@@ -12,7 +12,7 @@ U32 char_bmp_filename[8]=
 public class CDirEntry //64-byte fixed-size
 {
   U16 attr;	//See $LK,"RS_ATTR_DIR",A="MN:RS_ATTR_DIR"$.  I would like to change these.
-  U8 name[CDIR_FILENAME_LEN]; //See $LK,"char_bmp_filename",A="MN:char_bmp_filename"$, $LK,"FileNameChk",A="MN:FileNameChk"$
+  U8 name[CDIR_FILENAME_LEN]; //See $LK,"char_bmp_filename",A="MN:char_bmp_filename"$, $LK,"FileNameCheck",A="MN:FileNameCheck"$
   I64 clus; (blk) //One sector per clus.
   I64 size;	//In bytes
   CDate datetime; //See  $LK,"DateTime",A="::/Doc/TimeDate.DD"$, $LK,"Implementation of DateTime",A="FI:::/Kernel/KDate.HC"$
@@ -31,7 +31,7 @@ public class CRedSeaBoot //RedSea is type FAT32 in partition table to fool BIOS.
   U16 signature2;	//0xAA55
 };
 $HL,0$
-See $LK,"::/Kernel/BlkDev/FileSysRedSea.HC"$ and $LK,"::/Adam/Opt/Boot/DskISORedSea.HC"$.
+See $LK,"::/Kernel/BlkDev/FileSysRedSea.HC"$ and $LK,"::/Zenith/Boot/DiskISORedSea.HC"$.
 
 Files with names ending in  are compressed.  See $LK,"::/Kernel/Compress.HC"$.
 

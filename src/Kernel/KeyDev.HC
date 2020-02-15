@@ -137,7 +137,7 @@ U0 CtrlAltC(I64)
 
 U0 CtrlAltD(I64)
 {
-  if (!IsDbgMode) {
+  if (!IsDebugMode) {
     if (Fs==Gs->idle_task)
       BptS(sys_winmgr_task->rip,sys_winmgr_task);
     else

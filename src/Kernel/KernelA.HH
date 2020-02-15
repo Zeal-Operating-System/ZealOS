@@ -21,6 +21,7 @@ extern class CTask;
 #define FALSE	0
 #define ON	1
 #define OFF	0
+#define NONE	0 //for use in default arguments
 #define I8_MIN (-0x80)
 #define I8_MAX 0x7F
 #define U8_MIN 0
@@ -455,7 +456,7 @@ class CKernel
 #define RLf_PATCHED		3
 #define RLf_16MEG_SYS_CODE_BP	4
 #define RLf_64BIT		5
-#define RLf_16MEG_ADAM_HEAP_CTRL 6
+#define RLf_16MEG_ZENITH_HEAP_CTRL 6
 #define RLf_FULL_HEAPS		7
 #define RLf_RAW			8
 #define RLf_INTERRUPTS		9
@@ -467,8 +468,8 @@ class CKernel
 #define RLf_REGISTRY		15
 #define RLf_HOME		16
 #define RLf_AUTO_COMPLETE	17
-#define RLf_ADAM_SERVER		18
-#define RLf_ONCE_ADAM		19
+#define RLf_ZENITH_SERVER		18
+#define RLf_ONCE_ZENITH		19
 #define RLf_ONCE_USER		20
 
 #define RLF_16BIT		0x000001
@@ -477,7 +478,7 @@ class CKernel
 #define RLF_PATCHED		0x000008
 #define RLF_16MEG_SYS_CODE_BP	0x000010
 #define RLF_64BIT		0x000020
-#define RLF_16MEG_ADAM_HEAP_CTRL 0x000040
+#define RLF_16MEG_ZENITH_HEAP_CTRL 0x000040
 #define RLF_FULL_HEAPS		0x000050
 #define RLF_RAW			0x000100
 #define RLF_INTERRUPTS		0x000200
@@ -489,8 +490,8 @@ class CKernel
 #define RLF_REGISTRY		0x008000
 #define RLF_HOME		0x010000
 #define RLF_AUTO_COMPLETE	0x020000
-#define RLF_ADAM_SERVER		0x040000
-#define RLF_ONCE_ADAM		0x080000
+#define RLF_ZENITH_SERVER		0x040000
+#define RLF_ONCE_ZENITH		0x080000
 #define RLF_ONCE_USER		0x100000
 
 #help_index "Processor"
@@ -719,7 +720,7 @@ public class CHashTable
 
 #define KERNEL_MODULE_NAME	"/Kernel/Kernel"
 
-class CDbgInfo
+class CDebugInfo
 {
   U32	min_line,max_line;
   U32	body[1]; //Code heap is 32-bit value
@@ -729,7 +730,7 @@ public class CHashSrcSym:CHash
 {
   U8	*src_link,
 	*idx;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   U8	*import_name;
   CAOTImportExport *ie_lst;
 };
@@ -1506,8 +1507,8 @@ public class CAutoCompleteGlbls
 };
 
 #help_index "AutoComplete/Dictionary"
-#define ACD_WORD_FILENAME	"/Adam/AutoComplete/ACWords.DATA"
-#define ACD_DEF_FILENAME	"/Adam/AutoComplete/ACDefs.DATA"
+#define ACD_WORD_FILENAME	"/Zenith/AutoComplete/ACWords.DATA"
+#define ACD_DEF_FILENAME	"/Zenith/AutoComplete/ACDefs.DATA"
 
 #define ACD_H1			0
 #define ACD_H1_END		1
@@ -2759,7 +2760,7 @@ public class CDirContext
 #define FF_CONTIGUOUS		16
 #define FF_USE_OLD_DATETIME	32
 
-public class CFile //See $LK,"::/Demo/Dsk/DataBase.HC"$.
+public class CFile //See $LK,"::/Demo/Disk/DataBase.HC"$.
 {
   I64	flags;
   CDirEntry de;
@@ -2836,7 +2837,7 @@ class CMemRange
 //We add 2 pags, so a request is not rounded-up to next power of two.
 #define MEM_EXTRA_HASH2_PAGS	2
 
-#define MEM_ADAM_STK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
+#define MEM_ZENITH_STK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
 #define MEM_SETH_STK		(MEM_PAG_SIZE*512)
 #define MEM_INTERRUPT_STK	(MEM_PAG_SIZE*512)
 #define MEM_DFT_STK		(MEM_PAG_SIZE*512)
@@ -3415,9 +3416,9 @@ public class CSysFixedArea
 {
   CFPU	init_fpu_mmx;
   CCPU	boot_cpu;
-  CTask	adam;
+  CTask	zenith;
   CBlkPool sys_code_bp;
-  CHeapCtrl adam_hc;
+  CHeapCtrl zenith_hc;
   $$=($$+0x1000-1)&-0x1000;
 };
 
@@ -3816,7 +3817,7 @@ class CMPCrash
   I64	msg_num;
 };
 
-public class CDbgGlbls
+public class CDebugGlbls
 {
   CTask *focus_task;
   U8	*msg;

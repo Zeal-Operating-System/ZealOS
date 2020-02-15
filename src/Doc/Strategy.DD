@@ -58,6 +58,6 @@ A three bttn mouse is like a leg you cannot put weight on.  ZenithOS just does h
 
 * All tasks have a heap and a sym table.  Scope is that of environment vars in other operating systems.  As text is typed at the command line or you run programs by $FG,2$#include$FG$ing them, the syms go in the table.  If a sym is not found, the parent task's table is checked.  The father of all tasks has the API syms you'll need waiting in it's table.  No need to $FG,2$#include$FG$ headers.
 
-* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the $LK,"Adam Task",A="FF:::/Doc/Glossary.DD,Adam Task"$$FG$'s symbol system-wide global.
+* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$'s symbol system-wide global.
 
 * Sometimes, I $LK,"cut corners",A="FI:::/Doc/CutCorners.DD"$ in the interest of keeping the code beautiful.

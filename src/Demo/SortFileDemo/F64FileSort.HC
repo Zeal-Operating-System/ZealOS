@@ -49,7 +49,7 @@ Type("~/DemoUnsortedF64.DD");
 Type("~/DemoSortedF64.DD");
 
 U0 F64FileSortDAT(U8 *in_name,U8 *out_name)
-{//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Dsk/DataBase.HC"$
+{//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Disk/DataBase.HC"$
   I64 size;
   F64 *a=FileRead(in_name,&size);
   QSortI64(a,size/sizeof(F64),&Compare); //Sort 64-bit sized values
@@ -59,7 +59,7 @@ U0 F64FileSortDAT(U8 *in_name,U8 *out_name)
 F64FileSortDAT("~/DemoUnsortedF64.DATA","~/DemoSortedF64.DATA");
 
 U0 F64FileDumpDAT(U8 *in_name)
-{//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Dsk/DataBase.HC"$
+{//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Disk/DataBase.HC"$
   I64 i,n,size;
   F64 *a=FileRead(in_name,&size);
   n=size/sizeof(F64);

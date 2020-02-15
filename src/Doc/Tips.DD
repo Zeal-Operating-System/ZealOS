@@ -49,7 +49,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * $LK,"Merge",A="MN:Merge"$() can be used to see what's changed.  The $FG,2$+d$FG$ flag will show differences of files which have changed and allow you to merge code.  (The $FG,2$+r$FG$ flag will recurse.)
 
-* There is a utility $LK,"LinkChk",A="MN:LinkChk"$() which will check for broken links in documentation.
+* There is a utility $LK,"LinkCheck",A="MN:LinkCheck"$() which will check for broken links in documentation.
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$,ON) to find unnecessary parentheses in code.
 
@@ -121,7 +121,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can delete the $FG,4$~/Registry.HC$FG$ file.  The policy is that deleting it will restore defaults.  It is a text doc, if you want to edit it.  Be careful of tree indentations.
 
-* Study $LK,"::/Adam/Opt/Utils/MemRep.HC"$ and $LK,"WallPaper",A="MN:WallPaper"$() to learn how the system resources are put together.
+* Study $LK,"::/Zenith/Utils/MemRep.HC"$ and $LK,"WallPaper",A="MN:WallPaper"$() to learn how the system resources are put together.
 
 * The editor's sel-text mechanism allows for disjoint portions of sel text.  This is a feature, not a bug -- you can cut-and-paste disjoint text.
 

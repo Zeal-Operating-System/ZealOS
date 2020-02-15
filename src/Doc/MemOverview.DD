@@ -6,7 +6,7 @@ In ZenithOS, the lowest 2Gig of memory is called the $FG,2$code heap$FG$.  Zenit
 
 You can create new, independent heaps using $LK,"HeapCtrlInit",A="MN:HeapCtrlInit"$().  Then, use the $LK,"CHeapCtrl",A="MN:CHeapCtrl"$ as the 2nd arg to $LK,"MAlloc",A="MN:MAlloc"$().  See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 
-Memory alloced by a task will be freed when the task is killed.  The $LK,"Adam Task",A="FF:::/Doc/Glossary.DD,Adam Task"$ is a task that never dies.  His memory is like kernel memory in other operating systems.  See $LK,"ACAlloc",A="MN:ACAlloc"$(), $LK,"AMAlloc",A="MN:AMAlloc"$(), $LK,"AMAllocIdent",A="MN:AMAllocIdent"$() and $LK,"AStrNew",A="MN:AStrNew"$().
+Memory alloced by a task will be freed when the task is killed.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is a task that never dies.  His memory is like kernel memory in other operating systems.  See $LK,"ACAlloc",A="MN:ACAlloc"$(), $LK,"AMAlloc",A="MN:AMAlloc"$(), $LK,"AMAllocIdent",A="MN:AMAllocIdent"$() and $LK,"AStrNew",A="MN:AStrNew"$().
 
 All of the regular page tables are marked, "cached".  When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01AA000000",D="DD_UNCACHED_ALIAS"$$FG$.  See $LK,"dev.uncached_alias",A="FF:::/Kernel/KMain.HC,dev.uncached_alias"$.
 
@@ -21,7 +21,7 @@ $FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"00036AEF",D="DD_KERNEL_END"$$
 $ID,2$Kernel module, placed here by the boot-loader, $LK,"BOOT_RAM_BASE",A="MN:BOOT_RAM_BASE"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00096600",D="DD_BOOT_HIGH_LOC_DVD"$- 0x00$TX,"00096FFF",D="DD_BOOT_HIGH_LOC_DVD_END"$$FG$
-$ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/Adam/Opt/Boot/BootDVD.HC"$ & $LK,"BootHD",A="FI:::/Adam/Opt/Boot/BootHD.HC"$.
+$ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/Zenith/Boot/BootDVD.HC"$ & $LK,"BootHD",A="FI:::/Zenith/Boot/BootHD.HC"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00097000",D="DD_MP_VECT"$- 0x00$TX,"00097030",D="DD_MP_VECT_END"$$FG$ Multicore start-up vect code, $LK,"MPN_VECT",A="MN:MPN_VECT"$.
 $FG,2$~0x000009F000- 0x000009FFFF$FG$ Extended BIOS data area.

@@ -30,4 +30,4 @@ PressAKey;
 
 ClassRep(Fs);
 
-//See also $LK,"DocForm",A="MN:DocForm"$(), $LK,"::/Demo/Dsk/BlkDevRep.HC"$ and $LK,"::/Demo/ClassMeta.HC"$.
+//See also $LK,"DocForm",A="MN:DocForm"$(), $LK,"::/Demo/Disk/BlkDevRep.HC"$ and $LK,"::/Demo/ClassMeta.HC"$.

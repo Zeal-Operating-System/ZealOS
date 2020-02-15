@@ -304,7 +304,7 @@ U0 PrsSizeOf(CCmpCtrl *cc)
 {
   CHashClass *tmpc;
   CMemberLst *tmpm;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   I64 i;
   if (cc->token!=TK_IDENT)
     LexExcept(cc,"Invalid class at ");

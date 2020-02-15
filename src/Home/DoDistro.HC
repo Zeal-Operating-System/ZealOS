@@ -22,7 +22,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 
   CopyTree(BOOT_DIR,	"/Distro" BOOT_DIR);
   CopyTree("/Home",	"/Distro/Home");
-  CopyTree("/Adam",	"/Distro/Adam");
+  CopyTree("/Zenith",	"/Distro/Zenith");
   CopyTree("/Apps",	"/Distro/Apps");
   CopyTree("/Compiler",	"/Distro/Compiler");
   CopyTree("/Demo",	"/Distro/Demo");
@@ -31,7 +31,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
   CopyTree("/Misc",	"/Distro/Misc");
 
   //To save space, optionally delete dictionary.
-  //Del("/Distro/Adam/AutoComplete/ACDefs.DATA");
+  //Del("/Distro/Zenith/AutoComplete/ACDefs.DATA");
   CopyTree("/Downloads","/Distro/Downloads");	  //You can leave this out.
   DirMk("/Distro/Tmp");
   DirMk("/Distro/Tmp/ScrnShots");
@@ -40,7 +40,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
   //If CD-ROM use MT_CD instead of MT_DVD.
   //DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
 
-  DelTree("/Distro");
+  DelTree("/Distro");
   Free(out_iso_filename);
 }
 

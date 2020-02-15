@@ -15,10 +15,10 @@ U0 RedSeaFreeFreeLst(CDrv *dv)
     }
     dv->next_free=NULL;
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
   } catch
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
 }
 
 U0 RedSeaFreeLstBuild(CDrv *dv)
@@ -49,10 +49,10 @@ U0 RedSeaFreeLstBuild(CDrv *dv)
       first+=i+1;
     }
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
   } catch
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
 }
 
 U0 RedSeaInit(CDrv *dv)
@@ -63,7 +63,7 @@ U0 RedSeaInit(CDrv *dv)
     unlock=DrvLock(dv);
     BlkRead(dv,&br,dv->drv_offset,1);
     if (br.signature!=MBR_PT_REDSEA || br.signature2!=0xAA55)
-      throw('Drv');
+      throw('Drive');
     dv->fs_type=FSt_REDSEA;
     RedSeaFreeFreeLst(dv);
     dv->spc=1;
@@ -73,10 +73,10 @@ U0 RedSeaInit(CDrv *dv)
     dv->fat1=dv->fat2=dv->drv_offset+1;
     DrvFATBlkAlloc(dv);
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
   } catch
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
 }
 
 Bool RedSeaValidate(U8 drv_let)
@@ -145,9 +145,9 @@ U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
 
     BlkWrite(dv,root_dir,br->root_clus,root_dir_blks);
     RedSeaInit(dv);
-    DrvUnlock(dv);
+    DriveUnlock(dv);
   } catch
-    DrvUnlock(dv);
+    DriveUnlock(dv);
   Free(br);
   Free(root_dir);
 }
@@ -162,9 +162,9 @@ Bool RedSeaFileFind(CDrv *dv,I64 cur_dir_clus,U8 *name,
   if (fuf_flags&~FUG_FILE_FIND)
     throw('FUF');
   MemSet(_res,0,sizeof(CDirEntry));
-  DrvChk(dv);
+  DrvCheck(dv);
   if (dv->fs_type!=FSt_REDSEA)
-    PrintErr("Not RedSea Drv\n");
+    PrintErr("Not RedSea Drive\n");
   else if (!CFileNameTo(dname,name))
     PrintErr("Invalid FileName: \"%s\".\n",name);
   else
@@ -197,10 +197,10 @@ Bool RedSeaFileFind(CDrv *dv,I64 cur_dir_clus,U8 *name,
 rsff_done:
       Free(buf);
       if (unlock)
-	DrvUnlock(dv);
+	DriveUnlock(dv);
     } catch
       if (unlock)
-	DrvUnlock(dv);
+	DriveUnlock(dv);
   return res;
 }
 
@@ -209,11 +209,11 @@ U8 *RedSeaFileRead(CDrv *dv,U8 *cur_dir,U8 *filename,I64 *_size,I64 *_attr)
   U8 *buf=NULL;
   CDirEntry de;
   I64 c,blk_cnt,cur_dir_clus;
-  DrvChk(dv);
+  DrvCheck(dv);
   *_size=0;
   *_attr=0;
   if (dv->fs_type!=FSt_REDSEA)
-    PrintErr("Not RedSea Drv\n");
+    PrintErr("Not RedSea Drive\n");
   else
     try {
       DrvLock(dv);
@@ -227,9 +227,9 @@ U8 *RedSeaFileRead(CDrv *dv,U8 *cur_dir,U8 *filename,I64 *_size,I64 *_attr)
 	*_size=de.size;
 	*_attr=FileAttr(de.name,de.attr);
       }
-      DrvUnlock(dv);
+      DriveUnlock(dv);
     } catch
-      DrvUnlock(dv);
+      DriveUnlock(dv);
   return buf;
 }
 
@@ -237,7 +237,7 @@ Bool RedSeaCd(U8 *name,I64 cur_dir_clus)
 {
   CDirEntry de;
   if (Fs->cur_dv->fs_type!=FSt_REDSEA)
-    PrintErr("Not RedSea Drv\n");
+    PrintErr("Not RedSea Drive\n");
   else if (RedSeaFileFind(Fs->cur_dv,cur_dir_clus,name,&de,FUF_JUST_DIRS))
     return TRUE;
   else
@@ -249,10 +249,10 @@ U0 RedSeaFreeClus(CDrv *dv,I64 c,I64 cnt)
 {
   CFreeLst *tmpf;
   Bool found=FALSE,unlock,unlock_break;
-  DrvChk(dv);
+  DrvCheck(dv);
   if (!c) return;
   if (dv->fs_type!=FSt_REDSEA)
-    PrintErr("Not RedSea Drv\n");
+    PrintErr("Not RedSea Drive\n");
   else
     try {
       unlock_break=BreakLock;
@@ -286,12 +286,12 @@ U0 RedSeaFreeClus(CDrv *dv,I64 c,I64 cnt)
       DrvFATBlkClean(dv);
 
       if (unlock)
-	DrvUnlock(dv);
+	DriveUnlock(dv);
       if (unlock_break)
 	BreakUnlock;
     } catch {
       if (unlock)
-	DrvUnlock(dv);
+	DriveUnlock(dv);
       if (unlock_break)
 	BreakUnlock;
     }
@@ -303,7 +303,7 @@ I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
   I64 i,first,best_size=I64_MAX;
   Bool unlock,unlock_break;
   if (cnt<=0)
-    throw('Drv');
+    throw('Drive');
   try {
     unlock_break=BreakLock;
     unlock=DrvLock(dv);
@@ -320,7 +320,7 @@ I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
       tmpf=tmpf->next;
     }
     if (!best_free)
-      throw('Drv');
+      throw('Drive');
     first=best_free->start;
     for (i=0;i<cnt;i++) {
       DrvFATBlkSet(dv,first+i);
@@ -335,12 +335,12 @@ I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
       Free(best_free);
     }
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
     if (unlock_break)
       BreakUnlock;
   } catch {
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
     if (unlock_break)
       BreakUnlock;
   }
@@ -408,7 +408,7 @@ Bool RedSeaDirNew(CDrv *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	      de2.size=dir_size;
 	      RedSeaDirNew(dv,parent_dir,&de2,FALSE);
 	    } else
-	      throw('Drv');
+	      throw('Drive');
 	    Free(tmp);
 	    Free(parent_dir);
 	  }
@@ -441,12 +441,12 @@ Bool RedSeaDirNew(CDrv *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
     }
     Free(buf);
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
     if (unlock_break)
       BreakUnlock;
   } catch {
     if (unlock)
-      DrvUnlock(dv);
+      DriveUnlock(dv);
     if (unlock_break)
       BreakUnlock;
   }
@@ -495,11 +495,11 @@ I64 RedSeaFilesDel(CDrv *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
       }
     }
     Free(buf);
-    DrvUnlock(dv);
+    DriveUnlock(dv);
     if (unlock_break)
       BreakUnlock;
   } catch {
-    DrvUnlock(dv);
+    DriveUnlock(dv);
     if (unlock_break)
       BreakUnlock;
   }
@@ -514,7 +514,7 @@ I64 RedSeaFileWrite(CDrv *dv,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
   MemSet(&de,0,sizeof(CDirEntry));
   if (size<0) size=0;
   if (dv->fs_type!=FSt_REDSEA)
-    PrintErr("Not RedSea Drv\n");
+    PrintErr("Not RedSea Drive\n");
   else if (!CFileNameTo(de.name,name))
     PrintErr("Invalid FileName: \"%s\".\n",name);
   else {
@@ -571,7 +571,7 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
 	  tmpde->next=res;
 	  res=tmpde;
 	  tmpde->full_name=DirNameAbs(tmpde->name);
-	  DrvUnlock(dv);
+	  DriveUnlock(dv);
 	  if (Cd(tmpde->name)) {
 	    tmpde->sub=RedSeaFilesFind(files_find_mask,fuf_flags,tmpde);
 	    Cd("..");
@@ -593,9 +593,9 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
       ptr(U8 *)+=CDIR_SIZE;
     }
     Free(buf);
-    DrvUnlock(dv);
+    DriveUnlock(dv);
   } catch
-    DrvUnlock(dv);
+    DriveUnlock(dv);
   return res;
 }
 

@@ -97,7 +97,7 @@ I64 TimeCal()
       i=SysTimerRead-timer_start;
     }
     if (!i)
-      AdamErr("Timer Cal Error");
+      ZenithErr("Timer Cal Error");
     else {
       cnts.time_stamp_freq/=i;
       cnts.time_stamp_kHz_freq=cnts.time_stamp_freq/1000;
@@ -193,7 +193,7 @@ U0 Snd(I8 ona=0)
       OutU8(0x42,period.u8[1]);
       OutU8(0x61,3|InU8(0x61));
     }
-    if (!IsDbgMode && scrncast.record) {
+    if (!IsDebugMode && scrncast.record) {
       d=ACAlloc(sizeof(CSndData));
       d->ona=ona;
       d->tS=tS;
@@ -277,13 +277,13 @@ Bool IsSilent()
   return Bt(&Fs->display_flags,DISPLAYf_SILENT);
 }
 
-Bool SysDbg(Bool val)
-{//Set SysDbg bit you can use while debugging.
+Bool SysDebug(Bool val)
+{//Set SysDebug bit you can use while debugging.
   return LBEqu(&sys_semas[SEMA_DEBUG],0,val);
 }
 
-Bool IsSysDbg()
-{//Return SysDbg bit.
+Bool IsSysDebug()
+{//Return SysDebug bit.
   return Bt(&sys_semas[SEMA_DEBUG],0);
 }
 
@@ -309,12 +309,12 @@ Bool IsSingleUser()
   return Bt(&sys_semas[SEMA_SINGLE_USER],0);
 }
 
-Bool DbgMode(Bool val)
+Bool DebugMode(Bool val)
 {//Set dbg-mode.
   return LBEqu(&sys_semas[SEMA_DBG_MODE],0,val);
 }
 
-Bool IsDbgMode()
+Bool IsDebugMode()
 {//Return dbg-mode.
   return Bt(&sys_semas[SEMA_DBG_MODE],0);
 }

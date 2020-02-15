@@ -1,13 +1,13 @@
 U0 Exit()
 {//Terminate own task.
-  if (Fs==sys_focus_task && IsDbgMode) {
+  if (Fs==sys_focus_task && IsDebugMode) {
     LBts(&Fs->task_flags,TASKf_KILL_AFTER_DBG);
     G;
   } else {
     if (sys_staff_mode_flag)
-      AdamLog("%p:%p:%p:%p:%p:%p\n",Caller(0),Caller(1),Caller(2),Caller(3),
+      ZenithLog("%p:%p:%p:%p:%p:%p\n",Caller(0),Caller(1),Caller(2),Caller(3),
 	    Caller(4),Caller(5),Caller(6),Caller(7));
-    if (!Gs->num && !IsDbgMode)
+    if (!Gs->num && !IsDebugMode)
       SingleUser(OFF);
     Fs->rflags=GetRFlags;
     Fs->rsp=GetRSP;
@@ -228,7 +228,7 @@ I64 TaskInit(CTask *task,I64 stk_size)
   task->win_top		=13;
   task->win_bottom	=text.rows-2;
 
-  if (blkdev.home_dir) {//Beware Adam $LK,"TaskInit",A="FF:::/Kernel/KStart64.HC,TaskInit"$. I guess ok until $LK,"DskChg",A="FF:::/Kernel/KMain.HC,DskChg"$().
+  if (blkdev.home_dir) {//Beware Zenith $LK,"TaskInit",A="FF:::/Kernel/KStart64.HC,TaskInit"$. I guess ok until $LK,"DiskChg",A="FF:::/Kernel/KMain.HC,DiskChg"$().
     task->cur_dv=blkdev.let_to_drv[*blkdev.home_dir-'A'];
     task->cur_dir=StrNew(blkdev.home_dir+2,task);
   } else
@@ -241,7 +241,7 @@ I64 TaskInit(CTask *task,I64 stk_size)
 
 CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
 	I64 target_cpu=-1,	//-1 for current CPU. See $LK,"multi-core",A="FI:::/Demo/MultiCore/LoadTest.HC"$.
-	CTask *parent=NULL,	//NULL means adam
+	CTask *parent=NULL,	//NULL means zenith
 	I64 stk_size=0,		//0=default
 	I64 flags=1<<JOBf_ADD_TO_QUE)
 {//Create task on core running at address.
@@ -251,7 +251,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   if (target_cpu>=0)
     return SpawnQue(fp_start_addr,data,task_name,target_cpu,
 	  parent,stk_size,flags);
-  task=CAlloc(sizeof(CTask),adam_task->code_heap);
+  task=CAlloc(sizeof(CTask),zenith_task->code_heap);
   task->task_signature=TASK_SIGNATURE_VAL;
   if (!task_name) task_name="Unnamed Task";
   if (!parent) parent=Gs->seth_task;
@@ -417,13 +417,13 @@ U0 UserCmdLine(I64 dummy=0)
   Fs->win_inhibit=WIG_USER_TASK_DFT;
   CallExtStr("UserStartUp");
   if (!LBts(&Fs->display_flags,DISPLAYf_SHOW))
-    Dbg;
+    Debug;
   UserTaskCont;
 }
 
 CTask *User(U8 *fmt=NULL,...)
 {//Create user term task.
-  U8 *st;
+  U8 *st;
   CTask *task=Spawn(&UserCmdLine,,"Terminal");
   TaskWait(task);
   if (fmt) {

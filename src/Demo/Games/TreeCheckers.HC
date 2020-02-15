@@ -112,7 +112,7 @@ Unit *UnitFind(I64 x,I64 y,I64 player)
   return res;
 }
 
-U0 KillsChk(I64 x1,I64 y1,I64 player)
+U0 KillsCheck(I64 x1,I64 y1,I64 player)
 {
   I64 i,j,x2,y2,dd;
   Bool found;
@@ -338,7 +338,7 @@ cn_start:
 	  break;
 	case MSG_MS_L_UP:
 	  UnitMove(tmpu,arg1,arg2);
-	  KillsChk(tmpu->x,tmpu->y,cur_player);
+	  KillsCheck(tmpu->x,tmpu->y,cur_player);
 	  show_start=FALSE;
 	  tmpu=NULL;
 	  cur_player=1-cur_player;

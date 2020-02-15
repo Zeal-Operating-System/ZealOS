@@ -20,7 +20,7 @@ extern U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type);
 extern U0 OptPass5(CCmpCtrl *cc);
 extern U0 OptPass6(CCmpCtrl *cc);
 extern I64 OptPass789A(
-	CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDbgInfo **_dbg);
+	CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg);
 extern CHashClass *PrsClass(
 	CCmpCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern);
 extern CHashFun *PrsFunJoin(

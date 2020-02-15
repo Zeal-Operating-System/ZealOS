@@ -10,7 +10,7 @@ Doing whole file operations will sabotage efforts to change the 640x480 resoluti
 
 The file compression scheme in ZenithOS only works on whole file operations and the $LK,"DolDoc",A="FI:::/Doc/DolDoc.DD"$ format cannot have text tacked onto the end, since binary data is at the end.
 
-I don't want to spoil fun, so of course I offer a way to get awesome performance that is, ironically, superior.  $LK,"FBlkRead",A="MN:FBlkRead"$() and $LK,"FBlkWrite",A="MN:FBlkWrite"$() allow you to read a block offset from the start of a file.  Since files are all contiguous, this is incredibly efficient.  You just have to declare the desired file size when you create it with $LK,"FOpen",A="MN:FOpen"$() and cannot change it.  See $LK,"::/Demo/Dsk/DataBase.HC"$.
+I don't want to spoil fun, so of course I offer a way to get awesome performance that is, ironically, superior.  $LK,"FBlkRead",A="MN:FBlkRead"$() and $LK,"FBlkWrite",A="MN:FBlkWrite"$() allow you to read a block offset from the start of a file.  Since files are all contiguous, this is incredibly efficient.  You just have to declare the desired file size when you create it with $LK,"FOpen",A="MN:FOpen"$() and cannot change it.  See $LK,"::/Demo/Disk/DataBase.HC"$.
 
 If you like, you are encouraged to to do raw $LK,"BlkRead",A="MN:BlkRead"$() and $LK,"BlkWrite",A="MN:BlkWrite"$() directly on a drive.  Just get a pointer to a $LK,"CDrv",A="MN:CDrv"$ with $LK,"Let2Drv",A="MN:Let2Drv"$() and you are on your way!  Your computer is supposed to be a fun toy!  You can make an entire partition used for a database, or invent a file system.
 

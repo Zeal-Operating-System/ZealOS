@@ -1,4 +1,4 @@
-$TR-UL,"Adam"$
+$TR-UL,"Zenith"$
 $ID,2$$TR,"SysMsgFlags"$
 $ID,2$sys_msg_flags[0]=0xFF;
 $ID,-2$$TR,"SysRegVer"$
@@ -64,7 +64,7 @@ progress3_tf=0.000;progress4_tf=113.560;
 $ID,-2$$TR,"TempleTetris"$
 $ID,2$I64 hiscore=0;
 $ID,-2$$ID,-2$$TR,"Once"$
-$ID,2$$TR,"Adam"$
+$ID,2$$TR,"Zenith"$
 $ID,2$$ID,-2$$TR,"User"$
 $ID,2$$ID,-2$$ID,-2$$TR,"DemoCompany"$
 $ID,2$$TR,"Game1"$

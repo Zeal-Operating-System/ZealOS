@@ -86,7 +86,7 @@ public extern Bool WildMatch(U8 *test_str,U8 *wild_str);
 #help_index "Char/Operations;Memory"
 public extern U8 *CatPrint(U8 *dst,U8 *fmt,...);
 
-#help_index "Char/Operations;Memory/Adam Heap"
+#help_index "Char/Operations;Memory/Zenith Heap"
 public extern U8 *AStrNew(U8 *buf);
 
 #help_index "Char/Operations;Memory/Heap"
@@ -163,17 +163,17 @@ public extern U0	QueVectU8Put(CQueVectU8 *v,I64 idx,U8 ch);
 
 #help_index "Debugging"
 public extern U8 *Caller(I64 num=1);
-public extern Bool ChkCodePtr(U8 *ptr);
-public extern Bool ChkOnStk(U8 *ptr,CTask *task=NULL);
-public extern Bool ChkPtr(U8 *ptr);
+public extern Bool CheckCodePtr(U8 *ptr);
+public extern Bool CheckOnStk(U8 *ptr,CTask *task=NULL);
+public extern Bool CheckPtr(U8 *ptr);
 public extern Bool IsSingleUser();
-public extern Bool IsSysDbg();
+public extern Bool IsSysDebug();
 public extern Bool SingleUser(Bool val);
-public extern Bool SysDbg(Bool val);
+public extern Bool SysDebug(Bool val);
 public extern U8 *TaskCaller(CTask *task=NULL,
 	I64 num=0,Bool saved_context=FALSE);
 public extern I64 UnusedStk(CTask *task=NULL);
-public extern CDbgGlbls dbg;
+public extern CDebugGlbls dbg;
 
 #help_index "Debugging/Debugger"
 public extern Bool B(U8 *addr,CTask *task=NULL,Bool live=TRUE) //Toggle bpt.
@@ -181,7 +181,7 @@ public extern I64 B2(CTask *task=NULL,Bool live=TRUE);
 extern CBpt *BptFind(U8 *needle_addr,CTask *haystack_task=NULL,Bool rem=FALSE);
 public extern Bool BptR(U8 *addr,CTask *task=NULL,Bool live=TRUE,Bool rem=TRUE);
 public extern Bool BptS(U8 *addr,CTask *task=NULL,Bool live=TRUE);
-public extern Bool DbgMode(Bool val);
+public extern Bool DebugMode(Bool val);
 public extern Bool E(U8 *addr,I64 cnt=512,I64 edf_dof_flags=0);
 public extern Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0);
 extern Bool EdLiteFileLine(U8 *fl_file_line,I64 edf_dof_flags=0);
@@ -189,7 +189,7 @@ public extern Bool Fix(I64 edf_dof_flags=0);
 public extern U0 FixSet(U8 *filename,I64 line);
 public extern U0 G(U8 *ms=INVALID_PTR,CTask *task=NULL);
 public extern U0 G2(U8 *ms=INVALID_PTR,CTask *task=NULL);
-public extern Bool IsDbgMode();
+public extern Bool IsDebugMode();
 public extern U0 S(U8 *ms=INVALID_PTR,CTask *task=NULL);
 
 #help_index "Debugging/Debugger;DolDoc/Cmd Line (Typically);"\
@@ -206,7 +206,7 @@ public extern U0 StkRep(CTask *task=NULL);
 extern I64 *TaskRegAddr(CTask *task,I64 reg_num);
 
 #help_index "Debugging/FunSeg"
-#help_file "::/Doc/DbgFunSeg"
+#help_file "::/Doc/DebugFunSeg"
 public extern Bool PutSrcLink(U8 *addr,I64 cnt=1,U8 *buf=NULL);
 public extern U8 *SrcEdLink(U8 *addr,I64 cnt=1,CTask *mem_task=NULL);
 public extern U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL);
@@ -226,7 +226,7 @@ public extern U0 RawPutChar(I64 ch);
 public extern U0 VGAFlush();
 
 #help_index "Debugging;Debugging/Debugger"
-public extern U0 Dbg(U8 *msg=NULL,I64 msg_num=0);
+public extern U0 Debug(U8 *msg=NULL,I64 msg_num=0);
 public extern U0 Panic(U8 *msg=NULL,I64 msg_num=0,Bool panic=TRUE);
 
 #help_index "Define;Char/Define"
@@ -282,8 +282,8 @@ public extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 	Bool del_dir=FALSE,Bool print_msg=TRUE);
 public extern I64 Dir(U8 *files_find_mask="*",Bool full=FALSE);
 public extern Bool DirMk(U8 *filename,I64 entry_cnt=0);
-public extern Bool Drv(U8 drv_let);
-public extern U0 DskChg(U8 drv_let=0);
+public extern Bool Drive(U8 drv_let);
+public extern U0 DiskChg(U8 drv_let=0);
 public extern U0 HomeSet(U8 *dirname);
 
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically);Install"
@@ -300,7 +300,7 @@ public extern U8 *ExtDft(U8 *filename,U8 *extension);
 public extern U8 *FileExtDot(U8 *src);
 public extern U8 *FileExtRem(U8 *src,U8 *dst=NULL);
 public extern U8 *FileNameAbs(U8 *filename,I64 fuf_flags=0);
-public extern Bool FileNameChk(U8 *filename);
+public extern Bool FileNameCheck(U8 *filename);
 public extern Bool FilesFindMatch(U8 *_test_name,
 	U8 *files_find_mask,I64 fuf_flags=0);
 public extern Bool IsDir(U8 *dir_name);
@@ -325,7 +325,7 @@ extern I64 FileAttr(U8 *name,I64 old_attr=0);
 
 #help_index "File/Low Level"
 #help_file "::/Doc/FileLowLevel"
-public extern CBlkDev *BlkDevChk(CBlkDev *bd,Bool except=TRUE);
+public extern CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE);
 public extern U0 BlkDevDel(CBlkDev *bd);
 public extern Bool BlkDevLock(CBlkDev *bd);
 public extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
@@ -344,7 +344,7 @@ public extern I64 ClusRead(CDrv *dv,U8 *buf,I64 c,I64 cnt);
 public extern I64 ClusWrite(CDrv *dv,U8 *buf,I64 c,I64 cnt);
 extern Bool CopySingle(U8 *f1,U8 *f2); //Just one file
 public extern U8 Drv2Let(CDrv *dv=NULL);
-public extern CDrv *DrvChk(CDrv *dv,Bool except=TRUE);
+public extern CDrv *DrvCheck(CDrv *dv,Bool except=TRUE);
 public extern U0 DrvDel(CDrv *dv);
 public extern Bool DrvLock(CDrv *dv);
 public extern CDrv *DrvMakeFreeSlot(U8 drv_let);
@@ -352,7 +352,7 @@ public extern U8 *DrvModelNum(U8 drv_let=0);
 public extern U8 DrvNextFreeLet(U8 first_drv_let='C');
 public extern U8 *DrvSerialNum(U8 drv_let=0);
 public extern U8 DrvTextAttrGet(U8 drv_let=0);
-public extern Bool DrvUnlock(CDrv *dv,Bool rst=FALSE);
+public extern Bool DriveUnlock(CDrv *dv,Bool rst=FALSE);
 public extern U0 DrvsRelease();
 extern U0 FAT32FreeClus(CDrv *dv,I64 c);
 public extern CBlkDev *Let2BlkDev(U8 drv_let=0,Bool except=TRUE);
@@ -387,8 +387,8 @@ extern U0 ATAReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt);
 extern U0 ATAWriteBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt);
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	Bool whole_drv,Bool make_free);
-extern U0 DskCacheInit(I64 size_in_U8s);
-public extern U0 DskCacheInvalidate(CDrv *dv);
+extern U0 DiskCacheInit(I64 size_in_U8s);
+public extern U0 DiskCacheInvalidate(CDrv *dv);
 public extern I64 MountIDEAuto();
 public extern CBlkDevGlbls blkdev;
 
@@ -457,8 +457,8 @@ public extern U0 Fmt(U8 drv_let,Bool quick=TRUE,
 public extern I64 Scale2Mem(I64 min,I64 max,I64 limit=2*1024*1024*1024);
 
 #help_index "Job/Exe;Task/Job/Exe"
-public extern U0 AdamErr(U8 *fmt,...);
-public extern U0 AdamLog(U8 *fmt,...);
+public extern U0 ZenithErr(U8 *fmt,...);
+public extern U0 ZenithLog(U8 *fmt,...);
 public extern I64 ExeCmdLine(CCmpCtrl *cc);
 public extern U0 JobDel(CJob *tmpc);
 public extern I64 JobsHndlr(I64 run_flags,CTask *task=NULL);
@@ -469,7 +469,7 @@ public extern U0 TaskRstAwaitingMsg(CTask *task=NULL);
 public extern U0 UserTaskCont();
 
 #help_index "Job/Exe;Task/Job/Exe;Compiler"
-public extern I64 Adam(U8 *fmt,...);
+public extern I64 Zenith(U8 *fmt,...);
 public extern I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL);
 public extern I64 PopUpPrint(U8 *fmt,...);
 
@@ -554,7 +554,7 @@ public extern U64 RandU64();
 public extern I64 RoundI64(I64 num,I64 to);
 public extern I64 Seed(I64 seed=0,CTask *task=NULL);
 
-#help_index "Memory/Adam Heap"
+#help_index "Memory/Zenith Heap"
 public extern U8 *ACAlloc(I64 size);
 public extern U8 *AMAlloc(I64 size);
 public extern U8 *AMAllocIdent(U8 *src);
@@ -631,7 +631,7 @@ public extern U0 MPIntAll(U8 num);
 public extern U0 MPNMInt();
 extern CTask *SpawnQue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	U8 *task_name=NULL,I64 target_cpu,
-	CTask *parent=NULL, //NULL means adam
+	CTask *parent=NULL, //NULL means zenith
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "MultiCore;Boot"
@@ -702,7 +702,7 @@ public extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
 public extern CTask *User(U8 *fmt=NULL,...);
 public extern U0 UserCmdLine();
 public _extern _YIELD U0 Yield();
-public extern CTask *adam_task;
+public extern CTask *zenith_task;
 public extern I64 sys_num_spawned_tasks;
 extern CTask *sys_winmgr_task,*sys_task_being_scrn_updated;
 
@@ -724,7 +724,7 @@ public extern U0 WinDerivedValsUpdate(CTask *task);
 #help_index "Task;Job/Exe;Task/Job/Exe;MultiCore"
 public extern CTask *Spawn(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	U8 *task_name=NULL,I64 target_cpu=-1,	//-1 means current CPU
-	CTask *parent=NULL, //NULL means adam
+	CTask *parent=NULL, //NULL means zenith
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"

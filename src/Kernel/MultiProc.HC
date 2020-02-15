@@ -114,13 +114,13 @@ CTSS *TSSNew(I64 cpu_num)
 }
 
 CCPU *CPUStructInit(I64 num,CCPU *c,CTask *seth_task)
-{//Seth is null when called by adam on CSysFixedArea.boot_cpu0
+{//Seth is null when called by zenith on CSysFixedArea.boot_cpu0
   MemSet(c,0,sizeof(CCPU));
   c->addr=c;
   c->num=num;
   c->idle_factor=0.01;
   QueInit(&c->next_dying);
-  if (Bt(&sys_run_level,RLf_16MEG_ADAM_HEAP_CTRL)) {
+  if (Bt(&sys_run_level,RLf_16MEG_ZENITH_HEAP_CTRL)) {
     c->idle_task=Spawn(0,NULL,"Idle Task",,Fs,,0);
     LBts(&c->idle_task->task_flags,TASKf_IDLE);
     c->tss=TSSNew(num);
@@ -169,7 +169,7 @@ U0 MPHalt()
 }
 
 U0 MPAPICInit()
-{//Called by adam during start-up
+{//Called by zenith during start-up
 //and other cores during initialization
   //after $LK,"Core0StartMP",A="MN:Core0StartMP"$().
   *(dev.uncached_alias+LAPIC_SVR)(U32 *)|=LAPICF_APIC_ENABLED;
@@ -245,7 +245,7 @@ CJob *JobQue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
 }
 
 CTask *SpawnQue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
-	I64 target_cpu, CTask *parent=NULL, //NULL means adam
+	I64 target_cpu, CTask *parent=NULL, //NULL means zenith
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE)
 {
   CTask *res;
@@ -281,7 +281,7 @@ U0 CoreAPSethInit()
 }
 
 U0 Core0StartMP()
-{//Called by adam during $LK,"start-up",A="FF:::/Kernel/KMain.HC,Core0StartMP"$.
+{//Called by zenith during $LK,"start-up",A="FF:::/Kernel/KMain.HC,Core0StartMP"$.
   CTask *task;
   U8 buf[STR_LEN];
   CAP16BitInit *mp=MP_VECT_ADDR;
@@ -337,7 +337,7 @@ U0 Core0StartMP()
     StrPrint(buf,"Seth Task CPU%02X",i);
     task=Spawn(&CoreAPSethInit,NULL,buf,,,MEM_SETH_STK,0);
     task->rflags=RFLAGG_START;
-//$LK,"CTask",A="MN:CTask"$ alloced off this core's seth_task's heap (Which is Adam)
+//$LK,"CTask",A="MN:CTask"$ alloced off this core's seth_task's heap (Which is Zenith)
     CPUStructInit(i,&cpu_structs[i],task);
     WBINVD //Not sure why this is needed.  Might just need delay.
   }
@@ -352,7 +352,7 @@ U0 Core0StartMP()
 }
 
 U0 Core0Init()
-{//Called by adam during start-up
+{//Called by zenith during start-up
   CRAXRBCRCXRDX ee;
   CPUId(0x1,&ee);
 
@@ -362,9 +362,9 @@ U0 Core0Init()
   dbg.mp_crash=ACAlloc(sizeof(CMPCrash));
 
   //Must be in code heap because init code uses 32 bit addr of cpu_struct
-  adam_task->gs=cpu_structs=
+  zenith_task->gs=cpu_structs=
 	CAlloc(sizeof(CCPU)*MP_PROCESSORS_NUM,Fs->code_heap);
-  CPUStructInit(0,cpu_structs,adam_task);
+  CPUStructInit(0,cpu_structs,zenith_task);
   asm {//RAX has GS
     IMPORT SET_GS_BASE;
     CALL SET_GS_BASE

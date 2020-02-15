@@ -121,7 +121,7 @@ U0 SysDefinesLoad()
 	"Segment Not Present\0Stk Segment Fault\0General Protection\0"
 	"Page Fault\0\0Math Fault\0Alignment Check\0Machine Check\0"
 	"SIMD Exception\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-	"\0\0\0\0\0\0\0\0\0\0\0MP Crash\0Wake\0Dbg\0");
+	"\0\0\0\0\0\0\0\0\0\0\0MP Crash\0Wake\0Debug\0");
 }
 
 U8 *Color2Str(U8 *buf,CColorROPU32 c)

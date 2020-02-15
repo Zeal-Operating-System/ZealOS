@@ -211,7 +211,7 @@ U0 AddBox(ManDefineStruct *md,I64 c,I64 x1,I64 y1,I64 z1,
 
 U8 *Man2CSprite()
 {
-//See $LK,"::/Adam/Gr/GrSpritePlot.HC",A="FL:::/Adam/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.
+//See $LK,"::/Zenith/Gr/GrSpritePlot.HC",A="FL:::/Zenith/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.
   U8 *res=MAlloc(sizeof(CSpriteMeshU8s)+
 	m->vertex_cnt*sizeof(CD3I32)+m->tri_cnt*sizeof(CMeshTri)+
 	sprite_elem_base_sizes[SPT_END]),

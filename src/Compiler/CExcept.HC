@@ -55,7 +55,7 @@ U0 LexPutPos(CCmpCtrl *cc)
     "%s,%d ",cc->lex_include_stk->full_name,cc->lex_include_stk->line_num;
   else {
     PutFileLink(cc->lex_include_stk->full_name,,cc->lex_include_stk->line_num);
-    AdamErr("%s,%d\n",
+    ZenithErr("%s,%d\n",
 	  cc->lex_include_stk->full_name,cc->lex_include_stk->line_num);
     '' CH_SPACE;
   }
@@ -71,7 +71,7 @@ U0 LexWarn(CCmpCtrl *cc,U8 *str=NULL)
       "%s\n",cc->htc.fun->src_link;
     else {
       "$$LK,\"%s\"$$\n",cc->htc.fun->src_link;
-      AdamErr("%s\n",cc->htc.fun->src_link);
+      ZenithErr("%s\n",cc->htc.fun->src_link);
     }
   } else
     LexPutPos(cc);
@@ -80,18 +80,18 @@ U0 LexWarn(CCmpCtrl *cc,U8 *str=NULL)
 
 U0 LexExcept(CCmpCtrl *cc,U8 *str=NULL)
 {//Print err msg, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
-  if (!Bt(&sys_run_level,RLf_ADAM_SERVER)) {
+  if (!Bt(&sys_run_level,RLf_ZENITH_SERVER)) {
     Raw(ON);
     "Note: Still in boot phase.\n";
   }
   if (str) PrintErr(str);
   if (!IsRaw)
-    AdamErr("Task:%08X %s\n",Fs,str);
+    ZenithErr("Task:%08X %s\n",Fs,str);
   LexPutPos(cc);
   cc->error_cnt++;
   FlushMsgs;
-  if (!Bt(&sys_run_level,RLf_ADAM_SERVER))
-    Dbg("Type \"Fix;\"");
+  if (!Bt(&sys_run_level,RLf_ZENITH_SERVER))
+    Debug("Type \"Fix;\"");
   throw('Compiler');
 }
 

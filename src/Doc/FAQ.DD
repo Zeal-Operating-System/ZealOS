@@ -15,7 +15,7 @@ $ID,2$3D $LK,"Sprites",A="FI:::/Doc/Sprite.DD"$ are stored as a mesh of triangle
 $ID,-2$$TR,"If the compiler is JIT, isn't it an interpretor?"$
 $ID,2$ZenithOS compiles, doesn't $FG,2$interpret$FG$, and uses no $FG,2$byte code$FG$ anywhere.  I loosely use the word $FG,2$script$FG$ sometimes, but it's actually compiled.  The compiler's $LK,"optimization",A="MN:OptPass012"$ code is actually where the compiler evaluates constants to simplify them, like every optimizing compiler.
 $ID,-2$$TR,"Are you a Creationist?"$
-$ID,2$I am an evolutionist.  $FG,2$Adam$FG$ is a better term for the first father of all tasks than $FG,2$root$FG$ was!
+$ID,2$I am an evolutionist.  $FG,2$Zenith$FG$ is a better term for the first father of all tasks than $FG,2$root$FG$ was!
 $ID,-2$$TR,"Is 'Bt()' in the code Bit Torrent?"$
 $ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ inst, not $FG,2$bit torrent$FG$.
 $ID,-2$$TR,"Is 'Fs->' in the code file system?"$
@@ -45,7 +45,7 @@ $ID,2$The editor periodically takes a snap-shot of the document for $FG,2$UNDO$F
 $ID,-2$$TR,"Why is it in text mode?"$
 $ID,2$ZenithOS runs in $FG,2$VGA 640x480 16 color$FG$ graphics mode, not text mode.  It changes to this mode with a $LK,"BIOS call",A="FF:::/Kernel/KStart16.HC,INT 0x10"$ while in real-mode before it switches to 64-bit mode.  The text is $LK,"drawn by hand",A="MN:GrUpdateTextFG"$.  See $LK,"::/Kernel/FontStd.HC"$.  If graphics mode fails, it falls-back on text mode.  You can force text mode with an $LK,"Kernel config",A="FI:::/Kernel/KCfg.HC"$ option.
 $ID,-2$$TR,"Where is the kernel memory?"$
-$ID,2$ZenithOS identity-maps all memory, all the time.  It is like paging is not used.  There is no special kernel $FG,2$high half$FG$ memory space.  ZenithOS is ring-0-only, so everything is kernel, even user programs.  There is a special task called $FG,2$Adam$FG$ and he doesn't die, so his heap never gets freed.  That's as close to $FG,2$kernel memory$FG$ as it gets.  All code goes in the lowest 2Gig of addresses, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.  See $LK,"MemOverview",A="FI:::/Doc/MemOverview.DD"$.
+$ID,2$ZenithOS identity-maps all memory, all the time.  It is like paging is not used.  There is no special kernel $FG,2$high half$FG$ memory space.  ZenithOS is ring-0-only, so everything is kernel, even user programs.  There is a special task called $FG,2$Zenith$FG$ and he doesn't die, so his heap never gets freed.  That's as close to $FG,2$kernel memory$FG$ as it gets.  All code goes in the lowest 2Gig of addresses, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.  See $LK,"MemOverview",A="FI:::/Doc/MemOverview.DD"$.
 $ID,-2$$TR,"Why does it run code from stack addresses?"$
 $ID,2$ZenithOS puts all code in the lowest 2Gig, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.  ZenithOS is 64-bit, but $FG,2$2Gig$FG$ is enough for code.  It actually puts global variables there, too, but you can turn that off with $LK,"OPTf_GLBLS_ON_DATA_HEAP",A="MN:OPTf_GLBLS_ON_DATA_HEAP"$.  $LK,"MAlloc",A="MN:MAlloc"$() allocs higher memory.
 $ID,-2$$TR,"How does it SYSCALL?"$
@@ -55,7 +55,7 @@ $ID,2$The stack does not grow, so do not do deep recursion.  In theory, memory g
 $ID,-2$$TR,"How do I set the PATH?"$
 $ID,2$There is no $FG,2$PATH$FG$.  You do not enter filenames at the command-line and expect them to run.  You enter C-like code.  $LK,"Get Started Here",A="FI:::/Doc/CmdLineOverview.DD"$.
 $ID,-2$$TR,"How do I boot it with Grub?"$
-$ID,2$If you use Grub, you $FG,2$chain-load$FG$ like Windows.  See $LK,"Boot",A="FI:::/Doc/Boot.DD"$.  You can use the ZenithOS boot-loader.  $LK,"Master-Boot-Loader-Stage1",A="FI:::/Adam/Opt/Boot/BootMHD.HC"$, $LK,"Master-Boot-Loader-Stage2",A="FI:::/Adam/Opt/Boot/BootMHD2.HC"$, $LK,"Partition-Boot-Loader",A="FI:::/Adam/Opt/Boot/BootHD.HC"$, $LK,"CD-DVD-Boot-Loader",A="FI:::/Adam/Opt/Boot/BootDVD.HC"$.
+$ID,2$If you use Grub, you $FG,2$chain-load$FG$ like Windows.  See $LK,"Boot",A="FI:::/Doc/Boot.DD"$.  You can use the ZenithOS boot-loader.  $LK,"Master-Boot-Loader-Stage1",A="FI:::/Zenith/Boot/BootMHD.HC"$, $LK,"Master-Boot-Loader-Stage2",A="FI:::/Zenith/Boot/BootMHD2.HC"$, $LK,"Partition-Boot-Loader",A="FI:::/Zenith/Boot/BootHD.HC"$, $LK,"CD-DVD-Boot-Loader",A="FI:::/Zenith/Boot/BootDVD.HC"$.
 $ID,-2$$TR,"How do I get Kernel.BIN to boot?"$
 $ID,2$The boot-loaders must be patched by you running $LK,"BootHDIns",A="MN:BootHDIns"$() or $LK,"BootMHDIns",A="MN:BootMHDIns"$().  Those will write the block address into the boot-loader because the boot-loaders do not navigate file systems to find the $LK,"Stage2",A="FI:::/Kernel/KStart16.HC"$ if you relocate it.
 $ID,-2$$TR,"Why is there some 16-Bit code?"$
@@ -82,8 +82,8 @@ $ID,-2$$TR,"Why is there garbage at the end of my text files?"$
 $ID,2$Binary sprite data is stored beyond the terminating $FG,2$NULL$FG$ in text files.  Map files store debug src line addresses.
 $ID,-2$$TR,"Why are sprites so small?"$
 $ID,2$Sprites can be stored as vector graphics so they might take shockingly little room.  They can be converted to bitmaps.
-$ID,-2$$TR,"Why don't I need to recompile /Adam and /Home files?"$
-$ID,2$If you change code in the $FG,2$/Adam$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.  There is no $FG,2$.BIN$FG$ file for $FG,2$JIT$FG$ compilation.  See $LK,"::/StartOS.HC"$.
+$ID,-2$$TR,"Why don't I need to recompile /Zenith and /Home files?"$
+$ID,2$If you change code in the $FG,2$/Zenith$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.  There is no $FG,2$.BIN$FG$ file for $FG,2$JIT$FG$ compilation.  See $LK,"::/StartOS.HC"$.
 $ID,-2$$TR,"Why does it finds files that aren't there?"$
 $ID,2$If not found, $FG,2$.Z$FG$ is added or removed from filename and a search is done again.  If a file is still not found, the parent directories are searched for a file of the same name.
 $ID,-2$

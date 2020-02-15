@@ -1,6 +1,6 @@
 /*The ~/Registry.HC file is HolyC code.
-You can execute a tree branch of it.The Adam
-branch is executed in the Adam task boot phase.
+You can execute a tree branch of it.The Zenith
+branch is executed in the Zenith task boot phase.
 Normally, you will place var declarations
 in the branch you make, but since an arthmetic expression
 is valid in HolyC you can place simple expressions

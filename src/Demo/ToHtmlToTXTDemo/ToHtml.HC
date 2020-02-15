@@ -137,7 +137,7 @@ U8 *TOSLinkCvt1(U8 *link_st)
 	while (LBts(&locks,0))
 	  Yield;
 	if (!bible)
-	  bible=Adam("DocRead(\"%s\");",filename);
+	  bible=Zenith("DocRead(\"%s\");",filename);
 	if (DocFind(bible,num,needle))
 	  res=URLBibleGateway(link_st);
 	LBtr(&locks,0);

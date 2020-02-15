@@ -26,11 +26,11 @@ U0 StartUpTasks()
   WinTileVert;
   "Boot Time:%7.3fs\n",tS;
   XTalk(user,"Cd;#include \"Once\";\n");
-  Silent;//no output to scrn
+  Silent;//no output to scrn
   ACInit("/*;!*/Bible.TXT*");
   Silent(OFF); //no output to scrn
 }
 
 StartUpTasks;
 
-"\nTempleOS V%5.3f\t%D %T\n\n",sys_os_version,sys_compile_time,sys_compile_time;
+"\nZenithOS V%5.3f\t%D %T\n\n",sys_os_version,sys_compile_time,sys_compile_time;

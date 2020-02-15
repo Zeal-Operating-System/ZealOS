@@ -7,14 +7,14 @@ USE64
 	FXSAVE	U64 [RAX]
 
 //Init CPU0 Struct
-	PUSH	SYS_FIXED_AREA+CSysFixedArea.adam
+	PUSH	SYS_FIXED_AREA+CSysFixedArea.zenith
 	PUSH	SYS_FIXED_AREA+CSysFixedArea.boot_cpu
 	PUSH	0
 	CALL	&CPUStructInit
 	CALL	SET_GS_BASE
 
-//Init Adam HeapCtrl
-	MOV	EDI,U32 SYS_FIXED_AREA+CSysFixedArea.adam_hc
+//Init Zenith HeapCtrl
+	MOV	EDI,U32 SYS_FIXED_AREA+CSysFixedArea.zenith_hc
 	MOV	EAX,U32 SYS_FIXED_AREA+CSysFixedArea.sys_code_bp
 	MOV	U64 CHeapCtrl.bp[RDI],RAX
 	MOV	U32 CHeapCtrl.hc_signature[RDI],HEAP_CTRL_SIGNATURE_VAL
@@ -23,16 +23,16 @@ USE64
 	MOV	U64 CHeapCtrl.next_um[RDI],RAX
 	MOV	U64 CHeapCtrl.last_um[RDI],RAX
 
-	MOV	EAX,U32 SYS_FIXED_AREA+CSysFixedArea.adam
+	MOV	EAX,U32 SYS_FIXED_AREA+CSysFixedArea.zenith
 	MOV	U64 CHeapCtrl.mem_task[RDI],RAX
 	MOV	U64 CTask.code_heap[RAX],RDI
 	MOV	U64 CTask.data_heap[RAX],RDI
 	MOV	U32 CTask.task_signature[RAX],TASK_SIGNATURE_VAL
 	
-	BTS	U32 [SYS_RUN_LEVEL],RLf_16MEG_ADAM_HEAP_CTRL
+	BTS	U32 [SYS_RUN_LEVEL],RLf_16MEG_ZENITH_HEAP_CTRL
 
-	PUSH	MEM_ADAM_STK
-	PUSH	U32 SYS_FIXED_AREA+CSysFixedArea.adam
+	PUSH	MEM_ZENITH_STK
+	PUSH	U32 SYS_FIXED_AREA+CSysFixedArea.zenith
 	CALL	&TaskInit
 	CALL	SET_FS_BASE
 	MOV	RSP,U64 CTask.rsp[RAX]
@@ -71,7 +71,7 @@ USE64
 	RET
 
 //************************************
-SYS_RAM_REBOOT:: //This gets copied high.  $LK,"SYS_RAM_REBOOT",A="FF:::/Adam/Opt/Boot/BootRAM.HC,SYS_RAM_REBOOT:2"$
+SYS_RAM_REBOOT:: //This gets copied high.  $LK,"SYS_RAM_REBOOT",A="FF:::/Zenith/Boot/BootRAM.HC,SYS_RAM_REBOOT:2"$
 	PUSH	U32 CGDT.ds		//stk seg
 	PUSH	U32 BOOT_RAM_LIMIT	//stk
 	PUSH	U32 0			//flags

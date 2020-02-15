@@ -66,10 +66,10 @@ $LK,"InStr",A="MN:InStr"$(U8 *fmt,...) sends text of an $LK,"InFile",A="FF:::/Do
 $LK,"XTalk",A="MN:XTalk"$(CTask *task,U8 *fmt,...) and text to another task's input buffer.
 $LK,"XTalkStr",A="MN:XTalkStr"$(CTask *task,U8 *fmt,...) sends text of an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$ to the keyboard stream of another TASK but can also do mouse cmds.
 
-$LK,"DocPrint",A="MN:DocPrint"$(CDoc *doc,U8 *fmt,...) sends text to a document.  You can buffer to a Doc and save it, providing the functionality of $FG,2$fprintf$FG$.  See $LK,"::/Demo/Dsk/FPrintF.HC"$.
+$LK,"DocPrint",A="MN:DocPrint"$(CDoc *doc,U8 *fmt,...) sends text to a document.  You can buffer to a Doc and save it, providing the functionality of $FG,2$fprintf$FG$.  See $LK,"::/Demo/Disk/FPrintF.HC"$.
 
-$LK,"Adam",A="MN:Adam"$(U8 *fmt,...) sends text to the $LK,"Adam Task",A="FF:::/Doc/Glossary.DD,Adam Task"$ to be compiled and run.
-$LK,"AdamLog",A="MN:AdamLog"$(U8 *fmt,...) and $LK,"AdamErr",A="MN:AdamErr"$(U8 *fmt,...) send text to the $LK,"Adam Task",A="FF:::/Doc/Glossary.DD,Adam Task"$ to be displayed.
+$LK,"Zenith",A="MN:Zenith"$(U8 *fmt,...) sends text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be compiled and run.
+$LK,"ZenithLog",A="MN:ZenithLog"$(U8 *fmt,...) and $LK,"ZenithErr",A="MN:ZenithErr"$(U8 *fmt,...) send text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be displayed.
 
 $LK,"StreamPrint",A="MN:StreamPrint"$(U8 *fmt,...) sends text to the stream of code being compiled and must reside in a $FG,2$#exe{}$FG$ blk.
 
@@ -81,7 +81,7 @@ $LK,"ExePrint",A="MN:ExePrint"$(U8 *fmt,...) compiles and execute a string.  Not
 
 $LK,"Once",A="MN:Once"$(U8 *fmt,...) Writes User code to $LK,"Registry",A="FI:~/Registry.HC"$ to be executed next boot.
 
-$LK,"AOnce",A="MN:AOnce"$(U8 *fmt,...) Writes Adam code to $LK,"Registry",A="FI:~/Registry.HC"$ to be executed next boot.
+$LK,"AOnce",A="MN:AOnce"$(U8 *fmt,...) Writes Zenith code to $LK,"Registry",A="FI:~/Registry.HC"$ to be executed next boot.
 
 $LK,"InPrint",A="MN:InPrint"$(I64 mS,U8 *fmt,...) $LK,"PutChars",A="MN:PutChars"$()s one at a time with a delay.
 

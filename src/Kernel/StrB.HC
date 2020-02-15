@@ -113,9 +113,9 @@ Bool AreYouSure()
 }
 
 U0 Help()
-{//Dbg help or master help index file.
-  if (IsDbgMode)
-    DbgHelp;
+{//Debug help or master help index file.
+  if (IsDebugMode)
+    DebugHelp;
   else
     PopUp("Type(\"::/Doc/HelpIndex.DD\");DocTop;View;");
 }
@@ -124,7 +124,7 @@ U0 ScanFlags(U8 *_dst_flags,U8 *lst,U8 *src)
 {/*More than 64 flags. Flags passed by ref.
 
 Examples:
-$LK,"ScanFlags",A="FF:::/Adam/Opt/Utils/Diff.HC,ScanFlags:2"$(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+$LK,"ScanFlags",A="FF:::/Zenith/Utils/Diff.HC,ScanFlags:2"$(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 
 I64 flags=0;
 ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.

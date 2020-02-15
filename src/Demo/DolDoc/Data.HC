@@ -8,7 +8,7 @@
    -P	Means it is a string var, basically.
 
    ,32	sets the tag string width.
-	See $LK,"Data Tag Width",A="FA:::/Adam/DolDoc/DocPlain.HC,DataTagWidth"$.
+	See $LK,"Data Tag Width",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$.
 
    ,RT=I16 means the val is 2 bytes.
 	See $LK,"DocDataFmt",A="MN:DocDataFmt"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().

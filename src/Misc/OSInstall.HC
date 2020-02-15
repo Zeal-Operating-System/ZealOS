@@ -20,7 +20,7 @@ U0 InstallDrv(U8 drv_let)
 Bool VMPrtDsk(CTask *task,CATARep *ata_drv)
 {
   if (ata_drv) {
-    XTalkWait(task,"DskPrt(,0.5,0.5);\nC\np%d\nY",ata_drv->num);
+    XTalkWait(task,"DiskPrt(,0.5,0.5);\nC\np%d\nY",ata_drv->num);
     return TRUE;
   } else
     return FALSE;
@@ -35,7 +35,7 @@ U0 VMInstallDrv(CTask *task,U8 drv_let,
     XTalkWait(task,"C\np%d\n",ata_drv->num);
   if (atapi_drv)
     XTalkWait(task,"Tp%d\n",atapi_drv->num);
-  XTalkWait(task,"\n\n\n"); //Exit Drives,Dsk Cache,Options
+  XTalkWait(task,"\n\n\n"); //Exit Drives,Disk Cache,Options
 }
 
 U0 VMInstallWiz()
@@ -150,7 +150,7 @@ U0 RegularInstallWiz()
   }
   InstallDrv(drv_let);
   XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\n"
-	"C\ns%s\n%s\n%C\n\n\n", //Exit Drives,Dsk Cache,Options
+	"C\ns%s\n%s\n%C\n\n\n", //Exit Drives,Disk Cache,Options
 	drv_let,base0,base1,'0'+unit);
   "$$RED$$Install Master Boot loader?$$FG$$";
   if (YorN) {
@@ -166,7 +166,7 @@ U0 RegularInstallWiz()
 
 U0 DoInstructions()
 {
-  CTask *task=User;
+  CTask *task=User;
   AutoComplete;
   WinToTop(Fs);
   WinTileVert;

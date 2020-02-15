@@ -2,7 +2,7 @@
 
 #define SLOP	BLK_SIZE
 
-U0 TOSDbgDistro1()
+U0 TOSDebugDistro1()
 {
   CBinFile *bfh=mem_boot_base-sizeof(CBinFile);
   bfh(I64)+=bfh->file_size-1;
@@ -11,15 +11,15 @@ U0 TOSDbgDistro1()
   DefinePrint("TOS_DBG_DISTRO_END",  "0x%X",FloorI64(
 	(BOOT_RAM_LIMIT-(BOOT_STK_SIZE+DVD_BOOT_LOADER_SIZE))>>4<<4-
 	(bfh(I64)-SYS_KERNEL_END)-SLOP,BLK_SIZE));
-  DefinePrint("CFG_DBG_DISTRO_FILE","\"/Tmp/DbgDistro.BIN\"");
-} TOSDbgDistro1;
+  DefinePrint("CFG_DBG_DISTRO_FILE","\"/Tmp/DebugDistro.BIN\"");
+} TOSDebugDistro1;
 
-U0 TOSDbgDistro2()
+U0 TOSDebugDistro2()
 {
   DefinePrint("CFG_DBG_DISTRO","\"a0x%X\n0x%X\n\"",TOS_DBG_DISTRO,
 	(TOS_DBG_DISTRO_END-TOS_DBG_DISTRO)/BLK_SIZE);
   DefinePrint("CFG_DBG_DISTRO_START","\"0x%X\"",TOS_DBG_DISTRO);
-} TOSDbgDistro2;
+} TOSDebugDistro2;
 
 U0 TOSInit()
 {
@@ -56,6 +56,6 @@ U0 TOSInit()
 #define TOS_DVD_CFG	"TB\n0x20000\nT\n\n\nStaffMode\nMountIDEAuto\nCT\n"
 #define TOS_DVD_DBG_CFG "A" CFG_DBG_DISTRO\
 			"B\nScale2Mem(2048,0x40000)\n\n\n"\
-			"NoMP\nTextMode\nDontProbe\nDbgDistro\n"\
+			"NoMP\nTextMode\nDontProbe\nDebugDistro\n"\
 			"C:" CFG_DBG_DISTRO_FILE "\n"\
 			CFG_DBG_DISTRO_START "\n\n"

@@ -72,11 +72,11 @@ U0 DoWhap()
 }
 U0 DoDataBase()
 {
-  XTalkWait(task,"#include \"::/Demo/Dsk/DataBase\";\n");
+  XTalkWait(task,"#include \"::/Demo/Disk/DataBase\";\n");
 }
 U0 DoDskRaw()
 {
-  XTalkWait(task,"#include \"::/Demo/Dsk/DskRaw\";\n");
+  XTalkWait(task,"#include \"::/Demo/Disk/DiskRaw\";\n");
 }
 U0 DoTimeClock()
 {
@@ -1290,7 +1290,7 @@ U0 DoSuggestedSpelling()
 U0 DoFPrintF()
 {
   CTask *task=User;
-  XTalkWait(task,"#include \"::/Demo/Dsk/FPrintF\";\n");
+  XTalkWait(task,"#include \"::/Demo/Disk/FPrintF\";\n");
   XTalkWait(task,"~/DemoFPrintF.DD");
   PostMsgWait(task,MSG_KEY_DOWN_UP,CH_ESC,0);
   XTalkWait(task,"Type(\"~/DemoFPrintF.DD\");\n");
@@ -1543,7 +1543,7 @@ U0 OSTestSuite()
   TS("Psalmody");	DoPsalmody;
   TS("JukeBox");	DoJukeBox;
   TS("Span");		if (!sys_heap_init_flag) DoSpan; //Has FloodFill
-  TS("Strut");		DoStrut;
+//  TS("Strut");		DoStrut;
   TS("RawHide");	DoRawHide;
   TS("KeepAway");	DoKeepAway;
   TS("XCaliber");	DoXCaliber;
@@ -1627,11 +1627,11 @@ U0 OSTestSuite()
   TS("MiniGrLib");	TSFile("::/Demo/Lectures/MiniGrLib",0);
   TS("TimeIns");	TSFileChar("::/Demo/TimeIns");
   TS("PhoneNumWords");	DoPhoneNumWords;
-  TS("UnusedSpaceRep");	TSFile("::/Demo/Dsk/UnusedSpaceRep");
-  TS("BlkDevRep");	TSFile("::/Demo/Dsk/BlkDevRep");
+  TS("UnusedSpaceRep");	TSFile("::/Demo/Disk/UnusedSpaceRep");
+  TS("BlkDevRep");	TSFile("::/Demo/Disk/BlkDevRep");
   TS("LastClass");	DoLastClass;
   TS("FPrintF");	if (DrvIsWritable('~')) DoFPrintF;
-  TS("SerializeTree");	TSFile("::/Demo/Dsk/SerializeTree");
+  TS("SerializeTree");	TSFile("::/Demo/Disk/SerializeTree");
   TS("Exceptions");	DoExceptions;
   TS("ScrnDCodes");	TSFileChar("::/Demo/ScrnCodes");
   TS("ExtChars");	TSFile("::/Demo/ExtChars");
@@ -1696,21 +1696,21 @@ U0 OSTestSuite()
   TS("HeapLogSizeRep");	XTalkWait(task,"HeapLogSizeRep;Sleep(750);\n");
   TS("CPURep");		if (mp_cnt>1)
 				XTalkWait(task,"CPURep(TRUE);Sleep(750);\n");
-  TS("DskChk");		if (DrvIsWritable(':'))
-				XTalkWait(task,"DskChk;Sleep(750);\n");
+  TS("DiskCheck");		if (DrvIsWritable(':'))
+				XTalkWait(task,"DiskCheck;Sleep(750);\n");
   TS("DrvView");	if (DrvIsWritable(':')) {
     XTalkWait(task,"DrvView;\n");
     Sleep(750);
     PostMsgWait(task,MSG_KEY_DOWN_UP,CH_SPACE,0);
   }
-  TS("DskView");	if (DrvIsWritable(':')) {
-    XTalkWait(task,"DskView;\n");
+  TS("DiskView");	if (DrvIsWritable(':')) {
+    XTalkWait(task,"DiskView;\n");
     Sleep(250); //Short because ATARep takes time.
     PostMsgWait(task,MSG_KEY_DOWN_UP,CH_SPACE,0);
   }
   TS("ATARep");		XTalkWait(task,"ATARep;\npSleep(750);\n");
   TS("HashDepthRep");	XTalkWait(task,
-	"HashDepthRep(adam_task->hash_table);Sleep(750);\n");
+	"HashDepthRep(zenith_task->hash_table);Sleep(750);\n");
   TS("Who");		XTalkWait(task,"Who;Sleep(750);\n");
   TS("DrvRep");		XTalkWait(task,"DrvRep;Sleep(750);\n");
   TS("TaskRep");	XTalkWait(task,"TaskRep;Sleep(750);\n");

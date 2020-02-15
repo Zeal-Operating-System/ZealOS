@@ -9,4 +9,4 @@ U0 OnceDemo()
 
 OnceDemo;
 
-//There are variants for adam $LK,"AOnce",A="MN:AOnce"$().
+//There are variants for zenith $LK,"AOnce",A="MN:AOnce"$().

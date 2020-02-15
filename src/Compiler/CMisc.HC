@@ -145,7 +145,7 @@ U8 *CmdLinePmt()
     Free(st);
   }
   '>';
-  if (IsDbgMode&&IsRaw)
+  if (IsDebugMode&&IsRaw)
     RawDr;
 
   LBts(&Fs->task_flags,TASKf_CMD_LINE_PMT);

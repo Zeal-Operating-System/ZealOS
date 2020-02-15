@@ -19,7 +19,7 @@ Edit
 
 CDDVD
 {
-  DskChg(,'c');
+  DiskChg(,'c');
   MountISOC(,'i');
   MakeRedSeaISOC(,'m');
   BurnISOFile(,'B');
@@ -28,5 +28,5 @@ CDDVD
 Program
 {
   Include(,0,0x3F0000003F);
-  AdamInclude(,0,0x23F0000023F);
+  ZenithInclude(,0,0x23F0000023F);
 }

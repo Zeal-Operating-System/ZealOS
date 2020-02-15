@@ -20,7 +20,7 @@ Most filenames end in $FG,2$$FG$ because they are stored compressed.
 
 Drives are specified with a letter.  The boot drive is specified with a '$FG,2$:$FG$'.  The home dir drive is specified with a $FG,2$'~'$FG$.
 
->$FG,2$Drv('B');$FG$	B drive
+>$FG,2$Drive('B');$FG$	B drive
 
 The drive can be specified in a $LK,"Cd",A="MN:Cd"$() command as in:
 

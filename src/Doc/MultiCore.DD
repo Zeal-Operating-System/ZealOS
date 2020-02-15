@@ -4,7 +4,7 @@ There are multicore safe locks for file access and heap allocations, however, so
 
 Only tasks on $FG,2$Core0$FG$ can have windows, but other cores can help render them.
 
-Each core has an executive $LK,"Seth Task",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ which is the father of all tasks on that core.  $LK,"Adam",A="FF:::/Doc/Glossary.DD,Adam Task"$ is the $LK,"Seth Task",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ on $FG,2$Core0$FG$.
+Each core has an executive $LK,"Seth Task",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ which is the father of all tasks on that core.  $LK,"Zenith",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is the $LK,"Seth Task",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ on $FG,2$Core0$FG$.
 
 You give a job to a $LK,"Seth Task",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ with $LK,"JobQue",A="MN:JobQue"$() and get the result with $LK,"JobResGet",A="MN:JobResGet"$().  You spawn a task on any core with $LK,"Spawn",A="MN:Spawn"$().
 

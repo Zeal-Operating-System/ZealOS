@@ -403,41 +403,41 @@ I64 PopUpPrint(U8 *fmt,...)
   return res;
 }
 
-I64 Adam(U8 *fmt,...)
-{//Make adam_task execute code.
+I64 Zenith(U8 *fmt,...)
+{//Make zenith_task execute code.
   I64 res;
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
   CJob *tmpc;
-  if (Fs==adam_task) {
-    tmpc=TaskExe(adam_task,Fs,buf,0);
+  if (Fs==zenith_task) {
+    tmpc=TaskExe(zenith_task,Fs,buf,0);
     JobsHndlr(GetRFlags);
   } else {
-    TaskWait(adam_task);
-    tmpc=TaskExe(adam_task,Fs,buf,1<<JOBf_WAKE_MASTER);
+    TaskWait(zenith_task);
+    tmpc=TaskExe(zenith_task,Fs,buf,1<<JOBf_WAKE_MASTER);
   }
   JobResScan(tmpc,&res);
   Free(buf);
   return res;
 }
 
-U0 AdamLog(U8 *fmt,...)
-{//Display text in adam_task.
+U0 ZenithLog(U8 *fmt,...)
+{//Display text in zenith_task.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
-  if (Fs==adam_task)
+  if (Fs==zenith_task)
     "%s",buf;
   else if (!IsSingleUser)
-    Adam("\"%%s\",%d;",buf);
+    Zenith("\"%%s\",%d;",buf);
   Free(buf);
 }
 
-U0 AdamErr(U8 *fmt,...)
-{//Display red blinking Err text in adam_task.
+U0 ZenithErr(U8 *fmt,...)
+{//Display red blinking Err text in zenith_task.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),
 	*st=MStrPrint(ST_ERR_ST "%s",buf);
-  if (Fs==adam_task)
+  if (Fs==zenith_task)
     "%s",st;
   else if (!IsSingleUser)
-    Adam("\"%%s\",%d;",st);
+    Zenith("\"%%s\",%d;",st);
   Free(st);
   Free(buf);
 }

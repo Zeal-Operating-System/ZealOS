@@ -16,4 +16,4 @@ $FG,2$<CTRL-1>$FG$	Autocompletes the 1st dictionary word in the window.
 $FG,2$<CTRL-2>$FG$	Autocompletes the 2nd dictionary word in the window.
 $FG,2$<CTRL-n>$FG$	Autocompletes the n-th dictionary word in the window.
 
-If you have the raw Project Gutenberg dictionary file, you can generate the ZenithOS processed dictionary files with the stand-alone program $LK,"::/Adam/AutoComplete/ACDictGen.HC"$.
+If you have the raw Project Gutenberg dictionary file, you can generate the ZenithOS processed dictionary files with the stand-alone program $LK,"::/Zenith/AutoComplete/ACDictGen.HC"$.

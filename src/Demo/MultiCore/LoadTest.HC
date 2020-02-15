@@ -14,7 +14,7 @@ U0 Job1(I64)
 U0 Job2(I64)
 {//Log a file
   while (!app_done) {
-    AdamLog("%F","::/Demo/MultiCore/LoadTest.HC");
+    ZenithLog("%F","::/Demo/MultiCore/LoadTest.HC");
     Yield;
   }
   lock {app_done_ack--;}
@@ -24,7 +24,7 @@ U0 Job3(I64)
 {//Log a file
   while (!app_done) {
     Cd("::/Compiler");
-    AdamLog("%F","Compiler.PRJ");
+    ZenithLog("%F","Compiler.PRJ");
     Yield;
   }
   lock {app_done_ack--;}

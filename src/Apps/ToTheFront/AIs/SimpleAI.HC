@@ -28,7 +28,7 @@ U0 PlayerIndirect()
   Unit *target,*tmpu;
   I64 i;
   for (i=0;i<UNITS_NUM;i++) {
-    UserChk;
+    UserCheck;
     tmpu=&units[cur_player][i];
     if (tmpu->life>0 && tmpu->indirect_fire &&
 	  (target=UnitNearestFind(tmpu->row,tmpu->col,enemy_player,TRUE,
@@ -44,7 +44,7 @@ U0 PlayerMove()
   I64 i;
   F64 x,y;
   for (i=0;i<UNITS_NUM;i++) {
-    UserChk;
+    UserCheck;
     tmpu=&units[cur_player][i];
     if (tmpu->life>0) {
 //Cheats because it violates Line-of-Sight
@@ -65,7 +65,7 @@ U0 PlayerDirect()
   Unit *target,*tmpu;
   I64 i;
   for (i=0;i<UNITS_NUM;i++) {
-    UserChk;
+    UserCheck;
     tmpu=&units[cur_player][i];
     if (tmpu->life>0 && !tmpu->indirect_fire &&
 	  (target=UnitNearestFind(tmpu->row,tmpu->col,enemy_player,TRUE,

@@ -59,11 +59,11 @@ CHash *FunSegFind(U8 *addr,I64 *_offset)
   CHashTable *h;
   CCPU *c;
   U64 i,best=0xFFFF;
-  if (!ChkCodePtr(addr)) {
+  if (!CheckCodePtr(addr)) {
     *_offset=best;
     return NULL;
   }
-  if (IsDbgMode)
+  if (IsDebugMode)
     for (i=0;i<mp_cnt;i++) {
       c=&cpu_structs[i];
       task=c->seth_task;
@@ -92,7 +92,7 @@ fs_abort_task:
 U0 FunSegCacheAdd(CHash *tmps,U8 *addr)
 {
   I64 i;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   CFunSegCache *tmpfsc;
   if (tmps && tmps->type&HTT_FUN &&
 	(dbg_info=tmps(CHashFun *)->dbg_info)) {
@@ -207,7 +207,7 @@ I64 SrcLineNum(U8 *addr,I64 cnt=1)
 {//linenum for src of addr.
   CHashSrcSym *tmph;
   I64 cur_line,first_line,last_line,num_lines,offset;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   U32 *body;
   U8 *src,*src2;
   if (tmph=FunSegFind(addr,&offset)) {
@@ -263,7 +263,7 @@ U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
   CHashSrcSym *tmph;
   I64 i,j,ii,offset,best=NULL,d,best_d;
   U32 *body;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   U8 *src;
   if ((tmph=FunSegFind(addr,&offset)) &&
 	tmph->type&(HTT_FUN|HTT_EXPORT_SYS_SYM)) {

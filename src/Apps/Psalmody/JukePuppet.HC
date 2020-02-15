@@ -1,6 +1,6 @@
 U0 SongPuppet(CTask *task,I64 passes)
 {
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   I64 i,start,end,rip,last_rip;
   CHashFun *tmpf=NULL;
   for (i=0;i<250 && TaskValidate(task);i++) {

@@ -39,7 +39,7 @@ U0 TaskFocusNext()
 {
   CTask *task,*_task=sys_focus_task;
   sys_focus_task=NULL;
-  if (!_task) _task=adam_task;
+  if (!_task) _task=zenith_task;
   task=_task->next_task;
   do {
     if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS)) {

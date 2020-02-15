@@ -88,12 +88,12 @@ public U0 TADHymns(I64 vol,I64 let)
 }
 
 #help_index "Misc/TOS"
-public U0 DskChkAll()
-{//DskChk on C & D.
+public U0 DiskCheckAll()
+{//DiskCheck on C & D.
   U8 *ptr=TOS_HDS;
   while (*ptr) {
-    "DskChk('%c')\n",*ptr;
-    DskChk(*ptr++,TRUE);
+    "DiskCheck('%c')\n",*ptr;
+    DiskCheck(*ptr++,TRUE);
   }
 }
 

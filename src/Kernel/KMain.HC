@@ -24,7 +24,7 @@ U0 SysGlblsInit()
 	  kernel_cfg->mount_ide_auto_cd_let);
   }
 
-  DbgMode(ON);
+  DebugMode(ON);
   rev_bits_table=CAlloc(256);
   set_bits_table=CAlloc(256);
   for (i=0;i<256;i++)
@@ -40,7 +40,7 @@ U0 SysGlblsInit()
   #exe {
     StreamPrint("blkdev.boot_drv_let='%C';",kernel_cfg->boot_drv_let);
     StreamPrint("#exe{Option(OPTf_WARN_PAREN,OFF);}");
-    StreamPrint("DskCacheInit(%s);",kernel_cfg->dsk_cache_size_exp);
+    StreamPrint("DiskCacheInit(%s);",kernel_cfg->dsk_cache_size_exp);
     StreamPrint("#exe{Option(OPTf_WARN_PAREN,ON);}");
   };
 
@@ -136,14 +136,14 @@ U0 KMain()
 {//Continued from $LK,"KStart64.HC",A="FF:::/Kernel/KStart64.HC,I32 &KMain"$
   CBlkDev *bd;
   OutU8(0x61,InU8(0x61)&~3); //Snd;
-  adam_task=Fs;
+  zenith_task=Fs;
   BlkPoolsInit;
   SysGlblsInit;
   Mem32DevInit;
   UncachedAliasAlloc;
   LoadKernel;
   SysGrInit;
-  StrCpy(Fs->task_name,"Adam Task CPU00");
+  StrCpy(Fs->task_name,"Zenith Task CPU00");
   StrCpy(Fs->task_title,Fs->task_name);
   Fs->title_src=TTS_TASK_NAME;
   Fs->win_right=text.cols-2;
@@ -173,8 +173,8 @@ U0 KMain()
 
   TimeCal;
   BlkDevsInitAll;
-  "DskChg(':');\n";
-  DskChg(':');
+  "DiskChg(':');\n";
+  DiskChg(':');
   #exe {
     StreamPrint("HomeSet(\"%s\");\n"
 	  "blkdev.ins_base0=%d;blkdev.ins_base1=%d;blkdev.ins_unit =%d;\n",
@@ -210,7 +210,7 @@ U0 KMain()
   Load("Compiler",LDF_SILENT);
   LBts(&sys_run_level,RLf_COMPILER);
 
-  DbgMode(OFF);
+  DebugMode(OFF);
   cnts.time_stamp_freq_initial=TimeCal;
   Cd("/");
   try ExeFile("StartOS"); //Continues $LK,"/StartOS.HC",A="FL:/StartOS.HC,1"$
@@ -219,10 +219,10 @@ U0 KMain()
     Silent(OFF);
     GetOutOfDollar;
     PutExcept;
-    Dbg;
+    Debug;
   }
 
-  LBts(&sys_run_level,RLf_ADAM_SERVER);
+  LBts(&sys_run_level,RLf_ZENITH_SERVER);
   SrvTaskCont; //Never to return
 }
 

@@ -32,7 +32,7 @@ U0 DoIt()
 
   //Flags are explained here:
   //$LK,"::/Doc/DolDocOverview.DD"$	$LK,"::/Doc/Widget.DD"$
-  //$LK,"Dollar Flags",A="MN:DOCEf_TAG"$		$LK,"ST_DOC_FLAGS",A="FF:::/Adam/DolDoc/DocInit.HC,ST_DOC_FLAGS"$
+  //$LK,"Dollar Flags",A="MN:DOCEf_TAG"$		$LK,"ST_DOC_FLAGS",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$
   doc_e->tag_cb=&tSCB;
   DocPrint(bdoc,"$$FG$$");
   DocUnlock(bdoc);

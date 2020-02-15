@@ -4,4 +4,4 @@ See $LK,"::/Demo/Graphics/SpritePlot.HC"$, $LK,"::/Demo/Graphics/SpritePlot3D.HC
 
 Be aware that copying $FG,2$SP$FG$, $FG,2$IB$FG$, or $FG,2$IS$FG$ entries with the clip results in duplicate entries with different nums.  You can manually remove dups by editing with $FG,2$<CTRL-t>$FG$ and setting to the original num.
 
-See $LK,"::/Adam/Gr/GrSpritePlot.HC",A="FL:::/Adam/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.$FG$
+See $LK,"::/Zenith/Gr/GrSpritePlot.HC",A="FL:::/Zenith/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.$FG$

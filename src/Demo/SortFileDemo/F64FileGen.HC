@@ -15,7 +15,7 @@ U0 F64FileGenTXT(U8 *filename,I64 n)
 F64FileGenTXT("~/DemoUnsortedF64.DD",10);
 
 U0 F64FileGenDAT(U8 *filename,I64 n)
-{//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Dsk/DataBase.HC"$
+{//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Disk/DataBase.HC"$
   I64 i;
   F64 *a=MAlloc(n*sizeof(F64));
   for (i=0;i<n;i++)

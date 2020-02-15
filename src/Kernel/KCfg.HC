@@ -1,7 +1,7 @@
 //This is run in a $LK,"#exe",A="FF:::/Kernel/Kernel.PRJ,KCfg"${}.
 
 U8 *kernel_cfg_options="MemInit\0HeapInit\0VarInit\0StaffMode\0"
-"HomeDir\0NoMP\0TextMode\0DontProbe\0MountIDEAuto\0DbgDistro\0Help\0";
+"HomeDir\0NoMP\0TextMode\0DontProbe\0MountIDEAuto\0DebugDistro\0Help\0";
 
 #define CFG_MEM_INIT		0
 #define CFG_HEAP_INIT		1
@@ -35,7 +35,7 @@ CDoc *KCfgAddDev(CKCfg *c)
   "\n\nIn anticipation of the drives you will\n"
 	"define shortly, enter the drive letter\n"
 	"of the drive with the account directory.\n"
-	"\n($$PURPLE$$<ENTER>$$FG$$ for cur drv) Boot Drv:";
+	"\n($$PURPLE$$<ENTER>$$FG$$ for cur drv) Boot Drive:";
   ch=Let2Let(GetChar);
   if ('A'<=ch<='Z')
     c->boot_drv_let=ch;
@@ -73,7 +73,7 @@ U0 KCfgOptions(CKCfg *c)
 	    "$$PURPLE$$TextMode$$FG$$ Text Mode (requires hard reboot).\n"
 	    "$$PURPLE$$DontProbe$$FG$$ Just prompt CD/DVD ports, don't probe.\n"
 	    "$$PURPLE$$MountIDEAuto$$FG$$ Auto Mount IDE drives to 'C' and 'T'.\n"
-	    "$$PURPLE$$DbgDistro$$FG$$ Include RAM Drv in Kernel.BIN.\n"
+	    "$$PURPLE$$DebugDistro$$FG$$ Include RAM Drive in Kernel.BIN.\n"
 	    "\n";
     else
       if (0<=i<CFG_OPTIONS_NUM) {
@@ -138,8 +138,8 @@ U0 KCfgOptions(CKCfg *c)
 	    c->dbg_distro_file=0;
 	    c->dbg_distro_start=0;
 	    if (state) {
-	      c->dbg_distro_file=GetStr("Dbg Distro File:");
-	      c->dbg_distro_start=GetI64("Dbg Distro Start:");
+	      c->dbg_distro_file=GetStr("Debug Distro File:");
+	      c->dbg_distro_start=GetI64("Debug Distro Start:");
 	    }
 	    break;
 	}

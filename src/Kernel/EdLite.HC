@@ -63,7 +63,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   CLine head,*tmpl,*tmpl1,*cur_line;
   Bool	res=FALSE,
 	old_raw=Raw(ON),
-	old_debug=DbgMode(ON),
+	old_debug=DebugMode(ON),
 	old_single=SingleUser(ON);
 
   if (!filename) filename=blkdev.tmp_filename;
@@ -293,7 +293,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   Free(head.line);
   Free(bin_data);
   Raw(old_raw);
-  DbgMode(old_debug);
+  DebugMode(old_debug);
   SingleUser(old_single);
   text.raw_flags=text.raw_flags&~RWF_SHOW_DOLLAR|old_raw_flags&RWF_SHOW_DOLLAR;
   POPFD

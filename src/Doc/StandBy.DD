@@ -10,7 +10,7 @@ $FG,2$   <ESC>    $FG$Save  & Exit
 $FG,2$<SHIFT-ESC> $FG$Abort & Exit
 $FG,2$ <WINDOWS>  $FG$Pull-Down Menu
 
-$FG,4$$TX+CX+L+PU+UL,"Tongues",A="::/Adam/God/HSNotes.DD"$$FG$
+$FG,4$$TX+CX+L+PU+UL,"Tongues",A="::/Zenith/God/HSNotes.DD"$$FG$
 $FG,4$$TX+CX,"(Works Everywhere)"$$FG$
 $FG,2$   <F7>     $FG$God Word
 $FG,2$<SHIFT-F7>  $FG$God Passage

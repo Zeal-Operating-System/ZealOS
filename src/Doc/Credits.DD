@@ -12,7 +12,7 @@ I, $FG,2$Terry A. Davis$FG$, wrote all of ZenithOS over the past $TX,"13.9",D="D
 
 *) The LZW compression algorithm, $LK,"::/Kernel/Compress.HC"$, came from a magazine and I implemented it when I worked for Ticketmaster.
 
-*) The adaptive-step-size-Runge-Kutta algorithm, $LK,"::/Adam/AMathODE.HC"$, is adapted from the book, $UL,1$Numeric Recipies in C$UL,0$.
+*) The adaptive-step-size-Runge-Kutta algorithm, $LK,"::/Zenith/ZMathODE.HC"$, is adapted from the book, $UL,1$Numeric Recipies in C$UL,0$.
 
 *) The mountain in some games is from $FG,4$$TX,"http://www.public-domain-photos.com",HTML="http://www.public-domain-photos.com"$$FG$.  The wolf in BlackDiamond is also from there.  I took watermarked photos and converted to 16 color.
 

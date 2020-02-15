@@ -156,7 +156,7 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
       }
     }
     LBts(&Fs->task_flags,TASKf_IDLE);
-    if (IsDbgMode) {
+    if (IsDebugMode) {
 //We don't want interrupt-driven keyboard when in debugger
       //because that could have side-effects or crash, so we poll
       //keyboard when in debugger with interrupts off.
@@ -222,7 +222,7 @@ I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE)
     Free(st);
   } else {
     while (TRUE) {
-      ch=GetChar(,FALSE,IsDbgMode);
+      ch=GetChar(,FALSE,IsDebugMode);
       if (ch=='\n') {
 	'' ch;
 	break;

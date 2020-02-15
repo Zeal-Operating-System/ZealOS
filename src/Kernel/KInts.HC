@@ -87,7 +87,7 @@ INT_FAULT::
 	PUSH	U64 CTask.fault_err_code[RSI]
 	PUSH	U64 CTask.fault_num[RSI]
 	MOV	RSI,CTask.rsi[RSI]
-	CALL	&Fault2 	//See $LK,"Fault2",A="FF:::/Kernel/KDbg.HC,Fault2"$
+	CALL	&Fault2 	//See $LK,"Fault2",A="FF:::/Kernel/KDebug.HC,Fault2"$
 	JMP	I32 RESTORE_FS_TASK
 
 INT_FAULT_ERR_CODE_BITMAP::

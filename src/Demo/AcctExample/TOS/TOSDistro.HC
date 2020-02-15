@@ -40,7 +40,7 @@ public U0 TOSCopyDrv(U8 src,U8 dst)
   CopyTree(buf_s,buf_d);
 
   DocClear;
-  Drv(dst);
+  Drive(dst);
   TOSBootHDIns(dst);
 }
 
@@ -86,7 +86,7 @@ U0 DistroPrep()
   Move(ACD_DEF_FILENAME,ACD_DEF_FILENAME_Z);
 }
 
-U0 DbgDistroFilePrep()
+U0 DebugDistroFilePrep()
 {
   CBlkDev *bd;
   if (!Let2Drv('A',FALSE)) {
@@ -106,16 +106,16 @@ U0 DbgDistroFilePrep()
   Copy("C:/Kernel/*.HH*",		"A:/Kernel");
   CopyTree("C:/Kernel/BlkDev",		"A:/Kernel/BlkDev");
 
-  Copy("C:/Home/Sup1/Sup1Distro/DbgStartOS.HC","A:/StartOS.HC");
+  Copy("C:/Home/Sup1/Sup1Distro/DebugStartOS.HC","A:/StartOS.HC");
 
-  DirMk("A:/Adam");
-  Copy("C:/Home/Sup1/Sup1Distro/DbgMakeAdam.HC","A:/Adam/MakeAdam.HC");
-  Copy("C:/Home/Sup1/Sup1Distro/DbgMount.HC","A:/Adam");
-  Copy("C:/Adam/AExts.HC",	"A:/Adam");
-  Copy("C:/Adam/AMath.HC",	"A:/Adam");
-  Copy("C:/Adam/Training.HC","A:/Adam");
-  Copy("C:/Adam/AMem.HC",	"A:/Adam");
-  Copy("C:/Adam/TaskRep.HC",	"A:/Adam");
+  DirMk("A:/Zenith");
+  Copy("C:/Home/Sup1/Sup1Distro/DebugMakeZenith.HC","A:/Zenith/MakeZenith.HC");
+  Copy("C:/Home/Sup1/Sup1Distro/DebugMount.HC","A:/Zenith");
+  Copy("C:/Zenith/AExts.HC",	"A:/Zenith");
+  Copy("C:/Zenith/AMath.HC",	"A:/Zenith");
+  Copy("C:/Zenith/Training.HC","A:/Zenith");
+  Copy("C:/Zenith/AMem.HC",	"A:/Zenith");
+  Copy("C:/Zenith/TaskRep.HC",	"A:/Zenith");
 
   FileWrite("C:" CFG_DBG_DISTRO_FILE,
 	bd->RAM_dsk,(bd->max_blk+1)<<BLK_SIZE_BITS);
@@ -124,7 +124,7 @@ U0 DbgDistroFilePrep()
 
 U0 StdDistroPrep()
 {
-  Drv('C');
+  Drive('C');
   DistroPrep;
   In(STD_DISTRO_DVD_CFG);
   BootDVDIns('C');
@@ -144,12 +144,12 @@ U0 MakeStdDistro()
   DefinePrint("DD_TEMPLEOSCD_SIZE",
 	"Download $TX,"ZenithOS V5.03",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
 	0.1*(10*Size(TOS_ISO_NAME,"+s")/1024/1024));
-  Drv('C');
+  Drive('C');
 }
 
 U0 LiteDistroPrep()
 {
-  Drv('C');
+  Drive('C');
   DistroPrep;
   In(STD_DISTRO_DVD_CFG);
   BootDVDIns('C');
@@ -164,8 +164,8 @@ U0 LiteDistroPrep()
   Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
   Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
   Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
-  Del(TOS_DISTRO_DIR "/Adam/AutoComplete/ACDefs.DATA");
-  Del(TOS_DISTRO_DIR "/Adam/AutoComplete/ACWords.DATA");
+  Del(TOS_DISTRO_DIR "/Zenith/AutoComplete/ACDefs.DATA");
+  Del(TOS_DISTRO_DIR "/Zenith/AutoComplete/ACWords.DATA");
   Del(TOS_DISTRO_DIR "/Misc/Bible.TXT");
 }
 U0 MakeLiteDistro()
@@ -175,14 +175,14 @@ U0 MakeLiteDistro()
   DefinePrint("DD_TEMPLEOSCD_SIZE",
 	"Download $TX,"ZenithOS V5.03",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
 	0.1*(10*Size(TOS_ISO_NAME,"+s")/1024/1024));
-  Drv('C');
+  Drive('C');
 }
 
-U0 DbgDistroPrep()
+U0 DebugDistroPrep()
 {
-  Drv('C');
+  Drive('C');
   DistroPrep;
-  DbgDistroFilePrep;
+  DebugDistroFilePrep;
   In(TOS_DVD_DBG_CFG);
   BootDVDIns('C');
   Fmt('B',,FALSE,FSt_REDSEA);
@@ -194,19 +194,19 @@ U0 DbgDistroPrep()
   Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
   Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
 }
-U0 MakeDbgDistro()
+U0 MakeDebugDistro()
 {
-  DbgDistroPrep;
+  DebugDistroPrep;
   RedSeaISO(TOS_ISO_NAME,TOS_DISTRO_DIR,TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
   DefinePrint("DD_TEMPLEOS_DBG_SIZE",
 	"Download $TX,"ZenithOS V5.03",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)",
 	0.1*(10*Size(TOS_ISO_NAME,"+s")/1024/1024));
-  Drv('C');
+  Drive('C');
 }
 
 U0 StaffDistroPrep()
 {
-  Drv('C');
+  Drive('C');
   DistroPrep;
   In(TOS_DVD_CFG);
   BootDVDIns('C');
@@ -225,7 +225,7 @@ U0 MakeStaffDistro()
   DefinePrint("DD_TEMPLEOS_STAFF_SIZE",
 	"Download $TX,"ZenithOS V5.03",D="DD_OS_NAME_VERSION"$ - T.S. Company Internal Distro (%0.1fMB)",
 	0.1*(10*Size(TOS_ISO_NAME,"+s")/1024/1024));
-  Drv('C');
+  Drive('C');
 }
 
 I64 UpdateLineCnts()
@@ -233,7 +233,7 @@ I64 UpdateLineCnts()
   I64 res;
 
   DocClear;
-  Drv('C');
+  Drive('C');
   DistroPrep;
 
   Cd("C:/");
@@ -243,12 +243,12 @@ I64 UpdateLineCnts()
 
   DocMax;
   DocClear;
-  res=LineRep("C:/*","-r")+LineRep("C:/Adam/*")+
+  res=LineRep("C:/*","-r")+LineRep("C:/Zenith/*")+
 	LineRep("C:/Compiler/*","-S+$$")+LineRep("C:/Kernel/*");
   CopyTree("B:/TOS/TOS","C:/Home");
   DelTree("B:/TOS/TOS");
 
-  DocTreeFWrite("C:/Adam/ADefine.HC","LineRep",
+  DocTreeFWrite("C:/Zenith/ZDefine.HC","LineRep",
 	"DefinePrint(\"DD_TEMPLEOS_LOC\",\"%,d\");\n",res);
   DefinePrint("DD_TEMPLEOS_LOC","%,d",res);
 
@@ -295,11 +295,11 @@ U0 TOSRegen2()
   tos_progress_t0=tS;
   RegExe("ZenithOS/TOSRegen");
 
-  TOSProgress("DskChk All");
+  TOSProgress("DiskCheck All");
   AutoComplete;
   WinBorder;
   WinMax;
-  DskChkAll;
+  DiskCheckAll;
 
   TOSProgress("Update Line Cnts");
   UpdateLineCnts;
@@ -328,10 +328,10 @@ U0 TOSRegen2()
   Move(TOS_ISO_NAME,"D:/Downloads/TOS_Lite.ISO");
 #endif
 #if MAKE_DBG
-  TOSProgress("Make Dbg Distro ISO");
-  MakeDbgDistro;
+  TOSProgress("Make Debug Distro ISO");
+  MakeDebugDistro;
   DocClear;
-  Move(TOS_ISO_NAME,"D:/Downloads/TOS_Dbg.ISO");
+  Move(TOS_ISO_NAME,"D:/Downloads/TOS_Debug.ISO");
 #endif
 #if MAKE_STAFF
   TOSProgress("Make Staff Distro ISO");
@@ -350,15 +350,15 @@ U0 TOSRegen2()
 
   DocClear;
   TOSProgress("Check for Broken DolDoc Links");
-  if (LinkChk)
+  if (LinkCheck)
     throw;
 
   TOSProgress("Find /Home");
   slash_home=F2("/Home","-i+la");
 
-  TOSProgress("DskChk All");
-  Drv('C');
-  DskChkAll;
+  TOSProgress("DiskCheck All");
+  Drive('C');
+  DiskCheckAll;
 
   TOSProgress("Done");
   SettingsPop;

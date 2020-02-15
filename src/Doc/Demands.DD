@@ -6,10 +6,10 @@ $HC,"<object width=\"640\" height=\"520\"><param name=\"movie\" value=\"http://w
 
 * Windows, Linux and VMware (because of mounted drives) must support $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system when mounting partition, so I can get rid of 1,000 lines of redundant, blemished code -- FAT32.  God's temple must be perfect.  Redundant code for multiple file systems is bad and imperfect.  For this operating system, we want low line count.  More than one driver for the same type of device is also bad.
 
-See $LK,"::/Kernel/BlkDev/FileSysRedSea.HC"$ and $LK,"::/Adam/Opt/Boot/DskISORedSea.HC"$.
+See $LK,"::/Kernel/BlkDev/FileSysRedSea.HC"$ and $LK,"::/Zenith/Boot/DiskISORedSea.HC"$.
 
 $LK,"::/Kernel/BlkDev/FileSysFAT.HC"$	:974 lines for FAT32 gets eliminated.
-$LK,"::/Kernel/BlkDev/DskClus.HC"$	:152 All the clus operations become blk.
+$LK,"::/Kernel/BlkDev/DiskClus.HC"$	:152 All the clus operations become blk.
 
 * Microsoft must cancel SecureBoot because it makes dual booting impossible.  ZenithOS is an additional operating system that must be used along-side Windows or Linux, not as a replacement.  It must dual boot because it has no networking. Real hardware as opposed to VMware is like the difference between looking in a telescope eye piece vs just looking at an off-line image.  God said the C64/Apple II generation owned ancestral lands.  VMware is like being taken off of our land and moved onto a reservation.  In this case, however, it will not stand.  In fact, God said to replace Windows with Wine, justice.  We can make a 100% standard model PC with a standard software for everyone, backed-up in factory ROM.
 
@@ -24,7 +24,7 @@ $LK,"::/Kernel/BlkDev/DskClus.HC"$	:152 All the clus operations become blk.
 * VMware needs to support more than 16 cores.  I had a 24 core Xeon with 128 Gig of RAM.  I discovered VMware allocates memory too slowly, where QEMU had no problem.
 
 * Until super-simple block devices are available, hard disk should be placed at IDE primary master 1F0/3F6 and CD/DVD/Blu-ray should be placed at the IDE secondary master 170/376.  Currently, the wicked CIA plays musical chairs with controllers each time you make an install.  With tons of ugly code, I do my best.
-$LK,"/Kernel/BlkDev/DskATAId.HC",A="FI:::/Kernel/BlkDev/DskATAId.HC"$	:286 lines to figure-out I/O ports is gone.
+$LK,"/Kernel/BlkDev/DiskATAId.HC",A="FI:::/Kernel/BlkDev/DiskATAId.HC"$	:286 lines to figure-out I/O ports is gone.
 $LK,"/Kernel/PCIBIOS.HC",A="FI:::/Kernel/PCIBIOS.HC"$		:290 could be eliminated, but maybe we will keep it so people can play with PCI devices.
 
 * Until super-simple serial ports are available, PS/2 emulated keyboard and mouse must work.  The BIOS must enable these.  The plan is to transition the industry off of USB.  Interum solution is to make virtual RS232 Octart for USB devices in the same way PS/2 mouse is emulated.  All mice will be two button, one wheel.  No more HID insanity, no more multi-end point, just simple tx rx fifos with soft/hard flowcontrol that can jump the queue.  People with special needs can buy PCI cards.  Our kids deserve code this simple $LK,"::/Doc/Comm.HC"$.  The right to do your own port banging is what the C64 being our God given ancestral land means.
@@ -48,7 +48,7 @@ $LK,"::/Kernel/Mem/PageTables.HC"$	:135 lines to identity-map gets eliminated.
 
 * We must have the ultimate Bible search engine.  Currently, all we have is     $TX,"filter search",HTML="https://www.youtube.com/watch?v=ULJU8DzvQFo"$.  In the end, it should be a low line-count technique.  Maybe, I allocate 500 lines out of the 20,000 reserve.
 
-* We will make a $LK,"Standard ZenithOS PC",A="FI:::/Doc/StdTempleOSPC.DD"$.
+* We will make a $LK,"Standard ZenithOS PC",A="FI:::/Doc/StdZenithOSPC.DD"$.
 $FG,8$
 * "VMware" is a trademark owned by VMware, Inc.
 * "Linux" is a trademark owned by Linus Torvalds.

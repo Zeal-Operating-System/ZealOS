@@ -5,7 +5,7 @@ CJob sys_macro_head;
 CTask *sys_macro_task;
 CDoc *sys_clip_doc;
 
-CTask *adam_task;
+CTask *zenith_task;
 I64 sys_num_spawned_tasks;
 
 CTask *sys_winmgr_task,*sys_task_being_scrn_updated;
@@ -19,7 +19,7 @@ CAutoCompleteDictGlbls acd;
 CAutoCompleteGlbls ac;
 CBlkDevGlbls	blkdev;
 CCntsGlbls	cnts={1,0,2676302000,2676302,2676302000,0,0,0,FALSE};
-CDbgGlbls	dbg;
+CDebugGlbls	dbg;
 CDevGlbls	dev;
 CGridGlbls	ms_grid; //See $LK,"::/Demo/Graphics/Grid.HC"$.
 CMsStateGlbls	ms,ms_last;

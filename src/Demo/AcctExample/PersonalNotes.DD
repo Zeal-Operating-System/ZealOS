@@ -10,7 +10,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Corrupt ISO.C, might be fix--no longer dependent on direntry ISO filesize
 
-* DskChk CDROM
+* DiskCheck CDROM
 
 * Compiler Bug: $LK,"AUWrite",A="MN:AUWrite"$() dst->cdt=t0_now+ToI64(CDATE_FREQ*(tmpsd->tS-t0_tS));
 
@@ -22,7 +22,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Does entire tool chain support super/sub script?
 
-* 170624 $LK,"DskChk",A="MN:DskChk"$() showed extra alloced clus for FAT32, Sup1Hymns.  ClusNum was '.'+1 and clus was zero.
+* 170624 $LK,"DiskCheck",A="MN:DiskCheck"$() showed extra alloced clus for FAT32, Sup1Hymns.  ClusNum was '.'+1 and clus was zero.
 
 * $LK,"::/Apps/X-Caliber/X-Caliber.HC"$
 * Add asteroid harbor defense.
@@ -37,18 +37,18 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * $MA-X+PU,"64-Bit Device Memory",LM="F(\"mem64_ptr\");View;"$ is not implemented.
 
-* Investigate why packet loss $LK,"Training Sleep(1)",A="FF:::/Adam/Training.HC,Sleep(1)"$.
+* Investigate why packet loss $LK,"Training Sleep(1)",A="FF:::/Zenith/Training.HC,Sleep(1)"$.
 
 * Add AVL or red/black binary tree library support.  We have fixed-size stack.  Auto-balancing binary tree is very needed.  I've done everything myself.  I don't want to ruin a perfect record.  I'm in no hurry.
 
-* $LK,"SpriteEd",A="FI:::/Adam/Gr/SpriteEd.HC"$ shift pts, Ctrl pt for ellipse/polygon w,h is off when rotated.
+* $LK,"SpriteEd",A="FI:::/Zenith/Gr/SpriteEd.HC"$ shift pts, Ctrl pt for ellipse/polygon w,h is off when rotated.
 
-* God said this is bad.  $LK,"FL:::/Adam/DolDoc/DocFind.HC,41"$
+* God said this is bad.  $LK,"FL:::/Zenith/DolDoc/DocFind.HC,41"$
 * Backward <SHIFT-F3> is broken?
 
 * $LK,"Find",A="MN:Find"$() search sprite text?
 
-* Cannot include ':' in $LK,"Document Links",A="FF:::/Adam/DolDoc/DocLink.HC,AD"$ search string.
+* Cannot include ':' in $LK,"Document Links",A="FF:::/Zenith/DolDoc/DocLink.HC,AD"$ search string.
 * $$DA fixed width string: <Del> or <BACKSPACE> permanently shortens.
 
 * 11/19/16 editor took long time after copying old testament onto clip and exiting.
@@ -61,9 +61,9 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * $LK,"DOCT_HEX_ED",A="MN:DOCT_HEX_ED"$ with odd size, ASCII cannot be edited.
 
-* $LK,"FL:::/Adam/Gr/SpriteEd.HC,789"$ Resize bitmap?
+* $LK,"FL:::/Zenith/Gr/SpriteEd.HC,789"$ Resize bitmap?
 
-* $LK,"DOCEF_REMALLOC_DATA",A="FF:::/Adam/DolDoc/DocChar.HC,DOCEF_REMALLOC_DATA"$ HexEdit Remalloc.
+* $LK,"DOCEF_REMALLOC_DATA",A="FF:::/Zenith/DolDoc/DocChar.HC,DOCEF_REMALLOC_DATA"$ HexEdit Remalloc.
 
 * $LK,"DOCF_DBL_DOLLARS",A="MN:DOCF_DBL_DOLLARS"$ in $LK,"Reindention",A="MN:EdCodeTools2"$.
 
@@ -124,13 +124,13 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 
 * $LK,"Mem32DevAlloc",A="MN:Mem32DevAlloc"$() is broken.  Devices should be in free spot of E820 report.
 
-* $LK,"SpriteEd",A="FI:::/Adam/Gr/SpriteEd.HC"$: Strip $LK,"SPT_SHIFT",A="MN:SPT_SHIFT"$ origin cmds?
+* $LK,"SpriteEd",A="FI:::/Zenith/Gr/SpriteEd.HC"$: Strip $LK,"SPT_SHIFT",A="MN:SPT_SHIFT"$ origin cmds?
 
 * Clean-up ASCII #127 delete char?  (No. Maybe, we want a new usage for 127 in future centuries.)
 
 * Compiler: Exceptions don't free $LK,"CCmpCtrl",A="MN:CCmpCtrl"$ stuff.
 
-* $LK,"::/Adam/DolDoc/DocHighlight.HC"$ for code comments at top of documents.
+* $LK,"::/Zenith/DolDoc/DocHighlight.HC"$ for code comments at top of documents.
 
 * Unhandled exception msgs from MP's get overwritten by WinMgr.
 
@@ -147,7 +147,7 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 $FG,5$$TX+CX,"TODO: Too Hard, or Not Worth Doing."$$FG$
 * AutoComplete/$LK,"Man",A="MN:Man"$() Jmp for user code.
 
-* $LK,"Bible sized nodes",A="FF:::/Adam/DolDoc/DocRecalc.HC,->tag+i"$
+* $LK,"Bible sized nodes",A="FF:::/Zenith/DolDoc/DocRecalc.HC,->tag+i"$
 
 * $LK,"FileMgr",A="MN:FileMgr"$() is bad with lots of files.  
 
@@ -173,7 +173,7 @@ $ID,5$$HL,1$U0 Main()
 $ID,-5$$HL,0$
 * Compiler: Get rid of $LK,"0x20000",A="FF:::/Compiler/CMain.HC,0x20000"$ limit.
 
-* $LK,"GrFloodFillRay",A="MN:GrFloodFillRay"$: Get rid of $LK,"0x80000",A="FF:::/Adam/Gr/GrPrimatives.HC,0x80000"$ limit.
+* $LK,"GrFloodFillRay",A="MN:GrFloodFillRay"$: Get rid of $LK,"0x80000",A="FF:::/Zenith/Gr/GrPrimatives.HC,0x80000"$ limit.
 
 
 $FG,5$$TX+CX,"Bugs"$$FG$
@@ -181,7 +181,7 @@ $FG,5$$TX+CX,"Bugs"$$FG$
 
 * 1/12/16 make RAM drive 2288 blks, $FG,2$CopyTree("C:/Home","B:/Home"); $FG$  Disk runs-out of space and hangs instead of reporting errors.
 
-* Bug introduced around 11/1/15.  Changed $LK,"::/Kernel/Sched.HC"$ and now $LK,"WinToTop",A="MN:WinToTop"$ is called on Adam task at start-up, sometimes.  Might be user's fault because of bad keys pressed during VMware power-on init.  Might be fixed by $LK,"ACf_INIT_IN_PROGRESS",A="MN:ACf_INIT_IN_PROGRESS"$.
+* Bug introduced around 11/1/15.  Changed $LK,"::/Kernel/Sched.HC"$ and now $LK,"WinToTop",A="MN:WinToTop"$ is called on Zenith task at start-up, sometimes.  Might be user's fault because of bad keys pressed during VMware power-on init.  Might be fixed by $LK,"ACf_INIT_IN_PROGRESS",A="MN:ACf_INIT_IN_PROGRESS"$.
 
 * 1/12/16 $LK,"ATARepEntry",A="MN:ATARepEntry"$ shows corrupted bttns.  Weird.  Perhaps, my imagination.
 
@@ -203,7 +203,7 @@ $FG,5$$TX+CX,"Bugs? Not really sure."$$FG$
 
 * 4/13/14 Strut or RawHide crashed when $LK,"sys_var_init_flag",A="MN:sys_var_init_flag"$ was set during testsuite.  Perhaps, floodfill?
 
-* $LK,"DskChk",A="MN:DskChk"$ alloc unalloced.  I don't know if I fixed this.
+* $LK,"DiskCheck",A="MN:DiskCheck"$ alloc unalloced.  I don't know if I fixed this.
 
 * 1/?/2015,8/10/2015 Macro sel in Menu did not go to shell?  No, I think just <CTRL-m> twice.  Not a bug.
 
@@ -226,7 +226,7 @@ $ID,-5$
 
 * Make $LK,"Clamp",A="MN:Clamp"$(), $LK,"Min",A="MN:Min"$(), $LK,"Max",A="MN:Max"$() into asm routines?
 
-* Add local vars to sym table in $LK,"Dbg",A="MN:Dbg"$()?
+* Add local vars to sym table in $LK,"Debug",A="MN:Debug"$()?
 
 * Compiler: Prints two error messages for expressions in stmts.
 
@@ -234,7 +234,7 @@ $ID,-5$
 
 * Race condition in $LK,"::/Demo/Games/FlatTops.HC"$ torpedo.
 
-* Links to self document if empty file name? $LK,"Document Links",A="FF:::/Adam/DolDoc/DocLink.HC,AD"$
+* Links to self document if empty file name? $LK,"Document Links",A="FF:::/Zenith/DolDoc/DocLink.HC,AD"$
 
 * $LK,"FUF_RECURSE",A="MN:FUF_RECURSE"$ would be nice if capital "+R".
 
@@ -261,7 +261,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Make so just CdRom; command to copy entire disk to ::/CdRom directory? 
 
-* $LK,"MP DepthBuf",A="FF:::/Adam/Gr/SpriteMesh.HC,dc->depth_buf=e->"$ is a kludge because of dc->depth_buf=NULL in various graphics routines.
+* $LK,"MP DepthBuf",A="FF:::/Zenith/Gr/SpriteMesh.HC,dc->depth_buf=e->"$ is a kludge because of dc->depth_buf=NULL in various graphics routines.
 
 * Improve editor undo, add redo.
 
@@ -278,8 +278,8 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * $LK,"GrPutChar3",A="MN:GrPutChar3"$() with depth buf?
 
-* Eliminate?  $LK,"::/Adam/Ctrls/CtrlsA.HC"$?
-* Eliminate?  $LK,"::/Adam/AMathODE.HC"$?
+* Eliminate?  $LK,"::/Zenith/Ctrls/CtrlsA.HC"$?
+* Eliminate?  $LK,"::/Zenith/ZMathODE.HC"$?
 * Eliminate?  $LK,"Complex",A="MN:Complex"$?
 * Eliminate?  $LK,"CDC",A="MN:CDC"$.brush?
 * Eliminate?  $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
@@ -367,14 +367,14 @@ $ID,5$$$=-CTASK_NEG_OFFSET
 offset(CTask.addr)==0
 Spawn(): CAlloc()
 TaskDel(): Free()
-CSysFixedArea.adam
+CSysFixedArea.Zenith
 Looks like task_flags,locked_flags cause problems with neg offset.
 $ID,-5$
 * Make a game, S.E.T.I., with radio telescope array.  Put God on air.
 
 
 $FG,5$$TX+CX,"Test"$$FG$
-* $LK,"SpriteBitMap",A="FI:::/Adam/Gr/SpriteBitMap.HC"$: Grabscroll? 
+* $LK,"SpriteBitMap",A="FI:::/Zenith/Gr/SpriteBitMap.HC"$: Grabscroll? 
 
 * $LK,"DrvMap",A="MN:DrvMap"$() in $LK,"MountFile",A="MN:MountFile"$().
 

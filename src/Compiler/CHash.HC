@@ -1,6 +1,6 @@
 I64 HashEntrySize(CHashSrcSym *tmph)
 {//Logical size of a std system hash entry.
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   CBinFile *bfh;
   switch (HashTypeNum(tmph)) {
     case HTt_DEFINE_STR:
@@ -32,7 +32,7 @@ I64 HashEntrySize(CHashSrcSym *tmph)
 
 I64 HashEntrySize2(CHashSrcSym *tmph)
 {//Memory size of a std system hash entry.
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   I64 res=MSize2(tmph);
   if (!(tmph->type&HTT_DICT_WORD))
     res+=MSize2(tmph->str);
@@ -94,7 +94,7 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
   U8 *src_link;
   CDoc *doc;
   CDocBin *tmpb;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
 
   doc=DocNew(map_name);
   doc->flags|=DOCF_NO_CURSOR;
@@ -106,7 +106,7 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
 	if (drv_let && StrLen(src_link)>=4)
 	  src_link[3]=drv_let;
 	if (dbg_info=tmph->dbg_info) {
-	  size=offset(CDbgInfo.body)+
+	  size=offset(CDebugInfo.body)+
 		sizeof(U32)*(dbg_info->max_line+2-dbg_info->min_line);
 	  if (size>MSize(dbg_info)) {
 	    "Corrupt Map Entry\n";

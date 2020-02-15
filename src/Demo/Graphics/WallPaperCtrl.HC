@@ -9,7 +9,7 @@ See $LK,"::/Demo/Graphics/Slider.HC"$
 and $LK,"::/Demo/Graphics/WallPaperFish.HC"$
 before messing with this program.
 
-It must be "Adam Included".
+It must be "Zenith Included".
 */
 
 #define SLIDER_RANGE   30
@@ -80,8 +80,8 @@ U0 LeftClickSlider(CCtrl *c,I64 x,I64 y,Bool)
 CCtrl *SliderNew()
 {
   CCtrl *c;
-  if (Fs!=adam_task) {
-    "Must be Adam Included with SHIFT-F5.\n"
+  if (Fs!=zenith_task) {
+    "Must be Zenith Included with SHIFT-F5.\n"
 	  "(Would crash when code mem was freed.)\n";
     return NULL;
   }

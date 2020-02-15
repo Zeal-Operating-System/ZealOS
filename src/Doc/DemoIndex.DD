@@ -27,7 +27,7 @@ $LK,"::/Demo/RandDemo.HC"$
 $LK,"::/Demo/KeyBitMap.HC"$
 $LK,"::/Demo/Graphics/WinZBuf.HC"$
 $LK,"::/Demo/Graphics/Elephant.HC"$
-$LK,"::/Demo/Graphics/WallPaperFish.HC"$ //Press SHIFT-F5 to Adam Include
+$LK,"::/Demo/Graphics/WallPaperFish.HC"$ //Press SHIFT-F5 to Zenith Include
 $LK,"::/Demo/Games/Digits.HC"$
 $LK,"::/Demo/Progress.HC"$ //has some ASM, just ignore
 $LK,"::/Demo/Graphics/Symmetry.HC"$
@@ -78,7 +78,7 @@ $LK,"::/Demo/MultiCore/Palindrome.HC"$
 $LK,"::/Demo/MultiCore/MPAdd.HC"$
 $LK,"::/Demo/MultiCore/Lock.HC"$
 $LK,"::/Demo/Graphics/Slider.HC"$
-$LK,"::/Demo/Graphics/WallPaperCtrl.HC"$ //Press SHIFT-F5 to Adam Include
+$LK,"::/Demo/Graphics/WallPaperCtrl.HC"$ //Press SHIFT-F5 to Zenith Include
 $LK,"::/Demo/Graphics/ScrollBars.HC"$
 $LK,"::/Demo/RegistryDemo.HC"$
 $LK,"::/Demo/Games/FlapBat.HC"$
@@ -120,7 +120,7 @@ $MA-X+PU,"::/Apps/Span",LM="Cd(\"::/Apps/Span\");Dir;View;\n"$
 $MA-X+PU,"::/Apps/Psalmody",LM="Cd(\"::/Apps/Psalmody\");Dir;View;\n"$
 $ID,-2$$TR,"Non-Game"$
 $ID,2$$LK,"::/Misc/DoDistro.HC"$
-$LK,"::/Demo/DbgDemo.HC"$
+$LK,"::/Demo/DebugDemo.HC"$
 $LK,"::/Demo/SubSwitch.HC"$
 $LK,"::/Demo/DateTime.HC"$
 $LK,"::/Demo/RevFileDemo/Rev.HC"$
@@ -134,10 +134,10 @@ $LK,"::/Demo/WordSearch.HC"$
 $LK,"::/Demo/Graphics/CommonAncestor.HC"$
 $LK,"::/Demo/Directives.HC"$
 $LK,"::/Demo/Carry.HC"$
-$LK,"::/Demo/Dsk/DataBase.HC"$
-$LK,"::/Demo/Dsk/FPrintF.HC"$
-$LK,"::/Demo/Dsk/DskRaw.HC"$
-$LK,"::/Demo/Dsk/UnusedSpaceRep.HC"$
+$LK,"::/Demo/Disk/DataBase.HC"$
+$LK,"::/Demo/Disk/FPrintF.HC"$
+$LK,"::/Demo/Disk/DiskRaw.HC"$
+$LK,"::/Demo/Disk/UnusedSpaceRep.HC"$
 $LK,"::/Demo/Lectures/MiniGrLib.HC"$
 $LK,"::/Demo/Lectures/MiniCompiler.HC"$
 $LK,"::/Demo/MagicPairs.HC"$
@@ -166,7 +166,7 @@ $LK,"::/Demo/DolDoc/MenuSprite.HC"$
 $LK,"::/Demo/DolDoc/ClickCallBack.HC"$
 $LK,"::/Demo/DolDoc/TreeDemo.HC"$
 $LK,"::/Demo/Exceptions.HC"$
-$LK,"::/Demo/Dsk/SerializeTree.HC"$
+$LK,"::/Demo/Disk/SerializeTree.HC"$
 $LK,"::/Demo/MemDemo.HC"$
 $LK,"::/Demo/StkGrow.HC"$
 $LK,"::/Demo/DolDoc/TextDemo.HC"$
@@ -190,5 +190,5 @@ $LK,"::/Demo/Asm/AsmAndC2.HC"$
 $LK,"::/Demo/Asm/AsmAndC3.HC"$
 $LK,"::/Demo/GlblVars.HC"$
 $LK,"::/Misc/OSTestSuite.HC"$
-$MA-X+PU,"::/Adam",LM="Cd(\"::/Adam\");Dir;View;\n"$
+$MA-X+PU,"::/Zenith",LM="Cd(\"::/Zenith\");Dir;View;\n"$
 $ID,-2$

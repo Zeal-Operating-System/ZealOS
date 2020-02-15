@@ -57,7 +57,7 @@ I64 AddTri(BallDefineStruct *,I64 c,I64 n0,I64 n1,I64 n2)
 
 U8 *Ball2CSprite()
 {
-//See $LK,"::/Adam/Gr/GrSpritePlot.HC",A="FL:::/Adam/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.
+//See $LK,"::/Zenith/Gr/GrSpritePlot.HC",A="FL:::/Zenith/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.
   U8 *res=MAlloc(sizeof(CSpriteMeshU8s)+
 	b->vertex_cnt*sizeof(CD3I32)+b->tri_cnt*sizeof(CMeshTri)
   +sprite_elem_base_sizes[SPT_END]),

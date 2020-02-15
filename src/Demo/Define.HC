@@ -1,6 +1,6 @@
 //See $LK,"Define",A="HI:Define"$.
 
-//These might be in the Adam task.
+//These might be in the Zenith task.
 DefineLoad("ST_YES_NO","(Yes or No)");
 DefineLoad("ST_EXIT","Exit");
 DefineLstLoad("ST_NO_YES_LST","No\0Yes\0");

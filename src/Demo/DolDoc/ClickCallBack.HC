@@ -19,7 +19,7 @@ U0 ClickCallBack()
 
   //Flags are explained here:
   //$LK,"::/Doc/DolDocOverview.DD"$	$LK,"::/Doc/Widget.DD"$
-  //$LK,"Dollar Flags",A="MN:DOCEf_TAG"$		$LK,"ST_DOC_FLAGS",A="FF:::/Adam/DolDoc/DocInit.HC,ST_DOC_FLAGS"$
+  //$LK,"Dollar Flags",A="MN:DOCEf_TAG"$		$LK,"ST_DOC_FLAGS",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$
   "(Not preserved if you press <CTRL-t>.)\n\n";
   doc_e->left_cb=&MyLeftCB1;
   DocUnlock(DocPut);

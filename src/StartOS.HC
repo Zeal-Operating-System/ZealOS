@@ -1,5 +1,5 @@
-//This is executed by the Adam task at boot.
-//See $LK,"Adam Start-up",A="FF:::/Kernel/KMain.HC,\"StartOS"$.
+//This is executed by the Zenith task at boot.
+//See $LK,"Zenith Start-up",A="FF:::/Kernel/KMain.HC,\"StartOS"$.
 
 #help_index "Compiler/Directive"
 public extern I8i Option(I64i num,I8i val);
@@ -13,11 +13,11 @@ Option(0,0); //(0,0)=EchoOff   (0,1)=EchoOn
 
 Option(OPTf_WARN_PAREN,ON);
 Option(OPTf_WARN_DUP_TYPES,ON);
-HashTablePurge(adam_task->hash_table);
+HashTablePurge(zenith_task->hash_table);
 
-#include "/Adam/MakeAdam"
+#include "/Zenith/MakeZenith"
 
-//Dbg("Type 'G;'");
+//Debug("Type 'G;'");
 DocTermNew;
 WinVert(2,10);
 
@@ -28,8 +28,6 @@ LBts(&Fs->display_flags,DISPLAYf_CHILDREN_NOT_ON_TOP);
 LBts(&Fs->display_flags,DISPLAYf_SHOW);
 RegInit;
 LBts(&sys_run_level,RLf_REGISTRY);
-if (!ins_reg.registered)
-  InsUnreg;
 
 WallPaperInit;
 
@@ -43,4 +41,4 @@ LBts(&sys_run_level,RLf_HOME);
 #help_index ""
 #include "~/MakeHome"
 
-//After this file, the Adam task enters $LK,"server mode",A="HI:Job"$.
+//After this file, the Zenith task enters $LK,"server mode",A="HI:Job"$.

@@ -557,7 +557,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 	break;
     end:
       disp+=rip;
-      if (IsDbgMode)
+      if (IsDebugMode)
 	CatPrint(arg1_st,"%p ",disp);
       else if (PutSrcLink(disp,512,buf2))
 	CatPrint(arg1_st,"%s ",buf2);

@@ -91,7 +91,7 @@ U0 CharDo(U8 ch)
   }
 }
 
-U0 UserChk()
+U0 UserCheck()
 {
   I64 ch;
   if (!alive_cnt[0] || !alive_cnt[1])

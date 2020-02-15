@@ -1,4 +1,4 @@
-I64 OptPass789A(CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDbgInfo **_dbg)
+I64 OptPass789A(CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg)
 {/*cc->pass==7 is first time
 cc->pass==8 is second time
 cc->pass==9 is third time
@@ -15,7 +15,7 @@ cc->pass==10 is final pass, code is placed into buf.
   CAOTImportExport *tmpie;
   CAOTHeapGlbl *tmphg;
   CAOTHeapGlblRef *tmphgr;
-  CDbgInfo *dbg_info;
+  CDebugInfo *dbg_info;
   CAOTCtrl *aotc=cc->aotc;
   Bool short_jmp;
   CHashClass *tmpc;
@@ -24,7 +24,7 @@ cc->pass==10 is final pass, code is placed into buf.
   CExternUsage *tmpeu;
 
   if (_dbg) {
-    *_dbg=dbg_info=CAlloc(offset(CDbgInfo.body)+sizeof(U32)*(num_lines+1));
+    *_dbg=dbg_info=CAlloc(offset(CDebugInfo.body)+sizeof(U32)*(num_lines+1));
     dbg_info->min_line=cc->min_line;
     dbg_info->max_line=cc->max_line;
     if (cc->flags&CCF_AOT_COMPILE)
