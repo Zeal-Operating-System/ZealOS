@@ -128,5 +128,5 @@ This bit tells ZenithOS to update whole scrn.
 MiniGrLibDemo;
 
 //See $LK,"RawPutChar",A="MN:RawPutChar"$() for text.
-//See $LK,"::/Demo/Lectures/ScrnMemory.HC"$ for color.
+//See $LK,"::/Demo/Lectures/ScreenMemory.HC"$ for color.
 //See $LK,"::/Demo/Lectures/GraphicsCPULoad.HC"$.

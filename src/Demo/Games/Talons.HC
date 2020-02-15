@@ -592,7 +592,7 @@ U0 MPDrawIt(CTask *task,CDC *dc)
   Mat4x4RotZ(dc->r,roll);
   DCMat4x4Set(dc,dc->r);
 
-  //Scrn to world coordinates
+  //Screen to world coordinates
 
   //This gives us the vects for stepping through the grid in
   //the direction the plane is facing. we step horizontally and vertically
@@ -969,7 +969,7 @@ U0 AnimateTask(I64)
     ms=1000*(tS-t0);
     t0=tS;
     if (!game_tf) {
-//Scrn to world coordinates
+//Screen to world coordinates
       s2w=Mat4x4IdentNew;
       Mat4x4RotZ(s2w,-roll);
       Mat4x4RotX(s2w,-è);

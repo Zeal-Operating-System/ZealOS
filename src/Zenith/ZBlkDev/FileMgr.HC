@@ -567,7 +567,7 @@ U0 FMRightClick()
 U8 *fm_ms_str=NULL;
 U0 (*fp_old_final_scrn_update)(CDC *dc);
 
-U0 FMFinalScrnUpdate(CDC *dc)
+U0 FMFinalScreenUpdate(CDC *dc)
 {
   if (fm_ms_str) {
     dc->color=LTRED;
@@ -611,7 +611,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
       case MSG_MS_L_DOWN:
 	doc_ce=doc->cur_entry;
 	fm_ms_str=doc_ce->tag;
-	gr.fp_final_scrn_update=&FMFinalScrnUpdate;
+	gr.fp_final_scrn_update=&FMFinalScreenUpdate;
 	break;
       case MSG_MS_L_UP:
 	if (doc_ce) {

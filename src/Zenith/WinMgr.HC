@@ -268,7 +268,7 @@ I64 WinMgrSleep(Bool flush_msgs=FALSE)
       winmgr.ideal_refresh_tS+=WINMGR_PERIOD;
     timeout_val=cnts.jiffies+(winmgr.ideal_refresh_tS-tS)*JIFFY_FREQ;
     LBts(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0);
-    GrUpdateScrn;
+    GrUpdateScreen;
     LBtr(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0);
     if (scrncast.record  && !scrncast.just_audio) {
       cdt=scrncast.t0_now(I64)+ToI64(CDATE_FREQ*(tS-scrncast.t0_tS));

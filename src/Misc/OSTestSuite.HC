@@ -266,10 +266,10 @@ U0 DoBSpline()
   DeathWait(&task,TRUE);
 }
 
-U0 DoScrnCapture()
+U0 DoScreenCapture()
 {
   CTask *task=User;
-  XTalkWait(task,"#include \"::/Demo/Graphics/ScrnCapture\";\n");
+  XTalkWait(task,"#include \"::/Demo/Graphics/ScreenCapture\";\n");
   Sleep(500);
   PostMsgWait(task,MSG_KEY_DOWN_UP,CH_SPACE,0);
   Sleep(500);
@@ -277,7 +277,7 @@ U0 DoScrnCapture()
   Sleep(750);
   PostMsgWait(task,MSG_KEY_DOWN_UP,CH_SPACE,0);
   DeathWait(&task,TRUE);
-  Del("~/DemoScrnShot.GR*");
+  Del("~/DemoScreenShot.GR*");
 }
 
 U0 DoStadium()
@@ -1592,7 +1592,7 @@ U0 OSTestSuite()
   TS("BSpline");	DoBSpline;
   TS("GrModels");	DoGrModels;
   TS("Blot");		TSFileChar("::/Demo/Graphics/Blot",1800);
-  TS("ScrnCapture");	if (DriveIsWritable('~')) DoScrnCapture;
+  TS("ScreenCapture");	if (DriveIsWritable('~')) DoScreenCapture;
   TS("Grid");		DoGrid;
   TS("Pick");		DoPick;
   TS("Pick3D");		DoPick3D;
@@ -1633,7 +1633,7 @@ U0 OSTestSuite()
   TS("FPrintF");	if (DriveIsWritable('~')) DoFPrintF;
   TS("SerializeTree");	TSFile("::/Demo/Disk/SerializeTree");
   TS("Exceptions");	DoExceptions;
-  TS("ScrnDCodes");	TSFileChar("::/Demo/ScrnCodes");
+  TS("ScreenDCodes");	TSFileChar("::/Demo/ScreenCodes");
   TS("ExtChars");	TSFile("::/Demo/ExtChars");
   TS("PanText");	TSFile("::/Demo/Graphics/PanText",0);
   TS("CharAnimation");	TSFile("::/Demo/Graphics/CharAnimation");

@@ -565,7 +565,7 @@ U0 ODERK5OneStep(CMathODE *ode)
 F64 ode_alloced_factor=0.75;
 
 U0 ODEsUpdate(CTask *task)
-{/* This routine is called by the $LK,"window mgr",A="FF:::/Zenith/Gr/GrScrn.HC,ODEsUpdate"$on a continuous
+{/* This routine is called by the $LK,"window mgr",A="FF:::/Zenith/Gr/GrScreen.HC,ODEsUpdate"$on a continuous
 basis to allow real-time simulation.It is intended
 to provide ress good enough for games.It uses a runge-kutta
 integrator which is a better algorithm than doing it with Euler.

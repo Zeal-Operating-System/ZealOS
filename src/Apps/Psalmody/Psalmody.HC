@@ -19,7 +19,7 @@ This uses four types of output
 
   4) The Fs->next_ctrl for the tempo/stacatto sliders.
 
-See $LK,"GrUpdateTaskWin",A="MN:GrUpdateTaskWin"$(), $LK,"GrUpdateTasks",A="MN:GrUpdateTasks"$() and $LK,"GrUpdateScrn",A="MN:GrUpdateScrn"$().
+See $LK,"GrUpdateTaskWin",A="MN:GrUpdateTaskWin"$(), $LK,"GrUpdateTasks",A="MN:GrUpdateTasks"$() and $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 $WW,1$$WW,0$*/
 
 #define PSMT_HEAD	0

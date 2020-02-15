@@ -15,7 +15,7 @@ U0 DrawIt(CTask *task,CDC *)
     TextChar(task,,(i&15)*2,(i/16)*2,i+BLACK<<12+WHITE<<8);
 }
 
-U0 ScrnCodes()
+U0 ScreenCodes()
 {
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
   DocClear;
@@ -24,4 +24,4 @@ U0 ScrnCodes()
   SettingsPop;
 }
 
-ScrnCodes;
+ScreenCodes;

@@ -4,7 +4,7 @@ U0 RawPutChar(I64 ch)
 See $LK,"GrUpdateTextFG",A="MN:GrUpdateTextFG"$ for
 the normal scrn text output routine.
 
-See also $LK,"GrUpdateScrn",A="MN:GrUpdateScrn"$().
+See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 */
   I64 i,row,col;
   U8 *ptr,*ptr1,*ptr2;

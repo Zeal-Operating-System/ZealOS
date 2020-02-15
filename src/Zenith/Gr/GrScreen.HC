@@ -1,4 +1,4 @@
-#help_index "Graphics/Scrn"
+#help_index "Graphics/Screen"
 
 U0 GrUpdateTaskODEs(CTask *task)
 {
@@ -121,7 +121,7 @@ public U0 GrScaleZoom(F64 scale)
   GrFixZoomScale;
 }
 
-U0 GrZoomInScrn()
+U0 GrZoomInScreen()
 {
   GrFixZoomScale;
   I64 plane,row,col,k,l,
@@ -370,7 +370,7 @@ U0 GrUpdateVGAGraphics()
   if (gr.scrn_zoom==1)
     src=gr.dc1->body;
   else {
-    GrZoomInScrn;
+    GrZoomInScreen;
     src=gr.zoomed_dc->body;
   }
   dst=gr.scrn_image->body;
@@ -395,8 +395,8 @@ U0 GrUpdateVGAGraphics()
   }
 }
 
-U0 GrUpdateScrn()
-{//Called by the Window Manager $LK,"HERE",A="FF:::/Zenith/WinMgr.HC,GrUpdateScrn"$, 30 times a second.
+U0 GrUpdateScreen()
+{//Called by the Window Manager $LK,"HERE",A="FF:::/Zenith/WinMgr.HC,GrUpdateScreen"$, 30 times a second.
   CDC *dc;
   if (!Bt(&sys_run_level,RLf_VGA)) //if text mode
     GrUpdateTasks;

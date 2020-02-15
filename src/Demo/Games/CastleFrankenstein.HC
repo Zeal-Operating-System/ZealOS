@@ -158,7 +158,7 @@ U0 DrawIt(CTask *task,CDC *dc)
   Mat4x4MulXYZ(dc->r,&xh,&yh,&zh);
   Mat4x4TranslationEqu(dc->r,xh,yh,zh);
 
-  //Scrn to world
+  //Screen to world
   s2w=Mat4x4IdentNew(task);
   Mat4x4RotX(s2w,-ã/2);
   Mat4x4RotZ(s2w,-man_é-ã/2);

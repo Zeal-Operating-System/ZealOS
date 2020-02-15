@@ -17,7 +17,7 @@ U0 StadiumGen()
   gr.fp_final_scrn_update=NULL;
 
   Refresh(2,TRUE);
-  dc2=DCScrnCapture;
+  dc2=DCScreenCapture;
   dc=DCExt(dc2,0,FONT_HEIGHT,GR_WIDTH,GR_HEIGHT);
   DCDel(dc2);
 

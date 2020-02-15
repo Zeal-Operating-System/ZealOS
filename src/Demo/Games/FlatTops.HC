@@ -793,7 +793,7 @@ U0 FlatTops()
   PopUpOk("$$GREEN$${Left-Mouse}$$FG$$\t\tChange Course\n"
 	"$$GREEN$${Right-Mouse}$$FG$$\t\tLaunch Squadron\n"
 	"$$GREEN$${Right-Double-Mouse}$$FG$$\tReturn Squadron\n"
-	"$$GREEN$${Ctrl-Left Grab}$$FG$$\tScroll Scrn\n");
+	"$$GREEN$${Ctrl-Left Grab}$$FG$$\tScroll Screen\n");
   MenuPush(
 	"File {"
 	"  Abort(,CH_SHIFT_ESC);"

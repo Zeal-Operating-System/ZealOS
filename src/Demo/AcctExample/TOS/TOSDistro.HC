@@ -64,7 +64,7 @@ U0 DistroPrep()
 
   DelTree("/Tmp");
   DirMk("/Tmp");
-  DirMk("/Tmp/ScrnShots");
+  DirMk("/Tmp/ScreenShots");
 
   Touch("/PersonalMenu.DD","+T");
   Touch("/Home/PersonalMenu.DD","+T");

@@ -1,4 +1,4 @@
-#help_index "Graphics/Scrn"
+#help_index "Graphics/Screen"
 
 U0 GrSetUpTables()
 {
@@ -93,7 +93,7 @@ U0 GrSetUpTables()
   }
 }
 
-#help_index "Graphics/Scrn;Windows"
+#help_index "Graphics/Screen;Windows"
 
 U0 WinZBufFill(CTask *task)
 {//Not public

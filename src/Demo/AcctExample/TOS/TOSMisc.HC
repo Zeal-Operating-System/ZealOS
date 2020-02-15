@@ -16,8 +16,8 @@ I64 CopyVideo()
   return res;
 }
 
-#help_index "ScrnCast/TOS"
-U0 DelScrnShots()
+#help_index "ScreenCast/TOS"
+U0 DelScreenShots()
 {
   Bool old_silent=Silent;
   DelTree("B:/Tmp");
@@ -37,12 +37,12 @@ public U0 FrameGrabberToggle(Bool sync_tone,Bool tos_theme,
     last_time=tS;
     if (fg_on) {
       fg_on=FALSE;
-      ScrnCast(OFF);
+      ScreenCast(OFF);
       User("CopyVideo;Exit;\n");
     } else {
-      DelScrnShots;
+      DelScreenShots;
       fg_on=TRUE;
-      ScrnCast(ON,just_audio);
+      ScreenCast(ON,just_audio);
       if (sync_tone) {Beep;}
       if (tos_theme) {User("ExeFile(\"~/TOS/TOSTheme\");Exit;\n");}
     }

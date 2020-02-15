@@ -664,10 +664,10 @@ public extern U8 *IntEntryGet(I64 irq);
 public extern U8 *IntEntrySet(I64 irq,
 	U0 (*fp_new_hndlr)(),I64 type=IDTET_IRQ,I64 dpl=0);
 
-#help_index "ScrnCast;Cmd Line (Typically)"
-public extern Bool ScrnCast(Bool val=ON,Bool just_audio=FALSE,
+#help_index "ScreenCast;Cmd Line (Typically)"
+public extern Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,
 	U8 *print_fmt="B:/Tmp/%X.GR")
-public extern CScrnCastGlbls scrncast;
+public extern CScreenCastGlbls scrncast;
 
 #help_index "Snd"
 #help_file "::/Doc/Snd"

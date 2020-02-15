@@ -3,7 +3,7 @@
 
 U0 PlotXY(I64 x,I64 y)
 {
-//Scrn bits are revd
+//Screen bits are revd
   LBts(text.vga_alias,y*GR_WIDTH+x^7);
 }
 

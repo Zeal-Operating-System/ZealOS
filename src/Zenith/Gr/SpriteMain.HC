@@ -43,8 +43,8 @@ I64 PopUpSpriteMain(CSprite **_head,I64 *_cur_elem_num,
 	"$$MU-UL,\"BSpline3\",LE=SPT_BSPLINE3$$\n"
 	"$$MU-UL,\"BSpline2 Closed\",LE=SPT_BSPLINE2_CLOSED$$\n"
 	"$$MU-UL,\"BSpline3 Closed\",LE=SPT_BSPLINE3_CLOSED$$\n"
-	"$$MU-UL,\"Insert Scrn-Captured BitMap\",LE=SPT_INS_SCRN_BITMAP$$\n"
-	"$$MU-UL,\"Insert Transparent Scrn-Captured BitMap\","
+	"$$MU-UL,\"Insert Screen-Captured BitMap\",LE=SPT_INS_SCRN_BITMAP$$\n"
+	"$$MU-UL,\"Insert Transparent Screen-Captured BitMap\","
 	"LE=SPT_INS_TRANSPARENT_SCRN_BITMAP$$\n"
 	"$$PURPLE$$$$MU-UL,\"+] Create or Edit 3D Mesh\",LE=SPT_MESH$$\n"
 	"$$MU-UL,\"+] Create or Edit Shiftable 3D Mesh\","
@@ -101,7 +101,7 @@ Bool PopUpExtents(I64 *_x1,I64 *_x2,I64 *_y1,I64 *_y2)
   return res;
 }
 
-U0 SpriteScrnInit(CDC *dc,I64,I64)
+U0 SpriteScreenInit(CDC *dc,I64,I64)
 {
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
   I64 xx,yy,old_pen_width=dc->thick;
@@ -136,7 +136,7 @@ CSprite *SMLine(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrLine3(dc,x1,y1,0,x2,y2,0);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
@@ -158,7 +158,7 @@ CSprite *SMArrow(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrArrow3(dc,x1,y1,0,x2,y2,0);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
@@ -184,7 +184,7 @@ CSprite *SMPlanarSymmetry(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2)
     dc->color=ROPF_DITHER+WHITE<<16+BLACK;
     GrLine3(dc,x1,y1,0,x2,y2,0);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   dc->flags=old_flags&DCF_SYMMETRY|dc->flags&~DCF_SYMMETRY;
@@ -207,7 +207,7 @@ CSprite *SMRect(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrRect3(dc,xx1,yy1,0,xx2-xx1,yy2-yy1);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
     if (x2<x1) {
       xx1=x2; xx2=x1;
@@ -231,7 +231,7 @@ CSprite *SMRect(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
   return res;
 }
 
-CSprite *SMScrnBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
+CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
 	I64 arg1,I64 arg2,CColorROPU32 bm_bkcolor)
 {
   I64 i,msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,
@@ -245,7 +245,7 @@ CSprite *SMScrnBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
     GrBorder(dc2,xx1+Fs->pix_left+Fs->scroll_x,yy1+Fs->pix_top+Fs->scroll_y,
 	  xx2+Fs->pix_left+Fs->scroll_x,yy2+Fs->pix_top+Fs->scroll_y);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
     if (x2<x1) {
       xx1=x2; xx2=x1;
@@ -265,12 +265,12 @@ CSprite *SMScrnBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
   res->pwhu.height=yy2-yy1;
   res->pwhu.x1=0;
   res->pwhu.y1=0;
-  SpriteScrnInit(dc,x,y);
+  SpriteScreenInit(dc,x,y);
   i=gr.scrn_zoom;
   GrScaleZoom(1.0/i);
   Refresh(2,TRUE);
 
-  dc3=DCScrnCapture;
+  dc3=DCScreenCapture;
   img=DCExt(dc3,Fs->pix_left+Fs->scroll_x+xx1,Fs->pix_top+Fs->scroll_y+yy1,
 	Fs->pix_left+Fs->scroll_x+xx2-1,Fs->pix_top+Fs->scroll_y+yy2-1);
   if (eletype==SPT_INS_TRANSPARENT_SCRN_BITMAP)
@@ -293,7 +293,7 @@ CSprite *SMCircle(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrCircle3(dc,x1,y1,0,Sqrt(SqrI64(x1-x2)+SqrI64(y1-y2)));
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
@@ -315,7 +315,7 @@ CSprite *SMEllipse(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrEllipse3(dc,(x1+x2)>>1,(y1+y2)>>1,0,AbsI64(x1-x2)>>1,AbsI64(y1-y2)>>1);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_ELLIPSE));
@@ -337,7 +337,7 @@ CSprite *SMEllipse(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     GrEllipse3(dc,res->pwha.x1+x,res->pwha.y1+y,0,
 	  res->pwha.width,res->pwha.height,res->pwha.angle);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   angle1=Arg(x2-(res->pwha.x1+x),y2-(res->pwha.y1+y));
@@ -362,7 +362,7 @@ CSprite *SMPolygon(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,I64 sides,
     GrRegPoly3(dc,(x1+x2)>>1,(y1+y2)>>1,0,
 	  AbsI64(x1-x2)>>1,AbsI64(y1-y2)>>1,sides);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_POLYGON));
@@ -386,7 +386,7 @@ CSprite *SMPolygon(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,I64 sides,
 	  res->pwhas.width,res->pwhas.height,
 	  res->pwhas.sides,res->pwhas.angle);
     msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-    SpriteScrnInit(dc,x,y);
+    SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
   } while (msg_code!=MSG_MS_L_UP);
   angle1=Arg(x2-(res->pwhas.x1+x),y2-(res->pwhas.y1+y));
@@ -567,7 +567,7 @@ U0 SMTextFamily(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,CDC *dc,
 	case SPT_TEXT_DIAMOND:	GrTextDiamond3(dc,x1,y1,0,st);	break;
       }
       msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-      SpriteScrnInit(dc,x,y);
+      SpriteScreenInit(dc,x,y);
       x1=arg1; y1=arg2;
     } while (msg_code!=MSG_MS_L_UP);
     tmpg=CAlloc(SpriteElemQueuedBaseSize(eletype)+StrLen(st)+1);
@@ -602,7 +602,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
       dc->color=ROPF_DITHER+WHITE<<16+BLACK;
       GrBorder(dc,xx1,yy1,xx2,yy2);
       msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-      SpriteScrnInit(dc,x,y);
+      SpriteScreenInit(dc,x,y);
       x2=arg1; y2=arg2;
       if (x2<x1) {
 	xx1=x2; xx2=x1;
@@ -797,10 +797,10 @@ U0 SMTaskTitleSet(I64 eletype)
   Fs->title_src=TTS_CONST; //Violates TTS_LOCKED_CONST
   switch (eletype) {
     case SPT_INS_SCRN_BITMAP:
-      StrCpy(Fs->task_title,"Insert Scrn BitMap");
+      StrCpy(Fs->task_title,"Insert Screen BitMap");
       break;
     case SPT_INS_TRANSPARENT_SCRN_BITMAP:
-      StrCpy(Fs->task_title,"Insert Transparent Scrn BitMap");
+      StrCpy(Fs->task_title,"Insert Transparent Screen BitMap");
       break;
     default:
       if (eletype>=0)
@@ -1029,7 +1029,7 @@ I64 SpriteMainEd(CDoc *doc)
       insert_pt=SpriteSetSettings(dc,head,cur_elem_num,xx,yy,
 	    &color,&thick,&x,&y);
       x+=xx; y+=yy;
-      SpriteScrnInit(dc,x,y);
+      SpriteScreenInit(dc,x,y);
       if (eletype==SPT_EXIT) {
 	res=SPE_EXIT;
 	goto ei_done;
@@ -1048,7 +1048,7 @@ I64 SpriteMainEd(CDoc *doc)
 	      res=SPE_ABORT;
 	      goto ei_done;
 	    case 'c': //eye-dropper
-	      dc3=DCScrnCapture(FALSE);
+	      dc3=DCScreenCapture(FALSE);
 	      color=GrPeek(dc3,ms.pos.x,ms.pos.y)^15;//Mouse cursor is XORed.
 	      DCDel(dc3);
 	      tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_COLOR));
@@ -1097,7 +1097,7 @@ I64 SpriteMainEd(CDoc *doc)
 		break;
 	      case SPT_INS_SCRN_BITMAP:
 	      case SPT_INS_TRANSPARENT_SCRN_BITMAP:
-		tmpg=SMScrnBitMap(eletype,dc,dc2,x,y,arg1,arg2,bm_bkcolor);
+		tmpg=SMScreenBitMap(eletype,dc,dc2,x,y,arg1,arg2,bm_bkcolor);
 		eletype=SPT_MENU;
 		break;
 	      case SPT_CIRCLE:

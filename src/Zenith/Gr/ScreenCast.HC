@@ -1,4 +1,4 @@
-#help_index "ScrnCast;Graphics/Device Contexts;Graphics/GR Files"
+#help_index "ScreenCast;Graphics/Device Contexts;Graphics/GR Files"
 
 #define MV_FILE_MAX	0x007FF000
 
@@ -57,7 +57,7 @@ public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
   return file_num;
 }
 
-#help_index "ScrnCast;Snd/AU Files"
+#help_index "ScreenCast;Snd/AU Files"
 public U0 SndShift(CSndData *head,F64 dt=0)
 {//Shift CSndData in time.
   CSndData *tmpsd,*tmpsd1;

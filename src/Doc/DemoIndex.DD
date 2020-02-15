@@ -32,7 +32,7 @@ $LK,"::/Demo/Games/Digits.HC"$
 $LK,"::/Demo/Progress.HC"$ //has some ASM, just ignore
 $LK,"::/Demo/Graphics/Symmetry.HC"$
 $LK,"::/Demo/Graphics/Blot.HC"$
-$LK,"::/Demo/Graphics/ScrnCapture.HC"$
+$LK,"::/Demo/Graphics/ScreenCapture.HC"$
 $LK,"::/Demo/Graphics/EdSprite.HC"$
 $LK,"::/Demo/PullDownMenu.HC"$
 $LK,"::/Demo/Graphics/Palette.HC"$
@@ -55,7 +55,7 @@ $LK,"::/Demo/Graphics/SpritePlot3D.HC"$
 $LK,"::/Demo/Graphics/Balloon.HC"$
 $LK,"::/Demo/Graphics/RotateTank.HC"$
 $LK,"::/Demo/Games/Wenceslas.HC"$
-$LK,"::/Demo/ScrnCodes.HC"$
+$LK,"::/Demo/ScreenCodes.HC"$
 $LK,"::/Demo/Graphics/PanText.HC"$
 $LK,"::/Demo/Graphics/CharAnimation.HC"$
 $LK,"::/Demo/Games/Maze.HC"$

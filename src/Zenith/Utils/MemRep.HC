@@ -14,7 +14,7 @@ I64 PenBrushesSize()
   return res;
 }
 
-I64 ScrnZoomTablesSize()
+I64 ScreenZoomTablesSize()
 {
   I64 res=0,i;
   for (i=1;i<=GR_SCRN_ZOOM_MAX;i++)
@@ -135,7 +135,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 
   if (task==sys_winmgr_task) {
     "gr.pen_brushes\t:%010X\n",PenBrushesSize;
-    "gr.scrn_zoom_tbles\t:%010X\n",ScrnZoomTablesSize;
+    "gr.scrn_zoom_tbles\t:%010X\n",ScreenZoomTablesSize;
     "scrncast.dc\t:%010X\n",DCSize(scrncast.dc);
     "scrncast.dc2_alias\t:%010X\n",DCSize(scrncast.dc2_alias);
   } else if (task==zenith_task) {

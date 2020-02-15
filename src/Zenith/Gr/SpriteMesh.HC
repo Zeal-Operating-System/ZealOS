@@ -13,7 +13,7 @@ class CMeshEdVertex
   CD3I32 p; //World coordinates of the point.
   U0 end;
   CD3I32 p0,
-	pt; //Transformed coordinates.	(Scrn)
+	pt; //Transformed coordinates.	(Screen)
   I32 num,flags;
 };
 
@@ -42,7 +42,7 @@ class CMeshFrame
   F64 view_scale;
   CDC *dc;
   I32 *depth_buf;
-  I64 *w2s,*s2w; //Scrn-to-world and world-to-scrn transform matrices.
+  I64 *w2s,*s2w; //Screen-to-world and world-to-scrn transform matrices.
   I64 vertex_cnt,tri_cnt; //Set by MeshSize
   CMeshEdVertex vertex_head,*cur_vertex,*chain_pred;
   CMeshEdTri	tri_head,*cur_tri;
@@ -74,7 +74,7 @@ CMeshEdTri *MeshTriNew(CMeshFrame *e,CColorROPU32 color,
 }
 
 CMeshEdVertex *MeshVertexFindScrPt(CMeshFrame *e,I64 x,I64 y)
-{//Scrn coordinates
+{//Screen coordinates
   CMeshEdVertex *res=NULL,*tmpv=e->vertex_head.next;
   I64 dd,dz,best_dd=I64_MAX,best_dz=I64_MAX;
   while (tmpv!=&e->vertex_head) {
@@ -534,7 +534,7 @@ I64 *MeshW2S(CMeshFrame *e,CTask *task)
 }
 
 I64 *MeshS2W(CMeshFrame *e,CTask *task)
-{//Scrn to world coordinate transform matrix.
+{//Screen to world coordinate transform matrix.
   CCtrl *c=CtrlFindUnique(task,CTRLT_VIEWING_ANGLES);
   CViewAngles *s=c->state;
   I64 *r=Mat4x4IdentNew(task);

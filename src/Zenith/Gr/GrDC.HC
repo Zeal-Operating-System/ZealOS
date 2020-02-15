@@ -413,8 +413,8 @@ public U0 DocGR(CDoc *doc=NULL,U8 *filename)
   DCDel(dc);
 }
 
-#help_index "Graphics/Device Contexts;Graphics/Scrn"
-public CDC *DCScrnCapture(Bool include_zoom=TRUE,CTask *task=NULL)
+#help_index "Graphics/Device Contexts;Graphics/Screen"
+public CDC *DCScreenCapture(Bool include_zoom=TRUE,CTask *task=NULL)
 {//Capture scrn to a device context.
   CDC *dc;
   U8 *dst;

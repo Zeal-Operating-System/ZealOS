@@ -4,10 +4,10 @@ U0 Main()
 {
   "Capture scrn...\n";
   PressAKey;
-  GRScrnCaptureWrite("~/DemoScrnShot");
+  GRScreenCaptureWrite("~/DemoScreenShot");
   "View captured scrn...\n";
   PressAKey;
-  GRScrnCaptureRead("~/DemoScrnShot");
+  GRScreenCaptureRead("~/DemoScreenShot");
   PressAKey;
   DCFill;
 }

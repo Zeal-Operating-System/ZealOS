@@ -232,7 +232,7 @@ I64 SpriteBitMapEd(CDoc *,CDocEntry *doc_e,CDC *dc,I64 *_xx1,I64 *_yy1,
 	      res=SPE_CONT;
 	      goto bm_key_up_done;
 	    case 'c': //eye-dropper
-	      dc2=DCScrnCapture(FALSE);
+	      dc2=DCScreenCapture(FALSE);
 	      color=GrPeek(dc2,ms.pos.x,ms.pos.y)^15;//Mouse cursor is XORed.
 	      DCDel(dc2);
 	      break;

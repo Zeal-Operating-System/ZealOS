@@ -3,7 +3,7 @@ U0 InstallDrive(U8 drv_let)
   U8 *st;
   ExePrint("CopyTree(\"::/\",\"%C:/\");",drv_let);
   ExePrint("DirMk(\"%C:/Tmp\");",drv_let);
-  ExePrint("DirMk(\"%C:/Tmp/ScrnShots\");",drv_let);
+  ExePrint("DirMk(\"%C:/Tmp/ScreenShots\");",drv_let);
   ExePrint("DirMk(\"%C:/Home\");",drv_let);
 
   st=MStrPrint("%C:/Home/DoDistro.HC",drv_let);

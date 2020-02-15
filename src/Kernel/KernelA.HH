@@ -3771,7 +3771,7 @@ class CKeyDevGlbls
 };
 
 #help_index "Snd"
-#help_index "ScrnCast;Snd/AU Files"
+#help_index "ScreenCast;Snd/AU Files"
 public class CAUData
 {//Fmt of AU files
   CDate	cdt;
@@ -3785,7 +3785,7 @@ class CSndData
   I8	ona;
 };
 
-public class CScrnCastGlbls
+public class CScreenCastGlbls
 {
   CSndData snd_head;
   CDate	t0_now;

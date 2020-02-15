@@ -127,7 +127,7 @@ $FG,2$Rst$FG$	Reset
 $FG,2$Rot$FG$	Rotation
 $FG,2$Rx$FG$	Receive
 $FG,2$Sched$FG$	Sceduler
-$FG,2$Scrn$FG$	Screen
+$FG,2$Screen$FG$	Screen
 $FG,2$Sec$FG$	Second, Secondary
 $FG,2$Sect$FG$	Sector
 $FG,2$Sel$FG$	Select, Selected
