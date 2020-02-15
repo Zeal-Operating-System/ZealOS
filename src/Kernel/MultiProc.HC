@@ -1,7 +1,7 @@
 asm {
 	ALIGN	16,OC_NOP
 USE16
-//See $LK,"TempleOS MultiCore",A="FI:::/Doc/MultiCore.DD"$.
+//See $LK,"ZenithOS MultiCore",A="FI:::/Doc/MultiCore.DD"$.
 
 //This code gets copied to $LK,"MP_VECT_ADDR",A="MN:MP_VECT_ADDR"$.
 //See $LK,"MemCpy(MP_VECT_ADDR",A="FF:::/Kernel/MultiProc.HC,MemCpy(mp:2"$.

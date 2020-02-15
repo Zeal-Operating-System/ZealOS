@@ -9,7 +9,7 @@ We want to use one set for ASCII, ScanCodes and ScreenCodes.
 128-191 : CTRL
 192-256 : CTRL+SHIFT
 
-No more ALT key in TempleOS.
+No more ALT key in ZenithOS.
 
 CTRL-LEFT/RIGHT is already begin/end line.
 CTRL-UP/DOWN    is already top/bottom of document.

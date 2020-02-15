@@ -1,5 +1,5 @@
 asm {/* See $LK,"::/Doc/Boot.DD"$.
-TempleOS starts in real, calls some BIOS
+ZenithOS starts in real, calls some BIOS
 routines, switches to 32 bit, and 64 bit mode
 and continues in $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ at $LK,"KMain",A="MN:KMain"$().
 

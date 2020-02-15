@@ -92,7 +92,7 @@ public U0 DCLighting(CDC *dc,
   //gives an illumination number.
   //65536*65536>>16=65536
 
-  //TempleOS will generate a random U16
+  //ZenithOS will generate a random U16
   //and compare to dither_probability_u16 and
   //will pick from two colors.
   //Probability dithering does not work with thick>1 at this time.
@@ -381,7 +381,7 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
 	COLORS_NUM*sizeof(CBGR48)+sizeof(CArcCtrl)+GR_WIDTH*GR_HEIGHT)
 
 public I64 GRWrite(U8 *filename,CDC *dc,I64 dcsf_flags=DCSF_COMPRESSED)
-{//TempleOS GR File.
+{//ZenithOS GR File.
   I64	size;
   U8	*st=ExtDft(filename,"GR"),
 	*src=DCSave(dc,&size,dcsf_flags);
@@ -392,7 +392,7 @@ public I64 GRWrite(U8 *filename,CDC *dc,I64 dcsf_flags=DCSF_COMPRESSED)
 }
 
 public CDC *GRRead(U8 *filename,CTask *task=NULL)
-{//TempleOS GR File.
+{//ZenithOS GR File.
   CDC	*dc=NULL;
   U8	*st=ExtDft(filename,"GR"),
 	*src=FileRead(st);

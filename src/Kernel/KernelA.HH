@@ -1,4 +1,4 @@
-// Main TempleOS header
+// Main ZenithOS header
 
 #help_index ""
 extern class CAOT;
@@ -263,7 +263,7 @@ public class CMathODE
 	h,h_min,h_max;
 
   //This is not precise, just a ballpark.
-  //TempleOS CMathODE's are for video games
+  //ZenithOS CMathODE's are for video games
   //not science.  It bails if it takes
   //too long.
   F64	min_tolerance,max_tolerance;
@@ -1476,7 +1476,7 @@ class CWinMgrTimingGlbls
 };
 
 #define WINMGR_FPS	(60000.0/1001)
-#define WINMGR_PERIOD	(1001/60000.0)
+#define WINMGR_PERIOD	(1001/60000.0)
 
 public class CWinMgrGlbls
 {
@@ -3490,7 +3490,7 @@ public class CSysFixedArea
 #define SCF_NO_SHIFT	(1<<SCf_NO_SHIFT)
 #define SCF_KEY_DESC	(1<<SCf_KEY_DESC)
 
-//TempleOS places a 1 in bit 7 for
+//ZenithOS places a 1 in bit 7 for
 //keys with an E0 prefix.
 //See $LK,"::/Doc/CharOverview.DD"$ and $LK,"KbdHndlr",A="MN:KbdHndlr"$().
 #define SC_ESC		0x01

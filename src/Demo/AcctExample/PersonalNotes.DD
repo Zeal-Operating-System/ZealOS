@@ -309,7 +309,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * I use fixed-point in $LK,"Circle",A="MN:Circle"$(), $LK,"Ellipse",A="MN:Ellipse"$(), $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$(), $LK,"Mat4x4MulMat4x4New",A="MN:Mat4x4MulMat4x4New"$() and others.  God says I might want to change to float.  $LK,"::/Demo/Lectures/FixedPoint.HC"$ $LK,"::/Demo/Lectures/FixedPointAdvanced.HC"$.
 
-* Note: We will never put multiple $LK,"Keyboard Tables",A="FI:::/Kernel/SerialDev/Keyboard.HC"$.  Each country must make their own version of TempleOS.  The $LK,"Intel Factory ROM",A="FF:::/Doc/Demands.DD,English"$ will have just English.  Our $LK,"Charter",A="FI:::/Doc/Charter.DD"$ bans multiple country or architectures in the same version.
+* Note: We will never put multiple $LK,"Keyboard Tables",A="FI:::/Kernel/SerialDev/Keyboard.HC"$.  Each country must make their own version of ZenithOS.  The $LK,"Intel Factory ROM",A="FF:::/Doc/Demands.DD,English"$ will have just English.  Our $LK,"Charter",A="FI:::/Doc/Charter.DD"$ bans multiple country or architectures in the same version.
 
 * 12 border chars in scrn font codes 0x02-0x0D.  $LK,"TextBorder",A="MN:TextBorder"$() $LK,"RawDr",A="MN:RawDr"$() $LK,"::/Demo/Games/CharDemo.HC"$. LineFeed shows-up in $FG,2$<CTRL-m>$FG$ PersonalMenu.
 

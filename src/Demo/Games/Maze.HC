@@ -22,7 +22,7 @@ U0 DrawIt(CTask *task,CDC *)
 //We would put these as local vars
 //in SolveMaze() but the system stk size
 //is limited, so it's a bad habit.The heap
-//is the normal TempleOS technique, but
+//is the normal ZenithOS technique, but
 //it's a pain in this case.
 I64	stk_ptr,
 	stk_x  [STK_SIZE],

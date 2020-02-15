@@ -157,7 +157,7 @@ U0 KMain()
   //Before this point use $LK,"Snd",A="MN:Snd"$() and $LK,"Busy",A="MN:Busy"$()
   //to debug.After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
   LBts(&sys_run_level,RLf_RAW);
-  "TempleOS V%5.3f\t%D %T\n\n",
+  "ZenithOS V%5.3f\t%D %T\n\n",
 	sys_os_version,sys_compile_time,sys_compile_time;
 
   TimersInit;

@@ -1,4 +1,4 @@
-$WW,1$$FG,5$$TX+CX,"Decisions Making TempleOS Simple"$
+$WW,1$$FG,5$$TX+CX,"Decisions Making ZenithOS Simple"$
 $FG$
 Everybody is obsessed, Jedi mind-tricked, by the notion that when you scale-up, it doesn't get bad, it gets worse.  They automatically think things are going to get bigger.  Guess what happens when you scale down?  It doesn't get good, it gets better!
 
@@ -12,11 +12,11 @@ Linux is a semi-tractor -- you need professional drivers for 20 gears.  Linux ha
 
 Windows is a car.
 
-TempleOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.  Don't do that!  There are no side air bags on a motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude complexity.
+ZenithOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.  Don't do that!  There are no side air bags on a motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude complexity.
 
-Linux and Windows are general purpose operating systems.  They attempt to do any task you want.  TempleOS cherry-picks tasks and is designed to do the same things a C64 did.  This saves and order of magnitude complexity.  For example, the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system allocates just contiguous files -- you load and save whole files at once.  A benefit is this allows compression.  Also, TempleOS does not do networking or multimedia.  In theory, memory will fragment with lots of big files.  The system would fall to pieces with multimedia, but God said 640x480 16 color is a permanent covenant like circumcision.
+Linux and Windows are general purpose operating systems.  They attempt to do any task you want.  ZenithOS cherry-picks tasks and is designed to do the same things a C64 did.  This saves and order of magnitude complexity.  For example, the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system allocates just contiguous files -- you load and save whole files at once.  A benefit is this allows compression.  Also, ZenithOS does not do networking or multimedia.  In theory, memory will fragment with lots of big files.  The system would fall to pieces with multimedia, but God said 640x480 16 color is a permanent covenant like circumcision.
 
-A three bttn mouse is like a leg you cannot put weight on.  TempleOS just does hardware everybody has, with no divergent code bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
+A three bttn mouse is like a leg you cannot put weight on.  ZenithOS just does hardware everybody has, with no divergent code bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
 
 
 

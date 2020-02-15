@@ -1,5 +1,5 @@
-RegDft("TempleOS/DunGen","F64 best_score=9999;\n");
-RegExe("TempleOS/DunGen");
+RegDft("ZenithOS/DunGen","F64 best_score=9999;\n");
+RegExe("ZenithOS/DunGen");
 
 //Set snap to 4 and width to 4
 //if you edit this map.
@@ -439,7 +439,7 @@ dg_done:
   SettingsPop;
   CleanUp;
   MenuPop;
-  RegWrite("TempleOS/DunGen","F64 best_score=%5.4f;\n",best_score);
+  RegWrite("ZenithOS/DunGen","F64 best_score=%5.4f;\n",best_score);
 }
 
 DunGen;

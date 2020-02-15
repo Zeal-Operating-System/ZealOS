@@ -57,7 +57,7 @@ CHashTable *HashTableNew(I64 size,CTask *mem_task=NULL)
 }
 
 U0 HashDel(CHashSrcSym *tmph)
-{//Free a std TempleOS system hash entry.
+{//Free a std ZenithOS system hash entry.
   if (!tmph) return;
   if (!(tmph->type&HTT_DICT_WORD))
     Free(tmph->str);

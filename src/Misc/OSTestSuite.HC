@@ -15,7 +15,7 @@ U0 TS(U8 *desc)
   progress4_max=171;
   progress4_t0=ts_t0;
   *progress4_desc=0;
-  RegExe("TempleOS/OSTestSuite");
+  RegExe("ZenithOS/OSTestSuite");
 }
 
 U0 TSFile(U8 *name,I64 mS=750)
@@ -1538,7 +1538,7 @@ U0 OSTestSuite()
   TS("BattleLines");	DoBattleLines;
   TS("BigGuns");	DoBigGuns;
   TS("FlapBat");	DoFlapBat;
-  TS("Titanium");	DoTitanium;
+//  TS("Titanium");	DoTitanium;
   TS("ToTheFront");	DoToTheFront;
   TS("Psalmody");	DoPsalmody;
   TS("JukeBox");	DoJukeBox;
@@ -1716,7 +1716,7 @@ U0 OSTestSuite()
   TS("TaskRep");	XTalkWait(task,"TaskRep;Sleep(750);\n");
   DeathWait(&task,TRUE);
 
-  ProgressBarsRst("TempleOS/OSTestSuite");
+  ProgressBarsRst("ZenithOS/OSTestSuite");
   "Elapsed Time:%5.3f\n",tS-ts_t0;
 }
 

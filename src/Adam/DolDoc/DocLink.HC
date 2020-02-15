@@ -1,6 +1,6 @@
 #help_index "DolDoc/Link"
 
-/* See $LK,"TempleOS Link Types",A="MN:ST_LINK_TYPES"$.
+/* See $LK,"ZenithOS Link Types",A="MN:ST_LINK_TYPES"$.
 "filename"
 "FI:filename"
 "FA:haystack_filename,needle_anchor_str"

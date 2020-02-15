@@ -2,8 +2,8 @@
 
 //Giotto, a famous artist, drew a freehand circle to get a job.
 
-RegDft("TempleOS/CircleTrace","F64 best_score=999;\n");
-RegExe("TempleOS/CircleTrace");
+RegDft("ZenithOS/CircleTrace","F64 best_score=999;\n");
+RegExe("ZenithOS/CircleTrace");
 
 I64 cx,cy;
 F64 avg_error=0,elapsed_time=0,total_error=0,score=999;
@@ -122,7 +122,7 @@ U0 CircleTrace()
   SettingsPop;
   DCFill;
   DCDel(dc);
-  RegWrite("TempleOS/CircleTrace","F64 best_score=%5.4f;\n",best_score);
+  RegWrite("ZenithOS/CircleTrace","F64 best_score=%5.4f;\n",best_score);
 }
 
 CircleTrace;  //Execute when #included

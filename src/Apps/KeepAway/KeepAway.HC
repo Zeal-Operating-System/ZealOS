@@ -218,8 +218,8 @@ Frame imgs[LAST_STOPPED_DRIBBLING+1]={
   {{$IB,"<22>",BI=22$,$IB,"<23>",BI=23$},DRIBBLE_T/STOPPED_DRIBBLING_IMGS_NUM},
 };
 
-RegDft("TempleOS/KeepAway","I64 best_score0=0,best_score1=9999;\n");
-RegExe("TempleOS/KeepAway");
+RegDft("ZenithOS/KeepAway","I64 best_score0=0,best_score1=9999;\n");
+RegExe("ZenithOS/KeepAway");
 
 F64 game_t_end,foul_t_end;
 I64 score0,score1;
@@ -702,7 +702,7 @@ ka_done: //Don't goto out of try
     PutExcept;
   SettingsPop;
   MenuPop;
-  RegWrite("TempleOS/KeepAway","I64 best_score0=%d,best_score1=%d;\n",
+  RegWrite("ZenithOS/KeepAway","I64 best_score0=%d,best_score1=%d;\n",
 	best_score0,best_score1);
 }
         Ê     p   ¨      ­ÿÿÿûÿÿÿûÿÿÿ­ÿÿÿûÿÿÿ   ·ÿÿÿûÿÿÿûÿÿÿ·ÿÿÿûÿÿÿ   ­ÿÿÿ   ûÿÿÿ­ÿÿÿ      ·ÿÿÿ   ûÿÿÿ·ÿÿÿ   

@@ -87,8 +87,8 @@
 
 
 
-RegDft("TempleOS/Varoom","F64 best_score=9999;\n");
-RegExe("TempleOS/Varoom");
+RegDft("ZenithOS/Varoom","F64 best_score=9999;\n");
+RegExe("ZenithOS/Varoom");
 
 F64 distance,t0,tf;
 Bool game_over;
@@ -697,7 +697,7 @@ vr_done: //Don't goto out of try
   SettingsPop;
   CleanUp;
   MenuPop;
-  RegWrite("TempleOS/Varoom","F64 best_score=%5.4f;\n",best_score);
+  RegWrite("ZenithOS/Varoom","F64 best_score=%5.4f;\n",best_score);
 }
 
 Varoom;

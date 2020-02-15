@@ -323,7 +323,7 @@ public U0 DrawWaitMs(CDC *dc,I64 x,I64 y)
 
 #help_index "Graphics/GR Files;Graphics/Scrn"
 public Bool GRScrnCaptureRead(U8 *filename,CDC *dc=gr.dc,I64 x=0,I64 y=0)
-{//GrBlot TempleOS GR File to dc,x,y.
+{//GrBlot ZenithOS GR File to dc,x,y.
   CDC *dc2;
   if (dc2=GRRead(filename)) {
     dc->color=ROP_EQU;
@@ -335,7 +335,7 @@ public Bool GRScrnCaptureRead(U8 *filename,CDC *dc=gr.dc,I64 x=0,I64 y=0)
 }
 
 public I64 GRScrnCaptureWrite(U8 *filename,Bool include_zoom=TRUE)
-{//Capture scrn to a TempleOS GR File.
+{//Capture scrn to a ZenithOS GR File.
   I64 size;
   CDC *dc=DCScrnCapture(include_zoom);
   size=GRWrite(filename,dc,DCSF_COMPRESSED|DCSF_PALETTE_GET);

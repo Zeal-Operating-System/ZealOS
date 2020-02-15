@@ -54,7 +54,7 @@ U0 DemoHolyC(U8 drv,U8 *fmt,U8 *name,I64 age)
 $FG$$ID,-2$
 * When dealing with function addresses such as for callbacks, precede the name with "$FG,2$&$FG$".
 
-* Type casting is postfix.  To typecast int or F64, use $LK,"ToI64",A="MN:ToI64"$(), $LK,"ToBool",A="MN:ToBool"$() or $LK,"ToF64",A="MN:ToF64"$(). (TempleOS follows normal C float<-->int conversion, but sometimes you want to override.  These functions are better than multiplying by "1.0" to convert to float.) 
+* Type casting is postfix.  To typecast int or F64, use $LK,"ToI64",A="MN:ToI64"$(), $LK,"ToBool",A="MN:ToBool"$() or $LK,"ToF64",A="MN:ToF64"$(). (ZenithOS follows normal C float<-->int conversion, but sometimes you want to override.  These functions are better than multiplying by "1.0" to convert to float.) 
 
 * There is no $FG,2$main()$FG$ function.  Any code outside of functions gets executed upon start-up, in order.
 
@@ -191,7 +191,7 @@ $FG$$ID,-2$
 
 * There is no question-colon operator.
 
-* TempleOS $LK,"operator precedence",A="FF:::/Compiler/CInit.HC,cmp.binary_ops"$
+* ZenithOS $LK,"operator precedence",A="FF:::/Compiler/CInit.HC,cmp.binary_ops"$
   $FG,2$`$FG$,$FG,2$>>$FG$,$FG,2$<<$FG$
   $FG,2$*$FG$,$FG,2$/$FG$,$FG,2$%$FG$
   $FG,2$&$FG$

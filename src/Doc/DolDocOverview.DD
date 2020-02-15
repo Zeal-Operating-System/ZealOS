@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"DolDoc Overview"$$FG$
 
-DolDoc is a TempleOS document type supported by $LK,"DolDoc Routines",A="HI:DolDoc"$.  In a document, commands are bracketed with '$FG,2$$$$FG$'s.  Use $FG,2$<CTRL-l>$FG$ to experiment inserting a command.  Then, use $FG,2$<CTRL-t>$FG$ to toggle to plain text to see it.
+DolDoc is a ZenithOS document type supported by $LK,"DolDoc Routines",A="HI:DolDoc"$.  In a document, commands are bracketed with '$FG,2$$$$FG$'s.  Use $FG,2$<CTRL-l>$FG$ to experiment inserting a command.  Then, use $FG,2$<CTRL-t>$FG$ to toggle to plain text to see it.
 
 Here is the grammar:
 

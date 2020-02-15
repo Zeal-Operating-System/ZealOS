@@ -1,4 +1,4 @@
-//TempleOS supports standard $LK,"Print",A="MN:Print"$()
+//ZenithOS supports standard $LK,"Print",A="MN:Print"$()
 //codes and extended ones.
 //See $LK,"Print(\"\") Fmt Strings",A="FI:::/Doc/Print.DD"$.
 

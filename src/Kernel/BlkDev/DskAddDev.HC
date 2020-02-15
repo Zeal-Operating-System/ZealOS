@@ -195,7 +195,7 @@ Bool GetBaseUnit(CBlkDev *bd)
   };
   if (!probe || !BootDVDProbeAll(bd)) {
     "\nDon't worry.  This is not a product\n"
-	  "registration.	TempleOS just needs the\n"
+	  "registration.	ZenithOS just needs the\n"
 	  "I/O port numbers for the CD/DVD.\n"
 	  "\nRetry the ports above or check Windows\n"
 	  "system information under I/O ports for\n"

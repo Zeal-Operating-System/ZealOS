@@ -728,7 +728,7 @@ I64 PrsUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
     case '(':
       if (Lex(cc)==TK_IDENT && cc->hash_entry &&
 	    cc->hash_entry->type & (HTT_CLASS|HTT_INTERNAL_TYPE))
-	LexExcept(cc,"Use TempleOS postfix typecasting at ");
+	LexExcept(cc,"Use ZenithOS postfix typecasting at ");
       else {
 	if (PREC_TERM>*max_prec)
 	  *max_prec=PREC_TERM;

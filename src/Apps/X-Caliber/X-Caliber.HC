@@ -1,10 +1,10 @@
 #define  XMSGF_ANTISPIN		0
 #define  XMSGF_SOLAR_STORM	1
-RegDft("TempleOS/XCaliber",
+RegDft("ZenithOS/XCaliber",
 	"I64 best_score=0;\n"
 	"I64 msg_flags=0;\n"
 	);
-RegExe("TempleOS/XCaliber");
+RegExe("ZenithOS/XCaliber");
 
 #define MT_HUMAN_SHIP		0
 #define MT_ENEMY_SHIP		1
@@ -1510,7 +1510,7 @@ U0 XCaliber()
   SettingsPop;
   CtrlPanelDel(cp);
   MenuPop;
-  RegWrite("TempleOS/XCaliber",
+  RegWrite("ZenithOS/XCaliber",
 	"I64 best_score=%d;\n"
 	"I64 msg_flags=%d;\n",best_score,msg_flags);
 }

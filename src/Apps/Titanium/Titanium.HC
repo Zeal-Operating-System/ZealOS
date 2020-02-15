@@ -1,5 +1,5 @@
-RegDft("TempleOS/Titanium","I64 best_score=0;\n");
-RegExe("TempleOS/Titanium");
+RegDft("ZenithOS/Titanium","I64 best_score=0;\n");
+RegExe("ZenithOS/Titanium");
 
 #define MAP_HEIGHT	4096
 
@@ -951,7 +951,7 @@ to_done:
     PutExcept;
   SettingsPop;
   MenuPop;
-  RegWrite("TempleOS/Titanium","I64 best_score=%d;\n",best_score);
+  RegWrite("ZenithOS/Titanium","I64 best_score=%d;\n",best_score);
 }
         R     óÿÿÿÏÿÿÿ   2   ÿÿÿÿÿÿÿÿÿÿÿÿ    ÿÿÿÿÿÿÿÿÿÿÿÿ    ÿÿÿÿÿÿÿÿÿÿÿ  
  ÿÿÿÿÿÿÿÿÿÿÿÿ    ÿÿÿÿÿÿÿÿÿÿ  

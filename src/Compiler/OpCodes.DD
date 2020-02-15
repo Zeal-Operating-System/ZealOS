@@ -9,7 +9,7 @@
 '*'= IEF_STI_LIKE	Floating STI-like for UAsm.
 '$$'= IEF_ENDING_ZERO	Ending zero for ENTER.
 
-$FG,4$Note:$FG$ TempleOS uses nonstandard opcodes.
+$FG,4$Note:$FG$ ZenithOS uses nonstandard opcodes.
 Asm is kind-of a bonus and I made changes
 to make the assembler simpler. For opcodes
 which can have different numbers of

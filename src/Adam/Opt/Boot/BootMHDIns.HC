@@ -53,9 +53,9 @@ public U0 BootMHDZero(U8 dst_drv)
 {//Set MBR of disk with dst partition to zero.
 
   //This is dangerous!!
-  //The TempleOS partitioner doesn't play well
+  //The ZenithOS partitioner doesn't play well
   //with other operating systems at this time and you need
-  //to do this on a drive partitioned by TempleOS
+  //to do this on a drive partitioned by ZenithOS
   //if you wish to partition with another operating system.
   CBlkDev *bd=Let2BlkDev(dst_drv);
   CMasterBoot mbr;
@@ -99,7 +99,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_lst=NULL)
       _q=BMHD2_BLK_ARRAY;
       MemSet(_q,0,sizeof(I64)*8);
       menu_ptr=BMHD2_BOOT_MSG;
-      StrPrint(menu_ptr,"\n\r\n\rTempleOS Boot Loader\n\r\n\r");
+      StrPrint(menu_ptr,"\n\r\n\rZenithOS Boot Loader\n\r\n\r");
       j=0;
       if (FileFind(BOOT_DIR_OLDMBR_BIN_C,&de,FUF_JUST_FILES)) {
 	Free(de.full_name);

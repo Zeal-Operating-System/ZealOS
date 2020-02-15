@@ -113,7 +113,7 @@ U0 TreeCommonAncestor()
 }
 
 TreeCommonAncestor;
-/*Be careful with recursive routines in TempleOS
+/*Be careful with recursive routines in ZenithOS
 because the stack does not grow and will overflow.
 
 See $LK,"::/Demo/StkGrow.HC"$.

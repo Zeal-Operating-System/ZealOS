@@ -576,7 +576,7 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
     MPInt(I_MP_CRASH,0);
     SysHlt;
   }
-  "\n\tTempleOS Debugger\n\n"
+  "\n\tZenithOS Debugger\n\n"
 	">Help;\t//For help.\n\n";
   Beep(62,TRUE);
   if (fault_num==I_DBG) {

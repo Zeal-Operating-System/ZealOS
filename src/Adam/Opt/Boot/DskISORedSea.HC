@@ -72,7 +72,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
     FillU32Palindrome(&iso_pri->vol_space_size,iso_size);
     FillU32Palindrome(&iso_pri->root_dir_record,dv->root_clus);
     iso_pri->file_structure_version=1;
-    StrCpy(iso_pri->publisher_id,"TempleOS RedSea");
+    StrCpy(iso_pri->publisher_id,"ZenithOS RedSea");
 
     MemCpy(iso_sup,iso_pri,DVD_BLK_SIZE);
     iso_sup->type=ISOT_SUPPLEMENTARY_DESC;
@@ -95,7 +95,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
     FBlkWrite(out_file,iso_term,19<<2,4);
 
     et->w[0]=1;
-    StrCpy(&et->w[2],"TempleOS");
+    StrCpy(&et->w[2],"ZenithOS");
     et->w[15]=0xAA55;
     j=0;
     for (i=0;i<16;i++) //Checksum

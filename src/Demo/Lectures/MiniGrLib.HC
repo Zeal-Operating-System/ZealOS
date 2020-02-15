@@ -116,10 +116,10 @@ U0 MiniGrLibDemo()
   MGUpdate;
   Busy(1500000);
 /*
-We are returning graphics to normal operations under TempleOS.
-It is not normal to by-pass the TempleOS graphcis routines.
-The TempleOS graphics don't know VGA has changed.
-This bit tells TempleOS to update whole scrn.
+We are returning graphics to normal operations under ZenithOS.
+It is not normal to by-pass the ZenithOS graphcis routines.
+The ZenithOS graphics don't know VGA has changed.
+This bit tells ZenithOS to update whole scrn.
 */
   //<CTRL-ALT-v> will flush scrn VGA cache.
   VGAFlush;

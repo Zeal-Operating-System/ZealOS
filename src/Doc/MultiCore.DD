@@ -1,6 +1,6 @@
-$WW,1$TempleOS does master-slave multicore instead of SMP.  $FG,2$Core0$FG$ is the master.  The master core's applications explicitly assign computational jobs to other cores and the TempleOS scheduler does not move tasks between cores.
+$WW,1$ZenithOS does master-slave multicore instead of SMP.  $FG,2$Core0$FG$ is the master.  The master core's applications explicitly assign computational jobs to other cores and the ZenithOS scheduler does not move tasks between cores.
 
-There are multicore safe locks for file access and heap allocations, however, so TempleOS is symmetrical in some sense.  See $LK,"::/Demo/MultiCore/LoadTest.HC"$.
+There are multicore safe locks for file access and heap allocations, however, so ZenithOS is symmetrical in some sense.  See $LK,"::/Demo/MultiCore/LoadTest.HC"$.
 
 Only tasks on $FG,2$Core0$FG$ can have windows, but other cores can help render them.
 

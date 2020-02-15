@@ -1,7 +1,7 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
 
-RegDft("TempleOS/RawHide","F64 best_score=9999;\n");
-RegExe("TempleOS/RawHide");
+RegDft("ZenithOS/RawHide","F64 best_score=9999;\n");
+RegExe("ZenithOS/RawHide");
 
 F64 t0,tf;
 I64 outside_cnt;
@@ -585,7 +585,7 @@ rh_done:
   SettingsPop;
   CleanUp;
   MenuPop;
-  RegWrite("TempleOS/RawHide","F64 best_score=%5.4f;\n",best_score);
+  RegWrite("ZenithOS/RawHide","F64 best_score=%5.4f;\n",best_score);
 }
 
 RawHide;

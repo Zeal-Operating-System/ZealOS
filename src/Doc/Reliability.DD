@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"RedSea Reliability"$$FG$
 
-TempleOS is like the 1040EZ tax form compared to the full 1040 form.  Obviously, it is simpler.  If you allow mission creep, pretty soon the 1040EZ looks just like the 1040 and the messed-up 1040EZ has no purpose.
+ZenithOS is like the 1040EZ tax form compared to the full 1040 form.  Obviously, it is simpler.  If you allow mission creep, pretty soon the 1040EZ looks just like the 1040 and the messed-up 1040EZ has no purpose.
 
 The Commodore 64 had a file system that was simple enough for peers in my generation to enjoy the thrill of knowing exactly what is going on at the hardware level and writing fun projects to access it.
 
@@ -10,7 +10,7 @@ Obviously, we don't do bad block tables, or redundant FATs.
 
 We use the simplest possible technique, a contiguous-file-only allocation bitmap, not $LK,"Block Chains",A="FI:::/Doc/BlkChain.DD"$ or FAT tables.
 
-You can be a good toy or you can be a good professional tool, but not both.  TempleOS's file manager will start too slowly once a few thousand files exist because the file manager makes a list of all files on start-up.
+You can be a good toy or you can be a good professional tool, but not both.  ZenithOS's file manager will start too slowly once a few thousand files exist because the file manager makes a list of all files on start-up.
 
 Do not have more than a few thousand files or the file manager will not function.
 

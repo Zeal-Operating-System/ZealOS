@@ -19,7 +19,7 @@ public I64 PopUpColor(U8 *header=NULL,
 }
 
 public I64 PopUpColorLighting(U8 *header=NULL)
-{//Chooser for std TempleOS $LK,"DCLighting",A="MN:DCLighting"$() color.
+{//Chooser for std ZenithOS $LK,"DCLighting",A="MN:DCLighting"$() color.
   I64 i;
   CDoc *doc=DocNew;
   if (header)

@@ -1,4 +1,4 @@
-/*TempleOS has a feature that allows
+/*ZenithOS has a feature that allows
 access to bytes and words of larger
 ints.
 

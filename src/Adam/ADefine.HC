@@ -4,7 +4,7 @@ U0 LoadDocDefines()
 {
   CBinFile *bfh=mem_boot_base-sizeof(CBinFile);
 
-  DefinePrint("DD_OS_NAME_VERSION","TempleOS V%0.2f",sys_os_version);
+  DefinePrint("DD_OS_NAME_VERSION","ZenithOS V%0.2f",sys_os_version);
   DefinePrint("DD_TEMPLEOS_AGE","%0.1f",
 	(Now-Str2Date("8/1/2003"))/ToF64(1<<32)/CDATE_YEAR_DAYS);
 

@@ -1,4 +1,4 @@
-$WW,1$GR graphics files are 8-bits-per-pixels but only 4-bits of color, with transparency and no palette.  Compression is the standard TempleOS$FG$ LZW compression.
+$WW,1$GR graphics files are 8-bits-per-pixels but only 4-bits of color, with transparency and no palette.  Compression is the standard ZenithOS$FG$ LZW compression.
 $HL,1$
 #define DCF_COMPRESSED		1 //This is the only saved flag.
 #define DCF_PALETTE		2

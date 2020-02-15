@@ -48,10 +48,10 @@ BDVD_DAP_BUF:		DU16	0,0;
 BDVD_DAP_BLK:		DU64	0;
 	
 BDVD_TEMPLEOS_MSG:
-	DU8	"LoadingTempleOS",0;
+	DU8	"LoadingZenithOS",0;
 
 BDVD_NOT64_MSG:
-	DU8	"TempleOS requires a 64-bit capable processor.\n\r",0;
+	DU8	"ZenithOS requires a 64-bit capable processor.\n\r",0;
 
 //These get patched.
 BDVD_BLK_LO::		DU16	0;

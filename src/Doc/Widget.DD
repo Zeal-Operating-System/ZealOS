@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"DolDoc Widget Help"$$FG$
 
-$LK,"DolDoc",A="::/Doc/DolDocOverview.DD"$ is a TempleOS document type.
+$LK,"DolDoc",A="::/Doc/DolDocOverview.DD"$ is a ZenithOS document type.
 
 $FG,2$"Expression"$FG$ a num or HolyC algebraic term with operators and HolyC syms can be entered.
 $FG,2$"Macro"$FG$ Most entries can behave like macro entries if you assign them macro strs.

@@ -4,7 +4,7 @@ Cd(__DIR__);;
 #help_file "::/Doc/DolDoc"
 
 /*
-TempleOS DolDoc's can have "cursor movement" cmds which can move the cursor up
+ZenithOS DolDoc's can have "cursor movement" cmds which can move the cursor up
 the scrn and layer on existing text.It can also have callback funs which
 supply live, changing text.For these reasons, you can't assume you know
 where the vis portion of the document is and must process much

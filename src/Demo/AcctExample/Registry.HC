@@ -21,7 +21,7 @@ HashPublic("INS_REG_MACHINE_NUM",HTT_DEFINE_STR);
 "InsReg:%s:%d\n",INS_REG_PERSONAL_INITIALS,INS_REG_MACHINE_NUM;
 
 #help_index ""
-$ID,-2$$ID,-2$$TR-UL,"TempleOS"$
+$ID,-2$$ID,-2$$TR-UL,"ZenithOS"$
 $ID,2$$TR,"EagleDive"$
 $ID,2$F64 best_score=147.6932;
 $ID,-2$$TR,"DiningStars"$

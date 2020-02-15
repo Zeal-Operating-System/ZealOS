@@ -1,4 +1,4 @@
-$WW,1$TempleOS has a string indirection feature implemented with the same hash symbol table entry as $FG,2$#define$FG$ macros, $LK,"HTT_DEFINE_STR",A="MN:HTT_DEFINE_STR"$.  Support for string lists is also provided, but it's not very efficient, though, you can make a hash table with a list using $LK,"HashDefineLstAdd",A="MN:HashDefineLstAdd"$().  See $LK,"::/Adam/DolDoc/DocInit.HC",A="FF:::/Adam/DolDoc/DocInit.HC,HashDefineLstAdd"$.
+$WW,1$ZenithOS has a string indirection feature implemented with the same hash symbol table entry as $FG,2$#define$FG$ macros, $LK,"HTT_DEFINE_STR",A="MN:HTT_DEFINE_STR"$.  Support for string lists is also provided, but it's not very efficient, though, you can make a hash table with a list using $LK,"HashDefineLstAdd",A="MN:HashDefineLstAdd"$().  See $LK,"::/Adam/DolDoc/DocInit.HC",A="FF:::/Adam/DolDoc/DocInit.HC,HashDefineLstAdd"$.
 
 If you have an $FG,2$@$FG$ as the first char of a define list entry, it is an alias for the prev entry num.
 

@@ -27,7 +27,7 @@ Bool ISOInit(CDrv *dv,I64 blk)
 	    case ISOT_SUPPLEMENTARY_DESC:
 	      de=&iso->root_dir_record;
 	      dv->size=iso->vol_space_size.little*bd->blk_size>>BLK_SIZE_BITS;
-	      if (!StrCmp(iso->publisher_id,"TempleOS RedSea")) {
+	      if (!StrCmp(iso->publisher_id,"ZenithOS RedSea")) {
 		dv->fs_type=FSt_REDSEA;
 		bd->drv_offset=dv->drv_offset=19<<2+drv_offset;
 		bd->max_blk=dv->size-1;
