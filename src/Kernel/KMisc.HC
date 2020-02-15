@@ -161,17 +161,17 @@ U0 Sleep(I64 mS)
 }
 
 F64 Ona2Freq(I8 ona)
-{//Ona to freq. Ona=60 is 440.0Hz.
+{//Ona to freq. Ona=60 is 432.0Hz.
   if (!ona)
     return 0;
   else
-    return 440.0/32*2.0`(ona/12.0);
+    return 432.0/32*2.0`(ona/12.0);
 }
 
 I8 Freq2Ona(F64 freq)
-{//Freq to Ona. 440.0Hz is Ona=60.
+{//Freq to Ona. 432.0Hz is Ona=60.
   if (freq>0)
-    return ClampI64(12*Log2(32.0/440.0*freq),1,I8_MAX);
+    return ClampI64(12*Log2(32.0/432.0*freq),1,I8_MAX);
   else
     return 0;
 }
