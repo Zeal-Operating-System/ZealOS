@@ -772,7 +772,7 @@ U0 MenFight(I64 phase_group)
 
 U0 Titanium()
 {
-  I64 i,msg_code,ch,sc;
+  I64 i,message_code,ch,sc;
   Bool gun_on;
 
   I64 next_update_jiffy;
@@ -818,9 +818,9 @@ U0 Titanium()
   try {
     while (TRUE) {
       next_update_jiffy=cnts.jiffies+JIFFY_FREQ/100;
-      while (msg_code=ScanMsg(&ch,&sc,1<<MSG_KEY_DOWN+1<<MSG_KEY_UP)) {
-	switch (msg_code) {
-	  case MSG_KEY_DOWN:
+      while (message_code=ScanMessage(&ch,&sc,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_KEY_UP)) {
+	switch (message_code) {
+	  case MESSAGE_KEY_DOWN:
 	    switch (ch) {
 	      case 0:
 		switch (sc.u8[0]) {
@@ -845,7 +845,7 @@ U0 Titanium()
 		break;
 	    }
 	    break;
-	  case MSG_KEY_UP:
+	  case MESSAGE_KEY_UP:
 	    if (ch==CH_SPACE)
 	      gun_on=FALSE;
 	    else if (sc.u8[0]==SC_CURSOR_RIGHT||sc.u8[0]==SC_CURSOR_LEFT)
@@ -927,7 +927,7 @@ U0 Titanium()
       if (game_over) {
 	tf=tS;
 	Sleep(750);
-	FlushMsgs;
+	FlushMessages;
 	while (!ScanKey(&ch)&&friendly_left||tS-tf<1.5) {
 	  total_score+=250;
 	  Snd(86); Sleep(150);
@@ -945,7 +945,7 @@ U0 Titanium()
       }
     }
 to_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   }
   catch
     PutExcept;

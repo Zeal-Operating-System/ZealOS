@@ -74,7 +74,7 @@ U0 FESave(Bool pmt)
 
 U0 FontEd()
 {
-  I64 msg_code,arg1,arg2,k;
+  I64 message_code,arg1,arg2,k;
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
   MenuPush(
 	"File {"
@@ -90,9 +90,9 @@ U0 FontEd()
   try {
     Fs->draw_it=&DrawIt;
     while (TRUE) {
-      switch (msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|1<<MSG_MS_R_DOWN|1<<MSG_MS_MOVE)) {
-	case MSG_KEY_DOWN:
+      switch (message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_MOVE)) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case 0:
 	      switch (arg2.u8[0]) {
@@ -123,26 +123,26 @@ U0 FontEd()
 	      cur_ch=arg1;
 	  }
 	  break;
-	case MSG_MS_L_DOWN:
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_L_DOWN:
+	case MESSAGE_MS_R_DOWN:
 	  if (0<=arg1<FONT_WIDTH*16 && 0<=arg2-2*FONT_HEIGHT<FONT_HEIGHT*16) {
 	    cur_ch=(arg2/FONT_HEIGHT-2)*16+arg1/FONT_WIDTH;
 	    break;
 	  } //fall through
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  k=((arg2-BLOW_UP_CHAR_Y)/FONT_HEIGHT)*FONT_WIDTH+
 		(arg1-BLOW_UP_CHAR_X)/FONT_WIDTH;
 	  if (0<=k<FONT_WIDTH*FONT_HEIGHT) {
-	    if (ms.lb||msg_code==MSG_MS_L_DOWN)
+	    if (ms.lb||message_code==MESSAGE_MS_L_DOWN)
 	      Bts(&text.font[cur_ch],k);
-	    if (ms.rb||msg_code==MSG_MS_R_DOWN)
+	    if (ms.rb||message_code==MESSAGE_MS_R_DOWN)
 	      Btr(&text.font[cur_ch],k);
 	  }
 	  break;
       }
     }
 fe_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   MenuPop;

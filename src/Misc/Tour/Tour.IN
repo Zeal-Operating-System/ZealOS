@@ -20,7 +20,7 @@ U0 TourPutTask()
   "$$WW+H,1$$";
   while (TRUE) {
     Refresh;
-    if (ScanMsg(&ch,,1<<MSG_KEY_DOWN) && (ch==CH_ESC||ch==CH_SHIFT_ESC)) {
+    if (ScanMessage(&ch,,1<<MESSAGE_KEY_DOWN) && (ch==CH_ESC||ch==CH_SHIFT_ESC)) {
       Kill(tour_task->parent_task,FALSE);
       break;
     }
@@ -120,5 +120,5 @@ U0 TourMenu()
 "DocClear;WinMax;\n";
 Refresh(2);
 TourMenu;
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 "Cd;Dir;\n";

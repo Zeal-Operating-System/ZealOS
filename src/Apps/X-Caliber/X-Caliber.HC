@@ -1,8 +1,8 @@
-#define  XMSGF_ANTISPIN		0
-#define  XMSGF_SOLAR_STORM	1
+#define  XMESSAGEF_ANTISPIN		0
+#define  XMESSAGEF_SOLAR_STORM	1
 RegDft("ZenithOS/XCaliber",
 	"I64 best_score=0;\n"
-	"I64 msg_flags=0;\n"
+	"I64 message_flags=0;\n"
 	);
 RegExe("ZenithOS/XCaliber");
 
@@ -87,7 +87,7 @@ Bool alarm;
 #define CMD_THRUST	3
 #define CMD_FIRE	4
 #define CMD_EXIT	5
-Bool game_over,show_level_msg;
+Bool game_over,show_level_message;
 
 #define STARS_NUM	100
 I64 stars_x[STARS_NUM],stars_y[STARS_NUM];
@@ -465,7 +465,7 @@ U0 DrawIt(CTask *task,CDC *dc)
     if (Blink)
       GrPrint(dc,(task->pix_width-9*FONT_WIDTH)/2,
 	    (task->pix_height-FONT_HEIGHT)/2,"Game Over");
-  } else if (show_level_msg) {
+  } else if (show_level_message) {
     if (Blink)
       GrPrint(dc,(task->pix_width-8*FONT_WIDTH)/2,
 	    (task->pix_height-FONT_HEIGHT)/2+50,"Level %d",level);
@@ -1307,16 +1307,16 @@ U0 InitLevel()
     tmpm=tmpm1;
   }
   if (level==1)
-    OneTimePopUp(&msg_flags,XMSGF_SOLAR_STORM,
+    OneTimePopUp(&message_flags,XMESSAGEF_SOLAR_STORM,
 	  "Face away from Sun in solar storm.\n");
   if (level==4)
-    OneTimePopUp(&msg_flags,XMSGF_ANTISPIN,
+    OneTimePopUp(&message_flags,XMESSAGEF_ANTISPIN,
 	  "Press $$GREEN$$<CURSOR-DOWN>$$FG$$ for anti-spin stabilizer.\n");
   human=ShipNew(Fs->pix_width/2,Fs->pix_height/2,ST_HUMAN1);
   for (i=0;i<level+2;i++)
     PlaceShip(ST_ENEMY1);
   PlaceShip(ST_ENEMY2);
-  show_level_msg=TRUE;
+  show_level_message=TRUE;
   ODEPause(ode);
 }
 
@@ -1346,7 +1346,7 @@ U0 Init()
 //********************************** Main
 U0 XCaliber()
 {
-  I64 ch,msg_code,arg1,arg2,sc;
+  I64 ch,message_code,arg1,arg2,sc;
   CCtrl *cp=CtrlPanelNew;
 
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
@@ -1393,10 +1393,10 @@ U0 XCaliber()
     QueueInsert(ode,Fs->last_ode);
     ch=0;
     do {
-      while (!game_over && !show_level_msg &&
-	    (msg_code=ScanMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_KEY_UP))) {
-	switch (msg_code) {
-	  case MSG_KEY_DOWN:
+      while (!game_over && !show_level_message &&
+	    (message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP))) {
+	switch (message_code) {
+	  case MESSAGE_KEY_DOWN:
 	    ch=arg1; sc=arg2;
 	    switch (ch) {
 	      case 0:
@@ -1450,7 +1450,7 @@ U0 XCaliber()
 		break;
 	    }
 	    break;
-	  case MSG_KEY_UP:
+	  case MESSAGE_KEY_UP:
 	    ch=arg1; sc=arg2;
 	    switch (ch) {
 	      case 0:
@@ -1487,13 +1487,13 @@ U0 XCaliber()
       ExpireSplats;
       ExpireMissiles;
       CheckDamage;
-      Refresh; //msgs are only qued by winmgr
-      if (show_level_msg) {
+      Refresh; //messages are only qued by winmgr
+      if (show_level_message) {
 	ch=GetKey(&sc);
 	if (ch=='\n')
 	  ch=0;
 	ODEPause(ode,OFF);
-	show_level_msg=FALSE;
+	show_level_message=FALSE;
       } else if (game_over) {
 	ch=ScanChar;
       } else {
@@ -1512,7 +1512,7 @@ U0 XCaliber()
   MenuPop;
   RegWrite("ZenithOS/XCaliber",
 	"I64 best_score=%d;\n"
-	"I64 msg_flags=%d;\n",best_score,msg_flags);
+	"I64 message_flags=%d;\n",best_score,message_flags);
 }
         ž      
     ÿÿÿÿ   ÿÿÿÿ

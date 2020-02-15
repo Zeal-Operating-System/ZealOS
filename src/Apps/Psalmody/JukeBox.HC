@@ -1,4 +1,4 @@
-CTask *JukeReward(U8 *msg)
+CTask *JukeReward(U8 *message)
 {
   U8 *buf;
   CDoc *doc;
@@ -7,7 +7,7 @@ CTask *JukeReward(U8 *msg)
   res->title_src=TTS_LOCKED_CONST;
 
   doc=DocNew(,res);
-  DocPrint(doc,"$$WW+H,1$$$$RED$$%s",msg);
+  DocPrint(doc,"$$WW+H,1$$$$RED$$%s",message);
 
   buf=MStrPrint("DocEd(0x%X);",doc);
   TaskExe(res,NULL,buf,1<<JOBf_EXIT_ON_COMPLETE|1<<JOBf_FREE_ON_COMPLETE);
@@ -25,7 +25,7 @@ CTask *JukeReward(U8 *msg)
   return res;
 }
 
-CTask *SingleSong(U8 *msg,U8 *name)
+CTask *SingleSong(U8 *message,U8 *name)
 {
   CTask *task=Spawn(&SrvCmdLine,NULL,name,,Fs);
   StrCpy(task->task_title,name);
@@ -34,7 +34,7 @@ CTask *SingleSong(U8 *msg,U8 *name)
   WinHorz(task->win_left,task->win_left+50,task);
   WinVert(2,2+8,task);
   task->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
-  TaskExe(task,NULL,msg,1<<JOBf_EXIT_ON_COMPLETE|1<<JOBf_FREE_ON_COMPLETE);
+  TaskExe(task,NULL,message,1<<JOBf_EXIT_ON_COMPLETE|1<<JOBf_FREE_ON_COMPLETE);
   DocPut(task)->max_entries=100;
   return task;
 }

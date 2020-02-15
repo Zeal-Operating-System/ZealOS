@@ -345,8 +345,8 @@ U0 DunGen()
 
   try {
     while (TRUE) {
-      switch (GetMsg(&ch,&sc,1<<MSG_KEY_DOWN|1<<MSG_KEY_UP)) {
-	case MSG_KEY_DOWN:
+      switch (GetMessage(&ch,&sc,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+	case MESSAGE_KEY_DOWN:
 	  switch (ch) {
 	    case '\n':
 	      Init;
@@ -426,14 +426,14 @@ U0 DunGen()
 	      }
 	  }
 	  break;
-	case MSG_KEY_UP:
+	case MESSAGE_KEY_UP:
 	  if (ch==CH_SPACE)
 	    man_attack=FALSE;
 	  break;
       }
     }
 dg_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

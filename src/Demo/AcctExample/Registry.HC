@@ -1,6 +1,6 @@
 $TR-UL,"Zenith"$
-$ID,2$$TR,"SysMsgFlags"$
-$ID,2$sys_msg_flags[0]=0xFF;
+$ID,2$$TR,"SysMessageFlags"$
+$ID,2$sys_message_flags[0]=0xFF;
 $ID,-2$$TR,"SysRegVer"$
 $ID,2$registry_version=5.030;
 $ID,-2$$TR,"InsReg"$
@@ -51,7 +51,7 @@ $ID,2$progress1_tf=0.000;progress2_tf=0.000;
 progress3_tf=0.000;progress4_tf=226.523;
 $ID,-2$$TR,"XCaliber"$
 $ID,2$I64 best_score=90;
-I64 msg_flags=2;
+I64 message_flags=2;
 $ID,-2$$TR,"Talons"$
 $ID,2$F64 best_score=9999.0000;
 $ID,-2$$TR,"BomberGolf"$

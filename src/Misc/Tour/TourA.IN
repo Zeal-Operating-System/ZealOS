@@ -24,7 +24,7 @@ TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ when finished.\n");
 InUntilChar(CH_ESC,CH_SHIFT_ESC);
 
 //Puts the cursor at the bottom.
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 
 TourPut(
 "We can unassemble a numeric address with "
@@ -36,9 +36,9 @@ InGetStr("\n");
 TourPut("The opcodes are slightly nonstandard.\n",TRUE);
 "Ed(\"::/Compiler/OpCodes.DD\");\n";
 
-Msg(MSG_KEY_DOWN,CH_CTRLF,0x42100000421);
+Message(MESSAGE_KEY_DOWN,CH_CTRLF,0x42100000421);
 "MOV";
-Msg(MSG_KEY_DOWN,CH_ESC,0x100000001);
+Message(MESSAGE_KEY_DOWN,CH_ESC,0x100000001);
 
 TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort.\n");
 InUntilChar(CH_ESC,CH_SHIFT_ESC);

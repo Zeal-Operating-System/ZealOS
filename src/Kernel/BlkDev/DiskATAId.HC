@@ -88,7 +88,7 @@ Bool BootDVDProbeAll(CBlkDev *bd)
   }
 }
 
-U0 ATARepEntry(I64 base0,I64 base1,I64 unit,U8 *msg,
+U0 ATARepEntry(I64 base0,I64 base1,I64 unit,U8 *message,
 	CATARep **_head,I64 *num_hints)
 {
   I64 type;
@@ -102,7 +102,7 @@ U0 ATARepEntry(I64 base0,I64 base1,I64 unit,U8 *msg,
       "$$RED$$HardDrive$$LTBLUE$$ATA";
     else
       "$$RED$$CD/DVDDrive$$LTBLUE$$ATAPI";
-    "%s$$FG$$\n",msg;
+    "%s$$FG$$\n",message;
     if (base0==blkdev.ins_base0 && unit==blkdev.ins_unit)
       "$$PURPLE$$(Drive originally installed from.)$$FG$$\n";
     "Base0:0x%04XBase1:0x%04XUnit:%d$$LM,0$$\n",

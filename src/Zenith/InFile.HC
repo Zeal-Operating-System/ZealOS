@@ -52,7 +52,7 @@ public U0 InGetKey(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
       }
     }
   } while (sc&sc_mask!=scan_code&sc_mask);
-  Msg(MSG_KEY_DOWN,ch,sc);
+  Message(MESSAGE_KEY_DOWN,ch,sc);
 }
 
 public I64 InGetChar(...)
@@ -64,7 +64,7 @@ public I64 InGetChar(...)
     if (sc.u8[0]!=SC_SHIFT && sc.u8[0]!=SC_ALT && sc.u8[0]!=SC_CTRL) {
       for (i=0;i<argc;i++)
 	if (ch==argv[i]) {
-	  Msg(MSG_KEY_DOWN,ch,sc);
+	  Message(MESSAGE_KEY_DOWN,ch,sc);
 	  return ch;
 	}
       StrPrint(buf,"Press ");
@@ -89,7 +89,7 @@ public U0 InUntilKey(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
   I64 sc,ch;
   do {
     ch=GetKey(&sc);
-    Msg(MSG_KEY_DOWN,ch,sc);
+    Message(MESSAGE_KEY_DOWN,ch,sc);
   } while (sc&sc_mask!=scan_code&sc_mask);
 }
 
@@ -98,7 +98,7 @@ public I64 InUntilChar(...)
   I64 i,sc,ch;
   while (TRUE) {
     ch=GetKey(&sc);
-    Msg(MSG_KEY_DOWN,ch,sc);
+    Message(MESSAGE_KEY_DOWN,ch,sc);
     for (i=0;i<argc;i++)
       if (ch==argv[i])
 	return ch;

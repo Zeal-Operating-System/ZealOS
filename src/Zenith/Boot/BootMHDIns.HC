@@ -98,7 +98,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_lst=NULL)
 
       _q=BMHD2_BLK_ARRAY;
       MemSet(_q,0,sizeof(I64)*8);
-      menu_ptr=BMHD2_BOOT_MSG;
+      menu_ptr=BMHD2_BOOT_MESSAGE;
       StrPrint(menu_ptr,"\n\r\n\rZenithOS Boot Loader\n\r\n\r");
       j=0;
       if (FileFind(BOOT_DIR_OLDMBR_BIN_C,&de,FUF_JUST_FILES)) {

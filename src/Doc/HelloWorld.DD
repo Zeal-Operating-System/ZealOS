@@ -38,14 +38,14 @@ MyPrint("Hello World\n");
 
 --------Hello.HC---------
 asm {
-MSG:	DU8 "Hello World\n",0;
+MESSAGE:	DU8 "Hello World\n",0;
 
 //The convention is underscore on C callable.
 //Two colons means exported symbol.
 _HELLO_WORLD::
 //You can only clobber RAX,RBX,RCX,RDX
 	PUSH	RSI
-	MOV	RSI,MSG
+	MOV	RSI,MESSAGE
 	CALL	PUT_STR
 	POP	RSI
 	RET

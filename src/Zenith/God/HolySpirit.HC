@@ -30,10 +30,10 @@ I64 PopUpTimerOk(U8 *header=NULL,U8 *footer=NULL)
   return i;
 }
 
-I64 GodPick(U8 *msg=NULL)
+I64 GodPick(U8 *message=NULL)
 {//GOD_GOOD_BITS
   U8 *st=MStrPrint("%s\n\nPress $$GREEN$$OKAY$$FG$$ to generate \n"
-	"a random num from a timer.\n",msg);
+	"a random num from a timer.\n",message);
   PopUpTimerOk(st,"\n\nThe $LK+PU,"Holy Spirit",A="FI:::/Zenith/God/HSNotes.DD"$ can puppet you.\n\n");
   Free(st);
   return KbdMsEvtTime>>GOD_BAD_BITS;
@@ -59,7 +59,7 @@ public U0 GodHexIns(U8 *st)
   }
 }
 
-public I64 GodBits(I64 num_bits,U8 *msg=NULL)
+public I64 GodBits(I64 num_bits,U8 *message=NULL)
 {//Return N bits. If low on entropy pop-up okay.
   U8 b;
   I64 res=0;
@@ -68,7 +68,7 @@ public I64 GodBits(I64 num_bits,U8 *msg=NULL)
       res=res<<1+b;
       num_bits--;
     } else
-      GodBitsIns(GOD_GOOD_BITS,GodPick(msg));
+      GodBitsIns(GOD_GOOD_BITS,GodPick(message));
   }
   return res;
 }

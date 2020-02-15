@@ -130,7 +130,7 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 
 * $LK,"::/Zenith/DolDoc/DocHighlight.HC"$ for code comments at top of documents.
 
-* Unhandled exception msgs from MP's get overwritten by WinMgr.
+* Unhandled exception messages from MP's get overwritten by WinMgr.
 
 * $LK,"Diff",A="MN:Diff"$("C:/Misc/Bible.TXT","D:/Misc/Bible.TXT"); Takes too long.
 
@@ -255,7 +255,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Should we get rid of drive mapping.  It's ugly.
 
-* Can we get rid of $LK,"MSG_CMD",A="MN:MSG_CMD"$?
+* Can we get rid of $LK,"MESSAGE_CMD",A="MN:MESSAGE_CMD"$?
 
 * Make so just CdRom; command to copy entire disk to ::/CdRom directory? 
 
@@ -283,9 +283,9 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 * Eliminate?  $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
 * Eliminate?  $LK,"ROP_XOR",A="MN:ROP_XOR"$?
 
-* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMsg",A="MN:PostMsg"$() msgs for ms_hard.  Already works for $LK,"MsSet",A="MN:MsSet"$()?
+* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMessage",A="MN:PostMessage"$() messages for ms_hard.  Already works for $LK,"MsSet",A="MN:MsSet"$()?
 
-* Should Msgs in PopUp queue get fwded to parent when task dies?
+* Should Messages in PopUp queue get fwded to parent when task dies?
 
 * Import Intel datasheets so we can use links in $LK,"Code",A="FI:::/Kernel/Mem/PageTables.HC"$ for documentation.  I tried a PDF-to-text convertor and it wasn't acceptible.
 

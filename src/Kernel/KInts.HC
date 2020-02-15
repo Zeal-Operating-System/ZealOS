@@ -106,11 +106,11 @@ U8 *IntEntryGet(I64 irq)
   return res;
 }
 
-U8 *IntEntrySet(I64 irq,U0 (*fp_new_hndlr)(),I64 type=IDTET_IRQ,I64 dpl=0)
+U8 *IntEntrySet(I64 irq,U0 (*fp_new_handler)(),I64 type=IDTET_IRQ,I64 dpl=0)
 {//Set interrupt vector. See $LK,"IDTET_IRQ",A="MN:IDTET_IRQ"$.
 //See $LK,"::/Demo/Lectures/InterruptDemo.HC"$.
   //See $LK,"::/Demo/MultiCore/Interrupts.HC"$.
-  I64 fp=fp_new_hndlr;
+  I64 fp=fp_new_handler;
   U8 *res,*dst;
   PUSHFD
   CLI
@@ -155,8 +155,8 @@ interrupt U0 IntDivZero()
     dbg.mp_crash->task=Fs;
     MOV	RAX,U64 8[RBP] //Get RIP off of stk.
     dbg.mp_crash->rip=GetRAX;
-    dbg.mp_crash->msg="Div Zero";
-    dbg.mp_crash->msg_num=0;
+    dbg.mp_crash->message="Div Zero";
+    dbg.mp_crash->message_num=0;
     MPInt(I_MP_CRASH,0);
     SysHlt;
   }

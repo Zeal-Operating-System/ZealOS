@@ -528,7 +528,7 @@ U0 CleanUp()
 
 U0 RawHide()
 {
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
   MenuPush(
 	"File {"
@@ -559,14 +559,14 @@ U0 RawHide()
   Fs->draw_it=&DrawIt;
   try {
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN+1<<MSG_MS_L_DOWN+1<<MSG_MS_R_DOWN);
-      switch (msg_code) {
-	case MSG_MS_L_DOWN:  //Doesn't do anything, yet.
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_R_DOWN);
+      switch (message_code) {
+	case MESSAGE_MS_L_DOWN:  //Doesn't do anything, yet.
 	  break;
-	case MSG_MS_R_DOWN:  //Doesn't do anything, yet.
+	case MESSAGE_MS_R_DOWN:  //Doesn't do anything, yet.
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      ReInit;
@@ -579,7 +579,7 @@ U0 RawHide()
       }
     }
 rh_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

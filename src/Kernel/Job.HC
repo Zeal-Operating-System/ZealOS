@@ -22,14 +22,14 @@ U0 JobCtrlInit(CJobCtrl *ctrl)
   ctrl->flags=0;
 }
 
-U0 TaskRstAwaitingMsg(CTask *task=NULL)
-{//Pop-ups get parent messages so wake-up our pop-ups if we got a msg.
+U0 TaskRstAwaitingMessage(CTask *task=NULL)
+{//Pop-ups get parent messages so wake-up our pop-ups if we got a message.
   if (!task) task=Fs;
   PUSHFD
   CLI
   do {
     if (TaskValidate(task))
-      LBtr(&task->task_flags,TASKf_AWAITING_MSG);
+      LBtr(&task->task_flags,TASKf_AWAITING_MESSAGE);
     else
       break;
   } while (task=task->popup_task);
@@ -60,7 +60,7 @@ CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags)
     return NULL;
   } else {
     LBtr(&srv->task_flags,TASKf_IDLE);
-    TaskRstAwaitingMsg(srv);
+    TaskRstAwaitingMessage(srv);
     QueueInsert(res,srv->srv_ctrl.last_waiting);
     LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
     if (Bt(&flags,JOBf_WAKE_MASTER)) {
@@ -108,7 +108,7 @@ CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
     res=NULL;
   } else {
     LBtr(&task->task_flags,TASKf_IDLE);
-    TaskRstAwaitingMsg(task);
+    TaskRstAwaitingMessage(task);
     QueueInsert(res,task->srv_ctrl.last_waiting);
     LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   }
@@ -116,10 +116,10 @@ CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
   return res;
 }
 
-CJob *TaskMsg(CTask *_srv,CTask *master,
-	I64 msg_code,I64 arg1,I64 arg2,I64 flags)
+CJob *TaskMessage(CTask *_srv,CTask *master,
+	I64 message_code,I64 arg1,I64 arg2,I64 flags)
 {//Post message to servant task.  Tell who the master task is.
-//See $LK,"flags",A="MN:JOBf_WAKE_MASTER"$ and $LK,"msg_code",A="MN:MSG_CMD"$.
+//See $LK,"flags",A="MN:JOBf_WAKE_MASTER"$ and $LK,"message_code",A="MN:MESSAGE_CMD"$.
   CJob *tmpc1,*tmpc;
   CTask *srv=_srv;
   if (!TaskValidate(srv) || master && !TaskValidate(master)||
@@ -127,14 +127,14 @@ CJob *TaskMsg(CTask *_srv,CTask *master,
     return NULL;
   tmpc=ACAlloc(sizeof(CJob));
   tmpc->master_task=master;
-  tmpc->job_code=JOBT_MSG;
-  tmpc->msg_code=AbsI64(msg_code); //negative means do a down and up
+  tmpc->job_code=JOBT_MESSAGE;
+  tmpc->message_code=AbsI64(message_code); //negative means do a down and up
   tmpc->aux1=arg1;
   tmpc->aux2=arg2;
   tmpc->flags=flags;
   PUSHFD
   if (Bt(&sys_semas[SEMA_RECORD_MACRO],0) &&
-	srv!=sys_macro_task && msg_code==MSG_KEY_DOWN) {
+	srv!=sys_macro_task && message_code==MESSAGE_KEY_DOWN) {
     tmpc1=AMAllocIdent(tmpc);
     CLI
     QueueInsert(tmpc1,sys_macro_head.last);
@@ -151,13 +151,13 @@ CJob *TaskMsg(CTask *_srv,CTask *master,
     tmpc=NULL;
   } else {
     LBtr(&srv->task_flags,TASKf_IDLE);
-    TaskRstAwaitingMsg(srv);
+    TaskRstAwaitingMessage(srv);
     QueueInsert(tmpc,srv->srv_ctrl.last_waiting);
     LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
   }
   POPFD
-  if (msg_code<0) //Down-Up
-    TaskMsg(_srv,master,-msg_code+1,arg1,arg2,flags);
+  if (message_code<0) //Down-Up
+    TaskMessage(_srv,master,-message_code+1,arg1,arg2,flags);
   return tmpc;
 }
 
@@ -239,27 +239,27 @@ U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE)
   }
 }
 
-U0 PostMsg(CTask *task,I64 msg_code,I64 arg1,I64 arg2,I64 flags=0)
-{//Post message to a task and return immediately.  See $LK,"msg_code",A="MN:MSG_CMD"$.
+U0 PostMessage(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
+{//Post message to a task and return immediately.  See $LK,"message_code",A="MN:MESSAGE_CMD"$.
   if (TaskValidate(task)) {
     if (Bt(&task->task_flags,TASKf_INPUT_FILTER_TASK))
-      TaskMsg(task->last_input_filter_task,NULL,msg_code,arg1,arg2,
+      TaskMessage(task->last_input_filter_task,NULL,message_code,arg1,arg2,
 	    flags|1<<JOBf_DONT_FILTER);
     else
-      TaskMsg(task,NULL,msg_code,arg1,arg2,flags);
+      TaskMessage(task,NULL,message_code,arg1,arg2,flags);
   }
 }
 
-U0 PostMsgWait(CTask *task,I64 msg_code,I64 arg1,I64 arg2,I64 flags=0)
-{//Post message to a task and wait until task is idle.See $LK,"msg_code",A="MN:MSG_CMD"$.
-  PostMsg(task,msg_code,arg1,arg2,flags);
+U0 PostMessageWait(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
+{//Post message to a task and wait until task is idle.See $LK,"message_code",A="MN:MESSAGE_CMD"$.
+  PostMessage(task,message_code,arg1,arg2,flags);
   TaskWait(task);
 }
 
-U0 Msg(I64 msg_code,I64 arg1,I64 arg2,I64 flags=0)
+U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
 {//Post message to current task and return immediately.
-//See $LK,"msg_code",A="MN:MSG_CMD"$.
-  PostMsg(Fs,msg_code,arg1,arg2,flags);
+//See $LK,"message_code",A="MN:MESSAGE_CMD"$.
+  PostMessage(Fs,message_code,arg1,arg2,flags);
 }
 
 #define JOB_DONE	0

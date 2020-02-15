@@ -8,5 +8,5 @@ windows.
 In("");
 "PopUp #1:%X\n",PopUpNoYes;
 
-InStr("Msg(MSG_KEY_DOWN,0,SC_CURSOR_RIGHT);'' CH_SPACE;");
+InStr("Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);'' CH_SPACE;");
 "PopUp #2:%X\n",PopUpNoYes;

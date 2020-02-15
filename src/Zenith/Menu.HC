@@ -50,9 +50,9 @@ CMenuEntry *MenuNewSub(CCompCtrl *cc,CTask *task)
       cc->cur_str[31]=0;
     StrCpy(tmpme->name,cc->cur_str);
     if (Lex(cc)=='(') {
-      tmpme->msg_code=MSG_KEY_DOWN_UP;
+      tmpme->message_code=MESSAGE_KEY_DOWN_UP;
       if (Lex(cc)!=',' && cc->token!=')')
-	tmpme->msg_code=LexExpressionI64(cc);
+	tmpme->message_code=LexExpressionI64(cc);
       if (cc->token==',')
 	Lex(cc);
       if (cc->token!=',' && cc->token!=')')
@@ -204,8 +204,8 @@ U0 DrawMenu(CDC *dc)
 	else
 	  i=m->attr;
 	if (y0<=y1<y0+FONT_HEIGHT) {
-	  if (tmpse->msg_code==MSG_KEY_DOWN||
-		tmpse->msg_code==MSG_KEY_DOWN_UP) {
+	  if (tmpse->message_code==MESSAGE_KEY_DOWN||
+		tmpse->message_code==MESSAGE_KEY_DOWN_UP) {
 	    if (!tmpse->arg2)
 	      tmpse->arg2=Char2ScanCode(tmpse->arg1);
 	    st=ScanCode2KeyName(tmpse->arg2);

@@ -199,7 +199,7 @@ U0 GrBitMapEdEtch(CDC *img,I64 width,CColorROPU32 bkcolor)
 I64 SpriteBitMapEd(CDoc *,CDocEntry *doc_e,CDC *dc,I64 *_xx1,I64 *_yy1,
 	I64 *_xx2,I64 *_yy2,CDC **_img,CColorROPU32 bkcolor)
 {
-  I64 i,j,mode=SPBM_LINE,color=BLACK,width=1,msg_code,arg1,arg2,x1,y1,x11,y11,
+  I64 i,j,mode=SPBM_LINE,color=BLACK,width=1,message_code,arg1,arg2,x1,y1,x11,y11,
 	x22,y22,res,xx1=*_xx1,yy1=*_yy1,xx2=*_xx2,yy2=*_yy2,
 	old_de_flags=doc_e->de_flags;
   Bool down=FALSE;
@@ -220,10 +220,10 @@ I64 SpriteBitMapEd(CDoc *,CDocEntry *doc_e,CDC *dc,I64 *_xx1,I64 *_yy1,
     dc->thick=1;
     GrBorder(dc,xx1-1,yy1-1,xx2,yy2);//This is done little bit too often.
 
-    while (msg_code=ScanMsg(&arg1,&arg2,1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|
-	  1<<MSG_MS_R_DOWN|1<<MSG_MS_MOVE|1<<MSG_KEY_DOWN)) {
-      switch (msg_code) {
-	case MSG_KEY_DOWN:
+    while (message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+	  1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN)) {
+      switch (message_code) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case CH_SHIFT_ESC:
 	      res=SPE_ABORT;
@@ -242,7 +242,7 @@ I64 SpriteBitMapEd(CDoc *,CDocEntry *doc_e,CDC *dc,I64 *_xx1,I64 *_yy1,
 	  }
 	  break;
 
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 bm_menu:
 	  DCFill(dc);
 	  StrCpy(Fs->task_title,"Sprite BitMap Menu");
@@ -346,7 +346,7 @@ bm_menu:
 	  GrBitMapEdPrepPersistentDC(dc,xx1,yy1,img);
 	  down=FALSE;
 	  break;
-	case MSG_MS_L_DOWN:
+	case MESSAGE_MS_L_DOWN:
 	  switch (mode) {
 	    case SPBM_PT:
 	      img->color=color;
@@ -441,7 +441,7 @@ bm_menu:
 	      break;
 	  }
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  switch (mode) {
 	    case SPBM_LINE:
 	    case SPBM_ARROW:
@@ -550,7 +550,7 @@ bm_menu:
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  switch (mode) {
 	    case SPBM_LINE:
 	    case SPBM_ARROW:
@@ -656,7 +656,7 @@ bm_menu:
     Refresh;
   }
 bm_key_up_done:
-  GetMsg(,,1<<MSG_KEY_UP);
+  GetMessage(,,1<<MESSAGE_KEY_UP);
 bm_done:
   DCDel(clip);
   DCDel(undo);

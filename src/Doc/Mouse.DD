@@ -1,4 +1,4 @@
-$WW,1$$LK,"ms.pos.x",A="MN:ms"$ and $LK,"ms.pos.y",A="MN:ms"$ can be used to access the x and y coordinates of the mouse.  They are relative to the scrn, not window.  These can be used if you don't want to use msg passing.  $LK,"ms.pos.z",A="MN:ms"$ is the wheel.
+$WW,1$$LK,"ms.pos.x",A="MN:ms"$ and $LK,"ms.pos.y",A="MN:ms"$ can be used to access the x and y coordinates of the mouse.  They are relative to the scrn, not window.  These can be used if you don't want to use message passing.  $LK,"ms.pos.z",A="MN:ms"$ is the wheel.
 
 $LK,"ms.pos_text.x",A="MN:CMsStateGlbls"$ and $LK,"ms.pos_text.y",A="MN:CMsStateGlbls"$ are the text column and row.  See $LK,"::/Demo/Games/Maze.HC"$.
 

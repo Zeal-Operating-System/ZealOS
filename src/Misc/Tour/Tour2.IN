@@ -1,5 +1,5 @@
 //Puts the cursor at the bottom.
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 "\n";
 
 TourPut(
@@ -25,7 +25,7 @@ TourPut(
 TourPut("Press $$GREEN$$<CURSOR-DOWN>$$FG$$ nine times.\n");
 
 //Puts the cursor at the top
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
 
 I64 i;
 for (i=0;i<9;i++)
@@ -64,5 +64,5 @@ TourPut(
 "\"MA\" stands for \"macro\".\n\n"
 "Now, $$GREEN$$<CTRL-t>$$FG$$ to toggle back to regular mode.\n");
 InGetChar(CH_CTRLT);
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 

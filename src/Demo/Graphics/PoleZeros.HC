@@ -94,7 +94,7 @@ U0 Draw()
 
 U0 PoleZeros()
 {
-  I64 msg_code,arg1,arg2,p11,p22,cx,cy;
+  I64 message_code,arg1,arg2,p11,p22,cx,cy;
   Complex *tmpc=NULL;
 
   PopUpOk(
@@ -117,34 +117,34 @@ U0 PoleZeros()
   try {
     Draw;
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN+1<<MSG_MS_L_DOWN+
-	    1<<MSG_MS_L_UP+1<<MSG_MS_R_DOWN+1<<MSG_MS_R_UP+1<<MSG_MS_MOVE);
-pz_msg:
+      message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+
+	    1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_DOWN+1<<MESSAGE_MS_R_UP+1<<MESSAGE_MS_MOVE);
+pz_message:
       cx=Fs->pix_width/2;
       cy=Fs->pix_height/2;
-      switch (msg_code) {
-	case MSG_MS_L_DOWN:
+      switch (message_code) {
+	case MESSAGE_MS_L_DOWN:
 	  tmpc=PoleZeroFind(arg1-cx,cy-arg2);
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  if (tmpc) {
 	    p11=arg1;p22=arg2;
 //get to last mouse move
-	    while (msg_code=ScanMsg(&arg1,&arg2,
-		  1<<MSG_KEY_DOWN+1<<MSG_MS_L_DOWN+
-		  1<<MSG_MS_L_UP+1<<MSG_MS_R_DOWN+
-		  1<<MSG_MS_R_UP+1<<MSG_MS_MOVE))
-	      if (msg_code==MSG_MS_MOVE) {
+	    while (message_code=ScanMessage(&arg1,&arg2,
+		  1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+
+		  1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_DOWN+
+		  1<<MESSAGE_MS_R_UP+1<<MESSAGE_MS_MOVE))
+	      if (message_code==MESSAGE_MS_MOVE) {
 		p11=arg1;p22=arg2;
 	      } else
-		goto pz_msg;
+		goto pz_message;
 
 	    tmpc->x=p11-cx;
 	    tmpc->y=cy-p22;
 	    Draw;
 	  }
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  if (tmpc) {
 	    tmpc->x=arg1-cx;
 	    tmpc->y=cy-arg2;
@@ -152,18 +152,18 @@ pz_msg:
 	    Draw;
 	  }
 	  break;
-	case MSG_MS_R_DOWN:
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_DOWN:
+	case MESSAGE_MS_R_UP:
 	  Draw;
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  if (arg1==CH_SHIFT_ESC||arg1==CH_ESC)
 	    goto pz_done;
       }
       Refresh;
     }
 pz_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

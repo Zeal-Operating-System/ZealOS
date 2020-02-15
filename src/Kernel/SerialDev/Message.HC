@@ -34,11 +34,11 @@ U0 InputFilterTask()
   SetRFlags(old_flags);
 }
 
-I64 ScanMsg(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
+I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 {/*Check for a message of type specified by a one in the mask.
 Throw-out messages not in mask.
 If no message fit mask, return NULL immediately.
-Remove desired message, return $LK,"msg_code",A="MN:MSG_CMD"$.
+Remove desired message, return $LK,"message_code",A="MN:MESSAGE_CMD"$.
 Note: This delivers messages from parent down to pop-up.
 */
   I64 res,old_flags;
@@ -54,52 +54,52 @@ Note: This delivers messages from parent down to pop-up.
     if (tmpc==tmpc1)
       break;
     else {
-      if (tmpc->job_code==JOBT_MSG) {
+      if (tmpc->job_code==JOBT_MESSAGE) {
 	QueueRemove(tmpc);
 	SetRFlags(old_flags);
-	res=tmpc->msg_code;
+	res=tmpc->message_code;
 	if (_arg1)
 	  *_arg1=tmpc->aux1;
 	if (_arg2)
 	  *_arg2=tmpc->aux2;
 	JobDel(tmpc);
-	if ((res!=MSG_KEY_DOWN || !(tmpc->aux2&SCF_KEY_DESC) ||
+	if ((res!=MESSAGE_KEY_DOWN || !(tmpc->aux2&SCF_KEY_DESC) ||
 	      !Bt(&task->win_inhibit,WIf_SELF_KEY_DESC)) && Bt(&mask,res))
 	  goto sm_done;
       }
     }
     SetRFlags(old_flags);
   }
-  res=MSG_NULL;
+  res=MESSAGE_NULL;
   if (_arg1)
     *_arg1=0;
   if (_arg2)
     *_arg2=0;
   if (task->parent_task&&task->parent_task->popup_task==task) {
     SetRFlags(old_flags);
-    return ScanMsg(_arg1,_arg2,mask,task->parent_task);
+    return ScanMessage(_arg1,_arg2,mask,task->parent_task);
   }
 sm_done:
   SetRFlags(old_flags);
   return res;
 }
 
-I64 FlushMsgs(CTask *task=NULL)
+I64 FlushMessages(CTask *task=NULL)
 {//Throw away all messages.  Return count.
   I64 res=0,arg1,arg2;
-  while (ScanMsg(&arg1,&arg2,~1,task))
+  while (ScanMessage(&arg1,&arg2,~1,task))
     res++;
   return res;
 }
 
-I64 GetMsg(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
+I64 GetMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 {//Wait for a message of type specified by a one in the mask.
 //Throw-out all messages not in mask.
-  //Returns $LK,"msg_code",A="MN:MSG_CMD"$. See $LK,"::/Demo/MsgLoop.HC"$.
+  //Returns $LK,"message_code",A="MN:MESSAGE_CMD"$. See $LK,"::/Demo/MessageLoop.HC"$.
   I64 res;
   if (!task) task=Fs;
   LBtr(&task->task_flags,TASKf_IDLE);
-  while (!(res=ScanMsg(_arg1,_arg2,mask,task))) {
+  while (!(res=ScanMessage(_arg1,_arg2,mask,task))) {
     LBts(&task->task_flags,TASKf_IDLE);
     Yield;
   }
@@ -108,25 +108,25 @@ I64 GetMsg(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 }
 
 I64 ScanChar()
-{//Checks for $LK,"MSG_KEY_DOWN",A="MN:MSG_KEY_DOWN"$ and returns 0 immediately if no key.
-//Waits for $LK,"MSG_KEY_UP",A="MN:MSG_KEY_UP"$ of non-zero $LK,"ASCII",A="MN:CH_CTRLA"$ key and returns $LK,"ASCII",A="MN:CH_CTRLA"$ if key.
-  //$LK,"ScanMsg",A="MN:ScanMsg"$() throws away other message types.
+{//Checks for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ and returns 0 immediately if no key.
+//Waits for $LK,"MESSAGE_KEY_UP",A="MN:MESSAGE_KEY_UP"$ of non-zero $LK,"ASCII",A="MN:CH_CTRLA"$ key and returns $LK,"ASCII",A="MN:CH_CTRLA"$ if key.
+  //$LK,"ScanMessage",A="MN:ScanMessage"$() throws away other message types.
   I64 arg1a,arg2a,arg1b,arg2b;
-  if (!ScanMsg(&arg1a,&arg2a,1<<MSG_KEY_DOWN)||!arg1a)
+  if (!ScanMessage(&arg1a,&arg2a,1<<MESSAGE_KEY_DOWN)||!arg1a)
     return 0;
   else
-    do GetMsg(&arg1b,&arg2b,1<<MSG_KEY_UP);
+    do GetMessage(&arg1b,&arg2b,1<<MESSAGE_KEY_UP);
     while (!arg1b);  //Be careful of $LK,"SC_SHIFT",A="MN:SC_SHIFT"$ and $LK,"SC_CTRL",A="MN:SC_CTRL"$, etc.
   return arg1a;
 }
 
 Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE)
-{//Checks for $LK,"MSG_KEY_DOWN",A="MN:MSG_KEY_DOWN"$ and returns FALSE immediately if no key.
+{//Checks for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ and returns FALSE immediately if no key.
 //Sets $LK,"ASCII",A="MN:CH_CTRLA"$ and $LK,"scan_code",A="FI:::/Doc/CharOverview.DD"$.
   //Removes key message and returns TRUE.
-  //$LK,"ScanMsg",A="MN:ScanMsg"$() throws away other message types.
+  //$LK,"ScanMessage",A="MN:ScanMessage"$() throws away other message types.
   I64 ch=0,sc=0;
-  if (ScanMsg(&ch,&sc,1<<MSG_KEY_DOWN)) {
+  if (ScanMessage(&ch,&sc,1<<MESSAGE_KEY_DOWN)) {
     if (_ch) *_ch=ch;
     if (_scan_code) *_scan_code=sc;
     if (echo)
@@ -140,7 +140,7 @@ Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE)
 }
 
 I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
-{//Waits for $LK,"MSG_KEY_DOWN",A="MN:MSG_KEY_DOWN"$ message and returns $LK,"ASCII",A="MN:CH_CTRLA"$.
+{//Waits for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ message and returns $LK,"ASCII",A="MN:CH_CTRLA"$.
 //Sets $LK,"scan_code",A="FI:::/Doc/CharOverview.DD"$.
   //$LK,"ScanKey",A="MN:ScanKey"$() throws away other message types.
   I64 ch,sc;
@@ -163,10 +163,10 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
       PUSHFD
       CLI
       KbdMsHandler(TRUE,FALSE);
-      KbdMsgsQueue;
+      KbdMessagesQueue;
       POPFD
     } else {
-      LBts(&Fs->task_flags,TASKf_AWAITING_MSG);
+      LBts(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
       Yield;
     }
     LBtr(&Fs->task_flags,TASKf_IDLE);
@@ -190,11 +190,11 @@ I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE)
   return ch1;
 }
 
-U8 *GetStr(U8 *msg=NULL,U8 *dft=NULL,I64 flags=0)
+U8 *GetStr(U8 *message=NULL,U8 *dft=NULL,I64 flags=0)
 {//Returns a $LK,"MAlloc",A="MN:MAlloc"$()ed prompted string.  See $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$.
   U8 *st;
-  if (msg)
-    "" msg,dft;
+  if (message)
+    "" message,dft;
   st=(*fp_getstr2)(flags);
   if (!*st) {
     Free(st);

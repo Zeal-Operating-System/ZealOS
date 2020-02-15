@@ -19,7 +19,7 @@ $LK,"::/Demo/Games/ElephantWalk.HC"$
 $LK,"::/Demo/Graphics/SpritePut.HC"$
 $LK,"::/Demo/Graphics/SpritePutExt.HC"$
 $LK,"::/Demo/Snd/ASCIIOrgan.HC"$
-$LK,"::/Demo/MsgLoop.HC"$
+$LK,"::/Demo/MessageLoop.HC"$
 $LK,"::/Demo/Graphics/Doodle.HC"$
 $LK,"::/Demo/Graphics/Speedline.HC"$
 $LK,"::/Demo/Graphics/Bounce.HC"$

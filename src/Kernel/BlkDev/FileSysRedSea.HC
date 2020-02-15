@@ -454,7 +454,7 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 }
 
 I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
-		     Bool del_dir,Bool print_msg)
+		     Bool del_dir,Bool print_message)
 {
   CDirEntry *buf,*buf2,*ptr;
   I64 i=0,res=0,ch,j=0,n=BLK_SIZE/CDIR_SIZE,cur_dir_clus;
@@ -481,7 +481,7 @@ I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
 	    !(ptr->attr & RS_ATTR_DIR)) &&
 	    FilesFindMatch(ptr->name,files_find_mask,fuf_flags)) {
 	if (!(ptr->attr & RS_ATTR_DIR)) res++;
-	if (print_msg)
+	if (print_message)
 	  "Del %s\n",ptr->name;
 	ptr->attr|=RS_ATTR_DELETED;
 	BlkWrite(dv,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);

@@ -14,10 +14,10 @@ U0 TurnNew()
   phase=PHASE_START;
   moving_unit=NULL;
 
-  SleepUntil(msg_off_timeout);
-  msg_off_timeout=cnts.jiffies+JIFFY_FREQ*2*animation_delay+1;
+  SleepUntil(message_off_timeout);
+  message_off_timeout=cnts.jiffies+JIFFY_FREQ*2*animation_delay+1;
   Snd(74);
-  StrPrint(msg_buf,"Turn %d",++turn);
+  StrPrint(message_buf,"Turn %d",++turn);
   VRSetUp(0);
   VRSetUp(1);
   VisRecalc(VR_ALL_UNITS);
@@ -34,21 +34,21 @@ U0 PhaseNew()
     TurnNew;
   }
 
-  SleepUntil(msg_off_timeout);
-  msg_off_timeout=cnts.jiffies+JIFFY_FREQ*2*animation_delay+1;
+  SleepUntil(message_off_timeout);
+  message_off_timeout=cnts.jiffies+JIFFY_FREQ*2*animation_delay+1;
   Snd(74);
   switch (phase) {
     case PHASE_INDIRECT0:
     case PHASE_INDIRECT1:
-      StrPrint(msg_buf,"Player %d Artillery Plot",cur_player+1);
+      StrPrint(message_buf,"Player %d Artillery Plot",cur_player+1);
       break;
     case PHASE_MOVE0:
     case PHASE_MOVE1:
-      StrPrint(msg_buf,"Player %d Move",cur_player+1);
+      StrPrint(message_buf,"Player %d Move",cur_player+1);
       break;
     case PHASE_DIRECT0:
     case PHASE_DIRECT1:
-      StrPrint(msg_buf,"Player %d Fire",cur_player+1);
+      StrPrint(message_buf,"Player %d Fire",cur_player+1);
       break;
   }
 }
@@ -179,8 +179,8 @@ U0 ToTheFront()
       res=PhaseDo;
       if (res=='GameOver') {
 	while (TRUE) {
-	  msg_off_timeout=0;
-	  StrCpy(msg_buf,"Game Over");
+	  message_off_timeout=0;
+	  StrCpy(message_buf,"Game Over");
 	  Snd;
 	  ch=GetChar(,FALSE);
 	  if (ch=='\n') {

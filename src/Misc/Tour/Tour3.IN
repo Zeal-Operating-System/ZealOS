@@ -1,5 +1,5 @@
 //Puts the cursor at the bottom.
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 "\n";
 
 TourPut(
@@ -24,10 +24,10 @@ TourPut(
 
 InPrint(25,"Ed(\"CastleFrankenstein.HC\");");
 InGetStr("\n");
-Msg(MSG_KEY_DOWN_UP,0,SC_CURSOR_UP|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP|SCF_CTRL);
 
 Sleep(1000);
-Msg(MSG_KEY_DOWN_UP,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_DOWN|SCF_CTRL);
 TourPut(
 "This is a first-person-shooter.\n\n"
 "There is no \"$$GREEN$$main()$$FG$$\" function in ZenithOS "

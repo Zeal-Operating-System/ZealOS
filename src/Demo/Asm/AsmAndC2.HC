@@ -13,7 +13,7 @@ asm {
 //Opcodes are slightly different to make writing my x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
-JIFFIES_MSG:	DU8 "Jiffies:",0;
+JIFFIES_MESSAGE:	DU8 "Jiffies:",0;
 
 //See $LK,"::/Kernel/StrA.HC",A="FL:::/Kernel/StrA.HC,1"$ and $LK,"::/Kernel/KUtils.HC"$.
 
@@ -35,7 +35,7 @@ _BEEPS2::
 	LOOP	@@05
 
 	PUSH	RSI	//See $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$ & $LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$
-	MOV	RSI,JIFFIES_MSG
+	MOV	RSI,JIFFIES_MESSAGE
 	CALL	PUT_STR
 	POP	RSI
 

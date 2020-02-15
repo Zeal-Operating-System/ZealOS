@@ -1038,7 +1038,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	case IC_ADD_RSP1:
 	  break;
 	default:
-	  "Pass:%d Missing IC hndlr\n",cc->pass;
+	  "Pass:%d Missing IC handler\n",cc->pass;
 	  ICPut(cc,tmpi);
 	  LexExcept(cc,"Compiler Optimization Error at ");
       }

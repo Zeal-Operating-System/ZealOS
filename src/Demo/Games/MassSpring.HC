@@ -98,7 +98,7 @@ U0 CleanUp()
 
 U0 MassSpringDemo()
 {
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   MyMass *tmpm1=NULL,*tmpm2=NULL;
 
   PopUpOk("Left-Click to place mas\n"
@@ -129,22 +129,22 @@ U0 MassSpringDemo()
 
   try {
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_MS_L_DOWN|1<<MSG_MS_R_DOWN|1<<MSG_MS_R_UP|1<<MSG_KEY_DOWN);
-      switch (msg_code) {
-	case MSG_MS_L_DOWN:
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_KEY_DOWN);
+      switch (message_code) {
+	case MESSAGE_MS_L_DOWN:
 	  PlaceMass(arg1,arg2);
 	  break;
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 	  tmpm1=MassFind(ode,arg1,arg2);
 	  tmpm2=NULL;
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  if (tmpm1 && (tmpm2=MassFind(ode,arg1,arg2)) && tmpm1!=tmpm2)
 	    PlaceSpring(tmpm1,tmpm2);
 	  tmpm1=tmpm2=NULL;
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      CleanUp;
@@ -158,7 +158,7 @@ U0 MassSpringDemo()
       }
     }
 ms_done: //Don't goto out of try
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

@@ -23,7 +23,7 @@ asm {
 //Opcodes are slightly different to make writing my x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
-MY_WORLD_MSG:
+MY_WORLD_MESSAGE:
 //Define U8 does not put terminating zeros
 //on strings.
 	DU8	"World\n",0;
@@ -40,7 +40,7 @@ _HELLO_WORLD::
 	MOV	RAX,'Hello ' //Supports multi-byte char consts
 	CALL	PUT_CHARS
 //We broke it in two pieces to show different ways.
-	MOV	RSI,MY_WORLD_MSG
+	MOV	RSI,MY_WORLD_MESSAGE
 	CALL	PUT_STR
 	LOOP	@@05
 	POP	RSI

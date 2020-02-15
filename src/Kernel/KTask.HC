@@ -368,14 +368,14 @@ I64 ExeCmdLine(CCompCtrl *cc)
 U0 SrvTaskCont()
 {//Act as server task in a loop handling commands.
   I64 old_flags=GetRFlags;
-  FlushMsgs;
+  FlushMessages;
   while (TRUE) {
     CLI
     if (JobsHandler(old_flags) && Fs->title_src==TTS_TASK_NAME)
       MemCpy(Fs->task_title,Fs->task_name,TASK_NAME_LEN);
-    FlushMsgs;
+    FlushMessages;
     LBts(&Fs->task_flags,TASKf_IDLE);
-    LBts(&Fs->task_flags,TASKf_AWAITING_MSG);
+    LBts(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
     Yield;
     SetRFlags(old_flags);
   }
@@ -452,7 +452,7 @@ I64 TaskEnd()
   if (task->task_end_cb) {
     task->wake_jiffy=0;
     LBtr(&task->task_flags,TASKf_KILL_TASK);
-    TaskRstAwaitingMsg(task);
+    TaskRstAwaitingMessage(task);
     Suspend(task,FALSE);
     task->rip=task->task_end_cb;
     task->task_end_cb=NULL;

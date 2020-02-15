@@ -149,7 +149,7 @@ The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG
 $ID,-2$$TR,"MA Macro"$
 $ID,2$A left macro arg, $FG,2$LM=""$FG$, will send text when the left mouse is clicked.
 
-A left in string, $FG,2$+LIS$FG$, flag will cause text to be sent to $LK,"InStr",A="MN:InStr"$() instead of $LK,"In",A="MN:In"$().  An InStr runs code.  Literal text is in quotes and messages are sent with $LK,"Msg",A="MN:Msg"$().  See $MA-X+PU,LM="Dir(\"::/Demo/InFile\");View;"$.
+A left in string, $FG,2$+LIS$FG$, flag will cause text to be sent to $LK,"InStr",A="MN:InStr"$() instead of $LK,"In",A="MN:In"$().  An InStr runs code.  Literal text is in quotes and messages are sent with $LK,"Message",A="MN:Message"$().  See $MA-X+PU,LM="Dir(\"::/Demo/InFile\");View;"$.
 
 Macro's are usually in your $LK,"~/PersonalMenu.DD"$ and have the '$FG,2$+X$FG$' flag set by $LK,"default",A="MN:DocInit"$.  Adding '$FG,2$-X$FG$' prevents the usual $FG,2$<ESC>$FG$ from being sent (which exits the PersonalMenu scrn).  Note: When you click a macro on the cmd line, it will go to the bottom and execute unless you cancel the $FG,2$<ESC>$FG$ with a '$FG,2$-X$FG$'.
 $ID,-2$$TR,"MU Menu Value"$
@@ -275,7 +275,7 @@ $FG,5$EXAMPLES:
 
 $FG$<CTRL-t> to see how the following were done.
 $UL,1$Underlined$UL,0$ $IV,1$Inverted$IV,0$ $BK,1$Blinking$BK,0$ $SY,-3$super$SY,0$ $SY,0$$SY,3$sub$SY,0$
-$TX,"This is a big long scrolling msg.",SCX=10$
+$TX,"This is a big long scrolling message.",SCX=10$
 
 $FG,5$Cursor Movements:$FG$
 $CM+LX,LE=3,RE=3$Cursor moved 3 rows down and to 3rd column from left.

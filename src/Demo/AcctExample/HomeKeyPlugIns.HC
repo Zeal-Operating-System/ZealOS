@@ -63,7 +63,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 
   //You can customize keys.  This routine
   //is called before the main editor
-  //key hndlr $LK,"DocPutKey",A="MN:DocPutKey"$().
+  //key handler $LK,"DocPutKey",A="MN:DocPutKey"$().
   //You can intercept any key.
 
   //Return TRUE if you completely

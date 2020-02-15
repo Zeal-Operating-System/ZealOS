@@ -100,8 +100,8 @@ U0 Halogen()
   Fs->draw_it=&DrawIt;
   try {
     while (TRUE) {
-      switch (ScanMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_KEY_UP)) {
-	case MSG_KEY_DOWN:
+      switch (ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+	case MESSAGE_KEY_DOWN:
 	  ch=arg1;sc=arg2;
 	  switch (ch) {
 	    case '\n':
@@ -112,7 +112,7 @@ U0 Halogen()
 	      goto ha_done;
 	  }
 	  break;
-	case MSG_KEY_UP:
+	case MESSAGE_KEY_UP:
 	  ch=arg1;sc=arg2;
 	  if (!ch)
 	    switch (sc.u8[0]) {
@@ -151,7 +151,7 @@ U0 Halogen()
       Sleep(10);
     }
 ha_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   MenuPop;

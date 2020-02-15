@@ -520,46 +520,46 @@ U0 FMRightClick()
 {
   switch (PopUpFMRight) {
     case FMR_INCLUDE:
-      Msg(MSG_KEY_DOWN,0,0x3F0000003F);
+      Message(MESSAGE_KEY_DOWN,0,0x3F0000003F);
       break;
     case FMR_ZENITH_INCLUDE:
-      Msg(MSG_KEY_DOWN,0,0x23F0000023F);
+      Message(MESSAGE_KEY_DOWN,0,0x23F0000023F);
       break;
     case FMR_DELETE:
-      Msg(MSG_KEY_DOWN,CH_CTRLY,0);
+      Message(MESSAGE_KEY_DOWN,CH_CTRLY,0);
       break;
     case FMR_RENAME:
-      Msg(MSG_KEY_DOWN,'r',0);
+      Message(MESSAGE_KEY_DOWN,'r',0);
       break;
     case FMR_MKDIR:
-      Msg(MSG_KEY_DOWN,'d',0);
+      Message(MESSAGE_KEY_DOWN,'d',0);
       break;
     case FMR_PLAIN:
-      Msg(MSG_KEY_DOWN,CH_SHIFT_SPACE,0);
+      Message(MESSAGE_KEY_DOWN,CH_SHIFT_SPACE,0);
       break;
     case FMR_PASTE:
-      Msg(MSG_KEY_DOWN,0,SC_INS+SCF_SHIFT);
+      Message(MESSAGE_KEY_DOWN,0,SC_INS+SCF_SHIFT);
       break;
     case FMR_CHG_DSK:
-      Msg(MSG_KEY_DOWN,'c',0);
+      Message(MESSAGE_KEY_DOWN,'c',0);
       break;
     case FMR_FORMAT:
-      Msg(MSG_KEY_DOWN,'f',0);
+      Message(MESSAGE_KEY_DOWN,'f',0);
       break;
     case FMR_MOUNT_REDSEA_ISO_C:
-      Msg(MSG_KEY_DOWN,'i',0);
+      Message(MESSAGE_KEY_DOWN,'i',0);
       break;
     case FMR_UNMOUNT:
-      Msg(MSG_KEY_DOWN,'u',0);
+      Message(MESSAGE_KEY_DOWN,'u',0);
       break;
     case FMR_MAKE_REDSEA_ISO_C:
-      Msg(MSG_KEY_DOWN,'m',0);
+      Message(MESSAGE_KEY_DOWN,'m',0);
       break;
     case FMR_BURN_ISO:
-      Msg(MSG_KEY_DOWN,'B',0);
+      Message(MESSAGE_KEY_DOWN,'B',0);
       break;
     case FMR_HELP:
-      Msg(MSG_KEY_DOWN,CH_CTRLM,0x43200000432);
+      Message(MESSAGE_KEY_DOWN,CH_CTRLM,0x43200000432);
       break;
   }
 }
@@ -579,7 +579,7 @@ U0 FMFinalScreenUpdate(CDC *dc)
 public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 {//File manager. Also, used to choose files and dirs.
   CDirEntry *head=NULL,*tmpde,*tmpde1,*tmpde2;
-  I64 sc,ch,arg1,arg2,msg_code;
+  I64 sc,ch,arg1,arg2,message_code;
   CDoc *doc=NULL,*old_put_doc=DocPut,*old_display_doc=DocDisplay;
   U8 *res=NULL,*st,*st2,*old_cur_dir=DirCur;
   CDocEntry *doc_ce=NULL,*doc_e;
@@ -598,22 +598,22 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
   }
   do {
     DocUnlock(doc);
-    do msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|1<<MSG_MS_R_UP);
+    do message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP);
     while (Fs!=sys_focus_task);
     DocLock(doc);
-    switch (msg_code) {
-      case MSG_MS_R_UP:
+    switch (message_code) {
+      case MESSAGE_MS_R_UP:
 	DocUnlock(doc);
 	FMRightClick;
 	DocLock(doc);
 	break;
-      case MSG_MS_L_DOWN:
+      case MESSAGE_MS_L_DOWN:
 	doc_ce=doc->cur_entry;
 	fm_ms_str=doc_ce->tag;
 	gr.fp_final_scrn_update=&FMFinalScreenUpdate;
 	break;
-      case MSG_MS_L_UP:
+      case MESSAGE_MS_L_UP:
 	if (doc_ce) {
 	  gr.fp_final_scrn_update=fp_old_final_scrn_update;
 	  if (WinCursorPosSet(Fs,arg1+Fs->pix_left+Fs->scroll_x,
@@ -663,7 +663,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 		}
 	      }
 	      Free(st2);
-	      FlushMsgs;
+	      FlushMessages;
 	    } else
 	      if (doc_e->type_u8==DOCT_MENU_VAL) {
 		DocUnlock(doc);
@@ -674,7 +674,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 	  }
 	}
 	break;
-      case MSG_KEY_DOWN:
+      case MESSAGE_KEY_DOWN:
 	doc_ce=NULL;
 	ch=arg1; sc=arg2;
 	if (sc.u8[0]==SC_DELETE && !(sc&(SCF_SHIFT|SCF_CTRL)))

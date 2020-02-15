@@ -1,5 +1,5 @@
 //Puts the cursor at the bottom.
-Msg(MSG_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 "\n";
 
 TourPut("Press $$GREEN$$<F1>$$FG$$ for the main help index.\n"

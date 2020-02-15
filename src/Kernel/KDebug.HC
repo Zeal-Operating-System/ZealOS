@@ -532,7 +532,7 @@ U0 DebugHelp()
 
 U0 Debug2()
 {
-  Bool old_win_inhibit,old_waiting_msg,old_single;
+  Bool old_win_inhibit,old_waiting_message,old_single;
   I64 i,old_getstr2;
   U8 buf[200];
   if (dbg.panic) {
@@ -544,7 +544,7 @@ U0 Debug2()
       U(Fs->rip,1);
   } else
     dbg.panic=TRUE;
-  old_waiting_msg=LBtr(&Fs->task_flags,TASKf_AWAITING_MSG);
+  old_waiting_message=LBtr(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
   old_win_inhibit=Fs->win_inhibit;
   Fs->win_inhibit=WIG_USER_TASK_DFT;
   sys_focus_task=Fs;
@@ -558,7 +558,7 @@ U0 Debug2()
   UserTaskCont;
   fp_getstr2=old_getstr2;
   Fs->win_inhibit=old_win_inhibit;
-  LBEqu(&Fs->task_flags,TASKf_AWAITING_MSG,old_waiting_msg);
+  LBEqu(&Fs->task_flags,TASKf_AWAITING_MESSAGE,old_waiting_message);
 }
 
 U0 Fault3(I64 fault_num,I64 fault_err_code)
@@ -571,8 +571,8 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
     dbg.mp_crash->cpu_num=Gs->num;
     dbg.mp_crash->task=Fs;
     dbg.mp_crash->rip=Fs->rip;
-    dbg.mp_crash->msg=dbg.msg;
-    dbg.mp_crash->msg_num=dbg.msg_num;
+    dbg.mp_crash->message=dbg.message;
+    dbg.mp_crash->message_num=dbg.message_num;
     MPInt(I_MP_CRASH,0);
     SysHlt;
   }
@@ -580,10 +580,10 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
 	">Help;\t//For help.\n\n";
   Beep(62,TRUE);
   if (fault_num==I_DBG) {
-    if (dbg.msg) {
-      "\n!!!%s",dbg.msg;
-      if (dbg.msg_num)
-	"%016X",dbg.msg_num;
+    if (dbg.message) {
+      "\n!!!%s",dbg.message;
+      if (dbg.message_num)
+	"%016X",dbg.message_num;
       "!!!\n\n";
     }
   }
@@ -635,18 +635,18 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
     Exit;
 }
 
-U0 Panic(U8 *msg=NULL,I64 msg_num=0,Bool panic=TRUE)
+U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE)
 {//Enter the debugger with panic?
   PUSHFD
   CLI
-  dbg.msg=msg;
-  dbg.msg_num=msg_num;
+  dbg.message=message;
+  dbg.message_num=message_num;
   dbg.panic=panic;
   INT I_DBG
   POPFD
 }
 
-U0 Debug(U8 *msg=NULL,I64 msg_num=0)
+U0 Debug(U8 *message=NULL,I64 message_num=0)
 {//Enter debugger, no panic.
-  Panic(msg,msg_num,FALSE);
+  Panic(message,message_num,FALSE);
 }

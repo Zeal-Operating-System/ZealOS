@@ -35,7 +35,7 @@ Bool CTPlot(CDC *dc,I64 x,I64 y,I64)
 
 U0 CircleTrace()
 {
-  I64 msg_code,arg1,arg2,x1,y1;
+  I64 message_code,arg1,arg2,x1,y1;
   F64 rad,t0,total_distance;
   CDC *dc=DCAlias;
 
@@ -57,12 +57,12 @@ U0 CircleTrace()
   dc->color=ROP_XOR+BLACK^TRANSPARENT;
   GrCircle(dc,cx,cy,CIRCLE_RADIUS);
   do {
-    msg_code=GetMsg(&arg1,&arg2,
-	  1<<MSG_KEY_DOWN+1<<MSG_MS_L_DOWN);
-    switch (msg_code) {
-      case MSG_KEY_UP:
+    message_code=GetMessage(&arg1,&arg2,
+	  1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN);
+    switch (message_code) {
+      case MESSAGE_KEY_UP:
 	break;
-      case MSG_MS_L_DOWN:
+      case MESSAGE_MS_L_DOWN:
 	DCFill;
 	dc->color=ROP_XOR+BLACK^TRANSPARENT;
 	GrCircle(dc,cx,cy,CIRCLE_RADIUS);
@@ -72,12 +72,12 @@ U0 CircleTrace()
 	total_error=0;
 	x1=arg1; y1=arg2;
 	do {
-	  msg_code=ScanMsg(&arg1,&arg2,
-		1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-	  switch (msg_code) {
-	    case MSG_MS_L_UP:
+	  message_code=ScanMessage(&arg1,&arg2,
+		1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
+	  switch (message_code) {
+	    case MESSAGE_MS_L_UP:
 	      break;
-	    case MSG_MS_MOVE:
+	    case MESSAGE_MS_MOVE:
 	      if (x1!=arg1 || y1!=arg2) {
 		total_distance+=Sqrt(Sqr(x1-arg1)+Sqr(y1-arg2));
 		Line(dc,x1,y1,0,arg1,arg2,0,&CTPlot);
@@ -96,11 +96,11 @@ U0 CircleTrace()
 	  //$LK,"Sleep",A="MN:Sleep"$()s until the next time the
 	  //window mgr task runs.The
 	  //window mgr calls the UpdateWin() routine
-	  //and places msgs in the que, so there's
+	  //and places messages in the que, so there's
 	  //no need to do anything until the window mgr runs.
 	  Refresh;
 
-	} while (msg_code!=MSG_MS_L_UP);
+	} while (message_code!=MESSAGE_MS_L_UP);
 	music.mute=TRUE; Sleep(200);
 	if (total_distance>0.95*CIRCUMFERENCE) {
 	  if (score<best_score) {
@@ -117,8 +117,8 @@ U0 CircleTrace()
 	Snd; Sleep(200); music.mute=FALSE;
 	break;
     }
-  } while (msg_code!=MSG_KEY_DOWN || arg1!=CH_SHIFT_ESC && arg1!=CH_ESC);
-  GetMsg(,,1<<MSG_KEY_UP);
+  } while (message_code!=MESSAGE_KEY_DOWN || arg1!=CH_SHIFT_ESC && arg1!=CH_ESC);
+  GetMessage(,,1<<MESSAGE_KEY_UP);
   SettingsPop;
   DCFill;
   DCDel(dc);

@@ -181,26 +181,26 @@ U0 Lattice()
   Fs->draw_it=&DrawIt;
   try {
     while (TRUE) {
-      switch (GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|
-	    1<<MSG_MS_R_DOWN|1<<MSG_MS_R_UP|1<<MSG_MS_MOVE)) {
-	case MSG_MS_L_DOWN:
+      switch (GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
+	    1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_MOVE)) {
+	case MESSAGE_MS_L_DOWN:
 	  tt.first=TRUE;
 	  tt.x=arg1;
 	  tt.y=arg2;
 	  break;
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 	  aim=TRUE;
 	  tt.é=Arg(arg1-tt.x,arg2-tt.y);
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  if (aim)
 	    tt.é=Arg(arg1-tt.x,arg2-tt.y);
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  tt.é=Arg(arg1-tt.x,arg2-tt.y);
 	  aim=FALSE;
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case 0:
 	      switch (arg2.u8[0]) {
@@ -254,7 +254,7 @@ U0 Lattice()
       }
     }
 lt_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

@@ -357,8 +357,8 @@ U0 Init()
   fire_radius=0;
   show_vis_row=-1;
   show_vis_col=-1;
-  *msg_buf=0;
-  msg_off_timeout=0;
+  *message_buf=0;
+  message_off_timeout=0;
   phase=PHASE_END;
 }
 

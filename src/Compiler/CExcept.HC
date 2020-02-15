@@ -63,7 +63,7 @@ U0 LexPutPos(CCompCtrl *cc)
 }
 
 U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
-{//Print warn msg, then, $LK,"LexPutPos",A="MN:LexPutPos"$().
+{//Print warn message, then, $LK,"LexPutPos",A="MN:LexPutPos"$().
   if (str) PrintWarn(str);
   if (cc->htc.fun) {
     "in fun '%s'.\n",cc->htc.fun->str;
@@ -79,7 +79,7 @@ U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
 }
 
 U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
-{//Print err msg, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
+{//Print err message, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
   if (!Bt(&sys_run_level,RLf_ZENITH_SERVER)) {
     Raw(ON);
     "Note: Still in boot phase.\n";
@@ -89,7 +89,7 @@ U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
     ZenithErr("Task:%08X %s\n",Fs,str);
   LexPutPos(cc);
   cc->error_cnt++;
-  FlushMsgs;
+  FlushMessages;
   if (!Bt(&sys_run_level,RLf_ZENITH_SERVER))
     Debug("Type \"Fix;\"");
   throw('Compiler');

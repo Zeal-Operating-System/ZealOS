@@ -14,13 +14,13 @@ _TEST_EXCEPT::
 	MOV	R15,U64 CExcept.r15[RAX]
 	PUSH	U64 CExcept.rflags[RAX]
 	POPFD
-	JMP	U64 CExcept.hndlr_catch[RAX]
+	JMP	U64 CExcept.handler_catch[RAX]
 
 _TAKE_EXCEPT::
 	XOR	RAX,RAX
 	MOV	RAX,FS:U64 CTask.last_except[RAX]
 	MOV	RSP,U64 CExcept.rsp[RAX]
-	JMP	U64 CExcept.hndlr_untry[RAX]
+	JMP	U64 CExcept.handler_untry[RAX]
 
 _SAVE_EXCEPT_REGS::
 	PUSH	RBP
@@ -43,7 +43,7 @@ _extern _TAKE_EXCEPT U0 TakeExcept();
 _extern _SAVE_EXCEPT_REGS U0 SaveExceptRegs(CExcept *t);
 
 U0 PutExcept(Bool catch_it=TRUE)
-{//Print exception msg and catch exception.
+{//Print exception message and catch exception.
   "Except:%c:",Fs->except_ch;
   "%P:%P:%P:%P:%P:%P\n",Fs->except_callers[0],Fs->except_callers[1],
 	Fs->except_callers[2],Fs->except_callers[3],Fs->except_callers[4],
@@ -65,8 +65,8 @@ U0 SysTry(U8 *catch_start,U8 *untry_start)
 {
   I64 *rbp=GetRBP;
   CExcept *tmpt=MAlloc(sizeof(CExcept));
-  tmpt->hndlr_catch=catch_start;
-  tmpt->hndlr_untry=untry_start;
+  tmpt->handler_catch=catch_start;
+  tmpt->handler_untry=untry_start;
   tmpt->rsp=rbp(U8 *)+sizeof(CTryStk);
   tmpt->rbp=*rbp;
   tmpt->rflags=GetRFlags;
@@ -117,13 +117,13 @@ U0 throw(I64 ch=0,Bool no_log=FALSE)
 U0 Break()
 {//Send <CTRL-ALT-c>.
   if (Bt(&Fs->task_flags,TASKf_BREAK_TO_SHIFT_ESC))
-    Msg(MSG_KEY_DOWN,CH_SHIFT_ESC,0x20100000201);
+    Message(MESSAGE_KEY_DOWN,CH_SHIFT_ESC,0x20100000201);
   else {
     Fs->wake_jiffy=0;
-    TaskRstAwaitingMsg;
+    TaskRstAwaitingMessage;
     DrivesRelease();
     BlkDevsRelease();
-    FlushMsgs;
+    FlushMessages;
     throw('Break');
   }
 }

@@ -178,17 +178,17 @@ public U8 *PopUpGetStr(U8 *header=NULL)
   return res;
 }
 
-public I64 PopUpGetI64(U8 *msg,I64 dft,I64 lo=I64_MIN,I64 hi=I64_MAX)
+public I64 PopUpGetI64(U8 *message,I64 dft,I64 lo=I64_MIN,I64 hi=I64_MAX)
 {//Prompt for I64 text expression in PopUp win task.
-  U8 *st=MStrPrint("GetI64(0x%X,0x%X,0x%X,0x%X);",msg,dft,lo,hi);
+  U8 *st=MStrPrint("GetI64(0x%X,0x%X,0x%X,0x%X);",message,dft,lo,hi);
   I64 res=PopUp(st,Fs);
   Free(st);
   return res;
 }
 
-public F64 PopUpGetF64(U8 *msg,F64 dft,F64 lo=F64_MIN,F64 hi=F64_MAX)
+public F64 PopUpGetF64(U8 *message,F64 dft,F64 lo=F64_MIN,F64 hi=F64_MAX)
 {//Prompt for F64 text expression in PopUp win task.
-  U8 *st=MStrPrint("GetF64(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));",msg,dft,lo,hi);
+  U8 *st=MStrPrint("GetF64(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));",message,dft,lo,hi);
   F64 res=PopUp(st,Fs)(F64);
   Free(st);
   return res;

@@ -1,7 +1,7 @@
 U0 PlayerIndirect()
 {
   Unit *tmpu=NULL;
-  I64 i,remaining=0,msg_code,arg1,arg2;
+  I64 i,remaining=0,message_code,arg1,arg2;
   F64 target_x,target_y;
   ViewPlayerSet(cur_player);
   for (i=0;i<UNITS_NUM;i++) {
@@ -12,13 +12,13 @@ U0 PlayerIndirect()
   while (remaining) {
     if (!alive_cnt[0] || !alive_cnt[1])
       throw('GameOver',TRUE);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|
-	  1<<MSG_MS_R_UP);
-    switch (msg_code) {
-      case MSG_KEY_DOWN:
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+	  1<<MESSAGE_MS_R_UP);
+    switch (message_code) {
+      case MESSAGE_KEY_DOWN:
 	CharDo(arg1);
 	break;
-      case MSG_MS_L_DOWN:
+      case MESSAGE_MS_L_DOWN:
 	if (CursorInWin(Fs,arg1,arg2)) {
 	  arg1-=x0; arg2-=y0;
 	  CursorUpdate(Fs,arg1,arg2);
@@ -33,7 +33,7 @@ U0 PlayerIndirect()
 	  }
 	}
 	break;
-      case MSG_MS_L_UP:
+      case MESSAGE_MS_L_UP:
 	if (CursorInWin(Fs,arg1,arg2)) {
 	  arg1-=x0; arg2-=y0;
 	  CursorUpdate(Fs,arg1,arg2);
@@ -53,7 +53,7 @@ U0 PlayerIndirect()
 	tmpu=NULL;
 	fire_radius=0;
 	break;
-      case MSG_MS_R_UP:
+      case MESSAGE_MS_R_UP:
 	if (CursorInWin(Fs,arg1,arg2))
 	  throw('PhaseOvr',TRUE);
 	break;
@@ -65,18 +65,18 @@ U0 PlayerIndirect()
 U0 PlayerMove()
 {
   Unit *tmpu=NULL;
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   ViewPlayerSet(cur_player);
   while (TRUE) {
     if (!alive_cnt[0] || !alive_cnt[1])
       throw('GameOver',TRUE);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|
-	  1<<MSG_MS_R_UP);
-    switch (msg_code) {
-      case MSG_KEY_DOWN:
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+	  1<<MESSAGE_MS_R_UP);
+    switch (message_code) {
+      case MESSAGE_KEY_DOWN:
 	CharDo(arg1);
 	break;
-      case MSG_MS_L_DOWN:
+      case MESSAGE_MS_L_DOWN:
 	if (CursorInWin(Fs,arg1,arg2)) {
 	  arg1-=x0; arg2-=y0;
 	  CursorUpdate(Fs,arg1,arg2);
@@ -86,7 +86,7 @@ U0 PlayerMove()
 	  }
 	}
 	break;
-      case MSG_MS_L_UP:
+      case MESSAGE_MS_L_UP:
 	if (CursorInWin(Fs,arg1,arg2)) {
 	  arg1-=x0; arg2-=y0;
 	  CursorUpdate(Fs,arg1,arg2);
@@ -99,7 +99,7 @@ U0 PlayerMove()
 	}
 	tmpu=NULL;
 	break;
-      case MSG_MS_R_UP:
+      case MESSAGE_MS_R_UP:
 	if (CursorInWin(Fs,arg1,arg2))
 	  throw('PhaseOvr',TRUE);
 	break;
@@ -110,18 +110,18 @@ U0 PlayerMove()
 U0 PlayerDirect()
 {
   Unit *tmpu=NULL,*target;
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   ViewPlayerSet(cur_player);
   while (TRUE) {
     if (!alive_cnt[0] || !alive_cnt[1])
       throw('GameOver',TRUE);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|
-	  1<<MSG_MS_R_UP);
-    switch (msg_code) {
-      case MSG_KEY_DOWN:
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+	  1<<MESSAGE_MS_R_UP);
+    switch (message_code) {
+      case MESSAGE_KEY_DOWN:
 	CharDo(arg1);
 	break;
-      case MSG_MS_L_DOWN:
+      case MESSAGE_MS_L_DOWN:
 	if (CursorInWin(Fs,arg1,arg2)) {
 	  arg1-=x0; arg2-=y0;
 	  CursorUpdate(Fs,arg1,arg2);
@@ -138,7 +138,7 @@ U0 PlayerDirect()
 	  }
 	}
 	break;
-      case MSG_MS_L_UP:
+      case MESSAGE_MS_L_UP:
 	if (CursorInWin(Fs,arg1,arg2)) {
 	  arg1-=x0; arg2-=y0;
 	  CursorUpdate(Fs,arg1,arg2);
@@ -157,7 +157,7 @@ U0 PlayerDirect()
 	tmpu=NULL;
 	fire_radius=0;
 	break;
-      case MSG_MS_R_UP:
+      case MESSAGE_MS_R_UP:
 	if (CursorInWin(Fs,arg1,arg2))
 	  throw('PhaseOvr',TRUE);
 	break;

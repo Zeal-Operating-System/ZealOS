@@ -710,7 +710,7 @@ Bool FAT32DirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 }
 
 I64 FAT32FilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
-		     Bool del_dir,Bool print_msg)
+		     Bool del_dir,Bool print_message)
 {
   CFAT32DirEntry *buf,*last_buf,*tmp_buf;
   I64 i,res=0,attr,xsum=0,last_dir_clus=INVALID_CLUS,
@@ -742,7 +742,7 @@ I64 FAT32FilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
 	      FATFromName(long_name.name,buf[cur_dir_entry].name);
 	    if (FilesFindMatch(long_name.name,files_find_mask,fuf_flags)) {
 	      if (!(attr & RS_ATTR_DIR)) res++;
-	      if (print_msg)
+	      if (print_message)
 		"Del %s\n",long_name.name;
 	      *buf[cur_dir_entry].name=0xE5;
 	      i=1;

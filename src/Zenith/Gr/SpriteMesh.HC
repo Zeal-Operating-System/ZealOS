@@ -971,7 +971,7 @@ See $LK,"::/Demo/Graphics/SpritePlot3D.HC"$.
 $WW,0$*/
   CCtrl *c=CtrlFindUnique(Fs,CTRLT_VIEWING_ANGLES);
   CViewAngles *s,*old_s;
-  I64 i,msg_code,sel_mode,arg1,arg2,make_tri_vertex_num=0,x,y,z;
+  I64 i,message_code,sel_mode,arg1,arg2,make_tri_vertex_num=0,x,y,z;
   CD3I32 p0a,p0b;
   CMeshEdVertex *va[3],*tmpv;
   Bool adjusting_z=FALSE,moving,save_and_exit;
@@ -1077,12 +1077,12 @@ $WW,0$*/
   try {//In case of <CTRL-ALT-c>
     while (TRUE) {
       MeshUpdateMenu(&e);
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_MS_MOVE|1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|
-	    1<<MSG_MS_L_UP|1<<MSG_MS_R_DOWN|1<<MSG_MS_R_UP);
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
+	    1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP);
 me_restart:
-      switch (msg_code) {
-	case MSG_KEY_DOWN:
+      switch (message_code) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case 0:
 	      switch (arg2.u8[0]) {
@@ -1173,9 +1173,9 @@ me_chain:
 		sel_mode=SEL_MESH_AND;
 	      else
 		sel_mode=SEL_MESH_OR;
-	      if ((msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN|
-		    1<<MSG_MS_L_UP|1<<MSG_MS_R_DOWN|1<<MSG_MS_R_UP))
-		    !=MSG_MS_L_DOWN) {
+	      if ((message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
+		    1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP))
+		    !=MESSAGE_MS_L_DOWN) {
 		Beep; Beep;
 		goto me_restart;
 	      }
@@ -1183,12 +1183,12 @@ me_chain:
 	      e.x2=arg1; e.y2=arg2;
 	      e.sel_rect=TRUE;
 	      while (TRUE) {
-		msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_MOVE|1<<MSG_KEY_DOWN|
-		      1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|1<<MSG_MS_R_DOWN|
-		      1<<MSG_MS_R_UP);
-		if (msg_code==MSG_MS_MOVE) {
+		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|
+		      1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|
+		      1<<MESSAGE_MS_R_UP);
+		if (message_code==MESSAGE_MS_MOVE) {
 		  e.x2=arg1; e.y2=arg2;
-		} else if (msg_code==MSG_MS_L_UP) {
+		} else if (message_code==MESSAGE_MS_L_UP) {
 		  e.x2=arg1; e.y2=arg2;
 		  break;
 		} else {
@@ -1320,7 +1320,7 @@ me_clip_cut:
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_DOWN:
+	case MESSAGE_MS_L_DOWN:
 	  switch (e.ed_mode) {
 	    case 'm':
 	      if (!moving) {
@@ -1364,7 +1364,7 @@ me_clip_cut:
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  switch (e.ed_mode) {
 	    case 'n':
 	    case 'f':
@@ -1416,7 +1416,7 @@ me_clip_cut:
 	      break;
 	  }
 	  break;
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 	  if (!adjusting_z && e.ed_mode!='M' &&
 		(e.chain_pred==e.vertex_head.last ||
 		e.ed_mode!='n' && e.ed_mode!='f' && e.ed_mode!='p')) {
@@ -1435,7 +1435,7 @@ me_clip_cut:
 	    Snd(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
 	  }
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  if (adjusting_z) {
 	    e.ms_z=RoundI64(Sign(p0b.y-ms.presnap.y)
 	    *Sqrt(Sqr(p0b.x-ms.presnap.x)+Sqr(p0b.y-ms.presnap.y))
@@ -1467,7 +1467,7 @@ me_clip_cut:
 	    goto me_chain;
 	  }
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  if (adjusting_z) {
 	    e.ms_z=RoundI64(Sign(p0b.y-ms.presnap.y)
 	    *Sqrt(Sqr(p0b.x-ms.presnap.x)+Sqr(p0b.y-ms.presnap.y))

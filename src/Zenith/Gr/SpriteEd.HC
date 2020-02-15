@@ -855,7 +855,7 @@ U0 SpriteCtrlPtsMove(CEdSprite *head,I64 dx,I64 dy)
 
 Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 {
-  I64 msg_code,arg1,arg2,xx,yy,xx2,yy2,dd,best_dd,cur_elem_num;
+  I64 message_code,arg1,arg2,xx,yy,xx2,yy2,dd,best_dd,cur_elem_num;
   Bool res=TRUE;
   CDC *dc=DCAlias;
   CEdSprite head,*tmpes,*best_es;
@@ -865,9 +865,9 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
   if (head.next!=&head) {
     while (TRUE) {
       SpriteCtrlPtsDraw(dc,&head); //has Refresh
-      switch (msg_code=ScanMsg(&arg1,&arg2,
-	    1<<MSG_MS_R_UP|1<<MSG_MS_L_DOWN|1<<MSG_KEY_DOWN)) {
-	case MSG_MS_L_DOWN:
+      switch (message_code=ScanMessage(&arg1,&arg2,
+	    1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_KEY_DOWN)) {
+	case MESSAGE_MS_L_DOWN:
 	  switch (mode) {
 	    case SPED_SEL:
 	    case SPED_UNSEL:
@@ -907,9 +907,9 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 		SpriteCtrlPtsDraw(dc,&head);
 		dc->color=ROPF_DITHER+WHITE<<16+RED;
 		GrBorder(dc,xx,yy,xx2,yy2);
-		if (msg_code=ScanMsg(&arg1,&arg2,
-		      1<<MSG_MS_MOVE|1<<MSG_MS_L_UP)) {
-		  if (msg_code==MSG_MS_MOVE) {
+		if (message_code=ScanMessage(&arg1,&arg2,
+		      1<<MESSAGE_MS_MOVE|1<<MESSAGE_MS_L_UP)) {
+		  if (message_code==MESSAGE_MS_MOVE) {
 		    xx2=arg1; yy2=arg2;
 		  } else
 		    break;
@@ -953,10 +953,10 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 	      case SPED_SHIFT_RECTS:
 		do {
 		  SpriteCtrlPtsDraw(dc,&head);
-		  msg_code=ScanMsg(&arg1,&arg2,
-			1<<MSG_KEY_DOWN|1<<MSG_MS_L_DOWN);
-		  if (msg_code==MSG_KEY_DOWN) goto gs_key;
-		} while (msg_code!=MSG_MS_L_DOWN);
+		  message_code=ScanMessage(&arg1,&arg2,
+			1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN);
+		  if (message_code==MESSAGE_KEY_DOWN) goto gs_key;
+		} while (message_code!=MESSAGE_MS_L_DOWN);
 		xx=arg1;yy=arg2;
 		break;
 	    end:
@@ -966,12 +966,12 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 	    case SPED_SHIFT_RECTS:
 	      do {
 		SpriteCtrlPtsDraw(dc,&head);
-		if (msg_code=ScanMsg(&arg1,&arg2,
-		      1<<MSG_MS_MOVE|1<<MSG_MS_L_UP)) {
+		if (message_code=ScanMessage(&arg1,&arg2,
+		      1<<MESSAGE_MS_MOVE|1<<MESSAGE_MS_L_UP)) {
 		  SpriteCtrlPtsMove(&head,arg1-xx,arg2-yy);
 		  xx=arg1;yy=arg2;
 		}
-	      } while (msg_code!=MSG_MS_L_UP);
+	      } while (message_code!=MESSAGE_MS_L_UP);
 	      tmpes=head.next;
 	      while (tmpes!=&head) {
 		tmpes->flags&=~SPEDF_SEL;
@@ -981,13 +981,13 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 	      break;
 	  }
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 gs_key:
 	  switch (arg1.u8[0]) {
 	    case CH_SHIFT_ESC:
 	      res=FALSE;
 	    case CH_ESC:
-	      GetMsg(&arg1,&arg2,1<<MSG_KEY_UP);
+	      GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_UP);
 	      goto gs_done;
 	    case 'p':
 	    case 'P':
@@ -999,7 +999,7 @@ gs_key:
 	      break;
 	  }
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  goto gs_done;
       }
     }
@@ -1019,7 +1019,7 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
   CDocEntry *doc_e2;
   CDocBin *tmpb;
   Bool unlock;
-  I64 i,r[16],msg_code,arg1,arg2,xx,yy,
+  I64 i,r[16],message_code,arg1,arg2,xx,yy,
 	old_de_flags;
   CSprite *head2,*next,*last,*tmpg,*insert_pt;
 
@@ -1045,7 +1045,7 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 	case SPED_SET_ORIGIN:
 	  SpriteQueueSelAll(*_head);
 	  doc_ce->de_flags=old_de_flags;
-	  GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP);
+	  GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP);
 	  SpriteSetOrigin(*_head,x-arg1,y-arg2,0);
 	  SpriteEdUpdate(doc,doc_ce,*_head);
 	  SpriteQueueSelAll(*_head,FALSE);
@@ -1054,15 +1054,15 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 	  if (!SpriteQueueSelCnt(*_head))
 	    SpriteQueueSelAll(*_head);
 	  doc_ce->de_flags=old_de_flags;
-	  GetMsg(&arg1,&arg2,1<<MSG_MS_L_DOWN);
+	  GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
 	  xx=arg1; yy=arg2;
 	  do {
-	    msg_code=GetMsg(&arg1,&arg2,
-		  1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+	    message_code=GetMessage(&arg1,&arg2,
+		  1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 	    SpriteSetOrigin(*_head,arg1-xx,arg2-yy,0);
 	    xx=arg1; yy=arg2;
 	    SpriteEdUpdate(doc,doc_ce,*_head);
-	  } while (msg_code!=MSG_MS_L_UP);
+	  } while (message_code!=MESSAGE_MS_L_UP);
 	  if (!SpriteQueueSelCnt(*_head,FALSE))
 	    SpriteQueueSelAll(*_head,FALSE);
 	  break;
@@ -1103,15 +1103,15 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 	  tmpg->p.x1=0;
 	  tmpg->p.y1=0;
 	  QueueInsert(tmpg,insert_pt->last);
-	  GetMsg(&arg1,&arg2,1<<MSG_MS_L_DOWN);
+	  GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
 	  xx=arg1; yy=arg2;
 	  do {
-	    msg_code=GetMsg(&arg1,&arg2,
-		  1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+	    message_code=GetMessage(&arg1,&arg2,
+		  1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 	    tmpg->p.x1=arg1-xx;
 	    tmpg->p.y1=arg2-yy;
 	    SpriteEdUpdate(doc,doc_ce,*_head);
-	  } while (msg_code!=MSG_MS_L_UP);
+	  } while (message_code!=MESSAGE_MS_L_UP);
 	  *_cur_elem_num+=1;
 	  break;
 	case SPED_INS_CLIP:

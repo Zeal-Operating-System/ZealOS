@@ -1,7 +1,7 @@
 #help_index "Registry"
 #define REGISTRY_FILENAME "~/Registry.HC"
 CDoc *sys_registry_doc=NULL;
-I64 sys_msg_flags[1]={0};
+I64 sys_message_flags[1]={0};
 F64 registry_version;
 
 Bool RegCache()
@@ -80,14 +80,14 @@ public Bool RegAppend(U8 *path,U8 *fmt,...)
   return res;
 }
  
-public Bool OneTimePopUp(U8 *_flags,I64 flag_num,U8 *msg)
+public Bool OneTimePopUp(U8 *_flags,I64 flag_num,U8 *message)
 {//See $LK,"::/Apps/X-Caliber/X-Caliber.HC"$.
   Bool res=FALSE;
   CDoc *doc=DocNew;
   CDocEntry *doc_e;
   if (!Bt(_flags,flag_num)) {
-    if (msg) DocPrint(doc,"%s",msg);
-    doc_e=DocPrint(doc,"\n$$CB,\"Do not show this msg again.\",LE=1$$");
+    if (message) DocPrint(doc,"%s",message);
+    doc_e=DocPrint(doc,"\n$$CB,\"Do not show this message again.\",LE=1$$");
     DocPrint(doc,"$$CM+CX,0,4$$$$BT,\"OKAY\",LE=1$$\n");
     if (PopUpMenu(doc)==1 && doc_e->de_flags&DOCEF_CHECKED_COLLAPSED) {
       LBts(_flags,flag_num);
@@ -98,18 +98,18 @@ public Bool OneTimePopUp(U8 *_flags,I64 flag_num,U8 *msg)
   return res;
 }
 
-U0 RegOneTimePopUp(I64 flag_num,U8 *msg)
+U0 RegOneTimePopUp(I64 flag_num,U8 *message)
 {//You're not supposed to make system pop-up flags, only me.
-  if (OneTimePopUp(sys_msg_flags,flag_num,msg))
-    RegWrite("Zenith/SysMsgFlags","sys_msg_flags[0]=0x%X;\n",
-	  sys_msg_flags[0]);
+  if (OneTimePopUp(sys_message_flags,flag_num,message))
+    RegWrite("Zenith/SysMessageFlags","sys_message_flags[0]=0x%X;\n",
+	  sys_message_flags[0]);
 }
 
 U0 RegInit()
 {
   U8 buf[STR_LEN];
   Bool version_present;
-  RegDft("Zenith/SysMsgFlags","sys_msg_flags[0]=0;\n",TRUE);
+  RegDft("Zenith/SysMessageFlags","sys_message_flags[0]=0;\n",TRUE);
   StrPrint(buf,"registry_version=%4.3f;\n",sys_os_version);
   version_present=RegDft("Zenith/SysRegVer",buf,TRUE);
   RegExe("Zenith");

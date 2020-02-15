@@ -11,9 +11,9 @@ U0 SysMacroStripKey(CJob *macro_head,I64 arg1,I64 arg2)
   tmpc=macro_head->next;
   while (tmpc!=macro_head) {
     tmpc1=tmpc->next;
-    if (tmpc->job_code==JOBT_MSG &&
-	  (tmpc->msg_code==MSG_KEY_DOWN || tmpc->msg_code==MSG_KEY_UP ||
-	  tmpc->msg_code==MSG_KEY_DOWN_UP) &&
+    if (tmpc->job_code==JOBT_MESSAGE &&
+	  (tmpc->message_code==MESSAGE_KEY_DOWN || tmpc->message_code==MESSAGE_KEY_UP ||
+	  tmpc->message_code==MESSAGE_KEY_DOWN_UP) &&
 	  arg1 && tmpc->aux1==arg1 || !arg1 && tmpc->aux2==arg2) {
       QueueRemove(tmpc);
       JobDel(tmpc);
@@ -23,7 +23,7 @@ U0 SysMacroStripKey(CJob *macro_head,I64 arg1,I64 arg2)
 }
 
 #define MT_NULL	0
-#define MT_MSG	1
+#define MT_MESSAGE	1
 #define MT_CHAR	2
 
 class CMacroTmp
@@ -37,15 +37,15 @@ CMacroTmp *Cmd2MT(CJob *tmpc)
 {
   U8 buf[8];
   CMacroTmp *tmpmt=CAlloc(sizeof(CMacroTmp));
-  if (Bt(char_bmp_macro,tmpc->aux1) && tmpc->msg_code==MSG_KEY_DOWN) {
+  if (Bt(char_bmp_macro,tmpc->aux1) && tmpc->message_code==MESSAGE_KEY_DOWN) {
     tmpmt->type=MT_CHAR;
     buf[0]=tmpc->aux1;
     buf[1]=0;
     StrPrint(tmpmt->buf,"%Q",buf);
   } else {
-    tmpmt->type=MT_MSG;
-    StrPrint(tmpmt->buf,"Msg(0x%X,0x%X,0x%X);",
-	  tmpc->msg_code,tmpc->aux1,tmpc->aux2);
+    tmpmt->type=MT_MESSAGE;
+    StrPrint(tmpmt->buf,"Message(0x%X,0x%X,0x%X);",
+	  tmpc->message_code,tmpc->aux1,tmpc->aux2);
   }
   return tmpmt;
 }
@@ -80,7 +80,7 @@ U8 *SysMacro2Str(CJob *macro_head)
   tmpmt=head.next;
   while (tmpmt!=&head) {
     tmpmt1=tmpmt->next;
-    if (tmpmt->type==MT_MSG) {
+    if (tmpmt->type==MT_MESSAGE) {
       StrCpy(ptr, tmpmt->buf);
       ptr+=StrLen(tmpmt->buf);
     } else {

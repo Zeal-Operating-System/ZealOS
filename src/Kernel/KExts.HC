@@ -29,7 +29,7 @@ extern U8 *Define(U8 *dname);
 extern I64 DefineMatch(U8 *needle,U8 *haystack_lst_dname,I64 flags=0);
 extern U8 *DefineSub(I64 sub,U8 *dname);
 extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
-	Bool del_dir=FALSE,Bool print_msg=TRUE);
+	Bool del_dir=FALSE,Bool print_message=TRUE);
 extern Bool DirMk(U8 *filename,I64 entry_cnt=0);
 extern Bool Drive(U8 drv_let);
 extern U8 Drive2Letter(CDrive *dv=NULL);
@@ -57,7 +57,7 @@ extern Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0);
 extern U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0);
 extern U8 *FileRead(U8 *filename,I64 *_size=NULL,I64 *_attr=NULL);
 extern I64 FileWrite(U8 *filename,U8 *fbuf,I64 size,CDate cdt=0,I64 attr=0);
-extern I64 FlushMsgs(CTask *task=NULL);
+extern I64 FlushMessages(CTask *task=NULL);
 extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE);
 extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
 extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,
@@ -77,8 +77,8 @@ extern U8 Letter2Letter(U8 drv_let=0);
 extern U0 MPInt(U8 num,I64 cpu_num=1);
 extern U8 *MStrPrint(U8 *fmt,...);
 extern U0 MsHardSet(I64 x,I64 y,I64 z,I64 l,I64 r);
-extern U0 Msg(I64 msg_code,I64 arg1,I64 arg2,I64 flags=0);
-extern U0 Panic(U8 *msg=NULL,I64 msg_num=0,Bool panic=TRUE);
+extern U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
+extern U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE);
 extern I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL);
 extern U0 Print(U8 *fmt,...);
 extern U0 PutChars(U64 ch);
@@ -98,9 +98,9 @@ extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 extern U8 *StrPrint(U8 *dst,U8 *fmt,...);
 extern U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags);
 extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
-extern CJob *TaskMsg(CTask *_srv,CTask *master,
-	I64 msg_code,I64 arg1,I64 arg2,I64 flags);
-extern U0 TaskRstAwaitingMsg(CTask *task=NULL);
+extern CJob *TaskMessage(CTask *_srv,CTask *master,
+	I64 message_code,I64 arg1,I64 arg2,I64 flags);
+extern U0 TaskRstAwaitingMessage(CTask *task=NULL);
 extern Bool TaskValidate(CTask *task);
 extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
 extern CTask *User(U8 *fmt=NULL,...);

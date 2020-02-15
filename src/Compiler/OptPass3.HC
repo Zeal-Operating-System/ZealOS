@@ -504,7 +504,7 @@ here1:
 	case IC_LABEL:
 	  break;
 	default:
-	  "Pass:%d Missing IC hndlr\n",cc->pass;
+	  "Pass:%d Missing IC handler\n",cc->pass;
 	  ICPut(cc,tmpi);
 	  LexExcept(cc,"Compiler Optimization Error at ");
       }

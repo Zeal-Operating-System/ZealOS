@@ -388,7 +388,7 @@ U0 PsmMenu(I64 psm_octave)
 	"$$LTGREEN$$Left Mouse$$FG$$\tDrag note or shift word\n"
 	"$$LTGREEN$$Right Mouse$$FG$$\tChange duration or set word\n";
   Sprite($IB,"<6>",BI=6$,"$$SP+LIS,\"\","
-	"LM=\"Msg(MSG_KEY_DOWN,0,SCF_CTRL|SC_CURSOR_LEFT);\",BI=%d$$");
+	"LM=\"Message(MESSAGE_KEY_DOWN,0,SCF_CTRL|SC_CURSOR_LEFT);\",BI=%d$$");
   "";
   if (psm.playing)
     Sprite($IB,"<9>",BI=9$,"$$SP,\"\",LM=\"x\",BI=%d$$");
@@ -402,7 +402,7 @@ U0 PsmMenu(I64 psm_octave)
     Sprite($IB,"<11>",BI=11$,"$$SP,\"\",LM=\"z\",BI=%d$$");
   "";
   Sprite($IB,"<7>",BI=7$,"$$SP+LIS,\"\","
-	"LM=\"Msg(MSG_KEY_DOWN,0,SCF_CTRL|SC_CURSOR_RIGHT);\",BI=%d$$");
+	"LM=\"Message(MESSAGE_KEY_DOWN,0,SCF_CTRL|SC_CURSOR_RIGHT);\",BI=%d$$");
   "$$CM+LX,0,6$$";
   PsmSetOctave(psm_octave);
   Refresh(2);

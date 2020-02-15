@@ -464,23 +464,23 @@ U0 KbdHandler()
   }
 }
 
-I64 KbdMsgsQueue()
+I64 KbdMessagesQueue()
 {
-  I64 arg1,arg2,msg_code=MSG_NULL;
+  I64 arg1,arg2,message_code=MESSAGE_NULL;
   CTask *task_focus;
   if (task_focus=sys_focus_task) {
     while (FifoI64Remove(kbd.scan_code_fifo,&arg2)) {
       arg1=ScanCode2Char(arg2);
       if (arg2 & SCF_KEY_UP) {
-	TaskMsg(task_focus,0,MSG_KEY_UP,arg1,arg2,0);
-	msg_code=MSG_KEY_UP;
+	TaskMessage(task_focus,0,MESSAGE_KEY_UP,arg1,arg2,0);
+	message_code=MESSAGE_KEY_UP;
       } else {
-	TaskMsg(task_focus,0,MSG_KEY_DOWN,arg1,arg2,0);
-	msg_code=MSG_KEY_DOWN;
+	TaskMessage(task_focus,0,MESSAGE_KEY_DOWN,arg1,arg2,0);
+	message_code=MESSAGE_KEY_DOWN;
       }
     }
   }
-  return msg_code;
+  return message_code;
 }
 
 I64 KbdMsEvtTime()

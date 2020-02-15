@@ -626,7 +626,7 @@ class CSema
 #define SEMA_UPDATE_WIN_Z_BUF	15
 #define SEMA_TT			16
 #define SEMA_MUTE		17
-#define SEMA_JUST_PUMP_MSGS	18
+#define SEMA_JUST_PUMP_MESSAGES	18
 #define SEMA_TMBEAT		19
 #define SEMA_FIX		20
 #define SEMA_SEMAS_NUM		21
@@ -3092,7 +3092,7 @@ public class CMenuEntry
   CMenuEntry *next;
   CMenuEntry *sub;
   U8	name[32];
-  I64	msg_code,arg1,arg2;
+  I64	message_code,arg1,arg2;
   Bool	checked,dir,pad[6];
 };
 
@@ -3116,7 +3116,7 @@ class CBpt
 class CExcept
 {
   CExcept *next,*last;
-  I64	hndlr_catch,hndlr_untry,
+  I64	handler_catch,handler_untry,
 	rsp,rbp,rflags,rsi,rdi,r10,r11,r12,r13,r14,r15;
 };
 
@@ -3138,7 +3138,7 @@ class CFPU
 #define JOBf_ADD_TO_QUE		8
 
 #define JOBT_TEXT_INPUT		0 //$LK,"TaskText",A="MN:TaskText"$()	Feed StdIn
-#define JOBT_MSG		1 //$LK,"TaskMsg",A="MN:TaskMsg"$()	Post msg
+#define JOBT_MESSAGE		1 //$LK,"TaskMessage",A="MN:TaskMessage"$()	Post message
 #define JOBT_EXE_STR		2 //$LK,"TaskExe",A="MN:TaskExe"$()	Compile & execute src code text
 //MP cmds
 #define JOBT_CALL		3 //$LK,"JobQueue",A="MN:JobQueue"$()	Tell MP to call function
@@ -3148,13 +3148,13 @@ class CJob
 {
   CJob *next,*last;
   CJobCtrl *ctrl;
-  I64	job_code,flags,msg_code;
+  I64	job_code,flags,message_code;
 
   I64	(*addr)(U8 *fun_arg);
   U8	*fun_arg;
 
   U8	*aux_str;
-  I64	aux1,aux2, //Sometimes called arg1 and arg2. (Windows msg param1 param2)
+  I64	aux1,aux2, //Sometimes called arg1 and arg2. (Windows message param1 param2)
 	res;
 
   CTask	*spawned_task,
@@ -3170,27 +3170,27 @@ class CJobCtrl
 };
 
 #help_index "Messages"
-//See $LK,"::/Demo/MsgLoop.HC"$
-#define MSG_NULL		0
-#define MSG_CMD			1
-#define MSG_KEY_DOWN		2  //($LK,"ASCII",A="MN:CH_CTRLA"$,$LK,"scan code",A="FI:::/Doc/CharOverview.DD"$) Press <CTRL-SHIFT-L>
-#define MSG_KEY_UP		3  //($LK,"ASCII",A="MN:CH_CTRLA"$,$LK,"scan code",A="FI:::/Doc/CharOverview.DD"$) Press <CTRL-SHIFT-L>
-#define MSG_MS_MOVE		4  //(x,y)
-#define MSG_MS_L_DOWN		5  //(x,y)
-#define MSG_MS_L_UP		6  //(x,y)
-#define MSG_MS_L_D_DOWN 	7  //(x,y)
-#define MSG_MS_L_D_UP		8  //(x,y)
-#define MSG_MS_R_DOWN		9  //(x,y)
-#define MSG_MS_R_UP		10 //(x,y)
-#define MSG_MS_R_D_DOWN 	11 //(x,y)
-#define MSG_MS_R_D_UP		12 //(x,y)
+//See $LK,"::/Demo/MessageLoop.HC"$
+#define MESSAGE_NULL		0
+#define MESSAGE_CMD			1
+#define MESSAGE_KEY_DOWN		2  //($LK,"ASCII",A="MN:CH_CTRLA"$,$LK,"scan code",A="FI:::/Doc/CharOverview.DD"$) Press <CTRL-SHIFT-L>
+#define MESSAGE_KEY_UP		3  //($LK,"ASCII",A="MN:CH_CTRLA"$,$LK,"scan code",A="FI:::/Doc/CharOverview.DD"$) Press <CTRL-SHIFT-L>
+#define MESSAGE_MS_MOVE		4  //(x,y)
+#define MESSAGE_MS_L_DOWN		5  //(x,y)
+#define MESSAGE_MS_L_UP		6  //(x,y)
+#define MESSAGE_MS_L_D_DOWN 	7  //(x,y)
+#define MESSAGE_MS_L_D_UP		8  //(x,y)
+#define MESSAGE_MS_R_DOWN		9  //(x,y)
+#define MESSAGE_MS_R_UP		10 //(x,y)
+#define MESSAGE_MS_R_D_DOWN 	11 //(x,y)
+#define MESSAGE_MS_R_D_UP		12 //(x,y)
 
 //Fake messages used to send both an up and down.
-#define MSG_KEY_DOWN_UP		-2  //Down & UP
-#define MSG_MS_L_DOWN_UP	-5  //Down & Up
-#define MSG_MS_L_D_DOWN_UP	-7  //Down & Up
-#define MSG_MS_R_DOWN_UP	-9  //Down & Up
-#define MSG_MS_R_D_DOWN_UP	-11 //Down & Up
+#define MESSAGE_KEY_DOWN_UP		-2  //Down & UP
+#define MESSAGE_MS_L_DOWN_UP	-5  //Down & Up
+#define MESSAGE_MS_L_D_DOWN_UP	-7  //Down & Up
+#define MESSAGE_MS_R_DOWN_UP	-9  //Down & Up
+#define MESSAGE_MS_R_D_DOWN_UP	-11 //Down & Up
 
 #help_index "Task/Settings"
 #define TSF_SAME_SONG	1
@@ -3235,7 +3235,7 @@ public class CTaskSettings
 #define TASKf_FILTER_INPUT	6
 #define TASKf_HAS_SONG		7
 #define TASKf_DISABLE_BPTS	8
-#define TASKf_AWAITING_MSG	9
+#define TASKf_AWAITING_MESSAGE	9
 #define TASKf_BREAK_LOCKED	10
 #define TASKf_PENDING_BREAK	11
 #define TASKf_BREAK_TO_SHIFT_ESC 12
@@ -3767,7 +3767,7 @@ class CKeyDevGlbls
 	**ctrl_alt_ret_addr; //addr of ret addr on stack in kbd irq
   U8	**ctrl_alt_no_shift_descs,**ctrl_alt_shift_descs,
 	desc[STR_LEN],
-	*hndlr;
+	*handler;
 };
 
 #help_index "Snd"
@@ -3813,15 +3813,15 @@ class CMPCrash
   I64	cpu_num;
   CTask *task;
   I64	rip;
-  U8	*msg;
-  I64	msg_num;
+  U8	*message;
+  I64	message_num;
 };
 
 public class CDebugGlbls
 {
   CTask *focus_task;
-  U8	*msg;
-  I64	msg_num;
+  U8	*message;
+  I64	message_num;
   CMPCrash *mp_crash;
   U8	*int_fault_code,
 	*fix_file_line;
@@ -3846,7 +3846,7 @@ public class CDebugGlbls
 #define STD_DISTRO_DVD_CFG	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
 
 #help_index "Registry"
-//Registry sys_msg_flags. $LK,"RegOneTimePopUp",A="MN:RegOneTimePopUp"$()
+//Registry sys_message_flags. $LK,"RegOneTimePopUp",A="MN:RegOneTimePopUp"$()
 #define ARf_FLOODFILL			0
 #define ARf_CSPRITE_INS_CLIP		1
 #define ARf_PLANAR_SYMMETRY		2

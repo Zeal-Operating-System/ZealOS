@@ -633,7 +633,7 @@ U0 Init()
 
 U0 KeepAway()
 {
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
 
   PopUpOk(
 	"Pass or hand-off to your team to score points.$$FG$$\n\n"
@@ -669,18 +669,18 @@ U0 KeepAway()
 
   try {
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_MS_L_DOWN|1<<MSG_MS_R_DOWN|1<<MSG_KEY_DOWN);
-      switch (msg_code) {
-	case MSG_MS_L_DOWN:
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_KEY_DOWN);
+      switch (message_code) {
+	case MESSAGE_MS_L_DOWN:
 ka_shoot:
 	  Shoot(human);
 	  break;
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 ka_jump:
 	  human->DzDt=JUMP_VELOCITY;
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      Init;
@@ -697,7 +697,7 @@ ka_jump:
       }
     }
 ka_done: //Don't goto out of try
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

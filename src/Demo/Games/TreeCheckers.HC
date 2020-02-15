@@ -283,7 +283,7 @@ U0 CleanUp()
 
 U0 TreeCheckers()
 {
-  I64 msg_code,arg1,arg2,ch,sc;
+  I64 message_code,arg1,arg2,ch,sc;
   Unit *tmpu;
 
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
@@ -311,10 +311,10 @@ cn_start:
     show_start=FALSE;
     Fs->draw_it=&DrawIt;
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN+1<<MSG_MS_L_DOWN+1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
-      switch (msg_code) {
-	case MSG_KEY_DOWN:
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
+      switch (message_code) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      CleanUp;
@@ -324,7 +324,7 @@ cn_start:
 	      goto cn_done;
 	  }
 	  break;
-	case MSG_MS_L_DOWN:
+	case MESSAGE_MS_L_DOWN:
 	  if (num_alive[0]>1 && num_alive[1]>1) {
 	    tmpu=UnitFind(arg1,arg2,cur_player);
 	    end_x=start_x=tmpu->x;
@@ -332,11 +332,11 @@ cn_start:
 	    show_start=TRUE;
 	  }
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  if (tmpu)
 	    UnitMove(tmpu,arg1,arg2);
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  UnitMove(tmpu,arg1,arg2);
 	  KillsCheck(tmpu->x,tmpu->y,cur_player);
 	  show_start=FALSE;
@@ -346,7 +346,7 @@ cn_start:
       }
     }
 cn_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

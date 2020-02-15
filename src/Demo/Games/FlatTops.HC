@@ -811,9 +811,9 @@ U0 FlatTops()
   Fs->animate_task=Spawn(&AnimateTask,NULL,"Animate",,Fs);
   try {
     while (TRUE)
-      switch (GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN|1<<MSG_MS_L_UP|1<<MSG_MS_R_UP|1<<MSG_MS_R_D_UP)) {
-	case MSG_KEY_DOWN:
+      switch (GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_R_D_UP)) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      CleanUp;
@@ -830,18 +830,18 @@ U0 FlatTops()
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  SquadronSeté(0,arg1,arg2);
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  SquadronLaunch(0,arg1,arg2);
 	  break;
-	case MSG_MS_R_D_UP:
+	case MESSAGE_MS_R_D_UP:
 	  SquadronReturn(0,arg1,arg2);
 	  break;
       }
 nv_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   SettingsPop;

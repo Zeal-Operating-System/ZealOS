@@ -107,15 +107,15 @@ U0 PsmRightClick(I64 x,I64 y)
 
 U0 PsmLeftClickPickNoteBox(I64 duration)
 {
-  I64 o,n,msg_code,arg1,arg2;
+  I64 o,n,message_code,arg1,arg2;
   PsmNote *tmpn,*tmpn1;
   do {
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP|1<<MSG_MS_MOVE);
-    if (msg_code==MSG_MS_MOVE) {
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+    if (message_code==MESSAGE_MS_MOVE) {
       DrawDC2;
       DrawNote(psm.dc2,arg1,arg2,duration);
     }
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   if (arg2<13*FONT_HEIGHT) {
     if (arg1>psm.head.last->x)
       tmpn1=psm.head.last;
@@ -146,15 +146,15 @@ U0 PsmLeftClickPickNoteBox(I64 duration)
 
 U0 PsmLeftClickPickMeterBox(I64 top,I64 bottom)
 {
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   PsmNote *tmpn,*tmpn1;
   do {
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP|1<<MSG_MS_MOVE);
-    if (msg_code==MSG_MS_MOVE) {
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+    if (message_code==MESSAGE_MS_MOVE) {
       DrawDC2;
       DrawTimeSignature(psm.dc2,arg1,arg2,top,bottom);
     }
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   if (arg2<13*FONT_HEIGHT) {
     if (arg1>=psm.head.x)
       tmpn1=psm.head.last;
@@ -176,15 +176,15 @@ U0 PsmLeftClickPickMeterBox(I64 top,I64 bottom)
 U0 PsmLeftClickStaffPtr(I64 x,I64 y)
 {
   PsmNote *tmpn,*tmpn1;
-  I64 o,n,msg_code,arg1,arg2,n_original,o_original;
+  I64 o,n,message_code,arg1,arg2,n_original,o_original;
   psm.cur_note=tmpn=PsmFindNote(x,y);
   if (tmpn!=&psm.head) {
     if (tmpn->type==PSMT_NOTE) {
       o_original=Ona2Octave(tmpn->ona);
       n_original=Ona2Note  (tmpn->ona);
       do {
-	msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP|1<<MSG_MS_MOVE);
-	if (msg_code==MSG_MS_L_UP) {
+	message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+	if (message_code==MESSAGE_MS_L_UP) {
 	  tmpn1=PsmFindNote(arg1,arg2);
 	  if (tmpn1==&psm.head || tmpn1==tmpn)
 	    goto move_note;
@@ -208,7 +208,7 @@ move_note:
 	    o--;
 	  tmpn->ona=Note2Ona(n,o);
 	}
-      } while (msg_code!=MSG_MS_L_UP);
+      } while (message_code!=MESSAGE_MS_L_UP);
       PsmSetWidth(tmpn);
     }
   }
@@ -216,17 +216,17 @@ move_note:
 
 U0 PsmLeftClickStaffBox(I64 x,I64 y)
 {
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   do {
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP|1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
     DrawDC2;
     psm.dc2->color=ROPF_DITHER+WHITE<<16+BLACK;
     GrBorder(psm.dc2,x,y,arg1,arg2);
-    if (msg_code==MSG_MS_L_UP) {
+    if (message_code==MESSAGE_MS_L_UP) {
       if (x>arg1) SwapI64(&x,&arg1);
       PsmMarkSel(x,arg1,TRUE);
     }
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   DrawDC2;
 }
 
@@ -307,7 +307,7 @@ U0 PsmDownKey(I64 x,I64 y)
     for (i=0;i<PSM_KEYS_NUM;i++) {
       o=&psm_kbd[i];
       if (o->x<=x<o->x+o->w && y<o->h) {
-	Msg(MSG_KEY_DOWN,o->ascii,0);
+	Message(MESSAGE_KEY_DOWN,o->ascii,0);
 	return;
       }
     }
@@ -324,7 +324,7 @@ U0 PsmUpKey(I64 x,I64 y)
     for (i=0;i<PSM_KEYS_NUM;i++) {
       o=&psm_kbd[i];
       if (o->x<=x<o->x+o->w && y<o->h) {
-	Msg(MSG_KEY_UP,o->ascii,0);
+	Message(MESSAGE_KEY_UP,o->ascii,0);
 	return;
       }
     }
@@ -350,7 +350,7 @@ U0 PsmPopMode()
 U0 Psalmody(U8 *dirname="~/Psalmody")
 {
   Bool was_playing,is_null=TRUE,was_null=TRUE;
-  I64 arg1,arg2,msg_code=0,col,ona=0,last_ona=0,
+  I64 arg1,arg2,message_code=0,col,ona=0,last_ona=0,
 	psm_octave=4,timeout_val,timeout_val2,old_doc_flags;
   U8 *filename=NULL,*st,*st2;
   PsmNote *tmpn;
@@ -376,7 +376,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
   MenuPush(
 	"File {"
 	"  New(,'.');"
-	"  ChgDir(MSG_CMD,PSMF_CD);"
+	"  ChgDir(MESSAGE_CMD,PSMF_CD);"
 	"  Open(,CH_CTRLO);"
 	"  SaveAs(,CH_CTRLA);"
 	"  Abort(,CH_SHIFT_ESC);"
@@ -399,7 +399,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
 	"  Play(,'x');"
 	"  Record(,'z');"
 	"  Random(,',');"
-	"  MarkIncomplete(MSG_CMD,PSMF_INCOMPLETE);"
+	"  MarkIncomplete(MESSAGE_CMD,PSMF_INCOMPLETE);"
 	"}"
 	"Snd {"
 	"  Octave1(,'1');"
@@ -431,22 +431,22 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
       was_playing=FALSE;
 mo_start:
       if (ms.pos_text.y-Fs->win_top<18)
-	msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_KEY_UP|
-	      1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|1<<MSG_MS_R_UP|
-	      1<<MSG_MS_MOVE|1<<MSG_CMD);
+	message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
+	      1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP|
+	      1<<MESSAGE_MS_MOVE|1<<MESSAGE_CMD);
       else
-	msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_KEY_UP|
-	      1<<MSG_MS_MOVE|1<<MSG_CMD);
-mo_got_msg:
-      if (msg_code==MSG_KEY_DOWN && arg1==CH_SPACE && !arg2) {
+	message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
+	      1<<MESSAGE_MS_MOVE|1<<MESSAGE_CMD);
+mo_got_message:
+      if (message_code==MESSAGE_KEY_DOWN && arg1==CH_SPACE && !arg2) {
 //The Window Mgr sets the Doc cur_entry to a bttn
 	//and generates a <SPACE> when the Doc Bttns are clicked.
 	//This is so that kbd and mouse are the same for Doc's.
-	//We must now pass the <SPACE> onto the Doc hndlr.
+	//We must now pass the <SPACE> onto the Doc handler.
 	PutKey(arg1,arg2);
 	goto mo_start;
       }
-      if (msg_code!=MSG_MS_MOVE) {
+      if (message_code!=MESSAGE_MS_MOVE) {
 	DocBottom;
 	if (was_playing || DocPut->cur_entry->y>=Fs->win_height-2) {
 	  PsmMenu(psm_octave);
@@ -456,8 +456,8 @@ mo_got_msg:
 
       ona=Note2Ona(3,psm_octave+1); //C
       is_null=TRUE;
-      switch (msg_code) {
-	case MSG_CMD:
+      switch (message_code) {
+	case MESSAGE_CMD:
 	  PsmPopMode;
 	  switch (arg1) {
 	    case PSMF_CD:
@@ -476,7 +476,7 @@ mo_got_msg:
 	  PsmPushMode(psm_octave);
 	  col=0;
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  evt_time=tS;
 	  if ('0'<=arg1<='9') {
 	    psm_octave=arg1-'0';
@@ -643,20 +643,20 @@ mo_got_msg:
 		  if (tmpn->type!=PSMT_METER) {
 		    timeout_val=cnts.jiffies;
 		    if (ms.pos_text.y-Fs->win_top<18)
-		      msg_code=ScanMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|
-			    1<<MSG_MS_L_DOWN|1<<MSG_MS_R_UP|1<<MSG_CMD);
+		      message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
+			    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_CMD);
 		    else
-		      msg_code=ScanMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|
-			    1<<MSG_MS_L_DOWN|1<<MSG_CMD);
-		    if (msg_code) {
+		      message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
+			    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_CMD);
+		    if (message_code) {
 		      Snd;
 		      psm.playing=FALSE;
 		      was_playing=TRUE;
 		      if (ms.pos_text.y-Fs->win_top>=18 &&
-			    msg_code==MSG_MS_L_DOWN)
+			    message_code==MESSAGE_MS_L_DOWN)
 			goto mo_start;
 		      else
-			goto mo_got_msg;
+			goto mo_got_message;
 		    }
 		    psm.cur_note=tmpn;
 		    psm.scrn_x+=tmpn->x-0.33*GR_WIDTH;
@@ -721,21 +721,21 @@ mo_got_msg:
 	    }
 	  }
 	  break;
-	case MSG_KEY_UP:
+	case MESSAGE_KEY_UP:
 	  evt_time=tS;
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  if (arg2>18*FONT_HEIGHT)
 	    Fs->win_inhibit=WIG_USER_TASK_DFT;
 	  else
 	    Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-WIF_SELF_BORDER
 		  -WIF_FOCUS_TASK_MENU-WIF_SELF_CTRLS;
 	  break;
-	case MSG_MS_L_DOWN:
+	case MESSAGE_MS_L_DOWN:
 	  PsmDownKey(arg1,arg2);
 	  PsmLeftClick(arg1,arg2);
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  PsmUpKey(arg1,arg2);
 	  break;
 	default:
@@ -781,7 +781,7 @@ mo_got_msg:
       }
     }
 mo_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   PsmPopMode;

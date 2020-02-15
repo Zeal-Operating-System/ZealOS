@@ -257,7 +257,7 @@ U0 SongTask(I64)
 
 U0 Span()
 {
-  I64 msg_code,arg1,arg2;
+  I64 message_code,arg1,arg2;
   MyMass   *tmpm1=NULL,*tmpm2=NULL;
   MySpring *tmps;
   CCtrl *bt_run,*bt_mode;
@@ -323,11 +323,11 @@ U0 Span()
 
   try {
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_DOWN|1<<MSG_MS_R_DOWN|
-	    1<<MSG_MS_L_UP|1<<MSG_KEY_DOWN|1<<MSG_MS_MOVE);
+      message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|
+	    1<<MESSAGE_MS_L_UP|1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_MOVE);
       DCFill(dc);
-      switch (msg_code) {
-	case MSG_MS_L_DOWN:
+      switch (message_code) {
+	case MESSAGE_MS_L_DOWN:
 	  cursor_mass=tmpm1=tmpm2=NULL;
 	  switch (mode_bttn.state) {
 	    case MD_MASS:
@@ -354,7 +354,7 @@ U0 Span()
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  switch (mode_bttn.state) {
 	    case MD_CONCRETE:
 	    case MD_STEEL:
@@ -369,7 +369,7 @@ U0 Span()
 	  }
 	  cursor_mass=tmpm1=tmpm2=NULL;
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  switch (mode_bttn.state) {
 	    case MD_MOVE:
 	      if (!run_bttn.state && tmpm1)
@@ -384,13 +384,13 @@ U0 Span()
 	      break;
 	  }
 	  break;
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 	  mode_bttn.state++;
 	  if (mode_bttn.state>=MD_MODES_NUM)
 	    mode_bttn.state=0;
 	  cursor_mass=tmpm1=tmpm2=NULL;
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      if (!SpanTime || !a.saved_ode) {
@@ -454,7 +454,7 @@ U0 Span()
       }
     }
 span_done: //Don't goto out of try
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   DocClear;

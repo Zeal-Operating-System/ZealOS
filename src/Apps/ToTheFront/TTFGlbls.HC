@@ -41,8 +41,8 @@ Bool	roads[map_rows][map_cols],
 F64	fire_radius,fire_radius_x,fire_radius_y;
 
 //These display "phase", "turn" and "game over".
-U8	msg_buf[STR_LEN];
-I64	msg_off_timeout; //Jiffies. Goes away after a time.
+U8	message_buf[STR_LEN];
+I64	message_off_timeout; //Jiffies. Goes away after a time.
 
 //Unit types
 #define UT_INFANTRY	0

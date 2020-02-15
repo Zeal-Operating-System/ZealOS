@@ -177,7 +177,7 @@ RESTORE_RSI_TASK2:
 @@20:	BT	U64 CTask.task_flags[RSI],TASKf_KILL_TASK
 	JC	END_RSI_TASK
 	TEST	U64 CTask.task_flags[RSI],
-		1<<TASKf_AWAITING_MSG|1<<TASKf_SUSPENDED
+		1<<TASKf_AWAITING_MESSAGE|1<<TASKf_SUSPENDED
 	JNZ	@@25
 
 	MOV	RAX,U64 [&cnts.jiffies]
@@ -258,7 +258,7 @@ BREAK_FOCUS_USER:
 //Do these now, in case interrupt happens.
 	MOV	U64 CTask.wake_jiffy[RSI],0
 	PUSH	RSI
-	CALL	&TaskRstAwaitingMsg
+	CALL	&TaskRstAwaitingMessage
 	JMP	I32 RESTORE_RSI_TASK
 
 END_FOCUS_USER:

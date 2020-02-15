@@ -46,7 +46,7 @@ extern U0 EdCodeTools(CDoc *doc);
 extern U8 *EdSprite(I64 bin_num);
 extern I64 ExeDoc(CDoc *doc,I64 ccf_flags=0);
 extern I64 FindWiz();
-extern I64 GetI64(U8 *msg=NULL,I64 dft=0,I64 lo=I64_MIN,I64 hi=I64_MAX);
+extern I64 GetI64(U8 *message=NULL,I64 dft=0,I64 lo=I64_MIN,I64 hi=I64_MAX);
 extern Bool GrPlot0(CDC *dc,I64 x,I64 y);
 extern CMenuEntry *MenuEntryFind(CMenu *haystack_menu,U8 *needle_full_name);
 extern CMenu *MenuFilePush(U8 *filename);
@@ -64,7 +64,7 @@ extern I64 PopUpFile(U8 *filename,
 	Bool warn_ext=TRUE,CTask *parent=NULL,CTask **_pu_task=NULL);
 extern Bool PopUpForm(U8 *_d,U8 *class_name=lastclass,
 	I64 dof_flags=DOF_SIZE_MIN,U8 *header=NULL,U8 *footer=NULL);
-extern I64 PopUpGetI64(U8 *msg,I64 dft,I64 lo=I64_MIN,I64 hi=I64_MAX);
+extern I64 PopUpGetI64(U8 *message,I64 dft,I64 lo=I64_MIN,I64 hi=I64_MAX);
 extern U8 *PopUpGetStr(U8 *header=NULL);
 extern I64 PopUpMenu(CDoc *doc,I64 dof_flags=0);
 extern Bool PopUpNoYes(U8 *header=NULL,U8 *footer=NULL);
@@ -75,7 +75,7 @@ extern Bool PopUpTransform(I64 *r);
 extern I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
 	U8 *_stage2_filename=NULL);
 extern U0 Refresh(I64 cnt=1,Bool force=FALSE);
-extern U0 RegOneTimePopUp(I64 flag_num,U8 *msg);
+extern U0 RegOneTimePopUp(I64 flag_num,U8 *message);
 extern Bool RegWrite(U8 *path,U8 *fmt,...);
 extern U0 SettingsPop(CTask *task=NULL,I64 flags=0);
 extern CTaskSettings *SettingsPush(CTask *task=NULL,I64 flags=0);

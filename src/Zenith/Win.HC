@@ -144,7 +144,7 @@ U0 ExtendedASCII()
   i=PopUpMenu(doc);
   DocDel(doc);
   if (i>=0)
-    PostMsg(ext_ASCII_task,MSG_KEY_DOWN_UP,i,Char2ScanCode(i));
+    PostMessage(ext_ASCII_task,MESSAGE_KEY_DOWN_UP,i,Char2ScanCode(i));
 }
 
 U0 CtrlAltA(I64)

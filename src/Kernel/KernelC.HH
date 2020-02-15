@@ -226,8 +226,8 @@ public extern U0 RawPutChar(I64 ch);
 public extern U0 VGAFlush();
 
 #help_index "Debugging;Debugging/Debugger"
-public extern U0 Debug(U8 *msg=NULL,I64 msg_num=0);
-public extern U0 Panic(U8 *msg=NULL,I64 msg_num=0,Bool panic=TRUE);
+public extern U0 Debug(U8 *message=NULL,I64 message_num=0);
+public extern U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE);
 
 #help_index "Define;Char/Define"
 #help_file "::/Doc/Define"
@@ -279,7 +279,7 @@ public extern I64 FSize(CFile *f);
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically)"
 public extern Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE);
 public extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
-	Bool del_dir=FALSE,Bool print_msg=TRUE);
+	Bool del_dir=FALSE,Bool print_message=TRUE);
 public extern I64 Dir(U8 *files_find_mask="*",Bool full=FALSE);
 public extern Bool DirMk(U8 *filename,I64 entry_cnt=0);
 public extern Bool Drive(U8 drv_let);
@@ -465,7 +465,7 @@ public extern I64 JobsHandler(I64 run_flags,CTask *task=NULL);
 extern U0 SrvCmdLine();
 public extern U0 SrvTaskCont();
 public extern CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags);
-public extern U0 TaskRstAwaitingMsg(CTask *task=NULL);
+public extern U0 TaskRstAwaitingMessage(CTask *task=NULL);
 public extern U0 UserTaskCont();
 
 #help_index "Job/Exe;Task/Job/Exe;Compiler"
@@ -477,10 +477,10 @@ public extern I64 PopUpPrint(U8 *fmt,...);
 public extern I64 JobResGet(CJob *rqst=NULL);
 public extern Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL);
 
-#help_index "Job/Text & Msgs;Task/Job/Text & Msgs"
+#help_index "Job/Text & Messages;Task/Job/Text & Messages"
 public extern CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags);
 
-#help_index "Job/Text & Msgs;Task/Job/Text & Msgs;InFile;StdIn/InFile"
+#help_index "Job/Text & Messages;Task/Job/Text & Messages;InFile;StdIn/InFile"
 public extern U0 In(U8 *fmt,...);
 public extern U0 InFile(U8 *filename);
 public extern U0 InStr(U8 *fmt,...);
@@ -489,21 +489,21 @@ public extern U0 XTalkStr(CTask *task,U8 *fmt,...);
 public extern U0 XTalkStrWait(CTask *task,U8 *fmt,...);
 public extern U0 XTalkWait(CTask *task,U8 *fmt,...);
 
-#help_index "Job/Text & Msgs;Task/Job/Text & Msgs;Messages"
-public extern U0 Msg(I64 msg_code,I64 arg1,I64 arg2,I64 flags=0);
-public extern U0 PostMsg(CTask *task,
-	I64 msg_code,I64 arg1,I64 arg2,I64 flags=0);
-public extern U0 PostMsgWait(CTask *task,I64 msg_code,
+#help_index "Job/Text & Messages;Task/Job/Text & Messages;Messages"
+public extern U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
+public extern U0 PostMessage(CTask *task,
+	I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
+public extern U0 PostMessageWait(CTask *task,I64 message_code,
 	I64 arg1,I64 arg2,I64 flags=0);
-public extern CJob *TaskMsg(CTask *srv,CTask *master,
-		     I64 msg_code,I64 arg1,I64 arg2,I64 flags);
+public extern CJob *TaskMessage(CTask *srv,CTask *master,
+		     I64 message_code,I64 arg1,I64 arg2,I64 flags);
 
 #help_index "Job;Task/Job"
 #help_file "::/Doc/Job"
 
 #help_index "Keyboard Devices/System;Char/System"
 #help_file "::/Doc/KeyDev"
-public extern U0 CtrlAltCBSet(U8 ch,U0 (*fp_hndlr)(I64 sc),
+public extern U0 CtrlAltCBSet(U8 ch,U0 (*fp_handler)(I64 sc),
 	U8 *no_shift_desc=NULL,U8 *shift_desc=NULL,Bool in_irq=FALSE);
 public extern U0 KeyDescSet(U8 *fmt,...);
 public extern CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch,I64 sc),
@@ -521,12 +521,12 @@ public extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,
 public extern I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,
 	Bool raw_cursor=FALSE);
 public extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
-public extern U8 *GetStr(U8 *msg=NULL,U8 *dft=NULL,I64 flags=0);
+public extern U8 *GetStr(U8 *message=NULL,U8 *dft=NULL,I64 flags=0);
 extern U0	KbdInit();
 public extern I64 KbdMsEvtTime();
 extern U0	KbdMsHandler(Bool poll_kbd,Bool poll_ms);
 extern U0	KbdMsInit();
-extern I64	KbdMsgsQueue();
+extern I64	KbdMessagesQueue();
 public extern U0 KbdTypeMatic(U8 delay);
 extern Bool	MsHardDriverInstall();
 public extern I64 PressAKey();
@@ -587,12 +587,12 @@ public extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,
 public extern I64 *MemPageTable(U8 *a);
 
 #help_index "Messages"
-#help_file "::/Doc/Msgs"
-public extern I64 FlushMsgs(CTask *task=NULL);
-public extern I64 GetMsg(I64 *_arg1=NULL,I64 *_arg2=NULL,
+#help_file "::/Doc/Messages"
+public extern I64 FlushMessages(CTask *task=NULL);
+public extern I64 GetMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,
 	I64 mask=~1,CTask *task=NULL);
 extern U0 InputFilterTask();
-public extern I64 ScanMsg(I64 *_arg1=NULL,I64 *_arg2=NULL,
+public extern I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,
 	I64 mask=~1,CTask *task=NULL);
 
 #help_index "Misc"
@@ -662,7 +662,7 @@ public extern I64 ATARep(Bool pmt=TRUE,
 #help_index "Processor"
 public extern U8 *IntEntryGet(I64 irq);
 public extern U8 *IntEntrySet(I64 irq,
-	U0 (*fp_new_hndlr)(),I64 type=IDTET_IRQ,I64 dpl=0);
+	U0 (*fp_new_handler)(),I64 type=IDTET_IRQ,I64 dpl=0);
 
 #help_index "ScreenCast;Cmd Line (Typically)"
 public extern Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,

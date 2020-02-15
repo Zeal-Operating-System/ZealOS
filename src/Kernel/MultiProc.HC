@@ -202,7 +202,7 @@ U0 CoreAPSethTask()
       while (LBts(&ctrl->flags,JOBCf_LOCKED));
     } while (ctrl->next_waiting!=ctrl && JobRunOne(GetRFlags,ctrl));
     CLI
-    LBts(&Fs->task_flags,TASKf_AWAITING_MSG);
+    LBts(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
     LBtr(&ctrl->flags,JOBCf_LOCKED);
     LBts(&Fs->task_flags,TASKf_IDLE);
     Yield;
@@ -236,7 +236,7 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
   CLI
   while (LBts(&ctrl->flags,JOBCf_LOCKED))
     Yield;
-  if (ctrl->next_waiting==ctrl && LBtr(&seth->task_flags,TASKf_AWAITING_MSG))
+  if (ctrl->next_waiting==ctrl && LBtr(&seth->task_flags,TASKf_AWAITING_MESSAGE))
     MPInt(I_WAKE,target_cpu);
   QueueInsert(tmpc,ctrl->last_waiting);
   LBtr(&ctrl->flags,JOBCf_LOCKED);
@@ -344,7 +344,7 @@ U0 Core0StartMP()
 
   //Make sure they're all up-and-running
   for (i=1;i<my_mp_cnt;i++)
-    while (!Bt(&cpu_structs[i].seth_task->task_flags,TASKf_AWAITING_MSG))
+    while (!Bt(&cpu_structs[i].seth_task->task_flags,TASKf_AWAITING_MESSAGE))
       PAUSE;
 
   POPFD
@@ -385,5 +385,5 @@ interrupt U0 IntMPCrash()
   text.raw_flags|=RWF_SHOW_DOLLAR;
   "MP Crash CPU%02X Task:%08X\n"
   "RIP:%P\n",dbg.mp_crash->cpu_num,dbg.mp_crash->task,dbg.mp_crash->rip;
-  Panic(dbg.mp_crash->msg,dbg.mp_crash->msg_num);
+  Panic(dbg.mp_crash->message,dbg.mp_crash->message_num);
 }

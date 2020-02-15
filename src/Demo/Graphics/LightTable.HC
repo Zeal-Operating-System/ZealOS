@@ -452,7 +452,7 @@ U0 LTMenuSet(I64 mode)
 #define PTS_NUM	1024
 U0 LightTable()
 {
-  I64 msg_code,mode=LTM_REFLECT_LINE,i,cnt,arg1,arg2,x1,y1,x2,y2;
+  I64 message_code,mode=LTM_REFLECT_LINE,i,cnt,arg1,arg2,x1,y1,x2,y2;
   CD3I32 *c=MAlloc(PTS_NUM*sizeof(CD3I32));
 
   p_root_locks=0;
@@ -504,11 +504,11 @@ U0 LightTable()
     animate_tasks[i]=Spawn(&MPAnimateTask,NULL,"MPAnimate",i);
   try {
     while (TRUE) {
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN+1<<MSG_MS_L_DOWN+1<<MSG_MS_L_UP+1<<MSG_MS_R_UP);
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_UP);
 lt_restart:
-      switch (msg_code) {
-	case MSG_MS_L_UP:
+      switch (message_code) {
+	case MESSAGE_MS_L_UP:
 	  Sweep(100,90,100);
 	  x2=arg1; y2=arg2;
 	  switch (mode) {
@@ -523,7 +523,7 @@ lt_restart:
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_DOWN:
+	case MESSAGE_MS_L_DOWN:
 	  x1=arg1; y1=arg2;
 	  switch (mode) {
 	    case LTM_REFLECT_LINE:
@@ -535,12 +535,12 @@ lt_restart:
 	      while (TRUE) {
 		x2=arg1; y2=arg2;
 		GrLine(map,x1,y1,x2,y2);
-		msg_code=GetMsg(&arg1,&arg2,
-		      1<<MSG_KEY_DOWN+1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+		message_code=GetMessage(&arg1,&arg2,
+		      1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 		GrLine(map,x1,y1,x2,y2);
-		if (msg_code==MSG_KEY_DOWN)
+		if (message_code==MESSAGE_KEY_DOWN)
 		  goto lt_restart;
-		else if (msg_code==MSG_MS_L_UP) {
+		else if (message_code==MESSAGE_MS_L_UP) {
 		  Sweep(100,90,100);
 		  x2=arg1; y2=arg2;
 		  break;
@@ -566,16 +566,16 @@ lt_restart:
 	      do {
 		c[cnt].x=arg1; c[cnt].y=arg2; c[cnt].z=0;
 		Gr2BSpline(map,c,cnt+1);
-		msg_code=GetMsg(&arg1,&arg2,1<<MSG_KEY_DOWN+1<<MSG_MS_L_UP+
-		      1<<MSG_MS_MOVE+1<<MSG_MS_R_UP);
+		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_UP+
+		      1<<MESSAGE_MS_MOVE+1<<MESSAGE_MS_R_UP);
 		Gr2BSpline(map,c,cnt+1);
-		if (msg_code==MSG_KEY_DOWN)
+		if (message_code==MESSAGE_KEY_DOWN)
 		  goto lt_restart;
-		else if (msg_code==MSG_MS_L_UP) {
+		else if (message_code==MESSAGE_MS_L_UP) {
 		  Sweep(100,90,100);
 		  cnt++;
 		}
-	      } while (cnt<PTS_NUM-1 && msg_code!=MSG_MS_R_UP);
+	      } while (cnt<PTS_NUM-1 && message_code!=MESSAGE_MS_R_UP);
 	      if (mode==LTM_REFLECT_SPLINE)
 		map->color=MIRROR_COLOR;
 	      else
@@ -594,7 +594,7 @@ lt_restart:
 	      break;
 	  }
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  i=PopUpPickLst("Reflect Line\0Reflect Spline\0Refract Line\0"
 		"Refract Spline\0Refract Flood Fill\0TestRay\0");
 	  if (i>=0) {
@@ -602,7 +602,7 @@ lt_restart:
 	    LTMenuSet(mode);
 	  }
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      CleanUp;
@@ -616,7 +616,7 @@ lt_restart:
 	    case 'e':
 	      full_speed=TRUE;
 	      Sleep(1500);
-	      FlushMsgs;
+	      FlushMessages;
 	      full_speed=FALSE;
 	      break;
 	    case 'n':
@@ -635,7 +635,7 @@ lt_restart:
       }
     }
 lt_done:
-    GetMsg(,,1<<MSG_KEY_UP);
+    GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;
   Free(c);

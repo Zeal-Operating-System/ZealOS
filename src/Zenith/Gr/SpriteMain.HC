@@ -130,15 +130,15 @@ U0 SpriteScreenInit(CDC *dc,I64,I64)
 
 CSprite *SMLine(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
   CSprite *res;
   do {
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrLine3(dc,x1,y1,0,x2,y2,0);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
   GrLine3(dc,x1,y1,0,x2,y2,0);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_LINE));
@@ -152,15 +152,15 @@ CSprite *SMLine(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 
 CSprite *SMArrow(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
   CSprite *res;
   do {
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrArrow3(dc,x1,y1,0,x2,y2,0);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
   GrArrow3(dc,x1,y1,0,x2,y2,0);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_ARROW));
@@ -174,7 +174,7 @@ CSprite *SMArrow(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 
 CSprite *SMPlanarSymmetry(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,old_width,old_flags;
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,old_width,old_flags;
   CSprite *res;
   old_width=dc->thick;
   old_flags=dc->flags;
@@ -183,10 +183,10 @@ CSprite *SMPlanarSymmetry(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2)
   do {
     dc->color=ROPF_DITHER+WHITE<<16+BLACK;
     GrLine3(dc,x1,y1,0,x2,y2,0);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   dc->flags=old_flags&DCF_SYMMETRY|dc->flags&~DCF_SYMMETRY;
   dc->thick=old_width;
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_PLANAR_SYMMETRY));
@@ -200,13 +200,13 @@ CSprite *SMPlanarSymmetry(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2)
 
 CSprite *SMRect(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,
 	xx1=arg1,yy1=arg2,xx2=arg1,yy2=arg2;
   CSprite *res;
   do {
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrRect3(dc,xx1,yy1,0,xx2-xx1,yy2-yy1);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
     if (x2<x1) {
@@ -219,7 +219,7 @@ CSprite *SMRect(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     } else {
       yy1=y1; yy2=y2;
     }
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
   GrRect3(dc,xx1,yy1,0,xx2-xx1,yy2-yy1);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_RECT));
@@ -234,7 +234,7 @@ CSprite *SMRect(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
 	I64 arg1,I64 arg2,CColorROPU32 bm_bkcolor)
 {
-  I64 i,msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,
+  I64 i,message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,
 	xx1=arg1,yy1=arg2,xx2=arg1,yy2=arg2,old_width;
   CDC *dc3,*img;
   CSprite *res;
@@ -244,7 +244,7 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
     dc2->color=ROPF_DITHER+WHITE<<16+BLACK;
     GrBorder(dc2,xx1+Fs->pix_left+Fs->scroll_x,yy1+Fs->pix_top+Fs->scroll_y,
 	  xx2+Fs->pix_left+Fs->scroll_x,yy2+Fs->pix_top+Fs->scroll_y);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
     if (x2<x1) {
@@ -257,7 +257,7 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
     } else {
       yy1=y1; yy2=y2;
     }
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   xx2++; yy2++;
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_BITMAP)+((xx2-xx1+7)&~7)*(yy2-yy1));
   res->type=SPT_BITMAP;
@@ -287,15 +287,15 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
 
 CSprite *SMCircle(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
   CSprite *res;
   do {
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrCircle3(dc,x1,y1,0,Sqrt(SqrI64(x1-x2)+SqrI64(y1-y2)));
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   dc->color=color&COLORROP_NO_ROP0_MASK;
   GrCircle3(dc,x1,y1,0,Sqrt(SqrI64(x1-x2)+SqrI64(y1-y2)));
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_CIRCLE));
@@ -308,16 +308,16 @@ CSprite *SMCircle(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 
 CSprite *SMEllipse(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
   F64 angle1,angle2;
   CSprite *res;
   do {
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrEllipse3(dc,(x1+x2)>>1,(y1+y2)>>1,0,AbsI64(x1-x2)>>1,AbsI64(y1-y2)>>1);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_ELLIPSE));
   res->type=SPT_ELLIPSE;
   res->pwha.x1=(x1+x2)>>1-x;
@@ -336,10 +336,10 @@ CSprite *SMEllipse(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrEllipse3(dc,res->pwha.x1+x,res->pwha.y1+y,0,
 	  res->pwha.width,res->pwha.height,res->pwha.angle);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   angle1=Arg(x2-(res->pwha.x1+x),y2-(res->pwha.y1+y));
   if (res->pwha.width>=res->pwha.height)
     res->pwha.angle=-(angle1-angle2);
@@ -354,17 +354,17 @@ CSprite *SMEllipse(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 CSprite *SMPolygon(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,I64 sides,
 	CColorROPU32 color)
 {
-  I64 msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
+  I64 message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
   F64 angle1,angle2;
   CSprite *res;
   do {
     dc->color=color&COLORROP_NO_ROP0_MASK;
     GrRegPoly3(dc,(x1+x2)>>1,(y1+y2)>>1,0,
 	  AbsI64(x1-x2)>>1,AbsI64(y1-y2)>>1,sides);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   res=CAlloc(SpriteElemQueuedBaseSize(SPT_POLYGON));
   res->type=SPT_POLYGON;
   res->pwhas.x1=(x1+x2)>>1-x;
@@ -385,10 +385,10 @@ CSprite *SMPolygon(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,I64 sides,
     GrRegPoly3(dc,res->pwhas.x1+x,res->pwhas.y1+y,0,
 	  res->pwhas.width,res->pwhas.height,
 	  res->pwhas.sides,res->pwhas.angle);
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     SpriteScreenInit(dc,x,y);
     x2=arg1; y2=arg2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
   angle1=Arg(x2-(res->pwhas.x1+x),y2-(res->pwhas.y1+y));
   if (res->pwhas.width>=res->pwhas.height)
     res->pwhas.angle=-(angle1-angle2);
@@ -404,7 +404,7 @@ CSprite *SMPolygon(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,I64 sides,
 CSprite *SMPolyLineFamily(I64 eletype,CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,
 	CColorROPU32 color)
 {
-  I64 i,num=0,msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
+  I64 i,num=0,message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2;
   I32 *ptr;
   CD3I32 *p;
   CSprite *res,*tmpg,*tmpg1,head2;
@@ -415,15 +415,15 @@ CSprite *SMPolyLineFamily(I64 eletype,CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,
       dc->color=color&COLORROP_NO_ROP0_MASK;
       if (num)
 	GrLine3(dc,x1,y1,0,x2,y2,0);
-      msg_code=GetMsg(&arg1,&arg2,
-	    1<<MSG_MS_L_UP+1<<MSG_MS_MOVE+1<<MSG_MS_R_UP);
+      message_code=GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE+1<<MESSAGE_MS_R_UP);
       dc->color=TRANSPARENT;
       if (num)
 	GrLine3(dc,x1,y1,0,x2,y2,0);
       x2=arg1; y2=arg2;
-    } while (msg_code!=MSG_MS_L_UP && msg_code!=MSG_MS_R_UP);
+    } while (message_code!=MESSAGE_MS_L_UP && message_code!=MESSAGE_MS_R_UP);
     dc->color=color&COLORROP_NO_ROP0_MASK;
-    if (msg_code==MSG_MS_L_UP) {
+    if (message_code==MESSAGE_MS_L_UP) {
       if (num)
 	GrLine3(dc,x1,y1,0,x2,y2,0);
       res=CAlloc(SpriteElemQueuedBaseSize(SPT_PT));
@@ -434,7 +434,7 @@ CSprite *SMPolyLineFamily(I64 eletype,CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,
       x1=x2;y1=y2;
       num++;
     }
-  } while (msg_code!=MSG_MS_R_UP);
+  } while (message_code!=MESSAGE_MS_R_UP);
 
   switch (eletype) {
     case SPT_POLYLINE:
@@ -494,7 +494,7 @@ CSprite *SMPolyLineFamily(I64 eletype,CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,
 
 CSprite *SMPolyPoint(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 {
-  I64 i,num=0,msg_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,x3,y3;
+  I64 i,num=0,message_code,x1=arg1,y1=arg2,x2=arg1,y2=arg2,x3,y3;
   I32 *ptr;
   CSprite *res,*tmpg,*tmpg1,head2;
 
@@ -502,12 +502,12 @@ CSprite *SMPolyPoint(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
   x3=arg1-x; y3=arg2-y;
   dc->color=color&COLORROP_NO_ROP0_MASK;
   do {
-    msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+    message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
     x2=arg1; y2=arg2;
     GrLine3(dc,x1,y1,0,x2,y2,0);
     Line(&head2,x1-x,y1-y,0,x2-x,y2-y,0,&SpritePolyPtPlot);
     x1=x2;y1=y2;
-  } while (msg_code!=MSG_MS_L_UP);
+  } while (message_code!=MESSAGE_MS_L_UP);
 
   num=0;
   res=head2.next;
@@ -552,7 +552,7 @@ U0 SMTextFamily(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,CDC *dc,
 	I64 old_de_flags)
 {
   CSprite *tmpg,*insert_pt=SpriteSetSettings(,head,*_cur_elem_num);
-  I64 msg_code,x1,y1;
+  I64 message_code,x1,y1;
   U8 *st;
   doc_ce->de_flags|=DOCEF_DONT_DRAW;
   st=PopUpGetStr("Enter text and press <ESC>.\n");
@@ -566,10 +566,10 @@ U0 SMTextFamily(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,CDC *dc,
 	case SPT_TEXT_BOX:	GrTextBox3(dc,x1,y1,0,st);	break;
 	case SPT_TEXT_DIAMOND:	GrTextDiamond3(dc,x1,y1,0,st);	break;
       }
-      msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+      message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
       SpriteScreenInit(dc,x,y);
       x1=arg1; y1=arg2;
-    } while (msg_code!=MSG_MS_L_UP);
+    } while (message_code!=MESSAGE_MS_L_UP);
     tmpg=CAlloc(SpriteElemQueuedBaseSize(eletype)+StrLen(st)+1);
     tmpg->type=eletype;
     tmpg->ps.x1=x1-x;
@@ -586,7 +586,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
 	CDC *dc,I64 xx,I64 yy,I64 arg1,I64 arg2,CColorROPU32 bm_bkcolor,
 	Bool sel,I64 xx1=0,I64 yy1=0,I64 xx2=0,I64 yy2=0,I64 *_cur_elem_num)
 {
-  I64 i,msg_code,x=xx,y=yy,x1=arg1,y1=arg2,x2=arg1,y2=arg2,old_width;
+  I64 i,message_code,x=xx,y=yy,x1=arg1,y1=arg2,x2=arg1,y2=arg2,old_width;
   CSprite *tmpg,*tmpg1,*insert_pt;
   CDC *img;
 
@@ -601,7 +601,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     do {
       dc->color=ROPF_DITHER+WHITE<<16+BLACK;
       GrBorder(dc,xx1,yy1,xx2,yy2);
-      msg_code=GetMsg(&arg1,&arg2,1<<MSG_MS_L_UP+1<<MSG_MS_MOVE);
+      message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
       SpriteScreenInit(dc,x,y);
       x2=arg1; y2=arg2;
       if (x2<x1) {
@@ -614,7 +614,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
       } else {
 	yy1=y1; yy2=y2;
       }
-    } while (msg_code!=MSG_MS_L_UP);
+    } while (message_code!=MESSAGE_MS_L_UP);
     dc->thick=old_width;
   }
 
@@ -1037,9 +1037,9 @@ I64 SpriteMainEd(CDoc *doc)
 	res=SPE_ABORT;
 	goto ei_done;
       }
-      switch (GetMsg(&arg1,&arg2,
-	    1<<MSG_KEY_DOWN|1<<MSG_MS_R_UP|1<<MSG_MS_L_DOWN)) {
-	case MSG_KEY_DOWN:
+      switch (GetMessage(&arg1,&arg2,
+	    1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_L_DOWN)) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case CH_ESC:
 	      res=SPE_EXIT;
@@ -1068,7 +1068,7 @@ I64 SpriteMainEd(CDoc *doc)
 	      break;
 	  }
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  if (eletype==SPT_PLANAR_SYMMETRY) {
 	    tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_PLANAR_SYMMETRY));
 	    tmpg->type=SPT_PLANAR_SYMMETRY;
@@ -1079,7 +1079,7 @@ I64 SpriteMainEd(CDoc *doc)
 	  } else
 	    eletype=SPT_MENU;
 	  break;
-	case MSG_MS_L_DOWN:
+	case MESSAGE_MS_L_DOWN:
 	  switch (eletype) {
 	    start:
 	      case SPT_LINE:
@@ -1145,7 +1145,7 @@ I64 SpriteMainEd(CDoc *doc)
 	      eletype=SPT_MENU;
 	      break;
 	    case SPT_SHIFTABLE_MESH:
-	      GetMsg(NULL,NULL,1<<MSG_MS_L_UP);
+	      GetMessage(NULL,NULL,1<<MESSAGE_MS_L_UP);
 	      doc_ce->de_flags|=DOCEF_DONT_DRAW;
 	      SMShiftableMesh(doc,doc_ce,head,x,y,arg1,arg2,&cur_elem_num);
 	      doc_ce->de_flags=old_de_flags;

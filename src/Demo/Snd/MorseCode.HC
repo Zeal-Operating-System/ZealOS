@@ -90,7 +90,7 @@ I64 MorseWaitKey()
   F64 dt;
   while (TRUE) {
     if (m_start) {
-      GetMsg(NULL,NULL,1<<MSG_KEY_UP);
+      GetMessage(NULL,NULL,1<<MESSAGE_KEY_UP);
       m_end=tS;
       Snd;
       dt_down=m_end-m_start;
@@ -102,7 +102,7 @@ I64 MorseWaitKey()
 	return '-';
     } else {
       if (!space_sent) {
-	while (!ScanMsg(&ch,NULL,1<<MSG_KEY_DOWN)) {
+	while (!ScanMessage(&ch,NULL,1<<MESSAGE_KEY_DOWN)) {
 	  dt=tS-m_end;
 	  if (dt>=M_SPACE_THRESHOLD) {
 	    space_sent=TRUE;

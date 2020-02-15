@@ -30,7 +30,7 @@ $ID,-2$
 
 * A $LK,"Cd",A="MN:Cd"$() cmd must be followed by two semicolons if a $FG,2$#include$FG$ is after it.  This is because the preprocessor processes the next token ahead.
 
-* The assembler's error msgs are often off by a line and undefines are cryptic.
+* The assembler's error messages are often off by a line and undefines are cryptic.
 
 * The last semicolon on the cmd line is converted to a dbl semicolon because the compiler looks ahead before doing a cmd.  This normally has no negative effect, but when entering $FG,2$if$FG$ stmts with $FG,2$else$FG$ clauses it presents problems.
 

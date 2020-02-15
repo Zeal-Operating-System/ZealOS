@@ -355,8 +355,8 @@ U0 PlayShip()
   try {
     while (main_mode_bttn.state==MMD_PLAY) {
       BreakConnectors;
-      switch (ScanMsg(&arg1,&arg2,1<<MSG_KEY_DOWN|1<<MSG_KEY_UP)) {
-	case MSG_KEY_DOWN:
+      switch (ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '0'...'9':
 	      if (tS>last_noise+0.25) {
@@ -380,14 +380,14 @@ U0 PlayShip()
 	    case CH_SPACE:
 	      if (++main_mode_bttn.state==MMD_MODES_NUM)
 		main_mode_bttn.state=0;
-	      GetMsg(,,1<<MSG_KEY_UP);
+	      GetMessage(,,1<<MESSAGE_KEY_UP);
 	      goto ps_done;
 	    case CH_SHIFT_ESC:
 	    case CH_ESC:
 	      throw;
 	  }
 	  break;
-	case MSG_KEY_UP:
+	case MESSAGE_KEY_UP:
 	  switch (arg1) {
 	    case 'd':
 	      ode->drag_v2=0.000002;
@@ -454,10 +454,10 @@ U0 EditShip()
   DocClear;
   try {
     while (main_mode_bttn.state==MMD_EDIT) {
-      switch (ScanMsg(&arg1,&arg2,
-	    1<<MSG_MS_L_DOWN|1<<MSG_MS_L_UP|1<<MSG_MS_R_DOWN|
-	    1<<MSG_MS_MOVE|1<<MSG_KEY_DOWN|1<<MSG_KEY_UP)) {
-	case MSG_MS_L_DOWN:
+      switch (ScanMessage(&arg1,&arg2,
+	    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|
+	    1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+	case MESSAGE_MS_L_DOWN:
 	  switch (edit_mode_bttn.state) {
 	    case EMD_MASS:
 	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
@@ -478,7 +478,7 @@ U0 EditShip()
 	      break;
 	  }
 	  break;
-	case MSG_MS_L_UP:
+	case MESSAGE_MS_L_UP:
 	  switch (edit_mode_bttn.state) {
 	    case EMD_MASS:
 	      break;
@@ -502,7 +502,7 @@ U0 EditShip()
 	      break;
 	  }
 	  break;
-	case MSG_MS_MOVE:
+	case MESSAGE_MS_MOVE:
 	  switch (edit_mode_bttn.state) {
 	    case EMD_MOVE:
 	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
@@ -515,13 +515,13 @@ U0 EditShip()
 	      break;
 	  }
 	  break;
-	case MSG_MS_R_DOWN:
+	case MESSAGE_MS_R_DOWN:
 	  if (++edit_mode_bttn.state==EMD_MODES_NUM)
 	    edit_mode_bttn.state=0;
 	  break;
-	case MSG_MS_R_UP:
+	case MESSAGE_MS_R_UP:
 	  break;
-	case MSG_KEY_DOWN:
+	case MESSAGE_KEY_DOWN:
 	  switch (arg1) {
 	    case '\n':
 	      CleanUp;
@@ -562,14 +562,14 @@ U0 EditShip()
 	    case CH_SPACE:
 	      if (++main_mode_bttn.state==MMD_MODES_NUM)
 		main_mode_bttn.state=0;
-	      GetMsg(,,1<<MSG_KEY_UP);
+	      GetMessage(,,1<<MESSAGE_KEY_UP);
 	      goto es_done;
 	    case CH_SHIFT_ESC:
 	    case CH_ESC:
 	      throw;
 	  }
 	  break;
-	case MSG_KEY_UP:
+	case MESSAGE_KEY_UP:
 	  switch (arg1) {
 	    case 'd':
 	      ODEPause(ode);
