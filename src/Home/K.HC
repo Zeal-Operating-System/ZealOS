@@ -3,7 +3,6 @@ BootHDIns;
 "\n\nSuccessful?";
 if(YorN)
 {
-  Once("#include\"DoDistro\";;OutU16(0x4004, 0x3400);");
+  Once("#include\"DoDistro\";;Del(\"~/Registry.HC\");OutU16(0x4004, 0x3400);");
   Reboot;
 }
-

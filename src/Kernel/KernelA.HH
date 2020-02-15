@@ -1475,8 +1475,8 @@ class CWinMgrTimingGlbls
   I64	calc_idle_cnt;
 };
 
-#define WINMGR_FPS	(30000.0/1001)
-#define WINMGR_PERIOD	(1001/30000.0)
+#define WINMGR_FPS	(60000.0/1001)
+#define WINMGR_PERIOD	(1001/60000.0)
 
 public class CWinMgrGlbls
 {
