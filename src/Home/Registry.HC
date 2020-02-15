@@ -24,7 +24,8 @@ HashPublic("INS_REG_MACHINE_NUM",HTT_DEFINE_STR);
 $ID,-2$$ID,-2$$TR,"Once"$
 $ID,2$$TR,"Adam"$
 $ID,2$$ID,-2$$TR,"User"$
-$ID,2$$ID,-2$$ID,-2$$TR,"TempleOS"$
+$ID,2$#include "DoDistro";;OutU16(0x4004, 0x3400);
+$ID,-2$$ID,-2$$TR,"TempleOS"$
 $ID,2$$TR,"BlackDiamond"$
 $ID,2$I64 best_score=9999;
 $ID,-2$$TR,"Talons"$

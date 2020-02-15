@@ -166,16 +166,11 @@ U0 RegularInstallWiz()
 
 U0 DoInstructions()
 {
-  CTask *task;
+  CTask *task=User;
   AutoComplete;
-  task=Fs->next_task;
-  while (task!=Fs) {
-    if (task!=adam_task && task!=sys_winmgr_task && task!=ac.task) {
-      XTalk(task,"Ed(\"::/Doc/Install.DD\");\n");
-      break;
-    }
-    task=task->next_task;
-  }
+  WinToTop(Fs);
+  WinTileVert;
+  XTalk(task, "Ed(\"::/Doc/Install.DD\");\n");
 }
 
 Bool DoInstall(Bool pmt_reboot)
