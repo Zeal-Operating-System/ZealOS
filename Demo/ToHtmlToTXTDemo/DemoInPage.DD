@@ -1,0 +1,11 @@
+$WW,1$$FG,5$$TX+CX,"The Temple Operating System",HTML="http://www.templeos.org"$$FG,0$
+
+$FG,4$$TX,"TempleOS File Downloads (100% Public Domain)",HTML="http://www.templeos.org/Downloads"$$FG$
+
+TempleOS is a free, public domain, open source, x86_64, non-preemptive multi-tasking, multi-cored, ring-0-only, single-address-map (identity-mapped), non-networked, PC operating system.  Paging is, basically, not used.
+
+The CIA obsfucates to foil India, China, Russia and Korea.  They make things more complicated than necessary.  TempleOS is more simple than necessary.  It is obnoxiously simple.  If you look at this $TX,"\"Hello World\" joke",HTML="http://www.ariel.com.au/jokes/The_Evolution_of_a_Programmer.html"$, you can see why I capped the line count of TempleOS at 100,000.
+
+God said TempleOS must be perfect, so backward compatibility is not promised.
+
+I, Terry Davis, wrote all $TX,"80,847",D="DD_TEMPLEOS_LOC"$ lines of TempleOS over the last $TX,"13.9",D="DD_TEMPLEOS_AGE"$ years, including the 64-bit compiler.  I have been a professional operating system developer since 1990 when I worked on Ticketmaster's VAX OS.
