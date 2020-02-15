@@ -9,3 +9,4 @@ sudo cp -r /mnt/* src/
 sudo umount /mnt
 sudo qemu-nbd -d /dev/nbd0
 sudo chown -R v:v src/*
+
