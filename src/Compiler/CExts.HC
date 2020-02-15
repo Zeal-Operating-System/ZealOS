@@ -7,7 +7,7 @@ import CDocEntry *DocPrint(CDoc *doc=NULL,U8 *fmt,...);
 import CDocEntry *DocPutLine(CDoc *doc,CDocEntry *doc_e);
 import I64 DocSize(CDoc *doc);
 import Bool DocWrite(CDoc *doc,Bool prompt=FALSE);
-extern U8 *CmdLinePmt();
+extern U8 *CmdLinePrompt();
 extern I64 HashEntrySize2(CHashSrcSym *tmph);
 extern Bool IsLexExpression2Bin(CCmpCtrl *cc,U8 **_machine_code);
 extern I64 Lex(CCmpCtrl *cc);

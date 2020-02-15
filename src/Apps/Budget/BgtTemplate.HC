@@ -150,7 +150,7 @@ U0 CBgtTemplatesExpand()
   }
 }
 
-CBgtTemplate *BgtTemplatePmt(CBgtTemplate *dft_t=NULL,CBgtEntry *dft_b=NULL)
+CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *dft_t=NULL,CBgtEntry *dft_b=NULL)
 {
   CBgtTemplate	t,*tmpt;
   CBgtEntry	*tmpb;
@@ -169,7 +169,7 @@ CBgtTemplate *BgtTemplatePmt(CBgtTemplate *dft_t=NULL,CBgtEntry *dft_b=NULL)
   while (TRUE)
     if (PopUpForm(&t) && ((t.type==BT_INTERVAL && t.period>0) ||
 	  t.type>BT_INTERVAL)) {
-      if (tmpb=BgtEntryPmt(dft_b)) {
+      if (tmpb=BgtEntryPrompt(dft_b)) {
 	tmpt=CAlloc(sizeof(CBgtTemplate));
 	MemCpy(&tmpt->start,&t.start,BT_SIZE);
 	MemCpy(&tmpt->b,tmpb,sizeof(CBgtEntry));

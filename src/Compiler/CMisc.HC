@@ -124,7 +124,7 @@ CD3I32 *LexD3I32(CCmpCtrl *cc,CD3I32 *p)
   return p;
 }
 
-U8 *CmdLinePmt()
+U8 *CmdLinePrompt()
 {
   I64 i;
   U8 *res,*st;

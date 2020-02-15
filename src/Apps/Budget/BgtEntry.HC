@@ -42,7 +42,7 @@ class CBgtEntryForm
   U8	desc  [512]	format "$$DA-P,A=\"Desc:%s\"$$\n";
 };
 
-CBgtEntry *BgtEntryPmt(CBgtEntry *dft=NULL)
+CBgtEntry *BgtEntryPrompt(CBgtEntry *dft=NULL)
 {
   CBgtEntryForm b;
   CBgtEntry *tmpb;

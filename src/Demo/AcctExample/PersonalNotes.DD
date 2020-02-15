@@ -93,9 +93,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Use thick and pen_height when clipping with thick>1.
 
-* $LK,"~/Sup1/Sup1Games/Rocks.HC"$.
-
-* Asm LIST NOLIST bugs.
+* Asm LIST NOLIST bugs.
 
 * Review writing to same cache-line from multicore.  Do $LK,"CTask",A="MN:CTask"$->task_flags and others need to be in separate cache lines?
 

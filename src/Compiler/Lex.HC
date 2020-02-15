@@ -224,7 +224,7 @@ lgc_start2:
 	} else {
 	  if (cc->flags & CCF_PMT) {
 	    Free(tmpf->buf);
-	    ptr=CmdLinePmt;
+	    ptr=CmdLinePrompt;
 	    if (StrCmp(ptr,"\n") && !cc->pmt_line++ && !StrCmp(ptr,"?\n") &&
 		cc->flags & CCF_QUESTION_HELP) {
 	      Free(ptr);

@@ -13,7 +13,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 	    doc_ce->type_u8==DOCT_MENU_VAL) {
 	tmpb=doc_ce->user_data;
 	if (tmpt=tmpb->template) {
-	  if (tmpt1=BgtTemplatePmt(tmpt)) {
+	  if (tmpt1=BgtTemplatePrompt(tmpt)) {
 	    QueueRemove(tmpt);
 	    BgtTemplatePurge(tmpt);
 	    BgtEntryDel2(&tmpt->b);
@@ -23,7 +23,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 	    BgtRegen;
 	  }
 	} else {
-	  if (tmpb1=BgtEntryPmt(tmpb)) {
+	  if (tmpb1=BgtEntryPrompt(tmpb)) {
 	    QueueRemove(tmpb);
 	    BgtEntryDel(tmpb);
 	    BgtIns(tmpb1);
@@ -62,13 +62,13 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
       }
       return TRUE;
     case 'n':
-      if (tmpb1=BgtEntryPmt) {
+      if (tmpb1=BgtEntryPrompt) {
 	BgtIns(tmpb1);
 	BgtRegen;
       }
       return TRUE;
     case 't':
-      if (tmpt1=BgtTemplatePmt) {
+      if (tmpt1=BgtTemplatePrompt) {
 	QueueInsert(tmpt1,t_head.last);
 	BgtTemplateExpand(tmpt1);
 	BgtRegen;
@@ -80,7 +80,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 	tmpb=doc_ce->user_data;
       else
 	tmpb=NULL;
-      if (tmpb1=BgtEntryPmt(tmpb)) {
+      if (tmpb1=BgtEntryPrompt(tmpb)) {
 	BgtIns(tmpb1);
 	BgtRegen;
       }
@@ -89,7 +89,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
       if ((doc_ce=doc->cur_entry) && doc_ce!=doc &&
 	    doc_ce->type_u8==DOCT_MENU_VAL) {
 	tmpb=doc_ce->user_data;
-	if (tmpt1=BgtTemplatePmt(,tmpb)) {
+	if (tmpt1=BgtTemplatePrompt(,tmpb)) {
 	  BgtTemplateExpand(tmpt1,TRUE);
 	  BgtTemplateDel(tmpt1);
 	  BgtRegen;
