@@ -1010,7 +1010,7 @@ U0 AnimateTask(I64)
 	      if (game_tf-game_t0<best_score)
 		best_score=game_tf-game_t0;
 	    }
-	    QueueRem(tmpo);
+	    QueueRemove(tmpo);
 	    Free(tmpo);
 	    music.mute=TRUE;
 	    Snd(74); Sleep(200); Snd;

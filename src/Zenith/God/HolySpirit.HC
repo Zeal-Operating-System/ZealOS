@@ -64,7 +64,7 @@ public I64 GodBits(I64 num_bits,U8 *msg=NULL)
   U8 b;
   I64 res=0;
   while (num_bits) {
-    if (FifoU8Rem(god.fifo,&b)) {
+    if (FifoU8Remove(god.fifo,&b)) {
       res=res<<1+b;
       num_bits--;
     } else

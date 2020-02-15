@@ -36,7 +36,7 @@ U0 PsmCutToClip()
     if (tmpn->flags&PSMF_SEL) {
       if (psm.cur_note==tmpn)
 	psm.cur_note=tmpn->next;
-      QueueRem(tmpn);
+      QueueRemove(tmpn);
       tmpn->flags&=~PSMF_SEL;
       QueueInsert(tmpn,psm.clip.last);
     }

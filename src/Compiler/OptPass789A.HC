@@ -900,7 +900,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	  ICQueueInsRev(tmpi,rip2);
 	  break;
 	case IC_QUE_REM:
-	  ICQueueRem(tmpi,rip2);
+	  ICQueueRemove(tmpi,rip2);
 	  break;
 	case IC_STRLEN:
 	  ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,

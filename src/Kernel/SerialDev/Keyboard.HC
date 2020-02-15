@@ -398,12 +398,12 @@ U0 KbdPktRead()
   if (!FifoU8Cnt(kbd.fifo)) {
     FifoU8Ins(kbd.fifo,raw_byte);
     if (raw_byte!=0xE0) {
-      while (FifoU8Rem(kbd.fifo,&raw_byte))
+      while (FifoU8Remove(kbd.fifo,&raw_byte))
 	FifoU8Ins(kbd.fifo2,raw_byte);
     }
   } else {
     FifoU8Ins(kbd.fifo,raw_byte);
-    while (FifoU8Rem(kbd.fifo,&raw_byte))
+    while (FifoU8Remove(kbd.fifo,&raw_byte))
       FifoU8Ins(kbd.fifo2,raw_byte);
   }
 }
@@ -442,10 +442,10 @@ U0 KbdHandler()
 {
   static U8 last_raw_byte=0;
   U8  raw_byte;
-  FifoU8Rem(kbd.fifo2,&raw_byte);
+  FifoU8Remove(kbd.fifo2,&raw_byte);
   KbdBuildSC(raw_byte,FALSE,&last_raw_byte,&kbd.scan_code);
   if (raw_byte==0xE0) {
-    FifoU8Rem(kbd.fifo2,&raw_byte);
+    FifoU8Remove(kbd.fifo2,&raw_byte);
     KbdBuildSC(raw_byte,FALSE,&last_raw_byte,&kbd.scan_code);
   }
   if (Btr(&kbd.scan_code,SCf_NEW_KEY)) {
@@ -469,7 +469,7 @@ I64 KbdMsgsQueue()
   I64 arg1,arg2,msg_code=MSG_NULL;
   CTask *task_focus;
   if (task_focus=sys_focus_task) {
-    while (FifoI64Rem(kbd.scan_code_fifo,&arg2)) {
+    while (FifoI64Remove(kbd.scan_code_fifo,&arg2)) {
       arg1=ScanCode2Char(arg2);
       if (arg2 & SCF_KEY_UP) {
 	TaskMsg(task_focus,0,MSG_KEY_UP,arg1,arg2,0);

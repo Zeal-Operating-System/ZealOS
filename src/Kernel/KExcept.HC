@@ -77,7 +77,7 @@ U0 SysTry(U8 *catch_start,U8 *untry_start)
 U0 SysUntry()
 {
   CExcept *tmpt=Fs->last_except;
-  QueueRem(tmpt);
+  QueueRemove(tmpt);
   Free(tmpt);
 }
 
@@ -103,7 +103,7 @@ U0 throw(I64 ch=0,Bool no_log=FALSE)
       TakeExcept;
     SetRBP(Fs->except_rbp);
     tmpt=Fs->last_except;
-    QueueRem(tmpt);
+    QueueRemove(tmpt);
     Free(tmpt);
   }
   was_raw=Raw(ON);

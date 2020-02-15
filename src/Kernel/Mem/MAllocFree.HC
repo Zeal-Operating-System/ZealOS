@@ -111,7 +111,7 @@ _MALLOC::
 	PUSH	RAX
 	MOV	EAX,U32 CMemBlk.pags[RDI]
 	ADD	U32 CMemBlk.pags[RSI],EAX
-//QueueRem
+//QueueRemove
 	MOV	RAX,U64 CMemBlk.next[RDI]
 	MOV	RBX,U64 CMemBlk.last[RDI]
 	MOV	U64 CMemBlk.last[RAX],RBX
@@ -278,7 +278,7 @@ _FREE::
 	PAUSE
 	JC	@@30
 #if _CFG_HEAP_DBG
-//QueueRem
+//QueueRemove
 	MOV	RDX,U64 CMemUsed.next[RSI]
 	MOV	RDI,U64 CMemUsed.last[RSI]
 	MOV	U64 CMemUsed.last[RDX],RDI

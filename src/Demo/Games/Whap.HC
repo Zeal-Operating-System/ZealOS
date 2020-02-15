@@ -165,7 +165,7 @@ U0 Whap()
   Fs->draw_it=&DrawIt;
   GetChar;
   SettingsPop;
-  QueueRem(ode);
+  QueueRemove(ode);
   ODEDel(ode);
   MenuPop;
 }

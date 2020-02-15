@@ -180,7 +180,7 @@ public I64 Unzip(U8 *files_find_mask="*.Z",U8 *fu_flags=NULL)
   while (tmpde) {
     if (IsDotZ(tmpde->full_name)) {
       st=StrNew(tmpde->full_name);
-      StrLastRem(st,".");
+      StrLastRemove(st,".");
       res+=Move(tmpde->full_name,st);
       Free(st);
     }

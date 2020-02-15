@@ -61,9 +61,9 @@ U0 KeyDescSet(U8 *fmt,...)
   Free(buf);
 }
 
-U0 KeyDevRem(CKeyDevEntry *tmpk)
+U0 KeyDevRemove(CKeyDevEntry *tmpk)
 {//Remove StdOut hook and free.
-  QueueRem(tmpk);
+  QueueRemove(tmpk);
   Free(tmpk);
 }
 
@@ -81,7 +81,7 @@ CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch,I64 sc),
     tmpk=tmpk->last;
   QueueInsert(tmpk1,tmpk);
   if (tmpk->priority==priority)
-    KeyDevRem(tmpk);
+    KeyDevRemove(tmpk);
   return tmpk1;
 }
 

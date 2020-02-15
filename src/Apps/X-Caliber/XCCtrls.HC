@@ -149,6 +149,6 @@ CCtrl *CtrlPanelNew()
 
 U0 CtrlPanelDel(CCtrl *c)
 {
-  QueueRem(c);
+  QueueRemove(c);
   Free(c);
 }

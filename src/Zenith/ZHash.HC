@@ -379,7 +379,7 @@ public U0 MapFileLoad(U8 *filename)
   I64 i,j,base=0;
   CDebugInfo *dbg_info;
 
-  FileExtRem(absname);
+  FileExtRemove(absname);
   if (absname[1]==':' && StrLen(absname)>2 &&
 	(tmph=HashSingleTableFind(absname+2,Fs->hash_table,HTT_MODULE)))
     base=tmph(CHashGeneric *)->user_data0+sizeof(CBinFile);

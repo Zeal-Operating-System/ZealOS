@@ -67,7 +67,7 @@ public U0 SndShift(CSndData *head,F64 dt=0)
       tmpsd1=tmpsd->next;
       tmpsd->tS-=dt;
       if (tmpsd->tS<tmpsd->last->tS) {
-	QueueRem(tmpsd);
+	QueueRemove(tmpsd);
 	Free(tmpsd);
       }
       tmpsd=tmpsd1;

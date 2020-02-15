@@ -331,7 +331,7 @@ I64 RedSeaAllocClus(CDrive *dv,I64 cnt)
     if (best_free->size-=cnt)
       best_free->start+=cnt;
     else {
-      QueueRem(best_free);
+      QueueRemove(best_free);
       Free(best_free);
     }
     if (unlock)
@@ -397,7 +397,7 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	  } else {
 	    tmp=StrNew(cur_dir);
 	    parent_dir=StrNew(cur_dir);
-	    StrLastRem(parent_dir,"/",tmp);
+	    StrLastRemove(parent_dir,"/",tmp);
 	    if (!*parent_dir) {
 	      Free(parent_dir);
 	      parent_dir=StrNew("/");

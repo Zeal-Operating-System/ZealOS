@@ -515,7 +515,7 @@ CSprite *SMPolyPoint(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
   while (res!=&head2) {
     tmpg=res->next;
     if (res->p.x1==x1 && res->p.y1==y1) {
-      QueueRem(res);
+      QueueRemove(res);
       Free(res);
     } else {
       num++;
@@ -538,7 +538,7 @@ CSprite *SMPolyPoint(CDC *dc,I64 x,I64 y,I64 arg1,I64 arg2,CColorROPU32 color)
 	  3*(SignI64(tmpg1->p.y1-y1)+1)]);
     i+=3;
     x1=tmpg1->p.x1;y1=tmpg1->p.y1;
-    QueueRem(tmpg1);
+    QueueRemove(tmpg1);
     Free(tmpg1);
     tmpg1=tmpg;
   }
@@ -641,7 +641,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     SpriteSetSettings(img,head,*_cur_elem_num,-(xx1-x),-(yy1-y));
     Sprite3(img,-(xx1-x),-(yy1-y),0,&tmpg1->start,TRUE);
     insert_pt=tmpg1->next;
-    QueueRem(tmpg1);
+    QueueRemove(tmpg1);
     Free(tmpg1);
   }
   MemCpy(&tmpg->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
@@ -698,7 +698,7 @@ U0 SMMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,I64 *_cur_elem_num)
     SpriteEdUpdate(doc,doc_ce,head);
     if (old_mesh) {
       insert_pt=tmpg;
-      QueueRem(tmpg1);
+      QueueRemove(tmpg1);
       Free(tmpg1);
       SpriteEdUpdate(doc,doc_ce,head);
     } else
@@ -764,7 +764,7 @@ U0 SMShiftableMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     SpriteEdUpdate(doc,doc_ce,head);
     if (old_mesh) {
       insert_pt=tmpg;
-      QueueRem(tmpg1);
+      QueueRemove(tmpg1);
       Free(tmpg1);
       SpriteEdUpdate(doc,doc_ce,head);
     } else

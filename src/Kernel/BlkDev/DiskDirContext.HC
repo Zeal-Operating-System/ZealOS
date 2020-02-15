@@ -49,12 +49,12 @@ CDirContext *DirContextNew(U8 *_mask,Bool make_mask=FALSE,
   else if (StrOcc(buf,';')) {
     semicolon_mask=MAlloc(mask_len+2);
     StrCpy(semicolon_mask,mask);
-    StrFirstRem(semicolon_mask,";",buf);
-    StrLastRem(buf,"/",dirc->mask);
+    StrFirstRemove(semicolon_mask,";",buf);
+    StrLastRemove(buf,"/",dirc->mask);
     CatPrint(dirc->mask,";%s",semicolon_mask);
     Free(semicolon_mask);
   } else
-    StrLastRem(buf,"/",dirc->mask);
+    StrLastRemove(buf,"/",dirc->mask);
 
   if (*mask=='/' && !*buf)
     StrCpy(buf,"/");

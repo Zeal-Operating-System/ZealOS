@@ -400,28 +400,28 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
 	case SPT_BITMAP:
 	  tmpg1=SpriteTransformBitMap(r,tmpg);
 	  QueueInsert(tmpg1,tmpg);
-	  QueueRem(tmpg);
+	  QueueRemove(tmpg);
 	  Free(tmpg);
 	  tmpg=tmpg1;
 	  break;
 	case SPT_ROTATED_RECT:
 	  tmpg1=SpriteTransformRect(r,tmpg,tmpg->ppa.angle);
 	  QueueInsert(tmpg1,tmpg);
-	  QueueRem(tmpg);
+	  QueueRemove(tmpg);
 	  Free(tmpg);
 	  tmpg=tmpg1;
 	  break;
 	case SPT_RECT:
 	  tmpg1=SpriteTransformRect(r,tmpg,0);
 	  QueueInsert(tmpg1,tmpg);
-	  QueueRem(tmpg);
+	  QueueRemove(tmpg);
 	  Free(tmpg);
 	  tmpg=tmpg1;
 	  break;
 	case SPT_CIRCLE:
 	  tmpg1=SpriteTransformCircle(r,tmpg);
 	  QueueInsert(tmpg1,tmpg);
-	  QueueRem(tmpg);
+	  QueueRemove(tmpg);
 	  Free(tmpg);
 	  tmpg=tmpg1;
 	  break;
@@ -429,7 +429,7 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
 	case SPT_POLYGON:
 	  tmpg1=SpriteTransformEllipse(r,tmpg);
 	  QueueInsert(tmpg1,tmpg);
-	  QueueRem(tmpg);
+	  QueueRemove(tmpg);
 	  Free(tmpg);
 	  tmpg=tmpg1;
 	  break;
@@ -467,7 +467,7 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
 	  while (tmpg1!=&head2) {
 	    tmpg2=tmpg1->next;
 	    if (tmpg1->p.x1==x3 && tmpg1->p.y1==y3) {
-	      QueueRem(tmpg1);
+	      QueueRemove(tmpg1);
 	      Free(tmpg1);
 	    } else {
 	      num++;
@@ -491,14 +491,14 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
 		  3*(SignI64(tmpg1->p.y1-y3)+1)]);
 	    i+=3;
 	    x3=tmpg1->p.x1;y3=tmpg1->p.y1;
-	    QueueRem(tmpg1);
+	    QueueRemove(tmpg1);
 	    Free(tmpg1);
 	    tmpg1=tmpg2;
 	  }
 	  tmpg3->type=SPT_POLYPT|tmpg->type&SPF_SEL;
 	  tmpg3->npu.num=num;
 	  QueueInsert(tmpg3,tmpg);
-	  QueueRem(tmpg);
+	  QueueRemove(tmpg);
 	  Free(tmpg);
 	  tmpg=tmpg3;
 	  break;

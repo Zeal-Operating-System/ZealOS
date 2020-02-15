@@ -298,7 +298,7 @@ U0 TaskQueueIns(CTask *task,CTask *pred=NULL)
   POPFD
 }
 
-U0 TaskQueueRem(CTask *task)
+U0 TaskQueueRemove(CTask *task)
 {//Remove a task from the scheduler running task queue.
 //Use $LK,"Suspend",A="MN:Suspend"$().
   CTask *next,*last;

@@ -100,7 +100,7 @@ CCtrl *SliderNew()
 
 U0 SliderDel(CCtrl *c)
 {
-  QueueRem(c);
+  QueueRemove(c);
   Free(c->state);
   Free(c);
 }

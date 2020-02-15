@@ -84,7 +84,7 @@ public CCtrl *CtrlBttnNew(I64 x,I64 y,I64 width=-1,I64 height=-1,
 
 public U0 CtrlBttnDel(CCtrl *c)
 {//Free bttn ctrl.
-  QueueRem(c);
+  QueueRemove(c);
   if (!(c->flags&BTF_DONT_FREE))
     Free(c->state);
   Free(c);

@@ -381,7 +381,7 @@ public U0 ViewAnglesDel(CTask *task=NULL)
   CCtrl *c;
   if (!task) task=Fs;
   if (c=CtrlFindUnique(task,CTRLT_VIEWING_ANGLES)) {
-    QueueRem(c);
+    QueueRemove(c);
     Free(c->state);
     Free(c);
   }

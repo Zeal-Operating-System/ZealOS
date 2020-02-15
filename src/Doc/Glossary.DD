@@ -118,7 +118,7 @@ $FG,2$Queue$FG$	Queue
 $FG,2$Rand$FG$	Random
 $FG,2$Ref$FG$	Reference
 $FG,2$Reg$FG$	Register, Registry, Regular
-$FG,2$Rem$FG$	Remove
+$FG,2$Remove$FG$	Remove
 $FG,2$Rep$FG$	Report, Repeat
 $FG,2$Res$FG$	Result
 $FG,2$Rev$FG$	Reverse, Reversed

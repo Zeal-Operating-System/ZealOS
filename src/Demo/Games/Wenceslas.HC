@@ -340,7 +340,7 @@ U0 AnimateTask(I64)
     while (tmps!=&step_head) {
       tmps1=tmps->next;
       if (tS-tmps->t0>5.0) {
-	QueueRem(tmps);
+	QueueRemove(tmps);
 	Free(tmps);
       }
       tmps=tmps1;
@@ -350,7 +350,7 @@ U0 AnimateTask(I64)
     while (tmps!=&king_step_head) {
       tmps1=tmps->next;
       if (tS-tmps->t0>3.0) {
-	QueueRem(tmps);
+	QueueRemove(tmps);
 	Free(tmps);
       }
       tmps=tmps1;

@@ -9,7 +9,7 @@ U0 JobQueueDel(CJob *head)
   CJob *tmpc=head->next,*tmpc1;
   while (tmpc!=head) {
     tmpc1=tmpc->next;
-    QueueRem(tmpc);
+    QueueRemove(tmpc);
     JobDel(tmpc);
     tmpc=tmpc1;
   }
@@ -178,7 +178,7 @@ Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL)
     tmpc=tmpc1->next;
     while (tmpc!=tmpc1) {
       if (!rqst || rqst==tmpc) {
-	QueueRem(tmpc);
+	QueueRemove(tmpc);
 	LBtr(&ctrl->flags,JOBCf_LOCKED);
 	POPFD
 	if (_res)
@@ -277,7 +277,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
     res=JOB_CONT;
   switch (tmpc->job_code) {
     case JOBT_SPAWN_TASK:
-      QueueRem(tmpc);
+      QueueRemove(tmpc);
       LBts(&tmpc->flags,JOBf_DISPATCHED);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       if (tmpc->aux_str)
@@ -288,7 +288,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 	      "Unnamed",,tmpc->aux1,tmpc->aux2,tmpc->flags);
       break;
     case JOBT_CALL:
-      QueueRem(tmpc);
+      QueueRemove(tmpc);
       LBts(&tmpc->flags,JOBf_DISPATCHED);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       SetRFlags(run_flags);
@@ -300,7 +300,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
       SetRFlags(old_flags);
       break;
     case JOBT_EXE_STR:
-      QueueRem(tmpc);
+      QueueRemove(tmpc);
       LBts(&tmpc->flags,JOBf_DISPATCHED);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       SetRFlags(run_flags);

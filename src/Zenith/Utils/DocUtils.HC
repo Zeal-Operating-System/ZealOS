@@ -1,13 +1,13 @@
 #help_index "DolDoc/Cmd Line (Typically)"
 
 U0 CursorRemFile(U8 *filename)
-{//Rem ASCII 5 cursor from one file.
+{//Remove ASCII 5 cursor from one file.
   CDoc *doc=DocRead(filename,DOCF_PLAIN_TEXT|DOCF_NO_CURSOR);
   DocWrite(doc);
   DocDel(doc);
 }
-public U0 CursorRem(U8 *files_find_mask="*")
-{//Rem ASCII 5 cursor.
+public U0 CursorRemove(U8 *files_find_mask="*")
+{//Remove ASCII 5 cursor.
   I64 fuf_flags=0;
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+T+f+F+O");
   CDirEntry *tmpde=FilesFind(files_find_mask,fuf_flags),*tmpde1=tmpde;

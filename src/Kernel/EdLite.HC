@@ -188,7 +188,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 		Free(cur_line->line);
 		Free(tmpl->line);
 		cur_line->line=src;
-		QueueRem(tmpl);
+		QueueRemove(tmpl);
 		Free(tmpl);
 	      }
 	    } else
@@ -216,7 +216,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	  Free(cur_line->line);
 	  Free(tmpl->line);
 	  tmpl->line=src;
-	  QueueRem(cur_line);
+	  QueueRemove(cur_line);
 	  Free(cur_line);
 	  cur_line=tmpl;
 	}
@@ -225,7 +225,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	if (cur_line!=&head) {
 	  tmpl=cur_line;
 	  cur_line=cur_line->next;
-	  QueueRem(tmpl);
+	  QueueRemove(tmpl);
 	  Free(tmpl->line);
 	  Free(tmpl);
 	  cur_col=0;
@@ -285,7 +285,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   tmpl=head.next;
   while (tmpl!=&head) {
     tmpl1=tmpl->next;
-    QueueRem(tmpl);
+    QueueRemove(tmpl);
     Free(tmpl->line);
     Free(tmpl);
     tmpl=tmpl1;
@@ -304,9 +304,9 @@ U0 ToFileLine(U8 *_fl_file_line,U8 **_filename,I64 *_linenum)
 {//"FI:D:/Dir/File.HC,123" to "D:/Dir/File.HC" and 123.
   U8 *st,*fl_file_line=StrNew(_fl_file_line);
   I64 linenum;
-  StrFirstRem(fl_file_line,":");
+  StrFirstRemove(fl_file_line,":");
   st=StrNew(fl_file_line);
-  StrLastRem(fl_file_line,",",st);
+  StrLastRemove(fl_file_line,",",st);
   linenum=Str2I64(st);
   Free(st);
   *_filename=fl_file_line;

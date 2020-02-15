@@ -751,7 +751,7 @@ sw_sub_end:
       Lex(cc);
       break;
     } else {
-      QueueRem(tmpss);
+      QueueRemove(tmpss);
       Free(tmpss);
       if (ParseKeyWord(cc)!=KW_END)
 	LexExcept(cc,"Missing 'end' at ");
@@ -830,7 +830,7 @@ U0 ParseStreamBlk(CCmpCtrl *cc)
 	htc->old_flags & (CCF_ASM_EXPRESSIONS|CCF_EXE_BLK|CCF_AOT_COMPILE);
   Free(htc);
   COCPop(cc);
-  QueueRem(tmpe);
+  QueueRemove(tmpe);
   if (*tmpe->body)
     LexIncludeStr(cc,"StreamBlk",tmpe->body,FALSE);
   else

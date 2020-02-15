@@ -213,7 +213,7 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
     start:
       case SPT_COLOR:
       case SPT_DITHER_COLOR:
-	st=LexFirstRem(cc,"}");
+	st=LexFirstRemove(cc,"}");
 	color=Str2ColorU32(st);
 	Free(st);
 	Lex(cc); //Skip color
@@ -499,7 +499,7 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
       QueueInit(&headt);
       while (cc->token=='(') {
 	tmpt=CAlloc(sizeof(CQueueMeshTri));
-	st=LexFirstRem(cc,",");
+	st=LexFirstRemove(cc,",");
 	tmpt->color=Str2ColorU32(st);
 	Free(st);
 	Lex(cc); //Skip color

@@ -57,7 +57,7 @@ U0 HeapLogFree(U8 *addr)
     tmphl=heaplog_head[i].next;
     while (tmphl!=&heaplog_head[i]) {
       if (addr==tmphl->addr) {
-	QueueRem(tmphl);
+	QueueRemove(tmphl);
 	LBtr(&sys_semas[SEMA_HEAPLOG_LOCK],0);
 	POPFD
 	Free(tmphl);

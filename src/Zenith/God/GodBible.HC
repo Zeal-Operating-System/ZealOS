@@ -248,7 +248,7 @@ public U0 BibleVerse(CDoc *doc_out=NULL,U8 *verse,I64 lines)
     st=StrNew(verse);
     st2=StrNew(verse);
     if (StrOcc(st,','))
-      StrLastRem(st,",",st2);
+      StrLastRemove(st,",",st2);
     else
       *st2=0;
     i=DefineMatch(st,"ST_BIBLE_BOOKS",LMF_IGNORE_CASE);

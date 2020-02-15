@@ -176,10 +176,10 @@ today.
       res.date=Str2I64(ptr,,&ptr);
     res+=Now+local_time_offset;
   } else {
-    StrFirstRem(ptr,"/",v); //Put mon into v
+    StrFirstRemove(ptr,"/",v); //Put mon into v
     ds.mon=Str2I64(v);
     if (StrOcc(ptr,'/')) {
-      StrFirstRem(ptr,"/",v); //Put day into v leaving year in ptr
+      StrFirstRemove(ptr,"/",v); //Put day into v leaving year in ptr
       ds.day_of_mon=Str2I64(v);
       ds.year=Str2I64(ptr,,&ptr);
       if (ds.year<100) //if not 4 digit year

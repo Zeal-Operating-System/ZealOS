@@ -265,7 +265,7 @@ CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   CLI
   while (LBts(&ctrl->flags,JOBCf_LOCKED))
     Yield;
-  QueueRem(tmpc);
+  QueueRemove(tmpc);
   LBtr(&ctrl->flags,JOBCf_LOCKED);
   POPFD
   JobDel(tmpc);

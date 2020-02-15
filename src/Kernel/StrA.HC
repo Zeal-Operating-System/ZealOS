@@ -574,7 +574,7 @@ U8 *StrFirstOcc(U8 *src,U8 *marker)
     return NULL;
 }
 
-U8 *StrFirstRem(U8 *src,U8 *marker,U8 *dst=NULL)
+U8 *StrFirstRemove(U8 *src,U8 *marker,U8 *dst=NULL)
 {//Remove first str segment and place in dst buf or NULL.
   I64 ch;
   U8 *ptr=src,*res=dst;
@@ -601,7 +601,7 @@ U8 *StrLastOcc(U8 *src,U8 *marker)
   return res;
 }
 
-U8 *StrLastRem(U8 *src,U8 *marker,U8 *dst=NULL)
+U8 *StrLastRemove(U8 *src,U8 *marker,U8 *dst=NULL)
 {//Remove last str segment and place in dst buf or NULL.
   U8 *ptr;
   if (ptr=StrLastOcc(src,marker)) {

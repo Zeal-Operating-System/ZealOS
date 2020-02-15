@@ -76,7 +76,7 @@ U0 SquadronIns(Obj *o,Obj *pred)
   succ->last_in_squadron=o;
 }
 
-U0 SquadronRem(Obj *o)
+U0 SquadronRemove(Obj *o)
 {
   Obj *pred=o->last_in_squadron,*succ=o->next_in_squadron;
   pred->next_in_squadron=succ;
@@ -120,8 +120,8 @@ U0 ObjDel(Obj *tmpo)
       tmpo->flags&=~OF_ACTIVE;
     else {
       if (tmpo->squadron>=0)
-	SquadronRem(tmpo);
-      QueueRem(tmpo);
+	SquadronRemove(tmpo);
+      QueueRemove(tmpo);
       if (tmpo->squadron>=0)
 	LBts(&squadrons[tmpo->squadron].dead_mask,tmpo->member_num);
       num_alive[tmpo->player]--;
@@ -727,7 +727,7 @@ U0 AnimateTask(I64)
 	  if (Rand<0.333333)
 	    tmpo->fuel*=0.75*Rand+0.25;
 	}
-	QueueRem(tmpt);
+	QueueRemove(tmpt);
 	Free(tmpt);
       } else {
 	tmpt->x+=tmpt->speed*Cos(tmpt->é)*period;

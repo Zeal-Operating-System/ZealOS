@@ -18,7 +18,7 @@ I64 Name2DirClus(CDrive *dv,U8 *dirname)
     unlock=DriveLock(dv);
     cur_dir_clus=dv->root_clus;
     while (*buf && cont) {
-      StrFirstRem(buf,"/",buf2);
+      StrFirstRemove(buf,"/",buf2);
       if (*buf2) {
 	switch (dv->fs_type) {
 	  case FSt_REDSEA:
@@ -59,7 +59,7 @@ I64 Name2ParentDirClus(CDrive *dv,U8 *dirname)
     cur_dir_clus=cur_dir_clus2=dv->root_clus;
     while (*buf && cont) {
       cur_dir_clus2=cur_dir_clus;
-      StrFirstRem(buf,"/",buf2);
+      StrFirstRemove(buf,"/",buf2);
       if (*buf2) {
 	switch (dv->fs_type) {
 	  case FSt_REDSEA:

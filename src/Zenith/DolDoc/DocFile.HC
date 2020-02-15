@@ -278,7 +278,7 @@ U0 DocUndoRestore(CDoc *doc)
   Bool unlock=DocLock(doc);
   CDocUndo *u=doc->undo_head.last,*u_next,*u_last;
   if (u!=&doc->undo_head) {
-    QueueRem(u);
+    QueueRemove(u);
     u_next=doc->undo_head.next;
     u_last=doc->undo_head.last;
     QueueInit(&doc->undo_head);

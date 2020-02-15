@@ -15,7 +15,7 @@ U0 SysMacroStripKey(CJob *macro_head,I64 arg1,I64 arg2)
 	  (tmpc->msg_code==MSG_KEY_DOWN || tmpc->msg_code==MSG_KEY_UP ||
 	  tmpc->msg_code==MSG_KEY_DOWN_UP) &&
 	  arg1 && tmpc->aux1==arg1 || !arg1 && tmpc->aux2==arg2) {
-      QueueRem(tmpc);
+      QueueRemove(tmpc);
       JobDel(tmpc);
     }
     tmpc=tmpc1;

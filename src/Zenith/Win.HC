@@ -286,7 +286,7 @@ I64 WinOnTopWindows()
     }
     if (Bt(&task->display_flags,DISPLAYf_WIN_ON_TOP) &&
 	  task!=sys_winmgr_task->last_task) {
-      TaskQueueRem(task);
+      TaskQueueRemove(task);
       TaskQueueIns(task,sys_winmgr_task);
       res++;
       if (!first_moved_fwd)
@@ -315,7 +315,7 @@ public I64 WinToTop(CTask *task=NULL,Bool update_z_buf=TRUE)
     return 0;
   }
   if (task!=sys_winmgr_task->last_task) {
-    TaskQueueRem(task);
+    TaskQueueRemove(task);
     TaskQueueIns(task,sys_winmgr_task);
     res++;
   }

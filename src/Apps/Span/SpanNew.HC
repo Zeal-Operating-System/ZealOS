@@ -12,7 +12,7 @@ CMathODE *SpanNew()
 U0 SpanDel(CMathODE *ode)
 {
   if (ode) {
-    QueueRem(ode);
+    QueueRemove(ode);
     QueueDel(&ode->next_mass,TRUE);
     QueueDel(&ode->next_spring,TRUE);
     ODEDel(ode);

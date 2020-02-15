@@ -355,11 +355,11 @@ U0 MissileDel(Missile *tmpmi)
 {
   I64 i;
   if (tmpmi->active) {
-    QueueRem(tmpmi);
+    QueueRemove(tmpmi);
     for(i=0;i<5;i++)
-      QueueRem(&tmpmi->s[i]);
-    QueueRem(&tmpmi->p_front);
-    QueueRem(&tmpmi->p_back);
+      QueueRemove(&tmpmi->s[i]);
+    QueueRemove(&tmpmi->p_front);
+    QueueRemove(&tmpmi->p_back);
     tmpmi->active=FALSE;
   }
 }
@@ -369,12 +369,12 @@ U0 ShipDel(Ship *tmpsp)
   I64 i;
   if (!tmpsp) return;
   for (i=0;i<tmpsp->masses;i++)
-    QueueRem(&tmpsp->p[i]);
+    QueueRemove(&tmpsp->p[i]);
   for (i=0;i<tmpsp->springs;i++)
-    QueueRem(&tmpsp->s[i]);
+    QueueRemove(&tmpsp->s[i]);
   for (i=0;i<2;i++)
     MissileDel(&tmpsp->missiles[i]);
-  QueueRem(tmpsp);
+  QueueRemove(tmpsp);
   Free(tmpsp);
   remaining--;
 }
@@ -418,7 +418,7 @@ I64 Tweaked()
 U0 AllDel(CMathODE *ode)
 {
   Ship *tmpsp,*tmpsp1;
-  QueueRem(ode);
+  QueueRemove(ode);
   tmpsp=ship_head.next;
   while (tmpsp!=&ship_head) {
     tmpsp1=tmpsp->next;
@@ -1218,8 +1218,8 @@ U0 ExpireShots()
 	SplatNew(tmps,1.0,3*ã/8,5*ã/8);
       else
 	SplatNew(tmps,.2,0,2*ã);
-      QueueRem(tmps);
-      QueueRem(&tmps->p);
+      QueueRemove(tmps);
+      QueueRemove(&tmps->p);
       Free(tmps);
     }
     tmps=tmps1;
@@ -1234,7 +1234,7 @@ U0 ExpireSplats()
     tmpm1=tmpm->next;
     if ((tmpm->type==MT_ION || tmpm->type==MT_ANTIMATTER_SPLAT) &&
 	  tS>tmpm->die_timeout) {
-      QueueRem(tmpm);
+      QueueRemove(tmpm);
       Free(tmpm);
     }
     tmpm=tmpm1;
@@ -1301,7 +1301,7 @@ U0 InitLevel()
   while (tmpm!=&ode->next_mass) {
     tmpm1=tmpm->next;
     if (tmpm->type==MT_ION || tmpm->type==MT_ANTIMATTER_SPLAT) {
-      QueueRem(tmpm);
+      QueueRemove(tmpm);
       Free(tmpm);
     }
     tmpm=tmpm1;

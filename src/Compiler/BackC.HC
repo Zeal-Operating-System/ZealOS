@@ -399,7 +399,7 @@ U0 ICQueueInsRev(CIntermediateCode *tmpi,I64 rip2)
   ICMov(tmpi,MDF_DISP+RT_I64,r1,sizeof(U8 *),MDF_REG+RT_I64,r2,0,rip2);
 }
 
-U0 ICQueueRem(CIntermediateCode *tmpi,I64 rip2)
+U0 ICQueueRemove(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 r1;
   if (tmpi->arg1.type==MDF_REG+RT_I64)

@@ -114,7 +114,7 @@ U0 MoveMass(MyMass *tmpm,I64 x, I64 y)
 
 U0 DelSpring(MySpring *tmps)
 {
-  QueueRem(tmps);
+  QueueRemove(tmps);
   Free(tmps);
 }
 
@@ -128,7 +128,7 @@ U0 DelMass(MyMass *tmpm)
       DelSpring(tmps);
     tmps=tmps1;
   }
-  QueueRem(tmpm);
+  QueueRemove(tmpm);
   Free(tmpm);
 }
 

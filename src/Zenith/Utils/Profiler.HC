@@ -75,7 +75,7 @@ public U0 ProfRep(I64 filter_cnt=1,Bool leave_it=OFF)
       while (i+hits<pf_buf_in_ptr && pf_array[i+hits]==rip);
 
       StrPrint(buf,"%p",rip);
-      StrFirstRem(buf,"+",buf2);
+      StrFirstRemove(buf,"+",buf2);
       if (StrCmp(buf2,last_buf)) {
 	if (*last_buf && routine_total>=filter_cnt)
 	  "$$GREEN$$%6.2f%08X:%s\n$$FG$$",100*routine_total/total_time,

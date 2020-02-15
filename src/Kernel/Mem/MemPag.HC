@@ -158,7 +158,7 @@ U0 MemPagTaskFree(CMemBlk *m,CHeapCtrl *hc)
     if (m->mb_signature!=MBS_USED_SIGNATURE_VAL)
       SysBadFree(m);
     else {
-      QueueRem(m);
+      QueueRemove(m);
       hc->alloced_u8s-=m->pags<<MEM_PAG_BITS;
       MemPagFree(m,hc->bp);
     }

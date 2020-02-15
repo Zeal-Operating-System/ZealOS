@@ -68,11 +68,11 @@ public _extern _STRCMP I64 StrCmp(U8 *st1,U8 *st2);
 public _extern _STRCPY U0 StrCpy(U8 *dst,U8 *src);
 public extern U8 *StrFind(U8 *needle,U8 *haystack_str,I64 flags=0);
 public extern U8 *StrFirstOcc(U8 *src,U8 *marker);
-public extern U8 *StrFirstRem(U8 *src,U8 *marker,U8 *dst=NULL);
+public extern U8 *StrFirstRemove(U8 *src,U8 *marker,U8 *dst=NULL);
 public _extern _STRICMP I64 StrICmp(U8 *st1,U8 *st2);
 public _extern _STRIMATCH U8 *StrIMatch(U8 *needle,U8 *haystack_str);
 public extern U8 *StrLastOcc(U8 *src,U8 *marker);
-public extern U8 *StrLastRem(U8 *src,U8 *marker,U8 *dst=NULL);
+public extern U8 *StrLastRemove(U8 *src,U8 *marker,U8 *dst=NULL);
 public _extern _STRMATCH U8 *StrMatch(U8 *needle,U8 *haystack_str);
 public _extern _STRNCMP I64 StrNCmp(U8 *st1,U8 *st2,I64 n);
 public _extern _STRNICMP I64 StrNICmp(U8 *st1,U8 *st2,I64 n);
@@ -140,14 +140,14 @@ public extern U0	FifoI64Flush(CFifoI64 *f);
 public extern Bool	FifoI64Ins(CFifoI64 *f,I64 q);
 public extern CFifoI64	*FifoI64New(I64 size,CTask *mem_task=NULL);
 public extern Bool	FifoI64Peek(CFifoI64 *f,I64 *_q);
-public extern Bool	FifoI64Rem(CFifoI64 *f,I64 *_q);
+public extern Bool	FifoI64Remove(CFifoI64 *f,I64 *_q);
 public extern I64	FifoU8Cnt(CFifoU8 *f);
 public extern U0	FifoU8Del(CFifoU8 *f);
 public extern U0	FifoU8Flush(CFifoU8 *f);
 public extern Bool	FifoU8Ins(CFifoU8 *f,U8 b);
 public extern CFifoU8	*FifoU8New(I64 size,CTask *mem_task=NULL);
 public extern Bool	FifoU8Peek(CFifoU8 *f,U8 *_b);
-public extern Bool	FifoU8Rem(CFifoU8 *f,U8 *_b);
+public extern Bool	FifoU8Remove(CFifoU8 *f,U8 *_b);
 
 #help_index "Data Types/Linked List"
 public extern I64	LinkedLstCnt(U8 **_lst);
@@ -298,7 +298,7 @@ public extern CBlkDev *DriveIsWritable(U8 drv_let=0,Bool except=FALSE);
 public extern U8 *ExtChg(U8 *filename,U8 *extension);
 public extern U8 *ExtDft(U8 *filename,U8 *extension);
 public extern U8 *FileExtDot(U8 *src);
-public extern U8 *FileExtRem(U8 *src,U8 *dst=NULL);
+public extern U8 *FileExtRemove(U8 *src,U8 *dst=NULL);
 public extern U8 *FileNameAbs(U8 *filename,I64 fuf_flags=0);
 public extern Bool FileNameCheck(U8 *filename);
 public extern Bool FilesFindMatch(U8 *_test_name,
@@ -508,7 +508,7 @@ public extern U0 CtrlAltCBSet(U8 ch,U0 (*fp_hndlr)(I64 sc),
 public extern U0 KeyDescSet(U8 *fmt,...);
 public extern CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch,I64 sc),
 	Bool (*fp_puts)(U8 *st),I64 priority,Bool key_descs=FALSE);
-public extern U0 KeyDevRem(CKeyDevEntry *tmpk);
+public extern U0 KeyDevRemove(CKeyDevEntry *tmpk);
 extern CKeyDevGlbls keydev;
 extern CJob sys_macro_head;
 extern CTask *sys_macro_task;
@@ -696,7 +696,7 @@ _extern _TASK_CONTEXT_RESTORE U0 TaskContextRestore();
 _extern _TASK_END_NOW U0 TaskEndNow();
 extern U0 TaskKillDying();
 public extern U0 TaskQueueIns(CTask *task,CTask *pred=NULL);
-public extern U0 TaskQueueRem(CTask *task);
+public extern U0 TaskQueueRemove(CTask *task);
 public extern Bool TaskValidate(CTask *task);
 public extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
 public extern CTask *User(U8 *fmt=NULL,...);

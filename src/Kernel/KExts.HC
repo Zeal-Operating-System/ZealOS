@@ -52,7 +52,7 @@ extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1);
 extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1);
 extern U0 FClose(CFile *f);
 extern CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0);
-extern U8 *FileExtRem(U8 *src,U8 *dst=NULL);
+extern U8 *FileExtRemove(U8 *src,U8 *dst=NULL);
 extern Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0);
 extern U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0);
 extern U8 *FileRead(U8 *filename,I64 *_size=NULL,I64 *_attr=NULL);

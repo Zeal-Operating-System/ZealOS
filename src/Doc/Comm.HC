@@ -34,7 +34,7 @@ U0 CommHandler(I64 port)
     if (stat & 4)	//RX
       FifoU8Ins(c->RX_fifo,InU8(c->base+UART_RDR));
     if (stat & 2) {	//TX
-      if (FifoU8Rem(c->TX_fifo,&b))
+      if (FifoU8Remove(c->TX_fifo,&b))
 	OutU8(c->base+UART_THR,b);
       else
 	OutU8(c->base+UART_IER,1); //RX but no THR empty

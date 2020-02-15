@@ -139,7 +139,7 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 * Finish Pilgrim game.
 
 * Compiler: PtrArith MUL SIZE -->QueueInsert(MUL)?
-* Compiler: QueueRem(IC_NOP)?
+* Compiler: QueueRemove(IC_NOP)?
 
 * Fix Chess game so not isometric view.
 
@@ -398,7 +398,7 @@ $FG,5$$TX+CX,"Test"$$FG$
 * Compiler: Err/Warn line nums?
 * Asm branch-out-of-range warn by one line?
 
-* Make sure queue links safe in one direction.  Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRem",A="MN:QueueRem"$ for multicore cycling fwd through tasks.
+* Make sure queue links safe in one direction.  Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRemove",A="MN:QueueRemove"$ for multicore cycling fwd through tasks.
 
 * Test removable media id and $LK,"RS_ATTR_RESIDENT",A="MN:RS_ATTR_RESIDENT"$.  $LK,"Touch",A="MN:Touch"$("","+T");
 

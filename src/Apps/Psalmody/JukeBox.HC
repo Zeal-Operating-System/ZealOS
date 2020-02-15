@@ -134,7 +134,7 @@ public U0 JukeBox(U8 *dirname="~/Psalmody",U8 **_filename=NULL)
 	DocPrint(doc,"\n");
       if (FileOcc("Play(",tmpde->full_name,"")) {
 	st=StrNew(tmpde->name);
-	FileExtRem(st);
+	FileExtRemove(st);
 	s=DocRead(tmpde->full_name);
 	doc_e=s->head.next;
 	while (doc_e!=s && doc_e->type_u8!=DOCT_TEXT)
@@ -185,7 +185,7 @@ public U0 JukeBox(U8 *dirname="~/Psalmody",U8 **_filename=NULL)
       }
       if (tmpde->user_data==JB_RUN_LEVEL_ONE) break; //<ESC>
       tmpde->user_data=JB_RUN_LEVEL_NULL; //Rst from <SPACE>
-      FileExtRem(st2);
+      FileExtRemove(st2);
       st=MStrPrint("ExeFile(\"%s\");",tmpde->full_name);
       MusicSettingsRst;
       task=SingleSong(st,st2);

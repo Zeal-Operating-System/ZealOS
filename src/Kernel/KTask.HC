@@ -393,7 +393,7 @@ U0 UserTaskCont()
       Lex(cc);
       ExeCmdLine(cc);
       cont=Bt(&cc->flags,CCf_PMT);
-      QueueRem(cc);
+      QueueRemove(cc);
       CmpCtrlDel(cc);
     } catch {
       if ((doc=Fs->put_doc) && doc->doc_signature==DOC_SIGNATURE_VAL)
@@ -497,7 +497,7 @@ I64 TaskEnd()
       (*fp_set_std_palette)();
   }
 
-  //QueueRem
+  //QueueRemove
   task->task_signature(I64)=0;
 
   tmpt =task->next_input_filter_task;
@@ -511,7 +511,7 @@ I64 TaskEnd()
   tmpt ->last_sibling_task=tmpt1;
 
   tmpt =task->next_task; //save to return
-  TaskQueueRem(task);
+  TaskQueueRemove(task);
 
   LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   LBtr(&task->task_flags,TASKf_TASK_LOCK);
@@ -535,7 +535,7 @@ U0 TaskKillDying()
     task=Gs->next_dying;
     while (task!=&Gs->next_dying && task->wake_jiffy<cnts.jiffies) {
       task1=task->next;
-      QueueRem(task);
+      QueueRemove(task);
       TaskDel(task);
       task=task1;
     }

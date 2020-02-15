@@ -79,7 +79,7 @@ U0 DistroPrep()
   if (FileFind("~/Sup1/Sup1Utils/SortHeaders.HC"))
     ExeFile("~/Sup1/Sup1Utils/SortHeaders.HC");
 
-  CursorRem("/*");
+  CursorRemove("/*");
   DelTree("/Demo/*.BI*");
   S2T("/*","+r+S");
   DocOpt("/*","+R");

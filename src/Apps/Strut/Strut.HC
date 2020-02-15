@@ -280,7 +280,7 @@ U0 BreakConnectors()
     tmps1=tmps->next;
     if (tmps->type==EMD_CONNECTOR &&
 	  Bt(kbd.down_bitmap,action_scan_codes[tmps->action_key-'0'])) {
-      QueueRem(tmps);
+      QueueRemove(tmps);
       Free(tmps);
     }
     tmps=tmps1;
@@ -310,7 +310,7 @@ U0 Init()
 U0 CleanUp()
 {
   if (ode) {
-    QueueRem(ode);
+    QueueRemove(ode);
     QueueDel(&ode->next_mass,TRUE);
     QueueDel(&ode->next_spring,TRUE);
     ODEDel(ode);

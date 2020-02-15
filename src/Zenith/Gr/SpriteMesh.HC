@@ -108,7 +108,7 @@ U0 MeshTriDel(CMeshFrame *e,CMeshEdTri *tmpt)
   if (tmpt) {
     if (tmpt==e->cur_tri)
       e->cur_tri=NULL;
-    QueueRem(tmpt);
+    QueueRemove(tmpt);
     Free(tmpt);
   }
 }
@@ -132,7 +132,7 @@ U0 MeshVertexDel(CMeshFrame *e,CMeshEdVertex *tmpv)
       e->cur_vertex=NULL;
     if (tmpv==e->chain_pred)
       e->chain_pred=NULL;
-    QueueRem(tmpv);
+    QueueRemove(tmpv);
     Free(tmpv);
   }
 }

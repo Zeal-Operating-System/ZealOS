@@ -67,7 +67,7 @@ public U0 DocEntryDel(CDoc *doc,CDocEntry *doc_e)
   else {
     if (doc->cur_entry==doc_e)
       doc->cur_entry=doc_e->next;
-    QueueRem(doc_e);
+    QueueRemove(doc_e);
     if (doc_e->de_flags & DOCEF_TAG)
       Free(doc_e->tag);
     if (doc_e->de_flags & DOCEF_AUX_STR)
@@ -259,7 +259,7 @@ public U0 DocRst(CDoc *doc,Bool is_old)
     b=doc->bin_head.next;
     while (b!=&doc->bin_head) {
       b1=b->next;
-      QueueRem(b);
+      QueueRemove(b);
       Free(b->data);
       Free(b);
       b=b1;

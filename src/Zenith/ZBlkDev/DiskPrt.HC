@@ -160,7 +160,7 @@ drv_let=0 means add new drive that is not already mounted.
     pd_done:
   while (head.next!=&head) {
     tmppp=head.next;
-    QueueRem(tmppp);
+    QueueRemove(tmppp);
     Free(tmppp);
   }
   return total;

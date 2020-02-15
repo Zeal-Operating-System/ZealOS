@@ -33,7 +33,7 @@ public CMenuEntry *MenuEntryFind(CMenu *haystack_menu,U8 *needle_full_name)
   st2=StrNew(needle_full_name);
   tmpse=(&haystack_menu->sub)(U8 *)-offset(CMenuEntry.sub);
   while (*st && tmpse) {
-    StrFirstRem(st,"/",st2);
+    StrFirstRemove(st,"/",st2);
     tmpse=MenuSubEntryFind(tmpse->sub,st2);
   }
   Free(st);

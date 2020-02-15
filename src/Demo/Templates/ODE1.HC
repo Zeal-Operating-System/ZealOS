@@ -36,7 +36,7 @@ U0 Init()
 
 U0 CleanUp()
 {
-  QueueRem(ode);
+  QueueRemove(ode);
   QueueDel(&ode->next_mass,TRUE);
   QueueDel(&ode->next_spring,TRUE);
   ODEDel(ode);

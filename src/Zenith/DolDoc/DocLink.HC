@@ -97,7 +97,7 @@ Bool DocFileEd(I64 _type,U8 *filename,
     } else {
       st1=StrNew(filename);
       st2=StrNew(filename);
-      StrLastRem(st1,"/",st2); //st2 is name without dir
+      StrLastRemove(st1,"/",st2); //st2 is name without dir
       if (!FileNameCheck(st2))
 	doc=NULL;
       else {
@@ -317,7 +317,7 @@ public Bool DocLinkCheck(CDoc *doc,U8 *link_st)
       case LK_BIBLE_FIND:
 	st=StrNew(link_st+3);
 	if (StrOcc(st,','))
-	  StrLastRem(st,",");
+	  StrLastRemove(st,",");
 	if (DefineMatch(st,"ST_BIBLE_BOOKS",LMF_IGNORE_CASE)>=0)
 	  res=TRUE;
 	Free(st);

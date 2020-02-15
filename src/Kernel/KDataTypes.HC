@@ -44,7 +44,7 @@ U0 QueueDel(CQueue *head,Bool querem=FALSE)
   while (tmpq!=head) {
     tmpq1=tmpq->next;
     if (querem)
-      QueueRem(tmpq);
+      QueueRemove(tmpq);
     Free(tmpq);
     tmpq=tmpq1;
   }
@@ -187,7 +187,7 @@ Bool FifoU8Ins(CFifoU8 *f,U8 b)
   }
 }
 
-Bool FifoU8Rem(CFifoU8 *f,U8 *_b)
+Bool FifoU8Remove(CFifoU8 *f,U8 *_b)
 {//Remove U8 from fifo.
   PUSHFD
   CLI
@@ -272,7 +272,7 @@ Bool FifoI64Ins(CFifoI64 *f,I64 q)
   }
 }
 
-Bool FifoI64Rem(CFifoI64 *f,I64 *_q)
+Bool FifoI64Remove(CFifoI64 *f,I64 *_q)
 {//Remove I64 from fifo.
   PUSHFD
   CLI

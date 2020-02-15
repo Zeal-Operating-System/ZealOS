@@ -69,7 +69,7 @@ public _intern IC_QUE_INS U0 QueueInsert(
 public _intern IC_QUE_INS_REV U0 QueueInsRev(
 	CQueue *entry,CQueue *succ);//Revd insert into que.
 //Ins item into que before successor.
-public _intern IC_QUE_REM U0 QueueRem(CQueue *entry); //Remove item from queue.
+public _intern IC_QUE_REM U0 QueueRemove(CQueue *entry); //Remove item from queue.
 
 #help_index "I/O;Processor/IO Port"
 public _intern IC_IN_U16 U16 InU16(I64 port); //Read U16 from I/O port.

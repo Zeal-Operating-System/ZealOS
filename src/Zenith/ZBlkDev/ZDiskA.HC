@@ -214,8 +214,8 @@ U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
     if (!StrCmp(attr,"+?"))
       "%-48ts%s\n",filename,StrPrintFlags(buf,Define("ST_FILE_ATTRS"),de.attr);
     else {
-      StrFirstRem(cur_dir,":");
-      StrLastRem(cur_dir,"/");
+      StrFirstRemove(cur_dir,":");
+      StrLastRemove(cur_dir,"/");
       if (!*cur_dir)
 	StrCpy(cur_dir,"/");
       ScanFlags(&de.attr,Define("ST_FILE_ATTRS"),attr);

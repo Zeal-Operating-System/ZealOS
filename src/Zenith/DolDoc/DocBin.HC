@@ -66,7 +66,7 @@ U0 DocBinsValidate(CDoc *doc)
   while (b!=&doc->bin_head) {
     b1=b->next;
     if (!b->use_cnt) {
-      QueueRem(b);
+      QueueRemove(b);
       Free(b->data);
       Free(b);
     } else {
@@ -85,7 +85,7 @@ U0 DocBinDel(CDoc *doc,CDocBin *b)
   if (doc && b && b->use_cnt) {
     b->use_cnt--;
     if (!b->use_cnt) {
-      QueueRem(b);
+      QueueRemove(b);
       Free(b->tag);
       Free(b->data);
       Free(b);
@@ -105,7 +105,7 @@ I64 DocBinPtrRst(CDoc *doc,CDocEntry *doc_e)
     bin_num=doc_e->bin_num;
     st=StrNew(doc_e->bin_ptr_link);
     st2=StrNew(st);
-    StrLastRem(st,",",st2);
+    StrLastRemove(st,",",st2);
     i=Str2I64(st2);
     if (i>0||*st2) {
       doc2=DocRead(st);

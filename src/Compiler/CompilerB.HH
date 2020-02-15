@@ -41,7 +41,7 @@ public extern U8 *LexExpression2Bin(CCmpCtrl *cc,I64 *_type=NULL);
 public extern F64 LexExpressionF64(CCmpCtrl *cc);
 public extern I64 LexExpressionI64(CCmpCtrl *cc);
 public extern U8 *LexExtStr(CCmpCtrl *cc,I64 *_size=NULL,Bool lex_next=TRUE);
-public extern U8 *LexFirstRem(CCmpCtrl *cc,U8 *marker,I64 _len=NULL);
+public extern U8 *LexFirstRemove(CCmpCtrl *cc,U8 *marker,I64 _len=NULL);
 public extern I64 LexGetChar(CCmpCtrl *cc);
 public extern U0 LexPopNoRestore(CCmpCtrl *cc);
 public extern U0 LexPopRestore(CCmpCtrl *cc);

@@ -37,11 +37,11 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
   buf=MAlloc(maxlen);
   StrCpy(new_cur_dir,Fs->cur_dir);
   while (*chg_to_buf && res) {
-    StrFirstRem(chg_to_buf,"/",buf);
+    StrFirstRemove(chg_to_buf,"/",buf);
     if (!*buf)
       StrCpy(new_cur_dir,"/");
     else if (!StrCmp(buf,"..")) {
-      StrLastRem(new_cur_dir,"/");
+      StrLastRemove(new_cur_dir,"/");
       if (!*new_cur_dir)
 	StrCpy(new_cur_dir,"/");
     } else if (!StrCmp(buf,"~")) {
@@ -112,7 +112,7 @@ I64 Dir(U8 *files_find_mask,Bool full)
     if (tmpde1) {
       Free(st);
       st=MAllocIdent(tmpde1->full_name);
-      StrLastRem(st,"/");
+      StrLastRemove(st,"/");
       if (!st[2])
 	StrCpy(st+2,"/");
 //Find max columns

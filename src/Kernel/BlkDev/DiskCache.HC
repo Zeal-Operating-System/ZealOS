@@ -43,9 +43,9 @@ I64 DiskCacheHash(I64 blk)
   return blkdev.cache_hash_table(U8 *)+i<<4-offset(CCacheBlk.next_hash);
 }
 
-U0 DiskCacheQueueRem(CCacheBlk *tmpc)
+U0 DiskCacheQueueRemove(CCacheBlk *tmpc)
 {
-  QueueRem(tmpc);
+  QueueRemove(tmpc);
   tmpc->next_hash->last_hash=tmpc->last_hash;
   tmpc->last_hash->next_hash=tmpc->next_hash;
 }
@@ -82,7 +82,7 @@ U0 DiskCacheAdd(CDrive *dv,U8 *buf, I64 blk, I64 cnt)
     while (cnt-->0) {
       if (!(tmpc=DiskCacheFind(dv,blk)))
 	tmpc=blkdev.cache_ctrl->next_lru;
-      DiskCacheQueueRem(tmpc);
+      DiskCacheQueueRemove(tmpc);
       MemCpy(&tmpc->body,buf,BLK_SIZE);
       tmpc->dv=dv;
       tmpc->blk=blk;
@@ -104,7 +104,7 @@ U0 DiskCacheInvalidate2(CDrive *dv)
     while (tmpc!=blkdev.cache_ctrl) {
       tmpc1=tmpc->last_lru;
       if (tmpc->dv==dv) {
-	DiskCacheQueueRem(tmpc);
+	DiskCacheQueueRemove(tmpc);
 	tmpc->dv=NULL;
 	tmpc->blk=0;
 	tmpc->next_hash=tmpc->last_hash=tmpc;

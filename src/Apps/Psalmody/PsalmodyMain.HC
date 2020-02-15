@@ -94,7 +94,7 @@ U0 PsmRightClick(I64 x,I64 y)
 	  break;
 	case PSMR_DELETE_NOTE:
 	  psm.cur_note=tmpn->next;
-	  QueueRem(tmpn);
+	  QueueRemove(tmpn);
 	  PsmNoteDel(tmpn);
 	  break;
       }
@@ -548,7 +548,7 @@ mo_got_msg:
 		      tmpn=psm.cur_note;
 		      psm.cur_note=tmpn->next;
 		      if (tmpn!=&psm.head) {
-			QueueRem(tmpn);
+			QueueRemove(tmpn);
 			PsmNoteDel(tmpn);
 		      }
 		    }
@@ -692,7 +692,7 @@ mo_got_msg:
 	      case CH_BACKSPACE:
 		tmpn=psm.cur_note->last;
 		if (tmpn!=&psm.head) {
-		  QueueRem(tmpn);
+		  QueueRemove(tmpn);
 		  PsmNoteDel(tmpn);
 		}
 		if (col) {

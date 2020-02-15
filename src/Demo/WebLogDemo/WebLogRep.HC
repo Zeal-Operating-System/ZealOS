@@ -191,7 +191,7 @@ U0 BlockIPNuip(LogStruct *head)
   while (tmplg!=head) {
     tmplg1=tmplg->next;
     if (IsBlocked(&blocked_head,tmplg->ip_num)) {
-      QueueRem(tmplg);
+      QueueRemove(tmplg);
       LogStructDel(tmplg);
     }
     tmplg=tmplg1;

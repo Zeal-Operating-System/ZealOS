@@ -195,7 +195,7 @@ CCtrl *SliderNew()
 
 U0 SliderDel(CCtrl *c)
 {
-QueueRem(c);
+QueueRemove(c);
 ");
   if (!*m->glbl_name)
     DocPrint(doc,"Free(c->state);\n");

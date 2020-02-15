@@ -165,7 +165,7 @@ CAOT *CmpBuf(U8 *buf,U8 *map_name=NULL,
   res=CmpJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drv_let);
   if (error_cnt)   *error_cnt=cc->error_cnt;
   if (warning_cnt) *warning_cnt=cc->warning_cnt;
-  QueueRem(cc);
+  QueueRemove(cc);
   if (res)
     CmpCtrlDel(cc);
   return res;
@@ -295,7 +295,7 @@ U0 CmpFixUpJITAsm(CCmpCtrl *cc,CAOT *tmpaot)
   Free(str);
   if (!cc->aot_depth && Bt(&cc->opts,OPTf_TRACE))
     Un(rip2,tmpaot->aot_U8s,64);
-  QueueRem(tmpaot);
+  QueueRemove(tmpaot);
   Free(tmpaot);
 }
 
@@ -331,7 +331,7 @@ U0 CmpFixUpAOTAsm(CCmpCtrl *cc,CAOT *tmpaot)
   tmpie=tmpaot->next_ie;
   while (tmpie!=&tmpaot->next_ie) {
     tmpie1=tmpie->next;
-    QueueRem(tmpie);
+    QueueRemove(tmpie);
     if (IET_REL_I0<=tmpie->type<=IET_IMM_I64) {
       if (tmpie->str) {
 	if (tmpie->flags&IEF_GOTO_LABEL) {
@@ -494,7 +494,7 @@ I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     while (tmpie!=&tmpaot->next_ie) {
       tmpie1=tmpie->next;
       if (!tmpie->type || IET_REL32_EXPORT<=tmpie->type<=IET_IMM64_EXPORT) {
-	QueueRem(tmpie);
+	QueueRemove(tmpie);
 	*ptr++=tmpie->type;
 	*ptr(U32 *)++=tmpie->rip;
 	if (tmpie->str) {
@@ -514,7 +514,7 @@ I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     tmpie=tmpaot->next_ie;
     while (tmpie!=&tmpaot->next_ie) {
       tmpie1=tmpie->next;
-      QueueRem(tmpie);
+      QueueRemove(tmpie);
       *ptr++=tmpie->type;
       if (tmpie->aot)
 	tmpie->rip+=tmpie->aot->rip2;
@@ -596,7 +596,7 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
       res=0;
     }
   }
-  QueueRem(cc);
+  QueueRemove(cc);
   if (okay)
     CmpCtrlDel(cc); //TODO: can crash
   return res;
@@ -640,7 +640,7 @@ I64 ExePutS2(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0)
   QueueInsert(cc,Fs->last_cc);
   Lex(cc);
   res=ExeCmdLine(cc);
-  QueueRem(cc);
+  QueueRemove(cc);
   CmpCtrlDel(cc);
   return res;
 }

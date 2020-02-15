@@ -386,7 +386,7 @@ U0 PlayerPick(U8 *dirname,I64 player)
     if (!(i++&3))
       DocPrint(doc,"\n");
     st=StrNew(tmpde1->name);
-    FileExtRem(st);
+    FileExtRemove(st);
     tmpde1->user_data=DocPrint(doc,"$$MU-UL,\"%-10ts\",LE=%d$$ ",st,tmpde1);
     Free(st);
     tmpde1=tmpde1->next;
@@ -396,7 +396,7 @@ U0 PlayerPick(U8 *dirname,I64 player)
     if (!(i++&3))
       DocPrint(doc,"\n");
     st=StrNew(tmpde1->name);
-    FileExtRem(st);
+    FileExtRemove(st);
     tmpde1->user_data=DocPrint(doc,"$$MU-UL,\"%-10ts\",LE=%d$$ ",st,tmpde1);
     Free(st);
     tmpde1=tmpde1->next;

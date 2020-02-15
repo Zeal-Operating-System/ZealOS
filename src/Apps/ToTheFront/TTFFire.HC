@@ -271,7 +271,7 @@ U0 IndirectResolveAll()
       Yield;
     indirect_explosion=FALSE;
 
-    QueueRem(tmpi);
+    QueueRemove(tmpi);
     Free(tmpi);
     tmpi=tmpi1;
   }

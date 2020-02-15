@@ -16,7 +16,7 @@ U0 InputFilterTask()
       break;
     else {
       if (tmpc->job_code==JOBT_TEXT_INPUT) {
-	QueueRem(tmpc);
+	QueueRemove(tmpc);
 	SetRFlags(old_flags);
 	try
 		ExePrint("%s",tmpc->aux_str);
@@ -55,7 +55,7 @@ Note: This delivers messages from parent down to pop-up.
       break;
     else {
       if (tmpc->job_code==JOBT_MSG) {
-	QueueRem(tmpc);
+	QueueRemove(tmpc);
 	SetRFlags(old_flags);
 	res=tmpc->msg_code;
 	if (_arg1)

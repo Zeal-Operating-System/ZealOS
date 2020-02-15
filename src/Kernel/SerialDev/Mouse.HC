@@ -83,7 +83,7 @@ U0 MsHardPktRead()
   ms_hard.timestamp=GetTSC;
   FifoU8Ins(ms_hard.fifo,InU8(KBD_PORT));
   if (FifoU8Cnt(ms_hard.fifo)==ms_hard.pkt_size)
-    while (FifoU8Rem(ms_hard.fifo,&j))
+    while (FifoU8Remove(ms_hard.fifo,&j))
       FifoU8Ins(ms_hard.fifo2,j);
 }
 
@@ -241,7 +241,7 @@ U0 MsHardHandler()
   for (i=0;i<4;i++)
     ms_buf[i]=0;
   for (i=0;i<ms_hard.pkt_size;i++)
-    if (!FifoU8Rem(ms_hard.fifo2,&ms_buf[i]))
+    if (!FifoU8Remove(ms_hard.fifo2,&ms_buf[i]))
       ms_buf[i]=0;
 
   ms_hard.bttns[0] = ms_buf[0] & 1;

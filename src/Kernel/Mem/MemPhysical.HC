@@ -17,7 +17,7 @@ Bool Mem32DevIns(CMemRange *tmpmr)
 	    (tmpmr->base+tmpmr->size);
       tmpmr1->base=tmpmr->base+tmpmr->size;
       if (!tmpmr1->size) {
-	QueueRem(tmpmr1);
+	QueueRemove(tmpmr1);
 	Free(tmpmr1);
       }
       return TRUE;

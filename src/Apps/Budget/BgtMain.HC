@@ -14,7 +14,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 	tmpb=doc_ce->user_data;
 	if (tmpt=tmpb->template) {
 	  if (tmpt1=BgtTemplatePmt(tmpt)) {
-	    QueueRem(tmpt);
+	    QueueRemove(tmpt);
 	    BgtTemplatePurge(tmpt);
 	    BgtEntryDel2(&tmpt->b);
 	    Free(tmpt);
@@ -24,7 +24,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 	  }
 	} else {
 	  if (tmpb1=BgtEntryPmt(tmpb)) {
-	    QueueRem(tmpb);
+	    QueueRemove(tmpb);
 	    BgtEntryDel(tmpb);
 	    BgtIns(tmpb1);
 	    BgtRegen;
@@ -37,10 +37,10 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 	    doc_ce->type_u8==DOCT_MENU_VAL) {
 	tmpb=doc_ce->user_data;
 	if (tmpt=tmpb->template) {
-	  QueueRem(tmpt);
+	  QueueRemove(tmpt);
 	  BgtTemplateDel(tmpt);
 	} else {
-	  QueueRem(tmpb);
+	  QueueRemove(tmpb);
 	  BgtEntryDel(tmpb);
 	}
 	BgtRegen;

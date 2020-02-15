@@ -150,7 +150,7 @@ U0 RiverDropsNext(CTask *mem_task)
   while (tmpr!=&rd_head) {
     tmpr1=tmpr->next;
     if (++tmpr->y>=MAP_HEIGHT-MAP_BORDER) {
-      QueueRem(tmpr);
+      QueueRemove(tmpr);
       Free(tmpr);
     } else {
       do {

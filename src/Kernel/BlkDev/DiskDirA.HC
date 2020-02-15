@@ -70,8 +70,8 @@ I64 DirEntryCompareName(CDirEntry *e1,CDirEntry *e2)
   else {
     StrCpy(buf1,e1->name);
     StrCpy(buf2,e2->name);
-    FileExtRem(buf1,buf3);
-    FileExtRem(buf2,buf4);
+    FileExtRemove(buf1,buf3);
+    FileExtRemove(buf2,buf4);
     if (d1=StrCmp(buf3,buf4))
       return d1;
     return StrCmp(buf1,buf2);

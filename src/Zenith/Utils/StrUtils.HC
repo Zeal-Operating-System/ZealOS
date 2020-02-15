@@ -33,7 +33,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
   while (doc_e!=doc) {
     doc_e1=doc_e->next;
     if (doc_e->type_u8==DOCT_TEXT) {
-      QueueRem(doc_e);
+      QueueRemove(doc_e);
       a[i++]=doc_e;
     } else
       DocEntryDel(doc,doc_e);

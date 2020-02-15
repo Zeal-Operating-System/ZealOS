@@ -5,7 +5,7 @@ U0 BgtTemplatePurge(CBgtTemplate *tmpt)
   while (tmpb!=&b_head) {
     tmpb1=tmpb->next;
     if (tmpb->template==tmpt) {
-      QueueRem(tmpb);
+      QueueRemove(tmpb);
       BgtEntryDel2(tmpb);
       Free(tmpb);
     }

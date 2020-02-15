@@ -226,7 +226,7 @@ CBinFile *Load(U8 *filename,I64 ld_flags=0,CBinFile *bfh_addr=INVALID_PTR)
   absname=FileNameAbs(fbuf);
   Free(fbuf);
   fbuf=StrNew(absname);
-  FileExtRem(fbuf);
+  FileExtRemove(fbuf);
   if (fbuf[1]==':' && StrLen(fbuf)>2)
     HashGenericAdd(fbuf+2,HTT_MODULE|HTF_PUBLIC,bfh_addr);
   LoadPass1(bfh_addr(U8 *)+bfh_addr->patch_table_offset,module_base,ld_flags);

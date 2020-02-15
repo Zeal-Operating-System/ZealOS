@@ -84,6 +84,6 @@ CCtrl *TempoNew()
 
 U0 TempoDel(CCtrl *c)
 {
-  QueueRem(c);
+  QueueRemove(c);
   Free(c);
 }

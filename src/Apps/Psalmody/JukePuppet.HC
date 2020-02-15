@@ -1,6 +1,6 @@
 U0 SongPuppet(CTask *task,I64 passes)
 {
-  CDebugInfo *dbg_info;
+  CDebugInfo *dbg_info;
   I64 i,start,end,rip,last_rip;
   CHashFun *tmpf=NULL;
   for (i=0;i<250 && TaskValidate(task);i++) {
@@ -33,7 +33,7 @@ U0 JukeSongPuppet(CTask *juke_task,I64 passes,I64 song_num,U8 *name)
   I64 i;
 
   if (FileExtDot(name))
-    FileExtRem(name);
+    FileExtRemove(name);
   BirthWait(&juke_task->popup_task);
   TaskWait(juke_task->popup_task);
   PostMsg(juke_task->popup_task,MSG_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);

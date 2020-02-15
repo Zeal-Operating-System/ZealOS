@@ -387,7 +387,7 @@ Bool BptS(U8 *addr,CTask *task=NULL,Bool live=TRUE)
 }
 
 Bool BptR(U8 *addr,CTask *task=NULL,Bool live=TRUE,Bool rem=TRUE)
-{//Rem breakpoint.
+{//Remove breakpoint.
   CBpt *tmpb;
   Bool res=FALSE;
   if (!task) task=Fs;
@@ -420,7 +420,7 @@ Bool B(U8 *addr,CTask *task=NULL,Bool live=TRUE)
 }
 
 I64 B2(CTask *task=NULL,Bool live=TRUE)
-{//Rem all breakpoints.
+{//Remove all breakpoints.
 //Return: cnt of removed.
   I64 res=0;
   CBpt *tmpb,*tmpb1;
@@ -467,7 +467,7 @@ U0 G(U8 *ip=INVALID_PTR,CTask *task=NULL)
 }
 
 U0 G2(U8 *ip=INVALID_PTR,CTask *task=NULL)
-{//Rem all breakpoints and Go.
+{//Remove all breakpoints and Go.
   if (!task) task=Fs;
   B2(task);
   if (ext[EXT_WIN_FOCUS])

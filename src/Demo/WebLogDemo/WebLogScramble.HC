@@ -23,10 +23,10 @@ U0 LogScrambleFile(U8 *name)
     if (doc_e->type_u8==DOCT_TEXT) {
       st=MAlloc(StrLen(doc_e->tag)+1);
       st2=MAlloc(StrLen(doc_e->tag)+1);
-      StrFirstRem(doc_e->tag," ",st);
+      StrFirstRemove(doc_e->tag," ",st);
 
       for (i=3;i>=0;i--) {
-	StrFirstRem(st,".",st2);
+	StrFirstRemove(st,".",st2);
 	num.u8[i]=key[i][Str2I64(st2)&255];
       }
 

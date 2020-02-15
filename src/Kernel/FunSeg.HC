@@ -247,7 +247,7 @@ I64 SrcLineNum(U8 *addr,I64 cnt=1)
       } else if (tmph->src_link) {
 	src =StrNew(tmph->src_link);
 	src2=StrNew(tmph->src_link);
-	StrLastRem(src,",",src2);
+	StrLastRemove(src,",",src2);
 	cur_line=Str2I64(src2);
 	Free(src);
 	Free(src2);
@@ -290,8 +290,8 @@ U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
   }
   if (best) {
     src=StrNew(best,mem_task);
-    StrFirstRem(src,":");
-    StrLastRem(src,",");
+    StrFirstRemove(src,":");
+    StrLastRemove(src,",");
     return src;
   } else
     return NULL;

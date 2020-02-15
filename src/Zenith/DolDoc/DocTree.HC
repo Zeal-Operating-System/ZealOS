@@ -12,7 +12,7 @@ public Bool DocTreeFind(CDoc *haystack_doc,U8 *needle_path,
   if (_start_indent) *_start_indent=haystack_doc;
   if (_end_indent) *_end_indent=haystack_doc;
   while (*st1 && doc_e!=haystack_doc) {
-    StrFirstRem(st1,"/",st2);
+    StrFirstRemove(st1,"/",st2);
     if (*st2) {
       while (doc_e!=haystack_doc) {
 	if (doc_e->type_u8==DOCT_INDENT)
@@ -77,7 +77,7 @@ public Bool DocTreeMake(CDoc *doc,U8 *path)
   doc->cur_entry=doc;
   doc->cur_col=0;
   while (*st1 && doc_e!=doc) {
-    StrFirstRem(st1,"/",st2);
+    StrFirstRemove(st1,"/",st2);
     if (*st2) {
       while (doc_e!=doc) {
 	if (doc_e->type_u8==DOCT_INDENT) {
@@ -105,7 +105,7 @@ public Bool DocTreeMake(CDoc *doc,U8 *path)
 mt_done:
   if (res) {
     while (*st3) {
-      StrFirstRem(st3,"/",st2);
+      StrFirstRemove(st3,"/",st2);
       if (*st2) {
 	DocPrint(doc,"$$TR+C,\"%s\"$$\n$$ID,2$$",st2);
 	doc->cur_entry=DocPrint(doc,"$$ID,-2$$");
@@ -208,7 +208,7 @@ public I64 ExeDoc(CDoc *doc,I64 ccf_flags=0)
       res=0;
     }
   }
-  QueueRem(cc);
+  QueueRemove(cc);
   if (okay)
     CmpCtrlDel(cc); //TODO: can crash
   if (unlock_doc)

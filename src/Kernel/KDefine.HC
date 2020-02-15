@@ -205,7 +205,7 @@ CColorROPU32 Str2ColorU32(U8 *st)
   CColorROPU32 res=0;
   if (!st) return COLOR_INVALID;
   st2=MAlloc(StrLen(st)+1);
-  StrFirstRem(st,str2color_lst,st2);
+  StrFirstRemove(st,str2color_lst,st2);
   res.c0=Str2ColorU16(st2);
   if (*st) {
     res.c1=Str2ColorU16(st);
