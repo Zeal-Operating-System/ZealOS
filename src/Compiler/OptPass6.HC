@@ -50,14 +50,14 @@ U0 OptPass6Lag(CCmpCtrl *cc,CPrsStk *ps,CIntermediateCode *tmpi,
       }
     }
     tmpi->ic_data=clobbered_stk_tmp_mask;
-    PrsPush(ps,stk_ptr);
-    PrsPush(ps,clobbered_stk_tmp_mask);
+    ParsePush(ps,stk_ptr);
+    ParsePush(ps,clobbered_stk_tmp_mask);
   } else if (code==IC_CALL_END) {
-    tmpi->ic_data=PrsPop(ps);
-    stk_ptr=PrsPop(ps);
+    tmpi->ic_data=ParsePop(ps);
+    stk_ptr=ParsePop(ps);
   } else if (code==IC_CALL_END2) {
     ps->ptr--;
-    stk_ptr=PrsPop(ps);
+    stk_ptr=ParsePop(ps);
   }
   if (intermediate_code_table[code].arg_cnt==IS_V_ARG)
     stk_ptr-=tmpi->ic_data>>3;

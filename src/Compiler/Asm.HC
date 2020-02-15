@@ -1,4 +1,4 @@
-Bool PrsAsmImm(CCmpCtrl *cc,CAsmArg *arg)
+Bool ParseAsmImm(CCmpCtrl *cc,CAsmArg *arg)
 {
   if (arg->imm_or_off_present)
     LexExcept(cc,"Already one immediate at ");
@@ -32,7 +32,7 @@ Bool PrsAsmImm(CCmpCtrl *cc,CAsmArg *arg)
   return TRUE;
 }
 
-U0 PrsAsmArg(CCmpCtrl *cc,CAsmArg *arg,Bool rel)
+U0 ParseAsmArg(CCmpCtrl *cc,CAsmArg *arg,Bool rel)
 {
   CHashGeneric *tmph,*tmph1;
   CHashReg *tmpr;
@@ -113,7 +113,7 @@ U0 PrsAsmArg(CCmpCtrl *cc,CAsmArg *arg,Bool rel)
 	}
       } else {
 pa_asm_direct_imm:
-	PrsAsmImm(cc,arg);
+	ParseAsmImm(cc,arg);
 	arg->num.abs_cnts=cc->abs_cnts;
 	if (arg->size<=1 && !rel && arg->num.abs_cnts&1) {
 	  if (cc->aotc->seg_size==16)
@@ -161,7 +161,7 @@ pa_asm_direct_imm:
 	  Lex(cc); //skip '+'
 	} else {
 pa_asm_indirect_imm:
-	  PrsAsmImm(cc,arg);
+	  ParseAsmImm(cc,arg);
 	  arg->num.abs_cnts=cc->abs_cnts;
 	}
       }
@@ -392,7 +392,7 @@ Bool AsmStoreNum(CCmpCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 
 U8 asm_seg_prefixes[6]={0x26,0x2E,0x36,0x3E,0x64,0x65};
 
-Bool PrsAsmInst(CCmpCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
+Bool ParseAsmInst(CCmpCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,j,arg1,arg2,om,seg,arg1mask,arg2mask;
@@ -811,7 +811,7 @@ Bool PrsAsmInst(CCmpCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
   LexExcept(cc,"Invalid inst at ");
 }
 
-U0 PrsAsmDefine(CCmpCtrl *cc,I64 U8_cnt)
+U0 ParseAsmDefine(CCmpCtrl *cc,I64 U8_cnt)
 {
   Bool is_dup;
   I64 i,dup_val;
@@ -885,7 +885,7 @@ U0 PrsAsmDefine(CCmpCtrl *cc,I64 U8_cnt)
   Lex(cc);
 }
 
-U0 PrsBinFile(CCmpCtrl *cc)
+U0 ParseBinFile(CCmpCtrl *cc)
 {
   I64 i,size;
   U8 *buf,*st;
@@ -901,7 +901,7 @@ U0 PrsBinFile(CCmpCtrl *cc)
   Lex(cc);
 }
 
-U0 PrsAsmBlk(CCmpCtrl *cc,I64 cmp_flags)
+U0 ParseAsmBlk(CCmpCtrl *cc,I64 cmp_flags)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,j,k,argcnt,
@@ -973,19 +973,19 @@ U0 PrsAsmBlk(CCmpCtrl *cc,I64 cmp_flags)
 	      AOTStoreCodeU8(cc,k);
 	    break;
 	  case AKW_DU8:
-	    PrsAsmDefine(cc,1);
+	    ParseAsmDefine(cc,1);
 	    break;
 	  case AKW_DU16:
-	    PrsAsmDefine(cc,2);
+	    ParseAsmDefine(cc,2);
 	    break;
 	  case AKW_DU32:
-	    PrsAsmDefine(cc,4);
+	    ParseAsmDefine(cc,4);
 	    break;
 	  case AKW_DU64:
-	    PrsAsmDefine(cc,8);
+	    ParseAsmDefine(cc,8);
 	    break;
 	  case AKW_BINFILE:
-	    PrsBinFile(cc);
+	    ParseBinFile(cc);
 	    break;
 	  case AKW_LIST:
 	    aotc->lst=TRUE;
@@ -1012,9 +1012,9 @@ U0 PrsAsmBlk(CCmpCtrl *cc,I64 cmp_flags)
 	if (tmpo->ins[0].arg1) {
 	  argcnt++;
 	  if (ARGT_REL8<=tmpo->ins[0].arg1<=ARGT_REL32)
-	    PrsAsmArg(cc,&aotc->arg1,TRUE);
+	    ParseAsmArg(cc,&aotc->arg1,TRUE);
 	  else
-	    PrsAsmArg(cc,&aotc->arg1,FALSE);
+	    ParseAsmArg(cc,&aotc->arg1,FALSE);
 	  if (tmpo->ins[0].arg2) {
 	    argcnt++;
 	    if (cc->token!=',')
@@ -1022,13 +1022,13 @@ U0 PrsAsmBlk(CCmpCtrl *cc,I64 cmp_flags)
 	    else {
 	      Lex(cc); //skip ','
 	      if (ARGT_REL8<=tmpo->ins[0].arg2<=ARGT_REL32)
-		PrsAsmArg(cc,&aotc->arg2,TRUE);
+		ParseAsmArg(cc,&aotc->arg2,TRUE);
 	      else
-		PrsAsmArg(cc,&aotc->arg2,FALSE);
+		ParseAsmArg(cc,&aotc->arg2,FALSE);
 	    }
 	  }
 	}
-	PrsAsmInst(cc,tmpo,argcnt);
+	ParseAsmInst(cc,tmpo,argcnt);
       } else if (cc->hash_entry->type & HTT_EXPORT_SYS_SYM) {
 	if (Btr(&cc->hash_entry->type,HTf_UNRESOLVED)) {
 	  if (cc->hash_entry->type & HTF_LOCAL) {

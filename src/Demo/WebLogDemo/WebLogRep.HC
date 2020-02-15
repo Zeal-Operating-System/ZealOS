@@ -33,7 +33,7 @@ U0 LogStructDel(LogStruct *tmplg)
   Free(tmplg);
 }
 
-U0 PrsSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
+U0 ParseSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
 {
   CDoc *doc=DocRead(name,
 	DOCF_PLAIN_TEXT_TABS|DOCF_DBL_DOLLARS|DOCF_NO_CURSOR);
@@ -128,13 +128,13 @@ U0 PrsSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
   DocDel(doc);
 }
 
-LogStruct *PrsLogFiles(U8 *files_find_mask,CDate *_dstart,CDate *_dend)
+LogStruct *ParseLogFiles(U8 *files_find_mask,CDate *_dstart,CDate *_dend)
 {
   LogStruct *head=CAlloc(sizeof(LogStruct));
   CDirEntry *tmpde=FilesFind(files_find_mask),*tmpde1=tmpde;
   QueueInit(head);
   while (tmpde) {
-    PrsSingleLogFile(head,tmpde->full_name,_dstart,_dend);
+    ParseSingleLogFile(head,tmpde->full_name,_dstart,_dend);
     tmpde=tmpde->next;
   }
   DirTreeDel(tmpde1);
@@ -500,7 +500,7 @@ U0 WebLogRep(U8 *mask,U8 *output_filename)
 
   DocMax;
 
-  head=PrsLogFiles(mask,&dstart,&dend);
+  head=ParseLogFiles(mask,&dstart,&dend);
   if (dstart>dend)
     PrintErr("No Data.\n");
   else {

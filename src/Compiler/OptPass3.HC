@@ -66,7 +66,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	  ps->ptr-=tmpi->ic_data>>3;
 	  break;
 	case IS_2_ARG:
-	  tmpi2=PrsPop(ps);
+	  tmpi2=ParsePop(ps);
 	  if (tmpi2->ic_flags&ICF_RES_TO_F64)
 	    tmpc2=cmp.internal_types[RT_F64];
 	  else if (tmpi2->ic_flags & ICF_RES_TO_INT)
@@ -76,7 +76,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	  tmpi->arg2.type=MDF_STK+CmpRawType(tmpc2);
 	  tmpi->ic_flags|=ICF_ARG2_WAS_STK;
 	case IS_1_ARG:
-	  tmpi1=PrsPop(ps);
+	  tmpi1=ParsePop(ps);
 	  if (tmpi1->ic_flags&ICF_RES_TO_F64)
 	    tmpc1=cmp.internal_types[RT_F64];
 	  else if (tmpi1->ic_flags & ICF_RES_TO_INT)
@@ -93,7 +93,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
       if (intermediate_code_table[code].res_cnt) {
 	tmpi->res.type=MDF_STK+CmpRawType(tmpc);
 	tmpi->ic_flags|=ICF_RES_WAS_STK;
-	PrsPush(ps,tmpi);
+	ParsePush(ps,tmpi);
       }
       switch [code] {
 	case IC_IMM_F64:

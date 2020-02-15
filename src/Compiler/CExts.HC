@@ -21,23 +21,23 @@ extern U0 OptPass5(CCmpCtrl *cc);
 extern U0 OptPass6(CCmpCtrl *cc);
 extern I64 OptPass789A(
 	CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg);
-extern CHashClass *PrsClass(
+extern CHashClass *ParseClass(
 	CCmpCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern);
-extern CHashFun *PrsFunJoin(
+extern CHashFun *ParseFunJoin(
 	CCmpCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags);
-extern I64 PrsKeyWord(CCmpCtrl *cc);
-extern Bool PrsStmt(CCmpCtrl *cc,I64 try_cnt=0,
+extern I64 ParseKeyWord(CCmpCtrl *cc);
+extern Bool ParseStatement(CCmpCtrl *cc,I64 try_cnt=0,
 	CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON);
-extern U0 PrsStreamBlk(CCmpCtrl *cc);
-extern CHashClass *PrsType(CCmpCtrl *cc,CHashClass **_tmpc1,
+extern U0 ParseStreamBlk(CCmpCtrl *cc);
+extern CHashClass *ParseType(CCmpCtrl *cc,CHashClass **_tmpc1,
 	I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
 	CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags);
-extern I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,
+extern I64 ParseUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,
 	CMemberLst **_local_var,CArrayDim **_tmpad,I64 *unary_post_prec);
-extern I64 PrsUnaryTerm(
+extern I64 ParseUnaryTerm(
 	CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,CArrayDim **_tmpad,
 	I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec);
-extern U0 PrsVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
+extern U0 ParseVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	CArrayDim *tmpad,U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass);
 _extern CMP_TEMPLATES			U32 cmp_templates[1];
 _extern CMP_TEMPLATES_DONT_POP		U32 cmp_templates_dont_pop[1];

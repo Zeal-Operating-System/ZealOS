@@ -171,10 +171,10 @@ U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type)
 	  ps->ptr-=tmpi->ic_data>>3;
 	  break;
 	case IS_2_ARG:
-	  tmpi2=PrsPop(ps);
+	  tmpi2=ParsePop(ps);
 	  tmpc2=tmpi2->ic_class;
 	case IS_1_ARG:
-	  tmpi1=PrsPop(ps);
+	  tmpi1=ParsePop(ps);
 	  tmpc1=tmpi1->ic_class;
 	  break;
 	case IS_0_ARG: //nobound switch
@@ -677,7 +677,7 @@ p4_sib:
 	while (OptIC4(tmpi));
 	code=tmpi->ic_code;
 	if (intermediate_code_table[code].res_cnt)
-	  PrsPush(ps,tmpi);
+	  ParsePush(ps,tmpi);
       }
     }
     tmpi=tmpi_next;

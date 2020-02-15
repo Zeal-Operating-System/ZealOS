@@ -15,7 +15,7 @@ The format of DolDoc cmds is a two character code, +/-flags, a comma and args se
 
 See $LK,"::/Doc/Widget.DD"$, $LK,"::/Demo/DolDoc/DemoDoc.DD"$, and $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.HC"$.
 
-<$LK,"TwoLetterCmd",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_CMDS"$>  See $LK,"Type Defines",A="MN:DOCT_TEXT"$ and $LK,"PrsDollarCmd",A="MN:PrsDollarCmd"$().
+<$LK,"TwoLetterCmd",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_CMDS"$>  See $LK,"Type Defines",A="MN:DOCT_TEXT"$ and $LK,"ParseDollarCmd",A="MN:ParseDollarCmd"$().
 $TR,"TX Text"$
 $ID,2$Normally, text is not bracketed with '$FG,2$$$$FG$', but if you wish to specify flag attr, such as centering text, you can bracket them with '$FG,2$$$$FG$' and enter flags such as "$FG,2$+CX$FG$".  You can't edit them normally if they are bracketed by '$FG,2$$$$FG$' unless you toggle to plain text mode with $FG,2$<CTRL-t>$FG$.
 $ID,-2$$TR,"CR Hard New Line"$

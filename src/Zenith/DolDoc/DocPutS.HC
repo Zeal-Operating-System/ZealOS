@@ -117,7 +117,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 		  *ptr4++=ch;
 	      }
 	      *ptr4=0;
-	      if (doc_e=PrsDollarCmd(doc,st2)) {
+	      if (doc_e=ParseDollarCmd(doc,st2)) {
 		res=doc_e;
 		DocInsEntry(doc,doc_e);
 	      }

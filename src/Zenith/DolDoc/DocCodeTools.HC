@@ -70,7 +70,7 @@ I64 EdRILex(CRILex *rx)
   do {
     Lex(rx->cc1);
     Lex(rx->cc2);
-    i=PrsKeyWord(rx->cc2);
+    i=ParseKeyWord(rx->cc2);
     if (rx->cc1->token=='\n' && rx->cc2->token==';' || rx->cc2->token=='{' ||
 	  rx->cc2->token=='}' || rx->cc2->token==':' || rx->cc2->token==')' &&
 	  !rx->exp_depth || i==KW_ELSE || i==KW_CATCH || i==KW_DO)
@@ -117,7 +117,7 @@ U0 EdRIExp(CRILex *rx)
   EdRILex(rx);
 }
 
-U0 EdRIStmt(CRILex *rx,Bool indent)
+U0 EdRIStatement(CRILex *rx,Bool indent)
 {
   I64 i;
   Bool cont;
@@ -125,55 +125,55 @@ U0 EdRIStmt(CRILex *rx,Bool indent)
     rx->depth++;
     EdRILex(rx);
     while (rx->cc1->token && rx->cc1->token!='}')
-      EdRIStmt(rx,FALSE);
+      EdRIStatement(rx,FALSE);
     if (--rx->depth<0) rx->depth=0;
     EdRILex(rx);
   } else {
     if (indent) rx->depth++;
     do {
       cont=FALSE;
-      switch (PrsKeyWord(rx->cc1)) {
+      switch (ParseKeyWord(rx->cc1)) {
 	case KW_IF:
 	  EdRILex(rx);
 	  EdRIExp(rx);
-	  EdRIStmt(rx,TRUE);
-	  if (PrsKeyWord(rx->cc1)==KW_ELSE) {
+	  EdRIStatement(rx,TRUE);
+	  if (ParseKeyWord(rx->cc1)==KW_ELSE) {
 	    EdRILex(rx);
-	    if (PrsKeyWord(rx->cc1)==KW_IF && rx->cc2->token!='\n')
-	      EdRIStmt(rx,FALSE);
+	    if (ParseKeyWord(rx->cc1)==KW_IF && rx->cc2->token!='\n')
+	      EdRIStatement(rx,FALSE);
 	    else
-	      EdRIStmt(rx,TRUE);
+	      EdRIStatement(rx,TRUE);
 	  }
 	  break;
 	case KW_TRY:
 	  EdRILex(rx);
-	  EdRIStmt(rx,TRUE);
-	  if (PrsKeyWord(rx->cc1)==KW_CATCH) {
+	  EdRIStatement(rx,TRUE);
+	  if (ParseKeyWord(rx->cc1)==KW_CATCH) {
 	    EdRILex(rx);
-	    EdRIStmt(rx,TRUE);
+	    EdRIStatement(rx,TRUE);
 	  }
 	  break;
 	case KW_LOCK:
 	  EdRILex(rx);
-	  EdRIStmt(rx,TRUE);
+	  EdRIStatement(rx,TRUE);
 	  break;
 	case KW_FOR:
 	case KW_WHILE:
 	  EdRILex(rx);
 	  EdRIExp(rx);
-	  EdRIStmt(rx,TRUE);
+	  EdRIStatement(rx,TRUE);
 	  break;
 	case KW_ASM:
 	case KW_CLASS:
 	case KW_UNION:
 	  if (EdRILex(rx)==TK_IDENT)
 	    EdRILex(rx);
-	  EdRIStmt(rx,TRUE);
+	  EdRIStatement(rx,TRUE);
 	  break;
 	case KW_DO:
 	  EdRILex(rx);
-	  EdRIStmt(rx,TRUE);
-	  if (PrsKeyWord(rx->cc1)==KW_WHILE) {
+	  EdRIStatement(rx,TRUE);
+	  if (ParseKeyWord(rx->cc1)==KW_WHILE) {
 	    EdRILex(rx);
 	    EdRIExp(rx);
 	  }
@@ -188,7 +188,7 @@ U0 EdRIStmt(CRILex *rx,Bool indent)
 	    EdRILex(rx);
 	    i=0;
 	    while (rx->cc1->token && rx->cc1->token!='}') {
-	      switch (PrsKeyWord(rx->cc1)) {
+	      switch (ParseKeyWord(rx->cc1)) {
 		case KW_START:
 		  rx->depth+=i; i=0;
 		  while (EdRILex(rx) && rx->cc1->token!=':');
@@ -209,7 +209,7 @@ U0 EdRIStmt(CRILex *rx,Bool indent)
 		  break;
 		default:
 		  if (rx->cc1->token)
-		    EdRIStmt(rx,TRUE);
+		    EdRIStatement(rx,TRUE);
 	      }
 	    }
 	    if (--rx->depth<0) rx->depth=0;
@@ -259,7 +259,7 @@ CQueueVectU8 *EdRICode(CDoc *doc)
   rx->indent=QueueVectU8New(doc->cur_entry->y);
 
   Lex(rx->cc1);
-  EdRIStmt(rx,FALSE);
+  EdRIStatement(rx,FALSE);
 
   CmpCtrlDel(rx->cc1);
   CmpCtrlDel(rx->cc2);

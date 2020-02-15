@@ -3,7 +3,7 @@
 Pass#0
 When parsing the arg expressions to a function
 call, there is a call to OptPass012 to determine
-the type of the expression. $LK,"OptPass012",A="FF:::/Compiler/PrsExp.HC,OptPass012"$
+the type of the expression. $LK,"OptPass012",A="FF:::/Compiler/ParseExp.HC,OptPass012"$
 
 Pass#1&2
 Constant expressions are simplified.
@@ -50,15 +50,15 @@ args.
 	ps->ptr-=tmpi->ic_data>>2;
 	break;
       case IS_2_ARG:
-	tmpi2=PrsPop(ps);
+	tmpi2=ParsePop(ps);
 	tmpc2=tmpi2->ic_class;
 	tmpi->t.arg2_tree=tmpi2;
-	tmpi->t.arg2_class=PrsPop(ps);
+	tmpi->t.arg2_class=ParsePop(ps);
       case IS_1_ARG:
-	tmpi1=PrsPop(ps);
+	tmpi1=ParsePop(ps);
 	tmpc1=tmpi1->ic_class;
 	tmpi->t.arg1_tree=tmpi1;
-	tmpi->t.arg1_class=PrsPop(ps);
+	tmpi->t.arg1_class=ParsePop(ps);
 	break;
       case IS_0_ARG: //nobound switch
 	break;
@@ -1265,8 +1265,8 @@ args.
       }
     }
     if (intermediate_code_table[tmpi_push->ic_code].res_cnt) {
-      PrsPush(ps,tmpi->ic_class2);
-      PrsPush(ps,tmpi_push);
+      ParsePush(ps,tmpi->ic_class2);
+      ParsePush(ps,tmpi_push);
     }
     if (tmpi->ic_class) {
       if (tmpi->ic_class->raw_type==RT_F64)

@@ -27,7 +27,7 @@ U0 OptPass5(CCmpCtrl *cc)
 	    ps->ptr--;
       }
       if (tmpi->arg2.type&MDF_STK) {
-	tmpi1=PrsPop(ps);
+	tmpi1=ParsePop(ps);
 	if (tmpi1->ic_code==IC_MOV || tmpi1->ic_code==IC_REG) {
 	  if (tmpi1->ic_flags & ICF_RES_TO_INT) {
 	    if (tmpi1->arg1.type&MDF_IMM)
@@ -51,7 +51,7 @@ U0 OptPass5(CCmpCtrl *cc)
       }
 
       if (tmpi->arg1.type&MDF_STK) {
-	tmpi1=PrsPop(ps);
+	tmpi1=ParsePop(ps);
 	if (tmpi1->ic_code==IC_MOV || tmpi1->ic_code==IC_REG) {
 	  if (tmpi1->ic_flags & ICF_RES_TO_INT) {
 	    if (tmpi1->arg1.type&MDF_IMM)
@@ -79,7 +79,7 @@ U0 OptPass5(CCmpCtrl *cc)
       }
       if (tmpi->res.type&MDF_STK &&
 	    !(tmpi->ic_flags&ICF_RES_NOT_USED))
-	PrsPush(ps,tmpi);
+	ParsePush(ps,tmpi);
     }
     tmpi=tmpi->next;
   }

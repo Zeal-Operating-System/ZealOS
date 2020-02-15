@@ -109,7 +109,7 @@ $FG,2$Prev$FG$	Previous
 $FG,2$Pri$FG$	Primary
 $FG,2$Prod$FG$	Product, Production
 $FG,2$Prof$FG$	Profile, Profiler
-$FG,2$Prs$FG$	Parse, Parser
+$FG,2$Parse$FG$	Parse, Parser
 $FG,2$Prt$FG$	Partition
 $FG,2$FunSeg$FG$ Program Section
 $FG,2$Pt$FG$	Point
@@ -139,7 +139,7 @@ $FG,2$Srv$FG$	Servant
 $FG,2$Stat$FG$	Status, Statistic
 $FG,2$Std$FG$	Standard
 $FG,2$Stk$FG$	Stack
-$FG,2$Stmt$FG$	Statement
+$FG,2$Statement$FG$	Statement
 $FG,2$Str$FG$	String
 $FG,2$Sym$FG$	Symbol
 $FG,2$Sync$FG$	Synchronization

@@ -50,7 +50,7 @@ public extern U0 LexPutLine(CCmpCtrl *cc,U8 *start);
 public extern U0 LexPutPos(CCmpCtrl *cc);
 public extern U0 LexPutToken(CCmpCtrl *cc);
 public extern U0 LexSkipEol(CCmpCtrl *cc);
-public extern U8 *LexStmt2Bin(
+public extern U8 *LexStatement2Bin(
 	CCmpCtrl *cc,I64 *_type,I64 cmp_flags=CMPF_PRS_SEMICOLON);
 public extern U0 LexWarn(CCmpCtrl *cc,U8 *str=NULL);
 extern CMemberLst *MemberClassBaseFind(
@@ -60,7 +60,7 @@ extern U0 MemberLstDel(CMemberLst *tmpm);
 public extern I64 MemberMetaData(U8 *st,CMemberLst *ml);
 public extern CMemberLstMeta *MemberMetaFind(U8 *st,CMemberLst *ml);
 public extern CHashClass *OptClassFwd(CHashClass *tmpc);
-public extern I64 PrsKeyWord(CCmpCtrl *cc);
+public extern I64 ParseKeyWord(CCmpCtrl *cc);
 
 #help_index "Compiler;Cmd Line (Typically)"
 extern I64 Cmp(U8 *filename,

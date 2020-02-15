@@ -35,7 +35,7 @@ U0 DocInit()
     if (tmph=HashFind(cc->cur_str,doldoc.hash,DHT_DOC_CMD)) {
       i=tmph->user_data0;
       Lex(cc);
-      PrsDocFlags(cc,&doldoc.dft_de_flags[i],&doldoc.dft_type_flags[i]);
+      ParseDocFlags(cc,&doldoc.dft_de_flags[i],&doldoc.dft_type_flags[i]);
     }
     if (cc->token==';')
       Lex(cc);

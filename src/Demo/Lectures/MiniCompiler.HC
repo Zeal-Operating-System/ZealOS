@@ -2,7 +2,7 @@
 $TR-C,"Main Compiler"$
 $ID,2$The mini compiler is like the main compiler, except the main compiler's lexical analyser removes comments and does preprocessing.$LK,"Lex",A="MN:Lex"$(),$LK,"Echo",A="MN:Echo"$(ON).
 
-The main compiler generates $LK,"Intermediate Code",A="FF:::/Compiler/CompilerA.HH,IC_END"$ at the parser stage.See $LK,"PrsExpression",A="MN:PrsExpression"$(), $LK,"PrsStmt",A="MN:PrsStmt"$().
+The main compiler generates $LK,"Intermediate Code",A="FF:::/Compiler/CompilerA.HH,IC_END"$ at the parser stage.See $LK,"ParseExpression",A="MN:ParseExpression"$(), $LK,"ParseStatement",A="MN:ParseStatement"$().
 
 The main compiler optimizes See $LK,"Intermediate Code Attributes",A="MN:intermediate_code_table"$, $LK,"Combining Consts",A="FF:::/Compiler/OptPass012.HC,case IC_MUL"$, $LK,"Choosing Reg Vars",A="FF:::/Compiler/OptPass3.HC,cmp.num_reg_vars"$.Use $LK,"PassTrace",A="MN:PassTrace"$() to see the optimization stages.
 
@@ -89,8 +89,8 @@ I64 Lex(U8 **_src,I64 *num)
 
 extern I64 Parse(U8 **_src,U8 **_dst);
 
-U0 PrsTerm(U8 **_src,U8 **_dst,I64 prec)
-{//See $LK,"PrsExpression",A="MN:PrsExpression"$().
+U0 ParseTerm(U8 **_src,U8 **_dst,I64 prec)
+{//See $LK,"ParseExpression",A="MN:ParseExpression"$().
   I64 i;
   U8 *src2;
   U8 *dst2;
@@ -111,7 +111,7 @@ U0 PrsTerm(U8 **_src,U8 **_dst,I64 prec)
 }
 
 I64 Parse(U8 **_src,U8 **_dst)
-{//See $LK,"PrsExpression",A="MN:PrsExpression"$().
+{//See $LK,"ParseExpression",A="MN:ParseExpression"$().
 //See $LK,"Opcode Fmts",A="FF:::/Compiler/OpCodes.DD,IDIV"$ for details on asm insts.
   I64 i;
   U8 *dst=*_dst;
@@ -130,7 +130,7 @@ I64 Parse(U8 **_src,U8 **_dst)
       *_dst=dst;
       return PREC_TERM;
     case TK_LEFT:
-      PrsTerm(_src,_dst,PREC_PAREN);
+      ParseTerm(_src,_dst,PREC_PAREN);
       if (Parse(_src,_dst)!=PREC_PAREN)
 	throw;
       return PREC_TERM;
@@ -139,7 +139,7 @@ I64 Parse(U8 **_src,U8 **_dst)
     case TK_OP:
       switch (i) {
 	case OP_MUL:
-	  PrsTerm(_src,&dst,PREC_MUL);
+	  ParseTerm(_src,&dst,PREC_MUL);
 	  *dst++=0x5A; //POP RDX
 	  *dst++=0x58; //POP RAX
 
@@ -152,7 +152,7 @@ I64 Parse(U8 **_src,U8 **_dst)
 	  *_dst=dst;
 	  return PREC_MUL;
 	case OP_DIV:
-	  PrsTerm(_src,&dst,PREC_MUL);
+	  ParseTerm(_src,&dst,PREC_MUL);
 	  *dst++=0x5B; //POP RBX
 	  *dst++=0x58; //POP RAX
 
@@ -167,7 +167,7 @@ I64 Parse(U8 **_src,U8 **_dst)
 	  *_dst=dst;
 	  return PREC_MUL;
 	case OP_ADD:
-	  PrsTerm(_src,&dst,PREC_ADD);
+	  ParseTerm(_src,&dst,PREC_ADD);
 	  *dst++=0x5A; //POP RDX
 	  *dst++=0x58; //POP RAX
 
@@ -179,7 +179,7 @@ I64 Parse(U8 **_src,U8 **_dst)
 	  *_dst=dst;
 	  return PREC_ADD;
 	case OP_SUB:
-	  PrsTerm(_src,&dst,PREC_ADD);
+	  ParseTerm(_src,&dst,PREC_ADD);
 	  *dst++=0x5A; //POP RDX
 	  *dst++=0x58; //POP RAX
 
@@ -211,7 +211,7 @@ U0 Main()
       src2=src;
       dst=code;
       try {
-	PrsTerm(&src2,&dst,PREC_PAREN);
+	ParseTerm(&src2,&dst,PREC_PAREN);
 	if (Parse(&src2,&dst)!=PREC_EOF)
 	  throw;
 	"$$RED$$This code is not efficient, but the compiler is simple.$$FG$$\n";

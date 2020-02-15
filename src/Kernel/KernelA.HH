@@ -836,7 +836,7 @@ public class CHashDefineStr:CHashSrcSym
 #define Cf_INTERNAL_TYPE	1
 
 public class CHashClass:CHashSrcSym
-{//See $LK,"PrsClassNew",A="MN:PrsClassNew"$(). base_class of $LK,"CHashFun",A="MN:CHashFun"$
+{//See $LK,"ParseClassNew",A="MN:ParseClassNew"$(). base_class of $LK,"CHashFun",A="MN:CHashFun"$
   I64	size,neg_offset;
   U32	member_cnt;
   U8	ptr_stars_cnt,raw_type;
@@ -859,7 +859,7 @@ public class CHashClass:CHashSrcSym
 #define Ff_RET1			15
 
 public class CHashFun:CHashClass
-{//See $LK,"PrsFunNew",A="MN:PrsFunNew"$().
+{//See $LK,"ParseFunNew",A="MN:ParseFunNew"$().
   CHashClass *return_class;
   U32	arg_cnt,pad,
 	used_reg_mask,clobbered_reg_mask;
@@ -1821,7 +1821,7 @@ I64 class CAbsCntsI64
 };
 
 class CAsmUndefHash
-{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/PrsExp.HC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM exp.
+{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.HC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM exp.
   CAsmUndefHash	*next;
   CHashExport	*hash;
 };

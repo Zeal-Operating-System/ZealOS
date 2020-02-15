@@ -1,5 +1,5 @@
 //Compiler initializes glbls in AOT bin modules to zero.
-//$LK,"Globals Set to Zero Here",A="FF:::/Compiler/PrsStmt.HC,Init AOT glbl to zero"$.
+//$LK,"Globals Set to Zero Here",A="FF:::/Compiler/ParseStatement.HC,Init AOT glbl to zero"$.
 
 CJob sys_macro_head;
 CTask *sys_macro_task;
@@ -13,7 +13,7 @@ U8 *rev_bits_table, //Table with U8 bits revd
    *set_bits_table; //Table with count of set bits in a U8
 CDate local_time_offset;
 F64	*pow10_I64,
-	sys_os_version=0.10;
+	sys_os_version=0.10;
 
 CAutoCompleteDictGlbls acd;
 CAutoCompleteGlbls ac;

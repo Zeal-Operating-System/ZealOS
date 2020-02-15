@@ -1,4 +1,4 @@
-U0 PrsVarInit(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
+U0 ParseVarInit(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 	U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass)
 {
   U8 *dst=*_dst,*machine_code;
@@ -18,7 +18,7 @@ U0 PrsVarInit(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
     LexPush(cc);
     Lex(cc);
     while (tmpm) {
-      PrsVarInit2(cc,&dst,tmpm->member_class,&tmpm->dim,
+      ParseVarInit2(cc,&dst,tmpm->member_class,&tmpm->dim,
 	    data_addr_rip,_base,data_heap,pass);
       if (cc->token==',')
 	Lex(cc);
@@ -68,7 +68,7 @@ U0 PrsVarInit(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 	  ICAdd(cc,IC_ABS_ADDR,data_addr_rip,tmpc+1);
 	  ICAdd(cc,IC_IMM_I64,dst-*_base,tmpc+1);
 	  ICAdd(cc,IC_ADD,0,tmpc+1);
-	  if (!PrsExpression(cc,NULL,TRUE))
+	  if (!ParseExpression(cc,NULL,TRUE))
 	    throw('Compiler');
 	  tmpi=cc->coc.coc_head.last;
 	  if (tmpi->ic_code==IC_END_EXP) {
@@ -120,7 +120,7 @@ class CVI2
   U0 base;
 };
 
-U0 PrsVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
+U0 ParseVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	CArrayDim *tmpad,U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass)
 {
   I64 i,j,cnt;
@@ -162,7 +162,7 @@ U0 PrsVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	while (cc->token!='}') {
 	  tmpvi=MAlloc(offset(CVI2.base)+tmpad1->total_cnt*tmpc->size);
 	  _b=&tmpvi->base;
-	  PrsVarInit2(cc,&_b,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
+	  ParseVarInit2(cc,&_b,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
 	  QueueInsert(tmpvi,head.last);
 	  if (cc->token==',')
 	    Lex(cc);
@@ -189,7 +189,7 @@ U0 PrsVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	*_dst=_b;
       } else {
 	for (i=0;i<tmpad1->cnt;i++) {
-	  PrsVarInit2(cc,_dst,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
+	  ParseVarInit2(cc,_dst,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
 	  if (tmpad1->cnt>1 && cc->token==',')
 	    Lex(cc);
 	}
@@ -198,21 +198,21 @@ U0 PrsVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
       }
     }
   } else {
-    PrsVarInit(cc,_dst,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
+    ParseVarInit(cc,_dst,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
     LexPush(cc);
   }
 }
 
-U0 PrsGlblInit(CCmpCtrl *cc,CHashGlblVar *tmpg,I64 pass)
+U0 ParseGlblInit(CCmpCtrl *cc,CHashGlblVar *tmpg,I64 pass)
 {
   U8 *dst=tmpg->data_addr;
-  PrsVarInit2(cc,&dst,tmpg->var_class,&tmpg->dim,
+  ParseVarInit2(cc,&dst,tmpg->var_class,&tmpg->dim,
 	tmpg->data_addr_rip,&tmpg->data_addr,
 	Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)||
 	Bt(&cc->flags,CCf_AOT_COMPILE),pass);
 }
 
-U0 PrsStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
+U0 ParseStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
 {
   U8 *machine_code,*dst=tmpm->static_data;
   CHashClass *tmpc=tmpm->member_class;
@@ -223,7 +223,7 @@ U0 PrsStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
     COCPush(cc);
     COCInit(cc);
   }
-  PrsVarInit2(cc,&dst,tmpc,&tmpm->dim,tmpm->static_data_rip,
+  ParseVarInit2(cc,&dst,tmpc,&tmpm->dim,tmpm->static_data_rip,
 	&tmpm->static_data,Bt(&cc->flags,CCf_AOT_COMPILE),pass);
   if (cc->flags&CCF_AOT_COMPILE && pass==2) {
     if (cc->coc.coc_head.next!=&cc->coc.coc_head) {
@@ -244,7 +244,7 @@ U0 PrsStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
   }
 }
 
-U0 PrsArrayDims(CCmpCtrl *cc,I64 mode,CArrayDim *dim)
+U0 ParseArrayDims(CCmpCtrl *cc,I64 mode,CArrayDim *dim)
 {//dim->next!=0 for array
   CArrayDim *tmpad,*tmpad1;
   I64 j;
@@ -282,7 +282,7 @@ U0 PrsArrayDims(CCmpCtrl *cc,I64 mode,CArrayDim *dim)
   }
 }
 
-CHashClass *PrsType(CCmpCtrl *cc,CHashClass **_tmpc1,
+CHashClass *ParseType(CCmpCtrl *cc,CHashClass **_tmpc1,
   I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
   CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags)
 {
@@ -307,10 +307,10 @@ CHashClass *PrsType(CCmpCtrl *cc,CHashClass **_tmpc1,
       LexExcept(cc,"Too many *'s at ");
   }
 
-  k=PrsKeyWord(cc);
+  k=ParseKeyWord(cc);
   if (k==KW_UNION || k==KW_CLASS) {
     Lex(cc);
-    tmpc2=PrsClass(cc,k,fsp_flags,mode&255==PRS0_EXTERN);
+    tmpc2=ParseClass(cc,k,fsp_flags,mode&255==PRS0_EXTERN);
     tmpc2->fwd_class=tmpc1;
     tmpc1=tmpc2;
     if (_tmpc1) *_tmpc1=tmpc1;
@@ -352,10 +352,10 @@ CHashClass *PrsType(CCmpCtrl *cc,CHashClass **_tmpc1,
       LexExcept(cc,"Missing ')' at ");
     if (Lex(cc)!='(')
       LexExcept(cc,"Expecting '(' at ");
-    fun_ptr=PrsFunJoin(cc,tmpc1,NULL,fsp_flags)+ptr_stars_cnt;
+    fun_ptr=ParseFunJoin(cc,tmpc1,NULL,fsp_flags)+ptr_stars_cnt;
     tmpc1=cmp.internal_types[RT_PTR]+ptr_stars_cnt;
   }
-  PrsArrayDims(cc,mode,tmpad);
+  ParseArrayDims(cc,mode,tmpad);
 
   tmpc2=OptClassFwd(tmpc1);
   if (tmpc2->ptr_stars_cnt) {
@@ -370,7 +370,7 @@ CHashClass *PrsType(CCmpCtrl *cc,CHashClass **_tmpc1,
   return tmpc1;
 }
 
-U0 PrsDotDotDot(CCmpCtrl *cc,CHashFun *tmpf,I64 _reg)
+U0 ParseDotDotDot(CCmpCtrl *cc,CHashFun *tmpf,I64 _reg)
 {
   CMemberLst *tmpm;
   CArrayDim *tmpad;
@@ -405,7 +405,7 @@ U0 PrsDotDotDot(CCmpCtrl *cc,CHashFun *tmpf,I64 _reg)
     Lex(cc);
 }
 
-U0 PrsVarLst(CCmpCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
+U0 ParseVarLst(CCmpCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
 {
   I64 i,k,old_flags=cc->flags,old_flags2,type,_reg;
   CHashClass *tmpc1,*tmpc2;
@@ -448,7 +448,7 @@ U0 PrsVarLst(CCmpCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
     }
     _reg=REG_UNDEF;
 pvl_restart1:
-    switch (PrsKeyWord(cc)) {
+    switch (ParseKeyWord(cc)) {
       case KW_REG:
 	_reg=REG_ALLOC;
 	if (Lex(cc)==TK_IDENT) {
@@ -466,7 +466,7 @@ pvl_restart1:
     }
 
     if (cc->token==TK_ELLIPSIS && mode.u8[1]==PRS1B_FUN_ARG) {
-      PrsDotDotDot(cc,tmpc,_reg);
+      ParseDotDotDot(cc,tmpc,_reg);
       goto pvl_done;
     }
     if (cc->token==TK_IDENT)
@@ -475,10 +475,10 @@ pvl_restart1:
       tmph=NULL;
     if (!tmph)
       LexExcept(cc,"Expecting type at ");
-    k=PrsKeyWord(cc);
+    k=ParseKeyWord(cc);
     if (k==KW_UNION) {
       Lex(cc);
-      PrsVarLst(cc,tmpc,mode|PRSF_UNION,tmpc->size);
+      ParseVarLst(cc,tmpc,mode|PRSF_UNION,tmpc->size);
     } else {
       if (!(tmph->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 	LexExcept(cc,"Expecting type at ");
@@ -495,7 +495,7 @@ pvl_restart2:
       }
       if (mode.u8[1]==PRS1B_FUN_ARG || mode.u8[1]==PRS1B_LOCAL_VAR) {
 pvl_restart3:
-	switch (PrsKeyWord(cc)) {
+	switch (ParseKeyWord(cc)) {
 	  case KW_REG:
 	    tmpm->reg=REG_ALLOC;
 	    LexPopNoRestore(cc);
@@ -518,7 +518,7 @@ pvl_restart3:
 	    goto pvl_restart3;
 	}
       }
-      tmpm->member_class=PrsType(cc,&tmpc1,&mode,tmpm,&tmpm->str,
+      tmpm->member_class=ParseType(cc,&tmpc1,&mode,tmpm,&tmpm->str,
 	    &tmpm->fun_ptr,NULL,&tmpm->dim,0);
       if (tmpm->fun_ptr)
 	tmpm->flags|=MLF_FUN;
@@ -560,7 +560,7 @@ pvl_restart3:
 	      LexPush(cc);
 	      LexPush(cc);
 	      Lex(cc); //skip =
-	      PrsStaticInit(cc,tmpm,1);
+	      ParseStaticInit(cc,tmpm,1);
 	      LexPopNoRestore(cc);
 	      i=tmpc2->size*tmpm->dim.total_cnt;
 	      k=(i+7)&~7;
@@ -575,7 +575,7 @@ pvl_restart3:
 	    }
 	    LexPush(cc);
 	    Lex(cc); //skip =
-	    PrsStaticInit(cc,tmpm,2);
+	    ParseStaticInit(cc,tmpm,2);
 	    LexPopNoRestore(cc);
 	    if (cc->flags&CCF_AOT_COMPILE)
 	      for (k=0;k<i;k++)
@@ -609,7 +609,7 @@ pvl_restart3:
 		  old_flags&CCF_DONT_MAKE_RES;
 	    LexPopRestore(cc);
 	    Lex(cc);
-	    if (!PrsExpression(cc,NULL,TRUE))
+	    if (!ParseExpression(cc,NULL,TRUE))
 	      throw('Compiler');
 	    tmpm->use_cnt=0;
 	    cc->flags|=CCF_DONT_MAKE_RES;
@@ -628,7 +628,7 @@ pvl_restart3:
 	  tmpm->size=8;
 	  if (cc->token=='=') {
 	    Lex(cc);
-	    if (PrsKeyWord(cc)==KW_LASTCLASS) {
+	    if (ParseKeyWord(cc)==KW_LASTCLASS) {
 	      tmpm->flags|=MLF_LASTCLASS;
 	      Lex(cc);
 	    } else {

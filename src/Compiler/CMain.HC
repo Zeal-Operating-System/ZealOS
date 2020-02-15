@@ -1,4 +1,4 @@
-U8 *LexStmt2Bin(CCmpCtrl *cc,I64 *_type,I64 cmp_flags=0)
+U8 *LexStatement2Bin(CCmpCtrl *cc,I64 *_type,I64 cmp_flags=0)
 {//Compile one cc stmt to bin code.
   I64 size,i,j,k,*res=INVALID_PTR;
   CCodeCtrl *tmpcbh;
@@ -7,7 +7,7 @@ U8 *LexStmt2Bin(CCmpCtrl *cc,I64 *_type,I64 cmp_flags=0)
   if (cc->aot_depth==2)
     COCPush(cc);
   COCInit(cc);
-  if (!PrsStmt(cc,,,cmp_flags)) {
+  if (!ParseStatement(cc,,,cmp_flags)) {
     if (cc->coc.coc_head.next!=&cc->coc.coc_head) {
       cc->coc.coc_head.last->ic_flags&=~ICF_RES_NOT_USED;
       ICAdd(cc,IC_RETURN_VAL2,0,0);
@@ -81,7 +81,7 @@ CAOT *CmpJoin(CCmpCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
       cmp_flags|=CMPF_PRS_SEMICOLON;
     if (cc->flags&CCF_AOT_COMPILE) {
       while (cc->token!=TK_EOF) {
-	buf=LexStmt2Bin(cc,NULL,cmp_flags);
+	buf=LexStatement2Bin(cc,NULL,cmp_flags);
 	if (buf!=INVALID_PTR) {
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_MAIN;
@@ -92,7 +92,7 @@ CAOT *CmpJoin(CCmpCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
 	  break;
       }
     } else
-      PrsStmt(cc,,,cmp_flags);
+      ParseStatement(cc,,,cmp_flags);
     AOTGlblsResolve(cc,res);
   } catch {
     if (Fs->except_ch=='Compiler' && !(cmp_flags&CMPF_ASM_BLK)) {

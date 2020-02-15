@@ -12,7 +12,7 @@
 #define PE_POP_ALL1		11
 #define PE_POP_ALL2		12
 
-CIntermediateCode *PrsAddOp(CCmpCtrl *cc,I64 stk_op,CHashClass *tmpc)
+CIntermediateCode *ParseAddOp(CCmpCtrl *cc,I64 stk_op,CHashClass *tmpc)
 {
   CIntermediateCode *tmpi=cc->coc.coc_head.last;
   Bool div_sizeof=FALSE;
@@ -62,7 +62,7 @@ CIntermediateCode *PrsAddOp(CCmpCtrl *cc,I64 stk_op,CHashClass *tmpc)
   return tmpi;
 }
 
-U0 PrsExpression2(CCmpCtrl *cc,I64 *_max_prec,CPrsStk *ps)
+U0 ParseExpression2(CCmpCtrl *cc,I64 *_max_prec,CPrsStk *ps)
 {
   I64 i,cur_op,stk_op,state,max_prec=PREC_NULL,unary_pre_prec,paren_prec,
 	unary_post_prec,left_prec=PREC_MAX;
@@ -81,16 +81,16 @@ pe_unary_term1:
 	cc->flags&=~(CCF_PAREN+CCF_PREINC+CCF_PREDEC+CCF_POSTINC+
 	      CCF_POSTDEC+CCF_FUN_EXP);
       case PE_UNARY_TERM2:
-	state=PrsUnaryTerm(cc,ps,&local_var,&tmpad,
+	state=ParseUnaryTerm(cc,ps,&local_var,&tmpad,
 	      &max_prec,&unary_pre_prec,&paren_prec);
 	break;
       case PE_UNARY_MODIFIERS:
-	state=PrsUnaryModifier(cc,ps,&local_var,&tmpad,&unary_post_prec);
+	state=ParseUnaryModifier(cc,ps,&local_var,&tmpad,&unary_post_prec);
 	break;
       case PE_MAYBE_MODIFIERS:
 	if (cc->token=='(') { //Typecast or fun_ptr
 	  cc->flags|=CCF_RAX;
-	  state=PrsUnaryModifier(cc,ps,&local_var,&tmpad,&unary_post_prec);
+	  state=ParseUnaryModifier(cc,ps,&local_var,&tmpad,&unary_post_prec);
 	} else
 	  goto pe_check_binary_ops1;
 	break;
@@ -130,8 +130,8 @@ pe_check_binary_ops1:
 
       case PE_CHECK_BINARY_OPS2:
 pe_check_binary_ops2:
-	stk_op=PrsPop(ps);
-	tmpc=PrsPop(ps);
+	stk_op=ParsePop(ps);
+	tmpc=ParsePop(ps);
 	if (!(0<stk_op.u8[2]<=PREC_UNARY_PRE+ASSOC_MASK))
 	  goto pe_do_binary_op;
 
@@ -140,10 +140,10 @@ pe_check_binary_ops2:
 	      stk_op.u16[0]==IC_UNARY_MINUS) {
 	  Lex(cc); //skip ` op
 	  left_prec=cur_op.i8[2];
-	  PrsPush(ps,tmpc);
-	  PrsPush(ps,stk_op);
-	  PrsPush(ps,cc->coc.coc_head.last->ic_class);
-	  PrsPush(ps,cur_op);
+	  ParsePush(ps,tmpc);
+	  ParsePush(ps,stk_op);
+	  ParsePush(ps,cc->coc.coc_head.last->ic_class);
+	  ParsePush(ps,cur_op);
 	  goto pe_unary_term1;
 	} else {
 	  tmpi=cc->coc.coc_head.last;
@@ -164,8 +164,8 @@ pe_check_binary_ops2:
 
       case PE_DO_BINARY_OP:
 pe_do_binary_op:
-	PrsPush(ps,tmpc);
-	PrsPush(ps,stk_op);
+	ParsePush(ps,tmpc);
+	ParsePush(ps,stk_op);
 	if (!cur_op)
 	  goto pe_pop_all1;
 
@@ -210,8 +210,8 @@ pe_do_binary_op:
 
       case PE_POP_HIGHER:
 pe_pop_higher:
-	stk_op=PrsPop(ps); //pop ops of higher prec
-	tmpc=PrsPop(ps);
+	stk_op=ParsePop(ps); //pop ops of higher prec
+	tmpc=ParsePop(ps);
 	if (!stk_op)
 	  goto pe_push_lower;
 	else if (cur_op.u8[2]&~ASSOC_MASK==stk_op.u8[2]&~ASSOC_MASK) {
@@ -220,7 +220,7 @@ pe_pop_higher:
 	} else if (cur_op.u8[2]&~ASSOC_MASK<=stk_op.u8[2]&~ASSOC_MASK)
 	  goto pe_push_lower;
 
-	tmpi=PrsAddOp(cc,stk_op,tmpc);
+	tmpi=ParseAddOp(cc,stk_op,tmpc);
 
 	if (intermediate_code_table[cur_op.u16[0]].type==IST_CMP &&
 	      intermediate_code_table[stk_op.u16[0]].type==IST_CMP) {
@@ -234,10 +234,10 @@ pe_pop_higher:
 
       case PE_PUSH_LOWER:
 pe_push_lower:
-	PrsPush(ps,tmpc);
-	PrsPush(ps,stk_op);
-	PrsPush(ps,cc->coc.coc_head.last->ic_class);
-	PrsPush(ps,cur_op);
+	ParsePush(ps,tmpc);
+	ParsePush(ps,stk_op);
+	ParsePush(ps,cc->coc.coc_head.last->ic_class);
+	ParsePush(ps,cur_op);
 	goto pe_unary_term1;
 
       case PE_POP_ALL1:
@@ -248,11 +248,11 @@ pe_pop_all1:
 	  ParenWarning(cc);
       case PE_POP_ALL2:
 pe_pop_all2:
-	stk_op=PrsPop(ps);
-	tmpc=PrsPop(ps);
+	stk_op=ParsePop(ps);
+	tmpc=ParsePop(ps);
 	if (!stk_op.u16[0])
 	  goto pe_done;
-	PrsAddOp(cc,stk_op,tmpc);
+	ParseAddOp(cc,stk_op,tmpc);
 	goto pe_pop_all2;
     }
   }
@@ -261,7 +261,7 @@ pe_done:
     *_max_prec=max_prec;
 }
 
-Bool PrsExpression(CCmpCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
+Bool ParseExpression(CCmpCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
 {
   Bool res=TRUE;
   I64 old_flags=cc->flags;
@@ -273,11 +273,11 @@ Bool PrsExpression(CCmpCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
     ps->ptr=0;
     ps->ptr2=0;
   }
-  PrsPush(ps,0); //terminate
-  PrsPush(ps,0); //terminate
+  ParsePush(ps,0); //terminate
+  ParsePush(ps,0); //terminate
   try
 //try catch causes noreg vars in function
-	  PrsExpression2(cc,_max_prec,ps);
+	  ParseExpression2(cc,_max_prec,ps);
   catch {
     if (Fs->except_ch=='Compiler') {
       res=FALSE;
@@ -300,7 +300,7 @@ Bool PrsExpression(CCmpCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
   return res;
 }
 
-U0 PrsSizeOf(CCmpCtrl *cc)
+U0 ParseSizeOf(CCmpCtrl *cc)
 {
   CHashClass *tmpc;
   CMemberLst *tmpm;
@@ -350,7 +350,7 @@ pu_sizeof_member:
   ICAdd(cc,IC_IMM_I64,i,cmp.internal_types[RT_I64]);
 }
 
-U0 PrsOffsetOf(CCmpCtrl *cc)
+U0 ParseOffsetOf(CCmpCtrl *cc)
 {
   CHashClass *tmpc;
   CMemberLst *tmpm;
@@ -380,7 +380,7 @@ U0 PrsOffsetOf(CCmpCtrl *cc)
   ICAdd(cc,IC_IMM_I64,i,cmp.internal_types[RT_I64]);
 }
 
-I64 PrsFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
+I64 ParseFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 {
   I64 i,argc_cnt,dft_val;
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
@@ -467,7 +467,7 @@ I64 PrsFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
       } else
 	ICAdd(cc,IC_IMM_I64,dft_val,tmpm->member_class);
     } else {
-      if (!PrsExpression(cc,NULL,FALSE,ps))
+      if (!ParseExpression(cc,NULL,FALSE,ps))
 	throw('Compiler');
       else {
 	COCPush(cc);
@@ -502,7 +502,7 @@ I64 PrsFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 	      LexExcept(cc,"Expecting ',' at ");
 	  }
 	  COCInit(cc);
-	  if (!PrsExpression(cc,NULL,FALSE,ps))
+	  if (!ParseExpression(cc,NULL,FALSE,ps))
 	    throw('Compiler');
 	  COCPush(cc);
 	  is_first_arg=FALSE;
@@ -519,7 +519,7 @@ I64 PrsFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 	      LexExcept(cc,"Expecting ',' at ");
 	  }
 	  COCInit(cc);
-	  if (!PrsExpression(cc,NULL,FALSE,ps))
+	  if (!ParseExpression(cc,NULL,FALSE,ps))
 	    throw('Compiler');
 	  COCPush(cc);
 	  is_first_arg=FALSE;
@@ -590,7 +590,7 @@ I64 PrsFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   return PE_UNARY_MODIFIERS;
 }
 
-I64 PrsUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
+I64 ParseUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	CArrayDim **_tmpad,I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec)
 {
   I64 i,j;
@@ -671,8 +671,8 @@ I64 PrsUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	i=IC_ADDR;
 	break;
     end:
-      PrsPush(ps,tmpc);
-      PrsPush(ps,PREC_UNARY_PRE<<16+i);
+      ParsePush(ps,tmpc);
+      ParsePush(ps,PREC_UNARY_PRE<<16+i);
       return PE_UNARY_TERM2;
 
     start:
@@ -736,7 +736,7 @@ I64 PrsUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	  paren_warn=FALSE;
 	else
 	  paren_warn=TRUE;
-	if (!PrsExpression(cc,paren_prec,FALSE,ps))
+	if (!ParseExpression(cc,paren_prec,FALSE,ps))
 	  throw('Compiler');
 	if (!paren_warn)
 	  *paren_prec=PREC_NULL;
@@ -765,9 +765,9 @@ I64 PrsUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	cc->flags&=~(CCF_RAX|CCF_ARRAY|CCF_FUN_EXP);
 	tmpc=tmpm->member_class+1;
 	if (tmpm->flags & MLF_FUN && !(cc->flags&CCF_ASM_EXPRESSIONS)) {
-	  PrsPopDeref(ps);
+	  ParsePopDeref(ps);
 	  cc->flags|=CCF_FUN_EXP;
-	  PrsPush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
+	  ParsePush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
 	}
 	if (tmpm->dim.next) {
 	  *_tmpad=tmpm->dim.next;
@@ -783,7 +783,7 @@ I64 PrsUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	    ICAdd(cc,IC_IMM_I64,tmpm->static_data,tmpc);
 	} else {
 	  if (cc->flags&CCF_ASM_EXPRESSIONS) {
-	    i=PrsPop(ps);
+	    i=ParsePop(ps);
 	    ps->ptr--;
 	    if (i.u16[0]!=IC_ADDR)
 	      LexExcept(cc,"Expecting '&' at ");
@@ -863,7 +863,7 @@ pu_export_sys_sym:
 	  if (PREC_TERM>*max_prec)
 	    *max_prec=PREC_TERM;
 	  Lex(cc);  //skip fun name
-	  return PrsFunCall(cc,ps,FALSE,tmpex);
+	  return ParseFunCall(cc,ps,FALSE,tmpex);
 	case HTt_GLBL_VAR:
 	  if (PREC_TERM>*max_prec)
 	    *max_prec=PREC_TERM;
@@ -897,13 +897,13 @@ pu_export_sys_sym:
 	  }
 	  Lex(cc);
 	  if (tmpg->flags & GVF_FUN) {
-	    PrsPopDeref(ps);
+	    ParsePopDeref(ps);
 	    cc->flags|=CCF_FUN_EXP;
-	    PrsPush2(ps,tmpg->fun_ptr-tmpg->fun_ptr->ptr_stars_cnt);
+	    ParsePush2(ps,tmpg->fun_ptr-tmpg->fun_ptr->ptr_stars_cnt);
 	  }
 	  return PE_UNARY_MODIFIERS;
 	case HTt_CLASS:
-	  PrsOffsetOf(cc);
+	  ParseOffsetOf(cc);
 	  return PE_MAYBE_MODIFIERS;
 	case HTt_KEYWORD:
 	  switch (tmpex(CHashGeneric *)->user_data0) {
@@ -913,7 +913,7 @@ pu_export_sys_sym:
 	      j=0;
 	      while (Lex(cc)=='(')
 		j++;
-	      PrsSizeOf(cc);
+	      ParseSizeOf(cc);
 	      while (j--) {
 		if (cc->token!=')')
 		  LexExcept(cc,"Missing ')' at ");
@@ -926,7 +926,7 @@ pu_export_sys_sym:
 	      j=0;
 	      while (Lex(cc)=='(')
 		j++;
-	      PrsOffsetOf(cc);
+	      ParseOffsetOf(cc);
 	      while (j--) {
 		if (cc->token!=')')
 		  LexExcept(cc,"Missing ')' at ");
@@ -957,7 +957,7 @@ pu_export_sys_sym:
   LexExcept(cc,"Missing expression at ");
 }
 
-I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
+I64 ParseUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	CArrayDim **_tmpad,I64 *unary_post_prec)
 {
   CHashClass *tmpc,*tmpc1;
@@ -1007,8 +1007,8 @@ I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	cc->flags|=CCF_ARRAY;
       }
       if(tmpm->flags & MLF_FUN) {
-	PrsPopDeref(ps);
-	PrsPush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
+	ParsePopDeref(ps);
+	ParsePush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
 	cc->flags|=CCF_FUN_EXP;
       }
       ICAdd(cc,IC_ADD,0,tmpc1);
@@ -1017,7 +1017,7 @@ I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
       if (cc->flags & CCF_FUN_EXP) {
 	if (!*unary_post_prec)
 	  *unary_post_prec=PREC_TERM;
-	return PrsFunCall(cc,ps,TRUE,PrsPop2(ps));
+	return ParseFunCall(cc,ps,TRUE,ParsePop2(ps));
       }
       if (!*unary_post_prec)
 	*unary_post_prec=PREC_TERM;
@@ -1029,11 +1029,11 @@ I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
       tmpc=cc->hash_entry;
       Lex(cc);
       mode=PRS0_TYPECAST|PRS1_NULL;
-      tmpc=PrsType(cc,&tmpc,&mode,NULL,NULL,&fun_ptr,NULL,&tmpad2,0);
+      tmpc=ParseType(cc,&tmpc,&mode,NULL,NULL,&fun_ptr,NULL,&tmpad2,0);
       if (fun_ptr) {
-	PrsPopDeref(ps);
+	ParsePopDeref(ps);
 	Bts(&cc->flags,CCf_FUN_EXP);
-	PrsPush2(ps,fun_ptr);
+	ParsePush2(ps,fun_ptr);
 	cm=COCMiscNew(cc,CMT_HASH_ENTRY);
 	cm->h=fun_ptr;
       }
@@ -1070,7 +1070,7 @@ I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	ICAdd(cc,IC_IMM_I64,tmpad1->total_cnt*tmpc1->size,tmpc);
 	if (*_tmpad=tmpad1->next) {
 	  old_flags=cc->flags;
-	  if (!PrsExpression(cc,NULL,FALSE,ps))
+	  if (!ParseExpression(cc,NULL,FALSE,ps))
 	    throw('Compiler');
 	  cc->flags=cc->flags&~CCF_FUN_EXP|old_flags&CCF_FUN_EXP;
 	  if (cc->token!=']')
@@ -1086,7 +1086,7 @@ I64 PrsUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
       } else
 	ICAdd(cc,IC_IMM_I64,tmpc1->size,tmpc);
       old_flags=cc->flags;
-      if (!PrsExpression(cc,NULL,FALSE,ps))
+      if (!ParseExpression(cc,NULL,FALSE,ps))
 	throw('Compiler');
       cc->flags=cc->flags&~CCF_FUN_EXP|old_flags&CCF_FUN_EXP;
       if (cc->token!=']')
@@ -1121,7 +1121,7 @@ U8 *LexExpression2Bin(CCmpCtrl *cc,I64 *_type=NULL)
   Bool old_trace=Btr(&cc->flags,CCf_PASS_TRACE_PRESENT);
   COCPush(cc);
   COCInit(cc);
-  if (PrsExpression(cc,NULL,FALSE)) {
+  if (ParseExpression(cc,NULL,FALSE)) {
     ICAdd(cc,IC_RETURN_VAL,0,0);
     ICAdd(cc,IC_RET,0,0);
     res=COCCompile(cc,&size,NULL,_type);

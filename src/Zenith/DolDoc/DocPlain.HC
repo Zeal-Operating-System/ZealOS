@@ -1,6 +1,6 @@
 #help_index "DolDoc"
 
-I64 PrsDocFlagSingle(CCmpCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
+I64 ParseDocFlagSingle(CCmpCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
 {
   I64 res=-1;
   CHashGeneric *tmph;
@@ -23,7 +23,7 @@ I64 PrsDocFlagSingle(CCmpCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
   return res;
 }
 
-I64 PrsDocFlags(CCmpCtrl *cc,I64 *_de_flags,U32 *_type)
+I64 ParseDocFlags(CCmpCtrl *cc,I64 *_de_flags,U32 *_type)
 {
   I64 res=-1;
   Bool turn_on;
@@ -35,7 +35,7 @@ I64 PrsDocFlags(CCmpCtrl *cc,I64 *_de_flags,U32 *_type)
     else
       break;
     Lex(cc);
-    res=PrsDocFlagSingle(cc,_de_flags,_type,turn_on);
+    res=ParseDocFlagSingle(cc,_de_flags,_type,turn_on);
   }
   return res;
 }
@@ -214,7 +214,7 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
   return buf2;
 }
 
-CDocEntry *PrsDollarCmd(CDoc *doc,U8 *st)
+CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 {//Uses $LK-UL,"Lex",A="MN:Lex"$() to parse a string and make Doc entries.
   I64 i,j,de_flags,processed_flags,attr=DOC_DFT;
   U8 *ptr,*st2;
@@ -241,7 +241,7 @@ CDocEntry *PrsDollarCmd(CDoc *doc,U8 *st)
       doc_e->type|=doldoc.dft_type_flags[i];
       doc_e->raw_type=RT_I64;
       doc_e->len=DOCE_LEN_DFT;
-      j=PrsDocFlags(cc,&doc_e->de_flags,&doc_e->type);
+      j=ParseDocFlags(cc,&doc_e->de_flags,&doc_e->type);
       cc->htc.hash_table_lst=old_hash_table_lst;
       switch [i] {
 	case DOCT_CHECK_BOX:
@@ -296,7 +296,7 @@ CDocEntry *PrsDollarCmd(CDoc *doc,U8 *st)
 	while (cc->token==',')
 	  Lex(cc);
 	cc->htc.hash_table_lst=old_hash_table_lst;
-	j=PrsDocFlagSingle(cc,&doc_e->de_flags,&doc_e->type,TRUE);
+	j=ParseDocFlagSingle(cc,&doc_e->de_flags,&doc_e->type,TRUE);
 	if (!(de_flags=~processed_flags & doc_e->de_flags & DOCEG_HAS_ARG))
 	  break;
 	if (cc->token=='=')

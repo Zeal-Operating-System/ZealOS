@@ -10,11 +10,11 @@ Cd(__DIR__);;
 #include "GrDC"
 #include "GrInitB"
 #include "GrMath"
-#include "GrScreen"
+#include "GrScreen"
 #include "GrBitMap"
 #include "GrPrimatives"
 #include "GrComposites"
-#include "ScrnCast"
+#include "ScreenCast"
 
 #define SPE_ABORT	(-1)
 #define SPE_EXIT	0

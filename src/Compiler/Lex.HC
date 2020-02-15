@@ -816,7 +816,7 @@ lex_else:
 		if (ch=='#') {
 		  if (!Lex(cc))
 		    goto lex_end;
-		  i=PrsKeyWord(cc);
+		  i=ParseKeyWord(cc);
 		  if (i==KW_IF || i==KW_IFDEF || i==KW_IFNDEF ||
 			i==KW_IFAOT || i==KW_IFJIT)
 		    j++;
@@ -867,7 +867,7 @@ lex_if:
 		    if (ch=='#') {
 		      if (!Lex(cc))
 			goto lex_end;
-		      i=PrsKeyWord(cc);
+		      i=ParseKeyWord(cc);
 		      if (i==KW_IF || i==KW_IFDEF || i==KW_IFNDEF ||
 			    i==KW_IFAOT || i==KW_IFJIT)
 			j++;
@@ -906,7 +906,7 @@ lex_ifdef:
 		if (ch=='#') {
 		  if (!Lex(cc))
 		    goto lex_end;
-		  i=PrsKeyWord(cc);
+		  i=ParseKeyWord(cc);
 		  if (i==KW_IF || i==KW_IFDEF || i==KW_IFNDEF ||
 			i==KW_IFAOT || i==KW_IFJIT)
 		    j++;
@@ -943,7 +943,7 @@ lex_ifndef:
 		if (ch=='#') {
 		  if (!Lex(cc))
 		    goto lex_end;
-		  i=PrsKeyWord(cc);
+		  i=ParseKeyWord(cc);
 		  if (i==KW_IF || i==KW_IFDEF || i==KW_IFNDEF ||
 			i==KW_IFAOT || i==KW_IFJIT)
 		    j++;
@@ -972,7 +972,7 @@ lex_ifaot:
 		if (ch=='#') {
 		  if (!Lex(cc))
 		    goto lex_end;
-		  i=PrsKeyWord(cc);
+		  i=ParseKeyWord(cc);
 		  if (i==KW_IF || i==KW_IFDEF || i==KW_IFNDEF ||
 			i==KW_IFAOT || i==KW_IFJIT)
 		    j++;
@@ -1001,7 +1001,7 @@ lex_ifjit:
 		if (ch=='#') {
 		  if (!Lex(cc))
 		    goto lex_end;
-		  i=PrsKeyWord(cc);
+		  i=ParseKeyWord(cc);
 		  if (i==KW_IF || i==KW_IFDEF || i==KW_IFNDEF ||
 			i==KW_IFAOT || i==KW_IFJIT)
 		    j++;
@@ -1031,7 +1031,7 @@ lex_ifjit:
 	  case KW_EXE:
 	    if (!Lex(cc))
 	      goto lex_end;
-	    PrsStreamBlk(cc);
+	    ParseStreamBlk(cc);
 	    goto lex_end;
 	  case KW_HELP_INDEX:
 	    if (Lex(cc)!=TK_STR)

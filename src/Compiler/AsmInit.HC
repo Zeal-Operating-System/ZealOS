@@ -77,7 +77,7 @@ U0 AsmHashLoad()
     i=LstMatch(cc->cur_str,"NONE\0R8\0R16\0R32\0R64\0SEG\0FSTK\0"
 	  "MM\0XMM\0OPCODE\0KEYWORD\0ASM_KEYWORD\0");
     if (i<=0)
-      LexExcept(cc,"Unknown Stmt");
+      LexExcept(cc,"Unknown Statement");
     Lex(cc); //skip keyword
     if (cc->token!=TK_IDENT)
       LexExcept(cc,"Expecting identifier at ");
@@ -196,7 +196,7 @@ U0 AsmHashLoad()
   CmpCtrlDel(cc);
   for (i=0;i<INTERNAL_TYPES_NUM;i++) {
     tmpit=&internal_types_table[i];
-    tmpc=PrsClassNew;
+    tmpc=ParseClassNew;
     tmpc->type=HTT_INTERNAL_TYPE;
     tmpc->raw_type=tmpit->type;
     Bts(&tmpc->flags,Cf_INTERNAL_TYPE);
@@ -205,5 +205,5 @@ U0 AsmHashLoad()
     HashAdd(tmpc,cmp.asm_hash);
     cmp.internal_types[tmpc->raw_type]=tmpc;
   }
-  zenith_task->hash_table->next=cmp.asm_hash;
+  zenith_task->hash_table->next=cmp.asm_hash;
 }

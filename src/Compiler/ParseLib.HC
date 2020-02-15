@@ -1,34 +1,34 @@
-U0 PrsPush(CPrsStk *ps,I64 val)
+U0 ParsePush(CPrsStk *ps,I64 val)
 {
   ps->stk[++ps->ptr]=val;
 }
 
-I64 PrsPop(CPrsStk *ps)
+I64 ParsePop(CPrsStk *ps)
 {
   return ps->stk[ps->ptr--];
 }
 
-U0 PrsPush2(CPrsStk *ps,I64 val)
+U0 ParsePush2(CPrsStk *ps,I64 val)
 {
   ps->stk2[++ps->ptr2]=val;
 }
 
-I64 PrsPop2(CPrsStk *ps)
+I64 ParsePop2(CPrsStk *ps)
 {
   return ps->stk2[ps->ptr2--];
 }
 
-U0 PrsPopDeref(CPrsStk *ps)
+U0 ParsePopDeref(CPrsStk *ps)
 {
-  I64 i=PrsPop(ps);
-  CHashClass *tmpc=PrsPop(ps);
+  I64 i=ParsePop(ps);
+  CHashClass *tmpc=ParsePop(ps);
   if (i.u16[0]!=IC_DEREF) {
-    PrsPush(ps,tmpc);
-    PrsPush(ps,i);
+    ParsePush(ps,tmpc);
+    ParsePush(ps,i);
   }
 }
 
-I64 PrsKeyWord(CCmpCtrl *cc)
+I64 ParseKeyWord(CCmpCtrl *cc)
 {//Cvt cur token to $LK,"KEYWORD",A="FF:::/Compiler/OpCodes.DD,KEYWORD"$ or -1.
   CHashGeneric *tmph;
   if (cc->token==TK_IDENT &&(tmph=cc->hash_entry) && tmph->type&HTT_KEYWORD)
@@ -37,7 +37,7 @@ I64 PrsKeyWord(CCmpCtrl *cc)
     return -1;
 }
 
-CHashClass *PrsClassNew()
+CHashClass *ParseClassNew()
 {/*Ptrs to classes are handled by
 allocating 5 structures for each
 new class and representing a pointer
@@ -59,7 +59,7 @@ for one * and two fwd for two **.
   return res;
 }
 
-CHashFun *PrsFunNew()
+CHashFun *ParseFunNew()
 {
   I64 i;
   CHashFun *res=CAlloc(sizeof(CHashFun)*(PTR_STARS_NUM+1),Fs->code_heap),
