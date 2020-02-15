@@ -2,7 +2,7 @@
 
 U0 DocInit()
 {//$LK-UL,"CMD Defines",A="MN:DOCT_TEXT"$
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   I64 i;
   CHashGeneric *tmph;
 
@@ -26,7 +26,7 @@ U0 DocInit()
 
   MemSet(doldoc.dft_de_flags,	0,sizeof(doldoc.dft_de_flags));
   MemSet(doldoc.dft_type_flags,	0,sizeof(doldoc.dft_type_flags));
-  cc=CmpCtrlNew("TX+T;DA+P+TRM+T+DL+DRT;CM+LE+RE;AN+T;LK+L+UL+T;MA+X+UL+T;"
+  cc=CompCtrlNew("TX+T;DA+P+TRM+T+DL+DRT;CM+LE+RE;AN+T;LK+L+UL+T;MA+X+UL+T;"
 	"MU+X+UL+T;BT+X+B+T;CB+CA+P+T+DRT;LS+LS+P+T+DRT;HX+P+Z;TR+TR+C+CA+UL+T;"
 	"SP+T;IB+T;IS+T;SO+T;HC+T;",CCF_DONT_FREE_BUF);
   cc->htc.hash_table_lst=NULL;
@@ -40,7 +40,7 @@ U0 DocInit()
     if (cc->token==';')
       Lex(cc);
   }
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
 
   for (i=0;i<DOCT_TYPES_NUM;i++)
     doldoc.dft_de_flags[i]&=~DOCG_BL_IV_UL;

@@ -200,7 +200,7 @@ U0 PsmLoadSong(U8 *filename,I64 *psm_octave,F64 *psm_duration)
 {
   U8 *st;
   PsmNote *tmpn;
-  CCmpCtrl *cc=CmpCtrlNew(MStrPrint("#include \"%s\"",filename));
+  CCompCtrl *cc=CompCtrlNew(MStrPrint("#include \"%s\"",filename));
   if (FileOcc("incomplete",filename,""))
     psm.incomplete_entry->checked=TRUE;
   else
@@ -242,7 +242,7 @@ U0 PsmLoadSong(U8 *filename,I64 *psm_octave,F64 *psm_duration)
 	}
       }
   }
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
 }
 
 U8 *PsmCvtSong()

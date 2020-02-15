@@ -1,4 +1,4 @@
-U0 ParseVarInit(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
+U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 	U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass)
 {
   U8 *dst=*_dst,*machine_code;
@@ -120,7 +120,7 @@ class CVI2
   U0 base;
 };
 
-U0 ParseVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
+U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	CArrayDim *tmpad,U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass)
 {
   I64 i,j,cnt;
@@ -203,7 +203,7 @@ U0 ParseVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
   }
 }
 
-U0 ParseGlblInit(CCmpCtrl *cc,CHashGlblVar *tmpg,I64 pass)
+U0 ParseGlblInit(CCompCtrl *cc,CHashGlblVar *tmpg,I64 pass)
 {
   U8 *dst=tmpg->data_addr;
   ParseVarInit2(cc,&dst,tmpg->var_class,&tmpg->dim,
@@ -212,7 +212,7 @@ U0 ParseGlblInit(CCmpCtrl *cc,CHashGlblVar *tmpg,I64 pass)
 	Bt(&cc->flags,CCf_AOT_COMPILE),pass);
 }
 
-U0 ParseStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
+U0 ParseStaticInit(CCompCtrl *cc,CMemberLst *tmpm,I64 pass)
 {
   U8 *machine_code,*dst=tmpm->static_data;
   CHashClass *tmpc=tmpm->member_class;
@@ -244,7 +244,7 @@ U0 ParseStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
   }
 }
 
-U0 ParseArrayDims(CCmpCtrl *cc,I64 mode,CArrayDim *dim)
+U0 ParseArrayDims(CCompCtrl *cc,I64 mode,CArrayDim *dim)
 {//dim->next!=0 for array
   CArrayDim *tmpad,*tmpad1;
   I64 j;
@@ -282,7 +282,7 @@ U0 ParseArrayDims(CCmpCtrl *cc,I64 mode,CArrayDim *dim)
   }
 }
 
-CHashClass *ParseType(CCmpCtrl *cc,CHashClass **_tmpc1,
+CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
   I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
   CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags)
 {
@@ -370,7 +370,7 @@ CHashClass *ParseType(CCmpCtrl *cc,CHashClass **_tmpc1,
   return tmpc1;
 }
 
-U0 ParseDotDotDot(CCmpCtrl *cc,CHashFun *tmpf,I64 _reg)
+U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
 {
   CMemberLst *tmpm;
   CArrayDim *tmpad;
@@ -405,7 +405,7 @@ U0 ParseDotDotDot(CCmpCtrl *cc,CHashFun *tmpf,I64 _reg)
     Lex(cc);
 }
 
-U0 ParseVarLst(CCmpCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
+U0 ParseVarLst(CCompCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
 {
   I64 i,k,old_flags=cc->flags,old_flags2,type,_reg;
   CHashClass *tmpc1,*tmpc2;

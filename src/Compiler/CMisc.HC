@@ -68,7 +68,7 @@ Bool Echo(Bool val)
 U0 StreamPrint(U8 *fmt,...)
 {//Injects text into the compile stream. Used in #exe{} blocks.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),*st;
-  CCmpCtrl *cc=Fs->last_cc;
+  CCompCtrl *cc=Fs->last_cc;
   CStreamBlk *tmpe=cc->last_stream_blk;
   if (tmpe!=&cc->next_stream_blk) {
     st=MStrPrint("%s%s",tmpe->body,buf);
@@ -88,7 +88,7 @@ U0 StreamDir()
   }
 }
 
-CD2I32 *LexD2I32(CCmpCtrl *cc,CD2I32 *p)
+CD2I32 *LexD2I32(CCompCtrl *cc,CD2I32 *p)
 {//Not HolyC. Sprite-like lex 2D point.
   if (cc->token!='(')
     LexExcept(cc,"Expecting '(' at ");
@@ -104,7 +104,7 @@ CD2I32 *LexD2I32(CCmpCtrl *cc,CD2I32 *p)
   return p;
 }
 
-CD3I32 *LexD3I32(CCmpCtrl *cc,CD3I32 *p)
+CD3I32 *LexD3I32(CCompCtrl *cc,CD3I32 *p)
 {//Not HolyC. Sprite-like lex 3D point.
   if (cc->token!='(')
     LexExcept(cc,"Expecting '(' at ");

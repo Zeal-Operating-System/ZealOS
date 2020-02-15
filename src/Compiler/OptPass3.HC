@@ -1,4 +1,4 @@
-U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
+U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 {
   CHashClass *tmpc,*tmpc1,*tmpc2;
   CCodeMisc *lb;
@@ -73,7 +73,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	    tmpc2=cmp.internal_types[RT_I64];
 	  else
 	    tmpc2=tmpi->t.arg2_class;
-	  tmpi->arg2.type=MDF_STK+CmpRawType(tmpc2);
+	  tmpi->arg2.type=MDF_STK+CompRawType(tmpc2);
 	  tmpi->ic_flags|=ICF_ARG2_WAS_STK;
 	case IS_1_ARG:
 	  tmpi1=ParsePop(ps);
@@ -83,15 +83,15 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	    tmpc1=cmp.internal_types[RT_I64];
 	  else
 	    tmpc1=tmpi->t.arg1_class;
-	  tmpi->arg1.type=MDF_STK+CmpRawType(tmpc1);
-	  tmpi->arg1_type_pointed_to=CmpRawTypePointed(tmpc1);
+	  tmpi->arg1.type=MDF_STK+CompRawType(tmpc1);
+	  tmpi->arg1_type_pointed_to=CompRawTypePointed(tmpc1);
 	  tmpi->ic_flags|=ICF_ARG1_WAS_STK;
 	  break;
 	case IS_0_ARG: //nobound switch
 	  break;
       }
       if (intermediate_code_table[code].res_cnt) {
-	tmpi->res.type=MDF_STK+CmpRawType(tmpc);
+	tmpi->res.type=MDF_STK+CompRawType(tmpc);
 	tmpi->ic_flags|=ICF_RES_WAS_STK;
 	ParsePush(ps,tmpi);
       }
@@ -123,7 +123,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	    tmpi->arg1.reg=tmpi1->arg1.reg;
 	    tmpi->arg1.disp=tmpi1->arg1.disp;
 	    tmpi->arg1.type=MDF_DISP+tmpi->res.type.raw_type;
-	    tmpi->arg1_type_pointed_to=CmpRawTypePointed(tmpc);
+	    tmpi->arg1_type_pointed_to=CompRawTypePointed(tmpc);
 	    tmpi->ic_code=IC_MOV;
 	    OptFree(tmpi1);
 	    if (tmpi->arg1.reg==REG_RBP)
@@ -139,7 +139,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	      tmpi->arg1.reg=tmpil2->arg1.reg;
 	      tmpi->arg1.disp=tmpi->ic_data;
 	      tmpi->arg1.type=MDF_DISP+tmpi->res.type.raw_type;
-	      tmpi->arg1_type_pointed_to=CmpRawTypePointed(tmpc);
+	      tmpi->arg1_type_pointed_to=CompRawTypePointed(tmpc);
 	      tmpi->ic_code=IC_MOV;
 	      OptFree(tmpil2);
 	      OptFree(tmpil1);
@@ -150,7 +150,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	case IC__MM:
 	case IC_PP_:
 	case IC_MM_:
-	  CmpMinTypePointed(tmpi,CmpRawTypePointed(tmpi->t.arg1_class));
+	  CompMinTypePointed(tmpi,CompRawTypePointed(tmpi->t.arg1_class));
 	case IC_DEREF_PP:
 	case IC_DEREF_MM:
 	  if (tmpi1->ic_code==IC_LEA && tmpi1->arg1.type&MDF_DISP &&
@@ -166,13 +166,13 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	case IC_MUL:
 	case IC_DIV:
 	  if (tmpc->raw_type==RT_F64) {
-	    CmpF2PushPop(tmpi,tmpi1,tmpi2);
+	    CompF2PushPop(tmpi,tmpi1,tmpi2);
 	    break;
 	  }
 	  break;
 	case IC_ADD:
 	  if (tmpc->raw_type==RT_F64) {
-	    CmpF2PushPop(tmpi,tmpi1,tmpi2);
+	    CompF2PushPop(tmpi,tmpi1,tmpi2);
 	    break;
 	  }
 	  if (OptFixupBinaryOp2(&tmpi1,&tmpi2)) {
@@ -202,7 +202,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	  break;
 	case IC_SUB:
 	  if (tmpc->raw_type==RT_F64) {
-	    CmpF2PushPop(tmpi,tmpi1,tmpi2);
+	    CompF2PushPop(tmpi,tmpi1,tmpi2);
 	    break;
 	  }
 	  if (tmpi2->ic_code==IC_IMM_I64) {
@@ -218,14 +218,14 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	case IC_GREATER:
 	case IC_LESS_EQU:
 	  if (tmpi->ic_flags&ICF_USE_F64)
-	    CmpF2PushPop(tmpi,tmpi1,tmpi2);
+	    CompF2PushPop(tmpi,tmpi1,tmpi2);
 	  break;
 	case IC_MUL_EQU:
 	case IC_DIV_EQU:
 	case IC_ADD_EQU:
 	case IC_SUB_EQU:
 	  if (tmpc->raw_type==RT_F64)
-	    CmpF1PushPop(tmpi,tmpi2);
+	    CompF1PushPop(tmpi,tmpi2);
 	case IC_ASSIGN_PP:
 	case IC_ASSIGN_MM:
 	case IC_ASSIGN:
@@ -244,7 +244,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 		break;
 	      }
 	  tmpi->arg1_type_pointed_to=tmpi->res.type.raw_type;
-	  CmpMinTypePointed(tmpi,CmpRawTypePointed(tmpi->t.arg1_class));
+	  CompMinTypePointed(tmpi,CompRawTypePointed(tmpi->t.arg1_class));
 	  break;
 	case IC_RETURN_VAL:
 	case IC_RETURN_VAL2:
@@ -264,7 +264,7 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 	case IC_TAN:
 	case IC_ATAN:
 	  if (tmpc->raw_type==RT_F64)
-	    CmpF1PushPop(tmpi,tmpi1);
+	    CompF1PushPop(tmpi,tmpi1);
 	  break;
 	case IC_NOBOUND_SWITCH:
 	case IC_SWITCH:
@@ -367,14 +367,14 @@ U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets)
 		mv[i].score++;
 		break;
 	      }
-	  tmpi->arg1_type_pointed_to=CmpRawType(tmpc);
+	  tmpi->arg1_type_pointed_to=CompRawType(tmpc);
 	  goto here1;
 	case IC_BR_LESS:
 	case IC_BR_GREATER_EQU:
 	case IC_BR_GREATER:
 	case IC_BR_LESS_EQU:
 	  if (tmpi->ic_flags&ICF_USE_F64)
-	    CmpF2PushPop(tmpi,tmpi1,tmpi2);
+	    CompF2PushPop(tmpi,tmpi1,tmpi2);
 	case IC_BR_EQU_EQU2...IC_BR_LESS_EQU2:
 	case IC_BR_CARRY:
 	case IC_BR_NOT_CARRY:

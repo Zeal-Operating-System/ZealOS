@@ -1,4 +1,4 @@
-U0 AsmResolve(CCmpCtrl *cc,CAsmUnresolvedRef *tmpu,U8 *label,Bool undefined)
+U0 AsmResolve(CCompCtrl *cc,CAsmUnresolvedRef *tmpu,U8 *label,Bool undefined)
 {
   CAOTImportExport *tmpie;
   CAsmUndefHash *tmpauh;
@@ -40,7 +40,7 @@ U0 AsmResolve(CCmpCtrl *cc,CAsmUnresolvedRef *tmpu,U8 *label,Bool undefined)
   }
 }
 
-U0 AOTLocalsResolve(CCmpCtrl *cc)
+U0 AOTLocalsResolve(CCompCtrl *cc)
 {
   CAOTCtrl *aotc=cc->aotc;
   CAsmUnresolvedRef *tmpu=aotc->local_unresolved,*tmpu1;
@@ -74,7 +74,7 @@ U0 AOTLocalsResolve(CCmpCtrl *cc)
   aotc->local_unresolved=NULL;
 }
 
-U0 AOTGlblsResolve(CCmpCtrl *cc,CAOT *tmpaot)
+U0 AOTGlblsResolve(CCompCtrl *cc,CAOT *tmpaot)
 {
   CAOTCtrl *aotc=cc->aotc;
   CHashFun *tmpf;
@@ -186,7 +186,7 @@ U0 AOTGlblsResolve(CCmpCtrl *cc,CAOT *tmpaot)
   }
 }
 
-U0 AsmUnresolvedAdd(CCmpCtrl *cc,U8 *machine_code,I64 type,I64 rip,I64 rel_rip,
+U0 AsmUnresolvedAdd(CCompCtrl *cc,U8 *machine_code,I64 type,I64 rip,I64 rel_rip,
 	CAsmUndefHash *local_asm_undef_hash,CAsmUndefHash *glbl_asm_undef_hash,
 	I64 line_num,Bool U8_avail)
 {

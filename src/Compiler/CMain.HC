@@ -1,4 +1,4 @@
-U8 *LexStatement2Bin(CCmpCtrl *cc,I64 *_type,I64 cmp_flags=0)
+U8 *LexStatement2Bin(CCompCtrl *cc,I64 *_type,I64 cmp_flags=0)
 {//Compile one cc stmt to bin code.
   I64 size,i,j,k,*res=INVALID_PTR;
   CCodeCtrl *tmpcbh;
@@ -32,7 +32,7 @@ U8 *LexStatement2Bin(CCmpCtrl *cc,I64 *_type,I64 cmp_flags=0)
   return res;
 }
 
-CAOT *CmpJoin(CCmpCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
+CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
 {
   CAOTCtrl *aotc,*old_aot=cc->aotc;
   I64 i,j,l;
@@ -154,24 +154,24 @@ CAOT *CmpJoin(CCmpCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
   return res;
 }
 
-CAOT *CmpBuf(U8 *buf,U8 *map_name=NULL,
+CAOT *CompBuf(U8 *buf,U8 *map_name=NULL,
   I64 *error_cnt=NULL, I64 *warning_cnt=NULL,U8 mapfile_drv_let=0)
 {
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   CAOT *res=NULL;
-  cc=CmpCtrlNew(buf,CCF_DONT_FREE_BUF);
+  cc=CompCtrlNew(buf,CCF_DONT_FREE_BUF);
   cc->flags|=CCF_AOT_COMPILE;
   QueueInsert(cc,Fs->last_cc);
-  res=CmpJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drv_let);
+  res=CompJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drv_let);
   if (error_cnt)   *error_cnt=cc->error_cnt;
   if (warning_cnt) *warning_cnt=cc->warning_cnt;
   QueueRemove(cc);
   if (res)
-    CmpCtrlDel(cc);
+    CompCtrlDel(cc);
   return res;
 }
 
-U0 CmpFixUpJITAsm(CCmpCtrl *cc,CAOT *tmpaot)
+U0 CompFixUpJITAsm(CCompCtrl *cc,CAOT *tmpaot)
 {
   I64 i,rip2=tmpaot->buf+tmpaot->rip,*str=NULL;
   U8 *ptr;
@@ -299,7 +299,7 @@ U0 CmpFixUpJITAsm(CCmpCtrl *cc,CAOT *tmpaot)
   Free(tmpaot);
 }
 
-U0 CmpFixUpAOTAsm(CCmpCtrl *cc,CAOT *tmpaot)
+U0 CompFixUpAOTAsm(CCompCtrl *cc,CAOT *tmpaot)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,rip2=tmpaot->rip+cc->aotc->rip;
@@ -416,7 +416,7 @@ U0 CmpFixUpAOTAsm(CCmpCtrl *cc,CAOT *tmpaot)
   }
 }
 
-I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
+I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
 {//AOT Compile HC or PRJ file a and output BIN file. Returns err_cnt.
   U8 *ptr,*fbuf=NULL,*fbuf2=NULL,*fbuf3=NULL,
 	*patch_table=MAlloc(0x20000);
@@ -433,7 +433,7 @@ I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
   if (map_name)
     fbuf3=ExtDft(map_name,"MAP");
 
-  if (tmpaot=CmpBuf(fbuf2,fbuf3,&error_cnt,&warning_cnt,mapfile_drv_let)) {
+  if (tmpaot=CompBuf(fbuf2,fbuf3,&error_cnt,&warning_cnt,mapfile_drv_let)) {
     aot_U8s=tmpaot->aot_U8s;
     ptr=patch_table;
 //See $LK,"Load",A="MN:Load"$()
@@ -573,10 +573,10 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
 {//JIT Compile and execute text from a puts("").
   I64 res;
   Bool okay=TRUE;
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   if (!filename)
     filename=blkdev.tmp_filename;
-  cc=CmpCtrlNew(buf,ccf_flags|CCF_DONT_FREE_BUF,filename);
+  cc=CompCtrlNew(buf,ccf_flags|CCF_DONT_FREE_BUF,filename);
   if (Fs->last_cc!=&Fs->next_cc) {
     cc->opts=Fs->last_cc->opts;
     if (htc) {
@@ -598,7 +598,7 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
   }
   QueueRemove(cc);
   if (okay)
-    CmpCtrlDel(cc); //TODO: can crash
+    CompCtrlDel(cc); //TODO: can crash
   return res;
 }
 
@@ -631,17 +631,17 @@ I64 RunFile(U8 *name,I64 ccf_flags=0,...)
 I64 ExePutS2(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0)
 {//throws exceptions
   I64 res;
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   if (!filename)
     filename=blkdev.tmp_filename;
-  cc=CmpCtrlNew(buf,ccf_flags|CCF_DONT_FREE_BUF,filename);
+  cc=CompCtrlNew(buf,ccf_flags|CCF_DONT_FREE_BUF,filename);
   if (Fs->last_cc!=&Fs->next_cc)
     cc->opts=Fs->last_cc->opts;
   QueueInsert(cc,Fs->last_cc);
   Lex(cc);
   res=ExeCmdLine(cc);
   QueueRemove(cc);
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
   return res;
 }
 
@@ -675,7 +675,7 @@ I64 StreamExePrint(U8 *fmt,...)
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
   I64 res=0;
   CLexHashTableContext *htc;
-  CCmpCtrl *cc=Fs->last_cc;
+  CCompCtrl *cc=Fs->last_cc;
   if (cc==&Fs->next_cc)
     PrintErr("Not Compiling\n");
   else {
@@ -690,8 +690,8 @@ I64 StreamExePrint(U8 *fmt,...)
 
 U0 CInit()
 {
-  CmpLoadDefines;
-  CmpFillTables;
+  CompLoadDefines;
+  CompFillTables;
   QueueInit(&cmp.ic_nop);
   cmp.ic_nop.ic_class=cmp.internal_types[RT_I64];
   cmp.ic_nop.ic_code=IC_NOP1;

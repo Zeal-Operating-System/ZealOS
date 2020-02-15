@@ -1,6 +1,6 @@
 U0 MyRead(U8 *filename)
 {
-  CCmpCtrl *cc=CmpCtrlNew(MStrPrint("#include \"%s\"",filename));
+  CCompCtrl *cc=CompCtrlNew(MStrPrint("#include \"%s\"",filename));
   while (Lex(cc)) {
     "%03d:",cc->token;
     switch (cc->token) {
@@ -12,5 +12,5 @@ U0 MyRead(U8 *filename)
     }
     '\n';
   }
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
 }

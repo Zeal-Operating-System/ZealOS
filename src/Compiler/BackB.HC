@@ -99,7 +99,7 @@ U0 ICXorXor(CIntermediateCode *tmpi,I64 rip)
 	MDF_REG+RT_I64,REG_RAX,0,rip);
 }
 
-U0 ICCmp(CIntermediateCode *tmpi,I64 us,I64 is,I64 rip)
+U0 ICComp(CIntermediateCode *tmpi,I64 us,I64 is,I64 rip)
 {
   I64 r1,d1,r2,i=0x48,j=tmpi->arg2.disp;
   if (tmpi->arg2.type&MDF_IMM && I32_MIN<=j<=I32_MAX) {
@@ -274,19 +274,19 @@ U0 ICToUpper(CIntermediateCode *tmpi,I64 rip)
   ICU32(tmpi,0xE0C08348);
 }
 
-U0 ICToI64(CCmpCtrl *cc,CIntermediateCode *tmpi,I64 rip)
+U0 ICToI64(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 {
   ICFCvt(cc,tmpi,REG_RAX,
 	tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,TRUE,CN_INST,rip);
 }
 
-U0 ICToF64(CCmpCtrl *cc,CIntermediateCode *tmpi,I64 rip)
+U0 ICToF64(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 {
   ICFCvt(cc,tmpi,REG_RAX,
 	tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,FALSE,CN_INST,rip);
 }
 
-U0 ICToBool(CCmpCtrl *,CIntermediateCode *tmpi,I64 rip)
+U0 ICToBool(CCompCtrl *,CIntermediateCode *tmpi,I64 rip)
 {
   I64 r;
   if (tmpi->arg1.type&MDF_REG)
@@ -465,7 +465,7 @@ U0 ICAssignPostIncDec(CIntermediateCode *tmpi,I64 op,I64 rip)
   }
 }
 
-U0 ICCmpAndBranch(CIntermediateCode *tmpi,Bool has_res,I64 rip,
+U0 ICCompAndBranch(CIntermediateCode *tmpi,Bool has_res,I64 rip,
    I64 us,I64 is,I64 not_us,I64 not_is,U8 *buf,I64 rip2)
 {
   I64 r1,r2,i=0x48,j,res_reg;

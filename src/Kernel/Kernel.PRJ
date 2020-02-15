@@ -1,5 +1,5 @@
 //Compile this by calling $LK,"BootHDIns",A="MN:BootHDIns"$().
-//Don't do it directly.See $LK,"Cmp(\"/Kernel/Kernel\")",A="FF:::/Zenith/Boot/BootHDIns.HC,Cmp(\"/Kernel/Kernel\""$.
+//Don't do it directly.See $LK,"Comp(\"/Kernel/Kernel\")",A="FF:::/Zenith/Boot/BootHDIns.HC,Comp(\"/Kernel/Kernel\""$.
 
 #exe {
   Cd(__DIR__);;

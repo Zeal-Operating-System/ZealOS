@@ -1,4 +1,4 @@
-U0 OptPass5(CCmpCtrl *cc)
+U0 OptPass5(CCompCtrl *cc)
 {
   CIntermediateCode *tmpi,*tmpi1;
   I64 code,i;
@@ -70,7 +70,7 @@ U0 OptPass5(CCmpCtrl *cc)
 	  tmpi->arg1.type=tmpi1->arg1.type&MDG_MASK+
 		MinI64(tmpi->arg1.type.raw_type,
 		MinI64(tmpi1->res.type.raw_type,tmpi1->arg1.type.raw_type));
-	  CmpMinTypePointed(tmpi,tmpi1->arg1_type_pointed_to);
+	  CompMinTypePointed(tmpi,tmpi1->arg1_type_pointed_to);
 	  tmpi->arg1.reg=tmpi1->arg1.reg;
 	  tmpi->arg1.disp=tmpi1->arg1.disp;
 	  tmpi->ic_flags|=tmpi1->ic_flags&ICG_NO_CVT_MASK;

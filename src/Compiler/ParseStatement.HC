@@ -1,4 +1,4 @@
-CHashClass *ParseClass(CCmpCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
+CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
 {
   CHashClass *tmpc,*base_class;
   if (cc->token!=TK_IDENT)
@@ -59,7 +59,7 @@ CHashClass *ParseClass(CCmpCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
   return tmpc;
 }
 
-CHashFun *ParseFunJoin(CCmpCtrl *cc,CHashClass *tmp_return,
+CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 	U8 *name,I64 fsp_flags)
 {
   CMemberLst *tmpm,*header_lst;
@@ -137,7 +137,7 @@ CHashFun *ParseFunJoin(CCmpCtrl *cc,CHashClass *tmp_return,
   return tmpf;
 }
 
-U0 ParseFun(CCmpCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
+U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
 {
   CMemberLst *tmpm;
   CCodeMisc *saved_leave_label;
@@ -206,7 +206,7 @@ U0 ParseFun(CCmpCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   cc->htc.local_var_lst=cc->htc.fun=cc->fun_lex_file=NULL;
 }
 
-U0 ParseGlblVarLst(CCmpCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
+U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
   I64 saved_val,I64 fsp_flags)
 {
   I64 i,j,mode,k,val;
@@ -456,7 +456,7 @@ U0 ParseGlblVarLst(CCmpCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
   }
 }
 
-U0 ParseIf(CCmpCtrl *cc,I64 try_cnt,CCodeMisc *lb_break)
+U0 ParseIf(CCompCtrl *cc,I64 try_cnt,CCodeMisc *lb_break)
 {
   CCodeMisc *lb,*lb1;
   I64 k;
@@ -483,7 +483,7 @@ U0 ParseIf(CCmpCtrl *cc,I64 try_cnt,CCodeMisc *lb_break)
     ICAdd(cc,IC_LABEL,lb,0);
 }
 
-U0 ParseWhile(CCmpCtrl *cc,I64 try_cnt)
+U0 ParseWhile(CCompCtrl *cc,I64 try_cnt)
 {
   CCodeMisc *lb,*lb_done;
   if (cc->token!='(')
@@ -503,7 +503,7 @@ U0 ParseWhile(CCmpCtrl *cc,I64 try_cnt)
   ICAdd(cc,IC_LABEL,lb_done,0);
 }
 
-U0 ParseDoWhile(CCmpCtrl *cc,I64 try_cnt)
+U0 ParseDoWhile(CCompCtrl *cc,I64 try_cnt)
 {
   CCodeMisc *lb,*lb_done;
   lb=COCMiscNew(cc,CMT_LABEL);
@@ -526,7 +526,7 @@ U0 ParseDoWhile(CCmpCtrl *cc,I64 try_cnt)
   Lex(cc);
 }
 
-U0 ParseFor(CCmpCtrl *cc,I64 try_cnt)
+U0 ParseFor(CCompCtrl *cc,I64 try_cnt)
 {
   CCodeCtrl *tmpcbh;
   CCodeMisc *lb,*lb_done;
@@ -575,7 +575,7 @@ class CSwitchCase {
   CSubSwitch *ss;
 };
 
-U0 ParseSwitch(CCmpCtrl *cc,I64 try_cnt)
+U0 ParseSwitch(CCompCtrl *cc,I64 try_cnt)
 {
   CSwitchCase *header=NULL,*tmps,*tmps1;	//Leaks on except
   CSubSwitch head,*tmpss;			//Leaks on except
@@ -788,7 +788,7 @@ sw_sub_end:
   mc_jt->range=range;
 }
 
-U0 ParseNoWarn(CCmpCtrl *cc)
+U0 ParseNoWarn(CCompCtrl *cc)
 {
   CMemberLst *tmpm;
   while (cc->token==TK_IDENT) {
@@ -802,7 +802,7 @@ U0 ParseNoWarn(CCmpCtrl *cc)
   }
 }
 
-U0 ParseStreamBlk(CCmpCtrl *cc)
+U0 ParseStreamBlk(CCompCtrl *cc)
 {
   CLexHashTableContext *htc=MAlloc(sizeof(CLexHashTableContext));
   CStreamBlk *tmpe=MAlloc(sizeof(CStreamBlk));
@@ -839,7 +839,7 @@ U0 ParseStreamBlk(CCmpCtrl *cc)
   Lex(cc); //Skip '}'
 }
 
-U0 ParseTryBlk(CCmpCtrl *cc,I64 try_cnt)
+U0 ParseTryBlk(CCompCtrl *cc,I64 try_cnt)
 {
   CCodeMisc	*lb_catch,*lb_done,*lb_untry;
   CHashClass	*tmpc=cmp.internal_types[RT_PTR];
@@ -901,7 +901,7 @@ U0 ParseTryBlk(CCmpCtrl *cc,I64 try_cnt)
   ICAdd(cc,IC_LABEL,lb_done,0);
 }
 
-Bool ParseStatement(CCmpCtrl *cc,I64 try_cnt=0,
+Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
   CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON)
 {
   I64 i,fsp_flags=0;
@@ -913,8 +913,8 @@ Bool ParseStatement(CCmpCtrl *cc,I64 try_cnt=0,
   if (cmp_flags&CMPF_ONE_ASM_INS) {
     if (cc->flags&CCF_AOT_COMPILE || cc->aot_depth)
       ParseAsmBlk(cc,CMPF_ONE_ASM_INS);
-    else if (tmpaot=CmpJoin(cc,CMPF_ASM_BLK|CMPF_ONE_ASM_INS))
-      CmpFixUpJITAsm(cc,tmpaot);
+    else if (tmpaot=CompJoin(cc,CMPF_ASM_BLK|CMPF_ONE_ASM_INS))
+      CompFixUpJITAsm(cc,tmpaot);
     fsp_flags=FSF_ASM;
   } else
     while (TRUE) {
@@ -943,7 +943,7 @@ Bool ParseStatement(CCmpCtrl *cc,I64 try_cnt=0,
 		start:
 		  case KW_ASM:
 		    if (cc->htc.fun) {
-		      if (tmpaot=CmpJoin(cc,CMPF_ASM_BLK))
+		      if (tmpaot=CompJoin(cc,CMPF_ASM_BLK))
 			ICAdd(cc,IC_ASM,tmpaot,0);
 		      Lex(cc); //Skip '}' of asm{}
 		    } else {
@@ -953,8 +953,8 @@ Bool ParseStatement(CCmpCtrl *cc,I64 try_cnt=0,
 			if (cc->flags&CCF_AOT_COMPILE && cc->aot_depth==1)
 			  Lex(cc); //Skip '}' of asm{}
 		      } else {
-			if (tmpaot=CmpJoin(cc,CMPF_ASM_BLK))
-			  CmpFixUpJITAsm(cc,tmpaot);
+			if (tmpaot=CompJoin(cc,CMPF_ASM_BLK))
+			  CompFixUpJITAsm(cc,tmpaot);
 			Lex(cc); //Skip '}' of asm{}
 		      }
 		      fsp_flags=FSF_ASM;
@@ -1169,7 +1169,7 @@ sm_not_keyword_afterall:
 	      } else {
 		if (tmpex->type & (HTT_OPCODE|HTT_ASM_KEYWORD)) {
 		  if (cc->htc.fun) {
-		    if (tmpaot=CmpJoin(cc,CMPF_ASM_BLK|CMPF_ONE_ASM_INS))
+		    if (tmpaot=CompJoin(cc,CMPF_ASM_BLK|CMPF_ONE_ASM_INS))
 		      ICAdd(cc,IC_ASM,tmpaot,0);
 		  } else
 		    LexExcept(cc,"Use Asm Blk at ");

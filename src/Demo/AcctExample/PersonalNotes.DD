@@ -93,7 +93,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Use thick and pen_height when clipping with thick>1.
 
-* Asm LIST NOLIST bugs.
+* Asm LIST NOLIST bugs.
 
 * Review writing to same cache-line from multicore.  Do $LK,"CTask",A="MN:CTask"$->task_flags and others need to be in separate cache lines?
 
@@ -126,7 +126,7 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 
 * Clean-up ASCII #127 delete char?  (No. Maybe, we want a new usage for 127 in future centuries.)
 
-* Compiler: Exceptions don't free $LK,"CCmpCtrl",A="MN:CCmpCtrl"$ stuff.
+* Compiler: Exceptions don't free $LK,"CCompCtrl",A="MN:CCompCtrl"$ stuff.
 
 * $LK,"::/Zenith/DolDoc/DocHighlight.HC"$ for code comments at top of documents.
 
@@ -295,7 +295,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Compiler: Local var array/struct initialization.
 
-* Compiler Optimization: Bools use r,rm in $LK,"ICCmp",A="MN:ICCmp"$() like in $LK,"ICCmpAndBranch",A="MN:ICCmpAndBranch"$()?
+* Compiler Optimization: Bools use r,rm in $LK,"ICComp",A="MN:ICComp"$() like in $LK,"ICCompAndBranch",A="MN:ICCompAndBranch"$()?
 
 * Compiler: !F64 ~F64
 
@@ -358,7 +358,7 @@ $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
 
 * Compiler: More use of more floating-point stk?
 
-* Compiler: More aggressive in $LK,"CmpF2PushPop",A="MN:CmpF2PushPop"$() with types besides MOV and F64. 
+* Compiler: More aggressive in $LK,"CompF2PushPop",A="MN:CompF2PushPop"$() with types besides MOV and F64. 
 
 * Playing with $LK,"::/Demo/Lectures/NegDisp.HC"$ on $LK,"CTask",A="MN:CTask"$?
 $ID,5$$$=-CTASK_NEG_OFFSET

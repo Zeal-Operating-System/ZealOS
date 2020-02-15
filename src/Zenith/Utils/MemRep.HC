@@ -90,7 +90,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 {
   I64 i,j,k,m,n;
   CDoc *pdoc,*ddoc,*bdoc;
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   CMathODE *o;
   CCPU *c;
   CTask *task1;
@@ -123,7 +123,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 
   cc=task->next_cc;
   while (cc!=&task->next_cc) {
-    "CmpCtrl\t:%010X\n",CmpCtrlSize(cc);
+    "CompCtrl\t:%010X\n",CompCtrlSize(cc);
     cc=cc->next;
   }
 

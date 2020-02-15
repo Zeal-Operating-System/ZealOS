@@ -199,7 +199,7 @@ public U0 Sprite2Code(CDoc *doc=NULL,U8 *elems)
   }
 }
 
-CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
+CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 {
   I64 i,num1,num2,size;
   CSprite *res,g;
@@ -565,7 +565,7 @@ public U8 *Code2Sprite(CDoc *doc,I64 *_size=NULL)
   CSprite head;
   U8 *res;
   Bool okay=TRUE,unlock_doc=DocLock(doc);
-  CCmpCtrl *cc=CmpCtrlNew(,CCF_DONT_FREE_BUF);
+  CCompCtrl *cc=CompCtrlNew(,CCF_DONT_FREE_BUF);
   CHashTable *old_hash_table_lst=cc->htc.hash_table_lst;
   CHashGeneric *tmph;
   I64 i,size=0;
@@ -591,7 +591,7 @@ public U8 *Code2Sprite(CDoc *doc,I64 *_size=NULL)
   if (unlock_doc)
     DocUnlock(doc);
   if (okay) {
-    CmpCtrlDel(cc); //TODO: can crash
+    CompCtrlDel(cc); //TODO: can crash
     res=SpriteQueue2Sprite(&head,&size);
   } else {
     res=NULL;

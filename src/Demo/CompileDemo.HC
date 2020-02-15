@@ -4,7 +4,7 @@ F64 CompileDemo(U8 *st)
 {
   I64 type;
   U8 *machine_code;
-  CCmpCtrl *cc=CmpCtrlNew(st,CCF_DONT_FREE_BUF);
+  CCompCtrl *cc=CompCtrlNew(st,CCF_DONT_FREE_BUF);
   F64 res=0;
   Lex(cc);  //Gotta get it started
   "Compile \"%s\"\n",st;
@@ -20,7 +20,7 @@ F64 CompileDemo(U8 *st)
     if (cc->token==';')
       Lex(cc);
   } while (cc->token!=TK_EOF);	//end of file?
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
   return res;
 }
 

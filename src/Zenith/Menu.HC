@@ -41,7 +41,7 @@ public CMenuEntry *MenuEntryFind(CMenu *haystack_menu,U8 *needle_full_name)
   return tmpse;
 }
 
-CMenuEntry *MenuNewSub(CCmpCtrl *cc,CTask *task)
+CMenuEntry *MenuNewSub(CCompCtrl *cc,CTask *task)
 {
   CMenuEntry *tmpme=NULL,*tmpse;
   if (cc->token==TK_IDENT) {
@@ -86,7 +86,7 @@ public CMenu *MenuNew(U8 *st,I64 flags=0,CTask *task=NULL)
 {//Parse a menu. You probably don't need this.
   CMenu *m;
   CMenuEntry *tmpse;
-  CCmpCtrl *cc=CmpCtrlNew(st,CCF_DONT_FREE_BUF);
+  CCompCtrl *cc=CompCtrlNew(st,CCF_DONT_FREE_BUF);
   if (!task) task=Fs;
   Lex(cc);
   m=CAlloc(sizeof(CMenu),task);
@@ -96,7 +96,7 @@ public CMenu *MenuNew(U8 *st,I64 flags=0,CTask *task=NULL)
   tmpse=&m->sub;
   while (tmpse)
     tmpse=tmpse->next=MenuNewSub(cc,task);
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
   return m;
 }
 

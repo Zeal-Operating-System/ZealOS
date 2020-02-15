@@ -28,7 +28,7 @@ U0 ParsePopDeref(CPrsStk *ps)
   }
 }
 
-I64 ParseKeyWord(CCmpCtrl *cc)
+I64 ParseKeyWord(CCompCtrl *cc)
 {//Cvt cur token to $LK,"KEYWORD",A="FF:::/Compiler/OpCodes.DD,KEYWORD"$ or -1.
   CHashGeneric *tmph;
   if (cc->token==TK_IDENT &&(tmph=cc->hash_entry) && tmph->type&HTT_KEYWORD)
@@ -76,7 +76,7 @@ CHashFun *ParseFunNew()
   return res;
 }
 
-CIntermediateCode *ICAdd(CCmpCtrl *cc,
+CIntermediateCode *ICAdd(CCompCtrl *cc,
    I64 opcode_and_precedence,I64 arg, CHashClass *c,I64 flags=0)
 {
   CIntermediateCode *tmpi=MAlloc(sizeof(CIntermediateCode));
@@ -96,7 +96,7 @@ CIntermediateCode *ICAdd(CCmpCtrl *cc,
   return tmpi;
 }
 
-U0 COCInit(CCmpCtrl *cc)
+U0 COCInit(CCompCtrl *cc)
 {
   CCodeCtrl *tmpcbh=&cc->coc;
   QueueInit(&tmpcbh->coc_head.next);
@@ -104,26 +104,26 @@ U0 COCInit(CCmpCtrl *cc)
   tmpcbh->coc_head.ic_code=IC_END;
 }
 
-U0 COCPush(CCmpCtrl *cc)
+U0 COCPush(CCompCtrl *cc)
 {
   CCodeCtrl *tmpcbh=MAlloc(sizeof(CCodeCtrl));
   MemCpy(tmpcbh,&cc->coc,sizeof(CCodeCtrl));
   cc->coc.coc_next=tmpcbh;
 }
 
-CCmpCtrl *COCPopNoFree(CCmpCtrl *cc)
+CCompCtrl *COCPopNoFree(CCompCtrl *cc)
 {
   CCodeCtrl *tmpcbh=cc->coc.coc_next;
   MemCpy(&cc->coc,tmpcbh,sizeof(CCodeCtrl));
   return tmpcbh;
 }
 
-U0 COCPop(CCmpCtrl *cc)
+U0 COCPop(CCompCtrl *cc)
 {
   Free(COCPopNoFree(cc));
 }
 
-U0 COCAppend(CCmpCtrl *cc, CCodeCtrl *tmpcbh)
+U0 COCAppend(CCompCtrl *cc, CCodeCtrl *tmpcbh)
 {
   if (tmpcbh->coc_head.next!=&cc->coc.coc_head.next) {
     cc->coc.coc_head.last->next=tmpcbh->coc_head.next;
@@ -140,7 +140,7 @@ U0 COCAppend(CCmpCtrl *cc, CCodeCtrl *tmpcbh)
   Free(tmpcbh);
 }
 
-CCodeMisc *COCMiscNew(CCmpCtrl *cc,I64 ty)
+CCodeMisc *COCMiscNew(CCompCtrl *cc,I64 ty)
 {
   CCodeMisc *res=CAlloc(sizeof(CCodeMisc));
   res->addr=INVALID_PTR;
@@ -149,7 +149,7 @@ CCodeMisc *COCMiscNew(CCmpCtrl *cc,I64 ty)
   return res;
 }
 
-CCodeMisc *COCGoToLabelFind(CCmpCtrl *cc,U8 *name)
+CCodeMisc *COCGoToLabelFind(CCompCtrl *cc,U8 *name)
 {
   CCodeMisc *cm=cc->coc.coc_next_misc;
   while (cm!=&cc->coc.coc_next_misc) {
@@ -161,7 +161,7 @@ CCodeMisc *COCGoToLabelFind(CCmpCtrl *cc,U8 *name)
   return NULL;
 }
 
-I64 COCFloatConstFind(CCmpCtrl *cc,F64 d)
+I64 COCFloatConstFind(CCompCtrl *cc,F64 d)
 {
   I64 i;
   CCodeMisc *cm=cc->coc.coc_next_misc;
@@ -183,7 +183,7 @@ I64 COCFloatConstFind(CCmpCtrl *cc,F64 d)
   return cm->addr;
 }
 
-U0 COCDel(CCmpCtrl *cc,CCodeCtrl *coc)
+U0 COCDel(CCompCtrl *cc,CCodeCtrl *coc)
 {
   CCodeMisc *cm,*cm1;
   U8 *undef=NULL;
@@ -226,7 +226,7 @@ U0 COCDel(CCmpCtrl *cc,CCodeCtrl *coc)
   }
 }
 
-U0 COCHeaderPut(CCmpCtrl *cc,I64 pass,Bool put)
+U0 COCHeaderPut(CCompCtrl *cc,I64 pass,Bool put)
 {
   CIntermediateCode *tmpi;
   if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT)) {
@@ -246,7 +246,7 @@ U0 COCHeaderPut(CCmpCtrl *cc,I64 pass,Bool put)
   cc->pass=pass;
 }
 
-U8 *COCCompile(CCmpCtrl *cc,I64 *_code_size,CDebugInfo **_dbg,I64 *_type)
+U8 *COCCompile(CCompCtrl *cc,I64 *_code_size,CDebugInfo **_dbg,I64 *_type)
 {
   U8 *res;
   CCodeMisc *lb;

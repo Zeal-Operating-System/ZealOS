@@ -1,4 +1,4 @@
-Bool ParseAsmImm(CCmpCtrl *cc,CAsmArg *arg)
+Bool ParseAsmImm(CCompCtrl *cc,CAsmArg *arg)
 {
   if (arg->imm_or_off_present)
     LexExcept(cc,"Already one immediate at ");
@@ -32,7 +32,7 @@ Bool ParseAsmImm(CCmpCtrl *cc,CAsmArg *arg)
   return TRUE;
 }
 
-U0 ParseAsmArg(CCmpCtrl *cc,CAsmArg *arg,Bool rel)
+U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 {
   CHashGeneric *tmph,*tmph1;
   CHashReg *tmpr;
@@ -174,7 +174,7 @@ pa_asm_indirect_imm:
   }
 }
 
-I64 AsmMakeArgMask(CCmpCtrl *cc,CAsmArg *arg)
+I64 AsmMakeArgMask(CCompCtrl *cc,CAsmArg *arg)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 res;
@@ -265,7 +265,7 @@ mm_done:
   return res;
 }
 
-Bool AsmStoreNum(CCmpCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
+Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i;
@@ -392,7 +392,7 @@ Bool AsmStoreNum(CCmpCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 
 U8 asm_seg_prefixes[6]={0x26,0x2E,0x36,0x3E,0x64,0x65};
 
-Bool ParseAsmInst(CCmpCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
+Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,j,arg1,arg2,om,seg,arg1mask,arg2mask;
@@ -811,7 +811,7 @@ Bool ParseAsmInst(CCmpCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
   LexExcept(cc,"Invalid inst at ");
 }
 
-U0 ParseAsmDefine(CCmpCtrl *cc,I64 U8_cnt)
+U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_cnt)
 {
   Bool is_dup;
   I64 i,dup_val;
@@ -885,7 +885,7 @@ U0 ParseAsmDefine(CCmpCtrl *cc,I64 U8_cnt)
   Lex(cc);
 }
 
-U0 ParseBinFile(CCmpCtrl *cc)
+U0 ParseBinFile(CCompCtrl *cc)
 {
   I64 i,size;
   U8 *buf,*st;
@@ -901,7 +901,7 @@ U0 ParseBinFile(CCmpCtrl *cc)
   Lex(cc);
 }
 
-U0 ParseAsmBlk(CCmpCtrl *cc,I64 cmp_flags)
+U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,j,k,argcnt,

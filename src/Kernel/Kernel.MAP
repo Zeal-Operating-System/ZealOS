@@ -69,7 +69,6 @@ $LK,"LstMatch",A="FL:::/Kernel/StrA.HC,416",BI=10$
 $LK,"IET_REL_I32",A="FL:::/Kernel/KernelA.HH,413"$
 $LK,"IET_REL_I16",A="FL:::/Kernel/KernelA.HH,411"$
 $LK,"CPrsStk",A="FL:::/Kernel/KernelA.HH,1689"$
-$LK,"CCmpCtrl",A="FL:::/Kernel/KernelA.HH,2179"$
 $LK,"ATAWBlks",A="FL:::/Kernel/BlkDev/DiskATA.HC,582",BI=11$
 $LK,"CCPU",A="FL:::/Kernel/KernelA.HH,3391"$
 $LK,"ATABlkSel",A="FL:::/Kernel/BlkDev/DiskATA.HC,1",BI=12$
@@ -304,7 +303,7 @@ $LK,"CtrlAltD",A="FL:::/Kernel/KeyDev.HC,138",BI=65$
 $LK,"RandI64",A="FL:::/Kernel/KMathB.HC,117",BI=66$
 $LK,"CH_CTRLT",A="FL:::/Kernel/KernelA.HH,3445"$
 $LK,"MBS_UNUSED_SIGNATURE_VAL",A="FL:::/Kernel/KernelA.HH,2813"$
-$LK,"CCmpGlbls",A="FL:::/Kernel/KernelA.HH,2226"$
+$LK,"CCompGlbls",A="FL:::/Kernel/KernelA.HH,2226"$
 $LK,"RT_U32",A="FL:::/Kernel/KernelA.HH,1571"$
 $LK,"RT_U16",A="FL:::/Kernel/KernelA.HH,1569"$
 $LK,"CExternUsage",A="FL:::/Kernel/KernelA.HH,822"$
@@ -1531,6 +1530,7 @@ $LK,"DOC_COLOR_DEFINE_STR",A="FL:::/Kernel/KernelA.HH,1151"$
 $LK,"DriveFATBlkAlloc",A="FL:::/Kernel/BlkDev/DiskDrive.HC,89",BI=335$
 $LK,"VM_VIRTUALBOX",A="FL:::/Kernel/KernelA.HH,3893"$
 $LK,"SCF_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3486"$
+$LK,"CCompCtrl",A="FL:::/Kernel/KernelA.HH,2179"$
 $LK,"TASK_CONTEXT_SAVE",A="FL:::/Kernel/Sched.HC,56"$
 $LK,"SCf_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3471"$
 $LK,"CDirContext",A="FL:::/Kernel/KernelA.HH,2747"$

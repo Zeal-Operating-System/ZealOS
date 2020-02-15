@@ -600,7 +600,7 @@ U0 ICXorEqu(CIntermediateCode *tmpi,I64 rip2)
 }
 
 U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
-	Bool nobound,CCmpCtrl *cc,U8 *buf,I64 rip2)
+	Bool nobound,CCompCtrl *cc,U8 *buf,I64 rip2)
 {
   I64 i,j,cnt,min,max,begin,r;
   CCodeMisc *lb;

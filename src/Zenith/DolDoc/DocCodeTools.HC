@@ -56,7 +56,7 @@ I64 PopUpEdFmt()
 
 class CRILex
 {
-  CCmpCtrl *cc1,*cc2;
+  CCompCtrl *cc1,*cc2;
   CQueueVectU8 *indent;
   I64 depth,exp_depth,one_shot;
   Bool was_new_line,is_not_cont;
@@ -246,12 +246,12 @@ CQueueVectU8 *EdRICode(CDoc *doc)
   CQueueVectU8 *res;
   CRILex *rx=CAlloc(sizeof(CRILex));
 
-  rx->cc1=CmpCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
+  rx->cc1=CompCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
   Free(rx->cc1->lex_include_stk->full_name);
   LexAttachDoc(rx->cc1,rx->cc1->lex_include_stk,doc,,
 	doc->cur_entry,doc->cur_col);
 
-  rx->cc2=CmpCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
+  rx->cc2=CompCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
   Free(rx->cc2->lex_include_stk->full_name);
   LexAttachDoc(rx->cc2,rx->cc2->lex_include_stk,doc,,
 	doc->cur_entry,doc->cur_col);
@@ -261,8 +261,8 @@ CQueueVectU8 *EdRICode(CDoc *doc)
   Lex(rx->cc1);
   EdRIStatement(rx,FALSE);
 
-  CmpCtrlDel(rx->cc1);
-  CmpCtrlDel(rx->cc2);
+  CompCtrlDel(rx->cc1);
+  CompCtrlDel(rx->cc2);
   res=rx->indent;
   Free(rx);
   return res;
@@ -458,7 +458,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	  tmpc=TaskExe(task,Fs,st,1<<JOBf_WAKE_MASTER|
 		1<<JOBf_FOCUS_MASTER|1<<JOBf_FREE_ON_COMPLETE);
 	  Free(st);
-	  st=MStrPrint("\"$$WW,1$$\";Cmp(\"%s\",\"SysTmp\",\"SysTmp\");",
+	  st=MStrPrint("\"$$WW,1$$\";Comp(\"%s\",\"SysTmp\",\"SysTmp\");",
 		prj_file);
 	  tmpc=TaskExe(task,Fs,st,1<<JOBf_WAKE_MASTER|1<<JOBf_FOCUS_MASTER);
 	  Free(st);

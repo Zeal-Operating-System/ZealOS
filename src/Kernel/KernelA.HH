@@ -2133,7 +2133,7 @@ class CLexHashTableContext
 	*glbl_hash_table;
 };
 
-//CmpCtrl flags
+//CompCtrl flags
 #define CCF_CMD_LINE		0x001
 #define CCF_PMT			0x002
 #define CCf_PMT			1
@@ -2176,9 +2176,9 @@ class CLexHashTableContext
 #define CCF_CLASS_DOL_OFFSET	0x4000000000
 #define CCF_DONT_MAKE_RES	0x8000000000
 
-public class CCmpCtrl
+public class CCompCtrl
 {
-  CCmpCtrl *next,*last;
+  CCompCtrl *next,*last;
   I64	token,
 	flags,
 	cur_i64;
@@ -2223,7 +2223,7 @@ public class CCmpCtrl
 };
 
 #help_index "Compiler"
-public class CCmpGlbls
+public class CCompGlbls
 {
   CHashTable *asm_hash;
   CHashClass *internal_types[RT_RTS_NUM];
@@ -3336,7 +3336,7 @@ public class CTask //The Fs segment reg points to current CTask.
   CHashTable *hash_table;
 
   CJobCtrl srv_ctrl;
-  CCmpCtrl *next_cc,*last_cc;
+  CCompCtrl *next_cc,*last_cc;
   CHashFun *last_fun;
 
   U0	(*task_end_cb)();

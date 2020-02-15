@@ -1,4 +1,4 @@
-U0 LexBackupLastChar(CCmpCtrl *cc)
+U0 LexBackupLastChar(CCompCtrl *cc)
 {
   CLexFile *tmpf=cc->lex_include_stk;
   tmpf->buf_ptr=cc->cur_buf_ptr;
@@ -9,7 +9,7 @@ U0 LexBackupLastChar(CCmpCtrl *cc)
     tmpf->last_U16=0;
 }
 
-U0 LexPush(CCmpCtrl *cc)
+U0 LexPush(CCompCtrl *cc)
 {//Create token-stream save point.
   CLexFile *tmpf;
   LexBackupLastChar(cc);
@@ -20,7 +20,7 @@ U0 LexPush(CCmpCtrl *cc)
   cc->lex_prs_stk=tmpf;
 }
 
-U0 LexPopRestore(CCmpCtrl *cc)
+U0 LexPopRestore(CCompCtrl *cc)
 {//Restore token-stream saved-point.
 //Bad things can happen if you cross an #include file boundary.
   CLexFile *tmpf=cc->lex_prs_stk;
@@ -35,7 +35,7 @@ U0 LexPopRestore(CCmpCtrl *cc)
   Free(tmpf);
 }
 
-U0 LexPopNoRestore(CCmpCtrl *cc)
+U0 LexPopNoRestore(CCompCtrl *cc)
 {//Don't restore token-stream saved-point.
   CLexFile *tmpf=cc->lex_prs_stk;
   cc->lex_prs_stk=tmpf->next;
@@ -100,7 +100,7 @@ CMemberLst *MemberClassBaseFind(CHashClass *needle_class,
   return NULL;
 }
 
-U0 MemberAdd(CCmpCtrl *cc,CMemberLst *tmpm,CHashClass *tmpc,I64 mode)
+U0 MemberAdd(CCompCtrl *cc,CMemberLst *tmpm,CHashClass *tmpc,I64 mode)
 {
   U8 *st=tmpm->str;
   CMemberLst **tmpm1,*tmpm2;
@@ -245,7 +245,7 @@ I64 MemberLstSize(CHashClass *tmpc)
   return res;
 }
 
-U8 *LexExtStr(CCmpCtrl *cc,I64 *_size=NULL,Bool lex_next=TRUE)
+U8 *LexExtStr(CCompCtrl *cc,I64 *_size=NULL,Bool lex_next=TRUE)
 {//Lex $LK,"TK_STR",A="MN:TK_STR"$'s to one combined str. _size includes terminator.
   I64 len=cc->cur_str_len,len1,len2;
   U8 *st=cc->cur_str,*st1,*st2;

@@ -193,7 +193,7 @@ public I64 ExeDoc(CDoc *doc,I64 ccf_flags=0)
 {//JIT Compile and execute a document.
   I64 res;
   Bool okay=TRUE,unlock_doc=DocLock(doc);
-  CCmpCtrl *cc=CmpCtrlNew(,ccf_flags|CCF_DONT_FREE_BUF);
+  CCompCtrl *cc=CompCtrlNew(,ccf_flags|CCF_DONT_FREE_BUF);
   if (Fs->last_cc!=&Fs->next_cc)
     cc->opts=Fs->last_cc->opts;
   QueueInsert(cc,Fs->last_cc);
@@ -210,7 +210,7 @@ public I64 ExeDoc(CDoc *doc,I64 ccf_flags=0)
   }
   QueueRemove(cc);
   if (okay)
-    CmpCtrlDel(cc); //TODO: can crash
+    CompCtrlDel(cc); //TODO: can crash
   if (unlock_doc)
     DocUnlock(doc);
   return res;

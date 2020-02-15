@@ -6,7 +6,7 @@ U0 Job1(I64)
   Silent;
   while (!app_done) {
     Cd("::/Compiler");
-    Cmp("Compiler");
+    Comp("Compiler");
   }
   lock {app_done_ack--;}
 }

@@ -109,7 +109,7 @@ extern U8 *StrPrintHex(U8 *dst,I64 num;I64 width);
 public extern CTextGlbls text;
 
 #help_index "Compiler/Lex"
-public extern U0 HashSrcFileSet(CCmpCtrl *cc,
+public extern U0 HashSrcFileSet(CCompCtrl *cc,
 	CHashSrcSym *h,I64 line_num_offset=0);
 
 #help_index "Compiler;Cmd Line (Typically)"
@@ -459,7 +459,7 @@ public extern I64 Scale2Mem(I64 min,I64 max,I64 limit=2*1024*1024*1024);
 #help_index "Job/Exe;Task/Job/Exe"
 public extern U0 ZenithErr(U8 *fmt,...);
 public extern U0 ZenithLog(U8 *fmt,...);
-public extern I64 ExeCmdLine(CCmpCtrl *cc);
+public extern I64 ExeCmdLine(CCompCtrl *cc);
 public extern U0 JobDel(CJob *tmpc);
 public extern I64 JobsHandler(I64 run_flags,CTask *task=NULL);
 extern U0 SrvCmdLine();

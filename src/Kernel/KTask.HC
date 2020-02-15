@@ -299,8 +299,8 @@ U0 TaskDerivedValsUpdate(CTask *task=NULL,Bool update_z_buf=TRUE)
   POPFD
 }
 
-I64 ExeCmdLine(CCmpCtrl *cc)
-{//Terminal JIT-compile-and-execute loop for CCmpCtrl.
+I64 ExeCmdLine(CCompCtrl *cc)
+{//Terminal JIT-compile-and-execute loop for CCompCtrl.
   I64 res=0,type,old_title_src=Fs->title_src;
   U8 *ptr,*ptr2,*ptr3,*machine_code,*old_task_title=StrNew(Fs->task_title);
   F64 t0;
@@ -383,18 +383,18 @@ U0 SrvTaskCont()
 
 U0 UserTaskCont()
 {//Terminal key-input-execute loop.
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   CDoc *doc;
   Bool cont=TRUE;
   do {
-    cc=CmpCtrlNew(,CCF_CMD_LINE|CCF_PMT|CCF_QUESTION_HELP);
+    cc=CompCtrlNew(,CCF_CMD_LINE|CCF_PMT|CCF_QUESTION_HELP);
     QueueInsert(cc,Fs->last_cc);
     try {
       Lex(cc);
       ExeCmdLine(cc);
       cont=Bt(&cc->flags,CCf_PMT);
       QueueRemove(cc);
-      CmpCtrlDel(cc);
+      CompCtrlDel(cc);
     } catch {
       if ((doc=Fs->put_doc) && doc->doc_signature==DOC_SIGNATURE_VAL)
 	DocUnlock(doc);

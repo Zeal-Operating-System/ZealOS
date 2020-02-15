@@ -1,4 +1,4 @@
-U0 AOTStoreCodeU8(CCmpCtrl *cc,U8 b)
+U0 AOTStoreCodeU8(CCompCtrl *cc,U8 b)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i=aotc->rip>>AOT_BIN_BLK_BITS;
@@ -27,7 +27,7 @@ U0 AOTStoreCodeU8(CCmpCtrl *cc,U8 b)
     aotc->num_bin_U8s=aotc->rip;
 }
 
-U0 AOTStoreCodeU32(CCmpCtrl *cc,U32 d)
+U0 AOTStoreCodeU32(CCompCtrl *cc,U32 d)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i=aotc->rip>>AOT_BIN_BLK_BITS,j=(aotc->rip+sizeof(U32))>>AOT_BIN_BLK_BITS;
@@ -65,7 +65,7 @@ U0 AOTStoreCodeU32(CCmpCtrl *cc,U32 d)
   }
 }
 
-U0 AOTStoreCodeU64(CCmpCtrl *cc,U64 q)
+U0 AOTStoreCodeU64(CCompCtrl *cc,U64 q)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64	i=aotc->rip>>AOT_BIN_BLK_BITS,
@@ -103,7 +103,7 @@ U0 AOTStoreCodeU64(CCmpCtrl *cc,U64 q)
   }
 }
 
-U0 AOTStoreCodeU8At(CCmpCtrl *cc,I64 rip,...)
+U0 AOTStoreCodeU8At(CCompCtrl *cc,I64 rip,...)
 {
   CAOTCtrl *aotc=cc->aotc;
   CAOTBinBlk *tmpbin;
@@ -124,7 +124,7 @@ U0 AOTStoreCodeU8At(CCmpCtrl *cc,I64 rip,...)
     aotc->num_bin_U8s=rip;
 }
 
-I64 AsmLexExpression(CCmpCtrl *cc)
+I64 AsmLexExpression(CCompCtrl *cc)
 {
   U8 *machine_code;
   I64 res=0;
@@ -144,7 +144,7 @@ I64 AsmLexExpression(CCmpCtrl *cc)
   return res;
 }
 
-U0 AsmLineLst(CCmpCtrl *cc)
+U0 AsmLineLst(CCompCtrl *cc)
 {
   CAOTCtrl *aotc=cc->aotc;
   CLexFile *tmpf=cc->lex_include_stk;

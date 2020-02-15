@@ -84,7 +84,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 	tmpil1->arg1.type=tmpil2->arg1.type&MDG_MASK+
 	      MinI64(tmpil1->arg1.type.raw_type,
 	      MinI64(tmpil2->res.type.raw_type,tmpil2->arg1.type.raw_type));
-	CmpMinTypePointed(tmpil1,tmpil2->arg1_type_pointed_to);
+	CompMinTypePointed(tmpil1,tmpil2->arg1_type_pointed_to);
 	tmpil1->arg1.reg=tmpil2->arg1.reg;
 	tmpil1->arg1.disp=tmpil2->arg1.disp;
 	tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CVT_MASK;
@@ -130,7 +130,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
   return FALSE;
 }
 
-U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type)
+U0 OptPass4(CCompCtrl *cc,COptReg *reg_offsets,I64 *_type)
 {
   CHashClass *tmpc,*tmpc1,*tmpc2;
   CIntermediateCode *tmpi,*tmpi1,*tmpi2,*tmpil1,*tmpil2,*tmpil3,
@@ -195,7 +195,7 @@ U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type)
 	  break;
 	case IC_MOV:
 	  if (tmpi->arg1.type&MDF_DISP && tmpi->arg1.reg==REG_RBP) {
-	    i=CmpOffset2Reg(tmpi->arg1.disp,reg_offsets);
+	    i=CompOffset2Reg(tmpi->arg1.disp,reg_offsets);
 	    if (i>=0) {
 	      tmpi->arg1.type=MDF_REG+tmpi->arg1.type.raw_type;
 	      tmpi->arg1.reg=i;
@@ -206,7 +206,7 @@ U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type)
 	case IC_DEREF:
 	  if (tmpi1->ic_code==IC_LEA) {
 	    if (tmpi1->arg1.type&MDF_DISP && tmpi1->arg1.reg==REG_RBP) {
-	      i=CmpOffset2Reg(tmpi1->arg1.disp,reg_offsets);
+	      i=CompOffset2Reg(tmpi1->arg1.disp,reg_offsets);
 	      if (i>=0) {
 		tmpi->ic_flags|=tmpi1->ic_flags;
 		tmpi->ic_code=IC_REG;
@@ -242,7 +242,7 @@ U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type)
 	case IC_MM_:
 	  if (tmpi1->ic_code==IC_LEA) {
 	    if (tmpi1->arg1.type&MDF_DISP && tmpi1->arg1.reg==REG_RBP) {
-	      i=CmpOffset2Reg(tmpi1->arg1.disp,reg_offsets);
+	      i=CompOffset2Reg(tmpi1->arg1.disp,reg_offsets);
 	      if (i>=0) {
 		tmpi->ic_flags|=tmpi1->ic_flags;
 		tmpi->arg1.type=MDF_REG+tmpi->arg1.type.raw_type;
@@ -316,7 +316,7 @@ p4_sib:
 	  } else if (tmpi1->ic_code==IC_LEA &&
 		tmpi1->arg1.type&MDF_DISP) {
 	    if (tmpi1->arg1.reg==REG_RBP &&
-		  CmpOffset2Reg(tmpi1->arg1.disp,reg_offsets)>=0)
+		  CompOffset2Reg(tmpi1->arg1.disp,reg_offsets)>=0)
 	      break;
 	    if (tmpi2->ic_code==IC_MOV && tmpi2->arg1.type==MDF_REG+RT_I64 ||
 		  tmpi2->ic_code==IC_REG) {
@@ -364,7 +364,7 @@ p4_sib:
 	    if (tmpi1->arg1.type&(MDF_DISP|MDF_SIB)) {
 	      tmpi2=tmpi->next;
 	      if (tmpi1->arg1.type&MDF_DISP && tmpi1->arg1.reg==REG_RBP) {
-		i=CmpOffset2Reg(tmpi1->arg1.disp,reg_offsets);
+		i=CompOffset2Reg(tmpi1->arg1.disp,reg_offsets);
 		if (i>=0) {
 		  tmpi->ic_flags|=tmpi1->ic_flags;
 		  tmpi->arg1.type=MDF_REG+tmpi->arg1.type.raw_type;
@@ -394,7 +394,7 @@ p4_sib:
 		tmpi2->arg2.type=tmpi->arg1.type;
 		tmpi2->arg2.reg=tmpi->arg1.reg;
 		tmpi2->arg2.disp=tmpi->arg1.disp;
-		CmpMinTypePointed(tmpi2,tmpi->arg1_type_pointed_to);
+		CompMinTypePointed(tmpi2,tmpi->arg1_type_pointed_to);
 	      }
 	      tmpi->ic_flags|=ICF_BY_VAL;
 	    }

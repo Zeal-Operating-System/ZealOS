@@ -1,4 +1,4 @@
-U0 AsmPrsInsFlags(CCmpCtrl *cc,CInst *tmpins)
+U0 AsmPrsInsFlags(CCompCtrl *cc,CInst *tmpins)
 {
   I64 i;
   while (TRUE) {
@@ -51,7 +51,7 @@ U0 AsmHashLoad()
 {//See $LK,"::/Compiler/OpCodes.DD"$.
   I64 i,j,size,size_max;
   CInternalType *tmpit;
-  CCmpCtrl *cc;
+  CCompCtrl *cc;
   CHashGeneric *tmph;
   CHashReg *tmpr;
   CHashOpcode *tmpo,*tmpo2,*tmpo_max;
@@ -68,7 +68,7 @@ U0 AsmHashLoad()
   size_max=offset(CHashOpcode.ins)+sizeof(CInst)<<5;
   tmpo_max=MAlloc(size_max);
 
-  cc=CmpCtrlNew(FileRead("OpCodes.DD"),,"OpCodes.DD");
+  cc=CompCtrlNew(FileRead("OpCodes.DD"),,"OpCodes.DD");
   cc->htc.hash_table_lst=NULL;
   Lex(cc);
   while (cc->token) {
@@ -193,7 +193,7 @@ U0 AsmHashLoad()
     Lex(cc); //Skip ';'
   }
   Free(tmpo_max);
-  CmpCtrlDel(cc);
+  CompCtrlDel(cc);
   for (i=0;i<INTERNAL_TYPES_NUM;i++) {
     tmpit=&internal_types_table[i];
     tmpc=ParseClassNew;

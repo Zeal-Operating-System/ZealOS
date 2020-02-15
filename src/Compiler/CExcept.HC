@@ -1,4 +1,4 @@
-U0 LexPutToken(CCmpCtrl *cc)
+U0 LexPutToken(CCompCtrl *cc)
 {//Print cur token to StdOut. (Crude)
   '"';
   if (cc->token==TK_IDENT || cc->token==TK_STR)
@@ -19,7 +19,7 @@ U0 LexPutToken(CCmpCtrl *cc)
   "\" ";
 }
 
-U8 *LexPutLine(CCmpCtrl *cc,U8 *start)
+U8 *LexPutLine(CCompCtrl *cc,U8 *start)
 {//Print cur pos to end of line to StdOut.
   I64 ch;
   U8 *ptr;
@@ -47,7 +47,7 @@ U8 *LexPutLine(CCmpCtrl *cc,U8 *start)
   return NULL;
 }
 
-U0 LexPutPos(CCmpCtrl *cc)
+U0 LexPutPos(CCompCtrl *cc)
 {//Print token, line link and, then, $LK,"LexPutLine",A="MN:LexPutLine"$().
   LexPutToken(cc);
   FixSet(cc->lex_include_stk->full_name,cc->lex_include_stk->line_num);
@@ -62,7 +62,7 @@ U0 LexPutPos(CCmpCtrl *cc)
   LexPutLine(cc,cc->lex_include_stk->line_start);
 }
 
-U0 LexWarn(CCmpCtrl *cc,U8 *str=NULL)
+U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
 {//Print warn msg, then, $LK,"LexPutPos",A="MN:LexPutPos"$().
   if (str) PrintWarn(str);
   if (cc->htc.fun) {
@@ -78,7 +78,7 @@ U0 LexWarn(CCmpCtrl *cc,U8 *str=NULL)
   cc->warning_cnt++;
 }
 
-U0 LexExcept(CCmpCtrl *cc,U8 *str=NULL)
+U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
 {//Print err msg, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
   if (!Bt(&sys_run_level,RLf_ZENITH_SERVER)) {
     Raw(ON);
@@ -101,13 +101,13 @@ U0 UndefinedExtern()
   throw('UndefExt');
 }
 
-U0 UnusedExternWarning(CCmpCtrl *cc,CHashClass *tmpc)
+U0 UnusedExternWarning(CCompCtrl *cc,CHashClass *tmpc)
 {
   PrintWarn("Unused extern '%s'\n",tmpc->str);
   cc->warning_cnt++;
 }
 
-U0 ParenWarning(CCmpCtrl *cc)
+U0 ParenWarning(CCompCtrl *cc)
 {
   if (Bt(&cc->opts,OPTf_WARN_PAREN) &&
 	!(cc->lex_include_stk->flags&LFSF_DEFINE))
@@ -181,7 +181,7 @@ U0 ICArgPut(CICArg *a,I64 type_pointed_to)
   '' CH_SPACE;
 }
 
-U0 ICPut(CCmpCtrl *cc,CIntermediateCode *tmpi)
+U0 ICPut(CCompCtrl *cc,CIntermediateCode *tmpi)
 {
   I64 opcode=tmpi->ic_code,i;
   if (opcode>=IC_END_EXP && opcode!=IC_NOP2) {

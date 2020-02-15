@@ -1,4 +1,4 @@
-CLexFile *LexFilePush(CCmpCtrl *cc)
+CLexFile *LexFilePush(CCompCtrl *cc)
 {//#include file push.
   CLexFile *res=CAlloc(sizeof(CLexFile));
   if (res->next=cc->lex_include_stk)
@@ -8,7 +8,7 @@ CLexFile *LexFilePush(CCmpCtrl *cc)
   return cc->lex_include_stk=res;
 }
 
-CLexFile *LexFilePop(CCmpCtrl *cc)
+CLexFile *LexFilePop(CCompCtrl *cc)
 {//#include file pop.
   CLexFile *tmpf;
   if (tmpf=cc->lex_include_stk) {
@@ -25,12 +25,12 @@ CLexFile *LexFilePop(CCmpCtrl *cc)
   return cc->lex_include_stk;
 }
 
-CCmpCtrl *CmpCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
-{//MAlloc and Init CCmpCtrl.
-//Frees buf in $LK,"CmpCtrlDel",A="MN:CmpCtrlDel"$ unless $LK,"CCF_DONT_FREE_BUF",A="MN:CCF_DONT_FREE_BUF"$ flag is set.
+CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
+{//MAlloc and Init CCompCtrl.
+//Frees buf in $LK,"CompCtrlDel",A="MN:CompCtrlDel"$ unless $LK,"CCF_DONT_FREE_BUF",A="MN:CCF_DONT_FREE_BUF"$ flag is set.
   //FileName is for error reporting.  If files are #included,
-  //new names are used.  See $LK,"Psalmody CmpCtrlNew",A="FF:::/Apps/Psalmody/PsalmodyFile.HC,CmpCtrlNew"$.
-  CCmpCtrl *cc=CAlloc(sizeof(CCmpCtrl));
+  //new names are used.  See $LK,"Psalmody CompCtrlNew",A="FF:::/Apps/Psalmody/PsalmodyFile.HC,CompCtrlNew"$.
+  CCompCtrl *cc=CAlloc(sizeof(CCompCtrl));
   CLexFile *tmpf;
   QueueInit(cc);
   cc->flags=flags;
@@ -55,8 +55,8 @@ CCmpCtrl *CmpCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
   return cc;
 }
 
-U0 CmpCtrlDel(CCmpCtrl *cc)
-{//Free CCmpCtrl.
+U0 CompCtrlDel(CCompCtrl *cc)
+{//Free CCompCtrl.
   while (LexFilePop(cc));
   LinkedLstDel(cc->lex_prs_stk);
   LinkedLstDel(cc->htc.next);
@@ -67,8 +67,8 @@ U0 CmpCtrlDel(CCmpCtrl *cc)
   Free(cc);
 }
 
-I64 CmpCtrlSize(CCmpCtrl *cc)
-{//Mem size of CCmpCtrl and its members.
+I64 CompCtrlSize(CCompCtrl *cc)
+{//Mem size of CCompCtrl and its members.
   CLexFile *tmpf=cc->lex_include_stk;
   I64 res=0;
   while (tmpf) {
@@ -90,7 +90,7 @@ I64 CmpCtrlSize(CCmpCtrl *cc)
 
 U32 lex_zeros=0;
 
-Bool LexDollar(CCmpCtrl *cc,CDoc *doc,CDocEntry *doc_e)
+Bool LexDollar(CCompCtrl *cc,CDoc *doc,CDocEntry *doc_e)
 {
   U8 *st;
   if (cc->flags&CCF_IN_QUOTES) {
@@ -104,7 +104,7 @@ Bool LexDollar(CCmpCtrl *cc,CDoc *doc,CDocEntry *doc_e)
     return FALSE;
 }
 
-I64 LexGetChar(CCmpCtrl *cc)
+I64 LexGetChar(CCompCtrl *cc)
 {//Get one char from stream. Allow put-back one.
   U8 *ptr,*src;
   CLexFile *tmpf;
@@ -261,14 +261,14 @@ lgc_done:
   return cc->last_U16;
 }
 
-U0 LexSkipEol(CCmpCtrl *cc)
+U0 LexSkipEol(CCompCtrl *cc)
 {//$LK,"LexGetChar",A="MN:LexGetChar"$ to NULL until end-of-line.
   I64 ch;
   do ch=$WW,0$LexGetChar(cc);
   while (Bt(char_bmp_non_eol,ch));
 }
 
-U8 *LexFirstRemove(CCmpCtrl *cc,U8 *marker,I64 _len=NULL)
+U8 *LexFirstRemove(CCompCtrl *cc,U8 *marker,I64 _len=NULL)
 {//$LK,"LexGetChar",A="MN:LexGetChar"$() chars making str until marker.
   U8 *res,*ptr;
   CQueueVectU8 *tmpv=QueueVectU8New;
@@ -290,7 +290,7 @@ U8 *LexFirstRemove(CCmpCtrl *cc,U8 *marker,I64 _len=NULL)
   return res;
 }
 
-U0 LexIncludeStr(CCmpCtrl *cc,U8 *abs_filename,U8 *src,Bool actual_file)
+U0 LexIncludeStr(CCompCtrl *cc,U8 *abs_filename,U8 *src,Bool actual_file)
 {
   LexBackupLastChar(cc);
   CLexFile *tmpf=LexFilePush(cc);
@@ -322,7 +322,7 @@ CDoc *LexDocRead(U8 *abs_filename,I64 flags)
 I64 cmp_type_flags_src_code[(DOCT_TYPES_NUM+63)/64]={
   1<<DOCT_TEXT|1<<DOCT_TAB|1<<DOCT_INS_BIN|1<<DOCT_INS_BIN_SIZE};
 
-U0 LexAttachDoc(CCmpCtrl *cc,CLexFile *tmpf=NULL,
+U0 LexAttachDoc(CCompCtrl *cc,CLexFile *tmpf=NULL,
 	CDoc *doc=NULL,U8 *abs_filename=NULL,CDocEntry *doc_e=NULL,I64 col=0)
 {//Start lexing doc. Give either doc or abs_filename.
   if (!doc)
@@ -364,7 +364,7 @@ U0 LexAttachDoc(CCmpCtrl *cc,CLexFile *tmpf=NULL,
   tmpf->last_U16=0;
 }
 
-I64 LexInStr(CCmpCtrl *cc,U8 *buf,I64 size,Bool *done)
+I64 LexInStr(CCompCtrl *cc,U8 *buf,I64 size,Bool *done)
 {
   I64 i=0,j,k,ch;
   *done=TRUE;
@@ -438,7 +438,7 @@ I64 LexInStr(CCmpCtrl *cc,U8 *buf,I64 size,Bool *done)
   return i;
 }
 
-I64 Lex(CCmpCtrl *cc)
+I64 Lex(CCompCtrl *cc)
 {//Fetch next token.
   I64 i,j,k,l,ch;
   CHash *tmph;

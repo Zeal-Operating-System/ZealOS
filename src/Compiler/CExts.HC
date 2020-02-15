@@ -9,35 +9,35 @@ import I64 DocSize(CDoc *doc);
 import Bool DocWrite(CDoc *doc,Bool prompt=FALSE);
 extern U8 *CmdLinePrompt();
 extern I64 HashEntrySize2(CHashSrcSym *tmph);
-extern Bool IsLexExpression2Bin(CCmpCtrl *cc,U8 **_machine_code);
-extern I64 Lex(CCmpCtrl *cc);
-extern I64 LexExpression(CCmpCtrl *cc);
-extern I64 LexGetChar(CCmpCtrl *cc);
+extern Bool IsLexExpression2Bin(CCompCtrl *cc,U8 **_machine_code);
+extern I64 Lex(CCompCtrl *cc);
+extern I64 LexExpression(CCompCtrl *cc);
+extern I64 LexGetChar(CCompCtrl *cc);
 extern CCodeMisc *OptLabelFwd(CCodeMisc *lb);
-extern CIntermediateCode *OptPass012(CCmpCtrl *cc);
-extern U0 OptPass3(CCmpCtrl *cc,COptReg *reg_offsets);
-extern U0 OptPass4(CCmpCtrl *cc,COptReg *reg_offsets,I64 *_type);
-extern U0 OptPass5(CCmpCtrl *cc);
-extern U0 OptPass6(CCmpCtrl *cc);
+extern CIntermediateCode *OptPass012(CCompCtrl *cc);
+extern U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets);
+extern U0 OptPass4(CCompCtrl *cc,COptReg *reg_offsets,I64 *_type);
+extern U0 OptPass5(CCompCtrl *cc);
+extern U0 OptPass6(CCompCtrl *cc);
 extern I64 OptPass789A(
-	CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg);
+	CCompCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg);
 extern CHashClass *ParseClass(
-	CCmpCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern);
+	CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern);
 extern CHashFun *ParseFunJoin(
-	CCmpCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags);
-extern I64 ParseKeyWord(CCmpCtrl *cc);
-extern Bool ParseStatement(CCmpCtrl *cc,I64 try_cnt=0,
+	CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags);
+extern I64 ParseKeyWord(CCompCtrl *cc);
+extern Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
 	CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON);
-extern U0 ParseStreamBlk(CCmpCtrl *cc);
-extern CHashClass *ParseType(CCmpCtrl *cc,CHashClass **_tmpc1,
+extern U0 ParseStreamBlk(CCompCtrl *cc);
+extern CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
 	I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
 	CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags);
-extern I64 ParseUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,
+extern I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,
 	CMemberLst **_local_var,CArrayDim **_tmpad,I64 *unary_post_prec);
 extern I64 ParseUnaryTerm(
-	CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,CArrayDim **_tmpad,
+	CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,CArrayDim **_tmpad,
 	I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec);
-extern U0 ParseVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
+extern U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	CArrayDim *tmpad,U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass);
 _extern CMP_TEMPLATES			U32 cmp_templates[1];
 _extern CMP_TEMPLATES_DONT_POP		U32 cmp_templates_dont_pop[1];

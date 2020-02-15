@@ -1,6 +1,6 @@
 #help_index "DolDoc"
 
-I64 ParseDocFlagSingle(CCmpCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
+I64 ParseDocFlagSingle(CCompCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
 {
   I64 res=-1;
   CHashGeneric *tmph;
@@ -23,7 +23,7 @@ I64 ParseDocFlagSingle(CCmpCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
   return res;
 }
 
-I64 ParseDocFlags(CCmpCtrl *cc,I64 *_de_flags,U32 *_type)
+I64 ParseDocFlags(CCompCtrl *cc,I64 *_de_flags,U32 *_type)
 {
   I64 res=-1;
   Bool turn_on;
@@ -220,7 +220,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
   U8 *ptr,*st2;
   CDocEntry *doc_e=NULL;
   CHashGeneric *tmph;
-  CCmpCtrl *cc=CmpCtrlNew(st,CCF_DONT_FREE_BUF);
+  CCompCtrl *cc=CompCtrlNew(st,CCF_DONT_FREE_BUF);
   CHashTable *old_hash_table_lst=cc->htc.hash_table_lst;
   try {
     cc->htc.hash_table_lst=NULL;
@@ -476,7 +476,7 @@ pd_err:
       DocDataScan(doc,doc_e);
       DocDataFmt(doc,doc_e);
     }
-    CmpCtrlDel(cc);
+    CompCtrlDel(cc);
   } catch {
     Fs->catch_except=TRUE;
     if (!doc_e)

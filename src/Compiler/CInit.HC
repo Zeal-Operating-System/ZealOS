@@ -201,7 +201,7 @@ CIntermediateStruct intermediate_code_table[IC_ICS_NUM]={
   {IS_1_ARG,1,IST_NULL,TRUE,FALSE,0,0,0,"ATAN"},
 };
 
-U0 CmpLoadDefines()
+U0 CompLoadDefines()
 {
   DefineLstLoad("ST_RAW_TYPES",
 	"\0\0I0\0U0\0I8\0U8\0I16\0U16\0I32\0U32\0I64\0U64\0"
@@ -236,7 +236,7 @@ U0 CmpLoadDefines()
   DefineLstLoad("ST_FSTK_REGS","ST0\0ST1\0ST2\0ST3\0ST4\0ST5\0ST6\0ST7\0");
 }
 
-U0 CmpFillTables()
+U0 CompFillTables()
 {
   I64 i;
   U32 *d;

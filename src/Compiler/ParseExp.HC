@@ -12,7 +12,7 @@
 #define PE_POP_ALL1		11
 #define PE_POP_ALL2		12
 
-CIntermediateCode *ParseAddOp(CCmpCtrl *cc,I64 stk_op,CHashClass *tmpc)
+CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stk_op,CHashClass *tmpc)
 {
   CIntermediateCode *tmpi=cc->coc.coc_head.last;
   Bool div_sizeof=FALSE;
@@ -62,7 +62,7 @@ CIntermediateCode *ParseAddOp(CCmpCtrl *cc,I64 stk_op,CHashClass *tmpc)
   return tmpi;
 }
 
-U0 ParseExpression2(CCmpCtrl *cc,I64 *_max_prec,CPrsStk *ps)
+U0 ParseExpression2(CCompCtrl *cc,I64 *_max_prec,CPrsStk *ps)
 {
   I64 i,cur_op,stk_op,state,max_prec=PREC_NULL,unary_pre_prec,paren_prec,
 	unary_post_prec,left_prec=PREC_MAX;
@@ -261,7 +261,7 @@ pe_done:
     *_max_prec=max_prec;
 }
 
-Bool ParseExpression(CCmpCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
+Bool ParseExpression(CCompCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
 {
   Bool res=TRUE;
   I64 old_flags=cc->flags;
@@ -300,7 +300,7 @@ Bool ParseExpression(CCmpCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
   return res;
 }
 
-U0 ParseSizeOf(CCmpCtrl *cc)
+U0 ParseSizeOf(CCompCtrl *cc)
 {
   CHashClass *tmpc;
   CMemberLst *tmpm;
@@ -350,7 +350,7 @@ pu_sizeof_member:
   ICAdd(cc,IC_IMM_I64,i,cmp.internal_types[RT_I64]);
 }
 
-U0 ParseOffsetOf(CCmpCtrl *cc)
+U0 ParseOffsetOf(CCompCtrl *cc)
 {
   CHashClass *tmpc;
   CMemberLst *tmpm;
@@ -380,7 +380,7 @@ U0 ParseOffsetOf(CCmpCtrl *cc)
   ICAdd(cc,IC_IMM_I64,i,cmp.internal_types[RT_I64]);
 }
 
-I64 ParseFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
+I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 {
   I64 i,argc_cnt,dft_val;
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
@@ -590,7 +590,7 @@ I64 ParseFunCall(CCmpCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   return PE_UNARY_MODIFIERS;
 }
 
-I64 ParseUnaryTerm(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
+I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	CArrayDim **_tmpad,I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec)
 {
   I64 i,j;
@@ -957,7 +957,7 @@ pu_export_sys_sym:
   LexExcept(cc,"Missing expression at ");
 }
 
-I64 ParseUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
+I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	CArrayDim **_tmpad,I64 *unary_post_prec)
 {
   CHashClass *tmpc,*tmpc1;
@@ -1114,7 +1114,7 @@ I64 ParseUnaryModifier(CCmpCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
   return PE_DEREFERENCE;
 }
 
-U8 *LexExpression2Bin(CCmpCtrl *cc,I64 *_type=NULL)
+U8 *LexExpression2Bin(CCompCtrl *cc,I64 *_type=NULL)
 {//Compile cc expression. You call the code.
   U8 *res;
   I64 size;
@@ -1132,12 +1132,12 @@ U8 *LexExpression2Bin(CCmpCtrl *cc,I64 *_type=NULL)
   return res;
 }
 
-Bool IsLexExpression2Bin(CCmpCtrl *cc,U8 **_machine_code)
+Bool IsLexExpression2Bin(CCompCtrl *cc,U8 **_machine_code)
 {//Compile cc expression to bin. Return err status.
   return ToBool(*_machine_code=LexExpression2Bin(cc));
 }
 
-I64 LexExpressionI64(CCmpCtrl *cc)
+I64 LexExpressionI64(CCompCtrl *cc)
 {//Compile cc expression, forcing to I64 and eval.
   U8 *machine_code;
   I64 res,type;
@@ -1151,7 +1151,7 @@ I64 LexExpressionI64(CCmpCtrl *cc)
   return res;
 }
 
-F64 LexExpressionF64(CCmpCtrl *cc)
+F64 LexExpressionF64(CCompCtrl *cc)
 {//Compile cc expression, forcing to F64 and eval.
   U8 *machine_code;
   I64 res,type;
@@ -1165,7 +1165,7 @@ F64 LexExpressionF64(CCmpCtrl *cc)
   return res(F64);
 }
 
-I64 LexExpression(CCmpCtrl *cc)
+I64 LexExpression(CCompCtrl *cc)
 {//Compile cc expression and eval.  Might be I64 or F64.
   U8 *machine_code;
   I64 res;

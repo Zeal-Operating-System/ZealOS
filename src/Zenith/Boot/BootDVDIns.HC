@@ -12,9 +12,9 @@
 
 U0 MakeAll()
 {
-  if (Cmp("/Compiler/Compiler","Compiler",,':'))
+  if (Comp("/Compiler/Compiler","Compiler",,':'))
     throw;
-  if (Cmp("/Kernel/Kernel","Kernel",,':'))
+  if (Comp("/Kernel/Kernel","Kernel",,':'))
     throw;
 }
 

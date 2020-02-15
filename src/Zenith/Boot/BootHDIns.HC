@@ -7,11 +7,17 @@
 
 #define KERNEL_BIN_C	"Kernel.BIN.C"
 
+
+U0 CompComp()
+{
+  if (Comp("/Compiler/Compiler","Compiler",,':'))
+    throw;
+}
+
 U0 MakeAll()
 {
-  if (Cmp("/Compiler/Compiler","Compiler",,':'))
-    throw;
-  if (Cmp("/Kernel/Kernel","Kernel",,':'))
+  CompComp;
+  if (Comp("/Kernel/Kernel","Kernel",,':'))
     throw;
 }
 

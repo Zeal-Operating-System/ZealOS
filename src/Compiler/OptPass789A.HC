@@ -1,4 +1,4 @@
-I64 OptPass789A(CCmpCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg)
+I64 OptPass789A(CCompCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg)
 {/*cc->pass==7 is first time
 cc->pass==8 is second time
 cc->pass==9 is third time
@@ -170,63 +170,63 @@ cc->pass==10 is final pass, code is placed into buf.
 	    ICFlagBranch(tmpi,rip,0x75850F,buf);
 	    break;
 	  case IC_BR_EQU_EQU:
-	    ICCmpAndBranch(tmpi,FALSE,rip,0x74840F,0x74840F,
+	    ICCompAndBranch(tmpi,FALSE,rip,0x74840F,0x74840F,
 		  0x74840F,0x74840F,buf,rip2);
 	    break;
 	  case IC_BR_EQU_EQU2:
-	    ICCmpAndBranch(tmpi,TRUE,rip,0x74840F,0x74840F,
+	    ICCompAndBranch(tmpi,TRUE,rip,0x74840F,0x74840F,
 		  0x74840F,0x74840F,buf,rip2);
 	    break;
 	  case IC_BR_NOT_EQU:
-	    ICCmpAndBranch(tmpi,FALSE,rip,0x75850F,0x75850F,
+	    ICCompAndBranch(tmpi,FALSE,rip,0x75850F,0x75850F,
 		  0x75850F,0x75850F,buf,rip2);
 	    break;
 	  case IC_BR_NOT_EQU2:
-	    ICCmpAndBranch(tmpi,TRUE,rip,0x75850F,0x75850F,
+	    ICCompAndBranch(tmpi,TRUE,rip,0x75850F,0x75850F,
 		  0x75850F,0x75850F,buf,rip2);
 	    break;
 	  case IC_BR_LESS:
 	    if (tmpi->ic_flags&ICF_USE_F64)
 	      ICFCmpAndBranch(cc,tmpi,	rip,0x72820F,0x77870F,buf,rip2);
 	    else
-	      ICCmpAndBranch(tmpi,FALSE,rip,0x72820F,0x7C8C0F,
+	      ICCompAndBranch(tmpi,FALSE,rip,0x72820F,0x7C8C0F,
 		    0x77870F,0x7F8F0F,buf,rip2);
 	    break;
 	  case IC_BR_LESS2:
-	    ICCmpAndBranch(tmpi,TRUE,rip,0x72820F,0x7C8C0F,
+	    ICCompAndBranch(tmpi,TRUE,rip,0x72820F,0x7C8C0F,
 		  0x77870F,0x7F8F0F,buf,rip2);
 	    break;
 	  case IC_BR_GREATER_EQU:
 	    if (tmpi->ic_flags&ICF_USE_F64)
 	      ICFCmpAndBranch(cc,tmpi,	rip,0x73830F,0x76860F,buf,rip2);
 	    else
-	      ICCmpAndBranch(tmpi,FALSE,rip,0x73830F,0x7D8D0F,
+	      ICCompAndBranch(tmpi,FALSE,rip,0x73830F,0x7D8D0F,
 		    0x76860F,0x7E8E0F,buf,rip2);
 	    break;
 	  case IC_BR_GREATER_EQU2:
-	    ICCmpAndBranch(tmpi,TRUE,rip,0x73830F,0x7D8D0F,
+	    ICCompAndBranch(tmpi,TRUE,rip,0x73830F,0x7D8D0F,
 		  0x76860F,0x7E8E0F,buf,rip2);
 	    break;
 	  case IC_BR_GREATER:
 	    if (tmpi->ic_flags&ICF_USE_F64)
 	      ICFCmpAndBranch(cc,tmpi,	rip,0x77870F,0x72820F,buf,rip2);
 	    else
-	      ICCmpAndBranch(tmpi,FALSE,rip,0x77870F,0x7F8F0F,
+	      ICCompAndBranch(tmpi,FALSE,rip,0x77870F,0x7F8F0F,
 		    0x72820F,0x7C8C0F,buf,rip2);
 	    break;
 	  case IC_BR_GREATER2:
-	    ICCmpAndBranch(tmpi,TRUE,rip,0x77870F,0x7F8F0F,
+	    ICCompAndBranch(tmpi,TRUE,rip,0x77870F,0x7F8F0F,
 		  0x72820F,0x7C8C0F,buf,rip2);
 	    break;
 	  case IC_BR_LESS_EQU:
 	    if (tmpi->ic_flags&ICF_USE_F64)
 	      ICFCmpAndBranch(cc,tmpi,	rip,0x76860F,0x73830F,buf,rip2);
 	    else
-	      ICCmpAndBranch(tmpi,FALSE,rip,0x76860F,0x7E8E0F,
+	      ICCompAndBranch(tmpi,FALSE,rip,0x76860F,0x7E8E0F,
 		    0x73830F,0x7D8D0F,buf,rip2);
 	    break;
 	  case IC_BR_LESS_EQU2:
-	    ICCmpAndBranch(tmpi,TRUE,rip,0x76860F,0x7E8E0F,
+	    ICCompAndBranch(tmpi,TRUE,rip,0x76860F,0x7E8E0F,
 		  0x73830F,0x7D8D0F,buf,rip2);
 	    break;
 	  case IC_BR_BT:
@@ -313,9 +313,9 @@ cc->pass==10 is final pass, code is placed into buf.
 	      tmpaot->rip=rip;
 	      tmpaot->rip2=rip2;
 	      if (cc->flags&CCF_AOT_COMPILE)
-		CmpFixUpAOTAsm(cc,tmpaot);
+		CompFixUpAOTAsm(cc,tmpaot);
 	      else
-		CmpFixUpJITAsm(cc,tmpaot);
+		CompFixUpJITAsm(cc,tmpaot);
 	      cnt=tmpi->ic_cnt;
 	      goto op789A_skip_copy;
 	    }
@@ -431,7 +431,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	  ICU8(tmpi,0x64);
 //It's ugly to use ic_class here
 	  ICMov(tmpi,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
-		MDF_DISP+CmpRawType(tmpi->ic_class),REG_RAX,tmpi->ic_data,
+		MDF_DISP+CompRawType(tmpi->ic_class),REG_RAX,tmpi->ic_data,
 		rip2);
 	  break;
 	case IC_MOV_GS:
@@ -439,7 +439,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	  ICU8(tmpi,0x65);
 //It's ugly to use ic_class here
 	  ICMov(tmpi,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
-		MDF_DISP+CmpRawType(tmpi->ic_class),REG_RAX,tmpi->ic_data,
+		MDF_DISP+CompRawType(tmpi->ic_class),REG_RAX,tmpi->ic_data,
 		rip2);
 	  break;
 	case IC_HOLYC_TYPECAST:
@@ -565,32 +565,32 @@ cc->pass==10 is final pass, code is placed into buf.
 	    ICFSub(cc,tmpi,buf,rip2);
 	  break;
 	case IC_EQU_EQU:
-	  ICCmp(tmpi,0x75,0x75,rip2);
+	  ICComp(tmpi,0x75,0x75,rip2);
 	  break;
 	case IC_NOT_EQU:
-	  ICCmp(tmpi,0x74,0x74,rip2);
+	  ICComp(tmpi,0x74,0x74,rip2);
 	  break;
 	case IC_LESS:
 	  if (tmpi->ic_flags&ICF_USE_INT)
-	    ICCmp(tmpi,0x73,0x7D,rip2);
+	    ICComp(tmpi,0x73,0x7D,rip2);
 	  else
 	    ICFCmp(cc,tmpi,CMP_TEMPLATE_LESS,rip2);
 	  break;
 	case IC_GREATER_EQU:
 	  if (tmpi->ic_flags&ICF_USE_INT)
-	    ICCmp(tmpi,0x72,0x7C,rip2);
+	    ICComp(tmpi,0x72,0x7C,rip2);
 	  else
 	    ICFCmp(cc,tmpi,CMP_TEMPLATE_GREATER_EQU,rip2);
 	  break;
 	case IC_GREATER:
 	  if (tmpi->ic_flags&ICF_USE_INT)
-	    ICCmp(tmpi,0x76,0x7E,rip2);
+	    ICComp(tmpi,0x76,0x7E,rip2);
 	  else
 	    ICFCmp(cc,tmpi,CMP_TEMPLATE_GREATER,rip2);
 	  break;
 	case IC_LESS_EQU:
 	  if (tmpi->ic_flags&ICF_USE_INT)
-	    ICCmp(tmpi,0x77,0x7F,rip2);
+	    ICComp(tmpi,0x77,0x7F,rip2);
 	  else
 	    ICFCmp(cc,tmpi,CMP_TEMPLATE_LESS_EQU,rip2);
 	  break;

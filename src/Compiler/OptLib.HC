@@ -80,7 +80,7 @@ CIntermediateCode *OptLead1(CIntermediateCode *tmpi)
   return tmpi;
 }
 
-I64 CmpOffset2Reg(I64 offset,COptReg *reg_offsets)
+I64 CompOffset2Reg(I64 offset,COptReg *reg_offsets)
 {
   I64 i;
   for (i=0;i<REG_REGS_NUM;i++)
@@ -225,9 +225,9 @@ Bool OptFixupUnaryOp(CIntermediateCode *tmpi, CIntermediateCode *tmpi1,
     return FBO1_NOT_CONST;
 }
 
-extern CIntermediateCode *OptBrNotZero(CCmpCtrl *cc,CIntermediateCode *tmpi);
+extern CIntermediateCode *OptBrNotZero(CCompCtrl *cc,CIntermediateCode *tmpi);
 
-CIntermediateCode *OptBrZero(CCmpCtrl *cc,CIntermediateCode *tmpi)
+CIntermediateCode *OptBrZero(CCompCtrl *cc,CIntermediateCode *tmpi)
 {
   CCodeMisc *lb_true,*lb_false;
   CIntermediateCode *tmpii=OptLag(tmpi),*tmpii2;
@@ -354,7 +354,7 @@ CIntermediateCode *OptBrZero(CCmpCtrl *cc,CIntermediateCode *tmpi)
   return tmpi;
 }
 
-CIntermediateCode *OptBrNotZero(CCmpCtrl *cc,CIntermediateCode *tmpi)
+CIntermediateCode *OptBrNotZero(CCompCtrl *cc,CIntermediateCode *tmpi)
 {
   CCodeMisc *lb_true,*lb_false;
   CIntermediateCode *tmpii=OptLag(tmpi),*tmpii2;
@@ -505,7 +505,7 @@ here:
   }
 }
 
-I64 CmpRawType(CHashClass *tmpc)
+I64 CompRawType(CHashClass *tmpc)
 {
   if (tmpc) {
     tmpc=OptClassFwd(tmpc);
@@ -514,7 +514,7 @@ I64 CmpRawType(CHashClass *tmpc)
   return 0;
 }
 
-I64 CmpRawTypePointed(CHashClass *tmpc)
+I64 CompRawTypePointed(CHashClass *tmpc)
 {
   if (tmpc) {
     if (tmpc->ptr_stars_cnt)
@@ -525,21 +525,21 @@ I64 CmpRawTypePointed(CHashClass *tmpc)
   return 0;
 }
 
-U0 CmpMinTypePointed(CIntermediateCode *tmpi,I64 pt1)
+U0 CompMinTypePointed(CIntermediateCode *tmpi,I64 pt1)
 {
   I64 pt;
   if ((pt=tmpi->arg1_type_pointed_to) && pt!=RT_F64 && 0<pt1<pt)
     tmpi->arg1_type_pointed_to=pt;
 }
 
-U0 CmpF1PushPop(CIntermediateCode *tmpi,CIntermediateCode *tmpi2)
+U0 CompF1PushPop(CIntermediateCode *tmpi,CIntermediateCode *tmpi2)
 {
   if (intermediate_code_table[tmpi2->ic_code].fpop||
 	tmpi2->ic_flags&ICF_RES_TO_F64)
     Bts(&tmpi->ic_flags,ICf_DONT_PUSH_FLOAT0);
 }
 
-U0 CmpF2PushPop(CIntermediateCode *tmpi,
+U0 CompF2PushPop(CIntermediateCode *tmpi,
 	CIntermediateCode *tmpi1,CIntermediateCode *tmpi2)
 {
   if ((tmpi2->ic_code==IC_MOV || tmpi2->ic_code==IC_IMM_F64) &&

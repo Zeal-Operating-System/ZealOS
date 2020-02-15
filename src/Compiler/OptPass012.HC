@@ -20,7 +20,7 @@ logic. 3-Arg comparisons are established.
 
 */
 
-CIntermediateCode *OptPass012(CCmpCtrl *cc)
+CIntermediateCode *OptPass012(CCompCtrl *cc)
 {/*Simplify CONST arithmetic.
 Sets the class throughout Expression trees.
 Returns the type of an Expression for use

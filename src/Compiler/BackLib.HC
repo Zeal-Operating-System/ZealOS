@@ -659,7 +659,7 @@ move_redundant:
 }
 
 U0 ICLea(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,
-	CICType t2,I64 r2,I64 d2,CCmpCtrl *cc,U8 *buf,I64 rip)
+	CICType t2,I64 r2,I64 d2,CCompCtrl *cc,U8 *buf,I64 rip)
 {
   I64 i;
   CAOTAbsAddr *tmpa;
