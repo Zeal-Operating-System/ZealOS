@@ -423,8 +423,8 @@ U0 UserCmdLine(I64 dummy=0)
 
 CTask *User(U8 *fmt=NULL,...)
 {//Create user term task.
-  U8 *st;
-  CTask *task=Spawn(&UserCmdLine);
+  U8 *st;
+  CTask *task=Spawn(&UserCmdLine,,"Terminal");
   TaskWait(task);
   if (fmt) {
     st=StrPrintJoin(NULL,fmt,argc,argv);

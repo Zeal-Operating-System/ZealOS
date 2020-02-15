@@ -29,7 +29,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
   CopyTree("/Doc",	"/Distro/Doc");
   CopyTree("/Kernel",	"/Distro/Kernel");
   CopyTree("/Misc",	"/Distro/Misc");
-
+
   //To save space, optionally delete dictionary.
   //Del("/Distro/Adam/AutoComplete/ACDefs.DATA");
   CopyTree("/Downloads","/Distro/Downloads");	  //You can leave this out.
@@ -40,7 +40,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
   //If CD-ROM use MT_CD instead of MT_DVD.
   //DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
 
-  //DelTree("/Distro");
+  DelTree("/Distro");
   Free(out_iso_filename);
 }
 

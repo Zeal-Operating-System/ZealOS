@@ -21,14 +21,12 @@ U0 SrvStartUp()
 
 U0 StartUpTasks()
 {
-  CTask *user1,*user2;
-  user1=User;
-  user2=User;
-  WinToTop(user1);
+  CTask *user = User;
+  WinToTop(user);
   WinTileVert;
   "Boot Time:%7.3fs\n",tS;
-  XTalk(user1,"Cd;#include \"Once\";\n");
-  Silent;	//no output to scrn
+  XTalk(user,"Cd;#include \"Once\";\n");
+  Silent;//no output to scrn
   ACInit("/*;!*/Bible.TXT*");
   Silent(OFF); //no output to scrn
 }

@@ -32,7 +32,7 @@ public CDoc *DocBorderNew(CDoc *pdoc)
   DocDataFmt(bdoc,doc_e);
   DocPrint(bdoc,"$$CM+H+NC,1,0$$$$TX+H+BD+IV,\"%X\"$$",Fs);
   DocPrint(bdoc,"$$TX+H+RX+BD,\"[X]\"$$");
-  DocPrint(bdoc,"$$BK,1$$$$TX+H+LX+BD,\"MENU\"$$$$BK,0$$");
+  DocPrint(bdoc,"$$TX+H+LX+BD,\"MENU\"$$");
   return bdoc;
 }
 
