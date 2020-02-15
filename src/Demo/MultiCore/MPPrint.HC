@@ -9,7 +9,7 @@ U0 MPPrintDemo()
 {
   I64 i;
   for (i=0;i<500;i++)
-    JobQue(&Job,DocPut,i%mp_cnt);
+    JobQueue(&Job,DocPut,i%mp_cnt);
   Sleep(500);
   "$$FG$$\n";
 }

@@ -228,7 +228,7 @@ MyMass *PlaceMass(I64 x, I64 y)
   tmpm->drag_profile_factor=100.0;
   tmpm->x=x;
   tmpm->y=y;
-  QueIns(tmpm,ode->last_mass);
+  QueueInsert(tmpm,ode->last_mass);
   return tmpm;
 }
 
@@ -245,7 +245,7 @@ MySpring *PlaceSpring(MyMass *tmpm1,MyMass *tmpm2,I64 type)
   else
     tmps->const=2500000/Sqr(d);
   tmps->action_key=next_action_key;
-  QueIns(tmps,ode->last_spring);
+  QueueInsert(tmps,ode->last_spring);
   return tmps;
 }
 
@@ -280,7 +280,7 @@ U0 BreakConnectors()
     tmps1=tmps->next;
     if (tmps->type==EMD_CONNECTOR &&
 	  Bt(kbd.down_bitmap,action_scan_codes[tmps->action_key-'0'])) {
-      QueRem(tmps);
+      QueueRem(tmps);
       Free(tmps);
     }
     tmps=tmps1;
@@ -304,15 +304,15 @@ U0 Init()
   ode->acceleration_limit=5e3;
   ode->drag_v2=0.000002;
   ode->drag_v3=0.0000001;
-  QueIns(ode,Fs->last_ode);
+  QueueInsert(ode,Fs->last_ode);
 }
 
 U0 CleanUp()
 {
   if (ode) {
-    QueRem(ode);
-    QueDel(&ode->next_mass,TRUE);
-    QueDel(&ode->next_spring,TRUE);
+    QueueRem(ode);
+    QueueDel(&ode->next_mass,TRUE);
+    QueueDel(&ode->next_spring,TRUE);
     ODEDel(ode);
     ode=NULL;
   }

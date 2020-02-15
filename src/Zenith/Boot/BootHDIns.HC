@@ -17,7 +17,7 @@ U0 MakeAll()
 
 public U0 BootHDIns(U8 drv_let=0)
 {//$LK,"MakeAll",A="MN:MakeAll"$ and install new boot-loader.
-  CDrv *dv;
+  CDrive *dv;
   CFAT32Boot br;
   CDirEntry de;
   I64 i;
@@ -26,7 +26,7 @@ public U0 BootHDIns(U8 drv_let=0)
       throw;
     dv=Fs->cur_dv;
     MakeAll;
-    switch (Let2BlkDevType(dv->drv_let)) {
+    switch (Letter2BlkDevType(dv->drv_let)) {
       case BDT_RAM:
       case BDT_ATA:
 	Move("/Kernel/Kernel.BIN","/" KERNEL_BIN_C);

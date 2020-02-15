@@ -1,17 +1,17 @@
-I64 ClusNumNext(CDrv *dv,I64 c,I64 cnt=1)
+I64 ClusNumNext(CDrive *dv,I64 c,I64 cnt=1)
 {//Return next cnt'th clus in chain.
   Bool unlock;
-  DrvCheck(dv);
+  DriveCheck(dv);
   if (cnt<=0) return c;
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     switch (dv->fs_type) {
       case FSt_REDSEA:
 	c+=cnt;
 	break;
       case FSt_FAT32:
 	while (cnt-->0 && 0<c<0x0FFFFFF8) {
-	  DrvFATBlkSet(dv,c);
+	  DriveFATBlkSet(dv,c);
 	  c=dv->cur_fat_blk[c & (BLK_SIZE/4-1)];
 	}
 	if (!(0<c<0x0FFFFFF8))
@@ -28,9 +28,9 @@ I64 ClusNumNext(CDrv *dv,I64 c,I64 cnt=1)
   return c;
 }
 
-I64 Clus2Blk(CDrv *dv,I64 c)
+I64 Clus2Blk(CDrive *dv,I64 c)
 {//Drive clus num to blk num.
-  DrvCheck(dv);
+  DriveCheck(dv);
   switch (dv->fs_type) {
     case FSt_REDSEA:
       return c;
@@ -41,14 +41,14 @@ I64 Clus2Blk(CDrv *dv,I64 c)
   }
 }
 
-I64 ClusBlkRead(CDrv *dv,U8 *buf,I64 c,I64 blks)
+I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks)
 {//Accepts blk count, so padding on last clus is not read.
   I64 i;
   Bool unlock;
-  DrvCheck(dv);
+  DriveCheck(dv);
   if (blks<=0) return c;
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     switch (dv->fs_type) {
       case FSt_REDSEA:
 	BlkRead(dv,buf,c,blks);
@@ -78,19 +78,19 @@ I64 ClusBlkRead(CDrv *dv,U8 *buf,I64 c,I64 blks)
   return c;
 }
 
-I64 ClusRead(CDrv *dv,U8 *buf,I64 c,I64 cnt)
+I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 cnt)
 {//Read clus cnt from drv to buf.
   return ClusBlkRead(dv,buf,c,cnt*dv->spc);
 }
 
-I64 ClusBlkWrite(CDrv *dv,U8 *buf,I64 c,I64 blks)
+I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks)
 {//Accepts blk count, so padding on last clus is not written.
   I64 i;
   Bool unlock;
-  DrvCheck(dv);
+  DriveCheck(dv);
   if (blks<=0) return c;
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     switch (dv->fs_type) {
       case FSt_REDSEA:
 	BlkWrite(dv,buf,c,blks);
@@ -120,15 +120,15 @@ I64 ClusBlkWrite(CDrv *dv,U8 *buf,I64 c,I64 blks)
   return c;
 }
 
-I64 ClusWrite(CDrv *dv,U8 *buf,I64 c,I64 cnt)
+I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 cnt)
 {//Write clus cnt from buf to drv.
   return ClusBlkWrite(dv,buf,c,cnt*dv->spc);
 }
 
-I64 ClusAlloc(CDrv *dv,I64 c=0,I64 cnt=1,Bool contiguous=FALSE)
+I64 ClusAlloc(CDrive *dv,I64 c=0,I64 cnt=1,Bool contiguous=FALSE)
 {//Alloc clus cnt into chain.
 //c=0 means first clus in chain
-  DrvCheck(dv);
+  DriveCheck(dv);
   if (cnt<=0) return c;
   switch (dv->fs_type) {
     case FSt_REDSEA:

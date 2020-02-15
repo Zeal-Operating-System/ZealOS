@@ -36,7 +36,7 @@ I64 sprite_elem_base_sizes[SPT_TYPES_NUM]={
   sizeof(CSpritePtStr),		//SPT_TEXT_DIAMOND
 };
 
-I64 SpriteElemQuedBaseSize(I64 type)
+I64 SpriteElemQueuedBaseSize(I64 type)
 {
   return sprite_elem_base_sizes[type&SPG_TYPE_MASK]+offset(CSprite.start);
 }

@@ -284,7 +284,7 @@ _extern _TASK_CONTEXT_RESTORE U0 TaskContextRestore(); //Restore a task context.
 _extern _YIELD U0 Yield(); //Yield cpu to next task.
 _extern _TASK_END_NOW U0 TaskEndNow(); //Terminate current task.
 
-U0 TaskQueIns(CTask *task,CTask *pred=NULL)
+U0 TaskQueueIns(CTask *task,CTask *pred=NULL)
 {//Insert a task in the scheduler running task queue.
 //You have no business with this, probably.
   CTask *last;
@@ -298,7 +298,7 @@ U0 TaskQueIns(CTask *task,CTask *pred=NULL)
   POPFD
 }
 
-U0 TaskQueRem(CTask *task)
+U0 TaskQueueRem(CTask *task)
 {//Remove a task from the scheduler running task queue.
 //Use $LK,"Suspend",A="MN:Suspend"$().
   CTask *next,*last;
@@ -311,7 +311,7 @@ U0 TaskQueRem(CTask *task)
   POPFD
 }
 
-U0 TaskQueInsChild(CTask *task)
+U0 TaskQueueInsChild(CTask *task)
 {
   CTask *last,*pred;
   PUSHFD

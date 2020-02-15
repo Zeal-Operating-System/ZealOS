@@ -11,7 +11,7 @@ I64 CopyVideo()
   Silent(old_silent);
   SndShift(&scrncast.snd_head,0.185);
   AUWrite("D:/Tmp/AUDIO",&scrncast.snd_head,scrncast.t0_now,scrncast.t0_tS);
-  QueDel(&scrncast.snd_head,TRUE);
+  QueueDel(&scrncast.snd_head,TRUE);
   GR2MV("D:/Tmp/VID%03d.MV","B:/Tmp","+d");
   return res;
 }

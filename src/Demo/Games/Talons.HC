@@ -295,7 +295,7 @@ U0 MPDoPanels(CTask *task)
 	  } while (cont);
 	  if (w>=threshold || h>=threshold) {
 	    tmpp=CAlloc(sizeof(Panel),task);
-	    QueInit(&tmpp->next_obj);
+	    QueueInit(&tmpp->next_obj);
 	    l=elevations[j][i];
 	    if (l<=WATER_ELEVATION*MAP_SCALE &&
 		  elevations[j][i+w-1]<=WATER_ELEVATION*MAP_SCALE &&
@@ -318,7 +318,7 @@ U0 MPDoPanels(CTask *task)
 		  tmpo->img=$IB,"<1>",BI=1$; //Fish
 		  tmpo->p.z=WATER_ELEVATION*MAP_SCALE;
 		}
-		QueIns(tmpo,tmpp->last_obj);
+		QueueInsert(tmpo,tmpp->last_obj);
 	      }
 	    } else {
 	      if (l<ROCK_ELEVATION*MAP_SCALE) {
@@ -333,7 +333,7 @@ U0 MPDoPanels(CTask *task)
 		  tmpo->p.z=l;
 		  tmpo->img=landscape_large_imgs[2]; //Tree
 		  tmpo->fish=FALSE;
-		  QueIns(tmpo,tmpp->last_obj);
+		  QueueInsert(tmpo,tmpp->last_obj);
 		}
 	      } else if (l<SNOW_ELEVATION*MAP_SCALE) {
 		if (!(RandU16&3)) {
@@ -1010,7 +1010,7 @@ U0 AnimateTask(I64)
 	      if (game_tf-game_t0<best_score)
 		best_score=game_tf-game_t0;
 	    }
-	    QueRem(tmpo);
+	    QueueRem(tmpo);
 	    Free(tmpo);
 	    music.mute=TRUE;
 	    Snd(74); Sleep(200); Snd;
@@ -1120,7 +1120,7 @@ U0 Init()
   z+=elevations[yy][xx]*COORDINATE_SCALE;
 
   for (i=0;i<mp_cnt;i++)
-    QueInit(&b_head[i]);
+    QueueInit(&b_head[i]);
 
   for (i=0;i<B_NUM;i++) {
     tmpb=MAlloc(sizeof(Bird));
@@ -1129,7 +1129,7 @@ U0 Init()
     tmpb->p.z=BIRD_ELEVATION*MAP_SCALE+
 	  elevations[tmpb->p.y/MAP_SCALE][tmpb->p.x/MAP_SCALE];
     tmpb->é=2*ã*Rand;
-    QueIns(tmpb,b_head[i%mp_cnt].last);
+    QueueInsert(tmpb,b_head[i%mp_cnt].last);
   }
 
   for (i=1;i<mp_cnt;i++)
@@ -1145,14 +1145,14 @@ U0 CleanUp()
   MPEnd;
   while (tmpp) {
     tmpp1=tmpp->next;
-    QueDel(&tmpp->next_obj);
+    QueueDel(&tmpp->next_obj);
     Free(tmpp->pts);
     Free(tmpp);
     tmpp=tmpp1;
   }
   for (i=0;i<mp_cnt;i++) {
-    QueDel(&b_head[i]);
-    QueInit(&b_head[i]);
+    QueueDel(&b_head[i]);
+    QueueInit(&b_head[i]);
   }
   DCDel(main_dc);
 }

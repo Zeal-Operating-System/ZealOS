@@ -183,10 +183,10 @@ I64 TaskInit(CTask *task,I64 stk_size)
 {//Returns Fs of task
   CTaskStk *tmps;
 
-  QueInit(&task->code_heap->next_mem_blk);
+  QueueInit(&task->code_heap->next_mem_blk);
   task->code_heap->last_mergable=NULL;
   if (task->code_heap!=task->data_heap) {
-    QueInit(&task->data_heap->next_mem_blk);
+    QueueInit(&task->data_heap->next_mem_blk);
     task->data_heap->last_mergable=NULL;
   }
 
@@ -203,10 +203,10 @@ I64 TaskInit(CTask *task,I64 stk_size)
 	(&task->next_child_task)(U8 *)-offset(CTask.next_sibling_task);
 
   JobCtrlInit(&task->srv_ctrl);
-  QueInit(&task->next_cc);
-  QueInit(&task->next_except);
-  QueInit(&task->next_ctrl);
-  QueInit(&task->next_ode);
+  QueueInit(&task->next_cc);
+  QueueInit(&task->next_except);
+  QueueInit(&task->next_ctrl);
+  QueueInit(&task->next_ode);
 
   task->fpu_mmx=MAllocAligned(sizeof(CFPU),0x10,task);
   MemCpy(task->fpu_mmx,
@@ -221,7 +221,7 @@ I64 TaskInit(CTask *task,I64 stk_size)
 
   task->text_attr	=WHITE<<4+BLUE;
   task->border_src	=BDS_CONST;
-  task->border_attr	=DrvTextAttrGet(':');
+  task->border_attr	=DriveTextAttrGet(':');
   task->title_src	=TTS_CONST;
   task->win_left	=1;
   task->win_right	=text.cols-2;
@@ -249,7 +249,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   //Could be alloced off of data heap.
   CTask *task;
   if (target_cpu>=0)
-    return SpawnQue(fp_start_addr,data,task_name,target_cpu,
+    return SpawnQueue(fp_start_addr,data,task_name,target_cpu,
 	  parent,stk_size,flags);
   task=CAlloc(sizeof(CTask),zenith_task->code_heap);
   task->task_signature=TASK_SIGNATURE_VAL;
@@ -276,8 +276,8 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   PUSHFD
   CLI
   if (Bt(&flags,JOBf_ADD_TO_QUE)) {
-    TaskQueInsChild(task);
-    TaskQueIns(task);
+    TaskQueueInsChild(task);
+    TaskQueueIns(task);
   }
   POPFD
   return task;
@@ -388,12 +388,12 @@ U0 UserTaskCont()
   Bool cont=TRUE;
   do {
     cc=CmpCtrlNew(,CCF_CMD_LINE|CCF_PMT|CCF_QUESTION_HELP);
-    QueIns(cc,Fs->last_cc);
+    QueueInsert(cc,Fs->last_cc);
     try {
       Lex(cc);
       ExeCmdLine(cc);
       cont=Bt(&cc->flags,CCf_PMT);
-      QueRem(cc);
+      QueueRem(cc);
       CmpCtrlDel(cc);
     } catch {
       if ((doc=Fs->put_doc) && doc->doc_signature==DOC_SIGNATURE_VAL)
@@ -464,7 +464,7 @@ I64 TaskEnd()
     return task->parent_task;
   }
 
-  DrvsRelease;
+  DrivesRelease;
   BlkDevsRelease;
   tmpt1=(&task->next_child_task)(U8 *)-offset(CTask.next_sibling_task);
   tmpt=tmpt1->next_sibling_task;
@@ -483,8 +483,8 @@ I64 TaskEnd()
   while (LBts(&task->srv_ctrl.flags,JOBCf_LOCKED))
     PAUSE
 
-  JobQueDel(&task->srv_ctrl.next_waiting);
-  JobQueDel(&task->srv_ctrl.next_done);
+  JobQueueDel(&task->srv_ctrl.next_waiting);
+  JobQueueDel(&task->srv_ctrl.next_done);
 
   if (IsRaw)
     VGAFlush;
@@ -497,7 +497,7 @@ I64 TaskEnd()
       (*fp_set_std_palette)();
   }
 
-  //QueRem
+  //QueueRem
   task->task_signature(I64)=0;
 
   tmpt =task->next_input_filter_task;
@@ -511,7 +511,7 @@ I64 TaskEnd()
   tmpt ->last_sibling_task=tmpt1;
 
   tmpt =task->next_task; //save to return
-  TaskQueRem(task);
+  TaskQueueRem(task);
 
   LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   LBtr(&task->task_flags,TASKf_TASK_LOCK);
@@ -519,7 +519,7 @@ I64 TaskEnd()
   task->wake_jiffy=cnts.jiffies+DYING_JIFFIES;
   while (LBts(&Gs->cpu_flags,CPUf_DYING_TASK_QUE))
     PAUSE
-  QueIns(task,Gs->last_dying);
+  QueueInsert(task,Gs->last_dying);
   LBtr(&Gs->cpu_flags,CPUf_DYING_TASK_QUE);
 
   return tmpt;
@@ -535,7 +535,7 @@ U0 TaskKillDying()
     task=Gs->next_dying;
     while (task!=&Gs->next_dying && task->wake_jiffy<cnts.jiffies) {
       task1=task->next;
-      QueRem(task);
+      QueueRem(task);
       TaskDel(task);
       task=task1;
     }

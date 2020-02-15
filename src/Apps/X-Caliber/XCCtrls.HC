@@ -142,13 +142,13 @@ CCtrl *CtrlPanelNew()
   c->draw_it=&DrawCtrlPanelCtrl;
   c->left_click=&LeftClickCtrlPanel;
   c->update_derived_vals=&UpdateDerivedCtrlPanelCtrl;
-  QueIns(c,Fs->last_ctrl);
+  QueueInsert(c,Fs->last_ctrl);
   TaskDerivedValsUpdate;
   return c;
 }
 
 U0 CtrlPanelDel(CCtrl *c)
 {
-  QueRem(c);
+  QueueRem(c);
   Free(c);
 }

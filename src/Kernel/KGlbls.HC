@@ -13,7 +13,7 @@ U8 *rev_bits_table, //Table with U8 bits revd
    *set_bits_table; //Table with count of set bits in a U8
 CDate local_time_offset;
 F64	*pow10_I64,
-	sys_os_version=5.030;
+	sys_os_version=0.10;
 
 CAutoCompleteDictGlbls acd;
 CAutoCompleteGlbls ac;

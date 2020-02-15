@@ -47,7 +47,7 @@ U0 RedSeaISO9660Stage1(U8 *iso_filename,U8 *stage2_filename)
 
 U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
 {
-  CDrv	*dv=Let2Drv(drv_let);
+  CDrive	*dv=Letter2Drive(drv_let);
   CISOPriDesc *iso_pri=CAlloc(DVD_BLK_SIZE),
 	*iso_boot=CAlloc(DVD_BLK_SIZE),
 	*iso_sup=CAlloc(DVD_BLK_SIZE),
@@ -139,7 +139,7 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
   I64 i,res,root_cnt,root_dir_blks,bitmap_blks,bitmap_blks1;
   CDirEntry *tmpde;
   U8 buf[STR_LEN],*iso_filename,*src_dir,*stage2_filename;
-  CDrv *dv=DrvMakeFreeSlot(DrvNextFreeLet('Q')); //First $LK,"BDT_ISO_FILE_WRITE",A="MN:BDT_ISO_FILE_WRITE"$
+  CDrive *dv=DriveMakeFreeSlot(DriveNextFreeLet('Q')); //First $LK,"BDT_ISO_FILE_WRITE",A="MN:BDT_ISO_FILE_WRITE"$
   CBlkDev *bd=BlkDevNextFreeSlot(dv->drv_let,BDT_ISO_FILE_WRITE);
 
   if (!IsDir(_src_dir))
@@ -177,7 +177,7 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
       StrPrint(buf,"%C:/",dv->drv_let);
       CopyTree(src_dir,buf,TRUE);
       RedSeaISO9660Stage1(iso_filename,stage2_filename);
-      DrvDel(dv);
+      DriveDel(dv);
       BlkDevDel(bd);
     }
     Free(stage2_filename);

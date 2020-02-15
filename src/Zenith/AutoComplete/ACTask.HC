@@ -23,7 +23,7 @@ U0 ACDocRst(I64 left,I64 top)
   DocRst(doc,TRUE);
   doc->flags|=DOCF_SIZE_MIN;
   Fs->border_src=BDS_CONST;
-  Fs->border_attr=LTGRAY<<4+DrvTextAttrGet(':')&15;
+  Fs->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   Fs->text_attr  =LTGRAY<<4+BLUE;
   LBtr(&Fs->display_flags,DISPLAYf_SHOW);
   WinHorz(left,Fs->win_right);

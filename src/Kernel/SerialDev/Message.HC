@@ -16,7 +16,7 @@ U0 InputFilterTask()
       break;
     else {
       if (tmpc->job_code==JOBT_TEXT_INPUT) {
-	QueRem(tmpc);
+	QueueRem(tmpc);
 	SetRFlags(old_flags);
 	try
 		ExePrint("%s",tmpc->aux_str);
@@ -55,7 +55,7 @@ Note: This delivers messages from parent down to pop-up.
       break;
     else {
       if (tmpc->job_code==JOBT_MSG) {
-	QueRem(tmpc);
+	QueueRem(tmpc);
 	SetRFlags(old_flags);
 	res=tmpc->msg_code;
 	if (_arg1)
@@ -163,7 +163,7 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
       PUSHFD
       CLI
       KbdMsHndlr(TRUE,FALSE);
-      KbdMsgsQue;
+      KbdMsgsQueue;
       POPFD
     } else {
       LBts(&Fs->task_flags,TASKf_AWAITING_MSG);

@@ -9,7 +9,7 @@ public U0 DocProfile(U8 *filename,I64 flags)
   CDoc *doc=DocRead(filename,flags);
 
   //doc->head which is equ to doc is the
-  //header of the CQue and represents the end-of-file marker.
+  //header of the CQueue and represents the end-of-file marker.
   CDocEntry *doc_e=doc->head.next;
   while (doc_e!=doc) {
     cmd_stats[doc_e->type_u8]++;

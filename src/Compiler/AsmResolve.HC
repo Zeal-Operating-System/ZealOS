@@ -144,7 +144,7 @@ U0 AOTGlblsResolve(CCmpCtrl *cc,CAOT *tmpaot)
 	    tmpie->str=StrNew(tmpex->str);
 	  do {
 	    tmpie1=tmpie->next;
-	    QueIns(tmpie,tmpaot->last_ie);
+	    QueueInsert(tmpie,tmpaot->last_ie);
 	  } while (tmpie=tmpie1);
 	  tmpex->ie_lst=NULL;
 	}
@@ -178,7 +178,7 @@ U0 AOTGlblsResolve(CCmpCtrl *cc,CAOT *tmpaot)
 	    tmpie->type++;
 	  tmpie->str=StrNew(tmpex->str);
 	  tmpie->src_link=StrNew(tmpex->src_link);
-	  QueIns(tmpie,tmpaot->last_ie);
+	  QueueInsert(tmpie,tmpaot->last_ie);
 	}
       }
       tmpex=tmpex->next;

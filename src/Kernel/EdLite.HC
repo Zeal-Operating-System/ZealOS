@@ -73,7 +73,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   CLI
   text.raw_flags=text.raw_flags&~RWF_SCROLL|RWF_SHOW_DOLLAR;
   kbd.scan_code=0;
-  QueInit(&head);
+  QueueInit(&head);
   head.line=StrNew("");
 
   if (buf) {
@@ -95,7 +95,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 
       tmpl=MAlloc(sizeof(CLine));
       tmpl->line=StrNew(src2);
-      QueIns(tmpl,head.last);
+      QueueInsert(tmpl,head.last);
       cnt++;
     }
 
@@ -188,7 +188,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 		Free(cur_line->line);
 		Free(tmpl->line);
 		cur_line->line=src;
-		QueRem(tmpl);
+		QueueRem(tmpl);
 		Free(tmpl);
 	      }
 	    } else
@@ -201,7 +201,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	tmpl=MAlloc(sizeof(CLine));
 	tmpl->line=StrNew(cur_line->line+cur_col);
 	cur_line->line[cur_col]=0;
-	QueIns(tmpl,cur_line);
+	QueueInsert(tmpl,cur_line);
 	cur_line=tmpl;
 	cur_col=0;
 	break;
@@ -216,7 +216,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	  Free(cur_line->line);
 	  Free(tmpl->line);
 	  tmpl->line=src;
-	  QueRem(cur_line);
+	  QueueRem(cur_line);
 	  Free(cur_line);
 	  cur_line=tmpl;
 	}
@@ -225,7 +225,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	if (cur_line!=&head) {
 	  tmpl=cur_line;
 	  cur_line=cur_line->next;
-	  QueRem(tmpl);
+	  QueueRem(tmpl);
 	  Free(tmpl->line);
 	  Free(tmpl);
 	  cur_col=0;
@@ -236,7 +236,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	  if (cur_line==&head) {
 	    cur_line=MAlloc(sizeof(CLine));
 	    cur_line->line=StrNew("");
-	    QueIns(cur_line,head.last);
+	    QueueInsert(cur_line,head.last);
 	  }
 	  src=MAlloc(StrLen(cur_line->line)+2);
 	  MemCpy(src,cur_line->line,cur_col);
@@ -285,7 +285,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   tmpl=head.next;
   while (tmpl!=&head) {
     tmpl1=tmpl->next;
-    QueRem(tmpl);
+    QueueRem(tmpl);
     Free(tmpl->line);
     Free(tmpl);
     tmpl=tmpl1;

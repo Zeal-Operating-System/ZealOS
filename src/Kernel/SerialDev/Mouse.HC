@@ -291,7 +291,7 @@ U0 KbdMsRst()
   kbd.rst=FALSE;
 }
 
-Bool MsHardDrvrInstall(I64 dummy=0) //can be spawned
+Bool MsHardDriverInstall(I64 dummy=0) //can be spawned
 {
   no_warn dummy;
   I64 i;

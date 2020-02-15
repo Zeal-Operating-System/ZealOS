@@ -20,8 +20,8 @@ U0 Tmp()
 	if (RunFile("::/Misc/OSInstall",,FALSE)) {
 	  Del("C:/Home/DoDistro.HC");
 	  Del("D:/Home/DoDistro.HC");
-	  OnceDrv('C',"\"\n\nRun TOSStaffIns;\n\n\n\";");
-	  OnceDrv('D',""); //This command uses cached Registry file.
+	  OnceDrive('C',"\"\n\nRun TOSStaffIns;\n\n\n\";");
+	  OnceDrive('D',""); //This command uses cached Registry file.
 	  if (PressAKey!=CH_SHIFT_ESC)
 	    Reboot; //Too dangerous for amateurs until reboot.
 	}

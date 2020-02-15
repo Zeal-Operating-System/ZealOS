@@ -591,7 +591,7 @@ U0 PrsSwitch(CCmpCtrl *cc,I64 try_cnt)
   else
     LexExcept(cc,"Expecting '(' or '[' at ");
   Lex(cc);
-  QueInit(&head);
+  QueueInit(&head);
 
   head.last->lb_break=COCMiscNew(cc,CMT_LABEL);
   head.last->lb_break->use_cnt++;
@@ -630,7 +630,7 @@ sw_cont:
 	  else
 	    LexExcept(cc,"Expecting ':' at ");
 	  tmpss=MAlloc(sizeof(CSubSwitch));
-	  QueIns(tmpss,head.last);
+	  QueueInsert(tmpss,head.last);
 	  head.last->lb_break=COCMiscNew(cc,CMT_LABEL);
 	  head.last->lb_break->use_cnt++;
 	  lb_fwd_case=COCMiscNew(cc,CMT_LABEL);
@@ -751,7 +751,7 @@ sw_sub_end:
       Lex(cc);
       break;
     } else {
-      QueRem(tmpss);
+      QueueRem(tmpss);
       Free(tmpss);
       if (PrsKeyWord(cc)!=KW_END)
 	LexExcept(cc,"Missing 'end' at ");
@@ -807,9 +807,9 @@ U0 PrsStreamBlk(CCmpCtrl *cc)
   CLexHashTableContext *htc=MAlloc(sizeof(CLexHashTableContext));
   CStreamBlk *tmpe=MAlloc(sizeof(CStreamBlk));
   tmpe->body=StrNew("");
-  QueIns(tmpe,cc->last_stream_blk);
+  QueueInsert(tmpe,cc->last_stream_blk);
   COCPush(cc);
-  QueInit(&cc->coc.coc_next_misc);
+  QueueInit(&cc->coc.coc_next_misc);
 
   MemCpy(htc,&cc->htc,sizeof(CLexHashTableContext));
   htc->old_flags=cc->flags;
@@ -830,7 +830,7 @@ U0 PrsStreamBlk(CCmpCtrl *cc)
 	htc->old_flags & (CCF_ASM_EXPRESSIONS|CCF_EXE_BLK|CCF_AOT_COMPILE);
   Free(htc);
   COCPop(cc);
-  QueRem(tmpe);
+  QueueRem(tmpe);
   if (*tmpe->body)
     LexIncludeStr(cc,"StreamBlk",tmpe->body,FALSE);
   else

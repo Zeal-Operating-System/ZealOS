@@ -1,10 +1,10 @@
-Bool DrvTypeSet(U8 drv_let,I64 type=FSt_REDSEA)
+Bool DriveTypeSet(U8 drv_let,I64 type=FSt_REDSEA)
 {//Very dangerous
   I64 i,j,ext_base,drv_num,offset,cur_type;
   CMasterBoot mbr;
   CBlkDev *bd;
-  drv_let=Let2Let(drv_let);
-  bd=Let2BlkDev(drv_let);
+  drv_let=Letter2Letter(drv_let);
+  bd=Letter2BlkDev(drv_let);
   drv_num=bd->first_drv_let-'A';
   switch (bd->type) {
     case BDT_ATA:
@@ -58,7 +58,7 @@ U0 Fmt(I64 drv_let,Bool quick=TRUE,Bool confirm=TRUE,I64 type=FSt_FAT32)
   //quick=FALSE means fill entire drive with zeros.
   //Choose $LK,"FSt_FAT32",A="MN:FSt_FAT32"$ or $LK,"FSt_REDSEA",A="MN:FSt_REDSEA"$.
   //You don't format a CD/DVD with this.
-  CDrv *dv=Let2Drv(drv_let);
+  CDrive *dv=Letter2Drive(drv_let);
   Bool old_silent=IsSilent;
   if (confirm && !AreYouSure)
     return;
@@ -73,7 +73,7 @@ U0 Fmt(I64 drv_let,Bool quick=TRUE,Bool confirm=TRUE,I64 type=FSt_FAT32)
 	Drive(drv_let);
 	Silent(old_silent);
 	FAT32Fmt(drv_let,quick);
-	DiskCacheInvalidate(Let2Drv(drv_let));
+	DiskCacheInvalidate(Letter2Drive(drv_let));
 	Drive(drv_let);
 	break;
       }
@@ -83,7 +83,7 @@ U0 Fmt(I64 drv_let,Bool quick=TRUE,Bool confirm=TRUE,I64 type=FSt_FAT32)
       Drive(drv_let);
       Silent(old_silent);
       RedSeaFmt(drv_let,quick);
-      DiskCacheInvalidate(Let2Drv(drv_let));
+      DiskCacheInvalidate(Letter2Drive(drv_let));
       Drive(drv_let);
       break;
     default:

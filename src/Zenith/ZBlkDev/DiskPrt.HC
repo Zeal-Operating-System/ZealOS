@@ -3,9 +3,9 @@
 #define ROUND_DRV_TO	(63*255)
 #define DRV_HEADER	63
 
-class CPlannedDrv
+class CPlannedDrive
 {
-  CPlannedDrv *next,*last;
+  CPlannedDrive *next,*last;
   I64 size;
   Bool pri;
 };
@@ -19,7 +19,7 @@ drv_let=0 means add new drive that is not already mounted.
 
 */
   CBlkDev *bd;
-  CPlannedDrv head,*tmppp;
+  CPlannedDrive head,*tmppp;
   CMasterBoot mbr;
   Bool pri=TRUE;
   I64 ext_base,drv_let2,pri_cnt=0,i,start_offset,offset,
@@ -38,18 +38,18 @@ drv_let=0 means add new drive that is not already mounted.
     return 0;
   '\n';
 
-  if (drv_let && !Let2BlkDev(drv_let,FALSE))
+  if (drv_let && !Letter2BlkDev(drv_let,FALSE))
     drv_let=0;
   if (!drv_let && !(drv_let=Mount(TRUE)) ||
-	!(bd=Let2BlkDev(drv_let,FALSE)) || bd->type!=BDT_ATA)
+	!(bd=Letter2BlkDev(drv_let,FALSE)) || bd->type!=BDT_ATA)
     return 0;
 
   total=bd->max_blk+1;
-  QueInit(&head);
+  QueueInit(&head);
   drv_let2=bd->first_drv_let;
   remaining=FloorU64(bd->max_blk+1,ROUND_DRV_TO);
   while (FloorU64(remaining,ROUND_DRV_TO)>=ROUND_DRV_TO) {
-    tmppp=MAlloc(sizeof(CPlannedDrv));
+    tmppp=MAlloc(sizeof(CPlannedDrive));
     do {
       "$$RED$$Partition %C$$FG$$\n",drv_let2;
       tmppp->pri=FALSE;
@@ -72,7 +72,7 @@ drv_let=0 means add new drive that is not already mounted.
 	tmppp->size=CeilU64(GetI64("Size in Blocks:",
 	      remaining-DRV_HEADER)+DRV_HEADER,ROUND_DRV_TO);
     } while (!(ROUND_DRV_TO<=tmppp->size<=FloorU64(remaining,ROUND_DRV_TO)));
-    QueIns(tmppp,head.last);
+    QueueInsert(tmppp,head.last);
     remaining-=tmppp->size;
     drv_let2++;
   }
@@ -160,7 +160,7 @@ drv_let=0 means add new drive that is not already mounted.
     pd_done:
   while (head.next!=&head) {
     tmppp=head.next;
-    QueRem(tmppp);
+    QueueRem(tmppp);
     Free(tmppp);
   }
   return total;

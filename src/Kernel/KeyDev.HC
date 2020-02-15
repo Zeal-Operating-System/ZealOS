@@ -63,7 +63,7 @@ U0 KeyDescSet(U8 *fmt,...)
 
 U0 KeyDevRem(CKeyDevEntry *tmpk)
 {//Remove StdOut hook and free.
-  QueRem(tmpk);
+  QueueRem(tmpk);
   Free(tmpk);
 }
 
@@ -79,7 +79,7 @@ CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch,I64 sc),
     tmpk1->flags|=KDF_HAS_DESCS;
   while (tmpk->priority>priority)
     tmpk=tmpk->last;
-  QueIns(tmpk1,tmpk);
+  QueueInsert(tmpk1,tmpk);
   if (tmpk->priority==priority)
     KeyDevRem(tmpk);
   return tmpk1;
@@ -205,7 +205,7 @@ U0 KeyDevInit()
   keydev.ctrl_alt_shift_descs	=CAlloc(26*sizeof(U8 *));
   keydev.ctrl_alt_in_irq_flags	=0;
   MemSet(&keydev.put_key_head,0,sizeof(CKeyDevEntry));
-  QueInit(&keydev.put_key_head);
+  QueueInit(&keydev.put_key_head);
   KeyDevAdd(&KDInputFilterPutKey,&KDInputFilterPutS,0x40000000,FALSE);
   KeyDevAdd(&KDRawPutKey,&KDRawPutS,0x60000000,FALSE);
   CtrlAltCBSet('C',&CtrlAltC,"Cmd/Break Execution",,TRUE);

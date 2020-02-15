@@ -134,7 +134,7 @@ Bool DocTreeWriteJoin(CDoc *doc,U8 *path,Bool write,U8 *fmt,I64 argc,I64 *argv)
   } else
     DocTreeMake(doc,path);
   DocPrint(doc,"%s",buf);
-  if (write && DrvIsWritable(*doc->filename.name))
+  if (write && DriveIsWritable(*doc->filename.name))
     DocWrite(doc);
   if (unlock_doc)
     DocUnlock(doc);
@@ -154,7 +154,7 @@ Bool DocTreeAppendJoin(CDoc *doc,U8 *path,Bool write,U8 *fmt,I64 argc,I64 *argv)
   } else
     DocTreeMake(doc,path);
   DocPrint(doc,"%s",buf);
-  if (write && DrvIsWritable(*doc->filename.name))
+  if (write && DriveIsWritable(*doc->filename.name))
     DocWrite(doc);
   if (unlock_doc)
     DocUnlock(doc);
@@ -196,7 +196,7 @@ public I64 ExeDoc(CDoc *doc,I64 ccf_flags=0)
   CCmpCtrl *cc=CmpCtrlNew(,ccf_flags|CCF_DONT_FREE_BUF);
   if (Fs->last_cc!=&Fs->next_cc)
     cc->opts=Fs->last_cc->opts;
-  QueIns(cc,Fs->last_cc);
+  QueueInsert(cc,Fs->last_cc);
   LexAttachDoc(cc,,doc);
   try {
     Lex(cc);
@@ -208,7 +208,7 @@ public I64 ExeDoc(CDoc *doc,I64 ccf_flags=0)
       res=0;
     }
   }
-  QueRem(cc);
+  QueueRem(cc);
   if (okay)
     CmpCtrlDel(cc); //TODO: can crash
   if (unlock_doc)

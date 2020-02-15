@@ -197,7 +197,7 @@ U0 Snd(I8 ona=0)
       d=ACAlloc(sizeof(CSndData));
       d->ona=ona;
       d->tS=tS;
-      QueIns(d,scrncast.snd_head.last);
+      QueueInsert(d,scrncast.snd_head.last);
     }
     LBtr(&sys_semas[SEMA_SND],0);
   }

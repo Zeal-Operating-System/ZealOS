@@ -134,7 +134,7 @@ U0 Whap()
   for (i=0;i<BALLS_NUM;i++) {
     balls[i].mass=1.0;
     balls[i].drag_profile_factor=1.0;
-    QueIns(&balls[i],ode->last_mass);
+    QueueInsert(&balls[i],ode->last_mass);
   }
   balls[2].x=balls[1].x+15;
   balls[2].y=balls[1].y;
@@ -145,27 +145,27 @@ U0 Whap()
   springs[0].end2=&balls[2];
   springs[0].rest_len=15;
   springs[0].const=10000;
-  QueIns(&springs[0],ode->last_spring);
+  QueueInsert(&springs[0],ode->last_spring);
   springs[1].end1=&balls[1];
   springs[1].end2=&balls[3];
   springs[1].rest_len=15;
   springs[1].const=10000;
-  QueIns(&springs[1],ode->last_spring);
+  QueueInsert(&springs[1],ode->last_spring);
   springs[2].end1=&balls[2];
   springs[2].end2=&balls[3];
   springs[2].rest_len=sqrt2*15;
   springs[2].const=10000;
-  QueIns(&springs[2],ode->last_spring);
+  QueueInsert(&springs[2],ode->last_spring);
 
   collision_t=0;
-  QueIns(ode,Fs->last_ode);
+  QueueInsert(ode,Fs->last_ode);
 
   DocCursor;
   DocClear;
   Fs->draw_it=&DrawIt;
   GetChar;
   SettingsPop;
-  QueRem(ode);
+  QueueRem(ode);
   ODEDel(ode);
   MenuPop;
 }

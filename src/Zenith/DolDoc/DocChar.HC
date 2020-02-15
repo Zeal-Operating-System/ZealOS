@@ -38,7 +38,7 @@ public U0 EdCursorLeft(CDoc *doc,I64 sc=I64_MIN)
 	doc_ne=DocEntryNewTag(doc,doc_ce,dst);
 	*dst=0;
 	doc_ce->max_col=cc;
-	QueIns(doc_ne,doc_ce);
+	QueueInsert(doc_ne,doc_ce);
       }
       cc--;
       if (IsEditableText(doc_ce) && cc>doc_ce->min_col) {
@@ -46,7 +46,7 @@ public U0 EdCursorLeft(CDoc *doc,I64 sc=I64_MIN)
 	doc_ne=DocEntryNewTag(doc,doc_ce,dst);
 	*dst=0;
 	doc_ce->max_col=cc;
-	QueIns(doc_ne,doc_ce);
+	QueueInsert(doc_ne,doc_ce);
 	doc_ce=doc_ne;
 	cc=doc_ce->min_col;
       }
@@ -71,7 +71,7 @@ public U0 EdCursorLeft(CDoc *doc,I64 sc=I64_MIN)
 	    doc_ne=DocEntryNewTag(doc,doc_ce,dst);
 	    *dst=0;
 	    doc_ce->max_col=cc;
-	    QueIns(doc_ne,doc_ce);
+	    QueueInsert(doc_ne,doc_ce);
 	    doc_ce=doc_ne;
 	    cc=doc_ce->min_col;
 	  }
@@ -115,7 +115,7 @@ public U0 EdCursorRight(CDoc *doc,I64 sc=I64_MIN)
 	doc_ne=DocEntryNewTag(doc,doc_ce,dst);
 	*dst=0;
 	doc_ce->max_col=cc;
-	QueIns(doc_ne,doc_ce);
+	QueueInsert(doc_ne,doc_ce);
 	doc_ce=doc_ne;
 	cc=doc_ce->min_col;
       }
@@ -131,7 +131,7 @@ public U0 EdCursorRight(CDoc *doc,I64 sc=I64_MIN)
 	doc_ne->type=DOCT_TEXT | old_color & -0x100;
 	doc_ne->de_flags=old_de_flags|doldoc.dft_de_flags[DOCT_TEXT];
 	doc_ce->max_col=cc;
-	QueIns(doc_ne,doc_ce);
+	QueueInsert(doc_ne,doc_ce);
 	doc_ce=doc_ne;
 	cc=doc_ce->min_col;
       } else if (cc>=doc_ce->max_col) {
@@ -192,7 +192,7 @@ public U0 EdLineUp(CDoc *doc,I64 sc=I64_MIN)
       *dst=0;
       doc_ne->x=doc_ce->x+doc->cur_col;
       doc_ce->max_col=doc->cur_col;
-      QueIns(doc_ne,doc_ce);
+      QueueInsert(doc_ne,doc_ce);
     } else if (doc->cur_col==doc_ce->min_col && doc_ce->last!=doc)
       doc_ce=doc_ce->last;
   } else if (doc_ce->last!=doc)
@@ -265,7 +265,7 @@ public U0 EdLineUp(CDoc *doc,I64 sc=I64_MIN)
       }
       doc_ne->x=doc_ce->x+doc->cur_col;
       doc_ce->max_col=doc->cur_col;
-      QueIns(doc_ne,doc_ce);
+      QueueInsert(doc_ne,doc_ce);
       doc_ce=doc_ne;
       doc->cur_col=doc_ce->min_col;
     }
@@ -311,7 +311,7 @@ public U0 EdLineDown(CDoc *doc,I64 sc=I64_MIN)
       }
       doc_ne->x=doc_ce->x+doc->cur_col;
       doc_ce->max_col=doc->cur_col;
-      QueIns(doc_ne,doc_ce);
+      QueueInsert(doc_ne,doc_ce);
       doc_ce=doc_ne;
       doc->cur_col=doc_ce->min_col;
     }
@@ -368,7 +368,7 @@ public U0 EdLineDown(CDoc *doc,I64 sc=I64_MIN)
     doc_ne->de_flags=old_de_flags|doldoc.dft_de_flags[DOCT_TEXT];
     doc_ce->max_col=doc->cur_col;
     doc_ne->x=doc_ce->x+doc->cur_col;
-    QueIns(doc_ne,doc_ce);
+    QueueInsert(doc_ne,doc_ce);
     doc_ce=doc_ne;
     doc->cur_col=doc_ce->min_col;
   }
@@ -542,7 +542,7 @@ ic_overstrike:
       doc_ne=DocEntryNewTag(doc,doc_ce,&ch);
       doc_ne->type=DOCT_TEXT | doc->settings_head.dft_text_attr<<8;
       doc_ne->de_flags=doldoc.dft_de_flags[DOCT_TEXT];
-      QueIns(doc_ne,doc_ce->last);
+      QueueInsert(doc_ne,doc_ce->last);
     } else if (ch=='\n') {
       while (doc->cur_entry->next!=doc && doc->cur_entry->y==y)
 	doc->cur_entry=doc->cur_entry->next;
@@ -619,7 +619,7 @@ ic_form_tab:
 	doc_ne->type=DOCT_TEXT | doc->settings_head.dft_text_attr<<8;
 	doc_ne->de_flags=doldoc.dft_de_flags[DOCT_TEXT];
 	doc_ne->x=doc_ce->x+1;
-	QueIns(doc_ne,doc_ce->last);
+	QueueInsert(doc_ne,doc_ce->last);
       }
     }
   }

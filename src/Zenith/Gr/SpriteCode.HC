@@ -205,9 +205,9 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
   CSprite *res,g;
   CColorROPU32 color;
   U8 *st,*ptr;
-  CQueD3I32 headp,*tmpp,*tmpa1;
-  CQueMeshTri headt,*tmpt,*tmpt1;
-  CQueVectU8 *tmpv;
+  CQueueD3I32 headp,*tmpp,*tmpa1;
+  CQueueMeshTri headt,*tmpt,*tmpt1;
+  CQueueVectU8 *tmpv;
   MemSet(&g,0,sizeof(CSprite));
   switch (type) {
     start:
@@ -329,7 +329,7 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
 	st=LexExtStr(cc);
       else
 	LexExcept(cc,"Expecting string at ");
-      size=SpriteElemQuedBaseSize(type);
+      size=SpriteElemQueuedBaseSize(type);
       i=StrLen(st)+1;
       res=MAlloc(size+i);
       MemCpy(res,&g,size);
@@ -339,18 +339,18 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
     case SPT_POLYLINE:
       Lex(cc); //Skip {
       g.type=SPT_POLYLINE;
-      QueInit(&headp);
+      QueueInit(&headp);
       while (cc->token=='(') {
-	tmpp=CAlloc(sizeof(CQueD3I32));
+	tmpp=CAlloc(sizeof(CQueueD3I32));
 	LexD2I32(cc,&tmpp->p);
-	QueIns(tmpp,headp.last);
+	QueueInsert(tmpp,headp.last);
 	g.nu.num++;
 	if (cc->token==',')
 	  Lex(cc); //Skip ,
       }
       if (g.nu.num<2)
 	LexExcept(cc,"Expecting point at ");
-      size=SpriteElemQuedBaseSize(SPT_POLYLINE);
+      size=SpriteElemQueuedBaseSize(SPT_POLYLINE);
       res=MAlloc(size+g.nu.num*sizeof(CD2I32));
       MemCpy(res,&g,size);
       ptr=&res->nu.u;
@@ -368,18 +368,18 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
     case SPT_BSPLINE2_CLOSED:
     case SPT_BSPLINE3_CLOSED:
       Lex(cc); //Skip {
-      QueInit(&headp);
+      QueueInit(&headp);
       while (cc->token=='(') {
-	tmpp=CAlloc(sizeof(CQueD3I32));
+	tmpp=CAlloc(sizeof(CQueueD3I32));
 	LexD3I32(cc,&tmpp->p);
-	QueIns(tmpp,headp.last);
+	QueueInsert(tmpp,headp.last);
 	g.nu.num++;
 	if (cc->token==',')
 	  Lex(cc); //Skip ,
       }
       if (g.nu.num<2)
 	LexExcept(cc,"Expecting point at ");
-      size=SpriteElemQuedBaseSize(type);
+      size=SpriteElemQueuedBaseSize(type);
       res=MAlloc(size+g.nu.num*sizeof(CD3I32));
       if (LexExpressionI64(cc)) {
 	if (type==SPT_BSPLINE2||type==SPT_BSPLINE2_CLOSED)
@@ -408,25 +408,25 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
       LexD2I32(cc,&g.npu.x);
       if (cc->token!=',')
 	LexExcept(cc,"Expecting ',' at ");
-      tmpv=QueVectU8New;
+      tmpv=QueueVectU8New;
       while (TRUE) {
 	if (!(i=LexGetChar(cc)))
 	  LexExcept(cc,"Expecting '}' at ");
 	if (i=='}')
 	  break;
 	if ('0'<=i<='7')
-	  QueVectU8Put(tmpv,g.npu.num++,i-'0');
+	  QueueVectU8Put(tmpv,g.npu.num++,i-'0');
       }
       Bts(&cc->flags,CCf_USE_LAST_U16);
       Lex(cc); //Load '}'
       g.type=SPT_POLYPT;
-      size=SpriteElemQuedBaseSize(SPT_POLYPT);
+      size=SpriteElemQueuedBaseSize(SPT_POLYPT);
       res=CAlloc(size+(g.npu.num*3+7)>>3);
       MemCpy(res,&g,size);
       ptr=&res->npu.u;
       for (i=0;i<g.npu.num;i++)
-	BFieldOrU32(ptr,i*3,QueVectU8Get(tmpv,i));
-      QueVectU8Del(tmpv);
+	BFieldOrU32(ptr,i*3,QueueVectU8Get(tmpv,i));
+      QueueVectU8Del(tmpv);
       break;
     case SPT_BITMAP:
       Lex(cc); //Skip {
@@ -437,7 +437,7 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
       LexD2I32(cc,&g.pwhu.width);
       if (cc->token!=',')
 	LexExcept(cc,"Expecting ',' at ");
-      tmpv=QueVectU8New;
+      tmpv=QueueVectU8New;
       num1=0;
       while (TRUE) {
 	if (!(i=ToUpper(LexGetChar(cc))))
@@ -445,24 +445,24 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
 	if (i=='}')
 	  break;
 	if ('0'<=i<='9')
-	  QueVectU8Put(tmpv,num1++,i-'0');
+	  QueueVectU8Put(tmpv,num1++,i-'0');
 	else if ('A'<=i<='F')
-	  QueVectU8Put(tmpv,num1++,i-'A'+10);
+	  QueueVectU8Put(tmpv,num1++,i-'A'+10);
 	else if (i==CH_SPACE||i==CH_SHIFT_SPACE)
-	  QueVectU8Put(tmpv,num1++,TRANSPARENT);
+	  QueueVectU8Put(tmpv,num1++,TRANSPARENT);
 	else if (i=='_')
-	  QueVectU8Put(tmpv,num1++,0);
+	  QueueVectU8Put(tmpv,num1++,0);
       }
       Bts(&cc->flags,CCf_USE_LAST_U16);
       Lex(cc); //Load '}'
       g.type=SPT_BITMAP;
-      size=SpriteElemQuedBaseSize(SPT_BITMAP);
+      size=SpriteElemQueuedBaseSize(SPT_BITMAP);
       res=CAlloc(size+num1);
       MemCpy(res,&g,size);
       ptr=&res->pwhu.u;
       for (i=0;i<num1;i++)
-	*ptr++=QueVectU8Get(tmpv,i);
-      QueVectU8Del(tmpv);
+	*ptr++=QueueVectU8Get(tmpv,i);
+      QueueVectU8Del(tmpv);
       break;
     case SPT_MESH:
     case SPT_SHIFTABLE_MESH:
@@ -483,11 +483,11 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
 	Lex(cc); //Skip ,
       }
       num1=0;
-      QueInit(&headp);
+      QueueInit(&headp);
       while (cc->token=='(') {
-	tmpp=CAlloc(sizeof(CQueD3I32));
+	tmpp=CAlloc(sizeof(CQueueD3I32));
 	LexD3I32(cc,&tmpp->p);
-	QueIns(tmpp,headp.last);
+	QueueInsert(tmpp,headp.last);
 	num1++;
 	if (cc->token==',')
 	  Lex(cc); //Skip ,
@@ -496,9 +496,9 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
 	LexExcept(cc,"Expecting ':' at ");
       Lex(cc); //Skip :
       num2=0;
-      QueInit(&headt);
+      QueueInit(&headt);
       while (cc->token=='(') {
-	tmpt=CAlloc(sizeof(CQueMeshTri));
+	tmpt=CAlloc(sizeof(CQueueMeshTri));
 	st=LexFirstRem(cc,",");
 	tmpt->color=Str2ColorU32(st);
 	Free(st);
@@ -518,7 +518,7 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
 	if (cc->token!=')')
 	  LexExcept(cc,"Expecting ')' at ");
 	Lex(cc); //Skip )
-	QueIns(tmpt,headt.last);
+	QueueInsert(tmpt,headt.last);
 	num2++;
 	if (cc->token==',')
 	  Lex(cc); //Skip ,
@@ -526,12 +526,12 @@ CSprite *Code2SpriteElem(CCmpCtrl *cc,I64 type)
       if (g.type==SPT_MESH) {
 	g.mu.vertex_cnt=num1;
 	g.mu.tri_cnt=num2;
-	size=SpriteElemQuedBaseSize(SPT_MESH);
+	size=SpriteElemQueuedBaseSize(SPT_MESH);
       } else {
 	g.pmu.vertex_cnt=num1;
 	g.pmu.tri_cnt=num2;
       }
-      size=SpriteElemQuedBaseSize(g.type);
+      size=SpriteElemQueuedBaseSize(g.type);
       res=MAlloc(size+num1*sizeof(CD3I32)+num2*sizeof(CMeshTri));
       MemCpy(res,&g,size);
       ptr=res(U8 *)+size;
@@ -569,7 +569,7 @@ public U8 *Code2Sprite(CDoc *doc,I64 *_size=NULL)
   CHashTable *old_hash_table_lst=cc->htc.hash_table_lst;
   CHashGeneric *tmph;
   I64 i,size=0;
-  QueInit(&head);
+  QueueInit(&head);
   LexAttachDoc(cc,,doc);
   try {
     do {
@@ -579,7 +579,7 @@ public U8 *Code2Sprite(CDoc *doc,I64 *_size=NULL)
 	i=tmph->user_data0;
 	cc->htc.hash_table_lst=old_hash_table_lst;
 	if (Lex(cc)=='{') //Skip ident
-	  QueIns(Code2SpriteElem(cc,i),head.last);
+	  QueueInsert(Code2SpriteElem(cc,i),head.last);
       } else if (cc->token)
 	LexExcept(cc,"Expecting sprite element type name at ");
     } while (cc->token);
@@ -592,12 +592,12 @@ public U8 *Code2Sprite(CDoc *doc,I64 *_size=NULL)
     DocUnlock(doc);
   if (okay) {
     CmpCtrlDel(cc); //TODO: can crash
-    res=SpriteQue2Sprite(&head,&size);
+    res=SpriteQueue2Sprite(&head,&size);
   } else {
     res=NULL;
     size=0;
   }
   if (_size) *_size=size;
-  QueDel(&head);
+  QueueDel(&head);
   return res;
 }

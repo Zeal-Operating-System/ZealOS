@@ -32,7 +32,7 @@ U0 OptSetNOP2(CIntermediateCode *tmpi,I64 stk_delta=1)
 
 CIntermediateCode *OptFree(CIntermediateCode *tmpi)
 {//We might access freed entries in CICTreeLinks
-  QueRem(tmpi);
+  QueueRem(tmpi);
   Free(tmpi);
   return NULL;
 }

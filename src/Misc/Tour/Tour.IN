@@ -11,7 +11,7 @@ U0 TourPutTask()
   LBts(&Fs->display_flags,DISPLAYf_WIN_ON_TOP);
   WinToTop;
   Fs->border_src=BDS_CONST;
-  Fs->border_attr=LTGRAY<<4+DrvTextAttrGet(':')&15;
+  Fs->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   Fs->text_attr  =LTGRAY<<4+BLUE;
   Fs->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
   doc=DocPut;

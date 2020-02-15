@@ -6,29 +6,29 @@
 #define MAKE_DBG	0
 #define MAKE_STAFF	1
 
-public U8 TOSGetDrv()
+public U8 TOSGetDrive()
 {//Pmt for drv let.
   I64 res;
   "Drive (%s):",TOS_HDS;
-  res=Let2Let(GetChar);
+  res=Letter2Letter(GetChar);
   '\n';
   return res;
 }
 
 public U0 TOSBootHDIns(U8 drv_let=0)
 {//Make Compiler and Kernel. Reinstall Kernel.
-  drv_let=Let2Let(drv_let);
+  drv_let=Letter2Letter(drv_let);
   In(TOS_CFG);
   BootHDIns(drv_let);
   if (StrOcc(TOS_MASTER_BOOT_DRVS,drv_let))
     BootMHDIns(drv_let);
 }
 
-public U0 TOSCopyDrv(U8 src,U8 dst)
+public U0 TOSCopyDrive(U8 src,U8 dst)
 {//Fmt dst and copy entire drv.
   U8 buf_s[STR_LEN],buf_d[STR_LEN];
-  src=Let2Let(src);
-  dst=Let2Let(dst);
+  src=Letter2Letter(src);
+  dst=Letter2Letter(dst);
 
   if (dst=='D')
     Fmt(dst,,FALSE,FSt_FAT32);
@@ -44,14 +44,14 @@ public U0 TOSCopyDrv(U8 src,U8 dst)
   TOSBootHDIns(dst);
 }
 
-public U0 TOSPmtAndCopyDrv()
+public U0 TOSPmtAndCopyDrive()
 {//Pmt for drv lets. Then, Fmt dst and copy entire drv.
    I64 src,dst;
   "$$RED$$\nCopy Src Drive:\n$$FG$$";
-  src=TOSGetDrv;
+  src=TOSGetDrive;
   "$$RED$$\nCopy Dst Drive:\n$$FG$$";
-  dst=TOSGetDrv;
-  TOSCopyDrv(src,dst);
+  dst=TOSGetDrive;
+  TOSCopyDrive(src,dst);
 }
 
 U0 DistroPrep()
@@ -89,11 +89,11 @@ U0 DistroPrep()
 U0 DebugDistroFilePrep()
 {
   CBlkDev *bd;
-  if (!Let2Drv('A',FALSE)) {
+  if (!Letter2Drive('A',FALSE)) {
     In(CFG_DBG_DISTRO "\n");
     Mount;
   }
-  bd=Let2BlkDev('A');
+  bd=Letter2BlkDev('A');
   Fmt('A',,FALSE,FSt_REDSEA);
 
   DirMk("A:/Compiler");
@@ -305,7 +305,7 @@ U0 TOSRegen2()
   UpdateLineCnts;
 
   TOSProgress("Copy C to D");
-  TOSCopyDrv('C','D');
+  TOSCopyDrive('C','D');
 
   TOSProgress("Make Standard Distro ISO");
   MakeStdDistro;

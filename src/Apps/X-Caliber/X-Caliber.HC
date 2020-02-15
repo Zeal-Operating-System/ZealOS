@@ -168,8 +168,8 @@ U0 MissileNew(Ship *tmpsp,I64 n)
   D3SubEqu(&tmpmi->p_back.x ,D3MulEqu(D3Copy(&p1,&p),MISSILE_LEN/2-1));
   D3Copy(&tmpmi->p_front.DxDt,&tmpsp->p[n].DxDt);
   D3Copy(&tmpmi->p_back.DxDt,&tmpsp->p[n].DxDt);
-  QueIns(&tmpmi->p_front,ode->last_mass);
-  QueIns(&tmpmi->p_back, ode->last_mass);
+  QueueInsert(&tmpmi->p_front,ode->last_mass);
+  QueueInsert(&tmpmi->p_back, ode->last_mass);
 
   tmpmi->s[0].end1=&tmpmi->p_front;
   tmpmi->s[0].end2=&tmpmi->p_back;
@@ -187,11 +187,11 @@ U0 MissileNew(Ship *tmpsp,I64 n)
     tmpmi->s[i].strength  =20000;
     tmpmi->s[i].color=BLACK;
     tmpmi->s[i].rest_len=D3Dist(&tmpmi->s[i].end1->x,&tmpmi->s[i].end2->x);
-    QueIns(&tmpmi->s[i],ode->last_spring);
+    QueueInsert(&tmpmi->s[i],ode->last_spring);
   }
   tmpmi->img=$IB,"<7>",BI=7$;
   tmpmi->active=TRUE;
-  QueIns(tmpmi,missile_head.last);
+  QueueInsert(tmpmi,missile_head.last);
 }
 
 Ship *ShipNew(I64 x,I64 y,I64 type)
@@ -222,7 +222,7 @@ Ship *ShipNew(I64 x,I64 y,I64 type)
 	else
 	  tmpsp->p[i].radius=4;
 	tmpsp->p[i].drag_profile_factor=3;
-	QueIns(&tmpsp->p[i],ode->last_mass);
+	QueueInsert(&tmpsp->p[i],ode->last_mass);
       }
       tmpsp->p[3].mass/=10.0;
       tmpsp->p[4].mass/=10.0;
@@ -252,7 +252,7 @@ Ship *ShipNew(I64 x,I64 y,I64 type)
 	  tmpsp->s[i].color=LTCYAN;
 	else
 	  tmpsp->s[i].color=LTGRAY;
-	QueIns(&tmpsp->s[i],ode->last_spring);
+	QueueInsert(&tmpsp->s[i],ode->last_spring);
       }
       MissileNew(tmpsp,0);
       MissileNew(tmpsp,1);
@@ -274,7 +274,7 @@ Ship *ShipNew(I64 x,I64 y,I64 type)
 	tmpsp->p[i].type=MT_ENEMY_SHIP;
 	tmpsp->p[i].radius=7;
 	tmpsp->p[i].drag_profile_factor=3;
-	QueIns(&tmpsp->p[i],ode->last_mass);
+	QueueInsert(&tmpsp->p[i],ode->last_mass);
       }
 
       tmpsp->springs=3;
@@ -291,7 +291,7 @@ Ship *ShipNew(I64 x,I64 y,I64 type)
 	tmpsp->s[i].const=10000;
 	tmpsp->s[i].strength  =20000;
 	tmpsp->s[i].color=BLACK;
-	QueIns(&tmpsp->s[i],ode->last_spring);
+	QueueInsert(&tmpsp->s[i],ode->last_spring);
       }
       remaining++;
       break;
@@ -314,7 +314,7 @@ Ship *ShipNew(I64 x,I64 y,I64 type)
 	tmpsp->p[i].type=MT_ENEMY_SHIP;
 	tmpsp->p[i].radius=6;
 	tmpsp->p[i].drag_profile_factor=5;
-	QueIns(&tmpsp->p[i],ode->last_mass);
+	QueueInsert(&tmpsp->p[i],ode->last_mass);
       }
 
       tmpsp->springs=7;
@@ -342,12 +342,12 @@ Ship *ShipNew(I64 x,I64 y,I64 type)
 	  tmpsp->s[i].color=LTPURPLE;
 	else
 	  tmpsp->s[i].color=BLACK;
-	QueIns(&tmpsp->s[i],ode->last_spring);
+	QueueInsert(&tmpsp->s[i],ode->last_spring);
       }
       remaining++;
       break;
   }
-  QueIns(tmpsp,ship_head.last);
+  QueueInsert(tmpsp,ship_head.last);
   return tmpsp;
 }
 
@@ -355,11 +355,11 @@ U0 MissileDel(Missile *tmpmi)
 {
   I64 i;
   if (tmpmi->active) {
-    QueRem(tmpmi);
+    QueueRem(tmpmi);
     for(i=0;i<5;i++)
-      QueRem(&tmpmi->s[i]);
-    QueRem(&tmpmi->p_front);
-    QueRem(&tmpmi->p_back);
+      QueueRem(&tmpmi->s[i]);
+    QueueRem(&tmpmi->p_front);
+    QueueRem(&tmpmi->p_back);
     tmpmi->active=FALSE;
   }
 }
@@ -369,12 +369,12 @@ U0 ShipDel(Ship *tmpsp)
   I64 i;
   if (!tmpsp) return;
   for (i=0;i<tmpsp->masses;i++)
-    QueRem(&tmpsp->p[i]);
+    QueueRem(&tmpsp->p[i]);
   for (i=0;i<tmpsp->springs;i++)
-    QueRem(&tmpsp->s[i]);
+    QueueRem(&tmpsp->s[i]);
   for (i=0;i<2;i++)
     MissileDel(&tmpsp->missiles[i]);
-  QueRem(tmpsp);
+  QueueRem(tmpsp);
   Free(tmpsp);
   remaining--;
 }
@@ -418,7 +418,7 @@ I64 Tweaked()
 U0 AllDel(CMathODE *ode)
 {
   Ship *tmpsp,*tmpsp1;
-  QueRem(ode);
+  QueueRem(ode);
   tmpsp=ship_head.next;
   while (tmpsp!=&ship_head) {
     tmpsp1=tmpsp->next;
@@ -426,7 +426,7 @@ U0 AllDel(CMathODE *ode)
     tmpsp=tmpsp1;
   }
   human=NULL;
-  QueDel(&shot_head,TRUE);
+  QueueDel(&shot_head,TRUE);
   ODEDel(ode);
 }
 
@@ -1080,8 +1080,8 @@ Shot *ShotNew(I64 type,CD3 *_p,CD3 *_v,F64 r,F64 fuse_time,
   if (_p_gun_offset)
     D3AddEqu(&tmps->p.x,_p_gun_offset);
   D3Copy(&tmps->p.DxDt,_v);
-  QueIns(&tmps->p,ode->last_mass);
-  QueIns(tmps,shot_head.last);
+  QueueInsert(&tmps->p,ode->last_mass);
+  QueueInsert(tmps,shot_head.last);
 }
 
 U0 SolarFlares()
@@ -1204,7 +1204,7 @@ U0 SplatNew(Shot *tmps,F64 die_time,F64 start,F64 end)
 	  Sin(start+é+(end-start)*i/tmps->splats);
     tmpm->DyDt+=50*Sqr(tmps->radius)*Rand*
 	  Cos(start+é+(end-start)*i/tmps->splats);
-    QueIns(tmpm,ode->last_mass);
+    QueueInsert(tmpm,ode->last_mass);
   }
 }
 
@@ -1218,8 +1218,8 @@ U0 ExpireShots()
 	SplatNew(tmps,1.0,3*ã/8,5*ã/8);
       else
 	SplatNew(tmps,.2,0,2*ã);
-      QueRem(tmps);
-      QueRem(&tmps->p);
+      QueueRem(tmps);
+      QueueRem(&tmps->p);
       Free(tmps);
     }
     tmps=tmps1;
@@ -1234,7 +1234,7 @@ U0 ExpireSplats()
     tmpm1=tmpm->next;
     if ((tmpm->type==MT_ION || tmpm->type==MT_ANTIMATTER_SPLAT) &&
 	  tS>tmpm->die_timeout) {
-      QueRem(tmpm);
+      QueueRem(tmpm);
       Free(tmpm);
     }
     tmpm=tmpm1;
@@ -1301,7 +1301,7 @@ U0 InitLevel()
   while (tmpm!=&ode->next_mass) {
     tmpm1=tmpm->next;
     if (tmpm->type==MT_ION || tmpm->type==MT_ANTIMATTER_SPLAT) {
-      QueRem(tmpm);
+      QueueRem(tmpm);
       Free(tmpm);
     }
     tmpm=tmpm1;
@@ -1327,9 +1327,9 @@ U0 Init()
   score=0;
   level=1;
 
-  QueInit(&ship_head);
-  QueInit(&shot_head);
-  QueInit(&missile_head);
+  QueueInit(&ship_head);
+  QueueInit(&shot_head);
+  QueueInit(&missile_head);
 
   for (i=0;i<STARS_NUM;i++) {
     stars_x[i]=RandU16%GR_WIDTH;
@@ -1390,7 +1390,7 @@ U0 XCaliber()
     ode->min_tolerance=1e-9;
     ode->drag_v3=0.00001;
     Init;
-    QueIns(ode,Fs->last_ode);
+    QueueInsert(ode,Fs->last_ode);
     ch=0;
     do {
       while (!game_over && !show_level_msg &&

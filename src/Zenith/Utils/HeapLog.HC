@@ -37,7 +37,7 @@ U0 HeapLogMAlloc(U8 *addr)
     CLI
     while (LBts(&sys_semas[SEMA_HEAPLOG_LOCK],0))
       PAUSE
-    QueIns(tmphl,heaplog_head[i].last);
+    QueueInsert(tmphl,heaplog_head[i].last);
     LBtr(&sys_semas[SEMA_HEAPLOG_LOCK],0);
     POPFD
   }
@@ -57,7 +57,7 @@ U0 HeapLogFree(U8 *addr)
     tmphl=heaplog_head[i].next;
     while (tmphl!=&heaplog_head[i]) {
       if (addr==tmphl->addr) {
-	QueRem(tmphl);
+	QueueRem(tmphl);
 	LBtr(&sys_semas[SEMA_HEAPLOG_LOCK],0);
 	POPFD
 	Free(tmphl);
@@ -92,7 +92,7 @@ public Bool HeapLog(Bool val=ON,CTask *task=NULL)
       ext[EXT_HEAPLOG_FREE]=&HeapLogFree;
       heaplog_head=MAlloc(sizeof(CHeapLogHash)*HL_HASH_SIZE,heaplog_hc);
       for (i=0;i<HL_HASH_SIZE;i++)
-	QueInit(&heaplog_head[i]);
+	QueueInit(&heaplog_head[i]);
       LBtr(&sys_semas[SEMA_HEAPLOG_LOCK],0);
       POPFD
       LBts(&sys_semas[SEMA_HEAPLOG_ACTIVE],0);
@@ -155,7 +155,7 @@ public U0 HeapLogSizeRep(Bool leave_it=OFF)
 
   size_head=MAlloc(sizeof(CHeapLogHash)*HL_HASH_SIZE,heaplog_hc);
   for (i=0;i<HL_HASH_SIZE;i++)
-    QueInit(&size_head[i]);
+    QueueInit(&size_head[i]);
 
   "$$WW,0$$";
   while (LBts(&sys_semas[SEMA_HEAPLOG_LOCK],0))
@@ -182,7 +182,7 @@ hl_next:
       MemCpy(tmphls,&hla,sizeof(CHeapLog));
       tmphls->cnt=1;
       tmphls->size=MSize(hla.addr);
-      QueIns(tmphls,size_head[k].last);
+      QueueInsert(tmphls,size_head[k].last);
 hl_found:
       tmphla=hla.next;
     }

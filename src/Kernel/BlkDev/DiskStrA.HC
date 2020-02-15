@@ -113,7 +113,7 @@ U8 *DirNameAbs(U8 *_dirname)
     return StrNew(_dirname);
   free_dirname=dirname=MStrUtil(_dirname,
 	SUF_REM_LEADING|SUF_REM_TRAILING|SUF_REM_CTRL_CHARS);
-  *drv=Drv2Let;
+  *drv=Drive2Letter;
   drv[1]=':';
   drv[2]=0;
   if (*dirname && dirname[1]==':') {
@@ -285,7 +285,7 @@ U8 *DirCur(CTask *task=NULL,CTask *mem_task=NULL)
   if (!task->cur_dir)
     return NULL;
   st=MAlloc(StrLen(task->cur_dir)+3,mem_task);
-  *st=Drv2Let(task->cur_dv);
+  *st=Drive2Letter(task->cur_dv);
   st[1]=':';
   StrCpy(st+2,task->cur_dir);
   return st;

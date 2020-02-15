@@ -30,7 +30,7 @@ U0 BgtIns(CBgtEntry *tmpb)
   CBgtEntry	*tmpb1=b_head.next;
   while (tmpb1!=&b_head && tmpb1->date<tmpb->date)
     tmpb1=tmpb1->next;
-  QueIns(tmpb,tmpb1->last);
+  QueueInsert(tmpb,tmpb1->last);
 }
 
 class CBgtEntryForm

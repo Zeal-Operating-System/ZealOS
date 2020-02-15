@@ -464,7 +464,7 @@ U0 KbdHndlr()
   }
 }
 
-I64 KbdMsgsQue()
+I64 KbdMsgsQueue()
 {
   I64 arg1,arg2,msg_code=MSG_NULL;
   CTask *task_focus;

@@ -131,7 +131,7 @@ U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
 	doc_e=doc_unsorted2[j2_lo];
 	while (doc_e!=doc_unsorted2[j2_hi]) {
 	  doc_e2=DocEntryCopy(doc,doc_e);
-	  QueIns(doc_e2,doc_e1);
+	  QueueInsert(doc_e2,doc_e1);
 	  doc_e1=doc_e2;
 	  doc_e=doc_e->next;
 	}

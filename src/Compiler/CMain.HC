@@ -24,7 +24,7 @@ U8 *LexStmt2Bin(CCmpCtrl *cc,I64 *_type,I64 cmp_flags=0)
       }
     } //TODO: else del misc?
   } else //TODO: too dangerous to del Misc?
-    QueDel(&cc->coc.coc_head.next);
+    QueueDel(&cc->coc.coc_head.next);
   if (cc->aot_depth==2) {
     tmpcbh=COCPopNoFree(cc);
     COCAppend(cc,tmpcbh);
@@ -44,9 +44,9 @@ CAOT *CmpJoin(CCmpCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
   CAOT *res=CAlloc(sizeof(CAOT)),*parent;
   if (parent=cc->aot) {
     res->parent_aot=parent;
-    QueIns(res,parent->last);
+    QueueInsert(res,parent->last);
   } else
-    QueInit(res);
+    QueueInit(res);
   cc->aot=res;
 
   res->next_ie=res->last_ie=&res->next_ie;
@@ -86,7 +86,7 @@ CAOT *CmpJoin(CCmpCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_MAIN;
 	  tmpie->rip=buf;
-	  QueIns(tmpie,res->last_ie);
+	  QueueInsert(tmpie,res->last_ie);
 	}
 	if (cmp_flags&CMPF_ASM_BLK)
 	  break;
@@ -161,11 +161,11 @@ CAOT *CmpBuf(U8 *buf,U8 *map_name=NULL,
   CAOT *res=NULL;
   cc=CmpCtrlNew(buf,CCF_DONT_FREE_BUF);
   cc->flags|=CCF_AOT_COMPILE;
-  QueIns(cc,Fs->last_cc);
+  QueueInsert(cc,Fs->last_cc);
   res=CmpJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drv_let);
   if (error_cnt)   *error_cnt=cc->error_cnt;
   if (warning_cnt) *warning_cnt=cc->warning_cnt;
-  QueRem(cc);
+  QueueRem(cc);
   if (res)
     CmpCtrlDel(cc);
   return res;
@@ -295,7 +295,7 @@ U0 CmpFixUpJITAsm(CCmpCtrl *cc,CAOT *tmpaot)
   Free(str);
   if (!cc->aot_depth && Bt(&cc->opts,OPTf_TRACE))
     Un(rip2,tmpaot->aot_U8s,64);
-  QueRem(tmpaot);
+  QueueRem(tmpaot);
   Free(tmpaot);
 }
 
@@ -331,7 +331,7 @@ U0 CmpFixUpAOTAsm(CCmpCtrl *cc,CAOT *tmpaot)
   tmpie=tmpaot->next_ie;
   while (tmpie!=&tmpaot->next_ie) {
     tmpie1=tmpie->next;
-    QueRem(tmpie);
+    QueueRem(tmpie);
     if (IET_REL_I0<=tmpie->type<=IET_IMM_I64) {
       if (tmpie->str) {
 	if (tmpie->flags&IEF_GOTO_LABEL) {
@@ -410,7 +410,7 @@ U0 CmpFixUpAOTAsm(CCmpCtrl *cc,CAOT *tmpaot)
 	  break;
       }
       tmpie->aot=NULL;
-      QueIns(tmpie,tmpaot->parent_aot->last_ie);
+      QueueInsert(tmpie,tmpaot->parent_aot->last_ie);
     }
     tmpie=tmpie1;
   }
@@ -494,7 +494,7 @@ I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     while (tmpie!=&tmpaot->next_ie) {
       tmpie1=tmpie->next;
       if (!tmpie->type || IET_REL32_EXPORT<=tmpie->type<=IET_IMM64_EXPORT) {
-	QueRem(tmpie);
+	QueueRem(tmpie);
 	*ptr++=tmpie->type;
 	*ptr(U32 *)++=tmpie->rip;
 	if (tmpie->str) {
@@ -514,7 +514,7 @@ I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     tmpie=tmpaot->next_ie;
     while (tmpie!=&tmpaot->next_ie) {
       tmpie1=tmpie->next;
-      QueRem(tmpie);
+      QueueRem(tmpie);
       *ptr++=tmpie->type;
       if (tmpie->aot)
 	tmpie->rip+=tmpie->aot->rip2;
@@ -556,7 +556,7 @@ I64 Cmp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     FileWrite(fbuf2,bfh,size);
     Free(bfh);
     Free(tmpaot->buf);
-    QueDel(tmpaot);
+    QueueDel(tmpaot);
     Free(tmpaot);
   }
   Free(patch_table);
@@ -585,7 +585,7 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
       MemCpy(&cc->htc,htc,sizeof(CLexHashTableContext));
     }
   }
-  QueIns(cc,Fs->last_cc);
+  QueueInsert(cc,Fs->last_cc);
   try {
     Lex(cc);
     res=ExeCmdLine(cc);
@@ -596,7 +596,7 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
       res=0;
     }
   }
-  QueRem(cc);
+  QueueRem(cc);
   if (okay)
     CmpCtrlDel(cc); //TODO: can crash
   return res;
@@ -637,10 +637,10 @@ I64 ExePutS2(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0)
   cc=CmpCtrlNew(buf,ccf_flags|CCF_DONT_FREE_BUF,filename);
   if (Fs->last_cc!=&Fs->next_cc)
     cc->opts=Fs->last_cc->opts;
-  QueIns(cc,Fs->last_cc);
+  QueueInsert(cc,Fs->last_cc);
   Lex(cc);
   res=ExeCmdLine(cc);
-  QueRem(cc);
+  QueueRem(cc);
   CmpCtrlDel(cc);
   return res;
 }
@@ -692,7 +692,7 @@ U0 CInit()
 {
   CmpLoadDefines;
   CmpFillTables;
-  QueInit(&cmp.ic_nop);
+  QueueInit(&cmp.ic_nop);
   cmp.ic_nop.ic_class=cmp.internal_types[RT_I64];
   cmp.ic_nop.ic_code=IC_NOP1;
   AsmHashLoad;

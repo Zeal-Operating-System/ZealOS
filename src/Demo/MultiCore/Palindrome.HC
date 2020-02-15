@@ -85,7 +85,7 @@ U0 Palindrome(U8 *filename)
   doc=DocPut;
   mp_not_done_flags=1<<mp_cnt-1;
   for (i=0;i<mp_cnt;i++)
-    JobQue(&MPPalindrome,NULL,i);
+    JobQueue(&MPPalindrome,NULL,i);
   while (mp_not_done_flags)
     Yield;
 

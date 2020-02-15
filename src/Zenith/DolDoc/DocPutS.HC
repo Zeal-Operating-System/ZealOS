@@ -206,7 +206,7 @@ public U0 DocPrintPartial(CDoc *doc=NULL,U8 *fmt,...)
 	  doc_ne=DocEntryNewTag(doc,doc_ce,ptr2);
 	  doc_ne->type=DOCT_TEXT|doc->settings_head.dft_text_attr<<8;
 	  doc_ne->de_flags=doldoc.dft_de_flags[DOCT_TEXT];
-	  QueIns(doc_ne,doc_ce->last);
+	  QueueInsert(doc_ne,doc_ce->last);
 	  doc->cur_entry=doc_ne;
 	  doc->cur_col=StrLen(ptr2);
 	}

@@ -176,7 +176,7 @@ $LK,"MAlloc",A="MN:MAlloc"$() would probably be the better choice.
 
   res=FALSE;
   for (i=0;i<cnt;i++)
-    cmd[i]=JobQue(&MPVisRecalc,&job[i],i,0);
+    cmd[i]=JobQueue(&MPVisRecalc,&job[i],i,0);
   for (i=0;i<cnt;i++)
     if (JobResGet(cmd[i]))
       res=TRUE;
@@ -217,7 +217,7 @@ U0 VisRecalcMap(I64 row,I64 col)
     job[i].lo=k;
   }
   for (i=0;i<cnt;i++)
-    cmd[i]=JobQue(&MPVisRecalcMap,&job[i],i,0);
+    cmd[i]=JobQueue(&MPVisRecalcMap,&job[i],i,0);
   for (i=0;i<cnt;i++)
     JobResGet(cmd[i]);
 }

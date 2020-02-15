@@ -121,7 +121,7 @@ U0 ObjDel(Obj *tmpo)
     else {
       if (tmpo->squadron>=0)
 	SquadronRem(tmpo);
-      QueRem(tmpo);
+      QueueRem(tmpo);
       if (tmpo->squadron>=0)
 	LBts(&squadrons[tmpo->squadron].dead_mask,tmpo->member_num);
       num_alive[tmpo->player]--;
@@ -279,8 +279,8 @@ U0 Init()
 	w=Fs->pix_width,h=Fs->pix_height;
   Squadron *tmps;
   Obj *tmpo,*tmpo1;
-  QueInit(&obj_head);
-  QueInit(&torpedo_head);
+  QueueInit(&obj_head);
+  QueueInit(&torpedo_head);
 
   next_noise=tS;
   Fs->scroll_x=0;
@@ -309,7 +309,7 @@ U0 Init()
       tmpo1->torpedos =tmpo1->max_torpedos=0;
       tmpo1->torpedos_range =0.0;
       tmpo1->next_action_time=0;
-      QueIns(tmpo1,obj_head.last);
+      QueueInsert(tmpo1,obj_head.last);
     }
 
     for (ship=0;ship<num_carriers[player];ship++) {
@@ -330,7 +330,7 @@ U0 Init()
       tmpo1->torpedos =tmpo1->max_torpedos=0;
       tmpo1->torpedos_range =0.0;
       tmpo1->next_action_time=0;
-      QueIns(tmpo1,obj_head.last);
+      QueueInsert(tmpo1,obj_head.last);
 
       for (squadron=0;squadron<num_squadrons_per_carrier[player];
 	    squadron++,num_squadrons++) {
@@ -349,7 +349,7 @@ U0 Init()
 	  tmpo->ship_guns=0;		tmpo->ship_guns_range=0.0;
 	  tmpo->torpedos =tmpo->max_torpedos=1;
 	  tmpo->torpedos_range =20.0;
-	  QueIns(tmpo,obj_head.last);
+	  QueueInsert(tmpo,obj_head.last);
 	}
       }
     }
@@ -374,8 +374,8 @@ U0 Init()
 
 U0 CleanUp()
 {
-  QueDel(&obj_head,TRUE);
-  QueDel(&torpedo_head,TRUE);
+  QueueDel(&obj_head,TRUE);
+  QueueDel(&torpedo_head,TRUE);
   Free(squadrons);
 }
 
@@ -639,7 +639,7 @@ U0 Combat(F64 period)
 	  tmpo1->death_time=tmpt->timeout=tS+d;
 	  tmpt->target=tmpo1;
 	  tmpt->é=Arg(tmpo1->x-tmpo->x,tmpo1->y-tmpo->y);
-	  QueIns(tmpt,torpedo_head.last);
+	  QueueInsert(tmpt,torpedo_head.last);
 	  Sweep(2000,86,53);
 	} else if (tmpo->ship_guns>0 && d<tmpo->ship_guns_range) {
 	  tmpo->flags|=OF_SHOOTING;
@@ -727,7 +727,7 @@ U0 AnimateTask(I64)
 	  if (Rand<0.333333)
 	    tmpo->fuel*=0.75*Rand+0.25;
 	}
-	QueRem(tmpt);
+	QueueRem(tmpt);
 	Free(tmpt);
       } else {
 	tmpt->x+=tmpt->speed*Cos(tmpt->é)*period;

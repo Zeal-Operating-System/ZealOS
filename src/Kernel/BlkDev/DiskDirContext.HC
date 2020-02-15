@@ -6,7 +6,7 @@ U0 DirContextDel(CDirContext *dirc,Bool restore=TRUE)
     bd=dirc->old_dv->bd;
     if (!(bd->flags & BDF_INIT_IN_PROGRESS)) {
       if (dirc->old_dir) {
-	Drive(Drv2Let(dirc->old_dv));
+	Drive(Drive2Letter(dirc->old_dv));
 	Cd(dirc->old_dir);
       }
     } else {
@@ -32,14 +32,14 @@ CDirContext *DirContextNew(U8 *_mask,Bool make_mask=FALSE,
   mask=MStrUtil(_mask,SUF_REM_LEADING|SUF_REM_TRAILING|SUF_REM_CTRL_CHARS);
   tmp_mask=mask;
   if (*mask && mask[1]==':') {
-    if (Fs->cur_dv!=Let2Drv(*mask) && !Drive(*mask))
+    if (Fs->cur_dv!=Letter2Drive(*mask) && !Drive(*mask))
       valid=FALSE;
     mask+=2;
   }
-  if (*mask=='~' && Fs->cur_dv!=Let2Drv('~') && !Drive('~'))
+  if (*mask=='~' && Fs->cur_dv!=Letter2Drive('~') && !Drive('~'))
     valid=FALSE;
   dirc->dv=Fs->cur_dv;
-  DrvCheck(dirc->dv);
+  DriveCheck(dirc->dv);
   buf=MAlloc(mask_len+2);
   StrCpy(buf,mask);
 

@@ -204,12 +204,12 @@ CATARep *ATARepFind(CATARep *haystack_head,I64 needle_num)
   return NULL;
 }
 
-CATARep *ATAIDDrvs(CATARep *head,CATARep **_ata_drv,CATARep **_atapi_drv)
+CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drv,CATARep **_atapi_drv)
 {//This is for when trying to sort-out main hard drives and CD/DVD drives.
   CATARep *res=NULL,*tmpha=head,*ata_drv=NULL,*atapi_drv=NULL;
   CBlkDev *bd;
   Bool was_silent=Silent,ins_found=FALSE;
-  bd=Let2BlkDev(':',FALSE);
+  bd=Letter2BlkDev(':',FALSE);
   Silent(was_silent);
   while (tmpha) {
     if (!res && bd && bd->type==tmpha->type) {
@@ -267,7 +267,7 @@ I64 MountIDEAuto()
   I64 res=0;
   CATARep *head=NULL,*ata_drv=NULL,*atapi_drv=NULL,*tmpha;
   ATARep(FALSE,TRUE,&head);
-  ATAIDDrvs(head,&ata_drv,&atapi_drv);
+  ATAIDDrives(head,&ata_drv,&atapi_drv);
   if (ata_drv && ATAMount(blkdev.first_hd_drv_let,BDT_ATA,
 	ata_drv->base0,ata_drv->base1,ata_drv->unit))
     res++;

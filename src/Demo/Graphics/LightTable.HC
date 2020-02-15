@@ -49,7 +49,7 @@ Photon *PhotonNew()
   Photon *res=CAlloc(sizeof(Photon));
   while (LBts(&p_root_locks,num))
     Yield;
-  QueIns(res,p_root[num].last);
+  QueueInsert(res,p_root[num].last);
   LBtr(&p_root_locks,num);
   return res;
 }
@@ -366,7 +366,7 @@ U0 Init()
   for (i=0;i<mp_cnt;i++) {
     while (LBts(&p_root_locks,i))
       Yield;
-    QueInit(&p_root[i]);
+    QueueInit(&p_root[i]);
     LBtr(&p_root_locks,i);
   }
 //x*y=bmp_mem*8
@@ -394,7 +394,7 @@ U0 CleanUp()
   for (i=0;i<mp_cnt;i++) {
     while (LBts(&p_root_locks,i))
       Yield;
-    QueDel(&p_root[i],TRUE);
+    QueueDel(&p_root[i],TRUE);
     LBtr(&p_root_locks,i);
   }
   DCDel(map);

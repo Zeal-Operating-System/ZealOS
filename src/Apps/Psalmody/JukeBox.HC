@@ -15,7 +15,7 @@ CTask *JukeReward(U8 *msg)
   TaskWait(res);
 
   res->border_src =BDS_CONST;
-  res->border_attr=LTGRAY<<4+DrvTextAttrGet(':')&15;
+  res->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   res->text_attr  =LTGRAY<<4+BLUE;
   res->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
   WinHorz(Fs->win_right+2,TEXT_COLS-2,res);

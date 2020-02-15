@@ -119,7 +119,7 @@ CCPU *CPUStructInit(I64 num,CCPU *c,CTask *seth_task)
   c->addr=c;
   c->num=num;
   c->idle_factor=0.01;
-  QueInit(&c->next_dying);
+  QueueInit(&c->next_dying);
   if (Bt(&sys_run_level,RLf_16MEG_ZENITH_HEAP_CTRL)) {
     c->idle_task=Spawn(0,NULL,"Idle Task",,Fs,,0);
     LBts(&c->idle_task->task_flags,TASKf_IDLE);
@@ -210,7 +210,7 @@ U0 CoreAPSethTask()
   }
 }
 
-CJob *JobQue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
+CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
        I64 target_cpu=1,I64 flags=1<<JOBf_FREE_ON_COMPLETE,
        I64 job_code=JOBT_CALL,U8 *aux_str=NULL,I64 aux1=0,I64 aux2=0)
 {//Queue multicore jobs, handled by Seth tasks.
@@ -238,18 +238,18 @@ CJob *JobQue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
     Yield;
   if (ctrl->next_waiting==ctrl && LBtr(&seth->task_flags,TASKf_AWAITING_MSG))
     MPInt(I_WAKE,target_cpu);
-  QueIns(tmpc,ctrl->last_waiting);
+  QueueInsert(tmpc,ctrl->last_waiting);
   LBtr(&ctrl->flags,JOBCf_LOCKED);
   POPFD
   return tmpc;
 }
 
-CTask *SpawnQue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
+CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
 	I64 target_cpu, CTask *parent=NULL, //NULL means zenith
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE)
 {
   CTask *res;
-  CJob *tmpc=JobQue(fp_addr,data,target_cpu,
+  CJob *tmpc=JobQueue(fp_addr,data,target_cpu,
 	flags,JOBT_SPAWN_TASK,task_name,parent,stk_size);
   CJobCtrl *ctrl;
 
@@ -265,7 +265,7 @@ CTask *SpawnQue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   CLI
   while (LBts(&ctrl->flags,JOBCf_LOCKED))
     Yield;
-  QueRem(tmpc);
+  QueueRem(tmpc);
   LBtr(&ctrl->flags,JOBCf_LOCKED);
   POPFD
   JobDel(tmpc);
@@ -300,8 +300,8 @@ U0 Core0StartMP()
     MPHalt; //sets mp_cnt to 1
     for (i=1;i<my_mp_cnt;i++) {
       c=&cpu_structs[i];
-      JobQueDel(&c->seth_task->srv_ctrl.next_waiting);
-      JobQueDel(&c->seth_task->srv_ctrl.next_done);
+      JobQueueDel(&c->seth_task->srv_ctrl.next_waiting);
+      JobQueueDel(&c->seth_task->srv_ctrl.next_done);
     }
   }
   MemSet(&cpu_structs[1],0,sizeof(CCPU)*(MP_PROCESSORS_NUM-1));

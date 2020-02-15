@@ -7,9 +7,9 @@ class CMeshTri
   I32 nums[3];	//Vertex number
 };
 
-class CQueMeshTri
+class CQueueMeshTri
 {
-  CQueMeshTri *next,*last;
+  CQueueMeshTri *next,*last;
   U0 start;
   I32 color;
   I32 nums[3];

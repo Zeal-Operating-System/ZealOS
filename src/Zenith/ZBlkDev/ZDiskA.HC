@@ -206,7 +206,7 @@ public I64 DelTree(U8 *files_find_mask,U8 *fu_flags=NULL)
 
 U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
 {
-  CDrv *dv=Let2Drv(*filename);
+  CDrive *dv=Letter2Drive(*filename);
   CDirEntry de;
   U8 *cur_dir=StrNew(filename),buf[STR_LEN];
   if (FileFind(filename,&de,FUF_JUST_FILES)) {

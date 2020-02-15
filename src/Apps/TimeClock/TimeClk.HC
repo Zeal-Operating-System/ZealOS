@@ -20,7 +20,7 @@ U0 TimeFileRead(TimeEntry *header)
   buf=FileRead(TIME_FILENAME);
   if (!buf)
     buf=CAlloc(1);
-  QueInit(header);
+  QueueInit(header);
   ptr=buf;
   while (type=*ptr++) {
     tmpt=CAlloc(sizeof(TimeEntry));
@@ -28,7 +28,7 @@ U0 TimeFileRead(TimeEntry *header)
     tmpt->datetime=*ptr(CDate *)++;
     tmpt->desc=StrNew(ptr);
     ptr+=StrLen(ptr)+1;
-    QueIns(tmpt,header->last);
+    QueueInsert(tmpt,header->last);
   }
   Free(buf);
 }
@@ -126,7 +126,7 @@ public U0 PunchOut()
     "\nEnter Description.\nPress <ESC> when done.\n";
     if (!(tmpt->desc=GetStr(,,GSF_WITH_NEW_LINE)))
       tmpt->desc=CAlloc(1);
-    QueIns(tmpt,header->last);
+    QueueInsert(tmpt,header->last);
     TimeFileWrite(header);
   }
   TimeEntriesDel(header);
@@ -144,7 +144,7 @@ public U0 PunchIn()
     "\nEnter Description.\nPress <ESC> when done.\n";
     if (!(tmpt->desc=GetStr(,,GSF_WITH_NEW_LINE)))
       tmpt->desc=CAlloc(1);
-    QueIns(tmpt,header->last);
+    QueueInsert(tmpt,header->last);
     TimeFileWrite(header);
   }
   TimeEntriesDel(header);

@@ -55,7 +55,7 @@ CMeshEdVertex *MeshVertexNew(CMeshFrame *e,I64 x,I64 y,I64 z)
   tmpv->p.x=x;
   tmpv->p.y=y;
   tmpv->p.z=z;
-  QueIns(tmpv,e->vertex_head.last);
+  QueueInsert(tmpv,e->vertex_head.last);
   return tmpv;
 }
 
@@ -69,7 +69,7 @@ CMeshEdTri *MeshTriNew(CMeshFrame *e,CColorROPU32 color,
   tmpt->t[0]=v1;
   tmpt->t[1]=v2;
   tmpt->t[2]=v3;
-  QueIns(tmpt,e->tri_head.last);
+  QueueInsert(tmpt,e->tri_head.last);
   return tmpt;
 }
 
@@ -108,7 +108,7 @@ U0 MeshTriDel(CMeshFrame *e,CMeshEdTri *tmpt)
   if (tmpt) {
     if (tmpt==e->cur_tri)
       e->cur_tri=NULL;
-    QueRem(tmpt);
+    QueueRem(tmpt);
     Free(tmpt);
   }
 }
@@ -132,7 +132,7 @@ U0 MeshVertexDel(CMeshFrame *e,CMeshEdVertex *tmpv)
       e->cur_vertex=NULL;
     if (tmpv==e->chain_pred)
       e->chain_pred=NULL;
-    QueRem(tmpv);
+    QueueRem(tmpv);
     Free(tmpv);
   }
 }
@@ -593,14 +593,14 @@ CMeshEdTri	sys_clip_tri_head;
 
 U0 MeshClipInit()
 {
-  QueInit(&sys_clip_vertex_head);
-  QueInit(&sys_clip_tri_head);
+  QueueInit(&sys_clip_vertex_head);
+  QueueInit(&sys_clip_tri_head);
 }
 
 U0 MeshClipRst()
 {
-  QueDel(&sys_clip_vertex_head,TRUE);
-  QueDel(&sys_clip_tri_head,TRUE);
+  QueueDel(&sys_clip_vertex_head,TRUE);
+  QueueDel(&sys_clip_tri_head,TRUE);
   MeshClipInit;
 }
 
@@ -614,7 +614,7 @@ U0 MeshClipCopy(CMeshFrame *e)
     if (tmpv->flags&VF_SEL) {
       tmpv->copy=tmpv2=ACAlloc(sizeof(CMeshEdVertex));
       MemCpy(&tmpv2->p,&tmpv->p,sizeof(CD3I32));
-      QueIns(tmpv2,sys_clip_vertex_head.last);
+      QueueInsert(tmpv2,sys_clip_vertex_head.last);
       tmpv->flags|=VF_COPIED;
       tmpv->flags&=~VF_SEL;
     } else {
@@ -631,7 +631,7 @@ U0 MeshClipCopy(CMeshFrame *e)
       tmpt2->t[1]=tmpt->t[1]->copy;
       tmpt2->t[2]=tmpt->t[2]->copy;
       tmpt2->mt.color=tmpt->mt.color;
-      QueIns(tmpt2,sys_clip_tri_head.last);
+      QueueInsert(tmpt2,sys_clip_tri_head.last);
       tmpt->flags|=TF_COPIED;
       tmpt->flags&=~TF_SEL;
     } else
@@ -687,7 +687,7 @@ U0 MeshClipPaste(CMeshFrame *e)
   while (tmpv2!=&sys_clip_vertex_head) {
     tmpv2->copy=tmpv=CAlloc(sizeof(CMeshEdVertex));
     MemCpy(&tmpv->p,&tmpv2->p,sizeof(CD3I32));
-    QueIns(tmpv,e->vertex_head.last);
+    QueueInsert(tmpv,e->vertex_head.last);
     tmpv->flags|=VF_SEL;
     tmpv2=tmpv2->next;
   }
@@ -753,7 +753,7 @@ U0 DrawIt(CTask *task,CDC *dc)
   e->dc=dc;
   e->depth_buf=dc->depth_buf;
   for (i=0;i<mp_cnt;i++)
-    JobQue(&MPDrawIt,e,i);
+    JobQueue(&MPDrawIt,e,i);
 
   tmpv=e->vertex_head.next;
   while (tmpv!=&e->vertex_head) {
@@ -823,8 +823,8 @@ U0 DrawIt(CTask *task,CDC *dc)
 U0 MeshInit(CMeshFrame *e,Bool flip_y)
 {
   MemSet(e,0,sizeof(CMeshFrame));
-  QueInit(&e->vertex_head);
-  QueInit(&e->tri_head);
+  QueueInit(&e->vertex_head);
+  QueueInit(&e->tri_head);
   e->ed_mode='v';
   e->grid_on=TRUE;
   e->vertex_on=TRUE;
@@ -849,8 +849,8 @@ U0 MeshLoad(CMeshFrame *e,U8 *src)
   CColorROPU32 color;
   CMeshEdVertex *tmpv,*va[3];
 
-  QueInit(&e->vertex_head);
-  QueInit(&e->tri_head);
+  QueueInit(&e->vertex_head);
+  QueueInit(&e->tri_head);
 
   e->vertex_cnt  =*src(I32 *)++;
   e->tri_cnt=*src(I32 *)++;
@@ -923,8 +923,8 @@ I32 *MeshSave(CMeshFrame *e,I64 *_size=NULL)
 
 U0 MeshCleanUp(CMeshFrame *e)
 {
-  QueDel(&e->vertex_head,TRUE);
-  QueDel(&e->tri_head,TRUE);
+  QueueDel(&e->vertex_head,TRUE);
+  QueueDel(&e->tri_head,TRUE);
   Free(e->w2s);
   Free(e->s2w);
 }

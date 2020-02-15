@@ -6,7 +6,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
 //If you have not recompiled $FG,2$Kernel$FG$ and defined your CD/DVD drive, use $LK,"Mount",A="MN:Mount"$.
   U8 *out_iso_filename=FileNameAbs(_out_iso_filename);
-  if (!DrvIsWritable) {
+  if (!DriveIsWritable) {
     "Drive must be writable.  Install on Hard drive, first.\n";
     return;
   }

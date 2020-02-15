@@ -32,7 +32,7 @@ Bool BlkDevInit(CBlkDev *bd)
 {
   CDirEntry de;
   U8 buf[STR_LEN];
-  CDrv *dv=Let2Drv(bd->first_drv_let);
+  CDrive *dv=Letter2Drive(bd->first_drv_let);
   Bool res=FALSE;
   if (!LBts(&bd->flags,BDf_INITIALIZED)) {
     bd->flags|=BDF_INIT_IN_PROGRESS;
@@ -126,7 +126,7 @@ CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type)
 {//Locate free slot for new BlkDev, like during $LK,"Mount",A="MN:Mount"$().
   I64 i=0;
   CBlkDev *res;
-  if (Let2BlkDevType(first_drv_let)!=type)
+  if (Letter2BlkDevType(first_drv_let)!=type)
     throw('BlkDev');
   do {
     res=&blkdev.blkdevs[i];
@@ -158,7 +158,7 @@ CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type)
 
 U0 BlkDevDel(CBlkDev *bd)
 {//Delete BlkDev
-  DrvBlkDevDel(bd);
+  DriveBlkDevDel(bd);
   FClose(bd->file_dsk);
   Free(bd->file_dsk_name);
   Free(bd->dev_id_record);
@@ -177,10 +177,10 @@ CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE)
     return bd;
 }
 
-CBlkDev *Let2BlkDev(U8 drv_let=0,Bool except=TRUE)
+CBlkDev *Letter2BlkDev(U8 drv_let=0,Bool except=TRUE)
 {//Drive letter to BlkDev ptr.
-  CDrv *dv;
-  if (dv=Let2Drv(drv_let,except))
+  CDrive *dv;
+  if (dv=Letter2Drive(drv_let,except))
     return BlkDevCheck(dv->bd,except);
   else
     return NULL;

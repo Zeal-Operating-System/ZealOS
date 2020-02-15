@@ -415,7 +415,7 @@ Bool ATAPIReadBlks2(CBlkDev *bd,F64 timeout,U8 *buf,
 
 U0 ATAPIReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt)
 {
-  CDrv *dv=Let2Drv(bd->first_drv_let);
+  CDrive *dv=Letter2Drive(bd->first_drv_let);
   I64 retry,spc=bd->blk_size>>BLK_SIZE_BITS,n,blk2,
 	l2=bd->max_reads<<1+spc<<1;
   U8 *dvd_buf=MAlloc(l2<<BLK_SIZE_BITS);
@@ -442,7 +442,7 @@ U0 ATAPIReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt)
   Free(dvd_buf);
 }
 
-Bool ATARBlks(CDrv *dv,U8 *buf, I64 blk, I64 cnt)
+Bool ATARBlks(CDrive *dv,U8 *buf, I64 blk, I64 cnt)
 {
   I64 n;
   CBlkDev *bd=dv->bd;
@@ -579,7 +579,7 @@ U0 ATAPIWriteBlks(CBlkDev *bd,U8 *buf, I64 native_blk, I64 cnt)
   ATAWaitNotBUSY(bd,0);
 }
 
-Bool ATAWBlks(CDrv *dv,U8 *buf, I64 blk, I64 cnt)
+Bool ATAWBlks(CDrive *dv,U8 *buf, I64 blk, I64 cnt)
 {
   I64 n,spc;
   CBlkDev *bd=dv->bd;

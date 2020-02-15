@@ -7,7 +7,7 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
       break;
     case BDT_ISO_FILE_READ:
     case BDT_ISO_FILE_WRITE:
-      bd->lock_fwding=Let2BlkDev(*bd->file_dsk_name);
+      bd->lock_fwding=Letter2BlkDev(*bd->file_dsk_name);
       break;
     case BDT_ATA:
     case BDT_ATAPI:
@@ -29,15 +29,15 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 {//It will mount just one partition of prt_num>=0.
 //When repartitioing whole drive, whole_drv=TRUE.
   I64 i,j,ext_base,offset,res=0,num=0;
-  CDrv *dv;
+  CDrive *dv;
   CRedSeaBoot br;
   CMasterBoot mbr;
 
   bd->bd_signature=BD_SIGNATURE_VAL;
   if (make_free)
-    dv=DrvMakeFreeSlot(bd->first_drv_let);
+    dv=DriveMakeFreeSlot(bd->first_drv_let);
   else
-    dv=DrvMakeFreeSlot(DrvNextFreeLet(bd->first_drv_let));
+    dv=DriveMakeFreeSlot(DriveNextFreeLet(bd->first_drv_let));
   dv->bd=bd;
   dv->drv_offset=bd->drv_offset;
   dv->size=bd->max_blk+1-bd->drv_offset;
@@ -87,9 +87,9 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	  for (i=0;i<4 && (prt_num<0 || num<=prt_num);i++) {
 	    if (mbr.p[i].type) {
 	      if (make_free)
-		dv=DrvMakeFreeSlot(bd->first_drv_let+res);
+		dv=DriveMakeFreeSlot(bd->first_drv_let+res);
 	      else
-		dv=DrvMakeFreeSlot(DrvNextFreeLet(bd->first_drv_let+res));
+		dv=DriveMakeFreeSlot(DriveNextFreeLet(bd->first_drv_let+res));
 	      dv->bd=bd;
 	      dv->drv_offset=mbr.p[i].offset+offset;
 	      dv->size	=mbr.p[i].size;
@@ -138,7 +138,7 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	      num++;
 	    }
 	  }
-	  if (Let2BlkDevType(bd->first_drv_let+res)!=bd->type)
+	  if (Letter2BlkDevType(bd->first_drv_let+res)!=bd->type)
 	    break;
 	  if (j<0)
 	    break;
@@ -167,10 +167,10 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
   return res;
 }
 
-Bool DrvEnable(U8 drv_let,Bool val)
+Bool DriveEnable(U8 drv_let,Bool val)
 {//Can unmount or remount, but not mount the first time.
-  CDrv *dv;
-  if (dv=Let2Drv(drv_let,FALSE))
+  CDrive *dv;
+  if (dv=Letter2Drive(drv_let,FALSE))
     return !LBEqu(&dv->fs_type,FStf_DISABLE,!val);
   else
     return FALSE;
@@ -227,7 +227,7 @@ U0 BlkDevsInitAll()
   CBlkDev *bd;
   I64 i;
   blkdev.blkdevs=CAlloc(sizeof(CBlkDev)*BLKDEVS_NUM);
-  blkdev.drvs=CAlloc(sizeof(CDrv)*DRVS_NUM);
+  blkdev.drvs=CAlloc(sizeof(CDrive)*DRVS_NUM);
   for (i=0;i<DRVS_NUM;i++)
     blkdev.let_to_drv[i]=&blkdev.drvs[i];
   #exe {

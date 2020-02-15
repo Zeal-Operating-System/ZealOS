@@ -20,7 +20,7 @@ public U0 DocLoad(CDoc *doc,U8 *src2,I64 size)
 	MemCpy(tmpb->data,src,tmpb->size);
 	src+=tmpb->size;
       }
-      QueIns(tmpb,doc->bin_head.last);
+      QueueInsert(tmpb,doc->bin_head.last);
       if (tmpb->num>=doc->cur_bin_num)
 	doc->cur_bin_num=tmpb->num+1;
     }
@@ -201,7 +201,7 @@ public U0 DocInsDoc(CDoc *doc=NULL,CDoc *doc2)
       *dst=0;
       doc_ne->type=DOCT_TEXT | doc_ce->type & 0xFFFFFF00;
       doc_ce->max_col=doc->cur_col;
-      QueIns(doc_ne,doc_ce);
+      QueueInsert(doc_ne,doc_ce);
       doc->cur_entry=doc_ne;
       doc->cur_col=doc_ne->min_col;
     } else
@@ -211,7 +211,7 @@ public U0 DocInsDoc(CDoc *doc=NULL,CDoc *doc2)
   while (doc_e!=doc2) {
     if (doc_e->type_u8!=DOCT_SOFT_NEW_LINE) {
       doc_ne=DocEntryCopy(doc,doc_e);
-      QueIns(doc_ne,doc->cur_entry->last);
+      QueueInsert(doc_ne,doc->cur_entry->last);
     }
     doc_e=doc_e->next;
   }
@@ -259,7 +259,7 @@ Bool DocCaptureUndo(CDoc *doc,Bool force=FALSE)
       doc->flags&=~DOCF_NO_CURSOR;
       u->body=DocSave(doc,&u->size);
       doc->flags=flags;
-      QueIns(u,doc->undo_head.last);
+      QueueInsert(u,doc->undo_head.last);
       doc->flags&=~DOCF_UNDO_DIRTY;
       doc->undo_cnt++;
       u->doc_flags=doc->flags;
@@ -278,10 +278,10 @@ U0 DocUndoRestore(CDoc *doc)
   Bool unlock=DocLock(doc);
   CDocUndo *u=doc->undo_head.last,*u_next,*u_last;
   if (u!=&doc->undo_head) {
-    QueRem(u);
+    QueueRem(u);
     u_next=doc->undo_head.next;
     u_last=doc->undo_head.last;
-    QueInit(&doc->undo_head);
+    QueueInit(&doc->undo_head);
     DocRst(doc,TRUE);
     doc->flags=u->doc_flags&~DOCF_NO_CURSOR;
     DocLoad(doc,u->body,u->size);

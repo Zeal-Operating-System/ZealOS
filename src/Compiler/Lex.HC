@@ -32,7 +32,7 @@ CCmpCtrl *CmpCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
   //new names are used.  See $LK,"Psalmody CmpCtrlNew",A="FF:::/Apps/Psalmody/PsalmodyFile.HC,CmpCtrlNew"$.
   CCmpCtrl *cc=CAlloc(sizeof(CCmpCtrl));
   CLexFile *tmpf;
-  QueInit(cc);
+  QueueInit(cc);
   cc->flags=flags;
   cc->opts=1<<OPTf_WARN_UNUSED_VAR|1<<OPTf_WARN_HEADER_MISMATCH;
   cc->htc.hash_mask=HTG_TYPE_MASK-HTT_IMPORT_SYS_SYM;
@@ -43,7 +43,7 @@ CCmpCtrl *CmpCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
   else
     cc->char_bmp_alpha_numeric=char_bmp_alpha_numeric;
   tmpf=LexFilePush(cc);
-  QueInit(&cc->next_stream_blk);
+  QueueInit(&cc->next_stream_blk);
   if (filename)
     tmpf->full_name=FileNameAbs(filename);
   else
@@ -271,21 +271,21 @@ U0 LexSkipEol(CCmpCtrl *cc)
 U8 *LexFirstRem(CCmpCtrl *cc,U8 *marker,I64 _len=NULL)
 {//$LK,"LexGetChar",A="MN:LexGetChar"$() chars making str until marker.
   U8 *res,*ptr;
-  CQueVectU8 *tmpv=QueVectU8New;
+  CQueueVectU8 *tmpv=QueueVectU8New;
   I64 i,len=0;
   while (TRUE) {
     i=LexGetChar(cc);
     if (!i||StrOcc(marker,i))
       break;
-    QueVectU8Put(tmpv,len++,i);
+    QueueVectU8Put(tmpv,len++,i);
   }
   if (i)
     Bts(&cc->flags,CCf_USE_LAST_U16);
   res=ptr=MAlloc(len+1);
   for (i=0;i<len;i++)
-    *ptr++=QueVectU8Get(tmpv,i);
+    *ptr++=QueueVectU8Get(tmpv,i);
   *ptr=0;
-  QueVectU8Del(tmpv);
+  QueueVectU8Del(tmpv);
   if (_len) *_len=len;
   return res;
 }

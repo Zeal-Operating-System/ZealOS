@@ -1,11 +1,11 @@
 U0 RawAccess(I64 drv_let=0)
 {
-  CDrv *dv=Let2Drv(drv_let);
-  CBlkDev *bd=Let2BlkDev(drv_let);
+  CDrive *dv=Letter2Drive(drv_let);
+  CBlkDev *bd=Letter2BlkDev(drv_let);
   I64 blk,old_offset,old_size;
   U8 *buf=MAlloc(BLK_SIZE);
 
-  DrvRep;
+  DriveRep;
   PressAKey;
 
   ClassRep(dv);
@@ -37,5 +37,5 @@ U0 RawAccess(I64 drv_let=0)
 
 RawAccess;
 
-//See $LK,"BlkRead",A="MN:BlkRead"$(), $LK,"BlkWrite",A="MN:BlkWrite"$(), $LK,"DrvLock",A="MN:DrvLock"$(), $LK,"DriveUnlock",A="MN:DriveUnlock"$()
+//See $LK,"BlkRead",A="MN:BlkRead"$(), $LK,"BlkWrite",A="MN:BlkWrite"$(), $LK,"DriveLock",A="MN:DriveLock"$(), $LK,"DriveUnlock",A="MN:DriveUnlock"$()
 //$LK,"DBlk",A="MN:DBlk"$(), $LK,"DClus",A="MN:DClus"$(), $LK,"BlkDevLock",A="MN:BlkDevLock"$() and $LK,"BlkDevUnlock",A="MN:BlkDevUnlock"$().

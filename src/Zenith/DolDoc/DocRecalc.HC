@@ -137,7 +137,7 @@ CDocEntry *DocSplitTag(CDoc *doc,CDocEntry *doc_e,I64 i,I64 x,I64 y,I64 type_u8)
       doc_e2=MAllocIdent(doc_e,doc->mem_task);
       doc_e2->tag=StrNew(doc_e->tag+i,doc->mem_task);
       doc_e2->de_flags=doc_e->de_flags&~DOCEG_HAS_ALLOC|DOCEF_TAG;
-      QueIns(doc_e2,doc_e);
+      QueueInsert(doc_e2,doc_e);
       if (doc->cur_entry==doc_e && doc->cur_col>=i) {
 	doc->cur_entry=doc_e2;
 	doc->cur_col=doc->cur_col-i;
@@ -152,7 +152,7 @@ CDocEntry *DocSplitTag(CDoc *doc,CDocEntry *doc_e,I64 i,I64 x,I64 y,I64 type_u8)
   doc_e2=DocEntryNewBase(doc,type_u8|doc_e->type & 0xFFFFFF00,
 	doc_e->de_flags&~DOCEG_HAS_ARG,x,y,doc_e->page_line_num);
   MemCpy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
-  QueIns(doc_e2,doc_e);
+  QueueInsert(doc_e2,doc_e);
   return doc_e2;
 }
 
@@ -194,7 +194,7 @@ CDocEntry *DocWordWrapAdd(CDoc *doc,CDocEntry *doc_e,
 	    DOCEF_WORD_WRAP|doc_e->de_flags&(DOCEF_HIGHLIGHT|DOCG_BL_IV_UL|
 	    DOCEF_SKIP|DOCEF_FILTER_SKIP),x,y,doc_e->last->page_line_num);
       MemCpy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
-      QueIns(doc_e2,doc_e->last);
+      QueueInsert(doc_e2,doc_e->last);
       return doc_e2;
     }
   }
@@ -499,9 +499,9 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 		doc_e->de_flags&~DOCEG_HAS_ARG,x,y,doc->page_line_num);
 	  MemCpy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
 	  if (doc_e->type_u8==DOCT_TEXT && doc->cur_col>=k)
-	    QueIns(doc_e2,doc_e);
+	    QueueInsert(doc_e2,doc_e);
 	  else
-	    QueInsRev(doc_e2,doc_e);
+	    QueueInsRev(doc_e2,doc_e);
 	}
       }
     }
@@ -1150,7 +1150,7 @@ rc_skip:
     if (doc->cur_entry==doc && recalc_flags&RECALCF_ADD_CURSOR) {
       doc_e2=DocEntryNewBase(doc,DOCT_CURSOR,,x,y,doc->page_line_num);
       MemCpy(&doc_e2->settings,s,sizeof(CDocSettings));
-      QueInsRev(doc_e2,doc);
+      QueueInsRev(doc_e2,doc);
     }
 
     if (doc->min_x>doc->max_x) {

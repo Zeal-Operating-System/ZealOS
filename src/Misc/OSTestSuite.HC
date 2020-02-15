@@ -1557,7 +1557,7 @@ U0 OSTestSuite()
   TS("Palindrome");	if (FileFind(BIBLE_FILENAME))
 				TSFile("::/Demo/MultiCore/Palindrome");
   TS("MPRadix");	if (mp_cnt>1) TSFile("::/Demo/MultiCore/MPRadix");
-  TS("LoadTest");	if (mp_cnt>1 && DrvIsWritable(':'))
+  TS("LoadTest");	if (mp_cnt>1 && DriveIsWritable(':'))
 				TSFileChar("::/Demo/MultiCore/LoadTest");
   TS("MPPrint");	if (mp_cnt>1) TSFile("::/Demo/MultiCore/MPPrint");
   TS("Lock");		if (mp_cnt>1) TSFile("::/Demo/MultiCore/Lock");
@@ -1592,7 +1592,7 @@ U0 OSTestSuite()
   TS("BSpline");	DoBSpline;
   TS("GrModels");	DoGrModels;
   TS("Blot");		TSFileChar("::/Demo/Graphics/Blot",1800);
-  TS("ScrnCapture");	if (DrvIsWritable('~')) DoScrnCapture;
+  TS("ScrnCapture");	if (DriveIsWritable('~')) DoScrnCapture;
   TS("Grid");		DoGrid;
   TS("Pick");		DoPick;
   TS("Pick3D");		DoPick3D;
@@ -1630,7 +1630,7 @@ U0 OSTestSuite()
   TS("UnusedSpaceRep");	TSFile("::/Demo/Disk/UnusedSpaceRep");
   TS("BlkDevRep");	TSFile("::/Demo/Disk/BlkDevRep");
   TS("LastClass");	DoLastClass;
-  TS("FPrintF");	if (DrvIsWritable('~')) DoFPrintF;
+  TS("FPrintF");	if (DriveIsWritable('~')) DoFPrintF;
   TS("SerializeTree");	TSFile("::/Demo/Disk/SerializeTree");
   TS("Exceptions");	DoExceptions;
   TS("ScrnDCodes");	TSFileChar("::/Demo/ScrnCodes");
@@ -1652,11 +1652,11 @@ U0 OSTestSuite()
   TS("Logic");		DoLogic;
   TS("CompileDemo");	TSFile("::/Demo/CompileDemo");
   TS("Prompt");		DoPrompt;
-  TS("WebLog");		if (DrvIsWritable('~')) DoWebLog;
-  TS("RevFile");	if (DrvIsWritable('~')) DoRevFile;
-  TS("SortFile");	if (DrvIsWritable('~')) DoSortFile;
-  TS("ToHtmlToTXT");	if (DrvIsWritable('~')) DoToHtmlToTXT;
-  TS("RegistryDemo");	if (DrvIsWritable('~'))
+  TS("WebLog");		if (DriveIsWritable('~')) DoWebLog;
+  TS("RevFile");	if (DriveIsWritable('~')) DoRevFile;
+  TS("SortFile");	if (DriveIsWritable('~')) DoSortFile;
+  TS("ToHtmlToTXT");	if (DriveIsWritable('~')) DoToHtmlToTXT;
+  TS("RegistryDemo");	if (DriveIsWritable('~'))
 				TSFile("::/Demo/RegistryDemo");
   TS("Define");		DoDefine;
   TS("GlblVars");	TSFile("::/Demo/GlblVars");
@@ -1666,7 +1666,7 @@ U0 OSTestSuite()
   TS("Data");		TSFile("::/Demo/DolDoc/Data");
   TS("CallBack");	TSFile("::/Demo/DolDoc/CallBack");
   TS("ClassMeta");	TSFile("::/Demo/ClassMeta");
-  TS("NumBible");	if (DrvIsWritable('~')) DoNumBible;
+  TS("NumBible");	if (DriveIsWritable('~')) DoNumBible;
   TS("Form");		DoForm;
   TS("ClickCallBack");	DoClickCallBack;
   TS("MenuBttn");	DoMenuBttn;
@@ -1696,14 +1696,14 @@ U0 OSTestSuite()
   TS("HeapLogSizeRep");	XTalkWait(task,"HeapLogSizeRep;Sleep(750);\n");
   TS("CPURep");		if (mp_cnt>1)
 				XTalkWait(task,"CPURep(TRUE);Sleep(750);\n");
-  TS("DiskCheck");		if (DrvIsWritable(':'))
+  TS("DiskCheck");		if (DriveIsWritable(':'))
 				XTalkWait(task,"DiskCheck;Sleep(750);\n");
-  TS("DrvView");	if (DrvIsWritable(':')) {
-    XTalkWait(task,"DrvView;\n");
+  TS("DriveView");	if (DriveIsWritable(':')) {
+    XTalkWait(task,"DriveView;\n");
     Sleep(750);
     PostMsgWait(task,MSG_KEY_DOWN_UP,CH_SPACE,0);
   }
-  TS("DiskView");	if (DrvIsWritable(':')) {
+  TS("DiskView");	if (DriveIsWritable(':')) {
     XTalkWait(task,"DiskView;\n");
     Sleep(250); //Short because ATARep takes time.
     PostMsgWait(task,MSG_KEY_DOWN_UP,CH_SPACE,0);
@@ -1712,7 +1712,7 @@ U0 OSTestSuite()
   TS("HashDepthRep");	XTalkWait(task,
 	"HashDepthRep(zenith_task->hash_table);Sleep(750);\n");
   TS("Who");		XTalkWait(task,"Who;Sleep(750);\n");
-  TS("DrvRep");		XTalkWait(task,"DrvRep;Sleep(750);\n");
+  TS("DriveRep");		XTalkWait(task,"DriveRep;Sleep(750);\n");
   TS("TaskRep");	XTalkWait(task,"TaskRep;Sleep(750);\n");
   DeathWait(&task,TRUE);
 

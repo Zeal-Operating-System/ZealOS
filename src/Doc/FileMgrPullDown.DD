@@ -2,8 +2,8 @@ File
 {
   Rename(,'r');
   DirMk(,'d');
-  FmtDrv(,'f');
-  UnmountDrv(,'u');
+  FmtDrive(,'f');
+  UnmountDrive(,'u');
   Abort(,CH_SHIFT_ESC);
   Exit(,CH_ESC);
 }

@@ -90,11 +90,11 @@ U0 PsmRightClick(I64 x,I64 y)
 	  break;
 	case PSMR_INS_NOTE:
 	  tmpn1=PsmNoteCopy(tmpn);
-	  QueIns(tmpn1,tmpn);
+	  QueueInsert(tmpn1,tmpn);
 	  break;
 	case PSMR_DELETE_NOTE:
 	  psm.cur_note=tmpn->next;
-	  QueRem(tmpn);
+	  QueueRem(tmpn);
 	  PsmNoteDel(tmpn);
 	  break;
       }
@@ -138,7 +138,7 @@ U0 PsmLeftClickPickNoteBox(I64 duration)
     tmpn->ona=Note2Ona(n,o);
     tmpn->duration=duration;
     PsmSetWidth(tmpn);
-    QueIns(tmpn,tmpn1);
+    QueueInsert(tmpn,tmpn1);
     psm.cur_note=tmpn->next;
   }
   DrawDC2;
@@ -167,7 +167,7 @@ U0 PsmLeftClickPickMeterBox(I64 top,I64 bottom)
     tmpn->meter_top=top;
     tmpn->meter_bottom=bottom;
     PsmSetWidth(tmpn);
-    QueIns(tmpn,tmpn1);
+    QueueInsert(tmpn,tmpn1);
     psm.cur_note=tmpn->next;
   }
   DrawDC2;
@@ -548,7 +548,7 @@ mo_got_msg:
 		      tmpn=psm.cur_note;
 		      psm.cur_note=tmpn->next;
 		      if (tmpn!=&psm.head) {
-			QueRem(tmpn);
+			QueueRem(tmpn);
 			PsmNoteDel(tmpn);
 		      }
 		    }
@@ -692,7 +692,7 @@ mo_got_msg:
 	      case CH_BACKSPACE:
 		tmpn=psm.cur_note->last;
 		if (tmpn!=&psm.head) {
-		  QueRem(tmpn);
+		  QueueRem(tmpn);
 		  PsmNoteDel(tmpn);
 		}
 		if (col) {
@@ -759,7 +759,7 @@ mo_got_msg:
 	    tmpn->duration=PsmCvtDuration(
 		  music.tempo*(evt_time-note_down_time));
 	    PsmSetWidth(tmpn);
-	    QueIns(tmpn,psm.cur_note->last);
+	    QueueInsert(tmpn,psm.cur_note->last);
 	  }
 	  if (!is_null) {
 	    note_down_time=tS;

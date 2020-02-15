@@ -114,7 +114,7 @@ $FG,2$Prt$FG$	Partition
 $FG,2$FunSeg$FG$ Program Section
 $FG,2$Pt$FG$	Point
 $FG,2$Ptr$FG$	Pointer
-$FG,2$Que$FG$	Queue
+$FG,2$Queue$FG$	Queue
 $FG,2$Rand$FG$	Random
 $FG,2$Ref$FG$	Reference
 $FG,2$Reg$FG$	Register, Registry, Regular
@@ -284,5 +284,5 @@ $ID,2$When two parts of a program have a common low-level routine, that routine 
 $ID,-2$$TR,"user_data"$
 $ID,2$Many operating system structures have space set aside for you to store values.  You are on your own managing these with multiple applications and libraries.
 $ID,-2$$TR,"Multicore Core0/CoreAP"$
-$ID,2$Core0, has the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$, and it is the master.  The $FG,2$application processors$FG$ have an executive $LK,"Seth Tasks",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQue",A="MN:JobQue"$() a job on them.
+$ID,2$Core0, has the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$, and it is the master.  The $FG,2$application processors$FG$ have an executive $LK,"Seth Tasks",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQueue",A="MN:JobQueue"$() a job on them.
 $ID,-2$

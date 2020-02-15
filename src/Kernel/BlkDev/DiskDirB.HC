@@ -10,7 +10,7 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
 {//Change directory. Optionally, make directories, too.
   I64 maxlen,cur_dir_clus=0;
   U8 *chg_to_buf,*new_cur_dir,*buf;
-  CDrv *dv;
+  CDrive *dv;
   Bool res=TRUE;
   if (!dirname)
     dirname="~";
@@ -18,9 +18,9 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
     return TRUE;
   if (dirname[1]==':') {
     if (*dirname==':') {
-      if (Fs->cur_dv!=Let2Drv(':') && !Drive(*dirname))
+      if (Fs->cur_dv!=Letter2Drive(':') && !Drive(*dirname))
 	return FALSE;
-    } else if (Fs->cur_dv!=Let2Drv(*dirname) && !Drive(*dirname))
+    } else if (Fs->cur_dv!=Letter2Drive(*dirname) && !Drive(*dirname))
       return FALSE;
     dirname+=2;
   }
@@ -48,7 +48,7 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
       Free(new_cur_dir);
       new_cur_dir=MAlloc(StrLen(blkdev.home_dir+2)+1+StrLen(chg_to_buf)+1);
       StrCpy(new_cur_dir,blkdev.home_dir+2);
-      if (Fs->cur_dv!=Let2Drv('~') && !Drive('~'))
+      if (Fs->cur_dv!=Letter2Drive('~') && !Drive('~'))
 	return FALSE;
     } else if (StrCmp(buf,".") && *buf) {
       dv=Fs->cur_dv;

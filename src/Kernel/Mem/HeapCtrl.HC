@@ -6,7 +6,7 @@ CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,CTask *task=NULL,CBlkPool *bp)
   hc->hc_signature=HEAP_CTRL_SIGNATURE_VAL;
   hc->mem_task=task;
   hc->bp=bp;
-  QueInit(&hc->next_mem_blk);
+  QueueInit(&hc->next_mem_blk);
   hc->last_mergable=NULL;
   hc->next_um=hc->last_um=(&hc->next_um)(U8 *)-offset(CMemUsed.next);
   return hc;

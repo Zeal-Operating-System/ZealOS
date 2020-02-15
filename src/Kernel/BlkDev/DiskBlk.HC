@@ -1,5 +1,5 @@
 #define ZERO_BUF_SIZE	2048
-U0 BlkWriteZero(CDrv *dv,I64 blk,I64 cnt)
+U0 BlkWriteZero(CDrive *dv,I64 blk,I64 cnt)
 {//Fill blk cnt with zeros in Drive.
   I64 n;
   U8 *z=CAlloc(ZERO_BUF_SIZE<<BLK_SIZE_BITS);
@@ -28,14 +28,14 @@ U0 BlkWriteZero(CDrv *dv,I64 blk,I64 cnt)
   }
 }
 
-Bool BlkRead(CDrv *dv,U8 *buf, I64 blk, I64 cnt)
+Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 cnt)
 {//Read blk cnt from Drive to buf.
   Bool res=TRUE,unlock;
   CBlkDev *bd=dv->bd;
   if (cnt<=0) return TRUE;
-  DrvCheck(dv);
+  DriveCheck(dv);
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     BlkDevInit(bd);
     if (dv->drv_offset && blk<dv->drv_offset ||
 	  blk+cnt>dv->drv_offset+dv->size)
@@ -68,14 +68,14 @@ Bool BlkRead(CDrv *dv,U8 *buf, I64 blk, I64 cnt)
   return res;
 }
 
-Bool BlkWrite(CDrv *dv,U8 *buf, I64 blk, I64 cnt)
+Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 cnt)
 {//Write blk cnt from buf to Drive.
   Bool res=TRUE,unlock;
   CBlkDev *bd=dv->bd;
   if (cnt<=0) return TRUE;
-  DrvCheck(dv);
+  DriveCheck(dv);
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     BlkDevInit(bd);
     if (bd->flags&BDF_READ_ONLY && !(bd->flags & BDF_READ_ONLY_OVERRIDE))
       throw('BlkDev');

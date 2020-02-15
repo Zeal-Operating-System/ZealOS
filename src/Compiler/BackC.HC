@@ -337,7 +337,7 @@ U0 ICBrBitOps(CIntermediateCode *tmpi,I64 rip,
   }
 }
 
-U0 ICQueInit(CIntermediateCode *tmpi,I64 rip2)
+U0 ICQueueInit(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 r1;
   if (tmpi->arg1.type==MDF_REG+RT_I64)
@@ -351,7 +351,7 @@ U0 ICQueInit(CIntermediateCode *tmpi,I64 rip2)
   ICMov(tmpi,MDF_DISP+RT_I64,r1,sizeof(U8 *),MDF_REG+RT_I64,r1,0,rip2);
 }
 
-U0 ICQueIns(CIntermediateCode *tmpi,I64 rip2)
+U0 ICQueueIns(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 r1,r2;
   if (tmpi->arg2.type==MDF_REG+RT_I64 && tmpi->arg2.reg!=REG_RDX)
@@ -375,7 +375,7 @@ U0 ICQueIns(CIntermediateCode *tmpi,I64 rip2)
   ICMov(tmpi,MDF_DISP+RT_I64,REG_RBX,sizeof(U8 *),MDF_REG+RT_I64,r2,0,rip2);
 }
 
-U0 ICQueInsRev(CIntermediateCode *tmpi,I64 rip2)
+U0 ICQueueInsRev(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 r1,r2;
   if (tmpi->arg2.type==MDF_REG+RT_I64 && tmpi->arg2.reg!=REG_RDX)
@@ -399,7 +399,7 @@ U0 ICQueInsRev(CIntermediateCode *tmpi,I64 rip2)
   ICMov(tmpi,MDF_DISP+RT_I64,r1,sizeof(U8 *),MDF_REG+RT_I64,r2,0,rip2);
 }
 
-U0 ICQueRem(CIntermediateCode *tmpi,I64 rip2)
+U0 ICQueueRem(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 r1;
   if (tmpi->arg1.type==MDF_REG+RT_I64)

@@ -43,8 +43,8 @@ public CMathODE *ODENew(I64 n,F64 max_tolerance=1e-6,I64 flags=0)
   ode->h_max=1e32;
   ode->max_tolerance=ode->min_tolerance=ode->tolerance_internal=max_tolerance;
   ode->win_task=ode->mem_task=Fs;
-  QueInit(&ode->next_mass);
-  QueInit(&ode->next_spring);
+  QueueInit(&ode->next_mass);
+  QueueInit(&ode->next_spring);
   ode->state=CAlloc(s);
   ode->array_base=MAlloc(12*s);
   ODERstPtrs(ode);

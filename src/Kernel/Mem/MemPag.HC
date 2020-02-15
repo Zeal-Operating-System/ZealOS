@@ -120,7 +120,7 @@ Return: NULL if out of memory.
   I64 threshold,cnt,size;
   CMemUnused *uum,**_uum,**_ptr;
   if (res=MemPagAlloc(pags,hc->bp)) {
-    QueIns(res,hc->last_mem_blk);
+    QueueInsert(res,hc->last_mem_blk);
     res->mb_signature=MBS_USED_SIGNATURE_VAL;
     hc->alloced_u8s+=res->pags<<MEM_PAG_BITS;
 
@@ -158,7 +158,7 @@ U0 MemPagTaskFree(CMemBlk *m,CHeapCtrl *hc)
     if (m->mb_signature!=MBS_USED_SIGNATURE_VAL)
       SysBadFree(m);
     else {
-      QueRem(m);
+      QueueRem(m);
       hc->alloced_u8s-=m->pags<<MEM_PAG_BITS;
       MemPagFree(m,hc->bp);
     }

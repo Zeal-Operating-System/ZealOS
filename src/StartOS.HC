@@ -31,7 +31,7 @@ LBts(&sys_run_level,RLf_REGISTRY);
 
 WallPaperInit;
 
-if (DrvIsWritable)
+if (DriveIsWritable)
   DirMk("/Tmp"); //Good to have a Tmp
 
 Option(OPTf_WARN_PAREN,OFF);

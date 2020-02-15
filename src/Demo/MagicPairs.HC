@@ -361,7 +361,7 @@ I64 MagicPairs(I64 N)
     rj[i].sqrt_primes=sqrt_primes;
     rj[i].cbrt_primes=cbrt_primes;
     rj[i].primes=primes;
-    rj[i].cmd=JobQue(&TestCoreRange,&rj[i],mp_cnt-1-i,0);
+    rj[i].cmd=JobQueue(&TestCoreRange,&rj[i],mp_cnt-1-i,0);
   }
   for (i=0;i<mp_cnt;i++)
     res+=JobResGet(rj[i].cmd);

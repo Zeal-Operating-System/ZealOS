@@ -112,7 +112,7 @@ U0 PrsSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
 	  tmplg->link=StrNew(src);
 	  src=++src2;
 
-	  QueIns(tmplg,head->last);
+	  QueueInsert(tmplg,head->last);
 	} else if (!StrNCmp(src,"HEAD ",5)) {
 	  LogStructDel(tmplg);
 	} else
@@ -132,7 +132,7 @@ LogStruct *PrsLogFiles(U8 *files_find_mask,CDate *_dstart,CDate *_dend)
 {
   LogStruct *head=CAlloc(sizeof(LogStruct));
   CDirEntry *tmpde=FilesFind(files_find_mask),*tmpde1=tmpde;
-  QueInit(head);
+  QueueInit(head);
   while (tmpde) {
     PrsSingleLogFile(head,tmpde->full_name,_dstart,_dend);
     tmpde=tmpde->next;
@@ -155,7 +155,7 @@ U0 BlockedStructAdd(BlockedStruct *head,U32 ip_num)
 {
   BlockedStruct *tmpb=CAlloc(sizeof(BlockedStruct));
   tmpb->ip_num=ip_num;
-  QueIns(tmpb,head->last);
+  QueueInsert(tmpb,head->last);
 }
 
 Bool IsBlocked(BlockedStruct *head,U32 ip_num)
@@ -174,7 +174,7 @@ U0 BlockIPNuip(LogStruct *head)
   BlockedStruct blocked_head;
   LogStruct *tmplg=head->next,*tmplg1;
 
-  QueInit(&blocked_head);
+  QueueInit(&blocked_head);
 
   BlockedStructAdd(&blocked_head,68<<24+227<<16+61<<8+6);
 
@@ -191,13 +191,13 @@ U0 BlockIPNuip(LogStruct *head)
   while (tmplg!=head) {
     tmplg1=tmplg->next;
     if (IsBlocked(&blocked_head,tmplg->ip_num)) {
-      QueRem(tmplg);
+      QueueRem(tmplg);
       LogStructDel(tmplg);
     }
     tmplg=tmplg1;
   }
 
-  QueDel(&blocked_head);
+  QueueDel(&blocked_head);
 }
 
 Bool IsDownLoad(LogStruct *tmplg)

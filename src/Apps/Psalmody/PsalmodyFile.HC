@@ -23,7 +23,7 @@ U0 PsmSongDel(PsmNote *head)
     PsmNoteDel(tmpn);
     tmpn=tmpn1;
   }
-  QueInit(head);
+  QueueInit(head);
 }
 
 U0 PsmCutToClip()
@@ -36,9 +36,9 @@ U0 PsmCutToClip()
     if (tmpn->flags&PSMF_SEL) {
       if (psm.cur_note==tmpn)
 	psm.cur_note=tmpn->next;
-      QueRem(tmpn);
+      QueueRem(tmpn);
       tmpn->flags&=~PSMF_SEL;
-      QueIns(tmpn,psm.clip.last);
+      QueueInsert(tmpn,psm.clip.last);
     }
     tmpn=tmpn1;
   }
@@ -50,7 +50,7 @@ U0 PsmPasteClip()
   tmpn=psm.clip.next;
   while (tmpn!=&psm.clip) {
     tmpn1=PsmNoteCopy(tmpn);
-    QueIns(tmpn1,psm.cur_note->last);
+    QueueInsert(tmpn1,psm.cur_note->last);
     tmpn=tmpn->next;
   }
 }
@@ -64,7 +64,7 @@ U0 PsmCopyToClip()
     if (tmpn->flags&PSMF_SEL) {
       tmpn->flags&=~PSMF_SEL;
       tmpn1=PsmNoteCopy(tmpn);
-      QueIns(tmpn1,psm.clip.last);
+      QueueInsert(tmpn1,psm.clip.last);
     }
     tmpn=tmpn->next;
   }
@@ -129,7 +129,7 @@ U0 PsmLoadSongStr(U8 *st,I64 *psm_octave,F64 *psm_duration)
 	else
 	  tmpn1->meter_bottom=4;
 	PsmSetWidth(tmpn1);
-	QueIns(tmpn1,psm.head.last);
+	QueueInsert(tmpn1,psm.head.last);
       }
       while (*st=='(') {
 	Bts(&tmpn->flags,PSMf_TIE);
@@ -192,7 +192,7 @@ U0 PsmLoadSongStr(U8 *st,I64 *psm_octave,F64 *psm_duration)
     tmpn->duration=i;
     tmpn->type=PSMT_NOTE;
     PsmSetWidth(tmpn);
-    QueIns(tmpn,psm.cur_note->last);
+    QueueInsert(tmpn,psm.cur_note->last);
   }
 }
 

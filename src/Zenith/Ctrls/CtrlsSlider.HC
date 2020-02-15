@@ -35,7 +35,7 @@ CTemplateCS *CtrlSliderGet()
     }
     tmps=CAlloc(sizeof(CTemplateCSSlider));
     tmps->name=st;
-    QueIns(tmps,res->last_slider);
+    QueueInsert(tmps,res->last_slider);
     tmps->num=res->num_sliders++;
   }
   return res;
@@ -188,14 +188,14 @@ CCtrl *SliderNew()
 "c->draw_it=&DrawCtrlSlider;
 c->left_click=&LeftClickSlider;
 c->update_derived_vals=&UpdateDerivedCtrlSlider;
-QueIns(c,Fs->last_ctrl);
+QueueInsert(c,Fs->last_ctrl);
 TaskDerivedValsUpdate;
 return c;
 }
 
 U0 SliderDel(CCtrl *c)
 {
-QueRem(c);
+QueueRem(c);
 ");
   if (!*m->glbl_name)
     DocPrint(doc,"Free(c->state);\n");

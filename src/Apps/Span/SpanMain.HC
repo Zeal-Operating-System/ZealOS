@@ -78,7 +78,7 @@ MyMass *PlaceMass(I64 x, I64 y)
   tmpm->radius=MASS_RADIUS;
   tmpm->cost=25.0*COST_SCALE;
   tmpm->color=YELLOW;
-  QueIns(tmpm,ode->last_mass);
+  QueueInsert(tmpm,ode->last_mass);
   return tmpm;
 }
 
@@ -114,7 +114,7 @@ U0 MoveMass(MyMass *tmpm,I64 x, I64 y)
 
 U0 DelSpring(MySpring *tmps)
 {
-  QueRem(tmps);
+  QueueRem(tmps);
   Free(tmps);
 }
 
@@ -128,7 +128,7 @@ U0 DelMass(MyMass *tmpm)
       DelSpring(tmps);
     tmps=tmps1;
   }
-  QueRem(tmpm);
+  QueueRem(tmpm);
   Free(tmpm);
 }
 
@@ -186,7 +186,7 @@ U0 PlaceSpring(MyMass *tmpm1,MyMass *tmpm2)
       tmps->flags|=SSF_NO_COMPRESSION;
       break;
   }
-  QueIns(tmps,ode->last_spring);
+  QueueInsert(tmps,ode->last_spring);
 }
 
 U0 AnimateTask(SpanAnimateStruct *a)

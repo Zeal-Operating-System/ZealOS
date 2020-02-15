@@ -1,4 +1,4 @@
-U0 InstallDrv(U8 drv_let)
+U0 InstallDrive(U8 drv_let)
 {
   U8 *st;
   ExePrint("CopyTree(\"::/\",\"%C:/\");",drv_let);
@@ -26,10 +26,10 @@ Bool VMPrtDsk(CTask *task,CATARep *ata_drv)
     return FALSE;
 }
 
-U0 VMInstallDrv(CTask *task,U8 drv_let,
+U0 VMInstallDrive(CTask *task,U8 drv_let,
 	CATARep *ata_drv,CATARep *atapi_drv)
 {
-  InstallDrv(drv_let);
+  InstallDrive(drv_let);
   XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\n",drv_let);
   if (ata_drv)
     XTalkWait(task,"C\np%d\n",ata_drv->num);
@@ -48,7 +48,7 @@ U0 VMInstallWiz()
   task=User;
   TaskWait(task);
   task->border_src=BDS_CONST;
-  task->border_attr=LTGRAY<<4+DrvTextAttrGet(':')&15;
+  task->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   task->text_attr  =LTGRAY<<4+BLUE;
   task->win_inhibit=WIG_TASK_DFT-WIF_SELF_BORDER;
   WinHorz(Fs->win_left,Fs->win_right,task);
@@ -57,10 +57,10 @@ U0 VMInstallWiz()
   WinToTop(Fs);
 
   ATARep(FALSE,TRUE,&head);
-  ATAIDDrvs(head,&ata_drv,&atapi_drv);
+  ATAIDDrives(head,&ata_drv,&atapi_drv);
   if (VMPrtDsk(task,ata_drv)) {
-    VMInstallDrv(task,'C',ata_drv,atapi_drv);
-    VMInstallDrv(task,'D',ata_drv,atapi_drv);
+    VMInstallDrive(task,'C',ata_drv,atapi_drv);
+    VMInstallDrive(task,'D',ata_drv,atapi_drv);
     BootMHDIns('C');
   }
   LinkedLstDel(head);
@@ -82,7 +82,7 @@ U0 RegularInstallWiz()
   task=User;
   TaskWait(task);
   task->border_src=BDS_CONST;
-  task->border_attr=LTGRAY<<4+DrvTextAttrGet(':')&15;
+  task->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   task->text_attr  =LTGRAY<<4+BLUE;
   task->win_inhibit=WIG_TASK_DFT-WIF_SELF_BORDER;
   WinHorz(Fs->win_left,Fs->win_right,task);
@@ -122,11 +122,11 @@ U0 RegularInstallWiz()
   }
   LinkedLstDel(head);
   XTalkWait(task,"%s\n%s\n%C\n",base0,base1,'0'+unit);
-  DrvRep;
+  DriveRep;
   do {
     st=GetStr("\nDestination Partition Letter: ");
     if (*st)
-      drv_let=Let2Let(*st);
+      drv_let=Letter2Letter(*st);
     else
       drv_let=0;
     Free(st);
@@ -148,7 +148,7 @@ U0 RegularInstallWiz()
     else
       Fmt(drv_let,,FALSE,FSt_REDSEA);
   }
-  InstallDrv(drv_let);
+  InstallDrive(drv_let);
   XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\n"
 	"C\ns%s\n%s\n%C\n\n\n", //Exit Drives,Disk Cache,Options
 	drv_let,base0,base1,'0'+unit);

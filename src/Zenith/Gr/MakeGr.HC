@@ -10,7 +10,7 @@ Cd(__DIR__);;
 #include "GrDC"
 #include "GrInitB"
 #include "GrMath"
-#include "GrScrn"
+#include "GrScreen"
 #include "GrBitMap"
 #include "GrPrimatives"
 #include "GrComposites"

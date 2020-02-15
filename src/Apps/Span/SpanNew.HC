@@ -5,16 +5,16 @@ CMathODE *SpanNew()
   ode->drag_v2=0.002;
   ode->drag_v3=0.00001;
   ode->acceleration_limit=5e3;
-  QueIns(ode,Fs->last_ode);
+  QueueInsert(ode,Fs->last_ode);
   return ode;
 }
 
 U0 SpanDel(CMathODE *ode)
 {
   if (ode) {
-    QueRem(ode);
-    QueDel(&ode->next_mass,TRUE);
-    QueDel(&ode->next_spring,TRUE);
+    QueueRem(ode);
+    QueueDel(&ode->next_mass,TRUE);
+    QueueDel(&ode->next_spring,TRUE);
     ODEDel(ode);
   }
 }
@@ -98,14 +98,14 @@ U0 SpanLoad(CMathODE *ode,U8 *src)
     tmpm=CAlloc(sizeof(MyMass));
     MemCpy(&tmpm->start,src,M_SIZE);
     src+=M_SIZE;
-    QueIns(tmpm,ode->last_mass);
+    QueueInsert(tmpm,ode->last_mass);
   }
 
   for (i=0;i<h.num_springs;i++) {
     tmps=CAlloc(sizeof(MySpring));
     MemCpy(&tmps->start,src,S_SIZE);
     src+=S_SIZE;
-    QueIns(tmps,ode->last_spring);
+    QueueInsert(tmps,ode->last_spring);
     tmps->end1=MassFindNum(ode,tmps->end1_num);
     tmps->end2=MassFindNum(ode,tmps->end2_num);
   }

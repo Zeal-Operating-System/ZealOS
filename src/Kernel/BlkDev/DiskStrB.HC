@@ -7,15 +7,15 @@ Bool CFileNameTo(U8 *dst,U8 *src)
   return TRUE;
 }
 
-I64 Name2DirClus(CDrv *dv,U8 *dirname)
+I64 Name2DirClus(CDrive *dv,U8 *dirname)
 {
   Bool cont=TRUE,unlock;
   I64 cur_dir_clus;
   CDirEntry de;
   U8 *buf=StrNew(dirname),*buf2=StrNew(dirname);
-  DrvCheck(dv);
+  DriveCheck(dv);
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     cur_dir_clus=dv->root_clus;
     while (*buf && cont) {
       StrFirstRem(buf,"/",buf2);
@@ -47,15 +47,15 @@ I64 Name2DirClus(CDrv *dv,U8 *dirname)
   return cur_dir_clus;
 }
 
-I64 Name2ParentDirClus(CDrv *dv,U8 *dirname)
+I64 Name2ParentDirClus(CDrive *dv,U8 *dirname)
 {
   Bool cont=TRUE,unlock;
   I64 cur_dir_clus,cur_dir_clus2;
   CDirEntry de;
   U8 *buf=StrNew(dirname),*buf2=StrNew(dirname);
-  DrvCheck(dv);
+  DriveCheck(dv);
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     cur_dir_clus=cur_dir_clus2=dv->root_clus;
     while (*buf && cont) {
       cur_dir_clus2=cur_dir_clus;

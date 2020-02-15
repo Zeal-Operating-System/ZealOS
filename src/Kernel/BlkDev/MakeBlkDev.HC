@@ -4,7 +4,7 @@
 #include "DiskATA"
 #include "DiskATAId"
 #include "DiskBlkDev"
-#include "DiskDrv"
+#include "DiskDrive"
 #include "DiskBlk"
 #include "DiskClus"
 #include "DiskStrB"

@@ -33,7 +33,7 @@ public U0 Refresh(I64 cnt=1,Bool force=FALSE)
 
 #help_index "Windows"
 
-I64 WinQueIPMsgs(Bool que)
+I64 WinQueueIPMsgs(Bool que)
 {
   static CD3I64 single_ms={0,0,0};
   F64 time=tS;
@@ -238,7 +238,7 @@ I64 WinMgrSleep(Bool flush_msgs=FALSE)
   if (flush_msgs)
     FifoI64Flush(kbd.scan_code_fifo);
   else if (TaskValidate(sys_focus_task)) {
-    KbdMsgsQue;
+    KbdMsgsQueue;
 
     que=TRUE;
     if (TaskValidate(sys_focus_task) &&
@@ -252,7 +252,7 @@ I64 WinMgrSleep(Bool flush_msgs=FALSE)
 	c=c->next;
       }
     }
-    msg_code=WinQueIPMsgs(que);
+    msg_code=WinQueueIPMsgs(que);
   } else {
     WinRefocus(sys_focus_task);
     if (!TaskValidate(sys_focus_task))

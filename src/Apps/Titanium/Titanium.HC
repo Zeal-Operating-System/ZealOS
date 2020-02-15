@@ -378,7 +378,7 @@ U0 DrawIt(CTask *task,CDC *dc)
   DCDepthBufAlloc(dc);
   mp_not_done_flags=1<<mp_cnt-1;
   for (i=0;i<mp_cnt;i++)
-    JobQue(&MPMenDraw,dc,i);
+    JobQueue(&MPMenDraw,dc,i);
   while (mp_not_done_flags)
     Yield;
   Free(dc->depth_buf);

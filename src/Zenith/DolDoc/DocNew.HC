@@ -67,7 +67,7 @@ public U0 DocEntryDel(CDoc *doc,CDocEntry *doc_e)
   else {
     if (doc->cur_entry==doc_e)
       doc->cur_entry=doc_e->next;
-    QueRem(doc_e);
+    QueueRem(doc_e);
     if (doc_e->de_flags & DOCEF_TAG)
       Free(doc_e->tag);
     if (doc_e->de_flags & DOCEF_AUX_STR)
@@ -165,7 +165,7 @@ public CDocEntry *DocEntryCopy(CDoc *doc,CDocEntry *doc_e)
       tmpb->tag=StrNew(doc_e->tag,task);
     else
       tmpb->tag=NULL;
-    QueIns(tmpb,doc->bin_head.last);
+    QueueInsert(tmpb,doc->bin_head.last);
   }
   if (doc_e->de_flags & DOCEF_REMALLOC_DATA)
     doc_ne->data=MAllocIdent(doc_e->data,task);
@@ -216,15 +216,15 @@ public U0 DocInsEntry(CDoc *doc,CDocEntry *doc_e)
     *dst=0;
     doc_ne->type=DOCT_TEXT|doc_ce->type&0xFFFFFF00;
     doc_ce->max_col=doc->cur_col;
-    QueIns(doc_ne,doc_ce);
+    QueueInsert(doc_ne,doc_ce);
     doc->cur_col=0;
     doc_ce=doc_ne;
   }
   if (doc_ce->type_u8==DOCT_TEXT && doc->cur_col>=doc_ce->max_col) {
-    QueIns(doc_e,doc_ce);
+    QueueInsert(doc_e,doc_ce);
     doc->cur_entry=doc_e->next;
   } else {
-    QueIns(doc_e,doc_ce->last);
+    QueueInsert(doc_e,doc_ce->last);
     doc->cur_entry=doc_ce;
   }
   doc->cur_col=doc->cur_entry->min_col;
@@ -259,7 +259,7 @@ public U0 DocRst(CDoc *doc,Bool is_old)
     b=doc->bin_head.next;
     while (b!=&doc->bin_head) {
       b1=b->next;
-      QueRem(b);
+      QueueRem(b);
       Free(b->data);
       Free(b);
       b=b1;
@@ -268,8 +268,8 @@ public U0 DocRst(CDoc *doc,Bool is_old)
 //Check $LK,"DocInsDoc",A="MN:DocInsDoc"$
   doc->flags&=DOCF_BREAK_UNLOCKED;
   doc->head.next=doc->head.last=doc;
-  QueInit(&doc->bin_head);
-  QueInit(&doc->undo_head);
+  QueueInit(&doc->bin_head);
+  QueueInit(&doc->undo_head);
   doc->undo_head.time_stamp=0;
   doc->undo_cnt=0;
   doc->cur_bin_num=1;

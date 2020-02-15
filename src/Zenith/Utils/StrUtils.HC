@@ -33,7 +33,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
   while (doc_e!=doc) {
     doc_e1=doc_e->next;
     if (doc_e->type_u8==DOCT_TEXT) {
-      QueRem(doc_e);
+      QueueRem(doc_e);
       a[i++]=doc_e;
     } else
       DocEntryDel(doc,doc_e);
@@ -47,7 +47,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
     if (!unique || !st || StrCmp(a[i]->tag,st)) {
       st=a[i]->tag;
       for (j=0;j<entry_lines && i<cnt;j++,i++) {
-	QueIns(a[i],doc->head.last);
+	QueueInsert(a[i],doc->head.last);
 	doc->cur_entry=&doc->head;
 	doc->cur_col=0;
 	DocPrint(doc,"\n");
@@ -55,7 +55,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
       res++;
     } else
       for (j=0;j<entry_lines && i<cnt;j++,i++) {
-	QueIns(a[i],doc->head.last);
+	QueueInsert(a[i],doc->head.last);
 	DocEntryDel(doc,a[i]);
       }
   }

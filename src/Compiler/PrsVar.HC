@@ -82,7 +82,7 @@ U0 PrsVarInit(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 	    tmpie=CAlloc(sizeof(CAOTImportExport));
 	    tmpie->type=IET_MAIN;
 	    tmpie->rip=cc->aotc->rip;
-	    QueIns(tmpie,cc->aot->last_ie);
+	    QueueInsert(tmpie,cc->aot->last_ie);
 	    for (i=0;i<size;i++)
 	      AOTStoreCodeU8(cc,machine_code[i]);
 	    Free(machine_code);
@@ -157,13 +157,13 @@ U0 PrsVarInit2(CCmpCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	Lex(cc);
       }
       if (tmpad1->cnt<0) {//[]
-	QueInit(&head);
+	QueueInit(&head);
 	cnt=0;
 	while (cc->token!='}') {
 	  tmpvi=MAlloc(offset(CVI2.base)+tmpad1->total_cnt*tmpc->size);
 	  _b=&tmpvi->base;
 	  PrsVarInit2(cc,&_b,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
-	  QueIns(tmpvi,head.last);
+	  QueueInsert(tmpvi,head.last);
 	  if (cc->token==',')
 	    Lex(cc);
 	  cnt++;
@@ -233,7 +233,7 @@ U0 PrsStaticInit(CCmpCtrl *cc,CMemberLst *tmpm,I64 pass)
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_MAIN;
 	  tmpie->rip=cc->aotc->rip;
-	  QueIns(tmpie,cc->aot->last_ie);
+	  QueueInsert(tmpie,cc->aot->last_ie);
 	  for (i=0;i<size;i++)
 	    AOTStoreCodeU8(cc,machine_code[i]);
 	}

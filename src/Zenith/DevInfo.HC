@@ -140,7 +140,7 @@ U0 PCILookUpDevs()
 	  tmppci->sub_code=PCIReadU8(b,d,f,0xA);
 	  tmppci->base_code=PCIReadU8(b,d,f,0xB);
 	  PCILookUpSingle(doc,w1,w2,&tmppci->vendor_str,&tmppci->dev_id_str);
-	  QueIns(tmppci,dev.pci_head.last);
+	  QueueInsert(tmppci,dev.pci_head.last);
 	  timeout=32*8*2;
 	} else if (sys_pci_busses==256 && --timeout<=0)
 	  goto lud_done;

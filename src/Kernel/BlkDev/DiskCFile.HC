@@ -22,7 +22,7 @@ CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0)
     f->max_blk=I64_MAX;
   f->file_clus_num=INVALID_CLUS;
   full_name=FileNameAbs(filename);
-  f->dv=Let2Drv(*full_name);
+  f->dv=Letter2Drive(*full_name);
   if (f->dv->fs_type==FSt_REDSEA)
     contiguous=TRUE;
   if (contiguous) {
@@ -98,7 +98,7 @@ U0 FClose(CFile *f)
 
 I64 FSetClus(CFile *f,I64 c,I64 blk,Bool read)
 {
-  CDrv *dv=f->dv;
+  CDrive *dv=f->dv;
   I64 i;
   if (f->clus!=c) {
     if (f->flags & FF_BUF_DIRTY) {
@@ -128,7 +128,7 @@ I64 FSetClus(CFile *f,I64 c,I64 blk,Bool read)
 
 Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
 {//Read [nth,n+cnt) blks of file.
-  CDrv *dv=f->dv;
+  CDrive *dv=f->dv;
   I64 spc=dv->spc,i,j,c=f->de.clus;
   if (!f || !dv) return FALSE;
   if (blk==FFB_NEXT_BLK)
@@ -180,7 +180,7 @@ Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
 
 Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
 {//Write [nth,n+cnt) blks of file.
-  CDrv *dv=f->dv;
+  CDrive *dv=f->dv;
   I64 spc=dv->spc,i,j,c=f->de.clus,c1;
   if (!f || !dv) return FALSE;
   if (blk==FFB_NEXT_BLK)

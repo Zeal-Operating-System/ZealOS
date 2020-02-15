@@ -1,11 +1,11 @@
 // See $LK,"RedSea File System",A="FI:::/Doc/RedSea.DD"$
 
-U0 RedSeaFreeFreeLst(CDrv *dv)
+U0 RedSeaFreeFreeLst(CDrive *dv)
 {
   CFreeLst *tmpf,*tmpf1;
   Bool unlock;
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     if (tmpf=dv->next_free) {
       while (tmpf!=&dv->next_free) {
 	tmpf1=tmpf->next;
@@ -21,20 +21,20 @@ U0 RedSeaFreeFreeLst(CDrv *dv)
       DriveUnlock(dv);
 }
 
-U0 RedSeaFreeLstBuild(CDrv *dv)
+U0 RedSeaFreeLstBuild(CDrive *dv)
 {
   Bool unlock;
   CFreeLst *tmpf;
   I64 i,first=dv->data_area,max_blk=dv->size+dv->drv_offset;
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     if (dv->next_free)
       RedSeaFreeFreeLst(dv);
-    QueInit(&dv->next_free);
+    QueueInit(&dv->next_free);
     while (first<max_blk) {
       i=0;  //count free clus
       while (first+i<max_blk) {
-	DrvFATBlkSet(dv,first+i);
+	DriveFATBlkSet(dv,first+i);
 	if (Bt(dv->cur_fat_blk,(first+i-dv->data_area)&(BLK_SIZE<<3-1)))
 	  break;
 	else
@@ -44,7 +44,7 @@ U0 RedSeaFreeLstBuild(CDrv *dv)
 	tmpf=AMAlloc(sizeof(CFreeLst));
 	tmpf->size=i;
 	tmpf->start=first;
-	QueIns(tmpf,dv->last_free);
+	QueueInsert(tmpf,dv->last_free);
       }
       first+=i+1;
     }
@@ -55,12 +55,12 @@ U0 RedSeaFreeLstBuild(CDrv *dv)
       DriveUnlock(dv);
 }
 
-U0 RedSeaInit(CDrv *dv)
+U0 RedSeaInit(CDrive *dv)
 {
   CRedSeaBoot br;
   Bool unlock;
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     BlkRead(dv,&br,dv->drv_offset,1);
     if (br.signature!=MBR_PT_REDSEA || br.signature2!=0xAA55)
       throw('Drive');
@@ -71,7 +71,7 @@ U0 RedSeaInit(CDrv *dv)
     dv->data_area=dv->drv_offset+br.bitmap_sects;
     dv->root_clus=br.root_clus;
     dv->fat1=dv->fat2=dv->drv_offset+1;
-    DrvFATBlkAlloc(dv);
+    DriveFATBlkAlloc(dv);
     if (unlock)
       DriveUnlock(dv);
   } catch
@@ -81,9 +81,9 @@ U0 RedSeaInit(CDrv *dv)
 
 Bool RedSeaValidate(U8 drv_let)
 {
-  CDrv *dv;
+  CDrive *dv;
   CRedSeaBoot br;
-  if ((dv=Let2Drv(drv_let,FALSE)) && dv->fs_type==FSt_REDSEA &&
+  if ((dv=Letter2Drive(drv_let,FALSE)) && dv->fs_type==FSt_REDSEA &&
 	BlkRead(dv,&br,dv->drv_offset,1) && br.signature==MBR_PT_REDSEA &&
 	br.signature2==0xAA55)
     return TRUE;
@@ -96,12 +96,12 @@ U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
   U8 *root_dir;
   CDirEntry *d_native;
   CRedSeaBoot *br=CAlloc(BLK_SIZE);
-  CDrv *dv=Let2Drv(drv_let);
+  CDrive *dv=Letter2Drive(drv_let);
   I64 i,n,root_dir_blks;
   try {
-    DrvLock(dv);
-//	DrvTypeSet(drv_let,FSt_REDSEA);
-    DrvTypeSet(drv_let,FSt_FAT32);
+    DriveLock(dv);
+//	DriveTypeSet(drv_let,FSt_REDSEA);
+    DriveTypeSet(drv_let,FSt_FAT32);
     dv->fs_type=FSt_REDSEA;
     br->signature=MBR_PT_REDSEA;
     br->signature2=0xAA55;
@@ -152,7 +152,7 @@ U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
   Free(root_dir);
 }
 
-Bool RedSeaFileFind(CDrv *dv,I64 cur_dir_clus,U8 *name,
+Bool RedSeaFileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,
 	CDirEntry *_res,I64 fuf_flags=0)
 {//$LK,"FUF_JUST_DIRS",A="MN:FUF_JUST_DIRS"$, $LK,"FUF_JUST_FILES",A="MN:FUF_JUST_FILES"$
   CDirEntry *buf,*buf2,*ptr;
@@ -162,14 +162,14 @@ Bool RedSeaFileFind(CDrv *dv,I64 cur_dir_clus,U8 *name,
   if (fuf_flags&~FUG_FILE_FIND)
     throw('FUF');
   MemSet(_res,0,sizeof(CDirEntry));
-  DrvCheck(dv);
+  DriveCheck(dv);
   if (dv->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else if (!CFileNameTo(dname,name))
     PrintErr("Invalid FileName: \"%s\".\n",name);
   else
     try {
-      unlock=DrvLock(dv);
+      unlock=DriveLock(dv);
       buf2=MAlloc(BLK_SIZE);
       BlkRead(dv,buf2,cur_dir_clus,1);
 
@@ -204,19 +204,19 @@ rsff_done:
   return res;
 }
 
-U8 *RedSeaFileRead(CDrv *dv,U8 *cur_dir,U8 *filename,I64 *_size,I64 *_attr)
+U8 *RedSeaFileRead(CDrive *dv,U8 *cur_dir,U8 *filename,I64 *_size,I64 *_attr)
 {
   U8 *buf=NULL;
   CDirEntry de;
   I64 c,blk_cnt,cur_dir_clus;
-  DrvCheck(dv);
+  DriveCheck(dv);
   *_size=0;
   *_attr=0;
   if (dv->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else
     try {
-      DrvLock(dv);
+      DriveLock(dv);
       cur_dir_clus=Name2DirClus(dv,cur_dir);
       if (RedSeaFileFind(dv,cur_dir_clus,filename,&de,FUF_JUST_FILES)) {
 	blk_cnt=(de.size+BLK_SIZE-1)>>BLK_SIZE_BITS;
@@ -245,18 +245,18 @@ Bool RedSeaCd(U8 *name,I64 cur_dir_clus)
   return FALSE;
 }
 
-U0 RedSeaFreeClus(CDrv *dv,I64 c,I64 cnt)
+U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 cnt)
 {
   CFreeLst *tmpf;
   Bool found=FALSE,unlock,unlock_break;
-  DrvCheck(dv);
+  DriveCheck(dv);
   if (!c) return;
   if (dv->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else
     try {
       unlock_break=BreakLock;
-      unlock=DrvLock(dv);
+      unlock=DriveLock(dv);
       if (!dv->next_free)
 	RedSeaFreeLstBuild(dv);
       tmpf=dv->next_free;
@@ -275,15 +275,15 @@ U0 RedSeaFreeClus(CDrv *dv,I64 c,I64 cnt)
 	tmpf=AMAlloc(sizeof(CFreeLst));
 	tmpf->size=cnt;
 	tmpf->start=c;
-	QueIns(tmpf,dv->last_free);
+	QueueInsert(tmpf,dv->last_free);
       }
       while (cnt-->0) {
-	DrvFATBlkSet(dv,c);
+	DriveFATBlkSet(dv,c);
 	LBtr(dv->cur_fat_blk,(c-dv->data_area)&(BLK_SIZE<<3-1));
 	LBts(&dv->fat_blk_dirty,0);
 	c++;
       }
-      DrvFATBlkClean(dv);
+      DriveFATBlkClean(dv);
 
       if (unlock)
 	DriveUnlock(dv);
@@ -297,7 +297,7 @@ U0 RedSeaFreeClus(CDrv *dv,I64 c,I64 cnt)
     }
 }
 
-I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
+I64 RedSeaAllocClus(CDrive *dv,I64 cnt)
 {
   CFreeLst *tmpf,*best_free=NULL;
   I64 i,first,best_size=I64_MAX;
@@ -306,7 +306,7 @@ I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
     throw('Drive');
   try {
     unlock_break=BreakLock;
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     if (!dv->next_free)
       RedSeaFreeLstBuild(dv);
     tmpf=dv->next_free;
@@ -323,15 +323,15 @@ I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
       throw('Drive');
     first=best_free->start;
     for (i=0;i<cnt;i++) {
-      DrvFATBlkSet(dv,first+i);
+      DriveFATBlkSet(dv,first+i);
       LBts(dv->cur_fat_blk,(first+i-dv->data_area)&(BLK_SIZE<<3-1));
       LBts(&dv->fat_blk_dirty,0);
     }
-    DrvFATBlkClean(dv);
+    DriveFATBlkClean(dv);
     if (best_free->size-=cnt)
       best_free->start+=cnt;
     else {
-      QueRem(best_free);
+      QueueRem(best_free);
       Free(best_free);
     }
     if (unlock)
@@ -347,7 +347,7 @@ I64 RedSeaAllocClus(CDrv *dv,I64 cnt)
   return first;
 }
 
-Bool RedSeaDirNew(CDrv *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
+Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 {
   CDirEntry *buf,*buf2,*ptr,de2;
   CRedSeaBoot *br;
@@ -357,7 +357,7 @@ Bool RedSeaDirNew(CDrv *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
   try {
     unlock_break=BreakLock;
     tmpde->attr|=RS_ATTR_CONTIGUOUS;
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     cur_dir_clus=Name2DirClus(dv,cur_dir);
     buf2=MAlloc(BLK_SIZE);
     BlkRead(dv,buf2,cur_dir_clus,1);
@@ -453,7 +453,7 @@ Bool RedSeaDirNew(CDrv *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
   return FALSE;
 }
 
-I64 RedSeaFilesDel(CDrv *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
+I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
 		     Bool del_dir,Bool print_msg)
 {
   CDirEntry *buf,*buf2,*ptr;
@@ -461,7 +461,7 @@ I64 RedSeaFilesDel(CDrv *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
   Bool unlock_break;
   try {
     unlock_break=BreakLock;
-    DrvLock(dv);
+    DriveLock(dv);
     cur_dir_clus=Name2DirClus(dv,cur_dir);
     buf2=MAlloc(BLK_SIZE);
     BlkRead(dv,buf2,cur_dir_clus,1);
@@ -506,7 +506,7 @@ I64 RedSeaFilesDel(CDrv *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
   return res;
 }
 
-I64 RedSeaFileWrite(CDrv *dv,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
+I64 RedSeaFileWrite(CDrive *dv,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
 	CDate cdt,I64 attr)
 {
   CDirEntry de;
@@ -537,13 +537,13 @@ I64 RedSeaFileWrite(CDrv *dv,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
 CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
 	CDirEntry *parent=NULL)
 {
-  CDrv *dv=Fs->cur_dv;
+  CDrive *dv=Fs->cur_dv;
   CDirEntry *buf,*buf2,*ptr,*res=NULL,*tmpde;
   I64 ch,cur_dir_clus;
   if (fuf_flags&~FUG_FILES_FIND)
     throw('FUF');
   try {
-    DrvLock(dv);
+    DriveLock(dv);
     cur_dir_clus=Name2DirClus(dv,Fs->cur_dir);
     buf2=MAlloc(BLK_SIZE);
     BlkRead(dv,buf2,cur_dir_clus,1);
@@ -576,7 +576,7 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
 	    tmpde->sub=RedSeaFilesFind(files_find_mask,fuf_flags,tmpde);
 	    Cd("..");
 	  }
-	  DrvLock(dv);
+	  DriveLock(dv);
 	} else {
 	  tmpde->full_name=FileNameAbs(tmpde->name);
 	  if ((tmpde->attr&RS_ATTR_DIR ||
@@ -599,7 +599,7 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
   return res;
 }
 
-Bool RedSeaMkDir(CDrv *dv,U8 *cur_dir,U8 *name,I64 entry_cnt)
+Bool RedSeaMkDir(CDrive *dv,U8 *cur_dir,U8 *name,I64 entry_cnt)
 {//entry_cnt is for preallocating dir blks.
   I64	c,cur_dir_clus=Name2DirClus(dv,cur_dir),
 	size=CeilU64((entry_cnt+3)<<6,BLK_SIZE);

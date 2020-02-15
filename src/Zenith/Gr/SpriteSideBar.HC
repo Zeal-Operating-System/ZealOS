@@ -1,12 +1,12 @@
 #help_index "Graphics/Sprite;Sprites"
 
-CSprite *SpriteSideBar2SpriteQue(CDoc *doc,CSprite *head,I64 *_cur_elem_num)
+CSprite *SpriteSideBar2SpriteQueue(CDoc *doc,CSprite *head,I64 *_cur_elem_num)
 {//For the side-bar
   CSprite *res=CAlloc(sizeof(CSprite)),*tmpg;
   CDocEntry *doc_e=doc->head.next;
   Bool found=FALSE;
   I64 num=0;
-  QueInit(res);
+  QueueInit(res);
   while (doc_e!=doc) {
     if (doc_e->type_u8==DOCT_MENU_VAL && doc_e->left_exp>=0) {
       tmpg=SpriteSetSettings(,head,doc_e->left_exp);
@@ -17,7 +17,7 @@ CSprite *SpriteSideBar2SpriteQue(CDoc *doc,CSprite *head,I64 *_cur_elem_num)
 	  *_cur_elem_num=num;
 	  found=TRUE;
 	}
-	QueIns(tmpg,res->last);
+	QueueInsert(tmpg,res->last);
 	num++;
       }
     }
@@ -25,7 +25,7 @@ CSprite *SpriteSideBar2SpriteQue(CDoc *doc,CSprite *head,I64 *_cur_elem_num)
   }
   if (!found)
     *_cur_elem_num=num;
-  QueDel(head);
+  QueueDel(head);
   Free(head);
   return res;
 }
@@ -89,7 +89,7 @@ U0 SpriteSideBarTask(CTask *parent,CSprite **_head,I64 *_cur_elem_num)
     doc_e=doc->cur_entry;
     if (doc_e->type_u8==DOCT_MENU_VAL)
       *_cur_elem_num=doc_e->left_exp;
-    *_head=SpriteSideBar2SpriteQue(doc,*_head,_cur_elem_num);
+    *_head=SpriteSideBar2SpriteQueue(doc,*_head,_cur_elem_num);
     DocClear(doc);
   }
 }

@@ -8,10 +8,10 @@ U0 BgtDataRead()
   U8		**s=StrFileRead(bgt_string_file,&max_num);
 
   MemSet(&b_head,0,sizeof(CBgtEntry));
-  QueInit(&b_head);
+  QueueInit(&b_head);
   b_head.date=Now;
   MemSet(&t_head,0,sizeof(CBgtTemplate));
-  QueInit(&t_head);
+  QueueInit(&t_head);
   t_head.b.date=Now;
 
   if (ptr=b=FileRead(bgt_data_file,&size)) {
@@ -22,7 +22,7 @@ U0 BgtDataRead()
       tmpb->credit=StrNew(s[tmpb->credit_idx]);
       tmpb->debit =StrNew(s[tmpb->debit_idx]);
       tmpb->desc  =StrNew(s[tmpb->desc_idx]);
-      QueIns(tmpb,b_head.last);
+      QueueInsert(tmpb,b_head.last);
       ptr+=BE_SIZE;
     }
 
@@ -36,7 +36,7 @@ U0 BgtDataRead()
       tmpt->b.credit=StrNew(s[tmpt->b.credit_idx]);
       tmpt->b.debit =StrNew(s[tmpt->b.debit_idx]);
       tmpt->b.desc  =StrNew(s[tmpt->b.desc_idx]);
-      QueIns(tmpt,t_head.last);
+      QueueInsert(tmpt,t_head.last);
     }
   }
 

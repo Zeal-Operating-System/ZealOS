@@ -93,14 +93,14 @@ CCtrl *SliderNew()
   c->draw_it=&DrawCtrlSlider;
   c->left_click=&LeftClickSlider;
   c->update_derived_vals=&UpdateDerivedCtrlSlider;
-  QueIns(c,sys_winmgr_task->last_ctrl);
+  QueueInsert(c,sys_winmgr_task->last_ctrl);
   TaskDerivedValsUpdate;
   return c;
 }
 
 U0 SliderDel(CCtrl *c)
 {
-  QueRem(c);
+  QueueRem(c);
   Free(c->state);
   Free(c);
 }

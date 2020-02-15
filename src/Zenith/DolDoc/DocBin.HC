@@ -66,7 +66,7 @@ U0 DocBinsValidate(CDoc *doc)
   while (b!=&doc->bin_head) {
     b1=b->next;
     if (!b->use_cnt) {
-      QueRem(b);
+      QueueRem(b);
       Free(b->data);
       Free(b);
     } else {
@@ -85,7 +85,7 @@ U0 DocBinDel(CDoc *doc,CDocBin *b)
   if (doc && b && b->use_cnt) {
     b->use_cnt--;
     if (!b->use_cnt) {
-      QueRem(b);
+      QueueRem(b);
       Free(b->tag);
       Free(b->data);
       Free(b);
@@ -128,7 +128,7 @@ I64 DocBinPtrRst(CDoc *doc,CDocEntry *doc_e)
 	  tmpb->tag=StrNew(doc_e->tag,doc->mem_task);
 	else
 	  tmpb->tag=NULL;
-	QueIns(tmpb,doc->bin_head.last);
+	QueueInsert(tmpb,doc->bin_head.last);
       } else
 	bin_num=0;
       DocDel(doc2);

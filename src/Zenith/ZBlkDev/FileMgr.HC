@@ -112,7 +112,7 @@ U0 FMDelUncollapsedLst(CFMUncollapsedLst *tmpc)
   }
 }
 
-CDirEntry *FMRebuildDocDrv(U8 drv_let,CDoc *doc,CDirEntry **_head,Bool init)
+CDirEntry *FMRebuildDocDrive(U8 drv_let,CDoc *doc,CDirEntry **_head,Bool init)
 {
   CDirEntry *tmpde,*tmpde1;
   U8 *st;
@@ -146,7 +146,7 @@ CDirEntry *FMRebuildDocDrv(U8 drv_let,CDoc *doc,CDirEntry **_head,Bool init)
 
 U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
 {
-  CDrv *dv;
+  CDrive *dv;
   I64 i;
   CDoc *doc=*_doc,*doc2=sys_clip_doc,*parent_doc;
   CFMUncollapsedLst *tmpc=NULL;
@@ -222,13 +222,13 @@ U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
     dv=&blkdev.drvs[i];
     if (dv->bd->type==BDT_ATAPI) {
       if (dv->bd->flags&BDF_INITIALIZED)
-	tmpde=FMRebuildDocDrv(Drv2Let(dv),doc,_head,TRUE);
+	tmpde=FMRebuildDocDrive(Drive2Letter(dv),doc,_head,TRUE);
       else {
-	tmpde=FMRebuildDocDrv(Drv2Let(dv),doc,_head,FALSE);
+	tmpde=FMRebuildDocDrive(Drive2Letter(dv),doc,_head,FALSE);
 	tmpde->user_data2|=DEF2_NOT_INITIALIZED;
       }
     } else if (dv->fs_type==FSt_REDSEA || dv->fs_type==FSt_FAT32)
-      FMRebuildDocDrv(Drv2Let(dv),doc,_head,TRUE);
+      FMRebuildDocDrive(Drive2Letter(dv),doc,_head,TRUE);
   }
   DocTop(doc);
   FMMarkUncollapsed(doc,tmpc,cur_entry,next_entry);
@@ -364,12 +364,12 @@ U0 FMUnmount(CDoc *doc)
     while (tmpde->parent)
       tmpde=tmpde->parent;
     drv_let=*tmpde->full_name;
-    if (Let2BlkDev(drv_let)!=Let2BlkDev(':'))
+    if (Letter2BlkDev(drv_let)!=Letter2BlkDev(':'))
       Unmount(drv_let);
   }
 }
 
-U0 FMFmtDrv(CDoc *doc)
+U0 FMFmtDrive(CDoc *doc)
 {
   CDocEntry *doc_ce=doc->cur_entry;
   CDirEntry *tmpde;
@@ -716,7 +716,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 	      FMBurnISO(doc);
 	      break;
 	    case 'f':
-	      FMFmtDrv(doc);
+	      FMFmtDrive(doc);
 	      break;
 	  end:
 	    FMRebuildDoc(&doc,&head,mode);

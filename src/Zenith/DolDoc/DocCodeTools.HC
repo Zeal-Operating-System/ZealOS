@@ -57,7 +57,7 @@ I64 PopUpEdFmt()
 class CRILex
 {
   CCmpCtrl *cc1,*cc2;
-  CQueVectU8 *indent;
+  CQueueVectU8 *indent;
   I64 depth,exp_depth,one_shot;
   Bool was_new_line,is_not_cont;
 };
@@ -80,7 +80,7 @@ I64 EdRILex(CRILex *rx)
       tmpf=rx->cc2->lex_include_stk;
       while (tmpf->next)
 	tmpf=tmpf->next;
-      QueVectU8Put(rx->indent,tmpf->cur_entry->y,rx->depth+rx->one_shot);
+      QueueVectU8Put(rx->indent,tmpf->cur_entry->y,rx->depth+rx->one_shot);
       rx->one_shot=0;
     }
     if (rx->cc2->token=='\n')
@@ -241,9 +241,9 @@ U0 EdRIStmt(CRILex *rx,Bool indent)
   }
 }
 
-CQueVectU8 *EdRICode(CDoc *doc)
+CQueueVectU8 *EdRICode(CDoc *doc)
 {
-  CQueVectU8 *res;
+  CQueueVectU8 *res;
   CRILex *rx=CAlloc(sizeof(CRILex));
 
   rx->cc1=CmpCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
@@ -256,7 +256,7 @@ CQueVectU8 *EdRICode(CDoc *doc)
   LexAttachDoc(rx->cc2,rx->cc2->lex_include_stk,doc,,
 	doc->cur_entry,doc->cur_col);
 
-  rx->indent=QueVectU8New(doc->cur_entry->y);
+  rx->indent=QueueVectU8New(doc->cur_entry->y);
 
   Lex(rx->cc1);
   EdRIStmt(rx,FALSE);
@@ -373,7 +373,7 @@ U0 EdRACollect(CDoc *doc,CRenum *head)
 	    ch=EdRAGetU8(doc);
 	    tmpr=MAlloc(sizeof(CRenum));
 	    StrCpy(tmpr->label,buf);
-	    QueIns(tmpr,head->last);
+	    QueueInsert(tmpr,head->last);
 	  }
 	}
       }
@@ -392,7 +392,7 @@ U0 EdRenumAsm(CDoc *doc)
   U8	buf[sizeof(CEdFindText.find_text)],
 	buf2[sizeof(CEdFindText.find_text)];
 
-  QueInit(&head);
+  QueueInit(&head);
   EdSelFun(doc,TRUE);
   EdRACollect(doc,&head);
 
@@ -427,7 +427,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
   U8 *b,*st,*st2,*prj_file;
   CTask *task=NULL;
   CJob *tmpc;
-  CQueVectU8 *indent;
+  CQueueVectU8 *indent;
 
   DocRecalc(doc);
   goto_line_num=doc->cur_entry->y+1;
@@ -527,7 +527,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	      start_of_line=TRUE;
 	    else {
 	      if (start_of_line) {
-		i=QueVectU8Get(indent,doc_e->y)*C_INDENT_SPACES;
+		i=QueueVectU8Get(indent,doc_e->y)*C_INDENT_SPACES;
 		x=doc_e->x+1;
 		while (i>8) {
 		  doc_ne=DocEntryNewBase(doc,
@@ -535,7 +535,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 			x,doc_e->y,doc_e->page_line_num);
 		  MemCpy(&doc_ne->settings,
 			&doc_e->settings,sizeof(CDocSettings));
-		  QueIns(doc_ne,doc_e->last);
+		  QueueInsert(doc_ne,doc_e->last);
 		  i-=8;
 		  x+=8;
 		}
@@ -550,7 +550,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 		  doc_ne->max_col=1;
 		  MemCpy(&doc_ne->settings,
 			&doc_e->settings,sizeof(CDocSettings));
-		  QueIns(doc_ne,doc_e->last);
+		  QueueInsert(doc_ne,doc_e->last);
 		}
 	      }
 	      start_of_line=FALSE;
@@ -558,7 +558,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	  }
 	  doc_e=doc_e->next;
 	}
-	QueVectU8Del(indent);
+	QueueVectU8Del(indent);
       }
       start_y=doc->cur_entry->y;
       EdReplaceTroubleAll(doc,FALSE,FALSE);

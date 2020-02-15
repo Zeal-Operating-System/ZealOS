@@ -120,9 +120,9 @@ public class Complex
 };
 
 #help_index "Data Types/Circular Queue"
-public class CQue
+public class CQueue
 {
-  CQue	*next,*last;
+  CQueue	*next,*last;
 };
 
 #help_index "Graphics/Data Types/D3I32;Math/Data Types/D3I32;Data Types/D3I32"
@@ -130,9 +130,9 @@ public class CD3I32 //Three dimensional I32 pt
 {
   I32	x,y,z;
 };
-public class CQueD3I32 //Que of three dimensional I32 pts
+public class CQueueD3I32 //Queue of three dimensional I32 pts
 {
-  CQueD3I32	*next,*last;
+  CQueueD3I32	*next,*last;
   CD3I32	p;
 };
 #help_index "Math/Data Types;Data Types"
@@ -161,9 +161,9 @@ public class CD3 //Three dimensional F64 pt
 
 #help_index "Data Types/Queue Vector"
 #define QUE_VECT_U8_CNT		512
-public class CQueVectU8
+public class CQueueVectU8
 {
-  CQueVectU8	*next,*last;
+  CQueueVectU8	*next,*last;
   I64	total_cnt,node_cnt,min_idx;
   U8	body[QUE_VECT_U8_CNT];
 };
@@ -2685,10 +2685,10 @@ class CFreeLst
 #define DRVS_NUM		26
 
 #define DRV_SIGNATURE_VAL	'DVSV'
-public class CDrv
+public class CDrive
 {
 //Don't access ->drv_let directly in case a drive has been remapped.
-  //Use $LK,"Drv2Let",A="MN:Drv2Let"$().
+  //Use $LK,"Drive2Letter",A="MN:Drive2Letter"$().
   I64	locked_flags;
   U32	dv_signature;
   U8	drv_let,pad;
@@ -2718,7 +2718,7 @@ class CCacheBlk
 {
   CCacheBlk *next_lru,*last_lru;
   CCacheBlk *next_hash,*last_hash;
-  CDrv	*dv;
+  CDrive	*dv;
   I64	blk;
   U8	body[BLK_SIZE];
 };
@@ -2736,7 +2736,7 @@ public class CBlkDevGlbls
   U8	*home_dir;
   CCacheBlk *cache_base,*cache_ctrl,**cache_hash_table;
   I64	cache_size,read_cnt,write_cnt;
-  CDrv	*drvs,*let_to_drv[32];
+  CDrive	*drvs,*let_to_drv[32];
   I64	mount_ide_auto_cnt,
 	ins_base0,ins_base1;	//Install cd/dvd controller.
   U8	boot_drv_let,first_hd_drv_let,first_dvd_drv_let;
@@ -2746,7 +2746,7 @@ public class CBlkDevGlbls
 #help_index "File/Internal"
 public class CDirContext
 {
-  CDrv	*old_dv,*dv;
+  CDrive	*old_dv,*dv;
   U8	*old_dir,*mask;
 };
 
@@ -2764,7 +2764,7 @@ public class CFile //See $LK,"::/Demo/Disk/DataBase.HC"$.
 {
   I64	flags;
   CDirEntry de;
-  CDrv	*dv;
+  CDrive	*dv;
   I64	fblk_num,clus,file_clus_num,max_blk;
   U8	*clus_buf;
 };
@@ -3141,7 +3141,7 @@ class CFPU
 #define JOBT_MSG		1 //$LK,"TaskMsg",A="MN:TaskMsg"$()	Post msg
 #define JOBT_EXE_STR		2 //$LK,"TaskExe",A="MN:TaskExe"$()	Compile & execute src code text
 //MP cmds
-#define JOBT_CALL		3 //$LK,"JobQue",A="MN:JobQue"$()	Tell MP to call function
+#define JOBT_CALL		3 //$LK,"JobQueue",A="MN:JobQueue"$()	Tell MP to call function
 #define JOBT_SPAWN_TASK		4 //$LK,"Spawn",A="MN:Spawn"$()	Tell MP to spawn task
 
 class CJob
@@ -3282,7 +3282,7 @@ public class CTask //The Fs segment reg points to current CTask.
 	*border_doc;
   I64	win_left,win_right,win_top,win_bottom;
 
-  CDrv	*cur_dv;
+  CDrive	*cur_dv;
   U8	*cur_dir;
 
   CTask *parent_task,

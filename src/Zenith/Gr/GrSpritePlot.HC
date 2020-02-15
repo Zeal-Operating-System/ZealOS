@@ -450,7 +450,7 @@ public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *fmt=NULL)
   MemCpy(tmpb->data,elems,size);
   tmpb->num=doc->cur_bin_num;
   tmpb->use_cnt=1;
-  QueIns(tmpb,doc->bin_head.last);
+  QueueInsert(tmpb,doc->bin_head.last);
   if (fmt)
     st=MStrPrint(fmt,doc->cur_bin_num++);
   else

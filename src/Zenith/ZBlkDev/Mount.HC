@@ -8,11 +8,11 @@ U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
   Bool whole_drv,make_free;
   CDoc *doc;
   if (boot_drv_let)
-    boot_drv_let=Let2Let(boot_drv_let);
+    boot_drv_let=Letter2Letter(boot_drv_let);
   do {
     cnt=0;
     if (!_doc)
-      DrvRep;
+      DriveRep;
     "\n****** Mount Drives ******\n"
 	  "$$GREEN$$A$$FG$$-$$GREEN$$B$$FG$$ are RAM drives.\n"
 	  "$$GREEN$$C$$FG$$-$$GREEN$$L$$FG$$ are ATA hard drives.\n"
@@ -20,9 +20,9 @@ U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
 	  "$$GREEN$$Q$$FG$$-$$GREEN$$S$$FG$$ are ISO file write drives.\n"
 	  "$$GREEN$$T$$FG$$-$$GREEN$$Z$$FG$$ are ATAPI CD/DVD drives.\n"
 	  "\nDrive Letter ($$PURPLE$$<ENTER>$$FG$$ to exit):";
-    drv_let=Let2Let(GetChar);
+    drv_let=Letter2Letter(GetChar);
     '\n';
-    if (type=Let2BlkDevType(drv_let)) {
+    if (type=Letter2BlkDevType(drv_let)) {
       whole_drv=FALSE;
       if (_doc) { //Called by $LK,"::/Kernel/KCfg.HC"$
 	doc=_doc;
@@ -142,13 +142,13 @@ public U8 Mount(Bool caller_is_prtdsk=FALSE)
 
 public U0 Unmount(U8 drv_let=0)
 {//Unmount drive(s).
-  BlkDevDel(Let2BlkDev(drv_let));
+  BlkDevDel(Letter2BlkDev(drv_let));
 }
 
 public U8 MountFile(U8 *filename)
 {//Mount ISO.C file.
   U8 *filename2=ExtDft(filename,"ISO.C"),*filename3=FileNameAbs(filename2);
-  CDrv *dv=DrvMakeFreeSlot(DrvNextFreeLet('M')); //First $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$
+  CDrive *dv=DriveMakeFreeSlot(DriveNextFreeLet('M')); //First $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$
   CBlkDev *bd=BlkDevNextFreeSlot(dv->drv_let,BDT_ISO_FILE_READ);
   bd->drv_offset=19<<2+(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;
   bd->file_dsk_name=AStrNew(filename3);

@@ -67,7 +67,7 @@ public U0 SndShift(CSndData *head,F64 dt=0)
       tmpsd1=tmpsd->next;
       tmpsd->tS-=dt;
       if (tmpsd->tS<tmpsd->last->tS) {
-	QueRem(tmpsd);
+	QueueRem(tmpsd);
 	Free(tmpsd);
       }
       tmpsd=tmpsd1;
@@ -79,7 +79,7 @@ public I64 AUWrite(U8 *filename,CSndData *head,CDate *t0_now,F64 t0_tS)
 {//Write AU file.
   CSndData *tmpsd;
   CAUData *base,*dst;
-  I64 size=(1+QueCnt(head))*sizeof(CAUData);
+  I64 size=(1+QueueCnt(head))*sizeof(CAUData);
   U8 *st=ExtDft(filename,"AU");
   base=dst=MAlloc(size);
   tmpsd=head;

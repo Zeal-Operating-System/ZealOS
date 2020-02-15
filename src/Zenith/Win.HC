@@ -286,8 +286,8 @@ I64 WinOnTopWindows()
     }
     if (Bt(&task->display_flags,DISPLAYf_WIN_ON_TOP) &&
 	  task!=sys_winmgr_task->last_task) {
-      TaskQueRem(task);
-      TaskQueIns(task,sys_winmgr_task);
+      TaskQueueRem(task);
+      TaskQueueIns(task,sys_winmgr_task);
       res++;
       if (!first_moved_fwd)
 	first_moved_fwd=task;
@@ -315,8 +315,8 @@ public I64 WinToTop(CTask *task=NULL,Bool update_z_buf=TRUE)
     return 0;
   }
   if (task!=sys_winmgr_task->last_task) {
-    TaskQueRem(task);
-    TaskQueIns(task,sys_winmgr_task);
+    TaskQueueRem(task);
+    TaskQueueIns(task,sys_winmgr_task);
     res++;
   }
   if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS))

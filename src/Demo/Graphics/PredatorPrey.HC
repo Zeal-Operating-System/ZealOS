@@ -67,7 +67,7 @@ U0 PredatorPrey()
     while (!ScanChar) {
       mp_not_done_flags=1<<mp_cnt-1;
       for (i=0;i<mp_cnt;i++)
-	JobQue(&PlotTrajectory,Fs,i);
+	JobQueue(&PlotTrajectory,Fs,i);
       do Yield;
       while (mp_not_done_flags);
     }

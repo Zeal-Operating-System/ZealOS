@@ -136,8 +136,8 @@ U0 RiverDropsDel()
 {
   while (LBts(&rd_lock,0))
     Yield;
-  QueDel(&rd_head,TRUE);
-  QueInit(&rd_head);
+  QueueDel(&rd_head,TRUE);
+  QueueInit(&rd_head);
   LBtr(&rd_lock,0);
 }
 
@@ -150,7 +150,7 @@ U0 RiverDropsNext(CTask *mem_task)
   while (tmpr!=&rd_head) {
     tmpr1=tmpr->next;
     if (++tmpr->y>=MAP_HEIGHT-MAP_BORDER) {
-      QueRem(tmpr);
+      QueueRem(tmpr);
       Free(tmpr);
     } else {
       do {
@@ -171,7 +171,7 @@ U0 RiverDropsNext(CTask *mem_task)
   tmpr->y=MAP_BORDER;
   tmpr->dx=0;
   tmpr->dy=0;
-  QueIns(tmpr,rd_head.last);
+  QueueInsert(tmpr,rd_head.last);
   LBtr(&rd_lock,0);
 }
 
@@ -512,7 +512,7 @@ U0 Init()
 {
   RiverNew;
   rd_lock=0;
-  QueInit(&rd_head);
+  QueueInit(&rd_head);
   map_dc=DCNew(MAP_WIDTH,MAP_HEIGHT);
   a=MAlloc(ANIMALS_NUM*sizeof(Animal));
   ReInit;

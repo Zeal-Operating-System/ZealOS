@@ -1,8 +1,8 @@
 CDirEntry *FilesFind2(U8 *files_find_mask,I64 fuf_flags)
 {
-  CDrv *dv=Fs->cur_dv;
+  CDrive *dv=Fs->cur_dv;
   CDirEntry *res=NULL;
-  DrvCheck(dv);
+  DriveCheck(dv);
   switch (dv->fs_type) {
     case FSt_REDSEA:
       res=RedSeaFilesFind(files_find_mask,fuf_flags);
@@ -61,7 +61,7 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
   Bool res=FALSE,old_silent;
   if (fuf_flags&~FUG_FILE_FIND)
     throw('FUF');
-  if (!filename || *filename && filename[1]==':' && !Let2Drv(*filename,FALSE))
+  if (!filename || *filename && filename[1]==':' && !Letter2Drive(*filename,FALSE))
     return FALSE;
   altname=ToggleZorNotZ(filename);
   if (fuf_flags&FUF_Z_OR_NOT_Z)
@@ -94,9 +94,9 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
       if (res && _de) {
 	if (StrCmp(Fs->cur_dir,"/"))
 	  full_name=MStrPrint("%C:%s/%s",
-		Drv2Let(Fs->cur_dv),Fs->cur_dir,de.name);
+		Drive2Letter(Fs->cur_dv),Fs->cur_dir,de.name);
 	else
-	  full_name=MStrPrint("%C:/%s",Drv2Let(Fs->cur_dv),de.name);
+	  full_name=MStrPrint("%C:/%s",Drive2Letter(Fs->cur_dv),de.name);
       }
       DirContextDel(dirc);
     }
@@ -131,10 +131,10 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
       if (res && _de) {
 	if (StrCmp(Fs->cur_dir,"/"))
 	  full_name=MStrPrint("%C:%s/%s",
-		Drv2Let(Fs->cur_dv),Fs->cur_dir,de.name);
+		Drive2Letter(Fs->cur_dv),Fs->cur_dir,de.name);
 	else
 	  full_name=MStrPrint("%C:/%s",
-		Drv2Let(Fs->cur_dv),de.name);
+		Drive2Letter(Fs->cur_dv),de.name);
       }
       DirContextDel(dirc);
     }

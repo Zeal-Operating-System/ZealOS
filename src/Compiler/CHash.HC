@@ -119,7 +119,7 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
 	      MemCpy(tmpb->data,dbg_info,size);
 	      tmpb->num=doc->cur_bin_num++;
 	      tmpb->use_cnt=1;
-	      QueIns(tmpb,doc->bin_head.last);
+	      QueueInsert(tmpb,doc->bin_head.last);
 	    } else
 	      dbg_info=NULL;
 	  }

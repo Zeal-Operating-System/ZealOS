@@ -15,7 +15,7 @@ U0 SysMacroStripKey(CJob *macro_head,I64 arg1,I64 arg2)
 	  (tmpc->msg_code==MSG_KEY_DOWN || tmpc->msg_code==MSG_KEY_UP ||
 	  tmpc->msg_code==MSG_KEY_DOWN_UP) &&
 	  arg1 && tmpc->aux1==arg1 || !arg1 && tmpc->aux2==arg2) {
-      QueRem(tmpc);
+      QueueRem(tmpc);
       JobDel(tmpc);
     }
     tmpc=tmpc1;
@@ -58,12 +58,12 @@ U8 *SysMacro2Str(CJob *macro_head)
   CMacroTmp *tmpmt,*tmpmt1,head;
   LBtr(&sys_semas[SEMA_RECORD_MACRO],0);
 
-  QueInit(&head);
+  QueueInit(&head);
   head.type=MT_NULL;
   tmpc=macro_head->next;
   while (tmpc!=macro_head) {
     tmpmt=Cmd2MT(tmpc);
-    QueIns(tmpmt,head.last);
+    QueueInsert(tmpmt,head.last);
     cnt+=StrLen(tmpmt->buf);
     if (tmpmt->type==MT_CHAR) {
       if (tmpmt->last->type!=MT_CHAR)
@@ -184,7 +184,7 @@ U0 MacroTask(I64)
     switch (i) {
       case SM_RECORD:
 	LBtr(&sys_semas[SEMA_RECORD_MACRO],0);
-	QueDel(&sys_macro_head,TRUE);
+	QueueDel(&sys_macro_head,TRUE);
 	LBts(&sys_semas[SEMA_RECORD_MACRO],0);
 	break;
       case SM_PLAY:

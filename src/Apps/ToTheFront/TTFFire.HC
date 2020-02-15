@@ -98,7 +98,7 @@ U0 IndirectAdd(Unit *tmpu,I64 row,I64 col)
   tmpi->attacker=tmpu;
   tmpi->row=row;
   tmpi->col=col;
-  QueIns(tmpi,indirect_head.last);
+  QueueInsert(tmpi,indirect_head.last);
 }
 
 Bool BulletPlot(U0,I64 x,I64 y,I64)
@@ -271,7 +271,7 @@ U0 IndirectResolveAll()
       Yield;
     indirect_explosion=FALSE;
 
-    QueRem(tmpi);
+    QueueRem(tmpi);
     Free(tmpi);
     tmpi=tmpi1;
   }

@@ -4,12 +4,12 @@ U0 JobDel(CJob *tmpc)
   Free(tmpc);
 }
 
-U0 JobQueDel(CJob *head)
+U0 JobQueueDel(CJob *head)
 {
   CJob *tmpc=head->next,*tmpc1;
   while (tmpc!=head) {
     tmpc1=tmpc->next;
-    QueRem(tmpc);
+    QueueRem(tmpc);
     JobDel(tmpc);
     tmpc=tmpc1;
   }
@@ -17,8 +17,8 @@ U0 JobQueDel(CJob *head)
 
 U0 JobCtrlInit(CJobCtrl *ctrl)
 {
-  QueInit(&ctrl->next_waiting);
-  QueInit(&ctrl->next_done);
+  QueueInit(&ctrl->next_waiting);
+  QueueInit(&ctrl->next_done);
   ctrl->flags=0;
 }
 
@@ -37,7 +37,7 @@ U0 TaskRstAwaitingMsg(CTask *task=NULL)
 }
 
 CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags)
-{//Queues a request to compile and execute src code text.
+{//Queueues a request to compile and execute src code text.
   CJob *res;
   if (!data || !TaskValidate(srv) || master && !TaskValidate(master) ||
 	srv->popup_task && !Bt(&srv->task_flags,TASKf_FILTER_INPUT))
@@ -61,7 +61,7 @@ CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags)
   } else {
     LBtr(&srv->task_flags,TASKf_IDLE);
     TaskRstAwaitingMsg(srv);
-    QueIns(res,srv->srv_ctrl.last_waiting);
+    QueueInsert(res,srv->srv_ctrl.last_waiting);
     LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
     if (Bt(&flags,JOBf_WAKE_MASTER)) {
       Suspend(master);
@@ -109,7 +109,7 @@ CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
   } else {
     LBtr(&task->task_flags,TASKf_IDLE);
     TaskRstAwaitingMsg(task);
-    QueIns(res,task->srv_ctrl.last_waiting);
+    QueueInsert(res,task->srv_ctrl.last_waiting);
     LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   }
   POPFD
@@ -137,7 +137,7 @@ CJob *TaskMsg(CTask *_srv,CTask *master,
 	srv!=sys_macro_task && msg_code==MSG_KEY_DOWN) {
     tmpc1=AMAllocIdent(tmpc);
     CLI
-    QueIns(tmpc1,sys_macro_head.last);
+    QueueInsert(tmpc1,sys_macro_head.last);
   }
   CLI
   while (Bt(&srv->task_flags,TASKf_FILTER_INPUT) &&
@@ -152,7 +152,7 @@ CJob *TaskMsg(CTask *_srv,CTask *master,
   } else {
     LBtr(&srv->task_flags,TASKf_IDLE);
     TaskRstAwaitingMsg(srv);
-    QueIns(tmpc,srv->srv_ctrl.last_waiting);
+    QueueInsert(tmpc,srv->srv_ctrl.last_waiting);
     LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
   }
   POPFD
@@ -178,7 +178,7 @@ Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL)
     tmpc=tmpc1->next;
     while (tmpc!=tmpc1) {
       if (!rqst || rqst==tmpc) {
-	QueRem(tmpc);
+	QueueRem(tmpc);
 	LBtr(&ctrl->flags,JOBCf_LOCKED);
 	POPFD
 	if (_res)
@@ -277,7 +277,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
     res=JOB_CONT;
   switch (tmpc->job_code) {
     case JOBT_SPAWN_TASK:
-      QueRem(tmpc);
+      QueueRem(tmpc);
       LBts(&tmpc->flags,JOBf_DISPATCHED);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       if (tmpc->aux_str)
@@ -288,7 +288,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 	      "Unnamed",,tmpc->aux1,tmpc->aux2,tmpc->flags);
       break;
     case JOBT_CALL:
-      QueRem(tmpc);
+      QueueRem(tmpc);
       LBts(&tmpc->flags,JOBf_DISPATCHED);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       SetRFlags(run_flags);
@@ -300,7 +300,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
       SetRFlags(old_flags);
       break;
     case JOBT_EXE_STR:
-      QueRem(tmpc);
+      QueueRem(tmpc);
       LBts(&tmpc->flags,JOBf_DISPATCHED);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       SetRFlags(run_flags);
@@ -320,7 +320,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 	CLI
 	while (LBts(&master->srv_ctrl.flags,JOBCf_LOCKED))
 	  PAUSE
-	QueIns(tmpc,master->srv_ctrl.last_done);
+	QueueInsert(tmpc,master->srv_ctrl.last_done);
 	LBts(&tmpc->flags,JOBf_DONE);
 	LBtr(&master->srv_ctrl.flags,JOBCf_LOCKED);
 	SetRFlags(old_flags);
@@ -337,7 +337,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
       CLI
       while (LBts(&ctrl->flags,JOBCf_LOCKED))
 	Yield;
-      QueIns(tmpc,ctrl->last_done);
+      QueueInsert(tmpc,ctrl->last_done);
       LBts(&tmpc->flags,JOBf_DONE);
       LBtr(&ctrl->flags,JOBCf_LOCKED);
       SetRFlags(old_flags);
@@ -475,7 +475,7 @@ U0 InFile(U8 *filename)
 {//Send InFile code file to self.
   U8 *name=ExtDft(filename,"IN");
   InStr("Cd(\"%C:%s\");;#include \"%s\"",
-	Drv2Let(Fs->cur_dv),Fs->cur_dir,name);
+	Drive2Letter(Fs->cur_dv),Fs->cur_dir,name);
   Free(name);
 }
 

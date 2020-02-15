@@ -230,7 +230,7 @@ U0 StepNew(CTask *task,I64 x,I64 y,F64 é,Bool left_right,Bool king)
     tmps->x=x;
     tmps->y=y;
     tmps->t0=tS;
-    QueIns(tmps,king_step_head.last);
+    QueueInsert(tmps,king_step_head.last);
   }
 
   if (left_right) {
@@ -238,23 +238,23 @@ U0 StepNew(CTask *task,I64 x,I64 y,F64 é,Bool left_right,Bool king)
     tmps->x=x-3.5*Sin(é)+2.0*Cos(é);
     tmps->y=y+3.5*Cos(é)+2.0*Sin(é);
     tmps->t0=tS;
-    QueIns(tmps,step_head.last);
+    QueueInsert(tmps,step_head.last);
     tmps=MAlloc(sizeof(Step),task);
     tmps->x=x-3.5*Sin(é)+5.0*Cos(é);
     tmps->y=y+3.5*Cos(é)+5.0*Sin(é);
     tmps->t0=tS;
-    QueIns(tmps,step_head.last);
+    QueueInsert(tmps,step_head.last);
   } else {
     tmps=MAlloc(sizeof(Step),task);
     tmps->x=x+3.5*Sin(é)+0.0*Cos(é);
     tmps->y=y-3.5*Cos(é)+0.0*Sin(é);
     tmps->t0=tS;
-    QueIns(tmps,step_head.last);
+    QueueInsert(tmps,step_head.last);
     tmps=MAlloc(sizeof(Step),task);
     tmps->x=x+3.5*Sin(é)+3.0*Cos(é);
     tmps->y=y-3.5*Cos(é)+3.0*Sin(é);
     tmps->t0=tS;
-    QueIns(tmps,step_head.last);
+    QueueInsert(tmps,step_head.last);
   }
 }
 
@@ -275,11 +275,11 @@ U0 Init()
     trees[i].fire_frame_idx=0;
   }
 
-  QueInit(&step_head);
-  QueInit(&king_step_head);
+  QueueInit(&step_head);
+  QueueInit(&king_step_head);
 
   SpriteExtents($IB,"<12>",BI=12$,&min_x,&max_x,&min_y,&max_y);
-  QueInit(&peasant_head);
+  QueueInit(&peasant_head);
   for (i=0;i<PEASANTS_NUM;i++) {
     tmpp=MAlloc(sizeof(Peasant));
     tmpp->x=RandU16%(w-2*BORDER-(max_x-min_x+1))+BORDER-min_x;
@@ -287,7 +287,7 @@ U0 Init()
     tmpp->é=ã*2*Rand;
     tmpp->door_opened_t0=0;
     tmpp->stopped=FALSE;
-    QueIns(tmpp,peasant_head.last);
+    QueueInsert(tmpp,peasant_head.last);
   }
   animate_phase=0;
   animate_mS=0;
@@ -305,9 +305,9 @@ U0 Init()
 U0 CleanUp()
 {
   DCDel(snow_tile);
-  QueDel(&peasant_head,TRUE);
-  QueDel(&step_head,TRUE);
-  QueDel(&king_step_head,TRUE);
+  QueueDel(&peasant_head,TRUE);
+  QueueDel(&step_head,TRUE);
+  QueueDel(&king_step_head,TRUE);
 }
 
 U0 Follow(CTask *,Peasant *tmpp)
@@ -340,7 +340,7 @@ U0 AnimateTask(I64)
     while (tmps!=&step_head) {
       tmps1=tmps->next;
       if (tS-tmps->t0>5.0) {
-	QueRem(tmps);
+	QueueRem(tmps);
 	Free(tmps);
       }
       tmps=tmps1;
@@ -350,7 +350,7 @@ U0 AnimateTask(I64)
     while (tmps!=&king_step_head) {
       tmps1=tmps->next;
       if (tS-tmps->t0>3.0) {
-	QueRem(tmps);
+	QueueRem(tmps);
 	Free(tmps);
       }
       tmps=tmps1;

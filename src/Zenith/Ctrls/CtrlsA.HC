@@ -209,7 +209,7 @@ U0 WinScrollsInit(CTask *task)
     c->update_derived_vals=&WinDerivedScrollValsUpdate;
     c->draw_it=&DrawWinScroll;
     c->left_click=&LeftClickHWinScroll;
-    QueIns(c,task->last_ctrl);
+    QueueInsert(c,task->last_ctrl);
   }
 
   if (!CtrlFindUnique(task,CTRLT_WIN_VSCROLL)) {
@@ -222,7 +222,7 @@ U0 WinScrollsInit(CTask *task)
     c->draw_it=&DrawWinScroll;
     c->left_click=&LeftClickVWinScroll;
     c->wheel_chg=&WheelChangeWinScroll;
-    QueIns(c,task->last_ctrl);
+    QueueInsert(c,task->last_ctrl);
   }
   TaskDerivedValsUpdate(task);
 }
@@ -370,7 +370,7 @@ public CCtrl *ViewAnglesNew(CTask *task=NULL)
     c->draw_it=&DrawViewAnglesCtrl;
     c->left_click=&LeftClickViewAngles;
     c->update_derived_vals=&UpdateDerivedViewAnglesCtrl;
-    QueIns(c,task->last_ctrl);
+    QueueInsert(c,task->last_ctrl);
     TaskDerivedValsUpdate(task);
   }
   return c;
@@ -381,7 +381,7 @@ public U0 ViewAnglesDel(CTask *task=NULL)
   CCtrl *c;
   if (!task) task=Fs;
   if (c=CtrlFindUnique(task,CTRLT_VIEWING_ANGLES)) {
-    QueRem(c);
+    QueueRem(c);
     Free(c->state);
     Free(c);
   }

@@ -7,7 +7,7 @@ U0 SysGlblsInit()
   sys_cache_line_width=ee.rbx.u8[1]*8;
 
   sys_focus_task=Fs;
-  QueInit(&sys_macro_head);
+  QueueInit(&sys_macro_head);
 
   blkdev.dft_iso_filename	=AStrNew(DFT_ISO_FILENAME);
   blkdev.dft_iso_c_filename	=AStrNew(DFT_ISO_C_FILENAME);
@@ -48,14 +48,14 @@ U0 SysGlblsInit()
   for (i=-308;i<309;i++)
     pow10_I64[i+309]=Pow10(i);
 
-  QueInit(&scrncast.snd_head);
+  QueueInit(&scrncast.snd_head);
   scrncast.t0_now=Now;
   scrncast.t0_tS=tS;
   scrncast.ona=scrncast.snd_head.ona=0;
 
   ProgressBarsRst;
 
-  QueInit(&dev.pci_head);
+  QueueInit(&dev.pci_head);
   dev.mem64_ptr=mem_mapped_space;
 
   dbg.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
@@ -182,9 +182,9 @@ U0 KMain()
 	  blkdev.ins_base0,blkdev.ins_base1,blkdev.ins_unit);
   }
   Gs->idle_task->cur_dv=blkdev.let_to_drv[*blkdev.home_dir-'A'];
-  DrvRep;
+  DriveRep;
   if (blkdev.dvd_boot_is_good) {
-    bd=Let2BlkDev(':');
+    bd=Letter2BlkDev(':');
     if (bd->type==BDT_ATAPI) {
       blkdev.ins_base0=bd->base0;
       blkdev.ins_base1=bd->base1;
@@ -203,7 +203,7 @@ U0 KMain()
   KbdMsInit;
   MsInit;
   KbdInit;
-  Spawn(&MsHardDrvrInstall);
+  Spawn(&MsHardDriverInstall);
 
   "Loading Compiler\n";
   Cd("/Compiler");

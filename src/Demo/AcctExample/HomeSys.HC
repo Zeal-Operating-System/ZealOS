@@ -37,7 +37,7 @@ U0 StartUpTasks()
   "AutoComplete Time:%7.3fs\n",tS;
 }
 
-if (DrvIsWritable(':')) {
+if (DriveIsWritable(':')) {
   DelTree("::/Tmp/ScrnShots");
   DirMk("::/Tmp/ScrnShots");
 }

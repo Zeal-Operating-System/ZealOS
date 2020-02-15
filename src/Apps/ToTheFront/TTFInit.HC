@@ -352,7 +352,7 @@ U0 Init()
     y0=FONT_HEIGHT;
   }
   InitUnits;
-  QueInit(&indirect_head);
+  QueueInit(&indirect_head);
   turn=0;
   fire_radius=0;
   show_vis_row=-1;
@@ -364,7 +364,7 @@ U0 Init()
 
 U0 CleanUp()
 {
-  QueDel(&indirect_head,TRUE);
+  QueueDel(&indirect_head,TRUE);
 }
 
 U0 PlayerPick(U8 *dirname,I64 player)

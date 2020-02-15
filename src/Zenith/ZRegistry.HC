@@ -30,7 +30,7 @@ public Bool RegDft(U8 *path,U8 *val,Bool is_zenith_entry=FALSE)
       else
 	Zenith("%s",val);
     }
-    if (DrvIsWritable(*sys_registry_doc->filename.name))
+    if (DriveIsWritable(*sys_registry_doc->filename.name))
       DocWrite(sys_registry_doc);
     res=FALSE;
   } else
@@ -150,7 +150,7 @@ public U0 Once(U8 *fmt,...)
   Free(buf);
 }
 
-public U0 AOnceDrv(U8 drv_let=0,U8 *fmt,...)
+public U0 AOnceDrive(U8 drv_let=0,U8 *fmt,...)
 {//Add Zenith code to drv $LK,"~/Registry.HC"$, executed next boot.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
   I64 old_drv_let=*sys_registry_doc->filename.name;
@@ -163,7 +163,7 @@ public U0 AOnceDrv(U8 drv_let=0,U8 *fmt,...)
   *sys_registry_doc->filename.name=old_drv_let;
 }
 
-public U0 OnceDrv(U8 drv_let=0,U8 *fmt,...)
+public U0 OnceDrive(U8 drv_let=0,U8 *fmt,...)
 {//Add User code to drv $LK,"~/Registry.HC"$, executed next boot.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
   I64 old_drv_let=*sys_registry_doc->filename.name;

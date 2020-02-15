@@ -64,7 +64,7 @@ U0 PlaceMass(I64 x, I64 y)
   tmpm->x=x;
   tmpm->y=y;
   tmpm->radius=10*(Rand+0.25);
-  QueIns(tmpm,ode->last_mass);
+  QueueInsert(tmpm,ode->last_mass);
 }
 
 U0 PlaceSpring(MyMass *tmpm1,MyMass *tmpm2)
@@ -74,7 +74,7 @@ U0 PlaceSpring(MyMass *tmpm1,MyMass *tmpm2)
   tmps->end2=tmpm2;
   tmps->const=10000;
   tmps->rest_len=100;
-  QueIns(tmps,ode->last_spring);
+  QueueInsert(tmps,ode->last_spring);
 }
 
 U0 Init()
@@ -85,14 +85,14 @@ U0 Init()
   ode->drag_v3=0.00001;
   ode->acceleration_limit=5e3;
 
-  QueIns(ode,Fs->last_ode);
+  QueueInsert(ode,Fs->last_ode);
 }
 
 U0 CleanUp()
 {
-  QueRem(ode);
-  QueDel(&ode->next_mass,TRUE);
-  QueDel(&ode->next_spring,TRUE);
+  QueueRem(ode);
+  QueueDel(&ode->next_mass,TRUE);
+  QueueDel(&ode->next_spring,TRUE);
   ODEDel(ode);
 }
 

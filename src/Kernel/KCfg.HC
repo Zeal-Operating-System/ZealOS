@@ -36,11 +36,11 @@ CDoc *KCfgAddDev(CKCfg *c)
 	"define shortly, enter the drive letter\n"
 	"of the drive with the account directory.\n"
 	"\n($$PURPLE$$<ENTER>$$FG$$ for cur drv) Boot Drive:";
-  ch=Let2Let(GetChar);
+  ch=Letter2Letter(GetChar);
   if ('A'<=ch<='Z')
     c->boot_drv_let=ch;
   else
-    c->boot_drv_let=Drv2Let(Fs->cur_dv);
+    c->boot_drv_let=Drive2Letter(Fs->cur_dv);
   "\n\n$$BK,1$$$$PURPLE$$Mount drives so they will be present when "
 	"you boot.$$FG$$$$BK,0$$\n";
   Mount2(c->boot_drv_let,doc,FALSE);
@@ -110,7 +110,7 @@ U0 KCfgOptions(CKCfg *c)
 	  case CFG_MOUNT_IDE_AUTO:
 	    if (state) {
 	      "First HD Drive Let:";
-	      c->mount_ide_auto_hd_let=Let2Let(GetChar);
+	      c->mount_ide_auto_hd_let=Letter2Letter(GetChar);
 	      if (!('A'<=c->mount_ide_auto_hd_let<='Z'))
 		c->mount_ide_auto_hd_let=0;
 	      '\n';
@@ -120,7 +120,7 @@ U0 KCfgOptions(CKCfg *c)
 		"First HD Drive:%C\n",'C';
 
 	      "First CD Drive Let:";
-	      c->mount_ide_auto_cd_let=Let2Let(GetChar);
+	      c->mount_ide_auto_cd_let=Letter2Letter(GetChar);
 	      if (!('A'<=c->mount_ide_auto_cd_let<='Z'))
 		c->mount_ide_auto_cd_let=0;
 	      '\n';

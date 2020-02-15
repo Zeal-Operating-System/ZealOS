@@ -92,15 +92,15 @@ CIntermediateCode *ICAdd(CCmpCtrl *cc,
     flags|=ICF_LOCK;
   tmpi->ic_flags=flags;
   tmpi->ic_line=cc->last_line_num;
-  QueIns(tmpi,cc->coc.coc_head.last);
+  QueueInsert(tmpi,cc->coc.coc_head.last);
   return tmpi;
 }
 
 U0 COCInit(CCmpCtrl *cc)
 {
   CCodeCtrl *tmpcbh=&cc->coc;
-  QueInit(&tmpcbh->coc_head.next);
-  QueInit(&tmpcbh->coc_next_misc);
+  QueueInit(&tmpcbh->coc_head.next);
+  QueueInit(&tmpcbh->coc_next_misc);
   tmpcbh->coc_head.ic_code=IC_END;
 }
 
@@ -145,7 +145,7 @@ CCodeMisc *COCMiscNew(CCmpCtrl *cc,I64 ty)
   CCodeMisc *res=CAlloc(sizeof(CCodeMisc));
   res->addr=INVALID_PTR;
   res->type=ty;
-  QueIns(res,cc->coc.coc_last_misc);
+  QueueInsert(res,cc->coc.coc_last_misc);
   return res;
 }
 
@@ -187,7 +187,7 @@ U0 COCDel(CCmpCtrl *cc,CCodeCtrl *coc)
 {
   CCodeMisc *cm,*cm1;
   U8 *undef=NULL;
-  QueDel(&coc->coc_head.next);
+  QueueDel(&coc->coc_head.next);
   cm=coc->coc_next_misc;
   while (cm!=&coc->coc_next_misc) {
     cm1=cm->next;

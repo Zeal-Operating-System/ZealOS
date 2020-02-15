@@ -10,14 +10,14 @@ Bool Mem32DevIns(CMemRange *tmpmr)
 	tmpmr2->flags=0;
 	tmpmr2->base=tmpmr1->base;
 	tmpmr2->size=tmpmr->base-tmpmr1->base;
-	QueInsRev(tmpmr2,tmpmr1);
+	QueueInsRev(tmpmr2,tmpmr1);
       }
-      QueInsRev(tmpmr,tmpmr1);
+      QueueInsRev(tmpmr,tmpmr1);
       tmpmr1->size=tmpmr1->base+tmpmr1->size-
 	    (tmpmr->base+tmpmr->size);
       tmpmr1->base=tmpmr->base+tmpmr->size;
       if (!tmpmr1->size) {
-	QueRem(tmpmr1);
+	QueueRem(tmpmr1);
 	Free(tmpmr1);
       }
       return TRUE;
@@ -32,14 +32,14 @@ U0 Mem32DevInit()
   CMemRange *tmpmr;
   CMemE820 *m20=MEM_E820;
 
-  QueInit(&dev.mem32_head);
+  QueueInit(&dev.mem32_head);
   tmpmr=AMAlloc(sizeof(CMemRange));
   tmpmr->type=MRT_UNUSED;
   tmpmr->flags=0;
 //Maybe !!! Change this to 0xF0000000 !!!
   tmpmr->base=0xE0000000;
   tmpmr->size=0x10000000;
-  QueIns(tmpmr,dev.mem32_head.last);
+  QueueInsert(tmpmr,dev.mem32_head.last);
 
   if (m20->type) {
     while (m20->type) {

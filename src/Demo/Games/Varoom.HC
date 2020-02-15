@@ -229,7 +229,7 @@ U0 TrackSlice(F64 *_x,F64 *_z,F64 é,F64 d)
   tmpt->num=track_head.last->num+1;
   tmpt->d  =track_head.last->d+d;
 
-  QueIns(tmpt,track_head.last);
+  QueueInsert(tmpt,track_head.last);
 
   if (tmpt->num&1)
     tmpt->c=RED;
@@ -270,7 +270,7 @@ U0 InitTrack()
   F64 x,z,é,d;
 
   MemSet(&track_head,0,sizeof(Track));
-  QueInit(&track_head);
+  QueueInit(&track_head);
 
   t_minx=t_minz=I64_MAX;
   t_maxx=t_maxz=I64_MIN;
@@ -457,7 +457,7 @@ U0 DrawIt(CTask *task,CDC *dc)
 
   mp_not_done_flags=1<<mp_cnt-1;
   for (i=0;i<mp_cnt;i++)
-    JobQue(&MPUpdateWin,dc,i);
+    JobQueue(&MPUpdateWin,dc,i);
   while (mp_not_done_flags)
     Yield;
 
@@ -631,7 +631,7 @@ U0 CleanUp()
 {
   while (mp_not_done_flags)
     Yield;
-  QueDel(&track_head,TRUE);
+  QueueDel(&track_head,TRUE);
   DCDel(track_map);
 }
 

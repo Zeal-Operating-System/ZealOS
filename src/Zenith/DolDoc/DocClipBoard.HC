@@ -19,7 +19,7 @@ public U0 ClipCopy(CDoc *doc)
       doc_e->type&=~DOCET_SEL;
       if (!Bt(doldoc.type_flags_data,doc_e->type_u8)) {
 	doc_ne=DocEntryCopy(doc2,doc_e);
-	QueIns(doc_ne,doc2->head.last);
+	QueueInsert(doc_ne,doc2->head.last);
       }
     }
     doc_e=doc_e->next;
@@ -43,7 +43,7 @@ public U0 ClipCut(CDoc *doc)
       doc_e->type&=~DOCET_SEL;
       if (!Bt(doldoc.type_flags_data,doc_e->type_u8)) {
 	doc_ne=DocEntryCopy(doc2,doc_e);
-	QueIns(doc_ne,doc2->head.last);
+	QueueInsert(doc_ne,doc2->head.last);
       }
       if (doc_e==doc->cur_entry || doc_e==doc_e2)
 	doc_e2=doc_e->next;
@@ -113,7 +113,7 @@ public CDoc *DocCopy(CDoc *doc,CDocEntry *start,CDocEntry *end)
     do {
       if (!Bt(doldoc.type_flags_data,start->type_u8)) {
 	doc_ne=DocEntryCopy(doc2,start);
-	QueIns(doc_ne,doc2->head.last);
+	QueueInsert(doc_ne,doc2->head.last);
       }
       if (start==end)
 	break;

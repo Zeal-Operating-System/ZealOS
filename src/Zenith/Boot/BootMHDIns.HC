@@ -15,8 +15,8 @@
 public U0 BootMHDOldRead(U8 src_drv,U8 dst_drv)
 {//Reads MBR from disk drive containing src partition.
 //Writes a single blk file to dst BOOT_DIR.
-  CBlkDev *bd=Let2BlkDev(src_drv);
-  CDrv *dv;
+  CBlkDev *bd=Letter2BlkDev(src_drv);
+  CDrive *dv;
   CMasterBoot mbr;
   Drive(dst_drv);
   dv=Fs->cur_dv;
@@ -37,7 +37,7 @@ public U0 BootMHDOldRead(U8 src_drv,U8 dst_drv)
 public U0 BootMHDOldWrite(U8 src_drv,U8 dst_drv)
 {//Reads OldMBR from src drive BOOT_DIR.
 //writes it to the MBR of the drive with dst partition.
-  CBlkDev *bd=Let2BlkDev(dst_drv);
+  CBlkDev *bd=Letter2BlkDev(dst_drv);
   CMasterBoot *mbr;
   Drive(src_drv);
   if (mbr=FileRead(BOOT_DIR_OLDMBR_BIN_C)) {
@@ -57,7 +57,7 @@ public U0 BootMHDZero(U8 dst_drv)
   //with other operating systems at this time and you need
   //to do this on a drive partitioned by ZenithOS
   //if you wish to partition with another operating system.
-  CBlkDev *bd=Let2BlkDev(dst_drv);
+  CBlkDev *bd=Letter2BlkDev(dst_drv);
   CMasterBoot mbr;
   MemSet(&mbr,0,BLK_SIZE);
 //Bypass partition bounds-checking
@@ -70,7 +70,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_lst=NULL)
 {//Create new MBR on the disk that has drv_let as a partition.
 //Puts stage 2 in BOOT_DIR of drv_let.
   CBlkDev *bd,*bd1;
-  CDrv *dv,*p1;
+  CDrive *dv,*p1;
   CMasterBoot mbr;
   CDirEntry de;
   I64 i,j,size,*_q;
@@ -110,10 +110,10 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_lst=NULL)
 
       ptr=buf;
       while (ch=*ptr++) {
-	if ((p1=Let2Drv(ch,FALSE)) && (bd1=p1->bd) && bd1==bd) {
+	if ((p1=Letter2Drive(ch,FALSE)) && (bd1=p1->bd) && bd1==bd) {
 	  *_q=p1->drv_offset;
-	  "Drive %C:%16X\n",Drv2Let(p1),*_q;
-	  CatPrint(menu_ptr,"%d. Drive %C\n\r",j++,Drv2Let(p1));
+	  "Drive %C:%16X\n",Drive2Letter(p1),*_q;
+	  CatPrint(menu_ptr,"%d. Drive %C\n\r",j++,Drive2Letter(p1));
 	  _q++;
 	}
       }

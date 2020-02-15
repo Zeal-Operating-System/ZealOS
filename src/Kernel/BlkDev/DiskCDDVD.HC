@@ -1,4 +1,4 @@
-Bool ISOInit(CDrv *dv,I64 blk)
+Bool ISOInit(CDrive *dv,I64 blk)
 {
   CBlkDev *bd=dv->bd;
   I64 spc=bd->blk_size>>BLK_SIZE_BITS,i=blk/spc,drv_offset=0;
@@ -8,7 +8,7 @@ Bool ISOInit(CDrv *dv,I64 blk)
   U8 buf[8];
 
   try {
-    unlock=DrvLock(dv);
+    unlock=DriveLock(dv);
     dv->fs_type=FSt_ISO9660;
     dv->spc=spc;
     dv->data_area=dv->root_clus=dv->drv_offset=bd->drv_offset=dv->size=0;
@@ -64,7 +64,7 @@ di_done:
 
 U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
 {//Read entire CD/DVD image into ISO file.
-  CDrv *dv=Let2Drv(dvd_drv_let);
+  CDrive *dv=Letter2Drive(dvd_drv_let);
   CBlkDev *bd=dv->bd;
   U8 *buf=MAlloc(COPY_BUF_BLKS<<BLK_SIZE_BITS),
 	*out_name2=ExtDft(out_name,"ISO");
@@ -145,7 +145,7 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   CDualBuf *d=CAlloc(sizeof(CDualBuf));
   U8 *buf,*in_name2,*in_name3;
   I64 i,n,spc,blk=0,cnt;
-  CDrv *dv=Let2Drv(dvd_drv_let);
+  CDrive *dv=Letter2Drive(dvd_drv_let);
   CBlkDev *bd=dv->bd,*bd2;
   CTask *task;
   CFile *f;
@@ -163,7 +163,7 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   FClose(f);
   if (bd->type!=BDT_ATAPI)
     throw('BlkDev');
-  bd2=Let2BlkDev(*in_name2);
+  bd2=Letter2BlkDev(*in_name2);
   while (bd2->lock_fwding)
     bd2=bd2->lock_fwding;  //If two blkdevs on same controller, use one lock
   if ((bd2->type==BDT_ATA || bd2->type==BDT_ATAPI) &&

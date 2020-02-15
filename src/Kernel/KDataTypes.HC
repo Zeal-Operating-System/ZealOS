@@ -38,33 +38,33 @@ I64 LinkedLstSize(U8 **_lst)
   return res;
 }
 
-U0 QueDel(CQue *head,Bool querem=FALSE)
+U0 QueueDel(CQueue *head,Bool querem=FALSE)
 {//Free entries in queue, not head.
-  CQue *tmpq=head->next,*tmpq1;
+  CQueue *tmpq=head->next,*tmpq1;
   while (tmpq!=head) {
     tmpq1=tmpq->next;
     if (querem)
-      QueRem(tmpq);
+      QueueRem(tmpq);
     Free(tmpq);
     tmpq=tmpq1;
   }
 }
 
-CQue *QueCopy(CQue *head,CTask *mem_task=NULL)
+CQueue *QueueCopy(CQueue *head,CTask *mem_task=NULL)
 {//MAlloc ident copy of entire queue and head.
-  CQue *res=MAllocIdent(head,mem_task),*tmpq=head->next,*tmpq1;
-  QueInit(res);
+  CQueue *res=MAllocIdent(head,mem_task),*tmpq=head->next,*tmpq1;
+  QueueInit(res);
   while (tmpq!=head) {
     tmpq1=MAllocIdent(tmpq,mem_task);
-    QueIns(tmpq1,res->last);
+    QueueInsert(tmpq1,res->last);
     tmpq=tmpq->next;
   }
   return res;
 }
 
-I64 QueCnt(CQue *head)
+I64 QueueCnt(CQueue *head)
 {//Count of nodes in queue, not head.
-  CQue *tmpq=head->next;
+  CQueue *tmpq=head->next;
   I64 res=0;
   while (tmpq!=head) {
     res++;
@@ -73,9 +73,9 @@ I64 QueCnt(CQue *head)
   return res;
 }
 
-I64 QueSize(CQue *head)
+I64 QueueSize(CQueue *head)
 {//Mem size of all nodes in queue, not head.
-  CQue *tmpq=head->next;
+  CQueue *tmpq=head->next;
   I64 res=0;
   while (tmpq!=head) {
     res+=MSize2(tmpq);
@@ -84,18 +84,18 @@ I64 QueSize(CQue *head)
   return res;
 }
 
-CQueVectU8 *QueVectU8New(I64 min_idx=0)
+CQueueVectU8 *QueueVectU8New(I64 min_idx=0)
 {//Create new queue vecter.
-  CQueVectU8 *res=MAlloc(sizeof(CQueVectU8));
-  QueInit(res);
+  CQueueVectU8 *res=MAlloc(sizeof(CQueueVectU8));
+  QueueInit(res);
   res->total_cnt=res->node_cnt=0;
   res->min_idx=min_idx;
   return res;
 }
 
-U0 QueVectU8Put(CQueVectU8 *v,I64 idx,U8 ch)
+U0 QueueVectU8Put(CQueueVectU8 *v,I64 idx,U8 ch)
 {//Put U8 at idx i.
-  CQueVectU8 *tmpv;
+  CQueueVectU8 *tmpv;
   idx-=v->min_idx;
   if (idx<0) return;
   if (idx<v->total_cnt) {
@@ -114,9 +114,9 @@ U0 QueVectU8Put(CQueVectU8 *v,I64 idx,U8 ch)
   while (TRUE) {
     tmpv=v->last;
     if (tmpv->node_cnt>=QUE_VECT_U8_CNT) {
-      tmpv=MAlloc(sizeof(CQueVectU8));
+      tmpv=MAlloc(sizeof(CQueueVectU8));
       tmpv->node_cnt=0;
-      QueIns(tmpv,v->last);
+      QueueInsert(tmpv,v->last);
     }
     if (idx--) {
       tmpv->body[tmpv->node_cnt++]=0;
@@ -129,17 +129,17 @@ U0 QueVectU8Put(CQueVectU8 *v,I64 idx,U8 ch)
   }
 }
 
-U0 QueVectU8Del(CQueVectU8 *v)
+U0 QueueVectU8Del(CQueueVectU8 *v)
 {//Free entire queue vector.
   if (v) {
-    QueDel(v);
+    QueueDel(v);
     Free(v);
   }
 }
 
-I64 QueVectU8Get(CQueVectU8 *v,I64 idx)
+I64 QueueVectU8Get(CQueueVectU8 *v,I64 idx)
 {//Get U8 at idx i.
-  CQueVectU8 *tmpv;
+  CQueueVectU8 *tmpv;
   idx-=v->min_idx;
   if (!(0<=idx<v->total_cnt)) return 0;
   tmpv=v;

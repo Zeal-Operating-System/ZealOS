@@ -77,13 +77,13 @@ CCtrl *TempoNew()
   c->update_derived_vals=&UpdateDerivedTempoCtrl;
   c->left=396;
   c->top=96;
-  QueIns(c,Fs->last_ctrl);
+  QueueInsert(c,Fs->last_ctrl);
   TaskDerivedValsUpdate;
   return c;
 }
 
 U0 TempoDel(CCtrl *c)
 {
-  QueRem(c);
+  QueueRem(c);
   Free(c);
 }

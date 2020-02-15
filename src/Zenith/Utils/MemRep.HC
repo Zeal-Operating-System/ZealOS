@@ -33,7 +33,7 @@ I64 TaskStkSize(CTask *task)
   return res;
 }
 
-I64 TaskQueSize(CTask *task)
+I64 TaskQueueSize(CTask *task)
 {
   CJob *tmpc,*tmpc1;
   I64 res=0;
@@ -71,14 +71,14 @@ I64 BlkDevsSize()
       j=(bd->max_blk+1)<<BLK_SIZE_BITS;
       if (bd->type==BDT_RAM)
 	"RAMDsk%C\t:%010X/%010X\n",
-	      bd->first_drv_let,j-DrvUnused(bd->first_drv_let),j;
+	      bd->first_drv_let,j-DriveUnused(bd->first_drv_let),j;
       res+=MSize2(bd->dev_id_record);
     }
   }
   return res;
 }
 
-I64 DrvsSize()
+I64 DrivesSize()
 {
   I64 i,res=MSize2(blkdev.drvs);
   for (i=0;i<DRVS_NUM;i++)
@@ -151,7 +151,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 	  if (task1->data_heap!=task1->code_heap)
 	    m+=MSize2(task1->code_heap);
 	}
-	n+=TaskQueSize(task1);
+	n+=TaskQueueSize(task1);
 	task1=task1->next_task;
       } while (task1!=c->seth_task);
       task1=c->idle_task;
@@ -164,9 +164,9 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
     "TSSes\t:%010X\n",k;
     "HeapCtrls\t:%010X\n",m;
     if (n)
-      "TaskQues\t:%010X\n",n;
+      "TaskQueues\t:%010X\n",n;
     "BlkDevs\t:%010X\n",BlkDevsSize;
-    "Drvs\t:%010X\n",DrvsSize;
+    "Drives\t:%010X\n",DrivesSize;
     if (blkdev.cache_base)
       "DiskCache\t:%010X\n",
 	    MSize2(blkdev.cache_base)+MSize2(blkdev.cache_hash_table)+

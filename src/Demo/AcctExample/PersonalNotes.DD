@@ -138,8 +138,8 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 
 * Finish Pilgrim game.
 
-* Compiler: PtrArith MUL SIZE -->QueIns(MUL)?
-* Compiler: QueRem(IC_NOP)?
+* Compiler: PtrArith MUL SIZE -->QueueInsert(MUL)?
+* Compiler: QueueRem(IC_NOP)?
 
 * Fix Chess game so not isometric view.
 
@@ -376,7 +376,7 @@ $ID,-5$
 $FG,5$$TX+CX,"Test"$$FG$
 * $LK,"SpriteBitMap",A="FI:::/Zenith/Gr/SpriteBitMap.HC"$: Grabscroll? 
 
-* $LK,"DrvMap",A="MN:DrvMap"$() in $LK,"MountFile",A="MN:MountFile"$().
+* $LK,"DriveMap",A="MN:DriveMap"$() in $LK,"MountFile",A="MN:MountFile"$().
 
 * Return ress for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
 * Collision cnts for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
@@ -391,14 +391,14 @@ $FG,5$$TX+CX,"Test"$$FG$
 
 * $LK,"FileMgr",A="MN:FileMgr"$() help link scrolls out of window.
 
-* $LK,"MsHardDrvrInstall",A="MN:MsHardDrvrInstall"$() throws exceptions?  Doesn't work?  Why mouse $LK,"0x9FC30",A="FF:::/Kernel/SerialDev/Mouse.HC,9FC"$?
+* $LK,"MsHardDriverInstall",A="MN:MsHardDriverInstall"$() throws exceptions?  Doesn't work?  Why mouse $LK,"0x9FC30",A="FF:::/Kernel/SerialDev/Mouse.HC,9FC"$?
 
 * VirtualBox MP reboot?
 
 * Compiler: Err/Warn line nums?
 * Asm branch-out-of-range warn by one line?
 
-* Make sure queue links safe in one direction.  Task $LK,"QueIns",A="MN:QueIns"$ and $LK,"QueRem",A="MN:QueRem"$ for multicore cycling fwd through tasks.
+* Make sure queue links safe in one direction.  Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRem",A="MN:QueueRem"$ for multicore cycling fwd through tasks.
 
 * Test removable media id and $LK,"RS_ATTR_RESIDENT",A="MN:RS_ATTR_RESIDENT"$.  $LK,"Touch",A="MN:Touch"$("","+T");
 

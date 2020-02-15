@@ -71,13 +71,13 @@ U0 SysTry(U8 *catch_start,U8 *untry_start)
   tmpt->rbp=*rbp;
   tmpt->rflags=GetRFlags;
   SaveExceptRegs(tmpt);
-  QueIns(tmpt,Fs->last_except);
+  QueueInsert(tmpt,Fs->last_except);
 }
 
 U0 SysUntry()
 {
   CExcept *tmpt=Fs->last_except;
-  QueRem(tmpt);
+  QueueRem(tmpt);
   Free(tmpt);
 }
 
@@ -103,7 +103,7 @@ U0 throw(I64 ch=0,Bool no_log=FALSE)
       TakeExcept;
     SetRBP(Fs->except_rbp);
     tmpt=Fs->last_except;
-    QueRem(tmpt);
+    QueueRem(tmpt);
     Free(tmpt);
   }
   was_raw=Raw(ON);
@@ -121,7 +121,7 @@ U0 Break()
   else {
     Fs->wake_jiffy=0;
     TaskRstAwaitingMsg;
-    DrvsRelease();
+    DrivesRelease();
     BlkDevsRelease();
     FlushMsgs;
     throw('Break');

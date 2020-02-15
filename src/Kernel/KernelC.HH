@@ -128,10 +128,10 @@ public extern U0 ArcExpandBuf(CArcCtrl *c);
 public extern Bool ArcFinishCompression(CArcCtrl *c);
 
 #help_index "Data Types/Circular Queue"
-public extern I64	QueCnt(CQue *head);
-public extern CQue	*QueCopy(CQue *head,CTask *mem_task=NULL);
-public extern U0	QueDel(CQue *head,Bool querem=FALSE);
-public extern I64	QueSize(CQue *head);
+public extern I64	QueueCnt(CQueue *head);
+public extern CQueue	*QueueCopy(CQueue *head,CTask *mem_task=NULL);
+public extern U0	QueueDel(CQueue *head,Bool querem=FALSE);
+public extern I64	QueueSize(CQueue *head);
 
 #help_index "Data Types/Fifo"
 public extern I64	FifoI64Cnt(CFifoI64 *f);
@@ -156,10 +156,10 @@ public extern U0	LinkedLstDel(U8 **_lst);
 public extern I64	LinkedLstSize(U8 **_lst);
 
 #help_index "Data Types/Queue Vector"
-public extern U0	QueVectU8Del(CQueVectU8 *v);
-public extern I64	QueVectU8Get(CQueVectU8 *v,I64 idx);
-public extern CQueVectU8 *QueVectU8New(I64 min_idx=0);
-public extern U0	QueVectU8Put(CQueVectU8 *v,I64 idx,U8 ch);
+public extern U0	QueueVectU8Del(CQueueVectU8 *v);
+public extern I64	QueueVectU8Get(CQueueVectU8 *v,I64 idx);
+public extern CQueueVectU8 *QueueVectU8New(I64 min_idx=0);
+public extern U0	QueueVectU8Put(CQueueVectU8 *v,I64 idx,U8 ch);
 
 #help_index "Debugging"
 public extern U8 *Caller(I64 num=1);
@@ -287,14 +287,14 @@ public extern U0 DiskChg(U8 drv_let=0);
 public extern U0 HomeSet(U8 *dirname);
 
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically);Install"
-public extern Bool DrvMap(U8 drv_let,CDrv *dv);
+public extern Bool DriveMap(U8 drv_let,CDrive *dv);
 
 #help_index "File/FileNames"
 extern CDirEntry *Cd2DirEntry(CDirEntry *tmpde,U8 *abs_name);
 public extern U8 *DirCur(CTask *task=NULL,CTask *mem_task=NULL);
 public extern U8 *DirFile(U8 *dirname,U8 *name=NULL,U8 *_extension=NULL);
 public extern U8 *DirNameAbs(U8 *dirname);
-public extern CBlkDev *DrvIsWritable(U8 drv_let=0,Bool except=FALSE);
+public extern CBlkDev *DriveIsWritable(U8 drv_let=0,Bool except=FALSE);
 public extern U8 *ExtChg(U8 *filename,U8 *extension);
 public extern U8 *ExtDft(U8 *filename,U8 *extension);
 public extern U8 *FileExtDot(U8 *src);
@@ -319,7 +319,7 @@ public extern U8 *FileNameTmpTxt();
 public extern U0 DirContextDel(CDirContext *dirc,Bool restore=TRUE);
 public extern CDirContext *DirContextNew(U8 *mask,
 	Bool make_mask=FALSE,Bool make_dirs=FALSE,Bool no_mask=FALSE);
-public extern Bool DirNew(CDrv *dv,U8 *cur_dir,
+public extern Bool DirNew(CDrive *dv,U8 *cur_dir,
 	CDirEntry *tmpde,Bool free_old_chain=TRUE);
 extern I64 FileAttr(U8 *name,I64 old_attr=0);
 
@@ -331,37 +331,37 @@ public extern Bool BlkDevLock(CBlkDev *bd);
 public extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
 public extern Bool BlkDevUnlock(CBlkDev *bd,Bool rst=FALSE);
 public extern U0 BlkDevsRelease();
-public extern Bool BlkRead(CDrv *dv,U8 *buf, I64 blk, I64 cnt);
-public extern Bool BlkWrite(CDrv *dv,U8 *buf, I64 blk, I64 cnt);
-public extern U0 BlkWriteZero(CDrv *dv,I64 blk,I64 cnt);
-public extern I64 Clus2Blk(CDrv *dv,I64 c);
-public extern I64 ClusAlloc(CDrv *dv,I64 c=0,
+public extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 cnt);
+public extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 cnt);
+public extern U0 BlkWriteZero(CDrive *dv,I64 blk,I64 cnt);
+public extern I64 Clus2Blk(CDrive *dv,I64 c);
+public extern I64 ClusAlloc(CDrive *dv,I64 c=0,
 	I64 cnt=1,Bool contiguous=FALSE);
-public extern I64 ClusBlkRead(CDrv *dv,U8 *buf,I64 c,I64 blks);
-public extern I64 ClusBlkWrite(CDrv *dv,U8 *buf,I64 c,I64 blks);
-public extern I64 ClusNumNext(CDrv *dv,I64 c,I64 cnt=1);
-public extern I64 ClusRead(CDrv *dv,U8 *buf,I64 c,I64 cnt);
-public extern I64 ClusWrite(CDrv *dv,U8 *buf,I64 c,I64 cnt);
+public extern I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks);
+public extern I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks);
+public extern I64 ClusNumNext(CDrive *dv,I64 c,I64 cnt=1);
+public extern I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 cnt);
+public extern I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 cnt);
 extern Bool CopySingle(U8 *f1,U8 *f2); //Just one file
-public extern U8 Drv2Let(CDrv *dv=NULL);
-public extern CDrv *DrvCheck(CDrv *dv,Bool except=TRUE);
-public extern U0 DrvDel(CDrv *dv);
-public extern Bool DrvLock(CDrv *dv);
-public extern CDrv *DrvMakeFreeSlot(U8 drv_let);
-public extern U8 *DrvModelNum(U8 drv_let=0);
-public extern U8 DrvNextFreeLet(U8 first_drv_let='C');
-public extern U8 *DrvSerialNum(U8 drv_let=0);
-public extern U8 DrvTextAttrGet(U8 drv_let=0);
-public extern Bool DriveUnlock(CDrv *dv,Bool rst=FALSE);
-public extern U0 DrvsRelease();
-extern U0 FAT32FreeClus(CDrv *dv,I64 c);
-public extern CBlkDev *Let2BlkDev(U8 drv_let=0,Bool except=TRUE);
-public extern I64 Let2BlkDevType(U8 drv_let);
-public extern CDrv *Let2Drv(U8 drv_let=0,Bool except=TRUE);
-public extern U8 Let2Let(U8 drv_let=0);
-extern I64 Name2DirClus(CDrv *dv,U8 *dirname);
-extern I64 Name2ParentDirClus(CDrv *dv,U8 *dirname);
-extern U0 RedSeaFreeClus(CDrv *dv,I64 c,I64 cnt);
+public extern U8 Drive2Letter(CDrive *dv=NULL);
+public extern CDrive *DriveCheck(CDrive *dv,Bool except=TRUE);
+public extern U0 DriveDel(CDrive *dv);
+public extern Bool DriveLock(CDrive *dv);
+public extern CDrive *DriveMakeFreeSlot(U8 drv_let);
+public extern U8 *DriveModelNum(U8 drv_let=0);
+public extern U8 DriveNextFreeLet(U8 first_drv_let='C');
+public extern U8 *DriveSerialNum(U8 drv_let=0);
+public extern U8 DriveTextAttrGet(U8 drv_let=0);
+public extern Bool DriveUnlock(CDrive *dv,Bool rst=FALSE);
+public extern U0 DrivesRelease();
+extern U0 FAT32FreeClus(CDrive *dv,I64 c);
+public extern CBlkDev *Letter2BlkDev(U8 drv_let=0,Bool except=TRUE);
+public extern I64 Letter2BlkDevType(U8 drv_let);
+public extern CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE);
+public extern U8 Letter2Letter(U8 drv_let=0);
+extern I64 Name2DirClus(CDrive *dv,U8 *dirname);
+extern I64 Name2ParentDirClus(CDrive *dv,U8 *dirname);
+extern U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 cnt);
 
 #help_index "File/Program Routines"
 public extern U0 DirEntryDel(CDirEntry *tmpde);
@@ -377,7 +377,7 @@ public extern I64 FileWrite(U8 *filename,
 public extern CDirEntry *FilesFind(U8 *files_find_mask,I64 fuf_flags=0);
 
 #help_index "File/System"
-public extern CATARep *ATAIDDrvs(CATARep *head,CATARep **_ata_drv,
+public extern CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drv,
 	CATARep **_atapi_drv);
 extern CBlkDev *ATAMount(U8 first_drv_let,
 	I64 type,I64 base0,I64 base1,I64 unit);
@@ -388,7 +388,7 @@ extern U0 ATAWriteBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt);
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	Bool whole_drv,Bool make_free);
 extern U0 DiskCacheInit(I64 size_in_U8s);
-public extern U0 DiskCacheInvalidate(CDrv *dv);
+public extern U0 DiskCacheInvalidate(CDrive *dv);
 public extern I64 MountIDEAuto();
 public extern CBlkDevGlbls blkdev;
 
@@ -442,12 +442,12 @@ public extern I64 HashDefineLstAdd(U8 *dname,I64 type,CHashTable *table);
 public extern U0 Help();
 
 #help_index "Info;File/Cmd Line (Typically);Cmd Line (Typically);Install"
-public extern U0 DrvRep();
+public extern U0 DriveRep();
 
 #help_index "Install"
 #help_file "::/Doc/Install"
 extern CATARep *ATARepFind(CATARep *haystack_head,I64 needle_num);
-public extern Bool DrvEnable(U8 drv_let,Bool val);
+public extern Bool DriveEnable(U8 drv_let,Bool val);
 
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
 public extern U0 Fmt(U8 drv_let,Bool quick=TRUE,
@@ -526,9 +526,9 @@ extern U0	KbdInit();
 public extern I64 KbdMsEvtTime();
 extern U0	KbdMsHndlr(Bool poll_kbd,Bool poll_ms);
 extern U0	KbdMsInit();
-extern I64	KbdMsgsQue();
+extern I64	KbdMsgsQueue();
 public extern U0 KbdTypeMatic(U8 delay);
-extern Bool	MsHardDrvrInstall();
+extern Bool	MsHardDriverInstall();
 public extern I64 PressAKey();
 public extern I64 ScanChar();
 public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);
@@ -629,7 +629,7 @@ extern U0 CoreAPSethTask();
 public extern U0 MPInt(U8 num,I64 cpu_num=1);
 public extern U0 MPIntAll(U8 num);
 public extern U0 MPNMInt();
-extern CTask *SpawnQue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
+extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	U8 *task_name=NULL,I64 target_cpu,
 	CTask *parent=NULL, //NULL means zenith
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
@@ -638,7 +638,7 @@ extern CTask *SpawnQue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 public extern U0 MPHalt();
 
 #help_index "MultiCore;Job/Exe;Task/Job/Exe"
-public extern CJob *JobQue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
+public extern CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
 	I64 target_cpu=1,I64 flags=1<<JOBf_FREE_ON_COMPLETE,
 	I64 job_code=JOBT_CALL,U8 *aux_str=NULL,I64 aux1=0,I64 aux2=0);
 
@@ -695,8 +695,8 @@ public extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
 _extern _TASK_CONTEXT_RESTORE U0 TaskContextRestore();
 _extern _TASK_END_NOW U0 TaskEndNow();
 extern U0 TaskKillDying();
-public extern U0 TaskQueIns(CTask *task,CTask *pred=NULL);
-public extern U0 TaskQueRem(CTask *task);
+public extern U0 TaskQueueIns(CTask *task,CTask *pred=NULL);
+public extern U0 TaskQueueRem(CTask *task);
 public extern Bool TaskValidate(CTask *task);
 public extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
 public extern CTask *User(U8 *fmt=NULL,...);

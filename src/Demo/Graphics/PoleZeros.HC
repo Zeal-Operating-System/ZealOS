@@ -71,7 +71,7 @@ U0 Draw()
   CDC *dc=DCAlias;
   while (TRUE) {
     for (i=0;i<mp_cnt;i++)
-      tmpm[i]=JobQue(&MPDraw,Fs,i,0);
+      tmpm[i]=JobQueue(&MPDraw,Fs,i,0);
     y_total=0;
     for (i=0;i<mp_cnt;i++)
       y_total+=JobResGet(tmpm[i])(F64);
