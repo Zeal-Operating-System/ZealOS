@@ -438,7 +438,7 @@ U0 KbdInit()
   OutU8(0x21,InU8(0x21)&~2);
 }
 
-U0 KbdHndlr()
+U0 KbdHandler()
 {
   static U8 last_raw_byte=0;
   U8  raw_byte;

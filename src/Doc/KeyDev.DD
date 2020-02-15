@@ -2,7 +2,7 @@ $WW,1$The editor mostly stays in a $LK,"GetKey",A="MN:GetKey"$()/$LK,"PutKey",A=
 
 $LK,"KeyDevAdd",A="MN:KeyDevAdd"$() defines a putkey device with a priority.  "Device" might be a misnomer.  Currently, the following are defined:
 
-Priority    Hndlr
+Priority    Handler
 ---------- ---------
 $FG,2$0x20000000$FG$ $LK,"MyPutKey",A="MN:MyPutKey"$() user hndlr
 $FG,2$0x40000000$FG$ $LK,"KDInputFilterPutKey",A="MN:KDInputFilterPutKey"$() for $LK,"In",A="MN:In"$(), $LK,"InStr",A="MN:InStr"$(), and $LK,"InFile",A="MN:InFile"$() handling.

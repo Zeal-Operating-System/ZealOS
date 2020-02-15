@@ -371,7 +371,7 @@ U0 SrvTaskCont()
   FlushMsgs;
   while (TRUE) {
     CLI
-    if (JobsHndlr(old_flags) && Fs->title_src==TTS_TASK_NAME)
+    if (JobsHandler(old_flags) && Fs->title_src==TTS_TASK_NAME)
       MemCpy(Fs->task_title,Fs->task_name,TASK_NAME_LEN);
     FlushMsgs;
     LBts(&Fs->task_flags,TASKf_IDLE);

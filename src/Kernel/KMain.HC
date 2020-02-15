@@ -59,7 +59,7 @@ U0 SysGlblsInit()
   dev.mem64_ptr=mem_mapped_space;
 
   dbg.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
-  dbg.int_fault_code=IntFaultHndlrsNew;
+  dbg.int_fault_code=IntFaultHandlersNew;
 }
 
 U0 SysGrInit()

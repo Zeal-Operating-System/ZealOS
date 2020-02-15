@@ -232,7 +232,7 @@ U0 MsHardSetPost()
       }
 }
 
-U0 MsHardHndlr()
+U0 MsHardHandler()
 {
   I64 i,dx,dy,dz;
   U8 ms_buf[4];
@@ -310,7 +310,7 @@ Bool MsHardDriverInstall(I64 dummy=0) //can be spawned
   return ms_hard.installed;
 }
 
-U0 KbdMsHndlr(Bool poll_kbd,Bool poll_ms)
+U0 KbdMsHandler(Bool poll_kbd,Bool poll_ms)
 {
   if (ms_hard.install_in_progress) {
     Yield;
@@ -335,10 +335,10 @@ U0 KbdMsHndlr(Bool poll_kbd,Bool poll_ms)
       KbdMsRst;
     else {
       while (FifoU8Cnt(kbd.fifo2))
-	KbdHndlr;
+	KbdHandler;
       while (FifoU8Cnt(ms_hard.fifo2))
 	if (ms_hard.installed)
-	  MsHardHndlr;
+	  MsHardHandler;
 	else
 	  KbdMsRst;
     }

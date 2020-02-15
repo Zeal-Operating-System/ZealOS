@@ -346,7 +346,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
   return res;
 }
 
-I64 JobsHndlr(I64 run_flags,CTask *task=NULL)
+I64 JobsHandler(I64 run_flags,CTask *task=NULL)
 {//Handle all waiting cmds and return.
   I64 cnt=0,old_flags=GetRFlags;
   if (!task) task=Fs;
@@ -410,7 +410,7 @@ I64 Zenith(U8 *fmt,...)
   CJob *tmpc;
   if (Fs==zenith_task) {
     tmpc=TaskExe(zenith_task,Fs,buf,0);
-    JobsHndlr(GetRFlags);
+    JobsHandler(GetRFlags);
   } else {
     TaskWait(zenith_task);
     tmpc=TaskExe(zenith_task,Fs,buf,1<<JOBf_WAKE_MASTER);

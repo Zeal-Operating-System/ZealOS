@@ -69,7 +69,7 @@ extern Bool IsRaw();
 extern U0 JobCtrlInit(CJobCtrl *ctrl);
 extern U0 JobDel(CJob *tmpc);
 extern U0 JobQueueDel(CJob *head);
-extern I64 JobsHndlr(I64 run_flags,CTask *task=NULL);
+extern I64 JobsHandler(I64 run_flags,CTask *task=NULL);
 extern CBlkDev *Letter2BlkDev(U8 drv_let=0,Bool except=TRUE);
 extern I64 Letter2BlkDevType(U8 drv_let);
 extern CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE);

@@ -52,7 +52,7 @@ IRQ_TIMER::  //I_TIMER
 	MOV	U32 [RAX+RDX],0
 	JMP	@@25
 
-@@20:	CALL	&IntCore0TimerHndlr	//Only Core 0 calls this.
+@@20:	CALL	&IntCore0TimerHandler	//Only Core 0 calls this.
 @@25:	XOR	RAX,RAX
 	CMP	RSI,U64 GS:CCPU.idle_task[RAX]
 	JE	I32 RESTORE_SETH_TASK_IF_READY
@@ -61,7 +61,7 @@ IRQ_TIMER::  //I_TIMER
 INT_FAULT::
 	PUSH	RBX
 	PUSH	RAX
-	MOV	BL,U8 16[RSP]	//We pushed fault_num $LK,"IntFaultHndlrsNew",A="MN:IntFaultHndlrsNew"$().
+	MOV	BL,U8 16[RSP]	//We pushed fault_num $LK,"IntFaultHandlersNew",A="MN:IntFaultHandlersNew"$().
 	XOR	RAX,RAX
 	MOV	FS:U8 CTask.fault_num[RAX],BL
 	POP	RAX
@@ -163,7 +163,7 @@ interrupt U0 IntDivZero()
   throw('DivZero');
 }
 
-U8 *IntFaultHndlrsNew()
+U8 *IntFaultHandlersNew()
 {
   I64 i;
   U8 *res=MAlloc(256*7,Fs->code_heap),*dst=res;

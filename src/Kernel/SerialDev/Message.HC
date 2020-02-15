@@ -9,7 +9,7 @@ U0 InputFilterTask()
   LBEqu(&Fs->task_flags,TASKf_FILTER_INPUT,old_filter);
   while (TRUE) {
     CLI
-    JobsHndlr(old_flags);
+    JobsHandler(old_flags);
     tmpc1=&Fs->srv_ctrl.next_waiting;
     tmpc=tmpc1->next;
     if (tmpc==tmpc1)
@@ -49,7 +49,7 @@ Note: This delivers messages from parent down to pop-up.
   while (TRUE) {
     CLI
     if (task==Fs)
-      JobsHndlr(old_flags);
+      JobsHandler(old_flags);
     tmpc=tmpc1->next;
     if (tmpc==tmpc1)
       break;
@@ -162,7 +162,7 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
       //keyboard when in debugger with interrupts off.
       PUSHFD
       CLI
-      KbdMsHndlr(TRUE,FALSE);
+      KbdMsHandler(TRUE,FALSE);
       KbdMsgsQueue;
       POPFD
     } else {

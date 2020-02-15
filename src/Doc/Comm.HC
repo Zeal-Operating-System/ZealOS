@@ -25,7 +25,7 @@ class CComm
   CFifoU8 *TX_fifo;
 } comm_ports[5];
 
-U0 CommHndlr(I64 port)
+U0 CommHandler(I64 port)
 {
   CComm *c=&comm_ports[port];
   I64 b=0,stat;
@@ -44,15 +44,15 @@ U0 CommHndlr(I64 port)
 
 interrupt U0 IRQComm3()
 {
-  CommHndlr(2);
-  CommHndlr(4);
+  CommHandler(2);
+  CommHandler(4);
   OutU8(0x20,0x20);
 }
 
 interrupt U0 IRQComm4()
 {
-  CommHndlr(1);
-  CommHndlr(3);
+  CommHandler(1);
+  CommHandler(3);
   OutU8(0x20,0x20);
 }
 

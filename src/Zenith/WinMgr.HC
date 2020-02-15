@@ -306,7 +306,7 @@ I64 WinMgrSleep(Bool flush_msgs=FALSE)
     }
     winmgr.updates++;
     if (ms_hard.install_attempts) //Don't call before boot mouse install attempt
-      KbdMsHndlr(FALSE,TRUE);
+      KbdMsHandler(FALSE,TRUE);
     SleepUntil(timeout_val);
   }
   return msg_code;

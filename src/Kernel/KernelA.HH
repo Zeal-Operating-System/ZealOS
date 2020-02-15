@@ -3493,7 +3493,7 @@ public class CSysFixedArea
 
 //ZenithOS places a 1 in bit 7 for
 //keys with an E0 prefix.
-//See $LK,"::/Doc/CharOverview.DD"$ and $LK,"KbdHndlr",A="MN:KbdHndlr"$().
+//See $LK,"::/Doc/CharOverview.DD"$ and $LK,"KbdHandler",A="MN:KbdHandler"$().
 #define SC_ESC		0x01
 #define SC_BACKSPACE	0x0E
 #define SC_TAB		0x0F

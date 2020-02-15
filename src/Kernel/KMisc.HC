@@ -44,8 +44,8 @@ I64 BCnt(I64 d)
   return res;
 }
 
-U0 IntCore0TimerHndlr(CTask *)
-{//Called from $LK,"IntCore0TimerHndlr",A="FF:::/Kernel/KInts.HC,IntCore0TimerHndlr"$
+U0 IntCore0TimerHandler(CTask *)
+{//Called from $LK,"IntCore0TimerHandler",A="FF:::/Kernel/KInts.HC,IntCore0TimerHandler"$
   I64 i;
   if (mp_cnt>1)
     while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
