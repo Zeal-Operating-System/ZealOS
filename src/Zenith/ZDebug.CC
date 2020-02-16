@@ -1,5 +1,5 @@
 #help_index "Debugging/Dump"
-Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
+Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,Bool u8_chars,
 	I64 depth,I64 max_depth,Bool dynamic,I64 types=HTT_CLASS,I64 offset=0)
 {//See $LK,"::/Demo/LastClass.CC"$.
   I64 i,j,stars,*ptr;
@@ -43,7 +43,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	}
       } else if (!stars) {
 	j=MinI64(ml->dim.total_count,32);
-	if (tmpc2->raw_type==RT_I8 || tmpc2->raw_type==RT_U8) {
+	if ((tmpc2->raw_type==RT_I8 || tmpc2->raw_type==RT_U8) && u8_chars) {
 	  if (j==1) {
 	    if (dynamic) {
 	      doc_e=DocPrint(doc,"$$DA-TRM+RD+UD,RT=U8,A=\"%%c\"$$\n");
@@ -143,9 +143,9 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	  DocPrint(doc,"$$TR,\"%s\"$$\n",ml->str);
 	  DocPrint(doc,"$$ID,2$$");
 	  if (!stars)
-	    ClassRep2(doc,ptr,tmpc2->str,depth+1,max_depth,dynamic);
+	    ClassRep2(doc,ptr,tmpc2->str,u8_chars,depth+1,max_depth,dynamic);
 	  else if (stars==1)
-	    ClassRep2(doc,*ptr,tmpc2->str,depth+1,max_depth,dynamic);
+	    ClassRep2(doc,*ptr,tmpc2->str,u8_chars,depth+1,max_depth,dynamic);
 	  DocPrint(doc,"$$ID,-2$$");
 	}
       } else
@@ -159,30 +159,38 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 }
 
 public U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
-	I64 max_depth=2,Bool fun=FALSE,I64 offset=0)
+	I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0)
 {//Displays members of a record by using the compiler's info.
   CDoc *doc;
+  I64 type;
+
   if (IsRaw)
     doc=DocNew;
-  else {
+  else
+  {
     DocMax;
     doc=DocPut;
   }
-  if (fun)
-    ClassRep2(doc,_d,class_name,0,max_depth,FALSE,HTT_FUN,offset);
+  if(fun)
+    type=HTT_FUN;
   else
-    ClassRep2(doc,_d,class_name,0,max_depth,FALSE,HTT_CLASS,offset);
+    type=HTT_CLASS;
+
+  ClassRep2(doc,_d,class_name,u8_chars,0,max_depth,FALSE,type,offset);
+
   DocPrint(doc,"\n");
   DocRecalc(doc);
-  if (IsRaw) {
+
+  if (IsRaw)
+  {
     DocDump(doc,100000);
     DocDel(doc);
   }
 }
 
 public U0 ClassRepD(U8 *_d,U8 *class_name=lastclass,
-	I64 max_depth=2,Bool fun=FALSE,I64 offset=0)
-{//Dynamic ClassRep. Uses hex_ed widgit for live changes.
+	I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0)
+{//Dynamic ClassRep. Uses hex_ed widget for live changes.
   CDoc *doc;
   if (IsRaw)
     doc=DocNew;
@@ -191,9 +199,9 @@ public U0 ClassRepD(U8 *_d,U8 *class_name=lastclass,
     doc=DocPut;
   }
   if (fun)
-    ClassRep2(doc,_d,class_name,0,max_depth,TRUE,HTT_FUN,offset);
+    ClassRep2(doc,_d,class_name,u8_chars,0,max_depth,TRUE,HTT_FUN,offset);
   else
-    ClassRep2(doc,_d,class_name,0,max_depth,TRUE,HTT_CLASS,offset);
+    ClassRep2(doc,_d,class_name,u8_chars,0,max_depth,TRUE,HTT_CLASS,offset);
   DocPrint(doc,"\n");
   DocRecalc(doc);
   if (IsRaw) {
@@ -232,10 +240,10 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
 	img=MAlloc(size);
 	MemCopy(img,rbp+tmpf->size,size);
 	UpdateRegVarImg(tmpf,img-tmpf->size,task);
-	ClassRep(img-tmpf->size,st,max_depth,TRUE,rbp-img+tmpf->size);
+	ClassRep(img-tmpf->size,st,max_depth,FALSE,TRUE,rbp-img+tmpf->size);
 	Free(img);
       } else
-	ClassRep(rbp,st,max_depth,TRUE);
+	ClassRep(rbp,st,max_depth,FALSE,TRUE);
     } else {
       tmpm=tmpf->member_list_and_root;
       while (tmpm) {
@@ -268,3 +276,4 @@ public U0 Uf(U8 *st)
       U(HashVal(tmpf));
   }
 }
+
