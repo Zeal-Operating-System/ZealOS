@@ -8,7 +8,7 @@ $WW,1$$FG,5$$TX+CX,"Tips"$$FG$
 
 * See $MA-X+PU,"Key Map",LM="KeyMap;View;\n"$ for a list of defined keys.  Define your own keys in $LK,"MyPutKey",A="MN:MyPutKey"$().  See $LK,"Keyboard Devices",A="HI:Keyboard Devices/System"$.
 
-* $FG,2$<ALT-m>$FG$ maximizes a window.  $FG,2$<ALT-SHIFT-w>$FG$ closes AutoComplete.  $FG,2$<ALT-w>$FG$ brings back AutoComplete.  $FG,2$<ALT-v>$FG$ vertically tiles windows.  $FG,2$<ALT-h>$FG$ horizontally tiles windows.  The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.HC"$.  You can customize them.
+* $FG,2$<ALT-m>$FG$ maximizes a window.  $FG,2$<ALT-SHIFT-w>$FG$ closes AutoComplete.  $FG,2$<ALT-w>$FG$ brings back AutoComplete.  $FG,2$<ALT-v>$FG$ vertically tiles windows.  $FG,2$<ALT-h>$FG$ horizontally tiles windows.  The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.CC"$.  You can customize them.
 
 * If you make changes to ZenithOS files in your $FG,2$/Home$FG$ directory, generally you reboot to make them take effect.  (You don't compile anything.)  You should have two ZenithOS partitions on your hard drive because a syntax error in a start-up file will make the partition unbootable.  Boot to the second partition or boot to a standard ZenithOS CD/DVD and use $LK,"Mount",A="MN:Mount"$() to mount your hard drive.
 
@@ -19,25 +19,25 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can use $FG,2$ans$FG$ in cmd line expressions.  It holds the res the last cmd line operation.  You can use the cmd prompt as a calculator by just entering expressions like $FG,2$1+2*3;$FG$.  $FG,2$F64$FG$ ress can be accessed with $FG,2$ansf$FG$.
 
-* Use the PullDown menu at the top of the scrn to learn commands, or for finding the keyboard controls to games.
+* Use the PullDown menu at the top of the screen to learn commands, or for finding the keyboard controls to games.
 
-* You can adjust the mouse movement rate by setting global vars in your start-up file.  See $LK,"mouse scale",A="FF:~/HomeLocalize.HC,mouse_hard.scale"$.
+* You can adjust the mouse movement rate by setting global vars in your start-up file.  See $LK,"mouse scale",A="FF:~/HomeLocalize.CC,mouse_hard.scale"$.
 
-* You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global var in a start-up file.  It's units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$.  See $LK,"local time",A="FF:~/HomeLocalize.HC,local_time"$.
+* You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global var in a start-up file.  It's units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$.  See $LK,"local time",A="FF:~/HomeLocalize.CC,local_time"$.
 
 * $FG,2$<CTRL-SHIFT-L>$FG$ in the editor to reindent a $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ function or renumber an asm routine's local labels.
 
 * You can use $FG,2$filter_lines$FG$ in the editor text search form ($FG,2$<CTRL-f>$FG$) to temporarily display just lines near each match.  A value of $FG,2$filter lines$FG$ set to $FG,2$5$FG$ will display lines within 5 lines of matches.  Then, you can do another find to a different string and achieve a $FG,2$AND$FG$ search.  When finished, press $FG,2$<ESC>$FG$.
  
-* You can recompile and reinstall the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$().  You'll probably want to make a function for recompiling that uses the $LK,"In",A="MN:In"$() function to answer the config questions.  See my technique $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.HC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.HC,1"$.
+* You can recompile and reinstall the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$().  You'll probably want to make a function for recompiling that uses the $LK,"In",A="MN:In"$() function to answer the config questions.  See my technique $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.CC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.CC,1"$.
 
 * $LK,"Scale2Mem",A="MN:Scale2Mem"$(min,max,limit=2*1024*1024*1024) can be used for config questions when recompiling.  The $LK,"BootHDIns",A="MN:BootHDIns"$() config prompts accept expressions, not just numbers.  The default disk cache is $FG,2$Scale2Mem(0x80000,0x8000000)$FG$.
 
-* You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/HomeSys.HC,ACInit"$() in $LK,"~/HomeSys.HC",A="FF:/Home/HomeSys.HC,ACInit"$.
+* You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/HomeSys.CC,ACInit"$() in $LK,"~/HomeSys.CC",A="FF:/Home/HomeSys.CC,ACInit"$.
 
 * Boolean expressions $BK,1$not$BK,0$ in $FG,2$if$FG$ statements don't have short circuit logic and are compiled inefficiently.
 
-* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ in your programs for whatever you like.  They're just global vars that are shown on the wallpaper.  The original intent was to indicate how far along operations were.  There's no coordination, so different apps might interfere.  I use them most for debugging--just values easily viewed.  See $LK,"::/Demo/Progress.HC"$.
+* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ in your programs for whatever you like.  They're just global vars that are shown on the wallpaper.  The original intent was to indicate how far along operations were.  There's no coordination, so different apps might interfere.  I use them most for debugging--just values easily viewed.  See $LK,"::/Demo/Progress.CC"$.
 
 * Use $LK,"DocMax",A="MN:DocMax"$() to adjust the size of the cmd line buf.  It counts $LK,"CDoc",A="MN:CDoc"$ entries, not lines.
 
@@ -55,29 +55,29 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find unnecessary local var type statements.
 
-* $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$,ON) can be placed in $LK,"StartOS.HC",A="FI:::/StartOS.HC"$ to echo start-up scripts.
+* $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$,ON) can be placed in $LK,"StartOS.CC",A="FI:::/StartOS.CC"$ to echo start-up scripts.
 
 * Use $LK,"Plain",A="MN:Plain"$() to edit a plain text file.  You'll need this if your file has $FG,2$$$$FG$'s.  Use the $LK,"ToDolDoc",A="MN:ToDolDoc"$() utility to convert plain text to DolDoc's by doubling $FG,2$$$$FG$'s.
 
-* Use $LK,"Silent",A="MN:Silent"$() to disable scrn text output.
+* Use $LK,"Silent",A="MN:Silent"$() to disable screen text output.
 
 * Grab-scroll any window at any time with $FG,2${CTRL-LEFT-MOUSE-DRAG}$FG$.  Null grab-scrolling with $FG,2${CTRL-RIGHT-MOUSE}$FG$.
 
 * Use $FG,2$<CTRL-ALT-z>$FG$ to zoom-in and $FG,2$<CTRL-ALT-SHIFT-Z>$FG$ to zoom-out.  You can scroll by moving to the edge of the window.  Set $LK,"gr.continuous_scroll",A="MN:CGrGlobals"$ to $FG,2$TRUE$FG$ if you want. 
 
-* Use $FG,2$<CTRL-ALT-g>$FG$ and $FG,2$<CTRL-ALT-SHIFT-G>$FG$ to display a grid on the scrn.
+* Use $FG,2$<CTRL-ALT-g>$FG$ and $FG,2$<CTRL-ALT-SHIFT-G>$FG$ to display a grid on the screen.
 
 * Use $FG,2$<CTRL-ALT-a>$FG$ to enter an extended ASCII char.
 
-* Use $FG,2$<CTRL-ALT-f>$FG$ to toggle between $LK,"Std Font",A="FI:::/Kernel/FontStd.HC"$ and $LK,"Cyrillic Font",A="FI:::/Kernel/FontCyrillic.HC"$.
+* Use $FG,2$<CTRL-ALT-f>$FG$ to toggle between $LK,"Std Font",A="FI:::/Kernel/FontStd.CC"$ and $LK,"Cyrillic Font",A="FI:::/Kernel/FontCyrillic.CC"$.
 
-* Use $FG,2$<CTRL-ALT-s>$FG$ will capture the scrn as a sprite on the clip.  You can save the cmd line doc as text with $FG,2$<CTRL-a>$FG$.
+* Use $FG,2$<CTRL-ALT-s>$FG$ will capture the screen as a sprite on the clip.  You can save the cmd line doc as text with $FG,2$<CTRL-a>$FG$.
 
 * You can save a sprite as a $FG,2$.GR$FG$ file in $FG,2$<CTRL-r>$FG$ on the Sprite BitMap Menu.
 
 * You can eye-dropper colors in the $FG,2$<CTRL-r>$FG$ sprite editor by pressing $FG,2$'c'$FG$.  Press $FG,2$'t'$FG$ for transparent.
 
-* There are handy functions--$FG,2$F(),R(),FD()$FG$ and $FG,2$RD()$FG$ which are defined in $LK,"~/HomeWrappers.HC"$.  You are encouraged to change them and add more.  They will perform find-and-replace operations accross multiple files.  The $FG,2$+l$FG$ flag is particularly useful since it limits to whole labels.  The $FG,2$+lb$FG$ and $FG,2$+la$FG$ flags limit to whole labels just before or after.  You are encouraged to add or modify handy wrapper functions to make cmd line operations easier.
+* There are handy functions--$FG,2$F(),R(),FD()$FG$ and $FG,2$RD()$FG$ which are defined in $LK,"~/HomeWrappers.CC"$.  You are encouraged to change them and add more.  They will perform find-and-replace operations accross multiple files.  The $FG,2$+l$FG$ flag is particularly useful since it limits to whole labels.  The $FG,2$+lb$FG$ and $FG,2$+la$FG$ flags limit to whole labels just before or after.  You are encouraged to add or modify handy wrapper functions to make cmd line operations easier.
 
 * When using $LK,"Find",A="MN:Find"$() while modifying code, work from the bottom-up so that line numbers are correct.  If you work top-down, then inserting or deleting lines causes the lower file links will be incorrect.
 
@@ -85,7 +85,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * When using $FG,2$<CTRL-l>$FG$ to insert links in documents, you can usually leave the $FG,2$Tag Text$FG$ blank and it will be filled-in automatically based on other entries.
 
-* There is a feature of the precompiler that allows code to be executed in the middle of compilation and data inserted into the compilation stream.  Click here for an example: $LK,"#exe {",A="FF:::/Kernel/KMain.HC,#exe {"$.
+* There is a feature of the precompiler that allows code to be executed in the middle of compilation and data inserted into the compilation stream.  Click here for an example: $LK,"#exe {",A="FF:::/Kernel/KMain.CC,#exe {"$.
 
 * If you output to the cmd line and wish to allow users to scroll around and view data, you can use $LK,"View",A="MN:View"$().
 
@@ -95,7 +95,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can reactivate $FG,2$AutoComplete$FG$ after closing it by pressing $FG,2$<CTRL-Fun Key>$FG$ or $FG,2$<ALT-w>$FG$ if you have it defined.
 
-* $FG,2$<CTRL-SHIFT-T>$FG$ to toggle to/from plain text just the $LK,"CDoc",A="MN:CDoc"$ cmd under the cursor.  See $LK,"::/Demo/DolDoc/TextDemo.HC"$.
+* $FG,2$<CTRL-SHIFT-T>$FG$ to toggle to/from plain text just the $LK,"CDoc",A="MN:CDoc"$ cmd under the cursor.  See $LK,"::/Demo/DolDoc/TextDemo.CC"$.
  
 * If you toggle to plain text when you are working with graphics in a document, you can add duplicate entries for sprites by entering a $FG,2$$$SP...$$$FG$ cmd with the same num.
 
@@ -111,7 +111,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * $LK,"GrFloodFill",A="MN:GrFloodFill"$() is slow.  $LK,"GrRect",A="MN:GrRect"$() is fast.
 
-* You can customize the $FG,2$wallpaper$FG$.  See $LK,"::/Demo/Graphics/WallPaperFish.HC"$.
+* You can customize the $FG,2$wallpaper$FG$.  See $LK,"::/Demo/Graphics/WallPaperFish.CC"$.
 
 * Your RAM disks will not be reformated when you reboot if the memory location has not changed and it finds the disk intacted.
 
@@ -119,9 +119,9 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Using a sub-int array, $FG,2$i.u8[3]$FG$, for example, will force a local var to non-reg.
 
-* You can delete the $FG,4$~/Registry.HC$FG$ file.  The policy is that deleting it will restore defaults.  It is a text doc, if you want to edit it.  Be careful of tree indentations.
+* You can delete the $FG,4$~/Registry.CC$FG$ file.  The policy is that deleting it will restore defaults.  It is a text doc, if you want to edit it.  Be careful of tree indentations.
 
-* Study $LK,"::/Zenith/Utils/MemRep.HC"$ and $LK,"WallPaper",A="MN:WallPaper"$() to learn how the system resources are put together.
+* Study $LK,"::/Zenith/Utils/MemRep.CC"$ and $LK,"WallPaper",A="MN:WallPaper"$() to learn how the system resources are put together.
 
 * The editor's sel-text mechanism allows for disjoint portions of sel text.  This is a feature, not a bug -- you can cut-and-paste disjoint text.
 
@@ -145,7 +145,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * With $FG,2$start$FG$/$FG,2$end$FG$, common trailing code is fast.  Common leading code is slow.$FG$
 
-* The first line of the $MA-X+PU,"Psalmody",LM="#include \"::/Apps/Psalmody/Run\"\n"$ $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ song files is a comment with a category recognized by $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.HC,JukeBox"$().  The categories are $FG,2$"no nothing"$FG$, $FG,2$"has words"$FG$, $FG,2$"has graphics"$FG$, or $FG,2$"special"$FG$.  The third character in the song comment is a digit rating number, shown in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.HC,JukeBox"$().  You can set the song rating in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.HC,JukeBox"$() by pressing $FG,2$0$FG$-$FG,2$9$FG$.  You can press $FG,2$<DEL>$FG$ to delete songs.
+* The first line of the $MA-X+PU,"Psalmody",LM="#include \"::/Apps/Psalmody/Run\"\n"$ $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ song files is a comment with a category recognized by $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$().  The categories are $FG,2$"no nothing"$FG$, $FG,2$"has words"$FG$, $FG,2$"has graphics"$FG$, or $FG,2$"special"$FG$.  The third character in the song comment is a digit rating number, shown in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$().  You can set the song rating in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$() by pressing $FG,2$0$FG$-$FG,2$9$FG$.  You can press $FG,2$<DEL>$FG$ to delete songs.
 
 $FG,8$
 * "Linux" is a trademark owned by Linus Torvalds.

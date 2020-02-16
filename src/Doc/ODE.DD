@@ -3,4 +3,4 @@ $WW,1$ZenithOS has an advanced algorithm for integrating ordinary differential e
 See $LK,"CMathODE",A="MN:CMathODE"$ and $LK,"ODEsUpdate",A="MN:ODEsUpdate"$ for an overview.
 See $LK,"ODECallDerivative",A="MN:ODECallDerivative"$ to see what support there is for masses and springs.
 
-See $LK,"::/Demo/Games/Whap.HC"$, $LK,"::/Demo/Games/Rocket.HC"$, $LK,"::/Demo/Games/MassSpring.HC"$, $LK,"::/Apps/Span/SpanMain.HC"$ or $LK,"::/Apps/X-Caliber/X-Caliber.HC"$.
+See $LK,"::/Demo/Games/Whap.CC"$, $LK,"::/Demo/Games/Rocket.CC"$, $LK,"::/Demo/Games/MassSpring.CC"$, $LK,"::/Apps/Span/SpanMain.CC"$ or $LK,"::/Apps/X-Caliber/X-Caliber.CC"$.

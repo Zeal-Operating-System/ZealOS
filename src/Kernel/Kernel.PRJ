@@ -1,5 +1,5 @@
 //Compile this by calling $LK,"BootHDIns",A="MN:BootHDIns"$().
-//Don't do it directly.See $LK,"Comp(\"/Kernel/Kernel\")",A="FF:::/Zenith/Boot/BootHDIns.HC,Comp(\"/Kernel/Kernel\""$.
+//Don't do it directly.See $LK,"Comp(\"/Kernel/Kernel\")",A="FF:::/Zenith/Boot/BootHDIns.CC,Comp(\"/Kernel/Kernel\""$.
 
 #exe {
   Cd(__DIR__);;
@@ -28,7 +28,7 @@
 #include "KGlobals"
 #include "KMathB"
 #include "Sched"
-#include "Memory/MakeMemory"
+#include "Memory/MakeMemory"
 #include "FontStd"
 #include "FontCyrillic"
 #include "StrB"

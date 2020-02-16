@@ -22,7 +22,7 @@ TourPut(
 "type it on the command line.\n\n"
 "$$GREEN$$<ENTER>$$FG$$ to complete the command.\n");
 
-InPrint(25,"Ed(\"CastleFrankenstein.HC\");");
+InPrint(25,"Ed(\"CastleFrankenstein.CC\");");
 InGetStr("\n");
 Message(MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP|SCF_CTRL);
 
@@ -43,7 +43,7 @@ TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort the editor.\n");
 InGetChar(CH_ESC,CH_SHIFT_ESC);
 
 TourPut(
-"Now, run the CastleFrankenstein.HC program.Press $$GREEN$$<ENTER>$$FG$$.\n");
+"Now, run the CastleFrankenstein.CC program.Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 InPrint(25,"#include \"CastleFrankenstein\";");
 InGetStr("\n");
@@ -72,7 +72,7 @@ TourPut(
 "$$GREEN$$<CTRL-ALT-t>$$FG$$\tTerminal window.\n"
 "$$GREEN$$<CTRL-ALT-x>$$FG$$\tKill task (window).\n",TRUE);
 
-InPrint(50,"Ed(\"CastleFrankenstein.HC\");\n");
+InPrint(50,"Ed(\"CastleFrankenstein.CC\");\n");
 
 TourPut("Press $$GREEN$$<F5>$$FG$$ in the editor to run the file being edited.\n");
 

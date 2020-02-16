@@ -63,7 +63,7 @@ extern class CTask;
 whole if no member is specified,
 similar to bit fields.
 
-See $LK,"EndianI64",A="MN:EndianI64"$() and $LK,"::/Demo/SubIntAccess.HC"$.
+See $LK,"EndianI64",A="MN:EndianI64"$() and $LK,"::/Demo/SubIntAccess.CC"$.
 */
 U16i union U16
 {
@@ -353,7 +353,7 @@ class CGDT
   CGDTEntry boot_cs;
   CGDTEntry cs32;
   CGDTEntry cs64;	//The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring-0.
-  CGDTEntry cs64_ring3;	//$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.HC"$, in case you want to play around.
+  CGDTEntry cs64_ring3;	//$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, in case you want to play around.
   CGDTEntry ds;
   CGDTEntry ds_ring3;
   CGDTEntry tr[MP_PROCESSORS_NUM];
@@ -383,13 +383,13 @@ class CMemE820
 
 #define BIN_SIGNATURE_VAL	'TOSB'
 class CBinFile
-{//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.HC,16 ALIGN"$ by compiler.
+{//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.CC,16 ALIGN"$ by compiler.
   U16	jmp;
   U8	module_align_bits,
 	reserved;
   U32	bin_signature;
   I64	org,
-	patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.HC,IET_ABS_ADDR"$
+	patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.CC,IET_ABS_ADDR"$
 	file_size;
 };
 
@@ -429,7 +429,7 @@ class CPatchTableAbsAddr
 
 #help_index "Boot"
 class CKernel
-{//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.HC,MEM_BOOT_BASE"$
+{//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.CC,MEM_BOOT_BASE"$
   CBinFile h;
   U32	jmp,
 	boot_src,
@@ -653,7 +653,7 @@ public class CHashTable
 };
 
 #help_index "Hash/System"
-//Hash table types: $LK,"ST_HTT_TYPES",A="FF:::/Kernel/KDefine.HC,ST_HTT_TYPES"$
+//Hash table types: $LK,"ST_HTT_TYPES",A="FF:::/Kernel/KDefine.CC,ST_HTT_TYPES"$
 #define HTt_EXPORT_SYS_SYM	0
 #define HTt_IMPORT_SYS_SYM	1
 #define HTt_DEFINE_STR		2
@@ -1392,7 +1392,7 @@ public class CDoc //Linked Text File header
   I64	(*left_click_link)(CDoc *doc,CDocEntry *doc_e);
   I64	(*right_click_link)(CDoc *doc,CDocEntry *doc_e);
 
-  //See $LK,"::/Apps/Psalmody/JukeBox.HC"$
+  //See $LK,"::/Apps/Psalmody/JukeBox.CC"$
   U8	*user_put_data; //Passed to user_put_key() and user_put_s()
   Bool	(*user_put_key)(CDoc *doc,U8 *data,I64 ch,I64 sc);
   Bool	(*user_put_s)(CDoc *doc,U8 *data,U8 *st);
@@ -1749,7 +1749,7 @@ class CCodeMisc
 //Slash value
 #define SV_R_REG	8
 #define SV_I_REG	9
-#define SV_STI_LIKE	10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.HC,uasm_slash_val"$ only.
+#define SV_STI_LIKE	10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.CC,uasm_slash_val"$ only.
 #define SV_NONE		11
 class CInst
 {
@@ -1821,7 +1821,7 @@ I64 class CAbsCountsI64
 };
 
 class CAsmUndefHash
-{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.HC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM exp.
+{//Only place created is $LK,"Exp Parser",A="FF:::/Compiler/ParseExp.CC,sizeof(CAsmUndefHash)"$ when an undef is found in an ASM exp.
   CAsmUndefHash	*next;
   CHashExport	*hash;
 };
@@ -2297,9 +2297,9 @@ public class CATARep
 #define ATAR1_CTRL	2
 
 #help_index "File/FileNames"
-#define FILEMASK_JIT	"*.HC*;*.HH*"
-#define FILEMASK_AOT	"*.HC*;*.HH*;*.PRJ*"
-#define FILEMASK_SRC	"*.HC*;*.HH*;*.IN*;*.PRJ*"
+#define FILEMASK_JIT	"*.CC*;*.HH*"
+#define FILEMASK_AOT	"*.CC*;*.HH*;*.PRJ*"
+#define FILEMASK_SRC	"*.CC*;*.HH*;*.IN*;*.PRJ*"
 #define FILEMASK_DD	FILEMASK_SRC ";*.DD*"
 #define FILEMASK_TXT	FILEMASK_DD ";*.TXT*"
 #define FILEMASK_GR	"*.GR*"
@@ -2760,7 +2760,7 @@ public class CDirContext
 #define FF_CONTIGUOUS		16
 #define FF_USE_OLD_DATETIME	32
 
-public class CFile //See $LK,"::/Demo/Disk/DataBase.HC"$.
+public class CFile //See $LK,"::/Demo/Disk/DataBase.CC"$.
 {
   I64	flags;
   CDirEntry de;
@@ -2850,7 +2850,7 @@ public class CBlkPool
 {
   I64	locked_flags,alloced_u8s,used_u8s;
   CMemBlk *mem_free_list,
-	*mem_free_2meg_list, //This is for Sup1CodeScraps/Mem/Mem2Meg.HC.
+	*mem_free_2meg_list, //This is for Sup1CodeScraps/Mem/Mem2Meg.CC.
 	*free_pag_hash[MEM_FREE_PAG_HASH_SIZE],
 	*free_pag_hash2[64-MEM_PAG_BITS];
 };
@@ -3071,7 +3071,7 @@ public class CCtrl
   //win pix coordinates
   I64	left,right,top,bottom;
 
-  //scrn pix coordinates (derived)
+  //screen pix coordinates (derived)
   I64	scrn_left,scrn_right,scrn_top,scrn_bottom;
 
   U8	*state;
@@ -3170,7 +3170,7 @@ class CJobCtrl
 };
 
 #help_index "Messages"
-//See $LK,"::/Demo/MessageLoop.HC"$
+//See $LK,"::/Demo/MessageLoop.CC"$
 #define MESSAGE_NULL		0
 #define MESSAGE_CMD			1
 #define MESSAGE_KEY_DOWN		2  //($LK,"ASCII",A="MN:CH_CTRLA"$,$LK,"scan code",A="FI:::/Doc/CharOverview.DD"$) Press <CTRL-SHIFT-L>
@@ -3298,7 +3298,7 @@ public class CTask //The Fs segment reg points to current CTask.
 	scroll_x,scroll_y,scroll_z;
 
   //These must be in this order
-  //for $LK,"TASK_CONTEXT_SAVE",A="FF:::/Kernel/Sched.HC,TASK_CONTEXT_SAVE"$ and $LK,"_TASK_CONTEXT_RESTORE",A="FF:::/Kernel/Sched.HC,_TASK_CONTEXT_RESTORE"$
+  //for $LK,"TASK_CONTEXT_SAVE",A="FF:::/Kernel/Sched.CC,TASK_CONTEXT_SAVE"$ and $LK,"_TASK_CONTEXT_RESTORE",A="FF:::/Kernel/Sched.CC,_TASK_CONTEXT_RESTORE"$
   I64	rip,rflags,rsp,rsi,rax,rcx,rdx,rbx,rbp,rdi,
 	r8,r9,r10,r11,r12,r13,r14,r15;
   CCPU	*gs;
@@ -3555,7 +3555,7 @@ public class CTextGlobals
 #define GR_WIDTH	640
 #define GR_HEIGHT	480
 
-//z-vals less than zero are in front of scrn and not drawn.
+//z-vals less than zero are in front of screen and not drawn.
 //we want to shift all Z-vals into a drawable range.
 //GR_Z_ALL is set to half of the Z-range which is an I32.
 #define GR_Z_ALL	(I32_MAX/2)
@@ -3572,7 +3572,7 @@ public class CTextGlobals
 #define DCF_SYMMETRY		0x200
 
 //Must be used with DCF_SYMMETRY set also.
-//See $LK,"::/Demo/Games/BigGuns.HC"$
+//See $LK,"::/Demo/Games/BigGuns.CC"$
 #define DCF_JUST_MIRROR		0x400
 
 #define DCF_LOCATE_NEAREST	0x800
@@ -3618,7 +3618,7 @@ public class CDC
   //0x0000 =100% color.c0
   //0x8000 =50%  color.c0   50% color.c1
   //0x10000=100% color.c1
-  //See $LK,"::/Demo/Graphics/SunMoon.HC"$ and	$LK,"::/Demo/Graphics/Shading.HC"$.
+  //See $LK,"::/Demo/Graphics/SunMoon.CC"$ and	$LK,"::/Demo/Graphics/Shading.CC"$.
   U64 dither_probability_u16;
 
   CDC *brush;
@@ -3645,7 +3645,7 @@ public class CDC
   I64	collision_count;
 
   I64	nearest_dist,
-	min_x,max_x,min_y,max_y; //Set by $LK,"DCF_RECORD_EXTENTS",A="MN:DCF_RECORD_EXTENTS"$ (scrn coordinates)
+	min_x,max_x,min_y,max_y; //Set by $LK,"DCF_RECORD_EXTENTS",A="MN:DCF_RECORD_EXTENTS"$ (screen coordinates)
 
   U32	dc_signature,pad;
   CTask	*mem_task,*win_task;

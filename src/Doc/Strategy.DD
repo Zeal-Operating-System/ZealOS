@@ -32,7 +32,7 @@ A three bttn mouse is like a leg you cannot put weight on.  ZenithOS just does h
 
 * Least (greatest) common denominator hardware support.  Mostly, one driver for each device class.  I can't be in the business of different drivers.  Compatibility is the greatest challenge for PC operating systems.  Disk code does not use interrupts, avoiding compatibility risks.  $FG,2$PS/2$FG$ keyboard/mouse is used instead of $FG,2$USB$FG$, also more compatible.
 
-* $FG,2$640x480$FG$ 16 colors.  Updates whole scrn at $FG,2$30 fps$FG$, optimized for full scrn games where $FG,2$InvalidRectangle$FG$s are counter-productive.
+* $FG,2$640x480$FG$ 16 colors.  Updates whole screen at $FG,2$30 fps$FG$, optimized for full screen games where $FG,2$InvalidRectangle$FG$s are counter-productive.
 
 * One font, 8x8.  Text and graphic layers done in software with text normally on an 8x8 grid.  It can run in Text mode if graphic initialization fails.
 
@@ -50,7 +50,7 @@ A three bttn mouse is like a leg you cannot put weight on.  ZenithOS just does h
 
 * No distinction between $FG,2$thread$FG$, $FG,2$process$FG$ or $FG,2$task$FG$.
 
-* The $LK,"Scheduler",A="FI:::/Kernel/Sched.HC"$ is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.  It's wonderfully simple.
+* The $LK,"Scheduler",A="FI:::/Kernel/Sched.CC"$ is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.  It's wonderfully simple.
 
 * $LK,"MultiCore",A="FI:::/Doc/MultiCore.DD"$ is done $FG,2$master/slave$FG$, instead of $FG,2$SMP$FG$.  $FG,2$Core0$FG$ applications explicitly assigns jobs.  Locks are present allowing multicore file, heap, and hardware access, though.
 

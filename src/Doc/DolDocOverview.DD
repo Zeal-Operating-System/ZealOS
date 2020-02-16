@@ -4,18 +4,18 @@ DolDoc is a ZenithOS document type supported by $LK,"DolDoc Routines",A="HI:DolD
 
 Here is the grammar:
 
-<DolDocCmd> := $FG,2$$$$FG$<$LK,"TwoLetterCmd",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_CMDS"$>[<FlagList>][$FG,2$,$FG$<ArgList>]$FG,2$$$$FG$ | $FG,2$$$$FG$$LK,"ColorName",A="MN:ST_COLORS"$$FG,2$$$$FG$
+<DolDocCmd> := $FG,2$$$$FG$<$LK,"TwoLetterCmd",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_CMDS"$>[<FlagList>][$FG,2$,$FG$<ArgList>]$FG,2$$$$FG$ | $FG,2$$$$FG$$LK,"ColorName",A="MN:ST_COLORS"$$FG,2$$$$FG$
 
-<FlagList> := $FG,2$+$FG$|$FG,2$-$FG$ <$LK,"FlagCode",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$>[$FG$<FlagList>]
+<FlagList> := $FG,2$+$FG$|$FG,2$-$FG$ <$LK,"FlagCode",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS"$>[$FG$<FlagList>]
 
-<ArgList> := <$LK,"ArgCode",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$>$FG,2$=$FG$<ArgExpression>[$FG,2$,$FG$<ArgList>]
+<ArgList> := <$LK,"ArgCode",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS"$>$FG,2$=$FG$<ArgExpression>[$FG,2$,$FG$<ArgList>]
 
 
-The format of DolDoc cmds is a two character code, +/-flags, a comma and args separated by commas.  Some commands have mandatory args.  Optional args are indicated with <$LK,"ArgCode",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$>$FG,2$=$FG$.  A $LK,"ColorName",A="MN:ST_COLORS"$ bracked by dollars, will change the foreground color.
+The format of DolDoc cmds is a two character code, +/-flags, a comma and args separated by commas.  Some commands have mandatory args.  Optional args are indicated with <$LK,"ArgCode",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS"$>$FG,2$=$FG$.  A $LK,"ColorName",A="MN:ST_COLORS"$ bracked by dollars, will change the foreground color.
 
-See $LK,"::/Doc/Widget.DD"$, $LK,"::/Demo/DolDoc/DemoDoc.DD"$, and $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.HC"$.
+See $LK,"::/Doc/Widget.DD"$, $LK,"::/Demo/DolDoc/DemoDoc.DD"$, and $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
 
-<$LK,"TwoLetterCmd",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_CMDS"$>  See $LK,"Type Defines",A="MN:DOCT_TEXT"$ and $LK,"ParseDollarCmd",A="MN:ParseDollarCmd"$().
+<$LK,"TwoLetterCmd",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_CMDS"$>  See $LK,"Type Defines",A="MN:DOCT_TEXT"$ and $LK,"ParseDollarCmd",A="MN:ParseDollarCmd"$().
 $TR,"TX Text"$
 $ID,2$Normally, text is not bracketed with '$FG,2$$$$FG$', but if you wish to specify flag attr, such as centering text, you can bracket them with '$FG,2$$$$FG$' and enter flags such as "$FG,2$+CX$FG$".  You can't edit them normally if they are bracketed by '$FG,2$$$$FG$' unless you toggle to plain text mode with $FG,2$<CTRL-t>$FG$.
 $ID,-2$$TR,"CR Hard New Line"$
@@ -95,7 +95,7 @@ The expressions are relative to the current cursor location, unless you make the
   $FG,2$+BY$FG$ bottom
   $FG,2$+PRY$FG$ page relative
 
-See $LK,"::/Demo/DolDoc/CursorMove.HC"$.
+See $LK,"::/Demo/DolDoc/CursorMove.CC"$.
 
 $ID,-2$$TR,"AN Anchor"$
 $ID,2$The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the anchor.  I don't use these very often, but they're good sometimes. 
@@ -121,11 +121,11 @@ Examples: <CTRL-t> to see
 12) For in-memory document address links, see $LK,"SpriteEdText",A="MN:SpriteEdText"$().
 
 $ID,-2$$TR,"BT Bttn"$
-$ID,2$See $LK,"::/Demo/DolDoc/MenuBttn.HC"$.
+$ID,2$See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.
 $ID,-2$$TR,"DA Data"$
-$ID,2$Used for forms that prompt for data or just displaying a value.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.HC"$, $LK,"::/Demo/Disk/DataBase.HC"$, and $LK,"::/Zenith/DolDoc/DocWidgetWiz.HC"$.
+$ID,2$Used for forms that prompt for data or just displaying a value.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.CC"$, $LK,"::/Demo/Disk/DataBase.CC"$, and $LK,"::/Zenith/DolDoc/DocWidgetWiz.CC"$.
 
-If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$DA...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.HC,&Fs->task_title"$.   
+If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$DA...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.CC,&Fs->task_title"$.   
 
 The default raw data type for the $FG,2$$$DA...$$$FG$ command is $FG,2$RT=I64$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 
@@ -133,17 +133,17 @@ The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the
 
 The default field length is $FG,2$LEN=64$FG$ characters.  For U8 arrays[], $LK,"DocForm",A="MN:DocForm"$() will automatically reset the field length to the string length from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition.  The length measures starting after the ':' in the $FG,2$A=""$FG$ format string.
 
-The space after the first ':' in the format string marks the first valid cursor pos.  See $LK,"Data Tag Width",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$.
+The space after the first ':' in the format string marks the first valid cursor pos.  See $LK,"Data Tag Width",A="FA:::/Zenith/DolDoc/DocPlain.CC,DataTagWidth"$.
 $ID,-2$$TR,"CB Check Box"$
-$ID,2$Used for forms.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.HC"$$FG$ and $LK,"CEdFindText",A="MN:CEdFindText"$.
+$ID,2$Used for forms.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.CC"$$FG$ and $LK,"CEdFindText",A="MN:CEdFindText"$.
 
-If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$CB...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.HC,&Fs->task_title"$.   
+If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$CB...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.CC,&Fs->task_title"$.   
 
 The default raw data type for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"LS List Widget"$
-$ID,2$Used for forms that prompt for data.  You must specify a define list, $FG,2$D=""$FG$.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.HC"$.
+$ID,2$Used for forms that prompt for data.  You must specify a define list, $FG,2$D=""$FG$.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.CC"$.
 
-If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$LS...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the data addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.HC,&Fs->task_title"$.   
+If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$LS...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the data addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.CC,&Fs->task_title"$.   
 
 The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"MA Macro"$
@@ -151,7 +151,7 @@ $ID,2$A left macro arg, $FG,2$LM=""$FG$, will send text when the left mouse is c
 
 A left in string, $FG,2$+LIS$FG$, flag will cause text to be sent to $LK,"InStr",A="MN:InStr"$() instead of $LK,"In",A="MN:In"$().  An InStr runs code.  Literal text is in quotes and messages are sent with $LK,"Message",A="MN:Message"$().  See $MA-X+PU,LM="Dir(\"::/Demo/InFile\");View;"$.
 
-Macro's are usually in your $LK,"~/PersonalMenu.DD"$ and have the '$FG,2$+X$FG$' flag set by $LK,"default",A="MN:DocInit"$.  Adding '$FG,2$-X$FG$' prevents the usual $FG,2$<ESC>$FG$ from being sent (which exits the PersonalMenu scrn).  Note: When you click a macro on the cmd line, it will go to the bottom and execute unless you cancel the $FG,2$<ESC>$FG$ with a '$FG,2$-X$FG$'.
+Macro's are usually in your $LK,"~/PersonalMenu.DD"$ and have the '$FG,2$+X$FG$' flag set by $LK,"default",A="MN:DocInit"$.  Adding '$FG,2$-X$FG$' prevents the usual $FG,2$<ESC>$FG$ from being sent (which exits the PersonalMenu screen).  Note: When you click a macro on the cmd line, it will go to the bottom and execute unless you cancel the $FG,2$<ESC>$FG$ with a '$FG,2$-X$FG$'.
 $ID,-2$$TR,"MU Menu Value"$
 $ID,2$A left expression arg, $FG,2$LE=<Exp>$FG$, will return a number when clicked with the left mouse.
 
@@ -163,7 +163,7 @@ $ID,2$A tree widget is a branch in a collapsable tree.  The domain of the branch
 
 You might want to use $LK,"DocPrintAtomic",A="MN:DocPrintAtomic"$().
 
-See $LK,"::/Demo/DolDoc/TreeDemo.HC"$.
+See $LK,"::/Demo/DolDoc/TreeDemo.CC"$.
 $ID,-2$$TR,"SP Sprite"$
 $ID,2$Insert a sprite into text with $FG,2$<CTRL-r>$FG$.  The cursor location at the time you press $FG,2$<CTRL-r>$FG$ is critical because the sprite will be offset from that location.  This is important when adding images to programs.  Numbers for sprites are automatically chosen because copying to and from the clip requires this.  You can insert another sprite with the same image by hitting $FG,2$<CTRL-t>$FG$ and manually adding a $FG,2$$$SP...$$$FG$ entry with the same $FG,2$BI=$FG$ num.
 
@@ -173,7 +173,7 @@ $ID,2$Tells the compiler to insert a pointer to some binary data stored after th
 
 You can, optionally, include tag text to be displayed for the $FG,2$$$IB...$$$FG$ cmd.  If you set the tag to "<1>", then the editor will automatically update the tag if the $FG,2$BI=$FG$ number changes.
 
-The reason for the $FG,2$$$IB...$$$FG$ cmd is to pass a arg to $LK,"Sprite",A="MN:Sprite"$() and $LK,"Sprite3",A="MN:Sprite3"$().  See $LK,"::/Demo/Graphics/SpritePlot.HC"$.
+The reason for the $FG,2$$$IB...$$$FG$ cmd is to pass a arg to $LK,"Sprite",A="MN:Sprite"$() and $LK,"Sprite3",A="MN:Sprite3"$().  See $LK,"::/Demo/Graphics/SpritePlot.CC"$.
 
 $ID,-2$$TR,"IS Insert Binary Size"$
 $ID,2$Inserts a number into the compiled stream describing the size of binary data associated with a bin number.  I never use this.
@@ -184,11 +184,11 @@ $ID,2$Include a $FG,2$1$FG$ or $FG,2$0$FG$.
 
 $FG,2$$$HL,1$$$FG$ will turn syntax highlighting on.
 $ID,-2$$TR,"HC html"$
-$ID,2$See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.HC"$ to generate a html version of a document.  You can cause html code to be injected with $FG,2$HC$FG$.  Use the $FG,2$+HTML$FG$ flag to inject a html link.
+$ID,2$See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$ to generate a html version of a document.  You can cause html code to be injected with $FG,2$HC$FG$.  Use the $FG,2$+HTML$FG$ flag to inject a html link.
 $ID,-2$$TR,"ER Error"$
 $ID,2$When errors are detected in DolDoc cmds, an $FG,2$ER$FG$ entry is generated.
 $ID,-2$
-<$LK,"FlagCode",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$>  See $LK,"Flag Defines",A="MN:DOCEf_LEFT_CB"$ and $LK,"Simple Flags",A="FI:::/Doc/Widget.DD"$.
+<$LK,"FlagCode",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS"$>  See $LK,"Flag Defines",A="MN:DOCEf_LEFT_CB"$ and $LK,"Simple Flags",A="FI:::/Doc/Widget.DD"$.
 $TR,"+H Hold"$
 $ID,2$Causes not to delete this cmd when cleared with $FG,2$CL$FG$ or when the doc->max_entries is exceeded.  Word wrap is a good to hold.  There is no way to delete these entries, at this point.
 $ID,-2$$TR,"+L Link"$
@@ -204,49 +204,49 @@ $ID,2$A PopUp flag on a $FG,2$MA$FG$ will cause the cmds to run in a new task, a
 $ID,-2$$TR,"+C Collapsed"$
 $ID,2$A collapsed flag on a $FG,2$TR$FG$ entry will cause it to start collapsed.  A $FG,2$-C$FG$ flag will make it start open.
 $ID,-2$$TR,"+X <ESC> (Exit)"$
-$ID,2$The exit flag will cause a $FG,2$$$MA...$$$FG$ macro to send an $FG,2$<ESC>$FG$ before running to exit the PersonalMenu scrn and return to the cmd prompt.  Actually, the default $FG,2$$$MA...$$$FG$ has an exit flag set so you add a $FG,2$-X$FG$ to turn-off $FG,2$ESC$FG$, for a $FG,2$+PU$FG$ pop-up macro.  If an entry is already at the cmd prompt, the $FG,2$+X$FG$ will movement to the bottom of the window.
+$ID,2$The exit flag will cause a $FG,2$$$MA...$$$FG$ macro to send an $FG,2$<ESC>$FG$ before running to exit the PersonalMenu screen and return to the cmd prompt.  Actually, the default $FG,2$$$MA...$$$FG$ has an exit flag set so you add a $FG,2$-X$FG$ to turn-off $FG,2$ESC$FG$, for a $FG,2$+PU$FG$ pop-up macro.  If an entry is already at the cmd prompt, the $FG,2$+X$FG$ will movement to the bottom of the window.
 $ID,-2$$TR,"+Q <SHIFT-ESC> (Abort Quit)"$
 $ID,2$A quit flag is similar to a $FG,2$+X$FG$ except a $FG,2$<SHIFT-ESC>$FG$ instead of an $FG,2$<ESC>$FG$ to exit.
 $ID,-2$$TR,"+Z Zero"$
 $ID,2$A zero flag on a $FG,2$HX$FG$ entry will cause the offset from zero.  A $FG,2$-X$FG$ will show the actual memory addr. By default, $FG,2$HX$FG$ has the zero flag set.
 $ID,-2$$TR,"+RD Refresh Data"$
-$ID,2$The Refresh Data flag on a $FG,2$DA$FG$ or a $FG,2$CB$FG$ makes the value on the scrn updated continuously.
+$ID,2$The Refresh Data flag on a $FG,2$DA$FG$ or a $FG,2$CB$FG$ makes the value on the screen updated continuously.
 $ID,-2$$TR,"+UD Update Data"$
 $ID,2$The Update Data flag on a $FG,2$DA$FG$ or a $FG,2$CB$FG$ makes the value in the $LK,"CDocEntry",A="MN:CDocEntry"$ updated when keys are typed on it.
 $ID,-2$$TR,"+TC Tag CallBack"$
-$ID,2$See $LK,"::/Demo/DolDoc/CallBack.HC"$.
+$ID,2$See $LK,"::/Demo/DolDoc/CallBack.CC"$.
 $ID,-2$$TR,"+LC Left CallBack"$
-$ID,2$See $LK,"::/Demo/DolDoc/ClickCallBack.HC"$.
+$ID,2$See $LK,"::/Demo/DolDoc/ClickCallBack.CC"$.
 $ID,-2$$TR,"+RC Right CallBack"$
-$ID,2$See $LK,"::/Demo/DolDoc/ClickCallBack.HC"$.
+$ID,2$See $LK,"::/Demo/DolDoc/ClickCallBack.CC"$.
 $ID,-2$
-<$LK,"ArgCode",A="FF:::/Zenith/DolDoc/DocInit.HC,ST_DOC_FLAGS"$>  See $LK,"Arg Defines",A="MN:DOCEf_TAG"$.
+<$LK,"ArgCode",A="FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS"$>  See $LK,"Arg Defines",A="MN:DOCEf_TAG"$.
 $TR,"T=\"\" Tag Str"$
-$ID,2$Some cmds have a tag by default.  See $LK,"TX+T",A="FF:::/Zenith/DolDoc/DocInit.HC,TX+T"$.  You can code $FG,2$T="tag_text"$FG$ as just $FG,2$"tag_text"$FG$ with no $FG,2$T=$FG$. 
+$ID,2$Some cmds have a tag by default.  See $LK,"TX+T",A="FF:::/Zenith/DolDoc/DocInit.CC,TX+T"$.  You can code $FG,2$T="tag_text"$FG$ as just $FG,2$"tag_text"$FG$ with no $FG,2$T=$FG$. 
 $ID,-2$$TR,"LEN=\"\" Field Length"$
 $ID,2$The default field length for $FG,2$$$DA...$$$FG$ commands is $FG,2$LEN=64$FG$ characters.  For U8 arrays[], $LK,"DocForm",A="MN:DocForm"$() will automatically reset the field length to the string length from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition.  The length measures starting after the ':' in the $FG,2$A=""$FG$ format string.
 
-The space after the first ':' in the format string marks the first valid cursor pos.  See $LK,"Data Tag Width",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$.
+The space after the first ':' in the format string marks the first valid cursor pos.  See $LK,"Data Tag Width",A="FA:::/Zenith/DolDoc/DocPlain.CC,DataTagWidth"$.
 $ID,-2$$TR,"A=\"\" Auxilliary Str"$
 $ID,2$Some cmds need auxilliary strings.  $FG,2$A="str"$FG$ means an $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str is present.  aux_str is used for song note text, link text, anchor text, and $FG,2$$$DA...$$$FG$ format string text.
 $ID,-2$$TR,"D=\"\" Define Str"$
 $ID,2$A $FG,2$D=""$FG$ means either a $LK,"define",A="HI:Define"$ str indirection is present on a text widget, or a define list is present on a list widget.
 
-For indirection, the tag will be regenerated by substituting the value of a system $FG,2$#define$FG$ or $LK,"DefineLoad",A="MN:DefineLoad"$() string.  See $LK,"::/Demo/DolDoc/DefineStr.HC"$, $LK,"::/Zenith/ZDefine.HC"$ and $LK,"::/Doc/MemoryOverview.DD"$.
+For indirection, the tag will be regenerated by substituting the value of a system $FG,2$#define$FG$ or $LK,"DefineLoad",A="MN:DefineLoad"$() string.  See $LK,"::/Demo/DolDoc/DefineStr.CC"$, $LK,"::/Zenith/ZDefine.CC"$ and $LK,"::/Doc/MemoryOverview.DD"$.
 
-For $FG,2$LS$FG$ widgets, see $LK,"::/Demo/DolDoc/Form.HC"$.
+For $FG,2$LS$FG$ widgets, see $LK,"::/Demo/DolDoc/Form.CC"$.
 $ID,-2$$TR,"HTML=\"\""$
-$ID,2$See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.HC"$ to generate a html version of a document.  You can cause html link on an item with $FG,2$HTML=""$FG$.
+$ID,2$See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$ to generate a html version of a document.  You can cause html link on an item with $FG,2$HTML=""$FG$.
 $ID,-2$$TR,"LE=<Exp> Left Expression"$
 $ID,2$Left expression.  $FG,2$CM$FG$ has this by default for X offset and you can leave-off the $FG,2$LE=$FG$, just putting the $FG,2$<Exp>$FG$.
 
-See $LK,"::/Demo/DolDoc/MenuBttn.HC"$.
+See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.
 $ID,-2$$TR,"LM=\"\" Left Macro Str"$
 $ID,2$Left macro string.
 $ID,-2$$TR,"RE=<Exp> Right Expression"$
 $ID,2$Right expression.  $FG,2$CM$FG$ has this by default for Y offset and you can leave-off the $FG,2$RE=$FG$, just putting the $FG,2$<Exp>$FG$.
 
-See $LK,"::/Demo/DolDoc/MenuBttn.HC"$.
+See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.
 $ID,-2$$TR,"RM=\"\" Right Macro Str"$
 $ID,2$Right macro string.
 $ID,-2$$TR,"BI=<Exp> Bin Number"$
@@ -255,7 +255,7 @@ $ID,-2$$TR,"BP=\"\" Bin Ptr"$
 $ID,2$The BinPtrLink flags lets you specify a filename and bin num to import a bin$FG$.
 
 $FG,2$$$SP,"<tag>",BI=1,BP="filename,1"$$$FG$ will import bin num "1" from filename.
-$FG,2$$$SP,"<1>",BI=1,BP="::/Demo/Graphics/Mountain.HC,Mountain"$$$FG$ will import bin with tag name "Mountain" from "::/Demo/Graphics/Mountain.HC".
+$FG,2$$$SP,"<1>",BI=1,BP="::/Demo/Graphics/Mountain.CC,Mountain"$$$FG$ will import bin with tag name "Mountain" from "::/Demo/Graphics/Mountain.CC".
 $ID,-2$$TR,"RT=<raw_data_type>"$
 $ID,2$The default data-type for the $FG,2$$$DA...$$$FG$ and $FG,2$$$LS...$$$FG$ commands is $FG,2$RT=I64$FG$.  If you do not specify a raw type and are using $LK,"DocForm",A="MN:DocForm"$(), it will use the $FG,2$class$FG$ member's raw type, automatically.  The default for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.
 
@@ -269,7 +269,7 @@ $ID,2$Scroll text in a marquee of so many columns.
 $ID,-2$$TR,"U=<Exp> User Data"$
 $ID,2$User Data.
 
-See $LK,"::/Demo/DolDoc/MenuBttn.HC"$.
+See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.
 $ID,-2$
 $FG,5$EXAMPLES:
 

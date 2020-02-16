@@ -38,7 +38,7 @@
 
 * Auto-completion, jump-to-source tool called $FG,2$AutoComplete$FG$ with Dictionary.
 
-* Window Manager.  Pan scrn with $FG,2$<CTRL-LeftDrag>$FG$.  Zoom scrn on mouse cursor with $FG,2$<CTRL-ALT-z>$FG$/$FG,2$<CTRL-ALT-SHIFT-Z>$FG$.
+* Window Manager.  Pan screen with $FG,2$<CTRL-LeftDrag>$FG$.  Zoom screen on mouse cursor with $FG,2$<CTRL-ALT-z>$FG$/$FG,2$<CTRL-ALT-SHIFT-Z>$FG$.
 
 * File Manager, $FG,2$<CTRL-d>$FG$.
 

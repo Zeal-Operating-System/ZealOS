@@ -14,7 +14,7 @@ If you don't have args, you don't need parenthesis.
 
 Directories are referenced with $FG,2$/$FG$ not $FG,2$\$FG$.  There is a current directory, but not a path.  To run a program, you typically $FG,2$#include $FG$it.  There are several shortcuts for $FG,2$#include$FG$ing files.  Right-click or hit $FG,2$<ENTER>$FG$ on a directory listing or press $FG,2$<F5>$FG$ while editing.
 
->$FG,2$Ed("NewFile.HC");$FG$	Invokes the editor. See $LK,"Doc Link Type",A="MN:LK_FILE"$.
+>$FG,2$Ed("NewFile.CC");$FG$	Invokes the editor. See $LK,"Doc Link Type",A="MN:LK_FILE"$.
 
 Most filenames end in $FG,2$$FG$ because they are stored compressed.
 
@@ -35,7 +35,7 @@ If a file is not found, $FG,2$.Z$FG$ is added or removed and a search is done, a
 
 You can place macros in your $LK,"PersonalMenu",A="FI:~/PersonalMenu.DD"$ for $LK,"Cd",A="MN:Cd"$() commands.  $FG,2$<CTRL-m>$FG$ to access your menu.
 
->$FG,2$Find("needle","/Demo/*.HC;*.DD;");$FG$ See $LK,"File Utils",A="FI:::/Doc/FileUtils.DD"$.
+>$FG,2$Find("needle","/Demo/*.CC;*.DD;");$FG$ See $LK,"File Utils",A="FI:::/Doc/FileUtils.DD"$.
 
 $LK,"Cmd Line Routines",A="HI:Cmd Line (Typically)"$
 

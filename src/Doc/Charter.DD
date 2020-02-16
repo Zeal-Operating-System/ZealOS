@@ -57,7 +57,7 @@ $ID,-5$
 
 * $FG,2$100% open source$FG$ with all source included.
 
-* Documents are not for printing.  They're dynamic, intended for the scrn.
+* Documents are not for printing.  They're dynamic, intended for the screen.
 
 * Just one 8x8 fixed-width font.  $FG,4$No Unicode, just Extended ASCII$FG$.  Other countries can make their own versions.  The versions should be just for one language and platform.
 

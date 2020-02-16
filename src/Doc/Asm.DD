@@ -44,4 +44,4 @@ $FG,2$ORG$FG$ $FG,4$num$FG$
 
 $FG,2$BINFILE$FG,4$ "FileName.BIN"$FG$;
 
-See $LK,"Assembly Language",A="FF:::/Doc/GuideLines.DD,Assembly Language"$, $LK,"::/Demo/Asm/AsmAndC1.HC"$, $LK,"::/Demo/Asm/AsmAndC2.HC"$ and $LK,"::/Demo/Asm/AsmAndC3.HC"$.
+See $LK,"Assembly Language",A="FF:::/Doc/GuideLines.DD,Assembly Language"$, $LK,"::/Demo/Asm/AsmAndC1.CC"$, $LK,"::/Demo/Asm/AsmAndC2.CC"$ and $LK,"::/Demo/Asm/AsmAndC3.CC"$.

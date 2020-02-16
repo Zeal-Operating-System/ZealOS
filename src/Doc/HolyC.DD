@@ -1,4 +1,4 @@
-$WW,1$$FG,5$$TX+CX,"HolyC"$$FG$
+$WW,1$$FG,5$$TX+CX,"CosmiC"$$FG$
 
 * See $LK,"::/Doc/CompilerOverview.DD"$.
 
@@ -43,12 +43,12 @@ $ID,2$$FG,2$void DemoC(char drv,char *format,char *name,int age)
   putchar('*');
 }
 
-U0 DemoHolyC(U8 drv,U8 *format,U8 *name,I64 age)
+U0 DemoCosmiC(U8 drive,U8 *format,U8 *name,I64 age)
 {
   "Hello World!\n";
   "%s age %d\n",name,age;
   "" format,name,age;
-  '' drv;
+  '' drive;
   '*';
 }
 $FG$$ID,-2$
@@ -78,7 +78,7 @@ $ID,2$$WW,0$
 $FG,2$I64 AddNums(...)
 {
   I64 i,res=0;
-  for (i=0;i<argc;i++)
+  for (i=0;i<argc;i++)
     res+=argv[i];
   return res;
 }
@@ -97,7 +97,7 @@ public U0 GrPrint(CDC *dc,I64 x,I64 y,U8 *format,...)
   ...
 
   GrPrint(gr.dc,(GR_WIDTH-10*FONT_WIDTH)>>1,(GR_HEIGHT-FONT_HEIGHT)>>1,
-  	"Score:%4d",score);  //Print score in the center of the scrn.
+  	"Score:%4d",score);  //Print score in the center of the screen.
   ...
 
 $WW,1$$FG$$ID,-2$
@@ -112,7 +112,7 @@ $FG$$ID,-2$
 
 * Allows ranges like "$FG,2$case 4...7:$FG$" in $FG,2$switch$FG$ statements.
 
-* A no case number causes next higher int case in $FG,2$switch$FG$ statements.  See $LK,"::/Demo/NullCase.HC"$.
+* A no case number causes next higher int case in $FG,2$switch$FG$ statements.  See $LK,"::/Demo/NullCase.CC"$.
 
 $ID,2$$FG,2$I64 i;
 for (i=0;i<20;i++) 
@@ -125,7 +125,7 @@ for (i=0;i<20;i++)
     case: "Eleven\n";	break; //One plus prev case.
   }$FG$$ID,-2$
 
-* Switch statements can be nestled with a single switch expression!  This is known as a "sub_switch" statement.  $FG,2$start$FG$/$FG,2$end$FG$ are used to group cases.  Don't goto out of, throw an exception out of, or return out of the $FG,2$start$FG$ front porch area.  See $LK,"::/Demo/SubSwitch.HC"$.
+* Switch statements can be nestled with a single switch expression!  This is known as a "sub_switch" statement.  $FG,2$start$FG$/$FG,2$end$FG$ are used to group cases.  Don't goto out of, throw an exception out of, or return out of the $FG,2$start$FG$ front porch area.  See $LK,"::/Demo/SubSwitch.CC"$.
 
 $ID,2$$FG,2$I64 i;
 for (i=0;i<10;i++)
@@ -191,7 +191,7 @@ $FG$$ID,-2$
 
 * There is no question-colon operator.
 
-* ZenithOS $LK,"operator precedence",A="FF:::/Compiler/CInit.HC,cmp.binary_ops"$
+* ZenithOS $LK,"operator precedence",A="FF:::/Compiler/CInit.CC,cmp.binary_ops"$
   $FG,2$`$FG$,$FG,2$>>$FG$,$FG,2$<<$FG$
   $FG,2$*$FG$,$FG,2$/$FG$,$FG,2$%$FG$
   $FG,2$&$FG$
@@ -209,7 +209,7 @@ $FG$$ID,-2$
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find dup local var type statements.
 
-* With the $FG,2$#exe{}$FG$ feature in your src code, you can place programs that insert text into the stream of code being compiled.  See $LK,"#exe {}",A="FF:::/Kernel/KMain.HC,#exe {"$ for an example where the date/time and compile-time prompting for configuration data is placed into a program.  $LK,"StreamPrint",A="MN:StreamPrint"$() places text into a src program stream following the conclusion of the $FG,2$#exe{}$FG$ blk.
+* With the $FG,2$#exe{}$FG$ feature in your src code, you can place programs that insert text into the stream of code being compiled.  See $LK,"#exe {}",A="FF:::/Kernel/KMain.CC,#exe {"$ for an example where the date/time and compile-time prompting for configuration data is placed into a program.  $LK,"StreamPrint",A="MN:StreamPrint"$() places text into a src program stream following the conclusion of the $FG,2$#exe{}$FG$ blk.
 
 * No $FG,2$#define$FG$ functions exist (I'm not a fan)
 
@@ -221,25 +221,25 @@ $FG$$ID,-2$
 
 * "$FG,2$$$$FG$" is an escape character.  Two dollar signs signify an ordinary $$.  See $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$.  In $FG,2$asm$FG$ or $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ code, it also refers to the inst's address or the offset in a $FG,2$class$FG$ definition. 
 
-* $FG,2$union$FG$ is more like a class, so you don't reference it with a $FG,2$union$FG$ label after you define it.  Some common unions are declared in $LK,"KernelA.HH",A="MN:U16"$ for 1,2,4 and 8 byte objects.  If you place a type in front of a union declaration, that is the type when used by itself.  See $LK,"::/Demo/SubIntAccess.HC"$. 
+* $FG,2$union$FG$ is more like a class, so you don't reference it with a $FG,2$union$FG$ label after you define it.  Some common unions are declared in $LK,"KernelA.HH",A="MN:U16"$ for 1,2,4 and 8 byte objects.  If you place a type in front of a union declaration, that is the type when used by itself.  See $LK,"::/Demo/SubIntAccess.CC"$. 
 
-* $FG,2$class$FG$ member vars can have meta data. $FG,2$format$FG$ and $FG,2$data$FG$ are two meta data types now used.  All compiler structures are saved and you can access the compiler's info about classes and vars.  See $LK,"::/Demo/ClassMeta.HC"$ and  $LK,"DocForm",A="MN:DocForm"$().
+* $FG,2$class$FG$ member vars can have meta data. $FG,2$format$FG$ and $FG,2$data$FG$ are two meta data types now used.  All compiler structures are saved and you can access the compiler's info about classes and vars.  See $LK,"::/Demo/ClassMeta.CC"$ and  $LK,"DocForm",A="MN:DocForm"$().
 
-* There is a keyword $FG,2$lastclass$FG$ you use as a default arg.  It is set to the class name of the prev arg.  See $LK,"::/Demo/LastClass.HC"$, $LK,"ClassRep",A="MN:ClassRep"$(), $LK,"DocForm",A="MN:DocForm"$()  and $LK,"::/Demo/Disk/BlkDevRep.HC"$.
+* There is a keyword $FG,2$lastclass$FG$ you use as a default arg.  It is set to the class name of the prev arg.  See $LK,"::/Demo/LastClass.CC"$, $LK,"ClassRep",A="MN:ClassRep"$(), $LK,"DocForm",A="MN:DocForm"$()  and $LK,"::/Demo/Disk/BlkDevRep.CC"$.
 
-* See $LK,"::/Demo/Exceptions.HC"$.  $FG,2$try{} catch{}$FG$ and $FG,2$throw$FG$ are different from C++. $FG,2$throw$FG$ is a function with an 8-byte or less char arg.  The char string passed in $FG,2$throw()$FG$ can be accessed from within a $FG,2$catch{}$FG$ using the $FG,2$Fs->except_ch$FG$.  Within a $FG,2$catch {}$FG$ blk, set the var $FG,2$Fs->catch_except$FG$ to $FG,2$TRUE$FG$ if you want to terminate the search for a handler.  Use $LK,"PutExcept",A="MN:PutExcept"$() as a handler, if you like.
+* See $LK,"::/Demo/Exceptions.CC"$.  $FG,2$try{} catch{}$FG$ and $FG,2$throw$FG$ are different from C++. $FG,2$throw$FG$ is a function with an 8-byte or less char arg.  The char string passed in $FG,2$throw()$FG$ can be accessed from within a $FG,2$catch{}$FG$ using the $FG,2$Fs->except_ch$FG$.  Within a $FG,2$catch {}$FG$ blk, set the var $FG,2$Fs->catch_except$FG$ to $FG,2$TRUE$FG$ if you want to terminate the search for a handler.  Use $LK,"PutExcept",A="MN:PutExcept"$() as a handler, if you like.
 
 * A function is available similar to $FG,2$sizeof$FG$ which provides the offset of a member of a class.  It's called $FG,2$offset$FG$.  You place the class name and member inside as in $FG,2$offset(classname.membername)$FG$.  It has nothing to do with 16-bit code.  Both $FG,2$sizeof$FG$ and $FG,2$offset$FG$ only accept one level of member vars.  That is, you can't do $FG,2$sizeof(classname.membername.submembername)$FG$.$FG$
 
 * There is no $FG,2$continue$FG$ stmt.  Use $FG,2$goto$FG$.
 
-* $FG,2$lock{}$FG$ can be used to apply asm $FG,2$LOCK$FG$ prefixes to code for safe multicore read-modify-write accesses.  The code bracked with have $FG,2$LOCK$FG$ asm prefix's applied to relevant insts within.  It's a little shoddy.  See $LK,"::/Demo/MultiCore/Lock.HC"$.
+* $FG,2$lock{}$FG$ can be used to apply asm $FG,2$LOCK$FG$ prefixes to code for safe multicore read-modify-write accesses.  The code bracked with have $FG,2$LOCK$FG$ asm prefix's applied to relevant insts within.  It's a little shoddy.  See $LK,"::/Demo/MultiCore/Lock.CC"$.
 
 * There is a function called $LK,"MSize",A="MN:MSize"$() which gives the size of an object alloced off the heap.  For larger size allocations, the system rounds-up to a power of two, so $FG,2$MSize()$FG$ lets you know the real size and you can take full advantage of it.
 
 * You CAN $LK,"Free",A="MN:Free"$() a $FG,2$NULL$FG$ ptr.  Useful variants of $LK,"MAlloc",A="MN:MAlloc"$() can be found $LK,"Here",A="MN:CAlloc"$.  Each task has a heap and you can $FG,2$MAlloc$FG$ and $FG,2$Free$FG$ off-of other task's heaps, or make an independent heap with $LK,"HeapCtrlInit",A="MN:HeapCtrlInit"$().  See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 
-* The stack does not grow because virtual mem is not used.  I recommend allocating large local vars from the heap.  You can change $LK,"MEM_DEFAULT_STACK",A="MN:MEM_DEFAULT_STACK"$ and recompile $FG,2$Kernel$FG$ or request more when doing a $LK,"Spawn",A="MN:Spawn"$().  You can use $LK,"CallStackGrow",A="MN:CallStackGrow"$(), but it's odd.  See $LK,"::/Demo/StackGrow.HC"$. 
+* The stack does not grow because virtual mem is not used.  I recommend allocating large local vars from the heap.  You can change $LK,"MEM_DEFAULT_STACK",A="MN:MEM_DEFAULT_STACK"$ and recompile $FG,2$Kernel$FG$ or request more when doing a $LK,"Spawn",A="MN:Spawn"$().  You can use $LK,"CallStackGrow",A="MN:CallStackGrow"$(), but it's odd.  See $LK,"::/Demo/StackGrow.CC"$. 
 
 * Only one base class is allowed.
 

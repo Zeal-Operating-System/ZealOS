@@ -152,8 +152,8 @@ public class CSpritePtMeshU8s : CSpriteBase
 
 #help_index "Graphics/Sprite;Sprites;Sprites/Binary"
 
-//See $LK,"Sprites",A="HI:Sprites"$.  See $LK,"::/Zenith/Gr/GrSpritePlot.HC",A="FL:::/Zenith/Gr/GrSpritePlot.HC,1"$ and
-//$LK,"::/Demo/Graphics/SpriteRaw.HC"$ for how CSprite are stored.
+//See $LK,"Sprites",A="HI:Sprites"$.  See $LK,"::/Zenith/Gr/GrSpritePlot.CC",A="FL:::/Zenith/Gr/GrSpritePlot.CC,1"$ and
+//$LK,"::/Demo/Graphics/SpriteRaw.CC"$ for how CSprite are stored.
 public class CSprite
 {
   CSprite *next,*last;

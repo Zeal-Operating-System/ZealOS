@@ -7,51 +7,51 @@ $ID,2$* Professionals doing hobby projects
 * Teenagers doing projects
 * Non-professional, older-persons projects
 $ID,-2$
-Simplicity is a goal to $LK,"keep the line count down",A="FI:::/Doc/Strategy.DD"$, so it's easy to tinker with.  As it turns-out, simplicity makes it faster in some ways, too.  It never switches privilege levels, never changes address maps, tends to load whole contiguous files and other, similar things which boost speed.  It's only $TX,"82,150",D="DD_TEMPLEOS_LOC"$ lines of code including the kernel, the 64-bit compiler, the graphics library and all the tools.  More importantly, it's designed to keep the user's line count down -- you can do a $LK,"Hello World",A="FI:::/Doc/HelloWorld.DD"$ application in one line of code and can put graphics on the scrn with a three line program!
+Simplicity is a goal to $LK,"keep the line count down",A="FI:::/Doc/Strategy.DD"$, so it's easy to tinker with.  As it turns-out, simplicity makes it faster in some ways, too.  It never switches privilege levels, never changes address maps, tends to load whole contiguous files and other, similar things which boost speed.  It's only $TX,"82,150",D="DD_TEMPLEOS_LOC"$ lines of code including the kernel, the 64-bit compiler, the graphics library and all the tools.  More importantly, it's designed to keep the user's line count down -- you can do a $LK,"Hello World",A="FI:::/Doc/HelloWorld.DD"$ application in one line of code and can put graphics on the screen with a three line program!
 
 It's a kayak, not a Titanic -- it will crash if you do something wrong.  You quickly reboot, however.  DOS and the 8-bit home computers of the 80's worked fine without memory protection and most computers in the world -- the embedded ones -- operate without protection.  The resulting simplicity of no protections is why ZenithOS has value.  In facts, that's the point of ZenithOS.  See the $LK,"ZenithOS Charter",A="FI:::/Doc/Charter.DD"$.
 
 Conventional thinking is "failure is not an option" for general purpose operating systems.  Since this OS is used in addition to Windows or Linux, however, failure is an option -- just use Windows or Linux if you can't do something.  I cherry-pick what it will and won't do, to make it maximally beautiful.  The following applications more or less form a basis that spans the range of use that ZenithOS is intended for:
 
-$LK,"/Demo/Games/BattleLines.HC",A="FI:::/Demo/Games/BattleLines.HC"$
-$LK,"/Demo/Games/BigGuns.HC",A="FI:::/Demo/Games/BigGuns.HC"$
-$LK,"/Demo/Games/BlackDiamond.HC",A="FI:::/Demo/Games/BlackDiamond.HC"$
-$LK,"/Demo/Games/BomberGolf.HC",A="FI:::/Demo/Games/BomberGolf.HC"$
-$LK,"/Demo/Games/CastleFrankenstein.HC",A="FI:::/Demo/Games/CastleFrankenstein.HC"$
-$LK,"/Demo/Games/CharDemo.HC",A="FI:::/Demo/Games/CharDemo.HC"$
-$LK,"/Demo/Games/CircleTrace.HC",A="FI:::/Demo/Games/CircleTrace.HC"$
-$LK,"/Demo/Games/Collision.HC",A="FI:::/Demo/Games/Collision.HC"$
-$LK,"/Demo/Games/Digits.HC",A="FI:::/Demo/Games/Digits.HC"$
-$LK,"/Demo/Games/DunGen.HC",A="FI:::/Demo/Games/DunGen.HC"$
-$LK,"/Demo/Games/Talons.HC",A="FI:::/Demo/Games/Talons.HC"$
-$LK,"/Demo/Games/ElephantWalk.HC",A="FI:::/Demo/Games/ElephantWalk.HC"$
-$LK,"/Demo/Games/FlapBat.HC",A="FI:::/Demo/Games/FlapBat.HC"$
-$LK,"/Demo/Games/FlatTops.HC",A="FI:::/Demo/Games/FlatTops.HC"$
-$LK,"/Demo/Games/Halogen.HC",A="FI:::/Demo/Games/Halogen.HC"$
-$LK,"/Demo/Games/MassSpring.HC",A="FI:::/Demo/Games/MassSpring.HC"$
-$LK,"/Demo/Games/Maze.HC",A="FI:::/Demo/Games/Maze.HC"$
-$LK,"/Demo/Games/RainDrops.HC",A="FI:::/Demo/Games/RainDrops.HC"$
-$LK,"/Demo/Games/RawHide.HC",A="FI:::/Demo/Games/RawHide.HC"$
-$LK,"/Demo/Games/Rocket.HC",A="FI:::/Demo/Games/Rocket.HC"$
-$LK,"/Demo/Games/RocketScience.HC",A="FI:::/Demo/Games/RocketScience.HC"$
-$LK,"/Demo/Games/Squirt.HC",A="FI:::/Demo/Games/Squirt.HC"$
-$LK,"/Demo/Games/TheDead.HC",A="FI:::/Demo/Games/TheDead.HC"$
-$LK,"/Demo/Games/TicTacToe.HC",A="FI:::/Demo/Games/TicTacToe.HC"$
-$LK,"/Demo/Games/TreeCheckers.HC",A="FI:::/Demo/Games/TreeCheckers.HC"$
-$LK,"/Demo/Games/Varoom.HC",A="FI:::/Demo/Games/Varoom.HC"$
-$LK,"/Demo/Games/Wenceslas.HC",A="FI:::/Demo/Games/Wenceslas.HC"$
-$LK,"/Demo/Games/Whap.HC",A="FI:::/Demo/Games/Whap.HC"$
-$LK,"/Demo/Games/Zing.HC",A="FI:::/Demo/Games/Zing.HC"$
-$LK,"/Demo/Games/ZoneOut.HC",A="FI:::/Demo/Games/ZoneOut.HC"$
-$LK,"/Apps/Psalmody/Examples/childish.HC",A="FI:::/Apps/Psalmody/Examples/childish.HC"$
-$LK,"/Apps/Psalmody/Examples/night.HC",A="FI:::/Apps/Psalmody/Examples/night.HC"$
-$LK,"/Apps/Psalmody/Examples/prosper.HC",A="FI:::/Apps/Psalmody/Examples/prosper.HC"$
+$LK,"/Demo/Games/BattleLines.CC",A="FI:::/Demo/Games/BattleLines.CC"$
+$LK,"/Demo/Games/BigGuns.CC",A="FI:::/Demo/Games/BigGuns.CC"$
+$LK,"/Demo/Games/BlackDiamond.CC",A="FI:::/Demo/Games/BlackDiamond.CC"$
+$LK,"/Demo/Games/BomberGolf.CC",A="FI:::/Demo/Games/BomberGolf.CC"$
+$LK,"/Demo/Games/CastleFrankenstein.CC",A="FI:::/Demo/Games/CastleFrankenstein.CC"$
+$LK,"/Demo/Games/CharDemo.CC",A="FI:::/Demo/Games/CharDemo.CC"$
+$LK,"/Demo/Games/CircleTrace.CC",A="FI:::/Demo/Games/CircleTrace.CC"$
+$LK,"/Demo/Games/Collision.CC",A="FI:::/Demo/Games/Collision.CC"$
+$LK,"/Demo/Games/Digits.CC",A="FI:::/Demo/Games/Digits.CC"$
+$LK,"/Demo/Games/DunGen.CC",A="FI:::/Demo/Games/DunGen.CC"$
+$LK,"/Demo/Games/Talons.CC",A="FI:::/Demo/Games/Talons.CC"$
+$LK,"/Demo/Games/ElephantWalk.CC",A="FI:::/Demo/Games/ElephantWalk.CC"$
+$LK,"/Demo/Games/FlapBat.CC",A="FI:::/Demo/Games/FlapBat.CC"$
+$LK,"/Demo/Games/FlatTops.CC",A="FI:::/Demo/Games/FlatTops.CC"$
+$LK,"/Demo/Games/Halogen.CC",A="FI:::/Demo/Games/Halogen.CC"$
+$LK,"/Demo/Games/MassSpring.CC",A="FI:::/Demo/Games/MassSpring.CC"$
+$LK,"/Demo/Games/Maze.CC",A="FI:::/Demo/Games/Maze.CC"$
+$LK,"/Demo/Games/RainDrops.CC",A="FI:::/Demo/Games/RainDrops.CC"$
+$LK,"/Demo/Games/RawHide.CC",A="FI:::/Demo/Games/RawHide.CC"$
+$LK,"/Demo/Games/Rocket.CC",A="FI:::/Demo/Games/Rocket.CC"$
+$LK,"/Demo/Games/RocketScience.CC",A="FI:::/Demo/Games/RocketScience.CC"$
+$LK,"/Demo/Games/Squirt.CC",A="FI:::/Demo/Games/Squirt.CC"$
+$LK,"/Demo/Games/TheDead.CC",A="FI:::/Demo/Games/TheDead.CC"$
+$LK,"/Demo/Games/TicTacToe.CC",A="FI:::/Demo/Games/TicTacToe.CC"$
+$LK,"/Demo/Games/TreeCheckers.CC",A="FI:::/Demo/Games/TreeCheckers.CC"$
+$LK,"/Demo/Games/Varoom.CC",A="FI:::/Demo/Games/Varoom.CC"$
+$LK,"/Demo/Games/Wenceslas.CC",A="FI:::/Demo/Games/Wenceslas.CC"$
+$LK,"/Demo/Games/Whap.CC",A="FI:::/Demo/Games/Whap.CC"$
+$LK,"/Demo/Games/Zing.CC",A="FI:::/Demo/Games/Zing.CC"$
+$LK,"/Demo/Games/ZoneOut.CC",A="FI:::/Demo/Games/ZoneOut.CC"$
+$LK,"/Apps/Psalmody/Examples/childish.CC",A="FI:::/Apps/Psalmody/Examples/childish.CC"$
+$LK,"/Apps/Psalmody/Examples/night.CC",A="FI:::/Apps/Psalmody/Examples/night.CC"$
+$LK,"/Apps/Psalmody/Examples/prosper.CC",A="FI:::/Apps/Psalmody/Examples/prosper.CC"$
 
 Two things to know about ZenithOS are that $UL,1$tasks$UL,0$ have $LK,"MAlloc",A="MN:MAlloc"$/$LK,"Free",A="MN:Free"$ heap memory, not applications, and tasks have compiler symbol tables that persist at a scope like environment variables in other operating systems, and the symbols can include functions.
 
 For other operating systems, I hated learning one language for command line scripts and another for programming.  With $FG,2$ZenithOS$FG$, the command line feeds right into the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ compiler, line by line, and it places code into memory it $LK,"MAlloc",A="MN:MAlloc"$()s.  The compiler is paused at the command line, waiting for input.  Naturally, you $FG,2$#include$FG$ a program to load it into memory and, usually, start it.
 
-During the boot process, many files get $LK,"compiled",A="FI:::/StartOS.HC"$ before you have access to the command line.  (Don't worry, booting takes only two seconds.)  All the header declarations for the operating system are compiled and are available for use in your programs without needing to $FG,2$#include $FG$them.  Everything is truly compiled to native $FG,2$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ machine code, nothing is $FG,2$interpreted$FG$ and there is no $FG,2$byte code$FG$.
+During the boot process, many files get $LK,"compiled",A="FI:::/StartOS.CC"$ before you have access to the command line.  (Don't worry, booting takes only two seconds.)  All the header declarations for the operating system are compiled and are available for use in your programs without needing to $FG,2$#include $FG$them.  Everything is truly compiled to native $FG,2$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$ machine code, nothing is $FG,2$interpreted$FG$ and there is no $FG,2$byte code$FG$.
 
 Statements at the global scope -- outside the scope of functions -- execute immediately.  There is no $FG,2$main()$FG$ function.  Instead, you give meaningful names to what would be $FG,2$main()$FG$ functions and you invoke them by calling them with a statement in the global scope, usually at the bottom of your file.
 
@@ -73,7 +73,7 @@ Once I was no longer using standard C/C++ syntax, I decided to change everything
 
 There are no object files in ZenithOS and, normally, you don't make executable files either, but you can.  That's known as $LK,"Ahead-of-Time",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ compilation.  Instead, you $LK,"Just in Time",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ compile.
 
-Tasks have no priority and are never removed from the queue.  Instead, they often poll whatever they are waiting on and swap-out.  (Swapping tasks takes half a microsecond and does not involve disk activity or memory maps.)  See $LK,"Scheduler",A="FL:::/Kernel/Sched.HC,1"$.  Polling keeps it simple.  It might be a problem if you had lots of tasks busy, which rarely happens on a home computer.  The order of the tasks in the queue determines front-to-back window order.
+Tasks have no priority and are never removed from the queue.  Instead, they often poll whatever they are waiting on and swap-out.  (Swapping tasks takes half a microsecond and does not involve disk activity or memory maps.)  See $LK,"Scheduler",A="FL:::/Kernel/Sched.CC,1"$.  Polling keeps it simple.  It might be a problem if you had lots of tasks busy, which rarely happens on a home computer.  The order of the tasks in the queue determines front-to-back window order.
 
 The $FG,2$FAT32$FG$ filesystem is supported to makes exchanging files with a dual booted other operating system easy and there is the simple, 64-bit ZenithOS $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ filesystem.  The $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ has allocation bitmap for clus and all files are stored contiguously.  You can't grow files.
 
@@ -81,15 +81,15 @@ ZenithOS is geared toward reading and writing whole files.  Since whole files ar
 
 If a file is not found, "$FG,2$$FG$" is added or removed and a search is done, again.  There is no $FG,2$PATH$FG$, but parent directories are searched when a file is not found.  This feature is especially useful for default account files.
 
-The graphic resolution is poor, $FG,2$640x480 16 color$FG$, but God said it was a covenant like circumcision.  Also, that's all I feel comfortable with without GPU acceleration supported.  A $FG,2$1600x1200x24$FG$ bit scrn takes 37 times more memory, implying 37 times the CPU power.  Also, a fixed size keeps it simple with everybody machine having the same appearance.  Look on the bright-side -- you won't spend as much time twiddling pixels for your game art and you'll have tons of CPU power available, especially with multicore systems.
+The graphic resolution is poor, $FG,2$640x480 16 color$FG$, but God said it was a covenant like circumcision.  Also, that's all I feel comfortable with without GPU acceleration supported.  A $FG,2$1600x1200x24$FG$ bit screen takes 37 times more memory, implying 37 times the CPU power.  Also, a fixed size keeps it simple with everybody machine having the same appearance.  Look on the bright-side -- you won't spend as much time twiddling pixels for your game art and you'll have tons of CPU power available, especially with multicore systems.
 
-ZenithOS is for hobbyist programmers on single user (at a time) home computers, not mainframes or servers.  The focus task is all-important so symmetrical multiprocessing is almost pointless.  Why does it matter running two apps at the same time twice as fast when you really want to run one faster?  You could say ZenithOS does master/slave multiprocessing.  The anticipated use for multicore is primarily putting graphics on the scrn.  Hardware graphics acceleration is not used, so this is possible.  See $LK,"ZenithOS MultiCore",A="FI:::/Doc/MultiCore.DD"$.
+ZenithOS is for hobbyist programmers on single user (at a time) home computers, not mainframes or servers.  The focus task is all-important so symmetrical multiprocessing is almost pointless.  Why does it matter running two apps at the same time twice as fast when you really want to run one faster?  You could say ZenithOS does master/slave multiprocessing.  The anticipated use for multicore is primarily putting graphics on the screen.  Hardware graphics acceleration is not used, so this is possible.  See $LK,"ZenithOS MultiCore",A="FI:::/Doc/MultiCore.DD"$.
 
 There is no distinction between the terms $FG,2$task$FG$, $FG,2$process$FG$ or $FG,2$thread$FG$.  All have a task record, $LK,"CTask",A="MN:CTask"$, pointed to by the $FG,2$FS$FG$ segment reg and are accessed with $FG,4$Fs->$FG$ while $FG,4$Gs->$FG$ points to a $LK,"CCPU",A="MN:CCPU"$ for the current CPU core.  Each task can have just one window, but a task can have children with windows.  (The segment regs are just used as extra regs -- there is nothing segmented about ZenithOS' memory.)  It is approximately the case that $FG,2$ZenithOS$FG$ is multi-threading, single-processing.
 
-In $FG,2$ZenithOS$FG$, $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$ refers to the father of all tasks.  He's never supposed to die.  Since tasks inherit the symbols of parents, system-wide stuff is associated with $FG,2$Zenith$FG$.  His heap is like kernel memory in other operating systems.  Since $FG,2$Zenith$FG$ is immortal, it's safe to alloc objects, not tied to any mortal task, from $FG,2$Zenith$FG$'s heap.  He stays in a server mode, taking requests, so you can ask him to $FG,2$#include$FG$ something, placing that code system-wide.  A funny story is that originally I called it the $FG,2$root$FG$ task and even had a $FG,2$/Root$FG$ directory :-)  $FG,2$Zenith$FG$ executes $LK,"::/StartOS.HC"$ at boot time.
+In $FG,2$ZenithOS$FG$, $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$ refers to the father of all tasks.  He's never supposed to die.  Since tasks inherit the symbols of parents, system-wide stuff is associated with $FG,2$Zenith$FG$.  His heap is like kernel memory in other operating systems.  Since $FG,2$Zenith$FG$ is immortal, it's safe to alloc objects, not tied to any mortal task, from $FG,2$Zenith$FG$'s heap.  He stays in a server mode, taking requests, so you can ask him to $FG,2$#include$FG$ something, placing that code system-wide.  A funny story is that originally I called it the $FG,2$root$FG$ task and even had a $FG,2$/Root$FG$ directory :-)  $FG,2$Zenith$FG$ executes $LK,"::/StartOS.CC"$ at boot time.
 
-For easy back-ups, place everything you author in your $FG,2$/Home$FG$ directory and subdirectories.  Then, use $LK,"CopyTree",A="MN:CopyTree"$().  That should make upgrading easy, too.  Customizable start-up scripts go in your $FG,2$/Home$FG$ directory.  The default start-up scripts are in the root directory.  Copy the start-up files you wish to customize into $FG,2$/Home$FG$ and modify them.  See $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.  You can make your own distro that includes everything and is a bootable live CD with $LK,"::/Misc/DoDistro.HC"$.
+For easy back-ups, place everything you author in your $FG,2$/Home$FG$ directory and subdirectories.  Then, use $LK,"CopyTree",A="MN:CopyTree"$().  That should make upgrading easy, too.  Customizable start-up scripts go in your $FG,2$/Home$FG$ directory.  The default start-up scripts are in the root directory.  Copy the start-up files you wish to customize into $FG,2$/Home$FG$ and modify them.  See $LK,"Home Files",A="FF:::/Doc/GuideLines.DD,/Home Files"$.  You can make your own distro that includes everything and is a bootable live CD with $LK,"::/Misc/DoDistro.CC"$.
 
 Typically, your usage pattern through the day will be repeatedly left or right clicking on filenames in a cmd line $LK,"Dir",A="MN:Dir"$() listing.  You left-click files to edit them and right-click to $FG,2$#include$FG$ them.  To begin a project, type $LK,"Ed",A="MN:Ed"$("filename");, supplying a filename.  You can also run programs with $FG,2$<F5>$FG$ when in the editor. $FG,2$<ESC>$FG$ to save and exit the file.  You'll need to do a new $LK,"Dir",A="MN:Dir"$() cmd, periodically, so make a macro on your PersonalMenu.  Access your PersonalMenu by pressing $FG,2$<CTRL-m>$FG$, cursoring until you are on top of it and pressing $FG,2$<SPACE>$FG$.
 
@@ -104,13 +104,13 @@ $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete.
 $FG,2$<ALT-a>$FG$ brings back AutoComplete.
 $FG,2$<ALT-v>$FG$ vertically tiles windows.
 $FG,2$<ALT-h>$FG$ horizontally tiles windows.
-The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.HC"$.  You can customize them.
+The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.CC"$.  You can customize them.
 
 $FG,2$<CTRL-ALT-t>$FG$ new terminal window.
 $FG,2$<CTRL-ALT-n>$FG$ switches to the next window.
 $FG,2$<CTRL-ALT-x>$FG$ kills a window.
 
-$LK,"Find",A="MN:Find"$() is your best friend.  There's a wrapper function called $LK,"F",A="MN:F"$() in your $FG,2$~/HomeWrappers.HC$FG$ file.  Feel free to make wrapper functions for functions you use often and customize the args.  By the way, $LK,"Find",A="MN:Find"$() or $LK,"R",A="MN:R"$() can be used to replace strings across multiple files.  You can access $LK,"Find",A="MN:Find"$() using $FG,2$<CTRL-SHIFT-f>$FG$.
+$LK,"Find",A="MN:Find"$() is your best friend.  There's a wrapper function called $LK,"F",A="MN:F"$() in your $FG,2$~/HomeWrappers.CC$FG$ file.  Feel free to make wrapper functions for functions you use often and customize the args.  By the way, $LK,"Find",A="MN:Find"$() or $LK,"R",A="MN:R"$() can be used to replace strings across multiple files.  You can access $LK,"Find",A="MN:Find"$() using $FG,2$<CTRL-SHIFT-f>$FG$.
 
 As you browse code, use the $FG,2$AutoComplete$FG$ window to look-up functions, etc.  $FG,2$<CTRL-SHIFT-F1>$FG$ (or whatever number) to follow a sym to it's source.  You can browse deeper and deeper.  You go back with $FG,2$<SHIFT-ESC>$FG$.
 
