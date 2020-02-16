@@ -1,7 +1,7 @@
 #help_index "Windows;Task/Delay"
 
 public U0 Refresh(I64 count=1,Bool force=FALSE)
-{//Wait for 30fps WinMgr to start & finish screen refresh.
+{//Wait for 60fps WinMgr to start & finish screen refresh.
   //0,FALSE Count Sync to WinMgr.
   //0,TRUE  Pump Messages.
   //1 Count Wait and Pump Messages.

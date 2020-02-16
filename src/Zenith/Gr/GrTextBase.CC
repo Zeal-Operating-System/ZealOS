@@ -5,7 +5,7 @@ asm {
 //************************************
 _TEXT_CHAR::
 //Bool TextChar(CTask *task,Bool allow_border=FALSE,I64 x,I64 y,I64 d);
-//Must be called 30fps in Fs->draw_it() callback.
+//Must be called 60fps in Fs->draw_it() callback.
 	PUSH	RBP
 	MOV	RBP,RSP
 	MOV	RCX,U64 SF_ARG1[RBP]
@@ -83,7 +83,7 @@ _TEXT_CHAR::
 //************************************
 _TEXT_LEN_STR::
 //Bool TextLenStr(CTask *task,I64 x,I64 y,I64 len,I64 attr,U8 *s)
-//Must be called 30fps in Fs->draw_it() callback.
+//Must be called 60fps in Fs->draw_it() callback.
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -159,7 +159,7 @@ _TEXT_LEN_STR::
 //************************************
 _TEXT_LEN_ATTR_STR::
 //Bool TextLenAttrStr(CTask *task,I64 x,I64 y,I64 len,U32 *_attr)
-//Must be called 30fps in Fs->draw_it() callback.
+//Must be called 60fps in Fs->draw_it() callback.
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -234,7 +234,7 @@ _TEXT_LEN_ATTR_STR::
 	RET1	40
 //************************************
 _TEXT_LEN_ATTR:://Bool TextLenAttr(CTask *task,I64 x,I64 y,I64 len,I64 attr)
-//Must be called 30fps in Fs->draw_it() callback.
+//Must be called 60fps in Fs->draw_it() callback.
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -310,16 +310,16 @@ _TEXT_LEN_ATTR:://Bool TextLenAttr(CTask *task,I64 x,I64 y,I64 len,I64 attr)
 	RET1	40
 }
 public _extern _TEXT_CHAR Bool TextChar(CTask *task,Bool allow_border=FALSE,
-I64 x,I64 y,I64 d); //Plot char. 30fps in Fs->draw_it() callback.
+I64 x,I64 y,I64 d); //Plot char. 60fps in Fs->draw_it() callback.
 public _extern _TEXT_LEN_STR Bool TextLenStr(CTask *task,I64 x,I64 y,I64 len,
-I64 attr,U8 *s); //Plot str with len.  30fps in Fs->draw_it() callback.
+I64 attr,U8 *s); //Plot str with len.  60fps in Fs->draw_it() callback.
 public _extern _TEXT_LEN_ATTR_STR Bool TextLenAttrStr(CTask *task,I64 x,I64 y,
-I64 len,U32 *_attr); //Plot attr str with len.	30fps in Fs->draw_it() callback.
+I64 len,U32 *_attr); //Plot attr str with len.	60fps in Fs->draw_it() callback.
 public _extern _TEXT_LEN_ATTR Bool TextLenAttr(CTask *task,I64 x,I64 y,I64 len,
-I64 attr); //Plot attrs with len.  30fps in Fs->draw_it() callback.
+I64 attr); //Plot attrs with len.  60fps in Fs->draw_it() callback.
 
 public U0 TextPrint(CTask *task,I64 x,I64 y,I64 attr,U8 *format,...)
-{//Plot chars. 30fps in Fs->draw_it() callback.
+{//Plot chars. 60fps in Fs->draw_it() callback.
 //You probably want $LK,"GrPrint",A="MN:GrPrint"$() or just $LK,"Print",A="MN:Print"$().
   U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   TextLenStr(task,x,y,StrLen(buf),attr<<8,buf);
@@ -328,7 +328,7 @@ public U0 TextPrint(CTask *task,I64 x,I64 y,I64 attr,U8 *format,...)
 
 public U0 TextBorder(CTask *task=NULL,
 	I64 l,I64 r,I64 t,I64 b,I64 attr,Bool solid)
-{//Plot border square. 30fps in Fs->draw_it() callback.
+{//Plot border square. 60fps in Fs->draw_it() callback.
 //Draws window borders or DolDoc text bttn borders.
   //Set task=sys_winmgr_task for no clipping.
   I64 i;
@@ -349,7 +349,7 @@ public U0 TextBorder(CTask *task=NULL,
 }
 
 public U0 TextRect(I64 l,I64 r,I64 t,I64 b,I64 d)
-{//Fill text rect. 30fps in Fs->draw_it() callback.
+{//Fill text rect. 60fps in Fs->draw_it() callback.
   I64 y,w;
   if (l>r || t>b) return;
   if (t<0) t=0;
