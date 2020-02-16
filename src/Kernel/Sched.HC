@@ -155,7 +155,7 @@ _TASK_END_NOW::
 
 _YIELD::
 	PUSHFD
-	TEST	U8 [SYS_SEMAS+SEMA_SINGLE_USER*DFT_CACHE_LINE_WIDTH],1
+	TEST	U8 [SYS_SEMAS+SEMA_SINGLE_USER*DEFAULT_CACHE_LINE_WIDTH],1
 	JZ	@@05
 	POPFD		//If single user, don't change task.
 	RET
@@ -196,7 +196,7 @@ RESTORE_RSI_TASK2:
 	JC	@@20	//Jmp if had chance for IRQ already
 	MOV	RAX,U64 GS:CCPU.idle_task[RAX]
 	MOV	RSP,U64 CTask.stk[RAX]
-	ADD	RSP,MEM_DFT_STK+CTaskStk.stk_base	//Rst to top
+	ADD	RSP,MEM_DEFAULT_STK+CTaskStk.stk_base	//Rst to top
 	CALL	SET_FS_BASE
 	STI	//Restore idle task so we can unmask IRQs.
 	HLT

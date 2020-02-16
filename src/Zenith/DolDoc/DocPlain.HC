@@ -49,12 +49,12 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
   if (doc_e->type_u8==DOCT_FOREGROUND &&
 	doc->flags&DOCF_COLOR_NAMES && 0<=attr<COLORS_NUM) {
     buf=StrNew(DefineSub(attr,"ST_COLORS"));
-    attr=DOC_DFT;
+    attr=DOC_DEFAULT;
   } else
     buf=StrNew(DefineSub(doc_e->type_u8,"ST_DOC_CMDS"));
   if (doc_e->type_u8!=DOCT_ERROR) {
-    f1=doldoc.dft_de_flags[doc_e->type_u8];
-    t1=doc_e->type_u8|doldoc.dft_type_flags[doc_e->type_u8];
+    f1=doldoc.default_de_flags[doc_e->type_u8];
+    t1=doc_e->type_u8|doldoc.default_type_flags[doc_e->type_u8];
 
     de_flags=doc_e->de_flags&~(DOCG_BL_IV_UL|DOCEF_SEL|
 	  DOCEF_HIGHLIGHT|DOCEF_WORD_WRAP|DOCEF_SKIP|DOCEF_FILTER_SKIP);
@@ -90,8 +90,8 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
 	break;
       case DOCT_FOREGROUND:
       case DOCT_BACKGROUND:
-      case DOCT_DFT_FOREGROUND:
-      case DOCT_DFT_BACKGROUND:
+      case DOCT_DEFAULT_FOREGROUND:
+      case DOCT_DEFAULT_BACKGROUND:
 	if (doc->flags&DOCF_COLOR_NAMES && 0<=attr<COLORS_NUM) {
 	  buf2=MStrPrint("%s%Z,",buf,doc_e->attr,"ST_COLORS");
 	  Free(buf); buf=buf2;
@@ -110,7 +110,7 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
       case DOCT_UNDERLINE:
       case DOCT_SHIFTED_X:
       case DOCT_SHIFTED_Y:
-	if (attr!=DOC_DFT) {
+	if (attr!=DOC_DEFAULT) {
 	  buf2=MStrPrint("%s%d,",buf,doc_e->attr);
 	  Free(buf); buf=buf2;
 	}
@@ -145,7 +145,7 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
 		buf2="";
 	    } else
 	      buf2=doc_e->tag;
-	    if (Bt(&doldoc.dft_de_flags[doc_e->type_u8],DOCEf_TAG))
+	    if (Bt(&doldoc.default_de_flags[doc_e->type_u8],DOCEf_TAG))
 	      buf2=MStrPrint("%s\"%$$Q\",",buf,buf2);
 	    else
 	      buf2=MStrPrint("%sT=\"%$$Q\",",buf,buf2);
@@ -216,7 +216,7 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
 
 CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 {//Uses $LK-UL,"Lex",A="MN:Lex"$() to parse a string and make Doc entries.
-  I64 i,j,de_flags,processed_flags,attr=DOC_DFT;
+  I64 i,j,de_flags,processed_flags,attr=DOC_DEFAULT;
   U8 *ptr,*st2;
   CDocEntry *doc_e=NULL;
   CHashGeneric *tmph;
@@ -237,10 +237,10 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
       Lex(cc); //skip cmd code
       doc_e=CAlloc(sizeof(CDocEntry),doc->mem_task);
       doc_e->type=i;
-      doc_e->de_flags=doldoc.dft_de_flags[i];
-      doc_e->type|=doldoc.dft_type_flags[i];
+      doc_e->de_flags=doldoc.default_de_flags[i];
+      doc_e->type|=doldoc.default_type_flags[i];
       doc_e->raw_type=RT_I64;
-      doc_e->len=DOCE_LEN_DFT;
+      doc_e->len=DOCE_LEN_DEFAULT;
       j=ParseDocFlags(cc,&doc_e->de_flags,&doc_e->type);
       cc->htc.hash_table_list=old_hash_table_list;
       switch [i] {
@@ -269,8 +269,8 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 	case DOCT_INDENT:
 	case DOCT_FOREGROUND:
 	case DOCT_BACKGROUND:
-	case DOCT_DFT_FOREGROUND:
-	case DOCT_DFT_BACKGROUND:
+	case DOCT_DEFAULT_FOREGROUND:
+	case DOCT_DEFAULT_BACKGROUND:
 	case DOCT_WORD_WRAP:
 	case DOCT_HIGHLIGHT:
 	case DOCT_BLINK:
@@ -311,7 +311,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 //If a $$MA,LM=""$$, Tag is filled when the LM is processed.
 	      //if doc_e->df_flags&DOCEF_LIST,
 	      // Tag is filled when the Define is processed.
-	      //(The dft_flag1.tag calls this after.)
+	      //(The default_flag1.tag calls this after.)
 	      if (cc->token==TK_STR) {
 		st2=LexExtStr(cc);
 		if (i==DOCT_CHECK_BOX) {
@@ -340,7 +340,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 	  case DOCEf_LEN:
 	    if (cc->token) {
 	      doc_e->len=LexExpression(cc);
-	      doc_e->de_flags&=~DOCEF_DFT_LEN;
+	      doc_e->de_flags&=~DOCEF_DEFAULT_LEN;
 	    } else
 	      goto pd_err;
 	    break;
@@ -431,7 +431,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 	      if (j<0)
 		goto pd_err;
 	      doc_e->raw_type=j;
-	      doc_e->de_flags&=~DOCEF_DFT_RAW_TYPE;
+	      doc_e->de_flags&=~DOCEF_DEFAULT_RAW_TYPE;
 	      Lex(cc);
 	    } else
 	      goto pd_err;

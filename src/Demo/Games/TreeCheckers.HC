@@ -302,7 +302,7 @@ U0 TreeCheckers()
   DocCursor;
   DocClear;
   PopUpOk("Step on the link mid points.\n");
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	-WIF_SELF_BORDER-WIF_FOCUS_TASK_MENU;
   try {
 cn_start:

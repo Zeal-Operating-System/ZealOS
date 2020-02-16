@@ -1,4 +1,4 @@
-RegDft("ZenithOS/DunGen","F64 best_score=9999;\n");
+RegDefault("ZenithOS/DunGen","F64 best_score=9999;\n");
 RegExe("ZenithOS/DunGen");
 
 //Set snap to 4 and width to 4

@@ -637,23 +637,23 @@ pvl_restart3:
 	      machine_code=LexExpression2Bin(cc,&type);
 	      if (!machine_code)
 		throw('Compiler');
-	      tmpm->dft_val=Call(machine_code);
+	      tmpm->default_val=Call(machine_code);
 	      tmpc2=OptClassFwd(tmpc2);
 	      if (tmpc2->raw_type==RT_F64) {
 		if (type!=RT_F64)
-		  tmpm->dft_val(F64)=tmpm->dft_val;
+		  tmpm->default_val(F64)=tmpm->default_val;
 	      } else {
 		if (type==RT_F64)
-		  tmpm->dft_val=tmpm->dft_val(F64);
+		  tmpm->default_val=tmpm->default_val(F64);
 	      }
 	      if (cc->flags & CCF_HAS_MISC_DATA) {
-		tmpm->dft_val=StrNew(tmpm->dft_val);
-		tmpm->flags|=MLF_STR_DFT_AVAILABLE;
+		tmpm->default_val=StrNew(tmpm->default_val);
+		tmpm->flags|=MLF_STR_DEFAULT_AVAILABLE;
 	      }
 	      Free(machine_code);
 	      cc->flags|=old_flags2&CCF_HAS_MISC_DATA;
 	    }
-	    tmpm->flags|=MLF_DFT_AVAILABLE;
+	    tmpm->flags|=MLF_DEFAULT_AVAILABLE;
 	  }
 	  LexPopNoRestore(cc);
 	  break;

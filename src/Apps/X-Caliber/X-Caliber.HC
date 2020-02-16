@@ -1,6 +1,6 @@
 #define  XMESSAGEF_ANTISPIN		0
 #define  XMESSAGEF_SOLAR_STORM	1
-RegDft("ZenithOS/XCaliber",
+RegDefault("ZenithOS/XCaliber",
 	"I64 best_score=0;\n"
 	"I64 message_flags=0;\n"
 	);
@@ -1381,7 +1381,7 @@ U0 XCaliber()
   WinMax;
   DocCursor;
   DocClear;
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	-WIF_SELF_BORDER-WIF_FOCUS_TASK_MENU-WIF_SELF_CTRLS;
   Fs->draw_it=&DrawIt;
   do {

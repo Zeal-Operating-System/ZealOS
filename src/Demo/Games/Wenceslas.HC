@@ -1,4 +1,4 @@
-RegDft("ZenithOS/Wenceslas","F64 best_score=9999;\n");
+RegDefault("ZenithOS/Wenceslas","F64 best_score=9999;\n");
 RegExe("ZenithOS/Wenceslas");
 
 #define BORDER		5

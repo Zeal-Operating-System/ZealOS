@@ -197,7 +197,7 @@ I64 TaskInit(CTask *task,I64 stk_size)
   task->task_num=sys_num_spawned_tasks++;
 
   task->rflags=RFLAGG_NORMAL;
-  task->win_inhibit=WIG_TASK_DFT;
+  task->win_inhibit=WIG_TASK_DEFAULT;
 
   task->next_child_task=task->last_child_task=
 	(&task->next_child_task)(U8 *)-offset(CTask.next_sibling_task);
@@ -215,7 +215,7 @@ I64 TaskInit(CTask *task,I64 stk_size)
   task->hash_table=HashTableNew(TASK_HASH_TABLE_SIZE,task);
 
   if (!stk_size)
-    stk_size=MEM_DFT_STK;
+    stk_size=MEM_DEFAULT_STK;
   task->stk=tmps=TaskStkNew(stk_size,task);
   task->rsp=(&tmps->stk_base)(U8 *)+tmps->stk_size;
 
@@ -406,7 +406,7 @@ U0 UserTaskCont()
 U0 SrvCmdLine(I64 dummy=0)
 {
   no_warn dummy;
-  Fs->win_inhibit=WIG_USER_TASK_DFT;
+  Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
   CallExtStr("SrvStartUp");
   SrvTaskCont;
 }
@@ -414,7 +414,7 @@ U0 SrvCmdLine(I64 dummy=0)
 U0 UserCmdLine(I64 dummy=0)
 {//A user task ends-up calling this.
   no_warn dummy;
-  Fs->win_inhibit=WIG_USER_TASK_DFT;
+  Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
   CallExtStr("UserStartUp");
   if (!LBts(&Fs->display_flags,DISPLAYf_SHOW))
     Debug;

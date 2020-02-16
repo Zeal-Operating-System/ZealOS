@@ -3,7 +3,7 @@ U0 InputFilterTask()
   CJob *tmpc,*tmpc1;
   Bool old_filter;
   I64 old_flags=GetRFlags;
-  Fs->win_inhibit=WIG_USER_TASK_DFT;
+  Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
   LBts(&Fs->task_flags,TASKf_INPUT_FILTER_TASK);
   old_filter=LBts(&Fs->last_input_filter_task->task_flags,TASKf_FILTER_INPUT);
   LBEqu(&Fs->task_flags,TASKf_FILTER_INPUT,old_filter);
@@ -190,16 +190,16 @@ I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE)
   return ch1;
 }
 
-U8 *GetStr(U8 *message=NULL,U8 *dft=NULL,I64 flags=0)
+U8 *GetStr(U8 *message=NULL,U8 *default=NULL,I64 flags=0)
 {//Returns a $LK,"MAlloc",A="MN:MAlloc"$()ed prompted string.  See $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$.
   U8 *st;
   if (message)
-    "" message,dft;
+    "" message,default;
   st=(*fp_getstr2)(flags);
   if (!*st) {
     Free(st);
-    if (dft)
-      return StrNew(dft);
+    if (default)
+      return StrNew(default);
     else
       return StrNew("");
   }

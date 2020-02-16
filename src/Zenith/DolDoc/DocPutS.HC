@@ -27,7 +27,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
     if (!ch) {
       if (j=ptr-ptr2) {
 	doc_e=DocEntryNewBase(doc,
-	      DOCT_TEXT|doc->settings_head.dft_text_attr<<8);
+	      DOCT_TEXT|doc->settings_head.default_text_attr<<8);
 	if (doc->flags & DOCF_NO_CURSOR) {
 	  src=MAlloc(j+1);
 	  MemCpy(src,ptr2,j+1);
@@ -46,7 +46,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
       if (j=ptr-ptr2) {
 	*ptr=0;
 	doc_e=DocEntryNewBase(doc,
-	      DOCT_TEXT|doc->settings_head.dft_text_attr<<8);
+	      DOCT_TEXT|doc->settings_head.default_text_attr<<8);
 	if (doc->flags & DOCF_NO_CURSOR) {
 	  src=MAlloc(j+1);
 	  MemCpy(src,ptr2,j+1);
@@ -72,13 +72,13 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
       switch (ch) {
 	case CH_CURSOR:
 	  doc_e=DocEntryNewBase(doc,
-		DOCT_CURSOR|doc->settings_head.dft_text_attr<<8);
+		DOCT_CURSOR|doc->settings_head.default_text_attr<<8);
 	  DocInsEntry(doc,doc_e);
 	  ptr++;
 	  break;
 	case '\t':
 	  doc_e=DocEntryNewBase(doc,
-		DOCT_TAB|doc->settings_head.dft_text_attr<<8);
+		DOCT_TAB|doc->settings_head.default_text_attr<<8);
 	  DocInsEntry(doc,doc_e);
 	  ptr++;
 	  break;
@@ -91,13 +91,13 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 	    *ptr=0; //zero second dollar
 	    if (ptr-1==ptr2 && *ptr2==CH_CURSOR) {
 	      doc_e=DocEntryNewBase(doc,
-		    DOCT_CURSOR|doc->settings_head.dft_text_attr<<8);
+		    DOCT_CURSOR|doc->settings_head.default_text_attr<<8);
 	      DocInsEntry(doc,doc_e);
 	      ptr2++;
 	    }
 	    if (ptr==ptr2) {
 	      doc_e=DocEntryNewBase(doc,
-		    DOCT_TEXT|doc->settings_head.dft_text_attr<<8);
+		    DOCT_TEXT|doc->settings_head.default_text_attr<<8);
 	      doc_e->max_col=1;
 	      if (doc->flags & DOCF_DBL_DOLLARS)
 		doc_e->tag=StrNew("$$$$",doc->mem_task);
@@ -111,7 +111,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 	      while (ch=*ptr3++) {
 		if (ch==CH_CURSOR) {
 		  doc_e=DocEntryNewBase(doc,
-			DOCT_CURSOR|doc->settings_head.dft_text_attr<<8);
+			DOCT_CURSOR|doc->settings_head.default_text_attr<<8);
 		  DocInsEntry(doc,doc_e);
 		} else
 		  *ptr4++=ch;
@@ -128,7 +128,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 	  break;
 	default:
 	  doc_e=DocEntryNewBase(doc,
-		DOCT_NEW_LINE|doc->settings_head.dft_text_attr<<8);
+		DOCT_NEW_LINE|doc->settings_head.default_text_attr<<8);
 	  DocInsEntry(doc,doc_e);
 	  if (ch=='\r')
 	    while (*ptr=='\r')
@@ -204,8 +204,8 @@ public U0 DocPrintPartial(CDoc *doc=NULL,U8 *fmt,...)
 	  doc_ce->tag=st;
 	} else {
 	  doc_ne=DocEntryNewTag(doc,doc_ce,ptr2);
-	  doc_ne->type=DOCT_TEXT|doc->settings_head.dft_text_attr<<8;
-	  doc_ne->de_flags=doldoc.dft_de_flags[DOCT_TEXT];
+	  doc_ne->type=DOCT_TEXT|doc->settings_head.default_text_attr<<8;
+	  doc_ne->de_flags=doldoc.default_de_flags[DOCT_TEXT];
 	  QueueInsert(doc_ne,doc_ce->last);
 	  doc->cur_entry=doc_ne;
 	  doc->cur_col=StrLen(ptr2);

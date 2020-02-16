@@ -428,10 +428,10 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
   CAOTHeapGlobalRef *tmphgr,*tmphgr1;
   CAOTHeapGlobal *tmphg,*tmphg1;
 
-  fbuf=ExtDft(filename,"PRJ");
+  fbuf=ExtDefault(filename,"PRJ");
   fbuf2=MStrPrint("#include \"%s\"",fbuf);
   if (map_name)
-    fbuf3=ExtDft(map_name,"MAP");
+    fbuf3=ExtDefault(map_name,"MAP");
 
   if (tmpaot=CompBuf(fbuf2,fbuf3,&error_count,&warning_count,mapfile_drv_let)) {
     aot_U8s=tmpaot->aot_U8s;
@@ -550,7 +550,7 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
 	  size-aot_U8s-sizeof(CBinFile));
     Free(fbuf2);
     if (out_name)
-      fbuf2=ExtDft(out_name,"BIN");
+      fbuf2=ExtDefault(out_name,"BIN");
     else
       fbuf2=ExtChg(fbuf,"BIN");
     FileWrite(fbuf2,bfh,size);
@@ -614,7 +614,7 @@ I64 ExePrint(U8 *fmt,...)
 I64 ExeFile(U8 *name,I64 ccf_flags=0)
 {//JIT Compile and execute a file.
   I64 res;
-  U8 *name2=ExtDft(name,"HC"),
+  U8 *name2=ExtDefault(name,"HC"),
 	*st=MStrPrint("#include \"%s\";",name2);
   res=ExePutS(st,name,ccf_flags);
   Free(st);
@@ -657,7 +657,7 @@ I64 ExePrint2(U8 *fmt,...)
 I64 ExeFile2(U8 *name,I64 ccf_flags=0)
 {//throws exceptions
   I64 res;
-  U8 *name2=ExtDft(name,"HC"),*st=MStrPrint("#include \"%s\";",name2);
+  U8 *name2=ExtDefault(name,"HC"),*st=MStrPrint("#include \"%s\";",name2);
   res=ExePutS2(st,name,ccf_flags);
   Free(st);
   Free(name2);

@@ -1,4 +1,4 @@
-RegDft("ZenithOS/Titanium","I64 best_score=0;\n");
+RegDefault("ZenithOS/Titanium","I64 best_score=0;\n");
 RegExe("ZenithOS/Titanium");
 
 #define MAP_HEIGHT	4096

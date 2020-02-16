@@ -489,7 +489,7 @@ U0 LightTable()
 	"Mem (0x%0X):",1024*1024*16);
 
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-
 	WIF_SELF_BORDER-WIF_FOCUS_TASK_MENU;
   Fs->text_attr=BLACK<<4+WHITE;	//Current $LK,"CTask",A="MN:CTask"$ is Fs segment register.
   AutoComplete;

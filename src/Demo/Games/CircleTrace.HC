@@ -2,7 +2,7 @@
 
 //Giotto, a famous artist, drew a freehand circle to get a job.
 
-RegDft("ZenithOS/CircleTrace","F64 best_score=999;\n");
+RegDefault("ZenithOS/CircleTrace","F64 best_score=999;\n");
 RegExe("ZenithOS/CircleTrace");
 
 I64 cx,cy;
@@ -50,7 +50,7 @@ U0 CircleTrace()
   cx=Fs->pix_width/2;
   cy=Fs->pix_height/2;
 
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
   Fs->draw_it=&DrawIt;
 
   DCFill;

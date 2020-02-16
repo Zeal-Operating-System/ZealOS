@@ -156,7 +156,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
     doc->parent_doc=old_display_doc;
   Fs->put_doc=Fs->display_doc=doc;
   if (!(dof_flags&DOF_DONT_TEXT_ATTR))
-    Fs->text_attr=DOC_ATTR_DFT_TEXT;
+    Fs->text_attr=DOC_ATTR_DEFAULT_TEXT;
   if (!(dof_flags&DOF_DONT_SHOW)) {
     LBts(&Fs->display_flags,DISPLAYf_SHOW);
     WinZBufUpdate;

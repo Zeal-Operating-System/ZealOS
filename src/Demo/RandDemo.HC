@@ -17,7 +17,7 @@ U0 RandDemo()
   I64 i;
 
   "Seed(0) will do timer XORed random numbers."
-	"A task starts with $LK,"Seed(0)",A="FF:::/Kernel/KTask.HC,Seed("$ by dft.\n";
+	"A task starts with $LK,"Seed(0)",A="FF:::/Kernel/KTask.HC,Seed("$ by default.\n";
   PressAKey;
   Seed;
   RandPts;
@@ -58,7 +58,7 @@ U0 RandDemo()
   for (i=0;i<5;i++)
     "%d: %d\n",i,RandI16;
 
-  Seed; //Dft should be kept to zero.
+  Seed; //Default should be kept to zero.
 }
 
 RandDemo;

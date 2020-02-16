@@ -382,7 +382,7 @@ U0 ParseOffsetOf(CCompCtrl *cc)
 
 I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 {
-  I64 i,argc_count,dft_val;
+  I64 i,argc_count,default_val;
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
 	is_template_fun;
   CHashClass *tmpc2,*last_class=NULL;
@@ -452,20 +452,20 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 	}
       }
     }
-    if (tmpm->flags & MLF_DFT_AVAILABLE &&
+    if (tmpm->flags & MLF_DEFAULT_AVAILABLE &&
 	  (cc->token==')' || cc->token==',' || !needs_right_paren)) {
-      dft_val=tmpm->dft_val;
+      default_val=tmpm->default_val;
       if (tmpm->flags & MLF_LASTCLASS && last_class)
-	dft_val=(last_class-last_class->ptr_stars_count)->str;
-      if (tmpm->flags & (MLF_STR_DFT_AVAILABLE|MLF_LASTCLASS) &&
+	default_val=(last_class-last_class->ptr_stars_count)->str;
+      if (tmpm->flags & (MLF_STR_DEFAULT_AVAILABLE|MLF_LASTCLASS) &&
 	    cc->flags&CCF_AOT_COMPILE) {
 	cm=COCMiscNew(cc,CMT_STR_CONST);
 	ICAdd(cc,IC_STR_CONST,cm,cmp.internal_types[RT_U8]+1);
-	cm->st_len=StrLen(dft_val)+1;
-	cm->str=StrNew(dft_val);
+	cm->st_len=StrLen(default_val)+1;
+	cm->str=StrNew(default_val);
 	cc->flags|=CCF_HAS_MISC_DATA;
       } else
-	ICAdd(cc,IC_IMM_I64,dft_val,tmpm->member_class);
+	ICAdd(cc,IC_IMM_I64,default_val,tmpm->member_class);
     } else {
       if (!ParseExpression(cc,NULL,FALSE,ps))
 	throw('Compiler');

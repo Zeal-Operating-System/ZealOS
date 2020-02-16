@@ -6,7 +6,7 @@ U0 Doodle()
   CDC *dc=DCAlias;
 
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
 
   AutoComplete;
   WinBorder;

@@ -1164,7 +1164,7 @@
 	0009	82C597-AFC2 
 	000C	82C541 
 	000D	82C543 
-	0100	dtdftdfz CPU to PCI Bridge for notebook
+	0100	dtdefaultdfz CPU to PCI Bridge for notebook
 	0101	82C532 Peripheral Controller
 	0102	82C534 PCI to PCI Bridge
 	0103	82C538 PCI to ISA Bridge

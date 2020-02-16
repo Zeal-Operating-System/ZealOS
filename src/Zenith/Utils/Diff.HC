@@ -320,7 +320,7 @@ I64 ZRepCompare(CDirEntry *e1,CDirEntry *e2)
 public U0 ZipRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL,
   Bool just_text_not_graphics=TRUE)
 {//Report file compressibility.
-//Dft is just src files.  (Used to spot
+//Default is just src files.  (Used to spot
   //src files with redundancy in them.)
   I64 i=0,count,size,fuf_flags=0;
   CDirEntry *tmpde,*tmpde1,**sort_buf;

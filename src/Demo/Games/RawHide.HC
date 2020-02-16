@@ -1,6 +1,6 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
 
-RegDft("ZenithOS/RawHide","F64 best_score=9999;\n");
+RegDefault("ZenithOS/RawHide","F64 best_score=9999;\n");
 RegExe("ZenithOS/RawHide");
 
 F64 t0,tf;
@@ -547,7 +547,7 @@ U0 RawHide()
 	"Keep holding the $$GREEN$$<CTRL>$$FG$$ key and\n"
 	"scroll with $$GREEN$${CTRL-Left Grab}$$FG$$.");
 
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	-WIF_SELF_BORDER-WIF_SELF_GRAB_SCROLL-WIF_FOCUS_TASK_MENU;
   AutoComplete;
   WinBorder;

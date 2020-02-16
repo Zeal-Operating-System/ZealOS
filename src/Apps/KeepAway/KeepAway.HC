@@ -218,7 +218,7 @@ Frame imgs[LAST_STOPPED_DRIBBLING+1]={
   {{$IB,"<22>",BI=22$,$IB,"<23>",BI=23$},DRIBBLE_T/STOPPED_DRIBBLING_IMGS_NUM},
 };
 
-RegDft("ZenithOS/KeepAway","I64 best_score0=0,best_score1=9999;\n");
+RegDefault("ZenithOS/KeepAway","I64 best_score0=0,best_score1=9999;\n");
 RegExe("ZenithOS/KeepAway");
 
 F64 game_t_end,foul_t_end;

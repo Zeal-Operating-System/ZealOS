@@ -103,7 +103,7 @@ U0 PoleZeros()
 	);
 
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
   GrPaletteSet(gr_palette_gray);
   GrPaletteColorSet(15,0xFFFF00000000); //White is red
 

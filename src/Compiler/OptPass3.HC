@@ -268,7 +268,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	  break;
 	case IC_NOBOUND_SWITCH:
 	case IC_SWITCH:
-	  lb=OptLabelFwd(tmpi->ic_data(CCodeMisc *)->dft);
+	  lb=OptLabelFwd(tmpi->ic_data(CCodeMisc *)->default);
 	  lb->use_count++;
 	  break;
 	case IC_ASM:

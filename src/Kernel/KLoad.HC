@@ -185,7 +185,7 @@ CBinFile *Load(U8 *filename,I64 ld_flags=0,CBinFile *bfh_addr=INVALID_PTR)
   I64 size,module_align,misalignment;
   CBinFile *bfh;
 
-  fbuf=ExtDft(filename,"BIN");
+  fbuf=ExtDefault(filename,"BIN");
   if (!(bfh=FileRead(fbuf,&size))) {
     Free(fbuf);
     return NULL;

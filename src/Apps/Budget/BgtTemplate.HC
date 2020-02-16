@@ -150,18 +150,18 @@ U0 CBgtTemplatesExpand()
   }
 }
 
-CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *dft_t=NULL,CBgtEntry *dft_b=NULL)
+CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *default_t=NULL,CBgtEntry *default_b=NULL)
 {
   CBgtTemplate	t,*tmpt;
   CBgtEntry	*tmpb;
   MemSet(&t,0,sizeof(CBgtTemplate));
-  if (dft_t) {
-    MemCpy(&t.start,&dft_t->start,BT_SIZE);
-    dft_b=&dft_t->b;
+  if (default_t) {
+    MemCpy(&t.start,&default_t->start,BT_SIZE);
+    default_b=&default_t->b;
   } else {
     t.type=BT_INTERVAL;
-    if (dft_b)
-      StrPrint(&t.start_date,"%D",dft_b->date);
+    if (default_b)
+      StrPrint(&t.start_date,"%D",default_b->date);
     else
       StrCpy(&t.start_date,"[");
     StrCpy(&t.end_date,"]");
@@ -169,7 +169,7 @@ CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *dft_t=NULL,CBgtEntry *dft_b=NULL)
   while (TRUE)
     if (PopUpForm(&t) && ((t.type==BT_INTERVAL && t.period>0) ||
 	  t.type>BT_INTERVAL)) {
-      if (tmpb=BgtEntryPrompt(dft_b)) {
+      if (tmpb=BgtEntryPrompt(default_b)) {
 	tmpt=CAlloc(sizeof(CBgtTemplate));
 	MemCpy(&tmpt->start,&t.start,BT_SIZE);
 	MemCpy(&tmpt->b,tmpb,sizeof(CBgtEntry));

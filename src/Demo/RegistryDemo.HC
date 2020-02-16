@@ -7,8 +7,8 @@ is valid in HolyC you can place simple expressions
 without vars.
 */
 
-RegDft("DemoCompany/Game1","F64 best_score=1.23;\n");
-RegDft("DemoCompany/Game1/SimpleVal","1234;\n");
+RegDefault("DemoCompany/Game1","F64 best_score=1.23;\n");
+RegDefault("DemoCompany/Game1/SimpleVal","1234;\n");
 RegExe("DemoCompany/Game1");
 
 U0 Game()

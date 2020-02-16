@@ -24,8 +24,8 @@ U0 DocInit()
   HashDefineListAdd("ST_DOC_FLAGS",DHT_DOC_FLAG,doldoc.hash);
   HashDefineListAdd("ST_COLORS",DHT_COLOR,doldoc.hash);
 
-  MemSet(doldoc.dft_de_flags,	0,sizeof(doldoc.dft_de_flags));
-  MemSet(doldoc.dft_type_flags,	0,sizeof(doldoc.dft_type_flags));
+  MemSet(doldoc.default_de_flags,	0,sizeof(doldoc.default_de_flags));
+  MemSet(doldoc.default_type_flags,	0,sizeof(doldoc.default_type_flags));
   cc=CompCtrlNew("TX+T;DA+P+TRM+T+DL+DRT;CM+LE+RE;AN+T;LK+L+UL+T;MA+X+UL+T;"
 	"MU+X+UL+T;BT+X+B+T;CB+CA+P+T+DRT;LS+LS+P+T+DRT;HX+P+Z;TR+TR+C+CA+UL+T;"
 	"SP+T;IB+T;IS+T;SO+T;HC+T;",CCF_DONT_FREE_BUF);
@@ -35,7 +35,7 @@ U0 DocInit()
     if (tmph=HashFind(cc->cur_str,doldoc.hash,DHT_DOC_CMD)) {
       i=tmph->user_data0;
       Lex(cc);
-      ParseDocFlags(cc,&doldoc.dft_de_flags[i],&doldoc.dft_type_flags[i]);
+      ParseDocFlags(cc,&doldoc.default_de_flags[i],&doldoc.default_type_flags[i]);
     }
     if (cc->token==';')
       Lex(cc);
@@ -43,11 +43,11 @@ U0 DocInit()
   CompCtrlDel(cc);
 
   for (i=0;i<DOCT_TYPES_NUM;i++)
-    doldoc.dft_de_flags[i]&=~DOCG_BL_IV_UL;
+    doldoc.default_de_flags[i]&=~DOCG_BL_IV_UL;
 
   doldoc.type_flags_form[0]=0;
   for (i=0;i<DOCT_TYPES_NUM;i++)
-    if (Bt(&doldoc.dft_de_flags[i],DOCEf_TAG) && i!=DOCT_TEXT || i==DOCT_HEX_ED)
+    if (Bt(&doldoc.default_de_flags[i],DOCEf_TAG) && i!=DOCT_TEXT || i==DOCT_HEX_ED)
       Bts(doldoc.type_flags_form,i);
 
       //Don't forget $LK,"cmp_type_flags_src_code",A="MN:cmp_type_flags_src_code"$.
@@ -61,8 +61,8 @@ U0 DocInit()
 	1<<DOCT_INDENT|
 	1<<DOCT_FOREGROUND|
 	1<<DOCT_BACKGROUND|
-	1<<DOCT_DFT_FOREGROUND|
-	1<<DOCT_DFT_BACKGROUND|
+	1<<DOCT_DEFAULT_FOREGROUND|
+	1<<DOCT_DEFAULT_BACKGROUND|
 	1<<DOCT_WORD_WRAP|
 	1<<DOCT_HIGHLIGHT|
 	1<<DOCT_BLINK|
@@ -81,8 +81,8 @@ U0 DocInit()
 	1<<DOCT_FOOTER|
 	1<<DOCT_FOREGROUND|
 	1<<DOCT_BACKGROUND|
-	1<<DOCT_DFT_FOREGROUND|
-	1<<DOCT_DFT_BACKGROUND|
+	1<<DOCT_DEFAULT_FOREGROUND|
+	1<<DOCT_DEFAULT_BACKGROUND|
 	1<<DOCT_WORD_WRAP|
 	1<<DOCT_HIGHLIGHT|
 	1<<DOCT_BLINK|

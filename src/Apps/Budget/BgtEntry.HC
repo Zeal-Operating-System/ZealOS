@@ -42,19 +42,19 @@ class CBgtEntryForm
   U8	desc  [512]	format "$$DA-P,A=\"Desc:%s\"$$\n";
 };
 
-CBgtEntry *BgtEntryPrompt(CBgtEntry *dft=NULL)
+CBgtEntry *BgtEntryPrompt(CBgtEntry *default=NULL)
 {
   CBgtEntryForm b;
   CBgtEntry *tmpb;
   U8 *st;
   MemSet(&b,0,sizeof(CBgtEntryForm));
   StrCpy(&b.date,"*");
-  if (dft) {
-    StrPrint(b.date,"%D",dft->date);
-    b.amount=dft->amount;
-    StrCpy(b.credit,dft->credit);
-    StrCpy(b.debit ,dft->debit);
-    StrCpy(b.desc  ,dft->desc);
+  if (default) {
+    StrPrint(b.date,"%D",default->date);
+    b.amount=default->amount;
+    StrCpy(b.credit,default->credit);
+    StrCpy(b.debit ,default->debit);
+    StrCpy(b.desc  ,default->desc);
   }
   while (TRUE)
     if (PopUpForm(&b)) {

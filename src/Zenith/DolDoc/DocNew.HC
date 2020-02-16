@@ -40,7 +40,7 @@ CDocEntry *DocEntryNewBase(CDoc *doc,I64 type,I64 de_flags=0,
 {//See also $LK,"MAllocIdent",A="FF:::/Zenith/DolDoc/DocRecalc.HC,MAllocIdent"$ and $MA-X+PU,"CDocEntry",LM="F(\"sizeof(CDocEntry)\");View;"$.
   CDocEntry *res=CAlloc(sizeof(CDocEntryBase),doc->mem_task);
   res->type=type;
-  res->de_flags=de_flags|doldoc.dft_de_flags[type.u8[0]];
+  res->de_flags=de_flags|doldoc.default_de_flags[type.u8[0]];
   res->x=x;
   res->y=y;
   res->page_line_num=page_line_num;
@@ -234,7 +234,7 @@ public U0 DocInsEntry(CDoc *doc,CDocEntry *doc_e)
 }
 
 public U0 DocRst(CDoc *doc,Bool is_old)
-{//Del all entries and set doc to dfts.
+{//Del all entries and set doc to defaults.
   Bool unlock;
   CDocEntry *doc_e,*doc_e2;
   CDocUndo *u,*u8;
@@ -279,19 +279,19 @@ public U0 DocRst(CDoc *doc,Bool is_old)
   doc->best_d=I64_MAX;
 
   s=&doc->settings_head;
-  s->left_margin=DOC_DFT;
-  s->right_margin=DOC_DFT;
+  s->left_margin=DOC_DEFAULT;
+  s->right_margin=DOC_DEFAULT;
   s->indent=0;
   s->page_len=66;
-  s->header=DOC_DFT;
-  s->footer=DOC_DFT;
+  s->header=DOC_DEFAULT;
+  s->footer=DOC_DEFAULT;
   s->state=DOCSS_NORMAL;
   s->comment_depth=0;
   s->paren_depth=0;
   s->brace_depth=0;
   s->shifted_x=0;
   s->shifted_y=0;
-  s->cur_text_attr=s->dft_text_attr=DOC_ATTR_DFT_TEXT;
+  s->cur_text_attr=s->default_text_attr=DOC_ATTR_DEFAULT_TEXT;
 
   doc_e=&doc->head;
   doc_e->type=DOCT_ERROR;

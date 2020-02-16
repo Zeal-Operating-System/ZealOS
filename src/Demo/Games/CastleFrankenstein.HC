@@ -1,6 +1,6 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
 
-RegDft("ZenithOS/CastleFrankenstein","F64 best_score=9999;\n");
+RegDefault("ZenithOS/CastleFrankenstein","F64 best_score=9999;\n");
 RegExe("ZenithOS/CastleFrankenstein");
 
 //Set snap to 4 and width to 4

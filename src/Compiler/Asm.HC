@@ -419,7 +419,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
       MemSet(&cur,0,sizeof(CAsmIns));
       cur.tmpins=tmpins;
       ModrM_complete=FALSE;
-      cur.is_dft=ToBool(tmpins->flags & IEF_DFT);
+      cur.is_default=ToBool(tmpins->flags & IEF_DEFAULT);
       if (aotc->seg_size==64) {
 	if (tmpins->flags & IEF_48_REX)
 	  cur.REX=0x48;
@@ -460,7 +460,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
       }
 
       if (argcount==1) {
-	if (best.U8_count!=255 && !found_second_possible && !best.is_dft) {
+	if (best.U8_count!=255 && !found_second_possible && !best.is_default) {
 	  found_second_possible=TRUE;
 	  if (!aotc->arg1.size)
 	    PrintWarn("no size specified at %s,%04d\n",
@@ -570,7 +570,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	  MemCpy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
 	}
       } else if (argcount==2) {
-	if (best.U8_count!=255 && !found_second_possible && !best.is_dft) {
+	if (best.U8_count!=255 && !found_second_possible && !best.is_default) {
 	  found_second_possible=TRUE;
 	  if (!aotc->arg1.size && !aotc->arg2.size)
 	    PrintWarn("no size specified at %s,%04d\n",
@@ -891,7 +891,7 @@ U0 ParseBinFile(CCompCtrl *cc)
   U8 *buf,*st;
   if (cc->token!=TK_STR)
     LexExcept(cc,"Expecting string at ");
-  st=ExtDft(cc->cur_str,"BIN");
+  st=ExtDefault(cc->cur_str,"BIN");
   buf=FileRead(st,&size);
   Free(st);
   for (i=0;i<size;i++)

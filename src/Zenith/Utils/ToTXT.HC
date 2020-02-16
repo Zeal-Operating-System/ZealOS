@@ -112,9 +112,9 @@ public U0 ToTXT(U8 *_in_name,U8 *_out_name=NULL,I64 width=70)
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
   WinHorz(0,width-1); //Sets doc width for word wrap.
 
-  in_name=ExtDft(_in_name,".DD");
+  in_name=ExtDefault(_in_name,".DD");
   if (_out_name)
-    out_name=ExtDft(_out_name,"TXT");
+    out_name=ExtDefault(_out_name,"TXT");
   else
     out_name=ExtChg(_in_name,"TXT");
 

@@ -1,6 +1,6 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
 
-RegDft("ZenithOS/Talons","F64 best_score=9999;\n");
+RegDefault("ZenithOS/Talons","F64 best_score=9999;\n");
 RegExe("ZenithOS/Talons");
 
 //Keep these power of two so shift is used instead of multiply

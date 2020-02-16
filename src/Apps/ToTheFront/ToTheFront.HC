@@ -75,7 +75,7 @@ U0 CharDo(U8 ch)
       old_draw_it=Fs->draw_it;
       old_inhibit=Fs->win_inhibit;
       Fs->draw_it=Fs->next_settings->draw_it;
-      Fs->win_inhibit=WIG_USER_TASK_DFT;
+      Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
       old_cursor=DocCursor(ON);
       DocBottom;
       "\n$$GREEN$$<SHIFT-ESC>$$FG$$ to return to game.\n";

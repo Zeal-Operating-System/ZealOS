@@ -9,8 +9,8 @@ U0 SysGlobalsInit()
   sys_focus_task=Fs;
   QueueInit(&sys_macro_head);
 
-  blkdev.dft_iso_filename	=AStrNew(DFT_ISO_FILENAME);
-  blkdev.dft_iso_c_filename	=AStrNew(DFT_ISO_C_FILENAME);
+  blkdev.default_iso_filename	=AStrNew(DEFAULT_ISO_FILENAME);
+  blkdev.default_iso_c_filename	=AStrNew(DEFAULT_ISO_C_FILENAME);
   blkdev.tmp_filename		=AStrNew("~/Tmp.DD");
   blkdev.dvd_boot_is_good=TRUE;
   #exe {

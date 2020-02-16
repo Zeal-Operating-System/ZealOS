@@ -169,18 +169,18 @@ gs_done:
 }
 
 #help_index "Keyboard Devices;Char/Input;StdIn"
-public I64 GetI64(U8 *message=NULL,I64 dft=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
+public I64 GetI64(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
 {//Prompt user for I64 expression.
   Bool okay;
   U8 *st;
   I64 res;
   while (TRUE) {
     if (message)
-      "" message,dft;
+      "" message,default;
     st=GetStr;
     if (!*st) {
       Free(st);
-      return dft;
+      return default;
     }
     try {
       res=ExePrint2("ToI64(%s);",st);
@@ -195,18 +195,18 @@ public I64 GetI64(U8 *message=NULL,I64 dft=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
   }
 }
 
-public F64 GetF64(U8 *message=NULL,F64 dft=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
+public F64 GetF64(U8 *message=NULL,F64 default=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
 {//Prompt user for F64 expression.
   Bool okay;
   U8 *st;
   F64 res;
   while (TRUE) {
     if (message)
-      "" message,dft;
+      "" message,default;
     st=GetStr;
     if (!*st) {
       Free(st);
-      return dft;
+      return default;
     }
     try {
       res=ExePrint2("ToF64(%s);",st)(F64);
@@ -221,19 +221,19 @@ public F64 GetF64(U8 *message=NULL,F64 dft=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
   }
 }
 
-public CDate GetDate(U8 *message=NULL,CDate dft=I64_MIN,
+public CDate GetDate(U8 *message=NULL,CDate default=I64_MIN,
 	CDate lo=I64_MIN,CDate hi=I64_MAX)
 {//Prompt user for date expression. (Use $LK,"Now",A="MN:Now"$() if you want current time.)
   U8 *st;
   CDate res;
-  if (dft==I64_MIN) dft=Now;
+  if (default==I64_MIN) default=Now;
   while (TRUE) {
     if (message)
-      "" message,dft,dft;
+      "" message,default,default;
     st=GetStr;
     if (!*st) {
       Free(st);
-      return dft;
+      return default;
     }
     res=Str2Date(st);
     Free(st);

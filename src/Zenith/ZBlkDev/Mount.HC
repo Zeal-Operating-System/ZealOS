@@ -147,7 +147,7 @@ public U0 Unmount(U8 drv_let=0)
 
 public U8 MountFile(U8 *filename)
 {//Mount ISO.C file.
-  U8 *filename2=ExtDft(filename,"ISO.C"),*filename3=FileNameAbs(filename2);
+  U8 *filename2=ExtDefault(filename,"ISO.C"),*filename3=FileNameAbs(filename2);
   CDrive *dv=DriveMakeFreeSlot(DriveNextFreeLet('M')); //First $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$
   CBlkDev *bd=BlkDevNextFreeSlot(dv->drv_let,BDT_ISO_FILE_READ);
   bd->drv_offset=19<<2+(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;

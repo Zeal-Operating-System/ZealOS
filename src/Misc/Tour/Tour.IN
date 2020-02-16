@@ -13,7 +13,7 @@ U0 TourPutTask()
   Fs->border_src=BDS_CONST;
   Fs->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   Fs->text_attr  =LTGRAY<<4+BLUE;
-  Fs->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
+  Fs->win_inhibit=WIG_NO_FOCUS_TASK_DEFAULT;
   doc=DocPut;
   doc->flags|=DOCF_FORM;
   DocCursor(FALSE,doc);
@@ -33,7 +33,7 @@ U0 TourPutTask()
     }
     DocUnlock(doc);
     if (tour_okay_pressed) {
-      Fs->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
+      Fs->win_inhibit=WIG_NO_FOCUS_TASK_DEFAULT;
       if (sys_focus_task==Fs)
 	WinRefocus;
     } else {

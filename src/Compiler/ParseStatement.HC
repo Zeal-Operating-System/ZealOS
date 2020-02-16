@@ -579,9 +579,9 @@ U0 ParseSwitch(CCompCtrl *cc,I64 try_count)
 {
   CSwitchCase *header=NULL,*tmps,*tmps1;	//Leaks on except
   CSubSwitch head,*tmpss;			//Leaks on except
-  CCodeMisc *lb_dft,*lb_fwd_case,*mc_jt,*lb_entry,**jmp_table;
+  CCodeMisc *lb_default,*lb_fwd_case,*mc_jt,*lb_entry,**jmp_table;
   CIntermediateCode *tmpi_sub,*tmpi_cmp,*tmpi_jmp,*tmpi_start;
-  Bool dft_found=FALSE,nobound;
+  Bool default_found=FALSE,nobound;
   I64 i,k_start=I64_MIN,k_end,lo=I64_MAX,hi=I64_MIN,range;
 
   if (cc->token=='(')
@@ -595,8 +595,8 @@ U0 ParseSwitch(CCompCtrl *cc,I64 try_count)
 
   head.last->lb_break=COCMiscNew(cc,CMT_LABEL);
   head.last->lb_break->use_count++;
-  lb_dft=COCMiscNew(cc,CMT_LABEL);
-  lb_dft->use_count++;
+  lb_default=COCMiscNew(cc,CMT_LABEL);
+  lb_default->use_count++;
   mc_jt=COCMiscNew(cc,CMT_JMP_TABLE);
   mc_jt->begin=COCMiscNew(cc,CMT_LABEL);
   mc_jt->begin->use_count++;
@@ -645,7 +645,7 @@ sw_cont:
 		goto sw_sub_end;
 	      case KW_START:
 	      case KW_CASE:
-	      case KW_DFT:
+	      case KW_DEFAULT:
 		if (cc->coc.coc_head.last==tmpi_start) {
 		  OptFree(tmpi_jmp);
 		  tmpss->lb_start=NULL;
@@ -716,13 +716,13 @@ sw_cont:
 	  } else
 	    LexExcept(cc,"Expecting ':' at ");
 	  break;
-	case KW_DFT:
+	case KW_DEFAULT:
 	  if (head.next!=&head) {
 	    lb_fwd_case=COCMiscNew(cc,CMT_LABEL);
 	    tmpi_jmp=ICAdd(cc,IC_JMP,lb_fwd_case,0);//In case fall-thru
 	  }
 	  Lex(cc);
-	  ICAdd(cc,IC_LABEL,lb_dft,0);
+	  ICAdd(cc,IC_LABEL,lb_default,0);
 	  if (cc->token==':')
 	    Lex(cc);
 	  else
@@ -736,7 +736,7 @@ sw_cont:
 	    }
 	    ICAdd(cc,IC_LABEL,lb_fwd_case,0);
 	  }
-	  dft_found=TRUE;
+	  default_found=TRUE;
 	  break;
 	default:
 	  ParseStatement(cc,try_count,head.last->lb_break);
@@ -761,8 +761,8 @@ sw_sub_end:
 	LexExcept(cc,"Expecting ':' at ");
     }
   }
-  if (!dft_found)
-    ICAdd(cc,IC_LABEL,lb_dft,0);
+  if (!default_found)
+    ICAdd(cc,IC_LABEL,lb_default,0);
 
   if (0<lo<=16)
     lo=0;
@@ -770,20 +770,20 @@ sw_sub_end:
   if (lo>hi || !(0<range<=0xFFFF))
     LexExcept(cc,"switch range error at ");
   jmp_table=MAlloc((sizeof(CCodeMisc *)*range+0x1FF)&~0x1FF);
-  MemSetI64(jmp_table,lb_dft,range);
+  MemSetI64(jmp_table,lb_default,range);
   tmpi_sub->ic_data=lo;
   tmpi_cmp->ic_data=range;
   tmps=header;
   while (tmps) {
     tmps1=tmps->next;
-    if (jmp_table[tmps->val-lo]!=lb_dft)
+    if (jmp_table[tmps->val-lo]!=lb_default)
       LexExcept(cc,"Duplicate case at ");
     else
       jmp_table[tmps->val-lo]=tmps->label;
     Free(tmps);
     tmps=tmps1;
   }
-  mc_jt->dft=lb_dft;
+  mc_jt->default=lb_default;
   mc_jt->jmp_table=jmp_table;
   mc_jt->range=range;
 }

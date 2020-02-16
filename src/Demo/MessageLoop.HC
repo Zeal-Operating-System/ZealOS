@@ -15,7 +15,7 @@ U0 MessageLoop()
   } while (message_code!=MESSAGE_KEY_DOWN || arg1!=CH_ESC && arg1!=CH_SHIFT_ESC);
   GetMessage(,,1<<MESSAGE_KEY_UP);
 
-  Fs->win_inhibit=WIG_USER_TASK_DFT;
+  Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
 }
 
 MessageLoop;

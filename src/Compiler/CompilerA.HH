@@ -260,7 +260,7 @@ class CIntermediateStruct
 #define KW_START	21
 #define KW_END		22
 #define KW_CASE		23
-#define KW_DFT		24
+#define KW_DEFAULT		24
 #define KW_PUBLIC	25
 #define KW_OFFSET	26
 #define KW_IMPORT	27

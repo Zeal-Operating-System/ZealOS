@@ -16,7 +16,7 @@ Bool RegCache()
     return TRUE;
 }
 
-public Bool RegDft(U8 *path,U8 *val,Bool is_zenith_entry=FALSE)
+public Bool RegDefault(U8 *path,U8 *val,Bool is_zenith_entry=FALSE)
 {//Add code doc tree branch to registry.
   Bool res,unlock_doc;
   RegCache;
@@ -109,9 +109,9 @@ U0 RegInit()
 {
   U8 buf[STR_LEN];
   Bool version_present;
-  RegDft("Zenith/SysMessageFlags","sys_message_flags[0]=0;\n",TRUE);
+  RegDefault("Zenith/SysMessageFlags","sys_message_flags[0]=0;\n",TRUE);
   StrPrint(buf,"registry_version=%4.3f;\n",sys_os_version);
-  version_present=RegDft("Zenith/SysRegVer",buf,TRUE);
+  version_present=RegDefault("Zenith/SysRegVer",buf,TRUE);
   RegExe("Zenith");
   if (registry_version!=sys_os_version) {
     RegWrite("Zenith/SysRegVer",buf);
@@ -180,14 +180,14 @@ public U0 OnceExe()
 {//Execute Once code. Call goes in $LK,"~/Once.HC"$.
   try {
 
-    RegDft("Once/Zenith","");
+    RegDefault("Once/Zenith","");
     if (RegCount("Once/Zenith")>2) {
       Zenith("RegExe(\"Once/Zenith\");");
       AOnceFlush;
     }
     LBts(&sys_run_level,RLf_ONCE_ZENITH);
 
-    RegDft("Once/User","");
+    RegDefault("Once/User","");
     if (RegCount("Once/User")>2) {
       RegExe("Once/User");
       OnceFlush;

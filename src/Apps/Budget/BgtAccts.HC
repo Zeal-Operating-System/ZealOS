@@ -51,12 +51,12 @@ I64 BgtAcctColor(U8 *st)
     return BLACK;
 }
 
-U8 *BgtPopUpAcct(U8 *header=NULL,U8 *dft=NULL)
+U8 *BgtPopUpAcct(U8 *header=NULL,U8 *default=NULL)
 {
   I64 i;
   U8 *res;
   CDoc *doc=DocNew;
-  CDocEntry *doc_e,*doc_dft=NULL;
+  CDocEntry *doc_e,*doc_default=NULL;
   CHashGeneric *tmph;
 
   if (header)
@@ -67,14 +67,14 @@ U8 *BgtPopUpAcct(U8 *header=NULL,U8 *dft=NULL)
     while (tmph) {
       doc_e=DocPrint(doc,"$$FG,%d$$$$MU-UL,\"%s\",LE=0x%X$$\n",
 	    tmph->user_data1,tmph->str,tmph->str);
-      if (dft && !StrCmp(dft,tmph->str))
-	doc_dft=doc_e;
+      if (default && !StrCmp(default,tmph->str))
+	doc_default=doc_e;
       tmph=tmph->next;
     }
   }
 
-  if (doc_dft) {
-    doc->cur_entry=doc_dft;
+  if (doc_default) {
+    doc->cur_entry=doc_default;
     doc->cur_col=0;
   }
   res=PopUpMenu(doc,DOF_DONT_HOME);

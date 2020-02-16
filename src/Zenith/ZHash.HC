@@ -371,7 +371,7 @@ public U0 PopUpHelpIndex(U8 *idx,CTask *parent=NULL)
 #help_index "Hash/System"
 public U0 MapFileLoad(U8 *filename)
 {//Load map file so we have src line info.
-  U8 *st,*ptr,*name=ExtDft(filename,"MAP"),
+  U8 *st,*ptr,*name=ExtDefault(filename,"MAP"),
 	*absname=FileNameAbs(name);
   CDoc *doc=DocRead(name);
   CDocEntry *doc_e;

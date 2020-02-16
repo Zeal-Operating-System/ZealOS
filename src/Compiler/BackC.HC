@@ -646,7 +646,7 @@ U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
     }
 
     rip+=tmpi->ic_count;
-    lb=tmpi->ic_data(CCodeMisc *)->dft;
+    lb=tmpi->ic_data(CCodeMisc *)->default;
     short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
     if (!buf && lb->addr!=INVALID_PTR) {
       i=lb->addr-(rip+2);

@@ -41,7 +41,7 @@ $FG,2$DC$FG$	Device Context
 $FG,2$Del$FG$	Delete
 $FG,2$Desc$FG$	Descriptor, Description
 $FG,2$Dev$FG$	Device
-$FG,2$Dft$FG$	Default
+$FG,2$Default$FG$	Default
 $FG,2$Dir$FG$	Directory, Direction
 $FG,2$Div$FG$	Divide
 $FG,2$Doc$FG$	Document

@@ -76,7 +76,7 @@ I64 EdRILex(CRILex *rx)
 	  !rx->exp_depth || i==KW_ELSE || i==KW_CATCH || i==KW_DO)
       rx->is_not_cont=TRUE;
     if (rx->was_new_line && (rx->cc1->token!=':' || i==KW_CASE ||
-	  i==KW_DFT || i==KW_START || i==KW_END)) {
+	  i==KW_DEFAULT || i==KW_START || i==KW_END)) {
       tmpf=rx->cc2->lex_include_stk;
       while (tmpf->next)
 	tmpf=tmpf->next;
@@ -202,7 +202,7 @@ U0 EdRIStatement(CRILex *rx,Bool indent)
 		  EdRILex(rx);
 		  break;
 		case KW_CASE:
-		case KW_DFT:
+		case KW_DEFAULT:
 		  rx->depth+=i; i=0;
 		  while (EdRILex(rx) && rx->cc1->token!=':');
 		  EdRILex(rx);
@@ -531,7 +531,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 		x=doc_e->x+1;
 		while (i>8) {
 		  doc_ne=DocEntryNewBase(doc,
-			DOCT_TAB|doc->settings_head.dft_text_attr<<8,,
+			DOCT_TAB|doc->settings_head.default_text_attr<<8,,
 			x,doc_e->y,doc_e->page_line_num);
 		  MemCpy(&doc_ne->settings,
 			&doc_e->settings,sizeof(CDocSettings));
@@ -544,7 +544,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 		  MemSet(b,CH_SPACE,i);
 		  b[i]=0;
 		  doc_ne=DocEntryNewBase(doc,
-			DOCT_TEXT|doc->settings_head.dft_text_attr<<8,,
+			DOCT_TEXT|doc->settings_head.default_text_attr<<8,,
 			x,doc_e->y,doc_e->page_line_num);
 		  doc_ne->tag=b;
 		  doc_ne->max_col=1;

@@ -67,14 +67,14 @@ U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
   CDrive *dv=Letter2Drive(dvd_drv_let);
   CBlkDev *bd=dv->bd;
   U8 *buf=MAlloc(COPY_BUF_BLKS<<BLK_SIZE_BITS),
-	*out_name2=ExtDft(out_name,"ISO");
+	*out_name2=ExtDefault(out_name,"ISO");
   CFile *f=FOpen(out_name2,"w");
   I64 n,spc=bd->blk_size>>BLK_SIZE_BITS,blk=0,count,retry;
   BlkDevInit(bd);
   if (bd->type!=BDT_ATAPI)
     throw('BlkDev');
   if (!out_name)
-    out_name=blkdev.dft_iso_filename;
+    out_name=blkdev.default_iso_filename;
   count=CeilU64(dv->size,spc);
   while (count>0) {
     if (count>COPY_BUF_BLKS)
@@ -151,8 +151,8 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   CFile *f;
 
   if (!in_name)
-    in_name=blkdev.dft_iso_filename;
-  in_name3=ExtDft(in_name,"ISO");
+    in_name=blkdev.default_iso_filename;
+  in_name3=ExtDefault(in_name,"ISO");
   in_name2=FileNameAbs(in_name3);
   f=FOpen(in_name2,"r");
   if (!f) {

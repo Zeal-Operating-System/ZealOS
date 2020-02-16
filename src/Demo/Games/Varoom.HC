@@ -87,7 +87,7 @@
 
 
 
-RegDft("ZenithOS/Varoom","F64 best_score=9999;\n");
+RegDefault("ZenithOS/Varoom","F64 best_score=9999;\n");
 RegExe("ZenithOS/Varoom");
 
 F64 distance,t0,tf;
@@ -654,7 +654,7 @@ U0 Varoom()
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
   try {
     Fs->text_attr=YELLOW<<4+BLUE;
-    Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+    Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	  -WIF_SELF_GRAB_SCROLL-WIF_FOCUS_TASK_MENU;
     AutoComplete;
     WinBorder;

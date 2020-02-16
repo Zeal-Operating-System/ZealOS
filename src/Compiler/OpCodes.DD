@@ -1,7 +1,7 @@
 /* See $LK,"AsmHashLoad",A="MN:AsmHashLoad"$().
 
 '!'= IEF_DONT_SWITCH_MODES
-'&'= IEF_DFT
+'&'= IEF_DEFAULT
 '%'= IEF_NOT_IN_64_BIT	Not Allowed in 64-bit.
 '='= IEF_48_REX		Rex 0x48 only if in 64-bit mode.
 '`'= IEF_REX_ONLY_R8_R15

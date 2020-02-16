@@ -296,7 +296,7 @@ public extern U8 *DirFile(U8 *dirname,U8 *name=NULL,U8 *_extension=NULL);
 public extern U8 *DirNameAbs(U8 *dirname);
 public extern CBlkDev *DriveIsWritable(U8 drv_let=0,Bool except=FALSE);
 public extern U8 *ExtChg(U8 *filename,U8 *extension);
-public extern U8 *ExtDft(U8 *filename,U8 *extension);
+public extern U8 *ExtDefault(U8 *filename,U8 *extension);
 public extern U8 *FileExtDot(U8 *src);
 public extern U8 *FileExtRemove(U8 *src,U8 *dst=NULL);
 public extern U8 *FileNameAbs(U8 *filename,I64 fuf_flags=0);
@@ -521,7 +521,7 @@ public extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,
 public extern I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,
 	Bool raw_cursor=FALSE);
 public extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
-public extern U8 *GetStr(U8 *message=NULL,U8 *dft=NULL,I64 flags=0);
+public extern U8 *GetStr(U8 *message=NULL,U8 *default=NULL,I64 flags=0);
 extern U0	KbdInit();
 public extern I64 KbdMsEvtTime();
 extern U0	KbdMsHandler(Bool poll_kbd,Bool poll_ms);

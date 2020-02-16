@@ -40,7 +40,7 @@ extern Bool DriveTypeSet(U8 drv_let,I64 type=FSt_REDSEA);
 extern U0 DrivesRelease();
 extern U0 DiskCacheInvalidate(CDrive *dv);
 extern U0 Exit();
-extern U8 *ExtDft(U8 *filename,U8 *extension);
+extern U8 *ExtDefault(U8 *filename,U8 *extension);
 extern I64 FAT32AllocClus(CDrive *dv,I64 c,I64 count);
 extern I64 FAT32AllocContiguousClus(CDrive *dv,I64 count);
 extern Bool FAT32DirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,

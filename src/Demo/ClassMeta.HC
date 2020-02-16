@@ -15,23 +15,23 @@ U0 RankOut(I64 i)
 
 class Test1Struct
 {
-  I64 age	print_str "%2d" dft_val 38;
-  I64 color	dft_val RED; //Accepts expressions
-  I64 rank	print_str "%1d" dft_val 6/2 output_fun &RankOut;
+  I64 age	print_str "%2d" default_val 38;
+  I64 color	default_val RED; //Accepts expressions
+  I64 rank	print_str "%1d" default_val 6/2 output_fun &RankOut;
 };
 
 class Test2Struct
 {
-  I64 age	 print_str "%2d" dft_val 38 percentile 54.20;
-  I64 rank	 print_str "%1d" dft_val 5;
-  I64 serial_num print_str "%6d" dft_val 123456;
+  I64 age	 print_str "%2d" default_val 38 percentile 54.20;
+  I64 rank	 print_str "%1d" default_val 5;
+  I64 serial_num print_str "%6d" default_val 123456;
 };
 
 U0 DumpStruct(U8 *_d,U8 *class_name=lastclass)
 {//lastclass is keyword.  See $LK,"::/Demo/LastClass.HC"$.
   CHashClass *tmpc=HashFind(class_name,Fs->hash_table,HTT_CLASS);
   U8 *print_str;
-  I64 *q,dft_val;
+  I64 *q,default_val;
   U0 (* fp_output_fun)(I64 i);
   F64 percentile;
   if (!tmpc) return;
@@ -48,8 +48,8 @@ U0 DumpStruct(U8 *_d,U8 *class_name=lastclass)
       "" print_str,*q;
 
       //This is slightly ambiguous -- if no meta is present it will return zero.
-    if (dft_val=MemberMetaData("dft_val",ml))
-      " default:%d",dft_val;
+    if (default_val=MemberMetaData("default_val",ml))
+      " default:%d",default_val;
 
       //This corrects for the ambiguity, allowing zero percentile.
     if (MemberMetaFind("percentile",ml)) {//check if it exists

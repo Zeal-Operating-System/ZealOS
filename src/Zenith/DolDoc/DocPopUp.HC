@@ -52,11 +52,11 @@ public U8 *PopUpPickDir(U8 *dir=NULL)
   return res;
 }
 
-public U8 *FileNameForm(U8 *dft=NULL,I64 dof_flags=0,CTask *mem_task=NULL)
+public U8 *FileNameForm(U8 *default=NULL,I64 dof_flags=0,CTask *mem_task=NULL)
 {//Text filename form in cur win, not PopUp.
   CEdFileName fn;
-  if (dft)
-    StrCpy(fn.name,dft);
+  if (default)
+    StrCpy(fn.name,default);
   else
     *fn.name=0;
   if (DocForm(&fn,,dof_flags))
@@ -65,10 +65,10 @@ public U8 *FileNameForm(U8 *dft=NULL,I64 dof_flags=0,CTask *mem_task=NULL)
     return NULL;
 }
 
-public U8 *PopUpFileName(U8 *dft=NULL,I64 dof_flags=0)
+public U8 *PopUpFileName(U8 *default=NULL,I64 dof_flags=0)
 {//Filename chooser. Uses form, not $LK,"FileMgr",A="MN:FileMgr"$().
   U8 *st=MStrPrint("FileNameForm(\"%Q\",0x%X,Fs->parent_task);",
-	dft,dof_flags|DOF_SIZE_MIN),*res=PopUp(st,Fs);
+	default,dof_flags|DOF_SIZE_MIN),*res=PopUp(st,Fs);
   Free(st);
   return res;
 }
@@ -178,17 +178,17 @@ public U8 *PopUpGetStr(U8 *header=NULL)
   return res;
 }
 
-public I64 PopUpGetI64(U8 *message,I64 dft,I64 lo=I64_MIN,I64 hi=I64_MAX)
+public I64 PopUpGetI64(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX)
 {//Prompt for I64 text expression in PopUp win task.
-  U8 *st=MStrPrint("GetI64(0x%X,0x%X,0x%X,0x%X);",message,dft,lo,hi);
+  U8 *st=MStrPrint("GetI64(0x%X,0x%X,0x%X,0x%X);",message,default,lo,hi);
   I64 res=PopUp(st,Fs);
   Free(st);
   return res;
 }
 
-public F64 PopUpGetF64(U8 *message,F64 dft,F64 lo=F64_MIN,F64 hi=F64_MAX)
+public F64 PopUpGetF64(U8 *message,F64 default,F64 lo=F64_MIN,F64 hi=F64_MAX)
 {//Prompt for F64 text expression in PopUp win task.
-  U8 *st=MStrPrint("GetF64(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));",message,dft,lo,hi);
+  U8 *st=MStrPrint("GetF64(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));",message,default,lo,hi);
   F64 res=PopUp(st,Fs)(F64);
   Free(st);
   return res;
@@ -264,7 +264,7 @@ public I64 ZenithFile(U8 *filename,Bool warn_ext=TRUE)
 {//Make zenith_task execute file.
   Bool okay=TRUE;
   U8 *name=FileNameAbs(filename),
-	*name2=ExtDft(name,"HC");
+	*name2=ExtDefault(name,"HC");
   I64 res=0;
   if (warn_ext &&
 	!FilesFindMatch(name2,FILEMASK_JIT) &&
@@ -282,7 +282,7 @@ public I64 PopUpFile(U8 *filename,Bool warn_ext=TRUE,
 {//$LK,"ExeFile2",A="MN:ExeFile2"$() in $LK,"PopUp",A="MN:PopUp"$ task. Cont as User.
   Bool okay=TRUE;
   U8 *st,*name=FileNameAbs(filename),
-	*name2=ExtDft(name,"HC");
+	*name2=ExtDefault(name,"HC");
   I64 res=0;
   if (warn_ext &&
 	!FilesFindMatch(name2,FILEMASK_JIT) &&
@@ -304,7 +304,7 @@ public I64 PopUpFile(U8 *filename,Bool warn_ext=TRUE,
 public I64 PopUpRunFile(U8 *filename,I64 ccf_flags=0,...)
 {//$LK,"ExeFile",A="MN:ExeFile"$() with args using $LK,"LastFun",A="MN:LastFun"$() in $LK,"PopUp",A="MN:PopUp"$ task.
   U8 *st,*name=FileNameAbs(filename),
-	*name2=ExtDft(name,"HC");
+	*name2=ExtDefault(name,"HC");
   I64 res=0;
   st=MStrPrint(
 	"\"$$$$WW+H,1$$$$\";ExeFile2(\"%s\",0x%X);LastFun(0x%X,0x%X);",

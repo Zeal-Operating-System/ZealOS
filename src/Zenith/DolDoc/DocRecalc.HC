@@ -97,14 +97,14 @@ U0 DocRecalcXY(CDoc *doc,CDocEntry *doc_e,
 	    doc->page_line_num%doc_e->settings.page_len;
     else
       doc->page_line_num=doc->page_line_num%doc_e->settings.page_len;
-    if (doc_e->settings.header!=DOC_DFT &&
+    if (doc_e->settings.header!=DOC_DEFAULT &&
 	  doc->page_line_num<doc_e->settings.header) {
       y+=doc_e->settings.header-doc->page_line_num;
       doc->page_line_num=doc_e->settings.header;
     }
-    if (doc_e->settings.footer==DOC_DFT) {
+    if (doc_e->settings.footer==DOC_DEFAULT) {
       if (doc->page_line_num>=doc_e->settings.page_len) {
-	if (doc_e->settings.header==DOC_DFT)
+	if (doc_e->settings.header==DOC_DEFAULT)
 	  doc->page_line_num=0;
 	else {
 	  doc->page_line_num=doc_e->settings.header;
@@ -115,7 +115,7 @@ U0 DocRecalcXY(CDoc *doc,CDocEntry *doc_e,
       if (doc->page_line_num>=
 	    doc_e->settings.page_len-doc_e->settings.footer) {
 	y+=doc_e->settings.footer;
-	if (doc_e->settings.header==DOC_DFT)
+	if (doc_e->settings.header==DOC_DEFAULT)
 	  doc->page_line_num=0;
 	else {
 	  doc->page_line_num=doc_e->settings.header;
@@ -354,7 +354,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
     recalc_flags&=~RECALCF_HAS_CURSOR;
     if (recalc_flags&RECALCG_MASK==RECALCt_TO_SCRN)
       doc->settings_head.cur_text_attr=
-	    doc->settings_head.dft_text_attr=win_task->border_attr;
+	    doc->settings_head.default_text_attr=win_task->border_attr;
   } else {
     if (recalc_flags&RECALCF_HAS_CURSOR && full_refresh) {
       if (Bt(&hss->flags,WSSf_SET_TO_POS)||Bt(&vss->flags,WSSf_SET_TO_POS)) {
@@ -375,7 +375,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
     }
     if (recalc_flags&RECALCG_MASK==RECALCt_TO_SCRN)
       doc->settings_head.cur_text_attr=
-	    doc->settings_head.dft_text_attr=win_task->text_attr;
+	    doc->settings_head.default_text_attr=win_task->text_attr;
   }
   x0=doc->line_start_col;
   y0=doc->top_line_num;
@@ -727,7 +727,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 	y++;
 	doc->page_line_num++;
 rc_start_of_line:
-	if (s->left_margin==DOC_DFT)
+	if (s->left_margin==DOC_DEFAULT)
 	  x=s->indent;
 	else
 	  x=s->indent+s->left_margin;
@@ -744,16 +744,16 @@ rc_adjust_xy:
 	      doc->page_line_num=doc->page_line_num%s->page_len;
 	  }
 	}
-	if (s->header!=DOC_DFT) {
+	if (s->header!=DOC_DEFAULT) {
 	  if (doc->page_line_num<s->header) {
 	    y+=s->header-doc->page_line_num;
 	    doc->page_line_num=s->header;
 	    goto rc_start_of_line;
 	  }
 	}
-	if (s->footer==DOC_DFT) {
+	if (s->footer==DOC_DEFAULT) {
 	  if (doc->page_line_num>=s->page_len) {
-	    if (s->header==DOC_DFT)
+	    if (s->header==DOC_DEFAULT)
 	      doc->page_line_num=0;
 	    else {
 	      doc->page_line_num=s->header;
@@ -764,7 +764,7 @@ rc_adjust_xy:
 	} else {
 	  if (doc->page_line_num>=s->page_len-s->footer) {
 	    y+=s->footer;
-	    if (s->header==DOC_DFT)
+	    if (s->header==DOC_DEFAULT)
 	      doc->page_line_num=0;
 	    else {
 	      doc->page_line_num=s->header;
@@ -869,36 +869,36 @@ rc_adjust_xy:
 	goto rc_start_of_line;
       case DOCT_FOREGROUND:
 	cur_u8_attr&=0xF0;
-	if (doc_e->attr==DOC_DFT)
-	  cur_u8_attr|=s->dft_text_attr&0x0F;
+	if (doc_e->attr==DOC_DEFAULT)
+	  cur_u8_attr|=s->default_text_attr&0x0F;
 	else
 	  cur_u8_attr|=doc_e->attr;
 	s->cur_text_attr=cur_u8_attr;
 	break;
       case DOCT_BACKGROUND:
 	cur_u8_attr&=0x0F;
-	if (doc_e->attr==DOC_DFT)
-	  cur_u8_attr|=s->dft_text_attr&0xF0;
+	if (doc_e->attr==DOC_DEFAULT)
+	  cur_u8_attr|=s->default_text_attr&0xF0;
 	else
 	  cur_u8_attr|=doc_e->attr<<4;
 	s->cur_text_attr=cur_u8_attr;
 	break;
-      case DOCT_DFT_FOREGROUND:
+      case DOCT_DEFAULT_FOREGROUND:
 	cur_u8_attr&=0xF0;
-	if (doc_e->attr==DOC_DFT)
-	  cur_u8_attr|=s->dft_text_attr&0xF;
+	if (doc_e->attr==DOC_DEFAULT)
+	  cur_u8_attr|=s->default_text_attr&0xF;
 	else
 	  cur_u8_attr|=doc_e->attr;
-	s->dft_text_attr=s->dft_text_attr&0xF0|cur_u8_attr&0x0F;
+	s->default_text_attr=s->default_text_attr&0xF0|cur_u8_attr&0x0F;
 	s->cur_text_attr=cur_u8_attr;
 	break;
-      case DOCT_DFT_BACKGROUND:
+      case DOCT_DEFAULT_BACKGROUND:
 	cur_u8_attr&=0x0F;
-	if (doc_e->attr==DOC_DFT)
-	  cur_u8_attr|=s->dft_text_attr&0xF0;
+	if (doc_e->attr==DOC_DEFAULT)
+	  cur_u8_attr|=s->default_text_attr&0xF0;
 	else
 	  cur_u8_attr|=doc_e->attr<<4;
-	s->dft_text_attr=s->dft_text_attr&0x0F|cur_u8_attr&0xF0;
+	s->default_text_attr=s->default_text_attr&0x0F|cur_u8_attr&0xF0;
 	s->cur_text_attr=cur_u8_attr;
 	break;
       case DOCT_WORD_WRAP:

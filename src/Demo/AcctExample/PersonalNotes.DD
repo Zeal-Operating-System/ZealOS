@@ -216,7 +216,7 @@ $FG,5$$TX+CX,"TODO? Not really, just angst."$$FG$
 $ID,5$CArrayDim dim;
 CHashFun *fun_ptr;
 $ID,-5$
-* extern of fun with dft arg of str?
+* extern of fun with default arg of str?
 
 * ISO.C on FAT32 created by Windows or Linux are not contiguous.
 

@@ -790,7 +790,7 @@ U0 DrawIt(CTask *task,CDC *dc)
     task->win_inhibit=WIF_SELF_DOC;
   } else {
     MeshCurSnap(e);
-    task->win_inhibit=WIG_TASK_DFT|WIF_SELF_DOC-WIF_SELF_FOCUS-WIF_SELF_BORDER
+    task->win_inhibit=WIG_TASK_DEFAULT|WIF_SELF_DOC-WIF_SELF_FOCUS-WIF_SELF_BORDER
 	  -WIF_SELF_CTRLS-WIF_FOCUS_TASK_MENU-WIF_SELF_GRAB_SCROLL;
   }
 
@@ -1062,7 +1062,7 @@ $WW,0$*/
 	"$$GREEN$$'s'$$FG$$: Set snap\n"
 	"\nSee menu at top of scrn for more.\n");
 
-  Fs->win_inhibit=WIG_TASK_DFT|WIF_SELF_DOC-WIF_SELF_FOCUS-WIF_SELF_BORDER
+  Fs->win_inhibit=WIG_TASK_DEFAULT|WIF_SELF_DOC-WIF_SELF_FOCUS-WIF_SELF_BORDER
 	-WIF_SELF_CTRLS-WIF_FOCUS_TASK_MENU-WIF_SELF_GRAB_SCROLL;
   Fs->horz_scroll.pos=0;
   Fs->vert_scroll.pos=0;

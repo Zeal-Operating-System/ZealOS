@@ -237,7 +237,7 @@ public Bool DocForm(U8 *_d,U8 *class_name=lastclass,
 	if (tmpc2->type & HTT_INTERNAL_TYPE) {
 	  if (ml->dim.next) { //Array
 	    if (tmpc2->raw_type==RT_U8 &&
-		  LBtr(&doc_e->de_flags,&DOCEf_DFT_LEN)) {
+		  LBtr(&doc_e->de_flags,&DOCEf_DEFAULT_LEN)) {
 	      doc_e->len=ml->dim.total_count;
 	      if (doc_e->de_flags&DOCEF_HAS_TERMINATOR)
 		doc_e->len--;
@@ -245,7 +245,7 @@ public Bool DocForm(U8 *_d,U8 *class_name=lastclass,
 	      doc_e->tag=MAlloc(doc_e->len+doc_e->min_col+2,
 		    doc->mem_task); //+2 because "_\0"
 	    }
-	  } else if (LBtr(&doc_e->de_flags,DOCEf_DFT_RAW_TYPE))
+	  } else if (LBtr(&doc_e->de_flags,DOCEf_DEFAULT_RAW_TYPE))
 	    doc_e->raw_type=tmpc2->raw_type;
 	}
       }

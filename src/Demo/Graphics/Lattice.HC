@@ -176,7 +176,7 @@ U0 Lattice()
   DocClear;
   TurtleInit(&tt);
   SetMenu;
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_FOCUS_TASK_MENU
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_FOCUS_TASK_MENU
 	-WIF_SELF_FOCUS-WIF_SELF_GRAB_SCROLL;
   Fs->draw_it=&DrawIt;
   try {

@@ -33,7 +33,7 @@ U0 PsmRightClick(I64 x,I64 y)
   if (DocPut) old_doc_flags=DocPut->flags;
   psm.cur_note=tmpn=PsmFindNote(x,y);
   if (tmpn!=&psm.head) {
-    Fs->win_inhibit=WIG_USER_TASK_DFT;
+    Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
     i=PopUpDuration;
     if (0<=i<PSM_DURATIONS_NUM) {
       if (tmpn->type==PSMT_NOTE)
@@ -100,7 +100,7 @@ U0 PsmRightClick(I64 x,I64 y)
       }
     }
     PsmSetWidth(psm.cur_note);
-    Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+    Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	  -WIF_SELF_BORDER-WIF_FOCUS_TASK_MENU-WIF_SELF_CTRLS;
   }
 }
@@ -333,14 +333,14 @@ U0 PsmUpKey(I64 x,I64 y)
 
 U0 PsmPushMode(I64 psm_octave)
 {
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	-WIF_SELF_BORDER-WIF_FOCUS_TASK_MENU-WIF_SELF_CTRLS;
   PsmMenu(psm_octave);
 }
 
 U0 PsmPopMode()
 {
-  Fs->win_inhibit=WIG_USER_TASK_DFT;
+  Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
   DCFill;
 }
 
@@ -726,9 +726,9 @@ mo_got_message:
 	  break;
 	case MESSAGE_MS_MOVE:
 	  if (arg2>18*FONT_HEIGHT)
-	    Fs->win_inhibit=WIG_USER_TASK_DFT;
+	    Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
 	  else
-	    Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-WIF_SELF_BORDER
+	    Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER
 		  -WIF_FOCUS_TASK_MENU-WIF_SELF_CTRLS;
 	  break;
 	case MESSAGE_MS_L_DOWN:

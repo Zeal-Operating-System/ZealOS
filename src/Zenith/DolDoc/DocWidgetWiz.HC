@@ -313,10 +313,10 @@ Bool GetLink(I64 type,U8 **_tag,U8 **_link,Bool *_pop_up,
 	}
 	break;
       case LK_ADDR:
-	e->num=DFT_ADDR_LINK_BIN_SIZE;
+	e->num=DEFAULT_ADDR_LINK_BIN_SIZE;
 	if (DocForm(e,"CEdAddrLink",,,ctrl_L_footer)) {
 	  res=TRUE;
-	  if (e->num==DFT_ADDR_LINK_BIN_SIZE) {
+	  if (e->num==DEFAULT_ADDR_LINK_BIN_SIZE) {
 	    if (!*e->tag)
 	      *_tag=StrNew(e->aux);
 	    else
@@ -396,8 +396,8 @@ I64 PopUpColorType()
   DocPrint(doc,"$$PURPLE$$$$TX+CX,\"Color Type Menu\"$$\n"
 	"\n$$LTBLUE$$$$MU,\"Foreground\",LE=DOCT_FOREGROUND$$\n"
 	"$$MU,\"Background\",LE=DOCT_BACKGROUND$$\n"
-	"$$MU,\"Default Foreground\",LE=DOCT_DFT_FOREGROUND$$\n"
-	"$$MU,\"Default Background\",LE=DOCT_DFT_BACKGROUND$$\n"
+	"$$MU,\"Default Foreground\",LE=DOCT_DEFAULT_FOREGROUND$$\n"
+	"$$MU,\"Default Background\",LE=DOCT_DEFAULT_BACKGROUND$$\n"
 	"%s",ctrl_L_footer);
   i=PopUpMenu(doc);
   DocDel(doc);
@@ -422,10 +422,10 @@ I64 PopUpPageSettingType()
 
 U0 EdInsColor()
 {
-  I64 type=PopUpColorType,col=DOC_DFT;
+  I64 type=PopUpColorType,col=DOC_DEFAULT;
   if (type>=0) {
     col=PopUpColor(,FALSE);
-    if (col==DOC_DFT)
+    if (col==DOC_DEFAULT)
       "$$%Z$$",type,"ST_DOC_CMDS";
     else if (col>=0)
       "$$%Z,%d$$",type,"ST_DOC_CMDS",col;
@@ -792,7 +792,7 @@ U0 EdInsData()
   U8 *st,buf[512],raw_type[16];
   CEdDataNum *e=CAlloc(sizeof(CEdDataNum));
   e->term=TRUE;
-  e->len=DOCE_LEN_DFT;
+  e->len=DOCE_LEN_DEFAULT;
   if ((i=PopUpPickDefineSub("ST_NATURAL_TYPES"))>=0) {
     *buf=0;
     i+=RT_I8;
@@ -822,7 +822,7 @@ U0 EdInsData()
       st=MStrPrint("%q",e->fmt_str);
       if (e->remalloc)
 	"$$$$DA%s,A=\\\"%$$Q\\\"$$$$",buf,st;
-      else if (e->len==DOCE_LEN_DFT)
+      else if (e->len==DOCE_LEN_DEFAULT)
 	"$$$$DA%s%s,A=\\\"%$$Q\\\"$$$$",buf,raw_type,st;
       else
 	"$$$$DA%s,LEN=%d%s,A=\\\"%$$Q\\\"$$$$",buf,e->len,raw_type,st;
@@ -861,7 +861,7 @@ U0 EdInsCheckBox()
 
 class CEdList
 {
-  U8	tag[512]	format "$$DA-P,A=\"Dft Sel:%s\"$$\n",
+  U8	tag[512]	format "$$DA-P,A=\"Default Sel:%s\"$$\n",
 	define_str[512]	format "$$DA-P,A=\"Define Str:%s\"$$\n";
   Bool	refresh		format "$$CB,\"Refresh Data\"$$\n";
   I64	type		format "$$LS,D=\"ST_INT_SIZE_TYPES\"$$\n";

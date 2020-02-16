@@ -601,12 +601,12 @@ class CRAXRBCRCXRDX
 #define EXT_EXTS_NUM		5
 
 #help_index "Processor"
-#define DFT_CACHE_LINE_WIDTH	128
+#define DEFAULT_CACHE_LINE_WIDTH	128
 
 //Semaphores
 class CSema
 {
-  Bool	val,pad[DFT_CACHE_LINE_WIDTH-1];
+  Bool	val,pad[DEFAULT_CACHE_LINE_WIDTH-1];
 };
 #define SEMA_DEBUG		0
 #define SEMA_RECORD_MACRO	1
@@ -776,9 +776,9 @@ public class CHashImport:CHashSrcSym
 #define PTR_STARS_NUM	4
 
 //Member List Flags
-#define MLF_DFT_AVAILABLE	1
+#define MLF_DEFAULT_AVAILABLE	1
 #define MLF_LASTCLASS		2
-#define MLF_STR_DFT_AVAILABLE	4
+#define MLF_STR_DEFAULT_AVAILABLE	4
 #define MLF_FUN			8
 #define MLF_DOT_DOT_DOT		16
 #define MLF_NO_UNUSED_WARN	32
@@ -814,7 +814,7 @@ public class CMemberList
   U8	*static_data;
   union {
     I64	static_data_rip;
-    I64 dft_val;
+    I64 default_val;
   }
   CHashFun *fun_ptr;
 };
@@ -919,8 +919,8 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCT_INDENT		14
 #define DOCT_FOREGROUND		15
 #define DOCT_BACKGROUND		16
-#define DOCT_DFT_FOREGROUND	17
-#define DOCT_DFT_BACKGROUND	18
+#define DOCT_DEFAULT_FOREGROUND	17
+#define DOCT_DEFAULT_BACKGROUND	18
 #define DOCT_WORD_WRAP		19
 #define DOCT_HIGHLIGHT		20
 #define DOCT_BLINK		21
@@ -1026,8 +1026,8 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCEF_FILTER_SKIP	0x200000000000000
 #define DOCEF_NO_CLICK_ON	0x400000000000000
 #define DOCEF_DONT_DRAW		0x800000000000000 //only works on sprites
-#define DOCEF_DFT_LEN		0x1000000000000000
-#define DOCEF_DFT_RAW_TYPE	0x2000000000000000
+#define DOCEF_DEFAULT_LEN		0x1000000000000000
+#define DOCEF_DEFAULT_RAW_TYPE	0x2000000000000000
 
 #define DOCEG_HAS_ALLOC		(DOCEF_TAG|DOCEF_AUX_STR|DOCEF_DEFINE|\
   DOCEF_HTML_LINK|DOCEF_LEFT_MACRO|DOCEF_RIGHT_MACRO|DOCEF_BIN_PTR_LINK|\
@@ -1112,8 +1112,8 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCEf_FILTER_SKIP	57
 #define DOCEf_NO_CLICK_ON	58
 #define DOCEf_DONT_DRAW		59 //only works on sprites
-#define DOCEf_DFT_LEN		60
-#define DOCEf_DFT_RAW_TYPE	61
+#define DOCEf_DEFAULT_LEN		60
+#define DOCEf_DEFAULT_RAW_TYPE	61
 #define DOCEf_FLAGS_NUM		62
 
 public class CDocBin
@@ -1136,7 +1136,7 @@ public class CDocBin
 #define DOCSS_COMMENT		3
 #define DOCSS_CPP_Z_COMMENT	4
 
-#define DOC_ATTR_DFT_TEXT	WHITE<<4+BLACK
+#define DOC_ATTR_DEFAULT_TEXT	WHITE<<4+BLACK
 #define DOC_COLOR_ALT_TEXT	LTGRAY
 #define DOC_COLOR_LINK		RED
 #define DOC_COLOR_MACRO		LTBLUE
@@ -1162,10 +1162,10 @@ public class CDocSettings
   U16	page_len,header,footer;
   I8	shifted_x,shifted_y;
   U8	state,comment_depth,paren_depth,brace_depth,
-	cur_text_attr,dft_text_attr;
+	cur_text_attr,default_text_attr;
 };
 
-#define DOC_DFT 		I32_MIN
+#define DOC_DEFAULT 		I32_MIN
 
 public class CDocEntryBase
 {
@@ -1187,7 +1187,7 @@ public class CDocEntryBase
 #assert !($$&7)
 };
 
-#define DOCE_LEN_DFT	64
+#define DOCE_LEN_DEFAULT	64
 
 public class CDocEntry:CDocEntryBase
 {
@@ -1214,7 +1214,7 @@ public class CDocEntry:CDocEntryBase
 	*my_fmt_data;
   I64	hex_ed_width;
   I32	scroll_len,
-	len, //$LK,"DOCE_LEN_DFT",A="MN:DOCE_LEN_DFT"$
+	len, //$LK,"DOCE_LEN_DEFAULT",A="MN:DOCE_LEN_DEFAULT"$
 	bin_num;
   U8	raw_type,pad[3];
   CDocBin *bin_data;
@@ -1441,11 +1441,11 @@ tries to do something.
 #define WIF_FOCUS_TASK_GRAB_SCROLL 0x02000000
 
 #define WIG_DBL_CLICK		(WIF_FOCUS_TASK_MS_L_D|WIF_FOCUS_TASK_MS_R_D)
-#define WIG_TASK_DFT		(WIF_FOCUS_TASK_MENU|WIG_DBL_CLICK|\
+#define WIG_TASK_DEFAULT		(WIF_FOCUS_TASK_MENU|WIG_DBL_CLICK|\
 	0xFFFF-WIF_SELF_DOC-WIF_SELF_ODE)
-#define WIG_NO_FOCUS_TASK_DFT	(WIG_TASK_DFT-WIF_SELF_BORDER\
+#define WIG_NO_FOCUS_TASK_DEFAULT	(WIG_TASK_DEFAULT-WIF_SELF_BORDER\
 	-WIF_SELF_MS_L-WIF_SELF_MS_R-WIG_DBL_CLICK)
-#define WIG_USER_TASK_DFT	WIF_SELF_KEY_DESC
+#define WIG_USER_TASK_DEFAULT	WIF_SELF_KEY_DESC
 
 #define WIf_SELF_FOCUS		0
 #define WIf_SELF_CTRLS		2
@@ -1714,7 +1714,7 @@ class CPrsStk
 
 class CCodeMisc
 {
-  CCodeMisc *next,*last,*fwd,*dft,*begin;
+  CCodeMisc *next,*last,*fwd,*default,*begin;
   U8	*str;
   U32	type,flags;
   I64	use_count;
@@ -1738,7 +1738,7 @@ class CCodeMisc
 #define IEF_OP_SIZE32		0x002
 #define IEF_PLUS_OPCODE		0x004
 #define IEF_DONT_SWITCH_MODES	0x008
-#define IEF_DFT			0x010
+#define IEF_DEFAULT			0x010
 #define IEF_NOT_IN_64_BIT	0x020
 #define IEF_48_REX		0x040
 #define IEF_REX_ONLY_R8_R15	0x080
@@ -1850,7 +1850,7 @@ class CAsmIns
   Bool	has_REX,has_ModrM,has_SIB,
 	has_addr_prefix,
 	has_operand_prefix,
-	is_dft,pad[2];
+	is_default,pad[2];
 };
 
 class CAsmArg
@@ -2724,14 +2724,14 @@ class CCacheBlk
 };
 
 #help_index "File/System"
-#define DFT_ISO_FILENAME	"::/Tmp/CDDVD.ISO"
-#define DFT_ISO_C_FILENAME	"::/Tmp/CDDVD.ISO.C"
+#define DEFAULT_ISO_FILENAME	"::/Tmp/CDDVD.ISO"
+#define DEFAULT_ISO_C_FILENAME	"::/Tmp/CDDVD.ISO.C"
 
 public class CBlkDevGlobals
 {
   CBlkDev *blkdevs;
-  U8	*dft_iso_filename;	//$TX,"\"::/Tmp/CDDVD.ISO\"",D="DFT_ISO_FILENAME"$
-  U8	*dft_iso_c_filename;	//$TX,"\"::/Tmp/CDDVD.ISO.C\"",D="DFT_ISO_C_FILENAME"$
+  U8	*default_iso_filename;	//$TX,"\"::/Tmp/CDDVD.ISO\"",D="DEFAULT_ISO_FILENAME"$
+  U8	*default_iso_c_filename;	//$TX,"\"::/Tmp/CDDVD.ISO.C\"",D="DEFAULT_ISO_C_FILENAME"$
   U8	*tmp_filename;
   U8	*home_dir;
   CCacheBlk *cache_base,*cache_ctrl,**cache_hash_table;
@@ -2840,7 +2840,7 @@ class CMemRange
 #define MEM_ZENITH_STK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
 #define MEM_SETH_STK		(MEM_PAG_SIZE*512)
 #define MEM_INTERRUPT_STK	(MEM_PAG_SIZE*512)
-#define MEM_DFT_STK		(MEM_PAG_SIZE*512)
+#define MEM_DEFAULT_STK		(MEM_PAG_SIZE*512)
 
 #define TASK_HASH_TABLE_SIZE	(1<<10)
 

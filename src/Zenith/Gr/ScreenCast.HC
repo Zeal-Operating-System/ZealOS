@@ -80,7 +80,7 @@ public I64 AUWrite(U8 *filename,CSndData *head,CDate *t0_now,F64 t0_tS)
   CSndData *tmpsd;
   CAUData *base,*dst;
   I64 size=(1+QueueCount(head))*sizeof(CAUData);
-  U8 *st=ExtDft(filename,"AU");
+  U8 *st=ExtDefault(filename,"AU");
   base=dst=MAlloc(size);
   tmpsd=head;
   do {

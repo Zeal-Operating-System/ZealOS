@@ -31,7 +31,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
  
 * You can recompile and reinstall the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$().  You'll probably want to make a function for recompiling that uses the $LK,"In",A="MN:In"$() function to answer the cfg questions.  See my technique $LK,"Cfg Strs",A="FL:::/Demo/AcctExample/TOS/TOSCfg.HC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.HC,1"$.
 
-* $LK,"Scale2Mem",A="MN:Scale2Mem"$(min,max,limit=2*1024*1024*1024) can be used for cfg questions when recompiling.  The $LK,"BootHDIns",A="MN:BootHDIns"$() cfg prompts accept expressions, not just numbers.  The dft disk cache is $FG,2$Scale2Mem(0x80000,0x8000000)$FG$.
+* $LK,"Scale2Mem",A="MN:Scale2Mem"$(min,max,limit=2*1024*1024*1024) can be used for cfg questions when recompiling.  The $LK,"BootHDIns",A="MN:BootHDIns"$() cfg prompts accept expressions, not just numbers.  The default disk cache is $FG,2$Scale2Mem(0x80000,0x8000000)$FG$.
 
 * You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/HomeSys.HC,ACInit"$() in $LK,"~/HomeSys.HC",A="FF:/Home/HomeSys.HC,ACInit"$.
 
@@ -43,7 +43,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Many data structures have a $FG,2$user_data$FG$ member.  Those are available for you to store a data item, for convenience.  $LK,"CTask",A="MN:CTask"$, $LK,"CDocEntry",A="MN:CDocEntry"$ and $LK,"CDirEntry",A="MN:CDirEntry"$ have them.  You shouldn't encounter conflicts with ZenithOS using them.
 
-* If, for some strange reason, you wanted to reduce mem usage, make a smaller disk cache when you recompile the kernel; disabling $FG,2$AutoComplete$FG$; Specify smaller stk sizes when doing $LK,"Spawn",A="MN:Spawn"$(), chang $LK,"MEM_DFT_STK",A="MN:MEM_DFT_STK"$, and using $LK,"DocMax",A="MN:DocMax"$() to reduce the cmd line buffer size.
+* If, for some strange reason, you wanted to reduce mem usage, make a smaller disk cache when you recompile the kernel; disabling $FG,2$AutoComplete$FG$; Specify smaller stk sizes when doing $LK,"Spawn",A="MN:Spawn"$(), chang $LK,"MEM_DEFAULT_STK",A="MN:MEM_DEFAULT_STK"$, and using $LK,"DocMax",A="MN:DocMax"$() to reduce the cmd line buffer size.
 
 * Filenames ending in "$FG,2$$FG$" will be automatically compressed and uncompressed when read or written.  The compression method is not supported by other operating systems.  You can store files uncompressed by $LK,"Move",A="MN:Move"$()ing them to a filename not ending in "$FG,2$$FG$".  See $LK,"::/Doc/TOSZ.DD"$ if you want to uncompress while in $FG,2$Linux$FG$.
 

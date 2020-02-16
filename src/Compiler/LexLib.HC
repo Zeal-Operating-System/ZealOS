@@ -161,14 +161,14 @@ Bool  MemberListCmp(CMemberList *tmpm1,CMemberList *tmpm2,I64 count=I64_MAX)
 	  tmpm1->member_class!=tmpm2->member_class ||
 	  tmpm1->member_class_base!=tmpm2->member_class_base)
       return FALSE;
-    if (tmpm1->flags&MLF_DFT_AVAILABLE || tmpm2->flags&MLF_DFT_AVAILABLE) {
-      if (tmpm1->flags&(MLF_DFT_AVAILABLE|MLF_STR_DFT_AVAILABLE)!=
-	    tmpm2->flags&(MLF_DFT_AVAILABLE|MLF_STR_DFT_AVAILABLE))
+    if (tmpm1->flags&MLF_DEFAULT_AVAILABLE || tmpm2->flags&MLF_DEFAULT_AVAILABLE) {
+      if (tmpm1->flags&(MLF_DEFAULT_AVAILABLE|MLF_STR_DEFAULT_AVAILABLE)!=
+	    tmpm2->flags&(MLF_DEFAULT_AVAILABLE|MLF_STR_DEFAULT_AVAILABLE))
 	return FALSE;
-      if (tmpm1->flags&MLF_STR_DFT_AVAILABLE) {
-	if (StrCmp(tmpm1->dft_val,tmpm2->dft_val))
+      if (tmpm1->flags&MLF_STR_DEFAULT_AVAILABLE) {
+	if (StrCmp(tmpm1->default_val,tmpm2->default_val))
 	  return FALSE;
-      } else if (tmpm1->dft_val!=tmpm2->dft_val)
+      } else if (tmpm1->default_val!=tmpm2->default_val)
 	return FALSE;
     }
     tmpm1=tmpm1->next;
@@ -188,8 +188,8 @@ U0 MemberListDel(CMemberList *tmpm)
     tmpm1=tmpm->next;
     Free(tmpm->str);
     LinkedListDel(tmpm->dim.next);
-    if (tmpm->flags & MLF_STR_DFT_AVAILABLE)
-      Free(tmpm->dft_val);
+    if (tmpm->flags & MLF_STR_DEFAULT_AVAILABLE)
+      Free(tmpm->default_val);
     if (tmpm->flags & MLF_FUN)
       HashDel(tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_count);
     tmp_meta=tmpm->meta;
@@ -227,8 +227,8 @@ I64 MemberListSize(CHashClass *tmpc)
   while (tmpm) {
     res+=MSize2(tmpm->str);
     res+=LinkedListSize(tmpm->dim.next);
-    if (tmpm->flags & MLF_STR_DFT_AVAILABLE)
-      res+=MSize2(tmpm->dft_val);
+    if (tmpm->flags & MLF_STR_DEFAULT_AVAILABLE)
+      res+=MSize2(tmpm->default_val);
     if (tmpm->flags & MLF_FUN)
       res+=HashEntrySize2(tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_count);
     tmp_meta=tmpm->meta;

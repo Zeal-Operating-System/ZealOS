@@ -17,7 +17,7 @@ CTask *JukeReward(U8 *message)
   res->border_src =BDS_CONST;
   res->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   res->text_attr  =LTGRAY<<4+BLUE;
-  res->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
+  res->win_inhibit=WIG_NO_FOCUS_TASK_DEFAULT;
   WinHorz(Fs->win_right+2,TEXT_COLS-2,res);
   WinVert(2,TEXT_ROWS-2,res);
 
@@ -33,7 +33,7 @@ CTask *SingleSong(U8 *message,U8 *name)
   TaskExe(task,Fs,";",1<<JOBf_WAKE_MASTER|1<<JOBf_FREE_ON_COMPLETE);
   WinHorz(task->win_left,task->win_left+50,task);
   WinVert(2,2+8,task);
-  task->win_inhibit=WIG_NO_FOCUS_TASK_DFT;
+  task->win_inhibit=WIG_NO_FOCUS_TASK_DEFAULT;
   TaskExe(task,NULL,message,1<<JOBf_EXIT_ON_COMPLETE|1<<JOBf_FREE_ON_COMPLETE);
   DocPut(task)->max_entries=100;
   return task;

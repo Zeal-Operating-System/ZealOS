@@ -1,4 +1,4 @@
-RegDft("MyCompany/MyApp","F64 best_score=9999;\n");
+RegDefault("MyCompany/MyApp","F64 best_score=9999;\n");
 RegExe("MyCompany/MyApp");
 
 U0 Main()

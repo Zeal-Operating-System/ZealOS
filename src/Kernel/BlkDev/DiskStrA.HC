@@ -209,7 +209,7 @@ U8 *ExtChg(U8 *filename,U8 *extension)
   return CatPrint(res,".%s",extension);
 }
 
-U8 *ExtDft(U8 *filename,U8 *extension)
+U8 *ExtDefault(U8 *filename,U8 *extension)
 {//Give extension if has none.
   U8 *res=MAlloc(StrLen(filename)+1+StrLen(extension)+1);
   StrCpy(res,filename);
@@ -300,7 +300,7 @@ returns default.
 ("/Kernel/BlkDev",NULL,"PRJ")		returns "D:/Kernel/Kernel.PRJ"
 ("/Apps/Psalmody","Load","HC")	returns "D:/Apps/Psalmody/Load.HC"
 */
-  U8 *st=DirNameAbs(dirname),*st2,*st3,*res,*dft=NULL,*ext;
+  U8 *st=DirNameAbs(dirname),*st2,*st3,*res,*default=NULL,*ext;
   if (_extension && *_extension) {
     if (*_extension=='.')
       ext=StrNew(_extension);
@@ -323,13 +323,13 @@ returns default.
       else
 	res=StrNew(st);
     }
-    if (!dft)
-      dft=StrNew(res);
+    if (!default)
+      default=StrNew(res);
     if (!*ext && (!name||!*name) || FileFind(res)) {
       Free(st3);
       Free(st2);
       Free(st);
-      Free(dft);
+      Free(default);
       Free(ext);
       return res;
     }
@@ -339,5 +339,5 @@ returns default.
   }
   Free(st);
   Free(ext);
-  return dft;
+  return default;
 }

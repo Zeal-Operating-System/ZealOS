@@ -274,7 +274,7 @@ U8 *COCCompile(CCompCtrl *cc,I64 *_code_size,CDebugInfo **_dbg,I64 *_type)
     if (lb->type==CMT_JMP_TABLE) {
       for (i=0;i<lb->range;i++)
 	lb->jmp_table[i]=OptLabelFwd(lb->jmp_table[i]);
-      lb->dft=OptLabelFwd(lb->dft);
+      lb->default=OptLabelFwd(lb->default);
     }
     lb=lb->next;
   }

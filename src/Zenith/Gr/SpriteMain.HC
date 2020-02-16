@@ -280,7 +280,7 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
   DCDel(img);
   DCDel(dc3);
   dc2->thick=old_width;
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	-WIF_SELF_BORDER-WIF_SELF_GRAB_SCROLL;
   return res;
 }
@@ -835,7 +835,7 @@ I64 SpriteMainEd(CDoc *doc)
     x+=xx; y+=yy;
     DCFill;
     if (eletype==SPT_MENU) {
-      Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS
+      Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS
 	    -WIF_SELF_BORDER-WIF_SELF_GRAB_SCROLL;
       if (winmgr.fps<10)
 	doc_ce->de_flags|=DOCEF_DONT_DRAW;
@@ -941,7 +941,7 @@ I64 SpriteMainEd(CDoc *doc)
 	doc_ce->de_flags|=DOCEF_DONT_DRAW;
 	PopUpOk("Drag-out a rect for the extents of the\nbitmap.\n");
 	doc_ce->de_flags=old_de_flags;
-	Fs->win_inhibit=WIG_TASK_DFT|WIF_FOCUS_TASK_MS_L|WIF_FOCUS_TASK_MS_R|
+	Fs->win_inhibit=WIG_TASK_DEFAULT|WIF_FOCUS_TASK_MS_L|WIF_FOCUS_TASK_MS_R|
 	      WIF_FOCUS_TASK_BORDER-WIF_SELF_FOCUS-WIF_SELF_GRAB_SCROLL;
 	break;
       case SPT_BITMAP:
@@ -979,7 +979,7 @@ I64 SpriteMainEd(CDoc *doc)
 	  PopUpOk("Drag-out a rect for the extents of the\nbitmap.\n");
 	}
 	doc_ce->de_flags=old_de_flags;
-	Fs->win_inhibit=WIG_TASK_DFT|WIF_FOCUS_TASK_MS_L|WIF_FOCUS_TASK_MS_R|
+	Fs->win_inhibit=WIG_TASK_DEFAULT|WIF_FOCUS_TASK_MS_L|WIF_FOCUS_TASK_MS_R|
 	      WIF_FOCUS_TASK_BORDER-WIF_SELF_FOCUS-WIF_SELF_GRAB_SCROLL;
 	break;
       case SPT_THICK:

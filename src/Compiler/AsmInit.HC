@@ -33,7 +33,7 @@ U0 AsmPrsInsFlags(CCompCtrl *cc,CInst *tmpins)
 	  return;
 	break;
       case '!': tmpins->flags|=IEF_DONT_SWITCH_MODES;	break;
-      case '&': tmpins->flags|=IEF_DFT;			break;
+      case '&': tmpins->flags|=IEF_DEFAULT;			break;
       case '%': tmpins->flags|=IEF_NOT_IN_64_BIT;	break;
       case '=': tmpins->flags|=IEF_48_REX;		break;
       case '`': tmpins->flags|=IEF_REX_ONLY_R8_R15;	break;

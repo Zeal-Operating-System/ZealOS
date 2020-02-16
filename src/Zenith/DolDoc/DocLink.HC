@@ -175,7 +175,7 @@ Bool DocFileEd(I64 _type,U8 *filename,
   return res;
 }
 
-#define DFT_ADDR_LINK_BIN_SIZE	64
+#define DEFAULT_ADDR_LINK_BIN_SIZE	64
 
 public I64 EdLinkCvt(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
 	I64 *_num=NULL,I64 edf_dof_flags=0)
@@ -206,7 +206,7 @@ public I64 EdLinkCvt(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
 	  *ptr=0;
 	  i=Str2I64(ptr+1);
 	} else
-	  i=DFT_ADDR_LINK_BIN_SIZE;
+	  i=DEFAULT_ADDR_LINK_BIN_SIZE;
 	if (ptr=SrcEdLink(ExePrint("%s;",filename2),i)) {
 	  res=EdLinkCvt(ptr,&filename,&needle_str,&num,edf_dof_flags);
 	  Free(ptr);

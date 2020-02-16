@@ -473,7 +473,7 @@ U0 InStr(U8 *fmt,...)
 
 U0 InFile(U8 *filename)
 {//Send InFile code file to self.
-  U8 *name=ExtDft(filename,"IN");
+  U8 *name=ExtDefault(filename,"IN");
   InStr("Cd(\"%C:%s\");;#include \"%s\"",
 	Drive2Letter(Fs->cur_dv),Fs->cur_dir,name);
   Free(name);

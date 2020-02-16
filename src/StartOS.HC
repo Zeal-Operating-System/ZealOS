@@ -22,7 +22,7 @@ DocTermNew;
 WinVert(2,10);
 
 sys_winmgr_task=Spawn(&WinMgrTask,NULL,"Window Mgr");
-Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_BORDER
+Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_BORDER
 	-WIF_SELF_GRAB_SCROLL-WIF_SELF_CTRLS;
 LBts(&Fs->display_flags,DISPLAYf_CHILDREN_NOT_ON_TOP);
 LBts(&Fs->display_flags,DISPLAYf_SHOW);

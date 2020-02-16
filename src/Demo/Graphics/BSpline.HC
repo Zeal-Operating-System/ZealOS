@@ -7,7 +7,7 @@ U0 BSplineDemo()
   CD3I32 c[PTS_NUM];
 
   SettingsPush;
-  Fs->win_inhibit=WIG_TASK_DFT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
+  Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
 
   DocClear;
   "Sel ctrl points with left mouse.Right when finished.\n";

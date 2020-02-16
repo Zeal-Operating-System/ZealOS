@@ -166,7 +166,7 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
   Bool unlock_doc_in=DocLock(doc_in),no_bwd;
 
   old_attr=doc_in->win_task->text_attr;
-  doc_in->win_task->text_attr=DOC_ATTR_DFT_TEXT;
+  doc_in->win_task->text_attr=DOC_ATTR_DEFAULT_TEXT;
 
   for (i=0xF0;i<=0xFF;i++)
     LBts(style_bitmap,i);
@@ -368,9 +368,9 @@ public U0 ToHtml(U8 *_in_name,U8 *_out_name=NULL,U8 *html_header=NULL,
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
   WinHorz(0,width-1); //Sets doc width for word wrap.
 
-  in_name=ExtDft(_in_name,"HC");
+  in_name=ExtDefault(_in_name,"HC");
   if (_out_name)
-    out_name=ExtDft(_out_name,"html");
+    out_name=ExtDefault(_out_name,"html");
   else
     out_name=ExtChg(_in_name,"html");
 

@@ -146,7 +146,7 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
     PrintErr("'%s' is not a dir.\n",_src_dir);
   else {
     if (!_iso_filename)
-      _iso_filename=blkdev.dft_iso_c_filename;
+      _iso_filename=blkdev.default_iso_c_filename;
     iso_filename=ExtChg(_iso_filename,"ISO.C");
     src_dir=DirNameAbs(_src_dir);
     if (_stage2_filename) {

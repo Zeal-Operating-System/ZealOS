@@ -546,7 +546,7 @@ U0 Debug2()
     dbg.panic=TRUE;
   old_waiting_message=LBtr(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
   old_win_inhibit=Fs->win_inhibit;
-  Fs->win_inhibit=WIG_USER_TASK_DFT;
+  Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
   sys_focus_task=Fs;
   kbd.scan_code=0;
   old_getstr2=fp_getstr2;

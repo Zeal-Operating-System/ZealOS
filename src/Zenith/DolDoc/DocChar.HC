@@ -129,7 +129,7 @@ public U0 EdCursorRight(CDoc *doc,I64 sc=I64_MIN)
 	doc_ne=DocEntryNewTag(doc,doc_ce,dst);
 	*dst=0;
 	doc_ne->type=DOCT_TEXT | old_color & -0x100;
-	doc_ne->de_flags=old_de_flags|doldoc.dft_de_flags[DOCT_TEXT];
+	doc_ne->de_flags=old_de_flags|doldoc.default_de_flags[DOCT_TEXT];
 	doc_ce->max_col=cc;
 	QueueInsert(doc_ne,doc_ce);
 	doc_ce=doc_ne;
@@ -365,7 +365,7 @@ public U0 EdLineDown(CDoc *doc,I64 sc=I64_MIN)
     doc_ne=DocEntryNewTag(doc,doc_ce,dst);
     *dst=0;
     doc_ne->type=DOCT_TEXT | old_color & -0x100;
-    doc_ne->de_flags=old_de_flags|doldoc.dft_de_flags[DOCT_TEXT];
+    doc_ne->de_flags=old_de_flags|doldoc.default_de_flags[DOCT_TEXT];
     doc_ce->max_col=doc->cur_col;
     doc_ne->x=doc_ce->x+doc->cur_col;
     QueueInsert(doc_ne,doc_ce);
@@ -540,8 +540,8 @@ ic_overstrike:
 	goto ic_done;
       }
       doc_ne=DocEntryNewTag(doc,doc_ce,&ch);
-      doc_ne->type=DOCT_TEXT | doc->settings_head.dft_text_attr<<8;
-      doc_ne->de_flags=doldoc.dft_de_flags[DOCT_TEXT];
+      doc_ne->type=DOCT_TEXT | doc->settings_head.default_text_attr<<8;
+      doc_ne->de_flags=doldoc.default_de_flags[DOCT_TEXT];
       QueueInsert(doc_ne,doc_ce->last);
     } else if (ch=='\n') {
       while (doc->cur_entry->next!=doc && doc->cur_entry->y==y)
@@ -557,10 +557,10 @@ ic_not_overstrike:
   if (ch=='\n') {
     if (sc&SCF_CTRL && !(sc&SCF_SHIFT)) {
       doc_ne=DocEntryNewBase(doc,
-	    DOCT_PAGE_BREAK|doc->settings_head.dft_text_attr<<8);
+	    DOCT_PAGE_BREAK|doc->settings_head.default_text_attr<<8);
     } else {
       doc_ne=DocEntryNewBase(doc,
-	    DOCT_NEW_LINE|doc->settings_head.dft_text_attr<<8);
+	    DOCT_NEW_LINE|doc->settings_head.default_text_attr<<8);
     }
     DocInsEntry(doc,doc_ne);
   } else if (ch=='\t') {
@@ -574,7 +574,7 @@ ic_form_tab:
       DocFormFwd(doc);
       goto ic_done;
     } else {
-      doc_ne=DocEntryNewBase(doc,DOCT_TAB|doc->settings_head.dft_text_attr<<8);
+      doc_ne=DocEntryNewBase(doc,DOCT_TAB|doc->settings_head.default_text_attr<<8);
       DocInsEntry(doc,doc_ne);
     }
   } else {
@@ -616,8 +616,8 @@ ic_form_tab:
 	doc->cur_col++;
       } else {
 	doc_ne=DocEntryNewTag(doc,doc_ce,&ch);
-	doc_ne->type=DOCT_TEXT | doc->settings_head.dft_text_attr<<8;
-	doc_ne->de_flags=doldoc.dft_de_flags[DOCT_TEXT];
+	doc_ne->type=DOCT_TEXT | doc->settings_head.default_text_attr<<8;
+	doc_ne->de_flags=doldoc.default_de_flags[DOCT_TEXT];
 	doc_ne->x=doc_ce->x+1;
 	QueueInsert(doc_ne,doc_ce->last);
       }

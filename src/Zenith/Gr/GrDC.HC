@@ -13,7 +13,7 @@ public U0 Mat4x4MulXYZ(I64 *r,I64 *_x,I64 *_y,I64 *_z)
 }
 
 public U0 DCTransform(CDC *dc,I64 *_x,I64 *_y,I64 *_z)
-{//This is the dft dc->transform() callback.
+{//This is the default dc->transform() callback.
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
   Mat4x4MulXYZ(dc->r,_x,_y,_z);
   *_x+=dc->x;
@@ -56,7 +56,7 @@ public U0 DCMat4x4Set(CDC *dc=NULL,I64 *r)
 #help_index "Graphics/Mesh"
 public U0 DCLighting(CDC *dc,
 	CD3I32 *p1,CD3I32 *p2,CD3I32 *p3,CColorROPU32 color)
-{//This is the dft dc->lighting() callback.
+{//This is the default dc->lighting() callback.
   CD3I32 v1,v2;
   I64 i,vn_x,vn_y,vn_z;
   F64 d;
@@ -383,7 +383,7 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
 public I64 GRWrite(U8 *filename,CDC *dc,I64 dcsf_flags=DCSF_COMPRESSED)
 {//ZenithOS GR File.
   I64	size;
-  U8	*st=ExtDft(filename,"GR"),
+  U8	*st=ExtDefault(filename,"GR"),
 	*src=DCSave(dc,&size,dcsf_flags);
   FileWrite(st,src,size);
   Free(st);
@@ -394,7 +394,7 @@ public I64 GRWrite(U8 *filename,CDC *dc,I64 dcsf_flags=DCSF_COMPRESSED)
 public CDC *GRRead(U8 *filename,CTask *task=NULL)
 {//ZenithOS GR File.
   CDC	*dc=NULL;
-  U8	*st=ExtDft(filename,"GR"),
+  U8	*st=ExtDefault(filename,"GR"),
 	*src=FileRead(st);
   if (src)
     dc=DCLoad(src,,task);

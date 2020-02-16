@@ -50,7 +50,7 @@ U0 VMInstallWiz()
   task->border_src=BDS_CONST;
   task->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   task->text_attr  =LTGRAY<<4+BLUE;
-  task->win_inhibit=WIG_TASK_DFT-WIF_SELF_BORDER;
+  task->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_BORDER;
   WinHorz(Fs->win_left,Fs->win_right,task);
   WinVert(Fs->win_top,(Fs->win_top+Fs->win_bottom)>>2-1,task);
   WinVert(task->win_bottom+3,Fs->win_bottom);
@@ -84,7 +84,7 @@ U0 RegularInstallWiz()
   task->border_src=BDS_CONST;
   task->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
   task->text_attr  =LTGRAY<<4+BLUE;
-  task->win_inhibit=WIG_TASK_DFT-WIF_SELF_BORDER;
+  task->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_BORDER;
   WinHorz(Fs->win_left,Fs->win_right,task);
   WinVert(Fs->win_top,(Fs->win_top+Fs->win_bottom)>>2-1,task);
   WinVert(task->win_bottom+3,Fs->win_bottom);
