@@ -13,3 +13,50 @@ Features in development include:
 Previous releases are currently archived on the `mega.nz` website:
   - [Previous Releases](https://mega.nz/#F!ZIEGmSRQ!qvL6Wk6THzE-dazkfT6N3Q)
 
+
+Changes include:
+  - 60FPS.
+  - Added a NONE #define for use in default function arguments.
+  - 440Hz 'A' tuning changed to 432Hz.
+  - Added CompComp function.
+  - System-wide renames:
+    - AOnce -> ZOnce
+    - ACAlloc -> ZCAlloc
+    - AMAlloc -> ZMAlloc
+    - AStrNew -> ZStrNew
+    - Adam -> Zenith
+    - BEqu -> BEqual
+    - Bwd -> Backward
+    - Cfg -> Config
+    - Chg -> Change
+    - Chk -> Check
+    - Cmp -> Comp
+      - (Compiler. CCmpCtrl->CCompCtrl, etc)
+    - Cmp -> Compare
+      - (StrCmp->StrCompare, etc)
+    - Cnt -> Count
+    - Cpy -> Copy
+    - Dbg -> Debug
+    - Dft -> Default
+    - Drv -> Drive
+    - Dsk -> Disk
+    - Fmt -> Format
+    - Fwd -> Forward
+    - Glbls -> Globals
+    - Hndlr -> Handler
+    - Lst -> List
+    - Ms -> Mouse
+    - Msg -> Message
+    - Pkt -> Packet
+    - Pmt -> Prompt
+    - Prs -> Parse
+    - QSort -> QuickSort
+    - Que -> Queue
+    - Rem -> Remove
+    - Rst -> Reset
+    - Rqst -> Request
+    - Scrn -> Screen
+    - Snd -> Sound
+    - Stk -> Stack
+    - Stmt -> Statement
+    - TempleOS -> ZenithOS
