@@ -39,7 +39,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
       DocEntryDel(doc,doc_e);
     doc_e=doc_e1;
   }
-  QSort(a,count/entry_lines,entry_lines*sizeof(CDocEntry *),&DEPtrCompare);
+  QuickSort(a,count/entry_lines,entry_lines*sizeof(CDocEntry *),&DEPtrCompare);
 
   res=0;
   st=NULL;

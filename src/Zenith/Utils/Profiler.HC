@@ -66,7 +66,7 @@ public U0 ProfRep(I64 filter_count=1,Bool leave_it=OFF)
   else {
     if (!(total_time=pf_jiffy_end-pf_jiffy_start))
       total_time=1;
-    QSortI64(pf_array,pf_buf_in_ptr,&ProfCompare);
+    QuickSortI64(pf_array,pf_buf_in_ptr,&ProfCompare);
     *last_buf=0;
     for (i=0;i<pf_buf_in_ptr;i+=hits) {
       rip=pf_array[i];

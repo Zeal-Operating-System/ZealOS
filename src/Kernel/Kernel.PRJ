@@ -48,7 +48,7 @@
 #include "KeyDev"
 #include "KExcept"
 #include "SerialDev/MakeSerialDev"
-#include "QSort"
+#include "QuickSort"
 #include "KTask"
 #include "Job"
 #include "PCIBIOS"

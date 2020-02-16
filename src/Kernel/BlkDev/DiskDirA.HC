@@ -102,10 +102,10 @@ U0 DirFilesSort(CDirEntry **_tmpde,I64 key)
       }
       switch [key] {
 	case SK_NAME:
-	  QSortI64(sort_buf,count,&DirEntryCompareName);
+	  QuickSortI64(sort_buf,count,&DirEntryCompareName);
 	  break;
 	case SK_CLUS:
-	  QSortI64(sort_buf,count,&DirEntryCompareClus);
+	  QuickSortI64(sort_buf,count,&DirEntryCompareClus);
 	  break;
       }
       tmpde=sort_buf[0];

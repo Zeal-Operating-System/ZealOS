@@ -67,7 +67,7 @@ $FG$I didn't like that, so I made parentheses optional on calls with no args and
 
 >$FG,2$Dir;$FG$
 
-The syntax change created an ambiguity when specifying function addresses, like for calling $LK,"QSort",A="MN:QSort"$().  To resolve it, I  made a '$FG,2$&$FG$' required in front of function names when specifying an address of a function, which is better anyway.
+The syntax change created an ambiguity when specifying function addresses, like for calling $LK,"QuickSort",A="MN:QuickSort"$().  To resolve it, I  made a '$FG,2$&$FG$' required in front of function names when specifying an address of a function, which is better anyway.
 
 Once I was no longer using standard C/C++ syntax, I decided to change everything I didn't like and call it $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$.  Here are the new $LK,"operator precedence",A="FF:::/Doc/HolyC.DD,operator precedence"$ rules.  It's Biblical!  See $LK,"Luke,5:37",A="BF:Luke,5:37"$.
 

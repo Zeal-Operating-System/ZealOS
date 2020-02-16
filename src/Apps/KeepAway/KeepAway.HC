@@ -371,7 +371,7 @@ U0 DrawIt(CTask *task,CDC *dc)
     }
   }
 
-  QSortI64(o_sort,OBJS_NUM,&ObjCompare);
+  QuickSortI64(o_sort,OBJS_NUM,&ObjCompare);
   for (i=0;i<OBJS_NUM;i++)
     DrawObj(dc,o_sort[i],tt);
   tt=(game_t_end-tS)/60;

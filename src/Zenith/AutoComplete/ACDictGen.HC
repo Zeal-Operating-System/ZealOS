@@ -130,7 +130,7 @@ U8 *ACDSortWords(U8 *start,I64 size,I64 word_count)
     ptr+=StrLen(ptr)+3;
   }
   "Sorting...\n"; Sleep(100);
-  QSortI64(ptr_array,word_count,&ACDCompareWords);
+  QuickSortI64(ptr_array,word_count,&ACDCompareWords);
   "Done...\n"; Sleep(100);
 
   ptr=out_start;

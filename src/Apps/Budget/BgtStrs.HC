@@ -94,7 +94,7 @@ public U0 StrFileWrite(U8 *name,CHashTable *table,Bool no_nums=FALSE)
 	tmph=tmph->next;
       }
     }
-    QSortI64(a,count,&StrEntriesCompare);
+    QuickSortI64(a,count,&StrEntriesCompare);
     for (i=0;i<count;i++) {
       tmph=a[i];
       if (tmph->user_data1&15!=color) {

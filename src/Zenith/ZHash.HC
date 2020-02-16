@@ -228,11 +228,11 @@ U8 *idx=NULL,CDoc *doc=NULL)
   }
 
   if (map)
-    QSort(list,count,sizeof(CWho),&HashEntriesCompare2);
+    QuickSort(list,count,sizeof(CWho),&HashEntriesCompare2);
   else if (idx)
-    QSort(list,count,sizeof(CWho),&HashEntriesCompare3);
+    QuickSort(list,count,sizeof(CWho),&HashEntriesCompare3);
   else
-    QSort(list,count,sizeof(CWho),&HashEntriesCompare);
+    QuickSort(list,count,sizeof(CWho),&HashEntriesCompare);
 
   if (idx) {
     progress1_max=count;

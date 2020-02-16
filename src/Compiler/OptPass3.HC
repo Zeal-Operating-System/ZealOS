@@ -535,7 +535,7 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 	  ~(REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS)|used_reg_mask;
     if (!Bt(&cc->opts,OPTf_NO_REG_VAR) &&
 	  !(cc->flags & CCF_NO_REG_OPT)) {
-      QSort(mv,member_count,sizeof(COptMemberVar),&OptMVCompare);
+      QuickSort(mv,member_count,sizeof(COptMemberVar),&OptMVCompare);
       while (member_count && !mv[member_count-1].score)
 	member_count--;
       j=0;

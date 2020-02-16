@@ -238,8 +238,8 @@ U0 UAsmHashLoad()
       tmph=tmph->next;
     }
   }
-  QSortI64(uasm.table_16_32,uasm.table_16_32_entries,&InstEntriesCompare);
-  QSortI64(uasm.table_64   ,uasm.table_64_entries   ,&InstEntriesCompare);
+  QuickSortI64(uasm.table_16_32,uasm.table_16_32_entries,&InstEntriesCompare);
+  QuickSortI64(uasm.table_64   ,uasm.table_64_entries   ,&InstEntriesCompare);
 }
 
 U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)

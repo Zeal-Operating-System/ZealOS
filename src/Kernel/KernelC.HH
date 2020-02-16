@@ -599,9 +599,9 @@ public extern I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,
 public extern I64 EndianI64(I64 d);
 public extern U16 EndianU16(U16 d);
 public extern U32 EndianU32(U32 d);
-public extern U0 QSort(U8 *base,I64 num, I64 width,
+public extern U0 QuickSort(U8 *base,I64 num, I64 width,
 	I64 (*fp_compare)(U8 *e1,U8 *e2));
-public extern U0 QSortI64(I64 *base,I64 num,
+public extern U0 QuickSortI64(I64 *base,I64 num,
 	I64 (*fp_compare)(I64 e1,I64 e2));
 public extern F64 sys_os_version;
 

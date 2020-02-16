@@ -17,9 +17,9 @@ I64 Compare(I32 *e1,I32 *e2)
   return *e1-*e2;
 }
 
-U0 QSortU32(I32 *base,I64 num)
+U0 QuickSortU32(I32 *base,I64 num)
 {//By customizing, we dramatically improve it!
-//Cut and paste from $LK,"QSortI64",A="MN:QSortI64"$().
+//Cut and paste from $LK,"QuickSortI64",A="MN:QuickSortI64"$().
   I64 i;
   I32 *less,*greater,pivot;
   if (num>1) {
@@ -50,11 +50,11 @@ U0 QSortU32(I32 *base,I64 num)
 	} else //All equ
 	  break;
       } else if (i<num/2) {
-	QSortU32(base,i);
+	QuickSortU32(base,i);
 	num-=i;
 	base=greater;
       } else {
-	QSortU32(greater,num-i);
+	QuickSortU32(greater,num-i);
 	num=i;
       }
     } while (num>1);
@@ -64,7 +64,7 @@ U0 QSortU32(I32 *base,I64 num)
 U0 MPSort(I64 dummy=0)
 {
   no_warn dummy;
-  QSortU32(b[Gs->num],bn[Gs->num]);
+  QuickSortU32(b[Gs->num],bn[Gs->num]);
   LBtr(&mp_not_done_flags,Gs->num);
 }
 
@@ -79,17 +79,17 @@ U0 MPRadixSortDemo(I64 dummy=0)
 
   arg2=MAlloc(NUM*sizeof(I32));
 
-  "$$GREEN$$QSort$$FG$$\n";
+  "$$GREEN$$QuickSort$$FG$$\n";
   t0=tS;
   MemCpy(arg2,arg1,sizeof(I32)*NUM);
-  QSort(arg2,NUM,sizeof(I32),&Compare);
+  QuickSort(arg2,NUM,sizeof(I32),&Compare);
   "Time:%9.6f\n",tS-t0;
   D(arg2+NUM/4);
 
-  "$$GREEN$$QSortU32$$FG$$\n";
+  "$$GREEN$$QuickSortU32$$FG$$\n";
   t0=tS;
   MemCpy(arg2,arg1,sizeof(I32)*NUM);
-  QSortU32(arg2,NUM);
+  QuickSortU32(arg2,NUM);
   "Time:%9.6f\n",tS-t0;
   D(arg2+NUM/4);
 
@@ -103,7 +103,7 @@ U0 MPRadixSortDemo(I64 dummy=0)
 
   if (my_mp_count<2) throw('MultCore');
 
-  "$$GREEN$$MP Radix QSortU32$$FG$$\n";
+  "$$GREEN$$MP Radix QuickSortU32$$FG$$\n";
   t0=tS;
   k1=32-Bsr(my_mp_count);
   k2=my_mp_count/2;
@@ -133,10 +133,10 @@ U0 MPRadixSortDemo(I64 dummy=0)
 MPRadixSortDemo;
 
 /*$HL,0$ Results on 8 Cores 3.397GHz Core i7:
-$FG,2$QSort$FG$
+$FG,2$QuickSort$FG$
 Time: 0.759998
-$FG,2$QSortU32$FG$
+$FG,2$QuickSortU32$FG$
 Time: 0.093684
-$FG,2$MP Radix QSortU32$FG$
+$FG,2$MP Radix QuickSortU32$FG$
 Time: 0.045450
 $HL,1$*/

@@ -32,7 +32,7 @@ U0 F64FileSortTXT(U8 *in_name,U8 *out_name)
       a[i++]=cc->cur_f64;
   CompCtrlDel(cc);
 
-  QSortI64(a,n,&Compare); //Sort 64-bit sized values
+  QuickSortI64(a,n,&Compare); //Sort 64-bit sized values
 
   //Save
   doc=DocNew(out_name);
@@ -52,7 +52,7 @@ U0 F64FileSortDAT(U8 *in_name,U8 *out_name)
 {//$LK,"File/CFile",A="HI:File/CFile"$, $LK,"::/Demo/Disk/DataBase.HC"$
   I64 size;
   F64 *a=FileRead(in_name,&size);
-  QSortI64(a,size/sizeof(F64),&Compare); //Sort 64-bit sized values
+  QuickSortI64(a,size/sizeof(F64),&Compare); //Sort 64-bit sized values
   FileWrite(out_name,a,size);
   Free(a);
 }

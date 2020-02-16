@@ -275,7 +275,7 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
     doc_e=doc_e->next;
   }
   doc_unsorted1[i]=doc1;
-  QSortI64(doc_sorted1,count1,&DiffEntriesCompare);
+  QuickSortI64(doc_sorted1,count1,&DiffEntriesCompare);
 
   doc_sorted2=MAlloc(count2*sizeof(CDocEntry *));
   doc_unsorted2=MAlloc((count2+1)*sizeof(CDocEntry *));
@@ -289,7 +289,7 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
     doc_e=doc_e->next;
   }
   doc_unsorted2[i]=doc2;
-  QSortI64(doc_sorted2,count2,&DiffEntriesCompare);
+  QuickSortI64(doc_sorted2,count2,&DiffEntriesCompare);
 
   res=DiffSub(doc1,&df_flags,0,count1,0,count2,count1,count2,
 	doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2);
@@ -342,7 +342,7 @@ public U0 ZipRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL,
     Free(arc);
     tmpde=tmpde->next;
   }
-  QSortI64(sort_buf,count,&ZRepCompare);
+  QuickSortI64(sort_buf,count,&ZRepCompare);
   for (i=0;i<count;i++) {
     "%4.1f%% %04X ",sort_buf[i]->user_data,sort_buf[i]->size;
     PutFileLink(sort_buf[i]->full_name);

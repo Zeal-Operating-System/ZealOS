@@ -134,7 +134,7 @@ U0 KeyMapFamily(CTask *task,I64 scf,Bool no_shift,Bool shift)
     ptr+=256;
     count+=256;
   }
-  QSortI64(entries,count,&KMCompare);
+  QuickSortI64(entries,count,&KMCompare);
   for (i=0;i<count;i++)
     if (entries[i]) {
       "%s",entries[i];
