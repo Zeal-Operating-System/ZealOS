@@ -90,7 +90,7 @@ public Bool DocDblBufSwap(CTask *task=NULL)
     DocLock(ddoc);
     task->display_doc=pdoc;
     DocUnlock(ddoc);
-    DocRst(ddoc,TRUE);
+    DocReset(ddoc,TRUE);
     MemCpy(ddoc->find_replace,pdoc->find_replace,sizeof(CEdFindText));
     MemCpy(&ddoc->filename,&pdoc->filename,sizeof(CEdFileName));
     ddoc->max_entries		=pdoc->max_entries;

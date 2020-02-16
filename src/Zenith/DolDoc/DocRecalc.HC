@@ -960,7 +960,7 @@ rc_adjust_xy:
 	      !tmpb->tag && doc_e->tag && *doc_e->tag)
 	  tmpb->tag=StrNew(doc_e->tag,mem_task);
 	if (tmpb && dc) {
-	  DCRst(dc);
+	  DCReset(dc);
 	  dc->flags&=~(DCF_DONT_DRAW|DCF_LOCATE_NEAREST);
 	  if (recalc_flags&RECALCG_MASK!=RECALCt_TO_SCRN ||
 		doc_e->de_flags&DOCEF_DONT_DRAW)
@@ -1031,7 +1031,7 @@ rc_adjust_xy:
 	  if (doc_e->aux_str &&
 		(!music.cur_song || StrCmp(music.cur_song,doc_e->aux_str))) {
 	    Free(music.cur_song);
-	    MusicSettingsRst;
+	    MusicSettingsReset;
 	    music.cur_song=AStrNew(doc_e->aux_str);
 	  }
 	}

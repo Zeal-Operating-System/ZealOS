@@ -597,7 +597,7 @@ U0 MeshClipInit()
   QueueInit(&sys_clip_tri_head);
 }
 
-U0 MeshClipRst()
+U0 MeshClipReset()
 {
   QueueDel(&sys_clip_vertex_head,TRUE);
   QueueDel(&sys_clip_tri_head,TRUE);
@@ -609,7 +609,7 @@ U0 MeshClipCopy(CMeshFrame *e)
   CMeshEdVertex	*tmpv=e->vertex_head.next,*tmpv2;
   CMeshEdTri	*tmpt=e->tri_head.next,*tmpt2;
 
-  MeshClipRst;
+  MeshClipReset;
   while (tmpv!=&e->vertex_head) {
     if (tmpv->flags&VF_SEL) {
       tmpv->copy=tmpv2=ACAlloc(sizeof(CMeshEdVertex));

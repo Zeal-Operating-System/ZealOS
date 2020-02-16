@@ -420,7 +420,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 	      st2=LexExtStr(cc);
 	      doc_e->bin_ptr_link=StrNew(st2,doc->mem_task);
 	      Free(st2);
-	      if (!DocBinPtrRst(doc,doc_e))
+	      if (!DocBinPtrReset(doc,doc_e))
 		doc_e->type=DOCT_ERROR;
 	    } else
 	      goto pd_err;
@@ -597,7 +597,7 @@ U0 DocFlagsToggle(CDoc *doc,I64 tog_flags)
   u_last=doc->undo_head.last;
   doc->undo_head.next=doc->undo_head.last=&doc->undo_head;
 
-  DocRst(doc,TRUE);
+  DocReset(doc,TRUE);
   doc->undo_head.next=u_next;
   doc->undo_head.last=u_last;
   DocUndoCountSet(doc);

@@ -2971,7 +2971,7 @@ public class CKbdStateGlobals
 //BitTest, $LK,"Bt",A="MN:Bt"$(), with an unmerged scan code.
 	down_bitmap2[8];
 
-  Bool	rst,		//Private: Reset KbdMs
+  Bool	reset,		//Private: Reset KbdMs
 	irqs_working;	//Private
 };
 

@@ -2,7 +2,7 @@ I64 ts_i;
 F64 ts_t0;
 
 U0 TS(U8 *desc)
-{//We must set these because an app can call $LK,"ProgressBarsRst",A="MN:ProgressBarsRst"$.
+{//We must set these because an app can call $LK,"ProgressBarsReset",A="MN:ProgressBarsReset"$.
   U8 *st=MStrPrint("%d. %s",ts_i,desc);
   if (*desc)
     progress3_max=1;
@@ -1716,7 +1716,7 @@ U0 OSTestSuite()
   TS("TaskRep");	XTalkWait(task,"TaskRep;Sleep(750);\n");
   DeathWait(&task,TRUE);
 
-  ProgressBarsRst("ZenithOS/OSTestSuite");
+  ProgressBarsReset("ZenithOS/OSTestSuite");
   "Elapsed Time:%5.3f\n",tS-ts_t0;
 }
 

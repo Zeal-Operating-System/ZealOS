@@ -15,14 +15,14 @@ U0 GrPaletteIndicesSet()
   CLI
   while (LBts(&sys_semas[SEMA_VGA],0))
     Yield;
-  InU8(VGAP_INPUT_STAT); //Rsts attr index/data
+  InU8(VGAP_INPUT_STAT); //Resets attr index/data
   for (i=0;i<COLORS_NUM;i++) {
     OutU8(VGAP_ATTR_INDEX,i);
     OutU8(VGAP_ATTR_DATA_WRITE,i);
   }
   OutU8(VGAP_ATTR_INDEX,0x20);
   OutU8(VGAP_ATTR_DATA_WRITE,0); //Dummy write
-  InU8(VGAP_INPUT_STAT); //Rsts attr index/data
+  InU8(VGAP_INPUT_STAT); //Resets attr index/data
   LBtr(&sys_semas[SEMA_VGA],0);
   POPFD
 }

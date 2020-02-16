@@ -19,7 +19,7 @@ U0 Main1()
   StrCpy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
   while (progress1++!=progress1_max)
     Sleep(20);
-  ProgressBarsRst;
+  ProgressBarsReset;
 }
 Main1;
 
@@ -32,7 +32,7 @@ U0 Main2()
   StrCpy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
   while (progress1++!=progress1_max)
     Sleep(20);
-  ProgressBarsRst;
+  ProgressBarsReset;
 }
 Main2;
 
@@ -46,7 +46,7 @@ U0 Main3()
   StrCpy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
   while (progress1++!=progress1_max)
     Sleep(20);
-  ProgressBarsRst("DemoCompany/ProgressBars");
+  ProgressBarsReset("DemoCompany/ProgressBars");
 }
 Main3;
 
@@ -57,7 +57,7 @@ U0 Main4()
   progress1_max=200;
   while (progress1++!=progress1_max)
     Sleep(20);
-  ProgressBarsRst;
+  ProgressBarsReset;
 }
 Main4;
 

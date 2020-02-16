@@ -329,7 +329,7 @@ public extern CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE);
 public extern U0 BlkDevDel(CBlkDev *bd);
 public extern Bool BlkDevLock(CBlkDev *bd);
 public extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
-public extern Bool BlkDevUnlock(CBlkDev *bd,Bool rst=FALSE);
+public extern Bool BlkDevUnlock(CBlkDev *bd,Bool reset=FALSE);
 public extern U0 BlkDevsRelease();
 public extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 count);
 public extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 count);
@@ -352,7 +352,7 @@ public extern U8 *DriveModelNum(U8 drv_let=0);
 public extern U8 DriveNextFreeLet(U8 first_drv_let='C');
 public extern U8 *DriveSerialNum(U8 drv_let=0);
 public extern U8 DriveTextAttrGet(U8 drv_let=0);
-public extern Bool DriveUnlock(CDrive *dv,Bool rst=FALSE);
+public extern Bool DriveUnlock(CDrive *dv,Bool reset=FALSE);
 public extern U0 DrivesRelease();
 extern U0 FAT32FreeClus(CDrive *dv,I64 c);
 public extern CBlkDev *Letter2BlkDev(U8 drv_let=0,Bool except=TRUE);
@@ -465,7 +465,7 @@ public extern I64 JobsHandler(I64 run_flags,CTask *task=NULL);
 extern U0 SrvCmdLine();
 public extern U0 SrvTaskCont();
 public extern CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags);
-public extern U0 TaskRstAwaitingMessage(CTask *task=NULL);
+public extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 public extern U0 UserTaskCont();
 
 #help_index "Job/Exe;Task/Job/Exe;Compiler"
@@ -606,7 +606,7 @@ public extern U0 QuickSortI64(I64 *base,I64 num,
 public extern F64 sys_os_version;
 
 #help_index "Misc/Progress Bars"
-public extern U0 ProgressBarsRst(U8 *path=NULL);
+public extern U0 ProgressBarsReset(U8 *path=NULL);
 
 #help_index "Mouse"
 #help_file "::/Doc/Mouse"
@@ -677,7 +677,7 @@ public extern Bool IsMute();
 public extern Bool Mute(Bool val);
 public extern F64 Ona2Freq(I64 ona);
 public extern U0 Sound(I8 ona=0);
-public extern U0 SoundRst();
+public extern U0 SoundReset();
 
 #help_index "StdIn"
 #help_file "::/Doc/Streams"

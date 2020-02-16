@@ -40,7 +40,7 @@ U0 Main()
   U8 *da=dev.uncached_alias+IOAPIC_REG;
   U32 *_d=dev.uncached_alias+IOAPIC_DATA;
 
-  ProgressBarsRst;
+  ProgressBarsReset;
   for (i=I_USER;i<I_USER+4;i++)
     IntEntrySet(i,vect[i&3],IDTET_IRQ);
 
@@ -56,7 +56,7 @@ U0 Main()
   Sleep(1000);
   "The keyboard and timer seem to be active.\n"
 	"IntA:%d IntB:%d IntC:%d IntD:%d\n\n"
-	"IntB is my keyboard and regs a single KEY-UP.\n"
+	"IntB is my keyboard and regs a single KEY-UP.\n"
 	"Rerun and press a few keys.\n",
 	progress1,progress2,progress3,progress4;
 
@@ -67,7 +67,7 @@ U0 Main()
     *da=i;
     *_d=0x14000+0x40+(i-IOREDTAB)/2;
   }
-  ProgressBarsRst;
+  ProgressBarsReset;
 }
 
 Main;

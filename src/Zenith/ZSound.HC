@@ -297,7 +297,7 @@ per second.It defaults to
   }
 }
 
-U0 MusicSettingsRst()
+U0 MusicSettingsReset()
 {
   music.play_note_num=0;
   music.stacatto_factor=0.9;
@@ -306,7 +306,7 @@ U0 MusicSettingsRst()
   music.note_len=1.0;
   music.meter_top=4;
   music.meter_bottom=4;
-  SoundRst;
+  SoundReset;
   PUSHFD
   CLI
   if (mp_count>1)
@@ -318,7 +318,7 @@ U0 MusicSettingsRst()
   POPFD
 }
 
-MusicSettingsRst;
+MusicSettingsReset;
 
 U0 CurSongTask()
 {

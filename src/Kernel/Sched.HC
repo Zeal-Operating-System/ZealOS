@@ -196,7 +196,7 @@ RESTORE_RSI_TASK2:
 	JC	@@20	//Jmp if had chance for IRQ already
 	MOV	RAX,U64 GS:CCPU.idle_task[RAX]
 	MOV	RSP,U64 CTask.stk[RAX]
-	ADD	RSP,MEM_DEFAULT_STK+CTaskStk.stk_base	//Rst to top
+	ADD	RSP,MEM_DEFAULT_STK+CTaskStk.stk_base	//Reset to top
 	CALL	SET_FS_BASE
 	STI	//Restore idle task so we can unmask IRQs.
 	HLT
@@ -258,7 +258,7 @@ BREAK_FOCUS_USER:
 //Do these now, in case interrupt happens.
 	MOV	U64 CTask.wake_jiffy[RSI],0
 	PUSH	RSI
-	CALL	&TaskRstAwaitingMessage
+	CALL	&TaskResetAwaitingMessage
 	JMP	I32 RESTORE_RSI_TASK
 
 END_FOCUS_USER:

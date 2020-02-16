@@ -184,10 +184,10 @@ public U0 JukeBox(U8 *dirname="~/Psalmody",U8 **_filename=NULL)
 	*_filename=StrNew(tmpde->full_name);
       }
       if (tmpde->user_data==JB_RUN_LEVEL_ONE) break; //<ESC>
-      tmpde->user_data=JB_RUN_LEVEL_NULL; //Rst from <SPACE>
+      tmpde->user_data=JB_RUN_LEVEL_NULL; //Reset from <SPACE>
       FileExtRemove(st2);
       st=MStrPrint("ExeFile(\"%s\");",tmpde->full_name);
-      MusicSettingsRst;
+      MusicSettingsReset;
       task=SingleSong(st,st2);
       Free(st2);
       Free(st);

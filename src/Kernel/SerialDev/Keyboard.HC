@@ -414,7 +414,7 @@ interrupt U0 IRQKbd()
   OutU8(0x20,0x20);
   kbd.irqs_working=TRUE;
   if (ms_hard.install_in_progress) {
-    kbd.rst=TRUE;
+    kbd.reset=TRUE;
     return;
   }
   keydev.ctrl_alt_ret_addr=GetRBP()(I64)+8;

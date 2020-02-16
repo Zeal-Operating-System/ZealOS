@@ -120,7 +120,7 @@ U0 Break()
     Message(MESSAGE_KEY_DOWN,CH_SHIFT_ESC,0x20100000201);
   else {
     Fs->wake_jiffy=0;
-    TaskRstAwaitingMessage;
+    TaskResetAwaitingMessage;
     DrivesRelease();
     BlkDevsRelease();
     FlushMessages;

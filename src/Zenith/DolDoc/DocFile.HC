@@ -186,7 +186,7 @@ public Bool DocWrite(CDoc *doc,Bool prompt=FALSE)
 #help_index "DolDoc"
 public U0 DocInsDoc(CDoc *doc=NULL,CDoc *doc2)
 {//Insert copy of doc2 into doc at insert pt, cur_entry.
-//TODO: $LK,"DocRst",A="MN:DocRst"$
+//TODO: $LK,"DocReset",A="MN:DocReset"$
   U8 *dst;
   Bool unlock_doc,unlock_doc2=DocLock(doc2);
   CDocEntry *doc_ne,*doc_e=doc2->head.next,*doc_ce;
@@ -225,7 +225,7 @@ public U0 DocInsDoc(CDoc *doc=NULL,CDoc *doc2)
 #help_index "DolDoc/Compiler;Compiler/Directive"
 public U0 StreamDoc(CDoc *doc)
 {//Inject doc into compile stream. Use inside #exe{}.
-//TODO: $LK,"DocRst",A="MN:DocRst"$
+//TODO: $LK,"DocReset",A="MN:DocReset"$
   Bool unlock_doc=DocLock(doc);
   CDocEntry *doc_e=doc->head.next;
   while (doc_e!=doc) {
@@ -282,7 +282,7 @@ U0 DocUndoRestore(CDoc *doc)
     u_next=doc->undo_head.next;
     u_last=doc->undo_head.last;
     QueueInit(&doc->undo_head);
-    DocRst(doc,TRUE);
+    DocReset(doc,TRUE);
     doc->flags=u->doc_flags&~DOCF_NO_CURSOR;
     DocLoad(doc,u->body,u->size);
     doc->flags=u->doc_flags;

@@ -17,10 +17,10 @@ U0 ACDDictWordsAdd(U8 *st)
 }
 
 #help_index "AutoComplete"
-U0 ACDocRst(I64 left,I64 top)
+U0 ACDocReset(I64 left,I64 top)
 {
   CDoc *doc=DocPut;
-  DocRst(doc,TRUE);
+  DocReset(doc,TRUE);
   doc->flags|=DOCF_SIZE_MIN;
   Fs->border_src=BDS_CONST;
   Fs->border_attr=LTGRAY<<4+DriveTextAttrGet(':')&15;
@@ -115,7 +115,7 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
 	  tmpw=tmpw->next;
 	}
       }
-    ACDocRst(51,13);
+    ACDocReset(51,13);
     if (ac.cur_word && *ac.cur_word) {
       "$$PURPLE$$Word:%s$$FG$$\n",ac.cur_word;
       for (i=0;i<ac.num_fillins;i++) {
@@ -174,7 +174,7 @@ U0 ACTaskCtrl(I64 sc,I64 last_sc,
   } else {
     if (sc!=last_sc) {
       if (sc&SCF_ALT) {
-	ACDocRst(27,3);
+	ACDocReset(27,3);
 	if (TaskValidate(original_focus_task) &&
 	      !Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC))
 	  KeyMapFamily(original_focus_task,0,
@@ -183,7 +183,7 @@ U0 ACTaskCtrl(I64 sc,I64 last_sc,
 	      ToBool(!(sc&SCF_SHIFT)),ToBool(sc&SCF_SHIFT));
       } else if (TaskValidate(original_focus_task) &&
 	    !Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC)) {
-	ACDocRst(27,3);
+	ACDocReset(27,3);
 	KeyMapFamily(original_focus_task,SCF_CTRL,
 	      ToBool(!(sc&SCF_SHIFT)),ToBool(sc&SCF_SHIFT));
       }
@@ -198,7 +198,7 @@ U0 ACTaskAlt(I64 sc,I64 last_sc,
 {
   if (sc!=last_sc && TaskValidate(original_focus_task) &&
 	!Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC)) {
-    ACDocRst(27,3);
+    ACDocReset(27,3);
     KeyMapFamily(original_focus_task,SCF_ALT,
 	  ToBool(!(sc&SCF_SHIFT)),ToBool(sc&SCF_SHIFT));
   }

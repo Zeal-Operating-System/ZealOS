@@ -886,7 +886,7 @@ U0 Core0Talons()
 	    (Fs->pix_height-FONT_HEIGHT)/2,"Game Over");
     }
   } else {
-    DCDepthBufRst(dc);
+    DCDepthBufReset(dc);
     mp.update_not_done_flags=1<<mp_count-1;
     MPDrawIt(Fs,dc);
     while (mp.update_not_done_flags)
@@ -1063,7 +1063,7 @@ U0 TaskEndCB()
 U0 SongTask(I64)
 {
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   while (TRUE) {
     Play("5eCGFsD4A5e.C4sG5eGDqCDeGsGG4qG");
     Play("5eCGFsD4A5e.C4sG5eGDqCDeGsGG4qG");

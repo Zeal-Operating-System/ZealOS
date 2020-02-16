@@ -94,7 +94,7 @@ interrupt U0 IRQMsHard()
   OutU8(0x20,0x20);
   ms_hard.irqs_working=TRUE;
   if (ms_hard.install_in_progress || !ms_hard.installed) {
-    kbd.rst=TRUE;
+    kbd.reset=TRUE;
     return;
   }
   MsHardPktRead;
@@ -111,7 +111,7 @@ U0 MsHardGetType()
     ms_hard.has_ext_bttns=TRUE;
 }
 
-Bool MsHardRst()
+Bool MsHardReset()
 {
   U8 b,*_b;
   F64 timeout;
@@ -131,7 +131,7 @@ Bool MsHardRst()
     KbdCmdSend(KBD_CTRL,0xAD); //Disable Kbd
     KbdCmdSend(KBD_CTRL,0xA8); //Enable Mouse
 
-    KbdMsCmdAck(0xFF); //Rst
+    KbdMsCmdAck(0xFF); //Reset
 
     timeout=tS+10.0;
     do
@@ -281,14 +281,14 @@ U0 MsHardSet(I64 x,I64 y,I64 z,I64 l,I64 r)
   MsHardSetPost;
 }
 
-U0 KbdMsRst()
+U0 KbdMsReset()
 {
   KbdCmdFlush;
   FifoU8Flush(kbd.fifo2);
   FifoU8Flush(ms_hard.fifo2);
   FifoI64Flush(kbd.scan_code_fifo);
   kbd.scan_code=0;
-  kbd.rst=FALSE;
+  kbd.reset=FALSE;
 }
 
 Bool MsHardDriverInstall(I64 dummy=0) //can be spawned
@@ -301,9 +301,9 @@ Bool MsHardDriverInstall(I64 dummy=0) //can be spawned
   IntEntrySet(0x2C,&IRQMsHard);
   for(i=0;i<5;i++)
     ms_hard.bttns[i]=0;
-  if (i=MsHardRst)
+  if (i=MsHardReset)
     OutU8(0xA1,InU8(0xA1)&~0x10);
-  KbdMsRst;
+  KbdMsReset;
   ms_hard.install_attempts++;
   ms_hard.installed=ms_hard.evt=i;
   ms_hard.install_in_progress=FALSE;
@@ -316,8 +316,8 @@ U0 KbdMsHandler(Bool poll_kbd,Bool poll_ms)
     Yield;
     return;
   }
-  if (kbd.rst)
-    KbdMsRst;
+  if (kbd.reset)
+    KbdMsReset;
   else {
     if (poll_ms && ms_hard.installed && !ms_hard.irqs_working) {
       PUSHFD
@@ -331,8 +331,8 @@ U0 KbdMsHandler(Bool poll_kbd,Bool poll_ms)
       while (InU8(KBD_CTRL)&1)
 	KbdPktRead;
 
-    if (kbd.rst)
-      KbdMsRst;
+    if (kbd.reset)
+      KbdMsReset;
     else {
       while (FifoU8Count(kbd.fifo2))
 	KbdHandler;
@@ -340,7 +340,7 @@ U0 KbdMsHandler(Bool poll_kbd,Bool poll_ms)
 	if (ms_hard.installed)
 	  MsHardHandler;
 	else
-	  KbdMsRst;
+	  KbdMsReset;
     }
   }
 }

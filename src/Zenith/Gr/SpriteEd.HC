@@ -7,7 +7,7 @@ CSprite *SpriteSetSettings(CDC *dc=NULL,CSprite *head,I64 elem_num,
   CSprite *res=head->next;
   I64 thick=1,xx=0,yy=0;
   CColorROPU32 color=BLACK;
-  if (dc) DCRst(dc);
+  if (dc) DCReset(dc);
   while (elem_num-->0 && res!=head) {
     switch (res->type&SPG_TYPE_MASK) {
       case SPT_COLOR:

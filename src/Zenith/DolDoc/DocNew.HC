@@ -233,7 +233,7 @@ public U0 DocInsEntry(CDoc *doc,CDocEntry *doc_e)
     DocUnlock(doc);
 }
 
-public U0 DocRst(CDoc *doc,Bool is_old)
+public U0 DocReset(CDoc *doc,Bool is_old)
 {//Del all entries and set doc to defaults.
   Bool unlock;
   CDocEntry *doc_e,*doc_e2;
@@ -313,7 +313,7 @@ public U0 DocDel(CDoc *doc)
   if (!doc || doc->doc_signature!=DOC_SIGNATURE_VAL) return;
   DocLock(doc);
   doc->doc_signature=0;
-  DocRst(doc,TRUE);
+  DocReset(doc,TRUE);
   Free(doc->find_replace);
   Free(doc->dollar_buf);
   DocUnlock(doc);
@@ -379,7 +379,7 @@ public CDoc *DocNew(U8 *filename=NULL,CTask *task=NULL)
   doc->max_entries=I64_MAX;
   doc->win_task=task;
   doc->mem_task=task;
-  DocRst(doc,FALSE);
+  DocReset(doc,FALSE);
   doc->doc_signature=DOC_SIGNATURE_VAL;
   return doc;
 }

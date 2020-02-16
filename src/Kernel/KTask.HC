@@ -452,7 +452,7 @@ I64 TaskEnd()
   if (task->task_end_cb) {
     task->wake_jiffy=0;
     LBtr(&task->task_flags,TASKf_KILL_TASK);
-    TaskRstAwaitingMessage(task);
+    TaskResetAwaitingMessage(task);
     Suspend(task,FALSE);
     task->rip=task->task_end_cb;
     task->task_end_cb=NULL;

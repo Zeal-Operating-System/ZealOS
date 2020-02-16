@@ -9,7 +9,7 @@ F64 LowPass1(F64 a,F64 y0,F64 y,F64 dt=1.0)
   return y0*dt+y*(1.0-dt);
 }
 
-U0 ODERstPtrs(CMathODE *ode)
+U0 ODEResetPtrs(CMathODE *ode)
 {
   I64 s=ode->n_internal*sizeof(F64);
   F64 *ptr=ode->array_base;
@@ -47,7 +47,7 @@ public CMathODE *ODENew(I64 n,F64 max_tolerance=1e-6,I64 flags=0)
   QueueInit(&ode->next_spring);
   ode->state=CAlloc(s);
   ode->array_base=MAlloc(12*s);
-  ODERstPtrs(ode);
+  ODEResetPtrs(ode);
   return ode;
 }
 
@@ -115,7 +115,7 @@ U0 ODEState2Internal(CMathODE *ode)
     ode->n_internal=ode->n+6*mass_count;
     ode->array_base=MAlloc(12*ode->n_internal*sizeof(F64),ode->mem_task);
     Free(old_array_base);
-    ODERstPtrs(ode);
+    ODEResetPtrs(ode);
 
     ODESetMassesPtrs(ode,ode->state_internal,ode->state_internal);
     tmpm=ode->next_mass;
@@ -245,7 +245,7 @@ public CMass *MassFindNum(CMathODE *ode,I64 num)
   return NULL;
 }
 
-public U0 ODERstInactive(CMathODE *ode)
+public U0 ODEResetInactive(CMathODE *ode)
 {//Set all masses and springs to ACTIVE for new trial.
   CMass *tmpm;
   CSpring *tmps;

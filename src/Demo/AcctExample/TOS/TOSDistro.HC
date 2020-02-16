@@ -364,7 +364,7 @@ U0 TOSRegen2()
   SettingsPop;
   "F2(\"/Home\") Count\t:%d\n",slash_home;
   "Elapsed Time\t:%5.3fs\n",tS-progress4_t0;
-  ProgressBarsRst("ZenithOS/TOSRegen");
+  ProgressBarsReset("ZenithOS/TOSRegen");
 }
 
 public U0 TOSPreRegen()

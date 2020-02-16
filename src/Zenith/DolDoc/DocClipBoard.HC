@@ -4,7 +4,7 @@ sys_clip_doc=DocNew;
 
 public U0 ClipDel()
 {//Delete everything on clip.
-  DocRst(sys_clip_doc,TRUE);
+  DocReset(sys_clip_doc,TRUE);
 }
 
 public U0 ClipCopy(CDoc *doc)

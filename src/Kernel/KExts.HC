@@ -17,7 +17,7 @@ extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 extern CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE);
 extern Bool BlkDevLock(CBlkDev *bd);
 extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
-extern Bool BlkDevUnlock(CBlkDev *bd,Bool rst=FALSE);
+extern Bool BlkDevUnlock(CBlkDev *bd,Bool reset=FALSE);
 extern U0 BlkDevsRelease();
 extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 count);
 extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 count);
@@ -100,7 +100,7 @@ extern U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags);
 extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
 extern CJob *TaskMessage(CTask *_srv,CTask *master,
 	I64 message_code,I64 arg1,I64 arg2,I64 flags);
-extern U0 TaskRstAwaitingMessage(CTask *task=NULL);
+extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 extern Bool TaskValidate(CTask *task);
 extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
 extern CTask *User(U8 *fmt=NULL,...);

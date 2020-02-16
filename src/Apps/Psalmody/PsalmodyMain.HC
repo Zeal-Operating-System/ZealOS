@@ -360,7 +360,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
   if (DocPut) old_doc_flags=DocPut->flags;
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 
-  MusicSettingsRst;
+  MusicSettingsReset;
   tempo_state.tempo=Round(TEMPO_RANGE*(music.tempo-0.5)/4.4);
   tempo_state.stacatto=Round(TEMPO_RANGE*(music.stacatto_factor-0.12)/0.88);
 

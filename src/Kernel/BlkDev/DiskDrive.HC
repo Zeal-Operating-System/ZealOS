@@ -11,11 +11,11 @@ Bool DriveLock(CDrive *dv)
     return FALSE;
 }
 
-Bool DriveUnlock(CDrive *dv,Bool rst=FALSE)
+Bool DriveUnlock(CDrive *dv,Bool reset=FALSE)
 {//Release exclusive lock on access to drv & BlkDev.
   DriveCheck(dv);
   if (Bt(&dv->locked_flags,DVlf_LOCKED) && dv->owning_task==Fs) {
-    BlkDevUnlock(dv->bd,rst);
+    BlkDevUnlock(dv->bd,reset);
     dv->owning_task=NULL;
     LBtr(&dv->locked_flags,DVlf_LOCKED);
     Yield; //Prevent deadlock

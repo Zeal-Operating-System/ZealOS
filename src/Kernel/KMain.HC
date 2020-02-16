@@ -53,7 +53,7 @@ U0 SysGlobalsInit()
   screencast.t0_tS=tS;
   screencast.ona=screencast.sound_head.ona=0;
 
-  ProgressBarsRst;
+  ProgressBarsReset;
 
   QueueInit(&dev.pci_head);
   dev.mem64_ptr=mem_mapped_space;

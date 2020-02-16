@@ -94,7 +94,7 @@ U0 DocBinDel(CDoc *doc,CDocBin *b)
     RawPrint(3000,"DocBinDel");
 }
 
-I64 DocBinPtrRst(CDoc *doc,CDocEntry *doc_e)
+I64 DocBinPtrReset(CDoc *doc,CDocEntry *doc_e)
 {
   U8 *st,*st2;
   CDoc *doc2;

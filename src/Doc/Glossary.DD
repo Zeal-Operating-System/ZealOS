@@ -123,7 +123,7 @@ $FG,2$Rep$FG$	Report, Repeat
 $FG,2$Res$FG$	Result
 $FG,2$Rev$FG$	Reverse, Reversed
 $FG,2$Rqst$FG$	Request
-$FG,2$Rst$FG$	Reset
+$FG,2$Reset$FG$	Reset
 $FG,2$Rot$FG$	Rotation
 $FG,2$Rx$FG$	Receive
 $FG,2$Sched$FG$	Sceduler
@@ -272,7 +272,7 @@ $FG,5$DOCG_????$FG$
 
 $FG,5$res$FG$ is reserved for local variables that hold the function return val.
 
-$FG,5$*$FG$ I used C++ like naming.  I place $FG,2$New$FG$, $FG,2$Del$FG$, $FG,2$Init$FG$, $FG,2$Rst$FG$, ect. on the end of a function name instead of at the beginning.  $FG,2$RstMusicSettings$FG$ should be $FG,2$MusicSettingsRst$FG$.
+$FG,5$*$FG$ I used C++ like naming.  I place $FG,2$New$FG$, $FG,2$Del$FG$, $FG,2$Init$FG$, $FG,2$Reset$FG$, ect. on the end of a function name instead of at the beginning.  $FG,2$ResetMusicSettings$FG$ should be $FG,2$MusicSettingsReset$FG$.
 $ID,-2$$TR,"Fs"$
 $ID,2$The CPU FS segment reg.  This reg points to the current task's $LK,"CTask",A="MN:CTask"$.
 $ID,-2$$TR,"Gs"$

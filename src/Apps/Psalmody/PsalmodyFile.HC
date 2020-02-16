@@ -346,7 +346,7 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 	"U0 Song()\n"
 	"{\n"
 	"Fs->task_end_cb=&SoundTaskEndCB;\n"
-	"MusicSettingsRst;\n"
+	"MusicSettingsReset;\n"
 	"music.tempo=%6.3f;\n"
 	"music.stacatto_factor=%6.3f;\n"
 	"try {\n"

@@ -1,7 +1,7 @@
 U0 Song()
 {//Song by Terry A. Davis
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   try //Catch <CTRL-ALT-c> exit
     while (!ScanChar) {
       Play("6hEqDC5B6CDhE",

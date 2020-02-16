@@ -2,7 +2,7 @@
 U0 Song()
 {
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   music.tempo= 2.480;
   music.stacatto_factor= 0.902;
   try {

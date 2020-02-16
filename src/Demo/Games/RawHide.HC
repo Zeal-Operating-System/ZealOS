@@ -449,7 +449,7 @@ U0 AnimateTask(CTask *parent)
 U0 SongTask(I64)
 {//Randomly generated (by God :-)
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   while (TRUE) {
     Play("5qC4etG5DC4B5DCECFqFC4sA5D4A5D4qB");
     Play("5C4etG5DC4B5DCECFqFC4sA5D4A5D4qB");

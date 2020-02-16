@@ -76,7 +76,7 @@ U0 UnusedDefineScan()
 
   Silent(old_silent);
   '\n';
-  ProgressBarsRst;
+  ProgressBarsReset;
 }
 
 UnusedDefineScan;

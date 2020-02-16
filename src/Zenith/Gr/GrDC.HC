@@ -131,7 +131,7 @@ public U0 DCClear(CDC *dc=NULL)
   DCFill(dc,0);
 }
 
-public U0 DCRst(CDC *dc)
+public U0 DCReset(CDC *dc)
 {//Reset $LK,"CDC",A="MN:CDC"$ structure members but not image body, itself.
   dc->color=BLACK;
   dc->color2=BLACK;
@@ -177,7 +177,7 @@ public CDC *DCAlias(CDC *dc=NULL,CTask *task=NULL)
   MemCpy(res,dc,sizeof(CDC));
   res->win_task=res->mem_task=task;
   res->r=MAlloc(16*sizeof(I64),task);
-  DCRst(res);
+  DCReset(res);
   res->flags|=DCF_ALIAS;
   res->alias=dc;
   return res;
@@ -200,7 +200,7 @@ public CDC *DCNew(I64 width,I64 height,CTask *task=NULL,Bool null_bitmap=FALSE)
   else
     res->body=CAlloc(res->width_internal*res->height,task);
   res->r=MAlloc(16*sizeof(I64),task);
-  DCRst(res);
+  DCReset(res);
   res->dc_signature=DCS_SIGNATURE_VAL;
   return res;
 }
@@ -226,7 +226,7 @@ public I64 DCSize(CDC *dc)
     return 0;
 }
 
-public I32 *DCDepthBufRst(CDC *dc)
+public I32 *DCDepthBufReset(CDC *dc)
 {//Reset device context depth buf to far away.
   if (dc->depth_buf)
     MemSetU32(dc->depth_buf,I32_MAX,dc->width_internal*dc->height);
@@ -237,7 +237,7 @@ public I32 *DCDepthBufAlloc(CDC *dc)
 {//Alloc a 32-bit depth buffer for device context.
   Free(dc->depth_buf);
   dc->depth_buf=MAlloc(dc->width_internal*dc->height*sizeof(I32),dc->mem_task);
-  return DCDepthBufRst(dc);
+  return DCDepthBufReset(dc);
 }
 
 public CDC *DCCopy(CDC *dc,CTask *task=NULL)

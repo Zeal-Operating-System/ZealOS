@@ -11,7 +11,7 @@ F64 avg_error=0,elapsed_time=0,total_error=0,score=999;
 U0 SongTask(I64)
 {
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   while (TRUE)
     Play("5hEDC4A5RCDECR");
 }

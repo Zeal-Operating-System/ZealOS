@@ -22,7 +22,7 @@ U0 JobCtrlInit(CJobCtrl *ctrl)
   ctrl->flags=0;
 }
 
-U0 TaskRstAwaitingMessage(CTask *task=NULL)
+U0 TaskResetAwaitingMessage(CTask *task=NULL)
 {//Pop-ups get parent messages so wake-up our pop-ups if we got a message.
   if (!task) task=Fs;
   PUSHFD
@@ -60,7 +60,7 @@ CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags)
     return NULL;
   } else {
     LBtr(&srv->task_flags,TASKf_IDLE);
-    TaskRstAwaitingMessage(srv);
+    TaskResetAwaitingMessage(srv);
     QueueInsert(res,srv->srv_ctrl.last_waiting);
     LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
     if (Bt(&flags,JOBf_WAKE_MASTER)) {
@@ -108,7 +108,7 @@ CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
     res=NULL;
   } else {
     LBtr(&task->task_flags,TASKf_IDLE);
-    TaskRstAwaitingMessage(task);
+    TaskResetAwaitingMessage(task);
     QueueInsert(res,task->srv_ctrl.last_waiting);
     LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   }
@@ -151,7 +151,7 @@ CJob *TaskMessage(CTask *_srv,CTask *master,
     tmpc=NULL;
   } else {
     LBtr(&srv->task_flags,TASKf_IDLE);
-    TaskRstAwaitingMessage(srv);
+    TaskResetAwaitingMessage(srv);
     QueueInsert(tmpc,srv->srv_ctrl.last_waiting);
     LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
   }

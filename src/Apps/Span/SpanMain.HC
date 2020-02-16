@@ -244,7 +244,7 @@ U0 Init(SpanAnimateStruct *a)
 U0 SongTask(I64)
 {//Song by Terry A. Davis
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   music.tempo= 3.636;
   music.stacatto_factor= 0.902;
   while (TRUE) {

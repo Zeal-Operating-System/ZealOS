@@ -204,7 +204,7 @@ U0 ToTheFront()
     } while (res!='ExitGame');
   } catch
     PutExcept;
-  ProgressBarsRst;
+  ProgressBarsReset;
 
   SettingsPop;
   DCDel(map_dc);

@@ -520,7 +520,7 @@ I64 FillGateTable()
   Bool chged=TRUE;
   passes=1;
   output_found=-1;
-  ProgressBarsRst;
+  ProgressBarsReset;
   progress1_max=table_size;
   '\n';
   while (num_outputs_found<num_outputs_entered && chged) {
@@ -543,7 +543,7 @@ I64 FillGateTable()
       }
     }
   }
-  ProgressBarsRst;
+  ProgressBarsReset;
   return num_outputs_found;
 }
 

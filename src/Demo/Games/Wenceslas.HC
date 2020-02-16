@@ -437,7 +437,7 @@ U0 BurnTrees()
 U0 SongTask(I64)
 {
   Fs->task_end_cb=&SoundTaskEndCB;
-  MusicSettingsRst;
+  MusicSettingsReset;
   music.tempo= 2.480;
   music.stacatto_factor= 0.902;
   while (TRUE) {

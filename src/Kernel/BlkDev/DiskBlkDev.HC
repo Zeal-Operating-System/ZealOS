@@ -12,13 +12,13 @@ Bool BlkDevLock(CBlkDev *bd)
     return FALSE;
 }
 
-Bool BlkDevUnlock(CBlkDev *bd,Bool rst=FALSE)
+Bool BlkDevUnlock(CBlkDev *bd,Bool reset=FALSE)
 {//Release exclusive lock on access to BlkDev.
   BlkDevCheck(bd);
   while (bd->lock_fwding)
     bd=bd->lock_fwding; //If two blkdevs on same controller, use just one lock
   if (Bt(&bd->locked_flags,BDlf_LOCKED) && bd->owning_task==Fs) {
-    if (rst)
+    if (reset)
       bd->flags&=~(BDF_INITIALIZED|BDF_INIT_IN_PROGRESS);
     bd->owning_task=NULL;
     LBtr(&bd->locked_flags,BDlf_LOCKED);

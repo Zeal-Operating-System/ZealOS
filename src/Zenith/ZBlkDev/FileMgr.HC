@@ -233,7 +233,7 @@ U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
   DocTop(doc);
   FMMarkUncollapsed(doc,tmpc,cur_entry,next_entry);
   DocCenter(doc);
-  DocRst(doc2,TRUE);
+  DocReset(doc2,TRUE);
   FMDelUncollapsedList(tmpc);
   Free(cur_entry);
   Free(next_entry);

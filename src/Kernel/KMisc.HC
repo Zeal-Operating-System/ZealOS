@@ -222,7 +222,7 @@ Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,U8 *print_fmt="B:/Tmp/%X.GR")
   return old_val;
 }
 
-U0 SoundRst()
+U0 SoundReset()
 {//Fix stuck sound.
   if (Bt(&sys_semas[SEMA_SOUND],0)) {
     Sleep(1);
@@ -319,7 +319,7 @@ Bool IsDebugMode()
   return Bt(&sys_semas[SEMA_DBG_MODE],0);
 }
 
-U0 ProgressBarsRst(U8 *path=NULL)
+U0 ProgressBarsReset(U8 *path=NULL)
 {//Reset all progress bars to zero.
   CallExtStr("ProgressBarsRegTf",path);
   MemSet(sys_progresses,0,sizeof(sys_progresses));

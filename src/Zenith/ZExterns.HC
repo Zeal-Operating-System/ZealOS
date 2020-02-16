@@ -35,7 +35,7 @@ extern CDocEntry *DocPrint(CDoc *doc=NULL,U8 *fmt,...);
 extern CDoc *DocPut(CTask *task=NULL);
 extern CDoc *DocRead(U8 *name=NULL,I64 flags=0);
 extern Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL);
-extern U0 DocRst(CDoc *doc,Bool is_old);
+extern U0 DocReset(CDoc *doc,Bool is_old);
 extern CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *fmt=NULL);
 extern U0 DocTop(CDoc *doc=NULL);
 extern Bool DocUnlock(CDoc *doc);
