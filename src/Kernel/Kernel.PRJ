@@ -28,7 +28,7 @@
 #include "KGlobals"
 #include "KMathB"
 #include "Sched"
-#include "Mem/MakeMem"
+#include "Memory/MakeMemory"
 #include "FontStd"
 #include "FontCyrillic"
 #include "StrB"

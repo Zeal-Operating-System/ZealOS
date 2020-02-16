@@ -11,7 +11,7 @@ U0 GridDemo()
 {
   CGridGlobals old_grid;
   U0 (*old_draw_mouse)(CDC *dc,I64 x,I64 y); //Can't init this type of var.
-  MemCpy(&old_grid,&mouse_grid,sizeof(CGridGlobals));
+  MemCopy(&old_grid,&mouse_grid,sizeof(CGridGlobals));
   GridInit;
   mouse_grid.snap=TRUE; //You can set other $LK,"stuff",A="MN:CGridGlobals"$.
   mouse_grid.x=GRID;
@@ -24,7 +24,7 @@ U0 GridDemo()
   }
   DCFill;
   gr.fp_draw_mouse=old_draw_mouse;
-  MemCpy(&mouse_grid,&old_grid,sizeof(CGridGlobals));
+  MemCopy(&mouse_grid,&old_grid,sizeof(CGridGlobals));
 }
 
 GridDemo;

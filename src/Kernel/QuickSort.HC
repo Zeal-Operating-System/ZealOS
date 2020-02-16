@@ -2,7 +2,7 @@ U0 QuickSortI64(I64 *base,I64 num, I64 (*fp_compare)(I64 e1,I64 e2))
 {/*Quick Sort for width==8.
 fp_compare() passes by value instead of ref.
 
-For ascending strings: return StrCmp(e1,e2);
+For ascending strings: return StrCompare(e1,e2);
 For ascending ints   : return e1-e2;
 
 Maybe, look at $LK,"::/Demo/MultiCore/MPRadix.HC"$.
@@ -59,7 +59,7 @@ U0 QuickSort2b(U8 *base,I64 num, I64 width,
   U8 *left,*right,*pivot=tmp+width;
   left =base;
   right=base+(num-1)*width;
-  MemCpy(pivot,base+num/2*width,width);
+  MemCopy(pivot,base+num/2*width,width);
   do {
     while ((*fp_compare)(left,pivot)<0)
       left+=width;
@@ -67,9 +67,9 @@ U0 QuickSort2b(U8 *base,I64 num, I64 width,
       right-=width;
     if (left<=right) {
       if (left!=right) {
-	MemCpy(tmp,right,width);
-	MemCpy(right,left,width);
-	MemCpy(left,tmp,width);
+	MemCopy(tmp,right,width);
+	MemCopy(right,left,width);
+	MemCopy(left,tmp,width);
       }
       left+=width;
       right-=width;
@@ -85,7 +85,7 @@ U0 QuickSort2b(U8 *base,I64 num, I64 width,
 U0 QuickSort(U8 *base,I64 num, I64 width, I64 (*fp_compare)(U8 *e1,U8 *e2))
 {/*Quick Sort: fp_compare() passes by ref.
 
-For ascending strings: return StrCmp(*e1,*e2);
+For ascending strings: return StrCompare(*e1,*e2);
 For ascending ints   : return *e1-*e2;
 Don't return e1-e2 if numbers can overflow, return -1,0 or 1.
 
@@ -93,7 +93,7 @@ Maybe, look at $LK,"::/Demo/MultiCore/MPRadix.HC"$.
 */
   U8 *tmp;
   if (width && num>1) {
-    if (width==sizeof(U8 *))	//assign instead of MemCpy for width 8
+    if (width==sizeof(U8 *))	//assign instead of MemCopy for width 8
       QuickSort2a(base,num,fp_compare);
     else {
       tmp=MAlloc(width*2);

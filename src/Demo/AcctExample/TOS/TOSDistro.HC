@@ -283,7 +283,7 @@ U0 TOSProgress(U8 *st)
   progress4_t0=tos_progress_t0;
   StrPrint(buf,"%d. %s",++progress4,st);
   "$$PURPLE$$$$TX+CX,\"%s\"$$$$FG$$\n",buf;
-  StrCpy(progress3_desc,buf);
+  StrCopy(progress3_desc,buf);
   tos_progress=progress4;
 }
 

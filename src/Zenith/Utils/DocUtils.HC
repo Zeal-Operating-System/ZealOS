@@ -48,8 +48,8 @@ I64 DocOptEntry(CDoc *,CDocEntry *doc_e,I64 fuf_flags)
 
   if (doc_e->de_flags&DOCEF_LINK && doc_e->de_flags&(DOCEF_AUX_STR|DOCEF_TAG)) {
     if (doc_e->de_flags & DOCEF_AUX_STR && doc_e->de_flags & DOCEF_TAG &&
-	  !MemCmp(doc_e->aux_str,"FI:",3) &&
-	  !StrCmp(doc_e->aux_str+3,doc_e->tag)) {
+	  !MemCompare(doc_e->aux_str,"FI:",3) &&
+	  !StrCompare(doc_e->aux_str+3,doc_e->tag)) {
       Free(doc_e->aux_str);
       doc_e->aux_str=NULL;
       doc_e->de_flags&=~DOCEF_AUX_STR;
@@ -66,7 +66,7 @@ I64 DocOptEntry(CDoc *,CDocEntry *doc_e,I64 fuf_flags)
 	  st[StrLen(st)-2]=0;
 	i=StrLen(st);
 	if ((st2=StrMatch(st,*_dst)) && st2[i]=='.' && st2[i+1]=='Z') {
-	  StrCpy(st2+i,st2+i+2);
+	  StrCopy(st2+i,st2+i+2);
 	  res++;
 	}
       }
@@ -75,13 +75,13 @@ I64 DocOptEntry(CDoc *,CDocEntry *doc_e,I64 fuf_flags)
     if (fuf_flags&FUF_RISKY) {
       if (doc_e->de_flags & DOCEF_AUX_STR) {
 	if (st=StrMatch(".Z",doc_e->aux_str)) {
-	  StrCpy(st,st+2);
+	  StrCopy(st,st+2);
 	  res++;
 	}
       }
       if (doc_e->de_flags&DOCEF_TAG) {
 	if (st=StrMatch(".Z",doc_e->tag)) {
-	  StrCpy(st,st+2);
+	  StrCopy(st,st+2);
 	  res++;
 	}
       }

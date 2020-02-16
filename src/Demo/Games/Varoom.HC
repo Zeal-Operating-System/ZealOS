@@ -191,8 +191,8 @@ U0 TrackSlice(F64 *_x,F64 *_z,F64 é,F64 d)
 
   tmpt=CAlloc(sizeof(Track));
   if (last) {
-    MemCpy(&tmpt->center[0],&last->center[3],sizeof(CD3I32));
-    MemCpy(&tmpt->center[1],&last->center[2],sizeof(CD3I32));
+    MemCopy(&tmpt->center[0],&last->center[3],sizeof(CD3I32));
+    MemCopy(&tmpt->center[1],&last->center[2],sizeof(CD3I32));
   }
   tmpt->center[2].x=x+(WIDTH/2)*c+dx;
   tmpt->center[2].z=z+(WIDTH/2)*s+dz;
@@ -202,8 +202,8 @@ U0 TrackSlice(F64 *_x,F64 *_z,F64 é,F64 d)
   tmpt->center[3].y=DipY(tmpt->center[3].x,tmpt->center[3].z);
 
   if (last) {
-    MemCpy(&tmpt->left[0],&last->left[3],sizeof(CD3I32));
-    MemCpy(&tmpt->left[1],&last->left[2],sizeof(CD3I32));
+    MemCopy(&tmpt->left[0],&last->left[3],sizeof(CD3I32));
+    MemCopy(&tmpt->left[1],&last->left[2],sizeof(CD3I32));
   }
   tmpt->left[2].x=x-(WIDTH/2)*c+dx;
   tmpt->left[2].z=z-(WIDTH/2)*s+dz;
@@ -213,8 +213,8 @@ U0 TrackSlice(F64 *_x,F64 *_z,F64 é,F64 d)
   tmpt->left[3].y=DipY(tmpt->left[3].x,tmpt->left[3].z);
 
   if (last) {
-    MemCpy(&tmpt->right[0],&last->right[3],sizeof(CD3I32));
-    MemCpy(&tmpt->right[1],&last->right[2],sizeof(CD3I32));
+    MemCopy(&tmpt->right[0],&last->right[3],sizeof(CD3I32));
+    MemCopy(&tmpt->right[1],&last->right[2],sizeof(CD3I32));
   }
   tmpt->right[2].x=x+(WIDTH/2+SHOULDER)*c+dx;
   tmpt->right[2].z=z+(WIDTH/2+SHOULDER)*s+dz;
@@ -255,12 +255,12 @@ U0 TrackSlice(F64 *_x,F64 *_z,F64 é,F64 d)
 U0 CoupleEnds()
 {
   Track *first=track_head.next,*last=track_head.last;
-  MemCpy(&first->center[0],&last->center[3],sizeof(CD3I32));
-  MemCpy(&first->center[1],&last->center[2],sizeof(CD3I32));
-  MemCpy(&first->left[0]  ,&last->left[3]  ,sizeof(CD3I32));
-  MemCpy(&first->left[1]  ,&last->left[2]  ,sizeof(CD3I32));
-  MemCpy(&first->right[0] ,&last->right[3] ,sizeof(CD3I32));
-  MemCpy(&first->right[1] ,&last->right[2] ,sizeof(CD3I32));
+  MemCopy(&first->center[0],&last->center[3],sizeof(CD3I32));
+  MemCopy(&first->center[1],&last->center[2],sizeof(CD3I32));
+  MemCopy(&first->left[0]  ,&last->left[3]  ,sizeof(CD3I32));
+  MemCopy(&first->left[1]  ,&last->left[2]  ,sizeof(CD3I32));
+  MemCopy(&first->right[0] ,&last->right[3] ,sizeof(CD3I32));
+  MemCopy(&first->right[1] ,&last->right[2] ,sizeof(CD3I32));
 }
 
 U0 InitTrack()

@@ -65,9 +65,9 @@ U8 *Ball2CSprite()
   *dst++ =SPT_MESH;
   *dst(I32 *)++ =b->vertex_count;
   *dst(I32 *)++ =b->tri_count;
-  MemCpy(dst,&b->v,b->vertex_count*sizeof(CD3I32));
+  MemCopy(dst,&b->v,b->vertex_count*sizeof(CD3I32));
   dst+=b->vertex_count*sizeof(CD3I32);
-  MemCpy(dst,&b->t,b->tri_count*sizeof(CMeshTri));
+  MemCopy(dst,&b->t,b->tri_count*sizeof(CMeshTri));
   dst+=b->tri_count*sizeof(CMeshTri);
   *dst++ =SPT_END;
   return res;
@@ -85,7 +85,7 @@ public U8 *BallGen()
   while (TRUE) {
     if (!DocForm(&bd1))
       return NULL;
-    MemCpy(&bd2,&bd1,sizeof(BallDefineStruct));
+    MemCopy(&bd2,&bd1,sizeof(BallDefineStruct));
     BDCorrect(&bd2);
 
     c=PopUpColorLighting;

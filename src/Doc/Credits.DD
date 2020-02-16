@@ -8,7 +8,7 @@ I, $FG,2$Terry A. Davis$FG$, wrote all of ZenithOS over the past $TX,"13.9",D="D
 
 *) $LK,"ATA Reg and Cmd Definitions",A="MN:ATA_NOP"$ are originally from Linux.  Later, I got the spec.
 
-*) The heap algorithm, $LK,"::/Kernel/Mem/MAllocFree.HC"$, is adapted from one I saw at Ticketmaster when I worked on their VAX operating system.
+*) The heap algorithm, $LK,"::/Kernel/Memory/MAllocFree.HC"$, is adapted from one I saw at Ticketmaster when I worked on their VAX operating system.
 
 *) The LZW compression algorithm, $LK,"::/Kernel/Compress.HC"$, came from a magazine and I implemented it when I worked for Ticketmaster.
 

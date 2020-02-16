@@ -45,7 +45,7 @@ $$	--> $$$$
       }
       doc_e=doc_e->next;
     }
-    StrCpy(doc->filename.name,out_name);
+    StrCopy(doc->filename.name,out_name);
     DocWrite(doc);
     DocDel(doc);
   }
@@ -98,7 +98,7 @@ U8 *ACDNextEntry(U8 **_ptr)
 	  "note>\0/note>\0blockquote>\0/blockquote>\0";
     while (*ignore) {
       l=StrLen(ignore);
-      if (!StrNCmp(ptr,ignore,l)) {
+      if (!StrNCompare(ptr,ignore,l)) {
 	ptr+=l;
 	break;
       } else
@@ -116,7 +116,7 @@ nentry_done:
 
 I64 ACDCompareWords(U8 *e1,U8 *e2)
 {
-  return StrICmp(e1,e2);
+  return StrICompare(e1,e2);
 }
 
 U8 *ACDSortWords(U8 *start,I64 size,I64 word_count)
@@ -165,12 +165,12 @@ next_word:
       def_word_start=out_ptr;
       if (st=ACDNextEntry(&in_ptr)) {
 	if (*st) {
-	  if (StrICmp(st,last_word)) {
+	  if (StrICompare(st,last_word)) {
 	    word_count++;
 
 	    *word_ptr++=ACD_WORD_CHAR;
 	    last_word=word_ptr;
-	    StrCpy(word_ptr,st);
+	    StrCopy(word_ptr,st);
 	    word_ptr+=StrLen(st)+1;
 
 	    d=word_ptr;
@@ -178,7 +178,7 @@ next_word:
 	    word_ptr+=2;
 
 	    *out_ptr++=ACD_WORD_CHAR;
-	    StrCpy(out_ptr,st);
+	    StrCopy(out_ptr,st);
 	    out_ptr+=StrLen(st)+1;
 	  }
 	  Free(st);
@@ -194,7 +194,7 @@ next_word:
 	      if(st=ACDNextEntry(&in_ptr)) {
 		if (*st) {
 		  *out_ptr++=ACD_DEF_CHAR;
-		  StrCpy(out_ptr,st);
+		  StrCopy(out_ptr,st);
 		  out_ptr+=StrLen(st)+1;
 		}
 		Free(st);
@@ -203,7 +203,7 @@ next_word:
 	      if(st=ACDNextEntry(&in_ptr)) {
 		if (*st) {
 		  *out_ptr++=ACD_PRONUNCIATION_CHAR;
-		  StrCpy(out_ptr,st);
+		  StrCopy(out_ptr,st);
 		  out_ptr+=StrLen(st)+1;
 		}
 		Free(st);
@@ -212,7 +212,7 @@ next_word:
 	      if(st=ACDNextEntry(&in_ptr)) {
 		if (*st) {
 		  *out_ptr++=ACD_POS_CHAR;
-		  StrCpy(out_ptr,st);
+		  StrCopy(out_ptr,st);
 		  out_ptr+=StrLen(st)+1;
 		}
 		Free(st);
@@ -221,7 +221,7 @@ next_word:
 	      if(st=ACDNextEntry(&in_ptr)) {
 		if (*st) {
 		  *out_ptr++=ACD_EXTRA_CHAR;
-		  StrCpy(out_ptr,st);
+		  StrCopy(out_ptr,st);
 		  out_ptr+=StrLen(st)+1;
 		}
 		Free(st);

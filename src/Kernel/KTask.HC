@@ -209,7 +209,7 @@ I64 TaskInit(CTask *task,I64 stack_size)
   QueueInit(&task->next_ode);
 
   task->fpu_mmx=MAllocAligned(sizeof(CFPU),0x10,task);
-  MemCpy(task->fpu_mmx,
+  MemCopy(task->fpu_mmx,
 	SYS_FIXED_AREA+offset(CSysFixedArea.init_fpu_mmx),sizeof(CFPU));
 
   task->hash_table=HashTableNew(TASK_HASH_TABLE_SIZE,task);
@@ -270,8 +270,8 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   task->rsp(U8 *)-=8;
   *task->rsp=&Exit;
   task->hash_table->next=parent->hash_table;
-  MemCpy(task->task_name,task_name,TASK_NAME_LEN);
-  StrCpy(task->task_title,task->task_name);
+  MemCopy(task->task_name,task_name,TASK_NAME_LEN);
+  StrCopy(task->task_title,task->task_name);
   task->title_src=TTS_TASK_NAME;
   PUSHFD
   CLI
@@ -333,7 +333,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
 	if (ptr2<ptr3) *ptr2=0;
       } else
 	if ((ptr=cc->lex_include_stack->line_start) && *ptr)
-	  MemCpy(ptr2,ptr,STR_LEN-1);
+	  MemCopy(ptr2,ptr,STR_LEN-1);
     }
     cc->flags&=~CCF_HAS_MISC_DATA;
     machine_code=LexStatement2Bin(cc,&type);
@@ -353,7 +353,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
   }
   if (Fs->title_src!=TTS_LOCKED_CONST) {
     Fs->title_src=old_title_src;
-    StrCpy(Fs->task_title,old_task_title);
+    StrCopy(Fs->task_title,old_task_title);
   }
   Free(old_task_title);
   if (cc->flags&CCF_JUST_LOAD) {
@@ -372,7 +372,7 @@ U0 SrvTaskCont()
   while (TRUE) {
     CLI
     if (JobsHandler(old_flags) && Fs->title_src==TTS_TASK_NAME)
-      MemCpy(Fs->task_title,Fs->task_name,TASK_NAME_LEN);
+      MemCopy(Fs->task_title,Fs->task_name,TASK_NAME_LEN);
     FlushMessages;
     LBts(&Fs->task_flags,TASKf_IDLE);
     LBts(&Fs->task_flags,TASKf_AWAITING_MESSAGE);

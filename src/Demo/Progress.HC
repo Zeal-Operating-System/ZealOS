@@ -16,7 +16,7 @@ U0 Main1()
   "\nWith description.\n";
   PressAKey;
   progress1_max=200;
-  StrCpy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
+  StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
   while (progress1++!=progress1_max)
     Sleep(20);
   ProgressBarsReset;
@@ -29,7 +29,7 @@ U0 Main2()
   PressAKey;
   progress1_max=200;
   progress1_t0=tS;
-  StrCpy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
+  StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
   while (progress1++!=progress1_max)
     Sleep(20);
   ProgressBarsReset;
@@ -43,7 +43,7 @@ U0 Main3()
   progress1_max=200;
   progress1_t0=tS;
   RegExe("DemoCompany/ProgressBars");
-  StrCpy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
+  StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
   while (progress1++!=progress1_max)
     Sleep(20);
   ProgressBarsReset("DemoCompany/ProgressBars");

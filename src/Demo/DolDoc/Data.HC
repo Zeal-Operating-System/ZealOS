@@ -50,7 +50,7 @@ U0 DataDemo()
   doc_e=DocPrint(doc,"$$DA-TRM+RD+UD,RT=I16,A=\"%%7d\"$$\n");
   doc_e->data=&i;
 
-  StrCpy(buf,"Terry");
+  StrCopy(buf,"Terry");
   doc_e=DocPrint(doc,"$$DA-P+RD+UD,LEN=7,A=\"Str:%%s\"$$\n");
   doc_e->data=buf;
 

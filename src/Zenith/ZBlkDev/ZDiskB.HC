@@ -16,7 +16,7 @@ I64 DirTreeSerializeFill(CDirEntry *tmpde,U8 *dst)
   while (tmpde) {
     *dst++=1;
     res++;
-    MemCpy(dst,&tmpde->start,CDIR_SIZE);
+    MemCopy(dst,&tmpde->start,CDIR_SIZE);
     dst+=CDIR_SIZE;
     res+=CDIR_SIZE;
     if (tmpde->attr & RS_ATTR_DIR) {
@@ -44,7 +44,7 @@ U8 *DirTreeUnserialize2(U8 *src,CDirEntry **tmpde)
   if (*src++) {
     tmpde1=CAlloc(sizeof(CDirEntry));
     *tmpde=tmpde1;
-    MemCpy(&tmpde1->start,src,CDIR_SIZE);
+    MemCopy(&tmpde1->start,src,CDIR_SIZE);
     src+=CDIR_SIZE;
     if (tmpde1->attr & RS_ATTR_DIR)
       src=DirTreeUnserialize2(src,&tmpde1->sub);

@@ -32,7 +32,7 @@ U0 PhoneNumWords(U8 *num)
 
       src=_num;
       while (*src) {
-	if (!StrNCmp(st,src,StrLen(st))) {
+	if (!StrNCompare(st,src,StrLen(st))) {
 	  ch=*src;
 	  *src=0;
 	  "%s",_num;

@@ -13,11 +13,11 @@ public U0 DocLoad(CDoc *doc,U8 *src2,I64 size)
     i=size-(offset(CDocBin.end)-offset(CDocBin.start));
     while (src<=src2+i) {
       tmpb=CAlloc(sizeof(CDocBin),doc->mem_task);
-      MemCpy(&tmpb->start,src,offset(CDocBin.end)-offset(CDocBin.start));
+      MemCopy(&tmpb->start,src,offset(CDocBin.end)-offset(CDocBin.start));
       src+=offset(CDocBin.end)-offset(CDocBin.start);
       tmpb->data=MAlloc(tmpb->size,doc->mem_task);
       if (tmpb->size) {
-	MemCpy(tmpb->data,src,tmpb->size);
+	MemCopy(tmpb->data,src,tmpb->size);
 	src+=tmpb->size;
       }
       QueueInsert(tmpb,doc->bin_head.last);
@@ -41,7 +41,7 @@ public CDoc *DocRead(U8 *name=NULL,I64 flags=0)
   if (!name) name=blkdev.tmp_filename;
   doc->flags|=flags;
   name2=FileNameAbs(name);
-  StrCpy(doc->filename.name,name2);
+  StrCopy(doc->filename.name,name2);
   if (src=FileRead(name2,&size,&doc->file_attr)) {
     if (dirc=DirContextNew(name2)) {
       DocLoad(doc,src,size);
@@ -143,7 +143,7 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
 	default:
 	  *dst++='$$';
 	  st=Doc2PlainText(doc,doc_e);
-	  StrCpy(dst,st);
+	  StrCopy(dst,st);
 	  dst+=StrLen(st);
 	  *dst++='$$';
 	  Free(st);
@@ -155,9 +155,9 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
   if (b!=&doc->bin_head) {
     do {
       if (b->use_count>b->tmp_use_count) {
-	MemCpy(dst,&b->start,offset(CDocBin.end)-offset(CDocBin.start));
+	MemCopy(dst,&b->start,offset(CDocBin.end)-offset(CDocBin.start));
 	dst+=offset(CDocBin.end)-offset(CDocBin.start);
-	MemCpy(dst,b->data,b->size);
+	MemCopy(dst,b->data,b->size);
 	dst+=b->size;
       }
       b=b->next;

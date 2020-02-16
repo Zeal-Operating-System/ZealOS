@@ -41,14 +41,14 @@ CDirContext *DirContextNew(U8 *_mask,Bool make_mask=FALSE,
   dirc->drive=Fs->cur_dv;
   DriveCheck(dirc->drive);
   buf=MAlloc(mask_len+2);
-  StrCpy(buf,mask);
+  StrCopy(buf,mask);
 
   dirc->mask=MAlloc(mask_len+2);
   if (no_mask)
     *dirc->mask=0;
   else if (StrOcc(buf,';')) {
     semicolon_mask=MAlloc(mask_len+2);
-    StrCpy(semicolon_mask,mask);
+    StrCopy(semicolon_mask,mask);
     StrFirstRemove(semicolon_mask,";",buf);
     StrLastRemove(buf,"/",dirc->mask);
     CatPrint(dirc->mask,";%s",semicolon_mask);
@@ -57,7 +57,7 @@ CDirContext *DirContextNew(U8 *_mask,Bool make_mask=FALSE,
     StrLastRemove(buf,"/",dirc->mask);
 
   if (*mask=='/' && !*buf)
-    StrCpy(buf,"/");
+    StrCopy(buf,"/");
 //If began with Dir, change to Dir.
   if (*buf && !Cd(buf,make_dirs))
     valid=FALSE;

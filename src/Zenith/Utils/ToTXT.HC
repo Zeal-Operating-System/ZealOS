@@ -120,7 +120,7 @@ public U0 ToTXT(U8 *_in_name,U8 *_out_name=NULL,I64 width=70)
 
   doc_in=DocRead(in_name);
   doc_out=Doc2TXT(doc_in);
-  StrCpy(&doc_out->filename.name,out_name);
+  StrCopy(&doc_out->filename.name,out_name);
 
   SettingsPop;
 

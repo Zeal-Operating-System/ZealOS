@@ -2,7 +2,7 @@
 
 I64 DEPtrCompare(CDocEntry **e1,CDocEntry **e2)
 {
-  return StrCmp((*e1)->tag,(*e2)->tag);
+  return StrCompare((*e1)->tag,(*e2)->tag);
 }
 
 public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
@@ -44,7 +44,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
   res=0;
   st=NULL;
   for (i=0;i<count;) {
-    if (!unique || !st || StrCmp(a[i]->tag,st)) {
+    if (!unique || !st || StrCompare(a[i]->tag,st)) {
       st=a[i]->tag;
       for (j=0;j<entry_lines && i<count;j++,i++) {
 	QueueInsert(a[i],doc->head.last);
@@ -59,7 +59,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
 	DocEntryDel(doc,a[i]);
       }
   }
-  StrCpy(doc->filename.name,out_name);
+  StrCopy(doc->filename.name,out_name);
   DocWrite(doc);
 
   Free(a);
@@ -164,7 +164,7 @@ U0 SUFile(U8 *filename,I64 suf_flags,F64 indent_scale_factor)
   while (doc_e!=doc) {
     if (doc_e->type_u8==DOCT_TEXT) {
       dst=MStrUtil(doc_e->tag,suf_flags,indent_scale_factor);
-      if (StrCmp(dst,doc_e->tag)) {
+      if (StrCompare(dst,doc_e->tag)) {
 	reduced+=StrLen(doc_e->tag)-StrLen(dst);
 	chged=TRUE;
 	Free(doc_e->tag);

@@ -61,7 +61,7 @@ PUT_STR::
 	CALL	&PutS
 	POP_C_REGS
 	RET
-_STRCPY::
+_STRCOPY::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -82,7 +82,7 @@ _STRCPY::
 	POP	RSI
 	POP	RBP
 	RET1	16
-_STRCMP::
+_STRCOMPARE::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -113,7 +113,7 @@ TO_UPPER::
 	JA	@@05
 	ADD	AL,'A'-'a'
 @@05:	RET
-_STRICMP::
+_STRICOMPARE::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -150,7 +150,7 @@ _STRICMP::
 	POP	RSI
 	POP	RBP
 	RET1	16
-_STRNCMP::
+_STRNCOMPARE::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -179,7 +179,7 @@ _STRNCMP::
 	POP	RSI
 	POP	RBP
 	RET1	24
-_STRNICMP::
+_STRNICOMPARE::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -305,19 +305,19 @@ _STRIMATCH::
 	POP	RBP
 	RET1	16
 }
-_extern _STRCMP I64 StrCmp(
+_extern _STRCOMPARE I64 StrCompare(
 	U8 *st1,U8 *st2); //Compare two strings.
-_extern _STRICMP I64 StrICmp(
+_extern _STRICOMPARE I64 StrICompare(
 	U8 *st1,U8 *st2); //Compare two strings, ignoring case.
-_extern _STRNCMP I64 StrNCmp(
+_extern _STRNCOMPARE I64 StrNCompare(
 	U8 *st1,U8 *st2,I64 n); //Compare N bytes in two strings.
-_extern _STRNICMP I64 StrNICmp(
+_extern _STRNICOMPARE I64 StrNICompare(
 	U8 *st1,U8 *st2,I64 n); //Compare N bytes in two strings, ignoring case.
 _extern _STRMATCH U8 *StrMatch(
 	U8 *needle,U8 *haystack_str); //Scan for string in string.
 _extern _STRIMATCH U8 *StrIMatch(
 	U8 *needle,U8 *haystack_str);//Scan for string in string, ignoring case.
-_extern _STRCPY U0 StrCpy(
+_extern _STRCOPY U0 StrCopy(
 	U8 *dst,U8 *src); //Copy string.
 
 //These bitmaps go to 0-511 so that $LK,"Lex",A="MN:Lex"$() can use them with $LK,"Token Codes",A="MN:TK_EOF"$.
@@ -585,7 +585,7 @@ U8 *StrFirstRemove(U8 *src,U8 *marker,U8 *dst=NULL)
   } else
     while ((ch=*ptr++) && !StrOcc(marker,ch));
   if (ch)
-    StrCpy(src,ptr);
+    StrCopy(src,ptr);
   else
     *src=0;
   return res;
@@ -606,11 +606,11 @@ U8 *StrLastRemove(U8 *src,U8 *marker,U8 *dst=NULL)
   U8 *ptr;
   if (ptr=StrLastOcc(src,marker)) {
     if (dst)
-      StrCpy(dst,ptr+1);
+      StrCopy(dst,ptr+1);
     *ptr=0;
   } else {
     if (dst)
-      StrCpy(dst,src);
+      StrCopy(dst,src);
     *src=0;
   }
   return dst;

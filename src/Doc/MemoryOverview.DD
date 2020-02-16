@@ -8,16 +8,16 @@ You can create new, independent heaps using $LK,"HeapCtrlInit",A="MN:HeapCtrlIni
 
 Memory alloced by a task will be freed when the task is killed.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is a task that never dies.  His memory is like kernel memory in other operating systems.  See $LK,"ZCAlloc",A="MN:ZCAlloc"$(), $LK,"ZMAlloc",A="MN:ZMAlloc"$(), $LK,"ZMAllocIdent",A="MN:ZMAllocIdent"$() and $LK,"ZStrNew",A="MN:ZStrNew"$().
 
-All of the regular page tables are marked, "cached".  When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01AA000000",D="DD_UNCACHED_ALIAS"$$FG$.  See $LK,"dev.uncached_alias",A="FF:::/Kernel/KMain.HC,dev.uncached_alias"$.
+All of the regular page tables are marked, "cached".  When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01A0000000",D="DD_UNCACHED_ALIAS"$$FG$.  See $LK,"dev.uncached_alias",A="FF:::/Kernel/KMain.HC,dev.uncached_alias"$.
 
 During an extended powered-on session of ZenithOS, in theory, memory will become fragmented, requiring a reboot.  It has never happens to me.
 
 See $LK,"MemRep",A="MN:MemRep"$() and $LK,"::/Demo/MemDemo.HC"$.
 
 
-$FG,5$$TX+CX,"Single System-wide Mem Map"$
+$FG,5$$TX+CX,"Single System-wide Memory Map"$
 
-$FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"00036AEF",D="DD_KERNEL_END"$$FG$
+$FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"0003637F",D="DD_KERNEL_END"$$FG$
 $ID,2$Kernel module, placed here by the boot-loader, $LK,"BOOT_RAM_BASE",A="MN:BOOT_RAM_BASE"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00096600",D="DD_BOOT_HIGH_LOC_DVD"$- 0x00$TX,"00096FFF",D="DD_BOOT_HIGH_LOC_DVD_END"$$FG$
@@ -33,13 +33,13 @@ $FG,2$ 0x00E0000000- 0x00FFFFFFFF$FG$
 $ID,2$32-bit devices could alloc memory at 0xF0000000 going up, but this is wrong, since some PCs already have devices at 0xF0000000.  No PCI devices are supported, so $LK,"Mem32DevAlloc",A="MN:Mem32DevAlloc"$() flaws are not an issue.
 $ID,-2$
 $FG,2$ 0x0080000000-~0x00DFFFFFFF$FG$
-$FG,2$ 0x0100000000-~0x$TX,"01A9FFFFFF",D="DD_PHYSICAL_SPACE_END"$$FG$
+$FG,2$ 0x0100000000-~0x$TX,"019FFFFFFF",D="DD_PHYSICAL_SPACE_END"$$FG$
 $ID,2$Data Heap mem.  (The physical memory that exists in this range is data heap.)
 $ID,-2$
-$FG,2$ 0x$TX,"01AA000000",D="DD_UNCACHED_ALIAS"$- 0x$TX,"02A9FFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
+$FG,2$ 0x$TX,"01A0000000",D="DD_UNCACHED_ALIAS"$- 0x$TX,"029FFFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
 $ID,2$Uncached alias of first 4Gig.  (For 32-bit device access.)
 $ID,-2$
-$FG,2$             - 0x$TX,"02A9FFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
+$FG,2$             - 0x$TX,"029FFFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
 $ID,2$64-bit devices are alloced with $LK,"Mem64DevAlloc",A="MN:Mem64DevAlloc"$() counting bwd, but no PCI devices are actually supported$WW,0$.
 $ID,-2$
 

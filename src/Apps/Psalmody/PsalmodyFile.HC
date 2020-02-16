@@ -207,7 +207,7 @@ U0 PsmLoadSong(U8 *filename,I64 *psm_octave,F64 *psm_duration)
     psm.incomplete_entry->checked=FALSE;
   while (Lex(cc)) {
     if (cc->token==TK_IDENT)
-      if (!StrCmp(cc->cur_str,"Play")) {
+      if (!StrCompare(cc->cur_str,"Play")) {
 	if (Lex(cc)=='(')
 	  if (Lex(cc)==TK_STR) {
 	    tmpn=psm.head.last;
@@ -226,14 +226,14 @@ U0 PsmLoadSong(U8 *filename,I64 *psm_octave,F64 *psm_duration)
 	      }
 	    }
 	  }
-      } else if (!StrCmp(cc->cur_str,"music") &&
+      } else if (!StrCompare(cc->cur_str,"music") &&
 	    Lex(cc)=='.' && Lex(cc)==TK_IDENT) {
-	if (!StrCmp(cc->cur_str,"tempo")) {
+	if (!StrCompare(cc->cur_str,"tempo")) {
 	  if (Lex(cc)=='=' && Lex(cc)==TK_F64) {
 	    music.tempo=cc->cur_f64-0.0005;
 	    tempo_state.tempo=Round(TEMPO_RANGE*(music.tempo-0.5)/4.4);
 	  }
-	} else if (!StrCmp(cc->cur_str,"stacatto_factor")) {
+	} else if (!StrCompare(cc->cur_str,"stacatto_factor")) {
 	  if (Lex(cc)=='=' && Lex(cc)==TK_F64) {
 	    music.stacatto_factor=cc->cur_f64-0.0005;
 	    tempo_state.stacatto=
@@ -307,7 +307,7 @@ U8 *PsmCvtSong()
   dst=st;
   tmpn=psm.head.next;
   while (tmpn!=&psm.head) {
-    StrCpy(dst,tmpn->ascii);
+    StrCopy(dst,tmpn->ascii);
     dst+=StrLen(tmpn->ascii);
     tmpn=tmpn->next;
   }

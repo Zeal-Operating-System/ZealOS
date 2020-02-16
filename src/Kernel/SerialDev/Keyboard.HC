@@ -205,19 +205,19 @@ U8 *Char2KeyName(I64 ch,Bool include_ctrl=TRUE)
   if (ch<=CH_SPACE) {
     switch [ch] {
       case '\n':
-	StrCpy(buf,"ENTER");
+	StrCopy(buf,"ENTER");
 	break;
       case CH_BACKSPACE:
-	StrCpy(buf,"BACKSPACE");
+	StrCopy(buf,"BACKSPACE");
 	break;
       case '\t':
-	StrCpy(buf,"TAB");
+	StrCopy(buf,"TAB");
 	break;
       case CH_ESC:
-	StrCpy(buf,"ESC");
+	StrCopy(buf,"ESC");
 	break;
       case CH_SHIFT_ESC:
-	StrCpy(buf,"SHIFT_ESC");
+	StrCopy(buf,"SHIFT_ESC");
 	break;
       case 0: //nobound switch
       case 29:
@@ -225,14 +225,14 @@ U8 *Char2KeyName(I64 ch,Bool include_ctrl=TRUE)
 	*buf=0;
 	break;
       case CH_SHIFT_SPACE:
-	StrCpy(buf,"SHIFT_SPACE");
+	StrCopy(buf,"SHIFT_SPACE");
 	break;
       case CH_SPACE:
-	StrCpy(buf,"SPACE");
+	StrCopy(buf,"SPACE");
 	break;
       default:
 	if (include_ctrl)
-	  StrCpy(buf,"CTRL");
+	  StrCopy(buf,"CTRL");
 	buf[i=StrLen(buf)]=ch-1+'a';
 	buf[i+1]=0;
 	break;
@@ -260,7 +260,7 @@ U8 *ScanCode2KeyName(I64 sc)
     CatPrint(buf,"");
   if (ch=ScanCode2Char(sc&255)) {
     st=Char2KeyName(ch,FALSE);
-    StrCpy(buf+StrLen(buf),st);
+    StrCopy(buf+StrLen(buf),st);
     Free(st);
   } else {
     switch (sc&255) {

@@ -56,7 +56,7 @@ U0 PutS(U8 *st)
 U0 KeyDescSet(U8 *format,...)
 {//Call this from key handler to report desc in $LK,"KeyMap",A="MN:KeyMap"$().
   U8 *buf=StrPrintJoin(NULL,format,argc,argv);
-  StrCpy(keydev.desc,buf);
+  StrCopy(keydev.desc,buf);
   keydev.handler=Caller;
   Free(buf);
 }

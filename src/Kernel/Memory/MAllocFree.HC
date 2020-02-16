@@ -221,7 +221,7 @@ MALLOC_FINAL_EXIT:
 	RET1	16
 //************************************
 _FREE::
-//Be aware of $LK,"heap_hash",A="FF:::/Kernel/Mem/MAllocFree.HC,heap_hash"$ in $LK,"MemPagTaskAlloc",A="MN:MemPagTaskAlloc"$().
+//Be aware of $LK,"heap_hash",A="FF:::/Kernel/Memory/MAllocFree.HC,heap_hash"$ in $LK,"MemPagTaskAlloc",A="MN:MemPagTaskAlloc"$().
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -411,7 +411,7 @@ U8 *MAllocIdent(U8 *src,CTask *mem_task=NULL)
   if (!src) return NULL;
   size=MSize(src);
   res=MAlloc(size,mem_task);
-  MemCpy(res,src,size);
+  MemCopy(res,src,size);
   return res;
 }
 
@@ -450,7 +450,7 @@ U8 *StrNew(U8 *buf,CTask *mem_task=NULL)
   if (buf) {
     size=StrLen(buf)+1;
     res=MAlloc(size,mem_task);
-    MemCpy(res,buf,size);
+    MemCopy(res,buf,size);
   } else {
     res=MAlloc(1,mem_task);
     *res=0;

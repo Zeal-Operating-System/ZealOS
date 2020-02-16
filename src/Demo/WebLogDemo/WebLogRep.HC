@@ -88,7 +88,7 @@ U0 ParseSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
 
 	if (*src++!=CH_SPACE) throw;
 	if (*src++!='\"') throw;
-	if (!StrNCmp(src,"GET ",4)) {
+	if (!StrNCompare(src,"GET ",4)) {
 	  src2=src+=4;
 	  do if (!*src2) throw;
 	  while (*src2++!=CH_SPACE);
@@ -113,7 +113,7 @@ U0 ParseSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
 	  src=++src2;
 
 	  QueueInsert(tmplg,head->last);
-	} else if (!StrNCmp(src,"HEAD ",5)) {
+	} else if (!StrNCompare(src,"HEAD ",5)) {
 	  LogStructDel(tmplg);
 	} else
 	  throw;
@@ -211,7 +211,7 @@ Bool IsDownLoad(LogStruct *tmplg)
 
 Bool IsIndex(LogStruct *tmplg)
 {
-  if (!StrCmp(tmplg->file,"/index.html") || !StrCmp(tmplg->file,"/"))
+  if (!StrCompare(tmplg->file,"/index.html") || !StrCompare(tmplg->file,"/"))
     return TRUE;
   else
     return FALSE;
@@ -222,8 +222,8 @@ Bool IsKeeper(LogStruct *tmplg,CDate dstart,CDate dend)
   if (dstart<=tmplg->datetime<=dend && !StrOcc(tmplg->file,'?') &&
     StrLen(tmplg->file)>2 && 'A'<=tmplg->file[1]<='Z' &&
     tmplg->size && tmplg->file[StrLen(tmplg->file)-1]!='/' &&
-    (StrLen(tmplg->file)<3 || MemCmp(&tmplg->file[1],"Wb",2)) &&
-    (StrLen(tmplg->file)<7 || MemCmp(&tmplg->file[1],"Family",6))) {
+    (StrLen(tmplg->file)<3 || MemCompare(&tmplg->file[1],"Wb",2)) &&
+    (StrLen(tmplg->file)<7 || MemCompare(&tmplg->file[1],"Family",6))) {
     return TRUE;
 
 }  else
@@ -261,7 +261,7 @@ U0 LinkTreeAdd(LinkStruct **_root,LogStruct *tmplg)
     throw;
   }
   if (root=*_root) {
-    if (!(i=StrCmp(tmplg->link,root->link)))
+    if (!(i=StrCompare(tmplg->link,root->link)))
       root->count++;
     else if (i<0)
       LinkTreeAdd(&root->left,tmplg);
@@ -284,7 +284,7 @@ U0 FileTreeAdd(LinkStruct **_root,LogStruct *tmplg)
     throw;
   }
   if (root=*_root) {
-    if (!(i=StrCmp(tmplg->file,root->file)))
+    if (!(i=StrCompare(tmplg->file,root->file)))
       root->count++;
     else if (i<0)
       FileTreeAdd(&root->left,tmplg);
@@ -514,7 +514,7 @@ U0 WebLogRep(U8 *mask,U8 *output_filename)
     FileRep(head,dstart,dend);
     DownLoadRep(head,dstart,dend);
 
-    StrCpy(DocPut->filename.name,output_filename);
+    StrCopy(DocPut->filename.name,output_filename);
     DocWrite(DocPut,TRUE);
 
     "$$WW,1$$";

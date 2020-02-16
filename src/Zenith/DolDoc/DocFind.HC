@@ -73,7 +73,7 @@ public Bool DocAnchorFind(CDoc *haystack_doc,U8 *needle_str)
     if (needle_str)
       while (doc_e!=haystack_doc) {
 	if (doc_e->type_u8==DOCT_ANCHOR && doc_e->de_flags & DOCEF_AUX_STR) {
-	  if (!StrCmp(needle_str,doc_e->aux_str)) {
+	  if (!StrCompare(needle_str,doc_e->aux_str)) {
 	    haystack_doc->cur_entry=doc_e;
 	    haystack_doc->cur_col=doc_e->min_col;
 	    res=TRUE;
@@ -548,14 +548,14 @@ Bool sel=TRUE,Bool match_case=TRUE,Bool whole_labels=FALSE)
   I64 i,res=-1;
   if (!doc) return -1;
   unlock=DocLock(doc);
-  MemCpy(&old_find_replace,doc->find_replace,sizeof(CEdFindText));
+  MemCopy(&old_find_replace,doc->find_replace,sizeof(CEdFindText));
   MemSet(doc->find_replace,0,sizeof(CEdFindText));
   i=StrLen(find);
   if (i<sizeof(CEdFindText.find_text)) {
-    MemCpy(doc->find_replace->find_text,find,i+1);
+    MemCopy(doc->find_replace->find_text,find,i+1);
     i=StrLen(replace);
     if (i<sizeof(CEdFindText.replace_text)) {
-      MemCpy(doc->find_replace->replace_text,replace,i+1);
+      MemCopy(doc->find_replace->replace_text,replace,i+1);
       doc->find_replace->replace=TRUE;
       doc->find_replace->scan_sel_text=sel;
       doc->find_replace->match_case=match_case;
@@ -564,7 +564,7 @@ Bool sel=TRUE,Bool match_case=TRUE,Bool whole_labels=FALSE)
       res=EdFindReplace(doc);
     }
   }
-  MemCpy(doc->find_replace,&old_find_replace,sizeof(CEdFindText));
+  MemCopy(doc->find_replace,&old_find_replace,sizeof(CEdFindText));
   if (unlock)
     DocUnlock(doc);
   return res;

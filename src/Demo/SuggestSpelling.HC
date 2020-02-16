@@ -38,7 +38,7 @@ Bool SuggestSpelling(U8 *word)
   if (len)
     while (*dict) {
       wf=SuggestMatchForm(dict+1);
-      if (!StrNCmp(pf,wf,len)) {
+      if (!StrNCompare(pf,wf,len)) {
 	"%16s",dict+1;
 	if (++col>=num_cols) {
 	  col=0;

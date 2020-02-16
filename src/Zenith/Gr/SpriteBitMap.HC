@@ -245,10 +245,10 @@ I64 SpriteBitMapEd(CDoc *,CDocEntry *doc_e,CDC *dc,I64 *_xx1,I64 *_yy1,
 	case MESSAGE_MS_R_DOWN:
 bm_menu:
 	  DCFill(dc);
-	  StrCpy(Fs->task_title,"Sprite BitMap Menu");
+	  StrCopy(Fs->task_title,"Sprite BitMap Menu");
 	  i=PopUpSpriteBitMap(color,width);
 	  if (i>=0)
-	    StrCpy(Fs->task_title,DefineSub(i,"ST_SPRITE_BITMAP_MENU"));
+	    StrCopy(Fs->task_title,DefineSub(i,"ST_SPRITE_BITMAP_MENU"));
 	  switch (i) {
 	    case DOCM_CANCEL:
 	      res=SPE_ABORT;

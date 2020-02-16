@@ -67,7 +67,7 @@ U8 *BgtPopUpAcct(U8 *header=NULL,U8 *default=NULL)
     while (tmph) {
       doc_e=DocPrint(doc,"$$FG,%d$$$$MU-UL,\"%s\",LE=0x%X$$\n",
 	    tmph->user_data1,tmph->str,tmph->str);
-      if (default && !StrCmp(default,tmph->str))
+      if (default && !StrCompare(default,tmph->str))
 	doc_default=doc_e;
       tmph=tmph->next;
     }

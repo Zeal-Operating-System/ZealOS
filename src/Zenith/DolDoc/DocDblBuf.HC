@@ -44,8 +44,8 @@ public CDoc *DocDblBufStart(CTask *task=NULL)
     res=DocNew(,task);
     res->win_task		=ddoc->win_task;
     res->max_entries		=ddoc->max_entries;
-    MemCpy(res->find_replace,ddoc->find_replace,sizeof(CEdFindText));
-    MemCpy(&res->filename,&ddoc->filename,sizeof(CEdFileName));
+    MemCopy(res->find_replace,ddoc->find_replace,sizeof(CEdFindText));
+    MemCopy(&res->filename,&ddoc->filename,sizeof(CEdFileName));
     res->left_click_link	=ddoc->left_click_link;
     res->right_click_link	=ddoc->right_click_link;
     res->user_put_data	=ddoc->user_put_data;
@@ -91,8 +91,8 @@ public Bool DocDblBufSwap(CTask *task=NULL)
     task->display_doc=pdoc;
     DocUnlock(ddoc);
     DocReset(ddoc,TRUE);
-    MemCpy(ddoc->find_replace,pdoc->find_replace,sizeof(CEdFindText));
-    MemCpy(&ddoc->filename,&pdoc->filename,sizeof(CEdFileName));
+    MemCopy(ddoc->find_replace,pdoc->find_replace,sizeof(CEdFindText));
+    MemCopy(&ddoc->filename,&pdoc->filename,sizeof(CEdFileName));
     ddoc->max_entries		=pdoc->max_entries;
     ddoc->flags			=pdoc->flags&DOCG_DBL_BUF_FLAGS |
 	  ddoc->flags&~DOCG_DBL_BUF_FLAGS;

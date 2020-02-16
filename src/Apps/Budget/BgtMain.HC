@@ -57,7 +57,7 @@ Bool BgtPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
       return TRUE;
     case 'v':
       if ((st=BgtPopUpAcct("View Acct\n\n",view_acct))>=0) {
-	StrCpy(view_acct,st);
+	StrCopy(view_acct,st);
 	BgtRegen;
       }
       return TRUE;
@@ -110,9 +110,9 @@ U0 BgtRegen()
   doc=DocNew;
   doc->flags|=DOCF_FORM;
   while (tmpb!=&b_head) {
-    if (!StrCmp(view_acct,tmpb->credit))
+    if (!StrCompare(view_acct,tmpb->credit))
       balance-=tmpb->amount;
-    if (!StrCmp(view_acct,tmpb->debit))
+    if (!StrCompare(view_acct,tmpb->debit))
       balance+=tmpb->amount;
     c=BgtAcctColor(tmpb->credit);
     if (c!=color) {
@@ -201,7 +201,7 @@ U0 Budget(U8 *dirname="~/Budget")
 	"  ViewAcct(,'v');"
 	"}"
 	);
-  StrCpy(view_acct,"BANK");
+  StrCopy(view_acct,"BANK");
   DocMax;
   old_put	 =Fs->put_doc;
   old_display	 =Fs->display_doc;

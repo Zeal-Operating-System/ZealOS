@@ -1,7 +1,7 @@
 #help_index "DolDoc/Misc"
 
 U8 captured_macro_name[STR_LEN];
-StrCpy(captured_macro_name,"Test");
+StrCopy(captured_macro_name,"Test");
 
 I64 sys_macro_repeat_n=1;
 
@@ -81,17 +81,17 @@ U8 *SysMacro2Str(CJob *macro_head)
   while (tmpmt!=&head) {
     tmpmt1=tmpmt->next;
     if (tmpmt->type==MT_MESSAGE) {
-      StrCpy(ptr, tmpmt->buf);
+      StrCopy(ptr, tmpmt->buf);
       ptr+=StrLen(tmpmt->buf);
     } else {
       if (tmpmt->last->type!=MT_CHAR) {
-	StrCpy(ptr, "\"");
+	StrCopy(ptr, "\"");
 	ptr+=StrLen("\"");
       }
-      StrCpy(ptr,tmpmt->buf);
+      StrCopy(ptr,tmpmt->buf);
       ptr+=StrLen(tmpmt->buf);
       if (tmpmt->next->type!=MT_CHAR) {
-	StrCpy(ptr, "\";");
+	StrCopy(ptr, "\";");
 	ptr+=StrLen("\";");
       }
     }
@@ -176,7 +176,7 @@ I64 PopUpMacroMenu()
 U0 MacroTask(I64)
 {
   I64 i;
-  StrCpy(captured_macro_name,"Click Here");
+  StrCopy(captured_macro_name,"Click Here");
   sys_macro_repeat_n=1;
   do {
     i=PopUpMacroMenu;

@@ -23,7 +23,7 @@ I64 PopUpDiffMenu()
 
 I64 DiffEntriesCompare(CDocEntry *doc_e1,CDocEntry *doc_e2)
 {
-  return StrCmp(doc_e1->tag,doc_e2->tag);
+  return StrCompare(doc_e1->tag,doc_e2->tag);
 }
 
 #define DF_MODIFIED			0x01
@@ -164,14 +164,14 @@ Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
     else if (!(j2_lo<=doc_sorted2[i2]->user_data<j2_hi)) //user_data is new y
       i2++;
     else {
-      i=StrCmp(doc_sorted1[i1]->tag,doc_sorted2[i2]->tag);
+      i=StrCompare(doc_sorted1[i1]->tag,doc_sorted2[i2]->tag);
       if (i>0)
 	i2++;
       else if (i<0)
 	i1++;
       else {
 	i2b=i2;
-	while (!StrCmp(doc_sorted1[i1]->tag,doc_sorted2[i2]->tag)) {
+	while (!StrCompare(doc_sorted1[i1]->tag,doc_sorted2[i2]->tag)) {
 	  if (j2_lo<=doc_sorted2[i2]->user_data<j2_hi) {//user_data is the new y
 	    score=0;
 	    j1=doc_sorted1[i1]->user_data; //user_data is the new y
@@ -180,7 +180,7 @@ Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
 	    if (j2_hi-j2<n)
 	      n=j2_hi-j2;
 	    while (score<n) {
-	      if (!StrCmp(doc_unsorted1[j1+score]->tag,
+	      if (!StrCompare(doc_unsorted1[j1+score]->tag,
 		    doc_unsorted2[j2+score]->tag))
 		score++;
 	      else
@@ -226,7 +226,7 @@ Bool DiffBins(CDoc *doc1,CDoc *doc2)
     return TRUE;
   while (tmpb1!=&doc1->bin_head) {
     if (tmpb1->size!=tmpb2->size ||
-	  MemCmp(tmpb1->data,tmpb2->data,tmpb1->size))
+	  MemCompare(tmpb1->data,tmpb2->data,tmpb1->size))
       return TRUE;
     tmpb1=tmpb1->next;
     tmpb2=tmpb2->next;

@@ -46,7 +46,7 @@ CFile *FOpen(U8 *filename,U8 *flags,I64 count=0)
     f->de.full_name=full_name;
     f->flags|=FF_NEW_FILE;
     if (dirc=DirContextNew(full_name)) {
-      StrCpy(f->de.name,dirc->mask);
+      StrCopy(f->de.name,dirc->mask);
       if (count>0) {//We pre-alloc the whole thing.
 	f->de.clus=ClusAlloc(f->drive,0,
 	      (count+f->drive->spc-1)/f->drive->spc,contiguous);
@@ -155,21 +155,21 @@ Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1)
 	j=count;
       else
 	j=spc-i;
-      MemCpy(buf,f->clus_buf+i<<BLK_SIZE_BITS,j<<BLK_SIZE_BITS);
+      MemCopy(buf,f->clus_buf+i<<BLK_SIZE_BITS,j<<BLK_SIZE_BITS);
       buf+=j<<BLK_SIZE_BITS;
       count-=j;
       blk+=j;
     }
     while (count>=spc) {
       c=FSetClus(f,c,blk,TRUE);
-      MemCpy(buf,f->clus_buf,spc<<BLK_SIZE_BITS);
+      MemCopy(buf,f->clus_buf,spc<<BLK_SIZE_BITS);
       buf+=spc<<BLK_SIZE_BITS;
       count-=spc;
       blk+=spc;
     }
     if (count>0) {
       c=FSetClus(f,c,blk,TRUE);
-      MemCpy(buf,f->clus_buf,count<<BLK_SIZE_BITS);
+      MemCopy(buf,f->clus_buf,count<<BLK_SIZE_BITS);
       buf+=count<<BLK_SIZE_BITS;
       blk+=count;
     }
@@ -224,7 +224,7 @@ Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1)
 	j=count;
       else
 	j=spc-i;
-      MemCpy(f->clus_buf+BLK_SIZE*i,buf,j<<BLK_SIZE_BITS);
+      MemCopy(f->clus_buf+BLK_SIZE*i,buf,j<<BLK_SIZE_BITS);
       f->flags|=FF_BUF_DIRTY;
       buf+=j<<BLK_SIZE_BITS;
       count-=j;
@@ -238,7 +238,7 @@ Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1)
     }
     while (count>=spc) {
       FSetClus(f,c,blk,FALSE);
-      MemCpy(f->clus_buf,buf,spc<<BLK_SIZE_BITS);
+      MemCopy(f->clus_buf,buf,spc<<BLK_SIZE_BITS);
       f->flags|=FF_BUF_DIRTY;
       buf+=spc<<BLK_SIZE_BITS;
       count-=spc;
@@ -252,7 +252,7 @@ Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1)
     }
     if (count>0) {
       FSetClus(f,c,blk,TRUE);
-      MemCpy(f->clus_buf,buf,count<<BLK_SIZE_BITS);
+      MemCopy(f->clus_buf,buf,count<<BLK_SIZE_BITS);
       f->flags|=FF_BUF_DIRTY;
       buf+=count<<BLK_SIZE_BITS;
       blk+=count;

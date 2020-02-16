@@ -120,7 +120,7 @@ I64 HashTablePurge(CHashTable *table)
 	while (tmph2) {
 	  if ((tmph2->type&HTT_EXPORT_SYS_SYM ||
 		tmph2->type&HTG_TYPE_MASK==HTT_INVALID) &&
-		!StrCmp(tmph2->str,tmph->str)) {
+		!StrCompare(tmph2->str,tmph->str)) {
 	    if (tmph2->type&HTG_TYPE_MASK==HTT_INVALID)
 	      tmph2->type=HTT_KEYWORD;//Won't delete HTT_INVALID
 	    HashRemDel(tmph2,table);

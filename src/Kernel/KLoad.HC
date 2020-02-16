@@ -217,7 +217,7 @@ CBinFile *Load(U8 *filename,I64 ld_flags=0,CBinFile *bfh_addr=INVALID_PTR)
     } else
       bfh_addr=bfh->org;
   }
-  MemCpy(bfh_addr,bfh,size);
+  MemCopy(bfh_addr,bfh,size);
   Free(bfh);
 
   lo_skip:

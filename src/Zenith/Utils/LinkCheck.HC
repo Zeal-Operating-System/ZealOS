@@ -58,7 +58,7 @@ public I64 LinkCheck(U8 *files_find_mask="/*",U8 *fu_flags=NULL)
     st=MStrPrint("Before %s Broke:%d",tmpde->full_name,res);
     if (StrLen(st)>PROGRESS_DESC_LEN-1)
       st[PROGRESS_DESC_LEN-1]=0;
-    StrCpy(progress2_desc,st);
+    StrCopy(progress2_desc,st);
     Free(st);
     Yield;
 
@@ -67,7 +67,7 @@ public I64 LinkCheck(U8 *files_find_mask="/*",U8 *fu_flags=NULL)
     st=MStrPrint("After %s Broke:%d",tmpde->full_name,res);
     if (StrLen(st)>PROGRESS_DESC_LEN-1)
       st[PROGRESS_DESC_LEN-1]=0;
-    StrCpy(progress2_desc,st);
+    StrCopy(progress2_desc,st);
     Free(st);
     Yield;
 

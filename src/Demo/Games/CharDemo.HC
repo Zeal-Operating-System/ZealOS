@@ -52,7 +52,7 @@ U0 AnimateTask(I64)
   I64 i;
   U64 *font=MAlloc(256*8);
   Fs->task_end_cb=&AnimateEndCB;
-  MemCpy(font,text.font,256*8);
+  MemCopy(font,text.font,256*8);
   text.font=font;
   font[CH_TREE]=0x18187E7E3C3C18;
   while (TRUE) {

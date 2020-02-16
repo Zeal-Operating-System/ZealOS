@@ -17,7 +17,7 @@ CDocBin *DocBinFindTag(CDoc *haystack_doc,U8 *needle_tag)
   if (needle_tag) {
     b=haystack_doc->bin_head.next;
     while (b!=&haystack_doc->bin_head) {
-      if (b->tag && !StrCmp(b->tag,needle_tag))
+      if (b->tag && !StrCompare(b->tag,needle_tag))
 	return b;
       b=b->next;
     }

@@ -1,5 +1,5 @@
 asm {
-// $LK,"::/Doc/MemOverview.DD"$
+// $LK,"::/Doc/MemoryOverview.DD"$
 
 USE32
 SYS_INIT_PAGE_TABLES::

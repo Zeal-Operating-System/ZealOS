@@ -44,19 +44,19 @@ U8 *SpanSave(CMathODE *ode,I64 *_size=NULL)
   count=sizeof(SpanHeader)+h.num_masses*M_SIZE+h.num_springs*S_SIZE;
 
   ptr=res=MAlloc(count);
-  MemCpy(ptr,&h,sizeof(SpanHeader));
+  MemCopy(ptr,&h,sizeof(SpanHeader));
   ptr+=sizeof(SpanHeader);
 
   tmpm=ode->next_mass;
   while (tmpm!=&ode->next_mass) {
-    MemCpy(ptr,&tmpm->start,M_SIZE);
+    MemCopy(ptr,&tmpm->start,M_SIZE);
     ptr+=M_SIZE;
     tmpm=tmpm->next;
   }
 
   tmps=ode->next_spring;
   while (tmps!=&ode->next_spring) {
-    MemCpy(ptr,&tmps->start,S_SIZE);
+    MemCopy(ptr,&tmps->start,S_SIZE);
     ptr+=S_SIZE;
     tmps=tmps->next;
   }
@@ -91,19 +91,19 @@ U0 SpanLoad(CMathODE *ode,U8 *src)
 
   if (!src) return;
 
-  MemCpy(&h,src,sizeof(SpanHeader));
+  MemCopy(&h,src,sizeof(SpanHeader));
   src+=sizeof(SpanHeader);
 
   for (i=0;i<h.num_masses;i++) {
     tmpm=CAlloc(sizeof(MyMass));
-    MemCpy(&tmpm->start,src,M_SIZE);
+    MemCopy(&tmpm->start,src,M_SIZE);
     src+=M_SIZE;
     QueueInsert(tmpm,ode->last_mass);
   }
 
   for (i=0;i<h.num_springs;i++) {
     tmps=CAlloc(sizeof(MySpring));
-    MemCpy(&tmps->start,src,S_SIZE);
+    MemCopy(&tmps->start,src,S_SIZE);
     src+=S_SIZE;
     QueueInsert(tmps,ode->last_spring);
     tmps->end1=MassFindNum(ode,tmps->end1_num);

@@ -257,7 +257,7 @@ public U0 BibleVerse(CDoc *doc_out=NULL,U8 *verse,I64 lines)
       doc_in=DocRead(BIBLE_FILENAME,DOCF_PLAIN_TEXT|DOCF_NO_CURSOR);
       DocGoToLine(doc_in,i); //one based
       if (*st2) {
-	StrCpy(doc_in->find_replace->find_text,st2);
+	StrCopy(doc_in->find_replace->find_text,st2);
 	EdFindNext(doc_in);
       }
       doc_e=doc_in->cur_entry;

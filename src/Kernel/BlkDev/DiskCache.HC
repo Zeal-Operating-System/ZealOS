@@ -83,7 +83,7 @@ U0 DiskCacheAdd(CDrive *drive,U8 *buf, I64 blk, I64 count)
       if (!(tmpc=DiskCacheFind(drive,blk)))
 	tmpc=blkdev.cache_ctrl->next_lru;
       DiskCacheQueueRemove(tmpc);
-      MemCpy(&tmpc->body,buf,BLK_SIZE);
+      MemCopy(&tmpc->body,buf,BLK_SIZE);
       tmpc->drive=drive;
       tmpc->blk=blk;
       DiskCacheQueueIns(tmpc);
@@ -125,7 +125,7 @@ U0 RCache(CDrive *drive,U8 **_buf, I64 *_blk, I64 *_count)
 //fetch leading blks from cache
     while (*_count>0) {
       if (tmpc=DiskCacheFind(drive,*_blk)) {
-	MemCpy(*_buf,&tmpc->body,BLK_SIZE);
+	MemCopy(*_buf,&tmpc->body,BLK_SIZE);
 	*_count-=1;
 	*_buf+=BLK_SIZE;
 	*_blk+=1;
@@ -135,7 +135,7 @@ U0 RCache(CDrive *drive,U8 **_buf, I64 *_blk, I64 *_count)
 //fetch trailing blks from cache
     while (*_count>0) {
       if (tmpc=DiskCacheFind(drive,*_blk+*_count-1)) {
-	MemCpy(*_buf+(*_count-1)<<BLK_SIZE_BITS,&tmpc->body,BLK_SIZE);
+	MemCopy(*_buf+(*_count-1)<<BLK_SIZE_BITS,&tmpc->body,BLK_SIZE);
 	*_count-=1;
       } else
 	break;

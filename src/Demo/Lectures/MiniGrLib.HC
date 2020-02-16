@@ -21,7 +21,7 @@ U0 MGUpdate()
   //0xA0000 alias is slower than normal RAM.
   OutU8(VGAP_IDX,VGAR_MAP_MASK);
   OutU8(VGAP_DATA,0xF);//All color planes at once -- Black and White
-  MemCpy(text.vga_alias,image,sizeof(image)); //Alias of 0xA0000
+  MemCopy(text.vga_alias,image,sizeof(image)); //Alias of 0xA0000
 }
  
 U0 MGPlot(I64 x,I64 y)

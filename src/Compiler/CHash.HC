@@ -18,7 +18,7 @@ I64 HashEntrySize(CHashSrcSym *tmph)
     case HTt_FILE:
       return MSize(tmph(CHashGeneric *)->user_data0);
     case HTt_MODULE:
-      if (StrCmp(tmph->str,KERNEL_MODULE_NAME))
+      if (StrCompare(tmph->str,KERNEL_MODULE_NAME))
 	return MSize(tmph(CHashGeneric *)->user_data0);
       else {
 	bfh=mem_boot_base-sizeof(CBinFile);
@@ -64,7 +64,7 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
   } else if (tmph->type & HTT_FILE)
     res+=MSize2(tmph(CHashGeneric *)->user_data0);
   else if (tmph->type & HTT_MODULE &&
-	StrCmp(tmph->str,KERNEL_MODULE_NAME))
+	StrCompare(tmph->str,KERNEL_MODULE_NAME))
     res+=MSize2(tmph(CHashGeneric *)->user_data0);
   return res;
 }
@@ -116,7 +116,7 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
 	      tmpb=CAlloc(sizeof(CDocBin));
 	      tmpb->size=size;
 	      tmpb->data=MAlloc(size);
-	      MemCpy(tmpb->data,dbg_info,size);
+	      MemCopy(tmpb->data,dbg_info,size);
 	      tmpb->num=doc->cur_bin_num++;
 	      tmpb->use_count=1;
 	      QueueInsert(tmpb,doc->bin_head.last);

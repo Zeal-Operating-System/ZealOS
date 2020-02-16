@@ -793,7 +793,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStack *ps,CMemberList **_local_var,
 	    return PE_MAYBE_MODIFIERS;
 	  } else {
 	    if (tmpm->dim.next && tmpm->offset>0 &&
-		  StrCmp(tmpm->str,"argv")) {
+		  StrCompare(tmpm->str,"argv")) {
 	      tmpc++;
 	      cc->flags&=~CCF_ARRAY;
 	    }

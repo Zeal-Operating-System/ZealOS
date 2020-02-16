@@ -273,7 +273,7 @@ per second.It defaults to
       ona=Note2Ona(note,octave);
     } else
       ona=0;
-    if (words && (word=ListSub(i++,words)) && StrCmp(word,""))
+    if (words && (word=ListSub(i++,words)) && StrCompare(word,""))
       "%s",word;
 
     d=JIFFY_FREQ*music.note_len/music.tempo;

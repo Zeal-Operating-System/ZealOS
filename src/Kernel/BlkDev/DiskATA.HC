@@ -437,7 +437,7 @@ U0 ATAPIReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count)
       ATAPIReadBlks2(bd,0,dvd_buf,blk2/spc,n,TRUE);
     if (bd->flags & BDF_READ_CACHE)
       DiskCacheAdd(drive,dvd_buf,blk2,n*spc);
-    MemCpy(buf,dvd_buf+(blk-blk2)<<BLK_SIZE_BITS,count<<BLK_SIZE_BITS);
+    MemCopy(buf,dvd_buf+(blk-blk2)<<BLK_SIZE_BITS,count<<BLK_SIZE_BITS);
   }
   Free(dvd_buf);
 }

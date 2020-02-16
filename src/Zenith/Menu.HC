@@ -15,7 +15,7 @@ public CMenuEntry *MenuSubEntryFind(
 	CMenuEntry *haystack_first,U8 *needle_entry_name)
 {//You probably don't need this. Use dir / and $LK,"MenuEntryFind",A="MN:MenuEntryFind"$().
   while (haystack_first) {
-    if (!StrCmp(haystack_first->name,needle_entry_name))
+    if (!StrCompare(haystack_first->name,needle_entry_name))
       return haystack_first;
     haystack_first=haystack_first->next;
   }
@@ -48,7 +48,7 @@ CMenuEntry *MenuNewSub(CCompCtrl *cc,CTask *task)
     tmpme=CAlloc(sizeof(CMenuEntry),task);
     if (StrLen(cc->cur_str)>31)
       cc->cur_str[31]=0;
-    StrCpy(tmpme->name,cc->cur_str);
+    StrCopy(tmpme->name,cc->cur_str);
     if (Lex(cc)=='(') {
       tmpme->message_code=MESSAGE_KEY_DOWN_UP;
       if (Lex(cc)!=',' && cc->token!=')')

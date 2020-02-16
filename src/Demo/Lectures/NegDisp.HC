@@ -11,12 +11,12 @@ class Person
 U0 OffsetDemo1()
 {
   Person *p=MAlloc(sizeof(Person));
-  StrCpy(p->first,    "Terry");
-  StrCpy(p->last,     "Davis");
-  StrCpy(p->address1, "8144 Sickle Lane");
-  StrCpy(p->address2, "");
-  StrCpy(p->city,     "Las Vegas");
-  StrCpy(p->state_zip,"NV 89128");
+  StrCopy(p->first,    "Terry");
+  StrCopy(p->last,     "Davis");
+  StrCopy(p->address1, "8144 Sickle Lane");
+  StrCopy(p->address2, "");
+  StrCopy(p->city,     "Las Vegas");
+  StrCopy(p->state_zip,"NV 89128");
 }
 
 U(&OffsetDemo1,34);
@@ -44,12 +44,12 @@ U8 state_zip[32];
 U0 OffsetDemo2()
 {
   Person *p=MAlloc(sizeof(Person))(I64)+128;
-  StrCpy(p->first,    "Terry");
-  StrCpy(p->last,     "Davis");
-  StrCpy(p->address1, "8144 Sickle Lane");
-  StrCpy(p->address2, "");
-  StrCpy(p->city,     "Las Vegas");
-  StrCpy(p->state_zip,"NV 89128");
+  StrCopy(p->first,    "Terry");
+  StrCopy(p->last,     "Davis");
+  StrCopy(p->address1, "8144 Sickle Lane");
+  StrCopy(p->address2, "");
+  StrCopy(p->city,     "Las Vegas");
+  StrCopy(p->state_zip,"NV 89128");
 }
 
 U(&OffsetDemo2,34);

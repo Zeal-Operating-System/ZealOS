@@ -102,7 +102,7 @@ U0 KConfigOptions(CKConfig *c)
 	    }
 	    Free(c->home_dir);
 	    c->home_dir=st2;
-	    if (StrCmp(c->home_dir,"::/Home"))
+	    if (StrCompare(c->home_dir,"::/Home"))
 	      c->opts[i]=TRUE;
 	    else
 	      c->opts[i]=FALSE;

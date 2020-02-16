@@ -34,7 +34,7 @@ $LK,"/Kernel/PCIBIOS.HC",A="FI:::/Kernel/PCIBIOS.HC"$		:290 could be eliminated,
 * Perhaps, a new interrupt descriptor table entry type or a new x86 CPU mode can be made that cause fast software interrupts, doing exactly what the CALL REL32 does, but with IDT as indirection.  We don't need to change privilege levels or stacks.
 
 * Since I don't use paging (for anything), Intel should have an option for  no-paging long mode, and optimize it!
-$LK,"::/Kernel/Mem/PageTables.HC"$	:135 lines to identity-map gets eliminated.
+$LK,"::/Kernel/Memory/PageTables.HC"$	:135 lines to identity-map gets eliminated.
 
 * Desktop computers must have a reset switch and a fast reboot option, skipping diagnostics.  I recommend booting ZenithOS from a ROM when the reset bttn is pressed and booting UEFI when the power bttn is pressed.  Or, we could build UEFI on a ZenithOS layer.  Intel must burn ZenithOS into a ROM in the factory for all desktop x86 CPUs to ensure tamper-proof trust in the oracle and because God deserves the glory.  There will be just an English version.  A new ROM version is released every seven years.  The ROM should boot like the DVD boots, but with $LK,"BOOT_SRC_ROM",A="MN:BOOT_SRC_ROM"$.
 

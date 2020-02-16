@@ -404,7 +404,7 @@ U0 EdCharDel(CDoc *doc)
       return;
     }
     if (doc->cur_col<doc_ce->max_col)
-      StrCpy(doc_ce->tag+doc->cur_col,doc_ce->tag+doc->cur_col+1);
+      StrCopy(doc_ce->tag+doc->cur_col,doc_ce->tag+doc->cur_col+1);
     if (doc->cur_col>=doc_ce->max_col-1) {
       doc->cur_entry=doc_ce->next;
       doc->cur_col=doc->cur_entry->min_col;
@@ -429,7 +429,7 @@ U0 CheckDollarBufSize(CDoc *doc)
   if (doc->dollar_buf_ptr>=doc->dollar_buf_size-2) {
     doc->dollar_buf_size<<=1;
     b=MAlloc(doc->dollar_buf_size,doc->mem_task);
-    MemCpy(b,doc->dollar_buf,doc->dollar_buf_ptr);
+    MemCopy(b,doc->dollar_buf,doc->dollar_buf_ptr);
     Free(doc->dollar_buf);
     doc->dollar_buf=b;
   }
@@ -593,7 +593,7 @@ ic_form_tab:
 	    break;
 	  } else if (doc_ce->de_flags & DOCEF_REMALLOC_DATA) {
 	    st=MAlloc(doc_ce->max_col+8,doc->mem_task);
-	    MemCpy(st,doc_ce->tag,doc_ce->max_col+1);
+	    MemCopy(st,doc_ce->tag,doc_ce->max_col+1);
 	    Free(doc_ce->tag);
 	    doc_ce->tag=st;
 	    doc_ce->len=MSize(st)-doc_ce->min_col-2; //See $LK,"DataTagWidth",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$

@@ -68,7 +68,7 @@ CSprite *Sprite2SpriteQueue(U8 *elems)
   while (tmpg->type&SPG_TYPE_MASK) {
     tmpg1=MAlloc(SpriteElemSize(tmpg)+offset(CSprite.start));
     s=SpriteElemSize(tmpg);
-    MemCpy(&tmpg1->start,&tmpg->start,s);
+    MemCopy(&tmpg1->start,&tmpg->start,s);
     QueueInsert(tmpg1,res->last);
     tmpg(U8 *)+=s;
   }
@@ -89,7 +89,7 @@ U8 *SpriteQueue2Sprite(CSprite *head,I64 *_size=NULL)
   tmpg=head->next;
   while (tmpg!=head) {
     i=SpriteElemSize(tmpg);
-    MemCpy(dst,&tmpg->start,i);
+    MemCopy(dst,&tmpg->start,i);
     dst+=i;
     tmpg=tmpg->next;
   }
@@ -355,7 +355,7 @@ CSprite *SpriteTransformBitMap(I64 *r,CSprite *tmpg)
   dc3->r=NULL;
   DCDel(dc3);
   tmpg1=CAlloc(offset(CSprite.start)+MSize(elems));
-  MemCpy(tmpg1(U8 *)+offset(CSprite.start),elems,MSize(elems));
+  MemCopy(tmpg1(U8 *)+offset(CSprite.start),elems,MSize(elems));
   tmpg1->type=tmpg->type;
 
   x=tmpg->pwhu.x1; y=tmpg->pwhu.y1; z=0;
@@ -1030,11 +1030,11 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
   do {
     if (winmgr.fps<10)
       doc_ce->de_flags|=DOCEF_DONT_DRAW;
-    StrCpy(Fs->task_title,"Sprite Edit Menu");
+    StrCopy(Fs->task_title,"Sprite Edit Menu");
     i=PopUpSpriteEd(_head,_cur_elem_num);
     SpriteEdUpdate(doc,doc_ce,*_head);
     if (0<=i<SPED_EXIT) {
-      StrCpy(Fs->task_title,DefineSub(i,"ST_SPRITE_ED_MENU"));
+      StrCopy(Fs->task_title,DefineSub(i,"ST_SPRITE_ED_MENU"));
       switch (i) {
 	case SPED_SEL_UNSEL_ALL:
 	  if (!SpriteQueueSelCount(*_head))

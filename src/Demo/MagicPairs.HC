@@ -319,7 +319,7 @@ I64 TestCoreRange(RangeJob *r)
 {
   I64 i,n,res=0;
   RangeJob rj;
-  MemCpy(&rj,r,sizeof(RangeJob));
+  MemCopy(&rj,r,sizeof(RangeJob));
   for (i=r->lo;i<r->hi;i+=CORE_SUB_RANGE) {
     rj.lo=i;
     rj.hi=i+CORE_SUB_RANGE;

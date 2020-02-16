@@ -18,7 +18,7 @@ U0 BgtDataRead()
     count=*ptr(I64 *)++;
     for (i=0;i<count;i++) {
       tmpb=CAlloc(sizeof(CBgtEntry));
-      MemCpy(&tmpb->start,ptr,BE_SIZE);
+      MemCopy(&tmpb->start,ptr,BE_SIZE);
       tmpb->credit=StrNew(s[tmpb->credit_idx]);
       tmpb->debit =StrNew(s[tmpb->debit_idx]);
       tmpb->desc  =StrNew(s[tmpb->desc_idx]);
@@ -29,9 +29,9 @@ U0 BgtDataRead()
     count=*ptr(I64 *)++;
     for (i=0;i<count;i++) {
       tmpt=CAlloc(sizeof(CBgtTemplate));
-      MemCpy(&tmpt->start,ptr,BT_SIZE);
+      MemCopy(&tmpt->start,ptr,BT_SIZE);
       ptr+=BT_SIZE;
-      MemCpy(&tmpt->b.start,ptr,BE_SIZE);
+      MemCopy(&tmpt->b.start,ptr,BE_SIZE);
       ptr+=BE_SIZE;
       tmpt->b.credit=StrNew(s[tmpt->b.credit_idx]);
       tmpt->b.debit =StrNew(s[tmpt->b.debit_idx]);
@@ -90,24 +90,24 @@ U0 BgtDataWrite()
   size=sizeof(I64)*2+count1*BE_SIZE+count2*(BT_SIZE+BE_SIZE);
   buf=ptr=MAlloc(size);
 
-  MemCpy(ptr,&count1,sizeof(I64));
+  MemCopy(ptr,&count1,sizeof(I64));
   ptr+=sizeof(I64);
   tmpb=b_head.next;
   while (tmpb!=&b_head) {
     if (tmpb->type!=BE_TEMPLATE_COPY) {
-      MemCpy(ptr,&tmpb->start,BE_SIZE);
+      MemCopy(ptr,&tmpb->start,BE_SIZE);
       ptr+=BE_SIZE;
     }
     tmpb=tmpb->next;
   }
 
-  MemCpy(ptr,&count2,sizeof(I64));
+  MemCopy(ptr,&count2,sizeof(I64));
   ptr+=sizeof(I64);
   tmpt=t_head.next;
   while (tmpt!=&t_head) {
-    MemCpy(ptr,&tmpt->start,BT_SIZE);
+    MemCopy(ptr,&tmpt->start,BT_SIZE);
     ptr+=BT_SIZE;
-    MemCpy(ptr,&tmpt->b.start,BE_SIZE);
+    MemCopy(ptr,&tmpt->b.start,BE_SIZE);
     ptr+=BE_SIZE;
     tmpt=tmpt->next;
   }

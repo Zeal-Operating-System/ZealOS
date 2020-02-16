@@ -35,22 +35,22 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
   maxlen=StrLen(Fs->cur_dir)+1+StrLen(chg_to_buf)+1;
   new_cur_dir=MAlloc(maxlen);
   buf=MAlloc(maxlen);
-  StrCpy(new_cur_dir,Fs->cur_dir);
+  StrCopy(new_cur_dir,Fs->cur_dir);
   while (*chg_to_buf && res) {
     StrFirstRemove(chg_to_buf,"/",buf);
     if (!*buf)
-      StrCpy(new_cur_dir,"/");
-    else if (!StrCmp(buf,"..")) {
+      StrCopy(new_cur_dir,"/");
+    else if (!StrCompare(buf,"..")) {
       StrLastRemove(new_cur_dir,"/");
       if (!*new_cur_dir)
-	StrCpy(new_cur_dir,"/");
-    } else if (!StrCmp(buf,"~")) {
+	StrCopy(new_cur_dir,"/");
+    } else if (!StrCompare(buf,"~")) {
       Free(new_cur_dir);
       new_cur_dir=MAlloc(StrLen(blkdev.home_dir+2)+1+StrLen(chg_to_buf)+1);
-      StrCpy(new_cur_dir,blkdev.home_dir+2);
+      StrCopy(new_cur_dir,blkdev.home_dir+2);
       if (Fs->cur_dv!=Letter2Drive('~') && !Drive('~'))
 	return FALSE;
-    } else if (StrCmp(buf,".") && *buf) {
+    } else if (StrCompare(buf,".") && *buf) {
       drive=Fs->cur_dv;
       cur_dir_clus=Name2DirClus(drive,new_cur_dir);
       switch (drive->fs_type) {
@@ -70,7 +70,7 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
 	res=DirMk(buf);
       }
       if (res) {
-	if (StrCmp(new_cur_dir,"/"))
+	if (StrCompare(new_cur_dir,"/"))
 	  CatPrint(new_cur_dir,"/");
 	CatPrint(new_cur_dir,buf);
       }
@@ -114,7 +114,7 @@ I64 Dir(U8 *files_find_mask,Bool full)
       st=MAllocIdent(tmpde1->full_name);
       StrLastRemove(st,"/");
       if (!st[2])
-	StrCpy(st+2,"/");
+	StrCopy(st+2,"/");
 //Find max columns
       tmpde2=tmpde1;
       while (tmpde2) {

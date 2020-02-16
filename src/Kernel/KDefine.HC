@@ -25,7 +25,7 @@ CHashDefineStr *DefineListLoad(U8 *dname,U8 *list)
     while (*ptr++);
   }
   tmph->data=MAlloc(ptr+1-list);
-  MemCpy(tmph->data,list,ptr+1-list);
+  MemCopy(tmph->data,list,ptr+1-list);
   tmph->count=count;
 
   idx=tmph->sub_idx=MAlloc(count*sizeof(U8 *));
@@ -172,13 +172,13 @@ CColorROPU16 Str2ColorU16(U8 *st)
       while (st<ptr)
 	*ptr2++=*st++;
       *ptr2++=0;
-      if (!StrICmp(st2,"TWO"))
+      if (!StrICompare(st2,"TWO"))
 	res.rop|=ROPBF_TWO_SIDED;
-      else if (!StrICmp(st2,"HALF"))
+      else if (!StrICompare(st2,"HALF"))
 	res.rop|=ROPBF_HALF_RANGE_COLOR;
       else if ((i=DefineMatch(st2,"ST_COLORS",LMF_IGNORE_CASE))>=0)
 	res.color=i;
-      else if (!StrICmp(st2,"TRANSPARENT"))
+      else if (!StrICompare(st2,"TRANSPARENT"))
 	res.color=TRANSPARENT;
       else {
 	Free(st2);

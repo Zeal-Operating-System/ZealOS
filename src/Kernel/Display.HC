@@ -44,7 +44,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
     col=text.raw_col%text.cols;
     if (!Bt(&sys_run_level,RLf_VGA)) { //if text mode
       if (text.raw_flags&RWF_SCROLL && text.raw_col && !row && !col) {
-	MemCpy(text.vga_text_alias,text.vga_text_alias+text.cols*2,
+	MemCopy(text.vga_text_alias,text.vga_text_alias+text.cols*2,
 	      text.cols*(text.rows-1)*2);
 	MemSet(text.vga_text_alias+text.cols*(text.rows-1)*2,0,text.cols*2);
 	text.raw_col-=text.cols;
@@ -58,13 +58,13 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
       OutU8(VGAP_DATA,0x0F); //All planes -- WHITE
       if (text.raw_flags&RWF_SCROLL && text.raw_col && !row && !col) {
 //Scroll cached image
-	MemCpy(text.raw_scrn_image,
+	MemCopy(text.raw_scrn_image,
 	      text.raw_scrn_image+GR_WIDTH*FONT_HEIGHT>>3,
 	      GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3);
 	MemSet(text.raw_scrn_image+GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3,0,
 	      GR_WIDTH*FONT_HEIGHT>>3);
 
-	MemCpy(text.vga_alias,text.raw_scrn_image,GR_WIDTH*GR_HEIGHT>>3);
+	MemCopy(text.vga_alias,text.raw_scrn_image,GR_WIDTH*GR_HEIGHT>>3);
 	text.raw_col-=text.cols;
 	row=text.rows-1;
       }

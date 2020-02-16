@@ -66,7 +66,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 	    unit=tmpha->unit;
 	  } else if (type!=BDT_ATAPI || *base0_buf) {
 	    if (type==BDT_ATAPI)
-	      StrCpy(base1_buf,"0");
+	      StrCopy(base1_buf,"0");
 	    else
 	      do {
 		"I/O Port Base1:\n";
@@ -85,10 +85,10 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 	    drv_let,type,unit);
       switch (type) {
 	case BDT_RAM:
-	  if (!*addr_buf) StrCpy(addr_buf,"0");
+	  if (!*addr_buf) StrCopy(addr_buf,"0");
 	  DocPrint(doc,"bd->RAM_disk=%s;\n",addr_buf);
 	case BDT_ISO_FILE_WRITE:
-	  if (!*blks_buf) StrCpy(blks_buf,"0");
+	  if (!*blks_buf) StrCopy(blks_buf,"0");
 	  DocPrint(doc,"bd->max_blk=(%s)-1;\n",blks_buf);
 	  DocPrint(doc,"bd->drv_offset=19<<2+"
 		"(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;\n");

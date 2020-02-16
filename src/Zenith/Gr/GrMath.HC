@@ -101,7 +101,7 @@ public I64 *Mat4x4MulMat4x4New(I64 *m1,I64 *m2,CTask *mem_task=NULL)
 
 public I64 *Mat4x4Equ(I64 *dst,I64 *src)
 {//Copy 4x4 Rot matrix.
-  MemCpy(dst,src,sizeof(I64)*16);
+  MemCopy(dst,src,sizeof(I64)*16);
   return dst;
 }
 

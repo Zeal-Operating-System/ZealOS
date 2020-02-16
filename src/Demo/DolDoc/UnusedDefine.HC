@@ -36,7 +36,7 @@ U0 UnusedDefineScan()
 
     progress1=0;
     progress1_max=count;
-    StrCpy(progress1_desc,"Define Scan");
+    StrCopy(progress1_desc,"Define Scan");
 
     table=Fs->hash_table;
     while (table) {

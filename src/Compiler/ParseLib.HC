@@ -107,14 +107,14 @@ U0 COCInit(CCompCtrl *cc)
 U0 COCPush(CCompCtrl *cc)
 {
   CCodeCtrl *tmpcbh=MAlloc(sizeof(CCodeCtrl));
-  MemCpy(tmpcbh,&cc->coc,sizeof(CCodeCtrl));
+  MemCopy(tmpcbh,&cc->coc,sizeof(CCodeCtrl));
   cc->coc.coc_next=tmpcbh;
 }
 
 CCompCtrl *COCPopNoFree(CCompCtrl *cc)
 {
   CCodeCtrl *tmpcbh=cc->coc.coc_next;
-  MemCpy(&cc->coc,tmpcbh,sizeof(CCodeCtrl));
+  MemCopy(&cc->coc,tmpcbh,sizeof(CCodeCtrl));
   return tmpcbh;
 }
 
@@ -154,7 +154,7 @@ CCodeMisc *COCGoToLabelFind(CCompCtrl *cc,U8 *name)
   CCodeMisc *cm=cc->coc.coc_next_misc;
   while (cm!=&cc->coc.coc_next_misc) {
     if ((cm->type==CMT_GOTO_LABEL||cm->type==CMT_ASM_LABEL) &&
-	  !StrCmp(cm->str,name))
+	  !StrCompare(cm->str,name))
       return cm;
     cm=cm->next;
   }

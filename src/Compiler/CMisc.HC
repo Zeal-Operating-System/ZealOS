@@ -154,7 +154,7 @@ U8 *CmdLinePrompt()
 
   i=StrLen(st);
   res=MAlloc(i+1+2);
-  MemCpy(res,st,i+1);
+  MemCopy(res,st,i+1);
   i--;
   while (i>=0 && Bt(char_bmp_white_space,res[i]))
     i--;

@@ -23,9 +23,9 @@ U0 AsmPrsInsFlags(CCompCtrl *cc,CInst *tmpins)
 	if (Lex(cc)==TK_I64 && cc->cur_i64<8)
 	  tmpins->slash_val=cc->cur_i64;
 	else if (cc->token==TK_IDENT) {
-	  if (!StrCmp(cc->cur_str,"R"))
+	  if (!StrCompare(cc->cur_str,"R"))
 	    tmpins->slash_val=SV_R_REG;
-	  else if (!StrCmp(cc->cur_str,"I"))
+	  else if (!StrCompare(cc->cur_str,"I"))
 	    tmpins->slash_val=SV_I_REG;
 	  else
 	    return;
@@ -153,7 +153,7 @@ U0 AsmHashLoad()
 	}
 	size=offset(CHashOpcode.ins)+sizeof(CInst)*tmpo_max->inst_entry_count;
 	tmpo=MAlloc(size);
-	MemCpy(tmpo,tmpo_max,size);
+	MemCopy(tmpo,tmpo_max,size);
 	tmpo->use_count=0;
 	if (HashFind(tmpo->str,cmp.asm_hash,HTT_OPCODE))
 	  LexExcept(cc,"Duplicate OPCODE entry ");

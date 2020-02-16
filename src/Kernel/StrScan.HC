@@ -72,7 +72,7 @@ to avoid this.
     neg=TRUE;
     ch=*src++;
   }
-  if (!StrNCmp(src-1,"inf",3)) {
+  if (!StrNCompare(src-1,"inf",3)) {
     d=ì;
     src+=3;
     goto a2f_end;
@@ -157,16 +157,16 @@ today.
 	start_year=FALSE,end_year=FALSE;
 
   MemSet(&ds,0,sizeof(CDateStruct));
-  if (!StrNCmp(ptr,"SM(",3)) {
+  if (!StrNCompare(ptr,"SM(",3)) {
     ptr+=3;
     start_mon=TRUE;
-  } else if (!StrNCmp(ptr,"EM(",3)) {
+  } else if (!StrNCompare(ptr,"EM(",3)) {
     ptr+=3;
     end_mon=TRUE;
-  } else if (!StrNCmp(ptr,"SY(",3)) {
+  } else if (!StrNCompare(ptr,"SY(",3)) {
     ptr+=3;
     start_year=TRUE;
-  } else if (!StrNCmp(ptr,"EY(",3)) {
+  } else if (!StrNCompare(ptr,"EY(",3)) {
     ptr+=3;
     end_year=TRUE;
   }
@@ -270,7 +270,7 @@ and take addr.
 	    if (cur_arg>=argc)
 	      throw('Scan');
 	    pptr=argv[cur_arg++];
-	    StrCpy(*pptr,buf);
+	    StrCopy(*pptr,buf);
 	    break;
 	  case 'c':
 	    if (cur_arg>=argc)

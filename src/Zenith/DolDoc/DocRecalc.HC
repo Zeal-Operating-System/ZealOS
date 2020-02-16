@@ -28,8 +28,8 @@ I64 DocWordWrapDel(CDoc *doc,CDocEntry *doc_e,
 	    doc_e->de_flags==doc_e2->de_flags && doc_e->type==doc_e2->type) {
 	j=StrLen(doc_e2->tag);
 	ptr=MAlloc(k+j+1,doc->mem_task);
-	MemCpy(ptr,doc_e->tag,k);
-	MemCpy(ptr+k,doc_e2->tag,j+1);
+	MemCopy(ptr,doc_e->tag,k);
+	MemCopy(ptr+k,doc_e2->tag,j+1);
 	Free(doc_e->tag);
 	doc_e->tag=ptr;
 	if (doc->cur_entry==doc_e2) {
@@ -151,7 +151,7 @@ CDocEntry *DocSplitTag(CDoc *doc,CDocEntry *doc_e,I64 i,I64 x,I64 y,I64 type_u8)
     doc_e=doc_e->last;
   doc_e2=DocEntryNewBase(doc,type_u8|doc_e->type & 0xFFFFFF00,
 	doc_e->de_flags&~DOCEG_HAS_ARG,x,y,doc_e->page_line_num);
-  MemCpy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
+  MemCopy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
   QueueInsert(doc_e2,doc_e);
   return doc_e2;
 }
@@ -193,7 +193,7 @@ CDocEntry *DocWordWrapAdd(CDoc *doc,CDocEntry *doc_e,
       doc_e2=DocEntryNewBase(doc,DOCT_SOFT_NEW_LINE|doc_e->type&0xFFFFFF00,
 	    DOCEF_WORD_WRAP|doc_e->de_flags&(DOCEF_HIGHLIGHT|DOCG_BL_IV_UL|
 	    DOCEF_SKIP|DOCEF_FILTER_SKIP),x,y,doc_e->last->page_line_num);
-      MemCpy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
+      MemCopy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
       QueueInsert(doc_e2,doc_e->last);
       return doc_e2;
     }
@@ -432,7 +432,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 	doc_e2=doc_e;
 	goto rc_skip;
       }
-      MemCpy(&doc_e->settings,s,sizeof(CDocSettings));
+      MemCopy(&doc_e->settings,s,sizeof(CDocSettings));
       s=&doc_e->settings;
       if (doc_e->de_flags & (DOCEF_TAG_CB|DOCEF_DEFINE) &&
 	    !(doc_e->de_flags & DOCEF_LIST)) {
@@ -497,7 +497,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 	  added_cursor=doc_e2=DocEntryNewBase(doc,
 		DOCT_CURSOR|doc_e->type&0xFFFFFF00,
 		doc_e->de_flags&~DOCEG_HAS_ARG,x,y,doc->page_line_num);
-	  MemCpy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
+	  MemCopy(&doc_e2->settings,&doc_e->settings,sizeof(CDocSettings));
 	  if (doc_e->type_u8==DOCT_TEXT && doc->cur_col>=k)
 	    QueueInsert(doc_e2,doc_e);
 	  else
@@ -1029,7 +1029,7 @@ rc_adjust_xy:
 	      recalc_flags&RECALCG_MASK==RECALCt_TO_SCRN &&
 	      !(doc_e->de_flags&DOCEF_DONT_DRAW)) {
 	  if (doc_e->aux_str &&
-		(!music.cur_song || StrCmp(music.cur_song,doc_e->aux_str))) {
+		(!music.cur_song || StrCompare(music.cur_song,doc_e->aux_str))) {
 	    Free(music.cur_song);
 	    MusicSettingsReset;
 	    music.cur_song=ZStrNew(doc_e->aux_str);
@@ -1116,7 +1116,7 @@ rc_skip:
 	doc_e2->x=x;
 	doc_e2->y=y;
 	doc_e2->page_line_num=doc->page_line_num;
-	MemCpy(&doc_e2->settings,s,sizeof(CDocSettings));
+	MemCopy(&doc_e2->settings,s,sizeof(CDocSettings));
 	doc_e2->type.u8[1]=cur_u8_attr;
 	doc_e2->de_flags=doc->flags
 	      &(DOCG_BL_IV_UL|DOCEF_WORD_WRAP|DOCEF_HIGHLIGHT) |
@@ -1149,7 +1149,7 @@ rc_skip:
   if (full_refresh) {
     if (doc->cur_entry==doc && recalc_flags&RECALCF_ADD_CURSOR) {
       doc_e2=DocEntryNewBase(doc,DOCT_CURSOR,,x,y,doc->page_line_num);
-      MemCpy(&doc_e2->settings,s,sizeof(CDocSettings));
+      MemCopy(&doc_e2->settings,s,sizeof(CDocSettings));
       QueueInsRev(doc_e2,doc);
     }
 
@@ -1167,7 +1167,7 @@ rc_skip:
       doc_e->x=x;
       doc_e->y=y;
       doc_e->page_line_num=doc->page_line_num;
-      MemCpy(&doc_e->settings,s,sizeof(CDocSettings));
+      MemCopy(&doc_e->settings,s,sizeof(CDocSettings));
       doc_e->type.u8[1]=cur_u8_attr;
       if (find_cursor) {
 	D=DocCharDist(doc,x,y);

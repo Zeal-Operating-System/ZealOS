@@ -287,7 +287,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Should Messages in PopUp queue get fwded to parent when task dies?
 
-* Import Intel datasheets so we can use links in $LK,"Code",A="FI:::/Kernel/Mem/PageTables.HC"$ for documentation.  I tried a PDF-to-text convertor and it wasn't acceptible.
+* Import Intel datasheets so we can use links in $LK,"Code",A="FI:::/Kernel/Memory/PageTables.HC"$ for documentation.  I tried a PDF-to-text convertor and it wasn't acceptible.
 
 * Switch stmt with sparse cases?  Maybe, ban sparse switch statements.
 

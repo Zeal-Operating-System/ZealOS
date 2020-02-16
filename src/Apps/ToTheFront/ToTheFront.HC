@@ -180,7 +180,7 @@ U0 ToTheFront()
       if (res=='GameOver') {
 	while (TRUE) {
 	  message_off_timeout=0;
-	  StrCpy(message_buf,"Game Over");
+	  StrCopy(message_buf,"Game Over");
 	  Sound;
 	  ch=GetChar(,FALSE);
 	  if (ch=='\n') {

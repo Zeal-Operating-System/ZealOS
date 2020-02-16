@@ -11,7 +11,7 @@ U8 *FileRead(U8 *filename,I64 *_size=NULL,I64 *_attr=NULL)
 	(tmph=HashFind(altname,zenith_task->hash_table,HTT_FILE))) {
     size=tmph->user_data1;
     res=MAlloc(size+1);
-    MemCpy(res,tmph->user_data0,size);
+    MemCopy(res,tmph->user_data0,size);
     res[size]=0; //Terminate
     attr=FileAttr(tmph->str,attr);
   } else {
@@ -42,7 +42,7 @@ U8 *FileRead(U8 *filename,I64 *_size=NULL,I64 *_attr=NULL)
       else
 	curname=altname;
       if (dirc=DirContextNew(curname)) {
-	while (!res && StrCmp(Fs->cur_dir,"/")) {
+	while (!res && StrCompare(Fs->cur_dir,"/")) {
 	  Cd("..");
 	  switch (Fs->cur_dv->fs_type) {
 	    case FSt_REDSEA:

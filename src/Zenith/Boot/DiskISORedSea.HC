@@ -31,7 +31,7 @@ U0 RedSeaISO9660Stage1(U8 *iso_filename,U8 *stage2_filename)
   CFile *out_file=NULL;
   U8	*stage1_buf=CAlloc(DVD_BOOT_LOADER_SIZE);
   if (FileFind(stage2_filename,&de) && (out_file=FOpen(iso_filename,"wc+"))) {
-    MemCpy(stage1_buf,BDVD_START,BDVD_END-BDVD_START);
+    MemCopy(stage1_buf,BDVD_START,BDVD_END-BDVD_START);
     *(BDVD_BLK_LO	-BDVD_START+stage1_buf)(U32 *)=de.clus>>2;
     *(BDVD_BLK_COUNT	-BDVD_START+stage1_buf)(U16 *)=
 	  (de.size+DVD_BLK_SIZE-1)>>(BLK_SIZE_BITS+2);
@@ -64,7 +64,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
       FBlkWrite(out_file,zero_buf,i,4);
 
     iso_pri->type=ISOT_PRI_VOL_DESC;
-    StrCpy(iso_pri->id,"CD001");
+    StrCopy(iso_pri->id,"CD001");
     iso_pri->version=1;
     FillU16Palindrome(&iso_pri->vol_set_size,1);
     FillU16Palindrome(&iso_pri->vol_seq_num,1);
@@ -72,19 +72,19 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
     FillU32Palindrome(&iso_pri->vol_space_size,iso_size);
     FillU32Palindrome(&iso_pri->root_dir_record,drive->root_clus);
     iso_pri->file_structure_version=1;
-    StrCpy(iso_pri->publisher_id,"ZenithOS RedSea");
+    StrCopy(iso_pri->publisher_id,"ZenithOS RedSea");
 
-    MemCpy(iso_sup,iso_pri,DVD_BLK_SIZE);
+    MemCopy(iso_sup,iso_pri,DVD_BLK_SIZE);
     iso_sup->type=ISOT_SUPPLEMENTARY_DESC;
 
     iso_boot->type=ISOT_BOOT_RECORD;
-    StrCpy(iso_boot->id,"CD001");
+    StrCopy(iso_boot->id,"CD001");
     iso_boot->version=1;
-    StrCpy(iso_boot(U8 *)+7,"EL TORITO SPECIFICATION");
+    StrCopy(iso_boot(U8 *)+7,"EL TORITO SPECIFICATION");
 
     FBlkWrite(out_file,iso_pri,16<<2,4);
     iso_term->type=ISOT_TERMINATOR;
-    StrCpy(iso_term->id,"CD001");
+    StrCopy(iso_term->id,"CD001");
     iso_term->version=1;
 
     d=iso_boot(U8 *)+0x47;
@@ -95,7 +95,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
     FBlkWrite(out_file,iso_term,19<<2,4);
 
     et->w[0]=1;
-    StrCpy(&et->w[2],"ZenithOS");
+    StrCopy(&et->w[2],"ZenithOS");
     et->w[15]=0xAA55;
     j=0;
     for (i=0;i<16;i++) //Checksum
@@ -155,7 +155,7 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
       i=StrLen(src_dir);
       if (i!=3)	//If not root
 	i++;	//Skip slash
-      StrCpy(stage2_filename+3,stage2_filename+i);
+      StrCopy(stage2_filename+3,stage2_filename+i);
     } else
       stage2_filename=NULL;
     tmpde=FilesFind(src_dir,FUF_RECURSE);

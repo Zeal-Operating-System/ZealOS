@@ -26,7 +26,7 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
   CDC *img;
   CD3I32 *p,*p2;
   CGrSym old_sym;
-  MemCpy(&old_sym,&dc->sym,sizeof(CGrSym));
+  MemCopy(&old_sym,&dc->sym,sizeof(CGrSym));
   if (dc->flags & DCF_LOCATE_NEAREST)
     dc->nearest_dist=I64_MAX;
   while (tmpg->type&SPG_TYPE_MASK) {
@@ -169,7 +169,7 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
 	break;
       start:
 	p2=p=MAlloc(tmpg->nu.num*sizeof(CD3I32));
-	MemCpy(p,&tmpg->nu.u,tmpg->nu.num*sizeof(CD3I32));
+	MemCopy(p,&tmpg->nu.u,tmpg->nu.num*sizeof(CD3I32));
 	for (i=0;i<tmpg->nu.num;i++,p2++) {
 	  p2->x+=x;
 	  p2->y+=y;
@@ -192,7 +192,7 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
 	break;
       case SPT_MESH:
 	p2=p=MAlloc(tmpg->mu.vertex_count*sizeof(CD3I32));
-	MemCpy(p,&tmpg->mu.u,tmpg->mu.vertex_count*sizeof(CD3I32));
+	MemCopy(p,&tmpg->mu.u,tmpg->mu.vertex_count*sizeof(CD3I32));
 	for (i=0;i<tmpg->mu.vertex_count;i++,p2++) {
 	  p2->x+=x;
 	  p2->y+=y;
@@ -216,7 +216,7 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
 	  z1=tmpg->pmu.z+z;
 	}
 	p2=p=MAlloc(tmpg->pmu.vertex_count*sizeof(CD3I32));
-	MemCpy(p,&tmpg->pmu.u,tmpg->pmu.vertex_count*sizeof(CD3I32));
+	MemCopy(p,&tmpg->pmu.u,tmpg->pmu.vertex_count*sizeof(CD3I32));
 	for (i=0;i<tmpg->pmu.vertex_count;i++,p2++) {
 	  p2->x+=x1;
 	  p2->y+=y1;
@@ -235,7 +235,7 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
     if (just_one_elem) break;
     tmpg(U8 *)+=SpriteElemSize(tmpg);
   }
-  MemCpy(&dc->sym,&old_sym,sizeof(CGrSym));
+  MemCopy(&dc->sym,&old_sym,sizeof(CGrSym));
   dc->color=old_color;
   dc->thick=old_pen_width;
   dc->flags=dc->flags&~(DCF_SYMMETRY|DCF_TRANSFORMATION) |
@@ -257,7 +257,7 @@ public U0 Sprite3Mat4x4B(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,I64 *m)
 {//Plot rotated by matrix.
   I64 r[16],*old_r=dc->r,new_m[16],
 	old_flags=dc->flags&DCF_TRANSFORMATION;
-  MemCpy(new_m,m,16*sizeof(I64));
+  MemCopy(new_m,m,16*sizeof(I64));
   dc->flags|=DCF_TRANSFORMATION;
   Mat4x4TranslationAdd(new_m,x,y,z);
   dc->r=Mat4x4MulMat4x4Equ(r,old_r,new_m);
@@ -333,11 +333,11 @@ public U8 *SpriteInterpolate(F64 t,U8 *elems0,U8 *elems1)
   if (t<0.5) {
     i=SpriteSize(elems0),
 	  res=MAlloc(i);
-    MemCpy(res,elems0,i);
+    MemCopy(res,elems0,i);
   } else {
     i=SpriteSize(elems1),
 	  res=MAlloc(i);
-    MemCpy(res,elems1,i);
+    MemCopy(res,elems1,i);
   }
   tmpgr=res-offset(CSprite.start);
   while (tmpg0->type&SPG_TYPE_MASK) {
@@ -447,7 +447,7 @@ public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *format=NULL)
   tmpb=CAlloc(sizeof(CDocBin),doc->mem_task);
   tmpb->size=size;
   tmpb->data=MAlloc(size,doc->mem_task);
-  MemCpy(tmpb->data,elems,size);
+  MemCopy(tmpb->data,elems,size);
   tmpb->num=doc->cur_bin_num;
   tmpb->use_count=1;
   QueueInsert(tmpb,doc->bin_head.last);

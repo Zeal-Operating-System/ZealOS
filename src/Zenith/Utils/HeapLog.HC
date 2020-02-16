@@ -127,7 +127,7 @@ public U0 HeapLogAddrRep(Bool leave_it=OFF)
     tmphl=heaplog_head[i].next;
     while (tmphl!=&heaplog_head[i]) {
 //Take snapshot in case modified. (while we work)
-      MemCpy(&hl,tmphl,sizeof(CHeapLog));
+      MemCopy(&hl,tmphl,sizeof(CHeapLog));
       "$$PURPLE$$%08X$$FG$$%08X",MSize(hl.addr),hl.addr;
       for (j=0;j<HL_CALLER_DEPTH;j++)
 	"%P",hl.caller[j];
@@ -164,7 +164,7 @@ public U0 HeapLogSizeRep(Bool leave_it=OFF)
     tmphla=heaplog_head[i].next;
     while (tmphla!=&heaplog_head[i]) {
 //Take snapshot in case modified. (while we work)
-      MemCpy(&hla,tmphla,sizeof(CHeapLog));
+      MemCopy(&hla,tmphla,sizeof(CHeapLog));
       k=(MSize(hla.addr)>>3+hla.caller[0])&(HL_HASH_SIZE-1);
       tmphls=size_head[k].next;
       while (tmphls!=&size_head[k]) {
@@ -179,7 +179,7 @@ hl_next:
 	tmphls=tmphls->next;
       }
       tmphls=MAlloc(sizeof(CHeapLog),heaplog_hc);
-      MemCpy(tmphls,&hla,sizeof(CHeapLog));
+      MemCopy(tmphls,&hla,sizeof(CHeapLog));
       tmphls->count=1;
       tmphls->size=MSize(hla.addr);
       QueueInsert(tmphls,size_head[k].last);

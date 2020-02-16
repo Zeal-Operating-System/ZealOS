@@ -55,8 +55,8 @@ CDocEntry *DocEntryNewTag(CDoc *doc,CDocEntry *doc_ce,U8 *tag)
   res->de_flags=doc_ce->de_flags; //Override
   res->max_col=l;
   res->tag=MAlloc(l+1,doc->mem_task);
-  MemCpy(res->tag,tag,l+1);
-  MemCpy(&res->settings,&doc_ce->settings,sizeof(CDocSettings));
+  MemCopy(res->tag,tag,l+1);
+  MemCopy(&res->settings,&doc_ce->settings,sizeof(CDocSettings));
   return res;
 }
 
@@ -205,7 +205,7 @@ public U0 DocInsEntry(CDoc *doc,CDocEntry *doc_e)
   doc_e->x=doc_ce->x;
   doc_e->y=doc_ce->y;
   doc_e->page_line_num=doc_ce->page_line_num;
-  MemCpy(&doc_e->settings,&doc_ce->settings,sizeof(CDocSettings));
+  MemCopy(&doc_e->settings,&doc_ce->settings,sizeof(CDocSettings));
   if (doc->cur_col>0 &&
 	doc_ce->type_u8==DOCT_TEXT &&
 	!(doc_ce->de_flags&(DOCEF_TAG_CB|DOCEF_DEFINE|DOCEF_AUX_STR|
@@ -301,7 +301,7 @@ public U0 DocReset(CDoc *doc,Bool is_old)
   doc_e->min_col=0;
   doc_e->max_col=0;
   doc_e->page_line_num=doc->page_line_num;
-  MemCpy(&doc_e->settings,s,sizeof(CDocSettings));
+  MemCopy(&doc_e->settings,s,sizeof(CDocSettings));
 
   DocTop(doc);
   if (unlock)
@@ -366,9 +366,9 @@ public CDoc *DocNew(U8 *filename=NULL,CTask *task=NULL)
   if (!task) task=Fs;
   doc=CAlloc(sizeof(CDoc),task);
   if (filename)
-    StrCpy(doc->filename.name,filename);
+    StrCopy(doc->filename.name,filename);
   else
-    StrCpy(doc->filename.name,blkdev.tmp_filename);
+    StrCopy(doc->filename.name,blkdev.tmp_filename);
   doc->find_replace=CAlloc(sizeof(CEdFindText),task);
   doc->find_replace->scan_fwd=TRUE;
   doc->find_replace->match_case=TRUE;

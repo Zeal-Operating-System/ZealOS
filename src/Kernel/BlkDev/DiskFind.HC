@@ -92,7 +92,7 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
 	  PrintErr("File System Not Supported\n");
       }
       if (res && _de) {
-	if (StrCmp(Fs->cur_dir,"/"))
+	if (StrCompare(Fs->cur_dir,"/"))
 	  full_name=MStrPrint("%C:%s/%s",
 		Drive2Letter(Fs->cur_dv),Fs->cur_dir,de.name);
 	else
@@ -112,7 +112,7 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
     else {
       Silent(old_silent);
       cur_dir_clus=Name2DirClus(dirc->drive,Fs->cur_dir);
-      while (!res && StrCmp(Fs->cur_dir,"/")) {
+      while (!res && StrCompare(Fs->cur_dir,"/")) {
 	Cd("..");
 	cur_dir_clus=Name2DirClus(dirc->drive,Fs->cur_dir);
 	switch (dirc->drive->fs_type) {
@@ -129,7 +129,7 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
 	}
       }
       if (res && _de) {
-	if (StrCmp(Fs->cur_dir,"/"))
+	if (StrCompare(Fs->cur_dir,"/"))
 	  full_name=MStrPrint("%C:%s/%s",
 		Drive2Letter(Fs->cur_dv),Fs->cur_dir,de.name);
 	else
@@ -141,7 +141,7 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
   }
   if (_de) {
     if (res) {
-      MemCpy(_de,&de,sizeof(CDirEntry));
+      MemCopy(_de,&de,sizeof(CDirEntry));
       _de->full_name=full_name;
     } else
       MemSet(_de,0,sizeof(CDirEntry));

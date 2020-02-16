@@ -18,7 +18,7 @@ public Bool DocTreeFind(CDoc *haystack_doc,U8 *needle_path,
 	if (doc_e->type_u8==DOCT_INDENT)
 	  i+=doc_e->attr;
 	else if (i==k && doc_e->de_flags&DOCEF_TREE &&
-	      !StrCmp(doc_e->tag+3,st2)) {
+	      !StrCompare(doc_e->tag+3,st2)) {
 	  if (*st1)
 	    break;
 	  else {
@@ -88,7 +88,7 @@ public Bool DocTreeMake(CDoc *doc,U8 *path)
 	    goto mt_done;
 	  }
 	} else if (i==k && doc_e->de_flags&DOCEF_TREE &&
-	      !StrCmp(doc_e->tag+3,st2)) {
+	      !StrCompare(doc_e->tag+3,st2)) {
 	  Free(st3);
 	  st3=StrNew(st1);
 	  j=i;

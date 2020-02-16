@@ -6,7 +6,7 @@ U0 BlkWriteZero(CDrive *drive,I64 blk,I64 count)
   Bool show_progress;
   if (count>ZERO_BUF_SIZE && drive->bd->type!=BDT_RAM) {
     progress1=0; progress1_max=count;
-    StrCpy(progress1_desc,"Zeroing");
+    StrCopy(progress1_desc,"Zeroing");
     show_progress=TRUE;
   } else
     show_progress=FALSE;
@@ -45,7 +45,7 @@ Bool BlkRead(CDrive *drive,U8 *buf, I64 blk, I64 count)
     if (count>0) {
       switch (bd->type) {
 	case BDT_RAM:
-	  MemCpy(buf,bd->RAM_disk+blk<<BLK_SIZE_BITS,count<<BLK_SIZE_BITS);
+	  MemCopy(buf,bd->RAM_disk+blk<<BLK_SIZE_BITS,count<<BLK_SIZE_BITS);
 	  break;
 	case BDT_ISO_FILE_READ:
 	case BDT_ISO_FILE_WRITE:
@@ -85,7 +85,7 @@ Bool BlkWrite(CDrive *drive,U8 *buf, I64 blk, I64 count)
     if (count>0) {
       switch (bd->type) {
 	case BDT_RAM:
-	  MemCpy(bd->RAM_disk+blk<<BLK_SIZE_BITS,buf,count<<BLK_SIZE_BITS);
+	  MemCopy(bd->RAM_disk+blk<<BLK_SIZE_BITS,buf,count<<BLK_SIZE_BITS);
 	  break;
 	case BDT_ISO_FILE_READ:
 	case BDT_ISO_FILE_WRITE:

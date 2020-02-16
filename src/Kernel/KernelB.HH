@@ -163,9 +163,9 @@ public _extern _D3_UNIT CD3 *D3Unit(CD3 *d); //To unit vect
 public _extern _D3_ZERO CD3 *D3Zero(CD3 *dst); //To zero
 
 #help_index "Memory"
-public _extern _MEMCMP I64 MemCmp(
+public _extern _MEMCOMPARE I64 MemCompare(
 	U8 *ptr1,U8 *ptr2,I64 count); //Compare chunk of memory.
-public _extern _MEMCPY U8 *MemCpy(
+public _extern _MEMCOPY U8 *MemCopy(
 	U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes fwd.
 public _extern _MEMSET U8 *MemSet(
 	U8 *dst,I64 val,I64 count); //Set chunk of U8s to value.

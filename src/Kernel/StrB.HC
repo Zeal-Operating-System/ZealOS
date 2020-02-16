@@ -9,7 +9,7 @@ U8 *Tabs2Spaces(U8 *src)
 	dst[i]=CH_SPACE;
 	if (i>=l-2) {
 	  tmp=MAlloc(l<<1);
-	  MemCpy(tmp,dst,i+1);
+	  MemCopy(tmp,dst,i+1);
 	  Free(dst);
 	  l<<=1;
 	  dst=tmp;
@@ -20,7 +20,7 @@ U8 *Tabs2Spaces(U8 *src)
       dst[col]=ch;
       if (col>=l-2) {
 	tmp=MAlloc(l<<1);
-	MemCpy(tmp,dst,col+1);
+	MemCopy(tmp,dst,col+1);
 	Free(dst);
 	l<<=1;
 	dst=tmp;
@@ -51,7 +51,7 @@ U8 *ScaleIndent(U8 *src,F64 indent_scale_factor)
     *dst2++='\t';
   for (i=col&7;i>0;i--)
     *dst2++=CH_SPACE;
-  StrCpy(dst2,src);
+  StrCopy(dst2,src);
   return dst;
 }
 

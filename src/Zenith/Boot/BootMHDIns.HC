@@ -79,7 +79,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
 
   try {
     if (drv_list) {
-      StrCpy(buf,drv_list);
+      StrCopy(buf,drv_list);
       StrUtil(buf,SUF_TO_UPPER);
     } else {
       j=0;

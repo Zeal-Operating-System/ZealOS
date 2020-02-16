@@ -3,7 +3,7 @@ CTask *JukeReward(U8 *message)
   U8 *buf;
   CDoc *doc;
   CTask *res=Spawn(&SrvCmdLine,NULL,"Reward",,Fs);
-  StrCpy(res->task_title,"Reward");
+  StrCopy(res->task_title,"Reward");
   res->title_src=TTS_LOCKED_CONST;
 
   doc=DocNew(,res);
@@ -28,7 +28,7 @@ CTask *JukeReward(U8 *message)
 CTask *SingleSong(U8 *message,U8 *name)
 {
   CTask *task=Spawn(&SrvCmdLine,NULL,name,,Fs);
-  StrCpy(task->task_title,name);
+  StrCopy(task->task_title,name);
   task->title_src=TTS_LOCKED_CONST;
   TaskExe(task,Fs,";",1<<JOBf_WAKE_MASTER|1<<JOBf_FREE_ON_COMPLETE);
   WinHorz(task->win_left,task->win_left+50,task);

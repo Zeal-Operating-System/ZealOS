@@ -84,7 +84,7 @@ U8 *TOSLinkCvt2(U8 *filename,I64 line_num)
   U8 *res=NULL,*st;
   if (filename) {
     st=ExtChange(filename,"html");
-    if (st && StrLen(st)>3 && !StrNCmp(st+1,":/",2))
+    if (st && StrLen(st)>3 && !StrNCompare(st+1,":/",2))
       res=MStrPrint("http://www.templeos.org/Wb/%s#l%d",st+3,line_num);
     Free(st);
   }
@@ -94,7 +94,7 @@ U8 *TOSLinkCvt2(U8 *filename,I64 line_num)
 U8 *URLBibleGateway(U8 *src)
 {
   U8 buf[STR_LEN],*dst=buf;
-  if (!MemCmp(src,"BF:",3))
+  if (!MemCompare(src,"BF:",3))
     src+=3;
   while (*src) {
     if (*src==CH_SPACE || *src==',')
@@ -265,10 +265,10 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 	case DOCT_TEXT:
 	  if (doc_e->de_flags&DOCEF_HIGHLIGHT) {
 	    if (doc_e->last==doc_in)
-	      MemCpy(&doc_e->settings,&doc_in->settings_head,
+	      MemCopy(&doc_e->settings,&doc_in->settings_head,
 		    sizeof(CDocSettings));
 	    else
-	      MemCpy(&doc_e->settings,&doc_e->last->settings,
+	      MemCopy(&doc_e->settings,&doc_e->last->settings,
 		    sizeof(CDocSettings));
 	    src=hl=DocHighlight(doc_e,doc_e->tag,StrLen(doc_e->tag),
 		  doc_e->type&0xFF00);
@@ -377,7 +377,7 @@ public U0 ToHtml(U8 *_in_name,U8 *_out_name=NULL,U8 *html_header=NULL,
   doc_in=DocRead(in_name);
   doc_out=Doc2Html(doc_in,html_header,body_header,body_footer,html_footer,
 	line_anchors,link_cvt,line_nums);
-  StrCpy(&doc_out->filename.name,out_name);
+  StrCopy(&doc_out->filename.name,out_name);
 
   SettingsPop;
 

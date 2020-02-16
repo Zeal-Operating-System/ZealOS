@@ -155,7 +155,7 @@ U0 Morse()
       *dst=0;
       src=morse_list;
       while (*src) {
-	if (!StrCmp(src+1,buf)) {
+	if (!StrCompare(src+1,buf)) {
 	  "$$GREEN$$%C$$FG$$",*src;
 	  break;
 	} else
@@ -174,4 +174,3 @@ U0 Morse()
 }
 
 Morse;
-

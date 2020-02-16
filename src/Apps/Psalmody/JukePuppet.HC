@@ -50,7 +50,7 @@ U0 JukeSongPuppet(CTask *juke_task,I64 passes,I64 song_num,U8 *name)
   found=FALSE;
   task=Fs->next_task;
   while (task!=Fs) {
-    if (!StrCmp(task->task_title,name)) {
+    if (!StrCompare(task->task_title,name)) {
       found=TRUE;
       break;
     }

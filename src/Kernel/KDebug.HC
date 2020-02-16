@@ -123,7 +123,7 @@ U0 StackRep(CTask *task=NULL)
     addr=*rsp;
   else
     addr=task->rip;
-  MemCpy(my_rsp,rsp,STACK_REP_LEN*sizeof(U8 *));
+  MemCopy(my_rsp,rsp,STACK_REP_LEN*sizeof(U8 *));
   POPFD
   Fs->hash_table=task->hash_table;
   for (i=0;i<STACK_REP_LEN;i++) {

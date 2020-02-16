@@ -49,7 +49,7 @@ U0 Search(I64 dx,I64 dy)
       for (i=n;i>2;i--) {
 	buf[i]=0;
 	if ((ptr=ACDWordPtAt(buf)) && *ptr++==ACD_WORD_CHAR &&
-	      !StrICmp(ptr,buf)) {
+	      !StrICompare(ptr,buf)) {
 	  "%s ",buf;
 	}
       }
@@ -87,7 +87,7 @@ U0 CollectWords(I64 dx,I64 dy,I64 *_n)
 
 I64 WordsCompare(U8 *e1,U8 *e2)
 {
-  return StrCmp(e1,e2);
+  return StrCompare(e1,e2);
 }
 
 /*Format of word list entry:
@@ -113,11 +113,11 @@ U0 DisplayWords(I64 n)
       if (!*w2) {
 	if (StrLen(dict+1)>2) {
 	  k=i;
-	  while (k<n && !StrNICmp(word_ptrs[k++],dict+1,StrLen(dict+1)))
+	  while (k<n && !StrNICompare(word_ptrs[k++],dict+1,StrLen(dict+1)))
 	    "%s ",dict+1;
 	}
 	w2=dict+1;
-	while (!StrICmp(w2,dict+1))
+	while (!StrICompare(w2,dict+1))
 	  dict+=StrLen(dict+1)+4;
       } else
 	dict+=StrLen(dict+1)+4;

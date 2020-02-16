@@ -315,7 +315,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
     end:
       size=SpriteElemSize(&g)+offset(CSprite.start);
       res=MAlloc(size);
-      MemCpy(res,&g,size);
+      MemCopy(res,&g,size);
       break;
     case SPT_TEXT:
     case SPT_TEXT_BOX:
@@ -332,8 +332,8 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
       size=SpriteElemQueuedBaseSize(type);
       i=StrLen(st)+1;
       res=MAlloc(size+i);
-      MemCpy(res,&g,size);
-      MemCpy(res(U8 *)+size,st,i);
+      MemCopy(res,&g,size);
+      MemCopy(res(U8 *)+size,st,i);
       Free(st);
       break;
     case SPT_POLYLINE:
@@ -352,12 +352,12 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 	LexExcept(cc,"Expecting point at ");
       size=SpriteElemQueuedBaseSize(SPT_POLYLINE);
       res=MAlloc(size+g.nu.num*sizeof(CD2I32));
-      MemCpy(res,&g,size);
+      MemCopy(res,&g,size);
       ptr=&res->nu.u;
       tmpp=headp.next;
       while (tmpp!=&headp) {
 	tmpa1=tmpp->next;
-	MemCpy(ptr,&tmpp->p,sizeof(CD2I32));
+	MemCopy(ptr,&tmpp->p,sizeof(CD2I32));
 	ptr+=sizeof(CD2I32);
 	Free(tmpp);
 	tmpp=tmpa1;
@@ -392,12 +392,12 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 	else
 	  g.type=SPT_BSPLINE3;
       }
-      MemCpy(res,&g,size);
+      MemCopy(res,&g,size);
       ptr=&res->nu.u;
       tmpp=headp.next;
       while (tmpp!=&headp) {
 	tmpa1=tmpp->next;
-	MemCpy(ptr,&tmpp->p,sizeof(CD3I32));
+	MemCopy(ptr,&tmpp->p,sizeof(CD3I32));
 	ptr+=sizeof(CD3I32);
 	Free(tmpp);
 	tmpp=tmpa1;
@@ -422,7 +422,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
       g.type=SPT_POLYPT;
       size=SpriteElemQueuedBaseSize(SPT_POLYPT);
       res=CAlloc(size+(g.npu.num*3+7)>>3);
-      MemCpy(res,&g,size);
+      MemCopy(res,&g,size);
       ptr=&res->npu.u;
       for (i=0;i<g.npu.num;i++)
 	BFieldOrU32(ptr,i*3,QueueVectU8Get(tmpv,i));
@@ -458,7 +458,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
       g.type=SPT_BITMAP;
       size=SpriteElemQueuedBaseSize(SPT_BITMAP);
       res=CAlloc(size+num1);
-      MemCpy(res,&g,size);
+      MemCopy(res,&g,size);
       ptr=&res->pwhu.u;
       for (i=0;i<num1;i++)
 	*ptr++=QueueVectU8Get(tmpv,i);
@@ -533,12 +533,12 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
       }
       size=SpriteElemQueuedBaseSize(g.type);
       res=MAlloc(size+num1*sizeof(CD3I32)+num2*sizeof(CMeshTri));
-      MemCpy(res,&g,size);
+      MemCopy(res,&g,size);
       ptr=res(U8 *)+size;
       tmpp=headp.next;
       while (tmpp!=&headp) {
 	tmpa1=tmpp->next;
-	MemCpy(ptr,&tmpp->p,sizeof(CD3I32));
+	MemCopy(ptr,&tmpp->p,sizeof(CD3I32));
 	ptr+=sizeof(CD3I32);
 	Free(tmpp);
 	tmpp=tmpa1;
@@ -546,7 +546,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
       tmpt=headt.next;
       while (tmpt!=&headt) {
 	tmpt1=tmpt->next;
-	MemCpy(ptr,&tmpt->start,sizeof(CMeshTri));
+	MemCopy(ptr,&tmpt->start,sizeof(CMeshTri));
 	ptr+=sizeof(CMeshTri);
 	Free(tmpt);
 	tmpt=tmpt1;

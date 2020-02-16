@@ -101,7 +101,7 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
   data_col=ACSkipCrap(src,data_col);
   data_col=ACPriorWordInStr(src,buf1,data_col,256);
 
-  if (!ac.cur_word || StrCmp(ac.cur_word,buf) || force_refresh) {
+  if (!ac.cur_word || StrCompare(ac.cur_word,buf) || force_refresh) {
     st=ac.cur_word;
     ac.cur_word=ZStrNew(buf);
     Free(st);
@@ -110,7 +110,7 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
       for (i=0;i<=ac.hash_table->mask && tS<timeout_time;i++) {
 	tmpw=ac.hash_table->body[i];
 	while (tmpw) {
-	  if (!MemCmp(ac.cur_word,tmpw->str,StrLen(ac.cur_word)))
+	  if (!MemCompare(ac.cur_word,tmpw->str,StrLen(ac.cur_word)))
 	    ACFillInAdd(tmpw);
 	  tmpw=tmpw->next;
 	}

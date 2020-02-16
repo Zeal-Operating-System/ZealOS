@@ -27,7 +27,7 @@ Bool ISOInit(CDrive *drive,I64 blk)
 	    case ISOT_SUPPLEMENTARY_DESC:
 	      de=&iso->root_dir_record;
 	      drive->size=iso->vol_space_size.little*bd->blk_size>>BLK_SIZE_BITS;
-	      if (!StrCmp(iso->publisher_id,"ZenithOS RedSea")) {
+	      if (!StrCompare(iso->publisher_id,"ZenithOS RedSea")) {
 		drive->fs_type=FSt_REDSEA;
 		bd->drv_offset=drive->drv_offset=19<<2+drv_offset;
 		bd->max_blk=drive->size-1;
@@ -192,7 +192,7 @@ U0 DVDImageWrite(U8 dvd_drive_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   ATAPIWaitReady(bd,0);
 
   progress1=0; progress1_max=count;
-  StrCpy(progress1_desc,"Writing");
+  StrCopy(progress1_desc,"Writing");
   while (count>0) {
     if (count>COPY_BUF_BLKS)
       n=COPY_BUF_BLKS;
@@ -215,7 +215,7 @@ U0 DVDImageWrite(U8 dvd_drive_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   ATAPISync(bd);
 
   progress1=0; progress1_max=2;
-  StrCpy(progress1_desc,"Closing");
+  StrCopy(progress1_desc,"Closing");
   for (i=0;i<2;i++) {
     ATAPIClose(bd,0x100,i); //Close tracks
     progress1++;

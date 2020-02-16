@@ -276,7 +276,7 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
   if (eletype==SPT_INS_TRANSPARENT_SCRN_BITMAP)
     DCColorChange(img,bm_bkcolor);
   GrScaleZoom(i);
-  MemCpy(&res->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
+  MemCopy(&res->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
   DCDel(img);
   DCDel(dc3);
   dc2->thick=old_width;
@@ -574,7 +574,7 @@ U0 SMTextFamily(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,CDC *dc,
     tmpg->type=eletype;
     tmpg->ps.x1=x1-x;
     tmpg->ps.y1=y1-y;
-    StrCpy(tmpg->ps.st,st);
+    StrCopy(tmpg->ps.st,st);
     QueueInsert(tmpg,insert_pt->last);
     SpriteEdUpdate(doc,doc_ce,head);
     *_cur_elem_num+=1;
@@ -644,7 +644,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     QueueRemove(tmpg1);
     Free(tmpg1);
   }
-  MemCpy(&tmpg->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
+  MemCopy(&tmpg->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
 
   switch (i=SpriteBitMapEd(doc,doc_ce,dc,&xx1,&yy1,
 	&xx2,&yy2,&img,bm_bkcolor)) {
@@ -658,7 +658,7 @@ I64 SMBitMap(I64 eletype,CDoc *doc,CDocEntry *doc_ce,CSprite *head,
       tmpg->pwhu.height=yy2-yy1;
       tmpg->pwhu.x1=xx1-x;
       tmpg->pwhu.y1=yy1-y;
-      MemCpy(&tmpg->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
+      MemCopy(&tmpg->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
       break;
   }
   QueueInsert(tmpg,insert_pt->last);
@@ -692,7 +692,7 @@ U0 SMMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,I64 *_cur_elem_num)
   if (mesh=SpriteMeshEd(old_mesh,&size,TRUE)) {
     tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_MESH)-sizeof(I32)*2+size);
     tmpg->type=SPT_MESH;
-    MemCpy(&tmpg->mu.vertex_count,mesh,size);
+    MemCopy(&tmpg->mu.vertex_count,mesh,size);
     Free(mesh);
     QueueInsert(tmpg,insert_pt->last);
     SpriteEdUpdate(doc,doc_ce,head);
@@ -755,7 +755,7 @@ U0 SMShiftableMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,
   if (mesh=SpriteMeshEd(old_mesh,&size,TRUE)) {
     tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_SHIFTABLE_MESH)-sizeof(I32)*2+size);
     tmpg->type=SPT_SHIFTABLE_MESH;
-    MemCpy(&tmpg->pmu.vertex_count,mesh,size);
+    MemCopy(&tmpg->pmu.vertex_count,mesh,size);
     Free(mesh);
     tmpg->pmu.x=arg1-x;
     tmpg->pmu.y=arg2-y;
@@ -797,14 +797,14 @@ U0 SMTaskTitleSet(I64 eletype)
   Fs->title_src=TTS_CONST; //Violates TTS_LOCKED_CONST
   switch (eletype) {
     case SPT_INS_SCRN_BITMAP:
-      StrCpy(Fs->task_title,"Insert Screen BitMap");
+      StrCopy(Fs->task_title,"Insert Screen BitMap");
       break;
     case SPT_INS_TRANSPARENT_SCRN_BITMAP:
-      StrCpy(Fs->task_title,"Insert Transparent Screen BitMap");
+      StrCopy(Fs->task_title,"Insert Transparent Screen BitMap");
       break;
     default:
       if (eletype>=0)
-	StrCpy(Fs->task_title,DefineSub(eletype,"ST_SPRITE_ELEM_TYPES"));
+	StrCopy(Fs->task_title,DefineSub(eletype,"ST_SPRITE_ELEM_TYPES"));
   }
   Fs->border_src=BDS_CONST;
 }
@@ -839,7 +839,7 @@ I64 SpriteMainEd(CDoc *doc)
 	    -WIF_SELF_BORDER-WIF_SELF_GRAB_SCROLL;
       if (winmgr.fps<10)
 	doc_ce->de_flags|=DOCEF_DONT_DRAW;
-      StrCpy(Fs->task_title,old_task_title);
+      StrCopy(Fs->task_title,old_task_title);
       Fs->border_src=old_border_src;
       Fs->title_src =old_title_src;
 
@@ -1162,7 +1162,7 @@ ei_done:
   doc_ce->de_flags=old_de_flags;
   DCDel(dc);
   DCDel(dc2);
-  StrCpy(Fs->task_title,old_task_title);
+  StrCopy(Fs->task_title,old_task_title);
   Free(old_task_title);
   Fs->border_src=old_border_src;
   Fs->title_src =old_title_src;

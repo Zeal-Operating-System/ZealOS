@@ -187,8 +187,8 @@ Bool RedSeaFileFind(CDrive *drive,I64 cur_dir_clus,U8 *name,
 	else if (!(ptr->attr & RS_ATTR_DELETED) &&
 	      !(fuf_flags&FUF_JUST_DIRS && !(ptr->attr & RS_ATTR_DIR)) &&
 	      !(fuf_flags&FUF_JUST_FILES && ptr->attr & RS_ATTR_DIR) &&
-	      !StrCmp(dname,ptr->name)) {
-	  MemCpy(&_res->attr,&ptr->attr,CDIR_SIZE);
+	      !StrCompare(dname,ptr->name)) {
+	  MemCopy(&_res->attr,&ptr->attr,CDIR_SIZE);
 	  res=TRUE;
 	  goto rsff_done;
 	}
@@ -372,12 +372,12 @@ Bool RedSeaDirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain
     while (TRUE) {
       if (!(ch=*ptr->name)) {
 	if (!written)
-	  MemCpy(&ptr->start,&tmpde->start,CDIR_SIZE);
+	  MemCopy(&ptr->start,&tmpde->start,CDIR_SIZE);
 	if ((i+1)*CDIR_SIZE+j<<BLK_SIZE_BITS<dir_size)
 	  BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
 	else {
 	  buf2=CAlloc(dir_size+BLK_SIZE);
-	  MemCpy(buf2,buf,dir_size);
+	  MemCopy(buf2,buf,dir_size);
 	  RedSeaFreeClus(drive,cur_dir_clus,dir_size>>BLK_SIZE_BITS);
 	  dir_size+=BLK_SIZE;
 	  c=ClusAlloc(drive,0,dir_size>>BLK_SIZE_BITS,TRUE);
@@ -416,17 +416,17 @@ Bool RedSeaDirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain
 	break;
       } else if (ptr->attr & RS_ATTR_DELETED) {
 	if (!written) {
-	  MemCpy(&ptr->start,&tmpde->start,CDIR_SIZE);
+	  MemCopy(&ptr->start,&tmpde->start,CDIR_SIZE);
 	  BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
 	  written=TRUE;
 	}
       } else {
-	if (!StrCmp(tmpde->name,ptr->name)) {
+	if (!StrCompare(tmpde->name,ptr->name)) {
 	  if (free_old_chain)
 	    RedSeaFreeClus(drive,ptr->clus,
 		  (ptr->size+BLK_SIZE-1)>>BLK_SIZE_BITS);
 	  if (!written)
-	    MemCpy(&ptr->start,&tmpde->start,CDIR_SIZE);
+	    MemCopy(&ptr->start,&tmpde->start,CDIR_SIZE);
 	  else
 	    ptr->attr|=RS_ATTR_DELETED;
 	  BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
@@ -564,7 +564,7 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
 	break;
       else if (!(ptr->attr & RS_ATTR_DELETED)) {
 	tmpde=CAlloc(sizeof(CDirEntry));
-	MemCpy(&tmpde->start,&ptr->start,CDIR_SIZE);
+	MemCopy(&tmpde->start,&ptr->start,CDIR_SIZE);
 	tmpde->parent=parent;
 	if (Bt(&fuf_flags,FUf_RECURSE) && tmpde->attr&RS_ATTR_DIR &&
 	      *tmpde->name!='.') {
@@ -611,7 +611,7 @@ Bool RedSeaMkDir(CDrive *drive,U8 *cur_dir,U8 *name,I64 entry_count)
     unlock_break=BreakLock;
     c=FileWrite(name,buf,size,0,RS_ATTR_DIR);
     d_native->attr=RS_ATTR_DIR|RS_ATTR_CONTIGUOUS;
-    StrCpy(d_native->name,name);
+    StrCopy(d_native->name,name);
     d_native->clus=c;
     d_native->size=size;
     d_native->datetime=Now;

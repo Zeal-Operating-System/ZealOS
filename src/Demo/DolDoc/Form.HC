@@ -22,7 +22,7 @@ U0 FormDemo()
   fds.num3=0x1234;
   fds.num4=-567;
   fds.type=1;
-  StrCpy(&fds.name,"John");
+  StrCopy(&fds.name,"John");
   fds.address1=StrNew("1234 Pine St.");
   fds.address2=NULL;	//Init to NULL if empty.
   fds.datetime=Now;

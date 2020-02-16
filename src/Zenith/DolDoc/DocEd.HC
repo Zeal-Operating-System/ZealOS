@@ -62,9 +62,9 @@ U8 *EdMoreCB(CDoc *,CDocEntry *doc_e,CTask *mem_task)
   CDoc *doc=doc_e->user_data;
   U8 *st=MAlloc(8,mem_task);
   if (doc->flags&DOCF_MORE)
-    StrCpy(st,"MoreÄ");
+    StrCopy(st,"MoreÄ");
   else
-    StrCpy(st,"ÄÄÄÄÄ");
+    StrCopy(st,"ÄÄÄÄÄ");
   return st;
 }
 
@@ -107,7 +107,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
   old_task_title=StrNew(Fs->task_title);
   if (Fs->title_src!=TTS_LOCKED_CONST) {
     Fs->title_src=TTS_ED_FILENAME;
-    MemCpy(Fs->task_title,doc->filename.name,STR_LEN-1);
+    MemCopy(Fs->task_title,doc->filename.name,STR_LEN-1);
   }
   doc_e=DocPrint(bdoc,"$$DA-TRM-P+BD+RD+CX+IV,LEN=STR_LEN-1,"
 	"A=\"%%s...\",SCX=16$$");
@@ -189,7 +189,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
   Fs->text_attr  =old_attr;
   if (Fs->title_src!=TTS_LOCKED_CONST) {
     Fs->title_src  =old_title_src;
-    StrCpy(Fs->task_title,old_task_title);
+    StrCopy(Fs->task_title,old_task_title);
   }
   Free(old_task_title);
   DocDel(bdoc);

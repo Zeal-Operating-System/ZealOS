@@ -76,11 +76,11 @@ public U0 ProfRep(I64 filter_count=1,Bool leave_it=OFF)
 
       StrPrint(buf,"%p",rip);
       StrFirstRemove(buf,"+",buf2);
-      if (StrCmp(buf2,last_buf)) {
+      if (StrCompare(buf2,last_buf)) {
 	if (*last_buf && routine_total>=filter_count)
 	  "$$GREEN$$%6.2f%08X:%s\n$$FG$$",100*routine_total/total_time,
 		routine_total,last_buf;
-	StrCpy(last_buf,buf2);
+	StrCopy(last_buf,buf2);
 	routine_total=0;
       }
       routine_total+=hits;

@@ -13,7 +13,7 @@ public U0 ACDWordsLoad()
     in_start=in_ptr;
     Free(acd.word_list);
     acd.word_list=ZMAlloc(size);
-    MemCpy(acd.word_list,in_start,size);
+    MemCopy(acd.word_list,in_start,size);
     acd.word_list_size=size;
 
     while (in_ptr<in_start+size) {
@@ -22,7 +22,7 @@ public U0 ACDWordsLoad()
       if (*in_ptr) {
 	st2=MStrUtil(in_ptr,SUF_TO_UPPER);
 	tmph=ZCAlloc(sizeof(CHashGeneric)+StrLen(st2)+1);
-	StrCpy(tmph+1,st2);
+	StrCopy(tmph+1,st2);
 	Free(st2);
 	in_ptr+=StrLen(in_ptr)+1;
 	tmph->str=tmph+1;

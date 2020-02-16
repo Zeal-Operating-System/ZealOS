@@ -105,7 +105,7 @@ U0 FunSegCacheAdd(CHash *tmps,U8 *addr)
     if (addr>=tmpfsc->limit)
       tmpfsc->limit=addr+1;
     i=MinI64(StrLen(tmps->str),FUN_SEG_CACHE_STR_LEN-1);
-    MemCpy(tmpfsc->str,tmps->str,i);
+    MemCopy(tmpfsc->str,tmps->str,i);
     tmpfsc->str[i]=0;
     tmpfsc->time_stamp=tS;
   }
@@ -157,17 +157,17 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
 	if (is_fun) {
 	  str2=MStrPrint("&%s",str);
 	  if (!field_len)
-	    StrCpy(buf,str2);
+	    StrCopy(buf,str2);
 	  else if (flags&PRTF_LEFT_JUSTIFY && StrLen(str2)<field_len)
-	    StrCpy(buf,str2);
+	    StrCopy(buf,str2);
 	  else
 	    StrPrint(buf,"%*ts",field_len,str2);
 	  Free(str2);
 	} else {
 	  if (!field_len)
-	    StrCpy(buf,str);
+	    StrCopy(buf,str);
 	  else if (flags&PRTF_LEFT_JUSTIFY && StrLen(str)<field_len)
-	    StrCpy(buf,str);
+	    StrCopy(buf,str);
 	  else
 	    StrPrint(buf,"%*ts",field_len,str);
 	}
@@ -196,7 +196,7 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
     }
   }
   if (flags&PRTF_COMMA)
-    StrCpy(buf,".");
+    StrCopy(buf,".");
   else if (flags&PRTF_TRUNCATE && field_len)
     StrPrint(buf,"%*tX",field_len,addr);
   else

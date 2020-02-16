@@ -129,7 +129,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 	  ClipDel;
 	  st1=FileNameAbs(BIBLE_FILENAME);
 	  st2=FileNameAbs(DocPut->filename.name);
-	  if (!StrCmp(st1,st2)) {
+	  if (!StrCompare(st1,st2)) {
 	    Free(st1);
 	    st1=BibleLine2Verse(DocPut->cur_entry->y+1,',');
 	    DocPrint(sys_clip_doc,"$$LK,\"BF:%s\"$$",st1);

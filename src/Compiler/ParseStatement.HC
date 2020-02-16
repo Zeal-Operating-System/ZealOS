@@ -193,7 +193,7 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   tmpm=cc->htc.fun->member_list_and_root;
   while (tmpm) {
     if (tmpm->flags & MLF_NO_UNUSED_WARN) {
-      if (tmpm->use_count>1&&StrCmp(tmpm->str,"_anon_"))
+      if (tmpm->use_count>1&&StrCompare(tmpm->str,"_anon_"))
 	PrintWarn("Unneeded no_warn\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
 	      cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 	      tmpm->str,cc->htc.fun->str);
@@ -811,7 +811,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
   COCPush(cc);
   QueueInit(&cc->coc.coc_next_misc);
 
-  MemCpy(htc,&cc->htc,sizeof(CLexHashTableContext));
+  MemCopy(htc,&cc->htc,sizeof(CLexHashTableContext));
   htc->old_flags=cc->flags;
   cc->htc.next=htc;
   cc->htc.fun=cc->htc.local_var_list=NULL;
@@ -825,7 +825,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
   while (cc->token && cc->token!='}')
     ExeCmdLine(cc);
 
-  MemCpy(&cc->htc,htc,sizeof(CLexHashTableContext));
+  MemCopy(&cc->htc,htc,sizeof(CLexHashTableContext));
   cc->flags=cc->flags&~CCF_EXE_BLK |
 	htc->old_flags & (CCF_ASM_EXPRESSIONS|CCF_EXE_BLK|CCF_AOT_COMPILE);
   Free(htc);

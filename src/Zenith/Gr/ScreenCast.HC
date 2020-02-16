@@ -33,7 +33,7 @@ public I64 GR2MV(U8 *print_format="VID%03d.MV",
       }
       src=DCSave(dc,&size);
       DCDel(dc);
-      MemCpy(dst,src,size);
+      MemCopy(dst,src,size);
       dst+=size;
       Free(src);
       if (fuf_flags&FUF_DEL) {

@@ -57,7 +57,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
   aotc->max_align_bits=0;
   aotc->org=INVALID_PTR;
 
-  MemCpy(htc,&cc->htc,sizeof(CLexHashTableContext));
+  MemCopy(htc,&cc->htc,sizeof(CLexHashTableContext));
   if (cc->htc.fun)
     cc->htc.glbl_hash_table=HashTableNew(128);
   else
@@ -133,7 +133,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
 	i=l;
 	if (i>AOT_BIN_BLK_SIZE)
 	  i=AOT_BIN_BLK_SIZE;
-	MemCpy(res->buf+j,tmpbin->body,i);
+	MemCopy(res->buf+j,tmpbin->body,i);
 	j+=i;
 	l-=i;
 	tmpbin=tmpbin->next;
@@ -146,7 +146,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
     res->org=aotc->org;
   }
   cc->aot=parent;
-  MemCpy(&cc->htc,htc,sizeof(CLexHashTableContext));
+  MemCopy(&cc->htc,htc,sizeof(CLexHashTableContext));
   Free(htc);
   Free(aotc);
   cc->aotc=old_aot;
@@ -471,7 +471,7 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drive_let=0
 	*ptr(U32 *)++=count;
 	if (tmphg->str) {
 	  i=StrLen(tmphg->str);
-	  MemCpy(ptr,tmphg->str,i+1);
+	  MemCopy(ptr,tmphg->str,i+1);
 	  Free(tmphg->str);
 	  ptr+=i+1;
 	} else
@@ -499,7 +499,7 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drive_let=0
 	*ptr(U32 *)++=tmpie->rip;
 	if (tmpie->str) {
 	  i=StrLen(tmpie->str);
-	  MemCpy(ptr,tmpie->str,i+1);
+	  MemCopy(ptr,tmpie->str,i+1);
 	  Free(tmpie->str);
 	  ptr+=i+1;
 	} else
@@ -521,7 +521,7 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drive_let=0
       *ptr(U32 *)++=tmpie->rip;
       if (tmpie->str) {
 	i=StrLen(tmpie->str);
-	MemCpy(ptr,tmpie->str,i+1);
+	MemCopy(ptr,tmpie->str,i+1);
 	Free(tmpie->str);
 	ptr+=i+1;
       } else
@@ -545,8 +545,8 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drive_let=0
     bfh->module_align_bits=tmpaot->max_align_bits;
     bfh->patch_table_offset=sizeof(CBinFile)+aot_U8s;
     bfh->file_size=size;
-    MemCpy(bfh(U8 *)+sizeof(CBinFile),tmpaot->buf,aot_U8s);
-    MemCpy(bfh(U8 *)+sizeof(CBinFile)+aot_U8s,patch_table,
+    MemCopy(bfh(U8 *)+sizeof(CBinFile),tmpaot->buf,aot_U8s);
+    MemCopy(bfh(U8 *)+sizeof(CBinFile)+aot_U8s,patch_table,
 	  size-aot_U8s-sizeof(CBinFile));
     Free(fbuf2);
     if (out_name)
@@ -582,7 +582,7 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
     if (htc) {
       cc->flags=cc->flags &~CCF_ASM_EXPRESSIONS |
 	    htc->old_flags&CCF_ASM_EXPRESSIONS;
-      MemCpy(&cc->htc,htc,sizeof(CLexHashTableContext));
+      MemCopy(&cc->htc,htc,sizeof(CLexHashTableContext));
     }
   }
   QueueInsert(cc,Fs->last_cc);

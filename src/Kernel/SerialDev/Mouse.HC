@@ -196,7 +196,7 @@ U0 MouseHardSpeedSet()
 U0 MouseHardSetPre()
 {
   I64 old_timestamp=mouse_hard_last.timestamp;
-  MemCpy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
+  MemCopy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
   mouse_hard_last.timestamp=old_timestamp;
 }
 
@@ -363,5 +363,5 @@ U0 KbdMouseInit()
   mouse_hard.prescale.z=0/mouse_hard.scale.z;
   mouse_hard.pos.x=GR_WIDTH>>1;
   mouse_hard.pos.y=GR_HEIGHT>>1;
-  MemCpy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
+  MemCopy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
 }

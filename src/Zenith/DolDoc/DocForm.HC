@@ -90,11 +90,11 @@ U0 DocDataFormat(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
 	  doc_e->len=MSize(doc_e->data)-2;
 	}
 	if (doc_e->len+doc_e->min_col>i)
-	  MemCpy(doc_e->tag,ptr,i+1);
+	  MemCopy(doc_e->tag,ptr,i+1);
 	else {
 	  ptr2=MAlloc(i+8,doc->mem_task);
 	  doc_e->len=MSize(ptr2)-doc_e->min_col-2;	 //See $LK,"DataTagWidth",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$
-	  MemCpy(ptr2,ptr,i+1);
+	  MemCopy(ptr2,ptr,i+1);
 	  Free(doc_e->tag);
 	  doc_e->tag=ptr2;
 	}
@@ -153,7 +153,7 @@ U0 DocDataScan(CDoc *doc,CDocEntry *doc_e)
       } else if (RT_I64<=doc_e->raw_type<=RT_UF64) {
 	if (doc_e->de_flags & DOCEF_REMALLOC_DATA) {
 	  ptr=MAlloc(i-doc_e->min_col+8,doc->mem_task);
-	  MemCpy(ptr,doc_e->tag+doc_e->min_col,i-doc_e->min_col+1);
+	  MemCopy(ptr,doc_e->tag+doc_e->min_col,i-doc_e->min_col+1);
 	  Free(doc_e->data);
 	  doc_e->data=ptr;
 	  doc_e->len=MSize(ptr)-1;

@@ -30,13 +30,13 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 	      DOCT_TEXT|doc->settings_head.default_text_attr<<8);
 	if (doc->flags & DOCF_NO_CURSOR) {
 	  src=MAlloc(j+1);
-	  MemCpy(src,ptr2,j+1);
+	  MemCopy(src,ptr2,j+1);
 	  StrUtil(src,SUF_REM_CTRL_CHARS);
 	  j=StrLen(src);
 	} else
 	  src=ptr2;
 	doc_e->tag=MAlloc(j+1,doc->mem_task);
-	MemCpy(doc_e->tag,src,j+1);
+	MemCopy(doc_e->tag,src,j+1);
 	doc_e->max_col=j;
 	DocInsEntry(doc,doc_e);
 	if (doc->flags & DOCF_NO_CURSOR)
@@ -49,7 +49,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 	      DOCT_TEXT|doc->settings_head.default_text_attr<<8);
 	if (doc->flags & DOCF_NO_CURSOR) {
 	  src=MAlloc(j+1);
-	  MemCpy(src,ptr2,j+1);
+	  MemCopy(src,ptr2,j+1);
 	  ptr3=src;
 	  ptr4=src;
 	  while (*ptr3)
@@ -62,7 +62,7 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
 	} else
 	  src=ptr2;
 	doc_e->tag=MAlloc(j+1,doc->mem_task);
-	MemCpy(doc_e->tag,src,j+1);
+	MemCopy(doc_e->tag,src,j+1);
 	doc_e->max_col=j;
 	DocInsEntry(doc,doc_e);
 	if (doc->flags & DOCF_NO_CURSOR)

@@ -60,19 +60,19 @@ U0 FMMarkUncollapsed(CDoc *doc,CFMUncollapsedList *tmpc,
       tmpde=doc_e->user_data;
       tmpc1=tmpc;
       while (tmpc1) {
-	if (!StrCmp(tmpc1->name,tmpde->full_name)) {
+	if (!StrCompare(tmpc1->name,tmpde->full_name)) {
 	  doc_e->de_flags&=~DOCEF_CHECKED_COLLAPSED;
 	  break;
 	}
 	tmpc1=tmpc1->next;
       }
       if (cur_entry) {
-	if (!StrNCmp(cur_entry,tmpde->full_name,StrLen(tmpde->full_name))) {
+	if (!StrNCompare(cur_entry,tmpde->full_name,StrLen(tmpde->full_name))) {
 	  doc->cur_entry=doc_e;
 	  if (StrLen(tmpde->full_name)==StrLen(cur_entry))
 	    cur_entry=NULL;
 	} else if (next_entry) {
-	  if (!StrNCmp(next_entry,
+	  if (!StrNCompare(next_entry,
 		tmpde->full_name,StrLen(tmpde->full_name))) {
 	    doc->cur_entry=doc_e;
 	    if (StrLen(tmpde->full_name)==StrLen(next_entry))
@@ -83,12 +83,12 @@ U0 FMMarkUncollapsed(CDoc *doc,CFMUncollapsedList *tmpc,
     } else if (doc_e->type_u8==DOCT_MENU_VAL) {
       tmpde=doc_e->user_data;
       if (cur_entry) {
-	if (!StrNCmp(cur_entry,tmpde->full_name,StrLen(tmpde->full_name))) {
+	if (!StrNCompare(cur_entry,tmpde->full_name,StrLen(tmpde->full_name))) {
 	  doc->cur_entry=doc_e;
 	  if (StrLen(tmpde->full_name)==StrLen(cur_entry))
 	    cur_entry=NULL;
 	} else if (next_entry) {
-	  if (!StrNCmp(next_entry,
+	  if (!StrNCompare(next_entry,
 		tmpde->full_name,StrLen(tmpde->full_name))) {
 	    doc->cur_entry=doc_e;
 	    if (StrLen(tmpde->full_name)==StrLen(next_entry))
@@ -251,7 +251,7 @@ U0 FMRename(CDoc *doc)
     tmpde=doc_e->user_data;
     if (parent=tmpde->parent) {
       Cd(parent->full_name);
-      StrCpy(fn.name,tmpde->name);
+      StrCopy(fn.name,tmpde->name);
       if (DocForm(&fn)) {
 	Silent;
 	Move(tmpde->name,fn.name);
@@ -262,9 +262,9 @@ U0 FMRename(CDoc *doc)
     tmpde=doc_e->user_data;
     if (parent=tmpde->parent) {
       Cd(parent->full_name);
-      StrCpy(fn.name,tmpde->name);
+      StrCopy(fn.name,tmpde->name);
       if (DocForm(&fn)) {
-	if (StrCmp(tmpde->name,fn.name)) {
+	if (StrCompare(tmpde->name,fn.name)) {
 	  Silent;
 	  if (CopyTree(tmpde->name,fn.name))
 	    DelTree(tmpde->name);
@@ -652,7 +652,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 		    st=MStrPrint("%s/%s",tmpde1->full_name,tmpde->name);
 		  else
 		    st=MStrPrint("%s%s",tmpde1->full_name,tmpde->name);
-		  if (StrCmp(tmpde->full_name,st)) {
+		  if (StrCompare(tmpde->full_name,st)) {
 		    Silent;
 		    CopyTree(tmpde->full_name,st);
 		    DelTree(tmpde->full_name);

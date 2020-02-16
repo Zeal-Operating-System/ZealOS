@@ -104,7 +104,7 @@ U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 	else if (type!=RT_F64 &&
 	      tmpc->raw_type==RT_F64)
 	  r(F64)=r;
-	MemCpy(dst,&r,tmpc->size);
+	MemCopy(dst,&r,tmpc->size);
       }
     }
     dst+=tmpc->size;
@@ -142,10 +142,10 @@ U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	  *_base=MAlloc(i);
 	else
 	  *_base=MAlloc(i,Fs->code_heap);
-	MemCpy(*_base,st,i);
+	MemCopy(*_base,st,i);
 	*_dst=*_base+i;
       } else {
-	MemCpy(*_dst,st,tmpad1->count);
+	MemCopy(*_dst,st,tmpad1->count);
 	*_dst+=tmpad1->count;
       }
       Free(st);
@@ -181,7 +181,7 @@ U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	tmpvi=head.next;
 	while (tmpvi!=&head) {
 	  tmpvi1=tmpvi->next;
-	  MemCpy(_b,&tmpvi->base,j);
+	  MemCopy(_b,&tmpvi->base,j);
 	  _b+=j;
 	  Free(tmpvi);
 	  tmpvi=tmpvi1;

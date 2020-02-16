@@ -12,7 +12,7 @@ U8 *FileExtRemove(U8 *src,U8 *dst=NULL)
   U8 *ptr;
   if (ptr=FileExtDot(src)) {
     if (dst)
-      StrCpy(dst,ptr+1);
+      StrCopy(dst,ptr+1);
     *ptr=0;
   } else if (dst)
     *dst=0;
@@ -43,11 +43,11 @@ Bool FilesFindMatch(U8 *_test_name,U8 *files_find_mask,I64 fuf_flags=0)
   U8 *mask1=MAlloc(mask_len+1),*mask2=MAlloc(mask_len+1),
 	*ptr,*test_name1,*test_name2;
   Bool res=FALSE;
-  StrCpy(mask1,files_find_mask);
+  StrCopy(mask1,files_find_mask);
   if (StrOcc(_test_name,'/')) {
     test_name1=MAlloc(tn_len+1);
     test_name2=MAlloc(tn_len+1);
-    StrCpy(test_name1,_test_name);
+    StrCopy(test_name1,_test_name);
     StrLastRemove(test_name1,"/",test_name2);
   } else {
     test_name1=NULL;
@@ -136,31 +136,31 @@ U8 *DirNameAbs(U8 *_dirname)
   maxlen=StrLen(buf)+1+StrLen(buf2)+1;
   buf3=MAlloc(maxlen);
   buf4=MAlloc(maxlen);
-  StrCpy(buf3,buf);
+  StrCopy(buf3,buf);
   while (*buf2) {
     StrFirstRemove(buf2,"/",buf4);
     if (!*buf4)
-      StrCpy(buf3,"/");
-    else if (!StrCmp(buf4,"..")) {
+      StrCopy(buf3,"/");
+    else if (!StrCompare(buf4,"..")) {
       StrLastRemove(buf3,"/");
       if (!*buf3)
-	StrCpy(buf3,"/");
-    } else if (!StrCmp(buf4,"~")) {
+	StrCopy(buf3,"/");
+    } else if (!StrCompare(buf4,"~")) {
       Free(buf3);
       buf3=MAlloc(StrLen(blkdev.home_dir+2)+1+StrLen(buf2)+1);
-      StrCpy(buf3,blkdev.home_dir+2);
+      StrCopy(buf3,blkdev.home_dir+2);
       *drv=*blkdev.home_dir;
-    } else if (!StrCmp(buf4,"."));
+    } else if (!StrCompare(buf4,"."));
     else if (*buf4) {
-      if (StrCmp(buf3,"/"))
+      if (StrCompare(buf3,"/"))
 	CatPrint(buf3,"/");
       CatPrint(buf3,buf4);
     }
   }
   Free(buf);
   res=MAlloc(StrLen(buf3)+3);
-  StrCpy(res,drv);
-  StrCpy(res+2,buf3);
+  StrCopy(res,drv);
+  StrCopy(res+2,buf3);
   Free(buf2);
   Free(buf3);
   Free(buf4);
@@ -182,11 +182,11 @@ U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0)
   buf_file=MAlloc(StrLen(free_filename)+1);
   StrLastRemove(buf,"/",buf_file);
   if (*filename=='/' && !*buf)
-    StrCpy(buf,"/");
+    StrCopy(buf,"/");
   buf_dir=DirNameAbs(free_buf);
   Free(free_buf);
   res=MAlloc(StrLen(buf_dir)+1+StrLen(buf_file)+1);
-  StrCpy(res,buf_dir);
+  StrCopy(res,buf_dir);
   if (res[StrLen(res)-1]!='/')
     CatPrint(res,"/");
   CatPrint(res,buf_file);
@@ -203,7 +203,7 @@ U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0)
 U8 *ExtChange(U8 *filename,U8 *extension)
 {//Change filename extension.
   U8 *res=MAlloc(StrLen(filename)+1+StrLen(extension)+1);
-  StrCpy(res,filename);
+  StrCopy(res,filename);
   if (FileExtDot(filename))
     FileExtRemove(res);
   return CatPrint(res,".%s",extension);
@@ -212,7 +212,7 @@ U8 *ExtChange(U8 *filename,U8 *extension)
 U8 *ExtDefault(U8 *filename,U8 *extension)
 {//Give extension if has none.
   U8 *res=MAlloc(StrLen(filename)+1+StrLen(extension)+1);
-  StrCpy(res,filename);
+  StrCopy(res,filename);
   if (!FileExtDot(filename))
     CatPrint(res,".%s",extension);
   return res;
@@ -223,7 +223,7 @@ CDirEntry *Cd2DirEntry(CDirEntry *tmpde,U8 *abs_name)
   I64 i;
   while (tmpde) {
     i=StrLen(tmpde->full_name);
-    if (StrNCmp(tmpde->full_name,abs_name,i)||
+    if (StrNCompare(tmpde->full_name,abs_name,i)||
 	  i && tmpde->full_name[i-1]!='/' && abs_name[i] && abs_name[i]!='/')
       tmpde=tmpde->next;
     else
@@ -287,7 +287,7 @@ U8 *DirCur(CTask *task=NULL,CTask *mem_task=NULL)
   st=MAlloc(StrLen(task->cur_dir)+3,mem_task);
   *st=Drive2Letter(task->cur_dv);
   st[1]=':';
-  StrCpy(st+2,task->cur_dir);
+  StrCopy(st+2,task->cur_dir);
   return st;
 }
 

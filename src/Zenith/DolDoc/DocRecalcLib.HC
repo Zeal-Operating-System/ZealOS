@@ -197,12 +197,12 @@ U0 DocUpdateTaskDocs(CTask *task)
   if (task->border_src==BDS_CUR_DRIVE && task->cur_dv)
     task->border_attr=DriveTextAttrGet(Drive2Letter(task->cur_dv));
   if (task->title_src==TTS_TASK_NAME)
-    StrCpy(task->task_title,task->task_name);
+    StrCopy(task->task_title,task->task_name);
   if ((doc=DocDisplay(task)) && !(doc->flags&DOCF_DONT_SHOW)) {
     if (task->border_src==BDS_ED_FILENAME_DRIVE)
       task->border_attr=DriveTextAttrGet(*doc->filename.name);
     if (task->title_src==TTS_ED_FILENAME)
-      MemCpy(task->task_title,doc->filename.name,STR_LEN-1);
+      MemCopy(task->task_title,doc->filename.name,STR_LEN-1);
     DocRecalc(doc,RECALCt_TO_SCRN|RECALCF_HAS_CURSOR);
   }
   if ((doc=DocBorder(task)) && !(doc->flags&DOCF_DONT_SHOW)) {

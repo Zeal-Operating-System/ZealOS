@@ -356,7 +356,7 @@ U0 EdRACollect(CDoc *doc,CRenum *head)
       ch=EdRAGetU8(doc);
       if (ch=='@') {
 	ch=EdRAGetU8(doc);
-	StrCpy(buf,"@@");
+	StrCopy(buf,"@@");
 	i=2;
 	while (ch>=0 && i<sizeof(CEdFindText.find_text)) {
 	  if (Bt(char_bmp_alpha_numeric,ch))
@@ -372,7 +372,7 @@ U0 EdRACollect(CDoc *doc,CRenum *head)
 	  if (ch==':') {
 	    ch=EdRAGetU8(doc);
 	    tmpr=MAlloc(sizeof(CRenum));
-	    StrCpy(tmpr->label,buf);
+	    StrCopy(tmpr->label,buf);
 	    QueueInsert(tmpr,head->last);
 	  }
 	}
@@ -496,7 +496,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	  Yield;
 	ToFileLine(dbg.fix_file_line,&st,&i);
 	LBtr(&sys_semas[SEMA_FIX],0);
-	if (!StrCmp(st,doc->filename.name))
+	if (!StrCompare(st,doc->filename.name))
 	  goto_line_num=i;
 	Free(st);
       }
@@ -533,7 +533,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 		  doc_ne=DocEntryNewBase(doc,
 			DOCT_TAB|doc->settings_head.default_text_attr<<8,,
 			x,doc_e->y,doc_e->page_line_num);
-		  MemCpy(&doc_ne->settings,
+		  MemCopy(&doc_ne->settings,
 			&doc_e->settings,sizeof(CDocSettings));
 		  QueueInsert(doc_ne,doc_e->last);
 		  i-=8;
@@ -548,7 +548,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 			x,doc_e->y,doc_e->page_line_num);
 		  doc_ne->tag=b;
 		  doc_ne->max_col=1;
-		  MemCpy(&doc_ne->settings,
+		  MemCopy(&doc_ne->settings,
 			&doc_e->settings,sizeof(CDocSettings));
 		  QueueInsert(doc_ne,doc_e->last);
 		}

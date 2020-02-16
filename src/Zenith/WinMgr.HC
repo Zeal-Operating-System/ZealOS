@@ -180,8 +180,8 @@ I64 WinQueueIPMessages(Bool que)
       }
     }
 
-    MemCpy(&mouse_last,&mouse,sizeof(CMouseStateGlobals));
-    MemCpy(&old_mouse,&mouse,sizeof(CMouseStateGlobals));
+    MemCopy(&mouse_last,&mouse,sizeof(CMouseStateGlobals));
+    MemCopy(&old_mouse,&mouse,sizeof(CMouseStateGlobals));
   }
   return message_code;
 }
@@ -278,7 +278,7 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
 	st=MStrPrint(screencast.print_format,cdt);
 	GRWrite(st,screencast.dc);
 	Free(st);
-      } else if (MemCmp(screencast.dc->body,
+      } else if (MemCompare(screencast.dc->body,
 	    screencast.dc2_alias->body,MSize(screencast.dc2_alias->body))) {
 	diff=DCDiff(screencast.dc,screencast.dc2_alias);
 	diff->cdt=cdt;

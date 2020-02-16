@@ -489,7 +489,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	  if (tmpa1->imm_or_off_present && tmpa1->indirect &&
 		tmpa1->reg1==REG_NONE) {
 	    cur.ModrM=cur.ModrM+5;
-	    MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+	    MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 	    cur.disp.U8_count=4;
 	    if (aotc->seg_size==64)
 	      cur.disp.imm_flag=FALSE;
@@ -518,7 +518,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 		  cur.REX|=2;
 		if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
 		  cur.has_REX=TRUE;
-		MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+		MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 		cur.disp.U8_count=4;
 	      } else {
 		cur.SIB|=(tmpa1->reg1&7)<<3+tmpa1->reg2&7;
@@ -540,7 +540,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	    }
 	    if (!ModrM_complete) {
 	      if (tmpa1->imm_or_off_present) {
-		MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+		MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 		if (!cur.disp.num.machine_code &&
 		      I8_MIN<=cur.disp.num.i<=I8_MAX) {
 		  cur.ModrM|=0x40;
@@ -567,7 +567,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	      ARGT_UIMM8<=arg1<=ARGT_UIMM64) {
 	  if (arg1==ARGT_IMM64 || arg2==ARGT_UIMM64)
 	    cur.REX|=8;
-	  MemCpy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
+	  MemCopy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
 	}
       } else if (argcount==2) {
 	if (best.U8_count!=255 && !found_second_possible && !best.is_default) {
@@ -657,7 +657,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 		cur.REX|=2;
 	      if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
 		cur.has_REX=TRUE;
-	      MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+	      MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 	      cur.disp.U8_count=4;
 	    } else {
 	      cur.SIB|=(tmpa1->reg1&7)<<3+tmpa1->reg2&7;
@@ -681,13 +681,13 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	    if (tmpa1->imm_or_off_present &&
 		  tmpa1->indirect && tmpa1->reg1==REG_NONE) {
 	      cur.ModrM=cur.ModrM&0xF8+5;
-	      MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+	      MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 	      cur.disp.U8_count=4;
 	      if (aotc->seg_size==64)
 		cur.disp.imm_flag=FALSE;
 	    } else {
 	      if (tmpa1->imm_or_off_present) {
-		MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+		MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 		if (!cur.disp.num.machine_code &&
 		      I8_MIN<=cur.disp.num.i<=I8_MAX) {
 		  cur.ModrM|=0x40;
@@ -711,14 +711,14 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	    }
 	  }
 	} else if (ARGT_MOFFS8<=arg1<=ARGT_MOFFS64) {
-	  MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
+	  MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 	  if (aotc->seg_size==16)
 	    cur.disp.U8_count=2;
 	  else
 	    cur.disp.U8_count=4;
 	  cur.has_addr_prefix=FALSE;
 	} else if (ARGT_MOFFS8<=arg2<=ARGT_MOFFS64) {
-	  MemCpy(&cur.disp.num,&tmpa2->num,sizeof(CAsmNum));
+	  MemCopy(&cur.disp.num,&tmpa2->num,sizeof(CAsmNum));
 	  if (aotc->seg_size==16)
 	    cur.disp.U8_count=2;
 	  else
@@ -726,7 +726,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	  cur.has_addr_prefix=FALSE;
 	} else if (ARGT_IMM8<=arg1<=ARGT_IMM64 ||
 	      ARGT_UIMM8<=arg1<=ARGT_UIMM64) {
-	  MemCpy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
+	  MemCopy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
 	  if (arg1==ARGT_IMM8 || arg1==ARGT_UIMM8) cur.imm.U8_count=1;
 	  else if (arg1==ARGT_IMM16 || arg1==ARGT_UIMM16) cur.imm.U8_count=2;
 	  else if (arg1==ARGT_IMM32 || arg1==ARGT_UIMM32) cur.imm.U8_count=4;
@@ -737,7 +737,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	}
 	if (ARGT_IMM8<=arg2<=ARGT_IMM64 ||
 	      ARGT_UIMM8<=arg2<=ARGT_UIMM64) {
-	  MemCpy(&cur.imm.num,&tmpa2->num,sizeof(CAsmNum));
+	  MemCopy(&cur.imm.num,&tmpa2->num,sizeof(CAsmNum));
 	  if (arg2==ARGT_IMM8 || arg2==ARGT_UIMM8) cur.imm.U8_count=1;
 	  else if (arg2==ARGT_IMM16 || arg2==ARGT_UIMM16) cur.imm.U8_count=2;
 	  else if (arg2==ARGT_IMM32 || arg2==ARGT_UIMM32) {
@@ -762,7 +762,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
       if (cur.U8_count<best.U8_count &&
 	    !(tmpins->flags & IEF_DONT_SWITCH_MODES &&
 	    (cur.has_addr_prefix || cur.has_operand_prefix)))
-	MemCpy(&best,&cur,sizeof(CAsmIns));
+	MemCopy(&best,&cur,sizeof(CAsmIns));
     }
   }
   if (best.U8_count<255) {

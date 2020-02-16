@@ -156,23 +156,23 @@ CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *default_t=NULL,CBgtEntry *default_
   CBgtEntry	*tmpb;
   MemSet(&t,0,sizeof(CBgtTemplate));
   if (default_t) {
-    MemCpy(&t.start,&default_t->start,BT_SIZE);
+    MemCopy(&t.start,&default_t->start,BT_SIZE);
     default_b=&default_t->b;
   } else {
     t.type=BT_INTERVAL;
     if (default_b)
       StrPrint(&t.start_date,"%D",default_b->date);
     else
-      StrCpy(&t.start_date,"[");
-    StrCpy(&t.end_date,"]");
+      StrCopy(&t.start_date,"[");
+    StrCopy(&t.end_date,"]");
   }
   while (TRUE)
     if (PopUpForm(&t) && ((t.type==BT_INTERVAL && t.period>0) ||
 	  t.type>BT_INTERVAL)) {
       if (tmpb=BgtEntryPrompt(default_b)) {
 	tmpt=CAlloc(sizeof(CBgtTemplate));
-	MemCpy(&tmpt->start,&t.start,BT_SIZE);
-	MemCpy(&tmpt->b,tmpb,sizeof(CBgtEntry));
+	MemCopy(&tmpt->start,&t.start,BT_SIZE);
+	MemCopy(&tmpt->b,tmpb,sizeof(CBgtEntry));
 	Free(tmpb);
 	return tmpt;
       }

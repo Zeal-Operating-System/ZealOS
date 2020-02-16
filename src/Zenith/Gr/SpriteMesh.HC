@@ -224,7 +224,7 @@ U0 MeshP0Capture(CMeshFrame *e)
 {
   CMeshEdVertex *tmpv=e->vertex_head.next;
   while (tmpv!=&e->vertex_head) {
-    MemCpy(&tmpv->p0,&tmpv->p,sizeof(CD3I32));
+    MemCopy(&tmpv->p0,&tmpv->p,sizeof(CD3I32));
     tmpv=tmpv->next;
   }
 }
@@ -458,7 +458,7 @@ U0 MPDrawIt(CMeshFrame *e)
   //We want e->dc's rotation matrix.
   dc->r=e->dc->r;
   dc->depth_buf=e->depth_buf;
-  MemCpy(&dc->ls,&e->dc->ls,sizeof(CD3I32));
+  MemCopy(&dc->ls,&e->dc->ls,sizeof(CD3I32));
 
   //... and translation (shift) vals.
   dc->x=e->dc->x;
@@ -613,7 +613,7 @@ U0 MeshClipCopy(CMeshFrame *e)
   while (tmpv!=&e->vertex_head) {
     if (tmpv->flags&VF_SEL) {
       tmpv->copy=tmpv2=ZCAlloc(sizeof(CMeshEdVertex));
-      MemCpy(&tmpv2->p,&tmpv->p,sizeof(CD3I32));
+      MemCopy(&tmpv2->p,&tmpv->p,sizeof(CD3I32));
       QueueInsert(tmpv2,sys_clip_vertex_head.last);
       tmpv->flags|=VF_COPIED;
       tmpv->flags&=~VF_SEL;
@@ -686,7 +686,7 @@ U0 MeshClipPaste(CMeshFrame *e)
   MeshTriSelAll(e,FALSE);
   while (tmpv2!=&sys_clip_vertex_head) {
     tmpv2->copy=tmpv=CAlloc(sizeof(CMeshEdVertex));
-    MemCpy(&tmpv->p,&tmpv2->p,sizeof(CD3I32));
+    MemCopy(&tmpv->p,&tmpv2->p,sizeof(CD3I32));
     QueueInsert(tmpv,e->vertex_head.last);
     tmpv->flags|=VF_SEL;
     tmpv2=tmpv2->next;
@@ -905,7 +905,7 @@ I32 *MeshSave(CMeshFrame *e,I64 *_size=NULL)
 
   e->vertex_count=0;
   while (tmpv!=&e->vertex_head) {
-    MemCpy(dst,&tmpv->start,offset(CMeshEdVertex.end)
+    MemCopy(dst,&tmpv->start,offset(CMeshEdVertex.end)
     -offset(CMeshEdVertex.start));
     dst+=offset(CMeshEdVertex.end)-offset(CMeshEdVertex.start);
     tmpv=tmpv->next;
@@ -913,7 +913,7 @@ I32 *MeshSave(CMeshFrame *e,I64 *_size=NULL)
 
   e->tri_count=0;
   while (tmpt!=&e->tri_head) {
-    MemCpy(dst,&tmpt->start,offset(CMeshEdTri.end)-offset(CMeshEdTri.start));
+    MemCopy(dst,&tmpt->start,offset(CMeshEdTri.end)-offset(CMeshEdTri.start));
     dst+=offset(CMeshEdTri.end)-offset(CMeshEdTri.start);
     tmpt=tmpt->next;
   }
@@ -979,7 +979,7 @@ $WW,0$*/
 
   if (c) {
     old_s=MAlloc(sizeof(CViewAngles));
-    MemCpy(old_s,c->state,sizeof(CViewAngles));
+    MemCopy(old_s,c->state,sizeof(CViewAngles));
   } else {
     c=ViewAnglesNew;
     old_s=NULL;
@@ -1500,7 +1500,7 @@ me_done:
   MeshCleanUp(&e);
   FramePtrDel("CMeshFrame");
   if (old_s) {
-    MemCpy(c->state,old_s,sizeof(CViewAngles));
+    MemCopy(c->state,old_s,sizeof(CViewAngles));
     Free(old_s);
   } else
     ViewAnglesDel;

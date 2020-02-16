@@ -56,7 +56,7 @@ public U8 *FileNameForm(U8 *default=NULL,I64 dof_flags=0,CTask *mem_task=NULL)
 {//Text filename form in cur win, not PopUp.
   CEdFileName fn;
   if (default)
-    StrCpy(fn.name,default);
+    StrCopy(fn.name,default);
   else
     *fn.name=0;
   if (DocForm(&fn,,dof_flags))

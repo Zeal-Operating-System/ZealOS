@@ -106,8 +106,8 @@ I64 CopyTree2(CDirEntry *tmpde,I64 src_dir_len,I64 dst_dir_len,U8 *dst_dir)
   I64 res=1;
   while (tmpde) {
     st=MAlloc(StrLen(tmpde->full_name)+dst_dir_len+2);
-    MemCpy(st,dst_dir,dst_dir_len);
-    StrCpy(st+dst_dir_len,tmpde->full_name+src_dir_len);
+    MemCopy(st,dst_dir,dst_dir_len);
+    StrCopy(st+dst_dir_len,tmpde->full_name+src_dir_len);
     if (tmpde->attr & RS_ATTR_DIR) {
       DirMk(st,LinkedListCount(tmpde->sub));
       res+=CopyTree2(tmpde->sub,src_dir_len,dst_dir_len,dst_dir);
@@ -131,7 +131,7 @@ public I64 CopyTree(U8 *src_files_find_mask,U8 *dst_files_find_mask,
   st1=DirNameAbs(src_files_find_mask);
   st2=DirNameAbs(dst_files_find_mask);
   i1=StrLen(st1);
-  if (!StrNCmp(st1,st2,i1) && (st2[i1]=='/' || !st2[i1]) ) {
+  if (!StrNCompare(st1,st2,i1) && (st2[i1]=='/' || !st2[i1]) ) {
     Free(st1);
     Free(st2);
     return 0;
@@ -211,13 +211,13 @@ U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
   U8 *cur_dir=StrNew(filename),buf[STR_LEN];
   if (FileFind(filename,&de,FUF_JUST_FILES)) {
     Free(de.full_name);
-    if (!StrCmp(attr,"+?"))
+    if (!StrCompare(attr,"+?"))
       "%-48ts%s\n",filename,StrPrintFlags(buf,Define("ST_FILE_ATTRS"),de.attr);
     else {
       StrFirstRemove(cur_dir,":");
       StrLastRemove(cur_dir,"/");
       if (!*cur_dir)
-	StrCpy(cur_dir,"/");
+	StrCopy(cur_dir,"/");
       ScanFlags(&de.attr,Define("ST_FILE_ATTRS"),attr);
       if (cdt==I64_MIN)
 	de.datetime=Now;

@@ -100,7 +100,7 @@ U0 DrawWinGrid(CDC *dc)
 U0 WinGrid(Bool val)
 {
   CGridGlobals last_grid;
-  MemCpy(&last_grid,&mouse_grid,sizeof(CGridGlobals));
+  MemCopy(&last_grid,&mouse_grid,sizeof(CGridGlobals));
   if (!val || PopUpForm(&mouse_grid)) {
     if (!val)
       GridInit;
@@ -108,7 +108,7 @@ U0 WinGrid(Bool val)
     mouse_hard.prescale.y*=last_grid.y_speed/mouse_grid.y_speed;
     mouse_hard.prescale.z*=last_grid.z_speed/mouse_grid.z_speed;
   } else
-    MemCpy(&mouse_grid,&last_grid,sizeof(CGridGlobals));
+    MemCopy(&mouse_grid,&last_grid,sizeof(CGridGlobals));
 }
 U0 CtrlAltG(I64 sc)
 {

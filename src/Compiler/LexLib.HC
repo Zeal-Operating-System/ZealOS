@@ -29,7 +29,7 @@ U0 LexPopRestore(CCompCtrl *cc)
     cc->flags|=CCF_USE_LAST_U16;
   else
     cc->flags&=~CCF_USE_LAST_U16;
-  MemCpy(cc->lex_include_stack(U8 *)+sizeof(U8 *),tmpf(U8 *)+sizeof(U8 *),
+  MemCopy(cc->lex_include_stack(U8 *)+sizeof(U8 *),tmpf(U8 *)+sizeof(U8 *),
 	sizeof(CLexFile)-sizeof(U8 *));
   cc->lex_prs_stack=tmpf->next;
   Free(tmpf);
@@ -46,7 +46,7 @@ I64 MemberMetaData(U8 *needle_str,CMemberList *haystack_member_list)
 {//Find meta data name, return meta data val. See $LK,"::/Demo/ClassMeta.HC"$.
   CMemberListMeta *meta=haystack_member_list->meta;
   while (meta) {
-    if (!StrCmp(meta->str,needle_str))
+    if (!StrCompare(meta->str,needle_str))
       return meta->user_data;
     meta=meta->next;
   }
@@ -57,7 +57,7 @@ CMemberListMeta *MemberMetaFind(U8 *needle_str,CMemberList *haystack_member_list
 {//Find meta data name, return meta data struct. See $LK,"::/Demo/ClassMeta.HC"$.
   CMemberListMeta *meta=haystack_member_list->meta;
   while (meta) {
-    if (!StrCmp(meta->str,needle_str))
+    if (!StrCompare(meta->str,needle_str))
       return meta;
     meta=meta->next;
   }
@@ -71,7 +71,7 @@ CMemberList *MemberFind(U8 *needle_str,CHashClass *haystack_class)
   do {
     tmpm=haystack_class->member_list_and_root;
     while (tmpm) {
-      if (!(i=StrCmp(tmpm->str,needle_str))) {
+      if (!(i=StrCompare(tmpm->str,needle_str))) {
 	tmpm->use_count++;
 	return tmpm;
       }
@@ -105,12 +105,12 @@ U0 MemberAdd(CCompCtrl *cc,CMemberList *tmpm,CHashClass *tmpc,I64 mode)
   U8 *st=tmpm->str;
   CMemberList **tmpm1,*tmpm2;
 
-  if (MemberFind(st,tmpc) && StrCmp(st,"pad") &&
-	StrCmp(st,"reserved") && StrCmp(st,"_anon_"))
+  if (MemberFind(st,tmpc) && StrCompare(st,"pad") &&
+	StrCompare(st,"reserved") && StrCompare(st,"_anon_"))
     LexExcept(cc,"Duplicate member at ");
   tmpm1=&tmpc->member_list_and_root;
   while (tmpm2=*tmpm1) {
-    if (StrCmp(tmpm2->str,st)<=0)
+    if (StrCompare(tmpm2->str,st)<=0)
       tmpm1=&tmpm2->left;
     else
       tmpm1=&tmpm2->right;
@@ -157,7 +157,7 @@ CMemberList *MemberListNew(I64 _reg)
 Bool  MemberListCmp(CMemberList *tmpm1,CMemberList *tmpm2,I64 count=I64_MAX)
 {
   while (tmpm1 && tmpm2 && count--) {
-    if (StrCmp(tmpm1->str,tmpm2->str) ||
+    if (StrCompare(tmpm1->str,tmpm2->str) ||
 	  tmpm1->member_class!=tmpm2->member_class ||
 	  tmpm1->member_class_base!=tmpm2->member_class_base)
       return FALSE;
@@ -166,7 +166,7 @@ Bool  MemberListCmp(CMemberList *tmpm1,CMemberList *tmpm2,I64 count=I64_MAX)
 	    tmpm2->flags&(MLF_DEFAULT_AVAILABLE|MLF_STR_DEFAULT_AVAILABLE))
 	return FALSE;
       if (tmpm1->flags&MLF_STR_DEFAULT_AVAILABLE) {
-	if (StrCmp(tmpm1->default_val,tmpm2->default_val))
+	if (StrCompare(tmpm1->default_val,tmpm2->default_val))
 	  return FALSE;
       } else if (tmpm1->default_val!=tmpm2->default_val)
 	return FALSE;
@@ -264,8 +264,8 @@ U8 *LexExtStr(CCompCtrl *cc,I64 *_size=NULL,Bool lex_next=TRUE)
       len=len1+len2-1;
       st=MAlloc(len);
       if (len1>1)
-	MemCpy(st,st1,len1-1);
-      MemCpy(st+len1-1,st2,len2);
+	MemCopy(st,st1,len1-1);
+      MemCopy(st+len1-1,st2,len2);
       Free(st1);
       Free(st2);
     }

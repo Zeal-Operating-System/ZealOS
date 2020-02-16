@@ -41,7 +41,7 @@ U0 BlkPoolsInit()
   else
     code_heap_limit=0x80000000;
 
-  i=code_heap_limit-SYS_16MEG_AREA_LIMIT; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Mem/PageTables.HC,RLf_16MEG_SYS_CODE_BP"$
+  i=code_heap_limit-SYS_16MEG_AREA_LIMIT; //See $LK,"RLf_16MEG_SYS_CODE_BP",A="FF:::/Kernel/Memory/PageTables.HC,RLf_16MEG_SYS_CODE_BP"$
   BlkPoolAdd(sys_code_bp,SYS_16MEG_AREA_LIMIT,i>>MEM_PAG_BITS);
   mem_heap_limit=i+SYS_16MEG_AREA_LIMIT-1;
 

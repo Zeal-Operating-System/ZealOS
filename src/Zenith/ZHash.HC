@@ -8,7 +8,7 @@ class CWho
 I64 HashEntriesCompare(CWho *h1,CWho *h2)
 {
   I64 i1,i2;
-  if (i1=StrCmp(h1->h->str,h2->h->str))
+  if (i1=StrCompare(h1->h->str,h2->h->str))
     return i1;
   i1=HashTypeNum(h1->h);
   i2=HashTypeNum(h2->h);
@@ -23,7 +23,7 @@ I64 HashEntriesCompare2(CWho *h1,CWho *h2)
     i1=HashTypeNum(tmpf1);
     i2=HashTypeNum(tmpf2);
     if (i1==i2)
-      return StrCmp(tmpf1->str,tmpf2->str);
+      return StrCompare(tmpf1->str,tmpf2->str);
   }
   return i1-i2;
 }
@@ -32,7 +32,7 @@ I64 HelpIndexCount(U8 *ptr,U8 *idx)
 {
   I64 count=0,ch,idx_len=StrLen(idx);
   while (*ptr) {
-    if (!StrNCmp(ptr,idx,idx_len))
+    if (!StrNCompare(ptr,idx,idx_len))
       count++;
     while (ch=*ptr++)
       if (ch==';')
@@ -55,7 +55,7 @@ U8 *HelpIndexStr(U8 **_ptr,U8 *idx)
     if (!ch)
       ptr--;
     *_ptr=ptr;
-    if (!StrNCmp(ptr2,idx,idx_len)) {
+    if (!StrNCompare(ptr2,idx,idx_len)) {
       if (ch==';')
 	ptr--;
       *ptr=0;
@@ -98,7 +98,7 @@ U8 *HelpComment(CTask *task,CHash *tmph,U8 *_src_link)
 	ptr=ptr2+2;
       else if (ptr2=StrMatch("/*",ptr))
 	ptr=ptr2+2;
-      else if (!StrNCmp(ptr,"public",6))
+      else if (!StrNCompare(ptr,"public",6))
 	ptr+=6;
       while (*ptr==CH_SPACE)
 	ptr++;
@@ -130,7 +130,7 @@ U8 *HelpComment(CTask *task,CHash *tmph,U8 *_src_link)
 I64 HashEntriesCompare3(CWho *h1,CWho *h2)
 {
   I64 i,i1=0,i2=0;
-  i=StrCmp(h1->idx,h2->idx);
+  i=StrCompare(h1->idx,h2->idx);
   if (i)
     return i;
   else {
@@ -142,7 +142,7 @@ I64 HashEntriesCompare3(CWho *h1,CWho *h2)
     if (i)
       return i;
     else
-      return StrCmp(h1->h->str,h2->h->str);
+      return StrCompare(h1->h->str,h2->h->str);
   }
 }
 
@@ -243,7 +243,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
     ptr=list[i].h;
     if (idx)
       if (cur_idx=list[i].idx) {
-	if (StrCmp(cur_idx,last_idx)) {
+	if (StrCompare(cur_idx,last_idx)) {
 	  Free(last_idx);
 	  last_idx=StrNew(cur_idx);
 	  if (i)

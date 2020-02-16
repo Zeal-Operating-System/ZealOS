@@ -215,18 +215,18 @@ I64 FindWiz()
   CFind *g=CAlloc(sizeof(CFind));
   I64 res=0;
   g->recurse=TRUE;
-  StrCpy(g->filemask,FILEMASK_TXT);
+  StrCopy(g->filemask,FILEMASK_TXT);
   if (doc=DocPut) {
-    StrCpy(g->find_text,doc->find_replace->find_text);
-    StrCpy(g->replace_text,doc->find_replace->replace_text);
+    StrCopy(g->find_text,doc->find_replace->find_text);
+    StrCopy(g->replace_text,doc->find_replace->replace_text);
     g->replace=doc->find_replace->replace;
     g->match_case=doc->find_replace->match_case;
     g->whole_labels=doc->find_replace->whole_labels;
   }
   if (DocForm(g,,0,"$$PURPLE$$$$TX+CX,\"Find\"$$\n$$FG$$")) {
     if (doc) {
-      StrCpy(doc->find_replace->find_text,g->find_text);
-      StrCpy(doc->find_replace->replace_text,g->replace_text);
+      StrCopy(doc->find_replace->find_text,g->find_text);
+      StrCopy(doc->find_replace->replace_text,g->replace_text);
       doc->find_replace->replace=g->replace;
       doc->find_replace->match_case=g->match_case;
       doc->find_replace->whole_labels=g->whole_labels;

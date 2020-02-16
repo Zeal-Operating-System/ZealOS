@@ -143,8 +143,8 @@ U0 KMain()
   UncachedAliasAlloc;
   LoadKernel;
   SysGrInit;
-  StrCpy(Fs->task_name,"Zenith Task CPU00");
-  StrCpy(Fs->task_title,Fs->task_name);
+  StrCopy(Fs->task_name,"Zenith Task CPU00");
+  StrCopy(Fs->task_title,Fs->task_name);
   Fs->title_src=TTS_TASK_NAME;
   Fs->win_right=text.cols-2;
   Fs->win_top++;

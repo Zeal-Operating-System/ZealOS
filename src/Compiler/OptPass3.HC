@@ -287,7 +287,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	  if ((tmpi1->ic_code==IC_IMM_I64 ||
 		tmpi1->ic_code==IC_IMM_F64) && !tmpi1->ic_data) {
 	    OptFree(tmpi1);
-	    MemCpy(&tmpi->arg1,&tmpi->arg2,sizeof(CICArg));
+	    MemCopy(&tmpi->arg1,&tmpi->arg2,sizeof(CICArg));
 	    tmpi->arg2.type=MDF_NULL;
 	    if (code==IC_BR_EQU_EQU)
 	      code=tmpi->ic_code=IC_BR_ZERO;
@@ -588,7 +588,7 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 	  tmpm=mv[i].m;
 //if not just flagged as reg var
 	  if (mv[i].offset_start && (!mv[i].m->dim.next||
-		tmpm->offset>0 && StrCmp(tmpm->str,"argv"))) {
+		tmpm->offset>0 && StrCompare(tmpm->str,"argv"))) {
 	    while (l<cmp.num_reg_vars &&
 		  Bts(&cc->htc.fun->used_reg_mask,cmp.to_reg_vars_map[l]))
 	      l++;

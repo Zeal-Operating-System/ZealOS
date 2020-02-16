@@ -149,7 +149,7 @@ public U0 DCReset(CDC *dc)
   Mat4x4IdentEqu(dc->r);
   dc->r_norm=GR_SCALE;
   dc->flags&=~(DCF_SYMMETRY|DCF_TRANSFORMATION|DCF_JUST_MIRROR);
-  MemCpy(dc->palette,gr_palette_std,sizeof(CBGR48)*COLORS_NUM);
+  MemCopy(dc->palette,gr_palette_std,sizeof(CBGR48)*COLORS_NUM);
 }
 
 public U0 DCExtentsInit(CDC *dc=NULL)
@@ -174,7 +174,7 @@ public CDC *DCAlias(CDC *dc=NULL,CTask *task=NULL)
   if (dc->dc_signature!=DCS_SIGNATURE_VAL)
     throw('Graphics');
   res=MAlloc(sizeof(CDC),task);
-  MemCpy(res,dc,sizeof(CDC));
+  MemCopy(res,dc,sizeof(CDC));
   res->win_task=res->mem_task=task;
   res->r=MAlloc(16*sizeof(I64),task);
   DCReset(res);
@@ -308,8 +308,8 @@ public U8 *DCSave(CDC *dc,I64 *_size=NULL,I64 dcsf_flags=DCSF_COMPRESSED)
   if (dcsf_flags&DCSF_PALETTE_GET)
     GrPaletteGet(palette);
   else
-    MemCpy(palette,&dc->palette,COLORS_NUM*sizeof(CBGR48));
-  if (MemCmp(palette,gr_palette_std,COLORS_NUM*sizeof(CBGR48))) {
+    MemCopy(palette,&dc->palette,COLORS_NUM*sizeof(CBGR48));
+  if (MemCompare(palette,gr_palette_std,COLORS_NUM*sizeof(CBGR48))) {
     flags|=DCF_PALETTE;
     total_size+=COLORS_NUM*sizeof(CBGR48);
   }
@@ -317,17 +317,17 @@ public U8 *DCSave(CDC *dc,I64 *_size=NULL,I64 dcsf_flags=DCSF_COMPRESSED)
   ptr=res=MAlloc(total_size);
 
 #assert !offset(CDC.start)
-  MemCpy(ptr,&dc->start,offset(CDC.end)-offset(CDC.start));
+  MemCopy(ptr,&dc->start,offset(CDC.end)-offset(CDC.start));
   ptr(CDC *)->flags=flags;
   ptr+=offset(CDC.end)-offset(CDC.start);
 
 #assert offset(CDC.end)==offset(CDC.palette)
   if (flags&DCF_PALETTE) {
-    MemCpy(ptr,palette,COLORS_NUM*sizeof(CBGR48));
+    MemCopy(ptr,palette,COLORS_NUM*sizeof(CBGR48));
     ptr+=COLORS_NUM*sizeof(CBGR48);
   }
 
-  MemCpy(ptr,body,body_size);
+  MemCopy(ptr,body,body_size);
   ptr+=body_size;
 
   Free(arc);
@@ -345,14 +345,14 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
   res=CAlloc(sizeof(CDC),task);
   res->win_task=task;
   res->mem_task=task;
-  MemCpy(&res->start,ptr,offset(CDC.end)-offset(CDC.start));
+  MemCopy(&res->start,ptr,offset(CDC.end)-offset(CDC.start));
   ptr+=offset(CDC.end)-offset(CDC.start);
 
   if (res->flags&DCF_PALETTE) {
-    MemCpy(&res->palette,ptr,COLORS_NUM*sizeof(CBGR48));
+    MemCopy(&res->palette,ptr,COLORS_NUM*sizeof(CBGR48));
     ptr+=COLORS_NUM*sizeof(CBGR48);
   } else
-    MemCpy(&res->palette,gr_palette_std,COLORS_NUM*sizeof(CBGR48));
+    MemCopy(&res->palette,gr_palette_std,COLORS_NUM*sizeof(CBGR48));
 
   body_size=res->width_internal*res->height;
   if (res->flags&DCF_COMPRESSED) {
@@ -362,7 +362,7 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
     ptr+=arc->compressed_size;
   } else {
     res->body=MAlloc(body_size,task);
-    MemCpy(res->body,ptr,body_size);
+    MemCopy(res->body,ptr,body_size);
     ptr+=body_size;
   }
   res->thick=1;

@@ -44,7 +44,7 @@ public CTaskSettings *SettingsPush(CTask *task=NULL,I64 flags=0)
 
   tmpse->win_inhibit=task->win_inhibit;
   tmpse->text_attr=task->text_attr;
-  StrCpy(tmpse->task_title,task->task_title);
+  StrCopy(tmpse->task_title,task->task_title);
   tmpse->title_src  =task->title_src;
   tmpse->border_attr=task->border_attr;
   tmpse->border_src =task->border_src;
@@ -80,7 +80,7 @@ U0 SettingsPop2(CTask *task,CTaskSettings *tmpse)
   task->border_attr=tmpse->border_attr;
   task->border_src =tmpse->border_src;
   task->title_src  =tmpse->title_src;
-  StrCpy(task->task_title,tmpse->task_title);
+  StrCopy(task->task_title,tmpse->task_title);
   AutoComplete(tmpse->autocomplete);
   GrPaletteSet(tmpse->palette);
   Sound;

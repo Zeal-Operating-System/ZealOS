@@ -93,7 +93,7 @@ I64 KMCompare(U8 *e1,U8 *e2)
   U8 buf1[STR_LEN],buf2[STR_LEN];
   KMComparePrepare(buf1,e1);
   KMComparePrepare(buf2,e2);
-  return StrCmp(buf1,buf2);
+  return StrCompare(buf1,buf2);
 }
 
 U0 KeyMapFamily2(U8 **entries,CTask *task,I64 scf)
@@ -112,7 +112,7 @@ U0 KeyMapFamily2(U8 **entries,CTask *task,I64 scf)
       Refresh(0,TRUE);
       Sleep(1); //Open loop because might be no response.  TODO: Drops messages.
     }
-    if (*keydev.desc && StrNCmp(keydev.desc,"Char/",7))
+    if (*keydev.desc && StrNCompare(keydev.desc,"Char/",7))
       entries[i]=KeyMapKeyMStrPrint(arg2,keydev.handler,keydev.desc,task);
   }
 }

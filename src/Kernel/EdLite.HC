@@ -101,7 +101,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 
     if (src+1-buf<size) {
       bin_data=MAlloc(bin_size=size-(src-buf));
-      MemCpy(bin_data,src,bin_size);
+      MemCopy(bin_data,src,bin_size);
     }
     Free(buf);
     res=TRUE;
@@ -192,7 +192,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 		Free(tmpl);
 	      }
 	    } else
-	      StrCpy(cur_line->line+cur_col,cur_line->line+cur_col+1);
+	      StrCopy(cur_line->line+cur_col,cur_line->line+cur_col+1);
 	    break;
 	}
 	break;
@@ -207,7 +207,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	break;
       case CH_BACKSPACE:
 	if (cur_col) {
-	  StrCpy(cur_line->line+cur_col-1,cur_line->line+cur_col);
+	  StrCopy(cur_line->line+cur_col-1,cur_line->line+cur_col);
 	  cur_col--;
 	} else if (cur_line!=&head && cur_line->last!=&head) {
 	  tmpl=cur_line->last;
@@ -239,10 +239,10 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 	    QueueInsert(cur_line,head.last);
 	  }
 	  src=MAlloc(StrLen(cur_line->line)+2);
-	  MemCpy(src,cur_line->line,cur_col);
+	  MemCopy(src,cur_line->line,cur_col);
 	  src[cur_col]=ch;
 	  if (cur_col<StrLen(cur_line->line))
-	    StrCpy(src+cur_col+1,cur_line->line+cur_col);
+	    StrCopy(src+cur_col+1,cur_line->line+cur_col);
 	  else
 	    src[cur_col+1]=0;
 	  Free(cur_line->line);
@@ -268,13 +268,13 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
     tmpl=head.next;
     while (tmpl!=&head) {
       i=StrLen(tmpl->line);
-      MemCpy(dst,tmpl->line,i);
+      MemCopy(dst,tmpl->line,i);
       dst+=i;
       *dst++='\n';
       tmpl=tmpl->next;
     }
     if (bin_data)
-      MemCpy(dst,bin_data,bin_size);
+      MemCopy(dst,bin_data,bin_size);
     FileWrite(filename,buf,size);
     Free(buf);
 

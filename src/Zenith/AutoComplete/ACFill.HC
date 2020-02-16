@@ -19,7 +19,7 @@ public U8 *ACDDefGet(U8 *st,I64 def_num=1)
 	while (*in_ptr!=ACD_WORD_CHAR && in_ptr<buf+ACD_BLK_SIZE*2)
 	  in_ptr++;
 	if (*in_ptr++==ACD_WORD_CHAR) {
-	  if (!StrICmp(st,in_ptr)) {
+	  if (!StrICompare(st,in_ptr)) {
 	    while (def_num && *in_ptr!=ACD_WORD_CHAR
 		  && in_ptr<buf+ACD_BLK_SIZE*2) {
 	      if (*in_ptr==ACD_DEF_CHAR) {
@@ -63,7 +63,7 @@ public U8 *ACDDefsGet(U8 *st)
 	while (*in_ptr!=ACD_WORD_CHAR && in_ptr<buf+ACD_BLK_SIZE*2)
 	  in_ptr++;
 	if (*in_ptr++==ACD_WORD_CHAR) {
-	  if (!StrICmp(st,in_ptr)) {
+	  if (!StrICompare(st,in_ptr)) {
 	    in_ptr2=in_ptr;
 	    in_ptr--;
 	    while (*in_ptr2!=ACD_WORD_CHAR
@@ -71,7 +71,7 @@ public U8 *ACDDefsGet(U8 *st)
 	      in_ptr2++;
 	    }
 	    res=MAlloc(in_ptr2+1-in_ptr);
-	    MemCpy(res,in_ptr,in_ptr2-in_ptr);
+	    MemCopy(res,in_ptr,in_ptr2-in_ptr);
 	    res[in_ptr2-in_ptr]=ACD_END_CHAR;
 	    break;
 	  }
@@ -107,7 +107,7 @@ public U8 *ACDWordPtAt(U8 *st)
 	  break;
       }
       if (*r==ACD_WORD_CHAR) {
-	i=StrICmp(st,r+1);
+	i=StrICompare(st,r+1);
 	if (i<0)
 	  end=r-1;
 	else if (i>0)
@@ -126,7 +126,7 @@ public U8 *ACDWordPtAt(U8 *st)
       else
 	break;
     }
-    if (*r==ACD_WORD_CHAR && StrICmp(st,r+1)>0)
+    if (*r==ACD_WORD_CHAR && StrICompare(st,r+1)>0)
       r+=StrLen(r)+3;
   }
   if (*r==ACD_WORD_CHAR)

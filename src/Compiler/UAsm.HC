@@ -644,7 +644,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
       bin_data_area2[(i-6)<<1+1]=CH_SPACE;
     }
   }
-  StrCpy(buf,line1);
+  StrCopy(buf,line1);
   if (!just_ins && rip-(*_rip)(I64)>6)
     CatPrint(buf,line2);
   *_rip=rip;

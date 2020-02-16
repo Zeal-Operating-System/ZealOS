@@ -11,7 +11,7 @@ ins_reg.host_os=2;
 ins_reg.host_vm=2;
 
 #define INS_REG_PERSONAL_INITIALS "TAD"
-StrCpy(ins_reg.initials,"TAD");
+StrCopy(ins_reg.initials,"TAD");
 HashPublic("INS_REG_PERSONAL_INITIALS",HTT_DEFINE_STR);
 
 #define INS_REG_MACHINE_NUM 0

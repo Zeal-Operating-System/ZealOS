@@ -114,7 +114,7 @@ U0 ICCopyTemplate(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,
       }
     }
   }
-  MemCpy(&tmpi->ic_body[tmpi->ic_count],ptr,i);
+  MemCopy(&tmpi->ic_body[tmpi->ic_count],ptr,i);
   if (!off_the_record)
     CompNoteFloatOp(cc,tmpi,dont_pushable,dont_popable,pos);
   tmpi->ic_count+=i;
@@ -567,7 +567,7 @@ U0 ICFModEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 	ICFCvt2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
     }
 //TODO: unpushable,unpop?  Not sure
-    ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_MOD,FALSE,FALSE,FALSE,CN_INST);
+    ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_MOD,FALSE,FALSE,FALSE,CN_INST);
     if (tmpi->arg1_type_pointed_to!=RT_F64)
       ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
     ICMov(tmpi,tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,

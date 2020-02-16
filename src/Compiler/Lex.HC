@@ -164,7 +164,7 @@ lgc_start2:
 		if (doc_e->bin_data) {
 		  ptr=MAlloc(doc_e->bin_data->size);
 		  if (doc_e->bin_data->data)
-		    MemCpy(ptr,doc_e->bin_data->data,doc_e->bin_data->size);
+		    MemCopy(ptr,doc_e->bin_data->data,doc_e->bin_data->size);
 		  cc->cur_str=ptr;
 		  cc->cur_str_len=doc_e->bin_data->size;
 		}
@@ -225,7 +225,7 @@ lgc_start2:
 	  if (cc->flags & CCF_PROMPT) {
 	    Free(tmpf->buf);
 	    ptr=CmdLinePrompt;
-	    if (StrCmp(ptr,"\n") && !cc->prompt_line++ && !StrCmp(ptr,"?\n") &&
+	    if (StrCompare(ptr,"\n") && !cc->prompt_line++ && !StrCompare(ptr,"?\n") &&
 		cc->flags & CCF_QUESTION_HELP) {
 	      Free(ptr);
 	      ptr=StrNew("Help;;\n");
@@ -613,19 +613,19 @@ lex_float_start:
 	  j=LexInStr(cc,buf,STR_LEN,&str_done);
 	  buf3=MAlloc(i+j);
 	  if (buf2) {
-	    MemCpy(buf3,buf2,i);
+	    MemCopy(buf3,buf2,i);
 	    Free(buf2);
 	    buf2=buf3;
-	    MemCpy(buf2+i,buf,j);
+	    MemCopy(buf2+i,buf,j);
 	  } else {
 	    buf2=buf3;
-	    MemCpy(buf2,buf,j);
+	    MemCopy(buf2,buf,j);
 	  }
 	  i+=j;
 	} while (!str_done);
 	Free(cc->cur_str);
 	cc->cur_str=MAlloc(i);
-	MemCpy(cc->cur_str,buf2,i);
+	MemCopy(cc->cur_str,buf2,i);
 	Free(buf2);
 	cc->cur_str_len=i;
 	cc->flags&=~CCF_IN_QUOTES;
@@ -773,13 +773,13 @@ lex_float_start:
 		      buf[j++]=0;
 		      buf3=MAlloc(i+j);
 		      if (buf2) {
-			MemCpy(buf3,buf2,i);
+			MemCopy(buf3,buf2,i);
 			Free(buf2);
 			buf2=buf3;
-			MemCpy(buf2+i,buf,j);
+			MemCopy(buf2+i,buf,j);
 		      } else {
 			buf2=buf3;
-			MemCpy(buf2,buf,j);
+			MemCopy(buf2,buf,j);
 		      }
 		      i+=j-1;
 		      j=0;
@@ -790,13 +790,13 @@ lex_float_start:
 	      buf[j++]=0;
 	      buf3=MAlloc(i+j);
 	      if (buf2) {
-		MemCpy(buf3,buf2,i);
+		MemCopy(buf3,buf2,i);
 		Free(buf2);
 		buf2=buf3;
-		MemCpy(buf2+i,buf,j);
+		MemCopy(buf2+i,buf,j);
 	      } else {
 		buf2=buf3;
-		MemCpy(buf2,buf,j);
+		MemCopy(buf2,buf,j);
 	      }
 	      tmph(CHashDefineStr *)->data=buf2;
 	      tmph(CHashDefineStr *)->count=-1;

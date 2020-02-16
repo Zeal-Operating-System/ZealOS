@@ -25,7 +25,7 @@ Bool CopySingle(U8 *f1,U8 *f2) //Just one file
   U8 *absf1=FileNameAbs(f1),*absf2=FileNameAbs(f2),*buf;
   I64 count,n,size,attr1=FileAttr(f1),attr2=FileAttr(f2),i,j;
   CFile *in_file=NULL,*out_file=NULL;
-  if (!StrCmp(absf1,absf2)) {//onto self?
+  if (!StrCompare(absf1,absf2)) {//onto self?
     Free(absf1);
     Free(absf2);
     return FALSE;

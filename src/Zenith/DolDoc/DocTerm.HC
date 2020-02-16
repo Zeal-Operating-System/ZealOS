@@ -139,14 +139,14 @@ I64 TermRightClickLink(CDoc *doc,CDocEntry *doc_e)
 	    res=TRUE;
 	    break;
 	  case RIGHT_COPY:
-	    StrCpy(fn.name,st);
+	    StrCopy(fn.name,st);
 	    if (DocForm(&fn)) {
 	      res=ToBool(Copy(st,fn.name));
 	    } else
 	      send_new_line=TRUE;
 	    break;
 	  case RIGHT_MOVE:
-	    StrCpy(fn.name,st);
+	    StrCopy(fn.name,st);
 	    if (DocForm(&fn))
 	      res=Move(st,fn.name);
 	    else

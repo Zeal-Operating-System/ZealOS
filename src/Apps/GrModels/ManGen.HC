@@ -219,9 +219,9 @@ U8 *Man2CSprite()
   *dst++ =SPT_MESH;
   *dst(I32 *)++ =m->vertex_count;
   *dst(I32 *)++ =m->tri_count;
-  MemCpy(dst,&m->v,m->vertex_count*sizeof(CD3I32));
+  MemCopy(dst,&m->v,m->vertex_count*sizeof(CD3I32));
   dst+=m->vertex_count*sizeof(CD3I32);
-  MemCpy(dst,&m->t,m->tri_count*sizeof(CMeshTri));
+  MemCopy(dst,&m->t,m->tri_count*sizeof(CMeshTri));
   dst+=m->tri_count*sizeof(CMeshTri);
   *dst++ =SPT_END;
   return res;
@@ -237,7 +237,7 @@ public U8 *ManGen()
   while (TRUE) {
     if (!DocForm(&md1))
       return NULL;
-    MemCpy(&md2,&md1,sizeof(ManDefineStruct));
+    MemCopy(&md2,&md1,sizeof(ManDefineStruct));
     MDCorrect(&md2);
 
     c1=PopUpColorLighting("$$BK,1$$Shirt$$BK,0$$\n");

@@ -120,22 +120,22 @@ U0 ODEState2Internal(CMathODE *ode)
     ODESetMassesPtrs(ode,ode->state_internal,ode->state_internal);
     tmpm=ode->next_mass;
     while (tmpm!=&ode->next_mass) {
-      MemCpy(tmpm->state,&tmpm->saved_state,sizeof(COrder2D3));
+      MemCopy(tmpm->state,&tmpm->saved_state,sizeof(COrder2D3));
       tmpm=tmpm->next;
     }
   }
-  MemCpy(ode->state_internal,ode->state,ode->n*sizeof(F64));
+  MemCopy(ode->state_internal,ode->state,ode->n*sizeof(F64));
 }
 
 U0 ODEInternal2State(CMathODE *ode)
 {
   CMass *tmpm;
-  MemCpy(ode->state,ode->state_internal,ode->n*sizeof(F64));
+  MemCopy(ode->state,ode->state_internal,ode->n*sizeof(F64));
   if (ode->flags&ODEF_HAS_MASSES) {
     ODESetMassesPtrs(ode,ode->state_internal,ode->state_internal);
     tmpm=ode->next_mass;
     while (tmpm!=&ode->next_mass) {
-      MemCpy(&tmpm->saved_state,tmpm->state,sizeof(COrder2D3));
+      MemCopy(&tmpm->saved_state,tmpm->state,sizeof(COrder2D3));
       tmpm=tmpm->next;
     }
   }
@@ -559,7 +559,7 @@ U0 ODERK5OneStep(CMathODE *ode)
   else
     ode->h*=5.0;
   ode->h=Clamp(ode->h,ode->h_min,ode->h_max);
-  MemCpy(ode->state_internal,tmpstate,sizeof(F64)*ode->n_internal);
+  MemCopy(ode->state_internal,tmpstate,sizeof(F64)*ode->n_internal);
 }
 
 F64 ode_alloced_factor=0.75;
@@ -612,7 +612,7 @@ it has a timeout.
 	    if (ode->mp_derive)
 	      ODEMPWake(ode);
 	    ODEState2Internal(ode);
-	    MemCpy(ode->initial_state,ode->state_internal,
+	    MemCopy(ode->initial_state,ode->state_internal,
 		  ode->n_internal*sizeof(F64));
 	    while (ode->t<t_desired) {
 	      ode->h_max=t_desired-ode->t;

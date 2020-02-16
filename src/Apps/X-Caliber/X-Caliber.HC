@@ -148,9 +148,9 @@ U0 MissileNew(Ship *tmpsp,I64 n)
   D3Copy(&tmpmi->p_back.x,&tmpmi->p_front.x);
 
   if (n&1)
-    StrCpy(tmpmi->label,"L");
+    StrCopy(tmpmi->label,"L");
   else
-    StrCpy(tmpmi->label,"R");
+    StrCopy(tmpmi->label,"R");
   tmpmi->owner=tmpsp;
   tmpmi->tons=0.5;
   tmpmi->p_front.mass=0.1;

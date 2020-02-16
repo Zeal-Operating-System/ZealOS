@@ -59,7 +59,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	    ~(ICF_PREV_DELETED|ICF_DONT_RESTORE)|ICF_CODE_FINAL;
       if (cc->pass==7)
 	cc->dont_push_float=Btr(&tmpi->ic_flags,ICf_DONT_PUSH_FLOAT0);
-      MemCpy(saved_arg1_arg2_r,&tmpi->arg1,3*sizeof(CICArg));
+      MemCopy(saved_arg1_arg2_r,&tmpi->arg1,3*sizeof(CICArg));
       tmpi->ic_count=0;
       tmpi->ic_last_start=-1;
       if (tmpi->arg2.type.mode) {
@@ -307,7 +307,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	    tmpaot=tmpi->ic_data;
 	    tmpi->ic_count+=tmpaot->aot_U8s;
 	    if (buf) {
-	      MemCpy(buf+rip,tmpaot->buf,tmpaot->aot_U8s);
+	      MemCopy(buf+rip,tmpaot->buf,tmpaot->aot_U8s);
 	      Free(tmpaot->buf);
 	      tmpaot->buf=buf;
 	      tmpaot->rip=rip;
@@ -1070,7 +1070,7 @@ cc->pass==10 is final pass, code is placed into buf.
       tmpi->ic_flags&=~ICF_DEL_PREV_INS;
     }
     if (count && buf)
-      MemCpy(buf+rip,tmpi->ic_body,count);
+      MemCopy(buf+rip,tmpi->ic_body,count);
 op789A_skip_copy:
     if (dbg_info && cc->min_line<=tmpi->ic_line<=cc->max_line) {
       i=tmpi->ic_line-cc->min_line;
@@ -1087,7 +1087,7 @@ op789A_skip_copy:
       "$$FG$$";
     }
     if (!(tmpi->ic_flags&(ICF_CODE_FINAL|ICF_DONT_RESTORE)))
-      MemCpy(&tmpi->arg1,saved_arg1_arg2_r,3*sizeof(CICArg));
+      MemCopy(&tmpi->arg1,saved_arg1_arg2_r,3*sizeof(CICArg));
     rip+=count;
     if (tmpi->ic_count>=IC_BODY_SIZE && tmpi->ic_code!=IC_ASM)
       throw('Compiler');
@@ -1101,7 +1101,7 @@ op789A_next:
       case CMT_STR_CONST:
 	lb->addr=rip;
 	if (buf)
-	  MemCpy(buf+rip,lb->str,lb->st_len);
+	  MemCopy(buf+rip,lb->str,lb->st_len);
 	rip+=lb->st_len;
 	break;
       case CMT_JMP_TABLE:
@@ -1136,7 +1136,7 @@ op789A_next:
       case CMT_FLOAT_CONSTS:
 	lb->addr=rip;
 	if (buf)
-	  MemCpy(buf+lb->addr,lb->float_consts,lb->num_consts*sizeof(F64));
+	  MemCopy(buf+lb->addr,lb->float_consts,lb->num_consts*sizeof(F64));
 	rip+=lb->num_consts*sizeof(F64);
 	break;
     }

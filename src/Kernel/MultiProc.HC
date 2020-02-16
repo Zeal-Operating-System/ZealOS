@@ -4,7 +4,7 @@ USE16
 //See $LK,"ZenithOS MultiCore",A="FI:::/Doc/MultiCore.DD"$.
 
 //This code gets copied to $LK,"MP_VECT_ADDR",A="MN:MP_VECT_ADDR"$.
-//See $LK,"MemCpy(MP_VECT_ADDR",A="FF:::/Kernel/MultiProc.HC,MemCpy(mp:2"$.
+//See $LK,"MemCopy(MP_VECT_ADDR",A="FF:::/Kernel/MultiProc.HC,MemCopy(mp:2"$.
 COREAP_16BIT_INIT::
 	JMP	@@05
 
@@ -309,14 +309,14 @@ U0 Core0StartMP()
   //When you start-up other cores, they jump to an addr
   //specified by a byte vect number, $LK,"MPN_VECT",A="MN:MPN_VECT"$ which corresponds
   //to a location 4096*vect number, $LK,"MP_VECT_ADDR",A="MN:MP_VECT_ADDR"$$WW,0$.
-  MemCpy(mp,COREAP_16BIT_INIT,COREAP_16BIT_INIT_END-COREAP_16BIT_INIT);
-  MemCpy(&mp->ap_gdt_ptr,SYS_GDT_PTR,sizeof(CSysLimitBase));
+  MemCopy(mp,COREAP_16BIT_INIT,COREAP_16BIT_INIT_END-COREAP_16BIT_INIT);
+  MemCopy(&mp->ap_gdt_ptr,SYS_GDT_PTR,sizeof(CSysLimitBase));
   mp_count_initial=mp_count=1;
   mp_count_lock=0;
 
   *(dev.uncached_alias+LAPIC_LVT_ERR)(U32 *)=
 	*(dev.uncached_alias+LAPIC_LVT_ERR)(U32 *)&0xFFFFFF00+MPN_VECT;
-  WBINVD //Not sure why this is needed.	Might just need delay. $LK,"MemCpy",A="MN:MemCpy"$ above?
+  WBINVD //Not sure why this is needed.	Might just need delay. $LK,"MemCopy",A="MN:MemCopy"$ above?
 
   *(dev.uncached_alias+LAPIC_ICR_LOW)(U32 *)=0xC4500; //assert init IPI
   Busy(10000);

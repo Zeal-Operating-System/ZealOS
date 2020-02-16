@@ -125,10 +125,10 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
 	case DOCEf_TAG:
 	  if (doc_e->type_u8==DOCT_DATA || doc_e->type_u8==DOCT_MACRO &&
 		(doc_e->de_flags&DOCEF_LEFT_MACRO &&
-		!StrCmp(doc_e->tag,doc_e->left_macro) ||
+		!StrCompare(doc_e->tag,doc_e->left_macro) ||
 		doc_e->de_flags&DOCEF_RIGHT_MACRO &&
-		!StrCmp(doc_e->tag,doc_e->right_macro)) ||
-		doc_e->de_flags&DOCEF_LIST && !StrCmp(doc_e->tag,"[]") &&
+		!StrCompare(doc_e->tag,doc_e->right_macro)) ||
+		doc_e->de_flags&DOCEF_LIST && !StrCompare(doc_e->tag,"[]") &&
 		doc_e->de_flags&DOCEF_DEFINE) {
 	    buf2=buf;
 	    buf=NULL;
@@ -509,8 +509,8 @@ U0 DocEntryToggle(CDoc *doc)
 	    i=StrLen(doc_ce2->tag);
 	    j=StrLen(doc_ce->tag);
 	    st=MAlloc(i+j+1,doc->mem_task);
-	    MemCpy(st,doc_ce2->tag,i);
-	    MemCpy(st+i,doc_ce->tag,j+1);
+	    MemCopy(st,doc_ce2->tag,i);
+	    MemCopy(st+i,doc_ce->tag,j+1);
 	    Free(doc_ce->tag);
 	    doc_ce->tag=st;
 	    doc_ce->max_col=i+j;
@@ -534,8 +534,8 @@ U0 DocEntryToggle(CDoc *doc)
 	    i=StrLen(doc_ce->tag);
 	    j=StrLen(doc_ce2->tag);
 	    st=MAlloc(i+j+1,doc->mem_task);
-	    MemCpy(st,doc_ce->tag,i);
-	    MemCpy(st+i,doc_ce2->tag,j+1);
+	    MemCopy(st,doc_ce->tag,i);
+	    MemCopy(st+i,doc_ce2->tag,j+1);
 	    Free(doc_ce->tag);
 	    doc_ce->tag=st;
 	    doc_ce->max_col=i+j;
@@ -560,7 +560,7 @@ U0 DocEntryToggle(CDoc *doc)
 	doc_ce->tag[j+1]=0;
 	st=StrNew(doc_ce->tag+i);
 	doc_ce->tag[j+1]=ch;
-	StrCpy(doc_ce->tag+i,doc_ce->tag+j+1);
+	StrCopy(doc_ce->tag+i,doc_ce->tag+j+1);
 	doc->cur_col=i;
 	st2=MStrPrint("%q",st);
 	if (doc_ce=DocPrint(doc,st2)) {

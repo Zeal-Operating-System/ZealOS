@@ -210,7 +210,7 @@ U0 UpdateRegVarImg(CHashFun *tmpf,U8 *_b,CTask *task)
   while (ml) {
     if (ml->reg!=REG_NONE) {
       tmpc=OptClassFwd(ml->member_class);
-      MemCpy(_b+ml->offset,TaskRegAddr(task,ml->reg),tmpc->size);
+      MemCopy(_b+ml->offset,TaskRegAddr(task,ml->reg),tmpc->size);
     }
     ml=ml->next;
   }
@@ -230,7 +230,7 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
 	size=tmpf->arg_count*8-tmpf->size+16;
 
 	img=MAlloc(size);
-	MemCpy(img,rbp+tmpf->size,size);
+	MemCopy(img,rbp+tmpf->size,size);
 	UpdateRegVarImg(tmpf,img-tmpf->size,task);
 	ClassRep(img-tmpf->size,st,max_depth,TRUE,rbp-img+tmpf->size);
 	Free(img);

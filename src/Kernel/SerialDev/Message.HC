@@ -214,10 +214,10 @@ I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE)
   if (allow_ext) {
     st=GetStr;
     if (StrLen(st)>size-1) {
-      MemCpy(buf,st,size-1);
+      MemCopy(buf,st,size-1);
       buf[size-1]=0;
     } else
-      StrCpy(buf,st);
+      StrCopy(buf,st);
     i=StrLen(buf);
     Free(st);
   } else {

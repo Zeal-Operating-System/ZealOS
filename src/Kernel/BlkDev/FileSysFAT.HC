@@ -86,7 +86,7 @@ U0 FAT32Format(U8 drv_let,Bool quick=TRUE)
     br->log_drive_num=0x80;
     br->ext_signature=0x29;
     br->serial_num=RandU32;
-    MemCpy(br->vol_name,"NONAME",11);
+    MemCopy(br->vol_name,"NONAME",11);
     br->fat_name[0](I64)='FAT32';
     br->signature=0xAA55;
     fis->signature1='RRaA';
@@ -121,11 +121,11 @@ Bool FATNameTo(U8 *dst,U8 *src)
   MemSet(dst,CH_SPACE,11);
   if (!FileNameCheck(src))
     return FALSE;
-  if (!StrCmp(src,"..")) {
+  if (!StrCompare(src,"..")) {
     *dst='.';
     dst[1]='.';
     return TRUE;
-  } else if (!StrCmp(src,".")) {
+  } else if (!StrCompare(src,".")) {
     *dst='.';
     return TRUE;
   }
@@ -237,7 +237,7 @@ Bool FAT32DirFill(CFAT32DirEntry *de,
   MemSet(de,0,sizeof(CFAT32DirEntry));
   res=FATNameTo(de->name,tmpde->name);
   FATFromName(dname,de->name);
-  if (StrCmp(dname,tmpde->name)) {
+  if (StrCompare(dname,tmpde->name)) {
     ord=0x41;
     xsum=FATNameXSum(de->name);
     if ((l=StrLen(tmpde->name))>13) {
@@ -315,14 +315,14 @@ Bool FAT32FileFind(CDrive *drive,I64 cur_dir_clus,
 	  else {
 	    if (!(attr&RS_ATTR_VOL_ID)) {
 	      if (xsum==FATNameXSum(buf[cur_dir_entry].name))
-		MemCpy(_res,&long_name,sizeof(CDirEntry));
+		MemCopy(_res,&long_name,sizeof(CDirEntry));
 	      else
 		MemSet(_res,0,sizeof(CDirEntry));
 	      if (!(fuf_flags&FUF_JUST_DIRS && !(attr & RS_ATTR_DIR)) &&
 		    !(fuf_flags&FUF_JUST_FILES && attr & RS_ATTR_DIR) &&
 		    FAT32CDirFill(_res,&buf[cur_dir_entry],
 		    drive->fat32_local_time_offset) &&
-		    !StrCmp(dname,_res->name)) {
+		    !StrCompare(dname,_res->name)) {
 		res=TRUE;
 		goto fff_done;
 	      }
@@ -594,7 +594,7 @@ Bool FAT32DirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	    break;
 	  }
 	if (ch==0xE5 && !written && avail_count>=de_count) {
-	  MemCpy(&buf[cur_dir_entry],&de,de_count*sizeof(CFAT32DirEntry));
+	  MemCopy(&buf[cur_dir_entry],&de,de_count*sizeof(CFAT32DirEntry));
 	  BlkWrite(drive,&buf[cur_dir_entry & -FAT32_ENTRIES_PER_BLK],
 		drive->data_area+cur_dir_clus*drive->spc
 		+cur_dir_entry>>FAT32_ENTRIES_BITS,1);
@@ -606,12 +606,12 @@ Bool FAT32DirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	  if (!*long_name.name)
 	    FATFromName(long_name.name,buf[cur_dir_entry].name);
 //Del old entry with same name
-	  if (!StrCmp(long_name.name,tmpde->name)) {
+	  if (!StrCompare(long_name.name,tmpde->name)) {
 	    if (free_old_chain)
 	      FAT32FreeClus(drive,buf[cur_dir_entry].clus_lo+
 		    buf[cur_dir_entry].clus_hi<<16);
 	    if (!written) {
-	      MemCpy(&buf[cur_dir_entry],&de[de_count-1],sizeof(CFAT32DirEntry));
+	      MemCopy(&buf[cur_dir_entry],&de[de_count-1],sizeof(CFAT32DirEntry));
 	      BlkWrite(drive,&buf[cur_dir_entry & -FAT32_ENTRIES_PER_BLK],
 		    drive->data_area+cur_dir_clus*drive->spc
 		    +cur_dir_entry>>FAT32_ENTRIES_BITS,1);
@@ -678,7 +678,7 @@ Bool FAT32DirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	  ClusWrite(drive,buf,cur_dir_clus,1);
 	}
       }
-      MemCpy(&buf[cur_dir_entry],&de,de_count*sizeof(CFAT32DirEntry));
+      MemCopy(&buf[cur_dir_entry],&de,de_count*sizeof(CFAT32DirEntry));
       BlkWrite(drive,&buf[cur_dir_entry &-FAT32_ENTRIES_PER_BLK],
 	    drive->data_area+cur_dir_clus*drive->spc+
 	    cur_dir_entry>>FAT32_ENTRIES_BITS,1);
@@ -858,7 +858,7 @@ CDirEntry *FAT32FilesFind(U8 *files_find_mask,
 	  if (!(attr&RS_ATTR_VOL_ID)) {
 	    tmpde=MAlloc(sizeof(CDirEntry));
 	    if (xsum==FATNameXSum(buf[cur_dir_entry].name))
-	      MemCpy(tmpde,&long_name,sizeof(CDirEntry));
+	      MemCopy(tmpde,&long_name,sizeof(CDirEntry));
 	    else
 	      MemSet(tmpde,0,sizeof(CDirEntry));
 	    if (FAT32CDirFill(tmpde,&buf[cur_dir_entry],

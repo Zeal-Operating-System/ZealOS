@@ -3,7 +3,7 @@
 CDirEntry MGFind(CDirEntry *needle_entry,CDirEntry *haystack_list)
 {
   while (haystack_list) {
-    if (!StrCmp(needle_entry->name,haystack_list->name))
+    if (!StrCompare(needle_entry->name,haystack_list->name))
       return haystack_list;
     haystack_list=haystack_list->next;
   }
