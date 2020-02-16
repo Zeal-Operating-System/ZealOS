@@ -29,7 +29,7 @@ _BEEPS::
 	POP	RBP
 	RET1	8	//Use special return. Pop one arg off of stack.
 
-//HolyC return vals are in RAX.  This function has no return value.
+//CosmiC return vals are in RAX.  This function has no return value.
 }
 
 //_extern binds a asm sym to a function.

@@ -2,7 +2,7 @@ $WW,1$$FG,5$$TX+CX,"DolDoc Widget Help"$$FG$
 
 $LK,"DolDoc",A="::/Doc/DolDocOverview.DD"$ is a ZenithOS document type.
 
-$FG,2$"Expression"$FG$ a num or HolyC algebraic term with operators and HolyC syms can be entered.
+$FG,2$"Expression"$FG$ a num or CosmiC algebraic term with operators and CosmiC syms can be entered.
 $FG,2$"Macro"$FG$ Most entries can behave like macro entries if you assign them macro strs.
 $FG,2$"InStr"$FG$ Like a macro except it is an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$.  You can't have both an in_str and macro text defined.  
 

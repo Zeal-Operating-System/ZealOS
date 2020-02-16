@@ -445,7 +445,7 @@ U0 TaskDel(CTask *task)
 I64 TaskEnd()
 {//Called with irq's off.
   CTask *task=Fs,*tmpt,*tmpt1;
-  if (task==sys_task_being_scrn_updated) {
+  if (task==sys_task_being_screen_updated) {
     LBts(&task->task_flags,TASKf_KILL_TASK);
     return task->next_task;
   }

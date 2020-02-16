@@ -52,7 +52,7 @@ class PsmCtrl
   PsmNote head;
   PsmNote clip;
   CMenuEntry *incomplete_entry,*record_entry;
-  I64 scrn_x,tool;
+  I64 screen_x,tool;
   PsmNote *cur_note;
   CDC *dc2;
   Bool playing;

@@ -704,7 +704,7 @@ public extern U0 UserCmdLine();
 public _extern _YIELD U0 Yield();
 public extern CTask *zenith_task;
 public extern I64 sys_num_spawned_tasks;
-extern CTask *sys_winmgr_task,*sys_task_being_scrn_updated;
+extern CTask *sys_winmgr_task,*sys_task_being_screen_updated;
 
 #help_index "Task/Delay;Time/CPU Cycles"
 public extern U0 Busy(I64 ÊS); //Loosely timed

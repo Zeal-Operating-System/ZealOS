@@ -40,7 +40,7 @@ public U0 InGetKey(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
   U8 buf[STR_LEN],*st;
   do {
     ch=GetKey(&sc);
-    if (sc.u8[0]!=SC_PRTSCRN1 &&
+    if (sc.u8[0]!=SC_PRINTSCREEN1 &&
 	  !(sc.u8[0]==SC_SHIFT && scan_code&SCF_SHIFT) &&
 	  !(sc.u8[0]==SC_CTRL && scan_code&SCF_CTRL) &&
 	  !(sc.u8[0]==SC_ALT && scan_code&SCF_ALT) ) {

@@ -78,7 +78,7 @@ $ID,2$$WW,0$
 $FG,2$I64 AddNums(...)
 {
   I64 i,res=0;
-  for (i=0;i<argc;i++)
+  for (i=0;i<argc;i++)
     res+=argv[i];
   return res;
 }
@@ -219,7 +219,7 @@ $FG$$ID,-2$
 
 * Can't use $FG,2$<>$FG$ with $FG,2$#include$FG$, use $FG,2$""$FG$.
 
-* "$FG,2$$$$FG$" is an escape character.  Two dollar signs signify an ordinary $$.  See $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$.  In $FG,2$asm$FG$ or $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ code, it also refers to the inst's address or the offset in a $FG,2$class$FG$ definition. 
+* "$FG,2$$$$FG$" is an escape character.  Two dollar signs signify an ordinary $$.  See $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$.  In $FG,2$asm$FG$ or $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ code, it also refers to the inst's address or the offset in a $FG,2$class$FG$ definition. 
 
 * $FG,2$union$FG$ is more like a class, so you don't reference it with a $FG,2$union$FG$ label after you define it.  Some common unions are declared in $LK,"KernelA.HH",A="MN:U16"$ for 1,2,4 and 8 byte objects.  If you place a type in front of a union declaration, that is the type when used by itself.  See $LK,"::/Demo/SubIntAccess.CC"$. 
 

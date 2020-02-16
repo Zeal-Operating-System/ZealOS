@@ -13,8 +13,8 @@ U0 StadiumGen()
   DocClear;
   Type("StadiumBG.DD");
   "$$CM,0,%d$$",TEXT_ROWS-3;
-  fp_old_update=gr.fp_final_scrn_update; //hide mouse cursor
-  gr.fp_final_scrn_update=NULL;
+  fp_old_update=gr.fp_final_screen_update; //hide mouse cursor
+  gr.fp_final_screen_update=NULL;
 
   Refresh(2,TRUE);
   dc2=DCScreenCapture;
@@ -25,7 +25,7 @@ U0 StadiumGen()
   DCDel(dc);
 
   DocCursor(ON);
-  gr.fp_final_scrn_update=fp_old_update;
+  gr.fp_final_screen_update=fp_old_update;
   DocClear;
 }
 

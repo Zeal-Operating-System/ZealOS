@@ -81,7 +81,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
   CColorROPU32 color,c,old_color;
   CTask *win_task;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->scroll_x;
     y+=win_task->scroll_y;
@@ -96,7 +96,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
     h1=0;
   w2=img->width;
   h2=img->height;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     x+=win_task->pix_left;
     y+=win_task->pix_top;
   }
@@ -105,7 +105,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
     if (dist<=dc->nearest_dist)
       dc->nearest_dist=dist;
   }
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     if (x+w1<0) w1=-x;
     if (x+w2>win_task->pix_right+1)
       w2=win_task->pix_right+1-x;
@@ -161,7 +161,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
       case ROPB_MONO:
 	color_mask=gr.to_8_colors[color.c0.color];
 	if (img->flags&DCF_NO_TRANSPARENTS) {
-	  if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP)
+	  if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP)
 	    win_z_buf_ptr=NULL;
 	  else {
 	    win_z_num=win_task->win_z_num;
@@ -269,7 +269,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
 	    }
 	} else {
 	  k=h1*img->width_internal;
-	  if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP) {
+	  if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP) {
 	    for (j=h1;j<h2;j++) {
 	      for (i=w1;i<w2;i++)
 		if (img->body[k+i])
@@ -314,7 +314,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
 	break;
       case ROPB_EQU:
 	if (img->flags&DCF_NO_TRANSPARENTS) {
-	  if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP)
+	  if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP)
 	    win_z_buf_ptr=NULL;
 	  else {
 	    win_z_num=win_task->win_z_num;
@@ -419,7 +419,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
 	} else {
 here1a:
 	  k=h1*img->width_internal;
-	  if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP) {
+	  if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP) {
 	    for (j=h1;j<h2;j++) {
 	      for (i=w1;i<w2;i++) {
 		c=img->body[k+i];
@@ -473,7 +473,7 @@ here1a:
 	break;
       case ROPB_XOR:
 	if (img->flags&DCF_NO_TRANSPARENTS) {
-	  if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP)
+	  if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP)
 	    win_z_buf_ptr=NULL;
 	  else {
 	    win_z_num=win_task->win_z_num;
@@ -621,7 +621,7 @@ public CDC *DCExt(CDC *dc=gr.dc,I64 x1,I64 y1,I64 x2,I64 y2,
   CTask *win_task;
   if (x1>x2) SwapI64(&x1,&x2);
   if (y1>y2) SwapI64(&y1,&y2);
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x1+=win_task->pix_left+win_task->scroll_x;
     y1+=win_task->pix_top +win_task->scroll_y;
@@ -698,7 +698,7 @@ public I64 GrPutChar(CDC *dc=gr.dc,I64 x,I64 y,U8 ch)
   CColorROPU32 color,c;
   CTask *win_task;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->scroll_x;
     y+=win_task->scroll_y;
@@ -715,7 +715,7 @@ public I64 GrPutChar(CDC *dc=gr.dc,I64 x,I64 y,U8 ch)
   w2=FONT_WIDTH;
   h2=FONT_HEIGHT;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     x+=win_task->pix_left;
     y+=win_task->pix_top;
   }
@@ -724,7 +724,7 @@ public I64 GrPutChar(CDC *dc=gr.dc,I64 x,I64 y,U8 ch)
     if (dist<=dc->nearest_dist)
       dc->nearest_dist=dist;
   }
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     if (x+w1<0) w1=-x;
     if (x+w2>win_task->pix_right+1)
       w2=win_task->pix_right+1-x;
@@ -777,7 +777,7 @@ public I64 GrPutChar(CDC *dc=gr.dc,I64 x,I64 y,U8 ch)
       color_mask=gr.to_8_colors[color.c0.color];
       k1=x+w1;
       kk1=(h1+y)*dc->width_internal+k1;
-      if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP) {
+      if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP) {
 	if (leading_pixels) {
 	  dst=dc->body+kk1&~7;
 	  src=font_ptr;
@@ -1018,7 +1018,7 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
   Bool dither,probability_dither;
   CTask *win_task;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->scroll_x;
     y+=win_task->scroll_y;
@@ -1035,7 +1035,7 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
   w2=w;
   h2=h;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     x+=win_task->pix_left;
     y+=win_task->pix_top;
   }
@@ -1047,7 +1047,7 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
     if (dist<=dc->nearest_dist)
       dc->nearest_dist=dist;
   }
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     if (x+w1<0) w1=-x;
     if (x+w2>win_task->pix_right+1)
       w2=win_task->pix_right+1-x;
@@ -1107,7 +1107,7 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
       }
       res+=dc->collision_count;
     } else {
-      if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP)
+      if (!(dc->flags & DCF_SCREEN_BITMAP) || dc->flags&DCF_ON_TOP)
 	win_z_buf_ptr=NULL;
       else {
 	win_z_num=win_task->win_z_num;
@@ -1459,7 +1459,7 @@ I64 GrRayLenMinus(CDC *dc,I64 x,I64 y)
   Bool not_color=ToBool(dc->flags&DCF_FILL_NOT_COLOR);
   CTask *win_task;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->scroll_x;
     y+=win_task->scroll_y;
@@ -1468,7 +1468,7 @@ I64 GrRayLenMinus(CDC *dc,I64 x,I64 y)
   y3=y;
   if (x3<0 || y3<0)
     goto gr_done;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     x3+=win_task->pix_left;
     y3+=win_task->pix_top;
     if (!(0<=x3<=win_task->pix_right) || !(0<=y3<=win_task->pix_bottom) ||
@@ -1483,7 +1483,7 @@ I64 GrRayLenMinus(CDC *dc,I64 x,I64 y)
   while (TRUE) {
     x3=x;
     if (x3&(FONT_WIDTH-1)==FONT_WIDTH-1) {
-      if (dc->flags & DCF_SCRN_BITMAP) {
+      if (dc->flags & DCF_SCREEN_BITMAP) {
 	if (x3<0) break;
 	x3+=win_task->pix_left;
 	if (!(0<=x3<=win_task->pix_right) || x3>=dc->width ||
@@ -1492,7 +1492,7 @@ I64 GrRayLenMinus(CDC *dc,I64 x,I64 y)
       } else
 	if (!(0<=x3<dc->width))
 	  break;
-    } else if (dc->flags & DCF_SCRN_BITMAP)
+    } else if (dc->flags & DCF_SCREEN_BITMAP)
       x3+=win_task->pix_left;
     dst=dst2+x3;
     c=*dst;
@@ -1526,7 +1526,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
   I32 *db2;
   CTask *win_task;
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->scroll_x;
     y+=win_task->scroll_y;
@@ -1537,7 +1537,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
   y3=y;
   if (x3<0 || y3<0)
     goto gr_done;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     x3+=win_task->pix_left;
     y3+=win_task->pix_top;
     if (!(0<=x3<=win_task->pix_right) || !(0<=y3<=win_task->pix_bottom) ||
@@ -1566,7 +1566,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
   while (TRUE) {
     x3=x;
     if (!(x3&(FONT_WIDTH-1))) {
-      if (dc->flags & DCF_SCRN_BITMAP) {
+      if (dc->flags & DCF_SCREEN_BITMAP) {
 	if (x3<0) break;
 	x3+=win_task->pix_left;
 	if (!(0<=x3<=win_task->pix_right) || x3>=dc->width ||
@@ -1576,7 +1576,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
 	if (!(0<=x3<dc->width))
 	  break;
       }
-    } else if (dc->flags & DCF_SCRN_BITMAP)
+    } else if (dc->flags & DCF_SCREEN_BITMAP)
       x3+=win_task->pix_left;
 
     dst=dst2+x3;
@@ -1635,7 +1635,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
     } else
       break;
   }
-  if (dc->flags & DCF_SCRN_BITMAP)
+  if (dc->flags & DCF_SCREEN_BITMAP)
     *x1=x-1-win_task->scroll_x;
   else
     *x1=x-1;
@@ -1643,7 +1643,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
   while (TRUE) {
     x3=x;
     if (x3&(FONT_WIDTH-1)==FONT_WIDTH-1) {
-      if (dc->flags & DCF_SCRN_BITMAP) {
+      if (dc->flags & DCF_SCREEN_BITMAP) {
 	if (x3<0) break;
 	x3+=win_task->pix_left;
 	if (!(0<=x3<=win_task->pix_right) || x3>=dc->width ||
@@ -1652,7 +1652,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
       } else
 	if (!(0<=x3<dc->width))
 	  break;
-    } else if (dc->flags & DCF_SCRN_BITMAP)
+    } else if (dc->flags & DCF_SCREEN_BITMAP)
       x3+=win_task->pix_left;
 
     dst=dst2+x3;
@@ -1731,7 +1731,7 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
     return GrRect(dc,x1,y,x2-x1+1,1);
   }
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x1+=win_task->scroll_x;
     x2+=win_task->scroll_x;
@@ -1760,7 +1760,7 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
   } else
     i=0;
   j=0;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     x1+=win_task->pix_left;
     x2+=win_task->pix_left;
     if (x1>win_task->pix_right)
@@ -1804,7 +1804,7 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
   if (dc->flags & DCF_DONT_DRAW)
     goto gr_done;
 
-  if (!(dc->flags & DCF_SCRN_BITMAP) ||
+  if (!(dc->flags & DCF_SCREEN_BITMAP) ||
 	win_task->next_task==sys_winmgr_task ||
 	dc->flags&DCF_ON_TOP ||	!IsPixCovered0(win_task,x1,y))
     char_clear=TRUE;
@@ -1872,7 +1872,7 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
       db++;
     z+=dz;
     if (!(x1&(FONT_WIDTH-1)) && x1<=x2) {
-      if (!(dc->flags & DCF_SCRN_BITMAP)||
+      if (!(dc->flags & DCF_SCREEN_BITMAP)||
 	    win_task->next_task==sys_winmgr_task ||
 	    dc->flags&DCF_ON_TOP || !IsPixCovered0(win_task,x1,y))
 	char_clear=TRUE;
@@ -1900,7 +1900,7 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
     return GrRect(dc,x,y1,1,y2-y1+1);
   }
 
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x +=win_task->scroll_x;
     y1+=win_task->scroll_y;
@@ -1929,7 +1929,7 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
   } else
     i=0;
   j=0;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     y1+=win_task->pix_top;
     y2+=win_task->pix_top;
     if (y1>win_task->pix_bottom)
@@ -1973,7 +1973,7 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
   if (dc->flags & DCF_DONT_DRAW)
     goto gr_done;
 
-  if (!(dc->flags & DCF_SCRN_BITMAP) ||
+  if (!(dc->flags & DCF_SCREEN_BITMAP) ||
 	win_task->next_task==sys_winmgr_task ||
 	dc->flags&DCF_ON_TOP ||	!IsPixCovered0(win_task,x,y1))
     char_clear=TRUE;
@@ -2041,7 +2041,7 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
       db+=dc->width_internal;
     z+=dz;
     if (!(y1&(FONT_HEIGHT-1)) && y1<=y2) {
-      if (!(dc->flags & DCF_SCRN_BITMAP)||
+      if (!(dc->flags & DCF_SCREEN_BITMAP)||
 	    win_task->next_task==sys_winmgr_task ||
 	    dc->flags&DCF_ON_TOP || !IsPixCovered0(win_task,x,y1))
 	char_clear=TRUE;

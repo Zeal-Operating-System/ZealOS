@@ -59,7 +59,7 @@ extern class CTask;
 #define eps	(0x3CB0000000000000(F64))
 
 #help_index "Data Types/Simple"
-/*HolyC union structure is treated as a
+/*CosmiC union structure is treated as a
 whole if no member is specified,
 similar to bit fields.
 
@@ -592,7 +592,7 @@ class CRAXRBCRCXRDX
 };
 
 //Asm callable function pointers.
-//They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from HolyC.
+//They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from CosmiC.
 #define EXT_WIN_TO_TOP		0
 #define EXT_WIN_FOCUS		1
 #define EXT_HEAPLOG_MALLOC	2
@@ -1358,7 +1358,7 @@ class CDocUndo
 
 #define RECALCt_NORMAL		0x00
 #define RECALCt_FIND_CURSOR	0x01
-#define RECALCt_TO_SCRN		0x02
+#define RECALCt_TO_SCREEN		0x02
 #define RECALCG_MASK		0xFF
 
 #define RECALCF_HAS_CURSOR	0x100
@@ -3072,7 +3072,7 @@ public class CCtrl
   I64	left,right,top,bottom;
 
   //screen pix coordinates (derived)
-  I64	scrn_left,scrn_right,scrn_top,scrn_bottom;
+  I64	screen_left,screen_right,screen_top,screen_bottom;
 
   U8	*state;
 
@@ -3528,8 +3528,8 @@ public class CSysFixedArea
 #define SC_F12		0x58
 #define SC_PAUSE	0x61
 #define SC_GUI		0xDB
-#define SC_PRTSCRN1	0xAA
-#define SC_PRTSCRN2	0xB7
+#define SC_PRINTSCREEN1	0xAA
+#define SC_PRINTSCREEN2	0xB7
 
 #help_index "Char;Debugging/Raw Output;TextBase Layer/Char"
 //text.raw_flags
@@ -3541,7 +3541,7 @@ public class CSysFixedArea
 public class CTextGlobals
 {
   I64	raw_col,raw_flags;
-  U8	*raw_scrn_image;
+  U8	*raw_screen_image;
   I64	rows,cols;		//Use TEXT_ROWS,TEXT_COLS
   U64	*font,*aux_font;
   U8	*vga_alias,*vga_text_alias;
@@ -3578,7 +3578,7 @@ public class CTextGlobals
 #define DCF_LOCATE_NEAREST	0x800
 #define DCF_DONT_DRAW		0x1000
 #define DCF_ALIAS		0x2000
-#define DCF_SCRN_BITMAP		0x4000
+#define DCF_SCREEN_BITMAP		0x4000
 #define DCF_FILL_NOT_COLOR	0x8000
 #define DCF_RECORD_EXTENTS	0x10000
 #define DCF_ON_TOP		0x20000
@@ -3866,18 +3866,18 @@ class CProgress
 };
 
 #help_index "Char/Operations"
-#define PRTF_PAD_ZERO		0x001
-#define PRTF_LEFT_JUSTIFY	0x002
-#define PRTF_TRUNCATE		0x004
-#define PRTF_COMMA		0x008
-#define PRTF_DOLLAR		0x010
-#define PRTF_SLASH		0x020
-#define PRTF_QUESTION		0x040
-#define PRTF_AUX_FMT_NUM	0x080
-#define PRTF_DECIMAL		0x100
-#define PRTF_NEG		0x200
-#define PRTF_NEG_E		0x400
-#define PRTF_NEG_AUX_FMT_NUM	0x800
+#define PRINTF_PAD_ZERO		0x001
+#define PRINTF_LEFT_JUSTIFY	0x002
+#define PRINTF_TRUNCATE		0x004
+#define PRINTF_COMMA		0x008
+#define PRINTF_DOLLAR		0x010
+#define PRINTF_SLASH		0x020
+#define PRINTF_QUESTION		0x040
+#define PRINTF_AUX_FMT_NUM	0x080
+#define PRINTF_DECIMAL		0x100
+#define PRINTF_NEG		0x200
+#define PRINTF_NEG_E		0x400
+#define PRINTF_NEG_AUX_FMT_NUM	0x800
 
 #help_index "Misc/Host"
 //Host Operating System

@@ -1,7 +1,7 @@
 asm {/* See $LK,"::/Doc/Boot.DD"$.
 ZenithOS starts in real, calls some BIOS
 routines, switches to 32 bit, and 64 bit mode
-and continues in $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ at $LK,"KMain",A="MN:KMain"$().
+and continues in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ at $LK,"KMain",A="MN:KMain"$().
 
 The boot loader jumps here in real-mode (16-bit).
 It actually jumps to the $LK,"CBinFile",A="MN:CBinFile"$ header which is

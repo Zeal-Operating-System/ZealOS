@@ -72,7 +72,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
     cc->htc.glbl_hash_table->next=Fs->hash_table;
   cc->htc.hash_table_list=cc->htc.local_hash_table=HashTableNew(16);
   cc->htc.local_hash_table->next=cc->htc.glbl_hash_table;
-  cc->htc.local_var_list=cc->htc.fun; //HolyC local vars
+  cc->htc.local_var_list=cc->htc.fun; //CosmiC local vars
   cc->htc.fun=NULL;
   try {
     if (comp_flags&CMPF_LEX_FIRST)

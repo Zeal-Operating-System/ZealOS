@@ -291,8 +291,8 @@ U8 *ScanCode2KeyName(I64 sc)
       case SC_F11:	CatPrint(buf,"F11");	break;
       case SC_F12:	CatPrint(buf,"F12");	break;
       case SC_GUI:	CatPrint(buf,"WINDOWS");  break;
-      case SC_PRTSCRN1:	CatPrint(buf,"PRTSCRN1"); break;
-      case SC_PRTSCRN2:	CatPrint(buf,"PRTSCRN2"); break;
+      case SC_PRINTSCREEN1:	CatPrint(buf,"PRINTSCREEN1"); break;
+      case SC_PRINTSCREEN2:	CatPrint(buf,"PRINTSCREEN2"); break;
     }
   }
   return StrNew(buf);

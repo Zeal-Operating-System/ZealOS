@@ -58,13 +58,13 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
       OutU8(VGAP_DATA,0x0F); //All planes -- WHITE
       if (text.raw_flags&RWF_SCROLL && text.raw_col && !row && !col) {
 //Scroll cached image
-	MemCopy(text.raw_scrn_image,
-	      text.raw_scrn_image+GR_WIDTH*FONT_HEIGHT>>3,
+	MemCopy(text.raw_screen_image,
+	      text.raw_screen_image+GR_WIDTH*FONT_HEIGHT>>3,
 	      GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3);
-	MemSet(text.raw_scrn_image+GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3,0,
+	MemSet(text.raw_screen_image+GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3,0,
 	      GR_WIDTH*FONT_HEIGHT>>3);
 
-	MemCopy(text.vga_alias,text.raw_scrn_image,GR_WIDTH*GR_HEIGHT>>3);
+	MemCopy(text.vga_alias,text.raw_screen_image,GR_WIDTH*GR_HEIGHT>>3);
 	text.raw_col-=text.cols;
 	row=text.rows-1;
       }
@@ -72,7 +72,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
       CLI
       ptr=ptr1=col+row*GR_WIDTH*FONT_HEIGHT>>3;
       ptr+=text.vga_alias;
-      ptr1+=text.raw_scrn_image; //Write to cached image as well
+      ptr1+=text.raw_screen_image; //Write to cached image as well
       ptr2=&text.font[ch&255];
       for (i=0;i<FONT_HEIGHT;i++) {
 	*ptr=*ptr1=rev_bits_table[*ptr2++];

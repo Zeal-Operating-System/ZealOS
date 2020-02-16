@@ -17,8 +17,8 @@ I64 PenBrushesSize()
 I64 ScreenZoomTablesSize()
 {
   I64 res=0,i;
-  for (i=1;i<=GR_SCRN_ZOOM_MAX;i++)
-    res+=MSize2(gr.scrn_zoom_tables[i]);
+  for (i=1;i<=GR_SCREEN_ZOOM_MAX;i++)
+    res+=MSize2(gr.screen_zoom_tables[i]);
   return res;
 }
 
@@ -135,7 +135,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 
   if (task==sys_winmgr_task) {
     "gr.pen_brushes\t:%010X\n",PenBrushesSize;
-    "gr.scrn_zoom_tbles\t:%010X\n",ScreenZoomTablesSize;
+    "gr.screen_zoom_tbles\t:%010X\n",ScreenZoomTablesSize;
     "screencast.dc\t:%010X\n",DCSize(screencast.dc);
     "screencast.dc2_alias\t:%010X\n",DCSize(screencast.dc2_alias);
   } else if (task==zenith_task) {
@@ -183,7 +183,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
     "gr.dc1\t\t:%010X\n",DCSize(gr.dc1);
     "gr.dc2\t\t:%010X\n",DCSize(gr.dc2);
     "gr.dc_cache\t\t:%010X\n",DCSize(gr.dc_cache);
-    "gr.scrn_image\t:%010X\n",DCSize(gr.scrn_image);
+    "gr.screen_image\t:%010X\n",DCSize(gr.screen_image);
     "gr.zoomed_dc\t:%010X\n",DCSize(gr.zoomed_dc);
   }
   "$$ID,-2$$";

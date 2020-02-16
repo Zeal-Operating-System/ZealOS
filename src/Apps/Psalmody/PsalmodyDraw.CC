@@ -146,7 +146,7 @@ U0 PsmRecalcNoteXY()
 {
   F64 measure_len=4,measure_left=measure_len;
   PsmNote *tmpn=psm.head.next;
-  I64 x=8-psm.scrn_x,ona,note,octave;
+  I64 x=8-psm.screen_x,ona,note,octave;
   while (TRUE) {
     tmpn->x=x;
     tmpn->y=50;
@@ -198,11 +198,11 @@ U0 DrawIt(CTask *task,CDC *dc)
 
   PsmRecalcNoteXY;
   if (psm.cur_note->x<64) {
-    psm.scrn_x-=128;
+    psm.screen_x-=128;
     PsmRecalcNoteXY;
   }
   if (psm.cur_note->x>=GR_WIDTH-64) {
-    psm.scrn_x+=128;
+    psm.screen_x+=128;
     PsmRecalcNoteXY;
   }
 

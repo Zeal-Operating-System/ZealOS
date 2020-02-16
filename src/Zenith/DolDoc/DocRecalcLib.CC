@@ -203,11 +203,11 @@ U0 DocUpdateTaskDocs(CTask *task)
       task->border_attr=DriveTextAttrGet(*doc->filename.name);
     if (task->title_src==TTS_ED_FILENAME)
       MemCopy(task->task_title,doc->filename.name,STR_LEN-1);
-    DocRecalc(doc,RECALCt_TO_SCRN|RECALCF_HAS_CURSOR);
+    DocRecalc(doc,RECALCt_TO_SCREEN|RECALCF_HAS_CURSOR);
   }
   if ((doc=DocBorder(task)) && !(doc->flags&DOCF_DONT_SHOW)) {
     WinScrollNull(task,&saved_scroll);
-    DocRecalc(doc,RECALCt_TO_SCRN);
+    DocRecalc(doc,RECALCt_TO_SCREEN);
     WinScrollRestore(task,&saved_scroll);
   }
 }

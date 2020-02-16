@@ -40,7 +40,7 @@ I64 PopUpEdFormat()
   I64 i;
   CDoc *doc=DocNew;
   DocPrint(doc,"$$LTBLUE$$$$MU,\"Compile Check\",LE=EF_CMP_CHK$$\n"
-	"$$MU,\"Reindent HolyC Fun (Beware braces in strings.)\","
+	"$$MU,\"Reindent CosmiC Fun (Beware braces in strings.)\","
 	"LE=EF_REINDENT$$\n"
 	"$$MU,\"Renum Asm Local @@ Labels for Fun\",LE=EF_RENUM_ASM$$\n"
 	"$$MU,\"Insert Template Code: Ctrl Slider\",LE=EF_CTRL_SLIDER$$\n"

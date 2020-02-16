@@ -214,7 +214,7 @@ U0 WinFinalUpdate(CDC *dc)
   DrawMouse(dc);
 }
 
-gr.fp_final_scrn_update=&WinFinalUpdate;
+gr.fp_final_screen_update=&WinFinalUpdate;
 
 U0 WinMouseUpdate()
 {
@@ -237,15 +237,15 @@ U0 WinMouseUpdate()
     }
   } else
     mouse.speed*=0.95;
-  if (gr.scrn_zoom!=1) {
+  if (gr.screen_zoom!=1) {
     if (gr.continuous_scroll)
       GrScaleZoom(1.0);
     else {
-      dd=(mouse.pos.x-gr.sx)*gr.scrn_zoom;
+      dd=(mouse.pos.x-gr.sx)*gr.screen_zoom;
       if (!(8<=dd<GR_WIDTH-8))
 	GrScaleZoom(1.0);
       else {
-	dd=(mouse.pos.y-gr.sy)*gr.scrn_zoom;
+	dd=(mouse.pos.y-gr.sy)*gr.screen_zoom;
 	if (!(8<=dd<GR_HEIGHT-8))
 	  GrScaleZoom(1.0);
       }

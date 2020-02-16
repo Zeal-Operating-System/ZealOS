@@ -1,8 +1,8 @@
 #help_index "Graphics/Sprite;Sprites"
 
 #define SPT_MENU	-2
-#define SPT_INS_SCRN_BITMAP		-3
-#define SPT_INS_TRANSPARENT_SCRN_BITMAP	-4
+#define SPT_INS_SCREEN_BITMAP		-3
+#define SPT_INS_TRANSPARENT_SCREEN_BITMAP	-4
 #define SPT_ED_MENU	-5
 #define SPT_EXIT	-6
 
@@ -43,9 +43,9 @@ I64 PopUpSpriteMain(CSprite **_head,I64 *_cur_elem_num,
 	"$$MU-UL,\"BSpline3\",LE=SPT_BSPLINE3$$\n"
 	"$$MU-UL,\"BSpline2 Closed\",LE=SPT_BSPLINE2_CLOSED$$\n"
 	"$$MU-UL,\"BSpline3 Closed\",LE=SPT_BSPLINE3_CLOSED$$\n"
-	"$$MU-UL,\"Insert Screen-Captured BitMap\",LE=SPT_INS_SCRN_BITMAP$$\n"
+	"$$MU-UL,\"Insert Screen-Captured BitMap\",LE=SPT_INS_SCREEN_BITMAP$$\n"
 	"$$MU-UL,\"Insert Transparent Screen-Captured BitMap\","
-	"LE=SPT_INS_TRANSPARENT_SCRN_BITMAP$$\n"
+	"LE=SPT_INS_TRANSPARENT_SCREEN_BITMAP$$\n"
 	"$$PURPLE$$$$MU-UL,\"+] Create or Edit 3D Mesh\",LE=SPT_MESH$$\n"
 	"$$MU-UL,\"+] Create or Edit Shiftable 3D Mesh\","
 	"LE=SPT_SHIFTABLE_MESH$$\n"
@@ -266,14 +266,14 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
   res->pwhu.x1=0;
   res->pwhu.y1=0;
   SpriteScreenInit(dc,x,y);
-  i=gr.scrn_zoom;
+  i=gr.screen_zoom;
   GrScaleZoom(1.0/i);
   Refresh(2,TRUE);
 
   dc3=DCScreenCapture;
   img=DCExt(dc3,Fs->pix_left+Fs->scroll_x+xx1,Fs->pix_top+Fs->scroll_y+yy1,
 	Fs->pix_left+Fs->scroll_x+xx2-1,Fs->pix_top+Fs->scroll_y+yy2-1);
-  if (eletype==SPT_INS_TRANSPARENT_SCRN_BITMAP)
+  if (eletype==SPT_INS_TRANSPARENT_SCREEN_BITMAP)
     DCColorChange(img,bm_bkcolor);
   GrScaleZoom(i);
   MemCopy(&res->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
@@ -796,10 +796,10 @@ U0 SMTaskTitleSet(I64 eletype)
 {
   Fs->title_src=TTS_CONST; //Violates TTS_LOCKED_CONST
   switch (eletype) {
-    case SPT_INS_SCRN_BITMAP:
+    case SPT_INS_SCREEN_BITMAP:
       StrCopy(Fs->task_title,"Insert Screen BitMap");
       break;
-    case SPT_INS_TRANSPARENT_SCRN_BITMAP:
+    case SPT_INS_TRANSPARENT_SCREEN_BITMAP:
       StrCopy(Fs->task_title,"Insert Transparent Screen BitMap");
       break;
     default:
@@ -937,7 +937,7 @@ I64 SpriteMainEd(CDoc *doc)
 	  PopUpOk("Select Origin.\n");
 	doc_ce->de_flags=old_de_flags;
 	break;
-      case SPT_INS_SCRN_BITMAP:
+      case SPT_INS_SCREEN_BITMAP:
 	doc_ce->de_flags|=DOCEF_DONT_DRAW;
 	PopUpOk("Drag-out a rect for the extents of the\nbitmap.\n");
 	doc_ce->de_flags=old_de_flags;
@@ -969,7 +969,7 @@ I64 SpriteMainEd(CDoc *doc)
 	}
 	doc_ce->de_flags=old_de_flags;
 	break;
-      case SPT_INS_TRANSPARENT_SCRN_BITMAP:
+      case SPT_INS_TRANSPARENT_SCREEN_BITMAP:
 	doc_ce->de_flags|=DOCEF_DONT_DRAW;
 	i=PopUpColor("Color to Become Transparent\n\n",,FALSE);
 	if (i<0)
@@ -1095,8 +1095,8 @@ I64 SpriteMainEd(CDoc *doc)
 	      case SPT_RECT:
 		tmpg=SMRect(dc,x,y,arg1,arg2,color);
 		break;
-	      case SPT_INS_SCRN_BITMAP:
-	      case SPT_INS_TRANSPARENT_SCRN_BITMAP:
+	      case SPT_INS_SCREEN_BITMAP:
+	      case SPT_INS_TRANSPARENT_SCREEN_BITMAP:
 		tmpg=SMScreenBitMap(eletype,dc,dc2,x,y,arg1,arg2,bm_bkcolor);
 		eletype=SPT_MENU;
 		break;

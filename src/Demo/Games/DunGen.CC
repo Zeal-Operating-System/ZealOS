@@ -49,10 +49,10 @@ U8 *tiles1[16]={NULL,$IB,"<7>",BI=7$ ,$IB,"<5>",BI=5$ ,NULL,NULL,NULL,NULL,NULL,
 U8 *tiles2[16]={NULL,$IB,"<8>",BI=8$ ,$IB,"<5>",BI=5$ ,NULL,NULL,NULL,NULL,NULL,
   $IB,"<6>",BI=6$ ,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
-#define SCRN_SCALE	24
-#define SCRN_WIDTH	24
-#define SCRN_HEIGHT	24
-I64 scrn_x,scrn_y;
+#define SCREEN_SCALE	24
+#define SCREEN_WIDTH	24
+#define SCREEN_HEIGHT	24
+I64 screen_x,screen_y;
 
 #define MAP_SCALE	4
 I64 map_width,map_height;
@@ -115,32 +115,32 @@ U0 DrawIt(CTask *task,CDC *dc)
   //if you did it like $LK,"::/Demo/Games/BigGuns.CC"$
   //with a $LK,"CDC",A="MN:CDC"$.
 
-  for (y=-SCRN_HEIGHT/2;y<SCRN_HEIGHT/2;y++) {
-    yy=y+scrn_y;
+  for (y=-SCREEN_HEIGHT/2;y<SCREEN_HEIGHT/2;y++) {
+    yy=y+screen_y;
     if (0<=yy<map_height)
-      for (x=-SCRN_WIDTH/2;x<SCRN_WIDTH/2;x++) {
-	xx=x+scrn_x;
+      for (x=-SCREEN_WIDTH/2;x<SCREEN_WIDTH/2;x++) {
+	xx=x+screen_x;
 	if (0<=xx<map_width) {
 	  if ((color=map[yy*map_width+xx]) &&
 		LOS(xx,yy,man_x,man_y)) {
 	    if (_tiles[color]) {
-	      x1=x*SCRN_SCALE;
-	      y1=y*SCRN_SCALE;
+	      x1=x*SCREEN_SCALE;
+	      y1=y*SCREEN_SCALE;
 	      z1=0;
 	      DCTransform(dc_t,&x1,&y1,&z1);
 	      Sprite3(dc,x1,y1,z1,_tiles[color]);
 	    } else {//If no tile defined, do solid color.
-	      poly[0].x=x*SCRN_SCALE;
-	      poly[0].y=y*SCRN_SCALE;
+	      poly[0].x=x*SCREEN_SCALE;
+	      poly[0].y=y*SCREEN_SCALE;
 	      poly[0].z=0;
-	      poly[1].x=(x+1)*SCRN_SCALE-1;
-	      poly[1].y=y*SCRN_SCALE;
+	      poly[1].x=(x+1)*SCREEN_SCALE-1;
+	      poly[1].y=y*SCREEN_SCALE;
 	      poly[1].z=0;
-	      poly[2].x=(x+1)*SCRN_SCALE;
-	      poly[2].y=(y+1)*SCRN_SCALE-1;
+	      poly[2].x=(x+1)*SCREEN_SCALE;
+	      poly[2].y=(y+1)*SCREEN_SCALE-1;
 	      poly[2].z=0;
-	      poly[3].x=x*SCRN_SCALE-1;
-	      poly[3].y=(y+1)*SCRN_SCALE-1;
+	      poly[3].x=x*SCREEN_SCALE-1;
+	      poly[3].y=(y+1)*SCREEN_SCALE-1;
 	      poly[3].z=0;
 	      dc_t->color=color;
 	      GrFillPoly3(dc_t,4,poly);
@@ -150,23 +150,23 @@ U0 DrawIt(CTask *task,CDC *dc)
       }
   }
 
-  for (y=-SCRN_HEIGHT/2;y<SCRN_HEIGHT/2;y++) {
-    yy=y+scrn_y;
+  for (y=-SCREEN_HEIGHT/2;y<SCREEN_HEIGHT/2;y++) {
+    yy=y+screen_y;
     if (0<=yy<map_height)
-      for (x=-SCRN_WIDTH/2;x<SCRN_WIDTH/2;x++) {
-	xx=x+scrn_x;
+      for (x=-SCREEN_WIDTH/2;x<SCREEN_WIDTH/2;x++) {
+	xx=x+screen_x;
 	if (0<=xx<map_width) {
 	  if (!map[yy*map_width+xx]) {
 	    if (yy+1<map_height && LOS(xx,yy+1,man_x,man_y)) {
-	      x1=x*SCRN_SCALE;
-	      y1=y*SCRN_SCALE;
+	      x1=x*SCREEN_SCALE;
+	      y1=y*SCREEN_SCALE;
 	      z1=0;
 	      DCTransform(dc_t,&x1,&y1,&z1);
 	      Sprite3(dc,x1,y1,z1,$IB,"<9>",BI=9$);
 	    }
 	    if (xx+1<map_width && LOS(xx+1,yy,man_x,man_y)) {
-	      x1=x*SCRN_SCALE;
-	      y1=y*SCRN_SCALE;
+	      x1=x*SCREEN_SCALE;
+	      y1=y*SCREEN_SCALE;
 	      z1=0;
 	      DCTransform(dc_t,&x1,&y1,&z1);
 	      Sprite3(dc,x1,y1,z1,$IB,"<10>",BI=10$);
@@ -178,8 +178,8 @@ U0 DrawIt(CTask *task,CDC *dc)
 
   for (i=0,tmpm=monsters;i<MONSTERS_NUM;i++,tmpm++)
     if (!tmpm->dead && LOS(tmpm->x,tmpm->y,man_x,man_y)) {
-      x1=(tmpm->x-scrn_x)*SCRN_SCALE+SCRN_SCALE/2;
-      y1=(tmpm->y-scrn_y)*SCRN_SCALE+SCRN_SCALE/2;
+      x1=(tmpm->x-screen_x)*SCREEN_SCALE+SCREEN_SCALE/2;
+      y1=(tmpm->y-screen_y)*SCREEN_SCALE+SCREEN_SCALE/2;
       z1=0;
       DCTransform(dc_t,&x1,&y1,&z1);
       if (tmpm->dx<0) {
@@ -190,14 +190,14 @@ U0 DrawIt(CTask *task,CDC *dc)
       Sprite3(dc,x1,y1,z1,$IB,"<4>",BI=4$);
     }
 
-  x1=(man_x-scrn_x)*SCRN_SCALE+SCRN_SCALE/2;
-  y1=(man_y-scrn_y)*SCRN_SCALE+SCRN_SCALE/2;
+  x1=(man_x-screen_x)*SCREEN_SCALE+SCREEN_SCALE/2;
+  y1=(man_y-screen_y)*SCREEN_SCALE+SCREEN_SCALE/2;
   z1=0;
   if (tS-man_attack_t0<0.2) {
-    x1+=Tri(tS-man_attack_t0,0.2)*SCRN_SCALE*man_dx;
-    y1+=Tri(tS-man_attack_t0,0.2)*SCRN_SCALE*man_dy;
+    x1+=Tri(tS-man_attack_t0,0.2)*SCREEN_SCALE*man_dx;
+    y1+=Tri(tS-man_attack_t0,0.2)*SCREEN_SCALE*man_dy;
     if (man_dy!=1)
-      y1-=Saw(tS-man_attack_t0,0.2)*SCRN_SCALE;
+      y1-=Saw(tS-man_attack_t0,0.2)*SCREEN_SCALE;
   }
   DCTransform(dc_t,&x1,&y1,&z1);
   if (man_dx<0) {
@@ -268,8 +268,8 @@ U0 Init()
   man_y=4;
   man_dx=0;
   man_dy=0;
-  scrn_x=0;
-  scrn_y=0;
+  screen_x=0;
+  screen_y=0;
   for (i=0,tmpm=monsters;i<MONSTERS_NUM;i++,tmpm++) {
     tmpm->dead=FALSE;
     tmpm->dx=0;
@@ -368,10 +368,10 @@ U0 DunGen()
 		    if (man_x+1<map_width &&
 			  map[man_y*map_width+(man_x+1)]==DKGRAY) {
 		      man_x++;
-		      if (man_x-scrn_x>SCRN_WIDTH/2-3) {
-			scrn_x+=SCRN_WIDTH/2;
-			if (scrn_x+SCRN_WIDTH/2>map_width)
-			  scrn_x=map_width-SCRN_WIDTH/2;
+		      if (man_x-screen_x>SCREEN_WIDTH/2-3) {
+			screen_x+=SCREEN_WIDTH/2;
+			if (screen_x+SCREEN_WIDTH/2>map_width)
+			  screen_x=map_width-SCREEN_WIDTH/2;
 		      }
 		    }
 		  break;
@@ -384,10 +384,10 @@ U0 DunGen()
 		    if (man_x-1>=0 &&
 			  map[man_y*map_width+(man_x-1)]==DKGRAY) {
 		      man_x--;
-		      if (man_x-scrn_x<-SCRN_WIDTH/2+3) {
-			scrn_x-=SCRN_WIDTH/2;
-			if (scrn_x-SCRN_WIDTH/2<0)
-			  scrn_x=SCRN_WIDTH/2;
+		      if (man_x-screen_x<-SCREEN_WIDTH/2+3) {
+			screen_x-=SCREEN_WIDTH/2;
+			if (screen_x-SCREEN_WIDTH/2<0)
+			  screen_x=SCREEN_WIDTH/2;
 		      }
 		    }
 		  break;
@@ -400,10 +400,10 @@ U0 DunGen()
 		    if (man_y-1>=0 &&
 			  map[(man_y-1)*map_width+man_x]==DKGRAY) {
 		      man_y--;
-		      if (man_y-scrn_y<-SCRN_HEIGHT/2+3) {
-			scrn_y-=SCRN_HEIGHT/2;
-			if (scrn_y-SCRN_HEIGHT/2<0)
-			  scrn_y=SCRN_HEIGHT/2;
+		      if (man_y-screen_y<-SCREEN_HEIGHT/2+3) {
+			screen_y-=SCREEN_HEIGHT/2;
+			if (screen_y-SCREEN_HEIGHT/2<0)
+			  screen_y=SCREEN_HEIGHT/2;
 		      }
 		    }
 		  break;
@@ -416,10 +416,10 @@ U0 DunGen()
 		    if (man_y+1<map_height &&
 			  map[(man_y+1)*map_width+man_x]==DKGRAY) {
 		      man_y++;
-		      if (man_y-scrn_y>SCRN_HEIGHT/2-3) {
-			scrn_y+=SCRN_HEIGHT/2;
-			if (scrn_y+SCRN_HEIGHT/2>map_height)
-			  scrn_y=map_height-SCRN_HEIGHT/2;
+		      if (man_y-screen_y>SCREEN_HEIGHT/2-3) {
+			screen_y+=SCREEN_HEIGHT/2;
+			if (screen_y+SCREEN_HEIGHT/2>map_height)
+			  screen_y=map_height-SCREEN_HEIGHT/2;
 		      }
 		    }
 		  break;

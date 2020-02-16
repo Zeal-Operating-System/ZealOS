@@ -367,7 +367,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
   if (DocPut) DocPut->flags|=DOCF_FORM;
 
   MemSet(&psm,0,sizeof(PsmCtrl));
-  psm.scrn_x=0;
+  psm.screen_x=0;
   psm.head.next=psm.head.last=&psm.head;
   psm.clip.next=psm.clip.last=&psm.clip;
   psm.cur_note=&psm.head;
@@ -586,12 +586,12 @@ mo_got_message:
 		      "$$GREEN$$<SHIFT-ESC>$$FG$$ to load it into Psalmody.\n\n"
 		      ST_WARN_ST " Graphics and other embelishments\n"
 		      "will be lost because Psalmody can't\n"
-		      "parse HolyC programs completely.\n");
+		      "parse CosmiC programs completely.\n");
 		Free(filename);
 		filename=NULL;
 		JukeBox(dirname,&filename);
 		if (filename) {
-		  psm.scrn_x=0;
+		  psm.screen_x=0;
 		  psm_duration=1.0;
 		  psm_octave=4;
 		  PsmSongDel(&psm.head);
@@ -626,7 +626,7 @@ mo_got_message:
 		psm_octave=4;
 		PsmSongDel(&psm.head);
 		psm.cur_note=&psm.head;
-		psm.scrn_x=0;
+		psm.screen_x=0;
 		break;
 	      case '\n':
 		if (psm.cur_note!=&psm.head)
@@ -659,7 +659,7 @@ mo_got_message:
 			goto mo_got_message;
 		    }
 		    psm.cur_note=tmpn;
-		    psm.scrn_x+=tmpn->x-0.33*GR_WIDTH;
+		    psm.screen_x+=tmpn->x-0.33*GR_WIDTH;
 		    if (PsmHasWords(tmpn->word))
 		      "%s",tmpn->word;
 		    Sound(tmpn->ona);
@@ -683,7 +683,7 @@ mo_got_message:
 		  tmpn=tmpn->next;
 		}
 		psm.cur_note=&psm.head;
-		psm.scrn_x+=psm.cur_note->x-GR_WIDTH/2;
+		psm.screen_x+=psm.cur_note->x-GR_WIDTH/2;
 		psm.playing=FALSE;
 		PsmMenu(psm_octave);
 		col=0;
@@ -707,7 +707,7 @@ mo_got_message:
 		  psm.record_entry->checked=TRUE;
 		  psm_duration=1.0;
 		  psm_octave=4;
-		  psm.scrn_x=0;
+		  psm.screen_x=0;
 		}
 		PsmMenu(psm_octave);
 		col=0;

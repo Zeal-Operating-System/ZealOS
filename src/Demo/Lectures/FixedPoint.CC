@@ -15,7 +15,7 @@ See $LK,"::/Demo/SubIntAccess.CC"$ for how
 to access upper or lower 32-bits.
 
 For a complete list of nonstandard compiler
-features, see $LK,"::/Doc/HolyC.DD"$.
+features, see $LK,"::/Doc/CosmiC.DD"$.
 */
 
 U0 Main()
@@ -69,7 +69,7 @@ place i into a reg, so there is a
 penalty.
 
 For a complete list of nonstandard compiler
-features, see $LK,"::/Doc/HolyC.DD"$.
+features, see $LK,"::/Doc/CosmiC.DD"$.
 */
 
   "i.u32[0]\t=%X\n",i.u32[0];

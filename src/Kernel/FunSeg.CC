@@ -137,7 +137,7 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
   CHashExport *tmpex;
   U8 *str,*str2;
   Bool is_fun=FALSE;
-  if (!(flags&PRTF_TRUNCATE))
+  if (!(flags&PRINTF_TRUNCATE))
     field_len=0;
   if (addr) {
     if (str=FunSegCacheFind(addr,&offset)) {
@@ -153,12 +153,12 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
     }
     if (str) {
       if (offset>0xFFFF) offset=0xFFFF;
-      if (flags&PRTF_COMMA) {
+      if (flags&PRINTF_COMMA) {
 	if (is_fun) {
 	  str2=MStrPrint("&%s",str);
 	  if (!field_len)
 	    StrCopy(buf,str2);
-	  else if (flags&PRTF_LEFT_JUSTIFY && StrLen(str2)<field_len)
+	  else if (flags&PRINTF_LEFT_JUSTIFY && StrLen(str2)<field_len)
 	    StrCopy(buf,str2);
 	  else
 	    StrPrint(buf,"%*ts",field_len,str2);
@@ -166,7 +166,7 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
 	} else {
 	  if (!field_len)
 	    StrCopy(buf,str);
-	  else if (flags&PRTF_LEFT_JUSTIFY && StrLen(str)<field_len)
+	  else if (flags&PRINTF_LEFT_JUSTIFY && StrLen(str)<field_len)
 	    StrCopy(buf,str);
 	  else
 	    StrPrint(buf,"%*ts",field_len,str);
@@ -175,7 +175,7 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
 	if (is_fun) {
 	  str2=MStrPrint("&%s",str);
 	  if (field_len && field_len>7) {
-	    if (flags&PRTF_LEFT_JUSTIFY && StrLen(str2)<field_len-7)
+	    if (flags&PRINTF_LEFT_JUSTIFY && StrLen(str2)<field_len-7)
 	      StrPrint(buf,"%s+0x%04X",str2,offset);
 	    else
 	      StrPrint(buf,"%*ts+0x%04X",field_len-7,str2,offset);
@@ -184,7 +184,7 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
 	  Free(str2);
 	} else {
 	  if (field_len && field_len>7) {
-	    if (flags&PRTF_LEFT_JUSTIFY && StrLen(str)<field_len-7)
+	    if (flags&PRINTF_LEFT_JUSTIFY && StrLen(str)<field_len-7)
 	      StrPrint(buf,"%s+0x%04X",str,offset);
 	    else
 	      StrPrint(buf,"%*ts+0x%04X",field_len-7,str,offset);
@@ -195,9 +195,9 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
       return;
     }
   }
-  if (flags&PRTF_COMMA)
+  if (flags&PRINTF_COMMA)
     StrCopy(buf,".");
-  else if (flags&PRTF_TRUNCATE && field_len)
+  else if (flags&PRINTF_TRUNCATE && field_len)
     StrPrint(buf,"%*tX",field_len,addr);
   else
     StrPrint(buf,"%X",addr);

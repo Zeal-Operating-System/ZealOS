@@ -420,10 +420,10 @@ public CDC *DCScreenCapture(Bool include_zoom=TRUE,CTask *task=NULL)
   U8 *dst;
   Refresh(0,FALSE);
   if (include_zoom)
-    dc=DCCopy(gr.scrn_image,task);
+    dc=DCCopy(gr.screen_image,task);
   else
     dc=DCCopy(gr.dc1,task);
-  dc->flags&=~DCF_SCRN_BITMAP;
+  dc->flags&=~DCF_SCREEN_BITMAP;
   dst=MAlloc(dc->width_internal*dc->height,task);
 //Pick background color that never occurs. COLOR_INVALID
   GrBitMap4ToBitMap8(dst,dc->body,

@@ -8,7 +8,7 @@
 
 * Free, $FG,2$public domain$FG$, $FG,2$100% open source$FG$.
 
-* 64-bit $FG,2$compiler/assembler$FG$ for $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$.  Truly compiles, doesn't interpret.  $FG,2$Just-in-Time$FG$ and $FG,2$Ahead-of-Time$FG$ compilation.  With $FG,2$JIT$FG$, no need for object or exe files.
+* 64-bit $FG,2$compiler/assembler$FG$ for $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.  Truly compiles, doesn't interpret.  $FG,2$Just-in-Time$FG$ and $FG,2$Ahead-of-Time$FG$ compilation.  With $FG,2$JIT$FG$, no need for object or exe files.
 
 * No 32-bit krufty code.
 

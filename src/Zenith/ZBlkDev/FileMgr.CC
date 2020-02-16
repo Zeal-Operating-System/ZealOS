@@ -565,7 +565,7 @@ U0 FMRightClick()
 }
 
 U8 *fm_mouse_str=NULL;
-U0 (*fp_old_final_scrn_update)(CDC *dc);
+U0 (*fp_old_final_screen_update)(CDC *dc);
 
 U0 FMFinalScreenUpdate(CDC *dc)
 {
@@ -573,7 +573,7 @@ U0 FMFinalScreenUpdate(CDC *dc)
     dc->color=LTRED;
     GrPrint(dc,mouse.pos.x,mouse.pos.y,"%s",fm_mouse_str);
   }
-  (*fp_old_final_scrn_update)(dc);
+  (*fp_old_final_screen_update)(dc);
 }
 
 public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
@@ -586,7 +586,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
   Bool okay;
 
   SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
-  fp_old_final_scrn_update=gr.fp_final_scrn_update;
+  fp_old_final_screen_update=gr.fp_final_screen_update;
   MenuFilePush("::/Doc/FileMgrPullDown.DD");
   FMRebuildDoc(&doc,&head,mode);
   if (tmpde1=Cd2DirEntry(head,old_cur_dir))
@@ -611,11 +611,11 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
       case MESSAGE_MS_L_DOWN:
 	doc_ce=doc->cur_entry;
 	fm_mouse_str=doc_ce->tag;
-	gr.fp_final_scrn_update=&FMFinalScreenUpdate;
+	gr.fp_final_screen_update=&FMFinalScreenUpdate;
 	break;
       case MESSAGE_MS_L_UP:
 	if (doc_ce) {
-	  gr.fp_final_scrn_update=fp_old_final_scrn_update;
+	  gr.fp_final_screen_update=fp_old_final_screen_update;
 	  if (WinCursorPosSet(Fs,arg1+Fs->pix_left+Fs->scroll_x,
 		arg2+Fs->pix_top+Fs->scroll_y,TRUE)) {
 	    doc_e=doc->cur_entry;
@@ -776,7 +776,7 @@ fm_regular_key:
 	break;
     }
   } while (ch!=CH_ESC && ch!=CH_SHIFT_ESC);
-  gr.fp_final_scrn_update=fp_old_final_scrn_update;
+  gr.fp_final_screen_update=fp_old_final_screen_update;
   Fs->put_doc	 =old_put_doc;
   Fs->display_doc=old_display_doc;
   SettingsPop;

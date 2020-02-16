@@ -107,9 +107,9 @@ $WW,1$
 
 * All offspring tasks of a task inherit syms.
 
-* The $FG,2$sizeof()$FG$ and HolyC structure members can be used in asm blks.
+* The $FG,2$sizeof()$FG$ and CosmiC structure members can be used in asm blks.
 
-* Using $FG,2$&i$FG$ in $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ or $FG,2$i.u8[2]$FG$ on a local var, $FG,2$i$FG$, will force it to $FG,2$noreg$FG$.
+* Using $FG,2$&i$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ or $FG,2$i.u8[2]$FG$ on a local var, $FG,2$i$FG$, will force it to $FG,2$noreg$FG$.
 
 * Using $FG,2$try$FG$/$FG,2$catch$FG$ in a function will force all local vars to $FG,2$noreg$FG$.
 

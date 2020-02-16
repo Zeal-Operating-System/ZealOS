@@ -2,7 +2,7 @@
 
 U0 GrUpdateTaskODEs(CTask *task)
 {
-  sys_task_being_scrn_updated=task;
+  sys_task_being_screen_updated=task;
   try
     ODEsUpdate(task);
   catch {
@@ -12,14 +12,14 @@ U0 GrUpdateTaskODEs(CTask *task)
     Sleep(3000);
     VGAFlush;
   }
-  sys_task_being_scrn_updated=NULL;
+  sys_task_being_screen_updated=NULL;
 }
 
 U0 GrUpdateTaskWin(CTask *task)
 { //Draw a win.  Only Core0 tasks have a win.
   CDC *dc;
   CD3I64 saved_scroll;
-  sys_task_being_scrn_updated=task;
+  sys_task_being_screen_updated=task;
   try {
     if (!Bt(&task->display_flags,DISPLAYf_NO_BORDER))
       TextBorder(Fs,task->win_left,task->win_right,task->win_top,
@@ -52,7 +52,7 @@ U0 GrUpdateTaskWin(CTask *task)
       VGAFlush;
     }
   }
-  sys_task_being_scrn_updated=NULL;
+  sys_task_being_screen_updated=NULL;
 }
 
 U0 GrUpdateTasks()
@@ -89,35 +89,35 @@ U0 GrUpdateTasks()
   winmgr.last_ode_time=winmgr.ode_time;
   ode_alloced_factor=LowPass1(0.1,ode_alloced_factor,
 	Clamp(Gs->idle_factor-0.1,0.2,0.8),1/winmgr.fps);
-  sys_task_being_scrn_updated=NULL;
+  sys_task_being_screen_updated=NULL;
 }
 
 U0 GrFixZoomScale()
 {
-  gr.scrn_zoom=ClampI64(gr.scrn_zoom,1,GR_SCRN_ZOOM_MAX);
-  if (gr.scrn_zoom==1) {
+  gr.screen_zoom=ClampI64(gr.screen_zoom,1,GR_SCREEN_ZOOM_MAX);
+  if (gr.screen_zoom==1) {
     gr.sx=0;
     gr.sy=0;
   } else {
-    gr.sx=ClampI64(gr.sx,0,GR_WIDTH-GR_WIDTH/gr.scrn_zoom)&~7;
-    gr.sy=ClampI64(gr.sy,0,GR_HEIGHT-GR_HEIGHT/gr.scrn_zoom);
+    gr.sx=ClampI64(gr.sx,0,GR_WIDTH-GR_WIDTH/gr.screen_zoom)&~7;
+    gr.sy=ClampI64(gr.sy,0,GR_HEIGHT-GR_HEIGHT/gr.screen_zoom);
   }
 }
 
 public U0 GrScaleZoom(F64 scale)
 {//Multiply zoom factor larger or smaller.
-  F64 s=gr.scrn_zoom;
-  gr.scrn_zoom=gr.scrn_zoom*scale;
+  F64 s=gr.screen_zoom;
+  gr.screen_zoom=gr.screen_zoom*scale;
   GrFixZoomScale;
-  s/=gr.scrn_zoom;
+  s/=gr.screen_zoom;
   mouse.scale.x*=s;
   mouse.scale.y*=s;
   mouse.scale.z*=s;
   mouse.offset.x=mouse.pos.x-(mouse.pos.x-mouse.offset.x)*s;
   mouse.offset.y=mouse.pos.y-(mouse.pos.y-mouse.offset.y)*s;
   mouse.offset.z=mouse.pos.z-(mouse.pos.z-mouse.offset.z)*s;
-  gr.sx=mouse.pos.x-gr.zoomed_dc->width >>1/gr.scrn_zoom;
-  gr.sy=mouse.pos.y-gr.zoomed_dc->height>>1/gr.scrn_zoom;
+  gr.sx=mouse.pos.x-gr.zoomed_dc->width >>1/gr.screen_zoom;
+  gr.sy=mouse.pos.y-gr.zoomed_dc->height>>1/gr.screen_zoom;
   GrFixZoomScale;
 }
 
@@ -125,26 +125,26 @@ U0 GrZoomInScreen()
 {
   GrFixZoomScale;
   I64 plane,row,col,k,l,
-	d2=gr.zoomed_dc->width>>3/gr.scrn_zoom,
+	d2=gr.zoomed_dc->width>>3/gr.screen_zoom,
 	d4=gr.zoomed_dc->width_internal>>3,
-	d5=d4-d2*gr.scrn_zoom,
-	d3=gr.zoomed_dc->height/gr.scrn_zoom,
+	d5=d4-d2*gr.screen_zoom,
+	d3=gr.zoomed_dc->height/gr.screen_zoom,
 	d6=(gr.zoomed_dc->height-d3)*gr.dc1->width_internal>>3,
-	d7=gr.zoomed_dc->height%gr.scrn_zoom*d4;
-  U8 *src,*src2,*dst,*src3,*map=gr.scrn_zoom_tables[gr.scrn_zoom];
+	d7=gr.zoomed_dc->height%gr.screen_zoom*d4;
+  U8 *src,*src2,*dst,*src3,*map=gr.screen_zoom_tables[gr.screen_zoom];
 
   src=gr.dc1->body+gr.sx>>3+gr.sy*gr.dc1->width_internal>>3;
   dst=gr.zoomed_dc->body;
   for (plane=1;plane<0x10;plane<<=1) {
     row=d3;
     while (row--) {
-      k=gr.scrn_zoom;
+      k=gr.screen_zoom;
       while (k--) {
 	src2=src;
 	col=d2;
 	while (col--) {
 	  src3=&map[*src2++];
-	  l=gr.scrn_zoom;
+	  l=gr.screen_zoom;
 	  while (l--) {
 	    *dst++=*src3;
 	    src3+=256;
@@ -367,13 +367,13 @@ U0 GrUpdateVGAGraphics()
 {//Update Graphic Card
   I64 row,plane,d=gr.zoomed_dc->width_internal>>6;
   U32 *src,*vga,*dst;
-  if (gr.scrn_zoom==1)
+  if (gr.screen_zoom==1)
     src=gr.dc1->body;
   else {
     GrZoomInScreen;
     src=gr.zoomed_dc->body;
   }
-  dst=gr.scrn_image->body;
+  dst=gr.screen_image->body;
   if (LBtr(&sys_semas[SEMA_FLUSH_VGA_IMAGE],0)) {
     for (plane=1;plane<0x10;plane<<=1) {
       OutU8(VGAP_IDX,VGAR_MAP_MASK);
@@ -409,8 +409,8 @@ U0 GrUpdateScreen()
 
   dc=DCAlias(gr.dc2,Fs);
   dc->flags|=DCF_ON_TOP;
-  if (gr.fp_final_scrn_update)
-    (*gr.fp_final_scrn_update)(dc);
+  if (gr.fp_final_screen_update)
+    (*gr.fp_final_screen_update)(dc);
   DCDel(dc);
 
   if (!Bt(&sys_run_level,RLf_VGA)) //if text mode

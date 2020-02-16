@@ -80,7 +80,7 @@ U0 SysGrInit()
     OutU8(VGAP_IDX,VGAR_MAP_MASK);
     OutU8(VGAP_DATA,0x0F);
     MemSet(text.vga_alias,0,GR_WIDTH*GR_HEIGHT>>3);
-    text.raw_scrn_image=CAlloc(GR_WIDTH*GR_HEIGHT/8);
+    text.raw_screen_image=CAlloc(GR_WIDTH*GR_HEIGHT/8);
     text.border_chars[2] (I64)=0x0908070605040302;
     text.border_chars[10](U32)=0x0D0C0B0A;
   }

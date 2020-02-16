@@ -8,7 +8,7 @@ public Bool GrClamp(CDC *dc=gr.dc,I64 *left,I64 *top,I64 *right,I64 *bottom,
   *top=0;
   *right=dc->width-1;
   *bottom=dc->height-1;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     if (GR_WIDTH-1<*right)
       *right=GR_WIDTH-1;
@@ -36,7 +36,7 @@ Bool DCClipLine(CDC *dc=gr.dc,I64 *x1,I64 *y1,I64 *x2,I64 *y2,
   I64 left,top,right,bottom;
   CTask *win_task;
   if (GrClamp(dc,&left,&top,&right,&bottom,width,height)) {
-    if (dc->flags & DCF_SCRN_BITMAP) {
+    if (dc->flags & DCF_SCREEN_BITMAP) {
       win_task=dc->win_task;
       *x1+=win_task->pix_left+win_task->scroll_x;
       *y1+=win_task->pix_top+win_task->scroll_y;
@@ -60,7 +60,7 @@ public Bool GrPlot(CDC *dc=gr.dc,I64 x,I64 y)
       dc->color.c0.rop=ROPB_MONO;
     GrBlot(dc,x,y,dc->brush);
     dc->color=old_color;
-  } else if (dc->flags & DCF_SCRN_BITMAP) {
+  } else if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->pix_left+win_task->scroll_x;
     y+=win_task->pix_top+win_task->scroll_y;
@@ -91,7 +91,7 @@ Bool GrPlot1(CDC *dc=gr.dc,I64 x,I64 y)
     else
       GrBlot(dc,x,y,dc->brush);
     dc->color=old_color;
-  } else if (dc->flags & DCF_SCRN_BITMAP) {
+  } else if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->pix_left+win_task->scroll_x;
     y+=win_task->pix_top+win_task->scroll_y;
@@ -112,7 +112,7 @@ public I64 GrPeek(CDC *dc=gr.dc,I64 x,I64 y)
 {//2D. Clipping but no transformation.
 //Returns pix color or -1 if off-screen or covered.
   CTask *win_task;
-  if (dc->flags & DCF_SCRN_BITMAP) {
+  if (dc->flags & DCF_SCREEN_BITMAP) {
     win_task=dc->win_task;
     x+=win_task->pix_left+win_task->scroll_x;
     y+=win_task->pix_top+win_task->scroll_y;
@@ -512,7 +512,7 @@ public Bool GrPlot3(CDC *dc=gr.dc,I64 x,I64 y,I64 z)
       }
     }
     if (record) {
-      if (dc->flags & DCF_SCRN_BITMAP) {
+      if (dc->flags & DCF_SCREEN_BITMAP) {
 	win_task=dc->win_task;
 	x+=win_task->pix_left+win_task->scroll_x;
 	y+=win_task->pix_top+win_task->scroll_y;
@@ -548,7 +548,7 @@ gr_done:
 Bool GrLinePlot0(CDC *dc,I64 x,I64 y,I64 z)
 {//This is a callback.
   CTask *win_task=dc->win_task;
-  if (!(dc->flags & DCF_SCRN_BITMAP) ||
+  if (!(dc->flags & DCF_SCREEN_BITMAP) ||
 	win_task->next_task==sys_winmgr_task ||
 	dc->flags&DCF_ON_TOP ||
 	!IsPixCovered0(win_task,x,y)) {
@@ -1413,7 +1413,7 @@ public I64 GrFillTri0(CDC *dc=gr.dc,CD3I32 *p1,CD3I32 *p2,CD3I32 *p4)
 
     min=0;
     max=dc->height;
-    if (dc->flags & DCF_SCRN_BITMAP) {
+    if (dc->flags & DCF_SCREEN_BITMAP) {
       win_task=dc->win_task;
       min-=win_task->scroll_y+win_task->pix_top;
       max-=win_task->scroll_y+win_task->pix_top;
@@ -1621,7 +1621,7 @@ public I64 GrFillTri0(CDC *dc=gr.dc,CD3I32 *p1,CD3I32 *p2,CD3I32 *p4)
 
     min=0;
     max=dc->width;
-    if (dc->flags & DCF_SCRN_BITMAP) {
+    if (dc->flags & DCF_SCREEN_BITMAP) {
       win_task=dc->win_task;
       min-=win_task->scroll_x+win_task->pix_left;
       max-=win_task->scroll_x+win_task->pix_left;
