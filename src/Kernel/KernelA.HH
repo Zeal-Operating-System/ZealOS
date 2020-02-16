@@ -495,6 +495,29 @@ class CKernel
 #define RLF_ONCE_USER		(1<<RLf_ONCE_USER)
 
 #help_index "Processor"
+//Control register flag bits
+#define CR0f_MP		1 //Monitor coprocessor
+#define CR0f_EM		2 //Emulation of coprocessor
+#define CR0f_TS		3 //Task switched, some irrelevant x87 task management stuff
+#define CR0f_NE		5 //Numeric error
+#define CR0f_PG		31//Enable paging
+
+#define CR4f_PAE	5 //Physical Address Extension, required by long mode
+#define CR4f_PGE	7 //Page-Global Enable
+#define CR4f_OSFXSR	9 //FXSAVE/FXRSTOR support enabled
+
+#define CR4F_PAE	(1<<CR4f_PAE)
+#define CR4F_PGE	(1<<CR4f_PGE)
+#define CR4F_OSFXSR	(1<<CR4f_OSFXSR)
+
+//Model specific regs.
+#define IA32F_SCE	0x001
+#define IA32F_LME	0x100
+#define IA32_LAPIC_BASE	0x01B
+#define IA32_EFER	0xC0000080
+#define IA32_FS_BASE	0xC0000100
+#define IA32_GS_BASE	0xC0000101
+
 //Programmable Interrupt Controller
 #define PIC1		0x20
 #define PIC1_DATA	0x21
@@ -541,14 +564,6 @@ class CKernel
 #define IOAPICVER		0x01
 #define IOAPICARB		0x02
 #define IOREDTAB		0x10
-
-//Model specific regs.
-#define IA32F_SCE	0x001
-#define IA32F_LME	0x100
-#define IA32_LAPIC_BASE	0x01B
-#define IA32_EFER	0xC0000080
-#define IA32_FS_BASE	0xC0000100
-#define IA32_GS_BASE	0xC0000101
 
 class CAP16BitInit
 {//AP Multicore
