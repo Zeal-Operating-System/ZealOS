@@ -130,8 +130,15 @@ U0 TimersInit()
   }
 }
 
-U0 Reboot()
+U0 Reboot(Bool format_ramdisks=FALSE)
 {//Hardware reset.
+  if (format_ramdisks)
+  {
+    if (DriveIsWritable('A'))
+      Format('A',,FALSE,FSt_REDSEA);
+    if (DriveIsWritable('B'))
+      Format('B',,FALSE,FSt_REDSEA);
+  }
   CLI
   if (mp_count>1)
     MPHalt;

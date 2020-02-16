@@ -11,7 +11,7 @@ public extern U8 *rev_bits_table,*set_bits_table;
 
 #help_index "Boot"
 #help_file "::/Doc/Boot"
-public extern U0 Reboot();
+public extern U0 Reboot(Bool format_ramdisks=FALSE);
 
 #help_index "Call"
 public argpop extern I64 CallStackGrow(I64 stack_size_threshold,I64 stack_size,
