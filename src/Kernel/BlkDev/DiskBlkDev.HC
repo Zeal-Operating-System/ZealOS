@@ -39,7 +39,7 @@ Bool BlkDevInit(CBlkDev *bd)
     switch (bd->type) {
       case BDT_RAM:
 	if (!bd->RAM_disk) {
-	  bd->RAM_disk=AMAlloc((bd->max_blk+1)<<BLK_SIZE_BITS);
+	  bd->RAM_disk=ZMAlloc((bd->max_blk+1)<<BLK_SIZE_BITS);
 	  bd->max_blk=MSize(bd->RAM_disk)>>BLK_SIZE_BITS-1;
 	}
 	drive->fs_type=FSt_REDSEA;
@@ -74,7 +74,7 @@ Bool BlkDevInit(CBlkDev *bd)
 	if (!bd->file_disk_name) {
 	  StrPrint(buf,"%C:/Drive%C.ISO.C",
 		blkdev.boot_drive_let,bd->first_drive_let);
-	  bd->file_disk_name=AStrNew(buf);
+	  bd->file_disk_name=ZStrNew(buf);
 	}
 	if (bd->max_blk<7)
 	  bd->max_blk=7;

@@ -387,7 +387,7 @@ _extern _MHEAP_CTRL CHeapCtrl *MHeapCtrl(U8 *src); //$LK,"CHeapCtrl",A="MN:CHeap
 _extern _MALLOC U8 *MAlloc(I64 size,CTask *mem_task=NULL); //Alloc memory chunk.
 //Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$. NULL allocs off current task's heap.
 
-U8 *AMAlloc(I64 size)
+U8 *ZMAlloc(I64 size)
 {//Alloc memory in Zenith's heap.
   return MAlloc(size,zenith_task);
 }
@@ -399,7 +399,7 @@ U8 *CAlloc(I64 size,CTask *mem_task=NULL)
   return res;
 }
 
-U8 *ACAlloc(I64 size)
+U8 *ZCAlloc(I64 size)
 {//Alloc and set to zero memory in Zenith's heap.
   return CAlloc(size,zenith_task);
 }
@@ -415,7 +415,7 @@ U8 *MAllocIdent(U8 *src,CTask *mem_task=NULL)
   return res;
 }
 
-U8 *AMAllocIdent(U8 *src)
+U8 *ZMAllocIdent(U8 *src)
 {//Alloc in Zenith's heap, ident copy of heap node.
   return MAllocIdent(src,zenith_task);
 }
@@ -458,7 +458,7 @@ U8 *StrNew(U8 *buf,CTask *mem_task=NULL)
   return res;
 }
 
-U8 *AStrNew(U8 *buf)
+U8 *ZStrNew(U8 *buf)
 {//Alloc copy of string in Zenith's heap.
   return StrNew(buf,zenith_task);
 }

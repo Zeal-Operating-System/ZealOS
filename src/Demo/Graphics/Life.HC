@@ -1,6 +1,6 @@
 //Conway's Game of Life
 
-CDC *dc[2]; //dbl buf
+CDC *dc[2]; //double buf
 I64 cur_dc,;
 Bool restart;
 

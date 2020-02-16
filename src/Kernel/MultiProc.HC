@@ -221,9 +221,9 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
   CTask *seth;
   if (!(0<=target_cpu<mp_count))
     throw('MultCore');
-  tmpc=ACAlloc(sizeof(CJob));
+  tmpc=ZCAlloc(sizeof(CJob));
   if (aux_str)
-    tmpc->aux_str=AStrNew(aux_str);
+    tmpc->aux_str=ZStrNew(aux_str);
   tmpc->job_code=job_code;
   tmpc->addr=fp_addr;
   tmpc->fun_arg=data;
@@ -359,7 +359,7 @@ U0 Core0Init()
   mp_count_initial=mp_count=1;
   mp_count_lock=0;
 
-  dbg.mp_crash=ACAlloc(sizeof(CMPCrash));
+  dbg.mp_crash=ZCAlloc(sizeof(CMPCrash));
 
   //Must be in code heap because init code uses 32 bit addr of cpu_struct
   zenith_task->gs=cpu_structs=

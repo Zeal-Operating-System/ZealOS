@@ -194,7 +194,7 @@ U0 Sound(I8 ona=0)
       OutU8(0x61,3|InU8(0x61));
     }
     if (!IsDebugMode && screencast.record) {
-      d=ACAlloc(sizeof(CSoundData));
+      d=ZCAlloc(sizeof(CSoundData));
       d->ona=ona;
       d->tS=tS;
       QueueInsert(d,screencast.sound_head.last);
@@ -210,7 +210,7 @@ Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,U8 *print_fmt="B:/Tmp/%X.GR")
   if (val) {
     if (!(old_val=LBtr(&screencast.record,0))) {
       Free(screencast.print_fmt);
-      screencast.print_fmt=AStrNew(print_fmt);
+      screencast.print_fmt=ZStrNew(print_fmt);
       screencast.t0_now=Now;
       screencast.sound_head.tS=screencast.t0_tS=tS;
       screencast.sound_head.ona=screencast.ona;

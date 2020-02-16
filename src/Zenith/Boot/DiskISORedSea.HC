@@ -171,7 +171,7 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
 
       bd->max_blk=CeilI64(bd->drv_offset+1+bitmap_blks+res,4);
       bd->max_blk--; //Inclusive.
-      bd->file_disk_name=AStrNew(iso_filename);
+      bd->file_disk_name=ZStrNew(iso_filename);
       bd->init_root_dir_blks=root_dir_blks;
       BlkDevAdd(bd,,TRUE,TRUE);
       StrPrint(buf,"%C:/",drive->drv_let);

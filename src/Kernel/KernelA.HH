@@ -1545,16 +1545,16 @@ public class CAutoCompleteDictGlobals
 //so it takes effect earlier than you might expect.
 #define OPTf_ECHO		0x00
 #define OPTf_TRACE		0x01
-#define OPTf_WARN_UNUSED_VAR	0x10 //Applied to funs, not stmts
+#define OPTf_WARN_UNUSED_VAR	0x10 //Applied to funs, not statements
 #define OPTf_WARN_PAREN		0x11 //Warn unnecessary parens
-#define OPTf_WARN_DUP_TYPES	0x12 //Warn dup local var type stmts
+#define OPTf_WARN_DUP_TYPES	0x12 //Warn dup local var type statements
 #define OPTf_WARN_HEADER_MISMATCH 0x13
 #define OPTf_EXTERNS_TO_IMPORTS	0x20
 #define OPTf_KEEP_PRIVATE	0x21
-#define OPTf_NO_REG_VAR		0x22  //Applied to funs, not stmts
+#define OPTf_NO_REG_VAR		0x22  //Applied to funs, not statements
 #define OPTf_GLBLS_ON_DATA_HEAP	0x23
 //Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
-#define OPTf_NO_BUILTIN_CONST	0x24 //Applied to funs, not stmts
+#define OPTf_NO_BUILTIN_CONST	0x24 //Applied to funs, not statements
 #define OPTf_USE_IMM64		0x25 //Not completely implemented
 
 #define OPTF_ECHO		(1<<OPTf_ECHO)

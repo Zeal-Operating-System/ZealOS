@@ -5,7 +5,7 @@ Bool Mem32DevIns(CMemRange *tmpmr)
     if (!tmpmr1->type && tmpmr->base>=tmpmr1->base &&
 	  tmpmr->base+tmpmr->size<=tmpmr1->base+tmpmr1->size) {
       if (tmpmr->base>tmpmr1->base) {
-	tmpmr2=AMAlloc(sizeof(CMemRange));
+	tmpmr2=ZMAlloc(sizeof(CMemRange));
 	tmpmr2->type=MRT_UNUSED;
 	tmpmr2->flags=0;
 	tmpmr2->base=tmpmr1->base;
@@ -33,7 +33,7 @@ U0 Mem32DevInit()
   CMemE820 *m20=MEM_E820;
 
   QueueInit(&dev.mem32_head);
-  tmpmr=AMAlloc(sizeof(CMemRange));
+  tmpmr=ZMAlloc(sizeof(CMemRange));
   tmpmr->type=MRT_UNUSED;
   tmpmr->flags=0;
 //Maybe !!! Change this to 0xF0000000 !!!
@@ -43,7 +43,7 @@ U0 Mem32DevInit()
 
   if (m20->type) {
     while (m20->type) {
-      tmpmr=AMAlloc(sizeof(CMemRange));
+      tmpmr=ZMAlloc(sizeof(CMemRange));
       tmpmr->type=m20->type;
       tmpmr->flags=0;
       tmpmr->base=m20->base;
@@ -69,7 +69,7 @@ U8 *Mem32DevAlloc(I64 size,I64 alignment)
     limit=base+size-1;
     if (!tmpmr1->type &&
 	  limit<tmpmr1->base+tmpmr1->size) {
-      tmpmr=AMAlloc(sizeof(CMemRange));
+      tmpmr=ZMAlloc(sizeof(CMemRange));
       tmpmr->type=MRT_DEV;
       tmpmr->flags=0;
       tmpmr->base=base;

@@ -103,7 +103,7 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
 
   if (!ac.cur_word || StrCmp(ac.cur_word,buf) || force_refresh) {
     st=ac.cur_word;
-    ac.cur_word=AStrNew(buf);
+    ac.cur_word=ZStrNew(buf);
     Free(st);
     ac.num_fillins=0;
     if (*ac.cur_word)

@@ -41,7 +41,7 @@ U0 RedSeaFreeListBuild(CDrive *drive)
 	  i++;
       }
       if (i) {
-	tmpf=AMAlloc(sizeof(CFreeList));
+	tmpf=ZMAlloc(sizeof(CFreeList));
 	tmpf->size=i;
 	tmpf->start=first;
 	QueueInsert(tmpf,drive->last_free);
@@ -272,7 +272,7 @@ U0 RedSeaFreeClus(CDrive *drive,I64 c,I64 count)
 	tmpf=tmpf->next;
       }
       if (!found) {
-	tmpf=AMAlloc(sizeof(CFreeList));
+	tmpf=ZMAlloc(sizeof(CFreeList));
 	tmpf->size=count;
 	tmpf->start=c;
 	QueueInsert(tmpf,drive->last_free);

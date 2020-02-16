@@ -1032,7 +1032,7 @@ rc_adjust_xy:
 		(!music.cur_song || StrCmp(music.cur_song,doc_e->aux_str))) {
 	    Free(music.cur_song);
 	    MusicSettingsReset;
-	    music.cur_song=AStrNew(doc_e->aux_str);
+	    music.cur_song=ZStrNew(doc_e->aux_str);
 	  }
 	}
 	doc->flags|=DOCF_HAS_SONG;

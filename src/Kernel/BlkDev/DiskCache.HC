@@ -13,8 +13,8 @@ U0 DiskCacheInit(I64 size_in_U8s)
     blkdev.cache_base=NULL;
     blkdev.cache_hash_table=NULL;
   } else {
-    blkdev.cache_ctrl=ACAlloc(offset(CCacheBlk.body));
-    blkdev.cache_base=AMAlloc(size_in_U8s);
+    blkdev.cache_ctrl=ZCAlloc(offset(CCacheBlk.body));
+    blkdev.cache_base=ZMAlloc(size_in_U8s);
     QueueInit(blkdev.cache_ctrl);
 
     count=MSize(blkdev.cache_base)/sizeof(CCacheBlk);
@@ -27,7 +27,7 @@ U0 DiskCacheInit(I64 size_in_U8s)
       tmpc->blk=0;
     }
 
-    blkdev.cache_hash_table=AMAlloc(DISK_CACHE_HASH_SIZE*sizeof(U8 *)*2);
+    blkdev.cache_hash_table=ZMAlloc(DISK_CACHE_HASH_SIZE*sizeof(U8 *)*2);
     for (i=0;i<DISK_CACHE_HASH_SIZE;i++) {
       tmpc=blkdev.cache_hash_table(U8 *)+i*sizeof(U8 *)*2
 	    -offset(CCacheBlk.next_hash);

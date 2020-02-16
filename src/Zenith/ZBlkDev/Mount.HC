@@ -95,7 +95,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 	  break;
 	case BDT_ISO_FILE_READ:
 	  filename2=FileNameAbs(filename);
-	  DocPrint(doc,"bd->file_disk_name=AStrNew(\"%s\");\n",filename2);
+	  DocPrint(doc,"bd->file_disk_name=ZStrNew(\"%s\");\n",filename2);
 	  DocPrint(doc,"bd->drv_offset=19<<2+"
 		"(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;\n");
 	  break;
@@ -151,7 +151,7 @@ public U8 MountFile(U8 *filename)
   CDrive *drive=DriveMakeFreeSlot(DriveNextFreeLet('M')); //First $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$
   CBlkDev *bd=BlkDevNextFreeSlot(drive->drv_let,BDT_ISO_FILE_READ);
   bd->drv_offset=19<<2+(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;
-  bd->file_disk_name=AStrNew(filename3);
+  bd->file_disk_name=ZStrNew(filename3);
   BlkDevAdd(bd,,TRUE,TRUE);
   Free(filename3);
   Free(filename2);

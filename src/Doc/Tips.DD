@@ -35,7 +35,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/HomeSys.HC,ACInit"$() in $LK,"~/HomeSys.HC",A="FF:/Home/HomeSys.HC,ACInit"$.
 
-* Boolean expressions $BK,1$not$BK,0$ in $FG,2$if$FG$ stmts don't have short circuit logic and are compiled inefficiently.
+* Boolean expressions $BK,1$not$BK,0$ in $FG,2$if$FG$ statements don't have short circuit logic and are compiled inefficiently.
 
 * You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ in your programs for whatever you like.  They're just global vars that are shown on the wallpaper.  The original intent was to indicate how far along operations were.  There's no coordination, so different apps might interfere.  I use them most for debugging--just values easily viewed.  See $LK,"::/Demo/Progress.HC"$.
 
@@ -53,7 +53,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$,ON) to find unnecessary parentheses in code.
 
-* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find unnecessary local var type stmts.
+* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find unnecessary local var type statements.
 
 * $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$,ON) can be placed in $LK,"StartOS.HC",A="FI:::/StartOS.HC"$ to echo start-up scripts.
 

@@ -87,7 +87,7 @@ public extern Bool WildMatch(U8 *test_str,U8 *wild_str);
 public extern U8 *CatPrint(U8 *dst,U8 *fmt,...);
 
 #help_index "Char/Operations;Memory/Zenith Heap"
-public extern U8 *AStrNew(U8 *buf);
+public extern U8 *ZStrNew(U8 *buf);
 
 #help_index "Char/Operations;Memory/Heap"
 public extern U8 *StrNew(U8 *buf,CTask *mem_task=NULL);
@@ -555,9 +555,9 @@ public extern I64 RoundI64(I64 num,I64 to);
 public extern I64 Seed(I64 seed=0,CTask *task=NULL);
 
 #help_index "Memory/Zenith Heap"
-public extern U8 *ACAlloc(I64 size);
-public extern U8 *AMAlloc(I64 size);
-public extern U8 *AMAllocIdent(U8 *src);
+public extern U8 *ZCAlloc(I64 size);
+public extern U8 *ZMAlloc(I64 size);
+public extern U8 *ZMAllocIdent(U8 *src);
 
 #help_index "Memory/BlkPool"
 public extern U0 BlkPoolAdd(CBlkPool *bp,CMemBlk *m,I64 pags);

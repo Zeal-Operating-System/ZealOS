@@ -6,7 +6,7 @@ In ZenithOS, the lowest 2Gig of memory is called the $FG,2$code heap$FG$.  Zenit
 
 You can create new, independent heaps using $LK,"HeapCtrlInit",A="MN:HeapCtrlInit"$().  Then, use the $LK,"CHeapCtrl",A="MN:CHeapCtrl"$ as the 2nd arg to $LK,"MAlloc",A="MN:MAlloc"$().  See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 
-Memory alloced by a task will be freed when the task is killed.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is a task that never dies.  His memory is like kernel memory in other operating systems.  See $LK,"ACAlloc",A="MN:ACAlloc"$(), $LK,"AMAlloc",A="MN:AMAlloc"$(), $LK,"AMAllocIdent",A="MN:AMAllocIdent"$() and $LK,"AStrNew",A="MN:AStrNew"$().
+Memory alloced by a task will be freed when the task is killed.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is a task that never dies.  His memory is like kernel memory in other operating systems.  See $LK,"ZCAlloc",A="MN:ZCAlloc"$(), $LK,"ZMAlloc",A="MN:ZMAlloc"$(), $LK,"ZMAllocIdent",A="MN:ZMAllocIdent"$() and $LK,"ZStrNew",A="MN:ZStrNew"$().
 
 All of the regular page tables are marked, "cached".  When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01AA000000",D="DD_UNCACHED_ALIAS"$$FG$.  See $LK,"dev.uncached_alias",A="FF:::/Kernel/KMain.HC,dev.uncached_alias"$.
 

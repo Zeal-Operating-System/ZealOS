@@ -226,7 +226,7 @@ $ID,-5$
 
 * Add local vars to sym table in $LK,"Debug",A="MN:Debug"$()?
 
-* Compiler: Prints two error messages for expressions in stmts.
+* Compiler: Prints two error messages for expressions in statements.
 
 * $LK,"U",A="MN:U"$() negative byte displacement, neg 32-bit disp.
 
@@ -289,7 +289,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Import Intel datasheets so we can use links in $LK,"Code",A="FI:::/Kernel/Mem/PageTables.HC"$ for documentation.  I tried a PDF-to-text convertor and it wasn't acceptible.
 
-* Switch stmt with sparse cases?  Maybe, ban sparse switch stmts.
+* Switch stmt with sparse cases?  Maybe, ban sparse switch statements.
 
 * Compiler Optimization: Postpone LocalVar init until last possible moment in case of return.
 
@@ -344,7 +344,7 @@ $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
 
 * Std local var names.
 
-* Ticketmaster format stmts? Overflow "t='*'" and padding character?
+* Ticketmaster format statements? Overflow "t='*'" and padding character?
 
 * Move stuff out of $LK,"Kernel",A="FI:::/Kernel/Kernel.PRJ"$ module.
 

@@ -10,7 +10,7 @@ $LK,"OPTf_WARN_UNUSED_VAR",A="MN:OPTf_WARN_UNUSED_VAR"$	warning if unused var.  
 
 $LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$		warning if parenthesis are not needed.
 
-$LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$	warning if dup local var type stmts.
+$LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$	warning if dup local var type statements.
 
 $LK,"OPTf_WARN_HEADER_MISMATCH",A="MN:OPTf_WARN_HEADER_MISMATCH"$ warning if fun header does not match.
 

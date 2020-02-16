@@ -12,7 +12,7 @@ public U0 ACDWordsLoad()
   if (in_ptr=FileRead(ACD_WORD_FILENAME,&size)) {
     in_start=in_ptr;
     Free(acd.word_list);
-    acd.word_list=AMAlloc(size);
+    acd.word_list=ZMAlloc(size);
     MemCpy(acd.word_list,in_start,size);
     acd.word_list_size=size;
 
@@ -21,7 +21,7 @@ public U0 ACDWordsLoad()
 	in_ptr++;
       if (*in_ptr) {
 	st2=MStrUtil(in_ptr,SUF_TO_UPPER);
-	tmph=ACAlloc(sizeof(CHashGeneric)+StrLen(st2)+1);
+	tmph=ZCAlloc(sizeof(CHashGeneric)+StrLen(st2)+1);
 	StrCpy(tmph+1,st2);
 	Free(st2);
 	in_ptr+=StrLen(in_ptr)+1;
@@ -48,8 +48,8 @@ CHashAC *ACHashAdd(U8 *w)
     tmpw->hits++;
     return tmpw;
   }
-  tmpw=ACAlloc(sizeof(CHashAC));
-  tmpw->str=AStrNew(w);
+  tmpw=ZCAlloc(sizeof(CHashAC));
+  tmpw->str=ZStrNew(w);
   tmpw->type=HTT_WORD;
   tmpw->use_count=1;
   tmpw->hits=1;

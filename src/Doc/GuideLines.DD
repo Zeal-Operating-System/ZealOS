@@ -124,7 +124,7 @@ $FG,2$	PUSH	RBP
 	LEAVE
 	RET
 $FG$
-* The args are removed from the stack with $FG,2$RET1$FG$ stmts.
+* The args are removed from the stack with $FG,2$RET1$FG$ statements.
 
 	$FG,2$RET1	16	//remove two args$FG$
 

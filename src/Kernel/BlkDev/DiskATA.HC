@@ -175,7 +175,7 @@ I64 ATAGetDevId(CBlkDev *bd,F64 timeout,Bool keep_id_record)
     if (InU8(bd->base0+ATAR0_STAT)&ATAS_ERR)
       res=BDT_ATAPI;
     else {
-      id_record=ACAlloc(512);
+      id_record=ZCAlloc(512);
       if (ATAGetRes(bd,timeout,id_record,512,512,FALSE))
 	res=BDT_ATA;
       else {
