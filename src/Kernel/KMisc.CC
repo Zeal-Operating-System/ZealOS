@@ -55,11 +55,11 @@ U0 IntCore0TimerHandler(CTask *)
   LBtr(&sys_semas[SEMA_SYS_TIMER],0);
   for (i=1;i<mp_count;i++)
     MPInt(I_TIMER,i);
-  OutU8(0x20,0x20); //Acknowledge PIC Interrupt
+  OutU8(PIC1,PIC_EOI); //Acknowledge PIC Interrupt
 }
 
 I64 SysTimerRead()
-{//System timer count with overflow already handled.
+{//System timer count with overflow already handled.
   I64 i,res;
   PUSHFD
   CLI
@@ -69,7 +69,7 @@ I64 SysTimerRead()
   OutU8(PIT_CMD, PIT_CMDF_CHANNEL0); //Latch Timer0
   if ((i=InU8(PIT0) + InU8(PIT0) << 8) == SYS_TIMER0_PERIOD)
   {
-    if (InU8(0x20) & 1)
+    if (InU8(PIC1) & 1)
       i=-1;
   }
   res=counts.timer+SYS_TIMER0_PERIOD-i;

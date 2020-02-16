@@ -495,8 +495,16 @@ class CKernel
 #define RLF_ONCE_USER		0x100000
 
 #help_index "Processor"
-#define LAPIC_BASE		0xFEE00000
 
+//Programmable Interrupt Controller
+#define PIC1		0x20
+#define PIC1_DATA	0x21
+#define PIC2		0xA0
+#define PIC2_DATA	0xA1
+#define PIC_EOI		0x20 //End of interrupt
+
+//Local Advanced Programmable Interrupt Controller
+#define LAPIC_BASE		0xFEE00000
 #define LAPIC_APIC_ID		(LAPIC_BASE+0x020)
 #define LAPIC_APIC_VERSION	(LAPIC_BASE+0x030)
 #define LAPIC_TASK_PRIORITY	(LAPIC_BASE+0x080)
@@ -551,7 +559,7 @@ class CAP16BitInit
 
 #help_index "Time/PIT"
 #help_file "::/Doc/PIT.DD"
-//Programmable Interval Timer
+//Programmable Interval Timer
 #define PIT0	0x40
 #define PIT2	0x42
 #define PIT_CMD	0x43

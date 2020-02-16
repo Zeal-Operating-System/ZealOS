@@ -48,7 +48,6 @@ Changes include:
     - Fwd -> Forward
     - Glbls -> Globals
     - Hndlr -> Handler
-    - Ints -> Interrupts
     - Lst -> List
     - Ms -> Mouse
     - Msg -> Message

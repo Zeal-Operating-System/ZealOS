@@ -46,14 +46,14 @@ interrupt U0 IRQComm3()
 {
   CommHandler(2);
   CommHandler(4);
-  OutU8(0x20,0x20);
+  OutU8(PIC1,PIC_EOI);
 }
 
 interrupt U0 IRQComm4()
 {
   CommHandler(1);
   CommHandler(3);
-  OutU8(0x20,0x20);
+  OutU8(PIC1,PIC_EOI);
 }
 
 U0 CommInit()
@@ -93,7 +93,7 @@ public CComm *CommInit8n1(I64 port,I64 baud)
   OutU8(c->base+UART_MCR,4);
   OutU8(c->base+UART_IER,0);	//Disable all IRQ
   OutU8(c->base+UART_MCR,0xA);	//out2 and rts
-  OutU8(0x21,InU8(0x21) & (0xFF-0x18));	//Enable 8259 IRQ 3 & 4
+  OutU8(PIC1_DATA,InU8(PIC1_DATA) & (0xFF-0x18));//Enable 8259 IRQ 3 & 4
   OutU8(c->base+UART_IER,1);	//RX but no THR empty
   POPFD
 
