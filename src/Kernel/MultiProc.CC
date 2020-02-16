@@ -287,11 +287,6 @@ U0 Core0StartMP()
   CAP16BitInit *mp=MP_VECT_ADDR;
   CCPU *c;
   I64 i,my_mp_count;
-  CRAXRBCRCXRDX ee;
-
-  CPUId(0x1,&ee);
-  if (!Bt(&ee.rdx,9))
-    return;
 
   PUSHFD
   CLI
@@ -343,7 +338,7 @@ U0 Core0StartMP()
   }
 
   //Make sure they're all up-and-running
-  for (i=1;i<my_mp_count;i++)
+  for (i = 1; i < my_mp_count;i++)
     while (!Bt(&cpu_structs[i].daemon_task->task_flags,TASKf_AWAITING_MESSAGE))
       PAUSE;
 
@@ -353,27 +348,19 @@ U0 Core0StartMP()
 
 U0 Core0Init()
 {//Called by zenith during start-up
-  CRAXRBCRCXRDX ee;
-  CPUId(0x1,&ee);
-
   mp_count_initial=mp_count=1;
   mp_count_lock=0;
 
   debug.mp_crash=ZCAlloc(sizeof(CMPCrash));
 
   //Must be in code heap because init code uses 32 bit addr of cpu_struct
-  zenith_task->gs=cpu_structs=
-	CAlloc(sizeof(CCPU)*MP_PROCESSORS_NUM,Fs->code_heap);
+  zenith_task->gs=cpu_structs=CAlloc(sizeof(CCPU)*MP_PROCESSORS_NUM,Fs->code_heap);
   CPUStructInit(0,cpu_structs,zenith_task);
-  asm {//RAX has GS
-    IMPORT SET_GS_BASE;
-    CALL SET_GS_BASE
-  }
-  if (Bt(&ee.rdx,9)) {
-//Unnecessary?
-    //	  SetMSR(IA32_LAPIC_BASE,dev.uncached_alias+LAPIC_BASE+0x900);
-    MPAPICInit;
-  }
+  //RAX has GS
+  IMPORT SET_GS_BASE;
+  CALL   SET_GS_BASE
+  
+  MPAPICInit;
 }
 
 interrupt U0 IntMPCrash()

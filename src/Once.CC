@@ -51,5 +51,5 @@ U0 Tmp()
       break;
   }
 }
-
+PaletteSetPastel;
 Tmp;

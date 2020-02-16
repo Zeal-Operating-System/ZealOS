@@ -495,10 +495,6 @@ class CKernel
 #define RLF_ONCE_USER		(1<<RLf_ONCE_USER)
 
 #help_index "Processor"
-
-//CPUID leaf flag bits
-#define CPUIDf_RDX_APIC	9
-
 //Programmable Interrupt Controller
 #define PIC1		0x20
 #define PIC1_DATA	0x21
