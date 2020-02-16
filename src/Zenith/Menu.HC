@@ -177,7 +177,7 @@ U0 DrawMenu(CDC *dc)
   CMenuEntry *tmpme,*tmpse,*cur_submenu=NULL;
   U8 *st=NULL;
   CTask *task=MenuTask;
-  I64 i,w,x0,y0,x1=ms.pos.x,y1=ms.pos.y;
+  I64 i,w,x0,y0,x1=mouse.pos.x,y1=mouse.pos.y;
   if (!TaskValidate(task) || !(m=task->cur_menu)) {
     sys_cur_submenu_entry=NULL;
     return;

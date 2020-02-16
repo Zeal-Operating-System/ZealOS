@@ -110,14 +110,14 @@ public U0 GrScaleZoom(F64 scale)
   gr.scrn_zoom=gr.scrn_zoom*scale;
   GrFixZoomScale;
   s/=gr.scrn_zoom;
-  ms.scale.x*=s;
-  ms.scale.y*=s;
-  ms.scale.z*=s;
-  ms.offset.x=ms.pos.x-(ms.pos.x-ms.offset.x)*s;
-  ms.offset.y=ms.pos.y-(ms.pos.y-ms.offset.y)*s;
-  ms.offset.z=ms.pos.z-(ms.pos.z-ms.offset.z)*s;
-  gr.sx=ms.pos.x-gr.zoomed_dc->width >>1/gr.scrn_zoom;
-  gr.sy=ms.pos.y-gr.zoomed_dc->height>>1/gr.scrn_zoom;
+  mouse.scale.x*=s;
+  mouse.scale.y*=s;
+  mouse.scale.z*=s;
+  mouse.offset.x=mouse.pos.x-(mouse.pos.x-mouse.offset.x)*s;
+  mouse.offset.y=mouse.pos.y-(mouse.pos.y-mouse.offset.y)*s;
+  mouse.offset.z=mouse.pos.z-(mouse.pos.z-mouse.offset.z)*s;
+  gr.sx=mouse.pos.x-gr.zoomed_dc->width >>1/gr.scrn_zoom;
+  gr.sy=mouse.pos.y-gr.zoomed_dc->height>>1/gr.scrn_zoom;
   GrFixZoomScale;
 }
 

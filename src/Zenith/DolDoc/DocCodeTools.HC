@@ -35,7 +35,7 @@ U0 EdReplaceTroubleAll(CDoc *doc,Bool to_safe,Bool sel)
 #define EF_CTRL_SLIDER	3
 #define EF_CH_SC	4
 
-I64 PopUpEdFmt()
+I64 PopUpEdFormat()
 {
   I64 i;
   CDoc *doc=DocNew;
@@ -641,7 +641,7 @@ U0 EdChSC(CDoc *doc)
 
 U0 EdCodeTools(CDoc *doc)
 {
-  I64 tool_action=PopUpEdFmt;
+  I64 tool_action=PopUpEdFormat;
   switch (tool_action) {
     case EF_CMP_CHK:
     case EF_REINDENT:

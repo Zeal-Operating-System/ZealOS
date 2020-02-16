@@ -35,12 +35,12 @@ U0 DrawBoard(I64 player)
 	break;
 
     }
-//ms.pos.x,ms.pos.y are mouse x,y.
-    //ms.lb	is mouse left bttn
+//mouse.pos.x,mouse.pos.y are mouse x,y.
+    //mouse.lb	is mouse left bttn
   if (player==1)
-    DrawX(dc,ms.pos.x-Fs->pix_left,ms.pos.y-Fs->pix_top);
+    DrawX(dc,mouse.pos.x-Fs->pix_left,mouse.pos.y-Fs->pix_top);
   else
-    DrawO(dc,ms.pos.x-Fs->pix_left,ms.pos.y-Fs->pix_top);
+    DrawO(dc,mouse.pos.x-Fs->pix_left,mouse.pos.y-Fs->pix_top);
   DCDel(dc);
 }
 
@@ -52,16 +52,16 @@ U0 TakeTurn(I64 player)
       Beep;
     else
       Beep(74);
-    while (!ms.lb) {
+    while (!mouse.lb) {
       DrawBoard(player);
       Refresh;
     }
-    while (ms.lb) {
+    while (mouse.lb) {
       DrawBoard(player);
       Refresh;
     }
-    x=ms.pos.x-Fs->pix_left;
-    y=ms.pos.y-Fs->pix_top;
+    x=mouse.pos.x-Fs->pix_left;
+    y=mouse.pos.y-Fs->pix_top;
     i=(x-100)/100+(y-100)/100*3;
   }
   board[i]=player;

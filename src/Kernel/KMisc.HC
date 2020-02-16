@@ -203,14 +203,14 @@ U0 Sound(I8 ona=0)
   }
 }
 
-Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,U8 *print_fmt="B:/Tmp/%X.GR")
+Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,U8 *print_format="B:/Tmp/%X.GR")
 {//WinMgr saves GR files to a dir.
   Bool old_val;
   screencast.just_audio=just_audio;
   if (val) {
     if (!(old_val=LBtr(&screencast.record,0))) {
-      Free(screencast.print_fmt);
-      screencast.print_fmt=ZStrNew(print_fmt);
+      Free(screencast.print_format);
+      screencast.print_format=ZStrNew(print_format);
       screencast.t0_now=Now;
       screencast.sound_head.tS=screencast.t0_tS=tS;
       screencast.sound_head.ona=screencast.ona;

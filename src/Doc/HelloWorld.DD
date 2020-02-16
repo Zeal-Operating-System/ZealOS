@@ -31,7 +31,7 @@ MyPrint2("Hello","World");
 --------Hello.HC---------
 U0 MyPrint(U8 *st)
 {
-  "" st; //Empty with no comma means first is fmt str.
+  "" st; //Empty with no comma means first is format str.
 }
 MyPrint("Hello World\n");
 

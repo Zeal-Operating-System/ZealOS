@@ -1,7 +1,7 @@
 #help_index "Windows"
 #help_file "::/Doc/Windows"
 
-CMsStateGlobals old_ms={{-1000,-1000,0},{-1000,-1000,0},{-1000,-1000,0},
+CMouseStateGlobals old_mouse={{-1000,-1000,0},{-1000,-1000,0},{-1000,-1000,0},
   {0,0,0},{1.0,1.0,1.0},0.0,GetTSC,0.350,0,0,
   FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
 };
@@ -91,24 +91,24 @@ U0 DrawWinGrid(CDC *dc)
   F64 d;
   dc->color=BLACK;
   dc->thick=1;
-  for (d=ms_grid.x_offset;d<GR_WIDTH; d+=ms_grid.x)
+  for (d=mouse_grid.x_offset;d<GR_WIDTH; d+=mouse_grid.x)
     GrLine(dc,d,0,d,GR_HEIGHT-1);
-  for (d=ms_grid.y_offset;d<GR_HEIGHT;d+=ms_grid.y)
+  for (d=mouse_grid.y_offset;d<GR_HEIGHT;d+=mouse_grid.y)
     GrLine(dc,0,d,GR_WIDTH-1,d);
 }
 
 U0 WinGrid(Bool val)
 {
   CGridGlobals last_grid;
-  MemCpy(&last_grid,&ms_grid,sizeof(CGridGlobals));
-  if (!val || PopUpForm(&ms_grid)) {
+  MemCpy(&last_grid,&mouse_grid,sizeof(CGridGlobals));
+  if (!val || PopUpForm(&mouse_grid)) {
     if (!val)
       GridInit;
-    ms_hard.prescale.x*=last_grid.x_speed/ms_grid.x_speed;
-    ms_hard.prescale.y*=last_grid.y_speed/ms_grid.y_speed;
-    ms_hard.prescale.z*=last_grid.z_speed/ms_grid.z_speed;
+    mouse_hard.prescale.x*=last_grid.x_speed/mouse_grid.x_speed;
+    mouse_hard.prescale.y*=last_grid.y_speed/mouse_grid.y_speed;
+    mouse_hard.prescale.z*=last_grid.z_speed/mouse_grid.z_speed;
   } else
-    MemCpy(&ms_grid,&last_grid,sizeof(CGridGlobals));
+    MemCpy(&mouse_grid,&last_grid,sizeof(CGridGlobals));
 }
 U0 CtrlAltG(I64 sc)
 {
@@ -171,29 +171,29 @@ public U0 WinScrollRestore(CTask *task,CD3I64 *s)
   task->scroll_z=s->z;
 }
 
-U0 DrawMs(CDC *dc)
+U0 DrawMouse(CDC *dc)
 {
   I64 x,y;
   PUSHFD
   CLI
-  x=ms.pos.x;
-  y=ms.pos.y;
+  x=mouse.pos.x;
+  y=mouse.pos.y;
   POPFD
-  if (ms.show && ms_hard.installed) {
+  if (mouse.show && mouse_hard.installed) {
     if (!Bt(&sys_run_level,RLf_VGA)) //if text mode
-      gr.text_base[ms.pos_text.x+ms.pos_text.y*TEXT_COLS]^=0x7F00;
+      gr.text_base[mouse.pos_text.x+mouse.pos_text.y*TEXT_COLS]^=0x7F00;
     else {
-      if (gr.fp_draw_ms) {
-	if (ms.lb)
+      if (gr.fp_draw_mouse) {
+	if (mouse.lb)
 	  dc->color=ROP_XOR+LTPURPLE^TRANSPARENT;
-	else if (ms.rb)
+	else if (mouse.rb)
 	  dc->color=ROP_XOR+LTCYAN^TRANSPARENT;
 	else
 	  dc->color=ROP_XOR+BLACK^TRANSPARENT;
-	if (winmgr.grab_scroll && gr.fp_draw_grab_ms)
-	  (*gr.fp_draw_grab_ms)(dc,x,y,winmgr.grab_scroll_closed);
+	if (winmgr.grab_scroll && gr.fp_draw_grab_mouse)
+	  (*gr.fp_draw_grab_mouse)(dc,x,y,winmgr.grab_scroll_closed);
 	else
-	  (*gr.fp_draw_ms)(dc,x,y);
+	  (*gr.fp_draw_mouse)(dc,x,y);
       }
     }
   }
@@ -201,51 +201,51 @@ U0 DrawMs(CDC *dc)
 
 U0 WinFinalUpdate(CDC *dc)
 {
-  if (ms_grid.show)
+  if (mouse_grid.show)
     DrawWinGrid(dc);
-  if (ms_grid.coord)
+  if (mouse_grid.coord)
     GrPrint(dc,GR_WIDTH-FONT_WIDTH*10,FONT_HEIGHT*3,
-	  "(%03d,%03d)",ms.pos.x,ms.pos.y);
+	  "(%03d,%03d)",mouse.pos.x,mouse.pos.y);
   DrawProgressBars(dc);
   if (winmgr.show_menu)
     DrawMenu(dc);
   else
     sys_cur_submenu_entry=NULL;
-  DrawMs(dc);
+  DrawMouse(dc);
 }
 
 gr.fp_final_scrn_update=&WinFinalUpdate;
 
-U0 WinMsUpdate()
+U0 WinMouseUpdate()
 {
   I64 dd;
   Bool set=FALSE;
-  if (ms_hard.installed) {
-    ms.has_wheel=ms_hard.has_wheel;
-    if (ms_hard.evt) {
-      MsUpdate(ms_hard.pos.x,ms_hard.pos.y,ms_hard.pos.z,
-	    ms_hard.bttns[0],ms_hard.bttns[1]);
-      ms_hard.evt=FALSE;
+  if (mouse_hard.installed) {
+    mouse.has_wheel=mouse_hard.has_wheel;
+    if (mouse_hard.evt) {
+      MouseUpdate(mouse_hard.pos.x,mouse_hard.pos.y,mouse_hard.pos.z,
+	    mouse_hard.bttns[0],mouse_hard.bttns[1]);
+      mouse_hard.evt=FALSE;
       set=TRUE;
     }
   }
 
   if (set) {
-    if (ms_hard.installed) {
-      ms.speed=ms_hard.speed;
-      ms.timestamp=ms_hard.timestamp;
+    if (mouse_hard.installed) {
+      mouse.speed=mouse_hard.speed;
+      mouse.timestamp=mouse_hard.timestamp;
     }
   } else
-    ms.speed*=0.95;
+    mouse.speed*=0.95;
   if (gr.scrn_zoom!=1) {
     if (gr.continuous_scroll)
       GrScaleZoom(1.0);
     else {
-      dd=(ms.pos.x-gr.sx)*gr.scrn_zoom;
+      dd=(mouse.pos.x-gr.sx)*gr.scrn_zoom;
       if (!(8<=dd<GR_WIDTH-8))
 	GrScaleZoom(1.0);
       else {
-	dd=(ms.pos.y-gr.sy)*gr.scrn_zoom;
+	dd=(mouse.pos.y-gr.sy)*gr.scrn_zoom;
 	if (!(8<=dd<GR_HEIGHT-8))
 	  GrScaleZoom(1.0);
       }

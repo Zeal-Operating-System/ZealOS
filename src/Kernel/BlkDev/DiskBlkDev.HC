@@ -47,7 +47,7 @@ Bool BlkDevInit(CBlkDev *bd)
 	if (RedSeaValidate(bd->first_drive_let))
 	  RedSeaInit(drive);
 	else
-	  RedSeaFmt(bd->first_drive_let);
+	  RedSeaFormat(bd->first_drive_let);
 	res=TRUE;
 	break;
       case BDT_ISO_FILE_READ:
@@ -81,7 +81,7 @@ Bool BlkDevInit(CBlkDev *bd)
 	bd->file_disk=FOpen(bd->file_disk_name,"wc",bd->max_blk+1);
 	drive->fs_type=FSt_REDSEA;
 	drive->size=bd->max_blk+1-bd->drv_offset;
-	RedSeaFmt(bd->first_drive_let);
+	RedSeaFormat(bd->first_drive_let);
 	CallExtStr("RedSeaISO9660",bd->file_disk_name,bd->first_drive_let);
 	res=TRUE;
 	break;

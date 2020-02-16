@@ -402,7 +402,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStack *ps,Bool indirect,CHashFun *tmpf)
     } else {
       if (!(tmpf=HashFind("Print",cc->htc.hash_table_list,HTT_FUN)))
 	LexExcept(cc,"Missing header for Print() and PutChars() at ");
-      if (!*cc->cur_str) //empty string signals Print with variable fmt_str
+      if (!*cc->cur_str) //empty string signals Print with variable format_str
 	Lex(cc);
       is_putchars=FALSE;
       is_print=TRUE;

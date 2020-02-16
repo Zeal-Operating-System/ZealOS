@@ -205,8 +205,8 @@ U8 *sys_pos_pows_lets="KMGTPEZY",
 #define TMP_BUF_LEN	256
 #define SLOP		8
 
-U8 *StrPrintJoin(U8 *dst,U8 *fmt,I64 argc,I64 *argv)
-{/*$LK,"Print(\"\") Fmt Strings",A="FI:::/Doc/Print.DD"$
+U8 *StrPrintJoin(U8 *dst,U8 *format,I64 argc,I64 *argv)
+{/*$LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$
 In float formatting, do not exceed 18-digits
 before or after the decimal point
 because the numbers before and after
@@ -215,13 +215,13 @@ in 64-bits.Use exponentiated forms
 to avoid this.
 */
   I64 i,j,l,ch,k,k0,n,n0,len,dec_len,flags,old_flags,
-	aux_fmt_num,comma_count,comma_fmt_count,cur_arg=0;
+	aux_format_num,comma_count,comma_format_count,cur_arg=0;
   U64 m;
   F64 d,d1;
   CDoc *doc;
   U8 *ptr,**_buf,*buf,**_dst,tmp_buf[TMP_BUF_LEN],tmp_buf2[TMP_BUF_LEN*2];
 
-  if (!fmt)
+  if (!format)
     throw('StrPrint');
   if (dst) {
     _buf=NULL;
@@ -233,33 +233,33 @@ to avoid this.
   }
   _dst=&dst;
 
-  while (ch = *fmt++) {
+  while (ch = *format++) {
     if (ch=='%') {
       flags=0;
-      if (*fmt=='-') {
+      if (*format=='-') {
 	flags|=PRTF_LEFT_JUSTIFY;
-	fmt++;
+	format++;
       }
-      if (*fmt=='0') {
+      if (*format=='0') {
 	flags|=PRTF_PAD_ZERO;
-	fmt++;
+	format++;
       }
       len=0;
-      while ('0'<=*fmt<='9')
-	len=len*10+ *fmt++ -'0';
-      if (*fmt=='*') {
-	fmt++;
+      while ('0'<=*format<='9')
+	len=len*10+ *format++ -'0';
+      if (*format=='*') {
+	format++;
 	if (cur_arg>=argc)
 	  throw('StrPrint');
 	len=argv[cur_arg++];
       }
       dec_len=0;
-      if (*fmt=='.') {
-	fmt++;
-	while ('0'<=*fmt<='9')
-	  dec_len=dec_len*10+ *fmt++ -'0';
-	if (*fmt=='*') {
-	  fmt++;
+      if (*format=='.') {
+	format++;
+	while ('0'<=*format<='9')
+	  dec_len=dec_len*10+ *format++ -'0';
+	if (*format=='*') {
+	  format++;
 	  if (cur_arg>=argc)
 	    throw('StrPrint');
 	  dec_len=argv[cur_arg++];
@@ -267,9 +267,9 @@ to avoid this.
 	flags|=PRTF_DECIMAL;
       }
 
-      aux_fmt_num=0;
+      aux_format_num=0;
       while (TRUE) {
-	switch (*fmt) {
+	switch (*format) {
 	  start:
 	    case '$$':
 	      flags|=PRTF_DOLLAR;
@@ -286,30 +286,30 @@ to avoid this.
 	    case 'l': //harmless
 	      break;
 	  end:
-	    fmt++;
+	    format++;
 	    break;
 
 	  case 'h':
-	    fmt++;
+	    format++;
 	    flags|=PRTF_AUX_FMT_NUM;
-	    if (*fmt=='?') {
-	      fmt++;
+	    if (*format=='?') {
+	      format++;
 	      flags|=PRTF_QUESTION;
 	    } else {
-	      if (*fmt=='*') {
-		fmt++;
+	      if (*format=='*') {
+		format++;
 		if (cur_arg>=argc)
 		  throw('StrPrint');
-		aux_fmt_num=argv[cur_arg++];
+		aux_format_num=argv[cur_arg++];
 	      } else {
-		if (*fmt=='-') {
-		  fmt++;
+		if (*format=='-') {
+		  format++;
 		  flags|=PRTF_NEG_AUX_FMT_NUM;
 		}
-		while ('0'<=*fmt<='9')
-		  aux_fmt_num=aux_fmt_num*10+ *fmt++ -'0';
+		while ('0'<=*format<='9')
+		  aux_format_num=aux_format_num*10+ *format++ -'0';
 		if (flags&PRTF_NEG_AUX_FMT_NUM)
-		  aux_fmt_num=-aux_fmt_num;
+		  aux_format_num=-aux_format_num;
 	      }
 	    }
 	    break;
@@ -320,7 +320,7 @@ to avoid this.
 
       sp_arg:
       k=0;
-      switch (*fmt++) {
+      switch (*format++) {
 	start:
 	  case 'F':
 	    if (cur_arg>=argc)
@@ -406,8 +406,8 @@ to avoid this.
 	    break;
 	end:
 	  if (!(flags&PRTF_AUX_FMT_NUM))
-	    aux_fmt_num=1;
-	  while (aux_fmt_num-->0)
+	    aux_format_num=1;
+	  while (aux_format_num-->0)
 	    OutStr(tmp_buf,_buf,_dst,len,flags);
 	  break;
 
@@ -444,7 +444,7 @@ sp_out_dec:
 	    goto sp_out_eng;
 	  }
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_count=comma_count=3;
+	    comma_format_count=comma_count=3;
 	    do {
 	      tmp_buf[k++]=ModU64(&m,10)+'0';
 	      if (!m) break;
@@ -467,12 +467,12 @@ sp_out_comma_num:
 	    if (flags&PRTF_PAD_ZERO) {
 	      if (flags&PRTF_NEG)
 		SPutChar(_dst,'-',_buf);
-	      comma_count=(len-k-i+comma_fmt_count-comma_count+1)
-	      %(comma_fmt_count+1)+1;
+	      comma_count=(len-k-i+comma_format_count-comma_count+1)
+	      %(comma_format_count+1)+1;
 	      for (;i<len-k;i++) {
 		if (!--comma_count) {
 		  SPutChar(_dst,',',_buf);
-		  comma_count=comma_fmt_count;
+		  comma_count=comma_format_count;
 		  if (++i>=len-k)
 		    break;
 		}
@@ -730,11 +730,11 @@ sp_out_eng: //Engineering notation
 	      j=0;
 	    } else {
 	      if (flags&PRTF_NEG_E)
-		j=-n-aux_fmt_num;
+		j=-n-aux_format_num;
 	      else
-		j=n-aux_fmt_num;
+		j=n-aux_format_num;
 	      d*=Pow10I64(j);
-	      i=aux_fmt_num/3;
+	      i=aux_format_num/3;
 	    }
 	    if (i<0)
 	      tmp_buf[k++]=sys_neg_pows_lets[-i];
@@ -789,7 +789,7 @@ sp_out_eng: //Engineering notation
 	    throw('StrPrint');
 	  m=argv[cur_arg++];
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_count=comma_count=4;
+	    comma_format_count=comma_count=4;
 	    do {
 	      tmp_buf[k]= m&15 +'0';
 	      if (tmp_buf[k]>'9') tmp_buf[k]+='A'-0x3A;
@@ -816,7 +816,7 @@ sp_out_eng: //Engineering notation
 	    throw('StrPrint');
 	  m=argv[cur_arg++];
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_count=comma_count=4;
+	    comma_format_count=comma_count=4;
 	    do {
 	      tmp_buf[k]= m&15 +'0';
 	      if (tmp_buf[k]>'9') tmp_buf[k]+='a'-0x3A;
@@ -844,7 +844,7 @@ sp_out_eng: //Engineering notation
 	    throw('StrPrint');
 	  m=argv[cur_arg++];
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_count=comma_count=4;
+	    comma_format_count=comma_count=4;
 	    do {
 	      tmp_buf[k++]= m&1 +'0';
 	      m>>=1;
@@ -873,47 +873,47 @@ sp_out_eng: //Engineering notation
   return buf;
 }
 
-U8 *StrPrint(U8 *dst,U8 *fmt,...)
+U8 *StrPrint(U8 *dst,U8 *format,...)
 {//See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
-  return StrPrintJoin(dst,fmt,argc,argv);
+  return StrPrintJoin(dst,format,argc,argv);
 }
 
-U8 *CatPrint(U8 *_dst,U8 *fmt,...)
+U8 *CatPrint(U8 *_dst,U8 *format,...)
 {//StrCat().See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
   U8 *dst=_dst;
   while (*dst)
     dst++;
-  StrPrintJoin(dst,fmt,argc,argv);
+  StrPrintJoin(dst,format,argc,argv);
   return _dst;
 }
 
-U0 Print(U8 *fmt,...)
-{//$LK,"Print(\"\") Fmt Strings",A="FI:::/Doc/Print.DD"$.See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
+U0 Print(U8 *format,...)
+{//$LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
 //Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/HolyC.DD,DemoHolyC"$
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   PutS(buf);//Don't use PutS().  $LK,"See Print() shortcut.",A="FF:::/Doc/HolyC.DD,DemoHolyC"$
   Free(buf);
 }
 
-U8 *MStrPrint(U8 *fmt,...)
+U8 *MStrPrint(U8 *format,...)
 {//MAlloc StrPrint.See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
-  U8 *res,*buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *res,*buf=StrPrintJoin(NULL,format,argc,argv);
   res=StrNew(buf);
   Free(buf);
   return res;
 }
 
-U0 PrintErr(U8 *fmt,...)
+U0 PrintErr(U8 *format,...)
 {//Print "Err:" and message in blinking red.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   GetOutOfDollar;
   "%,p %,p %,p %,p " ST_ERR_ST "%s",Caller,Caller(2),Caller(3),Caller(4),buf;
   Free(buf);
 }
 
-U0 PrintWarn(U8 *fmt,...)
+U0 PrintWarn(U8 *format,...)
 {//Print "Warn:" and message in blinking red.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   GetOutOfDollar;
   "%,p %,p %,p %,p " ST_WARN_ST "%s",Caller,Caller(2),Caller(3),Caller(4),buf;
   Free(buf);

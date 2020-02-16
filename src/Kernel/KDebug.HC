@@ -214,10 +214,10 @@ U0 Da(U8 **addr,I64 count=0x10)
   }
 }
 
-U0 RawPrint(I64 mS=100,U8 *fmt,...)
+U0 RawPrint(I64 mS=100,U8 *format,...)
 {//Print using $LK,"Raw",A="MN:Raw"$ scrn output for a length of time.
 //$BK,1$Your heap must be good.$BK,0$
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   Bool old_raw,old_input_filter;
   PUSHFD
   CLI
@@ -552,7 +552,7 @@ U0 Debug2()
   old_getstr2=fp_getstr2;
   fp_getstr2=&SysGetStr2;
   old_single=SingleUser(OFF);
-  while (!ms_hard.install_attempts)
+  while (!mouse_hard.install_attempts)
     Yield;
   SingleUser(old_single);
   UserTaskCont;

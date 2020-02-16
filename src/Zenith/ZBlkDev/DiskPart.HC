@@ -155,7 +155,7 @@ drv_let=0 means add new drive that is not already mounted.
   bd->flags&=~(BDF_INITIALIZED | BDF_INIT_IN_PROGRESS);
   BlkDevAdd(bd,,FALSE,TRUE);
   for (i=bd->first_drive_let;i<drv_let2;i++)
-    Fmt(i,,FALSE);
+    Format(i,,FALSE);
 
     pd_done:
   while (head.next!=&head) {

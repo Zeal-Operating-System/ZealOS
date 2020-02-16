@@ -254,7 +254,7 @@ I64 DocTmpAttr(CDoc *doc,CDocEntry *doc_e,I64 cur_u8_attr)
 }
 
 public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
-{//Recalc and fmt.  Also used by WinMgr to draw on scrn.
+{//Recalc and format.  Also used by WinMgr to draw on scrn.
   I64 i,ii,j,k,x,x0,y,y0,D,d2,col,col2,best_col=0,best_d=I64_MAX,xx,yy,zz,
 	num_entries=0,i_jif,cur_u8_attr,tmp_u32_attr,
 	cursor_y=I64_MIN,left_margin,right_margin,y_plot_top,y_plot_bottom,
@@ -278,7 +278,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 
     //WinMgr updates all wins $TX,"30",D="WINMGR_FPS"$, 33.33333mS
   if (recalc_flags&RECALCG_MASK==RECALCt_TO_SCRN && doc->owning_task!=Fs) {
-    i_jif=counts.jiffies+JIFFY_FREQ/250; //4 ms
+    i_jif=counts.jiffies+JIFFY_FREQ/250; //4 mouse
     while (Bt(&doc->locked_flags,DOClf_LOCKED)) {
       if (counts.jiffies>=i_jif)
 	return FALSE; //Bail-out if doc locked.
@@ -509,7 +509,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
     if (doc_e->de_flags & DOCEF_REFRESH_DATA &&
 	  (doc_e->type_u8==DOCT_DATA || doc_e->type_u8==DOCT_CHECK_BOX ||
 	  doc_e->de_flags & DOCEF_LIST)) {
-      DocDataFmt(doc,doc_e);
+      DocDataFormat(doc,doc_e);
       k=StrLen(doc_e->tag);
     }
     if (doc_e->de_flags&DOCEF_TAG) {

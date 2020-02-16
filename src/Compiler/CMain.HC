@@ -602,10 +602,10 @@ I64 ExePutS(U8 *buf,U8 *filename=NULL,
   return res;
 }
 
-I64 ExePrint(U8 *fmt,...)
+I64 ExePrint(U8 *format,...)
 {//JIT Compile and execute text from a printf().
   I64 res;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   res=ExePutS(buf);
   Free(buf);
   return res;
@@ -645,10 +645,10 @@ I64 ExePutS2(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0)
   return res;
 }
 
-I64 ExePrint2(U8 *fmt,...)
+I64 ExePrint2(U8 *format,...)
 {//throws exceptions
   I64 res;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   res=ExePutS2(buf);
   Free(buf);
   return res;
@@ -670,9 +670,9 @@ I64 RunFile2(U8 *name,I64 ccf_flags=0,...)
   return LastFun(argc,argv);
 }
 
-I64 StreamExePrint(U8 *fmt,...)
+I64 StreamExePrint(U8 *format,...)
 {//Causes value from stream to be used in an #exe{} block.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 res=0;
   CLexHashTableContext *htc;
   CCompCtrl *cc=Fs->last_cc;

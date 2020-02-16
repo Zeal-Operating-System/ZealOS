@@ -19,7 +19,7 @@ I64 PopUpSpriteMain(CSprite **_head,I64 *_cur_elem_num,
 	"$$LK+PU+CX,\"Click for Help\",A=\"FI:::/Doc/SpriteMain.DD\"$$\n"
 	"\n$$LTBLUE$$$$DA+M,A=\"Tag Text:%%s\"$$\n\n");
   doc_de->data=StrNew(_doc_e->tag,doc->mem_task);
-  DocDataFmt(doc,doc_de);
+  DocDataFormat(doc,doc_de);
 
   DocPrint(doc,"$$MU-UL,\"Color (4-bit)\",LE=SPT_COLOR$$\n"
 	"$$MU-UL,\"Dither Color (4-bit)\",LE=SPT_DITHER_COLOR$$\n"
@@ -82,16 +82,16 @@ Bool PopUpExtents(I64 *_x1,I64 *_x2,I64 *_y1,I64 *_y2)
   CDocEntry *doc_e;
   doc_e=DocPrint(doc,"$$DA,A=\"x1:%%d\"$$\n");
   doc_e->data=_x1;
-  DocDataFmt(doc,doc_e);
+  DocDataFormat(doc,doc_e);
   doc_e=DocPrint(doc,"$$DA,A=\"x2:%%d\"$$\n");
   doc_e->data=_x2;
-  DocDataFmt(doc,doc_e);
+  DocDataFormat(doc,doc_e);
   doc_e=DocPrint(doc,"$$DA,A=\"y1:%%d\"$$\n");
   doc_e->data=_y1;
-  DocDataFmt(doc,doc_e);
+  DocDataFormat(doc,doc_e);
   doc_e=DocPrint(doc,"$$DA,A=\"y2:%%d\"$$\n\n");
   doc_e->data=_y2;
-  DocDataFmt(doc,doc_e);
+  DocDataFormat(doc,doc_e);
 
   DocPrint(doc,"$$BT,\"Use These Extents\",LE=TRUE$$");
   DocPrint(doc,"$$CM,3,0$$$$BT,\"Drag-Out New Extents\",LE=FALSE$$\n\n");
@@ -1049,7 +1049,7 @@ I64 SpriteMainEd(CDoc *doc)
 	      goto ei_done;
 	    case 'c': //eye-dropper
 	      dc3=DCScreenCapture(FALSE);
-	      color=GrPeek(dc3,ms.pos.x,ms.pos.y)^15;//Mouse cursor is XORed.
+	      color=GrPeek(dc3,mouse.pos.x,mouse.pos.y)^15;//Mouse cursor is XORed.
 	      DCDel(dc3);
 	      tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_COLOR));
 	      tmpg->type=SPT_COLOR;

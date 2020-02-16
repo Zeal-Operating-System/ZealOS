@@ -4,7 +4,7 @@
 #include "DiskATA"
 #include "DiskATAId"
 #include "DiskBlkDev"
-#include "DiskDrive"
+#include "DiskDrive"
 #include "DiskBlk"
 #include "DiskClus"
 #include "DiskStrB"
@@ -19,5 +19,5 @@
 #include "DiskCFile"
 #include "DiskCopy"
 #include "DiskCDDVD"
-#include "DiskFmt"
+#include "DiskFormat"
 #exe {Cd("..");};

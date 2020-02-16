@@ -21,11 +21,11 @@ CBlkDevGlobals	blkdev;
 CCountsGlobals	counts={1,0,2676302000,2676302,2676302000,0,0,0,FALSE};
 CDebugGlobals	dbg;
 CDevGlobals	dev;
-CGridGlobals	ms_grid; //See $LK,"::/Demo/Graphics/Grid.HC"$.
-CMsStateGlobals	ms,ms_last;
+CGridGlobals	mouse_grid; //See $LK,"::/Demo/Graphics/Grid.HC"$.
+CMouseStateGlobals	mouse,mouse_last;
 CKbdStateGlobals	kbd;
 CKeyDevGlobals	keydev;
-CMsHardStateGlobals ms_hard,ms_hard_last;
+CMouseHardStateGlobals mouse_hard,mouse_hard_last;
 CScreenCastGlobals	screencast;
 CTextGlobals	text;
 

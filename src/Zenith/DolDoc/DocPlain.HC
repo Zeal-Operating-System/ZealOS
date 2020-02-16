@@ -474,7 +474,7 @@ pd_err:
     if (doc_e->de_flags&DOCEF_LIST && (doc_e->de_flags&DOCEF_REMALLOC_DATA ||
 	  !(doc_e->de_flags&DOCEF_DEREF_DATA))) {
       DocDataScan(doc,doc_e);
-      DocDataFmt(doc,doc_e);
+      DocDataFormat(doc,doc_e);
     }
     CompCtrlDel(cc);
   } catch {

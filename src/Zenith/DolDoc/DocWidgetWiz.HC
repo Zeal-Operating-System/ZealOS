@@ -768,7 +768,7 @@ U0 EdInsCursorMovement()
 
 class CEdDataNum
 {
-  U8	fmt_str[512]	format "$$DA-P,A=\"Format Str:%s\"$$\n";
+  U8	format_str[512]	format "$$DA-P,A=\"Format Str:%s\"$$\n";
   I64	len;
   Bool	term		format "$$CB,\"Form Field Terminator\"$$\n",
 	remalloc,
@@ -778,7 +778,7 @@ class CEdDataNum
 
 class CEdDataStr
 {
-  U8	fmt_str[512]	format "$$DA-P,A=\"Format Str:%s\"$$\n";
+  U8	format_str[512]	format "$$DA-P,A=\"Format Str:%s\"$$\n";
   I64	len		format "$$DA,A=\"Length:%d\"$$\n";
   Bool	term		format "$$CB,\"Zero Terminator\"$$\n",
 	remalloc	format "$$CB,\"Remalloc for Unlimited Length\"$$\n",
@@ -819,7 +819,7 @@ U0 EdInsData()
       if (e->refresh)	CatPrint(buf,"+RD");
       if (e->update)	CatPrint(buf,"+UD");
 
-      st=MStrPrint("%q",e->fmt_str);
+      st=MStrPrint("%q",e->format_str);
       if (e->remalloc)
 	"$$$$DA%s,A=\\\"%$$Q\\\"$$$$",buf,st;
       else if (e->len==DOCE_LEN_DEFAULT)

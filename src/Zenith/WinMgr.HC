@@ -35,153 +35,153 @@ public U0 Refresh(I64 count=1,Bool force=FALSE)
 
 I64 WinQueueIPMessages(Bool que)
 {
-  static CD3I64 single_ms={0,0,0};
+  static CD3I64 single_mouse={0,0,0};
   F64 time=tS;
   I64 message_code=0,arg1,arg2,single_arg1,single_arg2;
   CTask *task_focus=sys_focus_task;
 
   if (task_focus && !winmgr.grab_scroll) {
-    arg1=ms.pos.x-task_focus->pix_left-task_focus->scroll_x;
-    arg2=ms.pos.y-task_focus->pix_top-task_focus->scroll_y;
-    single_arg1=single_ms.x-task_focus->pix_left-task_focus->scroll_x;
-    single_arg2=single_ms.y-task_focus->pix_top-task_focus->scroll_y;
-    if (old_ms.presnap.x!=ms.presnap.x || old_ms.presnap.y!=ms.presnap.y) {
+    arg1=mouse.pos.x-task_focus->pix_left-task_focus->scroll_x;
+    arg2=mouse.pos.y-task_focus->pix_top-task_focus->scroll_y;
+    single_arg1=single_mouse.x-task_focus->pix_left-task_focus->scroll_x;
+    single_arg2=single_mouse.y-task_focus->pix_top-task_focus->scroll_y;
+    if (old_mouse.presnap.x!=mouse.presnap.x || old_mouse.presnap.y!=mouse.presnap.y) {
       if (que)
 	TaskMessage(task_focus,0,
 	      MESSAGE_MS_MOVE,arg1,arg2,0);
       message_code=MESSAGE_MS_MOVE;
     }
-//TODO que message for ms.pos.z?
-    if (ms.left_dbl_time) {
-      if (time>ms.left_dbl_time) {
-	if (ms.left_dbl) {
-	  if (!ms.left_down_sent) {
+//TODO que message for mouse.pos.z?
+    if (mouse.left_dbl_time) {
+      if (time>mouse.left_dbl_time) {
+	if (mouse.left_dbl) {
+	  if (!mouse.left_down_sent) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_L_D_DOWN,arg1,arg2,0);
-	    ms.left_down_sent=TRUE;
+	    mouse.left_down_sent=TRUE;
 	    message_code=MESSAGE_MS_L_D_DOWN;
 	  }
-	  if (!ms.lb) {
+	  if (!mouse.lb) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_L_D_UP,arg1,arg2,0);
-	    ms.left_dbl_time=0;
+	    mouse.left_dbl_time=0;
 	    message_code=MESSAGE_MS_L_D_UP;
 	  }
 	} else {
-	  if (!ms.left_down_sent) {
+	  if (!mouse.left_down_sent) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_L_DOWN,single_arg1,single_arg2,0);
-	    ms.left_down_sent=TRUE;
+	    mouse.left_down_sent=TRUE;
 	    message_code=MESSAGE_MS_L_DOWN;
 	  }
-	  if (!ms.lb) {
+	  if (!mouse.lb) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_L_UP,arg1,arg2,0);
-	    ms.left_dbl_time=0;
+	    mouse.left_dbl_time=0;
 	    message_code=MESSAGE_MS_L_UP;
 	  }
 	}
       } else {
-	if (ms.lb && !ms_last.lb) {
-	  ms.left_dbl_time=time;
-	  ms.left_dbl=TRUE;
+	if (mouse.lb && !mouse_last.lb) {
+	  mouse.left_dbl_time=time;
+	  mouse.left_dbl=TRUE;
 	}
       }
     } else {
       if (TaskValidate(task_focus) &&
 	    Bt(&task_focus->win_inhibit,WIf_FOCUS_TASK_MS_L_D)) {
-	if (ms.lb  && !ms_last.lb) {
+	if (mouse.lb  && !mouse_last.lb) {
 	  if (que)
 	    TaskMessage(task_focus,0,
 		  MESSAGE_MS_L_DOWN,arg1,arg2,0);
 	  message_code=MESSAGE_MS_L_DOWN;
-	} else if (!ms.lb && ms_last.lb) {
+	} else if (!mouse.lb && mouse_last.lb) {
 	  if (que)
 	    TaskMessage(task_focus,0,
 		  MESSAGE_MS_L_UP,arg1,arg2,0);
 	  message_code=MESSAGE_MS_L_UP;
 	}
       } else {
-	if (ms.lb  && !ms_last.lb) {
-	  ms.left_dbl=FALSE;
-	  ms.left_down_sent=FALSE;
-	  ms.left_dbl_time=time+ms.dbl_time;
-	  single_ms.x=ms.pos.x;
-	  single_ms.y=ms.pos.y;
+	if (mouse.lb  && !mouse_last.lb) {
+	  mouse.left_dbl=FALSE;
+	  mouse.left_down_sent=FALSE;
+	  mouse.left_dbl_time=time+mouse.dbl_time;
+	  single_mouse.x=mouse.pos.x;
+	  single_mouse.y=mouse.pos.y;
 	}
       }
     }
 
-    if (ms.right_dbl_time) {
-      if (time>ms.right_dbl_time) {
-	if (ms.right_dbl) {
-	  if (!ms.right_down_sent) {
+    if (mouse.right_dbl_time) {
+      if (time>mouse.right_dbl_time) {
+	if (mouse.right_dbl) {
+	  if (!mouse.right_down_sent) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_R_D_DOWN,arg1,arg2,0);
-	    ms.right_down_sent=TRUE;
+	    mouse.right_down_sent=TRUE;
 	    message_code=MESSAGE_MS_R_D_DOWN;
 	  }
-	  if (!ms.rb) {
+	  if (!mouse.rb) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_R_D_UP,arg1,arg2,0);
-	    ms.right_dbl_time=0;
+	    mouse.right_dbl_time=0;
 	    message_code=MESSAGE_MS_R_D_UP;
 	  }
 	} else {
-	  if (!ms.right_down_sent) {
+	  if (!mouse.right_down_sent) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_R_DOWN,single_arg1,single_arg2,0);
-	    ms.right_down_sent=TRUE;
+	    mouse.right_down_sent=TRUE;
 	    message_code=MESSAGE_MS_R_DOWN;
 	  }
-	  if (!ms.rb) {
+	  if (!mouse.rb) {
 	    if (que)
 	      TaskMessage(task_focus,0,
 		    MESSAGE_MS_R_UP,arg1,arg2,0);
-	    ms.right_dbl_time=0;
+	    mouse.right_dbl_time=0;
 	    message_code=MESSAGE_MS_R_UP;
 	  }
 	}
       } else {
-	if (ms.rb && !ms_last.rb) {
-	  ms.right_dbl_time=time;
-	  ms.right_dbl=TRUE;
+	if (mouse.rb && !mouse_last.rb) {
+	  mouse.right_dbl_time=time;
+	  mouse.right_dbl=TRUE;
 	}
       }
     } else {
       if (TaskValidate(task_focus) &&
 	    Bt(&task_focus->win_inhibit,WIf_FOCUS_TASK_MS_R_D)) {
-	if (ms.rb  && !ms_last.rb) {
+	if (mouse.rb  && !mouse_last.rb) {
 	  if (que)
 	    TaskMessage(task_focus,0,
 		  MESSAGE_MS_R_DOWN,arg1,arg2,0);
 	  message_code=MESSAGE_MS_R_DOWN;
-	} else if (!ms.rb && ms_last.rb) {
+	} else if (!mouse.rb && mouse_last.rb) {
 	  if (que)
 	    TaskMessage(task_focus,0,
 		  MESSAGE_MS_R_UP,arg1,arg2,0);
 	  message_code=MESSAGE_MS_R_UP;
 	}
       } else {
-	if (ms.rb  && !ms_last.rb) {
-	  ms.right_dbl=FALSE;
-	  ms.right_down_sent=FALSE;
-	  ms.right_dbl_time=time+ms.dbl_time;
-	  single_ms.x=ms.pos.x;
-	  single_ms.y=ms.pos.y;
+	if (mouse.rb  && !mouse_last.rb) {
+	  mouse.right_dbl=FALSE;
+	  mouse.right_down_sent=FALSE;
+	  mouse.right_dbl_time=time+mouse.dbl_time;
+	  single_mouse.x=mouse.pos.x;
+	  single_mouse.y=mouse.pos.y;
 	}
       }
     }
 
-    MemCpy(&ms_last,&ms,sizeof(CMsStateGlobals));
-    MemCpy(&old_ms,&ms,sizeof(CMsStateGlobals));
+    MemCpy(&mouse_last,&mouse,sizeof(CMouseStateGlobals));
+    MemCpy(&old_mouse,&mouse,sizeof(CMouseStateGlobals));
   }
   return message_code;
 }
@@ -245,7 +245,7 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
 	  !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_CTRLS)) {
       c=sys_focus_task->next_ctrl;
       while (c!=&sys_focus_task->next_ctrl) {
-	if (CtrlInside(c,ms.pos.x,ms.pos.y)) {
+	if (CtrlInside(c,mouse.pos.x,mouse.pos.y)) {
 	  que=FALSE;
 	  break;
 	}
@@ -260,7 +260,7 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
   }
   if (sys_focus_task)
     LBtr(&sys_focus_task->task_flags,TASKf_HAS_SONG);
-  WinMsUpdate;
+  WinMouseUpdate;
 
   if (!LBtr(&sys_semas[SEMA_JUST_PUMP_MESSAGES],0)) {
     t=tS+WINMGR_PERIOD/8;
@@ -275,14 +275,14 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
       if (!screencast.dc) {
 	screencast.dc=DCCopy(screencast.dc2_alias);
 	screencast.dc->cdt=cdt;
-	st=MStrPrint(screencast.print_fmt,cdt);
+	st=MStrPrint(screencast.print_format,cdt);
 	GRWrite(st,screencast.dc);
 	Free(st);
       } else if (MemCmp(screencast.dc->body,
 	    screencast.dc2_alias->body,MSize(screencast.dc2_alias->body))) {
 	diff=DCDiff(screencast.dc,screencast.dc2_alias);
 	diff->cdt=cdt;
-	st=MStrPrint(screencast.print_fmt,cdt);
+	st=MStrPrint(screencast.print_format,cdt);
 	GRWrite(st,diff);
 	Free(st);
 	DCDel(diff);
@@ -305,20 +305,20 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
       music.cur_song_task=NULL;
     }
     winmgr.updates++;
-    if (ms_hard.install_attempts) //Don't call before boot mouse install attempt
-      KbdMsHandler(FALSE,TRUE);
+    if (mouse_hard.install_attempts) //Don't call before boot mouse install attempt
+      KbdMouseHandler(FALSE,TRUE);
     SleepUntil(timeout_val);
   }
   return message_code;
 }
 
-CDoc *WinCursorPosSet(CTask *task,I64 msx,I64 msy,Bool set_cursor=TRUE)
+CDoc *WinCursorPosSet(CTask *task,I64 mouse_x,I64 mouse_y,Bool set_cursor=TRUE)
 {
   CDoc *res=NULL;
   Bool unlock;
   I64 x0,y0;
   if (!task) task=Fs;
-  if (WinInside(msx,msy,task)) {
+  if (WinInside(mouse_x,mouse_y,task)) {
     if ((res=DocDisplay(task)) && res->flags&DOCF_DONT_SHOW)
       res=NULL;
     else if (set_cursor) {
@@ -329,8 +329,8 @@ CDoc *WinCursorPosSet(CTask *task,I64 msx,I64 msy,Bool set_cursor=TRUE)
 	x0=res->line_start_col;
 	y0=res->top_line_num;
 	DocRecalc(res,RECALCF_HAS_CURSOR);
-	res->x=(msx-task->pix_left-task->scroll_x)/FONT_WIDTH +x0;
-	res->y=(msy-task->pix_top -task->scroll_y)/FONT_HEIGHT+y0;
+	res->x=(mouse_x-task->pix_left-task->scroll_x)/FONT_WIDTH +x0;
+	res->y=(mouse_y-task->pix_top -task->scroll_y)/FONT_HEIGHT+y0;
 	DocRecalc(res,RECALCt_FIND_CURSOR);
 	task->scroll_x=0;
 	task->scroll_y=0;
@@ -354,8 +354,8 @@ Bool WinKeyNavMenu()
   if (Bt(kbd.down_bitmap,SC_GUI) && focus && (m=focus->cur_menu)) {
     winmgr.show_menu=TRUE;
     sys_cur_submenu_entry=NULL;
-    old_pos.x=ms.pos.x; old_pos.y=ms.pos.y;
-    ms.pos.x=new_pos.x=ms.pos.y=new_pos.y=0;
+    old_pos.x=mouse.pos.x; old_pos.y=mouse.pos.y;
+    mouse.pos.x=new_pos.x=mouse.pos.y=new_pos.y=0;
     while (Bt(kbd.down_bitmap,SC_GUI)) {
       old_key_count=kbd.count;
       if (Bt(kbd.down_bitmap,SC_CURSOR_LEFT)) {
@@ -400,16 +400,16 @@ Bool WinKeyNavMenu()
       }
       new_pos.x=ClampI64(new_pos.x,0,GR_WIDTH-1);
       new_pos.y=ClampI64(new_pos.y,0,GR_HEIGHT-1);
-      ms.pos.x=new_pos.x; ms.pos.y=new_pos.y;
+      mouse.pos.x=new_pos.x; mouse.pos.y=new_pos.y;
       WinMgrSleep(TRUE);
       if (!sys_cur_submenu_entry)
-	ms.pos.y=new_pos.y=0;
+	mouse.pos.y=new_pos.y=0;
     }
     if (sys_cur_submenu_entry)
       TaskMessage(sys_focus_task,0,sys_cur_submenu_entry->message_code,
 	    sys_cur_submenu_entry->arg1,sys_cur_submenu_entry->arg2,0);
     winmgr.show_menu=FALSE;
-    ms.pos.x=old_pos.x; ms.pos.y=old_pos.y;
+    mouse.pos.x=old_pos.x; mouse.pos.y=old_pos.y;
     return TRUE;
   }
   return FALSE;
@@ -421,7 +421,7 @@ U0 WinMgrTask(I64)
   CDoc *doc;
   CDocEntry *doc_e;
   I64 x,y,z,message_code,
-	my_ms_z=0,left,top,
+	my_mouse_z=0,left,top,
 	old_flags=GetRFlags;
   Bool has_border;
   CCtrl *c;
@@ -464,7 +464,7 @@ wmt_start:
 	  SetRFlags(old_flags);
 	  goto wmt_start;
 	}
-	if (WinInside(ms.pos.x,ms.pos.y,task,FONT_WIDTH)) {
+	if (WinInside(mouse.pos.x,mouse.pos.y,task,FONT_WIDTH)) {
 	  SetRFlags(old_flags);
 	  break;
 	}
@@ -487,11 +487,11 @@ wmt_start:
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_MENU)) {
 	if (WinKeyNavMenu)
 	  goto wmt_start;
-	if (task==Fs && 0<=ms.pos.y<FONT_HEIGHT && ms_hard.installed) {
+	if (task==Fs && 0<=mouse.pos.y<FONT_HEIGHT && mouse_hard.installed) {
 	  winmgr.show_menu=TRUE;
-	  if (ms.lb && !old_ms.lb) {
+	  if (mouse.lb && !old_mouse.lb) {
 	    winmgr.show_menu=TRUE;
-	    while (ms.lb)
+	    while (mouse.lb)
 	      WinMgrSleep(TRUE);
 	    if (sys_cur_submenu_entry)
 	      TaskMessage(sys_focus_task,0,
@@ -499,7 +499,7 @@ wmt_start:
 		    sys_cur_submenu_entry->arg1,
 		    sys_cur_submenu_entry->arg2,0);
 	    winmgr.show_menu=FALSE;
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
 	}
@@ -513,20 +513,20 @@ wmt_start:
 	winmgr.grab_scroll_closed=FALSE;
 	winmgr.grab_scroll=TRUE;
 	while (kbd.scan_code&SCF_CTRL && TaskValidate(task) && (!ac.task ||
-	      !WinInside(ms.pos.x,ms.pos.y,ac.task,FONT_WIDTH))) {
-	  if (ms.lb) {
+	      !WinInside(mouse.pos.x,mouse.pos.y,ac.task,FONT_WIDTH))) {
+	  if (mouse.lb) {
 	    winmgr.grab_scroll_closed=TRUE;
-	    x=ms.pos.x-task->scroll_x;
-	    y=ms.pos.y-task->scroll_y;
-	    z=ms.pos.z-task->scroll_z;
-	    while (ms.lb && kbd.scan_code&SCF_CTRL && TaskValidate(task)) {
-	      task->scroll_x=(ms.pos.x-x)&~7;
-	      task->scroll_y=(ms.pos.y-y)&~7;
-	      task->scroll_z=ms.pos.z-z;
+	    x=mouse.pos.x-task->scroll_x;
+	    y=mouse.pos.y-task->scroll_y;
+	    z=mouse.pos.z-task->scroll_z;
+	    while (mouse.lb && kbd.scan_code&SCF_CTRL && TaskValidate(task)) {
+	      task->scroll_x=(mouse.pos.x-x)&~7;
+	      task->scroll_y=(mouse.pos.y-y)&~7;
+	      task->scroll_z=mouse.pos.z-z;
 	      WinMgrSleep(TRUE);
 	    }
 	    winmgr.grab_scroll_closed=FALSE;
-	  } else if (ms.rb)  {
+	  } else if (mouse.rb)  {
 	    task->scroll_x=0;
 	    task->scroll_y=0;
 	    task->scroll_z=0;
@@ -542,10 +542,10 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_CTRLS) &&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_CTRLS))) {
-	if (ms.lb && !old_ms.lb) {
+	if (mouse.lb && !old_mouse.lb) {
 	  c=task->next_ctrl;
 	  while (c!=&task->next_ctrl) {
-	    if (CtrlInside(c,ms.pos.x,ms.pos.y)) {
+	    if (CtrlInside(c,mouse.pos.x,mouse.pos.y)) {
 	      left=task->pix_left;
 	      top =task->pix_top;
 	      if (c->flags&CTRLF_BORDER) {
@@ -553,29 +553,29 @@ wmt_start:
 		top -=FONT_HEIGHT;
 	      }
 	      if (c->flags&CTRLF_CAPTURE_LEFT_MS) {
-		while (ms.lb && TaskValidate(task)) {
+		while (mouse.lb && TaskValidate(task)) {
 		  if (c->left_click)
-		    (*c->left_click)(c,ms.pos.x-left,ms.pos.y-top,TRUE);
+		    (*c->left_click)(c,mouse.pos.x-left,mouse.pos.y-top,TRUE);
 		  WinMgrSleep;
 		}
 		if (c->left_click)
-		  (*c->left_click)(c,ms.pos.x-left,ms.pos.y-top,FALSE);
-		old_ms.lb=FALSE;
+		  (*c->left_click)(c,mouse.pos.x-left,mouse.pos.y-top,FALSE);
+		old_mouse.lb=FALSE;
 		goto wmt_start;
 	      } else {
 		if (c->left_click)
-		  (*c->left_click)(c,ms.pos.x-left,ms.pos.y-top,TRUE);
-		old_ms.lb=TRUE;
+		  (*c->left_click)(c,mouse.pos.x-left,mouse.pos.y-top,TRUE);
+		old_mouse.lb=TRUE;
 		goto wmt_start;
 	      }
 	    }
 	    c=c->next;
 	  }
 	}
-	if (old_ms.lb && !ms.lb) {
+	if (old_mouse.lb && !mouse.lb) {
 	  c=task->next_ctrl;
 	  while (c!=&task->next_ctrl) {
-	    if (CtrlInside(c,ms.pos.x,ms.pos.y)) {
+	    if (CtrlInside(c,mouse.pos.x,mouse.pos.y)) {
 	      left=task->pix_left;
 	      top =task->pix_top;
 	      if (c->flags&CTRLF_BORDER) {
@@ -583,17 +583,17 @@ wmt_start:
 		top -=FONT_HEIGHT;
 	      }
 	      if (c->left_click)
-		(*c->left_click)(c,ms.pos.x-left,ms.pos.y-top,FALSE);
-	      old_ms.lb=FALSE;
+		(*c->left_click)(c,mouse.pos.x-left,mouse.pos.y-top,FALSE);
+	      old_mouse.lb=FALSE;
 	      goto wmt_start;
 	    }
 	    c=c->next;
 	  }
 	}
-	if (ms.rb && !old_ms.rb) {
+	if (mouse.rb && !old_mouse.rb) {
 	  c=task->next_ctrl;
 	  while (c!=&task->next_ctrl) {
-	    if (CtrlInside(c,ms.pos.x,ms.pos.y)) {
+	    if (CtrlInside(c,mouse.pos.x,mouse.pos.y)) {
 	      left=task->pix_left;
 	      top =task->pix_top;
 	      if (c->flags&CTRLF_BORDER) {
@@ -601,29 +601,29 @@ wmt_start:
 		top -=FONT_HEIGHT;
 	      }
 	      if (c->flags&CTRLF_CAPTURE_RIGHT_MS) {
-		while (ms.rb && TaskValidate(task)) {
+		while (mouse.rb && TaskValidate(task)) {
 		  if (c->right_click)
-		    (*c->right_click)(c,ms.pos.x-left,ms.pos.y-top,TRUE);
+		    (*c->right_click)(c,mouse.pos.x-left,mouse.pos.y-top,TRUE);
 		  WinMgrSleep;
 		}
 		if (c->right_click)
-		  (*c->right_click)(c,ms.pos.x-left,ms.pos.y-top,FALSE);
-		old_ms.rb=FALSE;
+		  (*c->right_click)(c,mouse.pos.x-left,mouse.pos.y-top,FALSE);
+		old_mouse.rb=FALSE;
 		goto wmt_start;
 	      } else {
 		if (c->right_click)
-		  (*c->right_click)(c,ms.pos.x-left,ms.pos.y-top,TRUE);
-		old_ms.rb=TRUE;
+		  (*c->right_click)(c,mouse.pos.x-left,mouse.pos.y-top,TRUE);
+		old_mouse.rb=TRUE;
 		goto wmt_start;
 	      }
 	    }
 	    c=c->next;
 	  }
 	}
-	if (old_ms.rb && !ms.rb) {
+	if (old_mouse.rb && !mouse.rb) {
 	  c=task->next_ctrl;
 	  while (c!=&task->next_ctrl) {
-	    if (CtrlInside(c,ms.pos.x,ms.pos.y)) {
+	    if (CtrlInside(c,mouse.pos.x,mouse.pos.y)) {
 	      left=task->pix_left;
 	      top =task->pix_top;
 	      if (c->flags&CTRLF_BORDER) {
@@ -631,27 +631,27 @@ wmt_start:
 		top -=FONT_HEIGHT;
 	      }
 	      if (c->right_click)
-		(*c->right_click)(c,ms.pos.x-left,ms.pos.y-top,FALSE);
-	      old_ms.rb=FALSE;
+		(*c->right_click)(c,mouse.pos.x-left,mouse.pos.y-top,FALSE);
+	      old_mouse.rb=FALSE;
 	      goto wmt_start;
 	    }
 	    c=c->next;
 	  }
 	}
-	if (ms.has_wheel && my_ms_z!=ms.pos.z) {
+	if (mouse.has_wheel && my_mouse_z!=mouse.pos.z) {
 	  if (task==sys_focus_task) {
 	    c=task->next_ctrl;
 	    while (c!=&task->next_ctrl) {
 	      if (c->wheel_chg) {
-		(*c->wheel_chg)(c,ms.pos.z-my_ms_z);
-		my_ms_z=ms.pos.z;
+		(*c->wheel_chg)(c,mouse.pos.z-my_mouse_z);
+		my_mouse_z=mouse.pos.z;
 		goto wmt_start;
 	      }
 	      c=c->next;
 	    }
-	    my_ms_z=ms.pos.z;
+	    my_mouse_z=mouse.pos.z;
 	  } else if (!sys_focus_task)
-	    my_ms_z=ms.pos.z;
+	    my_mouse_z=mouse.pos.z;
 	}
       }
 
@@ -661,8 +661,8 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_MS_L)&&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_MS_L))) {
-	if (!old_ms.lb && ms.lb) {
-	  if (doc=WinCursorPosSet(task,ms.pos.x,ms.pos.y)) {
+	if (!old_mouse.lb && mouse.lb) {
+	  if (doc=WinCursorPosSet(task,mouse.pos.x,mouse.pos.y)) {
 	    DocLock(doc);
 	    if (doc->doc_signature==DOC_SIGNATURE_VAL) {
 	      doc_e=doc->cur_entry;
@@ -672,7 +672,7 @@ wmt_start:
 	      }
 	    }
 	    DocUnlock(doc);
-	    old_ms.lb=TRUE;
+	    old_mouse.lb=TRUE;
 	    goto wmt_start;
 	  }
 	}
@@ -680,9 +680,9 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_MS_R)&&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_MS_R))) {
-	if (!old_ms.rb && ms.rb) {
-	  if (WinCursorPosSet(task,ms.pos.x,ms.pos.y)) {
-	    old_ms.rb=TRUE;
+	if (!old_mouse.rb && mouse.rb) {
+	  if (WinCursorPosSet(task,mouse.pos.x,mouse.pos.y)) {
+	    old_mouse.rb=TRUE;
 	    goto wmt_start;
 	  }
 	}
@@ -690,18 +690,18 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_BORDER) && has_border &&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_BORDER))) {
-	if (old_ms.lb && !ms.lb) {
-	  if (ms.pos_text.y==task->win_top-1) {
-	    if (task->win_left<=ms.pos_text.x<task->win_left+4) {
+	if (old_mouse.lb && !mouse.lb) {
+	  if (mouse.pos_text.y==task->win_top-1) {
+	    if (task->win_left<=mouse.pos_text.x<task->win_left+4) {
 	      TaskMessage(task,0,MESSAGE_KEY_DOWN,CH_CTRLM,0x43200000432,0);
-	      old_ms.lb=FALSE;
+	      old_mouse.lb=FALSE;
 	      goto wmt_start;
-	    } else if (task->win_right-2<=ms.pos_text.x<=task->win_right) {
+	    } else if (task->win_right-2<=mouse.pos_text.x<=task->win_right) {
 	      if (DocPut(task))
 		TaskMessage(task,0,MESSAGE_KEY_DOWN,CH_SHIFT_ESC,0,0);
 	      else
 		Kill(task,FALSE);
-	      old_ms.lb=FALSE;
+	      old_mouse.lb=FALSE;
 	      goto wmt_start;
 	    }
 	  }
@@ -710,10 +710,10 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_MS_L)&&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_MS_L))) {
-	if (old_ms.lb && !ms.lb) {
-	  if (doc=WinCursorPosSet(task,ms.pos.x,ms.pos.y,FALSE)) {
+	if (old_mouse.lb && !mouse.lb) {
+	  if (doc=WinCursorPosSet(task,mouse.pos.x,mouse.pos.y,FALSE)) {
 	    do message_code=WinMgrSleep;
-	    while (TaskValidate(task) && (ms.lb || ms.left_dbl_time));
+	    while (TaskValidate(task) && (mouse.lb || mouse.left_dbl_time));
 	    if (TaskValidate(task)) {
 	      if (message_code==MESSAGE_MS_L_UP) {
 		if (doc->doc_signature==DOC_SIGNATURE_VAL) {
@@ -736,7 +736,7 @@ wmt_start:
 	      } else if (message_code==MESSAGE_MS_L_D_UP)
 		TaskMessage(task,0,MESSAGE_KEY_DOWN,CH_ESC,0,0);
 	    }
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
 	}
@@ -745,10 +745,10 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_MS_R)&&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_MS_R))) {
-	if (old_ms.rb && !ms.rb) {
-	  if (doc=WinCursorPosSet(task,ms.pos.x,ms.pos.y,FALSE)) {
+	if (old_mouse.rb && !mouse.rb) {
+	  if (doc=WinCursorPosSet(task,mouse.pos.x,mouse.pos.y,FALSE)) {
 	    do message_code=WinMgrSleep;
-	    while (TaskValidate(task) && (ms.rb || ms.right_dbl_time));
+	    while (TaskValidate(task) && (mouse.rb || mouse.right_dbl_time));
 	    if (TaskValidate(task)) {
 	      if (message_code==MESSAGE_MS_R_UP) {
 		if (doc->doc_signature==DOC_SIGNATURE_VAL) {
@@ -768,7 +768,7 @@ wmt_start:
 	      } else if (message_code==MESSAGE_MS_R_D_UP)
 		TaskMessage(task,0,MESSAGE_KEY_DOWN,CH_SHIFT_ESC,0,0);
 	    }
-	    old_ms.rb=FALSE;
+	    old_mouse.rb=FALSE;
 	    goto wmt_start;
 	  }
 	}
@@ -777,79 +777,79 @@ wmt_start:
       if (!Bt(&task->win_inhibit,WIf_SELF_BORDER) && has_border &&
 	    (!TaskValidate(sys_focus_task)||
 	    !Bt(&sys_focus_task->win_inhibit,WIf_FOCUS_TASK_BORDER))) {
-	if (ms.lb && !old_ms.lb) {
-	  if (task->win_top==ms.pos_text.y+1 &&
-		task->win_left-1<=ms.pos_text.x<=task->win_right+1) {
-	    if (task->win_left<=ms.pos_text.x<task->win_left+4) {
-	      old_ms.lb=TRUE;
+	if (mouse.lb && !old_mouse.lb) {
+	  if (task->win_top==mouse.pos_text.y+1 &&
+		task->win_left-1<=mouse.pos_text.x<=task->win_right+1) {
+	    if (task->win_left<=mouse.pos_text.x<task->win_left+4) {
+	      old_mouse.lb=TRUE;
 	      goto wmt_start;
 	    }
-	    if (task->win_right-2<=ms.pos_text.x<=task->win_right) {
-	      old_ms.lb=TRUE;
+	    if (task->win_right-2<=mouse.pos_text.x<=task->win_right) {
+	      old_mouse.lb=TRUE;
 	      goto wmt_start;
 	    }
-	    x=ms.pos_text.x-task->win_left;
-	    if (ms.lb) {
+	    x=mouse.pos_text.x-task->win_left;
+	    if (mouse.lb) {
 	      WinToTop(task);
-	      while (ms.lb && TaskValidate(task)) {
-		WinHorz(ms.pos_text.x-x,task->win_width-1+ms.pos_text.x-x,task);
-		WinVert(ms.pos_text.y+1,task->win_height+ms.pos_text.y,task);
+	      while (mouse.lb && TaskValidate(task)) {
+		WinHorz(mouse.pos_text.x-x,task->win_width-1+mouse.pos_text.x-x,task);
+		WinVert(mouse.pos_text.y+1,task->win_height+mouse.pos_text.y,task);
 		WinMgrSleep;
 	      }
 	    }
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
-	  if (task->win_left==ms.pos_text.x+1 &&
-		task->win_top-1<=ms.pos_text.y<=task->win_bottom+1) {
-	    y=ms.pos_text.y-task->win_top;
-	    if (ms.lb) {
+	  if (task->win_left==mouse.pos_text.x+1 &&
+		task->win_top-1<=mouse.pos_text.y<=task->win_bottom+1) {
+	    y=mouse.pos_text.y-task->win_top;
+	    if (mouse.lb) {
 	      WinToTop(task);
-	      while (ms.lb && TaskValidate(task)) {
-		WinHorz(ms.pos_text.x+1,task->win_width+ms.pos_text.x,task);
-		WinVert(ms.pos_text.y-y,
-		      task->win_height-1+ms.pos_text.y-y,task);
+	      while (mouse.lb && TaskValidate(task)) {
+		WinHorz(mouse.pos_text.x+1,task->win_width+mouse.pos_text.x,task);
+		WinVert(mouse.pos_text.y-y,
+		      task->win_height-1+mouse.pos_text.y-y,task);
 		WinMgrSleep;
 	      }
 	    }
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
-	  if (task->win_right+1==ms.pos_text.x &&
-		task->win_bottom+1==ms.pos_text.y) {
-	    if (ms.lb) {
+	  if (task->win_right+1==mouse.pos_text.x &&
+		task->win_bottom+1==mouse.pos_text.y) {
+	    if (mouse.lb) {
 	      WinToTop(task);
-	      while (ms.lb && TaskValidate(task)) {
-		WinHorz(task->win_left,ms.pos_text.x-1,task);
-		WinVert(task->win_top,ms.pos_text.y-1,task);
+	      while (mouse.lb && TaskValidate(task)) {
+		WinHorz(task->win_left,mouse.pos_text.x-1,task);
+		WinVert(task->win_top,mouse.pos_text.y-1,task);
 		WinMgrSleep;
 	      }
 	    }
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
-	  if (task->win_bottom==ms.pos_text.y-1 &&
-		task->win_left<=ms.pos_text.x<=task->win_right) {
-	    if (ms.lb) {
+	  if (task->win_bottom==mouse.pos_text.y-1 &&
+		task->win_left<=mouse.pos_text.x<=task->win_right) {
+	    if (mouse.lb) {
 	      WinToTop(task);
-	      while (ms.lb && TaskValidate(task)) {
-		WinVert(task->win_top,ms.pos_text.y-1,task);
+	      while (mouse.lb && TaskValidate(task)) {
+		WinVert(task->win_top,mouse.pos_text.y-1,task);
 		WinMgrSleep;
 	      }
 	    }
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
-	  if (task->win_right==ms.pos_text.x-1 &&
-		task->win_top<=ms.pos_text.y<=task->win_bottom) {
-	    if (ms.lb) {
+	  if (task->win_right==mouse.pos_text.x-1 &&
+		task->win_top<=mouse.pos_text.y<=task->win_bottom) {
+	    if (mouse.lb) {
 	      WinToTop(task);
-	      while (ms.lb && TaskValidate(task)) {
-		WinHorz(task->win_left,ms.pos_text.x-1,task);
+	      while (mouse.lb && TaskValidate(task)) {
+		WinHorz(task->win_left,mouse.pos_text.x-1,task);
 		WinMgrSleep;
 	      }
 	    }
-	    old_ms.lb=FALSE;
+	    old_mouse.lb=FALSE;
 	    goto wmt_start;
 	  }
 	}

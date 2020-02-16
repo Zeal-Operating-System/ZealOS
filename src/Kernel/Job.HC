@@ -394,19 +394,19 @@ I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL)
   }
 }
 
-I64 PopUpPrint(U8 *fmt,...)
+I64 PopUpPrint(U8 *format,...)
 {//Execute code in $LK,"PopUp",A="MN:PopUp"$ task.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 res;
   res=PopUp(buf,Fs);
   Free(buf);
   return res;
 }
 
-I64 Zenith(U8 *fmt,...)
+I64 Zenith(U8 *format,...)
 {//Make zenith_task execute code.
   I64 res;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   CJob *tmpc;
   if (Fs==zenith_task) {
     tmpc=TaskExe(zenith_task,Fs,buf,0);
@@ -420,9 +420,9 @@ I64 Zenith(U8 *fmt,...)
   return res;
 }
 
-U0 ZenithLog(U8 *fmt,...)
+U0 ZenithLog(U8 *format,...)
 {//Display text in zenith_task.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   if (Fs==zenith_task)
     "%s",buf;
   else if (!IsSingleUser)
@@ -430,9 +430,9 @@ U0 ZenithLog(U8 *fmt,...)
   Free(buf);
 }
 
-U0 ZenithErr(U8 *fmt,...)
+U0 ZenithErr(U8 *format,...)
 {//Display red blinking Err text in zenith_task.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv),
 	*st=MStrPrint(ST_ERR_ST "%s",buf);
   if (Fs==zenith_task)
     "%s",st;
@@ -442,18 +442,18 @@ U0 ZenithErr(U8 *fmt,...)
   Free(buf);
 }
 
-U0 XTalk(CTask *task,U8 *fmt,...)
+U0 XTalk(CTask *task,U8 *format,...)
 {//Sends text to other task. See $LK,"::/Misc/OSTestSuite.HC"$.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),*st=ZStrNew(buf),
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv),*st=ZStrNew(buf),
 	*st2=MStrPrint("\"%%s\",%d;Free(%d);",st,st);
   TaskText(task,NULL,st2,0);
   Free(st2);
   Free(buf);
 }
 
-U0 XTalkWait(CTask *task,U8 *fmt,...)
+U0 XTalkWait(CTask *task,U8 *format,...)
 {//Send text to other task and wait for it to idle.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),*st=ZStrNew(buf),
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv),*st=ZStrNew(buf),
 	*st2=MStrPrint("\"%%s\",%d;Free(%d);",st,st);
   TaskText(task,NULL,st2,0);
   Free(st2);
@@ -461,9 +461,9 @@ U0 XTalkWait(CTask *task,U8 *fmt,...)
   TaskWait(task);
 }
 
-U0 InStr(U8 *fmt,...)
+U0 InStr(U8 *format,...)
 {//Send InFile code to self.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   if (Bt(&Fs->task_flags,TASKf_INPUT_FILTER_TASK))
     ExePrint("%s",buf);
   else
@@ -479,23 +479,23 @@ U0 InFile(U8 *filename)
   Free(name);
 }
 
-U0 In(U8 *fmt,...)
+U0 In(U8 *format,...)
 {//Send text to own input buffer. See $LK,"::/Demo/AcctExample/TOS/TOSDistro.HC"$.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),*st=ZStrNew(buf);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv),*st=ZStrNew(buf);
   InStr("\"%%s\",%d;Free(%d);",st,st);
   Free(buf);
 }
 
-U0 XTalkStr(CTask *task,U8 *fmt,...)
+U0 XTalkStr(CTask *task,U8 *format,...)
 {//Send InFile code to other task.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   TaskText(task,NULL,buf,0);
   Free(buf);
 }
 
-U0 XTalkStrWait(CTask *task,U8 *fmt,...)
+U0 XTalkStrWait(CTask *task,U8 *format,...)
 {//Send InFile code to other task and wait for it to idle.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   TaskText(task,NULL,buf,0);
   Free(buf);
   TaskWait(task);

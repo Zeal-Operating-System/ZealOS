@@ -91,11 +91,11 @@ U0 Maze()
     do {
       MemSet(text,0,sizeof(text));
       while (!(ch=ScanChar)) {
-	x=ms.pos_text.x-Fs->win_left-Fs->scroll_x/FONT_WIDTH;
-	y=ms.pos_text.y-Fs->win_top-Fs->scroll_y/FONT_HEIGHT;
-	if (ms.lb&&!winmgr.grab_scroll)
+	x=mouse.pos_text.x-Fs->win_left-Fs->scroll_x/FONT_WIDTH;
+	y=mouse.pos_text.y-Fs->win_top-Fs->scroll_y/FONT_HEIGHT;
+	if (mouse.lb&&!winmgr.grab_scroll)
 	  text[y][x]=CH_SPACE+ATTRF_INVERT+ATTR;
-	if (ms.rb&&!winmgr.grab_scroll) {
+	if (mouse.rb&&!winmgr.grab_scroll) {
 	  text[y][x]='*'+ATTR;
 	  SolveMaze(x,y);
 	  ch=GetChar;

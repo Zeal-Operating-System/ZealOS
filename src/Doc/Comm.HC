@@ -124,9 +124,9 @@ public U0 CommPutBlk(I64 port,U8 *buf,I64 count)
     CommPutChar(port,*buf++);
 }
 
-public U0 CommPrint(I64 port,U8 *fmt,...)
+public U0 CommPrint(I64 port,U8 *format,...)
 {
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   CommPutS(port,buf);
   Free(buf);
 }

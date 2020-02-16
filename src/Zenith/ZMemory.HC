@@ -135,7 +135,7 @@ public Bool HeapCtrlWalk(CHeapCtrl *hc)
     uum=uum->next;
   }
 
-  #if _CFG_HEAP_DBG
+  #if _CONFIG_HEAP_DBG
   CMemUsed *um,*um1;
   um1=(&hc->next_um)(U8 *)-offset(CMemUsed.next);
   um=um1->next;

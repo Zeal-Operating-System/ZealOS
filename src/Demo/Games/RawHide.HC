@@ -230,19 +230,19 @@ U0 DrawIt(CTask *task,CDC *dc)
       dc->flags&=~(DCF_JUST_MIRROR|DCF_SYMMETRY);
     }
 
-  if (ms.pos.x-last_pos_x>0)
+  if (mouse.pos.x-last_pos_x>0)
     left=FALSE;
-  else if (ms.pos.x-last_pos_x<0)
+  else if (mouse.pos.x-last_pos_x<0)
     left=TRUE;
   if (left) {
     dc->flags|=DCF_JUST_MIRROR|DCF_SYMMETRY;
-    DCSymmetrySet(dc,ms.pos.x-task->pix_left-task->scroll_x,0,
-	  ms.pos.x-task->pix_left-task->scroll_x,1);
+    DCSymmetrySet(dc,mouse.pos.x-task->pix_left-task->scroll_x,0,
+	  mouse.pos.x-task->pix_left-task->scroll_x,1);
   }
-  Sprite3(dc,ms.pos.x-task->pix_left-task->scroll_x,
-	     ms.pos.y-task->pix_top -task->scroll_y,0,horse_imgs[frame&3]);
+  Sprite3(dc,mouse.pos.x-task->pix_left-task->scroll_x,
+	     mouse.pos.y-task->pix_top -task->scroll_y,0,horse_imgs[frame&3]);
   dc->flags&=~(DCF_JUST_MIRROR|DCF_SYMMETRY);
-  last_pos_x=ms.pos.x;
+  last_pos_x=mouse.pos.x;
 
   if (tf) {
     dc->color=RED;
@@ -336,8 +336,8 @@ U0 AnimateTask(CTask *parent)
     max_speed=ClampU64(max_speed,U32_MAX/3,200*U32_MAX);
     cx=(MAP_WIDTH -parent->pix_width)/2,
 	  cy=(MAP_HEIGHT-parent->pix_height)/2;
-    cursor_x=ms.pos.x+cx-parent->pix_left-parent->scroll_x;
-    cursor_y=ms.pos.y+cy-parent->pix_top -parent->scroll_y;
+    cursor_x=mouse.pos.x+cx-parent->pix_left-parent->scroll_x;
+    cursor_y=mouse.pos.y+cy-parent->pix_top -parent->scroll_y;
     count=0;stress=0;
     my_outside_count=0;
     if (cursor_x<FENCE_WIDTH && cursor_y<FENCE_HEIGHT)

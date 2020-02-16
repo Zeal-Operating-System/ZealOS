@@ -22,7 +22,7 @@ $FG,2$Bttn$FG$	Button
 $FG,2$Buf$FG$	Buffer
 $FG,2$Bwd$FG$	Backward
 $FG,2$CB$FG$	Call-Back, Code Block
-$FG,2$Cfg$FG$	Config
+$FG,2$Config$FG$	Config
 $FG,2$Change$FG$	Change
 $FG,2$Check$FG$	Check
 $FG,2$Clip$FG$	Clipboard
@@ -56,7 +56,7 @@ $FG,2$Exe$FG$	Execute
 $FG,2$Ext$FG$	Extern, Extended, Extract
 $FG,2$Feat$FG$	Feature
 $FG,2$FG$FG$	Foreground
-$FG,2$Fmt$FG$	Format
+$FG,2$Format$FG$	Format
 $FG,2$Fwd$FG$	Forward
 $FG,2$FPS$FG$	Frames per Second, First Person Shooter
 $FG,2$fp_$FG$	Function ptr
@@ -91,7 +91,7 @@ $FG,2$Mgr$FG$	Manager
 $FG,2$Mid$FG$	Middle
 $FG,2$Mon$FG$	Month
 $FG,2$MP$FG$	MultiProcessor
-$FG,2$Ms$FG$	Mouse
+$FG,2$Mouse$FG$	Mouse
 $FG,2$Message$FG$	Message
 $FG,2$Num$FG$	Number
 $FG,2$Obj$FG$	Object

@@ -56,7 +56,7 @@ U0 DocFormBwd(CDoc *doc,Bool giveup=FALSE)
   }
 }
 
-U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
+U0 DocDataFormat(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
 {
   I64 i;
   U8 *ptr,*ptr2;
@@ -83,7 +83,7 @@ U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
     }
     if (doc_e->type_u8==DOCT_DATA) {
       if (doc_e->de_flags & DOCEF_REMALLOC_DATA) {
-	ptr=MStrPrint(doc_e->aux_str,d,doc_e->my_fmt_data);
+	ptr=MStrPrint(doc_e->aux_str,d,doc_e->my_format_data);
 	i=StrLen(ptr);
 	if (!doc_e->data) {
 	  doc_e->data=CAlloc(2,doc->mem_task);
@@ -100,7 +100,7 @@ U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
 	}
 	Free(ptr);
       } else {
-	StrPrint(doc_e->tag,doc_e->aux_str,d,doc_e->my_fmt_data);
+	StrPrint(doc_e->tag,doc_e->aux_str,d,doc_e->my_format_data);
 	i=StrLen(doc_e->tag);
       }
       if (doc_e->de_flags & DOCEF_HAS_TERMINATOR) {
@@ -147,7 +147,7 @@ U0 DocDataScan(CDoc *doc,CDocEntry *doc_e)
       if (i>doc_e->len+doc_e->min_col)
 	doc_e->tag[doc_e->len+doc_e->min_col]=0;
       if (RT_I8<=doc_e->raw_type<=RT_U32) {
-	StrScan(doc_e->tag,doc_e->aux_str,&d,doc_e->my_fmt_data);
+	StrScan(doc_e->tag,doc_e->aux_str,&d,doc_e->my_format_data);
 	if (doc_e->de_flags & DOCEF_HAS_TERMINATOR)
 	  doc_e->tag[i]='_';
       } else if (RT_I64<=doc_e->raw_type<=RT_UF64) {
@@ -158,7 +158,7 @@ U0 DocDataScan(CDoc *doc,CDocEntry *doc_e)
 	  doc_e->data=ptr;
 	  doc_e->len=MSize(ptr)-1;
 	} else
-	  StrScan(doc_e->tag,doc_e->aux_str,ptr,doc_e->my_fmt_data);
+	  StrScan(doc_e->tag,doc_e->aux_str,ptr,doc_e->my_format_data);
 	if (doc_e->de_flags & DOCEF_HAS_TERMINATOR)
 	  doc_e->tag[i]='_';
 	return;
@@ -254,8 +254,8 @@ public Bool DocForm(U8 *_d,U8 *class_name=lastclass,
 	doc_e->data=*doc_e->user_data(U8 **);
       } else
 	doc_e->data=_d+ml->offset;
-      doc_e->my_fmt_data=MemberMetaData("data",ml);
-      DocDataFmt(doc,doc_e);
+      doc_e->my_format_data=MemberMetaData("data",ml);
+      DocDataFormat(doc,doc_e);
     }
     ml=ml->next;
   }

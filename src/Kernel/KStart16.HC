@@ -80,7 +80,7 @@ GET_RIP:	POP	BX
 	MOV	AX,0x4F02
 	MOV	BX,0x12		//640x480 16 color
 #exe {
-  if (!kernel_cfg->opts[CFG_TEXT_MODE])
+  if (!kernel_config->opts[CONFIG_TEXT_MODE])
     StreamPrint("INT 0x10");	//Enable VGA
 };
 	CMP	AX,0x004F

@@ -421,13 +421,13 @@ U0 UserCmdLine(I64 dummy=0)
   UserTaskCont;
 }
 
-CTask *User(U8 *fmt=NULL,...)
+CTask *User(U8 *format=NULL,...)
 {//Create user term task.
   U8 *st;
   CTask *task=Spawn(&UserCmdLine,,"Terminal");
   TaskWait(task);
-  if (fmt) {
-    st=StrPrintJoin(NULL,fmt,argc,argv);
+  if (format) {
+    st=StrPrintJoin(NULL,format,argc,argv);
     XTalk(task,st);
     Free(st);
   }

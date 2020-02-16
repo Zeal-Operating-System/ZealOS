@@ -133,9 +133,9 @@ U0 FontEd()
 	  k=((arg2-BLOW_UP_CHAR_Y)/FONT_HEIGHT)*FONT_WIDTH+
 		(arg1-BLOW_UP_CHAR_X)/FONT_WIDTH;
 	  if (0<=k<FONT_WIDTH*FONT_HEIGHT) {
-	    if (ms.lb||message_code==MESSAGE_MS_L_DOWN)
+	    if (mouse.lb||message_code==MESSAGE_MS_L_DOWN)
 	      Bts(&text.font[cur_ch],k);
-	    if (ms.rb||message_code==MESSAGE_MS_R_DOWN)
+	    if (mouse.rb||message_code==MESSAGE_MS_R_DOWN)
 	      Btr(&text.font[cur_ch],k);
 	  }
 	  break;

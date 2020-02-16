@@ -1,7 +1,7 @@
 Cd(__DIR__);;
 
 #include "TOSExt"
-#include "TOSCfg"
+#include "TOSConfig"
 #include "TOSMisc"
 #include "TOSDistro"
 

@@ -369,7 +369,7 @@ U0 FMUnmount(CDoc *doc)
   }
 }
 
-U0 FMFmtDrive(CDoc *doc)
+U0 FMFormatDrive(CDoc *doc)
 {
   CDocEntry *doc_ce=doc->cur_entry;
   CDirEntry *tmpde;
@@ -384,7 +384,7 @@ U0 FMFmtDrive(CDoc *doc)
     st=MStrPrint("Format Drive '%c'?\nAre You Sure?\n",*tmpde->full_name);
     if (PopUpCancelOk(st)) {
       Silent;
-      Fmt(*tmpde->full_name,,FALSE);
+      Format(*tmpde->full_name,,FALSE);
       Silent(OFF);
     }
   }
@@ -564,14 +564,14 @@ U0 FMRightClick()
   }
 }
 
-U8 *fm_ms_str=NULL;
+U8 *fm_mouse_str=NULL;
 U0 (*fp_old_final_scrn_update)(CDC *dc);
 
 U0 FMFinalScreenUpdate(CDC *dc)
 {
-  if (fm_ms_str) {
+  if (fm_mouse_str) {
     dc->color=LTRED;
-    GrPrint(dc,ms.pos.x,ms.pos.y,"%s",fm_ms_str);
+    GrPrint(dc,mouse.pos.x,mouse.pos.y,"%s",fm_mouse_str);
   }
   (*fp_old_final_scrn_update)(dc);
 }
@@ -610,7 +610,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 	break;
       case MESSAGE_MS_L_DOWN:
 	doc_ce=doc->cur_entry;
-	fm_ms_str=doc_ce->tag;
+	fm_mouse_str=doc_ce->tag;
 	gr.fp_final_scrn_update=&FMFinalScreenUpdate;
 	break;
       case MESSAGE_MS_L_UP:
@@ -716,7 +716,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 	      FMBurnISO(doc);
 	      break;
 	    case 'f':
-	      FMFmtDrive(doc);
+	      FMFormatDrive(doc);
 	      break;
 	  end:
 	    FMRebuildDoc(&doc,&head,mode);

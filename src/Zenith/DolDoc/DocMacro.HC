@@ -143,11 +143,11 @@ I64 PopUpMacroMenu()
   CDoc *doc=DocNew;
   CDocEntry *doc_e=DocPrint(doc,"$$DA-P,LEN=STR_LEN-1,A=\"Name:%%s\"$$");
   doc_e->data=captured_macro_name;
-  DocDataFmt(doc,doc_e);
+  DocDataFormat(doc,doc_e);
 
   doc_e=DocPrint(doc,"\n$$DA,A=\"Repeat N:%%d\"$$");
   doc_e->data=&sys_macro_repeat_n;
-  DocDataFmt(doc,doc_e);
+  DocDataFormat(doc,doc_e);
 
   DocPrint(doc,"\n"
 	"$$CM+LX,1,3$$$$BT,\"RECORD\",LE=SM_RECORD$$"

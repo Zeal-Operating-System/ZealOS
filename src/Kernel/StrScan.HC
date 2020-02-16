@@ -209,7 +209,7 @@ today.
   return res-local_time_offset;
 }
 
-U8 *StrScan(U8 *src,U8 *fmt,...)
+U8 *StrScan(U8 *src,U8 *format,...)
 {/*Opposite of sprintf().Pass ptrs to data to be scanned-in.
 For "%s", pass ptr to ptr (be careful because addr
 of array is the same as array--create ptr to array
@@ -219,46 +219,46 @@ and take addr.
   Bool left_justify=FALSE;
   I64 ch,cur_arg=0,i,len,*i_ptr,dec_len;
   F64 *d_ptr;
-  if (!fmt)
+  if (!format)
     throw('Scan');
-  while (ch = *fmt++) {
+  while (ch = *format++) {
     if (ch=='%') {
-      if (*fmt=='%') {
+      if (*format=='%') {
 	src++;
-	fmt++;
+	format++;
       } else {
-	if (*fmt=='-') {
+	if (*format=='-') {
 	  left_justify=TRUE;
-	  fmt++;
+	  format++;
 	} else
 	  left_justify=FALSE;
 	len=0;
-	while ('0'<=*fmt<='9')
-	  len=len*10+ (*fmt++ -'0');
-	if (*fmt=='*') {
-	  fmt++;
+	while ('0'<=*format<='9')
+	  len=len*10+ (*format++ -'0');
+	if (*format=='*') {
+	  format++;
 	  if (cur_arg>=argc)
 	    throw('Scan');
 	  len=argv[cur_arg++];
 	}
-	ch=*fmt++;
+	ch=*format++;
 	if (ch && !len) {
 	  ptr=src;
-	  while (*ptr && *ptr!=*fmt)
+	  while (*ptr && *ptr!=*format)
 	    ptr++;
 	  len=ptr-src;
 	} else {
 	  if (ch=='.') {
 	    dec_len=0;
-	    while ('0'<=*fmt<='9')
-	      dec_len=dec_len*10+ (*fmt++-'0');
-	    if (*fmt=='*') {
-	      fmt++;
+	    while ('0'<=*format<='9')
+	      dec_len=dec_len*10+ (*format++-'0');
+	    if (*format=='*') {
+	      format++;
 	      if (cur_arg>=argc)
 		throw('Scan');
 	      dec_len=argv[cur_arg++];
 	    }
-	    ch=*fmt++;
+	    ch=*format++;
 	  }
 	}
 	buf=MAlloc(len+1);

@@ -5,9 +5,9 @@
   Cd(__DIR__);;
   Option(OPTf_WARN_PAREN,ON);
   Option(OPTf_WARN_DUP_TYPES,ON);
-  #include "KCfg"
-  CKCfg *kernel_cfg;
-  kernel_cfg=KCfgNew;
+  #include "KConfig"
+  CKConfig *kernel_config;
+  kernel_config=KConfigNew;
 };
 
 #include "KernelA.HH"
@@ -28,7 +28,7 @@
 #include "KGlobals"
 #include "KMathB"
 #include "Sched"
-#include "Mem/MakeMem"
+#include "Mem/MakeMem"
 #include "FontStd"
 #include "FontCyrillic"
 #include "StrB"
@@ -58,4 +58,4 @@
 #include "FunSeg"
 #include "KMain"
 
-#exe {KCfgDel(kernel_cfg);};
+#exe {KConfigDel(kernel_config);};

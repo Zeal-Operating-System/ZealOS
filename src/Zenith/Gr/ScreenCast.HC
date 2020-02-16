@@ -2,7 +2,7 @@
 
 #define MV_FILE_MAX	0x007FF000
 
-public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
+public I64 GR2MV(U8 *print_format="VID%03d.MV",
 	U8 *files_find_mask,U8 *fu_flags=NULL)
 {/*Merge GR list to MV file.
 "+d" will delete GR list files.
@@ -22,7 +22,7 @@ public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
       dc=GRRead(tmpde->full_name);
       GrBlot(dc_base,dc->x0,dc->y0,dc);
       if (dst+GR_FILE_MAX>base+MV_FILE_MAX) {
-	st=MStrPrint(print_fmt,file_num++);
+	st=MStrPrint(print_format,file_num++);
 	FileWrite(st,base,dst-base);
 	Free(st);
 	dst=base;
@@ -45,7 +45,7 @@ public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
       tmpde=tmpde->next;
     }
     if (dst>base) {
-      st=MStrPrint(print_fmt,file_num++);
+      st=MStrPrint(print_format,file_num++);
       FileWrite(st,base,dst-base);
       Free(st);
     }

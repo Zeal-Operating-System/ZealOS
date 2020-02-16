@@ -43,8 +43,8 @@ U0 DrawIt(CTask *task,CDC *dc)
   if (cursor_mass) {
     dc->color=RED;
     dc->thick=2;
-    GrLine3(dc,ms.pos.x-task->pix_left-task->scroll_x,
-	  ms.pos.y-task->pix_top-task->scroll_y,0,
+    GrLine3(dc,mouse.pos.x-task->pix_left-task->scroll_x,
+	  mouse.pos.y-task->pix_top-task->scroll_y,0,
 	  cursor_mass->x,cursor_mass->y,0);
   }
 

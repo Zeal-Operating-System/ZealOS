@@ -166,7 +166,7 @@ $FG,5$$TX+CX,"TODO: Too Hard, or Not Worth Doing."$$FG$
 * Compiler: FunPtr local vars?  I forgot if this was hard or not.
 $ID,5$$HL,1$U0 Main()
 {
-  U0 (*fp_old_draw_ms)(CDC *dc,I64 x,I64 y)=gr.fp_draw_ms;
+  U0 (*fp_old_draw_mouse)(CDC *dc,I64 x,I64 y)=gr.fp_draw_mouse;
 }
 $ID,-5$$HL,0$
 * Compiler: Get rid of $LK,"0x20000",A="FF:::/Compiler/CMain.HC,0x20000"$ limit.
@@ -205,7 +205,7 @@ $FG,5$$TX+CX,"Bugs? Not really sure."$$FG$
 
 * 1/?/2015,8/10/2015 Macro sel in Menu did not go to shell?  No, I think just <CTRL-m> twice.  Not a bug.
 
-* 5/7/14:Something like $LK,"InSetMs",A="MN:InSetMs"$ caused hang, then reboot in TestSuite.
+* 5/7/14:Something like $LK,"InSetMouse",A="MN:InSetMouse"$ caused hang, then reboot in TestSuite.
 * 5/7/14:#63 Maybe, $LK,"::/Demo/Graphics/Pick3D.HC"$ crashed in TestSuite.
 
 * $LK,"StrPrintJoin",A="MN:StrPrintJoin"$(,st); With st="\n\\"; (Forgot what this is talking about.)
@@ -283,7 +283,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 * Eliminate?  $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
 * Eliminate?  $LK,"ROP_XOR",A="MN:ROP_XOR"$?
 
-* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMessage",A="MN:PostMessage"$() messages for ms_hard.  Already works for $LK,"MsSet",A="MN:MsSet"$()?
+* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMessage",A="MN:PostMessage"$() messages for mouse_hard.  Already works for $LK,"MouseSet",A="MN:MouseSet"$()?
 
 * Should Messages in PopUp queue get fwded to parent when task dies?
 
@@ -389,7 +389,7 @@ $FG,5$$TX+CX,"Test"$$FG$
 
 * $LK,"FileMgr",A="MN:FileMgr"$() help link scrolls out of window.
 
-* $LK,"MsHardDriverInstall",A="MN:MsHardDriverInstall"$() throws exceptions?  Doesn't work?  Why mouse $LK,"0x9FC30",A="FF:::/Kernel/SerialDev/Mouse.HC,9FC"$?
+* $LK,"MouseHardDriverInstall",A="MN:MouseHardDriverInstall"$() throws exceptions?  Doesn't work?  Why mouse $LK,"0x9FC30",A="FF:::/Kernel/SerialDev/Mouse.HC,9FC"$?
 
 * VirtualBox MP reboot?
 
@@ -418,7 +418,7 @@ catches divide and out-of-mem.  Not sure what to do, yet.
 * Might make CSprite flood fill operate on a separate bitmap
 and blotted at the end.
 * <CTRL-r> delete subsprite in menu near others
-* make better heapwalk, do something with $LK,"_CFG_HEAP_DBG",A="FF:::/Kernel/KernelA.HH,_CFG_HEAP_DBG"$.
+* make better heapwalk, do something with $LK,"_CONFIG_HEAP_DBG",A="FF:::/Kernel/KernelA.HH,_CONFIG_HEAP_DBG"$.
 
 * static var off of data heap.
 * could add "const" to not set CCF_NOT_CONST flag for trig, etc.

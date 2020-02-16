@@ -23,12 +23,12 @@ MEM_PML4::		DU64	0;
 "SYS_VAR_INIT_FLAG::	DU8	%d;"
 "SYS_VAR_INIT_VAL::	DU8	%d;"
 "SYS_STAFF_MODE_FLAG::	DU8	%d;",
-kernel_cfg->opts[CFG_MEM_INIT], kernel_cfg->mem_init_val,
-kernel_cfg->opts[CFG_HEAP_INIT],kernel_cfg->heap_init_val,
-kernel_cfg->opts[CFG_VAR_INIT], kernel_cfg->var_init_val,
-kernel_cfg->opts[CFG_STAFF_MODE]);
+kernel_config->opts[CONFIG_MEM_INIT], kernel_config->mem_init_val,
+kernel_config->opts[CONFIG_HEAP_INIT],kernel_config->heap_init_val,
+kernel_config->opts[CONFIG_VAR_INIT], kernel_config->var_init_val,
+kernel_config->opts[CONFIG_STAFF_MODE]);
 };
-SYS_HEAP_DBG_FLAG::	DU8	_CFG_HEAP_DBG;
+SYS_HEAP_DBG_FLAG::	DU8	_CONFIG_HEAP_DBG;
 
 	ALIGN	8,0
 SYS_CTRL_ALT_FLAGS::	DU64	0;

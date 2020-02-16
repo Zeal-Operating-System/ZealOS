@@ -29,7 +29,7 @@ public CDoc *DocBorderNew(CDoc *pdoc)
   doc_e=DocPrint(bdoc,"$$DA+H-TRM-P+BD+RD+CX+IV,LEN=STR_LEN-1,"
 	"A=\"%%s...\",SCX=15$$");
   doc_e->data=&Fs->task_title;
-  DocDataFmt(bdoc,doc_e);
+  DocDataFormat(bdoc,doc_e);
   DocPrint(bdoc,"$$CM+H+NC,1,0$$$$TX+H+BD+IV,\"%X\"$$",Fs);
   DocPrint(bdoc,"$$TX+H+RX+BD,\"[X]\"$$");
   DocPrint(bdoc,"$$TX+H+LX+BD,\"MENU\"$$");

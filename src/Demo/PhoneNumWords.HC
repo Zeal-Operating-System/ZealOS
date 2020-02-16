@@ -1,7 +1,7 @@
 U8 char_map[26]="22233344455566677778889999";
 
 /*
-Fmt of word list entry:
+Format of word list entry:
   U8 ACD_WORD_CHAR
   U8 word[] with terminating zero
   I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA

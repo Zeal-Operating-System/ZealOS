@@ -187,7 +187,7 @@ I64 FAT32CheckDisk(U8 drv_let,Bool *_fix,Bool *_confirm)
   errs+=FAT32CheckDiskList(drive,FilesFind(files_find_mask,FUF_RECURSE),
 	bits,bits2,size,bpc);
 
-  bits2[1]=0; //See $LK,"FAT32Fmt",A="MN:FAT32Fmt"$()
+  bits2[1]=0; //See $LK,"FAT32Format",A="MN:FAT32Format"$()
   for (i=1;i<size;i++)
     if (bits2[i]) {
       PrintWarn("Shouldn't Alloc Clus:%0X\n",i);

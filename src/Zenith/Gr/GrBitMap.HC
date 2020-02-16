@@ -986,19 +986,19 @@ I64 GrVPutS(CDC *dc=gr.dc,I64 x,I64 y,U8 *_s)
   return res;
 }
 
-public I64 GrPrint(CDC *dc=gr.dc,I64 x,I64 y,U8 *fmt,...)
+public I64 GrPrint(CDC *dc=gr.dc,I64 x,I64 y,U8 *format,...)
 {//2D. Clipping but not transformation.
   I64 res;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   res=GrPutS(dc,x,y,buf);
   Free(buf);
   return res;
 }
 
-public I64 GrVPrint(CDC *dc=gr.dc,I64 x,I64 y,U8 *fmt,...)
+public I64 GrVPrint(CDC *dc=gr.dc,I64 x,I64 y,U8 *format,...)
 {//2D. Vertical text. Clipping but not transformation.
   I64 res;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   res=GrVPutS(dc,x,y,buf);
   Free(buf);
   return res;

@@ -1,6 +1,6 @@
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
 U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
-{//If _doc, called by $LK,"::/Kernel/KCfg.HC"$ else called by $LK,"Mount",A="MN:Mount"$().
+{//If _doc, called by $LK,"::/Kernel/KConfig.HC"$ else called by $LK,"Mount",A="MN:Mount"$().
   I64 count,total=0,num_hints,drv_let,type,unit,prt_num;
   U8 blks_buf[STR_LEN],addr_buf[STR_LEN],base0_buf[STR_LEN],base1_buf[STR_LEN],
 	*filename=NULL,*filename2=NULL,res=0;
@@ -24,7 +24,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
     '\n';
     if (type=Letter2BlkDevType(drv_let)) {
       whole_drive=FALSE;
-      if (_doc) { //Called by $LK,"::/Kernel/KCfg.HC"$
+      if (_doc) { //Called by $LK,"::/Kernel/KConfig.HC"$
 	doc=_doc;
 	make_free=FALSE;
       } else { //Called by $LK,"Mount",A="MN:Mount"$()
@@ -50,7 +50,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 	case BDT_ATAPI:
 	  num_hints=ATARep(,,&head);
 	  if (type==BDT_ATAPI && boot_drive_let)
-	    "<ENTER> to use booted CD/DVD\n"; //Only $LK,"::/Kernel/KCfg.HC"$
+	    "<ENTER> to use booted CD/DVD\n"; //Only $LK,"::/Kernel/KConfig.HC"$
 	  do {
 	    if (num_hints)
 	      "Enter dev number or\nport with $$PURPLE$$0x$$FG$$ prefix.\n"
@@ -102,7 +102,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 	case BDT_ATA:
 	case BDT_ATAPI:
 	  if (type==BDT_ATAPI && !*base0_buf) {
-	    DocPrint(doc,"GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KCfg.HC"$
+	    DocPrint(doc,"GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KConfig.HC"$
 	    if (drv_let==boot_drive_let)
 	      make_free=TRUE;
 	  } else
@@ -114,7 +114,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 	  break;
       }
       DocPrint(doc,"BlkDevAdd(bd,%d,%d,%d);\n",prt_num,whole_drive,make_free);
-      if (_doc) //Called by $LK,"::/Kernel/KCfg.HC"$
+      if (_doc) //Called by $LK,"::/Kernel/KConfig.HC"$
 	count++;
       else { //Called by $LK,"Mount",A="MN:Mount"$()
 	if ((count=ExeDoc(doc)) && whole_drive) {
@@ -129,7 +129,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
     }
     total+=count;
   } while (count && !_caller_is_prtdisk ||
-	!total && _doc); //At least 1 if Called by $LK,"::/Kernel/KCfg.HC"$
+	!total && _doc); //At least 1 if Called by $LK,"::/Kernel/KConfig.HC"$
   Free(filename);
   Free(filename2);
   return res;

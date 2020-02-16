@@ -1,0 +1,61 @@
+#help_index "Misc/TOS/Config"
+
+#define SLOP	BLK_SIZE
+
+U0 TOSDebugDistro1()
+{
+  CBinFile *bfh=mem_boot_base-sizeof(CBinFile);
+  bfh(I64)+=bfh->file_size-1;
+  DefinePrint("TOS_DBG_DISTRO","0x%X",
+	CeilI64(SYS_KERNEL_END+SLOP,BLK_SIZE));
+  DefinePrint("TOS_DBG_DISTRO_END",  "0x%X",FloorI64(
+	(BOOT_RAM_LIMIT-(BOOT_STACK_SIZE+DVD_BOOT_LOADER_SIZE))>>4<<4-
+	(bfh(I64)-SYS_KERNEL_END)-SLOP,BLK_SIZE));
+  DefinePrint("CONFIG_DBG_DISTRO_FILE","\"/Tmp/DebugDistro.BIN\"");
+} TOSDebugDistro1;
+
+U0 TOSDebugDistro2()
+{
+  DefinePrint("CONFIG_DBG_DISTRO","\"a0x%X\n0x%X\n\"",TOS_DBG_DISTRO,
+	(TOS_DBG_DISTRO_END-TOS_DBG_DISTRO)/BLK_SIZE);
+  DefinePrint("CONFIG_DBG_DISTRO_START","\"0x%X\"",TOS_DBG_DISTRO);
+} TOSDebugDistro2;
+
+U0 TOSInit()
+{
+  switch (INS_REG_MACHINE_NUM) {
+    case 1: //TAD Native Machine
+      DefinePrint("CONFIG_RAM_DRIVES",
+	    "\"B\nScale2Mem(2048,0x100000,4*1024*1024*1024)\n\"");
+      DefinePrint("CONFIG_HARD_DRIVES","\"C\ns0xFE00\n0xFE10\n0\"");
+      DefinePrint("CONFIG_DVD_DRIVES","\"Ts0x1F0\n1\"");
+      DefinePrint("CONFIG_DISK_CACHE","\"Scale2Mem(0x80000,0x8000000)\n\"");
+      DefinePrint("TOS_HDS","\"CD\"");
+      DefinePrint("TOS_MASTER_BOOT_DRIVES","\"C\"");
+      break;
+    default:
+      DefinePrint("CONFIG_RAM_DRIVES",
+	    "\"B\nScale2Mem(2048,0x100000,4*1024*1024*1024)\n\"");
+      DefinePrint("CONFIG_HARD_DRIVES","\"\"");
+      DefinePrint("CONFIG_DVD_DRIVES","\"\"");
+      DefinePrint("CONFIG_DISK_CACHE","\"Scale2Mem(0x80000,0x8000000)\n\"");
+      DefinePrint("TOS_HDS","\"CD\"");
+      DefinePrint("TOS_MASTER_BOOT_DRIVES","\"C\"");
+  }
+} TOSInit;
+
+#define TOS_ISO_NAME	"B:/TOS_Distro.ISO.C"
+#define TOS_DISTRO_DIR	"B:/Distro"
+#define CONFIG_OPTS	"StaffMode\nMountIDEAuto\nCT\n"
+#define CONFIG_DBG_OPTS	"StaffMode\nMountIDEAuto\nCT"\
+			"HeapInit\n130\nMemInit\n131\nVarInit\n132\n\n"
+#define CONFIG_DBGZ_OPTS	"StaffMode\nMountIDEAuto\nCT"\
+			"HeapInit\n0\nMemInit\n0\nVarInit\n0\n\n"
+#define TOS_CONFIG		"\n" CONFIG_RAM_DRIVES CONFIG_DVD_DRIVES CONFIG_HARD_DRIVES "\n"\
+			CONFIG_DISK_CACHE CONFIG_OPTS
+#define TOS_DVD_CONFIG	"TB\n0x20000\nT\n\n\nStaffMode\nMountIDEAuto\nCT\n"
+#define TOS_DVD_DBG_CONFIG "A" CONFIG_DBG_DISTRO\
+			"B\nScale2Mem(2048,0x40000)\n\n\n"\
+			"NoMP\nTextMode\nDontProbe\nDebugDistro\n"\
+			"C:" CONFIG_DBG_DISTRO_FILE "\n"\
+			CONFIG_DBG_DISTRO_START "\n\n"

@@ -1,8 +1,8 @@
 //ZenithOS supports standard $LK,"Print",A="MN:Print"$()
 //codes and extended ones.
-//See $LK,"Print(\"\") Fmt Strings",A="FI:::/Doc/Print.DD"$.
+//See $LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.
 
-//Demonstrates $LK,"aux_fmt_num",A="FF:::/Doc/Print.DD,aux_fmt_num:2"$ codes.
+//Demonstrates $LK,"aux_format_num",A="FF:::/Doc/Print.DD,aux_format_num:2"$ codes.
 
 "%10h?d\n",123456789;
 "%10h?d\n",12345;

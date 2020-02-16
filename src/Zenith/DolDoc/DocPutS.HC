@@ -145,16 +145,16 @@ CDocEntry *DocPutS(CDoc *doc,U8 *st)
   return res;
 }
 
-public CDocEntry *DocPrint(CDoc *doc=NULL,U8 *fmt,...)
+public CDocEntry *DocPrint(CDoc *doc=NULL,U8 *format,...)
 {//You must not print partial doc cmds.
 //Returns last newly created dollar-sign CDocEntry or NULL.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   CDocEntry *res=DocPutS(doc,buf);
   Free(buf);
   return res;
 }
 
-public U0 DocPrintPartial(CDoc *doc=NULL,U8 *fmt,...)
+public U0 DocPrintPartial(CDoc *doc=NULL,U8 *format,...)
 {//Lets you print half a doc cmd, if you like.
   U8 *buf,*st,*src,*dst,*ptr,*ptr2;
   Bool unlock;
@@ -162,7 +162,7 @@ public U0 DocPrintPartial(CDoc *doc=NULL,U8 *fmt,...)
   I64 ch,i,j;
   if (!doc && !(doc=DocPut))
     return;
-  buf=StrPrintJoin(NULL,fmt,argc,argv);
+  buf=StrPrintJoin(NULL,format,argc,argv);
   ptr=buf;
   if (doc->user_put_s && (*doc->user_put_s)(doc,doc->user_put_data,buf)) {
     Free(buf);
@@ -229,14 +229,14 @@ Bool KDDocPutS(U8 *st)
   return FALSE;
 }
 
-public U0 DocPrintAtomic(CDoc *doc=NULL,U8 *fmt,...)
+public U0 DocPrintAtomic(CDoc *doc=NULL,U8 *format,...)
 {//Prints multiple whole cmds all-at-once. Might need this when printing trees.
   U8 *buf;
   Bool unlock;
   I64 old_flags;
   if (!doc && !(doc=DocPut))
     return;
-  buf=StrPrintJoin(NULL,fmt,argc,argv);
+  buf=StrPrintJoin(NULL,format,argc,argv);
   unlock=DocLock(doc);
   old_flags=doc->flags;
   doc->flags|=DOCF_NO_CURSOR;

@@ -21,8 +21,8 @@ public class CGrGlobals
   I64	pan_text_x,pan_text_y;	//[-7,7]
   U0	(*fp_final_scrn_update)(CDC *dc);//Mouse cursor is handled here.
   U0	(*fp_wall_paper)(CTask *task);
-  U0	(*fp_draw_ms)(CDC *dc,I64 x,I64 y);
-  U0	(*fp_draw_grab_ms)(CDC *dc,I64 x,I64 y,Bool closed);
+  U0	(*fp_draw_mouse)(CDC *dc,I64 x,I64 y);
+  U0	(*fp_draw_grab_mouse)(CDC *dc,I64 x,I64 y,Bool closed);
   U8	*empty_sprite; //Gets assigned $LK,"gr.empty_sprite",A="FF:::/Zenith/ZMouse.HC,empty_sprite"$
 
   #define GR_PEN_BRUSHES_NUM 64

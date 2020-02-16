@@ -425,8 +425,8 @@ Squadron *SquadronLaunch(I64 player,F64 x=F64_MAX,F64 y=F64_MAX)
     if (player==0) {
       launch_unit_x1=tmpo->x;
       launch_unit_y1=tmpo->y;
-      launch_unit_x2=ms.pos.x-main_task->pix_left-main_task->scroll_x;
-      launch_unit_y2=ms.pos.y-main_task->pix_top -main_task->scroll_y;
+      launch_unit_x2=mouse.pos.x-main_task->pix_left-main_task->scroll_x;
+      launch_unit_y2=mouse.pos.y-main_task->pix_top -main_task->scroll_y;
       launch_t=tS+0.5;
     }
     if (tmpo->squadron>=0) {
@@ -494,8 +494,8 @@ Squadron *SquadronSeté(I64 player,F64 x=F64_MAX,F64 y=F64_MAX,F64 é=F64_MAX)
     if (player==0) {
       set_é_unit_x1=tmpo->x;
       set_é_unit_y1=tmpo->y;
-      set_é_unit_x2=ms.pos.x-main_task->pix_left-main_task->scroll_x;
-      set_é_unit_y2=ms.pos.y-main_task->pix_top -main_task->scroll_y;
+      set_é_unit_x2=mouse.pos.x-main_task->pix_left-main_task->scroll_x;
+      set_é_unit_y2=mouse.pos.y-main_task->pix_top -main_task->scroll_y;
       set_é_t=tS+0.5;
     }
     if (tmpo->squadron>=0) {

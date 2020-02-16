@@ -433,8 +433,8 @@ public U8 *SpriteInterpolate(F64 t,U8 *elems0,U8 *elems1)
 }
 
 #help_index "Graphics/Sprite;DolDoc/Output;StdOut/DolDoc"
-public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *fmt=NULL)
-{//Put a sprite into a document.  You can, optionally, supply a fmt string
+public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *format=NULL)
+{//Put a sprite into a document.  You can, optionally, supply a format string
 //for $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ cmd with a %d for the bin_num.
   I64 size;
   U8 *st;
@@ -451,8 +451,8 @@ public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *fmt=NULL)
   tmpb->num=doc->cur_bin_num;
   tmpb->use_count=1;
   QueueInsert(tmpb,doc->bin_head.last);
-  if (fmt)
-    st=MStrPrint(fmt,doc->cur_bin_num++);
+  if (format)
+    st=MStrPrint(format,doc->cur_bin_num++);
   else
     st=MStrPrint("$$SP,\"\",BI=%d$$",doc->cur_bin_num++);
   doc_e=DocPrint(doc,"%s",st);
@@ -465,11 +465,11 @@ public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *fmt=NULL)
   return doc_e;
 }
 
-public CDocEntry *Sprite(U8 *elems,U8 *fmt=NULL)
+public CDocEntry *Sprite(U8 *elems,U8 *format=NULL)
 {//Put sprite to the command-line, $LK,"DocPut",A="MN:DocPut"$.
-//If you set fmt, then include dollars ("$$SP ...$$") and leave %d for num.
+//If you set format, then include dollars ("$$SP ...$$") and leave %d for num.
   CDoc *doc;
   if (doc=DocPut)
-    return DocSprite(doc,elems,fmt);
+    return DocSprite(doc,elems,format);
   return NULL;
 }

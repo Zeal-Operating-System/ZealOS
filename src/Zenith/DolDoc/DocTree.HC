@@ -121,10 +121,10 @@ mt_done:
   return res;
 }
 
-Bool DocTreeWriteJoin(CDoc *doc,U8 *path,Bool write,U8 *fmt,I64 argc,I64 *argv)
+Bool DocTreeWriteJoin(CDoc *doc,U8 *path,Bool write,U8 *format,I64 argc,I64 *argv)
 {//Rewrite doc tree branch.
   CDocEntry *tree_branch,*start_indent,*end_indent;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   Bool res,unlock_doc=DocLock(doc);
   if (res=DocTreeFind(doc,path,
 	&tree_branch,&start_indent,&end_indent)) {
@@ -142,10 +142,10 @@ Bool DocTreeWriteJoin(CDoc *doc,U8 *path,Bool write,U8 *fmt,I64 argc,I64 *argv)
   return res;
 }
 
-Bool DocTreeAppendJoin(CDoc *doc,U8 *path,Bool write,U8 *fmt,I64 argc,I64 *argv)
+Bool DocTreeAppendJoin(CDoc *doc,U8 *path,Bool write,U8 *format,I64 argc,I64 *argv)
 {//Append to doc tree branch.
   CDocEntry *tree_branch,*start_indent,*end_indent;
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   Bool res,unlock_doc=DocLock(doc);
   if (res=DocTreeFind(doc,path,
 	&tree_branch,&start_indent,&end_indent)) {
@@ -162,28 +162,28 @@ Bool DocTreeAppendJoin(CDoc *doc,U8 *path,Bool write,U8 *fmt,I64 argc,I64 *argv)
   return res;
 }
 
-public Bool DocTreeWrite(CDoc *doc,U8 *path,Bool write=TRUE,U8 *fmt,...)
+public Bool DocTreeWrite(CDoc *doc,U8 *path,Bool write=TRUE,U8 *format,...)
 {//Rewrite doc tree branch.
-  return DocTreeWriteJoin(doc,path,write,fmt,argc,argv);
+  return DocTreeWriteJoin(doc,path,write,format,argc,argv);
 }
 
-public Bool DocTreeAppend(CDoc *doc,U8 *path,Bool write=TRUE,U8 *fmt,...)
+public Bool DocTreeAppend(CDoc *doc,U8 *path,Bool write=TRUE,U8 *format,...)
 {//Append to doc tree branch.
-  return DocTreeAppendJoin(doc,path,write,fmt,argc,argv);
+  return DocTreeAppendJoin(doc,path,write,format,argc,argv);
 }
 
-public Bool DocTreeFWrite(U8 *name,U8 *path,U8 *fmt,...)
+public Bool DocTreeFWrite(U8 *name,U8 *path,U8 *format,...)
 {//Rewrite doc tree branch in file.
   CDoc *doc=DocRead(name);
-  Bool res=DocTreeWriteJoin(doc,path,TRUE,fmt,argc,argv);
+  Bool res=DocTreeWriteJoin(doc,path,TRUE,format,argc,argv);
   DocDel(doc);
   return res;
 }
 
-public Bool DocTreeFAppend(U8 *name,U8 *path,U8 *fmt,...)
+public Bool DocTreeFAppend(U8 *name,U8 *path,U8 *format,...)
 {//Append to doc tree branch in file.
   CDoc *doc=DocRead(name);
-  Bool res=DocTreeAppendJoin(doc,path,TRUE,fmt,argc,argv);
+  Bool res=DocTreeAppendJoin(doc,path,TRUE,format,argc,argv);
   DocDel(doc);
   return res;
 }

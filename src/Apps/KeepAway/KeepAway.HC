@@ -501,8 +501,8 @@ U0 AnimateTask(CTask *parent_task)
 	    Shoot(o);
 	  if (!o->shooting) {
 	    if (o==human) {
-	      dx=(ms.pos.x-parent_task->pix_left-parent_task->scroll_x)-o->x;
-	      dy=(ms.pos.y-parent_task->pix_top-parent_task->scroll_y)*2-o->y;
+	      dx=(mouse.pos.x-parent_task->pix_left-parent_task->scroll_x)-o->x;
+	      dy=(mouse.pos.y-parent_task->pix_top-parent_task->scroll_y)*2-o->y;
 	    } else {
 	      if (!someone_has_ball && o->nearest_man_dd>4*MAN_SQR_RADIUS &&
 		    o->nearest_ball) {

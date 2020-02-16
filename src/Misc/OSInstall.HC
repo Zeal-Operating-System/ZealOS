@@ -144,9 +144,9 @@ U0 RegularInstallWiz()
       '\n';
     } while (!('1'<=ch<='2'));
     if (ch=='1')
-      Fmt(drv_let,,FALSE,FSt_FAT32);
+      Format(drv_let,,FALSE,FSt_FAT32);
     else
-      Fmt(drv_let,,FALSE,FSt_REDSEA);
+      Format(drv_let,,FALSE,FSt_REDSEA);
   }
   InstallDrive(drv_let);
   XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\n"

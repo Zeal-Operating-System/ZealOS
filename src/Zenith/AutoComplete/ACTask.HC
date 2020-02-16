@@ -227,7 +227,7 @@ U0 ACTask(I64)
   ac.cur_word=NULL;
   while (TRUE) {
     if (scan_code&(SCF_CTRL|SCF_ALT) ||
-	  GetTSC>KbdMsEvtTime+counts.time_stamp_freq>>1) {
+	  GetTSC>KbdMouseEvtTime+counts.time_stamp_freq>>1) {
       last_scan_code=scan_code;
       scan_code=kbd.scan_code;
     }

@@ -90,7 +90,7 @@ I64 WordsCompare(U8 *e1,U8 *e2)
   return StrCmp(e1,e2);
 }
 
-/*Fmt of word list entry:
+/*Format of word list entry:
   U8 ACD_WORD_CHAR
   U8 word[] with terminating zero
   I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA

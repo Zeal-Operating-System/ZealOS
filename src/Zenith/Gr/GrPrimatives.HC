@@ -825,9 +825,9 @@ public Bool GrPutChar3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 ch)
   return GrPutChar(dc,x,y,ch);
 }
 
-public I64 GrPrint3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *fmt,...)
+public I64 GrPrint3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *format,...)
 {//3D. Transformation. DCF_SYMMETRY is silly.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 res;
   if (dc->flags & DCF_TRANSFORMATION)
     (*dc->transform)(dc,&x,&y,&z);
@@ -836,9 +836,9 @@ public I64 GrPrint3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *fmt,...)
   return res;
 }
 
-public I64 GrVPrint3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *fmt,...)
+public I64 GrVPrint3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *format,...)
 {//3D. Vertical text. Transformation. DCF_SYMMETRY is silly.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 res;
   if (dc->flags & DCF_TRANSFORMATION)
     (*dc->transform)(dc,&x,&y,&z);

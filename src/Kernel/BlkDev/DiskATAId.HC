@@ -261,7 +261,7 @@ CBlkDev *ATAMount(U8 first_drive_let,I64 type,I64 base0,I64 base1,I64 unit)
 }
 
 I64 MountIDEAuto()
-{//Try to mount hard drive and CD/DVD, automatically. (Kernel.Cfg option).
+{//Try to mount hard drive and CD/DVD, automatically. (Kernel.Config option).
 //It uses 'C' and 'T' as first drive letters or whatever you set
   //in config when compiling Kernel.BIN.
   I64 res=0;

@@ -75,7 +75,7 @@ public U0 Life()
 	while (message_code!=MESSAGE_MS_L_UP) {
 	  restart=TRUE;
 	  dc[cur_dc]->color=GREEN;
-	  dc[cur_dc]->thick=0.04*ms.speed;
+	  dc[cur_dc]->thick=0.04*mouse.speed;
 	  GrLine3(dc[cur_dc],x1,y1,0,x2,y2,0);
 	  restart=TRUE;
 	  message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);

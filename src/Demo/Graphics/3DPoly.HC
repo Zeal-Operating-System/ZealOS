@@ -9,12 +9,12 @@ U0 Main()
     while (!ScanChar) {
       DCDepthBufReset(dc);
       DCSymmetrySet(dc,Fs->pix_width/2,Fs->pix_height/2,
-	    ms.pos.x-Fs->pix_left-Fs->scroll_x,
-	    ms.pos.y-Fs->pix_top-Fs->scroll_y);
+	    mouse.pos.x-Fs->pix_left-Fs->scroll_x,
+	    mouse.pos.y-Fs->pix_top-Fs->scroll_y);
       dc->color=LTBLUE;
       GrLine(dc,Fs->pix_width/2,Fs->pix_height/2,
-	    ms.pos.x-Fs->pix_left-Fs->scroll_x,
-	    ms.pos.y-Fs->pix_top-Fs->scroll_y);
+	    mouse.pos.x-Fs->pix_left-Fs->scroll_x,
+	    mouse.pos.y-Fs->pix_top-Fs->scroll_y);
 
       Mat4x4IdentEqu(dc->r);
       Mat4x4RotX(dc->r,ê);

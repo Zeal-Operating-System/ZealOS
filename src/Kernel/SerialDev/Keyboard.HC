@@ -62,7 +62,7 @@ U0 KbdLEDsSet(I64 sc)
     Fs->catch_except=TRUE;
 }
 
-U0 KbdMsCmdAck(...)
+U0 KbdMouseCmdAck(...)
 {
   I64 i,ack,timeout;
   for (i=0;i<argc;i++) {
@@ -385,7 +385,7 @@ U0 KbdBuildSC(U8 raw_byte,Bool in_irq,U8 *_last_raw_byte,I64 *_last_sc)
   *_last_sc=sc;
 }
 
-U0 KbdPktRead()
+U0 KbdPacketRead()
 {
   static U8 last_raw_byte=0;
   static I64 last_sc=0;
@@ -413,12 +413,12 @@ interrupt U0 IRQKbd()
   CLD
   OutU8(0x20,0x20);
   kbd.irqs_working=TRUE;
-  if (ms_hard.install_in_progress) {
+  if (mouse_hard.install_in_progress) {
     kbd.reset=TRUE;
     return;
   }
   keydev.ctrl_alt_ret_addr=GetRBP()(I64)+8;
-  KbdPktRead;
+  KbdPacketRead;
 }
 
 U0 KbdInit()
@@ -483,10 +483,10 @@ I64 KbdMessagesQueue()
   return message_code;
 }
 
-I64 KbdMsEvtTime()
+I64 KbdMouseEvtTime()
 {//Timestamp of last key or mouse event.
-  if (ms_hard.timestamp>kbd.timestamp)
-    return ms_hard.timestamp;
+  if (mouse_hard.timestamp>kbd.timestamp)
+    return mouse_hard.timestamp;
   else
     return kbd.new_key_timestamp;
 }

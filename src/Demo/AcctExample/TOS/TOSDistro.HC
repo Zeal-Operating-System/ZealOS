@@ -1,4 +1,4 @@
-//The CFG defines are $LK,"~/TOS/TOSCfg.HC",A="FI:::/Demo/AcctExample/TOS/TOSCfg.HC"$.
+//The CONFIG defines are $LK,"~/TOS/TOSConfig.HC",A="FI:::/Demo/AcctExample/TOS/TOSConfig.HC"$.
 
 #help_index "Misc/TOS/Distro"
 
@@ -18,22 +18,22 @@ public U8 TOSGetDrive()
 public U0 TOSBootHDIns(U8 drv_let=0)
 {//Make Compiler and Kernel. Reinstall Kernel.
   drv_let=Letter2Letter(drv_let);
-  In(TOS_CFG);
+  In(TOS_CONFIG);
   BootHDIns(drv_let);
   if (StrOcc(TOS_MASTER_BOOT_DRIVES,drv_let))
     BootMHDIns(drv_let);
 }
 
 public U0 TOSCopyDrive(U8 src,U8 dst)
-{//Fmt dst and copy entire drv.
+{//Format dst and copy entire drv.
   U8 buf_s[STR_LEN],buf_d[STR_LEN];
   src=Letter2Letter(src);
   dst=Letter2Letter(dst);
 
   if (dst=='D')
-    Fmt(dst,,FALSE,FSt_FAT32);
+    Format(dst,,FALSE,FSt_FAT32);
   else
-    Fmt(dst,,FALSE,FSt_REDSEA);
+    Format(dst,,FALSE,FSt_REDSEA);
 
   StrPrint(buf_s,"%c:/",src);
   StrPrint(buf_d,"%c:/",dst);
@@ -45,7 +45,7 @@ public U0 TOSCopyDrive(U8 src,U8 dst)
 }
 
 public U0 TOSPromptAndCopyDrive()
-{//Prompt for drv lets. Then, Fmt dst and copy entire drv.
+{//Prompt for drv lets. Then, Format dst and copy entire drv.
    I64 src,dst;
   "$$RED$$\nCopy Src Drive:\n$$FG$$";
   src=TOSGetDrive;
@@ -90,11 +90,11 @@ U0 DebugDistroFilePrep()
 {
   CBlkDev *bd;
   if (!Letter2Drive('A',FALSE)) {
-    In(CFG_DBG_DISTRO "\n");
+    In(CONFIG_DBG_DISTRO "\n");
     Mount;
   }
   bd=Letter2BlkDev('A');
-  Fmt('A',,FALSE,FSt_REDSEA);
+  Format('A',,FALSE,FSt_REDSEA);
 
   DirMk("A:/Compiler");
   Copy("C:/Compiler/Compiler.BIN",	"A:/Compiler");
@@ -117,7 +117,7 @@ U0 DebugDistroFilePrep()
   Copy("C:/Zenith/AMem.HC",	"A:/Zenith");
   Copy("C:/Zenith/TaskRep.HC",	"A:/Zenith");
 
-  FileWrite("C:" CFG_DBG_DISTRO_FILE,
+  FileWrite("C:" CONFIG_DBG_DISTRO_FILE,
 	bd->RAM_disk,(bd->max_blk+1)<<BLK_SIZE_BITS);
 }
 
@@ -126,9 +126,9 @@ U0 StdDistroPrep()
 {
   Drive('C');
   DistroPrep;
-  In(STD_DISTRO_DVD_CFG);
+  In(STD_DISTRO_DVD_CONFIG);
   BootDVDIns('C');
-  Fmt('B',,FALSE,FSt_REDSEA);
+  Format('B',,FALSE,FSt_REDSEA);
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home");
@@ -151,9 +151,9 @@ U0 LiteDistroPrep()
 {
   Drive('C');
   DistroPrep;
-  In(STD_DISTRO_DVD_CFG);
+  In(STD_DISTRO_DVD_CONFIG);
   BootDVDIns('C');
-  Fmt('B',,FALSE,FSt_REDSEA);
+  Format('B',,FALSE,FSt_REDSEA);
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home");
@@ -183,9 +183,9 @@ U0 DebugDistroPrep()
   Drive('C');
   DistroPrep;
   DebugDistroFilePrep;
-  In(TOS_DVD_DBG_CFG);
+  In(TOS_DVD_DBG_CONFIG);
   BootDVDIns('C');
-  Fmt('B',,FALSE,FSt_REDSEA);
+  Format('B',,FALSE,FSt_REDSEA);
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home");
@@ -208,9 +208,9 @@ U0 StaffDistroPrep()
 {
   Drive('C');
   DistroPrep;
-  In(TOS_DVD_CFG);
+  In(TOS_DVD_CONFIG);
   BootDVDIns('C');
-  Fmt('B',,FALSE,FSt_REDSEA);
+  Format('B',,FALSE,FSt_REDSEA);
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home/Sup1");
@@ -383,5 +383,5 @@ public U0 TOSRegen()
 {//Generate distro ISO's
   TOSBootHDIns('C');
   Once("TOSRegen2;");
-  BootRAM("C:/Kernel/" KERNEL_BIN_C); //Boot to load $LK,"TOS_CFG",A="PF:::/Demo/AcctExample/TOS/TOSCfg.HC,TOS_CFG"$.
+  BootRAM("C:/Kernel/" KERNEL_BIN_C); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.HC,TOS_CONFIG"$.
 }

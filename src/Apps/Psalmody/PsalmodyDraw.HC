@@ -313,7 +313,7 @@ U0 DrawPickTools()
     psm.dc2->color=RED;
   else
     psm.dc2->color=BLACK;
-  (*gr.fp_draw_ms)(psm.dc2,PSM_TOOLS_X+15,PSM_TOOLS_Y);
+  (*gr.fp_draw_mouse)(psm.dc2,PSM_TOOLS_X+15,PSM_TOOLS_Y);
   psm.dc2->color=BLACK;
 }
 

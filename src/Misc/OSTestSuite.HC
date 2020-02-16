@@ -509,8 +509,8 @@ U0 DoPixCollision()
   XTalkWait(task,"#include \"::/Demo/Graphics/Collision\";\n");
   w=task->pix_width>>1 +task->pix_left+task->scroll_x;
   h=task->pix_height>>1+task->pix_top +task->scroll_y;
-  MsSet(w-35,h-35);
-  InSetMs(10,w+35,w+35);
+  MouseSet(w-35,h-35);
+  InSetMouse(10,w+35,w+35);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
   DeathWait(&task,TRUE);
 }
@@ -781,9 +781,9 @@ U0 DoBattleLines()
   TaskWait(task->popup_task);
   PostMessageWait(task->popup_task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
   DeathWait(&task->popup_task);
-  MsSet(430,300,,TRUE);
-  InSetMs(10,530,400);
-  MsSet(,,,FALSE);
+  MouseSet(430,300,,TRUE);
+  InSetMouse(10,530,400);
+  MouseSet(,,,FALSE);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SHIFT_ESC,0);
   DeathWait(&task,TRUE);
 }
@@ -931,61 +931,61 @@ U0 DoStrut()
 
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
 
-  MsSet(200,200,,TRUE);
+  MouseSet(200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
   Refresh(2);
 
-  MsSet(GR_WIDTH-200,200,,TRUE);
+  MouseSet(GR_WIDTH-200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
 
-  MsSet(GR_WIDTH/2,400,,TRUE);
+  MouseSet(GR_WIDTH/2,400,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
 
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,'s',0);
 
-  MsSet(200,200,,TRUE);
+  MouseSet(200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(GR_WIDTH-200,200,,TRUE);
+  MouseSet(GR_WIDTH-200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(200,200,,TRUE);
+  MouseSet(200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(GR_WIDTH/2,400,,TRUE);
+  MouseSet(GR_WIDTH/2,400,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(GR_WIDTH-200,200,,TRUE);
+  MouseSet(GR_WIDTH-200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(GR_WIDTH/2,400,,TRUE);
+  MouseSet(GR_WIDTH/2,400,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(GR_WIDTH/2,GR_HEIGHT/2,,TRUE);
+  MouseSet(GR_WIDTH/2,GR_HEIGHT/2,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(GR_WIDTH-200,200,,TRUE);
+  MouseSet(GR_WIDTH-200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(GR_WIDTH/2,GR_HEIGHT/2,,TRUE);
+  MouseSet(GR_WIDTH/2,GR_HEIGHT/2,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(GR_WIDTH/2,400,,TRUE);
+  MouseSet(GR_WIDTH/2,400,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(GR_WIDTH/2,GR_HEIGHT/2,,TRUE);
+  MouseSet(GR_WIDTH/2,GR_HEIGHT/2,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(200,200,,TRUE);
+  MouseSet(200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,'t',0);
 
-  MsSet(GR_WIDTH/2,400,,TRUE);
+  MouseSet(GR_WIDTH/2,400,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(GR_WIDTH-200,200,,TRUE);
+  MouseSet(GR_WIDTH-200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(GR_WIDTH/2,400,,TRUE);
+  MouseSet(GR_WIDTH/2,400,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_DOWN,0,0);
-  MsSet(200,200,,TRUE);
+  MouseSet(200,200,,TRUE);
   PostMessageWait(task,MESSAGE_MS_L_UP,0,0);
 
-  MsSet(,,,FALSE);
+  MouseSet(,,,FALSE);
 
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
   LBts(kbd.down_bitmap,Char2ScanCode('1'));
@@ -1028,11 +1028,11 @@ U0 DoWhap()
 {
   CTask *task=User;
   XTalkWait(task,"#include \"::/Demo/Games/Whap\";\n");
-  MsSet(300,200);
+  MouseSet(300,200);
   Sleep(500);
-  InSetMs(3,350,300);
+  InSetMouse(3,350,300);
   Sleep(500);
-  InSetMs(3,450,200);
+  InSetMouse(3,450,200);
   Sleep(500);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SHIFT_ESC,0);
   DeathWait(&task,TRUE);
@@ -1041,14 +1041,14 @@ U0 DoWhap()
 U0 DoGrid()
 {
   CTask *task=User("#include \"::/Demo/Graphics/Grid\";\n");
-  MsSet(200,200);
+  MouseSet(200,200);
   Sleep(150);
-  InSetMs(2,400,400);
-  InSetMs(2,200,400);
-  InSetMs(2,200,200);
-  MsSet(,,,TRUE);
+  InSetMouse(2,400,400);
+  InSetMouse(2,200,400);
+  InSetMouse(2,200,200);
+  MouseSet(,,,TRUE);
   Sleep(50);
-  MsSet(,,,FALSE);
+  MouseSet(,,,FALSE);
   DocBottom(DocPut(task));
   DeathWait(&task,TRUE);
 }
@@ -1057,11 +1057,11 @@ U0 DoPick()
 {
   CTask *task=User;
   XTalkWait(task,"#include \"::/Demo/Graphics/Pick\";\n");
-  MsSet(200,200);
+  MouseSet(200,200);
   Sleep(500);
-  MsSet(,,,TRUE);
-  InSetMs(4,400,400);
-  MsSet(,,,FALSE);
+  MouseSet(,,,TRUE);
+  InSetMouse(4,400,400);
+  MouseSet(,,,FALSE);
   Sleep(500);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SHIFT_ESC,0);
   DeathWait(&task,TRUE);
@@ -1071,11 +1071,11 @@ U0 DoPick3D()
 {
   CTask *task=User;
   XTalkWait(task,"#include \"::/Demo/Graphics/Pick3D\";\n");
-  MsSet(200,200);
+  MouseSet(200,200);
   Sleep(500);
-  MsSet(,,,TRUE);
-  InSetMs(4,400,400);
-  MsSet(,,,FALSE);
+  MouseSet(,,,TRUE);
+  InSetMouse(4,400,400);
+  MouseSet(,,,FALSE);
   Sleep(500);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SHIFT_ESC,0);
   DeathWait(&task,TRUE);
@@ -1106,9 +1106,9 @@ U0 DoKeepAway()
   BirthWait(&task->popup_task);
   TaskWait(task->popup_task);
   PostMessageWait(task->popup_task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
-  MsSet(100,100);
+  MouseSet(100,100);
   Sleep(1500);
-  PostMessageWait(task,MESSAGE_MS_R_DOWN_UP,ms.pos.x,ms.pos.y);
+  PostMessageWait(task,MESSAGE_MS_R_DOWN_UP,mouse.pos.x,mouse.pos.y);
   Sleep(1000);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SHIFT_ESC,0);
   DeathWait(&task,TRUE);

@@ -46,7 +46,7 @@ public extern U8 ScanCode2Char(I64 sc);
 public extern U8 *ScanCode2KeyName(I64 sc);
 public extern F64 Str2F64(U8 *src,U8 **_end_ptr=NULL);
 public extern I64 Str2I64(U8 *st,I64 radix=10,U8 **_end_ptr=NULL);
-public extern U8 *StrScan(U8 *src,U8 *fmt,...);
+public extern U8 *StrScan(U8 *src,U8 *format,...);
 
 #help_index "Char/Conversion;Time/Date/CDate;Date/CDate"
 public extern CDate Str2Date(U8 *src);
@@ -60,7 +60,7 @@ public extern I64 ListMatch(U8 *needle, U8 *haystack_list,I64 flags=0);
 public extern U8 *ListSub(I64 sub, U8 *list);
 
 #help_index "Char/Operations"
-public extern U8 *MStrPrint(U8 *fmt,...);
+public extern U8 *MStrPrint(U8 *format,...);
 public extern U8 *MStrUtil(U8 *src,I64 flags,F64 indent_scale_factor=0);
 public extern U8 *ScaleIndent(U8 *src,F64 indent_scale_factor);
 public extern I64 Spaces2Tabs(U8 *dst,U8 *src);
@@ -77,14 +77,14 @@ public _extern _STRMATCH U8 *StrMatch(U8 *needle,U8 *haystack_str);
 public _extern _STRNCMP I64 StrNCmp(U8 *st1,U8 *st2,I64 n);
 public _extern _STRNICMP I64 StrNICmp(U8 *st1,U8 *st2,I64 n);
 public extern I64 StrOcc(U8 *src, U8 ch);
-public extern U8 *StrPrint(U8 *dst,U8 *fmt,...);
-public extern U8 *StrPrintJoin(U8 *dst,U8 *fmt,I64 argc,I64 *argv);
+public extern U8 *StrPrint(U8 *dst,U8 *format,...);
+public extern U8 *StrPrintJoin(U8 *dst,U8 *format,I64 argc,I64 *argv);
 public extern U8 *StrUtil(U8 *_src,I64 flags);
 public extern U8 *Tabs2Spaces(U8 *src);
 public extern Bool WildMatch(U8 *test_str,U8 *wild_str);
 
 #help_index "Char/Operations;Memory"
-public extern U8 *CatPrint(U8 *dst,U8 *fmt,...);
+public extern U8 *CatPrint(U8 *dst,U8 *format,...);
 
 #help_index "Char/Operations;Memory/Zenith Heap"
 public extern U8 *ZStrNew(U8 *buf);
@@ -95,9 +95,9 @@ public extern U8 *StrNew(U8 *buf,CTask *mem_task=NULL);
 #help_index "Char/Output;StdOut"
 public extern U0 GetOutOfDollar();
 public extern Bool IsSilent();
-public extern U0 Print(U8 *fmt,...);
-public extern U0 PrintErr(U8 *fmt,...);
-public extern U0 PrintWarn(U8 *fmt,...);
+public extern U0 Print(U8 *format,...);
+public extern U0 PrintErr(U8 *format,...);
+public extern U0 PrintWarn(U8 *format,...);
 public extern U0 PutChars(U64 ch);
 extern U0 PutHex(I64 num,I64 width);
 public extern U0 PutKey(I64 ch=0,I64 sc=0);
@@ -187,10 +187,10 @@ public extern Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0);
 extern Bool EdLiteFileLine(U8 *fl_file_line,I64 edf_dof_flags=0);
 public extern Bool Fix(I64 edf_dof_flags=0);
 public extern U0 FixSet(U8 *filename,I64 line);
-public extern U0 G(U8 *ms=INVALID_PTR,CTask *task=NULL);
-public extern U0 G2(U8 *ms=INVALID_PTR,CTask *task=NULL);
+public extern U0 G(U8 *mouse=INVALID_PTR,CTask *task=NULL);
+public extern U0 G2(U8 *mouse=INVALID_PTR,CTask *task=NULL);
 public extern Bool IsDebugMode();
-public extern U0 S(U8 *ms=INVALID_PTR,CTask *task=NULL);
+public extern U0 S(U8 *mouse=INVALID_PTR,CTask *task=NULL);
 
 #help_index "Debugging/Debugger;DolDoc/Cmd Line (Typically);"\
 	"Cmd Line (Typically);Help System"
@@ -221,7 +221,7 @@ public extern Bool Raw(Bool val);
 public extern U0 RawD(I64 mS=100,U8 *addr,I64 count=0x80);
 public extern U0 RawDm(I64 mS=100,U8 *addr,I64 count=0x80);
 extern U0 RawDr(CTask *task=NULL);
-public extern U0 RawPrint(I64 mS=100,U8 *fmt,...);
+public extern U0 RawPrint(I64 mS=100,U8 *format,...);
 public extern U0 RawPutChar(I64 ch);
 public extern U0 VGAFlush();
 
@@ -450,15 +450,15 @@ extern CATARep *ATARepFind(CATARep *haystack_head,I64 needle_num);
 public extern Bool DriveEnable(U8 drv_let,Bool val);
 
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
-public extern U0 Fmt(U8 drv_let,Bool quick=TRUE,
+public extern U0 Format(U8 drv_let,Bool quick=TRUE,
 	Bool confirm=TRUE,I64 type=FSt_FAT32);
 
 #help_index "Install;Memory/BlkPool"
 public extern I64 Scale2Mem(I64 min,I64 max,I64 limit=2*1024*1024*1024);
 
 #help_index "Job/Exe;Task/Job/Exe"
-public extern U0 ZenithErr(U8 *fmt,...);
-public extern U0 ZenithLog(U8 *fmt,...);
+public extern U0 ZenithErr(U8 *format,...);
+public extern U0 ZenithLog(U8 *format,...);
 public extern I64 ExeCmdLine(CCompCtrl *cc);
 public extern U0 JobDel(CJob *tmpc);
 public extern I64 JobsHandler(I64 run_flags,CTask *task=NULL);
@@ -469,9 +469,9 @@ public extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 public extern U0 UserTaskCont();
 
 #help_index "Job/Exe;Task/Job/Exe;Compiler"
-public extern I64 Zenith(U8 *fmt,...);
+public extern I64 Zenith(U8 *format,...);
 public extern I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL);
-public extern I64 PopUpPrint(U8 *fmt,...);
+public extern I64 PopUpPrint(U8 *format,...);
 
 #help_index "Job/Exe;Task/Job/Exe;MultiCore"
 public extern I64 JobResGet(CJob *rqst=NULL);
@@ -481,13 +481,13 @@ public extern Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL);
 public extern CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags);
 
 #help_index "Job/Text & Messages;Task/Job/Text & Messages;InFile;StdIn/InFile"
-public extern U0 In(U8 *fmt,...);
+public extern U0 In(U8 *format,...);
 public extern U0 InFile(U8 *filename);
-public extern U0 InStr(U8 *fmt,...);
-public extern U0 XTalk(CTask *task,U8 *fmt,...);
-public extern U0 XTalkStr(CTask *task,U8 *fmt,...);
-public extern U0 XTalkStrWait(CTask *task,U8 *fmt,...);
-public extern U0 XTalkWait(CTask *task,U8 *fmt,...);
+public extern U0 InStr(U8 *format,...);
+public extern U0 XTalk(CTask *task,U8 *format,...);
+public extern U0 XTalkStr(CTask *task,U8 *format,...);
+public extern U0 XTalkStrWait(CTask *task,U8 *format,...);
+public extern U0 XTalkWait(CTask *task,U8 *format,...);
 
 #help_index "Job/Text & Messages;Task/Job/Text & Messages;Messages"
 public extern U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
@@ -505,7 +505,7 @@ public extern CJob *TaskMessage(CTask *srv,CTask *master,
 #help_file "::/Doc/KeyDev"
 public extern U0 CtrlAltCBSet(U8 ch,U0 (*fp_handler)(I64 sc),
 	U8 *no_shift_desc=NULL,U8 *shift_desc=NULL,Bool in_irq=FALSE);
-public extern U0 KeyDescSet(U8 *fmt,...);
+public extern U0 KeyDescSet(U8 *format,...);
 public extern CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch,I64 sc),
 	Bool (*fp_puts)(U8 *st),I64 priority,Bool key_descs=FALSE);
 public extern U0 KeyDevRemove(CKeyDevEntry *tmpk);
@@ -523,12 +523,12 @@ public extern I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,
 public extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
 public extern U8 *GetStr(U8 *message=NULL,U8 *default=NULL,I64 flags=0);
 extern U0	KbdInit();
-public extern I64 KbdMsEvtTime();
-extern U0	KbdMsHandler(Bool poll_kbd,Bool poll_ms);
-extern U0	KbdMsInit();
+public extern I64 KbdMouseEvtTime();
+extern U0	KbdMouseHandler(Bool poll_kbd,Bool poll_mouse);
+extern U0	KbdMouseInit();
 extern I64	KbdMessagesQueue();
 public extern U0 KbdTypeMatic(U8 delay);
-extern Bool	MsHardDriverInstall();
+extern Bool	MouseHardDriverInstall();
 public extern I64 PressAKey();
 public extern I64 ScanChar();
 public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);
@@ -611,17 +611,17 @@ public extern U0 ProgressBarsReset(U8 *path=NULL);
 #help_index "Mouse"
 #help_file "::/Doc/Mouse"
 public extern U0 GridInit();
-public extern U0 MsSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,
+public extern U0 MouseSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,
 	I64 l=I64_MAX,I64 r=I64_MAX);
-public extern CMsStateGlobals ms;
-public extern CGridGlobals ms_grid;
-public extern CMsHardStateGlobals ms_hard;
-extern CMsHardStateGlobals ms_hard_last;
-extern CMsStateGlobals ms_last;
+public extern CMouseStateGlobals mouse;
+public extern CGridGlobals mouse_grid;
+public extern CMouseHardStateGlobals mouse_hard;
+extern CMouseHardStateGlobals mouse_hard_last;
+extern CMouseStateGlobals mouse_last;
 
 #help_index "Mouse/Ptr"
-extern U0 MsInit();
-extern U0 MsUpdate(I64 x,I64 y,I64 z,Bool l,Bool r);
+extern U0 MouseInit();
+extern U0 MouseUpdate(I64 x,I64 y,I64 z,Bool l,Bool r);
 
 #help_index "MultiCore"
 extern U0 Core0StartMP();
@@ -666,7 +666,7 @@ public extern U8 *IntEntrySet(I64 irq,
 
 #help_index "ScreenCast;Cmd Line (Typically)"
 public extern Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,
-	U8 *print_fmt="B:/Tmp/%X.GR")
+	U8 *print_format="B:/Tmp/%X.GR")
 public extern CScreenCastGlobals screencast;
 
 #help_index "Sound"
@@ -699,7 +699,7 @@ public extern U0 TaskQueueIns(CTask *task,CTask *pred=NULL);
 public extern U0 TaskQueueRemove(CTask *task);
 public extern Bool TaskValidate(CTask *task);
 public extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE);
-public extern CTask *User(U8 *fmt=NULL,...);
+public extern CTask *User(U8 *format=NULL,...);
 public extern U0 UserCmdLine();
 public _extern _YIELD U0 Yield();
 public extern CTask *zenith_task;

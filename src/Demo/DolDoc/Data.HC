@@ -11,7 +11,7 @@
 	See $LK,"Data Tag Width",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$.
 
    ,RT=I16 means the val is 2 bytes.
-	See $LK,"DocDataFmt",A="MN:DocDataFmt"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+	See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 */
 
 I16 i=0;

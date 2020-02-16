@@ -37,7 +37,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	  if (dynamic) {
 	    doc_e=DocPrint(doc,"$$DA-TRM-P+RD,LEN=64,A=\"%%40ts\"$$\n");
 	    doc_e->data=ptr;
-	    DocDataFmt(doc,doc_e);
+	    DocDataFormat(doc,doc_e);
 	  } else
 	    DocPrint(doc,"%40ts\n",ptr);
 	}
@@ -54,7 +54,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	    if (dynamic) {
 	      doc_e=DocPrint(doc,"$$DA-TRM-P+RD,LEN=64,A=\"%%40ts\"$$\n");
 	      doc_e->data=ptr;
-	      DocDataFmt(doc,doc_e);
+	      DocDataFormat(doc,doc_e);
 	    } else
 	      DocPrint(doc,"%40ts\n",ptr);
 	  }
@@ -128,7 +128,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 		DocPrint(doc,"%016X ",*ptr(I64 *)++);
 	  }
 	  if (dynamic)
-	    DocDataFmt(doc,doc_e);
+	    DocDataFormat(doc,doc_e);
 	}
 	if (j<ml->dim.total_count)
 	  DocPrint(doc,"...");

@@ -962,11 +962,11 @@ Obj *FishFind(I64 x1,I64 y1,I64 *_dd)
 U0 AnimateTask(I64)
 {//Steadily moves the airplane fwd.
   I64 i,*s2w,x1,y1,z1,dx,dy,dz,dd;
-  F64 t0=tS,ms,é,d;
+  F64 t0=tS,mouse,é,d;
   Obj *tmpo;
   Bird	*tmpb;
   while (TRUE) {
-    ms=1000*(tS-t0);
+    mouse=1000*(tS-t0);
     t0=tS;
     if (!game_tf) {
 //Screen to world coordinates
@@ -977,9 +977,9 @@ U0 AnimateTask(I64)
 
       dx=0;dy=0;dz=1<<16;
       Mat4x4MulXYZ(s2w,&dx,&dy,&dz);
-      x-=speed*ms*COORDINATE_SCALE*dx/1<<16;
-      y-=speed*ms*COORDINATE_SCALE*dy/1<<16;
-      z-=speed*ms*COORDINATE_SCALE*dz/1<<16;
+      x-=speed*mouse*COORDINATE_SCALE*dx/1<<16;
+      y-=speed*mouse*COORDINATE_SCALE*dy/1<<16;
+      z-=speed*mouse*COORDINATE_SCALE*dz/1<<16;
       Free(s2w);
       x1=x/COORDINATE_SCALE; y1=y/COORDINATE_SCALE; z1=z/COORDINATE_SCALE;
       if (z1<(WATER_ELEVATION+3)*MAP_SCALE) {
@@ -987,9 +987,9 @@ U0 AnimateTask(I64)
 	  z=WATER_ELEVATION*MAP_SCALE*COORDINATE_SCALE;
 	  if (invert_pitch) {
 	    if (pitch<-ã/8)
-	      è+=ms/1000.0*Sign(3*ã/8-è);
+	      è+=mouse/1000.0*Sign(3*ã/8-è);
 	  } else if (pitch<-ã/8)
-	    è+=ms/1000.0*Sign(-3*ã/8-è);
+	    è+=mouse/1000.0*Sign(-3*ã/8-è);
 	  WrapAngles;
 	}
 	speed=1.0;
@@ -1031,11 +1031,11 @@ U0 AnimateTask(I64)
       for (i=0;i<mp_count;i++) {
 	tmpb=b_head[i].next;
 	while (tmpb!=&b_head[i]) {
-	  tmpb->p.x+=10*ms/1000*MAP_SCALE*Cos(tmpb->é);
-	  tmpb->p.y+=10*ms/1000*MAP_SCALE*Sin(tmpb->é);
+	  tmpb->p.x+=10*mouse/1000*MAP_SCALE*Cos(tmpb->é);
+	  tmpb->p.y+=10*mouse/1000*MAP_SCALE*Sin(tmpb->é);
 	  tmpb->p.z=BIRD_ELEVATION*MAP_SCALE+
 		elevations[tmpb->p.y/MAP_SCALE][tmpb->p.x/MAP_SCALE];
-	  tmpb->é+=2*ã*ms/1000/10;
+	  tmpb->é+=2*ã*mouse/1000/10;
 	  tmpb=tmpb->next;
 	}
       }

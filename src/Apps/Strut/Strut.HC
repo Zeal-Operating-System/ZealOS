@@ -64,14 +64,14 @@ U0 W2S(F64 wx,F64 wy,F64 *_sx,F64 *_sy)
 U0 Zoom(F64 d)
 {
   F64 sx,sy,wx,wy;
-  I64 i,x=ms.pos.x,y=ms.pos.y;
+  I64 i,x=mouse.pos.x,y=mouse.pos.y;
   d=Exp(Ln(d)/ZOOM_STEPS);
   for (i=0;i<ZOOM_STEPS;i++) {
     S2W(x,y,&wx,&wy);
     zoom=Clamp(zoom*d,0.02,50);
     W2S(wx,wy,&sx,&sy);
-    task->scroll_x=ms.pos.x-sx-task->pix_left;
-    task->scroll_y=ms.pos.y-sy-task->pix_top;
+    task->scroll_x=mouse.pos.x-sx-task->pix_left;
+    task->scroll_y=mouse.pos.y-sy-task->pix_top;
     Sleep(10);
   }
 }
@@ -460,7 +460,7 @@ U0 EditShip()
 	case MESSAGE_MS_L_DOWN:
 	  switch (edit_mode_bttn.state) {
 	    case EMD_MASS:
-	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
+	      S2W(mouse.pos.x,mouse.pos.y,&wx,&wy);
 	      tmpm1=PlaceMass(wx,wy);
 	      if (ode->next_mass==tmpm1)
 		tmpm1->img=$IB,"<1>",BI=1$;
@@ -472,7 +472,7 @@ U0 EditShip()
 	    case EMD_CONNECTOR:
 	    case EMD_THRUSTER:
 	    case EMD_MOVE:
-	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
+	      S2W(mouse.pos.x,mouse.pos.y,&wx,&wy);
 	      tmpm1=MassFind(ode,wx,wy);
 	      tmpm2=NULL;
 	      break;
@@ -485,13 +485,13 @@ U0 EditShip()
 	    case EMD_SPRING:
 	    case EMD_CONNECTOR:
 	    case EMD_THRUSTER:
-	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
+	      S2W(mouse.pos.x,mouse.pos.y,&wx,&wy);
 	      if (tmpm1 && (tmpm2=MassFind(ode,wx,wy)) && tmpm1!=tmpm2)
 		PlaceSpring(tmpm1,tmpm2,edit_mode_bttn.state);
 	      tmpm1=tmpm2=NULL;
 	      break;
 	    case EMD_MOVE:
-	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
+	      S2W(mouse.pos.x,mouse.pos.y,&wx,&wy);
 	      if (tmpm1) {
 		tmpm1->x=wx;
 		tmpm1->y=wy;
@@ -505,7 +505,7 @@ U0 EditShip()
 	case MESSAGE_MS_MOVE:
 	  switch (edit_mode_bttn.state) {
 	    case EMD_MOVE:
-	      S2W(ms.pos.x,ms.pos.y,&wx,&wy);
+	      S2W(mouse.pos.x,mouse.pos.y,&wx,&wy);
 	      if (tmpm1) {
 		tmpm1->x=wx;
 		tmpm1->y=wy;

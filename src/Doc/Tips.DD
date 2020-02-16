@@ -21,7 +21,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Use the PullDown menu at the top of the scrn to learn commands, or for finding the keyboard controls to games.
 
-* You can adjust the mouse movement rate by setting global vars in your start-up file.  See $LK,"mouse scale",A="FF:~/HomeLocalize.HC,ms_hard.scale"$.
+* You can adjust the mouse movement rate by setting global vars in your start-up file.  See $LK,"mouse scale",A="FF:~/HomeLocalize.HC,mouse_hard.scale"$.
 
 * You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global var in a start-up file.  It's units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$.  See $LK,"local time",A="FF:~/HomeLocalize.HC,local_time"$.
 
@@ -29,9 +29,9 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can use $FG,2$filter_lines$FG$ in the editor text search form ($FG,2$<CTRL-f>$FG$) to temporarily display just lines near each match.  A value of $FG,2$filter lines$FG$ set to $FG,2$5$FG$ will display lines within 5 lines of matches.  Then, you can do another find to a different string and achieve a $FG,2$AND$FG$ search.  When finished, press $FG,2$<ESC>$FG$.
  
-* You can recompile and reinstall the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$().  You'll probably want to make a function for recompiling that uses the $LK,"In",A="MN:In"$() function to answer the cfg questions.  See my technique $LK,"Cfg Strs",A="FL:::/Demo/AcctExample/TOS/TOSCfg.HC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.HC,1"$.
+* You can recompile and reinstall the kernel with $LK,"BootHDIns",A="MN:BootHDIns"$().  You'll probably want to make a function for recompiling that uses the $LK,"In",A="MN:In"$() function to answer the config questions.  See my technique $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.HC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.HC,1"$.
 
-* $LK,"Scale2Mem",A="MN:Scale2Mem"$(min,max,limit=2*1024*1024*1024) can be used for cfg questions when recompiling.  The $LK,"BootHDIns",A="MN:BootHDIns"$() cfg prompts accept expressions, not just numbers.  The default disk cache is $FG,2$Scale2Mem(0x80000,0x8000000)$FG$.
+* $LK,"Scale2Mem",A="MN:Scale2Mem"$(min,max,limit=2*1024*1024*1024) can be used for config questions when recompiling.  The $LK,"BootHDIns",A="MN:BootHDIns"$() config prompts accept expressions, not just numbers.  The default disk cache is $FG,2$Scale2Mem(0x80000,0x8000000)$FG$.
 
 * You can permanently disable $FG,2$AutoComplete$FG$ commenting-out $LK,"ACInit",A="FF:/Home/HomeSys.HC,ACInit"$() in $LK,"~/HomeSys.HC",A="FF:/Home/HomeSys.HC,ACInit"$.
 
@@ -129,7 +129,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Use $LK,"HeapLog",A="MN:HeapLog"$(), $LK,"HeapLogAddrRep",A="MN:HeapLogAddrRep"$() and $LK,"HeapLogSizeRep",A="MN:HeapLogSizeRep"$() to find leaks.  Don't be confused by $LK,"CDoc",A="MN:CDoc"$ allocations.  Those are generated when text is written to the cmd line buffer.
 
-* For advanced heap debugging, play with $LK,"_CFG_HEAP_DBG",A="MN:_CFG_HEAP_DBG"$.  You're on your own.
+* For advanced heap debugging, play with $LK,"_CONFIG_HEAP_DBG",A="MN:_CONFIG_HEAP_DBG"$.  You're on your own.
 
 * You can use $LK,"Type",A="MN:Type"$() to display $FG,2$.GR$FG$ files.
 

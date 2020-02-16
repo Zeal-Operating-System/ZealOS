@@ -1211,7 +1211,7 @@ public class CDocEntry:CDocEntryBase
 	*aux_str,
 	*bin_ptr_link,
 	*html_link,
-	*my_fmt_data;
+	*my_format_data;
   I64	hex_ed_width;
   I32	scroll_len,
 	len, //$LK,"DOCE_LEN_DEFAULT",A="MN:DOCE_LEN_DEFAULT"$
@@ -2770,9 +2770,9 @@ public class CFile //See $LK,"::/Demo/Disk/DataBase.HC"$.
 };
 
 #help_index "Memory/Heap"
-#define _CFG_HEAP_DBG FALSE
+#define _CONFIG_HEAP_DBG FALSE
 
-#if _CFG_HEAP_DBG
+#if _CONFIG_HEAP_DBG
 class CMemUnused
 {
   CHeapCtrl *hc;
@@ -2971,12 +2971,12 @@ public class CKbdStateGlobals
 //BitTest, $LK,"Bt",A="MN:Bt"$(), with an unmerged scan code.
 	down_bitmap2[8];
 
-  Bool	reset,		//Private: Reset KbdMs
+  Bool	reset,		//Private: Reset KbdMouse
 	irqs_working;	//Private
 };
 
 #help_index "Mouse"
-public class CMsHardStateGlobals
+public class CMouseHardStateGlobals
 {
   CD3I64 pos,		//Position in pixels
 	prescale;
@@ -2995,7 +2995,7 @@ public class CMsHardStateGlobals
 	irqs_working;	//Private
 };
 
-public class CMsStateGlobals
+public class CMouseStateGlobals
 {
   CD3I64 pos,		//Position in pixels
 	pos_text,	//Position in text rows,cols
@@ -3059,7 +3059,7 @@ public class CViewAngles
 {
   I64	sx,sy,sz;
   F64	ax,ay,az;
-  CColorROPU32 cx,cy,cz,cbd,cbg,cfg;
+  CColorROPU32 cx,cy,cz,cbd,cbg,config;
 };
 
 public class CCtrl
@@ -3773,13 +3773,13 @@ class CKeyDevGlobals
 #help_index "Sound"
 #help_index "ScreenCast;Sound/AU Files"
 public class CAUData
-{//Fmt of AU files
+{//Format of AU files
   CDate	cdt;
   I8	ona;
 };
 
 class CSoundData
-{//Fmt recorded in mem
+{//Format recorded in mem
   CSoundData *next,*last;
   F64	tS;
   I8	ona;
@@ -3790,7 +3790,7 @@ public class CScreenCastGlobals
   CSoundData sound_head;
   CDate	t0_now;
   F64	t0_tS;
-  U8	*print_fmt;
+  U8	*print_format;
   CDC	*dc,*dc2_alias;
   Bool	record,just_audio;
   I8	ona;
@@ -3843,7 +3843,7 @@ public class CDebugGlobals
 #define BOOT_SRC_DVD		4
 
 // $LK,"In",A="MN:In"$("") StdIn for call to $LK,"BootHDIns",A="MN:BootHDIns"$().
-#define STD_DISTRO_DVD_CFG	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
+#define STD_DISTRO_DVD_CONFIG	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
 
 #help_index "Registry"
 //Registry sys_message_flags. $LK,"RegOneTimePopUp",A="MN:RegOneTimePopUp"$()

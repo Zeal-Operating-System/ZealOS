@@ -32,22 +32,22 @@ $ID,2$$FG,2$U0 Test(I64 i=4,I64 j,I64 k=5)
 
 Test(,3);$FG$
 $ID,-2$
-* A char const all alone is sent to $LK,"PutChars",A="MN:PutChars"$().  A string with or without args is sent to $LK,"Print",A="MN:Print"$().  An empty string literal signals a variable fmt_str follows.
+* A char const all alone is sent to $LK,"PutChars",A="MN:PutChars"$().  A string with or without args is sent to $LK,"Print",A="MN:Print"$().  An empty string literal signals a variable format_str follows.
 
-$ID,2$$FG,2$void DemoC(char drv,char *fmt,char *name,int age)
+$ID,2$$FG,2$void DemoC(char drv,char *format,char *name,int age)
 {
   printf("Hello World!\n");
   printf("%s age %d\n",name,age);
-  printf(fmt,name,age);
+  printf(format,name,age);
   putchar(drv);
   putchar('*');
 }
 
-U0 DemoHolyC(U8 drv,U8 *fmt,U8 *name,I64 age)
+U0 DemoHolyC(U8 drv,U8 *format,U8 *name,I64 age)
 {
   "Hello World!\n";
   "%s age %d\n",name,age;
-  "" fmt,name,age;
+  "" format,name,age;
   '' drv;
   '*';
 }
@@ -87,9 +87,9 @@ $FG$>$FG,2$AddNums(1,2,3);$FG$
 ans=6
 $FG,2$
 
-public U0 GrPrint(CDC *dc,I64 x,I64 y,U8 *fmt,...)
+public U0 GrPrint(CDC *dc,I64 x,I64 y,U8 *format,...)
 {
-  U8 *buf=$LK,"StrPrintJoin",A="MN:StrPrintJoin"$(NULL,fmt,argc,argv);//SPrintF() with $LK,"MAlloc",A="MN:MAlloc"$()ed string.
+  U8 *buf=$LK,"StrPrintJoin",A="MN:StrPrintJoin"$(NULL,format,argc,argv);//SPrintF() with $LK,"MAlloc",A="MN:MAlloc"$()ed string.
   $LK,"GrPutS",A="MN:GrPutS"$(dc,x,y,buf); //Plot string at x,y pixels. GrPutS is not public.
   Free(buf);
 }
@@ -209,7 +209,7 @@ $FG$$ID,-2$
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find dup local var type statements.
 
-* With the $FG,2$#exe{}$FG$ feature in your src code, you can place programs that insert text into the stream of code being compiled.  See $LK,"#exe {}",A="FF:::/Kernel/KMain.HC,#exe {"$ for an example where the date/time and compile-time prompting for cfguration data is placed into a program.  $LK,"StreamPrint",A="MN:StreamPrint"$() places text into a src program stream following the conclusion of the $FG,2$#exe{}$FG$ blk.
+* With the $FG,2$#exe{}$FG$ feature in your src code, you can place programs that insert text into the stream of code being compiled.  See $LK,"#exe {}",A="FF:::/Kernel/KMain.HC,#exe {"$ for an example where the date/time and compile-time prompting for configuration data is placed into a program.  $LK,"StreamPrint",A="MN:StreamPrint"$() places text into a src program stream following the conclusion of the $FG,2$#exe{}$FG$ blk.
 
 * No $FG,2$#define$FG$ functions exist (I'm not a fan)
 
@@ -243,7 +243,7 @@ $FG$$ID,-2$
 
 * Only one base class is allowed.
 
-* $FG,2$printf()$FG$ has new codes.  See $LK,"Print(\"\") Fmt Strings",A="FI:::/Doc/Print.DD"$.
+* $FG,2$printf()$FG$ has new codes.  See $LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.
 
 * All values are extended to 64-bit when accessed.  Intermediate calculations are done with 64-bit values.
 

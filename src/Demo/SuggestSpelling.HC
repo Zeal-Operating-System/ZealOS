@@ -21,7 +21,7 @@ U8 *SuggestMatchForm(U8 *src)
   return res;
 }
 
-/*Fmt of word list entry:
+/*Format of word list entry:
   U8 ACD_WORD_CHAR
   U8 word[] with terminating zero
   I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA

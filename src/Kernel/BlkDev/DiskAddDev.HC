@@ -188,7 +188,7 @@ Bool GetBaseUnit(CBlkDev *bd)
   I64 ch;
   Bool probe;
   #exe {
-    if (kernel_cfg->opts[CFG_DONT_PROBE])
+    if (kernel_config->opts[CONFIG_DONT_PROBE])
       StreamPrint("probe=FALSE;");
     else
       StreamPrint("probe=TRUE;");
@@ -231,10 +231,10 @@ U0 BlkDevsInitAll()
   for (i=0;i<DRIVES_NUM;i++)
     blkdev.let_to_drive[i]=&blkdev.drvs[i];
   #exe {
-    if (kernel_cfg->opts[CFG_MOUNT_IDE_AUTO])
+    if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])
       StreamPrint("MountIDEAuto;");
     StreamPrint("#exe {Option(OPTf_WARN_PAREN,OFF);}");
-    StreamDoc(kernel_cfg->add_dev);
+    StreamDoc(kernel_config->add_dev);
     StreamPrint("#exe {Option(OPTf_WARN_PAREN,ON);}");
   };
 }

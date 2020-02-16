@@ -1,13 +1,13 @@
-U0 InSetMsDemo()
+U0 InSetMouseDemo()
 {
   I64 t,l;
   WinBorder(ON);
   l=Fs->pix_left+Fs->scroll_x;
   t=Fs->pix_top+Fs->scroll_y;
-  MsSet(,,,FALSE,FALSE); //Mouse unclicked
-  InSetMs(,l-4,t-4);
-  InSetMs(20,l+20,t+20,,TRUE);
-  MsSet(,,,FALSE,FALSE);
+  MouseSet(,,,FALSE,FALSE); //Mouse unclicked
+  InSetMouse(,l-4,t-4);
+  InSetMouse(20,l+20,t+20,,TRUE);
+  MouseSet(,,,FALSE,FALSE);
 }
 
-InSetMsDemo;
+InSetMouseDemo;

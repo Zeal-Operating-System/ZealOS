@@ -45,7 +45,7 @@ U0 FAT32Init(CDrive *drive)
       DriveUnlock(drive);
 }
 
-U0 FAT32Fmt(U8 drv_let,Bool quick=TRUE)
+U0 FAT32Format(U8 drv_let,Bool quick=TRUE)
 {
   CFAT32Boot *br=CAlloc(BLK_SIZE);
   CFAT32FileInfoSect *fis=CAlloc(BLK_SIZE);

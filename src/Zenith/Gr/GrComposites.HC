@@ -295,18 +295,18 @@ mesh_done:
 }
 
 #help_index "Graphics/Misc;Mouse/Ptr"
-public U0 DrawStdMs(CDC *dc,I64 x,I64 y)
+public U0 DrawStdMouse(CDC *dc,I64 x,I64 y)
 {//This is a callback. See $LK,"::/Demo/Graphics/Grid.HC"$.
-//Called by $LK,"DrawMs",A="MN:DrawMs"$() which is
+//Called by $LK,"DrawMouse",A="MN:DrawMouse"$() which is
   //called by $LK,"WinFinalUpdate",A="MN:WinFinalUpdate"$().
   dc->thick=1;
   dc->flags&=~(DCF_TRANSFORMATION|DCF_SYMMETRY);
   GrArrow3(dc,x+8,y+8,0,x,y,0);
 }
 
-gr.fp_draw_ms=&DrawStdMs;
+gr.fp_draw_mouse=&DrawStdMouse;
 
-public U0 DrawWaitMs(CDC *dc,I64 x,I64 y)
+public U0 DrawWaitMouse(CDC *dc,I64 x,I64 y)
 {//This is a callback. See $LK,"::/Demo/Graphics/Grid.HC"$.
   I64 old_pen_width=dc->thick;
   CColorROPU32 old_color=dc->color;

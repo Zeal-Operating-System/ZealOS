@@ -9,8 +9,8 @@ import U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
 import U8 *DocSave(CDoc *doc,I64 *_size=NULL);
 import Bool DocUnlock(CDoc *doc);
 import Bool Ed(U8 *link_st,I64 edf_dof_flags=0);
-extern U0 ZenithErr(U8 *fmt,...);
-extern U0 ZenithLog(U8 *fmt,...);
+extern U0 ZenithErr(U8 *format,...);
+extern U0 ZenithLog(U8 *format,...);
 extern I64 BIOSTotalMem();
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	Bool whole_drive,Bool make_free);
@@ -22,7 +22,7 @@ extern U0 BlkDevsRelease();
 extern Bool BlkRead(CDrive *drive,U8 *buf, I64 blk, I64 count);
 extern Bool BlkWrite(CDrive *drive,U8 *buf, I64 blk, I64 count);
 extern U8 *Caller(I64 num=1);
-extern U8 *CatPrint(U8 *_dst,U8 *fmt,...);
+extern U8 *CatPrint(U8 *_dst,U8 *format,...);
 extern Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE);
 extern U0 DebugHelp();
 extern U8 *Define(U8 *dname);
@@ -75,12 +75,12 @@ extern I64 Letter2BlkDevType(U8 drv_let);
 extern CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE);
 extern U8 Letter2Letter(U8 drv_let=0);
 extern U0 MPInt(U8 num,I64 cpu_num=1);
-extern U8 *MStrPrint(U8 *fmt,...);
-extern U0 MsHardSet(I64 x,I64 y,I64 z,I64 l,I64 r);
+extern U8 *MStrPrint(U8 *format,...);
+extern U0 MouseHardSet(I64 x,I64 y,I64 z,I64 l,I64 r);
 extern U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
 extern U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE);
 extern I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL);
-extern U0 Print(U8 *fmt,...);
+extern U0 Print(U8 *format,...);
 extern U0 PutChars(U64 ch);
 extern U0 PutS(U8 *st); //Use $LK,"Print",A="MN:Print"$()
 extern I64 RedSeaAllocClus(CDrive *drive,I64 count);
@@ -88,14 +88,14 @@ extern Bool RedSeaDirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,
 	Bool free_old_chain);
 extern Bool RedSeaFileFind(CDrive *drive,I64 cur_dir_clus,U8 *name,
 	CDirEntry *_res,I64 fuf_flags=0);
-extern U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE);
+extern U0 RedSeaFormat(U8 drv_let,Bool quick=TRUE);
 extern U0 RedSeaFreeFreeList(CDrive *drive);
 extern U0 RedSeaInit(CDrive *drive);
 extern Bool RedSeaValidate(U8 drv_let);
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
     U8 *task_name=NULL,I64 target_cpu,CTask *parent=NULL, //NULL means zenith
     I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
-extern U8 *StrPrint(U8 *dst,U8 *fmt,...);
+extern U8 *StrPrint(U8 *dst,U8 *format,...);
 extern U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags);
 extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
 extern CJob *TaskMessage(CTask *_srv,CTask *master,
@@ -103,7 +103,7 @@ extern CJob *TaskMessage(CTask *_srv,CTask *master,
 extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 extern Bool TaskValidate(CTask *task);
 extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE);
-extern CTask *User(U8 *fmt=NULL,...);
+extern CTask *User(U8 *format=NULL,...);
 extern U0 UserTaskCont();
-extern U0 XTalk(CTask *task,U8 *fmt,...);
+extern U0 XTalk(CTask *task,U8 *format,...);
 extern U0 throw(I64 ch=0,Bool no_log=FALSE);

@@ -152,12 +152,12 @@ U0 MassSpringDemo()
 	      break;
 	    case CH_SHIFT_ESC:
 	    case CH_ESC:
-	      goto ms_done;
+	      goto mouse_done;
 	  }
 	  break;
       }
     }
-ms_done: //Don't goto out of try
+mouse_done: //Don't goto out of try
     GetMessage(,,1<<MESSAGE_KEY_UP);
   } catch
     PutExcept;

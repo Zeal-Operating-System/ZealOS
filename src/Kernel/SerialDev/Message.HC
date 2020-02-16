@@ -162,7 +162,7 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
       //keyboard when in debugger with interrupts off.
       PUSHFD
       CLI
-      KbdMsHandler(TRUE,FALSE);
+      KbdMouseHandler(TRUE,FALSE);
       KbdMessagesQueue;
       POPFD
     } else {

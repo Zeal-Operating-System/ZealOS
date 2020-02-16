@@ -23,8 +23,8 @@ U0 DrawIt(CTask *task,CDC *dc)
   GrRect(dc,cx-BASE_SIZE+2,cy-BASE_SIZE+2,BASE_SIZE*2-4,BASE_SIZE*2-4);
   dc->color=YELLOW;
   GrLine(dc,balls[0].x,balls[0].y,
-	ms.pos.x-task->pix_left-task->scroll_x,
-	ms.pos.y-task->pix_top-task->scroll_y);
+	mouse.pos.x-task->pix_left-task->scroll_x,
+	mouse.pos.y-task->pix_top-task->scroll_y);
   for (i=0;i<SPRINGS_NUM;i++)
     GrLine(dc,springs[i].end1->x,springs[i].end1->y,
 	  springs[i].end2->x,springs[i].end2->y);
@@ -59,8 +59,8 @@ U0 MyDerivative(CMathODE *ode,F64 t,COrder2D3 *,COrder2D3 *)
   CTask *task=ode->win_task;
 
   D3SubEqu(D3Equ(&p2,
-	ms.pos.x-task->pix_left-task->scroll_x,
-	ms.pos.y-task->pix_top-task->scroll_y,0),
+	mouse.pos.x-task->pix_left-task->scroll_x,
+	mouse.pos.y-task->pix_top-task->scroll_y,0),
 	&balls[0].state->x);
   D3AddEqu(&balls[0].DstateDt->DxDt,D3MulEqu(&p2,STRETCH));
 
@@ -129,8 +129,8 @@ U0 Whap()
   for (i=1;i<BALLS_NUM;i++)
     D3Equ(&balls[i].x,
 	  RandI16%500+Fs->pix_width>>1,RandI16%500+Fs->pix_height>>1,0);
-  balls[0].x=ms.pos.x-Fs->pix_left-Fs->scroll_x;
-  balls[0].y=ms.pos.y-Fs->pix_top-Fs->scroll_y;
+  balls[0].x=mouse.pos.x-Fs->pix_left-Fs->scroll_x;
+  balls[0].y=mouse.pos.y-Fs->pix_top-Fs->scroll_y;
   for (i=0;i<BALLS_NUM;i++) {
     balls[i].mass=1.0;
     balls[i].drag_profile_factor=1.0;

@@ -91,7 +91,7 @@ Bool RedSeaValidate(U8 drv_let)
     return FALSE;
 }
 
-U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
+U0 RedSeaFormat(U8 drv_let,Bool quick=TRUE)
 {
   U8 *root_dir;
   CDirEntry *d_native;

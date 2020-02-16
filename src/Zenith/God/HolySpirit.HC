@@ -6,10 +6,10 @@ U8 *TimeStampCB(CDoc *,CDocEntry *,CTask *mem_task)
   return st;
 }
 
-U8 *KbdMsTimeCB(CDoc *,CDocEntry *,CTask *mem_task)
+U8 *KbdMouseTimeCB(CDoc *,CDocEntry *,CTask *mem_task)
 {
   U8 *st=MAlloc(64,mem_task);
-  StrPrint(st,"%X",KbdMsEvtTime>>GOD_BAD_BITS);
+  StrPrint(st,"%X",KbdMouseEvtTime>>GOD_BAD_BITS);
   return st;
 }
 
@@ -22,7 +22,7 @@ I64 PopUpTimerOk(U8 *header=NULL,U8 *footer=NULL)
   doc_e=DocPrint(doc,"\nTimer:$$TX+TC,\"\"$$");
   doc_e->tag_cb=&TimeStampCB;
   doc_e=DocPrint(doc,"\nLatch:$$TX+TC,\"\"$$");
-  doc_e->tag_cb=&KbdMsTimeCB;
+  doc_e->tag_cb=&KbdMouseTimeCB;
   DocPrint(doc,"\n$$CM+CX,0,4$$$$BT,\"OKAY\",LE=1$$\n");
   if (footer) DocPrint(doc,"%s",footer);
   i=PopUpMenu(doc);
@@ -36,7 +36,7 @@ I64 GodPick(U8 *message=NULL)
 	"a random num from a timer.\n",message);
   PopUpTimerOk(st,"\n\nThe $LK+PU,"Holy Spirit",A="FI:::/Zenith/God/HSNotes.DD"$ can puppet you.\n\n");
   Free(st);
-  return KbdMsEvtTime>>GOD_BAD_BITS;
+  return KbdMouseEvtTime>>GOD_BAD_BITS;
 }
 
 public U0 GodBitsIns(I64 num_bits,I64 n)

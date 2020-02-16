@@ -8,10 +8,10 @@ public CTask *PopUpViewDoc(CDoc *doc,I64 dof_flags=0)
   return task;
 }
 
-public CTask *PopUpViewPrint(U8 *fmt,...)
+public CTask *PopUpViewPrint(U8 *format,...)
 {//View Print stmt in PopUp win task.
   CTask *task=Spawn(&SrvCmdLine,NULL,"View",,Fs);
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   CDoc *doc=DocNew(,task);
   DocPrint(doc,buf);
   Free(buf);
@@ -212,7 +212,7 @@ public I64 PopUpRangeI64(I64 lo,I64 hi,I64 step=1,
 }
 
 public F64 PopUpRangeF64(F64 lo,F64 hi,F64 step,
-    U8 *fmt="%9.4f",U8 *header=NULL,U8 *footer=NULL)
+    U8 *format="%9.4f",U8 *header=NULL,U8 *footer=NULL)
 {//Evenly-spaced F64 range chooser in PopUp win task.
   F64 d;
   I64 i;
@@ -222,7 +222,7 @@ public F64 PopUpRangeF64(F64 lo,F64 hi,F64 step,
     DocPrint(doc,"%s",header);
   DocPrint(doc,"$$LTBLUE$$");
   for (d=lo;d<=hi;d+=step) {
-    StrPrint(buf,fmt,d);
+    StrPrint(buf,format,d);
     DocPrint(doc,"$$MU,\"%s\",LE=0x%X$$\n",buf,d);
   }
   if (footer)
@@ -233,7 +233,7 @@ public F64 PopUpRangeF64(F64 lo,F64 hi,F64 step,
 }
 
 public F64 PopUpRangeF64Exp(F64 lo,F64 hi,F64 factor,
-    U8 *fmt="%9.4f",U8 *header=NULL,U8 *footer=NULL)
+    U8 *format="%9.4f",U8 *header=NULL,U8 *footer=NULL)
 {//Exp-spaced F64 range chooser in PopUp win task.
   F64 d;
   I64 i;
@@ -243,7 +243,7 @@ public F64 PopUpRangeF64Exp(F64 lo,F64 hi,F64 factor,
     DocPrint(doc,"%s",header);
   DocPrint(doc,"$$LTBLUE$$");
   for (d=lo;d<=hi;d*=factor) {
-    StrPrint(buf,fmt,d);
+    StrPrint(buf,format,d);
     DocPrint(doc,"$$MU,\"%s\",LE=0x%X$$\n",buf,d);
   }
   if (footer)
@@ -254,9 +254,9 @@ public F64 PopUpRangeF64Exp(F64 lo,F64 hi,F64 factor,
 }
 
 public F64 PopUpRangeF64Log(F64 lo,F64 hi,I64 steps,
-    U8 *fmt="%9.4f",U8 *header=NULL,U8 *footer=NULL)
+    U8 *format="%9.4f",U8 *header=NULL,U8 *footer=NULL)
 {//Log-spaced F64 range chooser in PopUp win task.
-  return PopUpRangeF64Exp(lo,hi,Exp(Ln(hi/lo)/(steps-1)),fmt,header,footer);
+  return PopUpRangeF64Exp(lo,hi,Exp(Ln(hi/lo)/(steps-1)),format,header,footer);
 }
 
 #help_index "Job/Exe;Task/Job/Exe;Compiler"

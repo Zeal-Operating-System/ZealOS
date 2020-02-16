@@ -65,9 +65,9 @@ Bool Echo(Bool val)
   return Option(OPTf_ECHO,val);
 }
 
-U0 StreamPrint(U8 *fmt,...)
+U0 StreamPrint(U8 *format,...)
 {//Injects text into the compile stream. Used in #exe{} blocks.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv),*st;
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv),*st;
   CCompCtrl *cc=Fs->last_cc;
   CStreamBlk *tmpe=cc->last_stream_blk;
   if (tmpe!=&cc->next_stream_blk) {

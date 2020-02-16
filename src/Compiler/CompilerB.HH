@@ -2,8 +2,8 @@
 extern U0 CInit(Bool first);
 public extern I64 ExeFile(U8 *name,I64 ccf_flags=0);
 public extern I64 ExeFile2(U8 *name,I64 ccf_flags=0);
-public extern I64 ExePrint(U8 *fmt,...);
-public extern I64 ExePrint2(U8 *fmt,...);
+public extern I64 ExePrint(U8 *format,...);
+public extern I64 ExePrint2(U8 *format,...);
 public extern I64 ExePutS(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0,
 	CLexHashTableContext *htc=NULL);
 public extern I64 ExePutS2(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0);
@@ -18,8 +18,8 @@ public extern Bool Echo(Bool val);
 public extern Bool GetOption(I64 num);
 public extern I64 PassTrace(I64 i=0b1001111101);
 extern U0 StreamDir();
-public extern I64 StreamExePrint(U8 *fmt,...);
-public extern U0 StreamPrint(U8 *fmt,...);
+public extern I64 StreamExePrint(U8 *format,...);
+public extern U0 StreamPrint(U8 *format,...);
 public extern Bool Trace(Bool val=ON);
 
 #help_index "Compiler/Lex"

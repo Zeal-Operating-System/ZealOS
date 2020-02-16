@@ -348,7 +348,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 		    } else {
 //$LK,"::/Zenith/God/HSNotes.DD"$
 		      FifoU8Flush(god.fifo);
-		      GodBitsIns(GOD_GOOD_BITS,KbdMsEvtTime>>GOD_BAD_BITS);
+		      GodBitsIns(GOD_GOOD_BITS,KbdMouseEvtTime>>GOD_BAD_BITS);
 		      if (sc&SCF_SHIFT)
 			GodBiblePassage;
 		      else

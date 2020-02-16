@@ -37,7 +37,7 @@ F64 F(Complex *x)
   CDiv(&n1,&num,&denom);
 
   R2P(&m,&a,n1.x,n1.y);
-  if (ms.rb)
+  if (mouse.rb)
     return ã+a;
   else
     return m;

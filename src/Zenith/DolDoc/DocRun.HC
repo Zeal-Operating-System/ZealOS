@@ -58,7 +58,7 @@ public I64 DocEntryRun(CDoc *doc,CDocEntry *doc_e,
 	    (tmph=HashFind(doc_e->define_str,
 	    doc->win_task->hash_table,HTT_DEFINE_STR)) &&
 	    (res=PopUpPickList(tmph->data))!=DOCM_CANCEL) {
-	DocDataFmt(doc,doc_e,res);
+	DocDataFormat(doc,doc_e,res);
 	DocDataScan(doc,doc_e);
 	has_action=TRUE;
       }

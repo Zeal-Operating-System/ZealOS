@@ -430,7 +430,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
     while (TRUE) {
       was_playing=FALSE;
 mo_start:
-      if (ms.pos_text.y-Fs->win_top<18)
+      if (mouse.pos_text.y-Fs->win_top<18)
 	message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
 	      1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP|
 	      1<<MESSAGE_MS_MOVE|1<<MESSAGE_CMD);
@@ -642,7 +642,7 @@ mo_got_message:
 		while (tmpn!=&psm.head) {
 		  if (tmpn->type!=PSMT_METER) {
 		    timeout_val=counts.jiffies;
-		    if (ms.pos_text.y-Fs->win_top<18)
+		    if (mouse.pos_text.y-Fs->win_top<18)
 		      message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
 			    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_CMD);
 		    else
@@ -652,7 +652,7 @@ mo_got_message:
 		      Sound;
 		      psm.playing=FALSE;
 		      was_playing=TRUE;
-		      if (ms.pos_text.y-Fs->win_top>=18 &&
+		      if (mouse.pos_text.y-Fs->win_top>=18 &&
 			    message_code==MESSAGE_MS_L_DOWN)
 			goto mo_start;
 		      else

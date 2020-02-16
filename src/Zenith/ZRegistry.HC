@@ -46,11 +46,11 @@ public I64 RegExe(U8 *path)
   return DocTreeExe(sys_registry_doc,path);
 }
 
-public Bool RegWrite(U8 *path,U8 *fmt,...)
+public Bool RegWrite(U8 *path,U8 *format,...)
 {//Rewrite doc tree branch in registry.
   Bool res;
   RegCache;
-  res=DocTreeWriteJoin(sys_registry_doc,path,TRUE,fmt,argc,argv);
+  res=DocTreeWriteJoin(sys_registry_doc,path,TRUE,format,argc,argv);
   return res;
 }
 
@@ -72,11 +72,11 @@ public I64 RegCount(U8 *path)
   return res;
 }
 
-public Bool RegAppend(U8 *path,U8 *fmt,...)
+public Bool RegAppend(U8 *path,U8 *format,...)
 {//Append to doc tree branch in registry.
   Bool res;
   RegCache;
-  res=DocTreeAppendJoin(sys_registry_doc,path,TRUE,fmt,argc,argv);
+  res=DocTreeAppendJoin(sys_registry_doc,path,TRUE,format,argc,argv);
   return res;
 }
  
@@ -132,27 +132,27 @@ public U0 OnceFlush()
   RegWrite("Once/User","");
 }
 
-public U0 AOnce(U8 *fmt,...)
+public U0 AOnce(U8 *format,...)
 {//Add Zenith code to $LK,"~/Registry.HC"$, executed next boot.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   if (!Bt(&sys_run_level,RLf_ONCE_ZENITH))
     AOnceFlush;
   RegAppend("Once/Zenith","%s\n",buf);
   Free(buf);
 }
 
-public U0 Once(U8 *fmt,...)
+public U0 Once(U8 *format,...)
 {//Add User code to $LK,"~/Registry.HC"$, executed next boot.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   if (!Bt(&sys_run_level,RLf_ONCE_USER))
     OnceFlush;
   RegAppend("Once/User","%s\n",buf);
   Free(buf);
 }
 
-public U0 AOnceDrive(U8 drv_let=0,U8 *fmt,...)
+public U0 AOnceDrive(U8 drv_let=0,U8 *format,...)
 {//Add Zenith code to drv $LK,"~/Registry.HC"$, executed next boot.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 old_drive_let=*sys_registry_doc->filename.name;
   if (drv_let)
     *sys_registry_doc->filename.name=drv_let;
@@ -163,9 +163,9 @@ public U0 AOnceDrive(U8 drv_let=0,U8 *fmt,...)
   *sys_registry_doc->filename.name=old_drive_let;
 }
 
-public U0 OnceDrive(U8 drv_let=0,U8 *fmt,...)
+public U0 OnceDrive(U8 drv_let=0,U8 *format,...)
 {//Add User code to drv $LK,"~/Registry.HC"$, executed next boot.
-  U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
+  U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 old_drive_let=*sys_registry_doc->filename.name;
   if (drv_let)
     *sys_registry_doc->filename.name=drv_let;

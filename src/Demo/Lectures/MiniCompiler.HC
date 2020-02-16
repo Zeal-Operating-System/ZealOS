@@ -112,7 +112,7 @@ U0 ParseTerm(U8 **_src,U8 **_dst,I64 prec)
 
 I64 Parse(U8 **_src,U8 **_dst)
 {//See $LK,"ParseExpression",A="MN:ParseExpression"$().
-//See $LK,"Opcode Fmts",A="FF:::/Compiler/OpCodes.DD,IDIV"$ for details on asm insts.
+//See $LK,"Opcode Formats",A="FF:::/Compiler/OpCodes.DD,IDIV"$ for details on asm insts.
   I64 i;
   U8 *dst=*_dst;
   switch (Lex(_src,&i)) {

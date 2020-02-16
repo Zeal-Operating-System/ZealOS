@@ -243,7 +243,7 @@ U0 DrawViewAnglesCtrl(CDC *dc,CCtrl *c)
   GrRect(dc, c->left+VIEWANGLES_BORDER,c->top+VIEWANGLES_BORDER,
 	VIEWANGLES_SPACING*4+3-2*VIEWANGLES_BORDER,
 	VIEWANGLES_SPACING*2+VIEWANGLES_RANGE-2*VIEWANGLES_BORDER);
-  dc->color=s->cfg;
+  dc->color=s->config;
   GrLine(dc,c->left+VIEWANGLES_SPACING,c->top+VIEWANGLES_SPACING,
 	c->left+VIEWANGLES_SPACING,c->top+VIEWANGLES_SPACING+
 	VIEWANGLES_RANGE-1);
@@ -359,7 +359,7 @@ public CCtrl *ViewAnglesNew(CTask *task=NULL)
     c=CAlloc(sizeof(CCtrl));
     s->cbd=BLUE;
     s->cbg=LTBLUE;
-    s->cfg=BLACK;
+    s->config=BLACK;
     s->cx=LTGREEN;
     s->cy=GREEN;
     s->cz=LTGREEN;

@@ -127,7 +127,7 @@ $ID,2$Used for forms that prompt for data or just displaying a value.  Use $FG,2
 
 If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$DA...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.HC,&Fs->task_title"$.   
 
-The default raw data type for the $FG,2$$$DA...$$$FG$ command is $FG,2$RT=I64$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFmt",A="MN:DocDataFmt"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+The default raw data type for the $FG,2$$$DA...$$$FG$ command is $FG,2$RT=I64$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 
 The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the print/scan format string.
 
@@ -139,13 +139,13 @@ $ID,2$Used for forms.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc co
 
 If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$CB...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.HC,&Fs->task_title"$.   
 
-The default raw data type for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFmt",A="MN:DocDataFmt"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+The default raw data type for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"LS List Widget"$
 $ID,2$Used for forms that prompt for data.  You must specify a define list, $FG,2$D=""$FG$.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().  See $LK,"::/Demo/DolDoc/Form.HC"$.
 
 If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$LS...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the data addr.  See $LK,"task_title",A="FF:::/Zenith/DolDoc/DocEd.HC,&Fs->task_title"$.   
 
-The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFmt",A="MN:DocDataFmt"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"MA Macro"$
 $ID,2$A left macro arg, $FG,2$LM=""$FG$, will send text when the left mouse is clicked.
 
@@ -259,7 +259,7 @@ $FG,2$$$SP,"<1>",BI=1,BP="::/Demo/Graphics/Mountain.HC,Mountain"$$$FG$ will impo
 $ID,-2$$TR,"RT=<raw_data_type>"$
 $ID,2$The default data-type for the $FG,2$$$DA...$$$FG$ and $FG,2$$$LS...$$$FG$ commands is $FG,2$RT=I64$FG$.  If you do not specify a raw type and are using $LK,"DocForm",A="MN:DocForm"$(), it will use the $FG,2$class$FG$ member's raw type, automatically.  The default for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.
 
-If not using $LK,"DocForm",A="MN:DocForm"$(), change it to $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFmt",A="MN:DocDataFmt"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+If not using $LK,"DocForm",A="MN:DocForm"$(), change it to $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"SX=<Exp> Shift X"$
 $ID,2$Shift tag text $FG,2$+$FG$/$FG,2$- 7$FG$ X pixels off the grid.
 $ID,-2$$TR,"SY=<Exp> Shift Y"$

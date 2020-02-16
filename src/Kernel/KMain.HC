@@ -14,14 +14,14 @@ U0 SysGlobalsInit()
   blkdev.tmp_filename		=ZStrNew("~/Tmp.DD");
   blkdev.dvd_boot_is_good=TRUE;
   #exe {
-    if (!kernel_cfg->mount_ide_auto_hd_let)
-      kernel_cfg->mount_ide_auto_hd_let='C';
-    if (!kernel_cfg->mount_ide_auto_cd_let)
-      kernel_cfg->mount_ide_auto_cd_let='T';
+    if (!kernel_config->mount_ide_auto_hd_let)
+      kernel_config->mount_ide_auto_hd_let='C';
+    if (!kernel_config->mount_ide_auto_cd_let)
+      kernel_config->mount_ide_auto_cd_let='T';
     StreamPrint("blkdev.first_hd_drive_let=%d;",
-	  kernel_cfg->mount_ide_auto_hd_let);
+	  kernel_config->mount_ide_auto_hd_let);
     StreamPrint("blkdev.first_dvd_drive_let=%d;",
-	  kernel_cfg->mount_ide_auto_cd_let);
+	  kernel_config->mount_ide_auto_cd_let);
   }
 
   DebugMode(ON);
@@ -38,9 +38,9 @@ U0 SysGlobalsInit()
   KeyDevInit;
 
   #exe {
-    StreamPrint("blkdev.boot_drive_let='%C';",kernel_cfg->boot_drive_let);
+    StreamPrint("blkdev.boot_drive_let='%C';",kernel_config->boot_drive_let);
     StreamPrint("#exe{Option(OPTf_WARN_PAREN,OFF);}");
-    StreamPrint("DiskCacheInit(%s);",kernel_cfg->disk_cache_size_exp);
+    StreamPrint("DiskCacheInit(%s);",kernel_config->disk_cache_size_exp);
     StreamPrint("#exe{Option(OPTf_WARN_PAREN,ON);}");
   };
 
@@ -97,8 +97,8 @@ U0 TimersInit()
 
   //High Precision Event Timer
   if (PCIReadU16(0,31,0,0)==0x8086) {//Intel?
-//D31 F0, cfg 0xF0=RCBA of PCI-LPC Bridge
-    _d=PCIReadU32(0,31,0,0xF0)(U8 *)&~0x3FFF+0x3404; //HPET cfg
+//D31 F0, config 0xF0=RCBA of PCI-LPC Bridge
+    _d=PCIReadU32(0,31,0,0xF0)(U8 *)&~0x3FFF+0x3404; //HPET config
 //7	enable
     //1:0 HPET is at 0xFED00000,0xFED01000, 0xFED02000 or 0xFED03000.
     *_d=*_d&3|0x80;
@@ -178,7 +178,7 @@ U0 KMain()
   #exe {
     StreamPrint("HomeSet(\"%s\");\n"
 	  "blkdev.ins_base0=%d;blkdev.ins_base1=%d;blkdev.ins_unit =%d;\n",
-	  kernel_cfg->home_dir,
+	  kernel_config->home_dir,
 	  blkdev.ins_base0,blkdev.ins_base1,blkdev.ins_unit);
   }
   Gs->idle_task->cur_dv=blkdev.let_to_drive[*blkdev.home_dir-'A'];
@@ -194,16 +194,16 @@ U0 KMain()
   LBts(&sys_run_level,RLf_BLKDEV);
 
   #exe {
-    if (!kernel_cfg->opts[CFG_NO_MP])
+    if (!kernel_config->opts[CONFIG_NO_MP])
       StreamPrint("\"MultiCore Start\\n\\n\";"
 	    "Core0StartMP;"
 	    "LBts(&sys_run_level,RLf_MP);");
   };
 
-  KbdMsInit;
-  MsInit;
+  KbdMouseInit;
+  MouseInit;
   KbdInit;
-  Spawn(&MsHardDriverInstall);
+  Spawn(&MouseHardDriverInstall);
 
   "Loading Compiler\n";
   Cd("/Compiler");
@@ -229,10 +229,10 @@ U0 KMain()
 asm {	ALIGN	16,OC_NOP
 SYS_KERNEL_END::
 #exe {
-  if (kernel_cfg->opts[CFG_DBG_DISTRO])
+  if (kernel_config->opts[CONFIG_DBG_DISTRO])
     StreamPrint("DU8 0x%X-(SYS_KERNEL_END-SYS_KERNEL+"
 	"BOOT_RAM_BASE+sizeof(CBinFile)) DUP (0);"
-	"BINFILE \"%s\";",kernel_cfg->dbg_distro_start,
-			  kernel_cfg->dbg_distro_file);
+	"BINFILE \"%s\";",kernel_config->dbg_distro_start,
+			  kernel_config->dbg_distro_file);
 };
 }

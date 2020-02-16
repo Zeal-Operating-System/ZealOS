@@ -1,16 +1,16 @@
-$WW,1$$LK,"ms.pos.x",A="MN:ms"$ and $LK,"ms.pos.y",A="MN:ms"$ can be used to access the x and y coordinates of the mouse.  They are relative to the scrn, not window.  These can be used if you don't want to use message passing.  $LK,"ms.pos.z",A="MN:ms"$ is the wheel.
+$WW,1$$LK,"mouse.pos.x",A="MN:mouse"$ and $LK,"mouse.pos.y",A="MN:mouse"$ can be used to access the x and y coordinates of the mouse.  They are relative to the scrn, not window.  These can be used if you don't want to use message passing.  $LK,"mouse.pos.z",A="MN:mouse"$ is the wheel.
 
-$LK,"ms.pos_text.x",A="MN:CMsStateGlobals"$ and $LK,"ms.pos_text.y",A="MN:CMsStateGlobals"$ are the text column and row.  See $LK,"::/Demo/Games/Maze.HC"$.
+$LK,"mouse.pos_text.x",A="MN:CMouseStateGlobals"$ and $LK,"mouse.pos_text.y",A="MN:CMouseStateGlobals"$ are the text column and row.  See $LK,"::/Demo/Games/Maze.HC"$.
 
-See $LK,"CMsStateGlobals",A="MN:CMsStateGlobals"$ and $LK,"CMsHardStateGlobals",A="MN:CMsHardStateGlobals"$.
+See $LK,"CMouseStateGlobals",A="MN:CMouseStateGlobals"$ and $LK,"CMouseHardStateGlobals",A="MN:CMouseHardStateGlobals"$.
 
-The $FG,2$hard$FG$ designation, as in $FG,2$ms_hard$FG$, represents hardware layer items before the application of an abstraction layer.
+The $FG,2$hard$FG$ designation, as in $FG,2$mouse_hard$FG$, represents hardware layer items before the application of an abstraction layer.
 
 $HL,1$//****
-ms_hard.pos.x=ms_hard.prescale.x*ms_hard.scale.x*ms_grid.x_speed;
-ms.presnap.x=ToI64(ms.scale.x*ms_hard.pos.x)+ms.offset.x;
-if (ms_grid.snap)
-  ms.pos.x=Trunc(ms.presnap.x/ms_grid.x)*ms_grid.x+ms_grid.x_offset;
+mouse_hard.pos.x=mouse_hard.prescale.x*mouse_hard.scale.x*mouse_grid.x_speed;
+mouse.presnap.x=ToI64(mouse.scale.x*mouse_hard.pos.x)+mouse.offset.x;
+if (mouse_grid.snap)
+  mouse.pos.x=Trunc(mouse.presnap.x/mouse_grid.x)*mouse_grid.x+mouse_grid.x_offset;
 else
-  ms.pos.x=ms.presnap.x;
+  mouse.pos.x=mouse.presnap.x;
 //****$HL,0$

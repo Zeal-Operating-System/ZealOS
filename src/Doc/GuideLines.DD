@@ -20,7 +20,7 @@ $FG,2$/0000Boot$FG$ Boot files go here.  Stage 2 of the ZenithOS hard drive mast
 
 $FG,5$$TX+CX,"::/Home Files"$$FG$
 
-The home dir is specified with $FG,2$'~'$FG$.  The home dir is $FG,2$::/Home$FG$ unless you change it with $LK,"HomeSet",A="MN:HomeSet"$() or compile the kernel with a cfg option.  An empty $FG,2$/Home$FG$ dir should be valid because it will get default files from the root dir. 
+The home dir is specified with $FG,2$'~'$FG$.  The home dir is $FG,2$::/Home$FG$ unless you change it with $LK,"HomeSet",A="MN:HomeSet"$() or compile the kernel with a config option.  An empty $FG,2$/Home$FG$ dir should be valid because it will get default files from the root dir. 
 
 $LK,"~/PersonalMenu.DD"$ a menu viewed with the $FG,2$<CTRL-m>$FG$ key or by clicking "$FG,2$MENU$FG$" in the upper left border area of a window.
 

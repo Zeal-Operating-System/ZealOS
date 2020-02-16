@@ -2,7 +2,7 @@ File
 {
   Rename(,'r');
   DirMk(,'d');
-  FmtDrive(,'f');
+  FormatDrive(,'f');
   UnmountDrive(,'u');
   Abort(,CH_SHIFT_ESC);
   Exit(,CH_ESC);
