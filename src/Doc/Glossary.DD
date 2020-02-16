@@ -1,4 +1,4 @@
-$WW,1$$FG,5$$TX+CX,"Glossery"$$FG$
+$WW,1$$FG,5$$TX+CX,"Glossary"$$FG$
 
 $TR,"Abbreviations"$
 $ID,2$$FG,2$Abs$FG$	Absolute
@@ -20,11 +20,7 @@ $FG,2$Blk$FG$	Block
 $FG,2$Bmp$FG$	BitMap
 $FG,2$Bttn$FG$	Button
 $FG,2$Buf$FG$	Buffer
-$FG,2$Bwd$FG$	Backward
 $FG,2$CB$FG$	Call-Back, Code Block
-$FG,2$Config$FG$	Config
-$FG,2$Change$FG$	Change
-$FG,2$Check$FG$	Check
 $FG,2$Clip$FG$	Clipboard
 $FG,2$Clus$FG$	Cluster
 $FG,2$Cmd$FG$	Command
@@ -34,14 +30,11 @@ $FG,2$Const$FG$	Consant
 $FG,2$Cont$FG$	Continue
 $FG,2$Ctrl$FG$	Control.  The ctrl key is indicated with "$FG,2$^$FG$" in documentation.
 $FG,2$Cur$FG$	Current
-$FG,2$Convert$FG$	Convert
-$FG,2$Debug$FG$	Debug
 $FG,2$Dbl$FG$	Double
 $FG,2$DC$FG$	Device Context
 $FG,2$Del$FG$	Delete
 $FG,2$Desc$FG$	Descriptor, Description
 $FG,2$Dev$FG$	Device
-$FG,2$Default$FG$	Default
 $FG,2$Dir$FG$	Directory, Direction
 $FG,2$Div$FG$	Divide
 $FG,2$Doc$FG$	Document
@@ -56,13 +49,11 @@ $FG,2$Exe$FG$	Execute
 $FG,2$Ext$FG$	Extern, Extended, Extract
 $FG,2$Feat$FG$	Feature
 $FG,2$FG$FG$	Foreground
-$FG,2$Format$FG$	Format
 $FG,2$Fwd$FG$	Forward
 $FG,2$FPS$FG$	Frames per Second, First Person Shooter
 $FG,2$fp_$FG$	Function ptr
 $FG,2$Fun$FG$	Function
 $FG,2$Gen$FG$	Generate
-$FG,2$Global$FG$	Global
 $FG,2$Gr$FG$	Graphic
 $FG,2$Hndlr$FG$	Handler
 $FG,2$IDE$FG$	Integrated Drive Electronics, Integrated Development Environment
@@ -91,8 +82,6 @@ $FG,2$Mgr$FG$	Manager
 $FG,2$Mid$FG$	Middle
 $FG,2$Mon$FG$	Month
 $FG,2$MP$FG$	MultiProcessor
-$FG,2$Mouse$FG$	Mouse
-$FG,2$Message$FG$	Message
 $FG,2$Num$FG$	Number
 $FG,2$Obj$FG$	Object
 $FG,2$Occ$FG$	Occurrence
@@ -118,7 +107,6 @@ $FG,2$Queue$FG$	Queue
 $FG,2$Rand$FG$	Random
 $FG,2$Ref$FG$	Reference
 $FG,2$Reg$FG$	Register, Registry, Regular
-$FG,2$Remove$FG$	Remove
 $FG,2$Rep$FG$	Report, Repeat
 $FG,2$Res$FG$	Result
 $FG,2$Rev$FG$	Reverse, Reversed
@@ -127,7 +115,6 @@ $FG,2$Reset$FG$	Reset
 $FG,2$Rot$FG$	Rotation
 $FG,2$Rx$FG$	Receive
 $FG,2$Sched$FG$	Sceduler
-$FG,2$Screen$FG$	Screen
 $FG,2$Sec$FG$	Second, Secondary
 $FG,2$Sect$FG$	Sector
 $FG,2$Sel$FG$	Select, Selected
@@ -135,11 +122,9 @@ $FG,2$Seq$FG$	Sequence
 $FG,2$Sound$FG$	Sound
 $FG,2$SP$FG$	SingleProcessor
 $FG,2$Src$FG$	Source
-$FG,2$Server$FG$	Server
 $FG,2$Stat$FG$	Status, Statistic
 $FG,2$Std$FG$	Standard
 $FG,2$Stack$FG$	Stack
-$FG,2$Statement$FG$	Statement
 $FG,2$Str$FG$	String
 $FG,2$Sym$FG$	Symbol
 $FG,2$Sync$FG$	Synchronization

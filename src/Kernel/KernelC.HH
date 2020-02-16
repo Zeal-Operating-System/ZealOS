@@ -523,7 +523,7 @@ public extern I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,
 public extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
 public extern U8 *GetStr(U8 *message=NULL,U8 *default=NULL,I64 flags=0);
 extern U0	KbdInit();
-public extern I64 KbdMouseEvtTime();
+public extern I64 KbdMouseEventTime();
 extern U0	KbdMouseHandler(Bool poll_kbd,Bool poll_mouse);
 extern U0	KbdMouseInit();
 extern I64	KbdMessagesQueue();

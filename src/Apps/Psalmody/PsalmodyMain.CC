@@ -354,7 +354,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
 	psm_octave=4,timeout_val,timeout_val2,old_doc_flags;
   U8 *filename=NULL,*st,*st2;
   PsmNote *tmpn;
-  F64 psm_duration=1.0,d,evt_time=tS,note_down_time=tS;
+  F64 psm_duration=1.0,d,event_time=tS,note_down_time=tS;
   CCtrl *c=TempoNew;
 
   if (DocPut) old_doc_flags=DocPut->flags;
@@ -477,7 +477,7 @@ mo_got_message:
 	  col=0;
 	  break;
 	case MESSAGE_KEY_DOWN:
-	  evt_time=tS;
+	  event_time=tS;
 	  if ('0'<=arg1<='9') {
 	    psm_octave=arg1-'0';
 	    PsmMenu(psm_octave);
@@ -722,7 +722,7 @@ mo_got_message:
 	  }
 	  break;
 	case MESSAGE_KEY_UP:
-	  evt_time=tS;
+	  event_time=tS;
 	  break;
 	case MESSAGE_MS_MOVE:
 	  if (arg2>18*FONT_HEIGHT)
@@ -757,7 +757,7 @@ mo_got_message:
 	    music.tempo=4.4*tempo_state.tempo/TEMPO_RANGE+0.5;
 	    music.stacatto_factor=0.88*tempo_state.stacatto/TEMPO_RANGE+0.12;
 	    tmpn->duration=PsmConvertDuration(
-		  music.tempo*(evt_time-note_down_time));
+		  music.tempo*(event_time-note_down_time));
 	    PsmSetWidth(tmpn);
 	    QueueInsert(tmpn,psm.cur_note->last);
 	  }

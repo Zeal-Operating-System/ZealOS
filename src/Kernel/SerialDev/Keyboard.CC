@@ -483,7 +483,7 @@ I64 KbdMessagesQueue()
   return message_code;
 }
 
-I64 KbdMouseEvtTime()
+I64 KbdMouseEventTime()
 {//Timestamp of last key or mouse event.
   if (mouse_hard.timestamp>kbd.timestamp)
     return mouse_hard.timestamp;

@@ -222,12 +222,12 @@ U0 MouseHardSetPost()
 
   if (mouse_hard.pos.x!=mouse_hard_last.pos.x || mouse_hard.pos.y!=mouse_hard_last.pos.y ||
 	mouse_hard.pos.z!=mouse_hard_last.pos.z) {
-    mouse_hard.evt=TRUE;
+    mouse_hard.event=TRUE;
     MouseHardSpeedSet;
   } else
     for (i=0;i<5;i++)
       if (mouse_hard.bttns[i]!=mouse_hard_last.bttns[i]) {
-	mouse_hard.evt=TRUE;
+	mouse_hard.event=TRUE;
 	break;
       }
 }
@@ -305,7 +305,7 @@ Bool MouseHardDriverInstall(I64 dummy=0) //can be spawned
     OutU8(0xA1,InU8(0xA1)&~0x10);
   KbdMouseReset;
   mouse_hard.install_attempts++;
-  mouse_hard.installed=mouse_hard.evt=i;
+  mouse_hard.installed=mouse_hard.event=i;
   mouse_hard.install_in_progress=FALSE;
   return mouse_hard.installed;
 }

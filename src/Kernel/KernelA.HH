@@ -2989,7 +2989,7 @@ public class CMouseHardStateGlobals
   Bool	bttns[5],
 	has_wheel,
 	has_ext_bttns,
-	evt,		//Private
+	event,		//Private
 	installed,	//Private
 	install_in_progress, //Private
 	irqs_working;	//Private

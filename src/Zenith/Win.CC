@@ -222,10 +222,10 @@ U0 WinMouseUpdate()
   Bool set=FALSE;
   if (mouse_hard.installed) {
     mouse.has_wheel=mouse_hard.has_wheel;
-    if (mouse_hard.evt) {
+    if (mouse_hard.event) {
       MouseUpdate(mouse_hard.pos.x,mouse_hard.pos.y,mouse_hard.pos.z,
 	    mouse_hard.bttns[0],mouse_hard.bttns[1]);
-      mouse_hard.evt=FALSE;
+      mouse_hard.event=FALSE;
       set=TRUE;
     }
   }
