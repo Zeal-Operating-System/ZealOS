@@ -24,11 +24,42 @@ U0 MPCPURep(CCPURep *cr)
 }
 
 public U0 CPURep(Bool full=FALSE)
-{//Report number of cores and clock freq.
-  I64 i,total_swaps,total_cycles;
-  F64 t0,tf;
+{//Report name, number of cores and clock freq.
+  U8 *name;
+  I64 i, total_swaps, total_cycles;
+  F64 t0, tf;
   CCPURep cr;
+  CRAXRBCRCXRDX regs;
 
+  CPUId(0x80000000, &regs);
+  if (regs.rax >= 0x80000004)
+  {//if getting full name is supported
+    name = MAlloc(4 * 4 * 3);
+    for (i = 2; i <= 4; i++)
+    {
+      CPUId(0x80000000 + i, &regs);
+      CatPrint(name, "%c%c%c%c", regs.rax, regs.rbx, regs.rcx, regs.rdx);
+    }
+    StrUtil(name, SUF_REM_LEADING | SUF_REM_TRAILING);
+    "%s\n\n", name;
+    Free(name);
+  }
+  else
+  {//Use vendor string
+    CPUId(0, &regs);
+    name = MStrPrint("%c%c%c", regs.rbx, regs.rdx, regs.rcx);
+    "Vendor:";
+    if (!StrCompare(name, "AuthenticAMD"))
+      "AdvancedMicroDevices,Inc.\n";
+    else if (!StrCompare(name, "GenuineIntel"))
+      "Intel Corporation\n";
+    else if (!StrCompare(name, "VIA VIA VIA ")) //for that one odd user
+      "VIA Technologies, Inc.\n";
+    else
+      "%s\n", name;
+    '\n';
+    Free(name);
+  }
   if (!full)
     "%03X Cores %6h?nHz\n",mp_count,ToF64(counts.time_stamp_freq);
   else {
