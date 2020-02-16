@@ -4,7 +4,7 @@
 
 U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
-//If you have not recompiled $GREEN$Kernel$FG$ and defined your CD/DVD drive, use $LK,"Mount",A="MN:Mount"$.
+//If you have not recompiled $FG,2$Kernel$FG$ and defined your CD/DVD drive, use $LK,"Mount",A="MN:Mount"$.
   U8 *out_iso_filename=FileNameAbs(_out_iso_filename);
   if (!DriveIsWritable) {
     "Drive must be writable.  Install on Hard drive, first.\n";
@@ -22,6 +22,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 
   CopyTree(BOOT_DIR,	"/Distro" BOOT_DIR);
   CopyTree("/Home",	"/Distro/Home");
+  Del("/Distro/Home/Registry.CC");
   CopyTree("/Zenith",	"/Distro/Zenith");
   CopyTree("/Apps",	"/Distro/Apps");
   CopyTree("/Compiler",	"/Distro/Compiler");

@@ -66,9 +66,10 @@ I64 SysTimerRead()
   if (mp_count>1)
     while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
       PAUSE
-  OutU8(0x43,0); //Latch Timer0
-  if ((i=InU8(0x40)+InU8(0x40)<<8)==SYS_TIMER0_PERIOD) {
-    if (InU8(0x20) & 1)
+  OutU8(PIT_CMD, PIT_CMDF_CHANNEL0); //Latch Timer0
+  if ((i=InU8(PIT0) + InU8(PIT0) << 8) == SYS_TIMER0_PERIOD)
+  {
+    if (InU8(0x20) & 1)
       i=-1;
   }
   res=counts.timer+SYS_TIMER0_PERIOD-i;
@@ -188,9 +189,9 @@ U0 Sound(I8 ona=0)
     } else if (ona!=screencast.ona) {
       screencast.ona=ona;
       period=ClampI64(SYS_TIMER_FREQ/Ona2Freq(ona),1,U16_MAX);
-      OutU8(0x43,0xB6);
-      OutU8(0x42,period);
-      OutU8(0x42,period.u8[1]);
+      OutU8(PIT_CMD,PIT_CMDF_CHANNEL2 | PIT_CMDF_OPMODE_SQUARE_WAVE | PIT_CMDF_ACCESS_WORD);
+      OutU8(PIT2,period);
+      OutU8(PIT2,period.u8[1]);
       OutU8(0x61,3|InU8(0x61));
     }
     if (!IsDebugMode && screencast.record) {

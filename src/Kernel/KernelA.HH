@@ -549,6 +549,19 @@ class CAP16BitInit
   CSysLimitBase ap_gdt_ptr;
 };
 
+#help_index "Time/PIT"
+//Programmable Interval Timer
+#define PIT0	0x40
+#define PIT1	0x41
+#define PIT2	0x42
+#define PIT_CMD	0x43
+
+#define PIT_CMDF_OPMODE_RATE_GEN	0x04
+#define PIT_CMDF_OPMODE_SQUARE_WAVE	0x06
+#define PIT_CMDF_ACCESS_WORD		0x30
+#define PIT_CMDF_CHANNEL0		0x00
+#define PIT_CMDF_CHANNEL2		0x80
+
 #help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
 //High Performance Event Timer
 #define HPET_GCAP_ID	(0xFED00000+0x00)
@@ -1495,7 +1508,7 @@ public class CWinMgrGlobals
 #define ACf_INIT_IN_PROGRESS	0
 #define ACf_LAST_WAS_KEYMAP	1
 
-#define AC_FILLINS_NUM		12
+#define AC_FILLINS_NUM		12
 public class CAutoCompleteGlobals
 {
   I64	col,row,old_col,old_row,num_words;
