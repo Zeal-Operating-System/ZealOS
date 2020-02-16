@@ -19,6 +19,7 @@ Changes include:
   - Added a NONE #define for use in default function arguments.
   - 440Hz 'A' tuning changed to 432Hz.
   - Added CompComp function.
+  - HolyC -> CosmiC.
   - System-wide renames:
     - AOnce -> ZOnce
     - ACAlloc -> ZCAlloc
@@ -36,10 +37,12 @@ Changes include:
       - (StrCmp->StrCompare, etc)
     - Cnt -> Count
     - Cpy -> Copy
+    - Cvt -> Convert
     - Dbg -> Debug
     - Dft -> Default
     - Drv -> Drive
     - Dsk -> Disk
+    - Evt -> Event
     - Fmt -> Format
     - Fwd -> Forward
     - Glbls -> Globals
@@ -57,6 +60,7 @@ Changes include:
     - Rqst -> Request
     - Scrn -> Screen
     - Snd -> Sound
+    - Srv -> Server
     - Stk -> Stack
     - Stmt -> Statement
     - TempleOS -> ZenithOS
