@@ -161,15 +161,15 @@ CJob *TaskMessage(CTask *_srv,CTask *master,
   return tmpc;
 }
 
-Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL)
-{//Check rqst complete, return with or without.
+Bool JobResScan(CJob *request=NULL,I64 *_res=NULL)
+{//Check request complete, return with or without.
   CJobCtrl *ctrl;
   CJob *tmpc,*tmpc1;
-  if (!rqst || Bt(&rqst->flags,JOBf_DONE)) {
-    if (!rqst || rqst->master_task)
+  if (!request || Bt(&request->flags,JOBf_DONE)) {
+    if (!request || request->master_task)
       ctrl=&Fs->srv_ctrl;
     else
-      ctrl=rqst->ctrl;
+      ctrl=request->ctrl;
     PUSHFD
     CLI
     while (LBts(&ctrl->flags,JOBCf_LOCKED))
@@ -177,7 +177,7 @@ Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL)
     tmpc1=&ctrl->next_done;
     tmpc=tmpc1->next;
     while (tmpc!=tmpc1) {
-      if (!rqst || rqst==tmpc) {
+      if (!request || request==tmpc) {
 	QueueRemove(tmpc);
 	LBtr(&ctrl->flags,JOBCf_LOCKED);
 	POPFD
@@ -196,25 +196,25 @@ Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL)
   return FALSE;
 }
 
-I64 JobResGet(CJob *rqst=NULL)
+I64 JobResGet(CJob *request=NULL)
 {//See $LK,"::/Demo/MultiCore/Lock.HC"$
   I64 res;
   CJob *tmpc1;
-  if (!rqst) {
+  if (!request) {
     tmpc1=&Fs->srv_ctrl.next_done;
     while (tmpc1==tmpc1->next) {
       LBts(&Fs->task_flags,TASKf_IDLE);
       Yield;
     }
   } else {
-    while (!Bt(&rqst->flags,JOBf_DONE)) {
+    while (!Bt(&request->flags,JOBf_DONE)) {
       LBts(&Fs->task_flags,TASKf_IDLE);
       Yield;
     }
   }
   LBtr(&Fs->task_flags,TASKf_IDLE);
 //Could get taken by someone else.
-  JobResScan(rqst,&res);
+  JobResScan(request,&res);
   return res;
 }
 

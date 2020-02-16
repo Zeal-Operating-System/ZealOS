@@ -6,7 +6,7 @@ U0 InputFilterTask()
   Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
   LBts(&Fs->task_flags,TASKf_INPUT_FILTER_TASK);
   old_filter=LBts(&Fs->last_input_filter_task->task_flags,TASKf_FILTER_INPUT);
-  LBEqu(&Fs->task_flags,TASKf_FILTER_INPUT,old_filter);
+  LBEqual(&Fs->task_flags,TASKf_FILTER_INPUT,old_filter);
   while (TRUE) {
     CLI
     JobsHandler(old_flags);

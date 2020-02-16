@@ -172,7 +172,7 @@ public U0 EdSelAll(CDoc *doc,Bool sel)
   Bool unlock=DocLock(doc);
   CDocEntry *doc_e=doc->head.next;
   while (doc_e!=doc) {
-    BEqu(&doc_e->type,DOCEt_SEL,sel);
+    BEqual(&doc_e->type,DOCEt_SEL,sel);
     doc_e=doc_e->next;
   }
   if (unlock)

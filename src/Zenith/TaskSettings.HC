@@ -64,9 +64,9 @@ U0 SettingsPop2(CTask *task,CTaskSettings *tmpse)
   CDoc *doc;
 
   if (doc=DocPut(task)) {
-    LBEqu(&doc->flags,DOCf_HIDE_CURSOR,!tmpse->hide_cursor);
-    LBEqu(&doc->flags,DOCf_DONT_HIGHLIGHT_CURSOR,!tmpse->highlight_cursor);
-    LBEqu(&doc->flags,DOCf_NO_SCROLL_BARS,!tmpse->scroll);
+    LBEqual(&doc->flags,DOCf_HIDE_CURSOR,!tmpse->hide_cursor);
+    LBEqual(&doc->flags,DOCf_DONT_HIGHLIGHT_CURSOR,!tmpse->highlight_cursor);
+    LBEqual(&doc->flags,DOCf_NO_SCROLL_BARS,!tmpse->scroll);
   }
 
   WinBorder(tmpse->border,task);

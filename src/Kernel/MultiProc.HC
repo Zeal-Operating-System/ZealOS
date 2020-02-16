@@ -70,7 +70,7 @@ USE64
 
 U0 TSSBusy(I64 tr,Bool val=OFF)
 {//See $LK,"::/Demo/Lectures/Ring3.HC"$.
-  LBEqu((&sys_gdt)(U8 *)+tr+4,9,val);
+  LBEqual((&sys_gdt)(U8 *)+tr+4,9,val);
 }
 
 CTSS *TSSNew(I64 cpu_num)

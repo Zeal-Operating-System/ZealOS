@@ -142,7 +142,7 @@ public I64 ATARep(Bool prompt=TRUE,Bool just_ide=FALSE,CATARep **_head=NULL)
 
   for (i=0;i<BLKDEVS_NUM;i++)
     if (blkdev.blkdevs[i].bd_signature==BD_SIGNATURE_VAL)
-      BEqu(&unlock_flags,i,
+      BEqual(&unlock_flags,i,
 	    BlkDevLock(&blkdev.blkdevs[i]));
 
   if (!just_ide)

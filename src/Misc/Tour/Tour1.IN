@@ -50,7 +50,7 @@ U0 RevealPopUpHelp(I64 scf)
 	Sound;
       Sleep(1);
     }
-    LBEqu(&Fs->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
+    LBEqual(&Fs->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
     Sound;
   } while (tS-t0<1.0);
 }

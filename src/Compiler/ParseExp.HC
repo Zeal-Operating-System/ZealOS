@@ -1128,7 +1128,7 @@ U8 *LexExpression2Bin(CCompCtrl *cc,I64 *_type=NULL)
   } else
     res=NULL;
   COCPop(cc);
-  BEqu(&cc->flags,CCf_PASS_TRACE_PRESENT,old_trace);
+  BEqual(&cc->flags,CCf_PASS_TRACE_PRESENT,old_trace);
   return res;
 }
 

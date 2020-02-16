@@ -226,7 +226,7 @@ U0 RawPrint(I64 mS=100,U8 *format,...)
   "%s",buf;
   Busy(mS<<10);
   POPFD
-  LBEqu(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
+  LBEqual(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
   Raw(old_raw);
   Free(buf);
 }
@@ -243,7 +243,7 @@ U0 RawD(I64 mS=100,U8 *addr,I64 count=0x80)
   D(addr,count);
   Busy(mS<<10);
   POPFD
-  LBEqu(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
+  LBEqual(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
   Raw(old_raw);
 }
 
@@ -259,7 +259,7 @@ U0 RawDm(I64 mS=100,U8 *addr,I64 count=0x80)
   Dm(addr,count);
   Busy(mS<<10);
   POPFD
-  LBEqu(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
+  LBEqual(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
   Raw(old_raw);
 }
 
@@ -558,7 +558,7 @@ U0 Debug2()
   UserTaskCont;
   fp_getstr2=old_getstr2;
   Fs->win_inhibit=old_win_inhibit;
-  LBEqu(&Fs->task_flags,TASKf_AWAITING_MESSAGE,old_waiting_message);
+  LBEqual(&Fs->task_flags,TASKf_AWAITING_MESSAGE,old_waiting_message);
 }
 
 U0 Fault3(I64 fault_num,I64 fault_err_code)

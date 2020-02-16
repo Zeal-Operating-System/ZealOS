@@ -56,7 +56,7 @@ public Bool ODEPause(CMathODE *ode,Bool val=ON)
 {//Pause ODE.
   Bool res;
   if (!ode) return OFF;
-  res=LBEqu(&ode->flags,ODEf_PAUSED,val);
+  res=LBEqual(&ode->flags,ODEf_PAUSED,val);
   if (val)
     while (Bt(&ode->flags,ODEf_BUSY))
       Yield;

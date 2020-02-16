@@ -194,7 +194,7 @@ U0 CtrlAltCBSet(U8 ch,U0 (*fp_handler)(I64 sc),
     else
       keydev.ctrl_alt_shift_descs[ch]=NULL;
 
-    BEqu(&keydev.ctrl_alt_in_irq_flags,ch,in_irq);
+    BEqual(&keydev.ctrl_alt_in_irq_flags,ch,in_irq);
   }
 }
 

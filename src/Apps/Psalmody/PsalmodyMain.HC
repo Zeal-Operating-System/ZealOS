@@ -516,13 +516,13 @@ mo_got_message:
 		      while (psm.cur_note->last!=&psm.head) {
 			psm.cur_note=psm.cur_note->last;
 			if (psm.cur_note!=&psm.head)
-			  LBEqu(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
+			  LBEqual(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
 		      }
 		    } else {
 		      if (psm.cur_note->last!=&psm.head) {
 			psm.cur_note=psm.cur_note->last;
 			if (psm.cur_note!=&psm.head)
-			  LBEqu(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
+			  LBEqual(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
 		      }
 		    }
 		    break;
@@ -530,13 +530,13 @@ mo_got_message:
 		    if (arg2&SCF_CTRL) {
 		      while (psm.cur_note!=&psm.head) {
 			if (psm.cur_note!=&psm.head)
-			  LBEqu(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
+			  LBEqual(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
 			psm.cur_note=psm.cur_note->next;
 		      }
 		    } else {
 		      if (psm.cur_note!=&psm.head) {
 			if (psm.cur_note!=&psm.head)
-			  LBEqu(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
+			  LBEqual(&psm.cur_note->flags,PSMf_SEL,arg2&SCF_SHIFT);
 			psm.cur_note=psm.cur_note->next;
 		      }
 		    }

@@ -24,7 +24,7 @@ U0 VRSetUp(I64 player)
   ut1=&units[player^1][0];
   for (i=0;i<UNITS_NUM;i++,ut0++,ut1++) {
     LBtr(&ut1->vis[player],0);
-    LBEqu(&ut0->vis[player],0,ut0->life>0);
+    LBEqual(&ut0->vis[player],0,ut0->life>0);
   }
 }
 
@@ -41,7 +41,7 @@ U0 VRMerge(I64 player)
   }
   ut1=&units[player^1][0];
   for (j=0;j<UNITS_NUM;j++,ut1++)
-    LBEqu(&ut1->vis[player],0,Bt(mask,j) && ut1->life>0);
+    LBEqual(&ut1->vis[player],0,Bt(mask,j) && ut1->life>0);
   Free(mask);
 }
 
@@ -77,7 +77,7 @@ Bool MPVisRecalc(MPCtrl1 *job)
 	  }
 	}
 	if (job->mode==VR_UPDATE_FRIENDLY_UNIT)
-	  LBEqu(&vis_unit_bitmap[cur_player],
+	  LBEqual(&vis_unit_bitmap[cur_player],
 		i+job->tmpu->num*((UNITS_NUM+7)&~7),seen);
       }
       break;

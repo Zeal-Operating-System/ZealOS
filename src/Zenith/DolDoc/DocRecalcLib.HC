@@ -137,21 +137,21 @@ public Bool DocCursor(Bool show=OFF,CDoc *doc=NULL)
 {//Show or hide cursor.
   if (!doc && !(doc=DocPut))
     return FALSE;
-  return !LBEqu(&doc->flags,DOCf_HIDE_CURSOR,!show);
+  return !LBEqual(&doc->flags,DOCf_HIDE_CURSOR,!show);
 }
 
 public Bool DocHighlightCursor(Bool show=OFF,CDoc *doc=NULL)
 {//Highlight or Don't highlight cursor.
   if (!doc && !(doc=DocPut))
     return FALSE;
-  return !LBEqu(&doc->flags,DOCf_DONT_HIGHLIGHT_CURSOR,!show);
+  return !LBEqual(&doc->flags,DOCf_DONT_HIGHLIGHT_CURSOR,!show);
 }
 
 public Bool DocScroll(Bool val=OFF,CDoc *doc=NULL)
 {//Turn scroll bars OFF/ON.
   if (!doc && !(doc=DocPut))
     return FALSE;
-  return !LBEqu(&doc->flags,DOCf_NO_SCROLL_BARS,!val);
+  return !LBEqual(&doc->flags,DOCf_NO_SCROLL_BARS,!val);
 }
 
 public U0 DocCollapse(Bool collapse=TRUE,CDoc *doc=NULL)
@@ -164,7 +164,7 @@ public U0 DocCollapse(Bool collapse=TRUE,CDoc *doc=NULL)
   doc_e=doc->head.next;
   while (doc_e!=doc) {
     if (doc_e->de_flags&DOCEF_TREE)
-      BEqu(&doc_e->de_flags,DOCEf_CHECKED_COLLAPSED,collapse);
+      BEqual(&doc_e->de_flags,DOCEf_CHECKED_COLLAPSED,collapse);
     doc_e=doc_e->next;
   }
   DocRecalc(doc);

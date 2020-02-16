@@ -81,7 +81,7 @@ Bool Suspend(CTask *task=NULL,Bool state=TRUE)
   PUSHFD
   CLI
   if (TaskValidate(task))
-    res=LBEqu(&task->task_flags,TASKf_SUSPENDED,state);
+    res=LBEqual(&task->task_flags,TASKf_SUSPENDED,state);
   else
     res=FALSE;
   POPFD

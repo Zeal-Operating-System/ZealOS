@@ -21,7 +21,7 @@ public I64 DocGetKey(I64 *_sc=NULL)
     old_key_desc=LBtr(&Fs->win_inhibit,WIf_SELF_KEY_DESC);
     do ch=GetKey(&sc,TRUE);
     while (sc&SCF_KEY_DESC);
-    LBEqu(&Fs->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
+    LBEqual(&Fs->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
 
     DocRecalc(DocPut);
     cont=FALSE;

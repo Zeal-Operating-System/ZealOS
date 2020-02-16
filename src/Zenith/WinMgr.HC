@@ -27,8 +27,8 @@ public U0 Refresh(I64 count=1,Bool force=FALSE)
     Sleep(1);
   }
   if (old_doc)
-    LBEqu(&old_doc->flags,DOCf_DO_FULL_REFRESH,old_full_refresh);
-  LBEqu(&Fs->task_flags,TASKf_IDLE,old_idle);
+    LBEqual(&old_doc->flags,DOCf_DO_FULL_REFRESH,old_full_refresh);
+  LBEqual(&Fs->task_flags,TASKf_IDLE,old_idle);
 }
 
 #help_index "Windows"

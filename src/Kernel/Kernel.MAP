@@ -379,7 +379,6 @@ $LK,"_LXCHG_U8",A="FL:::/Kernel/KUtils.HC,244"$
 $LK,"CtrlAltX",A="FL:::/Kernel/KeyDev.HC,173",BI=80$
 $LK,"UserTaskCont",A="FL:::/Kernel/KTask.HC,384",BI=81$
 $LK,"RFLAGf_NESTED_TASK",A="FL:::/Kernel/KernelA.HH,332"$
-$LK,"BEqu",A="FL:::/Kernel/KernelB.HH,28"$
 $LK,"FAT32MkDir",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,919",BI=82$
 $LK,"ClusBlkRead",A="FL:::/Kernel/BlkDev/DiskClus.HC,44",BI=83$
 $LK,"_MEMCOPY",A="FL:::/Kernel/KUtils.HC,55"$
@@ -527,7 +526,6 @@ $LK,"MSF_FIXED",A="FL:::/Kernel/KernelA.HH,209"$
 $LK,"screencast",A="FL:::/Kernel/KGlobals.HC,29"$
 $LK,"MEM_HEAP_BASE",A="FL:::/Kernel/KStart32.HC,6"$
 $LK,"_CPUID",A="FL:::/Kernel/KUtils.HC,319"$
-$LK,"_LBEQU",A="FL:::/Kernel/KUtils.HC,104"$
 $LK,"Caller",A="FL:::/Kernel/KDebug.HC,60",BI=114$
 $LK,"SUF_S2T",A="FL:::/Kernel/KernelA.HH,3737"$
 $LK,"ATA_DEV_RST",A="FL:::/Kernel/KernelA.HH,2270"$
@@ -723,6 +721,7 @@ $LK,"HashFunSegFind",A="FL:::/Kernel/FunSeg.HC,10",BI=139$
 $LK,"Dr",A="FL:::/Kernel/KDebug.HC,328",BI=140$
 $LK,"FBlkRead",A="FL:::/Kernel/BlkDev/DiskCFile.HC,129",BI=141$
 $LK,"CPUId",A="FL:::/Kernel/KernelB.HH,263"$
+$LK,"_BEQUAL",A="FL:::/Kernel/KUtils.HC,89"$
 $LK,"ARC_BITS_MAX",A="FL:::/Kernel/KernelA.HH,3685"$
 $LK,"FilesFind2",A="FL:::/Kernel/BlkDev/DiskFind.HC,1",BI=142$
 $LK,"TaskKillDying",A="FL:::/Kernel/KTask.HC,528",BI=143$
@@ -900,7 +899,6 @@ $LK,"RedSeaFileFind",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,155",BI=182$
 $LK,"CTRLF_CAPTURE_RIGHT_MS",A="FL:::/Kernel/KernelA.HH,3046"$
 $LK,"SYS_PCIBIOS_SERVICE_DIR",A="FL:::/Kernel/PCIBIOS.HC,4"$
 $LK,"tS",A="FL:::/Kernel/KMisc.HC,122",BI=183$
-$LK,"LBEqu",A="FL:::/Kernel/KernelB.HH,34"$
 $LK,"ICF_RES_NOT_USED",A="FL:::/Kernel/KernelA.HH,1611"$
 $LK,"DOCEt_SEL",A="FL:::/Kernel/KernelA.HH,960"$
 $LK,"ArcDetermineCompressionType",A="FL:::/Kernel/Compress.HC,102",BI=184$
@@ -1498,7 +1496,6 @@ $LK,"FirstDayOfMon",A="FL:::/Kernel/KDate.HC,71",BI=317$
 $LK,"counts",A="FL:::/Kernel/KGlobals.HC,21"$
 $LK,"PutChars",A="FL:::/Kernel/KeyDev.HC,20",BI=318$
 $LK,"ZenithErr",A="FL:::/Kernel/Job.HC,433",BI=319$
-$LK,"_BEQU",A="FL:::/Kernel/KUtils.HC,89"$
 $LK,"DOCEf_RAW_TYPE",A="FL:::/Kernel/KernelA.HH,1069"$
 $LK,"DOCEF_RAW_TYPE",A="FL:::/Kernel/KernelA.HH,981"$
 $LK,"DriveFATBlkClean",A="FL:::/Kernel/BlkDev/DiskDrive.HC,99",BI=320$
@@ -1545,6 +1542,7 @@ $LK,"VM_VIRTUALBOX",A="FL:::/Kernel/KernelA.HH,3893"$
 $LK,"SCF_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3486"$
 $LK,"CCompCtrl",A="FL:::/Kernel/KernelA.HH,2179"$
 $LK,"TASK_CONTEXT_SAVE",A="FL:::/Kernel/Sched.HC,56"$
+$LK,"LBEqual",A="FL:::/Kernel/KernelB.HH,34"$
 $LK,"SCf_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3471"$
 $LK,"CDirContext",A="FL:::/Kernel/KernelA.HH,2747"$
 $LK,"BootDVDProbeAll",A="FL:::/Kernel/BlkDev/DiskATAId.HC,29",BI=331$
@@ -2233,6 +2231,7 @@ $LK,"SCf_NO_SHIFT",A="FL:::/Kernel/KernelA.HH,3476"$
 $LK,"ARGT_MOFFS32",A="FL:::/Kernel/KernelA.HH,1926"$
 $LK,"ARGT_MOFFS16",A="FL:::/Kernel/KernelA.HH,1925"$
 $LK,"WIG_TASK_DEFAULT",A="FL:::/Kernel/KernelA.HH,1444"$
+$LK,"BEqual",A="FL:::/Kernel/KernelB.HH,28"$
 $LK,"PRTF_LEFT_JUSTIFY",A="FL:::/Kernel/KernelA.HH,3870"$
 $LK,"FUF_SINGLE",A="FL:::/Kernel/KernelA.HH,2576"$
 $LK,"FUf_SINGLE",A="FL:::/Kernel/KernelA.HH,2548"$
@@ -2666,6 +2665,7 @@ $LK,"IRQ_TIMER",A="FL:::/Kernel/KInts.HC,16"$
 $LK,"DOC_COLOR_TREE",A="FL:::/Kernel/KernelA.HH,1144"$
 $LK,"DOCEf_HAS_BIN",A="FL:::/Kernel/KernelA.HH,1067"$
 $LK,"DOCEF_HAS_BIN",A="FL:::/Kernel/KernelA.HH,979"$
+$LK,"_LBEQUAL",A="FL:::/Kernel/KUtils.HC,104"$
 $LK,"VGAP_CRTC_INDEX",A="FL:::/Kernel/KernelA.HH,3677"$
 $LK,"KbdMouseInit",A="FL:::/Kernel/SerialDev/Mouse.HC,348",BI=571$
 $LK,"ATTRF_SEL",A="FL:::/Kernel/KernelA.HH,896"$

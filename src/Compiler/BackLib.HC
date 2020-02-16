@@ -655,7 +655,7 @@ move_redundant:
   }
   if (tmpi->ic_count>last_start>tmpi->ic_last_start)
     tmpi->ic_last_start=last_start;
-  BEqu(&tmpi->ic_flags,ICf_LOCK,old_lock);
+  BEqual(&tmpi->ic_flags,ICf_LOCK,old_lock);
 }
 
 U0 ICLea(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,

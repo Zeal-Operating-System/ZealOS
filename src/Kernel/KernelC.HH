@@ -474,8 +474,8 @@ public extern I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL);
 public extern I64 PopUpPrint(U8 *format,...);
 
 #help_index "Job/Exe;Task/Job/Exe;MultiCore"
-public extern I64 JobResGet(CJob *rqst=NULL);
-public extern Bool JobResScan(CJob *rqst=NULL,I64 *_res=NULL);
+public extern I64 JobResGet(CJob *request=NULL);
+public extern Bool JobResScan(CJob *request=NULL,I64 *_res=NULL);
 
 #help_index "Job/Text & Messages;Task/Job/Text & Messages"
 public extern CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags);

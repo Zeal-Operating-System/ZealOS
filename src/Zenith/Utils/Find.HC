@@ -167,7 +167,7 @@ before or after "dd" are label characters.
   if (fuf_flags&~(FUG_FILES_FIND|FUF_IGNORE|FUF_ALL|
 	FUF_WHOLE_LABELS|FUF_WHOLE_LABELS_BEFORE|FUF_WHOLE_LABELS_AFTER))
     throw('FUF');
-  LBEqu(&fuf_flags,FUf_REPLACE,replace_text);
+  LBEqual(&fuf_flags,FUf_REPLACE,replace_text);
   tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND);
   fuf_flags&=FUF_ALL|FUF_REPLACE|FUF_IGNORE|FUF_WHOLE_LABELS|
 	FUF_WHOLE_LABELS_BEFORE|FUF_WHOLE_LABELS_AFTER;

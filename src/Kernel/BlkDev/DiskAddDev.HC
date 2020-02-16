@@ -171,7 +171,7 @@ Bool DriveEnable(U8 drv_let,Bool val)
 {//Can unmount or remount, but not mount the first time.
   CDrive *drive;
   if (drive=Letter2Drive(drv_let,FALSE))
-    return !LBEqu(&drive->fs_type,FStf_DISABLE,!val);
+    return !LBEqual(&drive->fs_type,FStf_DISABLE,!val);
   else
     return FALSE;
 }

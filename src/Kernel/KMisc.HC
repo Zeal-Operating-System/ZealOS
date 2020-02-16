@@ -149,7 +149,7 @@ U0 SleepUntil(I64 wake_jiffy)
   Bool old_idle=LBts(&Fs->task_flags,TASKf_IDLE);
   Fs->wake_jiffy=wake_jiffy;
   Yield;
-  LBEqu(&Fs->task_flags,TASKf_IDLE,old_idle);
+  LBEqual(&Fs->task_flags,TASKf_IDLE,old_idle);
 }
 
 U0 Sleep(I64 mS)
@@ -269,7 +269,7 @@ Bool IsMute()
 
 Bool Silent(Bool val=ON)
 {//Turn-off StdOut console text. (Not sound.)
-  return LBEqu(&Fs->display_flags,DISPLAYf_SILENT,val);
+  return LBEqual(&Fs->display_flags,DISPLAYf_SILENT,val);
 }
 
 Bool IsSilent()
@@ -279,7 +279,7 @@ Bool IsSilent()
 
 Bool SysDebug(Bool val)
 {//Set SysDebug bit you can use while debugging.
-  return LBEqu(&sys_semas[SEMA_DEBUG],0,val);
+  return LBEqual(&sys_semas[SEMA_DEBUG],0,val);
 }
 
 Bool IsSysDebug()
@@ -291,7 +291,7 @@ Bool Raw(Bool val)
 {//Set to direct scrn, BLACK & WHITE, non-windowed output mode.
   if (!val)
     VGAFlush;
-  return !LBEqu(&Fs->display_flags,DISPLAYf_NOT_RAW,!val);
+  return !LBEqual(&Fs->display_flags,DISPLAYf_NOT_RAW,!val);
 }
 
 Bool IsRaw()
@@ -301,7 +301,7 @@ Bool IsRaw()
 
 Bool SingleUser(Bool val)
 {//Set single-user mode.
-  return LBEqu(&sys_semas[SEMA_SINGLE_USER],0,val);
+  return LBEqual(&sys_semas[SEMA_SINGLE_USER],0,val);
 }
 
 Bool IsSingleUser()
@@ -311,7 +311,7 @@ Bool IsSingleUser()
 
 Bool DebugMode(Bool val)
 {//Set debug-mode.
-  return LBEqu(&sys_semas[SEMA_DBG_MODE],0,val);
+  return LBEqual(&sys_semas[SEMA_DBG_MODE],0,val);
 }
 
 Bool IsDebugMode()

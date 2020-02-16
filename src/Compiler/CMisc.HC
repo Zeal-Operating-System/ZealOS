@@ -1,6 +1,6 @@
 Bool Option(I64 num,Bool val)
 {//Set compiler $LK,"Option",A="FI:::/Doc/Options.DD"$ to val.
-  return BEqu(&Fs->last_cc->opts,num,val);
+  return BEqual(&Fs->last_cc->opts,num,val);
 }
 
 Bool GetOption(I64 num)

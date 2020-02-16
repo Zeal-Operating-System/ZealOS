@@ -216,7 +216,7 @@ I64 ATAReadNativeMax(CBlkDev *bd,F64 timeout)
     if (ATAGetDevId(bd,timeout,TRUE)==BDT_NULL)
       okay=FALSE;
     else
-      BEqu(&bd->flags,BDf_EXT_SIZE,Bt(&bd->dev_id_record[86],10));
+      BEqual(&bd->flags,BDf_EXT_SIZE,Bt(&bd->dev_id_record[86],10));
   }
   if (okay) {
     if (bd->flags & BDF_EXT_SIZE && bd->base1) {

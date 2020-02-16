@@ -116,7 +116,7 @@ Bool UnitMove(Unit *tmpu,I64 x,I64 y)
 	tmpu->row=r;
 	tmpu->col=c;
 	VisRecalc(VR_UPDATE_FRIENDLY_UNIT,tmpu);
-	LBEqu(&tmpu->vis[enemy_player],0,
+	LBEqual(&tmpu->vis[enemy_player],0,
 	      VisRecalc(VR_ONE_ENEMY_UNIT,tmpu));
       } else
 	break;

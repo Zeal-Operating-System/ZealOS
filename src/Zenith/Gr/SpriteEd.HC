@@ -563,7 +563,7 @@ I64 SpriteQueueSelAll(CSprite *head,Bool val=TRUE)
   I64 res=0;
   CSprite *tmpg=head->next;
   while (tmpg!=head) {
-    BEqu(&tmpg->type,SPf_SEL,val);
+    BEqual(&tmpg->type,SPf_SEL,val);
     res++;
     tmpg=tmpg->next;
   }

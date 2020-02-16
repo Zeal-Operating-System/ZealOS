@@ -324,7 +324,7 @@ dm_restart:
       Fs->catch_except=TRUE;
     }
   }
-  LBEqu(&Fs->task_flags,TASKf_BREAK_TO_SHIFT_ESC,old_break_shift_esc);
+  LBEqual(&Fs->task_flags,TASKf_BREAK_TO_SHIFT_ESC,old_break_shift_esc);
   Fs->border_src=old_border_src;
   Fs->task_end_cb=old_end_cb;
   return res;

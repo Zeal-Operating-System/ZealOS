@@ -35,8 +35,8 @@ U0 MouseUpdate(I64 x,I64 y,I64 z,Bool l,Bool r)
   }
   mouse.lb=l;
   mouse.rb=r;
-  LBEqu(&kbd.scan_code,SCf_MS_L_DOWN,mouse.lb);
-  LBEqu(&kbd.scan_code,SCf_MS_R_DOWN,mouse.rb);
+  LBEqual(&kbd.scan_code,SCf_MS_L_DOWN,mouse.lb);
+  LBEqual(&kbd.scan_code,SCf_MS_R_DOWN,mouse.rb);
 }
 
 U0 MouseSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,I64 l=I64_MAX,I64 r=I64_MAX)

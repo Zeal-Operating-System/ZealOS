@@ -522,7 +522,7 @@ U0 SquadronActions()
 	ObjLaunch(tmps->player,i,tmps->host,,,tmps->é);
 	tmpo=tmps->next_in_squadron;
 	while (tmpo!=tmps) {
-	  LBEqu(&completed_mask,tmpo->member_num,tmpo->flags&OF_ACTIVE);
+	  LBEqual(&completed_mask,tmpo->member_num,tmpo->flags&OF_ACTIVE);
 	  tmpo=tmpo->next_in_squadron;
 	}
 	if (completed_mask|tmps->dead_mask==tmps->total_mask)
@@ -531,7 +531,7 @@ U0 SquadronActions()
       case SA_FLYING:
 	tmpo=tmps->next_in_squadron;
 	while (tmpo!=tmps) {
-	  LBEqu(&completed_mask,tmpo->member_num,!(tmpo->flags&OF_ACTIVE));
+	  LBEqual(&completed_mask,tmpo->member_num,!(tmpo->flags&OF_ACTIVE));
 	  tmpo=tmpo->next_in_squadron;
 	}
 	if (completed_mask|tmps->dead_mask==tmps->total_mask)
@@ -549,7 +549,7 @@ U0 SquadronActions()
 	tmpo=tmps->next_in_squadron;
 	while (tmpo!=tmps) {
 	  tmpo->flags|=OF_RETURNING;
-	  LBEqu(&completed_mask,tmpo->member_num,!(tmpo->flags&OF_ACTIVE));
+	  LBEqual(&completed_mask,tmpo->member_num,!(tmpo->flags&OF_ACTIVE));
 	  tmpo=tmpo->next_in_squadron;
 	}
 	if (completed_mask|tmps->dead_mask==tmps->total_mask)

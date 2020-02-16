@@ -107,7 +107,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
     if (name) //if not fun_ptr
       HashAdd(tmpf,cc->htc.glbl_hash_table);
   }
-  BEqu(&tmpf->type,HTf_PUBLIC,fsp_flags&FSF_PUBLIC);
+  BEqual(&tmpf->type,HTf_PUBLIC,fsp_flags&FSF_PUBLIC);
   tmpf->return_class=tmp_return;
   tmpf->use_count=0;
   HashSrcFileSet(cc,tmpf);

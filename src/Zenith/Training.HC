@@ -153,7 +153,7 @@ public U0 KeyMap(CTask *task=NULL)
   KeyMapFamily(task,SCF_CTRL,TRUE,TRUE);
   KeyMapFamily(task,SCF_ALT,TRUE,TRUE);
   KeyMapCtrlAltFamily(TRUE,TRUE);
-  LBEqu(&task->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
+  LBEqual(&task->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
   "\nKeyMap Completed.\n";
 }
 

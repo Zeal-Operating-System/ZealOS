@@ -8,13 +8,13 @@ I64 ParseDocFlagSingle(CCompCtrl *cc,I64 *_de_flags,U32 *_type,Bool turn_on)
 	(tmph=HashFind(cc->cur_str,doldoc.hash,DHT_DOC_FLAG))) {
     res=tmph->user_data0;
     if (res<64) {
-      BEqu(_de_flags,res,turn_on);
+      BEqual(_de_flags,res,turn_on);
       switch (res) {
 	case DOCEf_BLINK:
 	case DOCEf_INVERT:
 	case DOCEf_UNDERLINE:
 	case DOCEf_SEL:
-	  BEqu(_type,res,turn_on);
+	  BEqual(_type,res,turn_on);
 	  break;
       }
     }
@@ -573,7 +573,7 @@ U0 DocEntryToggle(CDoc *doc)
     } else {
       old_color_names=LBts(&doc->flags,DOCf_COLOR_NAMES);
       st=Doc2PlainText(doc,doc_ce);
-      LBEqu(&doc->flags,DOCf_COLOR_NAMES,old_color_names);
+      LBEqual(&doc->flags,DOCf_COLOR_NAMES,old_color_names);
       DocEntryDel(doc,doc_ce);
       DocPrint(doc,"$$$$%$$Q$$$$",st);
     }

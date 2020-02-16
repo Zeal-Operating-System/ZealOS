@@ -102,7 +102,7 @@ U0 SpriteSelAll(U8 *elems,Bool val)
 {
   CSprite *tmpg=elems-offset(CSprite.start);
   while (tmpg->type&SPG_TYPE_MASK) {
-    BEqu(&tmpg->type,SPf_SEL,val);
+    BEqual(&tmpg->type,SPf_SEL,val);
     tmpg(U8 *)+=SpriteElemSize(tmpg);
   }
 }

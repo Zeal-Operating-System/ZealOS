@@ -6,7 +6,7 @@ public Bool DocLock(CDoc *doc)
     while (LBts(&doc->locked_flags,DOClf_LOCKED))
       Yield;
     if (doc->owning_task!=Fs)
-      LBEqu(&doc->flags,DOCf_BREAK_UNLOCKED,BreakLock(Fs));
+      LBEqual(&doc->flags,DOCf_BREAK_UNLOCKED,BreakLock(Fs));
     doc->owning_task=Fs;
     return TRUE;
   } else

@@ -12,7 +12,7 @@ CSprite *SpriteSideBar2SpriteQueue(CDoc *doc,CSprite *head,I64 *_cur_elem_num)
       tmpg=SpriteSetSettings(,head,doc_e->left_exp);
       if (tmpg!=head) {
 	tmpg=MAllocIdent(tmpg);
-	BEqu(&tmpg->type,SPf_SEL,Bt(&doc_e->type,DOCEt_SEL));
+	BEqual(&tmpg->type,SPf_SEL,Bt(&doc_e->type,DOCEt_SEL));
 	if (*_cur_elem_num==doc_e->left_exp) {
 	  *_cur_elem_num=num;
 	  found=TRUE;
@@ -47,8 +47,8 @@ U0 SpriteSideBarPickNew(CDoc *doc,CSprite *head,I64 old_num)
 	    DocPrint(doc,"$$LTRED$$$$MU-UL,\"%$$Q\",LE=%d$$\n",st,cur_elem_num++);
     else
       doc_e=DocPrint(doc,"$$LTBLUE$$$$MU-UL,\"%$$Q\",LE=%d$$\n",st,cur_elem_num++);
-    BEqu(&doc_e->de_flags,DOCEf_SEL,Bt(&tmpg->type,&SPf_SEL));
-    BEqu(&doc_e->type,DOCEt_SEL,Bt(&tmpg->type,SPf_SEL));
+    BEqual(&doc_e->de_flags,DOCEf_SEL,Bt(&tmpg->type,&SPf_SEL));
+    BEqual(&doc_e->type,DOCEt_SEL,Bt(&tmpg->type,SPf_SEL));
     Free(st);
     tmpg=tmpg->next;
   }

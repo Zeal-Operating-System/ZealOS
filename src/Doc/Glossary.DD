@@ -197,7 +197,7 @@ $FG,2$Q$FG$-$FG,2$S$FG$ are ISO file write drives.
 $FG,2$T$FG$-$FG,2$Z$FG$ are ATAPI CD/DVD drives.
 
 For commands taking a drive letter as an argument, char $FG,2$0$FG$ is the current drive.
-$ID,-2$$LK,"Bt, Bts, Btr, Btc, BEqu",A="HI:Bit"$
+$ID,-2$$LK,"Bt, Bts, Btr, Btc, BEqual",A="HI:Bit"$
 $LK,"Define",A="HI:Define"$
 $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$
 $LK,"Editor Link Types",A="MN:LK_FILE"$

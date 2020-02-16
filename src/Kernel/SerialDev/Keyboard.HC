@@ -52,9 +52,9 @@ U0 KbdCmdFlush()
 U0 KbdLEDsSet(I64 sc)
 {
   U8 v=0;
-  BEqu(&v,0,Bt(&sc,SCf_SCROLL));
-  BEqu(&v,1,Bt(&sc,SCf_NUM));
-  BEqu(&v,2,Bt(&sc,SCf_CAPS));
+  BEqual(&v,0,Bt(&sc,SCf_SCROLL));
+  BEqual(&v,1,Bt(&sc,SCf_NUM));
+  BEqual(&v,2,Bt(&sc,SCf_CAPS));
   try {
     KbdCmdSend(KBD_PORT,0xED);
     KbdCmdSend(KBD_PORT,v);
@@ -308,8 +308,8 @@ U0 KbdBuildSC(U8 raw_byte,Bool in_irq,U8 *_last_raw_byte,I64 *_last_sc)
     return;
   }
   sc=raw_byte;
-  BEqu(&sc,SCf_E0_PREFIX,*_last_raw_byte==0xE0);
-  BEqu(&sc,SCf_KEY_UP,raw_byte & 0x80);
+  BEqual(&sc,SCf_E0_PREFIX,*_last_raw_byte==0xE0);
+  BEqual(&sc,SCf_KEY_UP,raw_byte & 0x80);
   *_last_raw_byte=raw_byte;
 
   sc_flags=_last_sc->u32[0]&~0x1FF;

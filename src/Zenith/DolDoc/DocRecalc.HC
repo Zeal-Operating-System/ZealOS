@@ -1293,7 +1293,7 @@ rc_skip:
 	  vss->pos=doc->top_line_num;
 	}
       }
-      LBEqu(&doc->flags,DOCf_MORE,more);
+      LBEqual(&doc->flags,DOCf_MORE,more);
     }
   }
   if (!same_win) {

@@ -63,7 +63,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 		    KeyDescSet("Edit/GoTo Doc End");
 		} else {
 		  while (doc_ce!=doc) {
-		    BEqu(&doc_ce->type,DOCEt_SEL,sc&SCF_SHIFT);
+		    BEqual(&doc_ce->type,DOCEt_SEL,sc&SCF_SHIFT);
 		    doc_ce=doc->cur_entry=doc_ce->next;
 		  }
 		  doc->cur_col=doc_ce->min_col;
@@ -94,7 +94,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 		} else {
 		  if (doc_ce==doc) doc_ce=doc_ce->last;
 		  while (doc_ce!=doc) {
-		    BEqu(&doc_ce->type,DOCEt_SEL,sc&SCF_SHIFT);
+		    BEqual(&doc_ce->type,DOCEt_SEL,sc&SCF_SHIFT);
 		    doc_ce=doc->cur_entry=doc_ce->last;
 		  }
 		  doc_ce=doc->cur_entry=doc->head.next;
