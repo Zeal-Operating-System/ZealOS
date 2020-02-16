@@ -1,10 +1,10 @@
 U0 SysGlobalsInit()
 {
   I64 i,j;
-  CRAXRBCRCXRDX ee;
+  CRAXRBCRCXRDX regs;
 
-  CPUId(0x1,&ee);
-  sys_cache_line_width=ee.rbx.u8[1]*8;
+  CPUId(0x1,&regs);
+  sys_cache_line_width=regs.rbx.u8[1]*8;
 
   sys_focus_task=Fs;
   QueueInit(&sys_macro_head);
@@ -58,22 +58,35 @@ U0 SysGlobalsInit()
   QueueInit(&dev.pci_head);
   dev.mem64_ptr=mem_mapped_space;
 
+  Seg2Linear(SYS_FONT_PTR);
+
   debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
   debug.int_fault_code=IntFaultHandlersNew;
 }
 
 U0 SysGrInit()
 {
-  text.font=sys_font_std;
-  text.aux_font=sys_font_cyrillic;
+  I64 i, j;
+  text.font = MAlloc(256 * 8); //256 U64s
+  MemCopy(text.font, *SYS_FONT_PTR(U32), 256 * 8);
+
+  for (i = 0; i < 256; i++)
+    for (j = 0; j < 8; j++)
+      text.font[i].u8[j] = rev_bits_table[text.font[i].u8[j]];
+
+  text.aux_font=sys_font_std;
+  text.font['' - 1] = text.aux_font['' - 1]; //Shift-space
+  text.font[10] = text.aux_font[10]; //"Return" symbol
+  text.font[255] = text.aux_font[255]; //auxillary block character
+
+  text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
+  text.border_chars[10](U32)='ÀÈÙ¼';
   text.vga_alias	=dev.uncached_alias+VGAM_GRAPHICS;
   text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
   if (!Bt(&sys_run_level,RLf_VGA)) { //if text mode
     text.cols=80;
     text.rows=25;
     MemSet(text.vga_text_alias,0,text.rows*text.cols<<1);
-    text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
-    text.border_chars[10](U32)='ÀÈÙ¼';
   } else { //if 640x480 16 color
     text.cols=GR_WIDTH/FONT_WIDTH;
     text.rows=GR_HEIGHT/FONT_HEIGHT;
@@ -81,8 +94,6 @@ U0 SysGrInit()
     OutU8(VGAP_DATA,0x0F);
     MemSet(text.vga_alias,0,GR_WIDTH*GR_HEIGHT>>3);
     text.raw_screen_image=CAlloc(GR_WIDTH*GR_HEIGHT/8);
-    text.border_chars[2] (I64)=0x0908070605040302;
-    text.border_chars[10](U32)=0x0D0C0B0A;
   }
 }
 

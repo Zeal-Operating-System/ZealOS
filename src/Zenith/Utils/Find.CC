@@ -258,7 +258,7 @@ I64 FindWiz()
 
 public I64 FR(U8 *text_to_replace, U8 *new_text, U8 *files_find_mask="/*",
 		U8 *fu_flags=NONE, I64 sff_flags=NONE)
-{//Files rebane, Rename files matching mask.
+{//Files rename, Rename files matching mask.
  //Example: FR("Disk", "Disk");
  //FR("Gr", "Graphics", "/Zenith/Gr/*");
   CDirEntry *files, *files_head;
@@ -294,7 +294,7 @@ fr_all:
       switch(i)
       {
 	case FND_ALL:
-	  all_flag = TRUE;
+	  all_flag = TRUE;
 	  goto fr_all;
 
 	case FND_REPLACE:

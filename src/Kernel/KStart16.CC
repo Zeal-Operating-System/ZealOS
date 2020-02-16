@@ -51,6 +51,7 @@ GDT_TR_RING3:	DU8	MP_PROCESSORS_NUM*16 DUP(0);
 
 #assert $$-SYS_KERNEL==sizeof(CKernel)-sizeof(CBinFile)
 
+SYS_FONT_PTR::	DU32	0;
 //************************************
 CORE0_16BIT_INIT::
 //EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
@@ -76,6 +77,15 @@ GET_RIP:	POP	BX
 	MOV	DS,AX
 
 	MOV	U32 [SYS_RUN_LEVEL],RLF_16BIT
+
+//Get pointer to 8x8 VGA ROM font.
+	MOV	AX, 0x1130
+	MOV	BH, 3
+	INT	0x10
+	MOV	AX, ES
+	SHL	EAX, 16
+	MOV	AX, BP
+	MOV	U32 [SYS_FONT_PTR], EAX
 
 	MOV	AX,0x4F02
 	MOV	BX,0x12		//640x480 16 color

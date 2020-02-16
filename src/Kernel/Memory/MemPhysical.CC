@@ -179,3 +179,9 @@ I64 Scale2Mem(I64 min,I64 max,I64 limit=2*1024*1024*1024)
   else
     return min+(max-min)*i/limit;
 }
+
+I64 Seg2Linear(U32 *ptr)
+{//Convert 32-bit segmented farptr to linear address. Modify in place.
+  *ptr = *ptr >> 16 << 4 + *ptr & 0xFFFF;
+  return *ptr;
+}
