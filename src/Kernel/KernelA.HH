@@ -3456,8 +3456,8 @@ public class CSysFixedArea
 #define CH_SHIFT_SPACE	0x1F
 #define CH_SPACE	0x20
 
-#define ST_ERR_ST   "$$LTRED$$$$BK,1$$ERROR:$$FG$$$$BK,0$$ "
-#define ST_WARN_ST  "$$RED$$$$BK,1$$WARNING:$$FG$$$$BK,0$$ "
+#define ST_ERR_ST   "$$RED$$$$BK,1$$ERROR:$$FG$$$$BK,0$$ "
+#define ST_WARN_ST  "$$LTRED$$$$BK,1$$WARNING:$$FG$$$$BK,0$$ "
 
 //Scan code flags
 #define SCf_E0_PREFIX	7

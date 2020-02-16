@@ -29,4 +29,8 @@ public U0 Cls()
 {//Clear terminal. Reminiscent of DOS command of same name.
   DocClear;
 }
-
+
+public U0 ZCls()
+{//Clear zenith terminal.
+  Zenith("DocClear;\n");
+}
