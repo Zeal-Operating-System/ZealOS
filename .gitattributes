@@ -1,0 +1,4 @@
+*.CC linguist-language=HolyC
+*.HH linguist-language=HolyC
+*.PRJ linguist-language=HolyC
+*.IN linguist-language=HolyC
