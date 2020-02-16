@@ -55,7 +55,7 @@ IRQ_TIMER::  //I_TIMER
 @@20:	CALL	&IntCore0TimerHandler	//Only Core 0 calls this.
 @@25:	XOR	RAX,RAX
 	CMP	RSI,U64 GS:CCPU.idle_task[RAX]
-	JE	I32 RESTORE_SETH_TASK_IF_READY
+	JE	I32 RESTORE_DAEMON_TASK_IF_READY
 	JMP	I32 RESTORE_RSI_TASK
 //************************************
 INT_FAULT::
@@ -144,7 +144,7 @@ interrupt U0 IntNop()
 {//Make unplanned IRQs stop by all means!
   OutU8(PIC2,PIC_EOI);
   OutU8(PIC1,PIC_EOI);
-  *(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
+  *(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
 }
 
 interrupt U0 IntDivZero()

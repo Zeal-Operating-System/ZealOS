@@ -330,7 +330,7 @@ U0 MPMenDraw(CDC *dc2)
   dc->depth_buf=NULL;
   DCDel(dc);
   LBtr(&mp_not_done_flags,Gs->num);
-  Seed; //Return Seth task to timer-based.
+  Seed; //Return Daemon task to timer-based.
 }
 
 U0 MissilePos(I64 m,F64 é,I64 *_x,I64 *_y)

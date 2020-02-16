@@ -625,7 +625,7 @@ extern U0 MouseUpdate(I64 x,I64 y,I64 z,Bool l,Bool r);
 
 #help_index "MultiCore"
 extern U0 Core0StartMP();
-extern U0 CoreAPSethTask();
+extern U0 CoreAPDaemonTask();
 public extern U0 MPInt(U8 num,I64 cpu_num=1);
 public extern U0 MPIntAll(U8 num);
 public extern U0 MPNMInt();

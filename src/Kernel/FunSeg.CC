@@ -66,7 +66,7 @@ CHash *FunSegFind(U8 *addr,I64 *_offset)
   if (IsDebugMode)
     for (i=0;i<mp_count;i++) {
       c=&cpu_structs[i];
-      task=c->seth_task;
+      task=c->daemon_task;
       do {
 	if (!TaskValidate(task)) goto fs_abort_task;
 	h=task->hash_table;
@@ -75,7 +75,7 @@ CHash *FunSegFind(U8 *addr,I64 *_offset)
 	  h=h->next;
 	}
 	task=task->next_task;
-      } while (task!=c->seth_task);
+      } while (task!=c->daemon_task);
 fs_abort_task:
     }
   else {

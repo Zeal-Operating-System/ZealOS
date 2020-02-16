@@ -74,7 +74,7 @@ U0 GrUpdateTasks()
     } while (task!=task1);
 
     for (i=0;i<mp_count;i++) { //Loop through all cores.
-      task1=task=cpu_structs[i].seth_task;
+      task1=task=cpu_structs[i].daemon_task;
       do {
 	if (!TaskValidate(task)) break;
 	GrUpdateTaskODEs(task);

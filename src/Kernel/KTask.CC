@@ -60,7 +60,7 @@ Bool Kill(CTask *task,Bool wait=TRUE,Bool just_break=FALSE)
     } else {
       if (task!=sys_winmgr_task) {
 	for (i=0;i<mp_count;i++)
-	  if (task==cpu_structs[i].seth_task)
+	  if (task==cpu_structs[i].daemon_task)
 	    return FALSE;
 	LBts(&task->task_flags,TASKf_KILL_TASK);
 	if (wait) {
@@ -254,7 +254,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   task=CAlloc(sizeof(CTask),zenith_task->code_heap);
   task->task_signature=TASK_SIGNATURE_VAL;
   if (!task_name) task_name="Unnamed Task";
-  if (!parent) parent=Gs->seth_task;
+  if (!parent) parent=Gs->daemon_task;
   task->parent_task=parent;
   task->gs=parent->gs;
   if (sys_code_bp)
