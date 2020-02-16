@@ -48,7 +48,7 @@ Changes include:
     - Fwd -> Forward
     - Glbls -> Globals
     - Hndlr -> Handler
-    - KInts -> KInterrupts
+    - Ints -> Interrupts
     - Lst -> List
     - Ms -> Mouse
     - Msg -> Message

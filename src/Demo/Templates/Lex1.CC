@@ -14,3 +14,4 @@ U0 MyRead(U8 *filename)
   }
   CompCtrlDel(cc);
 }
+
