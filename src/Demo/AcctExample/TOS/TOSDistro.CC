@@ -56,7 +56,7 @@ public U0 TOSPromptAndCopyDrive()
 
 U0 DistroPrep()
 {
-  AOnceFlush; //Don't want in Registry
+  ZOnceFlush; //Don't want in Registry
   OnceFlush;
 
   Del("/Home/Demo*");

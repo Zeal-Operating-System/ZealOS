@@ -122,8 +122,8 @@ U0 RegInit()
 #help_index "Boot/Once;Registry/Once"
 #help_file "::/Doc/Once"
 
-public U0 AOnceFlush()
-{//Flush AOnce() buf.
+public U0 ZOnceFlush()
+{//Flush ZOnce() buf.
   RegWrite("Once/Zenith","");
 }
 
@@ -132,11 +132,11 @@ public U0 OnceFlush()
   RegWrite("Once/User","");
 }
 
-public U0 AOnce(U8 *format,...)
+public U0 ZOnce(U8 *format,...)
 {//Add Zenith code to $LK,"~/Registry.CC"$, executed next boot.
   U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   if (!Bt(&sys_run_level,RLf_ONCE_ZENITH))
-    AOnceFlush;
+    ZOnceFlush;
   RegAppend("Once/Zenith","%s\n",buf);
   Free(buf);
 }
@@ -150,14 +150,14 @@ public U0 Once(U8 *format,...)
   Free(buf);
 }
 
-public U0 AOnceDrive(U8 drv_let=0,U8 *format,...)
+public U0 ZOnceDrive(U8 drv_let=0,U8 *format,...)
 {//Add Zenith code to drv $LK,"~/Registry.CC"$, executed next boot.
   U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   I64 old_drive_let=*sys_registry_doc->filename.name;
   if (drv_let)
     *sys_registry_doc->filename.name=drv_let;
   if (!Bt(&sys_run_level,RLf_ONCE_ZENITH))
-    AOnceFlush;
+    ZOnceFlush;
   RegAppend("Once/Zenith","%s\n",buf);
   Free(buf);
   *sys_registry_doc->filename.name=old_drive_let;
@@ -183,7 +183,7 @@ public U0 OnceExe()
     RegDefault("Once/Zenith","");
     if (RegCount("Once/Zenith")>2) {
       Zenith("RegExe(\"Once/Zenith\");");
-      AOnceFlush;
+      ZOnceFlush;
     }
     LBts(&sys_run_level,RLf_ONCE_ZENITH);
 
@@ -195,7 +195,7 @@ public U0 OnceExe()
     LBts(&sys_run_level,RLf_ONCE_USER);
 
   } catch {
-    AOnceFlush;
+    ZOnceFlush;
     LBts(&sys_run_level,RLf_ONCE_ZENITH);
     OnceFlush;
     LBts(&sys_run_level,RLf_ONCE_USER);
