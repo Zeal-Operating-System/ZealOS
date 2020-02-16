@@ -255,14 +255,14 @@ public U0 Uf(U8 *st)
 {//Unassembles a named fun
   I64 i;
   CHashSrcSym *tmpf;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   if (tmpf=HashFind(st,Fs->hash_table,HTT_FUN|HTT_EXPORT_SYS_SYM)) {
     if (tmpf->type&HTT_FUN)
       FunRep(st);
-    if (dbg_info=tmpf->dbg_info) {
-      i=dbg_info->body[dbg_info->max_line+1-dbg_info->min_line]
-	    -dbg_info->body[0];
-      Un(dbg_info->body[0],i);
+    if (debug_info=tmpf->debug_info) {
+      i=debug_info->body[debug_info->max_line+1-debug_info->min_line]
+	    -debug_info->body[0];
+      Un(debug_info->body[0],i);
       "Code Size:%04X\n",i;
     } else
       U(HashVal(tmpf));

@@ -1,4 +1,4 @@
-I64 OptPass789A(CCompCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_dbg)
+I64 OptPass789A(CCompCtrl *cc,COptReg *reg_offsets,U8 *buf,CDebugInfo **_debug)
 {/*cc->pass==7 is first time
 cc->pass==8 is second time
 cc->pass==9 is third time
@@ -15,7 +15,7 @@ cc->pass==10 is final pass, code is placed into buf.
   CAOTImportExport *tmpie;
   CAOTHeapGlobal *tmphg;
   CAOTHeapGlobalRef *tmphgr;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   CAOTCtrl *aotc=cc->aotc;
   Bool short_jmp;
   CHashClass *tmpc;
@@ -23,16 +23,16 @@ cc->pass==10 is final pass, code is placed into buf.
   CHashGlobalVar *tmpg;
   CExternUsage *tmpeu;
 
-  if (_dbg) {
-    *_dbg=dbg_info=CAlloc(offset(CDebugInfo.body)+sizeof(U32)*(num_lines+1));
-    dbg_info->min_line=cc->min_line;
-    dbg_info->max_line=cc->max_line;
+  if (_debug) {
+    *_debug=debug_info=CAlloc(offset(CDebugInfo.body)+sizeof(U32)*(num_lines+1));
+    debug_info->min_line=cc->min_line;
+    debug_info->max_line=cc->max_line;
     if (cc->flags&CCF_AOT_COMPILE)
-      dbg_info->body[0]=aotc->rip;
+      debug_info->body[0]=aotc->rip;
     else
-      dbg_info->body[0]=buf;
+      debug_info->body[0]=buf;
   } else
-    dbg_info=NULL;
+    debug_info=NULL;
 
   if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT) &&
 	Bt(&cc->saved_pass_trace,cc->pass))
@@ -1072,10 +1072,10 @@ cc->pass==10 is final pass, code is placed into buf.
     if (count && buf)
       MemCopy(buf+rip,tmpi->ic_body,count);
 op789A_skip_copy:
-    if (dbg_info && cc->min_line<=tmpi->ic_line<=cc->max_line) {
+    if (debug_info && cc->min_line<=tmpi->ic_line<=cc->max_line) {
       i=tmpi->ic_line-cc->min_line;
-      if (!dbg_info->body[i])
-	dbg_info->body[i]=rip2;
+      if (!debug_info->body[i])
+	debug_info->body[i]=rip2;
     }
     if (tmpi->ic_flags&ICF_PASS_TRACE &&
 	  Bt(&cc->saved_pass_trace,cc->pass) && count) {
@@ -1142,11 +1142,11 @@ op789A_next:
     }
     lb=lb->next;
   }
-  if (dbg_info) {
+  if (debug_info) {
     if (cc->flags&CCF_AOT_COMPILE)
-      dbg_info->body[num_lines]=rip+aotc->rip;
+      debug_info->body[num_lines]=rip+aotc->rip;
     else
-      dbg_info->body[num_lines]=rip+buf;
+      debug_info->body[num_lines]=rip+buf;
   }
   return rip;
 }

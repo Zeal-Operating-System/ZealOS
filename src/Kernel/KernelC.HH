@@ -173,7 +173,7 @@ public extern Bool SysDebug(Bool val);
 public extern U8 *TaskCaller(CTask *task=NULL,
 	I64 num=0,Bool saved_context=FALSE);
 public extern I64 UnusedStack(CTask *task=NULL);
-public extern CDebugGlobals dbg;
+public extern CDebugGlobals debug;
 
 #help_index "Debugging/Debugger"
 public extern Bool B(U8 *addr,CTask *task=NULL,Bool live=TRUE) //Toggle bpt.

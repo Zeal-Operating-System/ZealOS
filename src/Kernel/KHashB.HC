@@ -67,7 +67,7 @@ U0 HashDel(CHashSrcSym *tmph)
     Free(tmph->import_name);
     LinkedListDel(tmph->ie_list);
     if (tmph->type & (HTT_FUN | HTT_EXPORT_SYS_SYM))
-      Free(tmph->dbg_info);
+      Free(tmph->debug_info);
     if (tmph->type & (HTT_FUN | HTT_CLASS))
 //Assumes code not on heap, so doesn't Free.
     //$LK,"ClassMemberListDel",A="MN:ClassMemberListDel"$() is an import to the Kernel module

@@ -310,12 +310,12 @@ Bool IsSingleUser()
 }
 
 Bool DebugMode(Bool val)
-{//Set dbg-mode.
+{//Set debug-mode.
   return LBEqu(&sys_semas[SEMA_DBG_MODE],0,val);
 }
 
 Bool IsDebugMode()
-{//Return dbg-mode.
+{//Return debug-mode.
   return Bt(&sys_semas[SEMA_DBG_MODE],0);
 }
 

@@ -40,7 +40,7 @@ $FG,2$ 0x$TX,"01A0000000",D="DD_UNCACHED_ALIAS"$- 0x$TX,"029FFFFFFF",D="DD_MAPPE
 $ID,2$Uncached alias of first 4Gig.  (For 32-bit device access.)
 $ID,-2$
 $FG,2$             - 0x$TX,"029FFFFFFF",D="DD_MAPPED_SPACE_END"$$FG$
-$ID,2$64-bit devices are alloced with $LK,"Mem64DevAlloc",A="MN:Mem64DevAlloc"$() counting bwd, but no PCI devices are actually supported$WW,0$.
+$ID,2$64-bit devices are alloced with $LK,"Mem64DevAlloc",A="MN:Mem64DevAlloc"$() counting backward, but no PCI devices are actually supported$WW,0$.
 $ID,-2$
 
 

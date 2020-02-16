@@ -1,5 +1,5 @@
 //See $LK,"::/Demo/Lectures/GraphicsCPULoad.HC"$
-U8 rev[256],	//The VGA bits are bwd
+U8 rev[256],	//The VGA bits are backward
 
    image[640*480/8];	//We need read-modify write.
 			//0xA0000 alias memory can't be read.

@@ -13,7 +13,7 @@ PUT_DEC_U64::
 	PUSH	RSI	      //See $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$&$LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$
 	LEA	RSI,-1[RBP]	//Load addr of end of buffer.
 				//We picked RSI because of PUT_STR
-				//We'll move bwd
+				//We'll move backward
 	MOV	U8 [RSI],0	//Terminator
 
 	TEST	RAX,RAX		//Special case -- zero

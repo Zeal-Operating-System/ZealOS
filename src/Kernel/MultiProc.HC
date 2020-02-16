@@ -359,7 +359,7 @@ U0 Core0Init()
   mp_count_initial=mp_count=1;
   mp_count_lock=0;
 
-  dbg.mp_crash=ZCAlloc(sizeof(CMPCrash));
+  debug.mp_crash=ZCAlloc(sizeof(CMPCrash));
 
   //Must be in code heap because init code uses 32 bit addr of cpu_struct
   zenith_task->gs=cpu_structs=
@@ -384,6 +384,6 @@ interrupt U0 IntMPCrash()
   Raw(ON);
   text.raw_flags|=RWF_SHOW_DOLLAR;
   "MP Crash CPU%02X Task:%08X\n"
-  "RIP:%P\n",dbg.mp_crash->cpu_num,dbg.mp_crash->task,dbg.mp_crash->rip;
-  Panic(dbg.mp_crash->message,dbg.mp_crash->message_num);
+  "RIP:%P\n",debug.mp_crash->cpu_num,debug.mp_crash->task,debug.mp_crash->rip;
+  Panic(debug.mp_crash->message,debug.mp_crash->message_num);
 }

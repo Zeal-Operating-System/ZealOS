@@ -92,16 +92,16 @@ fs_abort_task:
 U0 FunSegCacheAdd(CHash *tmps,U8 *addr)
 {
   I64 i;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   CFunSegCache *tmpfsc;
   if (tmps && tmps->type&HTT_FUN &&
-	(dbg_info=tmps(CHashFun *)->dbg_info)) {
-    lock i=dbg.fun_seg_cache_index++;
-    tmpfsc=&dbg.fun_seg_cache[i&(FUN_SEG_CACHE_SIZE-1)];
-    tmpfsc->base=dbg_info->body[0];
+	(debug_info=tmps(CHashFun *)->debug_info)) {
+    lock i=debug.fun_seg_cache_index++;
+    tmpfsc=&debug.fun_seg_cache[i&(FUN_SEG_CACHE_SIZE-1)];
+    tmpfsc->base=debug_info->body[0];
     if (addr<tmpfsc->base)
       tmpfsc->base=addr;
-    tmpfsc->limit=dbg_info->body[dbg_info->max_line+1-dbg_info->min_line];
+    tmpfsc->limit=debug_info->body[debug_info->max_line+1-debug_info->min_line];
     if (addr>=tmpfsc->limit)
       tmpfsc->limit=addr+1;
     i=MinI64(StrLen(tmps->str),FUN_SEG_CACHE_STR_LEN-1);
@@ -115,7 +115,7 @@ U8 *FunSegCacheFind(U8 *addr,I64 *_offset)
 {
   I64 i;
   F64 timeout;
-  CFunSegCache *tmpfsc=dbg.fun_seg_cache;
+  CFunSegCache *tmpfsc=debug.fun_seg_cache;
   if (addr==SYS_IDLE_PT) {
     *_offset=0;
     return "SYS_IDLE_PT";
@@ -207,14 +207,14 @@ I64 SrcLineNum(U8 *addr,I64 count=1)
 {//linenum for src of addr.
   CHashSrcSym *tmph;
   I64 cur_line,first_line,last_line,num_lines,offset;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   U32 *body;
   U8 *src,*src2;
   if (tmph=FunSegFind(addr,&offset)) {
     if (tmph->type&(HTT_FUN|HTT_EXPORT_SYS_SYM)) {
-      if (dbg_info=tmph->dbg_info) {
-	num_lines=dbg_info->max_line-dbg_info->min_line+1;
-	body=dbg_info->body;
+      if (debug_info=tmph->debug_info) {
+	num_lines=debug_info->max_line-debug_info->min_line+1;
+	body=debug_info->body;
 
 	//find first nonzero
 	first_line=0;
@@ -242,7 +242,7 @@ I64 SrcLineNum(U8 *addr,I64 count=1)
 	  cur_line++;
 
 	if (addr<body[cur_line]+count)
-	  return cur_line+dbg_info->min_line;
+	  return cur_line+debug_info->min_line;
 
       } else if (tmph->src_link) {
 	src =StrNew(tmph->src_link);
@@ -263,13 +263,13 @@ U8 *SrcFileName(U8 *addr,I64 count=1,CTask *mem_task=NULL)
   CHashSrcSym *tmph;
   I64 i,j,ii,offset,best=NULL,d,best_d;
   U32 *body;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   U8 *src;
   if ((tmph=FunSegFind(addr,&offset)) &&
 	tmph->type&(HTT_FUN|HTT_EXPORT_SYS_SYM)) {
-    if (dbg_info=tmph->dbg_info) {
-      j=dbg_info->max_line-dbg_info->min_line+1;
-      body=dbg_info->body;
+    if (debug_info=tmph->debug_info) {
+      j=debug_info->max_line-debug_info->min_line+1;
+      body=debug_info->body;
       best_d=I64_MAX;
       for (i=0;i<j;i++) {
 	if (0<body[i]<=addr<body[i]+count) {

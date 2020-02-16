@@ -377,7 +377,7 @@ public U0 MapFileLoad(U8 *filename)
   CDocEntry *doc_e;
   CHashSrcSym *tmph;
   I64 i,j,base=0;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
 
   FileExtRemove(absname);
   if (absname[1]==':' && StrLen(absname)>2 &&
@@ -406,17 +406,17 @@ public U0 MapFileLoad(U8 *filename)
 	  doc_e->aux_str=NULL;
 	}
 	if (tmph->type&(HTT_FUN|HTT_EXPORT_SYS_SYM) &&
-	      !(dbg_info=tmph->dbg_info) && doc_e->bin_data &&
-	      (dbg_info=doc_e->bin_data->data)) {
-	  if (doc_e->bin_data->size>MSize(dbg_info))
+	      !(debug_info=tmph->debug_info) && doc_e->bin_data &&
+	      (debug_info=doc_e->bin_data->data)) {
+	  if (doc_e->bin_data->size>MSize(debug_info))
 	    "Corrupt Map Entry\n";
 	  else {
 	    doc_e->bin_data->data=NULL;
-	    tmph->dbg_info=dbg_info;
-	    for (i=dbg_info->min_line;i<=dbg_info->max_line+1;i++) {
-	      j=i-dbg_info->min_line;
-	      if (dbg_info->body[j])
-		dbg_info->body[j]=dbg_info->body[j]+base;
+	    tmph->debug_info=debug_info;
+	    for (i=debug_info->min_line;i<=debug_info->max_line+1;i++) {
+	      j=i-debug_info->min_line;
+	      if (debug_info->body[j])
+		debug_info->body[j]=debug_info->body[j]+base;
 	    }
 	  }
 	}

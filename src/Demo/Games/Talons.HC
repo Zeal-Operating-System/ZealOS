@@ -960,7 +960,7 @@ Obj *FishFind(I64 x1,I64 y1,I64 *_dd)
 #define ANIMATE_MS	10
 
 U0 AnimateTask(I64)
-{//Steadily moves the airplane fwd.
+{//Steadily moves the airplane forward.
   I64 i,*s2w,x1,y1,z1,dx,dy,dz,dd;
   F64 t0=tS,mouse,é,d;
   Obj *tmpo;

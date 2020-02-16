@@ -151,12 +151,12 @@ interrupt U0 IntDivZero()
 {
   if (Gs->num) {
     mp_count=1;
-    dbg.mp_crash->cpu_num=Gs->num;
-    dbg.mp_crash->task=Fs;
+    debug.mp_crash->cpu_num=Gs->num;
+    debug.mp_crash->task=Fs;
     MOV	RAX,U64 8[RBP] //Get RIP off of stack.
-    dbg.mp_crash->rip=GetRAX;
-    dbg.mp_crash->message="Div Zero";
-    dbg.mp_crash->message_num=0;
+    debug.mp_crash->rip=GetRAX;
+    debug.mp_crash->message="Div Zero";
+    debug.mp_crash->message_num=0;
     MPInt(I_MP_CRASH,0);
     SysHlt;
   }
@@ -199,7 +199,7 @@ U0 IntInit2()
   CLI
   IntEntrySet(I_DIV_ZERO,&IntDivZero);
   for (i=1;i<0x20;i++)
-    IntEntrySet(i,&dbg.int_fault_code[7*i]);
+    IntEntrySet(i,&debug.int_fault_code[7*i]);
 /*In theory, we use the PIC mask reg to insure we don't get
 anything but keyboard, mouse and timer IRQs.  In practice, I've
 gotten IRQ 0x27, perhaps because I didn't initialize the APIC.
@@ -210,6 +210,6 @@ I have no idea why I got a IRQ 0x27.
   IntEntrySet(I_TIMER,IRQ_TIMER);
   IntEntrySet(I_MP_CRASH,*INT_MP_CRASH_ADDR(U32 *));
   IntEntrySet(I_WAKE,INT_WAKE);
-  IntEntrySet(I_DBG,&dbg.int_fault_code[7*I_DBG]);
+  IntEntrySet(I_DBG,&debug.int_fault_code[7*I_DBG]);
   POPFD
 }

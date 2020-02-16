@@ -143,7 +143,7 @@ U0 FindNormal(U8 *bmp,Photon *tmpp)
   //Coarse grains has black and white filled-in BSplines.
   //Fine grained has only white outline without being filled-in.
 
-  //Back-up a step and move fwd to get a fined-grained value
+  //Back-up a step and move forward to get a fined-grained value
   //for the point of contact.
   D3SubEqu(&tmpp->p,&tmpp->v);
   D3Mul(&p,bmp_scale,&tmpp->p);

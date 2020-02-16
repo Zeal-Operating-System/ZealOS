@@ -21,7 +21,7 @@ class CKConfig
 {
   U8 *disk_cache_size_exp;
   CDoc *add_dev;
-  U8 *dbg_distro_file,*dbg_distro_start;
+  U8 *debug_distro_file,*debug_distro_start;
   U8 *home_dir;
   Bool opts[CONFIG_OPTIONS_NUM];
   U8 mem_init_val,heap_init_val,var_init_val,
@@ -102,7 +102,7 @@ U0 KConfigOptions(CKConfig *c)
 	    }
 	    Free(c->home_dir);
 	    c->home_dir=st2;
-	    if (StrCompare(c->home_dir,"::/Home"))
+	    if (StrCompare(c->home_dir,"::/Home"))
 	      c->opts[i]=TRUE;
 	    else
 	      c->opts[i]=FALSE;
@@ -134,12 +134,12 @@ U0 KConfigOptions(CKConfig *c)
 	    }
 	    break;
 	  case CONFIG_DBG_DISTRO:
-	    Free(c->dbg_distro_file);
-	    c->dbg_distro_file=0;
-	    c->dbg_distro_start=0;
+	    Free(c->debug_distro_file);
+	    c->debug_distro_file=0;
+	    c->debug_distro_start=0;
 	    if (state) {
-	      c->dbg_distro_file=GetStr("Debug Distro File:");
-	      c->dbg_distro_start=GetI64("Debug Distro Start:");
+	      c->debug_distro_file=GetStr("Debug Distro File:");
+	      c->debug_distro_start=GetI64("Debug Distro Start:");
 	    }
 	    break;
 	}
@@ -166,7 +166,7 @@ CKConfig *KConfigNew()
 U0 KConfigDel(CKConfig *c)
 {
   DocDel(c->add_dev);
-  Free(c->dbg_distro_file);
+  Free(c->debug_distro_file);
   Free(c->home_dir);
   Free(c->disk_cache_size_exp);
   Free(c);

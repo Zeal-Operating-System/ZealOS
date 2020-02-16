@@ -1,7 +1,7 @@
 CCodeMisc *OptLabelFwd(CCodeMisc *lb)
 {
   CCodeMisc *lb1;
-  while (lb1=lb->fwd)
+  while (lb1=lb->forward)
     lb=lb1;
   return lb;
 }

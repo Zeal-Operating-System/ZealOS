@@ -522,7 +522,7 @@ p4_sib:
 	  lb=tmpi->ic_data;
 	  if (tmpi->ic_flags&ICF_PUSH_CMP) {
 	    lb->flags|=CMF_POP_CMP;
-	    lb->fwd=NULL;
+	    lb->forward=NULL;
 	  }
 	  break;
 	case IC_LABEL:

@@ -58,8 +58,8 @@ U0 SysGlobalsInit()
   QueueInit(&dev.pci_head);
   dev.mem64_ptr=mem_mapped_space;
 
-  dbg.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
-  dbg.int_fault_code=IntFaultHandlersNew;
+  debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
+  debug.int_fault_code=IntFaultHandlersNew;
 }
 
 U0 SysGrInit()
@@ -232,7 +232,7 @@ SYS_KERNEL_END::
   if (kernel_config->opts[CONFIG_DBG_DISTRO])
     StreamPrint("DU8 0x%X-(SYS_KERNEL_END-SYS_KERNEL+"
 	"BOOT_RAM_BASE+sizeof(CBinFile)) DUP (0);"
-	"BINFILE \"%s\";",kernel_config->dbg_distro_start,
-			  kernel_config->dbg_distro_file);
+	"BINFILE \"%s\";",kernel_config->debug_distro_start,
+			  kernel_config->debug_distro_file);
 };
 }

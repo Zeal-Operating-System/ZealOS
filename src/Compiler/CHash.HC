@@ -1,6 +1,6 @@
 I64 HashEntrySize(CHashSrcSym *tmph)
 {//Logical size of a std system hash entry.
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   CBinFile *bfh;
   switch (HashTypeNum(tmph)) {
     case HTt_DEFINE_STR:
@@ -10,9 +10,9 @@ I64 HashEntrySize(CHashSrcSym *tmph)
     case HTt_INTERNAL_TYPE:
       return tmph(CHashClass *)->size;
     case HTt_FUN:
-      if (dbg_info=tmph->dbg_info)
-	return dbg_info->body[dbg_info->max_line+1-dbg_info->min_line]
-	      -dbg_info->body[0];
+      if (debug_info=tmph->debug_info)
+	return debug_info->body[debug_info->max_line+1-debug_info->min_line]
+	      -debug_info->body[0];
       else
 	return -1;
     case HTt_FILE:
@@ -32,7 +32,7 @@ I64 HashEntrySize(CHashSrcSym *tmph)
 
 I64 HashEntrySize2(CHashSrcSym *tmph)
 {//Memory size of a std system hash entry.
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   I64 res=MSize2(tmph);
   if (!(tmph->type&HTT_DICT_WORD))
     res+=MSize2(tmph->str);
@@ -42,15 +42,15 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
     res+=MSize2(tmph->import_name);
     res+=LinkedListSize(tmph->ie_list);
     if (tmph->type & (HTT_FUN | HTT_EXPORT_SYS_SYM))
-      res+=MSize2(tmph->dbg_info);
+      res+=MSize2(tmph->debug_info);
     if (tmph->type & HTT_CLASS)
       res+=MemberListSize(tmph);
     else if (tmph->type & HTT_FUN) {
       res+=MemberListSize(tmph);
-      if (dbg_info=tmph->dbg_info)
+      if (debug_info=tmph->debug_info)
 //This should be $LK,"MSize",A="MN:MSize"$() but it would crash on AOT .BIN file funs.
-	res+=dbg_info->body[dbg_info->max_line+1-dbg_info->min_line]
-	      -dbg_info->body[0];
+	res+=debug_info->body[debug_info->max_line+1-debug_info->min_line]
+	      -debug_info->body[0];
     } else if (tmph->type&HTT_DEFINE_STR)
       res+=MSize2(tmph(CHashDefineStr *)->data);
     else if (tmph->type & HTT_GLBL_VAR) {
@@ -94,7 +94,7 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
   U8 *src_link;
   CDoc *doc;
   CDocBin *tmpb;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
 
   doc=DocNew(map_name);
   doc->flags|=DOCF_NO_CURSOR;
@@ -105,26 +105,26 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
 	src_link=StrNew(tmph->src_link);
 	if (drv_let && StrLen(src_link)>=4)
 	  src_link[3]=drv_let;
-	if (dbg_info=tmph->dbg_info) {
+	if (debug_info=tmph->debug_info) {
 	  size=offset(CDebugInfo.body)+
-		sizeof(U32)*(dbg_info->max_line+2-dbg_info->min_line);
-	  if (size>MSize(dbg_info)) {
+		sizeof(U32)*(debug_info->max_line+2-debug_info->min_line);
+	  if (size>MSize(debug_info)) {
 	    "Corrupt Map Entry\n";
-	    dbg_info=NULL;
+	    debug_info=NULL;
 	  } else {
-	    if (dbg_info->min_line<=dbg_info->max_line) {
+	    if (debug_info->min_line<=debug_info->max_line) {
 	      tmpb=CAlloc(sizeof(CDocBin));
 	      tmpb->size=size;
 	      tmpb->data=MAlloc(size);
-	      MemCopy(tmpb->data,dbg_info,size);
+	      MemCopy(tmpb->data,debug_info,size);
 	      tmpb->num=doc->cur_bin_num++;
 	      tmpb->use_count=1;
 	      QueueInsert(tmpb,doc->bin_head.last);
 	    } else
-	      dbg_info=NULL;
+	      debug_info=NULL;
 	  }
 	}
-	if (dbg_info)
+	if (debug_info)
 	  DocPrint(doc,"$$LK,\"%s\",A=\"%s\",BI=%d$$\n",
 		tmph->str,src_link,tmpb->num);
 	else

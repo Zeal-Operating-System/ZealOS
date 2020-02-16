@@ -1,6 +1,6 @@
 U0 SongPuppet(CTask *task,I64 passes)
 {
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   I64 i,start,end,rip,last_rip;
   CHashFun *tmpf=NULL;
   for (i=0;i<250 && TaskValidate(task);i++) {
@@ -8,9 +8,9 @@ U0 SongPuppet(CTask *task,I64 passes)
       break;
     Sleep(1);
   }
-  if (tmpf && (dbg_info=tmpf->dbg_info)) {
-    start=dbg_info->body[0];
-    end  =dbg_info->body[dbg_info->max_line+1-dbg_info->min_line];
+  if (tmpf && (debug_info=tmpf->debug_info)) {
+    start=debug_info->body[0];
+    end  =debug_info->body[debug_info->max_line+1-debug_info->min_line];
     last_rip=0;
     while (TRUE) {
       i=0;

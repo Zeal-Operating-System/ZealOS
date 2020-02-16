@@ -304,7 +304,7 @@ U0 ParseSizeOf(CCompCtrl *cc)
 {
   CHashClass *tmpc;
   CMemberList *tmpm;
-  CDebugInfo *dbg_info;
+  CDebugInfo *debug_info;
   I64 i;
   if (cc->token!=TK_IDENT)
     LexExcept(cc,"Invalid class at ");
@@ -319,10 +319,10 @@ U0 ParseSizeOf(CCompCtrl *cc)
 	  HTT_FUN|HTT_EXPORT_SYS_SYM)))
       LexExcept(cc,"Invalid class at ");
     if (tmpc->type&(HTT_FUN|HTT_EXPORT_SYS_SYM)) {
-      if (!(dbg_info=tmpc(CHashFun *)->dbg_info))
+      if (!(debug_info=tmpc(CHashFun *)->debug_info))
 	LexExcept(cc,"Size not defined at ");
-      i=dbg_info->body[dbg_info->max_line+1-dbg_info->min_line]
-	    -dbg_info->body[0];
+      i=debug_info->body[debug_info->max_line+1-debug_info->min_line]
+	    -debug_info->body[0];
       Lex(cc);
     } else {
       i=tmpc->size;
@@ -836,7 +836,7 @@ pu_export_sys_sym:
 	    cc->abs_counts.abs_addres++;
 	  if (tmpex->type & HTF_UNRESOLVED) {
 	    if (!(cc->flags&CCF_ASM_EXPRESSIONS))
-	      LexExcept(cc,"Illegal fwd ref at ");
+	      LexExcept(cc,"Illegal forward ref at ");
 	    tmpauh=MAlloc(sizeof(CAsmUndefHash));
 	    tmpauh->hash=tmpex;
 	    tmpauh->next=cc->asm_undef_hash;

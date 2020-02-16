@@ -7,7 +7,7 @@ $LK,"KernelB",A="FF:::/StartOS.HC,KernelB"$ StartOS.HC
 #help_index "Bit"
 #help_file "::/Doc/Bit"
 public _intern IC_BSF I64 Bsf(
-	I64 bit_field_val);//Scan fwd from lowest for 1st set. -1 if not found.
+	I64 bit_field_val);//Scan forward from lowest for 1st set. -1 if not found.
 public _intern IC_BSR I64 Bsr(
 	I64 bit_field_val);//Scan rev from highest for 1st set. -1 if not found.
 public _intern IC_BT Bool Bt(
@@ -166,7 +166,7 @@ public _extern _D3_ZERO CD3 *D3Zero(CD3 *dst); //To zero
 public _extern _MEMCOMPARE I64 MemCompare(
 	U8 *ptr1,U8 *ptr2,I64 count); //Compare chunk of memory.
 public _extern _MEMCOPY U8 *MemCopy(
-	U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes fwd.
+	U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes forward.
 public _extern _MEMSET U8 *MemSet(
 	U8 *dst,I64 val,I64 count); //Set chunk of U8s to value.
 public _extern _MEMSET_I64 I64 *MemSetI64(
@@ -177,7 +177,7 @@ public _extern _MEMSET_U32 U32 *MemSetU32(
 	U32 *dst,I64 val,I64 U32count); //Set chunk of U32s to value.
 public _extern _MEMSET U8 *MemSetU8(
 	U8 *dst,I64 val,I64 U8count); //Set chunk of U8s to value.
-_extern SYS_HEAP_DBG_FLAG	U8 sys_heap_dbg;
+_extern SYS_HEAP_DBG_FLAG	U8 sys_heap_debug;
 _extern SYS_HEAP_INIT_FLAG	U8 sys_heap_init_flag;
 _extern SYS_HEAP_INIT_VAL	U8 sys_heap_init_val;
 _extern SYS_MEM_INIT_FLAG	U8 sys_mem_init_flag;

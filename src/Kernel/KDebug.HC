@@ -471,7 +471,7 @@ U0 G2(U8 *ip=INVALID_PTR,CTask *task=NULL)
   if (!task) task=Fs;
   B2(task);
   if (ext[EXT_WIN_FOCUS])
-    CallExtNum(EXT_WIN_FOCUS,dbg.focus_task);
+    CallExtNum(EXT_WIN_FOCUS,debug.focus_task);
   VGAFlush;
   G(ip,task);
 }
@@ -535,7 +535,7 @@ U0 Debug2()
   Bool old_win_inhibit,old_waiting_message,old_single;
   I64 i,old_getstr2;
   U8 buf[200];
-  if (dbg.panic) {
+  if (debug.panic) {
     if (IsRaw) {
       i=Fs->rip;
       Ui(buf,&i);
@@ -543,7 +543,7 @@ U0 Debug2()
     } else
       U(Fs->rip,1);
   } else
-    dbg.panic=TRUE;
+    debug.panic=TRUE;
   old_waiting_message=LBtr(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
   old_win_inhibit=Fs->win_inhibit;
   Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
@@ -566,13 +566,13 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
   no_warn fault_err_code;
   PUSHFD
   CLI
-  if (Gs->num && dbg.mp_crash) {
+  if (Gs->num && debug.mp_crash) {
     mp_count=1;
-    dbg.mp_crash->cpu_num=Gs->num;
-    dbg.mp_crash->task=Fs;
-    dbg.mp_crash->rip=Fs->rip;
-    dbg.mp_crash->message=dbg.message;
-    dbg.mp_crash->message_num=dbg.message_num;
+    debug.mp_crash->cpu_num=Gs->num;
+    debug.mp_crash->task=Fs;
+    debug.mp_crash->rip=Fs->rip;
+    debug.mp_crash->message=debug.message;
+    debug.mp_crash->message_num=debug.message_num;
     MPInt(I_MP_CRASH,0);
     SysHlt;
   }
@@ -580,14 +580,14 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
 	">Help;\t//For help.\n\n";
   Beep(62,TRUE);
   if (fault_num==I_DBG) {
-    if (dbg.message) {
-      "\n!!!%s",dbg.message;
-      if (dbg.message_num)
-	"%016X",dbg.message_num;
+    if (debug.message) {
+      "\n!!!%s",debug.message;
+      if (debug.message_num)
+	"%016X",debug.message_num;
       "!!!\n\n";
     }
   }
-  if (dbg.panic)
+  if (debug.panic)
     CallerRep;
   Debug2;
   POPFD
@@ -596,15 +596,15 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
 U0 Fault2(I64 fault_num,I64 fault_err_code)
 {//Called from $LK,"Fault2",A="FF:::/Kernel/KInts.HC,Fault2"$.
 //$BK,1$Be careful not to swap-out and ruin the saved context$BK,0$
-  Bool was_raw,was_single_user,was_silent,was_in_dbg;
+  Bool was_raw,was_single_user,was_silent,was_in_debug;
   I64  i,old_raw_flags=text.raw_flags;
   was_single_user=SingleUser(ON);
   if (!IsDebugMode)
-    dbg.focus_task=sys_focus_task;
+    debug.focus_task=sys_focus_task;
   sys_focus_task=NULL;
   if (fault_num==I_BPT)
     Fs->rip--;
-  if (Fs->dbg_task)
+  if (Fs->debug_task)
     CallExtNum(EXT_DBG_RESUME,fault_num,fault_err_code);
   else {
     was_raw=Raw(ON);
@@ -616,7 +616,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
     "\"\n";
     "Fault:0x%02X %Z\t\tErr Code:%08X\n",
 	  fault_num,fault_num,"ST_INT_NAMES",fault_err_code;
-    was_in_dbg=DebugMode(ON);
+    was_in_debug=DebugMode(ON);
     "RIP:%08X",Fs->rip; //Sometimes crashes on %p, so do this first
     ":%pRSP:%08X\n",Fs->rip,Fs->rsp;
     if (fault_num==I_PAGE_FAULT) {
@@ -625,7 +625,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
       "Fault Addr:%08X:%p\n",i,i;
     }
     Fault3(fault_num,fault_err_code);
-    DebugMode(was_in_dbg);
+    DebugMode(was_in_debug);
     Silent(was_silent);
     Raw(was_raw);
     text.raw_flags=old_raw_flags;
@@ -639,9 +639,9 @@ U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE)
 {//Enter the debugger with panic?
   PUSHFD
   CLI
-  dbg.message=message;
-  dbg.message_num=message_num;
-  dbg.panic=panic;
+  debug.message=message;
+  debug.message_num=message_num;
+  debug.panic=panic;
   INT I_DBG
   POPFD
 }

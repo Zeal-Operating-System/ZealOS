@@ -171,7 +171,7 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   if (cc->flags&CCF_AOT_COMPILE) {
     cc->htc.fun->exe_addr=cc->aotc->rip;
     cc->htc.fun->type|=HTF_EXPORT|HTF_RESOLVE;
-    r=COCCompile(cc,&size,&cc->htc.fun->dbg_info,NULL);
+    r=COCCompile(cc,&size,&cc->htc.fun->debug_info,NULL);
     if (r) {
       j=(size+7)>>3;
       for (i=0;i<j;i++)
@@ -181,7 +181,7 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   } else {
     old_trace=Btr(&cc->opts,OPTf_TRACE);
     cc->htc.fun->exe_addr=COCCompile(
-	  cc,&size,&cc->htc.fun->dbg_info,NULL);
+	  cc,&size,&cc->htc.fun->debug_info,NULL);
     if (old_trace) {
       Bts(&cc->opts,OPTf_TRACE);
       Un(cc->htc.fun->exe_addr,size,64);

@@ -180,7 +180,7 @@ public U0 EdSelAll(CDoc *doc,Bool sel)
 }
 
 public Bool EdFindPaired(CDoc *doc,U8 plus,U8 minus,
-Bool fwd,Bool abort_on_dbl_colon=FALSE)
+Bool forward,Bool abort_on_dbl_colon=FALSE)
 {//Find { } or ( ) pair. Move cur_entry & center.
   Bool unlock=DocLock(doc),res=FALSE;
   U8 *ptr;
@@ -194,7 +194,7 @@ Bool fwd,Bool abort_on_dbl_colon=FALSE)
     if (doc_e!=doc) {
       if (doc_e->de_flags&DOCEF_TAG && doc_e->tag &&
 	    !(doc_e->de_flags&DOCEF_FILTER_SKIP)) {
-	if (fwd) {
+	if (forward) {
 	  if (doc_e==doc_ce)
 	    ptr=doc_e->tag+doc->cur_col+1;
 	  else
@@ -263,7 +263,7 @@ Bool fwd,Bool abort_on_dbl_colon=FALSE)
       }
     }
 pa_skip:
-    if (fwd)
+    if (forward)
       doc_e=doc_e->next;
     else
       doc_e=doc_e->last;
@@ -276,11 +276,11 @@ pa_done:
   return res;
 }
 
-public Bool EdGoToFun(CDoc *doc,Bool fwd,Bool abort_on_dbl_colon)
+public Bool EdGoToFun(CDoc *doc,Bool forward,Bool abort_on_dbl_colon)
 {//Move cur_entry to start of cur fun and center.(Shoddy)
   Bool unlock=DocLock(doc),res=FALSE;
   I64 ch,levels,colons;
-  if (fwd) {
+  if (forward) {
     levels=0;
     colons=0;
     while (doc->cur_entry!=doc) {

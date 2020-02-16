@@ -41,8 +41,8 @@ CHashClass *ParseClassNew()
 {/*Ptrs to classes are handled by
 allocating 5 structures for each
 new class and representing a pointer
-to a class by advancing 1 struct fwd
-for one * and two fwd for two **.
+to a class by advancing 1 struct forward
+for one * and two forward for two **.
 */
   I64 i;
   CHashClass *res=CAlloc(sizeof(CHashClass)*(PTR_STARS_NUM+1),Fs->code_heap),
@@ -246,14 +246,14 @@ U0 COCHeaderPut(CCompCtrl *cc,I64 pass,Bool put)
   cc->pass=pass;
 }
 
-U8 *COCCompile(CCompCtrl *cc,I64 *_code_size,CDebugInfo **_dbg,I64 *_type)
+U8 *COCCompile(CCompCtrl *cc,I64 *_code_size,CDebugInfo **_debug,I64 *_type)
 {
   U8 *res;
   CCodeMisc *lb;
   I64 i,code_size,last_code_size;
 
   COptReg reg_offsets[REG_REGS_NUM];
-  if (_dbg) *_dbg=NULL;
+  if (_debug) *_debug=NULL;
   cc->pass=0;
   COCHeaderPut(cc,1,TRUE);
   OptPass012(cc);
@@ -303,7 +303,7 @@ U8 *COCCompile(CCompCtrl *cc,I64 *_code_size,CDebugInfo **_dbg,I64 *_type)
       Fs->last_fun=cc->htc.fun;
   }
   COCHeaderPut(cc,10,FALSE);
-  code_size=OptPass789A(cc,reg_offsets,res,_dbg);
+  code_size=OptPass789A(cc,reg_offsets,res,_debug);
 
   COCDel(cc,&cc->coc);
   if (Bt(&cc->opts,OPTf_TRACE)) {

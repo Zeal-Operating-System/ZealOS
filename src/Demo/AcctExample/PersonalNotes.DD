@@ -396,7 +396,7 @@ $FG,5$$TX+CX,"Test"$$FG$
 * Compiler: Err/Warn line nums?
 * Asm branch-out-of-range warn by one line?
 
-* Make sure queue links safe in one direction.  Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRemove",A="MN:QueueRemove"$ for multicore cycling fwd through tasks.
+* Make sure queue links safe in one direction.  Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRemove",A="MN:QueueRemove"$ for multicore cycling forward through tasks.
 
 * Test removable media id and $LK,"RS_ATTR_RESIDENT",A="MN:RS_ATTR_RESIDENT"$.  $LK,"Touch",A="MN:Touch"$("","+T");
 

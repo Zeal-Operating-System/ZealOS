@@ -1108,28 +1108,28 @@ args.
       case IC_LABEL:
 	lb=OptLabelFwd(tmpi->ic_data);
 	lb1=tmpi->ic_data;
-	while (lb2=lb1->fwd) {
-	  lb1->fwd=lb;
+	while (lb2=lb1->forward) {
+	  lb1->forward=lb;
 	  lb1=lb2;
 	}
 	if (tmpi1=OptLag(tmpi)) {
 	  if (tmpi1->ic_code==IC_JMP) {
 	    lb1=tmpi1->ic_data;
-	    while (lb1->fwd)
-	      lb1=lb1->fwd;
+	    while (lb1->forward)
+	      lb1=lb1->forward;
 	    if (lb1==lb) {
 	      tmpi->ic_flags|=tmpi1->ic_flags;
 	      OptSetNOP1(tmpi1);
 	    }
 	  } else if (tmpi1->ic_code==IC_LABEL) {
 	    lb1=tmpi1->ic_data;
-	    if (!lb1->fwd)
-	      lb1->fwd=lb;
+	    if (!lb1->forward)
+	      lb1->forward=lb;
 	    if (tmpi1=OptLag(tmpi1)) {
 	      if (tmpi1->ic_code==IC_JMP) {
 		lb1=tmpi1->ic_data;
-		while (lb1->fwd)
-		  lb1=lb1->fwd;
+		while (lb1->forward)
+		  lb1=lb1->forward;
 		if (lb1==lb) {
 		  tmpi->ic_flags|=tmpi1->ic_flags;
 		  OptSetNOP1(tmpi1);
@@ -1145,7 +1145,7 @@ args.
 	    lb=OptLabelFwd(tmpi->ic_data);
 	    lb1=OptLabelFwd(tmpi1->ic_data);
 	    if (lb!=lb1)
-	      lb1->fwd=lb;
+	      lb1->forward=lb;
 	  }
 	}
 	break;
