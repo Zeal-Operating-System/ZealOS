@@ -11,6 +11,7 @@ Features in development include:
 
 Every commit contains a "MyDistro.iso" in the /src/Tmp folder, which is an ISO build of that commit.
 
+At first, I was developing exclusively inside a VM and occasionally generating ISOs as official releases. This was not a good approach, as things broke and I had no way of telling what changes caused what. So I decided to scrap that and restart from scratch.\
 Previous releases are currently archived on the `mega.nz` website:
   - [Previous Releases](https://mega.nz/#F!ZIEGmSRQ!qvL6Wk6THzE-dazkfT6N3Q)
 
