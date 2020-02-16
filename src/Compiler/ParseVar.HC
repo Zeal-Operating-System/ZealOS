@@ -203,7 +203,7 @@ U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
   }
 }
 
-U0 ParseGlblInit(CCompCtrl *cc,CHashGlblVar *tmpg,I64 pass)
+U0 ParseGlobalInit(CCompCtrl *cc,CHashGlobalVar *tmpg,I64 pass)
 {
   U8 *dst=tmpg->data_addr;
   ParseVarInit2(cc,&dst,tmpg->var_class,&tmpg->dim,

@@ -1,8 +1,8 @@
 $WW,1$$LK,"ms.pos.x",A="MN:ms"$ and $LK,"ms.pos.y",A="MN:ms"$ can be used to access the x and y coordinates of the mouse.  They are relative to the scrn, not window.  These can be used if you don't want to use message passing.  $LK,"ms.pos.z",A="MN:ms"$ is the wheel.
 
-$LK,"ms.pos_text.x",A="MN:CMsStateGlbls"$ and $LK,"ms.pos_text.y",A="MN:CMsStateGlbls"$ are the text column and row.  See $LK,"::/Demo/Games/Maze.HC"$.
+$LK,"ms.pos_text.x",A="MN:CMsStateGlobals"$ and $LK,"ms.pos_text.y",A="MN:CMsStateGlobals"$ are the text column and row.  See $LK,"::/Demo/Games/Maze.HC"$.
 
-See $LK,"CMsStateGlbls",A="MN:CMsStateGlbls"$ and $LK,"CMsHardStateGlbls",A="MN:CMsHardStateGlbls"$.
+See $LK,"CMsStateGlobals",A="MN:CMsStateGlobals"$ and $LK,"CMsHardStateGlobals",A="MN:CMsHardStateGlobals"$.
 
 The $FG,2$hard$FG$ designation, as in $FG,2$ms_hard$FG$, represents hardware layer items before the application of an abstraction layer.
 

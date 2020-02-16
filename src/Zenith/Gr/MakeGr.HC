@@ -3,7 +3,7 @@ Cd(__DIR__);;
 #include "GrInitA"
 #include "Gr.HH"
 #include "GrExt"
-#include "GrGlbls"
+#include "GrGlobals"
 #include "GrTextBase"
 #include "GrAsm"
 #include "GrPalette"
@@ -14,7 +14,7 @@ Cd(__DIR__);;
 #include "GrBitMap"
 #include "GrPrimatives"
 #include "GrComposites"
-#include "ScreenCast"
+#include "ScreenCast"
 
 #define SPE_ABORT	(-1)
 #define SPE_EXIT	0

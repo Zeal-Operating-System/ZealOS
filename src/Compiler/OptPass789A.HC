@@ -13,14 +13,14 @@ cc->pass==10 is final pass, code is placed into buf.
   CAOT *tmpaot;
   CAOTAbsAddr *tmpa;
   CAOTImportExport *tmpie;
-  CAOTHeapGlbl *tmphg;
-  CAOTHeapGlblRef *tmphgr;
+  CAOTHeapGlobal *tmphg;
+  CAOTHeapGlobalRef *tmphgr;
   CDebugInfo *dbg_info;
   CAOTCtrl *aotc=cc->aotc;
   Bool short_jmp;
   CHashClass *tmpc;
   CHashFun *tmpf;
-  CHashGlblVar *tmpg;
+  CHashGlobalVar *tmpg;
   CExternUsage *tmpeu;
 
   if (_dbg) {
@@ -115,7 +115,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	      if (buf && cc->flags&CCF_AOT_COMPILE &&
 //TODO:is this necessary--flags?
 		    !(cc->flags&(CCF_NO_ABSS|CCF_ASM_EXPRESSIONS))) {
-		tmphgr=CAlloc(sizeof(CAOTHeapGlblRef));
+		tmphgr=CAlloc(sizeof(CAOTHeapGlobalRef));
 		tmphgr->next=tmphg->references;
 		tmphg->references=tmphgr;
 		tmphgr->rip=rip2+tmpi->ic_cnt-8;

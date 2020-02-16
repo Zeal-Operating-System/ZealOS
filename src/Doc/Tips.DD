@@ -63,7 +63,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Grab-scroll any window at any time with $FG,2${CTRL-LEFT-MOUSE-DRAG}$FG$.  Null grab-scrolling with $FG,2${CTRL-RIGHT-MOUSE}$FG$.
 
-* Use $FG,2$<CTRL-ALT-z>$FG$ to zoom-in and $FG,2$<CTRL-ALT-SHIFT-Z>$FG$ to zoom-out.  You can scroll by moving to the edge of the window.  Set $LK,"gr.continuous_scroll",A="MN:CGrGlbls"$ to $FG,2$TRUE$FG$ if you want. 
+* Use $FG,2$<CTRL-ALT-z>$FG$ to zoom-in and $FG,2$<CTRL-ALT-SHIFT-Z>$FG$ to zoom-out.  You can scroll by moving to the edge of the window.  Set $LK,"gr.continuous_scroll",A="MN:CGrGlobals"$ to $FG,2$TRUE$FG$ if you want. 
 
 * Use $FG,2$<CTRL-ALT-g>$FG$ and $FG,2$<CTRL-ALT-SHIFT-G>$FG$ to display a grid on the scrn.
 
@@ -91,7 +91,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Use $LK,"View",A="MN:View"$() in Pop-up macros to linger until the user presses $FG,2$<ESC>$FG$ or $FG,2$<SHIFT-ESC>$FG$.
 
-* You can access the word under the cursor at $LK,"ac.cur_word",A="MN:CAutoCompleteGlbls"$.
+* You can access the word under the cursor at $LK,"ac.cur_word",A="MN:CAutoCompleteGlobals"$.
 
 * You can reactivate $FG,2$AutoComplete$FG$ after closing it by pressing $FG,2$<CTRL-Fun Key>$FG$ or $FG,2$<ALT-w>$FG$ if you have it defined.
 
@@ -125,7 +125,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * The editor's sel-text mechanism allows for disjoint portions of sel text.  This is a feature, not a bug -- you can cut-and-paste disjoint text.
 
-* $LK,"cnts.time_stamp_freq",A="MN:CCntsGlbls"$ is continuously calibrated.  Be careful because expressions might decrease.  Take a snap-shot, like this: $FG,2$timeout=$LK,"GetTSC",A="MN:GetTSC"$+$LK,"cnts.time_stamp_freq",A="MN:CCntsGlbls"$ x seconds;$FG$ and compare against $LK,"GetTSC",A="MN:GetTSC"$().  I recommend just using $LK,"tS",A="MN:tS"$ or $LK,"cnts.jiffies",A="MN:CCntsGlbls"$.
+* $LK,"cnts.time_stamp_freq",A="MN:CCntsGlobals"$ is continuously calibrated.  Be careful because expressions might decrease.  Take a snap-shot, like this: $FG,2$timeout=$LK,"GetTSC",A="MN:GetTSC"$+$LK,"cnts.time_stamp_freq",A="MN:CCntsGlobals"$ x seconds;$FG$ and compare against $LK,"GetTSC",A="MN:GetTSC"$().  I recommend just using $LK,"tS",A="MN:tS"$ or $LK,"cnts.jiffies",A="MN:CCntsGlobals"$.
 
 * Use $LK,"HeapLog",A="MN:HeapLog"$(), $LK,"HeapLogAddrRep",A="MN:HeapLogAddrRep"$() and $LK,"HeapLogSizeRep",A="MN:HeapLogSizeRep"$() to find leaks.  Don't be confused by $LK,"CDoc",A="MN:CDoc"$ allocations.  Those are generated when text is written to the cmd line buffer.
 

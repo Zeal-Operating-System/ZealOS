@@ -54,12 +54,12 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
     } else if (tmph->type&HTT_DEFINE_STR)
       res+=MSize2(tmph(CHashDefineStr *)->data);
     else if (tmph->type & HTT_GLBL_VAR) {
-      res+=LinkedLstSize(tmph(CHashGlblVar *)->dim.next);
-      if (!(tmph(CHashGlblVar *)->flags&GVF_ALIAS))
-	res+=MSize2(tmph(CHashGlblVar *)->data_addr);
-      if (tmph(CHashGlblVar *)->fun_ptr)
-	res+=HashEntrySize2(tmph(CHashGlblVar *)->fun_ptr
-	      -tmph(CHashGlblVar *)->fun_ptr->ptr_stars_cnt);
+      res+=LinkedLstSize(tmph(CHashGlobalVar *)->dim.next);
+      if (!(tmph(CHashGlobalVar *)->flags&GVF_ALIAS))
+	res+=MSize2(tmph(CHashGlobalVar *)->data_addr);
+      if (tmph(CHashGlobalVar *)->fun_ptr)
+	res+=HashEntrySize2(tmph(CHashGlobalVar *)->fun_ptr
+	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_cnt);
     }
   } else if (tmph->type & HTT_FILE)
     res+=MSize2(tmph(CHashGeneric *)->user_data0);

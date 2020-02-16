@@ -1,6 +1,6 @@
 #help_index "Graphics"
 
-public class CGrGlbls
+public class CGrGlobals
 {
   I64	*to_8_bits,*to_8_colors;
   CDC	*scrn_image,	//Read only.

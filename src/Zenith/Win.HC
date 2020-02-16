@@ -1,13 +1,13 @@
 #help_index "Windows"
 #help_file "::/Doc/Windows"
 
-CMsStateGlbls old_ms={{-1000,-1000,0},{-1000,-1000,0},{-1000,-1000,0},
+CMsStateGlobals old_ms={{-1000,-1000,0},{-1000,-1000,0},{-1000,-1000,0},
   {0,0,0},{1.0,1.0,1.0},0.0,GetTSC,0.350,0,0,
   FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
 };
 
-public CWinMgrGlbls winmgr={0,0,0,WINMGR_FPS,tS,tS,NULL,FALSE,FALSE,FALSE};
-winmgr.t=CAlloc(sizeof(CWinMgrTimingGlbls));
+public CWinMgrGlobals winmgr={0,0,0,WINMGR_FPS,tS,tS,NULL,FALSE,FALSE,FALSE};
+winmgr.t=CAlloc(sizeof(CWinMgrTimingGlobals));
 winmgr.t->last_calc_idle_time=tS;
 
 U0 ProgressBarsRegTf(U8 *path=NULL)
@@ -99,8 +99,8 @@ U0 DrawWinGrid(CDC *dc)
 
 U0 WinGrid(Bool val)
 {
-  CGridGlbls last_grid;
-  MemCpy(&last_grid,&ms_grid,sizeof(CGridGlbls));
+  CGridGlobals last_grid;
+  MemCpy(&last_grid,&ms_grid,sizeof(CGridGlobals));
   if (!val || PopUpForm(&ms_grid)) {
     if (!val)
       GridInit;
@@ -108,7 +108,7 @@ U0 WinGrid(Bool val)
     ms_hard.prescale.y*=last_grid.y_speed/ms_grid.y_speed;
     ms_hard.prescale.z*=last_grid.z_speed/ms_grid.z_speed;
   } else
-    MemCpy(&ms_grid,&last_grid,sizeof(CGridGlbls));
+    MemCpy(&ms_grid,&last_grid,sizeof(CGridGlobals));
 }
 U0 CtrlAltG(I64 sc)
 {

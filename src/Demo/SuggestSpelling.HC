@@ -71,7 +71,7 @@ U0 SuggestSpellingDemo()
 
 U0 CtrlAltL(I64)
 {
-//$LK,"ac.cur_word",A="MN:CAutoCompleteGlbls"$ is only set if AutoComplete
+//$LK,"ac.cur_word",A="MN:CAutoCompleteGlobals"$ is only set if AutoComplete
   //is running.
   if (!TaskValidate(ac.task)) {
     AutoComplete(ON);

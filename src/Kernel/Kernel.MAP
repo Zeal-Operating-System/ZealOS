@@ -52,12 +52,14 @@ $LK,"DOCT_BACKGROUND",A="FL:::/Kernel/KernelA.HH,921"$
 $LK,"DOCT_FOREGROUND",A="FL:::/Kernel/KernelA.HH,920"$
 $LK,"CGDT",A="FL:::/Kernel/KernelA.HH,349"$
 $LK,"TSF_SAME_SONG",A="FL:::/Kernel/KernelA.HH,3196"$
+$LK,"CDevGlobals",A="FL:::/Kernel/KernelA.HH,2877"$
 $LK,"PRTF_NEG_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3880"$
 $LK,"SCF_MS_L_DOWN",A="FL:::/Kernel/KernelA.HH,3487"$
 $LK,"SCf_MS_L_DOWN",A="FL:::/Kernel/KernelA.HH,3472"$
 $LK,"ICF_PUSH_CMP",A="FL:::/Kernel/KernelA.HH,1620"$
 $LK,"MLF_NO_UNUSED_WARN",A="FL:::/Kernel/KernelA.HH,784"$
 $LK,"I_MP_CRASH",A="FL:::/Kernel/KernelA.HH,308"$
+$LK,"CTextGlobals",A="FL:::/Kernel/KernelA.HH,3541"$
 $LK,"MEM_HEAP_HASH_SIZE",A="FL:::/Kernel/KernelA.HH,2834"$
 $LK,"INVALID_PTR",A="FL:::/Kernel/KernelA.HH,41"$
 $LK,"RECALCt_NORMAL",A="FL:::/Kernel/KernelA.HH,1359"$
@@ -92,6 +94,8 @@ $LK,"TK_EOF",A="FL:::/Kernel/KernelA.HH,2079"$
 $LK,"CWinScroll",A="FL:::/Kernel/KernelA.HH,3051"$
 $LK,"DOCEf_NO_CLICK_ON",A="FL:::/Kernel/KernelA.HH,1113"$
 $LK,"ARf_FLOODFILL",A="FL:::/Kernel/KernelA.HH,3850"$
+$LK,"CKeyDevGlobals",A="FL:::/Kernel/KernelA.HH,3762"$
+$LK,"CBlkDevGlobals",A="FL:::/Kernel/KernelA.HH,2730"$
 $LK,"ICF_USE_F64",A="FL:::/Kernel/KernelA.HH,1608"$
 $LK,"CH_BACKSPACE",A="FL:::/Kernel/KernelA.HH,3453"$
 $LK,"FloorI64",A="FL:::/Kernel/KMathB.HC,52",BI=16$
@@ -162,7 +166,7 @@ $LK,"ARGT_ST0",A="FL:::/Kernel/KernelA.HH,1945"$
 $LK,"RT_I64",A="FL:::/Kernel/KernelA.HH,1572"$
 $LK,"SEMA_REFRESH_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,619"$
 $LK,"FifoI64Cnt",A="FL:::/Kernel/KDataTypes.HC,312",BI=30$
-$LK,"sys_task_being_scrn_updated",A="FL:::/Kernel/KGlbls.HC,11"$
+$LK,"sys_task_being_scrn_updated",A="FL:::/Kernel/KGlobals.HC,11"$
 $LK,"SUF_SAFE_DOLLAR",A="FL:::/Kernel/KernelA.HH,3740"$
 $LK,"RWF_SHOW_DOLLAR",A="FL:::/Kernel/KernelA.HH,3538"$
 $LK,"_CFG_HEAP_DBG",A="FL:::/Kernel/KernelA.HH,2773"$
@@ -210,6 +214,7 @@ $LK,"SPutChar",A="FL:::/Kernel/StrPrint.HC,1",BI=46$
 $LK,"CYAN",A="FL:::/Kernel/KernelA.HH,2917"$
 $LK,"U64_MIN",A="FL:::/Kernel/KernelA.HH,39"$
 $LK,"TK_SUPERSCRIPT",A="FL:::/Kernel/KernelA.HH,2080"$
+$LK,"CScreenCastGlobals",A="FL:::/Kernel/KernelA.HH,3788"$
 $LK,"RS_ATTR_DELETED",A="FL:::/Kernel/KernelA.HH,2506"$
 $LK,"CMT_ASM_LABEL",A="FL:::/Kernel/KernelA.HH,1698"$
 $LK,"RLF_64BIT",A="FL:::/Kernel/KernelA.HH,480"$
@@ -220,7 +225,6 @@ $LK,"DOCf_HAS_SONG",A="FL:::/Kernel/KernelA.HH,1323"$
 $LK,"DOCF_HAS_SONG",A="FL:::/Kernel/KernelA.HH,1286"$
 $LK,"TaskQueueIns",A="FL:::/Kernel/Sched.HC,287",BI=48$
 $LK,"CH_CTRLA",A="FL:::/Kernel/KernelA.HH,3426"$
-$LK,"CHashGlblVar",A="FL:::/Kernel/KernelA.HH,878"$
 $LK,"CH_CTRLB",A="FL:::/Kernel/KernelA.HH,3427"$
 $LK,"DOCEf_TAG",A="FL:::/Kernel/KernelA.HH,1058"$
 $LK,"S",A="FL:::/Kernel/KDebug.HC,479",BI=49$
@@ -303,11 +307,10 @@ $LK,"CtrlAltD",A="FL:::/Kernel/KeyDev.HC,138",BI=67$
 $LK,"RandI64",A="FL:::/Kernel/KMathB.HC,117",BI=68$
 $LK,"CH_CTRLT",A="FL:::/Kernel/KernelA.HH,3445"$
 $LK,"MBS_UNUSED_SIGNATURE_VAL",A="FL:::/Kernel/KernelA.HH,2813"$
-$LK,"CCompGlbls",A="FL:::/Kernel/KernelA.HH,2226"$
 $LK,"RT_U32",A="FL:::/Kernel/KernelA.HH,1571"$
 $LK,"RT_U16",A="FL:::/Kernel/KernelA.HH,1569"$
 $LK,"CExternUsage",A="FL:::/Kernel/KernelA.HH,822"$
-$LK,"sys_os_version",A="FL:::/Kernel/KGlbls.HC,16"$
+$LK,"sys_os_version",A="FL:::/Kernel/KGlobals.HC,16"$
 $LK,"CH_CTRLU",A="FL:::/Kernel/KernelA.HH,3446"$
 $LK,"ARGT_MM32",A="FL:::/Kernel/KernelA.HH,1949"$
 $LK,"WIf_SELF_MS_WHEEL",A="FL:::/Kernel/KernelA.HH,1454"$
@@ -406,7 +409,6 @@ $LK,"FUF_CANCEL",A="FL:::/Kernel/KernelA.HH,2570"$
 $LK,"FUf_CANCEL",A="FL:::/Kernel/KernelA.HH,2542"$
 $LK,"FALSE",A="FL:::/Kernel/KernelA.HH,21"$
 $LK,"VGAP_REG_READ",A="FL:::/Kernel/KernelA.HH,3674"$
-$LK,"CUAsmGlbls",A="FL:::/Kernel/KernelA.HH,2241"$
 $LK,"TK_ADD_EQU",A="FL:::/Kernel/KernelA.HH,2108"$
 $LK,"TK_XOR_EQU",A="FL:::/Kernel/KernelA.HH,2107"$
 $LK,"StrPrintHex",A="FL:::/Kernel/StrA.HC,1",BI=92$
@@ -439,7 +441,7 @@ $LK,"WIF_SELF_DOC",A="FL:::/Kernel/KernelA.HH,1429"$
 $LK,"MLF_STATIC",A="FL:::/Kernel/KernelA.HH,785"$
 $LK,"JobsHandler",A="FL:::/Kernel/Job.HC,349",BI=98$
 $LK,"str2color_lst",A="FL:::/Kernel/KDefine.HC,156"$
-$LK,"local_time_offset",A="FL:::/Kernel/KGlbls.HC,14"$
+$LK,"local_time_offset",A="FL:::/Kernel/KGlobals.HC,14"$
 $LK,"RedSeaFilesFind",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,537",BI=99$
 $LK,"TK_INS_BIN",A="FL:::/Kernel/KernelA.HH,2120"$
 $LK,"ClusWrite",A="FL:::/Kernel/BlkDev/DiskClus.HC,123",BI=100$
@@ -458,6 +460,7 @@ $LK,"HTt_DICT_WORD",A="FL:::/Kernel/KernelA.HH,665"$
 $LK,"RLf_MP",A="FL:::/Kernel/KernelA.HH,464"$
 $LK,"PRTF_DOLLAR",A="FL:::/Kernel/KernelA.HH,3873"$
 $LK,"CSpring",A="FL:::/Kernel/KernelA.HH,228"$
+$LK,"CDebugGlobals",A="FL:::/Kernel/KernelA.HH,3820"$
 $LK,"CBGR24",A="FL:::/Kernel/KernelA.HH,2946"$
 $LK,"FONT_WIDTH",A="FL:::/Kernel/KernelA.HH,3551"$
 $LK,"CHeapCtrl",A="FL:::/Kernel/KernelA.HH,2863"$
@@ -466,6 +469,7 @@ $LK,"LastDayOfYear",A="FL:::/Kernel/KDate.HC,110",BI=107$
 $LK,"SYS_IDLE_PT",A="FL:::/Kernel/Sched.HC,204"$
 $LK,"mp_cnt_initial",A="FL:::/Kernel/KernelB.HH,240"$
 $LK,"STD_DISTRO_DVD_CFG",A="FL:::/Kernel/KernelA.HH,3846"$
+$LK,"CWinMgrTimingGlobals",A="FL:::/Kernel/KernelA.HH,1470"$
 $LK,"OS_WINDOWS",A="FL:::/Kernel/KernelA.HH,3887"$
 $LK,"CAbsCntsI64",A="FL:::/Kernel/KernelA.HH,1816"$
 $LK,"Core0StartMP",A="FL:::/Kernel/MultiProc.HC,283",BI=108$
@@ -526,6 +530,7 @@ $LK,"SLOP",A="FL:::/Kernel/StrPrint.HC,206"$
 $LK,"FF_BUF_DIRTY",A="FL:::/Kernel/KernelA.HH,2758"$
 $LK,"ICF_SWAP",A="FL:::/Kernel/KernelA.HH,1622"$
 $LK,"_STRMATCH",A="FL:::/Kernel/StrA.HC,223"$
+$LK,"CMsStateGlobals",A="FL:::/Kernel/KernelA.HH,2998"$
 $LK,"MSF_FIXED",A="FL:::/Kernel/KernelA.HH,209"$
 $LK,"MEM_HEAP_BASE",A="FL:::/Kernel/KStart32.HC,6"$
 $LK,"_CPUID",A="FL:::/Kernel/KUtils.HC,319"$
@@ -561,8 +566,8 @@ $LK,"I32_MAX",A="FL:::/Kernel/KernelA.HH,34"$
 $LK,"I16_MAX",A="FL:::/Kernel/KernelA.HH,30"$
 $LK,"CTryStk",A="FL:::/Kernel/KExcept.HC,56"$
 $LK,"DCF_PALETTE",A="FL:::/Kernel/KernelA.HH,3566"$
-$LK,"set_bits_table",A="FL:::/Kernel/KGlbls.HC,13"$
-$LK,"rev_bits_table",A="FL:::/Kernel/KGlbls.HC,12"$
+$LK,"set_bits_table",A="FL:::/Kernel/KGlobals.HC,13"$
+$LK,"rev_bits_table",A="FL:::/Kernel/KGlobals.HC,12"$
 $LK,"KBD_CTRL",A="FL:::/Kernel/KernelA.HH,2957"$
 $LK,"HTt_FUN",A="FL:::/Kernel/KernelA.HH,663"$
 $LK,"JobCtrlInit",A="FL:::/Kernel/Job.HC,18",BI=124$
@@ -622,6 +627,7 @@ $LK,"CEdFindText",A="FL:::/Kernel/KernelA.HH,1235"$
 $LK,"ClusNumNext",A="FL:::/Kernel/BlkDev/DiskClus.HC,1",BI=130$
 $LK,"WIf_FOCUS_TASK_MS_L_D",A="FL:::/Kernel/KernelA.HH,1463"$
 $LK,"LDF_NO_ABSS",A="FL:::/Kernel/KernelA.HH,380"$
+$LK,"CKbdStateGlobals",A="FL:::/Kernel/KernelA.HH,2958"$
 $LK,"DOCEf_LINK",A="FL:::/Kernel/KernelA.HH,1091"$
 $LK,"DOCEF_LINK",A="FL:::/Kernel/KernelA.HH,1003"$
 $LK,"D3Copy",A="FL:::/Kernel/KernelB.HH,147"$
@@ -668,6 +674,7 @@ $LK,"Ceil",A="FL:::/Kernel/KernelB.HH,123"$
 $LK,"DOCEF_SKIP_IN_FORM",A="FL:::/Kernel/KernelA.HH,1025"$
 $LK,"CCF_DONT_FREE_BUF",A="FL:::/Kernel/KernelA.HH,2141"$
 $LK,"ICF_RES_WAS_STK",A="FL:::/Kernel/KernelA.HH,1617"$
+$LK,"CAutoCompleteDictGlobals",A="FL:::/Kernel/KernelA.HH,1533"$
 $LK,"IET_ZEROED_CODE_HEAP",A="FL:::/Kernel/KernelA.HH,425"$
 $LK,"SrcEdLink",A="FL:::/Kernel/FunSeg.HC,300",BI=142$
 $LK,"GetRBP",A="FL:::/Kernel/KernelB.HH,253"$
@@ -772,6 +779,7 @@ $LK,"SYS_HASH_FIND1",A="FL:::/Kernel/KHashA.HC,81"$
 $LK,"GetRSP",A="FL:::/Kernel/KernelB.HH,255"$
 $LK,"_D3_DIST",A="FL:::/Kernel/KMathA.HC,39"$
 $LK,"ScanKey",A="FL:::/Kernel/SerialDev/Message.HC,123",BI=165$
+$LK,"CHashGlobalVar",A="FL:::/Kernel/KernelA.HH,878"$
 $LK,"DriveUnlock",A="FL:::/Kernel/BlkDev/DiskDrive.HC,14",BI=166$
 $LK,"InFile",A="FL:::/Kernel/Job.HC,474",BI=167$
 $LK,"D3DistSqr",A="FL:::/Kernel/KernelB.HH,150"$
@@ -823,7 +831,7 @@ $LK,"IEF_REX_ONLY_R8_R15",A="FL:::/Kernel/KernelA.HH,1744"$
 $LK,"MDF_IMM",A="FL:::/Kernel/KernelA.HH,1592"$
 $LK,"DOCSS_SINGLE_QUOTE",A="FL:::/Kernel/KernelA.HH,1134"$
 $LK,"KBD_PORT",A="FL:::/Kernel/KernelA.HH,2956"$
-$LK,"ac",A="FL:::/Kernel/KGlbls.HC,19"$
+$LK,"ac",A="FL:::/Kernel/KGlobals.HC,19"$
 $LK,"_FSTSW",A="FL:::/Kernel/KMathA.HC,641"$
 $LK,"ARGT_IMM32",A="FL:::/Kernel/KernelA.HH,1896"$
 $LK,"ARGT_IMM16",A="FL:::/Kernel/KernelA.HH,1895"$
@@ -832,8 +840,7 @@ $LK,"Free",A="FL:::/Kernel/Mem/MAllocFree.HC,383"$
 $LK,"DOCEf_AUX_STR",A="FL:::/Kernel/KernelA.HH,1060"$
 $LK,"DOCEF_AUX_STR",A="FL:::/Kernel/KernelA.HH,972"$
 $LK,"Char2KeyName",A="FL:::/Kernel/SerialDev/Keyboard.HC,201",BI=179$
-$LK,"blkdev",A="FL:::/Kernel/KGlbls.HC,20"$
-$LK,"CWinMgrGlbls",A="FL:::/Kernel/KernelA.HH,1482"$
+$LK,"blkdev",A="FL:::/Kernel/KGlobals.HC,20"$
 $LK,"DOCEf_TREE",A="FL:::/Kernel/KernelA.HH,1107"$
 $LK,"DOCEF_TREE",A="FL:::/Kernel/KernelA.HH,1021"$
 $LK,"progress1_tf",A="FL:::/Kernel/KernelB.HH,214"$
@@ -872,7 +879,7 @@ $LK,"SYS_GDT_PTR",A="FL:::/Kernel/KStart16.HC,34"$
 $LK,"_RSP",A="FL:::/Kernel/KernelA.HH,3376"$
 $LK,"DOCT_INS_BIN_SIZE",A="FL:::/Kernel/KernelA.HH,944"$
 $LK,"WinDerivedValsUpdate",A="FL:::/Kernel/Display.HC,93",BI=188$
-$LK,"fp_update_ctrls",A="FL:::/Kernel/KGlbls.HC,33"$
+$LK,"fp_update_ctrls",A="FL:::/Kernel/KGlobals.HC,33"$
 $LK,"DSK_CACHE_HASH_SIZE",A="FL:::/Kernel/KernelA.HH,2715"$
 $LK,"RS_ATTR_VOL_ID",A="FL:::/Kernel/KernelA.HH,2500"$
 $LK,"DOCf_UNDERLINE",A="FL:::/Kernel/KernelA.HH,1337"$
@@ -957,7 +964,7 @@ $LK,"ATTRf_UNDERLINE",A="FL:::/Kernel/KernelA.HH,902"$
 $LK,"SEMA_FLUSH_VGA_IMAGE",A="FL:::/Kernel/KernelA.HH,620"$
 $LK,"DOCF_BWD_MOVEMENT",A="FL:::/Kernel/KernelA.HH,1288"$
 $LK,"I64_MIN",A="FL:::/Kernel/KernelA.HH,37"$
-$LK,"ms",A="FL:::/Kernel/KGlbls.HC,25"$
+$LK,"ms",A="FL:::/Kernel/KGlobals.HC,25"$
 $LK,"Exit",A="FL:::/Kernel/KTask.HC,1",BI=212$
 $LK,"TASKf_BREAK_TO_SHIFT_ESC",A="FL:::/Kernel/KernelA.HH,3241"$
 $LK,"HTT_KEYWORD",A="FL:::/Kernel/KernelA.HH,696"$
@@ -980,7 +987,7 @@ $LK,"ODEF_BUSY",A="FL:::/Kernel/KernelA.HH,245"$
 $LK,"ArcCompressBuf",A="FL:::/Kernel/Compress.HC,110",BI=216$
 $LK,"MDG_REG_DISP_SIB_RIP",A="FL:::/Kernel/KernelA.HH,1600"$
 $LK,"ToFileLine",A="FL:::/Kernel/EdLite.HC,303",BI=217$
-$LK,"scrncast",A="FL:::/Kernel/KGlbls.HC,29"$
+$LK,"scrncast",A="FL:::/Kernel/KGlobals.HC,29"$
 $LK,"D3Unit",A="FL:::/Kernel/KernelB.HH,162"$
 $LK,"CTRLT_WIN_HSCROLL",A="FL:::/Kernel/KernelA.HH,3039"$
 $LK,"TK_IFAOT",A="FL:::/Kernel/KernelA.HH,2113"$
@@ -1056,6 +1063,7 @@ $LK,"DOCF_ALLOW_UNDO",A="FL:::/Kernel/KernelA.HH,1284"$
 $LK,"CMemberLst",A="FL:::/Kernel/KernelA.HH,802"$
 $LK,"DOCf_ALLOW_UNDO",A="FL:::/Kernel/KernelA.HH,1321"$
 $LK,"_D3_NORM",A="FL:::/Kernel/KMathA.HC,4"$
+$LK,"CAutoCompleteGlobals",A="FL:::/Kernel/KernelA.HH,1497"$
 $LK,"DOCEf_BLINK",A="FL:::/Kernel/KernelA.HH,1052"$
 $LK,"DOCEF_BLINK",A="FL:::/Kernel/KernelA.HH,1046"$
 $LK,"IsDotZ",A="FL:::/Kernel/BlkDev/DiskStrA.HC,22",BI=232$
@@ -1073,6 +1081,7 @@ $LK,"cpu_structs",A="FL:::/Kernel/KernelB.HH,238"$
 $LK,"SC_DELETE",A="FL:::/Kernel/KernelA.HH,3516"$
 $LK,"MsHardGetType",A="FL:::/Kernel/SerialDev/Mouse.HC,103",BI=235$
 $LK,"MESSAGE_KEY_DOWN",A="FL:::/Kernel/KernelA.HH,3176"$
+$LK,"CAOTHeapGlobalRef",A="FL:::/Kernel/KernelA.HH,1994"$
 $LK,"CLine",A="FL:::/Kernel/EdLite.HC,1"$
 $LK,"REGT_SEG",A="FL:::/Kernel/KernelA.HH,748"$
 $LK,"CMass",A="FL:::/Kernel/KernelA.HH,210"$
@@ -1091,11 +1100,10 @@ $LK,"ToggleZorNotZ",A="FL:::/Kernel/BlkDev/DiskStrA.HC,265",BI=239$
 $LK,"VGAP_ATTR_INDEX",A="FL:::/Kernel/KernelA.HH,3667"$
 $LK,"D3MulEqu",A="FL:::/Kernel/KernelB.HH,157"$
 $LK,"BDS_CONST",A="FL:::/Kernel/KernelA.HH,3217"$
-$LK,"SysGlblsInit",A="FL:::/Kernel/KMain.HC,1",BI=240$
-$LK,"PutSrcLink",A="FL:::/Kernel/FunSeg.HC,317",BI=241$
+$LK,"PutSrcLink",A="FL:::/Kernel/FunSeg.HC,317",BI=240$
 $LK,"RLF_ONCE_ZENITH",A="FL:::/Kernel/KernelA.HH,494"$
 $LK,"CMenu",A="FL:::/Kernel/KernelA.HH,3099"$
-$LK,"JobRunOne",A="FL:::/Kernel/Job.HC,269",BI=242$
+$LK,"JobRunOne",A="FL:::/Kernel/Job.HC,269",BI=241$
 $LK,"BDT_ATAPI",A="FL:::/Kernel/KernelA.HH,2606"$
 $LK,"FUF_MAP",A="FL:::/Kernel/KernelA.HH,2574"$
 $LK,"CFAT32DirEntry",A="FL:::/Kernel/KernelA.HH,2392"$
@@ -1109,11 +1117,11 @@ $LK,"LAPIC_LVT_PERF",A="FL:::/Kernel/KernelA.HH,521"$
 $LK,"SC_F1",A="FL:::/Kernel/KernelA.HH,3517"$
 $LK,"FSt_TYPES_NUM",A="FL:::/Kernel/KernelA.HH,2664"$
 $LK,"HTt_TYPES_NUM",A="FL:::/Kernel/KernelA.HH,674"$
-$LK,"Drive2Letter",A="FL:::/Kernel/BlkDev/DiskDrive.HC,153",BI=243$
+$LK,"Drive2Letter",A="FL:::/Kernel/BlkDev/DiskDrive.HC,153",BI=242$
 $LK,"SYS_SEMAS",A="FL:::/Kernel/KStart32.HC,72"$
 $LK,"SC_F2",A="FL:::/Kernel/KernelA.HH,3518"$
-$LK,"BirthWait",A="FL:::/Kernel/KTask.HC,31",BI=244$
-$LK,"MsHardRst",A="FL:::/Kernel/SerialDev/Mouse.HC,114",BI=245$
+$LK,"BirthWait",A="FL:::/Kernel/KTask.HC,31",BI=243$
+$LK,"MsHardRst",A="FL:::/Kernel/SerialDev/Mouse.HC,114",BI=244$
 $LK,"SYS_VAR_INIT_FLAG",A="FL::/Tmp.DD,1"$
 $LK,"SYS_MEM_INIT_FLAG",A="FL::/Tmp.DD,1"$
 $LK,"SC_F3",A="FL:::/Kernel/KernelA.HH,3519"$
@@ -1123,39 +1131,39 @@ $LK,"WSSf_SET_TO_POS",A="FL:::/Kernel/KernelA.HH,3049"$
 $LK,"RS_ATTR_SYSTEM",A="FL:::/Kernel/KernelA.HH,2499"$
 $LK,"I_BPT",A="FL:::/Kernel/KernelA.HH,303"$
 $LK,"_TAKE_EXCEPT",A="FL:::/Kernel/KExcept.HC,20"$
-$LK,"DefineCnt",A="FL:::/Kernel/KDefine.HC,74",BI=246$
+$LK,"DefineCnt",A="FL:::/Kernel/KDefine.HC,74",BI=245$
 $LK,"SC_F5",A="FL:::/Kernel/KernelA.HH,3521"$
 $LK,"WIF_FOCUS_TASK_MENU",A="FL:::/Kernel/KernelA.HH,1433"$
-$LK,"RedSeaCd",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,236",BI=247$
-$LK,"JobDel",A="FL:::/Kernel/Job.HC,1",BI=248$
+$LK,"RedSeaCd",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,236",BI=246$
+$LK,"JobDel",A="FL:::/Kernel/Job.HC,1",BI=247$
 $LK,"SC_F6",A="FL:::/Kernel/KernelA.HH,3522"$
 $LK,"DFT_ISO_C_FILENAME",A="FL:::/Kernel/KernelA.HH,2728"$
-$LK,"SysGrInit",A="FL:::/Kernel/KMain.HC,65",BI=249$
-$LK,"ArcCtrlDel",A="FL:::/Kernel/Compress.HC,244",BI=250$
-$LK,"SysBadMAlloc",A="FL:::/Kernel/Mem/MemPag.HC,6",BI=251$
+$LK,"SysGrInit",A="FL:::/Kernel/KMain.HC,65",BI=248$
+$LK,"ArcCtrlDel",A="FL:::/Kernel/Compress.HC,244",BI=249$
+$LK,"SysBadMAlloc",A="FL:::/Kernel/Mem/MemPag.HC,6",BI=250$
 $LK,"SC_F7",A="FL:::/Kernel/KernelA.HH,3523"$
 $LK,"DOCSS_NORMAL",A="FL:::/Kernel/KernelA.HH,1133"$
 $LK,"GVF_EXTERN",A="FL:::/Kernel/KernelA.HH,873"$
 $LK,"blkdev_text_attr",A="FL:::/Kernel/BlkDev/DiskDrive.HC,318"$
 $LK,"SC_F8",A="FL:::/Kernel/KernelA.HH,3524"$
-$LK,"Mute",A="FL:::/Kernel/KMisc.HC,251",BI=252$
+$LK,"Mute",A="FL:::/Kernel/KMisc.HC,251",BI=251$
 $LK,"INT_FAULT",A="FL:::/Kernel/KInts.HC,62"$
 $LK,"progress2_desc",A="FL:::/Kernel/KernelB.HH,217"$
 $LK,"DCSF_PALETTE_GET",A="FL:::/Kernel/KernelA.HH,3588"$
 $LK,"SC_F9",A="FL:::/Kernel/KernelA.HH,3525"$
 $LK,"DOCEF_SOLID_BORDER",A="FL:::/Kernel/KernelA.HH,1008"$
 $LK,"DOCT_TYPES_NUM",A="FL:::/Kernel/KernelA.HH,949"$
-$LK,"KbdMsRst",A="FL:::/Kernel/SerialDev/Mouse.HC,284",BI=253$
-$LK,"KbdBuildSC",A="FL:::/Kernel/SerialDev/Keyboard.HC,301",BI=254$
+$LK,"KbdMsRst",A="FL:::/Kernel/SerialDev/Mouse.HC,284",BI=252$
+$LK,"KbdBuildSC",A="FL:::/Kernel/SerialDev/Keyboard.HC,301",BI=253$
 $LK,"CInst",A="FL:::/Kernel/KernelA.HH,1754"$
 $LK,"IOAPICID",A="FL:::/Kernel/KernelA.HH,533"$
 $LK,"RFLAGf_SIGN",A="FL:::/Kernel/KernelA.HH,325"$
 $LK,"DKGRAY",A="FL:::/Kernel/KernelA.HH,2922"$
 $LK,"DOCEF_MARGIN_REL_X",A="FL:::/Kernel/KernelA.HH,1001"$
-$LK,"PutDirLink",A="FL:::/Kernel/BlkDev/DiskDirA.HC,197",BI=255$
-$LK,"EndianU32",A="FL:::/Kernel/KMisc.HC,15",BI=256$
-$LK,"EndianU16",A="FL:::/Kernel/KMisc.HC,7",BI=257$
-$LK,"MemPagTaskFree",A="FL:::/Kernel/Mem/MemPag.HC,153",BI=258$
+$LK,"PutDirLink",A="FL:::/Kernel/BlkDev/DiskDirA.HC,197",BI=254$
+$LK,"EndianU32",A="FL:::/Kernel/KMisc.HC,15",BI=255$
+$LK,"EndianU16",A="FL:::/Kernel/KMisc.HC,7",BI=256$
+$LK,"MemPagTaskFree",A="FL:::/Kernel/Mem/MemPag.HC,153",BI=257$
 $LK,"DOCEf_SOLID_BORDER",A="FL:::/Kernel/KernelA.HH,1096"$
 $LK,"DOCEF_LEFT_IN_STR",A="FL:::/Kernel/KernelA.HH,989"$
 $LK,"sys_pci_busses",A="FL:::/Kernel/KernelB.HH,248"$
@@ -1164,14 +1172,14 @@ $LK,"TTS_LOCKED_CONST",A="FL:::/Kernel/KernelA.HH,3223"$
 $LK,"CCf_FUN_EXP",A="FL:::/Kernel/KernelA.HH,2161"$
 $LK,"CCF_FUN_EXP",A="FL:::/Kernel/KernelA.HH,2160"$
 $LK,"LAPIC_APIC_VERSION",A="FL:::/Kernel/KernelA.HH,501"$
-$LK,"PutS",A="FL:::/Kernel/KeyDev.HC,29",BI=259$
+$LK,"PutS",A="FL:::/Kernel/KeyDev.HC,29",BI=258$
 $LK,"DOCEf_MARGIN_REL_X",A="FL:::/Kernel/KernelA.HH,1089"$
 $LK,"DOCEf_LEFT_IN_STR",A="FL:::/Kernel/KernelA.HH,1077"$
 $LK,"SEMA_VGA",A="FL:::/Kernel/KernelA.HH,625"$
 $LK,"CDocBin",A="FL:::/Kernel/KernelA.HH,1119"$
 $LK,"LAPIC_BASE",A="FL:::/Kernel/KernelA.HH,498"$
-$LK,"KbdMsHandler",A="FL:::/Kernel/SerialDev/Mouse.HC,313",BI=260$
-$LK,"StrPrintJoin",A="FL:::/Kernel/StrPrint.HC,208",BI=261$
+$LK,"KbdMsHandler",A="FL:::/Kernel/SerialDev/Mouse.HC,313",BI=259$
+$LK,"StrPrintJoin",A="FL:::/Kernel/StrPrint.HC,208",BI=260$
 $LK,"IA32_GS_BASE",A="FL:::/Kernel/KernelA.HH,544"$
 $LK,"log2_e",A="FL:::/Kernel/KernelA.HH,55"$
 $LK,"MinU64",A="FL:::/Kernel/KernelB.HH,102"$
@@ -1179,9 +1187,10 @@ $LK,"_SYS_HLT",A="FL:::/Kernel/KUtils.HC,468"$
 $LK,"CCF_AOT_COMPILE",A="FL:::/Kernel/KernelA.HH,2171"$
 $LK,"OPTf_KEEP_PRIVATE",A="FL:::/Kernel/KernelA.HH,1553"$
 $LK,"SEMA_SND",A="FL:::/Kernel/KernelA.HH,616"$
+$LK,"CCntsGlobals",A="FL:::/Kernel/KernelA.HH,558"$
 $LK,"HTF_EXPORT",A="FL:::/Kernel/KernelA.HH,708"$
 $LK,"HTf_EXPORT",A="FL:::/Kernel/KernelA.HH,678"$
-$LK,"ATAPIReadBlks2",A="FL:::/Kernel/BlkDev/DiskATA.HC,388",BI=262$
+$LK,"ATAPIReadBlks2",A="FL:::/Kernel/BlkDev/DiskATA.HC,388",BI=261$
 $LK,"_D3_UNIT",A="FL:::/Kernel/KMathA.HC,305"$
 $LK,"CCf_AOT_COMPILE",A="FL:::/Kernel/KernelA.HH,2172"$
 $LK,"POP_C_REGS",A="FL:::/Kernel/KernelA.HH,1777"$
@@ -1190,40 +1199,40 @@ $LK,"CSema",A="FL:::/Kernel/KernelA.HH,607"$
 $LK,"EXT_HEAPLOG_MALLOC",A="FL:::/Kernel/KernelA.HH,598"$
 $LK,"GR_WIDTH",A="FL:::/Kernel/KernelA.HH,3555"$
 $LK,"DOCT_SOFT_NEW_LINE",A="FL:::/Kernel/KernelA.HH,907"$
-$LK,"GetBaseUnit",A="FL:::/Kernel/BlkDev/DiskAddDev.HC,186",BI=263$
-$LK,"FixSet",A="FL:::/Kernel/EdLite.HC,327",BI=264$
+$LK,"GetBaseUnit",A="FL:::/Kernel/BlkDev/DiskAddDev.HC,186",BI=262$
+$LK,"FixSet",A="FL:::/Kernel/EdLite.HC,327",BI=263$
 $LK,"DOCf_SEL",A="FL:::/Kernel/KernelA.HH,1336"$
 $LK,"sqrt2",A="FL:::/Kernel/KernelA.HH,58"$
 $LK,"VM_QEMU",A="FL:::/Kernel/KernelA.HH,3892"$
 $LK,"ATAR0_SEL",A="FL:::/Kernel/KernelA.HH,2294"$
 $LK,"DOCEf_FLAGS_NUM",A="FL:::/Kernel/KernelA.HH,1117"$
-$LK,"IntFaultHandlersNew",A="FL:::/Kernel/KInts.HC,166",BI=265$
-$LK,"ms_hard",A="FL:::/Kernel/KGlbls.HC,28"$
-$LK,"SpawnQueue",A="FL:::/Kernel/MultiProc.HC,247",BI=266$
-$LK,"DriveBlkDevDel",A="FL:::/Kernel/BlkDev/DiskDrive.HC,78",BI=267$
+$LK,"IntFaultHandlersNew",A="FL:::/Kernel/KInts.HC,166",BI=264$
+$LK,"ms_hard",A="FL:::/Kernel/KGlobals.HC,28"$
+$LK,"SpawnQueue",A="FL:::/Kernel/MultiProc.HC,247",BI=265$
+$LK,"DriveBlkDevDel",A="FL:::/Kernel/BlkDev/DiskDrive.HC,78",BI=266$
 $LK,"mem_boot_base",A="FL:::/Kernel/KernelB.HH,37"$
 $LK,"TASKf_INPUT_FILTER_TASK",A="FL:::/Kernel/KernelA.HH,3234"$
 $LK,"OM_CB",A="FL:::/Kernel/KernelA.HH,1881"$
-$LK,"StrFirstRemove",A="FL:::/Kernel/StrA.HC,577",BI=268$
-$LK,"throw",A="FL:::/Kernel/KExcept.HC,84",BI=269$
+$LK,"StrFirstRemove",A="FL:::/Kernel/StrA.HC,577",BI=267$
+$LK,"throw",A="FL:::/Kernel/KExcept.HC,84",BI=268$
 $LK,"MESSAGE_MS_R_D_UP",A="FL:::/Kernel/KernelA.HH,3186"$
 $LK,"BDF_READ_ONLY_OVERRIDE",A="FL:::/Kernel/KernelA.HH,2612"$
 $LK,"TK_AND_AND",A="FL:::/Kernel/KernelA.HH,2098"$
 $LK,"REG_NONE",A="FL:::/Kernel/KernelA.HH,1797"$
 $LK,"OC_LOCK_PREFIX",A="FL:::/Kernel/KernelA.HH,1769"$
 $LK,"Ff_INTERRUPT",A="FL:::/Kernel/KernelA.HH,852"$
-$LK,"DriveLock",A="FL:::/Kernel/BlkDev/DiskDrive.HC,1",BI=270$
+$LK,"DriveLock",A="FL:::/Kernel/BlkDev/DiskDrive.HC,1",BI=269$
 $LK,"CFunSegCache",A="FL:::/Kernel/KernelA.HH,3801"$
 $LK,"OM_CD",A="FL:::/Kernel/KernelA.HH,1883"$
 $LK,"AAT_ADD_U8",A="FL:::/Kernel/KernelA.HH,1979"$
 $LK,"REGT_XMM",A="FL:::/Kernel/KernelA.HH,751"$
 $LK,"CQueueVectU8",A="FL:::/Kernel/KernelA.HH,164"$
-$LK,"CheckOnStk",A="FL:::/Kernel/KDebug.HC,31",BI=271$
+$LK,"CheckOnStk",A="FL:::/Kernel/KDebug.HC,31",BI=270$
 $LK,"CM_CONSTS_NUM",A="FL:::/Kernel/KernelA.HH,1713"$
 $LK,"DOCSS_CPP_Z_COMMENT",A="FL:::/Kernel/KernelA.HH,1137"$
 $LK,"DOCT_SHIFTED_X",A="FL:::/Kernel/KernelA.HH,929"$
 $LK,"RLF_16MEG_SYS_CODE_BP",A="FL:::/Kernel/KernelA.HH,479"$
-$LK,"PutExcept",A="FL:::/Kernel/KExcept.HC,45",BI=272$
+$LK,"PutExcept",A="FL:::/Kernel/KExcept.HC,45",BI=271$
 $LK,"TestExcept",A="FL:::/Kernel/KExcept.HC,41"$
 $LK,"char_bmp_printable",A="FL:::/Kernel/StrA.HC,376"$
 $LK,"CColorROPU32",A="FL:::/Kernel/KernelA.HH,2939"$
@@ -1240,7 +1249,7 @@ $LK,"STK_REP_LEN",A="FL:::/Kernel/KDebug.HC,102"$
 $LK,"I_NMI",A="FL:::/Kernel/KernelA.HH,302"$
 $LK,"ModU64",A="FL:::/Kernel/KernelB.HH,103"$
 $LK,"DOCG_DBL_BUF_FLAGS",A="FL:::/Kernel/KernelA.HH,963"$
-$LK,"JobResScan",A="FL:::/Kernel/Job.HC,164",BI=273$
+$LK,"JobResScan",A="FL:::/Kernel/Job.HC,164",BI=272$
 $LK,"WIf_FOCUS_TASK_MENU",A="FL:::/Kernel/KernelA.HH,1460"$
 $LK,"CTask",A="FL:::/Kernel/KernelA.HH,3271"$
 $LK,"OC_JMP_REL8",A="FL:::/Kernel/KernelA.HH,1773"$
@@ -1248,7 +1257,7 @@ $LK,"I8_MAX",A="FL:::/Kernel/KernelA.HH,26"$
 $LK,"_HASH_SINGLE_TABLE_FIND",A="FL:::/Kernel/KHashA.HC,143"$
 $LK,"_D3_ZERO",A="FL:::/Kernel/KMathA.HC,201"$
 $LK,"REGG_STK_TMP",A="FL:::/Kernel/KernelA.HH,1803"$
-$LK,"Str2F64",A="FL:::/Kernel/StrScan.HC,55",BI=274$
+$LK,"Str2F64",A="FL:::/Kernel/StrScan.HC,55",BI=273$
 $LK,"_YIELD",A="FL:::/Kernel/Sched.HC,157"$
 $LK,"OM_IB",A="FL:::/Kernel/KernelA.HH,1885"$
 $LK,"progress3_desc",A="FL:::/Kernel/KernelB.HH,223"$
@@ -1265,27 +1274,26 @@ $LK,"FUF_RECURSE",A="FL:::/Kernel/KernelA.HH,2565"$
 $LK,"FUf_RECURSE",A="FL:::/Kernel/KernelA.HH,2537"$
 $LK,"MemCmp",A="FL:::/Kernel/KernelB.HH,167"$
 $LK,"SC_PAGE_UP",A="FL:::/Kernel/KernelA.HH,3511"$
-$LK,"User",A="FL:::/Kernel/KTask.HC,424",BI=275$
+$LK,"User",A="FL:::/Kernel/KTask.HC,424",BI=274$
 $LK,"DOCEf_RIGHT_EXP",A="FL:::/Kernel/KernelA.HH,1065"$
 $LK,"DOCEF_RIGHT_EXP",A="FL:::/Kernel/KernelA.HH,977"$
-$LK,"DirEntryDel",A="FL:::/Kernel/BlkDev/DiskDirA.HC,14",BI=276$
+$LK,"DirEntryDel",A="FL:::/Kernel/BlkDev/DiskDirA.HC,14",BI=275$
 $LK,"CLexFile",A="FL:::/Kernel/KernelA.HH,2047"$
 $LK,"OM_CW",A="FL:::/Kernel/KernelA.HH,1882"$
 $LK,"DOCF_DONT_SWAP_OUT",A="FL:::/Kernel/KernelA.HH,1290"$
 $LK,"IA32_LAPIC_BASE",A="FL:::/Kernel/KernelA.HH,541"$
-$LK,"ATACmd",A="FL:::/Kernel/BlkDev/DiskATA.HC,59",BI=277$
+$LK,"ATACmd",A="FL:::/Kernel/BlkDev/DiskATA.HC,59",BI=276$
 $LK,"FILEMASK_DD",A="FL:::/Kernel/KernelA.HH,2303"$
 $LK,"DOCEf_SHIFTED_X",A="FL:::/Kernel/KernelA.HH,1070"$
 $LK,"DOCEG_DONT_EDIT",A="FL:::/Kernel/KernelA.HH,1040"$
 $LK,"DOCEF_SHIFTED_X",A="FL:::/Kernel/KernelA.HH,982"$
 $LK,"SEMA_HEAPLOG_ACTIVE",A="FL:::/Kernel/KernelA.HH,617"$
-$LK,"CScreenCastGlbls",A="FL:::/Kernel/KernelA.HH,3788"$
 $LK,"DOCEf_SHIFTED_Y",A="FL:::/Kernel/KernelA.HH,1071"$
 $LK,"DOCEF_SHIFTED_Y",A="FL:::/Kernel/KernelA.HH,983"$
-$LK,"Str2I64",A="FL:::/Kernel/StrScan.HC,1",BI=278$
+$LK,"Str2I64",A="FL:::/Kernel/StrScan.HC,1",BI=277$
 $LK,"Sqrt",A="FL:::/Kernel/KernelB.HH,109"$
-$LK,"NowDateTimeStruct",A="FL:::/Kernel/KDate.HC,133",BI=279$
-$LK,"YorN",A="FL:::/Kernel/StrB.HC,87",BI=280$
+$LK,"NowDateTimeStruct",A="FL:::/Kernel/KDate.HC,133",BI=278$
+$LK,"YorN",A="FL:::/Kernel/StrB.HC,87",BI=279$
 $LK,"MT_CD",A="FL:::/Kernel/KernelA.HH,2514"$
 $LK,"RFLAGf_VINT",A="FL:::/Kernel/KernelA.HH,336"$
 $LK,"DCF_ON_TOP",A="FL:::/Kernel/KernelA.HH,3584"$
@@ -1295,7 +1303,7 @@ $LK,"SYS_CPU_STRUCTS",A="FL:::/Kernel/KStart32.HC,64"$
 $LK,"DOCf_DONT_SWAP_OUT",A="FL:::/Kernel/KernelA.HH,1327"$
 $LK,"CDocEntryBase",A="FL:::/Kernel/KernelA.HH,1170"$
 $LK,"MLF_STR_DFT_AVAILABLE",A="FL:::/Kernel/KernelA.HH,781"$
-$LK,"ArcCtrlNew",A="FL:::/Kernel/Compress.HC,221",BI=281$
+$LK,"ArcCtrlNew",A="FL:::/Kernel/Compress.HC,221",BI=280$
 $LK,"DCF_DONT_DRAW",A="FL:::/Kernel/KernelA.HH,3579"$
 $LK,"DOC_SCROLL_SPEED",A="FL:::/Kernel/KernelA.HH,1131"$
 $LK,"ATTRf_SEL",A="FL:::/Kernel/KernelA.HH,901"$
@@ -1310,23 +1318,23 @@ $LK,"VGAP_DATA",A="FL:::/Kernel/KernelA.HH,3672"$
 $LK,"OM_NO",A="FL:::/Kernel/KernelA.HH,1880"$
 $LK,"IET_DATA_HEAP",A="FL:::/Kernel/KernelA.HH,426"$
 $LK,"GVF_DATA_HEAP",A="FL:::/Kernel/KernelA.HH,874"$
-$LK,"DefineSub",A="FL:::/Kernel/KDefine.HC,60",BI=282$
+$LK,"DefineSub",A="FL:::/Kernel/KDefine.HC,60",BI=281$
 $LK,"WHITE",A="FL:::/Kernel/KernelA.HH,2929"$
 $LK,"ATA_READ_MULTI_EXT",A="FL:::/Kernel/KernelA.HH,2277"$
 $LK,"DOCEF_SCROLLING_X",A="FL:::/Kernel/KernelA.HH,984"$
 $LK,"DOCEf_CHECKED_COLLAPSED",A="FL:::/Kernel/KernelA.HH,1098"$
-$LK,"Name2ParentDirClus",A="FL:::/Kernel/BlkDev/DiskStrB.HC,50",BI=283$
+$LK,"Name2ParentDirClus",A="FL:::/Kernel/BlkDev/DiskStrB.HC,50",BI=282$
 $LK,"DOCEf_SCROLLING_X",A="FL:::/Kernel/KernelA.HH,1072"$
-$LK,"MPInt",A="FL:::/Kernel/MultiProc.HC,132",BI=284$
+$LK,"MPInt",A="FL:::/Kernel/MultiProc.HC,132",BI=283$
 $LK,"BOOT_SRC_RAM",A="FL:::/Kernel/KernelA.HH,3841"$
 $LK,"TK_AND_EQU",A="FL:::/Kernel/KernelA.HH,2105"$
 $LK,"I64",A="FL:::/Kernel/KernelA.HH,106"$
-$LK,"PopUpPrint",A="FL:::/Kernel/Job.HC,397",BI=285$
-$LK,"IntEntryGet",A="FL:::/Kernel/KInts.HC,97",BI=286$
-$LK,"ms_grid",A="FL:::/Kernel/KGlbls.HC,24"$
+$LK,"PopUpPrint",A="FL:::/Kernel/Job.HC,397",BI=284$
+$LK,"IntEntryGet",A="FL:::/Kernel/KInts.HC,97",BI=285$
+$LK,"ms_grid",A="FL:::/Kernel/KGlobals.HC,24"$
 $LK,"FILEMASK_GR",A="FL:::/Kernel/KernelA.HH,2305"$
 $LK,"CD2",A="FL:::/Kernel/KernelA.HH,151"$
-$LK,"KeyDevInit",A="FL:::/Kernel/KeyDev.HC,201",BI=287$
+$LK,"KeyDevInit",A="FL:::/Kernel/KeyDev.HC,201",BI=286$
 $LK,"CCF_HAS_RETURN",A="FL:::/Kernel/KernelA.HH,2156"$
 $LK,"CAsmArg",A="FL:::/Kernel/KernelA.HH,1856"$
 $LK,"CD3",A="FL:::/Kernel/KernelA.HH,157"$
@@ -1334,42 +1342,42 @@ $LK,"QueueRemove",A="FL:::/Kernel/KernelB.HH,72"$
 $LK,"SYS_BOOT_BLK",A="FL:::/Kernel/KStart16.HC,24"$
 $LK,"progress4_desc",A="FL:::/Kernel/KernelB.HH,229"$
 $LK,"RFLAGf_ZERO",A="FL:::/Kernel/KernelA.HH,324"$
-$LK,"PCIReadU8",A="FL:::/Kernel/PCIBIOS.HC,163",BI=288$
+$LK,"PCIReadU8",A="FL:::/Kernel/PCIBIOS.HC,163",BI=287$
 $LK,"EXT_WIN_FOCUS",A="FL:::/Kernel/KernelA.HH,597"$
 $LK,"CHashAC",A="FL:::/Kernel/KernelA.HH,758"$
-$LK,"ms_last",A="FL:::/Kernel/KGlbls.HC,25"$
+$LK,"ms_last",A="FL:::/Kernel/KGlobals.HC,25"$
 $LK,"DOCf_NO_CURSOR",A="FL:::/Kernel/KernelA.HH,1310"$
 $LK,"DOCF_NO_CURSOR",A="FL:::/Kernel/KernelA.HH,1273"$
-$LK,"PrintWarn",A="FL:::/Kernel/StrPrint.HC,914",BI=289$
-$LK,"LoadOneImport",A="FL:::/Kernel/KLoad.HC,1",BI=290$
-$LK,"FOpen",A="FL:::/Kernel/BlkDev/DiskCFile.HC,9",BI=291$
+$LK,"PrintWarn",A="FL:::/Kernel/StrPrint.HC,914",BI=288$
+$LK,"LoadOneImport",A="FL:::/Kernel/KLoad.HC,1",BI=289$
+$LK,"FOpen",A="FL:::/Kernel/BlkDev/DiskCFile.HC,9",BI=290$
 $LK,"CCF_LAST_WAS_DOT",A="FL:::/Kernel/KernelA.HH,2170"$
 $LK,"CMF_DEFINED",A="FL:::/Kernel/KernelA.HH,1707"$
 $LK,"HTG_ALL",A="FL:::/Kernel/KernelA.HH,719"$
 $LK,"sys_var_init_val",A="FL:::/Kernel/KernelB.HH,187"$
 $LK,"FUF_REPLACE",A="FL:::/Kernel/KernelA.HH,2571"$
 $LK,"FUf_REPLACE",A="FL:::/Kernel/KernelA.HH,2543"$
-$LK,"BlkDevUnlock",A="FL:::/Kernel/BlkDev/DiskBlkDev.HC,15",BI=292$
+$LK,"BlkDevUnlock",A="FL:::/Kernel/BlkDev/DiskBlkDev.HC,15",BI=291$
 $LK,"CMemUsed",A="FL:::/Kernel/KernelA.HH,2799"$
-$LK,"IntMPCrash",A="FL:::/Kernel/MultiProc.HC,379",BI=293$
-$LK,"TSSBusy",A="FL:::/Kernel/MultiProc.HC,71",BI=294$
+$LK,"IntMPCrash",A="FL:::/Kernel/MultiProc.HC,379",BI=292$
+$LK,"TSSBusy",A="FL:::/Kernel/MultiProc.HC,71",BI=293$
 $LK,"FUF_JUST_AOT",A="FL:::/Kernel/KernelA.HH,2582"$
 $LK,"FUf_JUST_AOT",A="FL:::/Kernel/KernelA.HH,2554"$
-$LK,"DirNameAbs",A="FL:::/Kernel/BlkDev/DiskStrA.HC,108",BI=295$
+$LK,"DirNameAbs",A="FL:::/Kernel/BlkDev/DiskStrA.HC,108",BI=294$
 $LK,"DOF_DONT_HOME",A="FL:::/Kernel/KernelA.HH,1228"$
 $LK,"RLF_ZENITH_SERVER",A="FL:::/Kernel/KernelA.HH,493"$
 $LK,"CH_ESC",A="FL:::/Kernel/KernelA.HH,3454"$
 $LK,"DOCEf_DONT_DRAW",A="FL:::/Kernel/KernelA.HH,1114"$
 $LK,"DOCEF_DONT_DRAW",A="FL:::/Kernel/KernelA.HH,1028"$
 $LK,"WIF_FOCUS_TASK_MS_L",A="FL:::/Kernel/KernelA.HH,1435"$
-$LK,"WildMatch",A="FL:::/Kernel/StrA.HC,651",BI=296$
+$LK,"WildMatch",A="FL:::/Kernel/StrA.HC,651",BI=295$
 $LK,"MEM_EXTRA_HASH2_PAGS",A="FL:::/Kernel/KernelA.HH,2838"$
 $LK,"CDC",A="FL:::/Kernel/KernelA.HH,3599"$
 $LK,"SC_CURSOR_LEFT",A="FL:::/Kernel/KernelA.HH,3509"$
-$LK,"IsMute",A="FL:::/Kernel/KMisc.HC,265",BI=297$
+$LK,"IsMute",A="FL:::/Kernel/KMisc.HC,265",BI=296$
 $LK,"DOCT_CLEAR",A="FL:::/Kernel/KernelA.HH,913"$
-$LK,"DVDImageWrite",A="FL:::/Kernel/BlkDev/DiskCDDVD.HC,143",BI=298$
-$LK,"HashTypeNum",A="FL:::/Kernel/KHashB.HC,1",BI=299$
+$LK,"DVDImageWrite",A="FL:::/Kernel/BlkDev/DiskCDDVD.HC,143",BI=297$
+$LK,"HashTypeNum",A="FL:::/Kernel/KHashB.HC,1",BI=298$
 $LK,"CPUf_DYING_TASK_QUE",A="FL:::/Kernel/KernelA.HH,3389"$
 $LK,"BDf_READ_ONLY",A="FL:::/Kernel/KernelA.HH,2621"$
 $LK,"BDF_READ_ONLY",A="FL:::/Kernel/KernelA.HH,2611"$
@@ -1377,7 +1385,7 @@ $LK,"ISOT_BOOT_RECORD",A="FL:::/Kernel/KernelA.HH,2462"$
 $LK,"DCF_JUST_MIRROR",A="FL:::/Kernel/KernelA.HH,3576"$
 $LK,"FSt_UNKNOWN",A="FL:::/Kernel/KernelA.HH,2663"$
 $LK,"WIG_USER_TASK_DFT",A="FL:::/Kernel/KernelA.HH,1448"$
-$LK,"KMain",A="FL:::/Kernel/KMain.HC,135",BI=300$
+$LK,"KMain",A="FL:::/Kernel/KMain.HC,135",BI=299$
 $LK,"sys_cache_line_width",A="FL:::/Kernel/KernelB.HH,280"$
 $LK,"XchgI64",A="FL:::/Kernel/KernelB.HH,271"$
 $LK,"SC_CURSOR_DOWN",A="FL:::/Kernel/KernelA.HH,3508"$
@@ -1387,11 +1395,11 @@ $LK,"RLf_ZENITH_SERVER",A="FL:::/Kernel/KernelA.HH,471"$
 $LK,"I_SINGLE_STEP",A="FL:::/Kernel/KernelA.HH,301"$
 $LK,"ATA_WRITE_MULTI",A="FL:::/Kernel/KernelA.HH,2278"$
 $LK,"DOC_COLOR_KEYWORD",A="FL:::/Kernel/KernelA.HH,1155"$
-$LK,"XTalkStr",A="FL:::/Kernel/Job.HC,489",BI=301$
+$LK,"XTalkStr",A="FL:::/Kernel/Job.HC,489",BI=300$
 $LK,"CCF_IN_QUOTES",A="FL:::/Kernel/KernelA.HH,2153"$
 $LK,"CFifoU8",A="FL:::/Kernel/KernelA.HH,172"$
-$LK,"ATAReadNativeMax",A="FL:::/Kernel/BlkDev/DiskATA.HC,194",BI=302$
-$LK,"MsHardSetPre",A="FL:::/Kernel/SerialDev/Mouse.HC,196",BI=303$
+$LK,"ATAReadNativeMax",A="FL:::/Kernel/BlkDev/DiskATA.HC,194",BI=301$
+$LK,"MsHardSetPre",A="FL:::/Kernel/SerialDev/Mouse.HC,196",BI=302$
 $LK,"BOOT_SRC_ROM",A="FL:::/Kernel/KernelA.HH,3840"$
 $LK,"MEM_FREE_PAG_HASH_SIZE",A="FL:::/Kernel/KernelA.HH,2835"$
 $LK,"RLF_AUTO_COMPLETE",A="FL:::/Kernel/KernelA.HH,492"$
@@ -1407,15 +1415,15 @@ $LK,"FUF_IGNORE",A="FL:::/Kernel/KernelA.HH,2568"$
 $LK,"FUf_IGNORE",A="FL:::/Kernel/KernelA.HH,2540"$
 $LK,"AAT_SUB_U32",A="FL:::/Kernel/KernelA.HH,1984"$
 $LK,"AAT_SUB_U16",A="FL:::/Kernel/KernelA.HH,1982"$
-$LK,"UserCmdLine",A="FL:::/Kernel/KTask.HC,414",BI=304$
+$LK,"UserCmdLine",A="FL:::/Kernel/KTask.HC,414",BI=303$
 $LK,"GVF_FUN",A="FL:::/Kernel/KernelA.HH,871"$
 $LK,"IA32F_LME",A="FL:::/Kernel/KernelA.HH,540"$
 $LK,"LAPICF_APIC_ENABLED",A="FL:::/Kernel/KernelA.HH,510"$
 $LK,"RLf_AUTO_COMPLETE",A="FL:::/Kernel/KernelA.HH,470"$
-$LK,"PCIClassFind",A="FL:::/Kernel/PCIBIOS.HC,265",BI=305$
+$LK,"PCIClassFind",A="FL:::/Kernel/PCIBIOS.HC,265",BI=304$
 $LK,"RECALCF_HAS_CURSOR",A="FL:::/Kernel/KernelA.HH,1364"$
-$LK,"ATARep",A="FL:::/Kernel/BlkDev/DiskATAId.HC,134",BI=306$
-$LK,"KDInputFilterPutS",A="FL:::/Kernel/KeyDev.HC,117",BI=307$
+$LK,"ATARep",A="FL:::/Kernel/BlkDev/DiskATAId.HC,134",BI=305$
+$LK,"KDInputFilterPutS",A="FL:::/Kernel/KeyDev.HC,117",BI=306$
 $LK,"D3SubEqu",A="FL:::/Kernel/KernelB.HH,161"$
 $LK,"FUF_JUST_JIT",A="FL:::/Kernel/KernelA.HH,2583"$
 $LK,"FUf_JUST_JIT",A="FL:::/Kernel/KernelA.HH,2555"$
@@ -1427,33 +1435,33 @@ $LK,"DOCT_BLINK",A="FL:::/Kernel/KernelA.HH,926"$
 $LK,"U32",A="FL:::/Kernel/KernelA.HH,80"$
 $LK,"U16",A="FL:::/Kernel/KernelA.HH,68"$
 $LK,"_XCHG_I64",A="FL:::/Kernel/KUtils.HC,184"$
-$LK,"ATANop",A="FL:::/Kernel/BlkDev/DiskATA.HC,48",BI=308$
-$LK,"TaskDel",A="FL:::/Kernel/KTask.HC,437",BI=309$
+$LK,"ATANop",A="FL:::/Kernel/BlkDev/DiskATA.HC,48",BI=307$
+$LK,"TaskDel",A="FL:::/Kernel/KTask.HC,437",BI=308$
 $LK,"LXchgU8",A="FL:::/Kernel/KernelB.HH,267"$
 $LK,"AAT_SUB_U64",A="FL:::/Kernel/KernelA.HH,1986"$
-$LK,"HasLower",A="FL:::/Kernel/FunSeg.HC,1",BI=310$
+$LK,"HasLower",A="FL:::/Kernel/FunSeg.HC,1",BI=309$
 $LK,"_CALL",A="FL:::/Kernel/KUtils.HC,145"$
 $LK,"IA32F_SCE",A="FL:::/Kernel/KernelA.HH,539"$
 $LK,"__LINE__",A="FL:::/Kernel/KernelA.HH,2037"$
 $LK,"FUF_FLATTEN_TREE",A="FL:::/Kernel/KernelA.HH,2588"$
-$LK,"KeyDescSet",A="FL:::/Kernel/KeyDev.HC,56",BI=311$
-$LK,"TaskQueueRemove",A="FL:::/Kernel/Sched.HC,301",BI=312$
+$LK,"KeyDescSet",A="FL:::/Kernel/KeyDev.HC,56",BI=310$
+$LK,"TaskQueueRemove",A="FL:::/Kernel/Sched.HC,301",BI=311$
 $LK,"U64",A="FL:::/Kernel/KernelA.HH,96"$
-$LK,"FSize",A="FL:::/Kernel/BlkDev/DiskCFile.HC,1",BI=313$
-$LK,"IntEntrySet",A="FL:::/Kernel/KInts.HC,109",BI=314$
-$LK,"Mem32DevIns",A="FL:::/Kernel/Mem/MemPhysical.HC,1",BI=315$
+$LK,"FSize",A="FL:::/Kernel/BlkDev/DiskCFile.HC,1",BI=312$
+$LK,"IntEntrySet",A="FL:::/Kernel/KInts.HC,109",BI=313$
+$LK,"Mem32DevIns",A="FL:::/Kernel/Mem/MemPhysical.HC,1",BI=314$
 $LK,"SYS_MP_CNT_INITIAL",A="FL:::/Kernel/KStart32.HC,66"$
 $LK,"FUf_FLATTEN_TREE",A="FL:::/Kernel/KernelA.HH,2560"$
 $LK,"WIf_FOCUS_TASK_MS_L",A="FL:::/Kernel/KernelA.HH,1462"$
 $LK,"WIF_SELF_MS_L",A="FL:::/Kernel/KernelA.HH,1422"$
 $LK,"char_bmp_word",A="FL:::/Kernel/StrA.HC,340"$
 $LK,"WIf_SELF_MS_L",A="FL:::/Kernel/KernelA.HH,1452"$
-$LK,"BlkRead",A="FL:::/Kernel/BlkDev/DiskBlk.HC,31",BI=316$
+$LK,"BlkRead",A="FL:::/Kernel/BlkDev/DiskBlk.HC,31",BI=315$
 $LK,"_CEIL",A="FL:::/Kernel/KMathA.HC,441"$
-$LK,"TaskEnd",A="FL:::/Kernel/KTask.HC,445",BI=317$
+$LK,"TaskEnd",A="FL:::/Kernel/KTask.HC,445",BI=316$
 $LK,"MEM_1GIG_NUM",A="FL:::/Kernel/KStart32.HC,11"$
 $LK,"WIf_FOCUS_TASK_MS_R",A="FL:::/Kernel/KernelA.HH,1464"$
-$LK,"TaskCaller",A="FL:::/Kernel/KDebug.HC,75",BI=318$
+$LK,"TaskCaller",A="FL:::/Kernel/KDebug.HC,75",BI=317$
 $LK,"SV_NONE",A="FL:::/Kernel/KernelA.HH,1753"$
 $LK,"QUE_VECT_U8_CNT",A="FL:::/Kernel/KernelA.HH,163"$
 $LK,"RT_I0",A="FL:::/Kernel/KernelA.HH,1564"$
@@ -1466,99 +1474,99 @@ $LK,"DOCF_NULL_GRAB_SCROLL",A="FL:::/Kernel/KernelA.HH,1289"$
 $LK,"DOCEf_LEFT_MACRO",A="FL:::/Kernel/KernelA.HH,1064"$
 $LK,"SYS_GDT",A="FL:::/Kernel/KStart16.HC,39"$
 $LK,"JOBf_WAKE_MASTER",A="FL:::/Kernel/KernelA.HH,3129"$
-$LK,"CDate2Dos",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,1",BI=319$
+$LK,"CDate2Dos",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,1",BI=318$
 $LK,"SEMA_DEBUG",A="FL:::/Kernel/KernelA.HH,611"$
-$LK,"ExtChg",A="FL:::/Kernel/BlkDev/DiskStrA.HC,203",BI=320$
+$LK,"ExtChg",A="FL:::/Kernel/BlkDev/DiskStrA.HC,203",BI=319$
 $LK,"TMP_BUF_LEN",A="FL:::/Kernel/StrPrint.HC,205"$
 $LK,"MRT_UNUSED",A="FL:::/Kernel/KernelA.HH,2820"$
 $LK,"MDG_REG_DISP_SIB",A="FL:::/Kernel/KernelA.HH,1598"$
 $LK,"RLF_16MEG_ZENITH_HEAP_CTRL",A="FL:::/Kernel/KernelA.HH,481"$
 $LK,"RLf_16MEG_ZENITH_HEAP_CTRL",A="FL:::/Kernel/KernelA.HH,459"$
-$LK,"RedSeaFilesDel",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,456",BI=321$
+$LK,"RedSeaFilesDel",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,456",BI=320$
 $LK,"XchgU32",A="FL:::/Kernel/KernelB.HH,273"$
 $LK,"XchgU16",A="FL:::/Kernel/KernelB.HH,272"$
 $LK,"TK_SHL_EQU",A="FL:::/Kernel/KernelA.HH,2101"$
-$LK,"CCntsGlbls",A="FL:::/Kernel/KernelA.HH,558"$
-$LK,"LastDayOfMon",A="FL:::/Kernel/KDate.HC,82",BI=322$
+$LK,"LastDayOfMon",A="FL:::/Kernel/KDate.HC,82",BI=321$
 $LK,"RT_I8",A="FL:::/Kernel/KernelA.HH,1566"$
 $LK,"CAsmNum",A="FL:::/Kernel/KernelA.HH,1829"$
 $LK,"_REP_OUT_U16",A="FL:::/Kernel/KUtils.HC,297"$
 $LK,"_REP_OUT_U32",A="FL:::/Kernel/KUtils.HC,286"$
 $LK,"VGAM_TEXT",A="FL:::/Kernel/KernelA.HH,3664"$
 $LK,"ACD_POS",A="FL:::/Kernel/KernelA.HH,1519"$
-$LK,"FirstDayOfMon",A="FL:::/Kernel/KDate.HC,71",BI=323$
-$LK,"PutChars",A="FL:::/Kernel/KeyDev.HC,20",BI=324$
-$LK,"ZenithErr",A="FL:::/Kernel/Job.HC,433",BI=325$
+$LK,"FirstDayOfMon",A="FL:::/Kernel/KDate.HC,71",BI=322$
+$LK,"PutChars",A="FL:::/Kernel/KeyDev.HC,20",BI=323$
+$LK,"ZenithErr",A="FL:::/Kernel/Job.HC,433",BI=324$
 $LK,"_BEQU",A="FL:::/Kernel/KUtils.HC,89"$
 $LK,"DOCEf_RAW_TYPE",A="FL:::/Kernel/KernelA.HH,1069"$
 $LK,"DOCEF_RAW_TYPE",A="FL:::/Kernel/KernelA.HH,981"$
-$LK,"DriveFATBlkClean",A="FL:::/Kernel/BlkDev/DiskDrive.HC,99",BI=326$
+$LK,"DriveFATBlkClean",A="FL:::/Kernel/BlkDev/DiskDrive.HC,99",BI=325$
 $LK,"ansf",A="FL:::/Kernel/KernelA.HH,3367"$
-$LK,"BlkDevsInitAll",A="FL:::/Kernel/BlkDev/DiskAddDev.HC,225",BI=327$
-$LK,"SysUntry",A="FL:::/Kernel/KExcept.HC,77",BI=328$
+$LK,"BlkDevsInitAll",A="FL:::/Kernel/BlkDev/DiskAddDev.HC,225",BI=326$
+$LK,"SysUntry",A="FL:::/Kernel/KExcept.HC,77",BI=327$
 $LK,"WIF_FOCUS_TASK_BORDER",A="FL:::/Kernel/KernelA.HH,1440"$
 $LK,"_MEMCMP",A="FL:::/Kernel/KUtils.HC,70"$
 $LK,"DISPLAYf_NO_BORDER",A="FL:::/Kernel/KernelA.HH,3250"$
 $LK,"OFF",A="FL:::/Kernel/KernelA.HH,23"$
 $LK,"DOCF_DO_FULL_REFRESH",A="FL:::/Kernel/KernelA.HH,1291"$
-$LK,"FifoI64Remove",A="FL:::/Kernel/KDataTypes.HC,275",BI=329$
-$LK,"ExtDft",A="FL:::/Kernel/BlkDev/DiskStrA.HC,212",BI=330$
+$LK,"FifoI64Remove",A="FL:::/Kernel/KDataTypes.HC,275",BI=328$
+$LK,"ExtDft",A="FL:::/Kernel/BlkDev/DiskStrA.HC,212",BI=329$
 $LK,"SYS_BOOT_SRC",A="FL:::/Kernel/KStart16.HC,23"$
 $LK,"FUF_JUST_SRC",A="FL:::/Kernel/KernelA.HH,2581"$
 $LK,"FUf_JUST_SRC",A="FL:::/Kernel/KernelA.HH,2553"$
 $LK,"OC_CALL",A="FL:::/Kernel/KernelA.HH,1772"$
-$LK,"TaskExe",A="FL:::/Kernel/Job.HC,39",BI=331$
-$LK,"KbdMessagesQueue",A="FL:::/Kernel/SerialDev/Keyboard.HC,467",BI=332$
-$LK,"FileWrite",A="FL:::/Kernel/BlkDev/DiskFile.HC,79",BI=333$
+$LK,"TaskExe",A="FL:::/Kernel/Job.HC,39",BI=330$
+$LK,"KbdMessagesQueue",A="FL:::/Kernel/SerialDev/Keyboard.HC,467",BI=331$
+$LK,"FileWrite",A="FL:::/Kernel/BlkDev/DiskFile.HC,79",BI=332$
 $LK,"ARf_CSPRITE_PTS_RECTANGLES",A="FL:::/Kernel/KernelA.HH,3855"$
 $LK,"MESSAGE_KEY_DOWN_UP",A="FL:::/Kernel/KernelA.HH,3189"$
 $LK,"RFLAGf_ID",A="FL:::/Kernel/KernelA.HH,338"$
 $LK,"SCF_E0_PREFIX",A="FL:::/Kernel/KernelA.HH,3478"$
 $LK,"SCf_E0_PREFIX",A="FL:::/Kernel/KernelA.HH,3463"$
-$LK,"ATAWaitNotBUSY",A="FL:::/Kernel/BlkDev/DiskATA.HC,24",BI=334$
+$LK,"ATAWaitNotBUSY",A="FL:::/Kernel/BlkDev/DiskATA.HC,24",BI=333$
 $LK,"_XCHG_U16",A="FL:::/Kernel/KUtils.HC,200"$
 $LK,"_XCHG_U32",A="FL:::/Kernel/KUtils.HC,192"$
 $LK,"SUF_TO_LOWER",A="FL:::/Kernel/KernelA.HH,3736"$
 $LK,"ARGT_XMM32",A="FL:::/Kernel/KernelA.HH,1953"$
 $LK,"WIF_SELF_GRAB_SCROLL",A="FL:::/Kernel/KernelA.HH,1428"$
 $LK,"LDF_SILENT",A="FL:::/Kernel/KernelA.HH,382"$
-$LK,"MsInit",A="FL:::/Kernel/SerialDev/Mouse.HC,63",BI=335$
-$LK,"ZenithLog",A="FL:::/Kernel/Job.HC,423",BI=336$
+$LK,"MsInit",A="FL:::/Kernel/SerialDev/Mouse.HC,63",BI=334$
+$LK,"ZenithLog",A="FL:::/Kernel/Job.HC,423",BI=335$
 $LK,"RED",A="FL:::/Kernel/KernelA.HH,2918"$
 $LK,"RT_U0",A="FL:::/Kernel/KernelA.HH,1565"$
 $LK,"VGAR_MAP_MASK",A="FL:::/Kernel/KernelA.HH,3682"$
 $LK,"PRTF_COMMA",A="FL:::/Kernel/KernelA.HH,3872"$
 $LK,"CAOTCtrl",A="FL:::/Kernel/KernelA.HH,2061"$
 $LK,"DOC_COLOR_DEFINE_STR",A="FL:::/Kernel/KernelA.HH,1151"$
-$LK,"DriveFATBlkAlloc",A="FL:::/Kernel/BlkDev/DiskDrive.HC,89",BI=337$
+$LK,"DriveFATBlkAlloc",A="FL:::/Kernel/BlkDev/DiskDrive.HC,89",BI=336$
 $LK,"VM_VIRTUALBOX",A="FL:::/Kernel/KernelA.HH,3893"$
 $LK,"SCF_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3486"$
 $LK,"CCompCtrl",A="FL:::/Kernel/KernelA.HH,2179"$
 $LK,"TASK_CONTEXT_SAVE",A="FL:::/Kernel/Sched.HC,56"$
 $LK,"SCf_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3471"$
 $LK,"CDirContext",A="FL:::/Kernel/KernelA.HH,2747"$
-$LK,"BootDVDProbeAll",A="FL:::/Kernel/BlkDev/DiskATAId.HC,29",BI=338$
+$LK,"BootDVDProbeAll",A="FL:::/Kernel/BlkDev/DiskATAId.HC,29",BI=337$
 $LK,"_MEMCPY",A="FL:::/Kernel/KUtils.HC,55"$
 $LK,"_D3_DIST_SQR",A="FL:::/Kernel/KMathA.HC,61"$
 $LK,"ARGT_XMM64",A="FL:::/Kernel/KernelA.HH,1954"$
-$LK,"ATAWriteBlks",A="FL:::/Kernel/BlkDev/DiskATA.HC,464",BI=339$
+$LK,"ATAWriteBlks",A="FL:::/Kernel/BlkDev/DiskATA.HC,464",BI=338$
 $LK,"RT_U8",A="FL:::/Kernel/KernelA.HH,1567"$
 $LK,"RLf_16MEG_SYS_CODE_BP",A="FL:::/Kernel/KernelA.HH,457"$
 $LK,"DOCEf_USER_DATA",A="FL:::/Kernel/KernelA.HH,1073"$
 $LK,"DOCEF_USER_DATA",A="FL:::/Kernel/KernelA.HH,985"$
 $LK,"COPY_BUF_BLKS",A="FL:::/Kernel/BlkDev/DiskCopy.HC,22"$
-$LK,"FAT32FileWrite",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,799",BI=340$
+$LK,"FAT32FileWrite",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,799",BI=339$
 $LK,"EDf_BAIL",A="FL:::/Kernel/KernelA.HH,1264"$
 $LK,"EDF_BAIL",A="FL:::/Kernel/KernelA.HH,1258"$
 $LK,"SYS_RAM_REBOOT",A="FL:::/Kernel/KStart64.HC,74"$
-$LK,"FileFind",A="FL:::/Kernel/BlkDev/DiskFind.HC,54",BI=341$
+$LK,"CWinMgrGlobals",A="FL:::/Kernel/KernelA.HH,1482"$
+$LK,"FileFind",A="FL:::/Kernel/BlkDev/DiskFind.HC,54",BI=340$
 $LK,"SYS_FIND_PCI_SERVICES",A="FL:::/Kernel/PCIBIOS.HC,38"$
 $LK,"VGAP_ATTR_DATA_WRITE",A="FL:::/Kernel/KernelA.HH,3668"$
 $LK,"FUF_WHOLE_LABELS_BEFORE",A="FL:::/Kernel/KernelA.HH,2590"$
 $LK,"TK_MUL_EQU",A="FL:::/Kernel/KernelA.HH,2103"$
 $LK,"TK_NOT_EQU",A="FL:::/Kernel/KernelA.HH,2095"$
-$LK,"CFileNameTo",A="FL:::/Kernel/BlkDev/DiskStrB.HC,1",BI=342$
-$LK,"IntNop",A="FL:::/Kernel/KInts.HC,143",BI=343$
+$LK,"CFileNameTo",A="FL:::/Kernel/BlkDev/DiskStrB.HC,1",BI=341$
+$LK,"IntNop",A="FL:::/Kernel/KInts.HC,143",BI=342$
 $LK,"_D3_MUL_EQU",A="FL:::/Kernel/KMathA.HC,273"$
 $LK,"DISPLAYf_SHOW",A="FL:::/Kernel/KernelA.HH,3247"$
 $LK,"DOF_DONT_SHOW",A="FL:::/Kernel/KernelA.HH,1232"$
@@ -1570,20 +1578,20 @@ $LK,"CCF_UNRESOLVED",A="FL:::/Kernel/KernelA.HH,2158"$
 $LK,"MLF_FUN",A="FL:::/Kernel/KernelA.HH,782"$
 $LK,"DOCEF_ZERO_BASED",A="FL:::/Kernel/KernelA.HH,1019"$
 $LK,"HTF_UNRESOLVED",A="FL:::/Kernel/KernelA.HH,713"$
-$LK,"FAT32Cd",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,387",BI=344$
+$LK,"FAT32Cd",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,387",BI=343$
 $LK,"DOCEf_ZERO_BASED",A="FL:::/Kernel/KernelA.HH,1105"$
 $LK,"HTf_UNRESOLVED",A="FL:::/Kernel/KernelA.HH,683"$
 $LK,"CAP16BitInit",A="FL:::/Kernel/KernelA.HH,546"$
-$LK,"Clus2Blk",A="FL:::/Kernel/BlkDev/DiskClus.HC,31",BI=345$
-$LK,"ATAPIWriteBlks",A="FL:::/Kernel/BlkDev/DiskATA.HC,538",BI=346$
-$LK,"cnts",A="FL:::/Kernel/KGlbls.HC,21"$
+$LK,"Clus2Blk",A="FL:::/Kernel/BlkDev/DiskClus.HC,31",BI=344$
+$LK,"ATAPIWriteBlks",A="FL:::/Kernel/BlkDev/DiskATA.HC,538",BI=345$
+$LK,"cnts",A="FL:::/Kernel/KGlobals.HC,21"$
 $LK,"SYS_HEAP_INIT_FLAG",A="FL::/Tmp.DD,1"$
 $LK,"FUF_WHOLE_LABELS",A="FL:::/Kernel/KernelA.HH,2589"$
-$LK,"ScanChar",A="FL:::/Kernel/SerialDev/Message.HC,110",BI=347$
+$LK,"ScanChar",A="FL:::/Kernel/SerialDev/Message.HC,110",BI=346$
 $LK,"RepInU32",A="FL:::/Kernel/KernelB.HH,84"$
 $LK,"RepInU16",A="FL:::/Kernel/KernelB.HH,82"$
 $LK,"loge_2",A="FL:::/Kernel/KernelA.HH,57"$
-$LK,"FAT32FileFind",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,286",BI=348$
+$LK,"FAT32FileFind",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,286",BI=347$
 $LK,"GSF_SHIFT_ESC_EXIT",A="FL:::/Kernel/KernelA.HH,3725"$
 $LK,"SFG_WHOLE_LABELS",A="FL:::/Kernel/KernelA.HH,3746"$
 $LK,"SEMA_SINGLE_USER",A="FL:::/Kernel/KernelA.HH,621"$
@@ -1591,8 +1599,8 @@ $LK,"FUf_WHOLE_LABELS",A="FL:::/Kernel/KernelA.HH,2561"$
 $LK,"DOCf_DO_FULL_REFRESH",A="FL:::/Kernel/KernelA.HH,1328"$
 $LK,"DOCf_DONT_SHOW",A="FL:::/Kernel/KernelA.HH,1322"$
 $LK,"DOCF_DONT_SHOW",A="FL:::/Kernel/KernelA.HH,1285"$
-$LK,"MsHardSpeedSet",A="FL:::/Kernel/SerialDev/Mouse.HC,186",BI=349$
-$LK,"DirTreeDel2",A="FL:::/Kernel/BlkDev/DiskDirA.HC,46",BI=350$
+$LK,"MsHardSpeedSet",A="FL:::/Kernel/SerialDev/Mouse.HC,186",BI=348$
+$LK,"DirTreeDel2",A="FL:::/Kernel/BlkDev/DiskDirA.HC,46",BI=349$
 $LK,"FUF_JUST_TXT",A="FL:::/Kernel/KernelA.HH,2579"$
 $LK,"FUf_JUST_TXT",A="FL:::/Kernel/KernelA.HH,2551"$
 $LK,"DOCT_DFT_BACKGROUND",A="FL:::/Kernel/KernelA.HH,923"$
@@ -1603,8 +1611,8 @@ $LK,"HashFind",A="FL:::/Kernel/KHashA.HC,255"$
 $LK,"D3Cross",A="FL:::/Kernel/KernelB.HH,148"$
 $LK,"DOCEF_ESC",A="FL:::/Kernel/KernelA.HH,1004"$
 $LK,"_FREE",A="FL:::/Kernel/Mem/MAllocFree.HC,224"$
-$LK,"SrcLineNum",A="FL:::/Kernel/FunSeg.HC,206",BI=351$
-$LK,"ATAPIClose",A="FL:::/Kernel/BlkDev/DiskATA.HC,524",BI=352$
+$LK,"SrcLineNum",A="FL:::/Kernel/FunSeg.HC,206",BI=350$
+$LK,"ATAPIClose",A="FL:::/Kernel/BlkDev/DiskATA.HC,524",BI=351$
 $LK,"DOCT_MACRO",A="FL:::/Kernel/KernelA.HH,938"$
 $LK,"CH_SHIFT_ESC",A="FL:::/Kernel/KernelA.HH,3455"$
 $LK,"Abs",A="FL:::/Kernel/KernelB.HH,96"$
@@ -1618,10 +1626,10 @@ $LK,"DOCEf_RIGHT_X",A="FL:::/Kernel/KernelA.HH,1082"$
 $LK,"DOCEF_RIGHT_X",A="FL:::/Kernel/KernelA.HH,994"$
 $LK,"DCF_FILL_NOT_COLOR",A="FL:::/Kernel/KernelA.HH,3582"$
 $LK,"WIF_FOCUS_TASK_MS_WHEEL",A="FL:::/Kernel/KernelA.HH,1439"$
-$LK,"Debug",A="FL:::/Kernel/KDebug.HC,649",BI=353$
+$LK,"Debug",A="FL:::/Kernel/KDebug.HC,649",BI=352$
 $LK,"MESSAGE_KEY_UP",A="FL:::/Kernel/KernelA.HH,3177"$
 $LK,"DOCEF_LEN",A="FL:::/Kernel/KernelA.HH,971"$
-$LK,"FileAttr",A="FL:::/Kernel/BlkDev/DiskStrA.HC,238",BI=354$
+$LK,"FileAttr",A="FL:::/Kernel/BlkDev/DiskStrA.HC,238",BI=353$
 $LK,"_MEMSET",A="FL:::/Kernel/KUtils.HC,3"$
 $LK,"ROP_COLLISION",A="FL:::/Kernel/KernelA.HH,2900"$
 $LK,"TK_PLUS_PLUS",A="FL:::/Kernel/KernelA.HH,2088"$
@@ -1632,14 +1640,14 @@ $LK,"VGAP_REG_WRITE",A="FL:::/Kernel/KernelA.HH,3675"$
 $LK,"FUF_EXPAND",A="FL:::/Kernel/KernelA.HH,2575"$
 $LK,"FUf_EXPAND",A="FL:::/Kernel/KernelA.HH,2547"$
 $LK,"DOCEf_DEREF_DATA",A="FL:::/Kernel/KernelA.HH,1102"$
-$LK,"Del",A="FL:::/Kernel/BlkDev/DiskCopy.HC,82",BI=355$
+$LK,"Del",A="FL:::/Kernel/BlkDev/DiskCopy.HC,82",BI=354$
 $LK,"IDTET_TASK",A="FL:::/Kernel/KernelA.HH,294"$
-$LK,"TaskValidate",A="FL:::/Kernel/KTask.HC,22",BI=356$
-$LK,"FAT32Init",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,22",BI=357$
+$LK,"TaskValidate",A="FL:::/Kernel/KTask.HC,22",BI=355$
+$LK,"FAT32Init",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,22",BI=356$
 $LK,"LAPIC_ARIBITRATION_PRIORITY",A="FL:::/Kernel/KernelA.HH,503"$
-$LK,"fp_set_std_palette",A="FL:::/Kernel/KGlbls.HC,35"$
-$LK,"keydev",A="FL:::/Kernel/KGlbls.HC,27"$
-$LK,"MountIDEAuto",A="FL:::/Kernel/BlkDev/DiskATAId.HC,263",BI=358$
+$LK,"fp_set_std_palette",A="FL:::/Kernel/KGlobals.HC,35"$
+$LK,"keydev",A="FL:::/Kernel/KGlobals.HC,27"$
+$LK,"MountIDEAuto",A="FL:::/Kernel/BlkDev/DiskATAId.HC,263",BI=357$
 $LK,"HashBucketFind",A="FL:::/Kernel/KHashA.HC,260"$
 $LK,"OCF_ALIAS",A="FL:::/Kernel/KernelA.HH,1959"$
 $LK,"IC_BODY_SIZE",A="FL:::/Kernel/KernelA.HH,1634"$
@@ -1650,6 +1658,7 @@ $LK,"HTt_WORD",A="FL:::/Kernel/KernelA.HH,664"$
 $LK,"SEMA_DSK_CACHE",A="FL:::/Kernel/KernelA.HH,622"$
 $LK,"FUG_FILE_FIND",A="FL:::/Kernel/KernelA.HH,2596"$
 $LK,"I_PAGE_FAULT",A="FL:::/Kernel/KernelA.HH,304"$
+$LK,"SysGlobalsInit",A="FL:::/Kernel/KMain.HC,1",BI=358$
 $LK,"CProgress",A="FL:::/Kernel/KernelA.HH,3861"$
 $LK,"Arg",A="FL:::/Kernel/KernelB.HH,122"$
 $LK,"FSt_ISO9660",A="FL:::/Kernel/KernelA.HH,2661"$
@@ -1677,7 +1686,6 @@ $LK,"DOCf_HIGHLIGHT",A="FL:::/Kernel/KernelA.HH,1332"$
 $LK,"DOCF_HIGHLIGHT",A="FL:::/Kernel/KernelA.HH,1294"$
 $LK,"DOCT_HIGHLIGHT",A="FL:::/Kernel/KernelA.HH,925"$
 $LK,"_FAR_CALL32",A="FL:::/Kernel/PCIBIOS.HC,69"$
-$LK,"CAOTHeapGlblRef",A="FL:::/Kernel/KernelA.HH,1994"$
 $LK,"DOCEF_SEL",A="FL:::/Kernel/KernelA.HH,1048"$
 $LK,"IEF_IMM_NOT_REL",A="FL:::/Kernel/KernelA.HH,417"$
 $LK,"FAT32DirFill",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,229",BI=365$
@@ -1857,7 +1865,7 @@ $LK,"_D3_CROSS",A="FL:::/Kernel/KMathA.HC,82"$
 $LK,"VGAP_INPUT_STAT",A="FL:::/Kernel/KernelA.HH,3679"$
 $LK,"DOCf_UNDO_DIRTY",A="FL:::/Kernel/KernelA.HH,1343"$
 $LK,"WIf_SELF_BORDER",A="FL:::/Kernel/KernelA.HH,1455"$
-$LK,"text",A="FL:::/Kernel/KGlbls.HC,30"$
+$LK,"text",A="FL:::/Kernel/KGlobals.HC,30"$
 $LK,"ATA_READ_NATIVE_MAX_EXT",A="FL:::/Kernel/KernelA.HH,2273"$
 $LK,"MPrintQ",A="FL:::/Kernel/StrPrint.HC,56",BI=405$
 $LK,"MHeapCtrl",A="FL:::/Kernel/Mem/MAllocFree.HC,386"$
@@ -1895,7 +1903,7 @@ $LK,"CCF_PMT",A="FL:::/Kernel/KernelA.HH,2138"$
 $LK,"DOCEf_FILTER_SKIP",A="FL:::/Kernel/KernelA.HH,1112"$
 $LK,"SCF_NUM",A="FL:::/Kernel/KernelA.HH,3484"$
 $LK,"ACD_DEF_FILENAME",A="FL:::/Kernel/KernelA.HH,1511"$
-$LK,"fp_doc_put",A="FL:::/Kernel/KGlbls.HC,34"$
+$LK,"fp_doc_put",A="FL:::/Kernel/KGlobals.HC,34"$
 $LK,"IsRaw",A="FL:::/Kernel/KMisc.HC,297",BI=411$
 $LK,"TK_DBL_COLON",A="FL:::/Kernel/KernelA.HH,2091"$
 $LK,"ATAPIReadTrackInfo",A="FL:::/Kernel/BlkDev/DiskATA.HC,281",BI=412$
@@ -1910,7 +1918,7 @@ $LK,"DiskCacheHash",A="FL:::/Kernel/BlkDev/DiskCache.HC,40",BI=415$
 $LK,"MDG_MASK",A="FL:::/Kernel/KernelA.HH,1597"$
 $LK,"ACD_EXTRA_CHAR",A="FL:::/Kernel/KernelA.HH,1530"$
 $LK,"Reboot",A="FL:::/Kernel/KMain.HC,122",BI=416$
-$LK,"acd",A="FL:::/Kernel/KGlbls.HC,18"$
+$LK,"acd",A="FL:::/Kernel/KGlobals.HC,18"$
 $LK,"REG_RCX",A="FL:::/Kernel/KernelA.HH,1785"$
 $LK,"Ff_DOT_DOT_DOT",A="FL:::/Kernel/KernelA.HH,858"$
 $LK,"CHashClass",A="FL:::/Kernel/KernelA.HH,838"$
@@ -1949,7 +1957,7 @@ $LK,"SYS_FOCUS_TASK",A="FL:::/Kernel/KStart32.HC,63"$
 $LK,"DYING_JIFFIES",A="FL:::/Kernel/KernelA.HH,3264"$
 $LK,"FUF_JUST_DD",A="FL:::/Kernel/KernelA.HH,2580"$
 $LK,"FUf_JUST_DD",A="FL:::/Kernel/KernelA.HH,2552"$
-$LK,"dbg",A="FL:::/Kernel/KGlbls.HC,22"$
+$LK,"dbg",A="FL:::/Kernel/KGlobals.HC,22"$
 $LK,"QSort",A="FL:::/Kernel/QSort.HC,85",BI=425$
 $LK,"OutU32",A="FL:::/Kernel/KernelB.HH,79"$
 $LK,"OutU16",A="FL:::/Kernel/KernelB.HH,78"$
@@ -1977,7 +1985,6 @@ $LK,"LAPIC_EOI",A="FL:::/Kernel/KernelA.HH,505"$
 $LK,"sys_pos_pows_lets",A="FL:::/Kernel/StrPrint.HC,200"$
 $LK,"LIN_CONGRUE_A",A="FL:::/Kernel/KMathB.HC,74"$
 $LK,"Drive",A="FL:::/Kernel/BlkDev/DiskDrive.HC,263",BI=428$
-$LK,"CDebugGlbls",A="FL:::/Kernel/KernelA.HH,3820"$
 $LK,"VM_NATIVE",A="FL:::/Kernel/KernelA.HH,3890"$
 $LK,"OS_NATIVE",A="FL:::/Kernel/KernelA.HH,3885"$
 $LK,"CT_8_BIT",A="FL:::/Kernel/KernelA.HH,3689"$
@@ -2000,7 +2007,6 @@ $LK,"progress1",A="FL:::/Kernel/KernelB.HH,209"$
 $LK,"Floor",A="FL:::/Kernel/KernelB.HH,131"$
 $LK,"progress2",A="FL:::/Kernel/KernelB.HH,215"$
 $LK,"_CLAMP_U64",A="FL:::/Kernel/KUtils.HC,133"$
-$LK,"CMsStateGlbls",A="FL:::/Kernel/KernelA.HH,2998"$
 $LK,"progress3",A="FL:::/Kernel/KernelB.HH,221"$
 $LK,"FUF_JUST_GR",A="FL:::/Kernel/KernelA.HH,2584"$
 $LK,"FUf_JUST_GR",A="FL:::/Kernel/KernelA.HH,2556"$
@@ -2010,7 +2016,7 @@ $LK,"RAWDR_COL",A="FL:::/Kernel/KDebug.HC,289"$
 $LK,"progress4",A="FL:::/Kernel/KernelB.HH,227"$
 $LK,"CtrlAltCBSet",A="FL:::/Kernel/KeyDev.HC,178",BI=432$
 $LK,"SysTimerRead",A="FL:::/Kernel/KMisc.HC,61",BI=433$
-$LK,"dev",A="FL:::/Kernel/KGlbls.HC,23"$
+$LK,"dev",A="FL:::/Kernel/KGlobals.HC,23"$
 $LK,"FunSegCacheFind",A="FL:::/Kernel/FunSeg.HC,114",BI=434$
 $LK,"MsUpdate",A="FL:::/Kernel/SerialDev/Mouse.HC,9",BI=435$
 $LK,"CInsReg",A="FL:::/Kernel/KernelA.HH,3896"$
@@ -2022,12 +2028,11 @@ $LK,"ans",A="FL:::/Kernel/KernelA.HH,3366"$
 $LK,"ICF_DEL_PREV_INS",A="FL:::/Kernel/KernelA.HH,1629"$
 $LK,"LAPIC_LDR",A="FL:::/Kernel/KernelA.HH,508"$
 $LK,"BptFind",A="FL:::/Kernel/KDebug.HC,344",BI=436$
-$LK,"kbd",A="FL:::/Kernel/KGlbls.HC,26"$
+$LK,"kbd",A="FL:::/Kernel/KGlobals.HC,26"$
 $LK,"progress4_max",A="FL:::/Kernel/KernelB.HH,230"$
 $LK,"HashDel",A="FL:::/Kernel/KHashB.HC,59",BI=437$
 $LK,"ISOInit",A="FL:::/Kernel/BlkDev/DiskCDDVD.HC,1",BI=438$
 $LK,"DriveCheck",A="FL:::/Kernel/BlkDev/DiskDrive.HC,142",BI=439$
-$LK,"CKbdStateGlbls",A="FL:::/Kernel/KernelA.HH,2958"$
 $LK,"sys_font_std",A="FL:::/Kernel/FontStd.HC,3"$
 $LK,"LinkedLstCopy",A="FL:::/Kernel/KDataTypes.HC,11",BI=440$
 $LK,"MDF_NULL",A="FL:::/Kernel/KernelA.HH,1590"$
@@ -2062,7 +2067,7 @@ $LK,"Pow10",A="FL:::/Kernel/KernelB.HH,138"$
 $LK,"ATA_WRITE_MULTI_EXT",A="FL:::/Kernel/KernelA.HH,2279"$
 $LK,"CCF_PREDEC",A="FL:::/Kernel/KernelA.HH,2165"$
 $LK,"inf",A="FL:::/Kernel/KernelA.HH,49"$
-$LK,"sys_macro_head",A="FL:::/Kernel/KGlbls.HC,4"$
+$LK,"sys_macro_head",A="FL:::/Kernel/KGlobals.HC,4"$
 $LK,"XTalk",A="FL:::/Kernel/Job.HC,445",BI=445$
 $LK,"SYS_ENTER_LONG_MODE",A="FL:::/Kernel/KStart64.HC,44"$
 $LK,"eps",A="FL:::/Kernel/KernelA.HH,59"$
@@ -2070,7 +2075,7 @@ $LK,"LstSub",A="FL:::/Kernel/StrA.HC,397",BI=446$
 $LK,"RLF_PATCHED",A="FL:::/Kernel/KernelA.HH,478"$
 $LK,"TaskDerivedValsUpdate",A="FL:::/Kernel/KTask.HC,286",BI=447$
 $LK,"_HASH_ADD",A="FL:::/Kernel/KHashA.HC,170"$
-$LK,"zenith_task",A="FL:::/Kernel/KGlbls.HC,8"$
+$LK,"zenith_task",A="FL:::/Kernel/KGlobals.HC,8"$
 $LK,"MEM_E801",A="FL:::/Kernel/KStart16.HC,31"$
 $LK,"ISOT_VOL_DRV_DESC",A="FL:::/Kernel/KernelA.HH,2465"$
 $LK,"__TIME__",A="FL:::/Kernel/KernelA.HH,2036"$
@@ -2127,6 +2132,7 @@ $LK,"LTPURPLE",A="FL:::/Kernel/KernelA.HH,2927"$
 $LK,"RawDr",A="FL:::/Kernel/KDebug.HC,291",BI=459$
 $LK,"StrICmp",A="FL:::/Kernel/StrA.HC,311"$
 $LK,"ATAR0_DATA",A="FL:::/Kernel/KernelA.HH,2288"$
+$LK,"CMsHardStateGlobals",A="FL:::/Kernel/KernelA.HH,2979"$
 $LK,"OPTf_TRACE",A="FL:::/Kernel/KernelA.HH,1547"$
 $LK,"HTG_FLAGS_MASK",A="FL:::/Kernel/KernelA.HH,715"$
 $LK,"DirFilesSort",A="FL:::/Kernel/BlkDev/DiskDirA.HC,89",BI=460$
@@ -2196,6 +2202,8 @@ $LK,"TK_IFNDEF",A="FL:::/Kernel/KernelA.HH,2112"$
 $LK,"CMT_FLOAT_CONSTS",A="FL:::/Kernel/KernelA.HH,1702"$
 $LK,"CBinFile",A="FL:::/Kernel/KernelA.HH,385"$
 $LK,"LAPIC_SVR",A="FL:::/Kernel/KernelA.HH,511"$
+$LK,"CGridGlobals",A="FL:::/Kernel/KernelA.HH,3020"$
+$LK,"CCompGlobals",A="FL:::/Kernel/KernelA.HH,2226"$
 $LK,"StrPrintFunSeg",A="FL:::/Kernel/FunSeg.HC,134",BI=470$
 $LK,"HashVal",A="FL:::/Kernel/KHashB.HC,9",BI=471$
 $LK,"DOCEF_DFT_RAW_TYPE",A="FL:::/Kernel/KernelA.HH,1030"$
@@ -2227,14 +2235,14 @@ $LK,"CAsmUndefHash",A="FL:::/Kernel/KernelA.HH,1823"$
 $LK,"HTt_IMPORT_SYS_SYM",A="FL:::/Kernel/KernelA.HH,658"$
 $LK,"HTt_EXPORT_SYS_SYM",A="FL:::/Kernel/KernelA.HH,657"$
 $LK,"C32_EDI",A="FL:::/Kernel/PCIBIOS.HC,63"$
-$LK,"pow10_I64",A="FL:::/Kernel/KGlbls.HC,15"$
-$LK,"sys_num_spawned_tasks",A="FL:::/Kernel/KGlbls.HC,9"$
+$LK,"pow10_I64",A="FL:::/Kernel/KGlobals.HC,15"$
+$LK,"sys_num_spawned_tasks",A="FL:::/Kernel/KGlobals.HC,9"$
 $LK,"CAUData",A="FL:::/Kernel/KernelA.HH,3775"$
 $LK,"LAPIC_LVT_LINT0",A="FL:::/Kernel/KernelA.HH,522"$
 $LK,"ArcFinishCompression",A="FL:::/Kernel/Compress.HC,155",BI=476$
 $LK,"QueueDel",A="FL:::/Kernel/KDataTypes.HC,41",BI=477$
 $LK,"LAPIC_LVT_LINT1",A="FL:::/Kernel/KernelA.HH,523"$
-$LK,"sys_winmgr_task",A="FL:::/Kernel/KGlbls.HC,11"$
+$LK,"sys_winmgr_task",A="FL:::/Kernel/KGlobals.HC,11"$
 $LK,"SYS_PROGRESS2_TF",A="FL:::/Kernel/KStart32.HC,49"$
 $LK,"SC_CAPS",A="FL:::/Kernel/KernelA.HH,3504"$
 $LK,"SYS_RAM_REBOOT_END",A="FL:::/Kernel/KStart64.HC,99"$
@@ -2412,19 +2420,18 @@ $LK,"FUf_DEL",A="FL:::/Kernel/KernelA.HH,2539"$
 $LK,"RedSeaMkDir",A="FL:::/Kernel/BlkDev/FileSysRedSea.HC,602",BI=514$
 $LK,"PutKey",A="FL:::/Kernel/KeyDev.HC,1",BI=515$
 $LK,"_HASH_STR",A="FL:::/Kernel/KHashA.HC,120"$
-$LK,"CMsHardStateGlbls",A="FL:::/Kernel/KernelA.HH,2979"$
 $LK,"FUf_ALL",A="FL:::/Kernel/KernelA.HH,2541"$
+$LK,"CAOTHeapGlobal",A="FL:::/Kernel/KernelA.HH,2000"$
 $LK,"QueueVectU8New",A="FL:::/Kernel/KDataTypes.HC,87",BI=516$
 $LK,"DOF_SIZE_MIN",A="FL:::/Kernel/KernelA.HH,1226"$
 $LK,"ScanMessage",A="FL:::/Kernel/SerialDev/Message.HC,37",BI=517$
-$LK,"sys_macro_task",A="FL:::/Kernel/KGlbls.HC,5"$
+$LK,"sys_macro_task",A="FL:::/Kernel/KGlobals.HC,5"$
 $LK,"CArcCompress",A="FL:::/Kernel/KernelA.HH,3716"$
 $LK,"FAT32AllocContiguousClus",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,500",BI=518$
 $LK,"CHashOpcode",A="FL:::/Kernel/KernelA.HH,1960"$
 $LK,"CTRL_ALT_DEL",A="FL:::/Kernel/KernelA.HH,634"$
 $LK,"FifoU8Ins",A="FL:::/Kernel/KDataTypes.HC,173",BI=519$
 $LK,"IsDebugMode",A="FL:::/Kernel/KMisc.HC,317",BI=520$
-$LK,"CGridGlbls",A="FL:::/Kernel/KernelA.HH,3020"$
 $LK,"FATFromName",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,156",BI=521$
 $LK,"DOCf_SIZE_MIN",A="FL:::/Kernel/KernelA.HH,1317"$
 $LK,"DOCF_SIZE_MIN",A="FL:::/Kernel/KernelA.HH,1280"$
@@ -2454,7 +2461,7 @@ $LK,"HTT_CLASS",A="FL:::/Kernel/KernelA.HH,691"$
 $LK,"HTt_CLASS",A="FL:::/Kernel/KernelA.HH,661"$
 $LK,"Cd2DirEntry",A="FL:::/Kernel/BlkDev/DiskStrA.HC,221",BI=528$
 $LK,"IET_IMM_U0",A="FL:::/Kernel/KernelA.HH,408"$
-$LK,"sys_clip_doc",A="FL:::/Kernel/KGlbls.HC,6"$
+$LK,"sys_clip_doc",A="FL:::/Kernel/KGlobals.HC,6"$
 $LK,"BlkDevAdd",A="FL:::/Kernel/BlkDev/DiskAddDev.HC,27",BI=529$
 $LK,"MESSAGE_MS_L_DOWN_UP",A="FL:::/Kernel/KernelA.HH,3190"$
 $LK,"REGG_CLOBBERED",A="FL:::/Kernel/KernelA.HH,1801"$
@@ -2494,7 +2501,6 @@ $LK,"SaveExceptRegs",A="FL:::/Kernel/KExcept.HC,43"$
 $LK,"C:/Doc/Queue.DD",A="FL:::/Kernel/KernelB.HH,65"$
 $LK,"MEM_2MEG_NUM",A="FL:::/Kernel/KStart32.HC,10"$
 $LK,"SC_END",A="FL:::/Kernel/KernelA.HH,3514"$
-$LK,"CAOTHeapGlbl",A="FL:::/Kernel/KernelA.HH,2000"$
 $LK,"ArcExpandBuf",A="FL:::/Kernel/Compress.HC,165",BI=538$
 $LK,"FUf_MAP",A="FL:::/Kernel/KernelA.HH,2546"$
 $LK,"DOCf_MORE",A="FL:::/Kernel/KernelA.HH,1324"$
@@ -2562,6 +2568,7 @@ $LK,"ICF_NO_RIP",A="FL:::/Kernel/KernelA.HH,1628"$
 $LK,"SUF_REM_CTRL_CHARS",A="FL:::/Kernel/KernelA.HH,3730"$
 $LK,"SC_SHIFT",A="FL:::/Kernel/KernelA.HH,3501"$
 $LK,"ATA_SET_MAX_EXT",A="FL:::/Kernel/KernelA.HH,2275"$
+$LK,"CUAsmGlobals",A="FL:::/Kernel/KernelA.HH,2241"$
 $LK,"StrOcc",A="FL:::/Kernel/StrA.HC,462",BI=548$
 $LK,"StrCpy",A="FL:::/Kernel/StrA.HC,321"$
 $LK,"DOCT_INS_BIN",A="FL:::/Kernel/KernelA.HH,943"$
@@ -2598,7 +2605,7 @@ $LK,"sys_var_init_flag",A="FL:::/Kernel/KernelB.HH,186"$
 $LK,"PRTF_DECIMAL",A="FL:::/Kernel/KernelA.HH,3877"$
 $LK,"IOAPIC_DATA",A="FL:::/Kernel/KernelA.HH,531"$
 $LK,"SysGetStr2",A="FL:::/Kernel/KDebug.HC,337",BI=552$
-$LK,"fp_getstr2",A="FL:::/Kernel/KGlbls.HC,32"$
+$LK,"fp_getstr2",A="FL:::/Kernel/KGlobals.HC,32"$
 $LK,"KDRawPutKey",A="FL:::/Kernel/KeyDev.HC,88",BI=553$
 $LK,"DOCF_SUBSCRIPT_MODE",A="FL:::/Kernel/KernelA.HH,1304"$
 $LK,"Dos2CDate",A="FL:::/Kernel/BlkDev/FileSysFAT.HC,9",BI=554$
@@ -2607,8 +2614,6 @@ $LK,"DirEntryCompareClus",A="FL:::/Kernel/BlkDev/DiskDirA.HC,81",BI=556$
 $LK,"SYS_START_CR0",A="FL:::/Kernel/KernelA.HH,319"$
 $LK,"QSortI64",A="FL:::/Kernel/QSort.HC,1",BI=557$
 $LK,"RawPrint",A="FL:::/Kernel/KDebug.HC,217",BI=558$
-$LK,"CTextGlbls",A="FL:::/Kernel/KernelA.HH,3541"$
-$LK,"CDevGlbls",A="FL:::/Kernel/KernelA.HH,2877"$
 $LK,"AreYouSure",A="FL:::/Kernel/StrB.HC,109",BI=559$
 $LK,"DOCf_IN_DOLLAR",A="FL:::/Kernel/KernelA.HH,1340"$
 $LK,"DOCF_IN_DOLLAR",A="FL:::/Kernel/KernelA.HH,1302"$
@@ -2617,9 +2622,7 @@ $LK,"_REP_IN_U32",A="FL:::/Kernel/KUtils.HC,253"$
 $LK,"MP_VECT_ADDR",A="FL:::/Kernel/KernelA.HH,527"$
 $LK,"I_WAKE",A="FL:::/Kernel/KernelA.HH,309"$
 $LK,"Yield",A="FL:::/Kernel/Sched.HC,284"$
-$LK,"CKeyDevGlbls",A="FL:::/Kernel/KernelA.HH,3762"$
 $LK,"MRT_DEV",A="FL:::/Kernel/KernelA.HH,2822"$
-$LK,"CBlkDevGlbls",A="FL:::/Kernel/KernelA.HH,2730"$
 $LK,"CMBRPrt",A="FL:::/Kernel/KernelA.HH,2314"$
 $LK,"StrNew",A="FL:::/Kernel/Mem/MAllocFree.HC,446",BI=560$
 $LK,"HTT_GLBL_VAR",A="FL:::/Kernel/KernelA.HH,690"$
@@ -2646,7 +2649,7 @@ $LK,"StrScan",A="FL:::/Kernel/StrScan.HC,212",BI=564$
 $LK,"ATARepFind",A="FL:::/Kernel/BlkDev/DiskATAId.HC,197",BI=565$
 $LK,"QSort2a",A="FL:::/Kernel/QSort.HC,32",BI=566$
 $LK,"num_lock_map",A="FL:::/Kernel/SerialDev/Keyboard.HC,179"$
-$LK,"ms_hard_last",A="FL:::/Kernel/KGlbls.HC,28"$
+$LK,"ms_hard_last",A="FL:::/Kernel/KGlobals.HC,28"$
 $LK,"QSort2b",A="FL:::/Kernel/QSort.HC,55",BI=567$
 $LK,"KDF_HAS_DESCS",A="FL:::/Kernel/KernelA.HH,3753"$
 $LK,"CBlkPool",A="FL:::/Kernel/KernelA.HH,2849"$
@@ -2696,7 +2699,6 @@ $LK,"U32_MAX",A="FL:::/Kernel/KernelA.HH,36"$
 $LK,"U16_MAX",A="FL:::/Kernel/KernelA.HH,32"$
 $LK,"BlkDevInit",A="FL:::/Kernel/BlkDev/DiskBlkDev.HC,31",BI=579$
 $LK,"CTaskStk",A="FL:::/Kernel/KernelA.HH,3257"$
-$LK,"CWinMgrTimingGlbls",A="FL:::/Kernel/KernelA.HH,1470"$
 $LK,"DOC_COLOR_STR",A="FL:::/Kernel/KernelA.HH,1148"$
 $LK,"KbdMsCmdAck",A="FL:::/Kernel/SerialDev/Keyboard.HC,65",BI=580$
 $LK,"FAT32_ENTRIES_PER_BLK",A="FL:::/Kernel/KernelA.HH,2420"$
@@ -2741,7 +2743,6 @@ $LK,"FILEMASK_JIT",A="FL:::/Kernel/KernelA.HH,2300"$
 $LK,"ATAS_DRDY",A="FL:::/Kernel/KernelA.HH,2285"$
 $LK,"ARGT_AL",A="FL:::/Kernel/KernelA.HH,1929"$
 $LK,"CIntermediateCodeBase",A="FL:::/Kernel/KernelA.HH,1657"$
-$LK,"CAutoCompleteDictGlbls",A="FL:::/Kernel/KernelA.HH,1533"$
 $LK,"SYS_CODE_BP",A="FL:::/Kernel/KStart32.HC,37"$
 $LK,"LXchgI64",A="FL:::/Kernel/KernelB.HH,264"$
 $LK,"TASKf_NONTIMER_RAND",A="FL:::/Kernel/KernelA.HH,3244"$
@@ -2822,7 +2823,6 @@ $LK,"DOC_DFT",A="FL:::/Kernel/KernelA.HH,1168"$
 $LK,"CMemberLstMeta",A="FL:::/Kernel/KernelA.HH,794"$
 $LK,"DISPLAYf_WIN_ON_TOP",A="FL:::/Kernel/KernelA.HH,3251"$
 $LK,"INVALID_CLUS",A="FL:::/Kernel/KernelA.HH,2312"$
-$LK,"CAutoCompleteGlbls",A="FL:::/Kernel/KernelA.HH,1497"$
 $LK,"char_bmp_non_eol",A="FL:::/Kernel/StrA.HC,391"$
 $LK,"CQueue",A="FL:::/Kernel/KernelA.HH,123"$
 $LK,"CAOTImportExport",A="FL:::/Kernel/KernelA.HH,1969"$
@@ -2877,23 +2877,23 @@ X X &X 4X     BX bX XX     nX         ÄX ãX ùX     ØX ∂X ΩX  X —
  ﬂ
  Ë
      ˛
-   / V l Ü é ™ ∂ ¡     Ÿ ‰ Î ˆ     ˚  Î       8      g   q   €; €;     ‰; Ù;     ¸; 	< < < < < Ï       L      ¡   –   ´L ´L         ≈L ÿL ÌL ÛL     ˘L     M M M     M $M Ì       à      ˙     ìè  ìè              ©è  Ωè   è  ‹è  ‹è  Óè  ˘è  ê  ê  ê  !ê  !ê  !ê  2ê  =ê  Dê  Hê  Pê  Tê  \ê  bê      hê  hê      kê  yê  Ó       |            ∫¿ ∫¿ Ã¿     €¿ ﬁ¿ ˇ¿ "¡ 2¡ [¡ k¡ x¡ ®¡ ∑¡ ƒ¡ ‘¡     ⁄¡ Í¡ Í¡ ¸¡ ˇ¡ ¬ ¬ ¬ ¬     ¬ Å¬ Ô       8      	    ⁄ü ⁄ü     Ëü Ûü ˛ü     !† 7†     :† C†                @   Äë Äë             âë ïë     •ë ≤ë     √ë ‘ë Âë ˆë                                             í í %í 8í Jí Rí sí áí äí íí ¢í ≥í                                 ⁄í Ìí ˇí 4ì 6ì Gì Sì _ì     tì     {ì åì     öì ≠ì     πì Èì Ò       H      =  K  ‡è ‡è     ˙è     ê     &ê ;ê Aê Gê Gê Oê     Qê }ê Ú       L       \  3k 3k ;k     Fk Xk ^k     fk pk ìk ìk •k ≤k øk «k ’k     l l Vl [l [l ml zl ál ål     õl –l ◊l Ël Ól Ûl Ûl m m m $m     3m gm nm m Öm ám ám èm èm úm ±m     ∑m      m Óm ˚m n     n n #n .n 4n ?n ?n En Nn     Yn in nn çn ön ßn     ¨n ¨n     ∞n …n Û       ,      ô   †   j‹ j‹     s‹ ‹ á‹     å‹ ë‹ Ù       (         %   ìS ìS °S ΩS ¬S     ŒS ‘S ı       ,     r   π   < <         #<     '< .<     5< @< H<         O< O< ^< c< o<     {<     ã<     •< ¥< π< ¡< »< Ÿ<         Û< = = =  = C= H= Z= _= Ç=         Ü= è= ó= †=     ø= ∆= ◊=         ÿ=         ‹=     ˛= > $>     /> <> <> C>     e> v>     |> Ü> ˆ       8      J   T   æ€  æ€      Ã€  „€  Ó€  Ó€      ˘€  ‹  ‹  ‹  ˜       <      Ï   ˜         % 1 G a     l }      Æ ¯       $            £c £c ¨c µc     ªc ¿c ˘       l      A   X   ì ì Ùì î î /î Hî Qî \î gî äî õî •î ßî ≤î Ωî ∆î œî ‚î ıî ï     ï ï ï ˙       $      Ù   ˘   sè  sè  |è  Öè      ãè  êè  ˚                 
-   õT  õT  §T      ±T  ¬T  ¸       D      ˚     ¶Ú  ¶Ú      µÚ          ∫Ú  √Ú      ‘Ú  ’Ú  ËÚ      ÎÚ  ÒÚ  ˝       4        %  sC sC wC |C àC îC †C ´C     ≤C ¥C ˛       h     -  É  k- k-     ì- ï- û- ≤- µ-     ∫- æ- ›- Ò-     Ù- .     . . 4. =. ?. ^. g. g. g.     l. ¢. ¨. ∂. ¿.  . —. ›. È. Û. Û. Û. / / / / / (/ */ */ 3/ 5/ 5/ :/ </ </     A/ A/ A/ E/ `/ v/ Å/ ò/ °/ ¶/ ∞/ º/ »/     ‘/ Á/ ˛/ 0 0 0 50 E0 g0 Ñ0 ¢0 ¢0 ¢0 ¢0 ¢0 ¨0 µ0     º0 <1 ˇ       L      ≈   ‘   C C     W ^ c y     {     å ê £     ©     ÷        4            ûÍ  ûÍ  ¶Í  ÆÍ  ∂Í  æÍ  ∆Í  ŒÍ      “Í  ÷Í        ,            vÍ  vÍ  ~Í  ÜÍ  éÍ  ñÍ      öÍ  ûÍ        L      ô   ®   ãW  ãW  ôW          ûW  †W  ØW  ±W  øW   W      ”W  ”W  ‘W      ⁄W        x         7   ÷ ÷             Í Ô ˘    , , ; Q Z i p p s } ì ö ú     ü ° ° ≠       ò      9  [  ãD ãD õD •D ™D     ØD ØD æD √D         ‹D ÂD D ÚD ÛD     ÛD ˇD 
-E     E E E )E 3E AE FE     UE \E ^E ^E ^E dE       |
+   / V l Ü é ™ ∂ ¡     Ÿ ‰ Î ˆ     ˚  Î       8      g   q   €; €;     ‰; Ù;     ¸; 	< < < < < Ï       L      ¡   –   ´L ´L         ≈L ÿL ÌL ÛL     ˘L     M M M     M $M Ì       à      ˙     ìè  ìè              ©è  Ωè   è  ‹è  ‹è  Óè  ˘è  ê  ê  ê  !ê  !ê  !ê  2ê  =ê  Dê  Hê  Pê  Tê  \ê  bê      hê  hê      kê  yê  Ó       |            ∫¿ ∫¿ Ã¿     €¿ ﬁ¿ ˇ¿ "¡ 2¡ [¡ k¡ x¡ ®¡ ∑¡ ƒ¡ ‘¡     ⁄¡ Í¡ Í¡ ¸¡ ˇ¡ ¬ ¬ ¬ ¬     ¬ Å¬ Ô       8      	    ⁄ü ⁄ü     Ëü Ûü ˛ü     !† 7†     :† C†        H      =  K  ‡è ‡è     ˙è     ê     &ê ;ê Aê Gê Gê Oê     Qê }ê Ò       L       \  3k 3k ;k     Fk Xk ^k     fk pk ìk ìk •k ≤k øk «k ’k     l l Vl [l [l ml zl ál ål     õl –l ◊l Ël Ól Ûl Ûl m m m $m     3m gm nm m Öm ám ám èm èm úm ±m     ∑m      m Óm ˚m n     n n #n .n 4n ?n ?n En Nn     Yn in nn çn ön ßn     ¨n ¨n     ∞n …n Ú       ,      ô   †   j‹ j‹     s‹ ‹ á‹     å‹ ë‹ Û       (         %   ìS ìS °S ΩS ¬S     ŒS ‘S Ù       ,     r   π   < <         #<     '< .<     5< @< H<         O< O< ^< c< o<     {<     ã<     •< ¥< π< ¡< »< Ÿ<         Û< = = =  = C= H= Z= _= Ç=         Ü= è= ó= †=     ø= ∆= ◊=         ÿ=         ‹=     ˛= > $>     /> <> <> C>     e> v>     |> Ü> ı       8      J   T   æ€  æ€      Ã€  „€  Ó€  Ó€      ˘€  ‹  ‹  ‹  ˆ       <      Ï   ˜         % 1 G a     l }      Æ ˜       $            £c £c ¨c µc     ªc ¿c ¯       l      A   X   ì ì Ùì î î /î Hî Qî \î gî äî õî •î ßî ≤î Ωî ∆î œî ‚î ıî ï     ï ï ï ˘       $      Ù   ˘   sè  sè  |è  Öè      ãè  êè  ˙                 
+   õT  õT  §T      ±T  ¬T  ˚       D      ˚     ¶Ú  ¶Ú      µÚ          ∫Ú  √Ú      ‘Ú  ’Ú  ËÚ      ÎÚ  ÒÚ  ¸       4        %  sC sC wC |C àC îC †C ´C     ≤C ¥C ˝       h     -  É  k- k-     ì- ï- û- ≤- µ-     ∫- æ- ›- Ò-     Ù- .     . . 4. =. ?. ^. g. g. g.     l. ¢. ¨. ∂. ¿.  . —. ›. È. Û. Û. Û. / / / / / (/ */ */ 3/ 5/ 5/ :/ </ </     A/ A/ A/ E/ `/ v/ Å/ ò/ °/ ¶/ ∞/ º/ »/     ‘/ Á/ ˛/ 0 0 0 50 E0 g0 Ñ0 ¢0 ¢0 ¢0 ¢0 ¢0 ¨0 µ0     º0 <1 ˛       L      ≈   ‘   C C     W ^ c y     {     å ê £     ©     ÷ ˇ       4            ûÍ  ûÍ  ¶Í  ÆÍ  ∂Í  æÍ  ∆Í  ŒÍ      “Í  ÷Í         ,            vÍ  vÍ  ~Í  ÜÍ  éÍ  ñÍ      öÍ  ûÍ        L      ô   ®   ãW  ãW  ôW          ûW  †W  ØW  ±W  øW   W      ”W  ”W  ‘W      ⁄W        x         7   ÷ ÷             Í Ô ˘    , , ; Q Z i p p s } ì ö ú     ü ° ° ≠       ò      9  [  ãD ãD õD •D ™D     ØD ØD æD √D         ‹D ÂD D ÚD ÛD     ÛD ˇD 
+E     E E E )E 3E AE FE     UE \E ^E ^E ^E dE       |
      –   k  &Ø  &Ø                                  GØ                          IØ  `Ø  iØ  tØ  Ø  ÅØ  îØ  ¢Ø      ≠Ø      ∏Ø  ÃØ  ◊Ø  ⁄Ø  ‡Ø  ‰Ø      ÁØ  ÌØ  ÒØ      ÙØ  ˜Ø  
 ∞  ∞  '∞      *∞  B∞      R∞  U∞  [∞  ^∞  q∞  Ü∞  é∞      ë∞  ©∞      π∞      æ∞  æ∞  ∆∞  ∆∞  È∞  È∞  È∞  Ì∞  Ô∞  Ô∞  Û∞  ı∞  ı∞  ˘∞  ˚∞  ˚∞      ˇ∞      ˇ∞  ˇ∞  ±      ±  ±  ±  ±  ±  ±  ±  ±  !±      $±  <±  P±  U±  [±  ^±      c±  v±  ë±  ì±  ©±  ©±  ©±  Æ±  Æ±  ∞±      ∞±      µ±  ∏±  ﬁ±  ﬁ±      ﬁ±  ˆ±  ¸±  ≤  "≤  1≤  F≤      X≤  }≤  Ç≤      Ç≤  ö≤  ∏≤  Ω≤      Ω≤  ’≤  Û≤  ı≤      ı≤  ≥  )≥  +≥      +≥  C≥      _≥  _≥  }≥  â≥          é≥      é≥  ¶≥  Ω≥  ¬≥      ¬≥  ⁄≥  ˆ≥  ˚≥  ˚≥  ˇ≥  ¥  5¥  9¥  ;¥  ;¥  ?¥  W¥  u¥      y¥  y¥  ó¥          ú¥      ú¥  ¥¥  À¥  “¥  ◊¥      ◊¥  Ô¥  µ  µ  µ  +µ  Oµ      Vµ  Xµ      Xµ  fµ  nµ  óµ      ôµ      ôµ  ±µ  “µ  Òµ  ˆµ      ˆµ  ∂  #∂  E∂  9∂  ]∂      |∂  ù∂  †∂  •∂      •∂  Ω∂  ‘∂  ﬁ∂  „∂      Ù∂  Ù∂  ˙∂  ∑  ∑      ∑  )∑  9∑  9∑  o∑  }∑  É∑  ö∑      ¢∑  ´∑      ´∑      ∑∑  ª∑  ª∑  ƒ∑  ”∑  ‹∑  ‹∑  Â∑      Ô∑  ∏  )∏  F∏  U∏  [∏  p∏  x∏  Ñ∏  é∏  é∏      ¶∏  ®∏  ≥∏  À∏  Õ∏  Ì∏  Ì∏  Ú∏  Ú∏  (π  6π  ?π      ?π      Kπ  Oπ  Oπ  Xπ  gπ  pπ  pπ  yπ      π  õπ  ¶π  æπ  ¿π  Àπ  „π  Âπ  ∫  ∫  ∫  ∫  2∫  4∫      4∫  L∫  c∫  h∫      h∫  Ä∫  ó∫  °∫  ¶∫      º∫  º∫  ”∫      ”∫      ﬂ∫  „∫      È∫  Ú∫  ª  
 ª  
-ª  ª  ª  6ª  8ª  Tª  _ª  zª      |ª          |ª  Öª  ùª      ®ª  æª  Àª  ”ª  Ùª  ˆª  ˛ª      º  º  $º  )º      Jº  Tº  Tº  oº  yº  Ñº  †º  ≥º   º  “º  ‹º  ‹º  Âº  Èº       Ω  8Ω  CΩ  CΩ  CΩ  WΩ  `Ω  dΩ      {Ω  ≥Ω  ≥Ω  µΩ  µΩ  —Ω  €Ω  „Ω  „Ω  ÏΩ  Ω      æ  ?æ  Pæ  Væ  mæ      uæ  Çæ  áæ  áæ  êæ  îæ      ´æ  „æ  Ùæ      ˝æ  ø  ø  ø          ø  )ø  @ø  Jø  Oø      eø  }ø      }ø      ßø  ±ø  ±ø      Œø  “ø  Âø  Ìø  Ùø  ˇø      ¿  ¿  ¿  ¿  C¿      W¿  u¿  å¿      ñ¿  †¿  †¿  ∞¿  ⁄¿  Í¿  ¸¿  ¡  ¡  &¡  8¡  D¡      H¡  H¡  H¡  H¡  L¡      Q¡  Q¡  \¡      `¡  x¡  è¡  ô¡  û¡      ¥¡  Ã¡  Ã¡      ˆ¡   ¬  %¬      *¬  *¬  *¬  5¬      9¬  Q¬  h¬  r¬  w¬      ç¬  ç¬  •¬  •¬      ◊¬  ·¬      ˛¬  √  √      √  :√      @√      `√  r√  z√      |√      ï√  £√  ¿√      –√  –√  ˝√  ˇ√  )ƒ  +ƒ  Gƒ  Rƒ      \ƒ  fƒ      mƒ      äƒ  ìƒ  ìƒ  ¿ƒ  ÿƒ      €ƒ  ˆƒ  ˆƒ  ˆƒ  ˚ƒ   ≈  3≈      G≈  e≈  |≈  Å≈      ã≈  ï≈  ¬≈  ÷≈      Ÿ≈  ≈  ≈  ≈  ≈  ˙≈  ∆  '∆      1∆  6∆      6∆  N∆  e∆  o∆  ∆  ∆  õ∆  Ø∆  ≤∆  ƒ∆  Œ∆  ‘∆  Î∆      Û∆  ¸∆  «  «  «  «  1«  4«  F«  X«      ]«      ]«  u«  å«  ñ«  ¶«  ¶«  ¬«  ÷«  Ÿ«  Î«  ı«  ˚«  »      »  #»  (»  (»  (»  D»  X»  [»  m»  »      Ñ»  Ñ»      Ñ»  ú»  ≥»  Ω»  Õ»  Õ»  Ú»  …  …  …  *…      2…  ;…  @…  @…  @…  e…  v…  à…      ç…  ç…      ¢…  ¢…  ¢…  æ…  æ…  ÿ…      ﬂ…  À        |      Ñ  ü  r∑     r∑ è∑     ë∑ ü∑ ü∑ ≠∑     ¿∑     Ë∑ ∏ ∏ )∏ L∏ 4∏ f∏ Ü∏ õ∏     †∏ †∏ †∏ ≤∏     µ∏ ¡∏       ®      ∫   ‡   [¯ [¯                                 q¯ á¯                             Ö¯ ï¯ ù¯ §¯ ®¯ ∞¯ ¿¯ Œ¯ ›¯ „¯ Î¯ ˜¯ ˝¯ ˝¯ ˘     ˘ ˘     
-˘ Y˙       4      G  P  ¢ì ¢ì ∂ì Ãì ◊ì ‹ì Íì ˜ì      î î 	      D      ¶   ≥   jÅ  jÅ      vÅ  çÅ  òÅ  ûÅ  §Å  ™Å  ¿Å      «Å      ÃÅ  “Å  
-      |      ˜     jÇ         jÇ     †Ç îÇ         ∞Ç ∂Ç ≈Ç      Ç     €Ç ﬂÇ         „Ç ÌÇ ÚÇ É     É É     É $É       8      N   X   ‚Ÿ ‚Ÿ         ÚŸ ˙Ÿ     ⁄ ⁄ ⁄ ⁄ '⁄       P      A  Q  ‰:  ‰:      ;  ;  ;  );  /;      4;  R;  T;      b;  h;      k;  y;        à      T   r   ; ;     T         ^ n v § π        ‹ œ I e j u  å ñ §     ™ ∂ Ω À                @            j◊ j◊ s◊ {◊ Ñ◊ ò◊ ¢◊ ß◊ ≥◊     π◊ ª◊ ª◊ ¿◊       H         -   éı  éı  ¢ı          §ı  ´ı  πı  ·ı  Êı  ˝ı  ˆ  ˆ      ˆ  ˆ        0      -   5   ì ì ó ˇ ÿ ± )         `       ò      §   ∆   sh sh         ãh öh ®h     ∏h æh     æh     …h ‘h ◊h ‹h Êh Ùh     ˚h ¸h i i     i     i      i !i !i -i     /i ;i       X     7   â   6œ  6œ                                      Tœ      Zœ  aœ  qœ  xœ  Äœ  Üœ      çœ  £œ  ±œ  µœ      ∫œ  ¿œ  Œœ  —œ      ÷œ  Ÿœ  Ÿœ  Èœ  ˙œ  ¸œ  –  –  –      "–      )–  +–  8–  :–  :–  J–  [–  ^–  `–  l–  n–  é–      ì–      ö–  £–  ©–  Ø–      ∂–  π–  π–  …–  ⁄–      ‹–      —  )—      +—      2—  4—  @—  @—      T—  X—  X—  n—        @      ®  ¥  ` `     ` >` F` K` ^` k`     q`     t` Ö`       0            €˚ €˚     ‰˚ È˚ Ú˚     ¯˚ ¯˚ ˝˚       ,      ;   B   ä™ ä™ ô™ •™ ≥™ º™     ¡™ «™       ‰         6   NÕ  NÕ          lÕ  oÕ  rÕ  ÜÕ  éÕ      ïÕ  ©Õ  ¨Õ  ÆÕ  —Õ  —Õ  ‘Õ  ‰Õ  ÊÕ  ÊÕ  ÈÕ  ÎÕ  ÎÕ  ÓÕ  Œ  Œ  5Œ  ?Œ  IŒ  QŒ  QŒ  QŒ  SŒ  SŒ  XŒ  wŒ  }Œ  åŒ  úŒ  ∞Œ      ¿Œ  ¬Œ  ‘Œ      ‰Œ  ÈŒ  ÈŒ  ıŒ  ıŒ      œ  œ  œ  0œ        Ù      Ö   æ   Ù•  Ù•      ¶          	¶          ¶       ¶  $¶  *¶  *¶  1¶  7¶  ;¶  ?¶  F¶  L¶  S¶  Y¶      `¶  f¶  m¶  s¶  z¶  Ä¶  á¶  ç¶      î¶  ö¶      ß¶  ≠¶  ¥¶      Ω¶  ≈¶  ≈¶      Œ¶  œ¶  ‡¶  Û¶  ı¶  ß  ß  ß  "ß  -ß  8ß  Cß  Nß  Nß  Xß        L      W   f   »x  »x      —x  ·x  ·x  ˇx  y  y  y  !y  1y      3y  3y  3y  Zy        h      ›   Û   ≥é  ≥é      »é  ◊é  ‹é  Ïé      Ùé  Ùé      è  è  è  #è  /è  >è  Jè  Uè  [è  fè      iè  qè        D      <   I   N€  N€      b€  ~€  å€      ú€  û€  †€      ´€  Ø€  Ø€  ∑€        ∞      2   Z   ˚ ˚ Ò         
-Ò .Ò 9Ò HÒ TÒ hÒ áÒ èÒ ßÒ ∑Ò ◊Ò ◊Ò ˚Ò ˝Ò ˝Ò !Ú #Ú #Ú 5Ú 5Ú     =Ú =Ú IÚ ]Ú     eÚ eÚ wÚ ~Ú ~Ú êÚ ùÚ ©Ú         ÕÚ       P      Ñ   î   Í~ Í~ ˘~        # # # % 7 > o     ã å í       0      ç  ï  Cp Cp Yp     lp ~p Ñp     áp èp       <      a   l   2  2          @  Q  Y  ]  i  n      r  x        \      …   ‹   Ó Ó Ú   + 6 J [ } ü ∫ ’   & A \                 X      £   µ   Aw Aw             aw nw sw w üw •w ≤w     øw ∆w     œw     ”w ﬂw !      ,      í  ô  ÆÃ  ÆÃ  ¬Ã  ‘Ã  ŸÃ  
-Õ          GÕ  "      ‰         6   £ò  £ò  Ωò      ¿ò      √ò      …ò  ›ò  ‰ò  Áò  ô  ô  ô  ô  ô  ô  .ô   ô      <ô  Sô  _ô      sô  |ô  Ñô      ïô  ïô  ïô  ûô      •ô  ≥ô  µô      ¿ô  ∆ô  Âô  ıô  ˝ô  ö  ö  )ö  1ö  Cö  Fö  Fö  Fö  Fö      Rö  ïö  #           	   H   `g `g     Äg         èg     õg ¶g     ±g     ≈g ÿg „g Ôg  h h h h h #h <h Hh Hh ch uh àh ñh ´h     ±h ’h     ›h ›h Èh Ìh Òh 	i i Bi i Qi \i si     wi Äi     Öi Öi öi †i øi     ƒi ƒi –i ÷i ‹i     ﬁi Ói $      L             œ  œ Ÿœ ·œ ·œ Óœ      – – – – –     %– '– '– -– %      <      {  Ü  ≤Ü ≤Ü     ¿Ü ŸÜ ‰Ü ÎÜ á ÛÜ #á         pá &             G   K   B| B| Q|     n| t| '           l   ™   íò íò         ¶ò ¬ò “ò “ò Êò ò Ùò ¯ò     ô ô ô     ,ô 5ô 9ô     Hô [ô aô hô wô     zô Öô ∫ô ∆ô “ô ⁄ô ‰ô     Úô ö ö     #ö 4ö Gö Mö îö ¶ö ¥ö  ö Ÿö ‰ö ˙ö     õ õ õ 8õ Dõ Oõ Võ \õ cõ lõ     oõ ñõ (      †      ã  Ø  =  =      =  $=  $=  3=  ?=      F=  L=  L=  V=  _=  _=  e=  i=  l=  v=  Å=  Å=  ê=  ô=  ô=  §=  ©=  ¨=  Ø=  ≤=      µ=  º=  º=  º=  º=  º=       =  )             	    ˆÚ  ˆÚ  ˙Ú      Û  	Û  *      §     è   Ù   ∏} ∏} Œ}     ⁄} ‚} Û}                 ˜} ~ ~ +~ =~ B~ H~     M~ d~     m~ Ö~ ï~ ï~ ¢~ ∞~ º~ Ã~     ﬁ~ ﬁ~ ‚~ Ë~     ~ ˙~ ˙~ ˛~   !     % J J Y [ a     i { ê     ö     © Æ Æ ∫ ∫     » — — ‡ Ä Ä Ä Ä      Ä     +Ä AÄ VÄ eÄ tÄ     Ä ÅÄ     áÄ îÄ öÄ °Ä ÆÄ     ¥Ä ¥Ä ªÄ     ‘Ä ŸÄ ·Ä ÈÄ ÚÄ ˘Ä Å         qÅ +      ,            ãë  ãë      îë      Øë  µë  µë  ∫ë  ,      Ñ     á   ‰   Äñ Äñ     àñ †ñ ≠ñ ≤ñ ∑ñ ºñ ¡ñ ∆ñ Àñ „ñ ó ó /ó <ó     Eó Jó Oó             Tó ró ]ó     Çó áó èó ≠ó ≠ó ≤ó ¬ó »ó “ó ◊ó     ‡ó Âó Íó ˙ó                         (ò ]ò bò lò yò Éò ëò üò     Æò Æò                                 ’ò ⁄ò ﬂò ‰ò ô ô ô ô 6ô     ?ô Fô Rô ^ô Äô Äô áô éô ìô öô     £ô §ô ≠ô     ≤ô jö -      (      È  Ô  €t €t ıt u u     u !u .           ¬      ≤Ø ≤Ø ¿Ø »Ø ÕØ     ”Ø     ˚Ø ∞ &∞ .∞ 9∞ >∞     T∞     a∞ j∞ o∞ û∞ •∞ ≠∞ ª∞     ¬∞ Ë∞ Ë∞ Ò∞ ± ± 8± @± S± c± s±     É± í± ¢± ≤±     ¬± ‹± ·±     È± È± Ó± ¸± ≤ ,≤ 7≤ F≤ V≤ f≤ v≤     ê≤ ê≤ ê≤     ú≤ ¢≤ /      (      ƒ       +? +? 4? ;? [?     b? e? 0      4      û  ß  ´_ ´_     Ø_ ¿_ –_ ·_ Í_     Ô_ ˇ_ 1      p      	  !  —z —z                                     Âz Úz ˜z { 	{ { ,{     b{ k{     t{         Ä{ 2           Ü   ƒ   ¬« ¬« Ê«     ˘« » » » » » #» 5» >» ^»     c» |» É» É»     ò» §» §» À»     Œ» Ì» … … .… D… F… R… h…     ~… ù… º… »… ﬁ… Ù… ˘…         1  1  9  C  O  e      {  á  ù      ≥  Ω  ≈  Ã  ‚      Î  √À 3      8      u      V V     d s } é     ñ ò ò û 4      8      0   :   
+ª  ª  ª  6ª  8ª  Tª  _ª  zª      |ª          |ª  Öª  ùª      ®ª  æª  Àª  ”ª  Ùª  ˆª  ˛ª      º  º  $º  )º      Jº  Tº  Tº  oº  yº  Ñº  †º  ≥º   º  “º  ‹º  ‹º  Âº  Èº       Ω  8Ω  CΩ  CΩ  CΩ  WΩ  `Ω  dΩ      {Ω  ≥Ω  ≥Ω  µΩ  µΩ  —Ω  €Ω  „Ω  „Ω  ÏΩ  Ω      æ  ?æ  Pæ  Væ  mæ      uæ  Çæ  áæ  áæ  êæ  îæ      ´æ  „æ  Ùæ      ˝æ  ø  ø  ø          ø  )ø  @ø  Jø  Oø      eø  }ø      }ø      ßø  ±ø  ±ø      Œø  “ø  Âø  Ìø  Ùø  ˇø      ¿  ¿  ¿  ¿  C¿      W¿  u¿  å¿      ñ¿  †¿  †¿  ∞¿  ⁄¿  Í¿  ¸¿  ¡  ¡  &¡  8¡  D¡      H¡  H¡  H¡  H¡  L¡      Q¡  Q¡  \¡      `¡  x¡  è¡  ô¡  û¡      ¥¡  Ã¡  Ã¡      ˆ¡   ¬  %¬      *¬  *¬  *¬  5¬      9¬  Q¬  h¬  r¬  w¬      ç¬  ç¬  •¬  •¬      ◊¬  ·¬      ˛¬  √  √      √  :√      @√      `√  r√  z√      |√      ï√  £√  ¿√      –√  –√  ˝√  ˇ√  )ƒ  +ƒ  Gƒ  Rƒ      \ƒ  fƒ      mƒ      äƒ  ìƒ  ìƒ  ¿ƒ  ÿƒ      €ƒ  ˆƒ  ˆƒ  ˆƒ  ˚ƒ   ≈  3≈      G≈  e≈  |≈  Å≈      ã≈  ï≈  ¬≈  ÷≈      Ÿ≈  ≈  ≈  ≈  ≈  ˙≈  ∆  '∆      1∆  6∆      6∆  N∆  e∆  o∆  ∆  ∆  õ∆  Ø∆  ≤∆  ƒ∆  Œ∆  ‘∆  Î∆      Û∆  ¸∆  «  «  «  «  1«  4«  F«  X«      ]«      ]«  u«  å«  ñ«  ¶«  ¶«  ¬«  ÷«  Ÿ«  Î«  ı«  ˚«  »      »  #»  (»  (»  (»  D»  X»  [»  m»  »      Ñ»  Ñ»      Ñ»  ú»  ≥»  Ω»  Õ»  Õ»  Ú»  …  …  …  *…      2…  ;…  @…  @…  @…  e…  v…  à…      ç…  ç…      ¢…  ¢…  ¢…  æ…  æ…  ÿ…      ﬂ…  À        |      Ñ  ü  r∑     r∑ è∑     ë∑ ü∑ ü∑ ≠∑     ¿∑     Ë∑ ∏ ∏ )∏ L∏ 4∏ f∏ Ü∏ õ∏     †∏ †∏ †∏ ≤∏     µ∏ ¡∏       ®      ∫   ‡   [¯ [¯                                 q¯ á¯                             Ö¯ ï¯ ù¯ §¯ ®¯ ∞¯ ¿¯ Œ¯ ›¯ „¯ Î¯ ˜¯ ˝¯ ˝¯ ˘     ˘ ˘     
+˘ Y˙       4      G  P  ¢ì ¢ì ∂ì Ãì ◊ì ‹ì Íì ˜ì      î î       D      ¶   ≥   jÅ  jÅ      vÅ  çÅ  òÅ  ûÅ  §Å  ™Å  ¿Å      «Å      ÃÅ  “Å  	      |      ˜     jÇ         jÇ     †Ç îÇ         ∞Ç ∂Ç ≈Ç      Ç     €Ç ﬂÇ         „Ç ÌÇ ÚÇ É     É É     É $É 
+      8      N   X   ‚Ÿ ‚Ÿ         ÚŸ ˙Ÿ     ⁄ ⁄ ⁄ ⁄ '⁄       P      A  Q  ‰:  ‰:      ;  ;  ;  );  /;      4;  R;  T;      b;  h;      k;  y;        à      T   r   ; ;     T         ^ n v § π        ‹ œ I e j u  å ñ §     ™ ∂ Ω À                @            j◊ j◊ s◊ {◊ Ñ◊ ò◊ ¢◊ ß◊ ≥◊     π◊ ª◊ ª◊ ¿◊       H         -   éı  éı  ¢ı          §ı  ´ı  πı  ·ı  Êı  ˝ı  ˆ  ˆ      ˆ  ˆ        0      -   5   ì ì ó ˇ ÿ ± )         `       ò      §   ∆   sh sh         ãh öh ®h     ∏h æh     æh     …h ‘h ◊h ‹h Êh Ùh     ˚h ¸h i i     i     i      i !i !i -i     /i ;i       X     7   â   6œ  6œ                                      Tœ      Zœ  aœ  qœ  xœ  Äœ  Üœ      çœ  £œ  ±œ  µœ      ∫œ  ¿œ  Œœ  —œ      ÷œ  Ÿœ  Ÿœ  Èœ  ˙œ  ¸œ  –  –  –      "–      )–  +–  8–  :–  :–  J–  [–  ^–  `–  l–  n–  é–      ì–      ö–  £–  ©–  Ø–      ∂–  π–  π–  …–  ⁄–      ‹–      —  )—      +—      2—  4—  @—  @—      T—  X—  X—  n—        @      ®  ¥  ` `     ` >` F` K` ^` k`     q`     t` Ö`       0            €˚ €˚     ‰˚ È˚ Ú˚     ¯˚ ¯˚ ˝˚       ,      ;   B   ä™ ä™ ô™ •™ ≥™ º™     ¡™ «™       ‰         6   NÕ  NÕ          lÕ  oÕ  rÕ  ÜÕ  éÕ      ïÕ  ©Õ  ¨Õ  ÆÕ  —Õ  —Õ  ‘Õ  ‰Õ  ÊÕ  ÊÕ  ÈÕ  ÎÕ  ÎÕ  ÓÕ  Œ  Œ  5Œ  ?Œ  IŒ  QŒ  QŒ  QŒ  SŒ  SŒ  XŒ  wŒ  }Œ  åŒ  úŒ  ∞Œ      ¿Œ  ¬Œ  ‘Œ      ‰Œ  ÈŒ  ÈŒ  ıŒ  ıŒ      œ  œ  œ  0œ        Ù      Ö   æ   Ù•  Ù•      ¶          	¶          ¶       ¶  $¶  *¶  *¶  1¶  7¶  ;¶  ?¶  F¶  L¶  S¶  Y¶      `¶  f¶  m¶  s¶  z¶  Ä¶  á¶  ç¶      î¶  ö¶      ß¶  ≠¶  ¥¶      Ω¶  ≈¶  ≈¶      Œ¶  œ¶  ‡¶  Û¶  ı¶  ß  ß  ß  "ß  -ß  8ß  Cß  Nß  Nß  Xß        L      W   f   »x  »x      —x  ·x  ·x  ˇx  y  y  y  !y  1y      3y  3y  3y  Zy        h      ›   Û   ≥é  ≥é      »é  ◊é  ‹é  Ïé      Ùé  Ùé      è  è  è  #è  /è  >è  Jè  Uè  [è  fè      iè  qè        D      <   I   N€  N€      b€  ~€  å€      ú€  û€  †€      ´€  Ø€  Ø€  ∑€        ∞      2   Z   ˚ ˚ Ò         
+Ò .Ò 9Ò HÒ TÒ hÒ áÒ èÒ ßÒ ∑Ò ◊Ò ◊Ò ˚Ò ˝Ò ˝Ò !Ú #Ú #Ú 5Ú 5Ú     =Ú =Ú IÚ ]Ú     eÚ eÚ wÚ ~Ú ~Ú êÚ ùÚ ©Ú         ÕÚ       P      Ñ   î   Í~ Í~ ˘~        # # # % 7 > o     ã å í       0      ç  ï  Cp Cp Yp     lp ~p Ñp     áp èp       <      a   l   2  2          @  Q  Y  ]  i  n      r  x        \      …   ‹   Ó Ó Ú   + 6 J [ } ü ∫ ’   & A \                X      £   µ   Aw Aw             aw nw sw w üw •w ≤w     øw ∆w     œw     ”w ﬂw        ,      í  ô  ÆÃ  ÆÃ  ¬Ã  ‘Ã  ŸÃ  
+Õ          GÕ  !      ‰         6   £ò  £ò  Ωò      ¿ò      √ò      …ò  ›ò  ‰ò  Áò  ô  ô  ô  ô  ô  ô  .ô   ô      <ô  Sô  _ô      sô  |ô  Ñô      ïô  ïô  ïô  ûô      •ô  ≥ô  µô      ¿ô  ∆ô  Âô  ıô  ˝ô  ö  ö  )ö  1ö  Cö  Fö  Fö  Fö  Fö      Rö  ïö  "           	   H   `g `g     Äg         èg     õg ¶g     ±g     ≈g ÿg „g Ôg  h h h h h #h <h Hh Hh ch uh àh ñh ´h     ±h ’h     ›h ›h Èh Ìh Òh 	i i Bi i Qi \i si     wi Äi     Öi Öi öi †i øi     ƒi ƒi –i ÷i ‹i     ﬁi Ói #      L             œ  œ Ÿœ ·œ ·œ Óœ      – – – – –     %– '– '– -– $      <      {  Ü  ≤Ü ≤Ü     ¿Ü ŸÜ ‰Ü ÎÜ á ÛÜ #á         pá %             G   K   B| B| Q|     n| t| &           l   ™   íò íò         ¶ò ¬ò “ò “ò Êò ò Ùò ¯ò     ô ô ô     ,ô 5ô 9ô     Hô [ô aô hô wô     zô Öô ∫ô ∆ô “ô ⁄ô ‰ô     Úô ö ö     #ö 4ö Gö Mö îö ¶ö ¥ö  ö Ÿö ‰ö ˙ö     õ õ õ 8õ Dõ Oõ Võ \õ cõ lõ     oõ ñõ '      †      ã  Ø  =  =      =  $=  $=  3=  ?=      F=  L=  L=  V=  _=  _=  e=  i=  l=  v=  Å=  Å=  ê=  ô=  ô=  §=  ©=  ¨=  Ø=  ≤=      µ=  º=  º=  º=  º=  º=       =  (             	    ˆÚ  ˆÚ  ˙Ú      Û  	Û  )      §     è   Ù   ∏} ∏} Œ}     ⁄} ‚} Û}                 ˜} ~ ~ +~ =~ B~ H~     M~ d~     m~ Ö~ ï~ ï~ ¢~ ∞~ º~ Ã~     ﬁ~ ﬁ~ ‚~ Ë~     ~ ˙~ ˙~ ˛~   !     % J J Y [ a     i { ê     ö     © Æ Æ ∫ ∫     » — — ‡ Ä Ä Ä Ä      Ä     +Ä AÄ VÄ eÄ tÄ     Ä ÅÄ     áÄ îÄ öÄ °Ä ÆÄ     ¥Ä ¥Ä ªÄ     ‘Ä ŸÄ ·Ä ÈÄ ÚÄ ˘Ä Å         qÅ *      ,            ãë  ãë      îë      Øë  µë  µë  ∫ë  +      Ñ     á   ‰   Äñ Äñ     àñ †ñ ≠ñ ≤ñ ∑ñ ºñ ¡ñ ∆ñ Àñ „ñ ó ó /ó <ó     Eó Jó Oó             Tó ró ]ó     Çó áó èó ≠ó ≠ó ≤ó ¬ó »ó “ó ◊ó     ‡ó Âó Íó ˙ó                         (ò ]ò bò lò yò Éò ëò üò     Æò Æò                                 ’ò ⁄ò ﬂò ‰ò ô ô ô ô 6ô     ?ô Fô Rô ^ô Äô Äô áô éô ìô öô     £ô §ô ≠ô     ≤ô jö ,      (      È  Ô  €t €t ıt u u     u !u -           ¬      ≤Ø ≤Ø ¿Ø »Ø ÕØ     ”Ø     ˚Ø ∞ &∞ .∞ 9∞ >∞     T∞     a∞ j∞ o∞ û∞ •∞ ≠∞ ª∞     ¬∞ Ë∞ Ë∞ Ò∞ ± ± 8± @± S± c± s±     É± í± ¢± ≤±     ¬± ‹± ·±     È± È± Ó± ¸± ≤ ,≤ 7≤ F≤ V≤ f≤ v≤     ê≤ ê≤ ê≤     ú≤ ¢≤ .      (      ƒ       +? +? 4? ;? [?     b? e? /      4      û  ß  ´_ ´_     Ø_ ¿_ –_ ·_ Í_     Ô_ ˇ_ 0      p      	  !  —z —z                                     Âz Úz ˜z { 	{ { ,{     b{ k{     t{         Ä{ 1           Ü   ƒ   ¬« ¬« Ê«     ˘« » » » » » #» 5» >» ^»     c» |» É» É»     ò» §» §» À»     Œ» Ì» … … .… D… F… R… h…     ~… ù… º… »… ﬁ… Ù… ˘…         1  1  9  C  O  e      {  á  ù      ≥  Ω  ≈  Ã  ‚      Î  √À 2      8      u      V V     d s } é     ñ ò ò û 3      8      0   :   
 ™ 
-™     ™     ;™ ^™ j™ w™     Å™ Ü™ 5      ,      µ  º  ã` ã` î`     ù` ∞`     ∂` ª` 6      0         	   ∏Ñ ∏Ñ     ∆Ñ –Ñ ‰Ñ ÍÑ     ÏÑ ÚÑ 7      ,      8   ?   Æ Æ ¬ ‘ Â Û     ˘ ˇ 8      @      -  9  eQ  eQ                  uQ  ~Q  ÖQ  åQ      ìQ  îQ  úQ  9      ,            @g @g     Ig     Tg Vg Vg [g :      \      m   Ä   z  z          ú              †  ¨  Ω  …  “  Ò  ˝  Ä      Ä      Ä  Ä  ;      Ä            1`  1`  A`  H`  [`  g`  é`  ò`  ¢`  ™`  ≤`  ∫`  ∆`      ÿ`      Í`  a  a  a  'a      -a      3a      6a      =a  Ea  <      ¨         F   ªÂ ªÂ √Â «Â ”Â „Â ÓÂ ˝Â 	Ê Ê 'Ê PÊ bÊ jÊ àÊ ìÊ ≤Ê ≤Ê ŸÊ €Ê €Ê €Ê ÙÊ ˆÊ ˆÊ ˆÊ     Á Á  Á (Á CÁ CÁ CÁ UÁ \Á \Á nÁ     tÁ ~Á =      X     Ω    ª` ª` «` –` Ÿ` ﬂ`     Î` ˜` ˇ` a a a !a ,a     4a Ma _a la     ua ua za a ça îa ôa ôa üa ¶a ´a     ∑a øa »a »a     –a     ﬂa „a a     ˝a b b b b b (b     3b Ob Ob     Ob     Wb ^b eb lb     sb zb Åb àb     èb ñb     úb •b     ´b æb     œb Îb     ˙b     ˝b c >      |      K   f   Œˆ  Œˆ      Ìˆ  ˚ˆ  ˜  ˜  ˜  &˜  -˜  4˜  9˜  E˜      I˜  S˜  S˜  Z˜      ]˜  c˜  c˜  m˜      {˜  Ç˜  Ç˜  Ç˜  ê˜  ?      ,            + +     C N t     ò † @      0      À   ”   2ù 2ù Fù Öù åù íù üù     ≤ù æù A      ‡      »  ¸  Û     Û     ˚      * 4 = N ^     q ~ ë Ø     ∏ ≈ — › › Í Ù  - L _ _  å ¡ ≠     “ ◊ È Ì     ı ı        #     . < <     A M B      L      R   a   º§  º§      …§  —§  ‘§  ‚§  Â§  Ï§  §      Û§  ˜§  •      •  •  C      8      G   Q   t§  t§      Å§  â§  å§  ö§  û§  ¨§      ∞§  µ§  D      0            Æ Æ     ∑ º À     œ — ÷ E      <      ±  º  ªq ªq —q ‰q ¯q r r "r 8r >r     Dr zr F      T      c   t   ä⁄ ä⁄ ò⁄ ™⁄ ¥⁄ æ⁄ Ÿ⁄ ﬂ⁄ ·⁄ Ï⁄ € € .€     4€ 4€ 4€ 4€ :€ G      P      ·   Ò   [˙ [˙         e˙ x˙ ã˙ ì˙                                     G˚ H      (      M   S       +     4 6 I      H        !  bâ  bâ          pâ      |â  Åâ  Åâ  íâ      §â      ©â  ©â  Øâ  J      0      ‘   ‹   ¬ù ¬ù ÷ù û û "û :û     =û Iû K      ú      '   J   sd sd     çd Æd ¿d «d —d     ›d Âd d             ˚d     e e      e 'e +e +e 1e 7e Oe Xe ^e ge     le le le     pe ze L      X      ”  Â  ã4 ã4 ó4     ô4 ®4 æ4  4 —4     Ë4 Í4         5 5 5     5 5 M      î      O   p   òe òe æe         ¡e œe Íe ¯e f %f %f Df Ff Ff ef gf gf wf wf õf ¢f ´f ∂f     ∫f “f ‘f ˙f     g 	g         <g N      <         #   
+™     ™     ;™ ^™ j™ w™     Å™ Ü™ 4      ,      µ  º  ã` ã` î`     ù` ∞`     ∂` ª` 5      0         	   ∏Ñ ∏Ñ     ∆Ñ –Ñ ‰Ñ ÍÑ     ÏÑ ÚÑ 6      ,      8   ?   Æ Æ ¬ ‘ Â Û     ˘ ˇ 7      @      -  9  eQ  eQ                  uQ  ~Q  ÖQ  åQ      ìQ  îQ  úQ  8      ,            @g @g     Ig     Tg Vg Vg [g 9      \      m   Ä   z  z          ú              †  ¨  Ω  …  “  Ò  ˝  Ä      Ä      Ä  Ä  :      Ä            1`  1`  A`  H`  [`  g`  é`  ò`  ¢`  ™`  ≤`  ∫`  ∆`      ÿ`      Í`  a  a  a  'a      -a      3a      6a      =a  Ea  ;      ¨         F   ªÂ ªÂ √Â «Â ”Â „Â ÓÂ ˝Â 	Ê Ê 'Ê PÊ bÊ jÊ àÊ ìÊ ≤Ê ≤Ê ŸÊ €Ê €Ê €Ê ÙÊ ˆÊ ˆÊ ˆÊ     Á Á  Á (Á CÁ CÁ CÁ UÁ \Á \Á nÁ     tÁ ~Á <      X     Ω    ª` ª` «` –` Ÿ` ﬂ`     Î` ˜` ˇ` a a a !a ,a     4a Ma _a la     ua ua za a ça îa ôa ôa üa ¶a ´a     ∑a øa »a »a     –a     ﬂa „a a     ˝a b b b b b (b     3b Ob Ob     Ob     Wb ^b eb lb     sb zb Åb àb     èb ñb     úb •b     ´b æb     œb Îb     ˙b     ˝b c =      |      K   f   Œˆ  Œˆ      Ìˆ  ˚ˆ  ˜  ˜  ˜  &˜  -˜  4˜  9˜  E˜      I˜  S˜  S˜  Z˜      ]˜  c˜  c˜  m˜      {˜  Ç˜  Ç˜  Ç˜  ê˜  >      ,            + +     C N t     ò † ?      0      À   ”   2ù 2ù Fù Öù åù íù üù     ≤ù æù @      ‡      »  ¸  Û     Û     ˚      * 4 = N ^     q ~ ë Ø     ∏ ≈ — › › Í Ù  - L _ _  å ¡ ≠     “ ◊ È Ì     ı ı        #     . < <     A M A      L      R   a   º§  º§      …§  —§  ‘§  ‚§  Â§  Ï§  §      Û§  ˜§  •      •  •  B      8      G   Q   t§  t§      Å§  â§  å§  ö§  û§  ¨§      ∞§  µ§  C      0            Æ Æ     ∑ º À     œ — ÷ D      <      ±  º  ªq ªq —q ‰q ¯q r r "r 8r >r     Dr zr E      T      c   t   ä⁄ ä⁄ ò⁄ ™⁄ ¥⁄ æ⁄ Ÿ⁄ ﬂ⁄ ·⁄ Ï⁄ € € .€     4€ 4€ 4€ 4€ :€ F      P      ·   Ò   [˙ [˙         e˙ x˙ ã˙ ì˙                                     G˚ G      (      M   S       +     4 6 H      H        !  bâ  bâ          pâ      |â  Åâ  Åâ  íâ      §â      ©â  ©â  Øâ  I      0      ‘   ‹   ¬ù ¬ù ÷ù û û "û :û     =û Iû J      ú      '   J   sd sd     çd Æd ¿d «d —d     ›d Âd d             ˚d     e e      e 'e +e +e 1e 7e Oe Xe ^e ge     le le le     pe ze K      X      ”  Â  ã4 ã4 ó4     ô4 ®4 æ4  4 —4     Ë4 Í4         5 5 5     5 5 L      î      O   p   òe òe æe         ¡e œe Íe ¯e f %f %f Df Ff Ff ef gf gf wf wf õf ¢f ´f ∂f     ∫f “f ‘f ˙f     g 	g         <g M      <         #   
 © 
-©     ©  © (© 8© D© N© }©     © Ö© O      H      ?   M   Û9 Û9 ˜9 : %: L: y: †: ß: Æ: π: …: ⁄:     ﬂ: ·: P      4      ß  ∞  ;q ;q Oq aq jq Ñq ãq °q     ßq ∫q Q      4      Y   b   *⁄ *⁄ 3⁄ ;⁄ G⁄ X⁄ c⁄ k⁄     ~⁄ É⁄ R              Z   Ç¬ Ç¬         ñ¬ ù¬ ≠¬ ¥¬ ¥¬      ¬ ÷¬ ˝¬ √ ;√ G√ [√ _√ e√ s√ w√ }√ ã√ ã√ ã√ ™√ …√ ›√ ı√ ˘√ ˇ√ ƒ ƒ ƒ )ƒ )ƒ )ƒ )ƒ ,ƒ 1ƒ 6ƒ <ƒ Pƒ Tƒ Zƒ eƒ iƒ oƒ zƒ zƒ zƒ ƒ Öƒ ôƒ ùƒ £ƒ Æƒ ≤ƒ ∏ƒ ¡ƒ ¡ƒ ¡ƒ ˆƒ S      ¨      –  ˜  ‚∫ ‚∫     ª     	ª ª ª     ª     -ª :ª >ª Hª ^ª ^ª nª zª     ª ª òª £ª ´ª     ∞ª ¬ª ¬ª ¬ª  ª ÿª Êª ª Ûª     ¯ª º º º $º T      ê        ?  àH     àH     µH     ∏H ∆H œH œH ÊH ˜H I I     &I     3I 8I <I MI     wI I ÉI àI     êI ¢I     ±I     ¥I I U      ò     6   ò   `T `T         ÅT         ÑT     áT §T »T œT     ⁄T     ÈT ÛT     	U     U U $U 4U HU MU \U oU èU ôU èU ™U ¨U ∂U ¨U «U …U …U ŸU ŸU ÁU ¯U ˝U     )V PV PV     XV [V     ÅV     âV èV úV ¨V ¿V ≈V ‘V ÁV 
-W W )W IW WW IW dW iW wW iW ÑW âW âW ôW     ôW ¨W ΩW ¬W     ÓW W X X     X  X .X 3X FX     QX `X `X iX         „X V      0         	   Ô Ô Ô Ô !Ô *Ô 1Ô     5Ô ;Ô W      (      è   ï   jÄ  jÄ  vÄ  |Ä  ÇÄ      õÄ  ¶Ä  X      <      É  é  X1 X1     j1 v1 å1 ¶1     ±1 ¬1     ƒ1 Ú1 Y      @         +   ÉÍ ÉÍ ëÍ ôÍ µÍ µÍ ∫Í ∫Í «Í «Í ŸÍ     ŸÍ ‚Í Z      º        E  ™Ω ™Ω         ¿Ω »Ω     “Ω ﬁΩ ÏΩ     ¸Ω     $æ Gæ Væ Åæ Öæ     çæ         óæ     øæ ‚æ æ  ø ø 6ø Fø Kø Sø ~ø Çø îø ôø ¶ø ∞ø     æø æø     »ø “ø [      @      n   z   J J             J 4J     8J KJ TJ     XJ ZJ \              b  ∞,     ∞, ª,     ø,             «, Ë, ı, - - - 0- C-     \- p- |- î- §- ∑- ø- ‡- ı-  . 
-. /. 4. >. P.     i. x. Ö. ö. í. µ. Õ. —.     ÷. ÷.     Á. Á. ˙. / / 5/ 7/ 7/ J/     R/ R/ R/ d/ d/     m/ / Ü/ Ü/ ò/     û/ Ã/ ]      4      ∫   √   ã> ã>     ï> ï> ≈> €> ?     %? )? ^      @      .   :   s¸ s¸         Å¸ Ü¸     â¸ õ¸ °¸     §¸ ¶¸ ¨¸ _      Ë      Œ     På På                     jå Çå éå ûå ∞å         ¥å ∑å ¿å     √å ‘å ‘å     ‘å €å Ëå Îå     å Ìå         Jç aç dç     fç }ç Äç Çç äç öç öç £ç ≤ç ¿ç –ç ﬁç Áç Óç     Ûç Ûç Ûç     ˘ç é `      D          ˙º ˙º         Ω     6Ω YΩ fΩ sΩ ~Ω öΩ     ¢Ω ™Ω a             â  ç  Ó Ó ¸          b      8      Ó   ¯   ˙û ˙û ü ü     ü ü #ü ,ü     /ü 5ü c      h      R   h   Ät     Ät •t     ßt ºt ‹t ‚t ‹t ˘t ˚t u ˚t u u u *u *u     2u         au d      0            [S [S dS vS ÑS     àS åS åS ëS e      t         /   #  #          .  =  L  Z  u  ò  ª  ‹  Ì  ! #! 4! =! J! a!     |! ë! ò! ò! ≠! Æ! ≤! f      å        &  *Œ *Œ         4Œ 6Œ NŒ \Œ oŒ xŒ ¶Œ ©Œ ≤Œ ‡Œ „Œ ÁŒ ÏŒ ¯Œ ˇŒ !œ $œ &œ -œ Oœ Rœ Rœ     Uœ `œ gœ         nœ g      ÿ      &  X  
+©     ©  © (© 8© D© N© }©     © Ö© N      H      ?   M   Û9 Û9 ˜9 : %: L: y: †: ß: Æ: π: …: ⁄:     ﬂ: ·: O      4      ß  ∞  ;q ;q Oq aq jq Ñq ãq °q     ßq ∫q P      4      Y   b   *⁄ *⁄ 3⁄ ;⁄ G⁄ X⁄ c⁄ k⁄     ~⁄ É⁄ Q              Z   Ç¬ Ç¬         ñ¬ ù¬ ≠¬ ¥¬ ¥¬      ¬ ÷¬ ˝¬ √ ;√ G√ [√ _√ e√ s√ w√ }√ ã√ ã√ ã√ ™√ …√ ›√ ı√ ˘√ ˇ√ ƒ ƒ ƒ )ƒ )ƒ )ƒ )ƒ ,ƒ 1ƒ 6ƒ <ƒ Pƒ Tƒ Zƒ eƒ iƒ oƒ zƒ zƒ zƒ ƒ Öƒ ôƒ ùƒ £ƒ Æƒ ≤ƒ ∏ƒ ¡ƒ ¡ƒ ¡ƒ ˆƒ R      ¨      –  ˜  ‚∫ ‚∫     ª     	ª ª ª     ª     -ª :ª >ª Hª ^ª ^ª nª zª     ª ª òª £ª ´ª     ∞ª ¬ª ¬ª ¬ª  ª ÿª Êª ª Ûª     ¯ª º º º $º S      ê        ?  àH     àH     µH     ∏H ∆H œH œH ÊH ˜H I I     &I     3I 8I <I MI     wI I ÉI àI     êI ¢I     ±I     ¥I I T      ò     6   ò   `T `T         ÅT         ÑT     áT §T »T œT     ⁄T     ÈT ÛT     	U     U U $U 4U HU MU \U oU èU ôU èU ™U ¨U ∂U ¨U «U …U …U ŸU ŸU ÁU ¯U ˝U     )V PV PV     XV [V     ÅV     âV èV úV ¨V ¿V ≈V ‘V ÁV 
+W W )W IW WW IW dW iW wW iW ÑW âW âW ôW     ôW ¨W ΩW ¬W     ÓW W X X     X  X .X 3X FX     QX `X `X iX         „X U      0         	   Ô Ô Ô Ô !Ô *Ô 1Ô     5Ô ;Ô V      (      è   ï   jÄ  jÄ  vÄ  |Ä  ÇÄ      õÄ  ¶Ä  W      <      É  é  X1 X1     j1 v1 å1 ¶1     ±1 ¬1     ƒ1 Ú1 X      @         +   ÉÍ ÉÍ ëÍ ôÍ µÍ µÍ ∫Í ∫Í «Í «Í ŸÍ     ŸÍ ‚Í Y      º        E  ™Ω ™Ω         ¿Ω »Ω     “Ω ﬁΩ ÏΩ     ¸Ω     $æ Gæ Væ Åæ Öæ     çæ         óæ     øæ ‚æ æ  ø ø 6ø Fø Kø Sø ~ø Çø îø ôø ¶ø ∞ø     æø æø     »ø “ø Z      @      n   z   J J             J 4J     8J KJ TJ     XJ ZJ [              b  ∞,     ∞, ª,     ø,             «, Ë, ı, - - - 0- C-     \- p- |- î- §- ∑- ø- ‡- ı-  . 
+. /. 4. >. P.     i. x. Ö. ö. í. µ. Õ. —.     ÷. ÷.     Á. Á. ˙. / / 5/ 7/ 7/ J/     R/ R/ R/ d/ d/     m/ / Ü/ Ü/ ò/     û/ Ã/ \      4      ∫   √   ã> ã>     ï> ï> ≈> €> ?     %? )? ]      @      .   :   s¸ s¸         Å¸ Ü¸     â¸ õ¸ °¸     §¸ ¶¸ ¨¸ ^      Ë      Œ     På På                     jå Çå éå ûå ∞å         ¥å ∑å ¿å     √å ‘å ‘å     ‘å €å Ëå Îå     å Ìå         Jç aç dç     fç }ç Äç Çç äç öç öç £ç ≤ç ¿ç –ç ﬁç Áç Óç     Ûç Ûç Ûç     ˘ç é _      D          ˙º ˙º         Ω     6Ω YΩ fΩ sΩ ~Ω öΩ     ¢Ω ™Ω `             â  ç  Ó Ó ¸          a      8      Ó   ¯   ˙û ˙û ü ü     ü ü #ü ,ü     /ü 5ü b      h      R   h   Ät     Ät •t     ßt ºt ‹t ‚t ‹t ˘t ˚t u ˚t u u u *u *u     2u         au c      0            [S [S dS vS ÑS     àS åS åS ëS d      t         /   #  #          .  =  L  Z  u  ò  ª  ‹  Ì  ! #! 4! =! J! a!     |! ë! ò! ò! ≠! Æ! ≤! e      å        &  *Œ *Œ         4Œ 6Œ NŒ \Œ oŒ xŒ ¶Œ ©Œ ≤Œ ‡Œ „Œ ÁŒ ÏŒ ¯Œ ˇŒ !œ $œ &œ -œ Oœ Rœ Rœ     Uœ `œ gœ         nœ f              @   Äë Äë             âë ïë     •ë ≤ë     √ë ‘ë Âë ˆë                                             í í %í 8í Jí Rí sí áí äí íí ¢í ≥í                                 ⁄í Ìí ˇí 4ì 6ì Gì Sì _ì     tì     {ì åì     öì ≠ì     πì Èì g      ÿ      &  X  
 ° 
 °                              ° /°     :°     L° c° c° t° å° ô° ¨° ∏° √°         ”° ı°     ˜°     ¢ !¢ !¢ !¢ 2¢ ^¢ e¢ n¢ t¢ {¢ Å¢     Ü¢ å¢ ê¢     ó¢ ¢¢ ®¢         “¢ h      †      U   y   ÜÏ  ÜÏ          èÏ          üÏ  ≠Ï  —Ï  „Ï  ÂÏ  Ì      Ì  Ì  -Ì  /Ì  EÌ  ]Ì      dÌ  dÌ  eÌ      eÌ  sÌ  ~Ì  äÌ  åÌ  òÌ      £Ì      ≥Ì      ªÌ  ŒÌ  i      ¸      f   °   ê] ê] Ø]         ±] ¿] Ã] ÿ] Ì] Ú] ˚] ^ ^     ^ 4^ 4^ 7^     <^ F^ F^ P^     S^ i^ Å^ }^     è^ î^     ≤^ À^ ‘^ ◊^     ⁄^ ﬂ^ _ _ !_ _     M_ M_     a_ u_ |_ Ç_     Ö_ ä_ ö_     °_     §_ v` j      î      ¢   √   x` x`             ê` í` †` ¨` ≈` ÷` ﬂ` ¯` ˝` a a a ?a ?a Va Xa Xa oa qa qa Åa Åa     àa àa     êa         Èa k      †      V   z   ´Ï ´Ï         ≥Ï æÏ ŒÏ ›Ï ÈÏ Ì Ì "Ì *Ì /Ì /Ì <Ì RÌ dÌ lÌ tÌ ÜÌ ≥Ì øÌ “Ì     ⁄Ì ﬂÌ ﬂÌ ÒÌ     ÒÌ Ó 
 Ó 

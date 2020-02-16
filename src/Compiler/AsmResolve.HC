@@ -74,7 +74,7 @@ U0 AOTLocalsResolve(CCompCtrl *cc)
   aotc->local_unresolved=NULL;
 }
 
-U0 AOTGlblsResolve(CCompCtrl *cc,CAOT *tmpaot)
+U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 {
   CAOTCtrl *aotc=cc->aotc;
   CHashFun *tmpf;
@@ -170,7 +170,7 @@ U0 AOTGlblsResolve(CCompCtrl *cc,CAOT *tmpaot)
 	  if (tmpex->type & HTT_FUN)
 	    tmpie->rip=tmpf->exe_addr;
 	  else if (tmpex->type & HTT_GLBL_VAR)
-	    tmpie->rip=tmpex(CHashGlblVar *)->data_addr_rip;
+	    tmpie->rip=tmpex(CHashGlobalVar *)->data_addr_rip;
 	  else
 	    tmpie->rip=tmpex->val;
 	  tmpie->aot=cc->aot;

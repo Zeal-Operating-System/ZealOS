@@ -331,14 +331,14 @@ pu_sizeof_member:
 	if (!(tmpc->type & (HTT_CLASS|HTT_GLBL_VAR)))
 	  LexExcept(cc,"Invalid class at ");
 	else if (tmpc->type & HTT_GLBL_VAR)
-	  tmpc=tmpc(CHashGlblVar *)->var_class;
+	  tmpc=tmpc(CHashGlobalVar *)->var_class;
 	if (Lex(cc)!=TK_IDENT || !(tmpm=MemberFind(cc->cur_str,tmpc)))
 	  LexExcept(cc,"Invalid member at ");
 	else if (cc->local_var_entry)
 	  cc->local_var_entry->use_cnt--;
 	tmpc=tmpm->member_class;
 //Probably others like this:
-	#assert offset(CHashClass.size)==offset(CHashGlblVar.size)
+	#assert offset(CHashClass.size)==offset(CHashGlobalVar.size)
 	i=tmpc->size*tmpm->dim.total_cnt;
       }
     }
@@ -364,7 +364,7 @@ U0 ParseOffsetOf(CCompCtrl *cc)
     if (!tmpc || !(tmpc->type & (HTT_CLASS|HTT_GLBL_VAR)))
       LexExcept(cc,"Invalid class at ");
     else if (tmpc->type & HTT_GLBL_VAR)
-      tmpc=tmpc(CHashGlblVar *)->var_class;
+      tmpc=tmpc(CHashGlobalVar *)->var_class;
   }
   if (Lex(cc)!='.')
     LexExcept(cc,"Expecting '.' at ");
@@ -597,7 +597,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
   CHashExport *tmpex;
   CHashClass *tmpc;
   CHashFun *tmpf;
-  CHashGlblVar *tmpg;
+  CHashGlobalVar *tmpg;
   CMemberLst *tmpm;
   CAsmUndefHash *tmpauh;
   CCodeMisc *cm;

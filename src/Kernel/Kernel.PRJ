@@ -25,7 +25,7 @@
 #include "KernelB.HH"
 #include "KExts"
 #include "StrA"
-#include "KGlbls"
+#include "KGlobals"
 #include "KMathB"
 #include "Sched"
 #include "Mem/MakeMem"

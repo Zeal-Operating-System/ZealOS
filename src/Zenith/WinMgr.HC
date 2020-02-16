@@ -180,8 +180,8 @@ I64 WinQueueIPMessages(Bool que)
       }
     }
 
-    MemCpy(&ms_last,&ms,sizeof(CMsStateGlbls));
-    MemCpy(&old_ms,&ms,sizeof(CMsStateGlbls));
+    MemCpy(&ms_last,&ms,sizeof(CMsStateGlobals));
+    MemCpy(&old_ms,&ms,sizeof(CMsStateGlobals));
   }
   return message_code;
 }
@@ -191,7 +191,7 @@ U0 WinCalcIdles()
   F64 calc_idle_time;
   I64 i,k,total_jiffies,total_jiffies_delta,idle_pt_hits[MP_PROCESSORS_NUM];
   CCPU *c;
-  CWinMgrTimingGlbls *t=winmgr.t;
+  CWinMgrTimingGlobals *t=winmgr.t;
 
   if ((t->calc_idle_delta_time=
 	(calc_idle_time=tS)-t->last_calc_idle_time)>.25) {

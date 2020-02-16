@@ -92,4 +92,4 @@ extern U0 WinScrollRestore(CTask *task,CD3I64 *s);
 extern U0 WinScrollsInit(CTask *task);
 extern I64 WinToTop(CTask *task=NULL,Bool update_z_buf=TRUE);
 extern Bool WinVert(I64 top,I64 bottom,CTask *task=NULL);
-extern CWinMgrGlbls winmgr;
+extern CWinMgrGlobals winmgr;

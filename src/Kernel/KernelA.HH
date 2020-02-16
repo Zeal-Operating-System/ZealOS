@@ -2,7 +2,7 @@
 
 #help_index ""
 extern class CAOT;
-extern class CAOTHeapGlbl;
+extern class CAOTHeapGlobal;
 extern class CAOTImportExport;
 extern class CCPU;
 extern class CDC;
@@ -555,7 +555,7 @@ class CAP16BitInit
 #define HPET_GEN_CONF	(0xFED00000+0x10)
 #define HPET_MAIN_CNT	(0xFED00000+0xF0)
 
-public class CCntsGlbls
+public class CCntsGlobals
 {
   I64	jiffies,	//$LK,"JIFFY_FREQ",A="MN:JIFFY_FREQ"$
 	timer,		//$LK,"SYS_TIMER_FREQ",A="MN:SYS_TIMER_FREQ"$. Use $LK,"SysTimerRead",A="MN:SysTimerRead"$().
@@ -687,7 +687,7 @@ public class CHashTable
 #define HTT_EXPORT_SYS_SYM	0x00001 //CHashExport
 #define HTT_IMPORT_SYS_SYM	0x00002 //CHashImport
 #define HTT_DEFINE_STR		0x00004 //CHashDefineStr
-#define HTT_GLBL_VAR		0x00008 //CHashGlblVar
+#define HTT_GLBL_VAR		0x00008 //CHashGlobalVar
 #define HTT_CLASS		0x00010 //CHashClass
 #define HTT_INTERNAL_TYPE	0x00020 //CHashClass
 #define HTT_FUN			0x00040 //CHashFun
@@ -867,7 +867,7 @@ public class CHashFun:CHashClass
   CExternUsage *ext_lst;
 };
 
-//Glbl Var Flags
+//Global Var Flags
 #define GVF_FUN		1
 #define GVF_IMPORT	2
 #define GVF_EXTERN	4
@@ -875,7 +875,7 @@ public class CHashFun:CHashClass
 #define GVF_ALIAS	16
 #define GVF_ARRAY	32
 
-public class CHashGlblVar:CHashSrcSym
+public class CHashGlobalVar:CHashSrcSym
 {
   I64	size,flags;
   CHashClass *var_class;
@@ -884,10 +884,10 @@ public class CHashGlblVar:CHashSrcSym
   U8	*data_addr;
   union {
     I64	data_addr_rip;
-    CAOTHeapGlbl *heap_glbl;
+    CAOTHeapGlobal *heap_glbl;
   }
 };
-#assert offset(CHashClass.size)==offset(CHashGlblVar.size)
+#assert offset(CHashClass.size)==offset(CHashGlobalVar.size)
 
 #help_index "DolDoc"
 //See $LK,"TextBase Layer",A="HI:TextBase Layer"$.
@@ -1467,7 +1467,7 @@ tries to do something.
 #define WIf_FOCUS_TASK_BORDER	24
 #define WIf_FOCUS_TASK_GRAB_SCROLL 25
 
-class CWinMgrTimingGlbls
+class CWinMgrTimingGlobals
 {
   I64	last_total_jiffies,
 	last_idle_pt_hits[MP_PROCESSORS_NUM],
@@ -1479,7 +1479,7 @@ class CWinMgrTimingGlbls
 #define WINMGR_FPS	(60000.0/1001)
 #define WINMGR_PERIOD	(1001/60000.0)
 
-public class CWinMgrGlbls
+public class CWinMgrGlobals
 {
   I64	updates;
   F64	ode_time,
@@ -1487,14 +1487,14 @@ public class CWinMgrGlbls
 	fps,		//You can read but not write this. You have no control.
 	ideal_refresh_tS,
 	last_refresh_tS;
-  CWinMgrTimingGlbls *t;
+  CWinMgrTimingGlobals *t;
   Bool	show_menu,grab_scroll,grab_scroll_closed;
 };
 
 #help_index "AutoComplete"
 #define ACf_INIT_IN_PROGRESS	0
 #define AC_FILLINS_NUM 10
-public class CAutoCompleteGlbls
+public class CAutoCompleteGlobals
 {
   I64	num_words;
   CHashTable *hash_table;
@@ -1530,7 +1530,7 @@ public class CAutoCompleteGlbls
 #define ACD_EXTRA_CHAR		0x05
 
 #define ACD_FILLINS_NUM 10
-public class CAutoCompleteDictGlbls
+public class CAutoCompleteDictGlobals
 {
   U8	*word_lst;
   I64	word_lst_size,num_words,num_fillins;
@@ -1991,18 +1991,18 @@ class CAOTAbsAddr
   U8	type,pad[7];
 };
 
-class CAOTHeapGlblRef
+class CAOTHeapGlobalRef
 {
-  CAOTHeapGlblRef *next;
+  CAOTHeapGlobalRef *next;
   I64	rip;
 };
 
-class CAOTHeapGlbl
+class CAOTHeapGlobal
 {
-  CAOTHeapGlbl *next;
+  CAOTHeapGlobal *next;
   U8	*str;
   I64	size;
-  CAOTHeapGlblRef *references;
+  CAOTHeapGlobalRef *references;
 };
 
 class CAOT
@@ -2015,7 +2015,7 @@ class CAOT
   CAOT	*parent_aot;
   CAOTImportExport *next_ie,*last_ie;
   CAOTAbsAddr *abss;
-  CAOTHeapGlbl *heap_glbls;
+  CAOTHeapGlobal *heap_glbls;
 };
 
 class CStreamBlk
@@ -2067,7 +2067,7 @@ class CAOTCtrl
 	max_align_bits,org;
   CAsmUnresolvedRef *local_unresolved,*glbl_unresolved;
   CAOTAbsAddr *abss;
-  CAOTHeapGlbl *heap_glbls;
+  CAOTHeapGlobal *heap_glbls;
   I64	lst_col,lst_last_rip;
   U8	*last_label,*lst_last_line;
   CLexFile *lst_last_lfn;
@@ -2223,7 +2223,7 @@ public class CCompCtrl
 };
 
 #help_index "Compiler"
-public class CCompGlbls
+public class CCompGlobals
 {
   CHashTable *asm_hash;
   CHashClass *internal_types[RT_RTS_NUM];
@@ -2238,7 +2238,7 @@ public class CCompGlbls
 };
 
 #help_index "Debugging/Unassemble"
-class CUAsmGlbls
+class CUAsmGlobals
 {
   CInst **table_16_32,**table_64;
   I64	table_16_32_entries,
@@ -2727,7 +2727,7 @@ class CCacheBlk
 #define DFT_ISO_FILENAME	"::/Tmp/CDDVD.ISO"
 #define DFT_ISO_C_FILENAME	"::/Tmp/CDDVD.ISO.C"
 
-public class CBlkDevGlbls
+public class CBlkDevGlobals
 {
   CBlkDev *blkdevs;
   U8	*dft_iso_filename;	//$TX,"\"::/Tmp/CDDVD.ISO\"",D="DFT_ISO_FILENAME"$
@@ -2874,7 +2874,7 @@ public class CHeapCtrl
 };
 
 #help_index "Devices;Memory/Page Tables"
-public class CDevGlbls
+public class CDevGlobals
 {
   I64	*idt;
   U8	*mem64_ptr;
@@ -2955,7 +2955,7 @@ public I64 class CBGR48
 #help_index "Keyboard Devices;Char/Input;StdIn"
 #define KBD_PORT	0x60
 #define KBD_CTRL	0x64
-public class CKbdStateGlbls
+public class CKbdStateGlobals
 {
   I64	scan_code,	//See $LK,"scan codes",A="FI:::/Doc/CharOverview.DD"$
 	last_down_scan_code,
@@ -2976,7 +2976,7 @@ public class CKbdStateGlbls
 };
 
 #help_index "Mouse"
-public class CMsHardStateGlbls
+public class CMsHardStateGlobals
 {
   CD3I64 pos,		//Position in pixels
 	prescale;
@@ -2995,7 +2995,7 @@ public class CMsHardStateGlbls
 	irqs_working;	//Private
 };
 
-public class CMsStateGlbls
+public class CMsStateGlobals
 {
   CD3I64 pos,		//Position in pixels
 	pos_text,	//Position in text rows,cols
@@ -3017,7 +3017,7 @@ public class CMsStateGlbls
 	right_down_sent;//Private
 };
 
-public class CGridGlbls
+public class CGridGlobals
 {
   Bool	snap	format "$$CB,\"Snap Grid\"$$\n",
 	show	format "$$CB,\"Show Grid\"$$\n",
@@ -3538,7 +3538,7 @@ public class CSysFixedArea
 #define RWF_SHOW_DOLLAR	4
 #define RWF_SCROLL	8
 
-public class CTextGlbls
+public class CTextGlobals
 {
   I64	raw_col,raw_flags;
   U8	*raw_scrn_image;
@@ -3759,7 +3759,7 @@ class CKeyDevEntry
   Bool	(*put_s)(U8 *st);
 };
 
-class CKeyDevGlbls
+class CKeyDevGlobals
 {
   CKeyDevEntry put_key_head;
   U0	(**fp_ctrl_alt_cbs)(I64 sc);
@@ -3785,7 +3785,7 @@ class CSndData
   I8	ona;
 };
 
-public class CScreenCastGlbls
+public class CScreenCastGlobals
 {
   CSndData snd_head;
   CDate	t0_now;
@@ -3817,7 +3817,7 @@ class CMPCrash
   I64	message_num;
 };
 
-public class CDebugGlbls
+public class CDebugGlobals
 {
   CTask *focus_task;
   U8	*message;

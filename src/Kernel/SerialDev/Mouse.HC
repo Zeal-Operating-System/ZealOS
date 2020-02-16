@@ -62,8 +62,8 @@ U0 MsSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,I64 l=I64_MAX,I64 r=I64_MAX)
 
 U0 MsInit()
 {
-  MemSet(&ms,0,sizeof(CMsStateGlbls));
-  MemSet(&ms_last,0,sizeof(CMsStateGlbls));
+  MemSet(&ms,0,sizeof(CMsStateGlobals));
+  MemSet(&ms_last,0,sizeof(CMsStateGlobals));
   ms.offset.x=ms.offset.y=ms.offset.z=0;
   ms.scale.x=ms.scale.y=ms.scale.z=1.0;
   ms.pos_text.x=ms.pos_text.y=ms.pos_text.z=0;
@@ -196,7 +196,7 @@ U0 MsHardSpeedSet()
 U0 MsHardSetPre()
 {
   I64 old_timestamp=ms_hard_last.timestamp;
-  MemCpy(&ms_hard_last,&ms_hard,sizeof(CMsHardStateGlbls));
+  MemCpy(&ms_hard_last,&ms_hard,sizeof(CMsHardStateGlobals));
   ms_hard_last.timestamp=old_timestamp;
 }
 
@@ -347,12 +347,12 @@ U0 KbdMsHandler(Bool poll_kbd,Bool poll_ms)
 
 U0 KbdMsInit()
 {
-  MemSet(&kbd,0,sizeof(CKbdStateGlbls));
+  MemSet(&kbd,0,sizeof(CKbdStateGlobals));
   kbd.fifo=FifoU8New(8);
   kbd.fifo2=FifoU8New(0x1000);
   kbd.scan_code_fifo=FifoI64New(0x1000);
   kbd.irqs_working=FALSE;
-  MemSet(&ms_hard,0,sizeof(CMsHardStateGlbls));
+  MemSet(&ms_hard,0,sizeof(CMsHardStateGlobals));
   ms_hard.fifo=FifoU8New(8);
   ms_hard.fifo2=FifoU8New(0x1000);
   ms_hard.scale.x=0.5;
@@ -363,5 +363,5 @@ U0 KbdMsInit()
   ms_hard.prescale.z=0/ms_hard.scale.z;
   ms_hard.pos.x=GR_WIDTH>>1;
   ms_hard.pos.y=GR_HEIGHT>>1;
-  MemCpy(&ms_hard_last,&ms_hard,sizeof(CMsHardStateGlbls));
+  MemCpy(&ms_hard_last,&ms_hard,sizeof(CMsHardStateGlobals));
 }

@@ -188,7 +188,7 @@ $LK,"::/Demo/Asm/DivByHand.HC"$
 $LK,"::/Demo/Asm/AsmAndC1.HC"$
 $LK,"::/Demo/Asm/AsmAndC2.HC"$
 $LK,"::/Demo/Asm/AsmAndC3.HC"$
-$LK,"::/Demo/GlblVars.HC"$
+$LK,"::/Demo/GlobalVars.HC"$
 $LK,"::/Misc/OSTestSuite.HC"$
 $MA-X+PU,"::/Zenith",LM="Cd(\"::/Zenith\");Dir;View;\n"$
 $ID,-2$

@@ -72,7 +72,7 @@ mem.	They all have at least the size $LK,"CDocEntryBase",A="MN:CDocEntryBase"$.
 Note: $LK,"CDocEntry",A="MN:CDocEntry"$'s should be alloced from the
 heap of the owning task, doc->mem_task.
 
-The flag arrays $LK,"doldoc.type_flags_form",A="MN:CDolDocGlbls"$, etc
+The flag arrays $LK,"doldoc.type_flags_form",A="MN:CDolDocGlobals"$, etc
 are useful.
 */
 

@@ -10,7 +10,7 @@ public extern I64 ExePutS2(U8 *buf,U8 *filename=NULL,I64 ccf_flags=0);
 public _extern _LAST_FUN I64 LastFun(I64 argc,I64 *argv);
 public extern I64 RunFile(U8 *name,I64 ccf_flags=0,...);
 public extern I64 RunFile2(U8 *name,I64 ccf_flags=0,...);
-public extern CCompGlbls cmp;
+public extern CCompGlobals cmp;
 
 #help_index "Compiler/Directive"
 #help_file "::/Doc/Directives"
@@ -71,7 +71,7 @@ public extern U8 *U(U8 *rip,I64 cnt=20,I64 seg_size=64);
 public extern U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,
 	I64 *_jmp_dst=NULL,Bool just_ins=FALSE);
 public extern I64 Un(U8 *rip,I64 cnt=0x80,I64 seg_size=64);
-extern CUAsmGlbls uasm;
+extern CUAsmGlobals uasm;
 
 #help_index "Hash/System"
 public extern I64 HashEntrySize(CHashSrcSym *tmph);

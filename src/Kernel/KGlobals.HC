@@ -15,19 +15,19 @@ CDate local_time_offset;
 F64	*pow10_I64,
 	sys_os_version=0.10;
 
-CAutoCompleteDictGlbls acd;
-CAutoCompleteGlbls ac;
-CBlkDevGlbls	blkdev;
-CCntsGlbls	cnts={1,0,2676302000,2676302,2676302000,0,0,0,FALSE};
-CDebugGlbls	dbg;
-CDevGlbls	dev;
-CGridGlbls	ms_grid; //See $LK,"::/Demo/Graphics/Grid.HC"$.
-CMsStateGlbls	ms,ms_last;
-CKbdStateGlbls	kbd;
-CKeyDevGlbls	keydev;
-CMsHardStateGlbls ms_hard,ms_hard_last;
-CScreenCastGlbls	scrncast;
-CTextGlbls	text;
+CAutoCompleteDictGlobals acd;
+CAutoCompleteGlobals ac;
+CBlkDevGlobals	blkdev;
+CCntsGlobals	cnts={1,0,2676302000,2676302,2676302000,0,0,0,FALSE};
+CDebugGlobals	dbg;
+CDevGlobals	dev;
+CGridGlobals	ms_grid; //See $LK,"::/Demo/Graphics/Grid.HC"$.
+CMsStateGlobals	ms,ms_last;
+CKbdStateGlobals	kbd;
+CKeyDevGlobals	keydev;
+CMsHardStateGlobals ms_hard,ms_hard_last;
+CScreenCastGlobals	scrncast;
+CTextGlobals	text;
 
 U8  *(*fp_getstr2)(I64 flags=0);
 U0 (*fp_update_ctrls)(CTask *task);

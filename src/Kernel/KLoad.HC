@@ -34,7 +34,7 @@ U0 LoadOneImport(U8 **_src,U8 *module_base,I64 ld_flags)
       if (tmpex->type & HTT_FUN)
 	i=tmpex(CHashFun *)->exe_addr;
       else if (tmpex->type & HTT_GLBL_VAR)
-	i=tmpex(CHashGlblVar *)->data_addr;
+	i=tmpex(CHashGlobalVar *)->data_addr;
       else
 	i=tmpex->val;
       switch (etype) {

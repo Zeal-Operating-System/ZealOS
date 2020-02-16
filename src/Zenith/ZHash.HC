@@ -273,7 +273,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
 	  else
 	    StrPrint(buf,"%-10t$$Q %02X",ptr(CHashDefineStr *)->data,j);
 	} else if (ptr->type & HTT_GLBL_VAR)
-	  StrPrint(buf,"%010X",ptr(CHashGlblVar *)->data_addr);
+	  StrPrint(buf,"%010X",ptr(CHashGlobalVar *)->data_addr);
 	else
 	  StrPrint(buf,"%010X",HashVal(ptr));
 	j=HashEntrySize(ptr);

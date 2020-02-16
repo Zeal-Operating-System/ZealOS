@@ -1659,7 +1659,7 @@ U0 OSTestSuite()
   TS("RegistryDemo");	if (DriveIsWritable('~'))
 				TSFile("::/Demo/RegistryDemo");
   TS("Define");		DoDefine;
-  TS("GlblVars");	TSFile("::/Demo/GlblVars");
+  TS("GlobalVars");	TSFile("::/Demo/GlobalVars");
   TS("FileRead");	DoFileRead;
   TS("ParenWarn");	TSFile("::/Demo/ParenWarn");
   TS("DefineStr");	TSFile("::/Demo/DolDoc/DefineStr");

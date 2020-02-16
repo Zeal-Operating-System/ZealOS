@@ -206,15 +206,15 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   cc->htc.local_var_lst=cc->htc.fun=cc->fun_lex_file=NULL;
 }
 
-U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
+U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
   I64 saved_val,I64 fsp_flags)
 {
   I64 i,j,mode,k,val;
   U8 *st;
   CHashExport *tmpex;
-  CHashGlblVar *tmpg;
+  CHashGlobalVar *tmpg;
   CAOTCtrl *aotc=cc->aotc;
-  CAOTHeapGlbl *tmphg;
+  CAOTHeapGlobal *tmphg;
   CHashClass *tmpc;
   CHashFun *tmpf,*tmpf_fun_ptr;
   CArrayDim tmpad;
@@ -299,11 +299,11 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
       switch (mode&255) {
 	case PRS0__EXTERN:
 	  if (cc->flags&CCF_AOT_COMPILE) {
-	    tmpg=CAlloc(sizeof(CHashGlblVar));
+	    tmpg=CAlloc(sizeof(CHashGlobalVar));
 	    tmpg->data_addr_rip=val;
 	    tmpg->type=HTT_GLBL_VAR | HTF_EXPORT;
 	  } else {
-	    tmpg=CAlloc(sizeof(CHashGlblVar),Fs->code_heap);
+	    tmpg=CAlloc(sizeof(CHashGlobalVar),Fs->code_heap);
 	    tmpg->data_addr=val;
 	    tmpg->type=HTT_GLBL_VAR;
 	  }
@@ -314,7 +314,7 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	  if (!(cc->flags&CCF_AOT_COMPILE))
 	    LexExcept(cc,"import not needed at ");
 	  else {
-	    tmpg=CAlloc(sizeof(CHashGlblVar));
+	    tmpg=CAlloc(sizeof(CHashGlobalVar));
 	    tmpg->type=HTT_GLBL_VAR | HTF_IMPORT;
 	    if (mode&255==PRS0__IMPORT)
 	      tmpg->import_name=StrNew(val);
@@ -324,10 +324,10 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	  break;
 	case PRS0_EXTERN:
 	  if (cc->flags&CCF_AOT_COMPILE) {
-	    tmpg=CAlloc(sizeof(CHashGlblVar));
+	    tmpg=CAlloc(sizeof(CHashGlobalVar));
 	    tmpg->type=HTT_GLBL_VAR;
 	  } else {
-	    tmpg=CAlloc(sizeof(CHashGlblVar),Fs->code_heap);
+	    tmpg=CAlloc(sizeof(CHashGlobalVar),Fs->code_heap);
 	    tmpg->type=HTT_GLBL_VAR|HTF_UNRESOLVED;
 	  }
 	  break;
@@ -336,8 +336,8 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	    if (Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
 	      if (cc->token=='=')
 		LexExcept(cc,"Can't init glbl var on data heap in AOT module ");
-	      tmpg=CAlloc(sizeof(CHashGlblVar));
-	      tmphg=tmpg->heap_glbl=CAlloc(sizeof(CAOTHeapGlbl));
+	      tmpg=CAlloc(sizeof(CHashGlobalVar));
+	      tmphg=tmpg->heap_glbl=CAlloc(sizeof(CAOTHeapGlobal));
 	      tmphg->size=j;
 	      tmphg->str=StrNew(st);
 	      tmphg->next=aotc->heap_glbls;
@@ -347,7 +347,7 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	      if (tmpex && tmpex->type & HTT_GLBL_VAR) //TODO!! extern
 		LexExcept(cc,"Feature not implemented ");
 	    } else {
-	      tmpg=CAlloc(sizeof(CHashGlblVar));
+	      tmpg=CAlloc(sizeof(CHashGlobalVar));
 	      if (cc->token=='=')
 		tmpg->data_addr=CAlloc(j);
 	      if (tmpc->size>=8) //align
@@ -368,11 +368,11 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	    }
 	  } else {
 	    if (Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
-	      tmpg=CAlloc(sizeof(CHashGlblVar),Fs->code_heap);
+	      tmpg=CAlloc(sizeof(CHashGlobalVar),Fs->code_heap);
 	      tmpg->data_addr=MAlloc(j);
 	      tmpg->flags=GVF_DATA_HEAP;
 	    } else {
-	      tmpg=CAlloc(sizeof(CHashGlblVar),Fs->code_heap);
+	      tmpg=CAlloc(sizeof(CHashGlobalVar),Fs->code_heap);
 	      tmpg->data_addr=MAlloc(j,Fs->code_heap);
 	    }
 	    tmpg->type=HTT_GLBL_VAR;
@@ -414,7 +414,7 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	  LexPush(cc);
 	  LexPush(cc);
 	  Lex(cc);
-	  ParseGlblInit(cc,tmpg,1);
+	  ParseGlobalInit(cc,tmpg,1);
 	  LexPopNoRestore(cc);
 	  tmpg->size=tmpg->dim.total_cnt*tmpc->size;
 	  if (tmphg)
@@ -429,20 +429,20 @@ U0 ParseGlblVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	}
 	LexPush(cc);
 	Lex(cc);
-	ParseGlblInit(cc,tmpg,2);
+	ParseGlobalInit(cc,tmpg,2);
 	if (cc->flags&CCF_AOT_COMPILE)
 	  for (k=0;k<tmpg->size;k++)
 	    AOTStoreCodeU8At(cc,tmpg->data_addr_rip+k,tmpg->data_addr[k]);
 	LexPopNoRestore(cc);
       }
       if (has_alias) {
-	if (tmpex(CHashGlblVar *)->use_cnt<2) {
-	  PrintWarn("Unused extern '%s'\n",tmpex(CHashGlblVar *)->str);
+	if (tmpex(CHashGlobalVar *)->use_cnt<2) {
+	  PrintWarn("Unused extern '%s'\n",tmpex(CHashGlobalVar *)->str);
 	  cc->warning_cnt++;
 	}
-	tmpex(CHashGlblVar *)->flags|=GVF_ALIAS;
-	tmpex(CHashGlblVar *)->data_addr=tmpg->data_addr;
-	tmpex(CHashGlblVar *)->data_addr_rip=tmpg->data_addr_rip;
+	tmpex(CHashGlobalVar *)->flags|=GVF_ALIAS;
+	tmpex(CHashGlobalVar *)->data_addr=tmpg->data_addr;
+	tmpex(CHashGlobalVar *)->data_addr_rip=tmpg->data_addr_rip;
       }
       if (cc->token==',')
 	Lex(cc);
@@ -1007,7 +1007,7 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
 			  !(tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 		      LexExcept(cc,"Expecting type at ");
 		    Lex(cc);
-		    ParseGlblVarLst(cc,PRS0__EXTERN|PRS1_NULL,tmpex,i,fsp_flags);
+		    ParseGlobalVarLst(cc,PRS0__EXTERN|PRS1_NULL,tmpex,i,fsp_flags);
 		    break;
 		  case KW__IMPORT:
 sm_underscore_import:
@@ -1021,7 +1021,7 @@ sm_underscore_import:
 			  !(tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 		      LexExcept(cc,"Expecting type at ");
 		    Lex(cc);
-		    ParseGlblVarLst(cc,PRS0__IMPORT|PRS1_NULL,tmpex,
+		    ParseGlobalVarLst(cc,PRS0__IMPORT|PRS1_NULL,tmpex,
 			  import_name,fsp_flags);
 		    Free(import_name);
 		    break;
@@ -1042,7 +1042,7 @@ sm_underscore_import:
 		    if (Bt(&cc->opts,OPTf_EXTERNS_TO_IMPORTS))
 		      goto sm_import;
 		    Lex(cc);
-		    ParseGlblVarLst(cc,PRS0_EXTERN|PRS1_NULL,tmpex,0,fsp_flags);
+		    ParseGlobalVarLst(cc,PRS0_EXTERN|PRS1_NULL,tmpex,0,fsp_flags);
 		    break;
 		  case KW_IMPORT:
 		    if (cc->token!=TK_IDENT || !(tmpex=cc->hash_entry) ||
@@ -1050,7 +1050,7 @@ sm_underscore_import:
 		      LexExcept(cc,"Expecting type at ");
 sm_import:
 		    Lex(cc);
-		    ParseGlblVarLst(cc,PRS0_IMPORT|PRS1_NULL,tmpex,0,fsp_flags);
+		    ParseGlobalVarLst(cc,PRS0_IMPORT|PRS1_NULL,tmpex,0,fsp_flags);
 		    break;
 		  case KW__INTERN:
 		    i=LexExpressionI64(cc);
@@ -1058,7 +1058,7 @@ sm_import:
 			  !(tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 		      LexExcept(cc,"Expecting type at ");
 		    Lex(cc);
-		    ParseGlblVarLst(cc,PRS0__INTERN|PRS1_NULL,tmpex,i,fsp_flags);
+		    ParseGlobalVarLst(cc,PRS0__INTERN|PRS1_NULL,tmpex,i,fsp_flags);
 		    break;
 		end:
 		  fsp_flags&=FSF_ASM;
@@ -1145,7 +1145,7 @@ sm_import:
 		  Lex(cc);
 		  tmpex=ParseClass(cc,i,fsp_flags,FALSE);
 		  if (!cc->htc.fun && cc->token!=';') {
-		    ParseGlblVarLst(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
+		    ParseGlobalVarLst(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
 		    fsp_flags&=FSF_ASM;
 		    break;
 		  } else {
@@ -1164,7 +1164,7 @@ sm_not_keyword_afterall:
 		  if (cc->token=='}') goto sm_done;
 		} else {
 		  Lex(cc);
-		  ParseGlblVarLst(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
+		  ParseGlobalVarLst(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
 		}
 	      } else {
 		if (tmpex->type & (HTT_OPCODE|HTT_ASM_KEYWORD)) {

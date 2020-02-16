@@ -22,10 +22,10 @@ I64 HashVal(CHash *tmph)
     case HTt_HELP_FILE:
       return tmph;
     case HTt_GLBL_VAR:
-      if (tmph(CHashGlblVar *)->flags&GVF_EXTERN)
-	return &tmph(CHashGlblVar *)->data_addr;
+      if (tmph(CHashGlobalVar *)->flags&GVF_EXTERN)
+	return &tmph(CHashGlobalVar *)->data_addr;
       else
-	return tmph(CHashGlblVar *)->data_addr;
+	return tmph(CHashGlobalVar *)->data_addr;
     case HTt_FUN:
       if (Bt(&tmph(CHashFun *)->flags,Cf_EXTERN))
 	return tmph;
@@ -75,12 +75,12 @@ U0 HashDel(CHashSrcSym *tmph)
     else if (tmph->type&HTT_DEFINE_STR)
       Free(tmph(CHashDefineStr *)->data);
     else if (tmph->type & HTT_GLBL_VAR) {
-      if (!(tmph(CHashGlblVar *)->flags&GVF_ALIAS))
-	Free(tmph(CHashGlblVar *)->data_addr);
-      LinkedLstDel(tmph(CHashGlblVar *)->dim.next);
-      if (tmph(CHashGlblVar *)->fun_ptr)
-	HashDel(tmph(CHashGlblVar *)->fun_ptr
-	      -tmph(CHashGlblVar *)->fun_ptr->ptr_stars_cnt);
+      if (!(tmph(CHashGlobalVar *)->flags&GVF_ALIAS))
+	Free(tmph(CHashGlobalVar *)->data_addr);
+      LinkedLstDel(tmph(CHashGlobalVar *)->dim.next);
+      if (tmph(CHashGlobalVar *)->fun_ptr)
+	HashDel(tmph(CHashGlobalVar *)->fun_ptr
+	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_cnt);
     }
   } else if (tmph->type & HTT_FILE)
     Free(tmph(CHashGeneric *)->user_data0);

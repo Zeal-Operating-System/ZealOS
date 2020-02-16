@@ -7,7 +7,7 @@ INT_WAKE::
 	PUSH	RAX
 	MOV	EAX,&dev
 	MOV	EDX,U32 LAPIC_EOI
-	MOV	RAX,U64 CDevGlbls.uncached_alias[RAX]
+	MOV	RAX,U64 CDevGlobals.uncached_alias[RAX]
 	MOV	U32 [RAX+RDX],0
 	POP	RAX
 	POP	RDX
@@ -48,7 +48,7 @@ IRQ_TIMER::  //I_TIMER
 
 	MOV	EAX,&dev
 	MOV	EDX,U32 LAPIC_EOI
-	MOV	RAX,U64 CDevGlbls.uncached_alias[RAX]
+	MOV	RAX,U64 CDevGlobals.uncached_alias[RAX]
 	MOV	U32 [RAX+RDX],0
 	JMP	@@25
 

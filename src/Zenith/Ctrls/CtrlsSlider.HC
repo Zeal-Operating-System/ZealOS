@@ -20,7 +20,7 @@ CTemplateCS *CtrlSliderGet()
 
   "$$PURPLE$$Ctrl Slider$$FG$$\n\n";
 
-  res->glbl_name=GetStr("Glbl Struct Name (ENTER for No Glbl):");
+  res->glbl_name=GetStr("Global Struct Name (ENTER for No Global):");
   res->range=GetI64	("Range   (%4d):",30);
   res->spacing=GetI64("Spacing (%4d):",20);
   res->border=GetI64 ("Border  (%4d):",2);

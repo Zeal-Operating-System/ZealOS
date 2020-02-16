@@ -22,6 +22,6 @@ The upper 4-bytes are copied from lower 4-bytes.
 
 Run the program $LK,"::/Demo/MessageLoop.HC"$ to examine scan code.  Press $FG,2$<CTRL-SHIFT-l>$FG$ and "Insert ASCII/ScanCode".$FG$
 
-See $LK,"Key Allocations",A="FI:::/Doc/KeyAlloc.DD"$ and $LK,"CKbdStateGlbls",A="MN:CKbdStateGlbls"$.
+See $LK,"Key Allocations",A="FI:::/Doc/KeyAlloc.DD"$ and $LK,"CKbdStateGlobals",A="MN:CKbdStateGlobals"$.
 
 A $FG,2$String$FG$ is a bunch of ASCII characters terminated with a zero.

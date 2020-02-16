@@ -93,7 +93,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
       }
     } else
       ParseStatement(cc,,,cmp_flags);
-    AOTGlblsResolve(cc,res);
+    AOTGlobalsResolve(cc,res);
   } catch {
     if (Fs->except_ch=='Compiler' && !(cmp_flags&CMPF_ASM_BLK)) {
       LexPutPos(cc);
@@ -241,7 +241,7 @@ U0 CompFixUpJITAsm(CCompCtrl *cc,CAOT *tmpaot)
 	      if (tmpex->type & HTT_FUN)
 		i=tmpex(CHashFun *)->exe_addr;
 	      else if (tmpex->type & HTT_GLBL_VAR)
-		i=tmpex(CHashGlblVar *)->data_addr;
+		i=tmpex(CHashGlobalVar *)->data_addr;
 	      else
 		i=tmpex->val;
 	    }
@@ -425,8 +425,8 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
   CBinFile *bfh;
   CAOTImportExport *tmpie,*tmpie1;
   CAOTAbsAddr *tmpa,*tmpa1;
-  CAOTHeapGlblRef *tmphgr,*tmphgr1;
-  CAOTHeapGlbl *tmphg,*tmphg1;
+  CAOTHeapGlobalRef *tmphgr,*tmphgr1;
+  CAOTHeapGlobal *tmphg,*tmphg1;
 
   fbuf=ExtDft(filename,"PRJ");
   fbuf2=MStrPrint("#include \"%s\"",fbuf);

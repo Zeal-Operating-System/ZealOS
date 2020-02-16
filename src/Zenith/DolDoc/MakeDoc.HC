@@ -18,7 +18,7 @@ See $LK,"::/Doc/DolDocOverview.DD"$
 #define DHT_DOC_FLAG	2
 #define DHT_COLOR	4
 
-public class CDolDocGlbls
+public class CDolDocGlobals
 {
   CHashTable *hash;
   I64	dft_de_flags		[DOCT_TYPES_NUM],
@@ -29,7 +29,7 @@ public class CDolDocGlbls
 	clean_scan_codes	[4];
   I32	dft_type_flags		[DOCT_TYPES_NUM];
 } doldoc;
-MemSet(&doldoc,0,sizeof(CDolDocGlbls));
+MemSet(&doldoc,0,sizeof(CDolDocGlobals));
 
 #help_index "God"
 #define BIBLE_FILENAME	"::/Misc/Bible.TXT"

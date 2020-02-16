@@ -1,4 +1,4 @@
-/*$LK,"gr.dc",A="MN:CGrGlbls"$ is the persistent layer.  You can access
+/*$LK,"gr.dc",A="MN:CGrGlobals"$ is the persistent layer.  You can access
 it directly but two tasks accessing it simultaneously
 with no $LK,"DCAlias",A="MN:DCAlias"$() will screw-up color and stuff.
 */

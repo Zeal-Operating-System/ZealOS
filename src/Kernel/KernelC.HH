@@ -1,9 +1,9 @@
 #help_index "AutoComplete"
 #help_file "::/Doc/AutoComplete"
-public extern CAutoCompleteGlbls ac;
+public extern CAutoCompleteGlobals ac;
 
 #help_index "AutoComplete/Dictionary"
-public extern CAutoCompleteDictGlbls acd;
+public extern CAutoCompleteDictGlobals acd;
 
 #help_index "Bit"
 public extern I64 BCnt(I64 d);
@@ -106,7 +106,7 @@ public extern Bool Silent(Bool val=ON);
 extern U8 *StrPrintHex(U8 *dst,I64 num;I64 width);
 
 #help_index "Char;Debugging/Raw Output;TextBase Layer/Char"
-public extern CTextGlbls text;
+public extern CTextGlobals text;
 
 #help_index "Compiler/Lex"
 public extern U0 HashSrcFileSet(CCompCtrl *cc,
@@ -173,7 +173,7 @@ public extern Bool SysDebug(Bool val);
 public extern U8 *TaskCaller(CTask *task=NULL,
 	I64 num=0,Bool saved_context=FALSE);
 public extern I64 UnusedStk(CTask *task=NULL);
-public extern CDebugGlbls dbg;
+public extern CDebugGlobals dbg;
 
 #help_index "Debugging/Debugger"
 public extern Bool B(U8 *addr,CTask *task=NULL,Bool live=TRUE) //Toggle bpt.
@@ -246,7 +246,7 @@ public extern U8 *Mem32DevAlloc(I64 size,I64 alignment);
 public extern U0 Mem32DevFree(U8 *base);
 public extern U8 *Mem64DevAlloc(I64 *_pages1Gig);
 public extern U0 Mem64DevFree(U8 *base,I64 pages1Gig);
-public extern CDevGlbls dev;
+public extern CDevGlobals dev;
 
 #help_index "DolDoc/Clip"
 public extern CDoc *sys_clip_doc;
@@ -390,7 +390,7 @@ extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 extern U0 DiskCacheInit(I64 size_in_U8s);
 public extern U0 DiskCacheInvalidate(CDrive *dv);
 public extern I64 MountIDEAuto();
-public extern CBlkDevGlbls blkdev;
+public extern CBlkDevGlobals blkdev;
 
 #help_index "Graphics/Color"
 extern U0 (*fp_set_std_palette)();
@@ -509,7 +509,7 @@ public extern U0 KeyDescSet(U8 *fmt,...);
 public extern CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch,I64 sc),
 	Bool (*fp_puts)(U8 *st),I64 priority,Bool key_descs=FALSE);
 public extern U0 KeyDevRemove(CKeyDevEntry *tmpk);
-extern CKeyDevGlbls keydev;
+extern CKeyDevGlobals keydev;
 extern CJob sys_macro_head;
 extern CTask *sys_macro_task;
 
@@ -533,7 +533,7 @@ public extern I64 PressAKey();
 public extern I64 ScanChar();
 public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);
 public extern Bool YorN();
-public extern CKbdStateGlbls	kbd;
+public extern CKbdStateGlobals	kbd;
 
 #help_index "Math"
 public extern I64 CeilI64(I64 num,I64 to);
@@ -613,11 +613,11 @@ public extern U0 ProgressBarsRst(U8 *path=NULL);
 public extern U0 GridInit();
 public extern U0 MsSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,
 	I64 l=I64_MAX,I64 r=I64_MAX);
-public extern CMsStateGlbls ms;
-public extern CGridGlbls ms_grid;
-public extern CMsHardStateGlbls ms_hard;
-extern CMsHardStateGlbls ms_hard_last;
-extern CMsStateGlbls ms_last;
+public extern CMsStateGlobals ms;
+public extern CGridGlobals ms_grid;
+public extern CMsHardStateGlobals ms_hard;
+extern CMsHardStateGlobals ms_hard_last;
+extern CMsStateGlobals ms_last;
 
 #help_index "Mouse/Ptr"
 extern U0 MsInit();
@@ -667,7 +667,7 @@ public extern U8 *IntEntrySet(I64 irq,
 #help_index "ScreenCast;Cmd Line (Typically)"
 public extern Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,
 	U8 *print_fmt="B:/Tmp/%X.GR")
-public extern CScreenCastGlbls scrncast;
+public extern CScreenCastGlobals scrncast;
 
 #help_index "Snd"
 #help_file "::/Doc/Snd"
@@ -728,7 +728,7 @@ public extern CTask *Spawn(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
-public extern CCntsGlbls cnts;
+public extern CCntsGlobals cnts;
 
 #help_index "Time/Date/CDate;Date/CDate"
 #help_file "::/Doc/TimeDate"

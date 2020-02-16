@@ -78,7 +78,7 @@ $ID,-5$
 
 * Avoid boolean expression assignments.  Boolean assignments don't have short circuit logic and are not compiled efficiently.  The $FG,2$Bool$FG$ type is just an alias for a 1 byte signed int -- nothing forces it to $FG,2$1$FG$ or $FG,2$0$FG$.  There is a $LK,"ToBool",A="MN:ToBool"$() function that will for to $FG,2$1$FG$ ot $FG,2$0$FG$, however.
 
-* Glbl vars in $FG,2$AOT$FG$ BIN modules are initialized to zero.  They occupy space in BIN files.
+* Global vars in $FG,2$AOT$FG$ BIN modules are initialized to zero.  They occupy space in BIN files.
 
 * Bracketing code with $FG,2$PUSHFD CLI$FG$ and $FG,2$POPFD$FG$ will protect against simultaneous accesses from tasks on $UL,1$one$UL,0$ core.  To protect against multiple cores, you need a locked semaphore.  I think semiphores need to be in their own cache line, but I'm not sure.  I use lock bits in a lot of places not aligned.
 

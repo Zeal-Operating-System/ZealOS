@@ -85,7 +85,7 @@ public F64 FullTri(F64 t,F64 period)
 
 #help_index "Snd/Music"
 
-public class CMusicGlbls
+public class CMusicGlobals
 {
   U8	*cur_song;
   CTask	*cur_song_task;
@@ -219,7 +219,7 @@ durations stay set until changed.
 
 '(' tie, placed before the note to be extended
 
-$LK,"music.meter_top",A="MN:CMusicGlbls"$,$LK,"music.meter_bottom",A="MN:CMusicGlbls"$ is set with
+$LK,"music.meter_top",A="MN:CMusicGlobals"$,$LK,"music.meter_bottom",A="MN:CMusicGlobals"$ is set with
 "M3/4"
 "M4/4"
 etc.

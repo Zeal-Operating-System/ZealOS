@@ -17,7 +17,7 @@
 I16 i=0;
 U8 buf[8];
 
-U0 UpdateGlblTask(I64)
+U0 UpdateGlobalTask(I64)
 {
   while (TRUE) {
     i++;
@@ -40,7 +40,7 @@ U0 DataDemo()
   //  doc->flags|=DOCF_FORM
   //if you wish.
 
-  Spawn(&UpdateGlblTask,NULL,"Update Glbl",,Fs);
+  Spawn(&UpdateGlobalTask,NULL,"Update Global",,Fs);
 
   "Enter editor overstrike mode\n"
 	"and you can modify the val.\n"

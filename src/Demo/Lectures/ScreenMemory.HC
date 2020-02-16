@@ -37,7 +37,7 @@ That means no read-modify-writes, too.
 */
   Busy(4000000);
 
-  //ZenithOS has a 4 plane memory duplicate of the scrn, $LK,"gr.scrn_image",A="MN:CGrGlbls"$,
+  //ZenithOS has a 4 plane memory duplicate of the scrn, $LK,"gr.scrn_image",A="MN:CGrGlobals"$,
   //and only writes actual changes.See $LK,"GrUpdateVGAGraphics",A="MN:GrUpdateVGAGraphics"$().
   //<CTRL-ALT-v> will flush scrn VGA cache.
   VGAFlush;

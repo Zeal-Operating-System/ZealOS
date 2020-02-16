@@ -98,7 +98,7 @@ $WW,1$
  
 * Local non-reg function vars can be accessed in asm blks with $FG,2$&i[RBP]$FG$ for example.
 
-* Glbl vars and functions can be accessed in asm with and $FG,2$&$FG$ as in
+* Global vars and functions can be accessed in asm with and $FG,2$&$FG$ as in
 	$FG,2$MOV	RAX,I64 [&glbl_var]
 	CALL	I32 &Fun
 	CALL	I32 &SYS_SYM$FG$

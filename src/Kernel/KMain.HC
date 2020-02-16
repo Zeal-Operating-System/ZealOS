@@ -1,4 +1,4 @@
-U0 SysGlblsInit()
+U0 SysGlobalsInit()
 {
   I64 i,j;
   CRAXRBCRCXRDX ee;
@@ -138,7 +138,7 @@ U0 KMain()
   OutU8(0x61,InU8(0x61)&~3); //Snd;
   zenith_task=Fs;
   BlkPoolsInit;
-  SysGlblsInit;
+  SysGlobalsInit;
   Mem32DevInit;
   UncachedAliasAlloc;
   LoadKernel;

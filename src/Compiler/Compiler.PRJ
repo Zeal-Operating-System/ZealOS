@@ -13,12 +13,12 @@
 #exe {Option(OPTf_KEEP_PRIVATE,OFF);};
 #include "Templates"
 #include "CExts"
-CCompGlbls	cmp;
+CCompGlobals	cmp;
 #include "CInit"
 #include "CExcept"
 #include "LexLib"
 #include "Lex"
-CUAsmGlbls	uasm;
+CUAsmGlobals	uasm;
 #include "CHash"
 #include "UAsm"
 #include "ParseLib"

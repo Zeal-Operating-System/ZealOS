@@ -3,7 +3,7 @@
 #define GOD_BAD_BITS	4
 #define GOD_GOOD_BITS	24
 
-public class CGodGlbls
+public class CGodGlobals
 {
   U8	**words,
 	*word_file_mask;
@@ -15,7 +15,7 @@ public class CGodGlbls
   CFifoU8 *doodle_fifo;
   Bool	doodle_done;
 } god;
-MemSet(&god,0,sizeof(CGodGlbls));
+MemSet(&god,0,sizeof(CGodGlobals));
 god.doodle_fifo	=FifoU8New(2048*8);
 god.fifo	=FifoU8New(2048*8);
 
