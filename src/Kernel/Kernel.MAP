@@ -1,7 +1,7 @@
 $LK,"TASK_EXCEPT_CALLERS",A="FL:::/Kernel/KernelA.HH,3271"$
 $LK,"ARGT_R64",A="FL:::/Kernel/KernelA.HH,1922"$
 $LK,"MAlloc",A="FL:::/Kernel/Memory/MAllocFree.CC,387"$
-$LK,"BOOT_SRC_NULL",A="FL:::/Kernel/KernelA.HH,3854"$
+$LK,"BOOT_SRC_NULL",A="FL:::/Kernel/KernelA.HH,3855"$
 $LK,"KbdTypeMatic",A="FL:::/Kernel/SerialDev/Keyboard.CC,86",BI=1$
 $LK,"KbdLEDsSet",A="FL:::/Kernel/SerialDev/Keyboard.CC,52",BI=2$
 $LK,"LXchgU32",A="FL:::/Kernel/KernelB.HH,263"$
@@ -19,7 +19,7 @@ $LK,"c32_ebx",A="FL:::/Kernel/PCIBIOS.CC,153"$
 $LK,"D3Add",A="FL:::/Kernel/KernelB.HH,145"$
 $LK,"U64_F64_MAX",A="FL:::/Kernel/KernelA.HH,46"$
 $LK,"D3NormSqr",A="FL:::/Kernel/KernelB.HH,159"$
-$LK,"ARf_PLANAR_SYMMETRY",A="FL:::/Kernel/KernelA.HH,3867"$
+$LK,"ARf_PLANAR_SYMMETRY",A="FL:::/Kernel/KernelA.HH,3868"$
 $LK,"DOCf_PLAIN_TEXT_TABS",A="FL:::/Kernel/KernelA.HH,1321"$
 $LK,"RLF_BLKDEV",A="FL:::/Kernel/KernelA.HH,485"$
 $LK,"RLf_BLKDEV",A="FL:::/Kernel/KernelA.HH,463"$
@@ -76,7 +76,7 @@ $LK,"DOCEF_RIGHT_IN_STR",A="FL:::/Kernel/KernelA.HH,1004"$
 $LK,"LDF_JUST_LOAD",A="FL:::/Kernel/KernelA.HH,381"$
 $LK,"DiskCacheInvalidate2",A="FL:::/Kernel/BlkDev/DiskCache.CC,97",BI=11$
 $LK,"SYS_CACHE_LINE_WIDTH",A="FL:::/Kernel/KStart32.CC,70"$
-$LK,"PRINTF_COMMA",A="FL:::/Kernel/KernelA.HH,3887"$
+$LK,"PRINTF_COMMA",A="FL:::/Kernel/KernelA.HH,3888"$
 $LK,"MEM_DEFAULT_STACK",A="FL:::/Kernel/KernelA.HH,2858"$
 $LK,"CMF_I16_JMP_TABLE",A="FL:::/Kernel/KernelA.HH,1725"$
 $LK,"FramePtrSet",A="FL:::/Kernel/KHashB.CC,230",BI=12$
@@ -90,7 +90,7 @@ $LK,"FILEMASK_TXT",A="FL:::/Kernel/KernelA.HH,2319"$
 $LK,"TK_EOF",A="FL:::/Kernel/KernelA.HH,2094"$
 $LK,"CWinScroll",A="FL:::/Kernel/KernelA.HH,3066"$
 $LK,"DOCEf_NO_CLICK_ON",A="FL:::/Kernel/KernelA.HH,1126"$
-$LK,"ARf_FLOODFILL",A="FL:::/Kernel/KernelA.HH,3865"$
+$LK,"ARf_FLOODFILL",A="FL:::/Kernel/KernelA.HH,3866"$
 $LK,"CKeyDevGlobals",A="FL:::/Kernel/KernelA.HH,3777"$
 $LK,"CBlkDevGlobals",A="FL:::/Kernel/KernelA.HH,2745"$
 $LK,"ICF_USE_F64",A="FL:::/Kernel/KernelA.HH,1623"$
@@ -194,7 +194,7 @@ $LK,"WINMGR_FPS",A="FL:::/Kernel/KernelA.HH,1492"$
 $LK,"DOC_COLOR_CHAR_CONST",A="FL:::/Kernel/KernelA.HH,1162"$
 $LK,"PIT_CMDF_OPMODE_SQUARE_WAVE",A="FL:::/Kernel/KernelA.HH,560"$
 $LK,"E",A="FL:::/Kernel/FunSeg.CC,332",BI=36$
-$LK,"PRINTF_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3891"$
+$LK,"PRINTF_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3892"$
 $LK,"CEdFileName",A="FL:::/Kernel/KernelA.HH,1264"$
 $LK,"DOCT_LEFT_MARGIN",A="FL:::/Kernel/KernelA.HH,928"$
 $LK,"CCF_NO_CHAR_CONST",A="FL:::/Kernel/KernelA.HH,2164"$
@@ -215,7 +215,7 @@ $LK,"CYAN",A="FL:::/Kernel/KernelA.HH,2932"$
 $LK,"U64_MIN",A="FL:::/Kernel/KernelA.HH,39"$
 $LK,"HashDefineListAdd",A="FL:::/Kernel/KHashB.CC,206",BI=43$
 $LK,"TK_SUPERSCRIPT",A="FL:::/Kernel/KernelA.HH,2095"$
-$LK,"CScreenCastGlobals",A="FL:::/Kernel/KernelA.HH,3803"$
+$LK,"CScreenCastGlobals",A="FL:::/Kernel/KernelA.HH,3804"$
 $LK,"RS_ATTR_DELETED",A="FL:::/Kernel/KernelA.HH,2521"$
 $LK,"CMT_ASM_LABEL",A="FL:::/Kernel/KernelA.HH,1713"$
 $LK,"RLF_64BIT",A="FL:::/Kernel/KernelA.HH,480"$
@@ -354,7 +354,7 @@ $LK,"CtrlAltN",A="FL:::/Kernel/KeyDev.CC,158",BI=72$
 $LK,"CDirEntry",A="FL:::/Kernel/KernelA.HH,2535"$
 $LK,"TK_STR",A="FL:::/Kernel/KernelA.HH,2099"$
 $LK,"ACD_DEF_END",A="FL:::/Kernel/KernelA.HH,1531"$
-$LK,"PROGRESS_DESC_LEN",A="FL:::/Kernel/KernelA.HH,3875"$
+$LK,"PROGRESS_DESC_LEN",A="FL:::/Kernel/KernelA.HH,3876"$
 $LK,"CCF_ASM_EXPRESSIONS",A="FL:::/Kernel/KernelA.HH,2172"$
 $LK,"D3Sub",A="FL:::/Kernel/KernelB.HH,160"$
 $LK,"SC_CURSOR_RIGHT",A="FL:::/Kernel/KernelA.HH,3525"$
@@ -376,7 +376,7 @@ $LK,"HTt_ASM_KEYWORD",A="FL:::/Kernel/KernelA.HH,680"$
 $LK,"PCIWriteU32",A="FL:::/Kernel/PCIBIOS.CC,250",BI=76$
 $LK,"PCIWriteU16",A="FL:::/Kernel/PCIBIOS.CC,235",BI=77$
 $LK,"CtrlAltV",A="FL:::/Kernel/KeyDev.CC,168",BI=78$
-$LK,"VM_VMWARE",A="FL:::/Kernel/KernelA.HH,3906"$
+$LK,"VM_VMWARE",A="FL:::/Kernel/KernelA.HH,3907"$
 $LK,"_LXCHG_U8",A="FL:::/Kernel/KUtils.CC,244"$
 $LK,"CtrlAltX",A="FL:::/Kernel/KeyDev.CC,173",BI=79$
 $LK,"UserTaskCont",A="FL:::/Kernel/KTask.CC,384",BI=80$
@@ -430,7 +430,7 @@ $LK,"ServerTaskCont",A="FL:::/Kernel/KTask.CC,368",BI=88$
 $LK,"Scale2Mem",A="FL:::/Kernel/Memory/MemPhysical.CC,169",BI=89$
 $LK,"RandU32",A="FL:::/Kernel/KMathB.CC,107",BI=90$
 $LK,"RandU16",A="FL:::/Kernel/KMathB.CC,87",BI=91$
-$LK,"PRINTF_NEG_E",A="FL:::/Kernel/KernelA.HH,3894"$
+$LK,"PRINTF_NEG_E",A="FL:::/Kernel/KernelA.HH,3895"$
 $LK,"F64_MIN",A="FL:::/Kernel/KernelA.HH,48"$
 $LK,"_FLDCW",A="FL:::/Kernel/KMathA.CC,625"$
 $LK,"__DIR__",A="FL:::/Kernel/KernelA.HH,2058"$
@@ -462,7 +462,7 @@ $LK,"HTT_DICT_WORD",A="FL:::/Kernel/KernelA.HH,708"$
 $LK,"HTt_DICT_WORD",A="FL:::/Kernel/KernelA.HH,678"$
 $LK,"RLf_MP",A="FL:::/Kernel/KernelA.HH,464"$
 $LK,"CSpring",A="FL:::/Kernel/KernelA.HH,228"$
-$LK,"CDebugGlobals",A="FL:::/Kernel/KernelA.HH,3835"$
+$LK,"CDebugGlobals",A="FL:::/Kernel/KernelA.HH,3836"$
 $LK,"CBGR24",A="FL:::/Kernel/KernelA.HH,2961"$
 $LK,"MEM_SETH_STACK",A="FL:::/Kernel/KernelA.HH,2856"$
 $LK,"FONT_WIDTH",A="FL:::/Kernel/KernelA.HH,3566"$
@@ -471,8 +471,8 @@ $LK,"JobQueue",A="FL:::/Kernel/MultiProc.CC,213",BI=102$
 $LK,"LastDayOfYear",A="FL:::/Kernel/KDate.CC,110",BI=103$
 $LK,"SYS_IDLE_PT",A="FL:::/Kernel/Sched.CC,204"$
 $LK,"CWinMgrTimingGlobals",A="FL:::/Kernel/KernelA.HH,1483"$
-$LK,"OS_WINDOWS",A="FL:::/Kernel/KernelA.HH,3902"$
-$LK,"PRINTF_DOLLAR",A="FL:::/Kernel/KernelA.HH,3888"$
+$LK,"OS_WINDOWS",A="FL:::/Kernel/KernelA.HH,3903"$
+$LK,"PRINTF_DOLLAR",A="FL:::/Kernel/KernelA.HH,3889"$
 $LK,"Core0StartMP",A="FL:::/Kernel/MultiProc.CC,283",BI=104$
 $LK,"MESSAGE_MS_L_DOWN",A="FL:::/Kernel/KernelA.HH,3194"$
 $LK,"_D3_SUB",A="FL:::/Kernel/KMathA.CC,149"$
@@ -601,7 +601,7 @@ $LK,"SCf_MS_R_DOWN",A="FL:::/Kernel/KernelA.HH,3488"$
 $LK,"_R10",A="FL:::/Kernel/KernelA.HH,3395"$
 $LK,"SYS_MEM_INIT_VAL",A="FL::/Tmp.DD,1"$
 $LK,"_R11",A="FL:::/Kernel/KernelA.HH,3396"$
-$LK,"BOOT_RAM_LIMIT",A="FL:::/Kernel/KernelA.HH,3851"$
+$LK,"BOOT_RAM_LIMIT",A="FL:::/Kernel/KernelA.HH,3852"$
 $LK,"_R12",A="FL:::/Kernel/KernelA.HH,3397"$
 $LK,"MESSAGE_CMD",A="FL:::/Kernel/KernelA.HH,3190"$
 $LK,"SysGetI64",A="FL:::/Kernel/BlkDev/DiskAddDev.CC,179",BI=123$
@@ -662,7 +662,7 @@ $LK,"ICF_ARG2_WAS_STACK",A="FL:::/Kernel/KernelA.HH,1634"$
 $LK,"ICF_ARG1_WAS_STACK",A="FL:::/Kernel/KernelA.HH,1633"$
 $LK,"DOCT_INDENT",A="FL:::/Kernel/KernelA.HH,932"$
 $LK,"_ARG",A="FL:::/Kernel/KMathA.CC,366"$
-$LK,"PRINTF_SLASH",A="FL:::/Kernel/KernelA.HH,3889"$
+$LK,"PRINTF_SLASH",A="FL:::/Kernel/KernelA.HH,3890"$
 $LK,"COLORROP_NO_ROP0_MASK",A="FL:::/Kernel/KernelA.HH,2959"$
 $LK,"CDualBuf",A="FL:::/Kernel/BlkDev/DiskCDDVD.CC,105"$
 $LK,"TaskText",A="FL:::/Kernel/Job.CC,75",BI=131$
@@ -716,7 +716,7 @@ $LK,"char_bmp_alpha_numeric_no_at",A="FL:::/Kernel/StrA.CC,335"$
 $LK,"IEF_STI_LIKE",A="FL:::/Kernel/KernelA.HH,1761"$
 $LK,"HTf_PRIVATE",A="FL:::/Kernel/KernelA.HH,689"$
 $LK,"Dm",A="FL:::/Kernel/KDebug.CC,204",BI=136$
-$LK,"PRINTF_LEFT_JUSTIFY",A="FL:::/Kernel/KernelA.HH,3885"$
+$LK,"PRINTF_LEFT_JUSTIFY",A="FL:::/Kernel/KernelA.HH,3886"$
 $LK,"CCF_EXE_BLK",A="FL:::/Kernel/KernelA.HH,2169"$
 $LK,"BDf_REMOVABLE",A="FL:::/Kernel/KernelA.HH,2634"$
 $LK,"BDF_REMOVABLE",A="FL:::/Kernel/KernelA.HH,2624"$
@@ -873,7 +873,7 @@ $LK,"WIf_FOCUS_TASK_GRAB_SCROLL",A="FL:::/Kernel/KernelA.HH,1481"$
 $LK,"WIF_FOCUS_TASK_GRAB_SCROLL",A="FL:::/Kernel/KernelA.HH,1454"$
 $LK,"CIntermediateCode",A="FL:::/Kernel/KernelA.HH,1681"$
 $LK,"progress2_tf",A="FL:::/Kernel/KernelB.HH,217"$
-$LK,"PRINTF_TRUNCATE",A="FL:::/Kernel/KernelA.HH,3886"$
+$LK,"PRINTF_TRUNCATE",A="FL:::/Kernel/KernelA.HH,3887"$
 $LK,"MDF_REG",A="FL:::/Kernel/KernelA.HH,1608"$
 $LK,"DOC_COLOR_ANCHOR",A="FL:::/Kernel/KernelA.HH,1156"$
 $LK,"Str2ColorU32",A="FL:::/Kernel/KDefine.CC,202",BI=174$
@@ -980,7 +980,7 @@ $LK,"HTt_KEYWORD",A="FL:::/Kernel/KernelA.HH,679"$
 $LK,"RT_UF64",A="FL:::/Kernel/KernelA.HH,1593"$
 $LK,"DOCf_BWD_MOVEMENT",A="FL:::/Kernel/KernelA.HH,1338"$
 $LK,"BlkWrite",A="FL:::/Kernel/BlkDev/DiskBlk.CC,71",BI=206$
-$LK,"CMPCrash",A="FL:::/Kernel/KernelA.HH,3826"$
+$LK,"CMPCrash",A="FL:::/Kernel/KernelA.HH,3827"$
 $LK,"ROPBF_HALF_RANGE_COLOR",A="FL:::/Kernel/KernelA.HH,2908"$
 $LK,"JOBT_EXE_STR",A="FL:::/Kernel/KernelA.HH,3157"$
 $LK,"ICF_SHORT_JMP",A="FL:::/Kernel/KernelA.HH,1629"$
@@ -1032,7 +1032,7 @@ $LK,"DebugMode",A="FL:::/Kernel/KMisc.CC,313",BI=218$
 $LK,"IsSysDebug",A="FL:::/Kernel/KMisc.CC,286",BI=219$
 $LK,"RedSeaAllocClus",A="FL:::/Kernel/BlkDev/FileSysRedSea.CC,300",BI=220$
 $LK,"sys_semas",A="FL:::/Kernel/KernelB.HH,239"$
-$LK,"OS_LINUX",A="FL:::/Kernel/KernelA.HH,3901"$
+$LK,"OS_LINUX",A="FL:::/Kernel/KernelA.HH,3902"$
 $LK,"InputFilterTask",A="FL:::/Kernel/SerialDev/Message.CC,1",BI=221$
 $LK,"SYS_HASH_STR",A="FL:::/Kernel/KHashA.CC,4"$
 $LK,"ATAR0_CMD",A="FL:::/Kernel/KernelA.HH,2311"$
@@ -1157,7 +1157,7 @@ $LK,"SC_F9",A="FL:::/Kernel/KernelA.HH,3540"$
 $LK,"DOCEF_SOLID_BORDER",A="FL:::/Kernel/KernelA.HH,1021"$
 $LK,"DOCT_TYPES_NUM",A="FL:::/Kernel/KernelA.HH,962"$
 $LK,"KbdBuildSC",A="FL:::/Kernel/SerialDev/Keyboard.CC,301",BI=245$
-$LK,"BOOT_SRC_HARDDRIVE",A="FL:::/Kernel/KernelA.HH,3857"$
+$LK,"BOOT_SRC_HARDDRIVE",A="FL:::/Kernel/KernelA.HH,3858"$
 $LK,"CInst",A="FL:::/Kernel/KernelA.HH,1769"$
 $LK,"IOAPICID",A="FL:::/Kernel/KernelA.HH,533"$
 $LK,"RFLAGf_SIGN",A="FL:::/Kernel/KernelA.HH,325"$
@@ -1204,7 +1204,7 @@ $LK,"GetBaseUnit",A="FL:::/Kernel/BlkDev/DiskAddDev.CC,186",BI=254$
 $LK,"FixSet",A="FL:::/Kernel/EdLite.CC,327",BI=255$
 $LK,"DOCf_SEL",A="FL:::/Kernel/KernelA.HH,1349"$
 $LK,"sqrt2",A="FL:::/Kernel/KernelA.HH,58"$
-$LK,"VM_QEMU",A="FL:::/Kernel/KernelA.HH,3907"$
+$LK,"VM_QEMU",A="FL:::/Kernel/KernelA.HH,3908"$
 $LK,"ATAR0_SEL",A="FL:::/Kernel/KernelA.HH,2309"$
 $LK,"DOCEf_FLAGS_NUM",A="FL:::/Kernel/KernelA.HH,1130"$
 $LK,"IntFaultHandlersNew",A="FL:::/Kernel/KInterrupts.CC,166",BI=256$
@@ -1223,7 +1223,7 @@ $LK,"OC_LOCK_PREFIX",A="FL:::/Kernel/KernelA.HH,1784"$
 $LK,"Ff_INTERRUPT",A="FL:::/Kernel/KernelA.HH,865"$
 $LK,"MLF_DEFAULT_AVAILABLE",A="FL:::/Kernel/KernelA.HH,792"$
 $LK,"DriveLock",A="FL:::/Kernel/BlkDev/DiskDrive.CC,1",BI=261$
-$LK,"CFunSegCache",A="FL:::/Kernel/KernelA.HH,3816"$
+$LK,"CFunSegCache",A="FL:::/Kernel/KernelA.HH,3817"$
 $LK,"OM_CD",A="FL:::/Kernel/KernelA.HH,1898"$
 $LK,"AAT_ADD_U8",A="FL:::/Kernel/KernelA.HH,1994"$
 $LK,"REGT_XMM",A="FL:::/Kernel/KernelA.HH,764"$
@@ -1265,11 +1265,11 @@ $LK,"QuickSortI64",A="FL:::/Kernel/QuickSort.CC,1",BI=265$
 $LK,"OM_ID",A="FL:::/Kernel/KernelA.HH,1902"$
 $LK,"OM_CP",A="FL:::/Kernel/KernelA.HH,1899"$
 $LK,"_ROUND",A="FL:::/Kernel/KMathA.CC,380"$
-$LK,"OS_OTHER",A="FL:::/Kernel/KernelA.HH,3899"$
+$LK,"OS_OTHER",A="FL:::/Kernel/KernelA.HH,3900"$
 $LK,"RFLAGf_TRAP",A="FL:::/Kernel/KernelA.HH,326"$
 $LK,"I8_MIN",A="FL:::/Kernel/KernelA.HH,25"$
 $LK,"SYS_HASH_BUCKET_FIND",A="FL:::/Kernel/KHashA.CC,109"$
-$LK,"BOOT_SRC_DVD",A="FL:::/Kernel/KernelA.HH,3858"$
+$LK,"BOOT_SRC_DVD",A="FL:::/Kernel/KernelA.HH,3859"$
 $LK,"FUF_RECURSE",A="FL:::/Kernel/KernelA.HH,2580"$
 $LK,"FUf_RECURSE",A="FL:::/Kernel/KernelA.HH,2552"$
 $LK,"CallStackGrow",A="FL:::/Kernel/KTask.CC,110",BI=266$
@@ -1327,7 +1327,7 @@ $LK,"DOCEf_CHECKED_COLLAPSED",A="FL:::/Kernel/KernelA.HH,1111"$
 $LK,"Name2ParentDirClus",A="FL:::/Kernel/BlkDev/DiskStrB.CC,50",BI=276$
 $LK,"DOCEf_SCROLLING_X",A="FL:::/Kernel/KernelA.HH,1085"$
 $LK,"MPInt",A="FL:::/Kernel/MultiProc.CC,132",BI=277$
-$LK,"BOOT_SRC_RAM",A="FL:::/Kernel/KernelA.HH,3856"$
+$LK,"BOOT_SRC_RAM",A="FL:::/Kernel/KernelA.HH,3857"$
 $LK,"TK_AND_EQU",A="FL:::/Kernel/KernelA.HH,2120"$
 $LK,"I64",A="FL:::/Kernel/KernelA.HH,106"$
 $LK,"PopUpPrint",A="FL:::/Kernel/Job.CC,397",BI=278$
@@ -1401,7 +1401,7 @@ $LK,"XTalkStr",A="FL:::/Kernel/Job.CC,489",BI=295$
 $LK,"CCF_IN_QUOTES",A="FL:::/Kernel/KernelA.HH,2168"$
 $LK,"CFifoU8",A="FL:::/Kernel/KernelA.HH,172"$
 $LK,"ATAReadNativeMax",A="FL:::/Kernel/BlkDev/DiskATA.CC,194",BI=296$
-$LK,"BOOT_SRC_ROM",A="FL:::/Kernel/KernelA.HH,3855"$
+$LK,"BOOT_SRC_ROM",A="FL:::/Kernel/KernelA.HH,3856"$
 $LK,"MEM_FREE_PAG_HASH_SIZE",A="FL:::/Kernel/KernelA.HH,2850"$
 $LK,"RLF_AUTO_COMPLETE",A="FL:::/Kernel/KernelA.HH,492"$
 $LK,"SYS_KERNEL_END",A="FL:::/Kernel/KMain.CC,249"$
@@ -1409,7 +1409,7 @@ $LK,"TakeExcept",A="FL:::/Kernel/KExcept.CC,42"$
 $LK,"_MALLOC",A="FL:::/Kernel/Memory/MAllocFree.CC,5"$
 $LK,"CHashDefineStr",A="FL:::/Kernel/KernelA.HH,842"$
 $LK,"MemSet",A="FL:::/Kernel/KernelB.HH,171"$
-$LK,"PRINTF_NEG",A="FL:::/Kernel/KernelA.HH,3893"$
+$LK,"PRINTF_NEG",A="FL:::/Kernel/KernelA.HH,3894"$
 $LK,"_TRUNC",A="FL:::/Kernel/KMathA.CC,400"$
 $LK,"WIG_NO_FOCUS_TASK_DEFAULT",A="FL:::/Kernel/KernelA.HH,1459"$
 $LK,"HTF_IMM",A="FL:::/Kernel/KernelA.HH,723"$
@@ -1524,7 +1524,7 @@ $LK,"DOCEf_DEFAULT_LEN",A="FL:::/Kernel/KernelA.HH,1128"$
 $LK,"TaskExe",A="FL:::/Kernel/Job.CC,39",BI=324$
 $LK,"KbdMessagesQueue",A="FL:::/Kernel/SerialDev/Keyboard.CC,467",BI=325$
 $LK,"FileWrite",A="FL:::/Kernel/BlkDev/DiskFile.CC,79",BI=326$
-$LK,"ARf_CSPRITE_PTS_RECTANGLES",A="FL:::/Kernel/KernelA.HH,3870"$
+$LK,"ARf_CSPRITE_PTS_RECTANGLES",A="FL:::/Kernel/KernelA.HH,3871"$
 $LK,"MESSAGE_KEY_DOWN_UP",A="FL:::/Kernel/KernelA.HH,3204"$
 $LK,"RFLAGf_ID",A="FL:::/Kernel/KernelA.HH,338"$
 $LK,"DiskChange",A="FL:::/Kernel/BlkDev/DiskDrive.CC,237",BI=327$
@@ -1544,7 +1544,7 @@ $LK,"VGAR_MAP_MASK",A="FL:::/Kernel/KernelA.HH,3697"$
 $LK,"CAOTCtrl",A="FL:::/Kernel/KernelA.HH,2076"$
 $LK,"DOC_COLOR_DEFINE_STR",A="FL:::/Kernel/KernelA.HH,1164"$
 $LK,"DriveFATBlkAlloc",A="FL:::/Kernel/BlkDev/DiskDrive.CC,89",BI=330$
-$LK,"VM_VIRTUALBOX",A="FL:::/Kernel/KernelA.HH,3908"$
+$LK,"VM_VIRTUALBOX",A="FL:::/Kernel/KernelA.HH,3909"$
 $LK,"SCF_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3501"$
 $LK,"CCompCtrl",A="FL:::/Kernel/KernelA.HH,2194"$
 $LK,"TASK_CONTEXT_SAVE",A="FL:::/Kernel/Sched.CC,56"$
@@ -1627,7 +1627,7 @@ $LK,"CDATE_YEAR_DAYS",A="FL:::/Kernel/KernelA.HH,184"$
 $LK,"RFLAGf_OVERFLOW",A="FL:::/Kernel/KernelA.HH,329"$
 $LK,"SYS_POW",A="FL:::/Kernel/KMathA.CC,462"$
 $LK,"DRIVE_SIGNATURE_VAL",A="FL:::/Kernel/KernelA.HH,2702"$
-$LK,"ARf_CSPRITE_INS_CLIP",A="FL:::/Kernel/KernelA.HH,3866"$
+$LK,"ARf_CSPRITE_INS_CLIP",A="FL:::/Kernel/KernelA.HH,3867"$
 $LK,"DOCf_NULL_GRAB_SCROLL",A="FL:::/Kernel/KernelA.HH,1339"$
 $LK,"DOCEf_RIGHT_X",A="FL:::/Kernel/KernelA.HH,1095"$
 $LK,"DOCEF_RIGHT_X",A="FL:::/Kernel/KernelA.HH,1007"$
@@ -1668,7 +1668,7 @@ $LK,"HTt_WORD",A="FL:::/Kernel/KernelA.HH,677"$
 $LK,"FUG_FILE_FIND",A="FL:::/Kernel/KernelA.HH,2611"$
 $LK,"I_PAGE_FAULT",A="FL:::/Kernel/KernelA.HH,304"$
 $LK,"SysGlobalsInit",A="FL:::/Kernel/KMain.CC,1",BI=358$
-$LK,"CProgress",A="FL:::/Kernel/KernelA.HH,3876"$
+$LK,"CProgress",A="FL:::/Kernel/KernelA.HH,3877"$
 $LK,"Arg",A="FL:::/Kernel/KernelB.HH,122"$
 $LK,"FSt_ISO9660",A="FL:::/Kernel/KernelA.HH,2676"$
 $LK,"CISOPriDesc",A="FL:::/Kernel/KernelA.HH,2490"$
@@ -1934,14 +1934,14 @@ $LK,"MDG_MASK",A="FL:::/Kernel/KernelA.HH,1612"$
 $LK,"ACD_EXTRA_CHAR",A="FL:::/Kernel/KernelA.HH,1545"$
 $LK,"Reboot",A="FL:::/Kernel/KMain.CC,133",BI=422$
 $LK,"acd",A="FL:::/Kernel/KGlobals.CC,18"$
-$LK,"CSoundData",A="FL:::/Kernel/KernelA.HH,3796"$
+$LK,"CSoundData",A="FL:::/Kernel/KernelA.HH,3797"$
 $LK,"REG_RCX",A="FL:::/Kernel/KernelA.HH,1800"$
 $LK,"Ff_DOT_DOT_DOT",A="FL:::/Kernel/KernelA.HH,871"$
 $LK,"CHashClass",A="FL:::/Kernel/KernelA.HH,851"$
 $LK,"ZERO_BUF_SIZE",A="FL:::/Kernel/BlkDev/DiskBlk.CC,1"$
 $LK,"DiskCacheFind",A="FL:::/Kernel/BlkDev/DiskCache.CC,64",BI=423$
 $LK,"LoadKernel",A="FL:::/Kernel/KLoad.CC,240",BI=424$
-$LK,"PRINTF_PAD_ZERO",A="FL:::/Kernel/KernelA.HH,3884"$
+$LK,"PRINTF_PAD_ZERO",A="FL:::/Kernel/KernelA.HH,3885"$
 $LK,"SCF_KEY_UP",A="FL:::/Kernel/KernelA.HH,3494"$
 $LK,"SCf_KEY_UP",A="FL:::/Kernel/KernelA.HH,3479"$
 $LK,"ICF_BY_VAL",A="FL:::/Kernel/KernelA.HH,1628"$
@@ -2002,8 +2002,8 @@ $LK,"LAPIC_EOI",A="FL:::/Kernel/KernelA.HH,505"$
 $LK,"sys_pos_pows_lets",A="FL:::/Kernel/StrPrint.CC,200"$
 $LK,"LIN_CONGRUE_A",A="FL:::/Kernel/KMathB.CC,74"$
 $LK,"Drive",A="FL:::/Kernel/BlkDev/DiskDrive.CC,263",BI=437$
-$LK,"VM_NATIVE",A="FL:::/Kernel/KernelA.HH,3905"$
-$LK,"OS_NATIVE",A="FL:::/Kernel/KernelA.HH,3900"$
+$LK,"VM_NATIVE",A="FL:::/Kernel/KernelA.HH,3906"$
+$LK,"OS_NATIVE",A="FL:::/Kernel/KernelA.HH,3901"$
 $LK,"CT_8_BIT",A="FL:::/Kernel/KernelA.HH,3704"$
 $LK,"REG_RSP",A="FL:::/Kernel/KernelA.HH,1803"$
 $LK,"CtrlAltDel",A="FL:::/Kernel/KeyDev.CC,128",BI=438$
@@ -2037,7 +2037,7 @@ $LK,"CtrlAltCBSet",A="FL:::/Kernel/KeyDev.CC,178",BI=441$
 $LK,"SysTimerRead",A="FL:::/Kernel/KMisc.CC,61",BI=442$
 $LK,"dev",A="FL:::/Kernel/KGlobals.CC,23"$
 $LK,"FunSegCacheFind",A="FL:::/Kernel/FunSeg.CC,114",BI=443$
-$LK,"CInsReg",A="FL:::/Kernel/KernelA.HH,3911"$
+$LK,"CInsReg",A="FL:::/Kernel/KernelA.HH,3912"$
 $LK,"MEM_ZENITH_STACK",A="FL:::/Kernel/KernelA.HH,2855"$
 $LK,"HTT_REG",A="FL:::/Kernel/KernelA.HH,712"$
 $LK,"CTRLF_CAPTURE_LEFT_MS",A="FL:::/Kernel/KernelA.HH,3060"$
@@ -2102,7 +2102,7 @@ $LK,"zenith_task",A="FL:::/Kernel/KGlobals.CC,8"$
 $LK,"MEM_E801",A="FL:::/Kernel/KStart16.CC,31"$
 $LK,"__TIME__",A="FL:::/Kernel/KernelA.HH,2051"$
 $LK,"RLf_PATCHED",A="FL:::/Kernel/KernelA.HH,456"$
-$LK,"PRINTF_NEG_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3895"$
+$LK,"PRINTF_NEG_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3896"$
 $LK,"MEM_E820_ENTRIES_NUM",A="FL:::/Kernel/KernelA.HH,370"$
 $LK,"MEM_E820",A="FL:::/Kernel/KStart16.CC,32"$
 $LK,"ACD_WORD_FILENAME",A="FL:::/Kernel/KernelA.HH,1525"$
@@ -2116,6 +2116,7 @@ $LK,"log2_10",A="FL:::/Kernel/KernelA.HH,54"$
 $LK,"LTBLUE",A="FL:::/Kernel/KernelA.HH,2938"$
 $LK,"DOCf_AUTO_SAVE",A="FL:::/Kernel/KernelA.HH,1322"$
 $LK,"DOCF_AUTO_SAVE",A="FL:::/Kernel/KernelA.HH,1285"$
+$LK,"PCSPKR",A="FL:::/Kernel/KernelA.HH,3789"$
 $LK,"DOCEf_TOP_Y",A="FL:::/Kernel/KernelA.HH,1096"$
 $LK,"DOCEF_TOP_Y",A="FL:::/Kernel/KernelA.HH,1008"$
 $LK,"_CALLEXTNUM",A="FL:::/Kernel/KUtils.CC,362"$
@@ -2142,7 +2143,7 @@ $LK,"Bcd2Bin",A="FL:::/Kernel/KDate.CC,123",BI=461$
 $LK,"CAllocAligned",A="FL:::/Kernel/Memory/MAllocFree.CC,434",BI=462$
 $LK,"MAllocAligned",A="FL:::/Kernel/Memory/MAllocFree.CC,423",BI=463$
 $LK,"ext",A="FL:::/Kernel/KernelB.HH,53"$
-$LK,"FUN_SEG_CACHE_SIZE",A="FL:::/Kernel/KernelA.HH,3815"$
+$LK,"FUN_SEG_CACHE_SIZE",A="FL:::/Kernel/KernelA.HH,3816"$
 $LK,"DRIVES_NUM",A="FL:::/Kernel/KernelA.HH,2700"$
 $LK,"ACf_INIT_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,1508"$
 $LK,"RawDm",A="FL:::/Kernel/KDebug.CC,250",BI=464$
@@ -2246,14 +2247,14 @@ $LK,"CoreAPSethInit",A="FL:::/Kernel/MultiProc.CC,275",BI=480$
 $LK,"IRQKbd",A="FL:::/Kernel/SerialDev/Keyboard.CC,411",BI=481$
 $LK,"SwapU32",A="FL:::/Kernel/KernelB.HH,115"$
 $LK,"SwapU16",A="FL:::/Kernel/KernelB.HH,113"$
-$LK,"ARf_MESH_ED",A="FL:::/Kernel/KernelA.HH,3869"$
+$LK,"ARf_MESH_ED",A="FL:::/Kernel/KernelA.HH,3870"$
 $LK,"CAsmUndefHash",A="FL:::/Kernel/KernelA.HH,1838"$
 $LK,"HTt_IMPORT_SYS_SYM",A="FL:::/Kernel/KernelA.HH,671"$
 $LK,"HTt_EXPORT_SYS_SYM",A="FL:::/Kernel/KernelA.HH,670"$
 $LK,"C32_EDI",A="FL:::/Kernel/PCIBIOS.CC,63"$
 $LK,"pow10_I64",A="FL:::/Kernel/KGlobals.CC,15"$
 $LK,"sys_num_spawned_tasks",A="FL:::/Kernel/KGlobals.CC,9"$
-$LK,"CAUData",A="FL:::/Kernel/KernelA.HH,3790"$
+$LK,"CAUData",A="FL:::/Kernel/KernelA.HH,3791"$
 $LK,"LAPIC_LVT_LINT0",A="FL:::/Kernel/KernelA.HH,522"$
 $LK,"ArcFinishCompression",A="FL:::/Kernel/Compress.CC,155",BI=482$
 $LK,"QueueDel",A="FL:::/Kernel/KDataTypes.CC,41",BI=483$
@@ -2304,7 +2305,7 @@ $LK,"DiskCacheQueueRemove",A="FL:::/Kernel/BlkDev/DiskCache.CC,46",BI=489$
 $LK,"JOB_DONE",A="FL:::/Kernel/Job.CC,265"$
 $LK,"LoadPass2",A="FL:::/Kernel/KLoad.CC,154",BI=490$
 $LK,"MemPagTaskAlloc",A="FL:::/Kernel/Memory/MemPag.CC,114",BI=491$
-$LK,"ARf_MANAGE_SLIDER",A="FL:::/Kernel/KernelA.HH,3871"$
+$LK,"ARf_MANAGE_SLIDER",A="FL:::/Kernel/KernelA.HH,3872"$
 $LK,"SC_PAGE_DOWN",A="FL:::/Kernel/KernelA.HH,3527"$
 $LK,"QueueVectU8Del",A="FL:::/Kernel/KDataTypes.CC,132",BI=492$
 $LK,"OC_NOP",A="FL:::/Kernel/KernelA.HH,1785"$
@@ -2350,7 +2351,7 @@ $LK,"RepOutU32",A="FL:::/Kernel/KernelB.HH,90"$
 $LK,"RepOutU16",A="FL:::/Kernel/KernelB.HH,88"$
 $LK,"TK_SUBSCRIPT",A="FL:::/Kernel/KernelA.HH,2096"$
 $LK,"REGT_NONE",A="FL:::/Kernel/KernelA.HH,756"$
-$LK,"ARf_PSALMODY_JUKEBOX",A="FL:::/Kernel/KernelA.HH,3868"$
+$LK,"ARf_PSALMODY_JUKEBOX",A="FL:::/Kernel/KernelA.HH,3869"$
 $LK,"DOCEf_HTML_LINK",A="FL:::/Kernel/KernelA.HH,1075"$
 $LK,"DOCEF_HTML_LINK",A="FL:::/Kernel/KernelA.HH,987"$
 $LK,"NORMAL_KEY_SCAN_DECODE_TABLE",A="FL:::/Kernel/SerialDev/Keyboard.CC,3"$
@@ -2450,7 +2451,7 @@ $LK,"SC_PAUSE",A="FL:::/Kernel/KernelA.HH,3544"$
 $LK,"TRANSPARENT",A="FL:::/Kernel/KernelA.HH,2928"$
 $LK,"XTalkStrWait",A="FL:::/Kernel/Job.CC,496",BI=525$
 $LK,"mem_physical_space",A="FL:::/Kernel/KernelB.HH,194"$
-$LK,"PRINTF_QUESTION",A="FL:::/Kernel/KernelA.HH,3890"$
+$LK,"PRINTF_QUESTION",A="FL:::/Kernel/KernelA.HH,3891"$
 $LK,"CArcCtrl",A="FL:::/Kernel/KernelA.HH,3713"$
 $LK,"SC_CTRL",A="FL:::/Kernel/KernelA.HH,3517"$
 $LK,"RS_ATTR_LONG_NAME_MASK",A="FL:::/Kernel/KernelA.HH,2520"$
@@ -2460,7 +2461,7 @@ $LK,"DOC_COLOR_BIN",A="FL:::/Kernel/KernelA.HH,1160"$
 $LK,"Ff_NOARGPOP",A="FL:::/Kernel/KernelA.HH,868"$
 $LK,"EdLiteFileLine",A="FL:::/Kernel/EdLite.CC,316",BI=526$
 $LK,"FifoU8New",A="FL:::/Kernel/KDataTypes.CC,155",BI=527$
-$LK,"BOOT_STACK_SIZE",A="FL:::/Kernel/KernelA.HH,3852"$
+$LK,"BOOT_STACK_SIZE",A="FL:::/Kernel/KernelA.HH,3853"$
 $LK,"SC_HOME",A="FL:::/Kernel/KernelA.HH,3528"$
 $LK,"DISK_CACHE_HASH_SIZE",A="FL:::/Kernel/KernelA.HH,2730"$
 $LK,"FilesFindMatch",A="FL:::/Kernel/BlkDev/DiskStrA.CC,40",BI=528$
@@ -2485,7 +2486,7 @@ $LK,"CMemRange",A="FL:::/Kernel/KernelA.HH,2839"$
 $LK,"WIf_FOCUS_TASK_CTRLS",A="FL:::/Kernel/KernelA.HH,1474"$
 $LK,"C32_RSP",A="FL:::/Kernel/PCIBIOS.CC,66"$
 $LK,"OutStr",A="FL:::/Kernel/StrPrint.CC,20",BI=537$
-$LK,"PROGRESS_BARS_NUM",A="FL:::/Kernel/KernelA.HH,3874"$
+$LK,"PROGRESS_BARS_NUM",A="FL:::/Kernel/KernelA.HH,3875"$
 $LK,"DOCEf_CHECK_COLLAPSABLE",A="FL:::/Kernel/KernelA.HH,1112"$
 $LK,"DOCEF_PAGE_REL_Y",A="FL:::/Kernel/KernelA.HH,1013"$
 $LK,"TimersInit",A="FL:::/Kernel/KMain.CC,100",BI=538$
@@ -2503,7 +2504,7 @@ $LK,"CLexHashTableContext",A="FL:::/Kernel/KernelA.HH,2139"$
 $LK,"RLF_RAW",A="FL:::/Kernel/KernelA.HH,483"$
 $LK,"ATAPISetMaxSpeed",A="FL:::/Kernel/BlkDev/DiskATA.CC,118",BI=540$
 $LK,"SwapU8",A="FL:::/Kernel/KernelB.HH,117"$
-$LK,"FUN_SEG_CACHE_STR_LEN",A="FL:::/Kernel/KernelA.HH,3823"$
+$LK,"FUN_SEG_CACHE_STR_LEN",A="FL:::/Kernel/KernelA.HH,3824"$
 $LK,"DCF_TRANSFORMATION",A="FL:::/Kernel/KernelA.HH,3584"$
 $LK,"FF_CONTIGUOUS",A="FL:::/Kernel/KernelA.HH,2775"$
 $LK,"SEMA_MUTE",A="FL:::/Kernel/KernelA.HH,641"$
@@ -2617,7 +2618,7 @@ $LK,"IOAPIC_DATA",A="FL:::/Kernel/KernelA.HH,531"$
 $LK,"SysGetStr2",A="FL:::/Kernel/KDebug.CC,337",BI=555$
 $LK,"fp_getstr2",A="FL:::/Kernel/KGlobals.CC,32"$
 $LK,"KDRawPutKey",A="FL:::/Kernel/KeyDev.CC,88",BI=556$
-$LK,"STD_DISTRO_DVD_CONFIG",A="FL:::/Kernel/KernelA.HH,3861"$
+$LK,"STD_DISTRO_DVD_CONFIG",A="FL:::/Kernel/KernelA.HH,3862"$
 $LK,"DOCF_SUBSCRIPT_MODE",A="FL:::/Kernel/KernelA.HH,1317"$
 $LK,"Dos2CDate",A="FL:::/Kernel/BlkDev/FileSysFAT.CC,9",BI=557$
 $LK,"PostMessageWait",A="FL:::/Kernel/Job.CC,253",BI=558$
@@ -2641,8 +2642,8 @@ $LK,"STACK_REP_LEN",A="FL:::/Kernel/KDebug.CC,102"$
 $LK,"HTT_HELP_FILE",A="FL:::/Kernel/KernelA.HH,715"$
 $LK,"HTt_HELP_FILE",A="FL:::/Kernel/KernelA.HH,685"$
 $LK,"Round",A="FL:::/Kernel/KernelB.HH,139"$
-$LK,"VM_OTHER",A="FL:::/Kernel/KernelA.HH,3904"$
-$LK,"PRINTF_DECIMAL",A="FL:::/Kernel/KernelA.HH,3892"$
+$LK,"VM_OTHER",A="FL:::/Kernel/KernelA.HH,3905"$
+$LK,"PRINTF_DECIMAL",A="FL:::/Kernel/KernelA.HH,3893"$
 $LK,"ISOT_TERMINATOR",A="FL:::/Kernel/KernelA.HH,2481"$
 $LK,"ATAR0_STAT",A="FL:::/Kernel/KernelA.HH,2310"$
 $LK,"HPET_GEN_CONF",A="FL:::/Kernel/KernelA.HH,568"$
@@ -2745,7 +2746,7 @@ $LK,"CMF_I8_JMP_TABLE",A="FL:::/Kernel/KernelA.HH,1723"$
 $LK,"EdLiteUpdate",A="FL:::/Kernel/EdLite.CC,7",BI=587$
 $LK,"_ARC_ENTRY_GET",A="FL:::/Kernel/Compress.CC,43"$
 $LK,"SYS_CTRL_ALT_FLAGS",A="FL:::/Kernel/KStart32.CC,34"$
-$LK,"BOOT_RAM_BASE",A="FL:::/Kernel/KernelA.HH,3850"$
+$LK,"BOOT_RAM_BASE",A="FL:::/Kernel/KernelA.HH,3851"$
 $LK,"JOBf_HIGHEST_PRIORITY",A="FL:::/Kernel/KernelA.HH,3148"$
 $LK,"MT_DVD",A="FL:::/Kernel/KernelA.HH,2530"$
 $LK,"FramePtrDel",A="FL:::/Kernel/KHashB.CC,240",BI=588$

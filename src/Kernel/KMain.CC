@@ -105,7 +105,7 @@ U0 TimersInit()
   OutU8(PIT_CMD, PIT_CMDF_CHANNEL0 | PIT_CMDF_OPMODE_RATE_GEN | PIT_CMDF_ACCESS_WORD);
   OutU8(PIT0,SYS_TIMER0_PERIOD);
   OutU8(PIT0,SYS_TIMER0_PERIOD >> 8);
-
+
   //High Precision Event Timer
   if (PCIReadU16(0,31,0,0)==0x8086) {//Intel?
 //D31 F0, config 0xF0=RCBA of PCI-LPC Bridge
@@ -153,7 +153,7 @@ U0 Reboot(Bool format_ramdisks=FALSE)
 U0 KMain()
 {//Continued from $LK,"KStart64.CC",A="FF:::/Kernel/KStart64.CC,I32 &KMain"$
   CBlkDev *bd;
-  OutU8(0x61,InU8(0x61)&~3); //Sound;
+  OutU8(PCSPKR,InU8(PCSPKR)&~3); //Sound;
   zenith_task=Fs;
   BlkPoolsInit;
   SysGlobalsInit;

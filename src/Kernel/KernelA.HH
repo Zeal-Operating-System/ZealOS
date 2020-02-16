@@ -560,7 +560,7 @@ class CAP16BitInit
 #define PIT_CMDF_OPMODE_SQUARE_WAVE	0x06
 #define PIT_CMDF_ACCESS_WORD		0x30
 #define PIT_CMDF_CHANNEL0		0x00
-#define PIT_CMDF_CHANNEL2		0x80
+#define PIT_CMDF_CHANNEL2		0x80
 
 #help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
 //High Performance Event Timer
@@ -3786,6 +3786,7 @@ class CKeyDevGlobals
 };
 
 #help_index "Sound"
+#define PCSPKR	0x61
 #help_index "ScreenCast;Sound/AU Files"
 public class CAUData
 {//Format of AU files

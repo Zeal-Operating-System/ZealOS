@@ -69,7 +69,7 @@ I64 SysTimerRead()
   OutU8(PIT_CMD, PIT_CMDF_CHANNEL0); //Latch Timer0
   if ((i=InU8(PIT0) + InU8(PIT0) << 8) == SYS_TIMER0_PERIOD)
   {
-    if (InU8(0x20) & 1)
+    if (InU8(0x20) & 1)
       i=-1;
   }
   res=counts.timer+SYS_TIMER0_PERIOD-i;
@@ -185,14 +185,14 @@ U0 Sound(I8 ona=0)
 	!LBts(&sys_semas[SEMA_SOUND],0)) { //Mutex. Just throw-out if in use
     if (!ona) {
       screencast.ona=ona;
-      OutU8(0x61,InU8(0x61)&~3);
+      OutU8(PCSPKR, InU8(PCSPKR) & ~3);
     } else if (ona!=screencast.ona) {
       screencast.ona=ona;
       period=ClampI64(SYS_TIMER_FREQ/Ona2Freq(ona),1,U16_MAX);
       OutU8(PIT_CMD,PIT_CMDF_CHANNEL2 | PIT_CMDF_OPMODE_SQUARE_WAVE | PIT_CMDF_ACCESS_WORD);
       OutU8(PIT2,period);
       OutU8(PIT2,period.u8[1]);
-      OutU8(0x61,3|InU8(0x61));
+      OutU8(PCSPKR,3|InU8(PCSPKR));
     }
     if (!IsDebugMode && screencast.record) {
       d=ZCAlloc(sizeof(CSoundData));
