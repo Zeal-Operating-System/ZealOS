@@ -26,12 +26,14 @@ Changes include:
     - AStrNew -> ZStrNew
     - Adam -> Zenith
     - BEqu -> BEqual
-    - Bwd -> Bacward
+    - Bwd -> Backward
     - Cfg -> Config
     - Chg -> Change
     - Chk -> Check
-    - Cmp -> Comp // compiler
-    - Cmp -> Compare //StrCmp->StrCompare, etc
+    - Cmp -> Comp
+      - (Compiler. CCmpCtrl->CCompCtrl, etc)
+    - Cmp -> Compare
+      - (StrCmp->StrCompare, etc)
     - Cnt -> Count
     - Cpy -> Copy
     - Dbg -> Debug
