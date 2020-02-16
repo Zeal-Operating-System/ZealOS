@@ -236,9 +236,9 @@ public _extern SYS_PROGRESSES
 #help_index "MultiCore"
 #help_file "::/Doc/MultiCore"
 public _extern SYS_CPU_STRUCTS CCPU *cpu_structs; //$LK,"Gs",A="MN:Gs"$ points to cur $LK,"CCPU",A="MN:CCPU"$.
-public _extern SYS_MP_CNT I64 mp_count; //Count of cores
-_extern SYS_MP_CNT_INITIAL I64 mp_count_initial; //only used during $LK,"Core0StartMP",A="MN:Core0StartMP"$
-_extern SYS_MP_CNT_LOCK I64 mp_count_lock;
+public _extern SYS_MP_COUNT I64 mp_count; //Count of cores
+_extern SYS_MP_COUNT_INITIAL I64 mp_count_initial; //only used during $LK,"Core0StartMP",A="MN:Core0StartMP"$
+_extern SYS_MP_COUNT_LOCK I64 mp_count_lock;
 _extern SYS_SEMAS CSema sys_semas[SEMA_SEMAS_NUM];
 
 #help_index "MultiCore;Processor"
@@ -253,8 +253,8 @@ public _intern IC_GET_RAX I64 GetRAX(); //Get RAX register value.
 public _intern IC_GET_RBP U8 *GetRBP(); //Get RBP register value.
 public _intern IC_GET_RFLAGS I64 GetRFlags(); //Get RFlags register value.
 public _intern IC_GET_RSP U8 *GetRSP(); //Get RSP register value.
-public _intern IC_POP I64 Pop(); //Pop value from stk.
-public _intern IC_PUSH U0 Push(I64 d); //Push value on stk.
+public _intern IC_POP I64 Pop(); //Pop value from stack.
+public _intern IC_PUSH U0 Push(I64 d); //Push value on stack.
 public _intern IC_SET_RAX U0 SetRAX(I64 d); //Set RAX register value.
 public _intern IC_SET_RBP U0 SetRBP(U8 *d); //Set RBP register value.
 public _intern IC_SET_RFLAGS U0 SetRFlags(I64 d); //Set RFlags register value.

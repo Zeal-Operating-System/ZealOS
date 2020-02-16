@@ -18,16 +18,16 @@ U0 DrawIt(CTask *task,CDC *)
   TextPrint(task,0,1,ATTR>>8,"Solve maze starting at right click.");
 }
 
-#define STK_SIZE 2048
+#define STACK_SIZE 2048
 //We would put these as local vars
-//in SolveMaze() but the system stk size
+//in SolveMaze() but the system stack size
 //is limited, so it's a bad habit.The heap
 //is the normal ZenithOS technique, but
 //it's a pain in this case.
-I64	stk_ptr,
-	stk_x  [STK_SIZE],
-	stk_y  [STK_SIZE],
-	stk_dir[STK_SIZE];
+I64	stack_ptr,
+	stack_x  [STACK_SIZE],
+	stack_y  [STACK_SIZE],
+	stack_dir[STACK_SIZE];
 
 //Four directions:
 //  0=Up,1=right,2=down,3=left
@@ -37,10 +37,10 @@ I64	dir_x[4]={ 0,+1, 0,-1},  // Could use $LK,"gr_x_offsets2",A="MN:gr_x_offsets
 U0 SolveMaze(I64 x,I64 y)
 {
   I64 dir=0;
-  stk_ptr=0;
-  stk_x[stk_ptr]=x;
-  stk_y[stk_ptr]=y;
-  stk_dir[stk_ptr++]=dir;
+  stack_ptr=0;
+  stack_x[stack_ptr]=x;
+  stack_y[stack_ptr]=y;
+  stack_dir[stack_ptr++]=dir;
   while (TRUE) {
     if (!(0<=x<MinI64(Fs->win_width,TEXT_COLS)) ||
 	  !(0<=y<MinI64(Fs->win_height,TEXT_ROWS)) ) {
@@ -56,17 +56,17 @@ U0 SolveMaze(I64 x,I64 y)
       x-=dir_x[dir];
       y-=dir_y[dir];
       if (++dir==4) {
-	if (--stk_ptr<0) return;
-	x=stk_x[stk_ptr];
-	y=stk_y[stk_ptr];
-	dir=stk_dir[stk_ptr];
+	if (--stack_ptr<0) return;
+	x=stack_x[stack_ptr];
+	y=stack_y[stack_ptr];
+	dir=stack_dir[stack_ptr];
       }
     } else {
       dir=0;
-      stk_x[stk_ptr]=x;
-      stk_y[stk_ptr]=y;
-      stk_dir[stk_ptr++]=dir;
-      if (stk_ptr==STK_SIZE) return;
+      stack_x[stack_ptr]=x;
+      stack_y[stack_ptr]=y;
+      stack_dir[stack_ptr++]=dir;
+      if (stack_ptr==STACK_SIZE) return;
       Sleep(100);
       if (ScanChar)
 	throw;

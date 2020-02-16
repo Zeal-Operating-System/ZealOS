@@ -443,7 +443,7 @@ U0 ICAssignPostIncDec(CIntermediateCode *tmpi,I64 op,I64 rip)
     if (tmpi->res.type.mode)
       ICMov(tmpi,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
 	    tmpi->arg2.type,tmpi->arg2.reg,tmpi->arg2.disp,rip);
-    if (tmpc1->size!=1 || tmpi->arg1.type&MDF_STK)
+    if (tmpc1->size!=1 || tmpi->arg1.type&MDF_STACK)
       ICAddSubEctImm(tmpi,tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,
 	    MDF_REG+RT_I64,r,0,tmpc1->size,op.u16[3],rip);
     else

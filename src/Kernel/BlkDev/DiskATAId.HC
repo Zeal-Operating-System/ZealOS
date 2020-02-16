@@ -131,13 +131,13 @@ Bool ATARepExitAllApplications()
     return FALSE;
 }
 
-public I64 ATARep(Bool pmt=TRUE,Bool just_ide=FALSE,CATARep **_head=NULL)
+public I64 ATARep(Bool prompt=TRUE,Bool just_ide=FALSE,CATARep **_head=NULL)
 {//Report possible ATA devices by probing.  Hard disks and CD/DVDs.
   I64 d1,d2,i,j,k,count=0,unlock_flags=0,num_hints=0;
 #assert BLKDEVS_NUM<=64
   if (_head) *_head=NULL;
 
-  if (pmt && ATARepExitAllApplications)
+  if (prompt && ATARepExitAllApplications)
     return 0;
 
   for (i=0;i<BLKDEVS_NUM;i++)

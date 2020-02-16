@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
-* You can enter the debugger with $LK,"Debug",A="MN:Debug"$() or $FG,2$<CTRL-ALT-d>$FG$.  You might enter the debugger through a fault.  Enter $LK,"G",A="MN:G"$() or $LK,"G2",A="MN:G2"$() to continue execution.  Place a call to $LK,"Debug",A="MN:Debug"$() in your code at fatal error points to enter the debugger.  If you see a stk dump, record the label+offset and unassemble, $LK,"U",A="MN:U"$(). $LK,"U",A="MN:U"$($LK,"_RIP",A="MN:_RIP"$); 
+* You can enter the debugger with $LK,"Debug",A="MN:Debug"$() or $FG,2$<CTRL-ALT-d>$FG$.  You might enter the debugger through a fault.  Enter $LK,"G",A="MN:G"$() or $LK,"G2",A="MN:G2"$() to continue execution.  Place a call to $LK,"Debug",A="MN:Debug"$() in your code at fatal error points to enter the debugger.  If you see a stack dump, record the label+offset and unassemble, $LK,"U",A="MN:U"$(). $LK,"U",A="MN:U"$($LK,"_RIP",A="MN:_RIP"$); 
 
 * $LK,"U",A="MN:U"$(&FunName+offset) to unassemble mem or $LK,"Uf",A="MN:Uf"$("FunName") to unassemble a function. $LK,"U",A="MN:U"$($LK,"_RIP",A="MN:_RIP"$-16);
 
@@ -14,7 +14,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * $LK,"Dm",A="MN:Dm"$(), $LK,"DocDm",A="MN:DocDm"$(), $LK,"RawDm",A="MN:RawDm"$() to do 16 column hex dump mem with addresses showing.
 
-* $LK,"Da",A="MN:Da"$() to do one column address dump (for stk, etc.) with symbolic addresses.
+* $LK,"Da",A="MN:Da"$() to do one column address dump (for stack, etc.) with symbolic addresses.
 
 * $LK,"Dr",A="MN:Dr"$() dumps regs.  You can display and modify regs in the debugger with var-like labels, $FG,4$_RAX$FG$, $FG,4$_RBX$FG$, etc.
 

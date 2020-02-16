@@ -1,18 +1,18 @@
 CLexFile *LexFilePush(CCompCtrl *cc)
 {//#include file push.
   CLexFile *res=CAlloc(sizeof(CLexFile));
-  if (res->next=cc->lex_include_stk)
+  if (res->next=cc->lex_include_stack)
     res->depth=res->next->depth+1;
   else
     res->depth=-1; //Include depth starts with -1.
-  return cc->lex_include_stk=res;
+  return cc->lex_include_stack=res;
 }
 
 CLexFile *LexFilePop(CCompCtrl *cc)
 {//#include file pop.
   CLexFile *tmpf;
-  if (tmpf=cc->lex_include_stk) {
-    if ((cc->lex_include_stk=tmpf->next) || !(cc->flags & CCF_DONT_FREE_BUF)) {
+  if (tmpf=cc->lex_include_stack) {
+    if ((cc->lex_include_stack=tmpf->next) || !(cc->flags & CCF_DONT_FREE_BUF)) {
       if (tmpf->flags & LFSF_DOC) {
 	if (tmpf->doc)
 	  DocDel(tmpf->doc);
@@ -22,7 +22,7 @@ CLexFile *LexFilePop(CCompCtrl *cc)
     Free(tmpf->full_name);
     Free(tmpf);
   }
-  return cc->lex_include_stk;
+  return cc->lex_include_stack;
 }
 
 CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
@@ -48,7 +48,7 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
     tmpf->full_name=FileNameAbs(filename);
   else
     tmpf->full_name=StrNew(blkdev.tmp_filename);
-  if (flags & CCF_PMT)
+  if (flags & CCF_PROMPT)
     buf=CAlloc(8);
   tmpf->buf=tmpf->buf_ptr=tmpf->line_start=cc->cur_buf_ptr=buf;
   tmpf->line_num=1;
@@ -58,7 +58,7 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
 U0 CompCtrlDel(CCompCtrl *cc)
 {//Free CCompCtrl.
   while (LexFilePop(cc));
-  LinkedListDel(cc->lex_prs_stk);
+  LinkedListDel(cc->lex_prs_stack);
   LinkedListDel(cc->htc.next);
   Free(cc->ps);
   Free(cc->cur_str);
@@ -69,7 +69,7 @@ U0 CompCtrlDel(CCompCtrl *cc)
 
 I64 CompCtrlSize(CCompCtrl *cc)
 {//Mem size of CCompCtrl and its members.
-  CLexFile *tmpf=cc->lex_include_stk;
+  CLexFile *tmpf=cc->lex_include_stack;
   I64 res=0;
   while (tmpf) {
     if (tmpf->next || !(cc->flags & CCF_DONT_FREE_BUF)) {
@@ -119,7 +119,7 @@ lgc_start1:
     switch [cc->last_U16=*src++] {
       case 0:
 lgc_here:
-	tmpf=cc->lex_include_stk;
+	tmpf=cc->lex_include_stack;
 	if (tmpf->flags & LFSF_DOC) {
 	  doc=tmpf->doc;
 	  doc_e=tmpf->cur_entry;
@@ -214,7 +214,7 @@ lgc_start2:
 	    goto lgc_start1;
 	  tmpf->cur_entry=doc->head.last; //When take next, will still be end.
 	}
-	tmpf=cc->lex_include_stk;
+	tmpf=cc->lex_include_stack;
 	if (tmpf->next) {
 	  tmpf=LexFilePop(cc);
 	  cc->cur_buf_ptr=tmpf->buf_ptr;
@@ -222,10 +222,10 @@ lgc_start2:
 	  if (!(cc->last_U16=tmpf->last_U16))
 	    goto lgc_start1;
 	} else {
-	  if (cc->flags & CCF_PMT) {
+	  if (cc->flags & CCF_PROMPT) {
 	    Free(tmpf->buf);
 	    ptr=CmdLinePrompt;
-	    if (StrCmp(ptr,"\n") && !cc->pmt_line++ && !StrCmp(ptr,"?\n") &&
+	    if (StrCmp(ptr,"\n") && !cc->prompt_line++ && !StrCmp(ptr,"?\n") &&
 		cc->flags & CCF_QUESTION_HELP) {
 	      Free(ptr);
 	      ptr=StrNew("Help;;\n");
@@ -242,7 +242,7 @@ lgc_start2:
       case CH_CURSOR:
 	goto lgc_start1;
       case '\n':
-	tmpf=cc->lex_include_stk;
+	tmpf=cc->lex_include_stack;
 	if (!(tmpf->flags & LFSF_DOC)) {
 	  tmpf->line_num++;
 	  cmp.compiled_lines++;
@@ -444,7 +444,7 @@ I64 Lex(CCompCtrl *cc)
   CHash *tmph;
   Bool str_done,in_str,neg_e;
   U8 *fbuf,*buf2,*buf3,buf[STR_LEN];
-  cc->last_line_num=cc->lex_include_stk->line_num;
+  cc->last_line_num=cc->lex_include_stack->line_num;
   while (TRUE) {
 lex_cont:
     switch [ch=LexGetChar(cc)] {
@@ -504,7 +504,7 @@ lex_ident:
 	if (j & HTT_DEFINE_STR && !(cc->flags & CCF_NO_DEFINES)) {
 	  LexIncludeStr(cc,
 		tmph->str,StrNew(tmph(CHashDefineStr *)->data),FALSE);
-	  cc->lex_include_stk->flags|=LFSF_DEFINE;
+	  cc->lex_include_stack->flags|=LFSF_DEFINE;
 	} else {
 	  cc->hash_entry=tmph;
 	  Free(cc->cur_str);

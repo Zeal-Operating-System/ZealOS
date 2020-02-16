@@ -147,7 +147,7 @@ I64 AsmLexExpression(CCompCtrl *cc)
 U0 AsmLineList(CCompCtrl *cc)
 {
   CAOTCtrl *aotc=cc->aotc;
-  CLexFile *tmpf=cc->lex_include_stk;
+  CLexFile *tmpf=cc->lex_include_stack;
   CDocEntry *doc_e=tmpf->line_start,*doc_e2;
   if (aotc->list && aotc->list_last_lfn==tmpf && doc_e) {
     if (doc_e2=aotc->list_last_line) {

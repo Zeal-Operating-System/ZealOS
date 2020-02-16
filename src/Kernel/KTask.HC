@@ -97,29 +97,29 @@ Bool IsSuspended(CTask *task=NULL)
     return FALSE;
 }
 
-CTaskStk *TaskStkNew(I64 stk_size,CTask *task)
+CTaskStack *TaskStackNew(I64 stack_size,CTask *task)
 {
-  CTaskStk *tmps=MAlloc(stk_size+offset(CTaskStk.stk_base),task);
-  tmps->next_stk=NULL;
-  tmps->stk_ptr=NULL;
-  tmps->stk_size=MSize(tmps)-offset(CTaskStk.stk_base);
+  CTaskStack *tmps=MAlloc(stack_size+offset(CTaskStack.stack_base),task);
+  tmps->next_stack=NULL;
+  tmps->stack_ptr=NULL;
+  tmps->stack_size=MSize(tmps)-offset(CTaskStack.stack_base);
   return tmps;
 }
 
 #exe {Option(OPTf_NO_REG_VAR,ON);};
-argpop I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
+argpop I64 CallStackGrow(I64 stack_size_threshold,I64 stack_size,
 			/*argpop*/I64 (*fp_addr)(...),...)
-{//Grow stk in call with any fixed num of args.
-//See $LK,"::/Demo/StkGrow.HC"$.
-  CTaskStk *tmps,*tmps2,**_stk;
-  I64 res,*rsp,*rsp2,*old_stk;
+{//Grow stack in call with any fixed num of args.
+//See $LK,"::/Demo/StackGrow.HC"$.
+  CTaskStack *tmps,*tmps2,**_stack;
+  I64 res,*rsp,*rsp2,*old_stack;
 
-  if (UnusedStk>=stk_size_threshold) {
+  if (UnusedStack>=stack_size_threshold) {
 
     asm {
       LEAVE
       POP	RAX	//return addr
-      ADD	RSP,16	//pop threshold,stk_size
+      ADD	RSP,16	//pop threshold,stack_size
       POP	RBX	// *f
       ADD	RSP,8	//pop ARGC
       PUSH	RAX
@@ -128,14 +128,14 @@ argpop I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
 
   } else {
 
-    tmps2=TaskStkNew(stk_size,Fs);
-    tmps2->next_stk=tmps=Fs->stk;
-    rsp2=(&tmps2->stk_base)(U8 *)+tmps2->stk_size;
-    old_stk=rsp=&argv[argc];
+    tmps2=TaskStackNew(stack_size,Fs);
+    tmps2->next_stack=tmps=Fs->stack;
+    rsp2=(&tmps2->stack_base)(U8 *)+tmps2->stack_size;
+    old_stack=rsp=&argv[argc];
     while (argc-->0)
       *--rsp2=*--rsp;
-    _stk=&Fs->stk;
-    tmps->stk_ptr=rsp=GetRSP;
+    _stack=&Fs->stack;
+    tmps->stack_ptr=rsp=GetRSP;
     asm {
       IMPORT	_FREE;	//We are in a function, not at glbl scope.
 //The compiler treats these in isolation.
@@ -144,8 +144,8 @@ argpop I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
       POP	RDX	//flags
       CLI
       MOV	RBX,U64 &tmps2[RBP]
-      MOV	RAX,&_stk[RBP]
-      MOV	U64 [RAX],RBX	//Fs->stk=tmps2
+      MOV	RAX,&_stack[RBP]
+      MOV	U64 [RAX],RBX	//Fs->stack=tmps2
       MOV	RSP,U64 &rsp2[RBP]
       PUSH	RDX
       POPFD
@@ -157,8 +157,8 @@ argpop I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
       POP	RDX	//flags
       CLI
       MOV	RBX,U64 &tmps[RBP]
-      MOV	RAX,&_stk[RBP]
-      MOV	U64 [RAX],RBX	//Fs->stk=tmps
+      MOV	RAX,&_stack[RBP]
+      MOV	U64 [RAX],RBX	//Fs->stack=tmps
       MOV	RSP,U64 &rsp[RBP]
       PUSH	RDX
       POPFD
@@ -166,7 +166,7 @@ argpop I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
       PUSH	U64 &tmps2[RBP]
       CALL	_FREE
 
-      MOV	RDX,U64 &old_stk[RBP]
+      MOV	RDX,U64 &old_stack[RBP]
       MOV	RBX,U64 8[RBP]
       MOV	RAX,U64 &res[RBP]
       MOV	RBP,U64 [RBP]
@@ -179,9 +179,9 @@ argpop I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
 ;
 #exe {Option(OPTf_NO_REG_VAR,OFF);};
 
-I64 TaskInit(CTask *task,I64 stk_size)
+I64 TaskInit(CTask *task,I64 stack_size)
 {//Returns Fs of task
-  CTaskStk *tmps;
+  CTaskStack *tmps;
 
   QueueInit(&task->code_heap->next_mem_blk);
   task->code_heap->last_mergable=NULL;
@@ -214,10 +214,10 @@ I64 TaskInit(CTask *task,I64 stk_size)
 
   task->hash_table=HashTableNew(TASK_HASH_TABLE_SIZE,task);
 
-  if (!stk_size)
-    stk_size=MEM_DEFAULT_STK;
-  task->stk=tmps=TaskStkNew(stk_size,task);
-  task->rsp=(&tmps->stk_base)(U8 *)+tmps->stk_size;
+  if (!stack_size)
+    stack_size=MEM_DEFAULT_STACK;
+  task->stack=tmps=TaskStackNew(stack_size,task);
+  task->rsp=(&tmps->stack_base)(U8 *)+tmps->stack_size;
 
   task->text_attr	=WHITE<<4+BLUE;
   task->border_src	=BDS_CONST;
@@ -242,7 +242,7 @@ I64 TaskInit(CTask *task,I64 stk_size)
 CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
 	I64 target_cpu=-1,	//-1 for current CPU. See $LK,"multi-core",A="FI:::/Demo/MultiCore/LoadTest.HC"$.
 	CTask *parent=NULL,	//NULL means zenith
-	I64 stk_size=0,		//0=default
+	I64 stack_size=0,		//0=default
 	I64 flags=1<<JOBf_ADD_TO_QUE)
 {//Create task on core running at address.
 //Alloc $LK,"CTask",A="MN:CTask"$ structure from code heap so addr will be short.
@@ -250,7 +250,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
   CTask *task;
   if (target_cpu>=0)
     return SpawnQueue(fp_start_addr,data,task_name,target_cpu,
-	  parent,stk_size,flags);
+	  parent,stack_size,flags);
   task=CAlloc(sizeof(CTask),zenith_task->code_heap);
   task->task_signature=TASK_SIGNATURE_VAL;
   if (!task_name) task_name="Unnamed Task";
@@ -263,7 +263,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
     task->data_heap=HeapCtrlInit(,task,sys_data_bp);
   else
     task->data_heap=task->code_heap;
-  TaskInit(task,stk_size);
+  TaskInit(task,stack_size);
   task->rip=fp_start_addr;
   task->rsp(U8 *)-=8;
   *task->rsp=data;
@@ -313,9 +313,9 @@ I64 ExeCmdLine(CCompCtrl *cc)
     if (Fs->title_src==TTS_CUR_LEX) {
       ptr2=&Fs->task_title;
       ptr3=ptr2+STR_LEN-1;
-      if (cc->lex_include_stk->flags & LFSF_DOC) {
-	doc_e=cc->lex_include_stk->cur_entry;
-	doc=cc->lex_include_stk->doc;
+      if (cc->lex_include_stack->flags & LFSF_DOC) {
+	doc_e=cc->lex_include_stack->cur_entry;
+	doc=cc->lex_include_stack->doc;
 	while (doc_e!=doc && ptr2<ptr3) {
 	  switch (doc_e->type_u8) {
 	    case DOCT_TEXT:
@@ -332,7 +332,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
 	}
 	if (ptr2<ptr3) *ptr2=0;
       } else
-	if ((ptr=cc->lex_include_stk->line_start) && *ptr)
+	if ((ptr=cc->lex_include_stack->line_start) && *ptr)
 	  MemCpy(ptr2,ptr,STR_LEN-1);
     }
     cc->flags&=~CCF_HAS_MISC_DATA;
@@ -345,7 +345,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
 	Fs->answer_type=type;
 	Fs->answer_time=tS-t0;
 	Fs->new_answer=TRUE;
-	cc->pmt_line=0;
+	cc->prompt_line=0;
       }
       if (!(cc->flags&CCF_HAS_MISC_DATA))
 	Free(machine_code);
@@ -387,12 +387,12 @@ U0 UserTaskCont()
   CDoc *doc;
   Bool cont=TRUE;
   do {
-    cc=CompCtrlNew(,CCF_CMD_LINE|CCF_PMT|CCF_QUESTION_HELP);
+    cc=CompCtrlNew(,CCF_CMD_LINE|CCF_PROMPT|CCF_QUESTION_HELP);
     QueueInsert(cc,Fs->last_cc);
     try {
       Lex(cc);
       ExeCmdLine(cc);
-      cont=Bt(&cc->flags,CCf_PMT);
+      cont=Bt(&cc->flags,CCf_PROMPT);
       QueueRemove(cc);
       CompCtrlDel(cc);
     } catch {

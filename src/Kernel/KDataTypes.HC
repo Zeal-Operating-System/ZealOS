@@ -113,7 +113,7 @@ U0 QueueVectU8Put(CQueueVectU8 *v,I64 idx,U8 ch)
 
   while (TRUE) {
     tmpv=v->last;
-    if (tmpv->node_count>=QUE_VECT_U8_CNT) {
+    if (tmpv->node_count>=QUE_VECT_U8_COUNT) {
       tmpv=MAlloc(sizeof(CQueueVectU8));
       tmpv->node_count=0;
       QueueInsert(tmpv,v->last);

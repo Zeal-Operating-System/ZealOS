@@ -1673,7 +1673,7 @@ U0 OSTestSuite()
   TS("MenuSprite");DoMenuSprite;
   TS("SuggestedSpelling"); DoSuggestedSpelling;
   TS("WordSearch");	TSFileChar("::/Demo/WordSearch");
-  TS("StkGrow");	TSFile("::/Demo/StkGrow");
+  TS("StackGrow");	TSFile("::/Demo/StackGrow");
   TS("MemDemo");	TSFile("::/Demo/MemDemo");
   TS("WaterFowl");	TSFileChar("::/Demo/Sound/WaterFowl");
   TS("AsmHelloWorld");	TSFile("::/Demo/Asm/AsmHelloWorld");

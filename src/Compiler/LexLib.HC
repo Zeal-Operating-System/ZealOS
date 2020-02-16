@@ -1,6 +1,6 @@
 U0 LexBackupLastChar(CCompCtrl *cc)
 {
-  CLexFile *tmpf=cc->lex_include_stk;
+  CLexFile *tmpf=cc->lex_include_stack;
   tmpf->buf_ptr=cc->cur_buf_ptr;
   if (cc->flags & CCF_USE_LAST_U16) {
     tmpf->last_U16=cc->last_U16;
@@ -13,32 +13,32 @@ U0 LexPush(CCompCtrl *cc)
 {//Create token-stream save point.
   CLexFile *tmpf;
   LexBackupLastChar(cc);
-  if (cc->lex_include_stk->last_U16)
+  if (cc->lex_include_stack->last_U16)
     cc->flags|=CCF_USE_LAST_U16;
-  tmpf=MAllocIdent(cc->lex_include_stk);
-  tmpf->next=cc->lex_prs_stk;
-  cc->lex_prs_stk=tmpf;
+  tmpf=MAllocIdent(cc->lex_include_stack);
+  tmpf->next=cc->lex_prs_stack;
+  cc->lex_prs_stack=tmpf;
 }
 
 U0 LexPopRestore(CCompCtrl *cc)
 {//Restore token-stream saved-point.
 //Bad things can happen if you cross an #include file boundary.
-  CLexFile *tmpf=cc->lex_prs_stk;
+  CLexFile *tmpf=cc->lex_prs_stack;
   cc->cur_buf_ptr=tmpf->buf_ptr;
   if (cc->last_U16=tmpf->last_U16)
     cc->flags|=CCF_USE_LAST_U16;
   else
     cc->flags&=~CCF_USE_LAST_U16;
-  MemCpy(cc->lex_include_stk(U8 *)+sizeof(U8 *),tmpf(U8 *)+sizeof(U8 *),
+  MemCpy(cc->lex_include_stack(U8 *)+sizeof(U8 *),tmpf(U8 *)+sizeof(U8 *),
 	sizeof(CLexFile)-sizeof(U8 *));
-  cc->lex_prs_stk=tmpf->next;
+  cc->lex_prs_stack=tmpf->next;
   Free(tmpf);
 }
 
 U0 LexPopNoRestore(CCompCtrl *cc)
 {//Don't restore token-stream saved-point.
-  CLexFile *tmpf=cc->lex_prs_stk;
-  cc->lex_prs_stk=tmpf->next;
+  CLexFile *tmpf=cc->lex_prs_stack;
+  cc->lex_prs_stack=tmpf->next;
   Free(tmpf);
 }
 

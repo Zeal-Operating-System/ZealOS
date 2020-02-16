@@ -7,14 +7,14 @@ if you misuse it and it will crash.
 $LK,"U",A="MN:U"$() to see what code was generated.
 */
 
-#define CNT	0x1000000
+#define COUNT	0x1000000
 
 I64 glbl;
 
 U0 MPUnlockedInc(I64)
 {
   I64 i;
-  for (i=0;i<CNT;i++)
+  for (i=0;i<COUNT;i++)
     glbl++;
 }
 
@@ -26,13 +26,13 @@ U0 UnlockedInc()
   tmpm1=JobQueue(&MPUnlockedInc,NULL,1,0);
   JobResGet(tmpm0);
   JobResGet(tmpm1);
-  "Correct Count:%X Actual Count:%X\n",CNT*2,glbl;
+  "Correct Count:%X Actual Count:%X\n",COUNT*2,glbl;
 }
 
 U0 MPLockedInc(I64)
 {
   I64 i;
-  for (i=0;i<CNT;i++)
+  for (i=0;i<COUNT;i++)
     lock  //Can be used without {}
 	  glbl++;
 }
@@ -45,7 +45,7 @@ U0 LockedInc()
   tmpm1=JobQueue(&MPLockedInc,NULL,1,0);
   JobResGet(tmpm0);
   JobResGet(tmpm1);
-  "Correct Count:%X Actual Count:%X\n",CNT*2,glbl;
+  "Correct Count:%X Actual Count:%X\n",COUNT*2,glbl;
 }
 
 UnlockedInc;

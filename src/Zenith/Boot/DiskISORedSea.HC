@@ -33,11 +33,11 @@ U0 RedSeaISO9660Stage1(U8 *iso_filename,U8 *stage2_filename)
   if (FileFind(stage2_filename,&de) && (out_file=FOpen(iso_filename,"wc+"))) {
     MemCpy(stage1_buf,BDVD_START,BDVD_END-BDVD_START);
     *(BDVD_BLK_LO	-BDVD_START+stage1_buf)(U32 *)=de.clus>>2;
-    *(BDVD_BLK_CNT	-BDVD_START+stage1_buf)(U16 *)=
+    *(BDVD_BLK_COUNT	-BDVD_START+stage1_buf)(U16 *)=
 	  (de.size+DVD_BLK_SIZE-1)>>(BLK_SIZE_BITS+2);
     *(BDVD_SHIFT_BLKS	-BDVD_START+stage1_buf)(U16 *)=de.clus&3;
     if (de.clus&3)
-      *(BDVD_BLK_CNT	-BDVD_START+stage1_buf)(U16 *)+=1;
+      *(BDVD_BLK_COUNT	-BDVD_START+stage1_buf)(U16 *)+=1;
     FBlkWrite(out_file,stage1_buf,
 	  20<<2+1<<2,DVD_BOOT_LOADER_SIZE/BLK_SIZE);
     FClose(out_file);

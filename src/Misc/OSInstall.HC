@@ -173,7 +173,7 @@ U0 DoInstructions()
   XTalk(task, "Ed(\"::/Doc/Install.DD\");\n");
 }
 
-Bool DoInstall(Bool pmt_reboot)
+Bool DoInstall(Bool prompt_reboot)
 {
   I64 res=FALSE,vm_install;
   "\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox "
@@ -193,9 +193,9 @@ Bool DoInstall(Bool pmt_reboot)
       RegularInstallWiz();
       res=TRUE;
     } else
-      pmt_reboot=FALSE;
+      prompt_reboot=FALSE;
   }
-  if (pmt_reboot) {
+  if (prompt_reboot) {
     "Reboot Now ";
     if (YorN)
       Reboot;
@@ -203,10 +203,10 @@ Bool DoInstall(Bool pmt_reboot)
   return res;
 }
 
-Bool OSInstall(Bool pmt_reboot=TRUE)
+Bool OSInstall(Bool prompt_reboot=TRUE)
 {
   DoInstructions;
-  return DoInstall(pmt_reboot);
+  return DoInstall(prompt_reboot);
 }
 
 #if __CMD_LINE__

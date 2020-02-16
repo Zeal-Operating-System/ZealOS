@@ -9,13 +9,13 @@ fault, switches to ring 3, and generates
 a fault to switch back.
 */
 
-U8 *old_stk,*new_rip;
+U8 *old_stack,*new_rip;
 
 asm {
 INT_TO_RING0::	//Set to handle general protection 0xD fault temporarily.
 	INC	U64 [SYS_PROGRESS1]
-	PUSH	U32 CGDT.ds	//STKSEG
-	MOV	RAX,U64 [&old_stk]
+	PUSH	U32 CGDT.ds	//STACKSEG
+	MOV	RAX,U64 [&old_stack]
 	PUSH	RAX
 	PUSH	U32 0		//FLAGS--interrupts off
 	PUSH	U32 CGDT.cs64
@@ -36,7 +36,7 @@ U0 Ring3Demo()
   LTR	AX
 
   asm {
-    MOV	U64 [&old_stk],RSP
+    MOV	U64 [&old_stack],RSP
 
     LEA	RAX,[R3_CALLBACK]
     MOV	U64 [&new_rip],RAX
@@ -45,8 +45,8 @@ U0 Ring3Demo()
     MOV	DS,AX
     MOV	ES,AX
 
-    PUSH	U32 CGDT.ds_ring3+3	//STKSEG
-    PUSH	U64 [&old_stk]
+    PUSH	U32 CGDT.ds_ring3+3	//STACKSEG
+    PUSH	U64 [&old_stack]
     PUSH	U32 0		//FLAGS--interrupts off
     PUSH	U32 CGDT.cs64_ring3+3
     LEA	RAX,[R3_START]

@@ -15,7 +15,7 @@ class CTemplateCS
 CTemplateCS *CtrlSliderGet()
 {
   CTemplateCSSlider *tmps;
-  U8 *st,pmt[STR_LEN];
+  U8 *st,prompt[STR_LEN];
   CTemplateCS *res=CAlloc(sizeof(CTemplateCS));
 
   "$$PURPLE$$Ctrl Slider$$FG$$\n\n";
@@ -27,8 +27,8 @@ CTemplateCS *CtrlSliderGet()
 
   res->next_slider=res->last_slider=&res->next_slider;
   while (TRUE) {
-    StrPrint(pmt,"Slider #%d Name:",res->num_sliders+1);
-    st=GetStr(pmt);
+    StrPrint(prompt,"Slider #%d Name:",res->num_sliders+1);
+    st=GetStr(prompt);
     if (!*st) {
       Free(st);
       break;

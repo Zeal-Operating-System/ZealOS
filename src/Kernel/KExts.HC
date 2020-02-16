@@ -94,7 +94,7 @@ extern U0 RedSeaInit(CDrive *dv);
 extern Bool RedSeaValidate(U8 drv_let);
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
     U8 *task_name=NULL,I64 target_cpu,CTask *parent=NULL, //NULL means zenith
-    I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
+    I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 extern U8 *StrPrint(U8 *dst,U8 *fmt,...);
 extern U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags);
 extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
@@ -102,7 +102,7 @@ extern CJob *TaskMessage(CTask *_srv,CTask *master,
 	I64 message_code,I64 arg1,I64 arg2,I64 flags);
 extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 extern Bool TaskValidate(CTask *task);
-extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
+extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE);
 extern CTask *User(U8 *fmt=NULL,...);
 extern U0 UserTaskCont();
 extern U0 XTalk(CTask *task,U8 *fmt,...);

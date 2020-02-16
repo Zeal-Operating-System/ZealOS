@@ -329,7 +329,7 @@ U0 ICPush(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,I64 rip)
 	ICU8(tmpi,0x50+REG_RBX);
       }
       return;
-    case MDf_STK:
+    case MDf_STACK:
       return;
     case MDf_DISP:
     case MDf_SIB:
@@ -378,7 +378,7 @@ U0 ICPop(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,I64 rip)
       } else
 	ICSlashOp(tmpi,t1,r1,d1,SLASH_OP_POP,rip);
       break;
-    case MDf_STK:
+    case MDf_STACK:
     case MDf_IMM:
       ICU8(tmpi,0x58+REG_RBX);
       ICMov(tmpi,t1,r1,d1,MDF_REG+RT_I64,REG_RBX,0,rip);
@@ -503,7 +503,7 @@ U0 ICMov(CIntermediateCode *tmpi,
 	  ICU16(tmpi,i+r1<<8);
 	  ICU64(tmpi,d2);
 	}
-      } else if (t2&MDF_STK)
+      } else if (t2&MDF_STACK)
 	ICPop(tmpi,t1,r1,d1,rip);
       else {
 	if (r1==r2 && t2&MDF_REG)
@@ -537,7 +537,7 @@ U0 ICMov(CIntermediateCode *tmpi,
 	ICModr2(tmpi,i,,d2,rip);
       }
       break;
-    case MDf_STK:
+    case MDf_STACK:
       if (tmpi->ic_flags&ICF_PUSH_CMP)
 	ICPopRegs(tmpi,1<<REG_RBX);
       if (t1.raw_type<t2.raw_type)
@@ -575,7 +575,7 @@ U0 ICMov(CIntermediateCode *tmpi,
       break;
   }
 move_done:
-  if (!((t1|t2)&(MDF_STK|MDF_RIP_DISP32))) {
+  if (!((t1|t2)&(MDF_STACK|MDF_RIP_DISP32))) {
     tmpil1=tmpi;
     if (tmpi->ic_last_start<0 && (tmpil1=OptLag1(tmpi)) &&
 	  tmpil1->ic_last_start<0)
@@ -670,7 +670,7 @@ U0 ICLea(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,
       ICU24(tmpi,i.u8[2]<<16+0x8D00+i.u8[1]);
       ICModr2(tmpi,i,,d2,rip);
       break;
-    case MDf_STK:
+    case MDf_STACK:
       if (t2&MDF_RIP_DISP32) {
 	ICU8(tmpi,0x68);
 	ICU32(tmpi,d2);

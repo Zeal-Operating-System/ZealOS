@@ -9,7 +9,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
   COptMemberVar *mv=NULL;
   CAOT *tmpaot;
   CAOTImportExport *tmpie;
-  CPrsStk *ps=cc->ps;
+  CPrsStack *ps=cc->ps;
   ps->ptr=0;
   ps->ptr2=0;
 
@@ -29,8 +29,8 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
       if (0<=tmpm->reg<REG_REGS_NUM) {
 	if (Bts(&used_reg_mask,tmpm->reg))
 	  PrintWarn("Reg in use\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-		cc->lex_include_stk->full_name,
-		cc->lex_include_stk->line_num,tmpm->str,cc->htc.fun->str);
+		cc->lex_include_stack->full_name,
+		cc->lex_include_stack->line_num,tmpm->str,cc->htc.fun->str);
 	reg_offsets[tmpm->reg].offset=tmpm->offset;
 	reg_offsets[tmpm->reg].m=tmpm;
       } else if (tmpc->raw_type!=RT_F64 && tmpm->reg!=REG_NONE ||
@@ -42,8 +42,8 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	mv[member_count++].m=tmpm;
       } else if (tmpm->reg==REG_ALLOC)
 	PrintWarn("Can't reg var\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-	      cc->lex_include_stk->full_name,
-	      cc->lex_include_stk->line_num,tmpm->str,cc->htc.fun->str);
+	      cc->lex_include_stack->full_name,
+	      cc->lex_include_stack->line_num,tmpm->str,cc->htc.fun->str);
       tmpm=tmpm->next;
     }
   } else
@@ -73,8 +73,8 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	    tmpc2=cmp.internal_types[RT_I64];
 	  else
 	    tmpc2=tmpi->t.arg2_class;
-	  tmpi->arg2.type=MDF_STK+CompRawType(tmpc2);
-	  tmpi->ic_flags|=ICF_ARG2_WAS_STK;
+	  tmpi->arg2.type=MDF_STACK+CompRawType(tmpc2);
+	  tmpi->ic_flags|=ICF_ARG2_WAS_STACK;
 	case IS_1_ARG:
 	  tmpi1=ParsePop(ps);
 	  if (tmpi1->ic_flags&ICF_RES_TO_F64)
@@ -83,16 +83,16 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	    tmpc1=cmp.internal_types[RT_I64];
 	  else
 	    tmpc1=tmpi->t.arg1_class;
-	  tmpi->arg1.type=MDF_STK+CompRawType(tmpc1);
+	  tmpi->arg1.type=MDF_STACK+CompRawType(tmpc1);
 	  tmpi->arg1_type_pointed_to=CompRawTypePointed(tmpc1);
-	  tmpi->ic_flags|=ICF_ARG1_WAS_STK;
+	  tmpi->ic_flags|=ICF_ARG1_WAS_STACK;
 	  break;
 	case IS_0_ARG: //nobound switch
 	  break;
       }
       if (intermediate_code_table[code].res_count) {
-	tmpi->res.type=MDF_STK+CompRawType(tmpc);
-	tmpi->ic_flags|=ICF_RES_WAS_STK;
+	tmpi->res.type=MDF_STACK+CompRawType(tmpc);
+	tmpi->ic_flags|=ICF_RES_WAS_STACK;
 	ParsePush(ps,tmpi);
       }
       switch [code] {
@@ -547,8 +547,8 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 	} else {
 	  if (mv[i].m->reg==REG_ALLOC)
 	    PrintWarn("Can't reg var\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-		  cc->lex_include_stk->full_name,
-		  cc->lex_include_stk->line_num,mv[i].m->str,cc->htc.fun->str);
+		  cc->lex_include_stack->full_name,
+		  cc->lex_include_stack->line_num,mv[i].m->str,cc->htc.fun->str);
 	}
       }
       if (j>0) {
@@ -576,8 +576,8 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 		      tmpm->member_class->type&HTT_INTERNAL_TYPE)
 		  PrintWarn("Using 64-bit reg var.\n "
 			"$$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-			cc->lex_include_stk->full_name,
-			cc->lex_include_stk->line_num,
+			cc->lex_include_stack->full_name,
+			cc->lex_include_stack->line_num,
 			tmpm->str,cc->htc.fun->str);
 	      }
 	    }
@@ -604,8 +604,8 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 		    tmpm->member_class->type&HTT_INTERNAL_TYPE)
 		PrintWarn("Using 64-bit reg var.\n "
 		      "$$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-		      cc->lex_include_stk->full_name,
-		      cc->lex_include_stk->line_num,
+		      cc->lex_include_stack->full_name,
+		      cc->lex_include_stack->line_num,
 		      tmpm->str,cc->htc.fun->str);
 	    }
 	  }
@@ -615,7 +615,7 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
     Free(mv);
   }
   if (ps->ptr>2) {
-    "Pass:%d Stk:%08X\n",cc->pass,ps->ptr;
+    "Pass:%d Stack:%08X\n",cc->pass,ps->ptr;
     LexExcept(cc,"Compiler Optimization Error at ");
   }
 }

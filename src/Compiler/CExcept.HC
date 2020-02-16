@@ -24,8 +24,8 @@ U8 *LexPutLine(CCompCtrl *cc,U8 *start)
   I64 ch;
   U8 *ptr;
   if (!start) return NULL;
-  if (cc->lex_include_stk->flags&LFSF_DOC)
-    return DocPutLine(cc->lex_include_stk->doc,start);
+  if (cc->lex_include_stack->flags&LFSF_DOC)
+    return DocPutLine(cc->lex_include_stack->doc,start);
   else {
     ptr=start;
     while (ch=*ptr++) {
@@ -50,16 +50,16 @@ U8 *LexPutLine(CCompCtrl *cc,U8 *start)
 U0 LexPutPos(CCompCtrl *cc)
 {//Print token, line link and, then, $LK,"LexPutLine",A="MN:LexPutLine"$().
   LexPutToken(cc);
-  FixSet(cc->lex_include_stk->full_name,cc->lex_include_stk->line_num);
+  FixSet(cc->lex_include_stack->full_name,cc->lex_include_stack->line_num);
   if (IsRaw)
-    "%s,%d ",cc->lex_include_stk->full_name,cc->lex_include_stk->line_num;
+    "%s,%d ",cc->lex_include_stack->full_name,cc->lex_include_stack->line_num;
   else {
-    PutFileLink(cc->lex_include_stk->full_name,,cc->lex_include_stk->line_num);
+    PutFileLink(cc->lex_include_stack->full_name,,cc->lex_include_stack->line_num);
     ZenithErr("%s,%d\n",
-	  cc->lex_include_stk->full_name,cc->lex_include_stk->line_num);
+	  cc->lex_include_stack->full_name,cc->lex_include_stack->line_num);
     '' CH_SPACE;
   }
-  LexPutLine(cc,cc->lex_include_stk->line_start);
+  LexPutLine(cc,cc->lex_include_stack->line_start);
 }
 
 U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
@@ -110,7 +110,7 @@ U0 UnusedExternWarning(CCompCtrl *cc,CHashClass *tmpc)
 U0 ParenWarning(CCompCtrl *cc)
 {
   if (Bt(&cc->opts,OPTf_WARN_PAREN) &&
-	!(cc->lex_include_stk->flags&LFSF_DEFINE))
+	!(cc->lex_include_stack->flags&LFSF_DEFINE))
     LexWarn(cc,"Unnecessary parenthesis ");
 }
 
@@ -147,8 +147,8 @@ U0 ICArgPut(CICArg *a,I64 type_pointed_to)
     "%Z %Z ",a->type.raw_type,"ST_RAW_TYPES",
 	  Bsr(a->type>>8)+1,"ST_TY_TYPES";
   switch (Bsr(a->type)) {
-    case MDf_STK:
-      "STK";
+    case MDf_STACK:
+      "STACK";
       break;
     case MDf_IMM:
       "#%X",a->disp;

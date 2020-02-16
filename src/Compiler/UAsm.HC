@@ -583,7 +583,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
     case ARGT_STI:
       rip--;
       CatPrint(arg1_st,"%Z",*rip++ - tmpins->opcode[tmpins->opcode_count-1],
-	    "ST_FSTK_REGS");
+	    "ST_FSTACK_REGS");
       break;
   }
 
@@ -622,7 +622,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
     case ARGT_STI:
       rip--;
       CatPrint(arg2_st,"%Z",*rip++ -tmpins->opcode[tmpins->opcode_count-1],
-	    "ST_FSTK_REGS");
+	    "ST_FSTACK_REGS");
       break;
   }
   if (tmpins->flags&IEF_ENDING_ZERO)

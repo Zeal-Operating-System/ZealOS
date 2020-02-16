@@ -126,7 +126,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
 	"No Boot Loader Image\n";
       else {
 	Free(de.full_name);
-	*BMHD_BLK_CNT(U16 *)=(size+BLK_SIZE-1)>>BLK_SIZE_BITS;
+	*BMHD_BLK_COUNT(U16 *)=(size+BLK_SIZE-1)>>BLK_SIZE_BITS;
 	*BMHD_DAP_BLK(I64 *)=Clus2Blk(dv,de.clus);
 //Bypass partition bounds-checking
 	BlkDevLock(bd);

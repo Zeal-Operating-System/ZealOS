@@ -118,7 +118,7 @@ U0 SysDefinesLoad()
   DefineListLoad("ST_INT_NAMES","Divide Error\0SingleStep\0NMI\0Breakpoint\0"
 	"Overflow\0BOUND Range Exceeded\0Invalid Opcode\0No Math Coprocessor\0"
 	"Double Fault\0Coprocessor Segment Fault\0Invalid TASK\0"
-	"Segment Not Present\0Stk Segment Fault\0General Protection\0"
+	"Segment Not Present\0Stack Segment Fault\0General Protection\0"
 	"Page Fault\0\0Math Fault\0Alignment Check\0Machine Check\0"
 	"SIMD Exception\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
 	"\0\0\0\0\0\0\0\0\0\0\0MP Crash\0Wake\0Debug\0");

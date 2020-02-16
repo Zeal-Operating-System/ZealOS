@@ -77,7 +77,7 @@ I64 EdRILex(CRILex *rx)
       rx->is_not_cont=TRUE;
     if (rx->was_new_line && (rx->cc1->token!=':' || i==KW_CASE ||
 	  i==KW_DEFAULT || i==KW_START || i==KW_END)) {
-      tmpf=rx->cc2->lex_include_stk;
+      tmpf=rx->cc2->lex_include_stack;
       while (tmpf->next)
 	tmpf=tmpf->next;
       QueueVectU8Put(rx->indent,tmpf->cur_entry->y,rx->depth+rx->one_shot);
@@ -247,13 +247,13 @@ CQueueVectU8 *EdRICode(CDoc *doc)
   CRILex *rx=CAlloc(sizeof(CRILex));
 
   rx->cc1=CompCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
-  Free(rx->cc1->lex_include_stk->full_name);
-  LexAttachDoc(rx->cc1,rx->cc1->lex_include_stk,doc,,
+  Free(rx->cc1->lex_include_stack->full_name);
+  LexAttachDoc(rx->cc1,rx->cc1->lex_include_stack,doc,,
 	doc->cur_entry,doc->cur_col);
 
   rx->cc2=CompCtrlNew(,CCF_KEEP_NEW_LINES|CCF_DONT_FREE_BUF,doc->filename.name);
-  Free(rx->cc2->lex_include_stk->full_name);
-  LexAttachDoc(rx->cc2,rx->cc2->lex_include_stk,doc,,
+  Free(rx->cc2->lex_include_stack->full_name);
+  LexAttachDoc(rx->cc2,rx->cc2->lex_include_stack,doc,,
 	doc->cur_entry,doc->cur_col);
 
   rx->indent=QueueVectU8New(doc->cur_entry->y);

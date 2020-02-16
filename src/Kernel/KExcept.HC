@@ -53,7 +53,7 @@ U0 PutExcept(Bool catch_it=TRUE)
 
 #exe {Option(OPTf_NO_REG_VAR,ON);};
 
-class CTryStk
+class CTryStack
 {
   I64 rbp;
   I64 ret_rip;
@@ -67,7 +67,7 @@ U0 SysTry(U8 *catch_start,U8 *untry_start)
   CExcept *tmpt=MAlloc(sizeof(CExcept));
   tmpt->handler_catch=catch_start;
   tmpt->handler_untry=untry_start;
-  tmpt->rsp=rbp(U8 *)+sizeof(CTryStk);
+  tmpt->rsp=rbp(U8 *)+sizeof(CTryStack);
   tmpt->rbp=*rbp;
   tmpt->rflags=GetRFlags;
   SaveExceptRegs(tmpt);

@@ -14,7 +14,7 @@ public extern U8 *rev_bits_table,*set_bits_table;
 public extern U0 Reboot();
 
 #help_index "Call"
-public argpop extern I64 CallStkGrow(I64 stk_size_threshold,I64 stk_size,
+public argpop extern I64 CallStackGrow(I64 stack_size_threshold,I64 stack_size,
 	/*argpop*/I64 (*fp_addr)(...),...);
 //fp_addr can have any fixed number of arguments.
 
@@ -164,7 +164,7 @@ public extern U0	QueueVectU8Put(CQueueVectU8 *v,I64 idx,U8 ch);
 #help_index "Debugging"
 public extern U8 *Caller(I64 num=1);
 public extern Bool CheckCodePtr(U8 *ptr);
-public extern Bool CheckOnStk(U8 *ptr,CTask *task=NULL);
+public extern Bool CheckOnStack(U8 *ptr,CTask *task=NULL);
 public extern Bool CheckPtr(U8 *ptr);
 public extern Bool IsSingleUser();
 public extern Bool IsSysDebug();
@@ -172,7 +172,7 @@ public extern Bool SingleUser(Bool val);
 public extern Bool SysDebug(Bool val);
 public extern U8 *TaskCaller(CTask *task=NULL,
 	I64 num=0,Bool saved_context=FALSE);
-public extern I64 UnusedStk(CTask *task=NULL);
+public extern I64 UnusedStack(CTask *task=NULL);
 public extern CDebugGlobals dbg;
 
 #help_index "Debugging/Debugger"
@@ -202,7 +202,7 @@ public extern U0 D(U8 *addr,I64 count=0x80,Bool show_offset=TRUE);
 public extern U0 Da(U8 **addr,I64 count=0x10);
 public extern U0 Dm(U8 *addr,I64 count=0x80);
 public extern U0 Dr(CTask *task=NULL);
-public extern U0 StkRep(CTask *task=NULL);
+public extern U0 StackRep(CTask *task=NULL);
 extern I64 *TaskRegAddr(CTask *task,I64 reg_num);
 
 #help_index "Debugging/FunSeg"
@@ -632,7 +632,7 @@ public extern U0 MPNMInt();
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	U8 *task_name=NULL,I64 target_cpu,
 	CTask *parent=NULL, //NULL means zenith
-	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
+	I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "MultiCore;Boot"
 public extern U0 MPHalt();
@@ -656,7 +656,7 @@ public _extern SYS_PCI_SERVICES
 	U32 sys_pci_services;//Far call routine in the BIOS
 
 #help_index "PCI;Info;File/System;Devices"
-public extern I64 ATARep(Bool pmt=TRUE,
+public extern I64 ATARep(Bool prompt=TRUE,
 	Bool just_ide=FALSE,CATARep **_head=NULL);
 
 #help_index "Processor"
@@ -698,7 +698,7 @@ extern U0 TaskKillDying();
 public extern U0 TaskQueueIns(CTask *task,CTask *pred=NULL);
 public extern U0 TaskQueueRemove(CTask *task);
 public extern Bool TaskValidate(CTask *task);
-public extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE);
+public extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE);
 public extern CTask *User(U8 *fmt=NULL,...);
 public extern U0 UserCmdLine();
 public _extern _YIELD U0 Yield();
@@ -725,7 +725,7 @@ public extern U0 WinDerivedValsUpdate(CTask *task);
 public extern CTask *Spawn(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	U8 *task_name=NULL,I64 target_cpu=-1,	//-1 means current CPU
 	CTask *parent=NULL, //NULL means zenith
-	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
+	I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
 public extern CCountsGlobals counts;

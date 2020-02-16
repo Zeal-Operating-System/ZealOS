@@ -7,7 +7,7 @@
 asm {
 _BUZZ_FIZZ::
 	PUSH	RBP
-	MOV	RBP,RSP	//Always set-up stk frame.  (Stack Gets Traced)
+	MOV	RBP,RSP	//Always set-up stack frame.  (Stack Gets Traced)
 	PUSH	RSI	//See $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$ & $LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$
 	PUSH	RDI
 	MOV	RSI,FIZZ_SPAN-RANGE_START%FIZZ_SPAN+1

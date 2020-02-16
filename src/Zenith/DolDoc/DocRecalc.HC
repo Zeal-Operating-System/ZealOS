@@ -822,8 +822,8 @@ rc_adjust_xy:
 	if (doc_e!=added_cursor)
 	  del_doc_e=TRUE;
 	break;
-      case DOCT_PMT:
-	cur_u8_attr=cur_u8_attr&0xF0|DOC_COLOR_PMT;
+      case DOCT_PROMPT:
+	cur_u8_attr=cur_u8_attr&0xF0|DOC_COLOR_PROMPT;
 	if (y==cursor_y) {
 	  doc->cur_entry=doc_e->next;
 	  doc->cur_col=doc->cur_entry->min_col;

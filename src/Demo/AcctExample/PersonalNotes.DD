@@ -153,7 +153,7 @@ $FG,5$$TX+CX,"TODO: Too Hard, or Not Worth Doing."$$FG$
 
 * Log-to-file is inefficient because we load and save whole file.
 
-* $LK,"ICMov",A="MN:ICMov"$() $LK,"PUSH_CMP",A="FF:::/Compiler/BackLib.HC,PUSH_CMP"$ and $LK,"MDf_STK",A="MN:MDf_STK"$?  Perhaps, it's okay.
+* $LK,"ICMov",A="MN:ICMov"$() $LK,"PUSH_CMP",A="FF:::/Compiler/BackLib.HC,PUSH_CMP"$ and $LK,"MDf_STACK",A="MN:MDf_STACK"$?  Perhaps, it's okay.
 
 * Short FAT32 ~ names.
 
@@ -356,7 +356,7 @@ $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
 
 * More $LK,"Controls",A="MN:CCtrl"$?
 
-* Compiler: More use of more floating-point stk?
+* Compiler: More use of more floating-point stack?
 
 * Compiler: More aggressive in $LK,"CompF2PushPop",A="MN:CompF2PushPop"$() with types besides MOV and F64. 
 

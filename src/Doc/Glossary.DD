@@ -138,7 +138,7 @@ $FG,2$Src$FG$	Source
 $FG,2$Srv$FG$	Servant
 $FG,2$Stat$FG$	Status, Statistic
 $FG,2$Std$FG$	Standard
-$FG,2$Stk$FG$	Stack
+$FG,2$Stack$FG$	Stack
 $FG,2$Statement$FG$	Statement
 $FG,2$Str$FG$	String
 $FG,2$Sym$FG$	Symbol

@@ -217,7 +217,7 @@ U0 ICBrBitOps(CIntermediateCode *tmpi,I64 rip,
     if (tmpi->ic_flags&ICF_SWAP && !(arg2->type&MDF_REG) &&
 	  (!(arg2->type&MDF_IMM) ||arg2->disp>63)||
 	  !(tmpi->ic_flags&ICF_SWAP) && arg2->type&MDF_IMM &&
-	  arg2->disp<64 || arg2->type&MDF_STK) {
+	  arg2->disp<64 || arg2->type&MDF_STACK) {
       ICMov(tmpi,MDF_REG+RT_I64,REG_RCX,0,arg2->type,arg2->reg,arg2->disp,rip2);
       t2=MDF_REG+RT_I64;
       r2=REG_RCX;
@@ -233,7 +233,7 @@ U0 ICBrBitOps(CIntermediateCode *tmpi,I64 rip,
     if (!(tmpi->ic_flags&ICF_SWAP) && !(arg1->type&MDF_REG) &&
 	  (!(arg1->type&MDF_IMM) || arg1->disp>63) ||
 	  tmpi->ic_flags&ICF_SWAP && arg1->type&MDF_IMM &&
-	  arg1->disp<64 || arg1->type&MDF_STK) {
+	  arg1->disp<64 || arg1->type&MDF_STACK) {
       ICMov(tmpi,MDF_REG+RT_I64,REG_RDX,0,arg1->type,arg1->reg,arg1->disp,rip2);
       t1=MDF_REG+RT_I64;
       r1=REG_RDX;
@@ -539,7 +539,7 @@ U0 ICSwap(CIntermediateCode *tmpi,I64 rip2)
 U0 ICAndEqu(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 i,bit;
-  if (tmpi->arg2.type&MDF_IMM && !(tmpi->arg1.type&MDF_STK) &&
+  if (tmpi->arg2.type&MDF_IMM && !(tmpi->arg1.type&MDF_STACK) &&
 	tmpi->ic_flags&ICF_RES_NOT_USED) {
     i=~tmpi->arg2.disp;
     bit=Bsf(i);
@@ -560,7 +560,7 @@ U0 ICAndEqu(CIntermediateCode *tmpi,I64 rip2)
 U0 ICOrEqu(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 i,bit;
-  if (tmpi->arg2.type&MDF_IMM && !(tmpi->arg1.type&MDF_STK) &&
+  if (tmpi->arg2.type&MDF_IMM && !(tmpi->arg1.type&MDF_STACK) &&
 	tmpi->ic_flags&ICF_RES_NOT_USED) {
     i=tmpi->arg2.disp;
     bit=Bsf(i);
@@ -581,7 +581,7 @@ U0 ICOrEqu(CIntermediateCode *tmpi,I64 rip2)
 U0 ICXorEqu(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 i,bit;
-  if (tmpi->arg2.type&MDF_IMM && !(tmpi->arg1.type&MDF_STK) &&
+  if (tmpi->arg2.type&MDF_IMM && !(tmpi->arg1.type&MDF_STACK) &&
 	tmpi->ic_flags&ICF_RES_NOT_USED) {
     i=tmpi->arg2.disp;
     bit=Bsf(i);

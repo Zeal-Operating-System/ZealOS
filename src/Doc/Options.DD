@@ -14,6 +14,6 @@ $LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$	warning if dup local var t
 
 $LK,"OPTf_WARN_HEADER_MISMATCH",A="MN:OPTf_WARN_HEADER_MISMATCH"$ warning if fun header does not match.
 
-$LK,"OPTf_NO_REG_VAR",A="MN:OPTf_NO_REG_VAR"$ forces all function local vars to the stk not regs.  Applied to functions.
+$LK,"OPTf_NO_REG_VAR",A="MN:OPTf_NO_REG_VAR"$ forces all function local vars to the stack not regs.  Applied to functions.
 
 $LK,"OPTf_NO_BUILTIN_CONST",A="MN:OPTf_NO_BUILTIN_CONST"$ Disable 10-byte float consts for ã, log2_10, log10_2, loge_2.  Applied to functions.

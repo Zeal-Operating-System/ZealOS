@@ -218,7 +218,7 @@ I64 JobResGet(CJob *rqst=NULL)
   return res;
 }
 
-U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE)
+U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE)
 {//Wait for idle.
   CTask *task1;
   CJob *tmpc1;
@@ -231,7 +231,7 @@ U0 TaskWait(CTask *task=NULL,Bool cmd_line_pmt=FALSE)
       tmpc1=&task1->srv_ctrl.next_waiting;
       if (task1==Fs || !TaskValidate(task1) ||
 	    tmpc1==tmpc1->next && Bt(&task1->task_flags,TASKf_IDLE) &&
-	    (!cmd_line_pmt || Bt(&task1->task_flags,TASKf_CMD_LINE_PMT)))
+	    (!cmd_line_prompt || Bt(&task1->task_flags,TASKf_CMD_LINE_PROMPT)))
 	break;
       Yield;
     }

@@ -233,8 +233,8 @@ Bool IsKeeper(LogStruct *tmplg,CDate dstart,CDate dend)
 Bool IPNumTreeAdd(LogStruct **_head,LogStruct *tmplg)
 {
   LogStruct *head;
-  if (UnusedStk<0x200) {
-    PrintErr("Stk Overflow");
+  if (UnusedStack<0x200) {
+    PrintErr("Stack Overflow");
     throw;
   }
   if (head=*_head) {
@@ -256,8 +256,8 @@ U0 LinkTreeAdd(LinkStruct **_root,LogStruct *tmplg)
 {
   I64 i;
   LinkStruct *root,*tmplk;
-  if (UnusedStk<0x200) {
-    PrintErr("Stk Overflow");
+  if (UnusedStack<0x200) {
+    PrintErr("Stack Overflow");
     throw;
   }
   if (root=*_root) {
@@ -279,8 +279,8 @@ U0 FileTreeAdd(LinkStruct **_root,LogStruct *tmplg)
 {
   I64 i;
   LinkStruct *root,*tmplk;
-  if (UnusedStk<0x200) {
-    PrintErr("Stk Overflow");
+  if (UnusedStack<0x200) {
+    PrintErr("Stack Overflow");
     throw;
   }
   if (root=*_root) {

@@ -155,7 +155,7 @@ U0 ICAddSubEctImm(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,
 	return;
       }
       break;
-    case MDf_STK:
+    case MDf_STACK:
       ICAddSubEctImm(tmpi,MDF_REG+RT_I64,REG_RAX,0,t2,r2,d2,d,op,rip);
       ICPushRegs(tmpi,1<<REG_RAX);
       return;

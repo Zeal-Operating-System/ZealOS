@@ -137,8 +137,8 @@ I64 GrFloodFillRay(CDC *dc,I64 x,I64 y,I64 z,I32 *db)
 {
   I64 res,j,x1,ray_len,ray_len2;
 
-  if (UnusedStk<0x80)
-    Panic("Stk Overflow",Fs);
+  if (UnusedStack<0x80)
+    Panic("Stack Overflow",Fs);
 
   res=ray_len=GrRayLen(dc,&x,y,z,db);
   y--;

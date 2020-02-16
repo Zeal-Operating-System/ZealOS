@@ -431,7 +431,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 		doc_ce=doc->cur_entry=doc_ce->last;
 		if (doc_ce!=doc && doc_ce->type_u8==DOCT_SOFT_NEW_LINE)
 		  doc_ce=doc->cur_entry=doc_ce->last;
-		if (doc_ce==doc || doc_ce->type_u8==DOCT_PMT) {
+		if (doc_ce==doc || doc_ce->type_u8==DOCT_PROMPT) {
 		  doc_ce=doc->cur_entry=doc_ce->next;
 		  doc->cur_col=doc_ce->min_col;
 		} else {

@@ -32,7 +32,7 @@ I64 DiffEntriesCompare(CDocEntry *doc_e1,CDocEntry *doc_e2)
 #define DF_REMAINDER_ALL_FILE2		0x08
 #define DF_ABORT_FILE			0x10
 #define DF_ABORT_ALL_FILES		0x20
-#define DF_NO_MORE_PMTS_THIS_FILE	0x40
+#define DF_NO_MORE_PROMPTS_THIS_FILE	0x40
 
 U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
 	I64 j2_lo,I64 j2_hi,I64 count1,I64 count2,
@@ -89,7 +89,7 @@ U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
     "$$FG$$";
 
     use_file1=TRUE;
-    if (!(*_df_flags & DF_NO_MORE_PMTS_THIS_FILE)) {
+    if (!(*_df_flags & DF_NO_MORE_PROMPTS_THIS_FILE)) {
       switch (PopUpDiffMenu) {
 	case DS_USE_FILE1:
 	  break;
@@ -98,19 +98,19 @@ U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
 	  break;
 	case DS_REMAINDER_1:
 	  *_df_flags=*_df_flags&~DF_REMAINDER_ALL_FILE2|
-		DF_REMAINDER_ALL_FILE1|DF_NO_MORE_PMTS_THIS_FILE;
+		DF_REMAINDER_ALL_FILE1|DF_NO_MORE_PROMPTS_THIS_FILE;
 	  break;
 	case DS_REMAINDER_2:
 	  *_df_flags=*_df_flags&~DF_REMAINDER_ALL_FILE1|
-		DF_REMAINDER_ALL_FILE2|DF_NO_MORE_PMTS_THIS_FILE;
+		DF_REMAINDER_ALL_FILE2|DF_NO_MORE_PROMPTS_THIS_FILE;
 	  break;
 	case DS_ABORT_FILE:
 	  *_df_flags|=DF_DONT_MODIFIED|DF_ABORT_FILE|
-		DF_NO_MORE_PMTS_THIS_FILE;
+		DF_NO_MORE_PROMPTS_THIS_FILE;
 	  break;
 	default:
 	  *_df_flags|=DF_DONT_MODIFIED|DF_ABORT_ALL_FILES|
-		DF_NO_MORE_PMTS_THIS_FILE;
+		DF_NO_MORE_PROMPTS_THIS_FILE;
       }
     }
     if (*_df_flags & DF_REMAINDER_ALL_FILE2 &&

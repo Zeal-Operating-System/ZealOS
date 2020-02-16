@@ -22,13 +22,13 @@ I64 ScreenZoomTablesSize()
   return res;
 }
 
-I64 TaskStkSize(CTask *task)
+I64 TaskStackSize(CTask *task)
 {
-  CTaskStk *tmps=task->stk;
+  CTaskStack *tmps=task->stack;
   I64 res=0;
   while (tmps) {
     res+=MSize2(tmps);
-    tmps=tmps->next_stk;
+    tmps=tmps->next_stack;
   }
   return res;
 }
@@ -103,12 +103,12 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
   "$$ID,2$$Heap\t:%010X/%010X\n",TaskMemUsed(task,override_validate),
 	TaskMemAlloced(task,override_validate);
 
-  i=UnusedStk(task);
-  j=TaskStkSize(task);
-  if (0<=i<=task->stk->stk_size)
-    "Stk\t\t:%010X/%010X\n",j-i,j;
+  i=UnusedStack(task);
+  j=TaskStackSize(task);
+  if (0<=i<=task->stack->stack_size)
+    "Stack\t\t:%010X/%010X\n",j-i,j;
   else
-    "Stk\t\t:$$RED$$$$BK,1$$Overflow$$BK,0$$$$FG$$/%010X\n",j;
+    "Stack\t\t:$$RED$$$$BK,1$$Overflow$$BK,0$$$$FG$$/%010X\n",j;
 
   "HashTable\t:%010X\n",HashTableSize2(task->hash_table);
   "FPU\t\t:%010X\n",MSize2(task->fpu_mmx);

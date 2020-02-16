@@ -388,7 +388,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	  if (cc->htc.fun) {
 	    if (Bt(&cc->htc.fun->flags,Ff_INTERRUPT))
 	      ICPopRegs(tmpi,REGG_CLOBBERED|cc->htc.fun->used_reg_mask&
-		    (REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS|REGG_STK_TMP));
+		    (REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS|REGG_STACK_TMP));
 	    else
 	      ICPopRegs(tmpi,cc->htc.fun->used_reg_mask&
 		    (REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS));
@@ -702,7 +702,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	  if (cc->htc.fun) {
 	    if (Bt(&cc->htc.fun->flags,Ff_INTERRUPT))
 	      ICPushRegs(tmpi,REGG_CLOBBERED|cc->htc.fun->used_reg_mask&
-		    (REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS|REGG_STK_TMP));
+		    (REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS|REGG_STACK_TMP));
 	    else {
 	      if (sys_var_init_flag && i)
 		ICLocalVarInit(tmpi);

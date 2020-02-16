@@ -16,7 +16,7 @@ U0 CompComp()
 
 U0 MakeAll()
 {
-  CompComp;
+  CompComp;
   if (Comp("/Kernel/Kernel","Kernel",,':'))
     throw;
 }
@@ -46,7 +46,7 @@ public U0 BootHDIns(U8 drv_let=0)
 	  br.jump_and_nop[1]=offset(CFAT32Boot.code)-2;
 #assert offset(CFAT32Boot.code)>=offset(CRedSeaBoot.code)
 	  br.jump_and_nop[2]=OC_NOP;
-	  *BHD_BLK_CNT(U16 *)=(de.size+BLK_SIZE-1)>>BLK_SIZE_BITS;
+	  *BHD_BLK_COUNT(U16 *)=(de.size+BLK_SIZE-1)>>BLK_SIZE_BITS;
 	  *BHD_DAP_BLK(I64 *)=Clus2Blk(dv,de.clus);
 	  for (i=0;i<BHD_END-BHD_CODE;i++)
 	    br.code[i]=BHD_CODE(U8 *)[i];

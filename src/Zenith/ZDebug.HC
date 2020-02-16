@@ -245,7 +245,7 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
 	  "%08tX %s\n",tmpm->offset,tmpm->str;
 	tmpm=tmpm->next;
       }
-      "%08tX Stk Size\n",tmpf->size;
+      "%08tX Stack Size\n",tmpf->size;
     }
   }
 }

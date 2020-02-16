@@ -31,7 +31,7 @@ USE64
 	
 	BTS	U32 [SYS_RUN_LEVEL],RLf_16MEG_ZENITH_HEAP_CTRL
 
-	PUSH	MEM_ZENITH_STK
+	PUSH	MEM_ZENITH_STACK
 	PUSH	U32 SYS_FIXED_AREA+CSysFixedArea.zenith
 	CALL	&TaskInit
 	CALL	SET_FS_BASE
@@ -72,8 +72,8 @@ USE64
 
 //************************************
 SYS_RAM_REBOOT:: //This gets copied high.  $LK,"SYS_RAM_REBOOT",A="FF:::/Zenith/Boot/BootRAM.HC,SYS_RAM_REBOOT:2"$
-	PUSH	U32 CGDT.ds		//stk seg
-	PUSH	U32 BOOT_RAM_LIMIT	//stk
+	PUSH	U32 CGDT.ds		//stack seg
+	PUSH	U32 BOOT_RAM_LIMIT	//stack
 	PUSH	U32 0			//flags
 	PUSH	U32 CGDT.cs32
 	LEA	RAX,[@@10]

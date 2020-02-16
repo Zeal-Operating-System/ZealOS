@@ -38,7 +38,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
 	}
       }
     } else {
-      if (tmpi->arg1_type_pointed_to!=RT_F64 || arg1->type&MDF_STK) {
+      if (tmpi->arg1_type_pointed_to!=RT_F64 || arg1->type&MDF_STACK) {
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,arg2->type,
 	      arg2->reg,arg2->disp,rip);
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RDX,0,
@@ -141,7 +141,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
       t1=MDF_SIB+RT_I64; r1=REG_RSP+REG_RSP<<8; d1=0;
       rsp_size+=8;
     } else {
-      if (tmpi->arg1_type_pointed_to!=RT_F64 || arg1->type&MDF_STK) {
+      if (tmpi->arg1_type_pointed_to!=RT_F64 || arg1->type&MDF_STACK) {
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,arg2->type,
 	      arg2->reg,arg2->disp,rip);
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RCX,0,arg1->type,
@@ -274,7 +274,7 @@ U0 ICFCmpAndBranch(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip,
     }
   } else {
     if (alt) {
-      if (!(arg2->type&MDF_STK)) {
+      if (!(arg2->type&MDF_STACK)) {
 	if (tmpi->ic_flags&ICF_POP_CMP) {
 	  t1=MDF_SIB+RT_I64; r1=REG_RSP+REG_RSP<<8; d1=0;
 	  rsp_size+=8;
@@ -331,7 +331,7 @@ U0 ICFCmpAndBranch(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip,
 	t2=MDF_SIB+RT_I64; r2=REG_RSP+REG_RSP<<8; d2=0;
       }
     } else {
-      if (!(arg1->type&MDF_STK)) {
+      if (!(arg1->type&MDF_STACK)) {
 	if (arg2->type.raw_type>=RT_I64 && arg2->type&MDG_DISP_SIB_RIP) {
 	  t2=arg2->type;
 	  r2=arg2->reg;

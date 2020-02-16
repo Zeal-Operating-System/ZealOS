@@ -12,11 +12,11 @@
 #define PE_POP_ALL1		11
 #define PE_POP_ALL2		12
 
-CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stk_op,CHashClass *tmpc)
+CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stack_op,CHashClass *tmpc)
 {
   CIntermediateCode *tmpi=cc->coc.coc_head.last;
   Bool div_sizeof=FALSE;
-  switch (stk_op.u16[0]) {
+  switch (stack_op.u16[0]) {
     case IC_ADD:
       if (tmpc->ptr_stars_count && !tmpi->ic_class->ptr_stars_count &&
 	    tmpi->ic_class->raw_type!=RT_F64) {
@@ -45,8 +45,8 @@ CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stk_op,CHashClass *tmpc)
       }
       break;
   }
-  tmpi=ICAdd(cc,stk_op,0,tmpc);
-  if (stk_op.u8[3]&ECF_HAS_PUSH_CMP) {
+  tmpi=ICAdd(cc,stack_op,0,tmpc);
+  if (stack_op.u8[3]&ECF_HAS_PUSH_CMP) {
     tmpi->ic_flags|=ICF_POP_CMP;
     ICAdd(cc,IC_NOP1,0,cmp.internal_types[RT_I64]);
     ICAdd(cc,IC_AND_AND,0,cmp.internal_types[RT_I64],ICF_POP_CMP);
@@ -62,9 +62,9 @@ CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stk_op,CHashClass *tmpc)
   return tmpi;
 }
 
-U0 ParseExpression2(CCompCtrl *cc,I64 *_max_prec,CPrsStk *ps)
+U0 ParseExpression2(CCompCtrl *cc,I64 *_max_prec,CPrsStack *ps)
 {
-  I64 i,cur_op,stk_op,state,max_prec=PREC_NULL,unary_pre_prec,paren_prec,
+  I64 i,cur_op,stack_op,state,max_prec=PREC_NULL,unary_pre_prec,paren_prec,
 	unary_post_prec,left_prec=PREC_MAX;
   CIntermediateCode *tmpi;
   CHashClass *tmpc;
@@ -130,42 +130,42 @@ pe_check_binary_ops1:
 
       case PE_CHECK_BINARY_OPS2:
 pe_check_binary_ops2:
-	stk_op=ParsePop(ps);
+	stack_op=ParsePop(ps);
 	tmpc=ParsePop(ps);
-	if (!(0<stk_op.u8[2]<=PREC_UNARY_PRE+ASSOC_MASK))
+	if (!(0<stack_op.u8[2]<=PREC_UNARY_PRE+ASSOC_MASK))
 	  goto pe_do_binary_op;
 
       case PE_DO_UNARY_OP:
 	if (cur_op.u16[0]==IC_POWER &&
-	      stk_op.u16[0]==IC_UNARY_MINUS) {
+	      stack_op.u16[0]==IC_UNARY_MINUS) {
 	  Lex(cc); //skip ` op
 	  left_prec=cur_op.i8[2];
 	  ParsePush(ps,tmpc);
-	  ParsePush(ps,stk_op);
+	  ParsePush(ps,stack_op);
 	  ParsePush(ps,cc->coc.coc_head.last->ic_class);
 	  ParsePush(ps,cur_op);
 	  goto pe_unary_term1;
 	} else {
 	  tmpi=cc->coc.coc_head.last;
 	  tmpc=tmpi->ic_class;
-	  if (stk_op.u16[0]==IC_DEREF && tmpc->ptr_stars_count)
+	  if (stack_op.u16[0]==IC_DEREF && tmpc->ptr_stars_count)
 	    tmpc--;
-	  else if (stk_op.u16[0]==IC_ADDR) {
+	  else if (stack_op.u16[0]==IC_ADDR) {
 	    cc->abs_counts.c_addres++;
 	    if (intermediate_code_table[tmpi->ic_code].type==IST_DEREF)
 	      OptFree(tmpi);
 	    tmpc++;
 	  }
 	  tmpc=OptClassFwd(tmpc);
-	  if (stk_op)
-	    ICAdd(cc,stk_op,0,tmpc);
+	  if (stack_op)
+	    ICAdd(cc,stack_op,0,tmpc);
 	  goto pe_check_binary_ops2;
 	}
 
       case PE_DO_BINARY_OP:
 pe_do_binary_op:
 	ParsePush(ps,tmpc);
-	ParsePush(ps,stk_op);
+	ParsePush(ps,stack_op);
 	if (!cur_op)
 	  goto pe_pop_all1;
 
@@ -210,20 +210,20 @@ pe_do_binary_op:
 
       case PE_POP_HIGHER:
 pe_pop_higher:
-	stk_op=ParsePop(ps); //pop ops of higher prec
+	stack_op=ParsePop(ps); //pop ops of higher prec
 	tmpc=ParsePop(ps);
-	if (!stk_op)
+	if (!stack_op)
 	  goto pe_push_lower;
-	else if (cur_op.u8[2]&~ASSOC_MASK==stk_op.u8[2]&~ASSOC_MASK) {
+	else if (cur_op.u8[2]&~ASSOC_MASK==stack_op.u8[2]&~ASSOC_MASK) {
 	  if (cur_op.u8[2]&ASSOCF_RIGHT)
 	    goto pe_push_lower;
-	} else if (cur_op.u8[2]&~ASSOC_MASK<=stk_op.u8[2]&~ASSOC_MASK)
+	} else if (cur_op.u8[2]&~ASSOC_MASK<=stack_op.u8[2]&~ASSOC_MASK)
 	  goto pe_push_lower;
 
-	tmpi=ParseAddOp(cc,stk_op,tmpc);
+	tmpi=ParseAddOp(cc,stack_op,tmpc);
 
 	if (intermediate_code_table[cur_op.u16[0]].type==IST_CMP &&
-	      intermediate_code_table[stk_op.u16[0]].type==IST_CMP) {
+	      intermediate_code_table[stack_op.u16[0]].type==IST_CMP) {
 	  tmpi->ic_flags|=ICF_PUSH_CMP;
 	  ICAdd(cc,IC_NOP1,0,cmp.internal_types[RT_I64]);
 	  ICAdd(cc,IC_PUSH_CMP,0,tmpc);
@@ -235,7 +235,7 @@ pe_pop_higher:
       case PE_PUSH_LOWER:
 pe_push_lower:
 	ParsePush(ps,tmpc);
-	ParsePush(ps,stk_op);
+	ParsePush(ps,stack_op);
 	ParsePush(ps,cc->coc.coc_head.last->ic_class);
 	ParsePush(ps,cur_op);
 	goto pe_unary_term1;
@@ -248,11 +248,11 @@ pe_pop_all1:
 	  ParenWarning(cc);
       case PE_POP_ALL2:
 pe_pop_all2:
-	stk_op=ParsePop(ps);
+	stack_op=ParsePop(ps);
 	tmpc=ParsePop(ps);
-	if (!stk_op.u16[0])
+	if (!stack_op.u16[0])
 	  goto pe_done;
-	ParseAddOp(cc,stk_op,tmpc);
+	ParseAddOp(cc,stack_op,tmpc);
 	goto pe_pop_all2;
     }
   }
@@ -261,15 +261,15 @@ pe_done:
     *_max_prec=max_prec;
 }
 
-Bool ParseExpression(CCompCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL)
+Bool ParseExpression(CCompCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStack *_ps=NULL)
 {
   Bool res=TRUE;
   I64 old_flags=cc->flags;
-  CPrsStk *ps;
+  CPrsStack *ps;
   if (_ps)
     ps=_ps;
   else {
-    ps=MAlloc(sizeof(CPrsStk));
+    ps=MAlloc(sizeof(CPrsStack));
     ps->ptr=0;
     ps->ptr2=0;
   }
@@ -380,7 +380,7 @@ U0 ParseOffsetOf(CCompCtrl *cc)
   ICAdd(cc,IC_IMM_I64,i,cmp.internal_types[RT_I64]);
 }
 
-I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
+I64 ParseFunCall(CCompCtrl *cc,CPrsStack *ps,Bool indirect,CHashFun *tmpf)
 {
   I64 i,argc_count,default_val;
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
@@ -590,7 +590,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   return PE_UNARY_MODIFIERS;
 }
 
-I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberList **_local_var,
+I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStack *ps,CMemberList **_local_var,
 	CArrayDim **_tmpad,I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec)
 {
   I64 i,j;
@@ -732,7 +732,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberList **_local_var,
       else {
 	if (PREC_TERM>*max_prec)
 	  *max_prec=PREC_TERM;
-	if (cc->lex_include_stk->flags&LFSF_DEFINE)
+	if (cc->lex_include_stack->flags&LFSF_DEFINE)
 	  paren_warn=FALSE;
 	else
 	  paren_warn=TRUE;
@@ -957,7 +957,7 @@ pu_export_sys_sym:
   LexExcept(cc,"Missing expression at ");
 }
 
-I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberList **_local_var,
+I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStack *ps,CMemberList **_local_var,
 	CArrayDim **_tmpad,I64 *unary_post_prec)
 {
   CHashClass *tmpc,*tmpc1;

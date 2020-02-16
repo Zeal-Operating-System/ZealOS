@@ -62,7 +62,7 @@ TASK_CONTEXT_SAVE::
 	POP	U64 CTask.rsi[RSI]
 	MOV	U64 CTask.rax[RSI],RAX
 
-/*Divert the stk to the Task memory
+/*Divert the stack to the Task memory
 and push onto it and divert it back.
 It's a little faster.
 */
@@ -195,8 +195,8 @@ RESTORE_RSI_TASK2:
 	BTR	U32 GS:CCPU.cpu_flags[RAX],CPUf_RAN_A_TASK
 	JC	@@20	//Jmp if had chance for IRQ already
 	MOV	RAX,U64 GS:CCPU.idle_task[RAX]
-	MOV	RSP,U64 CTask.stk[RAX]
-	ADD	RSP,MEM_DEFAULT_STK+CTaskStk.stk_base	//Reset to top
+	MOV	RSP,U64 CTask.stack[RAX]
+	ADD	RSP,MEM_DEFAULT_STACK+CTaskStack.stack_base	//Reset to top
 	CALL	SET_FS_BASE
 	STI	//Restore idle task so we can unmask IRQs.
 	HLT

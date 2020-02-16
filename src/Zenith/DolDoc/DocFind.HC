@@ -386,11 +386,11 @@ I64 EdFindReplace(CDoc *doc)
   I64 cmd,i,j,plen,rlen,dlen,res=-1,sf_flags;
   U8 *src,*dst,*dst2;
   CDocEntry *doc_ce,*doc_e,*doc_marker=NULL;
-  if (doc->find_replace->pmt)
+  if (doc->find_replace->prompt)
     cmd=RSAC_REPLACE;
   else
     cmd=RSAC_ALL;
-  if (!doc->find_replace->pmt || DocForm(doc->find_replace)) {
+  if (!doc->find_replace->prompt || DocForm(doc->find_replace)) {
     res=0;
     unlock=DocLock(doc);
     if (doc->find_replace->match_case || doc->find_replace->local_var)
@@ -560,7 +560,7 @@ Bool sel=TRUE,Bool match_case=TRUE,Bool whole_labels=FALSE)
       doc->find_replace->scan_sel_text=sel;
       doc->find_replace->match_case=match_case;
       doc->find_replace->whole_labels=whole_labels;
-      doc->find_replace->pmt=FALSE;
+      doc->find_replace->prompt=FALSE;
       res=EdFindReplace(doc);
     }
   }

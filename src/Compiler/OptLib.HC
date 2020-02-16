@@ -22,10 +22,10 @@ U0 OptSetNOP1(CIntermediateCode *tmpi)
   tmpi->res.type =MDF_NULL+tmpi->res.type.raw_type;
 }
 
-U0 OptSetNOP2(CIntermediateCode *tmpi,I64 stk_delta=1)
+U0 OptSetNOP2(CIntermediateCode *tmpi,I64 stack_delta=1)
 {
   tmpi->ic_code=IC_NOP2;
-  tmpi->ic_data=stk_delta;
+  tmpi->ic_data=stack_delta;
   tmpi->arg1.type=MDF_NULL+tmpi->arg1.type.raw_type;
   tmpi->res.type =MDF_NULL+tmpi->res.type.raw_type;
 }

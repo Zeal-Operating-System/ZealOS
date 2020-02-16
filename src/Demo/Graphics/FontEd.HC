@@ -53,7 +53,7 @@ U0 DrawIt(CTask *task,CDC *dc)
     }
 }
 
-U0 FESave(Bool pmt)
+U0 FESave(Bool prompt)
 {
   U8 old_draw_it=Fs->draw_it;
   CDoc *doc=DocNew;
@@ -67,7 +67,7 @@ U0 FESave(Bool pmt)
     DocPrint(doc,"\n");
   }
   Fs->draw_it=NULL;
-  DocWrite(doc,pmt);
+  DocWrite(doc,prompt);
   Fs->draw_it=old_draw_it;
   DocDel(doc);
 }

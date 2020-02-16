@@ -376,7 +376,7 @@ U0 ICFOp(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
     }
   } else {
     if (alt) {
-      if (!(arg2->type&MDF_STK)) {
+      if (!(arg2->type&MDF_STACK)) {
 	if (arg1->type.raw_type>=RT_I64 && arg1->type&MDG_DISP_SIB_RIP) {
 	  t1=arg1->type;
 	  r1=arg1->reg;
@@ -424,7 +424,7 @@ U0 ICFOp(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
 	t2=MDF_SIB+RT_I64; r2=REG_RSP+REG_RSP<<8; d2=0;
       }
     } else {
-      if (!(arg1->type&MDF_STK)) {
+      if (!(arg1->type&MDF_STACK)) {
 	if (arg2->type.raw_type>=RT_I64 && arg2->type&MDG_DISP_SIB_RIP) {
 	  t2=arg2->type;
 	  r2=arg2->reg;

@@ -82,7 +82,7 @@ U0 StreamPrint(U8 *fmt,...)
 U0 StreamDir()
 {
   U8 *dirname;
-  if (dirname=DirFile(Fs->last_cc->lex_include_stk->full_name)) {
+  if (dirname=DirFile(Fs->last_cc->lex_include_stack->full_name)) {
     StreamPrint("\"%s\"",dirname);
     Free(dirname);
   }
@@ -148,9 +148,9 @@ U8 *CmdLinePrompt()
   if (IsDebugMode&&IsRaw)
     RawDr;
 
-  LBts(&Fs->task_flags,TASKf_CMD_LINE_PMT);
+  LBts(&Fs->task_flags,TASKf_CMD_LINE_PROMPT);
   st=GetStr(,,GSF_SHIFT_ESC_EXIT);
-  LBtr(&Fs->task_flags,TASKf_CMD_LINE_PMT);
+  LBtr(&Fs->task_flags,TASKf_CMD_LINE_PROMPT);
 
   i=StrLen(st);
   res=MAlloc(i+1+2);

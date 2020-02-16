@@ -153,7 +153,7 @@ CHashGeneric *HashGenericAdd(U8 *name,I64 type,
 
 U0 HashSrcFileSet(CCompCtrl *cc,CHashSrcSym *h,I64 line_num_offset=0)
 {//Set $LK,"CHashSrcSym",A="MN:CHashSrcSym"$ link and help_index by cur cc pos.
-  CLexFile *tmpf=cc->lex_include_stk;
+  CLexFile *tmpf=cc->lex_include_stack;
   I64 line_num=tmpf->line_num+line_num_offset;
   if (line_num<1) line_num=1;
   Free(h->src_link);

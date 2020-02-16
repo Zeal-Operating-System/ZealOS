@@ -73,7 +73,7 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 	      } else
 		Lex(cc); //skip ":"
 	      break;
-	    case REGT_FSTK:
+	    case REGT_FSTACK:
 	    case REGT_MM:
 	    case REGT_XMM:
 	      arg->size=8;
@@ -189,7 +189,7 @@ I64 AsmMakeArgMask(CCompCtrl *cc,CAsmArg *arg)
     }
     goto mm_done;
   }
-  if (arg->reg1_type==REGT_FSTK) {
+  if (arg->reg1_type==REGT_FSTACK) {
     if (arg->reg1)
       res=1<<ARGT_STI;
     else
@@ -278,7 +278,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
       if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I8+num2->imm_flag,
 	      aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-	      num2->num.glbl_asm_undef_hash,cc->lex_include_stk->line_num,
+	      num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
 	      U8_avail);
       else if (!num2->imm_flag && !(I8_MIN<=num2->num.i<=I8_MAX))
 	LexExcept(cc,"Branch out of range at ");
@@ -305,7 +305,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 	if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	  AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I16+num2->imm_flag,
 		aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-		num2->num.glbl_asm_undef_hash,cc->lex_include_stk->line_num,
+		num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
 		U8_avail);
 	else if (!num2->imm_flag && !(I16_MIN<=num2->num.i<=I16_MAX))
 	  LexExcept(cc,"Branch out of range at ");
@@ -332,7 +332,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 	if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	  AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I32+num2->imm_flag,
 		aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-		num2->num.glbl_asm_undef_hash,cc->lex_include_stk->line_num,
+		num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
 		U8_avail);
 	else if (!num2->imm_flag && !(I32_MIN<=num2->num.i<=I32_MAX))
 	  LexExcept(cc,"Branch out of range at ");
@@ -358,7 +358,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 	if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	  AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I64+num2->imm_flag,
 		aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-		num2->num.glbl_asm_undef_hash,cc->lex_include_stk->line_num,
+		num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
 		U8_avail);
 	if (num2->imm_flag) {
 	  if (num2->num.abs_counts.abs_addres&1) {
@@ -464,8 +464,8 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	  found_second_possible=TRUE;
 	  if (!aotc->arg1.size)
 	    PrintWarn("no size specified at %s,%04d\n",
-		  cc->lex_include_stk->full_name,
-		  cc->lex_include_stk->line_num-1);
+		  cc->lex_include_stack->full_name,
+		  cc->lex_include_stack->line_num-1);
 	}
 	if (tmpins->flags & IEF_PLUS_OPCODE) {
 	  if (tmpins->slash_val==SV_R_REG) {
@@ -475,7 +475,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	    if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
 	      cur.has_REX=TRUE;
 	  } else {//SV_I_REG
-	    if (tmpa1->reg1_type==REGT_FSTK)
+	    if (tmpa1->reg1_type==REGT_FSTACK)
 	      cur.last_opcode_U8+=tmpa1->reg1;
 	  }
 	}
@@ -574,8 +574,8 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	  found_second_possible=TRUE;
 	  if (!aotc->arg1.size && !aotc->arg2.size)
 	    PrintWarn("no size specified at %s,%04d\n",
-		  cc->lex_include_stk->full_name,
-		  cc->lex_include_stk->line_num-1);
+		  cc->lex_include_stack->full_name,
+		  cc->lex_include_stack->line_num-1);
 	}
 	if (tmpins->flags & IEF_PLUS_OPCODE) {
 	  if (tmpins->slash_val==SV_R_REG) {
@@ -593,9 +593,9 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 		cur.has_REX=TRUE;
 	    }
 	  } else {//SV_I_REG
-	    if (tmpa1->reg1_type==REGT_FSTK)
+	    if (tmpa1->reg1_type==REGT_FSTACK)
 	      cur.last_opcode_U8|=tmpa1->reg1;
-	    if (tmpa2->reg1_type==REGT_FSTK)
+	    if (tmpa2->reg1_type==REGT_FSTACK)
 	      cur.last_opcode_U8|=tmpa2->reg1;
 	  }
 	}

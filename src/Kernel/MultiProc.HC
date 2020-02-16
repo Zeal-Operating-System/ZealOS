@@ -35,14 +35,14 @@ AP_32BIT_INIT:
 	MOV	SS,AX
 
 @@05:	LOCK
-	BTS	U32 [SYS_MP_CNT_LOCK],0
+	BTS	U32 [SYS_MP_COUNT_LOCK],0
 	JC	@@05
 
-	MOV	ESI,U32 [SYS_MP_CNT_INITIAL]
+	MOV	ESI,U32 [SYS_MP_COUNT_INITIAL]
 	LOCK
-	INC	U32 [SYS_MP_CNT_INITIAL]
+	INC	U32 [SYS_MP_COUNT_INITIAL]
 	LOCK
-	BTR	U32 [SYS_MP_CNT_LOCK],0
+	BTR	U32 [SYS_MP_COUNT_LOCK],0
 
 	CMP	ESI,MP_PROCESSORS_NUM
 	JAE	I32 _SYS_HLT
@@ -50,7 +50,7 @@ AP_32BIT_INIT:
 	IMUL2	ESI,sizeof(CCPU)
 	ADD	ESI,U32 [SYS_CPU_STRUCTS]
 
-	LEA	ESP,U32 CCPU.start_stk+sizeof(CCPU.start_stk)[ESI]
+	LEA	ESP,U32 CCPU.start_stack+sizeof(CCPU.start_stack)[ESI]
 	PUSH	U32 RFLAGG_START
 	POPFD
 	PUSH	U32 0	//Return from next call will be 64-bit
@@ -80,11 +80,11 @@ CTSS *TSSNew(I64 cpu_num)
   tss->io_map_offset=offset(CTSS.io_map);
   MemSet(tss->io_map,0xFF,0x10000/8);
 
-  tss->st0=MAlloc(MEM_INTERRUPT_STK);
+  tss->st0=MAlloc(MEM_INTERRUPT_STACK);
   tss->rsp0=tss->st0(U8 *)+MSize(tss->st0);
-  tss->st1=MAlloc(MEM_INTERRUPT_STK);
+  tss->st1=MAlloc(MEM_INTERRUPT_STACK);
   tss->rsp1=tss->st1(U8 *)+MSize(tss->st1);
-  tss->st2=MAlloc(MEM_INTERRUPT_STK);
+  tss->st2=MAlloc(MEM_INTERRUPT_STACK);
   tss->rsp2=tss->st2(U8 *)+MSize(tss->st2);
 
   tss->tr      =offset(CGDT.tr)+cpu_num*16;
@@ -246,11 +246,11 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
 
 CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,U8 *task_name=NULL,
 	I64 target_cpu, CTask *parent=NULL, //NULL means zenith
-	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE)
+	I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE)
 {
   CTask *res;
   CJob *tmpc=JobQueue(fp_addr,data,target_cpu,
-	flags,JOBT_SPAWN_TASK,task_name,parent,stk_size);
+	flags,JOBT_SPAWN_TASK,task_name,parent,stack_size);
   CJobCtrl *ctrl;
 
   while (!Bt(&tmpc->flags,JOBf_DONE)) {
@@ -335,7 +335,7 @@ U0 Core0StartMP()
 
   for (i=1;i<my_mp_count;i++) {
     StrPrint(buf,"Seth Task CPU%02X",i);
-    task=Spawn(&CoreAPSethInit,NULL,buf,,,MEM_SETH_STK,0);
+    task=Spawn(&CoreAPSethInit,NULL,buf,,,MEM_SETH_STACK,0);
     task->rflags=RFLAGG_START;
 //$LK,"CTask",A="MN:CTask"$ alloced off this core's seth_task's heap (Which is Zenith)
     CPUStructInit(i,&cpu_structs[i],task);

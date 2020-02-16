@@ -171,10 +171,10 @@ U0 ArcExpandBuf(CArcCtrl *c)
   dst_ptr=c->dst_buf+c->dst_pos;
   dst_limit=c->dst_buf+c->dst_size;
 
-  while (dst_ptr<dst_limit && c->stk_ptr!=c->stk_base)
-    *dst_ptr++ = * -- c->stk_ptr;
+  while (dst_ptr<dst_limit && c->stack_ptr!=c->stack_base)
+    *dst_ptr++ = * -- c->stack_ptr;
 
-  if (c->stk_ptr==c->stk_base && dst_ptr<dst_limit) {
+  if (c->stack_ptr==c->stack_base && dst_ptr<dst_limit) {
     if (c->saved_basecode==U32_MAX) {
       lastcode=BFieldExtU32(c->src_buf,c->src_pos,
 	    c->next_bits_in_use);
@@ -189,15 +189,15 @@ U0 ArcExpandBuf(CArcCtrl *c)
 	    c->next_bits_in_use);
       c->src_pos+=c->next_bits_in_use;
       if (c->cur_entry==&c->compress[basecode]) {
-	*c->stk_ptr++=c->last_ch;
+	*c->stack_ptr++=c->last_ch;
 	code=lastcode;
       } else
 	code=basecode;
       while (code>=c->min_table_entry) {
-	*c->stk_ptr++=c->compress[code].ch;
+	*c->stack_ptr++=c->compress[code].ch;
 	code=c->compress[code].basecode;
       }
-      *c->stk_ptr++=code;
+      *c->stack_ptr++=code;
       c->last_ch=code;
 
       c->entry_used=TRUE;
@@ -209,8 +209,8 @@ U0 ArcExpandBuf(CArcCtrl *c)
       tmp1->next=tmp;
 
       ArcEntryGet(c);
-      while (dst_ptr<dst_limit && c->stk_ptr!=c->stk_base)
-	*dst_ptr++ = * -- c->stk_ptr;
+      while (dst_ptr<dst_limit && c->stack_ptr!=c->stack_base)
+	*dst_ptr++ = * -- c->stack_ptr;
       lastcode=basecode;
     }
     c->saved_basecode=lastcode;
@@ -223,8 +223,8 @@ CArcCtrl *ArcCtrlNew(Bool expand,I64 compression_type=CT_8_BIT)
   CArcCtrl *c;
   c=CAlloc(sizeof(CArcCtrl));
   if (expand) {
-    c->stk_base=MAlloc(1<<ARC_BITS_MAX);
-    c->stk_ptr=c->stk_base;
+    c->stack_base=MAlloc(1<<ARC_BITS_MAX);
+    c->stack_ptr=c->stack_base;
   }
   if (compression_type==CT_7_BIT)
     c->min_bits=7;
@@ -243,7 +243,7 @@ CArcCtrl *ArcCtrlNew(Bool expand,I64 compression_type=CT_8_BIT)
 
 U0 ArcCtrlDel(CArcCtrl *c)
 {//Free archive ctrl struct.
-  Free(c->stk_base);
+  Free(c->stack_base);
   Free(c);
 }
 

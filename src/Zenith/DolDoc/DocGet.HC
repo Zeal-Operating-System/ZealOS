@@ -134,7 +134,7 @@ U8 *DocGetStr2(I64 flags=0)
   if (flags&GSF_WITH_NEW_LINE) {
     doc_e=doc->cur_entry;
     do doc_e=doc_e->last;
-    while (doc_e!=doc && doc_e->type_u8!=DOCT_PMT);
+    while (doc_e!=doc && doc_e->type_u8!=DOCT_PROMPT);
     doc_e=doc_e->next;
     if (res=DocScanLine(doc,doc_e,NULL,&doc_e_end)) {
       while (doc_e_end!=doc && doc_e_end->type_u8==DOCT_NEW_LINE) {
@@ -153,11 +153,11 @@ U8 *DocGetStr2(I64 flags=0)
     doc_e=doc->cur_entry;
     do doc_e=doc_e->last;
     while (doc_e!=doc && doc_e->type_u8!=DOCT_NEW_LINE &&
-	  doc_e->type_u8!=DOCT_PMT);
-    if (doc_e!=doc && doc_e->type_u8!=DOCT_PMT) {
+	  doc_e->type_u8!=DOCT_PROMPT);
+    if (doc_e!=doc && doc_e->type_u8!=DOCT_PROMPT) {
       do doc_e=doc_e->last;
       while (doc_e!=doc && doc_e->type_u8!=DOCT_NEW_LINE &&
-	    doc_e->type_u8!=DOCT_PMT);
+	    doc_e->type_u8!=DOCT_PROMPT);
     }
     doc_e=doc_e->next;
     res=DocScanLine(doc,doc_e,NULL);

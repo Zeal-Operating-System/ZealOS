@@ -20,7 +20,7 @@ I64 TopDisk(I64 pole)
   return -1;
 }
 
-I64 PosInStk(I64 pole,I64 disk)
+I64 PosInStack(I64 pole,I64 disk)
 {
   I64 res=0,i;
   for (i=DISKS_NUM-1;i>disk;i--)
@@ -35,7 +35,7 @@ U0 SetDisksRestXY()
   for (i=0;i<DISKS_NUM;i++) {
     disks_x[i]=poles_x[disks_pole[i]];
     disks_y[i]=Fs->pix_height-PEDESTAL_HEIGHT
-	  -(DISK_HEIGHT+1)/2-1-(DISK_HEIGHT+1)*PosInStk(disks_pole[i],i);
+	  -(DISK_HEIGHT+1)/2-1-(DISK_HEIGHT+1)*PosInStack(disks_pole[i],i);
   }
 }
 
@@ -110,7 +110,7 @@ U0 MoveDisks(I64 src_pole,I64 dst_pole,I64 num)
   disks_pole[top]=dst_pole;
   for (y=disks_y[top];
 	y<Fs->pix_height-PEDESTAL_HEIGHT-(DISK_HEIGHT+1)/2-1
-	-(DISK_HEIGHT+1)*PosInStk(dst_pole,top);y++) {
+	-(DISK_HEIGHT+1)*PosInStack(dst_pole,top);y++) {
     disks_y[top]=y;
     MySleep;
   }

@@ -160,12 +160,12 @@ public class CD3 //Three dimensional F64 pt
 };
 
 #help_index "Data Types/Queue Vector"
-#define QUE_VECT_U8_CNT		512
+#define QUE_VECT_U8_COUNT		512
 public class CQueueVectU8
 {
   CQueueVectU8	*next,*last;
   I64	total_count,node_count,min_idx;
-  U8	body[QUE_VECT_U8_CNT];
+  U8	body[QUE_VECT_U8_COUNT];
 };
 
 #help_index "Data Types/Fifo"
@@ -553,7 +553,7 @@ class CAP16BitInit
 //High Performance Event Timer
 #define HPET_GCAP_ID	(0xFED00000+0x00)
 #define HPET_GEN_CONF	(0xFED00000+0x10)
-#define HPET_MAIN_CNT	(0xFED00000+0xF0)
+#define HPET_MAIN_COUNT	(0xFED00000+0xF0)
 
 public class CCountsGlobals
 {
@@ -746,7 +746,7 @@ public class CHashGeneric:CHash
 #define REGT_R32	3
 #define REGT_R64	4
 #define REGT_SEG	5
-#define REGT_FSTK	6
+#define REGT_FSTACK	6
 #define REGT_MM		7
 #define REGT_XMM	8
 
@@ -909,7 +909,7 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCT_PAGE_BREAK		4
 #define DOCT_CURSOR		5
 #define DOCT_MARKER		6
-#define DOCT_PMT		7
+#define DOCT_PROMPT		7
 #define DOCT_CLEAR		8
 #define DOCT_PAGE_LEN		9
 #define DOCT_LEFT_MARGIN	10
@@ -1142,7 +1142,7 @@ public class CDocBin
 #define DOC_COLOR_MACRO		LTBLUE
 #define DOC_COLOR_ANCHOR	DKGRAY
 #define DOC_COLOR_TREE		PURPLE
-#define DOC_COLOR_PMT		GREEN
+#define DOC_COLOR_PROMPT		GREEN
 #define DOC_COLOR_COMMENT	GREEN
 #define DOC_COLOR_BIN		LTGREEN
 #define DOC_COLOR_STR		BROWN
@@ -1244,7 +1244,7 @@ class CEdFindText
 	match_case		format "$$CB,\"Match Case\"$$\n",
 	whole_labels		format "$$CB,\"Whole Labels\"$$\n",
 	local_var		format "$$CB,\"Rename Local Var\"$$\n",
-	pmt,pad;
+	prompt,pad;
   I64	filter_lines		format "$$DA,A=\"Filter Lines:%d\"$$\n";
 };
 
@@ -1580,7 +1580,7 @@ public class CAutoCompleteDictGlobals
 #define RTF_UNSIGNED	1
 #define RTG_MASK	0xFF
 
-#define MDf_STK		8
+#define MDf_STACK		8
 #define MDf_IMM		9
 #define MDf_REG		10
 #define MDf_DISP	11
@@ -1588,7 +1588,7 @@ public class CAutoCompleteDictGlobals
 #define MDf_RIP_DISP32	13
 
 #define MDF_NULL	0x0000
-#define MDF_STK		0x0100
+#define MDF_STACK		0x0100
 #define MDF_IMM		0x0200
 #define MDF_REG		0x0400
 #define MDF_DISP	0x0800
@@ -1614,9 +1614,9 @@ public class CAutoCompleteDictGlobals
 #define ICF_SHORT_JMP			0x000001000
 #define ICF_PUSH_RES			0x000002000
 #define ICF_PASS_TRACE			0x000004000
-#define ICF_RES_WAS_STK			0x000008000
-#define ICF_ARG1_WAS_STK		0x000010000
-#define ICF_ARG2_WAS_STK		0x000020000
+#define ICF_RES_WAS_STACK			0x000008000
+#define ICF_ARG1_WAS_STACK		0x000010000
+#define ICF_ARG2_WAS_STACK		0x000020000
 #define ICF_PUSH_CMP			0x000040000 //for 50<i<j<=100 exps
 #define ICF_POP_CMP			0x000080000 //for 50<i<j<=100 exps
 #define ICF_SWAP			0x000100000
@@ -1686,12 +1686,12 @@ class CIntermediateCode:CIntermediateCodeBase
 #assert !($$&7)
 };
 
-class CPrsStk
+class CPrsStack
 {
   I64	ptr,
-	stk[255],
+	stack[255],
 	ptr2,
-	stk2[255];
+	stack2[255];
 };
 
 #define CMT_LABEL		0
@@ -1800,7 +1800,7 @@ POP R8 POP RDI POP RSI POP RBP POP RBX POP RDX POP RCX POP RAX
 
 #define REGG_CLOBBERED		0x013F //RAX,RCX,RDX,RBX,R8
 #define REGG_SAVED		0x0030 //RBP,RSP
-#define REGG_STK_TMP		0x0200 //R9
+#define REGG_STACK_TMP		0x0200 //R9
 #define REGG_LOCAL_VARS		0xCCC0 //RSI,RDI,R10,R11,R14,R15
 #define REGG_LOCAL_NON_PTR_VARS	0x3000 //R12,R13
 
@@ -2035,11 +2035,11 @@ class CCodeCtrl
 #define __DATE__ #exe{StreamPrint("\"%D\"",Now);}
 #define __TIME__ #exe{StreamPrint("\"%T\"",Now);}
 #define __LINE__ #exe{StreamPrint("%d",\
-	Fs->last_cc->lex_include_stk->line_num);}
+	Fs->last_cc->lex_include_stack->line_num);}
 #define __CMD_LINE__ #exe{StreamPrint("%d",Fs->last_cc->flags&CCF_CMD_LINE &&\
-	Fs->last_cc->lex_include_stk->depth<1);}
+	Fs->last_cc->lex_include_stack->depth<1);}
 #define __FILE__ #exe{StreamPrint("\"%s\"",\
-	Fs->last_cc->lex_include_stk->full_name);}
+	Fs->last_cc->lex_include_stack->full_name);}
 #define __DIR__  #exe{StreamDir;}
 
 #define LFSF_DOC	1
@@ -2135,8 +2135,8 @@ class CLexHashTableContext
 
 //CompCtrl flags
 #define CCF_CMD_LINE		0x001
-#define CCF_PMT			0x002
-#define CCf_PMT			1
+#define CCF_PROMPT			0x002
+#define CCf_PROMPT			1
 #define CCF_QUESTION_HELP	0x004
 #define CCF_DONT_FREE_BUF	0x008
 #define CCF_NO_DEFINES		0x010
@@ -2200,8 +2200,8 @@ public class CCompCtrl
   CMemberList *local_var_entry;
   CCodeMisc *lb_leave;
   U8	*cur_buf_ptr;
-  CLexFile *lex_include_stk,
-	*lex_prs_stk,
+  CLexFile *lex_include_stack,
+	*lex_prs_stack,
 	*fun_lex_file;
   CStreamBlk *next_stream_blk,*last_stream_blk;
   CAOT	*aot;
@@ -2216,9 +2216,9 @@ public class CCompCtrl
 	dont_push_float,pad[4];
 
   CCodeCtrl coc;
-  CPrsStk *ps;
+  CPrsStack *ps;
   CAOTCtrl *aotc;
-  I64	aot_depth,pmt_line;
+  I64	aot_depth,prompt_line;
 #assert !($$&7)
 };
 
@@ -2231,7 +2231,7 @@ public class CCompGlobals
   U32	*dual_U16_tokens1,*dual_U16_tokens2,*dual_U16_tokens3,
 	*binary_ops;
   I64	num_reg_vars,num_non_ptr_vars,
-	stk_tmps_mask,reg_vars_mask,non_ptr_vars_mask;
+	stack_tmps_mask,reg_vars_mask,non_ptr_vars_mask;
   U8	*to_reg_vars_map,*non_ptr_vars_map;
   I64	size_arg_mask[9],
 	compiled_lines;
@@ -2837,10 +2837,10 @@ class CMemRange
 //We add 2 pags, so a request is not rounded-up to next power of two.
 #define MEM_EXTRA_HASH2_PAGS	2
 
-#define MEM_ZENITH_STK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
-#define MEM_SETH_STK		(MEM_PAG_SIZE*512)
-#define MEM_INTERRUPT_STK	(MEM_PAG_SIZE*512)
-#define MEM_DEFAULT_STK		(MEM_PAG_SIZE*512)
+#define MEM_ZENITH_STACK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
+#define MEM_SETH_STACK		(MEM_PAG_SIZE*512)
+#define MEM_INTERRUPT_STACK	(MEM_PAG_SIZE*512)
+#define MEM_DEFAULT_STACK		(MEM_PAG_SIZE*512)
 
 #define TASK_HASH_TABLE_SIZE	(1<<10)
 
@@ -3230,7 +3230,7 @@ public class CTaskSettings
 #define TASKf_KILL_TASK		1
 #define TASKf_SUSPENDED		2
 #define TASKf_IDLE		3
-#define TASKf_CMD_LINE_PMT	4
+#define TASKf_CMD_LINE_PROMPT	4
 #define TASKf_INPUT_FILTER_TASK	5
 #define TASKf_FILTER_INPUT	6
 #define TASKf_HAS_SONG		7
@@ -3254,11 +3254,11 @@ public class CTaskSettings
 #define TASK_SIGNATURE_VAL		'TskS'
 #define TASK_NAME_LEN			32
 #define TASK_EXCEPT_CALLERS		8
-class CTaskStk
+class CTaskStack
 {
-  CTaskStk *next_stk;
-  I64	stk_size,stk_ptr;
-  U0	stk_base;
+  CTaskStack *next_stack;
+  I64	stack_size,stack_ptr;
+  U0	stack_base;
 };
 
 #define DYING_JIFFIES	ToI64(JIFFY_FREQ/5)
@@ -3315,7 +3315,7 @@ public class CTask //The Fs segment reg points to current CTask.
 	text_attr,border_attr;
   U16	win_z_num,pad;
 
-  CTaskStk *stk;
+  CTaskStack *stack;
 
   CExcept *next_except,*last_except;
   I64	except_rbp,	//throw routine's RBP
@@ -3403,7 +3403,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
   CTaskDying *next_dying,*last_dying;
   I64	kill_jiffy;
   CTSS	*tss;
-  I64	start_stk[16];
+  I64	start_stack[16];
 #assert !($$&7)
 };
 
@@ -3703,7 +3703,7 @@ public class CArcCtrl
   I64	min_bits,min_table_entry;
   CArcEntry *cur_entry,*next_entry;
   I64	cur_bits_in_use,next_bits_in_use;
-  U8	*stk_ptr,*stk_base;
+  U8	*stack_ptr,*stack_base;
   I64	free_idx,free_limit,
 	saved_basecode,
 	entry_used,
@@ -3834,7 +3834,7 @@ public class CDebugGlobals
 //Boot related
 #define BOOT_RAM_BASE		0x07C00
 #define BOOT_RAM_LIMIT		0x97000
-#define BOOT_STK_SIZE		BLK_SIZE
+#define BOOT_STACK_SIZE		BLK_SIZE
 
 #define BOOT_SRC_NULL		0
 #define BOOT_SRC_ROM		1

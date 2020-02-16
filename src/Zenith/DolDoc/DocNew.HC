@@ -372,7 +372,7 @@ public CDoc *DocNew(U8 *filename=NULL,CTask *task=NULL)
   doc->find_replace=CAlloc(sizeof(CEdFindText),task);
   doc->find_replace->scan_fwd=TRUE;
   doc->find_replace->match_case=TRUE;
-  doc->find_replace->pmt=TRUE;
+  doc->find_replace->prompt=TRUE;
   doc->left_click_link=&EdLeftClickLink;
   doc->dollar_buf_size=84;
   doc->dollar_buf=MAlloc(doc->dollar_buf_size,task);

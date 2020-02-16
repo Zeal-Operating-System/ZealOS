@@ -168,7 +168,7 @@ $LK,"::/Demo/DolDoc/TreeDemo.HC"$
 $LK,"::/Demo/Exceptions.HC"$
 $LK,"::/Demo/Disk/SerializeTree.HC"$
 $LK,"::/Demo/MemDemo.HC"$
-$LK,"::/Demo/StkGrow.HC"$
+$LK,"::/Demo/StackGrow.HC"$
 $LK,"::/Demo/DolDoc/TextDemo.HC"$
 $LK,"::/Demo/DolDoc/CursorMove.HC"$
 $LK,"::/Demo/DolDoc/DemoDoc.DD"$

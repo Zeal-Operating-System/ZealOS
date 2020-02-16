@@ -2,7 +2,7 @@ U0 OptPass5(CCompCtrl *cc)
 {
   CIntermediateCode *tmpi,*tmpi1;
   I64 code,i;
-  CPrsStk *ps=cc->ps;
+  CPrsStack *ps=cc->ps;
   ps->ptr=0;
   ps->ptr2=0;
 
@@ -26,7 +26,7 @@ U0 OptPass5(CCompCtrl *cc)
 	  if (Bt(&tmpi->ic_data,i))
 	    ps->ptr--;
       }
-      if (tmpi->arg2.type&MDF_STK) {
+      if (tmpi->arg2.type&MDF_STACK) {
 	tmpi1=ParsePop(ps);
 	if (tmpi1->ic_code==IC_MOV || tmpi1->ic_code==IC_REG) {
 	  if (tmpi1->ic_flags & ICF_RES_TO_INT) {
@@ -50,7 +50,7 @@ U0 OptPass5(CCompCtrl *cc)
 	}
       }
 
-      if (tmpi->arg1.type&MDF_STK) {
+      if (tmpi->arg1.type&MDF_STACK) {
 	tmpi1=ParsePop(ps);
 	if (tmpi1->ic_code==IC_MOV || tmpi1->ic_code==IC_REG) {
 	  if (tmpi1->ic_flags & ICF_RES_TO_INT) {
@@ -77,14 +77,14 @@ U0 OptPass5(CCompCtrl *cc)
 	  OptSetNOP2(tmpi1);
 	}
       }
-      if (tmpi->res.type&MDF_STK &&
+      if (tmpi->res.type&MDF_STACK &&
 	    !(tmpi->ic_flags&ICF_RES_NOT_USED))
 	ParsePush(ps,tmpi);
     }
     tmpi=tmpi->next;
   }
   if (ps->ptr>2) {
-    "Pass:%d Stk:%08X\n",cc->pass,ps->ptr;
+    "Pass:%d Stack:%08X\n",cc->pass,ps->ptr;
     LexExcept(cc,"Compiler Optimization Error at ");
   }
 }

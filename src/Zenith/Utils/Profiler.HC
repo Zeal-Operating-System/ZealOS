@@ -1,7 +1,7 @@
 #help_index "Debugging/Profiler;Profiler;Cmd Line (Typically)/Profiler"
 #help_file "::/Doc/Profiler"
 
-#define PF_ARRAY_CNT 0x100000
+#define PF_ARRAY_COUNT 0x100000
 I64 pf_jiffy_start,pf_jiffy_end;
 I64 *pf_array=NULL;
 I64 pf_cpu=0;
@@ -17,7 +17,7 @@ U0 ProfTimerInt(CTask *task)
 	i=SYS_IDLE_PT;
       else
 	i=TaskCaller(task,k,TRUE);
-      if (pf_buf_in_ptr<PF_ARRAY_CNT) {
+      if (pf_buf_in_ptr<PF_ARRAY_COUNT) {
 	pf_array[pf_buf_in_ptr++]=i;
 	pf_jiffy_end=counts.jiffies;
       }
@@ -42,7 +42,7 @@ after you have collected data.
     pf_depth=depth;
     pf_buf_in_ptr=0;
     if (!pf_array)
-      pf_array=AMAlloc(sizeof(I64)*PF_ARRAY_CNT);
+      pf_array=AMAlloc(sizeof(I64)*PF_ARRAY_COUNT);
     pf_jiffy_end=pf_jiffy_start=counts.jiffies;
     LBts(&pf_prof_active,0);
     cpu_structs[pf_cpu].profiler_timer_irq=&ProfTimerInt;

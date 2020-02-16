@@ -28,14 +28,14 @@ Bool CheckCodePtr(U8 *ptr)
     return FALSE;
 }
 
-Bool CheckOnStk(U8 *ptr,CTask *task=NULL)
-{//Check if addr is valid stk addr.
+Bool CheckOnStack(U8 *ptr,CTask *task=NULL)
+{//Check if addr is valid stack addr.
   Bool res=FALSE;
   PUSHFD
   CLI
   if (task) {
-    if (&task->stk->stk_base<=ptr<=
-	  (&task->stk->stk_base)(U8 *)+task->stk->stk_size)
+    if (&task->stack->stack_base<=ptr<=
+	  (&task->stack->stack_base)(U8 *)+task->stack->stack_size)
       res=TRUE;
   } else if (mem_heap_base<=ptr<=mem_heap_limit)
     res=TRUE;
@@ -43,16 +43,16 @@ Bool CheckOnStk(U8 *ptr,CTask *task=NULL)
   return res;
 }
 
-I64 UnusedStk(CTask *task=NULL)
-{//Count of usused bytes in task's stk.
+I64 UnusedStack(CTask *task=NULL)
+{//Count of usused bytes in task's stack.
   I64 res;
   if (!task) task=Fs;
   PUSHFD
   CLI
   if (task==Fs)
-    res=GetRSP()(U8 *)-(&task->stk->stk_base)(U8 *);
+    res=GetRSP()(U8 *)-(&task->stack->stack_base)(U8 *);
   else
-    res=task->rsp(U8 *)-(&task->stk->stk_base)(U8 *);
+    res=task->rsp(U8 *)-(&task->stack->stack_base)(U8 *);
   POPFD
   return res;
 }
@@ -65,7 +65,7 @@ U8 *Caller(I64 num=1)
     if (rbp>=*rbp)
       return NULL;
     rbp=*rbp;
-    if (!CheckOnStk(rbp,Fs))
+    if (!CheckOnStack(rbp,Fs))
       return NULL;
   }
   ptr=rbp+1;
@@ -73,7 +73,7 @@ U8 *Caller(I64 num=1)
 }
 
 U8 *TaskCaller(CTask *task=NULL,I64 num=0,Bool saved_context=FALSE)
-{//Fetches addr of Nth caller on task's stk.
+{//Fetches addr of Nth caller on task's stack.
   U8 **ptr,**rbp,**rsp;
   if (!task) task=Fs;
   if (!saved_context && task==Fs)
@@ -83,7 +83,7 @@ U8 *TaskCaller(CTask *task=NULL,I64 num=0,Bool saved_context=FALSE)
   rbp=task->rbp;
   rsp=task->rsp;
   if (num) {
-    while (CheckOnStk(rbp,task)) {
+    while (CheckOnStack(rbp,task)) {
       ptr=rbp+1;
       if (! --num)
 	return *ptr;
@@ -99,12 +99,12 @@ U8 *TaskCaller(CTask *task=NULL,I64 num=0,Bool saved_context=FALSE)
       return task->rip;
   }
 }
-#define STK_REP_LEN	32
+#define STACK_REP_LEN	32
 
-U0 StkRep(CTask *task=NULL)
-{//Reports whats on the stk.
+U0 StackRep(CTask *task=NULL)
+{//Reports whats on the stack.
   I64 i,j,addr,
-	**rbp,**rsp,*my_rsp[STK_REP_LEN];
+	**rbp,**rsp,*my_rsp[STACK_REP_LEN];
   CHashTable *old_hash=Fs->hash_table;
   if (!task) task=Fs;
   if (!TaskValidate(task))
@@ -123,15 +123,15 @@ U0 StkRep(CTask *task=NULL)
     addr=*rsp;
   else
     addr=task->rip;
-  MemCpy(my_rsp,rsp,STK_REP_LEN*sizeof(U8 *));
+  MemCpy(my_rsp,rsp,STACK_REP_LEN*sizeof(U8 *));
   POPFD
   Fs->hash_table=task->hash_table;
-  for (i=0;i<STK_REP_LEN;i++) {
+  for (i=0;i<STACK_REP_LEN;i++) {
     "%08X [RSP+%04X]: %016X ",rsp+i,
 	  i*sizeof(U8 *),my_rsp[i];
     while (TRUE) {
-      if (!(&task->stk->stk_base<=rbp<
-	    (&task->stk->stk_base)(U8 *)+task->stk->stk_size))
+      if (!(&task->stack->stack_base<=rbp<
+	    (&task->stack->stack_base)(U8 *)+task->stack->stack_size))
 	break;
       j=rbp-rsp;
       if (j>=i)
@@ -160,7 +160,7 @@ U0 CallerRep(U8 **rbp=NULL,CTask *task=NULL)
       rbp=task->rbp;
   }
   "CallerRep:\n";
-  while (CheckOnStk(rbp,task)) {
+  while (CheckOnStack(rbp,task)) {
     ptr=rbp+1;
     "%08X:%08tX:%P\n",ptr,*ptr,*ptr;
     if (rbp>=*rbp)
@@ -459,7 +459,7 @@ U0 G(U8 *ip=INVALID_PTR,CTask *task=NULL)
     if (task==Fs) {
       if (IsDebugMode && task->next_cc!=&task->next_cc) {
 	"Exit Debug\n";
-	Btr(&task->last_cc->flags,CCf_PMT);
+	Btr(&task->last_cc->flags,CCf_PROMPT);
       }
     } else
       Exit;
@@ -488,7 +488,7 @@ public U0 S(U8 *ip=INVALID_PTR,CTask *task=NULL) //Single-step.
   if (task==Fs) {
     if (IsDebugMode) {
       if (task->next_cc!=&task->next_cc)
-	Btr(&task->last_cc->flags,CCf_PMT);
+	Btr(&task->last_cc->flags,CCf_PROMPT);
     }
   } else
     Exit;
@@ -507,7 +507,7 @@ U0 DebugHelp()
 	">ClassRep(Fs,\"CTask\",1);\t//Dump current task record.\n"
 	">ClassRep(Fs,,1);\t\t//(It knows lastclass.)\n"
 	">CallerRep;\t\t\t//Stack trace report.\n"
-	">Da(_RSP);\t\t\t//Dump stk.\n"
+	">Da(_RSP);\t\t\t//Dump stack.\n"
 	">Dr;\t\t\t\t//Dump Regs.\n"
 	">1+2*3+&Print;\t\t\t//Show calculation res.\n"
 	">*(0x70000)(I64 *)=0x123456789;\t//Assign value to 0x70000-0x70007.\n"

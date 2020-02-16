@@ -79,7 +79,7 @@ I64 SysTimerRead()
 
 I64 HPET()
 { //Get high precision event timer.
-  return *(dev.uncached_alias+HPET_MAIN_CNT)(I64 *);
+  return *(dev.uncached_alias+HPET_MAIN_COUNT)(I64 *);
 }
 
 I64 TimeCal()

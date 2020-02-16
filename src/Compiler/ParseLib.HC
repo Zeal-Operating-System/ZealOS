@@ -1,24 +1,24 @@
-U0 ParsePush(CPrsStk *ps,I64 val)
+U0 ParsePush(CPrsStack *ps,I64 val)
 {
-  ps->stk[++ps->ptr]=val;
+  ps->stack[++ps->ptr]=val;
 }
 
-I64 ParsePop(CPrsStk *ps)
+I64 ParsePop(CPrsStack *ps)
 {
-  return ps->stk[ps->ptr--];
+  return ps->stack[ps->ptr--];
 }
 
-U0 ParsePush2(CPrsStk *ps,I64 val)
+U0 ParsePush2(CPrsStack *ps,I64 val)
 {
-  ps->stk2[++ps->ptr2]=val;
+  ps->stack2[++ps->ptr2]=val;
 }
 
-I64 ParsePop2(CPrsStk *ps)
+I64 ParsePop2(CPrsStack *ps)
 {
-  return ps->stk2[ps->ptr2--];
+  return ps->stack2[ps->ptr2--];
 }
 
-U0 ParsePopDeref(CPrsStk *ps)
+U0 ParsePopDeref(CPrsStack *ps)
 {
   I64 i=ParsePop(ps);
   CHashClass *tmpc=ParsePop(ps);

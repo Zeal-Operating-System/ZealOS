@@ -153,7 +153,7 @@ interrupt U0 IntDivZero()
     mp_count=1;
     dbg.mp_crash->cpu_num=Gs->num;
     dbg.mp_crash->task=Fs;
-    MOV	RAX,U64 8[RBP] //Get RIP off of stk.
+    MOV	RAX,U64 8[RBP] //Get RIP off of stack.
     dbg.mp_crash->rip=GetRAX;
     dbg.mp_crash->message="Div Zero";
     dbg.mp_crash->message_num=0;

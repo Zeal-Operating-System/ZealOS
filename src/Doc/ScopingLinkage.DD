@@ -113,7 +113,7 @@ $WW,1$
 
 * Using $FG,2$try$FG$/$FG,2$catch$FG$ in a function will force all local vars to $FG,2$noreg$FG$.
 
-* An unused gap on the stk is left for $FG,2$reg$FG$ vars.
+* An unused gap on the stack is left for $FG,2$reg$FG$ vars.
 
 * Note: $FG,2$static$FG$ function vars do not go on the data heap, no matter the setting of the $LK,"OPTf_GLBLS_ON_DATA_HEAP",A="MN:OPTf_GLBLS_ON_DATA_HEAP"$$FG$.  They may in the future.
 

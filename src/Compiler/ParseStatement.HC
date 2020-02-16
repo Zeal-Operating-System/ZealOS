@@ -81,7 +81,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
   } else
     tmpf=NULL;
   if (tmpf) {
-    tmpf->used_reg_mask=REGG_CLOBBERED+REGG_SAVED+REGG_STK_TMP;
+    tmpf->used_reg_mask=REGG_CLOBBERED+REGG_SAVED+REGG_STACK_TMP;
     Free(tmpf->src_link);
     tmpf->src_link=NULL;
     Free(tmpf->idx);
@@ -95,8 +95,8 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
   } else {
     tmpf=ParseFunNew;
     header_return=NULL;
-    tmpf->used_reg_mask=REGG_CLOBBERED+REGG_SAVED+REGG_STK_TMP;
-    tmpf->clobbered_reg_mask=REGG_CLOBBERED+REGG_STK_TMP;
+    tmpf->used_reg_mask=REGG_CLOBBERED+REGG_SAVED+REGG_STACK_TMP;
+    tmpf->clobbered_reg_mask=REGG_CLOBBERED+REGG_STACK_TMP;
     tmpf->str=name;
     if (cc->flags&CCF_AOT_COMPILE)
       tmpf->exe_addr=aotc->rip;
@@ -144,8 +144,8 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   I64 i,j,size,*r;
   Bool old_trace;
 
-  cc->fun_lex_file=cc->lex_include_stk;
-  cc->min_line=cc->max_line=cc->lex_include_stk->line_num;
+  cc->fun_lex_file=cc->lex_include_stack;
+  cc->min_line=cc->max_line=cc->lex_include_stack->line_num;
 
   cc->flags&=~CCF_NO_REG_OPT;
   cc->htc.local_var_list=cc->htc.fun=ParseFunJoin(cc,tmp_return,name,fsp_flags);
@@ -195,11 +195,11 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
     if (tmpm->flags & MLF_NO_UNUSED_WARN) {
       if (tmpm->use_count>1&&StrCmp(tmpm->str,"_anon_"))
 	PrintWarn("Unneeded no_warn\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-	      cc->lex_include_stk->full_name,cc->lex_include_stk->line_num,
+	      cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 	      tmpm->str,cc->htc.fun->str);
     } else if (!tmpm->use_count && GetOption(OPTf_WARN_UNUSED_VAR))
       PrintWarn("Unused var\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
-	    cc->lex_include_stk->full_name,cc->lex_include_stk->line_num,
+	    cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 	    tmpm->str,cc->htc.fun->str);
     tmpm=tmpm->next;
   }
@@ -924,8 +924,8 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
 	Lex(cc);
 	while (cc->token!='}' && cc->token!=TK_EOF)
 	  ParseStatement(cc,try_count,lb_break);
-	if (cc->lex_include_stk==cc->fun_lex_file)
-	  cc->max_line=cc->lex_include_stk->line_num;
+	if (cc->lex_include_stack==cc->fun_lex_file)
+	  cc->max_line=cc->lex_include_stack->line_num;
 	if (Lex(cc)!=',') goto sm_done;
       } else if (cc->token==';') {
 	if (cmp_flags&CMPF_PRS_SEMICOLON)

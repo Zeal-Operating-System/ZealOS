@@ -1,11 +1,11 @@
 //Pass the task structure you
 //wish to spy upon.
 
-U0 SpyStkRep(CTask *task)
+U0 SpyStackRep(CTask *task)
 {
   CDoc *doc=DocDblBufStart;
   while (!ScanChar && TaskValidate(task)) {
-    StkRep(task);
+    StackRep(task);
     '\n';
     "$$BK,1$$PRESS A KEY$$BK,0$$\n";
     DocDblBufSwap;
@@ -44,11 +44,11 @@ U0 Spy()
     '\n';
     task=GetI64("Task Addr: ",0);
     if (TaskValidate(task)) {
-      "\n\n\t$$BT,\"StkRep\",LM=\"1\n\"$$\n\n\n"
+      "\n\n\t$$BT,\"StackRep\",LM=\"1\n\"$$\n\n\n"
 	    "\n\n\t$$BT,\"CallerRep\",LM=\"2\n\"$$\n\n\n";
       i=GetI64("",0);
       if (i==1)
-	SpyStkRep(task);
+	SpyStackRep(task);
       else if (i==2)
 	SpyCallerRep(task);
       else

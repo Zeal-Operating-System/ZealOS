@@ -52,7 +52,7 @@ U0 DocInit()
 
       //Don't forget $LK,"cmp_type_flags_src_code",A="MN:cmp_type_flags_src_code"$.
   doldoc.type_flags_nontag_invis[0]=
-	1<<DOCT_PMT|
+	1<<DOCT_PROMPT|
 	1<<DOCT_PAGE_LEN|
 	1<<DOCT_LEFT_MARGIN|
 	1<<DOCT_RIGHT_MARGIN|

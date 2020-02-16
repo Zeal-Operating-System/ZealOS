@@ -140,7 +140,7 @@ to know if something is const.;-)This
 just compiles with the val at compile
 time, an advantage of just-in-time over
 AOT binaries.ZenithOS has a limited
-stk size, so don't get in the habit.
+stack size, so don't get in the habit.
 $LK,"MAlloc",A="MN:MAlloc"$() would probably be the better choice.
 */
   MPCtrl1 job[mp_count];

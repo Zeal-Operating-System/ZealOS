@@ -33,9 +33,9 @@ args.
   CIntermediateCode *tmpi,*tmpi1,*tmpi2,*tmpi3,*tmpi_push,
 	*last_with_class=NULL;
   CCodeMisc *lb,*lb1,*lb2;
-  CPrsStk *ps;
+  CPrsStack *ps;
   if (!(ps=cc->ps))
-    ps=cc->ps=MAlloc(sizeof(CPrsStk));
+    ps=cc->ps=MAlloc(sizeof(CPrsStack));
   ps->ptr=0;
   ps->ptr2=0;
   tmpi=cc->coc.coc_head.next;
@@ -1279,7 +1279,7 @@ args.
     tmpi=tmpi->next;
   }
   if (ps->ptr>2) {
-    "Pass:%d Stk:%08X\n",cc->pass,ps->ptr;
+    "Pass:%d Stack:%08X\n",cc->pass,ps->ptr;
     LexExcept(cc,"Compiler Optimization Error at ");
   }
 //This is for determining type conversions for passing args to funs.
