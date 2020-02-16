@@ -19,8 +19,8 @@ Changes include:
   - Added a NONE #define for use in default function arguments.
   - 440Hz 'A' tuning changed to 432Hz.
   - Added CompComp function.
-  - Added To A Waterfowl poem.
   - System-wide renames:
+    - AOnce -> ZOnce
     - ACAlloc -> ZCAlloc
     - AMAlloc -> ZMAlloc
     - AStrNew -> ZStrNew
@@ -31,7 +31,7 @@ Changes include:
     - Chg -> Change
     - Chk -> Check
     - Cmp -> Comp // compiler
-    - Cmp -> Compare //StrComp->StrCompare, etc
+    - Cmp -> Compare //StrCmp->StrCompare, etc
     - Cnt -> Count
     - Cpy -> Copy
     - Dbg -> Debug
