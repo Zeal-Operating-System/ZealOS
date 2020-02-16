@@ -166,7 +166,7 @@ public _extern _D3_ZERO CD3 *D3Zero(CD3 *dst); //To zero
 public _extern _MEMCOMPARE I64 MemCompare(
 	U8 *ptr1,U8 *ptr2,I64 count); //Compare chunk of memory.
 public _extern _MEMCOPY U8 *MemCopy(
-	U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes forward.
+	U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes forward.
 public _extern _MEMSET U8 *MemSet(
 	U8 *dst,I64 val,I64 count); //Set chunk of U8s to value.
 public _extern _MEMSET_I64 I64 *MemSetI64(
@@ -174,7 +174,7 @@ public _extern _MEMSET_I64 I64 *MemSetI64(
 public _extern _MEMSET_U16 U16 *MemSetU16(
 	U16 *dst,I64 val,I64 U16count); //Set chunk of U16s to value.
 public _extern _MEMSET_U32 U32 *MemSetU32(U32 *dst,I64 val,I64 U32count); //Set chunk of U32s to value.
-_extern SYS_HEAP_DBG_FLAG	U8 sys_heap_debug;
+_extern SYS_HEAP_DEBUG_FLAG	U8 sys_heap_debug;
 _extern SYS_HEAP_INIT_FLAG	U8 sys_heap_init_flag;
 _extern SYS_HEAP_INIT_VAL	U8 sys_heap_init_val;
 _extern SYS_MEM_INIT_FLAG	U8 sys_mem_init_flag;

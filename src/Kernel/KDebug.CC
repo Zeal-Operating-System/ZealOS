@@ -579,7 +579,7 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
   "\n\tZenithOS Debugger\n\n"
 	">Help;\t//For help.\n\n";
   Beep(62,TRUE);
-  if (fault_num==I_DBG) {
+  if (fault_num==I_DEBUG) {
     if (debug.message) {
       "\n!!!%s",debug.message;
       if (debug.message_num)
@@ -594,7 +594,7 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
 }
 
 U0 Fault2(I64 fault_num,I64 fault_err_code)
-{//Called from $LK,"Fault2",A="FF:::/Kernel/KInts.CC,Fault2"$.
+{//Called from $LK,"Fault2",A="FF:::/Kernel/KInterrupts.CC,Fault2"$.
 //$BK,1$Be careful not to swap-out and ruin the saved context$BK,0$
   Bool was_raw,was_single_user,was_silent,was_in_debug;
   I64  i,old_raw_flags=text.raw_flags;
@@ -605,7 +605,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
   if (fault_num==I_BPT)
     Fs->rip--;
   if (Fs->debug_task)
-    CallExtNum(EXT_DBG_RESUME,fault_num,fault_err_code);
+    CallExtNum(EXT_DEBUG_RESUME,fault_num,fault_err_code);
   else {
     was_raw=Raw(ON);
     was_silent=Silent(OFF);
@@ -631,7 +631,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
     text.raw_flags=old_raw_flags;
   }
   SingleUser(was_single_user);
-  if (LBtr(&Fs->task_flags,TASKf_KILL_AFTER_DBG))
+  if (LBtr(&Fs->task_flags,TASKf_KILL_AFTER_DEBUG))
     Exit;
 }
 
@@ -642,7 +642,7 @@ U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE)
   debug.message=message;
   debug.message_num=message_num;
   debug.panic=panic;
-  INT I_DBG
+  INT I_DEBUG
   POPFD
 }
 

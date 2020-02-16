@@ -12,7 +12,7 @@ U8 *kernel_config_options="MemInit\0HeapInit\0VarInit\0StaffMode\0"
 #define CONFIG_TEXT_MODE		6
 #define CONFIG_DONT_PROBE		7
 #define CONFIG_MOUNT_IDE_AUTO	8
-#define CONFIG_DBG_DISTRO	9
+#define CONFIG_DEBUG_DISTRO	9
 #define CONFIG_OPTIONS_NUM		10
 
 #define CONFIG_HELP		10
@@ -133,7 +133,7 @@ U0 KConfigOptions(CKConfig *c)
 	      c->mount_ide_auto_cd_let=0;
 	    }
 	    break;
-	  case CONFIG_DBG_DISTRO:
+	  case CONFIG_DEBUG_DISTRO:
 	    Free(c->debug_distro_file);
 	    c->debug_distro_file=0;
 	    c->debug_distro_start=0;

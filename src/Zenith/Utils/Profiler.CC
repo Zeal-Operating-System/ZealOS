@@ -9,7 +9,7 @@ I64 pf_buf_in_ptr=0,pf_depth;
 I64 pf_prof_active=0;
 
 U0 ProfTimerInt(CTask *task)
-{//See $LK,"profiler_timer_irq",A="FF:::/Kernel/KInts.CC,profiler_timer_irq"$.
+{//See $LK,"profiler_timer_irq",A="FF:::/Kernel/KInterrupts.CC,profiler_timer_irq"$.
   I64 i,k;
   if (Bt(&pf_prof_active,0))
     for (k=0;k<=pf_depth;k++) {

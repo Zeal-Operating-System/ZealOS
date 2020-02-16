@@ -210,6 +210,6 @@ I have no idea why I got a IRQ 0x27.
   IntEntrySet(I_TIMER,IRQ_TIMER);
   IntEntrySet(I_MP_CRASH,*INT_MP_CRASH_ADDR(U32 *));
   IntEntrySet(I_WAKE,INT_WAKE);
-  IntEntrySet(I_DBG,&debug.int_fault_code[7*I_DBG]);
+  IntEntrySet(I_DEBUG,&debug.int_fault_code[7*I_DEBUG]);
   POPFD
 }

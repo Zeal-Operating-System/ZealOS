@@ -418,7 +418,7 @@ catches divide and out-of-mem.  Not sure what to do, yet.
 * Might make CSprite flood fill operate on a separate bitmap
 and blotted at the end.
 * <CTRL-r> delete subsprite in menu near others
-* make better heapwalk, do something with $LK,"_CONFIG_HEAP_DBG",A="FF:::/Kernel/KernelA.HH,_CONFIG_HEAP_DBG"$.
+* make better heapwalk, do something with $LK,"_CONFIG_HEAP_DEBUG",A="FF:::/Kernel/KernelA.HH,_CONFIG_HEAP_DEBUG"$.
 
 * static var off of data heap.
 * could add "const" to not set CCF_NOT_CONST flag for trig, etc.

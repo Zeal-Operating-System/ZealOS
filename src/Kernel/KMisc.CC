@@ -45,7 +45,7 @@ I64 BCount(I64 d)
 }
 
 U0 IntCore0TimerHandler(CTask *)
-{//Called from $LK,"IntCore0TimerHandler",A="FF:::/Kernel/KInts.CC,IntCore0TimerHandler"$
+{//Called from $LK,"IntCore0TimerHandler",A="FF:::/Kernel/KInterrupts.CC,IntCore0TimerHandler"$
   I64 i;
   if (mp_count>1)
     while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
@@ -311,12 +311,12 @@ Bool IsSingleUser()
 
 Bool DebugMode(Bool val)
 {//Set debug-mode.
-  return LBEqual(&sys_semas[SEMA_DBG_MODE],0,val);
+  return LBEqual(&sys_semas[SEMA_DEBUG_MODE],0,val);
 }
 
 Bool IsDebugMode()
 {//Return debug-mode.
-  return Bt(&sys_semas[SEMA_DBG_MODE],0);
+  return Bt(&sys_semas[SEMA_DEBUG_MODE],0);
 }
 
 U0 ProgressBarsReset(U8 *path=NULL)

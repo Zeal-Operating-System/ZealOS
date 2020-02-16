@@ -307,7 +307,7 @@ public class CMathODE
 //Software Interrupts
 #define I_MP_CRASH		0x30
 #define I_WAKE			0x31
-#define I_DBG			0x32
+#define I_DEBUG			0x32
 //See $LK,"ST_INT_NAMES",A="MN:ST_INT_NAMES"$
 
 //You might want to start backward from
@@ -597,7 +597,7 @@ class CRAXRBCRCXRDX
 #define EXT_WIN_FOCUS		1
 #define EXT_HEAPLOG_MALLOC	2
 #define EXT_HEAPLOG_FREE	3
-#define EXT_DBG_RESUME		4
+#define EXT_DEBUG_RESUME		4
 #define EXT_EXTS_NUM		5
 
 #help_index "Processor"
@@ -612,7 +612,7 @@ class CSema
 #define SEMA_RECORD_MACRO	1
 #define SEMA_SYS_TIMER		2
 #define SEMA_SYS_DATE		3
-#define SEMA_DBG_MODE		4
+#define SEMA_DEBUG_MODE		4
 #define SEMA_SOUND		5
 #define SEMA_HEAPLOG_ACTIVE	6
 #define SEMA_HEAPLOG_LOCK	7
@@ -2770,9 +2770,9 @@ public class CFile //See $LK,"::/Demo/Disk/DataBase.CC"$.
 };
 
 #help_index "Memory/Heap"
-#define _CONFIG_HEAP_DBG FALSE
+#define _CONFIG_HEAP_DEBUG FALSE
 
-#if _CONFIG_HEAP_DBG
+#if _CONFIG_HEAP_DEBUG
 class CMemUnused
 {
   CHeapCtrl *hc;
@@ -3239,7 +3239,7 @@ public class CTaskSettings
 #define TASKf_BREAK_LOCKED	10
 #define TASKf_PENDING_BREAK	11
 #define TASKf_BREAK_TO_SHIFT_ESC 12
-#define TASKf_KILL_AFTER_DBG	13
+#define TASKf_KILL_AFTER_DEBUG	13
 
 #define TASKf_NONTIMER_RAND	14
 
@@ -3457,7 +3457,7 @@ public class CSysFixedArea
 #define CH_SPACE	0x20
 
 #define ST_ERR_ST   "$$RED$$$$BK,1$$ERROR:$$FG$$$$BK,0$$ "
-#define ST_WARN_ST  "$$LTRED$$$$BK,1$$WARNING:$$FG$$$$BK,0$$ "
+#define ST_WARN_ST  "$$LTRED$$$$BK,1$$WARNING:$$FG$$$$BK,0$$ "
 
 //Scan code flags
 #define SCf_E0_PREFIX	7

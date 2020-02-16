@@ -1,1 +1,1 @@
-$WW,1$Recompile the kernel with $LK,"_CONFIG_HEAP_DBG",A="MN:_CONFIG_HEAP_DBG"$=TRUE if you want more heap debugging.  You are on your own.
+$WW,1$Recompile the kernel with $LK,"_CONFIG_HEAP_DEBUG",A="MN:_CONFIG_HEAP_DEBUG"$=TRUE if you want more heap debugging.  You are on your own.

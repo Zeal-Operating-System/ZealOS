@@ -150,7 +150,7 @@ MALLOC_ALMOST_DONE:
 //RDX=HeapCtrl
 	ADD	U64 CHeapCtrl.used_u8s[RDX],RAX
 
-#if _CONFIG_HEAP_DBG
+#if _CONFIG_HEAP_DEBUG
 //QueueInsert
 	MOV	RDI,U64 CHeapCtrl.last_um[RDX]
 	MOV	U64 CMemUsed.next[RDI],RSI
@@ -248,7 +248,7 @@ _FREE::
 @@15:	MOV	RSI,U64 SF_ARG1[RBP]
 	TEST	RSI,RSI
 
-#if _CONFIG_HEAP_DBG
+#if _CONFIG_HEAP_DEBUG
 	JZ	I32 FREE_DONE
 #else
 	JZ	FREE_DONE
@@ -277,7 +277,7 @@ _FREE::
 	BTS	U32 CHeapCtrl.locked_flags[RDX],HClf_LOCKED
 	PAUSE
 	JC	@@30
-#if _CONFIG_HEAP_DBG
+#if _CONFIG_HEAP_DEBUG
 //QueueRemove
 	MOV	RDX,U64 CMemUsed.next[RSI]
 	MOV	RDI,U64 CMemUsed.last[RSI]

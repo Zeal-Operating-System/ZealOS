@@ -80,7 +80,7 @@ U0 SysGrInit()
   text.font[255] = text.aux_font[255]; //auxillary block character
 
   text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
-  text.border_chars[10](U32)='ÀÈÙ¼';
+  text.border_chars[10](U32)='ÀÈÙ¼';
   text.vga_alias	=dev.uncached_alias+VGAM_GRAPHICS;
   text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
   if (!Bt(&sys_run_level,RLf_VGA)) { //if text mode
@@ -240,7 +240,7 @@ U0 KMain()
 asm {	ALIGN	16,OC_NOP
 SYS_KERNEL_END::
 #exe {
-  if (kernel_config->opts[CONFIG_DBG_DISTRO])
+  if (kernel_config->opts[CONFIG_DEBUG_DISTRO])
     StreamPrint("DU8 0x%X-(SYS_KERNEL_END-SYS_KERNEL+"
 	"BOOT_RAM_BASE+sizeof(CBinFile)) DUP (0);"
 	"BINFILE \"%s\";",kernel_config->debug_distro_start,

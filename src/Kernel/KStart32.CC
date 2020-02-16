@@ -28,7 +28,7 @@ kernel_config->opts[CONFIG_HEAP_INIT],kernel_config->heap_init_val,
 kernel_config->opts[CONFIG_VAR_INIT], kernel_config->var_init_val,
 kernel_config->opts[CONFIG_STAFF_MODE]);
 };
-SYS_HEAP_DBG_FLAG::	DU8	_CONFIG_HEAP_DBG;
+SYS_HEAP_DEBUG_FLAG::	DU8	_CONFIG_HEAP_DEBUG;
 
 	ALIGN	8,0
 SYS_CTRL_ALT_FLAGS::	DU64	0;

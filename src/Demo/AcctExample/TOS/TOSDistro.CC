@@ -3,7 +3,7 @@
 #help_index "Misc/TOS/Distro"
 
 #define MAKE_LITE	1
-#define MAKE_DBG	0
+#define MAKE_DEBUG	0
 #define MAKE_STAFF	1
 
 public U8 TOSGetDrive()
@@ -90,7 +90,7 @@ U0 DebugDistroFilePrep()
 {
   CBlkDev *bd;
   if (!Letter2Drive('A',FALSE)) {
-    In(CONFIG_DBG_DISTRO "\n");
+    In(CONFIG_DEBUG_DISTRO "\n");
     Mount;
   }
   bd=Letter2BlkDev('A');
@@ -117,7 +117,7 @@ U0 DebugDistroFilePrep()
   Copy("C:/Zenith/AMem.CC",	"A:/Zenith");
   Copy("C:/Zenith/TaskRep.CC",	"A:/Zenith");
 
-  FileWrite("C:" CONFIG_DBG_DISTRO_FILE,
+  FileWrite("C:" CONFIG_DEBUG_DISTRO_FILE,
 	bd->RAM_disk,(bd->max_blk+1)<<BLK_SIZE_BITS);
 }
 
@@ -183,7 +183,7 @@ U0 DebugDistroPrep()
   Drive('C');
   DistroPrep;
   DebugDistroFilePrep;
-  In(TOS_DVD_DBG_CONFIG);
+  In(TOS_DVD_DEBUG_CONFIG);
   BootDVDIns('C');
   Format('B',,FALSE,FSt_REDSEA);
   DelTree(TOS_DISTRO_DIR);
@@ -198,7 +198,7 @@ U0 MakeDebugDistro()
 {
   DebugDistroPrep;
   RedSeaISO(TOS_ISO_NAME,TOS_DISTRO_DIR,TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-  DefinePrint("DD_TEMPLEOS_DBG_SIZE",
+  DefinePrint("DD_TEMPLEOS_DEBUG_SIZE",
 	"Download $TX,"ZenithOS V5.03",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)",
 	0.1*(10*Size(TOS_ISO_NAME,"+s")/1024/1024));
   Drive('C');
@@ -279,7 +279,7 @@ U0 TOSProgress(U8 *st)
   progress4=tos_progress;
   progress3_max=1;
   *progress4_desc=0;
-  progress4_max=9+MAKE_LITE+MAKE_DBG+MAKE_STAFF;
+  progress4_max=9+MAKE_LITE+MAKE_DEBUG+MAKE_STAFF;
   progress4_t0=tos_progress_t0;
   StrPrint(buf,"%d. %s",++progress4,st);
   "$$PURPLE$$$$TX+CX,\"%s\"$$$$FG$$\n",buf;
@@ -327,7 +327,7 @@ U0 TOSRegen2()
   DocClear;
   Move(TOS_ISO_NAME,"D:/Downloads/TOS_Lite.ISO");
 #endif
-#if MAKE_DBG
+#if MAKE_DEBUG
   TOSProgress("Make Debug Distro ISO");
   MakeDebugDistro;
   DocClear;

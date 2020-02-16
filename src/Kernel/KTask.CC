@@ -1,7 +1,7 @@
 U0 Exit()
 {//Terminate own task.
   if (Fs==sys_focus_task && IsDebugMode) {
-    LBts(&Fs->task_flags,TASKf_KILL_AFTER_DBG);
+    LBts(&Fs->task_flags,TASKf_KILL_AFTER_DEBUG);
     G;
   } else {
     if (sys_staff_mode_flag)
