@@ -550,9 +550,9 @@ class CAP16BitInit
 };
 
 #help_index "Time/PIT"
-//Programmable Interval Timer
+#help_file "::/Doc/PIT.DD"
+//Programmable Interval Timer
 #define PIT0	0x40
-#define PIT1	0x41
 #define PIT2	0x42
 #define PIT_CMD	0x43
 
@@ -3786,7 +3786,7 @@ class CKeyDevGlobals
 };
 
 #help_index "Sound"
-#define PCSPKR	0x61
+#define PCSPKR	0x61
 #help_index "ScreenCast;Sound/AU Files"
 public class CAUData
 {//Format of AU files

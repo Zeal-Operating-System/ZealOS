@@ -59,7 +59,7 @@ U0 IntCore0TimerHandler(CTask *)
 }
 
 I64 SysTimerRead()
-{//System timer count with overflow already handled.
+{//System timer count with overflow already handled.
   I64 i,res;
   PUSHFD
   CLI
@@ -185,14 +185,15 @@ U0 Sound(I8 ona=0)
 	!LBts(&sys_semas[SEMA_SOUND],0)) { //Mutex. Just throw-out if in use
     if (!ona) {
       screencast.ona=ona;
-      OutU8(PCSPKR, InU8(PCSPKR) & ~3);
+      OutU8(PCSPKR, InU8(PCSPKR) & ~3);
     } else if (ona!=screencast.ona) {
       screencast.ona=ona;
       period=ClampI64(SYS_TIMER_FREQ/Ona2Freq(ona),1,U16_MAX);
+      //See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
       OutU8(PIT_CMD,PIT_CMDF_CHANNEL2 | PIT_CMDF_OPMODE_SQUARE_WAVE | PIT_CMDF_ACCESS_WORD);
       OutU8(PIT2,period);
       OutU8(PIT2,period.u8[1]);
-      OutU8(PCSPKR,3|InU8(PCSPKR));
+      OutU8(PCSPKR,3|InU8(PCSPKR)); //enable speaker
     }
     if (!IsDebugMode && screencast.record) {
       d=ZCAlloc(sizeof(CSoundData));

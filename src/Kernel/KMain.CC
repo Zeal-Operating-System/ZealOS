@@ -98,7 +98,7 @@ U0 SysGrInit()
 }
 
 U0 TimersInit()
-{
+{//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
   I64 i,*_q;
   U32 *_d;
 
@@ -153,7 +153,7 @@ U0 Reboot(Bool format_ramdisks=FALSE)
 U0 KMain()
 {//Continued from $LK,"KStart64.CC",A="FF:::/Kernel/KStart64.CC,I32 &KMain"$
   CBlkDev *bd;
-  OutU8(PCSPKR,InU8(PCSPKR)&~3); //Sound;
+  OutU8(PCSPKR,InU8(PCSPKR)&~3); //Sound;
   zenith_task=Fs;
   BlkPoolsInit;
   SysGlobalsInit;
