@@ -212,7 +212,7 @@ U0 ACTaskAlt(I64 sc,I64 last_sc,
 	CTask *,CTask *original_focus_task)
 {
   if (sc!=last_sc && TaskValidate(original_focus_task) &&!Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC)) {
-    Bts(&ac.flags, ACf_LAST_WAS_KEYMAP);
+    Bts(&ac.flags, ACf_LAST_WAS_KEYMAP);
     ac.old_col = ac.col;
     ac.old_row = ac.row;
 
@@ -281,7 +281,7 @@ public Bool AutoComplete(Bool val=OFF)
   while (Bt(&ac.flags,ACf_INIT_IN_PROGRESS))
     Sleep(10);
   if (val) {
-    if (Bt(&sys_run_level,RLf_AUTO_COMPLETE)) {
+    if (Bt(&sys_run_level,RLf_AUTOCOMPLETE)) {
       if (TaskValidate(ac.task))
 	old_val=TRUE;
       else {
@@ -292,7 +292,7 @@ public Bool AutoComplete(Bool val=OFF)
     }
   } else {
     if (TaskValidate(ac.task)) {
-      if (Bt(&sys_run_level,RLf_AUTO_COMPLETE))
+      if (Bt(&sys_run_level,RLf_AUTOCOMPLETE))
 	old_val=TRUE;
       Kill(ac.task);
     }

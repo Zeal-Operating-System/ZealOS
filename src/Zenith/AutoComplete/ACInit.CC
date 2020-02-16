@@ -111,7 +111,7 @@ U0 ACMainFileListTraverse(U8 *files_find_mask)
 
 public U0 ACInit(U8 *mask=NULL)
 {//Read files and build AutoComplete statistics.
-  LBtr(&sys_run_level,RLf_AUTO_COMPLETE);
+  LBtr(&sys_run_level,RLf_AUTOCOMPLETE);
   AutoComplete;
   while (LBts(&ac.flags,ACf_INIT_IN_PROGRESS))
     Yield;
@@ -128,9 +128,9 @@ public U0 ACInit(U8 *mask=NULL)
 
   ACDWordsLoad;
   RegDefault("AutoComplete", "ac.col = TEXT_COLS-30;ac.row = 15;");
-  RegExe("AutoComplete");
+  RegExe("AutoComplete");
   LBtr(&ac.flags,ACf_INIT_IN_PROGRESS);
-  LBts(&sys_run_level,RLf_AUTO_COMPLETE);
+  LBts(&sys_run_level,RLf_AUTOCOMPLETE);
   AutoComplete(ON);
 }
 

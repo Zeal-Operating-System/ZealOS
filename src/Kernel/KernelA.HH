@@ -467,32 +467,32 @@ class CKernel
 #define RLf_WINMGR		14
 #define RLf_REGISTRY		15
 #define RLf_HOME		16
-#define RLf_AUTO_COMPLETE	17
-#define RLf_ZENITH_SERVER		18
+#define RLf_AUTOCOMPLETE	17
+#define RLf_ZENITH_SERVER	18
 #define RLf_ONCE_ZENITH		19
 #define RLf_ONCE_USER		20
 
-#define RLF_16BIT		0x000001
-#define RLF_VGA			0x000002
-#define RLF_32BIT		0x000004
-#define RLF_PATCHED		0x000008
-#define RLF_16MEG_SYS_CODE_BP	0x000010
-#define RLF_64BIT		0x000020
-#define RLF_16MEG_ZENITH_HEAP_CTRL 0x000040
-#define RLF_FULL_HEAPS		0x000050
-#define RLF_RAW			0x000100
-#define RLF_INTERRUPTS		0x000200
-#define RLF_BLKDEV		0x000400
-#define RLF_MP			0x000800
-#define RLF_COMPILER		0x001000
-#define RLF_DOC			0x002000
-#define RLF_WINMGR		0x004000
-#define RLF_REGISTRY		0x008000
-#define RLF_HOME		0x010000
-#define RLF_AUTO_COMPLETE	0x020000
-#define RLF_ZENITH_SERVER		0x040000
-#define RLF_ONCE_ZENITH		0x080000
-#define RLF_ONCE_USER		0x100000
+#define RLF_16BIT		(1<<RLf_16BIT)
+#define RLF_VGA			(1<<RLf_VGA)
+#define RLF_32BIT		(1<<RLf_32BIT)
+#define RLF_PATCHED		(1<<RLf_PATCHED)
+#define RLF_16MEG_SYS_CODE_BP	(1<<RLf_16MEG_SYS_CODE_BP)
+#define RLF_64BIT		(1<<RLf_64BIT)
+#define RLF_16MEG_ZENITH_HEAP_CTRL (1<<RLf_16MEG_ZENITH_HEAP_CTRL)
+#define RLF_FULL_HEAPS		(1<<RLf_FULL_HEAPS)
+#define RLF_RAW			(1<<RLf_RAW)
+#define RLF_INTERRUPTS		(1<<RLf_INTERRUPTS)
+#define RLF_BLKDEV		(1<<RLf_BLKDEV)
+#define RLF_MP			(1<<RLf_MP)
+#define RLF_COMPILER		(1<<RLf_COMPILER)
+#define RLF_DOC			(1<<RLf_DOC)
+#define RLF_WINMGR		(1<<RLf_WINMGR)
+#define RLF_REGISTRY		(1<<RLf_REGISTRY)
+#define RLF_HOME		(1<<RLf_HOME)
+#define RLF_AUTOCOMPLETE	(1<<RLf_AUTOCOMPLETE)
+#define RLF_ZENITH_SERVER	(1<<RLf_ZENITH_SERVER)
+#define RLF_ONCE_ZENITH		(1<<RLf_ONCE_ZENITH)
+#define RLF_ONCE_USER		(1<<RLf_ONCE_USER)
 
 #help_index "Processor"
 
@@ -503,7 +503,7 @@ class CKernel
 #define PIC2_DATA	0xA1
 #define PIC_EOI		0x20 //End of interrupt
 
-//Local Advanced Programmable Interrupt Controller
+//Local Advanced Programmable Interrupt Controller
 #define LAPIC_BASE		0xFEE00000
 #define LAPIC_APIC_ID		(LAPIC_BASE+0x020)
 #define LAPIC_APIC_VERSION	(LAPIC_BASE+0x030)

@@ -1406,7 +1406,6 @@ $LK,"CFifoU8",A="FL:::/Kernel/KernelA.HH,172"$
 $LK,"ATAReadNativeMax",A="FL:::/Kernel/BlkDev/DiskATA.CC,194",BI=296$
 $LK,"BOOT_SRC_ROM",A="FL:::/Kernel/KernelA.HH,3864"$
 $LK,"MEM_FREE_PAG_HASH_SIZE",A="FL:::/Kernel/KernelA.HH,2858"$
-$LK,"RLF_AUTO_COMPLETE",A="FL:::/Kernel/KernelA.HH,492"$
 $LK,"SYS_KERNEL_END",A="FL:::/Kernel/KMain.CC,249"$
 $LK,"TakeExcept",A="FL:::/Kernel/KExcept.CC,42"$
 $LK,"_MALLOC",A="FL:::/Kernel/Memory/MAllocFree.CC,5"$
@@ -1426,7 +1425,6 @@ $LK,"UserCmdLine",A="FL:::/Kernel/KTask.CC,414",BI=297$
 $LK,"GVF_FUN",A="FL:::/Kernel/KernelA.HH,892"$
 $LK,"IA32F_LME",A="FL:::/Kernel/KernelA.HH,548"$
 $LK,"LAPICF_APIC_ENABLED",A="FL:::/Kernel/KernelA.HH,518"$
-$LK,"RLf_AUTO_COMPLETE",A="FL:::/Kernel/KernelA.HH,470"$
 $LK,"PCIClassFind",A="FL:::/Kernel/PCIBIOS.CC,265",BI=298$
 $LK,"RECALCF_HAS_CURSOR",A="FL:::/Kernel/KernelA.HH,1385"$
 $LK,"ATARep",A="FL:::/Kernel/BlkDev/DiskATAId.CC,134",BI=299$
@@ -2577,6 +2575,7 @@ $LK,"Spawn",A="FL:::/Kernel/KTask.CC,242",BI=549$
 $LK,"CTaskDying",A="FL:::/Kernel/KernelA.HH,3288"$
 $LK,"CRedSeaBoot",A="FL:::/Kernel/KernelA.HH,2358"$
 $LK,"WIF_SELF_KEY_DESC",A="FL:::/Kernel/KernelA.HH,1452"$
+$LK,"RLF_AUTOCOMPLETE",A="FL:::/Kernel/KernelA.HH,492"$
 $LK,"SET_GS_BASE",A="FL:::/Kernel/KUtils.CC,433"$
 $LK,"DOC_COLOR_FUN",A="FL:::/Kernel/KernelA.HH,1175"$
 $LK,"CTRL_ALT_TAB",A="FL:::/Kernel/KernelA.HH,658"$
@@ -2589,6 +2588,7 @@ $LK,"SUF_REM_CTRL_CHARS",A="FL:::/Kernel/KernelA.HH,3753"$
 $LK,"SC_SHIFT",A="FL:::/Kernel/KernelA.HH,3524"$
 $LK,"ATA_SET_MAX_EXT",A="FL:::/Kernel/KernelA.HH,2298"$
 $LK,"CUAsmGlobals",A="FL:::/Kernel/KernelA.HH,2264"$
+$LK,"RLf_AUTOCOMPLETE",A="FL:::/Kernel/KernelA.HH,470"$
 $LK,"StrOcc",A="FL:::/Kernel/StrA.CC,462",BI=552$
 $LK,"DOCT_INS_BIN",A="FL:::/Kernel/KernelA.HH,964"$
 $LK,"StrMatch",A="FL:::/Kernel/StrA.CC,317"$

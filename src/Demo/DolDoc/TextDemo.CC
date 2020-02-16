@@ -19,4 +19,4 @@
 //<CTRL-SHIFT-T> on this link to toggle individual commands.
 	"Link: $LK,"Genesis,1:1",A="BF:Genesis,1:1"$\n\n\n"
 
-	"Bttn:$BT,"OKAY",LE=1$\n\n\n\n";
+	"Bttn:$BT,"OKAY",LE=1$\n\n\n\n";
