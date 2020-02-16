@@ -9,10 +9,10 @@ Features in development include:
   - VBE support, VESA graphics.
   - Network card drivers, network stack.
 
+Every commit contains a "MyDistro.iso" in the /src/Tmp folder, which is an ISO build of that commit.
 
 Previous releases are currently archived on the `mega.nz` website:
   - [Previous Releases](https://mega.nz/#F!ZIEGmSRQ!qvL6Wk6THzE-dazkfT6N3Q)
-
 
 Changes include:
   - 60FPS.
