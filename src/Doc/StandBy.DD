@@ -2,13 +2,21 @@ $FG,5$$TX+CX,"AutoComplete is in StandBy"$$FG$
 
 $FG,4$$TX+CX+L+PU+UL,"System Keys Quick Guide",A="::/Doc/HelpIndex.DD"$$FG$
 $FG,4$$TX+CX,"(Works Everywhere)"$$FG$
-$FG,2$  <SPACE>   $FG$Left-Click  
-$FG,2$  <ENTER>   $FG$Right-Click  
-$FG,2$   <F1>     $FG$Help
-$FG,2$ <CTRL-m>   $FG$Personal Menu
-$FG,2$   <ESC>    $FG$Save  & Exit
-$FG,2$<SHIFT-ESC> $FG$Abort & Exit
-$FG,2$ <WINDOWS>  $FG$Pull-Down Menu
+$FG,2$  <SPACE>   $FG$ Left-Click  
+$FG,2$  <ENTER>   $FG$ Right-Click  
+$FG,2$   <F1>     $FG$ Help
+$FG,2$  <CTRL-m>  $FG$ Personal Menu
+$FG,2$   <ESC>    $FG$ Save  & Exit
+$FG,2$<SHIFT-ESC> $FG$ Abort & Exit
+$FG,2$ <WINDOWS>   $FG$Pull-Down Menu
+$FG,2$<ALT-SHIFT-N>$FG$Close AC
+$FG,2$  <CTRL-D>$FG$   File Manager
+$FG,2$  <CTRL-F>$FG$   Find
+$FG,2$  <ALT-M>$FG$    Max Window
+$FG,2$  <ALT-H>$FG$    Horz Tile
+$FG,2$  <ALT-V>$FG$    Vert Tile
+$FG,2$  <CTRL-L>$FG$   Text Menu
+$FG,2$<CTRL-ALT-N>$FG$ Close AC
 
 $FG,4$$TX+CX+L+PU+UL,"Tongues",A="::/Zenith/God/HSNotes.DD"$$FG$
 $FG,4$$TX+CX,"(Works Everywhere)"$$FG$

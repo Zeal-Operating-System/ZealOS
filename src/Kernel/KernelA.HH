@@ -1493,10 +1493,12 @@ public class CWinMgrGlobals
 
 #help_index "AutoComplete"
 #define ACf_INIT_IN_PROGRESS	0
-#define AC_FILLINS_NUM 10
+#define ACf_LAST_WAS_KEYMAP	1
+
+#define AC_FILLINS_NUM		12
 public class CAutoCompleteGlobals
 {
-  I64	num_words;
+  I64	col,row,old_col,old_row,num_words;
   CHashTable *hash_table;
   U8	*cur_word;
   I64	flags;

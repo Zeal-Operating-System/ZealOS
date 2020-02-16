@@ -212,6 +212,8 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 		}
 	      }
 	      break;
+	    case SC_F11:
+	    case SC_F12:
 	    case SC_F1...SC_F10:
 	      if (sc&SCF_CTRL) {
 		if (sc&SCF_KEY_DESC) {
@@ -221,11 +223,25 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 		    KeyDescSet("Edit/Autocomplete Sym");
 		} else {
 		  DocUnlock(doc);
-		  if (AutoComplete(ON)) {
+		  if (AutoComplete(ON))
+                  {
 		    if (sc&SCF_SHIFT)
-		      ACMan(sc.u8[0]-SC_F1+1,Fs);
-		    else
-		      ACFillIn(sc.u8[0]-SC_F1+1);
+                    {
+                      if (sc.u8[0] == SC_F11)
+                        ACMan(11, Fs);
+                      else if(sc.u8[0] == SC_F12)
+                        ACMan(12, Fs);
+                      else
+		        ACMan(sc.u8[0]-SC_F1 + 1, Fs);
+                    }
+		    else {
+		      if (sc.u8[0] == SC_F11)
+                        ACFillIn(11);
+                      else if(sc.u8[0] == SC_F12)
+                        ACFillIn(12);
+                      else
+		      ACFillIn(sc.u8[0] - SC_F1 + 1);
+                    }
 		  }
 		  DocLock(doc);
 		}

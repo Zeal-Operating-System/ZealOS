@@ -4,12 +4,12 @@ U0 ACDDictWordsAdd(U8 *st)
   I64 i;
   U8 *ptr;
   if (st && *st && (ptr=ACDWordPtAt(st))) {
-    for (i=0;i<ACD_FILLINS_NUM;i++) {
+    for (i = 0; i < ACD_FILLINS_NUM; i++) {
       if (*ptr++!=ACD_WORD_CHAR)
 	break;
       if (i) '\n';
       acd.fillins[i]=ptr-1;
-      "$$GREEN$$'%d'$$FG$$ %-23ts",i,ptr;
+      "$$GREEN$$'%d'$$FG$$ $$BLACK$$%-23ts$$FG$$",i,ptr;
       ptr+=StrLen(ptr)+3;
     }
     acd.num_fillins=i;
@@ -89,6 +89,17 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
   F64 timeout_time=tS+0.5;
   CHashSrcSym *tmph;
 
+  if (LBtr(&ac.flags, ACf_LAST_WAS_KEYMAP))
+  {
+    ac.col = ac.old_col;
+    ac.row = ac.old_row;
+  }
+  else
+  {
+    ac.col = Fs->win_left;
+    ac.row = Fs->win_top;
+  }
+
   src=DocScanLine(focus_l,doc_e,&data_col);
   DocUnlock(focus_l);
   i=StrLen(src);
@@ -115,20 +126,21 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
 	  tmpw=tmpw->next;
 	}
       }
-    ACDocReset(51,13);
+    ACDocReset(ac.col, ac.row);
     if (ac.cur_word && *ac.cur_word) {
       "$$PURPLE$$Word:%s$$FG$$\n",ac.cur_word;
       for (i=0;i<ac.num_fillins;i++) {
 	st=ac.fillin_matches[i]->str;
-	"$$GREEN$$F%02d$$FG$$ ",i+1;
+	"$$GREEN$$F%02d$$FG$$$$HL$$ ",i+1;
 	if (TaskValidate(focus_task) &&
 	      (tmph=HashFind(st,focus_task->hash_table,HTG_SRC_SYM)) &&
 	      tmph->src_link) {
 	  if (tmph->type&HTF_PUBLIC)
-	    "$$RED$$";
-	  "$$TX+UL+L+PU,\"%$$Q\",A=\"%s\"$$$$FG$$\n",st,tmph->src_link;
+	    "$$IV$$";
+	  "$$TX+UL+L+PU,\"%$$Q\",A=\"%s\"$$$$IV,0$$\n",st,tmph->src_link;
 	} else
 	  "%s\n",st;
+        "$$HL,0$$";
       }
       if (acd.has_words)
 	ACDDictWordsAdd(ac.cur_word);
@@ -173,8 +185,11 @@ U0 ACTaskCtrl(I64 sc,I64 last_sc,
       WinZBufUpdate;
   } else {
     if (sc!=last_sc) {
+      Bts(&ac.flags, ACf_LAST_WAS_KEYMAP);
+      ac.old_col = ac.col;
+      ac.old_row = ac.row;
       if (sc&SCF_ALT) {
-	ACDocReset(27,3);
+	ACDocReset(TEXT_COLS-50,3);
 	if (TaskValidate(original_focus_task) &&
 	      !Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC))
 	  KeyMapFamily(original_focus_task,0,
@@ -183,7 +198,7 @@ U0 ACTaskCtrl(I64 sc,I64 last_sc,
 	      ToBool(!(sc&SCF_SHIFT)),ToBool(sc&SCF_SHIFT));
       } else if (TaskValidate(original_focus_task) &&
 	    !Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC)) {
-	ACDocReset(27,3);
+	ACDocReset(TEXT_COLS-50,3);
 	KeyMapFamily(original_focus_task,SCF_CTRL,
 	      ToBool(!(sc&SCF_SHIFT)),ToBool(sc&SCF_SHIFT));
       }
@@ -196,9 +211,12 @@ U0 ACTaskCtrl(I64 sc,I64 last_sc,
 U0 ACTaskAlt(I64 sc,I64 last_sc,
 	CTask *,CTask *original_focus_task)
 {
-  if (sc!=last_sc && TaskValidate(original_focus_task) &&
-	!Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC)) {
-    ACDocReset(27,3);
+  if (sc!=last_sc && TaskValidate(original_focus_task) &&!Bt(&original_focus_task->win_inhibit,WIf_SELF_KEY_DESC)) {
+    Bts(&ac.flags, ACf_LAST_WAS_KEYMAP);
+    ac.old_col = ac.col;
+    ac.old_row = ac.row;
+
+    ACDocReset(TEXT_COLS-50,3);
     KeyMapFamily(original_focus_task,SCF_ALT,
 	  ToBool(!(sc&SCF_SHIFT)),ToBool(sc&SCF_SHIFT));
   }
@@ -209,6 +227,7 @@ U0 ACTaskAlt(I64 sc,I64 last_sc,
 U0 ACTaskEndCB()
 {
   ac.task=NULL;
+  RegWrite("AutoComplete", "ac.col=%d;ac.row=%d;",ac.col, ac.row);
   Exit;
 }
 
@@ -220,7 +239,7 @@ U0 ACTask(I64)
   Fs->task_end_cb=&ACTaskEndCB;
   DocTermNew;
   LBts(&Fs->display_flags,DISPLAYf_SHOW);
-  WinHorz(51,Fs->win_right);
+  ACDocReset(ac.col,ac.row);
   LBts(&Fs->display_flags,DISPLAYf_WIN_ON_TOP);
   Fs->win_inhibit=WIG_NO_FOCUS_TASK_DEFAULT;
   Free(ac.cur_word);
@@ -276,7 +295,6 @@ public Bool AutoComplete(Bool val=OFF)
       if (Bt(&sys_run_level,RLf_AUTO_COMPLETE))
 	old_val=TRUE;
       Kill(ac.task);
-      DeathWait(&ac.task);
     }
   }
   return old_val;
