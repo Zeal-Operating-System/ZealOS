@@ -1543,7 +1543,7 @@ U0 OSTestSuite()
   TS("Psalmody");	DoPsalmody;
   TS("JukeBox");	DoJukeBox;
   TS("Span");		if (!sys_heap_init_flag) DoSpan; //Has FloodFill
-//  TS("Strut");		DoStrut;
+//  TS("Strut");		DoStrut;
   TS("RawHide");	DoRawHide;
   TS("KeepAway");	DoKeepAway;
   TS("XCaliber");	DoXCaliber;

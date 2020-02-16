@@ -10,6 +10,7 @@ Cd(__DIR__);;
 #include "Profiler"
 #include "StrUtils"
 #include "DocUtils"
+#include "TaskRep"
 #include "ToDolDoc"
 #include "ToTXT"
 Cd("..");;

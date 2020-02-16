@@ -3,8 +3,7 @@ Cd(__DIR__);;
 #include "ZMath"
 #include "Training"
 #include "ZMemory"
-#include "TaskRep"
-#include "ZMathODE"
+#include "ZMathODE"
 #include "Gr/MakeGr"
 #include "ZSound"
 #include "ZBlkDev/MakeZBlkDev"
@@ -12,7 +11,7 @@ Cd(__DIR__);;
 #include "Win"
 #include "WinMgr"
 #include "ZDebug"
-#include "::/Zenith/God/GodExterns"
+#include "::/Zenith/God/GodExterns"
 #include "DolDoc/MakeDoc"
 LBts(&sys_run_level,RLf_DOC);
 #include "Ctrls/MakeCtrls"
