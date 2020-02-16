@@ -202,7 +202,7 @@ I64 TaskInit(CTask *task,I64 stack_size)
   task->next_child_task=task->last_child_task=
 	(&task->next_child_task)(U8 *)-offset(CTask.next_sibling_task);
 
-  JobCtrlInit(&task->srv_ctrl);
+  JobCtrlInit(&task->server_ctrl);
   QueueInit(&task->next_cc);
   QueueInit(&task->next_except);
   QueueInit(&task->next_ctrl);
@@ -365,7 +365,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
     return res;
 }
 
-U0 SrvTaskCont()
+U0 ServerTaskCont()
 {//Act as server task in a loop handling commands.
   I64 old_flags=GetRFlags;
   FlushMessages;
@@ -403,12 +403,12 @@ U0 UserTaskCont()
   } while (cont);
 }
 
-U0 SrvCmdLine(I64 dummy=0)
+U0 ServerCmdLine(I64 dummy=0)
 {
   no_warn dummy;
   Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
-  CallExtStr("SrvStartUp");
-  SrvTaskCont;
+  CallExtStr("ServerStartUp");
+  ServerTaskCont;
 }
 
 U0 UserCmdLine(I64 dummy=0)
@@ -480,11 +480,11 @@ I64 TaskEnd()
 
   while (LBts(&task->task_flags,TASKf_TASK_LOCK))
     PAUSE
-  while (LBts(&task->srv_ctrl.flags,JOBCf_LOCKED))
+  while (LBts(&task->server_ctrl.flags,JOBCf_LOCKED))
     PAUSE
 
-  JobQueueDel(&task->srv_ctrl.next_waiting);
-  JobQueueDel(&task->srv_ctrl.next_done);
+  JobQueueDel(&task->server_ctrl.next_waiting);
+  JobQueueDel(&task->server_ctrl.next_done);
 
   if (IsRaw)
     VGAFlush;
@@ -513,7 +513,7 @@ I64 TaskEnd()
   tmpt =task->next_task; //save to return
   TaskQueueRemove(task);
 
-  LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
+  LBtr(&task->server_ctrl.flags,JOBCf_LOCKED);
   LBtr(&task->task_flags,TASKf_TASK_LOCK);
 
   task->wake_jiffy=counts.jiffies+DYING_JIFFIES;

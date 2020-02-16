@@ -45,7 +45,7 @@ U0 OptPass5(CCompCtrl *cc)
 		MinI64(tmpi1->res.type.raw_type,tmpi1->arg1.type.raw_type));
 	  tmpi->arg2.reg=tmpi1->arg1.reg;
 	  tmpi->arg2.disp=tmpi1->arg1.disp;
-	  tmpi->ic_flags|=tmpi1->ic_flags&ICG_NO_CVT_MASK;
+	  tmpi->ic_flags|=tmpi1->ic_flags&ICG_NO_CONVERT_MASK;
 	  OptSetNOP2(tmpi1);
 	}
       }
@@ -73,7 +73,7 @@ U0 OptPass5(CCompCtrl *cc)
 	  CompMinTypePointed(tmpi,tmpi1->arg1_type_pointed_to);
 	  tmpi->arg1.reg=tmpi1->arg1.reg;
 	  tmpi->arg1.disp=tmpi1->arg1.disp;
-	  tmpi->ic_flags|=tmpi1->ic_flags&ICG_NO_CVT_MASK;
+	  tmpi->ic_flags|=tmpi1->ic_flags&ICG_NO_CONVERT_MASK;
 	  OptSetNOP2(tmpi1);
 	}
       }

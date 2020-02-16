@@ -64,13 +64,13 @@ cc->pass==10 is final pass, code is placed into buf.
       tmpi->ic_last_start=-1;
       if (tmpi->arg2.type.mode) {
 	if (tmpi->ic_flags & ICF_ARG2_TO_F64) {
-	  ICFCvt(cc,tmpi,REG_RAX,tmpi->arg2.type,
+	  ICFConvert(cc,tmpi,REG_RAX,tmpi->arg2.type,
 		tmpi->arg2.reg,tmpi->arg2.disp,FALSE,CN_A2,rip2);
 	  tmpi->arg2.type=MDF_REG+RT_I64;
 	  tmpi->arg2.reg=REG_RAX;
 	  tmpi->arg2.disp=0;
 	} else if (tmpi->ic_flags & ICF_ARG2_TO_INT) {
-	  ICFCvt(cc,tmpi,REG_RAX,
+	  ICFConvert(cc,tmpi,REG_RAX,
 		tmpi->arg2.type,tmpi->arg2.reg,tmpi->arg2.disp,TRUE,CN_A2,rip2);
 	  tmpi->arg2.type=MDF_REG+RT_I64;
 	  tmpi->arg2.reg=REG_RAX;
@@ -79,13 +79,13 @@ cc->pass==10 is final pass, code is placed into buf.
       }
       if (tmpi->arg1.type.mode) {
 	if (tmpi->ic_flags & ICF_ARG1_TO_F64) {
-	  ICFCvt(cc,tmpi,REG_RDX,tmpi->arg1.type,
+	  ICFConvert(cc,tmpi,REG_RDX,tmpi->arg1.type,
 		tmpi->arg1.reg,tmpi->arg1.disp,FALSE,CN_A1,rip2);
 	  tmpi->arg1.type=MDF_REG+RT_I64;
 	  tmpi->arg1.reg=REG_RDX;
 	  tmpi->arg1.disp=0;
 	} else if (tmpi->ic_flags & ICF_ARG1_TO_INT) {
-	  ICFCvt(cc,tmpi,REG_RDX,
+	  ICFConvert(cc,tmpi,REG_RDX,
 		tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,TRUE,CN_A1,rip2);
 	  tmpi->arg1.type=MDF_REG+RT_I64;
 	  tmpi->arg1.reg=REG_RDX;
@@ -1048,7 +1048,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	    ICU24(tmpi,0x242CDF); //FILD U64 [RSP]
 	    ICU24(tmpi,0x241CDD); //FSTP U64 [RSP]
 	  } else {
-	    ICFCvt(cc,tmpi,REG_RAX,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
+	    ICFConvert(cc,tmpi,REG_RAX,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
 		  FALSE,CN_RES,rip2);
 	    if (!Bt(&tmpi->ic_flags,ICf_DONT_POP_FLOAT0+
 		  cc->cur_ic_float_op_num-1))
@@ -1056,7 +1056,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		    MDF_REG+RT_I64,REG_RAX,0,rip2);
 	  }
 	} else if (tmpi->ic_flags & ICF_RES_TO_INT) {
-	  ICFCvt(cc,tmpi,REG_RAX,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
+	  ICFConvert(cc,tmpi,REG_RAX,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
 		TRUE,CN_RES,rip2);
 	  ICMov(tmpi,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
 		MDF_REG+RT_I64,REG_RAX,0,rip2);

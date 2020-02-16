@@ -249,7 +249,7 @@ U0 PsmLeftClick(I64 x,I64 y)
   }
 }
 
-U8 PsmCvtDuration(F64 d)
+U8 PsmConvertDuration(F64 d)
 {
   F64 d1,d2;
   I64 j;
@@ -756,7 +756,7 @@ mo_got_message:
 	  if (!was_null) {
 	    music.tempo=4.4*tempo_state.tempo/TEMPO_RANGE+0.5;
 	    music.stacatto_factor=0.88*tempo_state.stacatto/TEMPO_RANGE+0.12;
-	    tmpn->duration=PsmCvtDuration(
+	    tmpn->duration=PsmConvertDuration(
 		  music.tempo*(evt_time-note_down_time));
 	    PsmSetWidth(tmpn);
 	    QueueInsert(tmpn,psm.cur_note->last);

@@ -20,7 +20,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 	      arg1->type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	      arg1->reg,arg1->disp,rip);
-	ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
+	ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
 	ICPush(tmpi,MDF_REG+RT_I64,REG_RAX,0,rip);
 	t1=MDF_SIB+RT_I64; r1=REG_RSP+REG_RSP<<8; d1=0;
 	rsp_size+=8;
@@ -45,7 +45,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
 	      arg1->type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	      arg1->reg,arg1->disp,rip);
 	if (tmpi->arg1_type_pointed_to!=RT_F64)
-	  ICFCvt2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
+	  ICFConvert2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
 	ICU16(tmpi,0x5052);	//PUSH EDX PUSH EAX
 	rsp_size=16;
 	t1=MDF_SIB+RT_I64; r1=REG_RSP+REG_RSP<<8; d1=8;
@@ -113,7 +113,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
       }
       if (tmpi->arg1_type_pointed_to!=RT_F64) {
 	ICPop(tmpi,MDF_REG+RT_I64,REG_RAX,0,rip);
-	ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
+	ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
 	ICMov(tmpi,arg1->type&MDG_MASK+tmpi->arg1_type_pointed_to,arg1->reg,
 	      arg1->disp,MDF_REG+RT_I64,REG_RAX,0,rip);
       } else
@@ -134,7 +134,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
       if (tmpi->arg1_type_pointed_to!=RT_F64) {
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 	      MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,rip);
-	ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
+	ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
 	ICPush(tmpi,MDF_REG+RT_I64,REG_RAX,0,rip);
       } else
 	ICPush(tmpi,MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,rip);
@@ -149,7 +149,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
 	ICMov(tmpi,MDF_REG+RT_I64,REG_RDX,0,
 	      MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,rip);
 	if (tmpi->arg1_type_pointed_to!=RT_F64)
-	  ICFCvt2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
+	  ICFConvert2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
 	ICU16(tmpi,0x5052);	//PUSH EDX PUSH EAX
 	rsp_size=16;
 	t1=MDF_SIB+RT_I64; r1=REG_RSP+REG_RSP<<8; d1=8;
@@ -213,7 +213,7 @@ U0 ICFOpEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,U8 *buf2,I64 rip)
       }
       ICPop(tmpi,MDF_REG+RT_I64,REG_RAX,0,rip);
       if (tmpi->arg1_type_pointed_to!=RT_F64)
-	ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
+	ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
       ICMov(tmpi,MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,
 	    MDF_REG+RT_I64,REG_RAX,0,rip);
     }

@@ -55,7 +55,7 @@ public _extern _CALLEXTNUM
 	I64 CallExtNum(I64 num,...); //Call ext num with fixed number of args.
 
 #help_index "Char/Conversion"
-public _intern IC_TOUPPER I64 ToUpper(U8 ch); //Cvt char to upper case.
+public _intern IC_TOUPPER I64 ToUpper(U8 ch); //Convert char to upper case.
 
 #help_index "Char/Operations"
 public _intern IC_STRLEN I64 StrLen(U8 *st); //String length.

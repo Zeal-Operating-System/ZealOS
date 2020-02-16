@@ -193,7 +193,7 @@ U0 MPAPICInit()
 
 U0 CoreAPSethTask()
 {
-  CJobCtrl *ctrl=&Fs->srv_ctrl;
+  CJobCtrl *ctrl=&Fs->server_ctrl;
   while (TRUE) {
     STI
     do {
@@ -231,7 +231,7 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
   tmpc->aux1=aux1;
   tmpc->aux2=aux2;
   seth=cpu_structs[target_cpu].seth_task;
-  tmpc->ctrl=ctrl=&seth->srv_ctrl;
+  tmpc->ctrl=ctrl=&seth->server_ctrl;
   PUSHFD
   CLI
   while (LBts(&ctrl->flags,JOBCf_LOCKED))
@@ -300,8 +300,8 @@ U0 Core0StartMP()
     MPHalt; //sets mp_count to 1
     for (i=1;i<my_mp_count;i++) {
       c=&cpu_structs[i];
-      JobQueueDel(&c->seth_task->srv_ctrl.next_waiting);
-      JobQueueDel(&c->seth_task->srv_ctrl.next_done);
+      JobQueueDel(&c->seth_task->server_ctrl.next_waiting);
+      JobQueueDel(&c->seth_task->server_ctrl.next_done);
     }
   }
   MemSet(&cpu_structs[1],0,sizeof(CCPU)*(MP_PROCESSORS_NUM-1));

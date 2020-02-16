@@ -159,7 +159,7 @@ I64 PopUpMacroMenu()
 	"\n\n\n$$GREEN$$SHIFT-F2$$FG$$ will play macro.\n");
   doc->flags|=DOCF_SIZE_MIN | DOCF_FORM;
   StrPrint(buf,"DocMenu(%d);",doc);
-  sys_macro_task=Spawn(&SrvCmdLine,NULL,"Macro Popup",,Fs);
+  sys_macro_task=Spawn(&ServerCmdLine,NULL,"Macro Popup",,Fs);
   Fs->popup_task=sys_macro_task;
   LBts(&sys_macro_task->display_flags,DISPLAYf_WIN_ON_TOP);
   tmpc=TaskExe(sys_macro_task,Fs,buf,

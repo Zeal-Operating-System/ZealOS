@@ -10,7 +10,7 @@ U0 InputFilterTask()
   while (TRUE) {
     CLI
     JobsHandler(old_flags);
-    tmpc1=&Fs->srv_ctrl.next_waiting;
+    tmpc1=&Fs->server_ctrl.next_waiting;
     tmpc=tmpc1->next;
     if (tmpc==tmpc1)
       break;
@@ -45,7 +45,7 @@ Note: This delivers messages from parent down to pop-up.
   CJob *tmpc,*tmpc1;
   if (!task) task=Fs;
   old_flags=GetRFlags;
-  tmpc1=&task->srv_ctrl.next_waiting;
+  tmpc1=&task->server_ctrl.next_waiting;
   while (TRUE) {
     CLI
     if (task==Fs)

@@ -2,7 +2,7 @@
 public CTask *PopUpViewDoc(CDoc *doc,I64 dof_flags=0)
 {//Pass doc to PopUp win task for viewing.
   U8 *buf=MStrPrint("DocEd(0x%X,0x%X);",doc,dof_flags);
-  CTask *task=Spawn(&SrvCmdLine,NULL,"View",,Fs);
+  CTask *task=Spawn(&ServerCmdLine,NULL,"View",,Fs);
   TaskExe(task,NULL,buf,1<<JOBf_EXIT_ON_COMPLETE|1<<JOBf_FREE_ON_COMPLETE);
   Free(buf);
   return task;
@@ -10,7 +10,7 @@ public CTask *PopUpViewDoc(CDoc *doc,I64 dof_flags=0)
 
 public CTask *PopUpViewPrint(U8 *format,...)
 {//View Print stmt in PopUp win task.
-  CTask *task=Spawn(&SrvCmdLine,NULL,"View",,Fs);
+  CTask *task=Spawn(&ServerCmdLine,NULL,"View",,Fs);
   U8 *buf=StrPrintJoin(NULL,format,argc,argv);
   CDoc *doc=DocNew(,task);
   DocPrint(doc,buf);

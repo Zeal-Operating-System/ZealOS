@@ -1629,7 +1629,7 @@ public class CAutoCompleteDictGlobals
 #define ICF_DEL_PREV_INS		0x040000000
 #define ICF_PREV_DELETED		0x080000000
 #define ICF_DONT_RESTORE		0x100000000
-#define ICG_NO_CVT_MASK			0x1FFFFFF00
+#define ICG_NO_CONVERT_MASK			0x1FFFFFF00
 
 #define IC_BODY_SIZE			0x83
 
@@ -3335,7 +3335,7 @@ public class CTask //The Fs segment reg points to current CTask.
   F64	last_ode_time;
   CHashTable *hash_table;
 
-  CJobCtrl srv_ctrl;
+  CJobCtrl server_ctrl;
   CCompCtrl *next_cc,*last_cc;
   CHashFun *last_fun;
 

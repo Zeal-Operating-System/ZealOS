@@ -39,24 +39,24 @@ I64 TaskQueueSize(CTask *task)
   I64 res=0;
   PUSHFD
   CLI
-  while (LBts(&task->srv_ctrl.flags,JOBCf_LOCKED))
+  while (LBts(&task->server_ctrl.flags,JOBCf_LOCKED))
     PAUSE
 
-  tmpc1=&task->srv_ctrl.next_waiting;
+  tmpc1=&task->server_ctrl.next_waiting;
   tmpc=tmpc1->next;
   while (tmpc!=tmpc1) {
     res+=MSize2(tmpc)+MSize2(tmpc->aux_str);
     tmpc=tmpc->next;
   }
 
-  tmpc1=&task->srv_ctrl.next_done;
+  tmpc1=&task->server_ctrl.next_done;
   tmpc=tmpc1->next;
   while (tmpc!=tmpc1) {
     res+=MSize2(tmpc)+MSize2(tmpc->aux_str);
     tmpc=tmpc->next;
   }
 
-  LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
+  LBtr(&task->server_ctrl.flags,JOBCf_LOCKED);
   POPFD
   return res;
 }

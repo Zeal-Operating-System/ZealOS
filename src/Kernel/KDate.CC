@@ -12,7 +12,7 @@ I64 YearStartDate(I64 year)
 }
 
 CDate Struct2Date(CDateStruct *_ds)
-{//Cvt CDateStruct to CDate.
+{//Convert CDateStruct to CDate.
   CDate cdt;
   I64 i1,i2;
   i1=YearStartDate(_ds->year);
@@ -37,7 +37,7 @@ I64 DayOfWeek(I64 i)
 }
 
 U0 Date2Struct(CDateStruct *_ds,CDate cdt)
-{//Cvt CDate to CDateStruct.
+{//Convert CDate to CDateStruct.
   I64 i,k,date=cdt.date;
   _ds->day_of_week=DayOfWeek(date);
   _ds->year=(date+1)*100000/CDATE_YEAR_DAYS_INT;

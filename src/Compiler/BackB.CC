@@ -276,13 +276,13 @@ U0 ICToUpper(CIntermediateCode *tmpi,I64 rip)
 
 U0 ICToI64(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 {
-  ICFCvt(cc,tmpi,REG_RAX,
+  ICFConvert(cc,tmpi,REG_RAX,
 	tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,TRUE,CN_INST,rip);
 }
 
 U0 ICToF64(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 {
-  ICFCvt(cc,tmpi,REG_RAX,
+  ICFConvert(cc,tmpi,REG_RAX,
 	tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,FALSE,CN_INST,rip);
 }
 

@@ -176,7 +176,7 @@ U0 ICAssign(CIntermediateCode *tmpi,I64 rip)
 	    tmpi1->arg1.reg!=tmpi->arg1.reg ||
 	    (tmpi->arg2.type&MDF_REG || tmpi->arg2.type&MDF_DISP) &&
 	    tmpi->arg2.reg==tmpi->arg1.reg ||
-	    tmpi->res.type.mode || tmpi1->ic_flags&~ICG_NO_CVT_MASK) {
+	    tmpi->res.type.mode || tmpi1->ic_flags&~ICG_NO_CONVERT_MASK) {
 	ICMov(tmpi,
 	      MDF_DISP+tmpi->arg1_type_pointed_to,
 	      tmpi->arg1.reg,tmpi->arg1.disp,

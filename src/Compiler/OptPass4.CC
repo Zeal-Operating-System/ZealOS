@@ -16,7 +16,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 	i=tmpil1->ic_data;
 	if (I32_MIN<=i<=I32_MAX &&
 	      !Bt(&cmp.non_ptr_vars_mask,tmpil2->arg1.reg)) {
-	  tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CVT_MASK;
+	  tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CONVERT_MASK;
 	  tmpil1->ic_code=IC_LEA;
 	  tmpil1->arg1.type=MDF_DISP+tmpil1->arg1.type.raw_type;
 	  tmpil1->arg1.reg=tmpil2->arg1.reg;
@@ -28,7 +28,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 	i=tmpil1->ic_data;
 	if (I32_MIN<=i<=I32_MAX && tmpil2->arg1.reg!=REG_RSP &&
 	      1<=tmpil2->ic_data<=3) {
-	  tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CVT_MASK;
+	  tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CONVERT_MASK;
 	  tmpil1->ic_code=IC_LEA;
 	  tmpil1->arg1.type=MDF_SIB+tmpil1->arg1.type.raw_type;
 	  tmpil1->arg1.reg=tmpil2->arg1.reg<<8+REG_NONE;
@@ -62,7 +62,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 	      MinI64(tmpil2->res.type.raw_type,tmpil2->arg1.type.raw_type));
 	tmpil1->arg2.reg=tmpil2->arg1.reg;
 	tmpil1->arg2.disp=tmpil2->arg1.disp;
-	tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CVT_MASK;
+	tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CONVERT_MASK;
 	OptSetNOP2(tmpil2);
 	return TRUE;
       }
@@ -87,7 +87,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 	CompMinTypePointed(tmpil1,tmpil2->arg1_type_pointed_to);
 	tmpil1->arg1.reg=tmpil2->arg1.reg;
 	tmpil1->arg1.disp=tmpil2->arg1.disp;
-	tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CVT_MASK;
+	tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CONVERT_MASK;
 	OptSetNOP2(tmpil2);
 	return TRUE;
       }
@@ -289,7 +289,7 @@ p4_lea_gone:
 		tmpi->arg1.reg=tmpi2->arg1.reg+tmpi1->arg1.reg<<8;
 p4_sib:
 		tmpi->ic_flags|=(tmpi1->ic_flags|tmpi2->ic_flags)
-		&ICG_NO_CVT_MASK;
+		&ICG_NO_CONVERT_MASK;
 		OptSetNOP2(tmpi1);
 		OptFree(tmpi2);
 

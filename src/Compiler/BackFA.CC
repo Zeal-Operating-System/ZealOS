@@ -120,7 +120,7 @@ U0 ICCopyTemplate(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,
   tmpi->ic_count+=i;
 }
 
-U0 ICFCvt(CCompCtrl *cc,CIntermediateCode *tmpi,I64 r1,
+U0 ICFConvert(CCompCtrl *cc,CIntermediateCode *tmpi,I64 r1,
 	CICType t2,I64 r2,I64 d2,Bool to_int,I64 pos,I64 rip)
 {
   I64 rsp_size=0,op1,op2;
@@ -166,7 +166,7 @@ U0 ICFCvt(CCompCtrl *cc,CIntermediateCode *tmpi,I64 r1,
   }
 }
 
-U0 ICFCvt2(CCompCtrl *cc,CIntermediateCode *tmpi,I64 r1,
+U0 ICFConvert2(CCompCtrl *cc,CIntermediateCode *tmpi,I64 r1,
 	CICType t2,I64 r2,I64 d2,Bool to_int,I64 rip)
 {
   I64 rsp_size=0,op1,op2;
@@ -556,7 +556,7 @@ U0 ICFModEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 	    tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	    tmpi->arg1.reg,tmpi->arg1.disp,rip);
       if (tmpi->arg1_type_pointed_to!=RT_F64)
-	ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
+	ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
     } else {
       ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 	    tmpi->arg2.type,tmpi->arg2.reg,tmpi->arg2.disp,rip);
@@ -564,12 +564,12 @@ U0 ICFModEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 	    tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	    tmpi->arg1.reg,tmpi->arg1.disp,rip);
       if (tmpi->arg1_type_pointed_to!=RT_F64)
-	ICFCvt2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
+	ICFConvert2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
     }
 //TODO: unpushable,unpop?  Not sure
     ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_MOD,FALSE,FALSE,FALSE,CN_INST);
     if (tmpi->arg1_type_pointed_to!=RT_F64)
-      ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
+      ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
     ICMov(tmpi,tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	  tmpi->arg1.reg,tmpi->arg1.disp,MDF_REG+RT_I64,REG_RAX,0,rip);
     if (tmpi->res.type.mode)
@@ -583,7 +583,7 @@ U0 ICFModEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
       ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 	    MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,rip);
       if (tmpi->arg1_type_pointed_to!=RT_F64)
-	ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
+	ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,FALSE,rip);
     } else {
       ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 	    tmpi->arg2.type,tmpi->arg2.reg,tmpi->arg2.disp,rip);
@@ -592,12 +592,12 @@ U0 ICFModEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
       ICMov(tmpi,MDF_REG+RT_I64,REG_RDX,0,
 	    MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,rip);
       if (tmpi->arg1_type_pointed_to!=RT_F64)
-	ICFCvt2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
+	ICFConvert2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
     }
 //TODO: unpushable,unpop?  Not sure
     ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_MOD,FALSE,FALSE,FALSE,CN_INST);
     if (tmpi->arg1_type_pointed_to!=RT_F64)
-      ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
+      ICFConvert2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
     ICMov(tmpi,MDF_DISP+tmpi->arg1_type_pointed_to,REG_RCX,0,
 	  MDF_REG+RT_I64,REG_RAX,0,rip);
     if (tmpi->res.type.mode)

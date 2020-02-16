@@ -36,7 +36,7 @@ U0 TXTPutS(CDoc *doc,U8 *st,I64 *_col)
 }
 
 public CDoc *Doc2TXT(CDoc *doc_in)
-{//Cvt $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ doc to plain text.
+{//Convert $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ doc to plain text.
   CDocEntry *doc_e,*doc_e2;
   I64 y,col;
   CDoc *doc_out=DocNew;

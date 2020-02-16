@@ -439,7 +439,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
       if (doc->flags&DOCF_PLAIN_TEXT)
 	DocFlagsToggle(doc,DOCF_PLAIN_TEXT);
       DocWrite(doc);
-      task=Spawn(&SrvCmdLine,NULL,"Srv",,Fs);
+      task=Spawn(&ServerCmdLine,NULL,"Server",,Fs);
       st2=DirCur;
       st=MStrPrint("Cd(\"%s\");",st2);
       tmpc=TaskExe(task,Fs,st,1<<JOBf_WAKE_MASTER|1<<JOBf_FOCUS_MASTER);

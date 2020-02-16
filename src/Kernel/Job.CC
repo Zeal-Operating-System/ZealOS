@@ -36,33 +36,33 @@ U0 TaskResetAwaitingMessage(CTask *task=NULL)
   POPFD
 }
 
-CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags)
+CJob *TaskExe(CTask *server,CTask *master,U8 *data,I64 flags)
 {//Queueues a request to compile and execute src code text.
   CJob *res;
-  if (!data || !TaskValidate(srv) || master && !TaskValidate(master) ||
-	srv->popup_task && !Bt(&srv->task_flags,TASKf_FILTER_INPUT))
+  if (!data || !TaskValidate(server) || master && !TaskValidate(master) ||
+	server->popup_task && !Bt(&server->task_flags,TASKf_FILTER_INPUT))
     return NULL;
   res=ZCAlloc(sizeof(CJob));
   res->master_task=master;
   res->job_code=JOBT_EXE_STR;
   res->flags=flags;
   res->aux_str=ZStrNew(data);
-  res->ctrl=&srv->srv_ctrl;
+  res->ctrl=&server->server_ctrl;
 
   PUSHFD
   CLI
-  while (LBts(&srv->srv_ctrl.flags,JOBCf_LOCKED))
+  while (LBts(&server->server_ctrl.flags,JOBCf_LOCKED))
     PAUSE
-  if (!TaskValidate(srv)) {
-    LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
+  if (!TaskValidate(server)) {
+    LBtr(&server->server_ctrl.flags,JOBCf_LOCKED);
     POPFD
     JobDel(res);
     return NULL;
   } else {
-    LBtr(&srv->task_flags,TASKf_IDLE);
-    TaskResetAwaitingMessage(srv);
-    QueueInsert(res,srv->srv_ctrl.last_waiting);
-    LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
+    LBtr(&server->task_flags,TASKf_IDLE);
+    TaskResetAwaitingMessage(server);
+    QueueInsert(res,server->server_ctrl.last_waiting);
+    LBtr(&server->server_ctrl.flags,JOBCf_LOCKED);
     if (Bt(&flags,JOBf_WAKE_MASTER)) {
       Suspend(master);
       Yield;
@@ -72,12 +72,12 @@ CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags)
   return res;
 }
 
-CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
+CJob *TaskText(CTask *server,CTask *master,U8 *data,I64 flags)
 {//Post StdIn text to servant task. Tell who the master task is.
   CJob *res;
   CTask *task;
-  if (!data || !TaskValidate(srv) || master && !TaskValidate(master) ||
-	srv->popup_task && !Bt(&srv->task_flags,TASKf_FILTER_INPUT))
+  if (!data || !TaskValidate(server) || master && !TaskValidate(master) ||
+	server->popup_task && !Bt(&server->task_flags,TASKf_FILTER_INPUT))
     return NULL;
   res=ZCAlloc(sizeof(CJob));
   res->master_task=master; //in case somebody cares
@@ -86,22 +86,22 @@ CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
   res->aux_str=ZStrNew(data);
 
   PUSHFD
-  task=srv->last_input_filter_task;
-  if (Bt(&flags,JOBf_HIGHEST_PRIORITY) || task==srv) {
-    if (task!=srv)
-      TaskWait(srv);
-    task=Spawn(&InputFilterTask,NULL,"Input Filter",,srv);
+  task=server->last_input_filter_task;
+  if (Bt(&flags,JOBf_HIGHEST_PRIORITY) || task==server) {
+    if (task!=server)
+      TaskWait(server);
+    task=Spawn(&InputFilterTask,NULL,"Input Filter",,server);
     CLI
-    task->next_input_filter_task=srv->next_input_filter_task;
-    task->last_input_filter_task=srv;
-    srv->next_input_filter_task=task;
+    task->next_input_filter_task=server->next_input_filter_task;
+    task->last_input_filter_task=server;
+    server->next_input_filter_task=task;
     task->next_input_filter_task->last_input_filter_task=task;
   } else {
     CLI
-    task=srv->next_input_filter_task;
+    task=server->next_input_filter_task;
   }
-  res->ctrl=&task->srv_ctrl;
-  while (LBts(&task->srv_ctrl.flags,JOBCf_LOCKED))
+  res->ctrl=&task->server_ctrl;
+  while (LBts(&task->server_ctrl.flags,JOBCf_LOCKED))
     PAUSE
   if (!TaskValidate(task)) {
     JobDel(res);
@@ -109,21 +109,21 @@ CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags)
   } else {
     LBtr(&task->task_flags,TASKf_IDLE);
     TaskResetAwaitingMessage(task);
-    QueueInsert(res,task->srv_ctrl.last_waiting);
-    LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
+    QueueInsert(res,task->server_ctrl.last_waiting);
+    LBtr(&task->server_ctrl.flags,JOBCf_LOCKED);
   }
   POPFD
   return res;
 }
 
-CJob *TaskMessage(CTask *_srv,CTask *master,
+CJob *TaskMessage(CTask *_server,CTask *master,
 	I64 message_code,I64 arg1,I64 arg2,I64 flags)
 {//Post message to servant task.  Tell who the master task is.
 //See $LK,"flags",A="MN:JOBf_WAKE_MASTER"$ and $LK,"message_code",A="MN:MESSAGE_CMD"$.
   CJob *tmpc1,*tmpc;
-  CTask *srv=_srv;
-  if (!TaskValidate(srv) || master && !TaskValidate(master)||
-	srv->popup_task && !Bt(&srv->task_flags,TASKf_FILTER_INPUT))
+  CTask *server=_server;
+  if (!TaskValidate(server) || master && !TaskValidate(master)||
+	server->popup_task && !Bt(&server->task_flags,TASKf_FILTER_INPUT))
     return NULL;
   tmpc=ZCAlloc(sizeof(CJob));
   tmpc->master_task=master;
@@ -134,30 +134,30 @@ CJob *TaskMessage(CTask *_srv,CTask *master,
   tmpc->flags=flags;
   PUSHFD
   if (Bt(&sys_semas[SEMA_RECORD_MACRO],0) &&
-	srv!=sys_macro_task && message_code==MESSAGE_KEY_DOWN) {
+	server!=sys_macro_task && message_code==MESSAGE_KEY_DOWN) {
     tmpc1=ZMAllocIdent(tmpc);
     CLI
     QueueInsert(tmpc1,sys_macro_head.last);
   }
   CLI
-  while (Bt(&srv->task_flags,TASKf_FILTER_INPUT) &&
+  while (Bt(&server->task_flags,TASKf_FILTER_INPUT) &&
 	!Bt(&flags,JOBf_DONT_FILTER))
-    srv=srv->next_input_filter_task;
-  tmpc->ctrl=&srv->srv_ctrl;
-  while (LBts(&srv->srv_ctrl.flags,JOBCf_LOCKED))
+    server=server->next_input_filter_task;
+  tmpc->ctrl=&server->server_ctrl;
+  while (LBts(&server->server_ctrl.flags,JOBCf_LOCKED))
     PAUSE
-  if (!TaskValidate(srv)) {
+  if (!TaskValidate(server)) {
     JobDel(tmpc);
     tmpc=NULL;
   } else {
-    LBtr(&srv->task_flags,TASKf_IDLE);
-    TaskResetAwaitingMessage(srv);
-    QueueInsert(tmpc,srv->srv_ctrl.last_waiting);
-    LBtr(&srv->srv_ctrl.flags,JOBCf_LOCKED);
+    LBtr(&server->task_flags,TASKf_IDLE);
+    TaskResetAwaitingMessage(server);
+    QueueInsert(tmpc,server->server_ctrl.last_waiting);
+    LBtr(&server->server_ctrl.flags,JOBCf_LOCKED);
   }
   POPFD
   if (message_code<0) //Down-Up
-    TaskMessage(_srv,master,-message_code+1,arg1,arg2,flags);
+    TaskMessage(_server,master,-message_code+1,arg1,arg2,flags);
   return tmpc;
 }
 
@@ -167,7 +167,7 @@ Bool JobResScan(CJob *request=NULL,I64 *_res=NULL)
   CJob *tmpc,*tmpc1;
   if (!request || Bt(&request->flags,JOBf_DONE)) {
     if (!request || request->master_task)
-      ctrl=&Fs->srv_ctrl;
+      ctrl=&Fs->server_ctrl;
     else
       ctrl=request->ctrl;
     PUSHFD
@@ -201,7 +201,7 @@ I64 JobResGet(CJob *request=NULL)
   I64 res;
   CJob *tmpc1;
   if (!request) {
-    tmpc1=&Fs->srv_ctrl.next_done;
+    tmpc1=&Fs->server_ctrl.next_done;
     while (tmpc1==tmpc1->next) {
       LBts(&Fs->task_flags,TASKf_IDLE);
       Yield;
@@ -228,7 +228,7 @@ U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE)
     CLI
     while (TRUE) {
       task1=task->last_input_filter_task;
-      tmpc1=&task1->srv_ctrl.next_waiting;
+      tmpc1=&task1->server_ctrl.next_waiting;
       if (task1==Fs || !TaskValidate(task1) ||
 	    tmpc1==tmpc1->next && Bt(&task1->task_flags,TASKf_IDLE) &&
 	    (!cmd_line_prompt || Bt(&task1->task_flags,TASKf_CMD_LINE_PROMPT)))
@@ -318,11 +318,11 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
     if (master=tmpc->master_task) {
       if (!Bt(&flags,JOBf_FREE_ON_COMPLETE)) {
 	CLI
-	while (LBts(&master->srv_ctrl.flags,JOBCf_LOCKED))
+	while (LBts(&master->server_ctrl.flags,JOBCf_LOCKED))
 	  PAUSE
-	QueueInsert(tmpc,master->srv_ctrl.last_done);
+	QueueInsert(tmpc,master->server_ctrl.last_done);
 	LBts(&tmpc->flags,JOBf_DONE);
-	LBtr(&master->srv_ctrl.flags,JOBCf_LOCKED);
+	LBtr(&master->server_ctrl.flags,JOBCf_LOCKED);
 	SetRFlags(old_flags);
       }
       if (Bt(&flags,JOBf_FOCUS_MASTER) &&
@@ -352,10 +352,10 @@ I64 JobsHandler(I64 run_flags,CTask *task=NULL)
   if (!task) task=Fs;
   while (TRUE) {
     CLI
-    while (LBts(&task->srv_ctrl.flags,JOBCf_LOCKED))
+    while (LBts(&task->server_ctrl.flags,JOBCf_LOCKED))
       PAUSE
-    if (task->srv_ctrl.next_waiting!=&task->srv_ctrl)
-      switch (JobRunOne(run_flags,&task->srv_ctrl)) {
+    if (task->server_ctrl.next_waiting!=&task->server_ctrl)
+      switch (JobRunOne(run_flags,&task->server_ctrl)) {
 	case JOB_CONT:
 	  count++;
 	  break;
@@ -368,7 +368,7 @@ I64 JobsHandler(I64 run_flags,CTask *task=NULL)
       goto jh_done;
   }
 jh_done:
-  LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
+  LBtr(&task->server_ctrl.flags,JOBCf_LOCKED);
   SetRFlags(old_flags);
   return count;
 }
@@ -377,7 +377,7 @@ I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL)
 {//Execute code in $LK,"PopUp",A="MN:PopUp"$ task.
   I64 res;
   CJob *tmpc;
-  CTask *task=Spawn(&SrvCmdLine,NULL,"Servant",,parent);
+  CTask *task=Spawn(&ServerCmdLine,NULL,"Server",,parent);
   if (!parent) {
     TaskExe(task,parent,buf,1<<JOBf_EXIT_ON_COMPLETE|1<<JOBf_FREE_ON_COMPLETE);
     if (_pu_task) *_pu_task=task;

@@ -78,9 +78,9 @@ U0 HtmlPutS(CDoc *doc,I64 u32_attr,I64 *_old_u32_attr,Bool underline_update,
   }
 }
 
-U8 *TOSLinkCvt2(U8 *filename,I64 line_num)
+U8 *TOSLinkConvert2(U8 *filename,I64 line_num)
 {// ::/  --> http://www.templeos.org/Wb/
-//Make your own LinkCvt routine
+//Make your own LinkConvert routine
   U8 *res=NULL,*st;
   if (filename) {
     st=ExtChange(filename,"html");
@@ -112,18 +112,18 @@ U8 *URLBibleGateway(U8 *src)
 	  "http://www.biblegateway.com/verse/en/%s",buf);
 }
 
-U8 *TOSLinkCvt1(U8 *link_st)
+U8 *TOSLinkConvert1(U8 *link_st)
 {
   static CDoc *bible=NULL;
   static I64 locks=0;
   U8 *res=NULL,*filename,*needle;
   I64 i,num;
   if (link_st) {
-    switch (i=EdLinkCvt(link_st,&filename,&needle,&num)) {
+    switch (i=EdLinkConvert(link_st,&filename,&needle,&num)) {
       case LK_FILE_LINE:
       case LK_PLAIN_LINE:
       case LK_FILE:
-	res=TOSLinkCvt2(filename,num);
+	res=TOSLinkConvert2(filename,num);
 	break;
       case -1:
       case LK_DEF:
@@ -144,7 +144,7 @@ U8 *TOSLinkCvt1(U8 *link_st)
 	break;
       default:
 	if (DocFileEd(i,filename,needle,&num,EDF_UNCOLLAPSE|EDF_BAIL))
-	  res=TOSLinkCvt2(filename,num);
+	  res=TOSLinkConvert2(filename,num);
     }
     Free(filename);
     Free(needle);
@@ -154,8 +154,8 @@ U8 *TOSLinkCvt1(U8 *link_st)
 
 public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 	U8 *body_footer=NULL,U8 *html_footer=NULL,Bool line_anchors=TRUE,
-	U8 (*link_cvt)(U8 *link_st)=&TOSLinkCvt1,Bool line_nums=FALSE)
-{//Cvt $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$doc to HTML file.
+	U8 (*link_convert)(U8 *link_st)=&TOSLinkConvert1,Bool line_nums=FALSE)
+{//Convert $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$doc to HTML file.
   CDocEntry *doc_e,*style,*doc_e2;
   I64 i,y,old_y=I64_MIN,col,old_u32_attr=DOCET_UNDEF_COLOR,old_attr,digits;
   U32 *hl,*src;
@@ -246,7 +246,7 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
       if (doc_e->de_flags&DOCEF_HTML_LINK)
 	link_st=StrNew(doc_e->html_link);
       else if (st=DocEntryLink(doc_in,doc_e)) {
-	link_st=link_cvt(st);
+	link_st=link_convert(st);
 	Free(st);
       }
 
@@ -359,9 +359,9 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 public U0 ToHtml(U8 *_in_name,U8 *_out_name=NULL,U8 *html_header=NULL,
 	U8 *body_header=NULL,U8 *body_footer=NULL,U8 *html_footer=NULL,
 	I64 width=80,Bool line_anchors=TRUE,
-	U8 (*link_cvt)(U8 *link_st)=&TOSLinkCvt1,Bool line_nums=FALSE)
+	U8 (*link_convert)(U8 *link_st)=&TOSLinkConvert1,Bool line_nums=FALSE)
 {//Convert $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$file to HTML.
-//Supply your own link_cvt routine.
+//Supply your own link_convert routine.
   U8 *in_name,*out_name;
   CDoc *doc_in,*doc_out;
 
@@ -376,7 +376,7 @@ public U0 ToHtml(U8 *_in_name,U8 *_out_name=NULL,U8 *html_header=NULL,
 
   doc_in=DocRead(in_name);
   doc_out=Doc2Html(doc_in,html_header,body_header,body_footer,html_footer,
-	line_anchors,link_cvt,line_nums);
+	line_anchors,link_convert,line_nums);
   StrCopy(&doc_out->filename.name,out_name);
 
   SettingsPop;

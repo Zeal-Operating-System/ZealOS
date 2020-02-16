@@ -223,7 +223,7 @@ U0 KMain()
   }
 
   LBts(&sys_run_level,RLf_ZENITH_SERVER);
-  SrvTaskCont; //Never to return
+  ServerTaskCont; //Never to return
 }
 
 asm {	ALIGN	16,OC_NOP

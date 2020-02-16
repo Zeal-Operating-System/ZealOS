@@ -462,9 +462,9 @@ public extern U0 ZenithLog(U8 *format,...);
 public extern I64 ExeCmdLine(CCompCtrl *cc);
 public extern U0 JobDel(CJob *tmpc);
 public extern I64 JobsHandler(I64 run_flags,CTask *task=NULL);
-extern U0 SrvCmdLine();
-public extern U0 SrvTaskCont();
-public extern CJob *TaskExe(CTask *srv,CTask *master,U8 *data,I64 flags);
+extern U0 ServerCmdLine();
+public extern U0 ServerTaskCont();
+public extern CJob *TaskExe(CTask *server,CTask *master,U8 *data,I64 flags);
 public extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 public extern U0 UserTaskCont();
 
@@ -478,7 +478,7 @@ public extern I64 JobResGet(CJob *request=NULL);
 public extern Bool JobResScan(CJob *request=NULL,I64 *_res=NULL);
 
 #help_index "Job/Text & Messages;Task/Job/Text & Messages"
-public extern CJob *TaskText(CTask *srv,CTask *master,U8 *data,I64 flags);
+public extern CJob *TaskText(CTask *server,CTask *master,U8 *data,I64 flags);
 
 #help_index "Job/Text & Messages;Task/Job/Text & Messages;InFile;StdIn/InFile"
 public extern U0 In(U8 *format,...);
@@ -495,7 +495,7 @@ public extern U0 PostMessage(CTask *task,
 	I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
 public extern U0 PostMessageWait(CTask *task,I64 message_code,
 	I64 arg1,I64 arg2,I64 flags=0);
-public extern CJob *TaskMessage(CTask *srv,CTask *master,
+public extern CJob *TaskMessage(CTask *server,CTask *master,
 		     I64 message_code,I64 arg1,I64 arg2,I64 flags);
 
 #help_index "Job;Task/Job"

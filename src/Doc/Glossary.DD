@@ -34,7 +34,7 @@ $FG,2$Const$FG$	Consant
 $FG,2$Cont$FG$	Continue
 $FG,2$Ctrl$FG$	Control.  The ctrl key is indicated with "$FG,2$^$FG$" in documentation.
 $FG,2$Cur$FG$	Current
-$FG,2$Cvt$FG$	Convert
+$FG,2$Convert$FG$	Convert
 $FG,2$Debug$FG$	Debug
 $FG,2$Dbl$FG$	Double
 $FG,2$DC$FG$	Device Context
@@ -135,7 +135,7 @@ $FG,2$Seq$FG$	Sequence
 $FG,2$Sound$FG$	Sound
 $FG,2$SP$FG$	SingleProcessor
 $FG,2$Src$FG$	Source
-$FG,2$Srv$FG$	Servant
+$FG,2$Server$FG$	Server
 $FG,2$Stat$FG$	Status, Statistic
 $FG,2$Std$FG$	Standard
 $FG,2$Stack$FG$	Stack

@@ -208,7 +208,7 @@ public Bool Ed(U8 *link_st,I64 edf_dof_flags=0)
   Bool cont,res=FALSE;
   CDoc *doc;
 
-  switch (i=EdLinkCvt(link_st,&filename,&needle_str,&num,edf_dof_flags)) {
+  switch (i=EdLinkConvert(link_st,&filename,&needle_str,&num,edf_dof_flags)) {
     case -1:
       break;
     case LK_DEF:

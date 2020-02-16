@@ -11,8 +11,8 @@ U0 UserStartUp()
   Dir;
 }
 
-U0 SrvStartUp()
-{//Run each time a srv task is spawned.
+U0 ServerStartUp()
+{//Run each time a server task is spawned.
   DocTermNew;
   LBts(&Fs->display_flags,DISPLAYf_SHOW);
   WinToTop;

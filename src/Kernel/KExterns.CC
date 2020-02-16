@@ -98,7 +98,7 @@ extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 extern U8 *StrPrint(U8 *dst,U8 *format,...);
 extern U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags);
 extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
-extern CJob *TaskMessage(CTask *_srv,CTask *master,
+extern CJob *TaskMessage(CTask *_server,CTask *master,
 	I64 message_code,I64 arg1,I64 arg2,I64 flags);
 extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 extern Bool TaskValidate(CTask *task);

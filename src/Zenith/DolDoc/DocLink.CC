@@ -177,7 +177,7 @@ Bool DocFileEd(I64 _type,U8 *filename,
 
 #define DEFAULT_ADDR_LINK_BIN_SIZE	64
 
-public I64 EdLinkCvt(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
+public I64 EdLinkConvert(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
 	I64 *_num=NULL,I64 edf_dof_flags=0)
 {//$LK,"Editor Link",A="MN:LK_FILE"$--> filename, needle_str and line number.
   U8 *st,*ptr,*src,*filename=NULL,*needle_str=NULL,*filename2;
@@ -196,7 +196,7 @@ public I64 EdLinkCvt(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
     switch (res=DefineMatch(st,"ST_LINK_TYPES",LMF_IGNORE_CASE)) {
       case LK_MAN_PAGE:
 	if (tmph=HashFind(filename2,Fs->hash_table,HTG_SRC_SYM))
-	  res=EdLinkCvt(tmph->src_link,&filename,
+	  res=EdLinkConvert(tmph->src_link,&filename,
 		&needle_str,&num,edf_dof_flags);
 	else
 	  res=-1;
@@ -208,7 +208,7 @@ public I64 EdLinkCvt(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
 	} else
 	  i=DEFAULT_ADDR_LINK_BIN_SIZE;
 	if (ptr=SrcEdLink(ExePrint("%s;",filename2),i)) {
-	  res=EdLinkCvt(ptr,&filename,&needle_str,&num,edf_dof_flags);
+	  res=EdLinkConvert(ptr,&filename,&needle_str,&num,edf_dof_flags);
 	  Free(ptr);
 	} else
 	  res=-1;
@@ -304,7 +304,7 @@ public Bool DocLinkCheck(CDoc *doc,U8 *link_st)
     st=FileNameAbs(doc->filename.name);
     dirc=DirContextNew(st);
     Free(st);
-    switch (EdLinkCvt(link_st,&filename)) {
+    switch (EdLinkConvert(link_st,&filename)) {
       case -1:
 	break;
       case LK_FILE_LINE:
@@ -336,7 +336,7 @@ public U8 *DocLinkFile(U8 *link_st,CTask *mem_task=NULL)
 {//Return the file for an $LK,"Editor Link Types",A="MN:LK_FILE"$.
   U8 *filename=NULL,*st,*res=NULL;
   if (link_st) {
-    switch (EdLinkCvt(link_st,&filename)) {
+    switch (EdLinkConvert(link_st,&filename)) {
       case LK_FILE:
       case LK_FILE_ANCHOR:
       case LK_FILE_FIND:

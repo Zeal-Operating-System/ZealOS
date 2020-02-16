@@ -245,7 +245,7 @@ U0 PsmLoadSong(U8 *filename,I64 *psm_octave,F64 *psm_duration)
   CompCtrlDel(cc);
 }
 
-U8 *PsmCvtSong()
+U8 *PsmConvertSong()
 {
   PsmNote *tmpn;
   U8 *st,*src,*dst;
@@ -324,7 +324,7 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
   I64 ch;
   U8 *ptr;
 
-  Free(PsmCvtSong); //set tmpn->ascii;
+  Free(PsmConvertSong); //set tmpn->ascii;
 
   music.tempo=4.4*tempo_state.tempo/TEMPO_RANGE+0.5;
   music.stacatto_factor=0.88*tempo_state.stacatto/TEMPO_RANGE+0.12;

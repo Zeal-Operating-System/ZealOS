@@ -9,13 +9,13 @@ class Test
 
 Test g1[]={
   {10,"Name1"},
-  {(tS%10.0)*100,"Name2"}, //Dynamic initialization
+  {(tS%10.0) * 100, "Name2"}, //Dynamic initialization
   {30,"Name3"}
 };
 
 D(g1,sizeof(g1));
 "Time 1:%d\n",g1[1].time;
-
+
 U0 Main1()
 {
   static Test s1[]={
@@ -50,7 +50,7 @@ because they don't take-up room in the .BIN file.
 
 Test g2[]={
   {10,"name1"},
-  {(tS%10.0)*100,"name2"}, //No dynamic initialization--cvted to const
+  {(tS%10.0)*100,"name2"}, //No dynamic initialization--converted to const
   {30,"name3"}
 };
 
@@ -61,7 +61,7 @@ U0 Main2()
 {
   static Test s2[]={
   {10,"static1"},
-	{(tS%10.0)*100,"static2"}, //No dynamic initialization--cvted to const
+	{(tS%10.0)*100,"static2"}, //No dynamic initialization--converted to const
 	{30,"static3"}
   };
   D(s2,sizeof(s2));

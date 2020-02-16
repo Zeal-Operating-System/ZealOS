@@ -118,7 +118,7 @@ args.
 	tmpi3=tmpi2->next; //DEREF
 	if (tmpi1->ic_code==IC_IMM_I64 && tmpi2->ic_code==IC_ADD &&
 	      tmpi3->ic_code==IC_DEREF &&
-	      !(tmpi3->ic_flags&~ICG_NO_CVT_MASK)) {
+	      !(tmpi3->ic_flags&~ICG_NO_CONVERT_MASK)) {
 	  tmpi->ic_flags|=tmpi1->ic_flags|tmpi2->ic_flags|tmpi3->ic_flags;
 	  if (tmpi->ic_code==IC_FS)
 	    tmpi->ic_code=IC_MOV_FS;
