@@ -19,7 +19,7 @@ Edit
 
 CDDVD
 {
-  DiskChg(,'c');
+  DiskChange(,'c');
   MountISOC(,'i');
   MakeRedSeaISOC(,'m');
   BurnISOFile(,'B');

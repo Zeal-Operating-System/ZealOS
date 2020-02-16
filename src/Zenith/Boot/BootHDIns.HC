@@ -23,16 +23,16 @@ U0 MakeAll()
 
 public U0 BootHDIns(U8 drv_let=0)
 {//$LK,"MakeAll",A="MN:MakeAll"$ and install new boot-loader.
-  CDrive *dv;
+  CDrive *drive;
   CFAT32Boot br;
   CDirEntry de;
   I64 i;
   try {
     if (!Drive(drv_let))
       throw;
-    dv=Fs->cur_dv;
+    drive=Fs->cur_dv;
     MakeAll;
-    switch (Letter2BlkDevType(dv->drv_let)) {
+    switch (Letter2BlkDevType(drive->drv_let)) {
       case BDT_RAM:
       case BDT_ATA:
 	Move("/Kernel/Kernel.BIN","/" KERNEL_BIN_C);
@@ -41,19 +41,19 @@ public U0 BootHDIns(U8 drv_let=0)
 	else {
 	  Free(de.full_name);
 	  "Modifying partition boot record.\n";
-	  BlkRead(dv,&br,dv->drv_offset,1);
+	  BlkRead(drive,&br,drive->drv_offset,1);
 	  br.jump_and_nop[0]=OC_JMP_REL8;
 	  br.jump_and_nop[1]=offset(CFAT32Boot.code)-2;
 #assert offset(CFAT32Boot.code)>=offset(CRedSeaBoot.code)
 	  br.jump_and_nop[2]=OC_NOP;
 	  *BHD_BLK_COUNT(U16 *)=(de.size+BLK_SIZE-1)>>BLK_SIZE_BITS;
-	  *BHD_DAP_BLK(I64 *)=Clus2Blk(dv,de.clus);
+	  *BHD_DAP_BLK(I64 *)=Clus2Blk(drive,de.clus);
 	  for (i=0;i<BHD_END-BHD_CODE;i++)
 	    br.code[i]=BHD_CODE(U8 *)[i];
 #assert sizeof(CFAT32Boot.code)>=BHD_END-BHD_CODE
 	  for (;i<sizeof(CFAT32Boot.code);i++)
 	    br.code[i]=0;
-	  BlkWrite(dv,&br,dv->drv_offset,1);
+	  BlkWrite(drive,&br,drive->drv_offset,1);
 	}
 	break;
       default:

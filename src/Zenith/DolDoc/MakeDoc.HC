@@ -34,7 +34,7 @@ MemSet(&doldoc,0,sizeof(CDolDocGlobals));
 #help_index "God"
 #define BIBLE_FILENAME	"::/Misc/Bible.TXT"
 
-#include "DocExt"
+#include "DocExterns"
 #include "DocBin"
 #include "DocNew"
 #include "DocForm"

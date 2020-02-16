@@ -19,13 +19,13 @@ U8 *kernel_cfg_options="MemInit\0HeapInit\0VarInit\0StaffMode\0"
 
 class CKCfg
 {
-  U8 *dsk_cache_size_exp;
+  U8 *disk_cache_size_exp;
   CDoc *add_dev;
   U8 *dbg_distro_file,*dbg_distro_start;
   U8 *home_dir;
   Bool opts[CFG_OPTIONS_NUM];
   U8 mem_init_val,heap_init_val,var_init_val,
-	boot_drv_let,mount_ide_auto_hd_let,mount_ide_auto_cd_let;
+	boot_drive_let,mount_ide_auto_hd_let,mount_ide_auto_cd_let;
 };
 
 CDoc *KCfgAddDev(CKCfg *c)
@@ -38,12 +38,12 @@ CDoc *KCfgAddDev(CKCfg *c)
 	"\n($$PURPLE$$<ENTER>$$FG$$ for cur drv) Boot Drive:";
   ch=Letter2Letter(GetChar);
   if ('A'<=ch<='Z')
-    c->boot_drv_let=ch;
+    c->boot_drive_let=ch;
   else
-    c->boot_drv_let=Drive2Letter(Fs->cur_dv);
+    c->boot_drive_let=Drive2Letter(Fs->cur_dv);
   "\n\n$$BK,1$$$$PURPLE$$Mount drives so they will be present when "
 	"you boot.$$FG$$$$BK,0$$\n";
-  Mount2(c->boot_drv_let,doc,FALSE);
+  Mount2(c->boot_drive_let,doc,FALSE);
   return doc;
 }
 
@@ -61,7 +61,7 @@ U0 KCfgOptions(CKCfg *c)
 	"$$PURPLE$$%13tz$$FG$$:%Z\n",i,kernel_cfg_options,c->opts[i],"ST_OFF_ON";
     "\nType '$$PURPLE$$Help$$FG$$' for help.\n";
     st=GetStr("Option ($$PURPLE$$<ENTER>$$FG$$ when done):","");
-    i=ListMatch(st,kernel_cfg_options,LMF_IGNORE_CASE);
+    i=ListMatch(st,kernel_cfg_options,LMF_IGNORE_CASE);
     if (i==CFG_HELP)
       "\n"
 	    "$$PURPLE$$MemInit$$FG$$ Initializes memory above 0x100000 "
@@ -154,7 +154,7 @@ CKCfg *KCfgNew()
 
   c->add_dev=KCfgAddDev(c);
   c->home_dir=StrNew("::/Home");
-  c->dsk_cache_size_exp=GetStr(
+  c->disk_cache_size_exp=GetStr(
 	"Disk Cache Size in Bytes,\n"
 	"gets rounded-up funny,\n"
 	"($$PURPLE$$<ENTER>$$FG$$ will use default.):",
@@ -168,6 +168,6 @@ U0 KCfgDel(CKCfg *c)
   DocDel(c->add_dev);
   Free(c->dbg_distro_file);
   Free(c->home_dir);
-  Free(c->dsk_cache_size_exp);
+  Free(c->disk_cache_size_exp);
   Free(c);
 }

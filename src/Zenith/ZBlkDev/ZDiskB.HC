@@ -81,13 +81,13 @@ I64 Size1(CDirEntry *tmpde,I64 *_fuf_flags,I64 round_to)
 {
   U8 buf[BLK_SIZE];
   I64 res=0,i;
-  CDrive *dv;
+  CDrive *drive;
   while (tmpde) {
     if ((i=tmpde->size) && Bt(_fuf_flags,FUf_EXPAND) &&
 	  !(tmpde->attr&RS_ATTR_DIR) &&
 	  FileAttr(tmpde->name)&RS_ATTR_COMPRESSED) {
-      dv=Letter2Drive(*tmpde->full_name);
-      BlkRead(dv,buf,Clus2Blk(dv,tmpde->clus),1);
+      drive=Letter2Drive(*tmpde->full_name);
+      BlkRead(drive,buf,Clus2Blk(drive,tmpde->clus),1);
       i=(&buf)(CArcCompress *)->expanded_size;
     }
     if (round_to)

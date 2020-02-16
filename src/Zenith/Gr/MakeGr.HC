@@ -2,7 +2,7 @@ Cd(__DIR__);;
 
 #include "GrInitA"
 #include "Gr.HH"
-#include "GrExt"
+#include "GrExterns"
 #include "GrGlobals"
 #include "GrTextBase"
 #include "GrAsm"

@@ -1,5 +1,5 @@
 #help_index "Info;File/Cmd Line (Typically);Cmd Line (Typically)"
-Bool CheckDskConfirm(Bool *_fix,Bool *_confirm)
+Bool CheckDiskConfirm(Bool *_fix,Bool *_confirm)
 {
   if (*_fix && *_confirm) {
     "Fix ";
@@ -10,7 +10,7 @@ Bool CheckDskConfirm(Bool *_fix,Bool *_confirm)
   return *_fix;
 }
 
-I64 RedSeaCheckDskList(CDrive *dv,CDirEntry *tmpde1,
+I64 RedSeaCheckDiskList(CDrive *drive,CDirEntry *tmpde1,
 	U8 *bits,U8 *bits2,I64 size,I64 bpc)
 {
   CDirEntry *tmpde2;
@@ -18,21 +18,21 @@ I64 RedSeaCheckDskList(CDrive *dv,CDirEntry *tmpde1,
   while (tmpde1) {
     tmpde2=tmpde1->next;
     if (tmpde1->attr & RS_ATTR_DIR && tmpde1->sub)
-      errs+=RedSeaCheckDskList(dv,tmpde1->sub,bits,bits2,size,bpc);
+      errs+=RedSeaCheckDiskList(drive,tmpde1->sub,bits,bits2,size,bpc);
     j=(tmpde1->size+bpc-1)/bpc;
     for (i=0;i<j;i++) {
-      if (i+tmpde1->clus-dv->data_area>size) {
+      if (i+tmpde1->clus-drive->data_area>size) {
 	PrintErr("Invalid Clus:%s Clus:%X\n",tmpde1->full_name,
 	      i+tmpde1->clus);
 	errs++;
 	break;
       }
-      if (LBts(bits,i+tmpde1->clus-dv->data_area)) {
+      if (LBts(bits,i+tmpde1->clus-drive->data_area)) {
 	PrintErr("Dbl Alloc:%s Clus:%X\n",tmpde1->full_name,
 	      i+tmpde1->clus);
 	errs++;
       }
-      if (!LBtr(bits2,i+tmpde1->clus-dv->data_area)) {
+      if (!LBtr(bits2,i+tmpde1->clus-drive->data_area)) {
 	PrintErr("UnAlloc:%s Clus:%X\n",tmpde1->full_name,
 	      i+tmpde1->clus);
 	errs++;
@@ -44,54 +44,54 @@ I64 RedSeaCheckDskList(CDrive *dv,CDirEntry *tmpde1,
   return errs;
 }
 
-I64 RedSeaCheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
+I64 RedSeaCheckDisk(U8 drv_let,Bool *_fix,Bool *_confirm)
 {
   I64 i,j,bpc,size,errs=0;
-  CDrive *dv=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
-  U8 *files_find_mask=MStrPrint("%c:/*",Drive2Letter(dv)),
+  CDrive *drive=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
+  U8 *files_find_mask=MStrPrint("%c:/*",Drive2Letter(drive)),
 	*old_dir=StrNew(Fs->cur_dir),
 	*bits,*bits2;
   CDirEntry *ptr,*ptr2;
 
   Drive(drv_let);
   "Scanning...\n";
-  size=(dv->size-(dv->data_area-dv->drv_offset))/dv->spc;
-  bpc=dv->spc<<BLK_SIZE_BITS;
+  size=(drive->size-(drive->data_area-drive->drv_offset))/drive->spc;
+  bpc=drive->spc<<BLK_SIZE_BITS;
   bits=CAlloc((size+7)>>3);
   bits2=CAlloc((size+7)>>3+BLK_SIZE);
-  BlkRead(dv,bits2,dv->fat1,((size+7)>>3+BLK_SIZE-1)>>BLK_SIZE_BITS);
+  BlkRead(drive,bits2,drive->fat1,((size+7)>>3+BLK_SIZE-1)>>BLK_SIZE_BITS);
 
   //Get Root Dir size
   ptr2=MAlloc(bpc);
-  BlkRead(dv,ptr2,dv->root_clus,1);
+  BlkRead(drive,ptr2,drive->root_clus,1);
   ptr=ptr2(U8 *)-offset(CDirEntry.start);
   j=(ptr->size+bpc-1)/bpc;
   Free(ptr2);
 
   for (i=0;i<j;i++) {
-    if (i+dv->root_clus-dv->data_area>size) {
-      PrintErr("Invalid Clus: RootDir Clus:%X\n",i+dv->root_clus);
+    if (i+drive->root_clus-drive->data_area>size) {
+      PrintErr("Invalid Clus: RootDir Clus:%X\n",i+drive->root_clus);
       errs++;
       break;
     }
-    if (LBts(bits,i+dv->root_clus-dv->data_area)) {
-      PrintErr("Dbl Alloc: RootDir Clus:%X\n",i+dv->root_clus);
+    if (LBts(bits,i+drive->root_clus-drive->data_area)) {
+      PrintErr("Dbl Alloc: RootDir Clus:%X\n",i+drive->root_clus);
       errs++;
     }
-    if (!LBtr(bits2,i+dv->root_clus-dv->data_area)) {
-      PrintErr("UnAlloc: RootDir Clus:%X\n",i+dv->root_clus);
+    if (!LBtr(bits2,i+drive->root_clus-drive->data_area)) {
+      PrintErr("UnAlloc: RootDir Clus:%X\n",i+drive->root_clus);
       errs++;
     }
   }
 
-  errs+=RedSeaCheckDskList(dv,FilesFind(files_find_mask,FUF_RECURSE),
+  errs+=RedSeaCheckDiskList(drive,FilesFind(files_find_mask,FUF_RECURSE),
 	bits,bits2,size,bpc);
   for (i=1;i<size;i++)
     if (Bt(bits2,i)) {
-      PrintWarn("Shouldn't Alloc Clus:%0X\n",i+dv->data_area);
+      PrintWarn("Shouldn't Alloc Clus:%0X\n",i+drive->data_area);
       errs++;
-      if (CheckDskConfirm(_fix,_confirm))
-	RedSeaFreeClus(dv,i+dv->data_area,1);
+      if (CheckDiskConfirm(_fix,_confirm))
+	RedSeaFreeClus(drive,i+drive->data_area,1);
     }
 
   Free(files_find_mask);
@@ -103,7 +103,7 @@ I64 RedSeaCheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
   return errs;
 }
 
-I64 FAT32CheckDskList(CDrive *dv,CDirEntry *tmpde1,
+I64 FAT32CheckDiskList(CDrive *drive,CDirEntry *tmpde1,
 	U8 *bits,U32 *bits2,I64 size,I64 bpc)
 {
   CDirEntry *tmpde2;
@@ -111,7 +111,7 @@ I64 FAT32CheckDskList(CDrive *dv,CDirEntry *tmpde1,
   while (tmpde1) {
     tmpde2=tmpde1->next;
     if (tmpde1->attr & RS_ATTR_DIR && tmpde1->sub)
-      errs+=FAT32CheckDskList(dv,tmpde1->sub,bits,bits2,size,bpc);
+      errs+=FAT32CheckDiskList(drive,tmpde1->sub,bits,bits2,size,bpc);
     i=0;
     c=tmpde1->clus;
     while (0<c<0x0FFFFFF8) {
@@ -129,7 +129,7 @@ I64 FAT32CheckDskList(CDrive *dv,CDirEntry *tmpde1,
 	errs++;
       } else
 	bits2[c]=0;
-      c=ClusNumNext(dv,c);
+      c=ClusNumNext(drive,c);
       i++;
     }
     if (!(tmpde1->attr & RS_ATTR_DIR)) {
@@ -149,23 +149,23 @@ I64 FAT32CheckDskList(CDrive *dv,CDirEntry *tmpde1,
   return errs;
 }
 
-I64 FAT32CheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
+I64 FAT32CheckDisk(U8 drv_let,Bool *_fix,Bool *_confirm)
 {
   I64 i,bpc,size,c,errs=0;
-  CDrive *dv=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
-  U8 *files_find_mask=MStrPrint("%c:/*",Drive2Letter(dv)),
+  CDrive *drive=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
+  U8 *files_find_mask=MStrPrint("%c:/*",Drive2Letter(drive)),
 	*old_dir=StrNew(Fs->cur_dir),
 	*bits;
   U32 *bits2;
   Drive(drv_let);
   "Scanning...\n";
-  size=(dv->size-(dv->data_area-dv->drv_offset))/dv->spc;
-  bpc=dv->spc<<BLK_SIZE_BITS;
+  size=(drive->size-(drive->data_area-drive->drv_offset))/drive->spc;
+  bpc=drive->spc<<BLK_SIZE_BITS;
   bits=CAlloc((size+7)>>3);
   bits2=CAlloc(size*4+BLK_SIZE);
-  BlkRead(dv,bits2,dv->fat1,(size*4+BLK_SIZE-1)>>BLK_SIZE_BITS);
+  BlkRead(drive,bits2,drive->fat1,(size*4+BLK_SIZE-1)>>BLK_SIZE_BITS);
 
-  c=dv->root_clus;
+  c=drive->root_clus;
   while (0<c<0x0FFFFFF8) {
     if (c>size) {
       PrintErr("Invalid Clus: RootDir Clus:%X\n",c);
@@ -181,10 +181,10 @@ I64 FAT32CheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
       errs++;
     } else
       bits2[c]=0;
-    c=ClusNumNext(dv,c);
+    c=ClusNumNext(drive,c);
   }
 
-  errs+=FAT32CheckDskList(dv,FilesFind(files_find_mask,FUF_RECURSE),
+  errs+=FAT32CheckDiskList(drive,FilesFind(files_find_mask,FUF_RECURSE),
 	bits,bits2,size,bpc);
 
   bits2[1]=0; //See $LK,"FAT32Fmt",A="MN:FAT32Fmt"$()
@@ -192,8 +192,8 @@ I64 FAT32CheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
     if (bits2[i]) {
       PrintWarn("Shouldn't Alloc Clus:%0X\n",i);
       errs++;
-      if (CheckDskConfirm(_fix,_confirm))
-	FAT32FreeClus(dv,i);
+      if (CheckDiskConfirm(_fix,_confirm))
+	FAT32FreeClus(drive,i);
     }
   Free(files_find_mask);
   Free(bits);
@@ -208,13 +208,13 @@ public I64 DiskCheck(U8 drv_let=0,Bool fix=FALSE,Bool confirm=TRUE)
 {//Check disk for allocation errors and, optionally, fix.
 //You probably want to reformat and reinstall.
   I64 errs=0;
-  CDrive *dv=Letter2Drive(drv_let);
-  switch (dv->fs_type) {
+  CDrive *drive=Letter2Drive(drv_let);
+  switch (drive->fs_type) {
     case FSt_REDSEA:
-      errs=RedSeaCheckDsk(drv_let,&fix,&confirm);
+      errs=RedSeaCheckDisk(drv_let,&fix,&confirm);
       break;
     case FSt_FAT32:
-      errs=FAT32CheckDsk(drv_let,&fix,&confirm);
+      errs=FAT32CheckDisk(drv_let,&fix,&confirm);
       break;
     default:
       PrintErr("File System Not Supported\n");
@@ -231,9 +231,9 @@ public I64 DiskCheck(U8 drv_let=0,Bool fix=FALSE,Bool confirm=TRUE)
 
 U0 RedSeaDriveView(U8 drv_let=0)
 {
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   I64 lohi,c1,i,x,y,l=(GR_HEIGHT-3*FONT_HEIGHT)*(GR_WIDTH-FONT_WIDTH<<1),
-	s=dv->size+dv->drv_offset-dv->data_area;
+	s=drive->size+drive->drv_offset-drive->data_area;
   U8 *bitmap;
   CDC *dc=DCAlias;
 
@@ -246,7 +246,7 @@ U0 RedSeaDriveView(U8 drv_let=0)
   try {
     i=((s+7)>>3+BLK_SIZE-1)>>BLK_SIZE_BITS;
     bitmap=MAlloc(i<<BLK_SIZE_BITS);
-    BlkRead(dv,bitmap,dv->fat1,i);
+    BlkRead(drive,bitmap,drive->fat1,i);
     i=0;
     for (y=0;y<GR_HEIGHT-3*FONT_HEIGHT;y++) {
       if (ScanKey)
@@ -264,7 +264,7 @@ U0 RedSeaDriveView(U8 drv_let=0)
     }
     Free(bitmap);
   } catch
-    DriveUnlock(dv);
+    DriveUnlock(drive);
   GetChar;
 
   SettingsPop;
@@ -273,9 +273,9 @@ U0 RedSeaDriveView(U8 drv_let=0)
 }
 U0 FAT32DriveView(U8 drv_let=0)
 {
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   I64 lohi,c1,i,x,y,l=(GR_HEIGHT-3*FONT_HEIGHT)*(GR_WIDTH-FONT_WIDTH<<1),
-	s=(dv->size+dv->spc-1)/dv->spc-(2+dv->data_area-dv->drv_offset);
+	s=(drive->size+drive->spc-1)/drive->spc-(2+drive->data_area-drive->drv_offset);
   U32 *bitmap;
   CDC *dc=DCAlias;
 
@@ -288,7 +288,7 @@ U0 FAT32DriveView(U8 drv_let=0)
   try {
     i=(s*4+BLK_SIZE-1)>>BLK_SIZE_BITS;
     bitmap=MAlloc(i<<BLK_SIZE_BITS);
-    BlkRead(dv,bitmap,dv->fat1,i);
+    BlkRead(drive,bitmap,drive->fat1,i);
     i=0;
     for (y=0;y<GR_HEIGHT-3*FONT_HEIGHT;y++) {
       if (ScanKey)
@@ -306,7 +306,7 @@ U0 FAT32DriveView(U8 drv_let=0)
     }
     Free(bitmap);
   } catch
-    DriveUnlock(dv);
+    DriveUnlock(drive);
   GetChar;
 
   SettingsPop;
@@ -315,9 +315,9 @@ U0 FAT32DriveView(U8 drv_let=0)
 }
 public U0 DriveView(U8 drv_let=0)
 {//Drive view. Graph the allocation map's fragmentation.
-  CDrive *dv=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
+  CDrive *drive=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
   Drive(drv_let);
-  switch (dv->fs_type) {
+  switch (drive->fs_type) {
     case FSt_REDSEA:
       RedSeaDriveView(drv_let);
       break;
@@ -336,7 +336,7 @@ public U0 DiskView(U8 drv_let=0)
 	h=Fs->pix_width,
 	v=Fs->pix_height,
 	radius;
-  CDrive *dv;
+  CDrive *drive;
   CBlkDev *bd=Letter2BlkDev(drv_let);
   CDC *dc=DCAlias;
   F64 sect_start,sect_end;
@@ -353,11 +353,11 @@ public U0 DiskView(U8 drv_let=0)
   GrCircle(dc,h>>1,v>>1,radius);
 
   j=1;
-  for (i=0;i<DRVS_NUM;i++) {
-    dv=&blkdev.drvs[i];
-    if (bd==dv->bd && dv->fs_type) {
-      sect_start=-(dv->drv_offset*2*ã/(bd->max_blk+1));
-      sect_end	=-((dv->drv_offset+dv->size)*2*ã/(bd->max_blk+1));
+  for (i=0;i<DRIVES_NUM;i++) {
+    drive=&blkdev.drvs[i];
+    if (bd==drive->bd && drive->fs_type) {
+      sect_start=-(drive->drv_offset*2*ã/(bd->max_blk+1));
+      sect_end	=-((drive->drv_offset+drive->size)*2*ã/(bd->max_blk+1));
       dc->color=BLACK;
       GrLine(dc,h>>1,v>>1,
 	    h>>1+radius*Cos(sect_start),
@@ -366,10 +366,10 @@ public U0 DiskView(U8 drv_let=0)
 	    h>>1+radius*Cos(sect_end),
 	    v>>1+radius*Sin(sect_end));
 
-      attr=DriveTextAttrGet(Drive2Letter(dv));
+      attr=DriveTextAttrGet(Drive2Letter(drive));
       dc->color=attr&15;
-      GrPrint(dc,0,v-FONT_HEIGHT*j,"%C %-8Z",Drive2Letter(dv),
-	    dv->fs_type,"ST_DRV_TYPES");
+      GrPrint(dc,0,v-FONT_HEIGHT*j,"%C %-8Z",Drive2Letter(drive),
+	    drive->fs_type,"ST_DRIVE_TYPES");
       dc->color.c1=attr>>4;
       dc->color|=ROPF_DITHER;
       GrFloodFill(dc,
@@ -387,47 +387,47 @@ public U0 DiskView(U8 drv_let=0)
 
 I64 RedSeaUnusedDriveSpace(U8 drv_let=0)
 {
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   I64 res=0,i,l;
   U8 *bitmap;
   try {
-    l=dv->size+dv->drv_offset-dv->data_area;
+    l=drive->size+drive->drv_offset-drive->data_area;
     i=((l+7)>>3+BLK_SIZE-1)>>BLK_SIZE_BITS;
     bitmap=MAlloc(i<<BLK_SIZE_BITS);
-    BlkRead(dv,bitmap,dv->fat1,i);
+    BlkRead(drive,bitmap,drive->fat1,i);
     for (i=0;i<l;i++)
       if (!Bt(bitmap,i))
 	res++;
     Free(bitmap);
   } catch
-    DriveUnlock(dv);
-  return res*BLK_SIZE*dv->spc;
+    DriveUnlock(drive);
+  return res*BLK_SIZE*drive->spc;
 }
 I64 FAT32UnusedDriveSpace(U8 drv_let=0)
 {
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   I64 res=0,i,l;
   U32 *bitmap;
   try {
-    l=(dv->size+dv->spc-1)/dv->spc-(2+dv->data_area-dv->drv_offset);
+    l=(drive->size+drive->spc-1)/drive->spc-(2+drive->data_area-drive->drv_offset);
     i=(l*4+BLK_SIZE-1)>>BLK_SIZE_BITS;
     bitmap=MAlloc(i<<BLK_SIZE_BITS);
-    BlkRead(dv,bitmap,dv->fat1,i);
+    BlkRead(drive,bitmap,drive->fat1,i);
     for (i=0;i<l;i++)
       if (!bitmap[i])
 	res++;
     Free(bitmap);
   } catch
-    DriveUnlock(dv);
-  return res*BLK_SIZE*dv->spc;
+    DriveUnlock(drive);
+  return res*BLK_SIZE*drive->spc;
 }
 public I64 DriveUnused(U8 drv_let=0)
 {//Returns unused size in bytes.
-  CDrive *dv=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
+  CDrive *drive=Letter2Drive(drv_let),*old_dv=Fs->cur_dv;
   U8 *old_dir=StrNew(Fs->cur_dir);
   I64 res=0;
   Drive(drv_let);
-  switch (dv->fs_type) {
+  switch (drive->fs_type) {
     case FSt_REDSEA:
       res=RedSeaUnusedDriveSpace(drv_let);
       break;

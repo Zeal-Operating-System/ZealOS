@@ -10,7 +10,7 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
 {//Change directory. Optionally, make directories, too.
   I64 maxlen,cur_dir_clus=0;
   U8 *chg_to_buf,*new_cur_dir,*buf;
-  CDrive *dv;
+  CDrive *drive;
   Bool res=TRUE;
   if (!dirname)
     dirname="~";
@@ -51,9 +51,9 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
       if (Fs->cur_dv!=Letter2Drive('~') && !Drive('~'))
 	return FALSE;
     } else if (StrCmp(buf,".") && *buf) {
-      dv=Fs->cur_dv;
-      cur_dir_clus=Name2DirClus(dv,new_cur_dir);
-      switch (dv->fs_type) {
+      drive=Fs->cur_dv;
+      cur_dir_clus=Name2DirClus(drive,new_cur_dir);
+      switch (drive->fs_type) {
 	case FSt_REDSEA:
 	  res=RedSeaCd(buf,cur_dir_clus);
 	  break;
@@ -175,12 +175,12 @@ Bool DirMk(U8 *filename,I64 entry_count=0)
 	"Make Directory:%s\n",filename;
 	name=MStrUtil(dirc->mask,
 	      SUF_REM_LEADING|SUF_REM_TRAILING|SUF_REM_CTRL_CHARS);
-	switch (dirc->dv->fs_type) {
+	switch (dirc->drive->fs_type) {
 	  case FSt_REDSEA:
-	    res=RedSeaMkDir(dirc->dv,Fs->cur_dir,name,entry_count);
+	    res=RedSeaMkDir(dirc->drive,Fs->cur_dir,name,entry_count);
 	    break;
 	  case FSt_FAT32:
-	    res=FAT32MkDir(dirc->dv,Fs->cur_dir,name,entry_count);
+	    res=FAT32MkDir(dirc->drive,Fs->cur_dir,name,entry_count);
 	    break;
 	  default:
 	    PrintErr("File System Not Supported\n");

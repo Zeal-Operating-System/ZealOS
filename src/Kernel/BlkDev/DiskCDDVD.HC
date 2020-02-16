@@ -1,6 +1,6 @@
-Bool ISOInit(CDrive *dv,I64 blk)
+Bool ISOInit(CDrive *drive,I64 blk)
 {
-  CBlkDev *bd=dv->bd;
+  CBlkDev *bd=drive->bd;
   I64 spc=bd->blk_size>>BLK_SIZE_BITS,i=blk/spc,drv_offset=0;
   CISOPriDesc *iso=MAlloc(bd->blk_size);
   CISODirEntry *de;
@@ -8,13 +8,13 @@ Bool ISOInit(CDrive *dv,I64 blk)
   U8 buf[8];
 
   try {
-    unlock=DriveLock(dv);
-    dv->fs_type=FSt_ISO9660;
-    dv->spc=spc;
-    dv->data_area=dv->root_clus=dv->drv_offset=bd->drv_offset=dv->size=0;
+    unlock=DriveLock(drive);
+    drive->fs_type=FSt_ISO9660;
+    drive->spc=spc;
+    drive->data_area=drive->root_clus=drive->drv_offset=bd->drv_offset=drive->size=0;
     while (TRUE) {
-      dv->size=MaxI64(dv->size,(i+1)*spc);
-      BlkRead(dv,iso,i*spc,spc);
+      drive->size=MaxI64(drive->size,(i+1)*spc);
+      BlkRead(drive,iso,i*spc,spc);
       buf[0](U32)=iso->id[0](U32);
       buf[4](U16)=iso->id[4](U8);
       switch (ListMatch(buf,"CD001\0CDW02\0BEA01\0BOOT2\0NSR02\0NSR03\0TEA01\0",
@@ -26,15 +26,15 @@ Bool ISOInit(CDrive *dv,I64 blk)
 	      break;
 	    case ISOT_SUPPLEMENTARY_DESC:
 	      de=&iso->root_dir_record;
-	      dv->size=iso->vol_space_size.little*bd->blk_size>>BLK_SIZE_BITS;
+	      drive->size=iso->vol_space_size.little*bd->blk_size>>BLK_SIZE_BITS;
 	      if (!StrCmp(iso->publisher_id,"ZenithOS RedSea")) {
-		dv->fs_type=FSt_REDSEA;
-		bd->drv_offset=dv->drv_offset=19<<2+drv_offset;
-		bd->max_blk=dv->size-1;
-		dv->size-=bd->drv_offset;
-		RedSeaInit(dv);
+		drive->fs_type=FSt_REDSEA;
+		bd->drv_offset=drive->drv_offset=19<<2+drv_offset;
+		bd->max_blk=drive->size-1;
+		drive->size-=bd->drv_offset;
+		RedSeaInit(drive);
 	      } else
-		dv->root_clus=de->loc.little;
+		drive->root_clus=de->loc.little;
 	      res=TRUE;
 	      goto di_done;
 	    case ISOT_TERMINATOR:
@@ -50,22 +50,22 @@ Bool ISOInit(CDrive *dv,I64 blk)
 di_done:
     Free(iso);
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch {
-    dv->fs_type=FSt_ISO9660;
-    dv->spc=spc;
-    dv->drv_offset=bd->drv_offset=dv->data_area=dv->root_clus=0;
+    drive->fs_type=FSt_ISO9660;
+    drive->spc=spc;
+    drive->drv_offset=bd->drv_offset=drive->data_area=drive->root_clus=0;
     Free(iso);
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   }
   return res;
 }
 
-U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
+U0 DVDImageRead(U8 dvd_drive_let,U8 *out_name)
 {//Read entire CD/DVD image into ISO file.
-  CDrive *dv=Letter2Drive(dvd_drv_let);
-  CBlkDev *bd=dv->bd;
+  CDrive *drive=Letter2Drive(dvd_drive_let);
+  CBlkDev *bd=drive->bd;
   U8 *buf=MAlloc(COPY_BUF_BLKS<<BLK_SIZE_BITS),
 	*out_name2=ExtDefault(out_name,"ISO");
   CFile *f=FOpen(out_name2,"w");
@@ -75,7 +75,7 @@ U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
     throw('BlkDev');
   if (!out_name)
     out_name=blkdev.default_iso_filename;
-  count=CeilU64(dv->size,spc);
+  count=CeilU64(drive->size,spc);
   while (count>0) {
     if (count>COPY_BUF_BLKS)
       n=COPY_BUF_BLKS;
@@ -140,13 +140,13 @@ U0 DVDImageWriteTask(CDualBuf *d)
   FClose(f);
 }
 
-U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
+U0 DVDImageWrite(U8 dvd_drive_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
 {//Write CD/DVD ISO file to disk.
   CDualBuf *d=CAlloc(sizeof(CDualBuf));
   U8 *buf,*in_name2,*in_name3;
   I64 i,n,spc,blk=0,count;
-  CDrive *dv=Letter2Drive(dvd_drv_let);
-  CBlkDev *bd=dv->bd,*bd2;
+  CDrive *drive=Letter2Drive(dvd_drive_let);
+  CBlkDev *bd=drive->bd,*bd2;
   CTask *task;
   CFile *f;
 
@@ -175,8 +175,8 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   bd->flags|=BDF_READ_ONLY_OVERRIDE;
   BlkDevInit(bd);
   spc=bd->blk_size>>BLK_SIZE_BITS;
-  if (dv->size<count)
-    dv->size=count;
+  if (drive->size<count)
+    drive->size=count;
 
   d->filename=in_name2;
   d->dvd_bd=bd;

@@ -12,15 +12,15 @@
 //Old master boot record
 #define BOOT_DIR_OLDMBR_BIN_C	BOOT_DIR "/OldMBR.BIN.C"
 
-public U0 BootMHDOldRead(U8 src_drv,U8 dst_drv)
+public U0 BootMHDOldRead(U8 src_drive,U8 dst_drive)
 {//Reads MBR from disk drive containing src partition.
 //Writes a single blk file to dst BOOT_DIR.
-  CBlkDev *bd=Letter2BlkDev(src_drv);
-  CDrive *dv;
+  CBlkDev *bd=Letter2BlkDev(src_drive);
+  CDrive *drive;
   CMasterBoot mbr;
-  Drive(dst_drv);
-  dv=Fs->cur_dv;
-  if (dv->fs_type!=FSt_REDSEA && dv->fs_type!=FSt_FAT32)
+  Drive(dst_drive);
+  drive=Fs->cur_dv;
+  if (drive->fs_type!=FSt_REDSEA && drive->fs_type!=FSt_FAT32)
     PrintErr("File System Not Supported\n");
   else {
 //Bypass partition bounds-checking
@@ -28,18 +28,18 @@ public U0 BootMHDOldRead(U8 src_drv,U8 dst_drv)
     ATAReadBlks(bd,&mbr,0,1);
     BlkDevUnlock(bd);
 
-    Drive(dst_drv);
+    Drive(dst_drive);
     DirMk(BOOT_DIR);
     FileWrite(BOOT_DIR_OLDMBR_BIN_C,&mbr,BLK_SIZE);
   }
 }
 
-public U0 BootMHDOldWrite(U8 src_drv,U8 dst_drv)
+public U0 BootMHDOldWrite(U8 src_drive,U8 dst_drive)
 {//Reads OldMBR from src drive BOOT_DIR.
 //writes it to the MBR of the drive with dst partition.
-  CBlkDev *bd=Letter2BlkDev(dst_drv);
+  CBlkDev *bd=Letter2BlkDev(dst_drive);
   CMasterBoot *mbr;
-  Drive(src_drv);
+  Drive(src_drive);
   if (mbr=FileRead(BOOT_DIR_OLDMBR_BIN_C)) {
 //Bypass partition bounds-checking
     BlkDevLock(bd);
@@ -49,7 +49,7 @@ public U0 BootMHDOldWrite(U8 src_drv,U8 dst_drv)
   Free(mbr);
 }
 
-public U0 BootMHDZero(U8 dst_drv)
+public U0 BootMHDZero(U8 dst_drive)
 {//Set MBR of disk with dst partition to zero.
 
   //This is dangerous!!
@@ -57,7 +57,7 @@ public U0 BootMHDZero(U8 dst_drv)
   //with other operating systems at this time and you need
   //to do this on a drive partitioned by ZenithOS
   //if you wish to partition with another operating system.
-  CBlkDev *bd=Letter2BlkDev(dst_drv);
+  CBlkDev *bd=Letter2BlkDev(dst_drive);
   CMasterBoot mbr;
   MemSet(&mbr,0,BLK_SIZE);
 //Bypass partition bounds-checking
@@ -70,7 +70,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
 {//Create new MBR on the disk that has drv_let as a partition.
 //Puts stage 2 in BOOT_DIR of drv_let.
   CBlkDev *bd,*bd1;
-  CDrive *dv,*p1;
+  CDrive *drive,*p1;
   CMasterBoot mbr;
   CDirEntry de;
   I64 i,j,size,*_q;
@@ -88,11 +88,11 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
       buf[j++]=0;
     }
     Drive(drv_let);
-    dv=Fs->cur_dv;
-    if (dv->fs_type!=FSt_REDSEA && dv->fs_type!=FSt_FAT32)
+    drive=Fs->cur_dv;
+    if (drive->fs_type!=FSt_REDSEA && drive->fs_type!=FSt_FAT32)
       PrintErr("File System Not Supported\n");
     else {
-      bd=dv->bd;
+      bd=drive->bd;
       if (!FileFind(BOOT_DIR_OLDMBR_BIN_C,,FUF_JUST_FILES))
 	BootMHDOldRead(drv_let,drv_let);
 
@@ -103,7 +103,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
       j=0;
       if (FileFind(BOOT_DIR_OLDMBR_BIN_C,&de,FUF_JUST_FILES)) {
 	Free(de.full_name);
-	*_q++=Clus2Blk(dv,de.clus);
+	*_q++=Clus2Blk(drive,de.clus);
 	CatPrint(menu_ptr,"0. Old Boot Record\n\r");
 	j++;
       }
@@ -127,7 +127,7 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
       else {
 	Free(de.full_name);
 	*BMHD_BLK_COUNT(U16 *)=(size+BLK_SIZE-1)>>BLK_SIZE_BITS;
-	*BMHD_DAP_BLK(I64 *)=Clus2Blk(dv,de.clus);
+	*BMHD_DAP_BLK(I64 *)=Clus2Blk(drive,de.clus);
 //Bypass partition bounds-checking
 	BlkDevLock(bd);
 	ATAReadBlks(bd,&mbr,0,1);

@@ -12,7 +12,7 @@
 #exe {Option(OPTf_EXTERNS_TO_IMPORTS,OFF);};
 #exe {Option(OPTf_KEEP_PRIVATE,OFF);};
 #include "Templates"
-#include "CExts"
+#include "CExterns"
 CCompGlobals	cmp;
 #include "CInit"
 #include "CExcept"

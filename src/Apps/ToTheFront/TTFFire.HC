@@ -157,7 +157,7 @@ U0 UnitDirectFire(Unit *tmpu,Unit *target)
   if (target_hit) {
     r=target->row;c=target->col;
     if ((facing=HexMoveOne(&r,&c,x1,y1))>=0)
-      facing=FacingChg(facing,target->facing);
+      facing=FacingChange(facing,target->facing);
     else
       facing=0;
     DamageDo(target,HitDamage(tmpu,target,facing,range_factor));

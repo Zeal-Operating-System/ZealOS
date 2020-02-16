@@ -153,27 +153,27 @@ public U0 Once(U8 *fmt,...)
 public U0 AOnceDrive(U8 drv_let=0,U8 *fmt,...)
 {//Add Zenith code to drv $LK,"~/Registry.HC"$, executed next boot.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
-  I64 old_drv_let=*sys_registry_doc->filename.name;
+  I64 old_drive_let=*sys_registry_doc->filename.name;
   if (drv_let)
     *sys_registry_doc->filename.name=drv_let;
   if (!Bt(&sys_run_level,RLf_ONCE_ZENITH))
     AOnceFlush;
   RegAppend("Once/Zenith","%s\n",buf);
   Free(buf);
-  *sys_registry_doc->filename.name=old_drv_let;
+  *sys_registry_doc->filename.name=old_drive_let;
 }
 
 public U0 OnceDrive(U8 drv_let=0,U8 *fmt,...)
 {//Add User code to drv $LK,"~/Registry.HC"$, executed next boot.
   U8 *buf=StrPrintJoin(NULL,fmt,argc,argv);
-  I64 old_drv_let=*sys_registry_doc->filename.name;
+  I64 old_drive_let=*sys_registry_doc->filename.name;
   if (drv_let)
     *sys_registry_doc->filename.name=drv_let;
   if (!Bt(&sys_run_level,RLf_ONCE_USER))
     OnceFlush;
   RegAppend("Once/User","%s\n",buf);
   Free(buf);
-  *sys_registry_doc->filename.name=old_drv_let;
+  *sys_registry_doc->filename.name=old_drive_let;
 }
 
 public U0 OnceExe()

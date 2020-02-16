@@ -51,7 +51,7 @@ public extern U0 LexPutPos(CCompCtrl *cc);
 public extern U0 LexPutToken(CCompCtrl *cc);
 public extern U0 LexSkipEol(CCompCtrl *cc);
 public extern U8 *LexStatement2Bin(
-	CCompCtrl *cc,I64 *_type,I64 cmp_flags=CMPF_PRS_SEMICOLON);
+	CCompCtrl *cc,I64 *_type,I64 comp_flags=CMPF_PRS_SEMICOLON);
 public extern U0 LexWarn(CCompCtrl *cc,U8 *str=NULL);
 extern CMemberList *MemberClassBaseFind(
 	CHashClass *needle_class,CHashClass *haystack_class);
@@ -64,7 +64,7 @@ public extern I64 ParseKeyWord(CCompCtrl *cc);
 
 #help_index "Compiler;Cmd Line (Typically)"
 extern I64 Comp(U8 *filename,
-	U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0);
+	U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drive_let=0);
 
 #help_index "Debugging/Unassemble"
 public extern U8 *U(U8 *rip,I64 count=20,I64 seg_size=64);

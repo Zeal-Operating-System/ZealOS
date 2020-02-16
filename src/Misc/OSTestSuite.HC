@@ -74,7 +74,7 @@ U0 DoDataBase()
 {
   XTalkWait(task,"#include \"::/Demo/Disk/DataBase\";\n");
 }
-U0 DoDskRaw()
+U0 DoDiskRaw()
 {
   XTalkWait(task,"#include \"::/Demo/Disk/DiskRaw\";\n");
 }

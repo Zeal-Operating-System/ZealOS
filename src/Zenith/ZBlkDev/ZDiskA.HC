@@ -206,7 +206,7 @@ public I64 DelTree(U8 *files_find_mask,U8 *fu_flags=NULL)
 
 U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
 {
-  CDrive *dv=Letter2Drive(*filename);
+  CDrive *drive=Letter2Drive(*filename);
   CDirEntry de;
   U8 *cur_dir=StrNew(filename),buf[STR_LEN];
   if (FileFind(filename,&de,FUF_JUST_FILES)) {
@@ -223,7 +223,7 @@ U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
 	de.datetime=Now;
       else
 	de.datetime=cdt;
-      DirNew(dv,cur_dir,&de,FALSE);
+      DirNew(drive,cur_dir,&de,FALSE);
     }
   } else
     PrintErr("File not found: \"%s\".\n",filename);

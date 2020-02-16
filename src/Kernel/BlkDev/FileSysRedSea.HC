@@ -1,41 +1,41 @@
 // See $LK,"RedSea File System",A="FI:::/Doc/RedSea.DD"$
 
-U0 RedSeaFreeFreeList(CDrive *dv)
+U0 RedSeaFreeFreeList(CDrive *drive)
 {
   CFreeList *tmpf,*tmpf1;
   Bool unlock;
   try {
-    unlock=DriveLock(dv);
-    if (tmpf=dv->next_free) {
-      while (tmpf!=&dv->next_free) {
+    unlock=DriveLock(drive);
+    if (tmpf=drive->next_free) {
+      while (tmpf!=&drive->next_free) {
 	tmpf1=tmpf->next;
 	Free(tmpf);
 	tmpf=tmpf1;
       }
     }
-    dv->next_free=NULL;
+    drive->next_free=NULL;
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
 }
 
-U0 RedSeaFreeListBuild(CDrive *dv)
+U0 RedSeaFreeListBuild(CDrive *drive)
 {
   Bool unlock;
   CFreeList *tmpf;
-  I64 i,first=dv->data_area,max_blk=dv->size+dv->drv_offset;
+  I64 i,first=drive->data_area,max_blk=drive->size+drive->drv_offset;
   try {
-    unlock=DriveLock(dv);
-    if (dv->next_free)
-      RedSeaFreeFreeList(dv);
-    QueueInit(&dv->next_free);
+    unlock=DriveLock(drive);
+    if (drive->next_free)
+      RedSeaFreeFreeList(drive);
+    QueueInit(&drive->next_free);
     while (first<max_blk) {
       i=0;  //count free clus
       while (first+i<max_blk) {
-	DriveFATBlkSet(dv,first+i);
-	if (Bt(dv->cur_fat_blk,(first+i-dv->data_area)&(BLK_SIZE<<3-1)))
+	DriveFATBlkSet(drive,first+i);
+	if (Bt(drive->cur_fat_blk,(first+i-drive->data_area)&(BLK_SIZE<<3-1)))
 	  break;
 	else
 	  i++;
@@ -44,47 +44,47 @@ U0 RedSeaFreeListBuild(CDrive *dv)
 	tmpf=AMAlloc(sizeof(CFreeList));
 	tmpf->size=i;
 	tmpf->start=first;
-	QueueInsert(tmpf,dv->last_free);
+	QueueInsert(tmpf,drive->last_free);
       }
       first+=i+1;
     }
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
 }
 
-U0 RedSeaInit(CDrive *dv)
+U0 RedSeaInit(CDrive *drive)
 {
   CRedSeaBoot br;
   Bool unlock;
   try {
-    unlock=DriveLock(dv);
-    BlkRead(dv,&br,dv->drv_offset,1);
+    unlock=DriveLock(drive);
+    BlkRead(drive,&br,drive->drv_offset,1);
     if (br.signature!=MBR_PT_REDSEA || br.signature2!=0xAA55)
       throw('Drive');
-    dv->fs_type=FSt_REDSEA;
-    RedSeaFreeFreeList(dv);
-    dv->spc=1;
-    dv->size=br.sects;
-    dv->data_area=dv->drv_offset+br.bitmap_sects;
-    dv->root_clus=br.root_clus;
-    dv->fat1=dv->fat2=dv->drv_offset+1;
-    DriveFATBlkAlloc(dv);
+    drive->fs_type=FSt_REDSEA;
+    RedSeaFreeFreeList(drive);
+    drive->spc=1;
+    drive->size=br.sects;
+    drive->data_area=drive->drv_offset+br.bitmap_sects;
+    drive->root_clus=br.root_clus;
+    drive->fat1=drive->fat2=drive->drv_offset+1;
+    DriveFATBlkAlloc(drive);
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
 }
 
 Bool RedSeaValidate(U8 drv_let)
 {
-  CDrive *dv;
+  CDrive *drive;
   CRedSeaBoot br;
-  if ((dv=Letter2Drive(drv_let,FALSE)) && dv->fs_type==FSt_REDSEA &&
-	BlkRead(dv,&br,dv->drv_offset,1) && br.signature==MBR_PT_REDSEA &&
+  if ((drive=Letter2Drive(drv_let,FALSE)) && drive->fs_type==FSt_REDSEA &&
+	BlkRead(drive,&br,drive->drv_offset,1) && br.signature==MBR_PT_REDSEA &&
 	br.signature2==0xAA55)
     return TRUE;
   else
@@ -96,17 +96,17 @@ U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
   U8 *root_dir;
   CDirEntry *d_native;
   CRedSeaBoot *br=CAlloc(BLK_SIZE);
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   I64 i,n,root_dir_blks;
   try {
-    DriveLock(dv);
+    DriveLock(drive);
 //	DriveTypeSet(drv_let,FSt_REDSEA);
     DriveTypeSet(drv_let,FSt_FAT32);
-    dv->fs_type=FSt_REDSEA;
+    drive->fs_type=FSt_REDSEA;
     br->signature=MBR_PT_REDSEA;
     br->signature2=0xAA55;
-    br->drv_offset=dv->drv_offset; //For CD/DVD image copy.
-    br->sects=dv->size;
+    br->drv_offset=drive->drv_offset; //For CD/DVD image copy.
+    br->sects=drive->size;
     n=(br->sects+BLK_SIZE<<3-1)/BLK_SIZE<<3;
     br->bitmap_sects=n;
     br->unique_id=GetTSC^Now()(U64);
@@ -115,16 +115,16 @@ U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
     if (quick)
       i=n+1;
     else
-      i=dv->size;
-    BlkWriteZero(dv,dv->drv_offset,i);
+      i=drive->size;
+    BlkWriteZero(drive,drive->drv_offset,i);
 
-    BlkWrite(dv,br,dv->drv_offset,1);
-    RedSeaInit(dv);
-    ClusAlloc(dv,0,1,FALSE);	//Alloc #1
+    BlkWrite(drive,br,drive->drv_offset,1);
+    RedSeaInit(drive);
+    ClusAlloc(drive,0,1,FALSE);	//Alloc #1
 
-    root_dir_blks=MaxI64(1,dv->bd->init_root_dir_blks);
-    br->root_clus=ClusAlloc(dv,0,root_dir_blks,FALSE);
-    BlkWrite(dv,br,dv->drv_offset,1);
+    root_dir_blks=MaxI64(1,drive->bd->init_root_dir_blks);
+    br->root_clus=ClusAlloc(drive,0,root_dir_blks,FALSE);
+    BlkWrite(drive,br,drive->drv_offset,1);
     root_dir=CAlloc(BLK_SIZE*root_dir_blks);
 
     d_native=root_dir-offset(CDirEntry.start);
@@ -143,16 +143,16 @@ U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE)
     d_native->clus=br->root_clus;
     d_native->datetime=Now;
 
-    BlkWrite(dv,root_dir,br->root_clus,root_dir_blks);
-    RedSeaInit(dv);
-    DriveUnlock(dv);
+    BlkWrite(drive,root_dir,br->root_clus,root_dir_blks);
+    RedSeaInit(drive);
+    DriveUnlock(drive);
   } catch
-    DriveUnlock(dv);
+    DriveUnlock(drive);
   Free(br);
   Free(root_dir);
 }
 
-Bool RedSeaFileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,
+Bool RedSeaFileFind(CDrive *drive,I64 cur_dir_clus,U8 *name,
 	CDirEntry *_res,I64 fuf_flags=0)
 {//$LK,"FUF_JUST_DIRS",A="MN:FUF_JUST_DIRS"$, $LK,"FUF_JUST_FILES",A="MN:FUF_JUST_FILES"$
   CDirEntry *buf,*buf2,*ptr;
@@ -162,20 +162,20 @@ Bool RedSeaFileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,
   if (fuf_flags&~FUG_FILE_FIND)
     throw('FUF');
   MemSet(_res,0,sizeof(CDirEntry));
-  DriveCheck(dv);
-  if (dv->fs_type!=FSt_REDSEA)
+  DriveCheck(drive);
+  if (drive->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else if (!CFileNameTo(dname,name))
     PrintErr("Invalid FileName: \"%s\".\n",name);
   else
     try {
-      unlock=DriveLock(dv);
+      unlock=DriveLock(drive);
       buf2=MAlloc(BLK_SIZE);
-      BlkRead(dv,buf2,cur_dir_clus,1);
+      BlkRead(drive,buf2,cur_dir_clus,1);
 
       ptr=buf2(U8 *)-offset(CDirEntry.start);
       buf=MAlloc(ptr->size);
-      BlkRead(dv,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
+      BlkRead(drive,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
       Free(buf2);
 
       ptr=buf(U8 *)-offset(CDirEntry.start);
@@ -197,39 +197,39 @@ Bool RedSeaFileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,
 rsff_done:
       Free(buf);
       if (unlock)
-	DriveUnlock(dv);
+	DriveUnlock(drive);
     } catch
       if (unlock)
-	DriveUnlock(dv);
+	DriveUnlock(drive);
   return res;
 }
 
-U8 *RedSeaFileRead(CDrive *dv,U8 *cur_dir,U8 *filename,I64 *_size,I64 *_attr)
+U8 *RedSeaFileRead(CDrive *drive,U8 *cur_dir,U8 *filename,I64 *_size,I64 *_attr)
 {
   U8 *buf=NULL;
   CDirEntry de;
   I64 c,blk_count,cur_dir_clus;
-  DriveCheck(dv);
+  DriveCheck(drive);
   *_size=0;
   *_attr=0;
-  if (dv->fs_type!=FSt_REDSEA)
+  if (drive->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else
     try {
-      DriveLock(dv);
-      cur_dir_clus=Name2DirClus(dv,cur_dir);
-      if (RedSeaFileFind(dv,cur_dir_clus,filename,&de,FUF_JUST_FILES)) {
+      DriveLock(drive);
+      cur_dir_clus=Name2DirClus(drive,cur_dir);
+      if (RedSeaFileFind(drive,cur_dir_clus,filename,&de,FUF_JUST_FILES)) {
 	blk_count=(de.size+BLK_SIZE-1)>>BLK_SIZE_BITS;
 	buf=MAlloc(blk_count<<BLK_SIZE_BITS+1);
 	c=de.clus;
-	c=BlkRead(dv,buf,c,blk_count);
+	c=BlkRead(drive,buf,c,blk_count);
 	buf[de.size]=0; //Terminate
 	*_size=de.size;
 	*_attr=FileAttr(de.name,de.attr);
       }
-      DriveUnlock(dv);
+      DriveUnlock(drive);
     } catch
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   return buf;
 }
 
@@ -245,22 +245,22 @@ Bool RedSeaCd(U8 *name,I64 cur_dir_clus)
   return FALSE;
 }
 
-U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count)
+U0 RedSeaFreeClus(CDrive *drive,I64 c,I64 count)
 {
   CFreeList *tmpf;
   Bool found=FALSE,unlock,unlock_break;
-  DriveCheck(dv);
+  DriveCheck(drive);
   if (!c) return;
-  if (dv->fs_type!=FSt_REDSEA)
+  if (drive->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else
     try {
       unlock_break=BreakLock;
-      unlock=DriveLock(dv);
-      if (!dv->next_free)
-	RedSeaFreeListBuild(dv);
-      tmpf=dv->next_free;
-      while (!found && tmpf!=&dv->next_free) {
+      unlock=DriveLock(drive);
+      if (!drive->next_free)
+	RedSeaFreeListBuild(drive);
+      tmpf=drive->next_free;
+      while (!found && tmpf!=&drive->next_free) {
 	if (tmpf->start+tmpf->size==c) {
 	  tmpf->size+=count;
 	  found=TRUE;
@@ -275,29 +275,29 @@ U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count)
 	tmpf=AMAlloc(sizeof(CFreeList));
 	tmpf->size=count;
 	tmpf->start=c;
-	QueueInsert(tmpf,dv->last_free);
+	QueueInsert(tmpf,drive->last_free);
       }
       while (count-->0) {
-	DriveFATBlkSet(dv,c);
-	LBtr(dv->cur_fat_blk,(c-dv->data_area)&(BLK_SIZE<<3-1));
-	LBts(&dv->fat_blk_dirty,0);
+	DriveFATBlkSet(drive,c);
+	LBtr(drive->cur_fat_blk,(c-drive->data_area)&(BLK_SIZE<<3-1));
+	LBts(&drive->fat_blk_dirty,0);
 	c++;
       }
-      DriveFATBlkClean(dv);
+      DriveFATBlkClean(drive);
 
       if (unlock)
-	DriveUnlock(dv);
+	DriveUnlock(drive);
       if (unlock_break)
 	BreakUnlock;
     } catch {
       if (unlock)
-	DriveUnlock(dv);
+	DriveUnlock(drive);
       if (unlock_break)
 	BreakUnlock;
     }
 }
 
-I64 RedSeaAllocClus(CDrive *dv,I64 count)
+I64 RedSeaAllocClus(CDrive *drive,I64 count)
 {
   CFreeList *tmpf,*best_free=NULL;
   I64 i,first,best_size=I64_MAX;
@@ -306,11 +306,11 @@ I64 RedSeaAllocClus(CDrive *dv,I64 count)
     throw('Drive');
   try {
     unlock_break=BreakLock;
-    unlock=DriveLock(dv);
-    if (!dv->next_free)
-      RedSeaFreeListBuild(dv);
-    tmpf=dv->next_free;
-    while (tmpf!=&dv->next_free) {
+    unlock=DriveLock(drive);
+    if (!drive->next_free)
+      RedSeaFreeListBuild(drive);
+    tmpf=drive->next_free;
+    while (tmpf!=&drive->next_free) {
       if (tmpf->size>=count && tmpf->size<best_size) {
 	best_free=tmpf;
 	best_size=tmpf->size;
@@ -323,11 +323,11 @@ I64 RedSeaAllocClus(CDrive *dv,I64 count)
       throw('Drive');
     first=best_free->start;
     for (i=0;i<count;i++) {
-      DriveFATBlkSet(dv,first+i);
-      LBts(dv->cur_fat_blk,(first+i-dv->data_area)&(BLK_SIZE<<3-1));
-      LBts(&dv->fat_blk_dirty,0);
+      DriveFATBlkSet(drive,first+i);
+      LBts(drive->cur_fat_blk,(first+i-drive->data_area)&(BLK_SIZE<<3-1));
+      LBts(&drive->fat_blk_dirty,0);
     }
-    DriveFATBlkClean(dv);
+    DriveFATBlkClean(drive);
     if (best_free->size-=count)
       best_free->start+=count;
     else {
@@ -335,19 +335,19 @@ I64 RedSeaAllocClus(CDrive *dv,I64 count)
       Free(best_free);
     }
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
     if (unlock_break)
       BreakUnlock;
   } catch {
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
     if (unlock_break)
       BreakUnlock;
   }
   return first;
 }
 
-Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
+Bool RedSeaDirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 {
   CDirEntry *buf,*buf2,*ptr,de2;
   CRedSeaBoot *br;
@@ -357,14 +357,14 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
   try {
     unlock_break=BreakLock;
     tmpde->attr|=RS_ATTR_CONTIGUOUS;
-    unlock=DriveLock(dv);
-    cur_dir_clus=Name2DirClus(dv,cur_dir);
+    unlock=DriveLock(drive);
+    cur_dir_clus=Name2DirClus(drive,cur_dir);
     buf2=MAlloc(BLK_SIZE);
-    BlkRead(dv,buf2,cur_dir_clus,1);
+    BlkRead(drive,buf2,cur_dir_clus,1);
 
     ptr=buf2(U8 *)-offset(CDirEntry.start);
     buf=MAlloc(ptr->size);
-    BlkRead(dv,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
+    BlkRead(drive,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
 
     dir_size=ptr->size;
     ptr=buf(U8 *)-offset(CDirEntry.start)+CDIR_SIZE;
@@ -374,26 +374,26 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	if (!written)
 	  MemCpy(&ptr->start,&tmpde->start,CDIR_SIZE);
 	if ((i+1)*CDIR_SIZE+j<<BLK_SIZE_BITS<dir_size)
-	  BlkWrite(dv,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
+	  BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
 	else {
 	  buf2=CAlloc(dir_size+BLK_SIZE);
 	  MemCpy(buf2,buf,dir_size);
-	  RedSeaFreeClus(dv,cur_dir_clus,dir_size>>BLK_SIZE_BITS);
+	  RedSeaFreeClus(drive,cur_dir_clus,dir_size>>BLK_SIZE_BITS);
 	  dir_size+=BLK_SIZE;
-	  c=ClusAlloc(dv,0,dir_size>>BLK_SIZE_BITS,TRUE);
+	  c=ClusAlloc(drive,0,dir_size>>BLK_SIZE_BITS,TRUE);
 	  Free(buf);
 	  buf=buf2;
 	  ptr=buf(U8 *)-offset(CDirEntry.start);
 	  ptr->size=dir_size;
 	  ptr->clus=c;
-	  BlkWrite(dv,buf,c,dir_size>>BLK_SIZE_BITS);
-	  if (cur_dir_clus==dv->root_clus) {
+	  BlkWrite(drive,buf,c,dir_size>>BLK_SIZE_BITS);
+	  if (cur_dir_clus==drive->root_clus) {
 	    br=CAlloc(BLK_SIZE);
-	    BlkRead(dv,br,dv->drv_offset,1);
+	    BlkRead(drive,br,drive->drv_offset,1);
 	    br->root_clus=c;
-	    BlkWrite(dv,br,dv->drv_offset,1);
+	    BlkWrite(drive,br,drive->drv_offset,1);
 	    Free(br);
-	    dv->root_clus=c;
+	    drive->root_clus=c;
 	  } else {
 	    tmp=StrNew(cur_dir);
 	    parent_dir=StrNew(cur_dir);
@@ -402,11 +402,11 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
 	      Free(parent_dir);
 	      parent_dir=StrNew("/");
 	    }
-	    if (RedSeaFileFind(dv,Name2DirClus(dv,parent_dir),
+	    if (RedSeaFileFind(drive,Name2DirClus(drive,parent_dir),
 		  tmp,&de2,FUF_JUST_DIRS)) {
 	      de2.clus=c;
 	      de2.size=dir_size;
-	      RedSeaDirNew(dv,parent_dir,&de2,FALSE);
+	      RedSeaDirNew(drive,parent_dir,&de2,FALSE);
 	    } else
 	      throw('Drive');
 	    Free(tmp);
@@ -417,19 +417,19 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
       } else if (ptr->attr & RS_ATTR_DELETED) {
 	if (!written) {
 	  MemCpy(&ptr->start,&tmpde->start,CDIR_SIZE);
-	  BlkWrite(dv,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
+	  BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
 	  written=TRUE;
 	}
       } else {
 	if (!StrCmp(tmpde->name,ptr->name)) {
 	  if (free_old_chain)
-	    RedSeaFreeClus(dv,ptr->clus,
+	    RedSeaFreeClus(drive,ptr->clus,
 		  (ptr->size+BLK_SIZE-1)>>BLK_SIZE_BITS);
 	  if (!written)
 	    MemCpy(&ptr->start,&tmpde->start,CDIR_SIZE);
 	  else
 	    ptr->attr|=RS_ATTR_DELETED;
-	  BlkWrite(dv,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
+	  BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
 	  break;
 	}
       }
@@ -441,19 +441,19 @@ Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,Bool free_old_chain)
     }
     Free(buf);
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
     if (unlock_break)
       BreakUnlock;
   } catch {
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
     if (unlock_break)
       BreakUnlock;
   }
   return FALSE;
 }
 
-I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
+I64 RedSeaFilesDel(CDrive *drive,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
 		     Bool del_dir,Bool print_message)
 {
   CDirEntry *buf,*buf2,*ptr;
@@ -461,14 +461,14 @@ I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
   Bool unlock_break;
   try {
     unlock_break=BreakLock;
-    DriveLock(dv);
-    cur_dir_clus=Name2DirClus(dv,cur_dir);
+    DriveLock(drive);
+    cur_dir_clus=Name2DirClus(drive,cur_dir);
     buf2=MAlloc(BLK_SIZE);
-    BlkRead(dv,buf2,cur_dir_clus,1);
+    BlkRead(drive,buf2,cur_dir_clus,1);
 
     ptr=buf2(U8 *)-offset(CDirEntry.start);
     buf=MAlloc(ptr->size);
-    BlkRead(dv,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
+    BlkRead(drive,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
     Free(buf2);
 
     ptr=buf(U8 *)-offset(CDirEntry.start);
@@ -484,8 +484,8 @@ I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
 	if (print_message)
 	  "Del %s\n",ptr->name;
 	ptr->attr|=RS_ATTR_DELETED;
-	BlkWrite(dv,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
-	RedSeaFreeClus(dv,ptr->clus,
+	BlkWrite(drive,buf(U8 *)+j<<BLK_SIZE_BITS,cur_dir_clus+j,1);
+	RedSeaFreeClus(drive,ptr->clus,
 	      (ptr->size+BLK_SIZE-1)>>BLK_SIZE_BITS);
       }
       ptr(U8 *)+=CDIR_SIZE;
@@ -495,41 +495,41 @@ I64 RedSeaFilesDel(CDrive *dv,U8 *cur_dir,U8 *files_find_mask,I64 fuf_flags,
       }
     }
     Free(buf);
-    DriveUnlock(dv);
+    DriveUnlock(drive);
     if (unlock_break)
       BreakUnlock;
   } catch {
-    DriveUnlock(dv);
+    DriveUnlock(drive);
     if (unlock_break)
       BreakUnlock;
   }
   return res;
 }
 
-I64 RedSeaFileWrite(CDrive *dv,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
+I64 RedSeaFileWrite(CDrive *drive,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
 	CDate cdt,I64 attr)
 {
   CDirEntry de;
   I64 c=0,blk_count;
   MemSet(&de,0,sizeof(CDirEntry));
   if (size<0) size=0;
-  if (dv->fs_type!=FSt_REDSEA)
+  if (drive->fs_type!=FSt_REDSEA)
     PrintErr("Not RedSea Drive\n");
   else if (!CFileNameTo(de.name,name))
     PrintErr("Invalid FileName: \"%s\".\n",name);
   else {
-    RedSeaFilesDel(dv,cur_dir,de.name,0,FALSE,FALSE);
+    RedSeaFilesDel(drive,cur_dir,de.name,0,FALSE,FALSE);
     de.size=size;
     if (blk_count=(size+BLK_SIZE-1)>>BLK_SIZE_BITS)
-      c=ClusAlloc(dv,0,blk_count,TRUE); //Always contiguous
+      c=ClusAlloc(drive,0,blk_count,TRUE); //Always contiguous
     else
       c=INVALID_CLUS;
     de.clus=c;
     de.attr=attr|RS_ATTR_CONTIGUOUS;
     de.datetime=cdt;
     if (blk_count)
-      BlkWrite(dv,buf,c,blk_count);
-    RedSeaDirNew(dv,cur_dir,&de,TRUE);
+      BlkWrite(drive,buf,c,blk_count);
+    RedSeaDirNew(drive,cur_dir,&de,TRUE);
   }
   return c;
 }
@@ -537,27 +537,27 @@ I64 RedSeaFileWrite(CDrive *dv,U8 *cur_dir,U8 *name,U8 *buf,I64 size,
 CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
 	CDirEntry *parent=NULL)
 {
-  CDrive *dv=Fs->cur_dv;
+  CDrive *drive=Fs->cur_dv;
   CDirEntry *buf,*buf2,*ptr,*res=NULL,*tmpde;
   I64 ch,cur_dir_clus;
   if (fuf_flags&~FUG_FILES_FIND)
     throw('FUF');
   try {
-    DriveLock(dv);
-    cur_dir_clus=Name2DirClus(dv,Fs->cur_dir);
+    DriveLock(drive);
+    cur_dir_clus=Name2DirClus(drive,Fs->cur_dir);
     buf2=MAlloc(BLK_SIZE);
-    BlkRead(dv,buf2,cur_dir_clus,1);
+    BlkRead(drive,buf2,cur_dir_clus,1);
 
     ptr=buf2(U8 *)-offset(CDirEntry.start);
     buf=MAlloc(ptr->size);
-    BlkRead(dv,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
+    BlkRead(drive,buf,cur_dir_clus,ptr->size>>BLK_SIZE_BITS);
     Free(buf2);
 
     ptr=buf(U8 *)-offset(CDirEntry.start);
     *ptr->name='.';
     ptr->name[1]=0;
     ptr(U8 *)+=CDIR_SIZE;
-    ptr->clus=Name2ParentDirClus(dv,Fs->cur_dir);
+    ptr->clus=Name2ParentDirClus(drive,Fs->cur_dir);
     ptr(U8 *)-=CDIR_SIZE;
     while (TRUE) {
       if (!(ch=*ptr->name))
@@ -571,12 +571,12 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
 	  tmpde->next=res;
 	  res=tmpde;
 	  tmpde->full_name=DirNameAbs(tmpde->name);
-	  DriveUnlock(dv);
+	  DriveUnlock(drive);
 	  if (Cd(tmpde->name)) {
 	    tmpde->sub=RedSeaFilesFind(files_find_mask,fuf_flags,tmpde);
 	    Cd("..");
 	  }
-	  DriveLock(dv);
+	  DriveLock(drive);
 	} else {
 	  tmpde->full_name=FileNameAbs(tmpde->name);
 	  if ((tmpde->attr&RS_ATTR_DIR ||
@@ -593,15 +593,15 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask,I64 fuf_flags,
       ptr(U8 *)+=CDIR_SIZE;
     }
     Free(buf);
-    DriveUnlock(dv);
+    DriveUnlock(drive);
   } catch
-    DriveUnlock(dv);
+    DriveUnlock(drive);
   return res;
 }
 
-Bool RedSeaMkDir(CDrive *dv,U8 *cur_dir,U8 *name,I64 entry_count)
+Bool RedSeaMkDir(CDrive *drive,U8 *cur_dir,U8 *name,I64 entry_count)
 {//entry_count is for preallocating dir blks.
-  I64	c,cur_dir_clus=Name2DirClus(dv,cur_dir),
+  I64	c,cur_dir_clus=Name2DirClus(drive,cur_dir),
 	size=CeilU64((entry_count+3)<<6,BLK_SIZE);
 #assert CDIR_SIZE==64
   U8 *buf=CAlloc(size);
@@ -624,7 +624,7 @@ Bool RedSeaMkDir(CDrive *dv,U8 *cur_dir,U8 *name,I64 entry_count)
     d_native->clus=cur_dir_clus;
     d_native->size=0;
     d_native->datetime=Now;
-    BlkWrite(dv,buf,c,1);
+    BlkWrite(drive,buf,c,1);
     Free(buf);
     if (unlock_break)
       BreakUnlock;

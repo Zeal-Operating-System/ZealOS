@@ -7,7 +7,7 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
       break;
     case BDT_ISO_FILE_READ:
     case BDT_ISO_FILE_WRITE:
-      bd->lock_fwding=Letter2BlkDev(*bd->file_dsk_name);
+      bd->lock_fwding=Letter2BlkDev(*bd->file_disk_name);
       break;
     case BDT_ATA:
     case BDT_ATAPI:
@@ -25,29 +25,29 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 }
 
 I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
-	Bool whole_drv,Bool make_free)
+	Bool whole_drive,Bool make_free)
 {//It will mount just one partition of prt_num>=0.
-//When repartitioing whole drive, whole_drv=TRUE.
+//When repartitioing whole drive, whole_drive=TRUE.
   I64 i,j,ext_base,offset,res=0,num=0;
-  CDrive *dv;
+  CDrive *drive;
   CRedSeaBoot br;
   CMasterBoot mbr;
 
   bd->bd_signature=BD_SIGNATURE_VAL;
   if (make_free)
-    dv=DriveMakeFreeSlot(bd->first_drv_let);
+    drive=DriveMakeFreeSlot(bd->first_drive_let);
   else
-    dv=DriveMakeFreeSlot(DriveNextFreeLet(bd->first_drv_let));
-  dv->bd=bd;
-  dv->drv_offset=bd->drv_offset;
-  dv->size=bd->max_blk+1-bd->drv_offset;
+    drive=DriveMakeFreeSlot(DriveNextFreeLet(bd->first_drive_let));
+  drive->bd=bd;
+  drive->drv_offset=bd->drv_offset;
+  drive->size=bd->max_blk+1-bd->drv_offset;
   switch (bd->type) {
     case BDT_RAM:
     case BDT_ISO_FILE_READ:
     case BDT_ISO_FILE_WRITE:
-      dv->dv_signature=DRV_SIGNATURE_VAL;
-      dv->prt_num=num;
-      dv->fs_type=FSt_REDSEA;
+      drive->drive_signature=DRIVE_SIGNATURE_VAL;
+      drive->prt_num=num;
+      drive->fs_type=FSt_REDSEA;
 //This is to force creation of a RAM
       //drive during boot, so it is probably
       //MAlloced to the same addr and can
@@ -58,20 +58,20 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
       if (BlkDevInit(bd))
 	res++;
       else
-	dv->dv_signature=0;
+	drive->drive_signature=0;
       break;
     case BDT_ATA:
-      dv->dv_signature=DRV_SIGNATURE_VAL; //Temporarily validate
+      drive->drive_signature=DRIVE_SIGNATURE_VAL; //Temporarily validate
       if (!BlkDevInit(bd))
-	dv->dv_signature=0; //Revoke validation
+	drive->drive_signature=0; //Revoke validation
       else {
-	dv->dv_signature=0; //Revoke validation
-	if (whole_drv) {
-	  dv->dv_signature=DRV_SIGNATURE_VAL;
-	  dv->prt_num=num;
+	drive->drive_signature=0; //Revoke validation
+	if (whole_drive) {
+	  drive->drive_signature=DRIVE_SIGNATURE_VAL;
+	  drive->prt_num=num;
 	  res++;
-	  dv->fs_type=FSt_REDSEA;
-	  dv->size=bd->max_blk+1-bd->drv_offset;
+	  drive->fs_type=FSt_REDSEA;
+	  drive->size=bd->max_blk+1-bd->drv_offset;
 //The following read is a test read.
 	  //if it hangs, the drive is not supported.
 	  ATAReadBlks(bd,&mbr,0,1);
@@ -87,19 +87,19 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	  for (i=0;i<4 && (prt_num<0 || num<=prt_num);i++) {
 	    if (mbr.p[i].type) {
 	      if (make_free)
-		dv=DriveMakeFreeSlot(bd->first_drv_let+res);
+		drive=DriveMakeFreeSlot(bd->first_drive_let+res);
 	      else
-		dv=DriveMakeFreeSlot(DriveNextFreeLet(bd->first_drv_let+res));
-	      dv->bd=bd;
-	      dv->drv_offset=mbr.p[i].offset+offset;
-	      dv->size	=mbr.p[i].size;
+		drive=DriveMakeFreeSlot(DriveNextFreeLet(bd->first_drive_let+res));
+	      drive->bd=bd;
+	      drive->drv_offset=mbr.p[i].offset+offset;
+	      drive->size	=mbr.p[i].size;
 	      switch (mbr.p[i].type) {
 		case MBR_PT_REDSEA:
-		  dv->dv_signature=DRV_SIGNATURE_VAL;
-		  dv->prt_num=num;
+		  drive->drive_signature=DRIVE_SIGNATURE_VAL;
+		  drive->prt_num=num;
 		  res++;
-		  dv->fs_type=FSt_REDSEA;
-		  RedSeaInit(dv);
+		  drive->fs_type=FSt_REDSEA;
+		  RedSeaInit(drive);
 		  break;
 		case MBR_PT_FAT32a:
 		case MBR_PT_FAT32b:
@@ -107,38 +107,38 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 		case MBR_PT_FAT32d:
 		case MBR_PT_FAT32e:
 		case MBR_PT_FAT32f:
-		  ATAReadBlks(bd,&br,dv->drv_offset,1);
-		  dv->dv_signature=DRV_SIGNATURE_VAL;
-		  dv->prt_num=num;
+		  ATAReadBlks(bd,&br,drive->drv_offset,1);
+		  drive->drive_signature=DRIVE_SIGNATURE_VAL;
+		  drive->prt_num=num;
 		  res++;
 		  if (br.signature==MBR_PT_REDSEA) {
-		    dv->fs_type=FSt_REDSEA;
-		    RedSeaInit(dv);
+		    drive->fs_type=FSt_REDSEA;
+		    RedSeaInit(drive);
 		  } else {
-		    dv->fs_type=FSt_FAT32;
-		    FAT32Init(dv);
+		    drive->fs_type=FSt_FAT32;
+		    FAT32Init(drive);
 		  }
 		  break;
 		case MBR_PT_NTFS:
-		  dv->dv_signature=DRV_SIGNATURE_VAL;
-		  dv->prt_num=num;
+		  drive->drive_signature=DRIVE_SIGNATURE_VAL;
+		  drive->prt_num=num;
 		  res++;
-		  dv->fs_type=FSt_NTFS;
+		  drive->fs_type=FSt_NTFS;
 		  break;
 		case 5:
 		case 15:
 		  j=i;
 		  break;
 		default:
-		  dv->dv_signature=DRV_SIGNATURE_VAL;
-		  dv->prt_num=num;
+		  drive->drive_signature=DRIVE_SIGNATURE_VAL;
+		  drive->prt_num=num;
 		  res++;
-		  dv->fs_type=FSt_UNKNOWN;
+		  drive->fs_type=FSt_UNKNOWN;
 	      }
 	      num++;
 	    }
 	  }
-	  if (Letter2BlkDevType(bd->first_drv_let+res)!=bd->type)
+	  if (Letter2BlkDevType(bd->first_drive_let+res)!=bd->type)
 	    break;
 	  if (j<0)
 	    break;
@@ -153,11 +153,11 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
       }
       break;
     case BDT_ATAPI:
-      dv->dv_signature=DRV_SIGNATURE_VAL;
-      dv->prt_num=num;
+      drive->drive_signature=DRIVE_SIGNATURE_VAL;
+      drive->prt_num=num;
       res++;
-      dv->fs_type=FSt_ISO9660; //Start with this
-      dv->size=0;
+      drive->fs_type=FSt_ISO9660; //Start with this
+      drive->size=0;
       break;
   }
   if (res)
@@ -169,9 +169,9 @@ I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 
 Bool DriveEnable(U8 drv_let,Bool val)
 {//Can unmount or remount, but not mount the first time.
-  CDrive *dv;
-  if (dv=Letter2Drive(drv_let,FALSE))
-    return !LBEqu(&dv->fs_type,FStf_DISABLE,!val);
+  CDrive *drive;
+  if (drive=Letter2Drive(drv_let,FALSE))
+    return !LBEqu(&drive->fs_type,FStf_DISABLE,!val);
   else
     return FALSE;
 }
@@ -227,9 +227,9 @@ U0 BlkDevsInitAll()
   CBlkDev *bd;
   I64 i;
   blkdev.blkdevs=CAlloc(sizeof(CBlkDev)*BLKDEVS_NUM);
-  blkdev.drvs=CAlloc(sizeof(CDrive)*DRVS_NUM);
-  for (i=0;i<DRVS_NUM;i++)
-    blkdev.let_to_drv[i]=&blkdev.drvs[i];
+  blkdev.drvs=CAlloc(sizeof(CDrive)*DRIVES_NUM);
+  for (i=0;i<DRIVES_NUM;i++)
+    blkdev.let_to_drive[i]=&blkdev.drvs[i];
   #exe {
     if (kernel_cfg->opts[CFG_MOUNT_IDE_AUTO])
       StreamPrint("MountIDEAuto;");

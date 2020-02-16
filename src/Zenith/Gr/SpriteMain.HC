@@ -274,7 +274,7 @@ CSprite *SMScreenBitMap(I64 eletype,CDC *dc,CDC *dc2,I64 x,I64 y,
   img=DCExt(dc3,Fs->pix_left+Fs->scroll_x+xx1,Fs->pix_top+Fs->scroll_y+yy1,
 	Fs->pix_left+Fs->scroll_x+xx2-1,Fs->pix_top+Fs->scroll_y+yy2-1);
   if (eletype==SPT_INS_TRANSPARENT_SCRN_BITMAP)
-    DCColorChg(img,bm_bkcolor);
+    DCColorChange(img,bm_bkcolor);
   GrScaleZoom(i);
   MemCpy(&res->pwhu.u,img->body,((xx2-xx1+7)&~7)*(yy2-yy1));
   DCDel(img);

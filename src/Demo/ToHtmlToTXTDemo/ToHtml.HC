@@ -83,7 +83,7 @@ U8 *TOSLinkCvt2(U8 *filename,I64 line_num)
 //Make your own LinkCvt routine
   U8 *res=NULL,*st;
   if (filename) {
-    st=ExtChg(filename,"html");
+    st=ExtChange(filename,"html");
     if (st && StrLen(st)>3 && !StrNCmp(st+1,":/",2))
       res=MStrPrint("http://www.templeos.org/Wb/%s#l%d",st+3,line_num);
     Free(st);
@@ -372,7 +372,7 @@ public U0 ToHtml(U8 *_in_name,U8 *_out_name=NULL,U8 *html_header=NULL,
   if (_out_name)
     out_name=ExtDefault(_out_name,"html");
   else
-    out_name=ExtChg(_in_name,"html");
+    out_name=ExtChange(_in_name,"html");
 
   doc_in=DocRead(in_name);
   doc_out=Doc2Html(doc_in,html_header,body_header,body_footer,html_footer,

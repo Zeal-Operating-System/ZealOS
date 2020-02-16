@@ -38,8 +38,8 @@ CDirContext *DirContextNew(U8 *_mask,Bool make_mask=FALSE,
   }
   if (*mask=='~' && Fs->cur_dv!=Letter2Drive('~') && !Drive('~'))
     valid=FALSE;
-  dirc->dv=Fs->cur_dv;
-  DriveCheck(dirc->dv);
+  dirc->drive=Fs->cur_dv;
+  DriveCheck(dirc->drive);
   buf=MAlloc(mask_len+2);
   StrCpy(buf,mask);
 

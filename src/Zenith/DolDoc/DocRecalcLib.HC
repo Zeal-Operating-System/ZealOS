@@ -194,12 +194,12 @@ U0 DocUpdateTaskDocs(CTask *task)
 {//This is called from $LK,"GrUpdateTaskWin",A="MN:GrUpdateTaskWin"$() by the winmgr at 30fps.
   CDoc *doc;
   CD3I64 saved_scroll;
-  if (task->border_src==BDS_CUR_DRV && task->cur_dv)
+  if (task->border_src==BDS_CUR_DRIVE && task->cur_dv)
     task->border_attr=DriveTextAttrGet(Drive2Letter(task->cur_dv));
   if (task->title_src==TTS_TASK_NAME)
     StrCpy(task->task_title,task->task_name);
   if ((doc=DocDisplay(task)) && !(doc->flags&DOCF_DONT_SHOW)) {
-    if (task->border_src==BDS_ED_FILENAME_DRV)
+    if (task->border_src==BDS_ED_FILENAME_DRIVE)
       task->border_attr=DriveTextAttrGet(*doc->filename.name);
     if (task->title_src==TTS_ED_FILENAME)
       MemCpy(task->task_title,doc->filename.name,STR_LEN-1);

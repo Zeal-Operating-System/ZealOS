@@ -70,8 +70,8 @@ I64 BlkDevsSize()
     if (bd->bd_signature==BD_SIGNATURE_VAL) {
       j=(bd->max_blk+1)<<BLK_SIZE_BITS;
       if (bd->type==BDT_RAM)
-	"RAMDsk%C\t:%010X/%010X\n",
-	      bd->first_drv_let,j-DriveUnused(bd->first_drv_let),j;
+	"RAMDisk%C\t:%010X/%010X\n",
+	      bd->first_drive_let,j-DriveUnused(bd->first_drive_let),j;
       res+=MSize2(bd->dev_id_record);
     }
   }
@@ -81,7 +81,7 @@ I64 BlkDevsSize()
 I64 DrivesSize()
 {
   I64 i,res=MSize2(blkdev.drvs);
-  for (i=0;i<DRVS_NUM;i++)
+  for (i=0;i<DRIVES_NUM;i++)
     res+=MSize2(blkdev.drvs[i].cur_fat_blk)+MSize2(blkdev.drvs[i].fis);
   return res;
 }

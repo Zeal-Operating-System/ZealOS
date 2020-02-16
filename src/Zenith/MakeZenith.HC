@@ -12,7 +12,7 @@ Cd(__DIR__);;
 #include "Win"
 #include "WinMgr"
 #include "ZDebug"
-#include "::/Zenith/God/GodExt"
+#include "::/Zenith/God/GodExterns"
 #include "DolDoc/MakeDoc"
 LBts(&sys_run_level,RLf_DOC);
 #include "Ctrls/MakeCtrls"

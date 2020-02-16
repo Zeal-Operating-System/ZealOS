@@ -619,7 +619,7 @@ class CSema
 #define SEMA_REFRESH_IN_PROGRESS 8
 #define SEMA_FLUSH_VGA_IMAGE	9
 #define SEMA_SINGLE_USER	10
-#define SEMA_DSK_CACHE		11
+#define SEMA_DISK_CACHE		11
 #define SEMA_FAR_CALL32		12
 #define SEMA_DEV_MEM		13
 #define SEMA_VGA		14
@@ -2311,7 +2311,7 @@ public class CATARep
 #define DVD_BOOT_LOADER_SIZE	DVD_BLK_SIZE*1
 #define INVALID_CLUS (-1)
 
-class CMBRPrt
+class CMBRPart
 {
   U8	active,	//0x80=active  0x00=inactive
 	start_head;
@@ -2328,7 +2328,7 @@ class CMasterBoot
   U8	code[440];
   U32	media_id;
   U16	zero;
-  CMBRPrt p[4];
+  CMBRPart p[4];
   U16	signature; //AA55
 };
 
@@ -2354,7 +2354,7 @@ class CFAT32Boot
   U16	reserved_sects;
   U8	copies_of_fat;
   U16	max_root_dir_entries,	//Not used
-	old_sects_in_drv;	//Not used
+	old_sects_in_drive;	//Not used
   U8	media_desc;		//F64 for hard disk
   U16	old_sects_per_fat,	//Not used
 	sects_per_track,
@@ -2368,7 +2368,7 @@ class CFAT32Boot
   U16	file_system_info_sect,
 	backup_boot_sect;
   U8	reserved[12],
-	log_drv_num,
+	log_drive_num,
 	unused,
 	ext_signature; //0x29
   U32	serial_num;
@@ -2462,7 +2462,7 @@ class CATAPITrack
 #define ISOT_BOOT_RECORD	0
 #define ISOT_PRI_VOL_DESC	1
 #define ISOT_SUPPLEMENTARY_DESC	2
-#define ISOT_VOL_DRV_DESC	3
+#define ISOT_VOL_DRIVE_DESC	3
 #define ISOT_TERMINATOR		255
 
 class CISODirEntry
@@ -2637,15 +2637,15 @@ public class CBlkDev
   I64	locked_flags;
   U32	bd_signature,
 	type,flags;
-  U8	first_drv_let,unit,pad[2];
+  U8	first_drive_let,unit,pad[2];
   U32	base0,base1,
 	blk_size;
   I64	drv_offset,init_root_dir_blks,
 	max_blk;
   U16	*dev_id_record;
-  U8	*RAM_dsk,
-	*file_dsk_name;
-  CFile *file_dsk;
+  U8	*RAM_disk,
+	*file_disk_name;
+  CFile *file_disk;
   CTask *owning_task;
   F64	last_time;
   U32	max_reads,max_writes;
@@ -2654,7 +2654,7 @@ public class CBlkDev
 //Drive locked_flags
 #define DVlf_LOCKED	0
 
-//See $LK,"ST_DRV_TYPES",A="MN:ST_DRV_TYPES"$
+//See $LK,"ST_DRIVE_TYPES",A="MN:ST_DRIVE_TYPES"$
 #define FSt_NULL	0
 #define FSt_REDSEA	1 //Supported
 #define FSt_FAT32	2 //Supported except for short names, to some degree
@@ -2682,15 +2682,15 @@ class CFreeList
   I64	start,size;
 };
 
-#define DRVS_NUM		26
+#define DRIVES_NUM		26
 
-#define DRV_SIGNATURE_VAL	'DVSV'
+#define DRIVE_SIGNATURE_VAL	'DVSV'
 public class CDrive
 {
 //Don't access ->drv_let directly in case a drive has been remapped.
   //Use $LK,"Drive2Letter",A="MN:Drive2Letter"$().
   I64	locked_flags;
-  U32	dv_signature;
+  U32	drive_signature;
   U8	drv_let,pad;
   U16	fs_type;
   I64	drv_offset,
@@ -2712,13 +2712,13 @@ public class CDrive
   CFreeList *next_free,*last_free;
 };
 
-#define DSK_CACHE_HASH_SIZE	0x2000
+#define DISK_CACHE_HASH_SIZE	0x2000
 
 class CCacheBlk
 {
   CCacheBlk *next_lru,*last_lru;
   CCacheBlk *next_hash,*last_hash;
-  CDrive	*dv;
+  CDrive	*drive;
   I64	blk;
   U8	body[BLK_SIZE];
 };
@@ -2736,17 +2736,17 @@ public class CBlkDevGlobals
   U8	*home_dir;
   CCacheBlk *cache_base,*cache_ctrl,**cache_hash_table;
   I64	cache_size,read_count,write_count;
-  CDrive	*drvs,*let_to_drv[32];
+  CDrive	*drvs,*let_to_drive[32];
   I64	mount_ide_auto_count,
 	ins_base0,ins_base1;	//Install cd/dvd controller.
-  U8	boot_drv_let,first_hd_drv_let,first_dvd_drv_let;
+  U8	boot_drive_let,first_hd_drive_let,first_dvd_drive_let;
   Bool	dvd_boot_is_good,ins_unit,pad[3];
 };
 
 #help_index "File/Internal"
 public class CDirContext
 {
-  CDrive	*old_dv,*dv;
+  CDrive	*old_dv,*drive;
   U8	*old_dir,*mask;
 };
 
@@ -2764,7 +2764,7 @@ public class CFile //See $LK,"::/Demo/Disk/DataBase.HC"$.
 {
   I64	flags;
   CDirEntry de;
-  CDrive	*dv;
+  CDrive	*drive;
   I64	fblk_num,clus,file_clus_num,max_blk;
   U8	*clus_buf;
 };
@@ -3215,8 +3215,8 @@ public class CTaskSettings
 #help_index "Task"
 //CTask.border_src
 #define BDS_CONST		0
-#define BDS_CUR_DRV		1
-#define BDS_ED_FILENAME_DRV	2
+#define BDS_CUR_DRIVE		1
+#define BDS_ED_FILENAME_DRIVE	2
 
 //CTask.title_src
 #define TTS_CONST		0
@@ -3839,7 +3839,7 @@ public class CDebugGlobals
 #define BOOT_SRC_NULL		0
 #define BOOT_SRC_ROM		1
 #define BOOT_SRC_RAM		2
-#define BOOT_SRC_HARDDRV	3
+#define BOOT_SRC_HARDDRIVE	3
 #define BOOT_SRC_DVD		4
 
 // $LK,"In",A="MN:In"$("") StdIn for call to $LK,"BootHDIns",A="MN:BootHDIns"$().

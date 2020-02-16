@@ -1,4 +1,4 @@
-U8 *LexStatement2Bin(CCompCtrl *cc,I64 *_type,I64 cmp_flags=0)
+U8 *LexStatement2Bin(CCompCtrl *cc,I64 *_type,I64 comp_flags=0)
 {//Compile one cc stmt to bin code.
   I64 size,i,j,k,*res=INVALID_PTR;
   CCodeCtrl *tmpcbh;
@@ -7,7 +7,7 @@ U8 *LexStatement2Bin(CCompCtrl *cc,I64 *_type,I64 cmp_flags=0)
   if (cc->aot_depth==2)
     COCPush(cc);
   COCInit(cc);
-  if (!ParseStatement(cc,,,cmp_flags)) {
+  if (!ParseStatement(cc,,,comp_flags)) {
     if (cc->coc.coc_head.next!=&cc->coc.coc_head) {
       cc->coc.coc_head.last->ic_flags&=~ICF_RES_NOT_USED;
       ICAdd(cc,IC_RETURN_VAL2,0,0);
@@ -32,7 +32,7 @@ U8 *LexStatement2Bin(CCompCtrl *cc,I64 *_type,I64 cmp_flags=0)
   return res;
 }
 
-CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=0)
+CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_let=0)
 {
   CAOTCtrl *aotc,*old_aot=cc->aotc;
   I64 i,j,l;
@@ -75,27 +75,27 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
   cc->htc.local_var_list=cc->htc.fun; //HolyC local vars
   cc->htc.fun=NULL;
   try {
-    if (cmp_flags&CMPF_LEX_FIRST)
+    if (comp_flags&CMPF_LEX_FIRST)
       Lex(cc);
-    if (!(cmp_flags&CMPF_ONE_ASM_INS))
-      cmp_flags|=CMPF_PRS_SEMICOLON;
+    if (!(comp_flags&CMPF_ONE_ASM_INS))
+      comp_flags|=CMPF_PRS_SEMICOLON;
     if (cc->flags&CCF_AOT_COMPILE) {
       while (cc->token!=TK_EOF) {
-	buf=LexStatement2Bin(cc,NULL,cmp_flags);
+	buf=LexStatement2Bin(cc,NULL,comp_flags);
 	if (buf!=INVALID_PTR) {
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_MAIN;
 	  tmpie->rip=buf;
 	  QueueInsert(tmpie,res->last_ie);
 	}
-	if (cmp_flags&CMPF_ASM_BLK)
+	if (comp_flags&CMPF_ASM_BLK)
 	  break;
       }
     } else
-      ParseStatement(cc,,,cmp_flags);
+      ParseStatement(cc,,,comp_flags);
     AOTGlobalsResolve(cc,res);
   } catch {
-    if (Fs->except_ch=='Compiler' && !(cmp_flags&CMPF_ASM_BLK)) {
+    if (Fs->except_ch=='Compiler' && !(comp_flags&CMPF_ASM_BLK)) {
       LexPutPos(cc);
       Fs->catch_except=TRUE;
     }
@@ -110,7 +110,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
     res=NULL;
   } else {
     if (map_name)
-      MapFileWrite(cc->htc.glbl_hash_table,map_name,mapfile_drv_let);
+      MapFileWrite(cc->htc.glbl_hash_table,map_name,mapfile_drive_let);
     HashTableDel(cc->htc.local_hash_table);
     HashTableDel(cc->htc.glbl_hash_table);
 
@@ -155,14 +155,14 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
 }
 
 CAOT *CompBuf(U8 *buf,U8 *map_name=NULL,
-  I64 *error_count=NULL, I64 *warning_count=NULL,U8 mapfile_drv_let=0)
+  I64 *error_count=NULL, I64 *warning_count=NULL,U8 mapfile_drive_let=0)
 {
   CCompCtrl *cc;
   CAOT *res=NULL;
   cc=CompCtrlNew(buf,CCF_DONT_FREE_BUF);
   cc->flags|=CCF_AOT_COMPILE;
   QueueInsert(cc,Fs->last_cc);
-  res=CompJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drv_let);
+  res=CompJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drive_let);
   if (error_count)   *error_count=cc->error_count;
   if (warning_count) *warning_count=cc->warning_count;
   QueueRemove(cc);
@@ -416,7 +416,7 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc,CAOT *tmpaot)
   }
 }
 
-I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
+I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drive_let=0)
 {//AOT Compile HC or PRJ file a and output BIN file. Returns err_count.
   U8 *ptr,*fbuf=NULL,*fbuf2=NULL,*fbuf3=NULL,
 	*patch_table=MAlloc(0x20000);
@@ -433,7 +433,7 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
   if (map_name)
     fbuf3=ExtDefault(map_name,"MAP");
 
-  if (tmpaot=CompBuf(fbuf2,fbuf3,&error_count,&warning_count,mapfile_drv_let)) {
+  if (tmpaot=CompBuf(fbuf2,fbuf3,&error_count,&warning_count,mapfile_drive_let)) {
     aot_U8s=tmpaot->aot_U8s;
     ptr=patch_table;
 //See $LK,"Load",A="MN:Load"$()
@@ -552,7 +552,7 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     if (out_name)
       fbuf2=ExtDefault(out_name,"BIN");
     else
-      fbuf2=ExtChg(fbuf,"BIN");
+      fbuf2=ExtChange(fbuf,"BIN");
     FileWrite(fbuf2,bfh,size);
     Free(bfh);
     Free(tmpaot->buf);

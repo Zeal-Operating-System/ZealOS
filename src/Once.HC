@@ -36,7 +36,7 @@ U0 Tmp()
       }
       break;
     case BOOT_SRC_RAM:
-    case BOOT_SRC_HARDDRV:
+    case BOOT_SRC_HARDDRIVE:
       "$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
       TipOfDay;
 //      Type("::/Doc/Customize.DD");
@@ -47,7 +47,7 @@ U0 Tmp()
 //	  Cd("::/Misc/Tour");
 //	  InFile("Tour");
 //	}
-//      }
+//      }
       break;
   }
 }

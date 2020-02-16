@@ -204,9 +204,9 @@ CATARep *ATARepFind(CATARep *haystack_head,I64 needle_num)
   return NULL;
 }
 
-CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drv,CATARep **_atapi_drv)
+CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drive,CATARep **_atapi_drive)
 {//This is for when trying to sort-out main hard drives and CD/DVD drives.
-  CATARep *res=NULL,*tmpha=head,*ata_drv=NULL,*atapi_drv=NULL;
+  CATARep *res=NULL,*tmpha=head,*ata_drive=NULL,*atapi_drive=NULL;
   CBlkDev *bd;
   Bool was_silent=Silent,ins_found=FALSE;
   bd=Letter2BlkDev(':',FALSE);
@@ -215,42 +215,42 @@ CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drv,CATARep **_atapi_drv)
     if (!res && bd && bd->type==tmpha->type) {
       if (bd->type==BDT_ATAPI &&
 	    bd->base0==tmpha->base0 && bd->unit==tmpha->unit)
-	res=atapi_drv=tmpha;
+	res=atapi_drive=tmpha;
       else if (bd->type==BDT_ATA && bd->base0==tmpha->base0 &&
 	    bd->base1==tmpha->base1 && bd->unit==tmpha->unit)
-	res=ata_drv=tmpha;
+	res=ata_drive=tmpha;
     }
     if (!res || res->type!=tmpha->type) {
       if (tmpha->type==BDT_ATA) {
-	if (!ata_drv || tmpha->unit<ata_drv->unit ||
-	      tmpha->unit==ata_drv->unit && tmpha->num<ata_drv->num)
-	  ata_drv=tmpha;
+	if (!ata_drive || tmpha->unit<ata_drive->unit ||
+	      tmpha->unit==ata_drive->unit && tmpha->num<ata_drive->num)
+	  ata_drive=tmpha;
       } else if (tmpha->type==BDT_ATAPI) {
-	if (!atapi_drv || !ins_found && (tmpha->unit<atapi_drv->unit ||
-	      tmpha->unit==atapi_drv->unit && tmpha->num<atapi_drv->num))
-	  atapi_drv=tmpha;
+	if (!atapi_drive || !ins_found && (tmpha->unit<atapi_drive->unit ||
+	      tmpha->unit==atapi_drive->unit && tmpha->num<atapi_drive->num))
+	  atapi_drive=tmpha;
       }
     }
     if (tmpha->type==BDT_ATAPI && bd && bd->type==BDT_ATA &&
       tmpha->base0==blkdev.ins_base0 && tmpha->unit==blkdev.ins_unit) {
       if (!ins_found) {
-	atapi_drv=tmpha;
+	atapi_drive=tmpha;
 	ins_found=TRUE;
       }
     }
     tmpha=tmpha->next;
   }
-  if (_ata_drv)   *_ata_drv  =ata_drv;
-  if (_atapi_drv) *_atapi_drv=atapi_drv;
+  if (_ata_drive)   *_ata_drive  =ata_drive;
+  if (_atapi_drive) *_atapi_drive=atapi_drive;
   return res;
 }
 
-CBlkDev *ATAMount(U8 first_drv_let,I64 type,I64 base0,I64 base1,I64 unit)
+CBlkDev *ATAMount(U8 first_drive_let,I64 type,I64 base0,I64 base1,I64 unit)
 {
   CBlkDev *res;
-  if (0<=first_drv_let-'A'<DRVS_NUM && (type==BDT_ATA || type==BDT_ATAPI) &&
+  if (0<=first_drive_let-'A'<DRIVES_NUM && (type==BDT_ATA || type==BDT_ATAPI) &&
 	0<=unit<=1) {
-    res=BlkDevNextFreeSlot(first_drv_let,type);
+    res=BlkDevNextFreeSlot(first_drive_let,type);
     res->unit=unit;
     res->base0=base0;
     res->base1=base1;
@@ -265,23 +265,23 @@ I64 MountIDEAuto()
 //It uses 'C' and 'T' as first drive letters or whatever you set
   //in config when compiling Kernel.BIN.
   I64 res=0;
-  CATARep *head=NULL,*ata_drv=NULL,*atapi_drv=NULL,*tmpha;
+  CATARep *head=NULL,*ata_drive=NULL,*atapi_drive=NULL,*tmpha;
   ATARep(FALSE,TRUE,&head);
-  ATAIDDrives(head,&ata_drv,&atapi_drv);
-  if (ata_drv && ATAMount(blkdev.first_hd_drv_let,BDT_ATA,
-	ata_drv->base0,ata_drv->base1,ata_drv->unit))
+  ATAIDDrives(head,&ata_drive,&atapi_drive);
+  if (ata_drive && ATAMount(blkdev.first_hd_drive_let,BDT_ATA,
+	ata_drive->base0,ata_drive->base1,ata_drive->unit))
     res++;
-  if (atapi_drv && ATAMount(blkdev.first_dvd_drv_let,BDT_ATAPI,
-	atapi_drv->base0,atapi_drv->base1,atapi_drv->unit))
+  if (atapi_drive && ATAMount(blkdev.first_dvd_drive_let,BDT_ATAPI,
+	atapi_drive->base0,atapi_drive->base1,atapi_drive->unit))
     res++;
   tmpha=head;
   while (tmpha) {
-    if (tmpha!=ata_drv && tmpha!=atapi_drv) {
-      if (tmpha->type==BDT_ATA && ATAMount(blkdev.first_hd_drv_let,BDT_ATA,
+    if (tmpha!=ata_drive && tmpha!=atapi_drive) {
+      if (tmpha->type==BDT_ATA && ATAMount(blkdev.first_hd_drive_let,BDT_ATA,
 	    tmpha->base0,tmpha->base1,tmpha->unit))
 	res++;
       else if (tmpha->type==BDT_ATAPI &&
-	    ATAMount(blkdev.first_dvd_drv_let,BDT_ATAPI,
+	    ATAMount(blkdev.first_dvd_drive_let,BDT_ATAPI,
 	    tmpha->base0,tmpha->base1,tmpha->unit))
 	res++;
     }

@@ -37,7 +37,7 @@ $FG,2$'d'$FG$
 $ID,2$Make Dir.
 $ID,-2$
 $FG,2$'c'$FG$
-$ID,2$DiskChg (Remount removable media).  Do not do this on blank disks.
+$ID,2$DiskChange (Remount removable media).  Do not do this on blank disks.
 $ID,-2$
 $FG,2$'f'$FG$
 $ID,2$Format drive.
@@ -56,7 +56,7 @@ $ID,2$Burn CD/DVD ISO file.  This burns a CD/DVD using the image file, $FG,2$$TX
 $ID,-2$
 
 $FG,5$Instructions on Using CD/DVD's$FG$
-$ID,2$If you have not recompiled Kernel and defined your CD/DVD drive, exit the FileMgr and use $LK,"Mount",A="MN:Mount"$ to define your CD/DVD drive.  Place a CD/DVD in the drive and press $FG,2$'c'$FG$ when on top of the CD/DVD drive letter to mount the drive.  It will call $LK,"DiskChg",A="MN:DiskChg"$(), the ZenithOS cmd to mount removable media.
+$ID,2$If you have not recompiled Kernel and defined your CD/DVD drive, exit the FileMgr and use $LK,"Mount",A="MN:Mount"$ to define your CD/DVD drive.  Place a CD/DVD in the drive and press $FG,2$'c'$FG$ when on top of the CD/DVD drive letter to mount the drive.  It will call $LK,"DiskChange",A="MN:DiskChange"$(), the ZenithOS cmd to mount removable media.
 $ID,-2$
 
 $FG,5$Instructions on Burning CD/DVD's$FG$

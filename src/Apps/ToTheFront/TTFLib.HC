@@ -26,7 +26,7 @@ U0 Toward(I64 *_row,I64 *_col,I64 direction)
   }
 }
 
-I64 FacingChg(I64 f1,I64 f2)
+I64 FacingChange(I64 f1,I64 f2)
 {
   I64 res=(f1+6-f2)%6;
   if (res>=3)

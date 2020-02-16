@@ -47,7 +47,7 @@ U0 RedSeaISO9660Stage1(U8 *iso_filename,U8 *stage2_filename)
 
 U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
 {
-  CDrive	*dv=Letter2Drive(drv_let);
+  CDrive	*drive=Letter2Drive(drv_let);
   CISOPriDesc *iso_pri=CAlloc(DVD_BLK_SIZE),
 	*iso_boot=CAlloc(DVD_BLK_SIZE),
 	*iso_sup=CAlloc(DVD_BLK_SIZE),
@@ -60,7 +60,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
 
   if (out_file=FOpen(iso_filename,"wc+")) {
     iso_size=FSize(out_file)/DVD_BLK_SIZE;
-    for (i=0;i<dv->bd->drv_offset;i+=4)
+    for (i=0;i<drive->bd->drv_offset;i+=4)
       FBlkWrite(out_file,zero_buf,i,4);
 
     iso_pri->type=ISOT_PRI_VOL_DESC;
@@ -70,7 +70,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
     FillU16Palindrome(&iso_pri->vol_seq_num,1);
     FillU16Palindrome(&iso_pri->log_block_size,DVD_BLK_SIZE);
     FillU32Palindrome(&iso_pri->vol_space_size,iso_size);
-    FillU32Palindrome(&iso_pri->root_dir_record,dv->root_clus);
+    FillU32Palindrome(&iso_pri->root_dir_record,drive->root_clus);
     iso_pri->file_structure_version=1;
     StrCpy(iso_pri->publisher_id,"ZenithOS RedSea");
 
@@ -139,19 +139,19 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
   I64 i,res,root_count,root_dir_blks,bitmap_blks,bitmap_blks1;
   CDirEntry *tmpde;
   U8 buf[STR_LEN],*iso_filename,*src_dir,*stage2_filename;
-  CDrive *dv=DriveMakeFreeSlot(DriveNextFreeLet('Q')); //First $LK,"BDT_ISO_FILE_WRITE",A="MN:BDT_ISO_FILE_WRITE"$
-  CBlkDev *bd=BlkDevNextFreeSlot(dv->drv_let,BDT_ISO_FILE_WRITE);
+  CDrive *drive=DriveMakeFreeSlot(DriveNextFreeLet('Q')); //First $LK,"BDT_ISO_FILE_WRITE",A="MN:BDT_ISO_FILE_WRITE"$
+  CBlkDev *bd=BlkDevNextFreeSlot(drive->drv_let,BDT_ISO_FILE_WRITE);
 
   if (!IsDir(_src_dir))
     PrintErr("'%s' is not a dir.\n",_src_dir);
   else {
     if (!_iso_filename)
       _iso_filename=blkdev.default_iso_c_filename;
-    iso_filename=ExtChg(_iso_filename,"ISO.C");
+    iso_filename=ExtChange(_iso_filename,"ISO.C");
     src_dir=DirNameAbs(_src_dir);
     if (_stage2_filename) {
       stage2_filename=FileNameAbs(_stage2_filename);
-      *stage2_filename=dv->drv_let;
+      *stage2_filename=drive->drv_let;
       i=StrLen(src_dir);
       if (i!=3)	//If not root
 	i++;	//Skip slash
@@ -171,13 +171,13 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
 
       bd->max_blk=CeilI64(bd->drv_offset+1+bitmap_blks+res,4);
       bd->max_blk--; //Inclusive.
-      bd->file_dsk_name=AStrNew(iso_filename);
+      bd->file_disk_name=AStrNew(iso_filename);
       bd->init_root_dir_blks=root_dir_blks;
       BlkDevAdd(bd,,TRUE,TRUE);
-      StrPrint(buf,"%C:/",dv->drv_let);
+      StrPrint(buf,"%C:/",drive->drv_let);
       CopyTree(src_dir,buf,TRUE);
       RedSeaISO9660Stage1(iso_filename,stage2_filename);
-      DriveDel(dv);
+      DriveDel(drive);
       BlkDevDel(bd);
     }
     Free(stage2_filename);

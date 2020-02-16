@@ -265,8 +265,8 @@ extern U0 SysUntry();
 public extern U0 throw(I64 ch=0,Bool no_log=FALSE);
 
 #help_index "File/CD DVD"
-public extern U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name);
-public extern U0 DVDImageWrite(U8 dvd_drv_let,
+public extern U0 DVDImageRead(U8 dvd_drive_let,U8 *out_name);
+public extern U0 DVDImageWrite(U8 dvd_drive_let,
 	U8 *in_name=NULL,I64 media_type=MT_DVD);
 
 #help_index "File/CFile"
@@ -283,11 +283,11 @@ public extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 public extern I64 Dir(U8 *files_find_mask="*",Bool full=FALSE);
 public extern Bool DirMk(U8 *filename,I64 entry_count=0);
 public extern Bool Drive(U8 drv_let);
-public extern U0 DiskChg(U8 drv_let=0);
+public extern U0 DiskChange(U8 drv_let=0);
 public extern U0 HomeSet(U8 *dirname);
 
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically);Install"
-public extern Bool DriveMap(U8 drv_let,CDrive *dv);
+public extern Bool DriveMap(U8 drv_let,CDrive *drive);
 
 #help_index "File/FileNames"
 extern CDirEntry *Cd2DirEntry(CDirEntry *tmpde,U8 *abs_name);
@@ -295,7 +295,7 @@ public extern U8 *DirCur(CTask *task=NULL,CTask *mem_task=NULL);
 public extern U8 *DirFile(U8 *dirname,U8 *name=NULL,U8 *_extension=NULL);
 public extern U8 *DirNameAbs(U8 *dirname);
 public extern CBlkDev *DriveIsWritable(U8 drv_let=0,Bool except=FALSE);
-public extern U8 *ExtChg(U8 *filename,U8 *extension);
+public extern U8 *ExtChange(U8 *filename,U8 *extension);
 public extern U8 *ExtDefault(U8 *filename,U8 *extension);
 public extern U8 *FileExtDot(U8 *src);
 public extern U8 *FileExtRemove(U8 *src,U8 *dst=NULL);
@@ -319,7 +319,7 @@ public extern U8 *FileNameTmpTxt();
 public extern U0 DirContextDel(CDirContext *dirc,Bool restore=TRUE);
 public extern CDirContext *DirContextNew(U8 *mask,
 	Bool make_mask=FALSE,Bool make_dirs=FALSE,Bool no_mask=FALSE);
-public extern Bool DirNew(CDrive *dv,U8 *cur_dir,
+public extern Bool DirNew(CDrive *drive,U8 *cur_dir,
 	CDirEntry *tmpde,Bool free_old_chain=TRUE);
 extern I64 FileAttr(U8 *name,I64 old_attr=0);
 
@@ -328,40 +328,40 @@ extern I64 FileAttr(U8 *name,I64 old_attr=0);
 public extern CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE);
 public extern U0 BlkDevDel(CBlkDev *bd);
 public extern Bool BlkDevLock(CBlkDev *bd);
-public extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
+public extern CBlkDev *BlkDevNextFreeSlot(U8 first_drive_let,I64 type);
 public extern Bool BlkDevUnlock(CBlkDev *bd,Bool reset=FALSE);
 public extern U0 BlkDevsRelease();
-public extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 count);
-public extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 count);
-public extern U0 BlkWriteZero(CDrive *dv,I64 blk,I64 count);
-public extern I64 Clus2Blk(CDrive *dv,I64 c);
-public extern I64 ClusAlloc(CDrive *dv,I64 c=0,
+public extern Bool BlkRead(CDrive *drive,U8 *buf, I64 blk, I64 count);
+public extern Bool BlkWrite(CDrive *drive,U8 *buf, I64 blk, I64 count);
+public extern U0 BlkWriteZero(CDrive *drive,I64 blk,I64 count);
+public extern I64 Clus2Blk(CDrive *drive,I64 c);
+public extern I64 ClusAlloc(CDrive *drive,I64 c=0,
 	I64 count=1,Bool contiguous=FALSE);
-public extern I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks);
-public extern I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks);
-public extern I64 ClusNumNext(CDrive *dv,I64 c,I64 count=1);
-public extern I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 count);
-public extern I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 count);
+public extern I64 ClusBlkRead(CDrive *drive,U8 *buf,I64 c,I64 blks);
+public extern I64 ClusBlkWrite(CDrive *drive,U8 *buf,I64 c,I64 blks);
+public extern I64 ClusNumNext(CDrive *drive,I64 c,I64 count=1);
+public extern I64 ClusRead(CDrive *drive,U8 *buf,I64 c,I64 count);
+public extern I64 ClusWrite(CDrive *drive,U8 *buf,I64 c,I64 count);
 extern Bool CopySingle(U8 *f1,U8 *f2); //Just one file
-public extern U8 Drive2Letter(CDrive *dv=NULL);
-public extern CDrive *DriveCheck(CDrive *dv,Bool except=TRUE);
-public extern U0 DriveDel(CDrive *dv);
-public extern Bool DriveLock(CDrive *dv);
+public extern U8 Drive2Letter(CDrive *drive=NULL);
+public extern CDrive *DriveCheck(CDrive *drive,Bool except=TRUE);
+public extern U0 DriveDel(CDrive *drive);
+public extern Bool DriveLock(CDrive *drive);
 public extern CDrive *DriveMakeFreeSlot(U8 drv_let);
 public extern U8 *DriveModelNum(U8 drv_let=0);
-public extern U8 DriveNextFreeLet(U8 first_drv_let='C');
+public extern U8 DriveNextFreeLet(U8 first_drive_let='C');
 public extern U8 *DriveSerialNum(U8 drv_let=0);
 public extern U8 DriveTextAttrGet(U8 drv_let=0);
-public extern Bool DriveUnlock(CDrive *dv,Bool reset=FALSE);
+public extern Bool DriveUnlock(CDrive *drive,Bool reset=FALSE);
 public extern U0 DrivesRelease();
-extern U0 FAT32FreeClus(CDrive *dv,I64 c);
+extern U0 FAT32FreeClus(CDrive *drive,I64 c);
 public extern CBlkDev *Letter2BlkDev(U8 drv_let=0,Bool except=TRUE);
 public extern I64 Letter2BlkDevType(U8 drv_let);
 public extern CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE);
 public extern U8 Letter2Letter(U8 drv_let=0);
-extern I64 Name2DirClus(CDrive *dv,U8 *dirname);
-extern I64 Name2ParentDirClus(CDrive *dv,U8 *dirname);
-extern U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count);
+extern I64 Name2DirClus(CDrive *drive,U8 *dirname);
+extern I64 Name2ParentDirClus(CDrive *drive,U8 *dirname);
+extern U0 RedSeaFreeClus(CDrive *drive,I64 c,I64 count);
 
 #help_index "File/Program Routines"
 public extern U0 DirEntryDel(CDirEntry *tmpde);
@@ -377,18 +377,18 @@ public extern I64 FileWrite(U8 *filename,
 public extern CDirEntry *FilesFind(U8 *files_find_mask,I64 fuf_flags=0);
 
 #help_index "File/System"
-public extern CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drv,
-	CATARep **_atapi_drv);
-extern CBlkDev *ATAMount(U8 first_drv_let,
+public extern CATARep *ATAIDDrives(CATARep *head,CATARep **_ata_drive,
+	CATARep **_atapi_drive);
+extern CBlkDev *ATAMount(U8 first_drive_let,
 	I64 type,I64 base0,I64 base1,I64 unit);
 extern Bool ATAPIStartStop(CBlkDev *bd,F64 timeout,Bool start);
 extern I64 ATAProbe(I64 base0,I64 base1,I64 unit);
 extern U0 ATAReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count);
 extern U0 ATAWriteBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count);
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
-	Bool whole_drv,Bool make_free);
+	Bool whole_drive,Bool make_free);
 extern U0 DiskCacheInit(I64 size_in_U8s);
-public extern U0 DiskCacheInvalidate(CDrive *dv);
+public extern U0 DiskCacheInvalidate(CDrive *drive);
 public extern I64 MountIDEAuto();
 public extern CBlkDevGlobals blkdev;
 

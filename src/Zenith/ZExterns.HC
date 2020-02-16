@@ -52,7 +52,7 @@ extern CMenuEntry *MenuEntryFind(CMenu *haystack_menu,U8 *needle_full_name);
 extern CMenu *MenuFilePush(U8 *filename);
 extern U0 MenuPop();
 extern CMenu *MenuPush(U8 *st);
-extern U8 Mount(Bool caller_is_prtdsk=FALSE);
+extern U8 Mount(Bool caller_is_prtdisk=FALSE);
 extern CTask *Noise(I64 mS,F64 min_ona,F64 max_ona);
 extern Bool Plain(U8 *filename,I64 edf_dof_flags=0);
 extern Bool PopUpCancelOk(U8 *header=NULL,U8 *footer=NULL);

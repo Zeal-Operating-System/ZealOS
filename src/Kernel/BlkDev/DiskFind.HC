@@ -1,9 +1,9 @@
 CDirEntry *FilesFind2(U8 *files_find_mask,I64 fuf_flags)
 {
-  CDrive *dv=Fs->cur_dv;
+  CDrive *drive=Fs->cur_dv;
   CDirEntry *res=NULL;
-  DriveCheck(dv);
-  switch (dv->fs_type) {
+  DriveCheck(drive);
+  switch (drive->fs_type) {
     case FSt_REDSEA:
       res=RedSeaFilesFind(files_find_mask,fuf_flags);
       break;
@@ -78,14 +78,14 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
       Silent(old_silent);
     else {
       Silent(old_silent);
-      cur_dir_clus=Name2DirClus(dirc->dv,Fs->cur_dir);
-      switch (dirc->dv->fs_type) {
+      cur_dir_clus=Name2DirClus(dirc->drive,Fs->cur_dir);
+      switch (dirc->drive->fs_type) {
 	case FSt_REDSEA:
-	  res=RedSeaFileFind(dirc->dv,cur_dir_clus,dirc->mask,
+	  res=RedSeaFileFind(dirc->drive,cur_dir_clus,dirc->mask,
 		&de,fuf_flags);
 	  break;
 	case FSt_FAT32:
-	  res=FAT32FileFind(dirc->dv,cur_dir_clus,dirc->mask,
+	  res=FAT32FileFind(dirc->drive,cur_dir_clus,dirc->mask,
 		&de,fuf_flags);
 	  break;
 	default:
@@ -111,17 +111,17 @@ Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0)
       Silent(old_silent);
     else {
       Silent(old_silent);
-      cur_dir_clus=Name2DirClus(dirc->dv,Fs->cur_dir);
+      cur_dir_clus=Name2DirClus(dirc->drive,Fs->cur_dir);
       while (!res && StrCmp(Fs->cur_dir,"/")) {
 	Cd("..");
-	cur_dir_clus=Name2DirClus(dirc->dv,Fs->cur_dir);
-	switch (dirc->dv->fs_type) {
+	cur_dir_clus=Name2DirClus(dirc->drive,Fs->cur_dir);
+	switch (dirc->drive->fs_type) {
 	  case FSt_REDSEA:
-	    res=RedSeaFileFind(dirc->dv,cur_dir_clus,
+	    res=RedSeaFileFind(dirc->drive,cur_dir_clus,
 		  dirc->mask,&de,fuf_flags);
 	    break;
 	  case FSt_FAT32:
-	    res=FAT32FileFind(dirc->dv,cur_dir_clus,
+	    res=FAT32FileFind(dirc->drive,cur_dir_clus,
 		  dirc->mask,&de,fuf_flags);
 	    break;
 	  default:

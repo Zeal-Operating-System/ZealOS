@@ -376,7 +376,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
   MenuPush(
 	"File {"
 	"  New(,'.');"
-	"  ChgDir(MESSAGE_CMD,PSMF_CD);"
+	"  ChangeDir(MESSAGE_CMD,PSMF_CD);"
 	"  Open(,CH_CTRLO);"
 	"  SaveAs(,CH_CTRLA);"
 	"  Abort(,CH_SHIFT_ESC);"

@@ -92,25 +92,25 @@ U0 ICCopyTemplate(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,
     alt=FALSE;
   }
   if (alt && dont_push_float && !dont_pop_float) {
-    ptr=cmp_templates_dont_push2[op];
-    i=cmp_templates_dont_push2[op+1]-ptr;
+    ptr=comp_templates_dont_push2[op];
+    i=comp_templates_dont_push2[op+1]-ptr;
   }
   if (!i) {
     if (dont_push_float) {
       if (dont_pop_float) {
-	ptr=cmp_templates_dont_push_pop[op];
-	i=cmp_templates_dont_push_pop[op+1]-ptr;
+	ptr=comp_templates_dont_push_pop[op];
+	i=comp_templates_dont_push_pop[op+1]-ptr;
       } else {
-	ptr=cmp_templates_dont_push[op];
-	i=cmp_templates_dont_push[op+1]-ptr;
+	ptr=comp_templates_dont_push[op];
+	i=comp_templates_dont_push[op+1]-ptr;
       }
     } else {
       if (dont_pop_float) {
-	ptr=cmp_templates_dont_pop[op];
-	i=cmp_templates_dont_pop[op+1]-ptr;
+	ptr=comp_templates_dont_pop[op];
+	i=comp_templates_dont_pop[op+1]-ptr;
       } else {
-	ptr=cmp_templates[op];
-	i=cmp_templates[op+1]-ptr;
+	ptr=comp_templates[op];
+	i=comp_templates[op+1]-ptr;
       }
     }
   }
@@ -567,7 +567,7 @@ U0 ICFModEqu(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip)
 	ICFCvt2(cc,tmpi,REG_RDX,MDF_REG+RT_I64,REG_RDX,0,FALSE,rip);
     }
 //TODO: unpushable,unpop?  Not sure
-    ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_MOD,FALSE,FALSE,FALSE,CN_INST);
+    ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_MOD,FALSE,FALSE,FALSE,CN_INST);
     if (tmpi->arg1_type_pointed_to!=RT_F64)
       ICFCvt2(cc,tmpi,REG_RAX,MDF_REG+RT_I64,REG_RAX,0,TRUE,rip);
     ICMov(tmpi,tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,

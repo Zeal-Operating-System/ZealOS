@@ -23,12 +23,12 @@
 #exe {Option(OPTf_EXTERNS_TO_IMPORTS,OFF);};
 #exe {Option(OPTf_KEEP_PRIVATE,OFF);};
 #include "KernelB.HH"
-#include "KExts"
+#include "KExterns"
 #include "StrA"
 #include "KGlobals"
 #include "KMathB"
 #include "Sched"
-#include "Mem/MakeMem"
+#include "Mem/MakeMem"
 #include "FontStd"
 #include "FontCyrillic"
 #include "StrB"

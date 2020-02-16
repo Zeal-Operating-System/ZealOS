@@ -20,7 +20,7 @@ public U0 TOSBootHDIns(U8 drv_let=0)
   drv_let=Letter2Letter(drv_let);
   In(TOS_CFG);
   BootHDIns(drv_let);
-  if (StrOcc(TOS_MASTER_BOOT_DRVS,drv_let))
+  if (StrOcc(TOS_MASTER_BOOT_DRIVES,drv_let))
     BootMHDIns(drv_let);
 }
 
@@ -118,7 +118,7 @@ U0 DebugDistroFilePrep()
   Copy("C:/Zenith/TaskRep.HC",	"A:/Zenith");
 
   FileWrite("C:" CFG_DBG_DISTRO_FILE,
-	bd->RAM_dsk,(bd->max_blk+1)<<BLK_SIZE_BITS);
+	bd->RAM_disk,(bd->max_blk+1)<<BLK_SIZE_BITS);
 }
 
 

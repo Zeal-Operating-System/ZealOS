@@ -1,23 +1,23 @@
-Bool DriveLock(CDrive *dv)
+Bool DriveLock(CDrive *drive)
 {//Make this task have exclusive access to drv & BlkDev.
-  DriveCheck(dv);
-  BlkDevLock(dv->bd);
-  if (!Bt(&dv->locked_flags,DVlf_LOCKED) || dv->owning_task!=Fs) {
-    while (LBts(&dv->locked_flags,DVlf_LOCKED))
+  DriveCheck(drive);
+  BlkDevLock(drive->bd);
+  if (!Bt(&drive->locked_flags,DVlf_LOCKED) || drive->owning_task!=Fs) {
+    while (LBts(&drive->locked_flags,DVlf_LOCKED))
       Yield;
-    dv->owning_task=Fs;
+    drive->owning_task=Fs;
     return TRUE;
   } else
     return FALSE;
 }
 
-Bool DriveUnlock(CDrive *dv,Bool reset=FALSE)
+Bool DriveUnlock(CDrive *drive,Bool reset=FALSE)
 {//Release exclusive lock on access to drv & BlkDev.
-  DriveCheck(dv);
-  if (Bt(&dv->locked_flags,DVlf_LOCKED) && dv->owning_task==Fs) {
-    BlkDevUnlock(dv->bd,reset);
-    dv->owning_task=NULL;
-    LBtr(&dv->locked_flags,DVlf_LOCKED);
+  DriveCheck(drive);
+  if (Bt(&drive->locked_flags,DVlf_LOCKED) && drive->owning_task==Fs) {
+    BlkDevUnlock(drive->bd,reset);
+    drive->owning_task=NULL;
+    LBtr(&drive->locked_flags,DVlf_LOCKED);
     Yield; //Prevent deadlock
     return TRUE;
   } else
@@ -27,11 +27,11 @@ Bool DriveUnlock(CDrive *dv,Bool reset=FALSE)
 U0 DrivesRelease()
 {//When task dies, release all owned drvs.
   I64 i;
-  CDrive *dv;
-  for (i=0;i<DRVS_NUM;i++) {
-    dv=&blkdev.drvs[i];
-    if (dv->owning_task==Fs && dv->dv_signature==DRV_SIGNATURE_VAL)
-      DriveUnlock(dv,TRUE);
+  CDrive *drive;
+  for (i=0;i<DRIVES_NUM;i++) {
+    drive=&blkdev.drvs[i];
+    if (drive->owning_task==Fs && drive->drive_signature==DRIVE_SIGNATURE_VAL)
+      DriveUnlock(drive,TRUE);
   }
 }
 
@@ -40,7 +40,7 @@ CDrive *DriveMakeFreeSlot(U8 drv_let)
 //!!! drv_let is not a $LK,"remapped",A="MN:DriveMap"$ drv.
   I64 i=Letter2Letter(drv_let)-'A';
   CDrive *res;
-  if (!(0<=i<DRVS_NUM))
+  if (!(0<=i<DRIVES_NUM))
     throw('Drive');
   res=&blkdev.drvs[i];
   MemSet(res,0,sizeof(CDrive));
@@ -48,114 +48,114 @@ CDrive *DriveMakeFreeSlot(U8 drv_let)
   return res;
 }
 
-U8 DriveNextFreeLet(U8 first_drv_let='C')
+U8 DriveNextFreeLet(U8 first_drive_let='C')
 {//Locate free slot for new drv, like during $LK,"Mount",A="MN:Mount"$().
-//!!! first_drv_let is not a $LK,"remapped",A="MN:DriveMap"$ drv.
-  I64 i=Letter2Letter(first_drv_let)-'A',type=Letter2BlkDevType(first_drv_let);
-  if (!(0<=i<DRVS_NUM))
+//!!! first_drive_let is not a $LK,"remapped",A="MN:DriveMap"$ drv.
+  I64 i=Letter2Letter(first_drive_let)-'A',type=Letter2BlkDevType(first_drive_let);
+  if (!(0<=i<DRIVES_NUM))
     throw('Drive');
   do
-    if (blkdev.drvs[i].dv_signature!=DRV_SIGNATURE_VAL) {
+    if (blkdev.drvs[i].drive_signature!=DRIVE_SIGNATURE_VAL) {
       if (Letter2BlkDevType(i+'A')!=type)
 	throw('Drive');
       else
 	return i+'A';
     }
-  while (++i<DRVS_NUM);
+  while (++i<DRIVES_NUM);
   throw('Drive');
   return 0; //Never gets here.
 }
 
-U0 DriveDel(CDrive *dv)
+U0 DriveDel(CDrive *drive)
 {//Delete drv
-  if (dv->fs_type==FSt_REDSEA && dv->next_free)
-    RedSeaFreeFreeList(dv);
-  Free(dv->cur_fat_blk);
-  Free(dv->fis);
-  MemSet(dv,0,sizeof(CDrive));
+  if (drive->fs_type==FSt_REDSEA && drive->next_free)
+    RedSeaFreeFreeList(drive);
+  Free(drive->cur_fat_blk);
+  Free(drive->fis);
+  MemSet(drive,0,sizeof(CDrive));
 }
 
 U0 DriveBlkDevDel(CBlkDev *bd)
 {//Delete drv's of BlkDev
   I64 i;
-  CDrive *dv;
-  for (i=0;i<DRVS_NUM;i++) {
-    dv=&blkdev.drvs[i];
-    if (dv->bd==bd)
-      DriveDel(dv);
+  CDrive *drive;
+  for (i=0;i<DRIVES_NUM;i++) {
+    drive=&blkdev.drvs[i];
+    if (drive->bd==bd)
+      DriveDel(drive);
   }
 }
 
-U0 DriveFATBlkAlloc(CDrive *dv)
+U0 DriveFATBlkAlloc(CDrive *drive)
 {
-  DriveCheck(dv);
-  Free(dv->cur_fat_blk);
-  dv->cur_fat_blk=AMAlloc(BLK_SIZE);
-  dv->cur_fat_blk_num=0;
-  dv->fat_blk_dirty=0;
-  BlkRead(dv,dv->cur_fat_blk,dv->fat1,1);
+  DriveCheck(drive);
+  Free(drive->cur_fat_blk);
+  drive->cur_fat_blk=AMAlloc(BLK_SIZE);
+  drive->cur_fat_blk_num=0;
+  drive->fat_blk_dirty=0;
+  BlkRead(drive,drive->cur_fat_blk,drive->fat1,1);
 }
 
-U0 DriveFATBlkClean(CDrive *dv,I64 fat_sel=3)
+U0 DriveFATBlkClean(CDrive *drive,I64 fat_sel=3)
 {
-  if ((dv->fs_type==FSt_FAT32 || dv->fs_type==FSt_REDSEA) &&
-       Bt(&dv->fat_blk_dirty,0)) {
-    if (dv->fat1==dv->fat2) {
-      BlkWrite(dv,dv->cur_fat_blk,dv->fat1+dv->cur_fat_blk_num,1);
-      LBtr(&dv->fat_blk_dirty,0);
+  if ((drive->fs_type==FSt_FAT32 || drive->fs_type==FSt_REDSEA) &&
+       Bt(&drive->fat_blk_dirty,0)) {
+    if (drive->fat1==drive->fat2) {
+      BlkWrite(drive,drive->cur_fat_blk,drive->fat1+drive->cur_fat_blk_num,1);
+      LBtr(&drive->fat_blk_dirty,0);
     } else {
       if (fat_sel==3 || !fat_sel)
-	BlkWrite(dv,dv->cur_fat_blk,dv->fat1+dv->cur_fat_blk_num,1);
+	BlkWrite(drive,drive->cur_fat_blk,drive->fat1+drive->cur_fat_blk_num,1);
       if (fat_sel==3 || fat_sel==1) {
-	BlkWrite(dv,dv->cur_fat_blk,dv->fat2+dv->cur_fat_blk_num,1);
-	LBtr(&dv->fat_blk_dirty,0);
+	BlkWrite(drive,drive->cur_fat_blk,drive->fat2+drive->cur_fat_blk_num,1);
+	LBtr(&drive->fat_blk_dirty,0);
       }
     }
   }
 }
 
-U0 DriveFATBlkSet(CDrive *dv,I64 c,I64 fat_sel=3)
+U0 DriveFATBlkSet(CDrive *drive,I64 c,I64 fat_sel=3)
 {
   I64 fat_blk_num;
   if (c==INVALID_CLUS)
     throw('Drive');
-  switch (dv->fs_type) {
+  switch (drive->fs_type) {
     case FSt_FAT32:
       fat_blk_num=c>>(BLK_SIZE_BITS-2);
       break;
     case FSt_REDSEA:
-      fat_blk_num=(c-dv->data_area)>>(BLK_SIZE_BITS+3);
+      fat_blk_num=(c-drive->data_area)>>(BLK_SIZE_BITS+3);
       break;
     default:
       throw('Drive');
   }
-  if (fat_blk_num!=dv->cur_fat_blk_num) {
-    DriveFATBlkClean(dv,fat_sel);
-    dv->cur_fat_blk_num=fat_blk_num;
+  if (fat_blk_num!=drive->cur_fat_blk_num) {
+    DriveFATBlkClean(drive,fat_sel);
+    drive->cur_fat_blk_num=fat_blk_num;
     if (fat_sel==3 || !fat_sel)
-      BlkRead(dv,dv->cur_fat_blk,dv->fat1+dv->cur_fat_blk_num,1);
+      BlkRead(drive,drive->cur_fat_blk,drive->fat1+drive->cur_fat_blk_num,1);
     else
-      BlkRead(dv,dv->cur_fat_blk,dv->fat2+dv->cur_fat_blk_num,1);
+      BlkRead(drive,drive->cur_fat_blk,drive->fat2+drive->cur_fat_blk_num,1);
   }
 }
 
-CDrive *DriveCheck(CDrive *dv,Bool except=TRUE)
+CDrive *DriveCheck(CDrive *drive,Bool except=TRUE)
 {//Check for valid drv. Throw exception.
-  if (!dv || dv->dv_signature!=DRV_SIGNATURE_VAL) {
+  if (!drive || drive->drive_signature!=DRIVE_SIGNATURE_VAL) {
     if (except)
       throw('Drive');
     else
       return NULL;
   } else
-    return dv;
+    return drive;
 }
 
-U8 Drive2Letter(CDrive *dv=NULL)
+U8 Drive2Letter(CDrive *drive=NULL)
 {//Drive ptr to Drive letter.
-  if (!dv)
-    dv=Fs->cur_dv;
-  DriveCheck(dv);
-  return dv->drv_let;
+  if (!drive)
+    drive=Fs->cur_dv;
+  DriveCheck(drive);
+  return drive->drv_let;
 }
 
 U8 Letter2Letter(U8 drv_let=0)
@@ -163,7 +163,7 @@ U8 Letter2Letter(U8 drv_let=0)
   if (!drv_let)
     drv_let=Drive2Letter(Fs->cur_dv);
   else if (drv_let==':')
-    drv_let=blkdev.boot_drv_let;
+    drv_let=blkdev.boot_drive_let;
   else if (drv_let=='~')
     drv_let=*blkdev.home_dir;
   return ToUpper(drv_let);
@@ -187,9 +187,9 @@ I64 Letter2BlkDevType(U8 drv_let)
 
 CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE)
 {//Drive letter to Drive ptr.
-  CDrive *dv;
+  CDrive *drive;
   if (!drv_let)
-    dv=Fs->cur_dv;
+    drive=Fs->cur_dv;
   else {
     drv_let=Letter2Letter(drv_let);
     if (!('A'<=drv_let<='Z')) {
@@ -198,9 +198,9 @@ CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE)
       else
 	return NULL;
     }
-    dv=blkdev.let_to_drv[drv_let-'A'];
+    drive=blkdev.let_to_drive[drv_let-'A'];
   }
-  return DriveCheck(dv,except);
+  return DriveCheck(drive,except);
 }
 
 CBlkDev *DriveIsWritable(U8 drv_let=0,Bool except=FALSE)
@@ -215,46 +215,46 @@ CBlkDev *DriveIsWritable(U8 drv_let=0,Bool except=FALSE)
     return bd;
 }
 
-U0 DiskCacheInvalidate(CDrive *dv)
-{//Needed for removable media. Called by $LK,"DiskChg",A="MN:DiskChg"$().
+U0 DiskCacheInvalidate(CDrive *drive)
+{//Needed for removable media. Called by $LK,"DiskChange",A="MN:DiskChange"$().
   Bool unlock;
-  CBlkDev *bd=dv->bd;
-  DriveCheck(dv);
+  CBlkDev *bd=drive->bd;
+  DriveCheck(drive);
   try {
-    unlock=DriveLock(dv);
+    unlock=DriveLock(drive);
     BlkDevInit(bd);
     if (bd->flags & BDF_READ_CACHE)
-      DiskCacheInvalidate2(dv);
+      DiskCacheInvalidate2(drive);
     if (bd->type==BDT_ATAPI && !(bd->flags & BDF_READ_ONLY_OVERRIDE))
-      ISOInit(dv,(32767/bd->blk_size+1)*bd->blk_size>>BLK_SIZE_BITS);
+      ISOInit(drive,(32767/bd->blk_size+1)*bd->blk_size>>BLK_SIZE_BITS);
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
 }
 
-U0 DiskChg(U8 drv_let=0)
+U0 DiskChange(U8 drv_let=0)
 {//Change disk. (Needed for removable media.)
-  CDrive *dv=Letter2Drive(drv_let);
-  CBlkDev *bd=dv->bd;
+  CDrive *drive=Letter2Drive(drv_let);
+  CBlkDev *bd=drive->bd;
   if (!(bd->flags&BDF_INITIALIZED))
     BlkDevInit(bd);
   else if (bd->flags&BDF_REMOVABLE) {
     if (bd->type==BDT_ATAPI)
       ATAInit(bd); //TODO: This is a kludge for QEMU?
-    DiskCacheInvalidate(dv);
+    DiskCacheInvalidate(drive);
   }
   Drive(drv_let);
-  RedSeaFreeFreeList(dv);
+  RedSeaFreeFreeList(drive);
 }
 
-Bool DriveMap(U8 drv_let,CDrive *dv)
+Bool DriveMap(U8 drv_let,CDrive *drive)
 {//Make drive letter map to another.
   drv_let=Letter2Letter(drv_let);
   if ('A'<=drv_let<='Z') {
-    blkdev.let_to_drv[drv_let-'A']=dv;
-    dv->drv_let=drv_let;
+    blkdev.let_to_drive[drv_let-'A']=drive;
+    drive->drv_let=drv_let;
     return TRUE;
   } else
     return FALSE;
@@ -262,20 +262,20 @@ Bool DriveMap(U8 drv_let,CDrive *dv)
 
 Bool Drive(U8 drv_let)
 {//Change drive.  You can set drive with $LK,"Cd",A="MN:Cd"$() as well.
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   CBlkDev *bd;
-  bd=BlkDevCheck(dv->bd);
-  if (dv!=Fs->cur_dv) {
+  bd=BlkDevCheck(drive->bd);
+  if (drive!=Fs->cur_dv) {
     if (bd->flags & BDF_REMOVABLE && !(bd->flags & BDF_INITIALIZED))
-      DiskChg(Drive2Letter(dv));
+      DiskChange(Drive2Letter(drive));
     if (bd->type==BDT_RAM ||
 	bd->type==BDT_ISO_FILE_READ || bd->type==BDT_ISO_FILE_WRITE)
       BlkDevInit(bd);
   }
-  Fs->cur_dv=dv;
+  Fs->cur_dv=drive;
   Free(Fs->cur_dir);
   Fs->cur_dir=StrNew("/");
-  switch (dv->fs_type) {
+  switch (drive->fs_type) {
     case FSt_REDSEA:
     case FSt_FAT32:
       return TRUE;
@@ -330,24 +330,24 @@ U8 DriveTextAttrGet(U8 drv_let=0)
 
 U0 DriveRep()
 {//Drive report.
-  CDrive *dv;
+  CDrive *drive;
   CBlkDev *bd;
   I64 ch,i,drv_let,attr;
   U8 *st;
   "\nDefined Drives:\n";
-  for (i=0,dv=blkdev.drvs;i<DRVS_NUM;i++,dv++) {
-    if (dv->dv_signature==DRV_SIGNATURE_VAL) {
-      bd=dv->bd;
-      drv_let=Drive2Letter(dv);
-      if (Bt(&dv->fs_type,FStf_DISABLE))
+  for (i=0,drive=blkdev.drvs;i<DRIVES_NUM;i++,drive++) {
+    if (drive->drive_signature==DRIVE_SIGNATURE_VAL) {
+      bd=drive->bd;
+      drv_let=Drive2Letter(drive);
+      if (Bt(&drive->fs_type,FStf_DISABLE))
 	ch='-';
-      else if (drv_let==blkdev.boot_drv_let)
+      else if (drv_let==blkdev.boot_drive_let)
 	ch=':';
       else
 	ch='+';
       attr=DriveTextAttrGet(drv_let);
       "$$FG,%d$$$$BG,%d$$%C %-8Z %-10Z %04X %04X %02X\n",
-	    attr&15,attr>>4,drv_let,dv->fs_type&FSG_TYPE_MASK,"ST_DRV_TYPES",
+	    attr&15,attr>>4,drv_let,drive->fs_type&FSG_TYPE_MASK,"ST_DRIVE_TYPES",
 	    bd->type,"ST_BLKDEV_TYPES",bd->base0,bd->base1,bd->unit;
       if (st=DriveModelNum(drv_let)) {
 	"Model#:%s\n",st;
@@ -358,8 +358,8 @@ U0 DriveRep()
 	Free(st);
       }
       if (bd->type==BDT_ISO_FILE_READ || bd->type==BDT_ISO_FILE_WRITE)
-	"File=\"%s\"\n",bd->file_dsk_name;
-      "%016X-%016X\n$$FG$$$$BG$$",dv->drv_offset,dv->drv_offset+dv->size-1;
+	"File=\"%s\"\n",bd->file_disk_name;
+      "%016X-%016X\n$$FG$$$$BG$$",drive->drv_offset,drive->drv_offset+drive->size-1;
     }
   }
   "Home Dir:\"%s\"\n",blkdev.home_dir;

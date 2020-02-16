@@ -53,12 +53,12 @@ GDT_TR_RING3:	DU8	MP_PROCESSORS_NUM*16 DUP(0);
 
 //************************************
 CORE0_16BIT_INIT::
-//EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.HC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.HC,BOOT_SRC_HARDDRV"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.HC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.HC,BOOT_SRC_RAM"$.)
+//EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.HC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.HC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.HC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.HC,BOOT_SRC_RAM"$.)
 	MOV	ECX,EAX
 	MOV	AX,(BOOT_RAM_LIMIT-BOOT_STACK_SIZE)/16
 	MOV	SS,AX
 	MOV	SP,BOOT_STACK_SIZE
-	PUSH	ECX	//Will be $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.HC,[SYS_BOOT_SRC]"$. See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.HC,BOOT_SRC_HARDDRV"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.HC,BOOT_SRC_DVD"$ & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.HC,BOOT_SRC_RAM"$.
+	PUSH	ECX	//Will be $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.HC,[SYS_BOOT_SRC]"$. See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.HC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.HC,BOOT_SRC_DVD"$ & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.HC,BOOT_SRC_RAM"$.
 	PUSH	EBX
 
 	CALL	U16 GET_RIP
@@ -162,7 +162,7 @@ GET_RIP:	POP	BX
 	OUT	0x92,AL
 
 	POP	U32 [SYS_BOOT_BLK]
-	POP	U32 [SYS_BOOT_SRC]	//See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.HC,BOOT_SRC_HARDDRV"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.HC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.HC,BOOT_SRC_RAM"$.
+	POP	U32 [SYS_BOOT_SRC]	//See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.HC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.HC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.HC,BOOT_SRC_RAM"$.
 
 	CLD
 	XOR	EAX,EAX

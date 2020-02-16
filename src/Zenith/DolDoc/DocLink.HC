@@ -111,7 +111,7 @@ Bool DocFileEd(I64 _type,U8 *filename,
 	doc=DocRead(filename,flags);
 	doc->desc='Edit';
 	Silent(old_silent);
-	Fs->border_src=BDS_ED_FILENAME_DRV;
+	Fs->border_src=BDS_ED_FILENAME_DRIVE;
       }
       Free(st1);
       Free(st2);

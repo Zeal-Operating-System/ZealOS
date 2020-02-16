@@ -268,7 +268,7 @@ public U0 DCMono(CDC *dc,
       *dst++=false_color;
 }
 
-public I64 DCColorChg(CDC *dc,I64 src_color,I64 dst_color=TRANSPARENT)
+public I64 DCColorChange(CDC *dc,I64 src_color,I64 dst_color=TRANSPARENT)
 {//Find and replace src color with dst in device context.
   I64 i,res=0;
   U8 *dst;

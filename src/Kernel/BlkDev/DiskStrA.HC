@@ -118,7 +118,7 @@ U8 *DirNameAbs(U8 *_dirname)
   drv[2]=0;
   if (*dirname && dirname[1]==':') {
     if (*dirname==':')
-      *drv=blkdev.boot_drv_let;
+      *drv=blkdev.boot_drive_let;
     else if (*dirname=='~')
       *drv=*blkdev.home_dir;
     else
@@ -200,7 +200,7 @@ U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0)
   return res;
 }
 
-U8 *ExtChg(U8 *filename,U8 *extension)
+U8 *ExtChange(U8 *filename,U8 *extension)
 {//Change filename extension.
   U8 *res=MAlloc(StrLen(filename)+1+StrLen(extension)+1);
   StrCpy(res,filename);

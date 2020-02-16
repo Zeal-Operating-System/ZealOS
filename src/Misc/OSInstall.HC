@@ -17,30 +17,30 @@ U0 InstallDrive(U8 drv_let)
   Free(st);
 }
 
-Bool VMPrtDsk(CTask *task,CATARep *ata_drv)
+Bool VMPartDisk(CTask *task,CATARep *ata_drive)
 {
-  if (ata_drv) {
-    XTalkWait(task,"DiskPrt(,0.5,0.5);\nC\np%d\nY",ata_drv->num);
+  if (ata_drive) {
+    XTalkWait(task,"DiskPart(,0.5,0.5);\nC\np%d\nY",ata_drive->num);
     return TRUE;
   } else
     return FALSE;
 }
 
 U0 VMInstallDrive(CTask *task,U8 drv_let,
-	CATARep *ata_drv,CATARep *atapi_drv)
+	CATARep *ata_drive,CATARep *atapi_drive)
 {
   InstallDrive(drv_let);
   XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\n",drv_let);
-  if (ata_drv)
-    XTalkWait(task,"C\np%d\n",ata_drv->num);
-  if (atapi_drv)
-    XTalkWait(task,"Tp%d\n",atapi_drv->num);
+  if (ata_drive)
+    XTalkWait(task,"C\np%d\n",ata_drive->num);
+  if (atapi_drive)
+    XTalkWait(task,"Tp%d\n",atapi_drive->num);
   XTalkWait(task,"\n\n\n"); //Exit Drives,Disk Cache,Options
 }
 
 U0 VMInstallWiz()
 {
-  CATARep *head=NULL,*ata_drv=NULL,*atapi_drv=NULL;
+  CATARep *head=NULL,*ata_drive=NULL,*atapi_drive=NULL;
   CTask *task;
   "\nIt's normal for this to freeze for a moment or two.\n";
   PressAKey;
@@ -57,10 +57,10 @@ U0 VMInstallWiz()
   WinToTop(Fs);
 
   ATARep(FALSE,TRUE,&head);
-  ATAIDDrives(head,&ata_drv,&atapi_drv);
-  if (VMPrtDsk(task,ata_drv)) {
-    VMInstallDrive(task,'C',ata_drv,atapi_drv);
-    VMInstallDrive(task,'D',ata_drv,atapi_drv);
+  ATAIDDrives(head,&ata_drive,&atapi_drive);
+  if (VMPartDisk(task,ata_drive)) {
+    VMInstallDrive(task,'C',ata_drive,atapi_drive);
+    VMInstallDrive(task,'D',ata_drive,atapi_drive);
     BootMHDIns('C');
   }
   LinkedListDel(head);

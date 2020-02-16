@@ -319,7 +319,7 @@ CDoc *LexDocRead(U8 *abs_filename,I64 flags)
   return doc;
 }
 
-I64 cmp_type_flags_src_code[(DOCT_TYPES_NUM+63)/64]={
+I64 comp_type_flags_src_code[(DOCT_TYPES_NUM+63)/64]={
   1<<DOCT_TEXT|1<<DOCT_TAB|1<<DOCT_INS_BIN|1<<DOCT_INS_BIN_SIZE};
 
 U0 LexAttachDoc(CCompCtrl *cc,CLexFile *tmpf=NULL,
@@ -336,7 +336,7 @@ U0 LexAttachDoc(CCompCtrl *cc,CLexFile *tmpf=NULL,
   tmpf->full_name=StrNew(doc->filename.name);
   tmpf->doc=doc;
   while (doc_e!=doc) {
-    if (Bt(cmp_type_flags_src_code,doc_e->type_u8))
+    if (Bt(comp_type_flags_src_code,doc_e->type_u8))
       break;
     doc_e=doc_e->next;
     col=doc_e->min_col;

@@ -23,7 +23,7 @@ $FG,2$Buf$FG$	Buffer
 $FG,2$Bwd$FG$	Backward
 $FG,2$CB$FG$	Call-Back, Code Block
 $FG,2$Cfg$FG$	Config
-$FG,2$Chg$FG$	Change
+$FG,2$Change$FG$	Change
 $FG,2$Check$FG$	Check
 $FG,2$Clip$FG$	Clipboard
 $FG,2$Clus$FG$	Cluster
@@ -110,7 +110,7 @@ $FG,2$Pri$FG$	Primary
 $FG,2$Prod$FG$	Product, Production
 $FG,2$Prof$FG$	Profile, Profiler
 $FG,2$Parse$FG$	Parse, Parser
-$FG,2$Prt$FG$	Partition
+$FG,2$Part$FG$	Partition
 $FG,2$FunSeg$FG$ Program Section
 $FG,2$Pt$FG$	Point
 $FG,2$Ptr$FG$	Pointer

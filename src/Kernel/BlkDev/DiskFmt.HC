@@ -5,7 +5,7 @@ Bool DriveTypeSet(U8 drv_let,I64 type=FSt_REDSEA)
   CBlkDev *bd;
   drv_let=Letter2Letter(drv_let);
   bd=Letter2BlkDev(drv_let);
-  drv_num=bd->first_drv_let-'A';
+  drv_num=bd->first_drive_let-'A';
   switch (bd->type) {
     case BDT_ATA:
       offset=0;
@@ -58,17 +58,17 @@ U0 Fmt(I64 drv_let,Bool quick=TRUE,Bool confirm=TRUE,I64 type=FSt_FAT32)
   //quick=FALSE means fill entire drive with zeros.
   //Choose $LK,"FSt_FAT32",A="MN:FSt_FAT32"$ or $LK,"FSt_REDSEA",A="MN:FSt_REDSEA"$.
   //You don't format a CD/DVD with this.
-  CDrive *dv=Letter2Drive(drv_let);
+  CDrive *drive=Letter2Drive(drv_let);
   Bool old_silent=IsSilent;
   if (confirm && !AreYouSure)
     return;
-  if (!dv)  {
+  if (!drive)  {
     PrintErr("Invalid Drive\n");
     return;
   }
   switch (type) {
     case FSt_FAT32:
-      if (dv->bd->type==BDT_ATA) {
+      if (drive->bd->type==BDT_ATA) {
 	Silent;
 	Drive(drv_let);
 	Silent(old_silent);

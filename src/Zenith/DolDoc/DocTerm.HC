@@ -41,7 +41,7 @@ public U0 DocTermNew()
   CDoc *pdoc=DocNew;
   pdoc->right_click_link=&TermRightClickLink;
   pdoc->max_entries=4096;
-  Fs->border_src=BDS_CUR_DRV;
+  Fs->border_src=BDS_CUR_DRIVE;
   pdoc->desc='Term';
   Fs->put_doc=Fs->display_doc=pdoc;
   Fs->border_doc=DocBorderNew(pdoc);

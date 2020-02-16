@@ -146,7 +146,7 @@ CDirEntry *FMRebuildDocDrive(U8 drv_let,CDoc *doc,CDirEntry **_head,Bool init)
 
 U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
 {
-  CDrive *dv;
+  CDrive *drive;
   I64 i;
   CDoc *doc=*_doc,*doc2=sys_clip_doc,*parent_doc;
   CFMUncollapsedList *tmpc=NULL;
@@ -218,17 +218,17 @@ U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
       break;
   }
   DocPrint(doc,"$$LTBLUE$$");
-  for (i=0;i<DRVS_NUM;i++) {
-    dv=&blkdev.drvs[i];
-    if (dv->bd->type==BDT_ATAPI) {
-      if (dv->bd->flags&BDF_INITIALIZED)
-	tmpde=FMRebuildDocDrive(Drive2Letter(dv),doc,_head,TRUE);
+  for (i=0;i<DRIVES_NUM;i++) {
+    drive=&blkdev.drvs[i];
+    if (drive->bd->type==BDT_ATAPI) {
+      if (drive->bd->flags&BDF_INITIALIZED)
+	tmpde=FMRebuildDocDrive(Drive2Letter(drive),doc,_head,TRUE);
       else {
-	tmpde=FMRebuildDocDrive(Drive2Letter(dv),doc,_head,FALSE);
+	tmpde=FMRebuildDocDrive(Drive2Letter(drive),doc,_head,FALSE);
 	tmpde->user_data2|=DEF2_NOT_INITIALIZED;
       }
-    } else if (dv->fs_type==FSt_REDSEA || dv->fs_type==FSt_FAT32)
-      FMRebuildDocDrive(Drive2Letter(dv),doc,_head,TRUE);
+    } else if (drive->fs_type==FSt_REDSEA || drive->fs_type==FSt_FAT32)
+      FMRebuildDocDrive(Drive2Letter(drive),doc,_head,TRUE);
   }
   DocTop(doc);
   FMMarkUncollapsed(doc,tmpc,cur_entry,next_entry);
@@ -326,7 +326,7 @@ U0 FMDelete(CDoc *doc)
   }
 }
 
-U0 FMChgDsk(CDoc *doc)
+U0 FMChangeDisk(CDoc *doc)
 {
   CDocEntry *doc_ce=doc->cur_entry;
   CDirEntry *tmpde;
@@ -338,7 +338,7 @@ U0 FMChgDsk(CDoc *doc)
     while (tmpde->parent)
       tmpde=tmpde->parent;
     Silent;
-    DiskChg(*tmpde->full_name);
+    DiskChange(*tmpde->full_name);
     Silent(OFF);
   }
 }
@@ -481,7 +481,7 @@ U0 FMCopy(CDoc *doc)
 #define FMR_MKDIR		4
 #define FMR_PLAIN		5
 #define FMR_PASTE		6
-#define FMR_CHG_DSK		7
+#define FMR_CHG_DISK		7
 #define FMR_FORMAT		8
 #define FMR_MOUNT_REDSEA_ISO_C	9
 #define FMR_UNMOUNT		10
@@ -501,7 +501,7 @@ I64 PopUpFMRight(U8 *header=NULL,U8 *footer=NULL)
 	"$$CM+LX,1,3 $$$$BT,\"MAKEDIRECTORY\",LE=FMR_MKDIR$$"
 	"$$CM+LX,29,0$$$$BT,\"PLAIN-TEXTEDIT\",LE=FMR_PLAIN$$"
 	"$$CM+LX,1,3 $$$$BT,\"PASTECLIPFILES\",LE=FMR_PASTE$$"
-	"$$CM+LX,29,0$$$$BT,\"CHANGEDISK(MOUNTIT)\",LE=FMR_CHG_DSK$$"
+	"$$CM+LX,29,0$$$$BT,\"CHANGEDISK(MOUNTIT)\",LE=FMR_CHG_DISK$$"
 	"$$CM+LX,1,3 $$$$BT,\"FORMAT\",LE=FMR_FORMAT$$"
 	"$$CM+LX,1,3 $$$$BT,\"MOUNTISO.CFILE\","
 	"LE=FMR_MOUNT_REDSEA_ISO_C$$"
@@ -540,7 +540,7 @@ U0 FMRightClick()
     case FMR_PASTE:
       Message(MESSAGE_KEY_DOWN,0,SC_INS+SCF_SHIFT);
       break;
-    case FMR_CHG_DSK:
+    case FMR_CHG_DISK:
       Message(MESSAGE_KEY_DOWN,'c',0);
       break;
     case FMR_FORMAT:
@@ -701,7 +701,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 	      FMDelete(doc);
 	      break;
 	    case 'c':
-	      FMChgDsk(doc);
+	      FMChangeDisk(doc);
 	      break;
 	    case 'i':
 	      FMMountISO(doc);

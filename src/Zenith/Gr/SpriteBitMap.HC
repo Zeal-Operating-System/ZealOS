@@ -268,7 +268,7 @@ bm_menu:
 	      if (i>=0) {
 		j=PopUpColor("Replace Color\n",,FALSE);
 		if (j>=0) {
-		  DCColorChg(img,i,j);
+		  DCColorChange(img,i,j);
 		  GrBitMapEdPrepPersistentDC(dc,xx1,yy1,img);
 		}
 	      }
@@ -391,7 +391,7 @@ bm_menu:
 		  clip->flags&=~DCF_NO_TRANSPARENTS;
 		} else {
 		  dc2=DCCopy(clip);
-		  DCColorChg(dc2,bkcolor);
+		  DCColorChange(dc2,bkcolor);
 		  GrBlot(dc,arg1,arg2,dc2);
 		  DCDel(dc2);
 		}
@@ -518,7 +518,7 @@ bm_menu:
 		  clip->flags&=~DCF_NO_TRANSPARENTS;
 		} else {
 		  dc2=DCCopy(clip);
-		  DCColorChg(dc2,bkcolor);
+		  DCColorChange(dc2,bkcolor);
 		  GrBlot(dc,arg1,arg2,dc2);
 		  DCDel(dc2);
 		}
@@ -630,7 +630,7 @@ bm_menu:
 		  clip->flags&=~DCF_NO_TRANSPARENTS;
 		} else {
 		  dc2=DCCopy(clip);
-		  DCColorChg(dc2,bkcolor);
+		  DCColorChange(dc2,bkcolor);
 		  GrBlot(img,arg1-xx1,arg2-yy1,dc2);
 		  DCDel(dc2);
 		}

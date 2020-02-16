@@ -901,7 +901,7 @@ U0 ParseBinFile(CCompCtrl *cc)
   Lex(cc);
 }
 
-U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
+U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,j,k,argcount,
@@ -913,7 +913,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 
   aotc->seg_size=64;
   cc->flags|=CCF_ASM_EXPRESSIONS;
-  if (!(cmp_flags&CMPF_ONE_ASM_INS)) {
+  if (!(comp_flags&CMPF_ONE_ASM_INS)) {
     if (cc->token!='{')
       LexExcept(cc,"Expecting '{' at ");
     Lex(cc);
@@ -1103,7 +1103,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
       Lex(cc);
     else
       LexExcept(cc,"Syntax error at ");
-    if (cmp_flags&CMPF_ONE_ASM_INS && (cc->token!=TK_IDENT ||
+    if (comp_flags&CMPF_ONE_ASM_INS && (cc->token!=TK_IDENT ||
 	  !(tmpo=cc->hash_entry) ||
 	  !(tmpo->type&(HTT_OPCODE|HTT_ASM_KEYWORD))))
       break;

@@ -228,8 +228,8 @@ I64 TaskInit(CTask *task,I64 stack_size)
   task->win_top		=13;
   task->win_bottom	=text.rows-2;
 
-  if (blkdev.home_dir) {//Beware Zenith $LK,"TaskInit",A="FF:::/Kernel/KStart64.HC,TaskInit"$. I guess ok until $LK,"DiskChg",A="FF:::/Kernel/KMain.HC,DiskChg"$().
-    task->cur_dv=blkdev.let_to_drv[*blkdev.home_dir-'A'];
+  if (blkdev.home_dir) {//Beware Zenith $LK,"TaskInit",A="FF:::/Kernel/KStart64.HC,TaskInit"$. I guess ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.HC,DiskChange"$().
+    task->cur_dv=blkdev.let_to_drive[*blkdev.home_dir-'A'];
     task->cur_dir=StrNew(blkdev.home_dir+2,task);
   } else
     task->cur_dir=StrNew("/Home",task);

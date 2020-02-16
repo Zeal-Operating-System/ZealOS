@@ -902,7 +902,7 @@ U0 ParseTryBlk(CCompCtrl *cc,I64 try_count)
 }
 
 Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
-  CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON)
+  CCodeMisc *lb_break=NULL,I64 comp_flags=CMPF_PRS_SEMICOLON)
 {
   I64 i,fsp_flags=0;
   CHashExport *tmpex;
@@ -910,7 +910,7 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
   U8 *import_name;
   CHashFun *tmp_untry;
   CAOT *tmpaot;
-  if (cmp_flags&CMPF_ONE_ASM_INS) {
+  if (comp_flags&CMPF_ONE_ASM_INS) {
     if (cc->flags&CCF_AOT_COMPILE || cc->aot_depth)
       ParseAsmBlk(cc,CMPF_ONE_ASM_INS);
     else if (tmpaot=CompJoin(cc,CMPF_ASM_BLK|CMPF_ONE_ASM_INS))
@@ -928,7 +928,7 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
 	  cc->max_line=cc->lex_include_stack->line_num;
 	if (Lex(cc)!=',') goto sm_done;
       } else if (cc->token==';') {
-	if (cmp_flags&CMPF_PRS_SEMICOLON)
+	if (comp_flags&CMPF_PRS_SEMICOLON)
 	  Lex(cc);
 	if (cc->token!=',') goto sm_done;
       } else {
@@ -1206,7 +1206,7 @@ sm_prs_exp:
 	  if (!ParseExpression(cc,NULL,TRUE))
 	    throw('Compiler');
 sm_semicolon:
-	  if (cmp_flags&CMPF_PRS_SEMICOLON) {
+	  if (comp_flags&CMPF_PRS_SEMICOLON) {
 	    if (cc->token==';')
 	      Lex(cc);
 	    else if (cc->token!=',')

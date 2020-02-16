@@ -1,18 +1,18 @@
-I64 ClusNumNext(CDrive *dv,I64 c,I64 count=1)
+I64 ClusNumNext(CDrive *drive,I64 c,I64 count=1)
 {//Return next count'th clus in chain.
   Bool unlock;
-  DriveCheck(dv);
+  DriveCheck(drive);
   if (count<=0) return c;
   try {
-    unlock=DriveLock(dv);
-    switch (dv->fs_type) {
+    unlock=DriveLock(drive);
+    switch (drive->fs_type) {
       case FSt_REDSEA:
 	c+=count;
 	break;
       case FSt_FAT32:
 	while (count-->0 && 0<c<0x0FFFFFF8) {
-	  DriveFATBlkSet(dv,c);
-	  c=dv->cur_fat_blk[c & (BLK_SIZE/4-1)];
+	  DriveFATBlkSet(drive,c);
+	  c=drive->cur_fat_blk[c & (BLK_SIZE/4-1)];
 	}
 	if (!(0<c<0x0FFFFFF8))
 	  c=INVALID_CLUS;
@@ -21,47 +21,47 @@ I64 ClusNumNext(CDrive *dv,I64 c,I64 count=1)
 	throw('Drive');
     }
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   return c;
 }
 
-I64 Clus2Blk(CDrive *dv,I64 c)
+I64 Clus2Blk(CDrive *drive,I64 c)
 {//Drive clus num to blk num.
-  DriveCheck(dv);
-  switch (dv->fs_type) {
+  DriveCheck(drive);
+  switch (drive->fs_type) {
     case FSt_REDSEA:
       return c;
     case FSt_FAT32:
-      return dv->data_area+c*dv->spc;
+      return drive->data_area+c*drive->spc;
     default:
       throw('Drive');
   }
 }
 
-I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks)
+I64 ClusBlkRead(CDrive *drive,U8 *buf,I64 c,I64 blks)
 {//Accepts blk count, so padding on last clus is not read.
   I64 i;
   Bool unlock;
-  DriveCheck(dv);
+  DriveCheck(drive);
   if (blks<=0) return c;
   try {
-    unlock=DriveLock(dv);
-    switch (dv->fs_type) {
+    unlock=DriveLock(drive);
+    switch (drive->fs_type) {
       case FSt_REDSEA:
-	BlkRead(dv,buf,c,blks);
+	BlkRead(drive,buf,c,blks);
 	c+=blks;
 	break;
       case FSt_FAT32:
 	while (blks && 0<c<0x0FFFFFF8) {
 	  i=blks;
-	  if (i>dv->spc)
-	    i=dv->spc;
-	  BlkRead(dv,buf,dv->data_area+c*dv->spc,i);
+	  if (i>drive->spc)
+	    i=drive->spc;
+	  BlkRead(drive,buf,drive->data_area+c*drive->spc,i);
 	  buf+=i<<BLK_SIZE_BITS;
-	  c=ClusNumNext(dv,c,1);
+	  c=ClusNumNext(drive,c,1);
 	  blks-=i;
 	}
 	if (blks)
@@ -71,29 +71,29 @@ I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks)
 	throw('Drive');
     }
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   return c;
 }
 
-I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 count)
+I64 ClusRead(CDrive *drive,U8 *buf,I64 c,I64 count)
 {//Read clus count from drv to buf.
-  return ClusBlkRead(dv,buf,c,count*dv->spc);
+  return ClusBlkRead(drive,buf,c,count*drive->spc);
 }
 
-I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks)
+I64 ClusBlkWrite(CDrive *drive,U8 *buf,I64 c,I64 blks)
 {//Accepts blk count, so padding on last clus is not written.
   I64 i;
   Bool unlock;
-  DriveCheck(dv);
+  DriveCheck(drive);
   if (blks<=0) return c;
   try {
-    unlock=DriveLock(dv);
-    switch (dv->fs_type) {
+    unlock=DriveLock(drive);
+    switch (drive->fs_type) {
       case FSt_REDSEA:
-	BlkWrite(dv,buf,c,blks);
+	BlkWrite(drive,buf,c,blks);
 	c=0;
 	break;
       case FSt_FAT32:
@@ -101,11 +101,11 @@ I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks)
 	  if (!(0<c<0x0FFFFFF8))
 	    throw('Drive');
 	  i=blks;
-	  if (i>dv->spc)
-	    i=dv->spc;
-	  BlkWrite(dv,buf,dv->data_area+c*dv->spc,i);
+	  if (i>drive->spc)
+	    i=drive->spc;
+	  BlkWrite(drive,buf,drive->data_area+c*drive->spc,i);
 	  buf+=i<<BLK_SIZE_BITS;
-	  c=ClusNumNext(dv,c);
+	  c=ClusNumNext(drive,c);
 	  blks-=i;
 	}
 	break;
@@ -113,32 +113,32 @@ I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks)
 	throw('Drive');
     }
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   } catch
     if (unlock)
-      DriveUnlock(dv);
+      DriveUnlock(drive);
   return c;
 }
 
-I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 count)
+I64 ClusWrite(CDrive *drive,U8 *buf,I64 c,I64 count)
 {//Write clus count from buf to drv.
-  return ClusBlkWrite(dv,buf,c,count*dv->spc);
+  return ClusBlkWrite(drive,buf,c,count*drive->spc);
 }
 
-I64 ClusAlloc(CDrive *dv,I64 c=0,I64 count=1,Bool contiguous=FALSE)
+I64 ClusAlloc(CDrive *drive,I64 c=0,I64 count=1,Bool contiguous=FALSE)
 {//Alloc clus count into chain.
 //c=0 means first clus in chain
-  DriveCheck(dv);
+  DriveCheck(drive);
   if (count<=0) return c;
-  switch (dv->fs_type) {
+  switch (drive->fs_type) {
     case FSt_REDSEA:
-      return RedSeaAllocClus(dv,count);
+      return RedSeaAllocClus(drive,count);
     case FSt_FAT32:
       if (contiguous) {
 	if (c) throw('File');
-	return FAT32AllocContiguousClus(dv,count);
+	return FAT32AllocContiguousClus(drive,count);
       } else
-	return FAT32AllocClus(dv,c,count);
+	return FAT32AllocClus(drive,c,count);
     default:
       throw('Drive');
   }

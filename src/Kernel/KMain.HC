@@ -18,9 +18,9 @@ U0 SysGlobalsInit()
       kernel_cfg->mount_ide_auto_hd_let='C';
     if (!kernel_cfg->mount_ide_auto_cd_let)
       kernel_cfg->mount_ide_auto_cd_let='T';
-    StreamPrint("blkdev.first_hd_drv_let=%d;",
+    StreamPrint("blkdev.first_hd_drive_let=%d;",
 	  kernel_cfg->mount_ide_auto_hd_let);
-    StreamPrint("blkdev.first_dvd_drv_let=%d;",
+    StreamPrint("blkdev.first_dvd_drive_let=%d;",
 	  kernel_cfg->mount_ide_auto_cd_let);
   }
 
@@ -38,9 +38,9 @@ U0 SysGlobalsInit()
   KeyDevInit;
 
   #exe {
-    StreamPrint("blkdev.boot_drv_let='%C';",kernel_cfg->boot_drv_let);
+    StreamPrint("blkdev.boot_drive_let='%C';",kernel_cfg->boot_drive_let);
     StreamPrint("#exe{Option(OPTf_WARN_PAREN,OFF);}");
-    StreamPrint("DiskCacheInit(%s);",kernel_cfg->dsk_cache_size_exp);
+    StreamPrint("DiskCacheInit(%s);",kernel_cfg->disk_cache_size_exp);
     StreamPrint("#exe{Option(OPTf_WARN_PAREN,ON);}");
   };
 
@@ -173,15 +173,15 @@ U0 KMain()
 
   TimeCal;
   BlkDevsInitAll;
-  "DiskChg(':');\n";
-  DiskChg(':');
+  "DiskChange(':');\n";
+  DiskChange(':');
   #exe {
     StreamPrint("HomeSet(\"%s\");\n"
 	  "blkdev.ins_base0=%d;blkdev.ins_base1=%d;blkdev.ins_unit =%d;\n",
 	  kernel_cfg->home_dir,
 	  blkdev.ins_base0,blkdev.ins_base1,blkdev.ins_unit);
   }
-  Gs->idle_task->cur_dv=blkdev.let_to_drv[*blkdev.home_dir-'A'];
+  Gs->idle_task->cur_dv=blkdev.let_to_drive[*blkdev.home_dir-'A'];
   DriveRep;
   if (blkdev.dvd_boot_is_good) {
     bd=Letter2BlkDev(':');

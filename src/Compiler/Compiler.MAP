@@ -20,6 +20,7 @@ $LK,"ICQueueIns",A="FL:::/Compiler/BackC.HC,354",BI=17$
 $LK,"ICAndBranch",A="FL:::/Compiler/BackC.HC,1",BI=18$
 $LK,"ParseAsmInst",A="FL:::/Compiler/Asm.HC,395",BI=19$
 $LK,"U",A="FL:::/Compiler/UAsm.HC,653",BI=20$
+$LK,"comp_templates_dont_push",A="FL:::/Compiler/CExterns.HC,45"$
 $LK,"LastFun",A="FL:::/Compiler/CMisc.HC,48"$
 $LK,"OptLead1",A="FL:::/Compiler/OptLib.HC,73",BI=21$
 $LK,"ExePutS2",A="FL:::/Compiler/CMain.HC,631",BI=22$
@@ -77,6 +78,7 @@ $LK,"CN_INST",A="FL:::/Compiler/BackFA.HC,3"$
 $LK,"CmdLinePrompt",A="FL:::/Compiler/CMisc.HC,127",BI=57$
 $LK,"ParseClassNew",A="FL:::/Compiler/ParseLib.HC,40",BI=58$
 $LK,"OptPass3",A="FL:::/Compiler/OptPass3.HC,1",BI=59$
+$LK,"comp_templates_dont_push2",A="FL:::/Compiler/CExterns.HC,44"$
 $LK,"OptPass4",A="FL:::/Compiler/OptPass4.HC,133",BI=60$
 $LK,"OptPass5",A="FL:::/Compiler/OptPass5.HC,1",BI=61$
 $LK,"OptPass6",A="FL:::/Compiler/OptPass6.HC,96",BI=62$
@@ -178,6 +180,7 @@ $LK,"OptLag2",A="FL:::/Compiler/OptLib.HC,62",BI=138$
 $LK,"StreamPrint",A="FL:::/Compiler/CMisc.HC,68",BI=139$
 $LK,"_LAST_FUN",A="FL:::/Compiler/CMisc.HC,12"$
 $LK,"ICFCvt",A="FL:::/Compiler/BackFA.HC,123",BI=140$
+$LK,"comp_templates_dont_pop",A="FL:::/Compiler/CExterns.HC,43"$
 $LK,"StreamDir",A="FL:::/Compiler/CMisc.HC,82",BI=141$
 $LK,"GetOption",A="FL:::/Compiler/CMisc.HC,6",BI=142$
 $LK,"LexStatement2Bin",A="FL:::/Compiler/CMain.HC,1",BI=143$
@@ -236,9 +239,9 @@ $LK,"PE_DO_BINARY_OP",A="FL:::/Compiler/ParseExp.HC,9"$
 $LK,"OptLabelFwd",A="FL:::/Compiler/OptLib.HC,1",BI=184$
 $LK,"ICOrOr",A="FL:::/Compiler/BackB.HC,51",BI=185$
 $LK,"LexExcept",A="FL:::/Compiler/CExcept.HC,81",BI=186$
-$LK,"cmp_templates",A="FL:::/Compiler/CExts.HC,42"$
 $LK,"INTERNAL_TYPES_NUM",A="FL:::/Compiler/CInit.HC,1"$
 $LK,"CompF2PushPop",A="FL:::/Compiler/OptLib.HC,542",BI=187$
+$LK,"comp_templates",A="FL:::/Compiler/CExterns.HC,42"$
 $LK,"CompFixUpAOTAsm",A="FL:::/Compiler/CMain.HC,302",BI=188$
 $LK,"CMP_TEMPLATES",A="FL:::/Compiler/Templates.HC,4"$
 $LK,"MODR_D8_INDIRECT_REG",A="FL:::/Compiler/BackLib.HC,128"$
@@ -281,7 +284,6 @@ $LK,"CompJoin",A="FL:::/Compiler/CMain.HC,35",BI=219$
 $LK,"LexIncludeStr",A="FL:::/Compiler/Lex.HC,293",BI=220$
 $LK,"MODR_SIB_D8_INDIRECT_REG",A="FL:::/Compiler/BackLib.HC,131"$
 $LK,"CompCtrlNew",A="FL:::/Compiler/Lex.HC,28",BI=221$
-$LK,"cmp_type_flags_src_code",A="FL:::/Compiler/Lex.HC,322"$
 $LK,"ParseFor",A="FL:::/Compiler/ParseStatement.HC,529",BI=222$
 $LK,"MemberListDel",A="FL:::/Compiler/LexLib.HC,183",BI=223$
 $LK,"ParseFun",A="FL:::/Compiler/ParseStatement.HC,140",BI=224$
@@ -324,21 +326,19 @@ $LK,"SLASH_OP_IMM_U8",A="FL:::/Compiler/BackLib.HC,262"$
 $LK,"ExeFile",A="FL:::/Compiler/CMain.HC,614",BI=252$
 $LK,"COCMiscNew",A="FL:::/Compiler/ParseLib.HC,143",BI=253$
 $LK,"ParseVarList",A="FL:::/Compiler/ParseVar.HC,408",BI=254$
-$LK,"cmp_templates_dont_pop",A="FL:::/Compiler/CExts.HC,43"$
 $LK,"StreamExePrint",A="FL:::/Compiler/CMain.HC,673",BI=255$
 $LK,"COCGoToLabelFind",A="FL:::/Compiler/ParseLib.HC,152",BI=256$
 $LK,"CompOffset2Reg",A="FL:::/Compiler/OptLib.HC,83",BI=257$
+$LK,"comp_type_flags_src_code",A="FL:::/Compiler/Lex.HC,322"$
 $LK,"OptMVCompare",A="FL:::/Compiler/OptLib.HC,562",BI=258$
 $LK,"ICToBool",A="FL:::/Compiler/BackB.HC,289",BI=259$
 $LK,"ParseAsmBlk",A="FL:::/Compiler/Asm.HC,904",BI=260$
 $LK,"ParseAsmArg",A="FL:::/Compiler/Asm.HC,35",BI=261$
 $LK,"OptFixSizeOf",A="FL:::/Compiler/OptLib.HC,484",BI=262$
-$LK,"cmp_templates_dont_push",A="FL:::/Compiler/CExts.HC,45"$
-$LK,"cmp_templates_dont_push_pop",A="FL:::/Compiler/CExts.HC,46"$
+$LK,"comp_templates_dont_push_pop",A="FL:::/Compiler/CExterns.HC,46"$
 $LK,"ParseAsmImm",A="FL:::/Compiler/Asm.HC,1",BI=263$
 $LK,"LexAttachDoc",A="FL:::/Compiler/Lex.HC,325",BI=264$
 $LK,"MODR_RIP_REL_IMM_U32",A="FL:::/Compiler/BackLib.HC,134"$
-$LK,"cmp_templates_dont_push2",A="FL:::/Compiler/CExts.HC,44"$
 $LK,"InstEntryFind",A="FL:::/Compiler/UAsm.HC,66",BI=265$
 $LK,"ParseDoWhile",A="FL:::/Compiler/ParseStatement.HC,506",BI=266$
 $LK,"ParseStreamBlk",A="FL:::/Compiler/ParseStatement.HC,805",BI=267$

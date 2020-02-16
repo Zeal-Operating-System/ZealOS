@@ -4014,7 +4014,7 @@
 	0006	emu10k1x Soundblaster Live! 5.1 (SB0200)
 	0007	C6SB0410515017656A Sound Blaster 5.1 vhttp://files2.europe.creative.com/manualdn/Drivers/AVP/10599/0x48689B99/SB51_XPDR
 	0008	ca0108 sound blaster Audigy 4
-	000A	SB24PCDRVLB1040090 Creative Labs  Sound Blaster X-Fi Xtreme Audio
+	000A	SB24PCDRIVELB1040090 Creative Labs  Sound Blaster X-Fi Xtreme Audio
 	000B	SB1270 Sound Blaster X-Fi Titanium HD
 	000D	SB0880 PCIe SB X-Fi Titanium Fatal1ty Pro Series
 	0011	SB1500 Sound Blaster Z
@@ -6721,7 +6721,7 @@
 	16A6	BCM5702X Gigabit Ethernet
 	16A7	BCM5703X Gigabit Ethernet
 	16A8	BLM5701 NetXtreme Gigabit Ethernet
-	16AA	B06BDRV BroadCom NetExtreme II Server
+	16AA	B06BDRIVE BroadCom NetExtreme II Server
 	16B1	BCM57781 BCM57781
 	16B5	BCM57785X Broadcom NetLink Gigabit Ethernet
 	16BE	16BE8 CardReader Broadcom 1.0.0.221

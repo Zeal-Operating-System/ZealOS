@@ -415,7 +415,7 @@ Bool ATAPIReadBlks2(CBlkDev *bd,F64 timeout,U8 *buf,
 
 U0 ATAPIReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count)
 {
-  CDrive *dv=Letter2Drive(bd->first_drv_let);
+  CDrive *drive=Letter2Drive(bd->first_drive_let);
   I64 retry,spc=bd->blk_size>>BLK_SIZE_BITS,n,blk2,
 	l2=bd->max_reads<<1+spc<<1;
   U8 *dvd_buf=MAlloc(l2<<BLK_SIZE_BITS);
@@ -424,8 +424,8 @@ U0 ATAPIReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count)
       blk2=0;
     else
       blk2=FloorU64(blk-bd->max_reads,spc);
-    if (blk2+l2>dv->size+dv->drv_offset)
-      l2=dv->size+dv->drv_offset-blk2;
+    if (blk2+l2>drive->size+drive->drv_offset)
+      l2=drive->size+drive->drv_offset-blk2;
     n=(l2+spc-1)/spc;
 
     retry=4;
@@ -436,16 +436,16 @@ U0 ATAPIReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count)
     if (!retry)
       ATAPIReadBlks2(bd,0,dvd_buf,blk2/spc,n,TRUE);
     if (bd->flags & BDF_READ_CACHE)
-      DiskCacheAdd(dv,dvd_buf,blk2,n*spc);
+      DiskCacheAdd(drive,dvd_buf,blk2,n*spc);
     MemCpy(buf,dvd_buf+(blk-blk2)<<BLK_SIZE_BITS,count<<BLK_SIZE_BITS);
   }
   Free(dvd_buf);
 }
 
-Bool ATARBlks(CDrive *dv,U8 *buf, I64 blk, I64 count)
+Bool ATARBlks(CDrive *drive,U8 *buf, I64 blk, I64 count)
 {
   I64 n;
-  CBlkDev *bd=dv->bd;
+  CBlkDev *bd=drive->bd;
   while (count>0) {
     n=count;
     if (n>bd->max_reads)
@@ -579,10 +579,10 @@ U0 ATAPIWriteBlks(CBlkDev *bd,U8 *buf, I64 native_blk, I64 count)
   ATAWaitNotBUSY(bd,0);
 }
 
-Bool ATAWBlks(CDrive *dv,U8 *buf, I64 blk, I64 count)
+Bool ATAWBlks(CDrive *drive,U8 *buf, I64 blk, I64 count)
 {
   I64 n,spc;
-  CBlkDev *bd=dv->bd;
+  CBlkDev *bd=drive->bd;
   Bool unlock;
   spc=bd->blk_size>>BLK_SIZE_BITS;
   if (bd->type==BDT_ATAPI) {

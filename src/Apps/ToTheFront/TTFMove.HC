@@ -9,7 +9,7 @@ I64 HexMoveOneCost(Unit *tmpu,I64 r,I64 c,I64 facing)
   if (tmpu->infantry)
     res=0;
   else {
-    res=FacingChg(facing,tmpu->facing);
+    res=FacingChange(facing,tmpu->facing);
     if (res>0) res--;
   }
   if (roads[r][c] && roads[tmpu->row][tmpu->col])
