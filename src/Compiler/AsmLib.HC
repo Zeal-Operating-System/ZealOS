@@ -15,13 +15,13 @@ U0 AOTStoreCodeU8(CCompCtrl *cc,U8 b)
       break;
     }
   tmpbin->body[aotc->rip++ & (AOT_BIN_BLK_SIZE-1)]=b;
-  if (aotc->lst) {
-    if (aotc->lst_col>=24) {
+  if (aotc->list) {
+    if (aotc->list_col>=24) {
       '\n';
-      aotc->lst_col=0;
+      aotc->list_col=0;
     }
     "%02X ",b;
-    aotc->lst_col+=3;
+    aotc->list_col+=3;
   }
   if (aotc->rip>aotc->num_bin_U8s)
     aotc->num_bin_U8s=aotc->rip;
@@ -52,13 +52,13 @@ U0 AOTStoreCodeU32(CCompCtrl *cc,U32 d)
     _d=tmpbin->body+ aotc->rip&(AOT_BIN_BLK_SIZE-1);
     *_d=d;
     aotc->rip+=sizeof(U32);
-    if (aotc->lst) {
-      if (aotc->lst_col>=24) {
+    if (aotc->list) {
+      if (aotc->list_col>=24) {
 	'\n';
-	aotc->lst_col=0;
+	aotc->list_col=0;
       }
       "%08X ",d;
-      aotc->lst_col+=9;
+      aotc->list_col+=9;
     }
     if (aotc->rip>aotc->num_bin_U8s)
       aotc->num_bin_U8s=aotc->rip;
@@ -90,13 +90,13 @@ U0 AOTStoreCodeU64(CCompCtrl *cc,U64 q)
     _q=tmpbin->body+ aotc->rip&(AOT_BIN_BLK_SIZE-1);
     *_q=q;
     aotc->rip+=sizeof(I64);
-    if (aotc->lst) {
-      if (aotc->lst_col>=24) {
+    if (aotc->list) {
+      if (aotc->list_col>=24) {
 	'\n';
-	aotc->lst_col=0;
+	aotc->list_col=0;
       }
       "%016X ",q;
-      aotc->lst_col+=17;
+      aotc->list_col+=17;
     }
     if (aotc->rip>aotc->num_bin_U8s)
       aotc->num_bin_U8s=aotc->rip;
@@ -144,32 +144,32 @@ I64 AsmLexExpression(CCompCtrl *cc)
   return res;
 }
 
-U0 AsmLineLst(CCompCtrl *cc)
+U0 AsmLineList(CCompCtrl *cc)
 {
   CAOTCtrl *aotc=cc->aotc;
   CLexFile *tmpf=cc->lex_include_stk;
   CDocEntry *doc_e=tmpf->line_start,*doc_e2;
-  if (aotc->lst && aotc->lst_last_lfn==tmpf && doc_e) {
-    if (doc_e2=aotc->lst_last_line) {
+  if (aotc->list && aotc->list_last_lfn==tmpf && doc_e) {
+    if (doc_e2=aotc->list_last_line) {
       if (tmpf->flags& LFSF_DOC) {
 	while (doc_e2->y<doc_e->y) {
-	  "%h*c%08X",24-aotc->lst_col,CH_SPACE,aotc->lst_last_rip;
-	  aotc->lst_col=0;
+	  "%h*c%08X",24-aotc->list_col,CH_SPACE,aotc->list_last_rip;
+	  aotc->list_col=0;
 	  doc_e2=LexPutLine(cc,doc_e2);
 	}
       } else {
 	while (*doc_e2(U8 *) && doc_e2!=doc_e) {
-	  "%h*c%08X",24-aotc->lst_col,CH_SPACE,aotc->lst_last_rip;
-	  aotc->lst_col=0;
+	  "%h*c%08X",24-aotc->list_col,CH_SPACE,aotc->list_last_rip;
+	  aotc->list_col=0;
 	  doc_e2=LexPutLine(cc,doc_e2);
 	}
       }
-      aotc->lst_last_line=doc_e2;
+      aotc->list_last_line=doc_e2;
     } else
-      aotc->lst_last_line=doc_e;
+      aotc->list_last_line=doc_e;
   } else {
-    aotc->lst_last_line=NULL;
-    aotc->lst_last_lfn=tmpf;
+    aotc->list_last_line=NULL;
+    aotc->list_last_lfn=tmpf;
   }
-  aotc->lst_last_rip=aotc->rip;
+  aotc->list_last_rip=aotc->rip;
 }

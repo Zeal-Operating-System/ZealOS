@@ -3,7 +3,7 @@ U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 {
   U8 *dst=*_dst,*machine_code;
   I64 i,j,r,old_flags,type,size;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   CIntermediateCode *tmpi;
   CAOTCtrl *aotc=cc->aotc;
   CAOTAbsAddr *tmpa;
@@ -11,7 +11,7 @@ U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
   Bool is_str;
 
   tmpc=OptClassFwd(tmpc);
-  if (tmpm=tmpc->member_lst_and_root) {
+  if (tmpm=tmpc->member_list_and_root) {
     if (cc->token!='{')
       LexExcept(cc,"Expecting '{' at ");
     LexPopNoRestore(cc);
@@ -212,7 +212,7 @@ U0 ParseGlobalInit(CCompCtrl *cc,CHashGlobalVar *tmpg,I64 pass)
 	Bt(&cc->flags,CCf_AOT_COMPILE),pass);
 }
 
-U0 ParseStaticInit(CCompCtrl *cc,CMemberLst *tmpm,I64 pass)
+U0 ParseStaticInit(CCompCtrl *cc,CMemberList *tmpm,I64 pass)
 {
   U8 *machine_code,*dst=tmpm->static_data;
   CHashClass *tmpc=tmpm->member_class;
@@ -283,7 +283,7 @@ U0 ParseArrayDims(CCompCtrl *cc,I64 mode,CArrayDim *dim)
 }
 
 CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
-  I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
+  I64 *_mode,CMemberList *tmpm,U8 **_ident,CHashFun **_fun_ptr,
   CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags)
 {
   I64 k,ptr_stars_count,mode=*_mode;
@@ -372,13 +372,13 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
 
 U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
 {
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   CArrayDim *tmpad;
 
   Bts(&tmpf->flags,Ff_DOT_DOT_DOT);
 
   Lex(cc);
-  tmpm=MemberLstNew(_reg);
+  tmpm=MemberListNew(_reg);
   tmpm->flags=MLF_DOT_DOT_DOT;
   tmpm->member_class=cmp.internal_types[RT_I64];
   tmpm->str=StrNew("argc");
@@ -387,7 +387,7 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
   tmpf->size+=8;
   MemberAdd(cc,tmpm,tmpf,PRS1B_FUN_ARG);
 
-  tmpm=MemberLstNew(_reg);
+  tmpm=MemberListNew(_reg);
   tmpm->flags=MLF_DOT_DOT_DOT;
   tmpm->member_class=cmp.internal_types[RT_I64];
   tmpm->str=StrNew("argv");
@@ -405,13 +405,13 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
     Lex(cc);
 }
 
-U0 ParseVarLst(CCompCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
+U0 ParseVarList(CCompCtrl *cc,CHashClass *tmpc,I64 mode,I64 union_base=0)
 {
   I64 i,k,old_flags=cc->flags,old_flags2,type,_reg;
   CHashClass *tmpc1,*tmpc2;
   CHash *tmph;
-  CMemberLst *tmpm;
-  CMemberLstMeta *tmp_meta;
+  CMemberList *tmpm;
+  CMemberListMeta *tmp_meta;
   U8 *machine_code;
   Bool undef_array_size,first;
   cc->flags|=CCF_DONT_MAKE_RES;
@@ -478,7 +478,7 @@ pvl_restart1:
     k=ParseKeyWord(cc);
     if (k==KW_UNION) {
       Lex(cc);
-      ParseVarLst(cc,tmpc,mode|PRSF_UNION,tmpc->size);
+      ParseVarList(cc,tmpc,mode|PRSF_UNION,tmpc->size);
     } else {
       if (!(tmph->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 	LexExcept(cc,"Expecting type at ");
@@ -487,7 +487,7 @@ pvl_restart2:
       tmpc1=tmph;
       LexPush(cc);
       Lex(cc); //skip type or ','
-      tmpm=MemberLstNew(_reg);
+      tmpm=MemberListNew(_reg);
       _reg=REG_UNDEF;
       if (mode.u8[1]==PRS1B_STATIC_LOCAL_VAR) {
 	tmpm->flags|=MLF_STATIC;
@@ -673,7 +673,7 @@ pvl_restart3:
 	    cc->class_dol_offset=tmpc->size;
 
 	  while (cc->token==TK_IDENT) {
-	    tmp_meta=MAlloc(sizeof(CMemberLstMeta));
+	    tmp_meta=MAlloc(sizeof(CMemberListMeta));
 	    tmp_meta->next=tmpm->meta;
 	    tmpm->meta=tmp_meta;
 	    tmp_meta->str=cc->cur_str;

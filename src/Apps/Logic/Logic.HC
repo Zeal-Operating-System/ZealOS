@@ -47,7 +47,7 @@ $SP,"",BI=9$
 $SP,"",BI=10$
 
 $ID,-6$
-U8 *gate_type_lst="NULL\0OUTPUT\0INPUT\0"
+U8 *gate_type_list="NULL\0OUTPUT\0INPUT\0"
      "NOT\0AND\0OR\0NAND\0NOR\0XOR\0AND3\0OR3\0NAND3\0NOR3\0";
 
 #define GT_NULL   0  //Specifies that table entry has not been filled-in
@@ -84,7 +84,7 @@ U0 GetGates()
   "\nEnter the available gate types in the order you prefer them to be used.\n"
 	"Your choices are:\n";
   for (i=GT_FIRST_REAL_GATE;i<GT_ENTRIES_NUM;i++)
-    "%z ",i,gate_type_lst;
+    "%z ",i,gate_type_list;
   '\n';
 
   num_sel_gates=0;
@@ -95,7 +95,7 @@ U0 GetGates()
       Free(st);
       return;
     }
-    i=LstMatch(st,gate_type_lst,LMF_IGNORE_CASE);
+    i=ListMatch(st,gate_type_list,LMF_IGNORE_CASE);
     Free(st);
     if (i<GT_FIRST_REAL_GATE)
       "Invalid response\n";

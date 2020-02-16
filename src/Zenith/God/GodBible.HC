@@ -1,7 +1,7 @@
 #help_index "God"
 U0 BibleInit()
 {
-  DefineLstLoad("ST_BIBLE_BOOKS",
+  DefineListLoad("ST_BIBLE_BOOKS",
 	"Genesis\0"
 	"Exodus\0"
 	"Leviticus\0"
@@ -68,7 +68,7 @@ U0 BibleInit()
 	"3 John\0"
 	"Jude\0"
 	"Revelation\0");
-  DefineLstLoad("ST_BIBLE_BOOK_LINES",
+  DefineListLoad("ST_BIBLE_BOOK_LINES",
 	"297\0"
 	"5068\0"
 	"9123\0"

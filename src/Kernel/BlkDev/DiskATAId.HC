@@ -287,7 +287,7 @@ I64 MountIDEAuto()
     }
     tmpha=tmpha->next;
   }
-  LinkedLstDel(head);
+  LinkedListDel(head);
   blkdev.mount_ide_auto_count=res;
   return res;
 }

@@ -45,9 +45,9 @@ $FG,2$"%D"$FG$ date.  Pass a $LK,"CDate",A="MN:CDate"$.
 
 $FG,2$"%T"$FG$ time.  Pass a $LK,"CDate",A="MN:CDate"$.
 
-$FG,2$"%z"$FG$ sub_entry of an enumerated list of text entries.  See $LK,"LstSub",A="MN:LstSub"$().  Pass sub_entry_num first, list second.
+$FG,2$"%z"$FG$ sub_entry of an enumerated list of text entries.  See $LK,"ListSub",A="MN:ListSub"$().  Pass sub_entry_num first, list second.
 
-$FG,2$"%Z"$FG$ $LK,"DefineLstLoad",A="MN:DefineLstLoad"$() subentry.  Pass sub_entry_num first, define_name second.
+$FG,2$"%Z"$FG$ $LK,"DefineListLoad",A="MN:DefineListLoad"$() subentry.  Pass sub_entry_num first, define_name second.
 
 $FG,2$"%Q"$FG$ convert "\" to "\\" and quote to backslash quote. (For use in creating strs in strs.)
 

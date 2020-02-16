@@ -30,7 +30,7 @@
 
 U0 GrInit4()
 {
-  DefineLstLoad("ST_SPRITE_BITMAP_MENU",
+  DefineListLoad("ST_SPRITE_BITMAP_MENU",
 	"Exit\0Main Menu\0Color\0Dither Color\0Width\0Point\0Line\0Arrow\0"
 	"Rect\0Circle\0Text\0Text Box\0Text Diamond\0Flood Fill\0"
 	"Flood Fill Not Color\0PolyLine\0PolyPoint\0Copy\0Delete\0Paste\0"

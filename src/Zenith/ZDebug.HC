@@ -3,7 +3,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	I64 depth,I64 max_depth,Bool dynamic,I64 types=HTT_CLASS,I64 offset=0)
 {//See $LK,"::/Demo/LastClass.HC"$.
   I64 i,j,stars,*ptr;
-  CMemberLst *ml;
+  CMemberList *ml;
   CDocEntry *doc_e;
   Bool unlock;
   CHashClass *tmpc,*tmpc2;
@@ -21,7 +21,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
     return FALSE;
   unlock=DocLock(doc);
   DocPrint(doc,"Class:\"%s\"\n",class_name);
-  ml=tmpc->member_lst_and_root;
+  ml=tmpc->member_list_and_root;
   while (ml) {
     tmpc2=ml->member_class;
     ptr=_d(U8 *)+ml->offset;
@@ -204,9 +204,9 @@ public U0 ClassRepD(U8 *_d,U8 *class_name=lastclass,
 
 U0 UpdateRegVarImg(CHashFun *tmpf,U8 *_b,CTask *task)
 {
-  CMemberLst *ml;
+  CMemberList *ml;
   CHashClass *tmpc;
-  ml=tmpf->member_lst_and_root;
+  ml=tmpf->member_list_and_root;
   while (ml) {
     if (ml->reg!=REG_NONE) {
       tmpc=OptClassFwd(ml->member_class);
@@ -221,7 +221,7 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
   I64 size;
   U8 *img;
   CHashFun *tmpf=HashFind(st,Fs->hash_table,HTT_FUN);
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   if (tmpf) {
     if (rbp) {
       if (task) {
@@ -237,7 +237,7 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
       } else
 	ClassRep(rbp,st,max_depth,TRUE);
     } else {
-      tmpm=tmpf->member_lst_and_root;
+      tmpm=tmpf->member_list_and_root;
       while (tmpm) {
 	if (0<=tmpm->reg<REG_REGS_NUM)
 	  "%08Z %s\n",tmpm->reg,"ST_U64_REGS",tmpm->str;

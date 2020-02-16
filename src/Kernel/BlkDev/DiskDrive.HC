@@ -69,7 +69,7 @@ U8 DriveNextFreeLet(U8 first_drv_let='C')
 U0 DriveDel(CDrive *dv)
 {//Delete drv
   if (dv->fs_type==FSt_REDSEA && dv->next_free)
-    RedSeaFreeFreeLst(dv);
+    RedSeaFreeFreeList(dv);
   Free(dv->cur_fat_blk);
   Free(dv->fis);
   MemSet(dv,0,sizeof(CDrive));
@@ -246,7 +246,7 @@ U0 DiskChg(U8 drv_let=0)
     DiskCacheInvalidate(dv);
   }
   Drive(drv_let);
-  RedSeaFreeFreeLst(dv);
+  RedSeaFreeFreeList(dv);
 }
 
 Bool DriveMap(U8 drv_let,CDrive *dv)

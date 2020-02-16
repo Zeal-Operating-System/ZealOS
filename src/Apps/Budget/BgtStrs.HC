@@ -84,7 +84,7 @@ public U0 StrFileWrite(U8 *name,CHashTable *table,Bool no_nums=FALSE)
   if (table) {
     count=0;	//Count Strings
     for (i=0;i<=table->mask;i++)
-      count+=LinkedLstCount(table->body[i]);
+      count+=LinkedListCount(table->body[i]);
     a=MAlloc(count*sizeof(CHashGeneric *));
     j=0;	//Load Strings
     for (i=0;i<=table->mask;i++) {

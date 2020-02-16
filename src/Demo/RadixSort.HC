@@ -3,9 +3,9 @@
 
 U8 a[N];
 
-class Lst
+class List
 {
-  Lst *next;
+  List *next;
   U8 *a;
 } l[N],*r[RADIX];
 
@@ -20,7 +20,7 @@ U0 DumpIn()
 U0 DumpOut()
 {
   I64 i,j=0;
-  Lst *tmpl;
+  List *tmpl;
   "$$RED$$\n\nOutput$$FG$$\n";
   for (i=0;i<RADIX;i++) {
     tmpl=r[i];

@@ -27,7 +27,7 @@ class MySpring:CSpring
 #define MMD_PLAY	1
 #define MMD_MODES_NUM	2
 CColorROPU32 main_mode_colors[MMD_MODES_NUM]={LTRED,LTGREEN};
-DefineLstLoad("ST_MAIN_MODES","Edit\0Play\0");
+DefineListLoad("ST_MAIN_MODES","Edit\0Play\0");
 CCtrlBttnState main_mode_bttn;
 
 //Edit Modes
@@ -38,7 +38,7 @@ CCtrlBttnState main_mode_bttn;
 #define EMD_MOVE	4
 #define EMD_MODES_NUM	5
 CColorROPU32 edit_mode_colors[EMD_MODES_NUM]={LTGRAY,LTCYAN,CYAN,YELLOW,LTBLUE};
-DefineLstLoad("ST_EDIT_MODES","Mass\0Spring\0Connector\0Thruster\0Move\0");
+DefineListLoad("ST_EDIT_MODES","Mass\0Spring\0Connector\0Thruster\0Move\0");
 CCtrlBttnState edit_mode_bttn;
 
 CTask *task;

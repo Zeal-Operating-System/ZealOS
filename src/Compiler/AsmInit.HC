@@ -4,7 +4,7 @@ U0 AsmPrsInsFlags(CCompCtrl *cc,CInst *tmpins)
   while (TRUE) {
     switch (cc->token) {
       case TK_IDENT:
-	if ((i=LstMatch(cc->cur_str,"NO\0CB\0CW\0CD\0CP\0IB\0IW\0ID\0"))>=0) {
+	if ((i=ListMatch(cc->cur_str,"NO\0CB\0CW\0CD\0CP\0IB\0IW\0ID\0"))>=0) {
 	  tmpins->opcode_modifier=i;
 	  break;
 	} else
@@ -69,12 +69,12 @@ U0 AsmHashLoad()
   tmpo_max=MAlloc(size_max);
 
   cc=CompCtrlNew(FileRead("OpCodes.DD"),,"OpCodes.DD");
-  cc->htc.hash_table_lst=NULL;
+  cc->htc.hash_table_list=NULL;
   Lex(cc);
   while (cc->token) {
     if (cc->token!=TK_IDENT)
       LexExcept(cc,"Expecting identifier at ");
-    i=LstMatch(cc->cur_str,"NONE\0R8\0R16\0R32\0R64\0SEG\0FSTK\0"
+    i=ListMatch(cc->cur_str,"NONE\0R8\0R16\0R32\0R64\0SEG\0FSTK\0"
 	  "MM\0XMM\0OPCODE\0KEYWORD\0ASM_KEYWORD\0");
     if (i<=0)
       LexExcept(cc,"Unknown Statement");

@@ -1,39 +1,39 @@
-U0 LinkedLstDel(U8 **_lst)
+U0 LinkedListDel(U8 **_list)
 {//Free entire linked-list.
   U8 **tmpl;
-  while (_lst) {
-    tmpl=*_lst;
-    Free(_lst);
-    _lst=tmpl;
+  while (_list) {
+    tmpl=*_list;
+    Free(_list);
+    _list=tmpl;
   }
 }
 
-U8 *LinkedLstCopy(U8 **_lst,CTask *mem_task=NULL)
+U8 *LinkedListCopy(U8 **_list,CTask *mem_task=NULL)
 {//MAlloc ident copy of entire linked-list.
   U8 *res=NULL,**tmpl=&res;
-  while (_lst) {
-    tmpl=*tmpl=MAllocIdent(_lst,mem_task);
-    _lst=*_lst;
+  while (_list) {
+    tmpl=*tmpl=MAllocIdent(_list,mem_task);
+    _list=*_list;
   }
   return res;
 }
 
-I64 LinkedLstCount(U8 **_lst)
+I64 LinkedListCount(U8 **_list)
 {//Count of nodes in linked-list.
   I64 res=0;
-  while (_lst) {
+  while (_list) {
     res++;
-    _lst=*_lst;
+    _list=*_list;
   }
   return res;
 }
 
-I64 LinkedLstSize(U8 **_lst)
+I64 LinkedListSize(U8 **_list)
 {//Mem size of all nodes in linked-list.
   I64 res=0;
-  while (_lst) {
-    res+=MSize2(_lst);
-    _lst=*_lst;
+  while (_list) {
+    res+=MSize2(_list);
+    _list=*_list;
   }
   return res;
 }

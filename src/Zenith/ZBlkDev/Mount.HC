@@ -78,7 +78,7 @@ U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
 	    } while (!(0<=unit<=1));
 	    '\n';
 	  }
-	  LinkedLstDel(head);
+	  LinkedListDel(head);
 	  break;
       }
       DocPrint(doc,"bd=BlkDevNextFreeSlot(\'%C\',%d);bd->unit=%d;\n",

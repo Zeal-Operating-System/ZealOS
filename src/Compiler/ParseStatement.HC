@@ -51,9 +51,9 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
       tmpc->size+=base_class->size;
     }
     if (keyword==KW_UNION)
-      ParseVarLst(cc,tmpc,PRS0_NULL|PRS1_CLASS|PRSF_UNION);
+      ParseVarList(cc,tmpc,PRS0_NULL|PRS1_CLASS|PRSF_UNION);
     else
-      ParseVarLst(cc,tmpc,PRS0_NULL|PRS1_CLASS);
+      ParseVarList(cc,tmpc,PRS0_NULL|PRS1_CLASS);
     tmpc->size+=tmpc->neg_offset;
   }
   return tmpc;
@@ -62,7 +62,7 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
 CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 	U8 *name,I64 fsp_flags)
 {
-  CMemberLst *tmpm,*header_lst;
+  CMemberList *tmpm,*header_list;
   CAOTCtrl *aotc=cc->aotc;
   CHashClass *header_return;
   CHashFun *tmpf;
@@ -88,10 +88,10 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
     tmpf->idx=NULL;
     Free(name);
     header_arg_count=tmpf->arg_count;
-    header_lst=tmpf->member_lst_and_root;
+    header_list=tmpf->member_list_and_root;
     header_return=tmpf->return_class;
-    tmpf->member_lst_and_root=NULL;
-    ClassMemberLstDel(tmpf);
+    tmpf->member_list_and_root=NULL;
+    ClassMemberListDel(tmpf);
   } else {
     tmpf=ParseFunNew;
     header_return=NULL;
@@ -111,11 +111,11 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
   tmpf->return_class=tmp_return;
   tmpf->use_count=0;
   HashSrcFileSet(cc,tmpf);
-  ParseVarLst(cc,tmpf,PRS0_NULL|PRS1_FUN_ARG);
+  ParseVarList(cc,tmpf,PRS0_NULL|PRS1_FUN_ARG);
   tmpf->arg_count=tmpf->member_count;
   if (0<tmpf->arg_count<<3<=I16_MAX && !Bt(&tmpf->flags,Ff_DOT_DOT_DOT))
     LBts(&tmpf->flags,Ff_RET1);
-  tmpm=tmpf->member_lst_and_root;
+  tmpm=tmpf->member_list_and_root;
   while (tmpm) {
     tmpm->offset+=16; //RBP+RETURN
     tmpm=tmpm->next;
@@ -127,19 +127,19 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 	PrintWarn("Fun Header return mismatch '%s'\n",tmpf->str);
 	cc->warning_count++;
       }
-      if (!MemberLstCmp(tmpf->member_lst_and_root,header_lst,header_arg_count)) {
+      if (!MemberListCmp(tmpf->member_list_and_root,header_list,header_arg_count)) {
 	PrintWarn("Fun header args mismatch '%s'\n",tmpf->str);
 	cc->warning_count++;
       }
     }
-    MemberLstDel(header_lst);
+    MemberListDel(header_list);
   }
   return tmpf;
 }
 
 U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
 {
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   CCodeMisc *saved_leave_label;
   I64 i,j,size,*r;
   Bool old_trace;
@@ -148,7 +148,7 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   cc->min_line=cc->max_line=cc->lex_include_stk->line_num;
 
   cc->flags&=~CCF_NO_REG_OPT;
-  cc->htc.local_var_lst=cc->htc.fun=ParseFunJoin(cc,tmp_return,name,fsp_flags);
+  cc->htc.local_var_list=cc->htc.fun=ParseFunJoin(cc,tmp_return,name,fsp_flags);
 
   COCPush(cc);
   Btr(&cc->flags,CCf_PASS_TRACE_PRESENT);
@@ -190,7 +190,7 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   }
   LBtr(&cc->htc.fun->flags,Cf_EXTERN);
   COCPop(cc);
-  tmpm=cc->htc.fun->member_lst_and_root;
+  tmpm=cc->htc.fun->member_list_and_root;
   while (tmpm) {
     if (tmpm->flags & MLF_NO_UNUSED_WARN) {
       if (tmpm->use_count>1&&StrCmp(tmpm->str,"_anon_"))
@@ -203,10 +203,10 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
 	    tmpm->str,cc->htc.fun->str);
     tmpm=tmpm->next;
   }
-  cc->htc.local_var_lst=cc->htc.fun=cc->fun_lex_file=NULL;
+  cc->htc.local_var_list=cc->htc.fun=cc->fun_lex_file=NULL;
 }
 
-U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
+U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
   I64 saved_val,I64 fsp_flags)
 {
   I64 i,j,mode,k,val;
@@ -790,7 +790,7 @@ sw_sub_end:
 
 U0 ParseNoWarn(CCompCtrl *cc)
 {
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   while (cc->token==TK_IDENT) {
     if (!(tmpm=cc->local_var_entry))
       LexExcept(cc,"Expecting local var at ");
@@ -814,8 +814,8 @@ U0 ParseStreamBlk(CCompCtrl *cc)
   MemCpy(htc,&cc->htc,sizeof(CLexHashTableContext));
   htc->old_flags=cc->flags;
   cc->htc.next=htc;
-  cc->htc.fun=cc->htc.local_var_lst=NULL;
-  cc->htc.define_hash_table=cc->htc.hash_table_lst=
+  cc->htc.fun=cc->htc.local_var_list=NULL;
+  cc->htc.define_hash_table=cc->htc.hash_table_list=
 	cc->htc.glbl_hash_table=cc->htc.local_hash_table=Fs->hash_table;
   cc->flags=cc->flags & ~(CCF_ASM_EXPRESSIONS|CCF_AOT_COMPILE) | CCF_EXE_BLK;
   if (cc->token=='{')
@@ -843,8 +843,8 @@ U0 ParseTryBlk(CCompCtrl *cc,I64 try_count)
 {
   CCodeMisc	*lb_catch,*lb_done,*lb_untry;
   CHashClass	*tmpc=cmp.internal_types[RT_PTR];
-  CHashFun	*tmp_try=HashFind("SysTry",cc->htc.hash_table_lst,HTT_FUN),
-	*tmp_untry=HashFind("SysUntry",cc->htc.hash_table_lst,HTT_FUN);
+  CHashFun	*tmp_try=HashFind("SysTry",cc->htc.hash_table_list,HTT_FUN),
+	*tmp_untry=HashFind("SysUntry",cc->htc.hash_table_list,HTT_FUN);
 
   if (!tmp_try || !tmp_untry)
     LexExcept(cc,"Missing header for SysTry() and SysUntry() at ");
@@ -1007,7 +1007,7 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
 			  !(tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 		      LexExcept(cc,"Expecting type at ");
 		    Lex(cc);
-		    ParseGlobalVarLst(cc,PRS0__EXTERN|PRS1_NULL,tmpex,i,fsp_flags);
+		    ParseGlobalVarList(cc,PRS0__EXTERN|PRS1_NULL,tmpex,i,fsp_flags);
 		    break;
 		  case KW__IMPORT:
 sm_underscore_import:
@@ -1021,7 +1021,7 @@ sm_underscore_import:
 			  !(tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 		      LexExcept(cc,"Expecting type at ");
 		    Lex(cc);
-		    ParseGlobalVarLst(cc,PRS0__IMPORT|PRS1_NULL,tmpex,
+		    ParseGlobalVarList(cc,PRS0__IMPORT|PRS1_NULL,tmpex,
 			  import_name,fsp_flags);
 		    Free(import_name);
 		    break;
@@ -1042,7 +1042,7 @@ sm_underscore_import:
 		    if (Bt(&cc->opts,OPTf_EXTERNS_TO_IMPORTS))
 		      goto sm_import;
 		    Lex(cc);
-		    ParseGlobalVarLst(cc,PRS0_EXTERN|PRS1_NULL,tmpex,0,fsp_flags);
+		    ParseGlobalVarList(cc,PRS0_EXTERN|PRS1_NULL,tmpex,0,fsp_flags);
 		    break;
 		  case KW_IMPORT:
 		    if (cc->token!=TK_IDENT || !(tmpex=cc->hash_entry) ||
@@ -1050,7 +1050,7 @@ sm_underscore_import:
 		      LexExcept(cc,"Expecting type at ");
 sm_import:
 		    Lex(cc);
-		    ParseGlobalVarLst(cc,PRS0_IMPORT|PRS1_NULL,tmpex,0,fsp_flags);
+		    ParseGlobalVarList(cc,PRS0_IMPORT|PRS1_NULL,tmpex,0,fsp_flags);
 		    break;
 		  case KW__INTERN:
 		    i=LexExpressionI64(cc);
@@ -1058,7 +1058,7 @@ sm_import:
 			  !(tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
 		      LexExcept(cc,"Expecting type at ");
 		    Lex(cc);
-		    ParseGlobalVarLst(cc,PRS0__INTERN|PRS1_NULL,tmpex,i,fsp_flags);
+		    ParseGlobalVarList(cc,PRS0__INTERN|PRS1_NULL,tmpex,i,fsp_flags);
 		    break;
 		end:
 		  fsp_flags&=FSF_ASM;
@@ -1091,7 +1091,7 @@ sm_import:
 		    LexExcept(cc,"Not in fun.  Can't return a val ");
 		  if (try_count) {
 		    tmp_untry=HashFind("SysUntry",
-			  cc->htc.hash_table_lst,HTT_FUN);
+			  cc->htc.hash_table_list,HTT_FUN);
 		    for (i=0;i<try_count;i++) {
 		      if (Bt(&tmp_untry->flags,Cf_EXTERN)) {
 			cc->abs_counts.externs++;
@@ -1145,7 +1145,7 @@ sm_import:
 		  Lex(cc);
 		  tmpex=ParseClass(cc,i,fsp_flags,FALSE);
 		  if (!cc->htc.fun && cc->token!=';') {
-		    ParseGlobalVarLst(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
+		    ParseGlobalVarList(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
 		    fsp_flags&=FSF_ASM;
 		    break;
 		  } else {
@@ -1158,13 +1158,13 @@ sm_not_keyword_afterall:
 	      if (tmpex->type & (HTT_CLASS|HTT_INTERNAL_TYPE)) {
 		if (cc->htc.fun) {
 		  if (fsp_flags&FSF_STATIC)
-		    ParseVarLst(cc,cc->htc.fun,PRS0_NULL|PRS1_STATIC_LOCAL_VAR);
+		    ParseVarList(cc,cc->htc.fun,PRS0_NULL|PRS1_STATIC_LOCAL_VAR);
 		  else
-		    ParseVarLst(cc,cc->htc.fun,PRS0_NULL|PRS1_LOCAL_VAR);
+		    ParseVarList(cc,cc->htc.fun,PRS0_NULL|PRS1_LOCAL_VAR);
 		  if (cc->token=='}') goto sm_done;
 		} else {
 		  Lex(cc);
-		  ParseGlobalVarLst(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
+		  ParseGlobalVarList(cc,PRS0_NULL|PRS1_NULL,tmpex,0,fsp_flags);
 		}
 	      } else {
 		if (tmpex->type & (HTT_OPCODE|HTT_ASM_KEYWORD)) {

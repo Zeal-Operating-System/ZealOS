@@ -37,7 +37,7 @@ CColorROPU32 run_colors[2]={RED,GREEN};
 #define MD_MODES_NUM	6
 CColorROPU32 mode_colors[MD_MODES_NUM]=
 {BROWN,LTGRAY,DKGRAY,RED,PURPLE,RED};
-  DefineLstLoad("ST_SPAN_MODES","Mass\0Concrete\0Steel\0Wire\0Move\0Delete\0");
+  DefineListLoad("ST_SPAN_MODES","Mass\0Concrete\0Steel\0Wire\0Move\0Delete\0");
 
   class SpanAnimateStruct
 	  {

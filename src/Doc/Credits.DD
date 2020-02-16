@@ -20,7 +20,7 @@ I, $FG,2$Terry A. Davis$FG$, wrote all of ZenithOS over the past $TX,"13.9",D="D
 
 *) A few features were inspired by $FG,2$MATLAB$FG$, such as $FG,2$ans$FG$ in expressions at the command-line.  There is a lot of $FG,2$MSDOS$FG$ , $FG,2$Windows$FG$, $FG,2$VAXTMOS$FG$ (VAX Ticketmaster O.S.) and $FG,2$Unix$FG$ inspiration, too, such as drive letters, command names, etc.
 
-*) I included $LK,"PCIDevice Lst File",A="FI:::/Misc/PCIDevices.DD",HTML="http://www.pcidatabase.com/reports.php?type=tab-delimeted"$.
+*) I included $LK,"PCIDevice List File",A="FI:::/Misc/PCIDevices.DD",HTML="http://www.pcidatabase.com/reports.php?type=tab-delimeted"$.
 
 *) Thanks to whoever wrote this $FG,4$$TX,"CppHtml.HC",HTML="http://web.archive.org/web/20100325153025/http://home.scarlet.be/zoetrope/cpphtml.htm"$$FG$.  I'm a novice on web stuff and you helped me with html.  See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.HC"$.
 

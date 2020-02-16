@@ -63,7 +63,7 @@ U0 VMInstallWiz()
     VMInstallDrive(task,'D',ata_drv,atapi_drv);
     BootMHDIns('C');
   }
-  LinkedLstDel(head);
+  LinkedListDel(head);
   WinVert(task->win_top,Fs->win_bottom);
   Kill(task);
 }
@@ -120,7 +120,7 @@ U0 RegularInstallWiz()
       Free(st);
     } while (!(0<=unit<=1));
   }
-  LinkedLstDel(head);
+  LinkedListDel(head);
   XTalkWait(task,"%s\n%s\n%C\n",base0,base1,'0'+unit);
   DriveRep;
   do {

@@ -3,7 +3,7 @@
 //These might be in the Zenith task.
 DefineLoad("ST_YES_NO","(Yes or No)");
 DefineLoad("ST_EXIT","Exit");
-DefineLstLoad("ST_NO_YES_LST","No\0Yes\0");
+DefineListLoad("ST_NO_YES_LIST","No\0Yes\0");
 
 //New strings might be loaded for each user
 //to override.
@@ -12,7 +12,7 @@ DefineLstLoad("ST_NO_YES_LST","No\0Yes\0");
 if (YorN) {
   DefineLoad("ST_YES_NO","(Si or No)");
   DefineLoad("ST_EXIT","Salida");
-  DefineLstLoad("ST_NO_YES_LST","No\0Si\0");
+  DefineListLoad("ST_NO_YES_LIST","No\0Si\0");
 }
 
 Bool Quit()
@@ -23,7 +23,7 @@ Bool Quit()
   while (TRUE) {
     "%S %S?","ST_EXIT","ST_YES_NO";
     st=GetStr;
-    i=DefineMatch(st,"ST_NO_YES_LST",LMF_IGNORE_CASE);
+    i=DefineMatch(st,"ST_NO_YES_LIST",LMF_IGNORE_CASE);
     if (i>=0) {
       res=i;
       break;

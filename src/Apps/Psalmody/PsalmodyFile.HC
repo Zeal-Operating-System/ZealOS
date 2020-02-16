@@ -271,7 +271,7 @@ U8 *PsmCvtSong()
 	  ona++;
 	octave=Ona2Octave(ona);
 	note  =Ona2Note  (ona);
-	note=music.note_map[*LstSub(note,psm_note_lst)-'A'];
+	note=music.note_map[*ListSub(note,psm_note_list)-'A'];
       }
       if (Bt(&tmpn->flags,PSMf_TIE))
 	*dst++='(';
@@ -280,14 +280,14 @@ U8 *PsmCvtSong()
 	last_octave=octave;
       }
       if (tmpn->duration!=last_duration) {
-	src=LstSub(tmpn->duration,psm_duration_lst);
+	src=ListSub(tmpn->duration,psm_duration_list);
 	*dst++=src[0];
 	if (src[1])
 	  *dst++=src[1];
 	last_duration=tmpn->duration;
       }
       if (tmpn->ona) {
-	src=LstSub(note,psm_note_lst);
+	src=ListSub(note,psm_note_list);
 	*dst++=src[0];
 	if (src[1])
 	  *dst++=src[1];

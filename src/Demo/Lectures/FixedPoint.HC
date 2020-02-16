@@ -14,7 +14,7 @@ as int and lower 32-bits as fraction.
 See $LK,"::/Demo/SubIntAccess.HC"$ for how
 to access upper or lower 32-bits.
 
-For a complete lst of nonstandard compiler
+For a complete list of nonstandard compiler
 features, see $LK,"::/Doc/HolyC.DD"$.
 */
 
@@ -68,7 +68,7 @@ because the compiler decides it cannot
 place i into a reg, so there is a
 penalty.
 
-For a complete lst of nonstandard compiler
+For a complete list of nonstandard compiler
 features, see $LK,"::/Doc/HolyC.DD"$.
 */
 

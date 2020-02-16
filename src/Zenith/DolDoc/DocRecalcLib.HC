@@ -40,7 +40,7 @@ U0 DocDelToEntry(CDoc *doc,CDocEntry *clear_entry,Bool clear_holds)
   }
 }
 
-U0 DocBorderLstDraw(CDoc *doc)
+U0 DocBorderListDraw(CDoc *doc)
 {
   CTask *win_task=doc->win_task;
   I64 i,y=-1,attr=win_task->border_attr<<8;

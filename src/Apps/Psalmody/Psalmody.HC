@@ -58,6 +58,6 @@ class PsmCtrl
   Bool playing;
 } psm;
 
-U8 *psm_note_lst="A\0A#\0B\0C\0C#\0D\0D#\0E\0F\0F#\0G\0G#\0";
+U8 *psm_note_list="A\0A#\0B\0C\0C#\0D\0D#\0E\0F\0F#\0G\0G#\0";
 U8 psm_note_map[12]={6,6,5,4,4,3,3,2,1,1,0,0};
 U8 psm_note_inverse_map[7]={10,8,7,5,3,2,0};

@@ -30,12 +30,12 @@ extern Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
 	CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON);
 extern U0 ParseStreamBlk(CCompCtrl *cc);
 extern CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
-	I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
+	I64 *_mode,CMemberList *tmpm,U8 **_ident,CHashFun **_fun_ptr,
 	CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags);
 extern I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,
-	CMemberLst **_local_var,CArrayDim **_tmpad,I64 *unary_post_prec);
+	CMemberList **_local_var,CArrayDim **_tmpad,I64 *unary_post_prec);
 extern I64 ParseUnaryTerm(
-	CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,CArrayDim **_tmpad,
+	CCompCtrl *cc,CPrsStk *ps,CMemberList **_local_var,CArrayDim **_tmpad,
 	I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec);
 extern U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	CArrayDim *tmpad,U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass);

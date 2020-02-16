@@ -1,6 +1,6 @@
 #help_index "God"
 
-DefineLstLoad("ST_RHYTHM_COMPLEXITY","Simple\0Normal\0Complex\0");
+DefineListLoad("ST_RHYTHM_COMPLEXITY","Simple\0Normal\0Complex\0");
 
 class CMakeSongSettings
 {

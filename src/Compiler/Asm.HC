@@ -919,7 +919,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
     Lex(cc);
   }
   while (cc->token && cc->token!='}') {
-    AsmLineLst(cc);
+    AsmLineList(cc);
     if (cc->token==TK_IDENT && cc->hash_entry) {
       if (cc->hash_entry->type&HTT_ASM_KEYWORD) {
 	i=cc->hash_entry->user_data0;
@@ -946,7 +946,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 	    Lex(cc); //skip ';';
 	    break;
 	  case AKW_ORG:
-	    if (cc->htc.local_var_lst)
+	    if (cc->htc.local_var_list)
 	      LexExcept(cc,"ORG not allowed in fun asm blk ");
 	    if (aotc->org!=INVALID_PTR)
 	      LexExcept(cc,"Just one org allowed ");
@@ -955,7 +955,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 	    aotc->org=AsmLexExpression(cc);
 	    break;
 	  case AKW_ALIGN:
-	    if (cc->htc.local_var_lst)
+	    if (cc->htc.local_var_list)
 	      LexExcept(cc,"ALIGN not allowed in fun asm blk ");
 	    i=AsmLexExpression(cc);
 	    j=Bsf(i);
@@ -988,10 +988,10 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 	    ParseBinFile(cc);
 	    break;
 	  case AKW_LIST:
-	    aotc->lst=TRUE;
+	    aotc->list=TRUE;
 	    break;
 	  case AKW_NOLIST:
-	    aotc->lst=FALSE;
+	    aotc->list=FALSE;
 	    break;
 	  case AKW_USE16:
 	    aotc->seg_size=16;
@@ -1078,7 +1078,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 	  HashAdd(tmpex,cc->htc.local_hash_table);
 	} else
 	  HashAdd(tmpex,cc->htc.glbl_hash_table);
-	if (cc->htc.local_var_lst) {//AsmBlk in fun? Also add goto-like label.
+	if (cc->htc.local_var_list) {//AsmBlk in fun? Also add goto-like label.
 	  if (!(g_lb=COCGoToLabelFind(cc,tmpex->str))) {
 	    g_lb=COCMiscNew(cc,CMT_ASM_LABEL);
 	    g_lb->str=StrNew(tmpex->str);
@@ -1109,6 +1109,6 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
       break;
   }
   AOTLocalsResolve(cc);
-  aotc->lst=FALSE;
+  aotc->list=FALSE;
   cc->flags&=cc->flags&~CCF_ASM_EXPRESSIONS|old_flags;
 }

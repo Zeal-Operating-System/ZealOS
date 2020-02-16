@@ -5,7 +5,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
   CIntermediateCode *tmpi,*tmpi1,*tmpi2,*tmpi_next,
 	*tmpil1,*tmpil2;
   I64 code,i,j,l,member_count,used_reg_mask=0;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   COptMemberVar *mv=NULL;
   CAOT *tmpaot;
   CAOTImportExport *tmpie;
@@ -23,7 +23,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
       member_count+=2;
     mv=CAlloc(member_count*sizeof(COptMemberVar));
     member_count=0;
-    tmpm=cc->htc.fun->member_lst_and_root;
+    tmpm=cc->htc.fun->member_list_and_root;
     while (tmpm) {
       tmpc=OptClassFwd(tmpm->member_class);
       if (0<=tmpm->reg<REG_REGS_NUM) {

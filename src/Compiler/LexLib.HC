@@ -42,9 +42,9 @@ U0 LexPopNoRestore(CCompCtrl *cc)
   Free(tmpf);
 }
 
-I64 MemberMetaData(U8 *needle_str,CMemberLst *haystack_member_lst)
+I64 MemberMetaData(U8 *needle_str,CMemberList *haystack_member_list)
 {//Find meta data name, return meta data val. See $LK,"::/Demo/ClassMeta.HC"$.
-  CMemberLstMeta *meta=haystack_member_lst->meta;
+  CMemberListMeta *meta=haystack_member_list->meta;
   while (meta) {
     if (!StrCmp(meta->str,needle_str))
       return meta->user_data;
@@ -53,9 +53,9 @@ I64 MemberMetaData(U8 *needle_str,CMemberLst *haystack_member_lst)
   return 0;
 }
 
-CMemberLstMeta *MemberMetaFind(U8 *needle_str,CMemberLst *haystack_member_lst)
+CMemberListMeta *MemberMetaFind(U8 *needle_str,CMemberList *haystack_member_list)
 {//Find meta data name, return meta data struct. See $LK,"::/Demo/ClassMeta.HC"$.
-  CMemberLstMeta *meta=haystack_member_lst->meta;
+  CMemberListMeta *meta=haystack_member_list->meta;
   while (meta) {
     if (!StrCmp(meta->str,needle_str))
       return meta;
@@ -64,12 +64,12 @@ CMemberLstMeta *MemberMetaFind(U8 *needle_str,CMemberLst *haystack_member_lst)
   return NULL;
 }
 
-CMemberLst *MemberFind(U8 *needle_str,CHashClass *haystack_class)
+CMemberList *MemberFind(U8 *needle_str,CHashClass *haystack_class)
 {//Find class member. See $LK,"ClassRep",A="MN:ClassRep"$() and $LK,"DocForm",A="MN:DocForm"$().
   I64 i;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   do {
-    tmpm=haystack_class->member_lst_and_root;
+    tmpm=haystack_class->member_list_and_root;
     while (tmpm) {
       if (!(i=StrCmp(tmpm->str,needle_str))) {
 	tmpm->use_count++;
@@ -84,10 +84,10 @@ CMemberLst *MemberFind(U8 *needle_str,CHashClass *haystack_class)
   return NULL;
 }
 
-CMemberLst *MemberClassBaseFind(CHashClass *needle_class,
+CMemberList *MemberClassBaseFind(CHashClass *needle_class,
 	CHashClass *haystack_class)
 {//Find class member class base. For finding dup class local vars.
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   tmpm=haystack_class->member_class_base_root;
   while (tmpm) {
     if (needle_class==tmpm->member_class_base)
@@ -100,15 +100,15 @@ CMemberLst *MemberClassBaseFind(CHashClass *needle_class,
   return NULL;
 }
 
-U0 MemberAdd(CCompCtrl *cc,CMemberLst *tmpm,CHashClass *tmpc,I64 mode)
+U0 MemberAdd(CCompCtrl *cc,CMemberList *tmpm,CHashClass *tmpc,I64 mode)
 {
   U8 *st=tmpm->str;
-  CMemberLst **tmpm1,*tmpm2;
+  CMemberList **tmpm1,*tmpm2;
 
   if (MemberFind(st,tmpc) && StrCmp(st,"pad") &&
 	StrCmp(st,"reserved") && StrCmp(st,"_anon_"))
     LexExcept(cc,"Duplicate member at ");
-  tmpm1=&tmpc->member_lst_and_root;
+  tmpm1=&tmpc->member_list_and_root;
   while (tmpm2=*tmpm1) {
     if (StrCmp(tmpm2->str,st)<=0)
       tmpm1=&tmpm2->left;
@@ -143,18 +143,18 @@ U0 MemberAdd(CCompCtrl *cc,CMemberLst *tmpm,CHashClass *tmpc,I64 mode)
   tmpm->right=NULL;
   tmpm->left_class_base=NULL;
   tmpm->right_class_base=NULL;
-  tmpm2=tmpc->last_in_member_lst;
-  tmpm2->next=tmpc->last_in_member_lst=tmpm;
+  tmpm2=tmpc->last_in_member_list;
+  tmpm2->next=tmpc->last_in_member_list=tmpm;
 }
 
-CMemberLst *MemberLstNew(I64 _reg)
+CMemberList *MemberListNew(I64 _reg)
 {
-  CMemberLst *res=CAlloc(sizeof(CMemberLst));
+  CMemberList *res=CAlloc(sizeof(CMemberList));
   res->reg=_reg;
   return res;
 }
 
-Bool  MemberLstCmp(CMemberLst *tmpm1,CMemberLst *tmpm2,I64 count=I64_MAX)
+Bool  MemberListCmp(CMemberList *tmpm1,CMemberList *tmpm2,I64 count=I64_MAX)
 {
   while (tmpm1 && tmpm2 && count--) {
     if (StrCmp(tmpm1->str,tmpm2->str) ||
@@ -180,14 +180,14 @@ Bool  MemberLstCmp(CMemberLst *tmpm1,CMemberLst *tmpm2,I64 count=I64_MAX)
     return FALSE;
 }
 
-U0 MemberLstDel(CMemberLst *tmpm)
+U0 MemberListDel(CMemberList *tmpm)
 {
-  CMemberLst *tmpm1;
-  CMemberLstMeta *tmp_meta,*tmp_meta1;
+  CMemberList *tmpm1;
+  CMemberListMeta *tmp_meta,*tmp_meta1;
   while (tmpm) {
     tmpm1=tmpm->next;
     Free(tmpm->str);
-    LinkedLstDel(tmpm->dim.next);
+    LinkedListDel(tmpm->dim.next);
     if (tmpm->flags & MLF_STR_DFT_AVAILABLE)
       Free(tmpm->dft_val);
     if (tmpm->flags & MLF_FUN)
@@ -206,27 +206,27 @@ U0 MemberLstDel(CMemberLst *tmpm)
   }
 }
 
-U0 ClassMemberLstDel(CHashClass *tmpc)
+U0 ClassMemberListDel(CHashClass *tmpc)
 {
-  MemberLstDel(tmpc->member_lst_and_root);
+  MemberListDel(tmpc->member_list_and_root);
   tmpc->size=0;
-  tmpc->last_in_member_lst=&tmpc->member_lst_and_root;
-  tmpc->member_lst_and_root=NULL;
+  tmpc->last_in_member_list=&tmpc->member_list_and_root;
+  tmpc->member_list_and_root=NULL;
   tmpc->member_class_base_root=NULL;
   tmpc->member_count=0;
   if (tmpc->type&HTT_FUN)
     tmpc(CHashFun *)->arg_count=0;
 }
 
-I64 MemberLstSize(CHashClass *tmpc)
+I64 MemberListSize(CHashClass *tmpc)
 {
-  CMemberLst *tmpm;
-  CMemberLstMeta *tmp_meta;
+  CMemberList *tmpm;
+  CMemberListMeta *tmp_meta;
   I64 res=0;
-  tmpm=tmpc->member_lst_and_root;
+  tmpm=tmpc->member_list_and_root;
   while (tmpm) {
     res+=MSize2(tmpm->str);
-    res+=LinkedLstSize(tmpm->dim.next);
+    res+=LinkedListSize(tmpm->dim.next);
     if (tmpm->flags & MLF_STR_DFT_AVAILABLE)
       res+=MSize2(tmpm->dft_val);
     if (tmpm->flags & MLF_FUN)

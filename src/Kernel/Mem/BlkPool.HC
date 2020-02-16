@@ -6,11 +6,11 @@ U0 BlkPoolAdd(CBlkPool *bp,CMemBlk *m,I64 pags)
   CLI
   while (LBts(&bp->locked_flags,BPlf_LOCKED))
     PAUSE
-  m->next=bp->mem_free_lst;
+  m->next=bp->mem_free_list;
   m->pags=pags;
   m->mb_signature=MBS_UNUSED_SIGNATURE_VAL;
   bp->alloced_u8s+=pags<<MEM_PAG_BITS;
-  bp->mem_free_lst=m;
+  bp->mem_free_list=m;
   LBtr(&bp->locked_flags,BPlf_LOCKED);
   POPFD
 }

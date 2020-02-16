@@ -128,7 +128,7 @@ U8 *Doc2PlainText(CDoc *doc,CDocEntry *doc_e)
 		!StrCmp(doc_e->tag,doc_e->left_macro) ||
 		doc_e->de_flags&DOCEF_RIGHT_MACRO &&
 		!StrCmp(doc_e->tag,doc_e->right_macro)) ||
-		doc_e->de_flags&DOCEF_LST && !StrCmp(doc_e->tag,"[]") &&
+		doc_e->de_flags&DOCEF_LIST && !StrCmp(doc_e->tag,"[]") &&
 		doc_e->de_flags&DOCEF_DEFINE) {
 	    buf2=buf;
 	    buf=NULL;
@@ -221,9 +221,9 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
   CDocEntry *doc_e=NULL;
   CHashGeneric *tmph;
   CCompCtrl *cc=CompCtrlNew(st,CCF_DONT_FREE_BUF);
-  CHashTable *old_hash_table_lst=cc->htc.hash_table_lst;
+  CHashTable *old_hash_table_list=cc->htc.hash_table_list;
   try {
-    cc->htc.hash_table_lst=NULL;
+    cc->htc.hash_table_list=NULL;
     if (Lex(cc)==TK_IDENT) {
       if (tmph=HashFind(cc->cur_str,doldoc.hash,DHT_DOC_CMD|DHT_COLOR)) {
 	if (tmph->type&DHT_DOC_CMD)
@@ -242,7 +242,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
       doc_e->raw_type=RT_I64;
       doc_e->len=DOCE_LEN_DFT;
       j=ParseDocFlags(cc,&doc_e->de_flags,&doc_e->type);
-      cc->htc.hash_table_lst=old_hash_table_lst;
+      cc->htc.hash_table_list=old_hash_table_list;
       switch [i] {
 	case DOCT_CHECK_BOX:
 	  doc_e->raw_type=RT_I8;
@@ -292,10 +292,10 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 
       processed_flags=0;
       while (TRUE) {
-	cc->htc.hash_table_lst=NULL;
+	cc->htc.hash_table_list=NULL;
 	while (cc->token==',')
 	  Lex(cc);
-	cc->htc.hash_table_lst=old_hash_table_lst;
+	cc->htc.hash_table_list=old_hash_table_list;
 	j=ParseDocFlagSingle(cc,&doc_e->de_flags,&doc_e->type,TRUE);
 	if (!(de_flags=~processed_flags & doc_e->de_flags & DOCEG_HAS_ARG))
 	  break;
@@ -309,7 +309,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 	  case DOCEf_TAG:
 	    if (!doc_e->tag) {
 //If a $$MA,LM=""$$, Tag is filled when the LM is processed.
-	      //if doc_e->df_flags&DOCEF_LST,
+	      //if doc_e->df_flags&DOCEF_LIST,
 	      // Tag is filled when the Define is processed.
 	      //(The dft_flag1.tag calls this after.)
 	      if (cc->token==TK_STR) {
@@ -318,7 +318,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 		  st=MStrPrint("[X] %s",st2);
 		  Free(st2);
 		  doc_e->min_col=1;
-		} else if (doc_e->de_flags & DOCEF_LST) {
+		} else if (doc_e->de_flags & DOCEF_LIST) {
 		  if (*st2!='[') {
 		    st=MStrPrint("[%s]",st2);
 		    Free(st2);
@@ -364,7 +364,7 @@ CDocEntry *ParseDollarCmd(CDoc *doc,U8 *st)
 	      st2=LexExtStr(cc);
 	      doc_e->define_str=StrNew(st2,doc->mem_task);
 	      Free(st2);
-	      if (doc_e->de_flags&DOCEF_LST && !doc_e->tag)
+	      if (doc_e->de_flags&DOCEF_LIST && !doc_e->tag)
 		doc_e->tag=StrNew("[]",doc->mem_task);
 	    } else
 	      goto pd_err;
@@ -471,7 +471,7 @@ pd_err:
       doc_e->type=DOCT_ERROR;
       doc_e->de_flags=0;
     }
-    if (doc_e->de_flags&DOCEF_LST && (doc_e->de_flags&DOCEF_REMALLOC_DATA ||
+    if (doc_e->de_flags&DOCEF_LIST && (doc_e->de_flags&DOCEF_REMALLOC_DATA ||
 	  !(doc_e->de_flags&DOCEF_DEREF_DATA))) {
       DocDataScan(doc,doc_e);
       DocDataFmt(doc,doc_e);

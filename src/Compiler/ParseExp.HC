@@ -68,7 +68,7 @@ U0 ParseExpression2(CCompCtrl *cc,I64 *_max_prec,CPrsStk *ps)
 	unary_post_prec,left_prec=PREC_MAX;
   CIntermediateCode *tmpi;
   CHashClass *tmpc;
-  CMemberLst *local_var;
+  CMemberList *local_var;
   CArrayDim *tmpad=NULL;
 
   goto pe_unary_term1;
@@ -303,7 +303,7 @@ Bool ParseExpression(CCompCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStk *_ps=NULL
 U0 ParseSizeOf(CCompCtrl *cc)
 {
   CHashClass *tmpc;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   CDebugInfo *dbg_info;
   I64 i;
   if (cc->token!=TK_IDENT)
@@ -353,7 +353,7 @@ pu_sizeof_member:
 U0 ParseOffsetOf(CCompCtrl *cc)
 {
   CHashClass *tmpc;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   I64 i;
   if (cc->token!=TK_IDENT)
     LexExcept(cc,"Invalid class at ");
@@ -386,21 +386,21 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
 	is_template_fun;
   CHashClass *tmpc2,*last_class=NULL;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   CCodeCtrl *tmpcbh,*tmpcbh1;
   CCodeMisc *cm;
   CIntermediateCode *tmpi;
 
   if (!tmpf) {
     if (cc->token==TK_CHAR_CONST) {
-      if (!(tmpf=HashFind("PutChars",cc->htc.hash_table_lst,HTT_FUN)))
+      if (!(tmpf=HashFind("PutChars",cc->htc.hash_table_list,HTT_FUN)))
 	LexExcept(cc,"Missing header for Print() and PutChars() at ");
       if (!cc->cur_i64) //empty char signals PutChars with variable
 	Lex(cc);
       is_print=FALSE;
       is_putchars=TRUE;
     } else {
-      if (!(tmpf=HashFind("Print",cc->htc.hash_table_lst,HTT_FUN)))
+      if (!(tmpf=HashFind("Print",cc->htc.hash_table_list,HTT_FUN)))
 	LexExcept(cc,"Missing header for Print() and PutChars() at ");
       if (!*cc->cur_str) //empty string signals Print with variable fmt_str
 	Lex(cc);
@@ -428,7 +428,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   tmpcbh=cc->coc.coc_next;
   cc->coc.coc_next=NULL;
   i=tmpf->arg_count;
-  tmpm=tmpf->member_lst_and_root;
+  tmpm=tmpf->member_list_and_root;
   argc_count=0;
   if (cc->token=='(') {
     Lex(cc);
@@ -590,7 +590,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   return PE_UNARY_MODIFIERS;
 }
 
-I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
+I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberList **_local_var,
 	CArrayDim **_tmpad,I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec)
 {
   I64 i,j;
@@ -598,7 +598,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
   CHashClass *tmpc;
   CHashFun *tmpf;
   CHashGlobalVar *tmpg;
-  CMemberLst *tmpm;
+  CMemberList *tmpm;
   CAsmUndefHash *tmpauh;
   CCodeMisc *cm;
   Bool paren_warn;
@@ -627,7 +627,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 		if (Bt(&tmpf->flags,Cf_EXTERN)) {
 		  if (cc->flags&CCF_AOT_COMPILE) {
 		    if (cc->flags&CCF_ASM_EXPRESSIONS) {
-		      if (tmpex=HashFind(tmpf->str,cc->htc.hash_table_lst,
+		      if (tmpex=HashFind(tmpf->str,cc->htc.hash_table_list,
 			    HTT_EXPORT_SYS_SYM))
 			goto pu_export_sys_sym;
 		      else
@@ -815,7 +815,7 @@ pu_new_sys_sym:
 	tmpex=CAlloc(sizeof(CHashExport),Fs->code_heap);
 	tmpex->str=cc->cur_str;
 	cc->cur_str=NULL;
-	if (!cc->htc.local_var_lst &&
+	if (!cc->htc.local_var_list &&
 	      *tmpex->str=='@' && tmpex->str[1]=='@') {
 	  tmpex->type=HTT_EXPORT_SYS_SYM | HTF_UNRESOLVED | HTF_LOCAL;
 	  HashAdd(tmpex,cc->htc.local_hash_table);
@@ -957,12 +957,12 @@ pu_export_sys_sym:
   LexExcept(cc,"Missing expression at ");
 }
 
-I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
+I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberList **_local_var,
 	CArrayDim **_tmpad,I64 *unary_post_prec)
 {
   CHashClass *tmpc,*tmpc1;
   CHashFun *fun_ptr;
-  CMemberLst *tmpm=*_local_var;
+  CMemberList *tmpm=*_local_var;
   CIntermediateCode *tmpi,*tmpi1;
   CArrayDim *tmpad1,tmpad2;
   CCodeMisc *cm;

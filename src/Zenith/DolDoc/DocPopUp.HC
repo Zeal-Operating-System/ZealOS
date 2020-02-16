@@ -87,18 +87,18 @@ Bool PopUpCd()
 }
 
 #help_index "DolDoc/Input;Char/Lists;StdIn/DolDoc"
-public I64 PopUpPickLst(U8 *lst)
-{//Prompt for lst entry in PopUp win task.
+public I64 PopUpPickList(U8 *list)
+{//Prompt for list entry in PopUp win task.
   I64 res,i=0;
   CDoc *doc=DocNew;
   DocPrint(doc,"$$LTBLUE$$");
-  while (*lst) {
-    if (*lst=='@') {//Check for '@' alias lst entry
+  while (*list) {
+    if (*list=='@') {//Check for '@' alias list entry
       i--;
-      lst++;
+      list++;
     }
-    DocPrint(doc,"$$MU,\"%s\",LE=%d$$\n",lst,i++);
-    lst+=StrLen(lst)+1;
+    DocPrint(doc,"$$MU,\"%s\",LE=%d$$\n",list,i++);
+    list+=StrLen(list)+1;
   }
   DocPrint(doc,"\n$$MU,\"CANCEL\",LE=DOCM_CANCEL$$\n");
   res=PopUpMenu(doc);
@@ -108,8 +108,8 @@ public I64 PopUpPickLst(U8 *lst)
 
 #help_index "DolDoc/Input;Char/Lists;Char/Define;StdIn/DolDoc"
 public U8 *PopUpPickDefineSub(U8 *dname)
-{//Prompt for $LK,"Define",A="HI:Define"$ lst entry in PopUp win task.
-  return PopUpPickLst(Define(dname));
+{//Prompt for $LK,"Define",A="HI:Define"$ list entry in PopUp win task.
+  return PopUpPickList(Define(dname));
 }
 
 #help_index "DolDoc/Input;StdIn/DolDoc"

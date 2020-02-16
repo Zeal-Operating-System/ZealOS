@@ -16,7 +16,7 @@ class FDStruct
 U0 FormDemo()
 {
   FDStruct fds;
-  DefineLstLoad("ST_PERSON_TYPE","Child\0Teen\0Adult\0");
+  DefineListLoad("ST_PERSON_TYPE","Child\0Teen\0Adult\0");
   fds.num1=12.3e-4;	//Set defaults
   fds.num2=4.5e3;
   fds.num3=0x1234;

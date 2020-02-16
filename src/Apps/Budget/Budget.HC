@@ -34,7 +34,7 @@ class CBgtEntry
 #define BT_SEMIANNUAL	4
 #define BT_ANNUAL	5
 
-DefineLstLoad("ST_BGT_TEMPLATE_TYPES",
+DefineListLoad("ST_BGT_TEMPLATE_TYPES",
 	"Null\0Interval\0Monthly\0Bimonthly\0Semiannual\0Annual\0");
 
 class CBgtTemplate

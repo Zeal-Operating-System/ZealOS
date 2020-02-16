@@ -65,19 +65,19 @@ U0 HashDel(CHashSrcSym *tmph)
     Free(tmph->src_link);
     Free(tmph->idx);
     Free(tmph->import_name);
-    LinkedLstDel(tmph->ie_lst);
+    LinkedListDel(tmph->ie_list);
     if (tmph->type & (HTT_FUN | HTT_EXPORT_SYS_SYM))
       Free(tmph->dbg_info);
     if (tmph->type & (HTT_FUN | HTT_CLASS))
 //Assumes code not on heap, so doesn't Free.
-    //$LK,"ClassMemberLstDel",A="MN:ClassMemberLstDel"$() is an import to the Kernel module
-      ClassMemberLstDel(tmph);
+    //$LK,"ClassMemberListDel",A="MN:ClassMemberListDel"$() is an import to the Kernel module
+      ClassMemberListDel(tmph);
     else if (tmph->type&HTT_DEFINE_STR)
       Free(tmph(CHashDefineStr *)->data);
     else if (tmph->type & HTT_GLBL_VAR) {
       if (!(tmph(CHashGlobalVar *)->flags&GVF_ALIAS))
 	Free(tmph(CHashGlobalVar *)->data_addr);
-      LinkedLstDel(tmph(CHashGlobalVar *)->dim.next);
+      LinkedListDel(tmph(CHashGlobalVar *)->dim.next);
       if (tmph(CHashGlobalVar *)->fun_ptr)
 	HashDel(tmph(CHashGlobalVar *)->fun_ptr
 	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_count);
@@ -182,32 +182,32 @@ CHashGeneric *HashPublic(U8 *st,I64 mask,Bool val=TRUE)
     return NULL;
 }
 
-I64 HashLstAdd(U8 *lst,I64 type,CHashTable *table)
+I64 HashListAdd(U8 *list,I64 type,CHashTable *table)
 {//Add a list to a hash table.
   I64 i=0;
   CHashGeneric *tmph;
-  if (lst) {
-    while (*lst) {
-      if (*lst=='@')
-	lst++;
+  if (list) {
+    while (*list) {
+      if (*list=='@')
+	list++;
       else
 	i++;
       tmph=CAlloc(sizeof(CHashGeneric));
       tmph->user_data0=i-1;
-      tmph->str=StrNew(lst);
+      tmph->str=StrNew(list);
       tmph->type=type;
       HashAdd(tmph,table);
-      while (*lst++);
+      while (*list++);
     }
   }
   return i;
 }
 
-I64 HashDefineLstAdd(U8 *dname,I64 type,CHashTable *table)
-{//Add define list to a hash table. See $LK,"::/Zenith/DolDoc/DocInit.HC",A="FF:::/Zenith/DolDoc/DocInit.HC,HashDefineLstAdd"$.
+I64 HashDefineListAdd(U8 *dname,I64 type,CHashTable *table)
+{//Add define list to a hash table. See $LK,"::/Zenith/DolDoc/DocInit.HC",A="FF:::/Zenith/DolDoc/DocInit.HC,HashDefineListAdd"$.
   CHashDefineStr *tmph;
   if (tmph=HashFind(dname,Fs->hash_table,HTT_DEFINE_STR))
-    return HashLstAdd(tmph->data,type,table);
+    return HashListAdd(tmph->data,type,table);
   else
     return 0;
 }

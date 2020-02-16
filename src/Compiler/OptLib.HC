@@ -556,7 +556,7 @@ U0 CompF2PushPop(CIntermediateCode *tmpi,
 class COptMemberVar
 {
   I64 score,offset_start,offset_end,lea_balance;
-  CMemberLst *m;
+  CMemberList *m;
 };
 
 I64 OptMVCompare(COptMemberVar *mv1,COptMemberVar *mv2)

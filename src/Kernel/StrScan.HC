@@ -288,7 +288,7 @@ and take addr.
 	    if (cur_arg+1>=argc)
 	      throw('Scan');
 	    i_ptr=argv[cur_arg++];
-	    *i_ptr=LstMatch(buf,argv[cur_arg++]);
+	    *i_ptr=ListMatch(buf,argv[cur_arg++]);
 	    break;
 	  case 'Z':
 	    if (cur_arg+1>=argc)

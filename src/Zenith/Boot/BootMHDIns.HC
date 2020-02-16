@@ -66,7 +66,7 @@ public U0 BootMHDZero(U8 dst_drv)
   BlkDevUnlock(bd);
 }
 
-public Bool BootMHDIns(U8 drv_let,U8 *drv_lst=NULL)
+public Bool BootMHDIns(U8 drv_let,U8 *drv_list=NULL)
 {//Create new MBR on the disk that has drv_let as a partition.
 //Puts stage 2 in BOOT_DIR of drv_let.
   CBlkDev *bd,*bd1;
@@ -78,8 +78,8 @@ public Bool BootMHDIns(U8 drv_let,U8 *drv_lst=NULL)
   Bool res=FALSE;
 
   try {
-    if (drv_lst) {
-      StrCpy(buf,drv_lst);
+    if (drv_list) {
+      StrCpy(buf,drv_list);
       StrUtil(buf,SUF_TO_UPPER);
     } else {
       j=0;

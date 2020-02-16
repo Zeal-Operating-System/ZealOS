@@ -271,7 +271,7 @@ class CWebBookMarkForm
   I64	sec;
 };
 
-DefineLstLoad("ST_FAMLY_PHOTOS","Family1_58-78\0Family2_78-86\0"
+DefineListLoad("ST_FAMLY_PHOTOS","Family1_58-78\0Family2_78-86\0"
 	"Family3_86-99\0Family4_99\0");
 
 class CFamilyPhotoForm

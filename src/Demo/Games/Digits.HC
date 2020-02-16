@@ -1,4 +1,4 @@
-//This loads a lst of zero terminated
+//This loads a list of zero terminated
 //strings into the sym table and
 //gives a name to it.Strings like
 //this are known as Define entries.

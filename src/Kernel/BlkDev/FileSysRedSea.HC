@@ -1,8 +1,8 @@
 // See $LK,"RedSea File System",A="FI:::/Doc/RedSea.DD"$
 
-U0 RedSeaFreeFreeLst(CDrive *dv)
+U0 RedSeaFreeFreeList(CDrive *dv)
 {
-  CFreeLst *tmpf,*tmpf1;
+  CFreeList *tmpf,*tmpf1;
   Bool unlock;
   try {
     unlock=DriveLock(dv);
@@ -21,15 +21,15 @@ U0 RedSeaFreeFreeLst(CDrive *dv)
       DriveUnlock(dv);
 }
 
-U0 RedSeaFreeLstBuild(CDrive *dv)
+U0 RedSeaFreeListBuild(CDrive *dv)
 {
   Bool unlock;
-  CFreeLst *tmpf;
+  CFreeList *tmpf;
   I64 i,first=dv->data_area,max_blk=dv->size+dv->drv_offset;
   try {
     unlock=DriveLock(dv);
     if (dv->next_free)
-      RedSeaFreeFreeLst(dv);
+      RedSeaFreeFreeList(dv);
     QueueInit(&dv->next_free);
     while (first<max_blk) {
       i=0;  //count free clus
@@ -41,7 +41,7 @@ U0 RedSeaFreeLstBuild(CDrive *dv)
 	  i++;
       }
       if (i) {
-	tmpf=AMAlloc(sizeof(CFreeLst));
+	tmpf=AMAlloc(sizeof(CFreeList));
 	tmpf->size=i;
 	tmpf->start=first;
 	QueueInsert(tmpf,dv->last_free);
@@ -65,7 +65,7 @@ U0 RedSeaInit(CDrive *dv)
     if (br.signature!=MBR_PT_REDSEA || br.signature2!=0xAA55)
       throw('Drive');
     dv->fs_type=FSt_REDSEA;
-    RedSeaFreeFreeLst(dv);
+    RedSeaFreeFreeList(dv);
     dv->spc=1;
     dv->size=br.sects;
     dv->data_area=dv->drv_offset+br.bitmap_sects;
@@ -247,7 +247,7 @@ Bool RedSeaCd(U8 *name,I64 cur_dir_clus)
 
 U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count)
 {
-  CFreeLst *tmpf;
+  CFreeList *tmpf;
   Bool found=FALSE,unlock,unlock_break;
   DriveCheck(dv);
   if (!c) return;
@@ -258,7 +258,7 @@ U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count)
       unlock_break=BreakLock;
       unlock=DriveLock(dv);
       if (!dv->next_free)
-	RedSeaFreeLstBuild(dv);
+	RedSeaFreeListBuild(dv);
       tmpf=dv->next_free;
       while (!found && tmpf!=&dv->next_free) {
 	if (tmpf->start+tmpf->size==c) {
@@ -272,7 +272,7 @@ U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count)
 	tmpf=tmpf->next;
       }
       if (!found) {
-	tmpf=AMAlloc(sizeof(CFreeLst));
+	tmpf=AMAlloc(sizeof(CFreeList));
 	tmpf->size=count;
 	tmpf->start=c;
 	QueueInsert(tmpf,dv->last_free);
@@ -299,7 +299,7 @@ U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count)
 
 I64 RedSeaAllocClus(CDrive *dv,I64 count)
 {
-  CFreeLst *tmpf,*best_free=NULL;
+  CFreeList *tmpf,*best_free=NULL;
   I64 i,first,best_size=I64_MAX;
   Bool unlock,unlock_break;
   if (count<=0)
@@ -308,7 +308,7 @@ I64 RedSeaAllocClus(CDrive *dv,I64 count)
     unlock_break=BreakLock;
     unlock=DriveLock(dv);
     if (!dv->next_free)
-      RedSeaFreeLstBuild(dv);
+      RedSeaFreeListBuild(dv);
     tmpf=dv->next_free;
     while (tmpf!=&dv->next_free) {
       if (tmpf->size>=count && tmpf->size<best_size) {

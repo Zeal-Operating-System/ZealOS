@@ -10,7 +10,7 @@ CHashDefineStr *DefineLoad(U8 *dname,U8 *st)
   return tmph;
 }
 
-CHashDefineStr *DefineLstLoad(U8 *dname,U8 *lst)
+CHashDefineStr *DefineListLoad(U8 *dname,U8 *list)
 {//Create DEFINE list. Not efficient, but handy.
   I64 count=0;
   U8 *ptr,**idx;
@@ -18,18 +18,18 @@ CHashDefineStr *DefineLstLoad(U8 *dname,U8 *lst)
   tmph->type=HTT_DEFINE_STR;
   tmph->str=StrNew(dname);
   tmph->src_link=MStrPrint("AD:0x%X",Caller);
-  ptr=lst;
+  ptr=list;
   while (*ptr) {
     if (*ptr!='@')
       count++;
     while (*ptr++);
   }
-  tmph->data=MAlloc(ptr+1-lst);
-  MemCpy(tmph->data,lst,ptr+1-lst);
+  tmph->data=MAlloc(ptr+1-list);
+  MemCpy(tmph->data,list,ptr+1-list);
   tmph->count=count;
 
   idx=tmph->sub_idx=MAlloc(count*sizeof(U8 *));
-  ptr=lst;
+  ptr=list;
   while (*ptr) {
     if (*ptr!='@')
       *idx++=ptr;
@@ -82,9 +82,9 @@ I64 DefineCount(U8 *dname)
     return -1;
 }
 
-I64 DefineMatch(U8 *needle,U8 *haystack_lst_dname,I64 flags=0)
+I64 DefineMatch(U8 *needle,U8 *haystack_list_dname,I64 flags=0)
 {//Find match for string in define list.
-  return LstMatch(needle,Define(haystack_lst_dname),flags);
+  return ListMatch(needle,Define(haystack_list_dname),flags);
 }
 
 U0 DefinePrint(U8 *dname,U8 *src,...)
@@ -96,26 +96,26 @@ U0 DefinePrint(U8 *dname,U8 *src,...)
 
 U0 SysDefinesLoad()
 {
-  DefineLstLoad("ST_OFF_ON","Off\0On\0");
-  DefineLstLoad("ST_HTT_TYPES","ExportSysSym\0ImportSysSym\0DefineStr\0GlbVar\0"
+  DefineListLoad("ST_OFF_ON","Off\0On\0");
+  DefineListLoad("ST_HTT_TYPES","ExportSysSym\0ImportSysSym\0DefineStr\0GlbVar\0"
 	"Class\0IntType\0Funct\0Word\0DictWord\0KeyWord\0AsmKeyWord\0OpCode\0"
 	"Reg\0File\0Module\0HelpFile\0FramePtr\0\0\0\0\0\0\0Private\0"
 	"Public\0Export\0Import\0Imm\0Goto\0Res\0Unres\0Local\0");
-  DefineLstLoad("ST_DAYS_OF_WEEK","Sunday\0Monday\0Tuesday\0Wednesday\0"
+  DefineListLoad("ST_DAYS_OF_WEEK","Sunday\0Monday\0Tuesday\0Wednesday\0"
 	"Thursday\0Friday\0Saturday\0");
-  DefineLstLoad("ST_MONTHS","January\0February\0March\0April\0May\0"
+  DefineListLoad("ST_MONTHS","January\0February\0March\0April\0May\0"
 	"June\0July\0August\0September\0October\0November\0December\0");
-  DefineLstLoad("ST_FILE_ATTRS","R\0H\0S\0V\0D\0A\0\0\0X\0T\0Z\0C\0F\0");
-  DefineLstLoad("ST_FILE_UTIL_FLAGS","r\0d\0i\0a\0c\0R\0p\0m\0x\0s\0"
+  DefineListLoad("ST_FILE_ATTRS","R\0H\0S\0V\0D\0A\0\0\0X\0T\0Z\0C\0F\0");
+  DefineListLoad("ST_FILE_UTIL_FLAGS","r\0d\0i\0a\0c\0R\0p\0m\0x\0s\0"
 	"D\0F\0T\0$$\0S\0A\0J\0G\0Z\0O\0P\0f\0l\0lb\0la\0");
-  DefineLstLoad("ST_BLKDEV_TYPES",
+  DefineListLoad("ST_BLKDEV_TYPES",
 	"NULL\0RAM\0ATA\0FILE_READ\0FILE_WRITE\0ATAPI\0");
-  DefineLstLoad("ST_DRV_TYPES",
+  DefineListLoad("ST_DRV_TYPES",
 	"NULL\0REDSEA\0FAT32\0ISO9660\0NTFS\0UNKNOWN\0");
-  DefineLstLoad("ST_COLORS","BLACK\0BLUE\0GREEN\0CYAN\0"
+  DefineListLoad("ST_COLORS","BLACK\0BLUE\0GREEN\0CYAN\0"
 	"RED\0PURPLE\0BROWN\0LTGRAY\0DKGRAY\0LTBLUE\0LTGREEN\0"
 	"LTCYAN\0LTRED\0LTPURPLE\0YELLOW\0WHITE\0");
-  DefineLstLoad("ST_INT_NAMES","Divide Error\0SingleStep\0NMI\0Breakpoint\0"
+  DefineListLoad("ST_INT_NAMES","Divide Error\0SingleStep\0NMI\0Breakpoint\0"
 	"Overflow\0BOUND Range Exceeded\0Invalid Opcode\0No Math Coprocessor\0"
 	"Double Fault\0Coprocessor Segment Fault\0Invalid TASK\0"
 	"Segment Not Present\0Stk Segment Fault\0General Protection\0"
@@ -153,7 +153,7 @@ U8 *Color2Str(U8 *buf,CColorROPU32 c)
   return buf;
 }
 
-U8 *str2color_lst="/,)}>";
+U8 *str2color_list="/,)}>";
 
 CColorROPU16 Str2ColorU16(U8 *st)
 {//$LK,"DCLighting",A="MN:DCLighting"$ color str with flags to $LK,"CColorROPU16",A="MN:CColorROPU16"$.
@@ -162,7 +162,7 @@ CColorROPU16 Str2ColorU16(U8 *st)
   U8 *ptr,*ptr2,*st2;
   if (!st) return COLOR_INVALID;
   while (TRUE) {
-    if (!*st||StrOcc(str2color_lst,*st))
+    if (!*st||StrOcc(str2color_list,*st))
       return res;
     if (Bt(char_bmp_alpha,*st)) {
       ptr=st;
@@ -205,7 +205,7 @@ CColorROPU32 Str2ColorU32(U8 *st)
   CColorROPU32 res=0;
   if (!st) return COLOR_INVALID;
   st2=MAlloc(StrLen(st)+1);
-  StrFirstRemove(st,str2color_lst,st2);
+  StrFirstRemove(st,str2color_list,st2);
   res.c0=Str2ColorU16(st2);
   if (*st) {
     res.c1=Str2ColorU16(st);

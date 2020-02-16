@@ -492,7 +492,7 @@ I64 PopUpWidgetType()
 	"$$MU,\"Macro\",LE=DOCT_MACRO$$\n"
 	"$$MU,\"Bttn\",LE=DOCT_BTTN$$\n"
 	"$$MU,\"Check Box\",LE=DOCT_CHECK_BOX$$\n"
-	"$$MU,\"List\",LE=DOCT_LST$$\n"
+	"$$MU,\"List\",LE=DOCT_LIST$$\n"
 	"$$MU,\"Menu Val\",LE=DOCT_MENU_VAL$$\n"
 	"$$MU,\"Data\",LE=DOCT_DATA$$\n"
 	"$$MU,\"Hex Edit\",LE=DOCT_HEX_ED$$\n"
@@ -859,7 +859,7 @@ U0 EdInsCheckBox()
   Free(e);
 }
 
-class CEdLst
+class CEdList
 {
   U8	tag[512]	format "$$DA-P,A=\"Dft Sel:%s\"$$\n",
 	define_str[512]	format "$$DA-P,A=\"Define Str:%s\"$$\n";
@@ -867,10 +867,10 @@ class CEdLst
   I64	type		format "$$LS,D=\"ST_INT_SIZE_TYPES\"$$\n";
 };
 
-U0 EdInsLst()
+U0 EdInsList()
 {
   U8 *st1,*st2,buf[512],raw_type[16];
-  CEdLst *e=CAlloc(sizeof(CEdLst));
+  CEdList *e=CAlloc(sizeof(CEdList));
   e->type=RT_I64-RT_I8;
   if (DocForm(e,,,,ctrl_L_footer)) {
     *buf=0;
@@ -1019,8 +1019,8 @@ U0 EdInsWidgetWiz()
     case DOCT_CHECK_BOX:
       EdInsCheckBox;
       break;
-    case DOCT_LST:
-      EdInsLst;
+    case DOCT_LIST:
+      EdInsList;
       break;
     case DOCT_HEX_ED:
       EdInsHexEd;

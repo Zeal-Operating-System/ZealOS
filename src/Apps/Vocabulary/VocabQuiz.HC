@@ -5,7 +5,7 @@ U8 *RandVocabWord()
   if (!acd.num_words)
     return NULL;
   i=RandU32%acd.num_words;
-  ptr=acd.word_lst;
+  ptr=acd.word_list;
   while (i-- && *ptr==ACD_WORD_CHAR)
     ptr+=StrLen(ptr)+3;
   if (*ptr++!=ACD_WORD_CHAR)

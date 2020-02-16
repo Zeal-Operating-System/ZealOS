@@ -69,8 +69,8 @@ _MALLOC::
 	ADD	RSI,sizeof(CMemBlk)
 	JMP	I32 MALLOC_ALMOST_DONE
 
-//Little allocation, chunk-off piece from free lst chunks
-@@35:	LEA	RSI,U64 CHeapCtrl.malloc_free_lst-CMemUnused.next[RDX]
+//Little allocation, chunk-off piece from free list chunks
+@@35:	LEA	RSI,U64 CHeapCtrl.malloc_free_list-CMemUnused.next[RDX]
 
 @@40:	MOV	RBX,RSI
 	MOV	RSI,U64 CMemUnused.next[RBX]
@@ -121,7 +121,7 @@ _MALLOC::
 @@55:	MOV	U64 CHeapCtrl.last_mergable[RDX],RSI
 	LEA	RSI,U64 sizeof(CMemBlk)[RSI]
 	SUB	RAX,sizeof(CMemBlk)
-	LEA	RBX,U64 CHeapCtrl.malloc_free_lst-CMemUnused.next[RDX]
+	LEA	RBX,U64 CHeapCtrl.malloc_free_list-CMemUnused.next[RDX]
 	MOV	RDI,U64 CMemUnused.next[RBX]
 	MOV	U64 CMemUnused.next[RSI],RDI
 	MOV	U64 CMemUnused.size[RSI],RAX

@@ -347,8 +347,8 @@ CBpt *BptFind(U8 *needle_addr,CTask *haystack_task=NULL,Bool rem=FALSE)
   if (!haystack_task) haystack_task=Fs;
   PUSHFD
   CLI
-  tmpb1=&haystack_task->bpt_lst;
-  tmpb=haystack_task->bpt_lst;
+  tmpb1=&haystack_task->bpt_list;
+  tmpb=haystack_task->bpt_list;
   while (tmpb) {
     tmpb2=tmpb->next;
     if (tmpb->addr==needle_addr) {
@@ -377,8 +377,8 @@ Bool BptS(U8 *addr,CTask *task=NULL,Bool live=TRUE)
     tmpb->addr=addr;
     tmpb->val=*addr;
     res=FALSE;
-    tmpb->next=task->bpt_lst;
-    task->bpt_lst=tmpb;
+    tmpb->next=task->bpt_list;
+    task->bpt_list=tmpb;
     if (task==Fs && live)
       *addr=OC_BPT;
   }
@@ -427,8 +427,8 @@ I64 B2(CTask *task=NULL,Bool live=TRUE)
   if (!task) task=Fs;
   PUSHFD
   CLI
-  tmpb=task->bpt_lst;
-  task->bpt_lst=NULL;
+  tmpb=task->bpt_list;
+  task->bpt_list=NULL;
   while (tmpb) {
     tmpb1=tmpb->next;
     if (task==Fs && live)

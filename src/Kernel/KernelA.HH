@@ -732,7 +732,7 @@ public class CHashSrcSym:CHash
 	*idx;
   CDebugInfo *dbg_info;
   U8	*import_name;
-  CAOTImportExport *ie_lst;
+  CAOTImportExport *ie_list;
 };
 
 public class CHashGeneric:CHash
@@ -775,7 +775,7 @@ public class CHashImport:CHashSrcSym
 #help_index "Compiler/Internal"
 #define PTR_STARS_NUM	4
 
-//Member Lst Flags
+//Member List Flags
 #define MLF_DFT_AVAILABLE	1
 #define MLF_LASTCLASS		2
 #define MLF_STR_DFT_AVAILABLE	4
@@ -791,21 +791,21 @@ public class CArrayDim
 };
 
 #define MLMF_IS_STR	1
-public class CMemberLstMeta
+public class CMemberListMeta
 {
-  CMemberLstMeta *next;
+  CMemberListMeta *next;
   U8	*str;
   I64	flags,
 	user_data;
 };
 
-public class CMemberLst
+public class CMemberList
 {
-  CMemberLst *next,*left,*right,
+  CMemberList *next,*left,*right,
 	*left_class_base,*right_class_base; //For finding dup class local vars.
   U8	*str;
   CHashClass *member_class,*member_class_base;
-  CMemberLstMeta *meta;
+  CMemberListMeta *meta;
   U32	use_count;
   U16	flags;
   I8	reg,pad;
@@ -841,9 +841,9 @@ public class CHashClass:CHashSrcSym
   U32	member_count;
   U8	ptr_stars_count,raw_type;
   U16	flags;
-  CMemberLst *member_lst_and_root, //Head of linked list and head of tree.
+  CMemberList *member_list_and_root, //Head of linked list and head of tree.
 	*member_class_base_root, //For finding dup class local vars.
-	*last_in_member_lst;
+	*last_in_member_list;
   CHashClass	*base_class,
 	*fwd_class;
 };
@@ -864,7 +864,7 @@ public class CHashFun:CHashClass
   U32	arg_count,pad,
 	used_reg_mask,clobbered_reg_mask;
   U8	*exe_addr;
-  CExternUsage *ext_lst;
+  CExternUsage *ext_list;
 };
 
 //Global Var Flags
@@ -934,7 +934,7 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCT_BTTN		29
 #define DOCT_DATA		30
 #define DOCT_CHECK_BOX		31
-#define DOCT_LST		32
+#define DOCT_LIST		32
 #define DOCT_MACRO		33
 #define DOCT_MENU_VAL		34
 #define DOCT_HEX_ED		35
@@ -1019,7 +1019,7 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCEF_ZERO_BASED	0x4000000000000
 #define DOCEF_HOLD		0x8000000000000
 #define DOCEF_TREE		0x10000000000000
-#define DOCEF_LST		0x20000000000000
+#define DOCEF_LIST		0x20000000000000
 #define DOCEF_SKIP		0x40000000000000
 #define DOCEF_POPUP		0x80000000000000
 #define DOCEF_SKIP_IN_FORM	0x100000000000000
@@ -1105,7 +1105,7 @@ public class CHashGlobalVar:CHashSrcSym
 #define DOCEf_ZERO_BASED	50
 #define DOCEf_HOLD		51
 #define DOCEf_TREE		52
-#define DOCEf_LST		53
+#define DOCEf_LIST		53
 #define DOCEf_SKIP		54
 #define DOCEf_POPUP		55
 #define DOCEf_SKIP_IN_FORM	56
@@ -1398,7 +1398,7 @@ public class CDoc //Linked Text File header
   Bool	(*user_put_s)(CDoc *doc,U8 *data,U8 *st);
 
   CDoc	*parent_doc; //(When browsing deeper, opening deeper docs.)
-  U64	desc; //8 characters. See $LK,"DocBorderLstDraw",A="MN:DocBorderLstDraw"$().
+  U64	desc; //8 characters. See $LK,"DocBorderListDraw",A="MN:DocBorderListDraw"$().
 
   CDocBin bin_head;
   CDocSettings settings_head;
@@ -1532,8 +1532,8 @@ public class CAutoCompleteGlobals
 #define ACD_FILLINS_NUM 10
 public class CAutoCompleteDictGlobals
 {
-  U8	*word_lst;
-  I64	word_lst_size,num_words,num_fillins;
+  U8	*word_list;
+  I64	word_list_size,num_words,num_fillins;
   U8	*fillins[ACD_FILLINS_NUM];
   Bool	has_words,has_defs;
 };
@@ -2068,11 +2068,11 @@ class CAOTCtrl
   CAsmUnresolvedRef *local_unresolved,*glbl_unresolved;
   CAOTAbsAddr *abss;
   CAOTHeapGlobal *heap_glbls;
-  I64	lst_col,lst_last_rip;
-  U8	*last_label,*lst_last_line;
-  CLexFile *lst_last_lfn;
+  I64	list_col,list_last_rip;
+  U8	*last_label,*list_last_line;
+  CLexFile *list_last_lfn;
   I64	seg_size;
-  Bool	lst;
+  Bool	list;
 };
 
 //Tokens
@@ -2125,9 +2125,9 @@ class CLexHashTableContext
 {
   CLexHashTableContext *next;
   I64	old_flags,hash_mask;
-  CHashFun *local_var_lst,
+  CHashFun *local_var_list,
 	*fun;
-  CHashTable *hash_table_lst,
+  CHashTable *hash_table_list,
 	*define_hash_table,
 	*local_hash_table,
 	*glbl_hash_table;
@@ -2197,7 +2197,7 @@ public class CCompCtrl
   CHashGeneric *hash_entry;
   CAbsCountsI64 abs_counts;
   CAsmUndefHash *asm_undef_hash;
-  CMemberLst *local_var_entry;
+  CMemberList *local_var_entry;
   CCodeMisc *lb_leave;
   U8	*cur_buf_ptr;
   CLexFile *lex_include_stk,
@@ -2397,7 +2397,7 @@ class CFAT32DirEntry
 	CrtTimeTenth;
   U16	CrtTime,
 	CrtDate,
-	LstAccDate,
+	ListAccDate,
 	clus_hi,
 	WrtTime,
 	WrtDate,
@@ -2676,9 +2676,9 @@ public class CBlkDev
 #define MBR_PT_NTFS	0x07
 #define MBR_PT_REDSEA	0x88
 
-class CFreeLst
+class CFreeList
 {
-  CFreeLst *next,*last;
+  CFreeList *next,*last;
   I64	start,size;
 };
 
@@ -2709,7 +2709,7 @@ public class CDrive
   I64	fat_blk_dirty,
 	cur_fat_blk_num;
   U32	*cur_fat_blk;
-  CFreeLst *next_free,*last_free;
+  CFreeList *next_free,*last_free;
 };
 
 #define DSK_CACHE_HASH_SIZE	0x2000
@@ -2849,8 +2849,8 @@ class CMemRange
 public class CBlkPool
 {
   I64	locked_flags,alloced_u8s,used_u8s;
-  CMemBlk *mem_free_lst,
-	*mem_free_2meg_lst, //This is for Sup1CodeScraps/Mem/Mem2Meg.HC.
+  CMemBlk *mem_free_list,
+	*mem_free_2meg_list, //This is for Sup1CodeScraps/Mem/Mem2Meg.HC.
 	*free_pag_hash[MEM_FREE_PAG_HASH_SIZE],
 	*free_pag_hash2[64-MEM_PAG_BITS];
 };
@@ -2868,7 +2868,7 @@ public class CHeapCtrl
   CTask *mem_task;
   CMemBlk *next_mem_blk,*last_mem_blk;
   CMemBlk *last_mergable;
-  CMemUnused *malloc_free_lst;
+  CMemUnused *malloc_free_list;
   CMemUsed *next_um,*last_um;
   CMemUnused *heap_hash[MEM_HEAP_HASH_SIZE/sizeof(U8 *)];
 };
@@ -3327,7 +3327,7 @@ public class CTask //The Fs segment reg points to current CTask.
   U8	answer_type,pad[5];
   I64	answer;
   F64	answer_time;
-  CBpt	*bpt_lst;
+  CBpt	*bpt_list;
   CCtrl	*next_ctrl,*last_ctrl;
   CMenu	*cur_menu;
   CTaskSettings *next_settings;
@@ -3745,7 +3745,7 @@ public class CArcCompress
 #define SFF_WHOLE_LABELS_AFTER	4
 #define SFG_WHOLE_LABELS	(SFF_WHOLE_LABELS_BEFORE|SFF_WHOLE_LABELS_AFTER)
 
-//Flags for LstMatch
+//Flags for ListMatch
 #define LMF_IGNORE_CASE		1
 #define LMF_EXACT		2
 

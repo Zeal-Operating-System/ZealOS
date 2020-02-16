@@ -182,11 +182,11 @@ SYS_INIT_16MEG_SYS_CODE_BP::
 
 @@05:	SHR	EAX,MEM_PAG_BITS
 	MOV	ESI,SYS_FIXED_AREA+CSysFixedArea.sys_code_bp
-	MOV	EBX,U32 CBlkPool.mem_free_lst[ESI]
+	MOV	EBX,U32 CBlkPool.mem_free_list[ESI]
 	MOV	U32 CMemBlk.next[EDI],EBX
 	MOV	U32 CMemBlk.next+4[EDI],0
-	MOV	U32 CBlkPool.mem_free_lst[ESI],EDI
-	MOV	U32 CBlkPool.mem_free_lst+4[ESI],0
+	MOV	U32 CBlkPool.mem_free_list[ESI],EDI
+	MOV	U32 CBlkPool.mem_free_list+4[ESI],0
 	MOV	U32 CMemBlk.mb_signature[EDI],MBS_UNUSED_SIGNATURE_VAL
 	MOV	U32 CMemBlk.pags[EDI],EAX
 	SHL	EAX,MEM_PAG_BITS

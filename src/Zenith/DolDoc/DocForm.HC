@@ -62,7 +62,7 @@ U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
   U8 *ptr,*ptr2;
   CHashDefineStr *tmph;
   if (doc_e->type_u8==DOCT_DATA && doc_e->de_flags&DOCEF_AUX_STR ||
-	doc_e->type_u8==DOCT_CHECK_BOX || doc_e->de_flags & DOCEF_LST) {
+	doc_e->type_u8==DOCT_CHECK_BOX || doc_e->de_flags & DOCEF_LIST) {
     if (d==DOCM_CANCEL) {
       if (doc_e->de_flags&DOCEF_DEREF_DATA &&
 	    !(doc_e->de_flags&DOCEF_REMALLOC_DATA)) {
@@ -108,7 +108,7 @@ U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
 	doc_e->tag[i]=0;
       }
       doc_e->max_col=i;
-    } else if (doc_e->de_flags & DOCEF_LST) {
+    } else if (doc_e->de_flags & DOCEF_LIST) {
       if (doc_e->de_flags & DOCEF_DEFINE && (tmph=HashFind(doc_e->define_str,
 	    doc->win_task->hash_table,HTT_DEFINE_STR)) && 0<=d<tmph->count) {
 	ptr=MStrPrint("[%s]",tmph->sub_idx[d]);
@@ -134,7 +134,7 @@ U0 DocDataScan(CDoc *doc,CDocEntry *doc_e)
   U8 *ptr,*ptr1,*ptr2;
   CHashDefineStr *tmph;
   if (doc_e->type_u8==DOCT_DATA && doc_e->de_flags&DOCEF_AUX_STR ||
-	doc_e->type_u8==DOCT_CHECK_BOX || doc_e->de_flags & DOCEF_LST) {
+	doc_e->type_u8==DOCT_CHECK_BOX || doc_e->de_flags & DOCEF_LIST) {
     if (doc_e->de_flags&DOCEF_DEREF_DATA &&
 	  !(doc_e->de_flags&DOCEF_REMALLOC_DATA)) {
       if (!(ptr=doc_e->data)) return;
@@ -163,7 +163,7 @@ U0 DocDataScan(CDoc *doc,CDocEntry *doc_e)
 	  doc_e->tag[i]='_';
 	return;
       }
-    } else if (doc_e->de_flags & DOCEF_LST) {
+    } else if (doc_e->de_flags & DOCEF_LIST) {
       d=0;
       if (doc_e->tag && doc_e->de_flags & DOCEF_DEFINE &&
 	    (tmph=HashFind(doc_e->define_str,
@@ -175,7 +175,7 @@ U0 DocDataScan(CDoc *doc,CDocEntry *doc_e)
 	  if (ptr2[i-1]==']')
 	    ptr2[i-1]=0;
 	}
-	d=LstMatch(ptr2,tmph->data);
+	d=ListMatch(ptr2,tmph->data);
 	Free(ptr1);
       }
     } else {
@@ -210,7 +210,7 @@ public Bool DocForm(U8 *_d,U8 *class_name=lastclass,
     I64 dof_flags=0,U8 *header=NULL,U8 *footer=NULL)
 {//User input. Supply a class name that has format definitions.
 //See $LK,"::/Demo/DolDoc/Form.HC"$ and $LK,"::/Demo/LastClass.HC"$.
-  CMemberLst *ml;
+  CMemberList *ml;
   CDocEntry *doc_e;
   U8 *format;
   CHashClass *tmpc,*tmpc2;
@@ -225,12 +225,12 @@ public Bool DocForm(U8 *_d,U8 *class_name=lastclass,
   doc->flags|=DOCF_OVERSTRIKE|DOCF_FORM;
   if (dof_flags&DOF_SIZE_MIN)
     doc->flags|=DOCF_SIZE_MIN;
-  ml=tmpc->member_lst_and_root;
+  ml=tmpc->member_list_and_root;
   while (ml) {
     if ((format=MemberMetaData("format",ml)) &&
 	  (doc_e=DocPrint(doc,"%s",format))) {
       tmpc2=ml->member_class;
-      if ((doc_e->type_u8==DOCT_DATA || doc_e->type_u8==DOCT_LST ||
+      if ((doc_e->type_u8==DOCT_DATA || doc_e->type_u8==DOCT_LIST ||
 	    doc_e->type_u8==DOCT_CHECK_BOX) && !tmpc2->ptr_stars_count) {
 	tmpc2=OptClassFwd(tmpc2);
 	tmpc2-=tmpc2->ptr_stars_count;

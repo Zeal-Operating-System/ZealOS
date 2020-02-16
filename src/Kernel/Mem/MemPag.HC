@@ -42,7 +42,7 @@ Return: NULL if out of memory.
       goto at_done;
     }
   }
-  m=&bp->mem_free_lst;
+  m=&bp->mem_free_list;
   while (TRUE) {
     if (!(res=m->next)) {
 //We're probably out of luck, but lets search for a
@@ -124,13 +124,13 @@ Return: NULL if out of memory.
     res->mb_signature=MBS_USED_SIGNATURE_VAL;
     hc->alloced_u8s+=res->pags<<MEM_PAG_BITS;
 
-    //Tidy-up free lst (Move into heap hash)
-    //because if free lst gets long, delay causes crash.
+    //Tidy-up free list (Move into heap hash)
+    //because if free list gets long, delay causes crash.
     threshold=MEM_HEAP_HASH_SIZE>>4;
 #assert MEM_HEAP_HASH_SIZE>>4>=sizeof(U8 *)
     do {
       count=0;
-      _uum=&hc->malloc_free_lst;
+      _uum=&hc->malloc_free_list;
       while (uum=*_uum) {
 #assert !offset(CMemUnused.next)
 	size=uum->size;

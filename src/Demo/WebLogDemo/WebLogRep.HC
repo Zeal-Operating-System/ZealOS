@@ -38,7 +38,7 @@ U0 ParseSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
   CDoc *doc=DocRead(name,
 	DOCF_PLAIN_TEXT_TABS|DOCF_DBL_DOLLARS|DOCF_NO_CURSOR);
   CDocEntry *doc_e=doc->head.next;
-  U8 *src,*src2,*mon_lst=Define("ST_MONTHS");
+  U8 *src,*src2,*mon_list=Define("ST_MONTHS");
   LogStruct *tmplg;
   CDateStruct ds;
   I64 i;
@@ -65,7 +65,7 @@ U0 ParseSingleLogFile(LogStruct *head,U8 *name,CDate *_dstart,CDate *_dend)
 	do if (!*src2) throw;
 	while (*src2++!='/');
 	* --src2=0;
-	ds.mon=1+LstMatch(src,mon_lst,LMF_IGNORE_CASE);
+	ds.mon=1+ListMatch(src,mon_list,LMF_IGNORE_CASE);
 	src=++src2;
 	ds.year=Str2I64(src,10,&src);
 	if (*src++!=':') throw;
@@ -141,7 +141,7 @@ LogStruct *ParseLogFiles(U8 *files_find_mask,CDate *_dstart,CDate *_dend)
   return head;
 }
 
-U0 LogLstDel(LogStruct *head)
+U0 LogListDel(LogStruct *head)
 {
   LogStruct *tmplg=head->next,*tmplg1;
   while (tmplg!=head) {
@@ -178,7 +178,7 @@ U0 BlockIPNuip(LogStruct *head)
 
   BlockedStructAdd(&blocked_head,68<<24+227<<16+61<<8+6);
 
-  //pass 1: collect robot lst
+  //pass 1: collect robot list
   while (tmplg!=head) {
     if (StrIMatch("ROBOT",tmplg->file) &&
 	  !IsBlocked(&blocked_head,tmplg->ip_num))
@@ -519,7 +519,7 @@ U0 WebLogRep(U8 *mask,U8 *output_filename)
 
     "$$WW,1$$";
   }
-  LogLstDel(head);
+  LogListDel(head);
 }
 
 #if __CMD_LINE__

@@ -199,8 +199,8 @@ U8 *MPrintq(U8 *ptr,I64 flags)
 
 U8 *sys_pos_pows_lets="KMGTPEZY",
    *sys_neg_pows_lets="mænpfazy",
-   *sys_pos_pows_lst="kilo\0mega\0giga\0tera\0peta\0exa\0zetta\0yotta\0",
-   *sys_neg_pows_lst="milli\0micro\0nano\0pico\0femto\0atto\0zepto\0yocto\0";
+   *sys_pos_pows_list="kilo\0mega\0giga\0tera\0peta\0exa\0zetta\0yotta\0",
+   *sys_neg_pows_list="milli\0micro\0nano\0pico\0femto\0atto\0zepto\0yocto\0";
 
 #define TMP_BUF_LEN	256
 #define SLOP		8
@@ -373,7 +373,7 @@ to avoid this.
 	  case 'z':
 	    if (cur_arg+1>=argc)
 	      throw('StrPrint');
-	    ptr=LstSub(argv[cur_arg],argv[cur_arg+1]);
+	    ptr=ListSub(argv[cur_arg],argv[cur_arg+1]);
 	    cur_arg=cur_arg+2;
 	    break;
 	  case 'Z':

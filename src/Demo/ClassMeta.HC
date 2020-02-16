@@ -35,8 +35,8 @@ U0 DumpStruct(U8 *_d,U8 *class_name=lastclass)
   U0 (* fp_output_fun)(I64 i);
   F64 percentile;
   if (!tmpc) return;
-  CMemberLst *ml;
-  ml=tmpc->member_lst_and_root;
+  CMemberList *ml;
+  ml=tmpc->member_list_and_root;
   while (ml) {
     "%s:",ml->str;
 
@@ -53,7 +53,7 @@ U0 DumpStruct(U8 *_d,U8 *class_name=lastclass)
 
       //This corrects for the ambiguity, allowing zero percentile.
     if (MemberMetaFind("percentile",ml)) {//check if it exists
-//We could use the $LK,"CMemberLstMeta",A="MN:CMemberLstMeta"$ structure returned by
+//We could use the $LK,"CMemberListMeta",A="MN:CMemberListMeta"$ structure returned by
       //$LK,"MemberMetaFind",A="MN:MemberMetaFind"$() and save a search.
       percentile=MemberMetaData("percentile",ml)(F64);
       " percentile: %5.2f",percentile;

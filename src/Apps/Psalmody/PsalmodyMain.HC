@@ -750,7 +750,7 @@ mo_got_message:
 	  else
 	    st="R";
 	} else
-	  st=LstSub(Ona2Note(ona),psm_note_lst);
+	  st=ListSub(Ona2Note(ona),psm_note_list);
 	Snd(ona);
 	if (psm.record_entry->checked) {
 	  if (!was_null) {

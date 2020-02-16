@@ -40,7 +40,7 @@ CDoc *KCfgAddDev(CKCfg *c)
   if ('A'<=ch<='Z')
     c->boot_drv_let=ch;
   else
-    c->boot_drv_let=Drive2Letter(Fs->cur_dv);
+    c->boot_drv_let=Drive2Letter(Fs->cur_dv);
   "\n\n$$BK,1$$$$PURPLE$$Mount drives so they will be present when "
 	"you boot.$$FG$$$$BK,0$$\n";
   Mount2(c->boot_drv_let,doc,FALSE);
@@ -61,7 +61,7 @@ U0 KCfgOptions(CKCfg *c)
 	"$$PURPLE$$%13tz$$FG$$:%Z\n",i,kernel_cfg_options,c->opts[i],"ST_OFF_ON";
     "\nType '$$PURPLE$$Help$$FG$$' for help.\n";
     st=GetStr("Option ($$PURPLE$$<ENTER>$$FG$$ when done):","");
-    i=LstMatch(st,kernel_cfg_options,LMF_IGNORE_CASE);
+    i=ListMatch(st,kernel_cfg_options,LMF_IGNORE_CASE);
     if (i==CFG_HELP)
       "\n"
 	    "$$PURPLE$$MemInit$$FG$$ Initializes memory above 0x100000 "

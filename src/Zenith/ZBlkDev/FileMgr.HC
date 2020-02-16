@@ -22,22 +22,22 @@ U0 DirFileDoc(CDoc *doc,CDirEntry *tmpde)
 #define FM_PICK_FILE	1
 #define FM_PICK_DIR	2
 
-class CFMUncollapsedLst
+class CFMUncollapsedList
 {
-  CFMUncollapsedLst *next;
+  CFMUncollapsedList *next;
   U8 *name;
 };
 
-CFMUncollapsedLst *FMCollectUncollapsedLst(CDoc *doc)
+CFMUncollapsedList *FMCollectUncollapsedList(CDoc *doc)
 {
   CDocEntry *doc_e=doc->head.next;
-  CFMUncollapsedLst *res=NULL,*tmpc;
+  CFMUncollapsedList *res=NULL,*tmpc;
   CDirEntry *tmpde;
   while (doc_e!=doc) {
     if (doc_e->type_u8==DOCT_TREE) {
       if (!(doc_e->de_flags&DOCEF_CHECKED_COLLAPSED)) {
 	if (tmpde=doc_e->user_data) {
-	  tmpc=MAlloc(sizeof(CFMUncollapsedLst));
+	  tmpc=MAlloc(sizeof(CFMUncollapsedList));
 	  tmpc->next=res;
 	  res=tmpc;
 	  tmpc->name=StrNew(tmpde->full_name);
@@ -49,11 +49,11 @@ CFMUncollapsedLst *FMCollectUncollapsedLst(CDoc *doc)
   return res;
 }
 
-U0 FMMarkUncollapsed(CDoc *doc,CFMUncollapsedLst *tmpc,
+U0 FMMarkUncollapsed(CDoc *doc,CFMUncollapsedList *tmpc,
 	U8 *cur_entry,U8 *next_entry)
 {
   CDocEntry *doc_e=doc->head.next;
-  CFMUncollapsedLst *tmpc1;
+  CFMUncollapsedList *tmpc1;
   CDirEntry *tmpde;
   while (doc_e!=doc) {
     if (doc_e->type_u8==DOCT_TREE) {
@@ -101,9 +101,9 @@ U0 FMMarkUncollapsed(CDoc *doc,CFMUncollapsedLst *tmpc,
   }
 }
 
-U0 FMDelUncollapsedLst(CFMUncollapsedLst *tmpc)
+U0 FMDelUncollapsedList(CFMUncollapsedList *tmpc)
 {
-  CFMUncollapsedLst *tmpc1;
+  CFMUncollapsedList *tmpc1;
   while (tmpc) {
     tmpc1=tmpc->next;
     Free(tmpc->name);
@@ -149,7 +149,7 @@ U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
   CDrive *dv;
   I64 i;
   CDoc *doc=*_doc,*doc2=sys_clip_doc,*parent_doc;
-  CFMUncollapsedLst *tmpc=NULL;
+  CFMUncollapsedList *tmpc=NULL;
   U8 *cur_entry=NULL,*next_entry=NULL;
   CDocEntry *doc_ce;
   CDirEntry *tmpde,*tmpde1,*cur_tree_entry;
@@ -192,7 +192,7 @@ U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
     if (tmpde)
       next_entry=StrNew(tmpde->full_name);
 
-    tmpc=FMCollectUncollapsedLst(doc);
+    tmpc=FMCollectUncollapsedList(doc);
     DocDel(doc);
   }
   if (*_head) {
@@ -234,7 +234,7 @@ U0 FMRebuildDoc(CDoc **_doc,CDirEntry **_head,I64 mode)
   FMMarkUncollapsed(doc,tmpc,cur_entry,next_entry);
   DocCenter(doc);
   DocRst(doc2,TRUE);
-  FMDelUncollapsedLst(tmpc);
+  FMDelUncollapsedList(tmpc);
   Free(cur_entry);
   Free(next_entry);
   *_doc=doc;

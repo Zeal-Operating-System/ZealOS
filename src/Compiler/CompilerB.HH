@@ -24,7 +24,7 @@ public extern Bool Trace(Bool val=ON);
 
 #help_index "Compiler/Lex"
 #help_file "::/Doc/Lex"
-extern U0 ClassMemberLstDel(CHashClass *c);
+extern U0 ClassMemberListDel(CHashClass *c);
 public extern U0 CompCtrlDel(CCompCtrl *cc);
 public extern CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL);
 public extern I64 CompCtrlSize(CCompCtrl *cc);
@@ -53,12 +53,12 @@ public extern U0 LexSkipEol(CCompCtrl *cc);
 public extern U8 *LexStatement2Bin(
 	CCompCtrl *cc,I64 *_type,I64 cmp_flags=CMPF_PRS_SEMICOLON);
 public extern U0 LexWarn(CCompCtrl *cc,U8 *str=NULL);
-extern CMemberLst *MemberClassBaseFind(
+extern CMemberList *MemberClassBaseFind(
 	CHashClass *needle_class,CHashClass *haystack_class);
-public extern CMemberLst *MemberFind(U8 *needle_str,CHashClass *haystack_class);
-extern U0 MemberLstDel(CMemberLst *tmpm);
-public extern I64 MemberMetaData(U8 *st,CMemberLst *ml);
-public extern CMemberLstMeta *MemberMetaFind(U8 *st,CMemberLst *ml);
+public extern CMemberList *MemberFind(U8 *needle_str,CHashClass *haystack_class);
+extern U0 MemberListDel(CMemberList *tmpm);
+public extern I64 MemberMetaData(U8 *st,CMemberList *ml);
+public extern CMemberListMeta *MemberMetaFind(U8 *st,CMemberList *ml);
 public extern CHashClass *OptClassFwd(CHashClass *tmpc);
 public extern I64 ParseKeyWord(CCompCtrl *cc);
 

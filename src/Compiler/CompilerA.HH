@@ -395,7 +395,7 @@ class CIntermediateStruct
 class COptReg
 {
   I64	offset;
-  CMemberLst *m;
+  CMemberList *m;
 };
 
 #define CMPF_ASM_BLK		1

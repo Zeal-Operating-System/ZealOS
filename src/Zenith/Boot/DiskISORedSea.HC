@@ -118,7 +118,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
 
 I64 RedSeaISOPass1(CDirEntry *tmpde)
 {
-  I64 dir_entry_count=3+LinkedLstCount(tmpde),res=0;
+  I64 dir_entry_count=3+LinkedListCount(tmpde),res=0;
   while (tmpde) {
     if (tmpde->attr & RS_ATTR_DIR) {
       if (tmpde->sub)
@@ -159,7 +159,7 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
     } else
       stage2_filename=NULL;
     tmpde=FilesFind(src_dir,FUF_RECURSE);
-    root_count=LinkedLstCount(tmpde)+3;
+    root_count=LinkedListCount(tmpde)+3;
     root_dir_blks=CeilU64(root_count<<6,BLK_SIZE)>>BLK_SIZE_BITS;
     if (res=RedSeaISOPass1(tmpde)>>BLK_SIZE_BITS) {
       bd->drv_offset=19<<2+(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;

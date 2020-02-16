@@ -1,11 +1,11 @@
 #help_index "Cmd Line (Typically)"
 
-CDirEntry MGFind(CDirEntry *needle_entry,CDirEntry *haystack_lst)
+CDirEntry MGFind(CDirEntry *needle_entry,CDirEntry *haystack_list)
 {
-  while (haystack_lst) {
-    if (!StrCmp(needle_entry->name,haystack_lst->name))
-      return haystack_lst;
-    haystack_lst=haystack_lst->next;
+  while (haystack_list) {
+    if (!StrCmp(needle_entry->name,haystack_list->name))
+      return haystack_list;
+    haystack_list=haystack_list->next;
   }
   return NULL;
 }

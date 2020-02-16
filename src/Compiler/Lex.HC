@@ -36,7 +36,7 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
   cc->flags=flags;
   cc->opts=1<<OPTf_WARN_UNUSED_VAR|1<<OPTf_WARN_HEADER_MISMATCH;
   cc->htc.hash_mask=HTG_TYPE_MASK-HTT_IMPORT_SYS_SYM;
-  cc->htc.define_hash_table=cc->htc.hash_table_lst=
+  cc->htc.define_hash_table=cc->htc.hash_table_list=
 	cc->htc.glbl_hash_table=cc->htc.local_hash_table=Fs->hash_table;
   if (flags&CCF_KEEP_AT_SIGN)
     cc->char_bmp_alpha_numeric=char_bmp_alpha_numeric_no_at;
@@ -58,8 +58,8 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
 U0 CompCtrlDel(CCompCtrl *cc)
 {//Free CCompCtrl.
   while (LexFilePop(cc));
-  LinkedLstDel(cc->lex_prs_stk);
-  LinkedLstDel(cc->htc.next);
+  LinkedListDel(cc->lex_prs_stk);
+  LinkedListDel(cc->htc.next);
   Free(cc->ps);
   Free(cc->cur_str);
   Free(cc->cur_help_idx);
@@ -491,12 +491,12 @@ lex_ident:
 	}
 	buf[i++]=0;
 	tmph=NULL;
-	if (cc->htc.local_var_lst)
-	  cc->local_var_entry=MemberFind(buf,cc->htc.local_var_lst);
+	if (cc->htc.local_var_list)
+	  cc->local_var_entry=MemberFind(buf,cc->htc.local_var_list);
 	else
 	  cc->local_var_entry=NULL;
-	if (!cc->local_var_entry && cc->htc.hash_table_lst)
-	  tmph=HashFind(buf,cc->htc.hash_table_lst,cc->htc.hash_mask);
+	if (!cc->local_var_entry && cc->htc.hash_table_list)
+	  tmph=HashFind(buf,cc->htc.hash_table_list,cc->htc.hash_mask);
 	if (tmph)
 	  j=tmph->type;
 	else

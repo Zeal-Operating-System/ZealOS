@@ -174,7 +174,7 @@ U0 GrInit2()
 {
   MemSet(&gr,0,sizeof(CGrGlobals));
   gr.sprite_hash=HashTableNew(512);
-  HashDefineLstAdd("ST_SPRITE_ELEM_CODES",SPHT_ELEM_CODE,gr.sprite_hash);
+  HashDefineListAdd("ST_SPRITE_ELEM_CODES",SPHT_ELEM_CODE,gr.sprite_hash);
   gr.scrn_zoom=1;
 
   PaletteSetStd;

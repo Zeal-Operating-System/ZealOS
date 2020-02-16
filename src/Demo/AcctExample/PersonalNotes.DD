@@ -212,7 +212,7 @@ $FG,5$$TX+CX,"Bugs? Not really sure."$$FG$
 
 
 $FG,5$$TX+CX,"TODO? Not really, just angst."$$FG$
-* Should these be moved into $LK,"CHashClass",A="MN:CHashClass"$ from $LK,"CMemberLst",A="MN:CMemberLst"$ and $LK,"CHashGlobalVar",A="MN:CHashGlobalVar"$?
+* Should these be moved into $LK,"CHashClass",A="MN:CHashClass"$ from $LK,"CMemberList",A="MN:CMemberList"$ and $LK,"CHashGlobalVar",A="MN:CHashGlobalVar"$?
 $ID,5$CArrayDim dim;
 CHashFun *fun_ptr;
 $ID,-5$

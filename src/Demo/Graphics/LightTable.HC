@@ -595,7 +595,7 @@ lt_restart:
 	  }
 	  break;
 	case MESSAGE_MS_R_UP:
-	  i=PopUpPickLst("Reflect Line\0Reflect Spline\0Refract Line\0"
+	  i=PopUpPickList("Reflect Line\0Reflect Spline\0Refract Line\0"
 		"Refract Spline\0Refract Flood Fill\0TestRay\0");
 	  if (i>=0) {
 	    mode=i;

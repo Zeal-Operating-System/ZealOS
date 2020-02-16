@@ -53,11 +53,11 @@ public I64 DocEntryRun(CDoc *doc,CDocEntry *doc_e,
 	}
 	has_action=TRUE;
       }
-      if (!exited && doc_e->de_flags & DOCEF_LST &&
+      if (!exited && doc_e->de_flags & DOCEF_LIST &&
 	    doc_e->de_flags & DOCEF_DEFINE &&
 	    (tmph=HashFind(doc_e->define_str,
 	    doc->win_task->hash_table,HTT_DEFINE_STR)) &&
-	    (res=PopUpPickLst(tmph->data))!=DOCM_CANCEL) {
+	    (res=PopUpPickList(tmph->data))!=DOCM_CANCEL) {
 	DocDataFmt(doc,doc_e,res);
 	DocDataScan(doc,doc_e);
 	has_action=TRUE;

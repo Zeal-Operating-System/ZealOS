@@ -54,7 +54,7 @@ for one * and two fwd for two **.
     tmpc->ptr_stars_count=i;
     tmpc++;
   }
-  res->last_in_member_lst=&res->member_lst_and_root;
+  res->last_in_member_list=&res->member_list_and_root;
   res->size=0;
   return res;
 }
@@ -71,7 +71,7 @@ CHashFun *ParseFunNew()
     tmpf->ptr_stars_count=i;
     tmpf++;
   }
-  res->last_in_member_lst=&res->member_lst_and_root;
+  res->last_in_member_list=&res->member_list_and_root;
   res->size=0;
   return res;
 }
@@ -209,7 +209,7 @@ U0 COCDel(CCompCtrl *cc,CCodeCtrl *coc)
 	Free(cm->float_consts);
 	break;
       case CMT_ARRAY_DIM:
-	LinkedLstDel(cm->dim);
+	LinkedListDel(cm->dim);
 	break;
       case CMT_HASH_ENTRY:
 	HashDel(cm->h);

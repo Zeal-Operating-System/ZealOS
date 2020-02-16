@@ -52,12 +52,12 @@ public extern U8 *StrScan(U8 *src,U8 *fmt,...);
 public extern CDate Str2Date(U8 *src);
 
 #help_index "Char/Flags"
-public extern U0 ScanFlags(U8 *_dst_flags,U8 *lst,U8 *src);
-public extern U8 *StrPrintFlags(U8 *dst,U8 *lst,I64 flags);
+public extern U0 ScanFlags(U8 *_dst_flags,U8 *list,U8 *src);
+public extern U8 *StrPrintFlags(U8 *dst,U8 *list,I64 flags);
 
 #help_index "Char/Lists"
-public extern I64 LstMatch(U8 *needle, U8 *haystack_lst,I64 flags=0);
-public extern U8 *LstSub(I64 sub, U8 *lst);
+public extern I64 ListMatch(U8 *needle, U8 *haystack_list,I64 flags=0);
+public extern U8 *ListSub(I64 sub, U8 *list);
 
 #help_index "Char/Operations"
 public extern U8 *MStrPrint(U8 *fmt,...);
@@ -150,10 +150,10 @@ public extern Bool	FifoU8Peek(CFifoU8 *f,U8 *_b);
 public extern Bool	FifoU8Remove(CFifoU8 *f,U8 *_b);
 
 #help_index "Data Types/Linked List"
-public extern I64	LinkedLstCount(U8 **_lst);
-public extern U8	*LinkedLstCopy(U8 **_lst,CTask *mem_task=NULL);
-public extern U0	LinkedLstDel(U8 **_lst);
-public extern I64	LinkedLstSize(U8 **_lst);
+public extern I64	LinkedListCount(U8 **_list);
+public extern U8	*LinkedListCopy(U8 **_list,CTask *mem_task=NULL);
+public extern U0	LinkedListDel(U8 **_list);
+public extern I64	LinkedListSize(U8 **_list);
 
 #help_index "Data Types/Queue Vector"
 public extern U0	QueueVectU8Del(CQueueVectU8 *v);
@@ -237,8 +237,8 @@ public extern U0 DefinePrint(U8 *dname,U8 *src,...);
 
 #help_index "Define;Char/Define;Char/Lists"
 public extern I64 DefineCount(U8 *dname);
-public extern CHashDefineStr *DefineLstLoad(U8 *dname,U8 *lst);
-public extern I64 DefineMatch(U8 *needle,U8 *haystack_lst_dname,I64 flags=0);
+public extern CHashDefineStr *DefineListLoad(U8 *dname,U8 *list);
+public extern I64 DefineMatch(U8 *needle,U8 *haystack_list_dname,I64 flags=0);
 public extern U8 *DefineSub(I64 sub,U8 *dname);
 
 #help_index "Devices;Memory/Page Tables"
@@ -433,10 +433,10 @@ public extern I64 HashVal(CHash *tmph);
 extern U0 SysSymImportsResolve(U8 *sptr,I64 ld_flags=0);
 
 #help_index "Hash/System;Char/Lists"
-public extern I64 HashLstAdd(U8 *lst,I64 type,CHashTable *table);
+public extern I64 HashListAdd(U8 *list,I64 type,CHashTable *table);
 
 #help_index "Hash/System;Define;Char/Define;Char/Lists"
-public extern I64 HashDefineLstAdd(U8 *dname,I64 type,CHashTable *table);
+public extern I64 HashDefineListAdd(U8 *dname,I64 type,CHashTable *table);
 
 #help_index "Help System;Debugging/Debugger"
 public extern U0 Help();

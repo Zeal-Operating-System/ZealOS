@@ -268,7 +268,7 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
   I64 i;
   CAOTImportExport *tmpie;
   CHashExport *tmpex=HashFind("SYS_POW",
-	cc->htc.hash_table_lst,HTT_EXPORT_SYS_SYM);
+	cc->htc.hash_table_list,HTT_EXPORT_SYS_SYM);
 
   ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 	tmpi->arg2.type,tmpi->arg2.reg,tmpi->arg2.disp,rip);
@@ -289,8 +289,8 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_IMM_I64;
 	  tmpie->rip=rip+tmpi->ic_count-8;
-	  tmpie->next=tmpex->ie_lst;
-	  tmpex->ie_lst=tmpie;
+	  tmpie->next=tmpex->ie_list;
+	  tmpex->ie_list=tmpie;
 	}
 	ICU16(tmpi,0xD3FF);
       } else {
@@ -300,8 +300,8 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_REL_I32;
 	  tmpie->rip=rip+tmpi->ic_count-4;
-	  tmpie->next=tmpex->ie_lst;
-	  tmpex->ie_lst=tmpie;
+	  tmpie->next=tmpex->ie_list;
+	  tmpex->ie_list=tmpie;
 	}
       }
     } else {//Kernel

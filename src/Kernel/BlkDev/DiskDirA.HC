@@ -91,7 +91,7 @@ U0 DirFilesSort(CDirEntry **_tmpde,I64 key)
   I64 i,count;
   CDirEntry *tmpde=*_tmpde,*tmpde1,**sort_buf;
   if (tmpde) {
-    count=LinkedLstCount(tmpde);
+    count=LinkedListCount(tmpde);
     if (count>1) {
       sort_buf=MAlloc(count*sizeof(U8 *));
       i=0;

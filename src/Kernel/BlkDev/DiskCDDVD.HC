@@ -17,7 +17,7 @@ Bool ISOInit(CDrive *dv,I64 blk)
       BlkRead(dv,iso,i*spc,spc);
       buf[0](U32)=iso->id[0](U32);
       buf[4](U16)=iso->id[4](U8);
-      switch (LstMatch(buf,"CD001\0CDW02\0BEA01\0BOOT2\0NSR02\0NSR03\0TEA01\0",
+      switch (ListMatch(buf,"CD001\0CDW02\0BEA01\0BOOT2\0NSR02\0NSR03\0TEA01\0",
 	    LMF_EXACT)) {
 	case 0:
 	  switch (iso->type) {

@@ -220,7 +220,7 @@ I64 DocTmpAttr(CDoc *doc,CDocEntry *doc_e,I64 cur_u8_attr)
 	  tmp_u32_attr.u8[1]|=DOC_COLOR_LINK;
 	else if (doc_e->de_flags & DOCEF_LEFT_MACRO)
 	  tmp_u32_attr.u8[1]|=DOC_COLOR_MACRO;
-	else if (doc_e->de_flags & (DOCEF_TREE|DOCEF_LST))
+	else if (doc_e->de_flags & (DOCEF_TREE|DOCEF_LIST))
 	  tmp_u32_attr.u8[1]|=DOC_COLOR_TREE;
 	else
 	  tmp_u32_attr.u8[1]|=DOC_COLOR_BIN;
@@ -238,7 +238,7 @@ I64 DocTmpAttr(CDoc *doc,CDocEntry *doc_e,I64 cur_u8_attr)
 	tmp_u32_attr.u8[1]|=DOC_COLOR_ANCHOR;
 	break;
       case DOCT_TREE:
-      case DOCT_LST:
+      case DOCT_LIST:
 	tmp_u32_attr.u8[1]|=DOC_COLOR_TREE;
 	break;
       default:
@@ -390,7 +390,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
     y_plot_bottom=y0+height-1-scroll_y/FONT_HEIGHT;
     if (!(doc->flags&DOCF_BORDER_DOC) &&
 	  !Bt(&win_task->display_flags,DISPLAYf_NO_BORDER))
-      DocBorderLstDraw(doc);
+      DocBorderListDraw(doc);
   }
 
   if (doc->cur_col<=doc->cur_entry->min_col)
@@ -435,7 +435,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
       MemCpy(&doc_e->settings,s,sizeof(CDocSettings));
       s=&doc_e->settings;
       if (doc_e->de_flags & (DOCEF_TAG_CB|DOCEF_DEFINE) &&
-	    !(doc_e->de_flags & DOCEF_LST)) {
+	    !(doc_e->de_flags & DOCEF_LIST)) {
 	Free(doc_e->tag);
 	if (doc_e->de_flags & DOCEF_TAG_CB) {
 	  if (doc_e->tag_cb)
@@ -508,7 +508,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 
     if (doc_e->de_flags & DOCEF_REFRESH_DATA &&
 	  (doc_e->type_u8==DOCT_DATA || doc_e->type_u8==DOCT_CHECK_BOX ||
-	  doc_e->de_flags & DOCEF_LST)) {
+	  doc_e->de_flags & DOCEF_LIST)) {
       DocDataFmt(doc,doc_e);
       k=StrLen(doc_e->tag);
     }
@@ -629,7 +629,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
     switch [doc_e->type_u8] {
       case DOCT_TEXT:
 	if (!col2 && !(doc_e->de_flags
-	      &(DOCEF_TREE|DOCEF_LST|DOCEF_TAG_CB|DOCEF_DEFINE|
+	      &(DOCEF_TREE|DOCEF_LIST|DOCEF_TAG_CB|DOCEF_DEFINE|
 	      DOCEF_AUX_STR|DOCEF_HTML_LINK|DOCEF_BIN_PTR_LINK)))
 	  del_doc_e=TRUE;
 	break;
@@ -1055,7 +1055,7 @@ rc_adjust_xy:
 	case DOCT_CHECK_BOX:
 	  doc_e->max_col=2;
 	  break;
-	case DOCT_LST:
+	case DOCT_LIST:
 	case DOCT_TREE:
 	case DOCT_BTTN:
 	case DOCT_LINK:
@@ -1064,7 +1064,7 @@ rc_adjust_xy:
 	  doc_e->max_col=1;
 	  break;
 	default:
-	  if (doc_e->de_flags & (DOCEF_TREE|DOCEF_LST))
+	  if (doc_e->de_flags & (DOCEF_TREE|DOCEF_LIST))
 	    doc_e->max_col=1;
 	  else
 	    doc_e->max_col=col2;

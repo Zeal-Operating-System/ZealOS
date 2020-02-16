@@ -394,52 +394,52 @@ U32
   0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF,
   0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF,0xFFFFFFFF};
 
-U8 *LstSub(I64 sub, U8 *lst)
-{//Point to lst entry.
+U8 *ListSub(I64 sub, U8 *list)
+{//Point to list entry.
 //Not efficient.Use an array of U8 ptrs for efficiency.
-  if (!lst) return NULL;
-  while (*lst && sub>0) {
-    while (*lst)	//Advance to end of cur entry.
-      lst++;
-    lst++;		//Skip trailing zero.
-    if (*lst=='@')	//Check for '@' alias lst entry.
-      lst++;
+  if (!list) return NULL;
+  while (*list && sub>0) {
+    while (*list)	//Advance to end of cur entry.
+      list++;
+    list++;		//Skip trailing zero.
+    if (*list=='@')	//Check for '@' alias list entry.
+      list++;
     else
       sub--;
   }
-  if (sub||!*lst)
+  if (sub||!*list)
     return NULL;
   else
-    return lst;
+    return list;
 }
 
-I64 LstMatch(U8 *needle, U8 *haystack_lst,I64 flags=0)
+I64 ListMatch(U8 *needle, U8 *haystack_list,I64 flags=0)
 {//-2 if Ambiguous
 // -1 if not found
   // Not efficient. Use hash tables for efficiency.
   I64 n,sub=0,res=-1;
   U8 *ptr;
   Bool exact_match=FALSE;
-  if (!haystack_lst) return -1;
+  if (!haystack_list) return -1;
   n=StrLen(needle);
-  while (*haystack_lst) {
-    if (*haystack_lst=='@') {	//Check for '@' alias haystack_lst entry
+  while (*haystack_list) {
+    if (*haystack_list=='@') {	//Check for '@' alias haystack_list entry
       sub--;
-      haystack_lst++;
+      haystack_list++;
     }
     ptr=needle;
     if (flags & LMF_IGNORE_CASE)
-      while (*ptr && ToUpper(*ptr)==ToUpper(*haystack_lst)) {
+      while (*ptr && ToUpper(*ptr)==ToUpper(*haystack_list)) {
 	ptr++;
-	haystack_lst++;
+	haystack_list++;
       }
     else
-      while (*ptr && *ptr==*haystack_lst) {
+      while (*ptr && *ptr==*haystack_list) {
 	ptr++;
-	haystack_lst++;
+	haystack_list++;
       }
     if (!*ptr) {		//Did we reach end of needle?
-      if (!*haystack_lst)	//Did we reach end of haystack_lst?
+      if (!*haystack_list)	//Did we reach end of haystack_list?
 	return sub;		//Found Exact match
       else {
 	if (res!=-1) {
@@ -451,9 +451,9 @@ I64 LstMatch(U8 *needle, U8 *haystack_lst,I64 flags=0)
 	}
       }
     }
-    while (*haystack_lst)	//Advance to end of cur entry.
-      haystack_lst++;
-    haystack_lst++;		//Skip trailing zero
+    while (*haystack_list)	//Advance to end of cur entry.
+      haystack_list++;
+    haystack_list++;		//Skip trailing zero
     sub++;
   }
   return res;

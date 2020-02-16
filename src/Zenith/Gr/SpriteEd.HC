@@ -626,7 +626,7 @@ Bool SpriteEdText(CSprite **_head,I64 *_cur_elem_num)
 
 U0 GrInit3()
 {
-  DefineLstLoad("ST_SPRITE_ED_MENU","Select/Unselect All\0\0Select\0"
+  DefineListLoad("ST_SPRITE_ED_MENU","Select/Unselect All\0\0Select\0"
 	"Select Rects\0Unselect\0Unselect Rects\0Shift Points\0Shift Rects\0"
 	"Shift Selected\0Transform Selected\0Set Origin\0"
 	"Insert Shift SubOrigin\0Edit as Text\0Insert Clip\0Main Menu\0");

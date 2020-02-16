@@ -70,9 +70,9 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
       cc->htc.glbl_hash_table->next=htc->glbl_hash_table;
   } else
     cc->htc.glbl_hash_table->next=Fs->hash_table;
-  cc->htc.hash_table_lst=cc->htc.local_hash_table=HashTableNew(16);
+  cc->htc.hash_table_list=cc->htc.local_hash_table=HashTableNew(16);
   cc->htc.local_hash_table->next=cc->htc.glbl_hash_table;
-  cc->htc.local_var_lst=cc->htc.fun; //HolyC local vars
+  cc->htc.local_var_list=cc->htc.fun; //HolyC local vars
   cc->htc.fun=NULL;
   try {
     if (cmp_flags&CMPF_LEX_FIRST)
@@ -106,7 +106,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
       cc->error_count=1;
     cc->aot=res->parent_aot;
     Free(res);
-    LinkedLstDel(aotc->bin);
+    LinkedListDel(aotc->bin);
     res=NULL;
   } else {
     if (map_name)
@@ -139,7 +139,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
 	tmpbin=tmpbin->next;
       }
     }
-    LinkedLstDel(aotc->bin);
+    LinkedListDel(aotc->bin);
     res->abss=aotc->abss;
     res->heap_glbls=aotc->heap_glbls;
     res->max_align_bits=aotc->max_align_bits;

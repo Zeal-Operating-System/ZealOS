@@ -724,7 +724,7 @@ wmt_start:
 		      if (doc_e!=doc) {
 			if (doc_e->de_flags & DOCEF_HAS_BORDER)
 			  doc_e->de_flags&=~DOCEF_SOLID_BORDER;
-			if (doc_e->de_flags & (DOCEF_TREE|DOCEF_LST|
+			if (doc_e->de_flags & (DOCEF_TREE|DOCEF_LIST|
 			      DOCEF_LINK|DOCEF_CHECK_COLLAPSABLE|
 			      DOCEF_LEFT_CB|DOCEF_LEFT_MACRO|DOCEF_LEFT_EXP))
 			  TaskMessage(task,0,MESSAGE_KEY_DOWN,CH_SPACE,0,0);

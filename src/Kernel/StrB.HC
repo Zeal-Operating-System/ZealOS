@@ -120,7 +120,7 @@ U0 Help()
     PopUp("Type(\"::/Doc/HelpIndex.DD\");DocTop;View;");
 }
 
-U0 ScanFlags(U8 *_dst_flags,U8 *lst,U8 *src)
+U0 ScanFlags(U8 *_dst_flags,U8 *list,U8 *src)
 {/*More than 64 flags. Flags passed by ref.
 
 Examples:
@@ -144,7 +144,7 @@ ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.
 		*src!=CH_SPACE && *src!=CH_SHIFT_SPACE)
 	    *ptr++=*src++;
 	  *ptr=0;
-	  i=LstMatch(buf,lst);
+	  i=ListMatch(buf,list);
 	  if (i>=0)
 	    LBts(_dst_flags,i);
 	  else {
@@ -160,7 +160,7 @@ ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.
 		*src!=CH_SPACE && *src!=CH_SHIFT_SPACE)
 	    *ptr++=*src++;
 	  *ptr=0;
-	  i=LstMatch(buf,lst);
+	  i=ListMatch(buf,list);
 	  if (i>=0)
 	    LBtr(_dst_flags,i);
 	  else {
@@ -174,14 +174,14 @@ ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.
   }
 }
 
-U8 *StrPrintFlags(U8 *dst,U8 *lst,I64 flags)
+U8 *StrPrintFlags(U8 *dst,U8 *list,I64 flags)
 {//Only 64 flags. Flags passed by value.
   I64 i;
   *dst=0;
   while (flags) {
     i=Bsf(flags);
     Btr(&flags,i);
-    CatPrint(dst,"+%z",i,lst);
+    CatPrint(dst,"+%z",i,list);
   }
   return dst;
 }

@@ -83,7 +83,7 @@ public U8 *ACDDefsGet(U8 *st)
   return res;
 }
 
-/*Fmt of word lst entry:
+/*Fmt of word list entry:
   U8 ACD_WORD_CHAR
   U8 word[] with terminating zero
   I16 block;
@@ -91,17 +91,17 @@ public U8 *ACDDefsGet(U8 *st)
 public U8 *ACDWordPtAt(U8 *st)
 {//Point to word in word list.
   I64 i;
-  U8 *start=acd.word_lst,*r=start,
-	*end=acd.word_lst+acd.word_lst_size;
+  U8 *start=acd.word_list,*r=start,
+	*end=acd.word_list+acd.word_list_size;
   if (!st || !*st)
-    return acd.word_lst;
-  if (acd.word_lst_size) {
+    return acd.word_list;
+  if (acd.word_list_size) {
     while (start+3<end) {
       r=(start+end)>>1;
       while (TRUE) {
-	while (*r!=ACD_WORD_CHAR && r>acd.word_lst)
+	while (*r!=ACD_WORD_CHAR && r>acd.word_list)
 	  r--;
-	if ((r[2]==ACD_WORD_CHAR||r[1]==ACD_WORD_CHAR)&&r-3>acd.word_lst)
+	if ((r[2]==ACD_WORD_CHAR||r[1]==ACD_WORD_CHAR)&&r-3>acd.word_list)
 	  r--;
 	else
 	  break;
@@ -119,9 +119,9 @@ public U8 *ACDWordPtAt(U8 *st)
     }
     r=(start+end)>>1;
     while (TRUE) {
-      while (*r!=ACD_WORD_CHAR && r>acd.word_lst)
+      while (*r!=ACD_WORD_CHAR && r>acd.word_list)
 	r--;
-      if ((r[2]==ACD_WORD_CHAR||r[1]==ACD_WORD_CHAR)&&r-3>acd.word_lst)
+      if ((r[2]==ACD_WORD_CHAR||r[1]==ACD_WORD_CHAR)&&r-3>acd.word_list)
 	r--;
       else
 	break;
@@ -132,7 +132,7 @@ public U8 *ACDWordPtAt(U8 *st)
   if (*r==ACD_WORD_CHAR)
     return r;
   else
-    return acd.word_lst;
+    return acd.word_list;
 }
 
 U0 ACDFillin(I64 n)

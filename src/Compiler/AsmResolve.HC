@@ -8,8 +8,8 @@ U0 AsmResolve(CCompCtrl *cc,CAsmUnresolvedRef *tmpu,U8 *label,Bool undefined)
     while (tmpauh) {
       if (tmpauh->hash->type & HTF_UNRESOLVED) {
 	tmpie=CAlloc(sizeof(CAOTImportExport));
-	tmpie->next=tmpauh->hash->ie_lst;
-	tmpauh->hash->ie_lst=tmpie;
+	tmpie->next=tmpauh->hash->ie_list;
+	tmpauh->hash->ie_list=tmpie;
 	tmpie->rip=tmpu->rip;
 	tmpie->aot=cc->aot;
 	tmpie->type=tmpu->type;
@@ -64,12 +64,12 @@ U0 AOTLocalsResolve(CCompCtrl *cc)
     if (!undefined)
       AsmResolve(cc,tmpu,label,FALSE);
     Free(tmpu->machine_code);
-    LinkedLstDel(tmpu->asm_undef_hash);
+    LinkedListDel(tmpu->asm_undef_hash);
     Free(tmpu);
     tmpu=tmpu1;
   }
   HashTableDel(cc->htc.local_hash_table);
-  cc->htc.hash_table_lst=cc->htc.local_hash_table=HashTableNew(16);
+  cc->htc.hash_table_list=cc->htc.local_hash_table=HashTableNew(16);
   cc->htc.local_hash_table->next=cc->htc.glbl_hash_table;
   aotc->local_unresolved=NULL;
 }
@@ -97,14 +97,14 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 	tmpex=tmpauh->hash;
 	if (tmpex->type & HTT_EXPORT_SYS_SYM&& tmpex->type & HTF_UNRESOLVED &&
 	      !(tmpex->type & HTF_IMPORT) &&
-	      (tmpf=HashFind(tmpex->str,cc->htc.hash_table_lst,HTT_FUN)) &&
+	      (tmpf=HashFind(tmpex->str,cc->htc.hash_table_list,HTT_FUN)) &&
 	      !Bt(&tmpf->flags,Cf_EXTERN)) {
 	  tmpex->val=tmpf->exe_addr;
 	  tmpex->type&=~HTF_UNRESOLVED;
 	  label=tmpauh->hash->str;
 	} else {
 	  if (!(tmpex->type & HTF_IMPORT)) {
-	    if (cc->htc.local_var_lst) {
+	    if (cc->htc.local_var_list) {
 	      tmpex->type|=HTF_GOTO_LABEL;
 	      tmpex->use_count++;
 	    } else {
@@ -126,7 +126,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
     }
     AsmResolve(cc,tmpu,label,undefined);
     Free(tmpu->machine_code);
-    LinkedLstDel(tmpu->asm_undef_hash);
+    LinkedListDel(tmpu->asm_undef_hash);
     Free(tmpu);
     tmpu=tmpu1;
   }
@@ -135,7 +135,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
     tmpex=cc->htc.glbl_hash_table->body[i];
     while (tmpex) {
       if (tmpex->type & (HTF_IMPORT|HTF_GOTO_LABEL)) {
-	if (tmpex->use_count && (tmpie=tmpex->ie_lst)) {
+	if (tmpex->use_count && (tmpie=tmpex->ie_list)) {
 	  if (tmpex->type&HTF_GOTO_LABEL)
 	    tmpie->flags|=IEF_GOTO_LABEL;
 	  if (tmpex->import_name)
@@ -146,7 +146,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 	    tmpie1=tmpie->next;
 	    QueueInsert(tmpie,tmpaot->last_ie);
 	  } while (tmpie=tmpie1);
-	  tmpex->ie_lst=NULL;
+	  tmpex->ie_list=NULL;
 	}
       } else if (tmpex->type & (HTF_EXPORT|HTF_RESOLVE)) {
 	if (tmpex->type & HTF_UNRESOLVED) {
@@ -155,7 +155,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 	}
 	if (tmpex->type & HTF_RESOLVE) {
 	  tmpf=tmpex;
-	  tmpeu=tmpf->ext_lst;
+	  tmpeu=tmpf->ext_list;
 	  while (tmpeu) {
 	    tmpeu8=tmpeu->next;
 	    j=tmpf->exe_addr-(tmpeu->rip+4);

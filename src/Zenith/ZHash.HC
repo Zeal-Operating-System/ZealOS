@@ -155,7 +155,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
   CHashTable *table;
   CHashSrcSym *tmph;
   CHashGeneric *ptr;
-  CWho *lst;
+  CWho *list;
   I64 count,i,j,k,f=0;
   U8 buf[512],*last_idx=StrNew(""),*cur_idx,*comment;
   Bool recurse,publics,map;
@@ -201,7 +201,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
   }
   if (!count) goto wh_done;
 
-  lst=CAlloc(count*sizeof(CWho));
+  list=CAlloc(count*sizeof(CWho));
   j=0;
   table=h;
   while (table) {
@@ -211,12 +211,12 @@ U8 *idx=NULL,CDoc *doc=NULL)
 	if (!(tmph->type & (HTF_IMPORT | HTF_PRIVATE)) &&
 	      (tmph->type & HTF_PUBLIC || !publics))
 	  if (!idx)
-	    lst[j++].h=tmph;
+	    list[j++].h=tmph;
 	  else if (tmph->type&HTG_SRC_SYM && (cur_idx=tmph->idx) &&
 		(k=HelpIndexCount(cur_idx,idx)))
 	    while (k--) {
-	      lst[j].idx=HelpIndexStr(&cur_idx,idx);
-	      lst[j++].h=tmph;
+	      list[j].idx=HelpIndexStr(&cur_idx,idx);
+	      list[j++].h=tmph;
 	    }
 	tmph=tmph->next;
       }
@@ -228,11 +228,11 @@ U8 *idx=NULL,CDoc *doc=NULL)
   }
 
   if (map)
-    QSort(lst,count,sizeof(CWho),&HashEntriesCompare2);
+    QSort(list,count,sizeof(CWho),&HashEntriesCompare2);
   else if (idx)
-    QSort(lst,count,sizeof(CWho),&HashEntriesCompare3);
+    QSort(list,count,sizeof(CWho),&HashEntriesCompare3);
   else
-    QSort(lst,count,sizeof(CWho),&HashEntriesCompare);
+    QSort(list,count,sizeof(CWho),&HashEntriesCompare);
 
   if (idx) {
     progress1_max=count;
@@ -240,9 +240,9 @@ U8 *idx=NULL,CDoc *doc=NULL)
   }
   for (i=0;i<count;i++) {
     comment=NULL;
-    ptr=lst[i].h;
+    ptr=list[i].h;
     if (idx)
-      if (cur_idx=lst[i].idx) {
+      if (cur_idx=list[i].idx) {
 	if (StrCmp(cur_idx,last_idx)) {
 	  Free(last_idx);
 	  last_idx=StrNew(cur_idx);
@@ -303,11 +303,11 @@ U8 *idx=NULL,CDoc *doc=NULL)
       }
       DocPrint(doc,"\n");
     }
-    Free(lst[i].idx);
+    Free(list[i].idx);
     if (idx)
       progress1++;
   }
-  Free(lst);
+  Free(list);
   if (idx)
     progress1=progress1_max=0;
 
@@ -335,7 +335,7 @@ public I64 HashDepthRep(CHashTable *table=NULL)
   for (i=0;i<=table->mask;i++) {
     tmph=table->body[i];
     if (tmph) {
-      j=LinkedLstCount(tmph);
+      j=LinkedListCount(tmph);
       if (j<HDR_NUM)
 	a[j]++;
       count+=j;

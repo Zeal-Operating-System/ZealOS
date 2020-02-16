@@ -21,7 +21,7 @@ U8 *SuggestMatchForm(U8 *src)
   return res;
 }
 
-/*Fmt of word lst entry:
+/*Fmt of word list entry:
   U8 ACD_WORD_CHAR
   U8 word[] with terminating zero
   I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA
@@ -29,7 +29,7 @@ U8 *SuggestMatchForm(U8 *src)
 
 Bool SuggestSpelling(U8 *word)
 {
-  U8 *dict=acd.word_lst,
+  U8 *dict=acd.word_list,
 	*pf=SuggestMatchForm(word),
 	*wf;
   I64 len=StrLen(pf),

@@ -566,18 +566,18 @@ public U8 *Code2Sprite(CDoc *doc,I64 *_size=NULL)
   U8 *res;
   Bool okay=TRUE,unlock_doc=DocLock(doc);
   CCompCtrl *cc=CompCtrlNew(,CCF_DONT_FREE_BUF);
-  CHashTable *old_hash_table_lst=cc->htc.hash_table_lst;
+  CHashTable *old_hash_table_list=cc->htc.hash_table_list;
   CHashGeneric *tmph;
   I64 i,size=0;
   QueueInit(&head);
   LexAttachDoc(cc,,doc);
   try {
     do {
-      cc->htc.hash_table_lst=NULL;
+      cc->htc.hash_table_list=NULL;
       if (Lex(cc)==TK_IDENT && //Skip ;
 	    (tmph=HashFind(cc->cur_str,gr.sprite_hash,SPHT_ELEM_CODE))) {
 	i=tmph->user_data0;
-	cc->htc.hash_table_lst=old_hash_table_lst;
+	cc->htc.hash_table_list=old_hash_table_list;
 	if (Lex(cc)=='{') //Skip ident
 	  QueueInsert(Code2SpriteElem(cc,i),head.last);
       } else if (cc->token)

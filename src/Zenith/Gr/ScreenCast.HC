@@ -4,7 +4,7 @@
 
 public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
 	U8 *files_find_mask,U8 *fu_flags=NULL)
-{/*Merge GR lst to MV file.
+{/*Merge GR list to MV file.
 "+d" will delete GR list files.
 */
   I64 fuf_flags=0,file_num=0,size;
@@ -16,7 +16,7 @@ public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F");
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
   tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND);
-  if (progress1_max=LinkedLstCount(tmpde1)) {
+  if (progress1_max=LinkedListCount(tmpde1)) {
     dst=base=MAlloc(MV_FILE_MAX);
     while (tmpde) {
       dc=GRRead(tmpde->full_name);

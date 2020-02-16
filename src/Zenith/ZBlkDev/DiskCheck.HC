@@ -10,7 +10,7 @@ Bool CheckDskConfirm(Bool *_fix,Bool *_confirm)
   return *_fix;
 }
 
-I64 RedSeaCheckDskLst(CDrive *dv,CDirEntry *tmpde1,
+I64 RedSeaCheckDskList(CDrive *dv,CDirEntry *tmpde1,
 	U8 *bits,U8 *bits2,I64 size,I64 bpc)
 {
   CDirEntry *tmpde2;
@@ -18,7 +18,7 @@ I64 RedSeaCheckDskLst(CDrive *dv,CDirEntry *tmpde1,
   while (tmpde1) {
     tmpde2=tmpde1->next;
     if (tmpde1->attr & RS_ATTR_DIR && tmpde1->sub)
-      errs+=RedSeaCheckDskLst(dv,tmpde1->sub,bits,bits2,size,bpc);
+      errs+=RedSeaCheckDskList(dv,tmpde1->sub,bits,bits2,size,bpc);
     j=(tmpde1->size+bpc-1)/bpc;
     for (i=0;i<j;i++) {
       if (i+tmpde1->clus-dv->data_area>size) {
@@ -84,7 +84,7 @@ I64 RedSeaCheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
     }
   }
 
-  errs+=RedSeaCheckDskLst(dv,FilesFind(files_find_mask,FUF_RECURSE),
+  errs+=RedSeaCheckDskList(dv,FilesFind(files_find_mask,FUF_RECURSE),
 	bits,bits2,size,bpc);
   for (i=1;i<size;i++)
     if (Bt(bits2,i)) {
@@ -103,7 +103,7 @@ I64 RedSeaCheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
   return errs;
 }
 
-I64 FAT32CheckDskLst(CDrive *dv,CDirEntry *tmpde1,
+I64 FAT32CheckDskList(CDrive *dv,CDirEntry *tmpde1,
 	U8 *bits,U32 *bits2,I64 size,I64 bpc)
 {
   CDirEntry *tmpde2;
@@ -111,7 +111,7 @@ I64 FAT32CheckDskLst(CDrive *dv,CDirEntry *tmpde1,
   while (tmpde1) {
     tmpde2=tmpde1->next;
     if (tmpde1->attr & RS_ATTR_DIR && tmpde1->sub)
-      errs+=FAT32CheckDskLst(dv,tmpde1->sub,bits,bits2,size,bpc);
+      errs+=FAT32CheckDskList(dv,tmpde1->sub,bits,bits2,size,bpc);
     i=0;
     c=tmpde1->clus;
     while (0<c<0x0FFFFFF8) {
@@ -184,7 +184,7 @@ I64 FAT32CheckDsk(U8 drv_let,Bool *_fix,Bool *_confirm)
     c=ClusNumNext(dv,c);
   }
 
-  errs+=FAT32CheckDskLst(dv,FilesFind(files_find_mask,FUF_RECURSE),
+  errs+=FAT32CheckDskList(dv,FilesFind(files_find_mask,FUF_RECURSE),
 	bits,bits2,size,bpc);
 
   bits2[1]=0; //See $LK,"FAT32Fmt",A="MN:FAT32Fmt"$()

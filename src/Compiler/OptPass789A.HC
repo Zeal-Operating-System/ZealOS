@@ -129,8 +129,8 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpie=CAlloc(sizeof(CAOTImportExport));
 		tmpie->type=IET_IMM_U32;
 		tmpie->rip=rip2+tmpi->ic_count-4;
-		tmpie->next=tmpg->ie_lst;
-		tmpg->ie_lst=tmpie;
+		tmpie->next=tmpg->ie_list;
+		tmpg->ie_list=tmpie;
 	      }
 	      ICU24(tmpi,0xC06348);
 	      break;
@@ -337,8 +337,8 @@ cc->pass==10 is final pass, code is placed into buf.
 	    if (buf) {
 	      tmpf=tmpi->ic_data;
 	      tmpeu=CAlloc(sizeof(CExternUsage));
-	      tmpeu->next=tmpf->ext_lst;
-	      tmpf->ext_lst=tmpeu;
+	      tmpeu->next=tmpf->ext_list;
+	      tmpf->ext_list=tmpeu;
 	      tmpeu->rip=rip2+1;
 	    }
 	    break;
@@ -364,8 +364,8 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpie=CAlloc(sizeof(CAOTImportExport));
 		tmpie->type=IET_IMM_I64;
 		tmpie->rip=rip2+tmpi->ic_count-8;
-		tmpie->next=tmpf->ie_lst;
-		tmpf->ie_lst=tmpie;
+		tmpie->next=tmpf->ie_list;
+		tmpf->ie_list=tmpie;
 	      }
 	      ICU16(tmpi,0xD3FF);
 	    } else {
@@ -376,8 +376,8 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpie=CAlloc(sizeof(CAOTImportExport));
 		tmpie->type=IET_REL_I32;
 		tmpie->rip=rip2+tmpi->ic_count-4;
-		tmpie->next=tmpf->ie_lst;
-		tmpf->ie_lst=tmpie;
+		tmpie->next=tmpf->ie_list;
+		tmpf->ie_list=tmpie;
 	      }
 	    }
 	    break;

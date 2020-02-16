@@ -86,7 +86,7 @@ It's a little faster.
 	MOV	RAX,U64 CTask.fpu_mmx[RSI]
 	FXSAVE	U64 [RAX]
 
-	MOV	RDX,U64 CTask.bpt_lst[RSI]
+	MOV	RDX,U64 CTask.bpt_list[RSI]
 @@05:	TEST	RDX,RDX
 	JZ	@@10
 	MOV	RDI,U64 CBpt.addr[RDX]
@@ -105,7 +105,7 @@ _TASK_CONTEXT_RESTORE::
 	BTS	U32 GS:CCPU.cpu_flags[RAX],CPUf_RAN_A_TASK
 @@05:	BT	U64 CTask.task_flags[RSI],TASKf_DISABLE_BPTS
 	JC	@@15
-	MOV	RDX,U64 CTask.bpt_lst[RSI]
+	MOV	RDX,U64 CTask.bpt_list[RSI]
 @@10:	TEST	RDX,RDX
 	JZ	@@15
 	MOV	RDI,U64 CBpt.addr[RDX]

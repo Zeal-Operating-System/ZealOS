@@ -11,10 +11,10 @@ public U0 ACDWordsLoad()
   acd.num_words=0;
   if (in_ptr=FileRead(ACD_WORD_FILENAME,&size)) {
     in_start=in_ptr;
-    Free(acd.word_lst);
-    acd.word_lst=AMAlloc(size);
-    MemCpy(acd.word_lst,in_start,size);
-    acd.word_lst_size=size;
+    Free(acd.word_list);
+    acd.word_list=AMAlloc(size);
+    MemCpy(acd.word_list,in_start,size);
+    acd.word_list_size=size;
 
     while (in_ptr<in_start+size) {
       if (*in_ptr==ACD_WORD_CHAR)
@@ -90,7 +90,7 @@ U0 ACSingleFileAdd(U8 *buf)
   }
 }
 
-U0 ACMainFileLstTraverse(U8 *files_find_mask)
+U0 ACMainFileListTraverse(U8 *files_find_mask)
 {
   U8 *buf;
   CDirEntry *tmpde,*tmpde1;
@@ -124,7 +124,7 @@ public U0 ACInit(U8 *mask=NULL)
   ac.cur_word=NULL;
 
   if (mask)
-    ACMainFileLstTraverse(mask);
+    ACMainFileListTraverse(mask);
 
   ACDWordsLoad;
   LBtr(&ac.flags,ACf_INIT_IN_PROGRESS);
@@ -135,7 +135,7 @@ public U0 ACInit(U8 *mask=NULL)
 I64 AutoCompleteSize()
 {
   if (ac.hash_table)
-    return HashTableSize2(ac.hash_table)+MSize2(acd.word_lst);
+    return HashTableSize2(ac.hash_table)+MSize2(acd.word_list);
   else
     return 0;
 }

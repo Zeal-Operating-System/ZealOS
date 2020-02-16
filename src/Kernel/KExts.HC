@@ -26,7 +26,7 @@ extern U8 *CatPrint(U8 *_dst,U8 *fmt,...);
 extern Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE);
 extern U0 DebugHelp();
 extern U8 *Define(U8 *dname);
-extern I64 DefineMatch(U8 *needle,U8 *haystack_lst_dname,I64 flags=0);
+extern I64 DefineMatch(U8 *needle,U8 *haystack_list_dname,I64 flags=0);
 extern U8 *DefineSub(I64 sub,U8 *dname);
 extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 	Bool del_dir=FALSE,Bool print_message=TRUE);
@@ -89,7 +89,7 @@ extern Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,
 extern Bool RedSeaFileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,
 	CDirEntry *_res,I64 fuf_flags=0);
 extern U0 RedSeaFmt(U8 drv_let,Bool quick=TRUE);
-extern U0 RedSeaFreeFreeLst(CDrive *dv);
+extern U0 RedSeaFreeFreeList(CDrive *dv);
 extern U0 RedSeaInit(CDrive *dv);
 extern Bool RedSeaValidate(U8 drv_let);
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,

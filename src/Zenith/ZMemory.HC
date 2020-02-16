@@ -64,13 +64,13 @@ public Bool HeapRep(CTask *task)
   }
   '\n';
 
-  uum=task->code_heap->malloc_free_lst;
+  uum=task->code_heap->malloc_free_list;
   while (uum) {
     "%X, ",uum->size;
     uum=uum->next;
   }
   if (task->data_heap!=task->code_heap) {
-    uum=task->data_heap->malloc_free_lst;
+    uum=task->data_heap->malloc_free_list;
     while (uum) {
       "%X, ",uum->size;
       uum=uum->next;
@@ -128,7 +128,7 @@ public Bool HeapCtrlWalk(CHeapCtrl *hc)
       uum=uum->next;
     }
   }
-  uum=hc->malloc_free_lst;
+  uum=hc->malloc_free_list;
   while (uum) {
     if (!IsInHeapCtrl(uum,hc,FALSE))
       goto hc_false;
