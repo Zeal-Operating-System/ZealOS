@@ -164,7 +164,7 @@ public class CD3 //Three dimensional F64 pt
 public class CQueueVectU8
 {
   CQueueVectU8	*next,*last;
-  I64	total_cnt,node_cnt,min_idx;
+  I64	total_count,node_count,min_idx;
   U8	body[QUE_VECT_U8_CNT];
 };
 
@@ -396,7 +396,7 @@ class CBinFile
 class CPatchTableAbsAddr
 {
   U8	eit_abs_addr;	//$LK,"IET_ABS_ADDR",A="MN:IET_ABS_ADDR"$
-  U32	abs_addres_cnt;
+  U32	abs_addres_count;
   U8	zero;
   U32	abs_addres[1];
 };
@@ -555,7 +555,7 @@ class CAP16BitInit
 #define HPET_GEN_CONF	(0xFED00000+0x10)
 #define HPET_MAIN_CNT	(0xFED00000+0xF0)
 
-public class CCntsGlobals
+public class CCountsGlobals
 {
   I64	jiffies,	//$LK,"JIFFY_FREQ",A="MN:JIFFY_FREQ"$
 	timer,		//$LK,"SYS_TIMER_FREQ",A="MN:SYS_TIMER_FREQ"$. Use $LK,"SysTimerRead",A="MN:SysTimerRead"$().
@@ -642,7 +642,7 @@ public class CHash
   CHash	*next;
   U8	*str;
   U32	type,
-	use_cnt; // inc'ed every time search found, never dec'ed.
+	use_count; // inc'ed every time search found, never dec'ed.
 };
 
 public class CHashTable
@@ -787,7 +787,7 @@ public class CHashImport:CHashSrcSym
 public class CArrayDim
 {
   CArrayDim *next;
-  I64	cnt,total_cnt;
+  I64	count,total_count;
 };
 
 #define MLMF_IS_STR	1
@@ -806,7 +806,7 @@ public class CMemberLst
   U8	*str;
   CHashClass *member_class,*member_class_base;
   CMemberLstMeta *meta;
-  U32	use_cnt;
+  U32	use_count;
   U16	flags;
   I8	reg,pad;
   I64	offset,size;
@@ -829,7 +829,7 @@ class CExternUsage
 public class CHashDefineStr:CHashSrcSym
 {
   U8	*data,**sub_idx;
-  I64	cnt;
+  I64	count;
 };
 
 #define Cf_EXTERN		0
@@ -838,8 +838,8 @@ public class CHashDefineStr:CHashSrcSym
 public class CHashClass:CHashSrcSym
 {//See $LK,"ParseClassNew",A="MN:ParseClassNew"$(). base_class of $LK,"CHashFun",A="MN:CHashFun"$
   I64	size,neg_offset;
-  U32	member_cnt;
-  U8	ptr_stars_cnt,raw_type;
+  U32	member_count;
+  U8	ptr_stars_count,raw_type;
   U16	flags;
   CMemberLst *member_lst_and_root, //Head of linked list and head of tree.
 	*member_class_base_root, //For finding dup class local vars.
@@ -861,7 +861,7 @@ public class CHashClass:CHashSrcSym
 public class CHashFun:CHashClass
 {//See $LK,"ParseFunNew",A="MN:ParseFunNew"$().
   CHashClass *return_class;
-  U32	arg_cnt,pad,
+  U32	arg_count,pad,
 	used_reg_mask,clobbered_reg_mask;
   U8	*exe_addr;
   CExternUsage *ext_lst;
@@ -1119,10 +1119,10 @@ public class CHashGlobalVar:CHashSrcSym
 public class CDocBin
 {
   CDocBin *next,*last;
-  I32	tmp_use_cnt,renum_num;
+  I32	tmp_use_count,renum_num;
   U8	*tag;
   U0	start;
-  U32	num,flags,size,use_cnt;
+  U32	num,flags,size,use_count;
   U0	end;
   U8	*data;
 #assert !($$&7)
@@ -1376,7 +1376,7 @@ public class CDoc //Linked Text File header
   U8	*dollar_buf; //When entering $$ cmds, it buffers them until the end $$.
 
   CTask *win_task,*mem_task,*owning_task;
-  I32	page_line_num,undo_cnt,
+  I32	page_line_num,undo_count,
 	x,y,min_x,max_x,min_y,max_y;
   I64	line,col,best_d,
 	old_win_top,old_win_bottom,
@@ -1384,7 +1384,7 @@ public class CDoc //Linked Text File header
 	cmd_U8;
   U32	doc_signature,cur_bin_num;
   I64	max_entries,
-	updates_cnt;
+	updates_count;
   CEdFindText *find_replace;
 
   CEdFileName filename;
@@ -1471,9 +1471,9 @@ class CWinMgrTimingGlobals
 {
   I64	last_total_jiffies,
 	last_idle_pt_hits[MP_PROCESSORS_NUM],
-	last_swap_cnter[MP_PROCESSORS_NUM];
+	last_swap_counter[MP_PROCESSORS_NUM];
   F64	last_calc_idle_time,calc_idle_delta_time;
-  I64	calc_idle_cnt;
+  I64	calc_idle_count;
 };
 
 #define WINMGR_FPS	(60000.0/1001)
@@ -1659,7 +1659,7 @@ class CIntermediateCodeBase
   CIntermediateCode *next,*last;
   U16	ic_code,
 	ic_precedence;
-  I16	ic_cnt,
+  I16	ic_count,
 	ic_last_start;
 };
 
@@ -1717,7 +1717,7 @@ class CCodeMisc
   CCodeMisc *next,*last,*fwd,*dft,*begin;
   U8	*str;
   U32	type,flags;
-  I64	use_cnt;
+  I64	use_count;
   U8	*addr;
   union {
     I64 st_len;		//STR_CONST
@@ -1754,7 +1754,7 @@ class CCodeMisc
 class CInst
 {
   U8	ins_entry_num, //This entry num in opcode hash entry
-	opcode_cnt,
+	opcode_count,
 	opcode[4];
   U16	flags;
   U8	slash_val,uasm_slash_val,opcode_modifier,
@@ -1813,10 +1813,10 @@ class CAOTBinBlk
   U8	body[AOT_BIN_BLK_SIZE];
 };
 
-I64 class CAbsCntsI64
+I64 class CAbsCountsI64
 {
-  U16	abs_addres, //Only odd/even matters. Cnt of absolute addres in an exp.
-	c_addres; //Only odd/even matters. Cnt of C addres in an exp.
+  U16	abs_addres, //Only odd/even matters. Count of absolute addres in an exp.
+	c_addres; //Only odd/even matters. Count of C addres in an exp.
   U32	externs; //Only nonzero matters. Some regions have externs banned.
 };
 
@@ -1831,13 +1831,13 @@ class CAsmNum
   I64	i;
   U8	*machine_code;
   CAsmUndefHash	*local_asm_undef_hash,*glbl_asm_undef_hash;
-  CAbsCntsI64 abs_cnts;
+  CAbsCountsI64 abs_counts;
 };
 
 class CAsmNum2
 {
   CAsmNum num;
-  I64	U8_cnt,rel;
+  I64	U8_count,rel;
   Bool	imm_flag;
 };
 
@@ -1845,7 +1845,7 @@ class CAsmIns
 {
   CInst *tmpins;
   CAsmNum2 imm,disp;
-  I64	U8_cnt,last_opcode_U8,
+  I64	U8_count,last_opcode_U8,
 	REX,ModrM,SIB;
   Bool	has_REX,has_ModrM,has_SIB,
 	has_addr_prefix,
@@ -1959,7 +1959,7 @@ class CAsmUnresolvedRef
 #define OCF_ALIAS	1
 public class CHashOpcode:CHash
 {
-  U16	inst_entry_cnt,
+  U16	inst_entry_count,
 	oc_flags,pad[2];
   CInst ins[1];
 };
@@ -2187,15 +2187,15 @@ public class CCompCtrl
   I64	cur_str_len,
 	class_dol_offset;
   U8	*dollar_buf;
-  I64	dollar_cnt;
+  I64	dollar_count;
   U8	*cur_help_idx;
   I64	last_U16,
 	min_line,max_line,last_line_num,
-	lock_cnt;
+	lock_count;
   U32	*char_bmp_alpha_numeric;
   CLexHashTableContext htc;
   CHashGeneric *hash_entry;
-  CAbsCntsI64 abs_cnts;
+  CAbsCountsI64 abs_counts;
   CAsmUndefHash *asm_undef_hash;
   CMemberLst *local_var_entry;
   CCodeMisc *lb_leave;
@@ -2207,7 +2207,7 @@ public class CCompCtrl
   CAOT	*aot;
 
   I64	pass,opts,pass_trace,saved_pass_trace,
-	error_cnt,warning_cnt;
+	error_count,warning_count;
 
   //For intermediate codes with multiple float ops (int<->float conversions)
   I64	cur_ic_float_op_num,last_ic_float_op_num;
@@ -2735,9 +2735,9 @@ public class CBlkDevGlobals
   U8	*tmp_filename;
   U8	*home_dir;
   CCacheBlk *cache_base,*cache_ctrl,**cache_hash_table;
-  I64	cache_size,read_cnt,write_cnt;
+  I64	cache_size,read_count,write_count;
   CDrive	*drvs,*let_to_drv[32];
-  I64	mount_ide_auto_cnt,
+  I64	mount_ide_auto_count,
 	ins_base0,ins_base1;	//Install cd/dvd controller.
   U8	boot_drv_let,first_hd_drv_let,first_dvd_drv_let;
   Bool	dvd_boot_is_good,ins_unit,pad[3];
@@ -2959,7 +2959,7 @@ public class CKbdStateGlobals
 {
   I64	scan_code,	//See $LK,"scan codes",A="FI:::/Doc/CharOverview.DD"$
 	last_down_scan_code,
-	cnt,		//Count of keys pressed since boot.
+	count,		//Count of keys pressed since boot.
 	timestamp,	//Output: GetTSC when event.
 	new_key_timestamp; //Output: GetTSC when new key event.
   CFifoU8 *fifo,*fifo2; //Private
@@ -3303,7 +3303,7 @@ public class CTask //The Fs segment reg points to current CTask.
 	r8,r9,r10,r11,r12,r13,r14,r15;
   CCPU	*gs;
   CFPU	*fpu_mmx;
-  I64	swap_cnter;
+  I64	swap_counter;
 
   U0	(*draw_it)(CTask *task,CDC *dc);
 
@@ -3398,7 +3398,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
   I64	total_jiffies;
   CTask *seth_task,*idle_task;
   I64	tr,   //task reg
-	swap_cnter;
+	swap_counter;
   U0	(*profiler_timer_irq)(CTask *task);
   CTaskDying *next_dying,*last_dying;
   I64	kill_jiffy;
@@ -3642,7 +3642,7 @@ public class CDC
   CGrSym sym;
 
   I32	cur_x,cur_y,cur_z,pad;
-  I64	collision_cnt;
+  I64	collision_count;
 
   I64	nearest_dist,
 	min_x,max_x,min_y,max_y; //Set by $LK,"DCF_RECORD_EXTENTS",A="MN:DCF_RECORD_EXTENTS"$ (scrn coordinates)

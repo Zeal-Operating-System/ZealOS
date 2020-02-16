@@ -472,33 +472,33 @@ I64 StrOcc(U8 *src, I64 ch)
 I64 Spaces2Tabs(U8 *dst,U8 *src)
 {//Src buf with spaces to dst buf without.
   U8 *src2;
-  I64 chged=0,space_cnt,space_cnt2,col=0;
+  I64 chged=0,space_count,space_count2,col=0;
   if (*src)
     while (TRUE) {
       src2=src;
       while (*src2==CH_SPACE)
 	src2++;
-      space_cnt=src2-src;
-      while (col+space_cnt>=8) {
-	space_cnt2=8-col;
-	if (space_cnt2==1)
+      space_count=src2-src;
+      while (col+space_count>=8) {
+	space_count2=8-col;
+	if (space_count2==1)
 	  *dst++=CH_SPACE;
 	else {
 	  *dst++='\t';
-	  chged+=space_cnt2-1;
+	  chged+=space_count2-1;
 	}
-	space_cnt-=space_cnt2;
+	space_count-=space_count2;
 	col=0;
       }
       if (*src2=='\t') {
-	if (space_cnt==1 && col==7)
+	if (space_count==1 && col==7)
 	  *dst++=CH_SPACE;
 	else
-	  chged+=space_cnt;
+	  chged+=space_count;
 	*dst++='\t';
 	col=0;
       } else {
-	while (space_cnt--) {
+	while (space_count--) {
 	  *dst++=CH_SPACE;
 	  if (++col==8)
 	    col=0;

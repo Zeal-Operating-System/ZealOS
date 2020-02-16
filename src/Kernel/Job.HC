@@ -348,7 +348,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 
 I64 JobsHandler(I64 run_flags,CTask *task=NULL)
 {//Handle all waiting cmds and return.
-  I64 cnt=0,old_flags=GetRFlags;
+  I64 count=0,old_flags=GetRFlags;
   if (!task) task=Fs;
   while (TRUE) {
     CLI
@@ -357,7 +357,7 @@ I64 JobsHandler(I64 run_flags,CTask *task=NULL)
     if (task->srv_ctrl.next_waiting!=&task->srv_ctrl)
       switch (JobRunOne(run_flags,&task->srv_ctrl)) {
 	case JOB_CONT:
-	  cnt++;
+	  count++;
 	  break;
 	case JOB_EXIT:
 	  Exit;
@@ -370,7 +370,7 @@ I64 JobsHandler(I64 run_flags,CTask *task=NULL)
 jh_done:
   LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   SetRFlags(old_flags);
-  return cnt;
+  return count;
 }
 
 I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL)

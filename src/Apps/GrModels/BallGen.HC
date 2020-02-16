@@ -5,8 +5,8 @@
 
 class Ball
 {
-  I32 vertex_cnt;
-  I32 tri_cnt;
+  I32 vertex_count;
+  I32 tri_count;
   CD3I32	    v[VERTICES_NUM];
   CMeshTri t[TRIS_NUM];
 } *b;
@@ -35,10 +35,10 @@ U0 BDCorrect(BallDefineStruct *bd)
 I64 AddVertex(BallDefineStruct *,I64 x,I64 y,I64 z)
 {
   I64 i;
-  for (i=0;i<b->vertex_cnt;i++)
+  for (i=0;i<b->vertex_count;i++)
     if (b->v[i].x==x && b->v[i].y==y && b->v[i].z==z)
       return i;
-  i=b->vertex_cnt++;
+  i=b->vertex_count++;
   b->v[i].x=x;
   b->v[i].y=y;
   b->v[i].z=z;
@@ -47,7 +47,7 @@ I64 AddVertex(BallDefineStruct *,I64 x,I64 y,I64 z)
 
 I64 AddTri(BallDefineStruct *,I64 c,I64 n0,I64 n1,I64 n2)
 {
-  I64 res=b->tri_cnt++;
+  I64 res=b->tri_count++;
   b->t[res].color=c;
   b->t[res].nums[0]=n0;
   b->t[res].nums[1]=n1;
@@ -59,16 +59,16 @@ U8 *Ball2CSprite()
 {
 //See $LK,"::/Zenith/Gr/GrSpritePlot.HC",A="FL:::/Zenith/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.
   U8 *res=MAlloc(sizeof(CSpriteMeshU8s)+
-	b->vertex_cnt*sizeof(CD3I32)+b->tri_cnt*sizeof(CMeshTri)
+	b->vertex_count*sizeof(CD3I32)+b->tri_count*sizeof(CMeshTri)
   +sprite_elem_base_sizes[SPT_END]),
 	*dst=res;
   *dst++ =SPT_MESH;
-  *dst(I32 *)++ =b->vertex_cnt;
-  *dst(I32 *)++ =b->tri_cnt;
-  MemCpy(dst,&b->v,b->vertex_cnt*sizeof(CD3I32));
-  dst+=b->vertex_cnt*sizeof(CD3I32);
-  MemCpy(dst,&b->t,b->tri_cnt*sizeof(CMeshTri));
-  dst+=b->tri_cnt*sizeof(CMeshTri);
+  *dst(I32 *)++ =b->vertex_count;
+  *dst(I32 *)++ =b->tri_count;
+  MemCpy(dst,&b->v,b->vertex_count*sizeof(CD3I32));
+  dst+=b->vertex_count*sizeof(CD3I32);
+  MemCpy(dst,&b->t,b->tri_count*sizeof(CMeshTri));
+  dst+=b->tri_count*sizeof(CMeshTri);
   *dst++ =SPT_END;
   return res;
 }
@@ -116,7 +116,7 @@ public U8 *BallGen()
     "%h7c",'\n';
     Sprite(res,"\t\t$$SP,\"<1>\",BI=%d$$");
     "%h7c",'\n';
-    "Vertices:%d\n",b->vertex_cnt;
+    "Vertices:%d\n",b->vertex_count;
     Free(b);
     "Do another";
     if (YorN)

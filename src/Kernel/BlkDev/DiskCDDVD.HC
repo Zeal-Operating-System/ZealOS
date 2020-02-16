@@ -69,18 +69,18 @@ U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
   U8 *buf=MAlloc(COPY_BUF_BLKS<<BLK_SIZE_BITS),
 	*out_name2=ExtDft(out_name,"ISO");
   CFile *f=FOpen(out_name2,"w");
-  I64 n,spc=bd->blk_size>>BLK_SIZE_BITS,blk=0,cnt,retry;
+  I64 n,spc=bd->blk_size>>BLK_SIZE_BITS,blk=0,count,retry;
   BlkDevInit(bd);
   if (bd->type!=BDT_ATAPI)
     throw('BlkDev');
   if (!out_name)
     out_name=blkdev.dft_iso_filename;
-  cnt=CeilU64(dv->size,spc);
-  while (cnt>0) {
-    if (cnt>COPY_BUF_BLKS)
+  count=CeilU64(dv->size,spc);
+  while (count>0) {
+    if (count>COPY_BUF_BLKS)
       n=COPY_BUF_BLKS;
     else
-      n=cnt;
+      n=count;
     if (n>bd->max_reads)
       n=bd->max_reads;
 
@@ -94,7 +94,7 @@ U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
       ATAPIReadBlks2(bd,0,buf,blk/spc,n/spc,TRUE);
 
     FBlkWrite(f,buf,blk,n);
-    cnt-=n;
+    count-=n;
     blk+=n;
   }
   FClose(f);
@@ -105,7 +105,7 @@ U0 DVDImageRead(U8 dvd_drv_let,U8 *out_name)
 class CDualBuf
 {
   U8 *buf0,*buf1;
-  I64 in_buf,out_buf,cnt;
+  I64 in_buf,out_buf,count;
   U8 *filename;
   CBlkDev *dvd_bd;
 };
@@ -113,17 +113,17 @@ class CDualBuf
 U0 DVDImageWriteTask(CDualBuf *d)
 {
   U8 *buf;
-  I64 n,blk=0,cnt=d->cnt;
+  I64 n,blk=0,count=d->count;
   CFile *f;
   if (FileAttr(d->filename)&RS_ATTR_CONTIGUOUS)
     f=FOpen(d->filename,"rc");
   else
     f=FOpen(d->filename,"r");
-  while (cnt>0) {
-    if (cnt>COPY_BUF_BLKS)
+  while (count>0) {
+    if (count>COPY_BUF_BLKS)
       n=COPY_BUF_BLKS;
     else
-      n=cnt;
+      n=count;
     if (n>d->dvd_bd->max_writes)
       n=d->dvd_bd->max_writes;
     if (d->in_buf&1)
@@ -134,7 +134,7 @@ U0 DVDImageWriteTask(CDualBuf *d)
       Yield;
     FBlkRead(f,buf,blk,n);
     d->in_buf++;
-    cnt-=n;
+    count-=n;
     blk+=n;
   }
   FClose(f);
@@ -144,7 +144,7 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
 {//Write CD/DVD ISO file to disk.
   CDualBuf *d=CAlloc(sizeof(CDualBuf));
   U8 *buf,*in_name2,*in_name3;
-  I64 i,n,spc,blk=0,cnt;
+  I64 i,n,spc,blk=0,count;
   CDrive *dv=Letter2Drive(dvd_drv_let);
   CBlkDev *bd=dv->bd,*bd2;
   CTask *task;
@@ -159,7 +159,7 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
     Free(d);
     return;
   }
-  cnt=(FSize(f)+BLK_SIZE-1)>>BLK_SIZE_BITS;
+  count=(FSize(f)+BLK_SIZE-1)>>BLK_SIZE_BITS;
   FClose(f);
   if (bd->type!=BDT_ATAPI)
     throw('BlkDev');
@@ -175,14 +175,14 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   bd->flags|=BDF_READ_ONLY_OVERRIDE;
   BlkDevInit(bd);
   spc=bd->blk_size>>BLK_SIZE_BITS;
-  if (dv->size<cnt)
-    dv->size=cnt;
+  if (dv->size<count)
+    dv->size=count;
 
   d->filename=in_name2;
   d->dvd_bd=bd;
   d->buf0=MAlloc(COPY_BUF_BLKS<<BLK_SIZE_BITS);
   d->buf1=MAlloc(COPY_BUF_BLKS<<BLK_SIZE_BITS);
-  d->cnt=cnt;
+  d->count=count;
 
   task=Spawn(&DVDImageWriteTask,d,"Write CD/DVD");
   while (d->in_buf<=d->out_buf)
@@ -191,13 +191,13 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
   BlkDevLock(bd);
   ATAPIWaitReady(bd,0);
 
-  progress1=0; progress1_max=cnt;
+  progress1=0; progress1_max=count;
   StrCpy(progress1_desc,"Writing");
-  while (cnt>0) {
-    if (cnt>COPY_BUF_BLKS)
+  while (count>0) {
+    if (count>COPY_BUF_BLKS)
       n=COPY_BUF_BLKS;
     else
-      n=cnt;
+      n=count;
     if (n>bd->max_writes)
       n=bd->max_writes;
     if (d->out_buf&1)
@@ -208,7 +208,7 @@ U0 DVDImageWrite(U8 dvd_drv_let,U8 *in_name=NULL,I64 media_type=MT_DVD)
       Yield;
     ATAPIWriteBlks(bd,buf,blk/spc,(n+spc-1)/spc);
     d->out_buf++;
-    cnt-=n;
+    count-=n;
     blk+=n;
     progress1+=n;
   }

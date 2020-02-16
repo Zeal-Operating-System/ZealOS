@@ -36,7 +36,7 @@ I64 EndianI64(I64 d)
   return res;
 }
 
-I64 BCnt(I64 d)
+I64 BCount(I64 d)
 {//Count set bits in I64.
   I64 res=0,i;
   for (i=0;i<8;i++)
@@ -47,13 +47,13 @@ I64 BCnt(I64 d)
 U0 IntCore0TimerHandler(CTask *)
 {//Called from $LK,"IntCore0TimerHandler",A="FF:::/Kernel/KInts.HC,IntCore0TimerHandler"$
   I64 i;
-  if (mp_cnt>1)
+  if (mp_count>1)
     while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
       PAUSE
-  lock cnts.jiffies++;
-  cnts.timer+=SYS_TIMER0_PERIOD+1;
+  lock counts.jiffies++;
+  counts.timer+=SYS_TIMER0_PERIOD+1;
   LBtr(&sys_semas[SEMA_SYS_TIMER],0);
-  for (i=1;i<mp_cnt;i++)
+  for (i=1;i<mp_count;i++)
     MPInt(I_TIMER,i);
   OutU8(0x20,0x20); //Acknowledge PIC Interrupt
 }
@@ -63,7 +63,7 @@ I64 SysTimerRead()
   I64 i,res;
   PUSHFD
   CLI
-  if (mp_cnt>1)
+  if (mp_count>1)
     while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
       PAUSE
   OutU8(0x43,0); //Latch Timer0
@@ -71,7 +71,7 @@ I64 SysTimerRead()
     if (InU8(0x20) & 1)
       i=-1;
   }
-  res=cnts.timer+SYS_TIMER0_PERIOD-i;
+  res=counts.timer+SYS_TIMER0_PERIOD-i;
   LBtr(&sys_semas[SEMA_SYS_TIMER],0);
   POPFD
   return res;
@@ -90,24 +90,24 @@ I64 TimeCal()
     PUSHFD
     CLI
     if (HPET_start) {
-      cnts.time_stamp_freq=cnts.HPET_freq*(GetTSC-time_stamp_start);
+      counts.time_stamp_freq=counts.HPET_freq*(GetTSC-time_stamp_start);
       i=HPET-HPET_start;
     } else {
-      cnts.time_stamp_freq=SYS_TIMER_FREQ*(GetTSC-time_stamp_start);
+      counts.time_stamp_freq=SYS_TIMER_FREQ*(GetTSC-time_stamp_start);
       i=SysTimerRead-timer_start;
     }
     if (!i)
       ZenithErr("Timer Cal Error");
     else {
-      cnts.time_stamp_freq/=i;
-      cnts.time_stamp_kHz_freq=cnts.time_stamp_freq/1000;
-      cnts.time_stamp_calibrated=TRUE;
+      counts.time_stamp_freq/=i;
+      counts.time_stamp_kHz_freq=counts.time_stamp_freq/1000;
+      counts.time_stamp_calibrated=TRUE;
     }
     POPFD
   }
   PUSHFD
   CLI
-  if (cnts.HPET_freq) {
+  if (counts.HPET_freq) {
     timer_start=0;
     HPET_start=HPET;
   } else {
@@ -116,13 +116,13 @@ I64 TimeCal()
   }
   time_stamp_start=GetTSC;
   POPFD
-  return cnts.time_stamp_freq;
+  return counts.time_stamp_freq;
 }
 
 F64 tS()
 {//Time since boot in seconds as a float.
-  if (cnts.HPET_freq)
-    return ToF64(HPET-cnts.HPET_initial)/cnts.HPET_freq;
+  if (counts.HPET_freq)
+    return ToF64(HPET-counts.HPET_initial)/counts.HPET_freq;
   else
     return SysTimerRead/ToF64(SYS_TIMER_FREQ);
 }
@@ -130,14 +130,14 @@ F64 tS()
 Bool Blink(F64 Hz=2.5)
 {//Return TRUE, then FALSE, then TRUE at given frequency.
   if (!Hz) return 0;
-  return ToI64(cnts.jiffies*2*Hz/JIFFY_FREQ)&1;
+  return ToI64(counts.jiffies*2*Hz/JIFFY_FREQ)&1;
 }
 
 U0 Busy(I64 ÊS)
 {//Loosely timed.
   I64 i;
-  if (cnts.HPET_freq) {
-    i=HPET+cnts.HPET_freq*ÊS/1000000;
+  if (counts.HPET_freq) {
+    i=HPET+counts.HPET_freq*ÊS/1000000;
     while (HPET<i);
   } else
     for (i=0;i<ÊS;i++)
@@ -157,7 +157,7 @@ U0 Sleep(I64 mS)
   if (!mS)
     Yield;
   else
-    SleepUntil(cnts.jiffies+mS*JIFFY_FREQ/1000);
+    SleepUntil(counts.jiffies+mS*JIFFY_FREQ/1000);
 }
 
 F64 Ona2Freq(I8 ona)
@@ -165,7 +165,7 @@ F64 Ona2Freq(I8 ona)
   if (!ona)
     return 0;
   else
-    return 432.0/32*2.0`(ona/12.0);
+    return 432.0/32*2.0`(ona/12.0);
 }
 
 I8 Freq2Ona(F64 freq)

@@ -274,14 +274,14 @@ U0 MPMenDraw(CDC *dc2)
 {
   CTask *task=dc2->win_task;
   CDC *dc=DCAlias(dc2,task);
-  I64 i,r[16],lo=Gs->num*U_NUM/mp_cnt,hi=(Gs->num+1)*U_NUM/mp_cnt,
+  I64 i,r[16],lo=Gs->num*U_NUM/mp_count,hi=(Gs->num+1)*U_NUM/mp_count,
 	yy,phase,scroll_y=MAP_HEIGHT-100-100*(tS-t0);
   Unit *tmpu;
   Explosion *tmpe;
   U8 *tmps,**_tmps;
   F64 tt,ts=tS;
 
-  for (i=Gs->num;i<E_NUM;i+=mp_cnt) {
+  for (i=Gs->num;i<E_NUM;i+=mp_count) {
     tmpe=&e[i];
     yy=(tmpe->y-scroll_y)&(MAP_HEIGHT-1);
     if (-32<=yy<=task->pix_bottom+32 && !tmpe->dead) {
@@ -376,8 +376,8 @@ U0 DrawIt(CTask *task,CDC *dc)
     }
 
   DCDepthBufAlloc(dc);
-  mp_not_done_flags=1<<mp_cnt-1;
-  for (i=0;i<mp_cnt;i++)
+  mp_not_done_flags=1<<mp_count-1;
+  for (i=0;i<mp_count;i++)
     JobQueue(&MPMenDraw,dc,i);
   while (mp_not_done_flags)
     Yield;
@@ -509,9 +509,9 @@ U0 CheckCollisions()
       x=tmpu->x;
       y=(tmpu->y-scroll_y)&(MAP_HEIGHT-1);
       if (0<=x<GR_WIDTH && 0<=y<GR_HEIGHT) {
-	dc2->collision_cnt=0;
+	dc2->collision_count=0;
 	GrRect(dc2,x-3,y-9,6,8);
-	if (dc2->collision_cnt)
+	if (dc2->collision_count)
 	  ManDie(tmpu,TRUE);
       }
     }
@@ -817,7 +817,7 @@ U0 Titanium()
 
   try {
     while (TRUE) {
-      next_update_jiffy=cnts.jiffies+JIFFY_FREQ/100;
+      next_update_jiffy=counts.jiffies+JIFFY_FREQ/100;
       while (message_code=ScanMessage(&ch,&sc,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_KEY_UP)) {
 	switch (message_code) {
 	  case MESSAGE_KEY_DOWN:

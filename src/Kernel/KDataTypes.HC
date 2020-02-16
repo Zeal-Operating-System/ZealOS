@@ -18,7 +18,7 @@ U8 *LinkedLstCopy(U8 **_lst,CTask *mem_task=NULL)
   return res;
 }
 
-I64 LinkedLstCnt(U8 **_lst)
+I64 LinkedLstCount(U8 **_lst)
 {//Count of nodes in linked-list.
   I64 res=0;
   while (_lst) {
@@ -62,7 +62,7 @@ CQueue *QueueCopy(CQueue *head,CTask *mem_task=NULL)
   return res;
 }
 
-I64 QueueCnt(CQueue *head)
+I64 QueueCount(CQueue *head)
 {//Count of nodes in queue, not head.
   CQueue *tmpq=head->next;
   I64 res=0;
@@ -88,7 +88,7 @@ CQueueVectU8 *QueueVectU8New(I64 min_idx=0)
 {//Create new queue vecter.
   CQueueVectU8 *res=MAlloc(sizeof(CQueueVectU8));
   QueueInit(res);
-  res->total_cnt=res->node_cnt=0;
+  res->total_count=res->node_count=0;
   res->min_idx=min_idx;
   return res;
 }
@@ -98,32 +98,32 @@ U0 QueueVectU8Put(CQueueVectU8 *v,I64 idx,U8 ch)
   CQueueVectU8 *tmpv;
   idx-=v->min_idx;
   if (idx<0) return;
-  if (idx<v->total_cnt) {
+  if (idx<v->total_count) {
     tmpv=v;
     do {
-      idx-=tmpv->node_cnt;
+      idx-=tmpv->node_count;
       if (idx<0) {
-	tmpv->body[idx+tmpv->node_cnt]=ch;
+	tmpv->body[idx+tmpv->node_count]=ch;
 	return;
       }
       tmpv=tmpv->next;
     } while (tmpv!=v);
   } else
-    idx-=v->total_cnt;
+    idx-=v->total_count;
 
   while (TRUE) {
     tmpv=v->last;
-    if (tmpv->node_cnt>=QUE_VECT_U8_CNT) {
+    if (tmpv->node_count>=QUE_VECT_U8_CNT) {
       tmpv=MAlloc(sizeof(CQueueVectU8));
-      tmpv->node_cnt=0;
+      tmpv->node_count=0;
       QueueInsert(tmpv,v->last);
     }
     if (idx--) {
-      tmpv->body[tmpv->node_cnt++]=0;
-      v->total_cnt++;
+      tmpv->body[tmpv->node_count++]=0;
+      v->total_count++;
     } else {
-      tmpv->body[tmpv->node_cnt++]=ch;
-      v->total_cnt++;
+      tmpv->body[tmpv->node_count++]=ch;
+      v->total_count++;
       break;
     }
   }
@@ -141,12 +141,12 @@ I64 QueueVectU8Get(CQueueVectU8 *v,I64 idx)
 {//Get U8 at idx i.
   CQueueVectU8 *tmpv;
   idx-=v->min_idx;
-  if (!(0<=idx<v->total_cnt)) return 0;
+  if (!(0<=idx<v->total_count)) return 0;
   tmpv=v;
   do {
-    idx-=tmpv->node_cnt;
+    idx-=tmpv->node_count;
     if (idx<0)
-      return tmpv->body[idx+tmpv->node_cnt];
+      return tmpv->body[idx+tmpv->node_count];
     tmpv=tmpv->next;
   } while (tmpv!=v);
   return 0;
@@ -224,7 +224,7 @@ U0 FifoU8Flush(CFifoU8 *f)
   POPFD
 }
 
-I64 FifoU8Cnt(CFifoU8 *f)
+I64 FifoU8Count(CFifoU8 *f)
 {//Count of U8's in fifo.
   I64 res;
   PUSHFD
@@ -309,7 +309,7 @@ U0 FifoI64Flush(CFifoI64 *f)
   POPFD
 }
 
-I64 FifoI64Cnt(CFifoI64 *f)
+I64 FifoI64Count(CFifoI64 *f)
 {//Count of I64's in fifo.
   I64 res;
   PUSHFD

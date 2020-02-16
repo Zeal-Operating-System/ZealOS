@@ -6,7 +6,7 @@ public extern CAutoCompleteGlobals ac;
 public extern CAutoCompleteDictGlobals acd;
 
 #help_index "Bit"
-public extern I64 BCnt(I64 d);
+public extern I64 BCount(I64 d);
 public extern U8 *rev_bits_table,*set_bits_table;
 
 #help_index "Boot"
@@ -128,20 +128,20 @@ public extern U0 ArcExpandBuf(CArcCtrl *c);
 public extern Bool ArcFinishCompression(CArcCtrl *c);
 
 #help_index "Data Types/Circular Queue"
-public extern I64	QueueCnt(CQueue *head);
+public extern I64	QueueCount(CQueue *head);
 public extern CQueue	*QueueCopy(CQueue *head,CTask *mem_task=NULL);
 public extern U0	QueueDel(CQueue *head,Bool querem=FALSE);
 public extern I64	QueueSize(CQueue *head);
 
 #help_index "Data Types/Fifo"
-public extern I64	FifoI64Cnt(CFifoI64 *f);
+public extern I64	FifoI64Count(CFifoI64 *f);
 public extern U0	FifoI64Del(CFifoI64 *f);
 public extern U0	FifoI64Flush(CFifoI64 *f);
 public extern Bool	FifoI64Ins(CFifoI64 *f,I64 q);
 public extern CFifoI64	*FifoI64New(I64 size,CTask *mem_task=NULL);
 public extern Bool	FifoI64Peek(CFifoI64 *f,I64 *_q);
 public extern Bool	FifoI64Remove(CFifoI64 *f,I64 *_q);
-public extern I64	FifoU8Cnt(CFifoU8 *f);
+public extern I64	FifoU8Count(CFifoU8 *f);
 public extern U0	FifoU8Del(CFifoU8 *f);
 public extern U0	FifoU8Flush(CFifoU8 *f);
 public extern Bool	FifoU8Ins(CFifoU8 *f,U8 b);
@@ -150,7 +150,7 @@ public extern Bool	FifoU8Peek(CFifoU8 *f,U8 *_b);
 public extern Bool	FifoU8Remove(CFifoU8 *f,U8 *_b);
 
 #help_index "Data Types/Linked List"
-public extern I64	LinkedLstCnt(U8 **_lst);
+public extern I64	LinkedLstCount(U8 **_lst);
 public extern U8	*LinkedLstCopy(U8 **_lst,CTask *mem_task=NULL);
 public extern U0	LinkedLstDel(U8 **_lst);
 public extern I64	LinkedLstSize(U8 **_lst);
@@ -182,7 +182,7 @@ extern CBpt *BptFind(U8 *needle_addr,CTask *haystack_task=NULL,Bool rem=FALSE);
 public extern Bool BptR(U8 *addr,CTask *task=NULL,Bool live=TRUE,Bool rem=TRUE);
 public extern Bool BptS(U8 *addr,CTask *task=NULL,Bool live=TRUE);
 public extern Bool DebugMode(Bool val);
-public extern Bool E(U8 *addr,I64 cnt=512,I64 edf_dof_flags=0);
+public extern Bool E(U8 *addr,I64 count=512,I64 edf_dof_flags=0);
 public extern Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0);
 extern Bool EdLiteFileLine(U8 *fl_file_line,I64 edf_dof_flags=0);
 public extern Bool Fix(I64 edf_dof_flags=0);
@@ -198,19 +198,19 @@ public extern Bool Man(U8 *st,I64 edf_dof_flags=0);
 
 #help_index "Debugging/Dump"
 public extern U0 CallerRep(U8 **rbp=NULL,CTask *task=NULL);
-public extern U0 D(U8 *addr,I64 cnt=0x80,Bool show_offset=TRUE);
-public extern U0 Da(U8 **addr,I64 cnt=0x10);
-public extern U0 Dm(U8 *addr,I64 cnt=0x80);
+public extern U0 D(U8 *addr,I64 count=0x80,Bool show_offset=TRUE);
+public extern U0 Da(U8 **addr,I64 count=0x10);
+public extern U0 Dm(U8 *addr,I64 count=0x80);
 public extern U0 Dr(CTask *task=NULL);
 public extern U0 StkRep(CTask *task=NULL);
 extern I64 *TaskRegAddr(CTask *task,I64 reg_num);
 
 #help_index "Debugging/FunSeg"
 #help_file "::/Doc/DebugFunSeg"
-public extern Bool PutSrcLink(U8 *addr,I64 cnt=1,U8 *buf=NULL);
-public extern U8 *SrcEdLink(U8 *addr,I64 cnt=1,CTask *mem_task=NULL);
-public extern U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL);
-public extern I64 SrcLineNum(U8 *addr,I64 cnt=1);
+public extern Bool PutSrcLink(U8 *addr,I64 count=1,U8 *buf=NULL);
+public extern U8 *SrcEdLink(U8 *addr,I64 count=1,CTask *mem_task=NULL);
+public extern U8 *SrcFileName(U8 *addr,I64 count=1,CTask *mem_task=NULL);
+public extern I64 SrcLineNum(U8 *addr,I64 count=1);
 
 #help_index "Debugging/FunSeg;Hash/System"
 public extern CHash *FunSegFind(U8 *addr,I64 *_offset);
@@ -218,8 +218,8 @@ public extern CHash *FunSegFind(U8 *addr,I64 *_offset);
 #help_index "Debugging/Raw Output"
 public extern Bool IsRaw();
 public extern Bool Raw(Bool val);
-public extern U0 RawD(I64 mS=100,U8 *addr,I64 cnt=0x80);
-public extern U0 RawDm(I64 mS=100,U8 *addr,I64 cnt=0x80);
+public extern U0 RawD(I64 mS=100,U8 *addr,I64 count=0x80);
+public extern U0 RawDm(I64 mS=100,U8 *addr,I64 count=0x80);
 extern U0 RawDr(CTask *task=NULL);
 public extern U0 RawPrint(I64 mS=100,U8 *fmt,...);
 public extern U0 RawPutChar(I64 ch);
@@ -236,7 +236,7 @@ public extern CHashDefineStr *DefineLoad(U8 *dname,U8 *st);
 public extern U0 DefinePrint(U8 *dname,U8 *src,...);
 
 #help_index "Define;Char/Define;Char/Lists"
-public extern I64 DefineCnt(U8 *dname);
+public extern I64 DefineCount(U8 *dname);
 public extern CHashDefineStr *DefineLstLoad(U8 *dname,U8 *lst);
 public extern I64 DefineMatch(U8 *needle,U8 *haystack_lst_dname,I64 flags=0);
 public extern U8 *DefineSub(I64 sub,U8 *dname);
@@ -270,10 +270,10 @@ public extern U0 DVDImageWrite(U8 dvd_drv_let,
 	U8 *in_name=NULL,I64 media_type=MT_DVD);
 
 #help_index "File/CFile"
-public extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1);
-public extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1);
+public extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
+public extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
 public extern U0 FClose(CFile *f);
-public extern CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0);
+public extern CFile *FOpen(U8 *filename,U8 *flags,I64 count=0);
 public extern I64 FSize(CFile *f);
 
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically)"
@@ -281,7 +281,7 @@ public extern Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE);
 public extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 	Bool del_dir=FALSE,Bool print_message=TRUE);
 public extern I64 Dir(U8 *files_find_mask="*",Bool full=FALSE);
-public extern Bool DirMk(U8 *filename,I64 entry_cnt=0);
+public extern Bool DirMk(U8 *filename,I64 entry_count=0);
 public extern Bool Drive(U8 drv_let);
 public extern U0 DiskChg(U8 drv_let=0);
 public extern U0 HomeSet(U8 *dirname);
@@ -331,17 +331,17 @@ public extern Bool BlkDevLock(CBlkDev *bd);
 public extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
 public extern Bool BlkDevUnlock(CBlkDev *bd,Bool rst=FALSE);
 public extern U0 BlkDevsRelease();
-public extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 cnt);
-public extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 cnt);
-public extern U0 BlkWriteZero(CDrive *dv,I64 blk,I64 cnt);
+public extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 count);
+public extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 count);
+public extern U0 BlkWriteZero(CDrive *dv,I64 blk,I64 count);
 public extern I64 Clus2Blk(CDrive *dv,I64 c);
 public extern I64 ClusAlloc(CDrive *dv,I64 c=0,
-	I64 cnt=1,Bool contiguous=FALSE);
+	I64 count=1,Bool contiguous=FALSE);
 public extern I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks);
 public extern I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks);
-public extern I64 ClusNumNext(CDrive *dv,I64 c,I64 cnt=1);
-public extern I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 cnt);
-public extern I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 cnt);
+public extern I64 ClusNumNext(CDrive *dv,I64 c,I64 count=1);
+public extern I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 count);
+public extern I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 count);
 extern Bool CopySingle(U8 *f1,U8 *f2); //Just one file
 public extern U8 Drive2Letter(CDrive *dv=NULL);
 public extern CDrive *DriveCheck(CDrive *dv,Bool except=TRUE);
@@ -361,7 +361,7 @@ public extern CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE);
 public extern U8 Letter2Letter(U8 drv_let=0);
 extern I64 Name2DirClus(CDrive *dv,U8 *dirname);
 extern I64 Name2ParentDirClus(CDrive *dv,U8 *dirname);
-extern U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 cnt);
+extern U0 RedSeaFreeClus(CDrive *dv,I64 c,I64 count);
 
 #help_index "File/Program Routines"
 public extern U0 DirEntryDel(CDirEntry *tmpde);
@@ -383,8 +383,8 @@ extern CBlkDev *ATAMount(U8 first_drv_let,
 	I64 type,I64 base0,I64 base1,I64 unit);
 extern Bool ATAPIStartStop(CBlkDev *bd,F64 timeout,Bool start);
 extern I64 ATAProbe(I64 base0,I64 base1,I64 unit);
-extern U0 ATAReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt);
-extern U0 ATAWriteBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 cnt);
+extern U0 ATAReadBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count);
+extern U0 ATAWriteBlks(CBlkDev *bd,U8 *buf, I64 blk, I64 count);
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 	Bool whole_drv,Bool make_free);
 extern U0 DiskCacheInit(I64 size_in_U8s);
@@ -728,7 +728,7 @@ public extern CTask *Spawn(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	I64 stk_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
-public extern CCntsGlobals cnts;
+public extern CCountsGlobals counts;
 
 #help_index "Time/Date/CDate;Date/CDate"
 #help_file "::/Doc/TimeDate"

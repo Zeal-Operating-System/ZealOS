@@ -488,7 +488,7 @@ U0 OptFixSizeOf(CIntermediateCode *tmpi1,
     tmpi1->t.arg2_tree->ic_code=IC_IMM_I64;
     tmpi1->t.arg2_tree->ic_class=tmpcc;
     tmpi_push->ic_class=tmpcc;
-    if (tmpcc->ptr_stars_cnt) {
+    if (tmpcc->ptr_stars_count) {
       tmpcc--;
       if (tmpcc->size==1)
 	goto here;
@@ -517,7 +517,7 @@ I64 CompRawType(CHashClass *tmpc)
 I64 CompRawTypePointed(CHashClass *tmpc)
 {
   if (tmpc) {
-    if (tmpc->ptr_stars_cnt)
+    if (tmpc->ptr_stars_count)
       tmpc--;
     tmpc=OptClassFwd(tmpc);
     return tmpc->raw_type;

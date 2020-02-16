@@ -133,7 +133,7 @@ Bool MPVisRecalc(MPCtrl1 *job)
 
 Bool VisRecalc(I64 mode,Unit *tmpu=NULL)
 {
-  I64 i,hi,k,cnt;
+  I64 i,hi,k,count;
   Bool res;
 /*The compiler doesn't go out of it's way
 to know if something is const.;-)This
@@ -143,8 +143,8 @@ AOT binaries.ZenithOS has a limited
 stk size, so don't get in the habit.
 $LK,"MAlloc",A="MN:MAlloc"$() would probably be the better choice.
 */
-  MPCtrl1 job[mp_cnt];
-  CJob *cmd[mp_cnt];
+  MPCtrl1 job[mp_count];
+  CJob *cmd[mp_count];
 
   if (mode==VR_FRIENDLY_UNIT_DIED) {
     MemSet((&vis_unit_bitmap[enemy_player])(U8 *)+
@@ -153,7 +153,7 @@ $LK,"MAlloc",A="MN:MAlloc"$() would probably be the better choice.
     return 0; //Return any value--don't care
   }
 
-  cnt=mp_cnt; //Cores
+  count=mp_count; //Cores
   hi=UNITS_NUM;
   if (mode==VR_ONE_ENEMY_UNIT) {
     for (hi--;hi>=0;hi--)
@@ -162,22 +162,22 @@ $LK,"MAlloc",A="MN:MAlloc"$() would probably be the better choice.
     hi++;
   }
   k=hi;
-  if (hi/mp_cnt<2)
-    cnt=1;
-  for (i=0;i<cnt;i++) {
+  if (hi/mp_count<2)
+    count=1;
+  for (i=0;i<count;i++) {
     job[i].mode=mode;
     job[i].tmpu=tmpu;
     job[i].hi=k;
-    k-=hi/cnt;
+    k-=hi/count;
     if (k<0) k=0;
-    if (i==cnt-1) k=0;
+    if (i==count-1) k=0;
     job[i].lo=k;
   }
 
   res=FALSE;
-  for (i=0;i<cnt;i++)
+  for (i=0;i<count;i++)
     cmd[i]=JobQueue(&MPVisRecalc,&job[i],i,0);
-  for (i=0;i<cnt;i++)
+  for (i=0;i<count;i++)
     if (JobResGet(cmd[i]))
       res=TRUE;
   if (mode==VR_UPDATE_FRIENDLY_UNIT)
@@ -198,26 +198,26 @@ U0 MPVisRecalcMap(MPCtrl2 *job)
 
 U0 VisRecalcMap(I64 row,I64 col)
 {
-  I64 i,hi,k,cnt;
-  MPCtrl2 job[mp_cnt];
-  CJob *cmd[mp_cnt];
+  I64 i,hi,k,count;
+  MPCtrl2 job[mp_count];
+  CJob *cmd[mp_count];
 
-  cnt=mp_cnt; //Cores
+  count=mp_count; //Cores
   hi=map_rows;
   k=hi;
-  if (hi/mp_cnt<2)
-    cnt=1;
-  for (i=0;i<cnt;i++) {
+  if (hi/mp_count<2)
+    count=1;
+  for (i=0;i<count;i++) {
     job[i].row=row;
     job[i].col=col;
     job[i].hi=k;
-    k-=hi/cnt;
+    k-=hi/count;
     if (k<0) k=0;
-    if (i==cnt-1) k=0;
+    if (i==count-1) k=0;
     job[i].lo=k;
   }
-  for (i=0;i<cnt;i++)
+  for (i=0;i<count;i++)
     cmd[i]=JobQueue(&MPVisRecalcMap,&job[i],i,0);
-  for (i=0;i<cnt;i++)
+  for (i=0;i<count;i++)
     JobResGet(cmd[i]);
 }

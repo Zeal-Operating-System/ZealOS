@@ -170,7 +170,7 @@ class CFFRay
 
 I64 GrFloodFillRay(CDC *dc,I64 x,I64 y,I64 z,I32 *db)
 {//See the above commented-out routine for an easier to understand version.
-//Returns cnt of pixs changed
+//Returns count of pixs changed
   I64 res=0;
 //We don't dynamically calculate the size to avoid
   //fragmentation of memory.
@@ -241,7 +241,7 @@ public I64 GrFloodFill(CDC *dc=gr.dc,I64 x,I64 y,
 {//2D. Ignore z and db.
 //not_color=TRUE means fill up to everything which is not the current color.
   //not_color=FALSE means fill all parts equ to the color under the point.
-  //Returns cnt of pixs changed
+  //Returns count of pixs changed
   I64 res=0,j,old_flags=dc->flags;
   CColorROPU32 old_color2=dc->color2;
   CDC *old_brush;
@@ -635,14 +635,14 @@ public Bool Gr3Bezier(CDC *dc=gr.dc,CD3I32 *ctrl)
   return Bezier3(dc,ctrl,&GrLinePlot);
 }
 
-public Bool Gr2BSpline(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
+public Bool Gr2BSpline(CDC *dc=gr.dc,CD3I32 *ctrl,I64 count,Bool closed=FALSE)
 {//2nd order. Clipping but no transform or thick.
-  return BSpline2(dc,ctrl,cnt,&GrLinePlot,closed);
+  return BSpline2(dc,ctrl,count,&GrLinePlot,closed);
 }
 
-public Bool Gr3BSpline(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
+public Bool Gr3BSpline(CDC *dc=gr.dc,CD3I32 *ctrl,I64 count,Bool closed=FALSE)
 {//3rd order. Clipping but no transform or thick.
-  return BSpline3(dc,ctrl,cnt,&GrLinePlot,closed);
+  return BSpline3(dc,ctrl,count,&GrLinePlot,closed);
 }
 
 I64 GrLineFat3(CDC *dc=gr.dc,I64 x1,I64 y1,I64 z1,I64 x2,I64 y2,I64 z2,
@@ -973,7 +973,7 @@ public I64 GrFloodFill3(CDC *dc=gr.dc,I64 x1,I64 y1,I64 z1,Bool not_color=FALSE)
 {//3D. Transformation.
 //not_color=TRUE means fill up to everything which is not the current color.
   //not_color=FALSE means fill all parts equ to the color under the point.
-  //Returns cnt of pixs changed
+  //Returns count of pixs changed
   I64 res,old_flags=dc->flags,
 	_x,_y,_z;
   if (dc->flags & DCF_TRANSFORMATION) {
@@ -1304,15 +1304,15 @@ gr_done:
   return res;
 }
 
-public I64 Gr2BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
+public I64 Gr2BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 count,Bool closed=FALSE)
 {//2nd order. Clipping and transform and thick.
   Bool res=FALSE;
   I64 i,x,y,z,
 	old_flags=dc->flags;
   CD3I32 *ctrl2=NULL,*ctrl3=NULL;
   if (dc->flags & DCF_TRANSFORMATION) {
-    ctrl2=MAlloc(sizeof(CD3I32)*cnt);
-    for (i=0;i<cnt;i++) {
+    ctrl2=MAlloc(sizeof(CD3I32)*count);
+    for (i=0;i<count;i++) {
       x=ctrl[i].x;
       y=ctrl[i].y;
       z=ctrl[i].z;
@@ -1325,8 +1325,8 @@ public I64 Gr2BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
     ctrl=ctrl2;
   }
   if (dc->flags & DCF_SYMMETRY) {
-    ctrl3=MAlloc(sizeof(CD3I32)*cnt);
-    for (i=0;i<cnt;i++) {
+    ctrl3=MAlloc(sizeof(CD3I32)*count);
+    for (i=0;i<count;i++) {
       x=ctrl[i].x;
       y=ctrl[i].y;
       z=ctrl[i].z;
@@ -1336,12 +1336,12 @@ public I64 Gr2BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
       ctrl3[i].z=z;
     }
     dc->flags&=~DCF_SYMMETRY;
-    res=BSpline2(dc,ctrl3,cnt,&GrPlot3,closed);
+    res=BSpline2(dc,ctrl3,count,&GrPlot3,closed);
     if (dc->flags & DCF_JUST_MIRROR)
       goto gr_done;
   }
 
-  res|=BSpline2(dc,ctrl,cnt,&GrPlot3,closed);
+  res|=BSpline2(dc,ctrl,count,&GrPlot3,closed);
 gr_done:
   Free(ctrl2);
   Free(ctrl3);
@@ -1349,15 +1349,15 @@ gr_done:
   return res;
 }
 
-public Bool Gr3BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
+public Bool Gr3BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 count,Bool closed=FALSE)
 {//3rd order. Clipping and transform and thick.
   Bool res=FALSE;
   I64 i,x,y,z,
 	old_flags=dc->flags;
   CD3I32 *ctrl2=NULL,*ctrl3=NULL;
   if (dc->flags & DCF_TRANSFORMATION) {
-    ctrl2=MAlloc(sizeof(CD3I32)*cnt);
-    for (i=0;i<cnt;i++) {
+    ctrl2=MAlloc(sizeof(CD3I32)*count);
+    for (i=0;i<count;i++) {
       x=ctrl[i].x;
       y=ctrl[i].y;
       z=ctrl[i].z;
@@ -1370,8 +1370,8 @@ public Bool Gr3BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
     ctrl=ctrl2;
   }
   if (dc->flags & DCF_SYMMETRY) {
-    ctrl3=MAlloc(sizeof(CD3I32)*cnt);
-    for (i=0;i<cnt;i++) {
+    ctrl3=MAlloc(sizeof(CD3I32)*count);
+    for (i=0;i<count;i++) {
       x=ctrl[i].x;
       y=ctrl[i].y;
       z=ctrl[i].z;
@@ -1381,12 +1381,12 @@ public Bool Gr3BSpline3(CDC *dc=gr.dc,CD3I32 *ctrl,I64 cnt,Bool closed=FALSE)
       ctrl3[i].z=z;
     }
     dc->flags&=~DCF_SYMMETRY;
-    res=BSpline3(dc,ctrl3,cnt,&GrPlot3,closed);
+    res=BSpline3(dc,ctrl3,count,&GrPlot3,closed);
     if (dc->flags & DCF_JUST_MIRROR)
       goto gr_done;
   }
 
-  res|=BSpline3(dc,ctrl,cnt,&GrPlot3,closed);
+  res|=BSpline3(dc,ctrl,count,&GrPlot3,closed);
 gr_done:
   Free(ctrl2);
   Free(ctrl3);
@@ -1395,7 +1395,7 @@ gr_done:
 }
 
 public I64 GrFillTri0(CDC *dc=gr.dc,CD3I32 *p1,CD3I32 *p2,CD3I32 *p4)
-{//3D. Returns cnt of pixs changed
+{//3D. Returns count of pixs changed
   I64 x1,x2,y1,y2,z1,z2,dx1,dy1,dz1,dx2,dy2,dz2,res=0,i,min,max;
   CTask *win_task;
 

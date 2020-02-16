@@ -6,7 +6,7 @@ I64 FSize(CFile *f)
     return 0;
 }
 
-CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0)
+CFile *FOpen(U8 *filename,U8 *flags,I64 count=0)
 {//Allows flags "r","w","w+". "c" for contiguous.
 //(It uses $LK,"StrOcc",A="MN:StrOcc"$() for 'w', 'r', '+', 'c')
   CFile *f=CAlloc(sizeof(CFile));
@@ -16,8 +16,8 @@ CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0)
 
   f->clus=INVALID_CLUS;
   f->fblk_num=0;
-  if (cnt>0)
-    f->max_blk=cnt-1;
+  if (count>0)
+    f->max_blk=count-1;
   else
     f->max_blk=I64_MAX;
   f->file_clus_num=INVALID_CLUS;
@@ -47,10 +47,10 @@ CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0)
     f->flags|=FF_NEW_FILE;
     if (dirc=DirContextNew(full_name)) {
       StrCpy(f->de.name,dirc->mask);
-      if (cnt>0) {//We pre-alloc the whole thing.
+      if (count>0) {//We pre-alloc the whole thing.
 	f->de.clus=ClusAlloc(f->dv,0,
-	      (cnt+f->dv->spc-1)/f->dv->spc,contiguous);
-	f->de.size=cnt<<BLK_SIZE_BITS;
+	      (count+f->dv->spc-1)/f->dv->spc,contiguous);
+	f->de.size=count<<BLK_SIZE_BITS;
 	DirNew(dirc->dv,Fs->cur_dir,&f->de,TRUE);
 	f->flags&=~FF_NEW_FILE;
       }
@@ -126,20 +126,20 @@ I64 FSetClus(CFile *f,I64 c,I64 blk,Bool read)
   return c;
 }
 
-Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
-{//Read [nth,n+cnt) blks of file.
+Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1)
+{//Read [nth,n+count) blks of file.
   CDrive *dv=f->dv;
   I64 spc=dv->spc,i,j,c=f->de.clus;
   if (!f || !dv) return FALSE;
   if (blk==FFB_NEXT_BLK)
     blk=f->fblk_num;
-  if (blk+cnt-1>f->max_blk)
+  if (blk+count-1>f->max_blk)
     return FALSE;
-  if (cnt<=0) return TRUE;
+  if (count<=0) return TRUE;
 
   if (f->flags & FF_CONTIGUOUS) {
-    BlkRead(dv,buf,Clus2Blk(dv,c)+blk,cnt);
-    blk+=cnt;
+    BlkRead(dv,buf,Clus2Blk(dv,c)+blk,count);
+    blk+=count;
   } else {
     i=blk/spc;
     if (0<=f->file_clus_num<=i) {
@@ -151,48 +151,48 @@ Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
 
     if (i=blk%spc) {
       c=FSetClus(f,c,blk,TRUE);
-      if (cnt<spc-i)
-	j=cnt;
+      if (count<spc-i)
+	j=count;
       else
 	j=spc-i;
       MemCpy(buf,f->clus_buf+i<<BLK_SIZE_BITS,j<<BLK_SIZE_BITS);
       buf+=j<<BLK_SIZE_BITS;
-      cnt-=j;
+      count-=j;
       blk+=j;
     }
-    while (cnt>=spc) {
+    while (count>=spc) {
       c=FSetClus(f,c,blk,TRUE);
       MemCpy(buf,f->clus_buf,spc<<BLK_SIZE_BITS);
       buf+=spc<<BLK_SIZE_BITS;
-      cnt-=spc;
+      count-=spc;
       blk+=spc;
     }
-    if (cnt>0) {
+    if (count>0) {
       c=FSetClus(f,c,blk,TRUE);
-      MemCpy(buf,f->clus_buf,cnt<<BLK_SIZE_BITS);
-      buf+=cnt<<BLK_SIZE_BITS;
-      blk+=cnt;
+      MemCpy(buf,f->clus_buf,count<<BLK_SIZE_BITS);
+      buf+=count<<BLK_SIZE_BITS;
+      blk+=count;
     }
   }
   f->fblk_num=blk;
   return TRUE;
 }
 
-Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
-{//Write [nth,n+cnt) blks of file.
+Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1)
+{//Write [nth,n+count) blks of file.
   CDrive *dv=f->dv;
   I64 spc=dv->spc,i,j,c=f->de.clus,c1;
   if (!f || !dv) return FALSE;
   if (blk==FFB_NEXT_BLK)
     blk=f->fblk_num;
-  if (blk+cnt-1>f->max_blk)
+  if (blk+count-1>f->max_blk)
     return FALSE;
   if (!(f->flags & FF_WRITE))
     return FALSE;
-  if (cnt<=0) return TRUE;
+  if (count<=0) return TRUE;
   if (f->flags & FF_CONTIGUOUS) {
-    BlkWrite(dv,buf,Clus2Blk(dv,c)+blk,cnt);
-    blk+=cnt;
+    BlkWrite(dv,buf,Clus2Blk(dv,c)+blk,count);
+    blk+=count;
   } else {
     if (!c) {
       c=ClusAlloc(dv,0,1,FALSE);
@@ -220,42 +220,42 @@ Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1)
 
     if (i=blk%spc) {
       FSetClus(f,c,blk,TRUE);
-      if (cnt<spc-i)
-	j=cnt;
+      if (count<spc-i)
+	j=count;
       else
 	j=spc-i;
       MemCpy(f->clus_buf+BLK_SIZE*i,buf,j<<BLK_SIZE_BITS);
       f->flags|=FF_BUF_DIRTY;
       buf+=j<<BLK_SIZE_BITS;
-      cnt-=j;
+      count-=j;
       blk+=j;
-      if (cnt>0) {
+      if (count>0) {
 	c1=c;
 	c=ClusNumNext(dv,c1,1);
 	if (c==INVALID_CLUS)
 	  c=ClusAlloc(dv,c1,1,FALSE);
       }
     }
-    while (cnt>=spc) {
+    while (count>=spc) {
       FSetClus(f,c,blk,FALSE);
       MemCpy(f->clus_buf,buf,spc<<BLK_SIZE_BITS);
       f->flags|=FF_BUF_DIRTY;
       buf+=spc<<BLK_SIZE_BITS;
-      cnt-=spc;
+      count-=spc;
       blk+=spc;
-      if (cnt>0) {
+      if (count>0) {
 	c1=c;
 	c=ClusNumNext(dv,c1,1);
 	if (c==INVALID_CLUS)
 	  c=ClusAlloc(dv,c1,1,FALSE);
       }
     }
-    if (cnt>0) {
+    if (count>0) {
       FSetClus(f,c,blk,TRUE);
-      MemCpy(f->clus_buf,buf,cnt<<BLK_SIZE_BITS);
+      MemCpy(f->clus_buf,buf,count<<BLK_SIZE_BITS);
       f->flags|=FF_BUF_DIRTY;
-      buf+=cnt<<BLK_SIZE_BITS;
-      blk+=cnt;
+      buf+=count<<BLK_SIZE_BITS;
+      blk+=count;
     }
     if (f->de.size<blk<<BLK_SIZE_BITS)
       f->de.size=blk<<BLK_SIZE_BITS;

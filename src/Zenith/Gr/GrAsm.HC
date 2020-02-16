@@ -407,4 +407,4 @@ _extern _GR_UPDATE_LINE64 U0 GrUpdateLine64(
 _extern _GR_UPDATE_LINE64_FLUSH_CACHE U0 GrUpdateLine64FlushCache(
   U64 **_vga,U64 **_src,I64 d,U8 **_dst);
 _extern _DC_BLOT_COLOR4 U0 DCBlotColor4(
-  U8 *dst,I64 *img,I64 *img_cache,I64 cnt);
+  U8 *dst,I64 *img,I64 *img_cache,I64 count);

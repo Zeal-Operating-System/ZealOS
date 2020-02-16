@@ -12,7 +12,7 @@ U0 DrawIt(CTask *,CDC *dc2)
 
 U0 AnimateTask(I64)
 {
-  I64 x,y,x1,y1,cnt,next_dc;
+  I64 x,y,x1,y1,count,next_dc;
   while (TRUE) {
     next_dc=cur_dc^1;
 start_over:
@@ -20,20 +20,20 @@ start_over:
     DCClear(dc[next_dc]);
     for (y=1;y<Fs->parent_task->pix_height-1;y++) {
       for (x=1;x<Fs->parent_task->pix_width-1;x++) {
-	cnt=0;
+	count=0;
 	for (y1=y-1;y1<=y+1;y1++)
 	  for (x1=x-1;x1<=x+1;x1++)
 	    if (GrPeek(dc[cur_dc],x1,y1)==GREEN)
-	      cnt++;
+	      count++;
 	if (restart) goto start_over;
 	if (GrPeek(dc[cur_dc],x,y)==GREEN) {
-	  if (cnt==3) {
+	  if (count==3) {
 	    dc[next_dc]->color=GREEN;
 	    GrPlot(dc[next_dc],x,y);
 	  }
 	} else {
-//	  if (cnt==3) {//Use this for the classic rules
-	  if (cnt==2) {
+//	  if (count==3) {//Use this for the classic rules
+	  if (count==2) {
 	    dc[next_dc]->color=GREEN;
 	    GrPlot(dc[next_dc],x,y);
 	  }
@@ -48,7 +48,7 @@ start_over:
 
 public U0 Life()
 {
-  I64 message_code,cnt,x1,y1,x2,y2,arg1,arg2;
+  I64 message_code,count,x1,y1,x2,y2,arg1,arg2;
 
   dc[0]=DCNew(GR_WIDTH,GR_HEIGHT);
   dc[1]=DCNew(GR_WIDTH,GR_HEIGHT);
@@ -71,7 +71,7 @@ public U0 Life()
       case MESSAGE_MS_L_DOWN:
 	x1=arg1; y1=arg2;
 	x2=arg1; y2=arg2;
-	cnt=0;
+	count=0;
 	while (message_code!=MESSAGE_MS_L_UP) {
 	  restart=TRUE;
 	  dc[cur_dc]->color=GREEN;

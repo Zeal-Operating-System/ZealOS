@@ -26,9 +26,9 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
     tmpc2=ml->member_class;
     ptr=_d(U8 *)+ml->offset;
     DocPrint(doc,"%08X ",ptr(U8 *)+offset);
-    stars=tmpc2->ptr_stars_cnt;
+    stars=tmpc2->ptr_stars_count;
     tmpc2=OptClassFwd(tmpc2);
-    tmpc2-=tmpc2->ptr_stars_cnt;
+    tmpc2-=tmpc2->ptr_stars_count;
     if (tmpc2->type & HTT_INTERNAL_TYPE) {
       DocPrint(doc,"$$GREEN$$%-20ts:$$FG$$",ml->str);
       if (stars==1 && (tmpc2->raw_type==RT_I8 || tmpc2->raw_type==RT_U8)) {
@@ -42,7 +42,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	    DocPrint(doc,"%40ts\n",ptr);
 	}
       } else if (!stars) {
-	j=MinI64(ml->dim.total_cnt,32);
+	j=MinI64(ml->dim.total_count,32);
 	if (tmpc2->raw_type==RT_I8 || tmpc2->raw_type==RT_U8) {
 	  if (j==1) {
 	    if (dynamic) {
@@ -130,7 +130,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,
 	  if (dynamic)
 	    DocDataFmt(doc,doc_e);
 	}
-	if (j<ml->dim.total_cnt)
+	if (j<ml->dim.total_count)
 	  DocPrint(doc,"...");
       } else
 	DocPrint(doc,"%016X",*ptr);
@@ -227,7 +227,7 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
       if (task) {
 //tmpf->size is negative.It's the bottom
 	//of the fun local var space relative to RBP .
-	size=tmpf->arg_cnt*8-tmpf->size+16;
+	size=tmpf->arg_count*8-tmpf->size+16;
 
 	img=MAlloc(size);
 	MemCpy(img,rbp+tmpf->size,size);

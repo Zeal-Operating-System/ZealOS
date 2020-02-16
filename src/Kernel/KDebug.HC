@@ -169,20 +169,20 @@ U0 CallerRep(U8 **rbp=NULL,CTask *task=NULL)
   }
 }
 
-U0 D(U8 *addr,I64 cnt=0x80,Bool show_offset=TRUE)
+U0 D(U8 *addr,I64 count=0x80,Bool show_offset=TRUE)
 {//Dump mem, showing offsets.
 //See $LK,"DocD",A="MN:DocD"$() for a live dump.
   I64 i,j,ch;
   U8 *ptr=addr;
-  while (cnt) {
+  while (count) {
     if (show_offset)
       "%08X",ptr-addr;
     else
       "%010X",ptr;
-    if (cnt>16)
+    if (count>16)
       j=16;
     else
-      j=cnt;
+      j=count;
     for (i=0;i<j;i++)
       "%02X ",ptr[i];
     for (;i<16;i++)
@@ -196,19 +196,19 @@ U0 D(U8 *addr,I64 cnt=0x80,Bool show_offset=TRUE)
 	'' ch;
     }
     '\n';
-    cnt-=j;
+    count-=j;
     ptr+=j;
   }
 }
 
-U0 Dm(U8 *addr,I64 cnt=0x80)
+U0 Dm(U8 *addr,I64 count=0x80)
 {//Show mem addr, not offsets.
-  D(addr,cnt,FALSE);
+  D(addr,count,FALSE);
 }
 
-U0 Da(U8 **addr,I64 cnt=0x10)
+U0 Da(U8 **addr,I64 count=0x10)
 {//Dump mem, showing symbolic addresses.
-  while (cnt-->0) {
+  while (count-->0) {
     "%08X:%08X,%P\n",addr,*addr,*addr;
     addr++;
   }
@@ -231,7 +231,7 @@ U0 RawPrint(I64 mS=100,U8 *fmt,...)
   Free(buf);
 }
 
-U0 RawD(I64 mS=100,U8 *addr,I64 cnt=0x80)
+U0 RawD(I64 mS=100,U8 *addr,I64 count=0x80)
 {//Dumps a block of mem using $LK,"Raw",A="MN:Raw"$
 //scrn output for a fixed length
   //of time.
@@ -240,14 +240,14 @@ U0 RawD(I64 mS=100,U8 *addr,I64 cnt=0x80)
   CLI
   old_raw=Raw(ON);
   old_input_filter=LBtr(&Fs->task_flags,TASKf_INPUT_FILTER_TASK);
-  D(addr,cnt);
+  D(addr,count);
   Busy(mS<<10);
   POPFD
   LBEqu(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
   Raw(old_raw);
 }
 
-U0 RawDm(I64 mS=100,U8 *addr,I64 cnt=0x80)
+U0 RawDm(I64 mS=100,U8 *addr,I64 count=0x80)
 {//Dumps a block of mem using $LK,"Raw",A="MN:Raw"$
 //scrn output for a fixed length
   //of time.
@@ -256,7 +256,7 @@ U0 RawDm(I64 mS=100,U8 *addr,I64 cnt=0x80)
   CLI
   old_raw=Raw(ON);
   old_input_filter=LBtr(&Fs->task_flags,TASKf_INPUT_FILTER_TASK);
-  Dm(addr,cnt);
+  Dm(addr,count);
   Busy(mS<<10);
   POPFD
   LBEqu(&Fs->task_flags,TASKf_INPUT_FILTER_TASK,old_input_filter);
@@ -421,7 +421,7 @@ Bool B(U8 *addr,CTask *task=NULL,Bool live=TRUE)
 
 I64 B2(CTask *task=NULL,Bool live=TRUE)
 {//Remove all breakpoints.
-//Return: cnt of removed.
+//Return: count of removed.
   I64 res=0;
   CBpt *tmpb,*tmpb1;
   if (!task) task=Fs;
@@ -567,7 +567,7 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
   PUSHFD
   CLI
   if (Gs->num && dbg.mp_crash) {
-    mp_cnt=1;
+    mp_count=1;
     dbg.mp_crash->cpu_num=Gs->num;
     dbg.mp_crash->task=Fs;
     dbg.mp_crash->rip=Fs->rip;

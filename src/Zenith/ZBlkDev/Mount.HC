@@ -1,7 +1,7 @@
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
 U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
 {//If _doc, called by $LK,"::/Kernel/KCfg.HC"$ else called by $LK,"Mount",A="MN:Mount"$().
-  I64 cnt,total=0,num_hints,drv_let,type,unit,prt_num;
+  I64 count,total=0,num_hints,drv_let,type,unit,prt_num;
   U8 blks_buf[STR_LEN],addr_buf[STR_LEN],base0_buf[STR_LEN],base1_buf[STR_LEN],
 	*filename=NULL,*filename2=NULL,res=0;
   CATARep *head=NULL,*tmpha;
@@ -10,7 +10,7 @@ U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
   if (boot_drv_let)
     boot_drv_let=Letter2Letter(boot_drv_let);
   do {
-    cnt=0;
+    count=0;
     if (!_doc)
       DriveRep;
     "\n****** Mount Drives ******\n"
@@ -115,9 +115,9 @@ U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
       }
       DocPrint(doc,"BlkDevAdd(bd,%d,%d,%d);\n",prt_num,whole_drv,make_free);
       if (_doc) //Called by $LK,"::/Kernel/KCfg.HC"$
-	cnt++;
+	count++;
       else { //Called by $LK,"Mount",A="MN:Mount"$()
-	if ((cnt=ExeDoc(doc)) && whole_drv) {
+	if ((count=ExeDoc(doc)) && whole_drv) {
 	  if (_caller_is_prtdsk) {
 	    res=drv_let;
 	    DiskPrt(drv_let,1.0); //First mount whole drive.
@@ -127,8 +127,8 @@ U8 Mount2(U8 boot_drv_let,CDoc *_doc,Bool _caller_is_prtdsk)
 	DocDel(doc);
       }
     }
-    total+=cnt;
-  } while (cnt && !_caller_is_prtdsk ||
+    total+=count;
+  } while (count && !_caller_is_prtdsk ||
 	!total && _doc); //At least 1 if Called by $LK,"::/Kernel/KCfg.HC"$
   Free(filename);
   Free(filename2);

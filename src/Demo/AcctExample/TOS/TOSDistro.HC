@@ -228,7 +228,7 @@ U0 MakeStaffDistro()
   Drive('C');
 }
 
-I64 UpdateLineCnts()
+I64 UpdateLineCounts()
 {
   I64 res;
 
@@ -301,8 +301,8 @@ U0 TOSRegen2()
   WinMax;
   DiskCheckAll;
 
-  TOSProgress("Update Line Cnts");
-  UpdateLineCnts;
+  TOSProgress("Update Line Counts");
+  UpdateLineCounts;
 
   TOSProgress("Copy C to D");
   TOSCopyDrive('C','D');
@@ -362,7 +362,7 @@ U0 TOSRegen2()
 
   TOSProgress("Done");
   SettingsPop;
-  "F2(\"/Home\") Cnt\t:%d\n",slash_home;
+  "F2(\"/Home\") Count\t:%d\n",slash_home;
   "Elapsed Time\t:%5.3fs\n",tS-progress4_t0;
   ProgressBarsRst("ZenithOS/TOSRegen");
 }

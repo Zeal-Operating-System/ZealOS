@@ -14,7 +14,7 @@ U0 AsmAndC3()
     STC
     ADC	AL,0 //Round-about way to make the not-special constant, 0x42.
     CALL	PUT_HEX_U8
-    MOV	RCX,cnts.time_stamp_freq>>5 //JIT Const.  Simple delay loop.
+    MOV	RCX,counts.time_stamp_freq>>5 //JIT Const.  Simple delay loop.
 @@1:	LOOP	@@1
     '\n';
   }

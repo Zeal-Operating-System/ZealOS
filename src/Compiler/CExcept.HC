@@ -75,7 +75,7 @@ U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
     }
   } else
     LexPutPos(cc);
-  cc->warning_cnt++;
+  cc->warning_count++;
 }
 
 U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
@@ -88,7 +88,7 @@ U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
   if (!IsRaw)
     ZenithErr("Task:%08X %s\n",Fs,str);
   LexPutPos(cc);
-  cc->error_cnt++;
+  cc->error_count++;
   FlushMessages;
   if (!Bt(&sys_run_level,RLf_ZENITH_SERVER))
     Debug("Type \"Fix;\"");
@@ -104,7 +104,7 @@ U0 UndefinedExtern()
 U0 UnusedExternWarning(CCompCtrl *cc,CHashClass *tmpc)
 {
   PrintWarn("Unused extern '%s'\n",tmpc->str);
-  cc->warning_cnt++;
+  cc->warning_count++;
 }
 
 U0 ParenWarning(CCompCtrl *cc)
@@ -118,15 +118,15 @@ U0 ICClassPut(CHashClass *c)
 {
   I64 i;
   if (!c) return;
-  if (c->ptr_stars_cnt>4) {
-    PrintErr("put_class ptrcnt=%d\n",c->ptr_stars_cnt);
+  if (c->ptr_stars_count>4) {
+    PrintErr("put_class ptrcount=%d\n",c->ptr_stars_count);
     while (TRUE)
 //TODO:
       Yield;
   }
-  for (i=0;i<c->ptr_stars_cnt;i++)
+  for (i=0;i<c->ptr_stars_count;i++)
     '*';
-  c-=c->ptr_stars_cnt;
+  c-=c->ptr_stars_count;
   if (c->str)
     "%s",c->str;
   else {

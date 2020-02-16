@@ -66,12 +66,12 @@ I64 SpriteElemSize(CSprite *tmpg)
       i+=tmpg->nu.num*sizeof(CD3I32);
       break;
     case SPT_MESH:
-      i+=tmpg->mu.vertex_cnt*sizeof(CD3I32)+
-	    tmpg->mu.tri_cnt*sizeof(CMeshTri);
+      i+=tmpg->mu.vertex_count*sizeof(CD3I32)+
+	    tmpg->mu.tri_count*sizeof(CMeshTri);
       break;
     case SPT_SHIFTABLE_MESH:
-      i+=tmpg->pmu.vertex_cnt*sizeof(CD3I32)+
-	    tmpg->pmu.tri_cnt*sizeof(CMeshTri);
+      i+=tmpg->pmu.vertex_count*sizeof(CD3I32)+
+	    tmpg->pmu.tri_count*sizeof(CMeshTri);
       break;
   }
   return i;
@@ -179,10 +179,10 @@ public U8 *SpriteElem2Summary(CSprite *tmpg)
       CatPrint(buf,"%d",tmpg->nu.num);
       break;
     case SPT_MESH:
-      CatPrint(buf,"%dV,%dT",tmpg->mu.vertex_cnt,tmpg->mu.tri_cnt);
+      CatPrint(buf,"%dV,%dT",tmpg->mu.vertex_count,tmpg->mu.tri_count);
       break;
     case SPT_SHIFTABLE_MESH:
-      CatPrint(buf,"%dV,%dT",tmpg->pmu.vertex_cnt,tmpg->pmu.tri_cnt);
+      CatPrint(buf,"%dV,%dT",tmpg->pmu.vertex_count,tmpg->pmu.tri_count);
       break;
   }
   return StrNew(buf);

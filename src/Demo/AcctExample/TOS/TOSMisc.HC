@@ -99,16 +99,16 @@ public U0 DiskCheckAll()
 
 public CDoc *DC2Doc(CDC *dc,I64 dx=0,I64 dy=0,I64 *_total_score=NULL)
 {//Use OCR to make a text DolDoc from CDC.
-  U8 byte_bit_cnts[256];
+  U8 byte_bit_counts[256];
   I64 i,j,*ptr,row,col,ch,best_ch,score,best_score,
 	cur_char_image,diff_image,total_score=0;
   CDoc *doc=DocNew;
 
-  MemSet(byte_bit_cnts,0,sizeof(byte_bit_cnts));
+  MemSet(byte_bit_counts,0,sizeof(byte_bit_counts));
   for (i=0;i<256;i++)
     for (j=0;j<7;j++)
       if (Bt(&i,j))
-	byte_bit_cnts[i]++;
+	byte_bit_counts[i]++;
 
   for (row=0;row<dc->height/FONT_HEIGHT;row++) {
     for (col=0;col<dc->width/FONT_WIDTH;col++) {
@@ -126,7 +126,7 @@ public CDoc *DC2Doc(CDC *dc,I64 dx=0,I64 dy=0,I64 *_total_score=NULL)
 	diff_image=*ptr++ ^ cur_char_image;
 	score=0;
 	for (i=0;i<8;i++)
-	  score+=byte_bit_cnts[diff_image.u8[i]];
+	  score+=byte_bit_counts[diff_image.u8[i]];
 	if (score<best_score) {
 	  best_score=score;
 	  best_ch=ch;

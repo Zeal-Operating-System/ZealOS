@@ -21,7 +21,7 @@ public U0 TaskRep()
   CCPU *c;
   PUSHFD
   CLI
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     c=&cpu_structs[i];
     "$$PURPLE$$CPU%02X$$FG$$\n",i;
     TaskRepTask(c->seth_task,2);

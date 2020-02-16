@@ -100,16 +100,16 @@ U0 AsmHashLoad()
 	  LexExcept(cc,"Expecting opcode at ");
 	MemSet(tmpo_max,0,size_max);
 	tmpo_max->type=HTT_OPCODE;
-	tmpo_max->inst_entry_cnt=0;
+	tmpo_max->inst_entry_count=0;
 	tmpo_max->str=cc->cur_str;
 	cc->cur_str=0;
 	Lex(cc);	//Skip OPCODE
 	while (cc->token && cc->token!=';' && cc->token!=':') {
-	  tmpins=&tmpo_max->ins[tmpo_max->inst_entry_cnt];
-	  tmpins->ins_entry_num=tmpo_max->inst_entry_cnt++;
+	  tmpins=&tmpo_max->ins[tmpo_max->inst_entry_count];
+	  tmpins->ins_entry_num=tmpo_max->inst_entry_count++;
 	  tmpins->slash_val=SV_NONE; //Not zero!!
 	  while (cc->token==TK_I64) {
-	    tmpins->opcode[tmpins->opcode_cnt++]=cc->cur_i64;
+	    tmpins->opcode[tmpins->opcode_count++]=cc->cur_i64;
 	    Lex(cc);
 	  }
 	  if (cc->token==',')
@@ -151,10 +151,10 @@ U0 AsmHashLoad()
 	    }
 	  }
 	}
-	size=offset(CHashOpcode.ins)+sizeof(CInst)*tmpo_max->inst_entry_cnt;
+	size=offset(CHashOpcode.ins)+sizeof(CInst)*tmpo_max->inst_entry_count;
 	tmpo=MAlloc(size);
 	MemCpy(tmpo,tmpo_max,size);
-	tmpo->use_cnt=0;
+	tmpo->use_count=0;
 	if (HashFind(tmpo->str,cmp.asm_hash,HTT_OPCODE))
 	  LexExcept(cc,"Duplicate OPCODE entry ");
 	HashAdd(tmpo,cmp.asm_hash);

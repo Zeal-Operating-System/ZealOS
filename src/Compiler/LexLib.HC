@@ -72,7 +72,7 @@ CMemberLst *MemberFind(U8 *needle_str,CHashClass *haystack_class)
     tmpm=haystack_class->member_lst_and_root;
     while (tmpm) {
       if (!(i=StrCmp(tmpm->str,needle_str))) {
-	tmpm->use_cnt++;
+	tmpm->use_count++;
 	return tmpm;
       }
       if (i<=0)
@@ -119,7 +119,7 @@ U0 MemberAdd(CCompCtrl *cc,CMemberLst *tmpm,CHashClass *tmpc,I64 mode)
 
   if (mode==PRS1B_LOCAL_VAR) {
     tmpm->member_class_base=
-	tmpm->member_class-tmpm->member_class->ptr_stars_cnt;
+	tmpm->member_class-tmpm->member_class->ptr_stars_count;
     if (Bt(&cc->opts,OPTf_WARN_DUP_TYPES) &&
 	 MemberClassBaseFind(tmpm->member_class_base,tmpc))
       LexWarn(cc,"Duplicate type at ");
@@ -154,9 +154,9 @@ CMemberLst *MemberLstNew(I64 _reg)
   return res;
 }
 
-Bool  MemberLstCmp(CMemberLst *tmpm1,CMemberLst *tmpm2,I64 cnt=I64_MAX)
+Bool  MemberLstCmp(CMemberLst *tmpm1,CMemberLst *tmpm2,I64 count=I64_MAX)
 {
-  while (tmpm1 && tmpm2 && cnt--) {
+  while (tmpm1 && tmpm2 && count--) {
     if (StrCmp(tmpm1->str,tmpm2->str) ||
 	  tmpm1->member_class!=tmpm2->member_class ||
 	  tmpm1->member_class_base!=tmpm2->member_class_base)
@@ -174,7 +174,7 @@ Bool  MemberLstCmp(CMemberLst *tmpm1,CMemberLst *tmpm2,I64 cnt=I64_MAX)
     tmpm1=tmpm1->next;
     tmpm2=tmpm2->next;
   }
-  if (cnt<0 || !tmpm1 && !tmpm2)
+  if (count<0 || !tmpm1 && !tmpm2)
     return TRUE;
   else
     return FALSE;
@@ -191,7 +191,7 @@ U0 MemberLstDel(CMemberLst *tmpm)
     if (tmpm->flags & MLF_STR_DFT_AVAILABLE)
       Free(tmpm->dft_val);
     if (tmpm->flags & MLF_FUN)
-      HashDel(tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
+      HashDel(tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_count);
     tmp_meta=tmpm->meta;
     while (tmp_meta) {
       tmp_meta1=tmp_meta->next;
@@ -213,9 +213,9 @@ U0 ClassMemberLstDel(CHashClass *tmpc)
   tmpc->last_in_member_lst=&tmpc->member_lst_and_root;
   tmpc->member_lst_and_root=NULL;
   tmpc->member_class_base_root=NULL;
-  tmpc->member_cnt=0;
+  tmpc->member_count=0;
   if (tmpc->type&HTT_FUN)
-    tmpc(CHashFun *)->arg_cnt=0;
+    tmpc(CHashFun *)->arg_count=0;
 }
 
 I64 MemberLstSize(CHashClass *tmpc)
@@ -230,7 +230,7 @@ I64 MemberLstSize(CHashClass *tmpc)
     if (tmpm->flags & MLF_STR_DFT_AVAILABLE)
       res+=MSize2(tmpm->dft_val);
     if (tmpm->flags & MLF_FUN)
-      res+=HashEntrySize2(tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
+      res+=HashEntrySize2(tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_count);
     tmp_meta=tmpm->meta;
     while (tmp_meta) {
       res+=MSize2(tmp_meta->str);

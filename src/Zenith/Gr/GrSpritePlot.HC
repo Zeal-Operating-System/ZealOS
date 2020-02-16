@@ -191,15 +191,15 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
 	Free(p);
 	break;
       case SPT_MESH:
-	p2=p=MAlloc(tmpg->mu.vertex_cnt*sizeof(CD3I32));
-	MemCpy(p,&tmpg->mu.u,tmpg->mu.vertex_cnt*sizeof(CD3I32));
-	for (i=0;i<tmpg->mu.vertex_cnt;i++,p2++) {
+	p2=p=MAlloc(tmpg->mu.vertex_count*sizeof(CD3I32));
+	MemCpy(p,&tmpg->mu.u,tmpg->mu.vertex_count*sizeof(CD3I32));
+	for (i=0;i<tmpg->mu.vertex_count;i++,p2++) {
 	  p2->x+=x;
 	  p2->y+=y;
 	  p2->z+=z;
 	}
-	Gr3Mesh(dc,tmpg->mu.vertex_cnt,p,tmpg->mu.tri_cnt,
-	      (&tmpg->mu.u)(U8 *)+sizeof(CD3I32)*tmpg->mu.vertex_cnt);
+	Gr3Mesh(dc,tmpg->mu.vertex_count,p,tmpg->mu.tri_count,
+	      (&tmpg->mu.u)(U8 *)+sizeof(CD3I32)*tmpg->mu.vertex_count);
 	Free(p);
 	break;
       case SPT_SHIFTABLE_MESH:
@@ -215,15 +215,15 @@ public U0 Sprite3(CDC *dc=gr.dc,I64 x,I64 y,I64 z,U8 *elems,
 	  y1=tmpg->pmu.y+y;
 	  z1=tmpg->pmu.z+z;
 	}
-	p2=p=MAlloc(tmpg->pmu.vertex_cnt*sizeof(CD3I32));
-	MemCpy(p,&tmpg->pmu.u,tmpg->pmu.vertex_cnt*sizeof(CD3I32));
-	for (i=0;i<tmpg->pmu.vertex_cnt;i++,p2++) {
+	p2=p=MAlloc(tmpg->pmu.vertex_count*sizeof(CD3I32));
+	MemCpy(p,&tmpg->pmu.u,tmpg->pmu.vertex_count*sizeof(CD3I32));
+	for (i=0;i<tmpg->pmu.vertex_count;i++,p2++) {
 	  p2->x+=x1;
 	  p2->y+=y1;
 	  p2->z+=z1;
 	}
-	Gr3Mesh(dc,tmpg->pmu.vertex_cnt,p,tmpg->pmu.tri_cnt,
-	      (&tmpg->pmu.u)(U8 *)+sizeof(CD3I32)*tmpg->pmu.vertex_cnt);
+	Gr3Mesh(dc,tmpg->pmu.vertex_count,p,tmpg->pmu.tri_count,
+	      (&tmpg->pmu.u)(U8 *)+sizeof(CD3I32)*tmpg->pmu.vertex_count);
 	Free(p);
 	if (dc->flags&DCF_TRANSFORMATION) {
 	  dc->x-=tmpg->pmu.x;
@@ -408,7 +408,7 @@ public U8 *SpriteInterpolate(F64 t,U8 *elems0,U8 *elems1)
 	p0=&tmpg0->mu.u;
 	p1=&tmpg1->mu.u;
 	pr=&tmpgr->mu.u;
-	for (i=0;i<tmpg0->mu.vertex_cnt;i++) {
+	for (i=0;i<tmpg0->mu.vertex_count;i++) {
 	  pr[i].x=(p0[i].x*t0+p1[i].x*t1)>>32;
 	  pr[i].y=(p0[i].y*t0+p1[i].y*t1)>>32;
 	  pr[i].z=(p0[i].z*t0+p1[i].z*t1)>>32;
@@ -418,7 +418,7 @@ public U8 *SpriteInterpolate(F64 t,U8 *elems0,U8 *elems1)
 	p0=&tmpg0->pmu.u;
 	p1=&tmpg1->pmu.u;
 	pr=&tmpgr->pmu.u;
-	for (i=0;i<tmpg0->pmu.vertex_cnt;i++) {
+	for (i=0;i<tmpg0->pmu.vertex_count;i++) {
 	  pr[i].x=(p0[i].x*t0+p1[i].x*t1)>>32;
 	  pr[i].y=(p0[i].y*t0+p1[i].y*t1)>>32;
 	  pr[i].z=(p0[i].z*t0+p1[i].z*t1)>>32;
@@ -449,7 +449,7 @@ public CDocEntry *DocSprite(CDoc *doc=NULL,U8 *elems,U8 *fmt=NULL)
   tmpb->data=MAlloc(size,doc->mem_task);
   MemCpy(tmpb->data,elems,size);
   tmpb->num=doc->cur_bin_num;
-  tmpb->use_cnt=1;
+  tmpb->use_count=1;
   QueueInsert(tmpb,doc->bin_head.last);
   if (fmt)
     st=MStrPrint(fmt,doc->cur_bin_num++);

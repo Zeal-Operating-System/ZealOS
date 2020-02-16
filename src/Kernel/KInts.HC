@@ -150,7 +150,7 @@ interrupt U0 IntNop()
 interrupt U0 IntDivZero()
 {
   if (Gs->num) {
-    mp_cnt=1;
+    mp_count=1;
     dbg.mp_crash->cpu_num=Gs->num;
     dbg.mp_crash->task=Fs;
     MOV	RAX,U64 8[RBP] //Get RIP off of stk.

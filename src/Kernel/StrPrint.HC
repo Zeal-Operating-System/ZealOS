@@ -215,7 +215,7 @@ in 64-bits.Use exponentiated forms
 to avoid this.
 */
   I64 i,j,l,ch,k,k0,n,n0,len,dec_len,flags,old_flags,
-	aux_fmt_num,comma_cnt,comma_fmt_cnt,cur_arg=0;
+	aux_fmt_num,comma_count,comma_fmt_count,cur_arg=0;
   U64 m;
   F64 d,d1;
   CDoc *doc;
@@ -444,13 +444,13 @@ sp_out_dec:
 	    goto sp_out_eng;
 	  }
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_cnt=comma_cnt=3;
+	    comma_fmt_count=comma_count=3;
 	    do {
 	      tmp_buf[k++]=ModU64(&m,10)+'0';
 	      if (!m) break;
-	      if (!--comma_cnt) {
+	      if (!--comma_count) {
 		tmp_buf[k++]=',';
-		comma_cnt=3;
+		comma_count=3;
 	      }
 	    } while (k<TMP_BUF_LEN-SLOP);
 sp_out_comma_num:
@@ -467,12 +467,12 @@ sp_out_comma_num:
 	    if (flags&PRTF_PAD_ZERO) {
 	      if (flags&PRTF_NEG)
 		SPutChar(_dst,'-',_buf);
-	      comma_cnt=(len-k-i+comma_fmt_cnt-comma_cnt+1)
-	      %(comma_fmt_cnt+1)+1;
+	      comma_count=(len-k-i+comma_fmt_count-comma_count+1)
+	      %(comma_fmt_count+1)+1;
 	      for (;i<len-k;i++) {
-		if (!--comma_cnt) {
+		if (!--comma_count) {
 		  SPutChar(_dst,',',_buf);
-		  comma_cnt=comma_fmt_cnt;
+		  comma_count=comma_fmt_count;
 		  if (++i>=len-k)
 		    break;
 		}
@@ -574,11 +574,11 @@ sp_out_inf:
 
 	  m=Round(d);
 	  if (flags&PRTF_COMMA) {
-	    comma_cnt=i&3;
+	    comma_count=i&3;
 	    while (i-- && k<TMP_BUF_LEN-SLOP) {
-	      if (i>2 && !comma_cnt--) {
+	      if (i>2 && !comma_count--) {
 		tmp_buf[k++]=',';
-		comma_cnt=2;
+		comma_count=2;
 		if (!--i) break;
 	      }
 	      if (n) {
@@ -600,7 +600,7 @@ sp_out_inf:
 	  if (dec_len)
 	    tmp_buf[k++]='.';
 	  if (flags&PRTF_COMMA) {
-	    comma_cnt=3;
+	    comma_count=3;
 	    do {
 	      if (n) {
 		n--;
@@ -608,9 +608,9 @@ sp_out_inf:
 	      } else
 		tmp_buf[k++]=ModU64(&m,10)+'0';
 	      if (!m) break;
-	      if (!--comma_cnt) {
+	      if (!--comma_count) {
 		tmp_buf[k++]=',';
-		comma_cnt=3;
+		comma_count=3;
 	      }
 	    } while (k<TMP_BUF_LEN-SLOP);
 	  } else {
@@ -789,16 +789,16 @@ sp_out_eng: //Engineering notation
 	    throw('StrPrint');
 	  m=argv[cur_arg++];
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_cnt=comma_cnt=4;
+	    comma_fmt_count=comma_count=4;
 	    do {
 	      tmp_buf[k]= m&15 +'0';
 	      if (tmp_buf[k]>'9') tmp_buf[k]+='A'-0x3A;
 	      k++;
 	      m>>=4;
 	      if (!m) break;
-	      if (!--comma_cnt) {
+	      if (!--comma_count) {
 		tmp_buf[k++]=',';
-		comma_cnt=4;
+		comma_count=4;
 	      }
 	    } while (k<TMP_BUF_LEN-SLOP);
 	    goto sp_out_comma_num;
@@ -816,16 +816,16 @@ sp_out_eng: //Engineering notation
 	    throw('StrPrint');
 	  m=argv[cur_arg++];
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_cnt=comma_cnt=4;
+	    comma_fmt_count=comma_count=4;
 	    do {
 	      tmp_buf[k]= m&15 +'0';
 	      if (tmp_buf[k]>'9') tmp_buf[k]+='a'-0x3A;
 	      k++;
 	      m>>=4;
 	      if (!m) break;
-	      if (!--comma_cnt) {
+	      if (!--comma_count) {
 		tmp_buf[k++]=',';
-		comma_cnt=4;
+		comma_count=4;
 	      }
 	    } while (k<TMP_BUF_LEN-SLOP);
 	    goto sp_out_comma_num;
@@ -844,14 +844,14 @@ sp_out_eng: //Engineering notation
 	    throw('StrPrint');
 	  m=argv[cur_arg++];
 	  if (flags&PRTF_COMMA) {
-	    comma_fmt_cnt=comma_cnt=4;
+	    comma_fmt_count=comma_count=4;
 	    do {
 	      tmp_buf[k++]= m&1 +'0';
 	      m>>=1;
 	      if (!m) break;
-	      if (!--comma_cnt) {
+	      if (!--comma_count) {
 		tmp_buf[k++]=',';
-		comma_cnt=4;
+		comma_count=4;
 	      }
 	    } while (k<TMP_BUF_LEN-SLOP);
 	    goto sp_out_comma_num;

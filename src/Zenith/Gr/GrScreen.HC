@@ -73,7 +73,7 @@ U0 GrUpdateTasks()
       task=task->next_task;
     } while (task!=task1);
 
-    for (i=0;i<mp_cnt;i++) { //Loop through all cores.
+    for (i=0;i<mp_count;i++) { //Loop through all cores.
       task1=task=cpu_structs[i].seth_task;
       do {
 	if (!TaskValidate(task)) break;

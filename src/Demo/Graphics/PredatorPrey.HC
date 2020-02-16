@@ -65,8 +65,8 @@ U0 PredatorPrey()
     GrLine(dc,OX,0,OX,GR_HEIGHT-FONT_HEIGHT-1);
     GrLine(dc,0,OY,GR_WIDTH-1,OY);
     while (!ScanChar) {
-      mp_not_done_flags=1<<mp_cnt-1;
-      for (i=0;i<mp_cnt;i++)
+      mp_not_done_flags=1<<mp_count-1;
+      for (i=0;i<mp_count;i++)
 	JobQueue(&PlotTrajectory,Fs,i);
       do Yield;
       while (mp_not_done_flags);

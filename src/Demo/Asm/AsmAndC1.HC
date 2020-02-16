@@ -35,7 +35,7 @@ _BEEPS::
 //_extern binds a asm sym to a function.
 //My convention is to put an underscore
 //on C callable asm routines.
-_extern _BEEPS U0 Beeps(I64 cnt);
+_extern _BEEPS U0 Beeps(I64 count);
 
 I64 AsmAndC1()
 {
@@ -62,7 +62,7 @@ I64 AsmAndC1()
     PUSH	RAX
     CALL	Snd
 
-    MOV		RCX,cnts.time_stamp_freq>>3 //JIT Const.  Simple delay loop
+    MOV		RCX,counts.time_stamp_freq>>3 //JIT Const.  Simple delay loop
 @@10:	LOOP	@@10
 
     POP		RCX

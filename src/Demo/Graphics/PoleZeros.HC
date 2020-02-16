@@ -47,7 +47,7 @@ F64 MPDraw(CTask *task)
 {
   Complex xx;
   I64 x,y,w=task->pix_width,h=task->pix_height,cx=w/2,cy=h/2,
-	lo=Gs->num*h/mp_cnt,hi=(Gs->num+1)*h/mp_cnt;
+	lo=Gs->num*h/mp_count,hi=(Gs->num+1)*h/mp_count;
   F64 yy,y_total=0;
   CDC *dc=DCAlias(,task);
   for (y=lo;y<hi;y++) {
@@ -70,10 +70,10 @@ U0 Draw()
   I64 i,w=Fs->pix_width,h=Fs->pix_height,cx=w/2,cy=h/2;
   CDC *dc=DCAlias;
   while (TRUE) {
-    for (i=0;i<mp_cnt;i++)
+    for (i=0;i<mp_count;i++)
       tmpm[i]=JobQueue(&MPDraw,Fs,i,0);
     y_total=0;
-    for (i=0;i<mp_cnt;i++)
+    for (i=0;i<mp_count;i++)
       y_total+=JobResGet(tmpm[i])(F64);
 
     if (!y_total) break;

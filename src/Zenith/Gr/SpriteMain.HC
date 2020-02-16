@@ -675,24 +675,24 @@ U0 SMMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,I64 *_cur_elem_num)
   I64 i,size,x1,y1,z1;
   I32 *mesh,*old_mesh;
   if (tmpg1!=head && tmpg1->type&SPG_TYPE_MASK==SPT_MESH)
-    old_mesh=&tmpg1->mu.vertex_cnt;
+    old_mesh=&tmpg1->mu.vertex_count;
   else if (tmpg1!=head && tmpg1->type&SPG_TYPE_MASK==SPT_SHIFTABLE_MESH) {
     x1=tmpg1->pmu.x;
     y1=tmpg1->pmu.y;
     z1=tmpg1->pmu.z;
     p=&tmpg1->pmu.u;
-    for (i=0;i<tmpg1->pmu.vertex_cnt;i++,p++) {
+    for (i=0;i<tmpg1->pmu.vertex_count;i++,p++) {
       p->x+=x1;
       p->y+=y1;
       p->z+=z1;
     }
-    old_mesh=&tmpg1->pmu.vertex_cnt;
+    old_mesh=&tmpg1->pmu.vertex_count;
   } else
     old_mesh=NULL;
   if (mesh=SpriteMeshEd(old_mesh,&size,TRUE)) {
     tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_MESH)-sizeof(I32)*2+size);
     tmpg->type=SPT_MESH;
-    MemCpy(&tmpg->mu.vertex_cnt,mesh,size);
+    MemCpy(&tmpg->mu.vertex_count,mesh,size);
     Free(mesh);
     QueueInsert(tmpg,insert_pt->last);
     SpriteEdUpdate(doc,doc_ce,head);
@@ -708,7 +708,7 @@ U0 SMMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,I64 *_cur_elem_num)
     y1=tmpg1->pmu.y;
     z1=tmpg1->pmu.z;
     p=&tmpg1->pmu.u;
-    for (i=0;i<tmpg1->pmu.vertex_cnt;i++,p++) {
+    for (i=0;i<tmpg1->pmu.vertex_count;i++,p++) {
       p->x-=x1;
       p->y-=y1;
       p->z-=z1;
@@ -730,24 +730,24 @@ U0 SMShiftableMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     y1=-(arg2-y);
     z1=z;
     p=&tmpg1->mu.u;
-    for (i=0;i<tmpg1->mu.vertex_cnt;i++,p++) {
+    for (i=0;i<tmpg1->mu.vertex_count;i++,p++) {
       p->x+=x1;
       p->y+=y1;
       p->z+=z1;
     }
-    old_mesh=&tmpg1->mu.vertex_cnt;
+    old_mesh=&tmpg1->mu.vertex_count;
   } else if (tmpg1!=head && tmpg1->type&SPG_TYPE_MASK==SPT_SHIFTABLE_MESH) {
     z=-tmpg1->pmu.z;
     x1=tmpg1->pmu.x-(arg1-x);
     y1=tmpg1->pmu.y-(arg2-y);
     z1=tmpg1->pmu.z+z;
     p=&tmpg1->pmu.u;
-    for (i=0;i<tmpg1->pmu.vertex_cnt;i++,p++) {
+    for (i=0;i<tmpg1->pmu.vertex_count;i++,p++) {
       p->x+=x1;
       p->y+=y1;
       p->z+=z1;
     }
-    old_mesh=&tmpg1->pmu.vertex_cnt;
+    old_mesh=&tmpg1->pmu.vertex_count;
   } else {
     z=0;
     old_mesh=NULL;
@@ -755,7 +755,7 @@ U0 SMShiftableMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,
   if (mesh=SpriteMeshEd(old_mesh,&size,TRUE)) {
     tmpg=CAlloc(SpriteElemQueuedBaseSize(SPT_SHIFTABLE_MESH)-sizeof(I32)*2+size);
     tmpg->type=SPT_SHIFTABLE_MESH;
-    MemCpy(&tmpg->pmu.vertex_cnt,mesh,size);
+    MemCpy(&tmpg->pmu.vertex_count,mesh,size);
     Free(mesh);
     tmpg->pmu.x=arg1-x;
     tmpg->pmu.y=arg2-y;
@@ -774,7 +774,7 @@ U0 SMShiftableMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     y1=tmpg1->pmu.y-(arg2-y);
     z1=tmpg1->pmu.z+z;
     p=&tmpg1->pmu.u;
-    for (i=0;i<tmpg1->pmu.vertex_cnt;i++,p++) {
+    for (i=0;i<tmpg1->pmu.vertex_count;i++,p++) {
       p->x-=x1;
       p->y-=y1;
       p->z-=z1;
@@ -784,7 +784,7 @@ U0 SMShiftableMesh(CDoc *doc,CDocEntry *doc_ce,CSprite *head,
     y1=-(arg2-y);
     z1= z;
     p=&tmpg1->mu.u;
-    for (i=0;i<tmpg1->mu.vertex_cnt;i++,p++) {
+    for (i=0;i<tmpg1->mu.vertex_count;i++,p++) {
       p->x-=x1;
       p->y-=y1;
       p->z-=z1;
@@ -825,7 +825,7 @@ I64 SpriteMainEd(CDoc *doc)
   Refresh(2,TRUE);
   dc2->flags|=DCF_ON_TOP;
   head=Sprite2SpriteQueue(doc_ce->bin_data->data);
-  cur_elem_num=QueueCnt(head);
+  cur_elem_num=QueueCount(head);
   xx=(doc_ce->x+doc_ce->max_col-doc->line_start_col)*FONT_WIDTH;
   yy=(doc_ce->y-doc->top_line_num)*FONT_HEIGHT;
 
@@ -1185,7 +1185,7 @@ U0 EdSpriteIns(CDoc *doc)
     tmpb->size=sprite_elem_base_sizes[SPT_END];
     tmpb->data=CAlloc(tmpb->size,doc->mem_task);
     tmpb->num=doc->cur_bin_num++;
-    tmpb->use_cnt=1;
+    tmpb->use_count=1;
     QueueInsert(tmpb,doc->bin_head.last);
     doc_e=DocPrint(doc,"%s",st);
     doc_e->bin_data=tmpb;

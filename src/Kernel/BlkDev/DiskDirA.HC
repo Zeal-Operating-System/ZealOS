@@ -88,12 +88,12 @@ I64 DirEntryCompareClus(CDirEntry *e1,CDirEntry *e2)
 
 U0 DirFilesSort(CDirEntry **_tmpde,I64 key)
 {
-  I64 i,cnt;
+  I64 i,count;
   CDirEntry *tmpde=*_tmpde,*tmpde1,**sort_buf;
   if (tmpde) {
-    cnt=LinkedLstCnt(tmpde);
-    if (cnt>1) {
-      sort_buf=MAlloc(cnt*sizeof(U8 *));
+    count=LinkedLstCount(tmpde);
+    if (count>1) {
+      sort_buf=MAlloc(count*sizeof(U8 *));
       i=0;
       tmpde1=tmpde;
       while (tmpde1) {
@@ -102,15 +102,15 @@ U0 DirFilesSort(CDirEntry **_tmpde,I64 key)
       }
       switch [key] {
 	case SK_NAME:
-	  QSortI64(sort_buf,cnt,&DirEntryCompareName);
+	  QSortI64(sort_buf,count,&DirEntryCompareName);
 	  break;
 	case SK_CLUS:
-	  QSortI64(sort_buf,cnt,&DirEntryCompareClus);
+	  QSortI64(sort_buf,count,&DirEntryCompareClus);
 	  break;
       }
       tmpde=sort_buf[0];
       *_tmpde=tmpde;
-      for (i=0;i<cnt-1;i++) {
+      for (i=0;i<count-1;i++) {
 	tmpde1=sort_buf[i];
 	tmpde1->next=sort_buf[i+1];
       }

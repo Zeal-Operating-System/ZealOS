@@ -79,17 +79,17 @@ public _intern IC_OUT_U16 U0 OutU16(I64 port, I64 val); //Write U16 to I/O port.
 public _intern IC_OUT_U32 U0 OutU32(I64 port, I64 val); //Write U32 to I/O port.
 public _intern IC_OUT_U8  U0 OutU8(I64 port, I64 val); //Write U8 to I/O port.
 public _extern _REP_IN_U16 U0 RepInU16(
-	U8 *buf,I64 cnt,I64 port); //Repeated read U16 from I/O port.
+	U8 *buf,I64 count,I64 port); //Repeated read U16 from I/O port.
 public _extern _REP_IN_U32 U0 RepInU32(
-	U8 *buf,I64 cnt,I64 port); //Repeated read U32 from I/O port.
+	U8 *buf,I64 count,I64 port); //Repeated read U32 from I/O port.
 public _extern _REP_IN_U8  U0 RepInU8(
-	U8 *buf,I64 cnt,I64 port); //Repeated read U8 from I/O port.
+	U8 *buf,I64 count,I64 port); //Repeated read U8 from I/O port.
 public _extern _REP_OUT_U16 U0 RepOutU16(
-	U8 *buf,I64 cnt,I64 port); //Repeated write U16 to I/O port.
+	U8 *buf,I64 count,I64 port); //Repeated write U16 to I/O port.
 public _extern _REP_OUT_U32 U0 RepOutU32(
-	U8 *buf,I64 cnt,I64 port); //Repeated write U32 to I/O port.
+	U8 *buf,I64 count,I64 port); //Repeated write U32 to I/O port.
 public _extern _REP_OUT_U8  U0 RepOutU8(
-	U8 *buf,I64 cnt,I64 port); //Repeated write U8 to I/O port.
+	U8 *buf,I64 count,I64 port); //Repeated write U8 to I/O port.
 
 #help_index "Math"
 public _intern IC_ATAN F64 ATan(F64 d); //Arc Tan (Inverse Tan).
@@ -164,19 +164,19 @@ public _extern _D3_ZERO CD3 *D3Zero(CD3 *dst); //To zero
 
 #help_index "Memory"
 public _extern _MEMCMP I64 MemCmp(
-	U8 *ptr1,U8 *ptr2,I64 cnt); //Compare chunk of memory.
+	U8 *ptr1,U8 *ptr2,I64 count); //Compare chunk of memory.
 public _extern _MEMCPY U8 *MemCpy(
-	U8 *dst,U8 *src,I64 cnt); //Copy chunk of memory. Only goes fwd.
+	U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes fwd.
 public _extern _MEMSET U8 *MemSet(
-	U8 *dst,I64 val,I64 cnt); //Set chunk of U8s to value.
+	U8 *dst,I64 val,I64 count); //Set chunk of U8s to value.
 public _extern _MEMSET_I64 I64 *MemSetI64(
-	I64 *dst,I64 val,I64 I64cnt); //Set chunk of I64s to value.
+	I64 *dst,I64 val,I64 I64count); //Set chunk of I64s to value.
 public _extern _MEMSET_U16 U16 *MemSetU16(
-	U16 *dst,I64 val,I64 U16cnt); //Set chunk of U16s to value.
+	U16 *dst,I64 val,I64 U16count); //Set chunk of U16s to value.
 public _extern _MEMSET_U32 U32 *MemSetU32(
-	U32 *dst,I64 val,I64 U32cnt); //Set chunk of U32s to value.
+	U32 *dst,I64 val,I64 U32count); //Set chunk of U32s to value.
 public _extern _MEMSET U8 *MemSetU8(
-	U8 *dst,I64 val,I64 U8cnt); //Set chunk of U8s to value.
+	U8 *dst,I64 val,I64 U8count); //Set chunk of U8s to value.
 _extern SYS_HEAP_DBG_FLAG	U8 sys_heap_dbg;
 _extern SYS_HEAP_INIT_FLAG	U8 sys_heap_init_flag;
 _extern SYS_HEAP_INIT_VAL	U8 sys_heap_init_val;
@@ -236,9 +236,9 @@ public _extern SYS_PROGRESSES
 #help_index "MultiCore"
 #help_file "::/Doc/MultiCore"
 public _extern SYS_CPU_STRUCTS CCPU *cpu_structs; //$LK,"Gs",A="MN:Gs"$ points to cur $LK,"CCPU",A="MN:CCPU"$.
-public _extern SYS_MP_CNT I64 mp_cnt; //Count of cores
-_extern SYS_MP_CNT_INITIAL I64 mp_cnt_initial; //only used during $LK,"Core0StartMP",A="MN:Core0StartMP"$
-_extern SYS_MP_CNT_LOCK I64 mp_cnt_lock;
+public _extern SYS_MP_CNT I64 mp_count; //Count of cores
+_extern SYS_MP_CNT_INITIAL I64 mp_count_initial; //only used during $LK,"Core0StartMP",A="MN:Core0StartMP"$
+_extern SYS_MP_CNT_LOCK I64 mp_count_lock;
 _extern SYS_SEMAS CSema sys_semas[SEMA_SEMAS_NUM];
 
 #help_index "MultiCore;Processor"

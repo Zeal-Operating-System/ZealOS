@@ -425,15 +425,15 @@ public Bool WinVert(I64 top,I64 bottom,CTask *task=NULL)
 public U0 WinTileHorz()
 {//Tile windows horizontally top-to-bottom.
   CTask *task,*last_task=Fs;
-  I64 cnt,c,i,vert_size,no_border;
+  I64 count,c,i,vert_size,no_border;
 
   PUSHFD
   CLI //TODO Multiprocessor safe
   task=sys_winmgr_task;
-  cnt=0;
+  count=0;
   do {
     if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS))
-      cnt++;
+      count++;
     task=task->last_task;
   } while (task!=sys_winmgr_task);
 
@@ -442,7 +442,7 @@ public U0 WinTileHorz()
   do {
     if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS)) {
       no_border=Bt(&task->display_flags,DISPLAYf_NO_BORDER);
-      c=cnt- i&~3;
+      c=count- i&~3;
       if (!c)
 	c=1;
       else if (c>4)
@@ -465,14 +465,14 @@ public U0 WinTileHorz()
 public U0 WinTileVert()
 {//Tile windows vertically side-by-side.
   CTask *task,*last_task=Fs;
-  I64 cnt,c,i,horz_size,no_border;
+  I64 count,c,i,horz_size,no_border;
   PUSHFD
   CLI //TODO Multiprocessor safe
   task=sys_winmgr_task;
-  cnt=0;
+  count=0;
   do {
     if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS))
-      cnt++;
+      count++;
     task=task->last_task;
   } while (task!=sys_winmgr_task);
 
@@ -481,7 +481,7 @@ public U0 WinTileVert()
   do {
     if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS)) {
       no_border=Bt(&task->display_flags,DISPLAYf_NO_BORDER);
-      c=cnt- i&~3;
+      c=count- i&~3;
       if (!c)
 	c=1;
       else if (c>4)

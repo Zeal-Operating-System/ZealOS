@@ -106,7 +106,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 	  if (!(tmpex->type & HTF_IMPORT)) {
 	    if (cc->htc.local_var_lst) {
 	      tmpex->type|=HTF_GOTO_LABEL;
-	      tmpex->use_cnt++;
+	      tmpex->use_count++;
 	    } else {
 	      PrintErr("Undefined sym at line:%04d %s\n",
 		    tmpu->line_num,tmpex->str);
@@ -135,7 +135,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
     tmpex=cc->htc.glbl_hash_table->body[i];
     while (tmpex) {
       if (tmpex->type & (HTF_IMPORT|HTF_GOTO_LABEL)) {
-	if (tmpex->use_cnt && (tmpie=tmpex->ie_lst)) {
+	if (tmpex->use_count && (tmpie=tmpex->ie_lst)) {
 	  if (tmpex->type&HTF_GOTO_LABEL)
 	    tmpie->flags|=IEF_GOTO_LABEL;
 	  if (tmpex->import_name)

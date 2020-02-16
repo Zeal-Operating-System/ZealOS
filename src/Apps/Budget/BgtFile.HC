@@ -2,7 +2,7 @@ U0 BgtDataRead()
 {
   CBgtEntry	*tmpb;
   CBgtTemplate	*tmpt;
-  I64		i,cnt,size;
+  I64		i,count,size;
   U8		*b,*ptr;
   I64		max_num;
   U8		**s=StrFileRead(bgt_string_file,&max_num);
@@ -15,8 +15,8 @@ U0 BgtDataRead()
   t_head.b.date=Now;
 
   if (ptr=b=FileRead(bgt_data_file,&size)) {
-    cnt=*ptr(I64 *)++;
-    for (i=0;i<cnt;i++) {
+    count=*ptr(I64 *)++;
+    for (i=0;i<count;i++) {
       tmpb=CAlloc(sizeof(CBgtEntry));
       MemCpy(&tmpb->start,ptr,BE_SIZE);
       tmpb->credit=StrNew(s[tmpb->credit_idx]);
@@ -26,8 +26,8 @@ U0 BgtDataRead()
       ptr+=BE_SIZE;
     }
 
-    cnt=*ptr(I64 *)++;
-    for (i=0;i<cnt;i++) {
+    count=*ptr(I64 *)++;
+    for (i=0;i<count;i++) {
       tmpt=CAlloc(sizeof(CBgtTemplate));
       MemCpy(&tmpt->start,ptr,BT_SIZE);
       ptr+=BT_SIZE;
@@ -48,7 +48,7 @@ U0 BgtDataRead()
 
 U0 BgtDataWrite()
 {
-  I64 i,num=0,size,cnt1,cnt2;
+  I64 i,num=0,size,count1,count2;
   CHashTable	*table=HashTableNew(1024);
   CBgtEntry	*tmpb;
   CBgtTemplate	*tmpt;
@@ -64,33 +64,33 @@ U0 BgtDataWrite()
   }
 
   tmpb=b_head.next;
-  cnt1=0;
+  count1=0;
   while (tmpb!=&b_head) {
     if (tmpb->type!=BE_TEMPLATE_COPY) {
       tmpb->credit_idx	=StrFileAdd(tmpb->credit,&num,table);
       tmpb->debit_idx	=StrFileAdd(tmpb->debit,&num,table);
       tmpb->desc_idx		=StrFileAdd(tmpb->desc,&num,table);
-      cnt1++;
+      count1++;
     }
     tmpb=tmpb->next;
   }
 
   tmpt=t_head.next;
-  cnt2=0;
+  count2=0;
   while (tmpt!=&t_head) {
     tmpt->b.credit_idx	=StrFileAdd(tmpt->b.credit,&num,table);
     tmpt->b.debit_idx	=StrFileAdd(tmpt->b.debit,&num,table);
     tmpt->b.desc_idx		=StrFileAdd(tmpt->b.desc,&num,table);
-    cnt2++;
+    count2++;
     tmpt=tmpt->next;
   }
   StrFileWrite(bgt_string_file,table);
   StrFileDel(table);
 
-  size=sizeof(I64)*2+cnt1*BE_SIZE+cnt2*(BT_SIZE+BE_SIZE);
+  size=sizeof(I64)*2+count1*BE_SIZE+count2*(BT_SIZE+BE_SIZE);
   buf=ptr=MAlloc(size);
 
-  MemCpy(ptr,&cnt1,sizeof(I64));
+  MemCpy(ptr,&count1,sizeof(I64));
   ptr+=sizeof(I64);
   tmpb=b_head.next;
   while (tmpb!=&b_head) {
@@ -101,7 +101,7 @@ U0 BgtDataWrite()
     tmpb=tmpb->next;
   }
 
-  MemCpy(ptr,&cnt2,sizeof(I64));
+  MemCpy(ptr,&count2,sizeof(I64));
   ptr+=sizeof(I64);
   tmpt=t_head.next;
   while (tmpt!=&t_head) {

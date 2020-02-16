@@ -133,7 +133,7 @@ Bool ATARepExitAllApplications()
 
 public I64 ATARep(Bool pmt=TRUE,Bool just_ide=FALSE,CATARep **_head=NULL)
 {//Report possible ATA devices by probing.  Hard disks and CD/DVDs.
-  I64 d1,d2,i,j,k,cnt=0,unlock_flags=0,num_hints=0;
+  I64 d1,d2,i,j,k,count=0,unlock_flags=0,num_hints=0;
 #assert BLKDEVS_NUM<=64
   if (_head) *_head=NULL;
 
@@ -154,7 +154,7 @@ public I64 ATARep(Bool pmt=TRUE,Bool just_ide=FALSE,CATARep **_head=NULL)
 	  break;
 
 	"\nSubcode:0x%X Bus:0x%X Dev:0x%X Fun:0x%X\n",k,j.u8[2],j.u8[1],j.u8[0];
-	cnt++;
+	count++;
 
 	d1=PCIReadU32(j.u8[2],j.u8[1],j.u8[0],0x10);
 	d2=PCIReadU32(j.u8[2],j.u8[1],j.u8[0],0x14);
@@ -178,7 +178,7 @@ public I64 ATARep(Bool pmt=TRUE,Bool just_ide=FALSE,CATARep **_head=NULL)
 	}
       }
     }
-  if (!cnt) {
+  if (!count) {
     d1=0x1F0; d2=0x3F6;
     ATARepEntry(d1,d2,0,"Primary IDE",_head,&num_hints);
     ATARepEntry(d1,d2,1,"Primary IDE",_head,&num_hints);
@@ -288,6 +288,6 @@ I64 MountIDEAuto()
     tmpha=tmpha->next;
   }
   LinkedLstDel(head);
-  blkdev.mount_ide_auto_cnt=res;
+  blkdev.mount_ide_auto_count=res;
   return res;
 }

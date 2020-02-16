@@ -11,7 +11,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
   U8 *in_name,*out_name,*st;
   CDoc *doc;
   CDocEntry *doc_e,*doc_e1,**a;
-  I64 i,j,cnt=0,res;
+  I64 i,j,count=0,res;
 
   if (!_in_name) return 0;
   in_name=ExtDft(_in_name,".DD");
@@ -24,10 +24,10 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
   doc_e=doc->head.next;
   while (doc_e!=doc) {
     if (doc_e->type_u8==DOCT_TEXT)
-      cnt++;
+      count++;
     doc_e=doc_e->next;
   }
-  a=MAlloc(cnt*sizeof(CDocEntry *));
+  a=MAlloc(count*sizeof(CDocEntry *));
   doc_e=doc->head.next;
   i=0;
   while (doc_e!=doc) {
@@ -39,14 +39,14 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
       DocEntryDel(doc,doc_e);
     doc_e=doc_e1;
   }
-  QSort(a,cnt/entry_lines,entry_lines*sizeof(CDocEntry *),&DEPtrCompare);
+  QSort(a,count/entry_lines,entry_lines*sizeof(CDocEntry *),&DEPtrCompare);
 
   res=0;
   st=NULL;
-  for (i=0;i<cnt;) {
+  for (i=0;i<count;) {
     if (!unique || !st || StrCmp(a[i]->tag,st)) {
       st=a[i]->tag;
-      for (j=0;j<entry_lines && i<cnt;j++,i++) {
+      for (j=0;j<entry_lines && i<count;j++,i++) {
 	QueueInsert(a[i],doc->head.last);
 	doc->cur_entry=&doc->head;
 	doc->cur_col=0;
@@ -54,7 +54,7 @@ public I64 Sort(U8 *_in_name,U8 *_out_name=NULL,
       }
       res++;
     } else
-      for (j=0;j<entry_lines && i<cnt;j++,i++) {
+      for (j=0;j<entry_lines && i<count;j++,i++) {
 	QueueInsert(a[i],doc->head.last);
 	DocEntryDel(doc,a[i]);
       }

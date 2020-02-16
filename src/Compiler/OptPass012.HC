@@ -45,7 +45,7 @@ args.
     tmpi_push=tmpi;
     MemSet(&tmpi->arg1,0,3*sizeof(CICArg));
     tmpi->arg1_type_pointed_to=0;
-    switch [intermediate_code_table[code].arg_cnt] {
+    switch [intermediate_code_table[code].arg_count] {
       case IS_V_ARG:
 	ps->ptr-=tmpi->ic_data>>2;
 	break;
@@ -96,7 +96,7 @@ args.
 	  OptSetNOP1(tmpi);
 	} else {
 	  if (tmpi->ic_data) {//was paren
-	    if (!tmpi_push->ic_class->ptr_stars_cnt) {
+	    if (!tmpi_push->ic_class->ptr_stars_count) {
 	      if (tmpi_push->ic_class->raw_type==RT_F64)
 		tmpi_push->ic_class2=cmp.internal_types[RT_F64];
 	      else
@@ -265,7 +265,7 @@ args.
 	  }
 	  break;
       end:
-	if (!tmpi_push->ic_class->ptr_stars_cnt) {
+	if (!tmpi_push->ic_class->ptr_stars_count) {
 	  if (tmpi_push->ic_class->raw_type==RT_F64)
 	    tmpi_push->ic_class2=cmp.internal_types[RT_F64];
 	  else
@@ -712,7 +712,7 @@ args.
 	  tmpi->ic_class=cmp.internal_types[RT_I64];
 	  break;
       end:
-	if (!tmpi_push->ic_class->ptr_stars_cnt) {
+	if (!tmpi_push->ic_class->ptr_stars_count) {
 	  if (tmpi_push->ic_class->raw_type==RT_F64)
 	    tmpi_push->ic_class2=cmp.internal_types[RT_F64];
 	  else if (is_unsigned)
@@ -808,7 +808,7 @@ args.
 	  break;
       end:
 	tmpi->ic_flags&=~ICF_RES_TO_INT;
-	if (!tmpi_push->ic_class->ptr_stars_cnt) {
+	if (!tmpi_push->ic_class->ptr_stars_count) {
 	  if (tmpi_push->ic_class->raw_type==RT_F64)
 	    tmpi_push->ic_class2=cmp.internal_types[RT_F64];
 	  else if (is_unsigned)
@@ -1256,7 +1256,7 @@ args.
 	ICPut(cc,tmpi);
 	LexExcept(cc,"Compiler Optimization Error at ");
     }
-    if (intermediate_code_table[code].arg_cnt==IS_2_ARG) {
+    if (intermediate_code_table[code].arg_count==IS_2_ARG) {
       if (tmpi_push->ic_precedence&~ASSOC_MASK==PREC_ASSIGN)
 	OptFixSizeOf(tmpi2,tmpi_push,tmpi1->ic_class-1);
       else {
@@ -1264,7 +1264,7 @@ args.
 	OptFixSizeOf(tmpi2,tmpi_push,tmpi1->ic_class);
       }
     }
-    if (intermediate_code_table[tmpi_push->ic_code].res_cnt) {
+    if (intermediate_code_table[tmpi_push->ic_code].res_count) {
       ParsePush(ps,tmpi->ic_class2);
       ParsePush(ps,tmpi_push);
     }

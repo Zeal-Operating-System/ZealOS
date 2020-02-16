@@ -35,7 +35,7 @@ I64 DiffEntriesCompare(CDocEntry *doc_e1,CDocEntry *doc_e2)
 #define DF_NO_MORE_PMTS_THIS_FILE	0x40
 
 U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
-	I64 j2_lo,I64 j2_hi,I64 cnt1,I64 cnt2,
+	I64 j2_lo,I64 j2_hi,I64 count1,I64 count2,
 	CDocEntry **doc_unsorted1,CDocEntry **doc_unsorted2)
 {
   CDocEntry *doc_e,*doc_e1,*doc_e2;
@@ -44,15 +44,15 @@ U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
   CDoc *cur_l;
   if (!(*_df_flags & (DF_ABORT_FILE|DF_ABORT_ALL_FILES))) {
     "$$RED$$";
-    if (0<=j1_lo<cnt1)
+    if (0<=j1_lo<count1)
       "%d,",doc_unsorted1[j1_lo]->y+1;
-    else if (0<=j1_hi-1<cnt1)
+    else if (0<=j1_hi-1<count1)
       "%d,",doc_unsorted1[j1_hi-1]->y+1;
     else
       "***,";
-    if (0<=j2_lo<cnt2)
+    if (0<=j2_lo<count2)
       "%d",doc_unsorted2[j2_lo]->y+1;
-    else if (0<=j2_hi-1<cnt2)
+    else if (0<=j2_hi-1<count2)
       "%d",doc_unsorted2[j2_hi-1]->y+1;
     else
       "***";
@@ -141,7 +141,7 @@ U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
 }
 
 Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
-	I64 cnt1,I64 cnt2,CDocEntry **doc_sorted1,CDocEntry **doc_sorted2,
+	I64 count1,I64 count2,CDocEntry **doc_sorted1,CDocEntry **doc_sorted2,
 	CDocEntry **doc_unsorted1,CDocEntry **doc_unsorted2)
 {
   I64 i,i1=0,i2=0,i2b,j1,j2,n,
@@ -150,7 +150,7 @@ Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
 
   if (j1_lo>=j1_hi || j2_lo>=j2_hi) {
     if (j1_lo<j1_hi || j2_lo<j2_hi) {
-      DiffSel(doc,_df_flags,j1_lo,j1_hi,j2_lo,j2_hi,cnt1,cnt2,
+      DiffSel(doc,_df_flags,j1_lo,j1_hi,j2_lo,j2_hi,count1,count2,
 	    doc_unsorted1,doc_unsorted2);
       return TRUE;
     } else
@@ -158,7 +158,7 @@ Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
   }
 
   //Locate longest matching str in intervals
-  while (i1<cnt1 && i2<cnt2) {
+  while (i1<count1 && i2<count2) {
     if (!(j1_lo<=doc_sorted1[i1]->user_data<j1_hi)) //user_data is the new y
       i1++;
     else if (!(j2_lo<=doc_sorted2[i2]->user_data<j2_hi)) //user_data is new y
@@ -193,7 +193,7 @@ Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
 	    }
 	  }
 	  i2++;
-	  if (i2>=cnt2)
+	  if (i2>=count2)
 	    break;
 	}
 	i2=i2b;
@@ -202,15 +202,15 @@ Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
     }
   }
   if (!best_score) {
-    DiffSel(doc,_df_flags,j1_lo,j1_hi,j2_lo,j2_hi,cnt1,cnt2,
+    DiffSel(doc,_df_flags,j1_lo,j1_hi,j2_lo,j2_hi,count1,count2,
 	  doc_unsorted1,doc_unsorted2);
     return TRUE;
   } else {
-    if (DiffSub(doc,_df_flags,j1_lo,best_j1,j2_lo,best_j2,cnt1,cnt2,
+    if (DiffSub(doc,_df_flags,j1_lo,best_j1,j2_lo,best_j2,count1,count2,
 	  doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2))
       res=TRUE;
     if (DiffSub(doc,_df_flags,best_j1+best_score,j1_hi,best_j2+best_score,
-	  j2_hi,cnt1,cnt2,
+	  j2_hi,count1,count2,
 	  doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2))
       res=TRUE;
     return res;
@@ -240,7 +240,7 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
   CDoc *doc1=DocRead(dst_file,DOCF_PLAIN_TEXT_TABS|DOCF_NO_CURSOR),
 	*doc2=DocRead(src_file,DOCF_PLAIN_TEXT_TABS|DOCF_NO_CURSOR);
   CDocEntry *doc_e,**doc_sorted1,**doc_sorted2,**doc_unsorted1,**doc_unsorted2;
-  I64 i,cnt1=0,cnt2=0,df_flags;
+  I64 i,count1=0,count2=0,df_flags;
   Bool res=FALSE;
 
   if (_df_flags)
@@ -252,19 +252,19 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
   doc_e=doc1->head.next;
   while (doc_e!=doc1) {
     if (doc_e->type_u8==DOCT_TEXT)
-      doc_e->user_data=cnt1++; //user_data is the new y
+      doc_e->user_data=count1++; //user_data is the new y
     doc_e=doc_e->next;
   }
 
   doc_e=doc2->head.next;
   while (doc_e!=doc2) {
     if (doc_e->type_u8==DOCT_TEXT)
-      doc_e->user_data=cnt2++; //user_data is the new y
+      doc_e->user_data=count2++; //user_data is the new y
     doc_e=doc_e->next;
   }
 
-  doc_sorted1=MAlloc(cnt1*sizeof(CDocEntry *));
-  doc_unsorted1=MAlloc((cnt1+1)*sizeof(CDocEntry *));
+  doc_sorted1=MAlloc(count1*sizeof(CDocEntry *));
+  doc_unsorted1=MAlloc((count1+1)*sizeof(CDocEntry *));
   i=0;
   doc_e=doc1->head.next;
   while (doc_e!=doc1) {
@@ -275,10 +275,10 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
     doc_e=doc_e->next;
   }
   doc_unsorted1[i]=doc1;
-  QSortI64(doc_sorted1,cnt1,&DiffEntriesCompare);
+  QSortI64(doc_sorted1,count1,&DiffEntriesCompare);
 
-  doc_sorted2=MAlloc(cnt2*sizeof(CDocEntry *));
-  doc_unsorted2=MAlloc((cnt2+1)*sizeof(CDocEntry *));
+  doc_sorted2=MAlloc(count2*sizeof(CDocEntry *));
+  doc_unsorted2=MAlloc((count2+1)*sizeof(CDocEntry *));
   i=0;
   doc_e=doc2->head.next;
   while (doc_e!=doc2) {
@@ -289,9 +289,9 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
     doc_e=doc_e->next;
   }
   doc_unsorted2[i]=doc2;
-  QSortI64(doc_sorted2,cnt2,&DiffEntriesCompare);
+  QSortI64(doc_sorted2,count2,&DiffEntriesCompare);
 
-  res=DiffSub(doc1,&df_flags,0,cnt1,0,cnt2,cnt1,cnt2,
+  res=DiffSub(doc1,&df_flags,0,count1,0,count2,count1,count2,
 	doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2);
   if (df_flags&DF_MODIFIED && !(df_flags&DF_DONT_MODIFIED))
     DocWrite(doc1);
@@ -322,15 +322,15 @@ public U0 ZipRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL,
 {//Report file compressibility.
 //Dft is just src files.  (Used to spot
   //src files with redundancy in them.)
-  I64 i=0,cnt,size,fuf_flags=0;
+  I64 i=0,count,size,fuf_flags=0;
   CDirEntry *tmpde,*tmpde1,**sort_buf;
   U8 *buf;
   CArcCompress *arc;
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+F+S");
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
   tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
-  cnt=FileCnt(tmpde);
-  sort_buf=MAlloc(sizeof(CDirEntry *)*cnt);
+  count=FileCount(tmpde);
+  sort_buf=MAlloc(sizeof(CDirEntry *)*count);
   while (tmpde) {
     sort_buf[i++]=tmpde;
     buf=FileRead(tmpde->full_name,&size);
@@ -342,8 +342,8 @@ public U0 ZipRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL,
     Free(arc);
     tmpde=tmpde->next;
   }
-  QSortI64(sort_buf,cnt,&ZRepCompare);
-  for (i=0;i<cnt;i++) {
+  QSortI64(sort_buf,count,&ZRepCompare);
+  for (i=0;i<count;i++) {
     "%4.1f%% %04X ",sort_buf[i]->user_data,sort_buf[i]->size;
     PutFileLink(sort_buf[i]->full_name);
     '\n';

@@ -1556,12 +1556,12 @@ U0 OSTestSuite()
   TS("Primes");		TSFile("::/Demo/MultiCore/Primes");
   TS("Palindrome");	if (FileFind(BIBLE_FILENAME))
 				TSFile("::/Demo/MultiCore/Palindrome");
-  TS("MPRadix");	if (mp_cnt>1) TSFile("::/Demo/MultiCore/MPRadix");
-  TS("LoadTest");	if (mp_cnt>1 && DriveIsWritable(':'))
+  TS("MPRadix");	if (mp_count>1) TSFile("::/Demo/MultiCore/MPRadix");
+  TS("LoadTest");	if (mp_count>1 && DriveIsWritable(':'))
 				TSFileChar("::/Demo/MultiCore/LoadTest");
-  TS("MPPrint");	if (mp_cnt>1) TSFile("::/Demo/MultiCore/MPPrint");
-  TS("Lock");		if (mp_cnt>1) TSFile("::/Demo/MultiCore/Lock");
-  TS("Interrupts");	if (mp_cnt>1) TSFile("::/Demo/MultiCore/Interrupts");
+  TS("MPPrint");	if (mp_count>1) TSFile("::/Demo/MultiCore/MPPrint");
+  TS("Lock");		if (mp_count>1) TSFile("::/Demo/MultiCore/Lock");
+  TS("Interrupts");	if (mp_count>1) TSFile("::/Demo/MultiCore/Interrupts");
   TS("SpritePlot");	TSFileChar("::/Demo/Graphics/SpritePlot");
   TS("Elephants");	TSFileChar("::/Demo/Graphics/Elephant",,CH_SHIFT_ESC);
   TS("SpritePlot3D");	TSFileChar("::/Demo/Graphics/SpritePlot3D");
@@ -1694,7 +1694,7 @@ U0 OSTestSuite()
   TS("ZipRep");		XTalkWait(task,"ZipRep;Sleep(750);\n");
   TS("ProfRep");	XTalkWait(task,"ProfRep;Sleep(750);\n");
   TS("HeapLogSizeRep");	XTalkWait(task,"HeapLogSizeRep;Sleep(750);\n");
-  TS("CPURep");		if (mp_cnt>1)
+  TS("CPURep");		if (mp_count>1)
 				XTalkWait(task,"CPURep(TRUE);Sleep(750);\n");
   TS("DiskCheck");		if (DriveIsWritable(':'))
 				XTalkWait(task,"DiskCheck;Sleep(750);\n");

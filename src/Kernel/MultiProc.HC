@@ -131,7 +131,7 @@ CCPU *CPUStructInit(I64 num,CCPU *c,CTask *seth_task)
 
 U0 MPInt(U8 num,I64 cpu_num=1)
 {//Generate interrupt for specified core.
-  if (cpu_num>=mp_cnt) {
+  if (cpu_num>=mp_count) {
     if (!Bt(&sys_run_level,RLf_MP))
       return;
     else
@@ -163,7 +163,7 @@ U0 MPNMInt()
 
 U0 MPHalt()
 {//Halt all other cores.
-  mp_cnt=1;
+  mp_count=1;
   MPNMInt;
   Busy(10000);
 }
@@ -219,7 +219,7 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data),U8 *data=NULL,
   CJobCtrl *ctrl;
   CJob *tmpc;
   CTask *seth;
-  if (!(0<=target_cpu<mp_cnt))
+  if (!(0<=target_cpu<mp_count))
     throw('MultCore');
   tmpc=ACAlloc(sizeof(CJob));
   if (aux_str)
@@ -286,7 +286,7 @@ U0 Core0StartMP()
   U8 buf[STR_LEN];
   CAP16BitInit *mp=MP_VECT_ADDR;
   CCPU *c;
-  I64 i,my_mp_cnt;
+  I64 i,my_mp_count;
   CRAXRBCRCXRDX ee;
 
   CPUId(0x1,&ee);
@@ -295,10 +295,10 @@ U0 Core0StartMP()
 
   PUSHFD
   CLI
-  if (mp_cnt>1) {
-    my_mp_cnt=mp_cnt;
-    MPHalt; //sets mp_cnt to 1
-    for (i=1;i<my_mp_cnt;i++) {
+  if (mp_count>1) {
+    my_mp_count=mp_count;
+    MPHalt; //sets mp_count to 1
+    for (i=1;i<my_mp_count;i++) {
       c=&cpu_structs[i];
       JobQueueDel(&c->seth_task->srv_ctrl.next_waiting);
       JobQueueDel(&c->seth_task->srv_ctrl.next_done);
@@ -311,8 +311,8 @@ U0 Core0StartMP()
   //to a location 4096*vect number, $LK,"MP_VECT_ADDR",A="MN:MP_VECT_ADDR"$$WW,0$.
   MemCpy(mp,COREAP_16BIT_INIT,COREAP_16BIT_INIT_END-COREAP_16BIT_INIT);
   MemCpy(&mp->ap_gdt_ptr,SYS_GDT_PTR,sizeof(CSysLimitBase));
-  mp_cnt_initial=mp_cnt=1;
-  mp_cnt_lock=0;
+  mp_count_initial=mp_count=1;
+  mp_count_lock=0;
 
   *(dev.uncached_alias+LAPIC_LVT_ERR)(U32 *)=
 	*(dev.uncached_alias+LAPIC_LVT_ERR)(U32 *)&0xFFFFFF00+MPN_VECT;
@@ -327,13 +327,13 @@ U0 Core0StartMP()
 
   Busy(100000);
   for (i=0;i<10000;i++)
-    LBts(&mp_cnt_lock,0); //Don't let more through
-  my_mp_cnt=mp_cnt_initial;
+    LBts(&mp_count_lock,0); //Don't let more through
+  my_mp_count=mp_count_initial;
 
-  if (my_mp_cnt>MP_PROCESSORS_NUM)
-    my_mp_cnt=MP_PROCESSORS_NUM;
+  if (my_mp_count>MP_PROCESSORS_NUM)
+    my_mp_count=MP_PROCESSORS_NUM;
 
-  for (i=1;i<my_mp_cnt;i++) {
+  for (i=1;i<my_mp_count;i++) {
     StrPrint(buf,"Seth Task CPU%02X",i);
     task=Spawn(&CoreAPSethInit,NULL,buf,,,MEM_SETH_STK,0);
     task->rflags=RFLAGG_START;
@@ -343,12 +343,12 @@ U0 Core0StartMP()
   }
 
   //Make sure they're all up-and-running
-  for (i=1;i<my_mp_cnt;i++)
+  for (i=1;i<my_mp_count;i++)
     while (!Bt(&cpu_structs[i].seth_task->task_flags,TASKf_AWAITING_MESSAGE))
       PAUSE;
 
   POPFD
-  mp_cnt=my_mp_cnt; //Finalize cnt
+  mp_count=my_mp_count; //Finalize count
 }
 
 U0 Core0Init()
@@ -356,8 +356,8 @@ U0 Core0Init()
   CRAXRBCRCXRDX ee;
   CPUId(0x1,&ee);
 
-  mp_cnt_initial=mp_cnt=1;
-  mp_cnt_lock=0;
+  mp_count_initial=mp_count=1;
+  mp_count_lock=0;
 
   dbg.mp_crash=ACAlloc(sizeof(CMPCrash));
 
@@ -380,7 +380,7 @@ interrupt U0 IntMPCrash()
 {//Entering the debugger from another core causes an interrupt on Core0
 //Which calls this routine.
   *(dev.uncached_alias+LAPIC_EOI)(U32 *)=0;
-  mp_cnt=1;
+  mp_count=1;
   Raw(ON);
   text.raw_flags|=RWF_SHOW_DOLLAR;
   "MP Crash CPU%02X Task:%08X\n"

@@ -29,7 +29,7 @@ U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
       LexExcept(cc,"Missing '}' at ");
     Lex(cc);
   } else {
-    if (tmpc->ptr_stars_cnt==1 &&
+    if (tmpc->ptr_stars_count==1 &&
 	  ((tmpc-1)->raw_type==RT_I8 || (tmpc-1)->raw_type==RT_U8) &&
 	  !tmpad && cc->token==TK_STR)
       is_str=TRUE;
@@ -123,20 +123,20 @@ class CVI2
 U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	CArrayDim *tmpad,U8 *data_addr_rip,U8 **_base,Bool data_heap,I64 pass)
 {
-  I64 i,j,cnt;
+  I64 i,j,count;
   U8 *st,*_b;
   CVI2 head,*tmpvi,*tmpvi1;
   CArrayDim *tmpad1;
   tmpc=OptClassFwd(tmpc);
   if (tmpad1=tmpad->next) {
-    if (!tmpc->ptr_stars_cnt &&
+    if (!tmpc->ptr_stars_count &&
 	  (tmpc->raw_type==RT_I8 || tmpc->raw_type==RT_U8) &&
 	  cc->token==TK_STR) {
       LexPopNoRestore(cc);
       st=LexExtStr(cc,&i);
-      if (tmpad1->cnt<0) {//[]
-	tmpad1->cnt=i;
-	tmpad->total_cnt=i*tmpad1->total_cnt;
+      if (tmpad1->count<0) {//[]
+	tmpad1->count=i;
+	tmpad->total_count=i*tmpad1->total_count;
 	Free(*_base);
 	if (data_heap)
 	  *_base=MAlloc(i);
@@ -145,8 +145,8 @@ U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	MemCpy(*_base,st,i);
 	*_dst=*_base+i;
       } else {
-	MemCpy(*_dst,st,tmpad1->cnt);
-	*_dst+=tmpad1->cnt;
+	MemCpy(*_dst,st,tmpad1->count);
+	*_dst+=tmpad1->count;
       }
       Free(st);
       LexPush(cc);
@@ -156,23 +156,23 @@ U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	LexPush(cc);
 	Lex(cc);
       }
-      if (tmpad1->cnt<0) {//[]
+      if (tmpad1->count<0) {//[]
 	QueueInit(&head);
-	cnt=0;
+	count=0;
 	while (cc->token!='}') {
-	  tmpvi=MAlloc(offset(CVI2.base)+tmpad1->total_cnt*tmpc->size);
+	  tmpvi=MAlloc(offset(CVI2.base)+tmpad1->total_count*tmpc->size);
 	  _b=&tmpvi->base;
 	  ParseVarInit2(cc,&_b,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
 	  QueueInsert(tmpvi,head.last);
 	  if (cc->token==',')
 	    Lex(cc);
-	  cnt++;
+	  count++;
 	}
 	Lex(cc); //skip '}'
-	tmpad1->cnt=cnt;
-	tmpad->total_cnt=cnt*tmpad1->total_cnt;
-	j=tmpad1->total_cnt*tmpc->size;
-	i=cnt*j;
+	tmpad1->count=count;
+	tmpad->total_count=count*tmpad1->total_count;
+	j=tmpad1->total_count*tmpc->size;
+	i=count*j;
 	Free(*_base);
 	if (data_heap)
 	  *_base=_b=MAlloc(i);
@@ -188,9 +188,9 @@ U0 ParseVarInit2(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,
 	}
 	*_dst=_b;
       } else {
-	for (i=0;i<tmpad1->cnt;i++) {
+	for (i=0;i<tmpad1->count;i++) {
 	  ParseVarInit2(cc,_dst,tmpc,tmpad1,data_addr_rip,_base,data_heap,pass);
-	  if (tmpad1->cnt>1 && cc->token==',')
+	  if (tmpad1->count>1 && cc->token==',')
 	    Lex(cc);
 	}
 	if (cc->token=='}')
@@ -249,8 +249,8 @@ U0 ParseArrayDims(CCompCtrl *cc,I64 mode,CArrayDim *dim)
   CArrayDim *tmpad,*tmpad1;
   I64 j;
   dim->next=NULL;
-  dim->cnt=0;
-  dim->total_cnt=1;
+  dim->count=0;
+  dim->total_count=1;
   tmpad1=&dim->next;
   if (cc->token=='[') {
     if (mode.u8[1]==PRS1B_FUN_ARG)
@@ -266,7 +266,7 @@ U0 ParseArrayDims(CCompCtrl *cc,I64 mode,CArrayDim *dim)
       tmpad->next=NULL;
       tmpad1=&dim;
       do {
-	tmpad1->total_cnt*=j;
+	tmpad1->total_count*=j;
 	if (!tmpad1->next) {
 	  tmpad1->next=tmpad;
 	  break;
@@ -274,8 +274,8 @@ U0 ParseArrayDims(CCompCtrl *cc,I64 mode,CArrayDim *dim)
 	tmpad1=tmpad1->next;
       } while (tmpad1);
       tmpad1=tmpad;
-      tmpad->cnt=j;
-      tmpad->total_cnt=1;
+      tmpad->count=j;
+      tmpad->total_count=1;
       if (cc->token!=']')
 	LexExcept(cc,"Missing ']' at ");
     } while (Lex(cc)=='[');
@@ -286,7 +286,7 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
   I64 *_mode,CMemberLst *tmpm,U8 **_ident,CHashFun **_fun_ptr,
   CHashExport **_tmpex,CArrayDim *tmpad,I64 fsp_flags)
 {
-  I64 k,ptr_stars_cnt,mode=*_mode;
+  I64 k,ptr_stars_count,mode=*_mode;
   CHashClass *tmpc1=*_tmpc1,*tmpc2;
   CHashFun *fun_ptr=NULL;
   CHashExport *tmpex=NULL;
@@ -295,7 +295,7 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
   if (!tmpc1 || !(tmpc1->type & (HTT_CLASS|HTT_INTERNAL_TYPE)))
     LexExcept(cc,"Invalid class at ");
 
-  ptr_stars_cnt=0;
+  ptr_stars_count=0;
   while (cc->token=='*') {
     if (mode.u8[1]) {
       LexPopNoRestore(cc);
@@ -303,7 +303,7 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
     }
     Lex(cc);
     tmpc1++;
-    if (++ptr_stars_cnt>PTR_STARS_NUM)
+    if (++ptr_stars_count>PTR_STARS_NUM)
       LexExcept(cc,"Too many *'s at ");
   }
 
@@ -321,13 +321,13 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
   if (cc->token=='(') {
     if (Lex(cc)!='*')
       LexExcept(cc,"Expecting '*' at ");
-    ptr_stars_cnt=1; //fun_ptr
+    ptr_stars_count=1; //fun_ptr
     while (Lex(cc)=='*')
-      ptr_stars_cnt++; //fun_ptr
-    if (ptr_stars_cnt>PTR_STARS_NUM)
+      ptr_stars_count++; //fun_ptr
+    if (ptr_stars_count>PTR_STARS_NUM)
       LexExcept(cc,"Too many *'s at ");
   } else
-    ptr_stars_cnt=-1; //fun_ptr
+    ptr_stars_count=-1; //fun_ptr
 
   if (_ident) {
     if (cc->token==TK_IDENT) {
@@ -347,19 +347,19 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
     }
   }
 
-  if (ptr_stars_cnt>=0) { //fun_ptr
+  if (ptr_stars_count>=0) { //fun_ptr
     if (cc->token!=')')
       LexExcept(cc,"Missing ')' at ");
     if (Lex(cc)!='(')
       LexExcept(cc,"Expecting '(' at ");
-    fun_ptr=ParseFunJoin(cc,tmpc1,NULL,fsp_flags)+ptr_stars_cnt;
-    tmpc1=cmp.internal_types[RT_PTR]+ptr_stars_cnt;
+    fun_ptr=ParseFunJoin(cc,tmpc1,NULL,fsp_flags)+ptr_stars_count;
+    tmpc1=cmp.internal_types[RT_PTR]+ptr_stars_count;
   }
   ParseArrayDims(cc,mode,tmpad);
 
   tmpc2=OptClassFwd(tmpc1);
-  if (tmpc2->ptr_stars_cnt) {
-    tmpc2-=tmpc2->ptr_stars_cnt;
+  if (tmpc2->ptr_stars_count) {
+    tmpc2-=tmpc2->ptr_stars_count;
     if (tmpc2->type&HTT_INTERNAL_TYPE && !tmpc2->size)
       LexWarn(cc,"use \"U8 *\" instead of \"U0 *\" at ");
   }
@@ -391,11 +391,11 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
   tmpm->flags=MLF_DOT_DOT_DOT;
   tmpm->member_class=cmp.internal_types[RT_I64];
   tmpm->str=StrNew("argv");
-  tmpm->dim.total_cnt=127; //arbitrary
+  tmpm->dim.total_count=127; //arbitrary
   tmpm->dim.next=tmpad=MAlloc(sizeof(CArrayDim));
   tmpad->next=NULL;
-  tmpad->cnt=127; //arbitrary
-  tmpad->total_cnt=1;
+  tmpad->count=127; //arbitrary
+  tmpad->total_count=1;
   tmpm->offset=tmpf->size;
   tmpm->size=8; //Close enough
   tmpf->size+=8;//Close enough
@@ -526,10 +526,10 @@ pvl_restart3:
 	MemberAdd(cc,tmpm,tmpc,mode.u8[1]);
       else
 	MemberAdd(cc,tmpm,tmpc,PRS1B_NULL);
-      tmpc->member_cnt++;
+      tmpc->member_count++;
 
       tmpc2=tmpm->member_class;
-      i=tmpc2->size*tmpm->dim.total_cnt;
+      i=tmpc2->size*tmpm->dim.total_count;
       switch (mode.u8[1]) {
 	case PRS1B_STATIC_LOCAL_VAR:
 	  if (i<0) {
@@ -562,7 +562,7 @@ pvl_restart3:
 	      Lex(cc); //skip =
 	      ParseStaticInit(cc,tmpm,1);
 	      LexPopNoRestore(cc);
-	      i=tmpc2->size*tmpm->dim.total_cnt;
+	      i=tmpc2->size*tmpm->dim.total_count;
 	      k=(i+7)&~7;
 	      if (cc->flags&CCF_AOT_COMPILE)	{
 		k>>=3;
@@ -581,7 +581,7 @@ pvl_restart3:
 	      for (k=0;k<i;k++)
 		AOTStoreCodeU8At(cc,tmpm->static_data_rip+k,
 		      tmpm->static_data[k]);
-	    tmpm->use_cnt=0;
+	    tmpm->use_count=0;
 	    cc->flags|=CCF_DONT_MAKE_RES;
 	  }
 	  if (cc->flags&CCF_AOT_COMPILE)
@@ -611,7 +611,7 @@ pvl_restart3:
 	    Lex(cc);
 	    if (!ParseExpression(cc,NULL,TRUE))
 	      throw('Compiler');
-	    tmpm->use_cnt=0;
+	    tmpm->use_count=0;
 	    cc->flags|=CCF_DONT_MAKE_RES;
 	  } else
 	    LexPopNoRestore(cc);

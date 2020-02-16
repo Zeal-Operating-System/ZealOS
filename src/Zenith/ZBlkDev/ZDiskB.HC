@@ -116,23 +116,23 @@ public I64 Size(U8 *files_find_mask="/*",U8 *fu_flags=NULL,I64 round_to=0)
   return res;
 }
 
-public I64 FileCnt(CDirEntry *tmpde)
-{//Cnt of files in $LK,"CDirEntry",A="MN:CDirEntry"$ tree.
-  I64 cnt=0;
+public I64 FileCount(CDirEntry *tmpde)
+{//Count of files in $LK,"CDirEntry",A="MN:CDirEntry"$ tree.
+  I64 count=0;
   while (tmpde) {
     if (tmpde->attr&RS_ATTR_DIR)
-      cnt+=FileCnt(tmpde->sub);
+      count+=FileCount(tmpde->sub);
     else
-      cnt++;
+      count++;
     tmpde=tmpde->next;
   }
-  return cnt;
+  return count;
 }
 
 #help_index "File/Cmd Line (Typically);Cmd Line (Typically)"
 public I64 FF(U8 *files_find_mask,U8 *fu_flags=NULL)
 {//Files find. List files matching mask.
-  I64 cnt=0,fuf_flags=0;
+  I64 count=0,fuf_flags=0;
   CDirEntry *tmpde,*tmpde1;
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F");
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
@@ -140,11 +140,11 @@ public I64 FF(U8 *files_find_mask,U8 *fu_flags=NULL)
   while (tmpde) {
     PutFileLink(tmpde->full_name);
     '\n';
-    cnt++;
+    count++;
     tmpde=tmpde->next;
   }
   DirTreeDel(tmpde1);
-  return cnt;
+  return count;
 }
 
 public I64 Zip(U8 *files_find_mask="*",U8 *fu_flags=NULL)

@@ -11,7 +11,7 @@ class CHeapLog
     U8 *addr;
     I64 size;
   }
-  I64 cnt;
+  I64 count;
   U8 *caller[HL_CALLER_DEPTH];
 };
 
@@ -172,7 +172,7 @@ public U0 HeapLogSizeRep(Bool leave_it=OFF)
 	  for (j=0;j<HL_CALLER_DEPTH;j++)
 	    if (hla.caller[j]!=tmphls->caller[j])
 	      goto hl_next;
-	  tmphls->cnt++;
+	  tmphls->count++;
 	  goto hl_found;
 	}
 hl_next:
@@ -180,7 +180,7 @@ hl_next:
       }
       tmphls=MAlloc(sizeof(CHeapLog),heaplog_hc);
       MemCpy(tmphls,&hla,sizeof(CHeapLog));
-      tmphls->cnt=1;
+      tmphls->count=1;
       tmphls->size=MSize(hla.addr);
       QueueInsert(tmphls,size_head[k].last);
 hl_found:
@@ -193,11 +193,11 @@ hl_found:
     tmphls=size_head[i].next;
     while (tmphls!=&size_head[i]) {
       tmphls1=tmphls->next;
-      "%08X*%08X=%08X",tmphls->size,tmphls->cnt,tmphls->size*tmphls->cnt;
+      "%08X*%08X=%08X",tmphls->size,tmphls->count,tmphls->size*tmphls->count;
       for (j=0;j<HL_CALLER_DEPTH;j++)
 	"%P",tmphls->caller[j];
       '\n';
-      total+=tmphls->size*tmphls->cnt;
+      total+=tmphls->size*tmphls->count;
       Free(tmphls);
       tmphls=tmphls1;
     }

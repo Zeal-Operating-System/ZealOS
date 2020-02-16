@@ -8,18 +8,18 @@ class Photon
 {
   Photon *next,*last;
   CD3 p,v,n,p_normal_inhibit;
-} p_root[mp_cnt];
+} p_root[mp_count];
 I64 p_root_locks;
 
 #define ANIMATE_JIFFIES	(JIFFY_FREQ*0.01)
 I64 master_sleep_jiffy;
-CTask *animate_tasks[mp_cnt];
+CTask *animate_tasks[mp_count];
 
 #define LENS_COLOR	WHITE
 #define MIRROR_COLOR	DKGRAY
 CDC *map;
 
-I64 photon_cnt,mirror_cnt,snell_cnt,normal_inhibit,zero_normal;
+I64 photon_count,mirror_count,snell_count,normal_inhibit,zero_normal;
 Bool full_speed,show_normals;
 
 U8	*bmp_refract,*bmp_reflect;
@@ -45,7 +45,7 @@ U0 BmpLine(U8 *bmp,F64 x1,F64 y1,F64 x2,F64 y2)
 
 Photon *PhotonNew()
 {
-  I64 num=photon_cnt++%mp_cnt;
+  I64 num=photon_count++%mp_count;
   Photon *res=CAlloc(sizeof(Photon));
   while (LBts(&p_root_locks,num))
     Yield;
@@ -65,9 +65,9 @@ U0 DrawIt(CTask *,CDC *dc)
 	bmp_mem,bmp_mem/1024/1024,bmp_scale,
 	map->width,map->height,bmp_width,bmp_height);
   GrPrint(dc,0,FONT_HEIGHT,
-	"PhotonCnt:%d MirrorCnt:%d SnellCnt:%d SnellInhibit:%d ZeroNormal:%d",
-	photon_cnt,mirror_cnt,snell_cnt,normal_inhibit,zero_normal);
-  for (i=0;i<mp_cnt;i++) {
+	"PhotonCount:%d MirrorCount:%d SnellCount:%d SnellInhibit:%d ZeroNormal:%d",
+	photon_count,mirror_count,snell_count,normal_inhibit,zero_normal);
+  for (i=0;i<mp_count;i++) {
     while (LBts(&p_root_locks,i))
       Yield;
     tmpp=p_root[i].next;
@@ -236,7 +236,7 @@ U0 Mirror(Photon *tmpp)
   é$SY,3$n$SY,0$=Arg(tmpp->n.x,tmpp->n.y);
 
   D3Equ(&tmpp->v,Cos(2*é$SY,3$n$SY,0$+ã-é),Sin(2*é$SY,3$n$SY,0$+ã-é));
-  lock {mirror_cnt++;}
+  lock {mirror_count++;}
 }
 
 U0 SnellsLaw(Photon *tmpp,I64 last,I64 next)
@@ -264,15 +264,15 @@ U0 SnellsLaw(Photon *tmpp,I64 last,I64 next)
     é=é$SY,3$n$SY,0$-é2;
 
   D3Equ(&tmpp->v,Cos(é),Sin(é));
-  lock {snell_cnt++;}
+  lock {snell_count++;}
 }
 
 U0 AnimateTask(I64)
 {
   while (TRUE) {
     master_sleep_jiffy+=ANIMATE_JIFFIES;
-    if (cnts.jiffies>=master_sleep_jiffy)
-      master_sleep_jiffy=cnts.jiffies+ANIMATE_JIFFIES;
+    if (counts.jiffies>=master_sleep_jiffy)
+      master_sleep_jiffy=counts.jiffies+ANIMATE_JIFFIES;
     SleepUntil(master_sleep_jiffy);
   }
 }
@@ -338,11 +338,11 @@ U0 MPAnimateTask(I64)
       }
 
       tmpp=tmpp->next;
-      if (cnts.jiffies>=timeout_jiffy)
+      if (counts.jiffies>=timeout_jiffy)
 	break;
     }
     LBtr(&p_root_locks,Gs->num);
-    if (cnts.jiffies>=timeout_jiffy) {
+    if (counts.jiffies>=timeout_jiffy) {
       Sleep(1);
       timeout_jiffy=master_sleep_jiffy+ANIMATE_JIFFIES;
     }
@@ -359,11 +359,11 @@ U0 MPAnimateTask(I64)
 U0 Init()
 {
   I64 i;
-  master_sleep_jiffy=cnts.jiffies;
+  master_sleep_jiffy=counts.jiffies;
   full_speed=show_normals=FALSE;
-  photon_cnt=mirror_cnt=snell_cnt=normal_inhibit=zero_normal=0;
+  photon_count=mirror_count=snell_count=normal_inhibit=zero_normal=0;
   map=DCNew(Fs->pix_width,Fs->pix_height);
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     while (LBts(&p_root_locks,i))
       Yield;
     QueueInit(&p_root[i]);
@@ -391,7 +391,7 @@ U0 Init()
 U0 CleanUp()
 {
   I64 i;
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     while (LBts(&p_root_locks,i))
       Yield;
     QueueDel(&p_root[i],TRUE);
@@ -452,7 +452,7 @@ U0 LTMenuSet(I64 mode)
 #define PTS_NUM	1024
 U0 LightTable()
 {
-  I64 message_code,mode=LTM_REFLECT_LINE,i,cnt,arg1,arg2,x1,y1,x2,y2;
+  I64 message_code,mode=LTM_REFLECT_LINE,i,count,arg1,arg2,x1,y1,x2,y2;
   CD3I32 *c=MAlloc(PTS_NUM*sizeof(CD3I32));
 
   p_root_locks=0;
@@ -500,7 +500,7 @@ U0 LightTable()
   Init;
   Fs->draw_it=&DrawIt;
   Fs->animate_task=Spawn(&AnimateTask,NULL,"Animate",,Fs);
-  for (i=0;i<mp_cnt;i++)
+  for (i=0;i<mp_count;i++)
     animate_tasks[i]=Spawn(&MPAnimateTask,NULL,"MPAnimate",i);
   try {
     while (TRUE) {
@@ -558,37 +558,37 @@ lt_restart:
 	      break;
 	    case LTM_REFLECT_SPLINE:
 	    case LTM_REFRACT_SPLINE:
-	      cnt=0;
+	      count=0;
 	      if (mode==LTM_REFLECT_SPLINE)
 		map->color=ROP_XOR+MIRROR_COLOR;
 	      else
 		map->color=ROP_XOR+LENS_COLOR;
 	      do {
-		c[cnt].x=arg1; c[cnt].y=arg2; c[cnt].z=0;
-		Gr2BSpline(map,c,cnt+1);
+		c[count].x=arg1; c[count].y=arg2; c[count].z=0;
+		Gr2BSpline(map,c,count+1);
 		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_UP+
 		      1<<MESSAGE_MS_MOVE+1<<MESSAGE_MS_R_UP);
-		Gr2BSpline(map,c,cnt+1);
+		Gr2BSpline(map,c,count+1);
 		if (message_code==MESSAGE_KEY_DOWN)
 		  goto lt_restart;
 		else if (message_code==MESSAGE_MS_L_UP) {
 		  Sweep(100,90,100);
-		  cnt++;
+		  count++;
 		}
-	      } while (cnt<PTS_NUM-1 && message_code!=MESSAGE_MS_R_UP);
+	      } while (count<PTS_NUM-1 && message_code!=MESSAGE_MS_R_UP);
 	      if (mode==LTM_REFLECT_SPLINE)
 		map->color=MIRROR_COLOR;
 	      else
 		map->color=LENS_COLOR;
-	      Gr2BSpline3(map,c,cnt);
-	      for (i=0;i<cnt;i++) {
+	      Gr2BSpline3(map,c,count);
+	      for (i=0;i<count;i++) {
 		c[i].x*=bmp_scale;
 		c[i].y*=bmp_scale;
 	      }
 	      if (mode==LTM_REFLECT_SPLINE)
-		BSpline2(bmp_reflect,c,cnt,&BmpPlot);
+		BSpline2(bmp_reflect,c,count,&BmpPlot);
 	      else
-		BSpline2(bmp_refract,c,cnt,&BmpPlot);
+		BSpline2(bmp_refract,c,count,&BmpPlot);
 	      mode=LTM_REFLECT_LINE;
 	      LTMenuSet(mode);
 	      break;
@@ -640,7 +640,7 @@ lt_done:
     PutExcept;
   Free(c);
   SettingsPop;
-  for (i=0;i<mp_cnt;i++)
+  for (i=0;i<mp_count;i++)
     Kill(animate_tasks[i]);
   CleanUp;
   MenuPop;

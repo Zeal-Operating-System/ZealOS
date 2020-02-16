@@ -140,9 +140,9 @@ U0 SpriteElem2Code(CDoc *doc,CSprite *tmpg)
       DocPrint(doc,"{FALSE,");
       p=&tmpg->mu.u;
       col=0;
-      for (i=0;i<tmpg->mu.vertex_cnt;i++,p++) {
+      for (i=0;i<tmpg->mu.vertex_count;i++,p++) {
 	DocPrint(doc,"(%d,%d,%d)",p->x,p->y,p->z);
-	if (i+1<tmpg->mu.vertex_cnt) DocPrint(doc,",");
+	if (i+1<tmpg->mu.vertex_count) DocPrint(doc,",");
 	if (++col==4) {
 	  DocPrint(doc,"\t//%d\n",i);
 	  col=0;
@@ -150,11 +150,11 @@ U0 SpriteElem2Code(CDoc *doc,CSprite *tmpg)
       }
       DocPrint(doc,":");
       tri=p;
-      for (i=0;i<tmpg->mu.tri_cnt;i++,tri++) {
+      for (i=0;i<tmpg->mu.tri_count;i++,tri++) {
 	DocPrint(doc,"(%s,%d,%d,%d)",Color2Str(buf1,tri->color),
 	      tri->nums[0],tri->nums[1],tri->nums[2]);
-	if (i+1<tmpg->mu.tri_cnt) DocPrint(doc,",");
-	if (++col>=3 && i+1<tmpg->mu.tri_cnt) {
+	if (i+1<tmpg->mu.tri_count) DocPrint(doc,",");
+	if (++col>=3 && i+1<tmpg->mu.tri_count) {
 	  DocPrint(doc,"\n");
 	  col=0;
 	}
@@ -165,9 +165,9 @@ U0 SpriteElem2Code(CDoc *doc,CSprite *tmpg)
       DocPrint(doc,"{TRUE,(%d,%d,%d):",tmpg->pmu.x,tmpg->pmu.y,tmpg->pmu.z);
       p=&tmpg->pmu.u;
       col=1;
-      for (i=0;i<tmpg->pmu.vertex_cnt;i++,p++) {
+      for (i=0;i<tmpg->pmu.vertex_count;i++,p++) {
 	DocPrint(doc,"(%d,%d,%d)",p->x,p->y,p->z);
-	if (i+1<tmpg->pmu.vertex_cnt) DocPrint(doc,",");
+	if (i+1<tmpg->pmu.vertex_count) DocPrint(doc,",");
 	if (++col==4) {
 	  DocPrint(doc,"\t//%d\n",i);
 	  col=0;
@@ -175,11 +175,11 @@ U0 SpriteElem2Code(CDoc *doc,CSprite *tmpg)
       }
       DocPrint(doc,":");
       tri=p;
-      for (i=0;i<tmpg->pmu.tri_cnt;i++,tri++) {
+      for (i=0;i<tmpg->pmu.tri_count;i++,tri++) {
 	DocPrint(doc,"(%s,%d,%d,%d)",Color2Str(buf1,tri->color),
 	      tri->nums[0],tri->nums[1],tri->nums[2]);
-	if (i+1<tmpg->pmu.tri_cnt) DocPrint(doc,",");
-	if (++col>=3 && i+1<tmpg->pmu.tri_cnt) {
+	if (i+1<tmpg->pmu.tri_count) DocPrint(doc,",");
+	if (++col>=3 && i+1<tmpg->pmu.tri_count) {
 	  DocPrint(doc,"\n");
 	  col=0;
 	}
@@ -524,12 +524,12 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 	  Lex(cc); //Skip ,
       }
       if (g.type==SPT_MESH) {
-	g.mu.vertex_cnt=num1;
-	g.mu.tri_cnt=num2;
+	g.mu.vertex_count=num1;
+	g.mu.tri_count=num2;
 	size=SpriteElemQueuedBaseSize(SPT_MESH);
       } else {
-	g.pmu.vertex_cnt=num1;
-	g.pmu.tri_cnt=num2;
+	g.pmu.vertex_count=num1;
+	g.pmu.tri_count=num2;
       }
       size=SpriteElemQueuedBaseSize(g.type);
       res=MAlloc(size+num1*sizeof(CD3I32)+num2*sizeof(CMeshTri));

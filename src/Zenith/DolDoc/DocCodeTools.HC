@@ -518,7 +518,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	EdRemFunLeadingSpace(doc);
 	DocGoToLine(doc,start_y+1);
 	doc_e=doc->cur_entry;
-	end_y=start_y+indent->total_cnt;
+	end_y=start_y+indent->total_count;
 	while (start_y<=doc_e->y<end_y) {
 	  if (doc_e!=doc && doc_e!=doc->cur_entry &&
 		!(doc_e->de_flags&(DOCEG_DONT_EDIT-DOCEF_SCROLLING_X))) {

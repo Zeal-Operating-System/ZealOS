@@ -10,7 +10,7 @@ U0 PlayerIndirect()
       remaining++;
   }
   while (remaining) {
-    if (!alive_cnt[0] || !alive_cnt[1])
+    if (!alive_count[0] || !alive_count[1])
       throw('GameOver',TRUE);
     message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 	  1<<MESSAGE_MS_R_UP);
@@ -68,7 +68,7 @@ U0 PlayerMove()
   I64 message_code,arg1,arg2;
   ViewPlayerSet(cur_player);
   while (TRUE) {
-    if (!alive_cnt[0] || !alive_cnt[1])
+    if (!alive_count[0] || !alive_count[1])
       throw('GameOver',TRUE);
     message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 	  1<<MESSAGE_MS_R_UP);
@@ -113,7 +113,7 @@ U0 PlayerDirect()
   I64 message_code,arg1,arg2;
   ViewPlayerSet(cur_player);
   while (TRUE) {
-    if (!alive_cnt[0] || !alive_cnt[1])
+    if (!alive_count[0] || !alive_count[1])
       throw('GameOver',TRUE);
     message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 	  1<<MESSAGE_MS_R_UP);

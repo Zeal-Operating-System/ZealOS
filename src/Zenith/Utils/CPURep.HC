@@ -30,13 +30,13 @@ public U0 CPURep(Bool full=FALSE)
   CCPURep cr;
 
   if (!full)
-    "%03X Cores %6h?nHz\n",mp_cnt,ToF64(cnts.time_stamp_freq);
+    "%03X Cores %6h?nHz\n",mp_count,ToF64(counts.time_stamp_freq);
   else {
-    cr.swaps=CAlloc(sizeof(I64)*mp_cnt);
-    cr.cycles=CAlloc(sizeof(I64)*mp_cnt);
+    cr.swaps=CAlloc(sizeof(I64)*mp_count);
+    cr.cycles=CAlloc(sizeof(I64)*mp_count);
     cr.mp_start=cr.mp_end=FALSE;
-    cr.mp_not_done_flags=1<<mp_cnt-1;
-    for (i=0;i<mp_cnt;i++)
+    cr.mp_not_done_flags=1<<mp_count-1;
+    for (i=0;i<mp_count;i++)
       Spawn(&MPCPURep,&cr,NULL,i);
 
     t0=tS;
@@ -47,13 +47,13 @@ public U0 CPURep(Bool full=FALSE)
       Yield;
     tf=tS;
 
-    "\n%03X Cores %6h?nHz\n",mp_cnt,ToF64(cnts.time_stamp_freq);
+    "\n%03X Cores %6h?nHz\n",mp_count,ToF64(counts.time_stamp_freq);
     "\nContext\n"
 	  "CPUSwaps/sCycles\n"
 	  "---------------------------------\n";
     total_swaps=0;
     total_cycles=0;
-    for (i=0;i<mp_cnt;i++) {
+    for (i=0;i<mp_count;i++) {
       "%02X%13,d%17,d\n",i,
 	    ToI64(cr.swaps[i]/(tf-t0)),ToI64(cr.cycles[i]/(tf-t0));
       total_swaps+=cr.swaps[i];

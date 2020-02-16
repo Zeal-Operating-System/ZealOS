@@ -58,7 +58,7 @@ U0 EdLiteUpdate(CLine *head,CLine *cur_line,I64 cur_col,I64 line_start_col)
 Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 {//Light weight text editor for debugging.
   U8 *src,*src2,*src3,*dst,*buf,*bin_data=NULL;
-  I64 i,cnt=0,ch,sc,size,bin_size=0,line_start_col=0,cur_col=0,
+  I64 i,count=0,ch,sc,size,bin_size=0,line_start_col=0,cur_col=0,
 	old_raw_flags=text.raw_flags;
   CLine head,*tmpl,*tmpl1,*cur_line;
   Bool	res=FALSE,
@@ -96,7 +96,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
       tmpl=MAlloc(sizeof(CLine));
       tmpl->line=StrNew(src2);
       QueueInsert(tmpl,head.last);
-      cnt++;
+      count++;
     }
 
     if (src+1-buf<size) {
@@ -111,7 +111,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   if (--num<0)
     res=FALSE;
   else {
-    if (num<=cnt)
+    if (num<=count)
       while (num--)
 	cur_line=cur_line->next;
     else {

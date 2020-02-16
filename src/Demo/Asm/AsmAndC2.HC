@@ -6,7 +6,7 @@ it from the cmd line.
 */
 
 //This is to demo glbl var access.
-//Glbs defined elsewhere can accessed too, like cnts.jiffies.
+//Glbs defined elsewhere can accessed too, like counts.jiffies.
 I64 glbl_ona=Freq2Ona(400),glbl_ona_step=10,glbl_ona_base=Freq2Ona(100);
 
 asm {
@@ -24,7 +24,7 @@ _BEEPS2::
 	MOV	RBP,RSP
 	MOV	RCX,U64 SF_ARG1[RBP] //$LK,"SF_ARG1",A="FF:::/Kernel/KernelA.HH,SF_ARG1"$
 
-	PUSH	U64 [&cnts.jiffies]
+	PUSH	U64 [&counts.jiffies]
 
 @@05:	PUSH	RCX
 //U0 $LK,"Beep",A="MN:Beep"$(I8 ona=62,Bool busy=FALSE)
@@ -40,7 +40,7 @@ _BEEPS2::
 	POP	RSI
 
 	POP	RAX
-	SUB	RAX,U64 [&cnts.jiffies]
+	SUB	RAX,U64 [&counts.jiffies]
 	NEG	RAX
 	CALL	PUT_HEX_U64
 	MOV	RAX,'\n'
@@ -52,7 +52,7 @@ _BEEPS2::
 
 //My convention is to put an underscore
 //on C callable asm routines.
-_extern _BEEPS2 U0 Beeps2(I64 cnt);
+_extern _BEEPS2 U0 Beeps2(I64 count);
 
 U0 AsmAndC2()
 {
@@ -73,7 +73,7 @@ U0 AsmAndC2()
     ADD	RAX,U64 [&glbl_ona_base]  //Intentionally evaluated at run time
     PUSH	RAX
     CALL	&Snd	//We can skip IMPORT with & if JIT compiling.
-    MOV	RCX,cnts.time_stamp_freq>>3 //JIT Const.  Simple delay loop.
+    MOV	RCX,counts.time_stamp_freq>>3 //JIT Const.  Simple delay loop.
 @@10:	LOOP	@@10
 
     POP	RCX

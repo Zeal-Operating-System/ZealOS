@@ -7,7 +7,7 @@ size is now known
 cc->pass==10 is final pass, code is placed into buf.
 */
   CIntermediateCode *tmpi,*tmpi_next;
-  I64 i,cnt,num_lines=cc->max_line+1-cc->min_line,rip=0,rip2;
+  I64 i,count,num_lines=cc->max_line+1-cc->min_line,rip=0,rip2;
   U8  *ptr,saved_arg1_arg2_r[3*sizeof(CICArg)];
   CCodeMisc *lb;
   CAOT *tmpaot;
@@ -42,7 +42,7 @@ cc->pass==10 is final pass, code is placed into buf.
   cc->last_float_op_ic=NULL;
   tmpi=&cc->coc.coc_head;
   tmpi->ic_last_start=-1;
-  tmpi->ic_cnt=0;
+  tmpi->ic_count=0;
   tmpi=tmpi->next;
   while (tmpi->ic_code) {
     tmpi_next=tmpi->next;
@@ -60,7 +60,7 @@ cc->pass==10 is final pass, code is placed into buf.
       if (cc->pass==7)
 	cc->dont_push_float=Btr(&tmpi->ic_flags,ICf_DONT_PUSH_FLOAT0);
       MemCpy(saved_arg1_arg2_r,&tmpi->arg1,3*sizeof(CICArg));
-      tmpi->ic_cnt=0;
+      tmpi->ic_count=0;
       tmpi->ic_last_start=-1;
       if (tmpi->arg2.type.mode) {
 	if (tmpi->ic_flags & ICF_ARG2_TO_F64) {
@@ -105,7 +105,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpa->next=aotc->abss;
 		tmpa->type=AAT_ADD_U64;
 		aotc->abss=tmpa;
-		tmpa->rip=rip2+tmpi->ic_cnt-8;
+		tmpa->rip=rip2+tmpi->ic_count-8;
 	      }
 	      break;
 	    case IC_HEAP_GLBL:
@@ -118,7 +118,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmphgr=CAlloc(sizeof(CAOTHeapGlobalRef));
 		tmphgr->next=tmphg->references;
 		tmphg->references=tmphgr;
-		tmphgr->rip=rip2+tmpi->ic_cnt-8;
+		tmphgr->rip=rip2+tmpi->ic_count-8;
 	      }
 	      break;
 	    case IC_ADDR_IMPORT:
@@ -128,7 +128,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpg=tmpi->ic_data;
 		tmpie=CAlloc(sizeof(CAOTImportExport));
 		tmpie->type=IET_IMM_U32;
-		tmpie->rip=rip2+tmpi->ic_cnt-4;
+		tmpie->rip=rip2+tmpi->ic_count-4;
 		tmpie->next=tmpg->ie_lst;
 		tmpg->ie_lst=tmpie;
 	      }
@@ -136,13 +136,13 @@ cc->pass==10 is final pass, code is placed into buf.
 	      break;
 	    case IC_RIP:
 	      ICU16(tmpi,0xB848);
-	      ICU64(tmpi,rip2+tmpi->ic_cnt-2);
+	      ICU64(tmpi,rip2+tmpi->ic_count-2);
 	      if (cc->flags&CCF_AOT_COMPILE && buf &&!(cc->flags&CCF_NO_ABSS)) {
 		tmpa=CAlloc(sizeof(CAOTAbsAddr));
 		tmpa->next=aotc->abss;
 		tmpa->type=AAT_ADD_U64;
 		aotc->abss=tmpa;
-		tmpa->rip=rip2+tmpi->ic_cnt-8;
+		tmpa->rip=rip2+tmpi->ic_count-8;
 	      }
 	      break;
 	  end:
@@ -305,7 +305,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	    break;
 	  case IC_ASM:
 	    tmpaot=tmpi->ic_data;
-	    tmpi->ic_cnt+=tmpaot->aot_U8s;
+	    tmpi->ic_count+=tmpaot->aot_U8s;
 	    if (buf) {
 	      MemCpy(buf+rip,tmpaot->buf,tmpaot->aot_U8s);
 	      Free(tmpaot->buf);
@@ -316,7 +316,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		CompFixUpAOTAsm(cc,tmpaot);
 	      else
 		CompFixUpJITAsm(cc,tmpaot);
-	      cnt=tmpi->ic_cnt;
+	      count=tmpi->ic_count;
 	      goto op789A_skip_copy;
 	    }
 	    break;
@@ -344,7 +344,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	    break;
 	  case IC_CALL_INDIRECT2:
 	    ICU16(tmpi,0xBB48);
-	    if (cc->flags&CCF_AOT_COMPILE) i=rip2+tmpi->ic_cnt;
+	    if (cc->flags&CCF_AOT_COMPILE) i=rip2+tmpi->ic_count;
 	    ICU64(tmpi,tmpi->ic_data);
 	    ICU16(tmpi,0x13FF);
 	    if (buf && cc->flags&CCF_AOT_COMPILE&& !(cc->flags&CCF_NO_ABSS)) {
@@ -363,7 +363,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpf=tmpi->ic_data;
 		tmpie=CAlloc(sizeof(CAOTImportExport));
 		tmpie->type=IET_IMM_I64;
-		tmpie->rip=rip2+tmpi->ic_cnt-8;
+		tmpie->rip=rip2+tmpi->ic_count-8;
 		tmpie->next=tmpf->ie_lst;
 		tmpf->ie_lst=tmpie;
 	      }
@@ -375,7 +375,7 @@ cc->pass==10 is final pass, code is placed into buf.
 		tmpf=tmpi->ic_data;
 		tmpie=CAlloc(sizeof(CAOTImportExport));
 		tmpie->type=IET_REL_I32;
-		tmpie->rip=rip2+tmpi->ic_cnt-4;
+		tmpie->rip=rip2+tmpi->ic_count-4;
 		tmpie->next=tmpf->ie_lst;
 		tmpf->ie_lst=tmpie;
 	      }
@@ -406,12 +406,12 @@ cc->pass==10 is final pass, code is placed into buf.
 	    if (Bt(&cc->htc.fun->flags,Ff_HASERRCODE))
 	      ICAddRSP(tmpi,8);
 	    ICU16(tmpi,0xCF48);
-	  } else if (cc->htc.fun && cc->htc.fun->arg_cnt &&
+	  } else if (cc->htc.fun && cc->htc.fun->arg_count &&
 		(Bt(&cc->htc.fun->flags,Ff_RET1) ||
 		Bt(&cc->htc.fun->flags,Ff_ARGPOP)) &&
 		!Bt(&cc->htc.fun->flags,Ff_NOARGPOP)) {
 	    ICU8(tmpi,0xC2);
-	    ICU16(tmpi,cc->htc.fun->arg_cnt<<3);
+	    ICU16(tmpi,cc->htc.fun->arg_count<<3);
 	  } else
 	    ICU8(tmpi,0xC3);
 	  break;
@@ -1063,14 +1063,14 @@ cc->pass==10 is final pass, code is placed into buf.
 	}
       }
     }
-    cnt=tmpi->ic_cnt;
+    count=tmpi->ic_count;
     if (tmpi->ic_flags&ICF_DEL_PREV_INS) {
       if (cc->pass>8)
-	cnt=tmpi->ic_last_start;
+	count=tmpi->ic_last_start;
       tmpi->ic_flags&=~ICF_DEL_PREV_INS;
     }
-    if (cnt && buf)
-      MemCpy(buf+rip,tmpi->ic_body,cnt);
+    if (count && buf)
+      MemCpy(buf+rip,tmpi->ic_body,count);
 op789A_skip_copy:
     if (dbg_info && cc->min_line<=tmpi->ic_line<=cc->max_line) {
       i=tmpi->ic_line-cc->min_line;
@@ -1078,18 +1078,18 @@ op789A_skip_copy:
 	dbg_info->body[i]=rip2;
     }
     if (tmpi->ic_flags&ICF_PASS_TRACE &&
-	  Bt(&cc->saved_pass_trace,cc->pass) && cnt) {
+	  Bt(&cc->saved_pass_trace,cc->pass) && count) {
       "$$RED$$";
       if (buf)
-	Un(buf+rip,cnt,64);
+	Un(buf+rip,count,64);
       else
-	Un(tmpi->ic_body,cnt,64);
+	Un(tmpi->ic_body,count,64);
       "$$FG$$";
     }
     if (!(tmpi->ic_flags&(ICF_CODE_FINAL|ICF_DONT_RESTORE)))
       MemCpy(&tmpi->arg1,saved_arg1_arg2_r,3*sizeof(CICArg));
-    rip+=cnt;
-    if (tmpi->ic_cnt>=IC_BODY_SIZE && tmpi->ic_code!=IC_ASM)
+    rip+=count;
+    if (tmpi->ic_count>=IC_BODY_SIZE && tmpi->ic_code!=IC_ASM)
       throw('Compiler');
 op789A_next:
     tmpi=tmpi_next;

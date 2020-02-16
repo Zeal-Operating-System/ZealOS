@@ -28,7 +28,7 @@ public I64 TaskMemUsed(CTask *task=NULL,Bool override_validate=FALSE)
 #help_index "Memory/Task;Debugging/Heap;Memory/Debugging"
 public Bool HeapRep(CTask *task)
 {//Report status of task's heap.
-  I64 i,cnt;
+  I64 i,count;
   CMemUnused *uum;
 
   if (!task || task==Fs) {
@@ -46,21 +46,21 @@ public Bool HeapRep(CTask *task)
       PAUSE
 
   for (i=0;i<MEM_HEAP_HASH_SIZE>>3;i++) {
-    cnt=0;
+    count=0;
     uum=task->code_heap->heap_hash[i];
     while (uum) {
-      cnt+=uum->size;
+      count+=uum->size;
       uum=uum->next;
     }
     if (task->data_heap!=task->code_heap) {
       uum=task->data_heap->heap_hash[i];
       while (uum) {
-	cnt+=uum->size;
+	count+=uum->size;
 	uum=uum->next;
       }
     }
-    if (cnt)
-      "%03X:%08X\n",i<<3,cnt;
+    if (count)
+      "%03X:%08X\n",i<<3,count;
   }
   '\n';
 

@@ -51,7 +51,7 @@ public Bool GrPlot0(CDC *dc=gr.dc,I64 x,I64 y)
     case ROPB_COLLISION:
       c=*dst;
       if (c!=TRANSPARENT && c!=bkcolor.c0.color)
-	dc->collision_cnt++;
+	dc->collision_count++;
       break;
     case ROPB_XOR:
       *dst^=color.c0.color;
@@ -152,7 +152,7 @@ public I64 GrBlot(CDC *dc=gr.dc,I64 x,I64 y,CDC *img)
 	  for (i=w1;i<w2;i++) {
 	    c=dc->body[k1+i];
 	    if (c!=TRANSPARENT&&c!=color&&img->body[k+i]!=TRANSPARENT)
-	      dc->collision_cnt++;
+	      dc->collision_count++;
 	  }
 	  k+=img->width_internal;
 	  k1+=dc->width_internal;
@@ -768,7 +768,7 @@ public I64 GrPutChar(CDC *dc=gr.dc,I64 x,I64 y,U8 ch)
 	for (j=h2-h1;j;j--) {
 	  c=dc->body[k1+i];
 	  if (c!=TRANSPARENT && c!=color && Bt(src,m))
-	    dc->collision_cnt++;
+	    dc->collision_count++;
 	  k1+=dc->width_internal;
 	  src++;
 	}
@@ -1007,7 +1007,7 @@ public I64 GrVPrint(CDC *dc=gr.dc,I64 x,I64 y,U8 *fmt,...)
 #help_index "Graphics"
 public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
 {//2D. Width Height. Clipping but not transformation.
-//Returns cnt of pixs changed.
+//Returns count of pixs changed.
   I64 i,res=0,j,k1,kk1,w1,h1,w2,h2,dist,
 	leading_pixels,original_leading_pixels,whole_I64s,
 	trailing_pixels,leading_pixel_mask,trailing_pixel_mask,
@@ -1096,16 +1096,16 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
     if (color.c0.rop==ROPB_COLLISION) {//TODO: Might want to check win_z_buf
       color =dc->bkcolor.c0.color;
       k1=(h1+y)*dc->width_internal+x;
-      res=-dc->collision_cnt;
+      res=-dc->collision_count;
       for (j=h2-h1;j;j--) {
 	for (i=w1;i<w2;i++) {
 	  c=dc->body[k1+i];
 	  if (c!=TRANSPARENT && c!=color)
-	    dc->collision_cnt++;
+	    dc->collision_count++;
 	}
 	k1+=dc->width_internal;
       }
-      res+=dc->collision_cnt;
+      res+=dc->collision_count;
     } else {
       if (!(dc->flags & DCF_SCRN_BITMAP) || dc->flags&DCF_ON_TOP)
 	win_z_buf_ptr=NULL;
@@ -1453,7 +1453,7 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
 
 I64 GrRayLenMinus(CDC *dc,I64 x,I64 y)
 {
-//Returns cnt of pixs changed
+//Returns count of pixs changed
   I64 res=0,c,x3,y3,d;
   U8 *dst,*dst2;
   Bool not_color=ToBool(dc->flags&DCF_FILL_NOT_COLOR);
@@ -1517,7 +1517,7 @@ gr_done:
 
 I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
 {
-//Returns cnt of pixs changed
+//Returns count of pixs changed
   I64 res=0,d,x=*x1,x2,x3,y3,dist;
   Bool plot,dither,probability_dither,
 	not_color=ToBool(dc->flags&DCF_FILL_NOT_COLOR);
@@ -1624,7 +1624,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
 	case ROPB_COLLISION:
 	  c2=*dst;
 	  if (c2!=TRANSPARENT && c2!=bkcolor.c0.color)
-	    dc->collision_cnt++;
+	    dc->collision_count++;
 	  break;
 	case ROPB_XOR:
 	  *dst^=c;
@@ -1699,7 +1699,7 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
 	case ROPB_COLLISION:
 	  c2=*dst;
 	  if (c2!=TRANSPARENT && c2!=bkcolor.c0.color)
-	    dc->collision_cnt++;
+	    dc->collision_count++;
 	  break;
 	case ROPB_XOR:
 	  *dst^=c;
@@ -1717,7 +1717,7 @@ gr_done:
 
 public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
 {//3D. No transformation or thick.
-//Returns cnt of pixs changed
+//Returns count of pixs changed
   //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
   I64 dist,dx,dz,z,res=0,i,j,d;
   U8 *dst;
@@ -1848,7 +1848,7 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
 	  case ROPB_COLLISION:
 	    c2=*dst;
 	    if (c2!=TRANSPARENT && c2!=bkcolor.c0.color)
-	      dc->collision_cnt++;
+	      dc->collision_count++;
 	    break;
 	  case ROPB_XOR:
 	    *dst^=c;
@@ -1886,7 +1886,7 @@ gr_done:
 
 public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
 {//3D. No transformation or thick.
-//Returns cnt of pixs changed
+//Returns count of pixs changed
   //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.HC"$.
   I64 dist,dy,dz,z,res=0,i,j,d;
   U8 *dst;
@@ -2017,7 +2017,7 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
 	  case ROPB_COLLISION:
 	    c2=*dst;
 	    if (c2!=TRANSPARENT && c2!=bkcolor.c0.color)
-	      dc->collision_cnt++;
+	      dc->collision_count++;
 	    break;
 	  case ROPB_XOR:
 	    *dst^=c;

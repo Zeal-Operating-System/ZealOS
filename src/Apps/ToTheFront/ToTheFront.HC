@@ -15,7 +15,7 @@ U0 TurnNew()
   moving_unit=NULL;
 
   SleepUntil(message_off_timeout);
-  message_off_timeout=cnts.jiffies+JIFFY_FREQ*2*animation_delay+1;
+  message_off_timeout=counts.jiffies+JIFFY_FREQ*2*animation_delay+1;
   Snd(74);
   StrPrint(message_buf,"Turn %d",++turn);
   VRSetUp(0);
@@ -35,7 +35,7 @@ U0 PhaseNew()
   }
 
   SleepUntil(message_off_timeout);
-  message_off_timeout=cnts.jiffies+JIFFY_FREQ*2*animation_delay+1;
+  message_off_timeout=counts.jiffies+JIFFY_FREQ*2*animation_delay+1;
   Snd(74);
   switch (phase) {
     case PHASE_INDIRECT0:
@@ -94,7 +94,7 @@ U0 CharDo(U8 ch)
 U0 UserCheck()
 {
   I64 ch;
-  if (!alive_cnt[0] || !alive_cnt[1])
+  if (!alive_count[0] || !alive_count[1])
     throw('GameOver',TRUE);
   if (ch=ScanChar)
     CharDo(ch);

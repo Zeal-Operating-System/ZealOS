@@ -16,7 +16,7 @@ public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F");
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
   tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND);
-  if (progress1_max=LinkedLstCnt(tmpde1)) {
+  if (progress1_max=LinkedLstCount(tmpde1)) {
     dst=base=MAlloc(MV_FILE_MAX);
     while (tmpde) {
       dc=GRRead(tmpde->full_name);
@@ -79,7 +79,7 @@ public I64 AUWrite(U8 *filename,CSndData *head,CDate *t0_now,F64 t0_tS)
 {//Write AU file.
   CSndData *tmpsd;
   CAUData *base,*dst;
-  I64 size=(1+QueueCnt(head))*sizeof(CAUData);
+  I64 size=(1+QueueCount(head))*sizeof(CAUData);
   U8 *st=ExtDft(filename,"AU");
   base=dst=MAlloc(size);
   tmpsd=head;

@@ -600,7 +600,7 @@ U0 DocFlagsToggle(CDoc *doc,I64 tog_flags)
   DocRst(doc,TRUE);
   doc->undo_head.next=u_next;
   doc->undo_head.last=u_last;
-  DocUndoCntSet(doc);
+  DocUndoCountSet(doc);
   doc->flags=flags&~(DOCF_NO_CURSOR|DOCG_BL_IV_UL|DOCF_WORD_WRAP);
   DocLoad(doc,st,size);
   doc->flags|=flags&DOCF_NO_CURSOR;

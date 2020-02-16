@@ -137,8 +137,8 @@ U0 BgtRegen()
     //and line entries, so we never had to resync.
 
     doc_ce=pdoc->cur_entry;
-    timeout_jiffy=cnts.jiffies+JIFFY_FREQ; //Max one second.
-    while (doc_ce!=pdoc && cnts.jiffies<timeout_jiffy) {
+    timeout_jiffy=counts.jiffies+JIFFY_FREQ; //Max one second.
+    while (doc_ce!=pdoc && counts.jiffies<timeout_jiffy) {
       while (doc_ce->type_u8!=DOCT_MENU_VAL || !(tmpb_ce=doc_ce->user_data)) {
 	doc_ce=doc_ce->next;
 	if (doc_ce==pdoc) goto br_cont;

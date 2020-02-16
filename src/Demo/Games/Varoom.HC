@@ -296,8 +296,8 @@ U0 InitTrack()
   CoupleEnds;
 
   tmpt=track_head.next;
-  for (i=0;i<mp_cnt;i++) {
-    j=(i+1)*track_head.last->num/mp_cnt+1;
+  for (i=0;i<mp_count;i++) {
+    j=(i+1)*track_head.last->num/mp_count+1;
     track_start[i]=tmpt;
     while (tmpt!=&track_head && tmpt->num!=j)
       tmpt=tmpt->next;
@@ -378,7 +378,7 @@ U0 MPUpdateWin(CDC *dc2)
   }
 
   dc->flags|=DCF_TRANSFORMATION;
-  for (i=Gs->num;i<BUSHES_NUM;i+=mp_cnt) {
+  for (i=Gs->num;i<BUSHES_NUM;i+=mp_count) {
     x=b[i].p.x-c[0].p.x; y=b[i].p.y-c[0].p.y; z=b[i].p.z-c[0].p.z;
     Mat4x4MulXYZ(r,&x,&y,&z);
     if (z>0) {
@@ -394,7 +394,7 @@ U0 MPUpdateWin(CDC *dc2)
       dc->flags&=~(DCF_SYMMETRY|DCF_JUST_MIRROR);
     }
   }
-  for (i=Gs->num+1;i<CARS_NUM;i+=mp_cnt) {
+  for (i=Gs->num+1;i<CARS_NUM;i+=mp_count) {
     tmpc=&c[i];
     x=tmpc->p.x-c[0].p.x; y=tmpc->p.y-c[0].p.y; z=tmpc->p.z-c[0].p.z;
     Mat4x4MulXYZ(r,&x,&y,&z);
@@ -455,8 +455,8 @@ U0 DrawIt(CTask *task,CDC *dc)
     GrFloodFill(dc,s*x+cx,15+HORIZON_DIP*Sin(dip_é));
   }
 
-  mp_not_done_flags=1<<mp_cnt-1;
-  for (i=0;i<mp_cnt;i++)
+  mp_not_done_flags=1<<mp_count-1;
+  for (i=0;i<mp_count;i++)
     JobQueue(&MPUpdateWin,dc,i);
   while (mp_not_done_flags)
     Yield;

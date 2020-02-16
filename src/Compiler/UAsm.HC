@@ -1,17 +1,17 @@
 I64 InstEntriesCompare(CInst *tmpins1,CInst *tmpins2)
 {
-  I64 i1,i2,j=0,res=0,oc_cnt1=tmpins1->opcode_cnt,oc_cnt2=tmpins2->opcode_cnt;
+  I64 i1,i2,j=0,res=0,oc_count1=tmpins1->opcode_count,oc_count2=tmpins2->opcode_count;
   if (tmpins1->flags&IEF_STI_LIKE)
-    oc_cnt1--;
+    oc_count1--;
   if (tmpins2->flags&IEF_STI_LIKE)
-    oc_cnt2--;
+    oc_count2--;
   while (TRUE) {
-    if (j<oc_cnt1 && j<oc_cnt2) {
+    if (j<oc_count1 && j<oc_count2) {
       if (res=tmpins1->opcode[j]-tmpins2->opcode[j])
 	return res;
       j++;
     } else {
-      if (res=oc_cnt1-oc_cnt2)
+      if (res=oc_count1-oc_count2)
 	return res;
 
       if (tmpins1->flags&IEF_STI_LIKE && tmpins2->flags&IEF_STI_LIKE)
@@ -65,7 +65,7 @@ U0 DumpUAsmTables()
 
 CInst *InstEntryFind(U8 *rip,I64 opsize,I64 seg_size)
 {//Binary Search
-  I64 i,j,n,m,k,arg1,arg2,o1,o2,oc_cnt;
+  I64 i,j,n,m,k,arg1,arg2,o1,o2,oc_count;
   CInst *tmpins,**table;
   i=0;
   if (seg_size==64) {
@@ -84,12 +84,12 @@ CInst *InstEntryFind(U8 *rip,I64 opsize,I64 seg_size)
     while (TRUE) { //ief_compare_start
       arg1=tmpins->arg1;
       arg2=tmpins->arg2;
-      oc_cnt=tmpins->opcode_cnt;
+      oc_count=tmpins->opcode_count;
       if (tmpins->flags&IEF_STI_LIKE)
-	oc_cnt--;
-      if (n<oc_cnt) {
+	oc_count--;
+      if (n<oc_count) {
 	o1=rip[n];
-	if (n==tmpins->opcode_cnt-1 && tmpins->flags & IEF_PLUS_OPCODE)
+	if (n==tmpins->opcode_count-1 && tmpins->flags & IEF_PLUS_OPCODE)
 	  o1&=-8;
 	o2=tmpins->opcode[n++];
 	if (m=o1-o2)
@@ -132,11 +132,11 @@ CInst *InstEntryFind(U8 *rip,I64 opsize,I64 seg_size)
 	      m=1;
 	    goto ief_compare_done;
 	  case SV_I_REG:
-	    m=rip[n]>>3-tmpins->opcode[tmpins->opcode_cnt-1]>>3;
+	    m=rip[n]>>3-tmpins->opcode[tmpins->opcode_count-1]>>3;
 	    goto ief_compare_done;
 	  case SV_STI_LIKE:
-	    if (!(m=rip[n]>>3-tmpins->opcode[tmpins->opcode_cnt-1]>>3))
-	      m=rip[n]-tmpins->opcode[tmpins->opcode_cnt-1];
+	    if (!(m=rip[n]>>3-tmpins->opcode[tmpins->opcode_count-1]>>3))
+	      m=rip[n]-tmpins->opcode[tmpins->opcode_count-1];
 	    goto ief_compare_done;
 	  case SV_R_REG:
 	  case SV_NONE:
@@ -209,7 +209,7 @@ U0 UAsmHashLoad()
     while (tmph) {
       if (tmph->type==HTT_OPCODE && !(tmph->oc_flags&OCF_ALIAS)) {
 	tmpins=&tmph->ins;
-	for (k=0;k<tmph->inst_entry_cnt;k++) {
+	for (k=0;k<tmph->inst_entry_count;k++) {
 	  uasm.table_16_32_entries++;
 	  if (!(tmpins->flags&IEF_NOT_IN_64_BIT))
 	    uasm.table_64_entries++;
@@ -228,7 +228,7 @@ U0 UAsmHashLoad()
     while (tmph) {
       if (tmph->type==HTT_OPCODE && !(tmph->oc_flags&OCF_ALIAS)) {
 	tmpins=&tmph->ins;
-	for (k=0;k<tmph->inst_entry_cnt;k++) {
+	for (k=0;k<tmph->inst_entry_count;k++) {
 	  uasm.table_16_32[j1++]=tmpins;
 	  if (!(tmpins->flags&IEF_NOT_IN_64_BIT))
 	    uasm.table_64[j2++]=tmpins;
@@ -341,7 +341,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
       tmpins=tmpins2;
   }
 
-  rip+=tmpins->opcode_cnt;
+  rip+=tmpins->opcode_count;
   tmpo=tmpins(U8 *)-tmpins->ins_entry_num*sizeof(CInst)
   -offset(CHashOpcode.ins);
   if (just_ins)
@@ -367,7 +367,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 
   if (tmpins->flags & IEF_PLUS_OPCODE) {
     rip--;
-    RM1=*rip++ - tmpins->opcode[tmpins->opcode_cnt-1]+REX_b;
+    RM1=*rip++ - tmpins->opcode[tmpins->opcode_count-1]+REX_b;
     ptr=NULL;
     if (ARGT_R8<=arg1<=ARGT_R64) {
       if (arg1_size==8) {
@@ -582,7 +582,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
       break;
     case ARGT_STI:
       rip--;
-      CatPrint(arg1_st,"%Z",*rip++ - tmpins->opcode[tmpins->opcode_cnt-1],
+      CatPrint(arg1_st,"%Z",*rip++ - tmpins->opcode[tmpins->opcode_count-1],
 	    "ST_FSTK_REGS");
       break;
   }
@@ -621,7 +621,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
       break;
     case ARGT_STI:
       rip--;
-      CatPrint(arg2_st,"%Z",*rip++ -tmpins->opcode[tmpins->opcode_cnt-1],
+      CatPrint(arg2_st,"%Z",*rip++ -tmpins->opcode[tmpins->opcode_count-1],
 	    "ST_FSTK_REGS");
       break;
   }
@@ -650,14 +650,14 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
   *_rip=rip;
 }
 
-U8 *U(U8 *rip,I64 cnt=20,I64 seg_size=64)
+U8 *U(U8 *rip,I64 count=20,I64 seg_size=64)
 {//Unassembles a num of insts.
   I64 i;
   U8 buf[1024];
   if (seg_size==16)
     PrintWarn("16-bit unassembly is not well supported.\n");
   "$$HL,1$$";
-  for (i=0;i<cnt;i++) {
+  for (i=0;i<count;i++) {
     Ui(buf,&rip,seg_size);
     "%s",buf;
   }
@@ -665,10 +665,10 @@ U8 *U(U8 *rip,I64 cnt=20,I64 seg_size=64)
   return rip;
 }
 
-I64 Un(U8 *rip,I64 cnt=0x80,I64 seg_size=64)
+I64 Un(U8 *rip,I64 count=0x80,I64 seg_size=64)
 {//Unassembles a num of bytes
   I64 i=0;
-  U8 buf[1024],*end_rip=rip(I64)+cnt;
+  U8 buf[1024],*end_rip=rip(I64)+count;
   if (seg_size==16)
     PrintWarn("16-bit unassembly is not well supported.\n");
   "$$HL,1$$";

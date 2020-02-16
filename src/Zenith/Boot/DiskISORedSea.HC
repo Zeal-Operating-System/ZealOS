@@ -20,7 +20,7 @@ class CElTorito
   U16 load_seg; //0000->07C0
   U8 sys_type;
   U8 zero;
-  U16 sect_cnt;
+  U16 sect_count;
   U32 load_rba; //start addr of virtual disk
   U8 zero2[20];
 };
@@ -103,7 +103,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
     et->w[14]=-j;
     et->bootable=0x88;
     et->media_type=0;//0=no emu 2=1.44meg 4=hard drive
-    et->sect_cnt=4;  //5 seems like the limit, 4 is safer
+    et->sect_count=4;  //5 seems like the limit, 4 is safer
     et->load_rba=20<<2>>2+1;
     FBlkWrite(out_file,et,20<<2,4);
     FClose(out_file);
@@ -118,7 +118,7 @@ U0 RedSeaISO9660(U8 *iso_filename,U8 drv_let)
 
 I64 RedSeaISOPass1(CDirEntry *tmpde)
 {
-  I64 dir_entry_cnt=3+LinkedLstCnt(tmpde),res=0;
+  I64 dir_entry_count=3+LinkedLstCount(tmpde),res=0;
   while (tmpde) {
     if (tmpde->attr & RS_ATTR_DIR) {
       if (tmpde->sub)
@@ -129,14 +129,14 @@ I64 RedSeaISOPass1(CDirEntry *tmpde)
       res+=CeilU64(tmpde->size,BLK_SIZE);
     tmpde=tmpde->next;
   }
-  res+=CeilU64(dir_entry_cnt<<6,BLK_SIZE); //Size in bytes
+  res+=CeilU64(dir_entry_count<<6,BLK_SIZE); //Size in bytes
 #assert CDIR_SIZE==64
   return res;
 }
 public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
 	U8 *_stage2_filename=NULL)
 {//See $LK,"::/Misc/DoDistro.HC"$. Must be ISO.C
-  I64 i,res,root_cnt,root_dir_blks,bitmap_blks,bitmap_blks1;
+  I64 i,res,root_count,root_dir_blks,bitmap_blks,bitmap_blks1;
   CDirEntry *tmpde;
   U8 buf[STR_LEN],*iso_filename,*src_dir,*stage2_filename;
   CDrive *dv=DriveMakeFreeSlot(DriveNextFreeLet('Q')); //First $LK,"BDT_ISO_FILE_WRITE",A="MN:BDT_ISO_FILE_WRITE"$
@@ -159,8 +159,8 @@ public I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
     } else
       stage2_filename=NULL;
     tmpde=FilesFind(src_dir,FUF_RECURSE);
-    root_cnt=LinkedLstCnt(tmpde)+3;
-    root_dir_blks=CeilU64(root_cnt<<6,BLK_SIZE)>>BLK_SIZE_BITS;
+    root_count=LinkedLstCount(tmpde)+3;
+    root_dir_blks=CeilU64(root_count<<6,BLK_SIZE)>>BLK_SIZE_BITS;
     if (res=RedSeaISOPass1(tmpde)>>BLK_SIZE_BITS) {
       bd->drv_offset=19<<2+(DVD_BLK_SIZE*2+DVD_BOOT_LOADER_SIZE)/BLK_SIZE;
       bitmap_blks=1;

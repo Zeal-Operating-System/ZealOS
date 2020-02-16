@@ -106,7 +106,7 @@ public class CMusicGlobals
 #help_index "Snd/Music;Time/Seconds"
 public F64 tM()
 {//Time in seconds synced to music subsystem.
-  return (cnts.jiffies+music.tM_correction)/JIFFY_FREQ;
+  return (counts.jiffies+music.tM_correction)/JIFFY_FREQ;
 }
 
 public F64 Beat()
@@ -114,7 +114,7 @@ public F64 Beat()
   F64 res,cur_tM;
   PUSHFD
   CLI
-  if (mp_cnt>1)
+  if (mp_count>1)
     while (LBts(&sys_semas[SEMA_TMBEAT],0))
       PAUSE
   cur_tM=tM;
@@ -239,7 +239,7 @@ per second.It defaults to
   F64 d,on_jiffies,off_jiffies;
   music.play_note_num=0;
   while (*st) {
-    timeout_val=cnts.jiffies;
+    timeout_val=counts.jiffies;
     tie=FALSE;
 
     do {
@@ -309,7 +309,7 @@ U0 MusicSettingsRst()
   SndRst;
   PUSHFD
   CLI
-  if (mp_cnt>1)
+  if (mp_count>1)
     while (LBts(&sys_semas[SEMA_TMBEAT],0))
       PAUSE
   music.last_tM=tM;

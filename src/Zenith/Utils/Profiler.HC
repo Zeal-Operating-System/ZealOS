@@ -19,7 +19,7 @@ U0 ProfTimerInt(CTask *task)
 	i=TaskCaller(task,k,TRUE);
       if (pf_buf_in_ptr<PF_ARRAY_CNT) {
 	pf_array[pf_buf_in_ptr++]=i;
-	pf_jiffy_end=cnts.jiffies;
+	pf_jiffy_end=counts.jiffies;
       }
     }
 }
@@ -33,7 +33,7 @@ timer interrupt.
 Do a $LK,"ProfRep",A="MN:ProfRep"$(), (profiler report)
 after you have collected data.
 */
-  if (!(0<=cpu_num<mp_cnt))
+  if (!(0<=cpu_num<mp_count))
     ST_ERR_ST "Invalid CPU\n";
   else {
     cpu_structs[pf_cpu].profiler_timer_irq=NULL;
@@ -43,7 +43,7 @@ after you have collected data.
     pf_buf_in_ptr=0;
     if (!pf_array)
       pf_array=AMAlloc(sizeof(I64)*PF_ARRAY_CNT);
-    pf_jiffy_end=pf_jiffy_start=cnts.jiffies;
+    pf_jiffy_end=pf_jiffy_start=counts.jiffies;
     LBts(&pf_prof_active,0);
     cpu_structs[pf_cpu].profiler_timer_irq=&ProfTimerInt;
   }
@@ -54,7 +54,7 @@ I64 ProfCompare(U8 *i1,U8 *i2)
   return i1-i2;
 }
 
-public U0 ProfRep(I64 filter_cnt=1,Bool leave_it=OFF)
+public U0 ProfRep(I64 filter_count=1,Bool leave_it=OFF)
 {//Profiler report. Call $LK,"Prof",A="MN:Prof"$() first and collect data.
   I64 i,hits,rip,last_rip=0,routine_total=0;
   F64 total_time;
@@ -77,19 +77,19 @@ public U0 ProfRep(I64 filter_cnt=1,Bool leave_it=OFF)
       StrPrint(buf,"%p",rip);
       StrFirstRemove(buf,"+",buf2);
       if (StrCmp(buf2,last_buf)) {
-	if (*last_buf && routine_total>=filter_cnt)
+	if (*last_buf && routine_total>=filter_count)
 	  "$$GREEN$$%6.2f%08X:%s\n$$FG$$",100*routine_total/total_time,
 		routine_total,last_buf;
 	StrCpy(last_buf,buf2);
 	routine_total=0;
       }
       routine_total+=hits;
-      if (hits>=filter_cnt) {
+      if (hits>=filter_count) {
 	"%6.2f%08X:%P\n",100*hits/total_time,hits,rip;
 	last_rip=rip;
       }
     }
-    if (*last_buf && routine_total>=filter_cnt)
+    if (*last_buf && routine_total>=filter_count)
       "$$GREEN$$%6.2f%08X:%s\n$$FG$$",100*routine_total/total_time,
 	    routine_total,last_buf;
     "Total Time:%0.6fs\n",total_time/JIFFY_FREQ;

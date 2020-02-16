@@ -59,7 +59,7 @@ U0 OptPass6Lag(CCompCtrl *cc,CPrsStk *ps,CIntermediateCode *tmpi,
     ps->ptr--;
     stk_ptr=ParsePop(ps);
   }
-  if (intermediate_code_table[code].arg_cnt==IS_V_ARG)
+  if (intermediate_code_table[code].arg_count==IS_V_ARG)
     stk_ptr-=tmpi->ic_data>>3;
   if (tmpi->arg2.type&MDF_STK) {
     stk_ptr--;
@@ -147,7 +147,7 @@ U0 OptPass6(CCompCtrl *cc)
 	tmpi->arg1.disp=0;
 	tmpil2->res.type=MDF_REG+tmpil2->res.type.raw_type;
 	tmpil2->res.disp=0;
-	if (intermediate_code_table[tmpi->ic_code].arg_cnt==IS_2_ARG) {
+	if (intermediate_code_table[tmpi->ic_code].arg_count==IS_2_ARG) {
 	  tmpi->arg1.reg=REG_R8;
 	  tmpil2->res.reg=REG_R8;
 	} else {

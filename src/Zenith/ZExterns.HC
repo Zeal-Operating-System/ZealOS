@@ -15,7 +15,7 @@ extern U0 DocBottom(CDoc *doc=NULL);
 extern U0 DocCenter(CDoc *doc=NULL,I64 recalc_flags=RECALCt_NORMAL);
 extern U0 DocClear(CDoc *doc=NULL,Bool clear_holds=FALSE);
 extern Bool DocCursor(Bool show=OFF,CDoc *doc=NULL);
-extern U0 DocD(U8 *buf,I64 cnt=0x80);
+extern U0 DocD(U8 *buf,I64 count=0x80);
 extern U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL);
 extern U0 DocDel(CDoc *doc);
 extern CDoc *DocDisplay(CTask *task=NULL);
@@ -74,7 +74,7 @@ extern I64 PopUpRangeI64(
 extern Bool PopUpTransform(I64 *r);
 extern I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
 	U8 *_stage2_filename=NULL);
-extern U0 Refresh(I64 cnt=1,Bool force=FALSE);
+extern U0 Refresh(I64 count=1,Bool force=FALSE);
 extern U0 RegOneTimePopUp(I64 flag_num,U8 *message);
 extern Bool RegWrite(U8 *path,U8 *fmt,...);
 extern U0 SettingsPop(CTask *task=NULL,I64 flags=0);

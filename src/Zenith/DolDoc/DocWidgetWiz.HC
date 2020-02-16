@@ -897,7 +897,7 @@ U0 EdInsLst()
 
 class CEdHexEd
 {
-  I64	cnt	format "$$DA,A=\"Count:%d\"$$\n",
+  I64	count	format "$$DA,A=\"Count:%d\"$$\n",
 	cols	format "$$DA,A=\"Columns:%d\"$$\n";
   Bool	zero	format "$$CB,\"Zero Based\"$$\n",
 	refresh	format "$$CB,\"Refresh Data\"$$\n";
@@ -907,14 +907,14 @@ U0 EdInsHexEd()
 {
   U8 buf[512];
   CEdHexEd *e=CAlloc(sizeof(CEdHexEd));
-  e->cnt=128;
+  e->count=128;
   e->cols=4;
   e->zero=TRUE;
   if (DocForm(e,,,,ctrl_L_footer)) {
     *buf=0;
     if (!e->zero)  CatPrint(buf,"-Z");
     if (e->refresh)  CatPrint(buf,"+RD");
-    "$$$$HX%s,%d,%d$$$$",buf,e->cnt,e->cols;
+    "$$$$HX%s,%d,%d$$$$",buf,e->count,e->cols;
   }
   Free(e);
 }

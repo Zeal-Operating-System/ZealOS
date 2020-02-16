@@ -120,13 +120,13 @@ U0 DocUndoDel(CDoc *,CDocUndo *u)
   Free(u);
 }
 
-U0 DocUndoCntSet(CDoc *doc)
+U0 DocUndoCountSet(CDoc *doc)
 {
   Bool unlock=DocLock(doc);
   CDocUndo *u=doc->undo_head.next;
-  doc->undo_cnt=0;
+  doc->undo_count=0;
   while (u!=&doc->undo_head) {
-    doc->undo_cnt++;
+    doc->undo_count++;
     u=u->next;
   }
   if (unlock)
@@ -271,7 +271,7 @@ public U0 DocRst(CDoc *doc,Bool is_old)
   QueueInit(&doc->bin_head);
   QueueInit(&doc->undo_head);
   doc->undo_head.time_stamp=0;
-  doc->undo_cnt=0;
+  doc->undo_count=0;
   doc->cur_bin_num=1;
   doc->dollar_buf_ptr=0;
   doc->cmd_U8=CH_SPACE;

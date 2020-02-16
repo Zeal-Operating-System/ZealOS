@@ -4,7 +4,7 @@ CHashDefineStr *DefineLoad(U8 *dname,U8 *st)
   tmph->type=HTT_DEFINE_STR;
   tmph->str=StrNew(dname);
   tmph->data=StrNew(st);
-  tmph->cnt=-1;
+  tmph->count=-1;
   tmph->src_link=MStrPrint("AD:0x%X",Caller);
   HashAdd(tmph,Fs->hash_table);
   return tmph;
@@ -12,7 +12,7 @@ CHashDefineStr *DefineLoad(U8 *dname,U8 *st)
 
 CHashDefineStr *DefineLstLoad(U8 *dname,U8 *lst)
 {//Create DEFINE list. Not efficient, but handy.
-  I64 cnt=0;
+  I64 count=0;
   U8 *ptr,**idx;
   CHashDefineStr *tmph=CAlloc(sizeof(CHashDefineStr));
   tmph->type=HTT_DEFINE_STR;
@@ -21,14 +21,14 @@ CHashDefineStr *DefineLstLoad(U8 *dname,U8 *lst)
   ptr=lst;
   while (*ptr) {
     if (*ptr!='@')
-      cnt++;
+      count++;
     while (*ptr++);
   }
   tmph->data=MAlloc(ptr+1-lst);
   MemCpy(tmph->data,lst,ptr+1-lst);
-  tmph->cnt=cnt;
+  tmph->count=count;
 
-  idx=tmph->sub_idx=MAlloc(cnt*sizeof(U8 *));
+  idx=tmph->sub_idx=MAlloc(count*sizeof(U8 *));
   ptr=lst;
   while (*ptr) {
     if (*ptr!='@')
@@ -61,7 +61,7 @@ U8 *DefineSub(I64 sub,U8 *dname)
 {//Return DEFINE list entry indexed by number.
   CHashDefineStr *tmph;
   if (tmph=HashFind(dname,Fs->hash_table,HTT_DEFINE_STR)) {
-    if (0<=sub<tmph->cnt)
+    if (0<=sub<tmph->count)
       return tmph->sub_idx[sub];
     else
       return NULL;
@@ -71,11 +71,11 @@ U8 *DefineSub(I64 sub,U8 *dname)
     return NULL;
 }
 
-I64 DefineCnt(U8 *dname)
-{//Return cnt of entries in define list.
+I64 DefineCount(U8 *dname)
+{//Return count of entries in define list.
   CHashDefineStr *tmph;
   if (tmph=HashFind(dname,Fs->hash_table,HTT_DEFINE_STR))
-    return tmph->cnt;
+    return tmph->count;
   else if (dname)
     UndefinedDefine(dname);
   else

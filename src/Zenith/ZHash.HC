@@ -28,19 +28,19 @@ I64 HashEntriesCompare2(CWho *h1,CWho *h2)
   return i1-i2;
 }
 
-I64 HelpIndexCnt(U8 *ptr,U8 *idx)
+I64 HelpIndexCount(U8 *ptr,U8 *idx)
 {
-  I64 cnt=0,ch,idx_len=StrLen(idx);
+  I64 count=0,ch,idx_len=StrLen(idx);
   while (*ptr) {
     if (!StrNCmp(ptr,idx,idx_len))
-      cnt++;
+      count++;
     while (ch=*ptr++)
       if (ch==';')
 	break;
     if (!ch)
       ptr--;
   }
-  return cnt;
+  return count;
 }
 
 U8 *HelpIndexStr(U8 **_ptr,U8 *idx)
@@ -156,7 +156,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
   CHashSrcSym *tmph;
   CHashGeneric *ptr;
   CWho *lst;
-  I64 cnt,i,j,k,f=0;
+  I64 count,i,j,k,f=0;
   U8 buf[512],*last_idx=StrNew(""),*cur_idx,*comment;
   Bool recurse,publics,map;
   CTask *task;
@@ -178,7 +178,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
   } else
     task=NULL;
 
-  cnt=0;
+  count=0;
   table=h;
   while (table) {
     for (i=0;i<=table->mask;i++) {
@@ -187,9 +187,9 @@ U8 *idx=NULL,CDoc *doc=NULL)
 	if (!(tmph->type & (HTF_IMPORT | HTF_PRIVATE)) &&
 	      (tmph->type & HTF_PUBLIC || !publics)) {
 	  if (!idx)
-	    cnt++;
+	    count++;
 	  else if (tmph->type&HTG_SRC_SYM && (cur_idx=tmph->idx))
-	    cnt+=HelpIndexCnt(cur_idx,idx);
+	    count+=HelpIndexCount(cur_idx,idx);
 	}
 	tmph=tmph->next;
       }
@@ -199,9 +199,9 @@ U8 *idx=NULL,CDoc *doc=NULL)
     else
       break;
   }
-  if (!cnt) goto wh_done;
+  if (!count) goto wh_done;
 
-  lst=CAlloc(cnt*sizeof(CWho));
+  lst=CAlloc(count*sizeof(CWho));
   j=0;
   table=h;
   while (table) {
@@ -213,7 +213,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
 	  if (!idx)
 	    lst[j++].h=tmph;
 	  else if (tmph->type&HTG_SRC_SYM && (cur_idx=tmph->idx) &&
-		(k=HelpIndexCnt(cur_idx,idx)))
+		(k=HelpIndexCount(cur_idx,idx)))
 	    while (k--) {
 	      lst[j].idx=HelpIndexStr(&cur_idx,idx);
 	      lst[j++].h=tmph;
@@ -228,17 +228,17 @@ U8 *idx=NULL,CDoc *doc=NULL)
   }
 
   if (map)
-    QSort(lst,cnt,sizeof(CWho),&HashEntriesCompare2);
+    QSort(lst,count,sizeof(CWho),&HashEntriesCompare2);
   else if (idx)
-    QSort(lst,cnt,sizeof(CWho),&HashEntriesCompare3);
+    QSort(lst,count,sizeof(CWho),&HashEntriesCompare3);
   else
-    QSort(lst,cnt,sizeof(CWho),&HashEntriesCompare);
+    QSort(lst,count,sizeof(CWho),&HashEntriesCompare);
 
   if (idx) {
-    progress1_max=cnt;
+    progress1_max=count;
     progress1=0;
   }
-  for (i=0;i<cnt;i++) {
+  for (i=0;i<count;i++) {
     comment=NULL;
     ptr=lst[i].h;
     if (idx)
@@ -267,7 +267,7 @@ U8 *idx=NULL,CDoc *doc=NULL)
 
       if (!idx) {
 	if (ptr->type & HTT_DEFINE_STR) {
-	  j=ptr(CHashDefineStr *)->cnt;
+	  j=ptr(CHashDefineStr *)->count;
 	  if (j==-1)
 	    StrPrint(buf,"%-10t$$Q",ptr(CHashDefineStr *)->data);
 	  else
@@ -278,9 +278,9 @@ U8 *idx=NULL,CDoc *doc=NULL)
 	  StrPrint(buf,"%010X",HashVal(ptr));
 	j=HashEntrySize(ptr);
 	if (j==-1)
-	  CatPrint(buf," %04X  ",ptr->use_cnt);
+	  CatPrint(buf," %04X  ",ptr->use_count);
 	else
-	  CatPrint(buf," %04X %010X ",ptr->use_cnt,j);
+	  CatPrint(buf," %04X %010X ",ptr->use_count,j);
       } else
 	*buf=0;
 
@@ -328,17 +328,17 @@ wh_done:
 public I64 HashDepthRep(CHashTable *table=NULL)
 {//Hash table linked-list chain depth report.
 //Histogram of collision count.
-  I64 i,j,longest=0,cnt=0,a[HDR_NUM];
+  I64 i,j,longest=0,count=0,a[HDR_NUM];
   CHash *tmph;
   if (!table) table=Fs->hash_table;
   MemSet(a,0,sizeof(a));
   for (i=0;i<=table->mask;i++) {
     tmph=table->body[i];
     if (tmph) {
-      j=LinkedLstCnt(tmph);
+      j=LinkedLstCount(tmph);
       if (j<HDR_NUM)
 	a[j]++;
-      cnt+=j;
+      count+=j;
       if (j>longest)
 	longest=j;
     }
@@ -348,7 +348,7 @@ public I64 HashDepthRep(CHashTable *table=NULL)
     if (a[i])
       "%02d:%d\n",i,a[i];
   "Size:%dCount:%dLongest:%d\n",
-	table->mask+1,cnt,longest;
+	table->mask+1,count,longest;
   return longest;
 }
 

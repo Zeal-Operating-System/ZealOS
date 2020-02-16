@@ -16,44 +16,44 @@ sign or zero extended to 64-bits.
 
 U0 ICU8(CIntermediateCode *tmpi,U8 b)
 {
-  tmpi->ic_body[tmpi->ic_cnt++]=b;
+  tmpi->ic_body[tmpi->ic_count++]=b;
 }
 
 U0 ICRex(CIntermediateCode *tmpi,U8 b)
 {
   if (b)
-    tmpi->ic_body[tmpi->ic_cnt++]=b;
+    tmpi->ic_body[tmpi->ic_count++]=b;
 }
 
 U0 ICOpSizeRex(CIntermediateCode *tmpi,U8 b)
 {
-  tmpi->ic_body[tmpi->ic_cnt++]=OC_OP_SIZE_PREFIX;
+  tmpi->ic_body[tmpi->ic_count++]=OC_OP_SIZE_PREFIX;
   if (b)
-    tmpi->ic_body[tmpi->ic_cnt++]=b;
+    tmpi->ic_body[tmpi->ic_count++]=b;
 }
 
 U0 ICU16(CIntermediateCode *tmpi,U16 w)
 {
-  *(&tmpi->ic_body[tmpi->ic_cnt])(U16)=w;
-  tmpi->ic_cnt+=2;
+  *(&tmpi->ic_body[tmpi->ic_count])(U16)=w;
+  tmpi->ic_count+=2;
 }
 
 U0 ICU24(CIntermediateCode *tmpi,U32 d)
 {//Writes extra harmless overhanging byte.
-  *(&tmpi->ic_body[tmpi->ic_cnt])(U32)=d;
-  tmpi->ic_cnt+=3;
+  *(&tmpi->ic_body[tmpi->ic_count])(U32)=d;
+  tmpi->ic_count+=3;
 }
 
 U0 ICU32(CIntermediateCode *tmpi,U32 d)
 {
-  *(&tmpi->ic_body[tmpi->ic_cnt])(U32)=d;
-  tmpi->ic_cnt+=4;
+  *(&tmpi->ic_body[tmpi->ic_count])(U32)=d;
+  tmpi->ic_count+=4;
 }
 
 U0 ICU64(CIntermediateCode *tmpi,U64 q)
 {
-  *(&tmpi->ic_body[tmpi->ic_cnt])(U64)=q;
-  tmpi->ic_cnt+=8;
+  *(&tmpi->ic_body[tmpi->ic_count])(U64)=q;
+  tmpi->ic_count+=8;
 }
 
 U0 ICAddRSP(CIntermediateCode *tmpi,I64 i,Bool optimize=TRUE)
@@ -62,11 +62,11 @@ U0 ICAddRSP(CIntermediateCode *tmpi,I64 i,Bool optimize=TRUE)
   CIntermediateCode *tmpil1;
   if (optimize) {
     tmpil1=tmpi;
-    if (tmpi->ic_last_start<0 && !tmpi->ic_cnt &&
+    if (tmpi->ic_last_start<0 && !tmpi->ic_count &&
 	  (tmpil1=OptLag1(tmpi)) && tmpil1->ic_last_start<0)
       tmpil1=NULL;
     if (tmpil1) {
-      j=tmpil1->ic_cnt;
+      j=tmpil1->ic_count;
       if (tmpil1->ic_last_start==j-4 && tmpil1->ic_body[j-3]==0x83 &&
 	    tmpil1->ic_body[j-4]==0x48) {
 	if (tmpil1->ic_body[j-2]==0xEC)
@@ -87,7 +87,7 @@ U0 ICAddRSP(CIntermediateCode *tmpi,I64 i,Bool optimize=TRUE)
 	j=0;
       if (j) {
 	if (tmpi==tmpil1) {
-	  tmpi->ic_cnt=tmpi->ic_last_start;
+	  tmpi->ic_count=tmpi->ic_last_start;
 	  i+=j;
 	} else if (!(tmpi->ic_flags&ICF_PREV_DELETED)) {
 	  tmpil1->ic_flags|=ICF_DEL_PREV_INS;
@@ -97,7 +97,7 @@ U0 ICAddRSP(CIntermediateCode *tmpi,I64 i,Bool optimize=TRUE)
       }
     }
   }
-  last_start=tmpi->ic_cnt;
+  last_start=tmpi->ic_count;
   if (i>0) {
     if (i<=I8_MAX)
       ICU32(tmpi,0xC48348+i<<24);
@@ -116,7 +116,7 @@ U0 ICAddRSP(CIntermediateCode *tmpi,I64 i,Bool optimize=TRUE)
     } else
       throw('Compiler');
   }
-  if (optimize && tmpi->ic_cnt>last_start)
+  if (optimize && tmpi->ic_count>last_start)
     tmpi->ic_last_start=last_start;
 }
 
@@ -249,7 +249,7 @@ U0 ICModr2(CIntermediateCode *tmpi,I64 i,CICType t=0,I64 d,I64 rip=0)
 	  d-=4;
       }
     case MODR_RIP_REL:
-      ICU32(tmpi,d-(rip+4+tmpi->ic_cnt));
+      ICU32(tmpi,d-(rip+4+tmpi->ic_count));
       tmpi->ic_flags&=~ICF_CODE_FINAL;
       break;
   }
@@ -445,8 +445,8 @@ I64 ICBuiltInFloatConst(F64 d)
 U0 ICMov(CIntermediateCode *tmpi,
 	CICType t1,I64 r1,I64 d1,CICType t2,I64 r2,I64 d2,I64 rip)
 {
-  I64 i,cnt1,cnt2,b1_rex,b2_rex,b1,b2,b1_modr,b2_modr,
-	b1_r1,b1_r2,b2_r1,b2_r2,last_start=tmpi->ic_cnt;
+  I64 i,count1,count2,b1_rex,b2_rex,b1,b2,b1_modr,b2_modr,
+	b1_r1,b1_r2,b2_r1,b2_r2,last_start=tmpi->ic_count;
   CIntermediateCode *tmpil1;
   Bool old_lock=Btr(&tmpi->ic_flags,ICf_LOCK);
   switch (Bsr(t1)) {
@@ -582,21 +582,21 @@ move_done:
       tmpil1=NULL;
     if (tmpil1) {
       if (tmpil1==tmpi)
-	cnt1=last_start-tmpil1->ic_last_start;
+	count1=last_start-tmpil1->ic_last_start;
       else {
 	if (!(tmpil1->ic_flags&ICF_CODE_FINAL))
 	  tmpi->ic_flags&=~ICF_CODE_FINAL;
 	if (last_start)
-	  cnt1=0;
+	  count1=0;
 	else
-	  cnt1=tmpil1->ic_cnt-tmpil1->ic_last_start;
+	  count1=tmpil1->ic_count-tmpil1->ic_last_start;
       }
-      cnt2=tmpi->ic_cnt-last_start;
-      if (cnt1 && cnt1==cnt2) {
+      count2=tmpi->ic_count-last_start;
+      if (count1 && count1==count2) {
 	b1_rex=tmpil1->ic_body[tmpil1->ic_last_start];
 	b2_rex=tmpi->ic_body[last_start];
 	if (b1_rex&0x48==0x48 && b2_rex&0x48==0x48) {
-	  for (i=1;i<cnt1;i++)
+	  for (i=1;i<count1;i++)
 	    if ((b1=tmpil1->ic_body[tmpil1->ic_last_start+i])==
 		  (b2=tmpi->ic_body[last_start+i])) {
 	      if (i==1 && (b2==0x89 || b2==0x8B)) {
@@ -606,7 +606,7 @@ move_done:
 		b2_modr=tmpi->ic_body[last_start+2];
 		b2_r1=b2_modr&7	  +Bt(&b2_rex,0)<<3;
 		b2_r2=b2_modr>>3&7+Bt(&b2_rex,2)<<3;
-		if (cnt1==3 && b2_modr&0xC0==0xC0) {
+		if (count1==3 && b2_modr&0xC0==0xC0) {
 		  if (b2_r1==b2_r2)
 		    goto move_redundant;
 		  if (b1_modr&0xC0==0xC0) {
@@ -628,7 +628,7 @@ move_done:
 	      b2_modr=tmpi->ic_body[last_start+2];
 	      b2_r1=b2_modr&7	+Bt(&b2_rex,0)<<3;
 	      b2_r2=b2_modr>>3&7+Bt(&b2_rex,2)<<3;
-	      if (cnt1==3 && b2_modr&0xC0==0xC0) {
+	      if (count1==3 && b2_modr&0xC0==0xC0) {
 		if (b2_r1==b2_r2)
 		  goto move_redundant;
 		if (b1==0x89 && b2==0x8B || b1==0x8B && b2==0x89) {
@@ -645,15 +645,15 @@ move_done:
 		    !(b1==0x89 && b2==0x8B || b1==0x8B && b2==0x89))
 		break;
 	    }
-	  if (i==cnt1) {
+	  if (i==count1) {
 move_redundant:
-	    tmpi->ic_cnt=last_start;
+	    tmpi->ic_count=last_start;
 	  }
 	}
       }
     }
   }
-  if (tmpi->ic_cnt>last_start>tmpi->ic_last_start)
+  if (tmpi->ic_count>last_start>tmpi->ic_last_start)
     tmpi->ic_last_start=last_start;
   BEqu(&tmpi->ic_flags,ICf_LOCK,old_lock);
 }
@@ -679,7 +679,7 @@ U0 ICLea(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,
 	  tmpa->next=cc->aotc->abss;
 	  tmpa->type=AAT_ADD_U32;
 	  cc->aotc->abss=tmpa;
-	  tmpa->rip=rip+tmpi->ic_cnt-4;
+	  tmpa->rip=rip+tmpi->ic_count-4;
 	}
 	tmpi->ic_flags&=~ICF_CODE_FINAL;
 	break;

@@ -78,7 +78,7 @@ U8	vis_unit_bitmap[2][(((UNITS_NUM+7)&~7)*UNITS_NUM)>>3];
 #define PHASE_END	6
 
 I64	phase,cur_player,enemy_player,view_player,turn,
-	cursor_row,cursor_col,alive_cnt[2],
+	cursor_row,cursor_col,alive_count[2],
 	player_indirect[2],player_move[2],player_direct[2];
 F64	animation_delay=0.5;
 

@@ -159,9 +159,9 @@ I64 Dir(U8 *files_find_mask,Bool full)
   return res;
 }
 
-Bool DirMk(U8 *filename,I64 entry_cnt=0)
+Bool DirMk(U8 *filename,I64 entry_count=0)
 {//Make directory. $LK,"Cd",A="MN:Cd"$() can also make directories.
-//entry_cnt is for preallocating dir blks, leave it zero if you like.
+//entry_count is for preallocating dir blks, leave it zero if you like.
   U8 *name;
   CDirContext *dirc;
   Bool res=FALSE;
@@ -177,10 +177,10 @@ Bool DirMk(U8 *filename,I64 entry_cnt=0)
 	      SUF_REM_LEADING|SUF_REM_TRAILING|SUF_REM_CTRL_CHARS);
 	switch (dirc->dv->fs_type) {
 	  case FSt_REDSEA:
-	    res=RedSeaMkDir(dirc->dv,Fs->cur_dir,name,entry_cnt);
+	    res=RedSeaMkDir(dirc->dv,Fs->cur_dir,name,entry_count);
 	    break;
 	  case FSt_FAT32:
-	    res=FAT32MkDir(dirc->dv,Fs->cur_dir,name,entry_cnt);
+	    res=FAT32MkDir(dirc->dv,Fs->cur_dir,name,entry_count);
 	    break;
 	  default:
 	    PrintErr("File System Not Supported\n");

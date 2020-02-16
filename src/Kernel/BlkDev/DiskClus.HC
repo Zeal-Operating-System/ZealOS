@@ -1,16 +1,16 @@
-I64 ClusNumNext(CDrive *dv,I64 c,I64 cnt=1)
-{//Return next cnt'th clus in chain.
+I64 ClusNumNext(CDrive *dv,I64 c,I64 count=1)
+{//Return next count'th clus in chain.
   Bool unlock;
   DriveCheck(dv);
-  if (cnt<=0) return c;
+  if (count<=0) return c;
   try {
     unlock=DriveLock(dv);
     switch (dv->fs_type) {
       case FSt_REDSEA:
-	c+=cnt;
+	c+=count;
 	break;
       case FSt_FAT32:
-	while (cnt-->0 && 0<c<0x0FFFFFF8) {
+	while (count-->0 && 0<c<0x0FFFFFF8) {
 	  DriveFATBlkSet(dv,c);
 	  c=dv->cur_fat_blk[c & (BLK_SIZE/4-1)];
 	}
@@ -78,9 +78,9 @@ I64 ClusBlkRead(CDrive *dv,U8 *buf,I64 c,I64 blks)
   return c;
 }
 
-I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 cnt)
-{//Read clus cnt from drv to buf.
-  return ClusBlkRead(dv,buf,c,cnt*dv->spc);
+I64 ClusRead(CDrive *dv,U8 *buf,I64 c,I64 count)
+{//Read clus count from drv to buf.
+  return ClusBlkRead(dv,buf,c,count*dv->spc);
 }
 
 I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks)
@@ -120,25 +120,25 @@ I64 ClusBlkWrite(CDrive *dv,U8 *buf,I64 c,I64 blks)
   return c;
 }
 
-I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 cnt)
-{//Write clus cnt from buf to drv.
-  return ClusBlkWrite(dv,buf,c,cnt*dv->spc);
+I64 ClusWrite(CDrive *dv,U8 *buf,I64 c,I64 count)
+{//Write clus count from buf to drv.
+  return ClusBlkWrite(dv,buf,c,count*dv->spc);
 }
 
-I64 ClusAlloc(CDrive *dv,I64 c=0,I64 cnt=1,Bool contiguous=FALSE)
-{//Alloc clus cnt into chain.
+I64 ClusAlloc(CDrive *dv,I64 c=0,I64 count=1,Bool contiguous=FALSE)
+{//Alloc clus count into chain.
 //c=0 means first clus in chain
   DriveCheck(dv);
-  if (cnt<=0) return c;
+  if (count<=0) return c;
   switch (dv->fs_type) {
     case FSt_REDSEA:
-      return RedSeaAllocClus(dv,cnt);
+      return RedSeaAllocClus(dv,count);
     case FSt_FAT32:
       if (contiguous) {
 	if (c) throw('File');
-	return FAT32AllocContiguousClus(dv,cnt);
+	return FAT32AllocContiguousClus(dv,count);
       } else
-	return FAT32AllocClus(dv,c,cnt);
+	return FAT32AllocClus(dv,c,count);
     default:
       throw('Drive');
   }

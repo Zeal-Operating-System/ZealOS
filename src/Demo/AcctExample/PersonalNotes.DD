@@ -377,7 +377,7 @@ $FG,5$$TX+CX,"Test"$$FG$
 * $LK,"DriveMap",A="MN:DriveMap"$() in $LK,"MountFile",A="MN:MountFile"$().
 
 * Return ress for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
-* Collision cnts for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
+* Collision counts for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
 
 * $LK,"GetStr",A="MN:GetStr"$() or $LK,"GetChar",A="MN:GetChar"$() in $LK,"OSInstall",A="FI:::/Misc/OSInstall.HC"$ didn't like focus change.
 

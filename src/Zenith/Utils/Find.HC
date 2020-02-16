@@ -28,7 +28,7 @@ I64 FindFile(U8 *needle_str,U8 *haystack_filename,
 {//Have you confused with $LK,"FileFind",A="MN:FileFind"$()?
   Bool first_on_line,write_this_file=FALSE,cont=!Bt(_fuf_flags,FUf_CANCEL);
   U8 *src,*dst,*dst2,*name_buf=NULL;
-  I64 i,j,plen,rlen,dlen,cnt=0,old_flags,ss_flags;
+  I64 i,j,plen,rlen,dlen,count=0,old_flags,ss_flags;
   CDoc *cur_l,*doc=DocRead(haystack_filename,
 	DOCF_PLAIN_TEXT_TABS|DOCF_NO_CURSOR);
   CDocEntry *doc_e;
@@ -54,7 +54,7 @@ I64 FindFile(U8 *needle_str,U8 *haystack_filename,
       first_on_line=TRUE;
       while (src && cont) {
 	if (src=StrFind(needle_str,src,ss_flags)) {
-	  cnt++;
+	  count++;
 	  if (first_on_line || Bt(_fuf_flags,FUf_REPLACE)) {
 	    first_on_line=FALSE;
 	    PutFileLink(haystack_filename,,doc_e->y+1,TRUE);
@@ -139,7 +139,7 @@ I64 FindFile(U8 *needle_str,U8 *haystack_filename,
     "Wrote:%s\n",doc->filename.name;
   }
   DocDel(doc);
-  return cnt;
+  return count;
 }
 
 public I64 Find(U8 *needle_str,U8 *files_find_mask="*",
@@ -160,7 +160,7 @@ before or after "dd" are label characters.
 "+lb"=only checks for label chars before.
 "+la"=only checks for label chars after.
 */
-  I64 cnt=0,fuf_flags=0;
+  I64 count=0,fuf_flags=0;
   CDirEntry *tmpde,*tmpde1;
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+i+f+F+T");
   ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
@@ -172,11 +172,11 @@ before or after "dd" are label characters.
   fuf_flags&=FUF_ALL|FUF_REPLACE|FUF_IGNORE|FUF_WHOLE_LABELS|
 	FUF_WHOLE_LABELS_BEFORE|FUF_WHOLE_LABELS_AFTER;
   while (tmpde && !Bt(&fuf_flags,FUf_CANCEL)) {
-    cnt+=FindFile(needle_str,tmpde->full_name,&fuf_flags,replace_text);
+    count+=FindFile(needle_str,tmpde->full_name,&fuf_flags,replace_text);
     tmpde=tmpde->next;
   }
   DirTreeDel(tmpde1);
-  return cnt;
+  return count;
 }
 
 public I64 FileOcc(U8 *needle_str,
@@ -188,11 +188,11 @@ public I64 FileOcc(U8 *needle_str,
 "+lb"=only checks for label chars before.
 "+la"=only checks for label chars after.
 */
-  I64 cnt=0;
+  I64 count=0;
   Bool old_silent=Silent(TRUE);
-  cnt=Find(needle_str,files_find_mask,fu_flags);
+  count=Find(needle_str,files_find_mask,fu_flags);
   Silent(old_silent);
-  return cnt;
+  return count;
 }
 
 class CFind

@@ -26,7 +26,7 @@ public U0 ACDWordsLoad()
 	Free(st2);
 	in_ptr+=StrLen(in_ptr)+1;
 	tmph->str=tmph+1;
-	tmph->use_cnt=1;
+	tmph->use_count=1;
 	tmph->type=HTT_DICT_WORD;
 	d=in_ptr;
 	tmph->user_data0=*d;
@@ -51,7 +51,7 @@ CHashAC *ACHashAdd(U8 *w)
   tmpw=ACAlloc(sizeof(CHashAC));
   tmpw->str=AStrNew(w);
   tmpw->type=HTT_WORD;
-  tmpw->use_cnt=1;
+  tmpw->use_count=1;
   tmpw->hits=1;
   HashAdd(tmpw,ac.hash_table);
   ac.num_words++;

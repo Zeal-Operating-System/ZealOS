@@ -22,7 +22,7 @@ drv_let=0 means add new drive that is not already mounted.
   CPlannedDrive head,*tmppp;
   CMasterBoot mbr;
   Bool pri=TRUE;
-  I64 ext_base,drv_let2,pri_cnt=0,i,start_offset,offset,
+  I64 ext_base,drv_let2,pri_count=0,i,start_offset,offset,
 	total,remaining,cur_arg=0;
   "This command does not play well\n"
 	"with other operating systems.\n"
@@ -56,9 +56,9 @@ drv_let=0 means add new drive that is not already mounted.
       if (pri) {
 	"Primary Partition";
 	if (argc>cur_arg || YorN) {
-	  pri_cnt++;
+	  pri_count++;
 	  tmppp->pri=TRUE;
-	  if (pri_cnt==3)
+	  if (pri_count==3)
 	    pri=FALSE;
 	} else
 	  pri=FALSE;
@@ -97,7 +97,7 @@ drv_let=0 means add new drive that is not already mounted.
   MemSet(&mbr,0,BLK_SIZE);
   mbr.signature=0xAA55;
   offset=0;
-  for (i=0;i<pri_cnt;i++) {
+  for (i=0;i<pri_count;i++) {
     mbr.p[i].active=0x80;
     mbr.p[i].start_head=0;
     mbr.p[i].start_cyl=0x101;

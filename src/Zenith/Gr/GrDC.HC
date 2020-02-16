@@ -136,7 +136,7 @@ public U0 DCRst(CDC *dc)
   dc->color=BLACK;
   dc->color2=BLACK;
   dc->bkcolor=BLACK;
-  dc->collision_cnt=0;
+  dc->collision_count=0;
   dc->thick=1;
   dc->ls.x=37837; //1<<16/Sqrt(3)
   dc->ls.y=37837;

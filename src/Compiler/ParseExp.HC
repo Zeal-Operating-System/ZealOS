@@ -18,15 +18,15 @@ CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stk_op,CHashClass *tmpc)
   Bool div_sizeof=FALSE;
   switch (stk_op.u16[0]) {
     case IC_ADD:
-      if (tmpc->ptr_stars_cnt && !tmpi->ic_class->ptr_stars_cnt &&
+      if (tmpc->ptr_stars_count && !tmpi->ic_class->ptr_stars_count &&
 	    tmpi->ic_class->raw_type!=RT_F64) {
 	ICAdd(cc,IC_SIZEOF,1,cmp.internal_types[RT_I64]);
 	ICAdd(cc,IC_MUL,0,cmp.internal_types[RT_I64]);
       }
       break;
     case IC_SUB:
-      if (tmpc->ptr_stars_cnt && tmpi->ic_class->raw_type!=RT_F64) {
-	if (!tmpi->ic_class->ptr_stars_cnt) {
+      if (tmpc->ptr_stars_count && tmpi->ic_class->raw_type!=RT_F64) {
+	if (!tmpi->ic_class->ptr_stars_count) {
 	  ICAdd(cc,IC_SIZEOF,1,cmp.internal_types[RT_I64]);
 	  ICAdd(cc,IC_MUL,0,cmp.internal_types[RT_I64]);
 	} else
@@ -39,7 +39,7 @@ CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stk_op,CHashClass *tmpc)
       break;
     case IC_ADD_EQU:
     case IC_SUB_EQU:
-      if (tmpc->ptr_stars_cnt) {
+      if (tmpc->ptr_stars_count) {
 	ICAdd(cc,IC_SIZEOF,1,cmp.internal_types[RT_I64]);
 	ICAdd(cc,IC_MUL,0,cmp.internal_types[RT_I64]);
       }
@@ -148,10 +148,10 @@ pe_check_binary_ops2:
 	} else {
 	  tmpi=cc->coc.coc_head.last;
 	  tmpc=tmpi->ic_class;
-	  if (stk_op.u16[0]==IC_DEREF && tmpc->ptr_stars_cnt)
+	  if (stk_op.u16[0]==IC_DEREF && tmpc->ptr_stars_count)
 	    tmpc--;
 	  else if (stk_op.u16[0]==IC_ADDR) {
-	    cc->abs_cnts.c_addres++;
+	    cc->abs_counts.c_addres++;
 	    if (intermediate_code_table[tmpi->ic_code].type==IST_DEREF)
 	      OptFree(tmpi);
 	    tmpc++;
@@ -173,7 +173,7 @@ pe_do_binary_op:
 	  case IC_ADD:
 	  case IC_SUB:
 	    tmpi=cc->coc.coc_head.last;
-	    if (!tmpi->ic_class->ptr_stars_cnt &&
+	    if (!tmpi->ic_class->ptr_stars_count &&
 		  tmpi->ic_class->raw_type!=RT_F64) {
 	      ICAdd(cc,IC_SIZEOF,1,cmp.internal_types[RT_I64]);
 	      ICAdd(cc,IC_MUL,0,cmp.internal_types[RT_I64]);
@@ -202,7 +202,7 @@ pe_do_binary_op:
 	  tmpi=cc->coc.coc_head.last;
 	  tmpc=OptClassFwd(tmpi->ic_class);
 	  if (intermediate_code_table[tmpi->ic_code].type!=IST_DEREF ||
-		!tmpc->ptr_stars_cnt && !Bt(&tmpc->flags,Cf_INTERNAL_TYPE))
+		!tmpc->ptr_stars_count && !Bt(&tmpc->flags,Cf_INTERNAL_TYPE))
 	    LexExcept(cc,"Invalid lval at ");
 	  tmpi->ic_code=IC_NOP1; //Important for setting class (pretty sure)
 	  cur_op.u8[2]=PREC_ASSIGN|ASSOCF_RIGHT;
@@ -310,7 +310,7 @@ U0 ParseSizeOf(CCompCtrl *cc)
     LexExcept(cc,"Invalid class at ");
   if (tmpm=cc->local_var_entry) {
     tmpc=tmpm->member_class;
-    i=tmpc->size*tmpm->dim.total_cnt;
+    i=tmpc->size*tmpm->dim.total_count;
     if (Lex(cc)=='.')
       goto pu_sizeof_member;
   } else {
@@ -335,11 +335,11 @@ pu_sizeof_member:
 	if (Lex(cc)!=TK_IDENT || !(tmpm=MemberFind(cc->cur_str,tmpc)))
 	  LexExcept(cc,"Invalid member at ");
 	else if (cc->local_var_entry)
-	  cc->local_var_entry->use_cnt--;
+	  cc->local_var_entry->use_count--;
 	tmpc=tmpm->member_class;
 //Probably others like this:
 	#assert offset(CHashClass.size)==offset(CHashGlobalVar.size)
-	i=tmpc->size*tmpm->dim.total_cnt;
+	i=tmpc->size*tmpm->dim.total_count;
       }
     }
   }
@@ -373,7 +373,7 @@ U0 ParseOffsetOf(CCompCtrl *cc)
     if (Lex(cc)!=TK_IDENT || !(tmpm=MemberFind(cc->cur_str,tmpc)))
       LexExcept(cc,"Invalid member at ");
     else if (cc->local_var_entry)
-      cc->local_var_entry->use_cnt--;
+      cc->local_var_entry->use_count--;
     i+=tmpm->offset;
     tmpc=tmpm->member_class;
   } while (Lex(cc)=='.');
@@ -382,7 +382,7 @@ U0 ParseOffsetOf(CCompCtrl *cc)
 
 I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 {
-  I64 i,argc_cnt,dft_val;
+  I64 i,argc_count,dft_val;
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
 	is_template_fun;
   CHashClass *tmpc2,*last_class=NULL;
@@ -427,9 +427,9 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   COCPush(cc);
   tmpcbh=cc->coc.coc_next;
   cc->coc.coc_next=NULL;
-  i=tmpf->arg_cnt;
+  i=tmpf->arg_count;
   tmpm=tmpf->member_lst_and_root;
-  argc_cnt=0;
+  argc_count=0;
   if (cc->token=='(') {
     Lex(cc);
     needs_right_paren=TRUE;
@@ -456,7 +456,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 	  (cc->token==')' || cc->token==',' || !needs_right_paren)) {
       dft_val=tmpm->dft_val;
       if (tmpm->flags & MLF_LASTCLASS && last_class)
-	dft_val=(last_class-last_class->ptr_stars_cnt)->str;
+	dft_val=(last_class-last_class->ptr_stars_count)->str;
       if (tmpm->flags & (MLF_STR_DFT_AVAILABLE|MLF_LASTCLASS) &&
 	    cc->flags&CCF_AOT_COMPILE) {
 	cm=COCMiscNew(cc,CMT_STR_CONST);
@@ -506,7 +506,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 	    throw('Compiler');
 	  COCPush(cc);
 	  is_first_arg=FALSE;
-	  argc_cnt++;
+	  argc_count++;
 	} while (cc->token==',');
       }
     } else if (needs_right_paren) {
@@ -523,11 +523,11 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
 	    throw('Compiler');
 	  COCPush(cc);
 	  is_first_arg=FALSE;
-	  argc_cnt++;
+	  argc_count++;
 	} while (cc->token==',');
       }
     }
-    tmpi->ic_data=argc_cnt++; //++ so add_esp latter works
+    tmpi->ic_data=argc_count++; //++ so add_esp latter works
   }
   if (needs_right_paren) {
     if (cc->token==')')
@@ -557,9 +557,9 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
   else {
     if (indirect)
       ICAdd(cc,IC_CALL_INDIRECT,
-	    (argc_cnt+tmpf->arg_cnt)<<3,tmpf->return_class);
+	    (argc_count+tmpf->arg_count)<<3,tmpf->return_class);
     else if (Bt(&tmpf->flags,Cf_EXTERN)) {
-      cc->abs_cnts.externs++;
+      cc->abs_counts.externs++;
       if (cc->flags&CCF_AOT_COMPILE) {
 	if (tmpf->type&HTF_IMPORT)
 	  ICAdd(cc,IC_CALL_IMPORT,tmpf,tmpf->return_class);
@@ -572,14 +572,14 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStk *ps,Bool indirect,CHashFun *tmpf)
     if ((Bt(&tmpf->flags,Ff_RET1) || Bt(&tmpf->flags,Ff_ARGPOP)) &&
 	  !Bt(&tmpf->flags,Ff_NOARGPOP)) {
       if (indirect) {
-	ICAdd(cc,IC_ADD_RSP1,(argc_cnt+tmpf->arg_cnt)<<3,tmpf->return_class);
+	ICAdd(cc,IC_ADD_RSP1,(argc_count+tmpf->arg_count)<<3,tmpf->return_class);
 	ICAdd(cc,IC_ADD_RSP,8,tmpf->return_class);
       } else
-	ICAdd(cc,IC_ADD_RSP1,(argc_cnt+tmpf->arg_cnt)<<3,tmpf->return_class);
+	ICAdd(cc,IC_ADD_RSP1,(argc_count+tmpf->arg_count)<<3,tmpf->return_class);
     } else {
       if (indirect)
-	argc_cnt++;
-      ICAdd(cc,IC_ADD_RSP,(argc_cnt+tmpf->arg_cnt)<<3,tmpf->return_class);
+	argc_count++;
+      ICAdd(cc,IC_ADD_RSP,(argc_count+tmpf->arg_count)<<3,tmpf->return_class);
     }
   }
   if (!is_template_fun)
@@ -635,7 +635,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 		    }
 		    LexExcept(cc,"Can't take addr of extern fun");
 		  }
-		  cc->abs_cnts.externs++;
+		  cc->abs_counts.externs++;
 		  ICAdd(cc,IC_IMM_I64,
 			&tmpf->exe_addr,cmp.internal_types[RT_PTR]);
 		  ICAdd(cc,IC_DEREF,0,cmp.internal_types[RT_PTR]);
@@ -644,12 +644,12 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 		    ICAdd(cc,IC_ABS_ADDR,
 			  tmpf->exe_addr,cmp.internal_types[RT_PTR]);
 		    if (cc->flags&CCF_ASM_EXPRESSIONS)
-		      cc->abs_cnts.abs_addres++;
+		      cc->abs_counts.abs_addres++;
 		  } else
 		    ICAdd(cc,IC_IMM_I64,
 			  tmpf->exe_addr,cmp.internal_types[RT_PTR]);
 		}
-		cc->abs_cnts.c_addres++;
+		cc->abs_counts.c_addres++;
 		Lex(cc);
 		return PE_MAYBE_MODIFIERS;
 	      }
@@ -657,7 +657,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	      tmpex=tmpc;
 	      if (cc->flags&CCF_ASM_EXPRESSIONS &&
 		    !(cc->flags&CCF_AOT_COMPILE) && tmpex->type&HTF_IMM) {
-		cc->abs_cnts.c_addres++;
+		cc->abs_counts.c_addres++;
 		ICAdd(cc,IC_IMM_I64,
 		      tmpex->val,cmp.internal_types[RT_PTR]);
 		Lex(cc);
@@ -706,7 +706,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	break;
       case '$$':
 	if (cc->flags & CCF_ASM_EXPRESSIONS) {
-	  cc->abs_cnts.abs_addres++;
+	  cc->abs_counts.abs_addres++;
 	  if (cc->flags&CCF_AOT_COMPILE)
 	    ICAdd(cc,IC_ABS_ADDR,cc->aotc->rip,cmp.internal_types[RT_PTR]);
 	  else
@@ -767,7 +767,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	if (tmpm->flags & MLF_FUN && !(cc->flags&CCF_ASM_EXPRESSIONS)) {
 	  ParsePopDeref(ps);
 	  cc->flags|=CCF_FUN_EXP;
-	  ParsePush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
+	  ParsePush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_count);
 	}
 	if (tmpm->dim.next) {
 	  *_tmpad=tmpm->dim.next;
@@ -833,7 +833,7 @@ pu_export_sys_sym:
 	  if (PREC_TERM>*max_prec)
 	    *max_prec=PREC_TERM;
 	  if (!(tmpex->type & (HTF_IMM|HTF_IMPORT)))
-	    cc->abs_cnts.abs_addres++;
+	    cc->abs_counts.abs_addres++;
 	  if (tmpex->type & HTF_UNRESOLVED) {
 	    if (!(cc->flags&CCF_ASM_EXPRESSIONS))
 	      LexExcept(cc,"Illegal fwd ref at ");
@@ -853,7 +853,7 @@ pu_export_sys_sym:
 	      ICAdd(cc,IC_ABS_ADDR,tmpex->val,cmp.internal_types[RT_PTR]);
 	    else {
 	      if (tmpex->type&HTF_IMM)
-		cc->abs_cnts.c_addres++;
+		cc->abs_counts.c_addres++;
 	      ICAdd(cc,IC_IMM_I64,tmpex->val,cmp.internal_types[RT_PTR]);
 	    }
 	  }
@@ -889,7 +889,7 @@ pu_export_sys_sym:
 	    }
 	  } else {
 	    if (tmpg->flags & GVF_EXTERN) {
-	      cc->abs_cnts.externs++;
+	      cc->abs_counts.externs++;
 	      ICAdd(cc,IC_IMM_I64,&tmpg->data_addr,tmpc);
 	      ICAdd(cc,IC_DEREF,0,tmpc);
 	    } else
@@ -899,7 +899,7 @@ pu_export_sys_sym:
 	  if (tmpg->flags & GVF_FUN) {
 	    ParsePopDeref(ps);
 	    cc->flags|=CCF_FUN_EXP;
-	    ParsePush2(ps,tmpg->fun_ptr-tmpg->fun_ptr->ptr_stars_cnt);
+	    ParsePush2(ps,tmpg->fun_ptr-tmpg->fun_ptr->ptr_stars_count);
 	  }
 	  return PE_UNARY_MODIFIERS;
 	case HTt_CLASS:
@@ -987,7 +987,7 @@ I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
       if (!*unary_post_prec)
 	*unary_post_prec=PREC_TERM;
       tmpc=cc->coc.coc_head.last->ic_class;
-      if ((!tmpc->ptr_stars_cnt || cc->flags & CCF_ARRAY) && cc->token=='.')
+      if ((!tmpc->ptr_stars_count || cc->flags & CCF_ARRAY) && cc->token=='.')
 	LexExcept(cc,"Must be address, not value ");
       if (!(cc->flags & CCF_RAX))
 	tmpc--;
@@ -997,7 +997,7 @@ I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	    !(tmpm=MemberFind(cc->cur_str,tmpc)))
 	LexExcept(cc,"Invalid member at ");
       else if (cc->local_var_entry)
-	cc->local_var_entry->use_cnt--;
+	cc->local_var_entry->use_count--;
       Lex(cc);	//skip member name
       tmpc1=tmpm->member_class+1;
       ICAdd(cc,IC_IMM_I64,tmpm->offset,tmpc1);
@@ -1008,7 +1008,7 @@ I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
       }
       if(tmpm->flags & MLF_FUN) {
 	ParsePopDeref(ps);
-	ParsePush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_cnt);
+	ParsePush2(ps,tmpm->fun_ptr-tmpm->fun_ptr->ptr_stars_count);
 	cc->flags|=CCF_FUN_EXP;
       }
       ICAdd(cc,IC_ADD,0,tmpc1);
@@ -1057,17 +1057,17 @@ I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStk *ps,CMemberLst **_local_var,
 	*unary_post_prec=PREC_TERM;
       Lex(cc);
       tmpc=OptClassFwd(cc->coc.coc_head.last->ic_class);
-      if (!tmpc->ptr_stars_cnt)
+      if (!tmpc->ptr_stars_count)
 	LexExcept(cc,"Not array or ptr ");
       if (!(cc->flags & (CCF_ARRAY | CCF_RAX))) {
 	tmpc=OptClassFwd(tmpc-1);
-	if (!tmpc->ptr_stars_cnt)
+	if (!tmpc->ptr_stars_count)
 	  LexExcept(cc,"Not array or ptr ");
 	ICAdd(cc,IC_DEREF+PREC_UNARY_PRE<<16,0,tmpc);
       }
       tmpc1=tmpc-1;
       if (tmpad1=*_tmpad) {
-	ICAdd(cc,IC_IMM_I64,tmpad1->total_cnt*tmpc1->size,tmpc);
+	ICAdd(cc,IC_IMM_I64,tmpad1->total_count*tmpc1->size,tmpc);
 	if (*_tmpad=tmpad1->next) {
 	  old_flags=cc->flags;
 	  if (!ParseExpression(cc,NULL,FALSE,ps))

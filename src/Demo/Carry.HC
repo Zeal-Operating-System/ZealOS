@@ -1,10 +1,10 @@
 //Shows the $LK,"Carry",A="MN:Carry"$ function.  It holds the CPU carry flag.
 //$LK,"U",A="MN:U"$() Unassemble to make sure it is right.
 
-U0 BigCnt()
+U0 BigCount()
 {
   U64 lo=0,hi=0;
-  "BigCnt\n";
+  "BigCount\n";
   while (hi<0x10) {
     lo+=1<<58;
     hi+=Carry;
@@ -12,7 +12,7 @@ U0 BigCnt()
   }
 }
 
-BigCnt;
+BigCount;
 
 U0 BigShift()
 {

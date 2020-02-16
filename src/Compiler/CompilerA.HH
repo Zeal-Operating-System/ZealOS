@@ -3,7 +3,7 @@
 #define IS_0_ARG	0
 #define IS_1_ARG	1
 #define IS_2_ARG	2
-#define IS_V_ARG	3 //Variable Arg Cnt
+#define IS_V_ARG	3 //Variable Arg Count
 
 #define IST_NULL	0
 #define IST_DEREF	1
@@ -12,7 +12,7 @@
 	
 class CIntermediateStruct
 {
-  U8 arg_cnt,res_cnt,type;
+  U8 arg_count,res_count,type;
   Bool fpop,not_const,pad[3];
   U8 *name;
 };

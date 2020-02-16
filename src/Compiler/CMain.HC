@@ -102,8 +102,8 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
     okay=FALSE;
   }
   if (!okay) {
-    if (cc->error_cnt<1)
-      cc->error_cnt=1;
+    if (cc->error_count<1)
+      cc->error_count=1;
     cc->aot=res->parent_aot;
     Free(res);
     LinkedLstDel(aotc->bin);
@@ -155,7 +155,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 cmp_flags,U8 *map_name=NULL,U8 mapfile_drv_let=
 }
 
 CAOT *CompBuf(U8 *buf,U8 *map_name=NULL,
-  I64 *error_cnt=NULL, I64 *warning_cnt=NULL,U8 mapfile_drv_let=0)
+  I64 *error_count=NULL, I64 *warning_count=NULL,U8 mapfile_drv_let=0)
 {
   CCompCtrl *cc;
   CAOT *res=NULL;
@@ -163,8 +163,8 @@ CAOT *CompBuf(U8 *buf,U8 *map_name=NULL,
   cc->flags|=CCF_AOT_COMPILE;
   QueueInsert(cc,Fs->last_cc);
   res=CompJoin(cc,CMPF_LEX_FIRST,map_name,mapfile_drv_let);
-  if (error_cnt)   *error_cnt=cc->error_cnt;
-  if (warning_cnt) *warning_cnt=cc->warning_cnt;
+  if (error_count)   *error_count=cc->error_count;
+  if (warning_count) *warning_count=cc->warning_count;
   QueueRemove(cc);
   if (res)
     CompCtrlDel(cc);
@@ -228,7 +228,7 @@ U0 CompFixUpJITAsm(CCompCtrl *cc,CAOT *tmpaot)
 	    if(!(g_lb=COCGoToLabelFind(cc,str)))
 	      "Unresolved Reference:%s\n",str;
 	    else {
-	      g_lb->use_cnt++;
+	      g_lb->use_count++;
 	      g_lb=OptLabelFwd(g_lb);
 	      i=g_lb->addr+tmpaot->buf;
 	    }
@@ -338,7 +338,7 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc,CAOT *tmpaot)
 	  if(!(g_lb=COCGoToLabelFind(cc,tmpie->str)))
 	    "Unresolved Reference:%s\n",tmpie->str;
 	  else {
-	    g_lb->use_cnt++;
+	    g_lb->use_count++;
 	    g_lb=OptLabelFwd(g_lb);
 	  }
 	} else
@@ -417,11 +417,11 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc,CAOT *tmpaot)
 }
 
 I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
-{//AOT Compile HC or PRJ file a and output BIN file. Returns err_cnt.
+{//AOT Compile HC or PRJ file a and output BIN file. Returns err_count.
   U8 *ptr,*fbuf=NULL,*fbuf2=NULL,*fbuf3=NULL,
 	*patch_table=MAlloc(0x20000);
   CAOT *tmpaot;
-  I64 i,cnt,size=0,error_cnt=0,warning_cnt=0,aot_U8s=0;
+  I64 i,count,size=0,error_count=0,warning_count=0,aot_U8s=0;
   CBinFile *bfh;
   CAOTImportExport *tmpie,*tmpie1;
   CAOTAbsAddr *tmpa,*tmpa1;
@@ -433,20 +433,20 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
   if (map_name)
     fbuf3=ExtDft(map_name,"MAP");
 
-  if (tmpaot=CompBuf(fbuf2,fbuf3,&error_cnt,&warning_cnt,mapfile_drv_let)) {
+  if (tmpaot=CompBuf(fbuf2,fbuf3,&error_count,&warning_count,mapfile_drv_let)) {
     aot_U8s=tmpaot->aot_U8s;
     ptr=patch_table;
 //See $LK,"Load",A="MN:Load"$()
-    cnt=0;
+    count=0;
     tmpa=tmpaot->abss;
     while (tmpa) {
       if (!(tmpa->type&IEF_IMM_NOT_REL))
-	cnt++;
+	count++;
       tmpa=tmpa->next;
     }
-    if (cnt) {
+    if (count) {
       *ptr++=IET_ABS_ADDR;
-      *ptr(U32 *)++=cnt;
+      *ptr(U32 *)++=count;
       *ptr++=0;
       tmpa=tmpaot->abss;
       while (tmpa) {
@@ -460,15 +460,15 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
     tmphg=tmpaot->heap_glbls;
     while (tmphg) {
       tmphg1=tmphg->next;
-      cnt=0;
+      count=0;
       tmphgr=tmphg->references;
       while (tmphgr) {
-	cnt++;
+	count++;
 	tmphgr=tmphgr->next;
       }
-      if (cnt) {
+      if (count) {
 	*ptr++=IET_DATA_HEAP;
-	*ptr(U32 *)++=cnt;
+	*ptr(U32 *)++=count;
 	if (tmphg->str) {
 	  i=StrLen(tmphg->str);
 	  MemCpy(ptr,tmphg->str,i+1);
@@ -564,8 +564,8 @@ I64 Comp(U8 *filename,U8 *map_name=NULL,U8 *out_name=NULL,U8 mapfile_drv_let=0)
   Free(fbuf2);
   Free(fbuf3);
   Print("Errs:%d Warns:%d Code:%X Size:%X\n",
-	error_cnt,warning_cnt,aot_U8s,size);
-  return error_cnt;
+	error_count,warning_count,aot_U8s,size);
+  return error_count;
 }
 
 I64 ExePutS(U8 *buf,U8 *filename=NULL,

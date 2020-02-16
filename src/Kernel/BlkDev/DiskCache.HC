@@ -1,7 +1,7 @@
 U0 DiskCacheInit(I64 size_in_U8s)
 {
   CCacheBlk *tmpc;
-  I64 i,cnt;
+  I64 i,count;
 
   while (LBts(&sys_semas[SEMA_DSK_CACHE],0))
     Yield;
@@ -17,9 +17,9 @@ U0 DiskCacheInit(I64 size_in_U8s)
     blkdev.cache_base=AMAlloc(size_in_U8s);
     QueueInit(blkdev.cache_ctrl);
 
-    cnt=MSize(blkdev.cache_base)/sizeof(CCacheBlk);
-    blkdev.cache_size=cnt*BLK_SIZE;
-    for (i=0;i<cnt;i++) {
+    count=MSize(blkdev.cache_base)/sizeof(CCacheBlk);
+    blkdev.cache_size=count*BLK_SIZE;
+    for (i=0;i<count;i++) {
       tmpc=blkdev.cache_base+i;
       QueueInsert(tmpc,blkdev.cache_ctrl->last_lru);
       tmpc->next_hash=tmpc->last_hash=tmpc;
@@ -73,13 +73,13 @@ CCacheBlk *DiskCacheFind(CDrive *dv,I64 blk)
   return NULL;
 }
 
-U0 DiskCacheAdd(CDrive *dv,U8 *buf, I64 blk, I64 cnt)
+U0 DiskCacheAdd(CDrive *dv,U8 *buf, I64 blk, I64 count)
 {
   CCacheBlk *tmpc;
   if (blkdev.cache_base) {
     while (LBts(&sys_semas[SEMA_DSK_CACHE],0))
       Yield;
-    while (cnt-->0) {
+    while (count-->0) {
       if (!(tmpc=DiskCacheFind(dv,blk)))
 	tmpc=blkdev.cache_ctrl->next_lru;
       DiskCacheQueueRemove(tmpc);
@@ -116,27 +116,27 @@ U0 DiskCacheInvalidate2(CDrive *dv)
   }
 }
 
-U0 RCache(CDrive *dv,U8 **_buf, I64 *_blk, I64 *_cnt)
+U0 RCache(CDrive *dv,U8 **_buf, I64 *_blk, I64 *_count)
 {
   CCacheBlk *tmpc;
   if (blkdev.cache_base) {
     while (LBts(&sys_semas[SEMA_DSK_CACHE],0))
       Yield;
 //fetch leading blks from cache
-    while (*_cnt>0) {
+    while (*_count>0) {
       if (tmpc=DiskCacheFind(dv,*_blk)) {
 	MemCpy(*_buf,&tmpc->body,BLK_SIZE);
-	*_cnt-=1;
+	*_count-=1;
 	*_buf+=BLK_SIZE;
 	*_blk+=1;
       } else
 	break;
     }
 //fetch trailing blks from cache
-    while (*_cnt>0) {
-      if (tmpc=DiskCacheFind(dv,*_blk+*_cnt-1)) {
-	MemCpy(*_buf+(*_cnt-1)<<BLK_SIZE_BITS,&tmpc->body,BLK_SIZE);
-	*_cnt-=1;
+    while (*_count>0) {
+      if (tmpc=DiskCacheFind(dv,*_blk+*_count-1)) {
+	MemCpy(*_buf+(*_count-1)<<BLK_SIZE_BITS,&tmpc->body,BLK_SIZE);
+	*_count-=1;
       } else
 	break;
     }

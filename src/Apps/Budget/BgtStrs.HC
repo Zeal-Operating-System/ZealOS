@@ -78,14 +78,14 @@ I64 StrEntriesCompare(CHashGeneric *h1,CHashGeneric *h2)
 
 public U0 StrFileWrite(U8 *name,CHashTable *table,Bool no_nums=FALSE)
 {
-  I64 i,j,cnt,color=BLACK;
+  I64 i,j,count,color=BLACK;
   CDoc *doc=DocNew(name);
   CHashGeneric *tmph,**a;
   if (table) {
-    cnt=0;	//Count Strings
+    count=0;	//Count Strings
     for (i=0;i<=table->mask;i++)
-      cnt+=LinkedLstCnt(table->body[i]);
-    a=MAlloc(cnt*sizeof(CHashGeneric *));
+      count+=LinkedLstCount(table->body[i]);
+    a=MAlloc(count*sizeof(CHashGeneric *));
     j=0;	//Load Strings
     for (i=0;i<=table->mask;i++) {
       tmph=table->body[i];
@@ -94,8 +94,8 @@ public U0 StrFileWrite(U8 *name,CHashTable *table,Bool no_nums=FALSE)
 	tmph=tmph->next;
       }
     }
-    QSortI64(a,cnt,&StrEntriesCompare);
-    for (i=0;i<cnt;i++) {
+    QSortI64(a,count,&StrEntriesCompare);
+    for (i=0;i<count;i++) {
       tmph=a[i];
       if (tmph->user_data1&15!=color) {
 	DocPrint(doc,"$$FG,%d$$",tmph->user_data1&15);

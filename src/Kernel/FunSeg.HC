@@ -64,7 +64,7 @@ CHash *FunSegFind(U8 *addr,I64 *_offset)
     return NULL;
   }
   if (IsDebugMode)
-    for (i=0;i<mp_cnt;i++) {
+    for (i=0;i<mp_count;i++) {
       c=&cpu_structs[i];
       task=c->seth_task;
       do {
@@ -203,7 +203,7 @@ U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags)
     StrPrint(buf,"%X",addr);
 }
 
-I64 SrcLineNum(U8 *addr,I64 cnt=1)
+I64 SrcLineNum(U8 *addr,I64 count=1)
 {//linenum for src of addr.
   CHashSrcSym *tmph;
   I64 cur_line,first_line,last_line,num_lines,offset;
@@ -241,7 +241,7 @@ I64 SrcLineNum(U8 *addr,I64 cnt=1)
 	while ((!body[cur_line] || body[cur_line]<addr) && cur_line<last_line)
 	  cur_line++;
 
-	if (addr<body[cur_line]+cnt)
+	if (addr<body[cur_line]+count)
 	  return cur_line+dbg_info->min_line;
 
       } else if (tmph->src_link) {
@@ -258,7 +258,7 @@ I64 SrcLineNum(U8 *addr,I64 cnt=1)
   return -1;
 }
 
-U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
+U8 *SrcFileName(U8 *addr,I64 count=1,CTask *mem_task=NULL)
 {//MAlloc filename for src of addr.
   CHashSrcSym *tmph;
   I64 i,j,ii,offset,best=NULL,d,best_d;
@@ -272,7 +272,7 @@ U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
       body=dbg_info->body;
       best_d=I64_MAX;
       for (i=0;i<j;i++) {
-	if (0<body[i]<=addr<body[i]+cnt) {
+	if (0<body[i]<=addr<body[i]+count) {
 	  ii=i+1;
 	  while (!body[ii])
 	    ii++;
@@ -297,12 +297,12 @@ U8 *SrcFileName(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
     return NULL;
 }
 
-U8 *SrcEdLink(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
+U8 *SrcEdLink(U8 *addr,I64 count=1,CTask *mem_task=NULL)
 {//MAlloc file,line link to src of addr.
   U8 *filename,*st,*st2;
   I64 linenum;
-  if (filename=SrcFileName(addr,cnt)) {
-    linenum=SrcLineNum(addr,cnt);
+  if (filename=SrcFileName(addr,count)) {
+    linenum=SrcLineNum(addr,count);
     if (linenum<1)
       linenum=1;
     st2=MStrPrint("FL:%s,%d",filename,linenum);
@@ -314,10 +314,10 @@ U8 *SrcEdLink(U8 *addr,I64 cnt=1,CTask *mem_task=NULL)
   return NULL;
 }
 
-Bool PutSrcLink(U8 *addr,I64 cnt=1,U8 *buf=NULL)
+Bool PutSrcLink(U8 *addr,I64 count=1,U8 *buf=NULL)
 {//Put to StdOut a $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ file,line link to src of addr.
   U8 *src;
-  if (src=SrcEdLink(addr,cnt)) {
+  if (src=SrcEdLink(addr,count)) {
     if (buf)
       StrPrint(buf,"$$LK,\"%p\",A=\"%s\"$$",addr,src);
     else
@@ -329,11 +329,11 @@ Bool PutSrcLink(U8 *addr,I64 cnt=1,U8 *buf=NULL)
   return FALSE;
 }
 
-Bool E(U8 *addr,I64 cnt=512,I64 edf_dof_flags=0)
+Bool E(U8 *addr,I64 count=512,I64 edf_dof_flags=0)
 {//Edit src at addr.
   U8 *st;
   Bool res=FALSE;
-  if (st=SrcEdLink(addr,cnt)) {
+  if (st=SrcEdLink(addr,count)) {
     if (IsRaw)
       res=EdLiteFileLine(st,edf_dof_flags);
     else

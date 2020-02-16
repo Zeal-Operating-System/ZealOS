@@ -117,7 +117,7 @@ Currently, this is only called from $LK,"MAlloc",A="MN:MAlloc"$().
 Return: NULL if out of memory.
 */
   CMemBlk *res;
-  I64 threshold,cnt,size;
+  I64 threshold,count,size;
   CMemUnused *uum,**_uum,**_ptr;
   if (res=MemPagAlloc(pags,hc->bp)) {
     QueueInsert(res,hc->last_mem_blk);
@@ -129,7 +129,7 @@ Return: NULL if out of memory.
     threshold=MEM_HEAP_HASH_SIZE>>4;
 #assert MEM_HEAP_HASH_SIZE>>4>=sizeof(U8 *)
     do {
-      cnt=0;
+      count=0;
       _uum=&hc->malloc_free_lst;
       while (uum=*_uum) {
 #assert !offset(CMemUnused.next)
@@ -140,12 +140,12 @@ Return: NULL if out of memory.
 	  uum->next=*_ptr;
 	  *_ptr=uum;
 	} else {
-	  cnt++;
+	  count++;
 	  _uum=uum;
 	}
       }
       threshold<<=1;
-    } while (cnt>8 && threshold<=MEM_HEAP_HASH_SIZE);
+    } while (count>8 && threshold<=MEM_HEAP_HASH_SIZE);
   }
   return res;
 }

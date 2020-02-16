@@ -148,7 +148,7 @@ class Bird
   Bird *next,*last;
   CD3I64 p;
   F64 é;
-} b_head[mp_cnt];
+} b_head[mp_count];
 
 class Obj
 {
@@ -162,7 +162,7 @@ class Panel
 {//Polygon or Obj
   Panel *next;
   CD3I32 *pts;
-  I64 cnt;
+  I64 count;
   U16 update,num_sides;
   CColorROPU32 color;
   Obj *next_obj,*last_obj;
@@ -274,8 +274,8 @@ U0 MPDoPanels(CTask *task)
   Panel *tmpp,*start_ptr=NULL,*end_ptr=NULL;
   CD3I32 *poly;
   Obj *tmpo;
-  lo=Gs->num*(MAP_HEIGHT-1)/mp_cnt;
-  hi=(Gs->num+1)*(MAP_HEIGHT-1)/mp_cnt;
+  lo=Gs->num*(MAP_HEIGHT-1)/mp_count;
+  hi=(Gs->num+1)*(MAP_HEIGHT-1)/mp_count;
   for (threshold=8;threshold>=1;threshold--)
     for (j=lo;j<hi;j++) {
       for (i=0;i<MAP_WIDTH-1;i++) {
@@ -438,8 +438,8 @@ for each spot.
   MemSet(panels,0,sizeof(panels));
   CalcNormals;
   panel_head=NULL;
-  mp.init_not_done_flags=1<<mp_cnt-1;
-  for (i=0;i<mp_cnt;i++)
+  mp.init_not_done_flags=1<<mp_count-1;
+  for (i=0;i<mp_count;i++)
     Spawn(&MPDoPanels,Fs,"Do Panels",i);
   while (mp.init_not_done_flags)
     Sleep(1);
@@ -660,20 +660,20 @@ U0 MPDrawIt(CTask *task,CDC *dc)
   xh2>>=1; yh2>>=1;
   w_on_map=FALSE;
   dd_old=I64_MAX;
-  for (strip_width=0;cnts.jiffies<update_jiffy_limit;strip_width++) {
+  for (strip_width=0;counts.jiffies<update_jiffy_limit;strip_width++) {
     x1h=x1wa;
     y1h=y1wa;
     h_on_map=FALSE;
-    for (j=0;j<strip_height && cnts.jiffies<update_jiffy_limit;j++) {
+    for (j=0;j<strip_height && counts.jiffies<update_jiffy_limit;j++) {
       x1=x1h>>8; y1=y1h>>8;
       if (0<=x1<MAP_WIDTH && 0<=y1<MAP_HEIGHT) {
 	if ((tmpp=panels[y1][x1]) && tmpp->update!=update) {
 	  tmpp->update=update;
-	  if (tmpp->cnt>8*(1.1-Gs->idle_factor)) {
+	  if (tmpp->count>8*(1.1-Gs->idle_factor)) {
 	    dc->color=tmpp->color;
-	    tmpp->cnt=GrFillPoly3(dc,tmpp->num_sides,tmpp->pts);
+	    tmpp->count=GrFillPoly3(dc,tmpp->num_sides,tmpp->pts);
 	  } else
-	    tmpp->cnt++;
+	    tmpp->count++;
 	  tmpo=tmpp->next_obj;
 	  while (tmpo!=&tmpp->next_obj) {
 	    Sprite3(dc,tmpo->p.x,tmpo->p.y,tmpo->p.z,tmpo->img);
@@ -859,7 +859,7 @@ U0 Core0Talons()
   I64 i,xx,yy,elev,height,cx=Fs->pix_width>>1,cy=Fs->pix_height>>1;
   F64 min_strip_width,tt;
 
-  update_jiffy_limit=cnts.jiffies+JIFFY_FREQ/40;
+  update_jiffy_limit=counts.jiffies+JIFFY_FREQ/40;
 
   xx=x/(MAP_SCALE*COORDINATE_SCALE);
   yy=y/(MAP_SCALE*COORDINATE_SCALE);
@@ -887,13 +887,13 @@ U0 Core0Talons()
     }
   } else {
     DCDepthBufRst(dc);
-    mp.update_not_done_flags=1<<mp_cnt-1;
+    mp.update_not_done_flags=1<<mp_count-1;
     MPDrawIt(Fs,dc);
     while (mp.update_not_done_flags)
       Sleep(1);
 
     min_strip_width=F64_MAX;
-    for (i=0;i<mp_cnt;i++)
+    for (i=0;i<mp_count;i++)
       min_strip_width=Min(min_strip_width,32.0*mp.strip_width[i]/(i+32.0));
     strip_height=ClampI64(
 	  strip_height*Clamp(0.25*min_strip_width/strip_height,0.9,1.1),
@@ -1028,7 +1028,7 @@ U0 AnimateTask(I64)
 	speed=Clamp(speed+(0.0005-0.0002*Abs(è)/(ã/4)),0.1,5.0);
       }
 
-      for (i=0;i<mp_cnt;i++) {
+      for (i=0;i<mp_count;i++) {
 	tmpb=b_head[i].next;
 	while (tmpb!=&b_head[i]) {
 	  tmpb->p.x+=10*ms/1000*MAP_SCALE*Cos(tmpb->é);
@@ -1047,7 +1047,7 @@ U0 AnimateTask(I64)
 U0 MPEnd()
 {
   update_jiffy_limit=0;
-  mp.app_not_done_flags=1<<mp_cnt-1-1;
+  mp.app_not_done_flags=1<<mp_count-1-1;
   mp.app_done=TRUE;
 //Wait for all cores to exit
   while (mp.app_not_done_flags)
@@ -1119,7 +1119,7 @@ U0 Init()
   yy=y/(MAP_SCALE*COORDINATE_SCALE);
   z+=elevations[yy][xx]*COORDINATE_SCALE;
 
-  for (i=0;i<mp_cnt;i++)
+  for (i=0;i<mp_count;i++)
     QueueInit(&b_head[i]);
 
   for (i=0;i<B_NUM;i++) {
@@ -1129,10 +1129,10 @@ U0 Init()
     tmpb->p.z=BIRD_ELEVATION*MAP_SCALE+
 	  elevations[tmpb->p.y/MAP_SCALE][tmpb->p.x/MAP_SCALE];
     tmpb->é=2*ã*Rand;
-    QueueInsert(tmpb,b_head[i%mp_cnt].last);
+    QueueInsert(tmpb,b_head[i%mp_count].last);
   }
 
-  for (i=1;i<mp_cnt;i++)
+  for (i=1;i<mp_count;i++)
     Spawn(&CoreAPTalonsTask,Fs,"AP Talons",i);
   Fs->task_end_cb=&TaskEndCB;
   game_t0=tS;
@@ -1150,7 +1150,7 @@ U0 CleanUp()
     Free(tmpp);
     tmpp=tmpp1;
   }
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     QueueDel(&b_head[i]);
     QueueInit(&b_head[i]);
   }

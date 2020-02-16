@@ -29,7 +29,7 @@ ClickCallBack;
 
 I64 MyLeftCB2(CDoc *,CDocEntry *)
 {
-  return cnts.jiffies;
+  return counts.jiffies;
 }
 
 U0 PopUpJiffiesCallBack(I64 i)

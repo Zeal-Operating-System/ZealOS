@@ -15,7 +15,7 @@ U0 OptPass5(CCompCtrl *cc)
 	  ICPut(cc,tmpi);
 	}
       }
-      if (intermediate_code_table[code].arg_cnt==IS_V_ARG)
+      if (intermediate_code_table[code].arg_count==IS_V_ARG)
 	ps->ptr-=tmpi->ic_data>>3;
       if (code==IC_PUSH_REGS) {
 	for (i=0;i<REG_REGS_NUM;i++)

@@ -137,7 +137,7 @@ U0 BibleInit()
 	"98684\0"
 	"100111\0");
   DefinePrint("ST_BIBLE_LINES","%d",
-	Str2I64(DefineSub(DefineCnt("ST_BIBLE_BOOK_LINES")-1,
+	Str2I64(DefineSub(DefineCount("ST_BIBLE_BOOK_LINES")-1,
 	"ST_BIBLE_BOOK_LINES"))-1);
 } BibleInit;
 
@@ -146,9 +146,9 @@ public U8 *BibleLine2Verse(I64 line,I64 separate_ch=CH_SPACE)
 //Separate with <SPACE> or ','.  If you pass '%', it uses "%20".
   CDoc *doc;
   CDocEntry *doc_e;
-  I64 i=0,cnt=DefineCnt("ST_BIBLE_BOOKS"),start=0,last_start=0;
+  I64 i=0,count=DefineCount("ST_BIBLE_BOOKS"),start=0,last_start=0;
   U8 *ptr=DefineSub(0,"ST_BIBLE_BOOK_LINES"),*ptr2;
-  while (i<=cnt) {
+  while (i<=count) {
     last_start=start;
     start=Str2I64(ptr);
     if (line<start)
@@ -156,7 +156,7 @@ public U8 *BibleLine2Verse(I64 line,I64 separate_ch=CH_SPACE)
     i++;
     ptr+=StrLen(ptr)+1;
   }
-  if (0<=--i<cnt) {
+  if (0<=--i<count) {
     doc=DocRead(BIBLE_FILENAME,DOCF_PLAIN_TEXT|DOCF_NO_CURSOR);
     DocGoToLine(doc,line); //one based
     doc_e=doc->cur_entry;
@@ -283,11 +283,11 @@ public CDoc *BibleDoc()
   CDocEntry *doc_e=res->head.next,*doc_e1;
   Bool open_chapter=FALSE;
   U8	*ptr=Define("ST_BIBLE_BOOK_LINES");
-  I64	book,book_cnt=DefineCnt("ST_BIBLE_BOOK_LINES")-1,
+  I64	book,book_count=DefineCount("ST_BIBLE_BOOK_LINES")-1,
 	chapter,
 	line=Str2I64(ptr,,&ptr);
   ptr++;
-  for (book=0;book<book_cnt;book++) {
+  for (book=0;book<book_count;book++) {
     while (doc_e->y+1<line) {
       doc_e1=doc_e->next;
       DocEntryDel(res,doc_e);

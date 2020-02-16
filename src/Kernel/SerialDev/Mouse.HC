@@ -78,11 +78,11 @@ U0 MsInit()
 U0 MsHardPktRead()
 {
   U8 j;
-  if (GetTSC>ms_hard.timestamp+cnts.time_stamp_freq>>3)
+  if (GetTSC>ms_hard.timestamp+counts.time_stamp_freq>>3)
     FifoU8Flush(ms_hard.fifo);
   ms_hard.timestamp=GetTSC;
   FifoU8Ins(ms_hard.fifo,InU8(KBD_PORT));
-  if (FifoU8Cnt(ms_hard.fifo)==ms_hard.pkt_size)
+  if (FifoU8Count(ms_hard.fifo)==ms_hard.pkt_size)
     while (FifoU8Remove(ms_hard.fifo,&j))
       FifoU8Ins(ms_hard.fifo2,j);
 }
@@ -189,7 +189,7 @@ U0 MsHardSpeedSet()
   if ((dd=SqrI64(ms_hard_last.pos.x-ms_hard.pos.x)
 	+SqrI64(ms_hard_last.pos.y-ms_hard.pos.y)) &&
 	(tmp=ms_hard.timestamp-ms_hard_last.timestamp))
-    ms_hard.speed=Sqrt(dd)*cnts.time_stamp_freq/tmp;
+    ms_hard.speed=Sqrt(dd)*counts.time_stamp_freq/tmp;
   ms_hard_last.timestamp=ms_hard.timestamp;
 }
 
@@ -334,9 +334,9 @@ U0 KbdMsHandler(Bool poll_kbd,Bool poll_ms)
     if (kbd.rst)
       KbdMsRst;
     else {
-      while (FifoU8Cnt(kbd.fifo2))
+      while (FifoU8Count(kbd.fifo2))
 	KbdHandler;
-      while (FifoU8Cnt(ms_hard.fifo2))
+      while (FifoU8Count(ms_hard.fifo2))
 	if (ms_hard.installed)
 	  MsHardHandler;
 	else

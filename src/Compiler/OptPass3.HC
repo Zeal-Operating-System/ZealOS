@@ -4,7 +4,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
   CCodeMisc *lb;
   CIntermediateCode *tmpi,*tmpi1,*tmpi2,*tmpi_next,
 	*tmpil1,*tmpil2;
-  I64 code,i,j,l,member_cnt,used_reg_mask=0;
+  I64 code,i,j,l,member_count,used_reg_mask=0;
   CMemberLst *tmpm;
   COptMemberVar *mv=NULL;
   CAOT *tmpaot;
@@ -18,11 +18,11 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
     reg_offsets[i].m=NULL;
   }
   if (cc->htc.fun) {
-    member_cnt=cc->htc.fun->member_cnt;
+    member_count=cc->htc.fun->member_count;
     if (Bt(&cc->htc.fun->flags,Ff_DOT_DOT_DOT))
-      member_cnt+=2;
-    mv=CAlloc(member_cnt*sizeof(COptMemberVar));
-    member_cnt=0;
+      member_count+=2;
+    mv=CAlloc(member_count*sizeof(COptMemberVar));
+    member_count=0;
     tmpm=cc->htc.fun->member_lst_and_root;
     while (tmpm) {
       tmpc=OptClassFwd(tmpm->member_class);
@@ -36,10 +36,10 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
       } else if (tmpc->raw_type!=RT_F64 && tmpm->reg!=REG_NONE ||
 	    tmpm->reg==REG_ALLOC) {
 	if (tmpm->reg==REG_ALLOC)
-	  mv[member_cnt].score=I64_MAX/2; //big but not too big
-	mv[member_cnt].offset_start=tmpm->offset;
-	mv[member_cnt].offset_end=tmpm->offset+MaxI64(1,tmpm->size);
-	mv[member_cnt++].m=tmpm;
+	  mv[member_count].score=I64_MAX/2; //big but not too big
+	mv[member_count].offset_start=tmpm->offset;
+	mv[member_count].offset_end=tmpm->offset+MaxI64(1,tmpm->size);
+	mv[member_count++].m=tmpm;
       } else if (tmpm->reg==REG_ALLOC)
 	PrintWarn("Can't reg var\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
 	      cc->lex_include_stk->full_name,
@@ -47,7 +47,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
       tmpm=tmpm->next;
     }
   } else
-    member_cnt=0;
+    member_count=0;
 
   tmpi=cc->coc.coc_head.next;
   while (code=tmpi->ic_code) {
@@ -61,7 +61,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
       } else
 	tmpil1=tmpil2=&cmp.ic_nop;
       tmpc=tmpi->ic_class;
-      switch [intermediate_code_table[code].arg_cnt] {
+      switch [intermediate_code_table[code].arg_count] {
 	case IS_V_ARG:
 	  ps->ptr-=tmpi->ic_data>>3;
 	  break;
@@ -90,7 +90,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	case IS_0_ARG: //nobound switch
 	  break;
       }
-      if (intermediate_code_table[code].res_cnt) {
+      if (intermediate_code_table[code].res_count) {
 	tmpi->res.type=MDF_STK+CompRawType(tmpc);
 	tmpi->ic_flags|=ICF_RES_WAS_STK;
 	ParsePush(ps,tmpi);
@@ -127,7 +127,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	    tmpi->ic_code=IC_MOV;
 	    OptFree(tmpi1);
 	    if (tmpi->arg1.reg==REG_RBP)
-	      for (i=0;i<member_cnt;i++)
+	      for (i=0;i<member_count;i++)
 		if (mv[i].offset_start==tmpi->arg1.disp) {
 		  mv[i].lea_balance--;
 		  mv[i].score++;
@@ -155,7 +155,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	case IC_DEREF_MM:
 	  if (tmpi1->ic_code==IC_LEA && tmpi1->arg1.type&MDF_DISP &&
 		tmpi1->arg1.reg==REG_RBP)
-	    for (i=0;i<member_cnt;i++)
+	    for (i=0;i<member_count;i++)
 	      if (mv[i].offset_start==tmpi1->arg1.disp) {
 		mv[i].lea_balance--;
 		mv[i].score++;
@@ -190,7 +190,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	      tmpi->arg1.reg=REG_RBP;
 	      tmpi->arg1.type=MDF_DISP+tmpi->arg1.type.raw_type;
 	      tmpi->arg1.disp=tmpi->ic_data;
-	      for (i=0;i<member_cnt;i++)
+	      for (i=0;i<member_count;i++)
 		if (mv[i].offset_start<=tmpi->ic_data<mv[i].offset_end) {
 		  mv[i].lea_balance++;
 		  mv[i].score++;
@@ -237,7 +237,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	case IC_XOR_EQU:
 	  if (tmpi1->ic_code==IC_LEA && tmpi1->arg1.type&MDF_DISP &&
 		tmpi1->arg1.reg==REG_RBP)
-	    for (i=0;i<member_cnt;i++)
+	    for (i=0;i<member_count;i++)
 	      if (mv[i].offset_start==tmpi1->arg1.disp) {
 		mv[i].lea_balance--;
 		mv[i].score++;
@@ -269,7 +269,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	case IC_NOBOUND_SWITCH:
 	case IC_SWITCH:
 	  lb=OptLabelFwd(tmpi->ic_data(CCodeMisc *)->dft);
-	  lb->use_cnt++;
+	  lb->use_count++;
 	  break;
 	case IC_ASM:
 	  tmpaot=tmpi->ic_data;
@@ -278,7 +278,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	    if (IET_REL_I0<=tmpie->type<=IET_IMM_I64 &&
 		  tmpie->str && tmpie->flags&IEF_GOTO_LABEL &&
 		  (lb=COCGoToLabelFind(cc,tmpie->str)))
-	      lb->use_cnt++; //Prevent deadcode elimination.
+	      lb->use_count++; //Prevent deadcode elimination.
 	    tmpie=tmpie->next;
 	  }
 	  break;
@@ -361,7 +361,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 	case IC_BR_MM_NOT_ZERO:
 	  if (tmpi1->ic_code==IC_LEA && tmpi1->arg1.type&MDF_DISP &&
 		tmpi1->arg1.reg==REG_RBP)
-	    for (i=0;i<member_cnt;i++)
+	    for (i=0;i<member_count;i++)
 	      if (mv[i].offset_start==tmpi1->arg1.disp) {
 		mv[i].lea_balance--;
 		mv[i].score++;
@@ -394,7 +394,7 @@ here1:
 	    lb=tmpi->ic_data;
 	  else
 	    lb=OptLabelFwd(tmpi->ic_data);
-	  lb->use_cnt++;
+	  lb->use_count++;
 	  break;
 	case IC_NOP1:
 	  tmpi=OptFree(tmpi);
@@ -535,11 +535,11 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 	  ~(REGG_LOCAL_VARS|REGG_LOCAL_NON_PTR_VARS)|used_reg_mask;
     if (!Bt(&cc->opts,OPTf_NO_REG_VAR) &&
 	  !(cc->flags & CCF_NO_REG_OPT)) {
-      QSort(mv,member_cnt,sizeof(COptMemberVar),&OptMVCompare);
-      while (member_cnt && !mv[member_cnt-1].score)
-	member_cnt--;
+      QSort(mv,member_count,sizeof(COptMemberVar),&OptMVCompare);
+      while (member_count && !mv[member_count-1].score)
+	member_count--;
       j=0;
-      for (i=0;i<member_cnt;i++) {
+      for (i=0;i<member_count;i++) {
 	if (!mv[i].lea_balance && mv[i].offset_start) {//addr operator cancels
 	  mv[j].m=mv[i].m;
 	  mv[j].offset_start=mv[i].offset_start;
@@ -559,7 +559,7 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 	  for (i=0;i<j && l<cmp.num_non_ptr_vars;i++) {
 	    tmpm=mv[i].m;
 	    tmpc=OptClassFwd(tmpm->member_class);
-	    if (!tmpc->ptr_stars_cnt && !tmpm->dim.next) {
+	    if (!tmpc->ptr_stars_count && !tmpm->dim.next) {
 	      while (l<cmp.num_non_ptr_vars &&
 		    Bts(&cc->htc.fun->used_reg_mask,cmp.non_ptr_vars_map[l]))
 		l++;

@@ -97,7 +97,7 @@ Bool LexDollar(CCompCtrl *cc,CDoc *doc,CDocEntry *doc_e)
     Free(cc->dollar_buf);
     st=Doc2PlainText(doc,doc_e);
     cc->dollar_buf=MStrPrint("$$%$$Q$$",st);
-    cc->dollar_cnt=2;
+    cc->dollar_count=2;
     Free(st);
     return TRUE;
   } else
@@ -425,10 +425,10 @@ I64 LexInStr(CCompCtrl *cc,U8 *buf,I64 size,Bool *done)
       }
     } else if (ch=='$$') {
       buf[i++]='$$';
-      if (cc->dollar_cnt)
-	cc->dollar_cnt--;
+      if (cc->dollar_count)
+	cc->dollar_count--;
       else if (LexGetChar(cc)!='$$') {
-	cc->dollar_cnt=1;
+	cc->dollar_count=1;
 	cc->flags|=CCF_USE_LAST_U16;
       }
     } else
@@ -799,7 +799,7 @@ lex_float_start:
 		MemCpy(buf2,buf,j);
 	      }
 	      tmph(CHashDefineStr *)->data=buf2;
-	      tmph(CHashDefineStr *)->cnt=-1;
+	      tmph(CHashDefineStr *)->count=-1;
 	      HashAdd(tmph,cc->htc.define_hash_table);
 	    }
 	    cc->flags&=~CCF_NO_DEFINES;

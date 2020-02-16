@@ -1278,7 +1278,7 @@
 	1113	CL-PD6833 PCI-to-CardBus Host Adapter
 	1200	CL-GD7542 Nordic GUI Accelerator
 	1202	GD7543 Viking GUI Accelerator
-	1204	CL-GD7541 Nordic-lite VGA Cntrlr
+	1204	CL-GD7541 Nordic-lite VGA Countrlr
 	4000	1085 Ambient CLM Data Fax Voice
 	4400	CL-CD4400 Communications Controller
 	6001	CS4610/4611 CrystalClear SoundFusion PCI Audio Accelerator
@@ -1373,7 +1373,7 @@
 	9010	MegaRAID 428 Ultra Wide SCSI RAID Controller2
 	9030	EIDE Controller
 	9031	EIDE Controller
-	9032	IDE and SCSI Cntrlr
+	9032	IDE and SCSI Countrlr
 	9033	I960 SCSI Controller
 	9040	amd sempron(tm)2200+ Multimedia card
 	9060	MegaRAID 434 Ultra GT RAID Controller
@@ -1501,7 +1501,7 @@
 	8820	Ai1 TRIDENT DISPLAY CONTROLER /CyberALADDiN-T Driver
 	9320	TGUI9320 32-bit GUI Accelerator
 	9350	TGUI9350 32-bit GUI Accelerator
-	9360	7tskbc Flat panel Cntrlr
+	9360	7tskbc Flat panel Countrlr
 	9382	Cyber9382 
 	9383	Cyber9383 
 	9385	Cyber9385 
@@ -1662,7 +1662,7 @@
 102C	Asiliant (Chips And Technologies)
 	00B8	64310 Wingine DGX - DRAM Graphics Accelerator
 	00C0	69000 AGP/PCI Flat Panel/CRT VGA Accelerator
-	00D0	65545 Flat panel/crt VGA Cntrlr
+	00D0	65545 Flat panel/crt VGA Countrlr
 	00D8	65540 Flat Panel/CRT VGA Controller
 	00DC	65548 GUI Accelerator
 	00E0	65550 LCD/CRT controller
@@ -1708,7 +1708,7 @@
 	0006	GUI Accelerator
 	0007	unknown from Creative.com PCI to ux-bus Bridge
 	0008	GUI Accelerator (vga equivalent)
-	0009	graphic Cntrlr for 98
+	0009	graphic Countrlr for 98
 	001A	Nile II 
 	001D	uPD98405 NEASCOT-S20 ATM Integrated SAR Ctrlr
 	0021	Vrc4373 Nile I
@@ -2185,7 +2185,7 @@
 1054	Hitachi Ltd
 	0003	06A2 0003
 	0001	PCI Bridge
-	0002	pci bus PCI bus Cntrlr
+	0002	pci bus PCI bus Countrlr
 	0003	06A2 hts547575a9e384
 	3505	SH7751 SuperH (SH) 32-Bit RISC MCU/MPU Series
 1055	Standard Microsystems Corp.
@@ -2303,10 +2303,10 @@
 	0881	UM8881 HB4 486 PCI Chipset
 	0886	UM8886F ISA Bridge
 	0891	UM82C891 Pentium CPU to PCI bridge
-	1001	UM886A IDE Cntrlr (dual function)
+	1001	UM886A IDE Countrlr (dual function)
 	673A	UM8886BF EIDE Controller
 	673B	EIDE Master/DMA
-	8710	UM8710 VGA Cntrlr
+	8710	UM8710 VGA Countrlr
 	8821	21611a3b CPU/PCI Bridge
 	8822	PCI/ISA Bridge
 	8851	Pentium CPU/PCI Bridge
@@ -2388,7 +2388,7 @@
 1071	Mitac
 1072	GIT Co. Ltd.
 1073	Yamaha Corporation
-	0001	3D graphics Cntrlr
+	0001	3D graphics Countrlr
 	0002	YGV615 RPA3 3D-Graphics Controller
 	0003	00011179 
 	0004	YMF754B DS-1S Audio PCI Audio Controller
@@ -2458,7 +2458,7 @@
 	0000	P86C850 Graphic GLU-Logic
 107E	Testernec
 	0001	FLIPPER FRED Local Bus I/F to PCI Peripheral
-	0002	100 vg anylan Cntrlr
+	0002	100 vg anylan Countrlr
 	0004	5526 Fibre Channel Host Adapter
 	0005	x526 Fibre Channel Host Adapter
 	0008	4575/5525/5575/6575 (i)chipSAR+ 155 MBit ATM controller
@@ -2641,7 +2641,7 @@
 	0244	SIL3132 eSATA/Raid controller
 	0640	PCI0640A/B EIDE Ctrlr
 	0641	pci0640 pci eide adapter with raid 1
-	0642	PCI0642 IDE Cntrlr w/RAID 1
+	0642	PCI0642 IDE Countrlr w/RAID 1
 	0643	PCI0643 PCI EIDE controller
 	0646	CMD646 EIDE/UDMA Controller
 	0647	PCI0647 9738
@@ -2741,7 +2741,7 @@
 10AC	Honeywell IASD
 10AD	Winbond Systems Labs
 	0001	W83769F EIDE Ctrlr
-	0103	sl82c103 PCI-ide mode 4.5 Cntrlr
+	0103	sl82c103 PCI-ide mode 4.5 Countrlr
 	0105	W83789F Sonata bus master PCI-IDE controller
 	0565	W83C553F PCI/ISA bridge
 10AE	Cornerstone Technology
@@ -2962,11 +2962,11 @@
 10BD	Surecom Technology
 	0803	 MYSON Technology Inc SURECOM EP-320X-S 100/10M Et Ethernet PCI Adapter
 	0E34	NE34 Ethernet Adapter (NE2000 PCI clone)
-	5240	0055 IDE Cntrlr
+	5240	0055 IDE Countrlr
 	5241	8086 PCMCIA Bridge
-	5242	General Purpose Cntrlr
-	5243	00000000 Bus Cntrlr
-	5244	FCD Cntrlr
+	5242	General Purpose Countrlr
+	5243	00000000 Bus Countrlr
+	5244	FCD Countrlr
 	8136	Unkown Unkown
 	8139	surecom EP-320X-R adapter with realtek 8139c chip realtek 8139c
 10BE	Tsenglabs International Corp.
@@ -2984,7 +2984,7 @@
 10C6	Rambus Inc.
 10C8	Neomagic Corporation
 	0004	831610F7 MagicGraph 128XD
-	0000	NM2097 Graphics Cntrlr
+	0000	NM2097 Graphics Countrlr
 	0003	NM2093 MagicGraph 128ZV Video Controller
 	0004	NM2160 MagicGraph 128XD
 	0005	NM2200 MagicMedia 256AV
@@ -4540,7 +4540,7 @@
 	0002	DPRB Dual PCI to RapidIO Bridge
 	9876	3059 audio driver
 1135	Fuji Xerox Co Ltd
-	0001	Printer Cntrlr
+	0001	Printer Countrlr
 1136	Momentum Data Systems
 1137	Cisco Systems Inc
 1138	Ziatech Corporation
@@ -4582,7 +4582,7 @@
 	3210	9809 139K76B
 1143	Netpower Inc
 1144	Cincinnati Milacron
-	0001	Noservo Cntrlr
+	0001	Noservo Countrlr
 1145	Workbit Corp
 	F)21	???? HDCClassName 	F020	CardBus ATAPI Host Adapter
 	F021	NPATA32 CardBus CompactFlash Adapter
@@ -4907,7 +4907,7 @@
 1191	Acard Technology Corp.
 	0001	IDE Ctrlr
 	0002	ATP850UF UltraDMA33 EIDE Controller (AEC6210UF)
-	0003	SCSI-2 cache Cntrlr
+	0003	SCSI-2 cache Countrlr
 	0004	4111111111111111 UltraDMA33 EIDE Controller
 	0005	ATP850UF UltraDMA33 EIDE Controller (AEC6210UF)
 	0006	ATP860A UltraDMA66 EDIE Controller (AEC6260)

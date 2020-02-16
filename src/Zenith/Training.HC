@@ -119,7 +119,7 @@ U0 KeyMapFamily2(U8 **entries,CTask *task,I64 scf)
 
 U0 KeyMapFamily(CTask *task,I64 scf,Bool no_shift,Bool shift)
 {
-  I64 i,cnt=0;
+  I64 i,count=0;
   U8 **entries=CAlloc(2*256*sizeof(U8 *)),**ptr=entries;
   if (no_shift) {
     if (shift)
@@ -127,15 +127,15 @@ U0 KeyMapFamily(CTask *task,I64 scf,Bool no_shift,Bool shift)
     else
       KeyMapFamily2(ptr,task,scf);
     ptr+=256;
-    cnt+=256;
+    count+=256;
   }
   if (shift) {
     KeyMapFamily2(ptr,task,scf+SCF_SHIFT);
     ptr+=256;
-    cnt+=256;
+    count+=256;
   }
-  QSortI64(entries,cnt,&KMCompare);
-  for (i=0;i<cnt;i++)
+  QSortI64(entries,count,&KMCompare);
+  for (i=0;i<count;i++)
     if (entries[i]) {
       "%s",entries[i];
       Free(entries[i]);

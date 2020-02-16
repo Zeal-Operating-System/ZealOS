@@ -33,8 +33,8 @@ U0 DocBinsValidate(CDoc *doc)
   I64 renum_num=0;
   b=doc->bin_head.next;
   while (b!=&doc->bin_head) {
-    b->use_cnt=0;
-    b->tmp_use_cnt=0;
+    b->use_count=0;
+    b->tmp_use_count=0;
     b->renum_num=-1;
     Free(b->tag);
     b->tag=NULL;
@@ -46,8 +46,8 @@ U0 DocBinsValidate(CDoc *doc)
     if (doc_e->de_flags & DOCEF_HAS_BIN) {
       if (b=doc_e->bin_data=DocBinFindNum(doc,doc_e->bin_num)) {
 	if (doc_e->de_flags & DOCEF_BIN_PTR_LINK)
-	  b->tmp_use_cnt=I32_MAX;
-	if (!b->use_cnt++)
+	  b->tmp_use_count=I32_MAX;
+	if (!b->use_count++)
 	  b->renum_num=++renum_num;
 	doc_e->bin_num=b->renum_num;
 	if (!b->tag && doc_e->de_flags&DOCEF_TAG && doc_e->tag && *doc_e->tag)
@@ -65,7 +65,7 @@ U0 DocBinsValidate(CDoc *doc)
   doc->cur_bin_num=1;
   while (b!=&doc->bin_head) {
     b1=b->next;
-    if (!b->use_cnt) {
+    if (!b->use_count) {
       QueueRemove(b);
       Free(b->data);
       Free(b);
@@ -82,9 +82,9 @@ U0 DocBinsValidate(CDoc *doc)
 
 U0 DocBinDel(CDoc *doc,CDocBin *b)
 {
-  if (doc && b && b->use_cnt) {
-    b->use_cnt--;
-    if (!b->use_cnt) {
+  if (doc && b && b->use_count) {
+    b->use_count--;
+    if (!b->use_count) {
       QueueRemove(b);
       Free(b->tag);
       Free(b->data);
@@ -114,13 +114,13 @@ I64 DocBinPtrRst(CDoc *doc,CDocEntry *doc_e)
 	i=1;
 	if (bin_num>0) {
 	  if (tmpb=DocBinFindNum(doc,bin_num)) {
-	    i=tmpb->use_cnt;
+	    i=tmpb->use_count;
 	    DocBinDel(doc,tmpb);
 	  }
 	} else
 	  bin_num=doc->cur_bin_num++;
 	tmpb=MAllocIdent(tmpb2,doc->mem_task);
-	tmpb->use_cnt=i;
+	tmpb->use_count=i;
 	tmpb->data=MAllocIdent(tmpb2->data,doc->mem_task);
 	tmpb->num=bin_num;
 	doc_e->bin_data=tmpb;

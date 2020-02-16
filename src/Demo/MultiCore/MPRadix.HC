@@ -6,10 +6,10 @@ for sorting.  Then, it merge sorts them.
 
 #define NUM	1000000
 
-I64 my_mp_cnt=1<<Bsr(mp_cnt);//Power of 2
+I64 my_mp_count=1<<Bsr(mp_count);//Power of 2
 
 I32 *arg1,*arg2;
-I32 *b[my_mp_cnt],bn[my_mp_cnt];
+I32 *b[my_mp_count],bn[my_mp_count];
 I64 mp_not_done_flags;
 
 I64 Compare(I32 *e1,I32 *e2)
@@ -93,7 +93,7 @@ U0 MPRadixSortDemo(I64 dummy=0)
   "Time:%9.6f\n",tS-t0;
   D(arg2+NUM/4);
 
-  for (i=0;i<my_mp_cnt;i++) {
+  for (i=0;i<my_mp_count;i++) {
 //$WW,0$We must do full size, just in case.
     //There will be uneven split between cores
     //depending on the distribution of rand numbers.
@@ -101,23 +101,23 @@ U0 MPRadixSortDemo(I64 dummy=0)
     bn[i]=0;
   }
 
-  if (my_mp_cnt<2) throw('MultCore');
+  if (my_mp_count<2) throw('MultCore');
 
   "$$GREEN$$MP Radix QSortU32$$FG$$\n";
   t0=tS;
-  k1=32-Bsr(my_mp_cnt);
-  k2=my_mp_cnt/2;
+  k1=32-Bsr(my_mp_count);
+  k2=my_mp_count/2;
   for (i=0;i<NUM;i++) {
     j=arg1[i]>>k1+k2; //This is a preliminary radix sort.
     b[j][bn[j]++]=arg1[i];
   }
-  mp_not_done_flags=1<<my_mp_cnt-1;
-  for (i=0;i<my_mp_cnt;i++)
+  mp_not_done_flags=1<<my_mp_count-1;
+  for (i=0;i<my_mp_count;i++)
     Spawn(&MPSort,NULL,NULL,i);
   while (mp_not_done_flags)
     Yield;
   j=0;
-  for (i=0;i<my_mp_cnt;i++) {
+  for (i=0;i<my_mp_count;i++) {
     MemCpy(&arg2[j],b[i],bn[i]*sizeof(I32));
     j+=bn[i];
   }
@@ -126,7 +126,7 @@ U0 MPRadixSortDemo(I64 dummy=0)
 
   Free(arg1);
   Free(arg2);
-  for (i=0;i<my_mp_cnt;i++)
+  for (i=0;i<my_mp_count;i++)
     Free(b[i]);
 }
 

@@ -71,10 +71,10 @@ U0 DrawHexes()
   }
 }
 
-U0 MakeTerrain(U8 color,I64 cnt,I64 clus_lo,I64 clus_hi)
+U0 MakeTerrain(U8 color,I64 count,I64 clus_lo,I64 clus_hi)
 {
   I64 i,j,l,row,col;
-  for (i=0;i<cnt;i++) {
+  for (i=0;i<count;i++) {
     col=RandU32%map_cols;
     row=RandU32%map_rows;
     l=clus_lo+RandU16%(clus_hi-clus_lo+1);
@@ -234,9 +234,9 @@ U0 InitUnits()
   I64 i,j,row,col,type;
   Unit *tmpu;
   MemSet(units,0,sizeof(units));
-  alive_cnt[0]=alive_cnt[1]=UNITS_NUM;
+  alive_count[0]=alive_count[1]=UNITS_NUM;
   for (j=0;j<2;j++)
-    for (i=0;i<alive_cnt[j];i++) {
+    for (i=0;i<alive_count[j];i++) {
       tmpu=&units[j][i];
       tmpu->player=j;
       tmpu->num=i;

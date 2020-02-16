@@ -37,10 +37,10 @@ U0 PDAnswer(U8 *a,I64 len)
 U0 MPPalindrome(I64 dummy=0)
 {
   no_warn dummy;
-  U8 *src=buf+BORDER_CHARS+size*Gs->num/mp_cnt,
+  U8 *src=buf+BORDER_CHARS+size*Gs->num/mp_count,
 	*f,*b;
   I64 len,best=0,
-	my_size=(size+mp_cnt-1)/mp_cnt;
+	my_size=(size+mp_count-1)/mp_count;
   while (my_size--) {
 
     //Odd
@@ -83,8 +83,8 @@ U0 Palindrome(U8 *filename)
   PDNormalize;
 
   doc=DocPut;
-  mp_not_done_flags=1<<mp_cnt-1;
-  for (i=0;i<mp_cnt;i++)
+  mp_not_done_flags=1<<mp_count-1;
+  for (i=0;i<mp_count;i++)
     JobQueue(&MPPalindrome,NULL,i);
   while (mp_not_done_flags)
     Yield;

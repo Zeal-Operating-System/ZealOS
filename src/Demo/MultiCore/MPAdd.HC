@@ -1,36 +1,36 @@
 I64 mp_n;
 
-I64 MPSum(I64 my_mp_cnt)
+I64 MPSum(I64 my_mp_count)
 {//We could use the formula n*(n+1)/2
-  I64 lo=mp_n*Gs->num/my_mp_cnt,
-	hi=mp_n*(Gs->num+1)/my_mp_cnt,
+  I64 lo=mp_n*Gs->num/my_mp_count,
+	hi=mp_n*(Gs->num+1)/my_mp_count,
 	res=0,i;
   for (i=lo;i<hi;i++)
     res+=i;
   return res;
 }
 
-I64 Sum(I64 n,I64 my_mp_cnt)
+I64 Sum(I64 n,I64 my_mp_count)
 {
   CJob *tmpm[MP_PROCESSORS_NUM];
   I64 res=0,i;
   mp_n=n+1;
-  for (i=0;i<my_mp_cnt;i++)
-    tmpm[i]=JobQueue(&MPSum,my_mp_cnt,i,0);
-  for (i=0;i<my_mp_cnt;i++)
+  for (i=0;i<my_mp_count;i++)
+    tmpm[i]=JobQueue(&MPSum,my_mp_count,i,0);
+  for (i=0;i<my_mp_count;i++)
     res+=JobResGet(tmpm[i]);
   return res;
 }
 
 #define SAMPLE_SIZE 100
 
-F64 Test(I64 n,I64 my_mp_cnt)
+F64 Test(I64 n,I64 my_mp_count)
 {
   I64 i,val=0;
   F64 start,end;
   start=tS;
   for (i=0;i<SAMPLE_SIZE;i++)
-    val+=Sum(n,my_mp_cnt);
+    val+=Sum(n,my_mp_count);
   end=tS;
   "Val:%,d\n",val/SAMPLE_SIZE;
   "$$RED$$N:%12,d Time:%10.8f$$FG$$\n",n,(end-start)/SAMPLE_SIZE;
@@ -53,7 +53,7 @@ U0 MPAdd()
 
   for (i=0,n=VAL_MIN;i<TESTS_NUM;i++,n*=10) {
     t1=Test(n,1);
-    t2=Test(n,mp_cnt);
+    t2=Test(n,mp_count);
     ress[i]=t2*100.0/t1;
     "$$GREEN$$%8.4f%%$$FG$$\n\n",ress[i];
   }

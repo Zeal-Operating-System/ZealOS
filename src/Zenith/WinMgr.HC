@@ -1,29 +1,29 @@
 #help_index "Windows;Task/Delay"
 
-public U0 Refresh(I64 cnt=1,Bool force=FALSE)
+public U0 Refresh(I64 count=1,Bool force=FALSE)
 {//Wait for 30fps WinMgr to start & finish scrn refresh.
-  //0,FALSE Cnt Sync to WinMgr.
+  //0,FALSE Count Sync to WinMgr.
   //0,TRUE  Pump Messages.
-  //1 Cnt Wait and Pump Messages.
-  //2 Cnt Make Sure to do a Full Refresh
+  //1 Count Wait and Pump Messages.
+  //2 Count Make Sure to do a Full Refresh
   //and Set Cur Pos.
   Bool	old_full_refresh,
 	old_idle=LBts(&Fs->task_flags,TASKf_IDLE);
   CDoc *old_doc=DocPut;
-  I64 update_cnt;
-  if (!cnt&&force)
+  I64 update_count;
+  if (!count&&force)
     LBts(&sys_semas[SEMA_JUST_PUMP_MESSAGES],0);
   while (Bt(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0)) {
     if (force && sys_winmgr_task)
-      sys_winmgr_task->wake_jiffy=cnts.jiffies;
+      sys_winmgr_task->wake_jiffy=counts.jiffies;
     Yield;
   }
-  if (cnt>1 && old_doc)
+  if (count>1 && old_doc)
     old_full_refresh=LBts(&old_doc->flags,DOCf_DO_FULL_REFRESH);
-  update_cnt=winmgr.updates+cnt;
-  while (winmgr.updates<update_cnt) {
+  update_count=winmgr.updates+count;
+  while (winmgr.updates<update_count) {
     if (force && sys_winmgr_task)
-      sys_winmgr_task->wake_jiffy=cnts.jiffies;
+      sys_winmgr_task->wake_jiffy=counts.jiffies;
     Sleep(1);
   }
   if (old_doc)
@@ -198,12 +198,12 @@ U0 WinCalcIdles()
     PUSHFD
     CLI
     total_jiffies=cpu_structs[0].total_jiffies;
-    for (i=0;i<mp_cnt;i++)
+    for (i=0;i<mp_count;i++)
       idle_pt_hits[i]=cpu_structs[i].idle_pt_hits;
     POPFD
 
     total_jiffies_delta=total_jiffies-t->last_total_jiffies;
-    for (i=0;i<mp_cnt;i++) {
+    for (i=0;i<mp_count;i++) {
       c=&cpu_structs[i];
       if (total_jiffies_delta && (k=idle_pt_hits[i]-t->last_idle_pt_hits[i])>=0)
 	c->idle_factor=Clamp(ToF64(k)/total_jiffies_delta,0.01,0.99);
@@ -213,7 +213,7 @@ U0 WinCalcIdles()
     }
     t->last_total_jiffies=total_jiffies;
     t->last_calc_idle_time=calc_idle_time;
-    t->calc_idle_cnt++;
+    t->calc_idle_count++;
   }
 }
 
@@ -266,7 +266,7 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
     t=tS+WINMGR_PERIOD/8;
     while (winmgr.ideal_refresh_tS<t)
       winmgr.ideal_refresh_tS+=WINMGR_PERIOD;
-    timeout_val=cnts.jiffies+(winmgr.ideal_refresh_tS-tS)*JIFFY_FREQ;
+    timeout_val=counts.jiffies+(winmgr.ideal_refresh_tS-tS)*JIFFY_FREQ;
     LBts(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0);
     GrUpdateScreen;
     LBtr(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0);
@@ -346,7 +346,7 @@ CDoc *WinCursorPosSet(CTask *task,I64 msx,I64 msy,Bool set_cursor=TRUE)
 
 Bool WinKeyNavMenu()
 {
-  I64 i,old_key_cnt;
+  I64 i,old_key_count;
   CD3I64 old_pos,new_pos;
   CMenu *m;
   CMenuEntry *tmpme;
@@ -357,9 +357,9 @@ Bool WinKeyNavMenu()
     old_pos.x=ms.pos.x; old_pos.y=ms.pos.y;
     ms.pos.x=new_pos.x=ms.pos.y=new_pos.y=0;
     while (Bt(kbd.down_bitmap,SC_GUI)) {
-      old_key_cnt=kbd.cnt;
+      old_key_count=kbd.count;
       if (Bt(kbd.down_bitmap,SC_CURSOR_LEFT)) {
-	while (Bt(kbd.down_bitmap,SC_CURSOR_LEFT) && kbd.cnt==old_key_cnt)
+	while (Bt(kbd.down_bitmap,SC_CURSOR_LEFT) && kbd.count==old_key_count)
 	  WinMgrSleep(TRUE);
 	if (new_pos.x) {
 	  i=0;
@@ -375,7 +375,7 @@ Bool WinKeyNavMenu()
 	}
 	new_pos.y=0;
       } else if (Bt(kbd.down_bitmap,SC_CURSOR_RIGHT)) {
-	while (Bt(kbd.down_bitmap,SC_CURSOR_RIGHT) && kbd.cnt==old_key_cnt)
+	while (Bt(kbd.down_bitmap,SC_CURSOR_RIGHT) && kbd.count==old_key_count)
 	  WinMgrSleep(TRUE);
 	i=0;
 	tmpme=m->sub;
@@ -390,11 +390,11 @@ Bool WinKeyNavMenu()
 	}
 	new_pos.y=0;
       } else if (Bt(kbd.down_bitmap,SC_CURSOR_UP)) {
-	while (Bt(kbd.down_bitmap,SC_CURSOR_UP) && kbd.cnt==old_key_cnt)
+	while (Bt(kbd.down_bitmap,SC_CURSOR_UP) && kbd.count==old_key_count)
 	  WinMgrSleep(TRUE);
 	new_pos.y-=FONT_HEIGHT;
       } else if (Bt(kbd.down_bitmap,SC_CURSOR_DOWN)) {
-	while (Bt(kbd.down_bitmap,SC_CURSOR_DOWN) && kbd.cnt==old_key_cnt)
+	while (Bt(kbd.down_bitmap,SC_CURSOR_DOWN) && kbd.count==old_key_count)
 	  WinMgrSleep(TRUE);
 	new_pos.y+=FONT_HEIGHT;
       }

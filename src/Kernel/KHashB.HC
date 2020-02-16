@@ -80,7 +80,7 @@ U0 HashDel(CHashSrcSym *tmph)
       LinkedLstDel(tmph(CHashGlobalVar *)->dim.next);
       if (tmph(CHashGlobalVar *)->fun_ptr)
 	HashDel(tmph(CHashGlobalVar *)->fun_ptr
-	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_cnt);
+	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_count);
     }
   } else if (tmph->type & HTT_FILE)
     Free(tmph(CHashGeneric *)->user_data0);

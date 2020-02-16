@@ -2,7 +2,7 @@
 
 public U0 SpeedLineDemo()
 {
-  I64 message_code,cnt,x1,y1,x2,y2,arg1,arg2,color=BLACK;
+  I64 message_code,count,x1,y1,x2,y2,arg1,arg2,color=BLACK;
   CDC *dc=DCAlias;
   dc->color=color;
 
@@ -26,7 +26,7 @@ public U0 SpeedLineDemo()
       case MESSAGE_MS_L_DOWN:
 	x1=arg1; y1=arg2;
 	x2=arg1; y2=arg2;
-	cnt=0;
+	count=0;
 	while (message_code!=MESSAGE_MS_L_UP) {
 	  dc->thick=0.04*ms.speed;
 	  GrLine3(dc,x1,y1,0,x2,y2,0);

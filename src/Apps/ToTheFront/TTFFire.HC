@@ -69,7 +69,7 @@ Bool DamageDo(Unit *target,F64 damage)
       Sleep(1000*animation_delay);
       target->life=0;
       VisRecalc(VR_FRIENDLY_UNIT_DIED,target);
-      alive_cnt[target->player]--;
+      alive_count[target->player]--;
       return TRUE;
     } else {
       if (target->armor) {
@@ -201,7 +201,7 @@ Bool HexOccupy(Bool overrun,Unit *tmpu,Unit *target)
   } else {
     tmpu->life=0;
     VisRecalc(VR_FRIENDLY_UNIT_DIED,tmpu);
-    alive_cnt[tmpu->player]--;
+    alive_count[tmpu->player]--;
     "$$RED$$Failure$$FG$$\n";
     while (scrncast.ona) //see $LK,"Snd",A="MN:Snd"$()
       Yield;

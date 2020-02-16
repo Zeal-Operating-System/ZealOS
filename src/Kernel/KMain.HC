@@ -107,22 +107,22 @@ U0 TimersInit()
   _q=dev.uncached_alias+HPET_GCAP_ID;
   i=*_q; //i.u32[1]= period in femtoS (10e-15)
   if (100000<i.u32[1]<1000000000) {
-    cnts.HPET_freq    =1000000000000000/i.u32[1];
-    cnts.HPET_kHz_freq=1000000000000/i.u32[1];
+    counts.HPET_freq    =1000000000000000/i.u32[1];
+    counts.HPET_kHz_freq=1000000000000/i.u32[1];
     _q=dev.uncached_alias+HPET_GEN_CONF;
     *_q|=1; //Enable counting
-    cnts.HPET_initial=HPET;
+    counts.HPET_initial=HPET;
   } else {
-    cnts.HPET_freq=0;
-    cnts.HPET_kHz_freq=0;
-    cnts.HPET_initial=0;
+    counts.HPET_freq=0;
+    counts.HPET_kHz_freq=0;
+    counts.HPET_initial=0;
   }
 }
 
 U0 Reboot()
 {//Hardware reset.
   CLI
-  if (mp_cnt>1)
+  if (mp_count>1)
     MPHalt;
   *0x472(U16 *)=0;
   OutU8(0x70,0x8F);
@@ -211,7 +211,7 @@ U0 KMain()
   LBts(&sys_run_level,RLf_COMPILER);
 
   DebugMode(OFF);
-  cnts.time_stamp_freq_initial=TimeCal;
+  counts.time_stamp_freq_initial=TimeCal;
   Cd("/");
   try ExeFile("StartOS"); //Continues $LK,"/StartOS.HC",A="FL:/StartOS.HC,1"$
   catch {

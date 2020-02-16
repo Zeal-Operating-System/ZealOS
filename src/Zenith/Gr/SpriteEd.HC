@@ -162,7 +162,7 @@ U0 SpriteSetOrigin(CSprite *head,I64 dx,I64 dy,I64 dz)
 	  break;
 	case SPT_MESH:
 	  p=&tmpg->mu.u;
-	  for (i=0;i<tmpg->mu.vertex_cnt;i++,p++) {
+	  for (i=0;i<tmpg->mu.vertex_count;i++,p++) {
 	    p->x+=dx;
 	    p->y+=dy;
 	    p->z+=dz;
@@ -522,7 +522,7 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
 	  tmpg->pmu.y=y;
 	  tmpg->pmu.z=z;
 	  p=&tmpg->pmu.u;
-	  for (i=0;i<tmpg->pmu.vertex_cnt;i++,p++) {
+	  for (i=0;i<tmpg->pmu.vertex_count;i++,p++) {
 	    x=p->x; y=p->y; z=p->z;
 	    Mat4x4MulXYZ(r,&x,&y,&z);
 	    p->x=x;
@@ -532,7 +532,7 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
 	  break;
 	case SPT_MESH:
 	  p=&tmpg->mu.u;
-	  for (i=0;i<tmpg->mu.vertex_cnt;i++,p++) {
+	  for (i=0;i<tmpg->mu.vertex_count;i++,p++) {
 	    x=p->x; y=p->y; z=p->z;
 	    Mat4x4MulXYZ(r,&x,&y,&z);
 	    p->x=x;
@@ -545,7 +545,7 @@ U0 SpriteTransformQueue(CSprite *head,I64 *r)
   }
 }
 
-I64 SpriteQueueSelCnt(CSprite *head,Bool val=TRUE)
+I64 SpriteQueueSelCount(CSprite *head,Bool val=TRUE)
 {
   I64 res=0;
   CSprite *tmpg=head->next;
@@ -593,7 +593,7 @@ Bool SpriteEdText(CSprite **_head,I64 *_cur_elem_num)
 	Free(head);
 	head=Sprite2SpriteQueue(elems);
 	Free(elems);
-	*_cur_elem_num=QueueCnt(head); //TODO: Might want to improve this.
+	*_cur_elem_num=QueueCount(head); //TODO: Might want to improve this.
 	break;
       } else {
 	PopUpPrint("DocEd(0x%X,0x%X);",doc2,0);
@@ -1037,7 +1037,7 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
       StrCpy(Fs->task_title,DefineSub(i,"ST_SPRITE_ED_MENU"));
       switch (i) {
 	case SPED_SEL_UNSEL_ALL:
-	  if (!SpriteQueueSelCnt(*_head))
+	  if (!SpriteQueueSelCount(*_head))
 	    SpriteQueueSelAll(*_head);
 	  else
 	    SpriteQueueSelAll(*_head,FALSE);
@@ -1051,7 +1051,7 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 	  SpriteQueueSelAll(*_head,FALSE);
 	  break;
 	case SPED_SHIFT_SEL:
-	  if (!SpriteQueueSelCnt(*_head))
+	  if (!SpriteQueueSelCount(*_head))
 	    SpriteQueueSelAll(*_head);
 	  doc_ce->de_flags=old_de_flags;
 	  GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
@@ -1063,7 +1063,7 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 	    xx=arg1; yy=arg2;
 	    SpriteEdUpdate(doc,doc_ce,*_head);
 	  } while (message_code!=MESSAGE_MS_L_UP);
-	  if (!SpriteQueueSelCnt(*_head,FALSE))
+	  if (!SpriteQueueSelCount(*_head,FALSE))
 	    SpriteQueueSelAll(*_head,FALSE);
 	  break;
 	case SPED_SEL:
@@ -1086,13 +1086,13 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 	    SpriteEdUpdate(doc,doc_ce,*_head);
 	  break;
 	case SPED_TRANSFORM_SEL:
-	  if (!SpriteQueueSelCnt(*_head))
+	  if (!SpriteQueueSelCount(*_head))
 	    SpriteQueueSelAll(*_head);
 	  if (PopUpTransform(r)) {
 	    SpriteTransformQueue(*_head,r);
 	    SpriteEdUpdate(doc,doc_ce,*_head);
 	  }
-	  if (!SpriteQueueSelCnt(*_head,FALSE))
+	  if (!SpriteQueueSelCount(*_head,FALSE))
 	    SpriteQueueSelAll(*_head,FALSE);
 	  break;
 	case SPED_SHIFT_SUB_ORIGIN:

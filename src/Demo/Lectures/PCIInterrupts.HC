@@ -1,6 +1,6 @@
 //See $LK,"PCI",A="HI:PCI"$.
 
-#if mp_cnt>1
+#if mp_count>1
 #define DEST_CPU	1
 #else
 #define DEST_CPU	0
@@ -56,7 +56,7 @@ U0 Main()
   Sleep(1000);
   "The keyboard and timer seem to be active.\n"
 	"IntA:%d IntB:%d IntC:%d IntD:%d\n\n"
-	"IntB is my keybaord and regs a single KEY-UP.\n"
+	"IntB is my keyboard and regs a single KEY-UP.\n"
 	"Rerun and press a few keys.\n",
 	progress1,progress2,progress3,progress4;
 

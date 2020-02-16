@@ -66,7 +66,7 @@ SYS_HASH_SINGLE_TABLE_FIND::
 	POP	RDI
 	POP	RAX
 	LOOP	@@30
-	INC	U32 CHash.use_cnt[RAX]
+	INC	U32 CHash.use_count[RAX]
 	TEST	RAX,RAX
 	RET
 

@@ -29,7 +29,7 @@ $FG,2$Clip$FG$	Clipboard
 $FG,2$Clus$FG$	Cluster
 $FG,2$Cmd$FG$	Command
 $FG,2$Comp$FG$	Compiler
-$FG,2$Cnt$FG$	Count
+$FG,2$Count$FG$	Count
 $FG,2$Const$FG$	Consant
 $FG,2$Cont$FG$	Continue
 $FG,2$Ctrl$FG$	Control.  The ctrl key is indicated with "$FG,2$^$FG$" in documentation.

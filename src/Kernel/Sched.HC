@@ -98,7 +98,7 @@ It's a little faster.
 //************************************
 _TASK_CONTEXT_RESTORE::
 	XOR	RAX,RAX
-	INC	U64 GS:CCPU.swap_cnter[RAX]
+	INC	U64 GS:CCPU.swap_counter[RAX]
 	MOV	RSI,FS:CTask.addr[RAX]
 	BT	U32 CTask.rflags[RSI],RFLAGf_INT
 	JNC	@@05
@@ -113,7 +113,7 @@ _TASK_CONTEXT_RESTORE::
 	MOV	RDX,U64 CBpt.next[RDX]
 	JMP	@@10
 
-@@15:	INC	U64 CTask.swap_cnter[RSI]
+@@15:	INC	U64 CTask.swap_counter[RSI]
 
 	MOV	RAX,U64 CTask.fpu_mmx[RSI]
 	FXRSTOR	U64 [RAX]
@@ -180,7 +180,7 @@ RESTORE_RSI_TASK2:
 		1<<TASKf_AWAITING_MESSAGE|1<<TASKf_SUSPENDED
 	JNZ	@@25
 
-	MOV	RAX,U64 [&cnts.jiffies]
+	MOV	RAX,U64 [&counts.jiffies]
 	CMP	U64 CTask.wake_jiffy[RSI],RAX
 	JG	@@25	//Jmp if not ready, yet.
 

@@ -26,7 +26,7 @@ U0 UnlockedInc()
   tmpm1=JobQueue(&MPUnlockedInc,NULL,1,0);
   JobResGet(tmpm0);
   JobResGet(tmpm1);
-  "Correct Cnt:%X Actual Cnt:%X\n",CNT*2,glbl;
+  "Correct Count:%X Actual Count:%X\n",CNT*2,glbl;
 }
 
 U0 MPLockedInc(I64)
@@ -45,7 +45,7 @@ U0 LockedInc()
   tmpm1=JobQueue(&MPLockedInc,NULL,1,0);
   JobResGet(tmpm0);
   JobResGet(tmpm1);
-  "Correct Cnt:%X Actual Cnt:%X\n",CNT*2,glbl;
+  "Correct Count:%X Actual Count:%X\n",CNT*2,glbl;
 }
 
 UnlockedInc;

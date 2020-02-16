@@ -14,7 +14,7 @@ output $LK,"Silent",A="MN:Silent"$().
 U0 UnusedDefineScan()
 {
   CDoc *old_put_doc,*old_display_doc,*doc;
-  I64 i,cnt=0;
+  I64 i,count=0;
   CHashTable *table;
   CHash *tmph;
   CDocEntry *doc_e,*doc_e2;
@@ -27,7 +27,7 @@ U0 UnusedDefineScan()
 	tmph=table->body[i];
 	while (tmph) {
 	  if (tmph->type&HTT_DEFINE_STR)
-	    cnt++;
+	    count++;
 	  tmph=tmph->next;
 	}
       }
@@ -35,7 +35,7 @@ U0 UnusedDefineScan()
     }
 
     progress1=0;
-    progress1_max=cnt;
+    progress1_max=count;
     StrCpy(progress1_desc,"Define Scan");
 
     table=Fs->hash_table;

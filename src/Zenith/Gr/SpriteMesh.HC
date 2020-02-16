@@ -43,7 +43,7 @@ class CMeshFrame
   CDC *dc;
   I32 *depth_buf;
   I64 *w2s,*s2w; //Screen-to-world and world-to-scrn transform matrices.
-  I64 vertex_cnt,tri_cnt; //Set by MeshSize
+  I64 vertex_count,tri_count; //Set by MeshSize
   CMeshEdVertex vertex_head,*cur_vertex,*chain_pred;
   CMeshEdTri	tri_head,*cur_tri;
   I64 x1,y1,x2,y2,cur_snap;
@@ -64,7 +64,7 @@ CMeshEdTri *MeshTriNew(CMeshFrame *e,CColorROPU32 color,
 {
   static I64 cpu_num=0;
   CMeshEdTri *tmpt=CAlloc(sizeof(CMeshEdTri));
-  tmpt->cpu_num=cpu_num++%mp_cnt;
+  tmpt->cpu_num=cpu_num++%mp_count;
   tmpt->mt.color=color;
   tmpt->t[0]=v1;
   tmpt->t[1]=v2;
@@ -297,7 +297,7 @@ U0 MeshTriSelRect(CMeshFrame *e,I64 sel_mode,I64 x1,I64 x2,I64 y1,I64 y2)
   }
 }
 
-I64 MeshSelCnt(CMeshFrame *e)
+I64 MeshSelCount(CMeshFrame *e)
 {
   I64 res=0;
   CMeshEdVertex *tmpv=e->vertex_head.next;
@@ -319,7 +319,7 @@ U0 MeshSwapAxes(CMeshFrame *e,I64 o1,I64 o2)
 {
   Bool unsel;
   CMeshEdVertex *tmpv=e->vertex_head.next;
-  if (!MeshSelCnt(e)) {
+  if (!MeshSelCount(e)) {
     MeshVertexSelAll(e,TRUE);
     unsel=TRUE;
   } else
@@ -337,7 +337,7 @@ U0 MeshInvertAxis(CMeshFrame *e,I64 o)
 {
   Bool unsel;
   CMeshEdVertex *tmpv=e->vertex_head.next;
-  if (!MeshSelCnt(e)) {
+  if (!MeshSelCount(e)) {
     MeshVertexSelAll(e,TRUE);
     unsel=TRUE;
   } else
@@ -357,7 +357,7 @@ U0 MeshTransformSel(CMeshFrame *e)
   I64 r[16],x,y,z;
   CMeshEdVertex *tmpv=e->vertex_head.next;
   if (PopUpTransform(r)) {
-    if (!MeshSelCnt(e)) {
+    if (!MeshSelCount(e)) {
       MeshVertexSelAll(e,TRUE);
       unsel=TRUE;
     } else
@@ -379,7 +379,7 @@ U0 MeshColorTris(CMeshFrame *e)
 {
   Bool unsel;
   CMeshEdTri *tmpt=e->tri_head.next;
-  if (!MeshSelCnt(e)) {
+  if (!MeshSelCount(e)) {
     MeshTriSelAll(e,TRUE);
     unsel=TRUE;
   } else
@@ -397,7 +397,7 @@ U0 MeshRevTris(CMeshFrame *e)
 {
   Bool unsel;
   CMeshEdTri *tmpt=e->tri_head.next;
-  if (!MeshSelCnt(e)) {
+  if (!MeshSelCount(e)) {
     MeshTriSelAll(e,TRUE);
     unsel=TRUE;
   } else
@@ -468,7 +468,7 @@ U0 MPDrawIt(CMeshFrame *e)
 
   if (e->grid_on)
 //Draw grid with different cores.
-    for (i=-500+25*Gs->num;i<=500;i+=25*mp_cnt) {
+    for (i=-500+25*Gs->num;i<=500;i+=25*mp_count) {
       if (i) {
 	dc->color=DKGRAY;
 	GrLine3(dc,i,-500,0,i,500,0);
@@ -749,10 +749,10 @@ U0 DrawIt(CTask *task,CDC *dc)
     tmpv=tmpv->next;
   }
 
-  e->mp_not_done_flags=1<<mp_cnt-1; //Issue jobs to all cores.
+  e->mp_not_done_flags=1<<mp_count-1; //Issue jobs to all cores.
   e->dc=dc;
   e->depth_buf=dc->depth_buf;
-  for (i=0;i<mp_cnt;i++)
+  for (i=0;i<mp_count;i++)
     JobQueue(&MPDrawIt,e,i);
 
   tmpv=e->vertex_head.next;
@@ -852,16 +852,16 @@ U0 MeshLoad(CMeshFrame *e,U8 *src)
   QueueInit(&e->vertex_head);
   QueueInit(&e->tri_head);
 
-  e->vertex_cnt  =*src(I32 *)++;
-  e->tri_cnt=*src(I32 *)++;
-  for (i=0;i<e->vertex_cnt;i++) {
+  e->vertex_count  =*src(I32 *)++;
+  e->tri_count=*src(I32 *)++;
+  for (i=0;i<e->vertex_count;i++) {
     x=*src(I32 *)++;
     y=*src(I32 *)++;
     z=*src(I32 *)++;
     tmpv=MeshVertexNew(e,x,y,z);
     tmpv->num=i;
   }
-  for (i=0;i<e->tri_cnt;i++) {
+  for (i=0;i<e->tri_count;i++) {
     color=*src(I32 *)++;
     for (j=0;j<3;j++)
       va[j]=MeshVertexFindNum(e,*src(I32 *)++);
@@ -875,22 +875,22 @@ I64 MeshSize(CMeshFrame *e)
   CMeshEdVertex	*tmpv=e->vertex_head.next;
   CMeshEdTri	*tmpt=e->tri_head.next;
 
-  e->vertex_cnt=0;
+  e->vertex_count=0;
   while (tmpv!=&e->vertex_head) {
-    tmpv->num=e->vertex_cnt++;
+    tmpv->num=e->vertex_count++;
     tmpv=tmpv->next;
   }
 
-  e->tri_cnt=0;
+  e->tri_count=0;
   while (tmpt!=&e->tri_head) {
-    e->tri_cnt++;
+    e->tri_count++;
     for (i=0;i<3;i++)
       tmpt->mt.nums[i]=tmpt->t[i]->num;
     tmpt=tmpt->next;
   }
   return sizeof(I32)*2+
-	(offset(CMeshEdVertex.end)-offset(CMeshEdVertex.start))*e->vertex_cnt+
-	(offset(CMeshEdTri.end)-offset(CMeshEdTri.start))*e->tri_cnt;
+	(offset(CMeshEdVertex.end)-offset(CMeshEdVertex.start))*e->vertex_count+
+	(offset(CMeshEdTri.end)-offset(CMeshEdTri.start))*e->tri_count;
 }
 
 I32 *MeshSave(CMeshFrame *e,I64 *_size=NULL)
@@ -900,10 +900,10 @@ I32 *MeshSave(CMeshFrame *e,I64 *_size=NULL)
   CMeshEdVertex	*tmpv=e->vertex_head.next;
   CMeshEdTri	*tmpt=e->tri_head.next;
 
-  *dst(I32 *)++=e->vertex_cnt;
-  *dst(I32 *)++=e->tri_cnt;
+  *dst(I32 *)++=e->vertex_count;
+  *dst(I32 *)++=e->tri_count;
 
-  e->vertex_cnt=0;
+  e->vertex_count=0;
   while (tmpv!=&e->vertex_head) {
     MemCpy(dst,&tmpv->start,offset(CMeshEdVertex.end)
     -offset(CMeshEdVertex.start));
@@ -911,7 +911,7 @@ I32 *MeshSave(CMeshFrame *e,I64 *_size=NULL)
     tmpv=tmpv->next;
   }
 
-  e->tri_cnt=0;
+  e->tri_count=0;
   while (tmpt!=&e->tri_head) {
     MemCpy(dst,&tmpt->start,offset(CMeshEdTri.end)-offset(CMeshEdTri.start));
     dst+=offset(CMeshEdTri.end)-offset(CMeshEdTri.start);
@@ -957,8 +957,8 @@ U0 MeshUpdateMenu(CMeshFrame *e)
 I32 *SpriteMeshEd(I32 *head=NULL,I64 *_size=NULL,Bool flip_y=FALSE)
 {/*Fmt for mesh:
 {
-I32 vertex_cnt;
-I32 tri_cnt;
+I32 vertex_count;
+I32 tri_count;
 CD3I32 vertices[];
 CMeshTri tris[];
 }
@@ -1090,7 +1090,7 @@ me_restart:
 		  if (arg2&SCF_SHIFT)
 		    goto me_clip_cut;
 		  else {
-		    if (MeshSelCnt(&e))
+		    if (MeshSelCount(&e))
 		      MeshClipDel(&e);
 		    else if (e.ed_mode!='t')
 		      MeshVertexDel(&e,MeshVertexFindScrPt(&e,
@@ -1324,12 +1324,12 @@ me_clip_cut:
 	  switch (e.ed_mode) {
 	    case 'm':
 	      if (!moving) {
-		if (!MeshSelCnt(&e) &&
+		if (!MeshSelCount(&e) &&
 		      (tmpv=MeshVertexFindScrPt(&e,arg1,arg2))) {
 		  tmpv->flags|=VF_SEL;
 		  e.ms_z=RoundI64(tmpv->p.z,e.cur_snap);
 		}
-		if (MeshSelCnt(&e)) {
+		if (MeshSelCount(&e)) {
 		  MeshCursorW(&e,Fs,&x,&y,&z);
 		  p0a.x=x;
 		  p0a.y=y;
@@ -1341,12 +1341,12 @@ me_clip_cut:
 	      break;
 	    case 'M':
 	      if (!adjusting_z && !moving) {
-		if (!MeshSelCnt(&e) &&
+		if (!MeshSelCount(&e) &&
 		      (tmpv=MeshVertexFindScrPt(&e,arg1,arg2))) {
 		  tmpv->flags|=VF_SEL;
 		  e.ms_z=RoundI64(tmpv->p.z,e.cur_snap);
 		}
-		if (MeshSelCnt(&e)) {
+		if (MeshSelCount(&e)) {
 		  MeshCursorW(&e,Fs,&x,&y,&z);
 		  p0a.x=x;
 		  p0a.y=y;

@@ -6,12 +6,12 @@ Bool ParseAsmImm(CCompCtrl *cc,CAsmArg *arg)
   arg->num.local_asm_undef_hash=NULL;
   arg->num.glbl_asm_undef_hash=NULL;
   cc->asm_undef_hash=NULL;
-  cc->abs_cnts=0;
+  cc->abs_counts=0;
   cc->flags&=~(CCF_UNRESOLVED+CCF_LOCAL);
   if (!IsLexExpression2Bin(cc,&arg->num.machine_code))
     LexSkipEol(cc);
   else {
-    if (cc->abs_cnts.externs)
+    if (cc->abs_counts.externs)
       LexExcept(cc,"Extern Not Allowed at ");
     if (cc->flags & CCF_UNRESOLVED) {
       if (cc->flags & CCF_LOCAL) {
@@ -114,8 +114,8 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
       } else {
 pa_asm_direct_imm:
 	ParseAsmImm(cc,arg);
-	arg->num.abs_cnts=cc->abs_cnts;
-	if (arg->size<=1 && !rel && arg->num.abs_cnts&1) {
+	arg->num.abs_counts=cc->abs_counts;
+	if (arg->size<=1 && !rel && arg->num.abs_counts&1) {
 	  if (cc->aotc->seg_size==16)
 	    arg->size=2;
 	  else
@@ -162,7 +162,7 @@ pa_asm_direct_imm:
 	} else {
 pa_asm_indirect_imm:
 	  ParseAsmImm(cc,arg);
-	  arg->num.abs_cnts=cc->abs_cnts;
+	  arg->num.abs_counts=cc->abs_counts;
 	}
       }
       if (cc->token!=']')
@@ -265,7 +265,7 @@ mm_done:
   return res;
 }
 
-Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
+Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i;
@@ -273,8 +273,8 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 
   if (!num2->imm_flag)
     num2->num.i-=num2->rel;
-  for (i=0;i<cnt;i++) {
-    if (num2->U8_cnt==1) {
+  for (i=0;i<count;i++) {
+    if (num2->U8_count==1) {
       if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I8+num2->imm_flag,
 	      aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
@@ -283,7 +283,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
       else if (!num2->imm_flag && !(I8_MIN<=num2->num.i<=I8_MAX))
 	LexExcept(cc,"Branch out of range at ");
       if (num2->imm_flag) {
-	if (num2->num.abs_cnts.abs_addres&1) {
+	if (num2->num.abs_counts.abs_addres&1) {
 	  tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	  tmpa->next=aotc->abss;
 	  aotc->abss=tmpa;
@@ -291,7 +291,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	  tmpa->type=AAT_ADD_U8;
 	}
       } else {
-	if (num2->num.abs_cnts.c_addres&1) {
+	if (num2->num.abs_counts.c_addres&1) {
 	  tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	  tmpa->next=aotc->abss;
 	  aotc->abss=tmpa;
@@ -301,7 +301,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
       }
       AOTStoreCodeU8(cc,num2->num.i);
     } else {
-      if (num2->U8_cnt==2) {
+      if (num2->U8_count==2) {
 	if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	  AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I16+num2->imm_flag,
 		aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
@@ -310,7 +310,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	else if (!num2->imm_flag && !(I16_MIN<=num2->num.i<=I16_MAX))
 	  LexExcept(cc,"Branch out of range at ");
 	if (num2->imm_flag) {
-	  if (num2->num.abs_cnts.abs_addres&1) {
+	  if (num2->num.abs_counts.abs_addres&1) {
 	    tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	    tmpa->next=aotc->abss;
 	    aotc->abss=tmpa;
@@ -318,7 +318,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	    tmpa->type=AAT_ADD_U16;
 	  }
 	} else {
-	  if (num2->num.abs_cnts.c_addres&1) {
+	  if (num2->num.abs_counts.c_addres&1) {
 	    tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	    tmpa->next=aotc->abss;
 	    aotc->abss=tmpa;
@@ -328,7 +328,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	}
 	AOTStoreCodeU8(cc,num2->num.i.u8[0]);
 	AOTStoreCodeU8(cc,num2->num.i.u8[1]);
-      } else if (num2->U8_cnt==4) {
+      } else if (num2->U8_count==4) {
 	if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	  AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I32+num2->imm_flag,
 		aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
@@ -337,7 +337,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	else if (!num2->imm_flag && !(I32_MIN<=num2->num.i<=I32_MAX))
 	  LexExcept(cc,"Branch out of range at ");
 	if (num2->imm_flag) {
-	  if (num2->num.abs_cnts.abs_addres&1) {
+	  if (num2->num.abs_counts.abs_addres&1) {
 	    tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	    tmpa->next=aotc->abss;
 	    aotc->abss=tmpa;
@@ -345,7 +345,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	    tmpa->type=AAT_ADD_U32;
 	  }
 	} else {
-	  if (num2->num.abs_cnts.c_addres&1) {
+	  if (num2->num.abs_counts.c_addres&1) {
 	    tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	    tmpa->next=aotc->abss;
 	    aotc->abss=tmpa;
@@ -354,14 +354,14 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	  }
 	}
 	AOTStoreCodeU32(cc,num2->num.i);
-      } else if (num2->U8_cnt==8) {
+      } else if (num2->U8_count==8) {
 	if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
 	  AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I64+num2->imm_flag,
 		aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
 		num2->num.glbl_asm_undef_hash,cc->lex_include_stk->line_num,
 		U8_avail);
 	if (num2->imm_flag) {
-	  if (num2->num.abs_cnts.abs_addres&1) {
+	  if (num2->num.abs_counts.abs_addres&1) {
 	    tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	    tmpa->next=aotc->abss;
 	    aotc->abss=tmpa;
@@ -369,7 +369,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 	    tmpa->type=AAT_ADD_U64;
 	  }
 	} else {
-	  if (num2->num.abs_cnts.c_addres&1) {
+	  if (num2->num.abs_counts.c_addres&1) {
 	    tmpa=CAlloc(sizeof(CAOTAbsAddr));
 	    tmpa->next=aotc->abss;
 	    aotc->abss=tmpa;
@@ -392,7 +392,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 cnt,Bool U8_avail)
 
 U8 asm_seg_prefixes[6]={0x26,0x2E,0x36,0x3E,0x64,0x65};
 
-Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
+Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 {
   CAOTCtrl *aotc=cc->aotc;
   I64 i,j,arg1,arg2,om,seg,arg1mask,arg2mask;
@@ -401,16 +401,16 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
   CInst *tmpins;
   CAsmIns cur,best;
 
-  best.U8_cnt=255;
-  if (argcnt>0)
+  best.U8_count=255;
+  if (argcount>0)
     arg1mask=AsmMakeArgMask(cc,&aotc->arg1);
   else
     arg1mask=1;
-  if (argcnt>1)
+  if (argcount>1)
     arg2mask=AsmMakeArgMask(cc,&aotc->arg2);
   else
     arg2mask=1;
-  for (i=0;i<tmpo->inst_entry_cnt;i++) {
+  for (i=0;i<tmpo->inst_entry_count;i++) {
     tmpins=&tmpo->ins[i];
     if (tmpins->arg1==ARGT_REL8 || tmpins->arg2==ARGT_REL8)
       U8_avail=TRUE;
@@ -433,7 +433,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
       arg2=tmpins->arg2;
       tmpa1=&aotc->arg1;
       tmpa2=&aotc->arg2;
-      cur.last_opcode_U8=tmpins->opcode[tmpins->opcode_cnt-1];
+      cur.last_opcode_U8=tmpins->opcode[tmpins->opcode_count-1];
 
       if (tmpins->slash_val<8) {
 	cur.ModrM|=tmpins->slash_val<<3;
@@ -444,23 +444,23 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	    aotc->seg_size!=16 && tmpins->flags & IEF_OP_SIZE16)
 	cur.has_operand_prefix=TRUE;
 
-      if (om==OM_IB)	  cur.imm.U8_cnt=1;
-      else if (om==OM_IW) cur.imm.U8_cnt=2;
-      else if (om==OM_ID) cur.imm.U8_cnt=4;
+      if (om==OM_IB)	  cur.imm.U8_count=1;
+      else if (om==OM_IW) cur.imm.U8_count=2;
+      else if (om==OM_ID) cur.imm.U8_count=4;
 
       if (om==OM_CB) {
-	cur.imm.U8_cnt=1;
+	cur.imm.U8_count=1;
 	cur.imm.imm_flag=FALSE;
       } else if (om==OM_CW) {
-	cur.imm.U8_cnt=2;
+	cur.imm.U8_count=2;
 	cur.imm.imm_flag=FALSE;
       } else if (om==OM_CD) {
-	cur.imm.U8_cnt=4;
+	cur.imm.U8_count=4;
 	cur.imm.imm_flag=FALSE;
       }
 
-      if (argcnt==1) {
-	if (best.U8_cnt!=255 && !found_second_possible && !best.is_dft) {
+      if (argcount==1) {
+	if (best.U8_count!=255 && !found_second_possible && !best.is_dft) {
 	  found_second_possible=TRUE;
 	  if (!aotc->arg1.size)
 	    PrintWarn("no size specified at %s,%04d\n",
@@ -490,7 +490,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 		tmpa1->reg1==REG_NONE) {
 	    cur.ModrM=cur.ModrM+5;
 	    MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-	    cur.disp.U8_cnt=4;
+	    cur.disp.U8_count=4;
 	    if (aotc->seg_size==64)
 	      cur.disp.imm_flag=FALSE;
 	  } else {
@@ -519,7 +519,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 		if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
 		  cur.has_REX=TRUE;
 		MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-		cur.disp.U8_cnt=4;
+		cur.disp.U8_count=4;
 	      } else {
 		cur.SIB|=(tmpa1->reg1&7)<<3+tmpa1->reg2&7;
 		if (tmpa1->reg1&15>7)
@@ -533,7 +533,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 		if (tmpa1->reg2&7==REG_RBP &&
 		      !tmpa1->imm_or_off_present && tmpa1->indirect) {
 		  cur.ModrM|=0x40;
-		  cur.disp.U8_cnt=1;
+		  cur.disp.U8_count=1;
 		  ModrM_complete=TRUE;
 		}
 	      }
@@ -544,13 +544,13 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 		if (!cur.disp.num.machine_code &&
 		      I8_MIN<=cur.disp.num.i<=I8_MAX) {
 		  cur.ModrM|=0x40;
-		  cur.disp.U8_cnt=1;
+		  cur.disp.U8_count=1;
 		} else if (aotc->seg_size==16) {
 		  cur.ModrM|=0x80;
-		  cur.disp.U8_cnt=2;
+		  cur.disp.U8_count=2;
 		} else {
 		  cur.ModrM|=0x80;
-		  cur.disp.U8_cnt=4;
+		  cur.disp.U8_count=4;
 		}
 	      } else if (!tmpa1->indirect) {
 		cur.has_addr_prefix=FALSE;
@@ -558,7 +558,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	      } else {
 		if (tmpa1->reg1&7==REG_RBP) {
 		  cur.ModrM|=0x40;
-		  cur.disp.U8_cnt=1;
+		  cur.disp.U8_count=1;
 		}
 	      }
 	    }
@@ -569,8 +569,8 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	    cur.REX|=8;
 	  MemCpy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
 	}
-      } else if (argcnt==2) {
-	if (best.U8_cnt!=255 && !found_second_possible && !best.is_dft) {
+      } else if (argcount==2) {
+	if (best.U8_count!=255 && !found_second_possible && !best.is_dft) {
 	  found_second_possible=TRUE;
 	  if (!aotc->arg1.size && !aotc->arg2.size)
 	    PrintWarn("no size specified at %s,%04d\n",
@@ -658,7 +658,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	      if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
 		cur.has_REX=TRUE;
 	      MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-	      cur.disp.U8_cnt=4;
+	      cur.disp.U8_count=4;
 	    } else {
 	      cur.SIB|=(tmpa1->reg1&7)<<3+tmpa1->reg2&7;
 	      if (tmpa1->reg1&15>7)
@@ -672,7 +672,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	      if (tmpa1->reg2&7==REG_RBP &&
 		    !tmpa1->imm_or_off_present && tmpa1->indirect) {
 		cur.ModrM|=0x40;
-		cur.disp.U8_cnt=1;
+		cur.disp.U8_count=1;
 		ModrM_complete=TRUE;
 	      }
 	    }
@@ -682,7 +682,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 		  tmpa1->indirect && tmpa1->reg1==REG_NONE) {
 	      cur.ModrM=cur.ModrM&0xF8+5;
 	      MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-	      cur.disp.U8_cnt=4;
+	      cur.disp.U8_count=4;
 	      if (aotc->seg_size==64)
 		cur.disp.imm_flag=FALSE;
 	    } else {
@@ -691,13 +691,13 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 		if (!cur.disp.num.machine_code &&
 		      I8_MIN<=cur.disp.num.i<=I8_MAX) {
 		  cur.ModrM|=0x40;
-		  cur.disp.U8_cnt=1;
+		  cur.disp.U8_count=1;
 		} else if (aotc->seg_size==16) {
 		  cur.ModrM|=0x80;
-		  cur.disp.U8_cnt=2;
+		  cur.disp.U8_count=2;
 		} else {
 		  cur.ModrM|=0x80;
-		  cur.disp.U8_cnt=4;
+		  cur.disp.U8_count=4;
 		}
 	      } else if (!tmpa1->indirect) {
 		cur.has_addr_prefix=FALSE;
@@ -705,7 +705,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	      } else {
 		if (tmpa1->reg1&7==REG_RBP) {
 		  cur.ModrM|=0x40;
-		  cur.disp.U8_cnt=1;
+		  cur.disp.U8_count=1;
 		}
 	      }
 	    }
@@ -713,64 +713,64 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	} else if (ARGT_MOFFS8<=arg1<=ARGT_MOFFS64) {
 	  MemCpy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 	  if (aotc->seg_size==16)
-	    cur.disp.U8_cnt=2;
+	    cur.disp.U8_count=2;
 	  else
-	    cur.disp.U8_cnt=4;
+	    cur.disp.U8_count=4;
 	  cur.has_addr_prefix=FALSE;
 	} else if (ARGT_MOFFS8<=arg2<=ARGT_MOFFS64) {
 	  MemCpy(&cur.disp.num,&tmpa2->num,sizeof(CAsmNum));
 	  if (aotc->seg_size==16)
-	    cur.disp.U8_cnt=2;
+	    cur.disp.U8_count=2;
 	  else
-	    cur.disp.U8_cnt=4;
+	    cur.disp.U8_count=4;
 	  cur.has_addr_prefix=FALSE;
 	} else if (ARGT_IMM8<=arg1<=ARGT_IMM64 ||
 	      ARGT_UIMM8<=arg1<=ARGT_UIMM64) {
 	  MemCpy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
-	  if (arg1==ARGT_IMM8 || arg1==ARGT_UIMM8) cur.imm.U8_cnt=1;
-	  else if (arg1==ARGT_IMM16 || arg1==ARGT_UIMM16) cur.imm.U8_cnt=2;
-	  else if (arg1==ARGT_IMM32 || arg1==ARGT_UIMM32) cur.imm.U8_cnt=4;
+	  if (arg1==ARGT_IMM8 || arg1==ARGT_UIMM8) cur.imm.U8_count=1;
+	  else if (arg1==ARGT_IMM16 || arg1==ARGT_UIMM16) cur.imm.U8_count=2;
+	  else if (arg1==ARGT_IMM32 || arg1==ARGT_UIMM32) cur.imm.U8_count=4;
 	  else {
-	    cur.imm.U8_cnt=8;
+	    cur.imm.U8_count=8;
 	    cur.REX|=8;
 	  }
 	}
 	if (ARGT_IMM8<=arg2<=ARGT_IMM64 ||
 	      ARGT_UIMM8<=arg2<=ARGT_UIMM64) {
 	  MemCpy(&cur.imm.num,&tmpa2->num,sizeof(CAsmNum));
-	  if (arg2==ARGT_IMM8 || arg2==ARGT_UIMM8) cur.imm.U8_cnt=1;
-	  else if (arg2==ARGT_IMM16 || arg2==ARGT_UIMM16) cur.imm.U8_cnt=2;
+	  if (arg2==ARGT_IMM8 || arg2==ARGT_UIMM8) cur.imm.U8_count=1;
+	  else if (arg2==ARGT_IMM16 || arg2==ARGT_UIMM16) cur.imm.U8_count=2;
 	  else if (arg2==ARGT_IMM32 || arg2==ARGT_UIMM32) {
-	    cur.imm.U8_cnt=4;
+	    cur.imm.U8_count=4;
 	    if (tmpins->flags&IEF_REX_ONLY_R8_R15 && arg2==ARGT_UIMM32)
 	      cur.REX&=~8;
 	  } else {
-	    cur.imm.U8_cnt=8;
+	    cur.imm.U8_count=8;
 	    cur.REX|=8;
 	  }
 	}
       }
-      cur.U8_cnt=tmpins->opcode_cnt+cur.disp.U8_cnt+cur.imm.U8_cnt;
-      if (cur.has_ModrM) cur.U8_cnt++;
-      if (cur.has_SIB) cur.U8_cnt++;
+      cur.U8_count=tmpins->opcode_count+cur.disp.U8_count+cur.imm.U8_count;
+      if (cur.has_ModrM) cur.U8_count++;
+      if (cur.has_SIB) cur.U8_count++;
       if (aotc->seg_size==64 && cur.REX&0x40==0x40 &&
 	    (cur.REX!=0x40 || cur.has_REX) &&
 	    (cur.REX&7 || !(tmpins->flags&IEF_REX_ONLY_R8_R15 ||
 	    tmpins->flags&IEF_REX_XOR_LIKE && tmpa1->reg1==tmpa2->reg1 &&
 	    cur.ModrM&0xC0==0xC0)))
-	cur.U8_cnt++;
-      if (cur.U8_cnt<best.U8_cnt &&
+	cur.U8_count++;
+      if (cur.U8_count<best.U8_count &&
 	    !(tmpins->flags & IEF_DONT_SWITCH_MODES &&
 	    (cur.has_addr_prefix || cur.has_operand_prefix)))
 	MemCpy(&best,&cur,sizeof(CAsmIns));
     }
   }
-  if (best.U8_cnt<255) {
+  if (best.U8_count<255) {
     tmpins=best.tmpins;
     seg=REG_NONE;
-    if (argcnt>1 && aotc->arg2.seg!=REG_NONE && !aotc->arg2.just_seg)
+    if (argcount>1 && aotc->arg2.seg!=REG_NONE && !aotc->arg2.just_seg)
       seg=aotc->arg2.seg;
-    else if (argcnt>0 && aotc->arg1.seg!=REG_NONE && !aotc->arg1.just_seg)
+    else if (argcount>0 && aotc->arg1.seg!=REG_NONE && !aotc->arg1.just_seg)
       seg=aotc->arg1.seg;
     if (seg!=REG_NONE)
       AOTStoreCodeU8(cc,asm_seg_prefixes[seg]);
@@ -784,7 +784,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
 	  tmpins->flags&IEF_REX_XOR_LIKE && tmpa1->reg1==tmpa2->reg1 &&
 	  best.ModrM&0xC0==0xC0)))
       AOTStoreCodeU8(cc,best.REX);
-    for (j=0;j<tmpins->opcode_cnt-1;j++)
+    for (j=0;j<tmpins->opcode_count-1;j++)
       AOTStoreCodeU8(cc,tmpins->opcode[j]);
     AOTStoreCodeU8(cc,best.last_opcode_U8);
 
@@ -793,14 +793,14 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
     if (best.has_SIB)
       AOTStoreCodeU8(cc,best.SIB);
 
-    if (best.disp.U8_cnt) {
-      best.disp.rel=aotc->rip+best.disp.U8_cnt+best.imm.U8_cnt;
+    if (best.disp.U8_count) {
+      best.disp.rel=aotc->rip+best.disp.U8_count+best.imm.U8_count;
       if (!AsmStoreNum(cc,&best.disp,1,U8_avail))
 	return FALSE;
     }
 
-    if (best.imm.U8_cnt) {
-      best.imm.rel=aotc->rip+best.imm.U8_cnt;
+    if (best.imm.U8_count) {
+      best.imm.rel=aotc->rip+best.imm.U8_count;
       if (!AsmStoreNum(cc,&best.imm,1,U8_avail))
 	return FALSE;
     }
@@ -811,13 +811,13 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcnt)
   LexExcept(cc,"Invalid inst at ");
 }
 
-U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_cnt)
+U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_count)
 {
   Bool is_dup;
   I64 i,dup_val;
   U8 *ptr;
   CAsmNum2 num2;
-  num2.U8_cnt=U8_cnt;
+  num2.U8_count=U8_count;
 
   while (cc->token && cc->token!=';') {
     num2.num.local_asm_undef_hash=NULL;
@@ -830,13 +830,13 @@ U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_cnt)
       Lex(cc);	//Skip Str
     } else {
       is_dup=FALSE;
-      cc->abs_cnts=0;
+      cc->abs_counts=0;
       cc->asm_undef_hash=NULL;
       cc->flags&=~(CCF_UNRESOLVED+CCF_LOCAL);
       if (!IsLexExpression2Bin(cc,&num2.num.machine_code))
 	LexSkipEol(cc);
       else {
-	if (cc->abs_cnts.externs)
+	if (cc->abs_counts.externs)
 	  LexExcept(cc,"Extern Not Allowed at ");
 	if (cc->flags & CCF_UNRESOLVED) {
 	  if (cc->flags & CCF_LOCAL) {
@@ -866,10 +866,10 @@ U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_cnt)
       }
       num2.rel=0;
       num2.imm_flag=TRUE;
-      num2.num.abs_cnts=cc->abs_cnts;
+      num2.num.abs_counts=cc->abs_counts;
       if (is_dup) {
 	if (num2.num.local_asm_undef_hash || num2.num.glbl_asm_undef_hash)
-	  LexExcept(cc,"Undefined DUP cnt at ");
+	  LexExcept(cc,"Undefined DUP count at ");
 	num2.num.i=dup_val;
 	AsmStoreNum(cc,&num2,i,FALSE);
       } else {
@@ -904,7 +904,7 @@ U0 ParseBinFile(CCompCtrl *cc)
 U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 {
   CAOTCtrl *aotc=cc->aotc;
-  I64 i,j,k,argcnt,
+  I64 i,j,k,argcount,
 	old_flags=cc->flags & CCF_ASM_EXPRESSIONS;
   CHashOpcode *tmpo;
   CHashExport *tmpex;
@@ -1008,15 +1008,15 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
       } else if (cc->hash_entry->type & HTT_OPCODE) {
 	tmpo=cc->hash_entry;
 	Lex(cc); //skip opcode
-	argcnt=0;
+	argcount=0;
 	if (tmpo->ins[0].arg1) {
-	  argcnt++;
+	  argcount++;
 	  if (ARGT_REL8<=tmpo->ins[0].arg1<=ARGT_REL32)
 	    ParseAsmArg(cc,&aotc->arg1,TRUE);
 	  else
 	    ParseAsmArg(cc,&aotc->arg1,FALSE);
 	  if (tmpo->ins[0].arg2) {
-	    argcnt++;
+	    argcount++;
 	    if (cc->token!=',')
 	      LexExcept(cc,"Expecting ',' at ");
 	    else {
@@ -1028,7 +1028,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 	    }
 	  }
 	}
-	ParseAsmInst(cc,tmpo,argcnt);
+	ParseAsmInst(cc,tmpo,argcount);
       } else if (cc->hash_entry->type & HTT_EXPORT_SYS_SYM) {
 	if (Btr(&cc->hash_entry->type,HTf_UNRESOLVED)) {
 	  if (cc->hash_entry->type & HTF_LOCAL) {
@@ -1087,7 +1087,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 cmp_flags)
 	  g_lb->type=CMT_ASM_LABEL;
 	  g_lb->flags|=CMF_DEFINED;
 	  g_lb->rip=aotc->rip;
-	  g_lb->use_cnt++; //Disable warning on unused labels.
+	  g_lb->use_count++; //Disable warning on unused labels.
 	  ICAdd(cc,IC_LABEL,g_lb,0);
 	}
 	if (cc->token==TK_DBL_COLON) {

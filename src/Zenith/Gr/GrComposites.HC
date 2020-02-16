@@ -1,7 +1,7 @@
 #help_index "Graphics"
 public I64 GrFillPoly3(CDC *dc=gr.dc,I64 n,CD3I32 *poly)
 {//3D. Must be convex.
-//Returns cnt of pixs changed
+//Returns count of pixs changed
   CD3I32 tri[3];
   I64 i,j,x,y,z,res=0;
   if (n<3) return 0;
@@ -246,16 +246,16 @@ public Bool GrTextDiamond3(CDC *dc=gr.dc,
 }
 
 #help_index "Graphics/Mesh"
-public I64 Gr3Mesh(CDC *dc=gr.dc,I64 vertex_cnt,CD3I32 *p,
-	I64 tri_cnt,CMeshTri *tri)
-{//Returns cnt of pixs changed.
+public I64 Gr3Mesh(CDC *dc=gr.dc,I64 vertex_count,CD3I32 *p,
+	I64 tri_count,CMeshTri *tri)
+{//Returns count of pixs changed.
   CColorROPU32 old_color=dc->color;
   I64 i,x,y,z,res=0;
   CD3I32 *pt,*pt_sym,*p_sym,*dst;
   CMeshTri *tri_sym=tri;
   if (dc->flags&DCF_TRANSFORMATION) {
-    dst=pt=MAlloc(sizeof(CD3I32)*vertex_cnt);
-    for (i=0;i<vertex_cnt;i++,p++,dst++) {
+    dst=pt=MAlloc(sizeof(CD3I32)*vertex_count);
+    for (i=0;i<vertex_count;i++,p++,dst++) {
       x=p->x; y=p->y; z=p->z;
       (*dc->transform)(dc,&x,&y,&z);
       dst->x=x; dst->y=y; dst->z=z;
@@ -265,15 +265,15 @@ public I64 Gr3Mesh(CDC *dc=gr.dc,I64 vertex_cnt,CD3I32 *p,
     pt=NULL;
 
   if (dc->flags & DCF_SYMMETRY) {
-    dst=pt_sym=MAlloc(sizeof(CD3I32)*vertex_cnt);
+    dst=pt_sym=MAlloc(sizeof(CD3I32)*vertex_count);
     p_sym=p;
-    for (i=0;i<vertex_cnt;i++,p_sym++,dst++) {
+    for (i=0;i<vertex_count;i++,p_sym++,dst++) {
       x=p_sym->x; y=p_sym->y; z=p_sym->z;
       DCReflect(dc,&x,&y,&z);
       dst->x=x; dst->y=y; dst->z=z;
     }
     p_sym=pt_sym;
-    for (i=0;i<tri_cnt;i++,tri_sym++) {
+    for (i=0;i<tri_count;i++,tri_sym++) {
       (*dc->lighting)(dc,&p_sym[tri_sym->nums[0]],&p_sym[tri_sym->nums[2]],
 	    &p_sym[tri_sym->nums[1]],tri_sym->color);
       res+=GrFillTri0(dc,&p_sym[tri_sym->nums[0]],&p_sym[tri_sym->nums[2]],
@@ -283,7 +283,7 @@ public I64 Gr3Mesh(CDC *dc=gr.dc,I64 vertex_cnt,CD3I32 *p,
     if (dc->flags&DCF_JUST_MIRROR)
       goto mesh_done;
   }
-  for (i=0;i<tri_cnt;i++,tri++) {
+  for (i=0;i<tri_count;i++,tri++) {
     (*dc->lighting)(dc,&p[tri->nums[0]],&p[tri->nums[1]],
 	  &p[tri->nums[2]],tri->color);
     res+=GrFillTri0(dc,&p[tri->nums[0]],&p[tri->nums[1]],&p[tri->nums[2]]);

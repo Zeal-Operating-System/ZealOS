@@ -59,7 +59,7 @@ Bool Kill(CTask *task,Bool wait=TRUE,Bool just_break=FALSE)
       }
     } else {
       if (task!=sys_winmgr_task) {
-	for (i=0;i<mp_cnt;i++)
+	for (i=0;i<mp_count;i++)
 	  if (task==cpu_structs[i].seth_task)
 	    return FALSE;
 	LBts(&task->task_flags,TASKf_KILL_TASK);
@@ -357,7 +357,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
   }
   Free(old_task_title);
   if (cc->flags&CCF_JUST_LOAD) {
-    if (cc->error_cnt)
+    if (cc->error_count)
       return FALSE;
     else
       return TRUE;
@@ -516,7 +516,7 @@ I64 TaskEnd()
   LBtr(&task->srv_ctrl.flags,JOBCf_LOCKED);
   LBtr(&task->task_flags,TASKf_TASK_LOCK);
 
-  task->wake_jiffy=cnts.jiffies+DYING_JIFFIES;
+  task->wake_jiffy=counts.jiffies+DYING_JIFFIES;
   while (LBts(&Gs->cpu_flags,CPUf_DYING_TASK_QUE))
     PAUSE
   QueueInsert(task,Gs->last_dying);
@@ -529,17 +529,17 @@ U0 TaskKillDying()
 {//Delay freeing to prevent asking for trouble with quick reincarnations.
 //What if the user is doing this: $LK,"DoTreeCheckers",A="FF:::/Misc/OSTestSuite.HC,DoTreeCheckers"$.
   CTaskDying *task,*task1;
-  if (Gs->kill_jiffy<cnts.jiffies) {//Avoid doing as many lock operations.
+  if (Gs->kill_jiffy<counts.jiffies) {//Avoid doing as many lock operations.
     while (LBts(&Gs->cpu_flags,CPUf_DYING_TASK_QUE))
       PAUSE
     task=Gs->next_dying;
-    while (task!=&Gs->next_dying && task->wake_jiffy<cnts.jiffies) {
+    while (task!=&Gs->next_dying && task->wake_jiffy<counts.jiffies) {
       task1=task->next;
       QueueRemove(task);
       TaskDel(task);
       task=task1;
     }
     LBtr(&Gs->cpu_flags,CPUf_DYING_TASK_QUE);
-    Gs->kill_jiffy=cnts.jiffies+DYING_JIFFIES;
+    Gs->kill_jiffy=counts.jiffies+DYING_JIFFIES;
   }
 }

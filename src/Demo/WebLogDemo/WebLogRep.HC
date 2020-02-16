@@ -17,7 +17,7 @@ class LinkStruct
 {
   LinkStruct *left,*right;
   U8 *link,*file;
-  I64 cnt;
+  I64 count;
 };
 
 class BlockedStruct
@@ -262,7 +262,7 @@ U0 LinkTreeAdd(LinkStruct **_root,LogStruct *tmplg)
   }
   if (root=*_root) {
     if (!(i=StrCmp(tmplg->link,root->link)))
-      root->cnt++;
+      root->count++;
     else if (i<0)
       LinkTreeAdd(&root->left,tmplg);
     else
@@ -270,7 +270,7 @@ U0 LinkTreeAdd(LinkStruct **_root,LogStruct *tmplg)
   } else {
     tmplk=CAlloc(sizeof(LinkStruct));
     tmplk->link=tmplg->link;
-    tmplk->cnt=1;
+    tmplk->count=1;
     *_root=tmplk;
   }
 }
@@ -285,7 +285,7 @@ U0 FileTreeAdd(LinkStruct **_root,LogStruct *tmplg)
   }
   if (root=*_root) {
     if (!(i=StrCmp(tmplg->file,root->file)))
-      root->cnt++;
+      root->count++;
     else if (i<0)
       FileTreeAdd(&root->left,tmplg);
     else
@@ -293,7 +293,7 @@ U0 FileTreeAdd(LinkStruct **_root,LogStruct *tmplg)
   } else {
     tmplk=CAlloc(sizeof(LinkStruct));
     tmplk->file=tmplg->file;
-    tmplk->cnt=1;
+    tmplk->count=1;
     *_root=tmplk;
   }
 }
@@ -311,7 +311,7 @@ U0 LinkTreeTraverse(LinkStruct *root)
 {
   if (root) {
     LinkTreeTraverse(root->left);
-    "%3d:%$$Q\n",root->cnt,root->link;
+    "%3d:%$$Q\n",root->count,root->link;
     LinkTreeTraverse(root->right);
   }
 }
@@ -329,16 +329,16 @@ U0 FileTreeTraverse(LinkStruct *root)
 {
   if (root) {
     FileTreeTraverse(root->left);
-    "%3d:%$$Q\n",root->cnt,root->file;
+    "%3d:%$$Q\n",root->count,root->file;
     FileTreeTraverse(root->right);
   }
 }
 
 U0 DownLoadRep(LogStruct *head,CDate dstart,CDate dend)
 {
-  I64 i,j,cnt,dups,
-	hours_start,hours_end,*hour_cnts,*dup_cnts,
-	days_start,days_end,*day_cnts,*day_dup_cnts;
+  I64 i,j,count,dups,
+	hours_start,hours_end,*hour_counts,*dup_counts,
+	days_start,days_end,*day_counts,*day_dup_counts;
   LogStruct *tmplg=head->next,*dup_head=NULL;
   LinkStruct *link_root=NULL;
   CDateStruct ds;
@@ -349,20 +349,20 @@ U0 DownLoadRep(LogStruct *head,CDate dstart,CDate dend)
   days_start=(dstart+local_time_offset)>>32;
   days_end  =(dend+local_time_offset)>>32;
 
-  hour_cnts=CAlloc((hours_end-hours_start+1)*sizeof(I64));
-  dup_cnts =CAlloc((hours_end-hours_start+1)*sizeof(I64));
-  day_cnts =CAlloc((days_end-days_start+1)*sizeof(I64));
-  day_dup_cnts=CAlloc((days_end-days_start+1)*sizeof(I64));
-  dups=cnt=0;
+  hour_counts=CAlloc((hours_end-hours_start+1)*sizeof(I64));
+  dup_counts =CAlloc((hours_end-hours_start+1)*sizeof(I64));
+  day_counts =CAlloc((days_end-days_start+1)*sizeof(I64));
+  day_dup_counts=CAlloc((days_end-days_start+1)*sizeof(I64));
+  dups=count=0;
   while (tmplg!=head) {
     if (IsKeeper(tmplg,dstart,dend) && IsDownLoad(tmplg)) {
       i=tmplg->datetime*24;
-      hour_cnts[i.u32[1]-hours_start]++;
-      day_cnts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
-      cnt++;
+      hour_counts[i.u32[1]-hours_start]++;
+      day_counts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
+      count++;
       if (IPNumTreeAdd(&dup_head,tmplg)) {
-	day_dup_cnts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
-	dup_cnts[i.u32[1]-hours_start]++;
+	day_dup_counts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
+	dup_counts[i.u32[1]-hours_start]++;
 	dups++;
       }
       LinkTreeAdd(&link_root,tmplg);
@@ -373,10 +373,10 @@ U0 DownLoadRep(LogStruct *head,CDate dstart,CDate dend)
   "\n\nDownloads of /TOS_Distro.ISO\n";
   for (i=dstart;i<=dend;i+=1<<32)
     "%DDups:%5dTotal:%5dUniques:%5d\n",i,
-	  day_dup_cnts[(i+local_time_offset)>>32-days_start],
-	  day_cnts[(i+local_time_offset)>>32-days_start],
-	  day_cnts[(i+local_time_offset)>>32-days_start]-
-	  day_dup_cnts[(i+local_time_offset)>>32-days_start];
+	  day_dup_counts[(i+local_time_offset)>>32-days_start],
+	  day_counts[(i+local_time_offset)>>32-days_start],
+	  day_counts[(i+local_time_offset)>>32-days_start]-
+	  day_dup_counts[(i+local_time_offset)>>32-days_start];
 
   "\n\nDownloads of /TOS_Distro.ISO\n"
 	"'-' is a dup.'+' is not a dup.\n";
@@ -387,23 +387,23 @@ U0 DownLoadRep(LogStruct *head,CDate dstart,CDate dend)
   for (;i<=hours_end;i++) {
     Date2Struct(&ds,i<<32/24+local_time_offset);
     "%D %02d: ",i<<32/24,ds.hour;
-    for (j=0;j<dup_cnts[i-hours_start];j++)
+    for (j=0;j<dup_counts[i-hours_start];j++)
       '-';
-    for (;j<hour_cnts[i-hours_start];j++)
+    for (;j<hour_counts[i-hours_start];j++)
       '+';
     '\n';
   }
-  "Total:%dDups:%dUniques:%d\n",cnt,dups,cnt-dups;
+  "Total:%dDups:%dUniques:%d\n",count,dups,count-dups;
 
   "\n\nDownloads of /TOS_Distro.ISO\n";
   LinkTreeTraverse(link_root);
   '\n';
 
   LinkTreeDel(link_root);
-  Free(hour_cnts);
-  Free(dup_cnts);
-  Free(day_cnts);
-  Free(day_dup_cnts);
+  Free(hour_counts);
+  Free(dup_counts);
+  Free(day_counts);
+  Free(day_dup_counts);
 }
 
 U0 FileRep(LogStruct *head,CDate dstart,CDate dend)
@@ -423,9 +423,9 @@ U0 FileRep(LogStruct *head,CDate dstart,CDate dend)
 
 U0 IndexRep(LogStruct *head,CDate dstart,CDate dend)
 {
-  I64 i,j,cnt,dups,
-	hours_start,hours_end,*hour_cnts,*dup_cnts,
-	days_start,days_end,*day_cnts,*day_dup_cnts;
+  I64 i,j,count,dups,
+	hours_start,hours_end,*hour_counts,*dup_counts,
+	days_start,days_end,*day_counts,*day_dup_counts;
   LogStruct *tmplg=head->next,*dup_head=NULL;
   LinkStruct *link_root=NULL;
   CDateStruct ds;
@@ -436,20 +436,20 @@ U0 IndexRep(LogStruct *head,CDate dstart,CDate dend)
   days_start=(dstart+local_time_offset)>>32;
   days_end  =(dend+local_time_offset)>>32;
 
-  hour_cnts=CAlloc((hours_end-hours_start+1)*sizeof(I64));
-  dup_cnts =CAlloc((hours_end-hours_start+1)*sizeof(I64));
-  day_cnts =CAlloc((days_end-days_start+1)*sizeof(I64));
-  day_dup_cnts=CAlloc((days_end-days_start+1)*sizeof(I64));
-  dups=cnt=0;
+  hour_counts=CAlloc((hours_end-hours_start+1)*sizeof(I64));
+  dup_counts =CAlloc((hours_end-hours_start+1)*sizeof(I64));
+  day_counts =CAlloc((days_end-days_start+1)*sizeof(I64));
+  day_dup_counts=CAlloc((days_end-days_start+1)*sizeof(I64));
+  dups=count=0;
   while (tmplg!=head) {
     if (IsKeeper(tmplg,dstart,dend) && IsIndex(tmplg)) {
       i=tmplg->datetime*24;
-      hour_cnts[i.u32[1]-hours_start]++;
-      day_cnts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
-      cnt++;
+      hour_counts[i.u32[1]-hours_start]++;
+      day_counts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
+      count++;
       if (IPNumTreeAdd(&dup_head,tmplg)) {
-	day_dup_cnts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
-	dup_cnts[i.u32[1]-hours_start]++;
+	day_dup_counts[(tmplg->datetime+local_time_offset)>>32-days_start]++;
+	dup_counts[i.u32[1]-hours_start]++;
 	dups++;
       }
       LinkTreeAdd(&link_root,tmplg);
@@ -461,10 +461,10 @@ U0 IndexRep(LogStruct *head,CDate dstart,CDate dend)
 	"'-' is a dup.'+' is not a dup.\n";
   for (i=dstart;i<=dend;i+=1<<32)
     "%DDups:%5dTotal:%5dUniques:%5d\n",i,
-	  day_dup_cnts[(i+local_time_offset)>>32-days_start],
-	  day_cnts[(i+local_time_offset)>>32-days_start],
-	  day_cnts[(i+local_time_offset)>>32-days_start]-
-	  day_dup_cnts[(i+local_time_offset)>>32-days_start];
+	  day_dup_counts[(i+local_time_offset)>>32-days_start],
+	  day_counts[(i+local_time_offset)>>32-days_start],
+	  day_counts[(i+local_time_offset)>>32-days_start]-
+	  day_dup_counts[(i+local_time_offset)>>32-days_start];
 
   "\n\nHits on /index.html\n";
   if (hours_end-hours_start>=HOURS_MAX)
@@ -474,23 +474,23 @@ U0 IndexRep(LogStruct *head,CDate dstart,CDate dend)
   for (;i<=hours_end;i++) {
     Date2Struct(&ds,i<<32/24+local_time_offset);
     "%D %02d: ",i<<32/24,ds.hour;
-    for (j=0;j<dup_cnts[i-hours_start];j++)
+    for (j=0;j<dup_counts[i-hours_start];j++)
       '-';
-    for (;j<hour_cnts[i-hours_start];j++)
+    for (;j<hour_counts[i-hours_start];j++)
       '+';
     '\n';
   }
-  "Total:%dDups:%dUniques:%d\n",cnt,dups,cnt-dups;
+  "Total:%dDups:%dUniques:%d\n",count,dups,count-dups;
 
   "\n\nHits on /index.html\n";
   LinkTreeTraverse(link_root);
   '\n';
 
   LinkTreeDel(link_root);
-  Free(hour_cnts);
-  Free(dup_cnts);
-  Free(day_cnts);
-  Free(day_dup_cnts);
+  Free(hour_counts);
+  Free(dup_counts);
+  Free(day_counts);
+  Free(day_dup_counts);
 }
 
 U0 WebLogRep(U8 *mask,U8 *output_filename)

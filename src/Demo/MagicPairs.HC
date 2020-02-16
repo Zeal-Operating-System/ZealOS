@@ -45,7 +45,7 @@ class PowPrime
 
 class Prime
 {
-  U32 prime,pow_cnt;
+  U32 prime,pow_count;
   PowPrime *pp;
 };
 
@@ -110,7 +110,7 @@ PowPrime *PowPrimesNew(I64 N,I64 sqrt_primes,Prime *primes,I64 *_num_powprimes)
       pp->sumfact=sf;
       j*=p->prime;
       pp++;
-      p->pow_cnt++;
+      p->pow_count++;
     }
     p++;
   }
@@ -259,32 +259,32 @@ class RangeJob
   I64 num,lo,hi,N,sqrt_primes,cbrt_primes;
   Prime *primes;
   CJob *cmd;
-} rj[mp_cnt];
+} rj[mp_count];
 
 I64 TestCoreSubRange(RangeJob *r)
 {
   I64 i,j,m,n,n2,sf,res=0,range=r->hi-r->lo,
 	*sumfacts=MAlloc(range*sizeof(I64)),
 	*residue =MAlloc(range*sizeof(I64));
-  U16 *pow_cnt =MAlloc(range*sizeof(U16));
+  U16 *pow_count =MAlloc(range*sizeof(U16));
   Prime *p=r->primes;
   PowPrime *pp;
   MemSetI64(sumfacts,1,range);
   for (n=r->lo;n<r->hi;n++)
     residue[n-r->lo]=n;
   for (j=0;j<r->sqrt_primes;j++) {
-    MemSet(pow_cnt,0,range*sizeof(U16));
+    MemSet(pow_count,0,range*sizeof(U16));
     m=1;
-    for (i=0;i<p->pow_cnt;i++) {
+    for (i=0;i<p->pow_count;i++) {
       m*=p->prime;
       n=m-r->lo%m;
       while (n<range) {
-	pow_cnt[n]++;
+	pow_count[n]++;
 	n+=m;
       }
     }
     for (n=0;n<range;n++)
-      if (i=pow_cnt[n]) {
+      if (i=pow_count[n]) {
 	pp=&p->pp[i-1];
 	sumfacts[n]*=pp->sumfact;
 	residue [n]/=pp->n;
@@ -307,7 +307,7 @@ I64 TestCoreSubRange(RangeJob *r)
       }
     }
   }
-  Free(pow_cnt);
+  Free(pow_count);
   Free(residue);
   Free(sumfacts);
   return res;
@@ -340,7 +340,7 @@ I64 MagicPairs(I64 N)
   F64 t0=tS;
   I64 res=0;
   I64 sqrt_primes,cbrt_primes,num_powprimes,
-	i,k,n=(N-1)/mp_cnt+1;
+	i,k,n=(N-1)/mp_count+1;
   Prime *primes=PrimesNew(N,&sqrt_primes,&cbrt_primes);
   PowPrime *powprimes=PowPrimesNew(N,sqrt_primes,primes,&num_powprimes);
 
@@ -350,7 +350,7 @@ I64 MagicPairs(I64 N)
   *progress1_desc=0;
   progress1_max=N;
   k=2;
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     rj[i].doc=DocPut;
     rj[i].num=i;
     rj[i].lo=k;
@@ -361,9 +361,9 @@ I64 MagicPairs(I64 N)
     rj[i].sqrt_primes=sqrt_primes;
     rj[i].cbrt_primes=cbrt_primes;
     rj[i].primes=primes;
-    rj[i].cmd=JobQueue(&TestCoreRange,&rj[i],mp_cnt-1-i,0);
+    rj[i].cmd=JobQueue(&TestCoreRange,&rj[i],mp_count-1-i,0);
   }
-  for (i=0;i<mp_cnt;i++)
+  for (i=0;i<mp_count;i++)
     res+=JobResGet(rj[i].cmd);
   Free(powprimes);
   Free(primes);

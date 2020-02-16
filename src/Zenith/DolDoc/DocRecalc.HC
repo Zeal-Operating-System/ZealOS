@@ -278,9 +278,9 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 
     //WinMgr updates all wins $TX,"30",D="WINMGR_FPS"$, 33.33333mS
   if (recalc_flags&RECALCG_MASK==RECALCt_TO_SCRN && doc->owning_task!=Fs) {
-    i_jif=cnts.jiffies+JIFFY_FREQ/250; //4 ms
+    i_jif=counts.jiffies+JIFFY_FREQ/250; //4 ms
     while (Bt(&doc->locked_flags,DOClf_LOCKED)) {
-      if (cnts.jiffies>=i_jif)
+      if (counts.jiffies>=i_jif)
 	return FALSE; //Bail-out if doc locked.
       Yield;
     }
@@ -303,7 +303,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 	dc=DCAlias(gr.dc2,win_task); //Necessary for sprites
       break;
     case RECALCt_TO_SCRN:
-      if (doc->updates_cnt++%(ToI64(winmgr.fps/10)+1) &&
+      if (doc->updates_count++%(ToI64(winmgr.fps/10)+1) &&
 	    !Bt(&doc->flags,DOCf_DO_FULL_REFRESH) &&
 	    !(doc->flags&DOCF_BWD_MOVEMENT))
 	full_refresh=FALSE;

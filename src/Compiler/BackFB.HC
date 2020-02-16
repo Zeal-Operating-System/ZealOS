@@ -446,7 +446,7 @@ U0 ICFCmpAndBranch(CCompCtrl *cc,CIntermediateCode *tmpi,I64 rip,
     }
   }
 
-  rip+=tmpi->ic_cnt;
+  rip+=tmpi->ic_count;
   lb=OptLabelFwd(tmpi->ic_data);
   short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
   if (!buf && lb->addr!=INVALID_PTR) {

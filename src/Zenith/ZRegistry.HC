@@ -54,8 +54,8 @@ public Bool RegWrite(U8 *path,U8 *fmt,...)
   return res;
 }
 
-public I64 RegCnt(U8 *path)
-{//Tree branch cnt in registry.
+public I64 RegCount(U8 *path)
+{//Tree branch count in registry.
   I64 res=0;
   CDocEntry *tree_branch,*start_indent,*end_indent;
   Bool unlock_doc=DocLock(sys_registry_doc);
@@ -181,14 +181,14 @@ public U0 OnceExe()
   try {
 
     RegDft("Once/Zenith","");
-    if (RegCnt("Once/Zenith")>2) {
+    if (RegCount("Once/Zenith")>2) {
       Zenith("RegExe(\"Once/Zenith\");");
       AOnceFlush;
     }
     LBts(&sys_run_level,RLf_ONCE_ZENITH);
 
     RegDft("Once/User","");
-    if (RegCnt("Once/User")>2) {
+    if (RegCount("Once/User")>2) {
       RegExe("Once/User");
       OnceFlush;
     }

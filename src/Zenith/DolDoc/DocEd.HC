@@ -117,7 +117,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
   if (doc->flags & DOCF_ALLOW_UNDO) {
     DocPrint(bdoc,"$$CM+BY+LX+NC,1,1$$");
     doc_e=DocPrint(bdoc,"$$DA+BD+RD-TRM,RT=U32,A=\"Undo:%%03d\"$$\n");
-    doc_e->data=&doc->undo_cnt;
+    doc_e->data=&doc->undo_count;
     DocDataFmt(bdoc,doc_e);
   }
 

@@ -21,7 +21,7 @@ U0 CompNoteFloatOp(CCompCtrl *cc,CIntermediateCode *tmpi,
       case CN_INST:
 	if (cc->last_float_op_ic!=tmpi) {
 	  if (cc->dont_push_float) {
-	    if (intermediate_code_table[tmpi->ic_code].arg_cnt==IS_2_ARG &&
+	    if (intermediate_code_table[tmpi->ic_code].arg_count==IS_2_ARG &&
 		  cc->last_float_op_ic->res.reg!=REG_R8)
 	      tmpi->ic_flags|=ICF_ALT_TEMPLATE;
 	    else
@@ -29,7 +29,7 @@ U0 CompNoteFloatOp(CCompCtrl *cc,CIntermediateCode *tmpi,
 	    link=TRUE;
 	  }
 	} else {
-	  if (intermediate_code_table[tmpi->ic_code].arg_cnt==IS_2_ARG &&
+	  if (intermediate_code_table[tmpi->ic_code].arg_count==IS_2_ARG &&
 		cc->last_float_op_pos!=CN_A1)
 	    tmpi->ic_flags|=ICF_ALT_TEMPLATE;
 	  else
@@ -114,10 +114,10 @@ U0 ICCopyTemplate(CCompCtrl *cc,CIntermediateCode *tmpi,I64 op,
       }
     }
   }
-  MemCpy(&tmpi->ic_body[tmpi->ic_cnt],ptr,i);
+  MemCpy(&tmpi->ic_body[tmpi->ic_count],ptr,i);
   if (!off_the_record)
     CompNoteFloatOp(cc,tmpi,dont_pushable,dont_popable,pos);
-  tmpi->ic_cnt+=i;
+  tmpi->ic_count+=i;
 }
 
 U0 ICFCvt(CCompCtrl *cc,CIntermediateCode *tmpi,I64 r1,
@@ -288,18 +288,18 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
 	if (buf) {
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_IMM_I64;
-	  tmpie->rip=rip+tmpi->ic_cnt-8;
+	  tmpie->rip=rip+tmpi->ic_count-8;
 	  tmpie->next=tmpex->ie_lst;
 	  tmpex->ie_lst=tmpie;
 	}
 	ICU16(tmpi,0xD3FF);
       } else {
 	ICU8(tmpi,0xE8);
-	ICU32(tmpi,-(rip+tmpi->ic_cnt+4));
+	ICU32(tmpi,-(rip+tmpi->ic_count+4));
 	if (buf) {
 	  tmpie=CAlloc(sizeof(CAOTImportExport));
 	  tmpie->type=IET_REL_I32;
-	  tmpie->rip=rip+tmpi->ic_cnt-4;
+	  tmpie->rip=rip+tmpi->ic_count-4;
 	  tmpie->next=tmpex->ie_lst;
 	  tmpex->ie_lst=tmpie;
 	}
@@ -308,7 +308,7 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
       if (tmpex->type&HTF_UNRESOLVED)
 	throw('Compiler');
       else {
-	i=tmpex->val-(rip+tmpi->ic_cnt+5);
+	i=tmpex->val-(rip+tmpi->ic_count+5);
 	if (!(I32_MIN<=i<=I32_MAX)) {
 	  throw('Compiler');
 //	    ICU16(tmpi,0xBB48);
@@ -321,7 +321,7 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
       }
     }
   } else {
-    i=tmpex->val-(rip+tmpi->ic_cnt+5);
+    i=tmpex->val-(rip+tmpi->ic_count+5);
     if (!(I32_MIN<=i<=I32_MAX)) {
       ICU16(tmpi,0xBB48);
       ICU64(tmpi,tmpex->val);

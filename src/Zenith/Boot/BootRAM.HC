@@ -27,7 +27,7 @@ _HI_MEMCPY::
 	RET1	24
 }
 _extern _HI_CALL I64 HiCall(U8 *machine_code);
-_extern _HI_MEMCPY U8 *HiMemCpy(U8 *dst,U8 *src,I64 cnt);
+_extern _HI_MEMCPY U8 *HiMemCpy(U8 *dst,U8 *src,I64 count);
 
 #help_index "Boot"
 public U0 BootRAM(U8 *filename=NULL)
@@ -51,7 +51,7 @@ public U0 BootRAM(U8 *filename=NULL)
 	sizeof(CKernel)-offset(CKernel.start));
 
   CLI
-  if (mp_cnt>1)
+  if (mp_count>1)
     MPHalt;
 
   HiMemCpy(sys_ram_reboot,SYS_RAM_REBOOT,SYS_RAM_REBOOT_END-SYS_RAM_REBOOT);

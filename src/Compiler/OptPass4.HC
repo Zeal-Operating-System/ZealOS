@@ -151,8 +151,8 @@ U0 OptPass4(CCompCtrl *cc,COptReg *reg_offsets,I64 *_type)
     if (dead_code&&code!=IC_LABEL) {
       if (code==IC_JMP||code==IC_SUB_CALL) {
 	lb=OptLabelFwd(tmpi->ic_data);
-	if (lb->use_cnt>0)
-	  lb->use_cnt--;
+	if (lb->use_count>0)
+	  lb->use_count--;
       }
       tmpi=OptFree(tmpi);
     } else {
@@ -166,7 +166,7 @@ U0 OptPass4(CCompCtrl *cc,COptReg *reg_offsets,I64 *_type)
 	  tmpil2=tmpil3=&cmp.ic_nop;
       } else
 	tmpil1=tmpil2=tmpil3=&cmp.ic_nop;
-      switch [intermediate_code_table[code].arg_cnt] {
+      switch [intermediate_code_table[code].arg_count] {
 	case IS_V_ARG:
 	  ps->ptr-=tmpi->ic_data>>3;
 	  break;
@@ -527,7 +527,7 @@ p4_sib:
 	  break;
 	case IC_LABEL:
 	  lb=tmpi->ic_data;
-	  if (lb->use_cnt)
+	  if (lb->use_count)
 	    dead_code=FALSE;
 	  break;
 	case IC_JMP:
@@ -549,7 +549,7 @@ p4_sib:
 	      tmpi->arg1.disp=0;
 	      tmpil1->res.type=MDF_REG+tmpil1->res.type.raw_type;
 	      tmpil1->res.disp=0;
-	      if (intermediate_code_table[tmpi->ic_code].arg_cnt==IS_2_ARG) {
+	      if (intermediate_code_table[tmpi->ic_code].arg_count==IS_2_ARG) {
 		tmpi->arg1.reg=REG_R8;
 		tmpil1->res.reg=REG_R8;
 	      } else {
@@ -676,7 +676,7 @@ p4_sib:
       if (tmpi) {
 	while (OptIC4(tmpi));
 	code=tmpi->ic_code;
-	if (intermediate_code_table[code].res_cnt)
+	if (intermediate_code_table[code].res_count)
 	  ParsePush(ps,tmpi);
       }
     }

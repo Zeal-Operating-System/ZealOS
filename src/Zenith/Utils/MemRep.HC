@@ -140,7 +140,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
     "scrncast.dc2_alias\t:%010X\n",DCSize(scrncast.dc2_alias);
   } else if (task==zenith_task) {
     j=0;k=0;m=0;n=0;
-    for (i=0;i<mp_cnt;i++) {
+    for (i=0;i<mp_count;i++) {
       c=&cpu_structs[i];
       k+=TSSSize(c->tss);
       task1=c->seth_task;
@@ -216,7 +216,7 @@ public U0 MemRep()
     "$$BLACK$$Code/Data Heap\t:%010X/%010X$$FG$$\n",
 	  sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
 
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     c=&cpu_structs[i];
     "$$PURPLE$$CPU%d$$FG$$\n$$ID,2$$",i;
     task=c->seth_task;

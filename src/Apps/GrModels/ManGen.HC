@@ -5,8 +5,8 @@
 
 class Man
 {
-  I32 vertex_cnt;
-  I32 tri_cnt;
+  I32 vertex_count;
+  I32 tri_count;
   CD3I32   v[VERTICES_NUM];
   CMeshTri t[TRIS_NUM];
 } *m;
@@ -142,7 +142,7 @@ U0 MDCorrect(ManDefineStruct *md)
 
 I64 AddVertex(ManDefineStruct *md,I64 x,I64 y,I64 z)
 {
-  I64 res=m->vertex_cnt++;
+  I64 res=m->vertex_count++;
   m->v[res].x=-x;
   m->v[res].y=-y-md->leg_len-md->foot_rad*2;
   m->v[res].z=-z;
@@ -151,7 +151,7 @@ I64 AddVertex(ManDefineStruct *md,I64 x,I64 y,I64 z)
 
 I64 AddTri(ManDefineStruct *,I64 c,I64 n0,I64 n1,I64 n2)
 {
-  I64 res=m->tri_cnt++;
+  I64 res=m->tri_count++;
   m->t[res].color=c;
   m->t[res].nums[0]=n1;
   m->t[res].nums[1]=n0;
@@ -213,16 +213,16 @@ U8 *Man2CSprite()
 {
 //See $LK,"::/Zenith/Gr/GrSpritePlot.HC",A="FL:::/Zenith/Gr/GrSpritePlot.HC,1"$ for how CSprite are stored.
   U8 *res=MAlloc(sizeof(CSpriteMeshU8s)+
-	m->vertex_cnt*sizeof(CD3I32)+m->tri_cnt*sizeof(CMeshTri)+
+	m->vertex_count*sizeof(CD3I32)+m->tri_count*sizeof(CMeshTri)+
 	sprite_elem_base_sizes[SPT_END]),
 	*dst=res;
   *dst++ =SPT_MESH;
-  *dst(I32 *)++ =m->vertex_cnt;
-  *dst(I32 *)++ =m->tri_cnt;
-  MemCpy(dst,&m->v,m->vertex_cnt*sizeof(CD3I32));
-  dst+=m->vertex_cnt*sizeof(CD3I32);
-  MemCpy(dst,&m->t,m->tri_cnt*sizeof(CMeshTri));
-  dst+=m->tri_cnt*sizeof(CMeshTri);
+  *dst(I32 *)++ =m->vertex_count;
+  *dst(I32 *)++ =m->tri_count;
+  MemCpy(dst,&m->v,m->vertex_count*sizeof(CD3I32));
+  dst+=m->vertex_count*sizeof(CD3I32);
+  MemCpy(dst,&m->t,m->tri_count*sizeof(CMeshTri));
+  dst+=m->tri_count*sizeof(CMeshTri);
   *dst++ =SPT_END;
   return res;
 }

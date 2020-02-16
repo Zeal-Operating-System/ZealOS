@@ -4,7 +4,7 @@ RegDft("ZenithOS/RawHide","F64 best_score=9999;\n");
 RegExe("ZenithOS/RawHide");
 
 F64 t0,tf;
-I64 outside_cnt;
+I64 outside_count;
 
 #define MAP_WIDTH	1000
 #define MAP_HEIGHT	1000
@@ -257,7 +257,7 @@ U0 DrawIt(CTask *task,CDC *dc)
   }
   GrPrint(dc,-task->scroll_x,-task->scroll_y,
 	"Outside:%03d Time:%7.2fs Best:%7.2fs",
-	outside_cnt,t,best_score);
+	outside_count,t,best_score);
 }
 
 U0 BuddySel(I64 i)
@@ -328,8 +328,8 @@ Bool CheckMap(I64 x,I64 y)
 
 U0 AnimateTask(CTask *parent)
 {
-  I64 i,cx,cy,cursor_x,cursor_y,dd,ddx,ddy,cnt,max_speed=I64_MAX,updates=0,
-	my_outside_cnt;
+  I64 i,cx,cy,cursor_x,cursor_y,dd,ddx,ddy,count,max_speed=I64_MAX,updates=0,
+	my_outside_count;
   F64 f,d,dx,dy,s,stress;
   Animal *tmpa,*tmpa1;
   while (TRUE) {
@@ -338,8 +338,8 @@ U0 AnimateTask(CTask *parent)
 	  cy=(MAP_HEIGHT-parent->pix_height)/2;
     cursor_x=ms.pos.x+cx-parent->pix_left-parent->scroll_x;
     cursor_y=ms.pos.y+cy-parent->pix_top -parent->scroll_y;
-    cnt=0;stress=0;
-    my_outside_cnt=0;
+    count=0;stress=0;
+    my_outside_count=0;
     if (cursor_x<FENCE_WIDTH && cursor_y<FENCE_HEIGHT)
       gate_t=tS;
     RedrawGate;
@@ -409,17 +409,17 @@ U0 AnimateTask(CTask *parent)
 	  tmpa->y -=tmpa->dy;
 	  tmpa->dy=-tmpa->dy;
 	}
-	cnt++;
+	count++;
 	if (tmpa->x>>32>=FENCE_WIDTH || tmpa->y>>32>=FENCE_HEIGHT)
-	  my_outside_cnt++;
+	  my_outside_count++;
       }
     }
-    outside_cnt=my_outside_cnt;
+    outside_count=my_outside_count;
 
     if (!(updates&15))
       RiverDropsNext(parent);
 
-    if (!tf && !outside_cnt) {
+    if (!tf && !outside_count) {
       tf=tS;
       music.mute=TRUE;
       Snd(86);Sleep(200);Snd;Sleep(100);
@@ -432,8 +432,8 @@ U0 AnimateTask(CTask *parent)
 
     updates++;
 
-    if (cnt)
-      stress/=cnt;
+    if (count)
+      stress/=count;
     else
       stress=0;
     if (stress>100.0) {
@@ -501,7 +501,7 @@ U0 ReInit()
     a[i].frame0=RandU16&3;
     BuddySel(i);
   }
-  outside_cnt=ANIMALS_NUM;
+  outside_count=ANIMALS_NUM;
   gate_t=0;
   gate_é=0;
   t0=tS;

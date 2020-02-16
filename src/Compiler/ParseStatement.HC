@@ -19,7 +19,7 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
     if (tmpc) {
       if (!Bt(&tmpc->flags,Cf_EXTERN))
 	tmpc=NULL;
-      else if (tmpc->use_cnt<3)
+      else if (tmpc->use_count<3)
 	UnusedExternWarning(cc,tmpc);
     }
     if (tmpc) {
@@ -36,7 +36,7 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
     LBtr(&tmpc->flags,Cf_EXTERN);
     if (fsp_flags&FSF_PUBLIC)
       tmpc->type|=HTF_PUBLIC;
-    tmpc->use_cnt=0;
+    tmpc->use_count=0;
     if (cc->last_U16=='\n')
       HashSrcFileSet(cc,tmpc,-1);
     else
@@ -66,7 +66,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
   CAOTCtrl *aotc=cc->aotc;
   CHashClass *header_return;
   CHashFun *tmpf;
-  I64 header_arg_cnt;
+  I64 header_arg_count;
   if (name) {//if not fun_ptr
     if (cc->flags&CCF_AOT_COMPILE) {
       if ((tmpf=HashFind(name,cc->htc.glbl_hash_table,HTT_FUN)) &&
@@ -76,7 +76,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
       if ((tmpf=HashSingleTableFind(name,cc->htc.glbl_hash_table,HTT_FUN)) &&
 	    !Bt(&tmpf->flags,Cf_EXTERN))
 	tmpf=NULL;
-    if (tmpf && tmpf->use_cnt<3)
+    if (tmpf && tmpf->use_count<3)
       UnusedExternWarning(cc,tmpf);
   } else
     tmpf=NULL;
@@ -87,7 +87,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
     Free(tmpf->idx);
     tmpf->idx=NULL;
     Free(name);
-    header_arg_cnt=tmpf->arg_cnt;
+    header_arg_count=tmpf->arg_count;
     header_lst=tmpf->member_lst_and_root;
     header_return=tmpf->return_class;
     tmpf->member_lst_and_root=NULL;
@@ -109,11 +109,11 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
   }
   BEqu(&tmpf->type,HTf_PUBLIC,fsp_flags&FSF_PUBLIC);
   tmpf->return_class=tmp_return;
-  tmpf->use_cnt=0;
+  tmpf->use_count=0;
   HashSrcFileSet(cc,tmpf);
   ParseVarLst(cc,tmpf,PRS0_NULL|PRS1_FUN_ARG);
-  tmpf->arg_cnt=tmpf->member_cnt;
-  if (0<tmpf->arg_cnt<<3<=I16_MAX && !Bt(&tmpf->flags,Ff_DOT_DOT_DOT))
+  tmpf->arg_count=tmpf->member_count;
+  if (0<tmpf->arg_count<<3<=I16_MAX && !Bt(&tmpf->flags,Ff_DOT_DOT_DOT))
     LBts(&tmpf->flags,Ff_RET1);
   tmpm=tmpf->member_lst_and_root;
   while (tmpm) {
@@ -125,11 +125,11 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
     if (GetOption(OPTf_WARN_HEADER_MISMATCH)) {
       if (tmpf->return_class!=header_return) {
 	PrintWarn("Fun Header return mismatch '%s'\n",tmpf->str);
-	cc->warning_cnt++;
+	cc->warning_count++;
       }
-      if (!MemberLstCmp(tmpf->member_lst_and_root,header_lst,header_arg_cnt)) {
+      if (!MemberLstCmp(tmpf->member_lst_and_root,header_lst,header_arg_count)) {
 	PrintWarn("Fun header args mismatch '%s'\n",tmpf->str);
-	cc->warning_cnt++;
+	cc->warning_count++;
       }
     }
     MemberLstDel(header_lst);
@@ -193,11 +193,11 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
   tmpm=cc->htc.fun->member_lst_and_root;
   while (tmpm) {
     if (tmpm->flags & MLF_NO_UNUSED_WARN) {
-      if (tmpm->use_cnt>1&&StrCmp(tmpm->str,"_anon_"))
+      if (tmpm->use_count>1&&StrCmp(tmpm->str,"_anon_"))
 	PrintWarn("Unneeded no_warn\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
 	      cc->lex_include_stk->full_name,cc->lex_include_stk->line_num,
 	      tmpm->str,cc->htc.fun->str);
-    } else if (!tmpm->use_cnt && GetOption(OPTf_WARN_UNUSED_VAR))
+    } else if (!tmpm->use_count && GetOption(OPTf_WARN_UNUSED_VAR))
       PrintWarn("Unused var\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
 	    cc->lex_include_stk->full_name,cc->lex_include_stk->line_num,
 	    tmpm->str,cc->htc.fun->str);
@@ -226,7 +226,7 @@ U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
     if (!st) return;
     if (tmpad.next)
       is_array=TRUE;
-    else if (tmpad.total_cnt<0) {
+    else if (tmpad.total_count<0) {
       is_array=TRUE;
       tmpc--;
     } else
@@ -282,11 +282,11 @@ U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	  return;
       }
     } else {
-      if (tmpad.total_cnt<0) {
+      if (tmpad.total_count<0) {
 	i=0;
 	undef_array_size=TRUE;
       } else {
-	i=tmpad.total_cnt;
+	i=tmpad.total_count;
 	undef_array_size=FALSE;
       }
       if (tmpf_fun_ptr)
@@ -390,8 +390,8 @@ U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
       tmpg->var_class=tmpc;
       tmpg->str=st;
       tmpg->size=j;
-      tmpg->dim.total_cnt=i;
-      tmpg->use_cnt=0;
+      tmpg->dim.total_count=i;
+      tmpg->use_count=0;
       if (cc->last_U16=='\n')
 	HashSrcFileSet(cc,tmpg,-1);
       else
@@ -416,7 +416,7 @@ U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	  Lex(cc);
 	  ParseGlobalInit(cc,tmpg,1);
 	  LexPopNoRestore(cc);
-	  tmpg->size=tmpg->dim.total_cnt*tmpc->size;
+	  tmpg->size=tmpg->dim.total_count*tmpc->size;
 	  if (tmphg)
 	    tmphg->size=tmpg->size;
 	  if (cc->flags&CCF_AOT_COMPILE)
@@ -436,9 +436,9 @@ U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 	LexPopNoRestore(cc);
       }
       if (has_alias) {
-	if (tmpex(CHashGlobalVar *)->use_cnt<2) {
+	if (tmpex(CHashGlobalVar *)->use_count<2) {
 	  PrintWarn("Unused extern '%s'\n",tmpex(CHashGlobalVar *)->str);
-	  cc->warning_cnt++;
+	  cc->warning_count++;
 	}
 	tmpex(CHashGlobalVar *)->flags|=GVF_ALIAS;
 	tmpex(CHashGlobalVar *)->data_addr=tmpg->data_addr;
@@ -456,7 +456,7 @@ U0 ParseGlobalVarLst(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
   }
 }
 
-U0 ParseIf(CCompCtrl *cc,I64 try_cnt,CCodeMisc *lb_break)
+U0 ParseIf(CCompCtrl *cc,I64 try_count,CCodeMisc *lb_break)
 {
   CCodeMisc *lb,*lb1;
   I64 k;
@@ -470,20 +470,20 @@ U0 ParseIf(CCompCtrl *cc,I64 try_cnt,CCodeMisc *lb_break)
   Lex(cc);
   lb=COCMiscNew(cc,CMT_LABEL);
   ICAdd(cc,IC_BR_ZERO,lb,0);
-  ParseStatement(cc,try_cnt,lb_break);
+  ParseStatement(cc,try_count,lb_break);
   k=ParseKeyWord(cc);
   if (k==KW_ELSE) {
     Lex(cc);
     lb1=COCMiscNew(cc,CMT_LABEL);
     ICAdd(cc,IC_JMP,lb1,0);
     ICAdd(cc,IC_LABEL,lb,0);
-    ParseStatement(cc,try_cnt,lb_break);
+    ParseStatement(cc,try_count,lb_break);
     ICAdd(cc,IC_LABEL,lb1,0);
   } else
     ICAdd(cc,IC_LABEL,lb,0);
 }
 
-U0 ParseWhile(CCompCtrl *cc,I64 try_cnt)
+U0 ParseWhile(CCompCtrl *cc,I64 try_count)
 {
   CCodeMisc *lb,*lb_done;
   if (cc->token!='(')
@@ -498,18 +498,18 @@ U0 ParseWhile(CCompCtrl *cc,I64 try_cnt)
   Lex(cc);
   lb_done=COCMiscNew(cc,CMT_LABEL);
   ICAdd(cc,IC_BR_ZERO,lb_done,0);
-  ParseStatement(cc,try_cnt,lb_done);
+  ParseStatement(cc,try_count,lb_done);
   ICAdd(cc,IC_JMP,lb,0);
   ICAdd(cc,IC_LABEL,lb_done,0);
 }
 
-U0 ParseDoWhile(CCompCtrl *cc,I64 try_cnt)
+U0 ParseDoWhile(CCompCtrl *cc,I64 try_count)
 {
   CCodeMisc *lb,*lb_done;
   lb=COCMiscNew(cc,CMT_LABEL);
   lb_done=COCMiscNew(cc,CMT_LABEL);
   ICAdd(cc,IC_LABEL,lb,0);
-  ParseStatement(cc,try_cnt,lb_done);
+  ParseStatement(cc,try_count,lb_done);
   if (ParseKeyWord(cc)!=KW_WHILE)
     LexExcept(cc,"Missing 'while' at");
   if (Lex(cc)!='(')
@@ -526,7 +526,7 @@ U0 ParseDoWhile(CCompCtrl *cc,I64 try_cnt)
   Lex(cc);
 }
 
-U0 ParseFor(CCompCtrl *cc,I64 try_cnt)
+U0 ParseFor(CCompCtrl *cc,I64 try_count)
 {
   CCodeCtrl *tmpcbh;
   CCodeMisc *lb,*lb_done;
@@ -534,7 +534,7 @@ U0 ParseFor(CCompCtrl *cc,I64 try_cnt)
   if (cc->token!='(')
     LexExcept(cc,"Expecting '(' at ");
   Lex(cc);
-  ParseStatement(cc,try_cnt);
+  ParseStatement(cc,try_count);
 
   lb=COCMiscNew(cc,CMT_LABEL);
   ICAdd(cc,IC_LABEL,lb,0);
@@ -549,7 +549,7 @@ U0 ParseFor(CCompCtrl *cc,I64 try_cnt)
   COCPush(cc);
   COCInit(cc);
   if (cc->token!=')')
-    ParseStatement(cc,try_cnt,NULL,0);
+    ParseStatement(cc,try_count,NULL,0);
   COCPush(cc);
   tmpcbh=COCPopNoFree(cc);
   COCPop(cc);
@@ -557,7 +557,7 @@ U0 ParseFor(CCompCtrl *cc,I64 try_cnt)
     LexExcept(cc,"Missing ')' at ");
   Lex(cc);
 
-  ParseStatement(cc,try_cnt,lb_done);
+  ParseStatement(cc,try_count,lb_done);
   COCAppend(cc,tmpcbh);
   ICAdd(cc,IC_JMP,lb,0);
   ICAdd(cc,IC_LABEL,lb_done,0);
@@ -575,7 +575,7 @@ class CSwitchCase {
   CSubSwitch *ss;
 };
 
-U0 ParseSwitch(CCompCtrl *cc,I64 try_cnt)
+U0 ParseSwitch(CCompCtrl *cc,I64 try_count)
 {
   CSwitchCase *header=NULL,*tmps,*tmps1;	//Leaks on except
   CSubSwitch head,*tmpss;			//Leaks on except
@@ -594,12 +594,12 @@ U0 ParseSwitch(CCompCtrl *cc,I64 try_cnt)
   QueueInit(&head);
 
   head.last->lb_break=COCMiscNew(cc,CMT_LABEL);
-  head.last->lb_break->use_cnt++;
+  head.last->lb_break->use_count++;
   lb_dft=COCMiscNew(cc,CMT_LABEL);
-  lb_dft->use_cnt++;
+  lb_dft->use_count++;
   mc_jt=COCMiscNew(cc,CMT_JMP_TABLE);
   mc_jt->begin=COCMiscNew(cc,CMT_LABEL);
-  mc_jt->begin->use_cnt++;
+  mc_jt->begin->use_count++;
   if (!ParseExpression(cc,NULL,FALSE))
     throw('Compiler');
   tmpi_sub=ICAdd(cc,IC_IMM_I64,0,cmp.internal_types[RT_I64]);
@@ -632,7 +632,7 @@ sw_cont:
 	  tmpss=MAlloc(sizeof(CSubSwitch));
 	  QueueInsert(tmpss,head.last);
 	  head.last->lb_break=COCMiscNew(cc,CMT_LABEL);
-	  head.last->lb_break->use_cnt++;
+	  head.last->lb_break->use_count++;
 	  lb_fwd_case=COCMiscNew(cc,CMT_LABEL);
 	  tmpi_jmp=ICAdd(cc,IC_JMP,lb_fwd_case,0);
 
@@ -656,7 +656,7 @@ sw_cont:
 		}
 		goto sw_cont;
 	      default:
-		ParseStatement(cc,try_cnt);
+		ParseStatement(cc,try_count);
 	    }
 	  }
 	  break;
@@ -668,7 +668,7 @@ sw_cont:
 	  Lex(cc);
 	  lb_entry=COCMiscNew(cc,CMT_LABEL);
 	  ICAdd(cc,IC_LABEL,lb_entry,0);
-	  lb_entry->use_cnt++;
+	  lb_entry->use_count++;
 	  if (head.next!=&head) {
 	    tmpss=head.next;
 	    while (tmpss!=&head) {
@@ -739,7 +739,7 @@ sw_cont:
 	  dft_found=TRUE;
 	  break;
 	default:
-	  ParseStatement(cc,try_cnt,head.last->lb_break);
+	  ParseStatement(cc,try_count,head.last->lb_break);
       }
     }
 sw_sub_end:
@@ -839,7 +839,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
   Lex(cc); //Skip '}'
 }
 
-U0 ParseTryBlk(CCompCtrl *cc,I64 try_cnt)
+U0 ParseTryBlk(CCompCtrl *cc,I64 try_count)
 {
   CCodeMisc	*lb_catch,*lb_done,*lb_untry;
   CHashClass	*tmpc=cmp.internal_types[RT_PTR];
@@ -859,7 +859,7 @@ U0 ParseTryBlk(CCompCtrl *cc,I64 try_cnt)
   ICAdd(cc,IC_GET_LABEL,lb_untry,tmpc,ICF_PUSH_RES);
   ICAdd(cc,IC_GET_LABEL,lb_catch,tmpc,ICF_PUSH_RES);
   if (Bt(&tmp_try->flags,Cf_EXTERN)) {
-    cc->abs_cnts.externs++;
+    cc->abs_counts.externs++;
     if (cc->flags&CCF_AOT_COMPILE)
       ICAdd(cc,IC_CALL_IMPORT,tmp_try,tmpc);
     else
@@ -874,12 +874,12 @@ U0 ParseTryBlk(CCompCtrl *cc,I64 try_cnt)
   ICAdd(cc,IC_CALL_END,0,tmpc);
   ICAdd(cc,IC_END_EXP,0,0,ICF_RES_NOT_USED);
 
-  ParseStatement(cc,try_cnt+1);
+  ParseStatement(cc,try_count+1);
 
   ICAdd(cc,IC_LABEL,lb_untry,0);
   ICAdd(cc,IC_CALL_START,0,0);
   if (Bt(&tmp_untry->flags,Cf_EXTERN)) {
-    cc->abs_cnts.externs++;
+    cc->abs_counts.externs++;
     if (cc->flags&CCF_AOT_COMPILE)
       ICAdd(cc,IC_CALL_IMPORT,tmp_untry,tmpc);
     else
@@ -896,12 +896,12 @@ U0 ParseTryBlk(CCompCtrl *cc,I64 try_cnt)
 
   Lex(cc);
   ICAdd(cc,IC_LABEL,lb_catch,0);
-  ParseStatement(cc,try_cnt+1);
+  ParseStatement(cc,try_count+1);
   ICAdd(cc,IC_RET,0,tmpc);
   ICAdd(cc,IC_LABEL,lb_done,0);
 }
 
-Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
+Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
   CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON)
 {
   I64 i,fsp_flags=0;
@@ -923,7 +923,7 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
       if (cc->token=='{') {
 	Lex(cc);
 	while (cc->token!='}' && cc->token!=TK_EOF)
-	  ParseStatement(cc,try_cnt,lb_break);
+	  ParseStatement(cc,try_count,lb_break);
 	if (cc->lex_include_stk==cc->fun_lex_file)
 	  cc->max_line=cc->lex_include_stk->line_num;
 	if (Lex(cc)!=',') goto sm_done;
@@ -963,27 +963,27 @@ Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
 		  start:
 		    Lex(cc);
 		    case KW_LOCK:
-		      cc->lock_cnt++;
-		      ParseStatement(cc,try_cnt);
-		      cc->lock_cnt--;
+		      cc->lock_count++;
+		      ParseStatement(cc,try_count);
+		      cc->lock_count--;
 		      break;
 		    case KW_TRY:
-		      ParseTryBlk(cc,try_cnt);
+		      ParseTryBlk(cc,try_count);
 		      break;
 		    case KW_IF:
-		      ParseIf(cc,try_cnt,lb_break);
+		      ParseIf(cc,try_count,lb_break);
 		      break;
 		    case KW_FOR:
-		      ParseFor(cc,try_cnt);
+		      ParseFor(cc,try_count);
 		      break;
 		    case KW_WHILE:
-		      ParseWhile(cc,try_cnt);
+		      ParseWhile(cc,try_count);
 		      break;
 		    case KW_DO:
-		      ParseDoWhile(cc,try_cnt);
+		      ParseDoWhile(cc,try_count);
 		      break;
 		    case KW_SWITCH:
-		      ParseSwitch(cc,try_cnt);
+		      ParseSwitch(cc,try_count);
 		      break;
 		  end:
 		end:
@@ -1089,12 +1089,12 @@ sm_import:
 		case KW_RETURN:
 		  if (!cc->htc.fun)
 		    LexExcept(cc,"Not in fun.  Can't return a val ");
-		  if (try_cnt) {
+		  if (try_count) {
 		    tmp_untry=HashFind("SysUntry",
 			  cc->htc.hash_table_lst,HTT_FUN);
-		    for (i=0;i<try_cnt;i++) {
+		    for (i=0;i<try_count;i++) {
 		      if (Bt(&tmp_untry->flags,Cf_EXTERN)) {
-			cc->abs_cnts.externs++;
+			cc->abs_counts.externs++;
 			if (cc->flags&CCF_AOT_COMPILE)
 			  ICAdd(cc,IC_CALL_IMPORT,
 				tmp_untry,cmp.internal_types[RT_PTR]);
@@ -1126,7 +1126,7 @@ sm_import:
 		    g_lb->str=cc->cur_str;
 		    cc->cur_str=NULL;
 		  }
-		  g_lb->use_cnt++;
+		  g_lb->use_count++;
 		  ICAdd(cc,IC_JMP,g_lb,0);
 		  Lex(cc);
 		  goto sm_semicolon;

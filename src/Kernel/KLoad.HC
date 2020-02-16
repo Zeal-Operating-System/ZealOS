@@ -67,7 +67,7 @@ U0 SysSymImportsResolve(U8 *st_ptr,I64 ld_flags)
 U0 LoadPass1(U8 *src,U8 *module_base,I64 ld_flags)
 {
   U8 *ptr2,*ptr3,*st_ptr;
-  I64 i,j,cnt,etype;
+  I64 i,j,count,etype;
   CHashExport *tmpex=NULL;
   while (etype=*src++) {
     i=*src(U32 *)++;
@@ -96,8 +96,8 @@ U0 LoadPass1(U8 *src,U8 *module_base,I64 ld_flags)
 	if (ld_flags & LDF_NO_ABSS)
 	  src+=i*sizeof(U32);
 	else {
-	  cnt=i;
-	  for (j=0;j<cnt;j++) {
+	  count=i;
+	  for (j=0;j<count;j++) {
 	    ptr2=module_base+*src(U32 *)++;
 	    *ptr2(U32 *)+=module_base;
 	  }
@@ -119,8 +119,8 @@ U0 LoadPass1(U8 *src,U8 *module_base,I64 ld_flags)
 	  tmpex->val=ptr3;
 	  HashAdd(tmpex,Fs->hash_table);
 	}
-	cnt=i;
-	for (j=0;j<cnt;j++) {
+	count=i;
+	for (j=0;j<count;j++) {
 	  ptr2=module_base+*src(U32 *)++;
 	  *ptr2(I32 *)+=ptr3;
 	}
@@ -141,8 +141,8 @@ U0 LoadPass1(U8 *src,U8 *module_base,I64 ld_flags)
 	  tmpex->val=ptr3;
 	  HashAdd(tmpex,Fs->hash_table);
 	}
-	cnt=i;
-	for (j=0;j<cnt;j++) {
+	count=i;
+	for (j=0;j<count;j++) {
 	  ptr2=module_base+*src(U32 *)++;
 	  *ptr2(I64 *)+=ptr3;
 	}

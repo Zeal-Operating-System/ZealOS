@@ -25,7 +25,7 @@ U0 GodDoodleSmooth(I64 num)
 {
   CDC *dc=DCExt(god.doodle_dc,0,0,
 	god.doodle_dc->width-1,god.doodle_dc->height-1);
-  I64 i,x,y,x1,y1,c,histogram[16],best,best_cnt,c_old=god.doodle_dc->color;
+  I64 i,x,y,x1,y1,c,histogram[16],best,best_count,c_old=god.doodle_dc->color;
   for (y=0;y<god.doodle_dc->height;y++)
     for (x=0;x<god.doodle_dc->width;x++) {
       MemSet(histogram,0,sizeof(histogram));
@@ -36,11 +36,11 @@ U0 GodDoodleSmooth(I64 num)
 	    histogram[c]++;
 	}
       best=BLACK;
-      best_cnt=-1;
+      best_count=-1;
       for (i=0;i<16;i++)
-	if (histogram[i]>best_cnt) {
+	if (histogram[i]>best_count) {
 	  best=i;
-	  best_cnt=histogram[i];
+	  best_count=histogram[i];
 	}
       god.doodle_dc->color=best;
       GrPlot(god.doodle_dc,x,y);

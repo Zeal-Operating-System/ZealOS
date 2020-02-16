@@ -61,7 +61,7 @@ BHD_HISTART:
 	XOR	ECX,ECX
 	MOV	CX,U16 [BHD_BLK_CNT-BHD_START]
 
-@@05:	PUSH	CX	//Blk cnt
+@@05:	PUSH	CX	//Blk count
 
 //READ BLK
 	PUSH	ES	//Buf seg

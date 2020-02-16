@@ -118,9 +118,9 @@ U0 CommPutS(I64 port,U8 *st)
     CommPutChar(port,b);
 }
 
-public U0 CommPutBlk(I64 port,U8 *buf,I64 cnt)
+public U0 CommPutBlk(I64 port,U8 *buf,I64 count)
 {
-  while (cnt--)
+  while (count--)
     CommPutChar(port,*buf++);
 }
 

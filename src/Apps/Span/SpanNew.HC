@@ -24,7 +24,7 @@ U0 SpanDel(CMathODE *ode)
 
 U8 *SpanSave(CMathODE *ode,I64 *_size=NULL)
 {
-  I64 cnt;
+  I64 count;
   U8 *res,*ptr;
   MyMass   *tmpm;
   MySpring *tmps;
@@ -41,9 +41,9 @@ U8 *SpanSave(CMathODE *ode,I64 *_size=NULL)
   else
     h.num_springs=0;
 
-  cnt=sizeof(SpanHeader)+h.num_masses*M_SIZE+h.num_springs*S_SIZE;
+  count=sizeof(SpanHeader)+h.num_masses*M_SIZE+h.num_springs*S_SIZE;
 
-  ptr=res=MAlloc(cnt);
+  ptr=res=MAlloc(count);
   MemCpy(ptr,&h,sizeof(SpanHeader));
   ptr+=sizeof(SpanHeader);
 
@@ -60,7 +60,7 @@ U8 *SpanSave(CMathODE *ode,I64 *_size=NULL)
     ptr+=S_SIZE;
     tmps=tmps->next;
   }
-  if (_size) *_size=cnt;
+  if (_size) *_size=count;
   return res;
 }
 

@@ -58,7 +58,7 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
   CDocEntry *doc_e,*doc_e1;
   CDocBin *b;
   Bool unlock=DocLock(doc);
-  I64 ch,cnt=1;//terminator
+  I64 ch,count=1;//terminator
   U8 *st,*res,*dst,*src;
 
   if (!(doc->flags & (DOCF_PLAIN_TEXT|DOCF_PLAIN_TEXT_TABS)))
@@ -76,13 +76,13 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
 	case DOCT_TAB:
 	case DOCT_PAGE_BREAK:
 	case DOCT_CURSOR:
-	  cnt++;
+	  count++;
 	  break;
 	case DOCT_NEW_LINE:
 	  if (doc->flags&DOCF_CARRIAGE_RETURN)
-	    cnt+=2;
+	    count+=2;
 	  else
-	    cnt++;
+	    count++;
 	  break;
 	case DOCT_SOFT_NEW_LINE:
 	  break;
@@ -90,23 +90,23 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
 	  if (!(doc_e->de_flags & ~(DOCEF_TAG|DOCG_BL_IV_UL|DOCEF_WORD_WRAP|
 		DOCEF_HIGHLIGHT|DOCEF_SKIP|DOCEF_FILTER_SKIP))&&
 		!(doc_e->type&DOCG_BL_IV_UL)) {
-	    cnt+=StrLen(doc_e->tag);
+	    count+=StrLen(doc_e->tag);
 	    if (!(doc->flags & (DOCF_PLAIN_TEXT|DOCF_PLAIN_TEXT_TABS)) ||
 		  doc->flags&DOCF_DBL_DOLLARS)
-	      cnt+=StrOcc(doc_e->tag,'$$');
+	      count+=StrOcc(doc_e->tag,'$$');
 	    break;
 	  }
 	default:
 	  st=Doc2PlainText(doc,doc_e);
-	  cnt+=StrLen(st)+2;
+	  count+=StrLen(st)+2;
 	  Free(st);
       }
     }
   }
   for (b=doc->bin_head.next;b!=&doc->bin_head;b=b->next)
-    if (b->use_cnt>b->tmp_use_cnt)
-      cnt+=offset(CDocBin.end)-offset(CDocBin.start)+b->size;
-  res=MAlloc(cnt);
+    if (b->use_count>b->tmp_use_count)
+      count+=offset(CDocBin.end)-offset(CDocBin.start)+b->size;
+  res=MAlloc(count);
   dst=res;
   doc_e=doc->head.next;
   while (doc_e!=doc) {
@@ -154,7 +154,7 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
   b=doc->bin_head.next;
   if (b!=&doc->bin_head) {
     do {
-      if (b->use_cnt>b->tmp_use_cnt) {
+      if (b->use_count>b->tmp_use_count) {
 	MemCpy(dst,&b->start,offset(CDocBin.end)-offset(CDocBin.start));
 	dst+=offset(CDocBin.end)-offset(CDocBin.start);
 	MemCpy(dst,b->data,b->size);
@@ -163,8 +163,8 @@ public U8 *DocSave(CDoc *doc,I64 *_size=NULL)
       b=b->next;
     } while (b!=&doc->bin_head);
   } else
-    cnt--; //No terminator
-  if (_size) *_size=cnt;
+    count--; //No terminator
+  if (_size) *_size=count;
   if (unlock)
     DocUnlock(doc);
   return res;
@@ -251,7 +251,7 @@ Bool DocCaptureUndo(CDoc *doc,Bool force=FALSE)
     unlock=DocLock(doc);
     time_stamp=GetTSC;
     if (doc->flags&DOCF_UNDO_DIRTY &&
-	  time_stamp>doc->undo_head.last->time_stamp+cnts.time_stamp_freq<<4 ||
+	  time_stamp>doc->undo_head.last->time_stamp+counts.time_stamp_freq<<4 ||
 	  force) {
       u=CAlloc(sizeof(CDocUndo),doc->mem_task);
       u->time_stamp=time_stamp;
@@ -261,7 +261,7 @@ Bool DocCaptureUndo(CDoc *doc,Bool force=FALSE)
       doc->flags=flags;
       QueueInsert(u,doc->undo_head.last);
       doc->flags&=~DOCF_UNDO_DIRTY;
-      doc->undo_cnt++;
+      doc->undo_count++;
       u->doc_flags=doc->flags;
       res=TRUE;
       if (doc->flags&DOCF_AUTO_SAVE)
@@ -290,7 +290,7 @@ U0 DocUndoRestore(CDoc *doc)
     doc->undo_head.next=u_next;
     doc->undo_head.last=u_last;
   }
-  DocUndoCntSet(doc);
+  DocUndoCountSet(doc);
   doc->flags&=~DOCF_UNDO_DIRTY;
   if (unlock)
     DocUnlock(doc);

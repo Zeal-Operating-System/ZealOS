@@ -99,7 +99,7 @@ U64 snow_x,snow_y,new_snow_mS;
 CDC *snow_tile;
 
 I64 king_x,king_y,king_mS,king_phase,
-    not_stopped_cnt;
+    not_stopped_count;
 F64 king_timeout,king_é,t0,tf,door_open_t0;
 I64 animate_mS,animate_phase;
 
@@ -218,7 +218,7 @@ U0 DrawIt(CTask *task,CDC *dc)
   }
   dc->color=LTBLUE;
   GrPrint(dc,0,0,"Freezing Peasants:%d Time:%3.2f Best:%3.2f",
-	not_stopped_cnt,tt-t0,best_score);
+	not_stopped_count,tt-t0,best_score);
 }
 
 U0 StepNew(CTask *task,I64 x,I64 y,F64 é,Bool left_right,Bool king)
@@ -356,7 +356,7 @@ U0 AnimateTask(I64)
       tmps=tmps1;
     }
 
-    not_stopped_cnt=0;
+    not_stopped_count=0;
     tmpp=peasant_head.next;
     while (tmpp!=&peasant_head) {
       if (tmpp->stopped) {
@@ -388,12 +388,12 @@ U0 AnimateTask(I64)
 	  if (!animate_mS && animate_phase&1)
 	    StepNew(Fs->parent_task,tmpp->x,tmpp->y,tmpp->é,
 		  animate_phase&2,FALSE);
-	  not_stopped_cnt++;
+	  not_stopped_count++;
 	}
       }
       tmpp=tmpp->next;
     }
-    if (!not_stopped_cnt && !tf) {
+    if (!not_stopped_count && !tf) {
       tf=tS;
       music.mute=TRUE;
       Snd(86);Sleep(200);Snd;Sleep(100);

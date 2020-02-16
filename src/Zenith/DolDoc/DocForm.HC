@@ -110,7 +110,7 @@ U0 DocDataFmt(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
       doc_e->max_col=i;
     } else if (doc_e->de_flags & DOCEF_LST) {
       if (doc_e->de_flags & DOCEF_DEFINE && (tmph=HashFind(doc_e->define_str,
-	    doc->win_task->hash_table,HTT_DEFINE_STR)) && 0<=d<tmph->cnt) {
+	    doc->win_task->hash_table,HTT_DEFINE_STR)) && 0<=d<tmph->count) {
 	ptr=MStrPrint("[%s]",tmph->sub_idx[d]);
 	Free(doc_e->tag);
 	doc_e->tag=StrNew(ptr,doc->mem_task);
@@ -231,14 +231,14 @@ public Bool DocForm(U8 *_d,U8 *class_name=lastclass,
 	  (doc_e=DocPrint(doc,"%s",format))) {
       tmpc2=ml->member_class;
       if ((doc_e->type_u8==DOCT_DATA || doc_e->type_u8==DOCT_LST ||
-	    doc_e->type_u8==DOCT_CHECK_BOX) && !tmpc2->ptr_stars_cnt) {
+	    doc_e->type_u8==DOCT_CHECK_BOX) && !tmpc2->ptr_stars_count) {
 	tmpc2=OptClassFwd(tmpc2);
-	tmpc2-=tmpc2->ptr_stars_cnt;
+	tmpc2-=tmpc2->ptr_stars_count;
 	if (tmpc2->type & HTT_INTERNAL_TYPE) {
 	  if (ml->dim.next) { //Array
 	    if (tmpc2->raw_type==RT_U8 &&
 		  LBtr(&doc_e->de_flags,&DOCEf_DFT_LEN)) {
-	      doc_e->len=ml->dim.total_cnt;
+	      doc_e->len=ml->dim.total_count;
 	      if (doc_e->de_flags&DOCEF_HAS_TERMINATOR)
 		doc_e->len--;
 	      Free(doc_e->tag);  //See $LK,"DataTagWidth",A="FA:::/Zenith/DolDoc/DocPlain.HC,DataTagWidth"$

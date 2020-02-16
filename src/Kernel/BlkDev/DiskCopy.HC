@@ -23,7 +23,7 @@ Bool CopySingleZ(U8 *f1,U8 *f2) //Just one file
 Bool CopySingle(U8 *f1,U8 *f2) //Just one file
 {
   U8 *absf1=FileNameAbs(f1),*absf2=FileNameAbs(f2),*buf;
-  I64 cnt,n,size,attr1=FileAttr(f1),attr2=FileAttr(f2),i,j;
+  I64 count,n,size,attr1=FileAttr(f1),attr2=FileAttr(f2),i,j;
   CFile *in_file=NULL,*out_file=NULL;
   if (!StrCmp(absf1,absf2)) {//onto self?
     Free(absf1);
@@ -41,25 +41,25 @@ Bool CopySingle(U8 *f1,U8 *f2) //Just one file
     in_file=FOpen(f1,"r");
   if (in_file) {
     size=FSize(in_file);
-    cnt=(size+BLK_SIZE-1)>>BLK_SIZE_BITS;
+    count=(size+BLK_SIZE-1)>>BLK_SIZE_BITS;
     if (attr2 & RS_ATTR_CONTIGUOUS)
-      out_file=FOpen(f2,"wc",cnt);
+      out_file=FOpen(f2,"wc",count);
     else
-      out_file=FOpen(f2,"w",cnt);
+      out_file=FOpen(f2,"w",count);
     if (out_file) {
       "Copying %s to %s\n",f1,f2;
       j=size;
-      while (cnt>0) {
-	if (cnt>COPY_BUF_BLKS) {
+      while (count>0) {
+	if (count>COPY_BUF_BLKS) {
 	  n=COPY_BUF_BLKS;
 	  i=n<<BLK_SIZE_BITS;
 	} else {
-	  n=cnt;
+	  n=count;
 	  i=j;
 	}
 	FBlkRead(in_file, buf,FFB_NEXT_BLK,n);
 	FBlkWrite(out_file,buf,FFB_NEXT_BLK,n);
-	cnt-=n;
+	count-=n;
 	j-=n<<BLK_SIZE_BITS;
       }
       out_file->flags|=FF_USE_OLD_DATETIME;

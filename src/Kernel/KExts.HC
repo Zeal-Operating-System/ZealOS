@@ -19,8 +19,8 @@ extern Bool BlkDevLock(CBlkDev *bd);
 extern CBlkDev *BlkDevNextFreeSlot(U8 first_drv_let,I64 type);
 extern Bool BlkDevUnlock(CBlkDev *bd,Bool rst=FALSE);
 extern U0 BlkDevsRelease();
-extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 cnt);
-extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 cnt);
+extern Bool BlkRead(CDrive *dv,U8 *buf, I64 blk, I64 count);
+extern Bool BlkWrite(CDrive *dv,U8 *buf, I64 blk, I64 count);
 extern U8 *Caller(I64 num=1);
 extern U8 *CatPrint(U8 *_dst,U8 *fmt,...);
 extern Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE);
@@ -30,7 +30,7 @@ extern I64 DefineMatch(U8 *needle,U8 *haystack_lst_dname,I64 flags=0);
 extern U8 *DefineSub(I64 sub,U8 *dname);
 extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 	Bool del_dir=FALSE,Bool print_message=TRUE);
-extern Bool DirMk(U8 *filename,I64 entry_cnt=0);
+extern Bool DirMk(U8 *filename,I64 entry_count=0);
 extern Bool Drive(U8 drv_let);
 extern U8 Drive2Letter(CDrive *dv=NULL);
 extern U0 DriveBlkDevDel(CBlkDev *bd);
@@ -41,17 +41,17 @@ extern U0 DrivesRelease();
 extern U0 DiskCacheInvalidate(CDrive *dv);
 extern U0 Exit();
 extern U8 *ExtDft(U8 *filename,U8 *extension);
-extern I64 FAT32AllocClus(CDrive *dv,I64 c,I64 cnt);
-extern I64 FAT32AllocContiguousClus(CDrive *dv,I64 cnt);
+extern I64 FAT32AllocClus(CDrive *dv,I64 c,I64 count);
+extern I64 FAT32AllocContiguousClus(CDrive *dv,I64 count);
 extern Bool FAT32DirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,
 	Bool free_old_chain);
 extern Bool FAT32FileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,
 	CDirEntry *_res,I64 fuf_flags=0);
 extern U0 FAT32Init(CDrive *dv);
-extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1);
-extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 cnt=1);
+extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
+extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
 extern U0 FClose(CFile *f);
-extern CFile *FOpen(U8 *filename,U8 *flags,I64 cnt=0);
+extern CFile *FOpen(U8 *filename,U8 *flags,I64 count=0);
 extern U8 *FileExtRemove(U8 *src,U8 *dst=NULL);
 extern Bool FileFind(U8 *filename,CDirEntry *_de=NULL,I64 fuf_flags=0);
 extern U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0);
@@ -83,7 +83,7 @@ extern I64 PopUp(U8 *buf,CTask *parent=NULL,CTask **_pu_task=NULL);
 extern U0 Print(U8 *fmt,...);
 extern U0 PutChars(U64 ch);
 extern U0 PutS(U8 *st); //Use $LK,"Print",A="MN:Print"$()
-extern I64 RedSeaAllocClus(CDrive *dv,I64 cnt);
+extern I64 RedSeaAllocClus(CDrive *dv,I64 count);
 extern Bool RedSeaDirNew(CDrive *dv,U8 *cur_dir,CDirEntry *tmpde,
 	Bool free_old_chain);
 extern Bool RedSeaFileFind(CDrive *dv,I64 cur_dir_clus,U8 *name,

@@ -147,10 +147,10 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
   Bool cursor_on=FALSE;
   while (!ScanKey(&ch,&sc,FALSE)) {
     if (IsRaw && raw_cursor) {
-      if (!cursor_on && ToI64(GetTSC*5/cnts.time_stamp_freq)&1) {
+      if (!cursor_on && ToI64(GetTSC*5/counts.time_stamp_freq)&1) {
 	'Û';
 	cursor_on=TRUE;
-      } else if (cursor_on && !(ToI64(GetTSC*5/cnts.time_stamp_freq)&1)) {
+      } else if (cursor_on && !(ToI64(GetTSC*5/counts.time_stamp_freq)&1)) {
 	'' CH_BACKSPACE;
 	cursor_on=FALSE;
       }

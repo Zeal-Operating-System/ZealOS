@@ -71,7 +71,7 @@ public U0 ODEDel(CMathODE *ode)
   Free(ode->state);
   Free(ode->array_base);
   if (ode->slave_tasks) {
-    for (i=0;i<mp_cnt;i++)
+    for (i=0;i<mp_count;i++)
       Kill(ode->slave_tasks[i]);
     Free(ode->slave_tasks);
   }
@@ -102,17 +102,17 @@ U0 ODEState2Internal(CMathODE *ode)
 {
   CMass *tmpm;
   F64 *old_array_base;
-  I64 mass_cnt;
+  I64 mass_count;
 
   if (ode->flags&ODEF_HAS_MASSES) {
-    mass_cnt=0;
+    mass_count=0;
     tmpm=ode->next_mass;
     while (tmpm!=&ode->next_mass) {
-      mass_cnt++;
+      mass_count++;
       tmpm=tmpm->next;
     }
     old_array_base=ode->array_base;
-    ode->n_internal=ode->n+6*mass_cnt;
+    ode->n_internal=ode->n+6*mass_count;
     ode->array_base=MAlloc(12*ode->n_internal*sizeof(F64),ode->mem_task);
     Free(old_array_base);
     ODERstPtrs(ode);
@@ -346,11 +346,11 @@ U0 ODEMPWake(CMathODE *ode)
 {
   I64 i;
   if (!ode->slave_tasks) {
-    ode->slave_tasks=CAlloc(mp_cnt*sizeof(CTask *));
-    for (i=0;i<mp_cnt;i++)
+    ode->slave_tasks=CAlloc(mp_count*sizeof(CTask *));
+    for (i=0;i<mp_count;i++)
       ode->slave_tasks[i]=Spawn(&ODEMPTask,ode,"ODE Slave",i);
   }
-  for (i=0;i<mp_cnt;i++) {
+  for (i=0;i<mp_count;i++) {
     Suspend(ode->slave_tasks[i],FALSE);
     MPInt(I_WAKE,i);
   }
@@ -362,7 +362,7 @@ U0 ODEMPSleep(CMathODE *ode)
   if (ode->slave_tasks) {
     while (ode->mp_not_done_flags)
       Yield;
-    for (i=0;i<mp_cnt;i++)
+    for (i=0;i<mp_count;i++)
       Suspend(ode->slave_tasks[i]);
   }
 }
@@ -372,7 +372,7 @@ U0 ODECallMPDerivative(CMathODE *ode,F64 t,F64 *state,F64 *DstateDt)
   ode->mp_t=t;
   ode->mp_state=state;
   ode->mp_DstateDt=DstateDt;
-  ode->mp_not_done_flags=1<<mp_cnt-1;
+  ode->mp_not_done_flags=1<<mp_count-1;
   do Yield;
   while (ode->mp_not_done_flags);
 }

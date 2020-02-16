@@ -306,7 +306,7 @@ U0 ICPreIncDec(CIntermediateCode *tmpi,I64 op,I64 rip)
   I64 r;
   CHashClass *tmpc=tmpi->ic_class,*tmpc1=tmpc-1;
   if (tmpi->ic_flags & ICF_BY_VAL) {
-    if (tmpc->ptr_stars_cnt && tmpc1->size!=1) {
+    if (tmpc->ptr_stars_count && tmpc1->size!=1) {
       ICAddSubEctImm(tmpi,
 	    tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	    tmpi->arg1.reg,tmpi->arg1.disp,
@@ -328,7 +328,7 @@ U0 ICPreIncDec(CIntermediateCode *tmpi,I64 op,I64 rip)
 	    tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip);
       r=REG_RCX;
     }
-    if (tmpc->ptr_stars_cnt &&
+    if (tmpc->ptr_stars_count &&
 	  tmpc1->size!=1) {
       ICAddSubEctImm(tmpi,MDF_DISP+tmpi->arg1_type_pointed_to,r,0,
 	    MDF_DISP+tmpi->arg1_type_pointed_to,r,0,
@@ -351,7 +351,7 @@ U0 ICPostIncDec(CIntermediateCode *tmpi,I64 op,I64 rip)
       ICMov(tmpi,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
 	    tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	    tmpi->arg1.reg,tmpi->arg1.disp,rip);
-    if (tmpc->ptr_stars_cnt &&	tmpc1->size!=1)
+    if (tmpc->ptr_stars_count &&	tmpc1->size!=1)
       ICAddSubEctImm(tmpi,
 	    tmpi->arg1.type&MDG_MASK+tmpi->arg1_type_pointed_to,
 	    tmpi->arg1.reg,tmpi->arg1.disp,
@@ -373,7 +373,7 @@ U0 ICPostIncDec(CIntermediateCode *tmpi,I64 op,I64 rip)
     if (tmpi->res.type.mode)
       ICMov(tmpi,tmpi->res.type,tmpi->res.reg,tmpi->res.disp,
 	    MDF_DISP+tmpi->arg1_type_pointed_to,r,0,rip);
-    if (tmpc->ptr_stars_cnt &&	tmpc1->size!=1)
+    if (tmpc->ptr_stars_count &&	tmpc1->size!=1)
       ICAddSubEctImm(tmpi,MDF_DISP+tmpi->arg1_type_pointed_to,r,0,
 	    MDF_DISP+tmpi->arg1_type_pointed_to,r,0,tmpc1->size,op.u16[3],rip);
     else
@@ -595,7 +595,7 @@ U0 ICCompAndBranch(CIntermediateCode *tmpi,Bool has_res,I64 rip,
     }
   }
 
-  rip+=tmpi->ic_cnt;
+  rip+=tmpi->ic_count;
   lb=OptLabelFwd(tmpi->ic_data);
   short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
   if (!buf && lb->addr!=INVALID_PTR) {
@@ -658,7 +658,7 @@ U0 ICTestAndBranch(CIntermediateCode *tmpi,I64 rip,I64 is,U8 *buf,I64 rip2)
   } else
     ICTest(tmpi,tmpi->arg1.reg);
 
-  rip+=tmpi->ic_cnt;
+  rip+=tmpi->ic_count;
   lb=OptLabelFwd(tmpi->ic_data);
   short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
   if (!buf && lb->addr!=INVALID_PTR) {
@@ -691,7 +691,7 @@ U0 ICFlagBranch(CIntermediateCode *tmpi,I64 rip,I64 is,U8 *buf)
   Bool short_jmp;
   CCodeMisc *lb;
 
-  rip+=tmpi->ic_cnt;
+  rip+=tmpi->ic_count;
   lb=OptLabelFwd(tmpi->ic_data);
   short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
   if (!buf && lb->addr!=INVALID_PTR) {

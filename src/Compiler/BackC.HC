@@ -129,7 +129,7 @@ U0 ICAndBranch(CIntermediateCode *tmpi,I64 rip,I64 is,U8 *buf,I64 rip2)
     ICModr2(tmpi,i,,d1,rip2);
   }
 
-  rip+=tmpi->ic_cnt;
+  rip+=tmpi->ic_count;
   lb=OptLabelFwd(tmpi->ic_data);
   short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
   if (!buf && lb->addr!=INVALID_PTR) {
@@ -310,7 +310,7 @@ U0 ICBrBitOps(CIntermediateCode *tmpi,I64 rip,
     ICModr2(tmpi,i,,arg2->disp,rip2);
   }
 
-  rip+=tmpi->ic_cnt;
+  rip+=tmpi->ic_count;
   lb=OptLabelFwd(tmpi->ic_data);
   short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
   if (!buf && lb->addr!=INVALID_PTR) {
@@ -602,7 +602,7 @@ U0 ICXorEqu(CIntermediateCode *tmpi,I64 rip2)
 U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
 	Bool nobound,CCompCtrl *cc,U8 *buf,I64 rip2)
 {
-  I64 i,j,cnt,min,max,begin,r;
+  I64 i,j,count,min,max,begin,r;
   CCodeMisc *lb;
   Bool short_jmp;
   CAOTAbsAddr *tmpa;
@@ -645,7 +645,7 @@ U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
       ICU24(tmpi,i);
     }
 
-    rip+=tmpi->ic_cnt;
+    rip+=tmpi->ic_count;
     lb=tmpi->ic_data(CCodeMisc *)->dft;
     short_jmp=ToBool(tmpi->ic_flags&ICF_SHORT_JMP);
     if (!buf && lb->addr!=INVALID_PTR) {
@@ -695,13 +695,13 @@ U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
     else
       ICU8(tmpi,0x49);
     ICU24(tmpi,0x98BE0F+(r&7)<<16);
-    cnt=1;
+    count=1;
   } else if (lb->flags&CMF_U8_JMP_TABLE) {
     if (r<8)
-      cnt=2;
+      count=2;
     else {
       ICU8(tmpi,0x49);
-      cnt=1;
+      count=1;
     }
     ICU24(tmpi,0x98B60F+(r&7)<<16);
   } else if (lb->flags&CMF_I16_JMP_TABLE) {
@@ -710,21 +710,21 @@ U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
     else
       ICU8(tmpi,0x4A);
     ICU32(tmpi,0x451CBF0F+(r&7)<<27);
-    cnt=0;
+    count=0;
   } else if (lb->flags&CMF_U16_JMP_TABLE) {
     if (r<8)
-      cnt=1;
+      count=1;
     else {
       ICU8(tmpi,0x4A);
-      cnt=0;
+      count=0;
     }
     ICU32(tmpi,0x451CB70F+(r&7)<<27);
   } else {
     if (r<8)
-      cnt=2;
+      count=2;
     else {
       ICU8(tmpi,0x42);
-      cnt=1;
+      count=1;
     }
     ICU24(tmpi,0x851C8B+(r&7)<<19);
   }
@@ -733,7 +733,7 @@ U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
     tmpa->next=cc->aotc->abss;
     tmpa->type=AAT_ADD_U32;
     cc->aotc->abss=tmpa;
-    tmpa->rip=rip2+tmpi->ic_cnt;
+    tmpa->rip=rip2+tmpi->ic_count;
     ICU32(tmpi,lb->addr+cc->aotc->rip);
   } else
     ICU32(tmpi,lb->addr+buf);
@@ -746,14 +746,14 @@ U0 ICSwitch(CIntermediateCode *tmpi,I64 rip,
       tmpa->next=cc->aotc->abss;
       tmpa->type=AAT_ADD_U32;
       cc->aotc->abss=tmpa;
-      tmpa->rip=rip2+tmpi->ic_cnt;
+      tmpa->rip=rip2+tmpi->ic_count;
       ICU32(tmpi,begin+cc->aotc->rip);
     } else
       ICU32(tmpi,begin+buf);
   } else
-    cnt+=6;
+    count+=6;
   ICU16(tmpi,0xE3FF); //JMP EBX
-  for (i=0;i<cnt;i++) //Code must always shrink, not expand
+  for (i=0;i<count;i++) //Code must always shrink, not expand
     ICU8(tmpi,OC_NOP);
   tmpi->ic_flags&=~ICF_CODE_FINAL;
 }

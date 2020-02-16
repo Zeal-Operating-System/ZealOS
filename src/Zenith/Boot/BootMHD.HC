@@ -75,7 +75,7 @@ BMHD_HISTART:
 	XOR	ECX,ECX
 	MOV	CX,U16 [BMHD_BLK_CNT-BMHD_START]
 
-@@05:	PUSH	CX	//Blk cnt
+@@05:	PUSH	CX	//Blk count
 
 //READ BLK
 	PUSH	ES	//Buf seg

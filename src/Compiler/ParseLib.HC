@@ -51,7 +51,7 @@ for one * and two fwd for two **.
     tmpc->type=HTT_CLASS;
     tmpc->raw_type=RT_PTR;
     tmpc->size=sizeof(U8 *);
-    tmpc->ptr_stars_cnt=i;
+    tmpc->ptr_stars_count=i;
     tmpc++;
   }
   res->last_in_member_lst=&res->member_lst_and_root;
@@ -68,7 +68,7 @@ CHashFun *ParseFunNew()
     tmpf->type=HTT_FUN;
     tmpf->raw_type=RT_PTR;
     tmpf->size=sizeof(U8 *);
-    tmpf->ptr_stars_cnt=i;
+    tmpf->ptr_stars_count=i;
     tmpf++;
   }
   res->last_in_member_lst=&res->member_lst_and_root;
@@ -88,7 +88,7 @@ CIntermediateCode *ICAdd(CCompCtrl *cc,
     Bts(&cc->flags,CCf_PASS_TRACE_PRESENT);
     flags|=ICF_PASS_TRACE;
   }
-  if (cc->lock_cnt)
+  if (cc->lock_count)
     flags|=ICF_LOCK;
   tmpi->ic_flags=flags;
   tmpi->ic_line=cc->last_line_num;
@@ -197,7 +197,7 @@ U0 COCDel(CCompCtrl *cc,CCodeCtrl *coc)
 	if (!(cm->flags&CMF_DEFINED)) {
 	  undef=cm->str;
 	  cm->str=NULL;
-	} else if (!cm->use_cnt) {
+	} else if (!cm->use_count) {
 	  PrintWarn("Unused label %s\n",cm->str);
 	  LexWarn(cc,"Unused label at ");
 	}

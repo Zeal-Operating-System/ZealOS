@@ -53,7 +53,7 @@ CMacroTmp *Cmd2MT(CJob *tmpc)
 U8 *SysMacro2Str(CJob *macro_head)
 {
   CJob *tmpc;
-  I64 cnt=1; //terminating zero
+  I64 count=1; //terminating zero
   U8 *ptr,*m;
   CMacroTmp *tmpmt,*tmpmt1,head;
   LBtr(&sys_semas[SEMA_RECORD_MACRO],0);
@@ -64,17 +64,17 @@ U8 *SysMacro2Str(CJob *macro_head)
   while (tmpc!=macro_head) {
     tmpmt=Cmd2MT(tmpc);
     QueueInsert(tmpmt,head.last);
-    cnt+=StrLen(tmpmt->buf);
+    count+=StrLen(tmpmt->buf);
     if (tmpmt->type==MT_CHAR) {
       if (tmpmt->last->type!=MT_CHAR)
-	cnt+=StrLen("\"");
+	count+=StrLen("\"");
       if (tmpmt->next->type!=MT_CHAR)
-	cnt+=StrLen("\";");
+	count+=StrLen("\";");
     }
     tmpc=tmpc->next;
   }
 
-  m=MAlloc(cnt);
+  m=MAlloc(count);
   ptr=m;
 
   tmpmt=head.next;

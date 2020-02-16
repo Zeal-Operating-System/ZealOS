@@ -26,7 +26,7 @@ extern CHashClass *ParseClass(
 extern CHashFun *ParseFunJoin(
 	CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags);
 extern I64 ParseKeyWord(CCompCtrl *cc);
-extern Bool ParseStatement(CCompCtrl *cc,I64 try_cnt=0,
+extern Bool ParseStatement(CCompCtrl *cc,I64 try_count=0,
 	CCodeMisc *lb_break=NULL,I64 cmp_flags=CMPF_PRS_SEMICOLON);
 extern U0 ParseStreamBlk(CCompCtrl *cc);
 extern CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,

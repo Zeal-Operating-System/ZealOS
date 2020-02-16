@@ -130,11 +130,11 @@ I64 AsmLexExpression(CCompCtrl *cc)
   I64 res=0;
   cc->asm_undef_hash=NULL;
   cc->flags&=~(CCF_UNRESOLVED+CCF_LOCAL);
-  cc->abs_cnts=0;
+  cc->abs_counts=0;
   if (!IsLexExpression2Bin(cc,&machine_code))
     LexSkipEol(cc);
   else {
-    if (cc->abs_cnts.externs)
+    if (cc->abs_counts.externs)
       LexExcept(cc,"Extern Not Allowed at ");
     if (cc->flags & CCF_UNRESOLVED)
       LexExcept(cc,"Undefined sym at ");

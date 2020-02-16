@@ -390,12 +390,12 @@ U0 KbdPktRead()
   static U8 last_raw_byte=0;
   static I64 last_sc=0;
   U8 raw_byte;
-  if (GetTSC>kbd.timestamp+cnts.time_stamp_freq>>3)
+  if (GetTSC>kbd.timestamp+counts.time_stamp_freq>>3)
     FifoU8Flush(kbd.fifo);
   kbd.timestamp=GetTSC;
   raw_byte=InU8(KBD_PORT);
   KbdBuildSC(raw_byte,TRUE,&last_raw_byte,&last_sc);
-  if (!FifoU8Cnt(kbd.fifo)) {
+  if (!FifoU8Count(kbd.fifo)) {
     FifoU8Ins(kbd.fifo,raw_byte);
     if (raw_byte!=0xE0) {
       while (FifoU8Remove(kbd.fifo,&raw_byte))
@@ -452,7 +452,7 @@ U0 KbdHandler()
     kbd.new_key_timestamp=kbd.timestamp;
     Btr(&kbd.scan_code,32+SCf_NEW_KEY);
     FifoI64Ins(kbd.scan_code_fifo,kbd.scan_code);
-    kbd.cnt++;
+    kbd.count++;
     if (!(kbd.scan_code&SCF_KEY_UP)) {
       kbd.last_down_scan_code=kbd.scan_code;
       Bts(kbd.down_bitmap,kbd.scan_code.u8[0]);

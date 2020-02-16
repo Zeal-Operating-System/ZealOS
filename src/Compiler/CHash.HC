@@ -59,7 +59,7 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
 	res+=MSize2(tmph(CHashGlobalVar *)->data_addr);
       if (tmph(CHashGlobalVar *)->fun_ptr)
 	res+=HashEntrySize2(tmph(CHashGlobalVar *)->fun_ptr
-	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_cnt);
+	      -tmph(CHashGlobalVar *)->fun_ptr->ptr_stars_count);
     }
   } else if (tmph->type & HTT_FILE)
     res+=MSize2(tmph(CHashGeneric *)->user_data0);
@@ -118,7 +118,7 @@ U0 MapFileWrite(CHashTable *h,U8 *map_name,U8 drv_let)
 	      tmpb->data=MAlloc(size);
 	      MemCpy(tmpb->data,dbg_info,size);
 	      tmpb->num=doc->cur_bin_num++;
-	      tmpb->use_cnt=1;
+	      tmpb->use_count=1;
 	      QueueInsert(tmpb,doc->bin_head.last);
 	    } else
 	      dbg_info=NULL;

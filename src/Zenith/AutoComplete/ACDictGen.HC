@@ -119,9 +119,9 @@ I64 ACDCompareWords(U8 *e1,U8 *e2)
   return StrICmp(e1,e2);
 }
 
-U8 *ACDSortWords(U8 *start,I64 size,I64 word_cnt)
+U8 *ACDSortWords(U8 *start,I64 size,I64 word_count)
 {
-  U8 **ptr_array=MAlloc(sizeof(U8 *)*word_cnt),
+  U8 **ptr_array=MAlloc(sizeof(U8 *)*word_count),
 	*out_start=MAlloc(size),
 	*ptr=start,*ptr2;
   I64 i=0;
@@ -130,11 +130,11 @@ U8 *ACDSortWords(U8 *start,I64 size,I64 word_cnt)
     ptr+=StrLen(ptr)+3;
   }
   "Sorting...\n"; Sleep(100);
-  QSortI64(ptr_array,word_cnt,&ACDCompareWords);
+  QSortI64(ptr_array,word_count,&ACDCompareWords);
   "Done...\n"; Sleep(100);
 
   ptr=out_start;
-  for (i=0;i<word_cnt;i++) {
+  for (i=0;i<word_count;i++) {
     ptr2=ptr_array[i];
     while (*ptr2)
       *ptr++=*ptr2++;
@@ -148,7 +148,7 @@ U8 *ACDSortWords(U8 *start,I64 size,I64 word_cnt)
 
 U0 ACDGen(U8 *in_file)
 {
-  I64 cmd,size,word_cnt=0,largest_entry=0;
+  I64 cmd,size,word_count=0,largest_entry=0;
   U8 *st,*in_ptr=FileRead(in_file,&size),*in_start=in_ptr,
 	*out_ptr=MAlloc(size),*out_start=out_ptr,
 	*word_ptr=MAlloc(size),*word_start=word_ptr,
@@ -166,7 +166,7 @@ next_word:
       if (st=ACDNextEntry(&in_ptr)) {
 	if (*st) {
 	  if (StrICmp(st,last_word)) {
-	    word_cnt++;
+	    word_count++;
 
 	    *word_ptr++=ACD_WORD_CHAR;
 	    last_word=word_ptr;
@@ -240,14 +240,14 @@ next_word:
   Free(in_start);
 
   "Blk Size:%d\n",ACD_BLK_SIZE;
-  "Blk Cnt:%04X\n",(out_ptr-out_start+ACD_BLK_SIZE-1)/ACD_BLK_SIZE;
+  "Blk Count:%04X\n",(out_ptr-out_start+ACD_BLK_SIZE-1)/ACD_BLK_SIZE;
   "Largest Entry:%d\n",largest_entry;
-  "Word Count:%d\n",word_cnt;
+  "Word Count:%d\n",word_count;
 
   FileWrite(ACD_DEF_FILENAME,out_start,out_ptr-out_start);
   "Def File Size:%d\n",out_ptr-out_start;
 
-  sorted_word_start=ACDSortWords(word_start,word_ptr-word_start,word_cnt);
+  sorted_word_start=ACDSortWords(word_start,word_ptr-word_start,word_count);
   FileWrite(ACD_WORD_FILENAME,sorted_word_start,word_ptr-word_start);
   "Word File Size:%d\n",word_ptr-word_start;
 

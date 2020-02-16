@@ -309,12 +309,12 @@ public CDocEntry *DocPutLine(CDoc *doc=NULL,CDocEntry *doc_e)
 
 #help_index "Debugging/Dump;DolDoc/Cmd Line (Typically);"\
 	"Cmd Line (Typically);DolDoc/Output;StdOut/DolDoc"
-public U0 DocDm(U8 *buf,I64 cnt=0x80)
+public U0 DocDm(U8 *buf,I64 count=0x80)
 {//Dump live chunk of mem showing addresses. Can be edited.
   CDocEntry *doc_e;
   CDoc *doc=DocPut;
   Bool unlock=DocLock(doc);
-  doc_e=DocPrint(doc,"$$HX-Z,%d,16$$",cnt);
+  doc_e=DocPrint(doc,"$$HX-Z,%d,16$$",count);
   doc_e->data=buf;
   doc->cur_entry=doc_e->next;
   DocRecalc(doc);
@@ -322,12 +322,12 @@ public U0 DocDm(U8 *buf,I64 cnt=0x80)
     DocUnlock(doc);
 }
 
-public U0 DocD(U8 *buf,I64 cnt=0x80)
+public U0 DocD(U8 *buf,I64 count=0x80)
 {//Dump live chunk of mem showing offsets. Can be edited.
   CDocEntry *doc_e;
   CDoc *doc=DocPut;
   Bool unlock=DocLock(doc);
-  doc_e=DocPrint(doc,"$$HX,%d,16$$",cnt);
+  doc_e=DocPrint(doc,"$$HX,%d,16$$",count);
   doc_e->data=buf;
   doc->cur_entry=doc_e->next;
   DocRecalc(doc);

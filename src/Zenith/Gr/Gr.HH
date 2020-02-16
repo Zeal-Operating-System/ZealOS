@@ -99,8 +99,8 @@ public class CSpritePtStr : CSpritePt
 
 public class CSpriteMeshU8s : CSpriteBase
 {
-  I32 vertex_cnt;
-  I32 tri_cnt;
+  I32 vertex_count;
+  I32 tri_count;
   U8  u[0];
 };
 
@@ -109,8 +109,8 @@ public class CSpritePtMeshU8s : CSpriteBase
   I32 x;
   I32 y;
   I32 z;
-  I32 vertex_cnt;
-  I32 tri_cnt;
+  I32 vertex_count;
+  I32 tri_count;
   U8  u[0];
 };
 
