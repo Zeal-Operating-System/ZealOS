@@ -19,8 +19,8 @@ I64 PopUpFreq()
 
 #define MU_NOTHING	0
 #define MU_SET_FREQ	1
-#define MU_SND_ON	2
-#define MU_SND_OFF	3
+#define MU_SOUND_ON	2
+#define MU_SOUND_OFF	3
 
 U0 MenuBttn()
 {
@@ -36,9 +36,9 @@ U0 MenuBttn()
     "$$LM,8$$"; //Set left margin
 //These are bttns that return a val from a menu selection.
     if (!j)
-      "\n$$BT,\"Snd On\",LE=MU_SND_ON$$\n\n\n";
+      "\n$$BT,\"Sound On\",LE=MU_SOUND_ON$$\n\n\n";
     else
-      "\n$$BT,\"Snd Off\",LE=MU_SND_OFF$$\n\n\n";
+      "\n$$BT,\"Sound Off\",LE=MU_SOUND_OFF$$\n\n\n";
     "\n$$BT,\"Set Freq\",LE=MU_SET_FREQ$$\n\n\n"
 	  "\n$$BT,\"Nothing\",LE=MU_NOTHING$$\n\n\n"
 	  "\n$$BT,\"Done\",LE=DOCM_CANCEL$$\n\n\n";
@@ -47,19 +47,19 @@ U0 MenuBttn()
     switch (i) {
       case MU_NOTHING:
 	break;
-      case MU_SND_ON:
+      case MU_SOUND_ON:
 	j=freq;
-	Snd(Freq2Ona(j));
+	Sound(Freq2Ona(j));
 	break;
-      case MU_SND_OFF:
+      case MU_SOUND_OFF:
 	j=0;
-	Snd;
+	Sound;
 	break;
       case MU_SET_FREQ:
 	freq=PopUpFreq;
 	if (j) {
 	  j=freq;
-	  Snd(Freq2Ona(j));
+	  Sound(Freq2Ona(j));
 	}
 	break;
       default:
@@ -69,7 +69,7 @@ U0 MenuBttn()
   DocPut->flags=DocPut->flags&~DOCF_FORM |
 	old_flags & DOCF_FORM;
   DocClear;
-  Snd;
+  Sound;
 }
 
 MenuBttn;

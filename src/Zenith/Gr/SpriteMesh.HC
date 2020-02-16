@@ -1146,7 +1146,7 @@ me_chain:
 	      moving=FALSE;
 	      e.ed_mode=arg1;
 	      make_tri_vertex_num=0;
-	      Snd;
+	      Sound;
 	      break;
 	    case 'T':
 	      MeshTransformSel(&e);
@@ -1358,7 +1358,7 @@ me_clip_cut:
 		  p0b.y=ms.presnap.y;
 		  p0b.z=e.ms_z;
 		  adjusting_z=TRUE;
-		  Snd(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
+		  Sound(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
 		}
 	      }
 	      break;
@@ -1381,7 +1381,7 @@ me_clip_cut:
 		  e.ms_z=RoundI64(Sign(p0b.y-ms.presnap.y)
 		  *Sqrt(Sqr(p0b.x-ms.presnap.x)+Sqr(p0b.y-ms.presnap.y))
 		  +p0b.z,e.cur_snap);
-		  Snd;
+		  Sound;
 		  adjusting_z=FALSE;
 		  MeshCursorW(&e,Fs,&x,&y,&z);
 		  MeshP0Offset(&e,0,0,z-p0a.z);
@@ -1432,7 +1432,7 @@ me_clip_cut:
 	    p0b.y=ms.presnap.y;
 	    p0b.z=e.ms_z;
 	    adjusting_z=TRUE;
-	    Snd(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
+	    Sound(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
 	  }
 	  break;
 	case MESSAGE_MS_R_UP:
@@ -1440,7 +1440,7 @@ me_clip_cut:
 	    e.ms_z=RoundI64(Sign(p0b.y-ms.presnap.y)
 	    *Sqrt(Sqr(p0b.x-ms.presnap.x)+Sqr(p0b.y-ms.presnap.y))
 	    +p0b.z,e.cur_snap);
-	    Snd;
+	    Sound;
 	    adjusting_z=FALSE;
 	    if (moving) {
 	      MeshCursorW(&e,Fs,&x,&y,&z);
@@ -1472,7 +1472,7 @@ me_clip_cut:
 	    e.ms_z=RoundI64(Sign(p0b.y-ms.presnap.y)
 	    *Sqrt(Sqr(p0b.x-ms.presnap.x)+Sqr(p0b.y-ms.presnap.y))
 	    +p0b.z,e.cur_snap);
-	    Snd(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
+	    Sound(ClampI64(Freq2Ona(3*e.ms_z+1500),0,I8_MAX));
 	  }
 	  if (moving) {
 	    MeshCursorW(&e,Fs,&x,&y,&z);

@@ -1,13 +1,13 @@
 interrupt U0 IntBeepOn()
 {
   *(dev.uncached_alias+LAPIC_EOI)(U32 *)=0; //signal end of interrupt
-  Snd(34);
+  Sound(34);
 }
 
 interrupt U0 IntBeepOff()
 {
   *(dev.uncached_alias+LAPIC_EOI)(U32 *)=0;
-  Snd;
+  Sound;
 }
 
 U0 IntTest()

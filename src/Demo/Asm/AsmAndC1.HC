@@ -48,19 +48,19 @@ I64 AsmAndC1()
   asm {
 //You can clobber RAX,RBX,RCX,RDX.  The compiler expects that.
 
-    IMPORT	Snd; //Import an not use & or don't import and use &Snd.
+    IMPORT	Sound; //Import an not use & or don't import and use &Sound.
     MOV		RCX,&i[RBP] //You can clobber RAX,RBX,RCX,RDX.
 		//You better preserve the rest.
 @@05:	PUSH	RCX
 
-		//U0 $LK,"Snd",A="MN:Snd"$(I8 ona);
+		//U0 $LK,"Sound",A="MN:Sound"$(I8 ona);
     MOV		RAX,RCX	//ona=loop*10+50
     IMUL2	RAX,10 //ZenithOS uses nonstandard opcodes
 		//to avoid multiple form of the same one.
 		//See $LK,"::/Compiler/OpCodes.DD"$.
     ADD		RAX,40
     PUSH	RAX
-    CALL	Snd
+    CALL	Sound
 
     MOV		RCX,counts.time_stamp_freq>>3 //JIT Const.  Simple delay loop
 @@10:	LOOP	@@10
@@ -68,7 +68,7 @@ I64 AsmAndC1()
     POP		RCX
     LOOP	@@05
   }
-  Snd;
+  Sound;
   return i;
 }
 

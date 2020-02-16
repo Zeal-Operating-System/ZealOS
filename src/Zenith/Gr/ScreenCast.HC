@@ -57,10 +57,10 @@ public I64 GR2MV(U8 *print_fmt="VID%03d.MV",
   return file_num;
 }
 
-#help_index "ScreenCast;Snd/AU Files"
-public U0 SndShift(CSndData *head,F64 dt=0)
-{//Shift CSndData in time.
-  CSndData *tmpsd,*tmpsd1;
+#help_index "ScreenCast;Sound/AU Files"
+public U0 SoundShift(CSoundData *head,F64 dt=0)
+{//Shift CSoundData in time.
+  CSoundData *tmpsd,*tmpsd1;
   if (dt) {
     tmpsd=head->next;
     while (tmpsd!=head) {
@@ -75,9 +75,9 @@ public U0 SndShift(CSndData *head,F64 dt=0)
   }
 }
 
-public I64 AUWrite(U8 *filename,CSndData *head,CDate *t0_now,F64 t0_tS)
+public I64 AUWrite(U8 *filename,CSoundData *head,CDate *t0_now,F64 t0_tS)
 {//Write AU file.
-  CSndData *tmpsd;
+  CSoundData *tmpsd;
   CAUData *base,*dst;
   I64 size=(1+QueueCount(head))*sizeof(CAUData);
   U8 *st=ExtDefault(filename,"AU");

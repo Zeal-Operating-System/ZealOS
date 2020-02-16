@@ -1,7 +1,7 @@
 //9 has words
 U0 Song()
 {
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   music.tempo= 2.480;
   music.stacatto_factor= 0.902;
@@ -18,7 +18,7 @@ U0 Song()
     }
   } catch
     PutExcept;
-  Snd;
+  Sound;
 }
 
 Song;

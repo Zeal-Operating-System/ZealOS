@@ -19,7 +19,7 @@ U0 CleanUp()
 
 U0 SongTask(I64)
 {
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   while (TRUE) {
     Play("4AB5C");

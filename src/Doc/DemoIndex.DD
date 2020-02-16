@@ -18,7 +18,7 @@ $LK,"::/Demo/Graphics/SpritePlot.HC"$
 $LK,"::/Demo/Games/ElephantWalk.HC"$
 $LK,"::/Demo/Graphics/SpritePut.HC"$
 $LK,"::/Demo/Graphics/SpritePutExt.HC"$
-$LK,"::/Demo/Snd/ASCIIOrgan.HC"$
+$LK,"::/Demo/Sound/ASCIIOrgan.HC"$
 $LK,"::/Demo/MessageLoop.HC"$
 $LK,"::/Demo/Graphics/Doodle.HC"$
 $LK,"::/Demo/Graphics/Speedline.HC"$
@@ -40,7 +40,7 @@ $LK,"::/Demo/Games/CircleTrace.HC"$
 $LK,"::/Demo/Games/Halogen.HC"$
 $LK,"::/Demo/Games/TheDead.HC"$
 $LK,"::/Demo/Games/RainDrops.HC"$
-$LK,"::/Demo/Snd/MorseCode.HC"$
+$LK,"::/Demo/Sound/MorseCode.HC"$
 $MA-X+PU,"::/Demo/Games/Stadium",LM="Cd(\"::/Demo/Games/Stadium\");Dir;View;\n"$
 $LK,"::/Demo/Graphics/Lattice.HC"$
 $LK,"::/Demo/Graphics/Collision.HC"$
@@ -63,7 +63,7 @@ $LK,"::/Demo/Games/CharDemo.HC"$
 $LK,"::/Demo/Graphics/FontEd.HC"$
 $LK,"::/Demo/ExtChars.HC"$
 $LK,"::/Demo/TimeIns.HC"$
-$LK,"::/Demo/Snd/WaterFowl.HC"$
+$LK,"::/Demo/Sound/WaterFowl.HC"$
 $MA-X+PU,"::/Apps/Psalmody/Examples",LM="Cd(\"::/Apps/Psalmody/Examples\");Dir;View;\n"$
 $LK,"CPURep",A="MN:CPURep"$
 $LK,"::/Demo/MultiCore/MPPrint.HC"$

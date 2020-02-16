@@ -667,17 +667,17 @@ public extern U8 *IntEntrySet(I64 irq,
 #help_index "ScreenCast;Cmd Line (Typically)"
 public extern Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,
 	U8 *print_fmt="B:/Tmp/%X.GR")
-public extern CScreenCastGlobals scrncast;
+public extern CScreenCastGlobals screencast;
 
-#help_index "Snd"
-#help_file "::/Doc/Snd"
+#help_index "Sound"
+#help_file "::/Doc/Sound"
 public extern U0 Beep(I8 ona=62,Bool busy=FALSE);
 public extern I8 Freq2Ona(F64 freq);
 public extern Bool IsMute();
 public extern Bool Mute(Bool val);
 public extern F64 Ona2Freq(I64 ona);
-public extern U0 Snd(I8 ona=0);
-public extern U0 SndRst();
+public extern U0 Sound(I8 ona=0);
+public extern U0 SoundRst();
 
 #help_index "StdIn"
 #help_file "::/Doc/Streams"

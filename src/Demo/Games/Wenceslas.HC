@@ -396,10 +396,10 @@ U0 AnimateTask(I64)
     if (!not_stopped_count && !tf) {
       tf=tS;
       music.mute=TRUE;
-      Snd(86);Sleep(200);Snd;Sleep(100);
+      Sound(86);Sleep(200);Sound;Sleep(100);
       if (tf-t0<best_score) {
 	best_score=tf-t0;
-	Snd(86);Sleep(200);Snd;Sleep(100);
+	Sound(86);Sleep(200);Sound;Sleep(100);
       }
       music.mute=FALSE;
     }
@@ -436,7 +436,7 @@ U0 BurnTrees()
 
 U0 SongTask(I64)
 {
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   music.tempo= 2.480;
   music.stacatto_factor= 0.902;

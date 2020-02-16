@@ -162,7 +162,7 @@ U0 UnitDirectFire(Unit *tmpu,Unit *target)
       facing=0;
     DamageDo(target,HitDamage(tmpu,target,facing,range_factor));
   }
-  while (scrncast.ona) //see $LK,"Snd",A="MN:Snd"$()
+  while (screencast.ona) //see $LK,"Sound",A="MN:Sound"$()
     Yield;
   target_unit=NULL;
 }
@@ -195,7 +195,7 @@ Bool HexOccupy(Bool overrun,Unit *tmpu,Unit *target)
   }
   if (DamageDo(target,Round(damage))) {
     "$$RED$$Success$$FG$$\n";
-    while (scrncast.ona) //see $LK,"Snd",A="MN:Snd"$()
+    while (screencast.ona) //see $LK,"Sound",A="MN:Sound"$()
       Yield;
     return TRUE;
   } else {
@@ -203,7 +203,7 @@ Bool HexOccupy(Bool overrun,Unit *tmpu,Unit *target)
     VisRecalc(VR_FRIENDLY_UNIT_DIED,tmpu);
     alive_count[tmpu->player]--;
     "$$RED$$Failure$$FG$$\n";
-    while (scrncast.ona) //see $LK,"Snd",A="MN:Snd"$()
+    while (screencast.ona) //see $LK,"Sound",A="MN:Sound"$()
       Yield;
     return FALSE;
   }
@@ -267,7 +267,7 @@ U0 IndirectResolveAll()
     }
     Noise(2000*animation_delay,70,74);
     Sleep(2000*animation_delay);
-    while (scrncast.ona) //see $LK,"Snd",A="MN:Snd"$()
+    while (screencast.ona) //see $LK,"Sound",A="MN:Sound"$()
       Yield;
     indirect_explosion=FALSE;
 

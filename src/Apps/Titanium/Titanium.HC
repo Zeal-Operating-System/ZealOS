@@ -14,7 +14,7 @@ class Bullet
 I64 bullets_fired,missile_bmp;
 
 I64 x,y,dx,dy,finish_line;
-F64 é,t0,tf,snd_timeout;
+F64 é,t0,tf,sound_timeout;
 
 #define PHASES_GROUPS	8
 #define HACK_DIST	5
@@ -449,12 +449,12 @@ U0 ManDie(Unit *tmpu,Bool by_human)
     if (!by_human)
       enemy_by_friendly++;
   }
-  if (by_human && !snd_timeout) {
-    snd_timeout=tS+0.01;
+  if (by_human && !sound_timeout) {
+    sound_timeout=tS+0.01;
     if (tmpu->friendly)
-      Snd(46);
+      Sound(46);
     else
-      Snd(22);
+      Sound(22);
   }
 }
 
@@ -548,8 +548,8 @@ U0 Init()
   I64 i,xx,yy,scroll_y=MAP_HEIGHT-100;
   Unit *tmpu;
 
-  snd_timeout=0;
-  Snd;
+  sound_timeout=0;
+  Sound;
 
   total_score=0;
   game_over=FALSE;
@@ -641,9 +641,9 @@ U0 FireBullet()
   bullets_fired++;
   tmpb->dead=FALSE;
   tmpb->missile=FALSE;
-  if (!snd_timeout) {
-    snd_timeout=tS+0.0005;
-    Snd(74);
+  if (!sound_timeout) {
+    sound_timeout=tS+0.0005;
+    Sound(74);
   }
 }
 
@@ -675,9 +675,9 @@ Bool FireMissile(I64 n)
     tmpb->dy=Cos(a)*0x100000000;
     tmpb->dead=FALSE;
     tmpb->missile=TRUE;
-    if (!snd_timeout) {
-      snd_timeout=tS+0.0005;
-      Snd(74);
+    if (!sound_timeout) {
+      sound_timeout=tS+0.0005;
+      Sound(74);
     }
   }
 }
@@ -916,9 +916,9 @@ U0 Titanium()
       }
       main_loop_pass++;
 
-      if (snd_timeout && tS>snd_timeout) {
-	snd_timeout=0;
-	Snd;
+      if (sound_timeout && tS>sound_timeout) {
+	sound_timeout=0;
+	Sound;
       }
       SleepUntil(next_update_jiffy);
 
@@ -930,8 +930,8 @@ U0 Titanium()
 	FlushMessages;
 	while (!ScanKey(&ch)&&friendly_left||tS-tf<1.5) {
 	  total_score+=250;
-	  Snd(86); Sleep(150);
-	  Snd;	  Sleep(50);
+	  Sound(86); Sleep(150);
+	  Sound;	  Sleep(50);
 	  friendly_left--;
 	}
 	total_score+=250*friendly_left;

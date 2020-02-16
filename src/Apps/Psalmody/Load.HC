@@ -1,4 +1,4 @@
-#help_index "Snd/Music/Apps"
+#help_index "Sound/Music/Apps"
 
 Cd(__DIR__);;
 #include "JukeBox"

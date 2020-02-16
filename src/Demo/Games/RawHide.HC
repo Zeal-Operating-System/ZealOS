@@ -422,10 +422,10 @@ U0 AnimateTask(CTask *parent)
     if (!tf && !outside_count) {
       tf=tS;
       music.mute=TRUE;
-      Snd(86);Sleep(200);Snd;Sleep(100);
+      Sound(86);Sleep(200);Sound;Sleep(100);
       if (tf-t0<best_score) {
 	best_score=tf-t0;
-	Snd(86);Sleep(200);Snd;Sleep(100);
+	Sound(86);Sleep(200);Sound;Sleep(100);
       }
       music.mute=FALSE;
     }
@@ -448,7 +448,7 @@ U0 AnimateTask(CTask *parent)
 
 U0 SongTask(I64)
 {//Randomly generated (by God :-)
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   while (TRUE) {
     Play("5qC4etG5DC4B5DCECFqFC4sA5D4A5D4qB");

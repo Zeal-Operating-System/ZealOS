@@ -176,72 +176,72 @@ I8 Freq2Ona(F64 freq)
     return 0;
 }
 
-U0 Snd(I8 ona=0)
+U0 Sound(I8 ona=0)
 {//Play ona, a piano key num. 0 means rest.
   I64 period;
-  CSndData *d;
+  CSoundData *d;
   if (!Bt(&sys_semas[SEMA_MUTE],0) &&
-	!LBts(&sys_semas[SEMA_SND],0)) { //Mutex. Just throw-out if in use
+	!LBts(&sys_semas[SEMA_SOUND],0)) { //Mutex. Just throw-out if in use
     if (!ona) {
-      scrncast.ona=ona;
+      screencast.ona=ona;
       OutU8(0x61,InU8(0x61)&~3);
-    } else if (ona!=scrncast.ona) {
-      scrncast.ona=ona;
+    } else if (ona!=screencast.ona) {
+      screencast.ona=ona;
       period=ClampI64(SYS_TIMER_FREQ/Ona2Freq(ona),1,U16_MAX);
       OutU8(0x43,0xB6);
       OutU8(0x42,period);
       OutU8(0x42,period.u8[1]);
       OutU8(0x61,3|InU8(0x61));
     }
-    if (!IsDebugMode && scrncast.record) {
-      d=ACAlloc(sizeof(CSndData));
+    if (!IsDebugMode && screencast.record) {
+      d=ACAlloc(sizeof(CSoundData));
       d->ona=ona;
       d->tS=tS;
-      QueueInsert(d,scrncast.snd_head.last);
+      QueueInsert(d,screencast.sound_head.last);
     }
-    LBtr(&sys_semas[SEMA_SND],0);
+    LBtr(&sys_semas[SEMA_SOUND],0);
   }
 }
 
 Bool ScreenCast(Bool val=ON,Bool just_audio=FALSE,U8 *print_fmt="B:/Tmp/%X.GR")
 {//WinMgr saves GR files to a dir.
   Bool old_val;
-  scrncast.just_audio=just_audio;
+  screencast.just_audio=just_audio;
   if (val) {
-    if (!(old_val=LBtr(&scrncast.record,0))) {
-      Free(scrncast.print_fmt);
-      scrncast.print_fmt=AStrNew(print_fmt);
-      scrncast.t0_now=Now;
-      scrncast.snd_head.tS=scrncast.t0_tS=tS;
-      scrncast.snd_head.ona=scrncast.ona;
-      LBts(&scrncast.record,0);
+    if (!(old_val=LBtr(&screencast.record,0))) {
+      Free(screencast.print_fmt);
+      screencast.print_fmt=AStrNew(print_fmt);
+      screencast.t0_now=Now;
+      screencast.sound_head.tS=screencast.t0_tS=tS;
+      screencast.sound_head.ona=screencast.ona;
+      LBts(&screencast.record,0);
     }
   } else
-    old_val=LBtr(&scrncast.record,0);
-  Snd;
+    old_val=LBtr(&screencast.record,0);
+  Sound;
   return old_val;
 }
 
-U0 SndRst()
+U0 SoundRst()
 {//Fix stuck sound.
-  if (Bt(&sys_semas[SEMA_SND],0)) {
+  if (Bt(&sys_semas[SEMA_SOUND],0)) {
     Sleep(1);
-    if (Bt(&sys_semas[SEMA_SND],0)) {
+    if (Bt(&sys_semas[SEMA_SOUND],0)) {
       Sleep(1);
-      LBtr(&sys_semas[SEMA_SND],0);
+      LBtr(&sys_semas[SEMA_SOUND],0);
     }
   }
-  Snd;
+  Sound;
 }
 
 U0 Beep(I8 ona=62,Bool busy=FALSE)
 {//Make beep at given ona freq.
-  Snd(ona);
+  Sound(ona);
   if (busy)
     Busy(500000);
   else
     Sleep(500);
-  Snd;
+  Sound;
   if (busy)
     Busy(200000);
   else
@@ -254,7 +254,7 @@ Bool Mute(Bool val)
   if (val) {
     PUSHFD
     CLI
-    Snd;
+    Sound;
     res=LBts(&sys_semas[SEMA_MUTE],0);
     POPFD
   } else

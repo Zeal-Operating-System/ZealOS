@@ -54,7 +54,7 @@ A three bttn mouse is like a leg you cannot put weight on.  ZenithOS just does h
 
 * $LK,"MultiCore",A="FI:::/Doc/MultiCore.DD"$ is done $FG,2$master/slave$FG$, instead of $FG,2$SMP$FG$.  $FG,2$Core0$FG$ applications explicitly assigns jobs.  Locks are present allowing multicore file, heap, and hardware access, though.
 
-* $LK,"Sound",A="HI:Snd"$ has single-voice 8-bit signed MIDI-like samples.
+* $LK,"Sound",A="HI:Sound"$ has single-voice 8-bit signed MIDI-like samples.
 
 * All tasks have a heap and a sym table.  Scope is that of environment vars in other operating systems.  As text is typed at the command line or you run programs by $FG,2$#include$FG$ing them, the syms go in the table.  If a sym is not found, the parent task's table is checked.  The father of all tasks has the API syms you'll need waiting in it's table.  No need to $FG,2$#include$FG$ headers.
 

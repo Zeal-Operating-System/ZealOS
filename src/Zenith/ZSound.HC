@@ -1,11 +1,11 @@
-#help_index "Snd"
-public U0 SndTaskEndCB()
-{//Will turn-off snd when a task gets killed.
-  Snd;
+#help_index "Sound"
+public U0 SoundTaskEndCB()
+{//Will turn-off sound when a task gets killed.
+  Sound;
   Exit;
 }
 
-#help_index "Snd/Math;Math"
+#help_index "Sound/Math;Math"
 public F64 Saw(F64 t,F64 period)
 {//Sawtooth. 0.0 - 1.0 think "(Sin+1)/2"
   if (period) {
@@ -83,7 +83,7 @@ public F64 FullTri(F64 t,F64 period)
     return 0.0;
 }
 
-#help_index "Snd/Music"
+#help_index "Sound/Music"
 
 public class CMusicGlobals
 {
@@ -103,7 +103,7 @@ public class CMusicGlobals
   F64	tM_correction,last_Beat,last_tM;
 } music={NULL,NULL,4,1.0,{0,2,3,5,7,8,10},FALSE,4,4,2.5,0.9,0,0,0,0};
 
-#help_index "Snd/Music;Time/Seconds"
+#help_index "Sound/Music;Time/Seconds"
 public F64 tM()
 {//Time in seconds synced to music subsystem.
   return (counts.jiffies+music.tM_correction)/JIFFY_FREQ;
@@ -128,7 +128,7 @@ public F64 Beat()
   return res;
 }
 
-#help_index "Snd/Music"
+#help_index "Sound/Music"
 U8 *MusicSetOctave(U8 *st)
 {
   I64 ch;
@@ -284,12 +284,12 @@ per second.It defaults to
     timeout_val2=timeout_val+off_jiffies;
 
     if (!music.mute)
-      Snd(ona);
+      Sound(ona);
     SleepUntil(timeout_val);
     music.tM_correction+=on_jiffies-ToI64(on_jiffies);
 
     if (!music.mute && !tie)
-      Snd;
+      Sound;
     SleepUntil(timeout_val2);
     music.tM_correction+=off_jiffies-ToI64(off_jiffies);
 
@@ -306,7 +306,7 @@ U0 MusicSettingsRst()
   music.note_len=1.0;
   music.meter_top=4;
   music.meter_bottom=4;
-  SndRst;
+  SoundRst;
   PUSHFD
   CLI
   if (mp_count>1)
@@ -322,12 +322,12 @@ MusicSettingsRst;
 
 U0 CurSongTask()
 {
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   while (TRUE)
     Play(music.cur_song);
 }
 
-#help_index "Snd"
+#help_index "Sound"
 
 #define SE_NOISE	0
 #define SE_SWEEP	1
@@ -343,7 +343,7 @@ U0 SoundEffectEndTaskCB()
 {
   Free(FramePtr("CSoundEffectFrame"));
   music.mute--;
-  SndTaskEndCB;
+  SoundTaskEndCB;
 }
 
 U0 SoundEffectTask(CSoundEffectFrame *ns)
@@ -357,7 +357,7 @@ U0 SoundEffectTask(CSoundEffectFrame *ns)
       i=MaxI64(ns->ona2-ns->ona1,1);
       while (tS<timeout) {
 	ona=RandU16%i+ns->ona1;
-	Snd(ona);
+	Sound(ona);
 	t=Clamp(3000.0/Ona2Freq(ona),1.0,50.0);
 	if (t+tS>timeout)
 	  t=timeout-tS;
@@ -368,7 +368,7 @@ U0 SoundEffectTask(CSoundEffectFrame *ns)
       while (tS<timeout) {
 	t=(tS-t0)/ns->duration;
 	ona=(1.0-t)*ns->ona1+t*ns->ona2;
-	Snd(ona);
+	Sound(ona);
 	t=Clamp(3000.0/Ona2Freq(ona),1.0,50.0);
 	if (t+tS>timeout)
 	  t=timeout-tS;

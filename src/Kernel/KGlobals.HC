@@ -26,7 +26,7 @@ CMsStateGlobals	ms,ms_last;
 CKbdStateGlobals	kbd;
 CKeyDevGlobals	keydev;
 CMsHardStateGlobals ms_hard,ms_hard_last;
-CScreenCastGlobals	scrncast;
+CScreenCastGlobals	screencast;
 CTextGlobals	text;
 
 U8  *(*fp_getstr2)(I64 flags=0);

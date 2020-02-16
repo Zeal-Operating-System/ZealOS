@@ -15,7 +15,7 @@ U0 DrawIt(CTask *task,CDC *dc)
   I64 i,
 	cx=task->pix_width>>1,
 	cy=task->pix_height>>1;
-  Bool snd_on=FALSE;
+  Bool sound_on=FALSE;
   dc->color=BLACK;
   GrPrint(dc,0,0,"Protect your base.");
   GrRect(dc,cx-BASE_SIZE,cy-BASE_SIZE,BASE_SIZE*2,BASE_SIZE*2);
@@ -41,14 +41,14 @@ U0 DrawIt(CTask *task,CDC *dc)
     GrFloodFill(dc,balls[i].x,balls[i].y,TRUE);
     if (cx-BASE_SIZE-BALL_RADIUS<=balls[i].x<=cx+BASE_SIZE+BALL_RADIUS &&
 	  cy-BASE_SIZE-BALL_RADIUS<=balls[i].y<=cy+BASE_SIZE+BALL_RADIUS)
-      snd_on=TRUE;
+      sound_on=TRUE;
     dc->color=BLACK;
     GrCircle(dc,balls[i].x,balls[i].y,BALL_RADIUS);
   }
-  if (snd_on)
-    Snd(74);
+  if (sound_on)
+    Sound(74);
   else
-    Snd;
+    Sound;
 }
 
 U0 MyDerivative(CMathODE *ode,F64 t,COrder2D3 *,COrder2D3 *)

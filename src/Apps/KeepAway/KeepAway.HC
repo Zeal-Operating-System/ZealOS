@@ -428,8 +428,8 @@ U0 AnimateTask(CTask *parent_task)
       if (score0-score1>best_score0-best_score1) {
 	best_score0=score0;
 	best_score1=score1;
-	Snd(86);Sleep(100); Snd;Sleep(100);
-	Snd(86);Sleep(100); Snd;Sleep(100);
+	Sound(86);Sleep(100); Sound;Sleep(100);
+	Sound(86);Sleep(100); Sound;Sleep(100);
       }
     }
 

@@ -140,12 +140,12 @@ U0 Halogen()
 	  break;
       }
       if (crash)
-	Snd;
+	Sound;
       else {
 	if (speed)
-	  Snd(Freq2Ona(speed+10));
+	  Sound(Freq2Ona(speed+10));
 	else
-	  Snd;
+	  Sound;
 	UpdateRoad;
       }
       Sleep(10);

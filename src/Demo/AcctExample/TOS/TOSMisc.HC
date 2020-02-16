@@ -9,9 +9,9 @@ I64 CopyVideo()
   Del("D:/Tmp/*.AU");
   Del("D:/Tmp/*.MV");
   Silent(old_silent);
-  SndShift(&scrncast.snd_head,0.185);
-  AUWrite("D:/Tmp/AUDIO",&scrncast.snd_head,scrncast.t0_now,scrncast.t0_tS);
-  QueueDel(&scrncast.snd_head,TRUE);
+  SoundShift(&screencast.sound_head,0.185);
+  AUWrite("D:/Tmp/AUDIO",&screencast.sound_head,screencast.t0_now,screencast.t0_tS);
+  QueueDel(&screencast.sound_head,TRUE);
   GR2MV("D:/Tmp/VID%03d.MV","B:/Tmp","+d");
   return res;
 }

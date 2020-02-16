@@ -10,7 +10,7 @@ F64 avg_error=0,elapsed_time=0,total_error=0,score=999;
 
 U0 SongTask(I64)
 {
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   while (TRUE)
     Play("5hEDC4A5RCDECR");
@@ -104,17 +104,17 @@ U0 CircleTrace()
 	music.mute=TRUE; Sleep(200);
 	if (total_distance>0.95*CIRCUMFERENCE) {
 	  if (score<best_score) {
-	    Snd(86);Sleep(50);Snd;Sleep(50);
-	    Snd(86);Sleep(50);Snd;Sleep(50);
-	    Snd(86);Sleep(50);
+	    Sound(86);Sleep(50);Sound;Sleep(50);
+	    Sound(86);Sleep(50);Sound;Sleep(50);
+	    Sound(86);Sleep(50);
 	    best_score=score;
 	  } else {
-	    Snd(62);Sleep(50);
+	    Sound(62);Sleep(50);
 	  }
 	} else {
-	  Snd(34);Sleep(1000);
+	  Sound(34);Sleep(1000);
 	}
-	Snd; Sleep(200); music.mute=FALSE;
+	Sound; Sleep(200); music.mute=FALSE;
 	break;
     }
   } while (message_code!=MESSAGE_KEY_DOWN || arg1!=CH_SHIFT_ESC && arg1!=CH_ESC);

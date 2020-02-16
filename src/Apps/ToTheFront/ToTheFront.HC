@@ -16,7 +16,7 @@ U0 TurnNew()
 
   SleepUntil(message_off_timeout);
   message_off_timeout=counts.jiffies+JIFFY_FREQ*2*animation_delay+1;
-  Snd(74);
+  Sound(74);
   StrPrint(message_buf,"Turn %d",++turn);
   VRSetUp(0);
   VRSetUp(1);
@@ -36,7 +36,7 @@ U0 PhaseNew()
 
   SleepUntil(message_off_timeout);
   message_off_timeout=counts.jiffies+JIFFY_FREQ*2*animation_delay+1;
-  Snd(74);
+  Sound(74);
   switch (phase) {
     case PHASE_INDIRECT0:
     case PHASE_INDIRECT1:
@@ -102,7 +102,7 @@ U0 UserCheck()
 
 U0 TaskEndCB()
 {
-  Snd;
+  Sound;
   progress4=progress4_max=progress1=progress1_max=0;
   Exit;
 }
@@ -181,7 +181,7 @@ U0 ToTheFront()
 	while (TRUE) {
 	  message_off_timeout=0;
 	  StrCpy(message_buf,"Game Over");
-	  Snd;
+	  Sound;
 	  ch=GetChar(,FALSE);
 	  if (ch=='\n') {
 	    CleanUp;

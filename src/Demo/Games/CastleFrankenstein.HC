@@ -486,7 +486,7 @@ U0 CleanUp()
 
 U0 SongTask(I64)
 {//Song by Terry A. Davis
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   while (TRUE) {
     Play("3q.A#eGAeA#qAq.A#eGeAeA#qA");

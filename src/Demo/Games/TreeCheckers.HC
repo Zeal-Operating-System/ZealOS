@@ -123,7 +123,7 @@ U0 KillsCheck(I64 x1,I64 y1,I64 player)
       dd=SqrI64(x2-x1)+SqrI64(y2-y1);
       if (dd<=(CIRCLE_RAD+2)*(CIRCLE_RAD+2)) {
 	u[i].alive=FALSE;
-	Snd(62);Sleep(100);Snd;Sleep(25);
+	Sound(62);Sleep(100);Sound;Sleep(25);
 	num_alive[u[i].player]--;
 	do {
 	  found=FALSE;
@@ -132,7 +132,7 @@ U0 KillsCheck(I64 x1,I64 y1,I64 player)
 		  !u[u[j].link].alive) {
 	      found=TRUE;
 	      u[j].alive=FALSE;
-	      Snd(62);Sleep(100);Snd;Sleep(25);
+	      Sound(62);Sleep(100);Sound;Sleep(25);
 	      num_alive[u[j].player]--;
 	    }
 	} while (found);

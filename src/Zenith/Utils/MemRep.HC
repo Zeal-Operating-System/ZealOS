@@ -136,8 +136,8 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
   if (task==sys_winmgr_task) {
     "gr.pen_brushes\t:%010X\n",PenBrushesSize;
     "gr.scrn_zoom_tbles\t:%010X\n",ScreenZoomTablesSize;
-    "scrncast.dc\t:%010X\n",DCSize(scrncast.dc);
-    "scrncast.dc2_alias\t:%010X\n",DCSize(scrncast.dc2_alias);
+    "screencast.dc\t:%010X\n",DCSize(screencast.dc);
+    "screencast.dc2_alias\t:%010X\n",DCSize(screencast.dc2_alias);
   } else if (task==zenith_task) {
     j=0;k=0;m=0;n=0;
     for (i=0;i<mp_count;i++) {

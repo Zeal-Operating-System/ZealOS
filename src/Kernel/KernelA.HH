@@ -613,7 +613,7 @@ class CSema
 #define SEMA_SYS_TIMER		2
 #define SEMA_SYS_DATE		3
 #define SEMA_DBG_MODE		4
-#define SEMA_SND		5
+#define SEMA_SOUND		5
 #define SEMA_HEAPLOG_ACTIVE	6
 #define SEMA_HEAPLOG_LOCK	7
 #define SEMA_REFRESH_IN_PROGRESS 8
@@ -3770,24 +3770,24 @@ class CKeyDevGlobals
 	*handler;
 };
 
-#help_index "Snd"
-#help_index "ScreenCast;Snd/AU Files"
+#help_index "Sound"
+#help_index "ScreenCast;Sound/AU Files"
 public class CAUData
 {//Fmt of AU files
   CDate	cdt;
   I8	ona;
 };
 
-class CSndData
+class CSoundData
 {//Fmt recorded in mem
-  CSndData *next,*last;
+  CSoundData *next,*last;
   F64	tS;
   I8	ona;
 };
 
 public class CScreenCastGlobals
 {
-  CSndData snd_head;
+  CSoundData sound_head;
   CDate	t0_now;
   F64	t0_tS;
   U8	*print_fmt;

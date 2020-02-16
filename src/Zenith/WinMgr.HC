@@ -270,28 +270,28 @@ I64 WinMgrSleep(Bool flush_messages=FALSE)
     LBts(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0);
     GrUpdateScreen;
     LBtr(&sys_semas[SEMA_REFRESH_IN_PROGRESS],0);
-    if (scrncast.record  && !scrncast.just_audio) {
-      cdt=scrncast.t0_now(I64)+ToI64(CDATE_FREQ*(tS-scrncast.t0_tS));
-      if (!scrncast.dc) {
-	scrncast.dc=DCCopy(scrncast.dc2_alias);
-	scrncast.dc->cdt=cdt;
-	st=MStrPrint(scrncast.print_fmt,cdt);
-	GRWrite(st,scrncast.dc);
+    if (screencast.record  && !screencast.just_audio) {
+      cdt=screencast.t0_now(I64)+ToI64(CDATE_FREQ*(tS-screencast.t0_tS));
+      if (!screencast.dc) {
+	screencast.dc=DCCopy(screencast.dc2_alias);
+	screencast.dc->cdt=cdt;
+	st=MStrPrint(screencast.print_fmt,cdt);
+	GRWrite(st,screencast.dc);
 	Free(st);
-      } else if (MemCmp(scrncast.dc->body,
-	    scrncast.dc2_alias->body,MSize(scrncast.dc2_alias->body))) {
-	diff=DCDiff(scrncast.dc,scrncast.dc2_alias);
+      } else if (MemCmp(screencast.dc->body,
+	    screencast.dc2_alias->body,MSize(screencast.dc2_alias->body))) {
+	diff=DCDiff(screencast.dc,screencast.dc2_alias);
 	diff->cdt=cdt;
-	st=MStrPrint(scrncast.print_fmt,cdt);
+	st=MStrPrint(screencast.print_fmt,cdt);
 	GRWrite(st,diff);
 	Free(st);
 	DCDel(diff);
-	Free(scrncast.dc->body);
-	scrncast.dc->body=MAllocIdent(scrncast.dc2_alias->body);
+	Free(screencast.dc->body);
+	screencast.dc->body=MAllocIdent(screencast.dc2_alias->body);
       }
-    } else if (scrncast.dc) {
-      DCDel(scrncast.dc); //TODO: $LK,"MemRep",A="MN:MemRep"$ can crash.
-      scrncast.dc=NULL;
+    } else if (screencast.dc) {
+      DCDel(screencast.dc); //TODO: $LK,"MemRep",A="MN:MemRep"$ can crash.
+      screencast.dc=NULL;
     }
     if (sys_focus_task && !Bt(&sys_focus_task->task_flags,TASKf_HAS_SONG)) {
       Free(music.cur_song);
@@ -432,7 +432,7 @@ U0 WinMgrTask(I64)
   gr.dc->win_task=Fs;
   Fs->win_inhibit&=~WIF_SELF_CTRLS;
   GrSetUpTables;
-  scrncast.dc2_alias=DCAlias(gr.dc2);
+  screencast.dc2_alias=DCAlias(gr.dc2);
   WinZBufUpdate;
   LBts(&sys_run_level,RLf_WINMGR);
   while (TRUE) {

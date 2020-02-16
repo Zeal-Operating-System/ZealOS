@@ -401,7 +401,7 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
 	"  Random(,',');"
 	"  MarkIncomplete(MESSAGE_CMD,PSMF_INCOMPLETE);"
 	"}"
-	"Snd {"
+	"Sound {"
 	"  Octave1(,'1');"
 	"  Octave2(,'2');"
 	"  Octave3(,'3');"
@@ -649,7 +649,7 @@ mo_got_message:
 		      message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
 			    1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_CMD);
 		    if (message_code) {
-		      Snd;
+		      Sound;
 		      psm.playing=FALSE;
 		      was_playing=TRUE;
 		      if (ms.pos_text.y-Fs->win_top>=18 &&
@@ -662,7 +662,7 @@ mo_got_message:
 		    psm.scrn_x+=tmpn->x-0.33*GR_WIDTH;
 		    if (PsmHasWords(tmpn->word))
 		      "%s",tmpn->word;
-		    Snd(tmpn->ona);
+		    Sound(tmpn->ona);
 
 		    music.tempo=4.4*tempo_state.tempo/TEMPO_RANGE+0.5;
 		    music.stacatto_factor=
@@ -677,7 +677,7 @@ mo_got_message:
 			    d*(1.0-music.stacatto_factor);
 		    }
 		    SleepUntil(timeout_val);
-		    Snd;
+		    Sound;
 		    SleepUntil(timeout_val2);
 		  }
 		  tmpn=tmpn->next;
@@ -687,7 +687,7 @@ mo_got_message:
 		psm.playing=FALSE;
 		PsmMenu(psm_octave);
 		col=0;
-		Snd;
+		Sound;
 		break;
 	      case CH_BACKSPACE:
 		tmpn=psm.cur_note->last;
@@ -751,7 +751,7 @@ mo_got_message:
 	    st="R";
 	} else
 	  st=ListSub(Ona2Note(ona),psm_note_list);
-	Snd(ona);
+	Sound(ona);
 	if (psm.record_entry->checked) {
 	  if (!was_null) {
 	    music.tempo=4.4*tempo_state.tempo/TEMPO_RANGE+0.5;

@@ -53,7 +53,7 @@ U0 Init(CDC *dc)
   }
 }
 
-U0 SndMathDemo()
+U0 SoundMathDemo()
 {
   CDC *dc=DCAlias;
 
@@ -103,4 +103,4 @@ U0 SndMathDemo()
   DCDel(dc);
 }
 
-SndMathDemo;
+SoundMathDemo;

@@ -48,10 +48,10 @@ U0 SysGlobalsInit()
   for (i=-308;i<309;i++)
     pow10_I64[i+309]=Pow10(i);
 
-  QueueInit(&scrncast.snd_head);
-  scrncast.t0_now=Now;
-  scrncast.t0_tS=tS;
-  scrncast.ona=scrncast.snd_head.ona=0;
+  QueueInit(&screencast.sound_head);
+  screencast.t0_now=Now;
+  screencast.t0_tS=tS;
+  screencast.ona=screencast.sound_head.ona=0;
 
   ProgressBarsRst;
 
@@ -135,7 +135,7 @@ U0 Reboot()
 U0 KMain()
 {//Continued from $LK,"KStart64.HC",A="FF:::/Kernel/KStart64.HC,I32 &KMain"$
   CBlkDev *bd;
-  OutU8(0x61,InU8(0x61)&~3); //Snd;
+  OutU8(0x61,InU8(0x61)&~3); //Sound;
   zenith_task=Fs;
   BlkPoolsInit;
   SysGlobalsInit;
@@ -154,7 +154,7 @@ U0 KMain()
   Core0Init;
   IntInit1;
 
-  //Before this point use $LK,"Snd",A="MN:Snd"$() and $LK,"Busy",A="MN:Busy"$()
+  //Before this point use $LK,"Sound",A="MN:Sound"$() and $LK,"Busy",A="MN:Busy"$()
   //to debug.After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
   LBts(&sys_run_level,RLf_RAW);
   "ZenithOS V%5.3f\t%D %T\n\n",

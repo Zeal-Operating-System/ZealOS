@@ -67,19 +67,19 @@ U0 AsmAndC2()
     MOV	RCX,R15 //You can clobber RAX,RBX,RCX,RDX. Preserve the rest.
     @@05:	PUSH	RCX
 
-//U0 $LK,"Snd",A="MN:Snd"$(I8 ona);
+//U0 $LK,"Sound",A="MN:Sound"$(I8 ona);
     MOV	RAX,RCX	//ona=loop*10+100.0Hz
     IMUL2	RAX,glbl_ona_step //Intentionally evaluated at compile time
     ADD	RAX,U64 [&glbl_ona_base]  //Intentionally evaluated at run time
     PUSH	RAX
-    CALL	&Snd	//We can skip IMPORT with & if JIT compiling.
+    CALL	&Sound	//We can skip IMPORT with & if JIT compiling.
     MOV	RCX,counts.time_stamp_freq>>3 //JIT Const.  Simple delay loop.
 @@10:	LOOP	@@10
 
     POP	RCX
     LOOP	@@05
   }
-  Snd;
+  Sound;
 }
 
 AsmAndC2;

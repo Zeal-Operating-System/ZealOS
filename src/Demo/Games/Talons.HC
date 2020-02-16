@@ -1013,7 +1013,7 @@ U0 AnimateTask(I64)
 	    QueueRemove(tmpo);
 	    Free(tmpo);
 	    music.mute=TRUE;
-	    Snd(74); Sleep(200); Snd;
+	    Sound(74); Sleep(200); Sound;
 	    music.mute=FALSE;
 	  }
 	}
@@ -1062,7 +1062,7 @@ U0 TaskEndCB()
 
 U0 SongTask(I64)
 {
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   while (TRUE) {
     Play("5eCGFsD4A5e.C4sG5eGDqCDeGsGG4qG");

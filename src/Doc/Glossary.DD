@@ -132,7 +132,7 @@ $FG,2$Sec$FG$	Second, Secondary
 $FG,2$Sect$FG$	Sector
 $FG,2$Sel$FG$	Select, Selected
 $FG,2$Seq$FG$	Sequence
-$FG,2$Snd$FG$	Sound
+$FG,2$Sound$FG$	Sound
 $FG,2$SP$FG$	SingleProcessor
 $FG,2$Src$FG$	Source
 $FG,2$Srv$FG$	Servant
@@ -204,7 +204,7 @@ $LK,"Editor Link Types",A="MN:LK_FILE"$
 $LK,"files_find_mask",A="FI:::/Doc/FileUtils.DD"$
 $LK,"Hash Table",A="HI:Hash"$
 $LK,"InFile",A="HI:InFile"$
-$LK,"Ona",A="HI:Snd"$
+$LK,"Ona",A="HI:Sound"$
 $LK,"Pag",A="HI:Memory/BlkPool"$
 $LK,"RedSea File System",A="FI:::/Doc/RedSea.DD"$
 $LK,"Sprite",A="HI:Graphics/Sprite"$

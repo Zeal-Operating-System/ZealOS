@@ -166,7 +166,7 @@ U0 DoMessageLoop()
 U0 DoASCIIOrgan()
 {
   CTask *task=User;
-  XTalkWait(task,"#include \"::/Demo/Snd/ASCIIOrgan\";\n");
+  XTalkWait(task,"#include \"::/Demo/Sound/ASCIIOrgan\";\n");
   Sleep(100);
   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,'A',0);
   Sleep(200);
@@ -472,7 +472,7 @@ U0 DoTreeCheckers()
 U0 DoMorseCode()
 {
   CTask *task=User;
-  XTalkWait(task,"#include \"::/Demo/Snd/MorseCode\";\n");
+  XTalkWait(task,"#include \"::/Demo/Sound/MorseCode\";\n");
   Sleep(50);
 
   PostMessage(task,MESSAGE_KEY_DOWN,CH_SPACE,0);
@@ -1675,7 +1675,7 @@ U0 OSTestSuite()
   TS("WordSearch");	TSFileChar("::/Demo/WordSearch");
   TS("StkGrow");	TSFile("::/Demo/StkGrow");
   TS("MemDemo");	TSFile("::/Demo/MemDemo");
-  TS("WaterFowl");	TSFileChar("::/Demo/Snd/WaterFowl");
+  TS("WaterFowl");	TSFileChar("::/Demo/Sound/WaterFowl");
   TS("AsmHelloWorld");	TSFile("::/Demo/Asm/AsmHelloWorld");
   TS("AsmAndC1");	DoAsmAndC1;
   TS("AsmAndC2");	DoAsmAndC2;

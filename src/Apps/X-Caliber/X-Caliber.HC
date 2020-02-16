@@ -589,7 +589,7 @@ U0 DrawIt(CTask *task,CDC *dc)
 	      Sprite3ZB(dc,tmpsp->p[0].x,tmpsp->p[0].y,0,$IB,"<Laser>",BI=6$,arg);
 	      if (tmpsp->lasering && !tmpsp->laser_overheat) {
 		draw_laser_line=TRUE;
-		Snd(74);
+		Sound(74);
 	      }
 	  }
 
@@ -972,7 +972,7 @@ U0 CheckDamage()
     if (!human->laser_overheat && human->lasering) {
       if (human->laser_temperature>=LASER_TEMP_MAX) {
 	human->laser_overheat=TRUE;
-	Snd;
+	Sound;
       } else {
 	human->laser_temperature+=1.0;
 	D3Sub(&p1,&human->p[0].x,&human->p[1].x);
@@ -1180,7 +1180,7 @@ U0 HumanFireLaserEnd()
 {
   if (human && !human->exploding) {
     human->lasering=FALSE;
-    Snd;
+    Sound;
   }
 }
 

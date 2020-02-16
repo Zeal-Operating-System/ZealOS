@@ -115,7 +115,7 @@ U0 PsmSetOctave(I64 octave)
   U8 buf[STR_LEN];
   CMenuEntry *tmpse;
   for (i=1;i<=7;i++) {
-    StrPrint(buf,"Snd/Octave%d",i);
+    StrPrint(buf,"Sound/Octave%d",i);
     if (tmpse=MenuEntryFind(Fs->cur_menu,buf)) {
       if (i==octave)
 	tmpse->checked=TRUE;

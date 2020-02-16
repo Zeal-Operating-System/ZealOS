@@ -1,6 +1,6 @@
 U0 Song()
 {//Song by Terry A. Davis
-  Fs->task_end_cb=&SndTaskEndCB;
+  Fs->task_end_cb=&SoundTaskEndCB;
   MusicSettingsRst;
   try //Catch <CTRL-ALT-c> exit
     while (!ScanChar) {
@@ -35,7 +35,7 @@ U0 Song()
   catch
     PutExcept;
   '\n';
-  Snd;
+  Sound;
 }
 
 Song;

@@ -81,8 +81,8 @@ public U0 JukeSongsPuppet(U8 *dirname="~/Psalmody",I64 passes=2,
   tmpde1=FilesFind("*",FUF_RECURSE|FUF_JUST_TXT|FUF_JUST_FILES);
   for (tmpde=tmpde1,i=0;tmpde && i<start_song;i++)
     tmpde=tmpde->next;
-  if (scrncast.record)
-    t0=scrncast.t0_tS;
+  if (screencast.record)
+    t0=screencast.t0_tS;
   else
     t0=tS;
   for (i=start_song;tmpde && i<end_song;i++) {

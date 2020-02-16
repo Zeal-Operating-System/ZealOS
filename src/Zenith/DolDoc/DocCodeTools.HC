@@ -510,9 +510,9 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	indent=EdRICode(doc);
 	DocUnlock(doc);
 	if (beep) {
-	  Snd(86); Sleep(150); Snd;
+	  Sound(86); Sleep(150); Sound;
 	  Sleep(100);
-	  Snd(86); Sleep(150); Snd;
+	  Sound(86); Sleep(150); Sound;
 	}
 	DocLock(doc);
 	EdRemFunLeadingSpace(doc);
@@ -577,9 +577,9 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 	}
 	DocUnlock(doc);
 	if (beep) {
-	  Snd(86); Sleep(150); Snd;
+	  Sound(86); Sleep(150); Sound;
 	  Sleep(100);
-	  Snd(86); Sleep(150); Snd;
+	  Sound(86); Sleep(150); Sound;
 	}
 	DocLock(doc);
 	EdRenumAsm(doc);

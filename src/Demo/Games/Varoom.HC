@@ -509,9 +509,9 @@ U0 AnimateTask(I64)
   Track *tmpt,*tmpt2;
   while (TRUE) {
     if (!game_over)
-      Snd(12.0*Log2(c[0].speed/500+0.7));
+      Sound(12.0*Log2(c[0].speed/500+0.7));
     else
-      Snd;
+      Sound;
     for (i=0;i<CARS_NUM;i++) {
       tmpc=&c[i];
       tmpc->p.x-=0.01*tmpc->speed*Cos(tmpc->é-ã/2);

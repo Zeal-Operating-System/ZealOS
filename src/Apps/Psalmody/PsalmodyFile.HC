@@ -345,7 +345,7 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
   DocPrint(doc,
 	"U0 Song()\n"
 	"{\n"
-	"Fs->task_end_cb=&SndTaskEndCB;\n"
+	"Fs->task_end_cb=&SoundTaskEndCB;\n"
 	"MusicSettingsRst;\n"
 	"music.tempo=%6.3f;\n"
 	"music.stacatto_factor=%6.3f;\n"
@@ -411,7 +411,7 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 	"}\n"
 	"} catch\n"
 	"PutExcept;\n"
-	"Snd;\n"
+	"Sound;\n"
 	"}\n"
 	"\n"
 	"Song;\n");
