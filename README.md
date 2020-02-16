@@ -20,6 +20,7 @@ Changes include:
   - 440Hz 'A' tuning changed to 432Hz.
   - Added CompComp function.
   - HolyC -> CosmiC.
+  - Added Seg2Linear function.
   - System-wide renames:
     - AOnce -> ZOnce
     - ACAlloc -> ZCAlloc
