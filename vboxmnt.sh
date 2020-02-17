@@ -9,5 +9,5 @@ sudo cp -r /mnt/* src/
 sudo umount /mnt
 sudo qemu-nbd -d /dev/nbd0
 sudo chown -R v:v src/*
-mv src/Tmp/MyDistro.ISO.C src/Tmp/MyDistro.iso
+mv src/Tmp/MyDistro.ISO.C src/Tmp/Zenith-Latest.iso
 
