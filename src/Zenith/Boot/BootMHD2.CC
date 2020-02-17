@@ -111,7 +111,7 @@ BMHD2_HISTART:
 	POP	FS
 	POP	ES
 	POP	DS
-	POPFW
+	POPF
 
 //My assembler doesn't support 16-bit very well.
 	DU8	0xEA;	//JMP xxxx:yyyy
