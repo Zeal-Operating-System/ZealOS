@@ -28,6 +28,7 @@ Changes include:
     - AMAlloc -> ZMAlloc
     - AStrNew -> ZStrNew
     - Adam -> Zenith
+    - Seth -> Daemon
     - BEqu -> BEqual
     - Bwd -> Backward
     - Cfg -> Config
