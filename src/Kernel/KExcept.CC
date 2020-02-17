@@ -121,7 +121,7 @@ U0 Break()
   else {
     Fs->wake_jiffy=0;
     TaskResetAwaitingMessage;
-    DrivesRelease();
+    DrivesRelease();
     BlkDevsRelease();
     FlushMessages;
     throw('Break');

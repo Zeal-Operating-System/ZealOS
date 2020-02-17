@@ -167,6 +167,25 @@ lud_done:
   DocDel(doc);
 }
 
+public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
+			U16 vendor_id=NULL, U16 device_id=NULL,
+			U8 _bus=0xFF, U8 _dev=0xFF, U8 _fun=0xFF)
+{//return first device with matching class & subcode, vendor & device id, or a specific device.
+  PCILookUpDevs;
+  CPCIDev *p = dev.pci_head.next;
+  while (p != &dev.pci_head)
+  {
+    if(p->vendor_id == vendor_id && p->device_id == device_id ||
+	p->class_code == class_code && p->sub_code == sub_code ||
+	p->bus == _bus && p->dev == _dev && p->fun == _fun)
+
+      return p;
+    
+    p = p->next;
+  }
+  return NULL;
+}
+
 public U0 PCIRep()
 {//Report description of PCI devices.
   CPCIDev *tmppci;
@@ -179,7 +198,7 @@ public U0 PCIRep()
   tmppci=dev.pci_head.next;
   while (tmppci!=&dev.pci_head) {
     "%02X:%02X:%01X %02X-%02X-%02X $$GREEN$$%s $$CYAN$$%s$$FG$$\n",
-	  tmppci->bus,tmppci->dev,tmppci->fun,
+	  tmppci->bus,tmppci->dev,tmppci->fun,
 	  tmppci->class_code,tmppci->sub_code,tmppci->prog_if,
 	  tmppci->vendor_str,tmppci->dev_id_str;
     tmppci=tmppci->next;
