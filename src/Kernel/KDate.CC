@@ -120,12 +120,31 @@ I64 LastDayOfYear(I64 i)
   return cdt.date-1;
 }
 
-I64 Bcd2Bin(U64 b)
+U8 CMOSRegRead(I64 register)
+{//Read val from CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
+  OutU8(CMOS_SEL, register);
+  return InU8(CMOS_DATA);
+}
+
+U0 CMOSRegWrite(I64 register, I64 val)
+{//Write val to CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
+  OutU8(CMOS_SEL, register);
+  OutU8(CMOS_DATA, val);
+}
+
+Bool CMOSIsBcd()
+{//Check of CMOS is in binary-coded decimal mode.
+// Ex: 15:32:44 == 0x15:0x32:0x44 (not good). We use $LK,"Bcd2Binary",A="MN:Bcd2Binary"$() to convert.
+  return !(CMOSRegRead(CMOSR_STATUS_B) & CMOSF_BINARY);
+}
+
+I64 Bcd2Binary(U64 b)
 {
-  I64 i,res=0;
-  for (i=0;i<16;i++) {
-    res=res*10+b>>60;
-    b<<=4;
+  I64 i,res = 0;
+  for (i = 0; i < 16; i++)
+  {
+    res = res * 10 + b >> 60;
+    b <<= 4;
   }
   return res;
 }
@@ -133,59 +152,43 @@ I64 Bcd2Bin(U64 b)
 U0 NowDateTimeStruct(CDateStruct *_ds)
 {
   I64 i;
-  U8 *b=_ds;
-  Bool is_bcd;
+  U8 *b = _ds;
 
-  MemSet(_ds,0,sizeof(CDateStruct));
+  MemSet(_ds, 0, sizeof(CDateStruct));
   PUSHFD
   CLI
   while (LBts(&sys_semas[SEMA_SYS_DATE],0))
     PAUSE
 
-  OutU8(0x70,0x0A);
   do {
-    while (InU8(0x71) & 0x80)
+    while (CMOSRegRead(CMOSR_STATUS_A) & CMOSF_UPDATING)
       PAUSE
 
-    OutU8(0x70,0);
-    b[2]=InU8(0x71);
-    OutU8(0x70,2);
-    b[3]=InU8(0x71);
-    OutU8(0x70,4);
-    b[4]=InU8(0x71);
+    b[2] = CMOSRegRead(CMOSR_SEC);
+    b[3] = CMOSRegRead(CMOSR_MIN);
+    b[4] = CMOSRegRead(CMOSR_HOUR);
+    b[5] = CMOSRegRead(CMOSR_DAY_OF_WEEK);
+    b[6] = CMOSRegRead(CMOSR_DAY_OF_MONTH);
+    b[7] = CMOSRegRead(CMOSR_MONTH);
+    b[8] = CMOSRegRead(CMOSR_YEAR);
 
-    OutU8(0x70,6);
-    b[5]=InU8(0x71);
-    OutU8(0x70,7);
-    b[6]=InU8(0x71);
-    OutU8(0x70,8);
-    b[7]=InU8(0x71);
-    OutU8(0x70,9);
-    b[8]=InU8(0x71);
-
-    OutU8(0x70,0x0A);
-  } while (InU8(0x71) & 0x80);
-
-  OutU8(0x70,0x0B);
-  if (InU8(0x71) & 4)
-    is_bcd=FALSE;
-  else
-    is_bcd=TRUE;
+  } while (CMOSRegRead(CMOSR_STATUS_A) & CMOSF_UPDATING);
 
   LBtr(&sys_semas[SEMA_SYS_DATE],0);
   POPFD
-  if (is_bcd)
-    for (i=2;i<9;i++)
-      b[i]=Bcd2Bin(b[i]);
+  if (CMOSIsBcd)
+    for (i = 2; i < 9; i++)
+      b[i] = Bcd2Binary(b[i]);
 
-  if (_ds->year>255)	_ds->year=255;
-  _ds->year+=2000;
-  if (_ds->mon>12)	_ds->mon=12;
-  if (_ds->day_of_mon>31) _ds->day_of_mon=31;
-  if (_ds->day_of_week>6) _ds->day_of_week=6;
-  if (_ds->hour>23)	_ds->hour=23;
-  if (_ds->min>59)	_ds->min=59;
-  if (_ds->sec>59)	_ds->sec=59;
+  if (_ds->year > 255)	    _ds->year = 255;
+  _ds->year += 2000;
+
+  if (_ds->mon > 12)        _ds->mon = 12;
+  if (_ds->day_of_mon > 31) _ds->day_of_mon=31;
+  if (_ds->day_of_week > 6) _ds->day_of_week=6;
+  if (_ds->hour > 23)	    _ds->hour=23;
+  if (_ds->min > 59)	    _ds->min=59;
+  if (_ds->sec > 59)	    _ds->sec=59;
 }
 
 CDate Now()
@@ -193,4 +196,31 @@ CDate Now()
   CDateStruct ds;
   NowDateTimeStruct(&ds);
   return Struct2Date(&ds)-local_time_offset;
+}
+
+U0 TimeSet(CDateStruct *ds)
+{//Set CMOS time from user crafted $LK,"CDateStruct",A="MN:CDateStruct"$.
+//$BK,1$Make sure to use hex as decimals if BCD mode.$BK,0$ Check using $LK,"CMOSIsBcd",A="MN:CMOSIsBcd"$().
+//Ex: if bcd mode and we want 12/30, 10:45:15 -- 0x12/0x30, 0x10:0x45:0x15.
+//Pass year as double digit number (obviously 20XX is too big for a U8).
+  U8 *b = ds;
+
+  PUSHFD
+  CLI
+  while (LBts(&sys_semas[SEMA_SYS_DATE],0))
+    PAUSE
+
+  while (CMOSRegRead(CMOSR_STATUS_A) & CMOSF_UPDATING)
+    PAUSE
+
+  CMOSRegWrite(CMOSR_SEC, b[2]);
+  CMOSRegWrite(CMOSR_MIN, b[3]);
+  CMOSRegWrite(CMOSR_HOUR, b[4]);
+  CMOSRegWrite(CMOSR_DAY_OF_WEEK, b[5]);
+  CMOSRegWrite(CMOSR_DAY_OF_MONTH, b[6]);
+  CMOSRegWrite(CMOSR_MONTH, b[7]);
+  CMOSRegWrite(CMOSR_YEAR, b[8]);
+
+  LBtr(&sys_semas[SEMA_SYS_DATE],0);
+  POPFD
 }

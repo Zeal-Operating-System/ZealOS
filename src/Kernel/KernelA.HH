@@ -179,6 +179,24 @@ public class CFifoI64
   I64	*buf;
   I64	mask,in_ptr,out_ptr;
 };
+#help_index "Date/CMOS"
+#define CMOS_SEL	0x70 //select which reg to access using this port
+#define CMOS_DATA	0x71 //read from or write to reg using this port
+
+//CMOS registers
+#define CMOSR_SEC		0x0
+#define CMOSR_MIN		0x2
+#define CMOSR_HOUR		0x4
+#define CMOSR_DAY_OF_WEEK	0x6
+#define CMOSR_DAY_OF_MONTH	0x7
+#define CMOSR_MONTH		0x8
+#define CMOSR_YEAR		0x9
+#define CMOSR_STATUS_A		0xA
+#define CMOSR_STATUS_B		0xB
+
+//CMOS status flags
+#define CMOSF_BINARY	(1 << 2)
+#define CMOSF_UPDATING	(1 << 7)
 
 #help_index "Date/CDate"
 #define CDATE_YEAR_DAYS		365.24225

@@ -736,6 +736,12 @@ public extern CDate Now();
 public extern CDate Struct2Date(CDateStruct *_ds);
 public extern CDate local_time_offset;
 
+#help_index "Time/Date/CMOS;Date/CMOS"
+public extern U8 CMOSRegRead(I64 register);
+public extern U0 CMOSRegWrite(I64 register, I64 val);
+public extern Bool CMOSIsBcd();
+public extern U0 TimeSet(CDateStruct *ds);
+
 #help_index "Time/Date;Date"
 #help_file "::/Doc/Date"
 public extern I64 DayOfWeek(I64 i);
