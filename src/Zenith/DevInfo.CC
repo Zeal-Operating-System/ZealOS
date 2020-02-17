@@ -121,28 +121,46 @@ U0 PCILookUpSingle(CDoc *doc,I64 m,I64 d,U8 **_vendor,U8 **_dev)
 U0 PCILookUpDevs()
 {
   CPCIDev *tmppci;
-  I64 w1,w2,b,d,f,timeout=32*8*2;
+  I64 w1, w2, b, d, f, timeout = 32 * 8 * 2;
   CDoc *doc;
-  if (dev.pci_head.next!=&dev.pci_head)
+  if (dev.pci_head.next != &dev.pci_head)
     return;
-  doc=DocRead(PCI_DEV_FILE,DOCF_PLAIN_TEXT|DOCF_NO_CURSOR);
-  for (b=0;b<sys_pci_busses;b++)
-    for (d=0;d<32;d++)
-      for (f=0;f<8;f++) {
-	w1=PCIReadU16(b,d,f,0);
-	if (w1!=0xFFFF) {
-	  tmppci=ZCAlloc(sizeof(CPCIDev));
-	  tmppci->bus=b;
-	  tmppci->dev=d;
-	  tmppci->fun=f;
-	  tmppci->vendor=w1;
-	  tmppci->dev_id=w2=PCIReadU16(b,d,f,2);
-	  tmppci->sub_code=PCIReadU8(b,d,f,0xA);
-	  tmppci->base_code=PCIReadU8(b,d,f,0xB);
-	  PCILookUpSingle(doc,w1,w2,&tmppci->vendor_str,&tmppci->dev_id_str);
-	  QueueInsert(tmppci,dev.pci_head.last);
-	  timeout=32*8*2;
-	} else if (sys_pci_busses==256 && --timeout<=0)
+  doc = DocRead(PCI_DEV_FILE, DOCF_PLAIN_TEXT | DOCF_NO_CURSOR);
+  for (b = 0; b < sys_pci_busses; b++)
+    for (d = 0; d < 32; d++)
+      for (f = 0; f < 8; f++)
+      {
+	w1 = PCIReadU16(b, d, f, PCIR_VENDOR_ID);
+	if (w1 != 0xFFFF)
+        {
+	  tmppci = ZCAlloc(sizeof(CPCIDev));
+	  tmppci->bus = b;
+	  tmppci->dev = d;
+	  tmppci->fun = f;
+	  tmppci->vendor_id = w1;
+	  tmppci->device_id = w2 = PCIReadU16(b, d, f, PCIR_DEVICE_ID);
+	  tmppci->sub_code =	PCIReadU8(b, d, f, PCIR_SUB_CODE);
+	  tmppci->class_code =	PCIReadU8(b, d, f, PCIR_CLASS_CODE);
+	  tmppci->prog_if =	PCIReadU8(b, d, f, PCIR_PROG_IF);
+	  tmppci->revision_id =	PCIReadU8(b, d, f, PCIR_REVISION_ID);
+	  tmppci->bist = 	PCIReadU8(b, d, f, PCIR_BIST);
+	  tmppci->header_type =	PCIReadU8(b, d, f, PCIR_HEADER_TYPE);
+	  tmppci->latency_timer=PCIReadU8(b, d, f, PCIR_LATENCY_TIMER);
+	  tmppci->capabilities=	PCIReadU8(b, d, f, PCIR_CAPABILITIES);
+	  tmppci->cache_line_size=PCIReadU8(b, d, f, PCIR_CACHE_LINE_SIZE);
+	  tmppci->subsys_id =	PCIReadU16(b, d, f, PCIR_SUBSYS_ID);
+	  tmppci->subsys_vendor_id=PCIReadU16(b, d, f, PCIR_SUBSYS_VENDOR_ID);
+	  tmppci->erom =	PCIReadU32(b, d, f, PCIR_EXPANSION_ROM);
+	  tmppci->base[0] =	PCIReadU32(b, d, f, PCIR_BASE0);
+	  tmppci->base[1] =	PCIReadU32(b, d, f, PCIR_BASE1);
+	  tmppci->base[2] =	PCIReadU32(b, d, f, PCIR_BASE2);
+	  tmppci->base[3] =	PCIReadU32(b, d, f, PCIR_BASE3);
+	  tmppci->base[4] =	PCIReadU32(b, d, f, PCIR_BASE4);
+	  tmppci->base[5] =	PCIReadU32(b, d, f, PCIR_BASE5);
+	  PCILookUpSingle(doc, w1, w2, &tmppci->vendor_str, &tmppci->dev_id_str);
+	  QueueInsert(tmppci, dev.pci_head.last);
+	  timeout = 32 * 8 * 2;
+	} else if (sys_pci_busses == 256 && --timeout <= 0)
 	  goto lud_done;
       }
 lud_done:
@@ -160,9 +178,9 @@ public U0 PCIRep()
   PCILookUpDevs;
   tmppci=dev.pci_head.next;
   while (tmppci!=&dev.pci_head) {
-    "%02X:%02X:%01X %02X%02X $$GREEN$$%s $$CYAN$$%s$$FG$$\n",
-	  tmppci->bus,tmppci->dev,tmppci->fun,
-	  tmppci->base_code,tmppci->sub_code,
+    "%02X:%02X:%01X %02X-%02X-%02X $$GREEN$$%s $$CYAN$$%s$$FG$$\n",
+	  tmppci->bus,tmppci->dev,tmppci->fun,
+	  tmppci->class_code,tmppci->sub_code,tmppci->prog_if,
 	  tmppci->vendor_str,tmppci->dev_id_str;
     tmppci=tmppci->next;
   }

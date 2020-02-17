@@ -590,7 +590,7 @@ public class CCountsGlobals
 	timer,		//$LK,"SYS_TIMER_FREQ",A="MN:SYS_TIMER_FREQ"$. Use $LK,"SysTimerRead",A="MN:SysTimerRead"$().
 	time_stamp_freq,
 	time_stamp_kHz_freq,
-	time_stamp_freq_initial; //Initial freq, sampled once at boot time.
+	time_stamp_freq_initial; //Initial freq, sampled once at boot time.
   Bool	time_stamp_calibrated;
 };
 
@@ -2277,13 +2277,71 @@ class CUAsmGlobals
 };
 
 #help_index "Devices;PCI"
+
+//PCI Registers, used with $LK,"PCIRead",A="MN:PCIReadU16"$ functions.
+#define PCIR_VENDOR_ID		0x00
+#define PCIR_DEVICE_ID		0x02
+#define PCIR_COMMAND		0x04
+#define PCIR_STATUS		0x06
+#define PCIR_REVISION_ID	0x08
+#define PCIR_PROG_IF		0x09
+#define PCIR_SUB_CODE		0x0A
+#define PCIR_CLASS_CODE		0x0B
+#define PCIR_CACHE_LINE_SIZE	0x0C
+#define PCIR_LATENCY_TIMER	0x0D
+#define PCIR_HEADER_TYPE	0x0E
+#define PCIR_BIST		0x0F
+#define PCIR_BASE0		0x10
+#define PCIR_BASE1		0x14
+#define PCIR_BASE2		0x18
+#define PCIR_BASE3		0x1C
+#define PCIR_BASE4		0x20
+#define PCIR_BASE5		0x24
+#define PCIR_SUBSYS_VENDOR_ID	0x2C
+#define PCIR_SUBSYS_ID		0x2E
+#define PCIR_EXPANSION_ROM	0x30
+#define PCIR_CAPABILITIES	0x34
+#define PCIR_INTERRUPT_LINE	0x3C
+#define PCIR_INTERRUPT_PIN	0x3D
+#define PCIR_MIN_GRANT		0x3E
+#define PCIR_MAX_LATENCY	0x3F
+
+//PCI class codes
+#define PCIC_STORAGE	0x1
+#define PCIC_NETWORK	0x2
+
+//PCI subclass codes
+#define PCISC_ETHERNET	0x0
+#define PCISC_AHCI	0x6
+
 class CPCIDev
 {
-  CPCIDev *next,*last;
-  U16	vendor,dev_id;
-  U8	bus,dev,fun,pad,
-	sub_code,base_code,pad[6],
-	*vendor_str,*dev_id_str;
+  CPCIDev *next, *last;
+
+  U8	bus,dev,fun,
+	*vendor_str,
+	*dev_id_str,
+	class_code,
+	sub_code,
+	prog_if,
+	revision_id,
+	bist,
+	header_type,
+	latency_timer,
+	cache_line_size,
+	capabilities,
+	interrupt_line,
+	interrupt_pin,
+	min_grant,
+	max_latency;
+
+  U16	vendor_id,
+	device_id,
+	subsys_id,
+	subsys_vendor_id;
+
+  U32	base[6],
+	erom;  
 };
 
 #help_index "Devices;File/System;PCI"

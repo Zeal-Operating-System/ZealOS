@@ -62,13 +62,10 @@ public _intern IC_STRLEN I64 StrLen(U8 *st); //String length.
 
 #help_index "Data Types/Circular Queue"
 #help_file "::/Doc/Queue"
-public _intern IC_QUE_INIT U0 QueueInit(
-	CQueue *head); //Init queue head links.
-public _intern IC_QUE_INS U0 QueueInsert(
-	CQueue *entry,CQueue *pred);//Insert item into que after predecessor.
-public _intern IC_QUE_INS_REV U0 QueueInsRev(
-	CQueue *entry,CQueue *succ);//Revd insert into que.
-//Ins item into que before successor.
+public _intern IC_QUE_INIT U0 QueueInit(CQueue *head); //Init queue head links.
+public _intern IC_QUE_INS U0 QueueInsert(CQueue *entry,CQueue *pred);//Insert item into que after predecessor.
+public _intern IC_QUE_INS_REV U0 QueueInsRev(CQueue *entry,CQueue *succ);//Revd insert into que.
+//Ins item into que before successor.
 public _intern IC_QUE_REM U0 QueueRemove(CQueue *entry); //Remove item from queue.
 
 #help_index "I/O;Processor/IO Port"
