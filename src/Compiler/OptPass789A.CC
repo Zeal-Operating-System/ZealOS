@@ -890,16 +890,16 @@ cc->pass==10 is final pass, code is placed into buf.
 	case IC_SWAP_I64:
 	  ICSwap(tmpi,rip2);
 	  break;
-	case IC_QUE_INIT:
+	case IC_QUEUE_INIT:
 	  ICQueueInit(tmpi,rip2);
 	  break;
-	case IC_QUE_INS:
+	case IC_QUEUE_INSERT:
 	  ICQueueIns(tmpi,rip2);
 	  break;
-	case IC_QUE_INS_REV:
-	  ICQueueInsRev(tmpi,rip2);
+	case IC_QUEUE_INSERT_REV:
+	  ICQueueInsertRev(tmpi,rip2);
 	  break;
-	case IC_QUE_REM:
+	case IC_QUEUE_REMOVE:
 	  ICQueueRemove(tmpi,rip2);
 	  break;
 	case IC_STRLEN:

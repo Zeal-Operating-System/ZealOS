@@ -1240,10 +1240,10 @@ args.
       case IC_BTS:
       case IC_BTR:
       case IC_BTC:
-      case IC_QUE_INIT:
-      case IC_QUE_REM:
-      case IC_QUE_INS:
-      case IC_QUE_INS_REV:
+      case IC_QUEUE_INIT:
+      case IC_QUEUE_REMOVE:
+      case IC_QUEUE_INSERT:
+      case IC_QUEUE_INSERT_REV:
       case IC_OUT_U32:
       case IC_OUT_U16:
       case IC_OUT_U8:

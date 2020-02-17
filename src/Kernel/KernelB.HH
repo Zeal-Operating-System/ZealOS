@@ -62,11 +62,11 @@ public _intern IC_STRLEN I64 StrLen(U8 *st); //String length.
 
 #help_index "Data Types/Circular Queue"
 #help_file "::/Doc/Queue"
-public _intern IC_QUE_INIT U0 QueueInit(CQueue *head); //Init queue head links.
-public _intern IC_QUE_INS U0 QueueInsert(CQueue *entry,CQueue *pred);//Insert item into que after predecessor.
-public _intern IC_QUE_INS_REV U0 QueueInsRev(CQueue *entry,CQueue *succ);//Revd insert into que.
-//Ins item into que before successor.
-public _intern IC_QUE_REM U0 QueueRemove(CQueue *entry); //Remove item from queue.
+public _intern IC_QUEUE_INIT U0 QueueInit(CQueue *head); //Init queue head links.
+public _intern IC_QUEUE_INSERT U0 QueueInsert(CQueue *entry,CQueue *pred);//Insert item into que after predecessor.
+public _intern IC_QUEUE_INSERT_REV U0 QueueInsertRev(CQueue *entry,CQueue *succ);//Revd insert into que.
+//Ins item into que before successor.
+public _intern IC_QUEUE_REMOVE U0 QueueRemove(CQueue *entry); //Remove item from queue.
 
 #help_index "I/O;Processor/IO Port"
 public _intern IC_IN_U16 U16 InU16(I64 port); //Read U16 from I/O port.
@@ -253,14 +253,15 @@ public _intern IC_SET_RAX U0 SetRAX(I64 d); //Set RAX register value.
 public _intern IC_SET_RBP U0 SetRBP(U8 *d); //Set RBP register value.
 public _intern IC_SET_RFLAGS U0 SetRFlags(I64 d); //Set RFlags register value.
 public _intern IC_SET_RSP U0 SetRSP(U8 *d); //Set RSP register value.
-public _extern _CPUID U0 CPUId(
-	U32 rax,CRAXRBCRCXRDX *res); //Do CPUID inst.
+public _extern _CPUID U0 CPUId(U32 rax,CRAXRBCRCXRDX *res); //Do CPUID inst.
+public _extern _ENDIAN_U16 U16 EndianU16(U16 val); //Swap big<-->little endian U16.
+public _extern _ENDIAN_U32 U32 EndianU32(U32 val); //Swap big<-->little endian U32.
+public _extern _ENDIAN_U64 U64 EndianU64(U64 val); //Swap big<-->little endian U64.
 public _extern _LXCHG_I64 I64 LXchgI64(I64 *dst,I64 d); //Locked eXchange I64s.
 public _extern _LXCHG_U16 U16 LXchgU16(U16 *dst,U16 d); //Locked eXchange U16s.
 public _extern _LXCHG_U32 U32 LXchgU32(U32 *dst,U32 d); //Locked eXchange U32s.
 public _extern _LXCHG_U8  U8 LXchgU8(U8 *dst,U8 d); //Locked eXchange U8s.
-public _extern _SET_MSR U0 SetMSR(
-	I64 model_specific_reg,I64 val); //Model Specific Reg See $LK,"MSRs",A="MN:IA32_EFER"$.
+public _extern _SET_MSR U0 SetMSR(I64 model_specific_reg,I64 val); //Model Specific Reg See $LK,"MSRs",A="MN:IA32_EFER"$.
 public _extern _SYS_HLT U0 SysHlt(); //Loops doing HLT inst.
 public _extern _XCHG_I64 I64 XchgI64(I64 *dst,I64 d); //eXchange I64s.
 public _extern _XCHG_U16 U16 XchgU16(U16 *dst,U16 d); //eXchange U16s.

@@ -456,10 +456,10 @@ here1:
 	case IC_SWAP_U16:
 	case IC_SWAP_U32:
 	case IC_SWAP_I64:
-	case IC_QUE_INIT:
-	case IC_QUE_INS:
-	case IC_QUE_INS_REV:
-	case IC_QUE_REM:
+	case IC_QUEUE_INIT:
+	case IC_QUEUE_INSERT:
+	case IC_QUEUE_INSERT_REV:
+	case IC_QUEUE_REMOVE:
 	case IC_IN_U32:
 	case IC_IN_U16:
 	case IC_IN_U8:

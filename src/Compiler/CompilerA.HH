@@ -169,10 +169,10 @@ class CIntermediateStruct
 #define IC_BSF			0x7E
 #define IC_BSR			0x7F
 
-#define IC_QUE_INIT		0x80
-#define IC_QUE_INS		0x81
-#define IC_QUE_INS_REV		0x82
-#define IC_QUE_REM		0x83
+#define IC_QUEUE_INIT		0x80
+#define IC_QUEUE_INSERT		0x81
+#define IC_QUEUE_INSERT_REV		0x82
+#define IC_QUEUE_REMOVE		0x83
 
 #define IC_STRLEN		0x84
 

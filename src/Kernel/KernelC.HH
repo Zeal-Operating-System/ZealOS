@@ -596,9 +596,6 @@ public extern I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,
 	I64 mask=~1,CTask *task=NULL);
 
 #help_index "Misc"
-public extern I64 EndianI64(I64 d);
-public extern U16 EndianU16(U16 d);
-public extern U32 EndianU32(U32 d);
 public extern U0 QuickSort(U8 *base,I64 num, I64 width,
 	I64 (*fp_compare)(U8 *e1,U8 *e2));
 public extern U0 QuickSortI64(I64 *base,I64 num,

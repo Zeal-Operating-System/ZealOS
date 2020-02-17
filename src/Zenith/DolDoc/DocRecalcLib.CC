@@ -58,7 +58,7 @@ U0 DocBorderListDraw(CDoc *doc)
   while (tmpl && tmpl->doc_signature==DOC_SIGNATURE_VAL) {
     ch=tmpl->desc;
     i=(Bsr(ch)+7)>>3;	//StrLen
-    ch=EndianI64(ch<<((8-i)<<3));
+    ch=EndianU64(ch<<((8-i)<<3));
     attr=win_task->border_attr<<8;
     while (i-- && y>0) {
       TextChar(win_task,TRUE,-1,--y,attr+ch&0xFF);

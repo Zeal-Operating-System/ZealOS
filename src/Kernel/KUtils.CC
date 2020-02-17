@@ -1,4 +1,5 @@
 asm {
+/***********************************/
 _MEMSET::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -12,6 +13,8 @@ _MEMSET::
 	POP	RDI
 	POP	RBP
 	RET1	24
+
+/***********************************/
 _MEMSET_U16::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -25,6 +28,7 @@ _MEMSET_U16::
 	POP	RDI
 	POP	RBP
 	RET1	24
+/***********************************/
 _MEMSET_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -38,6 +42,7 @@ _MEMSET_U32::
 	POP	RDI
 	POP	RBP
 	RET1	24
+/***********************************/
 _MEMSET_I64::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -51,6 +56,7 @@ _MEMSET_I64::
 	POP	RDI
 	POP	RBP
 	RET1	24
+/***********************************/
 _MEMCOPY::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -66,6 +72,7 @@ _MEMCOPY::
 	POP	RSI
 	POP	RBP
 	RET1	24
+/***********************************/
 _MEMCOMPARE::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -85,6 +92,7 @@ _MEMCOMPARE::
 	POP	RSI
 	POP	RBP
 	RET1	24
+/***********************************/
 _BEQUAL::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -100,6 +108,7 @@ _BEQUAL::
 @@10:	ADC	AL,0
 	POP	RBP
 	RET1	24
+/***********************************/
 _LBEQUAL::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -117,6 +126,7 @@ _LBEQUAL::
 @@10:	ADC	AL,0
 	POP	RBP
 	RET1	24
+/***********************************/
 _CLAMP_I64::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -129,6 +139,7 @@ _CLAMP_I64::
 	CMOVG	RAX,RDX
 	POP	RBP
 	RET1	24
+/***********************************/
 _CLAMP_U64::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -141,6 +152,7 @@ _CLAMP_U64::
 	CMOVA	RAX,RDX
 	POP	RBP
 	RET1	24
+/***********************************/
 _CALL::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -150,6 +162,7 @@ _CALL::
 	CALL	RAX
 @@05:	POP	RBP
 	RET1	8
+/***********************************/
 _BIT_FIELD_OR_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -163,6 +176,7 @@ _BIT_FIELD_OR_U32::
 	OR	U64 [RBX],RAX
 	POP	RBP
 	RET1	24
+/***********************************/
 _BIT_FIELD_EXT_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -180,6 +194,7 @@ _BIT_FIELD_EXT_U32::
 	AND	RAX,RDX
 	POP	RBP
 	RET1	24
+/***********************************/
 _XCHG_I64::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -188,6 +203,7 @@ _XCHG_I64::
 	XCHG	U64 [RDX],RAX
 	POP	RBP
 	RET1	16
+/***********************************/
 _XCHG_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -196,6 +212,7 @@ _XCHG_U32::
 	XCHG	U32 [RDX],EAX
 	POP	RBP
 	RET1	16
+/***********************************/
 _XCHG_U16::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -204,6 +221,7 @@ _XCHG_U16::
 	XCHG	U16 [RDX],AX
 	POP	RBP
 	RET1	16
+/***********************************/
 _XCHG_U8::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -212,7 +230,7 @@ _XCHG_U8::
 	XCHG	U8 [RDX],AL
 	POP	RBP
 	RET1	16
-
+/***********************************/
 _LXCHG_I64::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -222,6 +240,7 @@ _LXCHG_I64::
 	XCHG	U64 [RDX],RAX
 	POP	RBP
 	RET1	16
+/***********************************/
 _LXCHG_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -231,6 +250,7 @@ _LXCHG_U32::
 	XCHG	U32 [RDX],EAX
 	POP	RBP
 	RET1	16
+/***********************************/
 _LXCHG_U16::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -240,6 +260,7 @@ _LXCHG_U16::
 	XCHG	U16 [RDX],AX
 	POP	RBP
 	RET1	16
+/***********************************/
 _LXCHG_U8::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -249,6 +270,31 @@ _LXCHG_U8::
 	XCHG	U8 [RDX],AL
 	POP	RBP
 	RET1	16
+/***********************************/
+_ENDIAN_U16::
+	PUSH	RBP
+	MOV	RBP, RSP
+	MOVZX	RAX, U16 SF_ARG1[RBP]
+	XCHG	AL, AH
+	POP	RBP
+	RET1	8
+/***********************************/
+_ENDIAN_U32::
+	PUSH	RBP
+	MOV	RBP, RSP
+	MOV	RAX, SF_ARG1[RBP]
+	BSWAP	EAX
+	POP	RBP
+	RET1	8
+/***********************************/
+_ENDIAN_U64::
+	PUSH	RBP
+	MOV	RBP, RSP
+	MOV	RAX, SF_ARG1[RBP]
+	BSWAP	RAX
+	POP	RBP
+	RET1	8
+/***********************************/
 _REP_IN_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -260,6 +306,7 @@ _REP_IN_U32::
 	POP	RDI
 	POP	RBP
 	RET1	24
+/***********************************/
 _REP_IN_U16::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -271,6 +318,7 @@ _REP_IN_U16::
 	POP	RDI
 	POP	RBP
 	RET1	24
+/***********************************/
 _REP_IN_U8::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -282,6 +330,7 @@ _REP_IN_U8::
 	POP	RDI
 	POP	RBP
 	RET1	24
+/***********************************/
 _REP_OUT_U32::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -293,6 +342,7 @@ _REP_OUT_U32::
 	POP	RSI
 	POP	RBP
 	RET1	24
+/***********************************/
 _REP_OUT_U16::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -304,6 +354,7 @@ _REP_OUT_U16::
 	POP	RSI
 	POP	RBP
 	RET1	24
+/***********************************/
 _REP_OUT_U8::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -315,6 +366,7 @@ _REP_OUT_U8::
 	POP	RSI
 	POP	RBP
 	RET1	24
+/***********************************/
 _CPUID::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -329,14 +381,15 @@ _CPUID::
 	POP	RSI
 	POP	RBP
 	RET1	16
+/***********************************/
 _CALL_IND::	//See $LK,"_LAST_FUN",A="MN:_LAST_FUN"$
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
 	PUSH	RDI
 	MOV	RDX,U64 SF_ARG1[RBP]
-	MOV	RCX,U64 SF_ARG2[RBP]	//argc
-	LEA	RSI,U64 SF_ARG3[RBP]	//argv
+	MOV	RCX,U64 SF_ARG2[RBP] //argc
+	LEA	RSI,U64 SF_ARG3[RBP] //argv
 	SHL	RCX,3
 	SUB	RSP,RCX
 	MOV	RDI,RSP
@@ -350,7 +403,7 @@ _CALL_IND::	//See $LK,"_LAST_FUN",A="MN:_LAST_FUN"$
 	POP	RBP
 	RET
 
-@@05:	MOV	RCX,U64 SF_ARG2[RBP]	//argc
+@@05:	MOV	RCX,U64 SF_ARG2[RBP] //argc
 	SHL	RCX,3
 	ADD	RSP,RCX
 	XOR	RAX,RAX
@@ -358,14 +411,15 @@ _CALL_IND::	//See $LK,"_LAST_FUN",A="MN:_LAST_FUN"$
 	POP	RSI
 	POP	RBP
 	RET
+/***********************************/
 _CALLEXTNUM::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
 	PUSH	RDI
 	MOV	RDX,U64 SF_ARG1[RBP]
-	MOV	RCX,U64 SF_ARG2[RBP]	//argc
-	LEA	RSI,U64 SF_ARG3[RBP]	//argv
+	MOV	RCX,U64 SF_ARG2[RBP] //argc
+	LEA	RSI,U64 SF_ARG3[RBP] //argv
 	SHL	RCX,3
 	SUB	RSP,RCX
 	MOV	RDI,RSP
@@ -381,20 +435,21 @@ _CALLEXTNUM::
 	POP	RBP
 	RET
 
-@@05:	MOV	RCX,U64 SF_ARG2[RBP]	//argc
+@@05:	MOV	RCX,U64 SF_ARG2[RBP] //argc
 	SHL	RCX,3
 	ADD	RSP,RCX
 	POP	RDI
 	POP	RSI
 	POP	RBP
 	RET
+/***********************************/
 _CALLEXTSTR::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
 	PUSH	RDI
-	MOV	RCX,U64 SF_ARG2[RBP]	//argc
-	LEA	RSI,U64 SF_ARG3[RBP]	//argv
+	MOV	RCX,U64 SF_ARG2[RBP] //argc
+	LEA	RSI,U64 SF_ARG3[RBP] //argv
 	SHL	RCX,3
 	SUB	RSP,RCX
 	MOV	RDI,RSP
@@ -422,13 +477,14 @@ _CALLEXTSTR::
 	POP	RBP
 	RET
 
-@@15:	MOV	RCX,U64 SF_ARG2[RBP]	//argc
+@@15:	MOV	RCX,U64 SF_ARG2[RBP] //argc
 	SHL	RCX,3
 	ADD	RSP,RCX
 	POP	RDI
 	POP	RSI
 	POP	RBP
 	RET
+/***********************************/
 SET_GS_BASE::
 	PUSH	RAX
 	PUSH	RCX
@@ -441,6 +497,7 @@ SET_GS_BASE::
 	POP	RCX
 	POP	RAX
 	RET
+/***********************************/
 SET_FS_BASE::
 	PUSH	RAX
 	PUSH	RCX
@@ -452,8 +509,10 @@ SET_FS_BASE::
 	POP	RDX
 	POP	RCX
 	POP	RAX
+/***********************************/
 _RET::
 	RET
+/***********************************/
 _SET_MSR::
 	PUSH	RBP
 	MOV	RBP,RSP
@@ -464,6 +523,7 @@ _SET_MSR::
 	WRMSR
 	POP	RBP
 	RET1	16
+/***********************************/
 _SYS_HLT::
 	CLI
 @@05:	HLT

@@ -80,7 +80,7 @@
 #define IC_XOR_XOR		0x42
 
 #define IC_COLON		0x43
-#define IC_QUESTION		0x44
+#define IC_QUEUESTION		0x44
 
 #define IC_ASSIGN		0x45
 #define IC_ASSIGN_PP		0x46
@@ -162,9 +162,9 @@
 #define IC_BSF			0x8B
 #define IC_BSR			0x8C
 
-#define IC_QUE_INS		0x8D
-#define IC_QUE_INS_REV		0x8E
-#define IC_QUE_REM		0x8F
+#define IC_QUEUE_INSERT		0x8D
+#define IC_QUEUE_INSERT_REV		0x8E
+#define IC_QUEUE_REMOVE		0x8F
 
 #define IC_STRLEN		0x90
 #define IC_MEMCPY		0x91

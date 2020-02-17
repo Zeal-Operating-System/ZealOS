@@ -501,7 +501,7 @@ public Bool DocRecalc(CDoc *doc,I64 recalc_flags=RECALCt_NORMAL)
 	  if (doc_e->type_u8==DOCT_TEXT && doc->cur_col>=k)
 	    QueueInsert(doc_e2,doc_e);
 	  else
-	    QueueInsRev(doc_e2,doc_e);
+	    QueueInsertRev(doc_e2,doc_e);
 	}
       }
     }
@@ -1150,7 +1150,7 @@ rc_skip:
     if (doc->cur_entry==doc && recalc_flags&RECALCF_ADD_CURSOR) {
       doc_e2=DocEntryNewBase(doc,DOCT_CURSOR,,x,y,doc->page_line_num);
       MemCopy(&doc_e2->settings,s,sizeof(CDocSettings));
-      QueueInsRev(doc_e2,doc);
+      QueueInsertRev(doc_e2,doc);
     }
 
     if (doc->min_x>doc->max_x) {

@@ -63,7 +63,7 @@ extern class CTask;
 whole if no member is specified,
 similar to bit fields.
 
-See $LK,"EndianI64",A="MN:EndianI64"$() and $LK,"::/Demo/SubIntAccess.CC"$.
+See $LK,"::/Demo/SubIntAccess.CC"$.
 */
 U16i union U16
 {
@@ -2277,7 +2277,7 @@ class CUAsmGlobals
 };
 
 #help_index "Devices;PCI"
-
+
 //PCI Registers, used with $LK,"PCIRead",A="MN:PCIReadU16"$ functions.
 #define PCIR_VENDOR_ID		0x00
 #define PCIR_DEVICE_ID		0x02

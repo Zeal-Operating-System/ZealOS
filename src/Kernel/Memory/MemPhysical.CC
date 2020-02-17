@@ -10,9 +10,9 @@ Bool Mem32DevIns(CMemRange *tmpmr)
 	tmpmr2->flags=0;
 	tmpmr2->base=tmpmr1->base;
 	tmpmr2->size=tmpmr->base-tmpmr1->base;
-	QueueInsRev(tmpmr2,tmpmr1);
+	QueueInsertRev(tmpmr2,tmpmr1);
       }
-      QueueInsRev(tmpmr,tmpmr1);
+      QueueInsertRev(tmpmr,tmpmr1);
       tmpmr1->size=tmpmr1->base+tmpmr1->size-
 	    (tmpmr->base+tmpmr->size);
       tmpmr1->base=tmpmr->base+tmpmr->size;
@@ -184,4 +184,4 @@ I64 Seg2Linear(U32 *ptr)
 {//Convert 32-bit segmented farptr to linear address. Modify in place.
   *ptr = *ptr >> 16 << 4 + *ptr & 0xFFFF;
   return *ptr;
-}
+}
