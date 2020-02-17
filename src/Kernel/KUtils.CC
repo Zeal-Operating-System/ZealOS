@@ -12,8 +12,7 @@ _MEMSET::
 	MOV	RAX,RDI
 	POP	RDI
 	POP	RBP
-	RET1	24
-
+	RET1	24
 /***********************************/
 _MEMSET_U16::
 	PUSH	RBP
@@ -280,7 +279,7 @@ _ENDIAN_U16::
 	RET1	8
 /***********************************/
 _ENDIAN_U32::
-	PUSH	RBP
+	PUSH	RBP
 	MOV	RBP, RSP
 	MOV	RAX, SF_ARG1[RBP]
 	BSWAP	EAX

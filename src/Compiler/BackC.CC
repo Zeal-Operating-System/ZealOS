@@ -351,7 +351,7 @@ U0 ICQueueInit(CIntermediateCode *tmpi,I64 rip2)
   ICMov(tmpi,MDF_DISP+RT_I64,r1,sizeof(U8 *),MDF_REG+RT_I64,r1,0,rip2);
 }
 
-U0 ICQueueIns(CIntermediateCode *tmpi,I64 rip2)
+U0 ICQueueInsert(CIntermediateCode *tmpi,I64 rip2)
 {
   I64 r1,r2;
   if (tmpi->arg2.type==MDF_REG+RT_I64 && tmpi->arg2.reg!=REG_RDX)

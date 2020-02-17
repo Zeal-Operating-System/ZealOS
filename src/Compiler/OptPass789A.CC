@@ -894,7 +894,7 @@ cc->pass==10 is final pass, code is placed into buf.
 	  ICQueueInit(tmpi,rip2);
 	  break;
 	case IC_QUEUE_INSERT:
-	  ICQueueIns(tmpi,rip2);
+	  ICQueueInsert(tmpi,rip2);
 	  break;
 	case IC_QUEUE_INSERT_REV:
 	  ICQueueInsertRev(tmpi,rip2);

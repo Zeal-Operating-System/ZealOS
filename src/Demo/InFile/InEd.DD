@@ -80,7 +80,7 @@
 #define IC_XOR_XOR		0x42
 
 #define IC_COLON		0x43
-#define IC_QUEUESTION		0x44
+#define IC_QUESTION		0x44
 
 #define IC_ASSIGN		0x45
 #define IC_ASSIGN_PP		0x46
