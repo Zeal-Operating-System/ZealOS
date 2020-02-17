@@ -128,7 +128,7 @@ U0 ACPutChoices(CDoc *focus_l,CDocEntry *doc_e,CTask *focus_task,
       }
     ACDocReset(ac.col, ac.row);
     if (ac.cur_word && *ac.cur_word) {
-      "$$PURPLE$$Word:%s$$FG$$\n",ac.cur_word;
+      "$$RED$$Word:%s$$FG$$\n",ac.cur_word;
       for (i=0;i<ac.num_fillins;i++) {
 	st=ac.fillin_matches[i]->str;
 	"$$GREEN$$F%02d$$FG$$$$HL$$ ",i+1;

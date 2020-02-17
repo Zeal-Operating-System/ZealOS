@@ -97,37 +97,11 @@ U0 SysGrInit()
   }
 }
 
-U0 TimersInit()
-{//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
-  I64 i,*_q;
-  U32 *_d;
-
+U0 TimerInit()
+{//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
   OutU8(PIT_CMD, PIT_CMDF_CHANNEL0 | PIT_CMDF_OPMODE_RATE_GEN | PIT_CMDF_ACCESS_WORD);
   OutU8(PIT0,SYS_TIMER0_PERIOD);
   OutU8(PIT0,SYS_TIMER0_PERIOD >> 8);
-
-  //High Precision Event Timer
-  if (PCIReadU16(0,31,0,0)==0x8086) {//Intel?
-//D31 F0, config 0xF0=RCBA of PCI-LPC Bridge
-    _d=PCIReadU32(0,31,0,0xF0)(U8 *)&~0x3FFF+0x3404; //HPET config
-//7	enable
-    //1:0 HPET is at 0xFED00000,0xFED01000, 0xFED02000 or 0xFED03000.
-    *_d=*_d&3|0x80;
-  }
-
-  _q=dev.uncached_alias+HPET_GCAP_ID;
-  i=*_q; //i.u32[1]= period in femtoS (10e-15)
-  if (100000<i.u32[1]<1000000000) {
-    counts.HPET_freq    =1000000000000000/i.u32[1];
-    counts.HPET_kHz_freq=1000000000000/i.u32[1];
-    _q=dev.uncached_alias+HPET_GEN_CONF;
-    *_q|=1; //Enable counting
-    counts.HPET_initial=HPET;
-  } else {
-    counts.HPET_freq=0;
-    counts.HPET_kHz_freq=0;
-    counts.HPET_initial=0;
-  }
 }
 
 U0 Reboot(Bool format_ramdisks=FALSE)
@@ -178,7 +152,7 @@ U0 KMain()
   "ZenithOS V%5.3f\t%D %T\n\n",
 	sys_os_version,sys_compile_time,sys_compile_time;
 
-  TimersInit;
+  TimerInit;
   if (BIOSTotalMem<ToI64(0.95*MEM_MIN_MEG*0x100000))
     RawPrint(4000,"!!! Requires $TX,"512Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
 

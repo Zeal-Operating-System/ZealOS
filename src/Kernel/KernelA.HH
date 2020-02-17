@@ -509,7 +509,7 @@ class CKernel
 #define CR4F_PAE	(1<<CR4f_PAE)
 #define CR4F_PGE	(1<<CR4f_PGE)
 #define CR4F_OSFXSR	(1<<CR4f_OSFXSR)
-
+
 //Model specific regs.
 #define IA32F_SCE	0x001
 #define IA32F_LME	0x100
@@ -584,22 +584,13 @@ class CAP16BitInit
 #define PIT_CMDF_CHANNEL0		0x00
 #define PIT_CMDF_CHANNEL2		0x80
 
-#help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
-//High Performance Event Timer
-#define HPET_GCAP_ID	(0xFED00000+0x00)
-#define HPET_GEN_CONF	(0xFED00000+0x10)
-#define HPET_MAIN_COUNT	(0xFED00000+0xF0)
-
 public class CCountsGlobals
 {
   I64	jiffies,	//$LK,"JIFFY_FREQ",A="MN:JIFFY_FREQ"$
 	timer,		//$LK,"SYS_TIMER_FREQ",A="MN:SYS_TIMER_FREQ"$. Use $LK,"SysTimerRead",A="MN:SysTimerRead"$().
 	time_stamp_freq,
 	time_stamp_kHz_freq,
-	time_stamp_freq_initial, //Initial freq, sampled once at boot time.
-	HPET_freq,
-	HPET_kHz_freq,
-	HPET_initial;	//Initial count, sampled at boot time.
+	time_stamp_freq_initial; //Initial freq, sampled once at boot time.
   Bool	time_stamp_calibrated;
 };
 

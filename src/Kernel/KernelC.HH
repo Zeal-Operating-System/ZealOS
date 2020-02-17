@@ -727,7 +727,7 @@ public extern CTask *Spawn(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
 	CTask *parent=NULL, //NULL means zenith
 	I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 
-#help_index "Time/CPU Cycles;Time/HPET;Time/Jiffies"
+#help_index "Time/CPU Cycles;Time/Jiffies"
 public extern CCountsGlobals counts;
 
 #help_index "Time/Date/CDate;Date/CDate"
@@ -749,10 +749,6 @@ public extern I64 LastDayOfYear(I64 i);
 public extern I64 YearStartDate(I64 year);
 public extern U16 mon_start_days1[12];
 public extern U16 mon_start_days2[12];
-
-#help_index "Time/HPET"
-#help_file "::/Doc/TimeHPET"
-public extern I64 HPET();
 
 #help_index "Time/Jiffies"
 #help_file "::/Doc/TimeJiffy"

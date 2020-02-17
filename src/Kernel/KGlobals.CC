@@ -18,7 +18,7 @@ F64	*pow10_I64,
 CAutoCompleteDictGlobals acd;
 CAutoCompleteGlobals ac;
 CBlkDevGlobals	blkdev;
-CCountsGlobals	counts={1,0,2676302000,2676302,2676302000,0,0,0,FALSE};
+CCountsGlobals	counts={1,0,2676302000,2676302,2676302000,FALSE};
 CDebugGlobals	debug;
 CDevGlobals	dev;
 CGridGlobals	mouse_grid; //See $LK,"::/Demo/Graphics/Grid.CC"$.

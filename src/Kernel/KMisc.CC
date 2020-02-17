@@ -78,25 +78,15 @@ I64 SysTimerRead()
   return res;
 }
 
-I64 HPET()
-{ //Get high precision event timer.
-  return *(dev.uncached_alias+HPET_MAIN_COUNT)(I64 *);
-}
-
 I64 TimeCal()
 {
-  static I64 time_stamp_start=0,timer_start=0,HPET_start=0;
+  static I64 time_stamp_start=0,timer_start=0;
   I64 i;
   if (time_stamp_start) {
     PUSHFD
     CLI
-    if (HPET_start) {
-      counts.time_stamp_freq=counts.HPET_freq*(GetTSC-time_stamp_start);
-      i=HPET-HPET_start;
-    } else {
       counts.time_stamp_freq=SYS_TIMER_FREQ*(GetTSC-time_stamp_start);
       i=SysTimerRead-timer_start;
-    }
     if (!i)
       ZenithErr("Timer Cal Error");
     else {
@@ -108,13 +98,7 @@ I64 TimeCal()
   }
   PUSHFD
   CLI
-  if (counts.HPET_freq) {
-    timer_start=0;
-    HPET_start=HPET;
-  } else {
-    timer_start=SysTimerRead;
-    HPET_start=0;
-  }
+  timer_start=SysTimerRead;
   time_stamp_start=GetTSC;
   POPFD
   return counts.time_stamp_freq;
@@ -122,10 +106,7 @@ I64 TimeCal()
 
 F64 tS()
 {//Time since boot in seconds as a float.
-  if (counts.HPET_freq)
-    return ToF64(HPET-counts.HPET_initial)/counts.HPET_freq;
-  else
-    return SysTimerRead/ToF64(SYS_TIMER_FREQ);
+  return SysTimerRead/ToF64(SYS_TIMER_FREQ);
 }
 
 Bool Blink(F64 Hz=2.5)
@@ -137,12 +118,8 @@ Bool Blink(F64 Hz=2.5)
 U0 Busy(I64 ÊS)
 {//Loosely timed.
   I64 i;
-  if (counts.HPET_freq) {
-    i=HPET+counts.HPET_freq*ÊS/1000000;
-    while (HPET<i);
-  } else
-    for (i=0;i<ÊS;i++)
-      PortNop;
+  for (i=0;i<ÊS;i++)
+    PortNop;
 }
 
 U0 SleepUntil(I64 wake_jiffy)
