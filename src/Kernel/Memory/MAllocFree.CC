@@ -443,6 +443,32 @@ U8 *CAllocAligned(I64 size,I64 alignment,
   return res;
 }
 
+U8 *ReAlloc(U8 *ptr, U64 new_size, CTask *mem_task=NULL)
+{//Resize chunk previously MAlloc'ed. if new_size is zero then act as Free.
+//If ptr is NULL then act as MAlloc. if both are NULL/0 does nothing (Free(NULL))
+//Useless for changing chunk sizes smaller than 8 bytes because MAlloc allocs 8 bytes at a time.
+  U8 *res;
+
+  if(!new_size)
+  {
+    Free(ptr); //we can free NULL
+    return NULL;
+  }
+
+  res = MAlloc(new_size, mem_task);
+  if(!ptr)
+    return res;
+
+  MemCopy(res, ptr, MinI64(MSize(ptr), new_size));
+  Free(ptr);
+  return res;
+}
+
+U8 *ZReAlloc(U8 *ptr, I64 new_size)
+{//Realloc in Zenith's heap.
+  return ReAlloc(ptr, new_size, zenith_task);
+}
+
 U8 *StrNew(U8 *buf,CTask *mem_task=NULL)
 {//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.NULL allocs off current task's heap.
   U8 *res;

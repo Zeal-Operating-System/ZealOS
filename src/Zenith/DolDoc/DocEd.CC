@@ -102,7 +102,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
   bdoc->flags|=DOCF_BORDER_DOC;
   DocPrint(bdoc,"$$CM+TY+LX+NC,0,-1$$");
   DocPrint(bdoc,"$$TX+RX+BD,\"[X]\"$$");
-  DocPrint(bdoc,"$$BK,1$$$$TX+LX+BD,\"MENU\"$$$$BK,0$$");
+  DocPrint(bdoc,"$$TX+LX+BD,\"MENU\"$$");
 
   old_task_title=StrNew(Fs->task_title);
   if (Fs->title_src!=TTS_LOCKED_CONST) {
@@ -110,7 +110,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
     MemCopy(Fs->task_title,doc->filename.name,STR_LEN-1);
   }
   doc_e=DocPrint(bdoc,"$$DA-TRM-P+BD+RD+CX+IV,LEN=STR_LEN-1,"
-	"A=\"%%s...\",SCX=16$$");
+	"A=\"%%s\"$$");
   doc_e->data=&Fs->task_title;
   DocDataFormat(bdoc,doc_e);
 
