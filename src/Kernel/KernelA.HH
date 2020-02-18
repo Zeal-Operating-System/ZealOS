@@ -462,7 +462,7 @@ class CKernel
   CMemE820 mem_E820[MEM_E820_ENTRIES_NUM];
   U64	mem_physical_space;
   CSysLimitBase sys_gdt_ptr;
-  U16	sys_pci_busses;
+  U16	sys_pci_buses;
   ;$$=($$+15)&-16;
   CGDT	sys_gdt;
 };
@@ -1186,7 +1186,7 @@ public class CDocBin
 #define DOC_COLOR_MACRO		LTBLUE
 #define DOC_COLOR_ANCHOR	DKGRAY
 #define DOC_COLOR_TREE		PURPLE
-#define DOC_COLOR_PROMPT		GREEN
+#define DOC_COLOR_PROMPT	GREEN
 #define DOC_COLOR_COMMENT	GREEN
 #define DOC_COLOR_BIN		LTGREEN
 #define DOC_COLOR_STR		BROWN
@@ -1198,7 +1198,8 @@ public class CDocBin
 #define DOC_COLOR_FUN		PURPLE
 #define DOC_COLOR_KEYWORD	BLUE
 #define DOC_COLOR_REG		LTRED
-
+#define DOC_COLOR_NUMBER	YELLOW
+
 public class CDocSettings
 {
   U32	final_u32_attr;
@@ -3063,7 +3064,7 @@ public I64 class CBGR48
 #define KBDC_LED	0xED
 #define KBDC_DISABLE_MS	0xA7
 #define KBDC_ENABLE_MS	0xA8
-#define KBDC_ENABLE_KBD	0xAE
+#define KBDC_ENABLE_KBD	0xAE
 #define KBDC_TYPEMATIC  0xF3
 #define KBDC_SCAN_CODES	0xF0
 

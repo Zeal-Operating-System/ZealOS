@@ -239,7 +239,7 @@ _extern SYS_SEMAS CSema sys_semas[SEMA_SEMAS_NUM];
 public _intern IC_GS CCPU *Gs(); //GS points to current $LK,"CCPU",A="MN:CCPU"$.
 
 #help_index "PCI"
-public _extern SYS_PCI_BUSES U16 sys_pci_busses; //Number of PCI buses.
+public _extern SYS_PCI_BUSES U16 sys_pci_buses; //Number of PCI buses.
 
 #help_index "Processor"
 public _intern IC_CARRY I64 Carry(); //See $LK,"::/Demo/Carry.CC"$

@@ -10,7 +10,7 @@ U32 *DocHighlight(CDocEntry *doc_e,U8 *src,I64 len,I64 _tmp_u32_attr)
   U32 *res=MAlloc((len+1)*sizeof(U32)),*dst=res;
   U8 *ptr;
   CDocSettings *s=&doc_e->settings;
-  I64 ch,ch1,last_ch,tmp_u32_attr,mask_tmp_u32_attr=_tmp_u32_attr&0xFFFFF000,
+  I64 count,ch,ch1,ch2,last_ch,tmp_u32_attr,mask_tmp_u32_attr=_tmp_u32_attr&0xFFFFF000,
 	comment_depth,brace_depth=s->brace_depth,paren_depth=s->paren_depth;
   CHash *tmph;
   switch [s->state] {
@@ -69,6 +69,44 @@ hl_normal:
 	  *dst++=ch1+tmp_u32_attr;
 	  if (!--len) goto hl_normal_done;
 	}
+
+        ptr = src;
+        if (*ptr++ == '0')
+        {
+          ch2 = *ptr--;
+          if (ch2 == 'x' || ch2 == 'b')
+          {
+            count = 0;
+            while (len && (Bt(char_bmp_hex_numeric, *src) || *src == ch2 && count < 2))
+            {
+              count++;
+              src++;
+              len--;
+            }
+            ch = *src;
+            *src = '\0';
+            tmp_u32_attr = DOC_COLOR_NUMBER << 8 | mask_tmp_u32_attr;
+            while (ch1 = *ptr++)
+              *dst++ = ch1 + tmp_u32_attr;
+            *src = ch;
+            if (!len) goto hl_normal_done;
+          }
+        }
+
+        ptr = src;
+        while (len && Bt(char_bmp_dec_numeric, *src))
+        {
+          src++;
+          len--;
+        }
+        ch = *src;
+        *src = '\0';
+        tmp_u32_attr = DOC_COLOR_NUMBER << 8 | mask_tmp_u32_attr;
+        while (ch1 = *ptr++)
+          *dst++ = ch1 + tmp_u32_attr;
+        *src = ch;
+        if (!len) goto hl_normal_done;
+
 	ptr=src;
 	while (len && Bt(char_bmp_alpha_numeric,*src)) {
 	  src++;

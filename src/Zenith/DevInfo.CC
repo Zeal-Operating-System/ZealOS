@@ -126,7 +126,7 @@ U0 PCILookUpDevs()
   if (dev.pci_head.next != &dev.pci_head)
     return;
   doc = DocRead(PCI_DEV_FILE, DOCF_PLAIN_TEXT | DOCF_NO_CURSOR);
-  for (b = 0; b < sys_pci_busses; b++)
+  for (b = 0; b < sys_pci_buses; b++)
     for (d = 0; d < 32; d++)
       for (f = 0; f < 8; f++)
       {
@@ -160,7 +160,7 @@ U0 PCILookUpDevs()
 	  PCILookUpSingle(doc, w1, w2, &tmppci->vendor_str, &tmppci->dev_id_str);
 	  QueueInsert(tmppci, dev.pci_head.last);
 	  timeout = 32 * 8 * 2;
-	} else if (sys_pci_busses == 256 && --timeout <= 0)
+	} else if (sys_pci_buses == 256 && --timeout <= 0)
 	  goto lud_done;
       }
 lud_done:
@@ -170,7 +170,7 @@ lud_done:
 public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 			U16 vendor_id=NULL, U16 device_id=NULL,
 			U8 _bus=0xFF, U8 _dev=0xFF, U8 _fun=0xFF)
-{//return first device with matching class & subcode, vendor & device id, or a specific device.
+{//return first device with matching class & subcode, vendor & device id, or a specific device.
   PCILookUpDevs;
   CPCIDev *p = dev.pci_head.next;
   while (p != &dev.pci_head)
@@ -189,7 +189,7 @@ public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 public U0 PCIRep()
 {//Report description of PCI devices.
   CPCIDev *tmppci;
-  "PCI Busses:%d\n",sys_pci_busses;
+  "PCI Buses:%d\n",sys_pci_buses;
   if (!FileFind(PCI_DEV_FILE)) {
     "You don't have the PCI device file.\n";
     return;
