@@ -116,7 +116,7 @@ class CIntermediateStruct
 #define IC_JMP			0x51
 #define IC_SUB_CALL		0x52
 #define IC_SWITCH		0x53
-#define IC_NOBOUND_SWITCH		0x54
+#define IC_NOBOUND_SWITCH	0x54
 
 #define IC_ADD_RSP		0x55
 #define IC_ADD_RSP1		0x56
@@ -171,7 +171,7 @@ class CIntermediateStruct
 
 #define IC_QUEUE_INIT		0x80
 #define IC_QUEUE_INSERT		0x81
-#define IC_QUEUE_INSERT_REV		0x82
+#define IC_QUEUE_INSERT_REV	0x82
 #define IC_QUEUE_REMOVE		0x83
 
 #define IC_STRLEN		0x84
@@ -234,7 +234,8 @@ class CIntermediateStruct
 #define IC_COS			0xB6
 #define IC_TAN			0xB7
 #define IC_ATAN			0xB8
-#define IC_ICS_NUM		0xB9
+#define IC_POPCNT		0xB9
+#define IC_ICS_NUM		0xBA
 
 #define KW_INCLUDE	0
 #define KW_DEFINE	1

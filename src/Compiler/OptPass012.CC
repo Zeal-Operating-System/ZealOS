@@ -931,6 +931,17 @@ args.
 	  OptSetNOP1(tmpi);		//BSR
 	}
 	break;
+      case IC_POPCNT:
+	if (tmpi1->ic_code==IC_IMM_I64) {
+	  tmpi1->ic_data = PopCount(tmpi1->ic_data);
+	  tmpi_push = tmpi1;
+	  OptSetNOP1(OptLag(tmpi1));	//CALL_START
+	  tmpi2 = OptLead1(tmpi);
+	  tmpi1->ic_flags |= tmpi->ic_flags | tmpi2->ic_flags;
+	  OptSetNOP1(tmpi2);		//CALL_END
+	  OptSetNOP1(tmpi);		//POPCNT
+	}
+        break;
       case IC_LBTS:
       case IC_LBTR:
       case IC_LBTC:

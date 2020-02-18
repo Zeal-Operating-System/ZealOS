@@ -439,6 +439,7 @@ here1:
 	case IC_LBTC:
 	case IC_BSF:
 	case IC_BSR:
+        case IC_POPCNT:
 	case IC_SIGN_I64:
 	case IC_TOUPPER:
 	case IC_TO_I64:

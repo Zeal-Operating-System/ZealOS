@@ -4,15 +4,7 @@ U0 PortNop()
   InU8(0x21);
 }
 
-I64 BCount(I64 d)
-{//Count set bits in I64.
-  I64 res=0,i;
-  for (i=0;i<8;i++)
-    res+=set_bits_table[d.u8[i]];
-  return res;
-}
-
-U0 IntCore0TimerHandler(CTask *)
+U0 IntCore0TimerHandler(CTask *)
 {//Called from $LK,"IntCore0TimerHandler",A="FF:::/Kernel/KInterrupts.CC,IntCore0TimerHandler"$
   I64 i;
   if (mp_count>1)

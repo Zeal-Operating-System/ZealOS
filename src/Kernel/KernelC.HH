@@ -6,8 +6,7 @@ public extern CAutoCompleteGlobals ac;
 public extern CAutoCompleteDictGlobals acd;
 
 #help_index "Bit"
-public extern I64 BCount(I64 d);
-public extern U8 *rev_bits_table,*set_bits_table;
+public extern U8 *rev_bits_table;
 
 #help_index "Boot"
 #help_file "::/Doc/Boot"

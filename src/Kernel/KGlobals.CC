@@ -9,8 +9,7 @@ CTask *zenith_task;
 I64 sys_num_spawned_tasks;
 
 CTask *sys_winmgr_task,*sys_task_being_screen_updated;
-U8 *rev_bits_table, //Table with U8 bits revd
-   *set_bits_table; //Table with count of set bits in a U8
+U8 *rev_bits_table; //Table with U8 bits reversed
 CDate local_time_offset;
 F64	*pow10_I64,
 	sys_os_version=0.10;
@@ -25,7 +24,7 @@ CGridGlobals	mouse_grid; //See $LK,"::/Demo/Graphics/Grid.CC"$.
 CMouseStateGlobals	mouse,mouse_last;
 CKbdStateGlobals	kbd;
 CKeyDevGlobals	keydev;
-CMouseHardStateGlobals mouse_hard,mouse_hard_last;
+CMouseHardStateGlobals mouse_hard,mouse_hard_last;
 CScreenCastGlobals	screencast;
 CTextGlobals	text;
 

@@ -817,6 +817,12 @@ cc->pass==10 is final pass, code is placed into buf.
 	  ICU16(tmpi,0x0375);
 	  ICU24(tmpi,0xD0F748);
 	  break;
+        case IC_POPCNT:
+	  ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
+		tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);
+	  ICU16(tmpi, 0xF348);
+          ICU32(tmpi, 0xC0B80F48);
+          break;
 	case IC_SIGN_I64:
 	  ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 		tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);

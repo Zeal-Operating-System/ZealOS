@@ -199,6 +199,7 @@ CIntermediateStruct intermediate_code_table[IC_ICS_NUM]={
   {IS_1_ARG,1,IST_NULL,TRUE,FALSE,0,0,0,"COS"},
   {IS_1_ARG,1,IST_NULL,TRUE,FALSE,0,0,0,"TAN"},
   {IS_1_ARG,1,IST_NULL,TRUE,FALSE,0,0,0,"ATAN"},
+  {IS_1_ARG,1,IST_NULL,FALSE,TRUE,0,0,0,"POPCNT"},
 };
 
 U0 CompLoadDefines()

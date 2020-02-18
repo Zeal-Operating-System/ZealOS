@@ -9,6 +9,6 @@ $FG,2$BEqual$FG$:	Set bit to value.
 $FG$Bit operations are "atomic", no interrupt between the reading and writing the bit, important when multitasking.  For multicore use "locked" forms.$FG$
 
 $FG,5$These don't take a pointer, but the actual field.$FG$
-$FG,2$Bsf$FG$:	Bit Scan Fwd (Pos of first low one bit or -1)
-$FG,2$Bsr$FG$:	Bit Scan Rev (Pos of first high one bit or -1)
-$FG,2$BCount$FG$:	Bit Count (Count of set bits)
+$FG,2$Bsf$FG$:	Bit Scan Forward (Pos of first low one bit or -1)
+$FG,2$Bsr$FG$:	Bit Scan Reverse (Pos of first high one bit or -1)
+$FG,2$PopCount$FG$:Population Count (Count of set bits)

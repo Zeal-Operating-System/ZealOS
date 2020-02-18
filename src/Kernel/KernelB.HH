@@ -6,32 +6,20 @@ $LK,"KernelB",A="FF:::/StartOS.CC,KernelB"$ StartOS.CC
 
 #help_index "Bit"
 #help_file "::/Doc/Bit"
-public _intern IC_BSF I64 Bsf(
-	I64 bit_field_val);//Scan forward from lowest for 1st set. -1 if not found.
-public _intern IC_BSR I64 Bsr(
-	I64 bit_field_val);//Scan rev from highest for 1st set. -1 if not found.
-public _intern IC_BT Bool Bt(
-	U8 *bit_field,I64 bit); //Bit test.
-public _intern IC_BTC Bool Btc(
-	U8 *bit_field,I64 bit); //Bit test and complement (same as xor with 1).
-public _intern IC_BTR Bool Btr(
-	U8 *bit_field,I64 bit); //Bit test and reset to zero.
-public _intern IC_BTS Bool Bts(
-	U8 *bit_field,I64 bit); //Bit test and set to one.
-public _intern IC_LBTC Bool LBtc(
-	U8 *bit_field,I64 bit); //Locked bit test and complement (xor with 1).
-public _intern IC_LBTR Bool LBtr(
-	U8 *bit_field,I64 bit); //Locked bit test and reset to zero.
-public _intern IC_LBTS Bool LBts(
-	U8 *bit_field,I64 bit); //Locked bit test and set to one.
-public _extern _BEQUAL Bool BEqual(
-	U8 *bit_field,I64 bit,Bool val);//Set bit equ to val.
-public _extern _BIT_FIELD_EXT_U32 U32 BFieldExtU32(
-	U8 *bit_field,I64 bit,I64 size); //Extract U32 from bit field.
-public _extern _BIT_FIELD_OR_U32 U0 BFieldOrU32(
-	U8 *bit_field,I64 bit,U32 pattern); //Or U32 into bit field.
-public _extern _LBEQUAL Bool LBEqual(
-	U8 *bit_field,I64 bit,Bool val); //Locked Set bit equ to val.
+public _intern IC_BSF I64 Bsf(I64 bit_field_val);//Scan forward from lowest for 1st set. -1 if not found.
+public _intern IC_BSR I64 Bsr(I64 bit_field_val);//Scan rev from highest for 1st set. -1 if not found.
+public _intern IC_BT Bool Bt(U8 *bit_field,I64 bit); //Bit test.
+public _intern IC_BTC Bool Btc(U8 *bit_field,I64 bit); //Bit test and complement (same as xor with 1).
+public _intern IC_BTR Bool Btr(U8 *bit_field,I64 bit); //Bit test and reset to zero.
+public _intern IC_BTS Bool Bts(U8 *bit_field,I64 bit); //Bit test and set to one.
+public _intern IC_LBTC Bool LBtc(U8 *bit_field,I64 bit); //Locked bit test and complement (xor with 1).
+public _intern IC_LBTR Bool LBtr(U8 *bit_field,I64 bit); //Locked bit test and reset to zero.
+public _intern IC_LBTS Bool LBts(U8 *bit_field,I64 bit); //Locked bit test and set to one.
+public _intern IC_POPCNT I64 PopCount(I64 bit_field_val);
+public _extern _BEQUAL Bool BEqual(U8 *bit_field,I64 bit,Bool val);//Set bit equ to val.
+public _extern _BIT_FIELD_EXT_U32 U32 BFieldExtU32(U8 *bit_field,I64 bit,I64 size); //Extract U32 from bit field.
+public _extern _BIT_FIELD_OR_U32 U0 BFieldOrU32(U8 *bit_field,I64 bit,U32 pattern); //Or U32 into bit field.
+public _extern _LBEQUAL Bool LBEqual(U8 *bit_field,I64 bit,Bool val); //Locked Set bit equ to val.
 
 #help_index "Boot"
 _extern MEM_BOOT_BASE U32 mem_boot_base;
