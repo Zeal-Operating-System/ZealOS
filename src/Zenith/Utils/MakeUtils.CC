@@ -1,4 +1,5 @@
 Cd(__DIR__);;
+#include "BinRep"
 #include "CPURep"
 #include "Diff"
 #include "Find"
@@ -10,7 +11,7 @@ Cd(__DIR__);;
 #include "Profiler"
 #include "StrUtils"
 #include "DocUtils"
-#include "TaskRep"
+#include "TaskRep"
 #include "ToDolDoc"
 #include "ToTXT"
 Cd("..");;
