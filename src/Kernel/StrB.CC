@@ -9,7 +9,7 @@ U8 *Tabs2Spaces(U8 *src)
 	dst[i]=CH_SPACE;
 	if (i>=l-2) {
 	  tmp=MAlloc(l<<1);
-	  MemCopy(tmp,dst,i+1);
+	  MemCopy(tmp,dst,i+1);
 	  Free(dst);
 	  l<<=1;
 	  dst=tmp;
@@ -124,7 +124,7 @@ U0 ScanFlags(U8 *_dst_flags,U8 *list,U8 *src)
 {/*More than 64 flags. Flags passed by ref.
 
 Examples:
-$LK,"ScanFlags",A="FF:::/Zenith/Utils/Diff.CC,ScanFlags:2"$(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+$LK,"ScanFlags",A="FF:::/Zenith/Utils/Find.CC,ScanFlags:2"$(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 
 I64 flags=0;
 ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.

@@ -1199,7 +1199,7 @@ public class CDocBin
 #define DOC_COLOR_KEYWORD	BLUE
 #define DOC_COLOR_REG		LTRED
 #define DOC_COLOR_NUMBER	YELLOW
-
+
 public class CDocSettings
 {
   U32	final_u32_attr;
@@ -2942,10 +2942,10 @@ class CMemRange
 //We add 2 pags, so a request is not rounded-up to next power of two.
 #define MEM_EXTRA_HASH2_PAGS	2
 
-#define MEM_ZENITH_STACK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
-#define MEM_DAEMON_STACK		(MEM_PAG_SIZE*512)
+#define MEM_ZENITH_STACK	(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
+#define MEM_DAEMON_STACK	(MEM_PAG_SIZE*512)
 #define MEM_INTERRUPT_STACK	(MEM_PAG_SIZE*512)
-#define MEM_DEFAULT_STACK		(MEM_PAG_SIZE*512)
+#define MEM_DEFAULT_STACK	(MEM_PAG_SIZE*512)
 
 #define TASK_HASH_TABLE_SIZE	(1<<10)
 
