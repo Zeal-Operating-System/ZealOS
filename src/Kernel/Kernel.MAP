@@ -205,7 +205,6 @@ $LK,"WINMGR_FPS",A="FL:::/Kernel/KernelA.HH,1524"$
 $LK,"DOC_COLOR_CHAR_CONST",A="FL:::/Kernel/KernelA.HH,1193"$
 $LK,"PIT_CMDF_OPMODE_SQUARE_WAVE",A="FL:::/Kernel/KernelA.HH,600"$
 $LK,"E",A="FL:::/Kernel/FunSeg.CC,332",BI=37$
-$LK,"PRINTF_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3991"$
 $LK,"CEdFileName",A="FL:::/Kernel/KernelA.HH,1296"$
 $LK,"DOCT_LEFT_MARGIN",A="FL:::/Kernel/KernelA.HH,959"$
 $LK,"CCF_NO_CHAR_CONST",A="FL:::/Kernel/KernelA.HH,2196"$
@@ -292,7 +291,6 @@ $LK,"BreakLock",A="FL:::/Kernel/KExcept.CC,131",BI=56$
 $LK,"CORE0_32BIT_INIT",A="FL:::/Kernel/KStart32.CC,75"$
 $LK,"CORE0_16BIT_INIT",A="FL:::/Kernel/KStart16.CC,57"$
 $LK,"CH_CTRLN",A="FL:::/Kernel/KernelA.HH,3553"$
-$LK,"BDf_FMT",A="FL:::/Kernel/KernelA.HH,2730"$
 $LK,"PCIR_REVISION_ID",A="FL:::/Kernel/KernelA.HH,2305"$
 $LK,"CCF_KEEP_DOT",A="FL:::/Kernel/KernelA.HH,2193"$
 $LK,"CH_CTRLO",A="FL:::/Kernel/KernelA.HH,3554"$
@@ -513,11 +511,11 @@ $LK,"HashSrcFileSet",A="FL:::/Kernel/KHashB.CC,154",BI=109$
 $LK,"ROP_XOR",A="FL:::/Kernel/KernelA.HH,3004"$
 $LK,"NULL",A="FL:::/Kernel/KernelA.HH,19"$
 $LK,"BlkPoolInit",A="FL:::/Kernel/Memory/BlkPool.CC,18",BI=110$
-$LK,"BDF_EXT_SIZE",A="FL:::/Kernel/KernelA.HH,2722"$
+$LK,"BDF_EXT_SIZE",A="FL:::/Kernel/KernelA.HH,2732"$
 $LK,"DriveRep",A="FL:::/Kernel/BlkDev/DiskDrive.CC,331",BI=111$
 $LK,"sys_boot_blk",A="FL:::/Kernel/KernelB.HH,26"$
 $LK,"TASKf_PENDING_BREAK",A="FL:::/Kernel/KernelA.HH,3354"$
-$LK,"BDf_EXT_SIZE",A="FL:::/Kernel/KernelA.HH,2732"$
+$LK,"BDf_EXT_SIZE",A="FL:::/Kernel/KernelA.HH,2722"$
 $LK,"JOBT_SPAWN_TASK",A="FL:::/Kernel/KernelA.HH,3259"$
 $LK,"DOCEF_UPDATE_DATA",A="FL:::/Kernel/KernelA.HH,1057"$
 $LK,"TASKf_KILL_TASK",A="FL:::/Kernel/KernelA.HH,3344"$
@@ -663,6 +661,7 @@ $LK,"SYS_PROGRESS2_DESC",A="FL:::/Kernel/KStart32.CC,50"$
 $LK,"SYS_STAFF_MODE_FLAG",A="FL::/Tmp.DD,1"$
 $LK,"BlkDevLockFwdingSet",A="FL:::/Kernel/BlkDev/DiskAddDev.CC,1",BI=128$
 $LK,"InU8",A="FL:::/Kernel/KernelB.HH,62"$
+$LK,"PRINTF_NEG_AUX_FORMAT_NUM",A="FL:::/Kernel/KernelA.HH,3995"$
 $LK,"ARGT_SREG",A="FL:::/Kernel/KernelA.HH,1983"$
 $LK,"_STRNCOMPARE",A="FL:::/Kernel/StrA.CC,154"$
 $LK,"CMemUnused",A="FL:::/Kernel/KernelA.HH,2897"$
@@ -737,8 +736,8 @@ $LK,"HTf_PRIVATE",A="FL:::/Kernel/KernelA.HH,720"$
 $LK,"Dm",A="FL:::/Kernel/KDebug.CC,204",BI=138$
 $LK,"PRINTF_LEFT_JUSTIFY",A="FL:::/Kernel/KernelA.HH,3985"$
 $LK,"CCF_EXE_BLK",A="FL:::/Kernel/KernelA.HH,2201"$
-$LK,"BDf_REMOVABLE",A="FL:::/Kernel/KernelA.HH,2724"$
-$LK,"BDF_REMOVABLE",A="FL:::/Kernel/KernelA.HH,2714"$
+$LK,"BDF_REMOVABLE",A="FL:::/Kernel/KernelA.HH,2724"$
+$LK,"BDf_REMOVABLE",A="FL:::/Kernel/KernelA.HH,2714"$
 $LK,"COLOR_INVALID",A="FL:::/Kernel/KernelA.HH,3037"$
 $LK,"DiskCacheQueueIns",A="FL:::/Kernel/BlkDev/DiskCache.CC,53",BI=139$
 $LK,"Bt",A="FL:::/Kernel/KernelB.HH,11"$
@@ -796,6 +795,8 @@ $LK,"BptS",A="FL:::/Kernel/KDebug.CC,368",BI=155$
 $LK,"_HASH_BUCKET_FIND",A="FL:::/Kernel/KHashA.CC,158"$
 $LK,"_MHEAP_CTRL",A="FL:::/Kernel/Memory/MAllocFree.CC,368"$
 $LK,"progress4_t0",A="FL:::/Kernel/KernelB.HH,213"$
+$LK,"BDF_FORMAT",A="FL:::/Kernel/KernelA.HH,2730"$
+$LK,"BDf_FORMAT",A="FL:::/Kernel/KernelA.HH,2720"$
 $LK,"ATAMount",A="FL:::/Kernel/BlkDev/DiskATAId.CC,248",BI=156$
 $LK,"FifoI64Peek",A="FL:::/Kernel/KDataTypes.CC,290",BI=157$
 $LK,"_EXP",A="FL:::/Kernel/KMathA.CC,558"$
@@ -974,7 +975,7 @@ $LK,"IsSingleUser",A="FL:::/Kernel/KMisc.CC,246",BI=206$
 $LK,"_POW10",A="FL:::/Kernel/KMathA.CC,524"$
 $LK,"I64_MAX",A="FL:::/Kernel/KernelA.HH,38"$
 $LK,"QueueInsert",A="FL:::/Kernel/KernelB.HH,54"$
-$LK,"BDF_LAST_WAS_WRITE",A="FL:::/Kernel/KernelA.HH,2718"$
+$LK,"BDF_LAST_WAS_WRITE",A="FL:::/Kernel/KernelA.HH,2728"$
 $LK,"DOCT_CURSOR_MOVEMENT",A="FL:::/Kernel/KernelA.HH,975"$
 $LK,"SCF_CTRL",A="FL:::/Kernel/KernelA.HH,3595"$
 $LK,"SCf_CTRL",A="FL:::/Kernel/KernelA.HH,3580"$
@@ -1022,7 +1023,7 @@ $LK,"D3Unit",A="FL:::/Kernel/KernelB.HH,147"$
 $LK,"CTRLT_WIN_HSCROLL",A="FL:::/Kernel/KernelA.HH,3153"$
 $LK,"TK_IFAOT",A="FL:::/Kernel/KernelA.HH,2160"$
 $LK,"IsDotC",A="FL:::/Kernel/BlkDev/DiskStrA.CC,31",BI=216$
-$LK,"BDf_LAST_WAS_WRITE",A="FL:::/Kernel/KernelA.HH,2728"$
+$LK,"BDf_LAST_WAS_WRITE",A="FL:::/Kernel/KernelA.HH,2718"$
 $LK,"TK_GREATER_EQU",A="FL:::/Kernel/KernelA.HH,2144"$
 $LK,"CICArg",A="FL:::/Kernel/KernelA.HH,1690"$
 $LK,"DOCEf_CENTER_X",A="FL:::/Kernel/KernelA.HH,1125"$
@@ -1242,7 +1243,7 @@ $LK,"OM_CB",A="FL:::/Kernel/KernelA.HH,1928"$
 $LK,"StrFirstRemove",A="FL:::/Kernel/StrA.CC,577",BI=261$
 $LK,"throw",A="FL:::/Kernel/KExcept.CC,84",BI=262$
 $LK,"MESSAGE_MS_R_D_UP",A="FL:::/Kernel/KernelA.HH,3300"$
-$LK,"BDF_READ_ONLY_OVERRIDE",A="FL:::/Kernel/KernelA.HH,2717"$
+$LK,"BDF_READ_ONLY_OVERRIDE",A="FL:::/Kernel/KernelA.HH,2727"$
 $LK,"TK_AND_AND",A="FL:::/Kernel/KernelA.HH,2145"$
 $LK,"REG_NONE",A="FL:::/Kernel/KernelA.HH,1844"$
 $LK,"OC_LOCK_PREFIX",A="FL:::/Kernel/KernelA.HH,1816"$
@@ -1411,8 +1412,8 @@ $LK,"DOCT_CLEAR",A="FL:::/Kernel/KernelA.HH,957"$
 $LK,"DVDImageWrite",A="FL:::/Kernel/BlkDev/DiskCDDVD.CC,143",BI=294$
 $LK,"HashTypeNum",A="FL:::/Kernel/KHashB.CC,1",BI=295$
 $LK,"CPUf_DYING_TASK_QUE",A="FL:::/Kernel/KernelA.HH,3503"$
-$LK,"BDf_READ_ONLY",A="FL:::/Kernel/KernelA.HH,2726"$
-$LK,"BDF_READ_ONLY",A="FL:::/Kernel/KernelA.HH,2716"$
+$LK,"BDF_READ_ONLY",A="FL:::/Kernel/KernelA.HH,2726"$
+$LK,"BDf_READ_ONLY",A="FL:::/Kernel/KernelA.HH,2716"$
 $LK,"ISOT_BOOT_RECORD",A="FL:::/Kernel/KernelA.HH,2567"$
 $LK,"DCF_JUST_MIRROR",A="FL:::/Kernel/KernelA.HH,3690"$
 $LK,"FSt_UNKNOWN",A="FL:::/Kernel/KernelA.HH,2768"$
@@ -1742,7 +1743,6 @@ $LK,"FAT32DirFill",A="FL:::/Kernel/BlkDev/FileSysFAT.CC,229",BI=370$
 $LK,"Carry",A="FL:::/Kernel/KernelB.HH,233"$
 $LK,"Cos",A="FL:::/Kernel/KernelB.HH,83"$
 $LK,"Clamp",A="FL:::/Kernel/KMathB.CC,1",BI=371$
-$LK,"BDF_FMT",A="FL:::/Kernel/KernelA.HH,2720"$
 $LK,"PIT_CMDF_ACCESS_WORD",A="FL:::/Kernel/KernelA.HH,601"$
 $LK,"GetMessage",A="FL:::/Kernel/SerialDev/Message.CC,95",BI=372$
 $LK,"Bsr",A="FL:::/Kernel/KernelB.HH,10"$
@@ -1873,10 +1873,10 @@ $LK,"PCISC_ETHERNET",A="FL:::/Kernel/KernelA.HH,2333"$
 $LK,"PrintErr",A="FL:::/Kernel/StrPrint.CC,906",BI=404$
 $LK,"FifoU8Remove",A="FL:::/Kernel/KDataTypes.CC,190",BI=405$
 $LK,"ROPF_TWO_SIDED",A="FL:::/Kernel/KernelA.HH,3011"$
-$LK,"BDF_READ_CACHE",A="FL:::/Kernel/KernelA.HH,2719"$
+$LK,"BDF_READ_CACHE",A="FL:::/Kernel/KernelA.HH,2729"$
 $LK,"SCF_INS",A="FL:::/Kernel/KernelA.HH,3604"$
 $LK,"CPUf_RAN_A_TASK",A="FL:::/Kernel/KernelA.HH,3502"$
-$LK,"BDf_READ_CACHE",A="FL:::/Kernel/KernelA.HH,2729"$
+$LK,"BDf_READ_CACHE",A="FL:::/Kernel/KernelA.HH,2719"$
 $LK,"GetChar",A="FL:::/Kernel/SerialDev/Message.CC,182",BI=406$
 $LK,"Sin",A="FL:::/Kernel/KernelB.HH,90"$
 $LK,"TK_OR_OR",A="FL:::/Kernel/KernelA.HH,2146"$
@@ -1938,7 +1938,7 @@ $LK,"sys_data_bp",A="FL:::/Kernel/KernelB.HH,173"$
 $LK,"SYS_PCI_BUSES",A="FL:::/Kernel/KStart16.CC,36"$
 $LK,"_CLAMP_I64",A="FL:::/Kernel/KUtils.CC,130"$
 $LK,"VGAP_MISC_OUTPUT",A="FL:::/Kernel/KernelA.HH,3784"$
-$LK,"BDf_READ_ONLY_OVERRIDE",A="FL:::/Kernel/KernelA.HH,2727"$
+$LK,"BDf_READ_ONLY_OVERRIDE",A="FL:::/Kernel/KernelA.HH,2717"$
 $LK,"Spaces2Tabs",A="FL:::/Kernel/StrA.CC,472",BI=415$
 $LK,"ROPBF_TWO_SIDED",A="FL:::/Kernel/KernelA.HH,2999"$
 $LK,"FUF_CLUS_ORDER",A="FL:::/Kernel/KernelA.HH,2691"$
@@ -2035,14 +2035,14 @@ $LK,"HashAdd",A="FL:::/Kernel/KHashA.CC,262"$
 $LK,"MLF_DOT_DOT_DOT",A="FL:::/Kernel/KernelA.HH,827"$
 $LK,"IsSuspended",A="FL:::/Kernel/KTask.CC,91",BI=441$
 $LK,"CAlloc",A="FL:::/Kernel/Memory/MAllocFree.CC,395",BI=442$
-$LK,"BDF_INITIALIZED",A="FL:::/Kernel/KernelA.HH,2715"$
+$LK,"BDF_INITIALIZED",A="FL:::/Kernel/KernelA.HH,2725"$
 $LK,"CAsmUnresolvedRef",A="FL:::/Kernel/KernelA.HH,1913"$
-$LK,"BDf_INITIALIZED",A="FL:::/Kernel/KernelA.HH,2725"$
+$LK,"BDf_INITIALIZED",A="FL:::/Kernel/KernelA.HH,2715"$
 $LK,"DOCT_SPRITE",A="FL:::/Kernel/KernelA.HH,986"$
 $LK,"sys_neg_pows_lets",A="FL:::/Kernel/StrPrint.CC,201"$
 $LK,"progress3_max",A="FL:::/Kernel/KernelB.HH,206"$
 $LK,"SqrI64",A="FL:::/Kernel/KernelB.HH,92"$
-$LK,"BDF_INIT_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,2721"$
+$LK,"BDF_INIT_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,2731"$
 $LK,"OPTF_ECHO",A="FL:::/Kernel/KernelA.HH,1607"$
 $LK,"OPTf_ECHO",A="FL:::/Kernel/KernelA.HH,1593"$
 $LK,"LAPIC_EOI",A="FL:::/Kernel/KernelA.HH,553"$
@@ -2151,7 +2151,6 @@ $LK,"zenith_task",A="FL:::/Kernel/KGlobals.CC,8"$
 $LK,"MEM_E801",A="FL:::/Kernel/KStart16.CC,31"$
 $LK,"__TIME__",A="FL:::/Kernel/KernelA.HH,2083"$
 $LK,"RLf_PATCHED",A="FL:::/Kernel/KernelA.HH,474"$
-$LK,"PRINTF_NEG_AUX_FMT_NUM",A="FL:::/Kernel/KernelA.HH,3995"$
 $LK,"MEM_E820_ENTRIES_NUM",A="FL:::/Kernel/KernelA.HH,388"$
 $LK,"MEM_E820",A="FL:::/Kernel/KStart16.CC,32"$
 $LK,"ACD_WORD_FILENAME",A="FL:::/Kernel/KernelA.HH,1557"$
@@ -2211,7 +2210,7 @@ $LK,"SYS_RUN_LEVEL",A="FL:::/Kernel/KStart16.CC,26"$
 $LK,"SCF_SCROLL",A="FL:::/Kernel/KernelA.HH,3599"$
 $LK,"SCf_SCROLL",A="FL:::/Kernel/KernelA.HH,3584"$
 $LK,"ClusAlloc",A="FL:::/Kernel/BlkDev/DiskClus.CC,128",BI=474$
-$LK,"BDf_INIT_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,2731"$
+$LK,"BDf_INIT_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,2721"$
 $LK,"TK_SUB_EQU",A="FL:::/Kernel/KernelA.HH,2156"$
 $LK,"TK_DIV_EQU",A="FL:::/Kernel/KernelA.HH,2151"$
 $LK,"OC_BPT",A="FL:::/Kernel/KernelA.HH,1818"$
@@ -2730,6 +2729,7 @@ $LK,"PCIR_INTERRUPT_LINE",A="FL:::/Kernel/KernelA.HH,2323"$
 $LK,"IEF_DONT_SWITCH_MODES",A="FL:::/Kernel/KernelA.HH,1787"$
 $LK,"I_TIMER",A="FL:::/Kernel/KernelA.HH,324"$
 $LK,"IRQ_TIMER",A="FL:::/Kernel/KInterrupts.CC,16"$
+$LK,"PRINTF_AUX_FORMAT_NUM",A="FL:::/Kernel/KernelA.HH,3991"$
 $LK,"DOC_COLOR_TREE",A="FL:::/Kernel/KernelA.HH,1188"$
 $LK,"DOCEf_HAS_BIN",A="FL:::/Kernel/KernelA.HH,1111"$
 $LK,"DOCEF_HAS_BIN",A="FL:::/Kernel/KernelA.HH,1023"$

@@ -2711,25 +2711,25 @@ public class CDirEntry
 #define BDT_ATAPI		5
 #define BDT_TYPES_NUM		6
 
-#define BDF_REMOVABLE		0x001
-#define BDF_INITIALIZED		0x002
-#define BDF_READ_ONLY		0x004
-#define BDF_READ_ONLY_OVERRIDE	0x008
-#define BDF_LAST_WAS_WRITE	0x010
-#define BDF_READ_CACHE		0x020
-#define BDF_FMT			0x040
-#define BDF_INIT_IN_PROGRESS	0x080
-#define BDF_EXT_SIZE		0x100
-
 #define BDf_REMOVABLE		0
 #define BDf_INITIALIZED		1
 #define BDf_READ_ONLY		2
 #define BDf_READ_ONLY_OVERRIDE	3
 #define BDf_LAST_WAS_WRITE	4
 #define BDf_READ_CACHE		5
-#define BDf_FMT			6
+#define BDf_FORMAT		6
 #define BDf_INIT_IN_PROGRESS	7
 #define BDf_EXT_SIZE		8
+
+#define BDF_REMOVABLE		0x001
+#define BDF_INITIALIZED		0x002
+#define BDF_READ_ONLY		0x004
+#define BDF_READ_ONLY_OVERRIDE	0x008
+#define BDF_LAST_WAS_WRITE	0x010
+#define BDF_READ_CACHE		0x020
+#define BDF_FORMAT		0x040
+#define BDF_INIT_IN_PROGRESS	0x080
+#define BDF_EXT_SIZE		0x100
 
 //locked flags
 #define BDlf_LOCKED		0
@@ -2945,7 +2945,7 @@ class CMemRange
 #define MEM_ZENITH_STACK	(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
 #define MEM_DAEMON_STACK	(MEM_PAG_SIZE*512)
 #define MEM_INTERRUPT_STACK	(MEM_PAG_SIZE*512)
-#define MEM_DEFAULT_STACK	(MEM_PAG_SIZE*512)
+#define MEM_DEFAULT_STACK	(MEM_PAG_SIZE*512)
 
 #define TASK_HASH_TABLE_SIZE	(1<<10)
 
@@ -3988,11 +3988,11 @@ class CProgress
 #define PRINTF_DOLLAR		0x010
 #define PRINTF_SLASH		0x020
 #define PRINTF_QUESTION		0x040
-#define PRINTF_AUX_FMT_NUM	0x080
+#define PRINTF_AUX_FORMAT_NUM	0x080
 #define PRINTF_DECIMAL		0x100
 #define PRINTF_NEG		0x200
 #define PRINTF_NEG_E		0x400
-#define PRINTF_NEG_AUX_FMT_NUM	0x800
+#define PRINTF_NEG_AUX_FORMAT_NUM	0x800
 
 #help_index "Misc/Host"
 //Host Operating System

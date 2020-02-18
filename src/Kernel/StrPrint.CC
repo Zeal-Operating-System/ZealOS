@@ -291,7 +291,7 @@ to avoid this.
 
 	  case 'h':
 	    format++;
-	    flags|=PRINTF_AUX_FMT_NUM;
+	    flags|=PRINTF_AUX_FORMAT_NUM;
 	    if (*format=='?') {
 	      format++;
 	      flags|=PRINTF_QUESTION;
@@ -304,11 +304,11 @@ to avoid this.
 	      } else {
 		if (*format=='-') {
 		  format++;
-		  flags|=PRINTF_NEG_AUX_FMT_NUM;
+		  flags|=PRINTF_NEG_AUX_FORMAT_NUM;
 		}
 		while ('0'<=*format<='9')
 		  aux_format_num=aux_format_num*10+ *format++ -'0';
-		if (flags&PRINTF_NEG_AUX_FMT_NUM)
+		if (flags&PRINTF_NEG_AUX_FORMAT_NUM)
 		  aux_format_num=-aux_format_num;
 	      }
 	    }
@@ -405,7 +405,7 @@ to avoid this.
 	    }
 	    break;
 	end:
-	  if (!(flags&PRINTF_AUX_FMT_NUM))
+	  if (!(flags&PRINTF_AUX_FORMAT_NUM))
 	    aux_format_num=1;
 	  while (aux_format_num-->0)
 	    OutStr(tmp_buf,_buf,_dst,len,flags);
@@ -438,7 +438,7 @@ to avoid this.
 	    m=-m;
 	  }
 sp_out_dec:
-	  if (flags&PRINTF_AUX_FMT_NUM) {
+	  if (flags&PRINTF_AUX_FORMAT_NUM) {
 	    if (!len) len=12;
 	    d=m;
 	    goto sp_out_eng;
@@ -721,7 +721,7 @@ sp_out_eng: //Engineering notation
 	    n=-n;
 	    flags|=PRINTF_NEG_E;
 	  }
-	  if (flags&PRINTF_AUX_FMT_NUM && -24<=n<=24) {
+	  if (flags&PRINTF_AUX_FORMAT_NUM && -24<=n<=24) {
 	    if (flags&PRINTF_QUESTION) {
 	      if (flags&PRINTF_NEG_E)
 		i=-n/3;
