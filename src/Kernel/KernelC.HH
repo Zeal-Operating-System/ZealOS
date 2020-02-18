@@ -529,6 +529,7 @@ extern U0	KbdMouseInit();
 extern I64	KbdMessagesQueue();
 public extern U0 KbdTypeMatic(U8 delay);
 extern Bool	MouseHardDriverInstall();
+public extern Bool MouseEnable(Bool val=TRUE);
 public extern I64 PressAKey();
 public extern I64 ScanChar();
 public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);
@@ -545,7 +546,7 @@ public extern F64 Max(F64 n1,F64 n2);
 public extern F64 Min(F64 n1,F64 n2);
 public extern F64 Pow10I64(I64 i);
 public extern F64 Rand(); //With timestamp
-public extern U8  RandU8();
+public extern U8  RandU8();
 public extern I16 RandI16();
 public extern I32 RandI32();
 public extern I64 RandI64();

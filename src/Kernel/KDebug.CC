@@ -596,7 +596,7 @@ U0 Fault3(I64 fault_num,I64 fault_err_code)
 U0 Fault2(I64 fault_num,I64 fault_err_code)
 {//Called from $LK,"Fault2",A="FF:::/Kernel/KInterrupts.CC,Fault2"$.
 //$BK,1$Be careful not to swap-out and ruin the saved context$BK,0$
-  Bool was_raw,was_single_user,was_silent,was_in_debug;
+  Bool was_raw,was_single_user,was_silent,was_in_debug,was_mouse_enabled;
   I64  i,old_raw_flags=text.raw_flags;
   was_single_user=SingleUser(ON);
   if (!IsDebugMode)
@@ -607,6 +607,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
   if (Fs->debug_task)
     CallExtNum(EXT_DEBUG_RESUME,fault_num,fault_err_code);
   else {
+    was_mouse_enabled = CallExtStr("MouseEnable", FALSE);
     was_raw=Raw(ON);
     was_silent=Silent(OFF);
     text.raw_flags|=RWF_SHOW_DOLLAR|RWF_SCROLL;
@@ -628,6 +629,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
     DebugMode(was_in_debug);
     Silent(was_silent);
     Raw(was_raw);
+    CallExtStr("MouseEnable", was_mouse_enabled);
     text.raw_flags=old_raw_flags;
   }
   SingleUser(was_single_user);

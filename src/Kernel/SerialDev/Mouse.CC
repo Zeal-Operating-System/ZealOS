@@ -291,6 +291,22 @@ U0 KbdMouseReset()
   kbd.reset=FALSE;
 }
 
+Bool MouseEnable(Bool val=TRUE)
+{
+  Bool old_val = mouse_hard.enabled;
+  if (val)
+  {
+    KbdCmdSend(KBD_CTRL, KBDC_ENABLE_MS);
+    mouse_hard.enabled = TRUE;
+  }
+  else
+  {
+    KbdCmdSend(KBD_CTRL, KBDC_DISABLE_MS);
+    mouse_hard.enabled = FALSE;
+  }
+  return old_val;
+}
+
 Bool MouseHardDriverInstall(I64 dummy=0) //can be spawned
 {
   no_warn dummy;
@@ -353,6 +369,7 @@ U0 KbdMouseInit()
   kbd.scan_code_fifo=FifoI64New(0x1000);
   kbd.irqs_working=FALSE;
   MemSet(&mouse_hard,0,sizeof(CMouseHardStateGlobals));
+  mouse_hard.enabled=TRUE;
   mouse_hard.fifo=FifoU8New(8);
   mouse_hard.fifo2=FifoU8New(0x1000);
   mouse_hard.scale.x=0.5;

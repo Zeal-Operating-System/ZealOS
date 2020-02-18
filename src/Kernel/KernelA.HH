@@ -196,7 +196,7 @@ public class CFifoI64
 
 //CMOS status flags
 #define CMOSF_BINARY	(1 << 2)
-#define CMOSF_UPDATING	(1 << 7)
+#define CMOSF_UPDATING	(1 << 7)
 
 #help_index "Date/CDate"
 #define CDATE_YEAR_DAYS		365.24225
@@ -3059,6 +3059,14 @@ public I64 class CBGR48
 #help_index "Keyboard Devices;Char/Input;StdIn"
 #define KBD_PORT	0x60
 #define KBD_CTRL	0x64
+
+#define KBDC_LED	0xED
+#define KBDC_DISABLE_MS	0xA7
+#define KBDC_ENABLE_MS	0xA8
+#define KBDC_ENABLE_KBD	0xAE
+#define KBDC_TYPEMATIC  0xF3
+#define KBDC_SCAN_CODES	0xF0
+
 public class CKbdStateGlobals
 {
   I64	scan_code,	//See $LK,"scan codes",A="FI:::/Doc/CharOverview.DD"$
@@ -3093,6 +3101,7 @@ public class CMouseHardStateGlobals
   Bool	bttns[5],
 	has_wheel,
 	has_ext_bttns,
+	enabled,
 	event,		//Private
 	installed,	//Private
 	install_in_progress, //Private

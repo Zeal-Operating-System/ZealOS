@@ -18,14 +18,14 @@ F64	*pow10_I64,
 CAutoCompleteDictGlobals acd;
 CAutoCompleteGlobals ac;
 CBlkDevGlobals	blkdev;
-CCountsGlobals	counts={1,0,2676302000,2676302,2676302000,FALSE};
+CCountsGlobals	counts={1,0,2676302000,2676302,2676302000,FALSE};
 CDebugGlobals	debug;
 CDevGlobals	dev;
 CGridGlobals	mouse_grid; //See $LK,"::/Demo/Graphics/Grid.CC"$.
 CMouseStateGlobals	mouse,mouse_last;
 CKbdStateGlobals	kbd;
 CKeyDevGlobals	keydev;
-CMouseHardStateGlobals mouse_hard,mouse_hard_last;
+CMouseHardStateGlobals mouse_hard,mouse_hard_last;
 CScreenCastGlobals	screencast;
 CTextGlobals	text;
 
