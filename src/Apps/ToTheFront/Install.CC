@@ -1,2 +1,2 @@
-DirMk("~/ToTheFront");
+DirMake("~/ToTheFront");
 

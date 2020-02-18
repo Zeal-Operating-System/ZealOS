@@ -30,7 +30,7 @@ extern I64 DefineMatch(U8 *needle,U8 *haystack_list_dname,I64 flags=0);
 extern U8 *DefineSub(I64 sub,U8 *dname);
 extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 	Bool del_dir=FALSE,Bool print_message=TRUE);
-extern Bool DirMk(U8 *filename,I64 entry_count=0);
+extern Bool DirMake(U8 *filename,I64 entry_count=0);
 extern Bool Drive(U8 drv_let);
 extern U8 Drive2Letter(CDrive *drive=NULL);
 extern U0 DriveBlkDevDel(CBlkDev *bd);

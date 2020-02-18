@@ -1,7 +1,7 @@
 File
 {
   Rename(,'r');
-  DirMk(,'d');
+  DirMake(,'d');
   FormatDrive(,'f');
   UnmountDrive(,'u');
   Abort(,CH_SHIFT_ESC);

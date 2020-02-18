@@ -63,8 +63,8 @@ U0 DistroPrep()
   DelTree("/Home/*Tmp.DD");
 
   DelTree("/Tmp");
-  DirMk("/Tmp");
-  DirMk("/Tmp/ScreenShots");
+  DirMake("/Tmp");
+  DirMake("/Tmp/ScreenShots");
 
   Touch("/PersonalMenu.DD","+T");
   Touch("/Home/PersonalMenu.DD","+T");
@@ -96,19 +96,19 @@ U0 DebugDistroFilePrep()
   bd=Letter2BlkDev('A');
   Format('A',,FALSE,FSt_REDSEA);
 
-  DirMk("A:/Compiler");
+  DirMake("A:/Compiler");
   Copy("C:/Compiler/Compiler.BIN",	"A:/Compiler");
   Copy("C:/Compiler/OpCodes.DD",	"A:/Compiler");
   Copy("C:/Compiler/CompilerA.HH",	"A:/Compiler");
   Copy("C:/Compiler/CompilerB.HH",	"A:/Compiler");
 
-  DirMk("A:/Kernel");
+  DirMake("A:/Kernel");
   Copy("C:/Kernel/*.HH*",		"A:/Kernel");
   CopyTree("C:/Kernel/BlkDev",		"A:/Kernel/BlkDev");
 
   Copy("C:/Home/Sup1/Sup1Distro/DebugStartOS.CC","A:/StartOS.CC");
 
-  DirMk("A:/Zenith");
+  DirMake("A:/Zenith");
   Copy("C:/Home/Sup1/Sup1Distro/DebugMakeZenith.CC","A:/Zenith/MakeZenith.CC");
   Copy("C:/Home/Sup1/Sup1Distro/DebugMount.CC","A:/Zenith");
   Copy("C:/Zenith/AExts.CC",	"A:/Zenith");
@@ -132,7 +132,7 @@ U0 StdDistroPrep()
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home");
-  DirMk(TOS_DISTRO_DIR "/Home");
+  DirMake(TOS_DISTRO_DIR "/Home");
   Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
   Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
   Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
@@ -157,7 +157,7 @@ U0 LiteDistroPrep()
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home");
-  DirMk(TOS_DISTRO_DIR "/Home");
+  DirMake(TOS_DISTRO_DIR "/Home");
   DelTree(TOS_DISTRO_DIR "/Apps");
   DelTree(TOS_DISTRO_DIR "/Demo");
   Copy(TOS_DISTRO_DIR "/Demo/Games/Talons.CC",TOS_DISTRO_DIR "/Home");
@@ -189,7 +189,7 @@ U0 DebugDistroPrep()
   DelTree(TOS_DISTRO_DIR);
   CopyTree("C:/",TOS_DISTRO_DIR "/");
   DelTree(TOS_DISTRO_DIR "/Home");
-  DirMk(TOS_DISTRO_DIR "/Home");
+  DirMake(TOS_DISTRO_DIR "/Home");
   Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
   Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
   Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");

@@ -39,7 +39,7 @@ U0 StartUpTasks()
 
 if (DriveIsWritable(':')) {
   DelTree("::/Tmp/ScreenShots");
-  DirMk("::/Tmp/ScreenShots");
+  DirMake("::/Tmp/ScreenShots");
 }
 
 StartUpTasks;

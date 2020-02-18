@@ -67,7 +67,7 @@ Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE)
       if (!res && make_dirs) {
 	Free(Fs->cur_dir);
 	Fs->cur_dir=StrNew(new_cur_dir);
-	res=DirMk(buf);
+	res=DirMake(buf);
       }
       if (res) {
 	if (StrCompare(new_cur_dir,"/"))
@@ -159,7 +159,7 @@ I64 Dir(U8 *files_find_mask,Bool full)
   return res;
 }
 
-Bool DirMk(U8 *filename,I64 entry_count=0)
+Bool DirMake(U8 *filename,I64 entry_count=0)
 {//Make directory. $LK,"Cd",A="MN:Cd"$() can also make directories.
 //entry_count is for preallocating dir blks, leave it zero if you like.
   U8 *name;

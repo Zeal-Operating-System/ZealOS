@@ -13,7 +13,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
   DelTree("/Distro");
   Del(out_iso_filename);
 
-  DirMk("/Distro");
+  DirMake("/Distro");
   In(STD_DISTRO_DVD_CONFIG);
   BootDVDIns;
 
@@ -33,8 +33,8 @@ U0 MakeMyISO(U8 *_out_iso_filename)
   //To save space, optionally delete dictionary.
   //Del("/Distro/Zenith/AutoComplete/ACDefs.DATA");
   CopyTree("/Downloads","/Distro/Downloads");	  //You can leave this out.
-  DirMk("/Distro/Tmp");
-  DirMk("/Distro/Tmp/ScreenShots");
+  DirMake("/Distro/Tmp");
+  DirMake("/Distro/Tmp/ScreenShots");
   RedSeaISO(out_iso_filename,"/Distro","/Distro" BOOT_DIR_KERNEL_BIN_C);
 
   //If CD-ROM use MT_CD instead of MT_DVD.

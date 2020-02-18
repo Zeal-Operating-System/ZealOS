@@ -1543,7 +1543,7 @@ U0 OSTestSuite()
   TS("Psalmody");	DoPsalmody;
   TS("JukeBox");	DoJukeBox;
   TS("Span");		if (!sys_heap_init_flag) DoSpan; //Has FloodFill
-//  TS("Strut");		DoStrut;
+//  TS("Strut");		DoStrut;
   TS("RawHide");	DoRawHide;
   TS("KeepAway");	DoKeepAway;
   TS("XCaliber");	DoXCaliber;
@@ -1691,7 +1691,6 @@ U0 OSTestSuite()
   TS("MemBIOSRep");	XTalkWait(task,"MemBIOSRep;Sleep(750);\n");
   TS("MemPageRep");	XTalkWait(task,"MemPageRep;Sleep(750);\n");
   TS("MemRep");		XTalkWait(task,"MemRep;Sleep(750);\n");
-  TS("ZipRep");		XTalkWait(task,"ZipRep;Sleep(750);\n");
   TS("ProfRep");	XTalkWait(task,"ProfRep;Sleep(750);\n");
   TS("HeapLogSizeRep");	XTalkWait(task,"HeapLogSizeRep;Sleep(750);\n");
   TS("CPURep");		if (mp_count>1)

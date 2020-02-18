@@ -29,7 +29,7 @@ public U0 BootMHDOldRead(U8 src_drive,U8 dst_drive)
     BlkDevUnlock(bd);
 
     Drive(dst_drive);
-    DirMk(BOOT_DIR);
+    DirMake(BOOT_DIR);
     FileWrite(BOOT_DIR_OLDMBR_BIN_C,&mbr,BLK_SIZE);
   }
 }

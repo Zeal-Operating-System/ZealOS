@@ -281,7 +281,7 @@ public extern Bool Cd(U8 *dirname=NULL,Bool make_dirs=FALSE);
 public extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
 	Bool del_dir=FALSE,Bool print_message=TRUE);
 public extern I64 Dir(U8 *files_find_mask="*",Bool full=FALSE);
-public extern Bool DirMk(U8 *filename,I64 entry_count=0);
+public extern Bool DirMake(U8 *filename,I64 entry_count=0);
 public extern Bool Drive(U8 drv_let);
 public extern U0 DiskChange(U8 drv_let=0);
 public extern U0 HomeSet(U8 *dirname);
@@ -529,7 +529,7 @@ extern U0	KbdMouseInit();
 extern I64	KbdMessagesQueue();
 public extern U0 KbdTypeMatic(U8 delay);
 extern Bool	MouseHardDriverInstall();
-public extern Bool MouseEnable(Bool val=TRUE);
+public extern Bool MouseEnable(Bool val=TRUE);
 public extern I64 PressAKey();
 public extern I64 ScanChar();
 public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);

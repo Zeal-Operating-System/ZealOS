@@ -287,7 +287,7 @@ U0 FMMkDir(CDoc *doc)
       Cd(parent->full_name);
       if (DocForm(&fn)) {
 	Silent;
-	DirMk(fn.name);
+	DirMake(fn.name);
 	Silent(OFF);
       }
     }
@@ -296,7 +296,7 @@ U0 FMMkDir(CDoc *doc)
     Cd(tmpde->full_name);
     if (DocForm(&fn)) {
       Silent;
-      DirMk(fn.name);
+      DirMake(fn.name);
       Silent(OFF);
     }
   }

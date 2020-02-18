@@ -21,7 +21,7 @@ U0 DelScreenShots()
 {
   Bool old_silent=Silent;
   DelTree("B:/Tmp");
-  DirMk("B:/Tmp");
+  DirMake("B:/Tmp");
   Del("D:/Tmp/*.AU");
   Del("D:/Tmp/*.MV");
   Del("C:/Tmp/*.AU");

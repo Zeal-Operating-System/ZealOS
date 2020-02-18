@@ -2,9 +2,9 @@ U0 InstallDrive(U8 drv_let)
 {
   U8 *st;
   ExePrint("CopyTree(\"::/\",\"%C:/\");",drv_let);
-  ExePrint("DirMk(\"%C:/Tmp\");",drv_let);
-  ExePrint("DirMk(\"%C:/Tmp/ScreenShots\");",drv_let);
-  ExePrint("DirMk(\"%C:/Home\");",drv_let);
+  ExePrint("DirMake(\"%C:/Tmp\");",drv_let);
+  ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",drv_let);
+  ExePrint("DirMake(\"%C:/Home\");",drv_let);
 
   st=MStrPrint("%C:/Home/DoDistro.CC",drv_let);
   if (!FileFind(st))
