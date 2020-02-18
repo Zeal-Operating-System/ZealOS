@@ -545,6 +545,7 @@ public extern F64 Max(F64 n1,F64 n2);
 public extern F64 Min(F64 n1,F64 n2);
 public extern F64 Pow10I64(I64 i);
 public extern F64 Rand(); //With timestamp
+public extern U8  RandU8();
 public extern I16 RandI16();
 public extern I32 RandI32();
 public extern I64 RandI64();
@@ -573,7 +574,7 @@ public _extern _FREE U0 Free(U8 *addr);
 public _extern _MALLOC U8 *MAlloc(I64 size,CTask *mem_task=NULL);
 public extern U8 *MAllocAligned(I64 size,I64 alignment,CTask *mem_task=NULL,I64 misalignment=0);
 public extern U8 *MAllocIdent(U8 *src,CTask *mem_task=NULL);
-public extern U8 *ReAlloc(U8 *src, U64 size, CTask *mem_task=NULL);
+public extern U8 *ReAlloc(U8 *src, U64 size, CTask *mem_task=NULL);
 public _extern _MHEAP_CTRL CHeapCtrl *MHeapCtrl(U8 *src);
 public _extern _MSIZE I64 MSize(U8 *src);   //size of heap object
 public _extern _MSIZE2 I64 MSize2(U8 *src); //Internal size

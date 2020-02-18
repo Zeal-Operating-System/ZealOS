@@ -74,75 +74,57 @@ I64 CeilI64(I64 num,I64 to)
 #define LIN_CONGRUE_A	6364136223846793005
 #define LIN_CONGRUE_C	1442695040888963407
 
+I64 RandInt()
+{//Don't use this. Use the functions below.
+  I64 res = Fs->rand_seed;
+  res = LIN_CONGRUE_A * res ^ (res & 0xFFFFFFFF0000) >> 16 + LIN_CONGRUE_C;
+  if (!Bt(&Fs->task_flags, TASKf_NONTIMER_RAND))
+    res ^= GetTSC;
+  Fs->rand_seed = res;
+  return res;
+}
+
+U8 RandU8()
+{//Random U8.
+  return RandInt & U8_MAX;
+}
+
 I16 RandI16()
 {//Random I16.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
+  I64 res = RandInt;
   return res.i16[0];
 }
 
 U16 RandU16()
 {//Random U16.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
-  return res.u16[0];
+  return RandInt & U16_MAX;
 }
 
 I32 RandI32()
 {//Random I32.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
+  I64 res = RandInt;
   return res.i32[0];
 }
 
 U32 RandU32()
 {//Random U32.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
-  return res.u32[0];
+  return RandInt & U32_MAX;
 }
 
 I64 RandI64()
 {//Random I64.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
-  return res;
+  return RandInt;
 }
 
 U64 RandU64()
 {//Random U64.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
-  return res;
+  return RandInt;
 }
 
 F64 Rand()
 {//Random F64.
-  I64 res=Fs->rand_seed;
-  res=LIN_CONGRUE_A*res^(res&0xFFFFFFFF0000)>>16+LIN_CONGRUE_C;
-  if (!Bt(&Fs->task_flags,TASKf_NONTIMER_RAND))
-    res^=GetTSC;
-  Fs->rand_seed=res;
-  return (res&0x3FFFFFFFFFFFFFFF)/ToF64(0x4000000000000000);
-}
+  return (RandInt & 0x3FFFFFFFFFFFFFFF) / ToF64(0x4000000000000000);
+}
 
 I64 Seed(I64 seed=0,CTask *task=NULL)
 {//Set $LK,"Rand",A="MN:Rand"$() seed. Zero for timer-based.
