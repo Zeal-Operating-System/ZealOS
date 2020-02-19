@@ -360,7 +360,7 @@ U0 Core0Init()
   IMPORT SET_GS_BASE;
   CALL   SET_GS_BASE
   
-  MPAPICInit;
+  MPAPICInit;
 }
 
 interrupt U0 IntMPCrash()
@@ -369,7 +369,7 @@ interrupt U0 IntMPCrash()
   *(dev.uncached_alias+LAPIC_EOI)(U32 *)=0;
   mp_count=1;
   Raw(ON);
-  text.raw_flags|=RWF_SHOW_DOLLAR;
+  text.raw_flags|=RAWF_SHOW_DOLLAR;
   "MP Crash CPU%02X Task:%08X\n"
   "RIP:%P\n",debug.mp_crash->cpu_num,debug.mp_crash->task,debug.mp_crash->rip;
   Panic(debug.mp_crash->message,debug.mp_crash->message_num);

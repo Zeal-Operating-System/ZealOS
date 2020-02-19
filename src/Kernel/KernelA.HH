@@ -3647,10 +3647,10 @@ public class CSysFixedArea
 
 #help_index "Char;Debugging/Raw Output;TextBase Layer/Char"
 //text.raw_flags
-#define RWF_IN_DOLLAR	1
-#define RWF_LAST_DOLLAR	2
-#define RWF_SHOW_DOLLAR	4
-#define RWF_SCROLL	8
+#define RAWF_IN_DOLLAR	1
+#define RAWF_LAST_DOLLAR	2
+#define RAWF_SHOW_DOLLAR	4
+#define RAWF_SCROLL	8
 
 public class CTextGlobals
 {

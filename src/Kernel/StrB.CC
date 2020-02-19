@@ -9,7 +9,7 @@ U8 *Tabs2Spaces(U8 *src)
 	dst[i]=CH_SPACE;
 	if (i>=l-2) {
 	  tmp=MAlloc(l<<1);
-	  MemCopy(tmp,dst,i+1);
+	  MemCopy(tmp,dst,i+1);
 	  Free(dst);
 	  l<<=1;
 	  dst=tmp;
@@ -76,7 +76,7 @@ U0 GetOutOfDollar()
 {//If a $$ has been printed, print another $$ to exit mode.
   CDoc *doc;
   if (IsRaw) {
-    if (text.raw_flags&RWF_IN_DOLLAR)
+    if (text.raw_flags&RAWF_IN_DOLLAR)
       '$$';
   } else {
     if (fp_doc_put && (doc=(*fp_doc_put)(Fs)) && doc->flags&DOCF_IN_DOLLAR)

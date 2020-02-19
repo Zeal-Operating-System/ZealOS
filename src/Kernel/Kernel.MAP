@@ -180,7 +180,6 @@ $LK,"RT_I64",A="FL:::/Kernel/KernelA.HH,1619"$
 $LK,"SEMA_REFRESH_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,663"$
 $LK,"KbdMouseReset",A="FL:::/Kernel/SerialDev/Mouse.CC,284",BI=29$
 $LK,"SUF_SAFE_DOLLAR",A="FL:::/Kernel/KernelA.HH,3854"$
-$LK,"RWF_SHOW_DOLLAR",A="FL:::/Kernel/KernelA.HH,3652"$
 $LK,"HTt_INTERNAL_TYPE",A="FL:::/Kernel/KernelA.HH,706"$
 $LK,"RedSeaFileWrite",A="FL:::/Kernel/BlkDev/FileSysRedSea.CC,509",BI=30$
 $LK,"CPatchTableAbsAddr",A="FL:::/Kernel/KernelA.HH,414"$
@@ -308,6 +307,7 @@ $LK,"HomeSet",A="FL:::/Kernel/BlkDev/DiskDirB.CC,1",BI=58$
 $LK,"PostMessage",A="FL:::/Kernel/Job.CC,242",BI=59$
 $LK,"DrivesRelease",A="FL:::/Kernel/BlkDev/DiskDrive.CC,27",BI=60$
 $LK,"D3Mul",A="FL:::/Kernel/KernelB.HH,141"$
+$LK,"RAWF_SHOW_DOLLAR",A="FL:::/Kernel/KernelA.HH,3652"$
 $LK,"CH_CTRLR",A="FL:::/Kernel/KernelA.HH,3557"$
 $LK,"SK_NAME",A="FL:::/Kernel/BlkDev/DiskDirA.CC,86"$
 $LK,"CtrlAltC",A="FL:::/Kernel/KeyDev.CC,133",BI=61$
@@ -548,7 +548,6 @@ $LK,"Caller",A="FL:::/Kernel/KDebug.CC,60",BI=115$
 $LK,"SUF_S2T",A="FL:::/Kernel/KernelA.HH,3851"$
 $LK,"ATA_DEV_RST",A="FL:::/Kernel/KernelA.HH,2375"$
 $LK,"INT_MP_CRASH_ADDR",A="FL:::/Kernel/KInterrupts.CC,2"$
-$LK,"RWF_LAST_DOLLAR",A="FL:::/Kernel/KernelA.HH,3651"$
 $LK,"RS_ATTR_CONTIGUOUS",A="FL:::/Kernel/KernelA.HH,2614"$
 $LK,"ARGT_NONE",A="FL:::/Kernel/KernelA.HH,1936"$
 $LK,"DOCT_DATA",A="FL:::/Kernel/KernelA.HH,979"$
@@ -663,6 +662,7 @@ $LK,"CVBEMode",A="FL:::/Kernel/KernelA.HH,4024"$
 $LK,"BlkDevLockFwdingSet",A="FL:::/Kernel/BlkDev/DiskAddDev.CC,1",BI=128$
 $LK,"InU8",A="FL:::/Kernel/KernelB.HH,62"$
 $LK,"PRINTF_NEG_AUX_FORMAT_NUM",A="FL:::/Kernel/KernelA.HH,3995"$
+$LK,"RAWF_LAST_DOLLAR",A="FL:::/Kernel/KernelA.HH,3651"$
 $LK,"ARGT_SREG",A="FL:::/Kernel/KernelA.HH,1983"$
 $LK,"_STRNCOMPARE",A="FL:::/Kernel/StrA.CC,154"$
 $LK,"CMemUnused",A="FL:::/Kernel/KernelA.HH,2897"$
@@ -768,7 +768,6 @@ $LK,"In",A="FL:::/Kernel/Job.CC,482",BI=148$
 $LK,"ACD_DEF_CHAR",A="FL:::/Kernel/KernelA.HH,1574"$
 $LK,"Gs",A="FL:::/Kernel/KernelB.HH,227"$
 $LK,"SYS_PROGRESS3_DESC",A="FL:::/Kernel/KStart32.CC,55"$
-$LK,"RWF_SCROLL",A="FL:::/Kernel/KernelA.HH,3653"$
 $LK,"REGG_LOCAL_VARS",A="FL:::/Kernel/KernelA.HH,1851"$
 $LK,"RepInU8",A="FL:::/Kernel/KernelB.HH,71"$
 $LK,"progress3_t0",A="FL:::/Kernel/KernelB.HH,207"$
@@ -2209,6 +2208,7 @@ $LK,"SYS_RUN_LEVEL",A="FL:::/Kernel/KStart16.CC,26"$
 $LK,"SCF_SCROLL",A="FL:::/Kernel/KernelA.HH,3599"$
 $LK,"SCf_SCROLL",A="FL:::/Kernel/KernelA.HH,3584"$
 $LK,"ClusAlloc",A="FL:::/Kernel/BlkDev/DiskClus.CC,128",BI=474$
+$LK,"RAWF_SCROLL",A="FL:::/Kernel/KernelA.HH,3653"$
 $LK,"BDf_INIT_IN_PROGRESS",A="FL:::/Kernel/KernelA.HH,2721"$
 $LK,"TK_SUB_EQU",A="FL:::/Kernel/KernelA.HH,2156"$
 $LK,"TK_DIV_EQU",A="FL:::/Kernel/KernelA.HH,2151"$
@@ -2672,7 +2672,6 @@ $LK,"IOAPICVER",A="FL:::/Kernel/KernelA.HH,582"$
 $LK,"LAPIC_LVT_TIMER",A="FL:::/Kernel/KernelA.HH,567"$
 $LK,"FAT32FreeClus",A="FL:::/Kernel/BlkDev/FileSysFAT.CC,399",BI=558$
 $LK,"sys_mem_init_flag",A="FL:::/Kernel/KernelB.HH,165"$
-$LK,"RWF_IN_DOLLAR",A="FL:::/Kernel/KernelA.HH,3650"$
 $LK,"DISPLAYf_CHILDREN_NOT_ON_TOP",A="FL:::/Kernel/KernelA.HH,3366"$
 $LK,"sys_var_init_flag",A="FL:::/Kernel/KernelB.HH,168"$
 $LK,"IOAPIC_DATA",A="FL:::/Kernel/KernelA.HH,579"$
@@ -2694,6 +2693,7 @@ $LK,"DOCF_IN_DOLLAR",A="FL:::/Kernel/KernelA.HH,1347"$
 $LK,"TaskStackNew",A="FL:::/Kernel/KTask.CC,100",BI=566$
 $LK,"_REP_IN_U16",A="FL:::/Kernel/KUtils.CC,310"$
 $LK,"_REP_IN_U32",A="FL:::/Kernel/KUtils.CC,298"$
+$LK,"RAWF_IN_DOLLAR",A="FL:::/Kernel/KernelA.HH,3650"$
 $LK,"MP_VECT_ADDR",A="FL:::/Kernel/KernelA.HH,575"$
 $LK,"CR0f_TS",A="FL:::/Kernel/KernelA.HH,519"$
 $LK,"I_WAKE",A="FL:::/Kernel/KernelA.HH,327"$

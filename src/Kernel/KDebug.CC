@@ -610,7 +610,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
     was_mouse_enabled = CallExtStr("MouseEnable", FALSE);
     was_raw=Raw(ON);
     was_silent=Silent(OFF);
-    text.raw_flags|=RWF_SHOW_DOLLAR|RWF_SCROLL;
+    text.raw_flags|=RAWF_SHOW_DOLLAR|RAWF_SCROLL;
 
     "Task \"";
     "%s",Fs->task_title;
@@ -629,7 +629,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
     DebugMode(was_in_debug);
     Silent(was_silent);
     Raw(was_raw);
-    CallExtStr("MouseEnable", was_mouse_enabled);
+    CallExtStr("MouseEnable", was_mouse_enabled);
     text.raw_flags=old_raw_flags;
   }
   SingleUser(was_single_user);

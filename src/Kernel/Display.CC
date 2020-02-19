@@ -9,21 +9,21 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
   I64 i,row,col;
   U8 *ptr,*ptr1,*ptr2;
 
-  if (!(text.raw_flags&RWF_SHOW_DOLLAR)) {
+  if (!(text.raw_flags&RAWF_SHOW_DOLLAR)) {
     if (ch=='$$') {
-      if (text.raw_flags&RWF_IN_DOLLAR) {
-	text.raw_flags&=~RWF_IN_DOLLAR;
-	if (!(text.raw_flags & RWF_LAST_DOLLAR)) {
-	  text.raw_flags&=~RWF_LAST_DOLLAR;
+      if (text.raw_flags&RAWF_IN_DOLLAR) {
+	text.raw_flags&=~RAWF_IN_DOLLAR;
+	if (!(text.raw_flags & RAWF_LAST_DOLLAR)) {
+	  text.raw_flags&=~RAWF_LAST_DOLLAR;
 	  return;
 	}
       } else {
-	text.raw_flags|=RWF_IN_DOLLAR|RWF_LAST_DOLLAR;
+	text.raw_flags|=RAWF_IN_DOLLAR|RAWF_LAST_DOLLAR;
 	return;
       }
     }
-    text.raw_flags&=~RWF_LAST_DOLLAR;
-    if (text.raw_flags&RWF_IN_DOLLAR)
+    text.raw_flags&=~RAWF_LAST_DOLLAR;
+    if (text.raw_flags&RAWF_IN_DOLLAR)
       return;
   }
   if (ch=='\t') {
@@ -43,7 +43,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
     row=text.raw_col/text.cols%text.rows;
     col=text.raw_col%text.cols;
     if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
-      if (text.raw_flags&RWF_SCROLL && text.raw_col && !row && !col) {
+      if (text.raw_flags&RAWF_SCROLL && text.raw_col && !row && !col) {
 	MemCopy(text.vga_text_alias,text.vga_text_alias+text.cols*2,
 	      text.cols*(text.rows-1)*2);
 	MemSet(text.vga_text_alias+text.cols*(text.rows-1)*2,0,text.cols*2);
@@ -56,7 +56,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
     } else {
       OutU8(VGAP_IDX,VGAR_MAP_MASK);
       OutU8(VGAP_DATA,0x0F); //All planes -- WHITE
-      if (text.raw_flags&RWF_SCROLL && text.raw_col && !row && !col) {
+      if (text.raw_flags&RAWF_SCROLL && text.raw_col && !row && !col) {
 //Scroll cached image
 	MemCopy(text.raw_screen_image,
 	      text.raw_screen_image+GR_WIDTH*FONT_HEIGHT>>3,

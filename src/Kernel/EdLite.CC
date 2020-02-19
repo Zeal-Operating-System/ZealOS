@@ -71,7 +71,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 
   PUSHFD
   CLI
-  text.raw_flags=text.raw_flags&~RWF_SCROLL|RWF_SHOW_DOLLAR;
+  text.raw_flags=text.raw_flags&~RAWF_SCROLL|RAWF_SHOW_DOLLAR;
   kbd.scan_code=0;
   QueueInit(&head);
   head.line=StrNew("");
@@ -295,7 +295,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
   Raw(old_raw);
   DebugMode(old_debug);
   SingleUser(old_single);
-  text.raw_flags=text.raw_flags&~RWF_SHOW_DOLLAR|old_raw_flags&RWF_SHOW_DOLLAR;
+  text.raw_flags=text.raw_flags&~RAWF_SHOW_DOLLAR|old_raw_flags&RAWF_SHOW_DOLLAR;
   POPFD
   return res;
 }
