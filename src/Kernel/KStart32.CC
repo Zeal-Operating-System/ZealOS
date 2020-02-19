@@ -12,7 +12,7 @@ MEM_1GIG_NUM::		DU64	0;
 MEM_512GIG_NUM::	DU64	0;
 MEM_PML2::		DU64	0;
 MEM_PML3::		DU64	0;
-MEM_PML4::		DU64	0;
+MEM_PML4::		DU64	0;
 
 #exe {
   StreamPrint(

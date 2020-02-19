@@ -15,7 +15,7 @@ public _intern IC_BTS Bool Bts(U8 *bit_field,I64 bit); //Bit test and set to one
 public _intern IC_LBTC Bool LBtc(U8 *bit_field,I64 bit); //Locked bit test and complement (xor with 1).
 public _intern IC_LBTR Bool LBtr(U8 *bit_field,I64 bit); //Locked bit test and reset to zero.
 public _intern IC_LBTS Bool LBts(U8 *bit_field,I64 bit); //Locked bit test and set to one.
-public _intern IC_POPCNT I64 PopCount(I64 bit_field_val);
+public _intern IC_POPCNT I64 PopCount(I64 bit_field_val);
 public _extern _BEQUAL Bool BEqual(U8 *bit_field,I64 bit,Bool val);//Set bit equ to val.
 public _extern _BIT_FIELD_EXT_U32 U32 BFieldExtU32(U8 *bit_field,I64 bit,I64 size); //Extract U32 from bit field.
 public _extern _BIT_FIELD_OR_U32 U0 BFieldOrU32(U8 *bit_field,I64 bit,U32 pattern); //Or U32 into bit field.
@@ -273,5 +273,11 @@ public _intern IC_FS CTask *Fs(); //FS seg reg points to the current $LK,"CTask"
 #help_index "Time/CPU Cycles"
 #help_file "::/Doc/TimeCycles"
 public _intern IC_RDTSC I64 GetTSC(); //Get time stamp counter.
+
+#help_index "Graphics/VBE"
+public _extern SYS_VBE_INFO CVBEInfo sys_vbe_info;
+public _extern SYS_VBE_FINAL_MODE CVBEMode sys_vbe_mode;
+_extern SYS_VBE_FINAL U16 sys_vbe_mode_num;
+_extern SYS_VBE_MODES CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
 
 #help_index ""

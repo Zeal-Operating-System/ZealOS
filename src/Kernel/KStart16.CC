@@ -51,41 +51,168 @@ GDT_TR_RING3:	DU8	MP_PROCESSORS_NUM*16 DUP(0);
 
 #assert $$-SYS_KERNEL==sizeof(CKernel)-sizeof(CBinFile)
 
+SYS_VBE_INFO::	DU8	sizeof(CVBEInfo) DUP(0);
+SYS_VBE_MODES::	DU8	sizeof(CVBEModeShort) * VBE_MODES_NUM DUP(0);
+SYS_VBE_FINAL_MODE::	DU8	sizeof(CVBEMode) DUP(0);
+SYS_VBE_FINAL::	DU16	0; //mode number of final mode set
+
+TEMP_VBE_MODE:		DU8	sizeof(CVBEMode) DUP(0);
+MAX_VBE_MODE:		DU8	sizeof(CVBEModeShort) DUP(0);
+MAX_SCREEN_HEIGHT:	DU16	0;
+
+SCREEN_WIDTH:	DU16	1024;
+SCREEN_HEIGHT:	DU16	768;
+
 SYS_FONT_PTR::	DU32	0;
 //************************************
-CORE0_16BIT_INIT::
+CORE0_16BIT_INIT::
 //EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
 	MOV	ECX,EAX
-	MOV	AX,(BOOT_RAM_LIMIT-BOOT_STACK_SIZE)/16
-	MOV	SS,AX
-	MOV	SP,BOOT_STACK_SIZE
+	MOV	AX, (BOOT_RAM_LIMIT-BOOT_STACK_SIZE) /  16
+	MOV	SS, AX
+	MOV	SP, BOOT_STACK_SIZE
 	PUSH	ECX	//Will be $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$ & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.
 	PUSH	EBX
 
-	CALL	U16 GET_RIP
-GET_RIP:	POP	BX
-	SUB	BX,GET_RIP
+	CALL	U16 GET_IP
+GET_IP:	POP	BX
+	SUB	BX,GET_IP
 	SHR	BX,4
 	MOV	AX,CS
 	ADD	AX,BX
 	PUSH	AX
-	PUSH	U16 @@05
+	PUSH	U16 @@04
 	RETF
 
-@@05:	STI
+@@04:	STI
 	MOV	AX,CS
 	MOV	DS,AX
 
 	MOV	U32 [SYS_RUN_LEVEL],RLF_16BIT
 
-//Get pointer to 8x8 VGA ROM font.
-	MOV	AX, 0x1130
-	MOV	BH, 3
+//Our variables are on the data segment, but VBE functions require ES.
+//moving DS into ES, while preserving ES
+	PUSH	ES
+	PUSH	DS
+	POP	ES
+
+//Get VBE implementation information
+	MOV	AX, 0x4F00
+	MOV	DI, SYS_VBE_INFO
+	MOV	CVBEInfo.signature[DI], 'VBE2' //set to 'VBE2' to use VBE 2.0 functionality
 	INT	0x10
-	MOV	AX, ES
-	SHL	EAX, 16
-	MOV	AX, BP
-	MOV	U32 [SYS_FONT_PTR], EAX
+	POP	ES
+
+	CMP	AX, 0x004F
+	JE	@@05
+	JMP	$$	//Freeze system if VBE not supported
+
+@@05:
+
+/*Loop variables:
+ DI <- Temporary storage for mode information
+ CX <- Mode number
+ DX <- mode array
+ GS <- Segment for video modes list
+ SI <- Offset for video modes list
+*/
+//Obtain segment:offset of list of potential video modes
+	MOV	AX, SYS_VBE_INFO
+	MOV	SI, CVBEInfo.video_modes[AX]
+	MOV	GS, CVBEInfo.video_modes+2[AX]
+
+	MOV	DI, TEMP_VBE_MODE
+	MOV	DX, SYS_VBE_MODES
+
+@@06: //Loop through all the mode numbers
+	MOV	AX, GS:[SI]
+	CMP	AX, 0xFFFF //FFFF signifies the end of the list
+	JE	@@08
+
+	ADD	SI, 2 //Increment pointer to read next U16 mode
+
+	MOV	CX, AX
+	BTS	CX, 14 //Set linear framebuffer bit in the mode number we are about to pass to the BIOS below
+	PUSH	ES
+	PUSH	DS
+	POP	ES
+//Get mode information for mode number
+	MOV	AX, 0x4F01
+	INT	0x10
+	POP	ES
+	CMP	AX, 0x004F
+	JNE	@@06 //if call to get mode information failed
+
+//filter everything but 32-bit color
+	MOV	AL, CVBEMode.bpp[DI]
+	CMP	AL, 32
+	JNE	@@06
+
+//Check if the mode is actually supported
+	MOV	AX, CVBEMode.attributes[DI]
+	AND	AX, 0x91 //bit 0 = supported, bit 4 = graphics mode, bit 7 = linear framebuffer
+	CMP	AX, 0x91
+	JNE	@@06
+
+//	MOV	AX, CVBEMode.memory_model[DI]
+//	CMP	AX, 4
+//	JNE	@@06
+//	CMP	AX, 6
+//	JNE	@@06
+//Copy information about this mode into an element of the mode array
+	MOV	BX, CVBEMode.height[DI]
+	MOV	CVBEModeShort.height[DX], BX
+
+	CMP	BX, [MAX_SCREEN_HEIGHT]
+	JL	@@07
+
+	MOV	[MAX_SCREEN_HEIGHT], BX
+	MOV	[MAX_VBE_MODE], CX
+
+@@07:	MOV	AX, CVBEMode.width[DI]
+	MOV	CVBEModeShort.width[DX], AX
+//	MOV	EAX, CVBEMode.max_pixel_clock[DI]
+//	MOV	CVBEModeShort.max_pixel_clock[DX], EAX
+
+	MOV	CVBEModeShort.mode_num[DX], CX
+	ADD	DX, sizeof(CVBEModeShort) //next array element
+
+//Check if width and height match
+	CMP	AX, [SCREEN_WIDTH]
+	JNE	@@06
+	CMP	BX, [SCREEN_HEIGHT]
+	JNE	@@06
+
+//If we've made it here we have our mode
+	MOV	[SYS_VBE_FINAL], CX
+	JMP	@@06
+
+@@08: //End of loop
+//If there isn't a valid mode set by user through kernel config, set the mode with the biggest height.
+	MOV	AX, [SYS_VBE_FINAL]
+	CMP	AX, 0
+	JNE	@@09
+	MOV	CX, [MAX_VBE_MODE]
+	MOV	[SYS_VBE_FINAL], CX
+
+@@09:	PUSH	ES
+	PUSH	DS
+	POP	ES
+//Get mode infomration for the mode we want
+	MOV	DI, SYS_VBE_FINAL_MODE
+	MOV	CX, [SYS_VBE_FINAL]
+	MOV	AX, 0x4F01
+	INT	0x10
+	POP	ES
+	CMP	AX, 0x004F
+	JNE	@@10 //if called failed
+
+//Set the mode; call takes mode number in BX
+//	MOV	AX, 0x4F02
+//	MOV	BX, CX
+//	INT	0x10
+//	CMP	AX, 0x004F
+//	JNE	@@10
 
 	MOV	AX,0x4F02
 	MOV	BX,0x12		//640x480 16 color
@@ -97,6 +224,15 @@ GET_RIP:	POP	BX
 	JNE	@@10		//Jmp if fail
 	BTS	U32 [SYS_RUN_LEVEL],RLf_VGA
 @@10:
+
+//Get pointer to 8x8 VGA ROM font.
+	MOV	AX, 0x1130
+	MOV	BH, 3
+	INT	0x10
+	MOV	AX, ES
+	SHL	EAX, 16
+	MOV	AX, BP
+	MOV	U32 [SYS_FONT_PTR], EAX
 
 //Get mem maps.
 	MOV	AX,0xE801

@@ -3994,3 +3994,62 @@ class CProgress
 #define PRINTF_NEG_E		0x400
 #define PRINTF_NEG_AUX_FORMAT_NUM	0x800
 
+#help_index "Graphics/VBE"
+#define BLACK32	0x000000
+#define WHITE32 0xFFFFFF
+
+#define VBE_MODES_NUM	32
+class CVBEInfo
+{
+  U8	signature[4];
+
+  U16	version;
+
+  U32	oem,
+	capabilities,
+	video_modes;
+
+  U16	video_memory,
+	software_revision;
+
+  U32	vendor,
+	product_name,
+	product_revision;
+
+  U8	reserved[222],
+	oem_data[256];
+};
+#assert sizeof(CVBEInfo)==512
+
+class CVBEMode
+{
+  U16	attributes,
+	pad[7],
+	pitch,
+	width,
+	height;
+
+  U8	pad[3],
+	bpp,
+	pad,
+	memory_model,
+	pad[12];
+
+  U32	framebuffer;
+
+  U16	pad[9];
+
+  U32	max_pixel_clock;
+
+  U8 	reserved[190];
+};
+#assert sizeof(CVBEMode)==256
+
+class CVBEModeShort
+{
+  U16	width,
+	height,
+	mode_num;
+  U32	max_pixel_clock; //TODO refresh rates.
+};
+#help_index ""
