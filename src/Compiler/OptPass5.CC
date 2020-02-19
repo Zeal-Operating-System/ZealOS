@@ -2,7 +2,7 @@ U0 OptPass5(CCompCtrl *cc)
 {
   CIntermediateCode *tmpi,*tmpi1;
   I64 code,i;
-  CPrsStack *ps=cc->ps;
+  CParseStack *ps=cc->ps;
   ps->ptr=0;
   ps->ptr2=0;
 

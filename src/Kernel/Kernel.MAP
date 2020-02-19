@@ -1068,7 +1068,6 @@ $LK,"GVF_IMPORT",A="FL:::/Kernel/KernelA.HH,916"$
 $LK,"HTF_IMPORT",A="FL:::/Kernel/KernelA.HH,753"$
 $LK,"HTf_IMPORT",A="FL:::/Kernel/KernelA.HH,723"$
 $LK,"IEF_PLUS_OPCODE",A="FL:::/Kernel/KernelA.HH,1786"$
-$LK,"CPrsStack",A="FL:::/Kernel/KernelA.HH,1736"$
 $LK,"LAPIC_ICR_LOW",A="FL:::/Kernel/KernelA.HH,564"$
 $LK,"mouse",A="FL:::/Kernel/KGlobals.CC,24"$
 $LK,"D3Zero",A="FL:::/Kernel/KernelB.HH,148"$
@@ -2133,6 +2132,7 @@ $LK,"inf",A="FL:::/Kernel/KernelA.HH,49"$
 $LK,"sys_macro_head",A="FL:::/Kernel/KGlobals.CC,4"$
 $LK,"XTalk",A="FL:::/Kernel/Job.CC,445",BI=461$
 $LK,"SYS_ENTER_LONG_MODE",A="FL:::/Kernel/KStart64.CC,54"$
+$LK,"CParseStack",A="FL:::/Kernel/KernelA.HH,1736"$
 $LK,"eps",A="FL:::/Kernel/KernelA.HH,59"$
 $LK,"RLF_PATCHED",A="FL:::/Kernel/KernelA.HH,496"$
 $LK,"TaskDerivedValsUpdate",A="FL:::/Kernel/KTask.CC,286",BI=462$

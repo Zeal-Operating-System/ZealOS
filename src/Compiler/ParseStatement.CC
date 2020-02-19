@@ -1175,13 +1175,13 @@ sm_not_keyword_afterall:
 		    LexExcept(cc,"Use Asm Blk at ");
 		  if (cc->token!=',') goto sm_done;
 		} else
-		  goto sm_prs_exp;
+		  goto sm_parse_exp;
 	      }
 	      fsp_flags&=FSF_ASM;
 	    }
 	  } else {//Ident, not in hash table
 	    if (cc->local_var_entry)
-	      goto sm_prs_exp;
+	      goto sm_parse_exp;
 	    if (!(g_lb=COCGoToLabelFind(cc,cc->cur_str))) {
 	      g_lb=COCMiscNew(cc,CMT_GOTO_LABEL);
 	      g_lb->str=cc->cur_str;
@@ -1202,7 +1202,7 @@ sm_not_keyword_afterall:
 	  ParseFunCall(cc,NULL,FALSE,NULL);
 	  goto sm_semicolon;
 	} else if (cc->token!=TK_EOF) {//Non-cur_str symbol, num or something
-sm_prs_exp:
+sm_parse_exp:
 	  if (!ParseExpression(cc,NULL,TRUE))
 	    throw('Compiler');
 sm_semicolon:

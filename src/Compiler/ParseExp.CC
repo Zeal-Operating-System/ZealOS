@@ -62,7 +62,7 @@ CIntermediateCode *ParseAddOp(CCompCtrl *cc,I64 stack_op,CHashClass *tmpc)
   return tmpi;
 }
 
-U0 ParseExpression2(CCompCtrl *cc,I64 *_max_prec,CPrsStack *ps)
+U0 ParseExpression2(CCompCtrl *cc,I64 *_max_prec,CParseStack *ps)
 {
   I64 i,cur_op,stack_op,state,max_prec=PREC_NULL,unary_pre_prec,paren_prec,
 	unary_post_prec,left_prec=PREC_MAX;
@@ -261,15 +261,15 @@ pe_done:
     *_max_prec=max_prec;
 }
 
-Bool ParseExpression(CCompCtrl *cc,I64 *_max_prec,Bool end_exp,CPrsStack *_ps=NULL)
+Bool ParseExpression(CCompCtrl *cc,I64 *_max_prec,Bool end_exp,CParseStack *_ps=NULL)
 {
   Bool res=TRUE;
   I64 old_flags=cc->flags;
-  CPrsStack *ps;
+  CParseStack *ps;
   if (_ps)
     ps=_ps;
   else {
-    ps=MAlloc(sizeof(CPrsStack));
+    ps=MAlloc(sizeof(CParseStack));
     ps->ptr=0;
     ps->ptr2=0;
   }
@@ -380,7 +380,7 @@ U0 ParseOffsetOf(CCompCtrl *cc)
   ICAdd(cc,IC_IMM_I64,i,cmp.internal_types[RT_I64]);
 }
 
-I64 ParseFunCall(CCompCtrl *cc,CPrsStack *ps,Bool indirect,CHashFun *tmpf)
+I64 ParseFunCall(CCompCtrl *cc,CParseStack *ps,Bool indirect,CHashFun *tmpf)
 {
   I64 i,argc_count,default_val;
   Bool is_first_arg=TRUE,needs_right_paren,is_print,is_putchars,
@@ -590,7 +590,7 @@ I64 ParseFunCall(CCompCtrl *cc,CPrsStack *ps,Bool indirect,CHashFun *tmpf)
   return PE_UNARY_MODIFIERS;
 }
 
-I64 ParseUnaryTerm(CCompCtrl *cc,CPrsStack *ps,CMemberList **_local_var,
+I64 ParseUnaryTerm(CCompCtrl *cc,CParseStack *ps,CMemberList **_local_var,
 	CArrayDim **_tmpad,I64 *max_prec,I64 *unary_pre_prec,I64 *paren_prec)
 {
   I64 i,j;
@@ -957,7 +957,7 @@ pu_export_sys_sym:
   LexExcept(cc,"Missing expression at ");
 }
 
-I64 ParseUnaryModifier(CCompCtrl *cc,CPrsStack *ps,CMemberList **_local_var,
+I64 ParseUnaryModifier(CCompCtrl *cc,CParseStack *ps,CMemberList **_local_var,
 	CArrayDim **_tmpad,I64 *unary_post_prec)
 {
   CHashClass *tmpc,*tmpc1;

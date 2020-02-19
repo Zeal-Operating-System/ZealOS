@@ -1,4 +1,4 @@
-U0 AsmPrsInsFlags(CCompCtrl *cc,CInst *tmpins)
+U0 AsmParseInsFlags(CCompCtrl *cc,CInst *tmpins)
 {
   I64 i;
   while (TRUE) {
@@ -117,7 +117,7 @@ U0 AsmHashLoad()
 	  else if (cc->token!=';')
 	    LexExcept(cc,"Expecting ',' at ");
 
-	  AsmPrsInsFlags(cc,tmpins);
+	  AsmParseInsFlags(cc,tmpins);
 
 	  tmpins->uasm_slash_val=tmpins->slash_val;
 	  if (tmpins->flags&IEF_STI_LIKE && tmpins->slash_val!=SV_I_REG)

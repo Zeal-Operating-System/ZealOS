@@ -1733,7 +1733,7 @@ class CIntermediateCode:CIntermediateCodeBase
 #assert !($$&7)
 };
 
-class CPrsStack
+class CParseStack
 {
   I64	ptr,
 	stack[255],
@@ -2248,7 +2248,7 @@ public class CCompCtrl
   CCodeMisc *lb_leave;
   U8	*cur_buf_ptr;
   CLexFile *lex_include_stack,
-	*lex_prs_stack,
+	*lex_parse_stack,
 	*fun_lex_file;
   CStreamBlk *next_stream_blk,*last_stream_blk;
   CAOT	*aot;
@@ -2263,7 +2263,7 @@ public class CCompCtrl
 	dont_push_float,pad[4];
 
   CCodeCtrl coc;
-  CPrsStack *ps;
+  CParseStack *ps;
   CAOTCtrl *aotc;
   I64	aot_depth,prompt_line;
 #assert !($$&7)
@@ -3994,4 +3994,3 @@ class CProgress
 #define PRINTF_NEG_E		0x400
 #define PRINTF_NEG_AUX_FORMAT_NUM	0x800
 
-

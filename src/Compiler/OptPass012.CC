@@ -33,9 +33,9 @@ args.
   CIntermediateCode *tmpi,*tmpi1,*tmpi2,*tmpi3,*tmpi_push,
 	*last_with_class=NULL;
   CCodeMisc *lb,*lb1,*lb2;
-  CPrsStack *ps;
+  CParseStack *ps;
   if (!(ps=cc->ps))
-    ps=cc->ps=MAlloc(sizeof(CPrsStack));
+    ps=cc->ps=MAlloc(sizeof(CParseStack));
   ps->ptr=0;
   ps->ptr2=0;
   tmpi=cc->coc.coc_head.next;
@@ -939,7 +939,7 @@ args.
 	  tmpi2 = OptLead1(tmpi);
 	  tmpi1->ic_flags |= tmpi->ic_flags | tmpi2->ic_flags;
 	  OptSetNOP1(tmpi2);		//CALL_END
-	  OptSetNOP1(tmpi);		//POPCNT
+	  OptSetNOP1(tmpi);		//POPCNT
 	}
         break;
       case IC_LBTS:

@@ -9,7 +9,7 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
   COptMemberVar *mv=NULL;
   CAOT *tmpaot;
   CAOTImportExport *tmpie;
-  CPrsStack *ps=cc->ps;
+  CParseStack *ps=cc->ps;
   ps->ptr=0;
   ps->ptr2=0;
 

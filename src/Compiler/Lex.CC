@@ -58,7 +58,7 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
 U0 CompCtrlDel(CCompCtrl *cc)
 {//Free CCompCtrl.
   while (LexFilePop(cc));
-  LinkedListDel(cc->lex_prs_stack);
+  LinkedListDel(cc->lex_parse_stack);
   LinkedListDel(cc->htc.next);
   Free(cc->ps);
   Free(cc->cur_str);

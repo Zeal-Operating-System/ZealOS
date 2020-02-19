@@ -25,7 +25,7 @@ Bool OptIC6(CIntermediateCode *tmpi)
   return FALSE;
 }
 
-U0 OptPass6Lag(CCompCtrl *cc,CPrsStack *ps,CIntermediateCode *tmpi,
+U0 OptPass6Lag(CCompCtrl *cc,CParseStack *ps,CIntermediateCode *tmpi,
 	I64 *_stack_ptr,I64 reg_stack_size,I64 *_clobbered_reg_mask)
 {
   I64 stack_ptr=*_stack_ptr,code,
@@ -97,7 +97,7 @@ U0 OptPass6(CCompCtrl *cc)
 {
   CIntermediateCode *tmpi,*tmpi_next,*tmpil1,*tmpil2,*old_tmpil2;
   I64 stack_ptr=0,reg_stack_size,clobbered_reg_mask=REGG_CLOBBERED;
-  CPrsStack *ps=cc->ps;
+  CParseStack *ps=cc->ps;
   ps->ptr=0;
   ps->ptr2=0;
   if (Bt(&cc->opts,OPTf_NO_REG_VAR) || cc->flags&CCF_NO_REG_OPT)

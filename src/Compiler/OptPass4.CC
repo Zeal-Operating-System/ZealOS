@@ -138,7 +138,7 @@ U0 OptPass4(CCompCtrl *cc,COptReg *reg_offsets,I64 *_type)
   I64 code,i;
   Bool dead_code=FALSE;
   CCodeMisc *lb;
-  CPrsStack *ps=cc->ps;
+  CParseStack *ps=cc->ps;
   ps->ptr=0;
   ps->ptr2=0;
 
