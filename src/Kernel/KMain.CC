@@ -55,14 +55,16 @@ U0 SysGlobalsInit()
   QueueInit(&dev.pci_head);
   dev.mem64_ptr=mem_mapped_space;
 
-  //framebuffer pointer is already linear
-  Seg2Linear(&sys_vbe_info.video_modes);
-  Seg2Linear(&sys_vbe_info.oem);
-  Seg2Linear(&sys_vbe_info.vendor);
-  Seg2Linear(&sys_vbe_info.product_name);
-  Seg2Linear(&sys_vbe_info.product_revision);
-  Seg2Linear(SYS_FONT_PTR);
-  sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
+  if(sys_boot_src.u8[0] != BOOT_SRC_RAM)
+  {//framebuffer pointer is already linear
+    Seg2Linear(&sys_vbe_info.video_modes);
+    Seg2Linear(&sys_vbe_info.oem);
+    Seg2Linear(&sys_vbe_info.vendor);
+    Seg2Linear(&sys_vbe_info.product_name);
+    Seg2Linear(&sys_vbe_info.product_revision);
+    Seg2Linear(SYS_FONT_PTR);
+    sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
+  }
 
   debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
   debug.int_fault_code=IntFaultHandlersNew;
@@ -86,7 +88,7 @@ U0 SysGrInit()
   text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
   text.border_chars[10](U32)='ÀÈÙ¼';
   text.vga_alias	=dev.uncached_alias+VGAM_GRAPHICS;
-  text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
+  text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
   if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
     text.cols=80;
     text.rows=25;

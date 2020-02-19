@@ -49,21 +49,19 @@ GDT_TR:		DU8	MP_PROCESSORS_NUM*16 DUP(0);
 GDT_TR_RING3:	DU8	MP_PROCESSORS_NUM*16 DUP(0);
 #assert $$-SYS_GDT==sizeof(CGDT)
 
-#assert $$-SYS_KERNEL==sizeof(CKernel)-sizeof(CBinFile)
-
+SYS_FONT_PTR::	DU32	0;
 SYS_VBE_INFO::	DU8	sizeof(CVBEInfo) DUP(0);
 SYS_VBE_MODES::	DU8	sizeof(CVBEModeShort) * VBE_MODES_NUM DUP(0);
 SYS_VBE_FINAL_MODE::	DU8	sizeof(CVBEMode) DUP(0);
 SYS_VBE_FINAL::	DU16	0; //mode number of final mode set
+#assert $$-SYS_KERNEL==sizeof(CKernel)-sizeof(CBinFile)
 
-TEMP_VBE_MODE:		DU8	sizeof(CVBEMode) DUP(0);
+TEMP_VBE_MODE:		DU8	sizeof(CVBEMode) DUP(0);
 MAX_VBE_MODE:		DU8	sizeof(CVBEModeShort) DUP(0);
 MAX_SCREEN_HEIGHT:	DU16	0;
 
 SCREEN_WIDTH:	DU16	1024;
 SCREEN_HEIGHT:	DU16	768;
-
-SYS_FONT_PTR::	DU32	0;
 //************************************
 CORE0_16BIT_INIT::
 //EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)

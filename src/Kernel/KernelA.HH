@@ -445,10 +445,70 @@ class CPatchTableAbsAddr
 #define IET_ZEROED_DATA_HEAP	24 //Not really used
 #define IET_MAIN		25
 
+
+#help_index "Graphics/VBE"
+#define BLACK32	0x000000
+#define WHITE32 0xFFFFFF
+
+#define VBE_MODES_NUM	32
+class CVBEInfo
+{
+  U8	signature[4];
+
+  U16	version;
+
+  U32	oem,
+	capabilities,
+	video_modes;
+
+  U16	total_memory,
+	software_revision;
+
+  U32	vendor,
+	product_name,
+	product_revision;
+
+  U8	reserved[222],
+	oem_data[256];
+};
+#assert sizeof(CVBEInfo)==512
+
+class CVBEMode
+{
+  U16	attributes,
+	pad[7],
+	pitch,
+	width,
+	height;
+
+  U8	pad[3],
+	bpp,
+	pad,
+	memory_model,
+	pad[12];
+
+  U32	framebuffer;
+
+  U16	pad[9];
+
+  U32	max_pixel_clock;
+
+  U8 	reserved[190];
+};
+#assert sizeof(CVBEMode)==256
+
+class CVBEModeShort
+{
+  U16	width,
+	height,
+	mode_num;
+  U32	max_pixel_clock; //TODO refresh rates.
+};
+
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.CC,MEM_BOOT_BASE"$
-  CBinFile h;
+  CBinFile h;
   U32	jmp,
 	boot_src,
 	boot_blk,
@@ -465,6 +525,11 @@ class CKernel
   U16	sys_pci_buses;
   ;$$=($$+15)&-16;
   CGDT	sys_gdt;
+  U32	sys_font_ptr;
+  CVBEInfo sys_vbe_info;
+  CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
+  CVBEMode sys_vbe_mode;
+  U16	sys_vbe_mode_num;
 };
 
 //Run-Levels
@@ -3994,62 +4059,4 @@ class CProgress
 #define PRINTF_NEG_E		0x400
 #define PRINTF_NEG_AUX_FORMAT_NUM	0x800
 
-#help_index "Graphics/VBE"
-#define BLACK32	0x000000
-#define WHITE32 0xFFFFFF
-
-#define VBE_MODES_NUM	32
-class CVBEInfo
-{
-  U8	signature[4];
-
-  U16	version;
-
-  U32	oem,
-	capabilities,
-	video_modes;
-
-  U16	total_memory,
-	software_revision;
-
-  U32	vendor,
-	product_name,
-	product_revision;
-
-  U8	reserved[222],
-	oem_data[256];
-};
-#assert sizeof(CVBEInfo)==512
-
-class CVBEMode
-{
-  U16	attributes,
-	pad[7],
-	pitch,
-	width,
-	height;
-
-  U8	pad[3],
-	bpp,
-	pad,
-	memory_model,
-	pad[12];
-
-  U32	framebuffer;
-
-  U16	pad[9];
-
-  U32	max_pixel_clock;
-
-  U8 	reserved[190];
-};
-#assert sizeof(CVBEMode)==256
-
-class CVBEModeShort
-{
-  U16	width,
-	height,
-	mode_num;
-  U32	max_pixel_clock; //TODO refresh rates.
-};
 #help_index ""
