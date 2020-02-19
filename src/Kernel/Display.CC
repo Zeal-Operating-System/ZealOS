@@ -6,8 +6,9 @@ the normal screen text output routine.
 
 See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 */
-  I64 i,row,col;
-  U8 *ptr,*ptr1,*ptr2;
+  I64 i,row,col,x,y;
+  U32 *framebuffer;
+  U64 ch_bitmap;
 
   if (!(text.raw_flags&RAWF_SHOW_DOLLAR)) {
     if (ch=='$$') {
@@ -26,61 +27,56 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
     if (text.raw_flags&RAWF_IN_DOLLAR)
       return;
   }
-  if (ch=='\t') {
+  if (ch=='\t')
+  {
     RawPutChar(CH_SPACE);
     while (text.raw_col & 7)
       RawPutChar(CH_SPACE);
-  } else if (ch==CH_BACKSPACE) {
+  }
+  else if (ch==CH_BACKSPACE)
+  {
     text.raw_col--;
     RawPutChar(CH_SPACE);
     text.raw_col--;
-  } else if (ch=='\n') {
+  }
+  else if (ch=='\n')
+  {
     RawPutChar(CH_SPACE);
     while (text.raw_col % text.cols)
       RawPutChar(CH_SPACE);
+  } 
+  else if (Bt(char_bmp_displayable,ch))
+  {
+    row = text.raw_col / text.cols % text.rows;
+    col = text.raw_col % text.cols;
 
-  } else if (Bt(char_bmp_displayable,ch)) {
-    row=text.raw_col/text.cols%text.rows;
-    col=text.raw_col%text.cols;
-    if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
-      if (text.raw_flags&RAWF_SCROLL && text.raw_col && !row && !col) {
-	MemCopy(text.vga_text_alias,text.vga_text_alias+text.cols*2,
-	      text.cols*(text.rows-1)*2);
-	MemSet(text.vga_text_alias+text.cols*(text.rows-1)*2,0,text.cols*2);
-	text.raw_col-=text.cols;
-	row=text.rows-1;
-      }
-      ptr=text.vga_text_alias+(row*text.cols+col)*2;
-      ptr[0]=ch;
-      ptr[1]=BLACK<<4+WHITE;
-    } else {
-      OutU8(VGAP_IDX,VGAR_MAP_MASK);
-      OutU8(VGAP_DATA,0x0F); //All planes -- WHITE
-      if (text.raw_flags&RAWF_SCROLL && text.raw_col && !row && !col) {
-//Scroll cached image
-	MemCopy(text.raw_screen_image,
-	      text.raw_screen_image+GR_WIDTH*FONT_HEIGHT>>3,
-	      GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3);
-	MemSet(text.raw_screen_image+GR_WIDTH*(GR_HEIGHT-FONT_HEIGHT)>>3,0,
-	      GR_WIDTH*FONT_HEIGHT>>3);
-
-	MemCopy(text.vga_alias,text.raw_screen_image,GR_WIDTH*GR_HEIGHT>>3);
-	text.raw_col-=text.cols;
-	row=text.rows-1;
-      }
-      PUSHFD
-      CLI
-      ptr=ptr1=col+row*GR_WIDTH*FONT_HEIGHT>>3;
-      ptr+=text.vga_alias;
-      ptr1+=text.raw_screen_image; //Write to cached image as well
-      ptr2=&text.font[ch&255];
-      for (i=0;i<FONT_HEIGHT;i++) {
-	*ptr=*ptr1=rev_bits_table[*ptr2++];
-	ptr+=GR_WIDTH>>3;
-	ptr1+=GR_WIDTH>>3;
-      }
-      POPFD
+    if (text.raw_flags&RAWF_SCROLL && text.raw_col && !row && !col)
+    {//Scroll screen down
+      MemCopy(text.fb_alias,
+		text.fb_alias    + sys_vbe_mode.width * FONT_HEIGHT,
+		(text.screen_size - sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+      MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
+      text.raw_col-=text.cols;
+      row=text.rows-1;
     }
+    x = col * FONT_WIDTH;
+    y = row * FONT_HEIGHT;
+    ch_bitmap = text.font[ch & 0xFF];
+    framebuffer = text.fb_alias + sys_vbe_mode.width * y + x;
+
+    PUSHFD
+    CLI
+    for (i = 0; i < FONT_WIDTH * FONT_HEIGHT; i++)
+    {
+      if (ch_bitmap & 1)
+        *framebuffer++ = WHITE32;
+      else
+        *framebuffer++ = BLACK32;
+      if (i & (FONT_WIDTH-1) == FONT_WIDTH-1)
+        framebuffer += sys_vbe_mode.width - FONT_WIDTH;
+      ch_bitmap >>= 1;
+    }
+    POPFD
     text.raw_col++;
   }
 }

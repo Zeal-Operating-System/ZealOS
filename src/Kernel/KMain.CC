@@ -97,41 +97,7 @@ U0 SysGrInit()
 
   MemSetU32(text.fb_alias, BLACK32, text.screen_size);
   text.vga_alias = CAlloc(text.rows * text.cols * 8);
-  text.vga_text_alias = CAlloc(text.rows * text.cols * 2);
 }
-
-/*U0 SysGrInit()
-{
-  I64 i, j;
-  text.font = MAlloc(256 * 8); //256 U64s
-  MemCopy(text.font, *SYS_FONT_PTR(U32), 256 * 8);
-
-  for (i = 0; i < 256; i++)
-    for (j = 0; j < 8; j++)
-      text.font[i].u8[j] = rev_bits_table[text.font[i].u8[j]];
-
-  text.aux_font=sys_font_std;
-  text.font['' - 1] = text.aux_font['' - 1]; //Shift-space
-  text.font[10] = text.aux_font[10]; //"Return" symbol
-  text.font[255] = text.aux_font[255]; //auxillary block character
-
-  text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
-  text.border_chars[10](U32)='ÀÈÙ¼';
-  text.vga_alias	=dev.uncached_alias+VGAM_GRAPHICS;
-  text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
-  if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
-    text.cols=80;
-    text.rows=25;
-    MemSet(text.vga_text_alias,0,text.rows*text.cols<<1);
-  } else { //if 640x480 16 color
-    text.cols=GR_WIDTH/FONT_WIDTH;
-    text.rows=GR_HEIGHT/FONT_HEIGHT;
-    OutU8(VGAP_IDX,VGAR_MAP_MASK);
-    OutU8(VGAP_DATA,0x0F);
-    MemSet(text.vga_alias,0,GR_WIDTH*GR_HEIGHT>>3);
-    text.raw_screen_image=CAlloc(GR_WIDTH*GR_HEIGHT/8);
-  }
-}*/
 
 U0 TimerInit()
 {//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.

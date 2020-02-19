@@ -67,16 +67,7 @@ U0 GrSetUpTables()
 	if (((x-1)^(y-1))&1 && SqrI64(y*2-k)+SqrI64(x*2-k)<rr)
 	  GrPlot0(dc,x-1,y-1);
   }
-  if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
-    MemSet(text.vga_text_alias,0,TEXT_ROWS*TEXT_COLS*sizeof(U16));
-    MemSet(gr.vga_text_cache,0,TEXT_ROWS*TEXT_COLS*sizeof(U16));
-  } else {
-    OutU8(VGAP_IDX,VGAR_MAP_MASK);
-    OutU8(VGAP_DATA,0x0F);
-//Virtual Box crashes on the following for some reason.
-    //	  MemSet(text.vga_alias,0,GR_HEIGHT*GR_WIDTH>>3);
-    MemSet(gr.screen_image->body,0,GR_WIDTH*GR_HEIGHT>>1);
-  }
+
   for (i=1;i<=GR_SCREEN_ZOOM_MAX;i++) {
     dst=gr.screen_zoom_tables[i]=MAlloc(256*i);
     for (j=0;j<256;j++) {
@@ -177,15 +168,13 @@ U0 GrInit2()
   HashDefineListAdd("ST_SPRITE_ELEM_CODES",SPHT_ELEM_CODE,gr.sprite_hash);
   gr.screen_zoom=1;
 
-  PaletteSetStd;
-  fp_set_std_palette=&PaletteSetStd;
-  GrPaletteIndicesSet;
+  PaletteSetPastel;
 
   gr.to_8_bits	=MAlloc(256*sizeof(I64));
   gr.to_8_colors=MAlloc(256*sizeof(I64));
 
   gr.screen_cache = MAlloc(sys_vbe_mode.width * sys_vbe_mode.height);
-
+
   gr.text_base=CAlloc(TEXT_ROWS*TEXT_COLS*sizeof(U32));
   gr.vga_text_cache=MAlloc(TEXT_ROWS*TEXT_COLS*sizeof(U16));
   gr.win_uncovered_bitmap=CAlloc(65536/8);

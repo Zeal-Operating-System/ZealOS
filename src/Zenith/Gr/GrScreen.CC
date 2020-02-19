@@ -245,7 +245,7 @@ U0 GrUpdateTextBG()
       MOV	U64 [RSI],R13
       ADD	RSI,R12
       MOV	U64 [RSI],R13
-      dst(U8 *)+=w2;
+      dst(U8 *)+=w2;
     }
     src+=w4;
     dst(U8 *)+=w3;
@@ -324,77 +324,6 @@ U0 DCBlotColor8(CDC *dc,CDC *img)
   }
 }
 
-U0 GrUpdateTextModeText()
-{
-  U32 *src=gr.text_base;
-  I64 cur_ch,i=TEXT_COLS*TEXT_ROWS;
-  U16 *dst=text.vga_text_alias,*dst2=gr.vga_text_cache;
-  Bool blink_flag=Blink;
-  if (LBtr(&sys_semas[SEMA_FLUSH_VGA_IMAGE],0)) {
-    while (i--) {
-      cur_ch=*src++;
-      if (cur_ch & ATTRF_SEL)
-	cur_ch.u8[1]=cur_ch.u8[1]^0xFF;
-      if (cur_ch & ATTRF_INVERT)
-	cur_ch.u8[1]=cur_ch.u8[1]<<4+cur_ch.u8[1]>>4;
-      if (cur_ch & ATTRF_BLINK)
-	if (blink_flag)
-	  cur_ch.u8[1]=cur_ch.u8[1]<<4+cur_ch.u8[1]>>4;
-      *dst++=*dst2++=cur_ch&0x7FFF;
-    }
-  } else {
-    while (i--) {
-      cur_ch=*src++;
-      if (cur_ch & ATTRF_SEL)
-	cur_ch.u8[1]=cur_ch.u8[1]^0xFF;
-      if (cur_ch & ATTRF_INVERT)
-	cur_ch.u8[1]=cur_ch.u8[1]<<4+cur_ch.u8[1]>>4;
-      if (cur_ch & ATTRF_BLINK)
-	if (blink_flag)
-	  cur_ch.u8[1]=cur_ch.u8[1]<<4+cur_ch.u8[1]>>4;
-      cur_ch&=0x7FFF;
-      if (*dst2!=cur_ch)
-	*dst++=*dst2++=cur_ch;
-      else {
-	dst++;
-	dst2++;
-      }
-    }
-  }
-}
-
-U0 GrUpdateVGAGraphics()
-{//Update Graphic Card
-  I64 row,plane,d=gr.zoomed_dc->width_internal>>6;
-  U32 *src,*vga,*dst;
-  if (gr.screen_zoom==1)
-    src=gr.dc1->body;
-  else {
-    GrZoomInScreen;
-    src=gr.zoomed_dc->body;
-  }
-  dst=gr.screen_image->body;
-  if (LBtr(&sys_semas[SEMA_FLUSH_VGA_IMAGE],0)) {
-    for (plane=1;plane<0x10;plane<<=1) {
-      OutU8(VGAP_IDX,VGAR_MAP_MASK);
-      OutU8(VGAP_DATA,plane);
-      vga=text.vga_alias;
-      row=gr.zoomed_dc->height;
-      while (row--)
-	GrUpdateLine64FlushCache(&vga,&src,d,&dst);
-    }
-  } else {
-    for (plane=1;plane<0x10;plane<<=1) {
-      OutU8(VGAP_IDX,VGAR_MAP_MASK);
-      OutU8(VGAP_DATA,plane);
-      vga=text.vga_alias;
-      row=gr.zoomed_dc->height;
-      while (row--)
-	GrUpdateLine64(&vga,&src,d,&dst);
-    }
-  }
-}
-
 U0 GrCalcScreenUpdates()
 {
   U16 *screen = gr.dc2->body, *last_screen = gr.screen_cache;
@@ -423,7 +352,7 @@ U0 GrUpdateScreen32()
 //}
   dst = text.raw_screen;
   while (src < size) //draw 2 pixels at a time
-    *dst++ = gr32_palette_gray[*src++ & 0xFF] | gr32_palette_gray[*src++ & 0xFF] << 32;
+    *dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;
 
   GrCalcScreenUpdates;
 
@@ -434,14 +363,10 @@ U0 GrUpdateScreen32()
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/Zenith/WinMgr.CC,GrUpdateScreen"$, 30 times a second.
   CDC *dc;
-  if (!Bt(&sys_run_level,RLf_VESA)) //if text mode
-    GrUpdateTasks;
-  else {
-    GrUpdateTextBG;
-    GrUpdateTextFG;
-    GrUpdateTasks;
-    DCBlotColor8(gr.dc2,gr.dc);
-  }
+  GrUpdateTextBG;
+  GrUpdateTextFG;
+  GrUpdateTasks;
+  DCBlotColor8(gr.dc2,gr.dc);
 
   dc=DCAlias(gr.dc2,Fs);
   dc->flags|=DCF_ON_TOP;
@@ -449,12 +374,6 @@ U0 GrUpdateScreen()
     (*gr.fp_final_screen_update)(dc);
   DCDel(dc);
 
-  if (!Bt(&sys_run_level,RLf_VESA)) //if text mode
-    GrUpdateTextModeText;
-  else {
-    DCBlotColor4(gr.dc1->body,gr.dc2->body,gr.dc_cache->body,
-	  gr.dc2->height*gr.dc2->width_internal>>3);
-    GrUpdateVGAGraphics;
-    GrUpdateScreen32;
-  }
+  DCBlotColor4(gr.dc1->body,gr.dc2->body,gr.dc_cache->body, gr.dc2->height*gr.dc2->width_internal>>3);
+  GrUpdateScreen32;
 }

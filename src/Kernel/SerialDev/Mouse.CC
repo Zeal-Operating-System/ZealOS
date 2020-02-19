@@ -21,8 +21,8 @@ U0 MouseUpdate(I64 x,I64 y,I64 z,Bool l,Bool r)
     mouse.pos.z=mouse.presnap.z;
   }
 
-  mouse.pos.x=ClampI64(mouse.pos.x,0,GR_WIDTH-1);
-  mouse.pos.y=ClampI64(mouse.pos.y,0,GR_HEIGHT-1);
+  mouse.pos.x=ClampI64(mouse.pos.x,0,sys_vbe_mode.width-1);
+  mouse.pos.y=ClampI64(mouse.pos.y,0,sys_vbe_mode.height-1);
   mouse.pos_text.x=mouse.pos.x/FONT_WIDTH;
   if (mouse.pos_text.x>=text.cols) {
     mouse.pos_text.x=text.cols-1;
@@ -41,9 +41,9 @@ U0 MouseUpdate(I64 x,I64 y,I64 z,Bool l,Bool r)
 
 U0 MouseSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,I64 l=I64_MAX,I64 r=I64_MAX)
 {//Note: Generates a message. See $LK,"MouseSet",A="FF:::/Demo/Games/Zing.CC,MouseSet"$().
-  if (!(0<=x<GR_WIDTH))
+  if (!(0<=x<sys_vbe_mode.width))
     x=mouse.pos.x;
-  if (!(0<=y<GR_HEIGHT))
+  if (!(0<=y<sys_vbe_mode.height))
     y=mouse.pos.y;
   if (z==I64_MAX)
     z=mouse.pos.z;
@@ -211,14 +211,14 @@ U0 MouseHardSetPost()
 //TODO mouse_grid.x_offset?
   if (i<0)
     mouse.offset.x-=i;
-  else if (i>=GR_WIDTH)
-    mouse.offset.x+=GR_WIDTH-1-i;
+  else if (i>=sys_vbe_mode.width)
+    mouse.offset.x+=sys_vbe_mode.width-1-i;
 
   i=Trunc(mouse.scale.y*mouse_hard.pos.y/mouse_grid.y)*mouse_grid.y+mouse.offset.y;
   if (i<0)
     mouse.offset.y-=i;
-  else if (i>=GR_HEIGHT)
-    mouse.offset.y+=GR_HEIGHT-1-i;
+  else if (i>=sys_vbe_mode.height)
+    mouse.offset.y+=sys_vbe_mode.height-1-i;
 
   if (mouse_hard.pos.x!=mouse_hard_last.pos.x || mouse_hard.pos.y!=mouse_hard_last.pos.y ||
 	mouse_hard.pos.z!=mouse_hard_last.pos.z) {
@@ -301,7 +301,7 @@ Bool MouseEnable(Bool val=TRUE)
   }
   else
   {
-    KbdCmdSend(KBD_CTRL, KBDC_DISABLE_MS);
+    KbdCmdSend(KBD_CTRL, KBDC_DISABLE_MS);
     mouse_hard.enabled = FALSE;
   }
   return old_val;
@@ -375,10 +375,10 @@ U0 KbdMouseInit()
   mouse_hard.scale.x=0.5;
   mouse_hard.scale.y=0.5;
   mouse_hard.scale.z=1.0;
-  mouse_hard.prescale.x=GR_WIDTH/mouse_hard.scale.x/2.0;
-  mouse_hard.prescale.y=GR_HEIGHT/mouse_hard.scale.y/2.0;
+  mouse_hard.prescale.x=sys_vbe_mode.width/mouse_hard.scale.x/2.0;
+  mouse_hard.prescale.y=sys_vbe_mode.height/mouse_hard.scale.y/2.0;
   mouse_hard.prescale.z=0/mouse_hard.scale.z;
-  mouse_hard.pos.x=GR_WIDTH>>1;
-  mouse_hard.pos.y=GR_HEIGHT>>1;
+  mouse_hard.pos.x=sys_vbe_mode.width>>1;
+  mouse_hard.pos.y=sys_vbe_mode.height>>1;
   MemCopy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
 }

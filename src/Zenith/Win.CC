@@ -179,22 +179,19 @@ U0 DrawMouse(CDC *dc)
   x=mouse.pos.x;
   y=mouse.pos.y;
   POPFD
-  if (mouse.show && mouse_hard.installed) {
-    if (!Bt(&sys_run_level,RLf_VESA)) //if text mode
-      gr.text_base[mouse.pos_text.x+mouse.pos_text.y*TEXT_COLS]^=0x7F00;
-    else {
-      if (gr.fp_draw_mouse) {
-	if (mouse.lb)
-	  dc->color=ROP_XOR+LTPURPLE^TRANSPARENT;
-	else if (mouse.rb)
-	  dc->color=ROP_XOR+LTCYAN^TRANSPARENT;
-	else
-	  dc->color=ROP_XOR+BLACK^TRANSPARENT;
-	if (winmgr.grab_scroll && gr.fp_draw_grab_mouse)
-	  (*gr.fp_draw_grab_mouse)(dc,x,y,winmgr.grab_scroll_closed);
-	else
-	  (*gr.fp_draw_mouse)(dc,x,y);
-      }
+  if (mouse.show && mouse_hard.installed)
+  {
+    if (gr.fp_draw_mouse) {
+      if (mouse.lb)
+	dc->color=LTGREEN;
+      else if (mouse.rb)
+	dc->color=LTRED;
+      else
+	dc->color=BLACK;
+      if (winmgr.grab_scroll && gr.fp_draw_grab_mouse)
+	(*gr.fp_draw_grab_mouse)(dc,x,y,winmgr.grab_scroll_closed);
+      else
+	(*gr.fp_draw_mouse)(dc,x,y);
     }
   }
 }

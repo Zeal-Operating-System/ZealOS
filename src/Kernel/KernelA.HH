@@ -3721,10 +3721,10 @@ public class CTextGlobals
 {
   I64	raw_col,raw_flags;
   U8	*raw_screen_image;
-  U32	*raw_screen, *fb_alias;
+  U32	*raw_screen, *fb_alias;
   I64	rows,cols;		//Use TEXT_ROWS,TEXT_COLS
   U64	*font,*aux_font,screen_size, buffer_size;
-  U8	*vga_alias,*vga_text_alias;
+  U8	*vga_alias;
   U8	border_chars[16];
 };
 
@@ -3732,9 +3732,6 @@ public class CTextGlobals
 #define FONT_HEIGHT	8
 
 #help_index "Graphics"
-#define GR_WIDTH	640
-#define GR_HEIGHT	480
-
 //z-vals less than zero are in front of screen and not drawn.
 //we want to shift all Z-vals into a drawable range.
 //GR_Z_ALL is set to half of the Z-range which is an I32.
