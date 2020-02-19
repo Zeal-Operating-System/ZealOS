@@ -10,7 +10,7 @@ _HI_CALL::
 @@05:	POP	RBP
 	RET1	8
 //************************************
-_HI_MEMCPY::
+_HI_MEMCOPY::
 	PUSH	RBP
 	MOV	RBP,RSP
 	PUSH	RSI
@@ -27,16 +27,14 @@ _HI_MEMCPY::
 	RET1	24
 }
 _extern _HI_CALL I64 HiCall(U8 *machine_code);
-_extern _HI_MEMCPY U8 *HiMemCpy(U8 *dst,U8 *src,I64 count);
+_extern _HI_MEMCOPY U8 *HiMemCopy(U8 *dst,U8 *src,I64 count);
 
 #help_index "Boot"
-public U0 BootRAM(U8 *filename=NULL)
+public U0 BootRAM(U8 *filename="::/" KERNEL_BIN_C)
 {//Softboot Kernel.BIN file. No hardware reset.
   I64 size;
   CKernel *hi_image,*lo_image=mem_boot_base-sizeof(CBinFile),
 	reg *sys_ram_reboot;
-  if (!filename)
-    filename="::/" KERNEL_BIN_C;
   do if (!(hi_image=FileRead(filename,&size))) return;
   while (hi_image<0x100000); //If alloc from low 640K, just get another copy.
 
@@ -54,7 +52,8 @@ public U0 BootRAM(U8 *filename=NULL)
   if (mp_count>1)
     MPHalt;
 
-  HiMemCpy(sys_ram_reboot,SYS_RAM_REBOOT,SYS_RAM_REBOOT_END-SYS_RAM_REBOOT);
-  HiMemCpy(lo_image,hi_image,size);
+  HiMemCopy(sys_ram_reboot,SYS_RAM_REBOOT,SYS_RAM_REBOOT_END-SYS_RAM_REBOOT);
+  HiMemCopy(lo_image,hi_image,size);
   HiCall(sys_ram_reboot);
 }
+
