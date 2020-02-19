@@ -3994,29 +3994,4 @@ class CProgress
 #define PRINTF_NEG_E		0x400
 #define PRINTF_NEG_AUX_FORMAT_NUM	0x800
 
-#help_index "Misc/Host"
-//Host Operating System
-#define OS_OTHER	0
-#define OS_NATIVE	1
-#define OS_LINUX	2
-#define OS_WINDOWS	3
-//Virtual Machine
-#define VM_OTHER	0
-#define VM_NATIVE	1
-#define VM_VMWARE	2
-#define VM_QEMU		3
-#define VM_VIRTUALBOX	4
-
-#help_index "Registry/Install Registration"
-public class CInsReg
-{
-  Bool	registered;
-  I64	host_os		format "$$PURPLE$$Install Registration$$FG$$\n\n"
-			"Host OS:$$LS,D=\"ST_HOST_OSES\"$$\n";
-  I64	host_vm		format "Host VM:$$LS,D=\"ST_HOST_VMS\"$$\n";
-  U8	initials[8]	format "$$DA-P,A=\"Your Initials:%s\"$$\n";
-  I64	machine_num	format
-			"$$DA-TRM,A=\"This Machine Num (Choose Any):%d\"$$\n";
-};
-
-#help_index ""
+

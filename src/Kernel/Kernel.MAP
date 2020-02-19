@@ -391,7 +391,6 @@ $LK,"HTt_ASM_KEYWORD",A="FL:::/Kernel/KernelA.HH,711"$
 $LK,"PCIWriteU32",A="FL:::/Kernel/PCIBIOS.CC,250",BI=76$
 $LK,"PCIWriteU16",A="FL:::/Kernel/PCIBIOS.CC,235",BI=77$
 $LK,"CtrlAltV",A="FL:::/Kernel/KeyDev.CC,168",BI=78$
-$LK,"VM_VMWARE",A="FL:::/Kernel/KernelA.HH,4006"$
 $LK,"_LXCHG_U8",A="FL:::/Kernel/KUtils.CC,264"$
 $LK,"CtrlAltX",A="FL:::/Kernel/KeyDev.CC,173",BI=79$
 $LK,"UserTaskCont",A="FL:::/Kernel/KTask.CC,384",BI=80$
@@ -485,7 +484,6 @@ $LK,"JobQueue",A="FL:::/Kernel/MultiProc.CC,213",BI=103$
 $LK,"LastDayOfYear",A="FL:::/Kernel/KDate.CC,110",BI=104$
 $LK,"SYS_IDLE_PT",A="FL:::/Kernel/Sched.CC,204"$
 $LK,"CWinMgrTimingGlobals",A="FL:::/Kernel/KernelA.HH,1515"$
-$LK,"OS_WINDOWS",A="FL:::/Kernel/KernelA.HH,4002"$
 $LK,"PRINTF_DOLLAR",A="FL:::/Kernel/KernelA.HH,3988"$
 $LK,"Core0StartMP",A="FL:::/Kernel/MultiProc.CC,283",BI=105$
 $LK,"MESSAGE_MS_L_DOWN",A="FL:::/Kernel/KernelA.HH,3293"$
@@ -1058,7 +1056,6 @@ $LK,"DebugMode",A="FL:::/Kernel/KMisc.CC,251",BI=223$
 $LK,"IsSysDebug",A="FL:::/Kernel/KMisc.CC,224",BI=224$
 $LK,"RedSeaAllocClus",A="FL:::/Kernel/BlkDev/FileSysRedSea.CC,300",BI=225$
 $LK,"sys_semas",A="FL:::/Kernel/KernelB.HH,224"$
-$LK,"OS_LINUX",A="FL:::/Kernel/KernelA.HH,4001"$
 $LK,"InputFilterTask",A="FL:::/Kernel/SerialDev/Message.CC,1",BI=226$
 $LK,"SYS_HASH_STR",A="FL:::/Kernel/KHashA.CC,4"$
 $LK,"ATAR0_CMD",A="FL:::/Kernel/KernelA.HH,2401"$
@@ -1231,7 +1228,6 @@ $LK,"KBDC_SCAN_CODES",A="FL:::/Kernel/KernelA.HH,3069"$
 $LK,"FixSet",A="FL:::/Kernel/EdLite.CC,327",BI=257$
 $LK,"DOCf_SEL",A="FL:::/Kernel/KernelA.HH,1381"$
 $LK,"sqrt2",A="FL:::/Kernel/KernelA.HH,58"$
-$LK,"VM_QEMU",A="FL:::/Kernel/KernelA.HH,4007"$
 $LK,"ATAR0_SEL",A="FL:::/Kernel/KernelA.HH,2399"$
 $LK,"DOCEf_FLAGS_NUM",A="FL:::/Kernel/KernelA.HH,1161"$
 $LK,"IntFaultHandlersNew",A="FL:::/Kernel/KInterrupts.CC,166",BI=258$
@@ -1293,7 +1289,6 @@ $LK,"QuickSortI64",A="FL:::/Kernel/QuickSort.CC,1",BI=267$
 $LK,"OM_ID",A="FL:::/Kernel/KernelA.HH,1934"$
 $LK,"OM_CP",A="FL:::/Kernel/KernelA.HH,1931"$
 $LK,"_ROUND",A="FL:::/Kernel/KMathA.CC,380"$
-$LK,"OS_OTHER",A="FL:::/Kernel/KernelA.HH,3999"$
 $LK,"RFLAGf_TRAP",A="FL:::/Kernel/KernelA.HH,344"$
 $LK,"I8_MIN",A="FL:::/Kernel/KernelA.HH,25"$
 $LK,"SYS_HASH_BUCKET_FIND",A="FL:::/Kernel/KHashA.CC,109"$
@@ -1577,7 +1572,6 @@ $LK,"VGAR_MAP_MASK",A="FL:::/Kernel/KernelA.HH,3796"$
 $LK,"CAOTCtrl",A="FL:::/Kernel/KernelA.HH,2108"$
 $LK,"DOC_COLOR_DEFINE_STR",A="FL:::/Kernel/KernelA.HH,1195"$
 $LK,"DriveFATBlkAlloc",A="FL:::/Kernel/BlkDev/DiskDrive.CC,89",BI=333$
-$LK,"VM_VIRTUALBOX",A="FL:::/Kernel/KernelA.HH,4008"$
 $LK,"SCF_NEW_KEY",A="FL:::/Kernel/KernelA.HH,3600"$
 $LK,"CCompCtrl",A="FL:::/Kernel/KernelA.HH,2226"$
 $LK,"TASK_CONTEXT_SAVE",A="FL:::/Kernel/Sched.CC,56"$
@@ -2049,8 +2043,6 @@ $LK,"LAPIC_EOI",A="FL:::/Kernel/KernelA.HH,553"$
 $LK,"sys_pos_pows_lets",A="FL:::/Kernel/StrPrint.CC,200"$
 $LK,"LIN_CONGRUE_A",A="FL:::/Kernel/KMathB.CC,74"$
 $LK,"Drive",A="FL:::/Kernel/BlkDev/DiskDrive.CC,263",BI=443$
-$LK,"VM_NATIVE",A="FL:::/Kernel/KernelA.HH,4005"$
-$LK,"OS_NATIVE",A="FL:::/Kernel/KernelA.HH,4000"$
 $LK,"CT_8_BIT",A="FL:::/Kernel/KernelA.HH,3803"$
 $LK,"REG_RSP",A="FL:::/Kernel/KernelA.HH,1835"$
 $LK,"CtrlAltDel",A="FL:::/Kernel/KeyDev.CC,128",BI=444$
@@ -2086,7 +2078,6 @@ $LK,"CtrlAltCBSet",A="FL:::/Kernel/KeyDev.CC,178",BI=447$
 $LK,"SysTimerRead",A="FL:::/Kernel/KMisc.CC,21",BI=448$
 $LK,"dev",A="FL:::/Kernel/KGlobals.CC,22"$
 $LK,"FunSegCacheFind",A="FL:::/Kernel/FunSeg.CC,114",BI=449$
-$LK,"CInsReg",A="FL:::/Kernel/KernelA.HH,4011"$
 $LK,"MEM_ZENITH_STACK",A="FL:::/Kernel/KernelA.HH,2945"$
 $LK,"HTT_REG",A="FL:::/Kernel/KernelA.HH,743"$
 $LK,"CTRLF_CAPTURE_LEFT_MS",A="FL:::/Kernel/KernelA.HH,3159"$
@@ -2702,7 +2693,6 @@ $LK,"STACK_REP_LEN",A="FL:::/Kernel/KDebug.CC,102"$
 $LK,"HTT_HELP_FILE",A="FL:::/Kernel/KernelA.HH,746"$
 $LK,"HTt_HELP_FILE",A="FL:::/Kernel/KernelA.HH,716"$
 $LK,"Round",A="FL:::/Kernel/KernelB.HH,124"$
-$LK,"VM_OTHER",A="FL:::/Kernel/KernelA.HH,4004"$
 $LK,"PRINTF_DECIMAL",A="FL:::/Kernel/KernelA.HH,3992"$
 $LK,"ISOT_TERMINATOR",A="FL:::/Kernel/KernelA.HH,2571"$
 $LK,"ATAR0_STAT",A="FL:::/Kernel/KernelA.HH,2400"$
