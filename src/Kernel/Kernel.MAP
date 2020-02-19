@@ -705,6 +705,7 @@ $LK,"PCIR_SUBSYS_ID",A="FL:::/Kernel/KernelA.HH,2385"$
 $LK,"MDG_DISP_SIB_RIP",A="FL:::/Kernel/KernelA.HH,1711"$
 $LK,"DOCEt_BLINK",A="FL:::/Kernel/KernelA.HH,1067"$
 $LK,"DOCET_BLINK",A="FL:::/Kernel/KernelA.HH,1061"$
+$LK,"month_start_days_leap",A="FL:::/Kernel/KDate.CC,5"$
 $LK,"mp_count_initial",A="FL:::/Kernel/KernelB.HH,222"$
 $LK,"C:/Doc/MultiCore.DD",A="FL:::/Kernel/KernelB.HH,220"$
 $LK,"JOBf_DONE",A="FL:::/Kernel/KernelA.HH,3314"$
@@ -1448,6 +1449,7 @@ $LK,"FUF_IGNORE",A="FL:::/Kernel/KernelA.HH,2738"$
 $LK,"FUf_IGNORE",A="FL:::/Kernel/KernelA.HH,2710"$
 $LK,"AAT_SUB_U32",A="FL:::/Kernel/KernelA.HH,2096"$
 $LK,"AAT_SUB_U16",A="FL:::/Kernel/KernelA.HH,2094"$
+$LK,"month_start_days",A="FL:::/Kernel/KDate.CC,3"$
 $LK,"UserCmdLine",A="FL:::/Kernel/KTask.CC,414",BI=299$
 $LK,"GVF_FUN",A="FL:::/Kernel/KernelA.HH,980"$
 $LK,"LAPICF_APIC_ENABLED",A="FL:::/Kernel/KernelA.HH,623"$
@@ -2462,10 +2464,8 @@ $LK,"COLORS_NUM",A="FL:::/Kernel/KernelA.HH,3101"$
 $LK,"IEF_GOTO_LABEL",A="FL:::/Kernel/KernelA.HH,2080"$
 $LK,"CMT_GOTO_LABEL",A="FL:::/Kernel/KernelA.HH,1811"$
 $LK,"DriveIsWritable",A="FL:::/Kernel/BlkDev/DiskDrive.CC,206",BI=517$
-$LK,"mon_start_days1",A="FL:::/Kernel/KDate.CC,3"$
 $LK,"BLKDEVS_NUM",A="FL:::/Kernel/KernelA.HH,2802"$
 $LK,"HTF_GOTO_LABEL",A="FL:::/Kernel/KernelA.HH,820"$
-$LK,"mon_start_days2",A="FL:::/Kernel/KDate.CC,5"$
 $LK,"FONT_HEIGHT",A="FL:::/Kernel/KernelA.HH,3731"$
 $LK,"HTf_GOTO_LABEL",A="FL:::/Kernel/KernelA.HH,790"$
 $LK,"ATAR0_LCYL",A="FL:::/Kernel/KernelA.HH,2462"$

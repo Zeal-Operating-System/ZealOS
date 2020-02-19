@@ -1,8 +1,8 @@
 //See $LK,"::/Doc/TimeDate.DD"$
 
-U16 mon_start_days1[12]={
+U16 month_start_days[12]={
 0,31,59,90,120,151,181,212,243,273,304,334};
-U16 mon_start_days2[12]={
+U16 month_start_days_leap[12]={
 0,31,60,91,121,152,182,213,244,274,305,335};
 
 I64 YearStartDate(I64 year)
@@ -18,9 +18,9 @@ CDate Struct2Date(CDateStruct *_ds)
   i1=YearStartDate(_ds->year);
   i2=YearStartDate(_ds->year+1);
   if (i2-i1==365)
-    i1+=mon_start_days1[_ds->mon-1];
+    i1+=month_start_days[_ds->mon-1];
   else
-    i1+=mon_start_days2[_ds->mon-1];
+    i1+=month_start_days_leap[_ds->mon-1];
   cdt.date=i1+_ds->day_of_mon-1;
   cdt.time=(_ds->sec10000+100*(_ds->sec100+100*(_ds->sec
 	+60*(_ds->min+60*_ds->hour))))<<21/(15*15*3*625);
@@ -49,14 +49,14 @@ U0 Date2Struct(CDateStruct *_ds,CDate cdt)
   date-=i;
   if (YearStartDate(_ds->year+1)-i==365) {
     k=0;
-    while (date>=mon_start_days1[k+1] && k<11)
+    while (date>=month_start_days[k+1] && k<11)
       k++;
-    date-=mon_start_days1[k];
+    date-=month_start_days[k];
   } else {
     k=0;
-    while (date>=mon_start_days2[k+1] && k<11)
+    while (date>=month_start_days_leap[k+1] && k<11)
       k++;
-    date-=mon_start_days2[k];
+    date-=month_start_days_leap[k];
   }
   _ds->mon=k+1;
   _ds->day_of_mon=date+1;
@@ -208,7 +208,7 @@ U0 TimeSet(CDateStruct *ds)
   PUSHFD
   CLI
   while (LBts(&sys_semas[SEMA_SYS_DATE],0))
-    PAUSE
+    PAUSE
 
   while (CMOSRegRead(CMOSR_STATUS_A) & CMOSF_UPDATING)
     PAUSE

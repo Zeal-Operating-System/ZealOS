@@ -751,8 +751,8 @@ public extern I64 FirstDayOfYear(I64 i);
 public extern I64 LastDayOfMon(I64 i);
 public extern I64 LastDayOfYear(I64 i);
 public extern I64 YearStartDate(I64 year);
-public extern U16 mon_start_days1[12];
-public extern U16 mon_start_days2[12];
+public extern U16 month_start_days[12];
+public extern U16 month_start_days_leap[12];
 
 #help_index "Time/Jiffies"
 #help_file "::/Doc/TimeJiffy"
