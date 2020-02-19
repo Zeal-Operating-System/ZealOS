@@ -1694,25 +1694,25 @@ U0 OSTestSuite()
   TS("ProfRep");	XTalkWait(task,"ProfRep;Sleep(750);\n");
   TS("HeapLogSizeRep");	XTalkWait(task,"HeapLogSizeRep;Sleep(750);\n");
   TS("CPURep");		if (mp_count>1)
-				XTalkWait(task,"CPURep(TRUE);Sleep(750);\n");
-  TS("DiskCheck");		if (DriveIsWritable(':'))
-				XTalkWait(task,"DiskCheck;Sleep(750);\n");
+			  XTalkWait(task,"CPURep(TRUE);Sleep(750);\n");
+  TS("DiskCheck");	if (DriveIsWritable(':'))
+			  XTalkWait(task,"DiskCheck;Sleep(750);\n");
   TS("DriveView");	if (DriveIsWritable(':')) {
-    XTalkWait(task,"DriveView;\n");
-    Sleep(750);
-    PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
-  }
+   			   XTalkWait(task,"DriveView;\n");
+			   Sleep(750);
+   			   PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
+		        }
   TS("DiskView");	if (DriveIsWritable(':')) {
     XTalkWait(task,"DiskView;\n");
     Sleep(250); //Short because ATARep takes time.
     PostMessageWait(task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
   }
   TS("ATARep");		XTalkWait(task,"ATARep;\npSleep(750);\n");
-  TS("HashDepthRep");	XTalkWait(task,
-	"HashDepthRep(zenith_task->hash_table);Sleep(750);\n");
+  TS("HashDepthRep");	XTalkWait(task,"HashDepthRep(zenith_task->hash_table);Sleep(750);\n");
   TS("Who");		XTalkWait(task,"Who;Sleep(750);\n");
-  TS("DriveRep");		XTalkWait(task,"DriveRep;Sleep(750);\n");
+  TS("DriveRep");	XTalkWait(task,"DriveRep;Sleep(750);\n");
   TS("TaskRep");	XTalkWait(task,"TaskRep;Sleep(750);\n");
+  TS("VideoRep");	XTalkWait(task, "VideoRep;Sleep(750)\n");
   DeathWait(&task,TRUE);
 
   ProgressBarsReset("ZenithOS/OSTestSuite");

@@ -113,7 +113,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * You can customize the $FG,2$wallpaper$FG$.  See $LK,"::/Demo/Graphics/WallPaperFish.CC"$.
 
-* Your RAM disks will not be reformated when you reboot if the memory location has not changed and it finds the disk intacted.
+* Your RAM disks will not be reformatted when you reboot if the memory location has not changed and it finds the disk intacted.
 
 * $FG,2$try{} catch{}$FG$ in a function will cause all vars to be non-reg.
 
