@@ -225,7 +225,7 @@ I64 TaskInit(CTask *task,I64 stack_size)
   task->title_src	=TTS_CONST;
   task->win_left	=1;
   task->win_right	=text.cols-2;
-  task->win_top		=13;
+  task->win_top		=text.rows / 5 + 3;
   task->win_bottom	=text.rows-2;
 
   if (blkdev.home_dir) {//Beware Zenith $LK,"TaskInit",A="FF:::/Kernel/KStart64.CC,TaskInit"$. I guess ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.CC,DiskChange"$().

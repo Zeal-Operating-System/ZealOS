@@ -286,7 +286,7 @@ I64 *TaskRegAddr(CTask *task,I64 reg_num)
   return NULL;
 }
 
-#define RAWDR_COL	40
+#define RAWDR_COL	(text.cols-40)
 
 U0 RawDr(CTask *task=NULL)
 {

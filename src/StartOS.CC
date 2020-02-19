@@ -19,7 +19,7 @@ HashTablePurge(zenith_task->hash_table);
 
 //Debug("Type 'G;'");
 DocTermNew;
-WinVert(2,10);
+WinVert(2,text.rows / 5);
 
 sys_winmgr_task=Spawn(&WinMgrTask,NULL,"Window Mgr");
 Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_BORDER
