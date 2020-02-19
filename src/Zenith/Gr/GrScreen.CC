@@ -395,6 +395,42 @@ U0 GrUpdateVGAGraphics()
   }
 }
 
+U0 GrCalcScreenUpdates()
+{
+  U16 *screen = gr.dc2->body, *last_screen = gr.screen_cache;
+  U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+
+  for (i = 0; i < diffs_size; i++)
+  {
+    if (screen[i] != last_screen[i])
+      dst[i] = src[i];
+  }
+  MemCopy(gr.screen_cache, gr.dc2->body, diffs_size * 2);
+}
+
+U0 GrUpdateScreen32()
+{
+  U64 size, *dst;
+  U8 *src;
+//if (gr.screen_zoom == 1) {
+    src = gr.dc2->body;
+    size = src + gr.dc2->height * gr.dc2->width_internal;
+//}
+//else {
+//  GrZoomInScreen;
+//  src = gr.zoomed_dc->body;
+//  size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
+//}
+  dst = text.raw_screen;
+  while (src < size) //draw 2 pixels at a time
+    *dst++ = gr32_palette_gray[*src++ & 0xFF] | gr32_palette_gray[*src++ & 0xFF] << 32;
+
+  GrCalcScreenUpdates;
+
+  if (LBtr(&sys_semas[SEMA_FLUSH_VGA_IMAGE],0))
+    MemCopy(text.fb_alias, text.raw_screen, text.buffer_size);
+}
+
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/Zenith/WinMgr.CC,GrUpdateScreen"$, 30 times a second.
   CDC *dc;
@@ -419,5 +455,6 @@ U0 GrUpdateScreen()
     DCBlotColor4(gr.dc1->body,gr.dc2->body,gr.dc_cache->body,
 	  gr.dc2->height*gr.dc2->width_internal>>3);
     GrUpdateVGAGraphics;
+    GrUpdateScreen32;
   }
 }

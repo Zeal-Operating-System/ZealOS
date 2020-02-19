@@ -508,7 +508,7 @@ class CVBEModeShort
 #help_index "Boot"
 class CKernel
 {//Must match $LK,"OSStartUp",A="FF:::/Kernel/KStart16.CC,MEM_BOOT_BASE"$
-  CBinFile h;
+  CBinFile h;
   U32	jmp,
 	boot_src,
 	boot_blk,
@@ -3721,8 +3721,9 @@ public class CTextGlobals
 {
   I64	raw_col,raw_flags;
   U8	*raw_screen_image;
+  U32	*raw_screen, *fb_alias;
   I64	rows,cols;		//Use TEXT_ROWS,TEXT_COLS
-  U64	*font,*aux_font;
+  U64	*font,*aux_font,screen_size, buffer_size;
   U8	*vga_alias,*vga_text_alias;
   U8	border_chars[16];
 };

@@ -88,6 +88,14 @@ Bool MyPutKey(I64 ch,I64 sc)
 		TimeIns;
 	    }
 	    return TRUE;
+          case SC_DELETE:
+            if(sc & SCF_SHIFT) {
+	      if(sc & SCF_KEY_DESC)
+                KeyDescSet("Cmd/Soft Reboot");
+              else
+                BootRAM;
+            }
+            return TRUE;
 	}
 	break;
       case 'a':

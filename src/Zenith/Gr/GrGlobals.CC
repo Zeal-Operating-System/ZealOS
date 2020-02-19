@@ -34,7 +34,7 @@ public class CGrGlobals
 	circle_hi[GR_PEN_BRUSHES_NUM][GR_PEN_BRUSHES_NUM];
 
   #define GR_SCREEN_ZOOM_MAX	8
-  U8	*screen_zoom_tables[GR_SCREEN_ZOOM_MAX+1];
+  U8	*screen_zoom_tables[GR_SCREEN_ZOOM_MAX+1], *screen_cache;
   I64	screen_zoom,sx,sy;
 
   //When zoomed, this keeps the mouse centered.
@@ -42,14 +42,18 @@ public class CGrGlobals
 	hide_row,hide_col;
 } gr;
 
+public CBGR24 gr_palette[COLORS_NUM];
+
 //See $LK,"RLf_VESA",A="FF:::/Kernel/KStart16.CC,RLf_VESA"$
 //See $LK,"SysGrInit",A="MN:SysGrInit"$()
 //Allows consts to be used instead of vars.
 HashPublic("GR_WIDTH",HTT_DEFINE_STR);;
+DefinePrint("GR_WIDTH", "%d", sys_vbe_mode.width);
 HashPublic("GR_HEIGHT",HTT_DEFINE_STR);;
+DefinePrint("GR_HEIGHT", "%d", sys_vbe_mode.height);
 
 #help_index "Char;TextBase Layer/Char"
-DefinePrint("TEXT_ROWS","%d",text.rows);;;
-HashPublic("TEXT_ROWS",HTT_DEFINE_STR);;;
-DefinePrint("TEXT_COLS","%d",text.cols);;;
-HashPublic("TEXT_COLS",HTT_DEFINE_STR);;;
+DefinePrint("TEXT_ROWS","%d",text.rows);;
+HashPublic("TEXT_ROWS",HTT_DEFINE_STR);;
+DefinePrint("TEXT_COLS","%d",text.cols);;
+HashPublic("TEXT_COLS",HTT_DEFINE_STR);;

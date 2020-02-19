@@ -79,11 +79,16 @@ public CBGR48 gr_palette_gray[COLORS_NUM]={
 0x888888888888,0x999999999999,0xAAAAAAAAAAAA,0xBBBBBBBBBBBB,
 0xCCCCCCCCCCCC,0xDDDDDDDDDDDD,0xEEEEEEEEEEEE,0xFFFFFFFFFFFF};
 
+public CBGR24 gr32_palette_gray[COLORS_NUM] = {
+  0x000000, 0x111111, 0x222222, 0x333333, 0x444444, 0x555555, 0x666666, 0x777777,
+  0x888888, 0x999999, 0xAAAAAA, 0xBBBBBB, 0xCCCCCC, 0xDDDDDD, 0xEEEEEE, 0xFFFFFF
+};
+
 public U0 GrPaletteGet(CBGR48 *bgr48)
 {//16 colors
   I64 i;
   for (i=0;i<COLORS_NUM;i++)
-    bgr48[i]=GrPaletteColorGet(i);
+    bgr48[i]=GrPaletteColorGet(i);
 }
 
 public U0 GrPaletteSet(CBGR48 *bgr48)

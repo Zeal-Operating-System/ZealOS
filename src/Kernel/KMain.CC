@@ -63,7 +63,7 @@ U0 SysGlobalsInit()
     Seg2Linear(&sys_vbe_info.product_name);
     Seg2Linear(&sys_vbe_info.product_revision);
     Seg2Linear(SYS_FONT_PTR);
-    sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
+    sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
   }
 
   debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
@@ -71,6 +71,36 @@ U0 SysGlobalsInit()
 }
 
 U0 SysGrInit()
+{
+  I64 i, j;
+  text.font = MAlloc(sizeof(U64) * 256);
+  MemCopy(text.font, *SYS_FONT_PTR(U32), sizeof(U64) * 256);
+  
+  for (i = 0; i < 256; i++)
+    for (j = 0; j < 8; j++)
+      text.font[i].u8[j] = rev_bits_table[text.font[i].u8[j]];
+
+  text.aux_font = sys_font_std;
+  text.font['' - 1] = text.aux_font['' - 1]; //Shift-space
+  text.font[10] = text.aux_font[10]; //"Return" symbol
+  text.font[255] = text.aux_font[255]; //auxillary block character
+  text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
+  text.border_chars[10](U32)='ÀÈÙ¼';
+
+  text.cols = sys_vbe_mode.width / FONT_WIDTH;
+  text.rows = sys_vbe_mode.height / FONT_HEIGHT;
+
+  text.screen_size = sys_vbe_mode.width * sys_vbe_mode.height;
+  text.buffer_size = text.screen_size * 4; //buffer for 32-bit, but only 16 colors now.
+  text.raw_screen = CAlloc(text.buffer_size);
+  text.fb_alias = sys_vbe_mode.framebuffer;
+
+  MemSetU32(text.fb_alias, BLACK32, text.screen_size);
+  text.vga_alias = CAlloc(text.rows * text.cols * 8);
+  text.vga_text_alias = CAlloc(text.rows * text.cols * 2);
+}
+
+/*U0 SysGrInit()
 {
   I64 i, j;
   text.font = MAlloc(256 * 8); //256 U64s
@@ -101,7 +131,7 @@ U0 SysGrInit()
     MemSet(text.vga_alias,0,GR_WIDTH*GR_HEIGHT>>3);
     text.raw_screen_image=CAlloc(GR_WIDTH*GR_HEIGHT/8);
   }
-}
+}*/
 
 U0 TimerInit()
 {//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
