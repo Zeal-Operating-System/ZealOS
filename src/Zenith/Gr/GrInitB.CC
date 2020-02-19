@@ -67,7 +67,7 @@ U0 GrSetUpTables()
 	if (((x-1)^(y-1))&1 && SqrI64(y*2-k)+SqrI64(x*2-k)<rr)
 	  GrPlot0(dc,x-1,y-1);
   }
-  if (!Bt(&sys_run_level,RLf_VGA)) { //if text mode
+  if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
     MemSet(text.vga_text_alias,0,TEXT_ROWS*TEXT_COLS*sizeof(U16));
     MemSet(gr.vga_text_cache,0,TEXT_ROWS*TEXT_COLS*sizeof(U16));
   } else {

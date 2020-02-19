@@ -10,7 +10,7 @@ U0 GrPaletteIndicesSet()
 // Set 16-colors to use first 16 DAC BGR entries, so we
 // never need to worry about indexes, just DAC palette settings.
   I64 i;
-  if (!Bt(&sys_run_level,RLf_VGA)) return;
+  if (!Bt(&sys_run_level,RLf_VESA)) return;
   PUSHFD
   CLI
   while (LBts(&sys_semas[SEMA_VGA],0))
@@ -29,7 +29,7 @@ U0 GrPaletteIndicesSet()
 
 public U0 GrPaletteColorSet(I64 color_num,CBGR48 bgr48)
 {//VGA has 6-bits for blue, for green, and for red.
-  if (!Bt(&sys_run_level,RLf_VGA)) return;
+  if (!Bt(&sys_run_level,RLf_VESA)) return;
   PUSHFD
   CLI
   while (LBts(&sys_semas[SEMA_VGA],0))
@@ -46,7 +46,7 @@ public U0 GrPaletteColorSet(I64 color_num,CBGR48 bgr48)
 public CBGR48 GrPaletteColorGet(I64 color_num)
 {//VGA has 6-bits for blue, for green, and for red.
   CBGR48 res=0;
-  if (!Bt(&sys_run_level,RLf_VGA)) return 0;
+  if (!Bt(&sys_run_level,RLf_VESA)) return 0;
   PUSHFD
   CLI
   while (LBts(&sys_semas[SEMA_VGA],0))
@@ -100,5 +100,5 @@ public U0 PaletteSetStd()
 public U0 PaletteSetPastel()
 {//Activate std palette.
   GrPaletteSet(gr_palette_pastel);
-  fp_set_std_palette=&PaletteSetPastel;
+  fp_set_std_palette=&PaletteSetPastel;
 }

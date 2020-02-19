@@ -398,7 +398,7 @@ U0 GrUpdateVGAGraphics()
 U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/Zenith/WinMgr.CC,GrUpdateScreen"$, 30 times a second.
   CDC *dc;
-  if (!Bt(&sys_run_level,RLf_VGA)) //if text mode
+  if (!Bt(&sys_run_level,RLf_VESA)) //if text mode
     GrUpdateTasks;
   else {
     GrUpdateTextBG;
@@ -413,7 +413,7 @@ U0 GrUpdateScreen()
     (*gr.fp_final_screen_update)(dc);
   DCDel(dc);
 
-  if (!Bt(&sys_run_level,RLf_VGA)) //if text mode
+  if (!Bt(&sys_run_level,RLf_VESA)) //if text mode
     GrUpdateTextModeText;
   else {
     DCBlotColor4(gr.dc1->body,gr.dc2->body,gr.dc_cache->body,

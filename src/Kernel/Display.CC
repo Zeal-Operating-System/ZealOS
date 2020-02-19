@@ -42,7 +42,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
   } else if (Bt(char_bmp_displayable,ch)) {
     row=text.raw_col/text.cols%text.rows;
     col=text.raw_col%text.cols;
-    if (!Bt(&sys_run_level,RLf_VGA)) { //if text mode
+    if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
       if (text.raw_flags&RWF_SCROLL && text.raw_col && !row && !col) {
 	MemCopy(text.vga_text_alias,text.vga_text_alias+text.cols*2,
 	      text.cols*(text.rows-1)*2);

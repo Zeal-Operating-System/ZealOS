@@ -42,7 +42,7 @@ public class CGrGlobals
 	hide_row,hide_col;
 } gr;
 
-//See $LK,"RLf_VGA",A="FF:::/Kernel/KStart16.CC,RLf_VGA"$
+//See $LK,"RLf_VESA",A="FF:::/Kernel/KStart16.CC,RLf_VESA"$
 //See $LK,"SysGrInit",A="MN:SysGrInit"$()
 //Allows consts to be used instead of vars.
 HashPublic("GR_WIDTH",HTT_DEFINE_STR);;

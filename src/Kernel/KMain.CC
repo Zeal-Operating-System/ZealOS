@@ -18,21 +18,20 @@ U0 SysGlobalsInit()
       kernel_config->mount_ide_auto_hd_let='C';
     if (!kernel_config->mount_ide_auto_cd_let)
       kernel_config->mount_ide_auto_cd_let='T';
-    StreamPrint("blkdev.first_hd_drive_let=%d;",
-	  kernel_config->mount_ide_auto_hd_let);
-    StreamPrint("blkdev.first_dvd_drive_let=%d;",
-	  kernel_config->mount_ide_auto_cd_let);
+    StreamPrint("blkdev.first_hd_drive_let=%d;", kernel_config->mount_ide_auto_hd_let);
+    StreamPrint("blkdev.first_dvd_drive_let=%d;", kernel_config->mount_ide_auto_cd_let);
   }
 
   DebugMode(ON);
+
   rev_bits_table=CAlloc(256);
   for (i=0;i<256;i++)
     for (j=0;j<8;j++) {
       if (Bt(&i,7-j))	LBts(rev_bits_table+i,j);
     }
 
-  ext=CAlloc(EXT_EXTS_NUM*sizeof(U8 *));
-  fp_getstr2=&SysGetStr2;
+  ext = CAlloc(EXT_EXTS_NUM*sizeof(U8 *));
+  fp_getstr2 = &SysGetStr2;
   KeyDevInit;
 
   #exe {
@@ -56,7 +55,14 @@ U0 SysGlobalsInit()
   QueueInit(&dev.pci_head);
   dev.mem64_ptr=mem_mapped_space;
 
+  //framebuffer pointer is already linear
+  Seg2Linear(&sys_vbe_info.video_modes);
+  Seg2Linear(&sys_vbe_info.oem);
+  Seg2Linear(&sys_vbe_info.vendor);
+  Seg2Linear(&sys_vbe_info.product_name);
+  Seg2Linear(&sys_vbe_info.product_revision);
   Seg2Linear(SYS_FONT_PTR);
+  sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
 
   debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
   debug.int_fault_code=IntFaultHandlersNew;
@@ -80,8 +86,8 @@ U0 SysGrInit()
   text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
   text.border_chars[10](U32)='ÀÈÙ¼';
   text.vga_alias	=dev.uncached_alias+VGAM_GRAPHICS;
-  text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
-  if (!Bt(&sys_run_level,RLf_VGA)) { //if text mode
+  text.vga_text_alias	=dev.uncached_alias+VGAM_TEXT;
+  if (!Bt(&sys_run_level,RLf_VESA)) { //if text mode
     text.cols=80;
     text.rows=25;
     MemSet(text.vga_text_alias,0,text.rows*text.cols<<1);

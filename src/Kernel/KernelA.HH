@@ -469,7 +469,7 @@ class CKernel
 
 //Run-Levels
 #define RLf_16BIT		0
-#define RLf_VGA			1
+#define RLf_VESA			1
 #define RLf_32BIT		2
 #define RLf_PATCHED		3
 #define RLf_16MEG_SYS_CODE_BP	4
@@ -491,7 +491,7 @@ class CKernel
 #define RLf_ONCE_USER		20
 
 #define RLF_16BIT		(1<<RLf_16BIT)
-#define RLF_VGA			(1<<RLf_VGA)
+#define RLF_VESA			(1<<RLf_VESA)
 #define RLF_32BIT		(1<<RLf_32BIT)
 #define RLF_PATCHED		(1<<RLf_PATCHED)
 #define RLF_16MEG_SYS_CODE_BP	(1<<RLf_16MEG_SYS_CODE_BP)
@@ -4009,7 +4009,7 @@ class CVBEInfo
 	capabilities,
 	video_modes;
 
-  U16	video_memory,
+  U16	total_memory,
 	software_revision;
 
   U32	vendor,

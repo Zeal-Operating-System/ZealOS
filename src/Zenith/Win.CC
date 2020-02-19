@@ -180,7 +180,7 @@ U0 DrawMouse(CDC *dc)
   y=mouse.pos.y;
   POPFD
   if (mouse.show && mouse_hard.installed) {
-    if (!Bt(&sys_run_level,RLf_VGA)) //if text mode
+    if (!Bt(&sys_run_level,RLf_VESA)) //if text mode
       gr.text_base[mouse.pos_text.x+mouse.pos_text.y*TEXT_COLS]^=0x7F00;
     else {
       if (gr.fp_draw_mouse) {

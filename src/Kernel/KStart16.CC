@@ -65,7 +65,7 @@ SCREEN_HEIGHT:	DU16	768;
 
 SYS_FONT_PTR::	DU32	0;
 //************************************
-CORE0_16BIT_INIT::
+CORE0_16BIT_INIT::
 //EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
 	MOV	ECX,EAX
 	MOV	AX, (BOOT_RAM_LIMIT-BOOT_STACK_SIZE) /  16
@@ -222,7 +222,7 @@ GET_IP:	POP	BX
 };
 	CMP	AX,0x004F
 	JNE	@@10		//Jmp if fail
-	BTS	U32 [SYS_RUN_LEVEL],RLf_VGA
+	BTS	U32 [SYS_RUN_LEVEL],RLf_VESA
 @@10:
 
 //Get pointer to 8x8 VGA ROM font.
