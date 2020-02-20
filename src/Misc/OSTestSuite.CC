@@ -1570,7 +1570,7 @@ U0 OSTestSuite()
   TS("SpriteText");	TSFile("::/Demo/Graphics/SpriteText");
   TS("SpriteRaw");	TSFile("::/Demo/Graphics/SpriteRaw");
   TS("EdSprite");	TSFile("::/Demo/Graphics/EdSprite");
-  TS("Balloon");	TSFile("::/Demo/Graphics/Balloon",0);
+//  TS("Balloon");	TSFile("::/Demo/Graphics/Balloon",0);
   TS("Carry");		TSFile("::/Demo/Carry");
   TS("Directives");	TSFile("::/Demo/Directives");
   TS("RandDemo");	DoRandDemo;
@@ -1624,7 +1624,7 @@ U0 OSTestSuite()
   TS("TextDemo");	TSFile("::/Demo/DolDoc/TextDemo");
   TS("CursorMove");	TSFile("::/Demo/DolDoc/CursorMove");
   TS("MiniCompiler");	DoMiniCompiler;
-  TS("MiniGrLib");	TSFile("::/Demo/Lectures/MiniGrLib",0);
+//  TS("MiniGrLib");	TSFile("::/Demo/Lectures/MiniGrLib",0);
   TS("TimeIns");	TSFileChar("::/Demo/TimeIns");
   TS("PhoneNumWords");	DoPhoneNumWords;
   TS("UnusedSpaceRep");	TSFile("::/Demo/Disk/UnusedSpaceRep");
@@ -1715,8 +1715,9 @@ U0 OSTestSuite()
   TS("VideoRep");	XTalkWait(task, "VideoRep;Sleep(750);\n");
   DeathWait(&task,TRUE);
 
-  ProgressBarsReset("ZenithOS/OSTestSuite");
+  ProgressBarsReset("ZenithOS/OSTestSuite");
   "Elapsed Time:%5.3f\n",tS-ts_t0;
 }
 
 OSTestSuite;
+

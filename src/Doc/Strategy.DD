@@ -34,7 +34,7 @@ A three bttn mouse is like a leg you cannot put weight on.  ZenithOS just does h
 
 * $FG,2$640x480$FG$ 16 colors.  Updates whole screen at $FG,2$60 fps$FG$, optimized for full screen games where $FG,2$InvalidRectangle$FG$s are counter-productive.
 
-* One font, 8x8.  Text and graphic layers done in software with text normally on an 8x8 grid.  It can run in Text mode if graphic initialization fails.
+* One font, 8x8. Text and graphic layers done in software with text normally on an 8x8 grid.
 
 * Compiler extends all values to 64-bit when fetched and does only 64-bit computations intermediately.  Assembler has minimal 16-bit support, good enough for compiling boot loaders.
 

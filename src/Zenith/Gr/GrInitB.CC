@@ -168,7 +168,7 @@ U0 GrInit2()
   HashDefineListAdd("ST_SPRITE_ELEM_CODES",SPHT_ELEM_CODE,gr.sprite_hash);
   gr.screen_zoom=1;
 
-  PaletteSetGruvboxLight;
+  PaletteSetGruvboxLight;
 
   gr.to_8_bits	=MAlloc(256*sizeof(I64));
   gr.to_8_colors=MAlloc(256*sizeof(I64));
@@ -176,7 +176,6 @@ U0 GrInit2()
   gr.screen_cache = MAlloc(sys_vbe_mode.width * sys_vbe_mode.height);
 
   gr.text_base=CAlloc(TEXT_ROWS*TEXT_COLS*sizeof(U32));
-  gr.vga_text_cache=MAlloc(TEXT_ROWS*TEXT_COLS*sizeof(U16));
   gr.win_uncovered_bitmap=CAlloc(65536/8);
   gr.highest_uncovered=0;
   gr.win_z_buf=MAlloc(TEXT_ROWS*TEXT_COLS*sizeof(U16));

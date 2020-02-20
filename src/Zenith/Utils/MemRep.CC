@@ -168,17 +168,16 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
     "BlkDevs\t:%010X\n",BlkDevsSize;
     "Drives\t:%010X\n",DrivesSize;
     if (blkdev.cache_base)
-      "DiskCache\t:%010X\n",
-	    MSize2(blkdev.cache_base)+MSize2(blkdev.cache_hash_table)+
-	    MSize2(blkdev.cache_ctrl);
+      "DiskCache\t:%010X\n",MSize2(blkdev.cache_base)+MSize2(blkdev.cache_hash_table)+ MSize2(blkdev.cache_ctrl);
     "Clip\t:%010X\n",DocSize(sys_clip_doc);
     "AutoComplete:%010X\n",CallExtStr("AutoCompleteSize");
+    "text.font\t:%010X\n", MSize2(text.font);
+    "text.raw_screen\t:%010X\n", MSize2(text.raw_screen);
     "gr.to_8_bits\t:%010X\n",MSize2(gr.to_8_bits);
     "gr.to_8_colors\t:%010X\n",MSize2(gr.to_8_colors);
     "gr.text_base\t:%010X\n",MSize2(gr.text_base);
-    "gr.vga_text_cache\t:%010X\n",MSize2(gr.vga_text_cache);
-    "gr.win_z_buf\t:%010X\n",MSize2(gr.win_z_buf)+
-	  MSize2(gr.win_uncovered_bitmap);
+    "gr.screen_cache\t:%010X\n",MSize2(gr.screen_cache);
+    "gr.win_z_buf\t:%010X\n",MSize2(gr.win_z_buf)+ MSize2(gr.win_uncovered_bitmap);
     "gr.dc\t\t:%010X\n",DCSize(gr.dc);
     "gr.dc1\t\t:%010X\n",DCSize(gr.dc1);
     "gr.dc2\t\t:%010X\n",DCSize(gr.dc2);
@@ -201,7 +200,6 @@ public U0 MemRep()
   "$$BLACK$$Low Memory\t:0000100000$$FG$$\n$$ID,2$$";
   "Kernel\t:%010X-%010X\n",mem_boot_base-sizeof(CBinFile),bfh;
 
-  "VGA\t\t:00000A0000-00000BFFFF\n";
   "$$ID,-2$$$$BLACK$$HighMemory\t:0000100000-%010X$$FG$$\n",
 	mem_heap_limit;
   "$LK,"SYS_FIXED_AREA",A="MN:CSysFixedArea"$\t:%010X-%010X\n",

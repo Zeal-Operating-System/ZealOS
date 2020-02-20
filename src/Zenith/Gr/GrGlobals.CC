@@ -17,7 +17,6 @@ public class CGrGlobals
 
   U16	*win_uncovered_bitmap;
   I64	highest_uncovered;
-  U16	*vga_text_cache;
   I64	pan_text_x,pan_text_y;	//[-7,7]
   U0	(*fp_final_screen_update)(CDC *dc);//Mouse cursor is handled here.
   U0	(*fp_wall_paper)(CTask *task);
@@ -56,4 +55,4 @@ DefinePrint("GR_HEIGHT", "%d", sys_vbe_mode.height);
 DefinePrint("TEXT_ROWS","%d",text.rows);;
 HashPublic("TEXT_ROWS",HTT_DEFINE_STR);;
 DefinePrint("TEXT_COLS","%d",text.cols);;
-HashPublic("TEXT_COLS",HTT_DEFINE_STR);;
+HashPublic("TEXT_COLS",HTT_DEFINE_STR);;
