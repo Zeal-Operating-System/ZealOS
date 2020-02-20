@@ -35,7 +35,7 @@ U0 VMInstallDrive(CTask *task,U8 drv_let,
     XTalkWait(task,"C\np%d\n",ata_drive->num);
   if (atapi_drive)
     XTalkWait(task,"Tp%d\n",atapi_drive->num);
-  XTalkWait(task,"\n\n\n"); //Exit Drives,Disk Cache,Options
+  XTalkWait(task,"\n1024\n768\n\n\n"); //Exit Drives,  set Screen Resolution, skip Disk Cache and Options
 }
 
 U0 VMInstallWiz()
@@ -73,7 +73,7 @@ U0 RegularInstallWiz()
   I64 unit,drv_let;
   U8 *st,*base0,*base1;
   CATARep *head=NULL,*tmpha;
-  I64 ch,num_hints;
+  I64 ch,num_hints,res_num;
   CTask *task;
 
   "\nIt's normal for this to freeze for a moment or two.\n";
@@ -149,9 +149,10 @@ U0 RegularInstallWiz()
       Format(drv_let,,FALSE,FSt_REDSEA);
   }
   InstallDrive(drv_let);
-  XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\n"
-	"C\ns%s\n%s\n%C\n\n\n", //Exit Drives,Disk Cache,Options
-	drv_let,base0,base1,'0'+unit);
+  XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\nC\ns%s\n%s\n%C\n",drv_let,base0,base1,'0'+unit);
+  VideoRep;
+  res_num = GetI64("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",,1);
+  XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
   "$$RED$$Install Master Boot loader?$$FG$$";
   if (YorN) {
     '\n';

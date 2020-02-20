@@ -12,7 +12,7 @@ MEM_1GIG_NUM::		DU64	0;
 MEM_512GIG_NUM::	DU64	0;
 MEM_PML2::		DU64	0;
 MEM_PML3::		DU64	0;
-MEM_PML4::		DU64	0;
+MEM_PML4::		DU64	0;
 
 #exe {
   StreamPrint(
@@ -21,12 +21,10 @@ MEM_PML3::		DU64	0;
 "SYS_HEAP_INIT_FLAG::	DU8	%d;"
 "SYS_HEAP_INIT_VAL::	DU8	%d;"
 "SYS_VAR_INIT_FLAG::	DU8	%d;"
-"SYS_VAR_INIT_VAL::	DU8	%d;"
-"SYS_STAFF_MODE_FLAG::	DU8	%d;",
+"SYS_VAR_INIT_VAL::	DU8	%d;",
 kernel_config->opts[CONFIG_MEM_INIT], kernel_config->mem_init_val,
 kernel_config->opts[CONFIG_HEAP_INIT],kernel_config->heap_init_val,
-kernel_config->opts[CONFIG_VAR_INIT], kernel_config->var_init_val,
-kernel_config->opts[CONFIG_STAFF_MODE]);
+kernel_config->opts[CONFIG_VAR_INIT], kernel_config->var_init_val);
 };
 SYS_HEAP_DEBUG_FLAG::	DU8	_CONFIG_HEAP_DEBUG;
 

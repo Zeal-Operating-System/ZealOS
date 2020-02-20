@@ -164,7 +164,6 @@ _extern SYS_HEAP_INIT_FLAG	U8 sys_heap_init_flag;
 _extern SYS_HEAP_INIT_VAL	U8 sys_heap_init_val;
 _extern SYS_MEM_INIT_FLAG	U8 sys_mem_init_flag;
 _extern SYS_MEM_INIT_VAL	U8 sys_mem_init_val;
-_extern SYS_STAFF_MODE_FLAG	U8 sys_staff_mode_flag;
 _extern SYS_VAR_INIT_FLAG	U8 sys_var_init_flag;
 _extern SYS_VAR_INIT_VAL	U8 sys_var_init_val;
 

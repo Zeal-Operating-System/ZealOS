@@ -1,48 +1,42 @@
 //This is run in a $LK,"#exe",A="FF:::/Kernel/Kernel.PRJ,KConfig"${}.
 
-U8 *kernel_config_options="MemInit\0HeapInit\0VarInit\0StaffMode\0"
-"HomeDir\0NoMP\0TextMode\0DontProbe\0MountIDEAuto\0DebugDistro\0Help\0";
+U8 *kernel_config_options="MemInit\0HeapInit\0VarInit\0HomeDir\0NoMP\0DontProbe\0MountIDEAuto\0DebugDistro\0Help";
 
 #define CONFIG_MEM_INIT		0
-#define CONFIG_HEAP_INIT		1
+#define CONFIG_HEAP_INIT	1
 #define CONFIG_VAR_INIT		2
-#define CONFIG_STAFF_MODE		3
-#define CONFIG_HOME_DIR		4
-#define CONFIG_NO_MP		5
-#define CONFIG_TEXT_MODE		6
-#define CONFIG_DONT_PROBE		7
-#define CONFIG_MOUNT_IDE_AUTO	8
-#define CONFIG_DEBUG_DISTRO	9
-#define CONFIG_OPTIONS_NUM		10
+#define CONFIG_HOME_DIR		3
+#define CONFIG_NO_MP		4
+#define CONFIG_DONT_PROBE	5
+#define CONFIG_MOUNT_IDE_AUTO	6
+#define CONFIG_DEBUG_DISTRO	7
+#define CONFIG_OPTIONS_NUM	8
 
-#define CONFIG_HELP		10
+#define CONFIG_HELP		8
 
 class CKConfig
 {
   U8 *disk_cache_size_exp;
   CDoc *add_dev;
-  U8 *debug_distro_file,*debug_distro_start;
+  U8 *debug_distro_file, *debug_distro_start;
   U8 *home_dir;
+  U16 screen_width, screen_height;
   Bool opts[CONFIG_OPTIONS_NUM];
-  U8 mem_init_val,heap_init_val,var_init_val,
-	boot_drive_let,mount_ide_auto_hd_let,mount_ide_auto_cd_let;
+  U8 mem_init_val, heap_init_val, var_init_val, boot_drive_let, mount_ide_auto_hd_let, mount_ide_auto_cd_let;
 };
 
 CDoc *KConfigAddDev(CKConfig *c)
 {
   I64 ch;
   CDoc *doc=DocNew;
-  "\n\nIn anticipation of the drives you will\n"
-	"define shortly, enter the drive letter\n"
-	"of the drive with the account directory.\n"
-	"\n($$PURPLE$$<ENTER>$$FG$$ for cur drv) Boot Drive:";
+  "\n\nIn anticipation of the drives you will define shortly, enter the drive letter\n"
+        "of the drive with your Home  directory. ($$PURPLE$$<ENTER>$$FG$$ for cur drv) Boot Drive:";
   ch=Letter2Letter(GetChar);
-  if ('A'<=ch<='Z')
-    c->boot_drive_let=ch;
+  if ('A' <= ch <= 'Z')
+    c->boot_drive_let = ch;
   else
-    c->boot_drive_let=Drive2Letter(Fs->cur_dv);
-  "\n\n$$BK,1$$$$PURPLE$$Mount drives so they will be present when "
-	"you boot.$$FG$$$$BK,0$$\n";
+    c->boot_drive_let = Drive2Letter(Fs->cur_dv);
+  "\n\n$$BK,1$$$$PURPLE$$Mount drives so they will be present when you boot.$$FG$$$$BK,0$$\n";
   Mount2(c->boot_drive_let,doc,FALSE);
   return doc;
 }
@@ -70,7 +64,6 @@ U0 KConfigOptions(CKConfig *c)
 	    "$$PURPLE$$VarInit$$FG$$ Initializes glbl var memory to a val.\n"
 	    "$$PURPLE$$HomeDir$$FG$$ Set home dir.\n"
 	    "$$PURPLE$$NoMP$$FG$$ No multicore.\n"
-	    "$$PURPLE$$TextMode$$FG$$ Text Mode (requires hard reboot).\n"
 	    "$$PURPLE$$DontProbe$$FG$$ Just prompt CD/DVD ports, don't probe.\n"
 	    "$$PURPLE$$MountIDEAuto$$FG$$ Auto Mount IDE drives to 'C' and 'T'.\n"
 	    "$$PURPLE$$DebugDistro$$FG$$ Include RAM Drive in Kernel.BIN.\n"
@@ -150,15 +143,30 @@ U0 KConfigOptions(CKConfig *c)
 
 CKConfig *KConfigNew()
 {
+  I64 resolution_num;
   CKConfig *c=CAlloc(sizeof(CKConfig));
 
-  c->add_dev=KConfigAddDev(c);
-  c->home_dir=StrNew("::/Home");
-  c->disk_cache_size_exp=GetStr(
-	"Disk Cache Size in Bytes,\n"
-	"gets rounded-up funny,\n"
-	"($$PURPLE$$<ENTER>$$FG$$ will use default.):",
-	"Scale2Mem(0x80000,0x8000000)");
+  c->add_dev = KConfigAddDev(c);
+  c->home_dir = StrNew("::/Home");
+
+  VideoRep(FALSE);
+  resolution_num = GetI64("Enter list number of desired resolution,"
+			"or desired width. ($$PURPLE$$<ENTER>$$FG$$ for auto maximum): ",,1);
+  if(resolution_num <= VBE_MODES_NUM)
+  {
+    c->screen_width = sys_vbe_modes[resolution_num - 1].width;
+    c->screen_height = sys_vbe_modes[resolution_num - 1].height;
+  }
+  else
+  {
+    c->screen_width = resolution_num;
+    c->screen_height = GetI64("Enter Height: ",,0);
+  }
+ 
+
+  c->disk_cache_size_exp = GetStr("Disk Cache Size in Bytes, gets rounded-up funny,\n"
+				"($$PURPLE$$<ENTER>$$FG$$ will use default.):",
+				"Scale2Mem(0x80000,0x8000000)");
   KConfigOptions(c);
   return c;
 }

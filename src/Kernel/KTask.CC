@@ -4,9 +4,6 @@ U0 Exit()
     LBts(&Fs->task_flags,TASKf_KILL_AFTER_DEBUG);
     G;
   } else {
-    if (sys_staff_mode_flag)
-      ZenithLog("%p:%p:%p:%p:%p:%p\n",Caller(0),Caller(1),Caller(2),Caller(3),
-	    Caller(4),Caller(5),Caller(6),Caller(7));
     if (!Gs->num && !IsDebugMode)
       SingleUser(OFF);
     Fs->rflags=GetRFlags;
@@ -225,7 +222,7 @@ I64 TaskInit(CTask *task,I64 stack_size)
   task->title_src	=TTS_CONST;
   task->win_left	=1;
   task->win_right	=text.cols-2;
-  task->win_top		=text.rows / 5 + 3;
+  task->win_top		=text.rows / 5 + 3;
   task->win_bottom	=text.rows-2;
 
   if (blkdev.home_dir) {//Beware Zenith $LK,"TaskInit",A="FF:::/Kernel/KStart64.CC,TaskInit"$. I guess ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.CC,DiskChange"$().

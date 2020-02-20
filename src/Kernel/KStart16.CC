@@ -60,8 +60,12 @@ TEMP_VBE_MODE:		DU8	sizeof(CVBEMode) DUP(0);
 MAX_VBE_MODE:		DU8	sizeof(CVBEModeShort) DUP(0);
 MAX_SCREEN_HEIGHT:	DU16	0;
 
-SCREEN_WIDTH:	DU16	1024;
-SCREEN_HEIGHT:	DU16	768;
+#exe
+{StreamPrint(
+"SCREEN_WIDTH:	DU16	%d;"
+"SCREEN_HEIGHT:	DU16	%d;",
+kernel_config->screen_width, kernel_config->screen_height);
+};
 //************************************
 CORE0_16BIT_INIT::
 //EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
@@ -211,7 +215,7 @@ GET_IP:	POP	BX
 	INT	0x10
 	CMP	AX, 0x004F
 	JNE	@@10
-
+
 	BTS	U32 [SYS_RUN_LEVEL],RLf_VESA
 @@10:
 
