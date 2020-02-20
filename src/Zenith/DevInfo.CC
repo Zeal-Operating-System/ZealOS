@@ -223,7 +223,7 @@ public U0 MemBIOSRep()
     Yield;
   tmpmr=dev.mem32_head.next;
   while (tmpmr!=&dev.mem32_head) {
-    "%z:%08X-%08X\n",
+    "%z:%08X-%08X\n",
 	  tmpmr->type,"Unused\0RAM\0Device",tmpmr->base,tmpmr->base+tmpmr->size-1;
     tmpmr=tmpmr->next;
   }
@@ -261,6 +261,7 @@ public U0 MemBIOSRep()
       m20++;
     }
   }
+  '\n';
 }
 
 public U0 MemPageRep()
