@@ -264,7 +264,7 @@ public _extern SYS_CACHE_LINE_WIDTH
 
 #help_index "Processor/Page Tables;Memory/Page Tables"
 public _intern IC_INVLPG
-	U0 InvlPg(U8 *a); //Invalidate page at addr inst.
+	U0 InvalidatePage(U8 *a); //Invalidate page at addr inst.
 public _extern MEM_PAGE_SIZE U64 mem_page_size;
 
 #help_index "Task;Processor"
@@ -275,7 +275,7 @@ public _intern IC_FS CTask *Fs(); //FS seg reg points to the current $LK,"CTask"
 public _intern IC_RDTSC I64 GetTSC(); //Get time stamp counter.
 
 #help_index "Graphics/VBE"
-public _extern SYS_VBE_INFO CVBEInfo sys_vbe_info;
+public _extern SYS_VBE_INFO CVBEInfo sys_vbe_info;
 public _extern SYS_VBE_FINAL_MODE CVBEMode sys_vbe_mode;
 _extern SYS_VBE_FINAL U16 sys_vbe_mode_num;
 _extern SYS_VBE_MODES CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];

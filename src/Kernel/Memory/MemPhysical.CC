@@ -116,7 +116,7 @@ U8 *Mem64DevAlloc(I64 *_pages1Gig)
     do {
       pte=MemPageTable(a);
       *pte=*pte&~0x18 |0x11; //Uncached and present
-      InvlPg(dev.mem64_ptr);
+      InvalidatePage(dev.mem64_ptr);
       a+=mem_page_size;
     } while (a-dev.mem64_ptr<1<<30);
   }
@@ -143,7 +143,7 @@ U0 UncachedAliasAlloc() //Make uncached alias for 4 lowest Gig.
   do {
     pte=MemPageTable(a);
     *pte=0x197+a-dev.uncached_alias;
-    InvlPg(a);
+    InvalidatePage(a);
     a+=mem_page_size;
   } while (a-dev.uncached_alias<1<<32);
 }

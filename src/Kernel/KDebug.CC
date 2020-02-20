@@ -1,44 +1,30 @@
 Bool CheckPtr(U8 *ptr)
 {//Check if addr is valid ptr.
-  if (mem_heap_base<=ptr<=mem_mapped_space) {
-    if (*MemPageTable(ptr)&1)
-      return TRUE;
-    else
-      return FALSE;
-  } else if (ptr<mem_boot_base)
-    return FALSE;
-  else if (ptr<VGAM_GRAPHICS)
-    return TRUE;
+  if (mem_heap_base <= ptr <= mem_mapped_space)
+    return *MemPageTable(ptr) & 1;
   else
-    return FALSE;
+    return mem_boot_base < ptr < VGAM_GRAPHICS;
 }
 
 Bool CheckCodePtr(U8 *ptr)
 {//Check if addr is valid code addr.
-  if (mem_heap_base<=ptr<=mem_heap_limit) {
-    if (*MemPageTable(ptr)&1)
-      return TRUE;
-    else
-      return FALSE;
-  } else if (ptr<mem_boot_base)
-    return FALSE;
-  else if (ptr<VGAM_GRAPHICS)
-    return TRUE;
+  if (mem_heap_base <= ptr <= mem_heap_limit)
+    return *MemPageTable(ptr) & 1;
   else
-    return FALSE;
+    return mem_boot_base < ptr < VGAM_GRAPHICS;
 }
 
 Bool CheckOnStack(U8 *ptr,CTask *task=NULL)
 {//Check if addr is valid stack addr.
-  Bool res=FALSE;
+  Bool res = FALSE;
   PUSHFD
   CLI
-  if (task) {
-    if (&task->stack->stack_base<=ptr<=
-	  (&task->stack->stack_base)(U8 *)+task->stack->stack_size)
+  if(task) {
+    if (&task->stack->stack_base <= ptr <= (&task->stack->stack_base)(U8 *) + task->stack->stack_size)
       res=TRUE;
-  } else if (mem_heap_base<=ptr<=mem_heap_limit)
-    res=TRUE;
+  }
+  else if (mem_heap_base <= ptr <= mem_heap_limit)
+    res = TRUE;
   POPFD
   return res;
 }
@@ -46,13 +32,14 @@ Bool CheckOnStack(U8 *ptr,CTask *task=NULL)
 I64 UnusedStack(CTask *task=NULL)
 {//Count of usused bytes in task's stack.
   I64 res;
-  if (!task) task=Fs;
+  if (!task)
+    task=Fs;
   PUSHFD
   CLI
-  if (task==Fs)
-    res=GetRSP()(U8 *)-(&task->stack->stack_base)(U8 *);
+  if (task == Fs)
+    res = GetRSP()(U8 *) - (&task->stack->stack_base)(U8 *);
   else
-    res=task->rsp(U8 *)-(&task->stack->stack_base)(U8 *);
+    res = task->rsp(U8 *) - (&task->stack->stack_base)(U8 *);
   POPFD
   return res;
 }
@@ -286,7 +273,7 @@ I64 *TaskRegAddr(CTask *task,I64 reg_num)
   return NULL;
 }
 
-#define RAWDR_COL	(text.cols-40)
+#define RAWDR_COL	(text.cols-40)
 
 U0 RawDr(CTask *task=NULL)
 {

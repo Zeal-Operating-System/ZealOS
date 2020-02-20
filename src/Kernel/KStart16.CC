@@ -211,15 +211,7 @@ GET_IP:	POP	BX
 	INT	0x10
 	CMP	AX, 0x004F
 	JNE	@@10
-
-//	MOV	AX,0x4F02
-//	MOV	BX,0x12		//640x480 16 color
-//#exe {
-//  if (!kernel_config->opts[CONFIG_TEXT_MODE])
-//    StreamPrint("INT 0x10");	//Enable VGA
-//};
-//	CMP	AX,0x004F
-//	JNE	@@10		//Jmp if fail
+
 	BTS	U32 [SYS_RUN_LEVEL],RLf_VESA
 @@10:
 

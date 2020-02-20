@@ -393,7 +393,7 @@ class CSysLimitBase
 #define MEM_E820t_BAD_MEM	5
 #define MEM_E820t_PERM_MEM	7
 
-class CMemE820
+class CMemE820
 {
   U8	*base;
   I64	len;
@@ -3845,25 +3845,6 @@ public class CDC
 #help_index "Devices"
 //VGA Memory
 #define VGAM_GRAPHICS	0xA0000
-#define VGAM_TEXT	0xB8000
-
-//VGA I/O ports
-#define VGAP_ATTR_INDEX		0x03C0
-#define VGAP_ATTR_DATA_WRITE	0x03C0 //alias
-#define VGAP_ATTR_DATA_READ	0x03C1
-#define VGAP_MISC_OUTPUT	0x03C2
-#define VGAP_IDX		0x03C4
-#define VGAP_DATA		0x03C5
-#define VGAP_PALETTE_MASK	0x03C6
-#define VGAP_REG_READ		0x03C7
-#define VGAP_REG_WRITE		0x03C8
-#define VGAP_PALETTE_DATA	0x03C9
-#define VGAP_CRTC_INDEX		0x03D4
-#define VGAP_CRTC_DATA		0x03D5
-#define VGAP_INPUT_STAT		0x03DA
-
-//VGA Registers
-#define VGAR_MAP_MASK		0x02
 
 #help_index "Compression/Piece by Piece"
 #define ARC_BITS_MAX	12
