@@ -9,6 +9,8 @@ Features in development include:
   - VBE support, VESA graphics.
   - Network card drivers, network stack.
 
+![](/screenshots/screenshot2.png)
+
 Every commit contains a "Zenith-Latest.iso" in the /src/Tmp folder, which is an ISO build of that commit.
 
 At first, I was developing exclusively inside a VM and occasionally generating ISOs as official releases. This was not a good approach, as things broke and I had no way of telling what changes caused what. So I decided to scrap that and restart from scratch.\
@@ -67,3 +69,5 @@ Changes include:
     - Stk -> Stack
     - Stmt -> Statement
     - TempleOS -> ZenithOS
+
+![](/screenshots/screenshot1.png)
