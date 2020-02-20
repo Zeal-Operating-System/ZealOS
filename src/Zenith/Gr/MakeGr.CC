@@ -2,7 +2,7 @@ Cd(__DIR__);;
 
 #include "GrInitA"
 #include "Gr.HH"
-#include "GrExterns"
+#include "GrExterns"
 #include "GrGlobals"
 #include "GrTextBase"
 #include "GrAsm"
@@ -16,9 +16,9 @@ Cd(__DIR__);;
 #include "GrComposites"
 #include "ScreenCast"
 
-#define SPE_ABORT	(-1)
-#define SPE_EXIT	0
-#define SPE_CONT	1
+#define SPE_ABORT 			(-1)
+#define SPE_EXIT				0
+#define SPE_CONT				1
 #include "SpriteNew"
 #include "GrSpritePlot"
 #include "SpriteMesh"

@@ -1,6 +1,6 @@
-$WW,1$$LK,"mouse.pos.x",A="MN:mouse"$ and $LK,"mouse.pos.y",A="MN:mouse"$ can be used to access the x and y coordinates of the mouse.  They are relative to the screen, not window.  These can be used if you don't want to use message passing.  $LK,"mouse.pos.z",A="MN:mouse"$ is the wheel.
+$WW,1$$LK,"mouse.pos.x",A="MN:mouse"$ and $LK,"mouse.pos.y",A="MN:mouse"$ can be used to access the x and y coordinates of the mouse.  They are relative to the screen, not window.  These can be used if you don't want to use message passing.	$LK,"mouse.pos.z",A="MN:mouse"$ is the wheel.
 
-$LK,"mouse.pos_text.x",A="MN:CMouseStateGlobals"$ and $LK,"mouse.pos_text.y",A="MN:CMouseStateGlobals"$ are the text column and row.  See $LK,"::/Demo/Games/Maze.CC"$.
+$LK,"mouse.pos_text.x",A="MN:CMouseStateGlobals"$ and $LK,"mouse.pos_text.y",A="MN:CMouseStateGlobals"$ are the text column and row.	See $LK,"::/Demo/Games/Maze.CC"$.
 
 See $LK,"CMouseStateGlobals",A="MN:CMouseStateGlobals"$ and $LK,"CMouseHardStateGlobals",A="MN:CMouseHardStateGlobals"$.
 
@@ -10,7 +10,7 @@ $HL,1$//****
 mouse_hard.pos.x=mouse_hard.prescale.x*mouse_hard.scale.x*mouse_grid.x_speed;
 mouse.presnap.x=ToI64(mouse.scale.x*mouse_hard.pos.x)+mouse.offset.x;
 if (mouse_grid.snap)
-  mouse.pos.x=Trunc(mouse.presnap.x/mouse_grid.x)*mouse_grid.x+mouse_grid.x_offset;
+	mouse.pos.x=Trunc(mouse.presnap.x/mouse_grid.x)*mouse_grid.x+mouse_grid.x_offset;
 else
-  mouse.pos.x=mouse.presnap.x;
+	mouse.pos.x=mouse.presnap.x;
 //****$HL,0$

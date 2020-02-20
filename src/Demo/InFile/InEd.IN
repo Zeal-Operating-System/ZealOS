@@ -4,7 +4,7 @@ Or, type $LK,"InFile",A="MN:InFile"$(filename);
 See $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$ in the glossary for more info.
 
 This InFile will renum the defines in
-InEd.DD.  Test it by numbering a few wrong
+InEd.DD.	Test it by numbering a few wrong
 and running this demo.
 
 */
@@ -15,14 +15,14 @@ U8 i;
 //Go to start of file
 Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
 for (i=0;i<=0xC3;i++) {
-  if (i)
-    Message(MESSAGE_KEY_DOWN_UP,0,SC_F3);
-  else
-    "%c0x%c",CH_CTRLF,CH_ESC;
-  Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-  Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-  "%02X",i;
-  Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-  Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-  "%c%c",CH_BACKSPACE,CH_BACKSPACE;
+	if (i)
+		Message(MESSAGE_KEY_DOWN_UP,0,SC_F3);
+	else
+		"%c0x%c",CH_CTRLF,CH_ESC;
+	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
+	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
+	"%02X",i;
+	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
+	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
+	"%c%c",CH_BACKSPACE,CH_BACKSPACE;
 }

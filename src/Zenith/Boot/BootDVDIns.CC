@@ -6,27 +6,27 @@
 
 #help_index "Install"
 
-#define KERNEL_BIN_C	"Kernel.BIN.C"
-#define BOOT_DIR	"/0000Boot"
-#define BOOT_DIR_KERNEL_BIN_C	BOOT_DIR "/0000" KERNEL_BIN_C
+#define KERNEL_BIN_C		"Kernel.BIN.C"
+#define BOOT_DIR				"/0000Boot"
+#define BOOT_DIR_KERNEL_BIN_C 	BOOT_DIR "/0000" KERNEL_BIN_C
 
 U0 MakeAll()
 {
-  if (Comp("/Compiler/Compiler","Compiler",,':'))
-    throw;
-  if (Comp("/Kernel/Kernel","Kernel",,':'))
-    throw;
+	if (Comp("/Compiler/Compiler","Compiler",,':'))
+		throw;
+	if (Comp("/Kernel/Kernel","Kernel",,':'))
+		throw;
 }
 
 public U0 BootDVDIns(U8 drv_let=0)
 {//See $LK,"::/Misc/DoDistro.CC"$.
-  try {
-    if (!Drive(drv_let))
-      throw;
-    MakeAll;
-    Move("/Kernel/Kernel.BIN",BOOT_DIR_KERNEL_BIN_C);
-  } catch {
-    PutExcept;
-    Beep;
-  }
+	try {
+		if (!Drive(drv_let))
+			throw;
+		MakeAll;
+		Move("/Kernel/Kernel.BIN",BOOT_DIR_KERNEL_BIN_C);
+	} catch {
+		PutExcept;
+		Beep;
+	}
 }

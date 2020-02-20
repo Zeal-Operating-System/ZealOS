@@ -1,32 +1,32 @@
 File
 {
-  Rename(,'r');
-  DirMake(,'d');
-  FormatDrive(,'f');
-  UnmountDrive(,'u');
-  Abort(,CH_SHIFT_ESC);
-  Exit(,CH_ESC);
+	Rename(,'r');
+	DirMake(,'d');
+	FormatDrive(,'f');
+	UnmountDrive(,'u');
+	Abort(,CH_SHIFT_ESC);
+	Exit(,CH_ESC);
 }
 
 Edit
 {
-  Ed(,CH_SPACE);
-  Plain(,CH_SHIFT_SPACE);
-  Copy(,CH_CTRLC);
-  Paste(,CH_CTRLV);
-  DeleteFile(,CH_CTRLY);
+	Ed(,CH_SPACE);
+	Plain(,CH_SHIFT_SPACE);
+	Copy(,CH_CTRLC);
+	Paste(,CH_CTRLV);
+	DeleteFile(,CH_CTRLY);
 }
 
 CDDVD
 {
-  DiskChange(,'c');
-  MountISOC(,'i');
-  MakeRedSeaISOC(,'m');
-  BurnISOFile(,'B');
+	DiskChange(,'c');
+	MountISOC(,'i');
+	MakeRedSeaISOC(,'m');
+	BurnISOFile(,'B');
 }
 
 Program
 {
-  Include(,0,0x3F0000003F);
-  ZenithInclude(,0,0x23F0000023F);
+	Include(,0,0x3F0000003F);
+	ZenithInclude(,0,0x23F0000023F);
 }

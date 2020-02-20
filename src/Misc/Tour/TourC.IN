@@ -7,4 +7,4 @@ TourPut(
 InGetStr("\n");
 
 if (LBtr(&tour_put->display_flags,DISPLAYf_SHOW))
-  WinZBufUpdate;
+	WinZBufUpdate;

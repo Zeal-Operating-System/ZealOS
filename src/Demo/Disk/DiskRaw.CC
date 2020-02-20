@@ -1,38 +1,38 @@
 U0 RawAccess(I64 drv_let=0)
 {
-  CDrive *drive=Letter2Drive(drv_let);
-  CBlkDev *bd=Letter2BlkDev(drv_let);
-  I64 blk,old_offset,old_size;
-  U8 *buf=MAlloc(BLK_SIZE);
+	CDrive *drive=Letter2Drive(drv_let);
+	CBlkDev *bd=Letter2BlkDev(drv_let);
+	I64 blk,old_offset,old_size;
+	U8 *buf=MAlloc(BLK_SIZE);
 
-  DriveRep;
-  PressAKey;
+	DriveRep;
+	PressAKey;
 
-  ClassRep(drive);
-  PressAKey;
+	ClassRep(drive);
+	PressAKey;
 
-  ClassRep(bd);
-  PressAKey;
+	ClassRep(bd);
+	PressAKey;
 
-  //Temporarily change partition range to full device.
-  //Normally, you are limited to just your partition.
-  //This is obviously $BK,1$dangerous$BK,0$!
-  old_offset=drive->drv_offset;
-  old_size  =drive->size;
-  drive->drv_offset=0;
-  drive->size=bd->max_blk+1;
+	//Temporarily change partition range to full device.
+	//Normally, you are limited to just your partition.
+	//This is obviously $BK,1$dangerous$BK,0$!
+	old_offset=drive->drv_offset;
+	old_size	=drive->size;
+	drive->drv_offset=0;
+	drive->size=bd->max_blk+1;
 
-  try {
-    blk=GetI64("Blk to Read: ",old_offset,0,bd->max_blk);
-    BlkRead(drive,buf,blk,1);
-    D(buf,BLK_SIZE);
-  } catch
-    PutExcept;
+	try {
+		blk=GetI64("Blk to Read: ",old_offset,0,bd->max_blk);
+		BlkRead(drive,buf,blk,1);
+		D(buf,BLK_SIZE);
+	} catch
+		PutExcept;
 
-  drive->drv_offset=old_offset;
-  drive->size  =old_size;
+	drive->drv_offset=old_offset;
+	drive->size  =old_size;
 
-  Free(buf);
+	Free(buf);
 }
 
 RawAccess;

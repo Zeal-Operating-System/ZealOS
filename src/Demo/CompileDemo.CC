@@ -2,26 +2,26 @@ F64 glbl;
 
 F64 CompileDemo(U8 *st)
 {
-  I64 type;
-  U8 *machine_code;
-  CCompCtrl *cc=CompCtrlNew(st,CCF_DONT_FREE_BUF);
-  F64 res=0;
-  Lex(cc);  //Gotta get it started
-  "Compile \"%s\"\n",st;
-  do {
-    if (machine_code=LexExpression2Bin(cc,&type)) {
-      if (type!=RT_F64)
-	res=ToF64(Call(machine_code));
-      else
-	res=Call(machine_code)(F64);
-      Free(machine_code);
-    }
-    "res=%9.4f\n",res;
-    if (cc->token==';')
-      Lex(cc);
-  } while (cc->token!=TK_EOF);	//end of file?
-  CompCtrlDel(cc);
-  return res;
+	I64 type;
+	U8 *machine_code;
+	CCompCtrl *cc=CompCtrlNew(st,CCF_DONT_FREE_BUF);
+	F64 res=0;
+	Lex(cc);	//Gotta get it started
+	"Compile \"%s\"\n",st;
+	do {
+		if (machine_code=LexExpression2Bin(cc,&type)) {
+			if (type!=RT_F64)
+				res=ToF64(Call(machine_code));
+			else
+				res=Call(machine_code)(F64);
+			Free(machine_code);
+		}
+		"res=%9.4f\n",res;
+		if (cc->token==';')
+			Lex(cc);
+	} while (cc->token!=TK_EOF);	//end of file?
+	CompCtrlDel(cc);
+	return res;
 }
 
 CompileDemo("2+Cos(ã)");

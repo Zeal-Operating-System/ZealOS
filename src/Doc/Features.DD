@@ -1,14 +1,14 @@
-         $WW,1$$FG,5$$TX+CX,"ZenithOS' Features"$$FG$
+				 $WW,1$$FG,5$$TX+CX,"ZenithOS' Features"$$FG$
 
 * Oracle in with $FG,2$<F7>$FG$ for words or $FG,2$<SHIFT-F7>$FG$ for passages.  See $LK,"tongues",A="FI:::/Zenith/God/HSNotes.DD"$.
 
 * $FG,4$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$, ring-0-only, single-address-map (identity), multitasking kernel with multicore support.
 
-* Master/Slave MultiCore 
+* Master/Slave MultiCore
 
 * Free, $FG,2$public domain$FG$, $FG,2$100% open source$FG$.
 
-* 64-bit $FG,2$compiler/assembler$FG$ for $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.  Truly compiles, doesn't interpret.  $FG,2$Just-in-Time$FG$ and $FG,2$Ahead-of-Time$FG$ compilation.  With $FG,2$JIT$FG$, no need for object or exe files.
+* 64-bit $FG,2$compiler/assembler$FG$ for $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.	Truly compiles, doesn't interpret.	$FG,2$Just-in-Time$FG$ and $FG,2$Ahead-of-Time$FG$ compilation.  With $FG,2$JIT$FG$, no need for object or exe files.
 
 * No 32-bit krufty code.
 
@@ -22,19 +22,19 @@
 
 * $LK,"Partitioning",A="MN:DiskPart"$ tool, installer, $FG,2$boot loaders$FG$ for CD/DVD and hard disk.
 
-* $FG,2$Editor/Browser$FG$ for a new $LK,"Document Format",A="FI:::/Doc/DolDocOverview.DD"$.  Source files and the command line window can have graphics, links, icons, trees, colors, super/sub scripts, margins.  Everything is seamless through-out the tool chain.  No need for separate resource files.
+* $FG,2$Editor/Browser$FG$ for a new $LK,"Document Format",A="FI:::/Doc/DolDocOverview.DD"$.	Source files and the command line window can have graphics, links, icons, trees, colors, super/sub scripts, margins.	Everything is seamless through-out the tool chain.	No need for separate resource files.
 
-* 8-bit $FG,2$ASCII$FG$, not just 7-bit.  Supported in entire tool chain.  $FG,2$<CTRL-ALT-a>$FG$
+* 8-bit $FG,2$ASCII$FG$, not just 7-bit.	Supported in entire tool chain.  $FG,2$<CTRL-ALT-a>$FG$
 
 * $FG,2$Graphics in source code$FG$, no resource files, $FG,2$graphic sprite editor$FG$. $FG,2$<CTRL-r>$FG$
 
-* $FG,2$64-bit pointers$FG$.  All memory, even more than 4Gig, can be directly accessed by all tasks on all cores at all times.
+* $FG,2$64-bit pointers$FG$.	All memory, even more than 4Gig, can be directly accessed by all tasks on all cores at all times.
 
-* $FG,2$Ring-0-only$FG$.  Highest CPU privileged mode at all times.  No off-limits insts.  No time lost changing modes or address maps.  Switches tasks in half a microsecond.
+* $FG,2$Ring-0-only$FG$.	Highest CPU privileged mode at all times.  No off-limits insts.  No time lost changing modes or address maps.  Switches tasks in half a microsecond.
 
 * $FG,2$2D/3D$FG$ graphics library
 
-* Real-time fancy $FG,2$differential-equation solver$FG$ for physics engines, to use in games.  (Adaptive step-size Runge-Kutta, interpolated for real-time.)
+* Real-time fancy $FG,2$differential-equation solver$FG$ for physics engines, to use in games.	(Adaptive step-size Runge-Kutta, interpolated for real-time.)
 
 * Auto-completion, jump-to-source tool called $FG,2$AutoComplete$FG$ with Dictionary.
 

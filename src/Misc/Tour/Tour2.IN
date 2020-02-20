@@ -29,7 +29,7 @@ Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
 
 I64 i;
 for (i=0;i<9;i++)
-  InGetKey(SC_CURSOR_DOWN);
+	InGetKey(SC_CURSOR_DOWN);
 
 TourPut(
 "Keyboard commands are:\n\n"

@@ -13,41 +13,41 @@ asm {
 //Opcodes are slightly different to make writing my x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
-JIFFIES_MESSAGE:	DU8 "Jiffies:",0;
+JIFFIES_MESSAGE:				DU8 "Jiffies:",0;
 
 //See $LK,"::/Kernel/StrA.CC",A="FL:::/Kernel/StrA.CC,1"$ and $LK,"::/Kernel/KUtils.CC"$.
 
 _BEEPS2::
-//You can clobber RAX,RBX,RCX,RDX,R8,R9.  The compiler expects that.
+//You can clobber RAX,RBX,RCX,RDX,R8,R9.	The compiler expects that.
 //See $LK,"REGG_CLOBBERED",A="MN:REGG_CLOBBERED"$ and $LK,"REGG_STACK_TMP",A="MN:REGG_STACK_TMP"$.
-	PUSH	RBP
-	MOV	RBP,RSP
-	MOV	RCX,U64 SF_ARG1[RBP] //$LK,"SF_ARG1",A="FF:::/Kernel/KernelA.HH,SF_ARG1"$
+				PUSH		RBP
+				MOV 		RBP,RSP
+				MOV 		RCX,U64 SF_ARG1[RBP] //$LK,"SF_ARG1",A="FF:::/Kernel/KernelA.HH,SF_ARG1"$
 
-	PUSH	U64 [&counts.jiffies]
+				PUSH		U64 [&counts.jiffies]
 
-@@05:	PUSH	RCX
+@@05: 	PUSH		RCX
 //U0 $LK,"Beep",A="MN:Beep"$(I8 ona=62,Bool busy=FALSE)
-	PUSH	FALSE	//Do not busy (spin) wait
-	PUSH	U64 [&glbl_ona]	//evaluated at run time
-	CALL	&Beep
-	POP	RCX
-	LOOP	@@05
+				PUSH		FALSE 	//Do not busy (spin) wait
+				PUSH		U64 [&glbl_ona] //evaluated at run time
+				CALL		&Beep
+				POP 		RCX
+				LOOP		@@05
 
-	PUSH	RSI	//See $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$ & $LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$
-	MOV	RSI,JIFFIES_MESSAGE
-	CALL	PUT_STR
-	POP	RSI
+				PUSH		RSI 		//See $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$ & $LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$
+				MOV 		RSI,JIFFIES_MESSAGE
+				CALL		PUT_STR
+				POP 		RSI
 
-	POP	RAX
-	SUB	RAX,U64 [&counts.jiffies]
-	NEG	RAX
-	CALL	PUT_HEX_U64
-	MOV	RAX,'\n'
-	CALL	PUT_CHARS
+				POP 		RAX
+				SUB 		RAX,U64 [&counts.jiffies]
+				NEG 		RAX
+				CALL		PUT_HEX_U64
+				MOV 		RAX,'\n'
+				CALL		PUT_CHARS
 
-	POP	RBP
-	RET1	8
+				POP 		RBP
+				RET1		8
 }
 
 //My convention is to put an underscore
@@ -56,30 +56,30 @@ _extern _BEEPS2 U0 Beeps2(I64 count);
 
 U0 AsmAndC2()
 {
-  I64 reg R15 i;
+	I64 reg R15 i;
 
-  i=GetI64("$$PURPLE$$\n\nNum of beeps 1-5 (%d):$$FG$$",3,1,5);
-  Beeps2(i);
+	i=GetI64("$$PURPLE$$\n\nNum of beeps 1-5 (%d):$$FG$$",3,1,5);
+	Beeps2(i);
 
-  asm {
-    LIST
+	asm {
+		LIST
 //You can clobber RAX,RBX,RCX,RDX, but preserve the rest.
-    MOV	RCX,R15 //You can clobber RAX,RBX,RCX,RDX. Preserve the rest.
-    @@05:	PUSH	RCX
+		MOV RCX,R15 //You can clobber RAX,RBX,RCX,RDX. Preserve the rest.
+		@@05: 			PUSH		RCX
 
 //U0 $LK,"Sound",A="MN:Sound"$(I8 ona);
-    MOV	RAX,RCX	//ona=loop*10+100.0Hz
-    IMUL2	RAX,glbl_ona_step //Intentionally evaluated at compile time
-    ADD	RAX,U64 [&glbl_ona_base]  //Intentionally evaluated at run time
-    PUSH	RAX
-    CALL	&Sound	//We can skip IMPORT with & if JIT compiling.
-    MOV	RCX,counts.time_stamp_freq>>3 //JIT Const.  Simple delay loop.
-@@10:	LOOP	@@10
+		MOV RAX,RCX //ona=loop*10+100.0Hz
+		IMUL2 			RAX,glbl_ona_step //Intentionally evaluated at compile time
+		ADD RAX,U64 [&glbl_ona_base]	//Intentionally evaluated at run time
+		PUSH				RAX
+		CALL				&Sound	//We can skip IMPORT with & if JIT compiling.
+		MOV RCX,counts.time_stamp_freq>>3 //JIT Const.	Simple delay loop.
+@@10: 	LOOP		@@10
 
-    POP	RCX
-    LOOP	@@05
-  }
-  Sound;
+		POP RCX
+		LOOP				@@05
+	}
+	Sound;
 }
 
 AsmAndC2;

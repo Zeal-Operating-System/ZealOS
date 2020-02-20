@@ -2,14 +2,14 @@
 
 U0 Main()
 {
-  "Capture screen...\n";
-  PressAKey;
-  GRScreenCaptureWrite("~/DemoScreenShot");
-  "View captured screen...\n";
-  PressAKey;
-  GRScreenCaptureRead("~/DemoScreenShot");
-  PressAKey;
-  DCFill;
+	"Capture screen...\n";
+	PressAKey;
+	GRScreenCaptureWrite("~/DemoScreenShot");
+	"View captured screen...\n";
+	PressAKey;
+	GRScreenCaptureRead("~/DemoScreenShot");
+	PressAKey;
+	DCFill;
 }
 
 Main;

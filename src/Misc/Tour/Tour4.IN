@@ -20,7 +20,7 @@ WinToTop;//Kludge
 TourPut("$$GREEN$$<CURSOR-DOWN>$$FG$$ until you reach \"Macro\".\n");
 I64 i;
 for (i=0;i<6;i++)
-  InGetKey(SC_CURSOR_DOWN);
+	InGetKey(SC_CURSOR_DOWN);
 
 TourPut("Press $$GREEN$$<SPACE>$$FG$$.\n");
 InGetStr(" ");
@@ -57,7 +57,7 @@ Message(MESSAGE_KEY_DOWN,CH_CTRLM,0x43200000432);
 Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
 Message(MESSAGE_KEY_DOWN,CH_CTRLL,0x42600000426);
 for (i=0;i<6;i++)
-  Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
+	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
 InPrint(," Click here for Pop-up version");
 Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
 InPrint(,"Cd(\"::/Demo/Games\");;#include \"CastleFrankenstein\";\\n");
@@ -66,7 +66,7 @@ Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_LEFT|SCF_CTRL);
 TourPut(
 "Press $$GREEN$$<CURSOR-DOWN>$$FG$$ until you reach the \"Pop-Up\" check-box.\n");
 for (i=0;i<2;i++)
-  InGetKey(SC_CURSOR_DOWN);
+	InGetKey(SC_CURSOR_DOWN);
 TourPut(
 "Press $$GREEN$$<SPACE>$$FG$$ to check the box.\n");
 InGetStr(" ");
@@ -94,5 +94,5 @@ TourPut(
 "$$GREEN$$<CTRL-S>$$FG$$ to save your PersonalMenu file, if you wish."
 "Your PersonalMenu is special and does not save on $$GREEN$$<ESC>$$FG$$.\n",TRUE);
 
-'' CH_SHIFT_ESC;	//exit menu
+'' CH_SHIFT_ESC;				//exit menu
 

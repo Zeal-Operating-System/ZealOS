@@ -7,7 +7,7 @@ InPrint(150,"new song");
 TourPut("Cursor down 8 times.\n");
 I64 i;
 for (i=0;i<8;i++)
-  InGetKey(SC_CURSOR_DOWN);
+	InGetKey(SC_CURSOR_DOWN);
 
 TourPut("Press '$$GREEN$$2$$FG$$' to show all lines within 2 of a match.\n");
 InGetStr("2");

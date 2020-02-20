@@ -9,47 +9,46 @@
 
 U0 Tmp()
 {
-  OnceExe;
-  switch (sys_boot_src.u16[0]) {
-    case BOOT_SRC_ROM:
-      "Continue booting hard drive ";
-      if (YorN) {
-	DocBottom;
-	ExeFile("C:/Home/Once");
-      }
-      break;
-    case BOOT_SRC_DVD:
-      "\nIf you answer 'No' you can play with\n"
-	    "the live CD without installing.\n\n"
-	    "Install onto hard drive ";
-      if (YorN) {
-	DocBottom;
-	RunFile("::/Misc/OSInstall",,TRUE);
-      }
-      if (FileFind("::/Misc/Tour")) {
-	"\nTake Tour";
-	if (YorN) {
-	  DocBottom;
-	  Cd("::/Misc/Tour");
-	  InFile("Tour");
+	OnceExe;
+	switch (sys_boot_src.u16[0]) {
+		case BOOT_SRC_ROM:
+			"Continue booting hard drive ";
+			if (YorN) {
+				DocBottom;
+				ExeFile("C:/Home/Once");
+			}
+			break;
+		case BOOT_SRC_DVD:
+			"\nIf you answer 'No' you can play with\n"
+						"the live CD without installing.\n\n"
+						"Install onto hard drive ";
+			if (YorN) {
+				DocBottom;
+				RunFile("::/Misc/OSInstall",,TRUE);
+			}
+			if (FileFind("::/Misc/Tour")) {
+				"\nTake Tour";
+				if (YorN) {
+					DocBottom;
+					Cd("::/Misc/Tour");
+					InFile("Tour");
+				}
+			}
+			break;
+		case BOOT_SRC_RAM:
+		case BOOT_SRC_HARDDRIVE:
+			"$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
+			TipOfDay;
+//			Type("::/Doc/Customize.DD");
+//		if (FileFind("::/Misc/Tour")) {
+//				"\nTake Tour";
+//				if (YorN) {
+//					DocBottom;
+//					Cd("::/Misc/Tour");
+//					InFile("Tour");
+//				}
+//			}
+			break;
 	}
-      }
-      break;
-    case BOOT_SRC_RAM:
-    case BOOT_SRC_HARDDRIVE:
-      "$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
-      TipOfDay;
-      Type("::/Doc/Customize.DD");
-    if (FileFind("::/Misc/Tour")) {
-	"\nTake Tour";
-	if (YorN) {
-	  DocBottom;
-	  Cd("::/Misc/Tour");
-	  InFile("Tour");
-	}
-      }
-      break;
-  }
 }
 Tmp;
-

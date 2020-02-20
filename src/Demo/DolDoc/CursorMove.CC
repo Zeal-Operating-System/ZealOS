@@ -1,17 +1,17 @@
 U0 CursorMovementDemo()
 {
-  I64 i;
-  for (i=0;i<100;i++) {
-    "%03d ",i;
-    "$$CM,-4,1$$";
-    if (i%10==9)
-      "$$CM,4,-10$$";
-  }
+	I64 i;
+	for (i=0;i<100;i++) {
+		"%03d ",i;
+		"$$CM,-4,1$$";
+		if (i%10==9)
+			"$$CM,4,-10$$";
+	}
 
-  //+LX is relative to left side.
-  //See <CTRL-l> with cursor-movement for all the flags.
-  //Check "Quote" to set-up a cmd for in quotes.
-  "$$CM+LX,0,+10$$\n";
+	//+LX is relative to left side.
+	//See <CTRL-l> with cursor-movement for all the flags.
+	//Check "Quote" to set-up a cmd for in quotes.
+	"$$CM+LX,0,+10$$\n";
 }
 
 CursorMovementDemo;

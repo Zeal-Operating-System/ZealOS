@@ -7,45 +7,45 @@ if you misuse it and it will crash.
 $LK,"U",A="MN:U"$() to see what code was generated.
 */
 
-#define COUNT	0x1000000
+#define COUNT 	0x1000000
 
 I64 glbl;
 
 U0 MPUnlockedInc(I64)
 {
-  I64 i;
-  for (i=0;i<COUNT;i++)
-    glbl++;
+	I64 i;
+	for (i=0;i<COUNT;i++)
+		glbl++;
 }
 
 U0 UnlockedInc()
 {
-  CJob *tmpm0,*tmpm1;
-  glbl=0;
-  tmpm0=JobQueue(&MPUnlockedInc,NULL,0,0);
-  tmpm1=JobQueue(&MPUnlockedInc,NULL,1,0);
-  JobResGet(tmpm0);
-  JobResGet(tmpm1);
-  "Correct Count:%X Actual Count:%X\n",COUNT*2,glbl;
+	CJob *tmpm0,*tmpm1;
+	glbl=0;
+	tmpm0=JobQueue(&MPUnlockedInc,NULL,0,0);
+	tmpm1=JobQueue(&MPUnlockedInc,NULL,1,0);
+	JobResGet(tmpm0);
+	JobResGet(tmpm1);
+	"Correct Count:%X Actual Count:%X\n",COUNT*2,glbl;
 }
 
 U0 MPLockedInc(I64)
 {
-  I64 i;
-  for (i=0;i<COUNT;i++)
-    lock  //Can be used without {}
-	  glbl++;
+	I64 i;
+	for (i=0;i<COUNT;i++)
+		lock	//Can be used without {}
+					glbl++;
 }
 
 U0 LockedInc()
 {
-  CJob *tmpm0,*tmpm1;
-  glbl=0;
-  tmpm0=JobQueue(&MPLockedInc,NULL,0,0);
-  tmpm1=JobQueue(&MPLockedInc,NULL,1,0);
-  JobResGet(tmpm0);
-  JobResGet(tmpm1);
-  "Correct Count:%X Actual Count:%X\n",COUNT*2,glbl;
+	CJob *tmpm0,*tmpm1;
+	glbl=0;
+	tmpm0=JobQueue(&MPLockedInc,NULL,0,0);
+	tmpm1=JobQueue(&MPLockedInc,NULL,1,0);
+	JobResGet(tmpm0);
+	JobResGet(tmpm1);
+	"Correct Count:%X Actual Count:%X\n",COUNT*2,glbl;
 }
 
 UnlockedInc;

@@ -23,7 +23,7 @@ extern U0 DocDump(CDoc *doc,I64 uS_delay=0);
 extern CDocEntry *DocEntryCopy(CDoc *doc,CDocEntry *doc_e);
 extern U0 DocEntryDel(CDoc *doc,CDocEntry *doc_e);
 extern Bool DocForm(U8 *_d,U8 *class_name=lastclass,
-	I64 dof_flags=0,U8 *header=NULL,U8 *footer=NULL);
+				I64 dof_flags=0,U8 *header=NULL,U8 *footer=NULL);
 extern U0 DocHelpIdx(CDoc *doc,U8 *idx);
 extern Bool DocHighlightCursor(Bool show=OFF,CDoc *doc=NULL);
 extern U0 DocInsDoc(CDoc *doc=NULL,CDoc *doc2);
@@ -57,23 +57,23 @@ extern CTask *Noise(I64 mS,F64 min_ona,F64 max_ona);
 extern Bool Plain(U8 *filename,I64 edf_dof_flags=0);
 extern Bool PopUpCancelOk(U8 *header=NULL,U8 *footer=NULL);
 extern I64 PopUpColor(U8 *header=NULL,
-	Bool allow_transparent=TRUE,Bool allow_default=TRUE);
+				Bool allow_transparent=TRUE,Bool allow_default=TRUE);
 extern I64 PopUpColorDither(U8 *header=NULL);
 extern I64 PopUpColorLighting(U8 *header=NULL);
 extern I64 PopUpFile(U8 *filename,
-	Bool warn_ext=TRUE,CTask *parent=NULL,CTask **_pu_task=NULL);
+				Bool warn_ext=TRUE,CTask *parent=NULL,CTask **_pu_task=NULL);
 extern Bool PopUpForm(U8 *_d,U8 *class_name=lastclass,
-	I64 dof_flags=DOF_SIZE_MIN,U8 *header=NULL,U8 *footer=NULL);
+				I64 dof_flags=DOF_SIZE_MIN,U8 *header=NULL,U8 *footer=NULL);
 extern I64 PopUpGetI64(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX);
 extern U8 *PopUpGetStr(U8 *header=NULL);
 extern I64 PopUpMenu(CDoc *doc,I64 dof_flags=0);
 extern Bool PopUpNoYes(U8 *header=NULL,U8 *footer=NULL);
 extern Bool PopUpOk(U8 *header=NULL,U8 *footer=NULL);
 extern I64 PopUpRangeI64(
-	I64 lo,I64 hi,I64 step=1,U8 *header=NULL,U8 *footer=NULL);
+				I64 lo,I64 hi,I64 step=1,U8 *header=NULL,U8 *footer=NULL);
 extern Bool PopUpTransform(I64 *r);
 extern I64 RedSeaISO(U8 *_iso_filename=NULL,U8 *_src_dir,
-	U8 *_stage2_filename=NULL);
+				U8 *_stage2_filename=NULL);
 extern U0 Refresh(I64 count=1,Bool force=FALSE);
 extern U0 RegOneTimePopUp(I64 flag_num,U8 *message);
 extern Bool RegWrite(U8 *path,U8 *format,...);

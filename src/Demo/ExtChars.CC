@@ -24,8 +24,8 @@ text.font[255]=face[0](U64);
 
 U0 SrcExample()
 {
-  I64 fÿÿ=12345;
-  "fÿÿ=%d\n",fÿÿ;
+	I64 fÿÿ=12345;
+	"fÿÿ=%d\n",fÿÿ;
 }
 
 SrcExample;

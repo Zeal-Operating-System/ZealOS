@@ -23,10 +23,10 @@ GrRect(img2,256-20,256-20,40,40);
 
 I64 i;
 for (i=0;i<256;i+=4) {
-  Refresh;
-  DCFill;
-  GrBlot(dc,i-256,i-256,img2);
-  Sleep(10);
+	Refresh;
+	DCFill;
+	GrBlot(dc,i-256,i-256,img2);
+	Sleep(10);
 }
 U8 *tmpg=DC2Sprite(img1);
 Sprite(tmpg);

@@ -22,7 +22,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Does entire tool chain support super/sub script?
 
-* 170624 $LK,"DiskCheck",A="MN:DiskCheck"$() showed extra alloced clus for FAT32, Sup1Hymns.  ClusNum was '.'+1 and clus was zero.
+* 170624 $LK,"DiskCheck",A="MN:DiskCheck"$() showed extra alloced clus for FAT32, Sup1Hymns.	ClusNum was '.'+1 and clus was zero.
 
 * $LK,"::/Apps/X-Caliber/X-Caliber.CC"$
 * Add asteroid harbor defense.
@@ -39,7 +39,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Investigate why packet loss $LK,"Training Sleep(1)",A="FF:::/Zenith/Training.CC,Sleep(1)"$.
 
-* Add AVL or red/black binary tree library support.  We have fixed-size stack.  Auto-balancing binary tree is very needed.  I've done everything myself.  I don't want to ruin a perfect record.  I'm in no hurry.
+* Add AVL or red/black binary tree library support.  We have fixed-size stack.	Auto-balancing binary tree is very needed.	I've done everything myself.	I don't want to ruin a perfect record.	I'm in no hurry.
 
 * $LK,"SpriteEd",A="FI:::/Zenith/Gr/SpriteEd.CC"$ shift pts, Ctrl pt for ellipse/polygon w,h is off when rotated.
 
@@ -67,11 +67,11 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * $LK,"DOCF_DBL_DOLLARS",A="MN:DOCF_DBL_DOLLARS"$ in $LK,"Reindention",A="MN:EdCodeTools2"$.
 
-* Compiler Optimization: Local array vars --> reg.  Might exist.
+* Compiler Optimization: Local array vars --> reg.	Might exist.
 
-* Make function as a better word processor.  Justify text.  Page numbers.  Header and footer templates?
+* Make function as a better word processor.  Justify text.	Page numbers.  Header and footer templates?
 
-* Compiler Optimization: heap_glbls with added offset.  Might exist.
+* Compiler Optimization: heap_glbls with added offset.	Might exist.
 
 * Bug: Find-and-replace text on $$PT$$ line before it.
 * 12/25/2015 Copy-Paste index.html glitch if source window 40 columns.
@@ -85,11 +85,11 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Can $LK,"MEM_EXTRA_HASH2_PAGS",A="MN:MEM_EXTRA_HASH2_PAGS"$ be just one?
 
-* Bible ranges in $LK,"BibleVerse",A="MN:BibleVerse"$(). 
+* Bible ranges in $LK,"BibleVerse",A="MN:BibleVerse"$().
 
 * $LK,"::/Demo/Games/FlatTops.CC"$ is torpedo, not bombs.
 
-* Reset MPs with $LK,"Core0StartMP",A="MN:Core0StartMP"$() after boot.  Free old task memory?
+* Reset MPs with $LK,"Core0StartMP",A="MN:Core0StartMP"$() after boot.	Free old task memory?
 
 * Use thick and pen_height when clipping with thick>1.
 
@@ -120,11 +120,11 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 
 * Asm could support R4u8 by adding 0x40 byte.
 
-* $LK,"Mem32DevAlloc",A="MN:Mem32DevAlloc"$() is broken.  Devices should be in free spot of E820 report.
+* $LK,"Mem32DevAlloc",A="MN:Mem32DevAlloc"$() is broken.	Devices should be in free spot of E820 report.
 
 * $LK,"SpriteEd",A="FI:::/Zenith/Gr/SpriteEd.CC"$: Strip $LK,"SPT_SHIFT",A="MN:SPT_SHIFT"$ origin cmds?
 
-* Clean-up ASCII #127 delete char?  (No. Maybe, we want a new usage for 127 in future centuries.)
+* Clean-up ASCII #127 delete char?	(No. Maybe, we want a new usage for 127 in future centuries.)
 
 * Compiler: Exceptions don't free $LK,"CCompCtrl",A="MN:CCompCtrl"$ stuff.
 
@@ -147,7 +147,7 @@ $FG,5$$TX+CX,"TODO: Too Hard, or Not Worth Doing."$$FG$
 
 * $LK,"Bible sized nodes",A="FF:::/Zenith/DolDoc/DocRecalc.CC,->tag+i"$
 
-* $LK,"FileMgr",A="MN:FileMgr"$() is bad with lots of files.  
+* $LK,"FileMgr",A="MN:FileMgr"$() is bad with lots of files.
 
 * Would be nice to have a routine telling how much free memory, so apps can plan a big alloc.  This is doable, depending on how.
 
@@ -159,14 +159,14 @@ $FG,5$$TX+CX,"TODO: Too Hard, or Not Worth Doing."$$FG$
 
 * $LK,"Find",A="MN:Find"$() search text in sprites.
 
-* Links in text in sprites. 
+* Links in text in sprites.
 
 * Compiler: Inline functions?
 
-* Compiler: FunPtr local vars?  I forgot if this was hard or not.
+* Compiler: FunPtr local vars?	I forgot if this was hard or not.
 $ID,5$$HL,1$U0 Main()
 {
-  U0 (*fp_old_draw_mouse)(CDC *dc,I64 x,I64 y)=gr.fp_draw_mouse;
+	U0 (*fp_old_draw_mouse)(CDC *dc,I64 x,I64 y)=gr.fp_draw_mouse;
 }
 $ID,-5$$HL,0$
 * Compiler: Get rid of $LK,"0x20000",A="FF:::/Compiler/CMain.CC,0x20000"$ limit.
@@ -179,9 +179,9 @@ $FG,5$$TX+CX,"Bugs"$$FG$
 
 * 1/12/16 make RAM drive 2288 blks, $FG,2$CopyTree("C:/Home","B:/Home"); $FG$  Disk runs-out of space and hangs instead of reporting errors.
 
-* Bug introduced around 11/1/15.  Changed $LK,"::/Kernel/Sched.CC"$ and now $LK,"WinToTop",A="MN:WinToTop"$ is called on Zenith task at start-up, sometimes.  Might be user's fault because of bad keys pressed during VMware power-on init.  Might be fixed by $LK,"ACf_INIT_IN_PROGRESS",A="MN:ACf_INIT_IN_PROGRESS"$.
+* Bug introduced around 11/1/15.	Changed $LK,"::/Kernel/Sched.CC"$ and now $LK,"WinToTop",A="MN:WinToTop"$ is called on Zenith task at start-up, sometimes.	Might be user's fault because of bad keys pressed during VMware power-on init.	Might be fixed by $LK,"ACf_INIT_IN_PROGRESS",A="MN:ACf_INIT_IN_PROGRESS"$.
 
-* 1/12/16 $LK,"ATARepEntry",A="MN:ATARepEntry"$ shows corrupted bttns.  Weird.  Perhaps, my imagination.
+* 1/12/16 $LK,"ATARepEntry",A="MN:ATARepEntry"$ shows corrupted bttns.	Weird.	Perhaps, my imagination.
 
 
 $FG,5$$TX+CX,"3rd Party Bugs"$$FG$
@@ -201,7 +201,7 @@ $FG,5$$TX+CX,"Bugs? Not really sure."$$FG$
 
 * 4/13/14 Strut or RawHide crashed when $LK,"sys_var_init_flag",A="MN:sys_var_init_flag"$ was set during testsuite.  Perhaps, floodfill?
 
-* $LK,"DiskCheck",A="MN:DiskCheck"$ alloc unalloced.  I don't know if I fixed this.
+* $LK,"DiskCheck",A="MN:DiskCheck"$ alloc unalloced.	I don't know if I fixed this.
 
 * 1/?/2015,8/10/2015 Macro sel in Menu did not go to shell?  No, I think just <CTRL-m> twice.  Not a bug.
 
@@ -247,7 +247,7 @@ $ID,-5$
 
 * $LK,"R",A="MN:R"$("char_bmp_","set_");
 
-* Clean-up code $LK,"FileNameAbs",A="MN:FileNameAbs"$(), does it need so many local var names?  I guess no choice.
+* Clean-up code $LK,"FileNameAbs",A="MN:FileNameAbs"$(), does it need so many local var names?	I guess no choice.
 
 
 $FG,5$$TX+CX,"Committee Needed"$$FG$
@@ -257,7 +257,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Can we get rid of $LK,"MESSAGE_CMD",A="MN:MESSAGE_CMD"$?
 
-* Make so just CdRom; command to copy entire disk to ::/CdRom directory? 
+* Make so just CdRom; command to copy entire disk to ::/CdRom directory?
 
 * $LK,"MP DepthBuf",A="FF:::/Zenith/Gr/SpriteMesh.CC,dc->depth_buf=e->"$ is a kludge because of dc->depth_buf=NULL in various graphics routines.
 
@@ -268,7 +268,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 * International Date output: $LK,"MPrintDate",A="MN:MPrintDate"$().  Every country make own version?
 * International Date input: $LK,"Str2Date",A="MN:Str2Date"$().
 
-* $LK,"DCF_SYMMETRY",A="MN:DCF_SYMMETRY"$ before transformation? (Currently, it's after.) 
+* $LK,"DCF_SYMMETRY",A="MN:DCF_SYMMETRY"$ before transformation? (Currently, it's after.)
 
 * $LK,"TRANSPARENT",A="MN:TRANSPARENT"$ does not work with $LK,"ROPF_DITHER",A="MN:ROPF_DITHER"$.
 
@@ -276,20 +276,20 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * $LK,"GrPutChar3",A="MN:GrPutChar3"$() with depth buf?
 
-* Eliminate?  $LK,"::/Zenith/Ctrls/CtrlsA.CC"$?
-* Eliminate?  $LK,"::/Zenith/ZMathODE.CC"$?
-* Eliminate?  $LK,"Complex",A="MN:Complex"$?
-* Eliminate?  $LK,"CDC",A="MN:CDC"$.brush?
-* Eliminate?  $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
-* Eliminate?  $LK,"ROP_XOR",A="MN:ROP_XOR"$?
+* Eliminate?	$LK,"::/Zenith/Ctrls/CtrlsA.CC"$?
+* Eliminate?	$LK,"::/Zenith/ZMathODE.CC"$?
+* Eliminate?	$LK,"Complex",A="MN:Complex"$?
+* Eliminate?	$LK,"CDC",A="MN:CDC"$.brush?
+* Eliminate?	$LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
+* Eliminate?	$LK,"ROP_XOR",A="MN:ROP_XOR"$?
 
-* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMessage",A="MN:PostMessage"$() messages for mouse_hard.  Already works for $LK,"MouseSet",A="MN:MouseSet"$()?
+* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMessage",A="MN:PostMessage"$() messages for mouse_hard.	Already works for $LK,"MouseSet",A="MN:MouseSet"$()?
 
 * Should Messages in PopUp queue get fwded to parent when task dies?
 
 * Import Intel datasheets so we can use links in $LK,"Code",A="FI:::/Kernel/Memory/PageTables.CC"$ for documentation.  I tried a PDF-to-text convertor and it wasn't acceptible.
 
-* Switch stmt with sparse cases?  Maybe, ban sparse switch statements.
+* Switch stmt with sparse cases?	Maybe, ban sparse switch statements.
 
 * Compiler Optimization: Postpone LocalVar init until last possible moment in case of return.
 
@@ -305,13 +305,13 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * SIMD in $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$?
 
-* I use fixed-point in $LK,"Circle",A="MN:Circle"$(), $LK,"Ellipse",A="MN:Ellipse"$(), $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$(), $LK,"Mat4x4MulMat4x4New",A="MN:Mat4x4MulMat4x4New"$() and others.  God says I might want to change to float.  $LK,"::/Demo/Lectures/FixedPoint.CC"$ $LK,"::/Demo/Lectures/FixedPointAdvanced.CC"$.
+* I use fixed-point in $LK,"Circle",A="MN:Circle"$(), $LK,"Ellipse",A="MN:Ellipse"$(), $LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$(), $LK,"Mat4x4MulMat4x4New",A="MN:Mat4x4MulMat4x4New"$() and others.  God says I might want to change to float.	$LK,"::/Demo/Lectures/FixedPoint.CC"$ $LK,"::/Demo/Lectures/FixedPointAdvanced.CC"$.
 
-* Note: We will never put multiple $LK,"Keyboard Tables",A="FI:::/Kernel/SerialDev/Keyboard.CC"$.  Each country must make their own version of ZenithOS.  The $LK,"Intel Factory ROM",A="FF:::/Doc/Demands.DD,English"$ will have just English.  Our $LK,"Charter",A="FI:::/Doc/Charter.DD"$ bans multiple country or architectures in the same version.
+* Note: We will never put multiple $LK,"Keyboard Tables",A="FI:::/Kernel/SerialDev/Keyboard.CC"$.  Each country must make their own version of ZenithOS.	The $LK,"Intel Factory ROM",A="FF:::/Doc/Demands.DD,English"$ will have just English.  Our $LK,"Charter",A="FI:::/Doc/Charter.DD"$ bans multiple country or architectures in the same version.
 
 * 12 border chars in screen font codes 0x02-0x0D.  $LK,"TextBorder",A="MN:TextBorder"$() $LK,"RawDr",A="MN:RawDr"$() $LK,"::/Demo/Games/CharDemo.CC"$. LineFeed shows-up in $FG,2$<CTRL-m>$FG$ PersonalMenu.
 
-* Super-simple high speed serial needs flow control.  $FG,2$<CTRL-s>$FG$ and $FG,2$<CTRL-q>$FG$?
+* Super-simple high speed serial needs flow control.	$FG,2$<CTRL-s>$FG$ and $FG,2$<CTRL-q>$FG$?
 
 
 $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
@@ -321,15 +321,15 @@ $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
 
 * Use standard terminology from "the literature".
 
-* Striped and other dither patterns.  Brushes?
+* Striped and other dither patterns.	Brushes?
 
 * Get rid of BYTE, WORD, DWORD in opcode and replace with U8, U16, U32.
 
 * Get rid of "Char".
 
-* Get rid of having two terms and pick one, "Disk" and "BlkDev"?  (Probably, not that one.)
+* Get rid of having two terms and pick one, "Disk" and "BlkDev"?	(Probably, not that one.)
 
-* Could switch to having just C and D drives and RAMDrive and CD/DVD? 
+* Could switch to having just C and D drives and RAMDrive and CD/DVD?
 
 * New editor widgets.
 
@@ -358,7 +358,7 @@ $FG,5$$TX+CX,"Inspirational Ideas"$$FG$
 
 * Compiler: More use of more floating-point stack?
 
-* Compiler: More aggressive in $LK,"CompF2PushPop",A="MN:CompF2PushPop"$() with types besides MOV and F64. 
+* Compiler: More aggressive in $LK,"CompF2PushPop",A="MN:CompF2PushPop"$() with types besides MOV and F64.
 
 * Playing with $LK,"::/Demo/Lectures/NegDisp.CC"$ on $LK,"CTask",A="MN:CTask"$?
 $ID,5$$$=-CTASK_NEG_OFFSET
@@ -368,11 +368,11 @@ TaskDel(): Free()
 CSysFixedArea.Zenith
 Looks like task_flags,locked_flags cause problems with neg offset.
 $ID,-5$
-* Make a game, S.E.T.I., with radio telescope array.  Put God on air.
+* Make a game, S.E.T.I., with radio telescope array.	Put God on air.
 
 
 $FG,5$$TX+CX,"Test"$$FG$
-* $LK,"SpriteBitMap",A="FI:::/Zenith/Gr/SpriteBitMap.CC"$: Grabscroll? 
+* $LK,"SpriteBitMap",A="FI:::/Zenith/Gr/SpriteBitMap.CC"$: Grabscroll?
 
 * $LK,"DriveMap",A="MN:DriveMap"$() in $LK,"MountFile",A="MN:MountFile"$().
 
@@ -383,35 +383,35 @@ $FG,5$$TX+CX,"Test"$$FG$
 
 * Test on Dad's computer or other people's?
 
-* $LK,"ICDivEqu",A="MN:ICDivEqu"$() assumes RBX.  Is it okay?
+* $LK,"ICDivEqu",A="MN:ICDivEqu"$() assumes RBX.	Is it okay?
 
 * InFile PopUp of PopUp?
 
 * $LK,"FileMgr",A="MN:FileMgr"$() help link scrolls out of window.
 
-* $LK,"MouseHardDriverInstall",A="MN:MouseHardDriverInstall"$() throws exceptions?  Doesn't work?  Why mouse $LK,"0x9FC30",A="FF:::/Kernel/SerialDev/Mouse.CC,9FC"$?
+* $LK,"MouseHardDriverInstall",A="MN:MouseHardDriverInstall"$() throws exceptions?	Doesn't work?  Why mouse $LK,"0x9FC30",A="FF:::/Kernel/SerialDev/Mouse.CC,9FC"$?
 
 * VirtualBox MP reboot?
 
 * Compiler: Err/Warn line nums?
 * Asm branch-out-of-range warn by one line?
 
-* Make sure queue links safe in one direction.  Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRemove",A="MN:QueueRemove"$ for multicore cycling forward through tasks.
+* Make sure queue links safe in one direction.	Task $LK,"QueueInsert",A="MN:QueueInsert"$ and $LK,"QueueRemove",A="MN:QueueRemove"$ for multicore cycling forward through tasks.
 
-* Test removable media id and $LK,"RS_ATTR_RESIDENT",A="MN:RS_ATTR_RESIDENT"$.  $LK,"Touch",A="MN:Touch"$("","+T");
+* Test removable media id and $LK,"RS_ATTR_RESIDENT",A="MN:RS_ATTR_RESIDENT"$.	$LK,"Touch",A="MN:Touch"$("","+T");
 
 
 $FG,5$$TX+CX,"Uncategorized"$$FG$
-* DiskCache during FileRead. <CTRL-ALT-c>, $LK,"Kill",A="MN:Kill"$().  
+* DiskCache during FileRead. <CTRL-ALT-c>, $LK,"Kill",A="MN:Kill"$().
 
 * MOV U8 [RSP+RCX],DL
 
 * $LK,"gr.screen_image",A="MN:CGrGlobals"$
-  >Might want to do ZOOM in U8 graphics and convert screen capture to U8
-  >Might want to rev bit order
+	>Might want to do ZOOM in U8 graphics and convert screen capture to U8
+	>Might want to rev bit order
 
 * This $LK,"Fs->catch_except=TRUE",A="FF:::/Kernel/Job.CC,Fs->catch_except=TRUE"$ causes problems because it
-catches divide and out-of-mem.  Not sure what to do, yet.
+catches divide and out-of-mem.	Not sure what to do, yet.
 
 * Release semaphores or break lock sema,usb_td
 
@@ -425,38 +425,38 @@ and blotted at the end.
 * could make glblvar imports use MDF_RIP_DISP32.
 * PUSH_CMP allocs reg R9 or whatever
 * Might be problem with NOP in OPT pass1 for NO_PUSH in expressions besides
-assignments.  Is ShiftNoPush fully implemented?
+assignments.	Is ShiftNoPush fully implemented?
 
 
 $FG,5$$TX+CX,"Bible Passages"$$FG$
-It is love I desire			$TX,"Hosea 6:6",HTML="http://www.biblegateway.com/verse/en/Hosea%206:6"$
-Males appear three times, not empty	$TX,"Deuteronomy 16:16",HTML="http://www.biblegateway.com/verse/en/Deuteronomy%2016:16"$
-Offer a sacrifice of praise		$TX,"Hebrews 13:15",HTML="http://www.biblegateway.com/verse/en/Hebrews%2013:15"$
-Do I drink blood of goats? Offer praise	$TX,"Psalms 50:14",HTML="http://www.biblegateway.com/verse/en/Psalms%2050:14"$
-When a servant becomes king...		$TX,"Proverb 30:22",HTML="http://www.biblegateway.com/verse/en/Proverb%2030:22"$
-Runner's stride				$TX,"Psalms 147:10",HTML="http://www.biblegateway.com/verse/en/Psalms%20147:10"$
-Buckling armor				$TX,"1 Kings 20:11",HTML="http://www.biblegateway.com/verse/en/1%20Kings%2020:11"$
-Lot cast in the lap			$TX,"Proverbs 16:33",HTML="http://www.biblegateway.com/verse/en/Proverbs%2016:33"$
-Lord does not repeat			$TX,"Job 33:14",HTML="http://www.biblegateway.com/verse/en/Job%2033:14"$
-Offer only in approved place		$TX,"Deuteronomy 12:13-18",HTML="http://www.biblegateway.com/passage/?search=Deuteronomy%2012:13-18&version=NIV"$
-Jesus' zeal for the Temple		$TX,"John 2:14-19",HTML="http://www.biblegateway.com/passage/?search=John%202:14-19&version=NIV"$
-Famine not for bread			$TX,"Amos 8:11-12",HTML="http://www.biblegateway.com/passage/?search=Amos%208:11-12&version=NIV"$
-To the honest, you are honest		$TX,"Psalm 18:26",HTML="http://www.biblegateway.com/verse/en/Psalm%2018:26"$
-Meek and humble of heart		$TX,"Matthew 11:29",HTML="http://www.biblegateway.com/verse/en/Matthew%2011:29"$
-Moses gets Aaron			$TX,"Exodus 4:10-16",HTML="http://www.biblegateway.com/passage/?search=Exodus%204:10-16&version=NIV"$
-There is no council against the Lord	$TX,"Proverbs 21:30",HTML="http://www.biblegateway.com/verse/en/Proverbs%2021:30"$
-Human help is worthless			$TX,"Psalm 108:12",HTML="http://www.biblegateway.com/verse/en/Psalm%20108:12"$
-Do not seek your own wealth		$TX,"1 Corinthians 10:24",HTML="http://www.biblegateway.com/verse/en/1%20Corinthians%2010:24"$
-Abundance of Spirits			$TX,"1 Corinthians 14:12",HTML="http://www.usccb.org/bible/1corinthians/14:12"$
-The stone rejected is cornerstone	$TX,"Matthew 21:42",HTML="http://www.biblegateway.com/verse/en/Matthew%2021:42"$
-Egypt rise like flood			$TX,"Jeremiah 46:7-8",HTML="http://www.biblegateway.com/passage/?search=Jeremiah%2046:7-8&version=NIV"$
-New wineskins				$TX,"Mark 2:22",HTML="http://www.biblegateway.com/verse/en/Mark%202:22"$
-Thousand songs of Solomon		$TX,"1 Kings 4:32",HTML="http://www.biblegateway.com/passage/?search=1%20Kings%204:32&version=NIV"$
-Not rich, nor poor, but my portion	$TX,"Proverbs 30:8",HTML="http://www.biblegateway.com/verse/en/Proverbs%2030:8"$
-Be hot or cold. Lukewarm I spit you out	$TX,"Revelation 3:16",HTML="http://www.biblegateway.com/verse/en/Revelation%203:16"$
+It is love I desire 										$TX,"Hosea 6:6",HTML="http://www.biblegateway.com/verse/en/Hosea%206:6"$
+Males appear three times, not empty 		$TX,"Deuteronomy 16:16",HTML="http://www.biblegateway.com/verse/en/Deuteronomy%2016:16"$
+Offer a sacrifice of praise 						$TX,"Hebrews 13:15",HTML="http://www.biblegateway.com/verse/en/Hebrews%2013:15"$
+Do I drink blood of goats? Offer praise $TX,"Psalms 50:14",HTML="http://www.biblegateway.com/verse/en/Psalms%2050:14"$
+When a servant becomes king...					$TX,"Proverb 30:22",HTML="http://www.biblegateway.com/verse/en/Proverb%2030:22"$
+Runner's stride 												$TX,"Psalms 147:10",HTML="http://www.biblegateway.com/verse/en/Psalms%20147:10"$
+Buckling armor													$TX,"1 Kings 20:11",HTML="http://www.biblegateway.com/verse/en/1%20Kings%2020:11"$
+Lot cast in the lap 										$TX,"Proverbs 16:33",HTML="http://www.biblegateway.com/verse/en/Proverbs%2016:33"$
+Lord does not repeat										$TX,"Job 33:14",HTML="http://www.biblegateway.com/verse/en/Job%2033:14"$
+Offer only in approved place						$TX,"Deuteronomy 12:13-18",HTML="http://www.biblegateway.com/passage/?search=Deuteronomy%2012:13-18&version=NIV"$
+Jesus' zeal for the Temple							$TX,"John 2:14-19",HTML="http://www.biblegateway.com/passage/?search=John%202:14-19&version=NIV"$
+Famine not for bread										$TX,"Amos 8:11-12",HTML="http://www.biblegateway.com/passage/?search=Amos%208:11-12&version=NIV"$
+To the honest, you are honest 					$TX,"Psalm 18:26",HTML="http://www.biblegateway.com/verse/en/Psalm%2018:26"$
+Meek and humble of heart								$TX,"Matthew 11:29",HTML="http://www.biblegateway.com/verse/en/Matthew%2011:29"$
+Moses gets Aaron												$TX,"Exodus 4:10-16",HTML="http://www.biblegateway.com/passage/?search=Exodus%204:10-16&version=NIV"$
+There is no council against the Lord		$TX,"Proverbs 21:30",HTML="http://www.biblegateway.com/verse/en/Proverbs%2021:30"$
+Human help is worthless 								$TX,"Psalm 108:12",HTML="http://www.biblegateway.com/verse/en/Psalm%20108:12"$
+Do not seek your own wealth 						$TX,"1 Corinthians 10:24",HTML="http://www.biblegateway.com/verse/en/1%20Corinthians%2010:24"$
+Abundance of Spirits										$TX,"1 Corinthians 14:12",HTML="http://www.usccb.org/bible/1corinthians/14:12"$
+The stone rejected is cornerstone 			$TX,"Matthew 21:42",HTML="http://www.biblegateway.com/verse/en/Matthew%2021:42"$
+Egypt rise like flood 									$TX,"Jeremiah 46:7-8",HTML="http://www.biblegateway.com/passage/?search=Jeremiah%2046:7-8&version=NIV"$
+New wineskins 													$TX,"Mark 2:22",HTML="http://www.biblegateway.com/verse/en/Mark%202:22"$
+Thousand songs of Solomon 							$TX,"1 Kings 4:32",HTML="http://www.biblegateway.com/passage/?search=1%20Kings%204:32&version=NIV"$
+Not rich, nor poor, but my portion			$TX,"Proverbs 30:8",HTML="http://www.biblegateway.com/verse/en/Proverbs%2030:8"$
+Be hot or cold. Lukewarm I spit you out $TX,"Revelation 3:16",HTML="http://www.biblegateway.com/verse/en/Revelation%203:16"$
 
 $TX,"Linus Torvalds (Dec 28, 1969)",HTML="https://en.wikipedia.org/wiki/Linus_Torvalds"$
-$TX,"John Carmack   (Aug 20, 1970)",HTML="https://en.wikipedia.org/wiki/John_Carmack"$
+$TX,"John Carmack 	(Aug 20, 1970)",HTML="https://en.wikipedia.org/wiki/John_Carmack"$
 $TX,"Terry A. Davis (Dec 15, 1969)",HTML="https://motherboard.vice.com/en_us/article/gods-lonely-programmer"$
 $TX,"Dr. David Pheanis",HTML="https://webapp4.asu.edu/directory/person/77201"$
 $TX,"Dr. Konstantinos S. Tsakalis",HTML="http://ecee.engineering.asu.edu/directory/tenured-and-tenure-track-faculty/kostantinos-s-tsakalis"$

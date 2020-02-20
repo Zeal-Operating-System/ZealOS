@@ -5,7 +5,7 @@ before import is resolved, you can use
 var and check it before calling.
 */
 import U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
-	I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0);
+				I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0);
 import U8 *DocSave(CDoc *doc,I64 *_size=NULL);
 import Bool DocUnlock(CDoc *doc);
 import Bool Ed(U8 *link_st,I64 edf_dof_flags=0);
@@ -13,7 +13,7 @@ extern U0 ZenithErr(U8 *format,...);
 extern U0 ZenithLog(U8 *format,...);
 extern I64 BIOSTotalMem();
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
-	Bool whole_drive,Bool make_free);
+				Bool whole_drive,Bool make_free);
 extern CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE);
 extern Bool BlkDevLock(CBlkDev *bd);
 extern CBlkDev *BlkDevNextFreeSlot(U8 first_drive_let,I64 type);
@@ -29,7 +29,7 @@ extern U8 *Define(U8 *dname);
 extern I64 DefineMatch(U8 *needle,U8 *haystack_list_dname,I64 flags=0);
 extern U8 *DefineSub(I64 sub,U8 *dname);
 extern I64 Del(U8 *files_find_mask,Bool make_mask=FALSE,
-	Bool del_dir=FALSE,Bool print_message=TRUE);
+				Bool del_dir=FALSE,Bool print_message=TRUE);
 extern Bool DirMake(U8 *filename,I64 entry_count=0);
 extern Bool Drive(U8 drv_let);
 extern U8 Drive2Letter(CDrive *drive=NULL);
@@ -44,9 +44,9 @@ extern U8 *ExtDefault(U8 *filename,U8 *extension);
 extern I64 FAT32AllocClus(CDrive *drive,I64 c,I64 count);
 extern I64 FAT32AllocContiguousClus(CDrive *drive,I64 count);
 extern Bool FAT32DirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,
-	Bool free_old_chain);
+				Bool free_old_chain);
 extern Bool FAT32FileFind(CDrive *drive,I64 cur_dir_clus,U8 *name,
-	CDirEntry *_res,I64 fuf_flags=0);
+				CDirEntry *_res,I64 fuf_flags=0);
 extern U0 FAT32Init(CDrive *drive);
 extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
 extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
@@ -61,7 +61,7 @@ extern I64 FlushMessages(CTask *task=NULL);
 extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE);
 extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
 extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,
-	CTask *task=NULL,CBlkPool *bp);
+				CTask *task=NULL,CBlkPool *bp);
 extern Bool ISOInit(CDrive *drive,I64 blk);
 extern Bool IsDebugMode();
 extern Bool IsDir(U8 *dir_name);
@@ -85,21 +85,21 @@ extern U0 PutChars(U64 ch);
 extern U0 PutS(U8 *st); //Use $LK,"Print",A="MN:Print"$()
 extern I64 RedSeaAllocClus(CDrive *drive,I64 count);
 extern Bool RedSeaDirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,
-	Bool free_old_chain);
+				Bool free_old_chain);
 extern Bool RedSeaFileFind(CDrive *drive,I64 cur_dir_clus,U8 *name,
-	CDirEntry *_res,I64 fuf_flags=0);
+				CDirEntry *_res,I64 fuf_flags=0);
 extern U0 RedSeaFormat(U8 drv_let,Bool quick=TRUE);
 extern U0 RedSeaFreeFreeList(CDrive *drive);
 extern U0 RedSeaInit(CDrive *drive);
 extern Bool RedSeaValidate(U8 drv_let);
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data),U8 *data=NULL,
-    U8 *task_name=NULL,I64 target_cpu,CTask *parent=NULL, //NULL means zenith
-    I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
+		U8 *task_name=NULL,I64 target_cpu,CTask *parent=NULL, //NULL means zenith
+		I64 stack_size=0,I64 flags=1<<JOBf_ADD_TO_QUE);
 extern U8 *StrPrint(U8 *dst,U8 *format,...);
 extern U0 StrPrintFunSeg(U8 *buf,I64 addr,I64 field_len,I64 flags);
 extern Bool Suspend(CTask *task=NULL,Bool state=TRUE);
 extern CJob *TaskMessage(CTask *_server,CTask *master,
-	I64 message_code,I64 arg1,I64 arg2,I64 flags);
+				I64 message_code,I64 arg1,I64 arg2,I64 flags);
 extern U0 TaskResetAwaitingMessage(CTask *task=NULL);
 extern Bool TaskValidate(CTask *task);
 extern U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE);

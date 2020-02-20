@@ -4,7 +4,7 @@ $WW,1$$FG,5$$TX+CX,"New ASCII"$$FG$
 We want to use one set for ASCII, ScanCodes and ScreenCodes.
 
 
-0  -63  :
+0  -63	:
 64 -127 : SHIFT
 128-191 : CTRL
 192-256 : CTRL+SHIFT
@@ -12,7 +12,7 @@ We want to use one set for ASCII, ScanCodes and ScreenCodes.
 No more ALT key in ZenithOS.
 
 CTRL-LEFT/RIGHT is already begin/end line.
-CTRL-UP/DOWN    is already top/bottom of document.
+CTRL-UP/DOWN		is already top/bottom of document.
 
 What about function keys?
 We will use reduced keyboard, probably.

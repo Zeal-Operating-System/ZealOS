@@ -7,7 +7,7 @@ $HL,1$//Press F5 in the editor to compile and run.
 --------Hello.CC---------
 U0 Main()
 {
-  "Hello World\n";
+	"Hello World\n";
 }
 Main;
 
@@ -15,7 +15,7 @@ Main;
 --------Hello.CC---------
 U0 MyPrint(U8 *st)
 {
-  "%s",st;
+	"%s",st;
 }
 MyPrint("Hello World\n");
 
@@ -23,7 +23,7 @@ MyPrint("Hello World\n");
 --------Hello.CC---------
 U0 MyPrint2(U8 *st1,U8 *st2) //Any number of args.
 {
-  "%s %s\n",st1,st2; //Any number of args.
+	"%s %s\n",st1,st2; //Any number of args.
 }
 MyPrint2("Hello","World");
 
@@ -31,24 +31,24 @@ MyPrint2("Hello","World");
 --------Hello.CC---------
 U0 MyPrint(U8 *st)
 {
-  "" st; //Empty with no comma means first is format str.
+	"" st; //Empty with no comma means first is format str.
 }
 MyPrint("Hello World\n");
 
 
 --------Hello.CC---------
 asm {
-MESSAGE:	DU8 "Hello World\n",0;
+MESSAGE:				DU8 "Hello World\n",0;
 
 //The convention is underscore on C callable.
 //Two colons means exported symbol.
 _HELLO_WORLD::
 //You can only clobber RAX,RBX,RCX,RDX
-	PUSH	RSI
-	MOV	RSI,MESSAGE
-	CALL	PUT_STR
-	POP	RSI
-	RET
+				PUSH		RSI
+				MOV 		RSI,MESSAGE
+				CALL		PUT_STR
+				POP 		RSI
+				RET
 }
 Call(_HELLO_WORLD);
 
@@ -57,11 +57,11 @@ Call(_HELLO_WORLD);
 asm {
 _HELLO_WORLD::
 //You can only clobber RAX,RBX,RCX,RDX
-	MOV	RAX,'Hello '
-	CALL	PUT_CHARS //Up to 8 chars packed into one 64-bit int.
-	MOV	RAX,'World\n'
-	CALL	PUT_CHARS
-	RET
+				MOV 		RAX,'Hello '
+				CALL		PUT_CHARS //Up to 8 chars packed into one 64-bit int.
+				MOV 		RAX,'World\n'
+				CALL		PUT_CHARS
+				RET
 }
 Call(_HELLO_WORLD);
 
@@ -70,14 +70,14 @@ Call(_HELLO_WORLD);
 asm {
 _MY_PRINT::
 //You can only clobber RAX,RBX,RCX,RDX
-	PUSH	RBP
-	MOV	RBP,RSP
-	PUSH	RSI
-	MOV	RSI,U64 SF_ARG1[RBP]
-	CALL	PUT_STR
-	POP	RSI
-	POP	RBP
-	RET1	8	//Callee pops the stack to clear args.
+				PUSH		RBP
+				MOV 		RBP,RSP
+				PUSH		RSI
+				MOV 		RSI,U64 SF_ARG1[RBP]
+				CALL		PUT_STR
+				POP 		RSI
+				POP 		RBP
+				RET1		8 			//Callee pops the stack to clear args.
 }
 _extern _MY_PRINT U0 MyPrint(U8 *st);
 MyPrint("Hello World\n");
@@ -87,12 +87,12 @@ MyPrint("Hello World\n");
 asm {
 _MY_PRINT::
 //You can only clobber RAX,RBX,RCX,RDX
-	PUSH	RBP
-	MOV	RBP,RSP
-	PUSH	U64 SF_ARG1[RBP]
-	CALL	&PutS	//Callee pops the stack to clear args.
-	POP	RBP
-	RET1	8
+				PUSH		RBP
+				MOV 		RBP,RSP
+				PUSH		U64 SF_ARG1[RBP]
+				CALL		&PutS 	//Callee pops the stack to clear args.
+				POP 		RBP
+				RET1		8
 }
 _extern _MY_PRINT U0 MyPrint(U8 *st);
 MyPrint("Hello World\n");

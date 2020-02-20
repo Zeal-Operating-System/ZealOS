@@ -3,34 +3,34 @@
 
 U0 UserStartUp()
 {//Run each time a user a spawned
-  DocTermNew;
-  Type("::/Doc/Start.DD");
-  LBts(&Fs->display_flags,DISPLAYf_SHOW);
-  WinToTop;
-  WinZBufUpdate;
-  Dir;
+	DocTermNew;
+	Type("::/Doc/Start.DD");
+	LBts(&Fs->display_flags,DISPLAYf_SHOW);
+	WinToTop;
+	WinZBufUpdate;
+	Dir;
 }
 
 U0 ServerStartUp()
 {//Run each time a server task is spawned.
-  DocTermNew;
-  LBts(&Fs->display_flags,DISPLAYf_SHOW);
-  WinToTop;
-  WinZBufUpdate;
+	DocTermNew;
+	LBts(&Fs->display_flags,DISPLAYf_SHOW);
+	WinToTop;
+	WinZBufUpdate;
 }
 
 U0 StartUpTasks()
 {
-  CTask *user = User;
-  WinToTop(user);
-  WinTileVert;
-  "Boot Time:%7.3fs\n",tS;
-  XTalk(user,"Cd;#include \"Once\";\n");
-  Silent;//no output to screen
-  ACInit("/*;!*/Bible.TXT*");
-  Silent(OFF); //no output to screen
+	CTask *user = User;
+	WinToTop(user);
+	WinTileVert;
+	"Boot Time:%7.3fs\n",tS;
+	XTalk(user,"Cd;#include \"Once\";\n");
+	Silent;//no output to screen
+	ACInit("/*;!*/Bible.TXT*");
+	Silent(OFF); //no output to screen
 }
 
 StartUpTasks;
 
-"\nZenithOS V %5.2f\t%D %T\n\n",sys_os_version,sys_compile_time,sys_compile_time;
+"\nZenithOS V %5.2f\t%D %T\n\n",sys_os_version,sys_compile_time,sys_compile_time;

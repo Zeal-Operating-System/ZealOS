@@ -4,7 +4,7 @@ $LK,"DolDoc",A="::/Doc/DolDocOverview.DD"$ is a ZenithOS document type.
 
 $FG,2$"Expression"$FG$ a num or CosmiC algebraic term with operators and CosmiC syms can be entered.
 $FG,2$"Macro"$FG$ Most entries can behave like macro entries if you assign them macro strs.
-$FG,2$"InStr"$FG$ Like a macro except it is an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$.  You can't have both an in_str and macro text defined.  
+$FG,2$"InStr"$FG$ Like a macro except it is an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$.	You can't have both an in_str and macro text defined.
 
 $FG,5$Tag Text$FG$ is the text that will be displayed for the item.  For links, you can leave it blank and the details of the link will be shown.
 $FG,5$Hide$FG$ means display nothing, making an entry invis.
@@ -18,7 +18,7 @@ $FG$$FG,5$Bottom Y$FG$ relative to the bottom of the window.
 
 $FG,5$Blink$FG$ make the text blink.
 $FG,5$Invert$FG$ make the text inverted.
-$FG,5$Underline$FG$ make the text underlined. 
+$FG,5$Underline$FG$ make the text underlined.
 
 $FG,5$Scroll X Length Expression$FG$ if a value is entered, the text will scroll in an area of this width.
 $FG,5$Y Offset Expression$FG$ if a value is entered, the text will be shifted vertically by this many pixs, so you can make superscripts or subscripts.
@@ -35,8 +35,8 @@ $FG,5$Y Expression$FG$ For cursor movements, the vertical value.
 
 $FG,5$PopUp$FG$ For macro's, run the macro in a PopUp window.  Do this when making a macro to run a program, so it doesn't tie-up memory.
 
-$FG,5$Escape$FG$ For macro's, send an $FG,2$<ESC>$FG$ char to exit before running the macro.  Without this, the macro runs in the wrong window, usually.
+$FG,5$Escape$FG$ For macro's, send an $FG,2$<ESC>$FG$ char to exit before running the macro.	Without this, the macro runs in the wrong window, usually.
 
-$FG,5$Refresh Data$FG$  updates $FG,2$$$DA...$$$FG$ entry continuously.
+$FG,5$Refresh Data$FG$	updates $FG,2$$$DA...$$$FG$ entry continuously.
 
 $FG,5$Html Link$FG$  stores a link which will be embedded if you generate a html version of a document with $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.

@@ -14,20 +14,20 @@ See $LK,"::/Doc/DolDocOverview.DD"$
 */
 
 //Hash Types
-#define DHT_DOC_CMD	1
-#define DHT_DOC_FLAG	2
-#define DHT_COLOR	4
+#define DHT_DOC_CMD 		1
+#define DHT_DOC_FLAG		2
+#define DHT_COLOR 			4
 
 public class CDolDocGlobals
 {
-  CHashTable *hash;
-  I64	default_de_flags		[DOCT_TYPES_NUM],
-	type_flags_nontag_invis [(DOCT_TYPES_NUM+63)/64],
-	type_flags_form		[(DOCT_TYPES_NUM+63)/64],
-	type_flags_data		[(DOCT_TYPES_NUM+63)/64],
-	type_flags_chk_dup	[(DOCT_TYPES_NUM+63)/64],
-	clean_scan_codes	[4];
-  I32	default_type_flags		[DOCT_TYPES_NUM];
+	CHashTable *hash;
+	I64 	default_de_flags								[DOCT_TYPES_NUM],
+				type_flags_nontag_invis [(DOCT_TYPES_NUM+63)/64],
+				type_flags_form 				[(DOCT_TYPES_NUM+63)/64],
+				type_flags_data 				[(DOCT_TYPES_NUM+63)/64],
+				type_flags_chk_dup			[(DOCT_TYPES_NUM+63)/64],
+				clean_scan_codes				[4];
+	I32 	default_type_flags							[DOCT_TYPES_NUM];
 } doldoc;
 MemSet(&doldoc,0,sizeof(CDolDocGlobals));
 

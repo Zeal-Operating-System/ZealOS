@@ -13,51 +13,51 @@ then the estimated time will display.
 
 U0 Main1()
 {
-  "\nWith description.\n";
-  PressAKey;
-  progress1_max=200;
-  StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
-  while (progress1++!=progress1_max)
-    Sleep(20);
-  ProgressBarsReset;
+	"\nWith description.\n";
+	PressAKey;
+	progress1_max=200;
+	StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
+	while (progress1++!=progress1_max)
+		Sleep(20);
+	ProgressBarsReset;
 }
 Main1;
 
 U0 Main2()
 {
-  "\nWith description and elapsed time.\n";
-  PressAKey;
-  progress1_max=200;
-  progress1_t0=tS;
-  StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
-  while (progress1++!=progress1_max)
-    Sleep(20);
-  ProgressBarsReset;
+	"\nWith description and elapsed time.\n";
+	PressAKey;
+	progress1_max=200;
+	progress1_t0=tS;
+	StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
+	while (progress1++!=progress1_max)
+		Sleep(20);
+	ProgressBarsReset;
 }
 Main2;
 
 U0 Main3()
 {
-  "\nWith description, elapsed time and registry total time.\n";
-  PressAKey;
-  progress1_max=200;
-  progress1_t0=tS;
-  RegExe("DemoCompany/ProgressBars");
-  StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
-  while (progress1++!=progress1_max)
-    Sleep(20);
-  ProgressBarsReset("DemoCompany/ProgressBars");
+	"\nWith description, elapsed time and registry total time.\n";
+	PressAKey;
+	progress1_max=200;
+	progress1_t0=tS;
+	RegExe("DemoCompany/ProgressBars");
+	StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
+	while (progress1++!=progress1_max)
+		Sleep(20);
+	ProgressBarsReset("DemoCompany/ProgressBars");
 }
 Main3;
 
 U0 Main4()
 {
-  "\nNo description.\n";
-  PressAKey;
-  progress1_max=200;
-  while (progress1++!=progress1_max)
-    Sleep(20);
-  ProgressBarsReset;
+	"\nNo description.\n";
+	PressAKey;
+	progress1_max=200;
+	while (progress1++!=progress1_max)
+		Sleep(20);
+	ProgressBarsReset;
 }
 Main4;
 
@@ -69,12 +69,12 @@ PressAKey;
 
 asm {
 _PROGRESS_DEMO::
-	MOV	RCX,12000000
-@@05:	MOV	U64 [&progress1],RCX
-	CALL	&Yield
-	LOOP	@@05
-	MOV	U64 [&progress1],RCX
-	RET
+				MOV 		RCX,12000000
+@@05: 	MOV 		U64 [&progress1],RCX
+				CALL		&Yield
+				LOOP		@@05
+				MOV 		U64 [&progress1],RCX
+				RET
 }
 _extern _PROGRESS_DEMO U0 AsmProgressDemo();
 AsmProgressDemo;
