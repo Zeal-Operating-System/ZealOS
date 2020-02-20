@@ -6,7 +6,7 @@ The Zenith Operating System is a modernized, professional fork of the 64-bit Tem
 Features in development include:
   - Fully-functional AHCI support.
   - Compiler optimizations for speed improvements.
-  - VBE support, VESA graphics.
+  - ~~VBE support~~ 32-bit color VBE graphics.
   - Network card drivers, network stack.
 
 Every commit contains a "Zenith-Latest.iso" in the /src/Tmp folder, which is an ISO build of that commit.
@@ -17,11 +17,10 @@ Previous releases are currently archived on the `mega.nz` website:
 
 Changes include:
   - 60FPS.
+  - VBE graphics with variable resolutions.
   - Added a NONE #define for use in default function arguments.
   - 440Hz 'A' tuning changed to 432Hz.
-  - Added CompComp function.
   - HolyC -> CosmiC.
-  - Added Seg2Linear function.
   - System-wide renames:
     - AOnce -> ZOnce
     - ACAlloc -> ZCAlloc
