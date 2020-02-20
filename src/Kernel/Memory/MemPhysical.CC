@@ -158,7 +158,7 @@ I64 BIOSTotalMem()
   r20=0;
   if (m20->type) {
     while (m20->type) {
-      if (m20->type==1)
+      if (m20->type==MEM_E820t_USABLE)
 	r20+=m20->len;
       m20++;
     }

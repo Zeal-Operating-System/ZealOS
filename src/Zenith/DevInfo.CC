@@ -208,32 +208,56 @@ public U0 PCIRep()
 #help_index "Info;Memory/Info"
 public U0 MemBIOSRep()
 {//Report the memory ranges reported by the BIOS at boot.
-  U16		*m01=MEM_E801;
-  CMemE820	*m20=MEM_E820;
+  U16		*m01 = MEM_E801;
+  CMemE820	*m20 = MEM_E820;
   CMemRange	*tmpmr;
-  "Standard Addresses\n"
-	"000A0000-000BFFFF VGA\n"
+
+  "$$PURPLE$$Standard Addresses$$FG$$\n"
 	"FEE00000-FEE00FFF See $$LK,\"APIC\",A=\"MN:LAPIC_BASE\"$$\n\n"
-	"32 Bit Device Mem\n";
+
+  "$$PURPLE$$VBE Linear Framebuffer$$FG$$\n"
+	"%08X-%08X See $$LK,\"VBE Mode\",A=\"FF:::/Kernel/KernelA.HH,framebuffer\"$$\n", text.fb_alias,
+										text.fb_alias(U8 *) + text.buffer_size - 1;
+  "\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
   while (LBts(&sys_semas[SEMA_DEV_MEM],0))
     Yield;
   tmpmr=dev.mem32_head.next;
   while (tmpmr!=&dev.mem32_head) {
-    "%02X:%016X-%016X\n",
-	  tmpmr->type,tmpmr->base,tmpmr->base+tmpmr->size-1;
+    "%z:%08X-%08X\n",
+	  tmpmr->type,"Unused\0RAM\0Device",tmpmr->base,tmpmr->base+tmpmr->size-1;
     tmpmr=tmpmr->next;
   }
   LBtr(&sys_semas[SEMA_DEV_MEM],0);
 
-  "\nBIOS Memory Report 15:E801\n"
-	"01:0000000000000000-%016X\n",0x100000+m01[0]<<10-1;
-  "01:0000000001000000-%016X\n",SYS_16MEG_AREA_LIMIT+m01[1]<<16-1;
+  "\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n"
+	"0000000000000000-%016X\n", 0x100000 + m01[0] << 10 - 1;
+  	"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] << 16 - 1;
 
-  if (m20->type) {
-    '\n';
-    "BIOS Memory Report 15:E820\n";
-    while (m20->type) {
-      "%02X:%016X-%016X\n",m20->type,m20->base,m20->base+m20->len-1;
+  if (m20->type)
+  {
+    "\n$$PURPLE$$BIOS Memory Report 15:E820$$FG$$\n";
+    while (m20->type)
+    {
+      "$$RED$$";
+      switch[m20->type] //nobound switch. very unlikely BIOS messed something up.
+      {
+        case MEM_E820t_USABLE:
+          "$$GREEN$$Usable:      ";
+          break;
+        case MEM_E820t_RESERVED:
+          "Reserved:    ";
+          break;
+        case MEM_E820t_ACPI:
+        case MEM_E820t_ACPI_NVS:
+	  "ACPI:        ";
+           break;
+        case MEM_E820t_BAD_MEM:
+          "Bad memory:  ";
+           break;
+        case MEM_E820t_PERM_MEM:
+          "Perm memory: ";
+       }
+      "$$FG$$%016X-%016X\n", m20->base, m20->base + m20->len - 1;
       m20++;
     }
   }

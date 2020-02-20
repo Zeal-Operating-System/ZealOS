@@ -386,7 +386,14 @@ class CSysLimitBase
 
 #help_index "Memory/Info"
 #define MEM_E820_ENTRIES_NUM	48
-class CMemE820
+#define MEM_E820t_USABLE	1
+#define MEM_E820t_RESERVED	2
+#define MEM_E820t_ACPI		3
+#define MEM_E820t_ACPI_NVS	4
+#define MEM_E820t_BAD_MEM	5
+#define MEM_E820t_PERM_MEM	7
+
+class CMemE820
 {
   U8	*base;
   I64	len;

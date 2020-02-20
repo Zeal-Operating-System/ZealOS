@@ -47,7 +47,7 @@ U0 BlkPoolsInit()
 
   if (code_heap_limit<total) {
     while (m20->type) {
-      if (m20->type==1) {
+      if (m20->type==MEM_E820t_USABLE) {
 	lo=m20->base;
 	hi=m20->base+m20->len;
 	if (lo<code_heap_limit) {

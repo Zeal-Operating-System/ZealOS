@@ -9,10 +9,10 @@ CTask *zenith_task;
 I64 sys_num_spawned_tasks;
 
 CTask *sys_winmgr_task,*sys_task_being_screen_updated;
-U8 *rev_bits_table; //Table with U8 bits reversed
+U8 *rev_bits_table; //Table with U8 bits reversed
 CDate local_time_offset;
 F64	*pow10_I64,
-	sys_os_version=0.10;
+	sys_os_version=1.000;
 
 CAutoCompleteDictGlobals acd;
 CAutoCompleteGlobals ac;

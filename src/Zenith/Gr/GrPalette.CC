@@ -9,6 +9,11 @@ public CBGR48 gr_palette_std[COLORS_NUM]={
 0x555555555555,0x55555555FFFF,0x5555FFFF5555,0x5555FFFFFFFF,
 0xFFFF55555555,0xFFFF5555FFFF,0xFFFFFFFF5555,0xFFFFFFFFFFFF};
 
+public CBGR24 gr_palette_gruvbox_light[COLORS_NUM] = {
+  0x3C3836, 0x076678, 0x79740E, 0x427B58, 0x9D0006, 0x8F3F71, 0xB57614, 0x928374,
+  0x7C6F64, 0x458588, 0x98971A, 0x689D6A, 0xCC241D, 0xB16286, 0xD79921, 0xFBF1C7
+};
+
 public CBGR24 gr_palette_pastel[COLORS_NUM]={
   0xE8E8D3, 0x8197BF, 0x19CB00, 0x668799, 0xCF6A4C, 0x8787AF, 0xFAD07A, 0x525252,
   0x888888, 0xACCAFF, 0x23FD00, 0x80BFAF, 0xFF9D80, 0xC4C4FF, 0xFFEFBF, 0x151515
@@ -36,6 +41,17 @@ public U0 PaletteSetGray(Bool persistent=TRUE)
   if (persistent)
     fp_set_std_palette = &PaletteSetGray;
 }
+
+
+public U0 PaletteSetGruvboxLight(Bool persistent=TRUE)
+{//Activate std palette.
+  GrPaletteSet(gr_palette_gruvbox_light);
+  VGAFlush;
+  if (persistent)
+    fp_set_std_palette = &PaletteSetGruvboxLight;
+}
+
+
 public U0 PaletteSetPastel(Bool persistent=TRUE)
 {//Activate std palette.
   GrPaletteSet(gr_palette_pastel);
@@ -44,4 +60,3 @@ public U0 PaletteSetPastel(Bool persistent=TRUE)
     fp_set_std_palette = &PaletteSetPastel;
 }
 
-
