@@ -1592,8 +1592,8 @@ class CWinMgrTimingGlobals
 	I64 	calc_idle_count;
 };
 
-#define WINMGR_FPS			(60000.0/1001)
-#define WINMGR_PERIOD 	(1001/60000.0)
+#define WINMGR_FPS		(30000.0/1001)
+#define WINMGR_PERIOD 	(1001/30000.0)
 
 public class CWinMgrGlobals
 {

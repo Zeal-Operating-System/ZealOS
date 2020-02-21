@@ -149,26 +149,29 @@ U0 UncachedAliasAlloc() //Make uncached alias for 4 lowest Gig.
 }
 
 I64 BIOSTotalMem()
-{
-	I64 r01,r20;
-	U16 					*m01=MEM_E801;
-	CMemE820			*m20=MEM_E820;
+{//Returns max of either E801 or E820 mem map.
+	I64 total01 = 0x100000, total20 = 0;
+	U16			*mem01 = MEM_E801;
+	CMemE820	*mem20 = MEM_E820;
 
-	r01=0x100000+m01[0]<<10+m01[1]<<16;
-	r20=0;
-	if (m20->type) {
-		while (m20->type) {
-			if (m20->type==MEM_E820t_USABLE)
-				r20+=m20->len;
-			m20++;
+	total01 += mem01[0] * 1024;		//First U16 is mem between 1MiB and 16 MiB in KiB.
+	total01 += mem01[1] * 64 * 1024;//Second U16 is mem above 16MiB (until it encounters a hole) in 64KiB blocks.
+
+	if (mem20->type)
+	{
+		while(mem20->type)
+		{
+			if(mem20->type == MEM_E820t_USABLE)
+				total20 += mem20->len;
+			mem20++;
 		}
-	}
-	return MaxI64(r01,r20);
+  	}
+	return MaxI64(total01, total20);  
 }
 
 I64 Scale2Mem(I64 min,I64 max,I64 limit=2*1024*1024*1024)
 {//Helps pick DiskCache and RAMDisk sizes.
-//Can be used in $LK,"BootHDIns",A="MN:BootHDIns"$() config scripts.
+//Can be used in $LK,"BootHDIns",A="MN:BootHDIns"$() config scripts.
 	I64 i;
 	if (sys_data_bp)
 		i=sys_data_bp->alloced_u8s;

@@ -276,7 +276,7 @@ public _intern IC_RDTSC I64 GetTSC(); //Get time stamp counter.
 #help_index "Graphics/VBE"
 public _extern SYS_VBE_INFO CVBEInfo sys_vbe_info;
 public _extern SYS_VBE_FINAL_MODE CVBEMode sys_vbe_mode;
-_extern SYS_VBE_FINAL U16 sys_vbe_mode_num;
+_extern SYS_VBE_FINAL_MODE_NUM U16 sys_vbe_mode_num;
 _extern SYS_VBE_MODES CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
 
 #help_index ""
