@@ -27,7 +27,7 @@ SYS_RUN_LEVEL:: DU32	0;
 
 MEM_BOOT_BASE::	DU32	0;			//Offset from start used by reboot
 MEM_E801::		DU16	0, 0;
-MEM_E820::		DU8 	MEM_E820_ENTRIES_NUM*sizeof(CMemE820) DUP (0);
+MEM_E820::		DU8 	MEM_E820_ENTRIES_NUM*sizeof(CMemE820) DUP (0);
 MEM_PHYSICAL_SPACE::	DU64	0;
 SYS_GDT_PTR::	DU16	sizeof(CGDT)-1;
 				DU64	0;
@@ -213,38 +213,46 @@ GET_IP: POP 	BX
 @@10:
 
 //Get mem maps.
-		MOV 		AX,0xE801
-		INT 		0x15
-		MOV 		U16 [MEM_E801],CX
-		MOV 		U16 [MEM_E801+2],DX
+//Get E801 memory map.
+//Output: AX = Memory between 1MiB and 16MiB in KiB (max 0x3C00 == 15 MiB)
+//		  BX = Memory after 16MiB until first memory hole in 64KiB blocks.
+		XOR		CX, CX
+		XOR		DX, DX
+		MOV		AX, 0xE801
+		INT 	0x15
+		JCXZ	@@12 //if CX and DX are zero, use AX and BX instead.
+		MOV		AX, CX
+		MOV		BX, DX
+@@12:	MOV 	U16 [MEM_E801],   AX
+		MOV 	U16 [MEM_E801+2], BX
 
-		MOV 		CX,MEM_E820_ENTRIES_NUM-1 //Leave one to terminate
-		XOR 		EBX,EBX
-		MOV 		AX,DS
-		MOV 		ES,AX
-		MOV 		DI,MEM_E820
-@@15: 	PUSH		CX
-		MOV 		EAX,0xE820
-		MOV 		ECX,sizeof(CMemE820)
-		MOV 		EDX,'PAMS'
-		INT 		0x15
-		JC			@@20
-		CMP 		EAX,'PAMS'
-		JNE 		@@20
-		TEST		EBX,EBX
-		JZ			@@20
-		ADD 		DI,sizeof(CMemE820)
-		POP 		CX
-		LOOP		@@15
-		SUB 		SP,2
-@@20: 	ADD 		SP,2
+		MOV 	CX,MEM_E820_ENTRIES_NUM - 1 //Leave one to terminate
+		XOR 	EBX ,EBX
+		MOV 	AX, DS
+		MOV 	ES, AX
+		MOV 	DI, MEM_E820
+@@15: 	PUSH	CX
+		MOV 	EAX, 0xE820
+		MOV 	ECX, sizeof(CMemE820)
+		MOV 	EDX, 'PAMS'
+		INT 	0x15
+		JC		@@20
+		CMP 	EAX, 'PAMS'
+		JNE 	@@20
+		TEST	EBX,EBX
+		JZ		@@20
+		ADD 	DI, sizeof(CMemE820)
+		POP 	CX
+		LOOP	@@15
+		SUB 	SP, 2
+@@20: 	ADD		SP, 2
 
 //Find how much space to map, start with E801 limit.
-		XOR 		EAX,EAX
-		MOV 		AX,[MEM_E801+2]
-		SHL 		EAX,16
-		ADD 		EAX,SYS_16MEG_AREA_LIMIT
-		XOR 		EDX,EDX
+		XOR 	EAX,EAX
+		MOV 	AX,[MEM_E801+2]
+		SHL 	EAX,16
+		ADD 	EAX,SYS_16MEG_AREA_LIMIT
+		XOR 	EDX,EDX
 
 //Find max of E820 to set mapped space.
 		MOV 	SI,MEM_E820

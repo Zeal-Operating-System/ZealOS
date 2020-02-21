@@ -11,7 +11,7 @@ import Bool DocUnlock(CDoc *doc);
 import Bool Ed(U8 *link_st,I64 edf_dof_flags=0);
 extern U0 ZenithErr(U8 *format,...);
 extern U0 ZenithLog(U8 *format,...);
-extern I64 BIOSTotalMem();
+extern I64 MemBIOSTotal();
 extern I64 BlkDevAdd(CBlkDev *bd,I64 prt_num=I64_MIN,
 				Bool whole_drive,Bool make_free);
 extern CBlkDev *BlkDevCheck(CBlkDev *bd,Bool except=TRUE);

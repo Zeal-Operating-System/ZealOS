@@ -111,11 +111,11 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 		"Stack\t\t:$$RED$$$$BK,1$$Overflow$$BK,0$$$$FG$$/%010X\n",j;
 
 	"HashTable\t:%010X\n",HashTableSize2(task->hash_table);
-	"FPU\t\t:%010X\n",MSize2(task->fpu_mmx);
-	"DirCur\t:%010X\n",MSize2(task->cur_dir);
+	"FPU\t\t\t:%010X\n",MSize2(task->fpu_mmx);
+	"DirCur\t\t:%010X\n",MSize2(task->cur_dir);
 
 	if (pdoc=DocPut(task))
-		"PutDoc\t:%010X\n",DocSize(pdoc);
+		"PutDoc\t\t:%010X\n",DocSize(pdoc);
 	if ((ddoc=DocDisplay(task)) && pdoc!=ddoc)
 		"DisplayDoc\t:%010X\n",DocSize(ddoc);
 	if (bdoc=DocBorder(task))
@@ -161,26 +161,26 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 				m+=MSize2(task1->code_heap);
 		}
 		"TaskStructs\t:%010X\n",j;
-		"TSSes\t:%010X\n",k;
+		"TSSes\t\t:%010X\n",k;
 		"HeapCtrls\t:%010X\n",m;
 		if (n)
 			"TaskQueues\t:%010X\n",n;
-		"BlkDevs\t:%010X\n",BlkDevsSize;
-		"Drives\t:%010X\n",DrivesSize;
+		"BlkDevs\t\t:%010X\n",BlkDevsSize;
+		"Drives\t\t:%010X\n",DrivesSize;
 		if (blkdev.cache_base)
 			"DiskCache\t:%010X\n",MSize2(blkdev.cache_base)+MSize2(blkdev.cache_hash_table)+ MSize2(blkdev.cache_ctrl);
-		"Clip\t:%010X\n",DocSize(sys_clip_doc);
+		"Clip\t\t:%010X\n",DocSize(sys_clip_doc);
 		"AutoComplete:%010X\n",CallExtStr("AutoCompleteSize");
-		"text.font\t:%010X\n", MSize2(text.font);
+		"text.font\t\t:%010X\n", MSize2(text.font);
 		"text.raw_screen\t:%010X\n", MSize2(text.raw_screen);
 		"gr.to_8_bits\t:%010X\n",MSize2(gr.to_8_bits);
 		"gr.to_8_colors\t:%010X\n",MSize2(gr.to_8_colors);
 		"gr.text_base\t:%010X\n",MSize2(gr.text_base);
 		"gr.screen_cache\t:%010X\n",MSize2(gr.screen_cache);
 		"gr.win_z_buf\t:%010X\n",MSize2(gr.win_z_buf)+ MSize2(gr.win_uncovered_bitmap);
-		"gr.dc\t\t:%010X\n",DCSize(gr.dc);
-		"gr.dc1\t\t:%010X\n",DCSize(gr.dc1);
-		"gr.dc2\t\t:%010X\n",DCSize(gr.dc2);
+		"gr.dc\t\t\t:%010X\n",DCSize(gr.dc);
+		"gr.dc1\t\t\t:%010X\n",DCSize(gr.dc1);
+		"gr.dc2\t\t\t:%010X\n",DCSize(gr.dc2);
 		"gr.dc_cache\t\t:%010X\n",DCSize(gr.dc_cache);
 		"gr.screen_image\t:%010X\n",DCSize(gr.screen_image);
 		"gr.zoomed_dc\t:%010X\n",DCSize(gr.zoomed_dc);
@@ -197,22 +197,19 @@ public U0 MemRep()
 	CBinFile *bfh=mem_boot_base-sizeof(CBinFile);
 	bfh(I64)+=bfh->file_size-1;
 
-	"$$BLACK$$Low Memory\t:0000100000$$FG$$\n$$ID,2$$";
-	"Kernel\t:%010X-%010X\n",mem_boot_base-sizeof(CBinFile),bfh;
+	"$$BLACK$$Low Memory\t:00100000$$FG$$\n$$ID,2$$";
+	"Kernel\t:%08X-%08X\n",mem_boot_base-sizeof(CBinFile),bfh;
 
-	"$$ID,-2$$$$BLACK$$HighMemory\t:0000100000-%010X$$FG$$\n",
-				mem_heap_limit;
-	"$LK,"SYS_FIXED_AREA",A="MN:CSysFixedArea"$\t:%010X-%010X\n",
-				SYS_FIXED_AREA,SYS_FIXED_AREA+sizeof(CSysFixedArea)-1;
+	"$$ID,-2$$$$BLACK$$HighMemory\t:00100000-%08X$$FG$$\n",mem_heap_limit;
+	"$LK,"SYS_FIXED_AREA",A="MN:CSysFixedArea"$\t:%08X-%08X\n",SYS_FIXED_AREA,SYS_FIXED_AREA+sizeof(CSysFixedArea)-1;
 
-	if (sys_data_bp) {
-		"$$BLACK$$Code Heap\t:%010X/%010X$$FG$$\n",
-					sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
-		"$$BLACK$$Data Heap\t:%010X/%010X$$FG$$\n",
-					sys_data_bp->used_u8s,sys_data_bp->alloced_u8s;
+    "$LK,"VBE framebuffer",A="FF:::/Kernel/KernelA.HH,framebuffer"$\t:%08X-%08X\n", text.fb_alias, text.fb_alias(U8 *) + text.buffer_size - 1;
+	if (sys_data_bp)
+    {
+		"$$BLACK$$Code Heap\t:%010X/%010X$$FG$$\n",sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
+		"$$BLACK$$Data Heap\t:%010X/%010X$$FG$$\n",	sys_data_bp->used_u8s,sys_data_bp->alloced_u8s;
 	} else
-		"$$BLACK$$Code/Data Heap\t:%010X/%010X$$FG$$\n",
-					sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
+		"$$BLACK$$Code/Data Heap\t:%08X/%08X$$FG$$\n",sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
 
 	for (i=0;i<mp_count;i++) {
 		c=&cpu_structs[i];

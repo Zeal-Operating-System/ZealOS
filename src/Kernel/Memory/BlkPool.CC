@@ -32,7 +32,7 @@ U0 BlkPoolsInit()
 	CMemE820 *m20=MEM_E820;
 	Bool first=TRUE;
 
-	total=BIOSTotalMem;
+	total=MemBIOSTotal;
 
 	if (total<=0x80000000)
 		code_heap_limit=total;

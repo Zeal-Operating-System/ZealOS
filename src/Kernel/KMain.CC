@@ -149,7 +149,7 @@ U0 KMain()
 				sys_os_version,sys_compile_time,sys_compile_time;
 
 	TimerInit;
-	if (BIOSTotalMem<ToI64(0.95*MEM_MIN_MEG*0x100000))
+	if (MemBIOSTotal < ToI64 (0.95*MEM_MIN_MEG*0x100000) )
 		RawPrint(4000,"!!! Requires $TX,"512Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
 
 	IntsInit;

@@ -242,8 +242,8 @@ public U0 MemBIOSRep()
 	LBtr(&sys_semas[SEMA_DEV_MEM],0);
 
 	"\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n"
-				"0000000000000000-%016X\n", 0x100000 + m01[0] << 10 - 1;
-				"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] << 16 - 1;
+				"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
+				"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] * 64 * 1024  - 1;
 
 	if (m20->type)
 	{
@@ -269,7 +269,7 @@ public U0 MemBIOSRep()
 				case MEM_E820t_PERM_MEM:
 					"Perm memory:";
 			 }
-			"%016X-%016X$$FG$$\n", m20->base, m20->base + m20->len - 1;
+			"%016X-%016X$$FG$$\n", m20->base, m20->base + m20->len - 1;
 			m20++;
 		}
 	}

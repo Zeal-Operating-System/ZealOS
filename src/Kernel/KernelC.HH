@@ -555,6 +555,9 @@ public extern U64 RandU64();
 public extern I64 RoundI64(I64 num,I64 to);
 public extern I64 Seed(I64 seed=0,CTask *task=NULL);
 
+#help_index "Memory/Info"
+public extern I64 MemBIOSTotal();
+
 #help_index "Memory/Zenith Heap"
 public extern U8 *ZCAlloc(I64 size);
 public extern U8 *ZMAlloc(I64 size);
