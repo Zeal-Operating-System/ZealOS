@@ -334,29 +334,44 @@ public class CMathODE
 
 #define MP_PROCESSORS_NUM 			128
 
-#define SYS_START_CR0 					0x0031
+//Control register flag bits
+#define CR0f_MP		1 //Monitor coprocessor
+#define CR0f_EM		2 //Emulation of coprocessor
+#define CR0f_TS		3 //Task switched, some irrelevant x87 task management stuff
+#define CR0f_NE		5 //Numeric error
+#define CR0f_PG		31//Enable paging
 
-#define RFLAGf_CARRY						0
-#define RFLAGf_PARITY 					2
-#define RFLAGf_AUX_CARRY				4
-#define RFLAGf_ZERO 						6
-#define RFLAGf_SIGN 						7
-#define RFLAGf_TRAP 						8 //Single Step
-#define RFLAGf_INT							9
-#define RFLAGf_DIR							10
-#define RFLAGf_OVERFLOW 				11
-#define RFLAGf_IOPL0						12 // I/O Privilege Level
-#define RFLAGf_IOPL1						13
-#define RFLAGf_NESTED_TASK			14
-#define RFLAGf_RESUME 					16
-#define RFLAGf_V8086						17
-#define RFLAGf_ALIGN_CHECK			18
-#define RFLAGf_VINT 						19 //Virtual Interrupt
-#define RFLAGf_VINT_PENDING 		20
-#define RFLAGf_ID 							21
+#define CR4f_PAE	5 //Physical Address Extension, required by long mode
+#define CR4f_PGE	7 //Page-Global Enable
+#define CR4f_OSFXSR 9 //FXSAVE/FXRSTOR support enabled
 
-#define RFLAGG_START						0x0000
-#define RFLAGG_NORMAL 					(1<<RFLAGf_INT)
+#define CR4F_PAE	(1<<CR4f_PAE)
+#define CR4F_PGE	(1<<CR4f_PGE)
+#define CR4F_OSFXSR (1<<CR4f_OSFXSR)
+
+#define SYS_START_CR0	0x0031
+
+#define RFLAGf_CARRY		0
+#define RFLAGf_PARITY 		2
+#define RFLAGf_AUX_CARRY	4
+#define RFLAGf_ZERO 		6
+#define RFLAGf_SIGN 		7
+#define RFLAGf_TRAP 		8 //Single Step
+#define RFLAGf_INT			9
+#define RFLAGf_DIR			10
+#define RFLAGf_OVERFLOW 	11
+#define RFLAGf_IOPL0		12 // I/O Privilege Level
+#define RFLAGf_IOPL1		13
+#define RFLAGf_NESTED_TASK	14
+#define RFLAGf_RESUME 		16
+#define RFLAGf_V8086		17
+#define RFLAGf_ALIGN_CHECK	18
+#define RFLAGf_VINT 		19 //Virtual Interrupt
+#define RFLAGf_VINT_PENDING 20
+#define RFLAGf_ID 			21
+
+#define RFLAGG_START	0x0000
+#define RFLAGG_NORMAL 	(1<<RFLAGf_INT)
 
 //Global Descriptor Table
 class CGDTEntry
@@ -385,13 +400,13 @@ class CSysLimitBase
 };
 
 #help_index "Memory/Info"
-#define MEM_E820_ENTRIES_NUM		48
-#define MEM_E820t_USABLE				1
-#define MEM_E820t_RESERVED			2
-#define MEM_E820t_ACPI					3
-#define MEM_E820t_ACPI_NVS			4
-#define MEM_E820t_BAD_MEM 			5
-#define MEM_E820t_PERM_MEM			7
+#define MEM_E820_ENTRIES_NUM	24
+#define MEM_E820t_USABLE		1
+#define MEM_E820t_RESERVED		2
+#define MEM_E820t_ACPI			3
+#define MEM_E820t_ACPI_NVS		4
+#define MEM_E820t_BAD_MEM 		5
+#define MEM_E820t_PERM_MEM		7
 
 class CMemE820
 {
@@ -584,20 +599,6 @@ class CKernel
 #define RLF_ONCE_USER 					(1<<RLf_ONCE_USER)
 
 #help_index "Processor"
-//Control register flag bits
-#define CR0f_MP 				1 //Monitor coprocessor
-#define CR0f_EM 				2 //Emulation of coprocessor
-#define CR0f_TS 				3 //Task switched, some irrelevant x87 task management stuff
-#define CR0f_NE 				5 //Numeric error
-#define CR0f_PG 				31//Enable paging
-
-#define CR4f_PAE				5 //Physical Address Extension, required by long mode
-#define CR4f_PGE				7 //Page-Global Enable
-#define CR4f_OSFXSR 		9 //FXSAVE/FXRSTOR support enabled
-
-#define CR4F_PAE				(1<<CR4f_PAE)
-#define CR4F_PGE				(1<<CR4f_PGE)
-#define CR4F_OSFXSR 		(1<<CR4f_OSFXSR)
 
 //Model specific regs.
 #define IA32F_SCE 			0x001
@@ -1593,7 +1594,7 @@ class CWinMgrTimingGlobals
 };
 
 #define WINMGR_FPS		(30000.0/1001)
-#define WINMGR_PERIOD 	(1001/30000.0)
+#define WINMGR_PERIOD 	(1001/30000.0)
 
 public class CWinMgrGlobals
 {

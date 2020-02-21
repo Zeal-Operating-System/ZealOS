@@ -225,10 +225,10 @@ public U0 MemBIOSRep()
 	CMemRange 		*tmpmr;
 
 	"$$PURPLE$$Standard Addresses$$FG$$\n"
-				"FEE00000-FEE00FFF See $$LK,\"APIC\",A=\"MN:LAPIC_BASE\"$$\n\n"
+				"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n"
 
 	"$$PURPLE$$VBE Linear Framebuffer$$FG$$\n"
-				"%08X-%08X See $$LK,\"VBE Mode\",A=\"FF:::/Kernel/KernelA.HH,framebuffer\"$$\n", text.fb_alias,
+				"%08X-%08X See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
 																																								text.fb_alias(U8 *) + text.buffer_size - 1;
 	"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
 	while (LBts(&sys_semas[SEMA_DEV_MEM],0))
@@ -242,7 +242,7 @@ public U0 MemBIOSRep()
 	LBtr(&sys_semas[SEMA_DEV_MEM],0);
 
 	"\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n"
-				"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
+				"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
 				"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] * 64 * 1024  - 1;
 
 	if (m20->type)
@@ -273,6 +273,11 @@ public U0 MemBIOSRep()
 			m20++;
 		}
 	}
+	"\n$$PURPLE$$BIOS Total Memory Report$$FG$$: ";
+	if (MemBIOSTotal < 1024 * 1024 * 1024)
+		"%03d MiB\n", MemBIOSTotal / 1024 / 1024; 		
+	else
+		"%04d GiB\n", MemBIOSTotal / 1024 / 1024 / 1024;
 }
 
 public U0 MemPageRep()

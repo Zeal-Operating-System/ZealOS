@@ -212,7 +212,6 @@ GET_IP: POP 	BX
 		BTS 	U32 [SYS_RUN_LEVEL], RLf_VESA
 @@10:
 
-//Get mem maps.
 //Get E801 memory map.
 //Output: AX = Memory between 1MiB and 16MiB in KiB (max 0x3C00 == 15 MiB)
 //		  BX = Memory after 16MiB until first memory hole in 64KiB blocks.
@@ -226,11 +225,12 @@ GET_IP: POP 	BX
 @@12:	MOV 	U16 [MEM_E801],   AX
 		MOV 	U16 [MEM_E801+2], BX
 
-		MOV 	CX,MEM_E820_ENTRIES_NUM - 1 //Leave one to terminate
-		XOR 	EBX ,EBX
-		MOV 	AX, DS
-		MOV 	ES, AX
-		MOV 	DI, MEM_E820
+//Get E820 memory map.
+		MOV 	CX , MEM_E820_ENTRIES_NUM - 1 //Leave one to terminate
+		XOR 	EBX, EBX
+		PUSH	DS
+		POP		ES
+		MOV 	DI , MEM_E820
 @@15: 	PUSH	CX
 		MOV 	EAX, 0xE820
 		MOV 	ECX, sizeof(CMemE820)
@@ -239,37 +239,37 @@ GET_IP: POP 	BX
 		JC		@@20
 		CMP 	EAX, 'PAMS'
 		JNE 	@@20
-		TEST	EBX,EBX
+		TEST	EBX, EBX
 		JZ		@@20
-		ADD 	DI, sizeof(CMemE820)
+		ADD 	DI , sizeof(CMemE820)
 		POP 	CX
 		LOOP	@@15
-		SUB 	SP, 2
-@@20: 	ADD		SP, 2
+		SUB 	SP , 2
+@@20: 	ADD		SP , 2 //if called failed we want to nullify the PUSHed CX value.
 
 //Find how much space to map, start with E801 limit.
 		XOR 	EAX,EAX
-		MOV 	AX,[MEM_E801+2]
+		MOV 	AX, [MEM_E801+2]
 		SHL 	EAX,16
 		ADD 	EAX,SYS_16MEG_AREA_LIMIT
 		XOR 	EDX,EDX
 
 //Find max of E820 to set mapped space.
-		MOV 	SI,MEM_E820
-@@25: 	MOV 	CL,CMemE820.type[SI]
-		TEST	CL,CL
+		MOV 	SI , MEM_E820
+@@25: 	MOV 	CL , CMemE820.type[SI]
+		TEST	CL , CL
 		JZ		@@35
-		MOV 	EBX,CMemE820.base[SI]
-		MOV 	ECX,CMemE820.base+4[SI]
-		ADD 	EBX,CMemE820.len[SI]
-		ADC 	ECX,CMemE820.len+4[SI]
-		SUB 	EBX,EAX
-		SBB 	ECX,EDX
+		MOV 	EBX, CMemE820.base  [SI]
+		MOV 	ECX, CMemE820.base+4[SI]
+		ADD 	EBX, CMemE820.len   [SI]
+		ADC 	ECX, CMemE820.len+4 [SI]
+		SUB 	EBX, EAX
+		SBB 	ECX, EDX
 		JC		@@30
-		MOV		EAX,CMemE820.base[SI]
-		MOV		EDX,CMemE820.base+4[SI]
-		ADD		EAX,CMemE820.len[SI]
-		ADC		EDX,CMemE820.len+4[SI]
+		MOV		EAX, CMemE820.base[SI]
+		MOV		EDX, CMemE820.base+4[SI]
+		ADD		EAX, CMemE820.len[SI]
+		ADC		EDX, CMemE820.len+4[SI]
 @@30: 	ADD		SI,sizeof(CMemE820)
 		JMP		@@25
 
