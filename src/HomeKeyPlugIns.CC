@@ -12,7 +12,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 {//ch=ASCII; sc=scan_code
 
 	//See $LK,"Char",A="HI:Char"$ for definition of scan codes.
-	//See $LK,"Key Allocations",A="FI:::/Doc/KeyAlloc.DD"$.
+	//See $LK,"Key Allocations",A="FI:::/Doc/KeyAlloc.DD"$ .
 	//See $LK,"Keyboard Devices",A="HI:Keyboard Devices/System"$.
 
 	//You can customize keys.  This routine
@@ -23,18 +23,25 @@ Bool MyPutKey(I64 ch,I64 sc)
 	//Return TRUE if you completely
 	//handled the key.
 	I64 i;
-	U8 *st1,*st2;
-	if (sc&SCF_ALT && !(sc&SCF_CTRL)) {
-		switch (ch) {
+	U8 *st1, *st2;
+
+	if (sc & SCF_ALT && !(sc & SCF_CTRL))
+	{
+		switch (ch)
+        {
 			case 0:
-				switch (sc.u8[0]) {
+				switch (sc.u8[0])
+				{
 					case SC_F1:
-						if (sc&SCF_SHIFT) {
+						if (sc&SCF_SHIFT)
+						{
 							if (sc&SCF_KEY_DESC)
 								KeyDescSet("Dol/LTPURPLE");
 							else
 								"$$LTPURPLE$$";
-						} else {
+						}
+						else
+						{
 							if (sc&SCF_KEY_DESC)
 								KeyDescSet("Dol/PURPLE");
 							else
@@ -42,12 +49,15 @@ Bool MyPutKey(I64 ch,I64 sc)
 						}
 						return TRUE;
 					case SC_F2:
-						if (sc&SCF_SHIFT) {
+						if (sc & SCF_SHIFT)
+						{
 							if (sc&SCF_KEY_DESC)
 								KeyDescSet("Dol/LTRED");
 							else
 								"$$LTRED$$";
-						} else {
+						}
+						else
+						{
 							if (sc&SCF_KEY_DESC)
 								KeyDescSet("Dol/RED");
 							else

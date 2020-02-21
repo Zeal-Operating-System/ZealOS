@@ -25,12 +25,14 @@ U0 SysGlobalsInit()
 	DebugMode(ON);
 
 	rev_bits_table=CAlloc(256);
-	for (i=0;i<256;i++)
-		for (j=0;j<8;j++) {
-			if (Bt(&i,7-j)) 	LBts(rev_bits_table+i,j);
-		}
 
-	ext = CAlloc(EXT_EXTS_NUM*sizeof(U8 *));
+	for (i = 0; i < 256; i++)
+		for (j = 0; j < 8; j++) 
+			if (Bt(&i,7-j))
+				Bts(rev_bits_table+i,j);
+		
+
+	ext = CAlloc(EXT_EXTS_NUM * sizeof(U8 *));
 	fp_getstr2 = &SysGetStr2;
 	KeyDevInit;
 
@@ -73,17 +75,17 @@ U0 SysGlobalsInit()
 U0 SysGrInit()
 {
 	I64 i, j;
-	text.font = MAlloc(sizeof(U64) * 256);
-	MemCopy(text.font, *SYS_FONT_PTR(U32), sizeof(U64) * 256);
+	text.aux_font = MAlloc(sizeof(U64) * 256);
+	MemCopy(text.aux_font, *SYS_FONT_PTR(U32), sizeof(U64) * 256);
  
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 8; j++)
-			text.font[i].u8[j] = rev_bits_table[text.font[i].u8[j]];
+			text.aux_font[i].u8[j] = rev_bits_table[text.aux_font[i].u8[j]];
 
-	text.aux_font = sys_font_std;
-	text.font['' - 1] = text.aux_font['' - 1]; //Shift-space
-	text.font[10] = text.aux_font[10]; //"Return" symbol
-	text.font[255] = text.aux_font[255]; //auxillary block character
+	text.font = sys_font_std;
+	text.aux_font['' - 1] = text.aux_font['' - 1]; //Shift-space
+	text.aux_font[10] = text.font[10];
+	text.aux_font[255] = text.font[255];
 	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32)='ÀÈÙ¼';
 
