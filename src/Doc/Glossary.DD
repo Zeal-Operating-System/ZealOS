@@ -148,7 +148,7 @@ $ID,2$There is no distinction between $FG,2$task$FG$, $FG,2$process$FG$ or $FG,2
 Since there is not friendly disk sharing and all tasks have the same address map, it might be accurate to call ZenithOS, "multi-thread/single-process".  You run a single application process on $FG,2$Core0$FG$ and it can create threads on the same core or others.	If you run multiple processes, it should be safe, but one process will wait until another completely finishes a long disk access.
 $ID,-2$$TR,"Zenith Task"$
 $ID,2$This is Zenith, as in Zenith and Eve, the parent of all tasks.	Zenith is immortal.  The zenith task is created at start-up and appears in the small window at the top beneath the user terminal windows.  Since the Zenith task is immortal, on Zenith's heap go all memory objects which you don't want destroyed by any single task's death.  When created, Zenith runs the file $LK,"::/StartOS.CC"$.  When start-up is finished, the zenith task enters a server mode where it accepts requests from other tasks.	The $LK,"Zenith",A="MN:Zenith"$("") routine will make Zenith compile and run text src code.  $FG,2$#include$FG$ statements can be sent to $LK,"Zenith",A="MN:Zenith"$(""), creating system-wide code and data which are immortal.
-$ID,-2$$TR-C,"Daemon Tasks"$
+$ID,-2$$TR,"Daemon Tasks"$
 $ID,2$Each CPU core has an executive task called $FG,2$Daemon$FG$ that is immortal.  The Zenith task on $FG,2$Core0$FG$ is also its $FG,2$Daemon$FG$ task.
 $ID,-2$$TR,"Code and Data Heaps"$
 $ID,2$ZenithOS uses the asm $FG,2$CALL$FG$ inst, exclusively, and that inst is limited to calling routines $FG,2$+/-2Gig$FG$ from the current code location.	To prevent out-of-range issues, I decided to separate code and data, placing all code within the lowest $FG,2$2Gig$FG$ of memory, addresses $FG,2$00000000$FG$-$FG,2$7FFFFFFF$FG$.	The compiler and $LK,"Load",A="MN:Load"$()er alloc memory from the code heap to store code and glbl vars, unless the compiler option $LK,"OPTf_GLBLS_ON_DATA_HEAP",A="MN:OPTf_GLBLS_ON_DATA_HEAP"$ is used.  When programs call $LK,"MAlloc",A="MN:MAlloc"$() is from the data heap, which in not limited in size, except by physical RAM memory.  You can alloc from any heap in any task at any time on any core, even making $LK,"independent",A="MN:MemPagAlloc"$ heaps.
@@ -200,30 +200,28 @@ $FG,2$CLI$FG$ disable interrupts.
 $FG,2$STI$FG$ enable interrupts.
 $FG,2$PUSHFD$FG$ pushes the CPU flags.
 $FG,2$POPFD$FG$ pops the CPU flags.
-$ID,-2$$TR,"Filename Extention Types"$
-$ID,2$$FG,5$*.???.Z$FG$
-	These files are automatically compressed or uncompresses files when read or written.
-$FG,5$*.???.C$FG$
-	Contiguous files--NOT compressed.
-$FG,5$*.DD;*.DD$FG$
+$ID,-2$$TR,"Filename Extention Types"$
+$ID,2$$FG,5$$FG,5$*.???.C$FG$
+	Contiguous files - not fragmented on disk.
+$FG,5$*.DD$FG$
 	Text Files
-$FG,5$*.CC;*.CC$FG$
+$FG,5$*.CC$FG$
 	CosmiC src files.  The default CosmiC compiler type is $FG,2$.CC$FG$.
-$FG,5$*.PRJ.Z;*.PRJ$FG$
+$FG,5$*.PRJ$FG$
 	CosmiC src files to be compiled $FG,2$AOT$FG$.
-$FG,5$*.HH.Z;*.HH$FG$
+$FG,5$*.HH$FG$
 	CosmiC src header files.
-$FG,5$*.MAP;*.MAP$FG$
+$FG,5$*.MAP$FG$
 	Compiler "map" files
-$FG,5$*.BIN;*.BIN.C;*.BIN$FG$
+$FG,5$*.BIN;*.BIN.C$FG$
 	Binary executable files, created by $LK,"Comp",A="MN:Comp"$() and read by $LK,"Load",A="MN:Load"$().
-$FG,5$*.DATA.Z;*.DATA$FG$
+$FG,5$*.DATA$FG$
 	Data files
-$FG,5$*.ISO$FG$
+$FG,5$*.ISO;*.ISO.C$FG$
 	CD/DVD image file.
-$FG,5$*.IN.Z;*.IN$FG$
+$FG,5$*.IN$FG$
 	$FG,2$InFile$FG$ Basically a CosmiC program whose stdout goes to the input of a task when $LK,"InFile",A="MN:InFile"$() is called.
-$FG,5$*.GR;*.GR$FG$
+$FG,5$*.GR$FG$
 	Graphics file
 
 $LK,"FILEMASK_TXT",A="MN:FILEMASK_TXT"$
@@ -269,5 +267,5 @@ $ID,2$When two parts of a program have a common low-level routine, that routine 
 $ID,-2$$TR,"user_data"$
 $ID,2$Many operating system structures have space set aside for you to store values.	You are on your own managing these with multiple applications and libraries.
 $ID,-2$$TR,"Multicore Core0/CoreAP"$
-$ID,2$Core0, has the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$, and it is the master.	The $FG,2$application processors$FG$ have an executive $LK,"Daemon Tasks",A="FF:::/Doc/Glossary.DD,Daemon Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQueue",A="MN:JobQueue"$() a job on them.
+$ID,2$Core0, has the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$$FG$, and it is the master.	The $FG,2$application processors$FG$ have an executive $LK,"Daemon Task",A="FF:::/Doc/Glossary.DD,Daemon Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQueue",A="MN:JobQueue"$() a job on them.
 $ID,-2$

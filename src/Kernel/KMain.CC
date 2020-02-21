@@ -75,10 +75,7 @@ U0 SysGrInit()
 {
 	text.font = sys_font_std;
     text.aux_font = sys_font_aux;
-	text.aux_font['' - 1] = text.aux_font['' - 1]; //Shift-space
-	text.aux_font[10] = text.font[10];
-	text.aux_font[255] = text.font[255];
-	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
+	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32)='ÀÈÙ¼';
 
 	text.cols = sys_vbe_mode.width / FONT_WIDTH;
