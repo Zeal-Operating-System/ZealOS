@@ -528,7 +528,7 @@ extern U0 			KbdMouseInit();
 extern I64			KbdMessagesQueue();
 public extern U0 KbdTypeMatic(U8 delay);
 extern Bool 		MouseHardDriverInstall();
-public extern Bool MouseEnable(Bool val=TRUE);
+public extern Bool MouseHardEnable(Bool val=TRUE);
 public extern I64 PressAKey();
 public extern I64 ScanChar();
 public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);

@@ -291,7 +291,7 @@ U0 KbdMouseReset()
 	kbd.reset=FALSE;
 }
 
-Bool MouseEnable(Bool val=TRUE)
+Bool MouseHardEnable(Bool val=TRUE)
 {
 	Bool old_val = mouse_hard.enabled;
 	if (val)

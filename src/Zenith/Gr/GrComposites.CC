@@ -299,9 +299,13 @@ public U0 DrawStdMouse(CDC *dc,I64 x,I64 y)
 {//This is a callback. See $LK,"::/Demo/Graphics/Grid.CC"$.
 //Called by $LK,"DrawMouse",A="MN:DrawMouse"$() which is
 	//called by $LK,"WinFinalUpdate",A="MN:WinFinalUpdate"$().
-	dc->thick=1;
 	dc->flags&=~(DCF_TRANSFORMATION|DCF_SYMMETRY);
-	GrArrow3(dc,x+8,y+8,0,x,y,0);
+	dc->thick=2;
+	GrArrow3(dc,x+10,y+10,0,x,y,0);
+//	GrLine3(dc, x, y, 0, x + 13, y + 6, 0);
+//	GrLine3(dc, x, y, 0, x + 6,  y + 13, 0);
+  //  GrLine3(dc, x + 13, y +  6, 0,x + 6, y + 13, 0);
+    //GrLine3(dc, x + 11, y + 11, 0, x + 15, y + 15, 0);
 }
 
 gr.fp_draw_mouse=&DrawStdMouse;

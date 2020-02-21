@@ -594,7 +594,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
 	if (Fs->debug_task)
 		CallExtNum(EXT_DEBUG_RESUME,fault_num,fault_err_code);
 	else {
-		was_mouse_enabled = CallExtStr("MouseEnable", FALSE);
+		was_mouse_enabled = CallExtStr("MouseHardEnable", FALSE);
 		was_raw=Raw(ON);
 		was_silent=Silent(OFF);
 		text.raw_flags|=RAWF_SHOW_DOLLAR|RAWF_SCROLL;
@@ -616,7 +616,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
 		DebugMode(was_in_debug);
 		Silent(was_silent);
 		Raw(was_raw);
-		CallExtStr("MouseEnable", was_mouse_enabled);
+		CallExtStr("MouseHardEnable", was_mouse_enabled);
 		text.raw_flags=old_raw_flags;
 	}
 	SingleUser(was_single_user);
