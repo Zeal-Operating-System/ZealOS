@@ -11,7 +11,15 @@ Features in development include:
 
 ![](/screenshots/screenshot2.png)
 
-Every commit contains a "Zenith-Latest.iso" in the /src/Tmp folder, which is an ISO build of that commit.
+## Getting started
+
+Every commit contains a "Zenith-latest-XXXX-XX-XX-XX-XX_XX_XX.iso" in the root of master, which is a timestamped ISO build of that commit. It might not be complete, or stable. See the "Releases" Tab for the latest stable release.
+
+### Contributing
+
+This basically a read-only repository. Everything happens inside the OS, as intended by Terry. After you've installed the latest release in a VM, you can make changes to the source. Once you've made your changes, you can make copies of the relevant files and put them into a folder, along with some kind of notes as to what you've done as a DolDoc document. You can then make a RedSea ISO file out of that folder by running `RedSeaISO("MyChanges.ISO", "/Home/Folder");`. Mount the VM hard drive in whatever OS-specific way you have to and grab the ISO and send it my way; a pull request attachment would work fine.
+
+## Background
 
 At first, I was developing exclusively inside a VM and occasionally generating ISOs as official releases. This was not a good approach, as things broke and I had no way of telling what changes caused what. So I decided to scrap that and restart from scratch.\
 Previous releases are currently archived on the `mega.nz` website:
@@ -68,5 +76,9 @@ Changes include:
     - Stk -> Stack
     - Stmt -> Statement
     - TempleOS -> ZenithOS
+
+## Screenshots
+
+32-bit color!
 
 ![](/screenshots/screenshot1.png)

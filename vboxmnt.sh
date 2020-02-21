@@ -10,4 +10,3 @@ sudo umount /mnt
 sudo qemu-nbd -d /dev/nbd0
 sudo chown -R v:v src/*
 mv src/Tmp/MyDistro.ISO.C ./Zenith-latest-$(date +%Y-%m-%d-%H_%M_%S).iso
-
