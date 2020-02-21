@@ -224,7 +224,7 @@ CBinFile *Load(U8 *filename,I64 ld_flags=0,CBinFile *bfh_addr=INVALID_PTR)
 	module_base=bfh_addr(U8 *)+sizeof(CBinFile);
 
 	absname=FileNameAbs(fbuf);
-	Free(fbuf);
+	Free(fbuf);
 	fbuf=StrNew(absname);
 	FileExtRemove(fbuf);
 	if (fbuf[1]==':' && StrLen(fbuf)>2)
@@ -239,8 +239,7 @@ CBinFile *Load(U8 *filename,I64 ld_flags=0,CBinFile *bfh_addr=INVALID_PTR)
 
 U0 LoadKernel()
 {
-	HashGenericAdd(KERNEL_MODULE_NAME,HTT_MODULE|HTF_PUBLIC,
-				mem_boot_base-sizeof(CBinFile));
+	HashGenericAdd(KERNEL_MODULE_NAME,HTT_MODULE|HTF_PUBLIC,mem_boot_base-sizeof(CBinFile));
 
 	//Abs patches done here $LK,"CPatchTableAbsAddr",A="FF:::/Kernel/KStart32.CC,CPatchTableAbsAddr"$.
 	LoadPass1(sys_boot_patch_table_base,mem_boot_base,LDF_NO_ABSS|LDF_SILENT);
