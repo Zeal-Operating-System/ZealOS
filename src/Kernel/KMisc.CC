@@ -23,7 +23,7 @@ I64 SysTimerRead()
 	I64 i,res;
 	PUSHFD
 	CLI
-	if (mp_count>1)
+	if (mp_count > 1)
 		while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
 			PAUSE
 	OutU8(PIT_CMD, PIT_CMDF_CHANNEL0); //Latch Timer0
@@ -42,14 +42,16 @@ I64 TimeCal()
 {
 	static I64 time_stamp_start=0,timer_start=0;
 	I64 i;
-	if (time_stamp_start) {
+	if (time_stamp_start)
+	{
 		PUSHFD
 		CLI
-			counts.time_stamp_freq=SYS_TIMER_FREQ*(GetTSC-time_stamp_start);
-			i=SysTimerRead-timer_start;
+			counts.time_stamp_freq = SYS_TIMER_FREQ * (GetTSC - time_stamp_start);
+			i = SysTimerRead - timer_start;
 		if (!i)
 			ZenithErr("Timer Cal Error");
-		else {
+		else
+		{
 			counts.time_stamp_freq/=i;
 			counts.time_stamp_kHz_freq=counts.time_stamp_freq/1000;
 			counts.time_stamp_calibrated=TRUE;
@@ -58,8 +60,8 @@ I64 TimeCal()
 	}
 	PUSHFD
 	CLI
-	timer_start=SysTimerRead;
-	time_stamp_start=GetTSC;
+	timer_start = SysTimerRead;
+	time_stamp_start = GetTSC;
 	POPFD
 	return counts.time_stamp_freq;
 }
@@ -118,12 +120,15 @@ U0 Sound(I8 ona=0)
 {//Play ona, a piano key num. 0 means rest.
 	I64 period;
 	CSoundData *d;
-	if (!Bt(&sys_semas[SEMA_MUTE],0) &&
-				!LBts(&sys_semas[SEMA_SOUND],0)) { //Mutex. Just throw-out if in use
-		if (!ona) {
+	if (!Bt(&sys_semas[SEMA_MUTE],0) && !LBts(&sys_semas[SEMA_SOUND],0))
+	{ //Mutex. Just throw-out if in use
+		if (!ona)
+		{
 			screencast.ona=ona;
 			OutU8(PCSPKR, InU8(PCSPKR) & ~3);
-		} else if (ona!=screencast.ona) {
+		}
+		else if (ona!=screencast.ona)
+		{
 			screencast.ona=ona;
 			period=ClampI64(SYS_TIMER_FREQ/Ona2Freq(ona),1,U16_MAX);
 			//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
@@ -132,7 +137,8 @@ U0 Sound(I8 ona=0)
 			OutU8(PIT2,period.u8[1]);
 			OutU8(PCSPKR,3|InU8(PCSPKR)); //enable speaker
 		}
-		if (!IsDebugMode && screencast.record) {
+		if (!IsDebugMode && screencast.record)
+		{
 			d=ZCAlloc(sizeof(CSoundData));
 			d->ona=ona;
 			d->tS=tS;
@@ -229,7 +235,7 @@ Bool IsSysDebug()
 Bool Raw(Bool val)
 {//Set to direct screen, BLACK & WHITE, non-windowed output mode.
 	if (!val)
-		VGAFlush;
+		VBEFlush;
 	return !LBEqual(&Fs->display_flags,DISPLAYf_NOT_RAW,!val);
 }
 
@@ -263,3 +269,4 @@ U0 ProgressBarsReset(U8 *path=NULL)
 	CallExtStr("ProgressBarsRegTf",path);
 	MemSet(sys_progresses,0,sizeof(sys_progresses));
 }
+

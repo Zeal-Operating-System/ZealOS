@@ -122,7 +122,7 @@ The ZenithOS graphics don't know VGA has changed.
 This bit tells ZenithOS to update whole screen.
 */
 	//<CTRL-ALT-v> will flush screen VGA cache.
-	VGAFlush;
+	VBEFlush;
 }
  
 MiniGrLibDemo;

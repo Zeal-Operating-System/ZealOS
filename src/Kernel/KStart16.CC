@@ -49,12 +49,11 @@ GDT_TR: 				DU8 		MP_PROCESSORS_NUM*16 DUP(0);
 GDT_TR_RING3: 	DU8 		MP_PROCESSORS_NUM*16 DUP(0);
 #assert $$-SYS_GDT==sizeof(CGDT)
 
-SYS_FONT_PTR::	DU32		0;
 SYS_VBE_INFO::	DU8 		sizeof(CVBEInfo) DUP(0);
 SYS_VBE_MODES:: DU8 		sizeof(CVBEModeShort) * VBE_MODES_NUM DUP(0);
 SYS_VBE_FINAL_MODE::		DU8 		sizeof(CVBEMode) DUP(0);
 SYS_VBE_FINAL:: DU16		0; //mode number of final mode set
-#assert $$-SYS_KERNEL==sizeof(CKernel)-sizeof(CBinFile)
+#assert $$-SYS_KERNEL==sizeof(CKernel)-sizeof(CBinFile)
 
 TEMP_VBE_MODE:					DU8 		sizeof(CVBEMode) DUP(0);
 MAX_VBE_MODE: 					DU8 		sizeof(CVBEModeShort) DUP(0);
@@ -212,15 +211,6 @@ GET_IP: POP 		BX
 
 		BTS 		U32 [SYS_RUN_LEVEL],RLf_VESA
 @@10:
-
-//Get pointer to 8x8 VGA ROM font.
-		MOV 		AX, 0x1130
-		MOV 		BH, 3
-		INT 		0x10
-		MOV 		AX, ES
-		SHL 		EAX, 16
-		MOV 		AX, BP
-		MOV 		U32 [SYS_FONT_PTR], EAX
 
 //Get mem maps.
 		MOV 		AX,0xE801

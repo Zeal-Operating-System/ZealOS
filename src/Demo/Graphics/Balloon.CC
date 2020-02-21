@@ -32,7 +32,7 @@ U0 Balloon()
 	}
 
 	STI
-	VGAFlush;
+	VBEFlush;
 }
 
 Balloon;

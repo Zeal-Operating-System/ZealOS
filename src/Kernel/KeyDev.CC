@@ -167,7 +167,7 @@ U0 CtrlAltT(I64)
 
 U0 CtrlAltV(I64)
 {
-	VGAFlush;
+	VBEFlush;
 }
 
 U0 CtrlAltX(I64)

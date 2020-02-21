@@ -37,10 +37,10 @@ That means no read-modify-writes, too.
 */
 	Busy(4000000);
 
-	//ZenithOS has a 4 plane memory duplicate of the screen, $LK,"gr.screen_image",A="MN:CGrGlobals"$,
+	//ZenithOS has a 4 plane memory duplicate of the screen, $LK,"gr.screen_image",A="MN:CGrGlobals"$,
 	//and only writes actual changes.See $LK,"GrUpdateVGAGraphics",A="MN:GrUpdateVGAGraphics"$().
 	//<CTRL-ALT-v> will flush screen VGA cache.
-	VGAFlush;
+	VBEFlush;
 }
 
 Main;

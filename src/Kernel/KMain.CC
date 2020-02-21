@@ -64,8 +64,7 @@ U0 SysGlobalsInit()
 		Seg2Linear(&sys_vbe_info.vendor);
 		Seg2Linear(&sys_vbe_info.product_name);
 		Seg2Linear(&sys_vbe_info.product_revision);
-		Seg2Linear(SYS_FONT_PTR);
-		sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
+		sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
 	}
 
 	debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
@@ -74,18 +73,11 @@ U0 SysGlobalsInit()
 
 U0 SysGrInit()
 {
-	I64 i, j;
-	text.aux_font = MAlloc(sizeof(U64) * 256);
-	MemCopy(text.aux_font, *SYS_FONT_PTR(U32), sizeof(U64) * 256);
- 
-	for (i = 0; i < 256; i++)
-		for (j = 0; j < 8; j++)
-			text.aux_font[i].u8[j] = rev_bits_table[text.aux_font[i].u8[j]];
-
 	text.font = sys_font_std;
+    text.aux_font = sys_font_aux;
 	text.aux_font['' - 1] = text.aux_font['' - 1]; //Shift-space
 	text.aux_font[10] = text.font[10];
-	text.aux_font[255] = text.font[255];
+	text.aux_font[255] = text.font[255];
 	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32)='ÀÈÙ¼';
 

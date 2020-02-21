@@ -28,7 +28,7 @@ public CBGR24 gr32_palette_std[COLORS_NUM]={
 public U0 PaletteSetStd(Bool persistent=TRUE)
 {//Activate std palette.
 	GrPaletteSet(gr32_palette_std);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetStd;
 }
@@ -41,7 +41,7 @@ public CBGR24 gr_palette_gray[COLORS_NUM] = {
 public U0 PaletteSetGray(Bool persistent=TRUE)
 {//Activate gray palette.
 	GrPaletteSet(gr_palette_gray);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetGray;
 }
@@ -54,7 +54,7 @@ public CBGR24 gr_palette_gruvbox_light[COLORS_NUM] = {
 public U0 PaletteSetGruvboxLight(Bool persistent=TRUE)
 {//Activate gruvbox light palette.
 	GrPaletteSet(gr_palette_gruvbox_light);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetGruvboxLight;
 }
@@ -67,7 +67,7 @@ public CBGR24 gr_palette_pastel[COLORS_NUM]={
 public U0 PaletteSetPastel(Bool persistent=TRUE)
 {//Activate pastel palette.
 	GrPaletteSet(gr_palette_pastel);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetPastel;
 }
@@ -80,7 +80,7 @@ public CBGR24 gr_palette_monokai[COLORS_NUM]={
 public U0 PaletteSetMonokai(Bool persistent=TRUE)
 {//Activate monokai palette.
 	GrPaletteSet(gr_palette_monokai);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetMonokai;
 }
@@ -93,7 +93,7 @@ public CBGR24 gr_palette_dark[COLORS_NUM] = {
 public U0 PaletteSetDark(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_dark);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetDark;
 }
@@ -106,7 +106,7 @@ public CBGR24 gr_palette_smooth[COLORS_NUM] = {
 public U0 PaletteSetSmooth(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_smooth);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetSmooth;
 }
@@ -119,7 +119,7 @@ public CBGR24 gr_palette_dorado[COLORS_NUM]= {
 public U0 PaletteSetDorado(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_dorado);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetDorado;
 }
@@ -133,7 +133,7 @@ public CBGR24 gr_palette_euphrasia[COLORS_NUM] = {
 public U0 PaletteSetEuphrasia(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_euphrasia);
-	VGAFlush;
+	VBEFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetEuphrasia;
 }

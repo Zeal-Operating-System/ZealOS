@@ -531,8 +531,7 @@ class CKernel
 	CSysLimitBase sys_gdt_ptr;
 	U16 	sys_pci_buses;
 	;$$=($$+15)&-16;
-	CGDT	sys_gdt;
-	U32 	sys_font_ptr;
+	CGDT	sys_gdt;
 	CVBEInfo sys_vbe_info;
 	CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
 	CVBEMode sys_vbe_mode;
@@ -733,7 +732,7 @@ class CSema
 #define SEMA_HEAPLOG_ACTIVE 		6
 #define SEMA_HEAPLOG_LOCK 			7
 #define SEMA_REFRESH_IN_PROGRESS 8
-#define SEMA_FLUSH_VGA_IMAGE		9
+#define SEMA_FLUSH_VBE_IMAGE		9
 #define SEMA_SINGLE_USER				10
 #define SEMA_DISK_CACHE 				11
 #define SEMA_FAR_CALL32 				12
@@ -776,7 +775,7 @@ public class CHashTable
 #define HTt_GLBL_VAR						3
 #define HTt_CLASS 							4
 #define HTt_INTERNAL_TYPE 			5
-#define HTt_FUN 								6
+#define HTt_FUN 								6
 #define HTt_WORD								7
 #define HTt_DICT_WORD 					8
 #define HTt_KEYWORD 						9

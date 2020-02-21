@@ -2,8 +2,8 @@ $WW,1$$FG,5$$TX+CX,"Credits"$$FG$
 
 I, $FG,2$Terry A. Davis$FG$, wrote all of TempleOS over the past 15.4 years (full-time).	It can run on some bare metal 64-bit PC's from about 2005-2010 with no layering, libraries, tools, modules or anything from other sources.	Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.	It is independent and stands alone.  It has no networking, so it certainly doesn't call home.  100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!	It is public domain, not GPL.
 
-*) $LK,"::/Kernel/FontStd.CC"$, is taken from $FG,4$$TX,"FreeDOS",HTML="http://www.freedos.org"$$FG$.  It's public domain.
-
+*) $LK,"::/Kernel/FontAux.CC"$, is taken from $FG,4$$TX,"FreeDOS",HTML="http://www.freedos.org"$$FG$.  It's public domain.
+
 *) $LK,"ATA Reg and Cmd Definitions",A="MN:ATA_NOP"$ are originally from Linux.  Later, I got the spec.
 
 *) The heap algorithm, $LK,"::/Kernel/Memory/MAllocFree.CC"$, is adapted from one I saw at Ticketmaster when I worked on their VAX operating system.

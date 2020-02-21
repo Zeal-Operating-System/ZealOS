@@ -81,9 +81,9 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 	}
 }
 
-U0 VGAFlush()
-{//Flush winmgr vga cache, so updates whole screen.
-	LBts(&sys_semas[SEMA_FLUSH_VGA_IMAGE],0);
+U0 VBEFlush()
+{//Flush winmgr screen cache, so updates whole screen.
+	LBts(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0);
 }
 
 U0 WinDerivedValsUpdate(CTask *task)

@@ -28,7 +28,7 @@ U0 GrDemo()
 					"$$GREEN$$Load@30Hz:$$RED$$%5.1f%%$$FG$$\n",1/t,100*t*30.0;
 	}
 //<CTRL-ALT-v> will flush screen VGA cache.
-	VGAFlush;
+	VBEFlush;
 }
 
 GrDemo;
