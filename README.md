@@ -1,5 +1,4 @@
 # ZenithOS
-[ZenithOS.org](http://zenithos.org/)
 
 The Zenith Operating System is a modernized, professional fork of the 64-bit Temple Operating System.
 
