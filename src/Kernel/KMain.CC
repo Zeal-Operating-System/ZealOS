@@ -1,7 +1,7 @@
 U0 SysGlobalsInit()
 {
 	I64 i,j;
-	CRAXRBCRCXRDX regs;
+	CRAXRBXRCXRDX regs;
 
 	CPUId(0x1,&regs);
 	sys_cache_line_width=regs.rbx.u8[1]*8;
@@ -64,7 +64,7 @@ U0 SysGlobalsInit()
 		Seg2Linear(&sys_vbe_info.vendor);
 		Seg2Linear(&sys_vbe_info.product_name);
 		Seg2Linear(&sys_vbe_info.product_revision);
-		sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
+		sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
 	}
 
 	debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));

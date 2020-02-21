@@ -303,6 +303,7 @@ $LK,"ICF_ARG2_TO_INT",A="FL:::/Kernel/KernelA.HH,1725"$
 $LK,"SysDebug",A="FL:::/Kernel/KMisc.CC,225",BI=57$
 $LK,"CH_CTRLQ",A="FL:::/Kernel/KernelA.HH,3627"$
 $LK,"CTSS",A="FL:::/Kernel/KernelA.HH,3540"$
+$LK,"CRAXRBXRCXRDX",A="FL:::/Kernel/KernelA.HH,704"$
 $LK,"HomeSet",A="FL:::/Kernel/BlkDev/DiskDirB.CC,1",BI=58$
 $LK,"PostMessage",A="FL:::/Kernel/Job.CC,242",BI=59$
 $LK,"DrivesRelease",A="FL:::/Kernel/BlkDev/DiskDrive.CC,27",BI=60$
@@ -2309,7 +2310,6 @@ $LK,"CMemberList",A="FL:::/Kernel/KernelA.HH,917"$
 $LK,"JobQueueDel",A="FL:::/Kernel/Job.CC,7",BI=489$
 $LK,"ARGT_MOFFS64",A="FL:::/Kernel/KernelA.HH,2045"$
 $LK,"DOCF_COLOR_NAMES",A="FL:::/Kernel/KernelA.HH,1392"$
-$LK,"CRAXRBCRCXRDX",A="FL:::/Kernel/KernelA.HH,704"$
 $LK,"_SAVE_EXCEPT_REGS",A="FL:::/Kernel/KExcept.CC,26"$
 $LK,"MDf_IMM",A="FL:::/Kernel/KernelA.HH,1702"$
 $LK,"DOCf_COLOR_NAMES",A="FL:::/Kernel/KernelA.HH,1429"$

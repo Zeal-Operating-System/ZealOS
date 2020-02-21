@@ -531,7 +531,7 @@ class CKernel
 	CSysLimitBase sys_gdt_ptr;
 	U16 	sys_pci_buses;
 	;$$=($$+15)&-16;
-	CGDT	sys_gdt;
+	CGDT	sys_gdt;
 	CVBEInfo sys_vbe_info;
 	CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
 	CVBEMode sys_vbe_mode;
@@ -701,63 +701,63 @@ public class CCountsGlobals
 #define SF_ARG7 0x40
 #define SF_ARG8 0x48
 
-class CRAXRBCRCXRDX
+class CRAXRBXRCXRDX
 {
-	I64 	rax,rbx,rcx,rdx;
+	I64 rax,rbx,rcx,rdx;
 };
 
 //Asm callable function pointers.
 //They work with $LK,"CallExtNum",A="MN:CallExtNum"$() when calling from CosmiC.
-#define EXT_WIN_TO_TOP					0
-#define EXT_WIN_FOCUS 					1
-#define EXT_HEAPLOG_MALLOC			2
-#define EXT_HEAPLOG_FREE				3
-#define EXT_DEBUG_RESUME								4
-#define EXT_EXTS_NUM						5
+#define EXT_WIN_TO_TOP		0
+#define EXT_WIN_FOCUS 		1
+#define EXT_HEAPLOG_MALLOC	2
+#define EXT_HEAPLOG_FREE	3
+#define EXT_DEBUG_RESUME	4
+#define EXT_EXTS_NUM		5
 
 #help_index "Processor"
-#define DEFAULT_CACHE_LINE_WIDTH				128
+#define DEFAULT_CACHE_LINE_WIDTH	128
 
 //Semaphores
 class CSema
 {
-	Bool	val,pad[DEFAULT_CACHE_LINE_WIDTH-1];
+	Bool val,pad[DEFAULT_CACHE_LINE_WIDTH-1];
 };
-#define SEMA_DEBUG							0
+#define SEMA_DEBUG					0
 #define SEMA_RECORD_MACRO 			1
-#define SEMA_SYS_TIMER					2
-#define SEMA_SYS_DATE 					3
-#define SEMA_DEBUG_MODE 				4
-#define SEMA_SOUND							5
+#define SEMA_SYS_TIMER				2
+#define SEMA_SYS_DATE 				3
+#define SEMA_DEBUG_MODE 			4
+#define SEMA_SOUND					5
 #define SEMA_HEAPLOG_ACTIVE 		6
 #define SEMA_HEAPLOG_LOCK 			7
-#define SEMA_REFRESH_IN_PROGRESS 8
+#define SEMA_REFRESH_IN_PROGRESS	8
 #define SEMA_FLUSH_VBE_IMAGE		9
-#define SEMA_SINGLE_USER				10
-#define SEMA_DISK_CACHE 				11
-#define SEMA_FAR_CALL32 				12
-#define SEMA_DEV_MEM						13
-#define SEMA_VGA								14
-#define SEMA_UPDATE_WIN_Z_BUF 	15
-#define SEMA_TT 								16
-#define SEMA_MUTE 							17
-#define SEMA_JUST_PUMP_MESSAGES 18
-#define SEMA_TMBEAT 						19
-#define SEMA_FIX								20
-#define SEMA_SEMAS_NUM					21
+#define SEMA_SINGLE_USER			10
+#define SEMA_DISK_CACHE 			11
+#define SEMA_FAR_CALL32 			12
+#define SEMA_DEV_MEM				13
+#define SEMA_VGA					14
+#define SEMA_UPDATE_WIN_Z_BUF		15
+#define SEMA_TT 					16
+#define SEMA_MUTE 					17
+#define SEMA_JUST_PUMP_MESSAGES		18
+#define SEMA_TMBEAT 				19
+#define SEMA_FIX					20
+#define SEMA_SEMAS_NUM				21
 
-#define CTRL_ALT_DEL						0
-#define CTRL_ALT_C							1
-#define CTRL_ALT_X							2
-#define CTRL_ALT_TAB						3
+#define CTRL_ALT_DEL	0
+#define CTRL_ALT_C		1
+#define CTRL_ALT_X		2
+#define CTRL_ALT_TAB	3
 
 #help_index "Hash"
 public class CHash
 {//See $LK,"Hash",A="HI:Hash"$
 	CHash *next;
-	U8		*str;
-	U32 	type,
-				use_count; // inc'ed every time search found, never dec'ed.
+	U8	*str;
+	U32	type,
+		use_count; // inc'ed every time search found, never dec'ed.
 };
 
 public class CHashTable

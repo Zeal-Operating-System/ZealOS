@@ -29,7 +29,7 @@ public U0 CPURep(Bool full=FALSE)
 	I64 i, total_swaps, total_cycles;
 	F64 t0, tf;
 	CCPURep cr;
-	CRAXRBCRCXRDX regs;
+	CRAXRBXRCXRDX regs;
 
 	CPUId(0x80000000, &regs);
 	if (regs.rax >= 0x80000004)

@@ -240,7 +240,7 @@ public _intern IC_SET_RAX U0 SetRAX(I64 d); //Set RAX register value.
 public _intern IC_SET_RBP U0 SetRBP(U8 *d); //Set RBP register value.
 public _intern IC_SET_RFLAGS U0 SetRFlags(I64 d); //Set RFlags register value.
 public _intern IC_SET_RSP U0 SetRSP(U8 *d); //Set RSP register value.
-public _extern _CPUID U0 CPUId(U32 rax,CRAXRBCRCXRDX *res); //Do CPUID inst.
+public _extern _CPUID U0 CPUId(U32 rax,CRAXRBXRCXRDX *res); //Do CPUID inst.
 public _extern _ENDIAN_U16 U16 EndianU16(U16 val); //Swap big<-->little endian U16.
 public _extern _ENDIAN_U32 U32 EndianU32(U32 val); //Swap big<-->little endian U32.
 public _extern _ENDIAN_U64 U64 EndianU64(U64 val); //Swap big<-->little endian U64.
