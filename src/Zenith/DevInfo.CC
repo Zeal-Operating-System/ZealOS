@@ -277,7 +277,7 @@ public U0 MemBIOSRep()
 	if (MemBIOSTotal < 1024 * 1024 * 1024)
 		"%03d MiB\n", MemBIOSTotal / 1024 / 1024; 		
 	else
-		"%04d GiB\n", MemBIOSTotal / 1024 / 1024 / 1024;
+		"%04d GiB\n", CeilU64(MemBIOSTotal / 1024 / 1024, 1024) / 1024;
 }
 
 public U0 MemPageRep()

@@ -138,7 +138,7 @@ U0 MPInt(U8 num,I64 cpu_num=1)
 			throw('MultCore');
 	}
 	PUSHFD
-	CLI //Multitasking safe because each core has a local apic and IRQ's are off
+	CLI //Multitasking safe because each core has a local apic and IRQs are off
 	while (*(dev.uncached_alias+LAPIC_ICR_LOW)(U32 *)&0x1000)
 		PAUSE
 	*(dev.uncached_alias+LAPIC_ICR_HIGH)(U32 *)=dev.mp_apic_ids[cpu_num]<<24;
@@ -149,7 +149,7 @@ U0 MPInt(U8 num,I64 cpu_num=1)
 U0 MPIntAll(U8 num)
 {//Generate interrupt for all but own core.
 	PUSHFD
-	CLI //Multitasking safe because each core has a local apic and IRQ's are off
+	CLI //Multitasking safe because each core has a local apic and IRQs are off
 	while (*(dev.uncached_alias+LAPIC_ICR_LOW)(U32 *)&0x1000)
 		PAUSE
 	*(dev.uncached_alias+LAPIC_ICR_LOW)(U32 *)=0xC4800+num;

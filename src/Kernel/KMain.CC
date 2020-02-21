@@ -153,7 +153,7 @@ U0 KMain()
 		RawPrint(4000,"!!! Requires $TX,"512Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
 
 	IntsInit;
-	"Enable IRQ's\n";
+	"Enable IRQs\n";
 	SetRFlags(RFLAGG_NORMAL);
 	Busy(2000);
 	IntInit2;
