@@ -7,7 +7,7 @@ U0 PaletteDemo()
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 //Alternatively, use $LK,"GrPaletteSet",A="MN:GrPaletteSet"$(gr_palette_gray);
-	for (i=0;i<COLORS_NUM;i++) {
+	for (i=0;i<COLORS_NUM;i++) {
 		j=0xFF*i/(COLORS_NUM-1);
 		bgr.b=j;
 		bgr.g=j;

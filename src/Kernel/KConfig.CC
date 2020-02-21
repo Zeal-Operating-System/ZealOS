@@ -16,7 +16,7 @@ U8 *kernel_config_options = "MemInit\0HeapInit\0VarInit\0HomeDir\0NoMP\0DontProb
 
 class CKConfig
 {
-	U8		*disk_cache_size_exp;
+	U8		*disk_cache_size_exp;
 	CDoc	*add_dev;
 	U8		*debug_distro_file, *debug_distro_start;
 	U8		*home_dir;
@@ -150,7 +150,7 @@ CKConfig *KConfigNew()
 	c->home_dir = StrNew("::/Home");
 
 	VideoRep(FALSE);
-	resolution_num = GetI64("Enter list number of desired resolution,"
+	resolution_num = GetI64("Enter list number of desired resolution, "
 												"or desired width. ($$PURPLE$$<ENTER>$$FG$$ for auto maximum): ",,1);
 	if(resolution_num <= VBE_MODES_NUM)
 	{
