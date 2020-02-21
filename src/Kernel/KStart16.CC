@@ -195,7 +195,7 @@ GET_IP: POP 	BX
 		POP 	ES
 //Get mode infomration for the mode we want
 		MOV 	DI, SYS_VBE_FINAL_MODE
-		MOV 	CX, [SYS_VBE_FINAL_MODE_NUM]
+		MOV 	CX, [SYS_VBE_FINAL_MODE_NUM]
 		MOV 	AX, 0x4F01
 		INT 	0x10
 		POP 	ES
@@ -261,7 +261,7 @@ GET_IP: POP 	BX
 		JZ		@@35
 		MOV 	EBX, CMemE820.base  [SI]
 		MOV 	ECX, CMemE820.base+4[SI]
-		ADD 	EBX, CMemE820.len   [SI]
+		ADD 	EBX, CMemE820.len   [SI]
 		ADC 	ECX, CMemE820.len+4 [SI]
 		SUB 	EBX, EAX
 		SBB 	ECX, EDX
