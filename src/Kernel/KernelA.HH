@@ -335,11 +335,15 @@ public class CMathODE
 #define MP_PROCESSORS_NUM 			128
 
 //Control register flag bits
+#define CR0f_PE		0 //Protection Enable (Protected mode)
 #define CR0f_MP		1 //Monitor coprocessor
 #define CR0f_EM		2 //Emulation of coprocessor
 #define CR0f_TS		3 //Task switched, some irrelevant x87 task management stuff
 #define CR0f_NE		5 //Numeric error
 #define CR0f_PG		31//Enable paging
+
+#define CR0F_PE		(1<<CR0f_PE)
+#define CR0F_NE		(1<<CR0f_NE)
 
 #define CR4f_PAE	5 //Physical Address Extension, required by long mode
 #define CR4f_PGE	7 //Page-Global Enable
@@ -349,8 +353,8 @@ public class CMathODE
 #define CR4F_PGE	(1<<CR4f_PGE)
 #define CR4F_OSFXSR (1<<CR4f_OSFXSR)
 
-#define SYS_START_CR0	0x0031
-
+#define SYS_START_CR0	(CR0F_PE | CR0F_NE)
+
 #define RFLAGf_CARRY		0
 #define RFLAGf_PARITY 		2
 #define RFLAGf_AUX_CARRY	4
@@ -371,7 +375,7 @@ public class CMathODE
 #define RFLAGf_ID 			21
 
 #define RFLAGG_START	0x0000
-#define RFLAGG_NORMAL 	(1<<RFLAGf_INT)
+#define RFLAGG_NORMAL 	(1<<RFLAGf_INT)
 
 //Global Descriptor Table
 class CGDTEntry
