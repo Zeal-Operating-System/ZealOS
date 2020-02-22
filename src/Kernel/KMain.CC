@@ -43,7 +43,7 @@ U0 SysGlobalsInit()
 		StreamPrint("#exe{Option(OPTf_WARN_PAREN,ON);}");
 	};
 
-	pow10_I64=CAlloc(sizeof(F64)*(308+308+1));
+	pow10_I64=CAlloc(sizeof(F64)*(308+308+1));
 	for (i = -308; i < 309; i++)
 		pow10_I64[i+309] = Pow10(i);
 
@@ -75,17 +75,17 @@ U0 SysGlobalsInit()
 U0 SysGrInit()
 {
 	I64 i, j;
-	text.font = MAlloc(256 * 8); //256 U64s
-	MemCopy(text.font, *SYS_FONT_PTR(U32), 256 * 8);
+	text.aux_font = MAlloc(256 * 8); //256 U64s
+	MemCopy(text.aux_font, *SYS_FONT_PTR(U32), 256 * 8);
 
 	for (i = 0; i < 256; i++)
 		for (j = 0; j < 8; j++)
-			text.font[i].u8[j] = rev_bits_table[text.font[i].u8[j]];
+			text.aux_font[i].u8[j] = rev_bits_table[text.aux_font[i].u8[j]];
 
-    text.aux_font = sys_font_std;
+    text.font = sys_font_std;
 
-	text.font[10] = text.aux_font[10]; //"Return" symbol 
-	text.font[255] = text.aux_font[255]; //Block symbol ÿ
+	text.aux_font[10] = text.font[10]; //"Return" symbol 
+	text.aux_font[255] = text.font[255]; //Block symbol ÿ
 
 	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32)='ÀÈÙ¼';
@@ -97,7 +97,7 @@ U0 SysGrInit()
 	text.buffer_size = text.screen_size * 4; //buffer for 32-bit, but only 16 colors now.
 	text.raw_screen = CAlloc(text.buffer_size);
 	text.fb_alias = sys_vbe_mode.framebuffer;
-
+
 	MemSetU32(text.fb_alias, BLACK32, text.screen_size);
 	text.vga_alias = CAlloc(text.rows * text.cols * 8);
 }
