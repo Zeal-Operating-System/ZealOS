@@ -85,7 +85,7 @@ public U0 PaletteSetMonokai(Bool persistent=TRUE)
 		fp_set_std_palette = &PaletteSetMonokai;
 }
 
-public CBGR24 gr_palette_dark[COLORS_NUM] = {
+public CBGR24 gr_palette_dark[COLORS_NUM] = {
 	0xFFFFFF, 0x6095C5, 0x6D9E3F, 0x3BA275, 0xD370A3, 0xAC7BDE, 0xB58858, 0x686868,
 	0x404040, 0x98CBFE, 0xA3D572, 0x75DAA5, 0xFFA7DA, 0xE5B0FF, 0xEFBD8B, 0x232323
 };
@@ -123,20 +123,3 @@ public U0 PaletteSetDorado(Bool persistent=TRUE)
 	if (persistent)
 		fp_set_std_palette = &PaletteSetDorado;
 }
-
-public CBGR24 gr_palette_euphrasia[COLORS_NUM] = {
-	0x1C2027, 0x355C9A, 0x38912B, 0x258F8F, 0xA62A3E, 0x7C4F9F, 0xB27D12, 0x666666,
-	0xC0C0C0, 0x45A3E6, 0x93C724, 0x60C6C8, 0xF04758, 0xC953EF, 0xDDB62B, 0xFFFFFF
-};
-
-
-public U0 PaletteSetEuphrasia(Bool persistent=TRUE)
-{//Activate dark palette.
-	GrPaletteSet(gr_palette_euphrasia);
-	VBEFlush;
-	if (persistent)
-		fp_set_std_palette = &PaletteSetEuphrasia;
-}
-
-
-PaletteSetEuphrasia;

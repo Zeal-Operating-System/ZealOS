@@ -43,9 +43,9 @@ U0 SysGlobalsInit()
 		StreamPrint("#exe{Option(OPTf_WARN_PAREN,ON);}");
 	};
 
-	pow10_I64=CAlloc(sizeof(F64)*(308+308+1));
-	for (i=-308;i<309;i++)
-		pow10_I64[i+309]=Pow10(i);
+	pow10_I64=CAlloc(sizeof(F64)*(308+308+1));
+	for (i = -308; i < 309; i++)
+		pow10_I64[i+309] = Pow10(i);
 
 	QueueInit(&screencast.sound_head);
 	screencast.t0_now=Now;
@@ -64,18 +64,30 @@ U0 SysGlobalsInit()
 		Seg2Linear(&sys_vbe_info.vendor);
 		Seg2Linear(&sys_vbe_info.product_name);
 		Seg2Linear(&sys_vbe_info.product_revision);
+		Seg2Linear(SYS_FONT_PTR);
 		sys_vbe_info.software_revision = Bcd2Binary(sys_vbe_info.software_revision);
 	}
 
-	debug.fun_seg_cache=CAlloc(FUN_SEG_CACHE_SIZE*sizeof(CFunSegCache));
-	debug.int_fault_code=IntFaultHandlersNew;
+	debug.fun_seg_cache = CAlloc(FUN_SEG_CACHE_SIZE * sizeof(CFunSegCache));
+	debug.int_fault_code = IntFaultHandlersNew;
 }
 
 U0 SysGrInit()
 {
-	text.font = sys_font_std;
-    text.aux_font = sys_font_aux;
-	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
+	I64 i, j;
+	text.font = MAlloc(256 * 8); //256 U64s
+	MemCopy(text.font, *SYS_FONT_PTR(U32), 256 * 8);
+
+	for (i = 0; i < 256; i++)
+		for (j = 0; j < 8; j++)
+			text.font[i].u8[j] = rev_bits_table[text.font[i].u8[j]];
+
+    text.aux_font = sys_font_std;
+
+	text.font[10] = text.aux_font[10]; //"Return" symbol 
+	text.font[255] = text.aux_font[255]; //Block symbol ÿ
+
+	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32)='ÀÈÙ¼';
 
 	text.cols = sys_vbe_mode.width / FONT_WIDTH;

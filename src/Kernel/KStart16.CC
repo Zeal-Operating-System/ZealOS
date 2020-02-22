@@ -40,12 +40,14 @@ GDT_BOOT_DS:	DU64	0x00CF92000000FFFF,0; //Gets patched.
 GDT_BOOT_CS:	DU64	0x00CF9A000000FFFF,0; //Gets patched.
 GDT_CS32: 		DU64	0x00CF9A000000FFFF,0;
 GDT_CS64: 		DU64	0x00209A0000000000,0; //The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring0.
-GDT_CS64_RING3: DU64	0x0020FA0000000000,0; //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, so you can play with.
+GDT_CS64_RING3: DU64	0x0020FA0000000000,0; //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, so you can play with.
 GDT_DS: 		DU64	0x00CF92000000FFFF,0;
 GDT_DS_RING3: 	DU64	0x00CFF2000000FFFF,0;
 GDT_TR: 		DU8 	MP_PROCESSORS_NUM*16 DUP(0);
 GDT_TR_RING3: 	DU8 	MP_PROCESSORS_NUM*16 DUP(0);
 #assert $$ - SYS_GDT == sizeof(CGDT)
+
+SYS_FONT_PTR::	DU32	0;
 
 SYS_VBE_INFO::	DU8 	sizeof(CVBEInfo) DUP(0);
 SYS_VBE_MODES:: DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM DUP(0);
@@ -195,7 +197,7 @@ GET_IP: POP 	BX
 		POP 	ES
 //Get mode infomration for the mode we want
 		MOV 	DI, SYS_VBE_FINAL_MODE
-		MOV 	CX, [SYS_VBE_FINAL_MODE_NUM]
+		MOV 	CX, [SYS_VBE_FINAL_MODE_NUM]
 		MOV 	AX, 0x4F01
 		INT 	0x10
 		POP 	ES
@@ -211,6 +213,15 @@ GET_IP: POP 	BX
 
 		BTS 	U32 [SYS_RUN_LEVEL], RLf_VESA
 @@10:
+
+//Get pointer to 8x8 VGA ROM font.
+		MOV		AX, 0x1130
+		MOV		BH, 3
+		INT		0x10
+		MOV		AX, ES
+		SHL		EAX, 16
+		MOV		AX, BP
+		MOV		U32 [SYS_FONT_PTR], EAX
 
 //Get E801 memory map.
 //Output: AX = Memory between 1MiB and 16MiB in KiB (max 0x3C00 == 15 MiB)

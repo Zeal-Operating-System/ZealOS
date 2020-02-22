@@ -354,7 +354,7 @@ public class CMathODE
 #define CR4F_OSFXSR (1<<CR4f_OSFXSR)
 
 #define SYS_START_CR0	(CR0F_PE | CR0F_NE)
-
+
 #define RFLAGf_CARRY		0
 #define RFLAGf_PARITY 		2
 #define RFLAGf_AUX_CARRY	4
@@ -551,6 +551,7 @@ class CKernel
 	U16 	sys_pci_buses;
 	;$$=($$+15)&-16;
 	CGDT	sys_gdt;
+	U32		sys_font_ptr;
 	CVBEInfo sys_vbe_info;
 	CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
 	CVBEMode sys_vbe_mode;

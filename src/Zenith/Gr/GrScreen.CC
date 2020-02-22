@@ -356,7 +356,7 @@ U0 GrUpdateScreen32()
 
 	GrCalcScreenUpdates;
 
-	if (LBtr(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0))
+	if (LBtr(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0))
 		MemCopy(text.fb_alias, text.raw_screen, text.buffer_size);
 }
 
