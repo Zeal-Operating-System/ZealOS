@@ -1,4 +1,3 @@
-//See $LK,"::/Demo/Lectures/GraphicsCPULoad.CC"$
 U8 rev[256],		//The VGA bits are backward
 
 	 image[640*480/8];		//We need read-modify write.
@@ -126,7 +125,3 @@ This bit tells ZenithOS to update whole screen.
 }
  
 MiniGrLibDemo;
-
-//See $LK,"RawPutChar",A="MN:RawPutChar"$() for text.
-//See $LK,"::/Demo/Lectures/ScreenMemory.CC"$ for color.
-//See $LK,"::/Demo/Lectures/GraphicsCPULoad.CC"$.

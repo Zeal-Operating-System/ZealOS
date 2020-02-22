@@ -170,7 +170,7 @@ U0 FifoU8Del(CFifoU8 *f)
 	Free(f);
 }
 
-Bool FifoU8Ins(CFifoU8 *f,U8 b)
+Bool FifoU8Insert(CFifoU8 *f,U8 b)
 {//Insert U8 into fifo.
 	I64 new_in_ptr;
 	PUSHFD

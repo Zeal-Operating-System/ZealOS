@@ -4,8 +4,7 @@
 				"Blink: $$BK,1$$Test$$BK,0$$\n\n"
 				"Invert: $$IV,1$$Test$$IV,0$$\n\n"
 				"UnderLine: $$UL,1$$Test$$UL,0$$\n\n"
-				"Link: $$LK,\"Genesis,1:1\",\"BF:Genesis,1:1\"$$\n\n\n"
-
+				"Link: $$LK,\"KStart16.CC\",A=\"::/Kernel/KStart16.CC\"$$\n\n\n"
 				"Bttn:$$BT-X,\"OKAY\",LE=1$$\n\n\n\n";
 
 //You can do it this way if you like.
@@ -16,7 +15,7 @@
 				"Blink: $BK,1$Test$BK,0$\n\n"
 				"Invert: $IV,1$Test$IV,0$\n\n"
 				"UnderLine: $UL,1$Test$UL,0$\n\n"
-//<CTRL-SHIFT-T> on this link to toggle individual commands.
-				"Link: $LK,"Genesis,1:1",A="BF:Genesis,1:1"$\n\n\n"
+//<CTRL-SHIFT-T> on this link to toggle individual commands.
+				"Link: $LK,"KStart16.CC",A="::/Kernel/KStart16.CC"$\n\n\n"
 
 				"Bttn:$BT,"OKAY",LE=1$\n\n\n\n";

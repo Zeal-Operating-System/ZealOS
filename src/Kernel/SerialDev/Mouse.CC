@@ -81,10 +81,10 @@ U0 MouseHardPacketRead()
 	if (GetTSC>mouse_hard.timestamp+counts.time_stamp_freq>>3)
 		FifoU8Flush(mouse_hard.fifo);
 	mouse_hard.timestamp=GetTSC;
-	FifoU8Ins(mouse_hard.fifo,InU8(KBD_PORT));
+	FifoU8Insert(mouse_hard.fifo,InU8(KBD_PORT));
 	if (FifoU8Count(mouse_hard.fifo)==mouse_hard.pkt_size)
 		while (FifoU8Remove(mouse_hard.fifo,&j))
-			FifoU8Ins(mouse_hard.fifo2,j);
+			FifoU8Insert(mouse_hard.fifo2,j);
 }
 
 interrupt U0 IRQMouseHard()

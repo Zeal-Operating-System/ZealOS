@@ -323,7 +323,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 												DocWrite(doc);
 												st=StrNew(doc->filename.name);
 											}
-											if (st2=DirFile(st,"Run","HC")) {
+											if (st2=DirFile(st,"Run","CC")) {
 												if (FileFind(st2)) {
 													Free(st);
 													st=st2;
@@ -339,37 +339,17 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 											}
 										}
 										break;
-									case SC_F6:
-										if (sc&SCF_KEY_DESC) {
-											if (sc&SCF_SHIFT)
-												KeyDescSet("Cmd/God Doodle");
-											else
-												KeyDescSet("Cmd/God Song");
-										} else {
-//$LK,"::/Zenith/God/HSNotes.DD"$
-											if (sc&SCF_SHIFT) {
-												DocUnlock(doc);
-												GodDoodle;
-												DocLock(doc);
-											} else
-												GodSong;
-										}
-										break;
 									case SC_F7:
-										if (sc&SCF_KEY_DESC) {
-											if (sc&SCF_SHIFT)
-												KeyDescSet("Cmd/God Passage");
-											else
-												KeyDescSet("Cmd/God Word");
-										} else {
-//$LK,"::/Zenith/God/HSNotes.DD"$
-											FifoU8Flush(god.fifo);
-											GodBitsIns(GOD_GOOD_BITS,KbdMouseEventTime>>GOD_BAD_BITS);
-											if (sc&SCF_SHIFT)
-												GodBiblePassage;
-											else
-												GodWord;
+										if (sc&SCF_KEY_DESC)
+										{
+											KeyDescSet("Cmd/God Word");
 										}
+										else
+										{
+											FifoU8Flush(divine.fifo);
+											DivineBitsInsert(DIVN_GOOD_BITS, KbdMouseEventTime >> DIVN_BAD_BITS);
+											DivineWord;
+										}
 										break;
 								}
 							}

@@ -396,15 +396,15 @@ U0 KbdPacketRead()
 	raw_byte=InU8(KBD_PORT);
 	KbdBuildSC(raw_byte,TRUE,&last_raw_byte,&last_sc);
 	if (!FifoU8Count(kbd.fifo)) {
-		FifoU8Ins(kbd.fifo,raw_byte);
+		FifoU8Insert(kbd.fifo,raw_byte);
 		if (raw_byte!=0xE0) {
 			while (FifoU8Remove(kbd.fifo,&raw_byte))
-				FifoU8Ins(kbd.fifo2,raw_byte);
+				FifoU8Insert(kbd.fifo2,raw_byte);
 		}
 	} else {
-		FifoU8Ins(kbd.fifo,raw_byte);
+		FifoU8Insert(kbd.fifo,raw_byte);
 		while (FifoU8Remove(kbd.fifo,&raw_byte))
-			FifoU8Ins(kbd.fifo2,raw_byte);
+			FifoU8Insert(kbd.fifo2,raw_byte);
 	}
 }
 

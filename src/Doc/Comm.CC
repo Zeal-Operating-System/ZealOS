@@ -32,7 +32,7 @@ U0 CommHandler(I64 port)
 	if (Bt(&c->flags,COMf_ENABLED)) {
 		stat=InU8(c->base+UART_IIR);
 		if (stat & 4) 			//RX
-			FifoU8Ins(c->RX_fifo,InU8(c->base+UART_RDR));
+			FifoU8Insert(c->RX_fifo,InU8(c->base+UART_RDR));
 		if (stat & 2) { 		//TX
 			if (FifoU8Remove(c->TX_fifo,&b))
 				OutU8(c->base+UART_THR,b);
@@ -105,7 +105,7 @@ public U0 CommPutChar(I64 port,U8 b)
 	CComm *c=&comm_ports[port];
 	PUSHFD
 	CLI
-	FifoU8Ins(c->TX_fifo,b);
+	FifoU8Insert(c->TX_fifo,b);
 	OutU8(c->base+UART_IER,3);		//RX and THR empty
 	POPFD
 	Sleep(10); //!!! Remove this line!!!	Linux echo_socket is too slow.

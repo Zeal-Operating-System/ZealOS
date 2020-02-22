@@ -27,7 +27,7 @@ U0 StartUpTasks()
 	"Boot Time:%7.3fs\n",tS;
 	XTalk(user,"Cd;#include \"Once\";\n");
 	Silent;//no output to screen
-	ACInit("/*;!*/Bible.TXT*");
+	ACInit("/*");
 	Silent(OFF); //no output to screen
 }
 

@@ -567,18 +567,18 @@ mo_got_message:
 										break;
 								}
 								break;
-							case ',':
-								Free(filename);
-								filename=NULL;
-								PsmPopMode;
-								music.octave=psm_octave;
-								if (st2=GodSongStr) {
-									PsmLoadSongStr(st2,&psm_octave,&psm_duration);
-									Free(st2);
-								}
-								PsmPushMode(psm_octave);
-								col=0;
-								break;
+//							case ',':
+//								Free(filename);
+//								filename=NULL;
+//								PsmPopMode;
+//								music.octave=psm_octave;
+//								if (st2=GodSongStr) {
+//									PsmLoadSongStr(st2,&psm_octave,&psm_duration);
+//									Free(st2);
+//								}
+//								PsmPushMode(psm_octave);
+//								col=0;
+//								break;
 							case CH_CTRLO:
 								PsmPopMode;
 								RegOneTimePopUp(ARf_PSALMODY_JUKEBOX,

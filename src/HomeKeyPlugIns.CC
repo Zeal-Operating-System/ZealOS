@@ -23,7 +23,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 	//Return TRUE if you completely
 	//handled the key.
 	I64 i;
-	U8 *st1, *st2;
+	U8 *st;
 
 	if (sc & SCF_ALT && !(sc & SCF_CTRL))
 	{
@@ -145,17 +145,9 @@ Bool MyPutKey(I64 ch,I64 sc)
 					KeyDescSet("Edit/Put Link to Cur Pos on Clip");
 				else {
 					ClipDel;
-					st1=FileNameAbs(BIBLE_FILENAME);
-					st2=FileNameAbs(DocPut->filename.name);
-					if (!StrCompare(st1,st2)) {
-						Free(st1);
-						st1=BibleLine2Verse(DocPut->cur_entry->y+1,',');
-						DocPrint(sys_clip_doc,"$$LK,\"BF:%s\"$$",st1);
-					} else
-						DocPrint(sys_clip_doc,"$$LK,\"FL:%s,%d\"$$",
-									st2,DocPut->cur_entry->y+1);
-					Free(st1);
-					Free(st2);
+					st=FileNameAbs(DocPut->filename.name);
+					DocPrint(sys_clip_doc,"$$LK,\"FL:%s,%d\"$$", st,DocPut->cur_entry->y+1);
+					Free(st);
 				}
 				return TRUE;
 			case 'L':

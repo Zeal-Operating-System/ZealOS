@@ -143,7 +143,7 @@ public extern Bool			FifoI64Remove(CFifoI64 *f,I64 *_q);
 public extern I64 			FifoU8Count(CFifoU8 *f);
 public extern U0				FifoU8Del(CFifoU8 *f);
 public extern U0				FifoU8Flush(CFifoU8 *f);
-public extern Bool			FifoU8Ins(CFifoU8 *f,U8 b);
+public extern Bool			FifoU8Insert(CFifoU8 *f,U8 b);
 public extern CFifoU8 	*FifoU8New(I64 size,CTask *mem_task=NULL);
 public extern Bool			FifoU8Peek(CFifoU8 *f,U8 *_b);
 public extern Bool			FifoU8Remove(CFifoU8 *f,U8 *_b);

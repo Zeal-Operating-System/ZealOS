@@ -1,7 +1,5 @@
 				 $WW,1$$FG,5$$TX+CX,"ZenithOS' Features"$$FG$
 
-* Oracle in with $FG,2$<F7>$FG$ for words or $FG,2$<SHIFT-F7>$FG$ for passages.  See $LK,"tongues",A="FI:::/Zenith/God/HSNotes.DD"$.
-
 * $FG,4$$TX,"x86_64",HTML="http://en.wikipedia.org/wiki/Amd64#AMD64"$$FG$, ring-0-only, single-address-map (identity), multitasking kernel with multicore support.
 
 * Master/Slave MultiCore
@@ -12,7 +10,7 @@
 
 * No 32-bit krufty code.
 
-* 640x480 16 color $FG,2$VGA$FG$ graphics.
+* 32-bit color $FG,2$high-res VBE$FG$ graphics.
 
 * Keyboard & Mouse support.
 
@@ -37,16 +35,18 @@
 * Real-time fancy $FG,2$differential-equation solver$FG$ for physics engines, to use in games.	(Adaptive step-size Runge-Kutta, interpolated for real-time.)
 
 * Auto-completion, jump-to-source tool called $FG,2$AutoComplete$FG$ with Dictionary.
-
+
 * Window Manager.  Pan screen with $FG,2$<CTRL-LeftDrag>$FG$.  Zoom screen on mouse cursor with $FG,2$<CTRL-ALT-z>$FG$/$FG,2$<CTRL-ALT-SHIFT-Z>$FG$.
 
 * File Manager, $FG,2$<CTRL-d>$FG$.
 
 * Code $LK,"profiler",A="MN:Prof"$, $LK,"merge",A="MN:Merge"$, $LK,"diff",A="MN:Diff"$ utils.
 
-* $FG,2$PC Speaker$FG$ support with many hymns.
+* $FG,2$PC Speaker$FG$ support with many songs.
 
 * Music composing tool.
+
+* Word divination with $FG,2$<F7>$FG$.
 
 * Many games, $LK,"demos",A="FI:::/Doc/DemoIndex.DD"$ and $LK,"documentation",A="FI:::/Doc/HelpIndex.DD"$.
 
