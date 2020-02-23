@@ -169,8 +169,6 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 
 * Added $LK,"Cls",A="MN:Cls"$() and $LK,"ZCls",A="MN:ZCls"$().
 
-* Fixed typo in class name: CRAXRBCRCXRDX -> $LK,"CRAXRBXRCXRDX",A="MN:CRAXRBXRCXRDX"$.
-
 * Functions starting with 'A' for Adam now start with 'Z' for Zenith.
 
 * $UL$Decompressed all files.$UL,0$ Removed Zip(), Unzip(), and ZipRep(). Slightly modified $LK,"FileRead",A="MN:FileRead"$() to disable reading compressed files. Removal of compression planned for the future.
