@@ -99,10 +99,10 @@ Bool DocFileEd(I64 _type,U8 *filename,
 				Silent;
 				if (Bt(&edf_dof_flags,EDf_BAIL)) //if bail, scan parents
 					res=FileFind(filename,,
-								FUF_JUST_FILES|FUF_Z_OR_NOT_Z|FUF_SCAN_PARENTS);
+								FUF_JUST_FILES|FUF_SCAN_PARENTS);
 				else if (!(res=FileFind(filename,,FUF_JUST_FILES)))
 					other_found=FileFind(filename,,
-								FUF_JUST_FILES|FUF_Z_OR_NOT_Z|FUF_SCAN_PARENTS);
+								FUF_JUST_FILES|FUF_SCAN_PARENTS);
 				doc=DocRead(filename,flags);
 				doc->desc='Edit';
 				Silent(old_silent);
@@ -251,7 +251,7 @@ public I64 EdLinkConvert(U8 *link_st,U8 **_filename=NULL,U8 **_needle_str=NULL,
 		if (LK_DOC<=res<=LK_DOC_LINE)
 			filename=StrNew(filename2); //Holds document address as number.
 		else
-			filename=FileNameAbs(filename2,FUF_Z_OR_NOT_Z);
+			filename=FileNameAbs(filename2);
 	}
 lc_done:
 	Free(st);
@@ -284,8 +284,7 @@ public Bool DocLinkCheck(CDoc *doc,U8 *link_st)
 			case LK_PLAIN_LINE:
 			case LK_FILE:
 //We don't check line number
-				res=FileFind(filename,,
-							FUF_JUST_FILES|FUF_Z_OR_NOT_Z|FUF_SCAN_PARENTS);
+				res=FileFind(filename,,FUF_JUST_FILES|FUF_SCAN_PARENTS);
 				break;
 			default://TODO: Need to validate HI: and DN:
 				if (Ed(link_st,EDF_BAIL))
@@ -309,7 +308,7 @@ public U8 *DocLinkFile(U8 *link_st)
 			case LK_PLAIN:
 			case LK_PLAIN_FIND:
 			case LK_PLAIN_LINE:
-				st=FileNameAbs(filename,FUF_Z_OR_NOT_Z|FUF_SCAN_PARENTS);
+				st=FileNameAbs(filename,FUF_SCAN_PARENTS);
 				res=StrNew(st);
 				Free(st);
 				break;

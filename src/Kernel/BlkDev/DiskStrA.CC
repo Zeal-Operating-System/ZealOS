@@ -159,8 +159,8 @@ U8 *DirNameAbs(U8 *_dirname)
 	return res;
 }
 
-U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0)
-{//Absolute filename. Accepts $LK,"FUF_Z_OR_NOT_Z",A="MN:FUF_Z_OR_NOT_Z"$, $LK,"FUF_SCAN_PARENTS",A="MN:FUF_SCAN_PARENTS"$.
+U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=NONE)
+{//Absolute filename. Accepts $LK,"FUF_SCAN_PARENTS",A="MN:FUF_SCAN_PARENTS"$.
 	U8 *res,*filename,*buf,*buf_file,*buf_dir,*free_filename,*free_buf;
 	CDirEntry de;
 	free_filename=filename=MStrUtil(_filename,

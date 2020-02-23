@@ -96,18 +96,102 @@ U0 DefinePrint(U8 *dname,U8 *src,...)
 
 U0 SysDefinesLoad()
 {
-	DefineListLoad("ST_OFF_ON","Off\0On\0");
-	DefineListLoad("ST_HTT_TYPES","ExportSysSym\0ImportSysSym\0DefineStr\0GlbVar\0"
-				"Class\0IntType\0Funct\0Word\0DictWord\0KeyWord\0AsmKeyWord\0OpCode\0"
-				"Reg\0File\0Module\0HelpFile\0FramePtr\0\0\0\0\0\0\0Private\0"
-				"Public\0Export\0Import\0Imm\0Goto\0Res\0Unres\0Local\0");
-	DefineListLoad("ST_DAYS_OF_WEEK","Sunday\0Monday\0Tuesday\0Wednesday\0"
-				"Thursday\0Friday\0Saturday\0");
-	DefineListLoad("ST_MONTHS","January\0February\0March\0April\0May\0"
-				"June\0July\0August\0September\0October\0November\0December\0");
-	DefineListLoad("ST_FILE_ATTRS","R\0H\0S\0V\0D\0A\0\0\0X\0T\0Z\0C\0F\0");
-	DefineListLoad("ST_FILE_UTIL_FLAGS","r\0d\0i\0a\0c\0R\0p\0m\0x\0s\0"
-				"D\0F\0T\0$$\0S\0A\0J\0G\0Z\0O\0P\0f\0l\0lb\0la\0");
+	DefineListLoad("ST_OFF_ON",
+							"Off\0"
+							"On\0");
+
+	DefineListLoad("ST_HTT_TYPES",
+							"ExportSysSym\0"
+							"ImportSysSym\0"
+							"DefineStr\0"
+							"GlbVar\0"
+							"Class\0"
+							"IntType\0"
+							"Funct\0"
+							"Word\0"
+							"DictWord\0"
+							"KeyWord\0"
+							"AsmKeyWord\0"
+							"OpCode\0"
+							"Reg\0"
+							"File\0"
+							"Module\0"
+							"HelpFile\0"
+							"FramePtr\0"
+							"\0\0\0\0\0\0"
+							"Private\0"
+							"Public\0"
+							"Export\0"
+							"Import\0"
+							"Imm\0"
+							"Goto\0"
+							"Res\0"
+							"Unres\0"
+							"Local\0");
+
+	DefineListLoad("ST_DAYS_OF_WEEK",
+							"Sunday\0"
+							"Monday\0"
+							"Tuesday\0"
+							"Wednesday\0"
+							"Thursday\0"
+							"Friday\0"
+							"Saturday\0");
+
+	DefineListLoad("ST_MONTHS",
+							"January\0"
+							"February\0"
+							"March\0"
+							"April\0"
+							"May\0"
+							"June\0"
+							"July\0"
+							"August\0"
+							"September\0"
+							"October\0"
+							"November\0"
+							"December\0");
+
+	DefineListLoad("ST_FILE_ATTRS",
+							"R\0"
+							"H\0"
+							"S\0"
+							"V\0"
+							"D\0"
+							"A\0"
+							"\0"
+							"\0"
+							"X\0"
+							"T\0"
+							"Z\0"
+							"C\0"
+							"F\0");
+
+	DefineListLoad("ST_FILE_UTIL_FLAGS",
+							"r\0"
+							"d\0"
+							"i\0"
+							"a\0"
+							"c\0"
+							"R\0"
+							"p\0"
+							"m\0"
+							"s\0"
+							"D\0"
+							"F\0"
+							"T\0"
+							"$$\0"
+							"S\0"
+							"A\0"
+							"J\0"
+							"G\0"
+							"O\0"
+							"P\0"
+							"f\0"
+							"l\0"
+							"lb\0"
+							"la\0");
+
 	DefineListLoad("ST_BLKDEV_TYPES",
 				"NULL\0RAM\0ATA\0FILE_READ\0FILE_WRITE\0ATAPI\0");
 	DefineListLoad("ST_DRIVE_TYPES",

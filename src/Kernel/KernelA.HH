@@ -2716,67 +2716,59 @@ public class CDirEntry
 #help_index "File/Program Routines"
 //File Util Flags
 //See $LK,"ST_FILE_UTIL_FLAGS",A="MN:ST_FILE_UTIL_FLAGS"$
-#define FUf_RECURSE 			0
-#define FUf_DIFF				1
-#define FUf_DEL 				1
-#define FUf_IGNORE				2
-#define FUf_ALL 				3
-#define FUf_CANCEL				4
-#define FUf_REPLACE 			5
-#define FUf_RISKY 				5
-#define FUf_PUBLIC				6
-#define FUf_MAP 								7
-#define FUf_EXPAND							8
-#define FUf_SINGLE							9
-#define FUf_JUST_DIRS 					10
-#define FUf_JUST_FILES					11
-#define FUf_JUST_TXT						12
-#define FUf_JUST_DD 						13
-#define FUf_JUST_SRC						14
-#define FUf_JUST_AOT						15
-#define FUf_JUST_JIT						16
-#define FUf_JUST_GR 						17
-#define FUf_Z_OR_NOT_Z					18
-#define FUf_CLUS_ORDER	19
-#define FUf_SCAN_PARENTS				20
-#define FUf_FLATTEN_TREE				21
-#define FUf_WHOLE_LABELS				22
-#define FUf_WHOLE_LABELS_BEFORE 23
-#define FUf_WHOLE_LABELS_AFTER	24
+#define FUf_RECURSE 			0	// r
+#define FUf_DIFF				1	// d
+#define FUf_DEL 				1	// d
+#define FUf_IGNORE				2	// i
+#define FUf_ALL 				3	// a
+#define FUf_CANCEL				4	// c
+#define FUf_REPLACE 			5	// R
+#define FUf_PUBLIC				6	// p
+#define FUf_MAP 				7	// m
+#define FUf_SINGLE				8	// s
+#define FUf_JUST_DIRS 			9	// D
+#define FUf_JUST_FILES			10	// F
+#define FUf_JUST_TXT			11	// T
+#define FUf_JUST_DD 			12	// $$
+#define FUf_JUST_SRC			13	// S
+#define FUf_JUST_AOT			14	// A
+#define FUf_JUST_JIT			15	// J
+#define FUf_JUST_GR 			16	// G
+#define FUf_CLUS_ORDER			17	// O (Move disk head one direction)
+#define FUf_SCAN_PARENTS		18	// P
+#define FUf_FLATTEN_TREE		19	// f
+#define FUf_WHOLE_LABELS		20	// l
+#define FUf_WHOLE_LABELS_BEFORE 21	// lb
+#define FUf_WHOLE_LABELS_AFTER	22	// la
 
-#define FUF_RECURSE 						0x0000001 //r
-#define FUF_DIFF								0x0000002 //d
-#define FUF_DEL 								0x0000002 //d
-#define FUF_IGNORE							0x0000004 //i
-#define FUF_ALL 								0x0000008 //a
-#define FUF_CANCEL							0x0000010 //c
-#define FUF_REPLACE 						0x0000020 //R
-#define FUF_RISKY 							0x0000020 //R
-#define FUF_PUBLIC							0x0000040 //p
-#define FUF_MAP 								0x0000080 //m
-#define FUF_EXPAND							0x0000100 //x
-#define FUF_SINGLE							0x0000200 //s
-#define FUF_JUST_DIRS 					0x0000400 //D
-#define FUF_JUST_FILES					0x0000800 //F
-#define FUF_JUST_TXT						0x0001000 //T
-#define FUF_JUST_DD 						0x0002000 //$$
-#define FUF_JUST_SRC						0x0004000 //S
-#define FUF_JUST_AOT						0x0008000 //A
-#define FUF_JUST_JIT						0x0010000 //J
-#define FUF_JUST_GR 						0x0020000 //G
-#define FUF_Z_OR_NOT_Z					0x0040000 //Z
-#define FUF_CLUS_ORDER	0x0080000 //O Move disk head one direction
-#define FUF_SCAN_PARENTS				0x0100000 //P
-#define FUF_FLATTEN_TREE				0x0200000 //f
-#define FUF_WHOLE_LABELS				0x0400000 //l
-#define FUF_WHOLE_LABELS_BEFORE 0x0800000 //lb
-#define FUF_WHOLE_LABELS_AFTER	0x1000000 //la
+#define FUF_RECURSE				(1<<FUf_RECURSE)
+#define FUF_DIFF				(1<<FUf_DIFF)
+#define FUF_DEL					(1<<FUf_DEL)
+#define FUF_IGNORE				(1<<FUf_IGNORE)
+#define FUF_ALL					(1<<FUf_ALL)
+#define FUF_CANCEL				(1<<FUf_CANCEL)
+#define FUF_REPLACE				(1<<FUf_REPLACE)
+#define FUF_PUBLIC				(1<<FUf_PUBLIC)
+#define FUF_MAP					(1<<FUf_MAP)
+#define FUF_SINGLE				(1<<FUf_SINGLE)
+#define FUF_JUST_DIRS			(1<<FUf_JUST_DIRS)
+#define FUF_JUST_FILES			(1<<FUf_JUST_FILES)
+#define FUF_JUST_TXT			(1<<FUf_JUST_TXT)
+#define FUF_JUST_DD				(1<<FUf_JUST_DD)
+#define FUF_JUST_SRC			(1<<FUf_JUST_SRC)
+#define FUF_JUST_AOT			(1<<FUf_JUST_AOT)
+#define FUF_JUST_JIT			(1<<FUf_JUST_JIT)
+#define FUF_JUST_GR				(1<<FUf_JUST_GR)
+#define FUF_CLUS_ORDER			(1<<FUf_CLUS_ORDER)
+#define FUF_SCAN_PARENTS		(1<<FUf_SCAN_PARENTS)
+#define FUF_FLATTEN_TREE		(1<<FUf_FLATTEN_TREE)
+#define FUF_WHOLE_LABELS		(1<<FUf_WHOLE_LABELS)
+#define FUF_WHOLE_LABELS_BEFORE	(1<<FUf_WHOLE_LABELS_BEFORE)
+#define FUF_WHOLE_LABELS_AFTER	(1<<FUf_WHOLE_LABELS_AFTER)
 
-#define FUG_FILES_FIND	(FUF_RECURSE|FUF_SINGLE|FUF_CLUS_ORDER|\
-	FUF_JUST_DIRS|FUF_JUST_FILES|FUF_JUST_TXT|FUF_JUST_DD|\
-	FUF_JUST_SRC|FUF_JUST_AOT|FUF_JUST_JIT|FUF_JUST_GR|FUF_FLATTEN_TREE)
-#define FUG_FILE_FIND 	(FUF_JUST_DIRS|FUF_JUST_FILES|FUF_Z_OR_NOT_Z|\
-	FUF_SCAN_PARENTS)
+#define FUG_FILES_FIND	(FUF_RECURSE|FUF_SINGLE|FUF_CLUS_ORDER|FUF_JUST_DIRS|FUF_JUST_FILES|FUF_JUST_TXT|FUF_JUST_DD|\
+							FUF_JUST_SRC|FUF_JUST_AOT|FUF_JUST_JIT|FUF_JUST_GR|FUF_FLATTEN_TREE)
+#define FUG_FILE_FIND 	(FUF_JUST_DIRS|FUF_JUST_FILES|FUF_SCAN_PARENTS)
 
 #help_index "File/Low Level"
 //See $LK,"ST_BLKDEV_TYPES",A="MN:ST_BLKDEV_TYPES"$

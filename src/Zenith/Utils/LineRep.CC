@@ -52,21 +52,15 @@ public I64 LineRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL)
 	return res;
 }
 
-I64 SizeRep1(CDirEntry *tmpde,I64 *_fuf_flags)
+I64 SizeRep1(CDirEntry *tmpde)
 {
 	I64 res=0,i;
-	U8 buf[BLK_SIZE];
-	CDrive *drive;
 	while (tmpde) {
 		if (tmpde->attr&RS_ATTR_DIR)
-			i=SizeRep1(tmpde->sub,_fuf_flags);
-		else if ((i=tmpde->size) && Bt(_fuf_flags,FUf_EXPAND) &&
-					FileAttr(tmpde->name)&RS_ATTR_COMPRESSED) {
-			drive=Letter2Drive(*tmpde->full_name);
-			BlkRead(drive,buf,Clus2Blk(drive,tmpde->clus),1);
-			i=(&buf)(CArcCompress *)->expanded_size;
-		}
-		tmpde->user_data=i;
+			i=SizeRep1(tmpde->sub);
+		else
+			i=tmpde->size;
+		tmpde->user_data=i; //Store size of the entry in user_data
 		res+=i;
 		tmpde=tmpde->next;
 	}
@@ -76,28 +70,26 @@ U0 SizeRep2(CDoc *doc,CDirEntry *tmpde)
 {
 	while (tmpde) {
 		if (tmpde->attr&RS_ATTR_DIR) {
-			DocPrint(doc,"%10,d $$TR+C,\"%s\"$$\n$$ID,2$$",
-						tmpde->user_data,tmpde->name);
+			DocPrint(doc,"%10,d $$TR+C,\"%s\"$$\n$$ID,2$$",tmpde->user_data,tmpde->name);
 			SizeRep2(doc,tmpde->sub);
 			DocPrint(doc,"$$ID,-2$$");
 		} else {
 			DocPrint(doc,"%10,d ",tmpde->user_data);
-			DocPrint(doc,"$$LK,\"%s\",A=\"FI:%s\"$$\n",
-						tmpde->name,tmpde->full_name);
+			DocPrint(doc,"$$LK,\"%s\",A=\"FI:%s\"$$\n",tmpde->name,tmpde->full_name);
 		}
 		tmpde=tmpde->next;
 	}
 }
-public I64 SizeRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL)
-{//Report file sizes. "+x" for expanded size of compressed files.
+public I64 SizeRep(U8 *files_find_mask="/*", U8 *fu_flags=NONE)
+{//Report file sizes.
 	I64 fuf_flags=0,res=0;
 	CDoc *doc=DocNew;
 	CDirEntry *tmpde1=NULL;
 	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
 	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
-	if (tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND)) {
-		fuf_flags&=FUF_EXPAND;
-		res=SizeRep1(tmpde1,&fuf_flags);
+	if (tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND))
+	{
+		res = SizeRep1(tmpde1);
 		DocPrint(doc,"%10,d $$TR+C,\"%s\"$$\n$$ID,2$$",res,files_find_mask);
 		SizeRep2(doc,tmpde1);
 		DocPrint(doc,"$$ID,-2$$");

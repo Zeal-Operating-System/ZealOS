@@ -449,7 +449,7 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 			WinVert(Fs->win_top, Fs->win_bottom,task);
 			if (JobResScan(tmpc,&r)) {
 				st=DirFile(doc->filename.name,,"PRJ");
-				prj_file=FileNameAbs(st,FUF_Z_OR_NOT_Z);
+				prj_file=FileNameAbs(st);
 				Free(st);
 				if (FileFind(prj_file)) {
 					st2=DirFile(prj_file),
@@ -475,8 +475,8 @@ U0 EdCodeTools2(CDoc *doc,I64 tool_action,Bool beep=TRUE)
 					JobResScan(tmpc,&r);
 				} else {
 					Free(prj_file);
-					st=DirFile(doc->filename.name,"Load","HC");
-					prj_file=FileNameAbs(st,FUF_Z_OR_NOT_Z);
+					st=DirFile(doc->filename.name,"Load","CC");
+					prj_file=FileNameAbs(st);
 					Free(st);
 					if (FileFind(prj_file))
 						st=MStrPrint("\"$$WW,1$$\";ExeFile(\"%s\",CCF_JUST_LOAD);",prj_file);
