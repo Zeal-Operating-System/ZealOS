@@ -104,7 +104,7 @@ public CBGR24 gr_palette_smooth[COLORS_NUM] = {
 };
 
 public U0 PaletteSetSmooth(Bool persistent=TRUE)
-{//Activate dark palette.
+{//Activate smooth palette.
 	GrPaletteSet(gr_palette_smooth);
 	LFBFlush;
 	if (persistent)
@@ -117,9 +117,22 @@ public CBGR24 gr_palette_dorado[COLORS_NUM]= {
 };
 
 public U0 PaletteSetDorado(Bool persistent=TRUE)
-{//Activate dark palette.
+{//Activate dorado palette.
 	GrPaletteSet(gr_palette_dorado);
 	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetDorado;
+}
+
+public CBGR24 gr_palette_night[COLORS_NUM]= {
+	0xDDDDDD, 0xAAAAFF, 0xAAAA00, 0x0000AA, 0xAA5555, 0xAA55AA, 0xAA5500, 0x444444,
+	0x555555, 0x5555FF, 0x55FF55, 0x55FFFF, 0xFF5555, 0xFF55FF, 0xFFFF55, 0x111111
+};
+
+public U0 PaletteSetNight(Bool persistent=TRUE)
+{//Activate night palette.
+	GrPaletteSet(gr_palette_night);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetNight;
 }
