@@ -349,7 +349,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 											FifoU8Flush(divine.fifo);
 											DivineBitsInsert(DIVN_GOOD_BITS, KbdMouseEventTime >> DIVN_BAD_BITS);
 											DivineWord;
-										}
+										}
 										break;
 								}
 							}

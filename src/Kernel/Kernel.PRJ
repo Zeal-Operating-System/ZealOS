@@ -30,7 +30,7 @@
 #include "Sched"
 #include "Memory/MakeMemory"
 #include "FontStd"
-#include "StrB"
+#include "StrB"
 #include "KHashA"
 #include "KInterrupts"
 #include "KDataTypes"

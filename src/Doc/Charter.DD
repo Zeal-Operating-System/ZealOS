@@ -26,7 +26,7 @@ $FG,5$$WW,1$$TX+CX,"ZenithOS Charter"$$FG$
 
 * $FG,2$Single-address-map$FG$ as though paging is not used.	Long mode requires paging, however, so the nearest thing is keeping all memory $FG,2$identity-mapped$FG$.
 
-* No encryption or passwords.
+* No encryption or passwords.
 
 * $FG,2$Free$FG$ and $FG,2$public domain$FG$.
 

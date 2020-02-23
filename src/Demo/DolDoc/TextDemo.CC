@@ -15,7 +15,7 @@
 				"Blink: $BK,1$Test$BK,0$\n\n"
 				"Invert: $IV,1$Test$IV,0$\n\n"
 				"UnderLine: $UL,1$Test$UL,0$\n\n"
-//<CTRL-SHIFT-T> on this link to toggle individual commands.
+//<CTRL-SHIFT-T> on this link to toggle individual commands.
 				"Link: $LK,"KStart16.CC",A="::/Kernel/KStart16.CC"$\n\n\n"
 
 				"Bttn:$BT,"OKAY",LE=1$\n\n\n\n";

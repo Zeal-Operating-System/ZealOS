@@ -510,7 +510,7 @@ I64 Spaces2Tabs(U8 *dst,U8 *src)
 				} else
 					break;
 			}
-			src=++src2;
+			src=++src2;
 		}
 	*dst=0;
 	return chged;

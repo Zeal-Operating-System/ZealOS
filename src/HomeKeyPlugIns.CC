@@ -146,7 +146,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 				else {
 					ClipDel;
 					st=FileNameAbs(DocPut->filename.name);
-					DocPrint(sys_clip_doc,"$$LK,\"FL:%s,%d\"$$", st,DocPut->cur_entry->y+1);
+					DocPrint(sys_clip_doc,"$$LK,\"FL:%s,%d\"$$", st,DocPut->cur_entry->y+1);
 					Free(st);
 				}
 				return TRUE;

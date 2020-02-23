@@ -266,7 +266,7 @@ public U0 MemBIOSRep()
 				case MEM_E820t_PERM_MEM:
 					"Perm memory:";
 				case MEM_E820t_RESERVED:
-				default:
+				default:
 					"Reserved   :";
 					break;
 			 }

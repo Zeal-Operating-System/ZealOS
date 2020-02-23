@@ -224,7 +224,7 @@ CBinFile *Load(U8 *filename,I64 ld_flags=0,CBinFile *bfh_addr=INVALID_PTR)
 	module_base=bfh_addr(U8 *)+sizeof(CBinFile);
 
 	absname=FileNameAbs(fbuf);
-	Free(fbuf);
+	Free(fbuf);
 	fbuf=StrNew(absname);
 	FileExtRemove(fbuf);
 	if (fbuf[1]==':' && StrLen(fbuf)>2)

@@ -1,6 +1,6 @@
 asm {
 INT_MP_CRASH_ADDR:: //Forward reference to work around compiler
-		DU32	&IntMPCrash;
+		DU32	&IntMPCrash;
 
 INT_WAKE::
 		PUSH	RDX

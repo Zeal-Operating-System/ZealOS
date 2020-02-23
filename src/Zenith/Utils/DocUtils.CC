@@ -41,10 +41,10 @@ public U0 Collapse(U8 *files_find_mask="*",
 	DirTreeDel(tmpde1);
 }
 
-I64 DocOptEntry(CDoc *,CDocEntry *doc_e,I64 fuf_flags)
+I64 DocOptEntry(CDoc *,CDocEntry *doc_e)
 {
-	U8 *st,*st2,**_dst;
-	I64 i,res=0;
+	U8 **_dst;
+	I64 res=0;
 
 	if (doc_e->de_flags&DOCEF_LINK && doc_e->de_flags&(DOCEF_AUX_STR|DOCEF_TAG)) {
 		if (doc_e->de_flags & DOCEF_AUX_STR && doc_e->de_flags & DOCEF_TAG &&
@@ -59,37 +59,10 @@ I64 DocOptEntry(CDoc *,CDocEntry *doc_e,I64 fuf_flags)
 			_dst=&doc_e->aux_str;
 		else
 			_dst=&doc_e->tag;
-		if (StrMatch(".Z",*_dst)) {
-			st=DocLinkFile(*_dst);
-			if (FileFind(st)) {
-				if (IsDotZ(st))
-					st[StrLen(st)-2]=0;
-				i=StrLen(st);
-				if ((st2=StrMatch(st,*_dst)) && st2[i]=='.' && st2[i+1]=='Z') {
-					StrCopy(st2+i,st2+i+2);
-					res++;
-				}
-			}
-			Free(st);
-		}
-		if (fuf_flags&FUF_RISKY) {
-			if (doc_e->de_flags & DOCEF_AUX_STR) {
-				if (st=StrMatch(".Z",doc_e->aux_str)) {
-					StrCopy(st,st+2);
-					res++;
-				}
-			}
-			if (doc_e->de_flags&DOCEF_TAG) {
-				if (st=StrMatch(".Z",doc_e->tag)) {
-					StrCopy(st,st+2);
-					res++;
-				}
-			}
-		}
 	}
 	return res;
 }
-I64 DocOptDoc(CDoc *doc,I64 fuf_flags)
+I64 DocOptDoc(CDoc *doc)
 {//Optimize Doc.
 	Bool unlock=DocLock(doc);
 	I64 res=0;
@@ -99,8 +72,8 @@ I64 DocOptDoc(CDoc *doc,I64 fuf_flags)
 	doc_e=doc->head.next;
 	while (doc_e!=doc) {
 		doc_e1=doc_e->next;
-		if (res+=DocOptEntry(doc,doc_e,fuf_flags))
-			res+=DocOptEntry(doc,doc_e,fuf_flags);
+		if (res+=DocOptEntry(doc,doc_e))
+			res+=DocOptEntry(doc,doc_e);
 		if (doc_e_last && doc_e_last->type&~0xFF00==doc_e->type&~0xFF00 &&
 			 doc_e_last->de_flags==doc_e->de_flags &&
 			 Bt(doldoc.type_flags_chk_dup,doc_e->type_u8) &&
@@ -116,18 +89,18 @@ I64 DocOptDoc(CDoc *doc,I64 fuf_flags)
 		DocUnlock(doc);
 	return res;
 }
-I64 DocOptFile(U8 *filename,I64 fuf_flags)
+I64 DocOptFile(U8 *filename)
 {//Optimize file.
 	I64 res;
 	CDoc *doc=DocRead(filename);
-	if (res=DocOptDoc(doc,fuf_flags)) {
+	if (res=DocOptDoc(doc)) {
 		"-%d:%s\n",res,doc->filename.name;
 		DocWrite(doc);
 	}
 	DocDel(doc);
 	return res;
 }
-I64 DocOptList(CDirEntry *tmpde,I64 fuf_flags)
+I64 DocOptList(CDirEntry *tmpde)
 {
 	I64 res=0;
 	CDirEntry *tmpde1;
@@ -136,10 +109,10 @@ I64 DocOptList(CDirEntry *tmpde,I64 fuf_flags)
 		if (tmpde->attr & RS_ATTR_DIR) {
 			if (tmpde->sub) {
 				"Scanning Directory: %s\n",tmpde->full_name;
-				res+=DocOptList(tmpde->sub,fuf_flags);
+				res+=DocOptList(tmpde->sub);
 			}
 		} else
-			res+=DocOptFile(tmpde->full_name,fuf_flags);
+			res+=DocOptFile(tmpde->full_name);
 		DirEntryDel(tmpde);
 		tmpde=tmpde1;
 	}
@@ -151,6 +124,5 @@ public I64 DocOpt(U8 *files_find_mask="*",U8 *fu_flags=NULL)
 	I64 fuf_flags=0;
 	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$");
 	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
-	return DocOptList(FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND),
-				fuf_flags&~FUG_FILES_FIND);
+	return DocOptList(FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND));
 }

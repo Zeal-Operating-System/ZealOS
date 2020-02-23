@@ -4,7 +4,7 @@ It has 3 channels:
 
 $LK,"Channel 0",A="MN:PIT0"$ can generate an interrupt, IRQ 0, at a defined frequency. We set it up in $LK,"TimerInit",A="MN:TimerInit"$(), and use it in $LK,"SysTimerRead",A="MN:SysTimerRead"$().
 
-Channel 1 was used historically to refresh the DRAM, but now it is obsolete as the hardware does this itself.  Channel 1 is useless and might not even be implemented anymore on modern machines.
+Channel 1 was used historically to refresh the DRAM, but now it is obsolete as the hardware does this itself.  Channel 1 is useless and might not even be implemented anymore on modern machines.
 
 $LK,"Channel 2",A="MN:PIT2"$'s output is connected to the PC speaker.
 

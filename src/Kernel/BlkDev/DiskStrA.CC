@@ -19,15 +19,6 @@ U8 *FileExtRemove(U8 *src,U8 *dst=NULL)
 	return dst;
 }
 
-Bool IsDotZ(U8 *filename)
-{//Does name end in ?
-	I64 i=StrLen(filename);
-	if (StrOcc(filename,'.')>1 && filename[i-1]=='Z' && filename[i-2]=='.')
-		return TRUE;
-	else
-		return FALSE;
-}
-
 Bool IsDotC(U8 *filename)
 {//Does name end in .C?
 	I64 i=StrLen(filename);
@@ -237,10 +228,7 @@ CDirEntry *Cd2DirEntry(CDirEntry *tmpde,U8 *abs_name)
 
 I64 FileAttr(U8 *name,I64 attr=0)
 {
-	if (IsDotZ(name))
-		attr|=RS_ATTR_COMPRESSED;
-	else
-		attr&=~RS_ATTR_COMPRESSED;
+	attr&=~RS_ATTR_COMPRESSED;
 	if (IsDotC(name))
 		attr|=RS_ATTR_CONTIGUOUS;
 	return attr;
@@ -260,17 +248,6 @@ Bool FileNameCheck(U8 *filename)
 		if (!Bt(char_bmp_filename,*ptr++))
 			return FALSE;
 	return TRUE;
-}
-
-U8 *ToggleZorNotZ(U8 *name)
-{//MAlloc name with Z if not Z or vice versa.
-	U8 *res;
-	if (IsDotZ(name)) {
-		res=StrNew(name);
-		res[StrLen(name)-2]=0;
-	} else
-		res=MStrPrint("%s",name);
-	return res;
 }
 
 U8 *FileNameTmpTxt()

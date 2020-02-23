@@ -2,31 +2,34 @@ Bool ParseAsmImm(CCompCtrl *cc,CAsmArg *arg)
 {
 	if (arg->imm_or_off_present)
 		LexExcept(cc,"Already one immediate at ");
-	arg->imm_or_off_present=TRUE;
-	arg->num.local_asm_undef_hash=NULL;
-	arg->num.glbl_asm_undef_hash=NULL;
-	cc->asm_undef_hash=NULL;
-	cc->abs_counts=0;
-	cc->flags&=~(CCF_UNRESOLVED+CCF_LOCAL);
-	if (!IsLexExpression2Bin(cc,&arg->num.machine_code))
+	arg->imm_or_off_present = TRUE;
+	arg->num.local_asm_undef_hash = NULL;
+	arg->num.glbl_asm_undef_hash = NULL;
+	cc->asm_undef_hash = NULL;
+	cc->abs_counts = 0;
+	cc->flags &= ~(CCF_UNRESOLVED + CCF_LOCAL);
+	if (!IsLexExpression2Bin(cc, &arg->num.machine_code))
 		LexSkipEol(cc);
-	else {
+	else
+	{
 		if (cc->abs_counts.externs)
 			LexExcept(cc,"Extern Not Allowed at ");
-		if (cc->flags & CCF_UNRESOLVED) {
-			if (cc->flags & CCF_LOCAL) {
-				arg->num.local_asm_undef_hash=cc->asm_undef_hash;
-				cc->asm_undef_hash=NULL;
-			} else {
-				arg->num.glbl_asm_undef_hash=cc->asm_undef_hash;
-				cc->asm_undef_hash=NULL;
-			}
-		} else {
-			arg->num.i=Call(arg->num.machine_code);
-			arg->num.glbl_asm_undef_hash=cc->asm_undef_hash;
+		if (cc->flags & CCF_UNRESOLVED)
+		{
+			if (cc->flags & CCF_LOCAL)
+				arg->num.local_asm_undef_hash = cc->asm_undef_hash;
+			else
+				arg->num.glbl_asm_undef_hash = cc->asm_undef_hash;
+
 			cc->asm_undef_hash=NULL;
+		} 
+		else
+		{
+			arg->num.i = Call(arg->num.machine_code);
+			arg->num.glbl_asm_undef_hash = cc->asm_undef_hash;
+			cc->asm_undef_hash = NULL;
 			Free(arg->num.machine_code);
-			arg->num.machine_code=NULL;
+			arg->num.machine_code = NULL;
 		}
 	}
 	return TRUE;
@@ -36,11 +39,11 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 {
 	CHashGeneric *tmph,*tmph1;
 	CHashReg *tmpr;
-	MemSet(arg,0,sizeof(CAsmArg));
-	arg->seg =REG_NONE;
-	arg->reg1=REG_NONE;
-	arg->reg2=REG_NONE;
-	arg->scale=1;
+	MemSet(arg, 0, sizeof(CAsmArg));
+	arg->seg  = REG_NONE;
+	arg->reg1 = REG_NONE;
+	arg->reg2 = REG_NONE;
+	arg->scale = 1;
 	while (TRUE)
 	{
 		if (cc->token == TK_IDENT)

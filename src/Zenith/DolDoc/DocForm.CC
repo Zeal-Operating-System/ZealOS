@@ -77,7 +77,7 @@ U0 DocDataFormat(CDoc *doc,CDocEntry *doc_e,I64 d=DOCM_CANCEL)
 				case RT_I16:		d=*ptr(I16 *);	break;
 				case RT_U16:		d=*ptr(U16 *);	break;
 				case RT_I32:		d=*ptr(I32 *);	break;
-				case RT_U32:		d=*ptr(U32 *);	break;
+				case RT_U32:		d=*ptr(U32 *);	break;
 				default:			d=*ptr(I64 *);
 			}
 		}

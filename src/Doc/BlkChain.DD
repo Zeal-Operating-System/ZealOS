@@ -6,7 +6,7 @@ The $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system does not allow files to gr
 
 Doing whole file operations is the ZenithOS way of doing thinks.	It is the simplest and, ironically, the fastest.	It is obnoxious in the characteristic way that ZenithOS is obnoxious, flaunting massive modern resources in a way that makes old programmers protest.
 
-When doing large, whole-file operations, immediately memory fragmentation is a serious problem, but not so for allocations in the range under a Meg (with occasional larger ones).
+When doing large, whole-file operations, immediately memory fragmentation is a serious problem, but not so for allocations in the range under a Meg (with occasional larger ones).
 
 The file compression scheme in ZenithOS only works on whole file operations and the $LK,"DolDoc",A="FI:::/Doc/DolDoc.DD"$ format cannot have text tacked onto the end, since binary data is at the end.
 

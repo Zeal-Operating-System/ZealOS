@@ -29,7 +29,7 @@ I64 DayOfWeek(I64 i)
 {//Day of week, given 32-bit day since AD 0.
 	i+=CDATE_BASE_DAY_OF_WEEK;
 	if (i>=0)
-		return i % 7;
+		return i % 7;
 	else
 		return 6-(6-i)%7;
 }

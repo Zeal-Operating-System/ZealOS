@@ -118,4 +118,3 @@ public U0 SettingsPop(CTask *task=NULL,I64 flags=0)
 		Free(tmpse);
 	}
 }
-

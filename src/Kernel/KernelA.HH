@@ -2716,15 +2716,15 @@ public class CDirEntry
 #help_index "File/Program Routines"
 //File Util Flags
 //See $LK,"ST_FILE_UTIL_FLAGS",A="MN:ST_FILE_UTIL_FLAGS"$
-#define FUf_RECURSE 						0
-#define FUf_DIFF								1
-#define FUf_DEL 								1
-#define FUf_IGNORE							2
-#define FUf_ALL 								3
-#define FUf_CANCEL							4
-#define FUf_REPLACE 						5
-#define FUf_RISKY 							5
-#define FUf_PUBLIC							6
+#define FUf_RECURSE 			0
+#define FUf_DIFF				1
+#define FUf_DEL 				1
+#define FUf_IGNORE				2
+#define FUf_ALL 				3
+#define FUf_CANCEL				4
+#define FUf_REPLACE 			5
+#define FUf_RISKY 				5
+#define FUf_PUBLIC				6
 #define FUf_MAP 								7
 #define FUf_EXPAND							8
 #define FUf_SINGLE							9
@@ -3599,7 +3599,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
 };
 
 #help_index "Memory/Page Tables"
-#define MEM_MIN_MEG 						256 //256 Meg minimum.
+#define MEM_MIN_MEG 						256 //256 Meg minimum.
 
 #define SYS_FIXED_AREA					0x100000
 #define SYS_16MEG_AREA_LIMIT		0x1000000

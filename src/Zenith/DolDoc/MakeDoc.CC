@@ -31,7 +31,7 @@ public class CDolDocGlobals
 } doldoc;
 MemSet(&doldoc,0,sizeof(CDolDocGlobals));
 
-#include "DocExterns"
+#include "DocExterns"
 #include "DocBin"
 #include "DocNew"
 #include "DocForm"

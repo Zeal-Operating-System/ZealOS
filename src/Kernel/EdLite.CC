@@ -33,7 +33,7 @@ U0 EdLiteUpdate(CLine *head,CLine *cur_line,I64 cur_col,I64 line_start_col)
 				if (ch=='\t')
 					k2=(k+4)&~3;
 				else
-					k2=k+1;
+					k2=k+1;
 				if (line_start_col<=k<line_start_col+text.cols) {
 					'' ch;
 					j=k2-line_start_col;

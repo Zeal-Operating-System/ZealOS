@@ -3,7 +3,7 @@ asm {
 HELLO:	DU8	"Hello, World!\n",0;
 
 _TEST::
-	PUSH	HELLO
+	PUSH	HELLO
 	CALL	&PutS
 	RET
 };

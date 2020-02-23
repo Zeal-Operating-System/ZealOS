@@ -22,7 +22,7 @@ U0 AsmParseInsFlags(CCompCtrl *cc,CInst *tmpins)
 			case '/':
 				if (Lex(cc)==TK_I64 && cc->cur_i64<8)
 					tmpins->slash_val=cc->cur_i64;
-				else if (cc->token==TK_IDENT) {
+				else if (cc->token==TK_IDENT) {
 					if (!StrCompare(cc->cur_str,"R"))
 						tmpins->slash_val=SV_R_REG;
 					else if (!StrCompare(cc->cur_str,"I"))

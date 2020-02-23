@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"CosmiC"$$FG$
 
-* See $LK,"::/Doc/CompilerOverview.DD"$.
+* See $LK,"::/Doc/CompilerOverview.DD"$.
 
 * See $LK,"Scoping and Linkage",A="FI:::/Doc/ScopingLinkage.DD"$ for details on $FG,2$extern$FG$, $FG,2$import$FG$, $FG,2$_extern$FG$, $FG,2$_import$FG$, etc.
 

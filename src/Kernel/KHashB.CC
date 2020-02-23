@@ -2,7 +2,7 @@ I64 HashTypeNum(CHash *tmph)
 {//Return bit num of hash type, limited to just types.
 	if (tmph)
 		return Bsf(tmph->type & HTG_TYPE_MASK);
-	return -1;
+	return -1;
 }
 
 I64 HashVal(CHash *tmph)

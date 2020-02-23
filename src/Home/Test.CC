@@ -1,10 +1,8 @@
-
-
 U0 Test()
 {
-	MOV	XMM12, 30
-}
+	MULPD XMM0, XMM15
+}
 
 Uf("Test");
 
-Test;
+//Test;

@@ -31,7 +31,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	CopyTree("/Kernel", 	"/Distro/Kernel");
 	CopyTree("/Misc", 		"/Distro/Misc");
 
-	//To save space, optionally delete dictionary.
+	//To save space, optionally delete dictionary.
 	//Del("/Distro/Zenith/AutoComplete/ACDefs.DATA");
 	CopyTree("/Downloads","/Distro/Downloads"); 		//You can leave this out.
 	DirMake("/Distro/Tmp");

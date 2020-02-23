@@ -15,4 +15,3 @@ d=2`(3`2);
 d=-d1`(d+d2);
 
 Option(OPTf_WARN_PAREN,OFF);
-

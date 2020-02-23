@@ -52,6 +52,3 @@ U0 Tmp()
 	}
 }
 Tmp;
-PaletteSetSmooth;
-SwapI64(&text.font,&text.aux_font);
-

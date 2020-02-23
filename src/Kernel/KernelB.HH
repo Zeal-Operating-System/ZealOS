@@ -15,7 +15,7 @@ public _intern IC_BTS Bool Bts(U8 *bit_field,I64 bit); //Bit test and set to one
 public _intern IC_LBTC Bool LBtc(U8 *bit_field,I64 bit); //Locked bit test and complement (xor with 1).
 public _intern IC_LBTR Bool LBtr(U8 *bit_field,I64 bit); //Locked bit test and reset to zero.
 public _intern IC_LBTS Bool LBts(U8 *bit_field,I64 bit); //Locked bit test and set to one.
-public _intern IC_POPCNT I64 PopCount(I64 bit_field_val); //Count number of set bits in number.
+public _intern IC_POPCNT I64 PopCount(I64 bit_field_val); //Count number of set bits in number.
 public _extern _BEQUAL Bool BEqual(U8 *bit_field,I64 bit,Bool val);//Set bit equ to val.
 public _extern _BIT_FIELD_EXT_U32 U32 BFieldExtU32(U8 *bit_field,I64 bit,I64 size); //Extract U32 from bit field.
 public _extern _BIT_FIELD_OR_U32 U0 BFieldOrU32(U8 *bit_field,I64 bit,U32 pattern); //Or U32 into bit field.

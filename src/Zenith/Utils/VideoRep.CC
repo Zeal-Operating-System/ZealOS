@@ -10,7 +10,7 @@ public I64 VideoRep(Bool full=TRUE)
 		"Vendor name       : $$BLACK$$%s$$FG$$\n", sys_vbe_info.vendor;
 		"Product name      : $$BLACK$$%s$$FG$$\n", sys_vbe_info.product_name;
 		"Product revision  : $$BLACK$$%s$$FG$$\n", sys_vbe_info.product_revision;
-		"Software revision : $$BLACK$$%X.%X$$FG$$\n", sys_vbe_info.software_revision.u8[1],  sys_vbe_info.software_revision.u8[0];
+		"Software revision : $$BLACK$$%X.%X$$FG$$\n", sys_vbe_info.software_revision.u8[1],  sys_vbe_info.software_revision.u8[0];
 		"Hardware memory   : $$BLACK$$%d MiB$$FG$$\n", sys_vbe_info.total_memory * 64 / 1024;
 		"\n\nAll modes shown are 32-bit color.\n\n";
 	}

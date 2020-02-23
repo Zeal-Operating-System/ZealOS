@@ -13,7 +13,7 @@ $FG,2$#else
 #endif
 #ifdef,#ifndef	$FG$Include code if a sym is defined.
 $FG,2$#ifaot,#ifjit 	$FG$Include code if in $FG,2$AOT$FG$ compiler mode.
-$FG,2$defined()$FG$ 		Is a function that can be used in expressions.
+$FG,2$defined()$FG$ 		Is a function that can be used in expressions.
 $FG,2$#help_index$FG$, $FG,2$#help_file$FG$ See $LK,"Help System",A="FI:::/Doc/HelpSystem.DD"$.
 
 See $LK,"PreProcessor",A="FF:::/Compiler/Lex.CC,KW_DEFINE"$.

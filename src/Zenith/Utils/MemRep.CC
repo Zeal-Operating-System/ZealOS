@@ -206,7 +206,7 @@ public U0 MemRep()
     "$LK,"VBE framebuffer",A="FF:::/Kernel/KernelA.HH,framebuffer"$\t:%08X-%08X\n", text.fb_alias, text.fb_alias(U8 *) + text.buffer_size - 1;
 	if (sys_data_bp)
     {
-		"$$BLACK$$Code Heap\t:%010X/%010X$$FG$$\n",sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
+		"$$BLACK$$Code Heap\t:%010X/%010X$$FG$$\n",sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;
 		"$$BLACK$$Data Heap\t:%010X/%010X$$FG$$\n",	sys_data_bp->used_u8s,sys_data_bp->alloced_u8s;
 	} else
 		"$$BLACK$$Code/Data Heap\t:%08X/%08X$$FG$$\n",sys_code_bp->used_u8s,sys_code_bp->alloced_u8s;

@@ -55,7 +55,7 @@ class CVBoxHGCMPtr
 };
 
 
-
+
 class CVBoxGuestInfo
 {
 	CVBoxHeader header;

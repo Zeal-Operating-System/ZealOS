@@ -84,7 +84,7 @@ U0 SysGrInit()
 
     text.font = sys_font_std;
 
-	//patch some chars
+	//patch some chars
 	text.aux_font[10] = text.font[10]; //"Return" symbol 
 	text.aux_font['' - 1] = text.font['' - 1]; //Shift-space 
 	text.aux_font[255] = text.font[255]; //Block symbol ÿ

@@ -302,7 +302,7 @@ public U0 DrawStdMouse(CDC *dc,I64 x,I64 y)
 	dc->flags&=~(DCF_TRANSFORMATION|DCF_SYMMETRY);
 	dc->thick=1;
 	GrArrow3(dc,x+8,y+8,0,x,y,0);
-}
+}
 
 gr.fp_draw_mouse=&DrawStdMouse;
 

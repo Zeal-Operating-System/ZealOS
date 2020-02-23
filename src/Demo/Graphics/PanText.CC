@@ -16,7 +16,7 @@ U0 PanText()
 		Sleep(30);
 	}
 
-	for (i=0;i<=7;i++) {
+	for (i=0;i<=7;i++) {
 		gr.pan_text_y=i;
 		Sleep(30);
 	}

@@ -25,4 +25,4 @@ I0 Color32Demo()
 	}
 }
 
-Color32Demo;
+Color32Demo;
