@@ -228,7 +228,6 @@ CDirEntry *Cd2DirEntry(CDirEntry *tmpde,U8 *abs_name)
 
 I64 FileAttr(U8 *name,I64 attr=0)
 {
-	attr&=~RS_ATTR_COMPRESSED;
 	if (IsDotC(name))
 		attr|=RS_ATTR_CONTIGUOUS;
 	return attr;

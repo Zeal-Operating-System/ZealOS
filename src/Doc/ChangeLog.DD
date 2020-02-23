@@ -1,5 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
 $IV,1$----02/23/20 02:36:28----$IV,0$
+* Removed RS_ATTR_COMPRESSED from $LK,"RedSea attributes",A="MN:RS_ATTR_READ_ONLY"$.
+
 * Refactored $LK,"FU flags",A="MN:FUf_RECURSE"$. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. $LK,"DocOptEntry",A="MN:DocOptEntry"$(), $LK,"Size",A="MN:Size"$(), $LK,"Size1",A="MN:"$(), $LK,"SizeRep",A="MN:SizeRep"$(), and $LK,"SizeRep1",A="MN:SizeRep1"$() have been updated accordingly.
 
 * Removed IsDotZ(), ToggleZOrNotZ(). $LK,"FileRead",A="MN:FileRead"$(), $LK,"FileWrite",A="MN:FileWrite"$(), and $LK,"FileFind",A="MN:FileFind"$() have been cleaned up accordingly.

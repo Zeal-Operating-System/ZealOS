@@ -2641,11 +2641,11 @@ class CATAPITrack
 };
 
 //ISO9660
-#define ISOT_BOOT_RECORD				0
-#define ISOT_PRI_VOL_DESC 			1
+#define ISOT_BOOT_RECORD		0
+#define ISOT_PRI_VOL_DESC 		1
 #define ISOT_SUPPLEMENTARY_DESC 2
-#define ISOT_VOL_DRIVE_DESC 		3
-#define ISOT_TERMINATOR 				255
+#define ISOT_VOL_DRIVE_DESC 	3
+#define ISOT_TERMINATOR 		255
 
 class CISODirEntry
 {
@@ -2676,20 +2676,18 @@ class CISOPriDesc
 
 //Red Sea Attributes
 //See $LK,"ST_FILE_ATTRS",A="MN:ST_FILE_ATTRS"$
-#define RS_ATTR_READ_ONLY 			0x01 //R
-#define RS_ATTR_HIDDEN					0x02 //H
-#define RS_ATTR_SYSTEM					0x04 //S
-#define RS_ATTR_VOL_ID					0x08 //V
-#define RS_ATTR_DIR 						0x10 //D
-#define RS_ATTR_ARCHIVE 				0x20 //A
-#define RS_ATTR_LONG_NAME 			(RS_ATTR_READ_ONLY|RS_ATTR_HIDDEN|\
-																RS_ATTR_SYSTEM|RS_ATTR_VOL_ID)
+#define RS_ATTR_READ_ONLY 		0x01 //R
+#define RS_ATTR_HIDDEN			0x02 //H
+#define RS_ATTR_SYSTEM			0x04 //S
+#define RS_ATTR_VOL_ID			0x08 //V
+#define RS_ATTR_DIR 			0x10 //D
+#define RS_ATTR_ARCHIVE 		0x20 //A
+#define RS_ATTR_LONG_NAME		(RS_ATTR_READ_ONLY|RS_ATTR_HIDDEN|RS_ATTR_SYSTEM|RS_ATTR_VOL_ID)
 #define RS_ATTR_LONG_NAME_MASK	(RS_ATTR_LONG_NAME|RS_ATTR_DIR|RS_ATTR_ARCHIVE)
-#define RS_ATTR_DELETED 				0x100 //X
-#define RS_ATTR_RESIDENT				0x200 //T
-#define RS_ATTR_COMPRESSED			0x400 //Z
-#define RS_ATTR_CONTIGUOUS			0x800 //C
-#define RS_ATTR_FIXED 					0x1000 //F
+#define RS_ATTR_DELETED 		0x100 //X
+#define RS_ATTR_RESIDENT		0x200 //T
+#define RS_ATTR_CONTIGUOUS		0x400 //C
+#define RS_ATTR_FIXED 			0x800 //F
 
 #help_index "File/CD DVD"
 //Media types for $LK,"DVDImageWrite",A="MN:DVDImageWrite"$()
