@@ -1,97 +1,97 @@
 asm {
 INT_MP_CRASH_ADDR:: //Forward reference to work around compiler
-				DU32		&IntMPCrash;
+		DU32	&IntMPCrash;
 
 INT_WAKE::
-				PUSH		RDX
-				PUSH		RAX
-				MOV 		EAX,&dev
-				MOV 		EDX,U32 LAPIC_EOI
-				MOV 		RAX,U64 CDevGlobals.uncached_alias[RAX]
-				MOV 		U32 [RAX+RDX],0
-				POP 		RAX
-				POP 		RDX
-				IRET
+		PUSH	RDX
+		PUSH	RAX
+		MOV 	EAX,&dev
+		MOV 	EDX,U32 LAPIC_EOI
+		MOV 	RAX,U64 CDevGlobals.uncached_alias[RAX]
+		MOV 	U32 [RAX+RDX],0
+		POP 	RAX
+		POP 	RDX
+		IRET
 
 IRQ_TIMER::  //I_TIMER
-				CALL		TASK_CONTEXT_SAVE
-				CLD
+		CALL	TASK_CONTEXT_SAVE
+		CLD
 
-				MOV 		RAX,U64 [RSP]
-				MOV 		U64 CTask.rip[RSI],RAX
-				MOV 		RAX,U64 16[RSP]
-				MOV 		U64 CTask.rflags[RSI],RAX
-				MOV 		RAX,U64 24[RSP]
-				MOV 		U64 CTask.rsp[RSI],RAX
+		MOV 	RAX,U64 [RSP]
+		MOV 	U64 CTask.rip[RSI],RAX
+		MOV 	RAX,U64 16[RSP]
+		MOV 	U64 CTask.rflags[RSI],RAX
+		MOV 	RAX,U64 24[RSP]
+		MOV 	U64 CTask.rsp[RSI],RAX
 
-				XOR 		RAX,RAX
-				MOV 		RDI,U64 GS:CCPU.addr[RAX]
-				LOCK
-				INC 		U64 CCPU.total_jiffies[RDI]
+		XOR 	RAX,RAX
+		MOV 	RDI,U64 GS:CCPU.addr[RAX]
+		LOCK
+		INC 	U64 CCPU.total_jiffies[RDI]
 
-				BT			U64 CTask.task_flags[RSI],TASKf_IDLE
-				JNC 		@@05
-				LOCK
-				INC 		U64 CCPU.idle_pt_hits[RDI]
+		BT		U64 CTask.task_flags[RSI],TASKf_IDLE
+		JNC		@@05
+		LOCK
+		INC 	U64 CCPU.idle_pt_hits[RDI]
 
-@@05: 	MOV 		RAX,U64 CCPU.profiler_timer_irq[RDI]
-				TEST		RAX,RAX
-				JZ			@@10
-				PUSH		RSI
-				CALL		RAX 		//See $LK,"ProfTimerInt",A="MN:ProfTimerInt"$().
-				JMP 		@@15
-@@10: 	ADD 		RSP,8
+@@05: 	MOV		RAX,U64 CCPU.profiler_timer_irq[RDI]
+		TEST	RAX,RAX
+		JZ		@@10
+		PUSH	RSI
+		CALL	RAX 		//See $LK,"ProfTimerInt",A="MN:ProfTimerInt"$().
+		JMP 	@@15
+@@10: 	ADD 	RSP,8
 @@15: 	CLI
-				MOV 		RAX,U64 CCPU.num[RDI]
-				TEST		RAX,RAX
-				JZ			@@20
+		MOV		RAX,U64 CCPU.num[RDI]
+		TEST	RAX,RAX
+		JZ		@@20
 
-				MOV 		EAX,&dev
-				MOV 		EDX,U32 LAPIC_EOI
-				MOV 		RAX,U64 CDevGlobals.uncached_alias[RAX]
-				MOV 		U32 [RAX+RDX],0
-				JMP 		@@25
+		MOV 	EAX,&dev
+		MOV 	EDX,U32 LAPIC_EOI
+		MOV 	RAX,U64 CDevGlobals.uncached_alias[RAX]
+		MOV 	U32 [RAX+RDX],0
+		JMP 	@@25
 
-@@20: 	CALL		&IntCore0TimerHandler 	//Only Core 0 calls this.
-@@25: 	XOR 		RAX,RAX
-				CMP 		RSI,U64 GS:CCPU.idle_task[RAX]
-				JE			I32 RESTORE_DAEMON_TASK_IF_READY
-				JMP 		I32 RESTORE_RSI_TASK
+@@20: 	CALL	&IntCore0TimerHandler 	//Only Core 0 calls this.
+@@25: 	XOR 	RAX,RAX
+		CMP 	RSI,U64 GS:CCPU.idle_task[RAX]
+		JE		I32 RESTORE_DAEMON_TASK_IF_READY
+		JMP 	I32 RESTORE_RSI_TASK
 //************************************
 INT_FAULT::
-				PUSH		RBX
-				PUSH		RAX
-				MOV 		BL,U8 16[RSP] 	//We pushed fault_num $LK,"IntFaultHandlersNew",A="MN:IntFaultHandlersNew"$().
-				XOR 		RAX,RAX
-				MOV 		FS:U8 CTask.fault_num[RAX],BL
-				POP 		RAX
-				POP 		RBX
-				ADD 		RSP,8 					//Pop fault_num
+		PUSH	RBX
+		PUSH	RAX
+		MOV 	BL,U8 16[RSP] 	//We pushed fault_num $LK,"IntFaultHandlersNew",A="MN:IntFaultHandlersNew"$().
+		XOR 	RAX,RAX
+		MOV 	FS:U8 CTask.fault_num[RAX],BL
+		POP 	RAX
+		POP 	RBX
+		ADD 	RSP,8 					//Pop fault_num
 
-				CALL		TASK_CONTEXT_SAVE
+		CALL	TASK_CONTEXT_SAVE
 
-				XOR 		RDX,RDX
-				MOV 		U64 CTask.fault_err_code[RSI],RDX
-				MOV 		EDX,U32 CTask.fault_num[RSI]
-				BT			U64 [INT_FAULT_ERR_CODE_BITMAP],RDX
-				JNC 		@@1
-				POP 		U64 CTask.fault_err_code[RSI]
+		XOR 		RDX,RDX
+		MOV 	U64 CTask.fault_err_code[RSI],RDX
+		MOV 	EDX,U32 CTask.fault_num[RSI]
+		BT		U64 [INT_FAULT_ERR_CODE_BITMAP],RDX
+		JNC 	@@1
+		POP		U64 CTask.fault_err_code[RSI]
 
-@@1:		MOV 		RAX,U64 [RSP]
-				MOV 		U64 CTask.rip[RSI],RAX
-				MOV 		RAX,U64 16[RSP]
-				MOV 		U64 CTask.rflags[RSI],RAX
-				MOV 		RSP,U64 24[RSP]
-				MOV 		U64 CTask.rsp[RSI],RSP
-				MOV 		RBP,CTask.rbp[RSI]
-				PUSH		U64 CTask.fault_err_code[RSI]
-				PUSH		U64 CTask.fault_num[RSI]
-				MOV 		RSI,CTask.rsi[RSI]
-				CALL		&Fault2 				//See $LK,"Fault2",A="FF:::/Kernel/KDebug.CC,Fault2"$
-				JMP 		I32 RESTORE_FS_TASK
+@@1:	MOV 	RAX,U64 [RSP]
+		MOV 	U64 CTask.rip[RSI],RAX
+		MOV 	RAX,U64 16[RSP]
+		MOV 	U64 CTask.rflags[RSI],RAX
+		MOV 	RSP,U64 24[RSP]
+		MOV 	U64 CTask.rsp[RSI],RSP
+		MOV 	RBP,CTask.rbp[RSI]
+		PUSH	U64 CTask.fault_err_code[RSI]
+		PUSH	U64 CTask.fault_num[RSI]
+		MOV 	RSI,CTask.rsi[RSI]
+		CALL	&Fault2 				//See $LK,"Fault2",A="FF:::/Kernel/KDebug.CC,Fault2"$
+		JMP 	I32 RESTORE_FS_TASK
 
 INT_FAULT_ERR_CODE_BITMAP::
-				DU32		0x00027D00,0,0,0,0,0,0,0;
+		DU32	0x00027D00,0,0,0,0,0,0,0;
 }
 
 U8 *IntEntryGet(I64 irq)

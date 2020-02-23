@@ -12,7 +12,7 @@ $FG,2$/Kernel$FG$ The core of the operating system is found here.  Since privile
 
 $FG,2$/Compiler$FG$ The compiler module src code is found here.  The compiler is $FG,2$AOT$FG$ compiled to produce a binary file which is loaded at boot.  It, too, is $FG,2$AOT$FG$ compiled by $LK,"BootHDIns",A="MN:BootHDIns"$().
 
-$FG,2$/Zenith$FG$ The non-kernel part of the operating system is found here.	It is $FG,2$JIT$FG$ compiled during boot.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is the father of all tasks, like Zenith and Eve.
+$FG,2$/Zenith$FG$ The non-kernel part of the operating system is found here.	It is $FG,2$JIT$FG$ compiled during boot.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is the most important task. It never dies. See the $MA-X+PU,"definition of zenith",LM="ACDDefsPut(DocPut, \"Zenith\");View;"$.
 
 $FG,2$/0000Boot$FG$ Boot files go here.  Stage 2 of the ZenithOS hard drive master boot loader, the old hard drive master boot record which is just blk#0, and the CD/DVD $LK,"0000Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ file go here.  ASCII $FG,2$0000$FG$ is near the top, alphabetically, in case you use $TX,"MagicISO",HTML="http://www.magiciso.com"$.
 
@@ -117,7 +117,7 @@ See $LK,"::/Doc/Asm.DD"$.
 * When interacting with $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for reg vars.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
 
 * I recommend using the standard stack frame for functions because $LK,"Caller",A="MN:Caller"$() is used to display the call stack, such as for the wallpaper.
-$FG,2$	PUSH		RBP
+$FG,2$				PUSH		RBP
 				MOV 		RBP,RSP
 				SUB 		RSP,nnnn
 ...

@@ -43,7 +43,7 @@ MESSAGE:				DU8 "Hello World\n",0;
 //The convention is underscore on C callable.
 //Two colons means exported symbol.
 _HELLO_WORLD::
-//You can only clobber RAX,RBX,RCX,RDX
+//You can only clobber RAX,RBX,RCX,RDX
 				PUSH		RSI
 				MOV 		RSI,MESSAGE
 				CALL		PUT_STR

@@ -1,0 +1,99 @@
+The basics of the CosmiC language. Requirements: Knowledge of basic integer mathematics and number sense.
+
+There are 4 main types of symbols. A symbol is just a fancy name for something with a name.
+
+We have:
+	- Functions
+	- Variables
+	- Definitions
+	- Classes
+
+$HL$//This is a variable
+I64 my_var;
+
+//This is another variable of a different $UL,1$type$UL,0$.
+U8 my_u8;
+$HL,0$
+Variables are declared as certain $UL,1$types$UL,0$. There are types for numbers. You just saw two of them above, I64 and U8.
+
+The compiler gives us 8 types for numbers. These types are different $UL,0$$UL,1$sizes$UL,0$ of numbers, and if they are $UL,1$signed$UL,0$ or $UL,0$$UL,1$unsigned$UL,0$.
+
+A $UL,1$byte$UL,1$$UL,0$ is 8 bits. The range of numbers you can store in a byte is 0 to 255. In a signed byte that range is from -128 to 127.
+
+* Unsigned types cannot be a negative value.
+* Only signed types can store negative numbers.
+
+Now you might be thinking, how does it know if a number is negative or not? After all, a number is just a series of bits!
+
+The way we store a signed number is we reserve a single bit in the number to tell us whether or not it is signed.
+
+If we have a number that is 8 bits wide, then we have to use a single bit as a $UL,0$$UL,1$sign bit$UL,0$.
+The sign bit is always the highest bit available.
+
+In a signed byte, bits #0-6 will be used to store the actual value of the number.
+
+Bit #7 will be the sign bit. If the sign bit is 1, then it is a negative number.
+
+#	7	6	5	4	3	2	1	0
+
+$FG,4$0b	0	0	0	0	0	0	1	1$FG$ 	=>  $FG,1$3$FG$
+	|						|	|
+  sign	 the number "3" in binary					
+
+
+If it a number is signed that means that it cannot use all of its bits to represent a value.
+Therefore, the range of numbers it can represent is split between the negative side and the positive side of numbers.
+
+				  $HL,0$$FG,6$					  Unsigned byte range
+
+								|----------------------------|
+				  $FG,5$     Signed byte range
+				  |--------------------------|
+$FG,0$-255-1270127255$FG$
+
+
+Now, you can imagine how this plays out with numbers that are bigger than 1 byte.
+
+For 2-byte numbers, the unsigned range becomes 0 to 65535, and the signed range becomes -32768 to 32767. 
+The sign bit is bit #15.
+
+Unsigned number types:
+
+	$HL$U8	-- 1 byte (8 bits) unsigned number
+	I8	-- 1 byte (8 bits - 1 sign bit = 7 bits) signed number
+
+	U16 -- 2 byte (16 bits) unsigned number
+	I16 -- 2 byte (16 bits - 1 sign bit = 15 bits) signed number
+
+	U32 -- 4 byte (32 bits) unsigned number
+	I32 -- 4 byte (32 bits - 1 sign bit = 31 bits) signed number
+
+	U64	-- 8 byte (64 bits) unsigned number
+	I64	-- 8 byte (64 bits - 1 sign bit = 63 bits) signed number
+
+$HL,0$
+Try it out on the command line:
+
+Declare a I8 variable named 'x' and assign(=) it the value 3, and press ENTER.
+
+$FG,1$C:/Home>$FG,2$I8 x = 3;$FG$
+
+Now type $FG,2$Bts(&x, 7);$FG$ and press ENTER. This will set bit #7 to 1. Bts is "Bit test and set". Don't forget the $FG,2$&$FG$.
+
+Now if you want to see the value of x, you can simply type $FG,2$x;$FG$ and press ENTER.
+
+$FG,1$C:/Home>$FG,2$x;
+$FG,1$0.000007s ans=0xFFFFFFFFFFFFFF83=-125$FG$
+
+Ignore the extra F's for now. You are interested in this hexadecimal '83' value. 
+
+So what happened? When you flipped the sign bit, the number 3 became -125. It started counting up from -128, instead of 0.
+
+You can type $FG,2$"%8tb\n", x;$FG$ to print out the number in binary, if you wish.
+
+For most purposes in programming, an $HL$I64$HL,0$ number will work fine.
+
+You are currently reading this on a 64-bit operating system, running on a 64-bit computer.
+We hear about the greatness of 64-bit machines all the time, but what exactly does that mean?
+
+The CPU is designed to work with 64-bit numbers, natively. 

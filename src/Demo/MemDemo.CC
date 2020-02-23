@@ -1,7 +1,7 @@
 U0 MemDemo()
 {
 	I64 i;
-"$$HL,1$$$$BLACK$$
+"$$HL,1$$$$BLACK$$
 #define MEM_PAG_BITS						9
 #define MEM_PAG_SIZE						(1<<MEM_PAG_BITS)
 #define MEM_HEAP_HASH_SIZE			1024

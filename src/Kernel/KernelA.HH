@@ -59,10 +59,7 @@ extern class CTask;
 #define eps 		(0x3CB0000000000000(F64))
 
 #help_index "Data Types/Simple"
-/*CosmiC union structure is treated as a
-whole if no member is specified,
-similar to bit fields.
-
+/*CosmiC union structure is treated as a whole if no member is specified, similar to bit fields.
 See $LK,"::/Demo/SubIntAccess.CC"$.
 */
 U16i union U16
@@ -1598,8 +1595,8 @@ class CWinMgrTimingGlobals
 	I64 	calc_idle_count;
 };
 
-#define WINMGR_FPS		(30000.0/1001)
-#define WINMGR_PERIOD 	(1001/30000.0)
+#define WINMGR_FPS		(60000.0/1001)
+#define WINMGR_PERIOD 	(1001/60000.0)
 
 public class CWinMgrGlobals
 {
@@ -3599,7 +3596,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
 };
 
 #help_index "Memory/Page Tables"
-#define MEM_MIN_MEG 						256 //256 Meg minimum.
+#define MEM_MIN_MEG 						256 //256 Meg minimum.
 
 #define SYS_FIXED_AREA					0x100000
 #define SYS_16MEG_AREA_LIMIT		0x1000000

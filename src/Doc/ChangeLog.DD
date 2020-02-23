@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
 
-$IV,1$----02/22/20 20:04:00----$IV,0$
+$IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
 
 * Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
@@ -159,7 +159,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 
 * Functions starting with 'A' for Adam now start with 'Z' for Zenith.
 
-* $UL$Decompressed all files. Removed Zip(), Unzip(), and ZipRep(). Slightly modified $LK,"FileRead",A="MN:"$() to disable reading compressed files. Removal of compression planned for the future.$UL,0$
+* $UL$Decompressed all files.$UL,0$ Removed Zip(), Unzip(), and ZipRep(). Slightly modified $LK,"FileRead",A="MN:FileRead"$() to disable reading compressed files. Removal of compression planned for the future.
 
 * $UL$Renamed all files from .HC -> .CC to reflect language name change.$UL,0$
 
