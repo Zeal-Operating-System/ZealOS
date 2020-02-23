@@ -47,8 +47,11 @@ U0 Tmp()
 //					Cd("::/Misc/Tour");
 //					InFile("Tour");
 //				}
-//			}
+//			}
 			break;
 	}
 }
 Tmp;
+PaletteSetSmooth;
+SwapI64(&text.font,&text.aux_font);
+

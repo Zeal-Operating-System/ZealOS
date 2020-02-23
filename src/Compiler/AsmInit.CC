@@ -22,7 +22,7 @@ U0 AsmParseInsFlags(CCompCtrl *cc,CInst *tmpins)
 			case '/':
 				if (Lex(cc)==TK_I64 && cc->cur_i64<8)
 					tmpins->slash_val=cc->cur_i64;
-				else if (cc->token==TK_IDENT) {
+				else if (cc->token==TK_IDENT) {
 					if (!StrCompare(cc->cur_str,"R"))
 						tmpins->slash_val=SV_R_REG;
 					else if (!StrCompare(cc->cur_str,"I"))
@@ -32,14 +32,14 @@ U0 AsmParseInsFlags(CCompCtrl *cc,CInst *tmpins)
 				} else
 					return;
 				break;
-			case '!': tmpins->flags|=IEF_DONT_SWITCH_MODES; 	break;
-			case '&': tmpins->flags|=IEF_DEFAULT; 										break;
-			case '%': tmpins->flags|=IEF_NOT_IN_64_BIT; 			break;
-			case '=': tmpins->flags|=IEF_48_REX;							break;
-			case '`': tmpins->flags|=IEF_REX_ONLY_R8_R15; 		break;
-			case '^': tmpins->flags|=IEF_REX_XOR_LIKE;								break;
-			case '*': tmpins->flags|=IEF_STI_LIKE;						break;
-			case '$$': tmpins->flags|=IEF_ENDING_ZERO;								break;
+			case '!': tmpins->flags|=IEF_DONT_SWITCH_MODES;	break;
+			case '&': tmpins->flags|=IEF_DEFAULT; 			break;
+			case '%': tmpins->flags|=IEF_NOT_IN_64_BIT; 	break;
+			case '=': tmpins->flags|=IEF_48_REX;			break;
+			case '`': tmpins->flags|=IEF_REX_ONLY_R8_R15;	break;
+			case '^': tmpins->flags|=IEF_REX_XOR_LIKE;		break;
+			case '*': tmpins->flags|=IEF_STI_LIKE;			break;
+			case '$$': tmpins->flags|=IEF_ENDING_ZERO;		break;
 			default:
 				return;
 		}
@@ -58,15 +58,15 @@ U0 AsmHashLoad()
 	CInst *tmpins;
 	CHashClass *tmpc;
 
-	cmp.size_arg_mask[0]=0x3FF0FFFFFE;
-	cmp.size_arg_mask[1]=0x1110111112;
-	cmp.size_arg_mask[2]=0x2220222224;
-	cmp.size_arg_mask[4]=0x0440444448;
-	cmp.size_arg_mask[8]=0x0880888880;
+	cmp.size_arg_mask[0] = 0x3FF0FFFFFE;
+	cmp.size_arg_mask[1] = 0x1110111112;
+	cmp.size_arg_mask[2] = 0x2220222224;
+	cmp.size_arg_mask[4] = 0x0440444448;
+	cmp.size_arg_mask[8] = 0x0880888880;
 
-	cmp.asm_hash=HashTableNew(1024);
-	size_max=offset(CHashOpcode.ins)+sizeof(CInst)<<5;
-	tmpo_max=MAlloc(size_max);
+	cmp.asm_hash = HashTableNew(1024);
+	size_max = offset(CHashOpcode.ins) + sizeof(CInst) << 5;
+	tmpo_max = MAlloc(size_max);
 
 	cc=CompCtrlNew(FileRead("OpCodes.DD"),,"OpCodes.DD");
 	cc->htc.hash_table_list=NULL;
@@ -74,8 +74,7 @@ U0 AsmHashLoad()
 	while (cc->token) {
 		if (cc->token!=TK_IDENT)
 			LexExcept(cc,"Expecting identifier at ");
-		i=ListMatch(cc->cur_str,"NONE\0R8\0R16\0R32\0R64\0SEG\0FSTACK\0"
-					"MM\0XMM\0OPCODE\0KEYWORD\0ASM_KEYWORD\0");
+		i=ListMatch(cc->cur_str, "NONE\0R8\0R16\0R32\0R64\0SEG\0FSTACK\0MM\0XMM\0OPCODE\0KEYWORD\0ASM_KEYWORD\0");
 		if (i<=0)
 			LexExcept(cc,"Unknown Statement");
 		Lex(cc); //skip keyword
@@ -87,12 +86,12 @@ U0 AsmHashLoad()
 				tmpr->str=cc->cur_str;
 				cc->cur_str=NULL;
 				Lex(cc); //skip keyword name
-				if (cc->token!=TK_I64)
-					LexExcept(cc,"Expecting int at ");
-				tmpr->type=HTT_REG;
-				tmpr->reg_type=i;
-				tmpr->reg_num=cc->cur_i64;
-				HashAdd(tmpr,cmp.asm_hash);
+				if (cc->token != TK_I64)
+					LexExcept(cc, "Expecting int at ");
+				tmpr->type = HTT_REG;
+				tmpr->reg_type = i;
+				tmpr->reg_num = cc->cur_i64;
+				HashAdd(tmpr, cmp.asm_hash);
 				Lex(cc); //Skip INT
 				break;
 			case: //OPCODE

@@ -4,7 +4,7 @@ Bool ParseAsmImm(CCompCtrl *cc,CAsmArg *arg)
 		LexExcept(cc,"Already one immediate at ");
 	arg->imm_or_off_present=TRUE;
 	arg->num.local_asm_undef_hash=NULL;
-	arg->num.glbl_asm_undef_hash=NULL;
+	arg->num.glbl_asm_undef_hash=NULL;
 	cc->asm_undef_hash=NULL;
 	cc->abs_counts=0;
 	cc->flags&=~(CCF_UNRESOLVED+CCF_LOCAL);
@@ -41,13 +41,18 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 	arg->reg1=REG_NONE;
 	arg->reg2=REG_NONE;
 	arg->scale=1;
-	while (TRUE) {
-		if (cc->token==TK_IDENT) {
-			if (tmph=cc->hash_entry) {
-				if (tmph->type&HTG_TYPE_MASK==HTT_REG) {
-					tmpr=tmph;
-					arg->reg1_type=tmpr->reg_type;
-					switch (tmpr->reg_type) {
+	while (TRUE)
+	{
+		if (cc->token == TK_IDENT)
+		{
+			if (tmph = cc->hash_entry)
+			{
+				if (tmph->type & HTG_TYPE_MASK == HTT_REG)
+				{
+					tmpr = tmph;
+					arg->reg1_type = tmpr->reg_type;
+					switch (tmpr->reg_type)
+					{
 						start:
 							case REGT_R8:
 								arg->size=1;
@@ -59,34 +64,36 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 								arg->size=4;
 								break;
 							case REGT_R64:
+							case REGT_FSTACK:
+							case REGT_MM:
 								arg->size=8;
 								break;
+							case REGT_XMM:
+								arg->size=16;
 						end:
 							arg->reg1=tmpr->reg_num;
 							Lex(cc);
 							return;
 						case REGT_SEG:
-							arg->seg=tmpr->reg_num;
-							if (Lex(cc)!=':') {
+							arg->seg = tmpr->reg_num;
+							if (Lex(cc) != ':')
+							{
 								arg->just_seg=TRUE;
 								return;
-							} else
+							}
+							else
 								Lex(cc); //skip ":"
 							break;
-						case REGT_FSTACK:
-						case REGT_MM:
-						case REGT_XMM:
-							arg->size=8;
-							arg->reg1=tmpr->reg_num;
-							Lex(cc);
-							return;
 					}
-				} else {
-					if ((tmph->type&HTG_TYPE_MASK==HTT_CLASS||
-								tmph->type&HTG_TYPE_MASK==HTT_INTERNAL_TYPE) &&
-								(tmph1=HashFind(cc->cur_str,cmp.asm_hash,HTT_ASM_KEYWORD)))
-						tmph=tmph1;
-					if (tmph->type&HTG_TYPE_MASK==HTT_ASM_KEYWORD) {
+				}
+				else
+				{
+					if ((tmph->type & HTG_TYPE_MASK == HTT_CLASS||
+								tmph->type & HTG_TYPE_MASK == HTT_INTERNAL_TYPE) &&
+								(tmph1 = HashFind(cc->cur_str, cmp.asm_hash, HTT_ASM_KEYWORD)))
+						tmph = tmph1;
+					if (tmph->type & HTG_TYPE_MASK == HTT_ASM_KEYWORD)
+					{
 						switch (tmph->user_data0) {
 							case AKW_I8:
 							case AKW_U8:
@@ -111,27 +118,34 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 					} else
 						goto pa_asm_direct_imm;
 				}
-			} else {
+			}
+			else
+			{
 pa_asm_direct_imm:
-				ParseAsmImm(cc,arg);
-				arg->num.abs_counts=cc->abs_counts;
-				if (arg->size<=1 && !rel && arg->num.abs_counts&1) {
-					if (cc->aotc->seg_size==16)
+				ParseAsmImm(cc, arg);
+				arg->num.abs_counts = cc->abs_counts;
+				if (arg->size <= 1 && !rel && arg->num.abs_counts & 1)
+				{
+					if (cc->aotc->seg_size == 16)
 						arg->size=2;
 					else
 						arg->size=4;
 				}
-				if (cc->token!='[')
+				if (cc->token != '[')
 					return;
 			}
-		} else if (cc->token=='[') {
-			arg->indirect=TRUE;
+		}
+		else if (cc->token=='[') {
+			arg->indirect = TRUE;
 			Lex(cc); // skip [
-			while (cc->token && cc->token!=']') {
-				if (cc->token==TK_IDENT) {
-					if (tmph=cc->hash_entry) {
-						if (tmph->type&HTG_TYPE_MASK==HTT_REG &&
-									REGT_R16<=tmph(CHashReg *)->reg_type<=REGT_R64) {
+			while (cc->token && cc->token != ']')
+			{
+				if (cc->token == TK_IDENT)
+				{
+					if (tmph = cc->hash_entry)
+					{
+						if (tmph->type & HTG_TYPE_MASK == HTT_REG && REGT_R16 <= tmph(CHashReg *)->reg_type <= REGT_R64)
+						{
 							tmpr=tmph;
 							arg->reg2_type=tmpr->reg_type;
 							if (arg->reg1==REG_NONE) {

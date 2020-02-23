@@ -4,13 +4,23 @@ class CInternalType
 {
 	U8 type,size,name[8];
 } internal_types_table[INTERNAL_TYPES_NUM]={
-	{RT_I0,0,"I0i"},{RT_I0,0,"I0"},{RT_U0,0,"U0i"},{RT_U0,0,"U0"},
-	{RT_I8,1,"I8i"},{RT_I8,1,"I8"},{RT_I8,1,"Bool"},
-	{RT_U8,1,"U8i"},{RT_U8,1,"U8"},
-	{RT_I16,2,"I16i"},{RT_U16,2,"U16i"},
-	{RT_I32,4,"I32i"},{RT_U32,4,"U32i"},
-	{RT_I64,8,"I64i"},{RT_U64,8,"U64i"},
-	{RT_F64,8,"F64i"},{RT_F64,8,"F64"},
+	{RT_I0,  0, "I0i"},
+	{RT_I0,  0, "I0"},
+	{RT_U0,  0, "U0i"},
+	{RT_U0,  0, "U0"},
+	{RT_I8,  1, "I8i"},
+	{RT_I8,  1, "I8"},
+	{RT_I8,  1, "Bool"},
+	{RT_U8,  1, "U8i"},
+	{RT_U8,  1, "U8"},
+	{RT_I16, 2, "I16i"},
+	{RT_U16, 2, "U16i"},
+	{RT_I32, 4, "I32i"},
+	{RT_U32, 4, "U32i"},
+	{RT_I64, 8, "I64i"},
+	{RT_U64, 8, "U64i"},
+	{RT_F64, 8, "F64i"},
+	{RT_F64, 8, "F64"},
 };
 
 CIntermediateStruct intermediate_code_table[IC_ICS_NUM]={
@@ -205,36 +215,245 @@ CIntermediateStruct intermediate_code_table[IC_ICS_NUM]={
 U0 CompLoadDefines()
 {
 	DefineListLoad("ST_RAW_TYPES",
-				"\0\0I0\0U0\0I8\0U8\0I16\0U16\0I32\0U32\0I64\0U64\0"
-				"F32\0UF32\0F64\0UF64\0");
+								"\0"
+								"\0"
+								"I0\0"
+								"U0\0"
+								"I8\0"
+								"U8\0"
+								"I16\0"
+								"U16\0"
+								"I32\0"
+								"U32\0"
+								"I64\0"
+								"U64\0"
+								"F32\0"
+								"UF32\0"
+								"F64\0"
+								"UF64\0");
+
 	DefineListLoad("ST_NATURAL_TYPES",
-				"I8\0U8\0I16\0U16\0I32\0U32\0I64\0U64\0F64\0String\0");
+								"I8\0"
+								"U8\0"
+								"I16\0"
+								"U16\0"
+								"I32\0"
+								"U32\0"
+								"I64\0"
+								"U64\0"
+								"F64\0"
+								"String\0");
+
 	DefineListLoad("ST_INT_SIZE_TYPES",
-				"I8\0U8\0I16\0U16\0I32\0U32\0I64\0U64\0");
-	DefineListLoad("ST_TY_TYPES","NULL\0STACK\0IMM\0REG\0DISP\0SIB\0RIP\0");
-	DefineListLoad("ST_U8_REGS","AL\0CL\0DL\0BL\0AH\0CH\0DH\0BH\0"
-				"R8u8\0R9u8\0R10u8\0R11u8\0R12u8\0R13u8\0R14u8\0R15u8\0");
-	DefineListLoad("ST_U8_REX_REGS","AL\0CL\0DL\0BL\0RSPu8\0RBPu8\0RSIu8\0RDIu8\0"
-				"R8u8\0R9u8\0R10u8\0R11u8\0R12u8\0R13u8\0R14u8\0R15u8\0");
-	DefineListLoad("ST_U16_REGS","AX\0CX\0DX\0BX\0SP\0BP\0SI\0DI\0"
-				"R8u16\0R9u16\0R10u16\0R11u16\0R12u16\0R13u16\0R14u16\0R15u16\0");
-	DefineListLoad("ST_U32_REGS","EAX\0ECX\0EDX\0EBX\0ESP\0EBP\0ESI\0EDI\0"
-				"R8u32\0R9u32\0R10u32\0R11u32\0R12u32\0R13u32\0R14u32\0R15u32\0");
-	DefineListLoad("ST_U64_REGS","RAX\0RCX\0RDX\0RBX\0RSP\0RBP\0RSI\0RDI\0"
-				"R8\0R9\0R10\0R11\0R12\0R13\0R14\0R15\0");
-	DefineListLoad("ST_MM_REGS","MM0\0MM1\0MM2\0MM3\0MM4\0MM5\0MM6\0MM7\0");
+								"I8\0"
+								"U8\0"
+								"I16\0"
+								"U16\0"
+								"I32\0"
+								"U32\0"
+								"I64\0"
+								"U64\0");
+
+	DefineListLoad("ST_TY_TYPES",
+								"NULL\0"
+								"STACK\0"
+								"IMM\0"
+								"REG\0"
+								"DISP\0"
+								"SIB\0"
+								"RIP\0");
+
+	DefineListLoad("ST_U8_REGS",
+								"AL\0"
+								"CL\0"
+								"DL\0"
+								"BL\0"
+								"AH\0"
+								"CH\0"
+								"DH\0"
+								"BH\0"
+								"R8u8\0"
+								"R9u8\0"
+								"R10u8\0"
+								"R11u8\0"
+								"R12u8\0"
+								"R13u8\0"
+								"R14u8\0"
+								"R15u8\0");
+
+	DefineListLoad("ST_U8_REX_REGS",
+								"AL\0"
+								"CL\0"
+								"DL\0"
+								"BL\0"
+								"RSPu8\0"
+								"RBPu8\0"
+								"RSIu8\0"
+								"RDIu8\0"
+								"R8u8\0"
+								"R9u8\0"
+								"R10u8\0"
+								"R11u8\0"
+								"R12u8\0"
+								"R13u8\0"
+								"R14u8\0"
+								"R15u8\0");
+
+	DefineListLoad("ST_U16_REGS",
+								"AX\0"
+								"CX\0"
+								"DX\0"
+								"BX\0"
+								"SP\0"
+								"BP\0"
+								"SI\0"
+								"DI\0"
+								"R8u16\0"
+								"R9u16\0"
+								"R10u16\0"
+								"R11u16\0"
+								"R12u16\0"
+								"R13u16\0"
+								"R14u16\0"
+								"R15u16\0");
+
+	DefineListLoad("ST_U32_REGS",
+								"EAX\0"
+								"ECX\0"
+								"EDX\0"
+								"EBX\0"
+								"ESP\0"
+								"EBP\0"
+								"ESI\0"
+								"EDI\0"
+								"R8u32\0"
+								"R9u32\0"
+								"R10u32\0"
+								"R11u32\0"
+								"R12u32\0"
+								"R13u32\0"
+								"R14u32\0"
+								"R15u32\0");
+
+	DefineListLoad("ST_U64_REGS",
+								"RAX\0"
+								"RCX\0"
+								"RDX\0"
+								"RBX\0"
+								"RSP\0"
+								"RBP\0"
+								"RSI\0"
+								"RDI\0"
+								"R8\0"
+								"R9\0"
+								"R10\0"
+								"R11\0"
+								"R12\0"
+								"R13\0"
+								"R14\0"
+								"R15\0");
+
+	DefineListLoad("ST_MM_REGS",
+								"MM0\0"
+								"MM1\0"
+								"MM2\0"
+								"MM3\0"
+								"MM4\0"
+								"MM5\0"
+								"MM6\0"
+								"MM7\0");
 	DefineListLoad("ST_XMM_REGS",
-				"XMM0\0XMM1\0XMM2\0XMM3\0XMM4\0XMM5\0XMM6\0XMM7\0");
-	DefineListLoad("ST_ARG_TYPES","NONE\0REL8\0REL16\0REL32\0"
-				"IMM8\0IMM16\0IMM32\0IMM64\0UIMM8\0UIMM16\0UIMM32\0UIMM64\0"
-				"R8\0R16\0R32\0R64\0RM8\0RM16\0RM32\0RM64\0"
-				"M8\0M16\0M32\0M64\0M1632\0M16N32\0M16N16\0M32N32\0"
-				"MOFFS8\0MOFFS16\0MOFFS32\0MOFFS64\0"
-				"AL\0AX\0EAX\0RAX\0CL\0DX\0\0SREG\0"
-				"SS\0DS\0ES\0FS\0GS\0CS\0ST0\0STI\0"
-				"MM\0MM32\0MM64\0XMM\0XMM32\0XMM64\0XMM128\0XMM0\0");
-	DefineListLoad("ST_SEG_REGS","ES\0CS\0SS\0DS\0FS\0GS\0");
-	DefineListLoad("ST_FSTACK_REGS","ST0\0ST1\0ST2\0ST3\0ST4\0ST5\0ST6\0ST7\0");
+								"XMM0\0"
+								"XMM1\0"
+								"XMM2\0"
+								"XMM3\0"
+								"XMM4\0"
+								"XMM5\0"
+								"XMM6\0"
+								"XMM7\0"
+								"XMM9\0"
+								"XMM10\0"
+								"XMM11\0"
+								"XMM12\0"
+								"XMM13\0"
+								"XMM14\0"
+								"XMM15\0");
+
+	DefineListLoad("ST_ARG_TYPES",
+								"NONE\0"
+								"REL8\0"
+								"REL16\0"
+								"REL32\0"
+								"IMM8\0"
+								"IMM16\0"
+								"IMM32\0"
+								"IMM64\0"
+								"UIMM8\0"
+								"UIMM16\0"
+								"UIMM32\0"
+								"UIMM64\0"
+								"R8\0"
+								"R16\0"
+								"R32\0"
+								"R64\0"
+								"RM8\0"
+								"RM16\0"
+								"RM32\0"
+								"RM64\0"
+								"M8\0"
+								"M16\0"
+								"M32\0"
+								"M64\0"
+								"M1632\0"
+								"M16N32\0"
+								"M16N16\0"
+								"M32N32\0"
+								"MOFFS8\0"
+								"MOFFS16\0"
+								"MOFFS32\0"
+								"MOFFS64\0"
+								"AL\0"
+								"AX\0"
+								"EAX\0"
+								"RAX\0"
+								"CL\0"
+								"DX\0"
+								"\0"
+								"SREG\0"
+								"SS\0"
+								"DS\0"
+								"ES\0"
+								"FS\0"
+								"GS\0"
+								"CS\0"
+								"ST0\0"
+								"STI\0"
+								"MM\0"
+								"MM32\0"
+								"MM64\0"
+								"XMM\0"
+								"XMM32\0"
+								"XMM64\0"
+								"XMM128\0"
+								"XMM0\0");
+
+	DefineListLoad("ST_SEG_REGS",
+								"ES\0"
+								"CS\0"
+								"SS\0"
+								"DS\0"
+								"FS\0"
+								"GS\0");
+
+	DefineListLoad("ST_FSTACK_REGS",
+								"ST0\0"
+								"ST1\0"
+								"ST2\0"
+								"ST3\0"
+								"ST4\0"
+								"ST5\0"
+								"ST6\0"
+								"ST7\0");
 }
 
 U0 CompFillTables()

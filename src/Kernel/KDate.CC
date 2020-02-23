@@ -9,7 +9,7 @@ I64 YearStartDate(I64 year)
 	return year*365+yd4-yd100+yd400-yd4000;
 }
 
-CDate Struct2Date(CDateStruct *_ds)
+CDate Struct2Date(CDateStruct *_ds)
 {//Convert CDateStruct to CDate.
 	CDate cdt;
 	I64 i1,i2;
@@ -29,7 +29,7 @@ I64 DayOfWeek(I64 i)
 {//Day of week, given 32-bit day since AD 0.
 	i+=CDATE_BASE_DAY_OF_WEEK;
 	if (i>=0)
-		return i % 7;
+		return i % 7;
 	else
 		return 6-(6-i)%7;
 }
