@@ -251,13 +251,10 @@ public U0 MemBIOSRep()
 		while (m20->type)
 		{
 			"$$RED$$";
-			switch[m20->type] //nobound switch. very unlikely BIOS messed something up.
+			switch(m20->type)
 			{
 				case MEM_E820t_USABLE:
 					"$$GREEN$$Usable     :";
-					break;
-				case MEM_E820t_RESERVED:
-					"Reserved   :";
 					break;
 				case MEM_E820t_ACPI:
 				case MEM_E820t_ACPI_NVS:
@@ -268,6 +265,10 @@ public U0 MemBIOSRep()
 					 break;
 				case MEM_E820t_PERM_MEM:
 					"Perm memory:";
+				case MEM_E820t_RESERVED:
+				default:
+					"Reserved   :";
+					break;
 			 }
 			"%016X-%016X$$FG$$\n", m20->base, m20->base + m20->len - 1;
 			m20++;
@@ -277,7 +278,7 @@ public U0 MemBIOSRep()
 	if (MemBIOSTotal < 1024 * 1024 * 1024)
 		"%03d MiB\n", MemBIOSTotal / 1024 / 1024; 		
 	else
-		"%04d GiB\n", CeilU64(MemBIOSTotal / 1024 / 1024, 1024) / 1024;
+		"%04d GiB\n", CeilU64(MemBIOSTotal / 1024 / 1024, 1024) / 1024;
 }
 
 public U0 MemPageRep()

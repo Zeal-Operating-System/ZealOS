@@ -81,7 +81,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 	}
 }
 
-U0 VBEFlush()
+U0 LFBFlush()
 {//Flush winmgr screen cache, so updates whole screen.
 	LBts(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0);
 }

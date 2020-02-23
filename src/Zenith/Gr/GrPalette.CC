@@ -28,7 +28,7 @@ public CBGR24 gr32_palette_std[COLORS_NUM]={
 public U0 PaletteSetStd(Bool persistent=TRUE)
 {//Activate std palette.
 	GrPaletteSet(gr32_palette_std);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetStd;
 }
@@ -41,7 +41,7 @@ public CBGR24 gr_palette_gray[COLORS_NUM] = {
 public U0 PaletteSetGray(Bool persistent=TRUE)
 {//Activate gray palette.
 	GrPaletteSet(gr_palette_gray);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetGray;
 }
@@ -54,7 +54,7 @@ public CBGR24 gr_palette_gruvbox_light[COLORS_NUM] = {
 public U0 PaletteSetGruvboxLight(Bool persistent=TRUE)
 {//Activate gruvbox light palette.
 	GrPaletteSet(gr_palette_gruvbox_light);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetGruvboxLight;
 }
@@ -67,7 +67,7 @@ public CBGR24 gr_palette_pastel[COLORS_NUM]={
 public U0 PaletteSetPastel(Bool persistent=TRUE)
 {//Activate pastel palette.
 	GrPaletteSet(gr_palette_pastel);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetPastel;
 }
@@ -80,12 +80,12 @@ public CBGR24 gr_palette_monokai[COLORS_NUM]={
 public U0 PaletteSetMonokai(Bool persistent=TRUE)
 {//Activate monokai palette.
 	GrPaletteSet(gr_palette_monokai);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetMonokai;
 }
 
-public CBGR24 gr_palette_dark[COLORS_NUM] = {
+public CBGR24 gr_palette_dark[COLORS_NUM] = {
 	0xFFFFFF, 0x6095C5, 0x6D9E3F, 0x3BA275, 0xD370A3, 0xAC7BDE, 0xB58858, 0x686868,
 	0x404040, 0x98CBFE, 0xA3D572, 0x75DAA5, 0xFFA7DA, 0xE5B0FF, 0xEFBD8B, 0x232323
 };
@@ -93,7 +93,7 @@ public U0 PaletteSetMonokai(Bool persistent=TRUE)
 public U0 PaletteSetDark(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_dark);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetDark;
 }
@@ -106,7 +106,7 @@ public CBGR24 gr_palette_smooth[COLORS_NUM] = {
 public U0 PaletteSetSmooth(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_smooth);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetSmooth;
 }
@@ -119,7 +119,7 @@ public CBGR24 gr_palette_dorado[COLORS_NUM]= {
 public U0 PaletteSetDorado(Bool persistent=TRUE)
 {//Activate dark palette.
 	GrPaletteSet(gr_palette_dorado);
-	VBEFlush;
+	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetDorado;
 }

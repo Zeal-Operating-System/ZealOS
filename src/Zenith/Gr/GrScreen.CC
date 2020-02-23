@@ -10,7 +10,7 @@ U0 GrUpdateTaskODEs(CTask *task)
 		"Exception in WinMgr: Update Task ODEs\n";
 		PutExcept;
 		Sleep(3000);
-		VBEFlush;
+		LFBFlush;
 	}
 	sys_task_being_screen_updated=NULL;
 }
@@ -49,7 +49,7 @@ U0 GrUpdateTaskWin(CTask *task)
 			"Exception in WinMgr: Update Task Win\n";
 			PutExcept;
 			Sleep(3000);
-			VBEFlush;
+			LFBFlush;
 		}
 	}
 	sys_task_being_screen_updated=NULL;
@@ -356,7 +356,7 @@ U0 GrUpdateScreen32()
 
 	GrCalcScreenUpdates;
 
-	if (LBtr(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0))
+	if (LBtr(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0))
 		MemCopy(text.fb_alias, text.raw_screen, text.buffer_size);
 }
 

@@ -459,7 +459,7 @@ U0 G2(U8 *ip=INVALID_PTR,CTask *task=NULL)
 	B2(task);
 	if (ext[EXT_WIN_FOCUS])
 		CallExtNum(EXT_WIN_FOCUS,debug.focus_task);
-	VBEFlush;
+	LFBFlush;
 	G(ip,task);
 }
 
@@ -511,7 +511,7 @@ U0 DebugHelp()
 				">B2;\t\t\t\t//Clear all break points.\n"
 				">S;\t\t\t\t//Single step.\n"
 				">G;\t\t\t\t//Resume execution.\n"
-				">G2;\t\t\t\t//B2;VBEFlush;WinFocus;G;\n"
+				">G2;\t\t\t\t//B2;LFBFlush;WinFocus;G;\n"
 				">Exit;\t\t\t\t//Exit (kill) task.\n\n"
 				"After resuming, <CTRL-ALT-n> next focus task.\n"
 				"After resuming, <CTRL-ALT-v> flushes screen VGA cache.\n\n";

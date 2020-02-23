@@ -551,7 +551,7 @@ class CKernel
 	U16 	sys_pci_buses;
 	;$$=($$+15)&-16;
 	CGDT	sys_gdt;
-	U32		sys_font_ptr;
+	U32		sys_font_ptr;
 	CVBEInfo sys_vbe_info;
 	CVBEModeShort sys_vbe_modes[VBE_MODES_NUM];
 	CVBEMode sys_vbe_mode;
@@ -3394,7 +3394,7 @@ public class CTaskSettings
 	U0		(*task_end_cb)();
 	CTask *song_task,*animate_task;
 	I64 	scroll_x,scroll_y,scroll_z;
-	CBGR48 palette[COLORS_NUM];
+	CBGR24 palette[COLORS_NUM];
 	U32 	win_inhibit;
 	U8		text_attr,title_src,
 				border_attr,border_src,
@@ -3599,7 +3599,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
 };
 
 #help_index "Memory/Page Tables"
-#define MEM_MIN_MEG 						512 //512 Meg minimum.
+#define MEM_MIN_MEG 						256 //256 Meg minimum.
 
 #define SYS_FIXED_AREA					0x100000
 #define SYS_16MEG_AREA_LIMIT		0x1000000
@@ -3732,7 +3732,6 @@ public class CSysFixedArea
 public class CTextGlobals
 {
 	I64 	raw_col,raw_flags;
-	U8		*raw_screen_image;
 	U32 	*raw_screen, *fb_alias;
 	I64 	rows,cols;							//Use TEXT_ROWS,TEXT_COLS
 	U64 	*font,*aux_font,screen_size, buffer_size;

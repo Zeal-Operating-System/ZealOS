@@ -150,7 +150,7 @@ CKConfig *KConfigNew()
 	c->home_dir = StrNew("::/Home");
 
 	VideoRep(FALSE);
-	resolution_num = GetI64("Enter list number of desired resolution, "
+	resolution_num = GetI64("Enter list number of desired resolution, "
 												"or desired width. ($$PURPLE$$<ENTER>$$FG$$ for auto maximum): ",,1);
 	if(resolution_num <= VBE_MODES_NUM)
 	{

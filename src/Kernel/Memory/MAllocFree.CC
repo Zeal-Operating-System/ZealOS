@@ -444,9 +444,9 @@ U8 *CAllocAligned(I64 size,I64 alignment,
 }
 
 U8 *ReAlloc(U8 *ptr, U64 new_size, CTask *mem_task=NULL)
-{//Resize chunk previously MAlloc'ed. if new_size is zero then act as Free.
+{//Resize previously MAlloc'ed chunk. If new_size is zero then act as Free.
 //If ptr is NULL then act as MAlloc. if both are NULL/0 does nothing (Free(NULL))
-//Useless for changing chunk sizes smaller than 8 bytes because MAlloc allocs 8 bytes at a time.
+//Useless for changing chunk sizes smaller than 8 bytes because MAlloc allocs 8 bytes at a time.
 	U8 *res;
 
 	if(!new_size)

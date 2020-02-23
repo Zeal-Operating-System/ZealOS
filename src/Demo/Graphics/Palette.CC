@@ -7,7 +7,7 @@ U0 PaletteDemo()
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 //Alternatively, use $LK,"GrPaletteSet",A="MN:GrPaletteSet"$(gr_palette_gray);
-	for (i=0;i<COLORS_NUM;i++) {
+	for (i=0;i<COLORS_NUM;i++) {
 		j=0xFF*i/(COLORS_NUM-1);
 		bgr.b=j;
 		bgr.g=j;
@@ -19,6 +19,7 @@ U0 PaletteDemo()
 	//You can do it this way, too.
 	gr_palette[WHITE] = 0xFFFF00;
 	PressAKey;
+	LFBFlush;
 
 	//$LK,"SettingsPop",A="MN:SettingsPop"$() restores original palette
 	SettingsPop;

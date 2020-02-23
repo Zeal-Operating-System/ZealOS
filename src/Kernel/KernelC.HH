@@ -222,7 +222,7 @@ public extern U0 RawDm(I64 mS=100,U8 *addr,I64 count=0x80);
 extern U0 RawDr(CTask *task=NULL);
 public extern U0 RawPrint(I64 mS=100,U8 *format,...);
 public extern U0 RawPutChar(I64 ch);
-public extern U0 VBEFlush();
+public extern U0 LFBFlush();
 
 #help_index "Debugging;Debugging/Debugger"
 public extern U0 Debug(U8 *message=NULL,I64 message_num=0);

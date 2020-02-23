@@ -84,7 +84,9 @@ U0 SysGrInit()
 
     text.font = sys_font_std;
 
+	//patch some chars
 	text.aux_font[10] = text.font[10]; //"Return" symbol 
+	text.aux_font['' - 1] = text.font['' - 1]; //Shift-space 
 	text.aux_font[255] = text.font[255]; //Block symbol ÿ
 
 	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
@@ -97,7 +99,7 @@ U0 SysGrInit()
 	text.buffer_size = text.screen_size * 4; //buffer for 32-bit, but only 16 colors now.
 	text.raw_screen = CAlloc(text.buffer_size);
 	text.fb_alias = sys_vbe_mode.framebuffer;
-
+
 	MemSetU32(text.fb_alias, BLACK32, text.screen_size);
 	text.vga_alias = CAlloc(text.rows * text.cols * 8);
 }

@@ -200,7 +200,7 @@ $FG,2$CLI$FG$ disable interrupts.
 $FG,2$STI$FG$ enable interrupts.
 $FG,2$PUSHFD$FG$ pushes the CPU flags.
 $FG,2$POPFD$FG$ pops the CPU flags.
-$ID,-2$$TR,"Filename Extention Types"$
+$ID,-2$$TR,"Filename Extention Types"$
 $ID,2$$FG,5$$FG,5$*.???.C$FG$
 	Contiguous files - not fragmented on disk.
 $FG,5$*.DD$FG$

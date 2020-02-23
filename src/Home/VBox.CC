@@ -29,9 +29,33 @@ class CVBoxHGCMHeader
 		reserved[2];
 	U32	flags;
 	I32	result;
-f
 };
 
+class CVBoxClipboardConnect
+{
+	CVBoxHGCMHeader header;
+	U32	location_type;
+	U8	location[128];
+	U32	client_id,
+		msg,
+		formats;
+};
+
+class CVBoxHGCMParam
+{
+	U32 type;
+	U64	value;
+};
+
+class CVBoxHGCMPtr
+{
+	U32	type,
+		size,
+		ptr;
+};
+
+
+
 class CVBoxGuestInfo
 {
 	CVBoxHeader header;

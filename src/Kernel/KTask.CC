@@ -484,7 +484,7 @@ I64 TaskEnd()
 	JobQueueDel(&task->server_ctrl.next_done);
 
 	if (IsRaw)
-		VBEFlush;
+		LFBFlush;
 
 	if (sys_focus_task==task) {
 		if (!Gs->num)

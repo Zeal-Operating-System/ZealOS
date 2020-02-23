@@ -7,14 +7,14 @@ $FG,2$  <ENTER> 	$FG$  Right-Click
 $FG,2$   <F1> 	$FG$  Help
 $FG,2$  <CTRL-m>	$FG$  Personal Menu
 $FG,2$   <ESC>	$FG$  Save  & Exit
-$FG,2$ <SHIFT-ESC> $FG$  Abort & Exit
+$FG,2$ <SHIFT-ESC> $FG$ Abort & Exit
+$FG,2$<CTRL+ALT+X>$FG$  Kill Window
+$FG,2$<ALT-SHIFT-N> $FG$Focus Next Win
 $FG,2$  <WINDOWS>	 $FG$ Pull-Down Menu
-$FG,2$<ALT-SHIFT-N> $FG$Close AC
 $FG,2$  <CTRL-D>$FG$	  File Manager
   $FG,2$<CTRL-F>$FG$	  Find
   $FG,2$<ALT-M>$FG$ 	  Max Window
   $FG,2$<ALT-H>$FG$ 	  Horz Tile
   $FG,2$<ALT-V>$FG$ 	  Vert Tile
   $FG,2$<CTRL-L>$FG$	  Text Menu
-$FG,2$<CTRL-ALT-N>$FG$  Close AC
-
+$FG,2$<ALT-SHIFT-A>$FG$ Close AC

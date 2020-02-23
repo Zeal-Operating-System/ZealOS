@@ -235,7 +235,7 @@ Bool IsSysDebug()
 Bool Raw(Bool val)
 {//Set to direct screen, BLACK & WHITE, non-windowed output mode.
 	if (!val)
-		VBEFlush;
+		LFBFlush;
 	return !LBEqual(&Fs->display_flags,DISPLAYf_NOT_RAW,!val);
 }
 
@@ -269,4 +269,3 @@ U0 ProgressBarsReset(U8 *path=NULL)
 	CallExtStr("ProgressBarsRegTf",path);
 	MemSet(sys_progresses,0,sizeof(sys_progresses));
 }
-
