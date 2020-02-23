@@ -283,27 +283,16 @@ public I64 DCColorChange(CDC *dc,I64 src_color,I64 dst_color=TRANSPARENT)
 	return res;
 }
 
-public U8 *DCSave(CDC *dc,I64 *_size=NULL,I64 dcsf_flags=DCSF_COMPRESSED)
+public U8 *DCSave(CDC *dc,I64 *_size=NULL,I64 dcsf_flags=NONE)
 {//Stores device context to mem, perhaps, with compression.
 	U8 *res,*ptr,*body;
-	CArcCompress *arc;
 	I64 body_size=dc->width_internal*dc->height,total_size,flags;
 	CBGR48 palette[COLORS_NUM];
 
-	if (dcsf_flags&DCSF_COMPRESSED) {
-		arc=CompressBuf(dc->body,body_size);
-		body_size=arc->compressed_size;
-		body=arc;
-	} else {
-		arc=NULL;
-		body=dc->body;
-	}
+	body=dc->body;
 
 	total_size=offset(CDC.end)-offset(CDC.start)+body_size;
-	if (dcsf_flags&DCSF_COMPRESSED)
-		flags=DCF_COMPRESSED;
-	else
-		flags=0;
+	flags=0;
 
 	if (dcsf_flags&DCSF_PALETTE_GET)
 		GrPaletteGet(palette);
@@ -330,7 +319,6 @@ public U8 *DCSave(CDC *dc,I64 *_size=NULL,I64 dcsf_flags=DCSF_COMPRESSED)
 	MemCopy(ptr,body,body_size);
 	ptr+=body_size;
 
-	Free(arc);
 	if (_size) *_size=total_size;
 	return res;
 }
@@ -339,7 +327,6 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
 {//Loads device context from mem.
 	CDC *res;
 	U8 *ptr=src;
-	CArcCompress *arc;
 	I64 body_size;
 	if (!task) task=Fs;
 	res=CAlloc(sizeof(CDC),task);
@@ -355,16 +342,9 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
 		MemCopy(&res->palette,gr_palette_std,COLORS_NUM*sizeof(CBGR48));
 
 	body_size=res->width_internal*res->height;
-	if (res->flags&DCF_COMPRESSED) {
-		res->flags&=~DCF_COMPRESSED;
-		arc=ptr;
-		res->body=ExpandBuf(arc,task);
-		ptr+=arc->compressed_size;
-	} else {
-		res->body=MAlloc(body_size,task);
-		MemCopy(res->body,ptr,body_size);
-		ptr+=body_size;
-	}
+	res->body=MAlloc(body_size,task);
+	MemCopy(res->body,ptr,body_size);
+	ptr+=body_size;
 	res->thick=1;
 	res->r=Mat4x4IdentNew(task);
 	res->r_norm.u32[1]=1;
@@ -377,10 +357,9 @@ public CDC *DCLoad(U8 *src,I64 *_size=NULL,CTask *task=NULL)
 #help_file "::/Doc/GRFiles"
 #help_index "Graphics/Device Contexts;Graphics/GR Files"
 
-#define GR_FILE_MAX 		(offset(CDC.end)-offset(CDC.start)+\
-				COLORS_NUM*sizeof(CBGR48)+sizeof(CArcCtrl)+GR_WIDTH*GR_HEIGHT)
+#define GR_FILE_MAX 		(offset(CDC.end)-offset(CDC.start)+\COLORS_NUM*sizeof(CBGR48)+GR_WIDTH*GR_HEIGHT)
 
-public I64 GRWrite(U8 *filename,CDC *dc,I64 dcsf_flags=DCSF_COMPRESSED)
+public I64 GRWrite(U8 *filename,CDC *dc,I64 dcsf_flags=NONE)
 {//ZenithOS GR File.
 	I64 	size;
 	U8		*st=ExtDefault(filename,"GR"),

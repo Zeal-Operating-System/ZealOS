@@ -192,7 +192,7 @@ I64 ATAGetDevId(CBlkDev *bd,F64 timeout,Bool keep_id_record)
 }
 
 I64 ATAReadNativeMax(CBlkDev *bd,F64 timeout)
-{//Returns zero on err
+{//Returns zero on error
 	I64 res=0;
 	Bool okay=TRUE;
 	if (bd->type==BDT_ATAPI) {

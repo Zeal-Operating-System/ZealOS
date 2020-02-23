@@ -1694,7 +1694,7 @@ public class CAutoCompleteDictGlobals
 #define RT_I32					8
 #define RT_U32					9
 #define RT_I64					10
-#define RT_PTR					10 //Signed to allow negative err codes. $LK,"DOCM_CANCEL",A="MN:DOCM_CANCEL"$
+#define RT_PTR					10 //Signed to allow negative error codes. $LK,"DOCM_CANCEL",A="MN:DOCM_CANCEL"$
 #define RT_U64					11
 #define RT_F32					12 //Not implemented
 #define RT_UF32 				13 //Not implemented, Fictitious
@@ -3740,9 +3740,8 @@ public class CTextGlobals
 
 #help_index "Graphics/Device Contexts"
 //Low 8 bits reserved for flags that go into saved bitmaps
-#define DCF_COMPRESSED					1
-#define DCF_PALETTE 						2
-#define DCF_NO_TRANSPARENTS 		4 //Can be used to optimized $LK,"GrBlot",A="MN:GrBlot"$().
+#define DCF_PALETTE 				1
+#define DCF_NO_TRANSPARENTS 		2 //Can be used to optimized $LK,"GrBlot",A="MN:GrBlot"$().
 
 #define DCF_TRANSFORMATION			0x100
 
@@ -3762,8 +3761,7 @@ public class CTextGlobals
 #define DCF_ON_TOP							0x20000
 
 //$LK,"DCSave",A="MN:DCSave"$() flags.
-#define DCSF_COMPRESSED 				1
-#define DCSF_PALETTE_GET				2
+#define DCSF_PALETTE_GET				1
 
 #define DCS_SIGNATURE_VAL 			'DvCS'
 
@@ -3839,45 +3837,6 @@ public class CDC
 #help_index "Devices"
 //VGA Memory
 #define VGAM_GRAPHICS 	0xA0000
-
-#help_index "Compression/Piece by Piece"
-#define ARC_BITS_MAX		12
-
-#define CT_NONE 				1
-#define CT_7_BIT				2
-#define CT_8_BIT				3
-class CArcEntry
-{
-	CArcEntry *next;
-	U16 	basecode;
-	U8		ch,pad;
-	U32 	pad;
-};
-
-public class CArcCtrl
-{
-	I64 	src_pos,src_size,
-				dst_pos,dst_size;
-	U8		*src_buf,*dst_buf;
-	I64 	min_bits,min_table_entry;
-	CArcEntry *cur_entry,*next_entry;
-	I64 	cur_bits_in_use,next_bits_in_use;
-	U8		*stack_ptr,*stack_base;
-	I64 	free_idx,free_limit,
-				saved_basecode,
-				entry_used,
-				last_ch;
-	CArcEntry compress[1<<ARC_BITS_MAX],
-				*hash[1<<ARC_BITS_MAX];
-};
-
-#help_index "Compression"
-public class CArcCompress
-{
-	I64 	compressed_size,expanded_size;
-	U8		compression_type;
-	U0		body;
-};
 
 #define "Char/Input;StdIn"
 //GetStr flags

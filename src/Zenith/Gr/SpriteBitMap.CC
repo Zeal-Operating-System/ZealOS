@@ -294,7 +294,7 @@ bm_menu:
 						case SPBM_SAVE_GR:
 							*filename.name=0;
 							if (DocForm(&filename) && *filename.name)
-								GRWrite(filename.name,img,DCSF_COMPRESSED|DCSF_PALETTE_GET);
+								GRWrite(filename.name,img,DCSF_PALETTE_GET);
 							goto bm_menu;
 						case SPBM_DITHER_COLOR:
 							i=PopUpColorDither;

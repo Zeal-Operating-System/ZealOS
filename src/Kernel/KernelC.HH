@@ -115,17 +115,6 @@ public extern U0 HashSrcFileSet(CCompCtrl *cc,
 extern U8 *Load(U8 *filename,I64 ld_flags=0,
 				CBinFile *bfh_addr=INVALID_PTR); //INVALID_PTR=don't care what load addr
 
-#help_index "Compression"
-public extern CArcCompress *CompressBuf(U8 *src,I64 size,CTask *mem_task=NULL);
-public extern U8 *ExpandBuf(CArcCompress *arc,CTask *mem_task=NULL);
-
-#help_index "Compression/Piece by Piece"
-public extern U0 ArcCompressBuf(CArcCtrl *c);
-public extern U0 ArcCtrlDel(CArcCtrl *c);
-public extern CArcCtrl *ArcCtrlNew(Bool expand,I64 compression_type=CT_8_BIT);
-public extern U0 ArcExpandBuf(CArcCtrl *c);
-public extern Bool ArcFinishCompression(CArcCtrl *c);
-
 #help_index "Data Types/Circular Queue"
 public extern I64 			QueueCount(CQueue *head);
 public extern CQueue		*QueueCopy(CQueue *head,CTask *mem_task=NULL);

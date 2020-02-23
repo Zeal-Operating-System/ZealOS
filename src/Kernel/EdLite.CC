@@ -335,7 +335,7 @@ U0 FixSet(U8 *filename,I64 line)
 }
 
 Bool Fix(I64 edf_dof_flags=0)
-{//Jump to last err src code to fix it.
+{//Jump to last error src code to fix it.
 	U8 *st;
 	Bool res=FALSE;
 

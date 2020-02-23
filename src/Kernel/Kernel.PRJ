@@ -34,7 +34,6 @@
 #include "KHashA"
 #include "KInterrupts"
 #include "KDataTypes"
-#include "Compress"
 #include "KHashB"
 #include "KLoad"
 #include "KDate"

@@ -79,7 +79,7 @@ U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
 }
 
 U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
-{//Print err message, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
+{//Print error message, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
 	if (!Bt(&sys_run_level,RLf_ZENITH_SERVER)) {
 		Raw(ON);
 		"Note: Still in boot phase.\n";

@@ -1133,7 +1133,7 @@ U8 *LexExpression2Bin(CCompCtrl *cc,I64 *_type=NULL)
 }
 
 Bool IsLexExpression2Bin(CCompCtrl *cc,U8 **_machine_code)
-{//Compile cc expression to bin. Return err status.
+{//Compile cc expression to bin. Return error status.
 	return ToBool(*_machine_code=LexExpression2Bin(cc));
 }
 

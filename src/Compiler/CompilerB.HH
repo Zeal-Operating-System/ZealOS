@@ -29,7 +29,7 @@ public extern U0 CompCtrlDel(CCompCtrl *cc);
 public extern CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL);
 public extern I64 CompCtrlSize(CCompCtrl *cc);
 public extern I64 IsLexExpression2Bin(
-				CCompCtrl *cc,U8 **machine_code); //FALSE=no err
+				CCompCtrl *cc,U8 **machine_code); //FALSE=no error
 public extern I64 Lex(CCompCtrl *cc);
 public extern U0 LexAttachDoc(CCompCtrl *cc,CLexFile *tmpf=NULL,
 				CDoc *doc=NULL,U8 *abs_filename=NULL,CDocEntry *doc_e=NULL,I64 col=0);

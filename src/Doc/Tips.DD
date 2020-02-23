@@ -135,7 +135,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * Use $LK,"Man",A="MN:Man"$() to jump to short sym name src code.
 
-* Use $LK,"Fix",A="MN:Fix"$() to edit and fix the last compiler err.
+* Use $LK,"Fix",A="MN:Fix"$() to edit and fix the last compiler error.
 
 * You can use $FG,2$<CTRL-SHIFT-L>$FG$ to do a check for compile errors.
 

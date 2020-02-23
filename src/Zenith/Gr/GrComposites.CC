@@ -338,7 +338,7 @@ public I64 GRScreenCaptureWrite(U8 *filename,Bool include_zoom=TRUE)
 {//Capture screen to a ZenithOS GR File.
 	I64 size;
 	CDC *dc=DCScreenCapture(include_zoom);
-	size=GRWrite(filename,dc,DCSF_COMPRESSED|DCSF_PALETTE_GET);
+	size=GRWrite(filename,dc,DCSF_PALETTE_GET);
 	DCDel(dc);
 	return size;
 }

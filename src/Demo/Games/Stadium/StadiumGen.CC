@@ -21,7 +21,7 @@ U0 StadiumGen()
 	dc=DCExt(dc2,0,FONT_HEIGHT,GR_WIDTH,GR_HEIGHT);
 	DCDel(dc2);
 
-	GRWrite("StadiumBG",dc,DCSF_COMPRESSED|DCSF_PALETTE_GET);
+	GRWrite("StadiumBG",dc,DCSF_PALETTE_GET);
 	DCDel(dc);
 
 	DocCursor(ON);

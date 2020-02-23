@@ -1,5 +1,5 @@
 U8 *LexStatement2Bin(CCompCtrl *cc,I64 *_type,I64 comp_flags=0)
-{//Compile one cc stmt to bin code.
+{//Compile one cc statement to bin code.
 	I64 size,i,j,k,*res=INVALID_PTR;
 	CCodeCtrl *tmpcbh;
 	if (_type) *_type=RT_I64;
