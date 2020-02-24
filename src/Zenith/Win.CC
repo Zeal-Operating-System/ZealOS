@@ -181,13 +181,8 @@ U0 DrawMouse(CDC *dc)
 	POPFD
 	if (mouse.show && mouse_hard.installed)
 	{
-		if (gr.fp_draw_mouse) {
-			if (mouse.lb)
-				dc->color=LTGREEN;
-			else if (mouse.rb)
-				dc->color=LTRED;
-			else
-				dc->color=BLACK;
+		if (gr.fp_draw_mouse)
+		{
 			if (winmgr.grab_scroll && gr.fp_draw_grab_mouse)
 				(*gr.fp_draw_grab_mouse)(dc,x,y,winmgr.grab_scroll_closed);
 			else

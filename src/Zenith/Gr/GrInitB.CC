@@ -168,7 +168,7 @@ U0 GrInit2()
 	HashDefineListAdd("ST_SPRITE_ELEM_CODES",SPHT_ELEM_CODE,gr.sprite_hash);
 	gr.screen_zoom=1;
 
-	PaletteSetPastel;
+	PaletteSetDark;
 
 	gr.to_8_bits	=MAlloc(256*sizeof(I64));
 	gr.to_8_colors=MAlloc(256*sizeof(I64));

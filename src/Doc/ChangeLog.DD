@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----02/23/20 23:59:37----$IV,0$
+* Added new $LK,"bitmap mouse",A="MN:DrawStdMouse"$.
+
 $IV,1$----02/23/20 02:36:28----$IV,0$
 * Renamed err -> error.
 
