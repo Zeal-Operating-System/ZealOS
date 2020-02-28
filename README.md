@@ -14,7 +14,7 @@ Features in development include:
 
 ## Getting started
 
-Every commit contains a "Zenith-latest-XXXX-XX-XX-XX-XX_XX_XX.iso" in the root of master, which is a timestamped ISO build of that commit. It might not be stable. See the "Releases" Tab for the latest stable release.
+Every commit contains a "Zenith-latest-XXXX-XX-XX-XX-XX_XX_XX.iso" in the root of master, which is a timestamped ISO build of that commit. It might not be stable. See the "Releases" page for the latest stable release.
 
 ### Contributing
 
