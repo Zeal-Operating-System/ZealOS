@@ -57,9 +57,9 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 		else {
 			if (tmpil1=OptLag(tmpi)) {
 				if (!(tmpil2=OptLag(tmpil1)))
-					tmpil2=&cmp.ic_nop;
+					tmpil2=&comp.ic_nop;
 			} else
-				tmpil1=tmpil2=&cmp.ic_nop;
+				tmpil1=tmpil2=&comp.ic_nop;
 			tmpc=tmpi->ic_class;
 			switch [intermediate_code_table[code].arg_count] {
 				case IS_V_ARG:
@@ -68,9 +68,9 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 				case IS_2_ARG:
 					tmpi2=ParsePop(ps);
 					if (tmpi2->ic_flags&ICF_RES_TO_F64)
-						tmpc2=cmp.internal_types[RT_F64];
+						tmpc2=comp.internal_types[RT_F64];
 					else if (tmpi2->ic_flags & ICF_RES_TO_INT)
-						tmpc2=cmp.internal_types[RT_I64];
+						tmpc2=comp.internal_types[RT_I64];
 					else
 						tmpc2=tmpi->t.arg2_class;
 					tmpi->arg2.type=MDF_STACK+CompRawType(tmpc2);
@@ -78,9 +78,9 @@ U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets)
 				case IS_1_ARG:
 					tmpi1=ParsePop(ps);
 					if (tmpi1->ic_flags&ICF_RES_TO_F64)
-						tmpc1=cmp.internal_types[RT_F64];
+						tmpc1=comp.internal_types[RT_F64];
 					else if (tmpi1->ic_flags & ICF_RES_TO_INT)
-						tmpc1=cmp.internal_types[RT_I64];
+						tmpc1=comp.internal_types[RT_I64];
 					else
 						tmpc1=tmpi->t.arg1_class;
 					tmpi->arg1.type=MDF_STACK+CompRawType(tmpc1);
@@ -555,17 +555,17 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 			if (j>0) {
 				if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT))
 					"Fun:%s\n",cc->htc.fun->str;
-				if (j>cmp.num_reg_vars) {
+				if (j>comp.num_reg_vars) {
 					l=0;
-					for (i=0;i<j && l<cmp.num_non_ptr_vars;i++) {
+					for (i=0;i<j && l<comp.num_non_ptr_vars;i++) {
 						tmpm=mv[i].m;
 						tmpc=OptClassFwd(tmpm->member_class);
 						if (!tmpc->ptr_stars_count && !tmpm->dim.next) {
-							while (l<cmp.num_non_ptr_vars &&
-										Bts(&cc->htc.fun->used_reg_mask,cmp.non_ptr_vars_map[l]))
+							while (l<comp.num_non_ptr_vars &&
+										Bts(&cc->htc.fun->used_reg_mask,comp.non_ptr_vars_map[l]))
 								l++;
-							if (l<cmp.num_non_ptr_vars) {
-								tmpm->reg=cmp.non_ptr_vars_map[l++];
+							if (l<comp.num_non_ptr_vars) {
+								tmpm->reg=comp.non_ptr_vars_map[l++];
 								reg_offsets[tmpm->reg].offset=mv[i].offset_start;
 								reg_offsets[tmpm->reg].m=tmpm;
 								if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT))
@@ -585,16 +585,16 @@ R12 and R13 as non-pointer register variables, such as index variables i,j,k.
 					}
 				}
 				l=0;
-				for (i=0;i<j && l<cmp.num_reg_vars;i++) {
+				for (i=0;i<j && l<comp.num_reg_vars;i++) {
 					tmpm=mv[i].m;
 //if not just flagged as reg var
 					if (mv[i].offset_start && (!mv[i].m->dim.next||
 								tmpm->offset>0 && StrCompare(tmpm->str,"argv"))) {
-						while (l<cmp.num_reg_vars &&
-									Bts(&cc->htc.fun->used_reg_mask,cmp.to_reg_vars_map[l]))
+						while (l<comp.num_reg_vars &&
+									Bts(&cc->htc.fun->used_reg_mask,comp.to_reg_vars_map[l]))
 							l++;
-						if (l<cmp.num_reg_vars) {
-							tmpm->reg=cmp.to_reg_vars_map[l++];
+						if (l<comp.num_reg_vars) {
+							tmpm->reg=comp.to_reg_vars_map[l++];
 							reg_offsets[tmpm->reg].offset=mv[i].offset_start;
 							reg_offsets[tmpm->reg].m=tmpm;
 							if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT))

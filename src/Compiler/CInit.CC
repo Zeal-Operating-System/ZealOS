@@ -353,15 +353,6 @@ U0 CompLoadDefines()
 								"R14\0"
 								"R15\0");
 
-	DefineListLoad("ST_MM_REGS",
-								"MM0\0"
-								"MM1\0"
-								"MM2\0"
-								"MM3\0"
-								"MM4\0"
-								"MM5\0"
-								"MM6\0"
-								"MM7\0");
 	DefineListLoad("ST_XMM_REGS",
 								"XMM0\0"
 								"XMM1\0"
@@ -432,10 +423,9 @@ U0 CompLoadDefines()
 								"MM32\0"
 								"MM64\0"
 								"XMM\0"
-								"XMM32\0"
+								"XMM0\0"
 								"XMM64\0"
-								"XMM128\0"
-								"XMM0\0");
+								"XMM128\0");
 
 	DefineListLoad("ST_SEG_REGS",
 								"ES\0"
@@ -461,21 +451,21 @@ U0 CompFillTables()
 	I64 i;
 	U32 *d;
 
-	cmp.to_reg_vars_map=CAlloc(REG_REGS_NUM*sizeof(U8));
-	cmp.num_reg_vars=0;
-	cmp.reg_vars_mask=REGG_LOCAL_VARS;
+	comp.to_reg_vars_map=CAlloc(REG_REGS_NUM*sizeof(U8));
+	comp.num_reg_vars=0;
+	comp.reg_vars_mask=REGG_LOCAL_VARS;
 	for (i=0;i<REG_REGS_NUM;i++)
-		if (Bt(&cmp.reg_vars_mask,i))
-			cmp.to_reg_vars_map[cmp.num_reg_vars++]=i;
+		if (Bt(&comp.reg_vars_mask,i))
+			comp.to_reg_vars_map[comp.num_reg_vars++]=i;
 
-	cmp.non_ptr_vars_map=CAlloc(REG_REGS_NUM*sizeof(U8));
-	cmp.num_non_ptr_vars=0;
-	cmp.non_ptr_vars_mask=REGG_LOCAL_NON_PTR_VARS;
+	comp.non_ptr_vars_map=CAlloc(REG_REGS_NUM*sizeof(U8));
+	comp.num_non_ptr_vars=0;
+	comp.non_ptr_vars_mask=REGG_LOCAL_NON_PTR_VARS;
 	for (i=0;i<REG_REGS_NUM;i++)
-		if (Bt(&cmp.non_ptr_vars_mask,i))
-			cmp.non_ptr_vars_map[cmp.num_non_ptr_vars++]=i;
+		if (Bt(&comp.non_ptr_vars_mask,i))
+			comp.non_ptr_vars_map[comp.num_non_ptr_vars++]=i;
 
-	cmp.dual_U16_tokens1=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
+	comp.dual_U16_tokens1=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
 	d['!']=TK_NOT_EQU<<16+'=';
 	d['&']=TK_AND_AND<<16+'&';
 	d['*']=TK_MUL_EQU<<16+'=';
@@ -490,7 +480,7 @@ U0 CompFillTables()
 	d['|']=TK_OR_OR<<16+'|';
 	d['%']=TK_MOD_EQU<<16+'=';
 
-	cmp.dual_U16_tokens2=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
+	comp.dual_U16_tokens2=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
 	d['&']=TK_AND_EQU<<16+'=';
 	d['+']=TK_ADD_EQU<<16+'=';
 	d['-']=TK_MINUS_MINUS<<16+'-';
@@ -500,11 +490,11 @@ U0 CompFillTables()
 	d['^']=TK_XOR_XOR<<16+'^';
 	d['|']=TK_OR_EQU<<16+'=';
 
-	cmp.dual_U16_tokens3=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
+	comp.dual_U16_tokens3=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
 	d['-']=TK_SUB_EQU<<16+'=';
 	d['/']=TK_DIV_EQU<<16+'=';
 
-	cmp.binary_ops=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
+	comp.binary_ops=d=CAlloc(sizeof(U32)*TK_TKS_NUM);
 	d['`']	 =(PREC_EXP+ASSOCF_RIGHT)<<16+IC_POWER;
 	d[TK_SHL]=(PREC_EXP+ASSOCF_LEFT)<<16+IC_SHL;
 	d[TK_SHR]=(PREC_EXP+ASSOCF_LEFT)<<16+IC_SHR;

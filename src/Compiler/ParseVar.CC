@@ -353,7 +353,7 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
 		if (Lex(cc)!='(')
 			LexExcept(cc,"Expecting '(' at ");
 		fun_ptr=ParseFunJoin(cc,tmpc1,NULL,fsp_flags)+ptr_stars_count;
-		tmpc1=cmp.internal_types[RT_PTR]+ptr_stars_count;
+		tmpc1=comp.internal_types[RT_PTR]+ptr_stars_count;
 	}
 	ParseArrayDims(cc,mode,tmpad);
 
@@ -380,7 +380,7 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
 	Lex(cc);
 	tmpm=MemberListNew(_reg);
 	tmpm->flags=MLF_DOT_DOT_DOT;
-	tmpm->member_class=cmp.internal_types[RT_I64];
+	tmpm->member_class=comp.internal_types[RT_I64];
 	tmpm->str=StrNew("argc");
 	tmpm->offset=tmpf->size;
 	tmpm->size=8;
@@ -389,7 +389,7 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
 
 	tmpm=MemberListNew(_reg);
 	tmpm->flags=MLF_DOT_DOT_DOT;
-	tmpm->member_class=cmp.internal_types[RT_I64];
+	tmpm->member_class=comp.internal_types[RT_I64];
 	tmpm->str=StrNew("argv");
 	tmpm->dim.total_count=127; //arbitrary
 	tmpm->dim.next=tmpad=MAlloc(sizeof(CArrayDim));

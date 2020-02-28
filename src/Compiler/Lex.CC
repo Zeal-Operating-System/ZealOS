@@ -147,7 +147,7 @@ lgc_start2:
 								tmpf->line_start=doc_e->next;
 								tmpf->line_num=doc_e->y+2;//+1 because NEW_LINE is on prev line
 //+1 because doc y starts at zero
-								cmp.compiled_lines++;
+								comp.compiled_lines++;
 								cc->last_U16='\n';
 								goto lgc_done;
 							case DOCT_TAB:
@@ -245,7 +245,7 @@ lgc_start2:
 				tmpf=cc->lex_include_stack;
 				if (!(tmpf->flags & LFSF_DOC)) {
 					tmpf->line_num++;
-					cmp.compiled_lines++;
+					comp.compiled_lines++;
 					tmpf->line_start=src;
 				}
 				break;
@@ -1093,7 +1093,7 @@ lex_dot_dot:
 			case ']'...'^':
 			case '{'...'~':
 			case '`':
-				if (!(i=cmp.dual_U16_tokens1[ch])) {
+				if (!(i=comp.dual_U16_tokens1[ch])) {
 					if (ch=='$$') {
 						ch=LexGetChar(cc);
 						if (ch=='$$') {
@@ -1148,7 +1148,7 @@ lex_check_comment:
 							goto lex_end;
 						}
 					}
-					if (i=cmp.dual_U16_tokens2[ch]) {
+					if (i=comp.dual_U16_tokens2[ch]) {
 						if (i.u16[0]==j) {
 							i>>=16;
 							if (!i) {// "//"
@@ -1173,7 +1173,7 @@ lex_check_comment:
 								goto lex_end;
 							}
 						}
-						if (i=cmp.dual_U16_tokens3[ch]) {
+						if (i=comp.dual_U16_tokens3[ch]) {
 							if (i.u16[0]==j) {
 								cc->token=i.u16[1];
 								goto lex_end;

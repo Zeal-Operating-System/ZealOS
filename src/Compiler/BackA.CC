@@ -93,7 +93,7 @@ U0 ICAddSubEctImm(CIntermediateCode *tmpi,CICType t1,I64 r1,I64 d1,
 			}
 		}
 		if (op.u8[0]==0x03 && I32_MIN<=d<=I32_MAX &&
-					!Bt(&cmp.non_ptr_vars_mask,r2)) {
+					!Bt(&comp.non_ptr_vars_mask,r2)) {
 			i=ICModr1(r1,MDF_DISP+RT_I64,r2,d);
 			i.u8[1]|=0x48;
 			ICU24(tmpi,i.u8[2]<<16+0x8D00+i.u8[1]);

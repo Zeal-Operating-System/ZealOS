@@ -4,7 +4,7 @@ $ID,2$The mini compiler is like the main compiler, except the main compiler's le
 
 The main compiler generates $LK,"Intermediate Code",A="FF:::/Compiler/CompilerA.HH,IC_END"$ at the parser stage.See $LK,"ParseExpression",A="MN:ParseExpression"$(), $LK,"ParseStatement",A="MN:ParseStatement"$().
 
-The main compiler optimizes See $LK,"Intermediate Code Attributes",A="MN:intermediate_code_table"$, $LK,"Combining Consts",A="FF:::/Compiler/OptPass012.CC,case IC_MUL"$, $LK,"Choosing Reg Vars",A="FF:::/Compiler/OptPass3.CC,cmp.num_reg_vars"$.Use $LK,"PassTrace",A="MN:PassTrace"$() to see the optimization stages.
+The main compiler optimizes See $LK,"Intermediate Code Attributes",A="MN:intermediate_code_table"$, $LK,"Combining Consts",A="FF:::/Compiler/OptPass012.CC,case IC_MUL"$, $LK,"Choosing Reg Vars",A="FF:::/Compiler/OptPass3.CC,comp.num_reg_vars"$.Use $LK,"PassTrace",A="MN:PassTrace"$() to see the optimization stages.
 
 The main compiler makes machine code in the back end.See $LK,"IC Struct",A="MN:CIntermediateCode"$, $LK,"COCCompile",A="MN:COCCompile"$ and $LK,"OptPass789A",A="FF:::/Compiler/OptPass789A.CC,IC_MUL"$(),$LK,"BackEnd",A="FF:::/Compiler/BackA.CC,ICMul"$.Set $LK,"Trace",A="MN:Trace"$(ON) to see the output of the backend.
 $ID,-2$

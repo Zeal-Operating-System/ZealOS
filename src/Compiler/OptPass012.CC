@@ -72,7 +72,7 @@ args.
 					tmpi->ic_data=ToI64(tmpi->ic_data(F64));
 					tmpi->ic_flags&=~ICF_RES_TO_INT;
 					tmpi->ic_code=IC_IMM_I64;
-					tmpi->ic_class=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
 				}
 				break;
 			case IC_IMM_I64:
@@ -81,7 +81,7 @@ args.
 					tmpi->ic_data(F64)=ToF64(tmpi->ic_data);
 					tmpi->ic_flags&=~ICF_RES_TO_F64;
 					tmpi->ic_code=IC_IMM_F64;
-					tmpi->ic_class=cmp.internal_types[RT_F64];
+					tmpi->ic_class=comp.internal_types[RT_F64];
 				}
 				break;
 			case IC_HOLYC_TYPECAST:
@@ -98,9 +98,9 @@ args.
 					if (tmpi->ic_data) {//was paren
 						if (!tmpi_push->ic_class->ptr_stars_count) {
 							if (tmpi_push->ic_class->raw_type==RT_F64)
-								tmpi_push->ic_class2=cmp.internal_types[RT_F64];
+								tmpi_push->ic_class2=comp.internal_types[RT_F64];
 							else
-								tmpi_push->ic_class2=cmp.internal_types[RT_I64];
+								tmpi_push->ic_class2=comp.internal_types[RT_I64];
 						}
 					} else {
 						tmpi1->ic_class=tmpi->ic_class;
@@ -157,7 +157,7 @@ args.
 					tmpi->ic_flags|=tmpi1->ic_flags;
 					OptSetNOP1(tmpi1);
 				}
-				tmpi_push->ic_class2=cmp.internal_types[RT_I64];
+				tmpi_push->ic_class2=comp.internal_types[RT_I64];
 				break;
 			start:
 				case IC_NOT:
@@ -188,7 +188,7 @@ args.
 						}
 					}
 					if (tmpc1->type&HTT_INTERNAL_TYPE && tmpc1->raw_type&RTF_UNSIGNED)
-						tmpi->ic_class=cmp.internal_types[tmpc1->raw_type-1];
+						tmpi->ic_class=comp.internal_types[tmpc1->raw_type-1];
 					break;
 				case IC_SHL_CONST:
 					if (i=OptFixupUnaryOp(tmpi,tmpi1,&is_unsigned)) {
@@ -267,9 +267,9 @@ args.
 			end:
 				if (!tmpi_push->ic_class->ptr_stars_count) {
 					if (tmpi_push->ic_class->raw_type==RT_F64)
-						tmpi_push->ic_class2=cmp.internal_types[RT_F64];
+						tmpi_push->ic_class2=comp.internal_types[RT_F64];
 					else
-						tmpi_push->ic_class2=cmp.internal_types[RT_I64];
+						tmpi_push->ic_class2=comp.internal_types[RT_I64];
 				}
 				break;
 			case IC_DEREF:
@@ -297,12 +297,12 @@ args.
 					LexWarn(cc,"Dereference U0 ");
 				break;
 			case IC_POWER:
-				tmpc=tmpi->ic_class=cmp.internal_types[RT_F64];
+				tmpc=tmpi->ic_class=comp.internal_types[RT_F64];
 				if (tmpc1->raw_type!=RT_F64)
 					tmpi1->ic_flags|=ICF_RES_TO_F64;
 				if (tmpc2->raw_type!=RT_F64)
 					tmpi2->ic_flags|=ICF_RES_TO_F64;
-				tmpi_push->ic_class2=cmp.internal_types[RT_F64];
+				tmpi_push->ic_class2=comp.internal_types[RT_F64];
 				break;
 			start:
 				case IC_MUL:
@@ -695,30 +695,30 @@ args.
 						tmpi->ic_data=tmpi1->ic_data&&tmpi2->ic_data;
 						tmpi->ic_code=IC_IMM_I64;
 					}
-					tmpi->ic_class=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
 					break;
 				case IC_OR_OR:
 					if (OptFixupBinaryOp1(tmpi,tmpi1,tmpi2,&is_unsigned)) {
 						tmpi->ic_data=tmpi1->ic_data||tmpi2->ic_data;
 						tmpi->ic_code=IC_IMM_I64;
 					}
-					tmpi->ic_class=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
 					break;
 				case IC_XOR_XOR:
 					if (OptFixupBinaryOp1(tmpi,tmpi1,tmpi2,&is_unsigned)) {
 						tmpi->ic_data=tmpi1->ic_data^^tmpi2->ic_data;
 						tmpi->ic_code=IC_IMM_I64;
 					}
-					tmpi->ic_class=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
 					break;
 			end:
 				if (!tmpi_push->ic_class->ptr_stars_count) {
 					if (tmpi_push->ic_class->raw_type==RT_F64)
-						tmpi_push->ic_class2=cmp.internal_types[RT_F64];
+						tmpi_push->ic_class2=comp.internal_types[RT_F64];
 					else if (is_unsigned)
-						tmpi_push->ic_class2=cmp.internal_types[RT_U64];
+						tmpi_push->ic_class2=comp.internal_types[RT_U64];
 					else
-						tmpi_push->ic_class2=cmp.internal_types[RT_I64];
+						tmpi_push->ic_class2=comp.internal_types[RT_I64];
 				}
 				break;
 			start:
@@ -810,16 +810,16 @@ args.
 				tmpi->ic_flags&=~ICF_RES_TO_INT;
 				if (!tmpi_push->ic_class->ptr_stars_count) {
 					if (tmpi_push->ic_class->raw_type==RT_F64)
-						tmpi_push->ic_class2=cmp.internal_types[RT_F64];
+						tmpi_push->ic_class2=comp.internal_types[RT_F64];
 					else if (is_unsigned)
-						tmpi_push->ic_class2=cmp.internal_types[RT_U64];
+						tmpi_push->ic_class2=comp.internal_types[RT_U64];
 					else
-						tmpi_push->ic_class2=cmp.internal_types[RT_I64];
+						tmpi_push->ic_class2=comp.internal_types[RT_I64];
 				}
 				if (tmpi_push->ic_flags & ICF_PUSH_CMP)
 					tmpi->ic_class=tmpi->ic_class2;
 				else
-					tmpi->ic_class=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
 				break;
 			start:
 				if (cc->pass==2 && (!tmpc->size||!tmpc2->size))
@@ -963,8 +963,8 @@ args.
 
 					tmpi->ic_code=IC_IMM_I64;
 					tmpi->ic_data=ToI64(tmpi1->ic_data(F64));
-					tmpi->ic_class=cmp.internal_types[RT_I64];
-					tmpi->ic_class2=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
+					tmpi->ic_class2=comp.internal_types[RT_I64];
 					OptSetNOP1(tmpi1);
 				} else if (tmpi1->ic_code==IC_IMM_I64) {
 					tmpi2=tmpi1->last;
@@ -981,8 +981,8 @@ args.
 
 					tmpi->ic_code=IC_IMM_I64;
 					tmpi->ic_data=tmpi1->ic_data;
-					tmpi->ic_class=cmp.internal_types[RT_I64];
-					tmpi->ic_class2=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
+					tmpi->ic_class2=comp.internal_types[RT_I64];
 					OptSetNOP1(tmpi1);
 				}
 				if (tmpi1->ic_flags&ICF_RES_TO_F64) {
@@ -1006,8 +1006,8 @@ args.
 								~(ICF_RES_TO_F64|ICF_PUSH_RES)|tmpi2->ic_flags;
 					OptSetNOP1(tmpi2);
 
-					tmpi1->ic_class=cmp.internal_types[RT_I64];
-					tmpi1->ic_class2=cmp.internal_types[RT_I64];
+					tmpi1->ic_class=comp.internal_types[RT_I64];
+					tmpi1->ic_class2=comp.internal_types[RT_I64];
 					tmpi_push=tmpi1;
 					OptSetNOP1(tmpi);
 				}
@@ -1028,8 +1028,8 @@ args.
 
 					tmpi->ic_code=IC_IMM_F64;
 					tmpi->ic_data(F64)=ToF64(tmpi1->ic_data);
-					tmpi->ic_class=cmp.internal_types[RT_F64];
-					tmpi->ic_class2=cmp.internal_types[RT_F64];
+					tmpi->ic_class=comp.internal_types[RT_F64];
+					tmpi->ic_class2=comp.internal_types[RT_F64];
 					OptSetNOP1(tmpi1);
 				} else if (tmpi1->ic_code==IC_IMM_F64) {
 					tmpi2=tmpi1->last;
@@ -1046,8 +1046,8 @@ args.
 
 					tmpi->ic_code=IC_IMM_F64;
 					tmpi->ic_data=tmpi1->ic_data;
-					tmpi->ic_class=cmp.internal_types[RT_F64];
-					tmpi->ic_class2=cmp.internal_types[RT_F64];
+					tmpi->ic_class=comp.internal_types[RT_F64];
+					tmpi->ic_class2=comp.internal_types[RT_F64];
 					OptSetNOP1(tmpi1);
 				}
 				if (tmpi1->ic_flags&ICF_RES_TO_INT) {
@@ -1071,8 +1071,8 @@ args.
 								~(ICF_RES_TO_INT|ICF_PUSH_RES)|tmpi2->ic_flags;
 					OptSetNOP1(tmpi2);
 
-					tmpi1->ic_class=cmp.internal_types[RT_F64];
-					tmpi1->ic_class2=cmp.internal_types[RT_F64];
+					tmpi1->ic_class=comp.internal_types[RT_F64];
+					tmpi1->ic_class2=comp.internal_types[RT_F64];
 					tmpi_push=tmpi1;
 					OptSetNOP1(tmpi);
 				}
@@ -1093,8 +1093,8 @@ args.
 
 					tmpi->ic_code=IC_IMM_I64;
 					tmpi->ic_data=ToBool(tmpi1->ic_data);
-					tmpi->ic_class=cmp.internal_types[RT_I64];
-					tmpi->ic_class2=cmp.internal_types[RT_I64];
+					tmpi->ic_class=comp.internal_types[RT_I64];
+					tmpi->ic_class2=comp.internal_types[RT_I64];
 					OptSetNOP1(tmpi1);
 				}
 				break;

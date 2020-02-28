@@ -602,9 +602,9 @@ U0 ParseSwitch(CCompCtrl *cc,I64 try_count)
 	mc_jt->begin->use_count++;
 	if (!ParseExpression(cc,NULL,FALSE))
 		throw('Compiler');
-	tmpi_sub=ICAdd(cc,IC_IMM_I64,0,cmp.internal_types[RT_I64]);
-	ICAdd(cc,IC_SUB,0,cmp.internal_types[RT_I64]);
-	tmpi_cmp=ICAdd(cc,IC_IMM_I64,0,cmp.internal_types[RT_I64]);
+	tmpi_sub=ICAdd(cc,IC_IMM_I64,0,comp.internal_types[RT_I64]);
+	ICAdd(cc,IC_SUB,0,comp.internal_types[RT_I64]);
+	tmpi_cmp=ICAdd(cc,IC_IMM_I64,0,comp.internal_types[RT_I64]);
 	if (nobound) {
 		ICAdd(cc,IC_NOBOUND_SWITCH,mc_jt,0);
 		if (cc->token!=']')
@@ -842,7 +842,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
 U0 ParseTryBlk(CCompCtrl *cc,I64 try_count)
 {
 	CCodeMisc 		*lb_catch,*lb_done,*lb_untry;
-	CHashClass		*tmpc=cmp.internal_types[RT_PTR];
+	CHashClass		*tmpc=comp.internal_types[RT_PTR];
 	CHashFun			*tmp_try=HashFind("SysTry",cc->htc.hash_table_list,HTT_FUN),
 				*tmp_untry=HashFind("SysUntry",cc->htc.hash_table_list,HTT_FUN);
 
@@ -1097,14 +1097,14 @@ sm_import:
 												cc->abs_counts.externs++;
 												if (cc->flags&CCF_AOT_COMPILE)
 													ICAdd(cc,IC_CALL_IMPORT,
-																tmp_untry,cmp.internal_types[RT_PTR]);
+																tmp_untry,comp.internal_types[RT_PTR]);
 												else
 													ICAdd(cc,IC_CALL_INDIRECT2,
 																&tmp_untry->exe_addr,
-																cmp.internal_types[RT_PTR]);
+																comp.internal_types[RT_PTR]);
 											} else
 												ICAdd(cc,IC_CALL,tmp_untry->exe_addr,
-															cmp.internal_types[RT_PTR]);
+															comp.internal_types[RT_PTR]);
 										}
 									}
 									if (Lex(cc)!=';') {

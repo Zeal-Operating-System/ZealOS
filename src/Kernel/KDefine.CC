@@ -198,13 +198,31 @@ U0 SysDefinesLoad()
 	DefineListLoad("ST_COLORS","BLACK\0BLUE\0GREEN\0CYAN\0"
 				"RED\0PURPLE\0BROWN\0LTGRAY\0DKGRAY\0LTBLUE\0LTGREEN\0"
 				"LTCYAN\0LTRED\0LTPURPLE\0YELLOW\0WHITE\0");
-	DefineListLoad("ST_INT_NAMES","Divide Error\0SingleStep\0NMI\0Breakpoint\0"
-				"Overflow\0BOUND Range Exceeded\0Invalid Opcode\0No Math Coprocessor\0"
-				"Double Fault\0Coprocessor Segment Fault\0Invalid TASK\0"
-				"Segment Not Present\0Stack Segment Fault\0General Protection\0"
-				"Page Fault\0\0Math Fault\0Alignment Check\0Machine Check\0"
-				"SIMD Exception\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-				"\0\0\0\0\0\0\0\0\0\0\0MP Crash\0Wake\0Debug\0");
+	DefineListLoad("ST_INT_NAMES",
+							"Divide Error\0"
+							"SingleStep\0"
+							"NMI\0"
+							"Breakpoint\0"
+							"Overflow\0"
+							"BOUND Range Exceeded\0"
+							"Invalid Opcode\0"
+							"No Math Coprocessor\0"
+							"Double Fault\0"
+							"Coprocessor Segment Fault\0"
+							"Invalid TASK\0"
+							"Segment Not Present\0"
+							"Stack Segment Fault\0"
+							"General Protection\0"
+							"Page Fault\0"
+							"\0"
+							"Math Fault\0"
+							"Alignment Check\0"
+							"Machine Check\0"
+							"SIMD Exception\0"
+							"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
+							"MP Crash\0"
+							"Wake\0"
+							"Debug\0");
 }
 
 U8 *Color2Str(U8 *buf,CColorROPU32 c)

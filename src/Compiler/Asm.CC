@@ -58,30 +58,29 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 					{
 						start:
 							case REGT_R8:
-								arg->size=1;
+								arg->size = 1;
 								break;
 							case REGT_R16:
-								arg->size=2;
+								arg->size = 2;
 								break;
 							case REGT_R32:
-								arg->size=4;
+								arg->size = 4;
 								break;
 							case REGT_R64:
 							case REGT_FSTACK:
-							case REGT_MM:
-								arg->size=8;
+								arg->size = 8;
 								break;
 							case REGT_XMM:
-								arg->size=16;
+								arg->size = 16;
 						end:
-							arg->reg1=tmpr->reg_num;
+							arg->reg1 = tmpr->reg_num;
 							Lex(cc);
 							return;
 						case REGT_SEG:
 							arg->seg = tmpr->reg_num;
 							if (Lex(cc) != ':')
 							{
-								arg->just_seg=TRUE;
+								arg->just_seg = TRUE;
 								return;
 							}
 							else
@@ -91,9 +90,8 @@ U0 ParseAsmArg(CCompCtrl *cc,CAsmArg *arg,Bool rel)
 				}
 				else
 				{
-					if ((tmph->type & HTG_TYPE_MASK == HTT_CLASS||
-								tmph->type & HTG_TYPE_MASK == HTT_INTERNAL_TYPE) &&
-								(tmph1 = HashFind(cc->cur_str, cmp.asm_hash, HTT_ASM_KEYWORD)))
+					if ((tmph->type & HTG_TYPE_MASK == HTT_CLASS || tmph->type & HTG_TYPE_MASK == HTT_INTERNAL_TYPE) &&
+								(tmph1 = HashFind(cc->cur_str, comp.asm_hash, HTT_ASM_KEYWORD)))
 						tmph = tmph1;
 					if (tmph->type & HTG_TYPE_MASK == HTT_ASM_KEYWORD)
 					{
@@ -130,15 +128,16 @@ pa_asm_direct_imm:
 				if (arg->size <= 1 && !rel && arg->num.abs_counts & 1)
 				{
 					if (cc->aotc->seg_size == 16)
-						arg->size=2;
+						arg->size = 2;
 					else
-						arg->size=4;
+						arg->size = 4;
 				}
 				if (cc->token != '[')
 					return;
 			}
 		}
-		else if (cc->token=='[') {
+		else if (cc->token == '[')
+		{
 			arg->indirect = TRUE;
 			Lex(cc); // skip [
 			while (cc->token && cc->token != ']')
@@ -191,81 +190,98 @@ pa_asm_indirect_imm:
 	}
 }
 
-I64 AsmMakeArgMask(CCompCtrl *cc,CAsmArg *arg)
+I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 {
-	CAOTCtrl *aotc=cc->aotc;
+	CAOTCtrl *aotc = cc->aotc;
 	I64 res;
-	if (arg->just_seg) {
-		switch (arg->seg) {
-			case 0: res=1<<ARGT_ES|1<<ARGT_SREG; break;
-			case 1: res=1<<ARGT_CS|1<<ARGT_SREG; break;
-			case 2: res=1<<ARGT_SS|1<<ARGT_SREG; break;
-			case 3: res=1<<ARGT_DS|1<<ARGT_SREG; break;
-			case 4: res=1<<ARGT_FS|1<<ARGT_SREG; break;
-			case 5: res=1<<ARGT_GS|1<<ARGT_SREG; break;
+
+	if (arg->just_seg)
+	{
+		switch (arg->seg)
+		{
+			case: res = ARGT_ES|ARGT_SREG; break;
+			case: res = ARGT_CS|ARGT_SREG; break;
+			case: res = ARGT_SS|ARGT_SREG; break;
+			case: res = ARGT_DS|ARGT_SREG; break;
+			case: res = ARGT_FS|ARGT_SREG; break;
+			case: res = ARGT_GS|ARGT_SREG; break;
 		}
 		goto mm_done;
 	}
-	if (arg->reg1_type==REGT_FSTACK) {
+
+	if (arg->reg1_type == REGT_FSTACK)
+	{
 		if (arg->reg1)
-			res=1<<ARGT_STI;
+			res = ARGT_STI;
 		else
-			res=1<<ARGT_ST0|1<<ARGT_STI;
-		goto mm_done;
-	}
-	res=cmp.size_arg_mask[arg->size];
-	if (aotc->seg_size==64)
-		res&=0xFF0FFFFFFF;
-
-	if (arg->reg1!=REG_NONE && arg->imm_or_off_present && !arg->num.i &&
-				!arg->num.glbl_asm_undef_hash && !arg->num.local_asm_undef_hash)
-		arg->imm_or_off_present=FALSE;	//Zero displacement
-
-	if (arg->reg2!=REG_NONE || arg->scale!=1) {
-		res&=0x0000FF0000;
+			res = ARGT_ST0 | ARGT_STI;
 		goto mm_done;
 	}
 
-	if (arg->indirect) {
-		if (arg->imm_or_off_present)
-			res&=0x00FFFF0000;
-		else
-			res&=0x000FFF0000;
-	} else {
-		if (arg->imm_or_off_present)
-			res&=0x000F000FFE;
-		else
-			res&=0x3F0FFFF000;
+	res = comp.size_arg_mask[arg->size];
+
+	if (aotc->seg_size == 64)
+		res &= 0xFF0FFFFFFF;
+
+	if (arg->reg1 != REG_NONE && arg->imm_or_off_present && !arg->num.i && 
+			!arg->num.glbl_asm_undef_hash && !arg->num.local_asm_undef_hash)
+		arg->imm_or_off_present = FALSE;	//Zero displacement
+
+	if (arg->reg2 != REG_NONE || arg->scale != 1)
+	{
+		res &= 0x0000FF0000;
+		goto mm_done;
 	}
-	if (arg->seg!=REG_NONE)
+
+	if (arg->indirect)
+	{
+		if (arg->imm_or_off_present)
+			res &= 0x00FFFF0000;
+		else
+			res &= 0x000FFF0000;
+	}
+	else
+	{
+		if (arg->imm_or_off_present)
+			res &= 0x000F000FFE;
+		else
+			res &= 0x3F0FFFF000;
+	}
+
+	if (arg->seg != REG_NONE)
 		res&=0x00FFFF0000;
-	if (arg->reg1==REG_NONE) {
+
+	if (arg->reg1 == REG_NONE)
+	{
 		if (arg->indirect)
-			res&=0x00FFFF0000;
-		else if (arg->num.i<0) {
-			if (arg->num.i>=I8_MIN)
-				res&=0x8FE;
-			else if (arg->num.i>=I16_MIN)
-				res&=0x8EE;
-			else if (arg->num.i>=I32_MIN)
-				res&=0x8CE;
+			res &= 0x00FFFF0000;
+		else if (arg->num.i < 0)
+		{
+			if (arg->num.i >= I8_MIN)
+				res &= 0x8FE;
+			else if (arg->num.i >= I16_MIN)
+				res &= 0x8EE;
+			else if (arg->num.i >= I32_MIN)
+				res &= 0x8CE;
 			else
-				res&=0x88E;
-		} else {
-			if (arg->num.i<=I8_MAX)
-				res&=0xFFE;
-			else if (arg->num.i<=U8_MAX)
-				res&=0xFEE;
-			else if (arg->num.i<=I16_MAX)
-				res&=0xEEE;
-			else if (arg->num.i<=U16_MAX)
-				res&=0xECE;
-			else if (arg->num.i<=I32_MAX)
-				res&=0xCCE;
-			else if (arg->num.i<=U32_MAX)
-				res&=0xC8E;
+				res &= 0x88E;
+		}
+		else
+		{
+			if (arg->num.i <= I8_MAX)
+				res &= 0xFFE;
+			else if (arg->num.i <= U8_MAX)
+				res &= 0xFEE;
+			else if (arg->num.i <= I16_MAX)
+				res &= 0xEEE;
+			else if (arg->num.i <= U16_MAX)
+				res &= 0xECE;
+			else if (arg->num.i <= I32_MAX)
+				res &= 0xCCE;
+			else if (arg->num.i <= U32_MAX)
+				res &= 0xC8E;
 			else
-				res&=0x88E;
+				res &= 0x88E;
 		}
 	} else {
 		res&=  0x3F00FFF000;
@@ -429,7 +445,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 		arg2mask=1;
 	for (i=0;i<tmpo->inst_entry_count;i++) {
 		tmpins=&tmpo->ins[i];
-		if (tmpins->arg1==ARGT_REL8 || tmpins->arg2==ARGT_REL8)
+		if (tmpins->arg1==ARGt_REL8 || tmpins->arg2==ARGt_REL8)
 			U8_avail=TRUE;
 		if (Bt(&arg1mask,tmpins->arg1) && Bt(&arg2mask,tmpins->arg2) &&
 					(!(tmpins->flags&IEF_NOT_IN_64_BIT) || aotc->seg_size!=64)) {
@@ -496,9 +512,9 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 							cur.last_opcode_U8+=tmpa1->reg1;
 					}
 				}
-				if (arg1==ARGT_R64 || arg1==ARGT_RM64 || arg1==ARGT_M64)
+				if (arg1==ARGt_R64 || arg1==ARGt_RM64 || arg1==ARGt_M64)
 					cur.REX|=8;
-				if (ARGT_RM8<=arg1<=ARGT_RM64 || ARGT_M8<=arg1<=ARGT_M64) {
+				if (ARGt_RM8<=arg1<=ARGt_RM64 || ARGt_M8<=arg1<=ARGt_M64) {
 					if (aotc->seg_size==16)
 						cur.has_addr_prefix=TRUE;
 
@@ -580,9 +596,9 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 							}
 						}
 					}
-				} else if (ARGT_REL8<=arg1<=ARGT_REL32 || ARGT_IMM8<=arg1<=ARGT_IMM64 ||
-							ARGT_UIMM8<=arg1<=ARGT_UIMM64) {
-					if (arg1==ARGT_IMM64 || arg2==ARGT_UIMM64)
+				} else if (ARGt_REL8<=arg1<=ARGt_REL32 || ARGt_IMM8<=arg1<=ARGt_IMM64 ||
+							ARGt_UIMM8<=arg1<=ARGt_UIMM64) {
+					if (arg1==ARGt_IMM64 || arg2==ARGt_UIMM64)
 						cur.REX|=8;
 					MemCopy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
 				}
@@ -596,7 +612,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 				}
 				if (tmpins->flags & IEF_PLUS_OPCODE) {
 					if (tmpins->slash_val==SV_R_REG) {
-						if (ARGT_AL<=arg1<=ARGT_RAX) {
+						if (ARGt_AL<=arg1<=ARGt_RAX) {
 							cur.last_opcode_U8|=tmpa2->reg1&7;
 							if (tmpa2->reg1&15>7)
 								cur.REX|=1;
@@ -616,16 +632,16 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 							cur.last_opcode_U8|=tmpa2->reg1;
 					}
 				}
-				if (arg1==ARGT_RM64 || arg2==ARGT_RM64 ||
-							arg1==ARGT_M64 || arg2==ARGT_M64 ||
-							arg1==ARGT_R64 || arg2==ARGT_R64)
+				if (arg1==ARGt_RM64 || arg2==ARGt_RM64 ||
+							arg1==ARGt_M64 || arg2==ARGt_M64 ||
+							arg1==ARGt_R64 || arg2==ARGt_R64)
 					cur.REX|=8;
-				if (ARGT_RM8<=arg1<=ARGT_RM64 || ARGT_RM8<=arg2<=ARGT_RM64 ||
-							ARGT_M8<=arg1<=ARGT_M64  || ARGT_M8<=arg2<=ARGT_M64) {
+				if (ARGt_RM8<=arg1<=ARGt_RM64 || ARGt_RM8<=arg2<=ARGt_RM64 ||
+							ARGt_M8<=arg1<=ARGt_M64  || ARGt_M8<=arg2<=ARGt_M64) {
 					if (aotc->seg_size==16)
 						cur.has_addr_prefix=TRUE;
 					cur.has_ModrM=TRUE;
-					if (ARGT_RM8<=arg2<=ARGT_RM64 || ARGT_M8<=arg2<=ARGT_M64) {
+					if (ARGt_RM8<=arg2<=ARGt_RM64 || ARGt_M8<=arg2<=ARGt_M64) {
 						tmpa1=&aotc->arg2;
 						tmpa2=&aotc->arg1;
 					}
@@ -727,39 +743,39 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 							}
 						}
 					}
-				} else if (ARGT_MOFFS8<=arg1<=ARGT_MOFFS64) {
+				} else if (ARGt_MOFFS8<=arg1<=ARGt_MOFFS64) {
 					MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
 					if (aotc->seg_size==16)
 						cur.disp.U8_count=2;
 					else
 						cur.disp.U8_count=4;
 					cur.has_addr_prefix=FALSE;
-				} else if (ARGT_MOFFS8<=arg2<=ARGT_MOFFS64) {
+				} else if (ARGt_MOFFS8<=arg2<=ARGt_MOFFS64) {
 					MemCopy(&cur.disp.num,&tmpa2->num,sizeof(CAsmNum));
 					if (aotc->seg_size==16)
 						cur.disp.U8_count=2;
 					else
 						cur.disp.U8_count=4;
 					cur.has_addr_prefix=FALSE;
-				} else if (ARGT_IMM8<=arg1<=ARGT_IMM64 ||
-							ARGT_UIMM8<=arg1<=ARGT_UIMM64) {
+				} else if (ARGt_IMM8<=arg1<=ARGt_IMM64 ||
+							ARGt_UIMM8<=arg1<=ARGt_UIMM64) {
 					MemCopy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
-					if (arg1==ARGT_IMM8 || arg1==ARGT_UIMM8) cur.imm.U8_count=1;
-					else if (arg1==ARGT_IMM16 || arg1==ARGT_UIMM16) cur.imm.U8_count=2;
-					else if (arg1==ARGT_IMM32 || arg1==ARGT_UIMM32) cur.imm.U8_count=4;
+					if (arg1==ARGt_IMM8 || arg1==ARGt_UIMM8) cur.imm.U8_count=1;
+					else if (arg1==ARGt_IMM16 || arg1==ARGt_UIMM16) cur.imm.U8_count=2;
+					else if (arg1==ARGt_IMM32 || arg1==ARGt_UIMM32) cur.imm.U8_count=4;
 					else {
 						cur.imm.U8_count=8;
 						cur.REX|=8;
 					}
 				}
-				if (ARGT_IMM8<=arg2<=ARGT_IMM64 ||
-							ARGT_UIMM8<=arg2<=ARGT_UIMM64) {
+				if (ARGt_IMM8<=arg2<=ARGt_IMM64 ||
+							ARGt_UIMM8<=arg2<=ARGt_UIMM64) {
 					MemCopy(&cur.imm.num,&tmpa2->num,sizeof(CAsmNum));
-					if (arg2==ARGT_IMM8 || arg2==ARGT_UIMM8) cur.imm.U8_count=1;
-					else if (arg2==ARGT_IMM16 || arg2==ARGT_UIMM16) cur.imm.U8_count=2;
-					else if (arg2==ARGT_IMM32 || arg2==ARGT_UIMM32) {
+					if (arg2==ARGt_IMM8 || arg2==ARGt_UIMM8) cur.imm.U8_count=1;
+					else if (arg2==ARGt_IMM16 || arg2==ARGt_UIMM16) cur.imm.U8_count=2;
+					else if (arg2==ARGt_IMM32 || arg2==ARGt_UIMM32) {
 						cur.imm.U8_count=4;
-						if (tmpins->flags&IEF_REX_ONLY_R8_R15 && arg2==ARGT_UIMM32)
+						if (tmpins->flags&IEF_REX_ONLY_R8_R15 && arg2==ARGt_UIMM32)
 							cur.REX&=~8;
 					} else {
 						cur.imm.U8_count=8;
@@ -1028,7 +1044,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 				argcount=0;
 				if (tmpo->ins[0].arg1) {
 					argcount++;
-					if (ARGT_REL8<=tmpo->ins[0].arg1<=ARGT_REL32)
+					if (ARGt_REL8<=tmpo->ins[0].arg1<=ARGt_REL32)
 						ParseAsmArg(cc,&aotc->arg1,TRUE);
 					else
 						ParseAsmArg(cc,&aotc->arg1,FALSE);
@@ -1038,7 +1054,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 							LexExcept(cc,"Expecting ',' at ");
 						else {
 							Lex(cc); //skip ','
-							if (ARGT_REL8<=tmpo->ins[0].arg2<=ARGT_REL32)
+							if (ARGt_REL8<=tmpo->ins[0].arg2<=ARGt_REL32)
 								ParseAsmArg(cc,&aotc->arg2,TRUE);
 							else
 								ParseAsmArg(cc,&aotc->arg2,FALSE);

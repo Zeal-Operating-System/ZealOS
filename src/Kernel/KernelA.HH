@@ -868,8 +868,7 @@ public class CHashGeneric:CHash
 #define REGT_R64	4
 #define REGT_SEG	5
 #define REGT_FSTACK	6
-#define REGT_MM 	7
-#define REGT_XMM	8
+#define REGT_XMM	7
 
 public class CHashReg:CHash
 {
@@ -2010,74 +2009,133 @@ class CAsmUnresolvedRef
 #define OM_IW 6
 #define OM_ID 7
 
-#define ARGT_NONE 			0
-#define ARGT_REL8 			1
-#define ARGT_REL16			2
-#define ARGT_REL32			3
+#define ARGt_NONE 		0
+#define ARGt_REL8 		1
+#define ARGt_REL16		2
+#define ARGt_REL32		3
+#define ARGT_NONE		(1<<ARGt_NONE)
+#define ARGT_REL8		(1<<ARGt_REL8)
+#define ARGT_REL16		(1<<ARGt_REL16)
+#define ARGT_REL32		(1<<ARGt_REL32)
 
-#define ARGT_IMM8 			4
-#define ARGT_IMM16			5
-#define ARGT_IMM32			6
-#define ARGT_IMM64			7
+#define ARGt_IMM8 		4
+#define ARGt_IMM16		5
+#define ARGt_IMM32		6
+#define ARGt_IMM64		7
+#define ARGT_IMM8		(1<<ARGt_IMM8)
+#define ARGT_IMM16		(1<<ARGt_IMM16)
+#define ARGT_IMM32		(1<<ARGt_IMM32)
+#define ARGT_IMM64		(1<<ARGt_IMM64)
 
-#define ARGT_UIMM8			8
-#define ARGT_UIMM16 		9
-#define ARGT_UIMM32 		10
-#define ARGT_UIMM64 		11
+#define ARGt_UIMM8		8
+#define ARGt_UIMM16 	9
+#define ARGt_UIMM32 	10
+#define ARGt_UIMM64 	11
+#define ARGT_UIMM8		(1<<ARGt_UIMM8)
+#define ARGT_UIMM16		(1<<ARGt_UIMM16)
+#define ARGT_UIMM32		(1<<ARGt_UIMM32)
+#define ARGT_UIMM64		(1<<ARGt_UIMM64)
 
-#define ARGT_R8 				12
-#define ARGT_R16				13
-#define ARGT_R32				14
-#define ARGT_R64				15
+#define ARGt_R8 		12
+#define ARGt_R16		13
+#define ARGt_R32		14
+#define ARGt_R64		15
+#define ARGT_R8			(1<<ARGt_R8)
+#define ARGT_R16		(1<<ARGt_R16)
+#define ARGT_R32		(1<<ARGt_R32)
+#define ARGT_R64		(1<<ARGt_R64)
 
-#define ARGT_RM8				16
-#define ARGT_RM16 			17
-#define ARGT_RM32 			18
-#define ARGT_RM64 			19
+#define ARGt_RM8		16
+#define ARGt_RM16		17
+#define ARGt_RM32		18
+#define ARGt_RM64		19
+#define ARGT_RM8		(1<<ARGt_RM8)
+#define ARGT_RM16		(1<<ARGt_RM16)
+#define ARGT_RM32		(1<<ARGt_RM32)
+#define ARGT_RM64		(1<<ARGt_RM64)
 
-#define ARGT_M8 				20
-#define ARGT_M16				21
-#define ARGT_M32				22
-#define ARGT_M64				23
+#define ARGt_M8 		20
+#define ARGt_M16		21
+#define ARGt_M32		22
+#define ARGt_M64		23
+#define ARGT_M8			(1<<ARGt_M8)
+#define ARGT_M16		(1<<ARGt_M16)
+#define ARGT_M32		(1<<ARGt_M32)
+#define ARGT_M64		(1<<ARGt_M64)
 
-#define ARGT_M1632			24 // Not implemented
-#define ARGT_M16N32 		25 // Not implemented
-#define ARGT_M16N16 		26 // Not implemented
-#define ARGT_M32N32 		27 // Not implemented
+#define ARGt_M1632		24 // Not implemented
+#define ARGt_M16N32		25 // Not implemented
+#define ARGt_M16N16		26 // Not implemented
+#define ARGt_M32N32		27 // Not implemented
+#define ARGT_M1632		(1<<ARGt_M1632)
+#define ARGT_M16N32		(1<<ARGt_M16N32)
+#define ARGT_M16N16		(1<<ARGt_M16N16)
+#define ARGT_M32N32		(1<<ARGt_M32N32)
 
-#define ARGT_MOFFS8 		28
-#define ARGT_MOFFS16		29
-#define ARGT_MOFFS32		30
-#define ARGT_MOFFS64		31
+#define ARGt_MOFFS8 	28
+#define ARGt_MOFFS16	29
+#define ARGt_MOFFS32	30
+#define ARGt_MOFFS64	31
+#define ARGT_MOFFS8		(1<<ARGt_MOFFS8)
+#define ARGT_MOFFS16	(1<<ARGt_MOFFS16)
+#define ARGT_MOFFS32	(1<<ARGt_MOFFS32)
+#define ARGT_MOFFS64	(1<<ARGt_MOFFS64)
 
-#define ARGT_AL 				32
-#define ARGT_AX 				33
-#define ARGT_EAX				34
-#define ARGT_RAX				35
+#define ARGt_AL 		32
+#define ARGt_AX 		33
+#define ARGt_EAX		34
+#define ARGt_RAX		35
+#define ARGt_CL 		36
+#define ARGt_DX 		37
+#define ARGT_AL			(1<<ARGt_AL)
+#define ARGT_AX			(1<<ARGt_AX)
+#define ARGT_EAX		(1<<ARGt_EAX)
+#define ARGT_RAX		(1<<ARGt_RAX)
+#define ARGT_CL			(1<<ARGt_CL)
+#define ARGT_DX			(1<<ARGt_DX)
 
-#define ARGT_CL 				36
-#define ARGT_DX 				37
-#define ARGT_SREG 			39
+#define ARGt_SREG	 	39
+#define ARGt_SS 		40
+#define ARGt_DS 		41
+#define ARGt_ES 		42
+#define ARGt_FS 		43
+#define ARGt_GS 		44
+#define ARGt_CS 		45
+#define ARGT_SREG		(1<<ARGt_SREG)
+#define ARGT_SS			(1<<ARGt_SS)
+#define ARGT_DS			(1<<ARGt_DS)
+#define ARGT_ES			(1<<ARGt_ES)
+#define ARGT_FS			(1<<ARGt_FS)
+#define ARGT_GS			(1<<ARGt_GS)
+#define ARGT_CS			(1<<ARGt_CS)
 
-#define ARGT_SS 				40
-#define ARGT_DS 				41
-#define ARGT_ES 				42
-#define ARGT_FS 				43
+#define ARGt_ST0		46
+#define ARGt_STI		47
+#define ARGT_ST0		(1<<ARGt_ST0)
+#define ARGT_STI		(1<<ARGt_STI)
 
-#define ARGT_GS 				44
-#define ARGT_CS 				45
-#define ARGT_ST0				46
-#define ARGT_STI				47
+#define ARGt_MM 		48 // Not implemented
+#define ARGt_MM32 		49 // Not implemented
+#define ARGt_MM64 		50 // Not implemented
+#define ARGT_MM			(1<<ARGt_MM)
+#define ARGT_MM32		(1<<ARGt_MM32)
+#define ARGT_MM64		(1<<ARGt_MM64)
 
-#define ARGT_MM 				48 // Not implemented
-#define ARGT_MM32 			49 // Not implemented
-#define ARGT_MM64 			50 // Not implemented
-#define ARGT_XMM				51 // Not implemented
+#define ARGt_XMM		51 // Not implemented
+#define ARGt_XMM0 		52 // Not implemented
+#define ARGt_XMM64		53 // Not implemented
+#define ARGt_XMM128 	54 // Not implemented
+#define ARGT_XMM		(1<<ARGt_XMM)
+#define ARGT_XMM0		(1<<ARGt_XMM0)
+#define ARGT_XMM64		(1<<ARGt_XMM64)
+#define ARGT_XMM128		(1<<ARGt_XMM128)
+#define ARGT_M128		(1<<55)
 
-#define ARGT_XMM32			52 // Not implemented
-#define ARGT_XMM64			53 // Not implemented
-#define ARGT_XMM128 		54 // Not implemented
-#define ARGT_XMM0 			55 // Not implemented
+#define ARGG_SIZE_1		(1)
+#define ARGG_SIZE_2		(1)
+#define ARGG_SIZE_4		(1)
+#define ARGG_SIZE_8		(ARGT_IMM64|ARGT_UIMM64|ARGT_R64|ARGT_RM64|ARGT_M64|ARGT_MOFFS64|ARGT_RAX|ARGT_XMM64)
+#define ARGG_SIZE_16	(ARGT_XMM|ARGT_XMM0|ARGT_XMM128|ARGT_M128)
 
 #help_index "Compiler/Internal;Hash/System"
 #define OCF_ALIAS 			1
@@ -2357,7 +2415,7 @@ public class CCompGlobals
 	I64 	num_reg_vars,num_non_ptr_vars,
 				stack_tmps_mask,reg_vars_mask,non_ptr_vars_mask;
 	U8		*to_reg_vars_map,*non_ptr_vars_map;
-	I64 	size_arg_mask[9],
+	I64 	size_arg_mask[17],
 				compiled_lines;
 };
 

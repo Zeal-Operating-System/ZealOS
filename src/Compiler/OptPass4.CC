@@ -15,7 +15,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 						tmpil2->arg1.type&MDF_REG) {
 				i=tmpil1->ic_data;
 				if (I32_MIN<=i<=I32_MAX &&
-							!Bt(&cmp.non_ptr_vars_mask,tmpil2->arg1.reg)) {
+							!Bt(&comp.non_ptr_vars_mask,tmpil2->arg1.reg)) {
 					tmpil1->ic_flags|=tmpil2->ic_flags&ICG_NO_CONVERT_MASK;
 					tmpil1->ic_code=IC_LEA;
 					tmpil1->arg1.type=MDF_DISP+tmpil1->arg1.type.raw_type;
@@ -97,7 +97,7 @@ Bool OptIC4(CIntermediateCode *tmpi)
 						tmpil1->arg1.type&MDF_STACK) {
 				i=tmpil2->ic_data;
 				if (I32_MIN<=i<=I32_MAX &&
-							!Bt(&cmp.non_ptr_vars_mask,tmpil2->arg1.reg)) {
+							!Bt(&comp.non_ptr_vars_mask,tmpil2->arg1.reg)) {
 					tmpil1->ic_flags|=tmpil2->ic_flags;
 					tmpil1->ic_code=IC_MOV;
 					tmpil1->arg1.type=MDF_DISP+tmpil1->arg1_type_pointed_to;
@@ -157,15 +157,15 @@ U0 OptPass4(CCompCtrl *cc,COptReg *reg_offsets,I64 *_type)
 			tmpi=OptFree(tmpi);
 		} else {
 			tmpc=tmpi->ic_class;
-			tmpi1=tmpi2=&cmp.ic_nop;
+			tmpi1=tmpi2=&comp.ic_nop;
 			if (tmpil1=OptLag2(tmpi)) {
 				if (tmpil2=OptLag2(tmpil1)) {
 					if (!(tmpil3=OptLag2(tmpil2)))
-						tmpil3=&cmp.ic_nop;
+						tmpil3=&comp.ic_nop;
 				} else
-					tmpil2=tmpil3=&cmp.ic_nop;
+					tmpil2=tmpil3=&comp.ic_nop;
 			} else
-				tmpil1=tmpil2=tmpil3=&cmp.ic_nop;
+				tmpil1=tmpil2=tmpil3=&comp.ic_nop;
 			switch [intermediate_code_table[code].arg_count] {
 				case IS_V_ARG:
 					ps->ptr-=tmpi->ic_data>>3;
@@ -428,7 +428,7 @@ p4_sib:
 									break;
 								}
 						}
-						tmpi->ic_class=cmp.internal_types[RT_I64];
+						tmpi->ic_class=comp.internal_types[RT_I64];
 					} else if (_type)
 						*_type=tmpi->ic_class->raw_type;
 					break;

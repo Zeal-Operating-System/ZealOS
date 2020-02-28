@@ -65,7 +65,7 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
 	if (cc->flags&CCF_AOT_COMPILE) {
 		cc->htc.define_hash_table=cc->htc.glbl_hash_table;
 		if (cc->aot_depth<=1)
-			cc->htc.glbl_hash_table->next=cmp.asm_hash;
+			cc->htc.glbl_hash_table->next=comp.asm_hash;
 		else
 			cc->htc.glbl_hash_table->next=htc->glbl_hash_table;
 	} else
@@ -692,9 +692,9 @@ U0 CInit()
 {
 	CompLoadDefines;
 	CompFillTables;
-	QueueInit(&cmp.ic_nop);
-	cmp.ic_nop.ic_class=cmp.internal_types[RT_I64];
-	cmp.ic_nop.ic_code=IC_NOP1;
+	QueueInit(&comp.ic_nop);
+	comp.ic_nop.ic_class=comp.internal_types[RT_I64];
+	comp.ic_nop.ic_code=IC_NOP1;
 	AsmHashLoad;
 	UAsmHashLoad;
 }
