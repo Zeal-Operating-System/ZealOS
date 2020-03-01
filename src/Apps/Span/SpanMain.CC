@@ -307,7 +307,7 @@ U0 Span()
 
 	PopUpOk(
 				"Build a bridge to hold-up the\n"
-				"red masses.Test your design\n"
+				"red masses.  Test your design\n"
 				"by pressing run/stop.\n\n"
 				"The lowest cost bridge that\n"
 				"stays standing wins.\n\n"

@@ -1,6 +1,6 @@
 //This is the software interrupt num
-//we will use.See $LK,"Software Int's",A="MN:I_WAKE"$ for
-//picking a num.Nums are subject to change.
+//we will use.  See $LK,"Software Int's",A="MN:I_WAKE"$ for
+//picking a num.  Nums are subject to change.
 
 #define I_F_UNARY_MINUS I_USER
 
@@ -64,14 +64,14 @@ U0 TimeIns()
 	for (i=0;i<SAMPLE_SIZE;i++)
 		UnaryMinusInt(ã);
 	end=GetTSC;
-	"Interrupt Cycles:%10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
+	"Interrupt Cycles: %10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
 
 	//Measure call time
 	start=GetTSC;
 	for (i=0;i<SAMPLE_SIZE;i++)
 		UnaryMinusCall(ã);
 	end=GetTSC;
-	"CallCycles:%10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
+	"Call      Cycles: %10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
 
 	IntEntrySet(I_F_UNARY_MINUS,old_irq,IDTET_IRQ);
 }

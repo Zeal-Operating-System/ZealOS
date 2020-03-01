@@ -27,7 +27,7 @@ U0 Lighting(CDC *dc,CD3I32 *ls,CD3I32 *poly,I64 color)
 	vn_y*=d;
 	vn_z*=d;
 //Vn is the cross product of V1 and V3
-	//which means it is perpendicular.It
+	//which means it is perpendicular.  It
 	//is the normal vect to the surface.
 	//It has been scaled to length 65536.
 	Mat4x4MulXYZ(r,&vn_x,&vn_y,&vn_z);

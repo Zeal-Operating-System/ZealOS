@@ -345,13 +345,13 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 	DocPrint(doc,
 				"U0 Song()\n"
 				"{\n"
-				"Fs->task_end_cb=&SoundTaskEndCB;\n"
-				"MusicSettingsReset;\n"
-				"music.tempo=%6.3f;\n"
-				"music.stacatto_factor=%6.3f;\n"
-				"try {\n"
-				"while (!ScanKey) {\n"
-				"\tPlay(\"",music.tempo+0.0005,music.stacatto_factor+0.0005);
+				"\tFs->task_end_cb=&SoundTaskEndCB;\n"
+				"\tMusicSettingsReset;\n"
+				"\tmusic.tempo=%6.3f;\n"
+				"\tmusic.stacatto_factor=%6.3f;\n"
+				"\ttry {\n"
+				"\t\twhile (!ScanKey) {\n"
+				"\t\t\tPlay(\"",music.tempo+0.0005,music.stacatto_factor+0.0005);
 
 	tmpn=psm.head.next;
 	tmpn1=tmpn;
@@ -372,19 +372,17 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 					if (tmpn1->type!=PSMT_METER) {
 						if (ptr=tmpn1->word) {
 							while (ch=*ptr) {
-								if (ch==CH_SPACE)
-									*ptr=CH_SHIFT_SPACE;
 								ptr++;
 							}
 							DocPrint(doc,"%Q\\0",tmpn1->word);
 						} else
-							DocPrint(doc,"%c\\0",CH_SHIFT_SPACE);
+							DocPrint(doc,"%c\\0",CH_SPACE);
 					}
 					tmpn1=tmpn1->next;
 				}
 			}
 			DocPrint(doc,"\");\n"
-						"\tPlay(\"");
+						"\t\t\tPlay(\"");
 			two_measure_left=2*measure_len;
 			tmpn1=tmpn;
 			has_words=FALSE;
@@ -396,22 +394,20 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 			if (tmpn1->type!=PSMT_METER) {
 				if (ptr=tmpn1->word) {
 					while (ch=*ptr) {
-						if (ch==CH_SPACE)
-							*ptr=CH_SHIFT_SPACE;
 						ptr++;
 					}
 					DocPrint(doc,"%Q\\0",tmpn1->word);
 				} else
-					DocPrint(doc,"%c\\0",CH_SHIFT_SPACE);
+					DocPrint(doc,"%c\\0",CH_SPACE);
 			}
 			tmpn1=tmpn1->next;
 		}
 	}
 	DocPrint(doc,"\");\n"
-				"}\n"
-				"} catch\n"
-				"PutExcept;\n"
-				"Sound;\n"
+				"\t\t}\n"
+				"\t} catch\n"
+				"\t\tPutExcept;\n"
+				"\tSound;\n"
 				"}\n"
 				"\n"
 				"Song;\n");

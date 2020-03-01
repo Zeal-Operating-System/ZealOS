@@ -56,7 +56,7 @@ U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 			machine_code=LexExpression2Bin(cc,&type);
 			if (old_flags&CCF_AOT_COMPILE &&
 						cc->flags&CCF_NOT_CONST &&
-						!Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
+						!Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)) {
 				cc->flags=cc->flags&~CCF_NO_ABSS|CCF_AOT_COMPILE;
 				Free(machine_code);
 				if (pass==2) {
@@ -208,7 +208,7 @@ U0 ParseGlobalInit(CCompCtrl *cc,CHashGlobalVar *tmpg,I64 pass)
 	U8 *dst=tmpg->data_addr;
 	ParseVarInit2(cc,&dst,tmpg->var_class,&tmpg->dim,
 				tmpg->data_addr_rip,&tmpg->data_addr,
-				Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)||
+				Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)||
 				Bt(&cc->flags,CCf_AOT_COMPILE),pass);
 }
 

@@ -2,16 +2,16 @@
 /*
 $LK,"CSprite",A="MN:CSprite"$s are stored as a sequence of var
 length operations with a 1-byte $LK,"type",A="MN:SPT_PT"$ leading
-each operation.They are stored, one after another,
+each operation.  They are stored, one after another,
 in a chunk of memory terminated by a $LK,"zero",A="MN:SPT_END"$.
 $LK,"Sprite3",A="MN:Sprite3"$() shows how the $LK,"CSprite",A="MN:CSprite"$ unions are used.
 
 $LK,"SpriteElemSize",A="MN:SpriteElemSize"$() will return the size of a single
 element, while $LK,"SpriteSize",A="MN:SpriteSize"$() will return the size
-of an entire list.Look at $LK,"sprite_elem_base_sizes",A="MN:sprite_elem_base_sizes"$.
+of an entire list.  Look at $LK,"sprite_elem_base_sizes",A="MN:sprite_elem_base_sizes"$.
 
 See $MA-X+PU,"::/Apps/GrModels",LM="Cd(\"::/Apps/GrModels\");Dir;View;\n"$ for an example of
-making CSprite by hand.It uses $LK,"SPT_MESH",A="MN:SPT_MESH"$,
+making CSprite by hand.  It uses $LK,"SPT_MESH",A="MN:SPT_MESH"$,
 one of the most complicated.
 */
 

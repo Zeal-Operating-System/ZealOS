@@ -172,7 +172,7 @@ CDocEntry *DocWordWrapAdd(CDoc *doc,CDocEntry *doc_e,
 		}
 		if (*_k>i) {
 			for (j=i;j>8-ii && j>=0;j--)
-				if (doc_e->tag[j]==CH_SPACE || doc_e->tag[j]==CH_SHIFT_SPACE) {
+				if (doc_e->tag[j]==CH_SPACE) {
 					i=j+1;
 					break;
 				}
@@ -794,7 +794,7 @@ rc_adjust_xy:
 					if (recalc_flags&RECALCG_MASK==RECALCt_TO_SCREEN &&
 								!(doc_e->de_flags&DOCEF_DONT_DRAW)) {
 						if (y_plot_top<=y<=y_plot_bottom)
-							TextLenStr(win_task,x-x0,y-y0,k,tmp_u32_attr,"");
+							TextLenStr(win_task,x-x0,y-y0,k,tmp_u32_attr,"    ");
 						x+=k;
 					} else {
 						if (find_cursor) {

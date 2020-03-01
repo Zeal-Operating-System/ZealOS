@@ -1,5 +1,5 @@
 /*Asm labels can only be defined once
-in a task.<F5> will spawn a new task
+in a task.  <F5> will spawn a new task
 each time, so you don't get redefine
 error, like when repeatedly #including
 it from the cmd line.

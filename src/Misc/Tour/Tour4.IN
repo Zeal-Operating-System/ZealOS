@@ -26,7 +26,7 @@ TourPut("Press $$GREEN$$<SPACE>$$FG$$.\n");
 InGetStr(" ");
 
 TourPut(
-"Now, we'll fill-in the visible tag of the macro.Then, "
+"Now, we'll fill-in the visible tag of the macro.  Then, "
 "we'll fill-in the macro text.\n",TRUE);
 InPrint(,"Click Here");
 
@@ -37,8 +37,8 @@ TourPut("Press $$GREEN$$<ESC>$$FG$$ to exit the form.\n");
 InGetChar(CH_ESC);
 
 TourPut(
-"Press $$GREEN$$<CTRL-SHIFT-ENTER>$$FG$$ to insert a line feed."
-"($$GREEN$$<CTRL-ENTER>$$FG$$ does a page break."
+"Press $$GREEN$$<CTRL-SHIFT-ENTER>$$FG$$ to insert a line feed.  "
+"($$GREEN$$<CTRL-ENTER>$$FG$$ does a page break.  "
 "$$GREEN$$<ENTER>$$FG$$ would execute the macro.)\n");
 InGetKey(SC_ENTER|SCF_CTRL|SCF_SHIFT);
 
@@ -91,7 +91,7 @@ TourPut(
 InUntilChar(CH_ESC,CH_SHIFT_ESC);
 
 TourPut(
-"$$GREEN$$<CTRL-S>$$FG$$ to save your PersonalMenu file, if you wish."
+"$$GREEN$$<CTRL-S>$$FG$$ to save your PersonalMenu file, if you wish.  "
 "Your PersonalMenu is special and does not save on $$GREEN$$<ESC>$$FG$$.\n",TRUE);
 
 '' CH_SHIFT_ESC;				//exit menu

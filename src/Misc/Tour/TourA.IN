@@ -6,7 +6,7 @@ InUntilChar(CH_ESC,CH_SHIFT_ESC);
 
 TourPut(
 "We will now use $$RED$$$$TX+L+PU+UL,\"Uf\",A=\"MN:Uf\"$$$$FG$$() to "
-"unassemble a function.It takes the function name as a string arg.\n\n"
+"unassemble a function.  It takes the function name as a string arg.\n\n"
 "Press $$GREEN$$<ENTER>$$FG$$.\n");
 "WinBorder;WinMax;\nUf(\"CAlloc\");";
 InGetStr("\n");

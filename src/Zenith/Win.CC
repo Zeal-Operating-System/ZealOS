@@ -70,7 +70,7 @@ U0 DrawProgressBars(CDC *dc)
 			else
 				st=MStrPrint("%d/%d",n,m);
 			if (sys_progresses[i].t0) {
-				st2=MStrPrint("%s%fs",st,tS-sys_progresses[i].t0);
+				st2=MStrPrint("%s %fs",st,tS-sys_progresses[i].t0);
 				Free(st);
 			} else
 				st2=st;
@@ -117,8 +117,8 @@ U0 CtrlAltG(I64 sc)
 	else
 		PopUp("WinGrid(ON);");
 }
-CtrlAltCBSet('G',&CtrlAltG,"Cmd/Grid On",
-				"Cmd/Grid Off");
+CtrlAltCBSet('G',&CtrlAltG,"Cmd /Grid On",
+				"Cmd /Grid Off");
 
 CTask *ext_ASCII_task;
 U0 ExtendedASCII()
@@ -127,17 +127,15 @@ U0 ExtendedASCII()
 	CDoc *doc=DocNew;
 	DocPrint(doc,"Sel Char and Press <ESC>\n$$LTBLUE$$");
 	for (i=0;i<256;i++) {
-		if (i>=CH_SHIFT_SPACE && i!=0x7F) {
-			if (i==CH_SHIFT_SPACE)
-				DocPrint(doc,"$$MU-UL,\"\\x1F\",LE=%d$$",i);
-			else if (i=='$$')
+		if (i>=CH_SPACE && i!=0x7F) {
+			if (i=='$$')
 				DocPrint(doc,"$$MU-UL,\"\\x24\",LE=%d$$",i);
 			else if (i=='\"'||i=='\\')
 				DocPrint(doc,"$$MU-UL,\"\\%c\",LE=%d$$",i,i);
 			else
 				DocPrint(doc,"$$MU-UL,\"%c\",LE=%d$$",i,i);
 		} else
-			DocPrint(doc,"");
+			DocPrint(doc," ");
 		if (i&15==15)
 			DocPrint(doc,"\n");
 	}
@@ -152,7 +150,7 @@ U0 CtrlAltA(I64)
 	if (ext_ASCII_task=sys_focus_task)
 		Spawn(&ExtendedASCII);
 }
-CtrlAltCBSet('A',&CtrlAltA,"Cmd/Extended ASCII");
+CtrlAltCBSet('A',&CtrlAltA,"Cmd /Extended ASCII");
 
 public U0 WinScrollNull(CTask *task,CD3I64 *s)
 {//If panning a window has been done, restore to zero.
@@ -270,7 +268,7 @@ I64 WinOnTopWindows()
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	task=sys_winmgr_task->next_task;
-	while (task!=sys_winmgr_task &&task!=first_moved_fwd) {
+	while (task!=sys_winmgr_task && task!=first_moved_fwd) {
 		task1=task->next_task;
 		if (!TaskValidate(task)) {
 			POPFD

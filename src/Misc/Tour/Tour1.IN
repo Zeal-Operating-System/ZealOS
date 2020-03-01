@@ -26,7 +26,7 @@ U0 RevealPopUpHelp(I64 scf)
 		Free(st);
 		st=MStrPrint(
 					"If you have $$GREEN$$AutoComplete$$FG$$ on, you "
-					"can list the key commands.This works both "
+					"can list the key commands.  This works both "
 					"in the editor and at the command line.\n"
 					"\n"
 					"You can click the links to jump to source code.\n"

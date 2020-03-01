@@ -228,7 +228,7 @@ public U0 MemBIOSRep()
 				"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n"
 
 	"$$PURPLE$$VBE Linear Framebuffer$$FG$$\n"
-				"%08X-%08X See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
+				"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
 																																								text.fb_alias(U8 *) + text.buffer_size - 1;
 	"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
 	while (LBts(&sys_semas[SEMA_DEV_MEM],0))
@@ -283,17 +283,17 @@ public U0 MemBIOSRep()
 
 public U0 MemPageRep()
 {//Page Table Report.
-	"MAPPED\t:%010Xwith",mem_mapped_space;
+	"MAPPED\t  :%010X with ",mem_mapped_space;
 	if (Bt(&mem_page_size,30))
 		"$$RED$$1GIG$$FG$$ pages\n";
 	else
 		"$$RED$$2MEG$$FG$$ pages\n";
-	"PML2\t:%010X2MEG:%08X\n",
+	"PML2\t  :%010X 2MEG  :%08X\n",
 				*MEM_PML2(U64 *),*MEM_2MEG_NUM(U64 *);
-	"PML3\t:%010X1GIG:%08X\n",
+	"PML3\t  :%010X 1GIG  :%08X\n",
 				*MEM_PML3(U64 *),*MEM_1GIG_NUM(U64 *);
-	"PML4\t:%010X512GIG:%08X\n",
+	"PML4\t  :%010X 512GIG:%08X\n",
 				*MEM_PML4(U64 *),*MEM_512GIG_NUM(U64 *);
 	"FIXED_AREA:%010X\n",SYS_FIXED_AREA;
-	"HEAP_BASE:%010X\nHEAP_LIMIT:%010X\n",mem_heap_base,mem_heap_limit;
+	"HEAP_BASE :%010X\nHEAP_LIMIT:%010X\n",mem_heap_base,mem_heap_limit;
 }

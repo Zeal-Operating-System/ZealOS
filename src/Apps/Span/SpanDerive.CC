@@ -2,7 +2,7 @@ U0 MyDerivative(CMathODE *ode,F64,COrder2D3 *,COrder2D3 *)
 {
 //The forces due to springs and drag are
 	//automatically handled by the
-	//ode code.We can add new forces
+	//ode code.  We can add new forces
 	//here.
 	CTask *task=ode->win_task;
 	F64 d,dd;

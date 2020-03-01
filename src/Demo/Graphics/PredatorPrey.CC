@@ -51,7 +51,7 @@ U0 PredatorPrey()
 	CDC *dc=DCAlias;
 
 	PopUpOk("This will plot multiple predator-prey\n"
-				"trajectories.It restarts many times\n"
+				"trajectories.  It restarts many times\n"
 				"with different, random, initial populations.\n");
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	try {

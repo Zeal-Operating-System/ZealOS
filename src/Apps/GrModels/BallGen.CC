@@ -13,7 +13,7 @@ class Ball
 
 class BallDefineStruct
 {
-	F64 radius		format	 "$$DA-TRM,A=\"Radius:%8.3f\"$$\n";
+	F64 radius		format	 "$$DA-TRM,A=\"Radius         :%8.3f\"$$\n";
 	I64 n_longitude format "$$DA-TRM,A=\"Longitude Faces:%5d\"$$\n";
 	I64 n_lattitude format "$$DA-TRM,A=\"Lattitude Rings:%5d\"$$\n";
 };

@@ -36,14 +36,14 @@ Bool MyPutKey(I64 ch,I64 sc)
 						if (sc&SCF_SHIFT)
 						{
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/LTPURPLE");
+								KeyDescSet("Dol /LTPURPLE");
 							else
 								"$$LTPURPLE$$";
 						}
 						else
 						{
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/PURPLE");
+								KeyDescSet("Dol /PURPLE");
 							else
 								"$$PURPLE$$";
 						}
@@ -52,14 +52,14 @@ Bool MyPutKey(I64 ch,I64 sc)
 						if (sc & SCF_SHIFT)
 						{
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/LTRED");
+								KeyDescSet("Dol /LTRED");
 							else
 								"$$LTRED$$";
 						}
 						else
 						{
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/RED");
+								KeyDescSet("Dol /RED");
 							else
 								"$$RED$$";
 						}
@@ -67,12 +67,12 @@ Bool MyPutKey(I64 ch,I64 sc)
 					case SC_F3:
 						if (sc&SCF_SHIFT) {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/LTGREEN");
+								KeyDescSet("Dol /LTGREEN");
 							else
 								"$$LTGREEN$$";
 						} else {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/GREEN");
+								KeyDescSet("Dol /GREEN");
 							else
 								"$$GREEN$$";
 						}
@@ -80,12 +80,12 @@ Bool MyPutKey(I64 ch,I64 sc)
 					case SC_F4:
 						if (sc&SCF_SHIFT) {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/Default Color");
+								KeyDescSet("Dol /Default Color");
 							else
 								"$$FG$$";
 						} else {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/BLUE");
+								KeyDescSet("Dol /BLUE");
 							else
 								"$$BLUE$$";
 						}
@@ -93,7 +93,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 					case SC_F7:
 						if (!(sc&SCF_SHIFT)) {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Cmd/TimeIns");
+								KeyDescSet("Cmd /TimeIns");
 							else
 								TimeIns;
 						}
@@ -101,7 +101,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 					case SC_DELETE:
 						if(sc & SCF_SHIFT) {
 							if(sc & SCF_KEY_DESC)
-								KeyDescSet("Cmd/Soft Reboot");
+								KeyDescSet("Cmd /Soft Reboot");
 							else
 								BootRAM;
 						}
@@ -110,25 +110,25 @@ Bool MyPutKey(I64 ch,I64 sc)
 				break;
 			case 'a':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Cmd/AutoComplete On");
+					KeyDescSet("Cmd /AutoComplete On");
 				else
 					AutoComplete(ON);
 				return TRUE;
 			case 'A':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Cmd/AutoComplete Off");
+					KeyDescSet("Cmd /AutoComplete Off");
 				else
 					AutoComplete;
 				return TRUE;
 			case 'h':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Cmd/WinTileHorz");
+					KeyDescSet("Cmd /WinTileHorz");
 				else
 					WinTileHorz;
 				return TRUE;
 			case 'm':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Cmd/WinMax");
+					KeyDescSet("Cmd /WinMax");
 				else {
 					WinBorder;
 					WinMax;
@@ -136,7 +136,7 @@ Bool MyPutKey(I64 ch,I64 sc)
 				return TRUE;
 			case 'v':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Cmd/WinTileVert");
+					KeyDescSet("Cmd /WinTileVert");
 				else
 					WinTileVert;
 				return TRUE;
@@ -165,37 +165,37 @@ Bool MyPutKey(I64 ch,I64 sc)
 				//Ins your own ALT-key plug-ins
 			case '1':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Dol/ã");
+					KeyDescSet("Dol /ã");
 				else
 					'ã';
 				return TRUE;
 			case '2':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Dol/é");
+					KeyDescSet("Dol /é");
 				else
 					'é';
 				return TRUE;
 			case '3':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Dol/è");
+					KeyDescSet("Dol /è");
 				else
 					'è';
 				return TRUE;
 			case '4':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Dol/ê");
+					KeyDescSet("Dol /ê");
 				else
 					'ê';
 				return TRUE;
 			case '9':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Dol/Indent 5");
+					KeyDescSet("Dol /Indent 5");
 				else
 					"$$ID,5$$";
 				return TRUE;
 			case '0':
 				if (sc&SCF_KEY_DESC)
-					KeyDescSet("Dol/Unindent 5");
+					KeyDescSet("Dol /Unindent 5");
 				else
 					"$$ID,-5$$";
 				return TRUE;

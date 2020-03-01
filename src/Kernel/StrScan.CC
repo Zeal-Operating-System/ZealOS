@@ -58,7 +58,7 @@ Does not allow more than 18-digits
 before or after the decimal point
 because the numbers before and after
 the decimal point are stored
-in 64-bits.Use exponentiated forms
+in 64-bits.  Use exponentiated forms
 to avoid this.
 */
 	I64 i,j,k,ch;
@@ -210,7 +210,7 @@ today.
 }
 
 U8 *StrScan(U8 *src,U8 *format,...)
-{/*Opposite of sprintf().Pass ptrs to data to be scanned-in.
+{/*Opposite of sprintf().  Pass ptrs to data to be scanned-in.
 For "%s", pass ptr to ptr (be careful because addr
 of array is the same as array--create ptr to array
 and take addr.

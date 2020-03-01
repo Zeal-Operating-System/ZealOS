@@ -168,10 +168,10 @@ U0 ToTheFront()
 				"$$GREEN$$<SPACE>$$FG$$\tor $$GREEN$${Right-click}$$FG$$ to end phase.\n"
 				"$$GREEN$$<SHIFT>$$FG$$\tto show line-of-sight.\n"
 				"$$GREEN$$<ENTER>$$FG$$\tto start new game.\n"
-				"$$GREEN$$1$$FG$$\tPlayer 1 view.\n"
-				"$$GREEN$$2$$FG$$\tPlayer 2 view.\n"
-				"$$GREEN$$c$$FG$$\tView odds calculations.\n"
-				"$$GREEN$$d$$FG$$\tSet animation delay.");
+				"$$GREEN$$  1$$FG$$\tPlayer 1 view.\n"
+				"$$GREEN$$  2$$FG$$\tPlayer 2 view.\n"
+				"$$GREEN$$  c$$FG$$\tView odds calculations.\n"
+				"$$GREEN$$  d$$FG$$\tSet animation delay.");
 	Fs->task_end_cb=&TaskEndCB; //<CTRL-ALT-x>
 	Fs->draw_it=&DrawIt;
 	try {

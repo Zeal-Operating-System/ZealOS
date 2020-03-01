@@ -86,8 +86,6 @@ $ID,-5$
 
 * I don't use $FG,2$U0 *$FG$ because the size is zero for ptr arithmetic.
 
-* Use $FG,2$$LK,"CH_SHIFT_SPACE",A="MN:CH_SHIFT_SPACE"$$FG$ for spaces in quotes in source code because I run $LK,"Spaces-to-Tabs",A="FF:::/Zenith/Utils/StrUtils.CC,S2T"$ on source code.
-
 * Do not use $FG,2$#if$FG$ or $FG,2$#ifdef$FG$
 
 

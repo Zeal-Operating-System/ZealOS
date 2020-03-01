@@ -626,7 +626,7 @@ Bool SpriteEdText(CSprite **_head,I64 *_cur_elem_num)
 
 U0 GrInit3()
 {
-	DefineListLoad("ST_SPRITE_ED_MENU","Select/Unselect All\0\0Select\0"
+	DefineListLoad("ST_SPRITE_ED_MENU","Select/Unselect All\0 \0Select\0"
 				"Select Rects\0Unselect\0Unselect Rects\0Shift Points\0Shift Rects\0"
 				"Shift Selected\0Transform Selected\0Set Origin\0"
 				"Insert Shift SubOrigin\0Edit as Text\0Insert Clip\0Main Menu\0");
@@ -655,7 +655,7 @@ I64 PopUpSpriteEd(CSprite **_head,I64 *_cur_elem_num)
 				"$$MU-UL,\"Edit as Text\",LE=SPED_TEXT_ED$$\n"
 				"$$MU-UL,\"Insert Clip Sprite's\",LE=SPED_INS_CLIP$$\n\n"
 				"$$PURPLE$$$$MU-UL,\"+] Sprite Main Menu\",LE=SPED_MAIN_MENU$$$$LTBLUE$$\n"
-				"$$MU-UL,\"ExitSprite\",LE=SPED_EXIT$$\n"
+				"$$MU-UL,\"Exit  Sprite\",LE=SPED_EXIT$$\n"
 				"$$MU-UL,\"Abort Sprite\",LE=DOCM_CANCEL$$");
 	st=MStrPrint("SpriteSideBarTask(0x%X,0x%X,0x%X);",Fs,_head,_cur_elem_num);
 	PopUp(st,NULL,&pu_task);
@@ -1117,9 +1117,9 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 				case SPED_INS_CLIP:
 					RegOneTimePopUp(ARf_CSPRITE_INS_CLIP,
 								"You will probably want to shift around\n"
-								"the location of element groups.Use\n"
+								"the location of element groups.  Use\n"
 								"'Insert shift sub-origin' after picking the\n"
-								"element to insert before.Or,\n"
+								"element to insert before.  Or,\n"
 								"use 'shift points'.\n");
 					insert_pt=SpriteSetSettings(,*_head,*_cur_elem_num);
 					unlock=DocLock(sys_clip_doc);

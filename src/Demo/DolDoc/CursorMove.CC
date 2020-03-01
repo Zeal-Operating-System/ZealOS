@@ -32,7 +32,7 @@ all flags and cmds.
 
 Note: the default page length is 66 lines
 and branching back more than the page length
-will reset the column to 1.So, set page
+will reset the column to 1.  So, set page
 length to a large number if you want to
 branch back a long distance.
 */

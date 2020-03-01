@@ -1356,9 +1356,9 @@ public class CDocEntry:CDocEntryBase
 class CEdFindText
 {
 	U8		find_text[STR_LEN] format "$$DA-P,"
-				"A=\"Find:%s\"$$\n",
+				"A=\"Find        :%s\"$$\n",
 				replace_text[STR_LEN] format "$$DA-P,"
-				"A=\"Replace:%s\"$$\n";
+				"A=\"Replace     :%s\"$$\n";
 	Bool	replace 								format "$$CB,\"Replace\"$$\n",
 				scan_fwd								format "$$CB,\"Fwd\"$$\n",
 				scan_sel_text 					format "$$CB,\"Selection\"$$\n",
@@ -1675,7 +1675,7 @@ public class CAutoCompleteDictGlobals
 #define OPTf_EXTERNS_TO_IMPORTS 0x20
 #define OPTf_KEEP_PRIVATE 			0x21
 #define OPTf_NO_REG_VAR 				0x22	//Applied to funs, not statements
-#define OPTf_GLBLS_ON_DATA_HEAP 0x23
+#define OPTf_GLOBALS_ON_DATA_HEAP 0x23
 //Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
 #define OPTf_NO_BUILTIN_CONST 	0x24 //Applied to funs, not statements
 #define OPTf_USE_IMM64					0x25 //Not completely implemented
@@ -2133,7 +2133,7 @@ class CAsmUnresolvedRef
 
 #define ARGG_SIZE_1		(1)
 #define ARGG_SIZE_2		(1)
-#define ARGG_SIZE_4		(1)
+#define ARGG_SIZE_4		(ARGT_REL32|ARGT_IMM32|ARGT_UIMM32|ARGT_R32|ARGT_RM32|ARGT_M32|ARGT_MOFFS32|ARGT_EAX)
 #define ARGG_SIZE_8		(ARGT_IMM64|ARGT_UIMM64|ARGT_R64|ARGT_RM64|ARGT_M64|ARGT_MOFFS64|ARGT_RAX|ARGT_XMM64)
 #define ARGG_SIZE_16	(ARGT_XMM|ARGT_XMM0|ARGT_XMM128|ARGT_M128)
 
@@ -3262,15 +3262,15 @@ public class CGridGlobals
 				show		format "$$CB,\"Show Grid\"$$\n",
 				coord 	format "$$CB,\"Show Coordinates\"$$\n";
 	U8		pad[5];
-	F64 	x 			format "$$DA-TRM,A=\"XSpacing:%6.3f\"$$\n",
-				y 			format "$$DA-TRM,A=\"YSpacing:%6.3f\"$$\n",
-				z 			format "$$DA-TRM,A=\"ZSpacing:%6.3f\"$$\n",
-				x_offset format "$$DA-TRM,A=\"XOffset:%6.3f\"$$\n",
-				y_offset format "$$DA-TRM,A=\"YOffset:%6.3f\"$$\n",
-				z_offset format "$$DA-TRM,A=\"ZOffset:%6.3f\"$$\n",
-				x_speed format "$$DA-TRM,A=\"XSpeed:%6.3f\"$$\n",
-				y_speed format "$$DA-TRM,A=\"YSpeed:%6.3f\"$$\n",
-				z_speed format "$$DA-TRM,A=\"ZSpeed:%6.3f\"$$\n";
+	F64 	x 			format "$$DA-TRM,A=\"X Spacing:%6.3f\"$$\n",
+				y 			format "$$DA-TRM,A=\"Y Spacing:%6.3f\"$$\n",
+				z 			format "$$DA-TRM,A=\"Z Spacing:%6.3f\"$$\n",
+				x_offset format "$$DA-TRM,A=\"X Offset :%6.3f\"$$\n",
+				y_offset format "$$DA-TRM,A=\"Y Offset :%6.3f\"$$\n",
+				z_offset format "$$DA-TRM,A=\"Z Offset :%6.3f\"$$\n",
+				x_speed format "$$DA-TRM,A=\"X Speed  :%6.3f\"$$\n",
+				y_speed format "$$DA-TRM,A=\"Y Speed  :%6.3f\"$$\n",
+				z_speed format "$$DA-TRM,A=\"Z Speed  :%6.3f\"$$\n";
 };
 
 #help_index "Ctrls"
@@ -3688,11 +3688,10 @@ public class CSysFixedArea
 #define CH_CTRLX				0x18
 #define CH_CTRLY				0x19
 #define CH_CTRLZ				0x1A
-#define CH_CURSOR 			0x05
-#define CH_BACKSPACE		0x08
+#define CH_CURSOR 				0x05
+#define CH_BACKSPACE			0x08
 #define CH_ESC					0x1B
-#define CH_SHIFT_ESC		0x1C
-#define CH_SHIFT_SPACE	0x1F
+#define CH_SHIFT_ESC			0x1C
 #define CH_SPACE				0x20
 
 #define ST_ERR_ST 	"$$RED$$$$BK,1$$ERROR:$$FG$$$$BK,0$$ "
@@ -4020,7 +4019,7 @@ public class CDebugGlobals
 #define BOOT_SRC_DVD						4
 
 // $LK,"In",A="MN:In"$("") StdIn for call to $LK,"BootHDIns",A="MN:BootHDIns"$().
-#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT\n\n\n\n"
+#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT \n\n\n\n"
 
 #help_index "Registry"
 //Registry sys_message_flags. $LK,"RegOneTimePopUp",A="MN:RegOneTimePopUp"$()

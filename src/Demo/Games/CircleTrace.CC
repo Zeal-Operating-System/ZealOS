@@ -18,7 +18,7 @@ U0 SongTask(I64)
 
 U0 DrawIt(CTask *task,CDC *dc)
 {
-	GrPrint(dc,0,0,"Error:%6.3fTime:%6.3fScore:%6.3fBest:%8.3f",
+	GrPrint(dc,0,0,"Error:%6.3f  Time:%6.3f  Score:%6.3f  Best:%8.3f",
 				avg_error,elapsed_time,score,best_score);
 }
 
@@ -94,7 +94,7 @@ U0 CircleTrace()
 					score=elapsed_time*avg_error;
 
 					//$LK,"Sleep",A="MN:Sleep"$()s until the next time the
-					//window mgr task runs.The
+					//window mgr task runs.  The
 					//window mgr calls the UpdateWin() routine
 					//and places messages in the que, so there's
 					//no need to do anything until the window mgr runs.

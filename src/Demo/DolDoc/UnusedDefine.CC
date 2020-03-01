@@ -56,7 +56,7 @@ U0 UnusedDefineScan()
 							doc_e=doc->head.next;
 							while (doc_e!=doc) {
 								if (doc_e->type_u8==DOCT_LINK) {
-									"%s",tmph->str;
+									"%s ",tmph->str;
 									doc_e2=DocEntryCopy(doc,doc_e);
 									DocInsEntry(old_put_doc,doc_e2);
 									'\n';

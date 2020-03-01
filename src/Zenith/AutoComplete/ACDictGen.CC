@@ -239,13 +239,13 @@ next_word:
 
 	Free(in_start);
 
-	"Blk Size:%d\n",ACD_BLK_SIZE;
-	"Blk Count:%04X\n",(out_ptr-out_start+ACD_BLK_SIZE-1)/ACD_BLK_SIZE;
-	"Largest Entry:%d\n",largest_entry;
-	"Word Count:%d\n",word_count;
+	"Blk Size      :%d\n",ACD_BLK_SIZE;
+	"Blk Count       :%04X\n",(out_ptr-out_start+ACD_BLK_SIZE-1)/ACD_BLK_SIZE;
+	"Largest Entry :%d\n",largest_entry;
+	"Word Count    :%d\n",word_count;
 
 	FileWrite(ACD_DEF_FILENAME,out_start,out_ptr-out_start);
-	"Def File Size:%d\n",out_ptr-out_start;
+	"Def File Size :%d\n",out_ptr-out_start;
 
 	sorted_word_start=ACDSortWords(word_start,word_ptr-word_start,word_count);
 	FileWrite(ACD_WORD_FILENAME,sorted_word_start,word_ptr-word_start);

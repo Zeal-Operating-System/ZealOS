@@ -130,59 +130,59 @@ public U8 *SpriteElem2Summary(CSprite *tmpg)
 	StrPrint(buf,"%Z",tmpg->type&SPG_TYPE_MASK,"ST_SPRITE_ELEM_TYPES");
 	switch (tmpg->type&SPG_TYPE_MASK) {
 		case SPT_COLOR:
-			CatPrint(buf,"%s",Color2Str(buf2,tmpg->c.color));
+			CatPrint(buf," %s",Color2Str(buf2,tmpg->c.color));
 			break;
 		case SPT_DITHER_COLOR:
-			CatPrint(buf,"%s",Color2Str(buf2,ROPF_DITHER|tmpg->d.dither_color.u8[0]|
+			CatPrint(buf," %s",Color2Str(buf2,ROPF_DITHER|tmpg->d.dither_color.u8[0]|
 						tmpg->d.dither_color.u8[1]<<COLORROP_BITS));
 			break;
 		case SPT_PT:
 		case SPT_FLOOD_FILL:
 		case SPT_FLOOD_FILL_NOT:
 		case SPT_SHIFT:
-			CatPrint(buf,"(%d,%d)",tmpg->p.x1,tmpg->p.y1);
+			CatPrint(buf," (%d,%d)",tmpg->p.x1,tmpg->p.y1);
 			break;
 		case SPT_LINE:
 		case SPT_ARROW:
 		case SPT_PLANAR_SYMMETRY:
 		case SPT_RECT:
 		case SPT_ROTATED_RECT:
-			CatPrint(buf,"(%d,%d),(%d,%d)",tmpg->pp.x1,tmpg->pp.y1,
+			CatPrint(buf," (%d,%d),(%d,%d)",tmpg->pp.x1,tmpg->pp.y1,
 						tmpg->pp.x2,tmpg->pp.y2);
 			break;
 		case SPT_CIRCLE:
-			CatPrint(buf,"(%d,%d):%dR",tmpg->pr.x1,tmpg->pr.y1,tmpg->pr.radius);
+			CatPrint(buf," (%d,%d):%dR",tmpg->pr.x1,tmpg->pr.y1,tmpg->pr.radius);
 			break;
 		case SPT_THICK:
-			CatPrint(buf,"%d",tmpg->t.thick);
+			CatPrint(buf," %d",tmpg->t.thick);
 			break;
 		case SPT_TEXT:
 		case SPT_TEXT_BOX:
 		case SPT_TEXT_DIAMOND:
-			CatPrint(buf,"%d,%d:%-16t$$Q",tmpg->ps.x1,tmpg->ps.y1,tmpg->ps.st);
+			CatPrint(buf," %d,%d:%-16t$$Q",tmpg->ps.x1,tmpg->ps.y1,tmpg->ps.st);
 			break;
 		case SPT_POLYLINE:
 		case SPT_POLYPT:
 			ptr=&tmpg->npu.x;
-			CatPrint(buf,"%d(%d,%d)",tmpg->npu.num,ptr[0],ptr[1]);
+			CatPrint(buf," %d (%d,%d)",tmpg->npu.num,ptr[0],ptr[1]);
 			break;
 		case SPT_ELLIPSE:
 		case SPT_POLYGON:
 		case SPT_BITMAP:
-			CatPrint(buf,"(%d,%d):%dW,%dH",tmpg->pwhu.x1,tmpg->pwhu.y1,
+			CatPrint(buf," (%d,%d):%dW,%dH",tmpg->pwhu.x1,tmpg->pwhu.y1,
 						tmpg->pwhu.width,tmpg->pwhu.height);
 			break;
 		case SPT_BSPLINE2:
 		case SPT_BSPLINE3:
 		case SPT_BSPLINE2_CLOSED:
 		case SPT_BSPLINE3_CLOSED:
-			CatPrint(buf,"%d",tmpg->nu.num);
+			CatPrint(buf," %d",tmpg->nu.num);
 			break;
 		case SPT_MESH:
-			CatPrint(buf,"%dV,%dT",tmpg->mu.vertex_count,tmpg->mu.tri_count);
+			CatPrint(buf," %dV,%dT",tmpg->mu.vertex_count,tmpg->mu.tri_count);
 			break;
 		case SPT_SHIFTABLE_MESH:
-			CatPrint(buf,"%dV,%dT",tmpg->pmu.vertex_count,tmpg->pmu.tri_count);
+			CatPrint(buf," %dV,%dT",tmpg->pmu.vertex_count,tmpg->pmu.tri_count);
 			break;
 	}
 	return StrNew(buf);

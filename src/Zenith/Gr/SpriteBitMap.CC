@@ -55,9 +55,9 @@ I64 PopUpSpriteBitMap(CColorROPU32 color,I64 width)
 	}
 	DocPrint(doc,"$$PURPLE$$$$TX+CX,\"Sprite BitMap Menu\"$$\n"
 				"$$LK+PU+CX,\"Click for Help\",A=\"FI:::/Doc/SpriteBitMap.DD\"$$\n"
-				"\n$$LTBLUE$$$$MU-UL,\"Color%s\",LE=SPBM_COLOR$$\n"
-				"$$MU-UL,\"Dither Color%s\",LE=SPBM_DITHER_COLOR$$\n"
-				"$$MU-UL,\"Width%d\",LE=SPBM_WIDTH$$\n"
+				"\n$$LTBLUE$$$$MU-UL,\"Color        %s\",LE=SPBM_COLOR$$\n"
+				"$$MU-UL,\"Dither Color %s\",LE=SPBM_DITHER_COLOR$$\n"
+				"$$MU-UL,\"Width        %d\",LE=SPBM_WIDTH$$\n"
 				"$$MU-UL,\"Find & Replace Color\",LE=SPBM_FIND_AND_REPLACE$$\n"
 				"$$MU-UL,\"Trim to Extents\",LE=SPBM_TRIM_TO_EXTENTS$$\n"
 				"$$MU-UL,\"Add Outline\",LE=SPBM_ADD_OUTLINE$$\n"
@@ -81,7 +81,7 @@ I64 PopUpSpriteBitMap(CColorROPU32 color,I64 width)
 				"\n$$MU-UL,\"Save GR File\",LE=SPBM_SAVE_GR$$\n"
 				"\n$$MU-UL,\"Undo\",LE=SPBM_UNDO$$\n"
 				"\n$$PURPLE$$$$MU-UL,\"+] Sprite Main Menu\",LE=SPBM_MAIN_MENU$$$$LTBLUE$$\n"
-				"$$MU-UL,\"ExitSprite\",LE=SPBM_EXIT$$\n"
+				"$$MU-UL,\"Exit  Sprite\",LE=SPBM_EXIT$$\n"
 				"$$MU-UL,\"Abort Sprite\",LE=DOCM_CANCEL$$\n"
 				"\nRight-Click to get back to this menu.",st1,st2,width);
 	res=PopUpMenu(doc);

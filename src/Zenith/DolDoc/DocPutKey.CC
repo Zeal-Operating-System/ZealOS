@@ -19,7 +19,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 	if (Bt(char_bmp_printable,ch) && !(sc&(SCF_CTRL|SCF_ALT))) {
 		if (sc&SCF_KEY_DESC) {
 			st=Char2KeyName(ch,FALSE);
-			KeyDescSet("Char/'%s'",st);
+			KeyDescSet("Char  /'%s'",st);
 			Free(st);
 		} else
 			EdCharIns(ch,sc,doc);
@@ -184,7 +184,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 									if (sc&SCF_SHIFT)
 										KeyDescSet("Edit/Cut To Clip");
 									else
-										KeyDescSet("Char/Delete");
+										KeyDescSet("Char  /Delete");
 								} else {
 									if (sc&SCF_SHIFT)
 										ClipCut(doc);
@@ -218,7 +218,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 							if (sc&SCF_CTRL) {
 								if (sc&SCF_KEY_DESC) {
 									if (sc&SCF_SHIFT)
-										KeyDescSet("Cmd/Src Code of Sym");
+										KeyDescSet("Cmd /Src Code of Sym");
 									else
 										KeyDescSet("Edit/Autocomplete Sym");
 								} else {
@@ -250,9 +250,9 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 									case SC_F1:
 										if (sc&SCF_KEY_DESC) {
 											if (sc&SCF_SHIFT)
-												KeyDescSet("Cmd/About");
+												KeyDescSet("Cmd /About");
 											else
-												KeyDescSet("Cmd/Help");
+												KeyDescSet("Cmd /Help");
 										} else {
 											if (sc&SCF_SHIFT)
 												Ed("::/Doc/AboutZenithOS.DD");
@@ -293,9 +293,9 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 									case SC_F4:
 										if (sc&SCF_KEY_DESC) {
 											if (sc&SCF_SHIFT)
-												KeyDescSet("Cmd/Insert Directory Name");
+												KeyDescSet("Cmd /Insert Directory Name");
 											else
-												KeyDescSet("Cmd/Insert FileName");
+												KeyDescSet("Cmd /Insert FileName");
 										} else {
 											DocUnlock(doc);
 											if (sc&SCF_SHIFT)
@@ -312,9 +312,9 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 									case SC_F5:
 										if (sc&SCF_KEY_DESC) {
 											if (sc&SCF_SHIFT)
-												KeyDescSet("Cmd/Zenith Include");
+												KeyDescSet("Cmd /Zenith Include");
 											else
-												KeyDescSet("Cmd/Run (Execute)");
+												KeyDescSet("Cmd /Run (Execute)");
 										} else {
 											if (st2=DocEntryLink(doc,doc_ce)) {
 												st=DocLinkFile(st2);
@@ -342,7 +342,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 									case SC_F7:
 										if (sc&SCF_KEY_DESC)
 										{
-											KeyDescSet("Cmd/God Word");
+											KeyDescSet("Cmd /God Word");
 										}
 										else
 										{
@@ -370,7 +370,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLB:
 					if (!(sc&SCF_SHIFT)) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Toggle Border");
+							KeyDescSet("Cmd /Toggle Border");
 						else
 							WinBorder(Bt(&doc->win_task->display_flags,
 										DISPLAYf_NO_BORDER),doc->win_task);
@@ -387,7 +387,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLD:
 					if (!(sc&SCF_SHIFT)) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/File Manager");
+							KeyDescSet("Cmd /File Manager");
 						else {
 							DocUnlock(doc);
 							FileMgr;
@@ -398,7 +398,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLF:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Search Files");
+							KeyDescSet("Cmd /Search Files");
 						else
 							FindWiz;
 					} else {
@@ -419,7 +419,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_BACKSPACE: //<CTRL-H>
 					if (!(sc&SCF_SHIFT)) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Char/Back Space");
+							KeyDescSet("Char  /Back Space");
 						else {
 							DocCaptureUndo(doc);
 							doc_ce=doc->cur_entry;
@@ -447,12 +447,12 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 					if (sc.u8[0]!=SC_TAB) {
 						if (sc&SCF_SHIFT) {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/Unindent 2");
+								KeyDescSet("Dol /Unindent 2");
 							else
 								DocPrint(doc,"$$ID,-2$$");
 						} else {
 							if (sc&SCF_KEY_DESC)
-								KeyDescSet("Dol/Indent 2");
+								KeyDescSet("Dol /Indent 2");
 							else
 								DocPrint(doc,"$$ID,2$$");
 						}
@@ -461,21 +461,21 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case '\n':
 					if (sc&SCF_KEY_DESC) {
 						if (sc&SCF_SHIFT)
-							KeyDescSet("Char/Return");
+							KeyDescSet("Char  /Return");
 						else
-							KeyDescSet("Char/Page Break");
+							KeyDescSet("Char  /Page Break");
 					} else
 						EdCharIns(ch,sc,doc);
 					break;
 				case CH_CTRLK:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Blinking Text Off");
+							KeyDescSet("Dol /Blinking Text Off");
 						else
 							DocPrint(doc,"$$BK,0$$");
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Blinking Text On");
+							KeyDescSet("Dol /Blinking Text On");
 						else
 							DocPrint(doc,"$$BK,1$$");
 					}
@@ -483,7 +483,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLL:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Code Tools");
+							KeyDescSet("Cmd /Code Tools");
 						else {
 							DocUnlock(doc);
 							EdCodeTools(doc);
@@ -491,7 +491,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 						}
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Insert Text Widgets Wizard");
+							KeyDescSet("Cmd /Insert Text Widgets Wizard");
 						else {
 							DocUnlock(doc);
 							EdInsWidgetWiz;
@@ -502,12 +502,12 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLM:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Personal Notes");
+							KeyDescSet("Cmd /Personal Notes");
 						else
 							Ed("~/PersonalNotes.DD");
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Personal Menu");
+							KeyDescSet("Cmd /Personal Menu");
 						else {
 							m=DocRead("~/PersonalMenu.DD");
 							DocMenu(m);
@@ -531,21 +531,21 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLP:
 					if (doc->flags & (DOCF_SUPERSCRIPT_MODE | DOCF_SUBSCRIPT_MODE)) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Toggle Super or Sub script");
+							KeyDescSet("Dol /Toggle Super or Sub script");
 						else {
 							DocPrint(doc,"$$SY,0$$");
 							doc->flags&=~(DOCF_SUPERSCRIPT_MODE | DOCF_SUBSCRIPT_MODE);
 						}
 					} else if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Toggle Subscript");
+							KeyDescSet("Dol /Toggle Subscript");
 						else {
 							DocPrint(doc,"$$SY,3$$");
 							doc->flags|=DOCF_SUBSCRIPT_MODE;
 						}
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Toggle Superscript");
+							KeyDescSet("Dol /Toggle Superscript");
 						else {
 							DocPrint(doc,"$$SY,-3$$");
 							doc->flags|=DOCF_SUPERSCRIPT_MODE;
@@ -557,7 +557,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLR:
 					if (!(sc&SCF_SHIFT)) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Cmd/Sprite Graphic Resource");
+							KeyDescSet("Cmd /Sprite Graphic Resource");
 						else
 							if (!(doc->flags&DOCF_FORM) &&
 										!(doc->flags&(DOCF_PLAIN_TEXT|DOCF_PLAIN_TEXT_TABS))) {
@@ -599,12 +599,12 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLU:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Underline Off");
+							KeyDescSet("Dol /Underline Off");
 						else
 							DocPrint(doc,"$$UL,0$$");
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Underline On");
+							KeyDescSet("Dol /Underline On");
 						else
 							DocPrint(doc,"$$UL,1$$");
 					}
@@ -620,12 +620,12 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLW:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Word Wrap Off");
+							KeyDescSet("Dol /Word Wrap Off");
 						else
 							DocPrint(doc,"$$WW,0$$");
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Word Wrap On");
+							KeyDescSet("Dol /Word Wrap On");
 						else
 							DocPrint(doc,"$$WW,1$$");
 					}
@@ -649,12 +649,12 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 				case CH_CTRLZ:
 					if (sc&SCF_SHIFT) {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Inverted Text Off");
+							KeyDescSet("Dol /Inverted Text Off");
 						else
 							DocPrint(doc,"$$IV,0$$");
 					} else {
 						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Dol/Inverted Text On");
+							KeyDescSet("Dol /Inverted Text On");
 						else
 							DocPrint(doc,"$$IV,1$$");
 					}
@@ -663,7 +663,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 					if (sc&SCF_CTRL) {
 						if (sc&SCF_KEY_DESC) {
 							if (sc&SCF_SHIFT)
-								KeyDescSet("Cmd/Word Definition");
+								KeyDescSet("Cmd /Word Definition");
 							else
 								KeyDescSet("Edit/Autocomplete Word");
 						} else {

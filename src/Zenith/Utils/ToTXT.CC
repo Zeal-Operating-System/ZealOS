@@ -19,7 +19,6 @@ U0 TXTPutS(CDoc *doc,U8 *st,I64 *_col)
 				case 'ê': 			ptr="omega";		break;
 				case 'ì': 			ptr="inf";			break;
 				case 'æ': 			ptr="u";				break;
-				case CH_SHIFT_SPACE: ptr=""; 	break;
 			end:
 				DocPrint(doc,ptr);
 				*_col=*_col+StrLen(ptr);
@@ -70,7 +69,7 @@ public CDoc *Doc2TXT(CDoc *doc_in)
 			}
 			if (no_bwd && !(doc_e->type_u8==DOCT_NEW_LINE && line_has_html_code))
 				while (col<doc_e->x)
-					TXTPutS(doc_out,"",&col);
+					TXTPutS(doc_out," ",&col);
 
 			switch (doc_e->type_u8) {
 				case DOCT_TEXT:

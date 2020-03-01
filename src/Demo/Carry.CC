@@ -8,7 +8,7 @@ U0 BigCount()
 	while (hi<0x10) {
 		lo+=1<<58;
 		hi+=Carry;
-		"%016X%016X\n",hi,lo;
+		"%016X %016X\n",hi,lo;
 	}
 }
 
@@ -22,7 +22,7 @@ U0 BigShift()
 		hi<<=1;
 		lo<<=1;
 		hi+=Carry;
-		"%016X%016X\n",hi,lo;
+		"%016X %016X\n",hi,lo;
 	}
 }
 

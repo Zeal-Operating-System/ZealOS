@@ -350,16 +350,16 @@ U0 DriveRep()
 						attr&15,attr>>4,drv_let,drive->fs_type&FSG_TYPE_MASK,"ST_DRIVE_TYPES",
 						bd->type,"ST_BLKDEV_TYPES",bd->base0,bd->base1,bd->unit;
 			if (st=DriveModelNum(drv_let)) {
-				"Model#:%s\n",st;
+				"   Model# :%s\n",st;
 				Free(st);
 			}
 			if (st=DriveSerialNum(drv_let)) {
-				"Serial#:%s\n",st;
+				"   Serial#:%s\n",st;
 				Free(st);
 			}
 			if (bd->type==BDT_ISO_FILE_READ || bd->type==BDT_ISO_FILE_WRITE)
-				"File=\"%s\"\n",bd->file_disk_name;
-			"%016X-%016X\n$$FG$$$$BG$$",drive->drv_offset,drive->drv_offset+drive->size-1;
+				"   File=\"%s\"\n",bd->file_disk_name;
+			"   %016X-%016X\n$$FG$$$$BG$$",drive->drv_offset,drive->drv_offset+drive->size-1;
 		}
 	}
 	"Home Dir:\"%s\"\n",blkdev.home_dir;

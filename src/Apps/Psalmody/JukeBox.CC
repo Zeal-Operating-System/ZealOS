@@ -93,13 +93,13 @@ Bool JBPutKey(CDoc *doc,U8 *,I64 ch,I64 sc)
 								"\"%s\"\n",st);
 					Free(st);
 				}
-				In("");
+				In(" ");
 			}
 			return TRUE;
 		} else if (ch==CH_SPACE||ch==CH_ESC)
 			tmpde->user_data++; //JB_RUN_LEVEL++
 //<SPACE> is followed by <ESC> --> JB_RUN_LEVEL_TWO
-			//Actual <ESC> just exits--> JB_RUN_LEVEL_ONE
+			//Actual <ESC> just exits      --> JB_RUN_LEVEL_ONE
 	}
 	return FALSE;
 }

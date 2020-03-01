@@ -58,7 +58,6 @@ U0 HtmlPutS(CDoc *doc,I64 u32_attr,I64 *_old_u32_attr,Bool underline_update,
 				break;
 
 			start:
-				case CH_SHIFT_SPACE: ptr=""; 	break;
 				case '&': 			ptr="&amp;";		break;
 				case '<': 			ptr="&lt;"; 		break;
 				case '>': 			ptr="&gt;"; 		break;
@@ -184,7 +183,7 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 					"<head>\n"
 					"<meta http-equiv=\"Content-Type\" "
 					"content=\"text/html;charset=US-ASCII\">\n"
-					"<meta name=\"generator\" content=\"$TX,"ZenithOS V5.03",D="DD_OS_NAME_VERSION"$\">\n";
+					"<meta name=\"generator\" content=\"$TX,"ZenithOS V1.00",D="DD_OS_NAME_VERSION"$\">\n";
 	if (!body_header) body_header=
 					"<body>\n"
 					"<pre style=\"font-family:courier;font-size:10pt\">\n";
@@ -211,7 +210,7 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 				if (line_anchors)
 					DocPrint(doc_out,"<a name=\"l%d\"></a>",y+1);
 				if (line_nums)
-					DocPrint(doc_out,"%0*d",digits,y+1);
+					DocPrint(doc_out,"%0*d ",digits,y+1);
 				old_y=y;
 			}
 			while (y<doc_e->y) {
@@ -221,7 +220,7 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 					if (line_anchors)
 						DocPrint(doc_out,"<a name=\"l%d\"></a>",y+1);
 					if (line_nums)
-						DocPrint(doc_out,"%0*d",digits,y+1);
+						DocPrint(doc_out,"%0*d ",digits,y+1);
 					old_y=y;
 				}
 				col=0;
@@ -240,7 +239,7 @@ public CDoc *Doc2Html(CDoc *doc_in,U8 *html_header=NULL,U8 *body_header=NULL,
 			if (no_bwd)
 				while (col<doc_e->x)
 					HtmlPutS(doc_out,doc_e->settings.final_u32_attr&~DOCET_UNDERLINE,
-								&old_u32_attr,TRUE,"",&col,style_bitmap);
+								&old_u32_attr,TRUE," ",&col,style_bitmap);
 
 			link_st=NULL;
 			if (doc_e->de_flags&DOCEF_HTML_LINK)

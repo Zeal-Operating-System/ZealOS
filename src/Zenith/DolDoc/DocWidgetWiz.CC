@@ -30,12 +30,12 @@ I64 PopUpLinkType(Bool include_anchor)
 
 class CEdFileLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				file[512] 			format "$$DA-P,A=\"File:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+				file[512] 			format "$$DA-P,A=\"File          :%s\"$$\n";
 	I64 	book;
 	U8		aux[512];
 	I64 	num;
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -43,12 +43,12 @@ class CEdFileLink
 
 class CEdFileAnchorLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				file[512] 			format "$$DA-P,A=\"File:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+				file[512] 			format "$$DA-P,A=\"File          :%s\"$$\n";
 	I64 	book;
-	U8		aux[512]				format "$$DA-P,A=\"Anchor Label:%s\"$$\n";
+	U8		aux[512]				format "$$DA-P,A=\"Anchor Label  :%s\"$$\n";
 	I64 	num;
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -56,12 +56,12 @@ class CEdFileAnchorLink
 
 class CEdFileFindLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				file[512] 			format "$$DA-P,A=\"File:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+				file[512] 			format "$$DA-P,A=\"File          :%s\"$$\n";
 	I64 	book;
-	U8		aux[512]				format "$$DA-P,A=\"Str:%s\"$$\n";
+	U8		aux[512]				format "$$DA-P,A=\"Str        :%s\"$$\n";
 	I64 	num 						format "$$DA-TRM,A=\"Occurrence Num:%04d\"$$\n";
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -69,12 +69,12 @@ class CEdFileFindLink
 
 class CEdFileLineLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				file[512] 			format "$$DA-P,A=\"File:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+				file[512] 			format "$$DA-P,A=\"File          :%s\"$$\n";
 	I64 	book;
 	U8		aux[512];
-	I64 	num 						format "$$DA-TRM,A=\"Line Num:%04d\"$$\n";
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	I64 	num 						format "$$DA-TRM,A=\"Line Num      :%04d\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -82,12 +82,12 @@ class CEdFileLineLink
 
 class CEdManPageLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
 				file[512];
 	I64 	book;
-	U8		aux[512]				format "$$DA-P,A=\"Label:%s\"$$\n";
+	U8		aux[512]				format "$$DA-P,A=\"Label         :%s\"$$\n";
 	I64 	num;
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -95,12 +95,12 @@ class CEdManPageLink
 
 class CEdAddrLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
 				file[512];
 	I64 	book;
-	U8		aux[512]				format "$$DA-P,A=\"Addr Exp:%s\"$$\n";
-	I64 	num 						format "$$DA-TRM,A=\"Bin Size:%04d\"$$\n";
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		aux[512]				format "$$DA-P,A=\"Addr Exp   :%s\"$$\n";
+	I64 	num 						format "$$DA-TRM,A=\"Bin Size      :%04d\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -108,12 +108,12 @@ class CEdAddrLink
 
 class CEdPlaceAnchor
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
 				file[512];
 	I64 	book;
-	U8		aux[512]				format "$$DA-P,A=\"Anchor Label:%s\"$$\n";
+	U8		aux[512]				format "$$DA-P,A=\"Anchor Label  :%s\"$$\n";
 	I64 	num;
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up,
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide						format "$$CB,\"Hide\"$$\n";
@@ -121,12 +121,12 @@ class CEdPlaceAnchor
 
 class CEdDefLink
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
 				file[512];
 	I64 	book;
-	U8		aux[512]				format "$$DA-P,A=\"Word:%s\"$$\n";
-	I64 	num 						format "$$DA-TRM,A=\"Def Num:%4d\"$$\n";
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		aux[512]				format "$$DA-P,A=\"Word          :%s\"$$\n";
+	I64 	num 						format "$$DA-TRM,A=\"Def Num       :%4d\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -134,12 +134,12 @@ class CEdDefLink
 
 class CEdProject
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				file[512] 			format "$$DA-P,A=\"File:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+				file[512] 			format "$$DA-P,A=\"File          :%s\"$$\n";
 	I64 	book;
 	U8		aux[512];
 	I64 	num;
-	U8		html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
 	Bool	pop_up					format "$$CB,\"PopUp\"$$\n",
 				quote 					format "$$CB,\"Quote\"$$\n",
 				hide;
@@ -483,7 +483,7 @@ I64 PopUpWidgetType()
 
 class CEdText
 {
-	U8		tag[512]	format "$$DA-P,A=\"Tag Text:%s\"$$\n";
+	U8		tag[512]	format "$$DA-P,A=\"Tag Text      :%s\"$$\n";
 	Bool	left_x		format "$$CB,\"Left X\"$$\n",
 				center_x	format "$$CB,\"Center X\"$$\n",
 				right_x 	format "$$CB,\"Right X\"$$\n",
@@ -494,10 +494,10 @@ class CEdText
 				tree			format "$$CB,\"Tree\"$$\n",
 				collapsed format "$$CB,\"Collapsed\"$$\n";
 	U8		scroll_x [512]	format "$$DA-P,A=\"Scroll X Length Expression:%s\"$$\n",
-				shift_x  [512]	format "$$DA-P,A=\"X Offset Expression:%s\"$$\n",
-				shift_y  [512]	format "$$DA-P,A=\"Y Offset Expression:%s\"$$\n",
-				define_str[512] format "$$DA-P,A=\"Define Str:%s\"$$\n",
-				html_link[512]	format "$$DA-P,A=\"Html Link:%s\"$$\n";
+				shift_x  [512]	format "$$DA-P,A=\"X Offset Expression       :%s\"$$\n",
+				shift_y  [512]	format "$$DA-P,A=\"Y Offset Expression       :%s\"$$\n",
+				define_str[512] format "$$DA-P,A=\"Define Str                :%s\"$$\n",
+				html_link[512]	format "$$DA-P,A=\"Html Link                 :%s\"$$\n";
 };
 
 U0 EdInsText()
@@ -541,8 +541,8 @@ U0 EdInsText()
 
 class CEdSong
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				song[512] 			format "$$DA-P,A=\"Song:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+				song[512] 			format "$$DA-P,A=\"Song          :%s\"$$\n";
 };
 
 U0 EdInsSong()
@@ -568,9 +568,9 @@ U0 EdInsHtml()
 
 class CEdMacroMenu
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				left_macro[512] format "$$DA-P,A=\"Left Click Macro:%s\"$$\n",
-				left_exp[512] 	format "$$DA-P,A=\"Left Click Expression:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text                  :%s\"$$\n",
+				left_macro[512] format "$$DA-P,A=\"Left Click Macro          :%s\"$$\n",
+				left_exp[512] 	format "$$DA-P,A=\"Left Click Expression     :%s\"$$\n";
 	Bool	popup 					format "$$CB,\"PopUp\"$$\n",
 				left_is_in_str	format "$$CB,\"Left is InStr\"$$\n",
 				left_x					format "$$CB,\"Left X \"$$\n",
@@ -582,8 +582,8 @@ class CEdMacroMenu
 				underline 			format "$$CB,\"Underline\"$$\n",
 				escape					format "$$CB,\"Escape\"$$\n";
 	U8		scroll_x[512] 	format "$$DA-P,A=\"Scroll X Length Expression:%s\"$$\n",
-				shift_x[512]		format "$$DA-P,A=\"X Offset Expression:%s\"$$\n",
-				shift_y[512]		format "$$DA-P,A=\"Y Offset Expression:%s\"$$\n";
+				shift_x[512]		format "$$DA-P,A=\"X Offset Expression       :%s\"$$\n",
+				shift_y[512]		format "$$DA-P,A=\"Y Offset Expression       :%s\"$$\n";
 };
 
 U0 EdInsMacroMenu(Bool is_macro)
@@ -638,7 +638,7 @@ U0 EdInsMacroMenu(Bool is_macro)
 
 class CEdBttn
 {
-	U8		tag[512]	 format "$$DA-P,A=\"Tag Text:%s\"$$\n";
+	U8		tag[512]	 format "$$DA-P,A=\"Tag Text      :%s\"$$\n";
 	Bool	popup 		 format "$$CB,\"PopUp\"$$\n",
 				left_x		 format "$$CB,\"Left X \"$$\n",
 				center_x	 format "$$CB,\"Center X \"$$\n",
@@ -698,15 +698,15 @@ U0 EdInsBttn()
 
 class CEdCursorMovement
 {
-	U8		left_exp[512] 	 format "$$DA-P,A=\"X Expression(LE):%s\"$$\n",
-				right_exp[512]	 format "$$DA-P,A=\"Y Expression(RE):%s\"$$\n";
-	Bool	left_x	 format "$$CB,\"LeftX \"$$\n",
-				center_x format "$$CB,\"CenterX \"$$\n",
-				right_x  format "$$CB,\"RightX \"$$\n",
+	U8		left_exp[512] 	 format "$$DA-P,A=\"X Expression (LE):%s\"$$\n",
+				right_exp[512]	 format "$$DA-P,A=\"Y Expression (RE):%s\"$$\n";
+	Bool	left_x	 format "$$CB,\"Left   X \"$$\n",
+				center_x format "$$CB,\"Center X \"$$\n",
+				right_x  format "$$CB,\"Right  X \"$$\n",
 				margin_rel format "$$CB,\"Margin Rel X\"$$\n",
-				top_y 	 format "$$CB,\"TopY \"$$\n",
-				center_y format "$$CB,\"CenterY \"$$\n",
-				bottom_y format "$$CB,\"BottomY \"$$\n",
+				top_y 	 format "$$CB,\"Top    Y \"$$\n",
+				center_y format "$$CB,\"Center Y \"$$\n",
+				bottom_y format "$$CB,\"Bottom Y \"$$\n",
 				page_rel format "$$CB,\"Page Rel Y\"$$\n",
 				quote 	 format "$$CB,\"Quote\"$$\n";
 };
@@ -809,7 +809,7 @@ U0 EdInsData()
 
 class CEdCheckBox
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n";
 	Bool	refresh 				format "$$CB,\"Refresh Data\"$$\n";
 	I64 	type						format "$$LS,D=\"ST_INT_SIZE_TYPES\"$$\n";
 };
@@ -836,8 +836,8 @@ U0 EdInsCheckBox()
 
 class CEdList
 {
-	U8		tag[512]				format "$$DA-P,A=\"Default Sel:%s\"$$\n",
-				define_str[512] format "$$DA-P,A=\"Define Str:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Default Sel    :%s\"$$\n",
+				define_str[512] format "$$DA-P,A=\"Define Str    :%s\"$$\n";
 	Bool	refresh 				format "$$CB,\"Refresh Data\"$$\n";
 	I64 	type						format "$$LS,D=\"ST_INT_SIZE_TYPES\"$$\n";
 };
@@ -896,7 +896,7 @@ U0 EdInsHexEd()
 
 class CEdBin
 {
-	U8		tag[512]								format "$$DA-P,A=\"Tag Text:%s\"$$\n";
+	U8		tag[512]								format "$$DA-P,A=\"Tag Text      :%s\"$$\n";
 	I64 	bin_num 								format "$$DA,A=\"Bin Num:%d\"$$\n";
 	U8		bin_ptr_link_file[512]	format "$$DA-P,A=\"File:%s\"$$\n";
 	I64 	bin_ptr_link_bin_num		format "$$DA,A=\"File Bin Num:%d\"$$\n";
@@ -911,7 +911,7 @@ U0 EdInsBin(I64 bin_num,I64 type)
 	e->bin_ptr_link_bin_num=1;
 	if (DocForm(e,,,
 				"Note: Normally, you enter no file,\n"
-				"just a bin num.If You enter a\n"
+				"just a bin num.  If You enter a\n"
 				"file, enter a file bin num or a file\n"
 				"bin tag.\n\n",ctrl_L_footer)) {
 		if (*e->bin_ptr_link_file) {
@@ -933,7 +933,7 @@ U0 EdInsBin(I64 bin_num,I64 type)
 
 class CEdTree
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text      :%s\"$$\n";
 	I64 	indent					format "$$DA,A=\"Indention:%d\"$$\n";
 	Bool	collapsed 			format "$$CB,\"Collapsed\"$$\n";
 };
@@ -1028,19 +1028,19 @@ I64 PopUpSpriteType()
 	CDoc *doc=DocNew;
 	DocPrint(doc,"$$PURPLE$$$$TX+CX,\"Graphic Sprite Resource Menu\"$$\n"
 				"$$LK+PU+CX,\"Click for Help\",A=\"FI:::/Doc/Resource.DD\"$$\n\n"
-				"$$LTBLUE$$$$MU,\"Make Sprite\",LE=EST_SPRITE$$$$FG$$\t"
+				"$$LTBLUE$$$$MU,\"Make Sprite\",LE=EST_SPRITE$$$$FG$$\t "
 				"Start by making a sprite.\n"
-				"$$LTBLUE$$$$MU,\"Ptr to Sprite\",LE=EST_SPRITE_PTR$$$$FG$$\t"
+				"$$LTBLUE$$$$MU,\"Ptr to Sprite\",LE=EST_SPRITE_PTR$$$$FG$$\t "
 				"Insert pointer into src code.\n"
-				"$$LTBLUE$$$$MU,\"Duplicate Sprite\",LE=EST_DUP_SPRITE$$$$FG$$"
+				"$$LTBLUE$$$$MU,\"Duplicate Sprite\",LE=EST_DUP_SPRITE$$$$FG$$ "
 				"Make dup image for in a doc.\n"
-				"$$LTBLUE$$$$MU,\"Sprite Size\",LE=EST_SPRITE_SIZE$$$$FG$$\t"
+				"$$LTBLUE$$$$MU,\"Sprite Size\",LE=EST_SPRITE_SIZE$$$$FG$$\t "
 				"Insert size of a sprite into src code.\n"
-				"$$LTBLUE$$$$MU,\"Sprite Macro\",LE=EST_SPRITE_MACRO$$$$FG$$\t"
+				"$$LTBLUE$$$$MU,\"Sprite Macro\",LE=EST_SPRITE_MACRO$$$$FG$$\t "
 				"Create icon with auto-text payload.\n"
-				"$$LTBLUE$$$$MU,\"Sprite Menu Item\",LE=EST_SPRITE_MENU$$$$FG$$"
+				"$$LTBLUE$$$$MU,\"Sprite Menu Item\",LE=EST_SPRITE_MENU$$$$FG$$ "
 				"Create icon with numeric payload.\n"
-				"$$LTBLUE$$$$MU,\"Sprite Link\",LE=EST_SPRITE_LINK$$$$FG$$\t"
+				"$$LTBLUE$$$$MU,\"Sprite Link\",LE=EST_SPRITE_LINK$$$$FG$$\t "
 				"Create icon with link payload.\n\n"
 				"$$LTBLUE$$$$MU,\"Abort\",LE=DOCM_CANCEL$$\n\n");
 	i=PopUpMenu(doc);
@@ -1050,8 +1050,8 @@ I64 PopUpSpriteType()
 
 class CEdMacroSprite
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				exp[512]				format "$$DA-P,A=\"Macro:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text       :%s\"$$\n",
+				exp[512]				format "$$DA-P,A=\"Macro          :%s\"$$\n";
 	Bool	escape					format "$$CB,\"Escape\"$$\n",
 				popup 					format "$$CB,\"PopUp\"$$\n",
 				is_in_str 							format "$$CB,\"InStr\"$$\n";
@@ -1059,8 +1059,8 @@ class CEdMacroSprite
 
 class CEdMenuSprite
 {
-	U8		tag[512]				format "$$DA-P,A=\"Tag Text:%s\"$$\n",
-				exp[512]				format "$$DA-P,A=\"Expression:%s\"$$\n";
+	U8		tag[512]				format "$$DA-P,A=\"Tag Text       :%s\"$$\n",
+				exp[512]				format "$$DA-P,A=\"Expression     :%s\"$$\n";
 	Bool	escape					format "$$CB,\"Escape\"$$\n",
 				popup,
 				is_in_str;

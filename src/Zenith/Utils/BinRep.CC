@@ -2,7 +2,7 @@
 
 DefineListLoad("ST_BIN_FILE_TYPES",
 								"END\0"
-								"\0"
+								" \0"
 								"REL_I0\0"
 								"IMM_U0\0"
 								"REL_I8\0"
@@ -13,7 +13,7 @@ DefineListLoad("ST_BIN_FILE_TYPES",
 								"IMM_U32\0"
 								"REL_I64\0"
 								"IMM_U64\0"
-								"\0\0\0\0"
+								" \0 \0 \0 \0"
 								"REL32_EXPORT\0"
 								"IMM32_EXPORT\0"
 								"REL64_EXPORT\0"
@@ -49,14 +49,14 @@ public Bool BinRep(U8 *filename)
 	fbuf = StrNew(absname);
 	FileExtRemove(fbuf);
 	if (fbuf[1] == ':' && StrLen(fbuf) > 2)
-		"MODULE_NAME:%s\n", fbuf + 2;
+		"     MODULE_NAME:%s\n", fbuf + 2;
 	else
 		"NO MODULE NAME\n";
 
 	if (bf->org != INVALID_PTR)
-		"ORG:%X\n", bf->org;
+		"      ORG:%X\n", bf->org;
 
-	"MODULE_ALIGN:%X\n", 1 << bf->module_align_bits;
+	"    MODULE_ALIGN:%X\n", 1 << bf->module_align_bits;
 
 	ptr = bf(U8 *) + bf->patch_table_offset;
 	while (etype = *ptr++)

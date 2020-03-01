@@ -1,6 +1,6 @@
 //This loads a list of zero terminated
 //strings into the sym table and
-//gives a name to it.Strings like
+//gives a name to it.  Strings like
 //this are known as Define entries.
 
 //See $LK,"ST_RAINBOW_10",A="FF:::/Zenith/Gr/GrPalette.CC,ST_RAINBOW_10"$
@@ -30,8 +30,8 @@ U0 Digits()
 	DocClear;
 //Set default background and foreground
 	"$$WW,1$$$$BG,DKGRAY$$$$FD,WHITE$$"
-				"\nThis is a memory game."
-				"Try to remember the digits and enter them."
+				"\nThis is a memory game.  "
+				"Try to remember the digits and enter them.  "
 				"They are colored based on electrical "
 				"engineering color codes.\n";
 	for (i=0;i<10;i++)

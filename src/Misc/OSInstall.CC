@@ -94,7 +94,7 @@ U0 RegularInstallWiz()
 	num_hints=ATARep(FALSE,,&head);
 	"\nInclude '$$PURPLE$$0x$$FG$$' for hexidecimal numbers.\n\n";
 	while (TRUE) {
-		base0=GetStr("Hard Drive I/O Port Base0: ");
+		base0=GetStr("Hard Drive I/O Port Base0  : ");
 		if (0<Str2I64(base0)<=0xFFFF)
 			break;
 		Free(base0);
@@ -109,7 +109,7 @@ U0 RegularInstallWiz()
 		Free(st);
 	} else {
 		while (TRUE) {
-			base1=GetStr("Hard Drive I/O Port Base1: ");
+			base1=GetStr("Hard Drive I/O Port Base1  : ");
 			if (0<Str2I64(base1)<=0xFFFF)
 				break;
 			Free(base1);
@@ -186,7 +186,7 @@ Bool DoInstall(Bool prompt_reboot)
 		VMInstallWiz();
 		res=TRUE;
 	} else {
-		"\n\nThis wizard works if you have a partition ready."
+		"\n\nThis wizard works if you have a partition ready.  "
 					"You can partition the drive or BootHDIns() "
 					"with more options if you do it by hand, not using this wizard.\n\n"
 					"Continue Install Wizard ";

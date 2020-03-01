@@ -393,7 +393,7 @@ U8 *ZMAlloc(I64 size)
 }
 
 U8 *CAlloc(I64 size,CTask *mem_task=NULL)
-{//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.NULL allocs off current task's heap.
+{//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.  NULL allocs off current task's heap.
 	U8 *res=MAlloc(size,mem_task);
 	MemSet(res,0,size);
 	return res;
@@ -405,7 +405,7 @@ U8 *ZCAlloc(I64 size)
 }
 
 U8 *MAllocIdent(U8 *src,CTask *mem_task=NULL)
-{//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.NULL allocs off current task's heap.
+{//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.  NULL allocs off current task's heap.
 	U8 *res;
 	I64 size;
 	if (!src) return NULL;
@@ -470,7 +470,7 @@ U8 *ZReAlloc(U8 *ptr, I64 new_size)
 }
 
 U8 *StrNew(U8 *buf,CTask *mem_task=NULL)
-{//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.NULL allocs off current task's heap.
+{//Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$.  NULL allocs off current task's heap.
 	U8 *res;
 	I64 size;
 	if (buf) {

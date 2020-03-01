@@ -21,7 +21,7 @@ U0 EdReplaceTroubleAll(CDoc *doc,Bool to_safe,Bool sel)
 	EdReplaceTroubleOne(doc,"#if" 		,"//<@%d@>"  ,i++,to_safe,sel);
 	EdReplaceTroubleOne(doc,"#endif"	,"//<@%d@>"  ,i++,to_safe,sel);
 //Convert #exe to union because we want that indent pattern.
-	EdReplaceTroubleOne(doc,"#exe"		,"union@%d@",i++,to_safe,sel);
+	EdReplaceTroubleOne(doc,"#exe"		,"union @%d@",i++,to_safe,sel);
 	EdReplaceTroubleOne(doc,"'{'" 		,"'<@%d@>'"  ,i++,to_safe,sel);
 	EdReplaceTroubleOne(doc,"'}'" 		,"'<@%d@>'"  ,i++,to_safe,sel);
 }
@@ -631,8 +631,6 @@ U0 EdChSC(CDoc *doc)
 		DocPrint(doc,"CH_SHIFT_ESC,0x%X",sc);
 	else if (ch==CH_SPACE)
 		DocPrint(doc,"CH_SPACE,0x%X",sc);
-	else if (ch==CH_SHIFT_SPACE)
-		DocPrint(doc,"CH_SHIFT_SPACE,0x%X",sc);
 	else if (Bt(char_bmp_displayable,ch))
 		DocPrint(doc,"'%c',0x%X",ch,sc);
 	else

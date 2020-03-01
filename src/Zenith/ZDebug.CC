@@ -233,7 +233,7 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
 	if (tmpf) {
 		if (rbp) {
 			if (task) {
-//tmpf->size is negative.It's the bottom
+//tmpf->size is negative.  It's the bottom
 				//of the fun local var space relative to RBP .
 				size=tmpf->arg_count*8-tmpf->size+16;
 

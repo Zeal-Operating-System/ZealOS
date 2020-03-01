@@ -27,7 +27,7 @@ public U0 DocProfile(U8 *filename,I64 flags)
 	"$$GREEN$$The lowest byte of the 32-bit 'doc_e->type', "
 				"'$$PURPLE$$doc_e->type.u8[0]$$GREEN$$', "
 				"is cmd and accessed with the union "
-				"'$$PURPLE$$doc_e->type_u8$$GREEN$$'."
+				"'$$PURPLE$$doc_e->type_u8$$GREEN$$'.  "
 				"See $$LK,\"CDocEntry\",A=\"MN:CDocEntry\"$$, "
 				"$$LK,\"Doc Type Defines\",A=\"MN:DOCT_TEXT\"$$ and "
 				"$$LK,\"Doc Type Codes\","
@@ -39,16 +39,16 @@ public U0 DocProfile(U8 *filename,I64 flags)
 
 	"\n$$GREEN$$'$$PURPLE$$doc_e->type.u8[1]$$GREEN$$' is "
 				"the screen color attr of the "
-				"entry.'$$PURPLE$$doc_e->type.u16[1]"
+				"entry.  '$$PURPLE$$doc_e->type.u16[1]"
 				"$$GREEN$$' is some flags for blinking and "
-				"stuff.See $$LK,\"Doc Type Flag "
+				"stuff.  See $$LK,\"Doc Type Flag "
 				"Defines\",A=\"MN:DOCET_BLINK\"$$.\n$$FG$$";
 
 	for (i=16;i<32;i++)
 		if (type_flags_stats[i])
 			"%4d:%d\n",i,type_flags_stats[i];
 
-	"$$GREEN$$\n'$$PURPLE$$doc_e->de_flags$$GREEN$$' is 64-bit."
+	"$$GREEN$$\n'$$PURPLE$$doc_e->de_flags$$GREEN$$' is 64-bit.  "
 				"See $$LK,\"Doc Flag Defines\",A=\"MN:DOCEf_TAG\"$$ and "
 				"$$LK,\"Doc Flag Codes\","
 				"A=\"FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS\"$$.\n"

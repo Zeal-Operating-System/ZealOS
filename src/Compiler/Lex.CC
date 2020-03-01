@@ -252,10 +252,7 @@ lgc_start2:
 			case 0xFF: //nobound switch
 		}
 lgc_done:
-		if (cc->last_U16==CH_SHIFT_SPACE)
-			cc->last_U16=CH_SPACE;
-		if (cc->opts & OPTF_ECHO &&
-					cc->last_U16<256 && Bt(char_bmp_printable,cc->last_U16))
+		if (cc->opts & OPTF_ECHO && cc->last_U16<256 && Bt(char_bmp_printable,cc->last_U16))
 			'' cc->last_U16;
 	}
 	return cc->last_U16;

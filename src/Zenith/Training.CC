@@ -17,19 +17,17 @@ U8 *KeyMapKeyMStrPrint(I64 sc,U0 (*fp_handler)(I64 sc),
 
 	k=*desc(U32 *);
 	if (k=='Edit')				c=BLUE;
-	else if (k=='Dol') 	c=GREEN;
-	else if (k=='Cmd') 	c=RED;
+	else if (k=='Dol ') 	c=GREEN;
+	else if (k=='Cmd ') 	c=RED;
 	else									c=BLACK;
 
-	res=MStrPrint("%-*s$$FG,%d$$$$TX+UL+L+PU,\"%$$Q\",A=\"%s\"$$$$FG$$\n",
+	res=MStrPrint("%-*s $$FG,%d$$$$TX+UL+L+PU,\"%$$Q\",A=\"%s\"$$$$FG$$\n",
 				i,st,c,desc,st2);
 	Free(st);
 	Free(st2);
 
 	ptr=res;
 	while (*ptr) {
-		if (*ptr==CH_SPACE)
-			*ptr=CH_SHIFT_SPACE;
 		ptr++;
 	}
 
@@ -51,11 +49,11 @@ U0 KeyMapCtrlAltFamily(Bool no_shift,Bool shift)
 	else
 		no_shift_f=0;
 	if (no_shift) KeyMapKeyPrint(SC_DELETE+SCF_CTRL+SCF_ALT+no_shift_f,
-					&Reboot,"Cmd/Reboot");
+					&Reboot,"Cmd /Reboot");
 	if (no_shift) KeyMapKeyPrint(SC_ESC+SCF_CTRL+SCF_ALT+no_shift_f,
-					&User,"Cmd/Terminal Window");
+					&User,"Cmd /Terminal Window");
 	if (no_shift) KeyMapKeyPrint(SC_TAB+SCF_CTRL+SCF_ALT+no_shift_f,
-					&WinToTop,"Cmd/Next Focus Task");
+					&WinToTop,"Cmd /Next Focus Task");
 
 	for (i=0;i<26;i++)
 		if (keydev.fp_ctrl_alt_cbs[i]) {
@@ -80,7 +78,7 @@ U0 KMComparePrepare(U8 *buf,I64 *src)
 		*dst(U8 *)=0;
 		if (ptr=StrMatch("SHIFT",buf)) {
 			for (i=0;i<5;i++)
-				ptr[i]=CH_SHIFT_SPACE;
+				ptr[i]=CH_SPACE;
 			if (ptr=StrMatch("$$",buf))
 				*ptr=255;
 		}
@@ -112,7 +110,7 @@ U0 KeyMapFamily2(U8 **entries,CTask *task,I64 scf)
 			Refresh(0,TRUE);
 			Sleep(1); //Open loop because might be no response.  TODO: Drops messages.
 		}
-		if (*keydev.desc && StrNCompare(keydev.desc,"Char/",7))
+		if (*keydev.desc && StrNCompare(keydev.desc,"Char  /",7))
 			entries[i]=KeyMapKeyMStrPrint(arg2,keydev.handler,keydev.desc,task);
 	}
 }

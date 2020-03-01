@@ -6,7 +6,7 @@ U0 Models()
 	I64 i;
 	Bool old_form=LBts(&(DocPut)->flags,DOCf_FORM);
 	DocClear;
-	"Make a CSprite model.Then, cut-and-Paste it.\n\n";
+	"Make a CSprite model.  Then, cut-and-Paste it.\n\n";
 	"$$LM,4$$";
 	"\n\n$$BT,\"Man\",LE=T_MAN$$\n\n";
 	"\n\n$$BT,\"Ball\",LE=T_BALL$$\n\n";

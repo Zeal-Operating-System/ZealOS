@@ -122,7 +122,7 @@ public Bool DocEd(CDoc *doc,I64 dof_flags=0)
 	}
 
 	DocPrint(bdoc,"$$CM+BY+RX+NC,-31,1$$");
-	doc_e=DocPrint(bdoc,"$$TX+BD+TC,\" \"$$");
+	doc_e=DocPrint(bdoc,"$$TX+BD+TC,\"     \"$$");
 	doc_e->user_data=doc;
 	doc_e->tag_cb=&EdMoreCB;
 	doc_e=DocPrint(bdoc,"$$TX+BD+TC,\" \"$$");

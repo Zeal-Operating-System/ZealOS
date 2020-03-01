@@ -396,7 +396,7 @@ U32
 
 U8 *ListSub(I64 sub, U8 *list)
 {//Point to list entry.
-//Not efficient.Use an array of U8 ptrs for efficiency.
+//Not efficient.  Use an array of U8 ptrs for efficiency.
 	if (!list) return NULL;
 	while (*list && sub>0) {
 		while (*list) 			//Advance to end of cur entry.
@@ -534,7 +534,7 @@ U8 *StrUtil(U8 *_src,I64 flags)
 				} else
 					*dst++ = ch;
 			}
-		} else if (!(flags & SUF_REM_CTRL_CHARS) || ch>=CH_SHIFT_SPACE)
+		} else if (!(flags & SUF_REM_CTRL_CHARS) || ch>=CH_SPACE)
 			*dst++=ch;
 	*dst=0;
 

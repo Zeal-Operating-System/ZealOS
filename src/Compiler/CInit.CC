@@ -215,8 +215,8 @@ CIntermediateStruct intermediate_code_table[IC_ICS_NUM]={
 U0 CompLoadDefines()
 {
 	DefineListLoad("ST_RAW_TYPES",
-								"\0"
-								"\0"
+								" \0"
+								" \0"
 								"I0\0"
 								"U0\0"
 								"I8\0"
@@ -409,7 +409,7 @@ U0 CompLoadDefines()
 								"RAX\0"
 								"CL\0"
 								"DX\0"
-								"\0"
+								" \0"
 								"SREG\0"
 								"SS\0"
 								"DS\0"

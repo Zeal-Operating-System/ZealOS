@@ -1,6 +1,6 @@
 /*On each core, tasks are linked in a
 circular doubly-linked list queue with
-the Daemon task as the head.On Core0,
+the Daemon task as the head.  On Core0,
 the queue order represents the front-to-back
 window stack order with the window mgr
 as the wallpaper.
@@ -9,7 +9,7 @@ The scheduler is round-robin.  It checks
 if a task is ready and runs it or skips it.
 Swapping tasks just involves storing and
 restoring regs (no disk I/O for virtual
-memory and no addr map changes).It is
+memory and no addr map changes).  It is
 always fully identity-mapped on all cores.
 Tasks can be switched in half a microsecond.
 
@@ -17,9 +17,9 @@ The scheduler checks if a task is
 waiting for a certain time or waiting
 on a message and skips if not ready.
 A task runs until it voluntarily yields ctrl
-with a call to $LK,"Yield",A="MN:Yield"$().Tasks waiting on I/O
+with a call to $LK,"Yield",A="MN:Yield"$().  Tasks waiting on I/O
 often loop, checking for a status and
-$LK,"Yield",A="MN:Yield"$ing.This does not really degrade
+$LK,"Yield",A="MN:Yield"$ing.  This does not really degrade
 performance, but pegs the CPU Load.
 
 The scheduler checks for a few keys:
@@ -32,7 +32,7 @@ The scheduler checks for a few keys:
 Each core has its own circular task queue.
 For AP processors, they have a "Daemon" task
 which stays in a loop waiting for jobs or
-requests to spawn tasks.See $LK,"CoreAPDaemonTask",A="MN:CoreAPDaemonTask"$().
+requests to spawn tasks.  See $LK,"CoreAPDaemonTask",A="MN:CoreAPDaemonTask"$().
 $HL,1$*/
 
 U0 TaskFocusNext()

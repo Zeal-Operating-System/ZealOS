@@ -70,7 +70,7 @@ I64 BlkDevsSize()
 		if (bd->bd_signature==BD_SIGNATURE_VAL) {
 			j=(bd->max_blk+1)<<BLK_SIZE_BITS;
 			if (bd->type==BDT_RAM)
-				"RAMDisk%C\t:%010X/%010X\n",
+				"RAMDisk %C\t:%010X/%010X\n",
 							bd->first_drive_let,j-DriveUnused(bd->first_drive_let),j;
 			res+=MSize2(bd->dev_id_record);
 		}
@@ -200,7 +200,7 @@ public U0 MemRep()
 	"$$BLACK$$Low Memory\t:00100000$$FG$$\n$$ID,2$$";
 	"Kernel\t:%08X-%08X\n",mem_boot_base-sizeof(CBinFile),bfh;
 
-	"$$ID,-2$$$$BLACK$$HighMemory\t:00100000-%08X$$FG$$\n",mem_heap_limit;
+	"$$ID,-2$$$$BLACK$$High Memory\t:00100000-%08X$$FG$$\n",mem_heap_limit;
 	"$LK,"SYS_FIXED_AREA",A="MN:CSysFixedArea"$\t:%08X-%08X\n",SYS_FIXED_AREA,SYS_FIXED_AREA+sizeof(CSysFixedArea)-1;
 
     "$LK,"VBE framebuffer",A="FF:::/Kernel/KernelA.HH,framebuffer"$\t:%08X-%08X\n", text.fb_alias, text.fb_alias(U8 *) + text.buffer_size - 1;

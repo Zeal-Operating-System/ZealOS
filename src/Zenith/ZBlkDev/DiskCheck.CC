@@ -221,9 +221,9 @@ public I64 DiskCheck(U8 drv_let=0,Bool fix=FALSE,Bool confirm=TRUE)
 	}
 	if (errs) {
 		if (fix)
-			"It might be a little better.";
+			"It might be a little better.  ";
 		"Copy files to another partition or CD/DVD, "
-					"reformat, and copy back."
+					"reformat, and copy back.  "
 					"Or, copy from a back-up.\n";
 	}
 	return errs;

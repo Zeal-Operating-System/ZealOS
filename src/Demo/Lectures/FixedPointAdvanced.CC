@@ -1,11 +1,11 @@
 /*"Fixed point" means you use ints
-that are scaled by a value.A common
+that are scaled by a value.  A common
 example would be using number of pennies
 instead of dollars with a float.
 
 Fixed-point used to be much $TX,"faster",HTML="http://en.wikipedia.org/wiki/X87"$,
 but modern processors do well with
-floats.It also depends on the compiler
+floats.  It also depends on the compiler
 and my compiler is poor with floats.
 
 I often use 64-bit ints with upper 32-bits
@@ -91,7 +91,7 @@ U0 Main()
 	}
 	end=GetTSC;
 	overhead_time=end-start;
-	"$$RED$$Overhead Cycles:%10.5f$$FG$$\n",
+	"$$RED$$Overhead Cycles       :%10.5f$$FG$$\n",
 				ToF64(overhead_time)/SAMPLE_SIZE;
 
 	//Measure F64 arithmetic
@@ -104,8 +104,8 @@ U0 Main()
 		fsum+=d1*coordinates[i&65535];
 	end=GetTSC;
 	test_time=end-start;
-	"Float Sum:%X\n",ToI64(fsum);
-	"$$RED$$Float Cycles:%10.5f$$FG$$\n",
+	"Float Sum             :%X\n",ToI64(fsum);
+	"$$RED$$Float Cycles          :%10.5f$$FG$$\n",
 				ToF64(test_time)/SAMPLE_SIZE;
 
 	//Measure fixed point arithmetic
@@ -118,8 +118,8 @@ U0 Main()
 	}
 	end=GetTSC;
 	test_time=end-start;
-	"Fixed-Point Sum:%X\n",sum;
-	"$$RED$$Fixed-Point Cycles:%10.5f$$FG$$\n",
+	"Fixed-Point Sum       :%X\n",sum;
+	"$$RED$$Fixed-Point Cycles    :%10.5f$$FG$$\n",
 				ToF64(test_time)/SAMPLE_SIZE;
 
 	//Measure fixed point arithmetic
@@ -127,7 +127,7 @@ U0 Main()
 	sum=AsmFixedPt;
 	end=GetTSC;
 	test_time=end-start;
-	"Asm Fixed-Point Sum:%X\n",sum;
+	"Asm Fixed-Point Sum   :%X\n",sum;
 	"$$RED$$Asm Fixed-Point Cycles:%10.5f$$FG$$\n",
 				ToF64(test_time)/SAMPLE_SIZE;
 
@@ -136,8 +136,8 @@ U0 Main()
 	sum=AsmFloat;
 	end=GetTSC;
 	test_time=end-start;
-	"Asm Float Sum:%X\n",sum;
-	"$$RED$$Asm Float Cycles:%10.5f$$FG$$\n",
+	"Asm Float Sum         :%X\n",sum;
+	"$$RED$$Asm Float Cycles      :%10.5f$$FG$$\n",
 				ToF64(test_time)/SAMPLE_SIZE;
 
 }
@@ -148,26 +148,26 @@ Main;
 
 Machine 1:
 8 Cores 2.660GHz
-$FG,4$Overhead Cycles:2.00814$FG$
-Float Sum:FFFFE1D361BEED68
-$FG,4$Float Cycles:10.16076$FG$
-Fixed-Point Sum:FFFFE1D361729914
-$FG,4$Fixed-Point Cycles:5.29392$FG$
-Asm Fixed-Point Sum:FFFFE1D361729914
-$FG,4$Asm Fixed-Point Cycles:4.20464$FG$
-Asm Float Sum:FFFFE1D361BEED56
-$FG,4$Asm Float Cycles:3.04635$FG$
+$FG,4$Overhead Cycles       :   2.00814$FG$
+Float Sum             :FFFFE1D361BEED68
+$FG,4$Float Cycles          :  10.16076$FG$
+Fixed-Point Sum       :FFFFE1D361729914
+$FG,4$Fixed-Point Cycles    :   5.29392$FG$
+Asm Fixed-Point Sum   :FFFFE1D361729914
+$FG,4$Asm Fixed-Point Cycles:   4.20464$FG$
+Asm Float Sum         :FFFFE1D361BEED56
+$FG,4$Asm Float Cycles      :   3.04635$FG$
 
 Machine 2:
 8 Cores 3.395GHz
-$FG,4$Overhead Cycles:4.87040$FG$
-Float Sum:D20A01DB177
-$FG,4$Float Cycles:10.11558$FG$
-Fixed-Point Sum:D209FD18CC7
-$FG,4$Fixed-Point Cycles:4.50618$FG$
-Asm Fixed-Point Sum:D209FD18CC7
-$FG,4$Asm Fixed-Point Cycles:3.02426$FG$
-Asm Float Sum:D20A01DB17B
-$FG,4$Asm Float Cycles:3.21070$FG$
+$FG,4$Overhead Cycles       :   4.87040$FG$
+Float Sum             :D20A01DB177
+$FG,4$Float Cycles          :  10.11558$FG$
+Fixed-Point Sum       :D209FD18CC7
+$FG,4$Fixed-Point Cycles    :   4.50618$FG$
+Asm Fixed-Point Sum   :D209FD18CC7
+$FG,4$Asm Fixed-Point Cycles:   3.02426$FG$
+Asm Float Sum         :D20A01DB17B
+$FG,4$Asm Float Cycles      :   3.21070$FG$
 
 $HL,1$*/

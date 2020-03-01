@@ -1,11 +1,11 @@
 /*"Fixed point" means you use ints
-that are scaled by a value.A common
+that are scaled by a value.  A common
 example would be using number of pennies
 instead of dollars with a float.
 
 Fixed-point used to be much $TX,"faster",HTML="http://en.wikipedia.org/wiki/X87"$,
 but modern processors do well with
-floats.It also depends on the compiler
+floats.  It also depends on the compiler
 and my compiler is poor with floats.
 
 I often use 64-bit ints with upper 32-bits
@@ -27,13 +27,13 @@ U0 Main()
 	t0=tS;
 	for (i=1000000000;i;i--)
 		i_sum+=i_val;
-	"IntSum\t\t:%.9f Time:%7.3fs\n",i_sum/ToF64(0x100000000),tS-t0;
+	"Int Sum\t\t:%.9f Time:%7.3fs\n",i_sum/ToF64(0x100000000),tS-t0;
 
 	f_val= 2.0000002;
 	t0=tS;
 	for (i=1000000000;i;i--)
 		f_sum+=f_val;
-	"FloatSum\t:%.9f Time:%7.3fs\n",f_sum,tS-t0;
+	"Float Sum\t:%.9f Time:%7.3fs\n",f_sum,tS-t0;
 	'\n';
 }
 
@@ -48,9 +48,9 @@ U0 DoIt2()
 	/*	Standard int types are declared
 with a special compiler feature which
 allows a structure to be accessed as a
-whole.That's why the i variable can
+whole.  That's why the i variable can
 be accessed normally in addition to
-structure member access $LK,"I64",A="MN:I64"$.The actual
+structure member access $LK,"I64",A="MN:I64"$.  The actual
 intrinsic compiler type is U64i.
 
 public U64i union I64

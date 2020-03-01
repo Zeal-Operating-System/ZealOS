@@ -5,7 +5,7 @@ The boot loader jumps here in real-mode (16-bit).
 It actually jumps to the $LK,"CBinFile",A="MN:CBinFile"$ header which is placed just before this by $LK,"the compiler",A="FF:::/Compiler/CMain.CC,16 ALIGN"$.
 The header begins with a short jmp to the start of this file's code which begins with the following small jump past some data.
 
-This file is first in the Kernel image because it is #included first.$LK,"Kernel.PRJ",A="FF:::/Kernel/Kernel.PRJ,KStart16:1"$
+This file is first in the Kernel image because it is #included first.  $LK,"Kernel.PRJ",A="FF:::/Kernel/Kernel.PRJ,KStart16:1"$
 */
 USE16
 SYS_KERNEL:: //This must match $LK,"CKernel",A="MN:CKernel"$.

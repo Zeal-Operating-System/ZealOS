@@ -230,7 +230,7 @@ The var music.stacatto_factor can
 be set to a range from 0.0 to 1.0.
 
 The var music.tempo is quarter-notes
-per second.It defaults to
+per second.  It defaults to
 2.5 and gets faster when bigger.
 */
 	U8 *word,*last_st;
@@ -273,7 +273,7 @@ per second.It defaults to
 			ona=Note2Ona(note,octave);
 		} else
 			ona=0;
-		if (words && (word=ListSub(i++,words)) && StrCompare(word,""))
+		if (words && (word=ListSub(i++,words)) && StrCompare(word," "))
 			"%s",word;
 
 		d=JIFFY_FREQ*music.note_len/music.tempo;

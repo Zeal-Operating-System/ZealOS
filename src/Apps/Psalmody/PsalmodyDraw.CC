@@ -68,7 +68,7 @@ Bool PsmBlink()
 
 Bool PsmHasWords(U8 *st)
 {
-	if (st && *st && (StrLen(st)>1 || *st!=CH_SPACE && *st!=CH_SHIFT_SPACE))
+	if (st && *st && (StrLen(st)>1 || *st!=CH_SPACE))
 		return TRUE;
 	else
 		return FALSE;
@@ -389,18 +389,18 @@ U0 PsmMenu(I64 psm_octave)
 				"$$LTGREEN$$Right Mouse$$FG$$\tChange duration or set word\n";
 	Sprite($IB,"<6>",BI=6$,"$$SP+LIS,\"\","
 				"LM=\"Message(MESSAGE_KEY_DOWN,0,SCF_CTRL|SC_CURSOR_LEFT);\",BI=%d$$");
-	"";
+	"   ";
 	if (psm.playing)
 		Sprite($IB,"<9>",BI=9$,"$$SP,\"\",LM=\"x\",BI=%d$$");
 	else
 		Sprite($IB,"<8>",BI=8$,"$$SP,\"\",LM=\"x\",BI=%d$$");
-	"";
+	"   ";
 	if (psm.record_entry->checked) {
 		psm.record_entry->checked=TRUE;
 		Sprite($IB,"<10>",BI=10$,"$$SP,\"\",LM=\"z\",BI=%d$$");
 	} else
 		Sprite($IB,"<11>",BI=11$,"$$SP,\"\",LM=\"z\",BI=%d$$");
-	"";
+	"   ";
 	Sprite($IB,"<7>",BI=7$,"$$SP+LIS,\"\","
 				"LM=\"Message(MESSAGE_KEY_DOWN,0,SCF_CTRL|SC_CURSOR_RIGHT);\",BI=%d$$");
 	"$$CM+LX,0,6$$";

@@ -1,5 +1,5 @@
 /*Asm labels can only be defined once
-in a task.<F5> will spawn a new task
+in a task.  <F5> will spawn a new task
 each time, so you don't get redefine
 error, like when repeatedly #including
 it from the cmd line.
@@ -7,7 +7,7 @@ it from the cmd line.
 These are many useful kernel
 routines $LK,"::/Kernel/StrA.CC",A="FF:::/Kernel/StrA.CC,PUT_CHARS"$
 intended to be called from
-asm.Generally, they preserve
+asm.  Generally, they preserve
 regs.
 
 You can call any routine you

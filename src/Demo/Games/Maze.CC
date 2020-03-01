@@ -21,7 +21,7 @@ U0 DrawIt(CTask *task,CDC *)
 #define STACK_SIZE 2048
 //We would put these as local vars
 //in SolveMaze() but the system stack size
-//is limited, so it's a bad habit.The heap
+//is limited, so it's a bad habit.  The heap
 //is the normal ZenithOS technique, but
 //it's a pain in this case.
 I64 		stack_ptr,

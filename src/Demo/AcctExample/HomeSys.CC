@@ -29,7 +29,7 @@ U0 StartUpTasks()
 	user2=User;
 	WinToTop(user1);
 	WinTileVert;
-	"BootTime:%7.3fs\n",tS;
+	"Boot     Time:%7.3fs\n",tS;
 	XTalk(user1,"Cd;#include \"Once\";\n");
 	Silent;
 	ACInit("/*;!*/Bible.TXT*;!*.TXT"); //No Bible, no uncompressed DD.

@@ -96,7 +96,7 @@ U8 *MPrintQ(U8 *ptr,I64 flags)
 					SPutChar(_dst,ch,_buf);
 					break;
 				default:
-					if (ch>=CH_SHIFT_SPACE && ch!=0x7F)
+					if (ch>=CH_SPACE && ch!=0x7F)
 						SPutChar(_dst,ch,_buf);
 					else {
 						StrPrint(buf2,"\\x%02X",ch);
@@ -197,8 +197,8 @@ U8 *MPrintq(U8 *ptr,I64 flags)
 	return buf;
 }
 
-U8 *sys_pos_pows_lets="KMGTPEZY",
-	 *sys_neg_pows_lets="mænpfazy",
+U8 *sys_pos_pows_lets=" KMGTPEZY",
+	 *sys_neg_pows_lets=" mænpfazy",
 	 *sys_pos_pows_list="kilo\0mega\0giga\0tera\0peta\0exa\0zetta\0yotta\0",
 	 *sys_neg_pows_list="milli\0micro\0nano\0pico\0femto\0atto\0zepto\0yocto\0";
 
@@ -211,7 +211,7 @@ In float formatting, do not exceed 18-digits
 before or after the decimal point
 because the numbers before and after
 the decimal point are stored
-in 64-bits.Use exponentiated forms
+in 64-bits.  Use exponentiated forms
 to avoid this.
 */
 	I64 i,j,l,ch,k,k0,n,n0,len,dec_len,flags,old_flags,
@@ -879,7 +879,7 @@ U8 *StrPrint(U8 *dst,U8 *format,...)
 }
 
 U8 *CatPrint(U8 *_dst,U8 *format,...)
-{//StrCat().See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
+{//StrCat().  See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
 	U8 *dst=_dst;
 	while (*dst)
 		dst++;
@@ -888,7 +888,7 @@ U8 *CatPrint(U8 *_dst,U8 *format,...)
 }
 
 U0 Print(U8 *format,...)
-{//$LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
+{//$LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.  See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
 //Don't use this.  $LK,"See Print() shortcut.",A="FF:::/Doc/CosmiC.DD,DemoCosmiC"$
 	U8 *buf=StrPrintJoin(NULL,format,argc,argv);
 	PutS(buf);//Don't use PutS().  $LK,"See Print() shortcut.",A="FF:::/Doc/CosmiC.DD,DemoCosmiC"$
@@ -896,7 +896,7 @@ U0 Print(U8 *format,...)
 }
 
 U8 *MStrPrint(U8 *format,...)
-{//MAlloc StrPrint.See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
+{//MAlloc StrPrint.  See $LK,"StrPrintJoin",A="MN:StrPrintJoin"$().
 	U8 *res,*buf=StrPrintJoin(NULL,format,argc,argv);
 	res=StrNew(buf);
 	Free(buf);

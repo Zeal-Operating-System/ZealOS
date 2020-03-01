@@ -48,7 +48,7 @@ BDVD_DAP_BUF: 					DU16		0,0;
 BDVD_DAP_BLK: 					DU64		0;
  
 BDVD_TEMPLEOS_MESSAGE:
-				DU8 		"LoadingZenithOS",0;
+				DU8 		"Loading ZenithOS",0;
 
 BDVD_NOT64_MESSAGE:
 				DU8 		"ZenithOS requires a 64-bit capable processor.\n\r",0;

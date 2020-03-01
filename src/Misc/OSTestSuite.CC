@@ -108,8 +108,8 @@ U0 DoRandDemo()
 {
 	CTask *task=User;
 	XTalkWait(task,"#include \"::/Demo/RandDemo\";\n");
-	XTalkWait(task,"");
-	XTalkWait(task,"");
+	XTalkWait(task," ");
+	XTalkWait(task," ");
 	Sleep(750);
 	DeathWait(&task,TRUE);
 }

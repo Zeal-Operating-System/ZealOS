@@ -56,7 +56,7 @@ Bool BlkDevInit(CBlkDev *bd)
 					try bd->file_disk=FOpen(bd->file_disk_name,"rc",bd->max_blk+1);
 					catch {
 						if (Fs->except_ch=='File')
-							PrintErr("Not Contiguous.Move file to filename.ISO.C.\n");
+							PrintErr("Not Contiguous.  Move file to filename.ISO.C.\n");
 						Fs->catch_except=TRUE;
 					}
 					if (bd->file_disk) {

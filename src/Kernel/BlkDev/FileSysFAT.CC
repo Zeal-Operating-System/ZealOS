@@ -86,8 +86,8 @@ U0 FAT32Format(U8 drv_let,Bool quick=TRUE)
 		br->log_drive_num=0x80;
 		br->ext_signature=0x29;
 		br->serial_num=RandU32;
-		MemCopy(br->vol_name,"NONAME",11);
-		br->fat_name[0](I64)='FAT32';
+		MemCopy(br->vol_name,"NO NAME    ",11);
+		br->fat_name[0](I64)='FAT32   ';
 		br->signature=0xAA55;
 		fis->signature1='RRaA';
 		fis->signature2='rrAa';

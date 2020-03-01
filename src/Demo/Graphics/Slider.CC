@@ -1,6 +1,6 @@
 /*This was done with <CTRL-SHIFT-L> template code.
 It's conceptually easy to do a ctrl,
-but tedious.You have complete freedom.
+but tedious.  You have complete freedom.
 
 See $LK,"CCtrl",A="MN:CCtrl"$.
 */

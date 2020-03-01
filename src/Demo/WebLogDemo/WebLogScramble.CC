@@ -18,7 +18,7 @@ U0 LogScrambleFile(U8 *name)
 	I64 i;
 	U32 num;
 	U8 *st,*st2;
-	"Scrambling:%s\n",name;
+	"Scrambling: %s\n",name;
 	while (doc_e!=doc) {
 		if (doc_e->type_u8==DOCT_TEXT) {
 			st=MAlloc(StrLen(doc_e->tag)+1);

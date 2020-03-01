@@ -372,14 +372,14 @@ U0 DownLoadRep(LogStruct *head,CDate dstart,CDate dend)
 
 	"\n\nDownloads of /TOS_Distro.ISO\n";
 	for (i=dstart;i<=dend;i+=1<<32)
-		"%DDups:%5dTotal:%5dUniques:%5d\n",i,
+		"%D  Dups:%5d  Total:%5d  Uniques:%5d\n",i,
 					day_dup_counts[(i+local_time_offset)>>32-days_start],
 					day_counts[(i+local_time_offset)>>32-days_start],
 					day_counts[(i+local_time_offset)>>32-days_start]-
 					day_dup_counts[(i+local_time_offset)>>32-days_start];
 
 	"\n\nDownloads of /TOS_Distro.ISO\n"
-				"'-' is a dup.'+' is not a dup.\n";
+				"'-' is a dup.  '+' is not a dup.\n";
 	if (hours_end-hours_start>=HOURS_MAX)
 		i=hours_end-HOURS_MAX+1;
 	else
@@ -393,7 +393,7 @@ U0 DownLoadRep(LogStruct *head,CDate dstart,CDate dend)
 			'+';
 		'\n';
 	}
-	"Total:%dDups:%dUniques:%d\n",count,dups,count-dups;
+	"Total:%d  Dups:%d  Uniques:%d\n",count,dups,count-dups;
 
 	"\n\nDownloads of /TOS_Distro.ISO\n";
 	LinkTreeTraverse(link_root);
@@ -458,9 +458,9 @@ U0 IndexRep(LogStruct *head,CDate dstart,CDate dend)
 	}
 
 	"\n\nHits on /index.html\n"
-				"'-' is a dup.'+' is not a dup.\n";
+				"'-' is a dup.  '+' is not a dup.\n";
 	for (i=dstart;i<=dend;i+=1<<32)
-		"%DDups:%5dTotal:%5dUniques:%5d\n",i,
+		"%D  Dups:%5d  Total:%5d  Uniques:%5d\n",i,
 					day_dup_counts[(i+local_time_offset)>>32-days_start],
 					day_counts[(i+local_time_offset)>>32-days_start],
 					day_counts[(i+local_time_offset)>>32-days_start]-
@@ -480,7 +480,7 @@ U0 IndexRep(LogStruct *head,CDate dstart,CDate dend)
 			'+';
 		'\n';
 	}
-	"Total:%dDups:%dUniques:%d\n",count,dups,count-dups;
+	"Total:%d  Dups:%d  Uniques:%d\n",count,dups,count-dups;
 
 	"\n\nHits on /index.html\n";
 	LinkTreeTraverse(link_root);
@@ -505,7 +505,7 @@ U0 WebLogRep(U8 *mask,U8 *output_filename)
 		PrintErr("No Data.\n");
 	else {
 		dstart=GetDate("Start(%D):",dstart);
-		dend	=GetDate("End(%D):",dend);
+		dend	=GetDate("End  (%D):",dend);
 		BlockIPNuip(head);
 
 		DocClear;

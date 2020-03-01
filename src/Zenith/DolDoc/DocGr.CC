@@ -27,9 +27,9 @@ public I64 PopUpColorLighting(U8 *header=NULL)
 	DocPrint(doc,"\nSingle-Sided means front and back different."
 				"\nDouble-Sided means front and back same."
 				"\n"
-				"\nHalf-Range means 0to[0,7]"
-				"\n[8,15]-8to[8,15]"
-				"\nFull-Range means 0to[0,7]to[0,7]+8"
+				"\nHalf-Range means 0 to [0,7]"
+				"\n                 [8,15]-8 to [8,15]"
+				"\nFull-Range means 0 to [0,7] to [0,7]+8"
 				"\n");
 	DocPrint(doc,
 				"\n$$LTPURPLE$$Single-Sided Full-Range Double-Sided Full-Range\n$$BLACK$$");
@@ -53,16 +53,16 @@ public I64 PopUpColorLighting(U8 *header=NULL)
 
 class CTransformForm
 {
-	F64 x_scale 	format "$$DA-TRM,A=\"XScale:%12.6f\"$$\n";
-	F64 y_scale 	format "$$DA-TRM,A=\"YScale:%12.6f\"$$\n";
-	F64 z_scale 	format "$$DA-TRM,A=\"ZScale:%12.6f\"$$\n";
+	F64 x_scale 	format "$$DA-TRM,A=\"X Scale :%12.6f\"$$\n";
+	F64 y_scale 	format "$$DA-TRM,A=\"Y Scale :%12.6f\"$$\n";
+	F64 z_scale 	format "$$DA-TRM,A=\"Z Scale :%12.6f\"$$\n";
 	F64 é_z 			format "\nAngles are in degrees\n"
-											 "$$DA-TRM,A=\"Z-Axis:%12.6f\"$$\n";
-	F64 é_y 			format "$$DA-TRM,A=\"Y-Axis:%12.6f\"$$\n";
-	F64 é_x 			format "$$DA-TRM,A=\"X-Axis:%12.6f\"$$\n";
-	F64 x_offset	format "\n$$DA-TRM,A=\"XOffset:%12.6f\"$$\n";
-	F64 y_offset	format "$$DA-TRM,A=\"YOffset:%12.6f\"$$\n";
-	F64 z_offset	format "$$DA-TRM,A=\"ZOffset:%12.6f\"$$\n";
+											 "$$DA-TRM,A=\"Z-Axis  :%12.6f\"$$\n";
+	F64 é_y 			format "$$DA-TRM,A=\"Y-Axis  :%12.6f\"$$\n";
+	F64 é_x 			format "$$DA-TRM,A=\"X-Axis  :%12.6f\"$$\n";
+	F64 x_offset	format "\n$$DA-TRM,A=\"X Offset:%12.6f\"$$\n";
+	F64 y_offset	format "$$DA-TRM,A=\"Y Offset:%12.6f\"$$\n";
+	F64 z_offset	format "$$DA-TRM,A=\"Z Offset:%12.6f\"$$\n";
 };
 
 #help_index "Graphics/Input;Graphics/Math/3D Transformation"

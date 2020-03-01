@@ -107,7 +107,7 @@ U8 *HelpComment(CTask *task,CHash *tmph,U8 *_src_link)
 		}
 		while (doc_e!=doc && doc_e->type_u8!=DOCT_NEW_LINE) {
 			if (doc_e->type_u8==DOCT_TAB) {
-				ptr=MStrPrint("%s",res);
+				ptr=MStrPrint("%s ",res);
 				Free(res);
 				res=ptr;
 			} else if (doc_e->de_flags&DOCEF_TAG) {
@@ -269,16 +269,16 @@ U8 *idx=NULL,CDoc *doc=NULL)
 				if (ptr->type & HTT_DEFINE_STR) {
 					j=ptr(CHashDefineStr *)->count;
 					if (j==-1)
-						StrPrint(buf,"%-10t$$Q",ptr(CHashDefineStr *)->data);
+						StrPrint(buf,"%-10t$$Q   ",ptr(CHashDefineStr *)->data);
 					else
 						StrPrint(buf,"%-10t$$Q %02X",ptr(CHashDefineStr *)->data,j);
 				} else if (ptr->type & HTT_GLBL_VAR)
-					StrPrint(buf,"%010X",ptr(CHashGlobalVar *)->data_addr);
+					StrPrint(buf,"%010X   ",ptr(CHashGlobalVar *)->data_addr);
 				else
-					StrPrint(buf,"%010X",HashVal(ptr));
+					StrPrint(buf,"%010X   ",HashVal(ptr));
 				j=HashEntrySize(ptr);
 				if (j==-1)
-					CatPrint(buf," %04X  ",ptr->use_count);
+					CatPrint(buf," %04X            ",ptr->use_count);
 				else
 					CatPrint(buf," %04X %010X ",ptr->use_count,j);
 			} else
@@ -347,7 +347,7 @@ public I64 HashDepthRep(CHashTable *table=NULL)
 	for (i=0;i<HDR_NUM;i++)
 		if (a[i])
 			"%02d:%d\n",i,a[i];
-	"Size:%dCount:%dLongest:%d\n",
+	"Size:%d Count:%d Longest:%d\n",
 				table->mask+1,count,longest;
 	return longest;
 }

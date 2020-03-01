@@ -49,7 +49,7 @@ Therefore, the range of numbers it can represent is split between the negative s
 								|----------------------------|
 				  $FG,5$     Signed byte range
 				  |--------------------------|
-$FG,0$-255-1270127255$FG$
+$FG,0$-255            -127            0           127             255$FG$
 
 
 Now, you can imagine how this plays out with numbers that are bigger than 1 byte.

@@ -1,5 +1,5 @@
-//This example shows bttns.Bttns return a menu val
-//unless you rig them to send macros.Menu entries are
+//This example shows bttns.  Bttns return a menu val
+//unless you rig them to send macros.  Menu entries are
 //about the same as bttns, but don't have a border.
 
 I64 PopUpFreq()

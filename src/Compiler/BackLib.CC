@@ -5,7 +5,7 @@ each intermediate code's output code.
 However, intermediate codes must be
 coupled together based on the arg and
 res type specifications in the
-$LK,"CICArg",A="MN:CICArg"$.RAX is the most common reg
+$LK,"CICArg",A="MN:CICArg"$.  RAX is the most common reg
 for coupling intermediate codes.
 
 Internal calculations take place on

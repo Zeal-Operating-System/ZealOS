@@ -83,7 +83,7 @@ U0 PsmRightClick(I64 x,I64 y)
 							tmpn->word=MStrPrint("%q",st);
 							Free(st);
 						} else
-							tmpn->word=StrNew("");
+							tmpn->word=StrNew(" ");
 						if (DocPut) DocPut->flags=DocPut->flags&
 										~DOCF_FORM|old_doc_flags&DOCF_FORM;
 					}

@@ -15,7 +15,7 @@ This uses four types of output
 
 	2) The Fs->draw_it() for the staff region, drawn every refresh.
 
-	3) The gr.dc persistent layer for the note chooser, meter chooser.The persistent layer is used during drag-and-drop.
+	3) The gr.dc persistent layer for the note chooser, meter chooser.  The persistent layer is used during drag-and-drop.
 
 	4) The Fs->next_ctrl for the tempo/stacatto sliders.
 

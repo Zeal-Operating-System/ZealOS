@@ -390,7 +390,7 @@ U0 DrawIt(CTask *task,CDC *dc)
 		}
 		dc->color=BLACK;
 	}
-	GrPrint(dc,0,0,"Time:%d:%04.1fScore:",ToI64(tt),(tt-ToI64(tt))*60);
+	GrPrint(dc,0,0,"Time:%d:%04.1f  Score:",ToI64(tt),(tt-ToI64(tt))*60);
 	GrPrint  (dc,FONT_WIDTH*27,0,"Best Score:");
 
 	dc->color=LTCYAN;

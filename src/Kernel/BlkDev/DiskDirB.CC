@@ -127,21 +127,21 @@ I64 Dir(U8 *files_find_mask,Bool full)
 			csize=Bsr(csize)/4+1;
 			c=Bsr(c)/4+1;
 
-			"$$MA,T=\"Directory\",LM=\"PopUpCd;Dir;\n\"$$of%s\n",st;
+			"$$MA,T=\"Directory\",LM=\"PopUpCd;Dir;\n\"$$ of %s\n",st;
 			if (full)
-				"__DATE____TIME__%*ts%*ts\n",
+				"__DATE__ __TIME__ %*ts %*ts\n",
 							csize,"SIZE",c,"BLK";
 			else
-				"DATE_TIME_%*ts\n",csize,"SIZE";
+				"DATE_ TIME_ %*ts\n",csize,"SIZE";
 			while (tmpde1) {
 				tmpde2=tmpde1->next;
 				res++;
 				if (full)
-					"%D%T%0*tX%0*tX ",tmpde1->datetime,tmpde1->datetime,
+					"%D %T %0*tX %0*tX ",tmpde1->datetime,tmpde1->datetime,
 								csize,tmpde1->size,c,tmpde1->clus;
 				else {
 					Date2Struct(&ds,tmpde1->datetime+local_time_offset);
-					"%02d/%02d%02d:%02d%0*tX ",ds.mon,ds.day_of_mon,ds.hour,ds.min,
+					"%02d/%02d %02d:%02d %0*tX ",ds.mon,ds.day_of_mon,ds.hour,ds.min,
 								csize,tmpde1->size;
 				}
 				if (tmpde1->attr & RS_ATTR_DIR)

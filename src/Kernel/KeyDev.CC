@@ -208,12 +208,12 @@ U0 KeyDevInit()
 	QueueInit(&keydev.put_key_head);
 	KeyDevAdd(&KDInputFilterPutKey,&KDInputFilterPutS,0x40000000,FALSE);
 	KeyDevAdd(&KDRawPutKey,&KDRawPutS,0x60000000,FALSE);
-	CtrlAltCBSet('C',&CtrlAltC,"Cmd/Break Execution",,TRUE);
-	CtrlAltCBSet('D',&CtrlAltD,"Cmd/Enter Debugger",,TRUE);
-	CtrlAltCBSet('F',&CtrlAltF,"Cmd/Toggle Aux Font");
-	CtrlAltCBSet('M',&CtrlAltM,"Cmd/Toggle Mute");
-	CtrlAltCBSet('N',&CtrlAltN,"Cmd/Next Focus Task",,TRUE);
-	CtrlAltCBSet('T',&CtrlAltT,"Cmd/Terminal Window");
-	CtrlAltCBSet('V',&CtrlAltV,"Cmd/VGA Flush",,TRUE);
-	CtrlAltCBSet('X',&CtrlAltX,"Cmd/Kill Focused Task",,TRUE);
+	CtrlAltCBSet('C',&CtrlAltC,"Cmd /Break Execution",,TRUE);
+	CtrlAltCBSet('D',&CtrlAltD,"Cmd /Enter Debugger",,TRUE);
+	CtrlAltCBSet('F',&CtrlAltF,"Cmd /Toggle Aux Font");
+	CtrlAltCBSet('M',&CtrlAltM,"Cmd /Toggle Mute");
+	CtrlAltCBSet('N',&CtrlAltN,"Cmd /Next Focus Task",,TRUE);
+	CtrlAltCBSet('T',&CtrlAltT,"Cmd /Terminal Window");
+	CtrlAltCBSet('V',&CtrlAltV,"Cmd /VGA Flush",,TRUE);
+	CtrlAltCBSet('X',&CtrlAltX,"Cmd /Kill Focused Task",,TRUE);
 }

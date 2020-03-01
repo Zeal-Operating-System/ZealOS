@@ -143,7 +143,7 @@ U0 Morse()
 
 	"$$GREEN$$";
 
-	doc_e=DocPrint(DocPut,"$$TX+TC,\"\"$$");
+	doc_e=DocPrint(DocPut,"$$TX+TC,\" \"$$");
 	doc_e->tag_cb=&MorseTimes;
 
 	"$$FG$$\n";

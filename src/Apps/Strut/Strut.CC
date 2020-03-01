@@ -183,7 +183,7 @@ U0 MyDerivative(CMathODE *ode,F64,COrder2D3 *,COrder2D3 *)
 {
 //The forces due to springs and drag are
 	//automatically handled by the
-	//ode code.We can add new forces
+	//ode code.  We can add new forces
 	//here.
 	F64 d,dd;
 	CD3 p;
@@ -606,10 +606,10 @@ U0 Strut()
 	"\n$$WW,1$$$$PURPLE$$$$TX+CX,\"Build a ship.\"$$$$FG$$\n\n"
 				"Sel mass mode.\tLeft-click to place masses.\n"
 				"Sel spring mode.\tLeft-drag to make members.\n"
-				"Sel thruster mode.\tPress a digit, 0-9.Drag to make thruster.\n"
-				"Sel connector mode.\tPress a digit, 0-9."
+				"Sel thruster mode.\tPress a digit, 0-9.  Drag to make thruster.\n"
+				"Sel connector mode.\tPress a digit, 0-9.  "
 				"Drag to make breakable connector.\n\n"
-				"Press $$GREEN$$<SPACE>$$FG$$ to run the game.Press digits to operate "
+				"Press $$GREEN$$<SPACE>$$FG$$ to run the game.  Press digits to operate "
 				"thrusters and break connectors.\n\n"
 				"Press $$GREEN$$<z>$$FG$$ or $$GREEN$$<SHIFT-Z>$$FG$$ to zoom in/out.\n\n";
 

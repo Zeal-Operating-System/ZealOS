@@ -9,7 +9,7 @@ SHIFT_KEY_SCAN_DECODE_TABLE::
 				DU8 		0,CH_SHIFT_ESC,"!@#$$%^&*()_+",CH_BACKSPACE,'\t';
 				DU8 		"QWERTYUIOP{}",'\n',0,"AS";
 				DU8 		"DFGHJKL:\"~",0,"|ZXCV";
-				DU8 		"BNM<>?",0,'*',0,CH_SHIFT_SPACE,0,0,0,0,0,0;
+				DU8 		"BNM<>?",0,'*',0,CH_SPACE,0,0,0,0,0,0;
 				DU8 		0,0,0,0,0,0,0,0,0,0,'-',0,0,0,'+',0;
 CTRL_KEY_SCAN_DECODE_TABLE::
 				DU8 		0,CH_ESC,"1234567890-=",CH_BACKSPACE,'\t';
@@ -224,15 +224,12 @@ U8 *Char2KeyName(I64 ch,Bool include_ctrl=TRUE)
 			case 30:
 				*buf=0;
 				break;
-			case CH_SHIFT_SPACE:
-				StrCopy(buf,"SHIFT_SPACE");
-				break;
 			case CH_SPACE:
 				StrCopy(buf,"SPACE");
 				break;
 			default:
 				if (include_ctrl)
-					StrCopy(buf,"CTRL");
+					StrCopy(buf,"CTRL ");
 				buf[i=StrLen(buf)]=ch-1+'a';
 				buf[i+1]=0;
 				break;
@@ -251,13 +248,13 @@ U8 *ScanCode2KeyName(I64 sc)
 	U8 buf[STR_LEN],*st;
 	*buf=0;
 	if (sc&SCF_CTRL)
-		CatPrint(buf,"CTRL");
+		CatPrint(buf,"CTRL ");
 	if (sc&SCF_ALT)
-		CatPrint(buf,"ALT");
+		CatPrint(buf,"ALT ");
 	if (sc&SCF_SHIFT)
-		CatPrint(buf,"SHIFT");
+		CatPrint(buf,"SHIFT ");
 	if (sc&SCF_NO_SHIFT)
-		CatPrint(buf,"");
+		CatPrint(buf,"      ");
 	if (ch=ScanCode2Char(sc&255)) {
 		st=Char2KeyName(ch,FALSE);
 		StrCopy(buf+StrLen(buf),st);

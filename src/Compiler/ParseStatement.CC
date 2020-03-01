@@ -194,11 +194,11 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
 	while (tmpm) {
 		if (tmpm->flags & MLF_NO_UNUSED_WARN) {
 			if (tmpm->use_count>1&&StrCompare(tmpm->str,"_anon_"))
-				PrintWarn("Unneeded no_warn\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
+				PrintWarn("Unneeded no_warn\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 							cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 							tmpm->str,cc->htc.fun->str);
 		} else if (!tmpm->use_count && GetOption(OPTf_WARN_UNUSED_VAR))
-			PrintWarn("Unused var\n $$LK,\"FL:%s,%d\"$$'%s' in '%s'\n",
+			PrintWarn("Unused var\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 						cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 						tmpm->str,cc->htc.fun->str);
 		tmpm=tmpm->next;
@@ -333,7 +333,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 					break;
 				default:
 					if (cc->flags&CCF_AOT_COMPILE) {
-						if (Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
+						if (Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)) {
 							if (cc->token=='=')
 								LexExcept(cc,"Can't init glbl var on data heap in AOT module ");
 							tmpg=CAlloc(sizeof(CHashGlobalVar));
@@ -367,7 +367,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 								AOTStoreCodeU8(cc,0); //Init AOT glbl to zero.
 						}
 					} else {
-						if (Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
+						if (Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)) {
 							tmpg=CAlloc(sizeof(CHashGlobalVar),Fs->code_heap);
 							tmpg->data_addr=MAlloc(j);
 							tmpg->flags=GVF_DATA_HEAP;

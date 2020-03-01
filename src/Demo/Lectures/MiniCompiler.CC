@@ -1,12 +1,12 @@
 /*$WW,1$
 $TR-C,"Main Compiler"$
-$ID,2$The mini compiler is like the main compiler, except the main compiler's lexical analyser removes comments and does preprocessing.$LK,"Lex",A="MN:Lex"$(),$LK,"Echo",A="MN:Echo"$(ON).
+$ID,2$The mini compiler is like the main compiler, except the main compiler's lexical analyser removes comments and does preprocessing.  $LK,"Lex",A="MN:Lex"$(),$LK,"Echo",A="MN:Echo"$(ON).
 
-The main compiler generates $LK,"Intermediate Code",A="FF:::/Compiler/CompilerA.HH,IC_END"$ at the parser stage.See $LK,"ParseExpression",A="MN:ParseExpression"$(), $LK,"ParseStatement",A="MN:ParseStatement"$().
+The main compiler generates $LK,"Intermediate Code",A="FF:::/Compiler/CompilerA.HH,IC_END"$ at the parser stage.  See $LK,"ParseExpression",A="MN:ParseExpression"$(), $LK,"ParseStatement",A="MN:ParseStatement"$().
 
-The main compiler optimizes See $LK,"Intermediate Code Attributes",A="MN:intermediate_code_table"$, $LK,"Combining Consts",A="FF:::/Compiler/OptPass012.CC,case IC_MUL"$, $LK,"Choosing Reg Vars",A="FF:::/Compiler/OptPass3.CC,comp.num_reg_vars"$.Use $LK,"PassTrace",A="MN:PassTrace"$() to see the optimization stages.
+The main compiler optimizes   See $LK,"Intermediate Code Attributes",A="MN:intermediate_code_table"$, $LK,"Combining Consts",A="FF:::/Compiler/OptPass012.CC,case IC_MUL"$, $LK,"Choosing Reg Vars",A="FF:::/Compiler/OptPass3.CC,comp.num_reg_vars"$.  Use $LK,"PassTrace",A="MN:PassTrace"$() to see the optimization stages.
 
-The main compiler makes machine code in the back end.See $LK,"IC Struct",A="MN:CIntermediateCode"$, $LK,"COCCompile",A="MN:COCCompile"$ and $LK,"OptPass789A",A="FF:::/Compiler/OptPass789A.CC,IC_MUL"$(),$LK,"BackEnd",A="FF:::/Compiler/BackA.CC,ICMul"$.Set $LK,"Trace",A="MN:Trace"$(ON) to see the output of the backend.
+The main compiler makes machine code in the back end.  See $LK,"IC Struct",A="MN:CIntermediateCode"$, $LK,"COCCompile",A="MN:COCCompile"$ and $LK,"OptPass789A",A="FF:::/Compiler/OptPass789A.CC,IC_MUL"$(), $LK,"BackEnd",A="FF:::/Compiler/BackA.CC,ICMul"$.  Set $LK,"Trace",A="MN:Trace"$(ON) to see the output of the backend.
 $ID,-2$
 $TR-C,"Mini Compiler"$
 $ID,2$For this mini compiler, some things you should know about 64-bit asm:
@@ -98,7 +98,7 @@ U0 ParseTerm(U8 **_src,U8 **_dst,I64 prec)
 		src2=*_src;
 		dst2=*_dst;
 		while (TRUE) {
-//This is inefficient.The main compiler doesn't back-up like this.
+//This is inefficient.  The main compiler doesn't back-up like this.
 			i=Parse(&src2,&dst2);
 			if (PREC_MUL<=i<prec) {
 				*_src=src2;
@@ -216,8 +216,8 @@ U0 Main()
 					throw;
 				"$$RED$$This code is not efficient, but the compiler is simple.$$FG$$\n";
 				Un(code,dst-code); //Unassemble the code we created.
-//$LK,"Call",A="MN:Call"$() is a function.See $LK,"_CALL",A="FF:::/Kernel/KUtils.CC,_CALL"$::
-				//See also $LK,"CallInd",A="MN:CallInd"$().See $LK,"_CALL_IND",A="FF:::/Kernel/KUtils.CC,_CALL_IND"$::
+//$LK,"Call",A="MN:Call"$() is a function.  See $LK,"_CALL",A="FF:::/Kernel/KUtils.CC,_CALL"$::
+				//See also $LK,"CallInd",A="MN:CallInd"$().  See $LK,"_CALL_IND",A="FF:::/Kernel/KUtils.CC,_CALL_IND"$::
 				"$$LTBLUE$$Answer:%d$$FG$$\n",Call(code);
 			} catch {
 				"$$RED$$Error$$FG$$\n";

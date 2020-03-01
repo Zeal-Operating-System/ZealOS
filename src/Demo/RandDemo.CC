@@ -16,7 +16,7 @@ U0 RandDemo()
 {
 	I64 i;
 
-	"Seed(0) will do timer XORed random numbers."
+	"Seed(0) will do timer XORed random numbers.  "
 				"A task starts with $LK,"Seed(0)",A="FF:::/Kernel/KTask.CC,Seed("$ by default.\n";
 	PressAKey;
 	Seed;
@@ -24,7 +24,7 @@ U0 RandDemo()
 	DCFill;
 
 	"\nSeed(num) will do deterministic, non-timer random numbers starting at "
-				"a specific seed.You can run a specific video game over and over "
+				"a specific seed.  You can run a specific video game over and over "
 				"by typing Seed(num) at the cmd line before the game.\n";
 	PressAKey;
 	Seed(1);

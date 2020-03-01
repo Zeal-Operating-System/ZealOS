@@ -37,7 +37,7 @@ on and off within your programs, leaving
 ones which need initialization on the code heap.
 
 You can't dynamically initialize data heap
-glbls--they are consts.This might be a silly
+glbls--they are consts.  This might be a silly
 point, but might res in odd differences, perhaps
 from the order things are evaluated.
 
@@ -46,7 +46,7 @@ because they don't take-up room in the .BIN file.
 */
 
 #ifjit
-#exe {Option(OPTf_GLBLS_ON_DATA_HEAP,ON);};
+#exe {Option(OPTf_GLOBALS_ON_DATA_HEAP,ON);};
 
 Test g2[]={
 	{10,"name1"},
@@ -70,7 +70,7 @@ U0 Main2()
 
 Main2;
 
-#exe {Option(OPTf_GLBLS_ON_DATA_HEAP,ON);};
+#exe {Option(OPTf_GLOBALS_ON_DATA_HEAP,ON);};
 #endif
 
 '\n';

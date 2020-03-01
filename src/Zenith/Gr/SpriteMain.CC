@@ -51,13 +51,13 @@ I64 PopUpSpriteMain(CSprite **_head,I64 *_cur_elem_num,
 				"LE=SPT_SHIFTABLE_MESH$$\n"
 				"$$MU-UL,\"+] Convert to BitMap or Edit BitMap\","
 				"LE=SPT_BITMAP$$$$LTBLUE$$\n"
-				"\n$$MU-UL,\"Transform On(for use with 3D icons)\","
+				"\n$$MU-UL,\"Transform On  (for use with 3D icons)\","
 				"LE=SPT_TRANSFORM_ON$$\n"
-				"$$MU-UL,\"Transform Off(for use with 3D icons)\","
+				"$$MU-UL,\"Transform Off (for use with 3D icons)\","
 				"LE=SPT_TRANSFORM_OFF$$\n"
 				"\n"
 				"$$PURPLE$$$$MU-UL,\"+] Sprite Edit Menu\",LE=SPT_ED_MENU$$$$LTBLUE$$\n"
-				"$$MU-UL,\"ExitSprite\",LE=SPT_EXIT$$\n"
+				"$$MU-UL,\"Exit  Sprite\",LE=SPT_EXIT$$\n"
 				"$$MU-UL,\"Abort Sprite\",LE=DOCM_CANCEL$$\n"
 				"\nRight-Click to get back to this menu.");
 	st=MStrPrint("SpriteSideBarTask(0x%X,0x%X,0x%X);",Fs,_head,_cur_elem_num);
@@ -80,20 +80,20 @@ Bool PopUpExtents(I64 *_x1,I64 *_x2,I64 *_y1,I64 *_y2)
 	I64 res;
 	CDoc *doc=DocNew;
 	CDocEntry *doc_e;
-	doc_e=DocPrint(doc,"$$DA,A=\"x1:%%d\"$$\n");
+	doc_e=DocPrint(doc,"  $$DA,A=\"x1:%%d\"$$\n");
 	doc_e->data=_x1;
 	DocDataFormat(doc,doc_e);
-	doc_e=DocPrint(doc,"$$DA,A=\"x2:%%d\"$$\n");
+	doc_e=DocPrint(doc,"  $$DA,A=\"x2:%%d\"$$\n");
 	doc_e->data=_x2;
 	DocDataFormat(doc,doc_e);
-	doc_e=DocPrint(doc,"$$DA,A=\"y1:%%d\"$$\n");
+	doc_e=DocPrint(doc,"  $$DA,A=\"y1:%%d\"$$\n");
 	doc_e->data=_y1;
 	DocDataFormat(doc,doc_e);
-	doc_e=DocPrint(doc,"$$DA,A=\"y2:%%d\"$$\n\n");
+	doc_e=DocPrint(doc,"  $$DA,A=\"y2:%%d\"$$\n\n");
 	doc_e->data=_y2;
 	DocDataFormat(doc,doc_e);
 
-	DocPrint(doc,"$$BT,\"Use These Extents\",LE=TRUE$$");
+	DocPrint(doc," $$BT,\"Use These Extents\",LE=TRUE$$");
 	DocPrint(doc,"$$CM,3,0$$$$BT,\"Drag-Out New Extents\",LE=FALSE$$\n\n");
 	do res=PopUpMenu(doc);
 	while (res!=FALSE && res!=TRUE);
@@ -856,7 +856,7 @@ I64 SpriteMainEd(CDoc *doc)
 				case SPT_FLOOD_FILL_NOT:
 					RegOneTimePopUp(ARf_FLOODFILL,
 								ST_WARN_ST "This is affected by what's underneath\n"
-								"when it is drawn.You will probably want to\n"
+								"when it is drawn.  You will probably want to\n"
 								"convert it to a bitmap.\n\n"
 								"A tip on artistry you might consider\n"
 								"is using lines to fill regions because\n"
@@ -918,8 +918,8 @@ I64 SpriteMainEd(CDoc *doc)
 				doc_ce->de_flags|=DOCEF_DONT_DRAW;
 				if (PopUpNoYes("Study the $$LK,\"X-Caliber\","
 							"A=\"FF:::/PersonalMenu.DD,X-Caliber\"$$ icon.\n\n"
-							"It has black rectangle background with stars.The\n"
-							"mesh is in front and rotates.To keep the background\n"
+							"It has black rectangle background with stars.  The\n"
+							"mesh is in front and rotates.  To keep the background\n"
 							"rectangle from rotating, "
 							"$$GREEN$$TRANSFORM OFF$$FG$$ has been used.\n\n"
 							"The X-Caliber mesh has a different origin for rotation.\n"
@@ -927,7 +927,7 @@ I64 SpriteMainEd(CDoc *doc)
 							"negative Z direction by editing the sprite as text\n"
 							"and changing the first vector.\n\n"
 							"For the mesh you are creating, use same origin as\n"
-							"the rest of the sprite?If $$GREEN$$YES$$FG$$, you can always\n"
+							"the rest of the sprite?  If $$GREEN$$YES$$FG$$, you can always\n"
 							"shift the mesh origin point in the sprite edit menu.\n")) {
 					doc_ce->de_flags=old_de_flags;
 					arg1=x; arg2=y;

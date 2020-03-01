@@ -37,11 +37,11 @@ F64 HitDamage(Unit *tmpu,Unit *target,I64 facing=1,F64 range_factor=0)
 	if (target->armor) {
 		d=target->armor/100.0*(5-facing)/5.0;
 		if (d>=0) {
-			"ArmorAttack\t\t:%6.2f\n",ToF64(tmpu->armored_attack);
+			"Armor Attack\t\t:%6.2f\n",ToF64(tmpu->armored_attack);
 			res*=(tmpu->armored_attack/100.0)/d;
 		} else
 			res=0;
-		"Armor(%z)Defense\t:%6.2f\n",facing,
+		"Armor(%z) Defense\t:%6.2f\n",facing,
 					"Front\0FrontSide\0RearSide\0Rear\0",100*d;
 	} else {
 		d=1.0-range_factor;
@@ -120,31 +120,31 @@ U0 UnitDirectFire(Unit *tmpu,Unit *target)
 	RowCol2XY(&x1,&y1,tmpu->row,tmpu->col);
 	RowCol2XY(&x2,&y2,target->row,target->col);
 	d=100*Rand;
-	"+%5.2fRoll\n",d;
+	"+%5.2f  Roll\n",d;
 	d+=tmpu->accuracy;
-	"+%2d.00Accuracy\n",tmpu->accuracy;
+	"+%2d.00  Accuracy\n",tmpu->accuracy;
 
 	range_factor=Sqrt(Sqr(x2-x1)+Sqr(y2-y1))/(tmpu->range*2*DSIN);
 	"-%5.2f%% of Range\n",100*range_factor;
 	d-=100*range_factor;
 	if (t2==TREES) {
-		"-30.00Target in Trees Penalty\n";
+		"-30.00  Target in Trees Penalty\n";
 		d-=30;
 	}
 	if (t1==MOUNTAINS && t2!=MOUNTAINS) {
-		"+30.00High Ground Bonus\n";
+		"+30.00  High Ground Bonus\n";
 		d+=30;
 	}
 	"_______\n";
 	target_unit=target;
 	if (d>=0) {
-		"+%5.2fHit\n",d;
+		"+%5.2f  Hit\n",d;
 		target_hit=TRUE;
 		Noise(500*animation_delay,34,41);
 		Sleep(500*animation_delay);
 		Line(NULL,x1,y1,0,x2,y2,0,&BulletPlot);
 	} else {
-		"-%5.2fMiss\n",-d;
+		"-%5.2f  Miss\n",-d;
 		target_hit=FALSE;
 		Noise(1000*animation_delay,69,74);
 		Sleep(1000*animation_delay);
@@ -222,9 +222,9 @@ U0 IndirectResolveAll()
 		RowCol2XY(&x1,&y1,tmpu->row,tmpu->col);
 		RowCol2XY(&x2,&y2,tmpi->row,tmpi->col);
 		d=100*Rand;
-		"+%5.2fRoll\n",d;
+		"+%5.2f  Roll\n",d;
 		d+=tmpu->accuracy;
-		"+%2d.00Accuracy\n",tmpu->accuracy;
+		"+%2d.00  Accuracy\n",tmpu->accuracy;
 		range_factor=Sqrt(Sqr(x2-x1)+Sqr(y2-y1))/(tmpu->range*2*DSIN);
 		"-%5.2f%% of Range\n",100*range_factor;
 		d-=100*range_factor;
@@ -232,11 +232,11 @@ U0 IndirectResolveAll()
 
 
 		if (d>=0) {
-			"+%5.2fHit\n",d;
+			"+%5.2f  Hit\n",d;
 			Noise(500*animation_delay,34,41);
 			Sleep(500*animation_delay);
 		} else {
-			"-%5.2fMiss\n",-d;
+			"-%5.2f  Miss\n",-d;
 			Noise(1000*animation_delay,69,74);
 			Sleep(1000*animation_delay);
 			i=RandU16%6;

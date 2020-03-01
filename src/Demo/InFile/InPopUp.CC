@@ -5,7 +5,7 @@ This example shows how you can drive pop-up
 windows.
 */
 
-In("");
+In(" ");
 "PopUp #1:%X\n",PopUpNoYes;
 
 InStr("Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);'' CH_SPACE;");

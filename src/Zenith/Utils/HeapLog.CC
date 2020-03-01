@@ -128,9 +128,9 @@ public U0 HeapLogAddrRep(Bool leave_it=OFF)
 		while (tmphl!=&heaplog_head[i]) {
 //Take snapshot in case modified. (while we work)
 			MemCopy(&hl,tmphl,sizeof(CHeapLog));
-			"$$PURPLE$$%08X$$FG$$%08X",MSize(hl.addr),hl.addr;
+			"$$PURPLE$$%08X$$FG$$ %08X",MSize(hl.addr),hl.addr;
 			for (j=0;j<HL_CALLER_DEPTH;j++)
-				"%P",hl.caller[j];
+				" %P",hl.caller[j];
 			'\n';
 			total+=MSize(hl.addr);
 			tmphl=hl.next;
@@ -195,7 +195,7 @@ hl_found:
 			tmphls1=tmphls->next;
 			"%08X*%08X=%08X",tmphls->size,tmphls->count,tmphls->size*tmphls->count;
 			for (j=0;j<HL_CALLER_DEPTH;j++)
-				"%P",tmphls->caller[j];
+				" %P",tmphls->caller[j];
 			'\n';
 			total+=tmphls->size*tmphls->count;
 			Free(tmphls);

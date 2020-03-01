@@ -101,7 +101,7 @@ BMHD_HISTART:
 //My assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP BOOT_RAM_BASE:0000
 				DU16		0,BOOT_RAM_BASE/16;
-//Continueshere$LK,"BMHD2_START",A="FF:::/Zenith/Boot/BootMHD2.CC,BMHD2_START"$
+//Continues here $LK,"BMHD2_START",A="FF:::/Zenith/Boot/BootMHD2.CC,BMHD2_START"$
 BMHD_END::
 #assert BMHD_END-BMHD_START<=440
 }

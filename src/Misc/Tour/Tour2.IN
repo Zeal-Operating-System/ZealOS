@@ -14,7 +14,7 @@ InGetStr("Dir;\n");
 
 TourPut(
 "Press $$GREEN$$<CTRL-m>$$FG$$.\n\n"
-"This will access your PersonalMenu.You can customize it."
+"This will access your PersonalMenu.  You can customize it.  "
 "It's like your START menu and desktop.\n");
 
 InGetChar(CH_CTRLM);
@@ -45,9 +45,9 @@ TourPut(
 InGetStr(" ");
 
 TourPut(
-"The macro changed directories and did a $$GREEN$$Dir;$$FG$$ command."
-"The $$RED$$RED$$FG$$ filenames listed are file links.Left-clicking will "
-"edit/view them.Right-clicking or pressing $$GREEN$$<ENTER>$$FG$$ when the "
+"The macro changed directories and did a $$GREEN$$Dir;$$FG$$ command.  "
+"The $$RED$$RED$$FG$$ filenames listed are file links.  Left-clicking will "
+"edit/view them.  Right-clicking or pressing $$GREEN$$<ENTER>$$FG$$ when the "
 "cursor is on top will bring-up a menu of options.\n\n"
 "The $$LTBLUE$$BLUE$$FG$$ underline entries \"$$LTBLUE$$.$$FG$$\" "
 "and \"$$LTBLUE$$..$$FG$$\""

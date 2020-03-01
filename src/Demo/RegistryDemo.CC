@@ -1,5 +1,5 @@
 /*The ~/Registry.CC file is CosmiC code.
-You can execute a tree branch of it.The Zenith
+You can execute a tree branch of it.  The Zenith
 branch is executed in the Zenith task boot phase.
 Normally, you will place var declarations
 in the branch you make, but since an arthmetic expression

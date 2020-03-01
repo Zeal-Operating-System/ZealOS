@@ -128,7 +128,7 @@ U0 SpriteElem2Code(CDoc *doc,CSprite *tmpg)
 					else if (*ptr(U8 *)<16)
 						DocPrint(doc,"%X",*ptr(U8 *));
 					else
-						DocPrint(doc,"%c",CH_SHIFT_SPACE);
+						DocPrint(doc,"%c",CH_SPACE);
 					if (++col>=k && (i+1<width_internal||j+1<tmpg->pwhu.height)) {
 						DocPrint(doc,"\n");
 						col=0;
@@ -448,7 +448,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 					QueueVectU8Put(tmpv,num1++,i-'0');
 				else if ('A'<=i<='F')
 					QueueVectU8Put(tmpv,num1++,i-'A'+10);
-				else if (i==CH_SPACE||i==CH_SHIFT_SPACE)
+				else if (i==CH_SPACE)
 					QueueVectU8Put(tmpv,num1++,TRANSPARENT);
 				else if (i=='_')
 					QueueVectU8Put(tmpv,num1++,0);

@@ -21,7 +21,7 @@ Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
 Sleep(1500);
 
 TourPut(
-"Press $$GREEN$$<F4>$$FG$$ for the file chooser.Then, "
+"Press $$GREEN$$<F4>$$FG$$ for the file chooser.  Then, "
 "pick a file and press $$GREEN$$<ESC>$$FG$$.");
 InGetKey(SC_F4);
 Sleep(5000);

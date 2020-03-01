@@ -44,9 +44,9 @@ class CBgtTemplate
 	U0 start;
 	U16 type							format "$$LS,D=\"ST_BGT_TEMPLATE_TYPES\"$$\n";
 	U16 flags;
-	U8 start_date[16] 		format "$$DA-P,A=\"StartDate:%s\"$$\n";
-	U8 end_date[16] 			format "$$DA-P,A=\"EndDate:%s\"$$\n";
-	F64 period						format "$$DA,A=\"Period:%8.2f\"$$\n";
+	U8 start_date[16] 		format "$$DA-P,A=\"Start Date:%s\"$$\n";
+	U8 end_date[16] 			format "$$DA-P,A=\"End Date  :%s\"$$\n";
+	F64 period						format "$$DA,A=\"Period    :%8.2f\"$$\n";
 	U0 end;
 
 	CBgtEntry b;

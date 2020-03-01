@@ -153,13 +153,13 @@ U0 AsmLineList(CCompCtrl *cc)
 		if (doc_e2=aotc->list_last_line) {
 			if (tmpf->flags& LFSF_DOC) {
 				while (doc_e2->y<doc_e->y) {
-					"%h*c%08X",24-aotc->list_col,CH_SPACE,aotc->list_last_rip;
+					"%h*c%08X ",24-aotc->list_col,CH_SPACE,aotc->list_last_rip;
 					aotc->list_col=0;
 					doc_e2=LexPutLine(cc,doc_e2);
 				}
 			} else {
 				while (*doc_e2(U8 *) && doc_e2!=doc_e) {
-					"%h*c%08X",24-aotc->list_col,CH_SPACE,aotc->list_last_rip;
+					"%h*c%08X ",24-aotc->list_col,CH_SPACE,aotc->list_last_rip;
 					aotc->list_col=0;
 					doc_e2=LexPutLine(cc,doc_e2);
 				}

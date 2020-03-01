@@ -212,7 +212,7 @@ U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
 	if (FileFind(filename,&de,FUF_JUST_FILES)) {
 		Free(de.full_name);
 		if (!StrCompare(attr,"+?"))
-			"%-48ts%s\n",filename,StrPrintFlags(buf,Define("ST_FILE_ATTRS"),de.attr);
+			"%-48ts %s\n",filename,StrPrintFlags(buf,Define("ST_FILE_ATTRS"),de.attr);
 		else {
 			StrFirstRemove(cur_dir,":");
 			StrLastRemove(cur_dir,"/");

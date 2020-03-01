@@ -178,7 +178,7 @@ U0 OptPass6(CCompCtrl *cc)
 		cc->htc.fun->clobbered_reg_mask=clobbered_reg_mask;
 		if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT) &&
 					Bt(&cc->saved_pass_trace,6)) {
-			"UsedReg Mask:%04X\n",cc->htc.fun->used_reg_mask;
+			"Used      Reg Mask:%04X\n",cc->htc.fun->used_reg_mask;
 			"Clobbered Reg Mask:%04X\n",clobbered_reg_mask;
 		}
 	}

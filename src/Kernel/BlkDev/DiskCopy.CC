@@ -8,7 +8,7 @@ Bool CopySingleZ(U8 *f1,U8 *f2) //Just one file
 		file_buf=FileRead(f1,&size,&attr);
 		attr=FileAttr(f2,attr);
 		if (file_buf) {
-			"Copying%s to %s\n",f1,f2;
+			"Copying %s to %s\n",f1,f2;
 			c=FileWrite(f2,file_buf,size,de.datetime,attr);
 			Free(file_buf);
 			return ToBool(c);

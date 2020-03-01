@@ -5,7 +5,7 @@ U0 TaskRepTask(CTask *task,I64 indent)
 	"%h*c$$MA,T=\"%08X\",LM=\"Kill(0x%X);\n\",$$ $$BLACK$$#%d$$FG$$ "
 				"$$TX,\"%$$Q...\",SCX=16$$\n",indent,CH_SPACE,task,task,task->task_num,
 				task->task_title;
-	"%h*c%08X%04X:%04X:%08X\n",indent+2,CH_SPACE,TaskMemAlloced(task),
+	"%h*c%08X %04X:%04X:%08X\n",indent+2,CH_SPACE,TaskMemAlloced(task),
 				task->task_flags,task->display_flags,task->win_inhibit;
 	task1=task->next_child_task;
 	while (task1!=(&task->next_child_task)(U8 *)

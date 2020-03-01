@@ -86,7 +86,7 @@ U0 SysGrInit()
 
 	//patch some chars
 	text.aux_font[10] = text.font[10]; //"Return" symbol 
-	text.aux_font['' - 1] = text.font['' - 1]; //Shift-space 
+	text.aux_font[' ' - 1] = text.font[' ' - 1]; //Shift-space  
 	text.aux_font[255] = text.font[255]; //Block symbol ÿ
 
 	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
@@ -154,7 +154,7 @@ U0 KMain()
 	IntInit1;
 
 	//Before this point use $LK,"Sound",A="MN:Sound"$() and $LK,"Busy",A="MN:Busy"$()
-	//to debug.After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
+	//to debug.  After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
 	LBts(&sys_run_level,RLf_RAW);
 	"ZenithOS V%5.3f\t%D %T\n\n",
 				sys_os_version,sys_compile_time,sys_compile_time;

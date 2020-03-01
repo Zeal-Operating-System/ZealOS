@@ -1,5 +1,5 @@
 /*This does a really crappy job of
-suggesting spellings.Write a better
+suggesting spellings.  Write a better
 one for fun.
 */
 
@@ -83,7 +83,7 @@ U0 CtrlAltL(I64)
 if (Fs!=zenith_task)
 	SuggestSpellingDemo;
 else {
-	CtrlAltCBSet('L',&CtrlAltL,"Cmd/Suggest Spelling");
+	CtrlAltCBSet('L',&CtrlAltL,"Cmd /Suggest Spelling");
 //Appears in the Zenith Task Window
 	"<CTRL-ALT-l> installed\n";
 }
