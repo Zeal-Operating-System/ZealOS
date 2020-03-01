@@ -228,33 +228,33 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 		arg->imm_or_off_present = FALSE;	//Zero displacement
 
 	if (arg->reg2 != REG_NONE || arg->scale != 1)
-	{
-		res &= 0x0000FF0000;
+	{//if reg or scale
+		res &= ARGG_M|ARGG_RM; //0x0000FF0000;
 		goto mm_done;
 	}
 
 	if (arg->indirect)
 	{
 		if (arg->imm_or_off_present)
-			res &= 0x00FFFF0000;
+			res &= ARGG_RM|ARGG_M|ARGG_MN|ARGG_MOFFS;//0x00FFFF0000;
 		else
-			res &= 0x000FFF0000;
+			res &= ARGG_RM|ARGG_M|ARGG_MN;//0x000FFF0000;
 	}
 	else
 	{
 		if (arg->imm_or_off_present)
-			res &= 0x000F000FFE;
+			res &= ARGG_MN|ARGG_IMM|ARGG_UIMM|ARGG_REL; //0x000F000FFE;
 		else
-			res &= 0x3F0FFFF000;
+			res &= ARGG_R|ARGG_RM|ARGG_M|ARGG_MN|ARGT_AL|ARGT_AX|ARGT_EAX|ARGT_RAX|ARGT_CL|ARGT_DX;//0x3F0FFFF000;
 	}
 
 	if (arg->seg != REG_NONE)
-		res&=0x00FFFF0000;
+		res &= ARGG_RM|ARGG_M|ARGG_MN|ARGG_MOFFS;//0x00FFFF0000;
 
 	if (arg->reg1 == REG_NONE)
 	{
 		if (arg->indirect)
-			res &= 0x00FFFF0000;
+			res &= ARGG_RM|ARGG_M|ARGG_MN|ARGG_MOFFS; //0x00FFFF0000;
 		else if (arg->num.i < 0)
 		{
 			if (arg->num.i >= I8_MIN)
@@ -477,17 +477,17 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 						aotc->seg_size!=16 && tmpins->flags & IEF_OP_SIZE16)
 				cur.has_operand_prefix=TRUE;
 
-			if (om==OM_IB)			cur.imm.U8_count=1;
-			else if (om==OM_IW) cur.imm.U8_count=2;
-			else if (om==OM_ID) cur.imm.U8_count=4;
+			if (om==OCM_IB)			cur.imm.U8_count=1;
+			else if (om==OCM_IW) cur.imm.U8_count=2;
+			else if (om==OCM_ID) cur.imm.U8_count=4;
 
-			if (om==OM_CB) {
+			if (om==OCM_CB) {
 				cur.imm.U8_count=1;
 				cur.imm.imm_flag=FALSE;
-			} else if (om==OM_CW) {
+			} else if (om==OCM_CW) {
 				cur.imm.U8_count=2;
 				cur.imm.imm_flag=FALSE;
-			} else if (om==OM_CD) {
+			} else if (om==OCM_CD) {
 				cur.imm.U8_count=4;
 				cur.imm.imm_flag=FALSE;
 			}

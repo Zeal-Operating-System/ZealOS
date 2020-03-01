@@ -1887,14 +1887,14 @@ class CInst
 };
 
 //x86 opcodes
-#define OC_OP_SIZE_PREFIX 			0x66
-#define OC_ADDR_SIZE_PREFIX 		0x67
-#define OC_LOCK_PREFIX					0xF0
-#define OC_NOP									0x90
-#define OC_BPT									0xCC
-#define OC_CALL 								0xE8
-#define OC_JMP_REL8 						0xEB
-#define OC_NOP2 								(OC_NOP<<8+OC_OP_SIZE_PREFIX)
+#define OC_OP_SIZE_PREFIX 	0x66
+#define OC_ADDR_SIZE_PREFIX	0x67
+#define OC_LOCK_PREFIX		0xF0
+#define OC_NOP				0x90
+#define OC_BPT				0xCC
+#define OC_CALL 			0xE8
+#define OC_JMP_REL8 		0xEB
+#define OC_NOP2 			(OC_NOP<<8+OC_OP_SIZE_PREFIX)
 
 #define PUSH_C_REGS PUSH RAX PUSH RCX PUSH RDX PUSH RBX PUSH R8 PUSH R9
 #define POP_C_REGS POP R9 POP R8 POP RBX POP RDX POP RCX POP RAX
@@ -1904,31 +1904,31 @@ PUSH RDI PUSH R8 PUSH R9 PUSH R10 PUSH R11 PUSH R12 PUSH R13 PUSH R14 PUSH R15
 #define POP_REGS POP R15 POP R14 POP R13 POP R12 POP R11 POP R10 POP R9 \
 POP R8 POP RDI POP RSI POP RBP POP RBX POP RDX POP RCX POP RAX
 
-#define REG_RAX 				0
-#define REG_RCX 				1
-#define REG_RDX 				2
-#define REG_RBX 				3
-#define REG_RSP 				4
-#define REG_RBP 				5
-#define REG_RSI 				6
-#define REG_RDI 				7
-#define REG_R8					8
-#define REG_REGS_NUM		16
+#define REG_RAX 		0
+#define REG_RCX 		1
+#define REG_RDX 		2
+#define REG_RBX 		3
+#define REG_RSP 		4
+#define REG_RBP 		5
+#define REG_RSI 		6
+#define REG_RDI 		7
+#define REG_R8			8
+#define REG_REGS_NUM	16
 
-#define REG_RIP 				16			//Used by compiler, not really it's num
+#define REG_RIP 	16			//Used by compiler, not really it's num
 //Be careful: RBPu8, RSPu8, RSIu8, RDIu8 are 20-24
-#define REG_NONE				32			//noreg flag sets it to this
-#define REG_ALLOC 			33			//reg flag sets it to this
-#define REG_UNDEF 			I8_MIN
+#define REG_NONE	32			//noreg flag sets it to this
+#define REG_ALLOC 	33			//reg flag sets it to this
+#define REG_UNDEF 	I8_MIN
 
-#define REGG_CLOBBERED					0x013F //RAX,RCX,RDX,RBX,R8
-#define REGG_SAVED							0x0030 //RBP,RSP
-#define REGG_STACK_TMP					0x0200 //R9
-#define REGG_LOCAL_VARS 				0xCCC0 //RSI,RDI,R10,R11,R14,R15
+#define REGG_CLOBBERED			0x013F //RAX,RCX,RDX,RBX,R8
+#define REGG_SAVED				0x0030 //RBP,RSP
+#define REGG_STACK_TMP			0x0200 //R9
+#define REGG_LOCAL_VARS 		0xCCC0 //RSI,RDI,R10,R11,R14,R15
 #define REGG_LOCAL_NON_PTR_VARS 0x3000 //R12,R13
 
-#define AOT_BIN_BLK_BITS 16
-#define AOT_BIN_BLK_SIZE (1<<AOT_BIN_BLK_BITS)
+#define AOT_BIN_BLK_BITS	16
+#define AOT_BIN_BLK_SIZE	(1<<AOT_BIN_BLK_BITS)
 
 class CAOTBinBlk
 {
@@ -2000,14 +2000,14 @@ class CAsmUnresolvedRef
 };
 
 //Opcode Modifier
-#define OM_NO 0
-#define OM_CB 1
-#define OM_CW 2
-#define OM_CD 3
-#define OM_CP 4
-#define OM_IB 5
-#define OM_IW 6
-#define OM_ID 7
+#define OCM_NO 0
+#define OCM_CB 1
+#define OCM_CW 2
+#define OCM_CD 3
+#define OCM_CP 4
+#define OCM_IB 5
+#define OCM_IW 6
+#define OCM_ID 7
 
 #define ARGt_NONE 		0
 #define ARGt_REL8 		1
@@ -2017,6 +2017,7 @@ class CAsmUnresolvedRef
 #define ARGT_REL8		(1<<ARGt_REL8)
 #define ARGT_REL16		(1<<ARGt_REL16)
 #define ARGT_REL32		(1<<ARGt_REL32)
+#define ARGG_REL		(ARGT_REL8|ARGT_REL16|ARGT_REL32)
 
 #define ARGt_IMM8 		4
 #define ARGt_IMM16		5
@@ -2026,6 +2027,7 @@ class CAsmUnresolvedRef
 #define ARGT_IMM16		(1<<ARGt_IMM16)
 #define ARGT_IMM32		(1<<ARGt_IMM32)
 #define ARGT_IMM64		(1<<ARGt_IMM64)
+#define ARGG_IMM		(ARGT_IMM8|ARGT_IMM16|ARGT_IMM32|ARGT_IMM64)
 
 #define ARGt_UIMM8		8
 #define ARGt_UIMM16 	9
@@ -2035,6 +2037,7 @@ class CAsmUnresolvedRef
 #define ARGT_UIMM16		(1<<ARGt_UIMM16)
 #define ARGT_UIMM32		(1<<ARGt_UIMM32)
 #define ARGT_UIMM64		(1<<ARGt_UIMM64)
+#define ARGG_UIMM		(ARGT_UIMM8|ARGT_UIMM16|ARGT_UIMM32|ARGT_UIMM64)
 
 #define ARGt_R8 		12
 #define ARGt_R16		13
@@ -2044,6 +2047,7 @@ class CAsmUnresolvedRef
 #define ARGT_R16		(1<<ARGt_R16)
 #define ARGT_R32		(1<<ARGt_R32)
 #define ARGT_R64		(1<<ARGt_R64)
+$ER$#define ARGG_R			(ARGT_R8|ARGT_R16|ARGT_R32|ARGT_R64)
 
 #define ARGt_RM8		16
 #define ARGt_RM16		17
@@ -2053,6 +2057,7 @@ class CAsmUnresolvedRef
 #define ARGT_RM16		(1<<ARGt_RM16)
 #define ARGT_RM32		(1<<ARGt_RM32)
 #define ARGT_RM64		(1<<ARGt_RM64)
+#define ARGG_RM			(ARGT_RM8|ARGT_RM16|ARGT_RM32|ARGT_RM64)
 
 #define ARGt_M8 		20
 #define ARGt_M16		21
@@ -2062,6 +2067,7 @@ class CAsmUnresolvedRef
 #define ARGT_M16		(1<<ARGt_M16)
 #define ARGT_M32		(1<<ARGt_M32)
 #define ARGT_M64		(1<<ARGt_M64)
+#define ARGG_M			(ARGT_M8|ARGT_M16|ARGT_M32|ARGT_M64)
 
 #define ARGt_M1632		24 // Not implemented
 #define ARGt_M16N32		25 // Not implemented
@@ -2071,6 +2077,7 @@ class CAsmUnresolvedRef
 #define ARGT_M16N32		(1<<ARGt_M16N32)
 #define ARGT_M16N16		(1<<ARGt_M16N16)
 #define ARGT_M32N32		(1<<ARGt_M32N32)
+#define ARGG_MN			(ARGT_M1632|ARGT_M16N32|ARGT_M16N16|ARGT_M32N32)
 
 #define ARGt_MOFFS8 	28
 #define ARGt_MOFFS16	29
@@ -2109,6 +2116,7 @@ class CAsmUnresolvedRef
 #define ARGT_FS			(1<<ARGt_FS)
 #define ARGT_GS			(1<<ARGt_GS)
 #define ARGT_CS			(1<<ARGt_CS)
+#define ARGG_SREG		(ARGT_SREG|ARGT_SS|ARGT_DS|ARGT_ES|ARGT_FS|ARGT_GS|ARGT_CS)
 
 #define ARGt_ST0		46
 #define ARGt_STI		47
