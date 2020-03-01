@@ -822,9 +822,9 @@ pu_new_sys_sym:
 				} else {
 					tmpex->type=HTT_EXPORT_SYS_SYM | HTF_UNRESOLVED;
 					if (tmpc)
-						HashAddAfter(tmpex,tmpc,cc->htc.glbl_hash_table);
+						HashAddAfter(tmpex,tmpc,cc->htc.global_hash_table);
 					else
-						HashAdd(tmpex,cc->htc.glbl_hash_table);
+						HashAdd(tmpex,cc->htc.global_hash_table);
 				}
 			}
 			switch (Bsf(tmpex->type)) {

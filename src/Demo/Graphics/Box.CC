@@ -1,4 +1,4 @@
-I64 glbl_r[4][4];
+I64 global_r[4][4];
 
 U0 DrawIt(CTask *,CDC *dc)
 {
@@ -8,7 +8,7 @@ U0 DrawIt(CTask *,CDC *dc)
 	dc->x=200;
 	dc->y=200;
 	dc->flags|=DCF_TRANSFORMATION;
-	DCMat4x4Set(dc,glbl_r); //This assigns to dc->r and sets r_norm.
+	DCMat4x4Set(dc,global_r); //This assigns to dc->r and sets r_norm.
 	GrLine3(dc,-100,-100,-100, -100, 100,-100);
 	GrLine3(dc,-100, 100,-100,	100, 100,-100);
 	GrLine3(dc, 100, 100,-100,	100,-100,-100);
@@ -31,11 +31,11 @@ U0 Box()
 	DocClear;
 	Fs->draw_it=&DrawIt;
 	while (!ScanChar) {
-		Mat4x4IdentEqu(glbl_r);
-		Mat4x4RotZ(glbl_r,é);
-		Mat4x4RotX(glbl_r,è);
-		Mat4x4RotZ(glbl_r,ê);
-		Mat4x4Scale(glbl_r,s);
+		Mat4x4IdentEqu(global_r);
+		Mat4x4RotZ(global_r,é);
+		Mat4x4RotX(global_r,è);
+		Mat4x4RotZ(global_r,ê);
+		Mat4x4Scale(global_r,s);
 
 		Sleep(20);
 		é+=2*ã/70;

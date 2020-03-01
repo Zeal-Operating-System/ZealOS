@@ -9,7 +9,7 @@ class CTemplateCS
 {
 	CTemplateCSSlider *next_slider,*last_slider;
 	I64 num_sliders,range,spacing,border;
-	U8 *glbl_name;
+	U8 *global_name;
 };
 
 CTemplateCS *CtrlSliderGet()
@@ -20,7 +20,7 @@ CTemplateCS *CtrlSliderGet()
 
 	"$$PURPLE$$Ctrl Slider$$FG$$\n\n";
 
-	res->glbl_name=GetStr("Global Struct Name (ENTER for No Global):");
+	res->global_name=GetStr("Global Struct Name (ENTER for No Global):");
 	res->range=GetI64 		("Range 	(%4d):",30);
 	res->spacing=GetI64("Spacing (%4d):",20);
 	res->border=GetI64 ("Border  (%4d):",2);
@@ -70,8 +70,8 @@ class CSliderState
 		DocPrint(doc,"  I64 %s;\n",tmps->name);
 		tmps=tmps->next;
 	}
-	if (*m->glbl_name)
-		DocPrint(doc,"} %s;\n",m->glbl_name);
+	if (*m->global_name)
+		DocPrint(doc,"} %s;\n",m->global_name);
 	else
 		DocPrint(doc,"};\n");
 
@@ -179,9 +179,9 @@ CCtrl *SliderNew()
   c->flags=CTRLF_SHOW|CTRLF_CAPTURE_LEFT_MS;
   c->type=CTRLT_GENERIC;
 ");
-	if (*m->glbl_name)
+	if (*m->global_name)
 		DocPrint(doc,"  c->state=&%s;\n"
-				"  MemSet(&%s,0,sizeof(CSliderState));\n",m->glbl_name,m->glbl_name);
+				"  MemSet(&%s,0,sizeof(CSliderState));\n",m->global_name,m->global_name);
 	else
 		DocPrint(doc, 			"  c->state=CAlloc(sizeof(CSliderState));\n");
 	DocPrint(doc,
@@ -197,7 +197,7 @@ U0 SliderDel(CCtrl *c)
 {
   QueueRemove(c);
 ");
-	if (!*m->glbl_name)
+	if (!*m->global_name)
 		DocPrint(doc,"  Free(c->state);\n");
 	DocPrint(doc,
 "  Free(c);

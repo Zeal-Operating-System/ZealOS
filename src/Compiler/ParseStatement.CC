@@ -7,15 +7,15 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
 		tmpc=ParseClassNew;
 		tmpc->str=cc->cur_str;
 		cc->cur_str=NULL;
-		HashAdd(tmpc,cc->htc.glbl_hash_table);
+		HashAdd(tmpc,cc->htc.global_hash_table);
 		LBts(&tmpc->flags,Cf_EXTERN);
 		HashSrcFileSet(cc,tmpc);
 		Lex(cc);
 	} else {
 		if (cc->flags&CCF_AOT_COMPILE)
-			tmpc=HashFind(cc->cur_str,cc->htc.glbl_hash_table,HTT_CLASS);
+			tmpc=HashFind(cc->cur_str,cc->htc.global_hash_table,HTT_CLASS);
 		else
-			tmpc=HashSingleTableFind(cc->cur_str,cc->htc.glbl_hash_table,HTT_CLASS);
+			tmpc=HashSingleTableFind(cc->cur_str,cc->htc.global_hash_table,HTT_CLASS);
 		if (tmpc) {
 			if (!Bt(&tmpc->flags,Cf_EXTERN))
 				tmpc=NULL;
@@ -31,7 +31,7 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
 			tmpc=ParseClassNew;
 			tmpc->str=cc->cur_str;
 			cc->cur_str=NULL;
-			HashAdd(tmpc,cc->htc.glbl_hash_table);
+			HashAdd(tmpc,cc->htc.global_hash_table);
 		}
 		LBtr(&tmpc->flags,Cf_EXTERN);
 		if (fsp_flags&FSF_PUBLIC)
@@ -69,11 +69,11 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 	I64 header_arg_count;
 	if (name) {//if not fun_ptr
 		if (cc->flags&CCF_AOT_COMPILE) {
-			if ((tmpf=HashFind(name,cc->htc.glbl_hash_table,HTT_FUN)) &&
+			if ((tmpf=HashFind(name,cc->htc.global_hash_table,HTT_FUN)) &&
 						tmpf->type & HTF_IMPORT)
 				tmpf=NULL;
 		} else
-			if ((tmpf=HashSingleTableFind(name,cc->htc.glbl_hash_table,HTT_FUN)) &&
+			if ((tmpf=HashSingleTableFind(name,cc->htc.global_hash_table,HTT_FUN)) &&
 						!Bt(&tmpf->flags,Cf_EXTERN))
 				tmpf=NULL;
 		if (tmpf && tmpf->use_count<3)
@@ -105,7 +105,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 		LBts(&tmpf->flags,Cf_EXTERN);
 		tmpf->flags|=fsp_flags&FSG_FUN_FLAGS1;
 		if (name) //if not fun_ptr
-			HashAdd(tmpf,cc->htc.glbl_hash_table);
+			HashAdd(tmpf,cc->htc.global_hash_table);
 	}
 	BEqual(&tmpf->type,HTf_PUBLIC,fsp_flags&FSF_PUBLIC);
 	tmpf->return_class=tmp_return;
@@ -406,7 +406,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 			}
 			if (is_array)
 				tmpg->flags|=GVF_ARRAY;
-			HashAdd(tmpg,cc->htc.glbl_hash_table);
+			HashAdd(tmpg,cc->htc.global_hash_table);
 			if (!(cc->flags&CCF_AOT_COMPILE) && !(tmpg->flags&GVF_EXTERN))
 				SysSymImportsResolve(tmpg->str);
 			if (cc->token=='=') {
@@ -816,7 +816,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
 	cc->htc.next=htc;
 	cc->htc.fun=cc->htc.local_var_list=NULL;
 	cc->htc.define_hash_table=cc->htc.hash_table_list=
-				cc->htc.glbl_hash_table=cc->htc.local_hash_table=Fs->hash_table;
+				cc->htc.global_hash_table=cc->htc.local_hash_table=Fs->hash_table;
 	cc->flags=cc->flags & ~(CCF_ASM_EXPRESSIONS|CCF_AOT_COMPILE) | CCF_EXE_BLK;
 	if (cc->token=='{')
 		Lex(cc);

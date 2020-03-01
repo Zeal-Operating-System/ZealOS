@@ -59,19 +59,19 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
 
 	MemCopy(htc,&cc->htc,sizeof(CLexHashTableContext));
 	if (cc->htc.fun)
-		cc->htc.glbl_hash_table=HashTableNew(128);
+		cc->htc.global_hash_table=HashTableNew(128);
 	else
-		cc->htc.glbl_hash_table=HashTableNew(1024);
+		cc->htc.global_hash_table=HashTableNew(1024);
 	if (cc->flags&CCF_AOT_COMPILE) {
-		cc->htc.define_hash_table=cc->htc.glbl_hash_table;
+		cc->htc.define_hash_table=cc->htc.global_hash_table;
 		if (cc->aot_depth<=1)
-			cc->htc.glbl_hash_table->next=comp.asm_hash;
+			cc->htc.global_hash_table->next=comp.asm_hash;
 		else
-			cc->htc.glbl_hash_table->next=htc->glbl_hash_table;
+			cc->htc.global_hash_table->next=htc->global_hash_table;
 	} else
-		cc->htc.glbl_hash_table->next=Fs->hash_table;
+		cc->htc.global_hash_table->next=Fs->hash_table;
 	cc->htc.hash_table_list=cc->htc.local_hash_table=HashTableNew(16);
-	cc->htc.local_hash_table->next=cc->htc.glbl_hash_table;
+	cc->htc.local_hash_table->next=cc->htc.global_hash_table;
 	cc->htc.local_var_list=cc->htc.fun; //CosmiC local vars
 	cc->htc.fun=NULL;
 	try {
@@ -110,9 +110,9 @@ CAOT *CompJoin(CCompCtrl *cc,I64 comp_flags,U8 *map_name=NULL,U8 mapfile_drive_l
 		res=NULL;
 	} else {
 		if (map_name)
-			MapFileWrite(cc->htc.glbl_hash_table,map_name,mapfile_drive_let);
+			MapFileWrite(cc->htc.global_hash_table,map_name,mapfile_drive_let);
 		HashTableDel(cc->htc.local_hash_table);
-		HashTableDel(cc->htc.glbl_hash_table);
+		HashTableDel(cc->htc.global_hash_table);
 
 		if (!aotc->num_bin_U8s)
 			res->buf=NULL;

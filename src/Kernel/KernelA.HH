@@ -1953,7 +1953,7 @@ class CAsmNum
 {
 	I64 	i;
 	U8		*machine_code;
-	CAsmUndefHash *local_asm_undef_hash,*glbl_asm_undef_hash;
+	CAsmUndefHash *local_asm_undef_hash,*global_asm_undef_hash;
 	CAbsCountsI64 abs_counts;
 };
 
@@ -1996,7 +1996,7 @@ class CAsmUnresolvedRef
 	U8		*str; 	//Only for import glbls
 	CAsmUndefHash *asm_undef_hash;
 	Bool	U8_avail,
-				imm_flag;//Only for import glbls
+			imm_flag;//Only for import glbls
 };
 
 //Opcode Modifier
@@ -2080,6 +2080,7 @@ class CAsmUnresolvedRef
 #define ARGT_MOFFS16	(1<<ARGt_MOFFS16)
 #define ARGT_MOFFS32	(1<<ARGt_MOFFS32)
 #define ARGT_MOFFS64	(1<<ARGt_MOFFS64)
+#define ARGG_MOFFS		(ARGT_MOFFS8|ARGT_MOFFS16|ARGT_MOFFS32|ARGT_MOFFS64)
 
 #define ARGt_AL 		32
 #define ARGt_AX 		33
@@ -2136,6 +2137,7 @@ class CAsmUnresolvedRef
 #define ARGG_SIZE_4		(ARGT_REL32|ARGT_IMM32|ARGT_UIMM32|ARGT_R32|ARGT_RM32|ARGT_M32|ARGT_MOFFS32|ARGT_EAX)
 #define ARGG_SIZE_8		(ARGT_IMM64|ARGT_UIMM64|ARGT_R64|ARGT_RM64|ARGT_M64|ARGT_MOFFS64|ARGT_RAX|ARGT_XMM64)
 #define ARGG_SIZE_16	(ARGT_XMM|ARGT_XMM0|ARGT_XMM128|ARGT_M128)
+
 
 #help_index "Compiler/Internal;Hash/System"
 #define OCF_ALIAS 			1
@@ -2247,7 +2249,7 @@ class CAOTCtrl
 	CAOTBinBlk *bin;
 	I64 	num_bin_U8s,
 				max_align_bits,org;
-	CAsmUnresolvedRef *local_unresolved,*glbl_unresolved;
+	CAsmUnresolvedRef *local_unresolved,*global_unresolved;
 	CAOTAbsAddr *abss;
 	CAOTHeapGlobal *heap_glbls;
 	I64 	list_col,list_last_rip;
@@ -2312,7 +2314,7 @@ class CLexHashTableContext
 	CHashTable *hash_table_list,
 				*define_hash_table,
 				*local_hash_table,
-				*glbl_hash_table;
+				*global_hash_table;
 };
 
 //CompCtrl flags
