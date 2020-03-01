@@ -8,6 +8,6 @@ Cd(__DIR__);;
 #include "~/HomeWrappers"
 MapFileLoad("::/Kernel/Kernel");
 MapFileLoad("::/Compiler/Compiler");
-#include "~/HomeKeyPlugIns"
+#include "~/HomeKeyPlugins"
 #include "~/HomeSys"
 Cd("..");;

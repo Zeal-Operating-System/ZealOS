@@ -11,6 +11,6 @@ MapFileLoad("::/Compiler/Compiler");
 
 #include "::/Apps/Psalmody/Load"
 #include "~/TOS/MakeTOS"
-#include "~/HomeKeyPlugIns"
+#include "~/HomeKeyPlugins"
 #include "~/HomeSys"
 Cd("..");;

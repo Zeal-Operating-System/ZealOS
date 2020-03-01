@@ -8,7 +8,7 @@ $WW,1$$FG,5$$TX+CX,"Tips"$$FG$
 
 * See $MA-X+PU,"Key Map",LM="KeyMap;View;\n"$ for a list of defined keys.  Define your own keys in $LK,"MyPutKey",A="MN:MyPutKey"$().  See $LK,"Keyboard Devices",A="HI:Keyboard Devices/System"$.
 
-* $FG,2$<ALT-m>$FG$ maximizes a window.  $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete.  $FG,2$<ALT-a>$FG$ brings back AutoComplete.	$FG,2$<ALT-v>$FG$ vertically tiles windows.  $FG,2$<ALT-h>$FG$ horizontally tiles windows.	The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.CC"$.  You can customize them.
+* $FG,2$<ALT-m>$FG$ maximizes a window.  $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete.  $FG,2$<ALT-a>$FG$ brings back AutoComplete.	$FG,2$<ALT-v>$FG$ vertically tiles windows.  $FG,2$<ALT-h>$FG$ horizontally tiles windows.	The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugins.CC"$.  You can customize them.
 
 * If you make changes to ZenithOS files in your $FG,2$/Home$FG$ directory, generally you reboot to make them take effect.  (You don't compile anything.)	You should have two ZenithOS partitions on your hard drive because a syntax error in a start-up file will make the partition unbootable.	Boot to the second partition or boot to a standard ZenithOS CD/DVD and use $LK,"Mount",A="MN:Mount"$() to mount your hard drive.
 
