@@ -221,7 +221,7 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 	res = comp.size_arg_mask[arg->size];
 
 	if (aotc->seg_size == 64)
-		res &= ~ARGG_MOFFS; //0xFF0FFFFFFF;
+		res &= ~ARGG_MOFFS;
 
 	if (arg->reg1 != REG_NONE && arg->imm_or_off_present && !arg->num.i && 
 			!arg->num.global_asm_undef_hash && !arg->num.local_asm_undef_hash)
@@ -229,53 +229,53 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 
 	if (arg->reg2 != REG_NONE || arg->scale != 1)
 	{//if reg or scale
-		res &= ARGG_M|ARGG_RM; //0x0000FF0000;
+		res &= ARGG_M|ARGG_RM;
 		goto mm_done;
 	}
 
 	if (arg->indirect)
 	{
 		if (arg->imm_or_off_present)
-			res &= ARGG_RM|ARGG_M|ARGG_MN|ARGG_MOFFS;//0x00FFFF0000;
+			res &= ARGG_RM | ARGG_M | ARGG_MN | ARGG_MOFFS;
 		else
-			res &= ARGG_RM|ARGG_M|ARGG_MN;//0x000FFF0000;
+			res &= ARGG_RM | ARGG_M | ARGG_MN;
 	}
 	else
 	{
 		if (arg->imm_or_off_present)
-			res &= ARGG_MN|ARGG_IMM|ARGG_UIMM|ARGG_REL; //0x000F000FFE;
+			res &= ARGG_MN | ARGG_IMM | ARGG_UIMM | ARGG_REL;
 		else
-			res &= ARGG_R|ARGG_RM|ARGG_M|ARGG_MN|ARGT_AL|ARGT_AX|ARGT_EAX|ARGT_RAX|ARGT_CL|ARGT_DX;//0x3F0FFFF000;
+			res &= ARGG_R | ARGG_RM | ARGG_M | ARGG_MN | ARGT_AL | ARGT_AX | ARGT_EAX | ARGT_RAX | ARGT_CL | ARGT_DX;
 	}
 
 	if (arg->seg != REG_NONE)
-		res &= ARGG_RM|ARGG_M|ARGG_MN|ARGG_MOFFS;//0x00FFFF0000;
+		res &= ARGG_RM | ARGG_M | ARGG_MN | ARGG_MOFFS;
 
 	if (arg->reg1 == REG_NONE)
 	{
 		if (arg->indirect)
-			res &= ARGG_RM|ARGG_M|ARGG_MN|ARGG_MOFFS; //0x00FFFF0000;
+			res &= ARGG_RM | ARGG_M | ARGG_MN | ARGG_MOFFS;
 		else if (arg->num.i < 0)
 		{
 			if (arg->num.i >= I8_MIN)
-				res &= 0x8FE;
+				res &= ARGG_REL | ARGG_IMM;//|ARGT_UIMM64; //0x8FE;
 			else if (arg->num.i >= I16_MIN)
-				res &= 0x8EE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_IMM16;///|ARGT_UIMM64;//0x8EE;
 			else if (arg->num.i >= I32_MIN)
-				res &= 0x8CE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32;//|ARGT_UIMM64;//0x8CE;
 			else
-				res &= 0x88E;
+				res &= ARGG_REL | ARGT_IMM64;//|ARGT_UIMM64;//0x88E;
 		}
 		else
 		{
 			if (arg->num.i <= I8_MAX)
-				res &= 0xFFE;
+				res &= ARGG_REL|ARGG_IMM|ARGG_UIMM;//0xFFE;
 			else if (arg->num.i <= U8_MAX)
-				res &= 0xFEE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_IMM16 | ARGG_UIMM;//0xFEE;
 			else if (arg->num.i <= I16_MAX)
-				res &= 0xEEE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32  |ARGT_IMM16 | ARGT_UIMM64 | ARGT_UIMM32 | ARGT_UIMM16;//0xEEE;
 			else if (arg->num.i <= U16_MAX)
-				res &= 0xECE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_UIMM64 | ARGT_UIMM32 | ARGT_UIMM16;//0xECE;
 			else if (arg->num.i <= I32_MAX)
 				res &= 0xCCE;
 			else if (arg->num.i <= U32_MAX)
@@ -283,16 +283,20 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 			else
 				res &= 0x88E;
 		}
-	} else {
-		res&=  0x3F00FFF000;
-		if (!arg->indirect) //M8-M64
-			res&=0xFFFF0FFFFF;
 	}
-	switch (arg->reg1) {
+	else
+	{
+		res &= 0x3F00FFF000;
+		if (!arg->indirect) //M8-M64
+			res &= 0xFFFF0FFFFF;
+	}
+
+	switch (arg->reg1)
+	{
 		case REG_RAX: res&=~0x3000000000; break;
 		case REG_RCX: res&=~0x2F00000000; break;
 		case REG_RDX: res&=~0x1F00000000; break;
-		default:			res&=~0x3F00000000;
+		default:      res&=~0x3F00000000;
 	}
 mm_done:
 	return res;

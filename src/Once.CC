@@ -52,4 +52,4 @@ U0 Tmp()
 	}
 }
 Tmp;
-PaletteSetSmooth;
+PaletteSetGruvboxLight;
