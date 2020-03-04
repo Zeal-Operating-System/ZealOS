@@ -295,7 +295,7 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 		case REG_RAX: res &= ~(ARGT_CL | ARGT_DX);		break;
 		case REG_RCX: res &= ~(ARGG_AXCLDX & ~ARGT_CL); break;
 		case REG_RDX: res &= ~(ARGG_AXCLDX & ~ARGT_DX); break;
-		default:      res &= ~(ARGG_AXCLDX);
+		default:      res &= ~ARGG_AXCLDX;
 	}
 mm_done:
 	return res;
@@ -517,7 +517,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 				}
 				if (arg1==ARGt_R64 || arg1==ARGt_RM64 || arg1==ARGt_M64)
 					cur.REX|=8;
-				if (ARGt_RM8<=arg1<=ARGt_RM64 || ARGt_M8<=arg1<=ARGt_M64) {
+				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_M8<=arg1<=ARGt_M128) {
 					if (aotc->seg_size==16)
 						cur.has_addr_prefix=TRUE;
 
@@ -639,12 +639,12 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 							arg1==ARGt_M64 || arg2==ARGt_M64 ||
 							arg1==ARGt_R64 || arg2==ARGt_R64)
 					cur.REX|=8;
-				if (ARGt_RM8<=arg1<=ARGt_RM64 || ARGt_RM8<=arg2<=ARGt_RM64 ||
-							ARGt_M8<=arg1<=ARGt_M64  || ARGt_M8<=arg2<=ARGt_M64) {
+				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_RM8<=arg2<=ARGt_XMM128 ||
+							ARGt_M8<=arg1<=ARGt_M128  || ARGt_M8<=arg2<=ARGt_M128) {
 					if (aotc->seg_size==16)
 						cur.has_addr_prefix=TRUE;
 					cur.has_ModrM=TRUE;
-					if (ARGt_RM8<=arg2<=ARGt_RM64 || ARGt_M8<=arg2<=ARGt_M64) {
+					if (ARGt_RM8<=arg2<=ARGt_XMM128 || ARGt_M8<=arg2<=ARGt_M128) {
 						tmpa1=&aotc->arg2;
 						tmpa2=&aotc->arg1;
 					}
