@@ -69,11 +69,11 @@ U0 AsmHashLoad()
 	CInst *tmpins;
 	CHashClass *tmpc;
 
-	comp.size_arg_mask[0] = 0x3FF0FFFFFE;
-	comp.size_arg_mask[1] = 0x1110111112;
-	comp.size_arg_mask[2] = 0x2220222224;
-	comp.size_arg_mask[4] = 0x0440444448;
-	comp.size_arg_mask[8] = ARGG_SIZE_8;//0x20000880888880;
+	comp.size_arg_mask[0] = ARGG_SIZE_0;
+	comp.size_arg_mask[1] = ARGG_SIZE_1;
+	comp.size_arg_mask[2] = ARGG_SIZE_2;
+	comp.size_arg_mask[4] = ARGG_SIZE_4;
+	comp.size_arg_mask[8] = ARGG_SIZE_8;
 	comp.size_arg_mask[16] = ARGG_SIZE_16;
 
 	comp.asm_hash = HashTableNew(1024);
@@ -87,7 +87,7 @@ U0 AsmHashLoad()
 	{
 		if (cc->token != TK_IDENT)
 			LexExcept(cc, "Expecting identifier at ");
-		i = ListMatch(cc->cur_str, "NONE\0R8\0R16\0R32\0R64\0SEG\0FSTACK\0XMM\0OPCODE\0KEYWORD\0ASM_KEYWORD\0");
+		i = ListMatch(cc->cur_str, "NONE\0R8\0R16\0R32\0R64\0SEG\0FSTACK\0XMM\0OPCODE\0KEYWORD\0ASM_KEYWORD");
 		if (i <= 0)
 			LexExcept(cc,"Unknown Statement");
 		Lex(cc); //skip keyword

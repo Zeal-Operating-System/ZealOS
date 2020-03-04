@@ -1,4 +1,4 @@
-In("CC\n\n1\n\n5\n\n\n");
+In("CC\n\n1\n\n6\n\n\n");
 BootHDIns;
 "\n\nSuccessful? ";
 if(YorN)
