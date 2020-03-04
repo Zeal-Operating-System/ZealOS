@@ -273,30 +273,30 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 			else if (arg->num.i <= U8_MAX)
 				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_IMM16 | ARGG_UIMM;//0xFEE;
 			else if (arg->num.i <= I16_MAX)
-				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32  |ARGT_IMM16 | ARGT_UIMM64 | ARGT_UIMM32 | ARGT_UIMM16;//0xEEE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_IMM16 | ARGT_UIMM64 | ARGT_UIMM32 | ARGT_UIMM16;//0xEEE;
 			else if (arg->num.i <= U16_MAX)
 				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_UIMM64 | ARGT_UIMM32 | ARGT_UIMM16;//0xECE;
 			else if (arg->num.i <= I32_MAX)
-				res &= 0xCCE;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_IMM32 | ARGT_UIMM64 | ARGT_UIMM32;//0xCCE;
 			else if (arg->num.i <= U32_MAX)
-				res &= 0xC8E;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_UIMM64 | ARGT_UIMM32;//0xC8E;
 			else
-				res &= 0x88E;
+				res &= ARGG_REL | ARGT_IMM64 | ARGT_UIMM64;//0x88E;
 		}
 	}
 	else
 	{
-		res &= 0x3F00FFF000;
+		res &= ARGG_R | ARGG_RM | ARGG_M | ARGT_AL | ARGT_AX | ARGT_EAX | ARGT_RAX | ARGT_CL | ARGT_DX;//0x3F00FFF000;
 		if (!arg->indirect) //M8-M64
-			res &= 0xFFFF0FFFFF;
+			res &= ~ARGG_M;
 	}
 
 	switch (arg->reg1)
 	{
-		case REG_RAX: res&=~0x3000000000; break;
-		case REG_RCX: res&=~0x2F00000000; break;
-		case REG_RDX: res&=~0x1F00000000; break;
-		default:      res&=~0x3F00000000;
+		case REG_RAX: res &= ~(ARGT_CL|ARGT_DX); break;//0x3000000000;
+		case REG_RCX: res &= ~(ARGT_RAX|ARGT_EAX|ARGT_AX|ARGT_AL|ARGT_DX); break;//~0x2F00000000
+		case REG_RDX: res &= ~(ARGT_RAX|ARGT_EAX|ARGT_AX|ARGT_AL|ARGT_CL); break;//~0x1F00000000
+		default:      res &= ~(ARGT_RAX|ARGT_EAX|ARGT_AX|ARGT_AL|ARGT_CL|ARGT_DX);//~0x3F00000000
 	}
 mm_done:
 	return res;

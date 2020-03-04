@@ -117,18 +117,13 @@ CPCIDev* PCNetPCIDevFind()
 }
 
 U32 PCNetGetIOBase()
-{/* Return memory IO base address
-	of PCNet card. Bits 0-4 are not
-	for the IO base, so an AND with
-	~0x1F ignores those bits. */
+{//Return memory IO base address of PCNet card. Bits 0-4 are not for the IO base, so an AND with ~0x1F ignores those bits.
 	U32 io_base = pcnet.pci->base[0] & ~0x1F;
 	return io_base;
 }
 
 U0 PCNetReset()
-{/* Reads the 32- and 16-bit RESET registers,
-	which, regardless of which mode the card is in,
-	will reset it back to 16-bit mode. */
+{//Reads the 32-/16-bit RESET registers, which, regardless of which mode the card is in, will reset it back to 16-bit mode.
 	InU32(PCNetGetIOBase() + PCNET_DW_RESET);
 	InU16(PCNetGetIOBase() + PCNET_WD_RESET);
 	Sleep(1); // OSDev says minimum 1 æS
@@ -136,9 +131,7 @@ U0 PCNetReset()
 
 U0 PCNetEnter32BitMode()
 {/* AMD PCNet datasheet p. 1-930
-	Summary: A 32-bit write (while in 16-bit mode)
-	to RDP  will cause 16-bit mode exit
-	and immediate enter into 32-bit mode. */
+	Summary: A 32-bit write (while in 16-bit mode) to RDP  will cause 16-bit mode exit and immediate enter into 32-bit mode.*/
 	OutU32(PCNetGetIOBase() + PCNET_DW_RDP, 0);
 
 }
@@ -535,9 +528,6 @@ U0 PCNetInit()
 	"pcnet->tx_de_buffer: %X\n",pcnet.tx_de_buffer;
 	"pcnet->rx_de_buffer_phys: %X\n",pcnet.rx_de_buffer_phys;
 	"pcnet->rx_de_buffer_phys: %X\n",pcnet.tx_de_buffer_phys;
-
-
 }
-
 
 PCNetInit();
