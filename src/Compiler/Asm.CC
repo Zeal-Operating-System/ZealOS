@@ -435,7 +435,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 	CAsmArg *tmpa1,*tmpa2;
 	Bool ModrM_complete,U8_avail=FALSE,found_second_possible=FALSE;
 	CInst *tmpins;
-	CAsmIns cur,best;
+	CAsmInst cur,best;
 
 	best.U8_count=255;
 	if (argcount>0)
@@ -452,7 +452,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 			U8_avail=TRUE;
 		if (Bt(&arg1mask,tmpins->arg1) && Bt(&arg2mask,tmpins->arg2) &&
 					(!(tmpins->flags&IEF_NOT_IN_64_BIT) || aotc->seg_size!=64)) {
-			MemSet(&cur,0,sizeof(CAsmIns));
+			MemSet(&cur,0,sizeof(CAsmInst));
 			cur.tmpins=tmpins;
 			ModrM_complete=FALSE;
 			cur.is_default=ToBool(tmpins->flags & IEF_DEFAULT);
@@ -798,7 +798,7 @@ Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
 			if (cur.U8_count<best.U8_count &&
 						!(tmpins->flags & IEF_DONT_SWITCH_MODES &&
 						(cur.has_addr_prefix || cur.has_operand_prefix)))
-				MemCopy(&best,&cur,sizeof(CAsmIns));
+				MemCopy(&best,&cur,sizeof(CAsmInst));
 		}
 	}
 	if (best.U8_count<255) {

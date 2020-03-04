@@ -1964,7 +1964,7 @@ class CAsmNum2
 	Bool	imm_flag;
 };
 
-class CAsmIns
+class CAsmInst
 {
 	CInst *tmpins;
 	CAsmNum2 imm,disp;
