@@ -1872,18 +1872,20 @@ class CCodeMisc
 //Slash value
 #define SV_R_REG				8
 #define SV_I_REG				9
-#define SV_STI_LIKE 		10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.CC,uasm_slash_val"$ only.
+#define SV_STI_LIKE 			10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.CC,uasm_slash_val"$ only.
 #define SV_NONE 				11
 class CInst
 {
 	U8		ins_entry_num, //This entry num in opcode hash entry
-				opcode_count,
-				opcode[4];
+			opcode_count,
+			opcode[4];
 	U16 	flags;
-	U8		slash_val,uasm_slash_val,opcode_modifier,
-				arg1,arg2,
-				size1,size2,//Size in bits
-				pad;
+	U8		arg1,arg2,
+			size1,size2,//Size in bits
+			slash_val,
+			uasm_slash_val,
+			opcode_modifier,pad;
+
 };
 
 //x86 opcodes

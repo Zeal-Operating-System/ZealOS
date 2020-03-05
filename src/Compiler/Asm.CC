@@ -286,7 +286,7 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 	else
 	{
 		res &= ARGG_R | ARGG_RM | ARGG_M | ARGG_AXCLDX;
-		if (!arg->indirect) //M8-M64
+		if (!arg->indirect) //M8-M128
 			res &= ~ARGG_M;
 	}
 
@@ -301,7 +301,7 @@ mm_done:
 	return res;
 }
 
-Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
+Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool u8_avail)
 {
 	CAOTCtrl *aotc=cc->aotc;
 	I64 i;
@@ -315,7 +315,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 				AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I8+num2->imm_flag,
 							aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
 							num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
-							U8_avail);
+							u8_avail);
 			else if (!num2->imm_flag && !(I8_MIN<=num2->num.i<=I8_MAX))
 				LexExcept(cc,"Branch out of range at ");
 			if (num2->imm_flag) {
@@ -342,7 +342,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 					AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I16+num2->imm_flag,
 								aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
 								num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
-								U8_avail);
+								u8_avail);
 				else if (!num2->imm_flag && !(I16_MIN<=num2->num.i<=I16_MAX))
 					LexExcept(cc,"Branch out of range at ");
 				if (num2->imm_flag) {
@@ -369,7 +369,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 					AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I32+num2->imm_flag,
 								aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
 								num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
-								U8_avail);
+								u8_avail);
 				else if (!num2->imm_flag && !(I32_MIN<=num2->num.i<=I32_MAX))
 					LexExcept(cc,"Branch out of range at ");
 				if (num2->imm_flag) {
@@ -395,7 +395,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 					AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I64+num2->imm_flag,
 								aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
 								num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
-								U8_avail);
+								u8_avail);
 				if (num2->imm_flag) {
 					if (num2->num.abs_counts.abs_addres&1) {
 						tmpa=CAlloc(sizeof(CAOTAbsAddr));
@@ -415,7 +415,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 				}
 				AOTStoreCodeU64(cc,num2->num.i);
 			}
-			if (U8_avail && !num2->num.local_asm_undef_hash &&
+			if (u8_avail && !num2->num.local_asm_undef_hash &&
 						!num2->num.global_asm_undef_hash &&
 						!num2->imm_flag && -124<=num2->num.i<=123) {
 				LexWarn(cc,"could use I8 displacement at ");
@@ -426,428 +426,563 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 	return TRUE;
 }
 
-U8 asm_seg_prefixes[6]={0x26,0x2E,0x36,0x3E,0x64,0x65};
+U8 asm_seg_prefixes[6]={0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65};
 
-Bool ParseAsmInst(CCompCtrl *cc,CHashOpcode *tmpo,I64 argcount)
+Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 {
-	CAOTCtrl *aotc=cc->aotc;
-	I64 i,j,arg1,arg2,om,seg,arg1mask,arg2mask;
-	CAsmArg *tmpa1,*tmpa2;
-	Bool ModrM_complete,U8_avail=FALSE,found_second_possible=FALSE;
+	CAOTCtrl *aotc = cc->aotc;
+	I64 i, j, arg1, arg2, ocm, seg, arg1mask, arg2mask;
+	CAsmArg *tmpa1, *tmpa2;
+	Bool ModrM_complete, u8_avail = FALSE, found_second_possible = FALSE;
 	CInst *tmpins;
-	CAsmInst cur,best;
+	CAsmInst cur, best;
 
-	best.U8_count=255;
-	if (argcount>0)
-		arg1mask=AsmMakeArgMask(cc,&aotc->arg1);
-	else
-		arg1mask=1;
-	if (argcount>1)
-		arg2mask=AsmMakeArgMask(cc,&aotc->arg2);
-	else
-		arg2mask=1;
-	for (i=0;i<tmpo->inst_entry_count;i++) {
-		tmpins=&tmpo->ins[i];
-		if (tmpins->arg1==ARGt_REL8 || tmpins->arg2==ARGt_REL8)
-			U8_avail=TRUE;
-		if (Bt(&arg1mask,tmpins->arg1) && Bt(&arg2mask,tmpins->arg2) &&
-					(!(tmpins->flags&IEF_NOT_IN_64_BIT) || aotc->seg_size!=64)) {
-			MemSet(&cur,0,sizeof(CAsmInst));
-			cur.tmpins=tmpins;
-			ModrM_complete=FALSE;
-			cur.is_default=ToBool(tmpins->flags & IEF_DEFAULT);
-			if (aotc->seg_size==64) {
+	best.U8_count = 255;
+
+	arg1mask = arg2mask = 1;
+
+	if (argcount > 0)
+		arg1mask=AsmMakeArgMask(cc, &aotc->arg1);
+	if (argcount > 1)
+		arg2mask=AsmMakeArgMask(cc, &aotc->arg2);
+
+	for (i = 0; i < tmpo->inst_entry_count; i++)
+	{
+		tmpins = &tmpo->ins[i];
+
+		if (tmpins->arg1 == ARGt_REL8 || tmpins->arg2 == ARGt_REL8)
+			u8_avail = TRUE;
+
+		if (Bt(&arg1mask, tmpins->arg1) && Bt(&arg2mask, tmpins->arg2) && (!(tmpins->flags & IEF_NOT_IN_64_BIT) || aotc->seg_size != 64))
+		{
+			MemSet(&cur, 0, sizeof(CAsmInst));
+			cur.tmpins = tmpins;
+			ModrM_complete = FALSE;
+			cur.is_default = ToBool(tmpins->flags & IEF_DEFAULT);
+
+			if (aotc->seg_size == 64)
+			{
 				if (tmpins->flags & IEF_48_REX)
-					cur.REX=0x48;
+					cur.REX = 0x48;
 				else
-					cur.REX=0x40;
-			}
-			cur.disp.imm_flag=TRUE;
-			cur.imm.imm_flag=TRUE;
-			om=tmpins->opcode_modifier;
-			arg1=tmpins->arg1;
-			arg2=tmpins->arg2;
-			tmpa1=&aotc->arg1;
-			tmpa2=&aotc->arg2;
-			cur.last_opcode_U8=tmpins->opcode[tmpins->opcode_count-1];
-
-			if (tmpins->slash_val<8) {
-				cur.ModrM|=tmpins->slash_val<<3;
-				cur.has_ModrM=TRUE;
+					cur.REX = 0x40;
 			}
 
-			if (aotc->seg_size==16 && tmpins->flags & IEF_OP_SIZE32 ||
-						aotc->seg_size!=16 && tmpins->flags & IEF_OP_SIZE16)
-				cur.has_operand_prefix=TRUE;
+			cur.disp.imm_flag = TRUE;
+			cur.imm.imm_flag = TRUE;
+			ocm = tmpins->opcode_modifier;
+			arg1 = tmpins->arg1;
+			arg2 = tmpins->arg2;
+			tmpa1 = &aotc->arg1;
+			tmpa2 = &aotc->arg2;
+			cur.last_opcode_U8 = tmpins->opcode[tmpins->opcode_count - 1];
 
-			if (om==OCM_IB)			cur.imm.U8_count=1;
-			else if (om==OCM_IW) cur.imm.U8_count=2;
-			else if (om==OCM_ID) cur.imm.U8_count=4;
-
-			if (om==OCM_CB) {
-				cur.imm.U8_count=1;
-				cur.imm.imm_flag=FALSE;
-			} else if (om==OCM_CW) {
-				cur.imm.U8_count=2;
-				cur.imm.imm_flag=FALSE;
-			} else if (om==OCM_CD) {
-				cur.imm.U8_count=4;
-				cur.imm.imm_flag=FALSE;
+			if (tmpins->slash_val < 8)
+			{
+				cur.ModrM |= tmpins->slash_val << 3;
+				cur.has_ModrM = TRUE;
 			}
 
-			if (argcount==1) {
-				if (best.U8_count!=255 && !found_second_possible && !best.is_default) {
-					found_second_possible=TRUE;
+			if (aotc->seg_size == 16 && tmpins->flags & IEF_OP_SIZE32 || aotc->seg_size!=16 && tmpins->flags & IEF_OP_SIZE16)
+				cur.has_operand_prefix = TRUE;
+
+			switch (ocm)
+			{
+				case OCM_CB:
+					cur.imm.imm_flag = FALSE;
+				case OCM_IB:
+					cur.imm.U8_count = 1;
+					break;
+				case OCM_CW:
+					cur.imm.imm_flag = FALSE;
+				case OCM_IW:
+					cur.imm.U8_count = 2;
+					break;
+				case OCM_CD:
+					cur.imm.imm_flag = FALSE;
+				case OCM_ID:
+					cur.imm.U8_count = 4;
+			}
+
+			if (argcount == 1)
+			{
+				if (best.U8_count != 255 && !found_second_possible && !best.is_default)
+				{
+					found_second_possible = TRUE;
+
 					if (!aotc->arg1.size)
-						PrintWarn("no size specified at %s,%04d\n",
-									cc->lex_include_stack->full_name,
-									cc->lex_include_stack->line_num-1);
+						PrintWarn("no size specified at %s : Line %04d\n", cc->lex_include_stack->full_name, cc->lex_include_stack->line_num - 1);
 				}
-				if (tmpins->flags & IEF_PLUS_OPCODE) {
-					if (tmpins->slash_val==SV_R_REG) {
-						cur.last_opcode_U8|=tmpa1->reg1&7;
-						if (tmpa1->reg1&15>7)
-							cur.REX|=1;
-						if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-							cur.has_REX=TRUE;
-					} else {//SV_I_REG
-						if (tmpa1->reg1_type==REGT_FSTACK)
-							cur.last_opcode_U8+=tmpa1->reg1;
-					}
-				}
-				if (arg1==ARGt_R64 || arg1==ARGt_RM64 || arg1==ARGt_M64)
-					cur.REX|=8;
-				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_M8<=arg1<=ARGt_M128) {
-					if (aotc->seg_size==16)
-						cur.has_addr_prefix=TRUE;
 
-					cur.has_ModrM=TRUE;
-					if (tmpa1->imm_or_off_present && tmpa1->indirect &&
-								tmpa1->reg1==REG_NONE) {
-						cur.ModrM=cur.ModrM+5;
-						MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-						cur.disp.U8_count=4;
-						if (aotc->seg_size==64)
-							cur.disp.imm_flag=FALSE;
-					} else {
-						if (tmpa1->reg2==REG_NONE && tmpa1->scale==1) {
-							cur.ModrM|=tmpa1->reg1&7;
-							if (tmpa1->reg1&15>7)
-								cur.REX|=1;
-							if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-								cur.has_REX=TRUE;
-						} else {
-							cur.ModrM|=4;
-							cur.has_SIB=TRUE;
-							if (tmpa1->scale==1)
-								cur.SIB=0;
-							else if (tmpa1->scale==2)
-								cur.SIB=0x40;
-							else if (tmpa1->scale==4)
-								cur.SIB=0x80;
-							else if (tmpa1->scale==8)
-								cur.SIB=0xC0;
-							if (tmpa1->reg2==REG_NONE) {
-								ModrM_complete=TRUE;
-								cur.SIB|=(tmpa1->reg1&7)<<3+REG_RBP;
-								if (tmpa1->reg1&15>7)
-									cur.REX|=2;
-								if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-									cur.has_REX=TRUE;
-								MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-								cur.disp.U8_count=4;
-							} else {
-								cur.SIB|=(tmpa1->reg1&7)<<3+tmpa1->reg2&7;
-								if (tmpa1->reg1&15>7)
-									cur.REX|=2;
-								if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-									cur.has_REX=TRUE;
-								if (tmpa1->reg2&15>7)
-									cur.REX|=1;
-								if (tmpa1->reg2>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-									cur.has_REX=TRUE;
-								if (tmpa1->reg2&7==REG_RBP &&
-											!tmpa1->imm_or_off_present && tmpa1->indirect) {
-									cur.ModrM|=0x40;
-									cur.disp.U8_count=1;
-									ModrM_complete=TRUE;
+				if (tmpins->flags & IEF_PLUS_OPCODE)
+				{
+					if (tmpins->slash_val == SV_R_REG)
+					{
+						cur.last_opcode_U8 |= tmpa1->reg1 & 7;
+
+						if (tmpa1->reg1 & 15 > 7)
+							cur.REX |= 1;
+
+						if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+							cur.has_REX = TRUE;
+					}
+					else
+					{//SV_I_REG
+						if (tmpa1->reg1_type == REGT_FSTACK)
+							cur.last_opcode_U8 += tmpa1->reg1;
+					}
+				}
+
+				if (arg1 == ARGt_R64 || arg1 == ARGt_RM64 || arg1 == ARGt_M64)
+					cur.REX |= 8;
+
+				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_M8<=arg1<=ARGt_M128)
+				{
+					if (aotc->seg_size == 16)
+						cur.has_addr_prefix = TRUE;
+
+					cur.has_ModrM = TRUE;
+					if (tmpa1->imm_or_off_present && tmpa1->indirect && tmpa1->reg1 == REG_NONE)
+					{
+						cur.ModrM = cur.ModrM + 5;
+						MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+						cur.disp.U8_count = 4;
+
+						if (aotc->seg_size == 64)
+							cur.disp.imm_flag = FALSE;
+					}
+					else
+					{
+						if (tmpa1->reg2 == REG_NONE && tmpa1->scale == 1)
+						{
+							cur.ModrM |= tmpa1->reg1 & 7;
+							if (tmpa1->reg1 & 0xF > 7)
+								cur.REX |= 1;
+							if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+								cur.has_REX = TRUE;
+						}
+						else
+						{
+							cur.ModrM |= 4;
+							cur.has_SIB = TRUE;
+
+							if (tmpa1->scale == 1)
+								cur.SIB = 0;
+							else if (tmpa1->scale == 2)
+								cur.SIB = 0x40;
+							else if (tmpa1->scale == 4)
+								cur.SIB = 0x80;
+							else if (tmpa1->scale == 8)
+								cur.SIB = 0xC0;
+
+							if (tmpa1->reg2 == REG_NONE)
+							{
+								ModrM_complete = TRUE;
+								cur.SIB |= (tmpa1->reg1 & 7) << 3 + REG_RBP;
+
+								if (tmpa1->reg1 & 15 > 7)
+									cur.REX |= 2;
+
+								if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+									cur.has_REX = TRUE;
+
+								MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+								cur.disp.U8_count = 4;
+							}
+							else
+							{
+								cur.SIB |= (tmpa1->reg1 & 7) << 3 + tmpa1->reg2 & 7;
+
+								if (tmpa1->reg1 & 0xF > 7)
+									cur.REX |= 2;
+
+								if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+									cur.has_REX = TRUE;
+
+								if (tmpa1->reg2 & 0xF > 7)
+									cur.REX |= 1;
+
+								if (tmpa1->reg2 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+									cur.has_REX = TRUE;
+
+								if (tmpa1->reg2 & 7 == REG_RBP && !tmpa1->imm_or_off_present && tmpa1->indirect)
+								{
+									cur.ModrM |= 0x40;
+									cur.disp.U8_count = 1;
+									ModrM_complete = TRUE;
 								}
 							}
 						}
-						if (!ModrM_complete) {
-							if (tmpa1->imm_or_off_present) {
-								MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-								if (!cur.disp.num.machine_code &&
-											I8_MIN<=cur.disp.num.i<=I8_MAX) {
-									cur.ModrM|=0x40;
-									cur.disp.U8_count=1;
-								} else if (aotc->seg_size==16) {
-									cur.ModrM|=0x80;
-									cur.disp.U8_count=2;
-								} else {
-									cur.ModrM|=0x80;
-									cur.disp.U8_count=4;
+
+						if (!ModrM_complete)
+						{
+							if (tmpa1->imm_or_off_present)
+							{
+								MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+
+								if (!cur.disp.num.machine_code && I8_MIN <= cur.disp.num.i <= I8_MAX)
+								{
+									cur.ModrM |= 0x40;
+									cur.disp.U8_count = 1;
 								}
-							} else if (!tmpa1->indirect) {
-								cur.has_addr_prefix=FALSE;
-								cur.ModrM|=0xC0;
-							} else {
-								if (tmpa1->reg1&7==REG_RBP) {
-									cur.ModrM|=0x40;
-									cur.disp.U8_count=1;
+								else if (aotc->seg_size == 16)
+								{
+									cur.ModrM |= 0x80;
+									cur.disp.U8_count = 2;
+								}
+								else
+								{
+									cur.ModrM |= 0x80;
+									cur.disp.U8_count = 4;
+								}
+							}
+							else if (!tmpa1->indirect)
+							{
+								cur.has_addr_prefix = FALSE;
+								cur.ModrM |= 0xC0;
+							}
+							else
+							{
+								if (tmpa1->reg1 & 7 == REG_RBP)
+								{
+									cur.ModrM |= 0x40;
+									cur.disp.U8_count = 1;
 								}
 							}
 						}
 					}
-				} else if (ARGt_REL8<=arg1<=ARGt_REL32 || ARGt_IMM8<=arg1<=ARGt_IMM64 ||
+				}
+				else if (ARGt_REL8<=arg1<=ARGt_REL32 || ARGt_IMM8<=arg1<=ARGt_IMM64 ||
 							ARGt_UIMM8<=arg1<=ARGt_UIMM64) {
-					if (arg1==ARGt_IMM64 || arg2==ARGt_UIMM64)
-						cur.REX|=8;
-					MemCopy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
+					if (arg1 == ARGt_IMM64 || arg2 == ARGt_UIMM64)
+						cur.REX |= 8;
+					MemCopy(&cur.imm.num, &tmpa1->num, sizeof(CAsmNum));
 				}
-			} else if (argcount==2) {
-				if (best.U8_count!=255 && !found_second_possible && !best.is_default) {
-					found_second_possible=TRUE;
+			}
+			else if (argcount == 2)
+			{
+				if (best.U8_count != 255 && !found_second_possible && !best.is_default)
+				{
+					found_second_possible = TRUE;
 					if (!aotc->arg1.size && !aotc->arg2.size)
-						PrintWarn("no size specified at %s,%04d\n",
-									cc->lex_include_stack->full_name,
-									cc->lex_include_stack->line_num-1);
+						PrintWarn("no size specified at %s, %04d\n", cc->lex_include_stack->full_name, cc->lex_include_stack->line_num - 1);
 				}
-				if (tmpins->flags & IEF_PLUS_OPCODE) {
-					if (tmpins->slash_val==SV_R_REG) {
-						if (ARGt_AL<=arg1<=ARGt_RAX) {
-							cur.last_opcode_U8|=tmpa2->reg1&7;
-							if (tmpa2->reg1&15>7)
-								cur.REX|=1;
-							if (tmpa2->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-								cur.has_REX=TRUE;
-						} else {
-							cur.last_opcode_U8|=tmpa1->reg1&7;
-							if (tmpa1->reg1&15>7)
-								cur.REX|=1;
-							if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-								cur.has_REX=TRUE;
+
+				if (tmpins->flags & IEF_PLUS_OPCODE)
+				{
+					if (tmpins->slash_val == SV_R_REG)
+					{
+						if (ARGt_AL<=arg1<=ARGt_RAX)
+						{
+							cur.last_opcode_U8 |= tmpa2->reg1 & 7;
+
+							if (tmpa2->reg1 & 0xF > 7)
+								cur.REX |= 1;
+
+							if (tmpa2->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+								cur.has_REX = TRUE;
 						}
-					} else {//SV_I_REG
-						if (tmpa1->reg1_type==REGT_FSTACK)
-							cur.last_opcode_U8|=tmpa1->reg1;
-						if (tmpa2->reg1_type==REGT_FSTACK)
-							cur.last_opcode_U8|=tmpa2->reg1;
+						else
+						{
+							cur.last_opcode_U8 |= tmpa1->reg1 & 7;
+
+							if (tmpa1->reg1 & 15 > 7)
+								cur.REX |= 1;
+
+							if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+								cur.has_REX = TRUE;
+						}
+					}
+					else
+					{//SV_I_REG
+						if (tmpa1->reg1_type == REGT_FSTACK)
+							cur.last_opcode_U8 |= tmpa1->reg1;
+
+						if (tmpa2->reg1_type == REGT_FSTACK)
+							cur.last_opcode_U8 |= tmpa2->reg1;
 					}
 				}
+
 				if (arg1==ARGt_RM64 || arg2==ARGt_RM64 ||
 							arg1==ARGt_M64 || arg2==ARGt_M64 ||
 							arg1==ARGt_R64 || arg2==ARGt_R64)
-					cur.REX|=8;
+					cur.REX |= 8;
+
 				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_RM8<=arg2<=ARGt_XMM128 ||
 							ARGt_M8<=arg1<=ARGt_M128  || ARGt_M8<=arg2<=ARGt_M128) {
-					if (aotc->seg_size==16)
-						cur.has_addr_prefix=TRUE;
-					cur.has_ModrM=TRUE;
+					if (aotc->seg_size == 16)
+						cur.has_addr_prefix = TRUE;
+					cur.has_ModrM = TRUE;
+
 					if (ARGt_RM8<=arg2<=ARGt_XMM128 || ARGt_M8<=arg2<=ARGt_M128) {
-						tmpa1=&aotc->arg2;
-						tmpa2=&aotc->arg1;
+						tmpa1 = &aotc->arg2;
+						tmpa2 = &aotc->arg1;
 					}
-					if (tmpins->slash_val==SV_R_REG) {
+
+					if (tmpins->slash_val == SV_R_REG)
+					{
 						if (tmpa2->just_seg)
-							cur.ModrM|=tmpa2->seg<<3;
-						else {
-							if (tmpa2->reg1==REG_NONE) {
-								cur.ModrM|=(tmpa1->reg1&7)<<3;
-								if (tmpa1->reg1&15>7)
-									cur.REX|=4;
-								if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-									cur.has_REX=TRUE;
-							} else {
-								cur.ModrM|=(tmpa2->reg1&7)<<3;
-								if (tmpa2->reg1&15>7)
-									cur.REX|=4;
-								if (tmpa2->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-									cur.has_REX=TRUE;
+							cur.ModrM |= tmpa2->seg << 3;
+						else
+						{
+							if (tmpa2->reg1 == REG_NONE)
+							{
+								cur.ModrM |= (tmpa1->reg1 & 7) << 3;
+
+								if (tmpa1->reg1 & 0xF > 7)
+									cur.REX |= 4;
+
+								if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+									cur.has_REX = TRUE;
+							}
+							else
+							{
+								cur.ModrM |= (tmpa2->reg1 & 7) << 3;
+
+								if (tmpa2->reg1 & 0xF > 7)
+									cur.REX |= 4;
+								if (tmpa2->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+									cur.has_REX = TRUE;
 							}
 						}
 					}
-					if (tmpa1->reg2==REG_NONE && tmpa1->scale==1) {
-						if (tmpa1->reg1!=REG_NONE) {
-							cur.ModrM|=tmpa1->reg1&7;
-							if (tmpa1->reg1&15>7)
-								cur.REX|=1;
-							if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
+
+					if (tmpa1->reg2 == REG_NONE && tmpa1->scale == 1)
+					{
+						if (tmpa1->reg1 != REG_NONE)
+						{
+							cur.ModrM |= tmpa1->reg1 & 7;
+
+							if (tmpa1->reg1 & 15 > 7)
+								cur.REX |= 1;
+
+							if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
 								cur.has_REX=TRUE;
-						}
-					} else {
-						cur.ModrM|=4;
-						cur.has_SIB=TRUE;
-						if (tmpa1->scale==1)
-							cur.SIB=0;
-						else if (tmpa1->scale==2)
-							cur.SIB=0x40;
-						else if (tmpa1->scale==4)
-							cur.SIB=0x80;
-						else if (tmpa1->scale==8)
-							cur.SIB=0xC0;
-						if (tmpa1->reg2==REG_NONE) {
-							ModrM_complete=TRUE;
-							cur.SIB|=(tmpa1->reg1&7)<<3+5;
-							if (tmpa1->reg1&15>7)
-								cur.REX|=2;
-							if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-								cur.has_REX=TRUE;
-							MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-							cur.disp.U8_count=4;
-						} else {
-							cur.SIB|=(tmpa1->reg1&7)<<3+tmpa1->reg2&7;
-							if (tmpa1->reg1&15>7)
-								cur.REX|=2;
-							if (tmpa1->reg1>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-								cur.has_REX=TRUE;
-							if (tmpa1->reg2&15>7)
-								cur.REX|=1;
-							if (tmpa1->reg2>=20) //RBPu8,RSPu8,RSIu8,RDIu8?
-								cur.has_REX=TRUE;
-							if (tmpa1->reg2&7==REG_RBP &&
-										!tmpa1->imm_or_off_present && tmpa1->indirect) {
-								cur.ModrM|=0x40;
-								cur.disp.U8_count=1;
-								ModrM_complete=TRUE;
-							}
 						}
 					}
-					if (!ModrM_complete) {
-						if (tmpa1->imm_or_off_present &&
-									tmpa1->indirect && tmpa1->reg1==REG_NONE) {
-							cur.ModrM=cur.ModrM&0xF8+5;
-							MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-							cur.disp.U8_count=4;
-							if (aotc->seg_size==64)
-								cur.disp.imm_flag=FALSE;
-						} else {
-							if (tmpa1->imm_or_off_present) {
-								MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-								if (!cur.disp.num.machine_code &&
-											I8_MIN<=cur.disp.num.i<=I8_MAX) {
-									cur.ModrM|=0x40;
-									cur.disp.U8_count=1;
-								} else if (aotc->seg_size==16) {
-									cur.ModrM|=0x80;
-									cur.disp.U8_count=2;
-								} else {
-									cur.ModrM|=0x80;
-									cur.disp.U8_count=4;
-								}
-							} else if (!tmpa1->indirect) {
-								cur.has_addr_prefix=FALSE;
-								cur.ModrM|=0xC0;
-							} else {
-								if (tmpa1->reg1&7==REG_RBP) {
-									cur.ModrM|=0x40;
-									cur.disp.U8_count=1;
-								}
-							}
-						}
-					}
-				} else if (ARGt_MOFFS8<=arg1<=ARGt_MOFFS64) {
-					MemCopy(&cur.disp.num,&tmpa1->num,sizeof(CAsmNum));
-					if (aotc->seg_size==16)
-						cur.disp.U8_count=2;
 					else
-						cur.disp.U8_count=4;
-					cur.has_addr_prefix=FALSE;
-				} else if (ARGt_MOFFS8<=arg2<=ARGt_MOFFS64) {
-					MemCopy(&cur.disp.num,&tmpa2->num,sizeof(CAsmNum));
-					if (aotc->seg_size==16)
-						cur.disp.U8_count=2;
+					{
+						cur.ModrM |= 4;
+						cur.has_SIB = TRUE;
+
+						switch (tmpa1->scale)
+						{
+							case 1: cur.SIB = 0;    break;
+							case 2: cur.SIB = 0x40; break;
+							case 4:	cur.SIB = 0x80; break;
+							case 8: cur.SIB = 0xC0; break;
+						}
+
+						if (tmpa1->reg2 == REG_NONE)
+						{
+							ModrM_complete = TRUE;
+							cur.SIB |= (tmpa1->reg1 & 7) << 3 + 5;
+							if (tmpa1->reg1 & 0xF > 7)
+								cur.REX |= 2;
+							if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+								cur.has_REX = TRUE;
+							MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+							cur.disp.U8_count = 4;
+						}
+						else
+						{
+							cur.SIB |= (tmpa1->reg1 & 7) << 3 + tmpa1->reg2 & 7;
+
+							if (tmpa1->reg1 & 0xF > 7)
+								cur.REX |= 2;
+
+							if (tmpa1->reg1 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+								cur.has_REX = TRUE;
+
+							if (tmpa1->reg2 & 15 > 7)
+								cur.REX |= 1;
+
+							if (tmpa1->reg2 >= 20) //RBPu8, RSPu8, RSIu8, RDIu8?
+								cur.has_REX=TRUE;
+
+							if (tmpa1->reg2 & 7 == REG_RBP && !tmpa1->imm_or_off_present && tmpa1->indirect)
+							{
+								cur.ModrM |= 0x40;
+								cur.disp.U8_count = 1;
+								ModrM_complete = TRUE;
+							}
+						}
+					}
+
+					if (!ModrM_complete)
+					{
+						if (tmpa1->imm_or_off_present && tmpa1->indirect && tmpa1->reg1 == REG_NONE)
+						{
+							cur.ModrM = cur.ModrM & 0xF8 + 5;
+							MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+							cur.disp.U8_count = 4;
+							if (aotc->seg_size == 64)
+								cur.disp.imm_flag = FALSE;
+						}
+						else
+						{
+							if (tmpa1->imm_or_off_present)
+							{
+								MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+
+								if (!cur.disp.num.machine_code && I8_MIN <= cur.disp.num.i <= I8_MAX)
+								{
+									cur.ModrM |= 0x40;
+									cur.disp.U8_count = 1;
+								}
+								else if (aotc->seg_size == 16)
+								{
+									cur.ModrM |= 0x80;
+									cur.disp.U8_count = 2;
+								}
+								else
+								{
+									cur.ModrM |= 0x80;
+									cur.disp.U8_count = 4;
+								}
+							}
+							else if (!tmpa1->indirect)
+							{
+								cur.has_addr_prefix = FALSE;
+								cur.ModrM |= 0xC0;
+							}
+							else
+							{
+								if (tmpa1->reg1 & 7 == REG_RBP)
+								{
+									cur.ModrM |= 0x40;
+									cur.disp.U8_count = 1;
+								}
+							}
+						}
+					}
+				}
+				else if (ARGt_MOFFS8 <= arg1 <= ARGt_MOFFS64)
+				{
+					MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
+					if (aotc->seg_size == 16)
+						cur.disp.U8_count = 2;
 					else
-						cur.disp.U8_count=4;
-					cur.has_addr_prefix=FALSE;
-				} else if (ARGt_IMM8<=arg1<=ARGt_IMM64 ||
-							ARGt_UIMM8<=arg1<=ARGt_UIMM64) {
-					MemCopy(&cur.imm.num,&tmpa1->num,sizeof(CAsmNum));
+						cur.disp.U8_count = 4;
+					cur.has_addr_prefix = FALSE;
+				}
+				else if (ARGt_MOFFS8 <= arg2 <= ARGt_MOFFS64)
+				{
+					MemCopy(&cur.disp.num, &tmpa2->num, sizeof(CAsmNum));
+					if (aotc->seg_size == 16)
+						cur.disp.U8_count = 2;
+					else
+						cur.disp.U8_count = 4;
+					cur.has_addr_prefix = FALSE;
+				}
+				else if (ARGt_IMM8<=arg1<=ARGt_IMM64 || ARGt_UIMM8<=arg1<=ARGt_UIMM64)
+				{
+					MemCopy(&cur.imm.num, &tmpa1->num, sizeof(CAsmNum));
 					if (arg1==ARGt_IMM8 || arg1==ARGt_UIMM8) cur.imm.U8_count=1;
 					else if (arg1==ARGt_IMM16 || arg1==ARGt_UIMM16) cur.imm.U8_count=2;
 					else if (arg1==ARGt_IMM32 || arg1==ARGt_UIMM32) cur.imm.U8_count=4;
-					else {
-						cur.imm.U8_count=8;
-						cur.REX|=8;
+					else
+					{
+						cur.imm.U8_count = 8;
+						cur.REX |= 8;
 					}
 				}
-				if (ARGt_IMM8<=arg2<=ARGt_IMM64 ||
-							ARGt_UIMM8<=arg2<=ARGt_UIMM64) {
-					MemCopy(&cur.imm.num,&tmpa2->num,sizeof(CAsmNum));
+
+				if (ARGt_IMM8<=arg2<=ARGt_IMM64 || ARGt_UIMM8<=arg2<=ARGt_UIMM64)
+				{
+					MemCopy(&cur.imm.num, &tmpa2->num, sizeof(CAsmNum));
+
 					if (arg2==ARGt_IMM8 || arg2==ARGt_UIMM8) cur.imm.U8_count=1;
 					else if (arg2==ARGt_IMM16 || arg2==ARGt_UIMM16) cur.imm.U8_count=2;
-					else if (arg2==ARGt_IMM32 || arg2==ARGt_UIMM32) {
-						cur.imm.U8_count=4;
+					else if (arg2==ARGt_IMM32 || arg2==ARGt_UIMM32)
+					{
+						cur.imm.U8_count = 4;
+
 						if (tmpins->flags&IEF_REX_ONLY_R8_R15 && arg2==ARGt_UIMM32)
-							cur.REX&=~8;
-					} else {
-						cur.imm.U8_count=8;
-						cur.REX|=8;
+							cur.REX &= ~8;
+					}
+					else
+					{
+						cur.imm.U8_count = 8;
+						cur.REX |= 8;
 					}
 				}
 			}
-			cur.U8_count=tmpins->opcode_count+cur.disp.U8_count+cur.imm.U8_count;
-			if (cur.has_ModrM) cur.U8_count++;
-			if (cur.has_SIB) cur.U8_count++;
-			if (aotc->seg_size==64 && cur.REX&0x40==0x40 &&
-						(cur.REX!=0x40 || cur.has_REX) &&
-						(cur.REX&7 || !(tmpins->flags&IEF_REX_ONLY_R8_R15 ||
-						tmpins->flags&IEF_REX_XOR_LIKE && tmpa1->reg1==tmpa2->reg1 &&
-						cur.ModrM&0xC0==0xC0)))
+			cur.U8_count = tmpins->opcode_count + cur.disp.U8_count + cur.imm.U8_count;
+
+			if (cur.has_ModrM)	cur.U8_count++;
+			if (cur.has_SIB)	cur.U8_count++;
+
+			if (aotc->seg_size == 64 && cur.REX & 0x40 == 0x40 && (cur.REX!=0x40 || cur.has_REX) && (cur.REX & 7 || !(tmpins->flags & IEF_REX_ONLY_R8_R15 ||
+										 tmpins->flags & IEF_REX_XOR_LIKE && tmpa1->reg1 == tmpa2->reg1 && cur.ModrM & 0xC0 == 0xC0)))
 				cur.U8_count++;
-			if (cur.U8_count<best.U8_count &&
-						!(tmpins->flags & IEF_DONT_SWITCH_MODES &&
-						(cur.has_addr_prefix || cur.has_operand_prefix)))
-				MemCopy(&best,&cur,sizeof(CAsmInst));
+
+			if (cur.U8_count < best.U8_count &&
+						!(tmpins->flags & IEF_DONT_SWITCH_MODES && (cur.has_addr_prefix || cur.has_operand_prefix)))
+				MemCopy(&best, &cur, sizeof(CAsmInst));
 		}
 	}
-	if (best.U8_count<255) {
-		tmpins=best.tmpins;
-		seg=REG_NONE;
-		if (argcount>1 && aotc->arg2.seg!=REG_NONE && !aotc->arg2.just_seg)
-			seg=aotc->arg2.seg;
-		else if (argcount>0 && aotc->arg1.seg!=REG_NONE && !aotc->arg1.just_seg)
-			seg=aotc->arg1.seg;
-		if (seg!=REG_NONE)
-			AOTStoreCodeU8(cc,asm_seg_prefixes[seg]);
+
+	if (best.U8_count < 255)
+	{
+		tmpins = best.tmpins;
+		seg = REG_NONE;
+
+		if (argcount > 1 && aotc->arg2.seg != REG_NONE && !aotc->arg2.just_seg)
+			seg = aotc->arg2.seg;
+		else if (argcount > 0 && aotc->arg1.seg != REG_NONE && !aotc->arg1.just_seg)
+			seg = aotc->arg1.seg;
+
+		if (seg != REG_NONE)
+			AOTStoreCodeU8(cc, asm_seg_prefixes[seg]);
+
 		if (best.has_operand_prefix)
-			AOTStoreCodeU8(cc,OC_OP_SIZE_PREFIX); //Operand size override
+			AOTStoreCodeU8(cc, OC_OP_SIZE_PREFIX); //Operand size override
+
 		if (best.has_addr_prefix	|| aotc->seg_size==16 && cur.has_SIB)
-			AOTStoreCodeU8(cc,OC_ADDR_SIZE_PREFIX); //Operand size override
-		if (aotc->seg_size==64 && best.REX&0x40==0x40 &&
-					(best.REX!=0x40 || best.has_REX) &&
-					(best.REX&7||!(tmpins->flags&IEF_REX_ONLY_R8_R15 ||
-					tmpins->flags&IEF_REX_XOR_LIKE && tmpa1->reg1==tmpa2->reg1 &&
-					best.ModrM&0xC0==0xC0)))
-			AOTStoreCodeU8(cc,best.REX);
-		for (j=0;j<tmpins->opcode_count-1;j++)
-			AOTStoreCodeU8(cc,tmpins->opcode[j]);
-		AOTStoreCodeU8(cc,best.last_opcode_U8);
+			AOTStoreCodeU8(cc, OC_ADDR_SIZE_PREFIX); //Operand size override
+
+		if (aotc->seg_size == 64 && best.REX & 0x40 == 0x40 && (best.REX != 0x40 || best.has_REX) &&
+					(best.REX & 7 || !(tmpins->flags & IEF_REX_ONLY_R8_R15 || tmpins->flags & IEF_REX_XOR_LIKE && tmpa1->reg1 == tmpa2->reg1 && best.ModrM & 0xC0 == 0xC0)))
+			AOTStoreCodeU8(cc, best.REX);
+
+		for (j = 0; j < tmpins->opcode_count - 1; j++)
+			AOTStoreCodeU8(cc, tmpins->opcode[j]);
+
+		AOTStoreCodeU8(cc, best.last_opcode_U8);
 
 		if (best.has_ModrM)
-			AOTStoreCodeU8(cc,best.ModrM);
+			AOTStoreCodeU8(cc, best.ModrM);
+
 		if (best.has_SIB)
-			AOTStoreCodeU8(cc,best.SIB);
+			AOTStoreCodeU8(cc, best.SIB);
 
-		if (best.disp.U8_count) {
-			best.disp.rel=aotc->rip+best.disp.U8_count+best.imm.U8_count;
-			if (!AsmStoreNum(cc,&best.disp,1,U8_avail))
+		if (best.disp.U8_count)
+		{
+			best.disp.rel = aotc->rip + best.disp.U8_count + best.imm.U8_count;
+
+			if (!AsmStoreNum(cc, &best.disp, 1, u8_avail))
 				return FALSE;
 		}
 
-		if (best.imm.U8_count) {
-			best.imm.rel=aotc->rip+best.imm.U8_count;
-			if (!AsmStoreNum(cc,&best.imm,1,U8_avail))
+		if (best.imm.U8_count)
+		{
+			best.imm.rel = aotc->rip+best.imm.U8_count;
+
+			if (!AsmStoreNum(cc, &best.imm, 1, u8_avail))
 				return FALSE;
 		}
-		if (tmpins->flags&IEF_ENDING_ZERO) //ENTER inst
-			AOTStoreCodeU8(cc,0);
+
+		if (tmpins->flags & IEF_ENDING_ZERO) //ENTER inst
+			AOTStoreCodeU8(cc, 0);
+
 		return TRUE;
 	}
-	LexExcept(cc,"Invalid inst at ");
+
+	LexExcept(cc, "Invalid instruction at ");
 }
 
-U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_count)
+U0 ParseAsmDefine(CCompCtrl *cc, I64 U8_count)
 {
 	Bool is_dup;
 	I64 i,dup_val;
