@@ -566,14 +566,13 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 							cur.ModrM |= 4;
 							cur.has_SIB = TRUE;
 
-							if (tmpa1->scale == 1)
-								cur.SIB = 0;
-							else if (tmpa1->scale == 2)
-								cur.SIB = 0x40;
-							else if (tmpa1->scale == 4)
-								cur.SIB = 0x80;
-							else if (tmpa1->scale == 8)
-								cur.SIB = 0xC0;
+							switch (tmpa1->scale)
+							{
+								case 1: cur.SIB = 0x00;	break;
+								case 2: cur.SIB = 0x40; break;
+								case 4: cur.SIB = 0x80; break;
+								case 8: cur.SIB = 0xC0; break;
+							}
 
 							if (tmpa1->reg2 == REG_NONE)
 							{
