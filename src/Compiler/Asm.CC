@@ -471,8 +471,8 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 			cur.disp.imm_flag = TRUE;
 			cur.imm.imm_flag = TRUE;
 			ocm = tmpins->opcode_modifier;
-			arg1 = tmpins->arg1;
-			arg2 = tmpins->arg2;
+			arg1 = 1 << tmpins->arg1;
+			arg2 = 1 << tmpins->arg2;
 			tmpa1 = &aotc->arg1;
 			tmpa2 = &aotc->arg2;
 			cur.last_opcode_U8 = tmpins->opcode[tmpins->opcode_count - 1];
@@ -533,10 +533,10 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 					}
 				}
 
-				if (arg1 == ARGt_R64 || arg1 == ARGt_RM64 || arg1 == ARGt_M64)
+				if (arg1 == ARGT_R64 || arg1 == ARGT_RM64 || arg1 == ARGT_M64)
 					cur.REX |= 8;
 
-				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_M8<=arg1<=ARGt_M128)
+				if (arg1 & (ARGG_RM | ARGG_M))
 				{
 					if (aotc->seg_size == 16)
 						cur.has_addr_prefix = TRUE;
@@ -652,9 +652,9 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 						}
 					}
 				}
-				else if (ARGt_REL8<=arg1<=ARGt_REL32 || ARGt_IMM8<=arg1<=ARGt_IMM64 ||
-							ARGt_UIMM8<=arg1<=ARGt_UIMM64) {
-					if (arg1 == ARGt_IMM64 || arg2 == ARGt_UIMM64)
+				else if (arg1 & (ARGG_REL | ARGG_IMM | ARGG_UIMM))
+				{
+					if (arg1 == ARGT_IMM64 || arg2 == ARGT_UIMM64)
 						cur.REX |= 8;
 					MemCopy(&cur.imm.num, &tmpa1->num, sizeof(CAsmNum));
 				}
@@ -672,7 +672,7 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 				{
 					if (tmpins->slash_val == SV_R_REG)
 					{
-						if (ARGt_AL<=arg1<=ARGt_RAX)
+						if (arg1 & (ARGG_AXCLDX & ~(ARGT_CL | ARGT_DX)))
 						{
 							cur.last_opcode_U8 |= tmpa2->reg1 & 7;
 
@@ -703,18 +703,18 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 					}
 				}
 
-				if (arg1==ARGt_RM64 || arg2==ARGt_RM64 ||
-							arg1==ARGt_M64 || arg2==ARGt_M64 ||
-							arg1==ARGt_R64 || arg2==ARGt_R64)
+				if	(arg1 == ARGT_RM64 || arg2 == ARGT_RM64 ||
+					 arg1 == ARGT_M64  || arg2 == ARGT_M64  ||
+					 arg1 == ARGT_R64  || arg2 == ARGT_R64)
 					cur.REX |= 8;
 
-				if (ARGt_RM8<=arg1<=ARGt_XMM128 || ARGt_RM8<=arg2<=ARGt_XMM128 ||
-							ARGt_M8<=arg1<=ARGt_M128  || ARGt_M8<=arg2<=ARGt_M128) {
+				if (arg1 & (ARGG_RM | ARGG_M) || arg2 & (ARGG_M | ARGG_RM))
+				{
 					if (aotc->seg_size == 16)
 						cur.has_addr_prefix = TRUE;
 					cur.has_ModrM = TRUE;
 
-					if (ARGt_RM8<=arg2<=ARGt_XMM128 || ARGt_M8<=arg2<=ARGt_M128) {
+					if (arg2 & (ARGG_RM | ARGG_M)) {
 						tmpa1 = &aotc->arg2;
 						tmpa2 = &aotc->arg1;
 					}
@@ -857,7 +857,7 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 						}
 					}
 				}
-				else if (ARGt_MOFFS8 <= arg1 <= ARGt_MOFFS64)
+				else if (arg1 & ARGG_MOFFS)
 				{
 					MemCopy(&cur.disp.num, &tmpa1->num, sizeof(CAsmNum));
 					if (aotc->seg_size == 16)
@@ -866,7 +866,7 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 						cur.disp.U8_count = 4;
 					cur.has_addr_prefix = FALSE;
 				}
-				else if (ARGt_MOFFS8 <= arg2 <= ARGt_MOFFS64)
+				else if (arg2 & ARGG_MOFFS)
 				{
 					MemCopy(&cur.disp.num, &tmpa2->num, sizeof(CAsmNum));
 					if (aotc->seg_size == 16)
@@ -875,12 +875,12 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 						cur.disp.U8_count = 4;
 					cur.has_addr_prefix = FALSE;
 				}
-				else if (ARGt_IMM8<=arg1<=ARGt_IMM64 || ARGt_UIMM8<=arg1<=ARGt_UIMM64)
+				else if (arg1 & (ARGG_IMM | ARGG_UIMM))
 				{
 					MemCopy(&cur.imm.num, &tmpa1->num, sizeof(CAsmNum));
-					if (arg1==ARGt_IMM8 || arg1==ARGt_UIMM8) cur.imm.U8_count=1;
-					else if (arg1==ARGt_IMM16 || arg1==ARGt_UIMM16) cur.imm.U8_count=2;
-					else if (arg1==ARGt_IMM32 || arg1==ARGt_UIMM32) cur.imm.U8_count=4;
+					if		(arg1 & ARGG_SIZE_1) cur.imm.U8_count = 1;
+					else if (arg1 & ARGG_SIZE_2) cur.imm.U8_count = 2;
+					else if (arg1 & ARGG_SIZE_4) cur.imm.U8_count = 4;
 					else
 					{
 						cur.imm.U8_count = 8;
@@ -888,17 +888,17 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 					}
 				}
 
-				if (ARGt_IMM8<=arg2<=ARGt_IMM64 || ARGt_UIMM8<=arg2<=ARGt_UIMM64)
+				if (arg2 & (ARGG_IMM | ARGG_UIMM))
 				{
 					MemCopy(&cur.imm.num, &tmpa2->num, sizeof(CAsmNum));
 
-					if (arg2==ARGt_IMM8 || arg2==ARGt_UIMM8) cur.imm.U8_count=1;
-					else if (arg2==ARGt_IMM16 || arg2==ARGt_UIMM16) cur.imm.U8_count=2;
-					else if (arg2==ARGt_IMM32 || arg2==ARGt_UIMM32)
+					if		(arg2 & ARGG_SIZE_1) cur.imm.U8_count = 1;
+					else if (arg2 & ARGG_SIZE_2) cur.imm.U8_count = 2;
+					else if (arg2 & ARGG_SIZE_4)
 					{
 						cur.imm.U8_count = 4;
 
-						if (tmpins->flags&IEF_REX_ONLY_R8_R15 && arg2==ARGt_UIMM32)
+						if (tmpins->flags & IEF_REX_ONLY_R8_R15 && arg2 == ARGT_UIMM32)
 							cur.REX &= ~8;
 					}
 					else
@@ -913,12 +913,11 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 			if (cur.has_ModrM)	cur.U8_count++;
 			if (cur.has_SIB)	cur.U8_count++;
 
-			if (aotc->seg_size == 64 && cur.REX & 0x40 == 0x40 && (cur.REX!=0x40 || cur.has_REX) && (cur.REX & 7 || !(tmpins->flags & IEF_REX_ONLY_R8_R15 ||
+			if (aotc->seg_size == 64 && cur.REX & 0x40 == 0x40 && (cur.REX != 0x40 || cur.has_REX) && (cur.REX & 7 || !(tmpins->flags & IEF_REX_ONLY_R8_R15 ||
 										 tmpins->flags & IEF_REX_XOR_LIKE && tmpa1->reg1 == tmpa2->reg1 && cur.ModrM & 0xC0 == 0xC0)))
 				cur.U8_count++;
 
-			if (cur.U8_count < best.U8_count &&
-						!(tmpins->flags & IEF_DONT_SWITCH_MODES && (cur.has_addr_prefix || cur.has_operand_prefix)))
+			if (cur.U8_count < best.U8_count && !(tmpins->flags & IEF_DONT_SWITCH_MODES && (cur.has_addr_prefix || cur.has_operand_prefix)))
 				MemCopy(&best, &cur, sizeof(CAsmInst));
 		}
 	}
