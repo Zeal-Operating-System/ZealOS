@@ -151,7 +151,7 @@ pe_check_binary_ops2:
 					if (stack_op.u16[0]==IC_DEREF && tmpc->ptr_stars_count)
 						tmpc--;
 					else if (stack_op.u16[0]==IC_ADDR) {
-						cc->abs_counts.c_addres++;
+						cc->abs_counts.c_address++;
 						if (intermediate_code_table[tmpi->ic_code].type==IST_DEREF)
 							OptFree(tmpi);
 						tmpc++;
@@ -644,12 +644,12 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CParseStack *ps,CMemberList **_local_var,
 										ICAdd(cc,IC_ABS_ADDR,
 													tmpf->exe_addr,comp.internal_types[RT_PTR]);
 										if (cc->flags&CCF_ASM_EXPRESSIONS)
-											cc->abs_counts.abs_addres++;
+											cc->abs_counts.abs_address++;
 									} else
 										ICAdd(cc,IC_IMM_I64,
 													tmpf->exe_addr,comp.internal_types[RT_PTR]);
 								}
-								cc->abs_counts.c_addres++;
+								cc->abs_counts.c_address++;
 								Lex(cc);
 								return PE_MAYBE_MODIFIERS;
 							}
@@ -657,7 +657,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CParseStack *ps,CMemberList **_local_var,
 							tmpex=tmpc;
 							if (cc->flags&CCF_ASM_EXPRESSIONS &&
 										!(cc->flags&CCF_AOT_COMPILE) && tmpex->type&HTF_IMM) {
-								cc->abs_counts.c_addres++;
+								cc->abs_counts.c_address++;
 								ICAdd(cc,IC_IMM_I64,
 											tmpex->val,comp.internal_types[RT_PTR]);
 								Lex(cc);
@@ -706,7 +706,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CParseStack *ps,CMemberList **_local_var,
 				break;
 			case '$$':
 				if (cc->flags & CCF_ASM_EXPRESSIONS) {
-					cc->abs_counts.abs_addres++;
+					cc->abs_counts.abs_address++;
 					if (cc->flags&CCF_AOT_COMPILE)
 						ICAdd(cc,IC_ABS_ADDR,cc->aotc->rip,comp.internal_types[RT_PTR]);
 					else
@@ -833,7 +833,7 @@ pu_export_sys_sym:
 					if (PREC_TERM>*max_prec)
 						*max_prec=PREC_TERM;
 					if (!(tmpex->type & (HTF_IMM|HTF_IMPORT)))
-						cc->abs_counts.abs_addres++;
+						cc->abs_counts.abs_address++;
 					if (tmpex->type & HTF_UNRESOLVED) {
 						if (!(cc->flags&CCF_ASM_EXPRESSIONS))
 							LexExcept(cc,"Illegal forward ref at ");
@@ -853,7 +853,7 @@ pu_export_sys_sym:
 							ICAdd(cc,IC_ABS_ADDR,tmpex->val,comp.internal_types[RT_PTR]);
 						else {
 							if (tmpex->type&HTF_IMM)
-								cc->abs_counts.c_addres++;
+								cc->abs_counts.c_address++;
 							ICAdd(cc,IC_IMM_I64,tmpex->val,comp.internal_types[RT_PTR]);
 						}
 					}

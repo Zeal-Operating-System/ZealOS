@@ -440,9 +440,9 @@ class CBinFile
 class CPatchTableAbsAddr
 {
 	U8		eit_abs_addr; 	//$LK,"IET_ABS_ADDR",A="MN:IET_ABS_ADDR"$
-	U32 	abs_addres_count;
+	U32 	abs_address_count;
 	U8		zero;
-	U32 	abs_addres[1];
+	U32 	abs_address[1];
 };
 
 //$LK,"CAOTImportExport",A="MN:CAOTImportExport"$ Types. Used in PatchTable.
@@ -1940,8 +1940,8 @@ class CAOTBinBlk
 
 I64 class CAbsCountsI64
 {
-	U16 	abs_addres, //Only odd/even matters. Count of absolute addres in an exp.
-				c_addres; //Only odd/even matters. Count of C addres in an exp.
+	U16 	abs_address, //Only odd/even matters. Count of absolute address in an exp.
+				c_address; //Only odd/even matters. Count of C address in an exp.
 	U32 	externs; //Only nonzero matters. Some regions have externs banned.
 };
 
@@ -1962,7 +1962,7 @@ class CAsmNum
 class CAsmNum2
 {
 	CAsmNum num;
-	I64 	U8_count,rel;
+	I64 	u8_count,rel;
 	Bool	imm_flag;
 };
 
@@ -1970,7 +1970,7 @@ class CAsmInst
 {
 	CInst *tmpins;
 	CAsmNum2 imm,disp;
-	I64 	U8_count,last_opcode_U8,
+	I64 	u8_count,last_opcode_U8,
 				REX,ModrM,SIB;
 	Bool	has_REX,has_ModrM,has_SIB,
 				has_addr_prefix,
