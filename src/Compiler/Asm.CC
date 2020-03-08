@@ -11,7 +11,7 @@ Bool ParseAsmImm(CCompCtrl *cc, CAsmArg *arg)
 	cc->flags &= ~(CCF_UNRESOLVED + CCF_LOCAL);
 
 	if (!IsLexExpression2Bin(cc, &arg->num.machine_code))
-		LexSkipEol(cc);
+		LexSkipEol(cc); //d
 	else
 	{
 		if (cc->abs_counts.externs)
