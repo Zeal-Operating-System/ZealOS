@@ -7,7 +7,7 @@ U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 		switch (cc->token)
 		{
 			case TK_IDENT:
-				if ((i = ListMatch(cc->cur_str, "NO\0CB\0CW\0CD\0CP\0IB\0IW\0ID\0")) >= 0)
+				if ((i = ListMatch(cc->cur_str, "NO\0CB\0CW\0CD\0CP\0IB\0IW\0ID")) >= 0)
 				{
 					tmpins->opcode_modifier = i;
 					break;
@@ -43,6 +43,20 @@ U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 				} else
 					LexExcept(cc, "Invalid slash val at ");
 				break;
+			case '$$':
+				if (Lex(cc) == TK_I64)
+				{
+					if(cc->cur_i64 <= I8_MAX)
+					{
+						tmpins->flags |= IEF_ENDING_IMM;
+						tmpins->ending_imm = cc->cur_i64;
+					}
+					else
+						LexExcept(cc, "Ending IMM too big at ");
+				}
+				else
+					LexExcept(cc, "Invalid ending IMM at ");
+				break;
 			case '!': tmpins->flags |= IEF_DONT_SWITCH_MODES;	break;
 			case '&': tmpins->flags |= IEF_DEFAULT; 			break;
 			case '%': tmpins->flags |= IEF_NOT_IN_64_BIT;	 	break;
@@ -50,7 +64,6 @@ U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 			case '`': tmpins->flags |= IEF_REX_ONLY_R8_R15;		break;
 			case '^': tmpins->flags |= IEF_REX_XOR_LIKE;		break;
 			case '*': tmpins->flags |= IEF_STI_LIKE;			break;
-			case '$$': tmpins->flags |= IEF_ENDING_ZERO;			break;
 			default:
 				return;
 		}

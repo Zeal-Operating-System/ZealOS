@@ -370,6 +370,23 @@ U0 CompLoadDefines()
 								"XMM14\0"
 								"XMM15\0");
 
+	DefineListLoad("ST_XMM64_REGS",
+								"XMM0u64\0"
+								"XMM1u64\0"
+								"XMM2u64\0"
+								"XMM3u64\0"
+								"XMM4u64\0"
+								"XMM5u64\0"
+								"XMM6u64\0"
+								"XMM7u64\0"
+								"XMM9u64\0"
+								"XMM10u64\0"
+								"XMM11u64\0"
+								"XMM12u64\0"
+								"XMM13u64\0"
+								"XMM14u64\0"
+								"XMM15u64\0");
+
 	DefineListLoad("ST_ARG_TYPES",
 								"NONE\0"
 								"REL8\0"
@@ -388,7 +405,6 @@ U0 CompLoadDefines()
 								"R32\0"
 								"R64\0"
 								"XMM\0"
-								"XMM0\0"
 								"RM8\0"
 								"RM16\0"
 								"RM32\0"
@@ -448,10 +464,10 @@ U0 CompFillTables()
 	I64 i;
 	U32 *d;
 
-	comp.to_reg_vars_map=CAlloc(REG_REGS_NUM*sizeof(U8));
-	comp.num_reg_vars=0;
-	comp.reg_vars_mask=REGG_LOCAL_VARS;
-	for (i=0;i<REG_REGS_NUM;i++)
+	comp.to_reg_vars_map = CAlloc(REG_REGS_NUM * sizeof(U8));
+	comp.num_reg_vars = 0;
+	comp.reg_vars_mask = REGG_LOCAL_VARS;
+	for (i = 0; i < REG_REGS_NUM; i++)
 		if (Bt(&comp.reg_vars_mask,i))
 			comp.to_reg_vars_map[comp.num_reg_vars++]=i;
 

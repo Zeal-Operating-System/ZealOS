@@ -625,7 +625,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 						"ST_FSTACK_REGS");
 			break;
 	}
-	if (tmpins->flags&IEF_ENDING_ZERO)
+	if (tmpins->flags&IEF_ENDING_IMM)
 		rip++;
 
 	if (*arg1_st)

@@ -1015,14 +1015,14 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 
 		if (best.imm.u8_count)
 		{
-			best.imm.rel = aotc->rip+best.imm.u8_count;
+			best.imm.rel = aotc->rip + best.imm.u8_count;
 
 			if (!AsmStoreNum(cc, &best.imm, 1, u8_avail))
 				return FALSE;
 		}
 
-		if (tmpins->flags & IEF_ENDING_ZERO) //ENTER inst
-			AOTStoreCodeU8(cc, 0);
+		if (tmpins->flags & IEF_ENDING_IMM) //ENTER/3-arg instructions
+			AOTStoreCodeU8(cc, tmpins->ending_imm);
 
 		return TRUE;
 	}

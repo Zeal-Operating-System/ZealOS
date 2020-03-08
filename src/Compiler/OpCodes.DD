@@ -1,13 +1,13 @@
 $HL$/* See $LK,"AsmHashLoad",A="MN:AsmHashLoad"$().
 
-'!'= IEF_DONT_SWITCH_MODES
-'&'= IEF_DEFAULT
-'%'= IEF_NOT_IN_64_BIT	Not Allowed in 64-bit.
-'='= IEF_48_REX 				Rex 0x48 only if in 64-bit mode.
-'`'= IEF_REX_ONLY_R8_R15
-'^'= IEF_REX_XOR_LIKE
-'*'= IEF_STI_LIKE 			Floating STI-like for UAsm.
-'$$'= IEF_ENDING_ZERO 	Ending zero for ENTER.
+'!' = IEF_DONT_SWITCH_MODES
+'&' = IEF_DEFAULT
+'%' = IEF_NOT_IN_64_BIT		Not Allowed in 64-bit.
+'=' = IEF_48_REX 			Rex 0x48 only if in 64-bit mode.
+'`' = IEF_REX_ONLY_R8_R15
+'^' = IEF_REX_XOR_LIKE
+'*' = IEF_STI_LIKE 			Floating STI-like for UAsm.
+'$$<I8>' = IEF_ENDING_IMM 	Ending IMM for 3 arg instructions or ENTER instruction.
 
 $FG,4$Note:$FG$ ZenithOS uses nonstandard opcodes.
 Asm is kind-of a bonus and I made changes
@@ -799,7 +799,7 @@ OPCODE CHPXCHG8B 0x0F 0xC7, RM64;
 OPCODE DAA 0x27;
 OPCODE DAS 0x2F;
 OPCODE ENTER
- 0xC8, $$IW IMM16;
+ 0xC8, $$0 IW IMM16;
 OPCODE HLT 0xF4;
 OPCODE IN
  0xE4, IB &AL UIMM8
@@ -1299,9 +1299,148 @@ OPCODE MOV_RAX_CR3 0x0F 0x20 0xD8, 32=;
 OPCODE MOV_CR4_RAX 0x0F 0x22 0xE0, 32=;
 OPCODE MOV_RAX_CR4 0x0F 0x20 0xE0, 32=;
 
+OPCODE PADDB 0x66 0x0F 0xFC,/R XMM XMM128;	//Add packed U8s/I8s.
+OPCODE PADDSB 0x66 0x0F 0xEC,/R XMM XMM128; //Add packed I8s with saturation. (saturation meaning sums greater or smaller than I8_MIN/I8_MAX become I8_MIN/I8_MAX)
+OPCODE PADDUSB 0x66 0x0F 0xDC,/R XMM XMM128;//Add packed U8s with saturation.
+OPCODE PADDW 0x66 0x0F 0xFD,/R XMM XMM128;	//Add packed U16s/I16s.
+OPCODE PADDSW 0x66 0x0F 0xED,/R XMM XMM128; //Add packed I16s with saturation.
+OPCODE PADDUSW 0x66 0x0F 0xDD,/R XMM XMM128;//Add packed U16s with saturation.
+OPCODE PADDD 0x66 0x0F 0xFE,/R XMM XMM128;	//Add packed U32s/I32s.
+OPCODE PADDQ 0x66 0x0F 0xD4,/R XMM XMM128;	//Add packed U64s/I64s.
+OPCODE ADDPD 0x66 0x0F 0x58,/R XMM XMM128;	//Add packed F64s.
+OPCODE ADDSD 0xF2 0x0F 0x58,/R XMM XMM64;	//Add scalar F64s.
+OPCODE ADDSUBPD 0x66 0x0F 0xD0,/R XMM XMM128;//Alternating Addition and Subtraction packed F64s.
+OPCODE HADDPD 0x66 0x0F 0x7C,/R XMM XMM128; //Horizontal Add F64s.
+OPCODE HSUBPD 0x66 0x0F 0x7D,/R XMM XMM128; //Horizontal Subtract F64s.
+
+OPCODE PAND 0x66 0x0F 0xDB,/R XMM XMM128;	//AND packed values in XMM#1 and #2.
+OPCODE PANDN 0x66 0x0F 0xDF,/R XMM XMM128;	//AND NOT packed values in XMM#1 and #2.
+OPCODE ANDPD 0x66 0x0F 0x54,/R XMM XMM128;	//AND packed F64s.
+OPCODE ANDNPD 0x66 0x0F 0x55,/R XMM XMM128;	//AND NOT packed F64s.
+
+OPCODE ORPD 0x66 0x0F 0x56,/R XMM XMM128;	//OR packed F64s.
+//OPCODE BLENDPD								
+OPCODE BLENDVPD 0x66 0x0F 0x38 0x15,/R XMM XMM128; //Variable Blend F64s.
+OPCODE PBLENDVB 0x66 0x0F 0x38 0x10,/R XMM XMM128; //Variable Blend packed U8s.
+//OPCODE PBLENDW 0x66 0x0F 0x3A 0x0E,/R XMM XMM128 IMM8; //Variable Blend packed U16s.
+
+//OPCODE CMPPD 0x66 0x0F 0xC2,/R IB XMM XMM128 IMM8;
+OPCODE CMPEQPD 0x66 0x0F 0xC2,/R $$0 XMM XMM128;
+OPCODE CMPLTPD 0x66 0x0F 0xC2,/R $$1 XMM XMM128;
+OPCODE CMPLEPD 0x66 0x0F 0xC2,/R $$2 XMM XMM128;
+OPCODE CMPUNORDPD 0x66 0x0F 0xC2,/R $$3 XMM XMM128;
+OPCODE CMPNEQPD 0x66 0x0F 0xC2,/R $$4 XMM XMM128;
+OPCODE CMPNLTPD 0x66 0x0F 0xC2,/R $$5 XMM XMM128;
+OPCODE CMPNLEPD 0x66 0x0F 0xC2,/R $$6 XMM XMM128;
+OPCODE CMPORDPD 0x66 0x0F 0xC2,/R $$7 XMM XMM128;
+//OPCODE CMPSD 0xF2 0x0F 0xC2,/R IB XMM XMM128 IMM8;
+OPCODE CMPEQSD 0xF2 0x0F 0xC2,/R $$0 XMM XMM128;
+OPCODE CMPLTSD 0xF2 0x0F 0xC2,/R $$1 XMM XMM128;
+OPCODE CMPLESD 0xF2 0x0F 0xC2,/R $$2 XMM XMM128;
+OPCODE CMPUNORDSD 0xF2 0x0F 0xC2,/R $$3 XMM XMM128;
+OPCODE CMPNEQSD 0xF2 0x0F 0xC2,/R $$4 XMM XMM128;
+OPCODE CMPNLTSD 0xF2 0x0F 0xC2,/R $$5 XMM XMM128;
+OPCODE CMPNLESD 0xF2 0x0F 0xC2,/R $$6 XMM XMM128;
+OPCODE CMPORDSD 0xF2 0x0F 0xC2,/R $$7 XMM XMM128;
+OPCODE COMISD 0x66 0x0F 0x2F,/R XMM XMM64;		//Compared Ordered Scalar F64.
+
+//Conversion instructions
+OPCODE CVTDQ2PD 0xF3 0x0F 0xE6,/R XMM XMM64; //Convert Packed U32s to F64s.
+OPCODE CVTPD2DQ 0xF2 0x0F 0xE6,/R XMM XMM128;//Convert Packed F64s to U32s.
+OPCODE CVTTPD2DQ 0x66 0x0F 0xE6,/R XMM XMM128;//Convert Packed F64s to U32s. Truncate inexact result.
+OPCODE CVTSD2SI 
+	0xF2 0x0F 0x2D,/R 32 R32 XMM64		//Convert F64 to I32.
+	0xF2 0x48 0x0F 0x2D,/R R64 XMM64;	//Convert F64 to I64.
+OPCODE CVTTSD2SI 
+	0xF2 0x0F 0x2C,/R 32 R32 XMM64		//Convert F64 to I32. Truncate inexact result.
+	0xF2 0x48 0x0F 0x2C,/R R64 XMM64;	//Convert F64 to I64. Truncate inexact result.
+OPCODE CVTSI2SD
+	0xF2 0x0F 0x2A,/R 32 XMM RM32		//Convert I32 to F64.
+	0xF2 0x48 0x0F 0x2A,/R XMM RM64;	//Convert I64 to F64.
+
+OPCODE DIVPD 0x66 0x0F 0x5E,/R XMM XMM128;	//Divide packed F64s.
+OPCODE DIVSD 0xF2 0x0F 0x5E,/R XMM XMM64;	//Divide scalar F64.
+
+OPCODE MULPD 0x66 0x0F 0x59,/R XMM XMM128; //Multiply packed F64s.
+OPCODE MULSD 0xF2 0x0F 0x59,/R XMM XMM64;  //Multiply scalar F64.
+//OPCODE PCLMULQDQ 0x66 0x0F 0x3A 0x44,/R IB XMM XMM128 IMM8; //Carry-Less Multiply U64s.
+OPCODE PCLMULLQLQDQ 0x66 0x0F 0x3A 0x44,/R $$0 XMM XMM128; //Carry-Less Multiply Low U64 of both XMM#1 and XMM#2.
+OPCODE PCLMULHQLQDQ 0x66 0x0F 0x3A 0x44,/R $$1 XMM XMM128; //Carry-Less Multiply Low U64 of XMM#1 and High U64 of XMM#2.
+OPCODE PCLMULLQHQDQ 0x66 0x0F 0x3A 0x44,/R $$16 XMM XMM128; //Carry-Less Multiply High U64 of XMM#1 and Low U64 of XMM#2.
+OPCODE PCLMULHQHQDQ 0x66 0x0F 0x3A 0x44,/R $$17 XMM XMM128; //Carry-Less Multiply High U64 of both XMM#1 and XMM#2.
+
+//OPCODE MPSADBW 0x66 0x0F 0x3A 0x42,/R IB XMM XMM128 IMM8;
+//OPCODE DPPD 0x66 0x0F 0x3A 0x41,/R IB XMM XMM128 IMM8;
+OPCODE EXTRQ
+//  0x66 0x0F 0x78,/0 IB IB XMM IMM8 IMM8 //Extract field from XMM bit index in IMM#2 bits 5:0 with length in IMM#1 bits 5:0
+ 0x66 0x0F 0x79,/R XMM XMM; //Extract field from XMM, with bit index in 2nd XMM reg 13:8, and length in 5:0
+OPCODE INSERTQ
+//  0xF2 0x0F 0x78,/R IB IB XMM XMM IMM8 IMM8 //bruh
+//Insert field starting at bit 0 of XMM#2 with length specified by XMM#2 bits 69:64. Inserted at index specified by XMM#2 bits 77:72
+ 0xF2 0x0F 0x79,/R XMM XMM;
+
+OPCODE LDMXCSR 0x0F 0xAE,/2 M32;	//Load MXCSR with 32-bit value from memory
+
+OPCODE MAXPD 0x66 0x0F 0x5F,/R XMM XMM128; //Max of a pair of packed F64s. Writes greater to corresponding position in XMM#1.
+OPCODE MAXSD 0xF2 0x0F 0x5F,/R XMM XMM64; //Max of 2 F64s. Writes max to XMM#1.
+OPCODE MINPD 0x66 0x0F 0x5D,/R XMM XMM128;//Min of a pair of packed F64s. Writes lesser to corresponding position in XMM#1.
+OPCODE MINSD 0xF2 0x0F 0x5D,/R XMM XMM64;//Min of 2 F64s. Writes min to XMM#1.
+
+OPCODE MOVSD2//FIXME TODO
+	0xF2 0x0F 0x10,/R XMM  XMM64	//Move F64.
+	0xF2 0x0F 0x11,/R XMM64 XMM;	//Move F64.
+OPCODE MOVAPD
+	0x66 0x0F 0x28,/R XMM XMM128	//Move 128-bit aligned packed F64s from XMM#2/M128 to XMM#1
+	0x66 0x0F 0x29,/R XMM128 XMM;	//Move 128-bit aligned packed F64s from XMM#1 to XMM#2/M128
+OPCODE MOVUPD
+	0x66 0x0F 0x10,/R XMM XMM128	//Move 128-bit unaligned packed F64s from XMM#2/M128 to XMM#1
+	0x66 0x0F 0x11,/R XMM128, XMM;	//Move 128-bit unaligned packed F64s from XMM#2 to XMM#1/M128
 OPCODE MOVD
- 0x66 0x0F 0x6E,/R 32 XMM RM32
- 0x66 0x0F 0x7E,/R 32 RM32 XMM;
+	0x66 0x0F 0x6E,/R 32 XMM RM32	//Move U32 from 32-bit register or memory to XMM.
+	0x66 0x0F 0x7E,/R 32 RM32 XMM	//Move low U32 of XMM to 32-bit register or memory. 
+	0x66 0x48 0x0F 0x6E,/R XMM RM64	//Move U64 from 64-bit register or memory to XMM.
+	0x66 0x48 0x0F 0x7E,/R RM64 XMM;//Move low U64 from XMM to 64-bit register or memory.
 OPCODE MOVQ
- 0x66 0x48 0x0F 0x6E,/R XMM RM64
- 0x66 0x48 0x0F 0x7E,/R RM64 XMM;
+	0xF3 0x0F 0x7E,/R XMM XMM64		//Move U64 from XMMu64/M64 to XMM Zero-extended.
+	0x66 0x0F 0xD6,/R XMM64 XMM;	//Move XMM to XMMu64/M64. Zero-extended.
+OPCODE MOVDDUP 0xF2 0x0F 0x12,/R XMM XMM64; //Move lower F64 from XMM#2 or memory into XMM#1, duplicating it into the higher 64-bits.
+OPCODE MOVDQA
+	0x66 0x0F 0x6F,/R XMM XMM128	//Move aligned 16 bytes from XMM#2/M128 to XMM#1
+	0x66 0x0F 0x7F,/R XMM128 XMM;	//Move aligned 16 bytes from  XMM#2 to XMM#1/M128
+OPCODE MOVDQU
+	0xF3 0x0F 0x6F,/R XMM XMM128	//Move unaligned 16 bytes from XMM#2/M128 to XMM#1
+	0xF3 0x0F 0x7F,/R XMM128 XMM;	//Move unaligned 16 bytes from XMM#2 to XMM#1/M128
+OPCODE LDDQU 0xF2 0x0F 0xF0,/R XMM M128;//Load M128 from unaligned addr to XMM
+OPCODE MASKMOVDQU 0x66 0x0F 0xF7,/R XMM XMM; //Move bytes selected by mask value in XMM#2 from XMM#1 to memory addr in DS:(E/R)DI
+OPCODE MOVHLPS 0x0F 0x12, XMM XMM;	//Move 2 "F32s" (64 bits) from high 64-bits of XMM#2 to low 64-bits of XMM#1
+OPCODE MOVLHPS 0x0F 0x16, XMM XMM;	//Move 2 "F32s" (64 bits) from low 64-bits of XMM#2 to high 64-bits of XMM#1
+OPCODE MOVLPD
+	0x66 0x0F 0x12,/R XMM M64		//Move F64 from M64 to low 64-bits of XMM
+	0x66 0x0F 0x13,/R M64 XMM;		//Move F64 from low-64 bits of XMM to M64
+OPCODE MOVHPD
+	0x66 0x0F 0x16,/R XMM M64		//Move F64 from M64 to high 64-bits of XMM
+	0x66 0x0F 0x17,/R M64 XMM;		//Move F64 from high 64-bits of XMM to M64
+OPCODE MOVMSKPD
+	0x66 0x0F 0x50,/R 32 R32 XMM //Extract sign bits of two packed F64s from XMM to R32. Zero-extends.
+	0x66 0x0F 0x50,/R R64 XMM; //Extract sign bits of two packed F64s from XMM to R32. Zero-extends.
+OPCODE MOVNTDQ 0x66 0x0F 0xE7,/R M128 XMM; //Move XMM to M128, Non-temporal. Minimize cache pollution.
+OPCODE MOVNTDQA 0x66 0x0F 0x38 0x2A,/R XMM M128; //Load 128-/256-bit aligned memory location to XMM. Non-temporal. Minimize cache pollution.
+OPCODE MOVNTPD 0x66 0x0F 0x2B,/R M128 XMM; //Move XMM to M128, Non-temporal. Minimize cache pollution (F64s)
+OPCODE MOVNTSD 0xF2 0x0F 0x2B,/R M64 XMM; //Move low F64 to M64, Non-temporal. Minimize cache pollution.
+OPCODE MOVNTI
+	0x0F 0xC3,/R 32 M32 R32 //Move R32 to M32, minimizing cache pollution.
+	0x0F 0xC3,/R M64 R64;	//Move R64 to M64, minimizing cache pollution.
+
+OPCODE PABSB 0x0F 0x38 0x1C,/R XMM XMM128; //Absolute values of 16 packed I8s.
+OPCODE PABSW 0x0F 0x38 0x1D,/R XMM XMM128; //Absolute values of 8 packed I16s.
+OPCODE PABSD 0x0F 0x38 0x1E,/R XMM XMM128; //Absolute values of 4 packed I32s.
+
+OPCODE PACKSSWB 0x66 0x0F 0x63,/R XMM XMM128; //Pack with Signed Saturation Word to Byte. Convert I16s in XMM#1 and #2 into I8s with saturation.
+OPCODE PACKSSDW 0x66 0x0F 0x6B,/R XMM XMM128; //Pack with Signed Saturation Dword to Word. Convert I32s in XMM#2 and #2 into I16s with saturation.
+OPCODE PACKUSWB 0x66 0x0F 0x67,/R XMM XMM128; //Pack with Unsigned Saturation Word to Byte. Convert U16s in XMM#2 and #2 into U8s with saturation.
+OPCODE PACKUSDW 0x66 0x0F 0x38 0x2B,/R XMM XMM128; //Pack with Unsigned Saturation Dword to Word. Convert U32s in XMM#2 and #2 into U16s with saturation.
+
+//OPCODE PALIGNR 0x66 0x0F 0x3A 0x0F,/R IB XMM XMM128 IMM8;
+
+OPCODE PAVGB 0x66 0x0F 0xE0,/R XMM XMM128;	//Average of packed U8s in corresponding positions in XMM#1 and #2. Writes averages to those positions in XMM#1.
+OPCODE PAVGW 0x66 0x0F 0xE3,/R XMM XMM128;	//Average of packed U16s in corresponding positions in XMM#1 and #2. Writes averages to those positions in XMM#1.
