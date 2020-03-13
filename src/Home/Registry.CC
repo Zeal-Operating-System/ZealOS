@@ -7,4 +7,7 @@ $ID,-2$$ID,-2$$TR,"Once"$
 $ID,2$$TR,"Zenith"$
 $ID,2$$ID,-2$$TR,"User"$
 $ID,2$$ID,-2$$ID,-2$$TR,"AutoComplete"$
-$ID,2$ac.col=70;ac.row=30;$ID,-2$
+$ID,2$ac.col=70;ac.row=30;$ID,-2$$TR,"ZenithOS"$
+$ID,2$$TR,"Talons"$
+$ID,2$F64 best_score=9999.0000;
+$ID,-2$$ID,-2$
