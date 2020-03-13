@@ -36,8 +36,8 @@ I64 InstEntriesCompare(CInst *tmpins1,CInst *tmpins2)
 			if (res=tmpins1->flags&IEF_48_REX - tmpins2->flags&IEF_48_REX)
 				return res;
 
-			i1=tmpins1->arg2==ARGt_IMM64 || tmpins1->arg2==ARGt_UIMM64;
-			i2=tmpins2->arg2==ARGt_IMM64 || tmpins2->arg2==ARGt_UIMM64;
+			i1=tmpins1->arg2==ARGT_IMM64 || tmpins1->arg2==ARGT_UIMM64;
+			i2=tmpins2->arg2==ARGT_IMM64 || tmpins2->arg2==ARGT_UIMM64;
 			return i1-i2;
 		}
 	}
@@ -115,7 +115,7 @@ CInst *InstEntryFind(U8 *rip,I64 opsize,I64 seg_size)
 									goto ief_compare_done;
 								}
 							}
-							if (opsize==64||arg1==ARGt_M64||arg2==ARGt_M64) {
+							if (opsize==64||arg1==ARGT_M64||arg2==ARGT_M64) {
 								if (!Bt(&uasm.ins64_arg_mask,arg1)&&
 											!Bt(&uasm.ins64_arg_mask,arg2)&&
 											!(tmpins->flags&IEF_48_REX))
@@ -152,17 +152,17 @@ CInst *InstEntryFind(U8 *rip,I64 opsize,I64 seg_size)
 								goto ief_compare_done;
 							}
 						}
-						if (opsize==64 || arg1==ARGt_M64 || arg2==ARGt_M64) {
+						if (opsize==64 || arg1==ARGT_M64 || arg2==ARGT_M64) {
 							if (!Bt(&uasm.ins64_arg_mask,arg1) &&
 										!Bt(&uasm.ins64_arg_mask,arg2) &&
-										!(tmpins->flags&IEF_48_REX)&& !(arg2==ARGt_NONE &&
-										(ARGt_UIMM8<=arg1<=ARGt_UIMM64 ||
-										ARGt_IMM8<=arg1<=ARGt_IMM64)))
+										!(tmpins->flags&IEF_48_REX)&& !(arg2==ARGT_NONE &&
+										(ARGT_UIMM8<=arg1<=ARGT_UIMM64 ||
+										ARGT_IMM8<=arg1<=ARGT_IMM64)))
 								m=1;
-							else if (tmpins->arg2==ARGt_IMM64 || tmpins->arg2==ARGt_UIMM64) {
-								if (arg2!=ARGt_IMM64&&arg2!=ARGt_UIMM64)
+							else if (tmpins->arg2==ARGT_IMM64 || tmpins->arg2==ARGT_UIMM64) {
+								if (arg2!=ARGT_IMM64&&arg2!=ARGT_UIMM64)
 									m=1;
-							} else if (arg2==ARGt_IMM64||arg2==ARGt_UIMM64)
+							} else if (arg2==ARGT_IMM64||arg2==ARGT_UIMM64)
 								m=-1;
 						} else {
 							if (Bt(&uasm.ins64_arg_mask,arg1) ||
@@ -198,14 +198,14 @@ U0 UAsmHashLoad()
 	CInst *tmpins;
 	I64 i,j1,j2,k;
 
-	uasm.ins64_arg_mask=0x0880888880+1<<ARGt_ST0+1<<ARGt_STI;
-	uasm.signed_arg_mask=1<<ARGt_REL8+1<<ARGt_REL16+1<<ARGt_REL32+
-				1<<ARGt_IMM8+1<<ARGt_IMM16+1<<ARGt_IMM32+1<<ARGt_IMM64;
-	uasm.mem_arg_mask=1<<ARGt_M8+1<<ARGt_M16+1<<ARGt_M32+1<<ARGt_M64;
+	uasm.ins64_arg_mask=0x0880888880+1<<ARGT_ST0+1<<ARGT_STI;
+	uasm.signed_arg_mask=1<<ARGT_REL8+1<<ARGT_REL16+1<<ARGT_REL32+
+				1<<ARGT_IMM8+1<<ARGT_IMM16+1<<ARGT_IMM32+1<<ARGT_IMM64;
+	uasm.mem_arg_mask=1<<ARGT_M8+1<<ARGT_M16+1<<ARGT_M32+1<<ARGT_M64;
 
 	uasm.table_16_32_entries=uasm.table_64_entries=0;
-	for (i=0;i<=comp.asm_hash->mask;i++) {
-		tmph=comp.asm_hash->body[i];
+	for (i=0;i<=cmp.asm_hash->mask;i++) {
+		tmph=cmp.asm_hash->body[i];
 		while (tmph) {
 			if (tmph->type==HTT_OPCODE && !(tmph->oc_flags&OCF_ALIAS)) {
 				tmpins=&tmph->ins;
@@ -223,8 +223,8 @@ U0 UAsmHashLoad()
 	j1=j2=0;
 	uasm.table_16_32=MAlloc(uasm.table_16_32_entries*sizeof(U8 *));
 	uasm.table_64 	=MAlloc(uasm.table_64_entries 	*sizeof(U8 *));
-	for (i=0;i<=comp.asm_hash->mask;i++) {
-		tmph=comp.asm_hash->body[i];
+	for (i=0;i<=cmp.asm_hash->mask;i++) {
+		tmph=cmp.asm_hash->body[i];
 		while (tmph) {
 			if (tmph->type==HTT_OPCODE && !(tmph->oc_flags&OCF_ALIAS)) {
 				tmpins=&tmph->ins;
@@ -369,7 +369,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 		rip--;
 		RM1=*rip++ - tmpins->opcode[tmpins->opcode_count-1]+REX_b;
 		ptr=NULL;
-		if (ARGt_R8<=arg1<=ARGt_R64) {
+		if (ARGT_R8<=arg1<=ARGT_R64) {
 			if (arg1_size==8) {
 				if (REX!=-1)
 					ptr="ST_U8_REX_REGS";
@@ -400,9 +400,9 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 		}
 	}
 
-	if (ARGt_RM8<=arg1<=ARGt_RM64 || ARGt_M8<=arg1<=ARGt_M64 ||
-				ARGt_RM8<=arg2<=ARGt_RM64 || ARGt_M8<=arg2<=ARGt_M64) {
-		if (ARGt_RM8<=arg2<=ARGt_RM64 || ARGt_M8<=arg2<=ARGt_M64) {
+	if (ARGT_RM8<=arg1<=ARGT_RM64 || ARGT_M8<=arg1<=ARGT_M64 ||
+				ARGT_RM8<=arg2<=ARGT_RM64 || ARGT_M8<=arg2<=ARGT_M64) {
+		if (ARGT_RM8<=arg2<=ARGT_RM64 || ARGT_M8<=arg2<=ARGT_M64) {
 			reloced_arg1=arg2;
 			reloced_arg2=arg1;
 			reloced_arg1_size=arg2_size;
@@ -436,11 +436,11 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 			RM2=-1;
 		else {
 			ptr=NULL;
-			if (reloced_arg2==ARGt_SREG) {
+			if (reloced_arg2==ARGT_SREG) {
 				if (RM2<=5)
 					ptr="ST_SEG_REGS";
-			} else if (!(ARGt_IMM8<=reloced_arg2<=ARGt_IMM64) &&
-						!(ARGt_UIMM8<=reloced_arg2<=ARGt_UIMM64)) {
+			} else if (!(ARGT_IMM8<=reloced_arg2<=ARGT_IMM64) &&
+						!(ARGT_UIMM8<=reloced_arg2<=ARGT_UIMM64)) {
 				if (reloced_arg2_size==8) {
 					if (REX!=-1)
 						ptr="ST_U8_REX_REGS";
@@ -460,13 +460,13 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 			disp=*rip(I32 *)++;
 			if (seg_size==64) {
 				disp+=rip;
-				if (reloced_arg2==ARGt_IMM8 || reloced_arg2==ARGt_UIMM8)
+				if (reloced_arg2==ARGT_IMM8 || reloced_arg2==ARGT_UIMM8)
 					disp++;
-				else if (reloced_arg2==ARGt_IMM16 || reloced_arg2==ARGt_UIMM16)
+				else if (reloced_arg2==ARGT_IMM16 || reloced_arg2==ARGT_UIMM16)
 					disp+=2;
-				else if (reloced_arg2==ARGt_IMM32 || reloced_arg2==ARGt_UIMM32)
+				else if (reloced_arg2==ARGT_IMM32 || reloced_arg2==ARGT_UIMM32)
 					disp+=4;
-				else if (reloced_arg2==ARGt_IMM64 || reloced_arg2==ARGt_UIMM64)
+				else if (reloced_arg2==ARGT_IMM64 || reloced_arg2==ARGT_UIMM64)
 					disp+=8;
 			}
 			CatPrint(reloced_arg1_st,"[%X]",disp);
@@ -526,33 +526,33 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 	}
 
 	switch (arg1) {
-		case ARGt_IMM8:
-		case ARGt_UIMM8:
+		case ARGT_IMM8:
+		case ARGT_UIMM8:
 			imm=*rip(U8 *)++;
 			CatPrint(arg1_st,"%02X",imm);
 			if (tmpins->opcode[0]==0xCD && (ptr=DefineSub(imm,"ST_INT_NAMES")))
 				CatPrint(arg1_st," %s",ptr);
 			break;
-		case ARGt_IMM16:
-		case ARGt_UIMM16:
+		case ARGT_IMM16:
+		case ARGT_UIMM16:
 			CatPrint(arg1_st,"%04X",*rip(U16 *)++);
 			break;
-		case ARGt_IMM32:
-		case ARGt_UIMM32:
+		case ARGT_IMM32:
+		case ARGT_UIMM32:
 			CatPrint(arg1_st,"%08X",*rip(U32 *)++);
 			break;
-		case ARGt_IMM64:
-		case ARGt_UIMM64:
+		case ARGT_IMM64:
+		case ARGT_UIMM64:
 			CatPrint(arg1_st,"%016X",*rip(I64 *)++);
 			break;
 		start:
-			case ARGt_REL8:
+			case ARGT_REL8:
 				disp=*rip(I8 *)++;
 				break;
-			case ARGt_REL16:
+			case ARGT_REL16:
 				disp=*rip(I16 *)++;
 				break;
-			case ARGt_REL32:
+			case ARGT_REL32:
 				disp=*rip(I32 *)++;
 				break;
 		end:
@@ -565,7 +565,7 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 				CatPrint(arg1_st,"%P ",disp);
 			if (_jmp_dst) *_jmp_dst=disp;
 			break;
-		case ARGt_MOFFS8...ARGt_MOFFS64:
+		case ARGT_MOFFS8...ARGT_MOFFS64:
 			CatPrint(arg1_st,seg_overrides);
 			if (arg1_size==8)
 				disp=*rip(U8 *)++;
@@ -575,12 +575,12 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 				disp=*rip(U32 *)++;
 			CatPrint(arg1_st,"[%X]",disp);
 			break;
-		case ARGt_AL ... ARGt_DX:
-		case ARGt_SS ... ARGt_ST0:
-			CatPrint(arg1_st,"%z",arg1-ARGt_AL,
+		case ARGT_AL ... ARGT_DX:
+		case ARGT_SS ... ARGT_ST0:
+			CatPrint(arg1_st,"%z",arg1-ARGT_AL,
 						"AL\0AX\0EAX\0RAX\0CL\0DX\0 \0 \0SS\0DS\0ES\0FS\0GS\0CS\0ST0\0");
 			break;
-		case ARGt_STI:
+		case ARGT_STI:
 			rip--;
 			CatPrint(arg1_st,"%Z",*rip++ - tmpins->opcode[tmpins->opcode_count-1],
 						"ST_FSTACK_REGS");
@@ -588,23 +588,23 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 	}
 
 	switch (arg2) {
-		case ARGt_IMM8:
-		case ARGt_UIMM8:
+		case ARGT_IMM8:
+		case ARGT_UIMM8:
 			CatPrint(arg2_st,"%02X",*rip(U8 *)++);
 			break;
-		case ARGt_IMM16:
-		case ARGt_UIMM16:
+		case ARGT_IMM16:
+		case ARGT_UIMM16:
 			CatPrint(arg2_st,"%04X",*rip(U16 *)++);
 			break;
-		case ARGt_IMM32:
-		case ARGt_UIMM32:
+		case ARGT_IMM32:
+		case ARGT_UIMM32:
 			CatPrint(arg2_st,"%08X",*rip(U32 *)++);
 			break;
-		case ARGt_IMM64:
-		case ARGt_UIMM64:
+		case ARGT_IMM64:
+		case ARGT_UIMM64:
 			CatPrint(arg2_st,"%016X",*rip(I64 *)++);
 			break;
-		case ARGt_MOFFS8...ARGt_MOFFS64:
+		case ARGT_MOFFS8...ARGT_MOFFS64:
 			CatPrint(arg2_st,seg_overrides);
 			if (arg2_size==8)
 				disp=*rip(U8 *)++;
@@ -614,18 +614,18 @@ U0 Ui(U8 *buf,U8 **_rip,I64 seg_size=64,I64 *_jmp_dst=NULL,Bool just_ins=FALSE)
 				disp=*rip(U32 *)++;
 			CatPrint(arg2_st,"[%X]",disp);
 			break;
-		case ARGt_AL ... ARGt_DX:
-		case ARGt_SS ... ARGt_ST0:
-			CatPrint(arg2_st,"%z",arg2-ARGt_AL,
+		case ARGT_AL ... ARGT_DX:
+		case ARGT_SS ... ARGT_ST0:
+			CatPrint(arg2_st,"%z",arg2-ARGT_AL,
 						"AL\0AX\0EAX\0RAX\0CL\0DX\0 \0 \0SS\0DS\0ES\0FS\0GS\0CS\0ST0\0");
 			break;
-		case ARGt_STI:
+		case ARGT_STI:
 			rip--;
 			CatPrint(arg2_st,"%Z",*rip++ -tmpins->opcode[tmpins->opcode_count-1],
 						"ST_FSTACK_REGS");
 			break;
 	}
-	if (tmpins->flags&IEF_ENDING_IMM)
+	if (tmpins->flags&IEF_ENDING_ZERO)
 		rip++;
 
 	if (*arg1_st)

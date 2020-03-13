@@ -174,10 +174,9 @@ U0 D(U8 *addr,I64 count=0x80,Bool show_offset=TRUE)
 			"%02X ",ptr[i];
 		for (;i<16;i++)
 			"   ";
-		for (i=0;i<j;i++)
-		{
+		for (i=0;i<j;i++) {
 			ch=ptr[i];
-			if (ch< CH_SPACE || ch==CH_BACKSPACE)
+			if (ch < CH_SPACE || ch==CH_BACKSPACE)
 				ch='.';
 			'' ch;
 			if (ch=='$$')

@@ -56,7 +56,7 @@ U0 ParseVarInit(CCompCtrl *cc,U8 **_dst,CHashClass *tmpc,CArrayDim *tmpad,
 			machine_code=LexExpression2Bin(cc,&type);
 			if (old_flags&CCF_AOT_COMPILE &&
 						cc->flags&CCF_NOT_CONST &&
-						!Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)) {
+						!Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
 				cc->flags=cc->flags&~CCF_NO_ABSS|CCF_AOT_COMPILE;
 				Free(machine_code);
 				if (pass==2) {
@@ -208,7 +208,7 @@ U0 ParseGlobalInit(CCompCtrl *cc,CHashGlobalVar *tmpg,I64 pass)
 	U8 *dst=tmpg->data_addr;
 	ParseVarInit2(cc,&dst,tmpg->var_class,&tmpg->dim,
 				tmpg->data_addr_rip,&tmpg->data_addr,
-				Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)||
+				Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)||
 				Bt(&cc->flags,CCf_AOT_COMPILE),pass);
 }
 
@@ -353,7 +353,7 @@ CHashClass *ParseType(CCompCtrl *cc,CHashClass **_tmpc1,
 		if (Lex(cc)!='(')
 			LexExcept(cc,"Expecting '(' at ");
 		fun_ptr=ParseFunJoin(cc,tmpc1,NULL,fsp_flags)+ptr_stars_count;
-		tmpc1=comp.internal_types[RT_PTR]+ptr_stars_count;
+		tmpc1=cmp.internal_types[RT_PTR]+ptr_stars_count;
 	}
 	ParseArrayDims(cc,mode,tmpad);
 
@@ -380,7 +380,7 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
 	Lex(cc);
 	tmpm=MemberListNew(_reg);
 	tmpm->flags=MLF_DOT_DOT_DOT;
-	tmpm->member_class=comp.internal_types[RT_I64];
+	tmpm->member_class=cmp.internal_types[RT_I64];
 	tmpm->str=StrNew("argc");
 	tmpm->offset=tmpf->size;
 	tmpm->size=8;
@@ -389,7 +389,7 @@ U0 ParseDotDotDot(CCompCtrl *cc,CHashFun *tmpf,I64 _reg)
 
 	tmpm=MemberListNew(_reg);
 	tmpm->flags=MLF_DOT_DOT_DOT;
-	tmpm->member_class=comp.internal_types[RT_I64];
+	tmpm->member_class=cmp.internal_types[RT_I64];
 	tmpm->str=StrNew("argv");
 	tmpm->dim.total_count=127; //arbitrary
 	tmpm->dim.next=tmpad=MAlloc(sizeof(CArrayDim));

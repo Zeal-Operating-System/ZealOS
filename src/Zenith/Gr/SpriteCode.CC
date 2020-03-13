@@ -128,7 +128,7 @@ U0 SpriteElem2Code(CDoc *doc,CSprite *tmpg)
 					else if (*ptr(U8 *)<16)
 						DocPrint(doc,"%X",*ptr(U8 *));
 					else
-						DocPrint(doc,"%c",CH_SPACE);
+						DocPrint(doc," ");
 					if (++col>=k && (i+1<width_internal||j+1<tmpg->pwhu.height)) {
 						DocPrint(doc,"\n");
 						col=0;

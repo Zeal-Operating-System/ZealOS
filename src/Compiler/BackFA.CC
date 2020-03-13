@@ -279,7 +279,7 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
 			tmpex=CAlloc(sizeof(CHashExport));
 			tmpex->str=StrNew("SYS_POW");
 			tmpex->type=HTT_EXPORT_SYS_SYM|HTF_UNRESOLVED|HTF_IMPORT;
-			HashAdd(tmpex,cc->htc.global_hash_table);
+			HashAdd(tmpex,cc->htc.glbl_hash_table);
 		}
 		if (tmpex->type&HTF_IMPORT) {
 			if (GetOption(OPTf_USE_IMM64)) {

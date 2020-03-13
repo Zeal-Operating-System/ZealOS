@@ -37,7 +37,7 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
 	cc->opts=1<<OPTf_WARN_UNUSED_VAR|1<<OPTf_WARN_HEADER_MISMATCH;
 	cc->htc.hash_mask=HTG_TYPE_MASK-HTT_IMPORT_SYS_SYM;
 	cc->htc.define_hash_table=cc->htc.hash_table_list=
-				cc->htc.global_hash_table=cc->htc.local_hash_table=Fs->hash_table;
+				cc->htc.glbl_hash_table=cc->htc.local_hash_table=Fs->hash_table;
 	if (flags&CCF_KEEP_AT_SIGN)
 		cc->char_bmp_alpha_numeric=char_bmp_alpha_numeric_no_at;
 	else
@@ -147,7 +147,7 @@ lgc_start2:
 								tmpf->line_start=doc_e->next;
 								tmpf->line_num=doc_e->y+2;//+1 because NEW_LINE is on prev line
 //+1 because doc y starts at zero
-								comp.compiled_lines++;
+								cmp.compiled_lines++;
 								cc->last_U16='\n';
 								goto lgc_done;
 							case DOCT_TAB:
@@ -245,14 +245,15 @@ lgc_start2:
 				tmpf=cc->lex_include_stack;
 				if (!(tmpf->flags & LFSF_DOC)) {
 					tmpf->line_num++;
-					comp.compiled_lines++;
+					cmp.compiled_lines++;
 					tmpf->line_start=src;
 				}
 				break;
 			case 0xFF: //nobound switch
 		}
 lgc_done:
-		if (cc->opts & OPTF_ECHO && cc->last_U16<256 && Bt(char_bmp_printable,cc->last_U16))
+		if (cc->opts & OPTF_ECHO &&
+					cc->last_U16<256 && Bt(char_bmp_printable,cc->last_U16))
 			'' cc->last_U16;
 	}
 	return cc->last_U16;
@@ -1045,7 +1046,7 @@ lex_ifjit:
 						Free(fbuf);
 						tmph->type=HTT_HELP_FILE|HTF_PUBLIC;
 						HashSrcFileSet(cc,tmph);
-						HashAdd(tmph,cc->htc.global_hash_table);
+						HashAdd(tmph,cc->htc.glbl_hash_table);
 						break;
 				}
 				break;
@@ -1090,7 +1091,7 @@ lex_dot_dot:
 			case ']'...'^':
 			case '{'...'~':
 			case '`':
-				if (!(i=comp.dual_U16_tokens1[ch])) {
+				if (!(i=cmp.dual_U16_tokens1[ch])) {
 					if (ch=='$$') {
 						ch=LexGetChar(cc);
 						if (ch=='$$') {
@@ -1145,7 +1146,7 @@ lex_check_comment:
 							goto lex_end;
 						}
 					}
-					if (i=comp.dual_U16_tokens2[ch]) {
+					if (i=cmp.dual_U16_tokens2[ch]) {
 						if (i.u16[0]==j) {
 							i>>=16;
 							if (!i) {// "//"
@@ -1170,7 +1171,7 @@ lex_check_comment:
 								goto lex_end;
 							}
 						}
-						if (i=comp.dual_U16_tokens3[ch]) {
+						if (i=cmp.dual_U16_tokens3[ch]) {
 							if (i.u16[0]==j) {
 								cc->token=i.u16[1];
 								goto lex_end;

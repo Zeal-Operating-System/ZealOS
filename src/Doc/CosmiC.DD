@@ -191,7 +191,7 @@ $FG$$ID,-2$
 
 * There is no question-colon operator.
 
-* ZenithOS $LK,"operator precedence",A="FF:::/Compiler/CInit.CC,comp.binary_ops"$
+* ZenithOS $LK,"operator precedence",A="FF:::/Compiler/CInit.CC,cmp.binary_ops"$
 	$FG,2$`$FG$,$FG,2$>>$FG$,$FG,2$<<$FG$
 	$FG,2$*$FG$,$FG,2$/$FG$,$FG,2$%$FG$
 	$FG,2$&$FG$

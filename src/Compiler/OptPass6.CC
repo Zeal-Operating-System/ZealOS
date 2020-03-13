@@ -6,7 +6,7 @@ Bool OptIC6(CIntermediateCode *tmpi)
 	if (tmpil1->ic_code==IC_ADD_CONST && tmpi->ic_code==IC_DEREF &&
 				tmpi->ic_flags&ICF_ARG1_WAS_STACK 			&&	tmpi->arg1.type&MDF_REG &&
 				tmpil1->res.type&MDF_REG && I32_MIN<=tmpil1->ic_data<=I32_MAX &&
-				!Bt(&comp.non_ptr_vars_mask,tmpil1->arg1.reg)) {
+				!Bt(&cmp.non_ptr_vars_mask,tmpil1->arg1.reg)) {
 		if (tmpil1->arg1.type&MDF_REG) {
 			tmpi->ic_flags=tmpi->ic_flags&~ICF_ARG1_WAS_STACK | tmpil1->ic_flags;
 			tmpi->ic_code=IC_MOV;
@@ -107,7 +107,7 @@ U0 OptPass6(CCompCtrl *cc)
 #assert REGG_STACK_TMP==1<<9
 	tmpi=cc->coc.coc_head.next;
 	old_tmpil2=NULL;
-	tmpil1=tmpil2=&comp.ic_nop;
+	tmpil1=tmpil2=&cmp.ic_nop;
 	while (tmpi->ic_code) {
 		if (tmpi->ic_code>IC_NOP2) {
 			if (tmpil1->ic_code>IC_NOP2)

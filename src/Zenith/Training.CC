@@ -27,9 +27,9 @@ U8 *KeyMapKeyMStrPrint(I64 sc,U0 (*fp_handler)(I64 sc),
 	Free(st2);
 
 	ptr=res;
-	while (*ptr) {
+	while (*ptr)
 		ptr++;
-	}
+	
 
 	return res;
 }

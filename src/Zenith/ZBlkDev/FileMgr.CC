@@ -493,7 +493,7 @@ I64 PopUpFMRight(U8 *header=NULL,U8 *footer=NULL)
 	I64 i;
 	CDoc *doc=DocNew;
 	if (header) DocPrint(doc,"%s",header);
-	DocPrint(doc,"$$CM+LX,1,1 $$$$BT,\"INCLUDE                 \",LE=FMR_INCLUDE$$"
+	DocPrint(doc,"$$CM+LX,1,1$$$$BT,\"INCLUDE                 \",LE=FMR_INCLUDE$$"
 				"$$CM+LX,29,0$$$$BT,\"ZENITH INCLUDE          \",LE=FMR_ZENITH_INCLUDE$$"
 				"$$CM+LX,1,3 $$$$BT,\"DELETE                  \",LE=FMR_DELETE$$"
 				"$$CM+LX,29,0$$$$BT,\"RENAME                  \",LE=FMR_RENAME$$"

@@ -440,9 +440,9 @@ class CBinFile
 class CPatchTableAbsAddr
 {
 	U8		eit_abs_addr; 	//$LK,"IET_ABS_ADDR",A="MN:IET_ABS_ADDR"$
-	U32 	abs_address_count;
+	U32 	abs_addres_count;
 	U8		zero;
-	U32 	abs_address[1];
+	U32 	abs_addres[1];
 };
 
 //$LK,"CAOTImportExport",A="MN:CAOTImportExport"$ Types. Used in PatchTable.
@@ -868,7 +868,8 @@ public class CHashGeneric:CHash
 #define REGT_R64	4
 #define REGT_SEG	5
 #define REGT_FSTACK	6
-#define REGT_XMM	7
+#define REGT_MM 	7
+#define REGT_XMM	8
 
 public class CHashReg:CHash
 {
@@ -1675,7 +1676,7 @@ public class CAutoCompleteDictGlobals
 #define OPTf_EXTERNS_TO_IMPORTS 0x20
 #define OPTf_KEEP_PRIVATE 			0x21
 #define OPTf_NO_REG_VAR 				0x22	//Applied to funs, not statements
-#define OPTf_GLOBALS_ON_DATA_HEAP 0x23
+#define OPTf_GLBLS_ON_DATA_HEAP 0x23
 //Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
 #define OPTf_NO_BUILTIN_CONST 	0x24 //Applied to funs, not statements
 #define OPTf_USE_IMM64					0x25 //Not completely implemented
@@ -1857,47 +1858,44 @@ class CCodeMisc
 };
 
 #help_index "Compiler/Assembler"
-#define IEF_OP_SIZE16 			0x001
-#define IEF_OP_SIZE32 			0x002
-#define IEF_PLUS_OPCODE 		0x004
+#define IEF_OP_SIZE16 					0x001
+#define IEF_OP_SIZE32 					0x002
+#define IEF_PLUS_OPCODE 				0x004
 #define IEF_DONT_SWITCH_MODES 	0x008
-#define IEF_DEFAULT 			0x010
-#define IEF_NOT_IN_64_BIT 		0x020
-#define IEF_48_REX				0x040
-#define IEF_REX_ONLY_R8_R15 	0x080
-#define IEF_REX_XOR_LIKE		0x100
-#define IEF_STI_LIKE			0x200
-#define IEF_ENDING_IMM 			0x400
+#define IEF_DEFAULT 										0x010
+#define IEF_NOT_IN_64_BIT 			0x020
+#define IEF_48_REX							0x040
+#define IEF_REX_ONLY_R8_R15 		0x080
+#define IEF_REX_XOR_LIKE				0x100
+#define IEF_STI_LIKE						0x200
+#define IEF_ENDING_ZERO 				0x400
 
 //Slash value
 #define SV_R_REG				8
 #define SV_I_REG				9
-#define SV_STI_LIKE 			10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.CC,uasm_slash_val"$ only.
+#define SV_STI_LIKE 		10 //$LK,"uasm_slash_val",A="FF:::/Compiler/AsmInit.CC,uasm_slash_val"$ only.
 #define SV_NONE 				11
 class CInst
 {
-	U16 	flags;
 	U8		ins_entry_num, //This entry num in opcode hash entry
-			opcode_count,
-			opcode[4],
-			arg1,arg2,
-			size1,size2,//Size in bits
-			slash_val,
-			uasm_slash_val,
-			opcode_modifier;
-	I8		ending_imm;
-
+				opcode_count,
+				opcode[4];
+	U16 	flags;
+	U8		slash_val,uasm_slash_val,opcode_modifier,
+				arg1,arg2,
+				size1,size2,//Size in bits
+				pad;
 };
 
 //x86 opcodes
-#define OC_OP_SIZE_PREFIX 	0x66
-#define OC_ADDR_SIZE_PREFIX	0x67
-#define OC_LOCK_PREFIX		0xF0
-#define OC_NOP				0x90
-#define OC_BPT				0xCC
-#define OC_CALL 			0xE8
-#define OC_JMP_REL8 		0xEB
-#define OC_NOP2 			(OC_NOP<<8+OC_OP_SIZE_PREFIX)
+#define OC_OP_SIZE_PREFIX 			0x66
+#define OC_ADDR_SIZE_PREFIX 		0x67
+#define OC_LOCK_PREFIX					0xF0
+#define OC_NOP									0x90
+#define OC_BPT									0xCC
+#define OC_CALL 								0xE8
+#define OC_JMP_REL8 						0xEB
+#define OC_NOP2 								(OC_NOP<<8+OC_OP_SIZE_PREFIX)
 
 #define PUSH_C_REGS PUSH RAX PUSH RCX PUSH RDX PUSH RBX PUSH R8 PUSH R9
 #define POP_C_REGS POP R9 POP R8 POP RBX POP RDX POP RCX POP RAX
@@ -1907,31 +1905,31 @@ PUSH RDI PUSH R8 PUSH R9 PUSH R10 PUSH R11 PUSH R12 PUSH R13 PUSH R14 PUSH R15
 #define POP_REGS POP R15 POP R14 POP R13 POP R12 POP R11 POP R10 POP R9 \
 POP R8 POP RDI POP RSI POP RBP POP RBX POP RDX POP RCX POP RAX
 
-#define REG_RAX 		0
-#define REG_RCX 		1
-#define REG_RDX 		2
-#define REG_RBX 		3
-#define REG_RSP 		4
-#define REG_RBP 		5
-#define REG_RSI 		6
-#define REG_RDI 		7
-#define REG_R8			8
-#define REG_REGS_NUM	16
+#define REG_RAX 				0
+#define REG_RCX 				1
+#define REG_RDX 				2
+#define REG_RBX 				3
+#define REG_RSP 				4
+#define REG_RBP 				5
+#define REG_RSI 				6
+#define REG_RDI 				7
+#define REG_R8					8
+#define REG_REGS_NUM		16
 
-#define REG_RIP 	16			//Used by compiler, not really it's num
+#define REG_RIP 				16			//Used by compiler, not really it's num
 //Be careful: RBPu8, RSPu8, RSIu8, RDIu8 are 20-24
-#define REG_NONE	32			//noreg flag sets it to this
-#define REG_ALLOC 	33			//reg flag sets it to this
-#define REG_UNDEF 	I8_MIN
+#define REG_NONE				32			//noreg flag sets it to this
+#define REG_ALLOC 			33			//reg flag sets it to this
+#define REG_UNDEF 			I8_MIN
 
-#define REGG_CLOBBERED			0x013F //RAX,RCX,RDX,RBX,R8
-#define REGG_SAVED				0x0030 //RBP,RSP
-#define REGG_STACK_TMP			0x0200 //R9
-#define REGG_LOCAL_VARS 		0xCCC0 //RSI,RDI,R10,R11,R14,R15
+#define REGG_CLOBBERED					0x013F //RAX,RCX,RDX,RBX,R8
+#define REGG_SAVED							0x0030 //RBP,RSP
+#define REGG_STACK_TMP					0x0200 //R9
+#define REGG_LOCAL_VARS 				0xCCC0 //RSI,RDI,R10,R11,R14,R15
 #define REGG_LOCAL_NON_PTR_VARS 0x3000 //R12,R13
 
-#define AOT_BIN_BLK_BITS	16
-#define AOT_BIN_BLK_SIZE	(1<<AOT_BIN_BLK_BITS)
+#define AOT_BIN_BLK_BITS 16
+#define AOT_BIN_BLK_SIZE (1<<AOT_BIN_BLK_BITS)
 
 class CAOTBinBlk
 {
@@ -1941,8 +1939,8 @@ class CAOTBinBlk
 
 I64 class CAbsCountsI64
 {
-	U16 	abs_address, //Only odd/even matters. Count of absolute address in an exp.
-				c_address; //Only odd/even matters. Count of C address in an exp.
+	U16 	abs_addres, //Only odd/even matters. Count of absolute addres in an exp.
+				c_addres; //Only odd/even matters. Count of C addres in an exp.
 	U32 	externs; //Only nonzero matters. Some regions have externs banned.
 };
 
@@ -1956,22 +1954,22 @@ class CAsmNum
 {
 	I64 	i;
 	U8		*machine_code;
-	CAsmUndefHash *local_asm_undef_hash,*global_asm_undef_hash;
+	CAsmUndefHash *local_asm_undef_hash,*glbl_asm_undef_hash;
 	CAbsCountsI64 abs_counts;
 };
 
 class CAsmNum2
 {
 	CAsmNum num;
-	I64 	u8_count,rel;
+	I64 	U8_count,rel;
 	Bool	imm_flag;
 };
 
-class CAsmInst
+class CAsmIns
 {
 	CInst *tmpins;
 	CAsmNum2 imm,disp;
-	I64 	u8_count,last_opcode_U8,
+	I64 	U8_count,last_opcode_U8,
 				REX,ModrM,SIB;
 	Bool	has_REX,has_ModrM,has_SIB,
 				has_addr_prefix,
@@ -1999,149 +1997,87 @@ class CAsmUnresolvedRef
 	U8		*str; 	//Only for import glbls
 	CAsmUndefHash *asm_undef_hash;
 	Bool	U8_avail,
-			imm_flag;//Only for import glbls
+				imm_flag;//Only for import glbls
 };
 
 //Opcode Modifier
-#define OCM_NO 0
-#define OCM_CB 1
-#define OCM_CW 2
-#define OCM_CD 3
-#define OCM_CP 4
-#define OCM_IB 5
-#define OCM_IW 6
-#define OCM_ID 7
+#define OM_NO 0
+#define OM_CB 1
+#define OM_CW 2
+#define OM_CD 3
+#define OM_CP 4
+#define OM_IB 5
+#define OM_IW 6
+#define OM_ID 7
 
-#define ARGt_NONE 		0
-#define ARGt_REL8 		1
-#define ARGt_REL16		2
-#define ARGt_REL32		3
-#define ARGT_NONE		(1<<ARGt_NONE)
-#define ARGT_REL8		(1<<ARGt_REL8)
-#define ARGT_REL16		(1<<ARGt_REL16)
-#define ARGT_REL32		(1<<ARGt_REL32)
-#define ARGG_REL		(ARGT_REL8|ARGT_REL16|ARGT_REL32)
+#define ARGT_NONE 			0
+#define ARGT_REL8 			1
+#define ARGT_REL16			2
+#define ARGT_REL32			3
 
-#define ARGt_IMM8 		4
-#define ARGt_IMM16		5
-#define ARGt_IMM32		6
-#define ARGt_IMM64		7
-#define ARGT_IMM8		(1<<ARGt_IMM8)
-#define ARGT_IMM16		(1<<ARGt_IMM16)
-#define ARGT_IMM32		(1<<ARGt_IMM32)
-#define ARGT_IMM64		(1<<ARGt_IMM64)
-#define ARGG_IMM		(ARGT_IMM8|ARGT_IMM16|ARGT_IMM32|ARGT_IMM64)
+#define ARGT_IMM8 			4
+#define ARGT_IMM16			5
+#define ARGT_IMM32			6
+#define ARGT_IMM64			7
 
-#define ARGt_UIMM8		8
-#define ARGt_UIMM16 	9
-#define ARGt_UIMM32 	10
-#define ARGt_UIMM64 	11
-#define ARGT_UIMM8		(1<<ARGt_UIMM8)
-#define ARGT_UIMM16		(1<<ARGt_UIMM16)
-#define ARGT_UIMM32		(1<<ARGt_UIMM32)
-#define ARGT_UIMM64		(1<<ARGt_UIMM64)
-#define ARGG_UIMM		(ARGT_UIMM8|ARGT_UIMM16|ARGT_UIMM32|ARGT_UIMM64)
+#define ARGT_UIMM8			8
+#define ARGT_UIMM16 		9
+#define ARGT_UIMM32 		10
+#define ARGT_UIMM64 		11
 
-#define ARGt_R8 		12
-#define ARGt_R16		13
-#define ARGt_R32		14
-#define ARGt_R64		15
-#define ARGt_XMM		16
-#define ARGT_R8			(1<<ARGt_R8)
-#define ARGT_R16		(1<<ARGt_R16)
-#define ARGT_R32		(1<<ARGt_R32)
-#define ARGT_R64		(1<<ARGt_R64)
-#define ARGT_XMM		(1<<ARGt_XMM)
-#define ARGG_R			(ARGT_R8|ARGT_R16|ARGT_R32|ARGT_R64|ARGT_XMM)
+#define ARGT_R8 				12
+#define ARGT_R16				13
+#define ARGT_R32				14
+#define ARGT_R64				15
 
-#define ARGt_RM8		17
-#define ARGt_RM16		18
-#define ARGt_RM32		19
-#define ARGt_RM64		20
-#define ARGt_XMM64		21
-#define ARGt_XMM128 	22
-#define ARGT_RM8		(1<<ARGt_RM8)
-#define ARGT_RM16		(1<<ARGt_RM16)
-#define ARGT_RM32		(1<<ARGt_RM32)
-#define ARGT_RM64		(1<<ARGt_RM64)
-#define ARGT_XMM64		(1<<ARGt_XMM64)
-#define ARGT_XMM128		(1<<ARGt_XMM128)
-#define ARGG_RM			(ARGT_RM8|ARGT_RM16|ARGT_RM32|ARGT_RM64|ARGT_XMM64|ARGT_XMM128)
+#define ARGT_RM8				16
+#define ARGT_RM16 			17
+#define ARGT_RM32 			18
+#define ARGT_RM64 			19
 
-#define ARGt_M8 		23
-#define ARGt_M16		24
-#define ARGt_M32		25
-#define ARGt_M64		26
-#define ARGt_M128		27
-#define ARGT_M8			(1<<ARGt_M8)
-#define ARGT_M16		(1<<ARGt_M16)
-#define ARGT_M32		(1<<ARGt_M32)
-#define ARGT_M64		(1<<ARGt_M64)
-#define ARGT_M128		(1<<ARGt_M128)
-#define ARGG_M			(ARGT_M8|ARGT_M16|ARGT_M32|ARGT_M64|ARGT_M128)
+#define ARGT_M8 				20
+#define ARGT_M16				21
+#define ARGT_M32				22
+#define ARGT_M64				23
 
-#define ARGt_M1632		28 // Not implemented
-#define ARGt_M16N32		29 // Not implemented
-#define ARGt_M16N16		30 // Not implemented
-#define ARGt_M32N32		31 // Not implemented
-#define ARGT_M1632		(1<<ARGt_M1632)
-#define ARGT_M16N32		(1<<ARGt_M16N32)
-#define ARGT_M16N16		(1<<ARGt_M16N16)
-#define ARGT_M32N32		(1<<ARGt_M32N32)
-#define ARGG_MN			(ARGT_M1632|ARGT_M16N32|ARGT_M16N16|ARGT_M32N32)
+#define ARGT_M1632			24 // Not implemented
+#define ARGT_M16N32 		25 // Not implemented
+#define ARGT_M16N16 		26 // Not implemented
+#define ARGT_M32N32 		27 // Not implemented
 
-#define ARGt_MOFFS8 	32
-#define ARGt_MOFFS16	33
-#define ARGt_MOFFS32	34
-#define ARGt_MOFFS64	35
-#define ARGT_MOFFS8		(1<<ARGt_MOFFS8)
-#define ARGT_MOFFS16	(1<<ARGt_MOFFS16)
-#define ARGT_MOFFS32	(1<<ARGt_MOFFS32)
-#define ARGT_MOFFS64	(1<<ARGt_MOFFS64)
-#define ARGG_MOFFS		(ARGT_MOFFS8|ARGT_MOFFS16|ARGT_MOFFS32|ARGT_MOFFS64)
+#define ARGT_MOFFS8 		28
+#define ARGT_MOFFS16		29
+#define ARGT_MOFFS32		30
+#define ARGT_MOFFS64		31
 
-#define ARGt_AL 		36
-#define ARGt_AX 		37
-#define ARGt_EAX		38
-#define ARGt_RAX		39
-#define ARGt_CL 		40
-#define ARGt_DX 		41
-#define ARGT_AL			(1<<ARGt_AL)
-#define ARGT_AX			(1<<ARGt_AX)
-#define ARGT_EAX		(1<<ARGt_EAX)
-#define ARGT_RAX		(1<<ARGt_RAX)
-#define ARGT_CL			(1<<ARGt_CL)
-#define ARGT_DX			(1<<ARGt_DX)
-#define ARGG_AXCLDX		(ARGT_AL|ARGT_AX|ARGT_EAX|ARGT_RAX|ARGT_CL|ARGT_DX)
+#define ARGT_AL 				32
+#define ARGT_AX 				33
+#define ARGT_EAX				34
+#define ARGT_RAX				35
 
-#define ARGt_SREG	 	42
-#define ARGt_SS 		43
-#define ARGt_DS 		44
-#define ARGt_ES 		45
-#define ARGt_FS 		46
-#define ARGt_GS 		47
-#define ARGt_CS 		48
-#define ARGT_SREG		(1<<ARGt_SREG)
-#define ARGT_SS			(1<<ARGt_SS)
-#define ARGT_DS			(1<<ARGt_DS)
-#define ARGT_ES			(1<<ARGt_ES)
-#define ARGT_FS			(1<<ARGt_FS)
-#define ARGT_GS			(1<<ARGt_GS)
-#define ARGT_CS			(1<<ARGt_CS)
-#define ARGG_SREG		(ARGT_SREG|ARGT_SS|ARGT_DS|ARGT_ES|ARGT_FS|ARGT_GS|ARGT_CS)
+#define ARGT_CL 				36
+#define ARGT_DX 				37
+#define ARGT_SREG 			39
 
-#define ARGt_ST0		49
-#define ARGt_STI		50
-#define ARGT_ST0		(1<<ARGt_ST0)
-#define ARGT_STI		(1<<ARGt_STI)
+#define ARGT_SS 				40
+#define ARGT_DS 				41
+#define ARGT_ES 				42
+#define ARGT_FS 				43
 
-#define ARGG_SIZE_0		(ARGG_REL|ARGG_IMM|ARGG_UIMM|ARGG_R|ARGG_RM|ARGG_M|ARGG_MOFFS|ARGG_AXCLDX)
-#define ARGG_SIZE_1		(ARGT_REL8|ARGT_IMM8|ARGT_UIMM8|ARGT_R8|ARGT_RM8|ARGT_M8|ARGT_MOFFS8|ARGT_AL|ARGT_CL)
-#define ARGG_SIZE_2		(ARGT_REL16|ARGT_IMM16|ARGT_UIMM16|ARGT_R16|ARGT_RM16|ARGT_M16|ARGT_MOFFS16|ARGT_AX|ARGT_DX)
-#define ARGG_SIZE_4		(ARGT_REL32|ARGT_IMM32|ARGT_UIMM32|ARGT_R32|ARGT_RM32|ARGT_M32|ARGT_MOFFS32|ARGT_EAX)
-#define ARGG_SIZE_8		(ARGT_IMM64|ARGT_UIMM64|ARGT_R64|ARGT_RM64|ARGT_M64|ARGT_MOFFS64|ARGT_RAX|ARGT_XMM64)
-#define ARGG_SIZE_16	(ARGT_XMM|ARGT_XMM128|ARGT_M128)
+#define ARGT_GS 				44
+#define ARGT_CS 				45
+#define ARGT_ST0				46
+#define ARGT_STI				47
 
+#define ARGT_MM 				48 // Not implemented
+#define ARGT_MM32 			49 // Not implemented
+#define ARGT_MM64 			50 // Not implemented
+#define ARGT_XMM				51 // Not implemented
+
+#define ARGT_XMM32			52 // Not implemented
+#define ARGT_XMM64			53 // Not implemented
+#define ARGT_XMM128 		54 // Not implemented
+#define ARGT_XMM0 			55 // Not implemented
 
 #help_index "Compiler/Internal;Hash/System"
 #define OCF_ALIAS 			1
@@ -2253,7 +2189,7 @@ class CAOTCtrl
 	CAOTBinBlk *bin;
 	I64 	num_bin_U8s,
 				max_align_bits,org;
-	CAsmUnresolvedRef *local_unresolved,*global_unresolved;
+	CAsmUnresolvedRef *local_unresolved,*glbl_unresolved;
 	CAOTAbsAddr *abss;
 	CAOTHeapGlobal *heap_glbls;
 	I64 	list_col,list_last_rip;
@@ -2318,7 +2254,7 @@ class CLexHashTableContext
 	CHashTable *hash_table_list,
 				*define_hash_table,
 				*local_hash_table,
-				*global_hash_table;
+				*glbl_hash_table;
 };
 
 //CompCtrl flags
@@ -2421,7 +2357,7 @@ public class CCompGlobals
 	I64 	num_reg_vars,num_non_ptr_vars,
 				stack_tmps_mask,reg_vars_mask,non_ptr_vars_mask;
 	U8		*to_reg_vars_map,*non_ptr_vars_map;
-	I64 	size_arg_mask[17],
+	I64 	size_arg_mask[9],
 				compiled_lines;
 };
 
@@ -3668,37 +3604,37 @@ public class CSysFixedArea
 };
 
 #help_index "Char"
-#define CH_CTRLA				0x01
-#define CH_CTRLB				0x02
-#define CH_CTRLC				0x03
-#define CH_CTRLD				0x04
-#define CH_CTRLE				0x05
-#define CH_CTRLF				0x06
-#define CH_CTRLG				0x07
-#define CH_CTRLH				0x08
-#define CH_CTRLI				0x09
-#define CH_CTRLJ				0x0A
-#define CH_CTRLK				0x0B
-#define CH_CTRLL				0x0C
-#define CH_CTRLM				0x0D
-#define CH_CTRLN				0x0E
-#define CH_CTRLO				0x0F
-#define CH_CTRLP				0x10
-#define CH_CTRLQ				0x11
-#define CH_CTRLR				0x12
-#define CH_CTRLS				0x13
-#define CH_CTRLT				0x14
-#define CH_CTRLU				0x15
-#define CH_CTRLV				0x16
-#define CH_CTRLW				0x17
-#define CH_CTRLX				0x18
-#define CH_CTRLY				0x19
-#define CH_CTRLZ				0x1A
-#define CH_CURSOR 				0x05
-#define CH_BACKSPACE			0x08
-#define CH_ESC					0x1B
-#define CH_SHIFT_ESC			0x1C
-#define CH_SPACE				0x20
+#define CH_CTRLA		0x01
+#define CH_CTRLB		0x02
+#define CH_CTRLC		0x03
+#define CH_CTRLD		0x04
+#define CH_CTRLE		0x05
+#define CH_CTRLF		0x06
+#define CH_CTRLG		0x07
+#define CH_CTRLH		0x08
+#define CH_CTRLI		0x09
+#define CH_CTRLJ		0x0A
+#define CH_CTRLK		0x0B
+#define CH_CTRLL		0x0C
+#define CH_CTRLM		0x0D
+#define CH_CTRLN		0x0E
+#define CH_CTRLO		0x0F
+#define CH_CTRLP		0x10
+#define CH_CTRLQ		0x11
+#define CH_CTRLR		0x12
+#define CH_CTRLS		0x13
+#define CH_CTRLT		0x14
+#define CH_CTRLU		0x15
+#define CH_CTRLV		0x16
+#define CH_CTRLW		0x17
+#define CH_CTRLX		0x18
+#define CH_CTRLY		0x19
+#define CH_CTRLZ		0x1A
+#define CH_CURSOR 		0x05
+#define CH_BACKSPACE	0x08
+#define CH_ESC			0x1B
+#define CH_SHIFT_ESC	0x1C
+#define CH_SPACE		0x20
 
 #define ST_ERR_ST 	"$$RED$$$$BK,1$$ERROR:$$FG$$$$BK,0$$ "
 #define ST_WARN_ST	"$$LTRED$$$$BK,1$$WARNING:$$FG$$$$BK,0$$ "

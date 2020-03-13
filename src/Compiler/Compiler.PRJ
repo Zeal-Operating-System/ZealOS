@@ -13,7 +13,7 @@
 #exe {Option(OPTf_KEEP_PRIVATE,OFF);};
 #include "Templates"
 #include "CExterns"
-CCompGlobals		comp;
+CCompGlobals		cmp;
 #include "CInit"
 #include "CExcept"
 #include "LexLib"

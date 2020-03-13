@@ -371,18 +371,17 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 				while (tmpn1!=tmpn) {
 					if (tmpn1->type!=PSMT_METER) {
 						if (ptr=tmpn1->word) {
-							while (ch=*ptr) {
+							while (ch=*ptr)
 								ptr++;
-							}
 							DocPrint(doc,"%Q\\0",tmpn1->word);
 						} else
-							DocPrint(doc,"%c\\0",CH_SPACE);
+							DocPrint(doc," \\0");
 					}
 					tmpn1=tmpn1->next;
 				}
 			}
 			DocPrint(doc,"\");\n"
-						"\t\t\tPlay(\"");
+						"\tPlay(\"");
 			two_measure_left=2*measure_len;
 			tmpn1=tmpn;
 			has_words=FALSE;
@@ -393,12 +392,12 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 		while (tmpn1!=tmpn) {
 			if (tmpn1->type!=PSMT_METER) {
 				if (ptr=tmpn1->word) {
-					while (ch=*ptr) {
+					while (ch=*ptr)
 						ptr++;
-					}
+					
 					DocPrint(doc,"%Q\\0",tmpn1->word);
 				} else
-					DocPrint(doc,"%c\\0",CH_SPACE);
+					DocPrint(doc," \\0");
 			}
 			tmpn1=tmpn1->next;
 		}

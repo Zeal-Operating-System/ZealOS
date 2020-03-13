@@ -7,7 +7,7 @@ it from the cmd line.
 
 //This is to demo glbl var access.
 //Glbs defined elsewhere can accessed too, like counts.jiffies.
-I64 global_ona=Freq2Ona(400),global_ona_step=10,global_ona_base=Freq2Ona(100);
+I64 glbl_ona=Freq2Ona(400),glbl_ona_step=10,glbl_ona_base=Freq2Ona(100);
 
 asm {
 //Opcodes are slightly different to make writing my x86_64 assembler easier.
@@ -29,7 +29,7 @@ _BEEPS2::
 @@05: 	PUSH		RCX
 //U0 $LK,"Beep",A="MN:Beep"$(I8 ona=62,Bool busy=FALSE)
 				PUSH		FALSE 	//Do not busy (spin) wait
-				PUSH		U64 [&global_ona] //evaluated at run time
+				PUSH		U64 [&glbl_ona] //evaluated at run time
 				CALL		&Beep
 				POP 		RCX
 				LOOP		@@05
@@ -69,8 +69,8 @@ U0 AsmAndC2()
 
 //U0 $LK,"Sound",A="MN:Sound"$(I8 ona);
 		MOV RAX,RCX //ona=loop*10+100.0Hz
-		IMUL2 			RAX,global_ona_step //Intentionally evaluated at compile time
-		ADD RAX,U64 [&global_ona_base]	//Intentionally evaluated at run time
+		IMUL2 			RAX,glbl_ona_step //Intentionally evaluated at compile time
+		ADD RAX,U64 [&glbl_ona_base]	//Intentionally evaluated at run time
 		PUSH				RAX
 		CALL				&Sound	//We can skip IMPORT with & if JIT compiling.
 		MOV RCX,counts.time_stamp_freq>>3 //JIT Const.	Simple delay loop.

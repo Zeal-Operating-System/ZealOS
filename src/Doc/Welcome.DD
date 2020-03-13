@@ -104,7 +104,7 @@ $FG,2$<ALT-SHIFT-a>$FG$ closes AutoComplete.
 $FG,2$<ALT-a>$FG$ brings back AutoComplete.
 $FG,2$<ALT-v>$FG$ vertically tiles windows.
 $FG,2$<ALT-h>$FG$ horizontally tiles windows.
-The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugins.CC"$.  You can customize them.
+The $FG,2$ALT$FG$ keys are defined in $LK,"~/HomeKeyPlugIns.CC"$.  You can customize them.
 
 $FG,2$<CTRL-ALT-t>$FG$ new terminal window.
 $FG,2$<CTRL-ALT-n>$FG$ switches to the next window.

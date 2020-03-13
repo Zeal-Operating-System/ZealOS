@@ -91,8 +91,8 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
 
 //Patch abs addresses
-		MOV		ECX, U32 CPatchTableAbsAddr.abs_address_count[ESI]
-		LEA		ESI, U32 CPatchTableAbsAddr.abs_address[ESI]
+		MOV		ECX, U32 CPatchTableAbsAddr.abs_addres_count[ESI]
+		LEA		ESI, U32 CPatchTableAbsAddr.abs_addres[ESI]
 @@05: 	LODSD
 		ADD		EAX, EDI
 		ADD		U32 [EAX],EDI

@@ -314,7 +314,7 @@ $IV,1$----01/14/17 19:16:51----$IV,0$
 
 $IV,1$----01/14/17 09:43:12----$IV,0$
 * Improved $LK,"::/Demo/AcctExample/TOS/TOSHolySpirit.HC"$.
-* Added comp $LK,"U0 Expression",A="FF:::/Compiler/PrsExp.HC,U0 Expression"$ warn.
+* Added cmp $LK,"U0 Expression",A="FF:::/Compiler/PrsExp.HC,U0 Expression"$ warn.
 * Improved syntax highlighting.
 
 $IV,1$----01/11/17 03:33:33----$IV,0$

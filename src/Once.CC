@@ -52,4 +52,3 @@ U0 Tmp()
 	}
 }
 Tmp;
-PaletteSetDark;

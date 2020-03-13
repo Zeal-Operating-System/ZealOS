@@ -101,17 +101,17 @@ Bool OptFixupBinaryOp1(CIntermediateCode *tmpi,
 	CHashClass *tmpc=tmpi->ic_class,*tmpc1,*tmpc2;
 
 	if (tmpi1->ic_flags&ICF_RES_TO_INT)
-		tmpc1=comp.internal_types[RT_I64];
+		tmpc1=cmp.internal_types[RT_I64];
 	else if (tmpi1->ic_flags&ICF_RES_TO_F64)
-		tmpc1=comp.internal_types[RT_F64];
+		tmpc1=cmp.internal_types[RT_F64];
 	else {
 		tmpc1=OptClassFwd(tmpi1->ic_class);
 	}
 
 	if (tmpi2->ic_flags&ICF_RES_TO_INT)
-		tmpc2=comp.internal_types[RT_I64];
+		tmpc2=cmp.internal_types[RT_I64];
 	else if (tmpi2->ic_flags&ICF_RES_TO_F64)
-		tmpc2=comp.internal_types[RT_F64];
+		tmpc2=cmp.internal_types[RT_F64];
 	else {
 		tmpc2=OptClassFwd(tmpi2->ic_class);
 	}
@@ -124,7 +124,7 @@ Bool OptFixupBinaryOp1(CIntermediateCode *tmpi,
 	if (tmpc->raw_type==RT_F64) {
 		if (tmpi1->ic_code==IC_IMM_I64) {
 			tmpi1->ic_data(F64)=tmpi1->ic_data;
-			tmpi1->ic_class=comp.internal_types[RT_F64];
+			tmpi1->ic_class=cmp.internal_types[RT_F64];
 			tmpi1->ic_code=IC_IMM_F64;
 			tmpi1->ic_flags&=~ICF_RES_TO_F64;
 		} else
@@ -132,7 +132,7 @@ Bool OptFixupBinaryOp1(CIntermediateCode *tmpi,
 				tmpi1->ic_flags|=ICF_RES_TO_F64;
 		if (tmpi2->ic_code==IC_IMM_I64) {
 			tmpi2->ic_data(F64)=tmpi2->ic_data;
-			tmpi2->ic_class=comp.internal_types[RT_F64];
+			tmpi2->ic_class=cmp.internal_types[RT_F64];
 			tmpi2->ic_code=IC_IMM_F64;
 			tmpi2->ic_flags&=~ICF_RES_TO_F64;
 		} else
@@ -142,16 +142,16 @@ Bool OptFixupBinaryOp1(CIntermediateCode *tmpi,
 					tmpii->ic_code!=IC_PUSH_CMP && tmpii->ic_code!=IC_AND_AND) {
 //We are looking for float comparisons to zero to convert to int.
 			if (tmpi1->ic_code==IC_IMM_F64 && !tmpi1->ic_data &&
-						tmpi2->ic_code==IC_DEREF && tmpc2==comp.internal_types[RT_F64]) {
+						tmpi2->ic_code==IC_DEREF && tmpc2==cmp.internal_types[RT_F64]) {
 				tmpi1->ic_code==IC_IMM_I64;
 				goto fb_here1;
 			} else if (tmpi2->ic_code==IC_IMM_F64 && !tmpi2->ic_data &&
-						tmpi1->ic_code==IC_DEREF && tmpc1==comp.internal_types[RT_F64]) {
+						tmpi1->ic_code==IC_DEREF && tmpc1==cmp.internal_types[RT_F64]) {
 				tmpi2->ic_code==IC_IMM_I64;
 fb_here1:
 				tmpi1->ic_flags&=~ICF_RES_TO_F64;
 				tmpi->ic_class=tmpi1->ic_class=tmpi2->ic_class=
-							comp.internal_types[RT_I64];
+							cmp.internal_types[RT_I64];
 				*is_unsigned=FALSE;
 				return FBO1_NOT_CONST;
 			}
@@ -203,7 +203,7 @@ Bool OptFixupUnaryOp(CIntermediateCode *tmpi, CIntermediateCode *tmpi1,
 	if (tmpc->raw_type==RT_F64) {
 		if (tmpi1->ic_code==IC_IMM_I64) {
 			tmpi1->ic_data(F64)=tmpi1->ic_data;
-			tmpi1->ic_class=comp.internal_types[RT_F64];
+			tmpi1->ic_class=cmp.internal_types[RT_F64];
 			tmpi1->ic_code=IC_IMM_F64;
 			tmpi1->ic_flags&=~ICF_RES_TO_F64;
 		} else

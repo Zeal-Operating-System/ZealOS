@@ -127,22 +127,24 @@ U0 ExtendedASCII()
 	CDoc *doc=DocNew;
 	DocPrint(doc,"Sel Char and Press <ESC>\n$$LTBLUE$$");
 	for (i=0;i<256;i++) {
-		if (i>=CH_SPACE && i!=0x7F) {
+		if (i >= CH_SPACE && i!=0x7F)
+		{
 			if (i=='$$')
 				DocPrint(doc,"$$MU-UL,\"\\x24\",LE=%d$$",i);
 			else if (i=='\"'||i=='\\')
 				DocPrint(doc,"$$MU-UL,\"\\%c\",LE=%d$$",i,i);
 			else
 				DocPrint(doc,"$$MU-UL,\"%c\",LE=%d$$",i,i);
-		} else
+		}
+		else
 			DocPrint(doc," ");
 		if (i&15==15)
 			DocPrint(doc,"\n");
 	}
-	i=PopUpMenu(doc);
+	i = PopUpMenu(doc);
 	DocDel(doc);
-	if (i>=0)
-		PostMessage(ext_ASCII_task,MESSAGE_KEY_DOWN_UP,i,Char2ScanCode(i));
+	if (i >= 0)
+		PostMessage(ext_ASCII_task, MESSAGE_KEY_DOWN_UP, i, Char2ScanCode(i));
 }
 
 U0 CtrlAltA(I64)

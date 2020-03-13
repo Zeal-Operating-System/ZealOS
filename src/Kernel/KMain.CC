@@ -86,7 +86,6 @@ U0 SysGrInit()
 
 	//patch some chars
 	text.aux_font[10] = text.font[10]; //"Return" symbol 
-	text.aux_font[' ' - 1] = text.font[' ' - 1]; //Shift-space  
 	text.aux_font[255] = text.font[255]; //Block symbol ÿ
 
 	text.border_chars[2] (I64)='ÄÍ³ºÚÉ¿»';
@@ -161,7 +160,7 @@ U0 KMain()
 
 	TimerInit;
 	if (MemBIOSTotal < ToI64 (0.95*MEM_MIN_MEG*0x100000) )
-		RawPrint(4000,"!!! Requires $TX,"512Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
+		RawPrint(4000,"!!! Requires $TX,"256Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
 
 	IntsInit;
 	"Enable IRQs\n";

@@ -7,15 +7,15 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
 		tmpc=ParseClassNew;
 		tmpc->str=cc->cur_str;
 		cc->cur_str=NULL;
-		HashAdd(tmpc,cc->htc.global_hash_table);
+		HashAdd(tmpc,cc->htc.glbl_hash_table);
 		LBts(&tmpc->flags,Cf_EXTERN);
 		HashSrcFileSet(cc,tmpc);
 		Lex(cc);
 	} else {
 		if (cc->flags&CCF_AOT_COMPILE)
-			tmpc=HashFind(cc->cur_str,cc->htc.global_hash_table,HTT_CLASS);
+			tmpc=HashFind(cc->cur_str,cc->htc.glbl_hash_table,HTT_CLASS);
 		else
-			tmpc=HashSingleTableFind(cc->cur_str,cc->htc.global_hash_table,HTT_CLASS);
+			tmpc=HashSingleTableFind(cc->cur_str,cc->htc.glbl_hash_table,HTT_CLASS);
 		if (tmpc) {
 			if (!Bt(&tmpc->flags,Cf_EXTERN))
 				tmpc=NULL;
@@ -31,7 +31,7 @@ CHashClass *ParseClass(CCompCtrl *cc,I64 keyword,I64 fsp_flags,Bool is_extern)
 			tmpc=ParseClassNew;
 			tmpc->str=cc->cur_str;
 			cc->cur_str=NULL;
-			HashAdd(tmpc,cc->htc.global_hash_table);
+			HashAdd(tmpc,cc->htc.glbl_hash_table);
 		}
 		LBtr(&tmpc->flags,Cf_EXTERN);
 		if (fsp_flags&FSF_PUBLIC)
@@ -69,11 +69,11 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 	I64 header_arg_count;
 	if (name) {//if not fun_ptr
 		if (cc->flags&CCF_AOT_COMPILE) {
-			if ((tmpf=HashFind(name,cc->htc.global_hash_table,HTT_FUN)) &&
+			if ((tmpf=HashFind(name,cc->htc.glbl_hash_table,HTT_FUN)) &&
 						tmpf->type & HTF_IMPORT)
 				tmpf=NULL;
 		} else
-			if ((tmpf=HashSingleTableFind(name,cc->htc.global_hash_table,HTT_FUN)) &&
+			if ((tmpf=HashSingleTableFind(name,cc->htc.glbl_hash_table,HTT_FUN)) &&
 						!Bt(&tmpf->flags,Cf_EXTERN))
 				tmpf=NULL;
 		if (tmpf && tmpf->use_count<3)
@@ -105,7 +105,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 		LBts(&tmpf->flags,Cf_EXTERN);
 		tmpf->flags|=fsp_flags&FSG_FUN_FLAGS1;
 		if (name) //if not fun_ptr
-			HashAdd(tmpf,cc->htc.global_hash_table);
+			HashAdd(tmpf,cc->htc.glbl_hash_table);
 	}
 	BEqual(&tmpf->type,HTf_PUBLIC,fsp_flags&FSF_PUBLIC);
 	tmpf->return_class=tmp_return;
@@ -333,7 +333,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 					break;
 				default:
 					if (cc->flags&CCF_AOT_COMPILE) {
-						if (Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)) {
+						if (Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
 							if (cc->token=='=')
 								LexExcept(cc,"Can't init glbl var on data heap in AOT module ");
 							tmpg=CAlloc(sizeof(CHashGlobalVar));
@@ -367,7 +367,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 								AOTStoreCodeU8(cc,0); //Init AOT glbl to zero.
 						}
 					} else {
-						if (Bt(&cc->opts,OPTf_GLOBALS_ON_DATA_HEAP)) {
+						if (Bt(&cc->opts,OPTf_GLBLS_ON_DATA_HEAP)) {
 							tmpg=CAlloc(sizeof(CHashGlobalVar),Fs->code_heap);
 							tmpg->data_addr=MAlloc(j);
 							tmpg->flags=GVF_DATA_HEAP;
@@ -406,7 +406,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc,I64 saved_mode,CHashClass *saved_tmpc,
 			}
 			if (is_array)
 				tmpg->flags|=GVF_ARRAY;
-			HashAdd(tmpg,cc->htc.global_hash_table);
+			HashAdd(tmpg,cc->htc.glbl_hash_table);
 			if (!(cc->flags&CCF_AOT_COMPILE) && !(tmpg->flags&GVF_EXTERN))
 				SysSymImportsResolve(tmpg->str);
 			if (cc->token=='=') {
@@ -602,9 +602,9 @@ U0 ParseSwitch(CCompCtrl *cc,I64 try_count)
 	mc_jt->begin->use_count++;
 	if (!ParseExpression(cc,NULL,FALSE))
 		throw('Compiler');
-	tmpi_sub=ICAdd(cc,IC_IMM_I64,0,comp.internal_types[RT_I64]);
-	ICAdd(cc,IC_SUB,0,comp.internal_types[RT_I64]);
-	tmpi_cmp=ICAdd(cc,IC_IMM_I64,0,comp.internal_types[RT_I64]);
+	tmpi_sub=ICAdd(cc,IC_IMM_I64,0,cmp.internal_types[RT_I64]);
+	ICAdd(cc,IC_SUB,0,cmp.internal_types[RT_I64]);
+	tmpi_cmp=ICAdd(cc,IC_IMM_I64,0,cmp.internal_types[RT_I64]);
 	if (nobound) {
 		ICAdd(cc,IC_NOBOUND_SWITCH,mc_jt,0);
 		if (cc->token!=']')
@@ -816,7 +816,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
 	cc->htc.next=htc;
 	cc->htc.fun=cc->htc.local_var_list=NULL;
 	cc->htc.define_hash_table=cc->htc.hash_table_list=
-				cc->htc.global_hash_table=cc->htc.local_hash_table=Fs->hash_table;
+				cc->htc.glbl_hash_table=cc->htc.local_hash_table=Fs->hash_table;
 	cc->flags=cc->flags & ~(CCF_ASM_EXPRESSIONS|CCF_AOT_COMPILE) | CCF_EXE_BLK;
 	if (cc->token=='{')
 		Lex(cc);
@@ -842,7 +842,7 @@ U0 ParseStreamBlk(CCompCtrl *cc)
 U0 ParseTryBlk(CCompCtrl *cc,I64 try_count)
 {
 	CCodeMisc 		*lb_catch,*lb_done,*lb_untry;
-	CHashClass		*tmpc=comp.internal_types[RT_PTR];
+	CHashClass		*tmpc=cmp.internal_types[RT_PTR];
 	CHashFun			*tmp_try=HashFind("SysTry",cc->htc.hash_table_list,HTT_FUN),
 				*tmp_untry=HashFind("SysUntry",cc->htc.hash_table_list,HTT_FUN);
 
@@ -1097,14 +1097,14 @@ sm_import:
 												cc->abs_counts.externs++;
 												if (cc->flags&CCF_AOT_COMPILE)
 													ICAdd(cc,IC_CALL_IMPORT,
-																tmp_untry,comp.internal_types[RT_PTR]);
+																tmp_untry,cmp.internal_types[RT_PTR]);
 												else
 													ICAdd(cc,IC_CALL_INDIRECT2,
 																&tmp_untry->exe_addr,
-																comp.internal_types[RT_PTR]);
+																cmp.internal_types[RT_PTR]);
 											} else
 												ICAdd(cc,IC_CALL,tmp_untry->exe_addr,
-															comp.internal_types[RT_PTR]);
+															cmp.internal_types[RT_PTR]);
 										}
 									}
 									if (Lex(cc)!=';') {

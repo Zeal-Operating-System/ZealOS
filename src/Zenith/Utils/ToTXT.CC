@@ -18,7 +18,7 @@ U0 TXTPutS(CDoc *doc,U8 *st,I64 *_col)
 				case 'è': 			ptr="phi";			break;
 				case 'ê': 			ptr="omega";		break;
 				case 'ì': 			ptr="inf";			break;
-				case 'æ': 			ptr="u";				break;
+				case 'æ': 			ptr="u";			break;
 			end:
 				DocPrint(doc,ptr);
 				*_col=*_col+StrLen(ptr);
