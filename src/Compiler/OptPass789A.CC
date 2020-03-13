@@ -108,7 +108,7 @@ cc->pass==10 is final pass, code is placed into buf.
 								tmpa->rip=rip2+tmpi->ic_count-8;
 							}
 							break;
-						case IC_HEAP_GLBL:
+						case IC_HEAP_GLOBAL:
 							ICU16(tmpi,0xB848);
 							ICU64(tmpi,0);
 							tmphg=tmpi->ic_data;

@@ -37,7 +37,7 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL,I64 flags=0,U8 *filename=NULL)
 	cc->opts=1<<OPTf_WARN_UNUSED_VAR|1<<OPTf_WARN_HEADER_MISMATCH;
 	cc->htc.hash_mask=HTG_TYPE_MASK-HTT_IMPORT_SYS_SYM;
 	cc->htc.define_hash_table=cc->htc.hash_table_list=
-				cc->htc.glbl_hash_table=cc->htc.local_hash_table=Fs->hash_table;
+				cc->htc.global_hash_table=cc->htc.local_hash_table=Fs->hash_table;
 	if (flags&CCF_KEEP_AT_SIGN)
 		cc->char_bmp_alpha_numeric=char_bmp_alpha_numeric_no_at;
 	else
@@ -1046,7 +1046,7 @@ lex_ifjit:
 						Free(fbuf);
 						tmph->type=HTT_HELP_FILE|HTF_PUBLIC;
 						HashSrcFileSet(cc,tmph);
-						HashAdd(tmph,cc->htc.glbl_hash_table);
+						HashAdd(tmph,cc->htc.global_hash_table);
 						break;
 				}
 				break;

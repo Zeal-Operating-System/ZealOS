@@ -20,7 +20,7 @@ I64 HashVal(CHash *tmph)
 		case HTt_OPCODE:
 		case HTt_HELP_FILE:
 			return tmph;
-		case HTt_GLBL_VAR:
+		case HTt_GLOBAL_VAR:
 			if (tmph(CHashGlobalVar *)->flags&GVF_EXTERN)
 				return &tmph(CHashGlobalVar *)->data_addr;
 			else
@@ -73,7 +73,7 @@ U0 HashDel(CHashSrcSym *tmph)
 			ClassMemberListDel(tmph);
 		else if (tmph->type&HTT_DEFINE_STR)
 			Free(tmph(CHashDefineStr *)->data);
-		else if (tmph->type & HTT_GLBL_VAR) {
+		else if (tmph->type & HTT_GLOBAL_VAR) {
 			if (!(tmph(CHashGlobalVar *)->flags&GVF_ALIAS))
 				Free(tmph(CHashGlobalVar *)->data_addr);
 			LinkedListDel(tmph(CHashGlobalVar *)->dim.next);
@@ -114,7 +114,7 @@ I64 HashTablePurge(CHashTable *table)
 		tmph=table->body[i];
 		while (tmph) {
 			tmph1=tmph->next; //We delete only older ones
-			if (tmph->type&(HTT_FUN|HTT_GLBL_VAR)) {
+			if (tmph->type&(HTT_FUN|HTT_GLOBAL_VAR)) {
 				tmph2=tmph->next; //Older always later in chain
 				while (tmph2) {
 					if ((tmph2->type&HTT_EXPORT_SYS_SYM ||

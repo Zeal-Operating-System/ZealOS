@@ -315,7 +315,7 @@ U0 ParseSizeOf(CCompCtrl *cc)
 			goto pu_sizeof_member;
 	} else {
 		if (!(tmpc=cc->hash_entry) || !(tmpc->type &
-					(HTT_CLASS|HTT_INTERNAL_TYPE|HTT_GLBL_VAR|
+					(HTT_CLASS|HTT_INTERNAL_TYPE|HTT_GLOBAL_VAR|
 					HTT_FUN|HTT_EXPORT_SYS_SYM)))
 			LexExcept(cc,"Invalid class at ");
 		if (tmpc->type&(HTT_FUN|HTT_EXPORT_SYS_SYM)) {
@@ -328,9 +328,9 @@ U0 ParseSizeOf(CCompCtrl *cc)
 			i=tmpc->size;
 			while (Lex(cc)=='.') {
 pu_sizeof_member:
-				if (!(tmpc->type & (HTT_CLASS|HTT_GLBL_VAR)))
+				if (!(tmpc->type & (HTT_CLASS|HTT_GLOBAL_VAR)))
 					LexExcept(cc,"Invalid class at ");
-				else if (tmpc->type & HTT_GLBL_VAR)
+				else if (tmpc->type & HTT_GLOBAL_VAR)
 					tmpc=tmpc(CHashGlobalVar *)->var_class;
 				if (Lex(cc)!=TK_IDENT || !(tmpm=MemberFind(cc->cur_str,tmpc)))
 					LexExcept(cc,"Invalid member at ");
@@ -361,9 +361,9 @@ U0 ParseOffsetOf(CCompCtrl *cc)
 		tmpc=tmpm->member_class;
 	else {
 		tmpc=cc->hash_entry;
-		if (!tmpc || !(tmpc->type & (HTT_CLASS|HTT_GLBL_VAR)))
+		if (!tmpc || !(tmpc->type & (HTT_CLASS|HTT_GLOBAL_VAR)))
 			LexExcept(cc,"Invalid class at ");
-		else if (tmpc->type & HTT_GLBL_VAR)
+		else if (tmpc->type & HTT_GLOBAL_VAR)
 			tmpc=tmpc(CHashGlobalVar *)->var_class;
 	}
 	if (Lex(cc)!='.')
@@ -776,7 +776,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc,CParseStack *ps,CMemberList **_local_var,
 				if (tmpm->flags&MLF_STATIC) {
 					if (cc->flags&CCF_AOT_COMPILE) {
 //			if (tmpg->flags&GVF_DATA_HEAP) //TODO
-						//		ICAdd(cc,IC_HEAP_GLBL,tmpm->static_data,tmpc);
+						//		ICAdd(cc,IC_HEAP_GLOBAL,tmpm->static_data,tmpc);
 						//	else
 						ICAdd(cc,IC_ABS_ADDR,tmpm->static_data_rip,tmpc);
 					} else
@@ -822,9 +822,9 @@ pu_new_sys_sym:
 				} else {
 					tmpex->type=HTT_EXPORT_SYS_SYM | HTF_UNRESOLVED;
 					if (tmpc)
-						HashAddAfter(tmpex,tmpc,cc->htc.glbl_hash_table);
+						HashAddAfter(tmpex,tmpc,cc->htc.global_hash_table);
 					else
-						HashAdd(tmpex,cc->htc.glbl_hash_table);
+						HashAdd(tmpex,cc->htc.global_hash_table);
 				}
 			}
 			switch (Bsf(tmpex->type)) {
@@ -864,7 +864,7 @@ pu_export_sys_sym:
 						*max_prec=PREC_TERM;
 					Lex(cc);	//skip fun name
 					return ParseFunCall(cc,ps,FALSE,tmpex);
-				case HTt_GLBL_VAR:
+				case HTt_GLOBAL_VAR:
 					if (PREC_TERM>*max_prec)
 						*max_prec=PREC_TERM;
 					tmpg=tmpex;
@@ -882,7 +882,7 @@ pu_export_sys_sym:
 								ICAdd(cc,IC_ADDR_IMPORT,tmpg,tmpc);
 							else {
 								if (tmpg->flags&GVF_DATA_HEAP)
-									ICAdd(cc,IC_HEAP_GLBL,tmpg->heap_glbl,tmpc);
+									ICAdd(cc,IC_HEAP_GLOBAL,tmpg->heap_global,tmpc);
 								else
 									ICAdd(cc,IC_ABS_ADDR,tmpg->data_addr_rip,tmpc);
 							}

@@ -778,7 +778,7 @@ public class CHashTable
 #define HTt_EXPORT_SYS_SYM			0
 #define HTt_IMPORT_SYS_SYM			1
 #define HTt_DEFINE_STR					2
-#define HTt_GLBL_VAR						3
+#define HTt_GLOBAL_VAR						3
 #define HTt_CLASS 							4
 #define HTt_INTERNAL_TYPE 			5
 #define HTt_FUN 								6
@@ -808,7 +808,7 @@ public class CHashTable
 #define HTT_EXPORT_SYS_SYM			0x00001 //CHashExport
 #define HTT_IMPORT_SYS_SYM			0x00002 //CHashImport
 #define HTT_DEFINE_STR					0x00004 //CHashDefineStr
-#define HTT_GLBL_VAR						0x00008 //CHashGlobalVar
+#define HTT_GLOBAL_VAR						0x00008 //CHashGlobalVar
 #define HTT_CLASS 							0x00010 //CHashClass
 #define HTT_INTERNAL_TYPE 			0x00020 //CHashClass
 #define HTT_FUN 								0x00040 //CHashFun
@@ -835,7 +835,7 @@ public class CHashTable
 #define HTF_LOCAL 							0x80000000
 #define HTG_FLAGS_MASK					0xFF000000
 
-#define HTG_SRC_SYM 		(HTT_DEFINE_STR|HTT_GLBL_VAR|HTT_FUN|HTT_CLASS|\
+#define HTG_SRC_SYM 		(HTT_DEFINE_STR|HTT_GLOBAL_VAR|HTT_FUN|HTT_CLASS|\
 												HTT_EXPORT_SYS_SYM|HTT_HELP_FILE)
 #define HTG_ALL 								-1
 
@@ -1005,7 +1005,7 @@ public class CHashGlobalVar:CHashSrcSym
 	U8		*data_addr;
 	union {
 		I64 data_addr_rip;
-		CAOTHeapGlobal *heap_glbl;
+		CAOTHeapGlobal *heap_global;
 	}
 };
 #assert offset(CHashClass.size)==offset(CHashGlobalVar.size)
@@ -1270,7 +1270,7 @@ public class CDocBin
 #define DOC_COLOR_CHAR_CONST		BROWN
 #define DOC_COLOR_EXPORT_SYS_SYM LTPURPLE
 #define DOC_COLOR_DEFINE_STR		CYAN
-#define DOC_COLOR_GLBL_VAR			LTCYAN
+#define DOC_COLOR_GLOBAL_VAR			LTCYAN
 #define DOC_COLOR_CLASS 				LTBLUE
 #define DOC_COLOR_FUN 					PURPLE
 #define DOC_COLOR_KEYWORD 			BLUE
@@ -1676,7 +1676,7 @@ public class CAutoCompleteDictGlobals
 #define OPTf_EXTERNS_TO_IMPORTS 0x20
 #define OPTf_KEEP_PRIVATE 			0x21
 #define OPTf_NO_REG_VAR 				0x22	//Applied to funs, not statements
-#define OPTf_GLBLS_ON_DATA_HEAP 0x23
+#define OPTf_GLOBALS_ON_DATA_HEAP 0x23
 //Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
 #define OPTf_NO_BUILTIN_CONST 	0x24 //Applied to funs, not statements
 #define OPTf_USE_IMM64					0x25 //Not completely implemented
@@ -1954,7 +1954,7 @@ class CAsmNum
 {
 	I64 	i;
 	U8		*machine_code;
-	CAsmUndefHash *local_asm_undef_hash,*glbl_asm_undef_hash;
+	CAsmUndefHash *local_asm_undef_hash,*global_asm_undef_hash;
 	CAbsCountsI64 abs_counts;
 };
 
@@ -1994,10 +1994,10 @@ class CAsmUnresolvedRef
 	U8		*machine_code;
 	I64 	rip,rel_rip;
 	CAOT	*aot;
-	U8		*str; 	//Only for import glbls
+	U8		*str; 	//Only for import globals
 	CAsmUndefHash *asm_undef_hash;
 	Bool	U8_avail,
-				imm_flag;//Only for import glbls
+				imm_flag;//Only for import globals
 };
 
 //Opcode Modifier
@@ -2139,7 +2139,7 @@ class CAOT
 	CAOT	*parent_aot;
 	CAOTImportExport *next_ie,*last_ie;
 	CAOTAbsAddr *abss;
-	CAOTHeapGlobal *heap_glbls;
+	CAOTHeapGlobal *heap_globals;
 };
 
 class CStreamBlk
@@ -2189,9 +2189,9 @@ class CAOTCtrl
 	CAOTBinBlk *bin;
 	I64 	num_bin_U8s,
 				max_align_bits,org;
-	CAsmUnresolvedRef *local_unresolved,*glbl_unresolved;
+	CAsmUnresolvedRef *local_unresolved,*global_unresolved;
 	CAOTAbsAddr *abss;
-	CAOTHeapGlobal *heap_glbls;
+	CAOTHeapGlobal *heap_globals;
 	I64 	list_col,list_last_rip;
 	U8		*last_label,*list_last_line;
 	CLexFile *list_last_lfn;
@@ -2254,7 +2254,7 @@ class CLexHashTableContext
 	CHashTable *hash_table_list,
 				*define_hash_table,
 				*local_hash_table,
-				*glbl_hash_table;
+				*global_hash_table;
 };
 
 //CompCtrl flags

@@ -33,7 +33,7 @@ U0 LoadOneImport(U8 **_src,U8 *module_base,I64 ld_flags)
 			ptr2=module_base+i;
 			if (tmpex->type & HTT_FUN)
 				i=tmpex(CHashFun *)->exe_addr;
-			else if (tmpex->type & HTT_GLBL_VAR)
+			else if (tmpex->type & HTT_GLOBAL_VAR)
 				i=tmpex(CHashGlobalVar *)->data_addr;
 			else
 				i=tmpex->val;

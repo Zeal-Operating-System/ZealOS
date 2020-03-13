@@ -427,7 +427,7 @@ here1:
 				case IC_SET_RSP:
 				case IC_SET_RAX:
 				case IC_ABS_ADDR:
-				case IC_HEAP_GLBL:
+				case IC_HEAP_GLOBAL:
 				case IC_ADDR_IMPORT:
 				case IC_TYPE:
 				case IC_BT:

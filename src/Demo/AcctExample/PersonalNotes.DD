@@ -71,7 +71,7 @@ $WW,1$$FG,5$$TX+CX,"TODO"$$FG$
 
 * Make function as a better word processor.  Justify text.	Page numbers.  Header and footer templates?
 
-* Compiler Optimization: heap_glbls with added offset.	Might exist.
+* Compiler Optimization: heap_globals with added offset.	Might exist.
 
 * Bug: Find-and-replace text on $$PT$$ line before it.
 * 12/25/2015 Copy-Paste index.html glitch if source window 40 columns.
@@ -251,7 +251,7 @@ $ID,-5$
 
 
 $FG,5$$TX+CX,"Committee Needed"$$FG$
-* Make binary tree look-up using FUN_SEG symbol addresses, so we can eliminate fun_seg cache and wall-paper kludge?  All CosmiC functions and glbl vars would have left-right for address search.
+* Make binary tree look-up using FUN_SEG symbol addresses, so we can eliminate fun_seg cache and wall-paper kludge?  All CosmiC functions and global vars would have left-right for address search.
 
 * Should we get rid of drive mapping.  It's ugly.
 
@@ -422,7 +422,7 @@ and blotted at the end.
 
 * static var off of data heap.
 * could add "const" to not set CCF_NOT_CONST flag for trig, etc.
-* could make glblvar imports use MDF_RIP_DISP32.
+* could make globalvar imports use MDF_RIP_DISP32.
 * PUSH_CMP allocs reg R9 or whatever
 * Might be problem with NOP in OPT pass1 for NO_PUSH in expressions besides
 assignments.	Is ShiftNoPush fully implemented?

@@ -1,4 +1,4 @@
-F64 glbl;
+F64 global;
 
 F64 CompileDemo(U8 *st)
 {
@@ -26,7 +26,7 @@ F64 CompileDemo(U8 *st)
 
 CompileDemo("2+Cos(ã)");
 CompileDemo("1;2+4");
-CompileDemo("glbl=1;glbl*2;glbl/3;Sin(glbl)");
+CompileDemo("global=1;global*2;global/3;Sin(global)");
 
 //This is just like you typed-it on
 //the cmd line.

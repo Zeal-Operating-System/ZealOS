@@ -77,9 +77,9 @@ Tasks have no priority and are never removed from the queue.	Instead, they often
 
 The $FG,2$FAT32$FG$ filesystem is supported to makes exchanging files with a dual booted other operating system easy and there is the simple, 64-bit ZenithOS $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ filesystem.  The $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ has allocation bitmap for clus and all files are stored contiguously.	You can't grow files.
 
-ZenithOS is geared toward reading and writing whole files.	Since whole files are processed, compression is possible.  Filenames ending in "$FG,2$$FG$" are automatically compressed or uncompressed when stored and fetched.  ZenithOS does support direct block random access into files, however -- $LK,"FBlkRead",A="MN:FBlkRead"$() and $LK,"FBlkWrite",A="MN:FBlkWrite"$().
+ZenithOS is geared toward reading and writing whole files. There is support for direct block random access into files, however -- $LK,"FBlkRead",A="MN:FBlkRead"$() and $LK,"FBlkWrite",A="MN:FBlkWrite"$().
 
-If a file is not found, "$FG,2$$FG$" is added or removed and a search is done, again.  There is no $FG,2$PATH$FG$, but parent directories are searched when a file is not found.	This feature is especially useful for default account files.
+There is no $FG,2$PATH$FG$, but parent directories are searched when a file is not found.	This feature is especially useful for default account files.
 
 The graphic resolution is poor, $FG,2$640x480 16 color$FG$, but God said it was a covenant like circumcision.  Also, that's all I feel comfortable with without GPU acceleration supported.  A $FG,2$1600x1200x24$FG$ bit screen takes 37 times more memory, implying 37 times the CPU power.  Also, a fixed size keeps it simple with everybody machine having the same appearance.	Look on the bright-side -- you won't spend as much time twiddling pixels for your game art and you'll have tons of CPU power available, especially with multicore systems.
 

@@ -1220,7 +1220,7 @@ args.
 			case IC_RETURN_VAL:
 			case IC_RETURN_VAL2:
 			case IC_ABS_ADDR:
-			case IC_HEAP_GLBL:
+			case IC_HEAP_GLOBAL:
 			case IC_ADDR_IMPORT:
 			case IC_GET_LABEL:
 			case IC_TYPE:

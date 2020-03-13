@@ -1,5 +1,5 @@
-//Compiler initializes glbls in AOT bin modules to zero.
-//$LK,"Globals Set to Zero Here",A="FF:::/Compiler/ParseStatement.CC,Init AOT glbl to zero"$.
+//Compiler initializes globals in AOT bin modules to zero.
+//$LK,"Globals Set to Zero Here",A="FF:::/Compiler/ParseStatement.CC,Init AOT global to zero"$.
 
 CJob sys_macro_head;
 CTask *sys_macro_task;

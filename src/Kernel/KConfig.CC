@@ -61,7 +61,7 @@ U0 KConfigOptions(CKConfig *c)
 						"$$PURPLE$$MemInit$$FG$$ Initializes memory above 0x100000 "
 						"to a val at boot.\n"
 						"$$PURPLE$$HeapInit$$FG$$ Initializes MAlloc() memory to a val.\n"
-						"$$PURPLE$$VarInit$$FG$$ Initializes glbl var memory to a val.\n"
+						"$$PURPLE$$VarInit$$FG$$ Initializes global var memory to a val.\n"
 						"$$PURPLE$$HomeDir$$FG$$ Set home dir.\n"
 						"$$PURPLE$$NoMP$$FG$$ No multicore.\n"
 						"$$PURPLE$$DontProbe$$FG$$ Just prompt CD/DVD ports, don't probe.\n"

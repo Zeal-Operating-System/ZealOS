@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/12/20 22:00:36----$IV,0$
+* Remove shift-space, as we use tab indentation now. $LK,"S2T",A="MN:S2T"$() is still present if needed.
+
 $IV,1$----02/23/20 23:59:37----$IV,0$
 * Added new $LK,"bitmap mouse",A="MN:DrawStdMouse"$.
 

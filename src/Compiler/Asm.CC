@@ -4,7 +4,7 @@ Bool ParseAsmImm(CCompCtrl *cc,CAsmArg *arg)
 		LexExcept(cc,"Already one immediate at ");
 	arg->imm_or_off_present = TRUE;
 	arg->num.local_asm_undef_hash = NULL;
-	arg->num.glbl_asm_undef_hash = NULL;
+	arg->num.global_asm_undef_hash = NULL;
 	cc->asm_undef_hash = NULL;
 	cc->abs_counts = 0;
 	cc->flags &= ~(CCF_UNRESOLVED + CCF_LOCAL);
@@ -19,14 +19,14 @@ Bool ParseAsmImm(CCompCtrl *cc,CAsmArg *arg)
 			if (cc->flags & CCF_LOCAL)
 				arg->num.local_asm_undef_hash = cc->asm_undef_hash;
 			else
-				arg->num.glbl_asm_undef_hash = cc->asm_undef_hash;
+				arg->num.global_asm_undef_hash = cc->asm_undef_hash;
 
 			cc->asm_undef_hash=NULL;
 		} 
 		else
 		{
 			arg->num.i = Call(arg->num.machine_code);
-			arg->num.glbl_asm_undef_hash = cc->asm_undef_hash;
+			arg->num.global_asm_undef_hash = cc->asm_undef_hash;
 			cc->asm_undef_hash = NULL;
 			Free(arg->num.machine_code);
 			arg->num.machine_code = NULL;
@@ -218,7 +218,7 @@ I64 AsmMakeArgMask(CCompCtrl *cc,CAsmArg *arg)
 		res&=0xFF0FFFFFFF;
 
 	if (arg->reg1!=REG_NONE && arg->imm_or_off_present && !arg->num.i &&
-				!arg->num.glbl_asm_undef_hash && !arg->num.local_asm_undef_hash)
+				!arg->num.global_asm_undef_hash && !arg->num.local_asm_undef_hash)
 		arg->imm_or_off_present=FALSE;	//Zero displacement
 
 	if (arg->reg2!=REG_NONE || arg->scale!=1) {
@@ -292,10 +292,10 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 		num2->num.i-=num2->rel;
 	for (i=0;i<count;i++) {
 		if (num2->U8_count==1) {
-			if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
+			if (num2->num.local_asm_undef_hash||num2->num.global_asm_undef_hash)
 				AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I8+num2->imm_flag,
 							aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-							num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
+							num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
 							U8_avail);
 			else if (!num2->imm_flag && !(I8_MIN<=num2->num.i<=I8_MAX))
 				LexExcept(cc,"Branch out of range at ");
@@ -319,10 +319,10 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 			AOTStoreCodeU8(cc,num2->num.i);
 		} else {
 			if (num2->U8_count==2) {
-				if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
+				if (num2->num.local_asm_undef_hash||num2->num.global_asm_undef_hash)
 					AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I16+num2->imm_flag,
 								aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-								num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
+								num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
 								U8_avail);
 				else if (!num2->imm_flag && !(I16_MIN<=num2->num.i<=I16_MAX))
 					LexExcept(cc,"Branch out of range at ");
@@ -346,10 +346,10 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 				AOTStoreCodeU8(cc,num2->num.i.u8[0]);
 				AOTStoreCodeU8(cc,num2->num.i.u8[1]);
 			} else if (num2->U8_count==4) {
-				if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
+				if (num2->num.local_asm_undef_hash||num2->num.global_asm_undef_hash)
 					AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I32+num2->imm_flag,
 								aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-								num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
+								num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
 								U8_avail);
 				else if (!num2->imm_flag && !(I32_MIN<=num2->num.i<=I32_MAX))
 					LexExcept(cc,"Branch out of range at ");
@@ -372,10 +372,10 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 				}
 				AOTStoreCodeU32(cc,num2->num.i);
 			} else if (num2->U8_count==8) {
-				if (num2->num.local_asm_undef_hash||num2->num.glbl_asm_undef_hash)
+				if (num2->num.local_asm_undef_hash||num2->num.global_asm_undef_hash)
 					AsmUnresolvedAdd(cc,num2->num.machine_code,IET_REL_I64+num2->imm_flag,
 								aotc->rip,num2->rel,num2->num.local_asm_undef_hash,
-								num2->num.glbl_asm_undef_hash,cc->lex_include_stack->line_num,
+								num2->num.global_asm_undef_hash,cc->lex_include_stack->line_num,
 								U8_avail);
 				if (num2->imm_flag) {
 					if (num2->num.abs_counts.abs_addres&1) {
@@ -397,7 +397,7 @@ Bool AsmStoreNum(CCompCtrl *cc,CAsmNum2 *num2,I64 count,Bool U8_avail)
 				AOTStoreCodeU64(cc,num2->num.i);
 			}
 			if (U8_avail && !num2->num.local_asm_undef_hash &&
-						!num2->num.glbl_asm_undef_hash &&
+						!num2->num.global_asm_undef_hash &&
 						!num2->imm_flag && -124<=num2->num.i<=123) {
 				LexWarn(cc,"could use I8 displacement at ");
 				return FALSE;
@@ -838,7 +838,7 @@ U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_count)
 
 	while (cc->token && cc->token!=';') {
 		num2.num.local_asm_undef_hash=NULL;
-		num2.num.glbl_asm_undef_hash=NULL;
+		num2.num.global_asm_undef_hash=NULL;
 		if (cc->token==TK_STR) {
 			ptr=cc->cur_str;
 			i=cc->cur_str_len-1;
@@ -860,7 +860,7 @@ U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_count)
 						num2.num.local_asm_undef_hash=cc->asm_undef_hash;
 						cc->asm_undef_hash=NULL;
 					} else {
-						num2.num.glbl_asm_undef_hash=cc->asm_undef_hash;
+						num2.num.global_asm_undef_hash=cc->asm_undef_hash;
 						cc->asm_undef_hash=NULL;
 					}
 				} else {
@@ -885,7 +885,7 @@ U0 ParseAsmDefine(CCompCtrl *cc,I64 U8_count)
 			num2.imm_flag=TRUE;
 			num2.num.abs_counts=cc->abs_counts;
 			if (is_dup) {
-				if (num2.num.local_asm_undef_hash || num2.num.glbl_asm_undef_hash)
+				if (num2.num.local_asm_undef_hash || num2.num.global_asm_undef_hash)
 					LexExcept(cc,"Undefined DUP count at ");
 				num2.num.i=dup_val;
 				AsmStoreNum(cc,&num2,i,FALSE);
@@ -952,7 +952,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 								tmpex->str=cc->cur_str;
 								cc->cur_str=0;
 								tmpex->type=HTT_EXPORT_SYS_SYM|HTF_UNRESOLVED;
-								HashAdd(tmpex,cc->htc.glbl_hash_table);
+								HashAdd(tmpex,cc->htc.global_hash_table);
 								tmpex->type|=HTF_IMPORT;
 								if (Lex(cc)==',')
 									Lex(cc); //skip ','
@@ -1091,10 +1091,10 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 			else {
 				if (*tmpex->str=='@' && tmpex->str[1]=='@') {
 					if (cc->token==TK_DBL_COLON)
-						LexExcept(cc,"No local glbl exports at ");
+						LexExcept(cc,"No local global exports at ");
 					HashAdd(tmpex,cc->htc.local_hash_table);
 				} else
-					HashAdd(tmpex,cc->htc.glbl_hash_table);
+					HashAdd(tmpex,cc->htc.global_hash_table);
 				if (cc->htc.local_var_list) {//AsmBlk in fun? Also add goto-like label.
 					if (!(g_lb=COCGoToLabelFind(cc,tmpex->str))) {
 						g_lb=COCMiscNew(cc,CMT_ASM_LABEL);

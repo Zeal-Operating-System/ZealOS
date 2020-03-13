@@ -32,7 +32,7 @@ class CIntermediateStruct
 #define IC_STR_CONST						0x0C
 #define IC_ABS_ADDR 						0x0D
 #define IC_ADDR_IMPORT					0x0E
-#define IC_HEAP_GLBL						0x0F
+#define IC_HEAP_GLOBAL						0x0F
 #define IC_SIZEOF 							0x10
 #define IC_TYPE 								0x11
 #define IC_GET_LABEL						0x12

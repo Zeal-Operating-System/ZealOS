@@ -29,7 +29,7 @@ U0 Main1()
 
 Main1;
 
-/*Now, we'll use the data heap glbl option
+/*Now, we'll use the data heap global option
 to force global vars onto the data heap.
 
 You can turn the data heap flag
@@ -37,16 +37,16 @@ on and off within your programs, leaving
 ones which need initialization on the code heap.
 
 You can't dynamically initialize data heap
-glbls--they are consts.  This might be a silly
+globals--they are consts.  This might be a silly
 point, but might res in odd differences, perhaps
 from the order things are evaluated.
 
-Data heap glbls are good for AOT modules
+Data heap globals are good for AOT modules
 because they don't take-up room in the .BIN file.
 */
 
 #ifjit
-#exe {Option(OPTf_GLBLS_ON_DATA_HEAP,ON);};
+#exe {Option(OPTf_GLOBALS_ON_DATA_HEAP,ON);};
 
 Test g2[]={
 	{10,"name1"},
@@ -70,7 +70,7 @@ U0 Main2()
 
 Main2;
 
-#exe {Option(OPTf_GLBLS_ON_DATA_HEAP,ON);};
+#exe {Option(OPTf_GLOBALS_ON_DATA_HEAP,ON);};
 #endif
 
 '\n';

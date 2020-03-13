@@ -70,7 +70,7 @@ U0 AOTLocalsResolve(CCompCtrl *cc)
 	}
 	HashTableDel(cc->htc.local_hash_table);
 	cc->htc.hash_table_list=cc->htc.local_hash_table=HashTableNew(16);
-	cc->htc.local_hash_table->next=cc->htc.glbl_hash_table;
+	cc->htc.local_hash_table->next=cc->htc.global_hash_table;
 	aotc->local_unresolved=NULL;
 }
 
@@ -78,7 +78,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 {
 	CAOTCtrl *aotc=cc->aotc;
 	CHashFun *tmpf;
-	CAsmUnresolvedRef *tmpu=aotc->glbl_unresolved,*tmpu1;
+	CAsmUnresolvedRef *tmpu=aotc->global_unresolved,*tmpu1;
 	I64 i,j;
 	CAOTImportExport *tmpie,*tmpie1;
 	CAsmUndefHash *tmpauh;
@@ -131,8 +131,8 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 		tmpu=tmpu1;
 	}
 
-	for (i=0;i<=cc->htc.glbl_hash_table->mask;i++) {
-		tmpex=cc->htc.glbl_hash_table->body[i];
+	for (i=0;i<=cc->htc.global_hash_table->mask;i++) {
+		tmpex=cc->htc.global_hash_table->body[i];
 		while (tmpex) {
 			if (tmpex->type & (HTF_IMPORT|HTF_GOTO_LABEL)) {
 				if (tmpex->use_count && (tmpie=tmpex->ie_list)) {
@@ -169,7 +169,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 					tmpie->type=IET_REL32_EXPORT;
 					if (tmpex->type & HTT_FUN)
 						tmpie->rip=tmpf->exe_addr;
-					else if (tmpex->type & HTT_GLBL_VAR)
+					else if (tmpex->type & HTT_GLOBAL_VAR)
 						tmpie->rip=tmpex(CHashGlobalVar *)->data_addr_rip;
 					else
 						tmpie->rip=tmpex->val;
@@ -187,7 +187,7 @@ U0 AOTGlobalsResolve(CCompCtrl *cc,CAOT *tmpaot)
 }
 
 U0 AsmUnresolvedAdd(CCompCtrl *cc,U8 *machine_code,I64 type,I64 rip,I64 rel_rip,
-				CAsmUndefHash *local_asm_undef_hash,CAsmUndefHash *glbl_asm_undef_hash,
+				CAsmUndefHash *local_asm_undef_hash,CAsmUndefHash *global_asm_undef_hash,
 				I64 line_num,Bool U8_avail)
 {
 	CAsmUnresolvedRef *tmpu=MAlloc(sizeof(CAsmUnresolvedRef));
@@ -205,12 +205,12 @@ U0 AsmUnresolvedAdd(CCompCtrl *cc,U8 *machine_code,I64 type,I64 rip,I64 rel_rip,
 		tmpu->next=cc->aotc->local_unresolved;
 		cc->aotc->local_unresolved=tmpu;
 	} else {
-		tmpu->asm_undef_hash=glbl_asm_undef_hash;
-		tmpu->next=cc->aotc->glbl_unresolved;
-		cc->aotc->glbl_unresolved=tmpu;
-		if (glbl_asm_undef_hash->hash->type & HTF_IMPORT) {
-			tmpu->str=StrNew(glbl_asm_undef_hash->hash->str);
-			if (glbl_asm_undef_hash->hash->type & HTF_IMM)
+		tmpu->asm_undef_hash=global_asm_undef_hash;
+		tmpu->next=cc->aotc->global_unresolved;
+		cc->aotc->global_unresolved=tmpu;
+		if (global_asm_undef_hash->hash->type & HTF_IMPORT) {
+			tmpu->str=StrNew(global_asm_undef_hash->hash->str);
+			if (global_asm_undef_hash->hash->type & HTF_IMM)
 				tmpu->imm_flag=TRUE;
 		}
 	}

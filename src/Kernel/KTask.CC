@@ -134,7 +134,7 @@ argpop I64 CallStackGrow(I64 stack_size_threshold,I64 stack_size,
 		_stack=&Fs->stack;
 		tmps->stack_ptr=rsp=GetRSP;
 		asm {
-			IMPORT		_FREE;	//We are in a function, not at glbl scope.
+			IMPORT		_FREE;	//We are in a function, not at global scope.
 //The compiler treats these in isolation.
 
 			PUSHFD

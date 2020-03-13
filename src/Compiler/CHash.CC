@@ -5,7 +5,7 @@ I64 HashEntrySize(CHashSrcSym *tmph)
 	switch (HashTypeNum(tmph)) {
 		case HTt_DEFINE_STR:
 			return MSize(tmph(CHashDefineStr *)->data);
-		case HTt_GLBL_VAR:
+		case HTt_GLOBAL_VAR:
 		case HTt_CLASS:
 		case HTt_INTERNAL_TYPE:
 			return tmph(CHashClass *)->size;
@@ -53,7 +53,7 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
 							-debug_info->body[0];
 		} else if (tmph->type&HTT_DEFINE_STR)
 			res+=MSize2(tmph(CHashDefineStr *)->data);
-		else if (tmph->type & HTT_GLBL_VAR) {
+		else if (tmph->type & HTT_GLOBAL_VAR) {
 			res+=LinkedListSize(tmph(CHashGlobalVar *)->dim.next);
 			if (!(tmph(CHashGlobalVar *)->flags&GVF_ALIAS))
 				res+=MSize2(tmph(CHashGlobalVar *)->data_addr);
