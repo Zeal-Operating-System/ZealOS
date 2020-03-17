@@ -149,7 +149,7 @@ U8 *CmdLinePrompt()
 		RawDr;
 
 	LBts(&Fs->task_flags,TASKf_CMD_LINE_PROMPT);
-	st=GetStr(,,GSF_SHIFT_ESC_EXIT);
+	st=StrGet(,,GSF_SHIFT_ESC_EXIT);
 	LBtr(&Fs->task_flags,TASKf_CMD_LINE_PROMPT);
 
 	i=StrLen(st);

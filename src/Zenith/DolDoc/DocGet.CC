@@ -177,7 +177,7 @@ public I64 GetI64(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
 	while (TRUE) {
 		if (message)
 			"" message,default;
-		st=GetStr;
+		st=StrGet;
 		if (!*st) {
 			Free(st);
 			return default;
@@ -203,7 +203,7 @@ public F64 GetF64(U8 *message=NULL,F64 default=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
 	while (TRUE) {
 		if (message)
 			"" message,default;
-		st=GetStr;
+		st=StrGet;
 		if (!*st) {
 			Free(st);
 			return default;
@@ -230,7 +230,7 @@ public CDate GetDate(U8 *message=NULL,CDate default=I64_MIN,
 	while (TRUE) {
 		if (message)
 			"" message,default,default;
-		st=GetStr;
+		st=StrGet;
 		if (!*st) {
 			Free(st);
 			return default;

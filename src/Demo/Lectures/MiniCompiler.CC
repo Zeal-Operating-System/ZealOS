@@ -206,7 +206,7 @@ U0 Main()
 		"This will compile an expression\n"
 					"consisting of ints, parentheses\n"
 					"and the operators +,-,* and /.\n";
-		src=GetStr;
+		src=StrGet;
 		if (*src) {
 			src2=src;
 			dst=code;

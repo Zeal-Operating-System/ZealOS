@@ -164,7 +164,7 @@ U8 *PopUpGetStr2(U8 *header,CTask *mem_task)
 	U8 *res,*st;
 	if (header)
 		"%s",header;
-	st=GetStr(,,GSF_WITH_NEW_LINE);
+	st=StrGet(,,GSF_WITH_NEW_LINE);
 	res=StrNew(st,mem_task);
 	Free(st);
 	return res;

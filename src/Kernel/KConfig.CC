@@ -54,7 +54,7 @@ U0 KConfigOptions(CKConfig *c)
 			else
 				"$$PURPLE$$%13tz$$FG$$:%Z\n",i,kernel_config_options,c->opts[i],"ST_OFF_ON";
 		"\nType '$$PURPLE$$Help$$FG$$' for help.\n";
-		st=GetStr("Option ($$PURPLE$$<ENTER>$$FG$$ when done):","");
+		st=StrGet("Option ($$PURPLE$$<ENTER>$$FG$$ when done):","");
 		i=ListMatch(st,kernel_config_options,LMF_IGNORE_CASE);
 		if (i==CONFIG_HELP)
 			"\n"
@@ -85,7 +85,7 @@ U0 KConfigOptions(CKConfig *c)
 							c->var_init_val=GetI64("Val (0-255):",255,0,255);
 						break;
 					case CONFIG_HOME_DIR:
-						st2=GetStr("Home Dir(\"%s\"):",c->home_dir);
+						st2=StrGet("Home Dir(\"%s\"):",c->home_dir);
 						if (!*st2)
 							st2=StrNew("::/Home");
 						else if (st2[1]!=':') {
@@ -131,7 +131,7 @@ U0 KConfigOptions(CKConfig *c)
 						c->debug_distro_file=0;
 						c->debug_distro_start=0;
 						if (state) {
-							c->debug_distro_file=GetStr("Debug Distro File:");
+							c->debug_distro_file=StrGet("Debug Distro File:");
 							c->debug_distro_start=GetI64("Debug Distro Start:");
 						}
 						break;
@@ -164,7 +164,7 @@ CKConfig *KConfigNew()
 	}
  
 
-	c->disk_cache_size_exp = GetStr("\nDisk Cache Size in Bytes, gets rounded-up funny, "
+	c->disk_cache_size_exp = StrGet("\nDisk Cache Size in Bytes, gets rounded-up funny, "
 																"($$PURPLE$$<ENTER>$$FG$$ will use default.):",
 																"Scale2Mem(0x80000,0x8000000)");
 	KConfigOptions(c);

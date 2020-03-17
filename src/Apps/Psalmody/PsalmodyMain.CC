@@ -76,7 +76,7 @@ U0 PsmRightClick(I64 x,I64 y)
 						else
 							st2=MStrPrint("\nWord(\"\"):");
 						DocBottom;
-						st=GetStr(st2);
+						st=StrGet(st2);
 						Free(st2);
 						Free(tmpn->word);
 						if (*st) {

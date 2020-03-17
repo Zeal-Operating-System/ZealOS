@@ -53,7 +53,7 @@ U0 PhoneNumWords(U8 *num)
 U0 PNWDemo()
 {
 	U8 *st;
-	while ((st=GetStr("Phone Num:")) && *st) {
+	while ((st=StrGet("Phone Num:")) && *st) {
 		PhoneNumWords(st);
 		Free(st);
 	}

@@ -190,7 +190,7 @@ I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE)
 	return ch1;
 }
 
-U8 *GetStr(U8 *message=NULL,U8 *default=NULL,I64 flags=0)
+U8 *StrGet(U8 *message=NULL,U8 *default=NULL,I64 flags=0)
 {//Returns a $LK,"MAlloc",A="MN:MAlloc"$()ed prompted string.  See $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$.
 	U8 *st;
 	if (message)
@@ -212,7 +212,7 @@ I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE)
 	I64 ch,i=0;
 	if (!size || !buf) return 0;
 	if (allow_ext) {
-		st=GetStr;
+		st=StrGet;
 		if (StrLen(st)>size-1) {
 			MemCopy(buf,st,size-1);
 			buf[size-1]=0;

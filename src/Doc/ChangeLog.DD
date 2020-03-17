@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/16/20 14:44:00----$IV,0$
+* Renamed GetStr() -> $LK,"StrGet",A="MN:StrGet"$().
+
+* Added some $LK,"AHCI headers",A="MN:AHCI_SIG_ATA"$.
+
 $IV,1$----03/12/20 22:00:36----$IV,0$
 * Added $LK,"PaletteSetGruvboxDark",A="MN:PaletteSetGruvboxDark"$().
 

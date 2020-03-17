@@ -94,7 +94,7 @@ U0 RegularInstallWiz()
 	num_hints=ATARep(FALSE,,&head);
 	"\nInclude '$$PURPLE$$0x$$FG$$' for hexidecimal numbers.\n\n";
 	while (TRUE) {
-		base0=GetStr("Hard Drive I/O Port Base0  : ");
+		base0=StrGet("Hard Drive I/O Port Base0  : ");
 		if (0<Str2I64(base0)<=0xFFFF)
 			break;
 		Free(base0);
@@ -109,13 +109,13 @@ U0 RegularInstallWiz()
 		Free(st);
 	} else {
 		while (TRUE) {
-			base1=GetStr("Hard Drive I/O Port Base1  : ");
+			base1=StrGet("Hard Drive I/O Port Base1  : ");
 			if (0<Str2I64(base1)<=0xFFFF)
 				break;
 			Free(base1);
 		}
 		do {
-			st =GetStr("Unit--$$PURPLE$$0$$FG$$=Master or $$PURPLE$$1$$FG$$=Slave: ","0");
+			st =StrGet("Unit--$$PURPLE$$0$$FG$$=Master or $$PURPLE$$1$$FG$$=Slave: ","0");
 			unit=Str2I64(st);
 			Free(st);
 		} while (!(0<=unit<=1));
@@ -124,7 +124,7 @@ U0 RegularInstallWiz()
 	XTalkWait(task,"%s\n%s\n%C\n",base0,base1,'0'+unit);
 	DriveRep;
 	do {
-		st=GetStr("\nDestination Partition Letter: ");
+		st=StrGet("\nDestination Partition Letter: ");
 		if (*st)
 			drv_let=Letter2Letter(*st);
 		else

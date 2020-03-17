@@ -1,0 +1,73 @@
+PCNet
+	PCNetPCIDevFind
+	PCNetGetIOBase
+	PCNetReset
+	PCNetEnter32BitMode
+	PCNetWriteRAP
+	PCNetWriteCSR
+	PCNetReadCSR
+	PCNetSetSWStyle
+	PCNetGetMAC
+	PCNetInitDescriptorEntry
+	PCNetAllocateBuffers
+	PCNetDirectInit
+	PCNetSetInterruptCSR
+	PCNetEnableTXAutoPad
+	PCNetExitConfigMode
+	PCNetDriverOwns
+	PCNetAllocateTransmitPacket
+	PCNetFinishTransmitPacket
+	PCNetReceivePacket
+	PCNetReleasePacket
+	PCNetIRQ
+	PCIRerouteInterrupts
+	PCNetSetupInterrupts
+	PCNetInit
+
+	EthernetFrameFinish (driver alias of PCNetFinishTransmitPacket)
+	EthernetFrameAllocate
+	EthernetGetMAC
+	
+
+NetQueue
+	NetQueueInit
+	NetQueuePull
+	NetQueuePushCopy
+
+
+Ethernet
+	EthernetFrameParse (Needs refining!)
+
+
+ARP
+	ARPCacheInit
+	ARPSend
+	ARPCacheFindByIP
+	ARPCachePut
+	ARPHandler
+	ARPSetIPV4Address
+
+
+Sockets
+
+
+IPV4
+
+
+ICMP
+
+
+TCP
+
+
+UDP
+
+
+DNS
+
+
+NetHandlerTask
+	NetHandlerTask
+	HandleNetQueueEntry	(4 million context swaps per second!)
+
+NetConfig

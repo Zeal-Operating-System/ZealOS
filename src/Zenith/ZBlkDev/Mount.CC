@@ -43,7 +43,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 					GetS(blks_buf,STR_LEN);
 					break;
 				case BDT_ISO_FILE_READ:
-					filename=GetStr("File Name:");
+					filename=StrGet("File Name:");
 					break;
 				case BDT_ATA:
 					prt_num=GetI64("Partition Num (Default=All):",prt_num);

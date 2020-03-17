@@ -500,14 +500,14 @@ extern CJob sys_macro_head;
 extern CTask *sys_macro_task;
 
 #help_index "Keyboard Devices;Char/Input;StdIn"
-extern U8  *(*fp_getstr2)(I64 flags=0); //GetStr $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$
+extern U8  *(*fp_getstr2)(I64 flags=0); //StrGet $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$
 public extern Bool AreYouSure();
 public extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,
 				Bool raw_cursor=FALSE);
 public extern I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,
 				Bool raw_cursor=FALSE);
 public extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
-public extern U8 *GetStr(U8 *message=NULL,U8 *default=NULL,I64 flags=0);
+public extern U8 *StrGet(U8 *message=NULL,U8 *default=NULL,I64 flags=0);
 extern U0 			KbdInit();
 public extern I64 KbdMouseEventTime();
 extern U0 			KbdMouseHandler(Bool poll_kbd,Bool poll_mouse);

@@ -90,7 +90,7 @@ U0 GetGates()
 	num_sel_gates=0;
 	while (num_sel_gates<GT_ENTRIES_NUM) {
 		"%d",num_sel_gates;
-		st=GetStr(" Gate: ");
+		st=StrGet(" Gate: ");
 		if (!*st) {
 			Free(st);
 			return;

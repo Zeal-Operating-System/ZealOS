@@ -14,7 +14,7 @@ U0 Cartesian()
 		"Enter algebraic equation to graph.\n"
 					"Example: y=2*x\n"
 					"y=";
-		if (st=GetStr) {
+		if (st=StrGet) {
 			if (*st) {
 				h=Fs->pix_width/2;
 				v=Fs->pix_height/2;

@@ -16,29 +16,29 @@ extern class CIntermediateCode;
 extern class CJobCtrl;
 extern class CTask;
 
-#define NULL		0
-#define TRUE		1
+#define NULL	0
+#define TRUE	1
 #define FALSE 	0
-#define ON			1
-#define OFF 		0
-#define NONE		0 //for use in default arguments
-#define I8_MIN (-0x80)
-#define I8_MAX 0x7F
-#define U8_MIN 0
-#define U8_MAX 0xFF
-#define I16_MIN (-0x8000)
-#define I16_MAX 0x7FFF
-#define U16_MIN 0
-#define U16_MAX 0xFFFF
-#define I32_MIN (-0x80000000)
-#define I32_MAX 0x7FFFFFFF
-#define U32_MIN 0
-#define U32_MAX 0xFFFFFFFF
-#define I64_MIN (-0x8000000000000000)
-#define I64_MAX 0x7FFFFFFFFFFFFFFF
+#define ON		1
+#define OFF 	0
+#define NONE	0 //for use in default arguments
+#define I8_MIN	(-0x80)
+#define I8_MAX	0x7F
+#define U8_MIN	0
+#define U8_MAX	0xFF
+#define I16_MIN	(-0x8000)
+#define I16_MAX	0x7FFF
+#define U16_MIN	0
+#define U16_MAX	0xFFFF
+#define I32_MIN	(-0x80000000)
+#define I32_MAX	0x7FFFFFFF
+#define U32_MIN	0
+#define U32_MAX	0xFFFFFFFF
+#define I64_MIN	(-0x8000000000000000)
+#define I64_MAX	0x7FFFFFFFFFFFFFFF
 #define U64_MIN 0
-#define U64_MAX 0xFFFFFFFFFFFFFFFF
-#define INVALID_PTR 		I64_MAX
+#define U64_MAX	0xFFFFFFFFFFFFFFFF
+#define INVALID_PTR	I64_MAX
 #define STR_LEN 144
 
 //(Int to F64 conversion is signed)
@@ -46,17 +46,17 @@ extern class CTask;
 #define U64_F64_MAX (0x43F0000000000000(F64))
 #define F64_MAX (0x7FEFFFFFFFFFFFFF(F64))
 #define F64_MIN (0xFFEFFFFFFFFFFFFF(F64))
-#define inf 		(0x7FF0000000000000(F64))
-#define ì 			(0x7FF0000000000000(F64))
-#define pi			(0x400921FB54442D18(F64))
-#define ã 			(0x400921FB54442D18(F64))
+#define inf 	(0x7FF0000000000000(F64))
+#define ì 		(0x7FF0000000000000(F64))
+#define pi		(0x400921FB54442D18(F64))
+#define ã 		(0x400921FB54442D18(F64))
 #define exp_1 	(0x4005BF0A8B145769(F64)) //The number "e"
 #define log2_10 (0x400A934F0979A371(F64))
 #define log2_e	(0x3FF71547652B82FE(F64))
 #define log10_2 (0x3FD34413509F79FF(F64))
 #define loge_2	(0x3FE62E42FEFA39EF(F64))
 #define sqrt2 	(0x3FF6A09E667F3BCD(F64))
-#define eps 		(0x3CB0000000000000(F64))
+#define eps 	(0x3CB0000000000000(F64))
 
 #help_index "Data Types/Simple"
 /*CosmiC union structure is treated as a
@@ -2375,69 +2375,69 @@ class CUAsmGlobals
 #help_index "Devices;PCI"
 
 //PCI Registers, used with $LK,"PCIRead",A="MN:PCIReadU16"$ functions.
-#define PCIR_VENDOR_ID					0x00
-#define PCIR_DEVICE_ID					0x02
-#define PCIR_COMMAND						0x04
-#define PCIR_STATUS 						0x06
-#define PCIR_REVISION_ID				0x08
-#define PCIR_PROG_IF						0x09
-#define PCIR_SUB_CODE 					0x0A
-#define PCIR_CLASS_CODE 				0x0B
-#define PCIR_CACHE_LINE_SIZE		0x0C
-#define PCIR_LATENCY_TIMER			0x0D
-#define PCIR_HEADER_TYPE				0x0E
-#define PCIR_BIST 							0x0F
-#define PCIR_BASE0							0x10
-#define PCIR_BASE1							0x14
-#define PCIR_BASE2							0x18
-#define PCIR_BASE3							0x1C
-#define PCIR_BASE4							0x20
-#define PCIR_BASE5							0x24
+#define PCIR_VENDOR_ID			0x00
+#define PCIR_DEVICE_ID			0x02
+#define PCIR_COMMAND			0x04
+#define PCIR_STATUS 			0x06
+#define PCIR_REVISION_ID		0x08
+#define PCIR_PROG_IF			0x09
+#define PCIR_SUB_CODE 			0x0A
+#define PCIR_CLASS_CODE 		0x0B
+#define PCIR_CACHE_LINE_SIZE	0x0C
+#define PCIR_LATENCY_TIMER		0x0D
+#define PCIR_HEADER_TYPE		0x0E
+#define PCIR_BIST 				0x0F
+#define PCIR_BASE0				0x10
+#define PCIR_BASE1				0x14
+#define PCIR_BASE2				0x18
+#define PCIR_BASE3				0x1C
+#define PCIR_BASE4				0x20
+#define PCIR_BASE5				0x24
 #define PCIR_SUBSYS_VENDOR_ID 	0x2C
-#define PCIR_SUBSYS_ID					0x2E
-#define PCIR_EXPANSION_ROM			0x30
-#define PCIR_CAPABILITIES 			0x34
-#define PCIR_INTERRUPT_LINE 		0x3C
-#define PCIR_INTERRUPT_PIN			0x3D
-#define PCIR_MIN_GRANT					0x3E
-#define PCIR_MAX_LATENCY				0x3F
+#define PCIR_SUBSYS_ID			0x2E
+#define PCIR_EXPANSION_ROM		0x30
+#define PCIR_CAPABILITIES 		0x34
+#define PCIR_INTERRUPT_LINE 	0x3C
+#define PCIR_INTERRUPT_PIN		0x3D
+#define PCIR_MIN_GRANT			0x3E
+#define PCIR_MAX_LATENCY		0x3F
 
 //PCI class codes
-#define PCIC_STORAGE		0x1
-#define PCIC_NETWORK		0x2
+#define PCIC_STORAGE	0x1
+#define PCIC_NETWORK	0x2
 
 //PCI subclass codes
 #define PCISC_ETHERNET	0x0
-#define PCISC_AHCI			0x6
+#define PCISC_AHCI		0x6
 
 class CPCIDev
 {
 	CPCIDev *next, *last;
 
-	U8		bus,dev,fun,
-				*vendor_str,
-				*dev_id_str,
-				class_code,
-				sub_code,
-				prog_if,
-				revision_id,
-				bist,
-				header_type,
-				latency_timer,
-				cache_line_size,
-				capabilities,
-				interrupt_line,
-				interrupt_pin,
-				min_grant,
-				max_latency;
+	U8	bus,dev,fun,
+		*vendor_str,
+		*dev_id_str,
+		class_code,
+		sub_code,
+		prog_if,
+		revision_id,
+		bist,
+		header_type,
+		latency_timer,
+		cache_line_size,
+		capabilities,
+		interrupt_line,
+		interrupt_pin,
+		min_grant,
+		max_latency;
 
-	U16 	vendor_id,
-				device_id,
-				subsys_id,
-				subsys_vendor_id;
+	U16	vendor_id,
+		device_id,
+		subsys_id,
+		subsys_vendor_id;
 
-	U32 	base[6],
-				erom;
+	U32 base[6],
+		erom;
 };
 
 #help_index "Devices;File/System;PCI"
@@ -2447,51 +2447,102 @@ public class CATARep
 	I64 	num,type,base0,base1,unit,irq;
 };
 
+//AHCI definitions
+#define AHCI_SIG_ATA	0x00000101
+#define AHCI_SIG_ATAPI	0xEB140101
+#define AHCI_SIG_SEMB	0xC33C0101 //Enclosure Management Bridge... rare to encounter in the wild
+#define AHCI_SIG_PM		0x96690101 //Port multiplier... not relevant to PC-type systems.
+
+#define AHCI_MAX_PORTS			32
+#define AHCI_PRDT_MAX_LEN		32
+#define AHCI_PRDT_BYTES_BITS	22
+#define AHCI_PRDT_BYTES			(1 << 22)
+
+#define AHCI_GHCf_HBA_RESET			0
+#define AHCI_GHCf_INTERRUPT_ENABLE	1
+#define AHCI_GHCf_AHCI_ENABLE		31
+
+#define AHCI_CAPSEXTf_BOH	0
+
+#define AHCI_BOHCf_BOS	0
+#define AHCI_BOHCf_OOS	1
+#define AHCI_BOHCf_BB	4
+
+#define AHCI_CHDESCf_W	6
+#define AHCI_CHDESCf_W	(1 << 6)
+
+#define AHCI_CFDESCf_C	7
+#define AHCI_CFDESCf_C	(1 << 7)
+
+#define AHCI_PxCMDf_ST		0
+#define AHCI_PxCMDf_SUD		1
+#define AHCI_PxCMDf_POD		2
+#define AHCI_PxCMDf_FRE		4
+#define AHCI_PxCMDf_FR		14
+#define AHCI_PxCMDf_CR		15
+#define AHCI_PxCMDf_ATAPI	24
+
+#define AHCI_PxCMDF_ST		(1 << 0)
+#define AHCI_PxCMDF_SUD		(1 << 1)
+#define AHCI_PxCMDF_POD		(1 << 2)
+#define AHCI_PxCMDF_FRE		(1 << 4)
+#define AHCI_PxCMDF_FR		(1 << 14)
+#define AHCI_PxCMDF_CR		(1 << 15)
+#define AHCI_PxCMDF_ATAPI	(1 << 24)
+
+#define AHCI_PxIEf_DP	5
+#define AHCI_PxIEf_TFE	30
+
+#define AHCI_PxIEF_DP	(1 << 5)
+#define AHCI_PxIEF_TFE	(1 << 30)
+
+#define AHCI_PxSCTLf_DET_INIT
+
 //See $LK,"::/Doc/Credits.DD"$.
-#define ATA_NOP 								0x00
-#define ATA_DEV_RST 						0x08
-#define ATA_PACKET							0xA0
-#define ATA_READ_NATIVE_MAX 		0xF8
+#define ATA_NOP 				0x00
+#define ATA_DEV_RST 			0x08
+#define ATA_PACKET				0xA0
+#define ATA_READ_NATIVE_MAX 	0xF8
 #define ATA_READ_NATIVE_MAX_EXT 0x27
-#define ATA_SET_MAX 						0xF9
-#define ATA_SET_MAX_EXT 				0x37
-#define ATA_READ_MULTI					0xC4
-#define ATA_READ_MULTI_EXT			0x29
-#define ATA_WRITE_MULTI 				0xC5
-#define ATA_WRITE_MULTI_EXT 		0x39
-#define ATA_ID_DEV							0xEC
+#define ATA_SET_MAX 			0xF9
+#define ATA_SET_MAX_EXT 		0x37
+#define ATA_READ_MULTI			0xC4
+#define ATA_READ_MULTI_EXT		0x29
+#define ATA_WRITE_MULTI 		0xC5
+#define ATA_WRITE_MULTI_EXT 	0x39
+#define ATA_ID_DEV				0xEC
 
-#define ATAS_ERR				0x01
-#define ATAS_DRQ				0x08
-#define ATAS_DF 				0x20
-#define ATAS_DRDY 			0x40
-#define ATAS_BSY				0x80
+#define ATAS_ERR	0x01
+#define ATAS_DRQ	0x08
+#define ATAS_DF 	0x20
+#define ATAS_DRDY	0x40
+#define ATAS_BSY	0x80
 
-#define ATAR0_DATA			0
-#define ATAR0_FEAT			1
-#define ATAR0_NSECT 		2
-#define ATAR0_SECT			3
-#define ATAR0_LCYL			4
-#define ATAR0_HCYL			5
-#define ATAR0_SEL 			6
-#define ATAR0_STAT			7
-#define ATAR0_CMD 			7
-#define ATAR1_CTRL			2
+#define ATAR0_DATA	0
+#define ATAR0_FEAT	1
+#define ATAR0_NSECT 2
+#define ATAR0_SECT	3
+#define ATAR0_LCYL	4
+#define ATAR0_HCYL	5
+#define ATAR0_SEL 	6
+#define ATAR0_STAT	7
+#define ATAR0_CMD 	7
+#define ATAR1_CTRL	2
 
 #help_index "File/FileNames"
-#define FILEMASK_JIT		"*.CC*;*.HH*"
-#define FILEMASK_AOT		"*.CC*;*.HH*;*.PRJ*"
-#define FILEMASK_SRC		"*.CC*;*.HH*;*.IN*;*.PRJ*"
-#define FILEMASK_DD 		FILEMASK_SRC ";*.DD*"
-#define FILEMASK_TXT		FILEMASK_DD ";*.TXT*"
-#define FILEMASK_GR 		"*.GR*"
+#define FILEMASK_JIT	"*.CC*;*.HH*"
+#define FILEMASK_AOT	"*.CC*;*.HH*;*.PRJ*"
+#define FILEMASK_SRC	"*.CC*;*.HH*;*.IN*;*.PRJ*"
+#define FILEMASK_DD 	FILEMASK_SRC ";*.DD*"
+#define FILEMASK_TXT	FILEMASK_DD ";*.TXT*"
+#define FILEMASK_GR 	"*.GR*"
 
 #help_index "File/Low Level"
 #define BLK_SIZE_BITS 	9
-#define BLK_SIZE				(1<<BLK_SIZE_BITS)
-#define DVD_BLK_SIZE		(4*BLK_SIZE)
-#define DVD_BOOT_LOADER_SIZE		DVD_BLK_SIZE*1
-#define INVALID_CLUS (-1)
+#define BLK_SIZE		(1<<BLK_SIZE_BITS)
+#define DVD_BLK_SIZE	(4*BLK_SIZE)
+#define DVD_BOOT_LOADER_SIZE	DVD_BLK_SIZE*1
+#define INVALID_CLUS	(-1)
 
 class CMBRPart
 {
@@ -3838,7 +3889,7 @@ public class CDC
 #define VGAM_GRAPHICS 	0xA0000
 
 #define "Char/Input;StdIn"
-//GetStr flags
+//StrGet flags
 #define GSF_SHIFT_ESC_EXIT			1 //This kills task on <SHIFT-ESC>
 #define GSF_WITH_NEW_LINE 			2
 

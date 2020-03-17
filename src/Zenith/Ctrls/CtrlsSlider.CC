@@ -20,7 +20,7 @@ CTemplateCS *CtrlSliderGet()
 
 	"$$PURPLE$$Ctrl Slider$$FG$$\n\n";
 
-	res->global_name=GetStr("Global Struct Name (ENTER for No Global):");
+	res->global_name=StrGet("Global Struct Name (ENTER for No Global):");
 	res->range=GetI64 		("Range 	(%4d):",30);
 	res->spacing=GetI64("Spacing (%4d):",20);
 	res->border=GetI64 ("Border  (%4d):",2);
@@ -28,7 +28,7 @@ CTemplateCS *CtrlSliderGet()
 	res->next_slider=res->last_slider=&res->next_slider;
 	while (TRUE) {
 		StrPrint(prompt,"Slider #%d Name:",res->num_sliders+1);
-		st=GetStr(prompt);
+		st=StrGet(prompt);
 		if (!*st) {
 			Free(st);
 			break;

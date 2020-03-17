@@ -22,7 +22,7 @@ Bool Quit()
 	I64 i;
 	while (TRUE) {
 		"%S %S?","ST_EXIT","ST_YES_NO";
-		st=GetStr;
+		st=StrGet;
 		i=DefineMatch(st,"ST_NO_YES_LIST",LMF_IGNORE_CASE);
 		if (i>=0) {
 			res=i;

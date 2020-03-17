@@ -1,6 +1,5 @@
 #help_index "Debugging/Dump"
-Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,Bool u8_chars,
-				I64 depth,I64 max_depth,Bool dynamic,I64 types=HTT_CLASS,I64 offset=0)
+Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,Bool u8_chars,Bool force,I64 depth,I64 max_depth,Bool dynamic,I64 types=HTT_CLASS,I64 offset=0)
 {//See $LK,"::/Demo/LastClass.CC"$.
 	I64 i,j,stars,*ptr;
 	CMemberList *ml;
@@ -12,7 +11,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,Bool u8_chars,
 		DocPrint(doc,"Class Not Found.\n");
 		return FALSE;
 	}
-	if (!CheckPtr(_d) || !CheckPtr(_d(U8 *)+tmpc->size)) {
+	if (!force && (!CheckPtr(_d) || !CheckPtr(_d(U8 *)+tmpc->size))) {
 		DocPrint(doc,"Bad Ptr:%016X\n",_d);
 		return FALSE;
 	}
@@ -143,9 +142,9 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,Bool u8_chars,
 					DocPrint(doc,"$$TR,\"%s\"$$\n",ml->str);
 					DocPrint(doc,"$$ID,2$$");
 					if (!stars)
-						ClassRep2(doc,ptr,tmpc2->str,u8_chars,depth+1,max_depth,dynamic);
+						ClassRep2(doc,ptr,tmpc2->str,u8_chars,force,depth+1,max_depth,dynamic);
 					else if (stars==1)
-						ClassRep2(doc,*ptr,tmpc2->str,u8_chars,depth+1,max_depth,dynamic);
+						ClassRep2(doc,*ptr,tmpc2->str,u8_chars,force,depth+1,max_depth,dynamic);
 					DocPrint(doc,"$$ID,-2$$");
 				}
 			} else
@@ -158,8 +157,7 @@ Bool ClassRep2(CDoc *doc,U8 *_d,U8 *class_name=lastclass,Bool u8_chars,
 	return TRUE;
 }
 
-public U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
-				I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0)
+public U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_chars=FALSE, Bool force=FALSE, Bool fun=FALSE, I64 offset=0)
 {//Displays members of a record by using the compiler's info.
 	CDoc *doc;
 	I64 type;
@@ -176,7 +174,7 @@ public U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
 	else
 		type=HTT_CLASS;
 
-	ClassRep2(doc,_d,class_name,u8_chars,0,max_depth,FALSE,type,offset);
+	ClassRep2(doc,_d,class_name,u8_chars,force,0,max_depth,FALSE,type,offset);
 
 	DocPrint(doc,"\n");
 	DocRecalc(doc);
@@ -189,7 +187,7 @@ public U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
 }
 
 public U0 ClassRepD(U8 *_d,U8 *class_name=lastclass,
-				I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0)
+				I64 max_depth=2,Bool u8_chars=FALSE,Bool force=FALSE,Bool fun=FALSE,I64 offset=0)
 {//Dynamic ClassRep. Uses hex_ed widget for live changes.
 	CDoc *doc;
 	if (IsRaw)
@@ -199,9 +197,9 @@ public U0 ClassRepD(U8 *_d,U8 *class_name=lastclass,
 		doc=DocPut;
 	}
 	if (fun)
-		ClassRep2(doc,_d,class_name,u8_chars,0,max_depth,TRUE,HTT_FUN,offset);
+		ClassRep2(doc,_d,class_name,u8_chars,force,0,max_depth,TRUE,HTT_FUN,offset);
 	else
-		ClassRep2(doc,_d,class_name,u8_chars,0,max_depth,TRUE,HTT_CLASS,offset);
+		ClassRep2(doc,_d,class_name,u8_chars,force,0,max_depth,TRUE,HTT_CLASS,offset);
 	DocPrint(doc,"\n");
 	DocRecalc(doc);
 	if (IsRaw) {
@@ -240,10 +238,10 @@ public U0 FunRep(U8 *st,U8 *rbp=NULL,I64 max_depth=2,CTask *task=NULL)
 				img=MAlloc(size);
 				MemCopy(img,rbp+tmpf->size,size);
 				UpdateRegVarImg(tmpf,img-tmpf->size,task);
-				ClassRep(img-tmpf->size,st,max_depth,FALSE,TRUE,rbp-img+tmpf->size);
+				ClassRep(img-tmpf->size,st,max_depth,FALSE,FALSE,TRUE,rbp-img+tmpf->size);
 				Free(img);
 			} else
-				ClassRep(rbp,st,max_depth,FALSE,TRUE);
+				ClassRep(rbp,st,max_depth,FALSE,FALSE,TRUE);
 		} else {
 			tmpm=tmpf->member_list_and_root;
 			while (tmpm) {

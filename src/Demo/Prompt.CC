@@ -14,7 +14,7 @@ U0 PromptDemo()
 	d=GetF64("Enter float expression(%12g):",1.2e3);
 	"Float=%e\n",d;
 
-	name=GetStr("Name (%s):","John");
+	name=StrGet("Name (%s):","John");
 	"Name:%s\n",name;
 	Free(name);
 

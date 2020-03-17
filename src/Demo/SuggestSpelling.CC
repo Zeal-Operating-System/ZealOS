@@ -57,7 +57,7 @@ U0 SuggestSpellingDemo()
 {
 	U8 *w;
 	while (TRUE) {
-		w=GetStr("Word:");
+		w=StrGet("Word:");
 		if (*w) {
 			SuggestSpelling(w);
 			Free(w);
