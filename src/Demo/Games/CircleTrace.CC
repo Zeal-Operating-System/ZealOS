@@ -57,7 +57,7 @@ U0 CircleTrace()
 	dc->color=ROP_XOR+BLACK^TRANSPARENT;
 	GrCircle(dc,cx,cy,CIRCLE_RADIUS);
 	do {
-		message_code=GetMessage(&arg1,&arg2,
+		message_code=MessageGet(&arg1,&arg2,
 					1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN);
 		switch (message_code) {
 			case MESSAGE_KEY_UP:
@@ -118,7 +118,7 @@ U0 CircleTrace()
 				break;
 		}
 	} while (message_code!=MESSAGE_KEY_DOWN || arg1!=CH_SHIFT_ESC && arg1!=CH_ESC);
-	GetMessage(,,1<<MESSAGE_KEY_UP);
+	MessageGet(,,1<<MESSAGE_KEY_UP);
 	SettingsPop;
 	DCFill;
 	DCDel(dc);

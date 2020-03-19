@@ -121,7 +121,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * The editor's sel-text mechanism allows for disjoint portions of sel text.  This is a feature, not a bug -- you can cut-and-paste disjoint text.
 
-* $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ is continuously calibrated.  Be careful because expressions might decrease.  Take a snap-shot, like this: $FG,2$timeout=$LK,"GetTSC",A="MN:GetTSC"$+$LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ x seconds;$FG$ and compare against $LK,"GetTSC",A="MN:GetTSC"$().  I recommend just using $LK,"tS",A="MN:tS"$ or $LK,"counts.jiffies",A="MN:CCountsGlobals"$.
+* $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ is continuously calibrated.  Be careful because expressions might decrease.  Take a snap-shot, like this: $FG,2$timeout=$LK,"TSCGet",A="MN:TSCGet"$+$LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ x seconds;$FG$ and compare against $LK,"TSCGet",A="MN:TSCGet"$().  I recommend just using $LK,"tS",A="MN:tS"$ or $LK,"counts.jiffies",A="MN:CCountsGlobals"$.
 
 * Use $LK,"HeapLog",A="MN:HeapLog"$(), $LK,"HeapLogAddrRep",A="MN:HeapLogAddrRep"$() and $LK,"HeapLogSizeRep",A="MN:HeapLogSizeRep"$() to find leaks.  Don't be confused by $LK,"CDoc",A="MN:CDoc"$ allocations.	Those are generated when text is written to the cmd line buffer.
 

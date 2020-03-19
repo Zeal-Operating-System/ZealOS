@@ -36,14 +36,14 @@ U0 JukeSongPuppet(CTask *juke_task,I64 passes,I64 song_num,U8 *name)
 		FileExtRemove(name);
 	BirthWait(&juke_task->popup_task);
 	TaskWait(juke_task->popup_task);
-	PostMessage(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);
+	MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);
 	TaskWait(juke_task->popup_task);
 	for (i=0;i<song_num;i++) {
-		PostMessage(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_RIGHT);
+		MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_RIGHT);
 		TaskWait(juke_task->popup_task);
 	}
 
-	PostMessage(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
+	MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
 	TaskWait(juke_task->popup_task);
 	Sleep(500);
 
@@ -59,10 +59,10 @@ U0 JukeSongPuppet(CTask *juke_task,I64 passes,I64 song_num,U8 *name)
 
 	if (found) {//Position cursor on song title during song
 		TaskWait(juke_task->popup_task);
-		PostMessage(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);
+		MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);
 		TaskWait(juke_task->popup_task);
 		for (i=0;i<song_num;i++) {
-			PostMessage(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_RIGHT);
+			MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_RIGHT);
 			TaskWait(juke_task->popup_task);
 		}
 		SongPuppet(task,passes);

@@ -239,7 +239,7 @@ U0 TaskWait(CTask *task=NULL,Bool cmd_line_prompt=FALSE)
 	}
 }
 
-U0 PostMessage(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
+U0 MessagePost(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
 {//Post message to a task and return immediately.  See $LK,"message_code",A="MN:MESSAGE_CMD"$.
 	if (TaskValidate(task)) {
 		if (Bt(&task->task_flags,TASKf_INPUT_FILTER_TASK))
@@ -250,16 +250,15 @@ U0 PostMessage(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
 	}
 }
 
-U0 PostMessageWait(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
+U0 MessagePostWait(CTask *task,I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
 {//Post message to a task and wait until task is idle.See $LK,"message_code",A="MN:MESSAGE_CMD"$.
-	PostMessage(task,message_code,arg1,arg2,flags);
+	MessagePost(task,message_code,arg1,arg2,flags);
 	TaskWait(task);
 }
 
 U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0)
-{//Post message to current task and return immediately.
-//See $LK,"message_code",A="MN:MESSAGE_CMD"$.
-	PostMessage(Fs,message_code,arg1,arg2,flags);
+{//Post message to current task and return immediately. See $LK,"message_code",A="MN:MESSAGE_CMD"$.
+	MessagePost(Fs,message_code,arg1,arg2,flags);
 }
 
 #define JOB_DONE				0
@@ -270,7 +269,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 {//Called with ctrl->flags,JOBCf_LOCKED.
 	CJob *tmpc=ctrl->next_waiting;
 	CTask 	*master;
-	I64 res,flags=tmpc->flags,old_flags=GetRFlags;
+	I64 res,flags=tmpc->flags,old_flags=RFlagsGet;
 	if (Bt(&flags,JOBf_EXIT_ON_COMPLETE))
 		res=JOB_EXIT;
 	else
@@ -291,25 +290,25 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 			QueueRemove(tmpc);
 			LBts(&tmpc->flags,JOBf_DISPATCHED);
 			LBtr(&ctrl->flags,JOBCf_LOCKED);
-			SetRFlags(run_flags);
+			RFlagsSet(run_flags);
 			LBtr(&Fs->task_flags,TASKf_IDLE);
 			try
 							tmpc->res=(*tmpc->addr)(tmpc->fun_arg);
 			catch
 				Fs->catch_except=TRUE;
-			SetRFlags(old_flags);
+			RFlagsSet(old_flags);
 			break;
 		case JOBT_EXE_STR:
 			QueueRemove(tmpc);
 			LBts(&tmpc->flags,JOBf_DISPATCHED);
 			LBtr(&ctrl->flags,JOBCf_LOCKED);
-			SetRFlags(run_flags);
+			RFlagsSet(run_flags);
 			LBtr(&Fs->task_flags,TASKf_IDLE);
 			try
 							tmpc->res=ExePrint("%s",tmpc->aux_str);
 			catch
 				Fs->catch_except=TRUE;
-			SetRFlags(old_flags);
+			RFlagsSet(old_flags);
 			break;
 		default:
 			res=JOB_DONE;
@@ -323,7 +322,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 				QueueInsert(tmpc,master->server_ctrl.last_done);
 				LBts(&tmpc->flags,JOBf_DONE);
 				LBtr(&master->server_ctrl.flags,JOBCf_LOCKED);
-				SetRFlags(old_flags);
+				RFlagsSet(old_flags);
 			}
 			if (Bt(&flags,JOBf_FOCUS_MASTER) &&
 						!Bt(&master->win_inhibit,WIf_SELF_FOCUS))
@@ -340,7 +339,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 			QueueInsert(tmpc,ctrl->last_done);
 			LBts(&tmpc->flags,JOBf_DONE);
 			LBtr(&ctrl->flags,JOBCf_LOCKED);
-			SetRFlags(old_flags);
+			RFlagsSet(old_flags);
 		}
 	}
 	return res;
@@ -348,7 +347,7 @@ I64 JobRunOne(I64 run_flags,CJobCtrl *ctrl)
 
 I64 JobsHandler(I64 run_flags,CTask *task=NULL)
 {//Handle all waiting cmds and return.
-	I64 count=0,old_flags=GetRFlags;
+	I64 count=0,old_flags=RFlagsGet;
 	if (!task) task=Fs;
 	while (TRUE) {
 		CLI
@@ -369,7 +368,7 @@ I64 JobsHandler(I64 run_flags,CTask *task=NULL)
 	}
 jh_done:
 	LBtr(&task->server_ctrl.flags,JOBCf_LOCKED);
-	SetRFlags(old_flags);
+	RFlagsSet(old_flags);
 	return count;
 }
 
@@ -410,7 +409,7 @@ I64 Zenith(U8 *format,...)
 	CJob *tmpc;
 	if (Fs==zenith_task) {
 		tmpc=TaskExe(zenith_task,Fs,buf,0);
-		JobsHandler(GetRFlags);
+		JobsHandler(RFlagsGet);
 	} else {
 		TaskWait(zenith_task);
 		tmpc=TaskExe(zenith_task,Fs,buf,1<<JOBf_WAKE_MASTER);

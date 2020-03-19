@@ -928,7 +928,7 @@ U0 Titanium()
 				tf=tS;
 				Sleep(750);
 				FlushMessages;
-				while (!ScanKey(&ch)&&friendly_left||tS-tf<1.5) {
+				while (!KeyScan(&ch)&&friendly_left||tS-tf<1.5) {
 					total_score+=250;
 					Sound(86); Sleep(150);
 					Sound;					Sleep(50);
@@ -937,7 +937,7 @@ U0 Titanium()
 				total_score+=250*friendly_left;
 				if (total_score>best_score)
 					best_score=total_score;
-				if (!ch) ch=GetChar(,FALSE);
+				if (!ch) ch=CharGet(,FALSE);
 				if (ch==CH_ESC||ch==CH_SHIFT_ESC)
 					goto to_done;
 				gun_on=FALSE;
@@ -945,7 +945,7 @@ U0 Titanium()
 			}
 		}
 to_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	}
 	catch
 		PutExcept;

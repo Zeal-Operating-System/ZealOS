@@ -421,7 +421,7 @@ I64 ParseFunCall(CCompCtrl *cc,CParseStack *ps,Bool indirect,CHashFun *tmpf)
 		if (!(cc->flags & (CCF_RAX | CCF_ARRAY)))
 			ICAdd(cc,IC_DEREF,0,cmp.internal_types[RT_PTR]);
 		cc->coc.coc_head.last->ic_class=cmp.internal_types[RT_PTR];
-		ICAdd(cc,IC_SET_RAX,0,cmp.internal_types[RT_PTR]);
+		ICAdd(cc,IC_RAX_SET,0,cmp.internal_types[RT_PTR]);
 		ICAdd(cc,IC_NOP2,1,cmp.internal_types[RT_PTR]); //balance the books
 	}
 	COCPush(cc);

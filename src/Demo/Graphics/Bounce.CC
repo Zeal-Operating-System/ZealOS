@@ -37,7 +37,7 @@ U0 Bounce()
 				}
 			}
 			Yield;
-		} while (!(ch=ScanChar) || (ch!=CH_SHIFT_ESC && ch!=CH_ESC));
+		} while (!(ch=CharScan) || (ch!=CH_SHIFT_ESC && ch!=CH_ESC));
 	} catch
 		PutExcept;
 	DCFill(dc);

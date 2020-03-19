@@ -32,7 +32,7 @@ U0 Ring3Demo()
 	old_vect=IntEntrySet(0x0D,INT_TO_RING0,IDTET_TRAP,0);
 
 	TSSBusy(Gs->tss->tr_ring3,OFF);
-	SetRAX(Gs->tss->tr_ring3+3);
+	RAXSet(Gs->tss->tr_ring3+3);
 	LTR 	AX
 
 	asm {
@@ -64,7 +64,7 @@ U0 Ring3Demo()
 	}
 
 	TSSBusy(Gs->tss->tr,OFF);
-	SetRAX(Gs->tss->tr);
+	RAXSet(Gs->tss->tr);
 	LTR 	AX
 
 	IntEntrySet(0x0D,old_vect,IDTET_IRQ,0);

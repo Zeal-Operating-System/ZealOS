@@ -23,12 +23,12 @@ Sleep(1500);
 TourPut(
 "Press $$GREEN$$<F4>$$FG$$ for the file chooser.  Then, "
 "pick a file and press $$GREEN$$<ESC>$$FG$$.");
-InGetKey(SC_F4);
+InKeyGet(SC_F4);
 Sleep(5000);
 TourPut("Press $$GREEN$$<ESC>$$FG$$ to exit the form.\n");
-InGetChar(CH_ESC);
+InCharGet(CH_ESC);
 
 TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort.\n");
-InGetChar(CH_SHIFT_ESC);
+InCharGet(CH_SHIFT_ESC);
 
 TourPut("Use $$GREEN$$<SHIFT F4>$$FG$$ to pick directories.\n",TRUE);

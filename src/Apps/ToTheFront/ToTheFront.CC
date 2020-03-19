@@ -96,7 +96,7 @@ U0 UserCheck()
 	I64 ch;
 	if (!alive_count[0] || !alive_count[1])
 		throw('GameOver',TRUE);
-	if (ch=ScanChar)
+	if (ch=CharScan)
 		CharDo(ch);
 }
 
@@ -182,7 +182,7 @@ U0 ToTheFront()
 					message_off_timeout=0;
 					StrCopy(message_buf,"Game Over");
 					Sound;
-					ch=GetChar(,FALSE);
+					ch=CharGet(,FALSE);
 					if (ch=='\n') {
 						CleanUp;
 						Init;

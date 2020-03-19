@@ -12,7 +12,7 @@ U0 PlayerIndirect()
 	while (remaining) {
 		if (!alive_count[0] || !alive_count[1])
 			throw('GameOver',TRUE);
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 					1<<MESSAGE_MS_R_UP);
 		switch (message_code) {
 			case MESSAGE_KEY_DOWN:
@@ -70,7 +70,7 @@ U0 PlayerMove()
 	while (TRUE) {
 		if (!alive_count[0] || !alive_count[1])
 			throw('GameOver',TRUE);
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 					1<<MESSAGE_MS_R_UP);
 		switch (message_code) {
 			case MESSAGE_KEY_DOWN:
@@ -115,7 +115,7 @@ U0 PlayerDirect()
 	while (TRUE) {
 		if (!alive_count[0] || !alive_count[1])
 			throw('GameOver',TRUE);
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 					1<<MESSAGE_MS_R_UP);
 		switch (message_code) {
 			case MESSAGE_KEY_DOWN:

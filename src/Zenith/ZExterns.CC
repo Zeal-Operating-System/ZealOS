@@ -46,7 +46,7 @@ extern U0 EdCodeTools(CDoc *doc);
 extern U8 *EdSprite(I64 bin_num);
 extern I64 ExeDoc(CDoc *doc,I64 ccf_flags=0);
 extern I64 FindWiz();
-extern I64 GetI64(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX);
+extern I64 I64Get(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX);
 extern Bool GrPlot0(CDC *dc,I64 x,I64 y);
 extern CMenuEntry *MenuEntryFind(CMenu *haystack_menu,U8 *needle_full_name);
 extern CMenu *MenuFilePush(U8 *filename);
@@ -63,7 +63,7 @@ extern I64 PopUpFile(U8 *filename,
 				Bool warn_ext=TRUE,CTask *parent=NULL,CTask **_pu_task=NULL);
 extern Bool PopUpForm(U8 *_d,U8 *class_name=lastclass,
 				I64 dof_flags=DOF_SIZE_MIN,U8 *header=NULL,U8 *footer=NULL);
-extern I64 PopUpGetI64(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX);
+extern I64 PopUpI64Get(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX);
 extern U8 *PopUpGetStr(U8 *header=NULL);
 extern I64 PopUpMenu(CDoc *doc,I64 dof_flags=0);
 extern Bool PopUpNoYes(U8 *header=NULL,U8 *footer=NULL);

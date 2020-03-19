@@ -586,16 +586,16 @@ p4_sib:
 				case IC_POP:
 				case IC_INVLPG:
 				case IC_CLFLUSH:
-				case IC_GET_RFLAGS:
+				case IC_RFLAGS_GET:
 				case IC_CARRY:
 				case IC_RDTSC:
-				case IC_SET_RFLAGS:
-				case IC_GET_RBP:
-				case IC_SET_RBP:
-				case IC_GET_RSP:
-				case IC_GET_RAX:
-				case IC_SET_RSP:
-				case IC_SET_RAX:
+				case IC_RFLAGS_SET:
+				case IC_RBP_GET:
+				case IC_RBP_SET:
+				case IC_RSP_GET:
+				case IC_RAX_GET:
+				case IC_RSP_SET:
+				case IC_RAX_SET:
 				case IC_SHL_CONST:
 				case IC_LEA:
 				case IC_SHR_CONST:

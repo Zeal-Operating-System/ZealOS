@@ -251,7 +251,7 @@ Bool FileNameCheck(U8 *filename)
 
 U8 *FileNameTmpTxt()
 {//Make pretty-safe tmp filename in home dir.
-	return MStrPrint("~/SysTmp%X.DD",GetTSC>>8&0xFFFFFFFF);
+	return MStrPrint("~/SysTmp%X.DD",TSCGet>>8&0xFFFFFFFF);
 }
 
 U8 *DirCur(CTask *task=NULL,CTask *mem_task=NULL)

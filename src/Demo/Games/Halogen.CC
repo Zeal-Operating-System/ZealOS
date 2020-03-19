@@ -151,7 +151,7 @@ U0 Halogen()
 			Sleep(10);
 		}
 ha_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	MenuPop;

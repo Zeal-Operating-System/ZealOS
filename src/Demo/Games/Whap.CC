@@ -163,7 +163,7 @@ U0 Whap()
 	DocCursor;
 	DocClear;
 	Fs->draw_it=&DrawIt;
-	GetChar;
+	CharGet;
 	SettingsPop;
 	QueueRemove(ode);
 	ODEDel(ode);

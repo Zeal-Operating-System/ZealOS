@@ -230,16 +230,16 @@ public _extern SYS_PCI_BUSES U16 sys_pci_buses; //Number of PCI buses.
 
 #help_index "Processor"
 public _intern IC_CARRY I64 Carry(); //See $LK,"::/Demo/Carry.CC"$
-public _intern IC_GET_RAX I64 GetRAX(); //Get RAX register value.
-public _intern IC_GET_RBP U8 *GetRBP(); //Get RBP register value.
-public _intern IC_GET_RFLAGS I64 GetRFlags(); //Get RFlags register value.
-public _intern IC_GET_RSP U8 *GetRSP(); //Get RSP register value.
+public _intern IC_RAX_GET I64 RAXGet(); //Get RAX register value.
+public _intern IC_RBP_GET U8 *RBPGet(); //Get RBP register value.
+public _intern IC_RFLAGS_GET I64 RFlagsGet(); //Get RFlags register value.
+public _intern IC_RSP_GET U8 *RSPGet(); //Get RSP register value.
 public _intern IC_POP I64 Pop(); //Pop value from stack.
 public _intern IC_PUSH U0 Push(I64 d); //Push value on stack.
-public _intern IC_SET_RAX U0 SetRAX(I64 d); //Set RAX register value.
-public _intern IC_SET_RBP U0 SetRBP(U8 *d); //Set RBP register value.
-public _intern IC_SET_RFLAGS U0 SetRFlags(I64 d); //Set RFlags register value.
-public _intern IC_SET_RSP U0 SetRSP(U8 *d); //Set RSP register value.
+public _intern IC_RAX_SET U0 RAXSet(I64 d); //Set RAX register value.
+public _intern IC_RBP_SET U0 RBPSet(U8 *d); //Set RBP register value.
+public _intern IC_RFLAGS_SET U0 RFlagsSet(I64 d); //Set RFlags register value.
+public _intern IC_RSP_SET U0 RSPSet(U8 *d); //Set RSP register value.
 public _extern _CPUID U0 CPUId(U32 rax,CRAXRBXRCXRDX *res); //Do CPUID inst.
 public _extern _ENDIAN_U16 U16 EndianU16(U16 val); //Swap big<-->little endian U16.
 public _extern _ENDIAN_U32 U32 EndianU32(U32 val); //Swap big<-->little endian U32.
@@ -271,7 +271,7 @@ public _intern IC_FS CTask *Fs(); //FS seg reg points to the current $LK,"CTask"
 
 #help_index "Time/CPU Cycles"
 #help_file "::/Doc/TimeCycles"
-public _intern IC_RDTSC I64 GetTSC(); //Get time stamp counter.
+public _intern IC_RDTSC I64 TSCGet(); //Get time stamp counter.
 
 #help_index "Graphics/VBE"
 public _extern SYS_VBE_INFO CVBEInfo sys_vbe_info;

@@ -58,7 +58,7 @@ U0 MyGame()
 
 	try {
 		while (TRUE)
-			switch (GetKey(&sc)) {
+			switch (KeyGet(&sc)) {
 				case 0:
 					switch (sc.u8[0]) {
 						case SC_CURSOR_LEFT:

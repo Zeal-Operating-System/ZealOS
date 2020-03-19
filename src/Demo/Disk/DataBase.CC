@@ -21,7 +21,7 @@ U0 WriteAcct()
 	Acct a;
 	I64 acctnum;
 
-	acctnum=GetI64("Acct #",-1);
+	acctnum=I64Get("Acct #",-1);
 	if (0<=acctnum<DB_ACCT_MAX) {
 		MemSet(&a,0,BLK_SIZE);
 		if (DocForm(&a)) {
@@ -38,7 +38,7 @@ U0 ReadAcct()
 	Acct a;
 	I64 acctnum;
 
-	acctnum=GetI64("Acct #",-1);
+	acctnum=I64Get("Acct #",-1);
 	if (0<=acctnum<DB_ACCT_MAX) {
 		f=FOpen(DB_FILENAME,"r");
 		FBlkRead(f,&a,acctnum*DB_ACCT_BLKS,DB_ACCT_BLKS);
@@ -54,7 +54,7 @@ U0 DatabaseDemo()
 		InitDatabase;
 	do {
 		"$$GREEN$$R$$FG$$ead acct, $$GREEN$$W$$FG$$rite acct or $$GREEN$$<SHIFT-ESC>$$FG$$:";
-		ch=ToUpper(GetChar);
+		ch=ToUpper(CharGet);
 		'\n';
 		if (ch=='R') ReadAcct;
 		if (ch=='W') WriteAcct;

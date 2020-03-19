@@ -42,7 +42,7 @@ I64 AsmAndC1()
 	I64 noreg i;	//Normally this would be stored in a reg
 //Check by unassembling with $LK,"Uf",A="MN:Uf"$("AsmAndC1").
 
-	i=GetI64("Num of beeps 1-5 (%d):",3,1,5);
+	i=I64Get("Num of beeps 1-5 (%d):",3,1,5);
 	Beeps(i);
 
 	asm {

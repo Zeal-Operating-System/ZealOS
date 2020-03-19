@@ -3,7 +3,7 @@ U0 Main()
 	I64 x1=0,y1=0,x2=0,y2=0,i=1,c=0;
 	I64 vx1=0,vy1=0,vx2=0,vy2=0;
 	CDC *dc=DCAlias;
-	while (!ScanChar) {
+	while (!CharScan) {
 		if (!--i) {
 			i=1000;
 			dc->color=c++&15;

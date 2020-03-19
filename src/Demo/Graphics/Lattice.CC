@@ -181,7 +181,7 @@ U0 Lattice()
 	Fs->draw_it=&DrawIt;
 	try {
 		while (TRUE) {
-			switch (GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
+			switch (MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
 						1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_MOVE)) {
 				case MESSAGE_MS_L_DOWN:
 					tt.first=TRUE;
@@ -254,7 +254,7 @@ U0 Lattice()
 			}
 		}
 lt_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

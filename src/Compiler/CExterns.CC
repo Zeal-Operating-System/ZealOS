@@ -12,7 +12,7 @@ extern I64 HashEntrySize2(CHashSrcSym *tmph);
 extern Bool IsLexExpression2Bin(CCompCtrl *cc,U8 **_machine_code);
 extern I64 Lex(CCompCtrl *cc);
 extern I64 LexExpression(CCompCtrl *cc);
-extern I64 LexGetChar(CCompCtrl *cc);
+extern I64 LexCharGet(CCompCtrl *cc);
 extern CCodeMisc *OptLabelFwd(CCodeMisc *lb);
 extern CIntermediateCode *OptPass012(CCompCtrl *cc);
 extern U0 OptPass3(CCompCtrl *cc,COptReg *reg_offsets);

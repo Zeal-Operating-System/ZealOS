@@ -14,7 +14,7 @@ U0 Doodle()
 	DocClear;
 	DCFill;
 	do {
-		message_code=GetMessage(&arg1,&arg2,
+		message_code=MessageGet(&arg1,&arg2,
 					1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_R_UP);
 		switch (message_code) {
 			case MESSAGE_MS_R_UP:
@@ -28,7 +28,7 @@ U0 Doodle()
 				dc->thick=7;
 				do {
 					GrLine3(dc,x1,y1,0,x2,y2,0);
-					message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
+					message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 					GrLine3(dc,x1,y1,0,x2,y2,0);
 					x2=arg1; y2=arg2;
 				} while (message_code!=MESSAGE_MS_L_UP);
@@ -38,7 +38,7 @@ U0 Doodle()
 				break;
 		}
 	} while (message_code!=MESSAGE_KEY_DOWN || !arg1);
-	GetMessage(,,1<<MESSAGE_KEY_UP);
+	MessageGet(,,1<<MESSAGE_KEY_UP);
 	DCFill;
 	DCDel(dc);
 	SettingsPop;

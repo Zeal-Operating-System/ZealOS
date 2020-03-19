@@ -2,7 +2,7 @@
 #help_file "::/Doc/Windows"
 
 CMouseStateGlobals old_mouse={{-1000,-1000,0},{-1000,-1000,0},{-1000,-1000,0},
-	{0,0,0},{1.0,1.0,1.0},0.0,GetTSC,0.350,0,0,
+	{0,0,0},{1.0,1.0,1.0},0.0,TSCGet,0.350,0,0,
 	FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
 };
 
@@ -144,7 +144,7 @@ U0 ExtendedASCII()
 	i = PopUpMenu(doc);
 	DocDel(doc);
 	if (i >= 0)
-		PostMessage(ext_ASCII_task, MESSAGE_KEY_DOWN_UP, i, Char2ScanCode(i));
+		MessagePost(ext_ASCII_task, MESSAGE_KEY_DOWN_UP, i, Char2ScanCode(i));
 }
 
 U0 CtrlAltA(I64)

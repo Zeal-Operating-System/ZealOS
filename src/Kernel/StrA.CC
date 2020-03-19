@@ -305,20 +305,13 @@ _STRIMATCH::
 				POP 		RBP
 				RET1		16
 }
-_extern _STRCOMPARE I64 StrCompare(
-				U8 *st1,U8 *st2); //Compare two strings.
-_extern _STRICOMPARE I64 StrICompare(
-				U8 *st1,U8 *st2); //Compare two strings, ignoring case.
-_extern _STRNCOMPARE I64 StrNCompare(
-				U8 *st1,U8 *st2,I64 n); //Compare N bytes in two strings.
-_extern _STRNICOMPARE I64 StrNICompare(
-				U8 *st1,U8 *st2,I64 n); //Compare N bytes in two strings, ignoring case.
-_extern _STRMATCH U8 *StrMatch(
-				U8 *needle,U8 *haystack_str); //Scan for string in string.
-_extern _STRIMATCH U8 *StrIMatch(
-				U8 *needle,U8 *haystack_str);//Scan for string in string, ignoring case.
-_extern _STRCOPY U0 StrCopy(
-				U8 *dst,U8 *src); //Copy string.
+_extern _STRCOMPARE I64 StrCompare(U8 *st1,U8 *st2); //Compare two strings.
+_extern _STRICOMPARE I64 StrICompare(U8 *st1,U8 *st2); //Compare two strings, ignoring case.
+_extern _STRNCOMPARE I64 StrNCompare(U8 *st1,U8 *st2,I64 n); //Compare N bytes in two strings.
+_extern _STRNICOMPARE I64 StrNICompare(U8 *st1,U8 *st2,I64 n); //Compare N bytes in two strings, ignoring case.
+_extern _STRMATCH U8 *StrMatch(U8 *needle,U8 *haystack_str); //Scan for string in string.
+_extern _STRIMATCH U8 *StrIMatch(U8 *needle,U8 *haystack_str);//Scan for string in string, ignoring case.
+_extern _STRCOPY U0 StrCopy(U8 *dst,U8 *src); //Copy string.
 
 //These bitmaps go to 0-511 so that $LK,"Lex",A="MN:Lex"$() can use them with $LK,"Token Codes",A="MN:TK_EOF"$.
 U32

@@ -13,13 +13,13 @@ U0 EdUndoFilter(CDoc *doc)
 		DocUnlock(doc);
 }
 
-public I64 DocGetKey(I64 *_sc=NULL)
+public I64 DocKeyGet(I64 *_sc=NULL)
 {//Called by $LK,"View",A="MN:View"$. You probably don't need this.
 	I64 ch,sc;
 	Bool cont,old_key_desc;
 	do {
 		old_key_desc=LBtr(&Fs->win_inhibit,WIf_SELF_KEY_DESC);
-		do ch=GetKey(&sc,TRUE);
+		do ch=KeyGet(&sc,TRUE);
 		while (sc&SCF_KEY_DESC);
 		LBEqual(&Fs->win_inhibit,WIf_SELF_KEY_DESC,old_key_desc);
 
@@ -96,14 +96,14 @@ public U8 *DocScanLine(CDoc *doc,CDocEntry *doc_e,
 }
 
 U8 *DocGetStr2(I64 flags=0)
-{//$LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$
+{//$LK,"Flags",A="MN:SGF_SHIFT_ESC_EXIT"$
 	CDoc *doc;
 	CDocEntry *doc_e,*doc_e_end;
 	U8 *st,*st2,*res;
 	I64 ch,sc;
 	"$$PT$$";
 	do {
-		ch=DocGetKey(&sc);
+		ch=DocKeyGet(&sc);
 		if (ch==CH_ESC) {
 			if (doc=DocPut) {
 				DocLock(doc);
@@ -115,10 +115,10 @@ U8 *DocGetStr2(I64 flags=0)
 				}
 				DocUnlock(doc);
 			}
-			if (flags&GSF_WITH_NEW_LINE)
+			if (flags&SGF_WITH_NEW_LINE)
 				break;
 		} if (ch==CH_SHIFT_ESC) {
-			if (flags&GSF_SHIFT_ESC_EXIT)
+			if (flags&SGF_SHIFT_ESC_EXIT)
 				Exit;
 			else {
 				res=StrNew("");
@@ -126,12 +126,12 @@ U8 *DocGetStr2(I64 flags=0)
 			}
 		}
 //<CTRL-SHIFT-ENTER> is a blank line without entry
-	} while (flags&GSF_WITH_NEW_LINE || ch!='\n' ||
+	} while (flags&SGF_WITH_NEW_LINE || ch!='\n' ||
 				sc&SCF_CTRL && sc&SCF_SHIFT);
 
 	doc=DocPut;
 	DocLock(doc);
-	if (flags&GSF_WITH_NEW_LINE) {
+	if (flags&SGF_WITH_NEW_LINE) {
 		doc_e=doc->cur_entry;
 		do doc_e=doc_e->last;
 		while (doc_e!=doc && doc_e->type_u8!=DOCT_PROMPT);
@@ -169,7 +169,7 @@ gs_done:
 }
 
 #help_index "Keyboard Devices;Char/Input;StdIn"
-public I64 GetI64(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
+public I64 I64Get(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
 {//Prompt user for I64 expression.
 	Bool okay;
 	U8 *st;
@@ -195,7 +195,7 @@ public I64 GetI64(U8 *message=NULL,I64 default=0,I64 lo=I64_MIN,I64 hi=I64_MAX)
 	}
 }
 
-public F64 GetF64(U8 *message=NULL,F64 default=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
+public F64 F64Get(U8 *message=NULL,F64 default=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
 {//Prompt user for F64 expression.
 	Bool okay;
 	U8 *st;
@@ -221,7 +221,7 @@ public F64 GetF64(U8 *message=NULL,F64 default=0,F64 lo=F64_MIN,F64 hi=F64_MAX)
 	}
 }
 
-public CDate GetDate(U8 *message=NULL,CDate default=I64_MIN,
+public CDate DateGet(U8 *message=NULL,CDate default=I64_MIN,
 				CDate lo=I64_MIN,CDate hi=I64_MAX)
 {//Prompt user for date expression. (Use $LK,"Now",A="MN:Now"$() if you want current time.)
 	U8 *st;

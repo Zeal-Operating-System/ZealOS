@@ -282,7 +282,7 @@ U0 ICFPow(CCompCtrl *cc,CIntermediateCode *tmpi,U8 *buf,I64 rip)
 			HashAdd(tmpex,cc->htc.global_hash_table);
 		}
 		if (tmpex->type&HTF_IMPORT) {
-			if (GetOption(OPTf_USE_IMM64)) {
+			if (OptionGet(OPTf_USE_IMM64)) {
 				ICU16(tmpi,0xBB48);
 				ICU64(tmpi,0);
 				if (buf) {

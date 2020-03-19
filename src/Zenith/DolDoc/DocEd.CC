@@ -3,7 +3,7 @@
 public Bool View()
 {//Go live for user interaction until <ESC> or <SHIFT-ESC>.
 	I64 ch;
-	do ch=DocGetKey;
+	do ch=DocKeyGet;
 	while (ch!=CH_ESC && ch!=CH_SHIFT_ESC);
 	return ch==CH_ESC;
 }

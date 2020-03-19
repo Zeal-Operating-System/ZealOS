@@ -110,7 +110,7 @@ U0 PsmLeftClickPickNoteBox(I64 duration)
 	I64 o,n,message_code,arg1,arg2;
 	PsmNote *tmpn,*tmpn1;
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
 		if (message_code==MESSAGE_MS_MOVE) {
 			DrawDC2;
 			DrawNote(psm.dc2,arg1,arg2,duration);
@@ -149,7 +149,7 @@ U0 PsmLeftClickPickMeterBox(I64 top,I64 bottom)
 	I64 message_code,arg1,arg2;
 	PsmNote *tmpn,*tmpn1;
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
 		if (message_code==MESSAGE_MS_MOVE) {
 			DrawDC2;
 			DrawTimeSignature(psm.dc2,arg1,arg2,top,bottom);
@@ -183,7 +183,7 @@ U0 PsmLeftClickStaffPtr(I64 x,I64 y)
 			o_original=Ona2Octave(tmpn->ona);
 			n_original=Ona2Note  (tmpn->ona);
 			do {
-				message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+				message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
 				if (message_code==MESSAGE_MS_L_UP) {
 					tmpn1=PsmFindNote(arg1,arg2);
 					if (tmpn1==&psm.head || tmpn1==tmpn)
@@ -218,7 +218,7 @@ U0 PsmLeftClickStaffBox(I64 x,I64 y)
 {
 	I64 message_code,arg1,arg2;
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_MOVE);
 		DrawDC2;
 		psm.dc2->color=ROPF_DITHER+WHITE<<16+BLACK;
 		GrBorder(psm.dc2,x,y,arg1,arg2);
@@ -431,11 +431,11 @@ U0 Psalmody(U8 *dirname="~/Psalmody")
 			was_playing=FALSE;
 mo_start:
 			if (mouse.pos_text.y-Fs->win_top<18)
-				message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
+				message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
 							1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP|
 							1<<MESSAGE_MS_MOVE|1<<MESSAGE_CMD);
 			else
-				message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
+				message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP|
 							1<<MESSAGE_MS_MOVE|1<<MESSAGE_CMD);
 mo_got_message:
 			if (message_code==MESSAGE_KEY_DOWN && arg1==CH_SPACE && !arg2) {
@@ -781,7 +781,7 @@ mo_got_message:
 			}
 		}
 mo_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	PsmPopMode;

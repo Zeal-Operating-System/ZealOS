@@ -46,7 +46,7 @@ I64 TimeCal()
 	{
 		PUSHFD
 		CLI
-			counts.time_stamp_freq = SYS_TIMER_FREQ * (GetTSC - time_stamp_start);
+			counts.time_stamp_freq = SYS_TIMER_FREQ * (TSCGet - time_stamp_start);
 			i = SysTimerRead - timer_start;
 		if (!i)
 			ZenithErr("Timer Cal Error");
@@ -61,7 +61,7 @@ I64 TimeCal()
 	PUSHFD
 	CLI
 	timer_start = SysTimerRead;
-	time_stamp_start = GetTSC;
+	time_stamp_start = TSCGet;
 	POPFD
 	return counts.time_stamp_freq;
 }

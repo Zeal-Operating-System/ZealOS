@@ -410,7 +410,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 				LexExcept(cc,"Expecting ',' at ");
 			tmpv=QueueVectU8New;
 			while (TRUE) {
-				if (!(i=LexGetChar(cc)))
+				if (!(i=LexCharGet(cc)))
 					LexExcept(cc,"Expecting '}' at ");
 				if (i=='}')
 					break;
@@ -440,7 +440,7 @@ CSprite *Code2SpriteElem(CCompCtrl *cc,I64 type)
 			tmpv=QueueVectU8New;
 			num1=0;
 			while (TRUE) {
-				if (!(i=ToUpper(LexGetChar(cc))))
+				if (!(i=ToUpper(LexCharGet(cc))))
 					LexExcept(cc,"Expecting '}' at ");
 				if (i=='}')
 					break;

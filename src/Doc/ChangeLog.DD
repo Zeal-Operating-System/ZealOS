@@ -1,82 +1,88 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
-$IV,1$----03/16/20 14:44:00----$IV,0$
-* Renamed GetStr() -> $LK,"StrGet",A="MN:StrGet"$().
+$IV,1$----03/19/20 01:51:36----$IV,0$
+* $LK,"R",A="MN:R"$("GetRAX", "$LK,"RAXGet",A="MN:RAXGet"$");
+* $LK,"R",A="MN:R"$("SetRAX", "$LK,"RAXSet",A="MN:RAXSet"$");
+* $LK,"R",A="MN:R"$("IC_GET_RAX", "$LK,"IC_RAX_GET",A="MN:IC_RAX_GET"$");
+* $LK,"R",A="MN:R"$("IC_SET_RAX", "$LK,"IC_RAX_SET",A="MN:IC_RAX_SET"$");
+* $LK,"R",A="MN:R"$("GetChar", "$LK,"CharGet",A="MN:CharGet"$");
+* $LK,"R",A="MN:R"$("GetMessage", "$LK,"MessageGet",A="MN:MessageGet"$");
+* $LK,"R",A="MN:R"$("GetKey", "$LK,"KeyGet",A="MN:KeyGet"$");
+* $LK,"R",A="MN:R"$("ScanChar", "$LK,"CharScan",A="MN:CharScan"$");
+* $LK,"R",A="MN:R"$("ScanKey", "$LK,"KeyScan",A="MN:KeyScan"$");
+* $LK,"R",A="MN:R"$("PostMessage", "$LK,"MessagePost",A="MN:MessagePost"$");
+* $LK,"R",A="MN:R"$("GetMessage", "$LK,"MessageGet",A="MN:MessageGet"$");
+* $LK,"R",A="MN:R"$("GetI64", "$LK,"I64Get",A="MN:I64Get"$");
+* $LK,"R",A="MN:R"$("GetF64", "$LK,"F64Get",A="MN:F64Get"$");
+* $LK,"R",A="MN:R"$("GetRBP", "$LK,"RBPGet",A="MN:RBPGet"$");
+* $LK,"R",A="MN:R"$("SetRBP", "$LK,"RBPSet",A="MN:RBPSet"$");
+* $LK,"R",A="MN:R"$("IC_GET_RBP", "$LK,"IC_RBP_GET",A="MN:IC_RBP_GET"$");
+* $LK,"R",A="MN:R"$("IC_SET_RBP", "$LK,"IC_RBP_SET",A="MN:IC_RBP_SET"$");
+* $LK,"R",A="MN:R"$("GetRSP", "$LK,"RSPGet",A="MN:RSPGet"$");
+* $LK,"R",A="MN:R"$("SetRSP", "$LK,"RSPSet",A="MN:RSPSet"$");
+* $LK,"R",A="MN:R"$("IC_GET_RSP", "$LK,"IC_RSP_GET",A="MN:IC_RSP_GET"$");
+* $LK,"R",A="MN:R"$("IC_SET_RSP", "$LK,"IC_RSP_SET",A="MN:IC_RSP_SET"$");
+* $LK,"R",A="MN:R"$("GetRFlags", "$LK,"RFlagsGet",A="MN:RFlagsGet"$");
+* $LK,"R",A="MN:R"$("IC_GET_RFLAGS", "$LK,"IC_RFLAGS_GET",A="MN:IC_RFLAGS_GET"$");
+* $LK,"R",A="MN:R"$("SetRFlags", "$LK,"RFlagsSet",A="MN:RFlagsSet"$");
+* $LK,"R",A="MN:R"$("IC_SET_RFLAGS", "$LK,"IC_RFLAGS_SET",A="MN:IC_RFLAGS_SET"$");
+* $LK,"R",A="MN:R"$("GetTSC", "$LK,"TSCGet",A="MN:TSCGet"$");
+* $LK,"R",A="MN:R"$("GetS", "$LK,"StrNGet",A="MN:StrNGet"$");
+* Modified characters '_' and 'c' in $LK,"FontStd",A="FI:::/Kernel/FontStd.CC"$.
 
+$IV,1$----03/16/20 14:44:00----$IV,0$
+* $LK,"R",A="MN:R"$("GetStr", "$LK,"StrGet",A="MN:StrGet"$");
+* Renamed GSF -> $LK,"SGF",A="MN:SGF_SHIFT_ESC_EXIT"$ as a consequence.
 * Added some $LK,"AHCI headers",A="MN:AHCI_SIG_ATA"$.
 
 $IV,1$----03/12/20 22:00:36----$IV,0$
 * Added $LK,"PaletteSetGruvboxDark",A="MN:PaletteSetGruvboxDark"$().
-
 * Remove shift-space, as we use tab indentation now. $LK,"S2T",A="MN:S2T"$() is still present if needed.
+
+$IV,1$----02/24/20 00:42:00----$IV,0$
+$BK,1$* Zenith 1.1 released.$BK,0$
 
 $IV,1$----02/23/20 23:59:37----$IV,0$
 * Added new $LK,"bitmap mouse",A="MN:DrawStdMouse"$.
 
 $IV,1$----02/23/20 02:36:28----$IV,0$
-* Renamed err -> error.
-
+* $LK,"R",A="MN:R"$("err", "error");
 * Removed compression from kernel. Compress.CC, CArcCtrl, CArcCompress, ExpandBuf(), CompressBuf(), DCSF_COMPRESSED, etc. Updated $LK,"::/Demo/Disk/SerializeTree.CC",A="FI:::/Demo/Disk/SerializeTree.CC"$ to not use compression.
-
 * Removed RS_ATTR_COMPRESSED from $LK,"RedSea attributes",A="MN:RS_ATTR_READ_ONLY"$.
-
 * Refactored $LK,"FU flags",A="MN:FUf_RECURSE"$. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. $LK,"DocOptEntry",A="MN:DocOptEntry"$(), $LK,"Size",A="MN:Size"$(), $LK,"Size1",A="MN:"$(), $LK,"SizeRep",A="MN:SizeRep"$(), and $LK,"SizeRep1",A="MN:SizeRep1"$() have been updated accordingly.
-
-* Removed IsDotZ(), ToggleZOrNotZ(). $LK,"FileRead",A="MN:FileRead"$(), $LK,"FileWrite",A="MN:FileWrite"$(), and $LK,"FileFind",A="MN:FileFind"$() have been cleaned up accordingly.
-
+* Removed IsDotZ(), ToggleZOrNotZ(). Cleaned up $LK,"FileRead",A="MN:FileRead"$(), $LK,"FileWrite",A="MN:FileWrite"$(), and $LK,"FileFind",A="MN:FileFind"$() accordingly.
 * Added XMM8-XMM15 to $LK,"OpCodes.DD",A="FF:::/Compiler/OpCodes.DD,XMM8"$.
-
 * Added $LK,"::/Demo/Graphics/32BitColor.CC",A="FI:::/Demo/Graphics/32BitColor.CC"$.
 
 $IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
-
 * Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
-
 * Removed the /Zenith/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/Zenith/Divination.CC",A="FI:::/Zenith/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:DivineWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
-
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 
 $IV,1$----02/21/20 17:30:17----$IV,0$
-* Renamed IRQ's -> IRQs.
-
+* $LK,"R",A="MN:R"$("IRQ's", "IRQs");
 * Updated $LK,"MemBIOSRep",A="MN:MemBIOSRep"$() to report on VBE Linear Framebuffer size. E820 memory ranges are color-coded. It now shows the total memory reported by $LK,"MemBIOSTotal",A="MN:MemBIOSTotal"$().
-
 * Updated AutoComplete shortcuts from old WordStat <ALT(-SHIFT-)-W> to $FG,2$<ALT(-SHIFT-)-A>$FG$ in $LK,"::/Doc/Tips.DD",A="FI:::/Doc/Tips.DD"$.
-
 * Added $LK,"check",A="FF:::/Kernel/KStart16.CC,E801:3"$ for invalid results of BIOS function 15:E801. BIOSes either return results in AX/BX or CX/DX. You have to make sure which pair of registers it is.
-
 * Renamed BIOSTotalMem() -> $LK,"MemBIOSTotal",A="MN:MemBIOSTotal"$(), rewritten and commented for clarity, exported from kernel. Neat function.
 
 $IV,1$----02/20/20 17:40:10----$IV,0$
 * Replaced old standard font with new $LK,"FontStd",A="FI:::/Kernel/FontStd.CC"$. The auxilliary font is now the VGA ROM Font.
-
 * $UL,1$We now use 1 Tab (4 spaces wide) for indentation.$UL,0$ All spaces used for indentation have been converted to tabs. Header files are messy. $LK,"PCILookUpSingle",A="MN:PCILookUpSingle"$() was fixed according to this change. $LK,"EdCodeTools",A="MN:EdCodeTools"$ re-indentation feature needs to be updated.
 
 $IV,1$----02/19/20 21:46:17----$IV,0$
 $BK,1$* Zenith 1.0 released.$BK,0$
-
 * $LK,"GRScreenCaptureWrite",A="MN:GRScreenCaptureWrite"$() and $LK,"GRScreenCaptureRead",A="MN:GRScreenCaptureRead"$() are broken. $LK,"DCLoad",A="MN:DCLoad"$() and $LK,"DCSave",A="MN:DCSave"$() use $LK,"DCF_COMPRESSED",A="MN:DCF_COMPRESSED"$. It also saves the palette as $LK,"CBGR48",A="MN:CBGR48"$, which is a problem.
-
 * Updated $LK,"MemRep",A="MN:MemRep"$() to report on VBE variables.
-
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
-
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
-
 * Shorten $LK,"CheckPtr",A="MN:"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
-
 * $LK,"RawDr",A="MN:RawDr"$() is 40 columns off the right of the screen, instead of fixed at column 40.
-
 * Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. Zenith task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
-
-* Renamed RLf_VGA -> $LK,"RLf_VESA",A="MN:RLf_VESA"$.
-
+* $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
 * Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.CC"$.
-
 * Added $MA-X+PU,"screen resolution selection",LM="F(\"->screen_w\");View;"$ to kernel configuration procedure.
-
 * Added $LK,"VideoRep",A="MN:VideoRep"$() to report on VBE modes and info, added test case to the $LK,"OSTestSuite",A="FF:::/Misc/OSTestSuite.CC,VideoRep"$.
-
 * $UL$Added VBE graphics support.$UL,0$ Screen zooming is non-functional at the moment. We are setting 32-bit color graphics modes but the graphics library is still 4-bit (16 color) internally. $LK,"MiniGrLib",A="FI:/Demo/Lectures/MiniGrLib.CC"$ broken for obvious reasons. Keeping it because its intention is to teach a how a graphics library works, generically. Removed 2 smaller VGA hardware programming demos.
 	Rundown:
 	- Added classes $LK,"CVBEInfo",A="MN:CVBEInfo"$, $LK,"CVBEMode",A="MN:CVBEMode"$, $LK,"CVBEModeShort",A="MN:CVBEModeShort"$
@@ -89,105 +95,55 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 	- $LK,"gr_palette",A="MN:gr_palette"$ global variable. We use $LK,"CBGR24",A="MN:CBGR24"$ in $LK,"GrPalette.CC",A="FI:::/Zenith/Gr/GrPalette.CC"$.
 
 * Added $LK,"BinRep",A="MN:BinRep"$() from Sup1 ISO.
-
-* Renamed sys_pci_busses -> $LK,"sys_pci_buses",A="MN:sys_pci_buses"$.
-
+* $LK,"R",A="MN:R"$("sys_pci_busses", "$LK,"sys_pci_buses",A="MN:sys_pci_buses"$");
 * Renamed RWF flags -> $LK,"RAWF",A="MN:RAWF_IN_DOLLAR"$.
-
 * Renamed mon_start_days1 and mon_start_days2 -> $LK,"month_start_days",A="MN:month_start_days"$ and $LK,"month_start_days_leap",A="MN:month_start_days_leap"$, respectively.
-
 * Moved random number generation algorithm into $LK,"seperate function",A="MN:RandInt"$ to reduce line count. Added $LK,"RandU8",A="MN:RandU8"$().
-
 * Added syntax highlighting for numbers. $LK,"DocHighlight",A="FF:::/Zenith/DolDoc/DocHighlight.CC,DOC_COLOR_NUMBER"$(), $LK,"DOC_COLOR_NUMBER",A="MN:DOC_COLOR_NUMBER"$.
-
 * Removed unnecessary checks for the presence of the $LK,"APIC",A="MN:LAPIC_BASE"$ in $LK,"MultiProc.CC",A="FI:::/Kernel/MultiProc.CC"$, as it is present on all x86 CPUs after the P5 microarchitecture.
-
 * Added untested $LK,"ReAlloc",A="MN:ReAlloc"$(), as it could be useful for certain programs.
-
 * Added definitions for the $LK,"PCI registers",A="MN:PCIR_VENDOR_ID"$. Expanded the $LK,"CPCIDev",A="MN:CPCIDev"$ class to contain the values of the read-only registers. Added $LK,"PCIDevFind",A="MN:"$() as a simpler/abstracted alternative to $LK,"PCIClassFind",A="MN:PCIClassFind"$().
-
 * Removed the unpolished HPET implementation from the kernel.
-
 * $LK,"Enabled the execution of SSE instructions",A="FF:::/Kernel/KStart64.CC,CR4f_OSFXSR"$. No actual SSE implementation in assembler yet, however.
-
 * Added definitions for the $MA-X+PU,"various flags",LM="F(\"CR0F_\", \"+lb\");F(\"CR4F_\", \"+lb\");View;"$ in the Control Registers.
-
 * Added definitions for the $MA-X+PU,"PIT",LM="F(\"PIT0\", \"+l-i\");F(\"PIT2\",\"+l-i\");F(\"PIT_CMD\");View;"$, and a $LK,"document",A="FI:::/Doc/PIT.DD"$ describing its usage in the OS.
-
 * Added definition for the $MA-X+PU,"PC speaker",LM="F(\"PCSPKR\");View;"$.
-
 * Added definitions for the $MA-X+PU,"PIC",LM="F(\"PIC\",\"-i+lb\");View;"$.
-
 * Added $LK,"TimeSet",A="MN:TimeSet"$() as there was no way to set the hardware clock before.
-
 * Added definitions for the $MA-X+PU,"CMOS",LM="F(\"CMOS\", \"+lb\");View;"$, $LK,"CMOSRegRead",A="MN:CMOSRegRead"$(), $LK,"CMOSRegWrite",A="MN:CMOSRegWrite"$(), $LK,"CMOSIsBcd",A="MN:CMOSIsBcd"$(). Rename Bcd2Bin() -> $LK,"Bcd2Binary",A="MN:Bcd2Binary"$().
-
 * Replaced the $LK,"endian-swapping functions",A="MN:EndianU16"$ with assembly versions.
-
 * Added $HL$POPCNT$HL,0$ instruction and $LK,"PopCount",A="MN:PopCount"$() compiler intrinsic, to replace BCount() and the set_bits_table.
-
 * Renamed opcodes PUSHFW, POPFW, PUSHAW, POPAW -> $HL$PUSHF, POPF, PUSHA, POPA$HL,0$ respectively.
-
 * The $MA-X+PU,"VGA ROM Font",LM="F(\"SYS_FONT_PTR\");View;"$ is used as the standard system font, with the old one being used as the auxilliary one. The cyrillic font has been removed.
-
 * Added $LK,"Seg2Linear",A="MN:Seg2Linear"$() to convert segmented 32-bit far pointers obtained from real mode to linear pointers.
-
 * Disabled the mouse in debug mode. No more garbage text on mouse movement. $MA-X+PU,"MouseHardEnable",LM="F(\"MouseHardEnable\");View;"$. You can use this function in your own applications to disable the mouse completely.
-
 * AutoComplete now stays where you move it instead of snapping back to a fixed location, and that location persists after rebooting by using the Registry to save the window location. Increased number of symbol links shown to 12, so you can use all the functions keys F1-F12. It does syntax highlighting on the symbols now, so you know what type they are. Public symbols are $IV$inverted$IV,0$. Dictionary words are BLACK to differentiate between symbols.
-
 * Added more keyboard shortcuts to the AutoComplete $LK,"standby doc",A="FI:::/Doc/StandBy.DD"$.
-
 * Removed "TOS Staff" and "InsReg" related code.
-
 * Renamed /Kernel/KInts.CC to $LK,"KInterrupts.CC",A="FI:::/Kernel/KInterrupts.CC"$.
-
 * Date section of status bar shows the year now.
-
 * Increased the length of the part of the status bar that shows the last keys pressed, so the longest combination (CTRL+ALT+SHIFT+ENTER) can be shown. It is always at the rightmost part of the screen instead of being fixed at column 55.
-
 * $LK,"ClassRep",A="MN:ClassRep"$() does not show ASCII values for U8/I8 members by default now. Added argument "u8_chars" to enable that.
-
 * Added several palettes. See the $LK,"palette setting functions",A="MN:PaletteSetDark"$.
-
 * Added option to format RAMdisks on $LK,"Reboot",A="MN:Reboot"$().
-
 * Removed MemSetU8() as it was just an alias for $LK,"MemSet",A="MN:MemSet"$().  
-
 * Moved TaskRep.CC and MemRep.CC from /Zenith to /Zenith/Utils
-
 * Removed /Zenith/Opt directory, moved subdirectories up.
-
 * Disabled blinking MENU.
-
 * Disabled scrolling title in editor.
-
 * One User terminal on startup.
-
 * Swapped colors in $LK,"ST_ERR_ST",A="MN:ST_ERR_ST"$ and $LK,"ST_WARN_ST",A="MN:ST_WARN_ST"$. RED is for errors, LTRED is for warnings.
-
 * $LK,"CPURep",A="MN:CPURep"$() now shows extended processor name or vendor string as fallback.
-
 * Added #$LK,"NONE",A="MN:NONE"$ define to replace 0 or NULL in default function arguments where applicable (usually flags).
-
 * Shift+Alt+Delete runs $LK,"BootRAM",A="MN:BootRAM"$().
-
 * Changed 440 Hz middle 'A' frequency to 432 Hz, as that is the correct frequency. $LK,"Ona2Freq",A="MN:Ona2Freq"$.
-
 * Changed WinMgr $LK,"refresh rate",A="MN:WINMGR_FPS"$ to 60 Hz.
-
 * New User tasks are named "Terminal" on startup.
-
 * Added $LK,"FR",A="MN:FR"$(), for renaming files matching a mask. I used it to do the .HC -> .CC conversion.
-
 * Added $LK,"Cls",A="MN:Cls"$() and $LK,"ZCls",A="MN:ZCls"$().
-
 * Functions starting with 'A' for Adam now start with 'Z' for Zenith.
-
 * $UL$Decompressed all files.$UL,0$ Removed Zip(), Unzip(), and ZipRep(). Slightly modified $LK,"FileRead",A="MN:FileRead"$() to disable reading compressed files. Removal of compression planned for the future.
-
 * $UL$Renamed all files from .HC -> .CC to reflect language name change.$UL,0$
-
 * Renaming:
 	TempleOS -> ZenithOS
 	HolyC -> CosmiC
@@ -234,7 +190,6 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 	Pkt -> Packet
 	Rqst -> Request
 	... and more.
-
 * $UL,1$Start of Zenith Development. Changes up until version 1.0 are not timestamped.$UL,0$
 
 At this point, Terry removed his changelog. Changes made by him after 4/30/17 are not documented.

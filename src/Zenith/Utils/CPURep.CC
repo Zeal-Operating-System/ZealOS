@@ -12,12 +12,12 @@ U0 MPCPURep(CCPURep *cr)
 	I64 swaps=0,cycles_0,cycles_f;
 	while (!cr->mp_start)
 		Yield;
-	cycles_0=GetTSC;
+	cycles_0=TSCGet;
 	while (!cr->mp_end) {
 		swaps++;
 		Yield;
 	}
-	cycles_f=GetTSC;
+	cycles_f=TSCGet;
 	cr->swaps[Gs->num]=swaps;
 	cr->cycles[Gs->num]=cycles_f-cycles_0;
 	LBtr(&cr->mp_not_done_flags,Gs->num);

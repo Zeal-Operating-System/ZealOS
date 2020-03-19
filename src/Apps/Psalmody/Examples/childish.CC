@@ -6,7 +6,7 @@ U0 Song()
 	music.tempo= 2.480;
 	music.stacatto_factor= 0.902;
 	try {
-		while (!ScanKey) {
+		while (!KeyScan) {
 			Play("5qEsCDCDqCDeEGsE4B5E4B5eC4B5sD4A5D4A",
 						"Be \0like \0 \0a \0 \0child \0 \0 \0 \0"
 						"some \0 \0re\0 \0spect.\n\0 \0 \0 \0 \0 \0");

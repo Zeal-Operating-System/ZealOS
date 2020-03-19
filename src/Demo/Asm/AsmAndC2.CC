@@ -58,7 +58,7 @@ U0 AsmAndC2()
 {
 	I64 reg R15 i;
 
-	i=GetI64("$$PURPLE$$\n\nNum of beeps 1-5 (%d):$$FG$$",3,1,5);
+	i=I64Get("$$PURPLE$$\n\nNum of beeps 1-5 (%d):$$FG$$",3,1,5);
 	Beeps2(i);
 
 	asm {

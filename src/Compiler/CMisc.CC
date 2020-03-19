@@ -3,7 +3,7 @@ Bool Option(I64 num,Bool val)
 	return BEqual(&Fs->last_cc->opts,num,val);
 }
 
-Bool GetOption(I64 num)
+Bool OptionGet(I64 num)
 {//Get state of compiler $LK,"option",A="MN:OPTf_ECHO"$.
 	return Bt(&Fs->last_cc->opts,num);
 }
@@ -149,7 +149,7 @@ U8 *CmdLinePrompt()
 		RawDr;
 
 	LBts(&Fs->task_flags,TASKf_CMD_LINE_PROMPT);
-	st=StrGet(,,GSF_SHIFT_ESC_EXIT);
+	st=StrGet(,,SGF_SHIFT_ESC_EXIT);
 	LBtr(&Fs->task_flags,TASKf_CMD_LINE_PROMPT);
 
 	i=StrLen(st);

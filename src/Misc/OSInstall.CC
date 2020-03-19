@@ -140,7 +140,7 @@ U0 RegularInstallWiz()
 			"$$PURPLE$$1$$FG$$) Use FAT32\n"
 						"$$PURPLE$$2$$FG$$) Use RedSea\n"
 						"\nFile System Type: ";
-			ch=GetChar;
+			ch=CharGet;
 			'\n';
 		} while (!('1'<=ch<='2'));
 		if (ch=='1')
@@ -151,7 +151,7 @@ U0 RegularInstallWiz()
 	InstallDrive(drv_let);
 	XTalkWait(task,"BootHDIns('%C');\n\nB\n0x20000\nC\ns%s\n%s\n%C\n",drv_let,base0,base1,'0'+unit);
 	VideoRep;
-	res_num = GetI64("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",,1);
+	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",,1);
 	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
 	"$$RED$$Install Master Boot loader?$$FG$$";
 	if (YorN) {

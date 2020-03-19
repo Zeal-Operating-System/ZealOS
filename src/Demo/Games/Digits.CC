@@ -56,7 +56,7 @@ restart:
 			"$$WW,1$$$$BG,DKGRAY$$$$FD,WHITE$$\n";
 			"Guess\nLength:%d\n\n",num;
 			for (i=0;i<num;i++) {
-				ch=GetChar(,FALSE);
+				ch=CharGet(,FALSE);
 				if (ch==CH_ESC||ch==CH_SHIFT_ESC) goto dg_done;
 				PrintDigit(ch);
 				if (ch!=answer[i]) {

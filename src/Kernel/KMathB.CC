@@ -79,7 +79,7 @@ I64 RandInt()
 	I64 res = Fs->rand_seed;
 	res = LIN_CONGRUE_A * res ^ (res & 0xFFFFFFFF0000) >> 16 + LIN_CONGRUE_C;
 	if (!Bt(&Fs->task_flags, TASKf_NONTIMER_RAND))
-		res ^= GetTSC;
+		res ^= TSCGet;
 	Fs->rand_seed = res;
 	return res;
 }
@@ -134,6 +134,6 @@ I64 Seed(I64 seed=0,CTask *task=NULL)
 		return task->rand_seed=seed;
 	} else {
 		LBtr(&task->task_flags,TASKf_NONTIMER_RAND);
-		return task->rand_seed^=GetTSC;
+		return task->rand_seed^=TSCGet;
 	}
 }

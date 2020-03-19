@@ -559,7 +559,7 @@ U0 RawHide()
 	Fs->draw_it=&DrawIt;
 	try {
 		while (TRUE) {
-			message_code=GetMessage(&arg1,&arg2,
+			message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_R_DOWN);
 			switch (message_code) {
 				case MESSAGE_MS_L_DOWN:  //Doesn't do anything, yet.
@@ -579,7 +579,7 @@ U0 RawHide()
 			}
 		}
 rh_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

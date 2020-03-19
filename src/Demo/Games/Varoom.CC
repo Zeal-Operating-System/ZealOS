@@ -665,7 +665,7 @@ U0 Varoom()
 		Fs->draw_it=&DrawIt;
 		Fs->animate_task=Spawn(&AnimateTask,NULL,"Animate",,Fs);
 		while (TRUE)
-			switch (GetKey(&sc)) {
+			switch (KeyGet(&sc)) {
 				case 0:
 					switch (sc.u8[0]) {
 						case SC_CURSOR_LEFT:

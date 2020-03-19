@@ -15,7 +15,7 @@ public extern CCompGlobals cmp;
 #help_index "Compiler/Directive"
 #help_file "::/Doc/Directives"
 public extern Bool Echo(Bool val);
-public extern Bool GetOption(I64 num);
+public extern Bool OptionGet(I64 num);
 public extern I64 PassTrace(I64 i=0b1001111101);
 extern U0 StreamDir();
 public extern I64 StreamExePrint(U8 *format,...);
@@ -42,7 +42,7 @@ public extern F64 LexExpressionF64(CCompCtrl *cc);
 public extern I64 LexExpressionI64(CCompCtrl *cc);
 public extern U8 *LexExtStr(CCompCtrl *cc,I64 *_size=NULL,Bool lex_next=TRUE);
 public extern U8 *LexFirstRemove(CCompCtrl *cc,U8 *marker,I64 _len=NULL);
-public extern I64 LexGetChar(CCompCtrl *cc);
+public extern I64 LexCharGet(CCompCtrl *cc);
 public extern U0 LexPopNoRestore(CCompCtrl *cc);
 public extern U0 LexPopRestore(CCompCtrl *cc);
 public extern U0 LexPush(CCompCtrl *cc);

@@ -6,7 +6,7 @@ public U0 InGetStr(U8 *st)
 	I64 ch,sc;
 	U8 buf[256],*st2;
 	while (*st) {
-		ch=GetKey(&sc,FALSE);
+		ch=KeyGet(&sc,FALSE);
 		if (sc.u8[0]!=SC_SHIFT &&
 					sc.u8[0]!=SC_ALT &&
 					sc.u8[0]!=SC_CTRL) {
@@ -34,12 +34,12 @@ public U0 InPrint(I64 mS=100,U8 *format,...)
 	Free(buf);
 }
 
-public U0 InGetKey(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
+public U0 InKeyGet(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
 {//Wait for user to press certain key.
 	I64 sc,ch;
 	U8 buf[STR_LEN],*st;
 	do {
-		ch=GetKey(&sc);
+		ch=KeyGet(&sc);
 		if (sc.u8[0]!=SC_PRINTSCREEN1 &&
 					!(sc.u8[0]==SC_SHIFT && scan_code&SCF_SHIFT) &&
 					!(sc.u8[0]==SC_CTRL && scan_code&SCF_CTRL) &&
@@ -55,12 +55,12 @@ public U0 InGetKey(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
 	Message(MESSAGE_KEY_DOWN,ch,sc);
 }
 
-public I64 InGetChar(...)
+public I64 InCharGet(...)
 {//Wait for user to press one of set of chars.
 	I64 i,sc,ch;
 	U8 buf[512],*st;
 	while (TRUE) {
-		ch=GetKey(&sc);
+		ch=KeyGet(&sc);
 		if (sc.u8[0]!=SC_SHIFT && sc.u8[0]!=SC_ALT && sc.u8[0]!=SC_CTRL) {
 			for (i=0;i<argc;i++)
 				if (ch==argv[i]) {
@@ -88,7 +88,7 @@ public U0 InUntilKey(I64 scan_code,I64 sc_mask=0xFF|SCF_SHIFT|SCF_CTRL|SCF_ALT)
 {//Let user type until he presses certain key.
 	I64 sc,ch;
 	do {
-		ch=GetKey(&sc);
+		ch=KeyGet(&sc);
 		Message(MESSAGE_KEY_DOWN,ch,sc);
 	} while (sc&sc_mask!=scan_code&sc_mask);
 }
@@ -97,7 +97,7 @@ public I64 InUntilChar(...)
 {//Let user type until he presses one of set of chars.
 	I64 i,sc,ch;
 	while (TRUE) {
-		ch=GetKey(&sc);
+		ch=KeyGet(&sc);
 		Message(MESSAGE_KEY_DOWN,ch,sc);
 		for (i=0;i<argc;i++)
 			if (ch==argv[i])

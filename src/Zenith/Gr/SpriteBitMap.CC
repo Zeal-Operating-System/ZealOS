@@ -656,7 +656,7 @@ bm_menu:
 		Refresh;
 	}
 bm_key_up_done:
-	GetMessage(,,1<<MESSAGE_KEY_UP);
+	MessageGet(,,1<<MESSAGE_KEY_UP);
 bm_done:
 	DCDel(clip);
 	DCDel(undo);

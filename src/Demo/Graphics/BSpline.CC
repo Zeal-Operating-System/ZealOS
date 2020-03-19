@@ -13,7 +13,7 @@ U0 BSplineDemo()
 	"Sel ctrl points with left mouse.  Right when finished.\n";
 	DCFill;
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_UP);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_UP);
 		if (message_code==MESSAGE_MS_L_UP) {
 			c[i].x=arg1; c[i].y=arg2; c[i].z=0;
 			dc->color=GREEN;

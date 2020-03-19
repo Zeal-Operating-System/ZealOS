@@ -17,7 +17,7 @@ divine.fifo = FifoU8New(2048 * 8);
 U8 *TimeStampCB(CDoc *, CDocEntry *, CTask *mem_task)
 {
 	U8 *st = MAlloc(64, mem_task);
-	StrPrint(st, "%X", GetTSC >> DIVN_BAD_BITS);
+	StrPrint(st, "%X", TSCGet >> DIVN_BAD_BITS);
 	return st;
 }
 

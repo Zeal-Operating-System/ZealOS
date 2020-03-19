@@ -20,7 +20,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 					"$$GREEN$$Q$$FG$$-$$GREEN$$S$$FG$$ are ISO file write drives.\n"
 					"$$GREEN$$T$$FG$$-$$GREEN$$Z$$FG$$ are ATAPI CD/DVD drives.\n"
 					"\nDrive Letter ($$PURPLE$$<ENTER>$$FG$$ to exit):";
-		drv_let=Letter2Letter(GetChar);
+		drv_let=Letter2Letter(CharGet);
 		'\n';
 		if (type=Letter2BlkDevType(drv_let)) {
 			whole_drive=FALSE;
@@ -37,16 +37,16 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 			switch (type) {
 				case BDT_RAM:
 					"Addr of RAM disk ($$PURPLE$$<ENTER>$$FG$$ to MAlloc):";
-					GetS(addr_buf,STR_LEN);
+					StrNGet(addr_buf,STR_LEN);
 				case BDT_ISO_FILE_WRITE:
 					"Blks of 512 bytes:";
-					GetS(blks_buf,STR_LEN);
+					StrNGet(blks_buf,STR_LEN);
 					break;
 				case BDT_ISO_FILE_READ:
 					filename=StrGet("File Name:");
 					break;
 				case BDT_ATA:
-					prt_num=GetI64("Partition Num (Default=All):",prt_num);
+					prt_num=I64Get("Partition Num (Default=All):",prt_num);
 				case BDT_ATAPI:
 					num_hints=ATARep(,,&head);
 					if (type==BDT_ATAPI && boot_drive_let)
@@ -57,7 +57,7 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 										"I/O Port Base0:\n";
 						else
 							"Include $$PURPLE$$0x$$FG$$ prefix.\nI/O Port Base0:\n";
-						GetS(base0_buf,STR_LEN);
+						StrNGet(base0_buf,STR_LEN);
 					} while (!Str2I64(base0_buf) && (type!=BDT_ATAPI || !boot_drive_let));
 					if (1<=Str2I64(base0_buf)<=num_hints) {
 						tmpha=ATARepFind(head,Str2I64(base0_buf));
@@ -70,11 +70,11 @@ U8 Mount2(U8 boot_drive_let,CDoc *_doc,Bool _caller_is_prtdisk)
 						else
 							do {
 								"I/O Port Base1:\n";
-								GetS(base1_buf,STR_LEN);
+								StrNGet(base1_buf,STR_LEN);
 							} while (!Str2I64(base1_buf));
 						do {
 							"\t$$PURPLE$$0$$FG$$=Master\n\t$$PURPLE$$1$$FG$$=Slave\nUnit:";
-							unit=GetChar-'0';
+							unit=CharGet-'0';
 						} while (!(0<=unit<=1));
 						'\n';
 					}

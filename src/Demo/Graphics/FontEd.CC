@@ -90,7 +90,7 @@ U0 FontEd()
 	try {
 		Fs->draw_it=&DrawIt;
 		while (TRUE) {
-			switch (message_code=GetMessage(&arg1,&arg2,
+			switch (message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_MOVE)) {
 				case MESSAGE_KEY_DOWN:
 					switch (arg1) {
@@ -142,7 +142,7 @@ U0 FontEd()
 			}
 		}
 fe_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	MenuPop;

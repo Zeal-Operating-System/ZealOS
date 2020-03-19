@@ -2,7 +2,7 @@ U0 InputFilterTask()
 {
 	CJob *tmpc,*tmpc1;
 	Bool old_filter;
-	I64 old_flags=GetRFlags;
+	I64 old_flags=RFlagsGet;
 	Fs->win_inhibit=WIG_USER_TASK_DEFAULT;
 	LBts(&Fs->task_flags,TASKf_INPUT_FILTER_TASK);
 	old_filter=LBts(&Fs->last_input_filter_task->task_flags,TASKf_FILTER_INPUT);
@@ -17,7 +17,7 @@ U0 InputFilterTask()
 		else {
 			if (tmpc->job_code==JOBT_TEXT_INPUT) {
 				QueueRemove(tmpc);
-				SetRFlags(old_flags);
+				RFlagsSet(old_flags);
 				try
 								ExePrint("%s",tmpc->aux_str);
 				catch
@@ -31,7 +31,7 @@ U0 InputFilterTask()
 	Fs->last_input_filter_task->next_input_filter_task=Fs->next_input_filter_task;
 	if (!old_filter)
 		LBtr(&Fs->last_input_filter_task->task_flags,TASKf_FILTER_INPUT);
-	SetRFlags(old_flags);
+	RFlagsSet(old_flags);
 }
 
 I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
@@ -44,7 +44,7 @@ Note: This delivers messages from parent down to pop-up.
 	I64 res,old_flags;
 	CJob *tmpc,*tmpc1;
 	if (!task) task=Fs;
-	old_flags=GetRFlags;
+	old_flags=RFlagsGet;
 	tmpc1=&task->server_ctrl.next_waiting;
 	while (TRUE) {
 		CLI
@@ -56,7 +56,7 @@ Note: This delivers messages from parent down to pop-up.
 		else {
 			if (tmpc->job_code==JOBT_MESSAGE) {
 				QueueRemove(tmpc);
-				SetRFlags(old_flags);
+				RFlagsSet(old_flags);
 				res=tmpc->message_code;
 				if (_arg1)
 					*_arg1=tmpc->aux1;
@@ -68,7 +68,7 @@ Note: This delivers messages from parent down to pop-up.
 					goto sm_done;
 			}
 		}
-		SetRFlags(old_flags);
+		RFlagsSet(old_flags);
 	}
 	res=MESSAGE_NULL;
 	if (_arg1)
@@ -76,11 +76,11 @@ Note: This delivers messages from parent down to pop-up.
 	if (_arg2)
 		*_arg2=0;
 	if (task->parent_task&&task->parent_task->popup_task==task) {
-		SetRFlags(old_flags);
+		RFlagsSet(old_flags);
 		return ScanMessage(_arg1,_arg2,mask,task->parent_task);
 	}
 sm_done:
-	SetRFlags(old_flags);
+	RFlagsSet(old_flags);
 	return res;
 }
 
@@ -92,7 +92,7 @@ I64 FlushMessages(CTask *task=NULL)
 	return res;
 }
 
-I64 GetMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
+I64 MessageGet(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 {//Wait for a message of type specified by a one in the mask.
 //Throw-out all messages not in mask.
 	//Returns $LK,"message_code",A="MN:MESSAGE_CMD"$. See $LK,"::/Demo/MessageLoop.CC"$.
@@ -107,7 +107,7 @@ I64 GetMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 	return res;
 }
 
-I64 ScanChar()
+I64 CharScan()
 {//Checks for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ and returns 0 immediately if no key.
 //Waits for $LK,"MESSAGE_KEY_UP",A="MN:MESSAGE_KEY_UP"$ of non-zero $LK,"ASCII",A="MN:CH_CTRLA"$ key and returns $LK,"ASCII",A="MN:CH_CTRLA"$ if key.
 	//$LK,"ScanMessage",A="MN:ScanMessage"$() throws away other message types.
@@ -115,12 +115,12 @@ I64 ScanChar()
 	if (!ScanMessage(&arg1a,&arg2a,1<<MESSAGE_KEY_DOWN)||!arg1a)
 		return 0;
 	else
-		do GetMessage(&arg1b,&arg2b,1<<MESSAGE_KEY_UP);
+		do MessageGet(&arg1b,&arg2b,1<<MESSAGE_KEY_UP);
 		while (!arg1b);  //Be careful of $LK,"SC_SHIFT",A="MN:SC_SHIFT"$ and $LK,"SC_CTRL",A="MN:SC_CTRL"$, etc.
 	return arg1a;
 }
 
-Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE)
+Bool KeyScan(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE)
 {//Checks for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ and returns FALSE immediately if no key.
 //Sets $LK,"ASCII",A="MN:CH_CTRLA"$ and $LK,"scan_code",A="FI:::/Doc/CharOverview.DD"$.
 	//Removes key message and returns TRUE.
@@ -139,18 +139,18 @@ Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE)
 	}
 }
 
-I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
+I64 KeyGet(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
 {//Waits for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ message and returns $LK,"ASCII",A="MN:CH_CTRLA"$.
 //Sets $LK,"scan_code",A="FI:::/Doc/CharOverview.DD"$.
-	//$LK,"ScanKey",A="MN:ScanKey"$() throws away other message types.
+	//$LK,"KeyScan",A="MN:KeyScan"$() throws away other message types.
 	I64 ch,sc;
 	Bool cursor_on=FALSE;
-	while (!ScanKey(&ch,&sc,FALSE)) {
+	while (!KeyScan(&ch,&sc,FALSE)) {
 		if (IsRaw && raw_cursor) {
-			if (!cursor_on && ToI64(GetTSC*5/counts.time_stamp_freq)&1) {
+			if (!cursor_on && ToI64(TSCGet*5/counts.time_stamp_freq)&1) {
 				'Û';
 				cursor_on=TRUE;
-			} else if (cursor_on && !(ToI64(GetTSC*5/counts.time_stamp_freq)&1)) {
+			} else if (cursor_on && !(ToI64(TSCGet*5/counts.time_stamp_freq)&1)) {
 				'' CH_BACKSPACE;
 				cursor_on=FALSE;
 			}
@@ -179,19 +179,19 @@ I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,Bool raw_cursor=FALSE)
 	return ch;
 }
 
-I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE)
+I64 CharGet(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE)
 {//Waits for non-zero $LK,"ASCII",A="MN:CH_CTRLA"$ key.
 //Sets $LK,"scan_code",A="FI:::/Doc/CharOverview.DD"$.
 	I64 ch1;
-	do ch1=GetKey(_scan_code,FALSE,raw_cursor);
+	do ch1=KeyGet(_scan_code,FALSE,raw_cursor);
 	while (!ch1);
 	if (echo)
 		"$$PT$$%c$$FG$$",ch1;
 	return ch1;
 }
 
-U8 *StrGet(U8 *message=NULL,U8 *default=NULL,I64 flags=0)
-{//Returns a $LK,"MAlloc",A="MN:MAlloc"$()ed prompted string.  See $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$.
+U8 *StrGet(U8 *message=NULL,U8 *default=NULL,I64 flags=NONE)
+{//Returns a $LK,"MAlloc",A="MN:MAlloc"$()ed prompted string.  See $LK,"Flags",A="MN:SGF_SHIFT_ESC_EXIT"$.
 	U8 *st;
 	if (message)
 		"" message,default;
@@ -206,7 +206,7 @@ U8 *StrGet(U8 *message=NULL,U8 *default=NULL,I64 flags=0)
 	return st;
 }
 
-I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE)
+I64 StrNGet(U8 *buf,I64 size,Bool allow_ext=TRUE)
 {//Prompt into fixed length string. Size must include terminator.
 	U8 *st;
 	I64 ch,i=0;
@@ -222,7 +222,7 @@ I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE)
 		Free(st);
 	} else {
 		while (TRUE) {
-			ch=GetChar(,FALSE,IsDebugMode);
+			ch=CharGet(,FALSE,IsDebugMode);
 			if (ch=='\n') {
 				'' ch;
 				break;

@@ -129,7 +129,7 @@ U0 MassSpringDemo()
 
 	try {
 		while (TRUE) {
-			message_code=GetMessage(&arg1,&arg2,
+			message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_KEY_DOWN);
 			switch (message_code) {
 				case MESSAGE_MS_L_DOWN:
@@ -158,7 +158,7 @@ U0 MassSpringDemo()
 			}
 		}
 mouse_done: //Don't goto out of try
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

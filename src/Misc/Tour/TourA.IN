@@ -14,7 +14,7 @@ InGetStr("\n");
 TourPut("Press $$GREEN$$<CURSOR-UP>$$FG$$ eight times..");
 I64 i;
 for (i=0;i<8;i++)
-	InGetKey(SC_CURSOR_UP);
+	InKeyGet(SC_CURSOR_UP);
 
 TourPut(
 "Press $$GREEN$$<SPACE>$$FG$$.\n");

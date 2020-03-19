@@ -3191,8 +3191,8 @@ public class CKbdStateGlobals
 	I64 	scan_code,			//See $LK,"scan codes",A="FI:::/Doc/CharOverview.DD"$
 				last_down_scan_code,
 				count,					//Count of keys pressed since boot.
-				timestamp,			//Output: GetTSC when event.
-				new_key_timestamp; //Output: GetTSC when new key event.
+				timestamp,			//Output: TSCGet when event.
+				new_key_timestamp; //Output: TSCGet when new key event.
 	CFifoU8 *fifo,*fifo2; //Private
 	CFifoI64 *scan_code_fifo;
 
@@ -3213,7 +3213,7 @@ public class CMouseHardStateGlobals
 				prescale;
 	CD3 	scale;
 	F64 	speed;					//Output: How fast the user is moving it.
-	I64 	timestamp,			//Output: GetTSC when event.
+	I64 	timestamp,			//Output: TSCGet when event.
 				install_attempts, //Private
 				pkt_size; 			//Private
 	CFifoU8 *fifo,*fifo2; //Private
@@ -3235,7 +3235,7 @@ public class CMouseStateGlobals
 				offset;
 	CD3 	scale;
 	F64 	speed;					//Output: How fast the user is moving it.
-	I64 	timestamp;			//Output: GetTSC when event.
+	I64 	timestamp;			//Output: TSCGet when event.
 	F64 	dbl_time, 			//Input: Time threshold for calling it a double click.
 				left_dbl_time,	//Private
 				right_dbl_time; //Private
@@ -3890,8 +3890,8 @@ public class CDC
 
 #define "Char/Input;StdIn"
 //StrGet flags
-#define GSF_SHIFT_ESC_EXIT			1 //This kills task on <SHIFT-ESC>
-#define GSF_WITH_NEW_LINE 			2
+#define SGF_SHIFT_ESC_EXIT			1 //This kills task on <SHIFT-ESC>
+#define SGF_WITH_NEW_LINE 			2
 
 #define "Char/Operations"
 //Flags for StrUtil and MStrUtil

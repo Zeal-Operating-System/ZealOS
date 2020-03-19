@@ -104,7 +104,7 @@ Bool LexDollar(CCompCtrl *cc,CDoc *doc,CDocEntry *doc_e)
 		return FALSE;
 }
 
-I64 LexGetChar(CCompCtrl *cc)
+I64 LexCharGet(CCompCtrl *cc)
 {//Get one char from stream. Allow put-back one.
 	U8 *ptr,*src;
 	CLexFile *tmpf;
@@ -260,19 +260,19 @@ lgc_done:
 }
 
 U0 LexSkipEol(CCompCtrl *cc)
-{//$LK,"LexGetChar",A="MN:LexGetChar"$ to NULL until end-of-line.
+{//$LK,"LexCharGet",A="MN:LexCharGet"$ to NULL until end-of-line.
 	I64 ch;
-	do ch=$WW,0$LexGetChar(cc);
+	do ch=$WW,0$LexCharGet(cc);
 	while (Bt(char_bmp_non_eol,ch));
 }
 
 U8 *LexFirstRemove(CCompCtrl *cc,U8 *marker,I64 _len=NULL)
-{//$LK,"LexGetChar",A="MN:LexGetChar"$() chars making str until marker.
+{//$LK,"LexCharGet",A="MN:LexCharGet"$() chars making str until marker.
 	U8 *res,*ptr;
 	CQueueVectU8 *tmpv=QueueVectU8New;
 	I64 i,len=0;
 	while (TRUE) {
-		i=LexGetChar(cc);
+		i=LexCharGet(cc);
 		if (!i||StrOcc(marker,i))
 			break;
 		QueueVectU8Put(tmpv,len++,i);
@@ -367,12 +367,12 @@ I64 LexInStr(CCompCtrl *cc,U8 *buf,I64 size,Bool *done)
 	I64 i=0,j,k,ch;
 	*done=TRUE;
 	while (i<size-1) {
-		ch=LexGetChar(cc);
+		ch=LexCharGet(cc);
 		if (!ch || ch=='"') {
 			buf[i++]=0;
 			return i;
 		} else if (ch=='\\') {
-			switch (ch=LexGetChar(cc)) {
+			switch (ch=LexCharGet(cc)) {
 				case '0':
 					buf[i++]=0;
 					break;
@@ -404,7 +404,7 @@ I64 LexInStr(CCompCtrl *cc,U8 *buf,I64 size,Bool *done)
 				case 'X':
 					j=0;
 					for (k=0;k<2;k++) {
-						ch=ToUpper(LexGetChar(cc));
+						ch=ToUpper(LexCharGet(cc));
 						if (Bt(char_bmp_hex_numeric,ch)) {
 							if (ch<='9')
 								j=j<<4+ch-'0';
@@ -425,7 +425,7 @@ I64 LexInStr(CCompCtrl *cc,U8 *buf,I64 size,Bool *done)
 			buf[i++]='$$';
 			if (cc->dollar_count)
 				cc->dollar_count--;
-			else if (LexGetChar(cc)!='$$') {
+			else if (LexCharGet(cc)!='$$') {
 				cc->dollar_count=1;
 				cc->flags|=CCF_USE_LAST_U16;
 			}
@@ -445,7 +445,7 @@ I64 Lex(CCompCtrl *cc)
 	cc->last_line_num=cc->lex_include_stack->line_num;
 	while (TRUE) {
 lex_cont:
-		switch [ch=LexGetChar(cc)] {
+		switch [ch=LexCharGet(cc)] {
 			case 0:
 				return cc->token=TK_EOF;
 			case TK_SUPERSCRIPT:
@@ -472,7 +472,7 @@ lex_ident:
 				while (TRUE) {
 					if (i>=STR_LEN)
 						LexExcept(cc,"Ident limited to STR_LEN chars at ");
-					else if (!(ch=LexGetChar(cc)))
+					else if (!(ch=LexCharGet(cc)))
 						break;
 					else if (Bt(cc->char_bmp_alpha_numeric,ch))
 						buf[i++]=ch;
@@ -514,10 +514,10 @@ lex_ident:
 				break;
 			case '0'...'9':
 				i=ch-'0';
-				ch=ToUpper(LexGetChar(cc));
+				ch=ToUpper(LexCharGet(cc));
 				if (ch=='X') {
 					while (TRUE) {
-						ch=ToUpper(LexGetChar(cc));
+						ch=ToUpper(LexCharGet(cc));
 						if (Bt(char_bmp_hex_numeric,ch)) {
 							if (ch<='9')
 								i=i<<4+ch-'0';
@@ -532,7 +532,7 @@ lex_ident:
 					}
 				} else if (ch=='B') {
 					while (TRUE) {
-						ch=LexGetChar(cc);
+						ch=LexCharGet(cc);
 						if (ch=='0')
 							i=i<<1;
 						else if (ch=='1')
@@ -556,10 +556,10 @@ lex_is_int:
 						cc->token=TK_I64;
 						goto lex_end;
 					}
-					ch=LexGetChar(cc);
+					ch=LexCharGet(cc);
 				}
 				if (ch=='.') {
-					ch=LexGetChar(cc);
+					ch=LexCharGet(cc);
 					if (ch=='.') {
 						cc->flags|=CCF_LAST_WAS_DOT;
 						goto lex_is_int;
@@ -579,13 +579,13 @@ lex_float_start:
 						cc->token=TK_F64;
 						goto lex_end;
 					}
-					ch=LexGetChar(cc);
+					ch=LexCharGet(cc);
 				}
-				ch=LexGetChar(cc);
+				ch=LexCharGet(cc);
 				neg_e=FALSE;
 				if (ch=='-') {
 					neg_e=TRUE;
-					ch=LexGetChar(cc);
+					ch=LexCharGet(cc);
 				}
 				j=0;
 				while (TRUE) {
@@ -600,7 +600,7 @@ lex_float_start:
 						cc->token=TK_F64;
 						goto lex_end;
 					}
-					ch=LexGetChar(cc);
+					ch=LexCharGet(cc);
 				}
 				break;
 			case '"':
@@ -634,10 +634,10 @@ lex_float_start:
 					break;
 				k=0;
 				for (j=0;j<8;j++) {
-					if (!(ch=LexGetChar(cc)) || ch=='\'')
+					if (!(ch=LexCharGet(cc)) || ch=='\'')
 						break;
 					if (ch=='\\') {
-						switch (ch=LexGetChar(cc)) {
+						switch (ch=LexCharGet(cc)) {
 							case '0': 				k.u8[j]=0;			break;
 							case '\'':				k.u8[j]='\''; 	break;
 							case '\`':				k.u8[j]='\`'; 	break;
@@ -651,7 +651,7 @@ lex_float_start:
 							case 'X':
 								i=0;
 								for (l=0;l<2;l++) {
-									ch=ToUpper(LexGetChar(cc));
+									ch=ToUpper(LexCharGet(cc));
 									if (Bt(char_bmp_hex_numeric,ch)) {
 										if (ch<='9')
 											i=i<<4+ch-'0';
@@ -669,14 +669,14 @@ lex_float_start:
 								cc->flags|=CCF_USE_LAST_U16;
 						}
 					} else if (ch=='$$') {
-						ch=LexGetChar(cc);
+						ch=LexCharGet(cc);
 						k.u8[j]='$$';
 						if (ch!='$$')
 							cc->flags|=CCF_USE_LAST_U16;
 					} else
 						k.u8[j]=ch;
 				}
-				if (ch!='\'' && (ch=LexGetChar(cc)) && ch!='\'')
+				if (ch!='\'' && (ch=LexCharGet(cc)) && ch!='\'')
 					LexExcept(cc,"Char const limited to 8 chars at ");
 				cc->cur_i64=k;
 				cc->token=TK_CHAR_CONST;
@@ -714,7 +714,7 @@ lex_float_start:
 							tmph->type=HTT_DEFINE_STR;
 							HashSrcFileSet(cc,tmph);
 
-							do ch=LexGetChar(cc); //skip space between define name and start
+							do ch=LexCharGet(cc); //skip space between define name and start
 							while (Bt(char_bmp_non_eol_white_space,ch));
 
 							i=j=0;
@@ -723,11 +723,11 @@ lex_float_start:
 								in_str=FALSE;
 								do {
 									if (ch=='\\') {
-										if (ch=LexGetChar(cc)) {
+										if (ch=LexCharGet(cc)) {
 											if (ch!='\r' && ch!='\n') {
 												buf[j++]='\\';
 												buf[j++]=ch;
-											} else if (ch=='\r' && LexGetChar(cc)!='\n')
+											} else if (ch=='\r' && LexCharGet(cc)!='\n')
 												cc->flags|=CCF_USE_LAST_U16;
 										} else {
 											buf[j++]='\\';
@@ -739,11 +739,11 @@ lex_float_start:
 										buf[j++]=ch;
 									} else
 										break;
-									while (ch=LexGetChar(cc)) {
+									while (ch=LexCharGet(cc)) {
 										if (ch=='/') {
-											ch=LexGetChar(cc);
+											ch=LexCharGet(cc);
 											if (ch=='/' && !in_str) {
-												do ch=LexGetChar(cc);
+												do ch=LexCharGet(cc);
 												while (Bt(char_bmp_non_eol,ch));
 												break;
 											} else {
@@ -751,7 +751,7 @@ lex_float_start:
 												cc->flags|=CCF_USE_LAST_U16;
 											}
 										} else if (ch=='\\') {
-											if (ch=LexGetChar(cc)) {
+											if (ch=LexCharGet(cc)) {
 												if (ch=='\"') {
 													buf[j++]='\\';
 													buf[j++]=ch;
@@ -810,7 +810,7 @@ lex_float_start:
 lex_else:
 						j=1;
 						do {
-							if (ch=LexGetChar(cc)) {
+							if (ch=LexCharGet(cc)) {
 								if (ch=='#') {
 									if (!Lex(cc))
 										goto lex_end;
@@ -861,7 +861,7 @@ lex_if:
 								else
 									j=1;
 								do {
-									if (ch=LexGetChar(cc)) {
+									if (ch=LexCharGet(cc)) {
 										if (ch=='#') {
 											if (!Lex(cc))
 												goto lex_end;
@@ -900,7 +900,7 @@ lex_ifdef:
 							goto lex_cont;
 						j=1;
 						do {
-							if (ch=LexGetChar(cc)) {
+							if (ch=LexCharGet(cc)) {
 								if (ch=='#') {
 									if (!Lex(cc))
 										goto lex_end;
@@ -937,7 +937,7 @@ lex_ifndef:
 							goto lex_cont;
 						j=1;
 						do {
-							if (ch=LexGetChar(cc)) {
+							if (ch=LexCharGet(cc)) {
 								if (ch=='#') {
 									if (!Lex(cc))
 										goto lex_end;
@@ -966,7 +966,7 @@ lex_ifaot:
 							goto lex_cont;
 						j=1;
 						do {
-							if (ch=LexGetChar(cc)) {
+							if (ch=LexCharGet(cc)) {
 								if (ch=='#') {
 									if (!Lex(cc))
 										goto lex_end;
@@ -995,7 +995,7 @@ lex_ifjit:
 							goto lex_cont;
 						j=1;
 						do {
-							if (ch=LexGetChar(cc)) {
+							if (ch=LexCharGet(cc)) {
 								if (ch=='#') {
 									if (!Lex(cc))
 										goto lex_end;
@@ -1066,14 +1066,14 @@ lex_ifjit:
 					cc->flags&=~CCF_LAST_WAS_DOT;
 					goto lex_dot_dot;
 				}
-				ch=LexGetChar(cc);
+				ch=LexCharGet(cc);
 				if ('0'<=ch<='9') {
 					i=0;
 					goto lex_float_start;
 				} else if (ch=='.') {
 lex_dot_dot:
 					cc->token=TK_DOT_DOT;
-					if (LexGetChar(cc)=='.')
+					if (LexCharGet(cc)=='.')
 						cc->token=TK_ELLIPSIS;
 					else
 						cc->flags|=CCF_USE_LAST_U16;
@@ -1093,12 +1093,12 @@ lex_dot_dot:
 			case '`':
 				if (!(i=cmp.dual_U16_tokens1[ch])) {
 					if (ch=='$$') {
-						ch=LexGetChar(cc);
+						ch=LexCharGet(cc);
 						if (ch=='$$') {
 							cc->token='$$';
 							goto lex_end;
 						} else if (ch) {
-							do ch=LexGetChar(cc);
+							do ch=LexCharGet(cc);
 							while (ch && ch!='$$');
 							if (!ch) {
 								cc->token=TK_EOF;
@@ -1115,24 +1115,24 @@ lex_dot_dot:
 						goto lex_end;
 					}
 				} else {
-					j=LexGetChar(cc);
+					j=LexCharGet(cc);
 					if (i.u16[0]==j) {
 						i>>=16;
 						if (!i) {// "/*"
 							j=1;
 							do {
-								if (!(ch=LexGetChar(cc)))
+								if (!(ch=LexCharGet(cc)))
 									return cc->token=TK_EOF;
 lex_check_comment:
 								if (ch=='*') {
-									if (!(ch=LexGetChar(cc)))
+									if (!(ch=LexCharGet(cc)))
 										return cc->token=TK_EOF;
 									if (ch=='/')
 										j--;
 									else
 										goto lex_check_comment;
 								} else if (ch=='/') {
-									if (!(ch=LexGetChar(cc)))
+									if (!(ch=LexCharGet(cc)))
 										return cc->token=TK_EOF;
 									if (ch=='*')
 										j++;
@@ -1158,7 +1158,7 @@ lex_check_comment:
 									goto lex_cont;
 							} else {
 								if (i==TK_SHL || i==TK_SHR) {
-									j=LexGetChar(cc);
+									j=LexCharGet(cc);
 									if (j=='=') {
 										if (i==TK_SHL)
 											i=TK_SHL_EQU;
@@ -1187,7 +1187,7 @@ lex_check_comment:
 		}
 	}
 lex_end:
-	LexGetChar(cc); //Do this so WAS_NEW_LINE is right
+	LexCharGet(cc); //Do this so WAS_NEW_LINE is right
 	cc->flags|=CCF_USE_LAST_U16;
 	return cc->token;
 }

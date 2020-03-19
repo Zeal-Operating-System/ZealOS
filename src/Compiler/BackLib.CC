@@ -426,7 +426,7 @@ I64 ICBuiltInFloatConst(F64 d)
 		return 0xEED9;
 	else if (d==1.0)
 		return 0xE8D9;
-	else if (GetOption(OPTf_NO_BUILTIN_CONST))
+	else if (OptionGet(OPTf_NO_BUILTIN_CONST))
 		return 0;
 	else if (d==ã)
 		return 0xEBD9;

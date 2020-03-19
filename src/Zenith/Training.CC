@@ -106,7 +106,7 @@ U0 KeyMapFamily2(U8 **entries,CTask *task,I64 scf)
 			if (task==Fs)
 				PutKey(arg1,arg2);
 			else
-				PostMessage(task,MESSAGE_KEY_DOWN,arg1,arg2);
+				MessagePost(task,MESSAGE_KEY_DOWN,arg1,arg2);
 			Refresh(0,TRUE);
 			Sleep(1); //Open loop because might be no response.  TODO: Drops messages.
 		}

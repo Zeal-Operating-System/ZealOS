@@ -117,7 +117,7 @@ U0 PoleZeros()
 	try {
 		Draw;
 		while (TRUE) {
-			message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+
+			message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+
 						1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_DOWN+1<<MESSAGE_MS_R_UP+1<<MESSAGE_MS_MOVE);
 pz_message:
 			cx=Fs->pix_width/2;
@@ -163,7 +163,7 @@ pz_message:
 			Refresh;
 		}
 pz_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

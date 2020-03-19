@@ -350,7 +350,7 @@ U8 *PsmSaveSong(U8 *dirname,U8 *full_filename)
 				"\tmusic.tempo=%6.3f;\n"
 				"\tmusic.stacatto_factor=%6.3f;\n"
 				"\ttry {\n"
-				"\t\twhile (!ScanKey) {\n"
+				"\t\twhile (!KeyScan) {\n"
 				"\t\t\tPlay(\"",music.tempo+0.0005,music.stacatto_factor+0.0005);
 
 	tmpn=psm.head.next;

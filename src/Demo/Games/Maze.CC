@@ -68,7 +68,7 @@ U0 SolveMaze(I64 x,I64 y)
 			stack_dir[stack_ptr++]=dir;
 			if (stack_ptr==STACK_SIZE) return;
 			Sleep(100);
-			if (ScanChar)
+			if (CharScan)
 				throw;
 		}
 	}
@@ -90,7 +90,7 @@ U0 Maze()
 	try
 		do {
 			MemSet(text,0,sizeof(text));
-			while (!(ch=ScanChar)) {
+			while (!(ch=CharScan)) {
 				x=mouse.pos_text.x-Fs->win_left-Fs->scroll_x/FONT_WIDTH;
 				y=mouse.pos_text.y-Fs->win_top-Fs->scroll_y/FONT_HEIGHT;
 				if (mouse.lb&&!winmgr.grab_scroll)
@@ -98,7 +98,7 @@ U0 Maze()
 				if (mouse.rb&&!winmgr.grab_scroll) {
 					text[y][x]='*'+ATTR;
 					SolveMaze(x,y);
-					ch=GetChar;
+					ch=CharGet;
 					break;
 				}
 				Refresh;

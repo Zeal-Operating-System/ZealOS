@@ -20,7 +20,7 @@ TourPut(
 "window.  Notice it is underlined.  This means a source code link is "
 "available.\n\n"
 "Press $$GREEN$$<CTRL-SHIFT-F1>$$FG$$ to jump to source code.\n");
-InGetKey(SC_F1|SCF_CTRL|SCF_SHIFT);
+InKeyGet(SC_F1|SCF_CTRL|SCF_SHIFT);
 Sleep(500);
 WinToTop;//Kludge
 
@@ -28,7 +28,7 @@ TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort the source code.\n");
 InUntilChar(CH_ESC,CH_SHIFT_ESC);
 
 TourPut("Press $$GREEN$$<CTRL-F1>$$FG$$ to autocomplete.\n");
-InGetKey(SC_F1|SCF_CTRL);
+InKeyGet(SC_F1|SCF_CTRL);
 Sleep(500);
 
 Message(MESSAGE_KEY_DOWN,'\n',SCF_CTRL|SCF_SHIFT);

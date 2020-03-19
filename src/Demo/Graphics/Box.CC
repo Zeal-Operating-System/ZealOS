@@ -30,7 +30,7 @@ U0 Box()
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	DocClear;
 	Fs->draw_it=&DrawIt;
-	while (!ScanChar) {
+	while (!CharScan) {
 		Mat4x4IdentEqu(global_r);
 		Mat4x4RotZ(global_r,é);
 		Mat4x4RotX(global_r,è);

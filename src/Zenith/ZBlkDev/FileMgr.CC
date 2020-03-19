@@ -592,7 +592,7 @@ public U8 *FileMgr(I64 mode=FM_NORMAL,CTask *mem_task=NULL)
 	}
 	do {
 		DocUnlock(doc);
-		do message_code=GetMessage(&arg1,&arg2,
+		do message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP);
 		while (Fs!=sys_focus_task);
 		DocLock(doc);

@@ -3,7 +3,7 @@ U0 Song()
 	Fs->task_end_cb=&SoundTaskEndCB;
 	MusicSettingsReset;
 	try //Catch <CTRL-ALT-c> exit
-		while (!ScanChar) {
+		while (!CharScan) {
 			Play("6hEqDC5B6CDhE",
 						"God \0is \0a \0g\0od \0of \0love.\n\0");
 			Play("5GqFEFhG6E",

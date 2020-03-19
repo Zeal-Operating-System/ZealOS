@@ -4,7 +4,7 @@
 U0 SpyStackRep(CTask *task)
 {
 	CDoc *doc=DocDblBufStart;
-	while (!ScanChar && TaskValidate(task)) {
+	while (!CharScan && TaskValidate(task)) {
 		StackRep(task);
 		'\n';
 		"$$BK,1$$PRESS A KEY$$BK,0$$\n";
@@ -18,7 +18,7 @@ U0 SpyStackRep(CTask *task)
 U0 SpyCallerRep(CTask *task)
 {
 	CDoc *doc=DocDblBufStart;
-	while (!ScanChar && TaskValidate(task)) {
+	while (!CharScan && TaskValidate(task)) {
 		CallerRep(task->rbp,task);
 		'\n';
 		"$$BK,1$$PRESS A KEY$$BK,0$$\n";
@@ -42,11 +42,11 @@ U0 Spy()
 			task=task->next_task;
 		}
 		'\n';
-		task=GetI64("Task Addr: ",0);
+		task=I64Get("Task Addr: ",0);
 		if (TaskValidate(task)) {
 			"\n\n\t$$BT,\"StackRep\",LM=\"1\n\"$$\n\n\n"
 						"\n\n\t$$BT,\"CallerRep\",LM=\"2\n\"$$\n\n\n";
-			i=GetI64("",0);
+			i=I64Get("",0);
 			if (i==1)
 				SpyStackRep(task);
 			else if (i==2)

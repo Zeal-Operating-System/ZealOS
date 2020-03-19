@@ -10,26 +10,26 @@ U0 TimeIns()
 	CPURep;
 
 	//Measure Loop Overhead
-	start1=GetTSC;
+	start1=TSCGet;
 	for (i=0;i<SAMPLE_SIZE;i++) {
 	}
-	end1=GetTSC;
+	end1=TSCGet;
 	overhead_time=end1-start1;
 
 	//Measure remainder...
-	start2=GetTSC;
+	start2=TSCGet;
 	for (i=0;i<SAMPLE_SIZE;i++)
 		tmp=i%0x400;
-	end2=GetTSC;
+	end2=TSCGet;
 	test_time=end2-start2;
 	"Remainder Version #1 Cycles\t: %10.5f\n",
 				ToF64(test_time-overhead_time)/SAMPLE_SIZE;
 
 	//Measure remainder...
-	start2=GetTSC;
+	start2=TSCGet;
 	for (i=0;i<SAMPLE_SIZE;i++)
 		tmp=i&0x3FF;
-	end2=GetTSC;
+	end2=TSCGet;
 	test_time=end2-start2;
 	"Remainder Version #2 Cycles\t: %10.5f\n",
 				ToF64(test_time-overhead_time)/SAMPLE_SIZE;

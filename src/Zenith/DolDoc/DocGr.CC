@@ -134,9 +134,9 @@ I64 DitherColor2(U8 *header=NULL)
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	Fs->draw_it=&DrawIt;
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_KEY_DOWN);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_KEY_DOWN);
 		if (message_code==MESSAGE_MS_L_DOWN) {
-			message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP);
+			message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP);
 			i=arg1/PU_SPACING;
 			j=(arg2-FramePtr("DitherFrame"))/PU_SPACING;
 			if (arg1>=0 && arg2>=0 && 0<=j<17 && 0<=i<17) {
@@ -147,7 +147,7 @@ I64 DitherColor2(U8 *header=NULL)
 			}
 		}
 	} while (!(message_code==MESSAGE_KEY_DOWN && (arg1==CH_ESC || arg1==CH_SHIFT_ESC)));
-	do GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_UP);
+	do MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_UP);
 	while (!arg1);
 dc_done:
 	SettingsPop;

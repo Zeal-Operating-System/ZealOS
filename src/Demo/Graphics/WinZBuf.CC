@@ -16,7 +16,7 @@ U0 ScrollBars()
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	DocClear;
 	Fs->draw_it=&DrawIt;
-	GetChar(,FALSE);
+	CharGet(,FALSE);
 	SettingsPop;
 }
 

@@ -31,7 +31,7 @@ CDoc *KConfigAddDev(CKConfig *c)
 	CDoc *doc=DocNew;
 	"\n\nIn anticipation of the drives you will define shortly, enter the drive letter\n"
 				"of the drive with your Home directory. ($$PURPLE$$<ENTER>$$FG$$ for current drive) Boot Drive:";
-	ch=Letter2Letter(GetChar);
+	ch=Letter2Letter(CharGet);
 	if ('A' <= ch <= 'Z')
 		c->boot_drive_let = ch;
 	else
@@ -74,15 +74,15 @@ U0 KConfigOptions(CKConfig *c)
 				switch (i) {
 					case CONFIG_MEM_INIT:
 						if (state)
-							c->mem_init_val=GetI64("Val (0-255):",255,0,255);
+							c->mem_init_val=I64Get("Val (0-255):",255,0,255);
 						break;
 					case CONFIG_HEAP_INIT:
 						if (state)
-							c->heap_init_val=GetI64("Val (0-255):",255,0,255);
+							c->heap_init_val=I64Get("Val (0-255):",255,0,255);
 						break;
 					case CONFIG_VAR_INIT:
 						if (state)
-							c->var_init_val=GetI64("Val (0-255):",255,0,255);
+							c->var_init_val=I64Get("Val (0-255):",255,0,255);
 						break;
 					case CONFIG_HOME_DIR:
 						st2=StrGet("Home Dir(\"%s\"):",c->home_dir);
@@ -103,7 +103,7 @@ U0 KConfigOptions(CKConfig *c)
 					case CONFIG_MOUNT_IDE_AUTO:
 						if (state) {
 							"First HD Drive Let:";
-							c->mount_ide_auto_hd_let=Letter2Letter(GetChar);
+							c->mount_ide_auto_hd_let=Letter2Letter(CharGet);
 							if (!('A'<=c->mount_ide_auto_hd_let<='Z'))
 								c->mount_ide_auto_hd_let=0;
 							'\n';
@@ -113,7 +113,7 @@ U0 KConfigOptions(CKConfig *c)
 								"First HD Drive:%C\n",'C';
 
 							"First CD Drive Let:";
-							c->mount_ide_auto_cd_let=Letter2Letter(GetChar);
+							c->mount_ide_auto_cd_let=Letter2Letter(CharGet);
 							if (!('A'<=c->mount_ide_auto_cd_let<='Z'))
 								c->mount_ide_auto_cd_let=0;
 							'\n';
@@ -132,7 +132,7 @@ U0 KConfigOptions(CKConfig *c)
 						c->debug_distro_start=0;
 						if (state) {
 							c->debug_distro_file=StrGet("Debug Distro File:");
-							c->debug_distro_start=GetI64("Debug Distro Start:");
+							c->debug_distro_start=I64Get("Debug Distro Start:");
 						}
 						break;
 				}
@@ -150,7 +150,7 @@ CKConfig *KConfigNew()
 	c->home_dir = StrNew("::/Home");
 
 	VideoRep(FALSE);
-	resolution_num = GetI64("Enter list number of desired resolution, "
+	resolution_num = I64Get("Enter list number of desired resolution, "
 												"or desired width. ($$PURPLE$$<ENTER>$$FG$$ for auto maximum): ",,1);
 	if(resolution_num <= VBE_MODES_NUM)
 	{
@@ -160,7 +160,7 @@ CKConfig *KConfigNew()
 	else
 	{
 		c->screen_width = resolution_num;
-		c->screen_height = GetI64("Enter Height: ",,0);
+		c->screen_height = I64Get("Enter Height: ",,0);
 	}
  
 

@@ -554,7 +554,7 @@ U0 CastleFrankenstein()
 
 	try {
 		while (TRUE) {
-			switch (GetKey(&sc)) {
+			switch (KeyGet(&sc)) {
 				case CH_SPACE:
 					Fire;
 					break;

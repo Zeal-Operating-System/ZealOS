@@ -380,7 +380,7 @@ U0 PlayShip()
 						case CH_SPACE:
 							if (++main_mode_bttn.state==MMD_MODES_NUM)
 								main_mode_bttn.state=0;
-							GetMessage(,,1<<MESSAGE_KEY_UP);
+							MessageGet(,,1<<MESSAGE_KEY_UP);
 							goto ps_done;
 						case CH_SHIFT_ESC:
 						case CH_ESC:
@@ -562,7 +562,7 @@ U0 EditShip()
 						case CH_SPACE:
 							if (++main_mode_bttn.state==MMD_MODES_NUM)
 								main_mode_bttn.state=0;
-							GetMessage(,,1<<MESSAGE_KEY_UP);
+							MessageGet(,,1<<MESSAGE_KEY_UP);
 							goto es_done;
 						case CH_SHIFT_ESC:
 						case CH_ESC:

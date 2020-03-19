@@ -122,7 +122,7 @@ CHashFun *ParseFunJoin(CCompCtrl *cc,CHashClass *tmp_return,
 	}
 	tmpf->size=0;
 	if (header_return) {
-		if (GetOption(OPTf_WARN_HEADER_MISMATCH)) {
+		if (OptionGet(OPTf_WARN_HEADER_MISMATCH)) {
 			if (tmpf->return_class!=header_return) {
 				PrintWarn("Fun Header return mismatch '%s'\n",tmpf->str);
 				cc->warning_count++;
@@ -197,7 +197,7 @@ U0 ParseFun(CCompCtrl *cc,CHashClass *tmp_return,U8 *name,I64 fsp_flags)
 				PrintWarn("Unneeded no_warn\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 							cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 							tmpm->str,cc->htc.fun->str);
-		} else if (!tmpm->use_count && GetOption(OPTf_WARN_UNUSED_VAR))
+		} else if (!tmpm->use_count && OptionGet(OPTf_WARN_UNUSED_VAR))
 			PrintWarn("Unused var\n $$LK,\"FL:%s,%d\"$$ '%s' in '%s'\n",
 						cc->lex_include_stack->full_name,cc->lex_include_stack->line_num,
 						tmpm->str,cc->htc.fun->str);

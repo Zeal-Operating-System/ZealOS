@@ -537,7 +537,7 @@ Lead peasants to fires.
 	Fs->draw_it=&DrawIt;
 	try {
 		while (TRUE) {
-			switch (GetKey(&sc)) {
+			switch (KeyGet(&sc)) {
 				case '\n':
 					CleanUp;
 					Init;

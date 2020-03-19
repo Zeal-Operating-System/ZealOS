@@ -164,7 +164,7 @@ U8 *PopUpGetStr2(U8 *header,CTask *mem_task)
 	U8 *res,*st;
 	if (header)
 		"%s",header;
-	st=StrGet(,,GSF_WITH_NEW_LINE);
+	st=StrGet(,,SGF_WITH_NEW_LINE);
 	res=StrNew(st,mem_task);
 	Free(st);
 	return res;
@@ -178,9 +178,9 @@ public U8 *PopUpGetStr(U8 *header=NULL)
 	return res;
 }
 
-public I64 PopUpGetI64(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX)
+public I64 PopUpI64Get(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX)
 {//Prompt for I64 text expression in PopUp win task.
-	U8 *st=MStrPrint("GetI64(0x%X,0x%X,0x%X,0x%X);",message,default,lo,hi);
+	U8 *st=MStrPrint("I64Get(0x%X,0x%X,0x%X,0x%X);",message,default,lo,hi);
 	I64 res=PopUp(st,Fs);
 	Free(st);
 	return res;
@@ -188,7 +188,7 @@ public I64 PopUpGetI64(U8 *message,I64 default,I64 lo=I64_MIN,I64 hi=I64_MAX)
 
 public F64 PopUpGetF64(U8 *message,F64 default,F64 lo=F64_MIN,F64 hi=F64_MAX)
 {//Prompt for F64 text expression in PopUp win task.
-	U8 *st=MStrPrint("GetF64(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));",message,default,lo,hi);
+	U8 *st=MStrPrint("F64Get(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));",message,default,lo,hi);
 	F64 res=PopUp(st,Fs)(F64);
 	Free(st);
 	return res;

@@ -1489,13 +1489,13 @@ U0 XCaliber()
 			CheckDamage;
 			Refresh; //messages are only qued by winmgr
 			if (show_level_message) {
-				ch=GetKey(&sc);
+				ch=KeyGet(&sc);
 				if (ch=='\n')
 					ch=0;
 				ODEPause(ode,OFF);
 				show_level_message=FALSE;
 			} else if (game_over) {
-				ch=ScanChar;
+				ch=CharScan;
 			} else {
 				if (!remaining) {
 					level++;

@@ -1,19 +1,19 @@
 "Ed(\"::/Misc/Bible.TXT\");\n";
 TourPut("Press $$GREEN$$<CTRL-F>$$FG$$ to find.\n");
-InGetChar(CH_CTRLF);
+InCharGet(CH_CTRLF);
 
 InPrint(150,"new song");
 
 TourPut("Cursor down 8 times.\n");
 I64 i;
 for (i=0;i<8;i++)
-	InGetKey(SC_CURSOR_DOWN);
+	InKeyGet(SC_CURSOR_DOWN);
 
 TourPut("Press '$$GREEN$$2$$FG$$' to show all lines within 2 of a match.\n");
 InGetStr("2");
 
 TourPut("Press $$GREEN$$<ESC>$$FG$$ to exit the form.\n");
-InGetChar(CH_ESC);
+InCharGet(CH_ESC);
 
 TourPut("Look around and press $$GREEN$$<ESC>$$FG$$ to turn off filter.\n");
 InUntilChar(CH_ESC,CH_SHIFT_ESC);

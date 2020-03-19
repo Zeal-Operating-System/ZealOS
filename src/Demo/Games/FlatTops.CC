@@ -811,7 +811,7 @@ U0 FlatTops()
 	Fs->animate_task=Spawn(&AnimateTask,NULL,"Animate",,Fs);
 	try {
 		while (TRUE)
-			switch (GetMessage(&arg1,&arg2,
+			switch (MessageGet(&arg1,&arg2,
 						1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_R_D_UP)) {
 				case MESSAGE_KEY_DOWN:
 					switch (arg1) {
@@ -841,7 +841,7 @@ U0 FlatTops()
 					break;
 			}
 nv_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

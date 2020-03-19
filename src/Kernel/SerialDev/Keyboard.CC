@@ -387,9 +387,9 @@ U0 KbdPacketRead()
 	static U8 last_raw_byte=0;
 	static I64 last_sc=0;
 	U8 raw_byte;
-	if (GetTSC>kbd.timestamp+counts.time_stamp_freq>>3)
+	if (TSCGet>kbd.timestamp+counts.time_stamp_freq>>3)
 		FifoU8Flush(kbd.fifo);
-	kbd.timestamp=GetTSC;
+	kbd.timestamp=TSCGet;
 	raw_byte=InU8(KBD_PORT);
 	KbdBuildSC(raw_byte,TRUE,&last_raw_byte,&last_sc);
 	if (!FifoU8Count(kbd.fifo)) {
@@ -414,7 +414,7 @@ interrupt U0 IRQKbd()
 		kbd.reset=TRUE;
 		return;
 	}
-	keydev.ctrl_alt_ret_addr=GetRBP()(I64)+8;
+	keydev.ctrl_alt_ret_addr=RBPGet()(I64)+8;
 	KbdPacketRead;
 }
 

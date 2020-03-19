@@ -253,7 +253,7 @@ U8 *LexExtStr(CCompCtrl *cc,I64 *_size=NULL,Bool lex_next=TRUE)
 	while (cc->token==TK_STR) {
 		st1=st;
 		len1=len;
-		if (!lex_next && LexGetChar(cc)!='\\') {
+		if (!lex_next && LexCharGet(cc)!='\\') {
 			cc->flags|=CCF_USE_LAST_U16;
 			break;
 		}

@@ -66,7 +66,7 @@ public U0 Life()
 	Fs->draw_it=&DrawIt;
 	Fs->win_inhibit=WIG_TASK_DEFAULT-WIF_SELF_FOCUS-WIF_SELF_BORDER;
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN);
 		switch (message_code) {
 			case MESSAGE_MS_L_DOWN:
 				x1=arg1; y1=arg2;
@@ -78,7 +78,7 @@ public U0 Life()
 					dc[cur_dc]->thick=0.04*mouse.speed;
 					GrLine3(dc[cur_dc],x1,y1,0,x2,y2,0);
 					restart=TRUE;
-					message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
+					message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 					x1=x2; y1=y2;
 					x2=arg1; y2=arg2;
 				}
@@ -88,7 +88,7 @@ public U0 Life()
 				break;
 		}
 	} while (message_code!=MESSAGE_KEY_DOWN || !arg1);
-	GetMessage(,,1<<MESSAGE_KEY_UP);
+	MessageGet(,,1<<MESSAGE_KEY_UP);
 	SettingsPop;
 	DCFill;
 	DCDel(dc[0]);

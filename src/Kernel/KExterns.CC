@@ -58,8 +58,8 @@ extern U8 *FileNameAbs(U8 *_filename,I64 fuf_flags=0);
 extern U8 *FileRead(U8 *filename,I64 *_size=NULL,I64 *_attr=NULL);
 extern I64 FileWrite(U8 *filename,U8 *fbuf,I64 size,CDate cdt=0,I64 attr=0);
 extern I64 FlushMessages(CTask *task=NULL);
-extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE);
-extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
+extern I64 CharGet(I64 *_scan_code=NULL,Bool echo=TRUE,Bool raw_cursor=FALSE);
+extern I64 StrNGet(U8 *buf,I64 size,Bool allow_ext=TRUE);
 extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,
 				CTask *task=NULL,CBlkPool *bp);
 extern Bool ISOInit(CDrive *drive,I64 blk);

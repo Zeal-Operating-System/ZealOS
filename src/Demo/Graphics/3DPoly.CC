@@ -6,7 +6,7 @@ U0 Main()
 	DCDepthBufAlloc(dc);
 	dc->flags|=DCF_TRANSFORMATION|DCF_SYMMETRY;
 	try {
-		while (!ScanChar) {
+		while (!CharScan) {
 			DCDepthBufReset(dc);
 			DCSymmetrySet(dc,Fs->pix_width/2,Fs->pix_height/2,
 						mouse.pos.x-Fs->pix_left-Fs->scroll_x,

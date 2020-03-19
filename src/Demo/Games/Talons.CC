@@ -1187,7 +1187,7 @@ U0 Talons()
 	Fs->draw_it=&DrawIt;
 	try //in case <CTRL-ALT-c> is pressed.
 		do {
-			if (ScanKey(&ch,&sc)) {
+			if (KeyScan(&ch,&sc)) {
 				switch (ch) {
 					case 0:
 						switch (sc.u8[0]) {

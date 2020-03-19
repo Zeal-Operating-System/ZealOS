@@ -60,17 +60,17 @@ U0 TimeIns()
 	old_irq=IntEntrySet(I_F_UNARY_MINUS,F_UNARY_MINUS_INT,IDTET_TRAP);
 
 	//Measure interrupt time
-	start=GetTSC;
+	start=TSCGet;
 	for (i=0;i<SAMPLE_SIZE;i++)
 		UnaryMinusInt(ã);
-	end=GetTSC;
+	end=TSCGet;
 	"Interrupt Cycles: %10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
 
 	//Measure call time
-	start=GetTSC;
+	start=TSCGet;
 	for (i=0;i<SAMPLE_SIZE;i++)
 		UnaryMinusCall(ã);
-	end=GetTSC;
+	end=TSCGet;
 	"Call      Cycles: %10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
 
 	IntEntrySet(I_F_UNARY_MINUS,old_irq,IDTET_IRQ);

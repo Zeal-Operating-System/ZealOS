@@ -164,7 +164,7 @@ U0 KMain()
 
 	IntsInit;
 	"Enable IRQs\n";
-	SetRFlags(RFLAGG_NORMAL);
+	RFlagsSet(RFLAGG_NORMAL);
 	Busy(2000);
 	IntInit2;
 	LBts(&sys_run_level,RLf_INTERRUPTS);

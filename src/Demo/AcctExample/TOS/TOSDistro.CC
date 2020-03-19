@@ -10,7 +10,7 @@ public U8 TOSGetDrive()
 {//Prompt for drv let.
 	I64 res;
 	"Drive (%s):",TOS_HDS;
-	res=Letter2Letter(GetChar);
+	res=Letter2Letter(CharGet);
 	'\n';
 	return res;
 }

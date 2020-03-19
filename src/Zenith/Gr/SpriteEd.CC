@@ -987,7 +987,7 @@ gs_key:
 						case CH_SHIFT_ESC:
 							res=FALSE;
 						case CH_ESC:
-							GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_UP);
+							MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_UP);
 							goto gs_done;
 						case 'p':
 						case 'P':
@@ -1045,7 +1045,7 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 				case SPED_SET_ORIGIN:
 					SpriteQueueSelAll(*_head);
 					doc_ce->de_flags=old_de_flags;
-					GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_UP);
+					MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_UP);
 					SpriteSetOrigin(*_head,x-arg1,y-arg2,0);
 					SpriteEdUpdate(doc,doc_ce,*_head);
 					SpriteQueueSelAll(*_head,FALSE);
@@ -1054,10 +1054,10 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 					if (!SpriteQueueSelCount(*_head))
 						SpriteQueueSelAll(*_head);
 					doc_ce->de_flags=old_de_flags;
-					GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
+					MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
 					xx=arg1; yy=arg2;
 					do {
-						message_code=GetMessage(&arg1,&arg2,
+						message_code=MessageGet(&arg1,&arg2,
 									1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 						SpriteSetOrigin(*_head,arg1-xx,arg2-yy,0);
 						xx=arg1; yy=arg2;
@@ -1103,10 +1103,10 @@ I64 SpriteEd(CDoc *doc,CDocEntry *doc_ce,I64 x,I64 y,
 					tmpg->p.x1=0;
 					tmpg->p.y1=0;
 					QueueInsert(tmpg,insert_pt->last);
-					GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
+					MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN);
 					xx=arg1; yy=arg2;
 					do {
-						message_code=GetMessage(&arg1,&arg2,
+						message_code=MessageGet(&arg1,&arg2,
 									1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 						tmpg->p.x1=arg1-xx;
 						tmpg->p.y1=arg2-yy;

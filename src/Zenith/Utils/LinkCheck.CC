@@ -8,7 +8,7 @@ I64 LinkCheckDoc(CDoc *doc,I64 *_fuf_flags)
 	CDocEntry *doc_e=doc->head.next;
 	I64 res=0;
 	while (doc_e!=doc) {
-		if (ScanKey) {
+		if (KeyScan) {
 			LBts(_fuf_flags,FUf_CANCEL);
 			break;
 		}

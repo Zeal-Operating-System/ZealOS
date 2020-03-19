@@ -1,6 +1,6 @@
 $WW,1$One jiffy is one time slice.	$LK,"counts.jiffies",A="MN:CCountsGlobals"$ returns time slices since boot.
 
-$LK,"SysTimerRead",A="MN:SysTimerRead"$ reads the timer ticks since boot.  It's not as fast as $LK,"GetTSC",A="MN:GetTSC"$.
+$LK,"SysTimerRead",A="MN:SysTimerRead"$ reads the timer ticks since boot.  It's not as fast as $LK,"TSCGet",A="MN:TSCGet"$.
 
 Use $LK,"JIFFY_FREQ",A="MN:JIFFY_FREQ"$ to convert $LK,"counts.jiffies",A="MN:CCountsGlobals"$.
 

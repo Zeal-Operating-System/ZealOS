@@ -176,10 +176,10 @@ Bool DriveEnable(U8 drv_let,Bool val)
 		return FALSE;
 }
 
-I64 SysGetI64()
+I64 SysI64Get()
 {
 	U8 st[STR_LEN];
-	GetS(st,STR_LEN,FALSE);
+	StrNGet(st,STR_LEN,FALSE);
 	return Str2I64(st,16);
 }
 
@@ -203,12 +203,12 @@ Bool GetBaseUnit(CBlkDev *bd)
 					"In Linux, use 'lspci -v' for ports.\n"
 					"\n\nEnter 4-digit hex I/O Port number.\n"
 					"CD/DVD I/O Port Base0: 0x";
-		bd->base0=SysGetI64;
+		bd->base0=SysI64Get;
 		bd->base1=0;
 		bd->unit =0;
 		if (bd->base0) {
 			"\nUnit (0 or 1): ";
-			do ch=GetChar(,FALSE);
+			do ch=CharGet(,FALSE);
 			while (!('0'<=ch<='1'));
 			'' ch;
 			bd->unit=ch-'0';

@@ -270,7 +270,7 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 											DocUnlock(doc);
 											if (sc&SCF_SHIFT) {
 												if (TaskValidate(sys_macro_task))
-													PostMessageWait(sys_macro_task,
+													MessagePostWait(sys_macro_task,
 																MESSAGE_KEY_DOWN_UP,CH_SHIFT_ESC,0);
 												SysMacroStripKey(&sys_macro_head,ch,sc);
 												PlaySysMacro;

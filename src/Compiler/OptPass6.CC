@@ -120,7 +120,7 @@ U0 OptPass6(CCompCtrl *cc)
 								tmpi->ic_flags&ICF_RES_NOT_USED &&
 								tmpil2->ic_code!=IC_CALL_END &&
 								tmpil2->ic_code!=IC_CALL_END2 &&
-								tmpil2->ic_code!=IC_SET_RAX &&
+								tmpil2->ic_code!=IC_RAX_SET &&
 								!(tmpi->ic_flags&(ICF_ARG2_TO_F64|ICF_ARG2_TO_INT)) &&
 								!(tmpil2->ic_flags&(ICF_RES_TO_F64|ICF_RES_TO_INT))) {
 						tmpil2->res.type =tmpi->arg1.type&MDG_MASK+

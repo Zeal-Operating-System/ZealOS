@@ -6,9 +6,9 @@ U0 Exit()
 	} else {
 		if (!Gs->num && !IsDebugMode)
 			SingleUser(OFF);
-		Fs->rflags=GetRFlags;
-		Fs->rsp=GetRSP;
-		Fs->rbp=GetRBP;
+		Fs->rflags=RFlagsGet;
+		Fs->rsp=RSPGet;
+		Fs->rbp=RBPGet;
 		Fs->rip=$$;
 		CLI
 		LBts(&Fs->task_flags,TASKf_KILL_TASK);
@@ -132,7 +132,7 @@ argpop I64 CallStackGrow(I64 stack_size_threshold,I64 stack_size,
 		while (argc-->0)
 			*--rsp2=*--rsp;
 		_stack=&Fs->stack;
-		tmps->stack_ptr=rsp=GetRSP;
+		tmps->stack_ptr=rsp=RSPGet;
 		asm {
 			IMPORT		_FREE;	//We are in a function, not at global scope.
 //The compiler treats these in isolation.
@@ -364,7 +364,7 @@ I64 ExeCmdLine(CCompCtrl *cc)
 
 U0 ServerTaskCont()
 {//Act as server task in a loop handling commands.
-	I64 old_flags=GetRFlags;
+	I64 old_flags=RFlagsGet;
 	FlushMessages;
 	while (TRUE) {
 		CLI
@@ -374,7 +374,7 @@ U0 ServerTaskCont()
 		LBts(&Fs->task_flags,TASKf_IDLE);
 		LBts(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
 		Yield;
-		SetRFlags(old_flags);
+		RFlagsSet(old_flags);
 	}
 }
 

@@ -109,7 +109,7 @@ U0 RedSeaFormat(U8 drv_let,Bool quick=TRUE)
 		br->sects=drive->size;
 		n=(br->sects+BLK_SIZE<<3-1)/BLK_SIZE<<3;
 		br->bitmap_sects=n;
-		br->unique_id=GetTSC^Now()(U64);
+		br->unique_id=TSCGet^Now()(U64);
 		br->root_clus=0;
 
 		if (quick)

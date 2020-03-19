@@ -125,7 +125,7 @@ Bool ATARepExitAllApplications()
 	"\nWe're going to probe hardware.\n"
 				"$$RED$$Exit all other applications.$$FG$$\n"
 				"Press '$$PURPLE$$p$$FG$$' to probe or '$$PURPLE$$s$$FG$$' to skip.\n";
-	if (ToUpper(GetChar(,FALSE))=='S')
+	if (ToUpper(CharGet(,FALSE))=='S')
 		return TRUE;
 	else
 		return FALSE;

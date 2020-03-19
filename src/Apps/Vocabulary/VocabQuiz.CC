@@ -35,7 +35,7 @@ U0 VocabQuiz()
 						"$$LM,7$$%s\n$$LM,4$$",i+1,i+1,ACDDefGet(words[i]);
 		"\n\n$$LTBLUE$$Answer:$$FG$$";
 		do {
-			ch=GetKey(,TRUE);
+			ch=KeyGet(,TRUE);
 			DocBottom;
 			if ('1'<=ch<='4') {
 				'\n';

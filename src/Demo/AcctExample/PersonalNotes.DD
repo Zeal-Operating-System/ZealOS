@@ -283,7 +283,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 * Eliminate?	$LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
 * Eliminate?	$LK,"ROP_XOR",A="MN:ROP_XOR"$?
 
-* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"PostMessage",A="MN:PostMessage"$() messages for mouse_hard.	Already works for $LK,"MouseSet",A="MN:MouseSet"$()?
+* $LK,"WinMgrTask",A="MN:WinMgrTask"$ needs to do doc operations on $LK,"MessagePost",A="MN:MessagePost"$() messages for mouse_hard.	Already works for $LK,"MouseSet",A="MN:MouseSet"$()?
 
 * Should Messages in PopUp queue get fwded to parent when task dies?
 
@@ -379,7 +379,7 @@ $FG,5$$TX+CX,"Test"$$FG$
 * Return ress for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
 * Collision counts for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
 
-* $LK,"StrGet",A="MN:StrGet"$() or $LK,"GetChar",A="MN:GetChar"$() in $LK,"OSInstall",A="FI:::/Misc/OSInstall.CC"$ didn't like focus change.
+* $LK,"StrGet",A="MN:StrGet"$() or $LK,"CharGet",A="MN:CharGet"$() in $LK,"OSInstall",A="FI:::/Misc/OSInstall.CC"$ didn't like focus change.
 
 * Test on Dad's computer or other people's?
 

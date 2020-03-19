@@ -63,13 +63,13 @@ class CTryStack
 
 U0 SysTry(U8 *catch_start,U8 *untry_start)
 {
-	I64 *rbp=GetRBP;
+	I64 *rbp=RBPGet;
 	CExcept *tmpt=MAlloc(sizeof(CExcept));
 	tmpt->handler_catch=catch_start;
 	tmpt->handler_untry=untry_start;
 	tmpt->rsp=rbp(U8 *)+sizeof(CTryStack);
 	tmpt->rbp=*rbp;
-	tmpt->rflags=GetRFlags;
+	tmpt->rflags=RFlagsGet;
 	SaveExceptRegs(tmpt);
 	QueueInsert(tmpt,Fs->last_except);
 }
@@ -90,7 +90,7 @@ U0 throw(I64 ch=0,Bool no_log=FALSE)
 	Fs->except_ch=ch;
 	for (i=0;i<TASK_EXCEPT_CALLERS;i++)
 		Fs->except_callers[i]=Caller(i+1);
-	Fs->except_rbp=GetRBP;
+	Fs->except_rbp=RBPGet;
 	Fs->catch_except=FALSE;
 	if (!no_log)
 		ZenithLog("Except:%c:%p:%p:%p:%p:%p:%p\n",ch,Fs->except_callers[0],
@@ -101,7 +101,7 @@ U0 throw(I64 ch=0,Bool no_log=FALSE)
 		TestExcept;
 		if (Fs->catch_except)
 			TakeExcept;
-		SetRBP(Fs->except_rbp);
+		RBPSet(Fs->except_rbp);
 		tmpt=Fs->last_except;
 		QueueRemove(tmpt);
 		Free(tmpt);

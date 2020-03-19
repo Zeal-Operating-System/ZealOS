@@ -90,7 +90,7 @@ I64 MorseWaitKey()
 	F64 dt;
 	while (TRUE) {
 		if (m_start) {
-			GetMessage(NULL,NULL,1<<MESSAGE_KEY_UP);
+			MessageGet(NULL,NULL,1<<MESSAGE_KEY_UP);
 			m_end=tS;
 			Sound;
 			dt_down=m_end-m_start;
@@ -111,7 +111,7 @@ I64 MorseWaitKey()
 					Yield;
 				}
 			} else
-				ch=GetChar(,FALSE);
+				ch=CharGet(,FALSE);
 			m_start=tS;
 			Sound(74);
 			if (ch==CH_SHIFT_ESC || ch==CH_ESC) {

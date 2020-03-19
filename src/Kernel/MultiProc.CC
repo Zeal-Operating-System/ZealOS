@@ -181,11 +181,11 @@ U0 MPAPICInit()
 	//	MemSet(dev.uncached_alias+LAPIC_ISR,0,0x20);
 	//	MemSet(dev.uncached_alias+LAPIC_TMR,0,0x20);
 
-	SetRAX(Gs->tss->tr);
+	RAXSet(Gs->tss->tr);
 	LTR 	AX
 	if (Gs->num) {
 		IntInit1;
-		SetRFlags(RFLAGG_NORMAL);
+		RFlagsSet(RFLAGG_NORMAL);
 	}
 }
 
@@ -200,7 +200,7 @@ U0 CoreAPDaemonTask()
 			TaskKillDying;
 			do PAUSE
 			while (LBts(&ctrl->flags,JOBCf_LOCKED));
-		} while (ctrl->next_waiting!=ctrl && JobRunOne(GetRFlags,ctrl));
+		} while (ctrl->next_waiting!=ctrl && JobRunOne(RFlagsGet,ctrl));
 		CLI
 		LBts(&Fs->task_flags,TASKf_AWAITING_MESSAGE);
 		LBtr(&ctrl->flags,JOBCf_LOCKED);

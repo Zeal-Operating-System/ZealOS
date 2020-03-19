@@ -154,7 +154,7 @@ interrupt U0 IntDivZero()
 		debug.mp_crash->cpu_num=Gs->num;
 		debug.mp_crash->task=Fs;
 		MOV RAX,U64 8[RBP] //Get RIP off of stack.
-		debug.mp_crash->rip=GetRAX;
+		debug.mp_crash->rip=RAXGet;
 		debug.mp_crash->message="Div Zero";
 		debug.mp_crash->message_num=0;
 		MPInt(I_MP_CRASH,0);
@@ -188,7 +188,7 @@ U0 IntInit1()
 	}
 	tmp_ptr.limit=256*16-1;
 	tmp_ptr.base =dev.idt;
-	SetRAX(&tmp_ptr);
+	RAXSet(&tmp_ptr);
 	LIDT U64 [RAX]
 }
 

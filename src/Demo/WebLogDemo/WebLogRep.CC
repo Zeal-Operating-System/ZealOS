@@ -504,8 +504,8 @@ U0 WebLogRep(U8 *mask,U8 *output_filename)
 	if (dstart>dend)
 		PrintErr("No Data.\n");
 	else {
-		dstart=GetDate("Start(%D):",dstart);
-		dend	=GetDate("End  (%D):",dend);
+		dstart=DateGet("Start(%D):",dstart);
+		dend	=DateGet("End  (%D):",dend);
 		BlockIPNuip(head);
 
 		DocClear;

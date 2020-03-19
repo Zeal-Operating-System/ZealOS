@@ -17,7 +17,7 @@ TourPut(
 "This will access your PersonalMenu.  You can customize it.  "
 "It's like your START menu and desktop.\n");
 
-InGetChar(CH_CTRLM);
+InCharGet(CH_CTRLM);
 TourPut(
 "You can also get to your PersonalMenu by clicking on the word "
 "\"$$GREEN$$MENU$$FG$$\" in the title bar.\n",TRUE);
@@ -29,7 +29,7 @@ Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
 
 I64 i;
 for (i=0;i<9;i++)
-	InGetKey(SC_CURSOR_DOWN);
+	InKeyGet(SC_CURSOR_DOWN);
 
 TourPut(
 "Keyboard commands are:\n\n"
@@ -56,13 +56,13 @@ TourPut(
 TourPut(
 "Press $$GREEN$$<CTRL-t>$$FG$$ to toggle to plain text mode.\n\n"
 "These are \"DolDoc\" commands.");
-InGetChar(CH_CTRLT);
+InCharGet(CH_CTRLT);
 
 TourPut(
 "The DolDoc widgets are bracketed with dollar sign characters.\n\n"
 "\"LK\" stands \"link\".\n"
 "\"MA\" stands for \"macro\".\n\n"
 "Now, $$GREEN$$<CTRL-t>$$FG$$ to toggle back to regular mode.\n");
-InGetChar(CH_CTRLT);
+InCharGet(CH_CTRLT);
 Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
 

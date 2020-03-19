@@ -345,7 +345,7 @@ U0 DunGen()
 
 	try {
 		while (TRUE) {
-			switch (GetMessage(&ch,&sc,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+			switch (MessageGet(&ch,&sc,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
 				case MESSAGE_KEY_DOWN:
 					switch (ch) {
 						case '\n':
@@ -433,7 +433,7 @@ U0 DunGen()
 			}
 		}
 dg_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

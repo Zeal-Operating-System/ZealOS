@@ -30,7 +30,7 @@ U0 Cartesian()
 					y_last=y;
 					first=FALSE;
 				}
-				ch=GetChar;
+				ch=CharGet;
 			} else
 				ch=CH_SHIFT_ESC;
 			Free(st);

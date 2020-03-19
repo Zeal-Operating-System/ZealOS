@@ -37,7 +37,7 @@ I64 UnusedStack(CTask *task=NULL)
 	PUSHFD
 	CLI
 	if (task == Fs)
-		res = GetRSP()(U8 *) - (&task->stack->stack_base)(U8 *);
+		res = RSPGet()(U8 *) - (&task->stack->stack_base)(U8 *);
 	else
 		res = task->rsp(U8 *) - (&task->stack->stack_base)(U8 *);
 	POPFD
@@ -47,7 +47,7 @@ I64 UnusedStack(CTask *task=NULL)
 U8 *Caller(I64 num=1)
 {//Returns the addr of the fun which called this one,
 //or the caller of the caller, etc.
-	U8 **rbp=GetRBP,**ptr;
+	U8 **rbp=RBPGet,**ptr;
 	while (num--) {
 		if (rbp>=*rbp)
 			return NULL;
@@ -99,7 +99,7 @@ U0 StackRep(CTask *task=NULL)
 	PUSHFD
 	CLI
 	if (task==Fs) {
-		rbp=GetRBP;
+		rbp=RBPGet;
 		rsp=rbp+3;
 		rbp=*rbp;
 	} else {
@@ -142,7 +142,7 @@ U0 CallerRep(U8 **rbp=NULL,CTask *task=NULL)
 	if (!task) task=Fs;
 	if (!rbp) {
 		if (task==Fs)
-			rbp=GetRBP;
+			rbp=RBPGet;
 		else
 			rbp=task->rbp;
 	}
@@ -324,7 +324,7 @@ U0 Dr(CTask *task=NULL)
 U8 *SysGetStr2(I64)
 {
 	U8 buf[512];
-	GetS(buf,512,FALSE);
+	StrNGet(buf,512,FALSE);
 	return StrNew(buf);
 }
 
@@ -609,7 +609,7 @@ U0 Fault2(I64 fault_num,I64 fault_err_code)
 		":%p  RSP:%08X\n",Fs->rip,Fs->rsp;
 		if (fault_num==I_PAGE_FAULT) {
 			MOV_RAX_CR2
-			i=GetRAX;
+			i=RAXGet;
 			"Fault Addr:%08X:%p\n",i,i;
 		}
 		Fault3(fault_num,fault_err_code);

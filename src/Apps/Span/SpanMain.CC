@@ -323,7 +323,7 @@ U0 Span()
 
 	try {
 		while (TRUE) {
-			message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|
+			message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_DOWN|
 						1<<MESSAGE_MS_L_UP|1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_MOVE);
 			DCFill(dc);
 			switch (message_code) {
@@ -454,7 +454,7 @@ U0 Span()
 			}
 		}
 span_done: //Don't goto out of try
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	DocClear;

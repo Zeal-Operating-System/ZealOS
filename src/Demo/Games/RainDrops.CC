@@ -173,7 +173,7 @@ U0 RainDrops()
 	Fs->draw_it=&DrawIt;
 	try {
 		do
-			switch (ch=GetKey(&sc)) {
+			switch (ch=KeyGet(&sc)) {
 				case '\n':
 					Init;
 					break;

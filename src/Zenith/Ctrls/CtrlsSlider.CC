@@ -21,9 +21,9 @@ CTemplateCS *CtrlSliderGet()
 	"$$PURPLE$$Ctrl Slider$$FG$$\n\n";
 
 	res->global_name=StrGet("Global Struct Name (ENTER for No Global):");
-	res->range=GetI64 		("Range 	(%4d):",30);
-	res->spacing=GetI64("Spacing (%4d):",20);
-	res->border=GetI64 ("Border  (%4d):",2);
+	res->range=I64Get 		("Range 	(%4d):",30);
+	res->spacing=I64Get("Spacing (%4d):",20);
+	res->border=I64Get ("Border  (%4d):",2);
 
 	res->next_slider=res->last_slider=&res->next_slider;
 	while (TRUE) {

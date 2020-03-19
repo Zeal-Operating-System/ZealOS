@@ -339,7 +339,7 @@ U0 ViewPlayerSet(I8 p)
 U0 Init()
 {
 	DocClear;
-	"GameSeed(0x%X)\n",Seed(PopUpGetI64("GameSeed(0x%X):",Seed));
+	"GameSeed(0x%X)\n",Seed(PopUpI64Get("GameSeed(0x%X):",Seed));
 	moving_unit=NULL;
 	InitMap;
 	ViewPlayerSet(cur_player=0);

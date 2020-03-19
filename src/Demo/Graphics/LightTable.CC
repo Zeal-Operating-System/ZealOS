@@ -481,7 +481,7 @@ U0 LightTable()
 	LTMenuSet(mode);
 
 	MemBIOSRep;
-	bmp_mem=GetI64("\n\n\nHow much memory for the high resolution\n"
+	bmp_mem=I64Get("\n\n\nHow much memory for the high resolution\n"
 				"shadow bitmap that helps improve the\n"
 				"accuracy of the normal vector estimate?\n"
 				"You can choose up to the largest\n"
@@ -504,7 +504,7 @@ U0 LightTable()
 		animate_tasks[i]=Spawn(&MPAnimateTask,NULL,"MPAnimate",i);
 	try {
 		while (TRUE) {
-			message_code=GetMessage(&arg1,&arg2,
+			message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_UP);
 lt_restart:
 			switch (message_code) {
@@ -535,7 +535,7 @@ lt_restart:
 							while (TRUE) {
 								x2=arg1; y2=arg2;
 								GrLine(map,x1,y1,x2,y2);
-								message_code=GetMessage(&arg1,&arg2,
+								message_code=MessageGet(&arg1,&arg2,
 											1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 								GrLine(map,x1,y1,x2,y2);
 								if (message_code==MESSAGE_KEY_DOWN)
@@ -566,7 +566,7 @@ lt_restart:
 							do {
 								c[count].x=arg1; c[count].y=arg2; c[count].z=0;
 								Gr2BSpline(map,c,count+1);
-								message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_UP+
+								message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_UP+
 											1<<MESSAGE_MS_MOVE+1<<MESSAGE_MS_R_UP);
 								Gr2BSpline(map,c,count+1);
 								if (message_code==MESSAGE_KEY_DOWN)
@@ -635,7 +635,7 @@ lt_restart:
 			}
 		}
 lt_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	Free(c);

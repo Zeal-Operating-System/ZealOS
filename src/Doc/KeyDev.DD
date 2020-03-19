@@ -1,4 +1,4 @@
-$WW,1$The editor mostly stays in a $LK,"GetKey",A="MN:GetKey"$()/$LK,"PutKey",A="MN:PutKey"$() loop.	The putkey portion is where keys are acted-upon.	ZenithOS has a chain of putkey handlers in a $LK,"Circular Queue",A="HI:Circular Queue"$ with priorities.  The highest priority handlers can choose to terminate handling, otherwise, the keys get sent on down the chain.
+$WW,1$The editor mostly stays in a $LK,"KeyGet",A="MN:KeyGet"$()/$LK,"PutKey",A="MN:PutKey"$() loop.	The putkey portion is where keys are acted-upon.	ZenithOS has a chain of putkey handlers in a $LK,"Circular Queue",A="HI:Circular Queue"$ with priorities.  The highest priority handlers can choose to terminate handling, otherwise, the keys get sent on down the chain.
 
 $LK,"KeyDevAdd",A="MN:KeyDevAdd"$() defines a putkey device with a priority.	"Device" might be a misnomer.  Currently, the following are defined:
 

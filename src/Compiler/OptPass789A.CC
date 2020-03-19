@@ -356,7 +356,7 @@ cc->pass==10 is final pass, code is placed into buf.
 						}
 						break;
 					case IC_CALL_IMPORT:
-						if (GetOption(OPTf_USE_IMM64)) {
+						if (OptionGet(OPTf_USE_IMM64)) {
 							ICU16(tmpi,0xBB48);
 							ICU64(tmpi,0);
 							if (buf) {
@@ -745,7 +745,7 @@ cc->pass==10 is final pass, code is placed into buf.
 								tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);
 					ICU24(tmpi,0x38AE0F);
 					break;
-				case IC_GET_RFLAGS:
+				case IC_RFLAGS_GET:
 					ICU8(tmpi,0x9C);
 					ICPop(tmpi,MDF_REG+RT_I64,REG_RAX,0,rip2);
 					break;
@@ -756,33 +756,33 @@ cc->pass==10 is final pass, code is placed into buf.
 				case IC_RDTSC:
 					ICCopyTemplate(cc,tmpi,CMP_TEMPLATE_RDTSC,TRUE,FALSE,FALSE,CN_INST);
 					break;
-				case IC_SET_RFLAGS:
+				case IC_RFLAGS_SET:
 					ICPush(tmpi,tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);
 					ICU8(tmpi,0x9D);
 					break;
-				case IC_GET_RBP:
+				case IC_RBP_GET:
 					ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 								MDF_REG+RT_I64,REG_RBP,0,rip2);
 					break;
-				case IC_SET_RBP:
+				case IC_RBP_SET:
 					ICMov(tmpi,MDF_REG+RT_I64,REG_RBP,0,
 								tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);
 					break;
-				case IC_GET_RSP:
+				case IC_RSP_GET:
 					ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 								MDF_REG+RT_I64,REG_RSP,0,rip2);
 					break;
-				case IC_SET_RSP:
+				case IC_RSP_SET:
 					ICMov(tmpi,MDF_REG+RT_I64,REG_RSP,0,
 								tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);
 					break;
 				case IC_RETURN_VAL:
-				case IC_SET_RAX:
+				case IC_RAX_SET:
 					ICMov(tmpi,MDF_REG+RT_I64,REG_RAX,0,
 								tmpi->arg1.type,tmpi->arg1.reg,tmpi->arg1.disp,rip2);
 					break;
 				case IC_RETURN_VAL2:
-				case IC_GET_RAX:
+				case IC_RAX_GET:
 					break;
 				case IC_BT:
 					ICBitOps(tmpi,&tmpi->arg1,&tmpi->arg2,tmpi->next,

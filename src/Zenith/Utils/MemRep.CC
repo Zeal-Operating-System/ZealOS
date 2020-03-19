@@ -98,7 +98,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 	if (!override_validate && !TaskValidate(task))
 		return FALSE;
 	if (task==Fs)
-		task->rsp=GetRSP;
+		task->rsp=RSPGet;
 	"$$BLACK$$%-27t$$Q#%08X$$FG$$\n",task->task_title,task;
 	"$$ID,2$$Heap\t:%010X/%010X\n",TaskMemUsed(task,override_validate),
 				TaskMemAlloced(task,override_validate);

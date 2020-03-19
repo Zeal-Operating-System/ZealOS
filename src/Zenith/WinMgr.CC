@@ -422,7 +422,7 @@ U0 WinMgrTask(I64)
 	CDocEntry *doc_e;
 	I64 x,y,z,message_code,
 				my_mouse_z=0,left,top,
-				old_flags=GetRFlags;
+				old_flags=RFlagsGet;
 	Bool has_border;
 	CCtrl *c;
 	WinHorz(0,TEXT_COLS-1);
@@ -446,12 +446,12 @@ wmt_start:
 			while (TRUE) {
 				CLI
 				if (!TaskValidate(task)) {
-					SetRFlags(old_flags);
+					RFlagsSet(old_flags);
 					goto wmt_start;
 				}
 				TaskDerivedValsUpdate(task,FALSE);
 				task=task->last_task;
-				SetRFlags(old_flags);
+				RFlagsSet(old_flags);
 				if (task==Fs)
 					break;
 			}
@@ -461,19 +461,19 @@ wmt_start:
 			while (TRUE) {
 				CLI
 				if (!TaskValidate(task)) {
-					SetRFlags(old_flags);
+					RFlagsSet(old_flags);
 					goto wmt_start;
 				}
 				if (WinInside(mouse.pos.x,mouse.pos.y,task,FONT_WIDTH)) {
-					SetRFlags(old_flags);
+					RFlagsSet(old_flags);
 					break;
 				}
 				if (task==Fs) { //Shouldn't happen
-					SetRFlags(old_flags);
+					RFlagsSet(old_flags);
 					goto wmt_start;
 				}
 				task=task->last_task;
-				SetRFlags(old_flags);
+				RFlagsSet(old_flags);
 			}
 
 			if (Bt(&task->display_flags,DISPLAYf_NO_BORDER))

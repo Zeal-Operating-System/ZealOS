@@ -124,7 +124,7 @@ public U0 PunchOut()
 		tmpt->type=TET_PUNCH_OUT;
 		tmpt->datetime=Now;
 		"\nEnter Description.\nPress <ESC> when done.\n";
-		if (!(tmpt->desc=StrGet(,,GSF_WITH_NEW_LINE)))
+		if (!(tmpt->desc=StrGet(,,SGF_WITH_NEW_LINE)))
 			tmpt->desc=CAlloc(1);
 		QueueInsert(tmpt,header->last);
 		TimeFileWrite(header);
@@ -142,7 +142,7 @@ public U0 PunchIn()
 		tmpt->type=TET_PUNCH_IN;
 		tmpt->datetime=Now;
 		"\nEnter Description.\nPress <ESC> when done.\n";
-		if (!(tmpt->desc=StrGet(,,GSF_WITH_NEW_LINE)))
+		if (!(tmpt->desc=StrGet(,,SGF_WITH_NEW_LINE)))
 			tmpt->desc=CAlloc(1);
 		QueueInsert(tmpt,header->last);
 		TimeFileWrite(header);

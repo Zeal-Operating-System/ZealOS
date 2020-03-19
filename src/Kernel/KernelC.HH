@@ -477,9 +477,9 @@ public extern U0 XTalkWait(CTask *task,U8 *format,...);
 
 #help_index "Job/Text & Messages;Task/Job/Text & Messages;Messages"
 public extern U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
-public extern U0 PostMessage(CTask *task,
+public extern U0 MessagePost(CTask *task,
 				I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
-public extern U0 PostMessageWait(CTask *task,I64 message_code,
+public extern U0 MessagePostWait(CTask *task,I64 message_code,
 				I64 arg1,I64 arg2,I64 flags=0);
 public extern CJob *TaskMessage(CTask *server,CTask *master,
 										 I64 message_code,I64 arg1,I64 arg2,I64 flags);
@@ -500,13 +500,13 @@ extern CJob sys_macro_head;
 extern CTask *sys_macro_task;
 
 #help_index "Keyboard Devices;Char/Input;StdIn"
-extern U8  *(*fp_getstr2)(I64 flags=0); //StrGet $LK,"Flags",A="MN:GSF_SHIFT_ESC_EXIT"$
+extern U8  *(*fp_getstr2)(I64 flags=0); //StrGet $LK,"Flags",A="MN:SGF_SHIFT_ESC_EXIT"$
 public extern Bool AreYouSure();
-public extern I64 GetChar(I64 *_scan_code=NULL,Bool echo=TRUE,
+public extern I64 CharGet(I64 *_scan_code=NULL,Bool echo=TRUE,
 				Bool raw_cursor=FALSE);
-public extern I64 GetKey(I64 *_scan_code=NULL,Bool echo=FALSE,
+public extern I64 KeyGet(I64 *_scan_code=NULL,Bool echo=FALSE,
 				Bool raw_cursor=FALSE);
-public extern I64 GetS(U8 *buf,I64 size,Bool allow_ext=TRUE);
+public extern I64 StrNGet(U8 *buf,I64 size,Bool allow_ext=TRUE);
 public extern U8 *StrGet(U8 *message=NULL,U8 *default=NULL,I64 flags=0);
 extern U0 			KbdInit();
 public extern I64 KbdMouseEventTime();
@@ -517,8 +517,8 @@ public extern U0 KbdTypeMatic(U8 delay);
 extern Bool 		MouseHardDriverInstall();
 public extern Bool MouseHardEnable(Bool val=TRUE);
 public extern I64 PressAKey();
-public extern I64 ScanChar();
-public extern Bool ScanKey(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);
+public extern I64 CharScan();
+public extern Bool KeyScan(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE);
 public extern Bool YorN();
 public extern CKbdStateGlobals	kbd;
 
@@ -580,7 +580,7 @@ public extern I64 *MemPageTable(U8 *a);
 #help_index "Messages"
 #help_file "::/Doc/Messages"
 public extern I64 FlushMessages(CTask *task=NULL);
-public extern I64 GetMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,
+public extern I64 MessageGet(I64 *_arg1=NULL,I64 *_arg2=NULL,
 				I64 mask=~1,CTask *task=NULL);
 extern U0 InputFilterTask();
 public extern I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,

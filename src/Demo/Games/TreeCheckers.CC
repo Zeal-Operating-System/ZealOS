@@ -311,7 +311,7 @@ cn_start:
 		show_start=FALSE;
 		Fs->draw_it=&DrawIt;
 		while (TRUE) {
-			message_code=GetMessage(&arg1,&arg2,
+			message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 			switch (message_code) {
 				case MESSAGE_KEY_DOWN:
@@ -346,7 +346,7 @@ cn_start:
 			}
 		}
 cn_done:
-		GetMessage(,,1<<MESSAGE_KEY_UP);
+		MessageGet(,,1<<MESSAGE_KEY_UP);
 	} catch
 		PutExcept;
 	SettingsPop;

@@ -109,7 +109,7 @@ U0 Init()
 	I64 i;
 
 	do {
-		table_size=GetI64("\nTable size in hex (3 input=0x100,4=0x10000): ",0);
+		table_size=I64Get("\nTable size in hex (3 input=0x100,4=0x10000): ",0);
 		if (table_size>TABLE_SIZE_MAX)
 			"Too large\n";
 		else if (table_size<1) {
@@ -133,7 +133,7 @@ U0 Init()
 	num_inputs_entered=0;
 	while (TRUE) {
 		"Input %C: ",'A'+num_inputs_entered;
-		i=GetI64("",-1);
+		i=I64Get("",-1);
 		if (i<0) break;
 		if (i>table_size)
 			"Too large\n";
@@ -155,7 +155,7 @@ U0 Init()
 	num_outputs_entered=0;
 	while (TRUE) {
 		"Output %C: ",'A'+num_outputs_entered;
-		i=GetI64("",-1);
+		i=I64Get("",-1);
 		if (i<0) break;
 		if (i>table_size)
 			"Too large\n";
@@ -578,7 +578,7 @@ U0 DigitalLogic()
 			DocCursor;
 			DocClear;
 			Fs->draw_it=&DrawIt;
-			GetChar;
+			CharGet;
 			DocClear;
 			Refresh(2,TRUE);
 			DocBottom;

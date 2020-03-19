@@ -70,7 +70,7 @@ U0 MouseInit()
 	mouse.has_wheel=FALSE;
 	mouse.show=TRUE;
 	mouse.speed=0;
-	mouse.timestamp=GetTSC;
+	mouse.timestamp=TSCGet;
 	mouse.dbl_time=0.350;
 	GridInit;
 }
@@ -78,9 +78,9 @@ U0 MouseInit()
 U0 MouseHardPacketRead()
 {
 	U8 j;
-	if (GetTSC>mouse_hard.timestamp+counts.time_stamp_freq>>3)
+	if (TSCGet>mouse_hard.timestamp+counts.time_stamp_freq>>3)
 		FifoU8Flush(mouse_hard.fifo);
-	mouse_hard.timestamp=GetTSC;
+	mouse_hard.timestamp=TSCGet;
 	FifoU8Insert(mouse_hard.fifo,InU8(KBD_PORT));
 	if (FifoU8Count(mouse_hard.fifo)==mouse_hard.pkt_size)
 		while (FifoU8Remove(mouse_hard.fifo,&j))
@@ -271,7 +271,7 @@ U0 MouseHardHandler()
 
 U0 MouseHardSet(I64 x,I64 y,I64 z,I64 l,I64 r)
 {
-	mouse_hard.timestamp=GetTSC;
+	mouse_hard.timestamp=TSCGet;
 	MouseHardSetPre;
 	mouse_hard.prescale.x=x/mouse_hard.scale.x/mouse_grid.x_speed;
 	mouse_hard.prescale.y=y/mouse_hard.scale.y/mouse_grid.y_speed;

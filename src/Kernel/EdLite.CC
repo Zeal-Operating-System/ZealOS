@@ -127,7 +127,7 @@ Bool EdLite(U8 *filename,I64 num=1,I64 edf_dof_flags=0)
 		while (cur_col-line_start_col>=text.cols)
 			line_start_col+=8;
 		EdLiteUpdate(&head,cur_line,cur_col,line_start_col);
-		switch (ch=GetKey(&sc,FALSE,TRUE)) {
+		switch (ch=KeyGet(&sc,FALSE,TRUE)) {
 			case 0:
 				switch (sc.u8[0]) {
 					case SC_CURSOR_UP:

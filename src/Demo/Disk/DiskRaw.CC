@@ -23,7 +23,7 @@ U0 RawAccess(I64 drv_let=0)
 	drive->size=bd->max_blk+1;
 
 	try {
-		blk=GetI64("Blk to Read: ",old_offset,0,bd->max_blk);
+		blk=I64Get("Blk to Read: ",old_offset,0,bd->max_blk);
 		BlkRead(drive,buf,blk,1);
 		D(buf,BLK_SIZE);
 	} catch

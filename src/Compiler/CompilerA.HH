@@ -146,15 +146,15 @@ class CIntermediateStruct
 #define IC_OUT_U16							0x6A
 #define IC_OUT_U32							0x6B
 
-#define IC_GET_RFLAGS 					0x6C
+#define IC_RFLAGS_GET 					0x6C
 #define IC_CARRY								0x6D
-#define IC_SET_RFLAGS 					0x6E
-#define IC_GET_RAX							0x6F
-#define IC_SET_RAX							0x70
-#define IC_GET_RBP							0x71
-#define IC_SET_RBP							0x72
-#define IC_GET_RSP							0x73
-#define IC_SET_RSP							0x74
+#define IC_RFLAGS_SET 					0x6E
+#define IC_RAX_GET							0x6F
+#define IC_RAX_SET							0x70
+#define IC_RBP_GET							0x71
+#define IC_RBP_SET							0x72
+#define IC_RSP_GET							0x73
+#define IC_RSP_SET							0x74
 #define IC_RIP									0x75
 
 #define IC_RDTSC								0x76

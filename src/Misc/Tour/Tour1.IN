@@ -8,11 +8,11 @@ TourPut("Press $$GREEN$$<F1>$$FG$$ for the main help index.\n"
 				"the editor and at the command line.\n"
 				"\n"
 				"You can find the $LK+PU,"Demo Index",A="FI:::/Doc/DemoIndex.DD"$ on the help index.\n");
-InGetKey(SC_F1);
+InKeyGet(SC_F1);
 
 TourPut(
 "Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort and exit.\n");
-InGetChar(CH_SHIFT_ESC);
+InCharGet(CH_SHIFT_ESC);
 
 U0 RevealPopUpHelp(I64 scf)
 {
@@ -43,7 +43,7 @@ U0 RevealPopUpHelp(I64 scf)
 
 		t0=tS;
 		while (kbd.scan_code&(SCF_CTRL|SCF_ALT|SCF_SHIFT)==scf) {
-			ScanKey(,,TRUE);
+			KeyScan(,,TRUE);
 			if (1.0<tS-t0<1.15)
 				Sound(34);
 			else

@@ -76,7 +76,7 @@ U0 DrawIt(CTask *task,CDC *dc)
 
 U0 MySleep()
 {
-	if (ScanChar)
+	if (CharScan)
 		throw;
 	Sleep(3);
 }

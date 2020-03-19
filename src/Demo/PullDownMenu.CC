@@ -33,7 +33,7 @@ U0 PullDownMenuDemo()
 				"of the screen.\n\n";
 
 	do {
-		message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_CMD);
+		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_CMD);
 		"\nCmd:%d ARG1:%X ARG2:%X\n\n",message_code,arg1,arg2;
 
 		switch (message_code) {

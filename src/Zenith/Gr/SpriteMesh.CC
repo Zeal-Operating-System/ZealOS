@@ -1077,7 +1077,7 @@ $WW,0$*/
 	try {//In case of <CTRL-ALT-c>
 		while (TRUE) {
 			MeshUpdateMenu(&e);
-			message_code=GetMessage(&arg1,&arg2,
+			message_code=MessageGet(&arg1,&arg2,
 						1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
 						1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP);
 me_restart:
@@ -1128,7 +1128,7 @@ me_restart:
 							break;
 						case 'f':
 						case 'p':
-							e.thickness=PopUpGetI64("Thickness (%d):",e.thickness);
+							e.thickness=PopUpI64Get("Thickness (%d):",e.thickness);
 						case 'n':
 							if (arg1=='n' || arg1=='p')
 								e.closed=TRUE;
@@ -1173,7 +1173,7 @@ me_chain:
 								sel_mode=SEL_MESH_AND;
 							else
 								sel_mode=SEL_MESH_OR;
-							if ((message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
+							if ((message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN|
 										1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_R_UP))
 										!=MESSAGE_MS_L_DOWN) {
 								Beep; Beep;
@@ -1183,7 +1183,7 @@ me_chain:
 							e.x2=arg1; e.y2=arg2;
 							e.sel_rect=TRUE;
 							while (TRUE) {
-								message_code=GetMessage(&arg1,&arg2,1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|
+								message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|
 											1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|
 											1<<MESSAGE_MS_R_UP);
 								if (message_code==MESSAGE_MS_MOVE) {

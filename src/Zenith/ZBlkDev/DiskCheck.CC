@@ -249,7 +249,7 @@ U0 RedSeaDriveView(U8 drv_let=0)
 		BlkRead(drive,bitmap,drive->fat1,i);
 		i=0;
 		for (y=0;y<GR_HEIGHT-3*FONT_HEIGHT;y++) {
-			if (ScanKey)
+			if (KeyScan)
 				break;
 			for (x=0;x<GR_WIDTH-FONT_WIDTH<<1;x++) {
 				lohi=i*s;
@@ -265,7 +265,7 @@ U0 RedSeaDriveView(U8 drv_let=0)
 		Free(bitmap);
 	} catch
 		DriveUnlock(drive);
-	GetChar;
+	CharGet;
 
 	SettingsPop;
 	DCFill;
@@ -291,7 +291,7 @@ U0 FAT32DriveView(U8 drv_let=0)
 		BlkRead(drive,bitmap,drive->fat1,i);
 		i=0;
 		for (y=0;y<GR_HEIGHT-3*FONT_HEIGHT;y++) {
-			if (ScanKey)
+			if (KeyScan)
 				break;
 			for (x=0;x<GR_WIDTH-FONT_WIDTH<<1;x++) {
 				lohi=i*s;
@@ -307,7 +307,7 @@ U0 FAT32DriveView(U8 drv_let=0)
 		Free(bitmap);
 	} catch
 		DriveUnlock(drive);
-	GetChar;
+	CharGet;
 
 	SettingsPop;
 	DCFill;
@@ -379,7 +379,7 @@ public U0 DiskView(U8 drv_let=0)
 		}
 	}
 
-	GetChar(,FALSE);
+	CharGet(,FALSE);
 	SettingsPop;
 	DCFill;
 	DCDel(dc);

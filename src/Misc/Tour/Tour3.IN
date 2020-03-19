@@ -40,7 +40,7 @@ TourPut(
 
 TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort the editor.\n");
 
-InGetChar(CH_ESC,CH_SHIFT_ESC);
+InCharGet(CH_ESC,CH_SHIFT_ESC);
 
 TourPut(
 "Now, run the CastleFrankenstein.CC program.  Press $$GREEN$$<ENTER>$$FG$$.\n");
@@ -76,7 +76,7 @@ InPrint(50,"Ed(\"CastleFrankenstein.CC\");\n");
 
 TourPut("Press $$GREEN$$<F5>$$FG$$ in the editor to run the file being edited.\n");
 
-InGetKey(SC_F5);
+InKeyGet(SC_F5);
 Sleep(1000);
 CTask *task=sys_focus_task;
 
