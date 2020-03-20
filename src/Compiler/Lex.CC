@@ -438,16 +438,16 @@ I64 LexInStr(CCompCtrl *cc,U8 *buf,I64 size,Bool *done)
 
 I64 Lex(CCompCtrl *cc)
 {//Fetch next token.
-	I64 i,j,k,l,ch;
+	I64 i, j, k, l, ch;
 	CHash *tmph;
-	Bool str_done,in_str,neg_e;
-	U8 *fbuf,*buf2,*buf3,buf[STR_LEN];
-	cc->last_line_num=cc->lex_include_stack->line_num;
+	Bool str_done, in_str, neg_e;
+	U8 *fbuf, *buf2, *buf3, buf[STR_LEN];
+	cc->last_line_num = cc->lex_include_stack->line_num;
 	while (TRUE) {
 lex_cont:
 		switch [ch=LexCharGet(cc)] {
 			case 0:
-				return cc->token=TK_EOF;
+				return cc->token = TK_EOF;
 			case TK_SUPERSCRIPT:
 				ch='>';
 				goto lex_ident;
@@ -458,8 +458,8 @@ lex_cont:
 				ch='=';
 				goto lex_ident;
 			case '@':
-				if (cc->flags&CCF_KEEP_AT_SIGN) {
-					cc->token=ch;
+				if (cc->flags & CCF_KEEP_AT_SIGN) {
+					cc->token = ch;
 					goto lex_end;
 				}
 			case 'A'...'Z':
@@ -515,33 +515,36 @@ lex_ident:
 			case '0'...'9':
 				i=ch-'0';
 				ch=ToUpper(LexCharGet(cc));
-				if (ch=='X') {
-					while (TRUE) {
-						ch=ToUpper(LexCharGet(cc));
-						if (Bt(char_bmp_hex_numeric,ch)) {
-							if (ch<='9')
-								i=i<<4+ch-'0';
-							else
-								i=i<<4+ch-'A'+10;
-						} else {
-							cc->cur_i64=i;
-							cc->flags|=CCF_USE_LAST_U16;
-							cc->token=TK_I64;
-							goto lex_end;
+				if (!Bt(&cc->opts, OPTf_DECIMAL_ONLY))
+				{
+					if (ch=='X') {
+						while (TRUE) {
+							ch=ToUpper(LexCharGet(cc));
+							if (Bt(char_bmp_hex_numeric,ch)) {
+								if (ch<='9')
+									i=i<<4+ch-'0';
+								else
+									i=i<<4+ch-'A'+10;
+							} else {
+								cc->cur_i64=i;
+								cc->flags|=CCF_USE_LAST_U16;
+								cc->token=TK_I64;
+								goto lex_end;
+							}
 						}
-					}
-				} else if (ch=='B') {
-					while (TRUE) {
-						ch=LexCharGet(cc);
-						if (ch=='0')
-							i=i<<1;
-						else if (ch=='1')
-							i=i<<1+1;
-						else {
-							cc->cur_i64=i;
-							cc->flags|=CCF_USE_LAST_U16;
-							cc->token=TK_I64;
-							goto lex_end;
+					} else if (ch=='B') {
+						while (TRUE) {
+							ch=LexCharGet(cc);
+							if (ch=='0')
+								i=i<<1;
+							else if (ch=='1')
+								i=i<<1+1;
+							else {
+								cc->cur_i64=i;
+								cc->flags|=CCF_USE_LAST_U16;
+								cc->token=TK_I64;
+								goto lex_end;
+							}
 						}
 					}
 				}
