@@ -263,7 +263,7 @@ public I64 FR(U8 *text_to_replace, U8 *new_text, U8 *files_find_mask="/*",
  //FR("Gr", "Graphics", "/Zenith/Gr/*");
 	CDirEntry *files, *files_head;
 	I64 i, count = 0, fuf_flags = 0;
-	U8 *str_loc, *name_start, *tmp_name, *name_end, *new_path;
+	U8 *tmp_name, *new_path;
 	Bool all_flag = FALSE;
 
 	ScanFlags(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r+f+F");
@@ -273,15 +273,11 @@ public I64 FR(U8 *text_to_replace, U8 *new_text, U8 *files_find_mask="/*",
 
 	while (files)
 	{
-		if (name_end = str_loc = StrFind(text_to_replace, files->name, sff_flags))
+		if (StrFind(text_to_replace, files->name, sff_flags))
 		{
 			PutFileLink(files->full_name);
-			name_start = files->name;
 			' -> ';
-			name_end += StrLen(text_to_replace); //Cut out the old text
-			name_start[StrLen(name_start) - StrLen(str_loc)] = '\0'; //End the name_start right before where the old text was
-
-			tmp_name = MStrPrint("%s%s%s", name_start, new_text, name_end);
+			tmp_name = StrReplace(files->name, text_to_replace, new_text, sff_flags);
 			new_path = MStrPrint("%s/%s", DirFile(files->full_name), tmp_name);
 			PutFileLink(new_path);
 

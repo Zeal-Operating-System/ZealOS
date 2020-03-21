@@ -71,6 +71,7 @@ public extern U8 *StrFirstRemove(U8 *src,U8 *marker,U8 *dst=NULL);
 public _extern _STRICOMPARE I64 StrICompare(U8 *st1,U8 *st2);
 public _extern _STRIMATCH U8 *StrIMatch(U8 *needle,U8 *haystack_str);
 public extern U8 *StrLastOcc(U8 *src,U8 *marker);
+public extern U8 *StrReplace(U8 *str, U8 *old, U8 *new, I64 sff_flags=NONE);
 public extern U8 *StrLastRemove(U8 *src,U8 *marker,U8 *dst=NULL);
 public _extern _STRMATCH U8 *StrMatch(U8 *needle,U8 *haystack_str);
 public _extern _STRNCOMPARE I64 StrNCompare(U8 *st1,U8 *st2,I64 n);

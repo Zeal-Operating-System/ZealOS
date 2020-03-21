@@ -641,6 +641,24 @@ U8 *StrFind(U8 *needle,U8 *haystack_str,I64 flags=0)
 	return haystack_str;
 }
 
+U8 *StrReplace(U8 *str, U8 *old, U8 *new, I64 sff_flags=NONE)
+{//Replace all instances of old with new in str. New MAlloc()ed string.
+	if (!*old)
+		return new;
+
+	U8 *str_start, *str_end, *str_loc, *tmpm = NULL;
+	while (str_loc = str_end = StrFind(old, str, sff_flags))
+	{
+		str_start = str;
+		str_end += StrLen(old); //Move start marker past old str, cutting it out
+		str_start[StrLen(str_start) - StrLen(str_loc)] = '\0'; //End str_start right before where old was
+		Free(tmpm);
+		tmpm = MStrPrint("%s%s%s", str_start, new, str_end);
+		str = tmpm;
+	}
+	return str;
+}
+
 Bool WildMatch(U8 *test_str,U8 *wild_str)
 {//Wildcard match with '*' and '?'.
 	I64 ch1,ch2;

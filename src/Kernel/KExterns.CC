@@ -1,8 +1,6 @@
 /*
-If you are sure a fun won't be called
-before import is resolved, you can use
-"import".  Otherwise, use a fun pointer
-var and check it before calling.
+If you are sure a fun won't be called before import is resolved, you can use
+"import".  Otherwise, use a fun pointer var and check it before calling.
 */
 import U0 ClassRep(U8 *_d,U8 *class_name=lastclass,
 				I64 max_depth=2,Bool u8_chars=FALSE,Bool fun=FALSE,I64 offset=0);
@@ -48,6 +46,7 @@ extern Bool FAT32DirNew(CDrive *drive,U8 *cur_dir,CDirEntry *tmpde,
 extern Bool FAT32FileFind(CDrive *drive,I64 cur_dir_clus,U8 *name,
 				CDirEntry *_res,I64 fuf_flags=0);
 extern U0 FAT32Init(CDrive *drive);
+extern U0 Free(U8 *addr);
 extern Bool FBlkRead(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
 extern Bool FBlkWrite(CFile *f,U8 *buf,I64 blk=FFB_NEXT_BLK,I64 count=1);
 extern U0 FClose(CFile *f);

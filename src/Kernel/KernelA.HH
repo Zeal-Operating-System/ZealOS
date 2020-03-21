@@ -1681,6 +1681,7 @@ public class CAutoCompleteDictGlobals
 #define OPTf_NO_BUILTIN_CONST 		10	//Applied to funs, not statements
 #define OPTf_USE_IMM64				11	//Not completely implemented
 #define OPTf_DECIMAL_ONLY			12	//Only allow decimal numbers (no 0x or 0b prefixed numbers)
+#define OPTf_NO_FLOATS				13	//No floating point numbers allowed
 
 #define OPTF_ECHO 							(1<<OPTf_ECHO)
 
