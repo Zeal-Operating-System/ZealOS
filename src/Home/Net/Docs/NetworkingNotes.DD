@@ -1,0 +1,73 @@
+$BG,0$$FG,15$Zenith Networking Stack Notes$FG,0$$BG,15$
+
+Departures from Shrine:
+
+	ARP Cache is Hashtable. Keys are U32 ip addresses to "%d" string.
+
+	NetFIFO is NetQueue. If problems arise, maybe set a #define max
+	for the length of the Queue.
+
+	Not defining ntohl and friends. Using Endian functions.
+
+	Many file global vars have been condensed into global classes.
+
+	Sockets are non-standard.
+
+Stack progress: (# done, ~ WIP, . N/A)
+
+	# PCNet-II Driver
+
+	# NetQueue
+		- no NetHandler currently
+
+	# Ethernet
+		- double check.
+
+	# ARP (Address Resolution Protocol)
+		- double check.
+
+	~ Sockets
+		- Implemented a Finite State Machine
+			through Socket function calls.
+			Sockets themselves do nothing,
+			all calls simply do/don't alter
+			socket state. Protocols will
+			need to detect socket states
+			and respond appropriately.
+
+
+	# IPV4 (Internet Protocol version 4)
+		- double check, some FIXMEs.
+
+	# ICMP (Internet Control Message Protocol)
+		- ? has FIXMEs.
+
+	. TCP (Transmission Control Protocol)
+
+	. UDP (User Datagram Protocol)
+
+	. DNS (Domain Name System)
+
+	. NetHandlerTask
+		- thinking maybe for this, instead of using this whole
+		handler function pointer nonsense, it can be done
+		more seamlessly with a switch(ethertype). Shrine
+		version just looks and seems wrong. Must be better way. 
+
+		- I'm thinking this is the better way:
+			We include the NetQueue handler as late as
+			possible, allowing all of the other layers of the
+			stack to already have their handle functions
+			made so we can just do a switch (ethertype) and
+			then directly call the appropriate handler.
+
+		- As of ICMP, this seems fine to do. IPV4 Handler needed
+			to do something very similar to what NetHandler does,
+			so for simplicity IPV4Handler was moved to NetHandler
+			file, as it does a switch with protocol types that
+			are defined in files after IPV4.CC is included. This should
+			likely be the convention for Handlers that need to process
+			data from an all-knowing perspective (i.e. NetHandler file is
+			included last.)
+
+	. NetConfig

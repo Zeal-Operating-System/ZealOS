@@ -227,9 +227,11 @@ U0 WinScrollsInit(CTask *task)
 	TaskDerivedValsUpdate(task);
 }
 #define VIEWANGLES_SPACING			22
-#define VIEWANGLES_RANGE				48
+//#define VIEWANGLES_RANGE				48
+#define VIEWANGLES_RANGE				360
 #define VIEWANGLES_BORDER 			2
-#define VIEWANGLES_SNAP 				2
+//#define VIEWANGLES_SNAP 				2
+#define VIEWANGLES_SNAP 				1
 
 U0 DrawViewAnglesCtrl(CDC *dc,CCtrl *c)
 {

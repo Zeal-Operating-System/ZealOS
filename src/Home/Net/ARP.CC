@@ -56,6 +56,7 @@ I64 ARPSend(U16 operation,
 {//method currently assumes send_ and target_ip EndianU16 already...
 
 	U8* ethernet_frame;
+	CARPHeader *header;
 	I64 de_index = EthernetFrameAllocate(&ethernet_frame,
 										send_mac_address,
 										dest_mac_address,
@@ -63,7 +64,7 @@ I64 ARPSend(U16 operation,
 										sizeof(CARPHeader));
 	if (de_index < 0) return de_index;// error state
 
-	CARPHeader *header = ethernet_frame;
+	header = ethernet_frame;
 
 	header->hardware_type = EndianU16(HTYPE_ETHERNET);
 	header->protocol_type = EndianU16(ETHERTYPE_IPV4);
@@ -82,6 +83,9 @@ I64 ARPSend(U16 operation,
 	EthernetFrameFinish(de_index);
 	return 0;
 }
+
+
+
 
 CARPHash *ARPCacheFindByIP(U32 ip_address)
 {
@@ -183,9 +187,10 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 			if (header->target_protocol_addr == arp_globals.local_ipv4)
 				ARPSend(ARP_REPLY,
 						header->sender_hardware_addr,
-						EthernetGetMAC,
+						EthernetGetMAC(),
 						arp_globals.local_ipv4,
-						header->sender_hardware_addr, header->sender_protocol_addr);
+						header->sender_hardware_addr,
+						header->sender_protocol_addr);
 			break;
 		case ARP_REPLY:
 			ARPCachePut(EndianU32(header->sender_protocol_addr), header->sender_hardware_addr);

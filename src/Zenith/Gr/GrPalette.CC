@@ -160,3 +160,29 @@ public U0 PaletteSetNight(Bool persistent=TRUE)
 		fp_set_std_palette = &PaletteSetNight;
 }
 //********************************************************************************
+public CBGR24 gr_palette_tom[COLORS_NUM]= {
+	0xC9C9C9, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x75507B, 0xCE982F, 0xD3D7CF,
+	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xAD7FA8, 0xFCE94F, 0x000000
+};
+
+public U0 PaletteSetTom(Bool persistent=TRUE)
+{//Activate tom's palette.
+	GrPaletteSet(gr_palette_tom);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetTom;
+}
+//********************************************************************************
+public CBGR24 gr_palette_tom_light[COLORS_NUM]= {
+	0x000000, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x75507B, 0xCE982F, 0xD3D7CF,
+	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xAD7FA8, 0xFCF29E, 0xC9C9C9
+};
+
+public U0 PaletteSetTomLight(Bool persistent=TRUE)
+{//Activate tom's light palette.
+	GrPaletteSet(gr_palette_tom_light);
+	LFBFlush;
+	if (persistent)
+		fp_set_std_palette = &PaletteSetTomLight;
+}
+//********************************************************************************

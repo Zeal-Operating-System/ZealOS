@@ -1,3 +1,23 @@
+U0 IPV4Handler(CEthernetFrame *ethernet_frame)
+{
+	CIPV4Packet packet;
+
+	IPV4ParsePacket(&packet, ethernet_frame);
+
+	ARPCachePut(packet.source_ip_address, ethernet_frame->source_address);
+
+	switch (packet.protocol)
+	{
+		case IP_PROTOCOL_ICMP:
+			ICMPHandler(&packet);
+			break;
+		case IP_PROTOCOL_TCP:
+			break;
+		case IP_PROTOCOL_UDP:
+			break;
+	}
+
+}
 
 U0 HandleNetQueueEntry(CNetQueueEntry *entry)
 {
@@ -9,6 +29,9 @@ U0 HandleNetQueueEntry(CNetQueueEntry *entry)
 	{
 		case ETHERTYPE_ARP:
 			ARPHandler(&ethernet_frame);
+			break;
+		case ETHERTYPE_IPV4:
+			IPV4Handler(&ethernet_frame);
 			break;
 	}
 }
@@ -25,7 +48,8 @@ U0 NetHandlerTask(I64)
 		}
 		else
 		{
-			LBts(&Fs->task_flags, TASKf_SUSPENDED);
+			LBts(&Fs->task_flags, TASKf_IDLE);
+			//ZenithLog("IDLE: NetHandler\n");
 			Yield;
 		}
 			

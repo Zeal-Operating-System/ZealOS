@@ -29,7 +29,7 @@ U0 EthernetInitGlobals()
 
 
 
-//This method is retarded. It needs help.
+//todo: check length , figure out the length+4 
 U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 {
 	//Shrine has a FIXME for check length! We need to figure out what
@@ -38,15 +38,15 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 	//of the current system should be done with less extra allocation
 	//altogether, more passing.
 
-	MemCopy(frame_out->destination_address, frame, 6); // 6 ? Why 6? Need a #define...
+	MemCopy(frame_out->destination_address, frame, MAC_ADDRESS_LENGTH);
 
-	MemCopy(frame_out->source_address, frame + 6, 6); // Ridiculous, what are those
+	MemCopy(frame_out->source_address, frame + MAC_ADDRESS_LENGTH, MAC_ADDRESS_LENGTH);
 
-	frame_out->ethertype = frame[13] | (frame[12] << 8); // This would be readable with #defines
+	frame_out->ethertype = frame[ETHERNET_ETHERTYPE_OFFSET+1] | (frame[ETHERNET_ETHERTYPE_OFFSET] << 8);
 
-	frame_out->data = frame + 14; // Fuck you Shrine
+	frame_out->data = frame + ETHERNET_DATA_OFFSET;
 
-	frame_out->length = length - 14 + 4;	//... He has a comment literally just saying "??". Wow.
+	frame_out->length = length - ETHERNET_MAC_HEADER_LENGTH + 4;	//... He has a comment literally just saying "??". Wow.
 }
 
 EthernetInitGlobals;
