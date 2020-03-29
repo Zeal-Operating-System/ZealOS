@@ -697,9 +697,9 @@ U0 Varoom()
 
 			} while (!is_key_pressed);
 
-			if (is_left_pressed)	c[0].dé -= .000002;
-			if (is_right_pressed)	c[0].dé += .000002;
-			if (is_up_pressed) 		c[0].speed += .006;
+			if (is_left_pressed)	c[0].dé -= .000001;
+			if (is_right_pressed)	c[0].dé += .000001;
+			if (is_up_pressed) 		c[0].speed += .004;
 			if (is_down_pressed)
 			{
 				c[0].speed -= .01;

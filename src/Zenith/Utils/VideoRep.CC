@@ -6,15 +6,15 @@ public I64 VideoRep(Bool full=TRUE)
 	if(full)
 	{
 		"\nVBE Version %X.%X\n\n", sys_vbe_info.version.u8[1], sys_vbe_info.version.u8[0];
-		"Manufacturer      : $$BLACK$$%s$$FG$$\n", sys_vbe_info.oem;
-		"Vendor name       : $$BLACK$$%s$$FG$$\n", sys_vbe_info.vendor;
-		"Product name      : $$BLACK$$%s$$FG$$\n", sys_vbe_info.product_name;
-		"Product revision  : $$BLACK$$%s$$FG$$\n", sys_vbe_info.product_revision;
-		"Software revision : $$BLACK$$%X.%X$$FG$$\n", sys_vbe_info.software_revision.u8[1],  sys_vbe_info.software_revision.u8[0];
-		"Hardware memory   : $$BLACK$$%d MiB$$FG$$\n", sys_vbe_info.total_memory * 64 / 1024;
+		"$$PURPLE$$Manufacturer      $$FG$$: $$BLACK$$%s$$FG$$\n", sys_vbe_info.oem;
+		"$$PURPLE$$Vendor name       $$FG$$: $$BLACK$$%s$$FG$$\n", sys_vbe_info.vendor;
+		"$$PURPLE$$Product name      $$FG$$: $$BLACK$$%s$$FG$$\n", sys_vbe_info.product_name;
+		"$$PURPLE$$Product revision  $$FG$$: $$BLACK$$%s$$FG$$\n", sys_vbe_info.product_revision;
+		"$$PURPLE$$Software revision $$FG$$: $$BLACK$$%X.%X$$FG$$\n", sys_vbe_info.software_revision.u8[1],  sys_vbe_info.software_revision.u8[0];
+		"$$PURPLE$$Hardware memory   $$FG$$: $$BLACK$$%d MiB$$FG$$\n", sys_vbe_info.total_memory * 64 / 1024;
 		"\n\nAll modes shown are 32-bit color.\n\n";
 	}
-	"$$CYAN$$ # 	 W	x 	H 		Mode$$FG$$\n\n";
+	"$$CYAN$$ #    W  x   H\t\t Mode$$FG$$\n\n";
 	for (i = 0; i < VBE_MODES_NUM; i++)
 	{
 		mode = &sys_vbe_modes[i];
@@ -31,3 +31,4 @@ public I64 VideoRep(Bool full=TRUE)
 	}
 	return mode_count;
 }
+

@@ -140,8 +140,7 @@ ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.
 				src++;
 				if (*src) {
 					ptr=buf;
-					while (*src && *src!='+' && *src!='-' &&
-								*src!=CH_SPACE)
+					while (*src && *src!='+' && *src!='-' && *src!=CH_SPACE)
 						*ptr++=*src++;
 					*ptr=0;
 					i=ListMatch(buf,list);
@@ -156,8 +155,7 @@ ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.
 				src++;
 				if (*src) {
 					ptr=buf;
-					while (*src && *src!='+' && *src!='-' &&
-								*src!=CH_SPACE)
+					while (*src && *src!='+' && *src!='-' && *src!=CH_SPACE)
 						*ptr++=*src++;
 					*ptr=0;
 					i=ListMatch(buf,list);
@@ -174,14 +172,20 @@ ScanFlags(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.
 	}
 }
 
-U8 *StrPrintFlags(U8 *dst,U8 *list,I64 flags)
-{//Only 64 flags. Flags passed by value.
-	I64 i;
-	*dst=0;
-	while (flags) {
-		i=Bsf(flags);
-		Btr(&flags,i);
-		CatPrint(dst,"+%z",i,list);
+U8 *StrPrintFlags(U8 *dst, U8 *list, I64 flags, Bool print_all=FALSE, I64 print_all_length=0)
+{//Only 64 flags. Flags passed by value. print_all will print false flags using `-`.
+//Specify print_all_length (list length) if print_all is true.
+	I64 i = 0;
+	*dst = 0;
+	if (!print_all_length)
+		print_all_length =  64;
+	while (i < print_all_length)
+	{
+		if (Bt(&flags, i))
+			CatPrint(dst, "+%z", i, list);
+		else if (print_all)
+			CatPrint(dst, "-%z", i, list);
+		i++;
 	}
 	return dst;
 }

@@ -52,7 +52,7 @@ public extern CDate Str2Date(U8 *src);
 
 #help_index "Char/Flags"
 public extern U0 ScanFlags(U8 *_dst_flags,U8 *list,U8 *src);
-public extern U8 *StrPrintFlags(U8 *dst,U8 *list,I64 flags);
+public extern U8 *StrPrintFlags(U8 *dst, U8 *list, I64 flags, Bool print_all=FALSE, I64 print_all_length=0);
 
 #help_index "Char/Lists"
 public extern I64 ListMatch(U8 *needle, U8 *haystack_list,I64 flags=0);
@@ -71,7 +71,7 @@ public extern U8 *StrFirstRemove(U8 *src,U8 *marker,U8 *dst=NULL);
 public _extern _STRICOMPARE I64 StrICompare(U8 *st1,U8 *st2);
 public _extern _STRIMATCH U8 *StrIMatch(U8 *needle,U8 *haystack_str);
 public extern U8 *StrLastOcc(U8 *src,U8 *marker);
-public extern U8 *StrReplace(U8 *str, U8 *old, U8 *new, I64 sff_flags=NONE);
+public extern U8 *StrReplace(U8 *str, U8 *old, U8 *new, I64 sff_flags=NONE, Bool free_str=FALSE);
 public extern U8 *StrLastRemove(U8 *src,U8 *marker,U8 *dst=NULL);
 public _extern _STRMATCH U8 *StrMatch(U8 *needle,U8 *haystack_str);
 public _extern _STRNCOMPARE I64 StrNCompare(U8 *st1,U8 *st2,I64 n);
@@ -572,8 +572,10 @@ public _extern _MSIZE2 I64 MSize2(U8 *src); //Internal size
 
 #help_index "Memory/HeapCtrl"
 public extern U0 HeapCtrlDel(CHeapCtrl *hc);
-public extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,
-				CTask *task=NULL,CBlkPool *bp);
+public extern CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL, CTask *task=NULL,CBlkPool *bp);
+
+#help_index "Memory/Segmentation"
+public extern U8 *Seg2Linear(U32 *ptr);
 
 #help_index "Memory/Page Tables"
 public extern I64 *MemPageTable(U8 *a);

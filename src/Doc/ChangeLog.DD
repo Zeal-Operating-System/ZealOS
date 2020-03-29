@@ -1,5 +1,19 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----03/29/20 14:07:00----$IV,0$
+* Modified $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ to use kbd bitmap for instant keypress response.
+* Modified $LK,"StrPrintFlags",A="MN:StrPrintFlags"$() to print unset flags as well.
+* Modified $LK,"StrReplace",A="MN:StrReplace"$() to free given str if free_str is set.
+* Exported $LK,"Seg2Linear",A="FF:::/Kernel/KernelC.HH,Seg2Linear"$() from kernel.
+
+$IV,1$----03/27/20 13:06:00----$IV,0$
+* Modified $LK,"Ctrl Slider",A="MN:VIEWANGLES_RANGE"$ for 3D model editor to allow higher precision.
+* Added $LK,"PaletteSetTom",A="MN:PaletteSetTom"$() and $LK,"PaletteSetTomLight",A="MN:PaletteSetTomLight"$().
+
+$IV,1$----03/21/20 19:35:00----$IV,0$
+* Added $LK,"StrReplace",A="MN:StrReplace"$(), not fully tested yet.
+
 $IV,1$----03/19/20 01:51:36----$IV,0$
+* Added $LK,"OPTf_DECIMAL_ONLY",A="MN:OPTf_DECIMAL_ONLY"$ for using $LK,"Lex",A="MN:Lex"$() with other languages like JSON.
 * $LK,"R",A="MN:R"$("GetRAX", "$LK,"RAXGet",A="MN:RAXGet"$");
 * $LK,"R",A="MN:R"$("SetRAX", "$LK,"RAXSet",A="MN:RAXSet"$");
 * $LK,"R",A="MN:R"$("IC_GET_RAX", "$LK,"IC_RAX_GET",A="MN:IC_RAX_GET"$");

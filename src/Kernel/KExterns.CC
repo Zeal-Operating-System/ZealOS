@@ -75,6 +75,7 @@ extern CDrive *Letter2Drive(U8 drv_let=0,Bool except=TRUE);
 extern U8 Letter2Letter(U8 drv_let=0);
 extern U0 MPInt(U8 num,I64 cpu_num=1);
 extern U8 *MStrPrint(U8 *format,...);
+extern U8 *StrNew(U8 *buf,CTask *mem_task=NULL);
 extern U0 MouseHardSet(I64 x,I64 y,I64 z,I64 l,I64 r);
 extern U0 Message(I64 message_code,I64 arg1,I64 arg2,I64 flags=0);
 extern U0 Panic(U8 *message=NULL,I64 message_num=0,Bool panic=TRUE);
