@@ -638,6 +638,18 @@ U0 CleanUp()
 U0 Varoom()
 {
 	I64 sc;
+
+	Bool is_up_pressed;
+	Bool is_down_pressed;
+	Bool is_left_pressed;
+	Bool is_right_pressed;
+	Bool is_nl_pressed;
+	Bool is_esc_pressed;
+
+	Bool is_key_pressed;
+
+	I64 sc_nl = Char2ScanCode('\n'); // scancode for typing newline
+
 	MenuPush(
 				"File {"
 				"  Abort(,CH_SHIFT_ESC);"
@@ -664,8 +676,43 @@ U0 Varoom()
 		Init;
 		Fs->draw_it=&DrawIt;
 		Fs->animate_task=Spawn(&AnimateTask,NULL,"Animate",,Fs);
-		while (TRUE)
-			switch (KeyGet(&sc)) {
+		while (TRUE) {
+
+			do {
+			is_up_pressed = Bt(kbd.down_bitmap, SC_CURSOR_UP);
+			is_down_pressed = Bt(kbd.down_bitmap, SC_CURSOR_DOWN);
+			is_left_pressed = Bt(kbd.down_bitmap, SC_CURSOR_LEFT);
+			is_right_pressed = Bt(kbd.down_bitmap, SC_CURSOR_RIGHT);
+			is_nl_pressed = Bt(kbd.down_bitmap, sc_nl);
+			is_esc_pressed = Bt(kbd.down_bitmap, SC_ESC);
+
+			is_key_pressed = is_up_pressed || 
+								is_down_pressed ||
+								is_left_pressed ||
+								is_right_pressed ||
+								is_nl_pressed ||
+								is_esc_pressed;
+
+			Yield;
+
+			} while (!is_key_pressed);
+
+			if (is_left_pressed)	c[0].dé -= .000002;
+			if (is_right_pressed)	c[0].dé += .000002;
+			if (is_up_pressed) 		c[0].speed += .006;
+			if (is_down_pressed)
+			{
+				c[0].speed -= .01;
+				if (c[0].speed < 0) c[0].speed=0;
+			}
+			if (is_nl_pressed)
+			{
+				CleanUp;
+				Init;
+			}
+			if (is_esc_pressed) goto vr_done;
+
+/*			switch (KeyGet(&sc)) {
 				case 0:
 					switch (sc.u8[0]) {
 						case SC_CURSOR_LEFT:
@@ -691,6 +738,8 @@ U0 Varoom()
 				case CH_ESC:
 					goto vr_done;
 			}
+*/
+		}
 vr_done: //Don't goto out of try
 	} catch
 		PutExcept;
