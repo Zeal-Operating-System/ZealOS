@@ -1,4 +1,11 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/01/20 01:49:47----$IV,0$
+* Made the boats in $LK,"Talons",A="FI:::/Demo/Games/Talons.CC"$ brown instead of black.
+
+$IV,1$----04/01/20 01:42:55----$IV,0$
+* Cleaned up $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ control fix some. Bug remains: run from Menu, ESC out, ESC again; a window locks up.
+  Added set/unset task idle between Yield to lower CPU use.
+
 $IV,1$----03/29/20 14:07:00----$IV,0$
 * Modified $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ to use kbd bitmap for instant keypress response.
 * Modified $LK,"StrPrintFlags",A="MN:StrPrintFlags"$() to print unset flags as well.
