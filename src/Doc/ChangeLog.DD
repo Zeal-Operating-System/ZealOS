@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/02/20 03:27:03----$IV,0$
+* Added camera rotation via mouse in 3D $LK,"SpriteMesh",A="FF:::/Zenith/Gr/SpriteMesh.CC,SpriteMeshEd"$ editor. 360 used as magic number, trying $LK,"VIEWANGLES_RANGE",A="FF:::/Zenith/Ctrls/CtrlsA.CC,VIEWANGLES_RANGE"$ crashed it.
+
 $IV,1$----04/02/20 01:50:52----$IV,0$
 * 'Fixed' $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ window lock up on exit. Brute-forcing zero, but somewhere $LK,"mp_not_done_flags",A="FF:::/Demo/Games/Varoom.CC,mp_not_done_flags"$ isn't getting cleared when shift-esc is entered with the new key implementation.
 

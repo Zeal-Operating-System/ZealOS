@@ -975,6 +975,9 @@ $WW,0$*/
 	CD3I32 p0a,p0b;
 	CMeshEdVertex *va[3],*tmpv;
 	Bool adjusting_z=FALSE,moving,save_and_exit;
+
+	Bool adjusting_camera=FALSE;
+
 	CMeshFrame e;
 
 	if (c) {
@@ -1050,6 +1053,7 @@ $WW,0$*/
 	AutoComplete;
 	RegOneTimePopUp(ARf_MESH_ED,
 				"$$GREEN$$Right Mouse$$FG$$: Hold and move to shift cursor z\n"
+				"$$GREEN$$Shift + Right Mouse$$FG$$: Hold and move to rotate camera\n"
 				"$$GREEN$$'j'$$FG$$: Jump cursor Z to nearest vertex's Z\n"
 				"$$GREEN$$'v'$$FG$$: Place Vertex Mode\n"
 				"$$GREEN$$'m'$$FG$$: Move Vertex Mode\n"
@@ -1417,7 +1421,8 @@ me_clip_cut:
 					}
 					break;
 				case MESSAGE_MS_R_DOWN:
-					if (!adjusting_z && e.ed_mode!='M' &&
+					if (Bt(kbd.down_bitmap,SC_SHIFT)) adjusting_camera = TRUE;
+					else if (!adjusting_z && e.ed_mode!='M' &&
 								(e.chain_pred==e.vertex_head.last ||
 								e.ed_mode!='n' && e.ed_mode!='f' && e.ed_mode!='p')) {
 						if (moving) {
@@ -1436,6 +1441,7 @@ me_clip_cut:
 					}
 					break;
 				case MESSAGE_MS_R_UP:
+					adjusting_camera = FALSE;
 					if (adjusting_z) {
 						e.mouse_z=RoundI64(Sign(p0b.y-mouse.presnap.y)
 						*Sqrt(Sqr(p0b.x-mouse.presnap.x)+Sqr(p0b.y-mouse.presnap.y))
@@ -1468,6 +1474,19 @@ me_clip_cut:
 					}
 					break;
 				case MESSAGE_MS_MOVE:
+					if (adjusting_camera)
+					{
+						// In the editor, X and Y of mouse rotate around Y and X 3D axes.
+
+						s->sx += mouse.presnap.y - mouse_last.presnap.y;
+						if (s->sx < 0) s->sx = 360; // VIEWANGLES_RANGE
+						else if (s->sx > 360) s->sx = 0;
+						s->sy -= mouse.presnap.x - mouse_last.presnap.x;
+						if (s->sy < 0) s->sy = 360; // VIEWANGLES_RANGE
+						else if (s->sy > 360) s->sy = 0;
+
+						break;
+					}
 					if (adjusting_z) {
 						e.mouse_z=RoundI64(Sign(p0b.y-mouse.presnap.y)
 						*Sqrt(Sqr(p0b.x-mouse.presnap.x)+Sqr(p0b.y-mouse.presnap.y))
