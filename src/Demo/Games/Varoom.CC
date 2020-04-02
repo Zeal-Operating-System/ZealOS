@@ -736,6 +736,8 @@ vr_done: //Don't goto out of try
 	} catch
 		PutExcept;
 	SettingsPop;
+	FlushMessages; // if Varoom included in Cmd line, fixes SHIFT_ESC quitting current cmd line.
+	mp_not_done_flags = 0; // fix for CleanUp hanging on a Yield while loop ...
 	CleanUp;
 	MenuPop;
 	RegWrite("ZenithOS/Varoom","F64 best_score=%5.4f;\n",best_score);
