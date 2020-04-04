@@ -1425,9 +1425,11 @@ me_clip_cut:
 				case MESSAGE_MS_R_DOWN:
 					if (Bt(kbd.down_bitmap,SC_SHIFT)) adjusting_camera_xy = TRUE;
 					if (Bt(kbd.down_bitmap,SC_ALT)) adjusting_camera_z = TRUE;
-					else if (!adjusting_z && e.ed_mode!='M' &&
+
+					if (!adjusting_z && e.ed_mode!='M' &&
 								(e.chain_pred==e.vertex_head.last ||
-								e.ed_mode!='n' && e.ed_mode!='f' && e.ed_mode!='p')) {
+								e.ed_mode!='n' && e.ed_mode!='f' && e.ed_mode!='p') &&
+								!adjusting_camera_xy && !adjusting_camera_z) {
 						if (moving) {
 							MeshCursorW(&e,Fs,&x,&y,&z);
 							MeshP0Offset(&e,x-p0a.x,y-p0a.y,z-p0a.z);
