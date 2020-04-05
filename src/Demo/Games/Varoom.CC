@@ -685,8 +685,8 @@ U0 Varoom()
 			is_nl_pressed = Bt(kbd.down_bitmap, sc_nl);
 			is_esc_pressed = Bt(kbd.down_bitmap, SC_ESC);
 
-			if (is_left_pressed)	c[0].dé -= .000001;
-			if (is_right_pressed)	c[0].dé += .000001;
+			if (is_left_pressed)	c[0].dé -= .0000015;
+			if (is_right_pressed)	c[0].dé += .0000015;
 			if (is_up_pressed) 		c[0].speed += .004;
 			if (is_down_pressed)
 			{

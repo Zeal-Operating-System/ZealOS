@@ -1,5 +1,6 @@
 Cd(__DIR__);;
 #include "BinRep"
+#include "SysRep"
 #include "CPURep"
 #include "Diff"
 #include "Find"

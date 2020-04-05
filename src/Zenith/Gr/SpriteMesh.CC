@@ -974,10 +974,7 @@ $WW,0$*/
 	I64 i,message_code,sel_mode,arg1,arg2,make_tri_vertex_num=0,x,y,z;
 	CD3I32 p0a,p0b;
 	CMeshEdVertex *va[3],*tmpv;
-	Bool adjusting_z=FALSE,moving,save_and_exit;
-
-	Bool adjusting_camera_xy = FALSE;
-	Bool adjusting_camera_z = FALSE;
+	Bool adjusting_z=FALSE, moving, save_and_exit, adjusting_camera_xy = FALSE, adjusting_camera_z = FALSE;
 
 	CMeshFrame e;
 

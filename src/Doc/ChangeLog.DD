@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/04/20 19:15:21----$IV,0$
+* Added $LK,"SysRep",A="MN:SysRep"$(). Various $LK,"CSM*Info",A="MN:CSMBIOSBIOSInfo"$ classes added. Pass in a $LK,"SMBIOSt_*",A="MN:SMBIOSt_BIOS"$ to get info for that specific structure type. It parses SMBIOS structures located in low memory. Question-colon operator would have saved many lines of code.
+
 $IV,1$----04/02/20 03:27:03----$IV,0$
 * Added camera rotation via mouse in 3D $LK,"SpriteMesh",A="FF:::/Zenith/Gr/SpriteMesh.CC,SpriteMeshEd"$ editor. 360 used as magic number, trying $LK,"VIEWANGLES_RANGE",A="FF:::/Zenith/Ctrls/CtrlsA.CC,VIEWANGLES_RANGE"$ crashed it.
 

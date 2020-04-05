@@ -21,7 +21,7 @@ I0 Color32Demo()
 			for (j = 0; j < SQUARE_SIZE; j++)
 				DrawPixel(x + i, y + j, color);
 
-		Sleep(1);
+		Busy(1000);
 	}
 }
 

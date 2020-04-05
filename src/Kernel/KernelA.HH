@@ -2374,6 +2374,248 @@ class CUAsmGlobals
 				mem_arg_mask;
 };
 
+#help_index "Devices/SMBIOS"
+//SMBIOS parsing based on SMBIOS specification 3.3.0 (document "DSP0134")
+#define SMBIOSt_BIOS				0
+#define SMBIOSt_SYSTEM				1
+#define SMBIOSt_BASEBOARD			2
+#define SMBIOSt_ENCLOSURE			3
+#define SMBIOSt_PROCESSOR			4
+#define SMBIOSt_CACHE				7
+#define SMBIOSt_CONNECTOR			8
+#define SMBIOSt_SLOT				9
+#define SMBIOSt_OEM_STRINGS			11
+#define SMBIOSt_SYS_CONFIG_OPTIONS	12
+#define SMBIOSt_PHYMEM				16
+#define SMBIOSt_MEM_DEVICE			17
+#define SMBIOSt_MAPPED_ADDR			19
+#define SMBIOSt_BATTERY				22
+#define SMBIOSt_BOOT_INFO			32
+
+class CSMBIOSHeader
+{//Section 6.1.2 line 885
+	U8	type,	//SMBIOSt_*
+		length;
+	U16	handle;	//identifier for this structure.
+};
+class CSMBIOSEntryPoint
+{//Section 5.2.1 line 812
+	U8	anchor_str[4], // '_SM_'
+		checksum,
+		length,
+		major_version,
+		minor_version;
+	U16	max_structure_size;
+	U8	entry_point_revision,
+		formatted_area[5],
+		anchor_str2[5], // '_DMI_'
+		checksum2;
+	U16	table_length;
+	U32	table_address;
+	U16	structure_count;
+	U8	bcd_revision;
+};
+
+class CSMBIOSBIOSInfo
+{//Section 7.1 line 922
+	CSMBIOSHeader header;
+	U8	vendor,
+		version;
+	U16	start_address_segment;
+	U8	release_date,
+		rom_size;
+	U64	flags;
+	U8	extended_flags[2];
+	U8	major_release,
+		minor_release,
+		embedded_controller_firmware_major_release,
+		embedded_controller_firmware_minor_release;
+	U16	extended_rom_size;
+};
+
+class CSMBIOSSystemInfo
+{//Section 7.2 line 936
+	CSMBIOSHeader header;
+	U8	manufacturer,
+		product_name,
+		version,
+		serial_number,
+		uuid[16],
+		wakeup_type,
+		sku_number,
+		family;
+};
+
+class CSMBIOSBaseboardInfo
+{//Section 7.3 line 968
+	CSMBIOSHeader header;
+	U8	manufacturer,
+		product,
+		version,
+		serial_number,
+		asset_tag,
+		feature_flags,
+		chassis_location;
+	U16	chassis_handle;
+	U8	board_type,
+		contained_object_handles_num;
+	U16	contained_object_handles[1]; //Variable length, member above gives length
+};
+
+class CSMBIOSEnclosureInfo
+{//Section 7.4 line 984
+	CSMBIOSHeader header;
+	U8	manufacturer,
+		type,
+		version,
+		serial_number,
+		asset_tag,
+		bootup_state,
+		power_supply_state,
+		thermal_state,
+		security_status;
+	U32	oem_defined;
+	U8	height,
+		power_cord_count,
+		contained_element_count,
+		contained_element_record_length,
+		contained_elements[1]; //array length == count * record_length;
+};
+
+class CSMBIOSEnclosureContainedElement
+{//Section 7.4.4 line 999
+	U8	contained_element_type,
+		contained_element_minimum,
+		contained_element_maximum;
+};
+
+class CSMBIOSProcessorInfo
+{//Section 7.5 line 1010
+	CSMBIOSHeader header;
+	U8	name,
+		type,
+		family,
+		manufacturer;
+	U64	id;
+	U8	version,
+		voltage;
+	U16	external_clock,
+		max_speed,
+		current_speed;
+	U8	status,
+		upgrade;
+	U16	l1_cache_handle,
+		l2_cache_handle,
+		l3_cache_handle;
+	U8	serial_number,
+		asset_tag,
+		part_number,
+		core_count,
+		cores_enabled,
+		thread_count;
+	U16	characteristics;
+};
+
+class CSMBIOSCacheInfo
+{//Section 7.8 line 1168
+	CSMBIOSHeader header;
+	U8	name;
+	U16	config,
+		max_size,
+		installed_size,
+		supported_sram_type,
+		installed_sram_type;
+	U8	cache_speed,
+		error_correction_type,
+		cache_type,
+		associativity;
+};
+
+class CSMBIOSConnectorInfo
+{//Section 7.9 line 1198
+	CSMBIOSHeader header;
+	U8	internal_name,
+		internal_type,
+		external_name,
+		external_type,
+		port_type;
+};
+
+class CSMBIOSSlotInfo
+{//Section 7.10 line 1226
+	CSMBIOSHeader header;
+	U8	name,
+		type,
+		data_bus_width,
+		current_usage,
+		length;
+	U16	id;
+	U8	flags1,
+		flags2;
+	U16	segment_group_number;
+	U8	bus_number,
+		device_function_number;
+};
+
+class CSMBIOSMemArrayInfo
+{//Section 7.17 line 1519
+	CSMBIOSHeader header;
+	U8	location,
+		use,
+		memory_error_correction;
+	U32	max_capacity;
+	U16	memory_error_info_handle,
+		mem_device_count;
+	U64	extended_max_capacity;
+};
+
+class CSMBIOSMemDeviceInfo
+{//Section 7.18 line 1538
+	CSMBIOSHeader header;
+	U16	memory_array_handle,
+		memory_error_info_handle,
+		total_width,
+		data_width,
+		size;
+	U8	form_factor,
+		device_set,
+		device_locator,
+		bank_locator,
+		type;
+	U16	type_detail,
+		speed;
+	U8	manufacturer,
+		serial_number,
+		asset_tag,
+		part_number,
+		attributes;
+	U32	extended_size;
+	U16	configured_speed,
+		min_voltage,
+		max_voltage,
+		configured_voltage;
+};
+
+class CSMBIOSBatteryInfo
+{//Section 7.23 line 1723
+	CSMBIOSHeader header;
+	U8	location,
+		manufacturer,
+		manufacture_date,
+		serial_number,
+		name,
+		chemistry,
+		capacity,
+		voltage,
+		sbds_version_number,
+		max_battery_data_error,
+		sbds_serial_number,
+		sbds_manufacture_date,
+		sbds_chemistry,
+		capacity_multiplier;
+	U32	oem;
+};
+
 #help_index "Devices;PCI"
 
 //PCI Registers, used with $LK,"PCIRead",A="MN:PCIReadU16"$ functions.
