@@ -76,9 +76,6 @@ U0 RegularInstallWiz()
 	I64 ch,num_hints,res_num;
 	CTask *task;
 
-	"\nIt's normal for this to freeze for a moment or two.\n";
-	PressAKey;
-
 	task=User;
 	TaskWait(task);
 	task->border_src=BDS_CONST;
@@ -176,27 +173,36 @@ U0 DoInstructions()
 
 Bool DoInstall(Bool prompt_reboot)
 {
-	I64 res=FALSE,vm_install;
-	"\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox "
-				"or a similar virtual machine? ";
-	vm_install=YorN;
-	DocBottom;
-
-	if (vm_install) {
-		VMInstallWiz();
-		res=TRUE;
-	} else {
-		"\n\nThis wizard works if you have a partition ready.  "
-					"You can partition the drive or BootHDIns() "
-					"with more options if you do it by hand, not using this wizard.\n\n"
-					"Continue Install Wizard ";
-		if (YorN) {
-			RegularInstallWiz();
-			res=TRUE;
-		} else
-			prompt_reboot=FALSE;
+	I64 res = FALSE, vm_install = TRUE;
+	CSMBIOSSystemInfo *sys_info = SMBIOSStructGet(SMBIOSt_SYSTEM);
+	U8 *company = SMBIOSStr(sys_info, sys_info->manufacturer);
+	
+	if (StrCompare(company, "VMware, Inc.") && StrCompare(company, "innotek GmbH") && StrCompare(company, "QEMU"))
+	{
+		"\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox or a similar virtual machine? ";
+		vm_install = YorN;
 	}
-	if (prompt_reboot) {
+	DocBottom;
+	if (vm_install)
+	{
+		VMInstallWiz();
+		res = TRUE;
+	}
+	else
+	{
+		"\n\nThis wizard works if you have a partition ready. You can partition the drive or BootHDIns() "
+				"with more options if you do it by hand, not using this wizard.\n\n"
+				"Continue Install Wizard ";
+		if (YorN)
+		{
+			RegularInstallWiz();
+			res = TRUE;
+		}
+		else
+			prompt_reboot = FALSE;
+	}
+	if (prompt_reboot)
+	{
 		"Reboot Now ";
 		if (YorN)
 			Reboot;

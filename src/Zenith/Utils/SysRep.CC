@@ -145,9 +145,16 @@ U8 *SMBIOSStr(CSMBIOSHeader *header, I64 str_num, U8 *default="None")
 	return ptr;
 }
 
-CSMBIOSHeader *SMBIOSStructGet(CSMBIOSHeader *head, I64 type=0xFFFFF, I64 handle=0xFFFFF)
+CSMBIOSHeader *SMBIOSStructGet(I64 type=0xFFFFF, I64 handle=0xFFFFF, CSMBIOSHeader *head=NULL)
 {//Search for struct with type or handle. Return NULL if not found.
 	I64 i;
+	CSMBIOSEntryPoint *entry;
+	if (!head)
+	{
+		if (!SMBIOSEntryScan(&entry))
+			return NULL;
+		head = entry->table_address;
+	}
 	while (head->type != 127)
 	{
 		if (head->handle == handle)
