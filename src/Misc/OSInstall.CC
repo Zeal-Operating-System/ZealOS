@@ -42,8 +42,6 @@ U0 VMInstallWiz()
 {
 	CATARep *head=NULL,*ata_drive=NULL,*atapi_drive=NULL;
 	CTask *task;
-	"\nIt's normal for this to freeze for a moment or two.\n";
-	PressAKey;
 
 	task=User;
 	TaskWait(task);
