@@ -31,54 +31,11 @@ Releases of the "old" Zenith are currently archived on the `mega.nz` website:
 Changes include:
   - 60FPS.
   - VBE graphics with variable resolutions.
-  - Added a NONE #define for use in default function arguments.
   - 440Hz 'A' tuning changed to 432Hz.
   - HolyC -> CosmiC.
-  - System-wide renames:
-    - AOnce -> ZOnce
-    - ACAlloc -> ZCAlloc
-    - AMAlloc -> ZMAlloc
-    - AStrNew -> ZStrNew
-    - Adam -> Zenith
-    - Seth -> Daemon
-    - BEqu -> BEqual
-    - Bwd -> Backward
-    - Cfg -> Config
-    - Chg -> Change
-    - Chk -> Check
-    - Cmp -> Comp
-      - (Compiler. CCmpCtrl->CCompCtrl, etc)
-    - Cmp -> Compare
-      - (StrCmp->StrCompare, etc)
-    - Cnt -> Count
-    - Cpy -> Copy
-    - Cvt -> Convert
-    - Dbg -> Debug
-    - Dft -> Default
-    - Drv -> Drive
-    - Dsk -> Disk
-    - Evt -> Event
-    - Fmt -> Format
-    - Fwd -> Forward
-    - Glbls -> Globals
-    - Hndlr -> Handler
-    - Lst -> List
-    - Ms -> Mouse
-    - Msg -> Message
-    - Pkt -> Packet
-    - Pmt -> Prompt
-    - Prs -> Parse
-    - QSort -> QuickSort
-    - Que -> Queue
-    - Rem -> Remove
-    - Rst -> Reset
-    - Rqst -> Request
-    - Scrn -> Screen
-    - Snd -> Sound
-    - Srv -> Server
-    - Stk -> Stack
-    - Stmt -> Statement
-    - TempleOS -> ZenithOS
+  - System-wide renaming for clarity
+  - No weird shift-space mechanism
+  - Reformatted code for readability
 
 ## Screenshots
 
