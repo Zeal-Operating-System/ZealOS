@@ -106,8 +106,8 @@ public I64 Words(U8 *files_find_mask="*",U32 *char_bmp=char_bmp_alpha,
 	I64 fuf_flags=0,res=0;
 	CDoc *doc_out=DocNew;
 	CDirEntry *tmpde,*tmpde1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F+T");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F+T");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde) {
 		res+=DocWordsFile(doc_out,tmpde->full_name,char_bmp);
@@ -141,8 +141,8 @@ public I64 LongLines(U8 *files_find_mask="*",I64 cols=80,U8 *fu_flags=NULL)
 {//Report files with lines of too many cols.
 	I64 res=0,fuf_flags=0;
 	CDirEntry *tmpde,*tmpde1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F+S");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F+S");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde) {
 		if (LongLinesFile(tmpde->full_name,cols))
@@ -188,8 +188,8 @@ public U0 SU(U8 *files_find_mask,I64 suf_flags,U8 *fu_flags=NULL,
 	//See $LK,"SUF Flags",A="MN:SUF_SINGLE_SPACE"$.
 	I64 fuf_flags=0;
 	CDirEntry *tmpde,*tmpde1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F+T");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F+T");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde) {
 		SUFile(tmpde->full_name,suf_flags,indent_scale_factor);

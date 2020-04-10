@@ -13,8 +13,8 @@ public I64 GR2MV(U8 *print_format="VID%03d.MV",
 	CDC *dc,*dc_base=DCNew(GR_WIDTH,GR_HEIGHT);
 	CDate cdt;
 	Bool old_silent;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND);
 	if (progress1_max=LinkedListCount(tmpde1)) {
 		dst=base=MAlloc(MV_FILE_MAX);

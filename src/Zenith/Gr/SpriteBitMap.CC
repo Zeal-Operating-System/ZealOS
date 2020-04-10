@@ -220,7 +220,7 @@ I64 SpriteBitMapEd(CDoc *,CDocEntry *doc_e,CDC *dc,I64 *_xx1,I64 *_yy1,
 		dc->thick=1;
 		GrBorder(dc,xx1-1,yy1-1,xx2,yy2);//This is done little bit too often.
 
-		while (message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
+		while (message_code=MessageScan(&arg1,&arg2,1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|
 					1<<MESSAGE_MS_R_DOWN|1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN)) {
 			switch (message_code) {
 				case MESSAGE_KEY_DOWN:

@@ -1,4 +1,10 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/09/20 19:33:16----$IV,0$
+* Added $LK,"Chess",A="FI:::/Demo/Games/Chess.CC"$ game from Sup1 disc.
+* $LK,"R",A="MN:R"$("ScanFlags", "$LK,"FlagsScan",A="MN:FlagsScan"$");
+* $LK,"R",A="MN:R"$("StrPrintFlags", "$LK,"FlagsStrPrint",A="MN:FlagsStrPrint"$");
+* $LK,"R",A="MN:R"$("ScanMessage", "$LK,"MessageScan",A="MN:MessageScan"$");
+
 $IV,1$----04/04/20 19:15:21----$IV,0$
 * Added $LK,"SysRep",A="MN:SysRep"$(). Various $LK,"CSM*Info",A="MN:CSMBIOSBIOSInfo"$ classes added. Pass in a $LK,"SMBIOSt_*",A="MN:SMBIOSt_BIOS"$ to get info for that specific structure type. It parses SMBIOS structures located in low memory. Question-colon operator would have saved many lines of code.
 
@@ -17,7 +23,7 @@ $IV,1$----04/01/20 01:42:55----$IV,0$
 
 $IV,1$----03/29/20 14:07:00----$IV,0$
 * Modified $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ to use kbd bitmap for instant keypress response.
-* Modified $LK,"StrPrintFlags",A="MN:StrPrintFlags"$() to print unset flags as well.
+* Modified $LK,"FlagsStrPrint",A="MN:FlagsStrPrint"$() to print unset flags as well.
 * Modified $LK,"StrReplace",A="MN:StrReplace"$() to free given str if free_str is set.
 * Exported $LK,"Seg2Linear",A="FF:::/Kernel/KernelC.HH,Seg2Linear"$() from kernel.
 

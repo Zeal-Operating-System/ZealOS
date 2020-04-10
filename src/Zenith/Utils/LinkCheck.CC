@@ -50,8 +50,8 @@ public I64 LinkCheck(U8 *files_find_mask="/*",U8 *fu_flags=NULL)
 	CDirEntry *tmpde,*tmpde1;
 	U8 *st;
 	progress2_max=1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$+f+F+O");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$+f+F+O");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde && !Bt(&fuf_flags,FUf_CANCEL)) {
 

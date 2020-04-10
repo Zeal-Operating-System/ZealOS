@@ -355,7 +355,7 @@ U0 PlayShip()
 	try {
 		while (main_mode_bttn.state==MMD_PLAY) {
 			BreakConnectors;
-			switch (ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+			switch (MessageScan(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
 				case MESSAGE_KEY_DOWN:
 					switch (arg1) {
 						case '0'...'9':
@@ -454,7 +454,7 @@ U0 EditShip()
 	DocClear;
 	try {
 		while (main_mode_bttn.state==MMD_EDIT) {
-			switch (ScanMessage(&arg1,&arg2,
+			switch (MessageScan(&arg1,&arg2,
 						1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_L_UP|1<<MESSAGE_MS_R_DOWN|
 						1<<MESSAGE_MS_MOVE|1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
 				case MESSAGE_MS_L_DOWN:

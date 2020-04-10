@@ -230,9 +230,9 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					else 
 					{
 						"$$TR,\"Flags\"$$";
-						StrPrintFlags(buffer, Define("ST_SMBIOS_BIOS_FLAGS"), bios_info->flags & ~0xF, show_all_flags, 31);
-						CatPrint(buffer, StrPrintFlags(buffer2, Define("ST_SMBIOS_BIOS_FLAGSEXT1"), bios_info->extended_flags[0], show_all_flags, 8));
-						CatPrint(buffer, StrPrintFlags(buffer2, Define("ST_SMBIOS_BIOS_FLAGSEXT2"), bios_info->extended_flags[1], show_all_flags, 5));
+						FlagsStrPrint(buffer, Define("ST_SMBIOS_BIOS_FLAGS"), bios_info->flags & ~0xF, show_all_flags, 31);
+						CatPrint(buffer, FlagsStrPrint(buffer2, Define("ST_SMBIOS_BIOS_FLAGSEXT1"), bios_info->extended_flags[0], show_all_flags, 8));
+						CatPrint(buffer, FlagsStrPrint(buffer2, Define("ST_SMBIOS_BIOS_FLAGSEXT2"), bios_info->extended_flags[1], show_all_flags, 5));
 						str = SysRepFlagsMake(buffer);
 						"%s$$FG$$\n", str; 
 						Free(str);
@@ -332,11 +332,11 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					"Asset Tag\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, p_info->asset_tag);
 					"Part Number\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, p_info->part_number);
 						
-					StrPrintFlags(buffer, Define("ST_SMBIOS_PROCESSOR_FLAGS"), p_info->characteristics, show_all_flags, 9);
+					FlagsStrPrint(buffer, Define("ST_SMBIOS_PROCESSOR_FLAGS"), p_info->characteristics, show_all_flags, 9);
 					str = SysRepFlagsMake(buffer);
 					"$$TR,\"Processor Flags\"$$%s$$FG$$\n", str;
-					StrPrintFlags(buffer, Define("ST_CPUID_1_EDX_FLAGS"), regs.rdx, show_all_flags, 32);
-					CatPrint(buffer, StrPrintFlags(buffer2, Define("ST_CPUID_1_ECX_FLAGS"), regs.rcx, show_all_flags, 31));
+					FlagsStrPrint(buffer, Define("ST_CPUID_1_EDX_FLAGS"), regs.rdx, show_all_flags, 32);
+					CatPrint(buffer, FlagsStrPrint(buffer2, Define("ST_CPUID_1_ECX_FLAGS"), regs.rcx, show_all_flags, 31));
 					str = SysRepFlagsMake(buffer);
 					"$$TR,\"CPUID 0x1 Flags\"$$%s$$FG$$\n", str;
 					Free(str);
@@ -380,7 +380,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 						"%d KB$$FG$$\n", (c_info->installed_size & 0x7FFF) * 64;
 					else
 						"%d KB$$FG$$\n", c_info->installed_size & 0x7FFF;
-					StrPrintFlags(buffer, Define("ST_SMBIOS_CACHE_SRAM_TYPES"), c_info->supported_sram_type);
+					FlagsStrPrint(buffer, Define("ST_SMBIOS_CACHE_SRAM_TYPES"), c_info->supported_sram_type);
 					str = StrReplace(buffer, "+", ", ");
 					"Supported SRAM Types\t:$$BLACK$$%s$$FG$$\n", str + 2;
 					Free(str);
@@ -476,7 +476,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					"Asset Tag\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, mem_info->asset_tag);
 					"Form Factor\t\t:$$BLACK$$%Z$$FG$$\n", mem_info->form_factor, "ST_SMBIOS_MEMDEV_FORM_FACTORS";
 					"Type\t\t\t\t:$$BLACK$$%Z$$FG$$\n", mem_info->type, "ST_SMBIOS_MEMDEV_TYPES";
-					StrPrintFlags(buffer, Define("ST_SMBIOS_MEMDEV_TYPE_DETAILS"), mem_info->type_detail, show_all_flags, 16);
+					FlagsStrPrint(buffer, Define("ST_SMBIOS_MEMDEV_TYPE_DETAILS"), mem_info->type_detail, show_all_flags, 16);
 					str = SysRepFlagsMake(buffer);
 					"$$TR,\"Type Flags\"$$%s$$FG$$\n", str;
 					Free(str);
@@ -494,7 +494,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					"Serial Number\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, b_info->serial_number);
 					"Asset Tag\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, b_info->asset_tag);
 					"$$TR,\"Flags\"$$";
-					StrPrintFlags(buffer, Define("ST_SMBIOS_BASEBOARD_FLAGS"), b_info->feature_flags, show_all_flags, 5);
+					FlagsStrPrint(buffer, Define("ST_SMBIOS_BASEBOARD_FLAGS"), b_info->feature_flags, show_all_flags, 5);
 					str = SysRepFlagsMake(buffer);
 					"%s$$FG$$\n", str;
 					Free(str);
@@ -608,8 +608,8 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					"$$TR,\"Flags\"$$";
 					if (!Bt(&slot_info->flags1, 0))
 					{
-						StrPrintFlags(buffer, Define("ST_SMBIOS_SLOT_FLAGS1"), slot_info->flags1, show_all_flags, 8);
-						CatPrint(buffer, StrPrintFlags(buffer2, Define("ST_SMBIOS_SLOT_FLAGS2"), slot_info->flags2, show_all_flags, 4));
+						FlagsStrPrint(buffer, Define("ST_SMBIOS_SLOT_FLAGS1"), slot_info->flags1, show_all_flags, 8);
+						CatPrint(buffer, FlagsStrPrint(buffer2, Define("ST_SMBIOS_SLOT_FLAGS2"), slot_info->flags2, show_all_flags, 4));
 						str = SysRepFlagsMake(buffer);
 						"%s$$FG$$\n", str;
 						Free(str);

@@ -162,8 +162,8 @@ before or after "dd" are label characters.
 */
 	I64 count=0,fuf_flags=0;
 	CDirEntry *tmpde,*tmpde1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+i+f+F+T");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+i+f+F+T");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (fuf_flags&~(FUG_FILES_FIND|FUF_IGNORE|FUF_ALL|
 				FUF_WHOLE_LABELS|FUF_WHOLE_LABELS_BEFORE|FUF_WHOLE_LABELS_AFTER))
 		throw('FUF');
@@ -266,8 +266,8 @@ public I64 FR(U8 *text_to_replace, U8 *new_text, U8 *files_find_mask="/*",
 	U8 *tmp_name, *new_path;
 	Bool all_flag = FALSE;
 
-	ScanFlags(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r+f+F");
-	ScanFlags(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
+	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r+f+F");
+	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
 
 	files = files_head = FilesFind(files_find_mask, fuf_flags);
 

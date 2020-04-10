@@ -51,8 +51,8 @@ public extern U8 *StrScan(U8 *src,U8 *format,...);
 public extern CDate Str2Date(U8 *src);
 
 #help_index "Char/Flags"
-public extern U0 ScanFlags(U8 *_dst_flags,U8 *list,U8 *src);
-public extern U8 *StrPrintFlags(U8 *dst, U8 *list, I64 flags, Bool print_all=FALSE, I64 print_all_length=0);
+public extern U0 FlagsScan(U8 *_dst_flags,U8 *list,U8 *src);
+public extern U8 *FlagsStrPrint(U8 *dst, U8 *list, I64 flags, Bool print_all=FALSE, I64 print_all_length=0);
 
 #help_index "Char/Lists"
 public extern I64 ListMatch(U8 *needle, U8 *haystack_list,I64 flags=0);
@@ -586,7 +586,7 @@ public extern I64 FlushMessages(CTask *task=NULL);
 public extern I64 MessageGet(I64 *_arg1=NULL,I64 *_arg2=NULL,
 				I64 mask=~1,CTask *task=NULL);
 extern U0 InputFilterTask();
-public extern I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,
+public extern I64 MessageScan(I64 *_arg1=NULL,I64 *_arg2=NULL,
 				I64 mask=~1,CTask *task=NULL);
 
 #help_index "Misc"

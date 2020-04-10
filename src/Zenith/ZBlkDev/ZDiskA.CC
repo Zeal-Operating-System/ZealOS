@@ -193,8 +193,8 @@ I64 DelTreeFiles(CDirEntry *tmpde1)
 public I64 DelTree(U8 *files_find_mask,U8 *fu_flags=NULL)
 {//Delete directory tree.
 	I64 res=0,fuf_flags=0;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (IsDir(files_find_mask)) {
 		res=DelTreeDirs(FilesFind(files_find_mask,fuf_flags));
 		res+=Del(files_find_mask,TRUE,TRUE);
@@ -212,13 +212,13 @@ U0 TouchFile(U8 *filename,U8 *attr,CDate cdt=I64_MIN)
 	if (FileFind(filename,&de,FUF_JUST_FILES)) {
 		Free(de.full_name);
 		if (!StrCompare(attr,"+?"))
-			"%-48ts %s\n",filename,StrPrintFlags(buf,Define("ST_FILE_ATTRS"),de.attr);
+			"%-48ts %s\n",filename,FlagsStrPrint(buf,Define("ST_FILE_ATTRS"),de.attr);
 		else {
 			StrFirstRemove(cur_dir,":");
 			StrLastRemove(cur_dir,"/");
 			if (!*cur_dir)
 				StrCopy(cur_dir,"/");
-			ScanFlags(&de.attr,Define("ST_FILE_ATTRS"),attr);
+			FlagsScan(&de.attr,Define("ST_FILE_ATTRS"),attr);
 			if (cdt==I64_MIN)
 				de.datetime=Now;
 			else
@@ -241,8 +241,8 @@ Touch(filename,"",,datetime);
 */
 	I64 fuf_flags=0;
 	CDirEntry *tmpde,*tmpde1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+f+F");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde) {
 		TouchFile(tmpde->full_name,attr,cdt);

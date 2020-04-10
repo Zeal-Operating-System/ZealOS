@@ -263,7 +263,7 @@ U0 ACTask(I64)
 				ACTaskNormal(scan_code,last_scan_code,focus_task,original_focus_task);
 		}
 		Sleep(333);
-		if (ScanMessage(&ch,,1<<MESSAGE_KEY_DOWN) && (ch==CH_ESC||ch==CH_SHIFT_ESC))
+		if (MessageScan(&ch,,1<<MESSAGE_KEY_DOWN) && (ch==CH_ESC||ch==CH_SHIFT_ESC))
 			break;
 		doc=DocPut;
 		DocLock(doc);

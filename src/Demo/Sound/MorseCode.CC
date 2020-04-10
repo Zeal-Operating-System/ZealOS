@@ -102,7 +102,7 @@ I64 MorseWaitKey()
 				return '-';
 		} else {
 			if (!space_sent) {
-				while (!ScanMessage(&ch,NULL,1<<MESSAGE_KEY_DOWN)) {
+				while (!MessageScan(&ch,NULL,1<<MESSAGE_KEY_DOWN)) {
 					dt=tS-m_end;
 					if (dt>=M_SPACE_THRESHOLD) {
 						space_sent=TRUE;

@@ -865,7 +865,7 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 	if (head.next!=&head) {
 		while (TRUE) {
 			SpriteCtrlPtsDraw(dc,&head); //has Refresh
-			switch (message_code=ScanMessage(&arg1,&arg2,
+			switch (message_code=MessageScan(&arg1,&arg2,
 						1<<MESSAGE_MS_R_UP|1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_KEY_DOWN)) {
 				case MESSAGE_MS_L_DOWN:
 					switch (mode) {
@@ -907,7 +907,7 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 								SpriteCtrlPtsDraw(dc,&head);
 								dc->color=ROPF_DITHER+WHITE<<16+RED;
 								GrBorder(dc,xx,yy,xx2,yy2);
-								if (message_code=ScanMessage(&arg1,&arg2,
+								if (message_code=MessageScan(&arg1,&arg2,
 											1<<MESSAGE_MS_MOVE|1<<MESSAGE_MS_L_UP)) {
 									if (message_code==MESSAGE_MS_MOVE) {
 										xx2=arg1; yy2=arg2;
@@ -953,7 +953,7 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 							case SPED_SHIFT_RECTS:
 								do {
 									SpriteCtrlPtsDraw(dc,&head);
-									message_code=ScanMessage(&arg1,&arg2,
+									message_code=MessageScan(&arg1,&arg2,
 												1<<MESSAGE_KEY_DOWN|1<<MESSAGE_MS_L_DOWN);
 									if (message_code==MESSAGE_KEY_DOWN) goto gs_key;
 								} while (message_code!=MESSAGE_MS_L_DOWN);
@@ -966,7 +966,7 @@ Bool SpriteSelUnselShiftPts(U8 *elems,I64 x,I64 y,I64 *_cur_elem_num,I64 mode)
 						case SPED_SHIFT_RECTS:
 							do {
 								SpriteCtrlPtsDraw(dc,&head);
-								if (message_code=ScanMessage(&arg1,&arg2,
+								if (message_code=MessageScan(&arg1,&arg2,
 											1<<MESSAGE_MS_MOVE|1<<MESSAGE_MS_L_UP)) {
 									SpriteCtrlPtsMove(&head,arg1-xx,arg2-yy);
 									xx=arg1;yy=arg2;

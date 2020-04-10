@@ -38,8 +38,8 @@ public I64 LineRep(U8 *files_find_mask="/*",U8 *fu_flags=NULL)
 	I64 fuf_flags=0,res=0;
 	CDoc *doc=DocNew;
 	CDirEntry *tmpde1=NULL;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+S");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+S");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (tmpde1=FilesFind(files_find_mask,fuf_flags)) {
 		res=LineRep1(tmpde1);
 		DocPrint(doc,"%8,d $$TR+C,\"%s\"$$\n$$ID,2$$",res,files_find_mask);
@@ -85,8 +85,8 @@ public I64 SizeRep(U8 *files_find_mask="/*", U8 *fu_flags=NONE)
 	I64 fuf_flags=0,res=0;
 	CDoc *doc=DocNew;
 	CDirEntry *tmpde1=NULL;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND))
 	{
 		res = SizeRep1(tmpde1);

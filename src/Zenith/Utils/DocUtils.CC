@@ -9,7 +9,7 @@ U0 CursorRemFile(U8 *filename)
 public U0 CursorRemove(U8 *files_find_mask="*")
 {//Remove ASCII 5 cursor.
 	I64 fuf_flags=0;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+T+f+F+O");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+T+f+F+O");
 	CDirEntry *tmpde=FilesFind(files_find_mask,fuf_flags),*tmpde1=tmpde;
 	while (tmpde) {
 		CursorRemFile(tmpde->full_name);
@@ -30,8 +30,8 @@ public U0 Collapse(U8 *files_find_mask="*",
 				Bool collapse=TRUE,U8 *fu_flags=NULL)
 {//Collapse $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ trees.
 	I64 fuf_flags=0;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F+$$+O");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F+$$+O");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	CDirEntry *tmpde=FilesFind(files_find_mask,fuf_flags),*tmpde1=tmpde;
 	while (tmpde && !Bt(&fuf_flags,FUf_CANCEL)) {
 		CollapseFile(tmpde->full_name,collapse);
@@ -122,7 +122,7 @@ public I64 DocOpt(U8 *files_find_mask="*",U8 *fu_flags=NULL)
 {//Optimize $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ files, eliminating aux_str's and .Z's.
 //+R flag for aggressively risky.
 	I64 fuf_flags=0;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	return DocOptList(FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND));
 }

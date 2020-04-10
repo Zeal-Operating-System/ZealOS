@@ -33,7 +33,7 @@ U0 FPrintFDemo(U8 *output_filename=NULL)
 {
 	I64 fuf_flags=0;
 	CDoc *doc=DocNew(output_filename);
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
 	DocPrint(doc,"$$TR-C,\"\"$$\n");
 	DocPrint(doc,"$$ID,+2$$");
 	TreeSub(doc,FilesFind("/*",fuf_flags));

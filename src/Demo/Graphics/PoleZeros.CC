@@ -130,7 +130,7 @@ pz_message:
 					if (tmpc) {
 						p11=arg1;p22=arg2;
 //get to last mouse move
-						while (message_code=ScanMessage(&arg1,&arg2,
+						while (message_code=MessageScan(&arg1,&arg2,
 									1<<MESSAGE_KEY_DOWN+1<<MESSAGE_MS_L_DOWN+
 									1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_R_DOWN+
 									1<<MESSAGE_MS_R_UP+1<<MESSAGE_MS_MOVE))

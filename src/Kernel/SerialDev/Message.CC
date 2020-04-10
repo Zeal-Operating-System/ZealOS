@@ -34,7 +34,7 @@ U0 InputFilterTask()
 	RFlagsSet(old_flags);
 }
 
-I64 ScanMessage(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
+I64 MessageScan(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 {/*Check for a message of type specified by a one in the mask.
 Throw-out messages not in mask.
 If no message fit mask, return NULL immediately.
@@ -77,7 +77,7 @@ Note: This delivers messages from parent down to pop-up.
 		*_arg2=0;
 	if (task->parent_task&&task->parent_task->popup_task==task) {
 		RFlagsSet(old_flags);
-		return ScanMessage(_arg1,_arg2,mask,task->parent_task);
+		return MessageScan(_arg1,_arg2,mask,task->parent_task);
 	}
 sm_done:
 	RFlagsSet(old_flags);
@@ -87,7 +87,7 @@ sm_done:
 I64 FlushMessages(CTask *task=NULL)
 {//Throw away all messages.  Return count.
 	I64 res=0,arg1,arg2;
-	while (ScanMessage(&arg1,&arg2,~1,task))
+	while (MessageScan(&arg1,&arg2,~1,task))
 		res++;
 	return res;
 }
@@ -99,7 +99,7 @@ I64 MessageGet(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 	I64 res;
 	if (!task) task=Fs;
 	LBtr(&task->task_flags,TASKf_IDLE);
-	while (!(res=ScanMessage(_arg1,_arg2,mask,task))) {
+	while (!(res=MessageScan(_arg1,_arg2,mask,task))) {
 		LBts(&task->task_flags,TASKf_IDLE);
 		Yield;
 	}
@@ -110,9 +110,9 @@ I64 MessageGet(I64 *_arg1=NULL,I64 *_arg2=NULL,I64 mask=~1,CTask *task=NULL)
 I64 CharScan()
 {//Checks for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ and returns 0 immediately if no key.
 //Waits for $LK,"MESSAGE_KEY_UP",A="MN:MESSAGE_KEY_UP"$ of non-zero $LK,"ASCII",A="MN:CH_CTRLA"$ key and returns $LK,"ASCII",A="MN:CH_CTRLA"$ if key.
-	//$LK,"ScanMessage",A="MN:ScanMessage"$() throws away other message types.
+	//$LK,"MessageScan",A="MN:MessageScan"$() throws away other message types.
 	I64 arg1a,arg2a,arg1b,arg2b;
-	if (!ScanMessage(&arg1a,&arg2a,1<<MESSAGE_KEY_DOWN)||!arg1a)
+	if (!MessageScan(&arg1a,&arg2a,1<<MESSAGE_KEY_DOWN)||!arg1a)
 		return 0;
 	else
 		do MessageGet(&arg1b,&arg2b,1<<MESSAGE_KEY_UP);
@@ -124,9 +124,9 @@ Bool KeyScan(I64 *_ch=NULL,I64 *_scan_code=NULL,Bool echo=FALSE)
 {//Checks for $LK,"MESSAGE_KEY_DOWN",A="MN:MESSAGE_KEY_DOWN"$ and returns FALSE immediately if no key.
 //Sets $LK,"ASCII",A="MN:CH_CTRLA"$ and $LK,"scan_code",A="FI:::/Doc/CharOverview.DD"$.
 	//Removes key message and returns TRUE.
-	//$LK,"ScanMessage",A="MN:ScanMessage"$() throws away other message types.
+	//$LK,"MessageScan",A="MN:MessageScan"$() throws away other message types.
 	I64 ch=0,sc=0;
-	if (ScanMessage(&ch,&sc,1<<MESSAGE_KEY_DOWN)) {
+	if (MessageScan(&ch,&sc,1<<MESSAGE_KEY_DOWN)) {
 		if (_ch) *_ch=ch;
 		if (_scan_code) *_scan_code=sc;
 		if (echo)

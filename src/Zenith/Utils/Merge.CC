@@ -45,8 +45,8 @@ destination files.
 */
 	I64 df_flags=0,fuf_flags=0;
 	CDirEntry *tmpde1=NULL,*tmpde2=NULL;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (fuf_flags&~(FUG_FILES_FIND|FUF_DIFF))
 		throw('FUF');
 	PrintWarn("This is based strictly on file dates.\n");
@@ -65,8 +65,8 @@ public U0 NewFiles(U8 *files_find_mask="/*",CDate cdt=0,U8 *fu_flags=NULL)
 	I64 fuf_flags=0;
 	CDirEntry *tmpde,*tmpde1;
 	if (!cdt) cdt=sys_compile_time;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+F");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+F");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde) {
 		if (tmpde->datetime>cdt)

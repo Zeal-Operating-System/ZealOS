@@ -161,8 +161,8 @@ U8 *idx=NULL,CDoc *doc=NULL)
 	Bool recurse,publics,map;
 	CTask *task;
 
-	ScanFlags(&f,Define("ST_FILE_UTIL_FLAGS"),"+r");
-	ScanFlags(&f,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&f,Define("ST_FILE_UTIL_FLAGS"),"+r");
+	FlagsScan(&f,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (f&~(FUF_RECURSE|FUF_PUBLIC|FUF_MAP))
 		throw('FUF');
 	recurse=Bt(&f,FUf_RECURSE);

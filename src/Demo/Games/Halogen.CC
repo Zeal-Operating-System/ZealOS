@@ -100,7 +100,7 @@ U0 Halogen()
 	Fs->draw_it=&DrawIt;
 	try {
 		while (TRUE) {
-			switch (ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
+			switch (MessageScan(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP)) {
 				case MESSAGE_KEY_DOWN:
 					ch=arg1;sc=arg2;
 					switch (ch) {

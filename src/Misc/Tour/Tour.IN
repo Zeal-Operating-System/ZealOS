@@ -20,7 +20,7 @@ U0 TourPutTask()
 	"$$WW+H,1$$";
 	while (TRUE) {
 		Refresh;
-		if (ScanMessage(&ch,,1<<MESSAGE_KEY_DOWN) && (ch==CH_ESC||ch==CH_SHIFT_ESC)) {
+		if (MessageScan(&ch,,1<<MESSAGE_KEY_DOWN) && (ch==CH_ESC||ch==CH_SHIFT_ESC)) {
 			Kill(tour_task->parent_task,FALSE);
 			break;
 		}

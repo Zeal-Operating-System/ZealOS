@@ -99,8 +99,8 @@ public I64 Size(U8 *files_find_mask="/*",U8 *fu_flags=NULL,I64 round_to=0)
 //Does not include directory size of base directory, but does include size of sub directories.
 	I64 fuf_flags=0,res=0;
 	CDirEntry *tmpde1=NULL;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	if (tmpde1=FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND))
 	{
 		res=Size1(tmpde1,round_to);
@@ -127,8 +127,8 @@ public I64 FF(U8 *files_find_mask,U8 *fu_flags=NULL)
 {//Files find. List files matching mask.
 	I64 count=0,fuf_flags=0;
 	CDirEntry *tmpde,*tmpde1;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+f+F");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	tmpde=tmpde1=FilesFind(files_find_mask,fuf_flags);
 	while (tmpde) {
 		PutFileLink(tmpde->full_name);

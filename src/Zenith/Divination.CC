@@ -93,7 +93,7 @@ I64 DivineInit(U8 *files_find_mask="/Misc/Vocab.DD")
 	U8 *buf, *ptr, *ptr2;
 	CDirEntry *tmpde, *tmpde1;
 
-	ScanFlags(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r+f+F+T+O");
+	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r+f+F+T+O");
 	if (fuf_flags & ~FUG_FILES_FIND)
 		throw('FUF');
 

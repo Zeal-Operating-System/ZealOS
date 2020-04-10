@@ -643,10 +643,10 @@ mo_got_message:
 									if (tmpn->type!=PSMT_METER) {
 										timeout_val=counts.jiffies;
 										if (mouse.pos_text.y-Fs->win_top<18)
-											message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
+											message_code=MessageScan(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
 														1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_MS_R_UP|1<<MESSAGE_CMD);
 										else
-											message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
+											message_code=MessageScan(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|
 														1<<MESSAGE_MS_L_DOWN|1<<MESSAGE_CMD);
 										if (message_code) {
 											Sound;

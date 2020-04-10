@@ -47,8 +47,8 @@ I64 MyUtilList(CDirEntry *tmpde,I64 fuf_flags)
 I64 MyUtil(U8 *files_find_mask="*",U8 *fu_flags=NULL)
 {
 	I64 fuf_flags=0;
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$");
-	ScanFlags(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),"+r+$$");
+	FlagsScan(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 	return MyUtilList(FilesFind(files_find_mask,fuf_flags&FUG_FILES_FIND),
 				fuf_flags&~FUG_FILES_FIND);
 }

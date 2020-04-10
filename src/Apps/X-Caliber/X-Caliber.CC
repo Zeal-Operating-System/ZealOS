@@ -1394,7 +1394,7 @@ U0 XCaliber()
 		ch=0;
 		do {
 			while (!game_over && !show_level_message &&
-						(message_code=ScanMessage(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP))) {
+						(message_code=MessageScan(&arg1,&arg2,1<<MESSAGE_KEY_DOWN|1<<MESSAGE_KEY_UP))) {
 				switch (message_code) {
 					case MESSAGE_KEY_DOWN:
 						ch=arg1; sc=arg2;

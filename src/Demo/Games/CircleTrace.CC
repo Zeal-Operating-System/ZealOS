@@ -72,7 +72,7 @@ U0 CircleTrace()
 				total_error=0;
 				x1=arg1; y1=arg2;
 				do {
-					message_code=ScanMessage(&arg1,&arg2,
+					message_code=MessageScan(&arg1,&arg2,
 								1<<MESSAGE_MS_L_UP+1<<MESSAGE_MS_MOVE);
 					switch (message_code) {
 						case MESSAGE_MS_L_UP:
