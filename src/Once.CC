@@ -10,10 +10,12 @@
 U0 Tmp()
 {
 	OnceExe;
-	switch (sys_boot_src.u16[0]) {
+	switch (sys_boot_src.u16[0])
+	{
 		case BOOT_SRC_ROM:
 			"Continue booting hard drive ";
-			if (YorN) {
+			if (YorN)
+			{
 				DocBottom;
 				ExeFile("C:/Home/Once");
 			}
@@ -22,11 +24,13 @@ U0 Tmp()
 			"\nIf you answer 'No' you can play with\n"
 						"the live CD without installing.\n\n"
 						"Install onto hard drive ";
-			if (YorN) {
+			if (YorN)
+			{
 				DocBottom;
-				RunFile("::/Misc/OSInstall",,TRUE);
+				RunFile("::/Misc/OSInstall",, TRUE);
 			}
-			if (FileFind("::/Misc/Tour")) {
+			if (FileFind("::/Misc/Tour"))
+			{
 				"\nTake Tour";
 				if (YorN) {
 					DocBottom;
@@ -40,9 +44,11 @@ U0 Tmp()
 			"$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
 			TipOfDay;
 //			Type("::/Doc/Customize.DD");
-//		if (FileFind("::/Misc/Tour")) {
+//		if (FileFind("::/Misc/Tour"))
+//		{
 //				"\nTake Tour";
-//				if (YorN) {
+//				if (YorN)
+//				{
 //					DocBottom;
 //					Cd("::/Misc/Tour");
 //					InFile("Tour");

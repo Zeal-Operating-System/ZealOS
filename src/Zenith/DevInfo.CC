@@ -201,18 +201,18 @@ public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 public U0 PCIRep()
 {//Report description of PCI devices.
 	CPCIDev *tmppci;
-	"PCI Buses:%d\n",sys_pci_buses;
+	"PCI Buses:%d\n", sys_pci_buses;
 	if (!FileFind(PCI_DEV_FILE)) {
 		"You don't have the PCI device file.\n";
 		return;
 	}
 	PCILookUpDevs;
-	tmppci=dev.pci_head.next;
-	while (tmppci!=&dev.pci_head) {
+	tmppci = dev.pci_head.next;
+	while (tmppci != &dev.pci_head) {
 		"%02X:%02X:%01X %02X-%02X-%02X $$GREEN$$%s $$CYAN$$%s$$FG$$\n",
-					tmppci->bus,tmppci->dev,tmppci->fun,
-					tmppci->class_code,tmppci->sub_code,tmppci->prog_if,
-					tmppci->vendor_str,tmppci->dev_id_str;
+					tmppci->bus, tmppci->dev, tmppci->fun,
+					tmppci->class_code, tmppci->sub_code, tmppci->prog_if,
+					tmppci->vendor_str, tmppci->dev_id_str;
 		tmppci=tmppci->next;
 	}
 }
@@ -231,15 +231,15 @@ public U0 MemBIOSRep()
 				"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
 																																								text.fb_alias(U8 *) + text.buffer_size - 1;
 	"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
-	while (LBts(&sys_semas[SEMA_DEV_MEM],0))
+	while (LBts(&sys_semas[SEMA_DEV_MEM], 0))
 		Yield;
-	tmpmr=dev.mem32_head.next;
-	while (tmpmr!=&dev.mem32_head) {
+	tmpmr = dev.mem32_head.next;
+	while (tmpmr != &dev.mem32_head) {
 		"%z:%08X-%08X\n",
-					tmpmr->type,"Unused\0RAM\0Device",tmpmr->base,tmpmr->base+tmpmr->size-1;
-		tmpmr=tmpmr->next;
+					tmpmr->type, "Unused\0RAM\0Device", tmpmr->base, tmpmr->base + tmpmr->size - 1;
+		tmpmr = tmpmr->next;
 	}
-	LBtr(&sys_semas[SEMA_DEV_MEM],0);
+	LBtr(&sys_semas[SEMA_DEV_MEM], 0);
 
 	"\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n"
 				"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
@@ -283,17 +283,17 @@ public U0 MemBIOSRep()
 
 public U0 MemPageRep()
 {//Page Table Report.
-	"MAPPED\t  :%010X with ",mem_mapped_space;
-	if (Bt(&mem_page_size,30))
+	"MAPPED\t  :%010X with ", mem_mapped_space;
+	if (Bt(&mem_page_size, 30))
 		"$$RED$$1GIG$$FG$$ pages\n";
 	else
 		"$$RED$$2MEG$$FG$$ pages\n";
 	"PML2\t  :%010X 2MEG  :%08X\n",
-				*MEM_PML2(U64 *),*MEM_2MEG_NUM(U64 *);
+				*MEM_PML2(U64 *), *MEM_2MEG_NUM(U64 *);
 	"PML3\t  :%010X 1GIG  :%08X\n",
-				*MEM_PML3(U64 *),*MEM_1GIG_NUM(U64 *);
+				*MEM_PML3(U64 *), *MEM_1GIG_NUM(U64 *);
 	"PML4\t  :%010X 512GIG:%08X\n",
-				*MEM_PML4(U64 *),*MEM_512GIG_NUM(U64 *);
-	"FIXED_AREA:%010X\n",SYS_FIXED_AREA;
-	"HEAP_BASE :%010X\nHEAP_LIMIT:%010X\n",mem_heap_base,mem_heap_limit;
+				*MEM_PML4(U64 *), *MEM_512GIG_NUM(U64 *);
+	"FIXED_AREA:%010X\n", SYS_FIXED_AREA;
+	"HEAP_BASE :%010X\nHEAP_LIMIT:%010X\n", mem_heap_base, mem_heap_limit;
 }

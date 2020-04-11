@@ -1,4 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/11/20 18:10:58----$IV,0$
+* Beginning efforts to reformat files some. Currently, keeping a temp log of progress at $LK,"FilesRefactored",A="FI:C:/Home/FilesRefactored.DD"$.
 
 $IV,1$----04/11/20 01:34:08----$IV,0$
 * Net Code Asterisks moving

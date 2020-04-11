@@ -13,7 +13,7 @@ Cd(__DIR__);;
 #include "ZDebug"
 #include "Divination"
 #include "DolDoc/MakeDoc"
-LBts(&sys_run_level,RLf_DOC);
+LBts(&sys_run_level, RLf_DOC);
 #include "Ctrls/MakeCtrls"
 #include "InFile"
 #include "ZRegistry"

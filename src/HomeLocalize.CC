@@ -5,15 +5,15 @@
 KbdTypeMatic(0);
 
 //Set Time Zone
-local_time_offset=0*60*60*CDATE_FREQ; //Do daylight savings by hand
+local_time_offset = 0 * 60 * 60 * CDATE_FREQ; //Do daylight savings by hand
 
 //$AN,"",A="mouse_move_scale"$adjust these to set mouse move scale
-mouse_hard.scale.x=0.5;
-mouse_hard.scale.y=0.5;
-mouse_hard.scale.z=1.0; //wheel
+mouse_hard.scale.x = 0.5;
+mouse_hard.scale.y = 0.5;
+mouse_hard.scale.z = 1.0; //wheel
 
 //don't change these
-mouse_hard.prescale.x=mouse_hard.pos.x/mouse_hard.scale.x;
-mouse_hard.prescale.y=mouse_hard.pos.y/mouse_hard.scale.y;
-mouse_hard.prescale.z=mouse_hard.pos.z/mouse_hard.scale.z;
+mouse_hard.prescale.x = mouse_hard.pos.x / mouse_hard.scale.x;
+mouse_hard.prescale.y = mouse_hard.pos.y / mouse_hard.scale.y;
+mouse_hard.prescale.z = mouse_hard.pos.z / mouse_hard.scale.z;
 
