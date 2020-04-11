@@ -1,6 +1,6 @@
 //Make Your own Distro by #include-ing this file.
 
-#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT \n\n640\n480\n\n\n"
+#define STD_DISTRO_DVD_CONFIG 	"TB\nScale2Mem(2048,0x40000)\nT \n\n800\n600\n\n\n"
 
 U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
