@@ -408,7 +408,7 @@ U0 KbdPacketRead()
 interrupt U0 IRQKbd()
 {
 	CLD
-	OutU8(PIC1,PIC_EOI);
+	OutU8(PIC_1,PIC_EOI);
 	kbd.irqs_working=TRUE;
 	if (mouse_hard.install_in_progress) {
 		kbd.reset=TRUE;
@@ -432,7 +432,7 @@ U0 KbdInit()
 		Fs->catch_except=TRUE;
 	}
 	IntEntrySet(0x21,&IRQKbd);
-	OutU8(PIC1_DATA,InU8(PIC1_DATA)&~2);
+	OutU8(PIC_1_DATA,InU8(PIC_1_DATA)&~2);
 }
 
 U0 KbdHandler()

@@ -309,30 +309,30 @@ public class CMathODE
 
 #help_index "Processor"
 //IDT entry types
-#define IDTET_TASK							0x05
-#define IDTET_IRQ 							0x0E
-#define IDTET_TRAP							0x0F //Same as IRQ but doesnt do CLI.
+#define IDTET_TASK		0x05
+#define IDTET_IRQ 		0x0E
+#define IDTET_TRAP		0x0F //Same as IRQ but doesnt do CLI.
 
 //Interrupts
 //0x00-0x1F are reserved by Intel
-#define I_DIV_ZERO							0x00
-#define I_SINGLE_STEP 					0x01
-#define I_NMI 									0x02
-#define I_BPT 									0x03
-#define I_PAGE_FAULT						0x0E
+#define I_DIV_ZERO		0x00
+#define I_SINGLE_STEP 	0x01
+#define I_NMI 			0x02
+#define I_BPT 			0x03
+#define I_PAGE_FAULT	0x0E
 //0x20-0x2F are used for hardware
-#define I_TIMER 								0x20
+#define I_TIMER 		0x20
 //Software Interrupts
-#define I_MP_CRASH							0x30
-#define I_WAKE									0x31
-#define I_DEBUG 								0x32
+#define I_MP_CRASH		0x30
+#define I_WAKE			0x31
+#define I_DEBUG 		0x32
 //See $LK,"ST_INT_NAMES",A="MN:ST_INT_NAMES"$
 
 //You might want to start backward from
 //0xFF for your own interrupts.
-#define I_USER									0x40
+#define I_USER			0x40
 
-#define MP_PROCESSORS_NUM 			128
+#define MP_PROCESSORS_NUM 	128
 
 //Control register flag bits
 #define CR0f_PE		0 //Protection Enable (Protected mode)
@@ -614,10 +614,10 @@ class CKernel
 #define IA32_GS_BASE		0xC0000101
 
 //Programmable Interrupt Controller
-#define PIC1						0x20
-#define PIC1_DATA 			0x21
-#define PIC2						0xA0
-#define PIC2_DATA 			0xA1
+#define PIC_1						0x20
+#define PIC_1_DATA 			0x21
+#define PIC_2						0xA0
+#define PIC_2_DATA 			0xA1
 #define PIC_EOI 				0x20 //End of interrupt
 
 //Local Advanced Programmable Interrupt Controller
@@ -669,8 +669,8 @@ class CAP16BitInit
 #help_index "Time/PIT"
 #help_file "::/Doc/PIT.DD"
 //Programmable Interval Timer
-#define PIT0		0x40
-#define PIT2		0x42
+#define PIT_0		0x40
+#define PIT_2		0x42
 #define PIT_CMD 0x43
 
 #define PIT_CMDF_OPMODE_RATE_GEN				0x04

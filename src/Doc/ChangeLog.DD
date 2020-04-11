@@ -1,4 +1,10 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----04/10/20 07:44:08----$IV,0$
+* $LK,"R",A="MN:R"$("PIC1", "$LK,"PIC_1",A="MN:PIC_1"$");
+* $LK,"R",A="MN:R"$("PIC2", "$LK,"PIC_2",A="MN:PIC_2"$");
+* $LK,"R",A="MN:R"$("PIT0", "$LK,"PIT_0",A="MN:PIT_0"$");
+* $LK,"R",A="MN:R"$("PIT2", "$LK,"PIT_2",A="MN:PIT_2"$");
+
 $IV,1$----04/09/20 19:33:16----$IV,0$
 * Added $LK,"Chess",A="FI:::/Demo/Games/Chess.CC"$ game from Sup1 disc.
 * $LK,"R",A="MN:R"$("ScanFlags", "$LK,"FlagsScan",A="MN:FlagsScan"$");
@@ -142,7 +148,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Removed the unpolished HPET implementation from the kernel.
 * $LK,"Enabled the execution of SSE instructions",A="FF:::/Kernel/KStart64.CC,CR4f_OSFXSR"$. No actual SSE implementation in assembler yet, however.
 * Added definitions for the $MA-X+PU,"various flags",LM="F(\"CR0F_\", \"+lb\");F(\"CR4F_\", \"+lb\");View;"$ in the Control Registers.
-* Added definitions for the $MA-X+PU,"PIT",LM="F(\"PIT0\", \"+l-i\");F(\"PIT2\",\"+l-i\");F(\"PIT_CMD\");View;"$, and a $LK,"document",A="FI:::/Doc/PIT.DD"$ describing its usage in the OS.
+* Added definitions for the $MA-X+PU,"PIT",LM="F(\"PIT_0\", \"+l-i\");F(\"PIT_2\",\"+l-i\");F(\"PIT_CMD\");View;"$, and a $LK,"document",A="FI:::/Doc/PIT.DD"$ describing its usage in the OS.
 * Added definition for the $MA-X+PU,"PC speaker",LM="F(\"PCSPKR\");View;"$.
 * Added definitions for the $MA-X+PU,"PIC",LM="F(\"PIC\",\"-i+lb\");View;"$.
 * Added $LK,"TimeSet",A="MN:TimeSet"$() as there was no way to set the hardware clock before.

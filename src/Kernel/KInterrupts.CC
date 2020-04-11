@@ -128,22 +128,22 @@ U8 *IntEntrySet(I64 irq,U0 (*fp_new_handler)(),I64 type=IDTET_IRQ,I64 dpl=0)
 
 U0 IntsInit()
 {//Init 8259
-	OutU8(PIC1,0x11); //IW1
-	OutU8(PIC2,0x11); //IW1
-	OutU8(PIC1_DATA,0x20); //IW2
-	OutU8(PIC2_DATA,0x28); //IW2
-	OutU8(PIC1_DATA,0x04); //IW3
-	OutU8(PIC2_DATA,0x02); //IW3
-	OutU8(PIC1_DATA,0x0D); //IW4
-	OutU8(PIC2_DATA,0x09); //IW4
-	OutU8(PIC1_DATA,0xFA); //Mask all but IRQ0 (timer) and IRQ2 Cascade.
-	OutU8(PIC2_DATA,0xFF);
+	OutU8(PIC_1,0x11); //IW1
+	OutU8(PIC_2,0x11); //IW1
+	OutU8(PIC_1_DATA,0x20); //IW2
+	OutU8(PIC_2_DATA,0x28); //IW2
+	OutU8(PIC_1_DATA,0x04); //IW3
+	OutU8(PIC_2_DATA,0x02); //IW3
+	OutU8(PIC_1_DATA,0x0D); //IW4
+	OutU8(PIC_2_DATA,0x09); //IW4
+	OutU8(PIC_1_DATA,0xFA); //Mask all but IRQ0 (timer) and IRQ2 Cascade.
+	OutU8(PIC_2_DATA,0xFF);
 }
 
 interrupt U0 IntNop()
 {//Make unplanned IRQs stop by all means!
-	OutU8(PIC2,PIC_EOI);
-	OutU8(PIC1,PIC_EOI);
+	OutU8(PIC_2,PIC_EOI);
+	OutU8(PIC_1,PIC_EOI);
 	*(dev.uncached_alias + LAPIC_EOI)(U32 *) = 0;
 }
 

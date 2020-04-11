@@ -15,7 +15,7 @@ U0 IntCore0TimerHandler(CTask *)
 	LBtr(&sys_semas[SEMA_SYS_TIMER],0);
 	for (i=1;i<mp_count;i++)
 		MPInt(I_TIMER,i);
-	OutU8(PIC1,PIC_EOI); //Acknowledge PIC Interrupt
+	OutU8(PIC_1,PIC_EOI); //Acknowledge PIC Interrupt
 }
 
 I64 SysTimerRead()
@@ -27,9 +27,9 @@ I64 SysTimerRead()
 		while (LBts(&sys_semas[SEMA_SYS_TIMER],0))
 			PAUSE
 	OutU8(PIT_CMD, PIT_CMDF_CHANNEL0); //Latch Timer0
-	if ((i=InU8(PIT0) + InU8(PIT0) << 8) == SYS_TIMER0_PERIOD)
+	if ((i=InU8(PIT_0) + InU8(PIT_0) << 8) == SYS_TIMER0_PERIOD)
 	{
-		if (InU8(PIC1) & 1)
+		if (InU8(PIC_1) & 1)
 			i=-1;
 	}
 	res=counts.timer+SYS_TIMER0_PERIOD-i;
@@ -133,8 +133,8 @@ U0 Sound(I8 ona=0)
 			period=ClampI64(SYS_TIMER_FREQ/Ona2Freq(ona),1,U16_MAX);
 			//See $LK,"::/Doc/PIT.DD",A="FI:::/Doc/PIT.DD"$.
 			OutU8(PIT_CMD,PIT_CMDF_CHANNEL2 | PIT_CMDF_OPMODE_SQUARE_WAVE | PIT_CMDF_ACCESS_WORD);
-			OutU8(PIT2,period);
-			OutU8(PIT2,period.u8[1]);
+			OutU8(PIT_2,period);
+			OutU8(PIT_2,period.u8[1]);
 			OutU8(PCSPKR,3|InU8(PCSPKR)); //enable speaker
 		}
 		if (!IsDebugMode && screencast.record)

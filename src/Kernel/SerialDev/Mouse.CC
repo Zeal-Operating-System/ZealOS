@@ -90,8 +90,8 @@ U0 MouseHardPacketRead()
 interrupt U0 IRQMouseHard()
 {
 	CLD
-	OutU8(PIC2,PIC_EOI);
-	OutU8(PIC1,PIC_EOI);
+	OutU8(PIC_2,PIC_EOI);
+	OutU8(PIC_1,PIC_EOI);
 	mouse_hard.irqs_working=TRUE;
 	if (mouse_hard.install_in_progress || !mouse_hard.installed) {
 		kbd.reset=TRUE;
@@ -312,13 +312,13 @@ Bool MouseHardDriverInstall(I64 dummy=0) //can be spawned
 	no_warn dummy;
 	I64 i;
 	mouse_hard.install_in_progress=TRUE;
-	OutU8(PIC2_DATA,InU8(PIC2_DATA)|0x10);
+	OutU8(PIC_2_DATA,InU8(PIC_2_DATA)|0x10);
 	mouse_hard.installed=mouse_hard.irqs_working=FALSE;
 	IntEntrySet(0x2C,&IRQMouseHard);
 	for(i=0;i<5;i++)
 		mouse_hard.bttns[i]=0;
 	if (i=MouseHardReset)
-		OutU8(PIC2_DATA,InU8(PIC2_DATA)&~0x10);
+		OutU8(PIC_2_DATA,InU8(PIC_2_DATA)&~0x10);
 	KbdMouseReset;
 	mouse_hard.install_attempts++;
 	mouse_hard.installed=mouse_hard.event=i;
