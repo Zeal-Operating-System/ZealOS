@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+
+$IV,1$----04/11/20 01:34:08----$IV,0$
+* Net Code Asterisks moving
+
 $IV,1$----04/10/20 07:44:08----$IV,0$
 * $LK,"R",A="MN:R"$("PIC1", "$LK,"PIC_1",A="MN:PIC_1"$");
 * $LK,"R",A="MN:R"$("PIC2", "$LK,"PIC_2",A="MN:PIC_2"$");

@@ -123,14 +123,14 @@ class CSocket
 	U16 domain;
 };
 
-Bool IPV4AddressParse(U8 *string, U32* destination)
+Bool IPV4AddressParse(U8 *string, U32 *destination)
 {
 //	U8* lexable_string;
 //	lexable_string = StrReplace(string, ",", ","); // swap any commas with an unexpected value
 
 	U8 *lexable_string = StrReplace(string, ".", ","); // swap dots with commas since Lex is easier with them.
 
-	CCompCtrl* cc = CompCtrlNew(lexable_string);
+	CCompCtrl *cc = CompCtrlNew(lexable_string);
 	//Bts(&cc->opts, OPTf_DECIMAL_ONLY);
 
 	cc->opts |= 1 << OPTf_DECIMAL_ONLY;
@@ -257,7 +257,7 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 
 //	I64 i;
 
-	U8* ip_string;
+	U8 *ip_string;
 //	U8* ip_string[INET_ADDRSTRLEN];
 	CIPV4Address *ipv4_source;
 	CIPV4Address *ipv6_source;
@@ -361,7 +361,7 @@ U0 SocketAccept(CSocket *socket)
 	}
 }
 
-U0 SocketClose(CSocket* socket)
+U0 SocketClose(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -379,7 +379,7 @@ U0 SocketClose(CSocket* socket)
 	}
 }
 
-U0 SocketBind(CSocket* socket)
+U0 SocketBind(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -395,7 +395,7 @@ U0 SocketBind(CSocket* socket)
 	}
 }
 
-U0 SocketConnect(CSocket* socket)
+U0 SocketConnect(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -411,7 +411,7 @@ U0 SocketConnect(CSocket* socket)
 	}
 }
 
-U0 SocketListen(CSocket* socket)
+U0 SocketListen(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -427,7 +427,7 @@ U0 SocketListen(CSocket* socket)
 	}
 }
 
-U0 SocketReceive(CSocket* socket)
+U0 SocketReceive(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -442,7 +442,7 @@ U0 SocketReceive(CSocket* socket)
 	}
 }
 
-U0 SocketReceiveFrom(CSocket* socket)
+U0 SocketReceiveFrom(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -457,7 +457,7 @@ U0 SocketReceiveFrom(CSocket* socket)
 	}
 }
 
-U0 SocketSend(CSocket* socket)
+U0 SocketSend(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -472,7 +472,7 @@ U0 SocketSend(CSocket* socket)
 	}
 }
 
-U0 SocketSendTo(CSocket* socket)
+U0 SocketSendTo(CSocket *socket)
 {
 	switch (socket->state)
 	{

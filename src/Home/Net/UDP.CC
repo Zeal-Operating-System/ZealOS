@@ -15,7 +15,7 @@ class CUDPHeader
 
 class CUDPSocket
 {
-	CSocket* socket;
+	CSocket *socket;
 
 	I64 receive_timeout_ms;
 	I64 receive_max_timeout;
@@ -39,7 +39,7 @@ class CUDPTreeQueue
 	CUDPTreeQueue *next;
 	CUDPTreeQueue *last;
 
-	CUDPSocket* socket;
+	CUDPSocket *socket;
 };
 
 class CUDPTreeNode
@@ -49,7 +49,7 @@ class CUDPTreeNode
 	CUDPTreeNode *left;
 	CUDPTreeNode *right;
 
-	CUDPTreeQueue* queue;
+	CUDPTreeQueue *queue;
 };
 
 CUDPTreeNode *UDPTreeNodeInit()
@@ -197,7 +197,7 @@ U0 UDPTreeNodeQueueInit(CUDPTreeNode *node)
 	QueueInit(node->queue);
 }
 
-U0 UDPTreeNodeQueueAdd(CUDPSocket* socket, CUDPTreeNode *node)
+U0 UDPTreeNodeQueueAdd(CUDPSocket *socket, CUDPTreeNode *node)
 {
 	CUDPTreeQueue *new_entry;
 
@@ -216,7 +216,7 @@ U0 UDPTreeNodeQueueAdd(CUDPSocket* socket, CUDPTreeNode *node)
 }
 
 // refactored to UDPTreeNodeQueueSocketFind for Socket-call level functions9
-CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket* socket, CUDPTreeNode *node)
+CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node)
 {
 
 	CUDPTreeQueue *temp_queue;
@@ -297,7 +297,7 @@ CUDPTreeQueue *UDPTreeNodeQueueSinglePop(U32 address, CUDPTreeNode *node)
 class CUDPGlobals
 {
 
-	CUDPTreeNode* bound_socket_tree;
+	CUDPTreeNode *bound_socket_tree;
 
 } udp_globals;
 
@@ -307,7 +307,7 @@ U0 UDPGlobalsInit()
 	udp_globals.bound_socket_tree = NULL;
 }
 
-I64 UDPPacketAllocate(U8** frame_out,
+I64 UDPPacketAllocate(U8 **frame_out,
 						U32 source_ip,
 						U16 source_port,
 						U32 destination_ip,
@@ -316,7 +316,7 @@ I64 UDPPacketAllocate(U8** frame_out,
 {
 	U8 *ethernet_frame;
 	I64 de_index;
-	CUDPHeader* header;
+	CUDPHeader *header;
 
 	de_index = IPV4PacketAllocate(&ethernet_frame,
 									IP_PROTOCOL_UDP,

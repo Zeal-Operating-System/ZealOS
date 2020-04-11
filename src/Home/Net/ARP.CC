@@ -55,7 +55,7 @@ I64 ARPSend(U16 operation,
 			U32 target_ip)
 {//method currently assumes send_ and target_ip EndianU16 already...
 
-	U8* ethernet_frame;
+	U8 *ethernet_frame;
 	CARPHeader *header;
 	I64 de_index = EthernetFrameAllocate(&ethernet_frame,
 										send_mac_address,
