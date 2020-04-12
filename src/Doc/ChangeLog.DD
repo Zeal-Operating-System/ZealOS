@@ -2,6 +2,7 @@ $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
 $IV,1$----04/12/20 17:06:38----$IV,0$
 * Added $LK,"CIDTEntry",A="MN:CIDTEntry"$ and rewrote $LK,"IntEntryGet",A="MN:IntEntryGet"$() and $LK,"IntEntrySet",A="MN:IntEntrySet"$(). $LK,"dev",A="MN:CDevGlobals"$.idt is now $LK,"allocated",A="FF:::/Kernel/KInterrupts.CC,CAllocAligned"$ on an 8-byte boundary as per Intel SDM recommendation.
 * Updated $LK,"OS version",A="MN:sys_os_version"$.
+* Changed $LK,"BIN_SIGNATURE_VAL",A="MN:BIN_SIGNATURE_VAL"$ from 'TOSB' to 'ZCCB'.
 
 $IV,1$----04/11/20 18:10:58----$IV,0$
 * Beginning efforts to reformat files some. Currently, keeping a temp log of progress at $LK,"FilesRefactored",A="FI:C:/Home/FilesRefactored.DD"$.
