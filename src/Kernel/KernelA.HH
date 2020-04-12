@@ -380,22 +380,35 @@ public class CMathODE
 //Global Descriptor Table
 class CGDTEntry
 {
-	U64 	lo,hi;
+	U64 lo,hi;
 };
 
 class CGDT
 {
-	CGDTEntry null;
-	CGDTEntry boot_ds;
-	CGDTEntry boot_cs;
-	CGDTEntry cs32;
-	CGDTEntry cs64; 			//The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring-0.
-	CGDTEntry cs64_ring3; //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, in case you want to play around.
-	CGDTEntry ds;
-	CGDTEntry ds_ring3;
-	CGDTEntry tr[MP_PROCESSORS_NUM];
-	CGDTEntry tr_ring3[MP_PROCESSORS_NUM];
+	CGDTEntry null,
+			  boot_ds,
+			  boot_cs,
+			  cs32,
+			  cs64, 			//The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring-0.
+			  cs64_ring3, //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, in case you want to play around.
+			  ds,
+			  ds_ring3,
+			  tr[MP_PROCESSORS_NUM],
+			  tr_ring3[MP_PROCESSORS_NUM];
 };
+
+//Interrupt Descriptor Table
+class CIDTEntry
+{
+	U16	offset_low,
+		seg_select;
+	U8	ist,
+		type_attr;
+	U16	offset_mid;
+	U32	offset_hi,
+		zero;
+};
+#assert sizeof(CIDTEntry) == 16
 
 class CSysLimitBase
 {
@@ -421,28 +434,28 @@ class CMemE820
 
 #help_index "Compiler/Internal"
 //Loader flags
-#define LDF_NO_ABSS 						1
-#define LDF_JUST_LOAD 					2
-#define LDF_SILENT							4
+#define LDF_NO_ABSS 	1
+#define LDF_JUST_LOAD 	2
+#define LDF_SILENT		4
 
-#define BIN_SIGNATURE_VAL 			'TOSB'
+#define BIN_SIGNATURE_VAL 	'ZCCB' //Zenith CosmiC Binary
 class CBinFile
 {//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.CC,16 ALIGN"$ by compiler.
-	U16 	jmp;
-	U8		module_align_bits,
-				reserved;
-	U32 	bin_signature;
-	I64 	org,
-				patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.CC,IET_ABS_ADDR"$
-				file_size;
+	U16 jmp;
+	U8	module_align_bits,
+		reserved;
+	U32 bin_signature;
+	I64 org,
+		patch_table_offset, //$LK,"Patch Table Generation",A="FF:::/Compiler/CMain.CC,IET_ABS_ADDR"$
+		file_size;
 };
 
 class CPatchTableAbsAddr
 {
-	U8		eit_abs_addr; 	//$LK,"IET_ABS_ADDR",A="MN:IET_ABS_ADDR"$
-	U32 	abs_addres_count;
-	U8		zero;
-	U32 	abs_addres[1];
+	U8	eit_abs_addr; 	//$LK,"IET_ABS_ADDR",A="MN:IET_ABS_ADDR"$
+	U32 abs_addres_count;
+	U8	zero;
+	U32 abs_addres[1];
 };
 
 //$LK,"CAOTImportExport",A="MN:CAOTImportExport"$ Types. Used in PatchTable.
@@ -3343,7 +3356,7 @@ public class CHeapCtrl
 #help_index "Devices;Memory/Page Tables"
 public class CDevGlobals
 {
-	I64 	*idt;
+	CIDTEntry *idt;
 	U8		*mem64_ptr;
 	U8		*uncached_alias; //Alias of lowest 4Gig.
 	U8		mp_apic_ids[MP_PROCESSORS_NUM];

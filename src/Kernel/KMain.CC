@@ -155,8 +155,7 @@ U0 KMain()
 	//Before this point use $LK,"Sound",A="MN:Sound"$() and $LK,"Busy",A="MN:Busy"$()
 	//to debug.  After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
 	LBts(&sys_run_level,RLf_RAW);
-	"ZenithOS V%5.3f\t%D %T\n\n",
-				sys_os_version,sys_compile_time,sys_compile_time;
+	"ZenithOS V%0.2f\t%D %T\n\n", sys_os_version,sys_compile_time,sys_compile_time;
 
 	TimerInit;
 	if (MemBIOSTotal < ToI64 (0.95*MEM_MIN_MEG*0x100000) )

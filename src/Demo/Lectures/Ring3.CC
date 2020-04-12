@@ -29,7 +29,7 @@ U0 Ring3Demo()
 	U8 *old_vect;
 	"Progress1 Before:%X\n",progress1;
 	CLI
-	old_vect=IntEntrySet(0x0D,INT_TO_RING0,IDTET_TRAP,0);
+	old_vect=IntEntrySet(0x0D,INT_TO_RING0,IDTET_TRAP);
 
 	TSSBusy(Gs->tss->tr_ring3,OFF);
 	RAXSet(Gs->tss->tr_ring3+3);
@@ -67,7 +67,7 @@ U0 Ring3Demo()
 	RAXSet(Gs->tss->tr);
 	LTR 	AX
 
-	IntEntrySet(0x0D,old_vect,IDTET_IRQ,0);
+	IntEntrySet(0x0D,old_vect,IDTET_IRQ);
 	STI
 	"Progress1 After :%X\n",progress1;
 }
