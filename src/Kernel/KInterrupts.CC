@@ -125,16 +125,16 @@ U8 *IntEntrySet(I64 irq, U0 (*fp_new_handler)(), I64 type=IDTET_IRQ)
 	return old_handler;
 }
 
-U0 IntsInit()
+U0 IntPICInit()
 {//Init 8259
-	OutU8(PIC_1, 0x11); //IW1
-	OutU8(PIC_2, 0x11); //IW1
-	OutU8(PIC_1_DATA, 0x20); //IW2
-	OutU8(PIC_2_DATA, 0x28); //IW2
-	OutU8(PIC_1_DATA, 0x04); //IW3
-	OutU8(PIC_2_DATA, 0x02); //IW3
-	OutU8(PIC_1_DATA, 0x0D); //IW4
-	OutU8(PIC_2_DATA, 0x09); //IW4
+	OutU8(PIC_1, PIC_INIT); //IW (Initialization Word) 1
+	OutU8(PIC_2, PIC_INIT); //IW1
+	OutU8(PIC_1_DATA, 0x20); //IW2 Moving IRQ base from 0 -> 32 (beyond Intel reserved faults)
+	OutU8(PIC_2_DATA, 0x28); //IW2 Moving IRQ base from 8 -> 40
+	OutU8(PIC_1_DATA, 0x04); //IW3 Telling PIC_1 PIC_2 exists.
+	OutU8(PIC_2_DATA, 0x02); //IW3 Telling PIC_2 its cascade identity.
+	OutU8(PIC_1_DATA, 0x0D); //IW4 8086 Mode, Buffered Mode (Master PIC)
+	OutU8(PIC_2_DATA, 0x09); //IW4 8086 Mode, Buffered Mode (Slave PIC)
 	OutU8(PIC_1_DATA, 0xFA); //Mask all but IRQ0 (timer) and IRQ2 Cascade.
 	OutU8(PIC_2_DATA, 0xFF);
 }

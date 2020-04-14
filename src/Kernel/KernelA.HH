@@ -16,228 +16,240 @@ extern class CIntermediateCode;
 extern class CJobCtrl;
 extern class CTask;
 
-#define NULL	0
-#define TRUE	1
-#define FALSE 	0
-#define ON		1
-#define OFF 	0
-#define NONE	0 //for use in default arguments
-#define I8_MIN	(-0x80)
-#define I8_MAX	0x7F
-#define U8_MIN	0
-#define U8_MAX	0xFF
-#define I16_MIN	(-0x8000)
-#define I16_MAX	0x7FFF
-#define U16_MIN	0
-#define U16_MAX	0xFFFF
-#define I32_MIN	(-0x80000000)
-#define I32_MAX	0x7FFFFFFF
-#define U32_MIN	0
-#define U32_MAX	0xFFFFFFFF
-#define I64_MIN	(-0x8000000000000000)
-#define I64_MAX	0x7FFFFFFFFFFFFFFF
-#define U64_MIN 0
-#define U64_MAX	0xFFFFFFFFFFFFFFFF
+#define NULL		0
+#define TRUE		1
+#define FALSE 		0
+#define ON			1
+#define OFF 		0
+#define NONE		0 //for use in default arguments
+#define I8_MIN		(-0x80)
+#define I8_MAX		0x7F
+#define U8_MIN		0
+#define U8_MAX		0xFF
+#define I16_MIN		(-0x8000)
+#define I16_MAX		0x7FFF
+#define U16_MIN		0
+#define U16_MAX		0xFFFF
+#define I32_MIN		(-0x80000000)
+#define I32_MAX		0x7FFFFFFF
+#define U32_MIN		0
+#define U32_MAX		0xFFFFFFFF
+#define I64_MIN		(-0x8000000000000000)
+#define I64_MAX		0x7FFFFFFFFFFFFFFF
+#define U64_MIN		0
+#define U64_MAX		0xFFFFFFFFFFFFFFFF
 #define INVALID_PTR	I64_MAX
-#define STR_LEN 144
+#define STR_LEN 	144
 
 //(Int to F64 conversion is signed)
 //Turn off 80-bit float constants with $LK,"OPTf_NO_BUILTIN_CONST",A="MN:OPTf_NO_BUILTIN_CONST"$.
 #define U64_F64_MAX (0x43F0000000000000(F64))
-#define F64_MAX (0x7FEFFFFFFFFFFFFF(F64))
-#define F64_MIN (0xFFEFFFFFFFFFFFFF(F64))
-#define inf 	(0x7FF0000000000000(F64))
-#define ì 		(0x7FF0000000000000(F64))
-#define pi		(0x400921FB54442D18(F64))
-#define ã 		(0x400921FB54442D18(F64))
-#define exp_1 	(0x4005BF0A8B145769(F64)) //The number "e"
-#define log2_10 (0x400A934F0979A371(F64))
-#define log2_e	(0x3FF71547652B82FE(F64))
-#define log10_2 (0x3FD34413509F79FF(F64))
-#define loge_2	(0x3FE62E42FEFA39EF(F64))
-#define sqrt2 	(0x3FF6A09E667F3BCD(F64))
-#define eps 	(0x3CB0000000000000(F64))
+#define F64_MAX 	(0x7FEFFFFFFFFFFFFF(F64))
+#define F64_MIN 	(0xFFEFFFFFFFFFFFFF(F64))
+#define inf 		(0x7FF0000000000000(F64))
+#define ì 			(0x7FF0000000000000(F64))
+#define pi			(0x400921FB54442D18(F64))
+#define ã 			(0x400921FB54442D18(F64))
+#define exp_1 		(0x4005BF0A8B145769(F64)) //The number "e"
+#define log2_10 	(0x400A934F0979A371(F64))
+#define log2_e		(0x3FF71547652B82FE(F64))
+#define log10_2 	(0x3FD34413509F79FF(F64))
+#define loge_2		(0x3FE62E42FEFA39EF(F64))
+#define sqrt2 		(0x3FF6A09E667F3BCD(F64))
+#define eps 		(0x3CB0000000000000(F64))
 
 #help_index "Data Types/Simple"
-/*CosmiC union structure is treated as a
-whole if no member is specified,
-similar to bit fields.
+//CosmiC union structure is treated as a whole if no member is specified, similar to bit fields.
+//See $LK,"::/Demo/SubIntAccess.CC"$.
 
-See $LK,"::/Demo/SubIntAccess.CC"$.
-*/
 U16i union U16
 {
-	I8i 	i8[2];
-	U8i 	u8[2];
+	I8i	i8[2];
+	U8i	u8[2];
 };
 
 I16i union I16
 {
-	I8i 	i8[2];
-	U8i 	u8[2];
+	I8i	i8[2];
+	U8i	u8[2];
 };
 
 U32i union U32
 {
-	I8i 	i8[4];
-	U8i 	u8[4];
-	I16 	i16[2];
-	U16 	u16[2];
+	I8i	i8[4];
+	U8i	u8[4];
+	I16	i16[2];
+	U16	u16[2];
 };
 
 I32i union I32
 {
-	I8i 	i8[4];
-	U8i 	u8[4];
-	I16 	i16[2];
-	U16 	u16[2];
+	I8i	i8[4];
+	U8i	u8[4];
+	I16	i16[2];
+	U16	u16[2];
 };
 
 U64i union U64
 {
-	I8i 	i8[8];
-	U8i 	u8[8];
-	I16 	i16[4];
-	U16 	u16[4];
-	I32 	i32[2];
-	U32 	u32[2];
+	I8i	i8[8];
+	U8i	u8[8];
+	I16	i16[4];
+	U16	u16[4];
+	I32	i32[2];
+	U32	u32[2];
 };
 
 I64i union I64
 {
-	I8i 	i8[8];
-	U8i 	u8[8];
-	I16 	i16[4];
-	U16 	u16[4];
-	I32 	i32[2];
-	U32 	u32[2];
+	I8i	i8[8];
+	U8i	u8[8];
+	I16	i16[4];
+	U16	u16[4];
+	I32	i32[2];
+	U32	u32[2];
 };
 
 #help_index "Math/Complex;Data Types/Complex"
 public class Complex
 {
-	F64 	x,y;
+	F64 x, y;
 };
 
 #help_index "Data Types/Circular Queue"
 public class CQueue
 {
-	CQueue				*next,*last;
+	CQueue	*next, *last;
 };
 
 #help_index "Graphics/Data Types/D3I32;Math/Data Types/D3I32;Data Types/D3I32"
 public class CD3I32 //Three dimensional I32 pt
 {
-	I32 	x,y,z;
+	I32	x, y, z;
 };
 public class CQueueD3I32 //Queue of three dimensional I32 pts
 {
-	CQueueD3I32 	*next,*last;
-	CD3I32				p;
+	CQueueD3I32 *next, *last;
+	CD3I32		p;
 };
 #help_index "Math/Data Types;Data Types"
 public class CD2I32 //Two dimensional I32 pt
 {
-	I32 	x,y;
+	I32 x, y;
 };
 public class CD2I64 //Two dimensional I64 pt
 {
-	I64 	x,y;
+	I64 x, y;
 };
 public class CD3I64 //Three dimensional I64 pt
 {
-	I64 	x,y,z;
+	I64	x, y, z;
 };
 public class CD2 //Two dimensional F64 pt
 {
-	F64 	x,y;
+	F64	x, y;
 };
 
 #help_index "Math/CD3;Data Types/CD3"
 public class CD3 //Three dimensional F64 pt
 {
-	F64 	x,y,z;
+	F64 x, y, z;
 };
 
 #help_index "Data Types/Queue Vector"
-#define QUE_VECT_U8_COUNT 							512
+#define QUE_VECT_U8_COUNT	512
 public class CQueueVectU8
 {
-	CQueueVectU8	*next,*last;
-	I64 	total_count,node_count,min_idx;
-	U8		body[QUE_VECT_U8_COUNT];
+	CQueueVectU8	*next,
+					*last;
+	I64 			 total_count,
+					 node_count,
+					 min_idx;
+	U8				 body[QUE_VECT_U8_COUNT];
 };
 
 #help_index "Data Types/Fifo"
 public class CFifoU8
 {
-	U8		*buf;
-	I64 	mask,in_ptr,out_ptr;
+	U8	*buf;
+	I64  mask,
+		 in_ptr,
+		 out_ptr;
 };
 public class CFifoI64
 {
-	I64 	*buf;
-	I64 	mask,in_ptr,out_ptr;
+	I64 *buf,
+		 mask,
+		 in_ptr,
+		 out_ptr;
 };
 #help_index "Date/CMOS"
-#define CMOS_SEL				0x70 //select which reg to access using this port
-#define CMOS_DATA 			0x71 //read from or write to reg using this port
+#define CMOS_SEL	0x70 //select which reg to access using this port
+#define CMOS_DATA 	0x71 //read from or write to reg using this port
 
 //CMOS registers
-#define CMOSR_SEC 							0x0
-#define CMOSR_MIN 							0x2
-#define CMOSR_HOUR							0x4
-#define CMOSR_DAY_OF_WEEK 			0x6
-#define CMOSR_DAY_OF_MONTH			0x7
-#define CMOSR_MONTH 						0x8
-#define CMOSR_YEAR							0x9
-#define CMOSR_STATUS_A					0xA
-#define CMOSR_STATUS_B					0xB
+#define CMOSR_SEC 			0x0
+#define CMOSR_MIN 			0x2
+#define CMOSR_HOUR			0x4
+#define CMOSR_DAY_OF_WEEK 	0x6
+#define CMOSR_DAY_OF_MONTH	0x7
+#define CMOSR_MONTH 		0x8
+#define CMOSR_YEAR			0x9
+#define CMOSR_STATUS_A		0xA
+#define CMOSR_STATUS_B		0xB
 
 //CMOS status flags
 #define CMOSF_BINARY		(1 << 2)
-#define CMOSF_UPDATING	(1 << 7)
+#define CMOSF_UPDATING		(1 << 7)
 
 #help_index "Date/CDate"
-#define CDATE_YEAR_DAYS 				365.24225
-#define CDATE_YEAR_DAYS_INT 		36524225
+#define CDATE_YEAR_DAYS 		365.24225
+#define CDATE_YEAR_DAYS_INT 	36524225
 #define CDATE_BASE_DAY_OF_WEEK	0
 public I64 class CDate
 {
-	U32 	time;
-	I32 	date;
+	U32	time;
+	I32	date;
 };
 
 #help_index "Date;Date/CDate"
 public class CDateStruct
 {
-	U8		sec10000,sec100,sec,min,hour,
-				day_of_week,day_of_mon,mon;
-	I32 	year;
+	U8	sec10000,
+		sec100,
+		sec,
+		min,
+		hour,
+		day_of_week,
+		day_of_mon,
+		mon;
+	I32 year;
 };
 
 #help_index "Math/ODE"
 public class COrder2D3
 {
-	F64 	x,y,z,
-				DxDt,DyDt,DzDt;
+	F64	x, y, z,
+		DxDt, DyDt, DzDt;
 };
 
 #define MSF_INACTIVE						1
 #define MSF_FIXED 							2
 public class CMass
 {
-	CMass *next,*last;
-	COrder2D3 *state, //Point to entries in $LK,"CMathODE",A="MN:CMathODE"$.state[]
+	CMass		*next,*last;
+	COrder2D3	*state, 	//Point to entries in $LK,"CMathODE",A="MN:CMathODE"$.state[]
 				*DstateDt;	//Point to entries in $LK,"CMathODE",A="MN:CMathODE"$.DstateDt[]
 
-	U0		start;
-	U32 	flags,num;
-	F64 	mass,drag_profile_factor;
-	U0		saved_state;
-	F64 	x,y,z,
-				DxDt,DyDt,DzDt;
-	U0		end;
+	U0			 start;
+	U32 		 flags,
+				 num;
+	F64 		 mass,
+				 drag_profile_factor;
+	U0			 saved_state;
+	F64 		 x,y,z,
+				 DxDt,DyDt,DzDt;
+	U0			 end;
 };
 
 #define SSF_INACTIVE						1
@@ -484,57 +496,47 @@ class CPatchTableAbsAddr
 #define IET_ZEROED_DATA_HEAP		24 //Not really used
 #define IET_MAIN								25
 
-
 #help_index "Graphics/VBE"
+
 #define BLACK32 0x000000
 #define WHITE32 0xFFFFFF
-
 #define VBE_MODES_NUM 	32
+
 class CVBEInfo
 {
-	U8		signature[4];
-
-	U16 	version;
-
-	U32 	oem,
-				capabilities,
-				video_modes;
-
-	U16 	total_memory,
-				software_revision;
-
-	U32 	vendor,
-				product_name,
-				product_revision;
-
-	U8		reserved[222],
-				oem_data[256];
+	U8	signature[4];
+	U16 version;
+	U32 oem,
+		capabilities,
+		video_modes;
+	U16 total_memory,
+		software_revision;
+	U32 vendor,
+		product_name,
+		product_revision;
+	U8	reserved[222],
+		oem_data[256];
 };
-#assert sizeof(CVBEInfo)==512
+#assert sizeof(CVBEInfo) == 512
 
 class CVBEMode
 {
-	U16 	attributes,
-				pad[7],
-				pitch,
-				width,
-				height;
-
-	U8		pad[3],
-				bpp,
-				pad,
-				memory_model,
-				pad[12];
-
-	U32 	framebuffer;
-
-	U16 	pad[9];
-
-	U32 	max_pixel_clock;
-
-	U8		reserved[190];
+	U16 attributes,
+		pad[7],
+		pitch,
+		width,
+		height;
+	U8	pad[3],
+		bpp,
+		pad,
+		memory_model,
+		pad[12];
+	U32	framebuffer;
+	U16	pad[9];
+	U32 max_pixel_clock;
+	U8	reserved[190];
 };
-#assert sizeof(CVBEMode)==256
+#assert sizeof(CVBEMode) == 256
 
 class CVBEModeShort
 {
@@ -572,106 +574,107 @@ class CKernel
 };
 
 //Run-Levels
-#define RLf_16BIT 							0
-#define RLf_VESA												1
-#define RLf_32BIT 							2
-#define RLf_PATCHED 						3
-#define RLf_16MEG_SYS_CODE_BP 	4
-#define RLf_64BIT 							5
-#define RLf_16MEG_ZENITH_HEAP_CTRL 6
-#define RLf_FULL_HEAPS					7
-#define RLf_RAW 								8
-#define RLf_INTERRUPTS					9
-#define RLf_BLKDEV							10
-#define RLf_MP									11
-#define RLf_COMPILER						12
-#define RLf_DOC 								13
-#define RLf_WINMGR							14
-#define RLf_REGISTRY						15
-#define RLf_HOME								16
-#define RLf_AUTOCOMPLETE				17
+#define RLf_16BIT 					0
+#define RLf_VESA					1
+#define RLf_32BIT 					2
+#define RLf_PATCHED 				3
+#define RLf_16MEG_SYS_CODE_BP 		4
+#define RLf_64BIT 					5
+#define RLf_16MEG_ZENITH_HEAP_CTRL	6
+#define RLf_FULL_HEAPS				7
+#define RLf_RAW 					8
+#define RLf_INTERRUPTS				9
+#define RLf_BLKDEV					10
+#define RLf_MP						11
+#define RLf_COMPILER				12
+#define RLf_DOC 					13
+#define RLf_WINMGR					14
+#define RLf_REGISTRY				15
+#define RLf_HOME					16
+#define RLf_AUTOCOMPLETE			17
 #define RLf_ZENITH_SERVER 			18
-#define RLf_ONCE_ZENITH 				19
-#define RLf_ONCE_USER 					20
+#define RLf_ONCE_ZENITH 			19
+#define RLf_ONCE_USER 				20
 
-#define RLF_16BIT 							(1<<RLf_16BIT)
-#define RLF_VESA												(1<<RLf_VESA)
-#define RLF_32BIT 							(1<<RLf_32BIT)
-#define RLF_PATCHED 						(1<<RLf_PATCHED)
-#define RLF_16MEG_SYS_CODE_BP 	(1<<RLf_16MEG_SYS_CODE_BP)
-#define RLF_64BIT 							(1<<RLf_64BIT)
-#define RLF_16MEG_ZENITH_HEAP_CTRL (1<<RLf_16MEG_ZENITH_HEAP_CTRL)
-#define RLF_FULL_HEAPS					(1<<RLf_FULL_HEAPS)
-#define RLF_RAW 								(1<<RLf_RAW)
-#define RLF_INTERRUPTS					(1<<RLf_INTERRUPTS)
-#define RLF_BLKDEV							(1<<RLf_BLKDEV)
-#define RLF_MP									(1<<RLf_MP)
-#define RLF_COMPILER						(1<<RLf_COMPILER)
-#define RLF_DOC 								(1<<RLf_DOC)
-#define RLF_WINMGR							(1<<RLf_WINMGR)
-#define RLF_REGISTRY						(1<<RLf_REGISTRY)
-#define RLF_HOME								(1<<RLf_HOME)
-#define RLF_AUTOCOMPLETE				(1<<RLf_AUTOCOMPLETE)
+#define RLF_16BIT 					(1<<RLf_16BIT)
+#define RLF_VESA					(1<<RLf_VESA)
+#define RLF_32BIT 					(1<<RLf_32BIT)
+#define RLF_PATCHED 				(1<<RLf_PATCHED)
+#define RLF_16MEG_SYS_CODE_BP 		(1<<RLf_16MEG_SYS_CODE_BP)
+#define RLF_64BIT 					(1<<RLf_64BIT)
+#define RLF_16MEG_ZENITH_HEAP_CTRL	(1<<RLf_16MEG_ZENITH_HEAP_CTRL)
+#define RLF_FULL_HEAPS				(1<<RLf_FULL_HEAPS)
+#define RLF_RAW 					(1<<RLf_RAW)
+#define RLF_INTERRUPTS				(1<<RLf_INTERRUPTS)
+#define RLF_BLKDEV					(1<<RLf_BLKDEV)
+#define RLF_MP						(1<<RLf_MP)
+#define RLF_COMPILER				(1<<RLf_COMPILER)
+#define RLF_DOC 					(1<<RLf_DOC)
+#define RLF_WINMGR					(1<<RLf_WINMGR)
+#define RLF_REGISTRY				(1<<RLf_REGISTRY)
+#define RLF_HOME					(1<<RLf_HOME)
+#define RLF_AUTOCOMPLETE			(1<<RLf_AUTOCOMPLETE)
 #define RLF_ZENITH_SERVER 			(1<<RLf_ZENITH_SERVER)
-#define RLF_ONCE_ZENITH 				(1<<RLf_ONCE_ZENITH)
-#define RLF_ONCE_USER 					(1<<RLf_ONCE_USER)
+#define RLF_ONCE_ZENITH 			(1<<RLf_ONCE_ZENITH)
+#define RLF_ONCE_USER 				(1<<RLf_ONCE_USER)
 
 #help_index "Processor"
 
 //Model specific regs.
-#define IA32F_SCE 			0x001
-#define IA32F_LME 			0x100
+#define IA32F_SCE 		0x001
+#define IA32F_LME 		0x100
 #define IA32_LAPIC_BASE 0x01B
-#define IA32_EFER 			0xC0000080
-#define IA32_FS_BASE		0xC0000100
-#define IA32_GS_BASE		0xC0000101
+#define IA32_EFER 		0xC0000080
+#define IA32_FS_BASE	0xC0000100
+#define IA32_GS_BASE	0xC0000101
 
 //Programmable Interrupt Controller
-#define PIC_1						0x20
-#define PIC_1_DATA 			0x21
-#define PIC_2						0xA0
-#define PIC_2_DATA 			0xA1
-#define PIC_EOI 				0x20 //End of interrupt
+#define PIC_1		0x20
+#define PIC_1_DATA 	0x21
+#define PIC_2		0xA0
+#define PIC_2_DATA 	0xA1
+#define PIC_INIT	0x11
+#define PIC_EOI 	0x20 //End of interrupt
 
 //Local Advanced Programmable Interrupt Controller
-#define LAPIC_BASE							0xFEE00000
-#define LAPIC_APIC_ID 					(LAPIC_BASE+0x020)
+#define LAPIC_BASE					0xFEE00000
+#define LAPIC_APIC_ID 				(LAPIC_BASE+0x020)
 #define LAPIC_APIC_VERSION			(LAPIC_BASE+0x030)
 #define LAPIC_TASK_PRIORITY 		(LAPIC_BASE+0x080)
-#define LAPIC_ARIBITRATION_PRIORITY (LAPIC_BASE+0x090)
-#define LAPIC_PROCESSOR_PRIORITY (LAPIC_BASE+0x0A0)
-#define LAPIC_EOI 							(LAPIC_BASE+0x0B0)
-#define LAPIC_LOG_DST 					(LAPIC_BASE+0x0D0)
-#define LAPIC_DFR 							(LAPIC_BASE+0x0E0)
-#define LAPIC_LDR 							(LAPIC_BASE+0x0D0)
+#define LAPIC_ARBITRATION_PRIORITY	(LAPIC_BASE+0x090)
+#define LAPIC_PROCESSOR_PRIORITY 	(LAPIC_BASE+0x0A0)
+#define LAPIC_EOI 					(LAPIC_BASE+0x0B0)
+#define LAPIC_LOG_DST 				(LAPIC_BASE+0x0D0)
+#define LAPIC_DFR 					(LAPIC_BASE+0x0E0)
+#define LAPIC_LDR 					(LAPIC_BASE+0x0D0)
 
 #define LAPICF_APIC_ENABLED 		0x100
-#define LAPIC_SVR 							(LAPIC_BASE+0x0F0)
+#define LAPIC_SVR 					(LAPIC_BASE+0x0F0)
 
-#define LAPIC_ISR 							(LAPIC_BASE+0x100)
-#define LAPIC_TMR 							(LAPIC_BASE+0x180)
-#define LAPIC_IRR 							(LAPIC_BASE+0x200)
-#define LAPIC_ICR_LOW 					(LAPIC_BASE+0x300)
-#define LAPIC_ICR_HIGH					(LAPIC_BASE+0x310)
+#define LAPIC_ISR 					(LAPIC_BASE+0x100)
+#define LAPIC_TMR 					(LAPIC_BASE+0x180)
+#define LAPIC_IRR 					(LAPIC_BASE+0x200)
+#define LAPIC_ICR_LOW 				(LAPIC_BASE+0x300)
+#define LAPIC_ICR_HIGH				(LAPIC_BASE+0x310)
 
-#define LAPIC_LVT_TIMER 				(LAPIC_BASE+0x320)
+#define LAPIC_LVT_TIMER 			(LAPIC_BASE+0x320)
 #define LAPIC_LVT_THERMAL 			(LAPIC_BASE+0x330)
-#define LAPIC_LVT_PERF					(LAPIC_BASE+0x340)
-#define LAPIC_LVT_LINT0 				(LAPIC_BASE+0x350)
-#define LAPIC_LVT_LINT1 				(LAPIC_BASE+0x360)
-#define LAPIC_LVT_ERR 					(LAPIC_BASE+0x370)
+#define LAPIC_LVT_PERF				(LAPIC_BASE+0x340)
+#define LAPIC_LVT_LINT0 			(LAPIC_BASE+0x350)
+#define LAPIC_LVT_LINT1 			(LAPIC_BASE+0x360)
+#define LAPIC_LVT_ERR 				(LAPIC_BASE+0x370)
 
-#define MPN_VECT								0x97
-#define MP_VECT_ADDR						(MPN_VECT*0x1000)
+#define MPN_VECT					0x97
+#define MP_VECT_ADDR				(MPN_VECT*0x1000)
 
 //I/O APIC Memory mapped window
-#define IOAPIC_REG							0xFEC00000 //U8
-#define IOAPIC_DATA 						0xFEC00010 //U32
+#define IOAPIC_REG	0xFEC00000 //U8
+#define IOAPIC_DATA 0xFEC00010 //U32
 //I/O APIC Regs
-#define IOAPICID								0x00
-#define IOAPICVER 							0x01
-#define IOAPICARB 							0x02
-#define IOREDTAB								0x10
+#define IOAPICID	0x00
+#define IOAPICVER 	0x01
+#define IOAPICARB 	0x02
+#define IOREDTAB	0x10
 
 class CAP16BitInit
 {//AP Multicore
@@ -684,13 +687,13 @@ class CAP16BitInit
 //Programmable Interval Timer
 #define PIT_0		0x40
 #define PIT_2		0x42
-#define PIT_CMD 0x43
+#define PIT_CMD 	0x43
 
-#define PIT_CMDF_OPMODE_RATE_GEN				0x04
-#define PIT_CMDF_OPMODE_SQUARE_WAVE 		0x06
-#define PIT_CMDF_ACCESS_WORD						0x30
-#define PIT_CMDF_CHANNEL0 							0x00
-#define PIT_CMDF_CHANNEL2 							0x80
+#define PIT_CMDF_OPMODE_RATE_GEN	0x04
+#define PIT_CMDF_OPMODE_SQUARE_WAVE 0x06
+#define PIT_CMDF_ACCESS_WORD		0x30
+#define PIT_CMDF_CHANNEL0 			0x00
+#define PIT_CMDF_CHANNEL2 			0x80
 
 public class CCountsGlobals
 {
@@ -702,10 +705,10 @@ public class CCountsGlobals
 	Bool	time_stamp_calibrated;
 };
 
-#define JIFFY_FREQ							1000 // Hz
-#define CDATE_FREQ							49710 // Hz
-#define SYS_TIMER_FREQ					(18333*65536/1000) //Hz
-#define SYS_TIMER0_PERIOD 			(65536*182/10/JIFFY_FREQ)
+#define JIFFY_FREQ			1000  // Hz
+#define CDATE_FREQ			49710 // Hz
+#define SYS_TIMER_FREQ		(18333*65536/1000) //Hz
+#define SYS_TIMER0_PERIOD	(65536*182/10/JIFFY_FREQ)
 
 #help_index "Call"
 //Function Stack Frame
@@ -2721,15 +2724,15 @@ public class CATARep
 
 #define AHCI_CAPSEXTf_BOH	0
 
-#define AHCI_BOHCf_BOS	0
-#define AHCI_BOHCf_OOS	1
-#define AHCI_BOHCf_BB	4
+#define AHCI_BOHCf_BOS		0
+#define AHCI_BOHCf_OOS		1
+#define AHCI_BOHCf_BB		4
 
-#define AHCI_CHDESCf_W	6
-#define AHCI_CHDESCf_W	(1 << 6)
+#define AHCI_CHDESCf_W		6
+#define AHCI_CHDESCf_W		(1 << 6)
 
-#define AHCI_CFDESCf_C	7
-#define AHCI_CFDESCf_C	(1 << 7)
+#define AHCI_CFDESCf_C		7
+#define AHCI_CFDESCf_C		(1 << 7)
 
 #define AHCI_PxCMDf_ST		0
 #define AHCI_PxCMDf_SUD		1
@@ -3446,21 +3449,16 @@ public I64 class CBGR48
 public class CKbdStateGlobals
 {
 	I64 	scan_code,			//See $LK,"scan codes",A="FI:::/Doc/CharOverview.DD"$
-				last_down_scan_code,
-				count,					//Count of keys pressed since boot.
-				timestamp,			//Output: TSCGet when event.
-				new_key_timestamp; //Output: TSCGet when new key event.
-	CFifoU8 *fifo,*fifo2; //Private
+			last_down_scan_code,
+			count,				//Count of keys pressed since boot.
+			timestamp,			//Output: TSCGet when event.
+			new_key_timestamp;	//Output: TSCGet when new key event.
+	CFifoU8 *fifo,*fifo2;		//Private
 	CFifoI64 *scan_code_fifo;
-
-	//BitTest, $LK,"Bt",A="MN:Bt"$(), with a merged scan code.
-	//(Left and right shift merged, for example.)
-	U32 	down_bitmap[8],
-//BitTest, $LK,"Bt",A="MN:Bt"$(), with an unmerged scan code.
-				down_bitmap2[8];
-
-	Bool	reset,					//Private: Reset KbdMouse
-				irqs_working; 	//Private
+	U32 	down_bitmap[8],		//BitTest, $LK,"Bt",A="MN:Bt"$(), with a merged scan code. (Left and right shift merged, for example.)
+			down_bitmap2[8];	//BitTest, $LK,"Bt",A="MN:Bt"$(), with an unmerged scan code.
+	Bool	reset,				//Private: Reset KbdMouse
+			irqs_working; 		//Private
 };
 
 #help_index "Mouse"

@@ -161,7 +161,7 @@ U0 KMain()
 	if (MemBIOSTotal < ToI64 (0.95*MEM_MIN_MEG*0x100000) )
 		RawPrint(4000,"!!! Requires $TX,"256Meg",D="DD_MEM_MIN_MEG"$ of RAM Memory !!!");
 
-	IntsInit;
+	IntPICInit;
 	"Enable IRQs\n";
 	RFlagsSet(RFLAGG_NORMAL);
 	Busy(2000);
