@@ -2750,13 +2750,110 @@ public class CATARep
 #define AHCI_PxCMDF_CR		(1 << 15)
 #define AHCI_PxCMDF_ATAPI	(1 << 24)
 
-#define AHCI_PxIEf_DP	5
-#define AHCI_PxIEf_TFE	30
+#define AHCI_PxIEf_DP		5
+#define AHCI_PxIEf_TFE		30
 
-#define AHCI_PxIEF_DP	(1 << 5)
-#define AHCI_PxIEF_TFE	(1 << 30)
+#define AHCI_PxIEF_DP		(1 << 5)
+#define AHCI_PxIEF_TFE		(1 << 30)
 
-#define AHCI_PxSCTLf_DET_INIT
+#define AHCI_PxSCTLf_DET_INIT		1
+#define AHCI_PxSCTLF_DET_INIT		(1 << 0)
+
+#define AHCI_PxSSTSF_DET_PRESENT	3
+
+class CAHCIPort
+{
+	U32	cmd_list_base_addr,
+		cmd_list_base_addr_upper,
+		fis_base_addr,
+		fis_base_addr_upper,
+		interrupt_status,
+		interrupt_enable,
+		cmd,
+		reserved,
+		task_file_data,
+		signature,
+		sata_status,
+		sata_ctrl,
+		sata_error,
+		sata_active,
+		cmd_issue,
+		sata_notif,
+		fis_switch_ctrl,
+		device_sleep;
+	U8	reserved[40],
+		vendor[16];
+};
+
+class CAHCIHba
+{
+	U32			caps,
+				ghc,
+				interrupt_status,
+				ports_implemented,
+				version,
+				ccc_ctrl,
+				ccc_location,
+				em_location,
+				em_ctrl,
+				caps_ext,
+				bohc;
+	U8			reserved[116],
+				vendor[96];
+	CAHCIPort	ports[32];
+};
+
+#define FIS_TYPE_H2D	0x27
+
+class CFisH2D
+{//Host to Device
+	U8	type,
+		desc, //We are concerned with bit #7. 1=command, 0=control
+		cmd,
+		feature_low,
+		lba0,
+		lba1,
+		lba2,
+		device,
+		lba3,
+		lba4,
+		lba5,
+		feature_high;
+	U16	count;
+	U8	icc,
+		ctrl;
+	U32	reserved;
+};
+
+class CPrdtEntry
+{
+	U32	data_base_addr,
+		data_base_addr_upper,
+		reserved,
+		data_byte_count;
+};
+
+class CHBACmdHeader
+{
+	U16	desc,
+		prdt_len;
+	U32	prdt_byte_count,
+		cmd_table_base_addr,
+		cmd_table_base_addr_upper,
+		reserved[4];
+};
+
+class CHBACmdTable
+{
+	U8			cmd_fis[64],
+				acmd[16],
+				reserved[48];
+	CPrdtEntry	prdt[8];
+};
+
+#define ATA_IDENT_SERIAL_NUM		10
+#define ATA_IDENT_MODEL_NUM			27
+#define ATA_IDENT_LBA48_CAPACITY	100
 
 //See $LK,"::/Doc/Credits.DD"$.
 #define ATA_NOP 				0x00
