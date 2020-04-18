@@ -1,3 +1,4 @@
+<a href="https://discord.gg/S6GZfRb"><img alt="Discord" src="https://img.shields.io/discord/661062825027829770?style=flat-square"></a>
 # ZenithOS
 
 The Zenith Operating System is a modernized, professional fork of the 64-bit Temple Operating System.
