@@ -1,5 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
-$IV,1$----04/21/20 16:13:01----$IV,0$
+$IV,1$----04/21/20 18:54:47----$IV,0$
+* Altered $LK+PU,"Tom Palettes",A="FF:::/Zenith/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.$IV,1$
+
+----04/21/20 16:13:01----$IV,0$
 * Added start-up intro $LK+PU,"Splash",A="FI:::/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/Once.CC,PopUpRunFile"$, when booting from disk install.
 $IV,1$
 ----04/13/20 13:48:15----$IV,0$
