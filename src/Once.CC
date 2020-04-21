@@ -43,6 +43,7 @@ U0 Tmp()
 		case BOOT_SRC_HARDDRIVE:
 			"$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
 			TipOfDay;
+			PopUpRunFile("::/ZSplash.CC");
 //			Type("::/Doc/Customize.DD");
 //		if (FileFind("::/Misc/Tour"))
 //		{
