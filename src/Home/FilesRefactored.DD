@@ -1,19 +1,22 @@
 $FG,7$Files reformatted starting from ::/ 'root' directory.$FG,0$
-StartOS.CC
-Once.CC
-HomeWrappers.CC
-HomeSys.CC
-HomeLocalize.CC
 HomeKeyPlugins.CC
+HomeLocalize.CC
+HomeSys.CC
+HomeWrappers.CC
+Once.CC
+StartOS.CC
+
 
 /Zenith/
 	DevInfo.CC
 	InFile.CC
 	MakeZenith.CC
+	Menu.CC
 	TaskSettings.CC
 	Training.CC
 	WallPaper.CC
 	Win.CC
+	WinMgr.CC
 
 
 $FG,7$-Tom$FG,0$
