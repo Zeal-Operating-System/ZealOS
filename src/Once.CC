@@ -21,6 +21,7 @@ U0 Tmp()
 			}
 			break;
 		case BOOT_SRC_DVD:
+			PopUpRunFile("::/ZSplash.CC");
 			"\nIf you answer 'No' you can play with\n"
 						"the live CD without installing.\n\n"
 						"Install onto hard drive ";
@@ -39,11 +40,11 @@ U0 Tmp()
 				}
 			}
 			break;
-		case BOOT_SRC_RAM:
 		case BOOT_SRC_HARDDRIVE:
+			PopUpRunFile("::/ZSplash.CC");
+		case BOOT_SRC_RAM:
 			"$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
 			TipOfDay;
-			PopUpRunFile("::/ZSplash.CC");
 //			Type("::/Doc/Customize.DD");
 //		if (FileFind("::/Misc/Tour"))
 //		{

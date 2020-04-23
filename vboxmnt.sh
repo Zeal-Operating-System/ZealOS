@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo modprobe nbd
-sudo qemu-nbd -c dev/nbd0 ~/VirtualBox\ VMs/ZenithOS/ZenithOS.qcow
+sudo qemu-nbd -c dev/nbd0 ~/VirtualBox\ VMs/ZenithOS/ZenithOS.vmdk
 sudo mount /dev/nbd0p1 /mnt
 
 rm -rf src/*
