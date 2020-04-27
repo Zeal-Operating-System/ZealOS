@@ -1,5 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
-$IV,1$----04/22/20 03:09:47----$IV,0$
+$IV,1$----04/27/20 15:34:42----$IV,0$
+* Changed $LK+PU,"GrBitMap",A="FI:::/Zenith/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.$IV,1$
+
+----04/22/20 03:09:47----$IV,0$
 * More files reformatted. $LK+PU,"Menu",A="FI:::/Zenith/Menu.CC"$, $LK+PU,"Window Manager",A="FI:::/Zenith/WinMgr.CC"$.$IV,1$
 
 ----04/21/20 18:54:47----$IV,0$

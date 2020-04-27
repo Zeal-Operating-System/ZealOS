@@ -7,6 +7,7 @@ public Bool GrPlot0(CDC *dc=gr.dc,I64 x,I64 y)
 	I32 *db;
 	I64 d,dist;
 	CColorROPU32 c,color=dc->color,bkcolor=dc->bkcolor;
+	Bool was_timer_rand = Bts(&Fs->task_flags, TASKf_NONTIMER_RAND);
 
 	if (dc->flags & DCF_LOCATE_NEAREST) {
 		dist=DistSqrI64(x,y,dc->cur_x,dc->cur_y);
@@ -35,6 +36,7 @@ public Bool GrPlot0(CDC *dc=gr.dc,I64 x,I64 y)
 				color.c1.rop=color.c0.rop;
 				color.c0=color.c1;
 			}
+			BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
 		} else {
 			if ((x^y)&1) {
 				color.c1.rop=color.c0.rop;
@@ -1015,7 +1017,7 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
 	U8 reg *dst;
 	U16 reg *win_z_buf_ptr;
 	CColorROPU32 color,c,dither_colors;
-	Bool dither,probability_dither;
+	Bool dither,probability_dither, was_timer_rand = Bts(&Fs->task_flags, TASKf_NONTIMER_RAND);
 	CTask *win_task;
 
 	if (dc->flags & DCF_SCREEN_BITMAP) {
@@ -1184,6 +1186,8 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
 								}
 								res=(h2-h1)*(w2-w1);
 							}
+							BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 							break;
 						case ROPB_XOR:
 							if (win_z_buf_ptr) {
@@ -1239,9 +1243,13 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
 								}
 								res=(h2-h1)*(w2-w1);
 							}
+							BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 							break;
 					}
 				} else {
+					BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 					if (((x+w1-original_leading_pixels)^(y+h1))&1)
 						SwapU16(&color.c0,&color.c1);
 					switch [color.c0.rop] {
@@ -1351,6 +1359,8 @@ public I64 GrRect(CDC *dc=gr.dc,I64 x,I64 y,I64 w,I64 h)
 					}
 				}
 			} else {
+				BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 				color_mask=gr.to_8_colors[color.c0.color];
 				switch [color.c0.rop] {
 					case ROPB_EQU:
@@ -1520,11 +1530,13 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
 //Returns count of pixs changed
 	I64 res=0,d,x=*x1,x2,x3,y3,dist;
 	Bool plot,dither,probability_dither,
-				not_color=ToBool(dc->flags&DCF_FILL_NOT_COLOR);
+				not_color=ToBool(dc->flags&DCF_FILL_NOT_COLOR),
+				was_timer_rand = Bts(&Fs->task_flags, TASKf_NONTIMER_RAND);
 	U8 *dst,*dst2;
 	CColorROPU32 c,c2,color=dc->color,bkcolor=dc->bkcolor;
 	I32 *db2;
 	CTask *win_task;
+
 
 	if (dc->flags & DCF_SCREEN_BITMAP) {
 		win_task=dc->win_task;
@@ -1710,8 +1722,12 @@ I64 GrRayLen(CDC *dc,I64 *x1,I64 y,I64 z=0,I32 *db=NULL)
 		} else
 			break;
 	}
+	BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 	return res;
 gr_done:
+	BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 	return 0;
 }
 
@@ -1723,8 +1739,9 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
 	U8 *dst;
 	CColorROPU32 c,c2,color=dc->color,bkcolor=dc->bkcolor,dither_colors;
 	I32 *db;
-	Bool plot=TRUE,char_clear,dither,probability_dither;
+	Bool plot=TRUE,char_clear,dither,probability_dither, was_timer_rand = Bts(&Fs->task_flags, TASKf_NONTIMER_RAND);
 	CTask *win_task;
+
 
 	if (!dc->depth_buf) {
 		if (x2<x1) SwapI64(&x1,&x2);
@@ -1881,6 +1898,8 @@ public I64 GrHLine(CDC *dc=gr.dc,I64 x1,I64 x2,I64 y,I64 z1=0,I64 z2=0)
 		}
 	}
 gr_done:
+	BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 	return res;
 }
 
@@ -1892,8 +1911,9 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
 	U8 *dst;
 	CColorROPU32 c,c2,color=dc->color,bkcolor=dc->bkcolor,dither_colors;
 	I32 *db;
-	Bool plot=TRUE,char_clear,dither,probability_dither;
+	Bool plot=TRUE,char_clear,dither,probability_dither, was_timer_rand = Bts(&Fs->task_flags, TASKf_NONTIMER_RAND);
 	CTask *win_task;
+
 
 	if (!dc->depth_buf) {
 		if (y2<y1) SwapI64(&y1,&y2);
@@ -2050,5 +2070,7 @@ public I64 GrVLine(CDC *dc=gr.dc,I64 x,I64 y1,I64 y2,I64 z1=0,I64 z2=0)
 		}
 	}
 gr_done:
+	BEqual(&Fs->task_flags, TASKf_NONTIMER_RAND, was_timer_rand);
+
 	return res;
 }
