@@ -222,9 +222,9 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					"Image Size\t\t:$$BLACK$$%d bytes$$FG$$\n", (0x10000 - bios_info->start_address_segment) * 16;
 					"ROM Size\t\t\t:$$BLACK$$";
 					if (bios_info->rom_size == 0xFF)
-						"%d %zB$$FG$$\n", bios_info->extended_rom_size & ~0xC000, Bt(&bios_info->extended_rom_size, 14), "M\0G";
+						"%d %ziB$$FG$$\n", bios_info->extended_rom_size & ~0xC000, Bt(&bios_info->extended_rom_size, 14), "M\0G";
 					else
-						"%d KB$$FG$$\n", (bios_info->rom_size + 1) * 64;
+						"%d KiB$$FG$$\n", (bios_info->rom_size + 1) * 64;
 					if (Bt(&bios_info->flags, 3))
 						"Flags Not Supported$$FG$$\n";
 					else 

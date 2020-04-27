@@ -3304,23 +3304,36 @@ class CCacheBlk
 };
 
 #help_index "File/System"
-#define DEFAULT_ISO_FILENAME		"::/Tmp/CDDVD.ISO"
+#define DEFAULT_ISO_FILENAME	"::/Tmp/CDDVD.ISO"
 #define DEFAULT_ISO_C_FILENAME	"::/Tmp/CDDVD.ISO.C"
 
 public class CBlkDevGlobals
 {
-	CBlkDev *blkdevs;
-	U8		*default_iso_filename;	//$TX,"\"::/Tmp/CDDVD.ISO\"",D="DEFAULT_ISO_FILENAME"$
-	U8		*default_iso_c_filename;				//$TX,"\"::/Tmp/CDDVD.ISO.C\"",D="DEFAULT_ISO_C_FILENAME"$
-	U8		*tmp_filename;
-	U8		*home_dir;
-	CCacheBlk *cache_base,*cache_ctrl,**cache_hash_table;
-	I64 	cache_size,read_count,write_count;
-	CDrive				*drvs,*let_to_drive[32];
-	I64 	mount_ide_auto_count,
-				ins_base0,ins_base1;		//Install cd/dvd controller.
-	U8		boot_drive_let,first_hd_drive_let,first_dvd_drive_let;
-	Bool	dvd_boot_is_good,ins_unit,pad[3];
+	CBlkDev	   *blkdevs;
+	CDrive	   *drvs,
+			   *let_to_drive[32];
+	U8		   *default_iso_filename,	//$TX,"\"::/Tmp/CDDVD.ISO\"",D="DEFAULT_ISO_FILENAME"$
+			   *default_iso_c_filename,	//$TX,"\"::/Tmp/CDDVD.ISO.C\"",D="DEFAULT_ISO_C_FILENAME"$
+			   *tmp_filename,
+			   *home_dir,
+			    boot_drive_let,
+				first_hd_drive_let,
+			    first_dvd_drive_let;
+	CAHCIHba   *ahci_hba;
+	CCacheBlk  *cache_base,
+			   *cache_ctrl,
+			  **cache_hash_table;
+	I64 		cache_size,
+				read_count,
+				write_count,
+				cmd_slot_count,
+				mount_ide_auto_count,
+				ins_base0,
+				ins_base1;	//Install cd/dvd controller.
+	Bool		dvd_boot_is_good,
+				ins_unit,
+				ahci64,
+				pad[2];
 };
 
 #help_index "File/Internal"
