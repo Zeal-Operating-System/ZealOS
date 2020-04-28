@@ -1,22 +1,27 @@
 Bool BootDVDProbe(CBlkDev *bd)
 {
-	U8 *img=CAlloc(DVD_BLK_SIZE);
+	U8 *img = CAlloc(DVD_BLK_SIZE);
 	I64 i;
-	Bool res=FALSE;
-	"Port: %04X,%04X Unit: %02X  ",bd->base0,bd->base1,bd->unit;
-	if (ATAProbe(bd->base0,bd->base1,bd->unit)==BDT_ATAPI) {
+	Bool res = FALSE;
+	"Port: %04X,%04X Unit: %02X  ", bd->base0, bd->base1, bd->unit;
+	if (ATAProbe(bd->base0, bd->base1, bd->unit) == BDT_ATAPI)
+	{
 		" ATAPI";
-		if (ATAPIStartStop(bd,tS+5.0,TRUE)) {
+		if (ATAPIStartStop(bd, tS + 5.0, TRUE))
+		{
 			" Started";
-			for (i=0;i<2;i++) {//Retry
-				if (ATAPIReadBlks2(bd,tS+7.0,img,sys_boot_blk,1,FALSE)) {
-					if ((img+sys_boot_src.u16[1]<<BLK_SIZE_BITS)(CKernel *)
-								->compile_time==sys_compile_time) {
+			for (i = 0; i < 2; i++)
+			{//Retry
+				if (ATAPIReadBlks2(bd, tS + 7.0, img, sys_boot_blk, 1, FALSE))
+				{
+					if ((img + sys_boot_src.u16[1] << BLK_SIZE_BITS)(CKernel *)->compile_time == sys_compile_time)
+					{
 						" Found\n";
 						return TRUE;
 					} else
 						" Read";
-				} else
+				}
+				else
 					" NoRead";
 			}
 		}
@@ -28,36 +33,42 @@ Bool BootDVDProbe(CBlkDev *bd)
 
 Bool BootDVDProbeAll(CBlkDev *bd)
 {
-	I64 d1,d2,i,j,k;
+	I64 d1, d2, i, j, k;
 
-	bd->base1=0;
-	for (k=0;k<256;k++) {
-		i=-1;
-		while (TRUE) {
-			j=PCIClassFind(0x010100+k,++i);
-			if (j<0)
+	bd->base1 = 0;
+	for (k = 0; k < 256; k++)
+	{
+		i = -1;
+		while (TRUE)
+		{
+			j = PCIClassFind(0x010100 + k, ++i);
+			if (j < 0)
 				break;
-			"Subcode:0x%X Bus:0x%X Dev:0x%X Fun:0x%X\n",k,j.u8[2],j.u8[1],j.u8[0];
-			d1=PCIReadU32(j.u8[2],j.u8[1],j.u8[0],0x10);
-			d2=PCIReadU32(j.u8[2],j.u8[1],j.u8[0],0x14);
-			if (d1&1 && d2&1) {
-				if (bd->base0=d1&~7) {
-					bd->unit=0;
+			"Subcode:0x%X Bus:0x%X Dev:0x%X Fun:0x%X\n", k, j.u8[2], j.u8[1], j.u8[0];
+			d1=PCIReadU32(j.u8[2], j.u8[1], j.u8[0], 0x10);
+			d2=PCIReadU32(j.u8[2], j.u8[1], j.u8[0], 0x14);
+			if (d1&1 && d2&1)
+			{
+				if (bd->base0 = d1 & ~7)
+				{
+					bd->unit = 0;
 					if (BootDVDProbe(bd))
 						return TRUE;
-					bd->unit=1;
+					bd->unit = 1;
 					if (BootDVDProbe(bd))
 						return TRUE;
 				}
 			}
-			d1=PCIReadU32(j.u8[2],j.u8[1],j.u8[0],0x18);
-			d2=PCIReadU32(j.u8[2],j.u8[1],j.u8[0],0x1C);
-			if (d1&1 && d2&1) {
-				if (bd->base0=d1&~7) {
-					bd->unit=0;
+			d1 = PCIReadU32(j.u8[2], j.u8[1], j.u8[0], 0x18);
+			d2 = PCIReadU32(j.u8[2], j.u8[1], j.u8[0], 0x1C);
+			if (d1&1 && d2&1)
+			{
+				if (bd->base0 = d1 & ~7)
+				{
+					bd->unit = 0;
 					if (BootDVDProbe(bd))
 						return TRUE;
-					bd->unit=1;
+					bd->unit = 1;
 					if (BootDVDProbe(bd))
 						return TRUE;
 				}
@@ -65,24 +76,26 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 		}
 	}
 
-	d1=0x1F0;
-	d2=0x3F6;
-	if (bd->base0=d1&~7) {
-		bd->unit=0;
+	d1 = 0x1F0;
+	d2 = 0x3F6;
+	if (bd->base0 = d1 & ~7)
+	{
+		bd->unit = 0;
 		if (BootDVDProbe(bd))
 			return TRUE;
-		bd->unit=1;
+		bd->unit = 1;
 		if (BootDVDProbe(bd))
 			return TRUE;
 	}
 
-	d1=0x170;
-	d2=0x376;
-	if (bd->base0=d1&~7) {
-		bd->unit=0;
+	d1 = 0x170;
+	d2 = 0x376;
+	if (bd->base0 = d1 & ~7)
+	{
+		bd->unit = 0;
 		if (BootDVDProbe(bd))
 			return TRUE;
-		bd->unit=1;
+		bd->unit = 1;
 		if (BootDVDProbe(bd))
 			return TRUE;
 	}

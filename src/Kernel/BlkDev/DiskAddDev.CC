@@ -193,29 +193,34 @@ Bool GetBaseUnit(CBlkDev *bd)
 		else
 			StreamPrint("probe=TRUE;");
 	};
-	if (!probe || !BootDVDProbeAll(bd)) {
+	if (!probe || !BootDVDProbeAll(bd))
+	{
 		"\nDon't worry.  This is not a product\n"
-					"registration.				ZenithOS just needs the\n"
-					"I/O port numbers for the CD/DVD.\n"
-					"\nRetry the ports above or check Windows\n"
-					"system information under I/O ports for\n"
-					"'IDE', 'ATA' or 'SATA'.\n"
-					"In Linux, use 'lspci -v' for ports.\n"
-					"\n\nEnter 4-digit hex I/O Port number.\n"
-					"CD/DVD I/O Port Base0: 0x";
-		bd->base0=SysI64Get;
-		bd->base1=0;
-		bd->unit =0;
-		if (bd->base0) {
+		"registration.				ZenithOS just needs the\n"
+		"I/O port numbers for the CD/DVD.\n"
+		"\nRetry the ports above or check Windows\n"
+		"system information under I/O ports for\n"
+		"'IDE', 'ATA' or 'SATA'.\n"
+		"In Linux, use 'lspci -v' for ports.\n"
+		"\n\nEnter 4-digit hex I/O Port number.\n"
+		"CD/DVD I/O Port Base0: 0x";
+
+		bd->base0 = SysI64Get;
+		bd->base1 = 0;
+		bd->unit  = 0;
+		if (bd->base0)
+		{
 			"\nUnit (0 or 1): ";
-			do ch=CharGet(,FALSE);
-			while (!('0'<=ch<='1'));
+			do ch = CharGet(, FALSE);
+			while (!('0' <= ch <= '1'));
 			'' ch;
-			bd->unit=ch-'0';
-			blkdev.dvd_boot_is_good=BootDVDProbe(bd);
+			bd->unit = ch - '0';
+			blkdev.dvd_boot_is_good = BootDVDProbe(bd);
 			return TRUE;
-		} else {
-			blkdev.dvd_boot_is_good=FALSE;
+		}
+		else
+		{
+			blkdev.dvd_boot_is_good = FALSE;
 			return FALSE;
 		}
 	}
@@ -226,10 +231,10 @@ U0 BlkDevsInitAll()
 {
 	CBlkDev *bd;
 	I64 i;
-	blkdev.blkdevs=CAlloc(sizeof(CBlkDev)*BLKDEVS_NUM);
-	blkdev.drvs=CAlloc(sizeof(CDrive)*DRIVES_NUM);
-	for (i=0;i<DRIVES_NUM;i++)
-		blkdev.let_to_drive[i]=&blkdev.drvs[i];
+	blkdev.blkdevs = CAlloc(sizeof(CBlkDev) * BLKDEVS_NUM);
+	blkdev.drvs = CAlloc(sizeof(CDrive) * DRIVES_NUM);
+	for (i = 0; i < DRIVES_NUM; i++)
+		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 	#exe {
 		if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])
 			StreamPrint("MountIDEAuto;");
