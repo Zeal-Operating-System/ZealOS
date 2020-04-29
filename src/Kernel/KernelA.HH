@@ -2704,156 +2704,13 @@ class CPCIDev
 public class CATARep
 {
 	CATARep *next;
-	I64 	num,type,base0,base1,unit,irq;
+	I64 	 num,
+			 type,
+			 base0,
+			 base1,
+			 unit,
+			 irq;
 };
-
-//AHCI definitions
-#define AHCI_SIG_ATA	0x00000101
-#define AHCI_SIG_ATAPI	0xEB140101
-#define AHCI_SIG_SEMB	0xC33C0101 //Enclosure Management Bridge... rare to encounter in the wild
-#define AHCI_SIG_PM		0x96690101 //Port multiplier... not relevant to PC-type systems.
-
-#define AHCI_MAX_PORTS			32
-#define AHCI_PRDT_MAX_LEN		32
-#define AHCI_PRDT_BYTES_BITS	22
-#define AHCI_PRDT_BYTES			(1 << 22)
-
-#define AHCI_GHCf_HBA_RESET			0
-#define AHCI_GHCf_INTERRUPT_ENABLE	1
-#define AHCI_GHCf_AHCI_ENABLE		31
-
-#define AHCI_CAPSEXTf_BOH	0
-
-#define AHCI_BOHCf_BOS		0
-#define AHCI_BOHCf_OOS		1
-#define AHCI_BOHCf_BB		4
-
-#define AHCI_CHDESCf_W		6
-#define AHCI_CHDESCf_W		(1 << 6)
-
-#define AHCI_CFDESCf_C		7
-#define AHCI_CFDESCf_C		(1 << 7)
-
-#define AHCI_PxCMDf_ST		0
-#define AHCI_PxCMDf_SUD		1
-#define AHCI_PxCMDf_POD		2
-#define AHCI_PxCMDf_FRE		4
-#define AHCI_PxCMDf_FR		14
-#define AHCI_PxCMDf_CR		15
-#define AHCI_PxCMDf_ATAPI	24
-
-#define AHCI_PxCMDF_ST		(1 << 0)
-#define AHCI_PxCMDF_SUD		(1 << 1)
-#define AHCI_PxCMDF_POD		(1 << 2)
-#define AHCI_PxCMDF_FRE		(1 << 4)
-#define AHCI_PxCMDF_FR		(1 << 14)
-#define AHCI_PxCMDF_CR		(1 << 15)
-#define AHCI_PxCMDF_ATAPI	(1 << 24)
-
-#define AHCI_PxIEf_DP		5
-#define AHCI_PxIEf_TFE		30
-
-#define AHCI_PxIEF_DP		(1 << 5)
-#define AHCI_PxIEF_TFE		(1 << 30)
-
-#define AHCI_PxSCTLf_DET_INIT		1
-#define AHCI_PxSCTLF_DET_INIT		(1 << 0)
-
-#define AHCI_PxSSTSF_DET_PRESENT	3
-
-class CAHCIPort
-{
-	U32	cmd_list_base_addr,
-		cmd_list_base_addr_upper,
-		fis_base_addr,
-		fis_base_addr_upper,
-		interrupt_status,
-		interrupt_enable,
-		cmd,
-		reserved,
-		task_file_data,
-		signature,
-		sata_status,
-		sata_ctrl,
-		sata_error,
-		sata_active,
-		cmd_issue,
-		sata_notif,
-		fis_switch_ctrl,
-		device_sleep;
-	U8	reserved[40],
-		vendor[16];
-};
-
-class CAHCIHba
-{
-	U32			caps,
-				ghc,
-				interrupt_status,
-				ports_implemented,
-				version,
-				ccc_ctrl,
-				ccc_location,
-				em_location,
-				em_ctrl,
-				caps_ext,
-				bohc;
-	U8			reserved[116],
-				vendor[96];
-	CAHCIPort	ports[32];
-};
-
-#define FIS_TYPE_H2D	0x27
-
-class CFisH2D
-{//Host to Device
-	U8	type,
-		desc, //We are concerned with bit #7. 1=command, 0=control
-		cmd,
-		feature_low,
-		lba0,
-		lba1,
-		lba2,
-		device,
-		lba3,
-		lba4,
-		lba5,
-		feature_high;
-	U16	count;
-	U8	icc,
-		ctrl;
-	U32	reserved;
-};
-
-class CPrdtEntry
-{
-	U32	data_base_addr,
-		data_base_addr_upper,
-		reserved,
-		data_byte_count;
-};
-
-class CHBACmdHeader
-{
-	U16	desc,
-		prdt_len;
-	U32	prdt_byte_count,
-		cmd_table_base_addr,
-		cmd_table_base_addr_upper,
-		reserved[4];
-};
-
-class CHBACmdTable
-{
-	U8			cmd_fis[64],
-				acmd[16],
-				reserved[48];
-	CPrdtEntry	prdt[8];
-};
-
-#define ATA_IDENT_SERIAL_NUM		10
-#define ATA_IDENT_MODEL_NUM			27
-#define ATA_IDENT_LBA48_CAPACITY	100
 
 //See $LK,"::/Doc/Credits.DD"$.
 #define ATA_NOP 				0x00
@@ -3319,21 +3176,18 @@ public class CBlkDevGlobals
 			    boot_drive_let,
 				first_hd_drive_let,
 			    first_dvd_drive_let;
-	CAHCIHba   *ahci_hba;
 	CCacheBlk  *cache_base,
 			   *cache_ctrl,
 			  **cache_hash_table;
 	I64 		cache_size,
 				read_count,
 				write_count,
-				cmd_slot_count,
 				mount_ide_auto_count,
 				ins_base0,
 				ins_base1;	//Install cd/dvd controller.
 	Bool		dvd_boot_is_good,
 				ins_unit,
-				ahci64,
-				pad[2];
+				pad[3];
 };
 
 #help_index "File/Internal"
