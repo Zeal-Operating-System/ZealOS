@@ -2673,7 +2673,6 @@ class CSMBIOSBatteryInfo
 class CPCIDev
 {
 	CPCIDev *next, *last;
-
 	U8	bus,dev,fun,
 		*vendor_str,
 		*dev_id_str,
@@ -2690,12 +2689,10 @@ class CPCIDev
 		interrupt_pin,
 		min_grant,
 		max_latency;
-
 	U16	vendor_id,
 		device_id,
 		subsys_id,
 		subsys_vendor_id;
-
 	U32 base[6],
 		erom;
 };
@@ -2712,6 +2709,155 @@ public class CATARep
 			 irq;
 };
 
+#help_index "Devices;Disk/AHCI"
+#define AHCI_MAX_PORTS			32
+
+//Physical Region Descriptor Table
+#define AHCI_PRDT_MAX_LEN		32
+#define AHCI_PRDT_BYTES_BITS	22
+#define AHCI_PRDT_BYTES			(1 << AHCI_PRDT_BYTES_BITS)
+#define AHCI_PRDT_MAX_BLOCKS	(U16_MAX + 1)
+
+//Global Host Control (Controller) flags
+#define AHCI_GHCf_HBA_RESET			0
+#define AHCI_GHCf_INTERRUPT_ENABLE	1
+#define AHCI_GHCf_AHCI_ENABLE		31
+
+#define AHCI_CAPSf_S64A		31	//Supports 64-bit Addressing
+
+#define AHCI_CAPSEXTf_BOH	0	//Supports BIOS/OS Handoff
+
+//BIOS/OS Handoff Control
+#define AHCI_BOHCf_BOS		0	//BIOS-Owned Semaphore (BIOS owns controller)
+#define AHCI_BOHCf_OOS		1	//OS-Owned Semaphore (OS owns controller)
+#define AHCI_BOHCf_BB		4	//BIOS Busy (polling bit while BIOS cleans up things after ownership transfer)
+
+//Command Header flags
+#define AHCI_CH_DESCf_W		6	//'Write' bit. Set when data is being written.
+#define AHCI_CH_DESCF_W		(1 << AHCI_CH_DESCf_W)
+
+//Command FIS flags
+#define AHCI_CF_DESCf_C		7	//'Command' bit. Set when FIS is an ATA command.
+#define AHCI_CF_DESCF_C		(1 << AHCI_CF_DESCF_C)
+
+//Port register flags
+//Command and Status register flags
+#define AHCI_PxCMDf_ST		0	//'Start'. Start processing commmand list. FRE must be set before.
+#define AHCI_PxCMDf_SUD		1	//'Spin-Up Device'. For devices that support Staggered Spin-up. We attempt to set it for all ports.
+#define AHCI_PxCMDf_POD		2	//'Power-On Device'. For devices that support Cold Presence. We attempt to set it for all ports.
+#define AHCI_PxCMDf_FRE		4	//'FIS Receive Enable'. Allows the processing of FISes.
+#define AHCI_PxCMDf_FR		14	//'FIS receive Running'. Status indicator for FRE.
+#define AHCI_PxCMDf_CR		15	//'Command list Running'. Status indicator for ST.
+#define AHCI_PxCMDf_ATAPI	24	//'Device is ATAPI'. When set, HBA turns on desktop LED when device is in use. For ATAPI devices.
+#define AHCI_PxCMDF_ST		(1 << AHCI_PxCMDf_ST)
+#define AHCI_PxCMDF_SUD		(1 << AHCI_PxCMDf_SUD)
+#define AHCI_PxCMDF_POD		(1 << AHCI_PxCMDf_POD)
+#define AHCI_PxCMDF_FRE		(1 << AHCI_PxCMDf_FRE)
+#define AHCI_PxCMDF_FR		(1 << AHCI_PxCMDf_FR)
+#define AHCI_PxCMDF_CR		(1 << AHCI_PxCMDf_CR)
+#define AHCI_PxCMDF_ATAPI	(1 << AHCI_PxCMDf_ATAPI)
+
+//Signature types
+#define AHCI_PxSIG_ATA		0x00000101
+#define AHCI_PxSIG_ATAPI	0xEB140101
+#define AHCI_PxSIG_SEMB		0xC33C0101 //Enclosure Management Bridge... rare to encounter in wild.
+#define AHCI_PxSIG_PM		0x96690101 //Port multiplier... not relevant to PC-type systems.
+
+class CAHCIPort
+{//Port register layout
+	U32	cmd_list_base,
+		cmd_list_base_upper,
+		fis_base,
+		fis_base_upper,
+		interrupt_status,
+		interrupt_enable,
+		command,
+		reserved,
+		task_file_data,
+		signature,
+		sata_status,
+		sata_ctrl,
+		sata_error,
+		sata_active,
+		cmd_issue,
+		sata_notif,
+		fis_switch_ctrl,
+		device_sleep;
+	U8	reserved[40],
+		vendor[16];
+};
+
+class CAHCIHba
+{//HBA register layout
+	U32	caps,
+		ghc,		//Global Host Control
+		interrupt_status,
+		ports_implemented,
+		version,
+		ccc_ctrl,	//Command Completion Coalescing
+		ccc_ports,
+		em_location,//Enclosure Management
+		em_ctrl,
+		caps_ext,
+		bohc;
+	U8	reserved[116],
+		vendor[96];
+	CAHCIPort ports[32];
+};
+
+#define FISt_H2D	0x27
+
+class CFisH2D
+{//Host To Device
+	U8	type,
+		desc,	//We are concerned with bit #7 ($LK,"AHCI_CF_DESCf_C",A="MN:AHCI_CF_DESCf_C"$) 1=command, 0=control.
+		command,
+		feature_low,
+		lba0,
+		lba1,
+		lba2,
+		device,
+		lba3,
+		lba4,
+		lba5,
+		feature_high;
+	U16	count;
+	U8	icc,
+		ctrl;
+	U32	reserved;
+};
+
+class CPrdtEntry
+{
+	U32	data_base,
+		data_base_upper,
+		reserved,
+		data_byte_count; //bit 31 is "Interrupt on Completion". bits 21:0 are the actual count.
+};
+
+class CHBACmdHeader
+{
+	U16	desc,	//$LK,"AHCI_CH_DESCf_W",A="MN:AHCI_CH_DESCf_W"$ 1=write 0=read  ATAPI too too TODO
+		prdt_len;
+	U32	prd_byte_count,
+		cmd_table_base,
+		cmd_table_base_upper,
+		reserved[4];
+};
+
+class CHBACmdTable
+{
+	U8	command_fis[64],
+		acmd[16],
+		reserved[48];
+	CPrdtEntry prdt[8];
+};
+
+//ATA_IDENTIFY command array indexes (array of U16s)
+#define ATA_IDENT_SERIAL_NUM		10
+#define ATA_IDENT_MODEL_NUM			27
+#define ATA_IDENT_LBA48_CAPACITY	100
+
 //See $LK,"::/Doc/Credits.DD"$.
 #define ATA_NOP 				0x00
 #define ATA_DEV_RST 			0x08
@@ -2722,9 +2868,11 @@ public class CATARep
 #define ATA_SET_MAX_EXT 		0x37
 #define ATA_READ_MULTI			0xC4
 #define ATA_READ_MULTI_EXT		0x29
+#define ATA_READ_DMA_EXT		0x25
 #define ATA_WRITE_MULTI 		0xC5
 #define ATA_WRITE_MULTI_EXT 	0x39
-#define ATA_ID_DEV				0xEC
+#define ATA_WRITE_DMA_EXT		0x35
+#define ATA_IDENTIFY			0xEC
 
 #define ATAS_ERR	0x01
 #define ATAS_DRQ	0x08
@@ -2760,14 +2908,14 @@ public class CATARep
 
 class CMBRPart
 {
-	U8		active, //0x80=active  0x00=inactive
-				start_head;
-	U16 	start_cyl;
-	U8		type,
-				end_head;
-	U16 	end_cyl;
-	U32 	offset, //Sects between MBR and first sect
-				size; 	//Sects in drv
+	U8	active, //0x80=active  0x00=inactive
+		start_head;
+	U16 start_cyl;
+	U8	type,
+		end_head;
+	U16 end_cyl;
+	U32 offset, //Sects between MBR and first sect
+		size; 	//Sects in drv
 };
 
 class CMasterBoot
@@ -2781,15 +2929,15 @@ class CMasterBoot
 
 class CRedSeaBoot
 {
-	U8		jump_and_nop[3],
-				signature,reserved[4]; //MBR_PT_REDSEA=0x88. Distinguish from real FAT32
-	I64 	drv_offset, 		//For CD/DVD image copy.
-				sects,
-				root_clus,
-				bitmap_sects,
-				unique_id;
-	U8		code[462];
-	U16 	signature2; 		//0xAA55
+	U8	jump_and_nop[3],
+		signature,reserved[4]; //MBR_PT_REDSEA=0x88. Distinguish from real FAT32
+	I64 drv_offset, 		//For CD/DVD image copy.
+		sects,
+		root_clus,
+		bitmap_sects,
+		unique_id;
+	U8	code[462];
+	U16 signature2; 		//0xAA55
 };
 
 class CFAT32Boot
@@ -3035,82 +3183,94 @@ public class CDirEntry
 
 #help_index "File/Low Level"
 //See $LK,"ST_BLKDEV_TYPES",A="MN:ST_BLKDEV_TYPES"$
-#define BDT_NULL								0
-#define BDT_RAM 								1
-#define BDT_ATA 								2
-#define BDT_ISO_FILE_READ 			3
-#define BDT_ISO_FILE_WRITE			4
-#define BDT_ATAPI 							5
-#define BDT_TYPES_NUM 					6
+#define BDT_NULL				0
+#define BDT_RAM 				1
+#define BDT_ATA 				2
+#define BDT_ISO_FILE_READ 		3
+#define BDT_ISO_FILE_WRITE		4
+#define BDT_ATAPI 				5
+#define BDT_TYPES_NUM 			6
 
-#define BDf_REMOVABLE 					0
-#define BDf_INITIALIZED 				1
-#define BDf_READ_ONLY 					2
+#define BDf_REMOVABLE 			0
+#define BDf_INITIALIZED 		1
+#define BDf_READ_ONLY 			2
 #define BDf_READ_ONLY_OVERRIDE	3
-#define BDf_LAST_WAS_WRITE			4
-#define BDf_READ_CACHE					5
-#define BDf_FORMAT							6
-#define BDf_INIT_IN_PROGRESS		7
-#define BDf_EXT_SIZE						8
+#define BDf_LAST_WAS_WRITE		4
+#define BDf_READ_CACHE			5
+#define BDf_FORMAT				6
+#define BDf_INIT_IN_PROGRESS	7
+#define BDf_EXT_SIZE			8
+#define BDf_INTERNAL_BUF		9
 
-#define BDF_REMOVABLE 					0x001
-#define BDF_INITIALIZED 				0x002
-#define BDF_READ_ONLY 					0x004
-#define BDF_READ_ONLY_OVERRIDE	0x008
-#define BDF_LAST_WAS_WRITE			0x010
-#define BDF_READ_CACHE					0x020
-#define BDF_FORMAT							0x040
-#define BDF_INIT_IN_PROGRESS		0x080
-#define BDF_EXT_SIZE						0x100
+#define BDF_REMOVABLE 			(1 << BDf_REMOVABLE)
+#define BDF_INITIALIZED 		(1 << BDf_INITIALIZED)
+#define BDF_READ_ONLY 			(1 << BDf_READ_ONLY)
+#define BDF_READ_ONLY_OVERRIDE	(1 << BDf_READ_ONLY_OVERRIDE)
+#define BDF_LAST_WAS_WRITE		(1 << BDf_LAST_WAS_WRITE)
+#define BDF_READ_CACHE			(1 << BDf_READ_CACHE)
+#define BDF_FORMAT				(1 << BDf_FORMAT)
+#define BDF_INIT_IN_PROGRESS	(1 << BDf_INIT_IN_PROGRESS)
+#define BDF_EXT_SIZE			(1 << BDf_EXT_SIZE)
+#define BDF_INTERNAL_BUF		(1 << BDf_INTERNAL_BUF)
 
 //locked flags
-#define BDlf_LOCKED 						0
+#define BDlf_LOCKED 			0
 
-#define BLKDEVS_NUM 						26
-#define BD_SIGNATURE_VAL				'BDSV'
+#define BLKDEVS_NUM 			26
+#define BD_SIGNATURE_VAL		'BDSV'
+
 public class CBlkDev
 {
 	CBlkDev *lock_fwding; //If two blkdevs on same controller, use just one lock
-	I64 	locked_flags;
-	U32 	bd_signature,
-				type,flags;
-	U8		first_drive_let,unit,pad[2];
-	U32 	base0,base1,
-				blk_size;
-	I64 	drv_offset,init_root_dir_blks,
-				max_blk;
+	CTask 	*owning_task;
+	CAHCIPort *ahci_port;
+	U8		*prd_buf,
+			 first_drive_let,
+			 unit,
+			 pad[2],
+			*RAM_disk,
+			*file_disk_name;
+	CFile	*file_disk;
+	U32 	 bd_signature,
+			 type,
+			 flags,
+		 	 base0,
+			 base1,
+			 blk_size,
+			 max_reads,
+			 max_writes;
+	I64 	 drv_offset,
+			 init_root_dir_blks,
+			 max_blk,
+			 locked_flags,
+			 port_number;
 	U16 	*dev_id_record;
-	U8		*RAM_disk,
-				*file_disk_name;
-	CFile *file_disk;
-	CTask *owning_task;
-	F64 	last_time;
-	U32 	max_reads,max_writes;
+	F64 	 last_time;
 };
 
 //Drive locked_flags
-#define DVlf_LOCKED 		0
+#define DVlf_LOCKED 	0
 
 //See $LK,"ST_DRIVE_TYPES",A="MN:ST_DRIVE_TYPES"$
-#define FSt_NULL				0
-#define FSt_REDSEA			1 //Supported
-#define FSt_FAT32 			2 //Supported except for short names, to some degree
-#define FSt_ISO9660 		3 //Not Supported
-#define FSt_NTFS				4 //Not Supported
-#define FSt_UNKNOWN 		5
+#define FSt_NULL		0
+#define FSt_REDSEA		1 //Supported
+#define FSt_FAT32 		2 //Supported except for short names, to some degree
+#define FSt_ISO9660 	3 //Not Supported
+#define FSt_NTFS		4 //Not Supported
+#define FSt_UNKNOWN 	5
 #define FSt_TYPES_NUM 	6
 #define FSG_TYPE_MASK 	0x7FFF
 //File system type flags
-#define FStf_DISABLE		15
+#define FStf_DISABLE	15
 
-#define MBR_PT_FAT12		0x01
+#define MBR_PT_FAT12	0x01
 #define MBR_PT_FAT32a 	0x0B
 #define MBR_PT_FAT32b 	0x0C
 #define MBR_PT_FAT32c 	0x1B
 #define MBR_PT_FAT32d 	0x1C
 #define MBR_PT_FAT32e 	0x8B
 #define MBR_PT_FAT32f 	0x8C
-#define MBR_PT_NTFS 		0x07
+#define MBR_PT_NTFS 	0x07
 #define MBR_PT_REDSEA 	0x88
 
 class CFreeList
@@ -3169,6 +3329,7 @@ public class CBlkDevGlobals
 	CBlkDev	   *blkdevs;
 	CDrive	   *drvs,
 			   *let_to_drive[32];
+	CAHCIHba   *ahci_hba;
 	U8		   *default_iso_filename,	//$TX,"\"::/Tmp/CDDVD.ISO\"",D="DEFAULT_ISO_FILENAME"$
 			   *default_iso_c_filename,	//$TX,"\"::/Tmp/CDDVD.ISO.C\"",D="DEFAULT_ISO_C_FILENAME"$
 			   *tmp_filename,
@@ -3183,11 +3344,13 @@ public class CBlkDevGlobals
 				read_count,
 				write_count,
 				mount_ide_auto_count,
+				cmd_slot_count,
 				ins_base0,
 				ins_base1;	//Install cd/dvd controller.
 	Bool		dvd_boot_is_good,
 				ins_unit,
-				pad[3];
+				ahci64,
+				pad[2];
 };
 
 #help_index "File/Internal"

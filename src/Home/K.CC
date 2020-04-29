@@ -1,4 +1,4 @@
-Ed("/Doc/ChangeLog.DD");
+//Ed("/Doc/ChangeLog.DD");
 
 In("CC\n\n1\n\n5\n\n\n");
 BootHDIns;

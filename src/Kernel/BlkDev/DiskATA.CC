@@ -170,7 +170,7 @@ I64 ATAGetDevId(CBlkDev *bd,F64 timeout,Bool keep_id_record)
 		OutU8(bd->base0+ATAR0_SEL,0xEF|bd->unit<<4);
 	else
 		OutU8(bd->base0+ATAR0_SEL,0xE0|bd->unit<<4);
-	ATACmd(bd,ATA_ID_DEV);
+	ATACmd(bd,ATA_IDENTIFY);
 	if (ATAWaitNotBUSY(bd,timeout)) {
 		if (InU8(bd->base0+ATAR0_STAT)&ATAS_ERR)
 			res=BDT_ATAPI;
