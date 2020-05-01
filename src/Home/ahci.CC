@@ -103,7 +103,10 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	cmd_fis = &cmd_table->command_fis;
 	MemSet(cmd_fis, 0, sizeof(CFisH2D));
 	cmd_fis->type	 = FISt_H2D;
-	cmd_fis->command = ATA_IDENTIFY;
+	if (Bt(&port->command, AHCI_PxCMDf_ATAPI))
+		cmd_fis->command = ATA_IDENTIFY_PACKET;
+	else
+		cmd_fis->command = ATA_IDENTIFY;
 	cmd_fis->device  = 0; //No bits need to be set in the device register.
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set cmd_fis->c to 1 (Command bit).
 
