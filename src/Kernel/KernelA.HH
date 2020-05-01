@@ -2763,6 +2763,16 @@ public class CATARep
 #define AHCI_PxSIG_SEMB		0xC33C0101 //Enclosure Management Bridge... rare to encounter in wild.
 #define AHCI_PxSIG_PM		0x96690101 //Port multiplier... not relevant to PC-type systems.
 
+//Interrupt flags (same in PxIE and PxIS)
+#define AHCI_PxIf_TFE	30	//Task File Error, see $LK,"ATAS_ERR",A="MN:ATAS_ERR"$.
+
+//COMRESET flags
+//SATA Control register flags
+#define AHCI_PxSCTLf_DET_INIT		1
+#define AHCI_PxSCTLF_DET_INIT		(1 << AHCI_PxSCTLf_DET_INIT)
+//SATA Status register flags
+#define AHCI_PxSSTSF_DET_PRESENT	3
+
 class CAHCIPort
 {//Port register layout
 	U32	cmd_list_base,
@@ -2825,6 +2835,19 @@ class CFisH2D
 	U8	icc,
 		ctrl;
 	U32	reserved;
+};
+
+class CFisReceived
+{
+	U8	dma_fis[28],
+		reserved[4],
+		pio_fis[20],
+		reserved[12],
+		r_fis[20],
+		reserved[4],
+		devbits_fis[8],
+		unknown_fis[64],
+		reserved[96];
 };
 
 class CPrdtEntry
@@ -3243,7 +3266,7 @@ public class CBlkDev
 			 init_root_dir_blks,
 			 max_blk,
 			 locked_flags,
-			 port_number;
+			 port_num;
 	U16 	*dev_id_record;
 	F64 	 last_time;
 };

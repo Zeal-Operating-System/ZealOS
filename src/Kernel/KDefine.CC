@@ -98,7 +98,11 @@ U0 SysDefinesLoad()
 {
 	DefineListLoad("ST_OFF_ON",
 							"Off\0"
-							"On\0");
+							"On");
+
+	DefineListLoad("ST_FALSE_TRUE",
+							"False\0"
+							"True");
 
 	DefineListLoad("ST_HTT_TYPES",
 							"ExportSysSym\0"

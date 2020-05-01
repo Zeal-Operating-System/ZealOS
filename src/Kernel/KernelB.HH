@@ -136,8 +136,7 @@ public _extern _D3_DIST_SQR F64 D3DistSqr(CD3 *d1,CD3 *d2); //Distance Squared
 public _extern _D3_DIV CD3 *D3Div(CD3 *quot,CD3 *d,F64 s); //quot=d/s
 public _extern _D3_DIV_EQU CD3 *D3DivEqu(CD3 *quot,F64 s); //quot/=s
 public _extern _D3_DOT F64 D3Dot(CD3 *d1,CD3 *d2); //d1 dot d2
-public _extern _D3_EQU CD3 *D3Equ(
-				CD3 *dst,F64 x=0,F64 y=0,F64 z=0); //dst=(x,y,z)
+public _extern _D3_EQU CD3 *D3Equ(CD3 *dst,F64 x=0,F64 y=0,F64 z=0); //dst=(x,y,z)
 public _extern _D3_MUL CD3 *D3Mul(CD3 *prod,F64 s,CD3 *d); //prod=s*d
 public _extern _D3_MUL_EQU CD3 *D3MulEqu(CD3 *prod,F64 s); //prod*=s
 public _extern _D3_NORM F64 D3Norm(CD3 *d); //Norm
@@ -148,16 +147,11 @@ public _extern _D3_UNIT CD3 *D3Unit(CD3 *d); //To unit vect
 public _extern _D3_ZERO CD3 *D3Zero(CD3 *dst); //To zero
 
 #help_index "Memory"
-public _extern _MEMCOMPARE I64 MemCompare(
-				U8 *ptr1,U8 *ptr2,I64 count); //Compare chunk of memory.
-public _extern _MEMCOPY U8 *MemCopy(
-				U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes forward.
-public _extern _MEMSET U8 *MemSet(
-				U8 *dst,I64 val,I64 count); //Set chunk of U8s to value.
-public _extern _MEMSET_I64 I64 *MemSetI64(
-				I64 *dst,I64 val,I64 I64count); //Set chunk of I64s to value.
-public _extern _MEMSET_U16 U16 *MemSetU16(
-				U16 *dst,I64 val,I64 U16count); //Set chunk of U16s to value.
+public _extern _MEMCOMPARE I64 MemCompare(U8 *ptr1,U8 *ptr2,I64 count); //Compare chunk of memory.
+public _extern _MEMCOPY U8 *MemCopy(U8 *dst,U8 *src,I64 count); //Copy chunk of memory. Only goes forward.
+public _extern _MEMSET U8 *MemSet(U8 *dst,I64 val,I64 count); //Set chunk of U8s to value.
+public _extern _MEMSET_I64 I64 *MemSetI64(I64 *dst,I64 val,I64 I64count); //Set chunk of I64s to value.
+public _extern _MEMSET_U16 U16 *MemSetU16(U16 *dst,I64 val,I64 U16count); //Set chunk of U16s to value.
 public _extern _MEMSET_U32 U32 *MemSetU32(U32 *dst,I64 val,I64 U32count); //Set chunk of U32s to value.
 _extern SYS_HEAP_DEBUG_FLAG 		U8 sys_heap_debug;
 _extern SYS_HEAP_INIT_FLAG			U8 sys_heap_init_flag;
