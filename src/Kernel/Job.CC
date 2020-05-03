@@ -430,7 +430,7 @@ U0 ZenithLog(U8 *format,...)
 }
 
 U0 ZenithWarn(U8 *format,...)
-{//Display pink blinking Err text in zenith_task.
+{//Display pink blinking Warn text in zenith_task.
 	U8 *buf=StrPrintJoin(NULL,format,argc,argv),
 				*st=MStrPrint(ST_WARN_ST "%s",buf);
 	if (Fs==zenith_task)

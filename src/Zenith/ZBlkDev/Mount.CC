@@ -155,12 +155,12 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 	return res;
 }
 
-public U8 Mount(Bool caller_is_prtdisk = FALSE)
+public U8 Mount(Bool caller_is_prtdisk=FALSE)
 {//Mount drives. Called from $LK,"DiskPart(Mount)",A="FF:::/Zenith/ZBlkDev/DiskPart.CC,Mount("$.
 	return Mount2(0, NULL, caller_is_prtdisk);
 }
 
-public U0 Unmount(U8 drv_let = 0)
+public U0 Unmount(U8 drv_let=0)
 {//Unmount drive(s).
 	BlkDevDel(Letter2BlkDev(drv_let));
 }
