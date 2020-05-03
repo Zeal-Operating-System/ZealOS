@@ -429,6 +429,18 @@ U0 ZenithLog(U8 *format,...)
 	Free(buf);
 }
 
+U0 ZenithWarn(U8 *format,...)
+{//Display pink blinking Err text in zenith_task.
+	U8 *buf=StrPrintJoin(NULL,format,argc,argv),
+				*st=MStrPrint(ST_WARN_ST "%s",buf);
+	if (Fs==zenith_task)
+		"%s",st;
+	else if (!IsSingleUser)
+		Zenith("\"%%s\",%d;",st);
+	Free(st);
+	Free(buf);
+}
+
 U0 ZenithErr(U8 *format,...)
 {//Display red blinking Err text in zenith_task.
 	U8 *buf=StrPrintJoin(NULL,format,argc,argv),

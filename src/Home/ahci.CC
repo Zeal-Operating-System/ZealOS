@@ -2,7 +2,8 @@
 
 I64 AHCILBA48CapacityGet(U16 *id_record)
 {//Get capacity of drive, in LBA blocks.
-	return *&id_record[ATA_IDENT_LBA48_CAPACITY](U64 *) - 1;
+	D((id_record + 27));
+	return	(id_record)(U64 *)[ATA_IDENT_LBA48_CAPACITY / 4] - 1;
 }
 
 I64 AHCIPortCmdSlotGet(CAHCIPort *port)
@@ -100,10 +101,10 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	cmd_table->prdt[0].data_byte_count = 512 - 1;
 	cmd_header->prdt_len = 1; //1 PRD, descrived above, which contains the address to put the ID record.
 
-	cmd_fis = &cmd_table->command_fis;
+	cmd_fis = &cmd_table->cmd_fis;
 	MemSet(cmd_fis, 0, sizeof(CFisH2D));
 	cmd_fis->type	 = FISt_H2D;
-	if (Bt(&port->command, AHCI_PxCMDf_ATAPI))
+	if (port->signature == AHCI_PxSIG_ATAPI)
 		cmd_fis->command = ATA_IDENTIFY_PACKET;
 	else
 		cmd_fis->command = ATA_IDENTIFY;
@@ -138,6 +139,151 @@ oof:
 	"%X\n", bd->max_blk;
 	Free(bd->dev_id_record);
 	bd->dev_id_record = dev_id_record;
+}
+
+U8 *AHCIBufferFix(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
+{
+	if (!blkdev.ahci64)
+	{
+		if (user_buf + buf_size < U32_MAX)
+		{	
+			"user_buf is less than U32_MAX\n";
+			return user_buf;
+		}
+		"Using internal buffer\n";
+		Bts(&bd->flags, BDf_INTERNAL_BUF);
+		Free(bd->prd_buf);
+		bd->prd_buf = MAlloc(buf_size, Fs->code_heap);
+		"Internal buffer: 0x%X\n", bd->prd_buf;
+		if (write)
+			MemCopy(bd->prd_buf, user_buf, buf_size);
+		return bd->prd_buf;
+	}
+	Btr(&bd->flags, BDf_INTERNAL_BUF);
+	return user_buf;
+}
+
+U0 AHCIAtaBlksRW(CBlkDev *bd, U8 *_buf, I64 blk, I64 count, Bool write)
+{
+	CHBACmdHeader *cmd_header;
+	CHBACmdTable  *cmd_table;
+	CFisH2D		  *cmd_fis;
+	CAHCIPort	  *port = bd->ahci_port;
+	I64			   buf_size, prdt_len, byte_count, _byte_count, i, slot = AHCIPortCmdSlotGet(port);
+	U8			  *buf;
+
+	if (count > AHCI_PRDT_MAX_BLOCKS)
+	{
+		ZenithErr("AHCI: blk count exceeds maximum of %d", AHCI_PRDT_MAX_BLOCKS);
+		throw('AHCI');
+	}
+	if (slot < 0)
+	{
+		ZenithErr("No empty command slots!\n");
+		throw('AHCI');
+	}
+
+	cmd_header = *&port->cmd_list_base(I64 *);
+	cmd_header += slot; //Move up pointer to the slot we have in the command list
+	MemSet(cmd_header, 0, sizeof(CHBACmdHeader));
+
+	//setting Command FIS length, bits 4:0, takes size in U32s.
+	cmd_header->desc = (cmd_header->desc & ~0x1F) + sizeof(CFisH2D) / sizeof(U32);
+	//Set 'write' bit depending on 'write' val
+	BEqual(&cmd_header->desc, AHCI_CH_DESCf_W, write);
+
+	cmd_table = *&cmd_header->cmd_table_base(I64 *);
+	MemSet(cmd_table, 0, sizeof(CHBACmdTable));
+
+	//determine buf_size and prdt_len
+	buf_size = count * BLK_SIZE;
+	prdt_len = (buf_size - 1) >> AHCI_PRDT_BYTES_BITS + 1;
+
+	if (prdt_len > AHCI_PRDT_MAX_LEN)
+	{//This is probably never going to happen because we check the count beforehand.
+		ZenithWarn("AHCI: Required PRDT length exceeds max of 32\n");
+		prdt_len = AHCI_PRDT_MAX_LEN;
+		buf_size = prdt_len * AHCI_PRDT_BYTES;
+	}
+	"prdt_len: %d\n", prdt_len;
+	"bytes to work on: %X\n", buf_size;
+
+	cmd_header->prdt_len = prdt_len;
+	buf = AHCIBufferFix(bd, _buf, buf_size, write);
+	"buf: %X\n", buf;
+
+	if (!buf)
+		throw('AHCI');
+
+	_byte_count = buf_size;
+	"count %d\n", _byte_count >> BLK_SIZE_BITS;
+	for (i = 0; i < prdt_len; i++)
+	{
+		if (buf_size > AHCI_PRDT_BYTES)
+			byte_count = AHCI_PRDT_BYTES;
+		else
+			byte_count = buf_size;
+
+		"prdt[%d].data_base = 0x%X\n", i, buf(I64).u32[0];
+		"prdt[%d].data_base_upper = 0x%X\n", i, buf(I64).u32[1];
+		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count - 1;
+
+		cmd_table->prdt[i].data_base	   = buf(I64).u32[0];
+		cmd_table->prdt[i].data_base_upper = buf(I64).u32[1];
+		cmd_table->prdt[i].data_byte_count = byte_count - 1; //Zero-based value
+		buf_size -= byte_count;
+		buf += byte_count;
+	}
+	cmd_fis = &cmd_table->cmd_fis;
+	MemSet(cmd_fis, 0, sizeof(CFisH2D));
+
+	cmd_fis->type = FISt_H2D;
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set cmd_fis->c to 1 (Command)
+	if (write)
+		//Assuming support for LBA48. Boomers need need not apply.
+		cmd_fis->command = ATA_WRITE_DMA_EXT;
+	else
+		cmd_fis->command = ATA_READ_DMA_EXT;
+
+	cmd_fis->lba0 = blk.u8[0];
+	cmd_fis->lba1 = blk.u8[1];
+	cmd_fis->lba2 = blk.u8[2];
+	cmd_fis->device = 1 << 6; //Required as per ATA8-ACS section 7.25.3
+	cmd_fis->lba3 = blk.u8[3];
+	cmd_fis->lba4 = blk.u8[4];
+	cmd_fis->lba5 = blk.u8[5];
+	cmd_fis->count = byte_count >> BLK_SIZE_BITS;
+
+	if (!AHCIPortWait(port, tS + 2))
+	{//2 second timeout for last command to complete.
+		ZenithErr("AHCI: Port %d hung during %z!\n", bd->port_num, write, "read\0write");
+		throw('AHCI');
+	}
+
+	Bts(&port->cmd_issue, slot); //Issue the command
+
+	while (TRUE)
+	{
+		if (!Bt(&port->cmd_issue, slot))
+			break;
+
+		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error
+		{
+oof:
+			ZenithErr("AHCI: Disk %z error on port %d!\n", write, "read\0write", bd->port_num);
+			throw('AHCI');
+		}
+	}
+	//Second check for safety
+	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE))
+		goto oof;
+
+	if (!write) //writeback buffer if internal buffer was used.
+		if (bd->flags & BDF_INTERNAL_BUF)
+		{
+			"Writeback internal buffer\n";
+			MemCopy(buf, _buf, buf_size);
+		}
 }
 
 U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
@@ -233,7 +379,7 @@ U0 AHCIInit()
 	blkdev.ahci64		  = Bt(&hba->caps, AHCI_CAPSf_S64A);
 	blkdev.cmd_slot_count = (hba->caps & 0x1F00) >> 8;
 	blkdev.ahci_hba		  = hba;
-//	blkdev.ahci64 = 0;
+	blkdev.ahci64 = 0;
 
 	"ahci64: %Z\n", blkdev.ahci64, "ST_FALSE_TRUE";
 
@@ -260,3 +406,22 @@ U0 AHCIInit()
 }
 
 AHCIInit;
+#define BLKS 8195
+
+U0 Test()
+{
+	U8 *buf = MAlloc(BLKS * BLK_SIZE, Fs->code_heap);
+	U8 *buf2 = MAlloc(BLKS * BLK_SIZE);
+
+	MemSet(buf, 0xFF, BLKS * BLK_SIZE);
+
+	CBlkDev *bd = CAlloc(sizeof(CBlkDev));
+	bd->ahci_port = &blkdev.ahci_hba->ports[0];
+
+	AHCIAtaBlksRW(bd, buf, 0, BLKS, TRUE);
+	AHCIAtaBlksRW(bd, buf2, 0, BLKS, FALSE);
+
+	D(buf2 + (BLKS - 5) * BLK_SIZE, 5 * BLK_SIZE);
+}
+DocMax;
+Test;

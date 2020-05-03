@@ -17,6 +17,8 @@ StartOS.CC
 	WallPaper.CC
 	Win.CC
 	WinMgr.CC
+	ZBlkDev/
+		Mount.CC
 
 
 $FG,7$-Tom$FG,0$

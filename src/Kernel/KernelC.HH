@@ -445,6 +445,7 @@ public extern I64 Scale2Mem(I64 min,I64 max,I64 limit=2*1024*1024*1024);
 
 #help_index "Job/Exe;Task/Job/Exe"
 public extern U0 ZenithErr(U8 *format,...);
+public extern U0 ZenithWarn(U8 *format, ...);
 public extern U0 ZenithLog(U8 *format,...);
 public extern I64 ExeCmdLine(CCompCtrl *cc);
 public extern U0 JobDel(CJob *tmpc);

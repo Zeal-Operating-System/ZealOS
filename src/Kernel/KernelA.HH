@@ -2870,7 +2870,7 @@ class CHBACmdHeader
 
 class CHBACmdTable
 {
-	U8	command_fis[64],
+	U8	cmd_fis[64],
 		acmd[16],
 		reserved[48];
 	CPrdtEntry prdt[8];
