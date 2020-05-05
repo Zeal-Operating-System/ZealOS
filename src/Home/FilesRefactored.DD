@@ -20,5 +20,7 @@ StartOS.CC
 	ZBlkDev/
 		Mount.CC
 
-
+/Kernel/
+	BlkDev/
+		DiskATA.CC
 $FG,7$-Tom$FG,0$
