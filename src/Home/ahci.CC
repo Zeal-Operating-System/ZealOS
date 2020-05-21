@@ -2,7 +2,6 @@
 
 I64 AHCILBA48CapacityGet(U16 *id_record)
 {//Get capacity of drive, in LBA blocks.
-	D((id_record + 27));
 	return	(id_record)(U64 *)[ATA_IDENT_LBA48_CAPACITY / 4] - 1;
 }
 
@@ -406,7 +405,7 @@ U0 AHCIInit()
 }
 
 AHCIInit;
-#define BLKS 8195
+#define BLKS 6145
 
 U0 Test()
 {

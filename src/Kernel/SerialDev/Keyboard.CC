@@ -3,13 +3,13 @@ NORMAL_KEY_SCAN_DECODE_TABLE::
 				DU8 		0,CH_ESC,"1234567890-=",CH_BACKSPACE,'\t';
 				DU8 		"qwertyuiop[]",'\n',0,"as";
 				DU8 		"dfghjkl;'\`",0,"\\zxcv";
-				DU8 		"bnm,./",0,'*',0,CH_SPACE,0,0,0,0,0,0;
+				DU8 		"bnm,./",0,'*',0,CH_SPACE,CH_BACKSPACE,0,0,0,0,0;
 				DU8 		0,0,0,0,0,0,0,0,0,0,'-',0,0,0,'+',0;
 SHIFT_KEY_SCAN_DECODE_TABLE::
 				DU8 		0,CH_SHIFT_ESC,"!@#$$%^&*()_+",CH_BACKSPACE,'\t';
 				DU8 		"QWERTYUIOP{}",'\n',0,"AS";
 				DU8 		"DFGHJKL:\"~",0,"|ZXCV";
-				DU8 		"BNM<>?",0,'*',0,CH_SPACE,0,0,0,0,0,0;
+				DU8 		"BNM<>?",0,'*',0,CH_SPACE,CH_BACKSPACE,0,0,0,0,0;
 				DU8 		0,0,0,0,0,0,0,0,0,0,'-',0,0,0,'+',0;
 CTRL_KEY_SCAN_DECODE_TABLE::
 				DU8 		0,CH_ESC,"1234567890-=",CH_BACKSPACE,'\t';
@@ -323,14 +323,14 @@ U0 KbdBuildSC(U8 raw_byte,Bool in_irq,U8 *_last_raw_byte,I64 *_last_sc)
 	new_key_f=SCF_NEW_KEY;
 	if (sc&SCF_KEY_UP)
 		switch (sc&~SCF_KEY_UP) {
-			case SC_SHIFT:		sc_flags&=~SCF_SHIFT; 	break;
-			case SC_CTRL: 		sc_flags&=~SCF_CTRL;		break;
-			case SC_ALT:			sc_flags&=~SCF_ALT; 		break;
-			case SC_DELETE: 	sc_flags&=~SCF_DELETE;	break;
-			case SC_INS:			sc_flags&=~SCF_INS; 		break;
-			case SC_CAPS: 		sc_flags^=SCF_CAPS; 		set_LEDs=TRUE;	break;
-			case SC_NUM:			sc_flags^=SCF_NUM;			set_LEDs=TRUE;	break;
-			case SC_SCROLL: 	sc_flags^=SCF_SCROLL; 	set_LEDs=TRUE;	break;
+			case SC_SHIFT:	sc_flags&=~SCF_SHIFT; 	break;
+			case SC_CTRL: 	sc_flags&=~SCF_CTRL;	break;
+			case SC_ALT:	sc_flags&=~SCF_ALT; 	break;
+			case SC_DELETE: sc_flags&=~SCF_DELETE;	break;
+			case SC_INS:	sc_flags&=~SCF_INS; 	break;
+//			case SC_CAPS: 	sc_flags^=SCF_CAPS; 	set_LEDs=TRUE;	break;
+			case SC_NUM:	sc_flags^=SCF_NUM;		set_LEDs=TRUE;	break;
+			case SC_SCROLL: sc_flags^=SCF_SCROLL; 	set_LEDs=TRUE;	break;
 		}
 	else
 		switch (sc) {
