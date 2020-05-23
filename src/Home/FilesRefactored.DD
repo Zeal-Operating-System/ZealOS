@@ -1,11 +1,11 @@
 $FG,7$Files reformatted starting from ::/ 'root' directory.$FG,0$
+
 HomeKeyPlugins.CC
 HomeLocalize.CC
 HomeSys.CC
 HomeWrappers.CC
 Once.CC
 StartOS.CC
-
 
 /Zenith/
 	DevInfo.CC
@@ -17,6 +17,14 @@ StartOS.CC
 	WallPaper.CC
 	Win.CC
 	WinMgr.CC
+	ZDebug.CC
+	ZDefine.CC
+	ZExterns.CC ... ?
+	ZHash.CC
+	ZMath.CC
+	ZMathODE.CC
+	ZMouse.CC
+
 	ZBlkDev/
 		Mount.CC
 
