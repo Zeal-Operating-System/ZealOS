@@ -23,6 +23,8 @@ StartOS.CC
 	ZHash.CC
 	ZMath.CC
 	ZMathODE.CC
+	ZMemory.CC
+	ZRegistry.CC
 	ZMouse.CC
 
 	ZBlkDev/
