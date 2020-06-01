@@ -1,5 +1,5 @@
 <a href="https://discord.gg/S6GZfRb"><img alt="Discord" src="https://img.shields.io/discord/661062825027829770?style=flat-square"></a>
-![goto counter](https://img.shields.io/github/search/VoidNV/ZenithOS/goto?style=flat-square) ![Youtube Channel](https://www.youtube.com/channel/UC6sEVp-ZM3w4cfnVu3fmKvg)
+![goto counter](https://img.shields.io/github/search/VoidNV/ZenithOS/goto?style=flat-square)   ![Youtube Channel](https://www.youtube.com/channel/UC6sEVp-ZM3w4cfnVu3fmKvg)
 # ZenithOS
 
 The Zenith Operating System is a modernized, professional fork of the 64-bit Temple Operating System.
@@ -37,6 +37,7 @@ Changes include:
   - HolyC -> CosmiC.
   - System-wide renaming for clarity
   - No weird shift-space mechanism
+  - Caps Lock is reassigned as Backspace
   - Reformatted code for readability
 
 ## Screenshots
