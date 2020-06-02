@@ -28,7 +28,13 @@ StartOS.CC
 	ZMouse.CC
 
 	ZBlkDev/
+		DiskCheck.CC
+		DiskPart.CC
+		FileMgr.CC
+		MakeZBlkDev.CC
 		Mount.CC
+		ZDiskA.CC
+		ZDiskB.CC
 
 /Kernel/
 	BlkDev/
