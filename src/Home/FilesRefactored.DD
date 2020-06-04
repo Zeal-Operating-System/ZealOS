@@ -39,4 +39,9 @@ StartOS.CC
 /Kernel/
 	BlkDev/
 		DiskATA.CC
+		DiskATAId.CC
+		DiskAddDev.CC
+		DiskBlk.CC
+		DiskBlkDev.CC
+		DiskCDDVD.CC
 $FG,7$-Tom$FG,0$
