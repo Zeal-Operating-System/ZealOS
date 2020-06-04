@@ -1,8 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
-$IV,1$----04/28/20 02:54:41----$IV,0$
-* Improved spacing somewhat in $LK+PU,"BlkDevsInitAll",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,BlkDevsInitAll"$, $LK+PU,"GetBaseUnit",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,GetBaseUnit"$, $LK+PU,"BootDVDProbeAll",A="FF:::/Kernel/BlkDev/DiskATAId.CC,BootDVDProbeAll"$, and $LK+PU,"BootDVDProbe",A="FF:::/Kernel/BlkDev/DiskATAId.CC,BootDVDProbe"$.$IV,1$
+$IV,1$----06/04/20 18:01:46----$IV,0$
+* Added $LK,"BIOSRep",A="MN:BIOSRep"$() as convenience function to view BIOS info from $LK,"SysRep",A="MN:SysRep"$().
 
-----04/27/20 15:34:42----$IV,0$
+$IV,1$----04/27/20 15:34:42----$IV,0$
 * Changed $LK+PU,"GrBitMap",A="FI:::/Zenith/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.$IV,1$
 
 ----04/22/20 03:09:47----$IV,0$

@@ -24,13 +24,13 @@ U0 StartUpTasks()
 	CTask *user = User;
 	WinToTop(user);
 	WinTileVert;
-	"Boot Time:%7.3fs\n",tS;
+	"Boot Time:%7.3fs\n", tS;
 	XTalk(user, "Cd;#include \"Once\";\n");
-	Silent;//no output to screen
+	Silent; //no output to screen
 	ACInit("/*");
 	Silent(OFF); //no output to screen
 }
 
 StartUpTasks;
 
-"\nZenithOS V %5.2f\t%D %T\n\n",sys_os_version,sys_compile_time,sys_compile_time;
+"\nZenithOS V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;

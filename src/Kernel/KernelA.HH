@@ -2407,6 +2407,7 @@ class CUAsmGlobals
 #define SMBIOSt_MAPPED_ADDR			19
 #define SMBIOSt_BATTERY				22
 #define SMBIOSt_BOOT_INFO			32
+#define SMBIOSt_ALL					0xFF //Non-existent placeholder type
 
 class CSMBIOSHeader
 {//Section 6.1.2 line 885

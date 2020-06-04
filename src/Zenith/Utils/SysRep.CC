@@ -183,8 +183,8 @@ U8 *SysRepFlagsMake(U8 *buf)
 	return str;
 }
 
-public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 memdev_handle=0xFFFF)
-{//Display info of System Management BIOS (SMBIOS) structures. 'type' is a SMBIOSt_* type. Returns structure count of displayed structures.
+public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE, I64 memdev_handle=0xFFFF)
+{//Display info of System Management BIOS (SMBIOS) structures.  Returns structure count of displayed structures.
 	I64 i = 1, structure_count = 0, cache_count = 0;
 	CSMBIOSEntryPoint *entry;
 	CSMBIOSHeader *header;
@@ -199,7 +199,6 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 
 	if (!handle && type == 0xFF)
 		"SMBIOS version %d.%d (%d entries)\n", entry->major_version, entry->minor_version, entry->structure_count;
-	"$$FD,CYAN$$";
 	while (header->type != 127)
 	{
 		if (handle && header->handle != handle)
@@ -213,6 +212,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					CSMBIOSBIOSInfo *bios_info = header;
 					I64 start_addr = bios_info->start_address_segment << 16;
 					"$$TR-C,\"BIOS\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$"
 					"Vendor\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, bios_info->vendor);
 					"Version\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, bios_info->version);
@@ -242,6 +242,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_SYSTEM:
 					CSMBIOSSystemInfo *sys_info = header;
 					"$$TR-C,\"System\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$Manufacturer\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, sys_info->manufacturer);
 					"Product Name\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, sys_info->product_name);
 					"Version\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, sys_info->version);
@@ -257,6 +258,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_ENCLOSURE:
 					CSMBIOSEnclosureInfo *info = header;
 					"$$TR-C,\"Enclosure\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$Manufacturer\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, info->manufacturer);
 					"Type\t\t\t\t:$$BLACK$$%Z%z$$FG$$\n", info->type & 0x7F, "ST_SMBIOS_ENCLOSURE_TYPES",
 						Bt(&info->type, 7), " \0, Lock Present";
@@ -283,6 +285,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					CRAXRBXRCXRDX regs;
 					CPUId(1, &regs);
 					"$$TR-C,\"Processor\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$Socket Name\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, p_info->name);
 					"Processor Type\t:$$BLACK$$%Z$$FG$$\n", p_info->type, "ST_SMBIOS_PROCESSOR_TYPES";
 					"Status\t\t\t:$$BLACK$$%z, %z$$FG$$\n",  p_info->status >> 6, "Socket Unpopulated\0Socket Populated", 
@@ -363,6 +366,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					if (cache_count++ > 0)
 						break;
 					CSMBIOSCacheInfo *c_info = header;
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Name\t\t\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, c_info->name);
 					"Status\t\t\t\t:$$BLACK$$%z$$FG$$\n", Bt(&c_info->config, 7), "Disabled\0Enabled";
@@ -397,6 +401,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_PHYMEM:
 					CSMBIOSMemArrayInfo *ma_info = header;
 					"$$TR,\"Memory Array\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Location\t\t\t:$$BLACK$$%Z$$FG$$\n", ma_info->location, "ST_SMBIOS_PHYMEM_LOCATIONS";
 					"Use\t\t\t\t:$$BLACK$$%Z$$FG$$\n", ma_info->use, "ST_SMBIOS_PHYMEM_USES";
@@ -420,6 +425,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 					if (memdev_handle != 0xFFFF && memdev_handle != mem_info->memory_array_handle)
 						break;
 					"$$TR,\"Memory Device\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Device Location\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, mem_info->device_locator);
 					"Bank Location\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, mem_info->bank_locator);
@@ -485,6 +491,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_BASEBOARD:
 					CSMBIOSBaseboardInfo *b_info = header;
 					"$$TR-C,\"Baseboard\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Manufacturer\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, b_info->manufacturer);
 					"Product\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, b_info->product);
@@ -503,6 +510,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_CONNECTOR:
 					CSMBIOSConnectorInfo *con_info = header;
 					"$$TR,\"Port Connector\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Port Type\t\t:$$BLACK$$";
 					if (con_info->port_type == 0xFF)
@@ -526,6 +534,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_BATTERY:
 					CSMBIOSBatteryInfo *bat_info = header;
 					"$$TR,\"Battery\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Name\t\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, bat_info->name);
 					"Manufacturer\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, bat_info->manufacturer);
@@ -568,6 +577,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 						"$$TR,\"OEM Strings\"$$\n";
 					else
 						"$$TR,\"Sys Config Strings\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					str = *(header(U8 *) + sizeof(CSMBIOSHeader)); //using str to hold the string count
 					for (i = 1; i <= str; i++)
@@ -577,6 +587,7 @@ public I64 SysRep(I64 type=0xFF, I64 handle=0, Bool show_all_flags=FALSE, I64 me
 				case SMBIOSt_SLOT:
 					CSMBIOSSlotInfo *slot_info = header;
 					"$$TR,\"Slot\"$$\n";
+					"$$FD,CYAN$$";
 					"$$ID,3$$";
 					"Name\t\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, slot_info->name);
 					"Type\t\t\t\t:$$BLACK$$";
@@ -631,4 +642,9 @@ loop_end:
 	if (!handle)
 		"$$FD,BLUE$$";
 	return structure_count;
+}
+
+public U0 BIOSRep()
+{//Wrapper around $LK,"SysRep",A="MN:SysRep"$() to only show BIOS info.
+	SysRep(SMBIOSt_BIOS);
 }

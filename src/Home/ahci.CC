@@ -171,14 +171,15 @@ U0 AHCIAtaBlksRW(CBlkDev *bd, U8 *_buf, I64 blk, I64 count, Bool write)
 	I64			   buf_size, prdt_len, byte_count, _byte_count, i, slot = AHCIPortCmdSlotGet(port);
 	U8			  *buf;
 
-	if (count > AHCI_PRDT_MAX_BLOCKS)
-	{
-		ZenithErr("AHCI: blk count exceeds maximum of %d", AHCI_PRDT_MAX_BLOCKS);
-		throw('AHCI');
-	}
 	if (slot < 0)
 	{
 		ZenithErr("No empty command slots!\n");
+		throw('AHCI');
+	}
+
+	if (count > AHCI_PRDT_MAX_BLOCKS)
+	{
+		ZenithErr("AHCI: blk count exceeds maximum of %d", AHCI_PRDT_MAX_BLOCKS);
 		throw('AHCI');
 	}
 
