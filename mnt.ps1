@@ -1,3 +1,6 @@
-copy -r -Force E:/* ~/Desktop/zenithos/src/
-del ~/Desktop/zenithos/*.iso
-move ~/Desktop/zenithos/src/Tmp/MyDistro.ISO.C ~/Desktop/zenithos/Zenith-latest-$(get-date -Format "yyyy-MM-dd-HH_mm_ss").iso
+$dir = "~\Projects\ZenithOS"
+Remove-Item -Recurse -Force ${dir}\src\*
+Copy-Item -Recurse -Force Z:/* ${dir}\src\
+Remove-Item ${dir}\*.iso
+Move-Item ${dir}\src\Tmp\MyDistro.ISO.C ${dir}\Zenith-latest-$(Get-Date -Format "yyyy-MM-dd-HH_mm_ss").iso
+
