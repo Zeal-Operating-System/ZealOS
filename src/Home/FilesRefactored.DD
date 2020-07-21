@@ -44,4 +44,5 @@ StartOS.CC
 		DiskBlk.CC
 		DiskBlkDev.CC
 		DiskCDDVD.CC
+		DiskCFile.CC
 $FG,7$-Tom$FG,0$
