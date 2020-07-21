@@ -36,6 +36,9 @@ StartOS.CC
 		ZDiskA.CC
 		ZDiskB.CC
 
+/Compiler/
+	CompilerA.HH
+
 /Kernel/
 	KStart64.CC
 
