@@ -2714,10 +2714,9 @@ public class CATARep
 #define AHCI_MAX_PORTS			32
 
 //Physical Region Descriptor Table
-#define AHCI_PRDT_MAX_LEN		32
-#define AHCI_PRDT_BYTES_BITS	22
-#define AHCI_PRDT_BYTES			(1 << AHCI_PRDT_BYTES_BITS)
-#define AHCI_PRDT_MAX_BLOCKS	(U16_MAX + 1)
+#define AHCI_PRD_MAX_BYTES		(4 * 1024 * 1024) //Max bytes that can go in one PRD entry ($ER$4 MiB). Section 4.2.3.3 Fig. 17 (DBC) 
+#define AHCI_PRDT_MAX_BLOCKS	(U16_MAX + 1) 	  //Max blocks you can transfer in one command. 
+#define AHCI_PRDT_MAX_LEN		8 				  //Max PRD entries in one command. This is equal to (MAX_BLOCKS * BLK_SIZE) ö MAX_BYTES.
 
 //Global Host Control (Controller) flags
 #define AHCI_GHCf_HBA_RESET			0
@@ -2859,9 +2858,22 @@ class CPrdtEntry
 		data_byte_count; //bit 31 is "Interrupt on Completion". bits 21:0 are the actual count.
 };
 
-class CHBACmdHeader
-{
-	U16	desc,	//$LK,"AHCI_CH_DESCf_W",A="MN:AHCI_CH_DESCf_W"$ 1=write 0=read  ATAPI too too TODO
+/*
+Bits of first U32:
+	4:0 - Command FIS Length, in U32s
+	  5 - ATAPI bit (A) for ATAPI command
+	  6 - Write bit (W) for write commands $LK,"AHCI_CH_DESCf_W",A="MN:AHCI_CH_DESCf_W"$ 1=write 0=read
+	  7 - Prefetchable (P)
+	  8 - Reset (R)
+	  9 - Built-in Self Test (BIST)
+	 10 - Clear busy upon R_OK
+	 11 - Reserved
+  15:12 - Port Multiplier Port (PMP)
+  31:16 - Physical Region Descriptor Table Length (PRDTL)
+*/
+class CPortCmdHeader
+{//What the CAHCIPort.cmd_list consists of.
+	U16	desc,
 		prdt_len;
 	U32	prd_byte_count,
 		cmd_table_base,
@@ -2869,7 +2881,7 @@ class CHBACmdHeader
 		reserved[4];
 };
 
-class CHBACmdTable
+class CPortCmdTable
 {
 	U8	cmd_fis[64],
 		acmd[16],

@@ -1,0 +1,6 @@
+$WW$
+- Pushing back internal_buf by doing $FG,2$internal_buf - buf_size$FG$ instead of using a second variable $FG,2$tmp_buf$FG$ might prove dangerous.
+
+- Perhaps make more references to spec in comments
+
+- ATAPI RW

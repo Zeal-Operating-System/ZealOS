@@ -5,14 +5,11 @@ $IV,1$----06/04/20 18:01:46----$IV,0$
 $IV,1$----04/27/20 15:34:42----$IV,0$
 * Changed $LK+PU,"GrBitMap",A="FI:::/Zenith/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.$IV,1$
 
-----04/22/20 03:09:47----$IV,0$
-* More files reformatted. $LK+PU,"Menu",A="FI:::/Zenith/Menu.CC"$, $LK+PU,"Window Manager",A="FI:::/Zenith/WinMgr.CC"$.$IV,1$
-
 ----04/21/20 18:54:47----$IV,0$
 * Altered $LK+PU,"Tom Palettes",A="FF:::/Zenith/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.$IV,1$
 
 ----04/21/20 16:13:01----$IV,0$
-* Added start-up intro $LK+PU,"Splash",A="FI:::/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/Once.CC,PopUpRunFile"$, when booting from disk install.
+* Added start-up intro $LK+PU,"Splash",A="FI:::/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/Once.CC,PopUpRunFile"$, after performing a full boot (excludes soft reboots).
 $IV,1$
 ----04/13/20 13:48:15----$IV,0$
 * Added $LK,"PIC_INIT",A="MN:PIC_INIT"$ and comments to $LK,"IntPICInit",A="MN:IntPICInit"$().
