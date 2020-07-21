@@ -37,6 +37,8 @@ StartOS.CC
 		ZDiskB.CC
 
 /Kernel/
+	KStart64.CC
+
 	BlkDev/
 		DiskATA.CC
 		DiskATAId.CC
