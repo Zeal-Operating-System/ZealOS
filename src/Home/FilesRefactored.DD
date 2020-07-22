@@ -38,6 +38,7 @@ StartOS.CC
 
 /Compiler/
 	CompilerA.HH
+	CompilerB.HH
 
 /Kernel/
 	KStart64.CC
