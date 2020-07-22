@@ -38,6 +38,7 @@ StartOS.CC
 
 /Compiler/
 	Asm.CC
+	AsmInit.CC
 	CompilerA.HH
 	CompilerB.HH
 
