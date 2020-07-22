@@ -37,6 +37,7 @@ StartOS.CC
 		ZDiskB.CC
 
 /Compiler/
+	Asm.CC
 	CompilerA.HH
 	CompilerB.HH
 
