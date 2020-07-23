@@ -4,7 +4,9 @@
 
 The Zenith Operating System is a modernized, professional fork of the 64-bit Temple Operating System. It is a direct reaction against corporate technological subversion, their takeover of free and open source software, and the removal of complete user control over computers.
 
-Unlike the \*nix atheists who thrive on distinguishing themselves from "others" by making everything inaccessible, unintuitive, and require arcane knowledge to work with the system, we strive to be simple, documented, and require as little of a knowledge gap as possible. One person should be able to comprehend the entire OS in at least a semi-detailed way within a few days of study. We simplify, not complicate; make accessible, not obfuscate.
+![](/screenshots/screenshot2.png)
+
+Unlike the \*nix atheists who thrive on distinguishing themselves from the "others" by making the system inaccessible, unintuitive, and require arcane knowledge to work with, we strive to be simple, documented, and require as little of a knowledge gap as possible. One person should be able to comprehend the entire system in at least a semi-detailed way within a few days of study. We simplify, not complicate; make accessible, not obfuscate.
 
 Features in development include:
   - Fully-functional AHCI support
@@ -14,7 +16,6 @@ Features in development include:
   - SSE2+ instruction support in compiler and assembler
   - Network card drivers and a networking stack
 
-![](/screenshots/screenshot2.png)
 
 Changes include:
   - 60 FPS
@@ -34,9 +35,9 @@ Changes include:
 - For running in a VM: Intel VT-x/AMD-V acceleration enabled in your BIOS settings (required to virtualize any 64-bit operating system properly).
 - A brain capable of becoming un-"jedi-mind-tricked".
 
-Every commit contains a "Zenith-latest-YYYY-XX-XX-XX-XX_XX_XX.iso" in the root of master, which is a timestamped ISO build of that commit. It might not be stable. See the [Releases](https://github.com/VoidNV/ZenithOS/releases) for the latest stable release. As ZenithOS is in heavy development the last release may be quite behind from master.
+Every commit contains a "Zenith-latest-YYYY-MM-DD-HH_MM_SS.iso" in the root of master, which is a timestamped ISO build of that commit. It might not be stable. See the [Releases](https://github.com/VoidNV/ZenithOS/releases) for the latest stable release. As ZenithOS is in heavy development the last release may be quite behind from master.
 
-This is basically a read-only repository. Everything happens inside the OS, as intended by Terry. After you've installed the latest release in a VM, you can make changes to the source. Once you've made your changes, you can make copies of the relevant files and put them into a folder, along with some kind of notes as to what you've done either in the pull request later or as a DolDoc document. You can then make a RedSea ISO file out of that folder by running `RedSeaISO("MyChanges.ISO", "/Home/Folder");`. Export the contents of the VM hard drive in whatever OS-specific way you have to (there are scripts in the root of the repo), grab the ISO, and send it my way; a pull request attachment would work fine.
+This is basically a read-only repository. Everything happens inside the OS, as intended by Terry. After you've installed the latest release in a VM, you can make changes to the source. Once you've made your changes, you can make copies of the relevant files and put them into a folder, along with some kind of notes as to what you've done either as a DolDoc document or in the pull request later. You can then make a RedSea ISO file out of that folder by running `RedSeaISO("MyChanges.ISO", "/Home/Folder");`. Export the contents of the VM hard drive in whatever OS-specific way you have to (there are scripts in the root of the repo), grab the ISO, and send it my way; a pull request attachment with the zipped ISO would work fine.
 
 ## Background
 
