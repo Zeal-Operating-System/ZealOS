@@ -41,6 +41,7 @@ StartOS.CC
 	AsmInit.CC
 	AsmLib.CC
 	AsmResolve.CC
+	BackA.CC
 	CompilerA.HH
 	CompilerB.HH
 
