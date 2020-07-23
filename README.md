@@ -8,6 +8,9 @@ The Zenith Operating System is a modernized, professional fork of the 64-bit Tem
 
 Unlike the \*nix atheists who thrive on distinguishing themselves from the "others" by making the system inaccessible, unintuitive, and require arcane knowledge to work with, we strive to be simple, documented, and require as little of a knowledge gap as possible. One person should be able to comprehend the entire system in at least a semi-detailed way within a few days of study. We simplify, not complicate; make accessible, not obfuscate.
 
+> The CIA encourages code obfuscation. They make it more complicated than necessary.\
+—Terry A. Davis
+
 Features in development include:
   - Fully-functional AHCI support
   - ~~VBE support~~ 32-bit color VBE graphics
