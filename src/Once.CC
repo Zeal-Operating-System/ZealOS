@@ -21,7 +21,6 @@ U0 Tmp()
 			}
 			break;
 		case BOOT_SRC_DVD:
-			PopUpRunFile("::/Zenith/ZSplash.CC");
 			"\nIf you answer 'No' you can play with\n"
 						"the live CD without installing.\n\n"
 						"Install onto hard drive ";
@@ -41,7 +40,6 @@ U0 Tmp()
 			}
 			break;
 		case BOOT_SRC_HARDDRIVE:
-			PopUpRunFile("::/Zenith/ZSplash.CC");
 		case BOOT_SRC_RAM:
 			"$$PURPLE$$$$TX+CX,\"Tip of the Day\"$$$$FG$$\n";
 			TipOfDay;
