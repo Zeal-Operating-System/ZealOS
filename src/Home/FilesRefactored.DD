@@ -43,6 +43,7 @@ StartOS.CC
 	AsmResolve.CC
 	BackA.CC
 	BackB.CC
+	BackC.CC
 	CExterns.CC
 	CInit.CC
 	CompilerA.HH
