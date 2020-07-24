@@ -46,6 +46,7 @@ StartOS.CC
 	BackC.CC
 	BackFA.CC
 	BackFB.CC
+	BackLib.CC
 	CExcept.CC
 	CExterns.CC
 	CHash.CC
