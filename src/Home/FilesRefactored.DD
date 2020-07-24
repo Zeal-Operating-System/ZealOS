@@ -51,6 +51,7 @@ StartOS.CC
 	CExterns.CC
 	CHash.CC
 	CInit.CC
+	CMain.CC
 	CMisc.CC
 	LexLib.CC
 	CompilerA.HH
