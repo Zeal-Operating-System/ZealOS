@@ -1,46 +1,54 @@
 U0 LexPutToken(CCompCtrl *cc)
 {//Print cur token to StdOut. (Crude)
 	'"';
-	if (cc->token==TK_IDENT || cc->token==TK_STR)
-		"%s",cc->cur_str;
-	else if (cc->token==TK_I64)
-		"INT:%X",cc->cur_i64;
-	else if (cc->token==TK_CHAR_CONST)
-		"U8:%X",cc->cur_i64;
-	else if (cc->token==TK_F64)
-		"FLOAT:%e",cc->cur_f64;
-	else if (cc->token=='\n')
+	if (cc->token == TK_IDENT || cc->token == TK_STR)
+		"%s", cc->cur_str;
+	else if (cc->token == TK_I64)
+		"INT:%X", cc->cur_i64;
+	else if (cc->token == TK_CHAR_CONST)
+		"U8:%X", cc->cur_i64;
+	else if (cc->token == TK_F64)
+		"FLOAT:%e", cc->cur_f64;
+	else if (cc->token == '\n')
 		"<NEW_LINE>";
-	else if (Bt(char_bmp_displayable,cc->token))
+	else if (Bt(char_bmp_displayable, cc->token))
 		'' cc->token;
-	else {
-		"T:%X",cc->token;
+	else
+	{
+		"T:%X", cc->token;
 	}
 	"\" ";
 }
 
-U8 *LexPutLine(CCompCtrl *cc,U8 *start)
+U8 *LexPutLine(CCompCtrl *cc, U8 *start)
 {//Print cur pos to end of line to StdOut.
 	I64 ch;
 	U8 *ptr;
-	if (!start) return NULL;
-	if (cc->lex_include_stack->flags&LFSF_DOC)
-		return DocPutLine(cc->lex_include_stack->doc,start);
-	else {
-		ptr=start;
-		while (ch=*ptr++) {
-			if (ch=='\n') {
-				if (*ptr=='\r')
+	if (!start)
+		return NULL;
+	if (cc->lex_include_stack->flags & LFSF_DOC)
+		return DocPutLine(cc->lex_include_stack->doc, start);
+	else
+	{
+		ptr = start;
+		while (ch = *ptr++)
+		{
+			if (ch == '\n')
+			{
+				if (*ptr == '\r')
 					ptr++;
 				break;
-			} else if (ch=='\r') {
-				if (*ptr=='\n')
+			}
+			else if (ch == '\r')
+			{
+				if (*ptr == '\n')
 					ptr++;
 				break;
 			}
 			'' ch;
 		}
-		if (!ch) ptr--;
+		if (!ch)
+			ptr--;
 		'\n';
 		return ptr;
 	}
@@ -50,86 +58,94 @@ U8 *LexPutLine(CCompCtrl *cc,U8 *start)
 U0 LexPutPos(CCompCtrl *cc)
 {//Print token, line link and, then, $LK,"LexPutLine",A="MN:LexPutLine"$().
 	LexPutToken(cc);
-	FixSet(cc->lex_include_stack->full_name,cc->lex_include_stack->line_num);
+	FixSet(cc->lex_include_stack->full_name, cc->lex_include_stack->line_num);
 	if (IsRaw)
-		"%s,%d ",cc->lex_include_stack->full_name,cc->lex_include_stack->line_num;
-	else {
-		PutFileLink(cc->lex_include_stack->full_name,,cc->lex_include_stack->line_num);
-		ZenithErr("%s,%d\n",
-					cc->lex_include_stack->full_name,cc->lex_include_stack->line_num);
+		"%s,%d ", cc->lex_include_stack->full_name, cc->lex_include_stack->line_num;
+	else
+	{
+		PutFileLink(cc->lex_include_stack->full_name,, cc->lex_include_stack->line_num);
+		ZenithErr("%s,%d\n", cc->lex_include_stack->full_name, cc->lex_include_stack->line_num);
 		'' CH_SPACE;
 	}
-	LexPutLine(cc,cc->lex_include_stack->line_start);
+	LexPutLine(cc, cc->lex_include_stack->line_start);
 }
 
-U0 LexWarn(CCompCtrl *cc,U8 *str=NULL)
+U0 LexWarn(CCompCtrl *cc, U8 *str=NULL)
 {//Print warn message, then, $LK,"LexPutPos",A="MN:LexPutPos"$().
-	if (str) PrintWarn(str);
-	if (cc->htc.fun) {
-		"in fun '%s'.\n",cc->htc.fun->str;
+	if (str)
+		PrintWarn(str);
+	if (cc->htc.fun)
+	{
+		"in fun '%s'.\n", cc->htc.fun->str;
 		if (IsRaw)
-			"%s\n",cc->htc.fun->src_link;
-		else {
-			"$$LK,\"%s\"$$\n",cc->htc.fun->src_link;
-			ZenithErr("%s\n",cc->htc.fun->src_link);
+			"%s\n", cc->htc.fun->src_link;
+		else
+		{
+			"$$LK,\"%s\"$$\n", cc->htc.fun->src_link;
+			ZenithErr("%s\n", cc->htc.fun->src_link);
 		}
-	} else
+	}
+	else
 		LexPutPos(cc);
 	cc->warning_count++;
 }
 
-U0 LexExcept(CCompCtrl *cc,U8 *str=NULL)
+U0 LexExcept(CCompCtrl *cc, U8 *str=NULL)
 {//Print error message, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
-	if (!Bt(&sys_run_level,RLf_ZENITH_SERVER)) {
+	if (!Bt(&sys_run_level, RLf_ZENITH_SERVER))
+	{
 		Raw(ON);
 		"Note: Still in boot phase.\n";
 	}
-	if (str) PrintErr(str);
+	if (str)
+		PrintErr(str);
 	if (!IsRaw)
-		ZenithErr("Task:%08X %s\n",Fs,str);
+		ZenithErr("Task:%08X %s\n", Fs,str);
 	LexPutPos(cc);
 	cc->error_count++;
 	FlushMessages;
-	if (!Bt(&sys_run_level,RLf_ZENITH_SERVER))
+	if (!Bt(&sys_run_level, RLf_ZENITH_SERVER))
 		Debug("Type \"Fix;\"");
 	throw('Compiler');
 }
 
 U0 UndefinedExtern()
 {
-	PrintErr("Undefined Extern\nat %P\n",Caller);
+	PrintErr("Undefined Extern\nat %P\n", Caller);
 	throw('UndefExt');
 }
 
-U0 UnusedExternWarning(CCompCtrl *cc,CHashClass *tmpc)
+U0 UnusedExternWarning(CCompCtrl *cc, CHashClass *tmpc)
 {
-	PrintWarn("Unused extern '%s'\n",tmpc->str);
+	PrintWarn("Unused extern '%s'\n", tmpc->str);
 	cc->warning_count++;
 }
 
 U0 ParenWarning(CCompCtrl *cc)
 {
-	if (Bt(&cc->opts,OPTf_WARN_PAREN) &&
-				!(cc->lex_include_stack->flags&LFSF_DEFINE))
-		LexWarn(cc,"Unnecessary parenthesis ");
+	if (Bt(&cc->opts, OPTf_WARN_PAREN) && !(cc->lex_include_stack->flags & LFSF_DEFINE))
+		LexWarn(cc, "Unnecessary parenthesis ");
 }
 
 U0 ICClassPut(CHashClass *c)
 {
 	I64 i;
-	if (!c) return;
-	if (c->ptr_stars_count>4) {
-		PrintErr("put_class ptrcount=%d\n",c->ptr_stars_count);
+	if (!c)
+		return;
+	if (c->ptr_stars_count > 4)
+	{
+		PrintErr("put_class ptrcount=%d\n", c->ptr_stars_count);
 		while (TRUE)
 //TODO:
 			Yield;
 	}
-	for (i=0;i<c->ptr_stars_count;i++)
+	for (i = 0; i < c->ptr_stars_count; i++)
 		'*';
-	c-=c->ptr_stars_count;
+	c -= c->ptr_stars_count;
 	if (c->str)
-		"%s",c->str;
-	else {
+		"%s", c->str;
+	else
+	{
 		PrintErr("put_class str=NULL\n");
 		while (TRUE)
 //TODO:
@@ -138,70 +154,76 @@ U0 ICClassPut(CHashClass *c)
 	'' CH_SPACE;
 }
 
-U0 ICArgPut(CICArg *a,I64 type_pointed_to)
+U0 ICArgPut(CICArg *a, I64 type_pointed_to)
 {
 	if (type_pointed_to)
-		"[%Z](%Z) %Z ",a->type.raw_type,"ST_RAW_TYPES",
-					type_pointed_to,"ST_RAW_TYPES",Bsr(a->type>>8)+1,"ST_TY_TYPES";
+		"[%Z](%Z) %Z ",
+		a->type.raw_type, "ST_RAW_TYPES", type_pointed_to, "ST_RAW_TYPES", Bsr(a->type >> 8) + 1, "ST_TY_TYPES";
 	else
-		"%Z %Z ",a->type.raw_type,"ST_RAW_TYPES",
-					Bsr(a->type>>8)+1,"ST_TY_TYPES";
-	switch (Bsr(a->type)) {
+		"%Z %Z ", a->type.raw_type, "ST_RAW_TYPES", Bsr(a->type >> 8) + 1, "ST_TY_TYPES";
+	switch (Bsr(a->type))
+	{
 		case MDf_STACK:
 			"STACK";
 			break;
 		case MDf_IMM:
-			"#%X",a->disp;
+			"#%X", a->disp;
 			break;
 		case MDf_REG:
-			"%Z",a->reg,"ST_U64_REGS";
+			"%Z", a->reg, "ST_U64_REGS";
 			break;
 		case MDf_DISP:
-			"%X[%Z]",a->disp,a->reg,"ST_U64_REGS";
+			"%X[%Z]", a->disp, a->reg, "ST_U64_REGS";
 			break;
 		case MDf_RIP_DISP32:
-			"[%X]",a->disp;
+			"[%X]", a->disp;
 			break;
 		case MDf_SIB:
 			if (a->disp)
-				"%X",a->disp;
-			if (a->reg==REG_RIP)
+				"%X", a->disp;
+			if (a->reg == REG_RIP)
 				'[';
 			else
-				"[%Z+",a->reg&15,"ST_U64_REGS";
-			"%Z",a->reg>>8&15,"ST_U64_REGS";
-			switch (a->reg>>14) {
-				case 0: "]";	 break;
-				case 1: "*2]"; break;
-				case 2: "*4]"; break;
-				case 3: "*8]"; break;
+				"[%Z+", a->reg & 15, "ST_U64_REGS";
+			"%Z", a->reg >> 8 & 15, "ST_U64_REGS";
+			switch (a->reg >> 14)
+			{
+				case 0:	"]";	break;
+				case 1:	"*2]";	break;
+				case 2:	"*4]";	break;
+				case 3:	"*8]";	break;
 			}
 			break;
 	}
 	'' CH_SPACE;
 }
 
-U0 ICPut(CCompCtrl *cc,CIntermediateCode *tmpi)
+U0 ICPut(CCompCtrl *cc, CIntermediateCode *tmpi)
 {
-	I64 opcode=tmpi->ic_code,i;
-	if (opcode>=IC_END_EXP && opcode!=IC_NOP2) {
-		"%15ts %016X ",intermediate_code_table[opcode].name,tmpi->ic_data;
-		if (cc->pass) {
-			if (tmpi->res.type.mode) {
+	I64 opcode = tmpi->ic_code, i;
+	if (opcode >= IC_END_EXP && opcode != IC_NOP2)
+	{
+		"%15ts %016X ", intermediate_code_table[opcode].name, tmpi->ic_data;
+		if (cc->pass)
+		{
+			if (tmpi->res.type.mode)
+			{
 				"$$PURPLE$$RES:$$FG$$";
-				ICArgPut(&tmpi->res,0);
+				ICArgPut(&tmpi->res, 0);
 			}
-			if (tmpi->arg1.type.mode) {
+			if (tmpi->arg1.type.mode)
+			{
 				"$$PURPLE$$ARG1:$$FG$$";
-				if (intermediate_code_table[tmpi->ic_code].type==IST_DEREF ||
-							intermediate_code_table[tmpi->ic_code].type==IST_ASSIGN)
-					ICArgPut(&tmpi->arg1,tmpi->arg1_type_pointed_to);
+				if (intermediate_code_table[tmpi->ic_code].type		== IST_DEREF ||
+						intermediate_code_table[tmpi->ic_code].type	== IST_ASSIGN)
+					ICArgPut(&tmpi->arg1, tmpi->arg1_type_pointed_to);
 				else
-					ICArgPut(&tmpi->arg1,0);
+					ICArgPut(&tmpi->arg1, 0);
 			}
-			if (tmpi->arg2.type.mode) {
+			if (tmpi->arg2.type.mode)
+			{
 				"$$PURPLE$$ARG2:$$FG$$";
-				ICArgPut(&tmpi->arg2,0);
+				ICArgPut(&tmpi->arg2, 0);
 			}
 			"$$PURPLE$$:$$FG$$";
 		}
@@ -240,11 +262,12 @@ U0 ICPut(CCompCtrl *cc,CIntermediateCode *tmpi)
 			"DEL_PREV ";
 		if (tmpi->ic_flags & ICF_PREV_DELETED)
 			"PREV_DEL ";
-		for (i=0;i<3;i++) {
-			if (Bt(&tmpi->ic_flags,ICf_DONT_PUSH_FLOAT0+i))
-				"DONT_PUSH#%d ",i;
-			if (Bt(&tmpi->ic_flags,ICf_DONT_POP_FLOAT0+i))
-				"DONT_POP#%d ",i;
+		for (i = 0; i < 3; i++)
+		{
+			if (Bt(&tmpi->ic_flags, ICf_DONT_PUSH_FLOAT0 + i))
+				"DONT_PUSH#%d ", i;
+			if (Bt(&tmpi->ic_flags, ICf_DONT_POP_FLOAT0 + i))
+				"DONT_POP#%d ", i;
 		}
 		if (tmpi->ic_flags & ICF_ALT_TEMPLATE)
 			"ALT_TMP ";
