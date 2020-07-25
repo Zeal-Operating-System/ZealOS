@@ -171,11 +171,12 @@ public U0 PaletteSetTom(Bool persistent=TRUE)
 	LFBFlush;
 	if (persistent)
 		fp_set_std_palette = &PaletteSetTom;
+	//*(drv_text_attr(U8 *) + 1) = BROWN;
 }
 //********************************************************************************
 public CBGR24 gr_palette_tom_light[COLORS_NUM]= {
-	0x000000, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x75507B, 0xCE982F, 0xD3D7CF,
-	0x555753, 0x729FCF, 0x82BC49, 0x34E2E2, 0xAC3535, 0xAD7FA8, 0xDDc500, 0xFFFFFF
+	0x000000, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x75507B, 0xBF8718, 0xB2B6AF,
+	0x555753, 0x729FCF, 0x82BC49, 0x00BBC8, 0xAC3535, 0xAD7FA8, 0xC7AB00, 0xFFFFFF
 };
 
 public U0 PaletteSetTomLight(Bool persistent=TRUE)
