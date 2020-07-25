@@ -35,7 +35,10 @@ U0 WallPaperStars(CTask *task)
 	//Uncomment the following if you wish. Will draw the old wallpaper over this one.
 	//old_wall_paper(task);
 
-	task->text_attr = WHITE << 4 + WHITE;
+	if (gr_palette[0] > gr_palette[15])
+		task->text_attr = WHITE << 4 + WHITE;
+	else
+		task->text_attr = BLACK << 4 + BLACK;
 
 }
 
@@ -48,7 +51,7 @@ U0 WallInit()
 		"\nMust be Zenith Included. (SHIFT-F5 / RightClick->Zenith Include) \n";
 		return;
 	}
-	old_wall_paper=gr.fp_wall_paper;
+	old_wall_paper = gr.fp_wall_paper;
 
 	for (i = 0; i < NUM_STARS; i++)
 	{
