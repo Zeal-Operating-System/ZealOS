@@ -53,6 +53,7 @@ StartOS.CC
 	CInit.CC
 	CMain.CC
 	CMisc.CC
+	Lex.CC
 	LexLib.CC
 	CompilerA.HH
 	CompilerB.HH
