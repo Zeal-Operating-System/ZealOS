@@ -55,6 +55,7 @@ StartOS.CC
 	CMisc.CC
 	Lex.CC
 	LexLib.CC
+	OpCodes.DD
 	CompilerA.HH
 	CompilerB.HH
 	Compiler.PRJ
