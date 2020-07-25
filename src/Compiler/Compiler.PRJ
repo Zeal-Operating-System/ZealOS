@@ -1,24 +1,24 @@
 #exe {
 	Cd(__DIR__);;
-	Option(OPTf_WARN_PAREN,ON);
-	Option(OPTf_WARN_DUP_TYPES,ON);
-	Option(OPTf_KEEP_PRIVATE,ON);
+	Option(OPTf_WARN_PAREN,		ON);
+	Option(OPTf_WARN_DUP_TYPES,	ON);
+	Option(OPTf_KEEP_PRIVATE,	ON);
 }
 #include "/Kernel/KernelA.HH"
 #include "/Compiler/CompilerA.HH"
-#exe {Option(OPTf_EXTERNS_TO_IMPORTS,ON);};
+#exe {Option(OPTf_EXTERNS_TO_IMPORTS,	ON);};
 #include "/Kernel/KernelB.HH"
 #include "/Kernel/KernelC.HH"
-#exe {Option(OPTf_EXTERNS_TO_IMPORTS,OFF);};
-#exe {Option(OPTf_KEEP_PRIVATE,OFF);};
+#exe {Option(OPTf_EXTERNS_TO_IMPORTS,	OFF);};
+#exe {Option(OPTf_KEEP_PRIVATE,			OFF);};
 #include "Templates"
 #include "CExterns"
-CCompGlobals		cmp;
+CCompGlobals	cmp;
 #include "CInit"
 #include "CExcept"
 #include "LexLib"
 #include "Lex"
-CUAsmGlobals		uasm;
+CUAsmGlobals	uasm;
 #include "CHash"
 #include "UAsm"
 #include "ParseLib"

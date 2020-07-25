@@ -57,6 +57,7 @@ StartOS.CC
 	LexLib.CC
 	CompilerA.HH
 	CompilerB.HH
+	Compiler.PRJ
 
 /Kernel/
 	KStart64.CC
