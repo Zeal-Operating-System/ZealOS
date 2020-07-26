@@ -64,6 +64,7 @@ StartOS.CC
 	OptPass789A.CC
 	ParseExp.CC
 	ParseLib.CC
+	ParseStatement.CC
 	Templates.CC
 	OpCodes.DD
 	CompilerA.HH
