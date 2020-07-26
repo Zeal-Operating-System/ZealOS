@@ -65,6 +65,7 @@ StartOS.CC
 	ParseExp.CC
 	ParseLib.CC
 	ParseStatement.CC
+	ParseVar.CC
 	Templates.CC
 	OpCodes.DD
 	CompilerA.HH
