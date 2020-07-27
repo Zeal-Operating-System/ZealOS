@@ -1,6 +1,6 @@
 U0 ParsePush(CParseStack *ps,I64 val)
 {
-	ps->stack[++ps->ptr]=val;
+	ps->stack[++ps->ptr] = val;
 }
 
 I64 ParsePop(CParseStack *ps)
@@ -8,9 +8,9 @@ I64 ParsePop(CParseStack *ps)
 	return ps->stack[ps->ptr--];
 }
 
-U0 ParsePush2(CParseStack *ps,I64 val)
+U0 ParsePush2(CParseStack *ps, I64 val)
 {
-	ps->stack2[++ps->ptr2]=val;
+	ps->stack2[++ps->ptr2] = val;
 }
 
 I64 ParsePop2(CParseStack *ps)
@@ -20,18 +20,19 @@ I64 ParsePop2(CParseStack *ps)
 
 U0 ParsePopDeref(CParseStack *ps)
 {
-	I64 i=ParsePop(ps);
-	CHashClass *tmpc=ParsePop(ps);
-	if (i.u16[0]!=IC_DEREF) {
-		ParsePush(ps,tmpc);
-		ParsePush(ps,i);
+	I64 i = ParsePop(ps);
+	CHashClass *tmpc = ParsePop(ps);
+	if (i.u16[0] != IC_DEREF)
+	{
+		ParsePush(ps, tmpc);
+		ParsePush(ps, i);
 	}
 }
 
 I64 ParseKeyWord(CCompCtrl *cc)
 {//Convert cur token to $LK,"KEYWORD",A="FF:::/Compiler/OpCodes.DD,KEYWORD"$ or -1.
 	CHashGeneric *tmph;
-	if (cc->token==TK_IDENT &&(tmph=cc->hash_entry) && tmph->type&HTT_KEYWORD)
+	if (cc->token == TK_IDENT &&(tmph = cc->hash_entry) && tmph->type & HTT_KEYWORD)
 		return tmph->user_data0;
 	else
 		return -1;
@@ -45,76 +46,76 @@ to a class by advancing 1 struct forward
 for one * and two forward for two **.
 */
 	I64 i;
-	CHashClass *res=CAlloc(sizeof(CHashClass)*(PTR_STARS_NUM+1),Fs->code_heap),
-				*tmpc=res;
-	for (i=0;i<=PTR_STARS_NUM;i++) {
-		tmpc->type=HTT_CLASS;
-		tmpc->raw_type=RT_PTR;
-		tmpc->size=sizeof(U8 *);
-		tmpc->ptr_stars_count=i;
+	CHashClass *res = CAlloc(sizeof(CHashClass) * (PTR_STARS_NUM + 1), Fs->code_heap), *tmpc = res;
+	for (i = 0; i <= PTR_STARS_NUM; i++)
+	{
+		tmpc->type = HTT_CLASS;
+		tmpc->raw_type = RT_PTR;
+		tmpc->size = sizeof(U8 *);
+		tmpc->ptr_stars_count = i;
 		tmpc++;
 	}
-	res->last_in_member_list=&res->member_list_and_root;
-	res->size=0;
+	res->last_in_member_list = &res->member_list_and_root;
+	res->size = 0;
 	return res;
 }
 
 CHashFun *ParseFunNew()
 {
 	I64 i;
-	CHashFun *res=CAlloc(sizeof(CHashFun)*(PTR_STARS_NUM+1),Fs->code_heap),
-				*tmpf=res;
-	for (i=0;i<=PTR_STARS_NUM;i++) {
-		tmpf->type=HTT_FUN;
-		tmpf->raw_type=RT_PTR;
-		tmpf->size=sizeof(U8 *);
-		tmpf->ptr_stars_count=i;
+	CHashFun *res = CAlloc(sizeof(CHashFun) * (PTR_STARS_NUM + 1), Fs->code_heap), *tmpf = res;
+	for (i = 0; i <= PTR_STARS_NUM; i++)
+	{
+		tmpf->type = HTT_FUN;
+		tmpf->raw_type = RT_PTR;
+		tmpf->size = sizeof(U8 *);
+		tmpf->ptr_stars_count = i;
 		tmpf++;
 	}
-	res->last_in_member_list=&res->member_list_and_root;
-	res->size=0;
+	res->last_in_member_list = &res->member_list_and_root;
+	res->size = 0;
 	return res;
 }
 
-CIntermediateCode *ICAdd(CCompCtrl *cc,
-	 I64 opcode_and_precedence,I64 arg, CHashClass *c,I64 flags=0)
+CIntermediateCode *ICAdd(CCompCtrl *cc, I64 opcode_and_precedence, I64 arg, CHashClass *c, I64 flags=0)
 {
-	CIntermediateCode *tmpi=MAlloc(sizeof(CIntermediateCode));
-	tmpi->ic_code=opcode_and_precedence.u16[0];
-	tmpi->ic_precedence=opcode_and_precedence.u16[1];
-	tmpi->ic_data=arg;
-	tmpi->ic_class=c;
-	if (cc->pass_trace) {
-		Bts(&cc->flags,CCf_PASS_TRACE_PRESENT);
-		flags|=ICF_PASS_TRACE;
+	CIntermediateCode *tmpi = MAlloc(sizeof(CIntermediateCode));
+	tmpi->ic_code = opcode_and_precedence.u16[0];
+	tmpi->ic_precedence = opcode_and_precedence.u16[1];
+	tmpi->ic_data = arg;
+	tmpi->ic_class = c;
+	if (cc->pass_trace)
+	{
+		Bts(&cc->flags, CCf_PASS_TRACE_PRESENT);
+		flags |= ICF_PASS_TRACE;
 	}
 	if (cc->lock_count)
-		flags|=ICF_LOCK;
-	tmpi->ic_flags=flags;
-	tmpi->ic_line=cc->last_line_num;
-	QueueInsert(tmpi,cc->coc.coc_head.last);
+		flags |= ICF_LOCK;
+	tmpi->ic_flags = flags;
+	tmpi->ic_line = cc->last_line_num;
+	QueueInsert(tmpi, cc->coc.coc_head.last);
 	return tmpi;
 }
 
 U0 COCInit(CCompCtrl *cc)
 {
-	CCodeCtrl *tmpcbh=&cc->coc;
+	CCodeCtrl *tmpcbh = &cc->coc;
 	QueueInit(&tmpcbh->coc_head.next);
 	QueueInit(&tmpcbh->coc_next_misc);
-	tmpcbh->coc_head.ic_code=IC_END;
+	tmpcbh->coc_head.ic_code = IC_END;
 }
 
 U0 COCPush(CCompCtrl *cc)
 {
-	CCodeCtrl *tmpcbh=MAlloc(sizeof(CCodeCtrl));
-	MemCopy(tmpcbh,&cc->coc,sizeof(CCodeCtrl));
-	cc->coc.coc_next=tmpcbh;
+	CCodeCtrl *tmpcbh = MAlloc(sizeof(CCodeCtrl));
+	MemCopy(tmpcbh, &cc->coc, sizeof(CCodeCtrl));
+	cc->coc.coc_next = tmpcbh;
 }
 
 CCompCtrl *COCPopNoFree(CCompCtrl *cc)
 {
-	CCodeCtrl *tmpcbh=cc->coc.coc_next;
-	MemCopy(&cc->coc,tmpcbh,sizeof(CCodeCtrl));
+	CCodeCtrl *tmpcbh = cc->coc.coc_next;
+	MemCopy(&cc->coc, tmpcbh, sizeof(CCodeCtrl));
 	return tmpcbh;
 }
 
@@ -125,81 +126,91 @@ U0 COCPop(CCompCtrl *cc)
 
 U0 COCAppend(CCompCtrl *cc, CCodeCtrl *tmpcbh)
 {
-	if (tmpcbh->coc_head.next!=&cc->coc.coc_head.next) {
-		cc->coc.coc_head.last->next=tmpcbh->coc_head.next;
-		tmpcbh->coc_head.next->last=cc->coc.coc_head.last;
-		cc->coc.coc_head.last=tmpcbh->coc_head.last;
-		tmpcbh->coc_head.last->next=&cc->coc.coc_head.next;
+	if (tmpcbh->coc_head.next != &cc->coc.coc_head.next)
+	{
+		cc->coc.coc_head.last->next = tmpcbh->coc_head.next;
+		tmpcbh->coc_head.next->last = cc->coc.coc_head.last;
+		cc->coc.coc_head.last = tmpcbh->coc_head.last;
+		tmpcbh->coc_head.last->next = &cc->coc.coc_head.next;
 	}
-	if (tmpcbh->coc_next_misc!=&cc->coc.coc_next_misc) {
-		cc->coc.coc_last_misc->next=tmpcbh->coc_next_misc;
-		tmpcbh->coc_next_misc->last=cc->coc.coc_last_misc;
-		cc->coc.coc_last_misc=tmpcbh->coc_last_misc;
-		tmpcbh->coc_last_misc->next=&cc->coc.coc_next_misc;
+	if (tmpcbh->coc_next_misc != &cc->coc.coc_next_misc)
+	{
+		cc->coc.coc_last_misc->next = tmpcbh->coc_next_misc;
+		tmpcbh->coc_next_misc->last = cc->coc.coc_last_misc;
+		cc->coc.coc_last_misc = tmpcbh->coc_last_misc;
+		tmpcbh->coc_last_misc->next = &cc->coc.coc_next_misc;
 	}
 	Free(tmpcbh);
 }
 
-CCodeMisc *COCMiscNew(CCompCtrl *cc,I64 ty)
+CCodeMisc *COCMiscNew(CCompCtrl *cc, I64 ty)
 {
-	CCodeMisc *res=CAlloc(sizeof(CCodeMisc));
-	res->addr=INVALID_PTR;
-	res->type=ty;
-	QueueInsert(res,cc->coc.coc_last_misc);
+	CCodeMisc *res = CAlloc(sizeof(CCodeMisc));
+	res->addr = INVALID_PTR;
+	res->type = ty;
+	QueueInsert(res, cc->coc.coc_last_misc);
 	return res;
 }
 
-CCodeMisc *COCGoToLabelFind(CCompCtrl *cc,U8 *name)
+CCodeMisc *COCGoToLabelFind(CCompCtrl *cc, U8 *name)
 {
-	CCodeMisc *cm=cc->coc.coc_next_misc;
-	while (cm!=&cc->coc.coc_next_misc) {
-		if ((cm->type==CMT_GOTO_LABEL||cm->type==CMT_ASM_LABEL) &&
-					!StrCompare(cm->str,name))
+	CCodeMisc *cm = cc->coc.coc_next_misc;
+	while (cm != &cc->coc.coc_next_misc)
+	{
+		if ((cm->type == CMT_GOTO_LABEL || cm->type == CMT_ASM_LABEL) && !StrCompare(cm->str, name))
 			return cm;
-		cm=cm->next;
+		cm = cm->next;
 	}
 	return NULL;
 }
 
-I64 COCFloatConstFind(CCompCtrl *cc,F64 d)
+I64 COCFloatConstFind(CCompCtrl *cc, F64 d)
 {
 	I64 i;
-	CCodeMisc *cm=cc->coc.coc_next_misc;
-	while (cm!=&cc->coc.coc_next_misc) {
-		if (cm->type==CMT_FLOAT_CONSTS) {
-			for (i=0;i<cm->num_consts;i++)
-				if (cm->float_consts[i]==d)
-					return cm->addr+i*sizeof(F64);
-			if (cm->num_consts<CM_CONSTS_NUM)  {
-				cm->float_consts[cm->num_consts++]=d;
-				return cm->addr+i*sizeof(F64);
+	CCodeMisc *cm = cc->coc.coc_next_misc;
+	while (cm != &cc->coc.coc_next_misc)
+	{
+		if (cm->type == CMT_FLOAT_CONSTS)
+		{
+			for (i = 0; i < cm->num_consts; i++)
+				if (cm->float_consts[i] == d)
+					return cm->addr + i * sizeof(F64);
+			if (cm->num_consts < CM_CONSTS_NUM)
+			{
+				cm->float_consts[cm->num_consts++] = d;
+				return cm->addr + i * sizeof(F64);
 			}
 		}
-		cm=cm->next;
+		cm = cm->next;
 	}
-	cm=COCMiscNew(cc,CMT_FLOAT_CONSTS);
-	cm->float_consts=MAlloc(CM_CONSTS_NUM*sizeof(F64));
-	cm->float_consts[cm->num_consts++]=d;
+	cm = COCMiscNew(cc, CMT_FLOAT_CONSTS);
+	cm->float_consts = MAlloc(CM_CONSTS_NUM * sizeof(F64));
+	cm->float_consts[cm->num_consts++] = d;
 	return cm->addr;
 }
 
-U0 COCDel(CCompCtrl *cc,CCodeCtrl *coc)
+U0 COCDel(CCompCtrl *cc, CCodeCtrl *coc)
 {
-	CCodeMisc *cm,*cm1;
-	U8 *undef=NULL;
+	CCodeMisc *cm, *cm1;
+	U8 *undef = NULL;
 	QueueDel(&coc->coc_head.next);
-	cm=coc->coc_next_misc;
-	while (cm!=&coc->coc_next_misc) {
-		cm1=cm->next;
-		switch (cm->type) {
+	cm = coc->coc_next_misc;
+	while (cm != &coc->coc_next_misc)
+	{
+		cm1 = cm->next;
+		switch (cm->type)
+		{
 			case CMT_GOTO_LABEL:
 			case CMT_ASM_LABEL:
-				if (!(cm->flags&CMF_DEFINED)) {
-					undef=cm->str;
-					cm->str=NULL;
-				} else if (!cm->use_count) {
-					PrintWarn("Unused label %s\n",cm->str);
-					LexWarn(cc,"Unused label at ");
+				if (!(cm->flags & CMF_DEFINED))
+				{
+					undef = cm->str;
+					cm->str = NULL;
+				}
+				else if (!cm->use_count)
+				{
+					PrintWarn("Unused label %s\n", cm->str);
+					LexWarn(cc, "Unused label at ");
 				}
 				break;
 			case CMT_JMP_TABLE:
@@ -217,107 +228,124 @@ U0 COCDel(CCompCtrl *cc,CCodeCtrl *coc)
 		}
 		Free(cm->str);
 		Free(cm);
-		cm=cm1;
+		cm = cm1;
 	}
-	if (undef) {
-		PrintErr("Undefined goto label %s\n",undef);
+	if (undef)
+	{
+		PrintErr("Undefined goto label %s\n", undef);
 		Free(undef);
-		LexExcept(cc,"Undefined goto label at ");
+		LexExcept(cc, "Undefined goto label at ");
 	}
 }
 
-U0 COCHeaderPut(CCompCtrl *cc,I64 pass,Bool put)
+U0 COCHeaderPut(CCompCtrl *cc, I64 pass, Bool put)
 {
 	CIntermediateCode *tmpi;
-	if (Bt(&cc->flags,CCf_PASS_TRACE_PRESENT)) {
-		if (put) {
-			if (Bt(&cc->saved_pass_trace,pass-1)) {
-				"$$IV,1$$Pass %d:$$IV,0$$\n",pass-1;
-				tmpi=cc->coc.coc_head.next;
-				while (tmpi->ic_code) {
-					if (tmpi->ic_flags&ICF_PASS_TRACE)
-						ICPut(cc,tmpi);
-					tmpi=tmpi->next;
+	if (Bt(&cc->flags, CCf_PASS_TRACE_PRESENT))
+	{
+		if (put)
+		{
+			if (Bt(&cc->saved_pass_trace, pass - 1))
+			{
+				"$$IV,1$$Pass %d:$$IV,0$$\n", pass - 1;
+				tmpi = cc->coc.coc_head.next;
+				while (tmpi->ic_code)
+				{
+					if (tmpi->ic_flags & ICF_PASS_TRACE)
+						ICPut(cc, tmpi);
+					tmpi = tmpi->next;
 				}
 			}
-		} else if (Bt(&cc->saved_pass_trace,pass))
-			"$$IV,1$$Pass %d:$$IV,0$$\n",pass;
+		}
+		else if (Bt(&cc->saved_pass_trace, pass))
+			"$$IV,1$$Pass %d:$$IV,0$$\n", pass;
 	}
-	cc->pass=pass;
+	cc->pass = pass;
 }
 
-U8 *COCCompile(CCompCtrl *cc,I64 *_code_size,CDebugInfo **_debug,I64 *_type)
+U8 *COCCompile(CCompCtrl *cc, I64 *_code_size, CDebugInfo **_debug, I64 *_type)
 {
 	U8 *res;
 	CCodeMisc *lb;
-	I64 i,code_size,last_code_size;
+	I64 i, code_size, last_code_size;
 
 	COptReg reg_offsets[REG_REGS_NUM];
-	if (_debug) *_debug=NULL;
-	cc->pass=0;
-	COCHeaderPut(cc,1,TRUE);
+	if (_debug)
+		*_debug = NULL;
+	cc->pass = 0;
+	COCHeaderPut(cc, 1, TRUE);
 	OptPass012(cc);
-	COCHeaderPut(cc,2,TRUE);
+	COCHeaderPut(cc, 2, TRUE);
 	OptPass012(cc);
-	COCHeaderPut(cc,3,TRUE);
-	OptPass3(cc,reg_offsets);
-	COCHeaderPut(cc,4,TRUE);
-	OptPass4(cc,reg_offsets,_type);
-	COCHeaderPut(cc,5,TRUE);
+	COCHeaderPut(cc, 3, TRUE);
+	OptPass3(cc, reg_offsets);
+	COCHeaderPut(cc, 4, TRUE);
+	OptPass4(cc, reg_offsets, _type);
+	COCHeaderPut(cc, 5, TRUE);
 	OptPass5(cc);
-	COCHeaderPut(cc,6,TRUE);
+	COCHeaderPut(cc, 6, TRUE);
 	OptPass6(cc);
-	COCHeaderPut(cc,7,TRUE);
+	COCHeaderPut(cc, 7, TRUE);
 
-	lb=cc->coc.coc_next_misc;
-	while (lb!=&cc->coc.coc_next_misc) {
-		if (lb->type==CMT_JMP_TABLE) {
-			for (i=0;i<lb->range;i++)
-				lb->jmp_table[i]=OptLabelFwd(lb->jmp_table[i]);
-			lb->default=OptLabelFwd(lb->default);
+	lb = cc->coc.coc_next_misc;
+	while (lb != &cc->coc.coc_next_misc)
+	{
+		if (lb->type == CMT_JMP_TABLE)
+		{
+			for (i = 0; i < lb->range; i++)
+				lb->jmp_table[i] = OptLabelFwd(lb->jmp_table[i]);
+			lb->default = OptLabelFwd(lb->default);
 		}
-		lb=lb->next;
+		lb = lb->next;
 	}
 
-	COCHeaderPut(cc,7,FALSE);
-	OptPass789A(cc,reg_offsets,NULL,NULL);
-	COCHeaderPut(cc,8,FALSE);
-	OptPass789A(cc,reg_offsets,NULL,NULL);
-	COCHeaderPut(cc,9,FALSE);
-	code_size=OptPass789A(cc,reg_offsets,NULL,NULL);
-	do {
-		last_code_size=code_size;
-		COCHeaderPut(cc,9,FALSE);
-		code_size=OptPass789A(cc,reg_offsets,NULL,NULL);
-		if (code_size>last_code_size) {
+	COCHeaderPut(cc, 7, FALSE);
+	OptPass789A(cc, reg_offsets, NULL, NULL);
+	COCHeaderPut(cc, 8, FALSE);
+	OptPass789A(cc, reg_offsets, NULL, NULL);
+	COCHeaderPut(cc, 9, FALSE);
+	code_size = OptPass789A(cc, reg_offsets, NULL, NULL);
+	do
+	{
+		last_code_size = code_size;
+		COCHeaderPut(cc, 9, FALSE);
+		code_size = OptPass789A(cc, reg_offsets, NULL, NULL);
+		if (code_size > last_code_size)
+		{
 			"Pass:9 Code Size\n";
-			LexExcept(cc,"Compiler Optimization Error at ");
+			LexExcept(cc, "Compiler Optimization Error at ");
 		}
-	} while (code_size<last_code_size);
+	}
+	while (code_size < last_code_size);
 
-	if (cc->flags&CCF_AOT_COMPILE)
-		res=MAlloc(code_size);
-	else {
-		res=MAlloc(code_size,Fs->code_heap);
+	if (cc->flags & CCF_AOT_COMPILE)
+		res = MAlloc(code_size);
+	else
+	{
+		res = MAlloc(code_size, Fs->code_heap);
 		if (cc->htc.fun)
-			Fs->last_fun=cc->htc.fun;
+			Fs->last_fun = cc->htc.fun;
 	}
-	COCHeaderPut(cc,10,FALSE);
-	code_size=OptPass789A(cc,reg_offsets,res,_debug);
+	COCHeaderPut(cc, 10, FALSE);
+	code_size = OptPass789A(cc, reg_offsets, res, _debug);
 
-	COCDel(cc,&cc->coc);
-	if (Bt(&cc->opts,OPTf_TRACE)) {
-		if (cc->flags&CCF_AOT_COMPILE) {
-			if (cc->aotc->seg_size==16)
-				Un(res,code_size,16);
-			else if (cc->aotc->seg_size==64)
-				Un(res,code_size,64);
+	COCDel(cc, &cc->coc);
+	if (Bt(&cc->opts, OPTf_TRACE))
+	{
+		if (cc->flags & CCF_AOT_COMPILE)
+		{
+			if (cc->aotc->seg_size == 16)
+				Un(res, code_size, 16);
+			else if (cc->aotc->seg_size == 64)
+				Un(res, code_size, 64);
 			else
-				Un(res,code_size,32);
-		} else
-			Un(res,code_size,64);
+				Un(res, code_size, 32);
+		}
+		else
+			Un(res,code_size, 64);
 	}
-	if (_code_size) *_code_size=code_size;
-	cc->saved_pass_trace=cc->pass_trace;
+	if (_code_size)
+		*_code_size = code_size;
+	cc->saved_pass_trace = cc->pass_trace;
 	return res;
 }

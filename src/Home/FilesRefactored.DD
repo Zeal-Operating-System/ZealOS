@@ -62,6 +62,7 @@ StartOS.CC
 	OptPass5.CC
 	OptPass6.CC
 	OptPass789A.CC
+	ParseLib.CC
 	OpCodes.DD
 	CompilerA.HH
 	CompilerB.HH
