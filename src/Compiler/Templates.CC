@@ -1,117 +1,117 @@
 asm {
 //************************************
 CMP_TEMPLATES::
-				DU32		@@05,@@10,@@15,@@25,@@30,
-								@@35,@@40,@@45,@@55,@@60,
-								@@75,@@80,@@85,@@90,@@95,
-								@@100,@@105,@@110,@@120,@@130;
+				DU32		@@05,  @@10,  @@15,  @@25,  @@30,
+							@@35,  @@40,  @@45,  @@55,  @@60,
+							@@75,  @@80,  @@85,  @@90,  @@95,
+							@@100, @@105, @@110, @@120, @@130;
 
 @@05: 	//INC
 				PUSH		RAX
 				FLD1
-				FADD		ST0,U64 [RSP]
+				FADD		ST0, U64 [RSP]
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@10: 	//DEC
 				PUSH		RAX
 				FLD1
-				FSUBR 	ST0,U64 [RSP]
+				FSUBR 		ST0, U64 [RSP]
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@15: 	//MOD
 				PUSH		RDX
 				PUSH		RAX
-				MOV 		RBX,RSP
+				MOV 		RBX, RSP
 				FLD 		U64 [RBX]
 				FLD 		U64 8[RBX]
 @@20: 	FPREM
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@20
 				FSTP		U64 [RBX]
-				FFREE 	ST0
+				FFREE 		ST0
 				FINCSTP
 				POP 		RAX
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@25: 	//LESS
 				PUSH		RDX
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FLD 		U64 8[RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,0
-				ADC 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 0
+				ADC 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,16
+				ADD 		RSP, 16
 
 @@30: 	//GREATER
 				PUSH		RDX
 				PUSH		RAX
 				FLD 		U64 8[RSP]
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,0
-				ADC 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 0
+				ADC 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,16
+				ADD 		RSP, 16
 
 @@35: 	//LESS_EQU
 				PUSH		RDX
 				PUSH		RAX
 				FLD 		U64 8[RSP]
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,1
-				SBB 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 1
+				SBB 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,16
+				ADD 		RSP, 16
 
 @@40: 	//GREATER_EQU
 				PUSH		RDX
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FLD 		U64 8[RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,1
-				SBB 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 1
+				SBB 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,16
+				ADD 		RSP, 16
 
 @@45: //StrLen
 				MOV 		RDX,RAX
-@@50: 	MOV 		BL,U8 [RAX]
+@@50: 			MOV 		BL, U8 [RAX]
 				INC 		RAX
-				TEST		BL,BL
+				TEST		BL, BL
 				JNZ 		@@50
-				SUB 		RAX,RDX
+				SUB 		RAX, RDX
 				DEC 		RAX
 
 @@55: //RDTSC
 				RDTSC
-				SHL 		RDX,32
-				ADD 		RAX,RDX
+				SHL 		RDX, 32
+				ADD 		RAX, RDX
 
 @@60: //SignI64
-				TEST		RAX,RAX
+				TEST		RAX, RAX
 				JZ			@@70
 				JS			@@65
-				MOV 		RAX,1
+				MOV 		RAX, 1
 				JMP 		@@70
-@@65: 	MOV 		RAX,-1
+@@65: 			MOV 		RAX, -1
 @@70:
 @@75:
 @@80:
 @@85: //Sqr
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FMUL		ST0,ST0
+				FMUL		ST0, ST0
 				FSTP		U64 [RSP]
 				POP 		RAX
 
@@ -146,11 +146,11 @@ CMP_TEMPLATES::
 @@110: //Tan
 				PUSH		RAX
 				FLD 		U64 [RSP]
-@@115:	FPTAN
+@@115:			FPTAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@115
-				FFREE 	ST0
+				FFREE 		ST0
 				FINCSTP
 				FSTP		U64 [RSP]
 				POP 		RAX
@@ -161,7 +161,7 @@ CMP_TEMPLATES::
 				FLD1
 @@125:	FPATAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@125
 				FSTP		U64 [RSP]
 				POP 		RAX
@@ -170,22 +170,22 @@ CMP_TEMPLATES::
 
 //************************************
 CMP_TEMPLATES_DONT_POP::
-				DU32		@@05,@@10,@@15,@@20,@@25,
-								@@30,@@35,@@40,@@45,@@50,
-								@@55,@@60,@@65,@@70,@@75,
-								@@80,@@85,@@90,@@100,@@110;
+				DU32		@@05, @@10, @@15, @@20,  @@25,
+							@@30, @@35, @@40, @@45,  @@50,
+							@@55, @@60, @@65, @@70,  @@75,
+							@@80, @@85, @@90, @@100, @@110;
 
 @@05: 	//INC
 				PUSH		RAX
 				FLD1
-				FADD		ST0,U64 [RSP]
+				FADD		ST0, U64 [RSP]
 				FST 		U64 [RSP]
 				POP 		RAX
 
 @@10: 	//DEC
 				PUSH		RAX
 				FLD1
-				FSUBR 	ST0,U64 [RSP]
+				FSUBR 		ST0, U64 [RSP]
 				FST 		U64 [RSP]
 				POP 		RAX
 
@@ -201,78 +201,78 @@ CMP_TEMPLATES_DONT_POP::
 @@60:
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@65: //Sqr
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FMUL		ST0,ST0
-				ADD 		RSP,8
+				FMUL		ST0, ST0
+				ADD 		RSP, 8
 
 @@70: //Abs
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FABS
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@75: //Sqrt
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FSQRT
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@80: //Sin
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FSIN
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@85: //Cos
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FCOS
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@90: //Tan
 				PUSH		RAX
 				FLD 		U64 [RSP]
-@@95: 	FPTAN
+@@95: 			FPTAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@95
-				FFREE 	ST0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@100: //Atan
 				PUSH		RAX
 				FLD 		U64 [RSP]
 				FLD1
-@@105:	FPATAN
+@@105:			FPATAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@105
-				ADD 		RSP,8
+				ADD 		RSP, 8
 @@110:
 
 //************************************
 CMP_TEMPLATES_DONT_PUSH::
-				DU32		@@05,@@10,@@15,@@20,@@30,
-								@@35,@@40,@@50,@@55,@@60,
-								@@65,@@70,@@75,@@80,@@85,
-								@@90,@@95,@@100,@@110,@@120;
+				DU32		@@05, @@10, @@15,  @@20,  @@30,
+							@@35, @@40, @@50,  @@55,  @@60,
+							@@65, @@70, @@75,  @@80,  @@85,
+							@@90, @@95, @@100, @@110, @@120;
 
 @@05: 	//INC
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FLD1
-				FADDP 	ST1,ST0
+				FADDP 		ST1, ST0
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@10: 	//DEC
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FLD1
-				FSUBP 	ST1,ST0
+				FSUBP 		ST1, ST0
 				FSTP		U64 [RSP]
 				POP 		RAX
 
@@ -280,101 +280,101 @@ CMP_TEMPLATES_DONT_PUSH::
 @@20: 	//LESS
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 0
 				JZ			@@25
-				MOV 		RAX,1
-				SBB 		RAX,0
-@@25: 	FFREE 	ST0
+				MOV 		RAX, 1
+				SBB 		RAX, 0
+@@25: 			FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@30: 	//GREATER
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,0
-				ADC 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 0
+				ADC 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@35: 	//LESS_EQU
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,1
-				SBB 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 1
+				SBB 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@40: 	//GREATER_EQU
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,1
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 1
 				JZ			@@45
-				MOV 		RAX,0
-				ADC 		RAX,0
-@@45: 	FFREE 	ST0
+				MOV 		RAX, 0
+				ADC 		RAX, 0
+@@45: 			FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 @@50:
 @@55:
 @@60:
 @@65: //FSTP
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FSTP		U64 [RSP]
 				POP 		RAX
 @@70:
 @@75: //Sqr
-				SUB 		RSP,8
-				FMUL		ST0,ST0
+				SUB 		RSP, 8
+				FMUL		ST0, ST0
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@80: //Abs
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FABS
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@85: //Sqrt
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FSQRT
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@90: //Sin
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FSIN
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@95: //Cos
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FCOS
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@100: //Tan
-				SUB 		RSP,8
-@@105:	FPTAN
+				SUB 		RSP, 8
+@@105:			FPTAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@105
-				FFREE 	ST0
+				FFREE 		ST0
 				FINCSTP
 				FSTP		U64 [RSP]
 				POP 		RAX
 
 @@110: //Atan
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FLD1
-@@115:	FPATAN
+@@115:			FPATAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@115
 				FSTP		U64 [RSP]
 				POP 		RAX
@@ -382,22 +382,22 @@ CMP_TEMPLATES_DONT_PUSH::
 
 //************************************
 CMP_TEMPLATES_DONT_PUSH_POP::
-				DU32		@@05,@@10,@@15,@@20,@@25,
-								@@30,@@35,@@40,@@45,@@50,
-								@@55,@@60,@@65,@@70,@@75,
-								@@80,@@85,@@90,@@95,@@105;
+				DU32		@@05, @@10, @@15, @@20, @@25,
+							@@30, @@35, @@40, @@45, @@50,
+							@@55, @@60, @@65, @@70, @@75,
+							@@80, @@85, @@90, @@95, @@105;
 
 @@05: 	//INC
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FLD1
-				FADDP 	ST1,ST0
+				FADDP 		ST1, ST0
 				FST 		U64 [RSP]
 				POP 		RAX
 
 @@10: 	//DEC
-				SUB 		RSP,8
+				SUB 		RSP, 8
 				FLD1
-				FSUBP 	ST1,ST0
+				FSUBP 		ST1, ST0
 				FST 		U64 [RSP]
 				POP 		RAX
 
@@ -412,7 +412,7 @@ CMP_TEMPLATES_DONT_PUSH_POP::
 @@55:
 @@60:
 @@65: //Sqr
-				FMUL		ST0,ST0
+				FMUL		ST0, ST0
 
 @@70: //Abs
 				FABS
@@ -429,25 +429,25 @@ CMP_TEMPLATES_DONT_PUSH_POP::
 @@90: //Tan
 				FPTAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@90
-				FFREE 	ST0
+				FFREE		ST0
 				FINCSTP
 
 @@95: //Atan
 				FLD1
-@@100:	FPATAN
+@@100:			FPATAN
 				FSTSW
-				TEST		AX,0x400
+				TEST		AX, 0x400
 				JNZ 		@@100
 @@105:
 
 //************************************
 CMP_TEMPLATES_DONT_PUSH2::
-				DU32		@@05,@@10,@@15,@@20,@@25,
-								@@35,@@45,@@50,@@55,@@60,
-								@@65,@@70,@@75,@@80,@@85,
-								@@90,@@95,@@100,@@105,@@110;
+				DU32		@@05, @@10, @@15,  @@20,  @@25,
+							@@35, @@45, @@50,  @@55,  @@60,
+							@@65, @@70, @@75,  @@80,  @@85,
+							@@90, @@95, @@100, @@105, @@110;
 
 @@05:
 @@10:
@@ -456,46 +456,46 @@ CMP_TEMPLATES_DONT_PUSH2::
 @@20: 	//LESS
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,0
-				ADC 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 0
+				ADC 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@25: 	//GREATER
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 0
 				JZ			@@30
-				MOV 		RAX,1
-				SBB 		RAX,0
-@@30: 	FFREE 	ST0
+				MOV 		RAX, 1
+				SBB 		RAX, 0
+@@30: 			FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@35: 	//LESS_EQU
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,1
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 1
 				JZ			@@40
-				MOV 		RAX,0
-				ADC 		RAX,0
-@@40: 	FFREE 	ST0
+				MOV 		RAX, 0
+				ADC 		RAX, 0
+@@40: 			FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 
 @@45: 	//GREATER_EQU
 				PUSH		RAX
 				FLD 		U64 [RSP]
-				FCOMIP	ST0,ST1
-				MOV 		RAX,1
-				SBB 		RAX,0
-				FFREE 	ST0
+				FCOMIP		ST0, ST1
+				MOV 		RAX, 1
+				SBB 		RAX, 0
+				FFREE 		ST0
 				FINCSTP
-				ADD 		RSP,8
+				ADD 		RSP, 8
 @@50:
 @@55:
 @@60:
