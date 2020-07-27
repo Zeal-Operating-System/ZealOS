@@ -61,6 +61,7 @@ StartOS.CC
 	OptPass4.CC
 	OptPass5.CC
 	OptPass6.CC
+	OptPass789A.CC
 	OpCodes.DD
 	CompilerA.HH
 	CompilerB.HH
