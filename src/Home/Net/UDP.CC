@@ -402,13 +402,12 @@ I64 UDPParsePacket(U16 *source_port_out,
 }
 
 //CUDPSocket *UDPSocket(U16 domain, U16 type) // should this even be allowed? why not just UDPSocket; ? it could just know its domain and type.
-CUDPSocket *UDPSocket(U16 domain)
+CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 {
 	U16 type = SOCKET_DATAGRAM;
 
-	if (domain != AF_INET)
-		Debug("Non IPV4 UDP Sockets not implemented yet !\n");
-
+//	if (domain != AF_INET)
+//		Debug("Non IPV4 UDP Sockets not implemented yet !\n");
 //	if (type != SOCKET_DATAGRAM)
 //		Debug("UDP Sockets must be of type SOCKET DATAGRAM"); // maybe just return null if wrong type and ZenithErr
 
@@ -416,18 +415,19 @@ CUDPSocket *UDPSocket(U16 domain)
 
 	udp_socket->socket = Socket(domain, type);
 	
-	udp_socket->receive_address.family = domain; // INET or INET6
+	udp_socket->receive_address.family = domain; // INET, INET6, or unspecified
 
 	return udp_socket;
 
 }
 
-I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_in) // I64 addr_len ?? does it really matter that much
+I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 {
-	//if we put in addr len do a check its valid for ipv4 and ipv6 based on family
-
 	CUDPTreeNode *temp_node;
-	CSocketAddressIPV4 *ipv4_socket_addr;
+	CSocketAddressIPV4 *ipv4_source;
+	CSocketAddressIPV4 *ipv4_receive;
+	CSocketAddressIPV6 *ipv6_source;
+	CSocketAddressIPV6 *ipv6_receive;
 	U16 port;
 
 	switch (udp_socket->socket->state)
@@ -446,16 +446,51 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_in) // 
 		return -1;
 	}
 
-	if (address_in->family != AF_INET) Debug("Non IPV4 socket binds not implemented !");
+	switch (address_source->family)
+	{
+		case AF_INET:
 
-	ipv4_socket_addr = address_in;
+			if (udp_socket->receive_address.family == AF_INET6)
+			{
+				ZenithErr("Attempted UDP Socket Bind with incompatible Address type.\n");
+				return -1;
+			}
 
-	udp_socket->receive_address(CSocketAddressIPV4).address.address = ipv4_socket_addr->address.address;
-	// bind socket to address in parameter.
-	udp_socket->receive_address(CSocketAddressIPV4).port = ipv4_socket_addr->port;
-	// ... consistency would say keep in Big Endian ...
+			ipv4_source = address_source;
+			ipv4_receive = &udp_socket->receive_address;
 
-	port = EndianU16(ipv4_socket_addr->port); // port member should be Big Endian,  so now we're going L.E (?)
+			ipv4_receive->address.address = ipv4_source->address.address; // bind socket to address in parameter.
+			ipv4_receive->port = ipv4_source->port; // ... consistency would say keep in Big Endian ...
+
+			port = EndianU16(ipv4_source->port); // port member should be Big Endian,  so now we're going L.E (?)
+
+			break;
+
+		case AF_INET6:
+
+			if (udp_socket->receive_address.family == AF_INET)
+			{
+				ZenithErr("Attempted UDP Socket Bind with incompatible Address type.\n");
+				return -1;
+			}
+
+			ipv6_source = address_source;
+			//ipv6_receive = 
+			// ...
+
+			port = EndianU16(ipv6_source->port); // port member should be Big Endian,  so now we're going L.E (?)
+
+			Debug("TODO: IPV6 UDP BIND");
+
+			break;
+
+		case AF_UNSPEC:
+			Debug("TODO: AF_UNSPEC UDP BIND");
+
+			break;
+	}
+
+	// at this point, Socket and Address have matching family values
 
 	if (udp_globals.bound_socket_tree)
 	{
@@ -464,14 +499,26 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_in) // 
 
 		if (temp_node)
 		{ // if we find we have bound sockets at port, check address before adding to queue
-			if (UDPTreeNodeQueueIPV4Find(udp_socket->receive_address(CSocketAddressIPV4).address.address, temp_node))
+			switch (address_source->family)
 			{
-				ZenithErr("Attempted UDP Socket Bind at an address already in Bound Socket Tree !\n");
-				return -1;
-			}
-			else
-			{ // if no address match, free to add socket to the node queue
-				UDPTreeNodeQueueAdd(udp_socket, temp_node);
+				case AF_INET:
+					if (UDPTreeNodeQueueIPV4Find(ipv4_receive->address.address, temp_node))
+					{
+						ZenithErr("Attempted UDP Socket Bind at an address already in Bound Socket Tree !\n");
+						return -1;
+					}
+					else
+					{ // if no address match, free to add socket to the node queue
+						UDPTreeNodeQueueAdd(udp_socket, temp_node);
+					}
+
+				case AF_INET6:
+					Debug("TODO: IPV6 UDP BIND");
+					break;
+
+				case AF_UNSPEC:
+					Debug("TODO: AF_UNSPEC UDP BIND");
+					break;
 			}
 		}
 		else

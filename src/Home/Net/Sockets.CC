@@ -31,6 +31,7 @@
 #define SOCKET_DATAGRAM	2
 #define SOCKET_RAW		3
 
+#define AF_UNSPEC	0
 #define	AF_INET		2
 #define AF_INET6	10
 
