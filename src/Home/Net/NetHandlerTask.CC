@@ -9,14 +9,16 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 	switch (packet.protocol)
 	{
 		case IP_PROTOCOL_ICMP:
+			ZenithLog("IPV4 Handler: ICMP.\n");
 			ICMPHandler(&packet);
 			break;
 		case IP_PROTOCOL_TCP:
 			break;
 		case IP_PROTOCOL_UDP:
+			ZenithLog("IPV4 Handler: UDP.\n");
+			UDPHandler(&packet);
 			break;
 	}
-
 }
 
 U0 HandleNetQueueEntry(CNetQueueEntry *entry)

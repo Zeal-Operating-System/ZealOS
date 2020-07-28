@@ -48,19 +48,19 @@
 
 class CSocketAddress
 {
-	U16	family; // 'address family, AF_xxx'
+	U16	family;		// 'address family, AF_xxx'
 
-	U8	data[14]; // '14 bytes of protocol address'
+	U8	data[14];	// '14 bytes of protocol address'
 };
 
 class CIPV4Address
 {
-	U32 address; // 'in Network Byte order' ... Big Endian
+	U32 address;	// 'in Network Byte order' ... Big Endian
 };
 
 class CIPV6Address
 {
-	U8	address[16]; //a clear #define would be nice
+	U8	address[16]; // a clear #define would be nice
 };
 
 class CIPAddressStorage
@@ -70,22 +70,22 @@ class CIPAddressStorage
 
 class CSocketAddressIPV4
 {
-	I16	family;	// 'AF_INET'
-	U16	port;	// 'in Network Byte order' ... Big Endian
+	I16	family;		// 'AF_INET'
+	U16	port;		// 'in Network Byte order' ... Big Endian
 
-	CIPV4Address	address;
+	CIPV4Address address;
 
-	U8	zeroes[8];	//'same size as socket address'
+	U8	zeroes[8];	// 'same size as socket address'
 };
 
 class CSocketAddressIPV6
 {
-	U16	family; // 'AF_INET6'
-	U16 port; // 'in Network Byte order'... Big Endian
+	U16	family;	// 'AF_INET6'
+	U16 port;	// 'in Network Byte order'... Big Endian
 
 	U32 flow_info;
 
-	CIPV6Address	address;
+	CIPV6Address address;
 
 	U32	scope_id;
 };
@@ -192,7 +192,7 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 
 	temp_destination = EndianU32(temp_destination); // store the address in Network Byte Order (Big-Endian)
 	*destination = temp_destination;
-	"\n\n%X\n\n",temp_destination;
+	"\n\n%X\n\n", temp_destination;
 	return TRUE;
 }
 
@@ -269,13 +269,11 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 
 			ipv4_source = source;
 
-
 			StrPrint(ip_string, "%d.%d.%d.%d",
-						ipv4_source->address.u8[3],
-						ipv4_source->address.u8[2],
-						ipv4_source->address.u8[1],
-						ipv4_source->address.u8[0]);
-
+					 ipv4_source->address.u8[3],
+					 ipv4_source->address.u8[2],
+					 ipv4_source->address.u8[1],
+					 ipv4_source->address.u8[0]);
 			break;
 		case AF_INET6:
 
@@ -288,8 +286,6 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 			ZenithErr("Socket Address to IP failed: Invalid Address Family.\n");
 			break;
 	}
-
-	
 
 	return ip_string;
 }

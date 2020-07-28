@@ -25,7 +25,7 @@ class CUDPSocket
 
 	CSocketAddressStorage receive_address; // based on ->family, cast or assign to a var as IPV4/IPV6 CSocketAddress
 
-	U16	bound_to; // represents the currently bound port
+	U16	bound_to;	// represents the currently bound port
 };
 
 
@@ -703,95 +703,89 @@ I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressS
 
 // UDPSocketSetOpt ?
 
-// UDPHandle
+I64 UDPHandler(CIPV4Packet *packet)
+{ // TODO: Need either two UDP handlers for IPv4/IPv6, or logic changes if IPV6 is desired.
+	U16 source_port;
+	U16 destination_port;
+	U8 *data;
+	I64 length;
+	CUDPTreeNode	*node;
+	CUDPTreeQueue	*queue;
+	CUDPSocket		*udp_socket;
+	CSocketAddressIPV4 *ipv4_addr;
+	I64 num_receive;
+
+	I64 error = UDPParsePacket(&source_port, &destination_port, &data, &length, packet);
+
+	if (error < 0)
+	{
+		ZenithErr("UDP Handler Packet Parse Error.\n");
+		return error;
+	}
+
+	if (udp_globals.bound_socket_tree)
+	{
+		node = UDPTreeNodeFind(destination_port, udp_globals.bound_socket_tree);
+		if (node)
+		{
+			// TODO: implement check for INADDR_ANY in socket queue
+			queue = UDPTreeNodeQueueIPV4Find(packet->destination_ip_address, node); // TODO: make sure bit order is correct here!!
+			if (queue)
+			{
+				udp_socket = queue->socket;
+				ZenithLog("Handled UDP packet, port and address are in bound tree.\n");
+			}
+			else
+			{
+				ZenithWarn("Handled UDP packet, found node for port, but address is not in node queue.\n");
+				return -1;
+			}
+		}
+		else
+		{
+			ZenithWarn("Handled UDP packet but node for port is not in tree.\n");
+			return -1;
+		}
+	}
+	else
+	{
+		ZenithWarn("Handled UDP packet but socket tree is currently empty.\n");
+		return -1;
+	}
+
+	// at this point, udp_socket is set, otherwise has already returned -1.
+
+	if (udp_socket->receive_buffer)
+	{
+		num_receive = udp_socket->receive_len;
+
+		if (num_receive > length)
+		{
+			num_receive = length;
+			ZenithWarn("UDP Handler: Truncating UDP socket receive length.\n");
+		}
+
+		MemCopy(udp_socket->receive_buffer, data, num_receive);
+
+		// Shrine has comment 'signal that we received something'
+		// In UDPSocketRecvFrom, a given buffer is set as receive buffer.
+		// Handler sees socket has buffer, copies data to that buffer,
+		// then clears the socket's pointer for it. Actual buffer location
+		// itself is untouched.
+		udp_socket->receive_buffer	= NULL;
+		udp_socket->receive_len		= num_receive;
+
+		ipv4_addr = &udp_socket->receive_address;
+
+		ipv4_addr->port				= EndianU16(source_port);
+		ipv4_addr->address.address	= EndianU32(packet->source_ip_address);
+	}
+
+	return error;
+}
 
 // the socket functions just act on the socket state machine.
 // ZenithErr and return fail vals if socket FSM improperly used.
 // Careful with Free()'s.
 
 UDPGlobalsInit;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

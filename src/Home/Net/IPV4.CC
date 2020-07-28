@@ -30,18 +30,18 @@ class CIPV4Packet
 
 class CIPV4Header
 { // note: U4's in some U8s.
-	U8 version_ihl; //Version for IPV4 is 4. IHL=Internet Header Length
+	U8 version_ihl;				// Version for IPV4 is 4. IHL=Internet Header Length
 
-	U8 dscp_ecn; // DSCP=Differentiated Services Code Point. ECN=Explicit Congestion Notification
+	U8 dscp_ecn;				// DSCP=Differentiated Services Code Point. ECN=Explicit Congestion Notification
 
-	U16 total_length; // min 20B max 65535
+	U16 total_length;			// min 20B max 65535
 
 	U16 identification;
 
-	U16 flags_fragment_offset; // flags first(?) 3 bits. fragment offset min 0 max 65528
+	U16 flags_fragment_offset;	// flags first(?) 3 bits. fragment offset min 0 max 65528
 	// flag: bit 0: reserved must be 0. bit 1: don't fragment. bit 2: more fragments
 
-	U8 time_to_live; // specified in seconds, wikipedia says nowadays serves as a hop count
+	U8 time_to_live;			// specified in seconds, wikipedia says nowadays serves as a hop count
 
 	U8 protocol;
 
@@ -63,10 +63,10 @@ class CIPV4Globals
 
 U0 InitIPV4Globals()
 {
-	ipv4_globals.local_ip = 0;
-	ipv4_globals.local_ip_be = 0;
+	ipv4_globals.local_ip			 = 0;
+	ipv4_globals.local_ip_be		 = 0;
 	ipv4_globals.ipv4_router_address = 0;
-	ipv4_globals.ipv4_subnet_mask = 0;
+	ipv4_globals.ipv4_subnet_mask	 = 0;
 }
 
 
@@ -131,8 +131,7 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 
 
 	// "outside this subnet; needs routing"
-	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != 
-		(ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
+	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != (ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
 	{
 		// Shrine recurses here... and says FIXME infinite loop if mis-configured...
 	}
@@ -156,7 +155,8 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 			{
 				Sleep(10);
 				entry = ARPCacheFindByIP(ip_address);
-				if (entry) break;
+				if (entry)
+					break;
 			}
 
 			if (entry)
@@ -169,16 +169,16 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		}
 
 		//Shrine does some in_addr mess to log error
-		ZenithLog("Failed to resolve address %d",ip_address);
+		ZenithLog("Failed to resolve address %d", ip_address);
 		return IPV4_ERR_HOST_UNREACHABLE;
 	}
 }
 
 I64 IPV4PacketAllocate(U8 **frame_out, 
-						U8 protocol,
-						U32 source_ip_address,
-						U32 destination_ip_address,
-						I64 length)
+					   U8 protocol,
+					   U32 source_ip_address,
+					   U32 destination_ip_address,
+					   I64 length)
 {
 	U8 *ethernet_frame;
 	U8 *destination_mac_address;
@@ -199,10 +199,10 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	}
 
 	de_index = EthernetFrameAllocate(&ethernet_frame,
-										EthernetGetMAC(),
-										destination_mac_address,
-										ETHERTYPE_IPV4,
-										sizeof(CIPV4Header) + length);
+									 EthernetGetMAC(),
+									 destination_mac_address,
+									 ETHERTYPE_IPV4,
+									 sizeof(CIPV4Header) + length);
 	if (de_index < 0)
 	{
 		ZenithLog("IPV4 Ethernet Frame Allocate failed.\n");
@@ -215,27 +215,17 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	header = ethernet_frame;
 
 
-	header->version_ihl = internet_header_length | (4 << 4);// whaaat the fuck is this? #define!
-
-	header->dscp_ecn = 0; // a clear define of what this actually means would be good
-
-	header->total_length = EndianU16(internet_header_length * 4 + length); //...why?
-
-	header->identification = 0;// define would be clearer
-
-	header->flags_fragment_offset = 0; // define would be clearer
-
-	header->time_to_live = IPV4_TTL;
-
-	header->protocol = protocol;
-
-	header->header_checksum = 0; // why is 0 ok?
-
-	header->source_ip_address = EndianU32(source_ip_address);
-
-	header->destination_ip_address = EndianU32(destination_ip_address);
-
-	header->header_checksum = IPV4Checksum(header, internet_header_length + 4);//why the 4's...
+	header->version_ihl				= internet_header_length | (4 << 4);// whaaat the fuck is this? #define!
+	header->dscp_ecn				= 0; // a clear define of what this actually means would be good
+	header->total_length			= EndianU16(internet_header_length * 4 + length); //...why?
+	header->identification			= 0; // define would be clearer
+	header->flags_fragment_offset	= 0; // define would be clearer
+	header->time_to_live			= IPV4_TTL;
+	header->protocol				= protocol;
+	header->header_checksum			= 0; // why is 0 ok?
+	header->source_ip_address		= EndianU32(source_ip_address);
+	header->destination_ip_address	= EndianU32(destination_ip_address);
+	header->header_checksum			= IPV4Checksum(header, internet_header_length + 4);//why the 4's...
 
 	*frame_out = ethernet_frame + sizeof(CIPV4Header);
 	return de_index;
@@ -253,7 +243,7 @@ U32 IPV4GetAddress()
 
 U0 IPV4SetAddress(U32 ip_address)
 {
-	ipv4_globals.local_ip = ip_address;
+	ipv4_globals.local_ip	 = ip_address;
 	ipv4_globals.local_ip_be = EndianU32(ip_address);
 
 	ARPSetIPV4Address(ip_address);
@@ -263,7 +253,7 @@ U0 IPV4SetAddress(U32 ip_address)
 U0 IPV4SetSubnet(U32 router_address, U32 subnet_mask)
 {
 	ipv4_globals.ipv4_router_address = router_address;
-	ipv4_globals.ipv4_subnet_mask = subnet_mask;
+	ipv4_globals.ipv4_subnet_mask	 = subnet_mask;
 }
 
 //I64
@@ -277,17 +267,12 @@ U0 IPV4ParsePacket(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 	I64 header_length = (header->version_ihl & 0x0F) * 4;//this Has to go. at least abstract or something..
 	U16 total_length = EndianU16(header->total_length);
 
-	packet_out->ethernet_frame = ethernet_frame;
-
-	packet_out->source_ip_address = EndianU32(header->source_ip_address);
-	packet_out->destination_ip_address = EndianU32(header->destination_ip_address);
-
-	packet_out->protocol = header->protocol;
-
-
-	packet_out->data = ethernet_frame->data + header_length;
-
-	packet_out->length = total_length - header_length;
+	packet_out->ethernet_frame			= ethernet_frame;
+	packet_out->source_ip_address		= EndianU32(header->source_ip_address);
+	packet_out->destination_ip_address	= EndianU32(header->destination_ip_address);
+	packet_out->protocol				= header->protocol;
+	packet_out->data					= ethernet_frame->data + header_length;
+	packet_out->length					= total_length - header_length;
 
 //	return 0;
 }

@@ -58,11 +58,13 @@ I64 ARPSend(U16 operation,
 	U8 *ethernet_frame;
 	CARPHeader *header;
 	I64 de_index = EthernetFrameAllocate(&ethernet_frame,
-										send_mac_address,
-										dest_mac_address,
-										ETHERTYPE_ARP,
-										sizeof(CARPHeader));
-	if (de_index < 0) return de_index;// error state
+										 send_mac_address,
+										 dest_mac_address,
+										 ETHERTYPE_ARP,
+										 sizeof(CARPHeader));
+
+	if (de_index < 0)
+		return de_index; // error state
 
 	header = ethernet_frame;
 
