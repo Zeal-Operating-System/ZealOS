@@ -176,7 +176,7 @@ public U0 PaletteSetTom(Bool persistent=TRUE)
 //********************************************************************************
 public CBGR24 gr_palette_tom_light[COLORS_NUM]= {
 	0x000000, 0x3465A4, 0x4E9A06, 0x06989A, 0xA24444, 0x75507B, 0xBF8718, 0xB2B6AF,
-	0x555753, 0x729FCF, 0x82BC49, 0x00BBC8, 0xAC3535, 0xAD7FA8, 0xC7AB00, 0xFFFFFF
+	0x555753, 0x729FCF, 0x82BC49, 0x00BBC8, 0xAC3535, 0xAD7FA8, 0xC7AB00, 0xFEF1F0
 };
 
 public U0 PaletteSetTomLight(Bool persistent=TRUE)
