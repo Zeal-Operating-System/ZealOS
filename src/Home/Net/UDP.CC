@@ -509,19 +509,12 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 
 	if (queue)
 	{
-		if (queue == queue->next == queue->last)
-		{ // queue is alone. Means port only has this address bound.
-			Debug("queue==next==last. implemented(?) this in SocketSinglePop, test it");
-		}
-		else
-		{ // queue has other addresses bound at this port. only Free the queue entry, after removing it.
-			UDPTreeNodeQueueSocketSinglePop(udp_socket, node);
+		UDPTreeNodeQueueSocketSinglePop(udp_socket, node);
 
-			Free(udp_socket->socket);
-			Free(udp_socket->receive_buffer);
-			Free(udp_socket);
-			Free(queue);
-		}
+		Free(udp_socket->socket);
+		Free(udp_socket->receive_buffer);
+		Free(udp_socket);
+		Free(queue);
 	}
 	else
 	{
