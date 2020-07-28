@@ -1,0 +1,39 @@
+$WW$$FG,5$$TX+CX,"Project Roadmap"$$FG$
+
+The goal is to be a fully-functional, self-reproducing x86_64 PC operating system running in $FG,2$ring-0 only$FG$, designed for modern machines with $FG,2$AHCI$FG$ and $FG,2$NVMe$FG$ drives.
+
+Roadmap:
+
+- AHCI driver that is capable of reading and burning CD/DVD discs, and can also work with RW discs.
+
+- Speed up the OS by doing compiler optimizations like register arguments.
+
+- Drop floating point support completely.
+
+- Add either SSE or AVX support (not both) to the assembler/compiler, for working with large integers.
+
+- Write a new 32-bit color graphics library that uses the added SIMD instructions. Refresh DolDoc for the following:
+
+- Build a simplistic GUI framework that integrates with DolDoc and the terminal using the new graphics library.
+
+- Add Intel HD Audio support.
+
+- Write drivers for the 5 most common ethernet cards.
+
+- Create a clean and robust networking stack that supports raw sockets, TCP, UDP, IP, ICMP, DHCP, and an HTTP library. Perhaps we can avoid Berkeley Sockets and create our own system?
+
+- Write applications using this networking stack.
+
+- Write a JSON library, so REST APIs can be used.
+
+- Drop FAT32 and maybe RedSea, replace with exFAT and proper ISO9660 support.
+
+- Whole system VCS, with root being top-level directory. Stored repo inside the OS, you can checkout any commit onto another partition and boot it to see what the OS was like in that commit.
+
+- Pull updates directly onto root filesystem from network. (it's a repo source tree after all).
+
+- At this point, bigger fish in the pond can be eyed. Perhaps support for USB keyboard and mice, and native USB mass storage support, significant code clean up and refactoring.
+
+- Port to other architectures??
+
+Perhaps, in order to reduce LOC in the compiler we can skip on most optimizations.
