@@ -187,7 +187,7 @@ CUDPTreeNode *UDPTreeNodeSinglePop(I64 port, CUDPTreeNode *tree)
 
 	return node;
 }
-
+/* TODO: determine if necessary to implement
 U0 UDPTreeNodeFree(CUDPTreeNode *node)
 {	// only clears and frees the node. !! if node has subtrees, 
 	// they will be left floating. use with caution to avoid memory leaks
@@ -195,7 +195,7 @@ U0 UDPTreeNodeFree(CUDPTreeNode *node)
 	// .. what does CQueue functions give us. QueueRemove is our best bet,
 	// i guess it will just try to swap around the next last ptrs.
 }
-
+*/
 U0 UDPTreeNodeQueueInit(CUDPTreeNode *node)
 {
 	node->queue = CAlloc(sizeof(CUDPTreeQueue));
@@ -389,7 +389,7 @@ I64 UDPParsePacket(U16 *source_port_out,
 
 	CUDPHeader *header = packet->data;
 
-	// Shrine has FIXME, validate packet length!
+	// TODO: Shrine has FIXME, validate packet length!
 
 	*source_port_out		= EndianU16(header->source_port);
 	*destination_port_out	= EndianU16(header->destination_port);
@@ -405,12 +405,6 @@ I64 UDPParsePacket(U16 *source_port_out,
 CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 {
 	U16 type = SOCKET_DATAGRAM;
-
-//	if (domain != AF_INET)
-//		Debug("Non IPV4 UDP Sockets not implemented yet !\n");
-//	if (type != SOCKET_DATAGRAM)
-//		Debug("UDP Sockets must be of type SOCKET DATAGRAM"); // maybe just return null if wrong type and ZenithErr
-
 	CUDPSocket *udp_socket = CAlloc(sizeof(CUDPSocket));
 
 	udp_socket->socket = Socket(domain, type);
@@ -456,11 +450,11 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 				return -1;
 			}
 
-			ipv4_source = address_source;
+			ipv4_source  = address_source;
 			ipv4_receive = &udp_socket->receive_address;
 
-			ipv4_receive->address.address = ipv4_source->address.address; // bind socket to address in parameter.
-			ipv4_receive->port = ipv4_source->port; // ... consistency would say keep in Big Endian ...
+			ipv4_receive->address.address	= ipv4_source->address.address; // bind socket to address in parameter.
+			ipv4_receive->port				= ipv4_source->port; // ... consistency would say keep in Big Endian ...
 
 			port = EndianU16(ipv4_source->port); // port member should be Big Endian,  so now we're going L.E (?)
 
@@ -475,7 +469,8 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 			}
 
 			ipv6_source = address_source;
-			//ipv6_receive = 
+			ipv6_receive = &udp_socket->receive_address;
+			// ...
 			// ...
 
 			port = EndianU16(ipv6_source->port); // port member should be Big Endian,  so now we're going L.E (?)
@@ -557,6 +552,9 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 	CUDPTreeNode *node;
 	CUDPTreeQueue *queue;
 
+	SocketClose(udp_socket->socket); // TODO: testing on closing a socket while another task is using it
+	// after low-level socket close, even if protocol level socket fails close, it is now disabled (state is close request)
+
 	node = UDPTreeNodeFind(udp_socket->bound_to, udp_globals.bound_socket_tree);
 
 	if (node)
@@ -591,10 +589,21 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 
 // UDPListen (Shrine just has no_warns, not implemented)
 
-I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *src_address)
+I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *address_out)
 { // ommitted I64 addrlen, flags not implemented
 	CSocketAddressIPV4 *ipv4_socket_addr;
 	CSocketAddressIPV6 *ipv6_socket_addr;
+
+	switch (udp_socket->socket->state)
+	{
+		case SOCKET_STATE_OPEN:  //	Socket State machine must
+		case SOCKET_STATE_BOUND: // be in connected or bound state
+			break;
+
+		default:
+			ZenithErr("Unsuccessful UDP Socket Receive From: Socket state-machine must be in OPEN or BOUND state.\n");
+			return -1;
+	}
 
 	udp_socket->receive_buffer	= buffer;
 	udp_socket->receive_len		= len;
@@ -613,25 +622,84 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 		Yield;
 	}
 
-	if (src_address)
+	if (address_out)
 	{
 		switch (udp_socket->receive_address.family)
 		{
 			case AF_INET:
-				ipv4_socket_addr = src_address;
+				ipv4_socket_addr = address_out;
 				MemCopy(ipv4_socket_addr, &udp_socket->receive_address, sizeof(CSocketAddressIPV4));
 				break;
 			case AF_INET6:
-				ipv6_socket_addr = src_address;
+				ipv6_socket_addr = address_out;
 				MemCopy(ipv6_socket_addr, &udp_socket->receive_address, sizeof(CSocketAddressIPV6));
+				break;
+			case AF_UNSPEC:
+				Debug("TODO: UDP Receive From Error AF_UNSPEC UDPSocket Address Family\n");
 				break;
 		}
 	}
 
+	SocketReceiveFrom(udp_socket->socket);
+
 	return udp_socket->receive_len;
 }
 
-// UDPSocketSendTo
+I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *destination_addr)
+{
+	CSocketAddressStorage *dest;
+	CSocketAddressIPV4 *ipv4_destination;
+	CSocketAddressIPV6 *ipv6_destination;
+	U8 *ethernet_frame;
+	I64 de_index;
+
+	switch (udp_socket->socket->state)
+	{
+		case SOCKET_STATE_OPEN:  //	Socket State machine must
+		case SOCKET_STATE_BOUND: // be in connected or bound state for send.
+			dest = &udp_socket->receive_address; // if already bound, ignore param destination
+			break;								 // and use stored address as send address.
+
+		case SOCKET_STATE_READY: // If socket state is initial, attempt to bind it to destination.
+			ZenithLog("UDP Socket Send To but Socket unbound. Attempting Bind at address parameter.\n");
+			UDPSocketBind(udp_socket, destination_addr);
+			dest = destination_addr;
+			break;
+
+		default:
+			ZenithErr("Unsuccessful UDP Socket Receive From: Socket state-machine must be in OPEN, BOUND or READY  state.\n");
+			return -1;
+	}
+
+	switch (dest->family)
+	{
+		case AF_INET:
+			ipv4_destination = dest;
+
+			de_index = UDPPacketAllocate(&ethernet_frame,
+										 IPV4GetAddress(),
+										 0,
+										 EndianU32(ipv4_destination->address.address),
+										 EndianU16(ipv4_destination->port),
+										 len); // is get address parens redundant?
+			break;
+		case AF_INET6:
+			ipv6_destination = dest;
+			Debug("TODO: IPV6 Not implemented yet");
+			break;
+		case AF_UNSPEC:
+			Debug("TODO: Error UDP Send To AF_UNSPEC\n");
+			break;
+	}
+
+	if (de_index < 0)
+		return -1;
+
+	MemCopy(ethernet_frame, buffer, len); // copies the data in buffer param into the ethernet frame
+
+	UDPPacketFinish(de_index);
+	return 0;
+}
 
 // UDPSocketSetOpt ?
 

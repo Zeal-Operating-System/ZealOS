@@ -363,7 +363,12 @@ U0 SocketAccept(CSocket *socket)
 }
 
 U0 SocketClose(CSocket *socket)
-{
+{	/* Sockets attempting close will enter close
+	request state before destroying the socket at
+	the protocol level. */
+	socket->state = SOCKET_STATE_CLOSE_REQ;
+
+	/*
 	switch (socket->state)
 	{
 		case SOCKET_STATE_LISTENING:
@@ -377,7 +382,7 @@ U0 SocketClose(CSocket *socket)
 		default:
 			SocketStateErr("CLOSE", socket->state);
 			break;
-	}
+	}*/
 }
 
 U0 SocketBind(CSocket *socket)
@@ -433,8 +438,9 @@ U0 SocketReceive(CSocket *socket)
 	switch (socket->state)
 	{
 		case SOCKET_STATE_OPEN:
-			/*	Sockets can only send/recv when
-				they have been connected to. */
+		case SOCKET_STATE_BOUND:
+			/*	Sockets can only recv when
+				connected to or bound. */
 			break;
 
 		default:
@@ -448,8 +454,9 @@ U0 SocketReceiveFrom(CSocket *socket)
 	switch (socket->state)
 	{
 		case SOCKET_STATE_OPEN:
-			/*	Sockets can only send/recv when
-				they have been connected to. */
+		case SOCKET_STATE_BOUND:
+			/*	Sockets can only recvfrom when
+				connected to or bound. */
 			break;
 
 		default:
@@ -463,7 +470,7 @@ U0 SocketSend(CSocket *socket)
 	switch (socket->state)
 	{
 		case SOCKET_STATE_OPEN:
-			/*	Sockets can only send/recv when
+			/*	Sockets can only send when
 				they have been connected to. */
 			break;
 
@@ -478,8 +485,13 @@ U0 SocketSendTo(CSocket *socket)
 	switch (socket->state)
 	{
 		case SOCKET_STATE_OPEN:
-			/*	Sockets can only send/recv when
-				they have been connected to. */
+		case SOCKET_STATE_BOUND:
+		case SOCKET_STATE_READY:
+			/*	Sockets can only sendto when
+				connected to, bound, or in
+				initial state. Protocol logic
+				will determine how to change
+				state based on params. */
 			break;
 
 		default:
