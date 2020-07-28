@@ -15,79 +15,79 @@ $FG,2$_import$FG$ binds a new $LK,"HTT_FUN",A="MN:HTT_FUN"$ or $LK,"HTT_GLOBAL_V
 
 
 $WW,0$$FG,5$Ahead of Time Compilation$FG$
-										$FG,2$G$FG$lobalScope/$FG,2$F$FG$unctionScope
-										| $FG,2$C$FG$odeHeap/$FG,2$D$FG$ataHeap/$FG,2$S$FG$tack/$FG,2$R$FG$egister
-										| | TaskHashEntry:Export$FG,2$S$FG$ysSym/$FG,2$D$FG$efine/$FG,2$F$FG$unction/$FG,2$C$FG$lass
-										| | | UsageScope: $FG,2$M$FG$odule/$FG,2$A$FG$smLocal/Asm$FG,2$B$FG$lk/$FG,2$T$FG$askAndChildren/$FG,2$F$FG$unction
-										| | | |UsageScope: $FG,2$G$FG$lbl/Asm$FG,2$L$FG$ocal/$FG,2$R$FG$emainder/$FG,2$g$FG$lblThisBlkAndRemainder
-										| | | || $FG,2$S$FG$taticVarInit/$FG,2$D$FG$ynamicVarInitAllowed/$FG,2$N$FG$oInitAllowed
-										| | | || | Are dups allowed within the namespace? A dup overshadows the original.
-										| | | || | $FG,2$D$FG$upsAllowed/$FG,2$N$FG$oDups/NoDupsBut$FG,2$P$FG$ad/$FG,2$W$FG$arningUnlessClosedOut
+						$FG,2$G$FG$lobalScope / $FG,2$F$FG$unctionScope
+						| $FG,2$C$FG$odeHeap / $FG,2$D$FG$ataHeap / $FG,2$S$FG$tack / $FG,2$R$FG$egister
+						| | TaskHashEntry: Export$FG,2$S$FG$ysSym / $FG,2$D$FG$efine / $FG,2$F$FG$unction / $FG,2$C$FG$lass
+						| | | UsageScope: $FG,2$M$FG$odule / $FG,2$A$FG$smLocal / Asm$FG,2$B$FG$lk / $FG,2$T$FG$askAndChildren / $FG,2$F$FG$unction
+						| | | |UsageScope: $FG,2$G$FG$lbl / Asm$FG,2$L$FG$ocal / $FG,2$R$FG$emainder / $FG,2$g$FG$lblThisBlkAndRemainder
+						| | | || $FG,2$S$FG$taticVarInit / $FG,2$D$FG$ynamicVarInitAllowed / $FG,2$N$FG$oInitAllowed
+						| | | || | Are dups allowed within the namespace? A dup overshadows the original.
+						| | | || | $FG,2$D$FG$upsAllowed / $FG,2$N$FG$oDups / NoDupsBut$FG,2$P$FG$ad / $FG,2$W$FG$arningUnlessClosedOut
 
-asm export $FG,2$label::$FG$	G C S MG	 N
-asm 			 $FG,2$label:$FG$ 	G C 	MG	 N
-asm local  $FG,2$@@label:$FG$ G C 	AL	 N
-asm $FG,2$IMPORT label;$FG$ 	G C 	MR	 N
-asm export $FG,2$label::$FG$	F C S BG	 N
-asm 			 $FG,2$label:$FG$ 	F C 	BG	 N
-asm local  $FG,2$@@label:$FG$ F C 	AL	 N
-asm $FG,2$IMPORT label;$FG$ 	F C 	BR	 N
-C 	goto	 $FG,2$label:$FG$ 	F C 	FG	 N
+asm export	$FG,2$label::$FG$		G C S MG   N
+asm 		$FG,2$label:$FG$ 		G C   MG   N
+asm local	$FG,2$@@label:$FG$	G C   AL   N
+asm $FG,2$IMPORT	label;$FG$ 		G C   MR   N
+asm export	$FG,2$label::$FG$		F C S BG   N
+asm 		$FG,2$label:$FG$ 		F C   BG   N
+asm local	$FG,2$@@label:$FG$	F C   AL   N
+asm $FG,2$IMPORT	label;$FG$ 		F C   BR   N
+C 	goto	$FG,2$label:$FG$ 		F C   FG   N
 
-					 $FG,2$#define$FG$	x 		MR	 D
-					 function G C S MR	 D
-					 var			F R 	FR	 N
-					 var			F S 	FR	 N
-$FG,2$static$FG$		 var			F C 	FR D N
-					 var			G C S MR D D
-					 var			G D 	MR N D
-					 $FG,2$class$FG$		G 		MR	 D
-class 		 member 	G 		MR	 P
-$FG,2$extern		 class$FG$		G 		MR	 D
-$FG,2$extern$FG$		 function G C 	MR	 W
-$FG,2$import$FG$		 function G C 	MR	 D
-$FG,2$import$FG$		 var			G C 	MR	 D
-$FG,2$_extern$FG$ 	 function G C 	MR	 D
-$FG,2$_extern$FG$ 	 var			G C 	MR	 D
-$FG,2$_import$FG$ 	 function G C 	MR	 D
-$FG,2$_import$FG$ 	 var			G C 	MR	 D
+			$FG,2$#define$FG$		x	  MR   D
+			function	G C S MR   D
+			var			F R   FR   N
+			var			F S   FR   N
+$FG,2$static$FG$		var			F C   FR D N
+			var			G C S MR D D
+			var			G D   MR N D
+			$FG,2$class$FG$		G	  MR   D
+class 		member		G	  MR   P
+$FG,2$extern		class$FG$		G	  MR   D
+$FG,2$extern$FG$		function	G C   MR   W
+$FG,2$import$FG$		function	G C   MR   D
+$FG,2$import$FG$		var			G C   MR   D
+$FG,2$_extern$FG$ 	function	G C   MR   D
+$FG,2$_extern$FG$ 	var			G C   MR   D
+$FG,2$_import$FG$ 	function	G C   MR   D
+$FG,2$_import$FG$ 	var			G C   MR   D
 
 
 $FG,5$Just in Time Compilation$FG$
-										$FG,2$G$FG$lobalScope/$FG,2$F$FG$unctionScope
-										| $FG,2$C$FG$odeHeap/$FG,2$D$FG$ataHeap/$FG,2$S$FG$tack/$FG,2$R$FG$egister
-										| | TaskHashEntry:Export$FG,2$S$FG$ysSym/$FG,2$D$FG$efine/$FG,2$F$FG$unction/$FG,2$C$FG$lass
-										| | | UsageScope: $FG,2$M$FG$odule/$FG,2$A$FG$smLocal/Asm$FG,2$B$FG$lk/$FG,2$T$FG$askAndChildren/$FG,2$F$FG$unction
-										| | | |UsageScope: $FG,2$G$FG$lbl/Asm$FG,2$L$FG$ocal/$FG,2$R$FG$emainder/$FG,2$g$FG$lblThisBlkAndRemainder
-										| | | || $FG,2$S$FG$taticVarInit/$FG,2$D$FG$ynamicVarInitAllowed/$FG,2$N$FG$oInitAllowed
-										| | | || | Are dups allowed within the namespace? A dup overshadows the original.
-										| | | || | $FG,2$D$FG$upsAllowed/$FG,2$N$FG$oDups/NoDupsBut$FG,2$P$FG$ad/$FG,2$W$FG$arningUnlessClosedOut
+						$FG,2$G$FG$lobalScope / $FG,2$F$FG$unctionScope
+						| $FG,2$C$FG$odeHeap / $FG,2$D$FG$ataHeap / $FG,2$S$FG$tack / $FG,2$R$FG$egister
+						| | TaskHashEntry: Export$FG,2$S$FG$ysSym / $FG,2$D$FG$efine / $FG,2$F$FG$unction / $FG,2$C$FG$lass
+						| | | UsageScope: $FG,2$M$FG$odule / $FG,2$A$FG$smLocal / Asm$FG,2$B$FG$lk / $FG,2$T$FG$askAndChildren / $FG,2$F$FG$unction
+						| | | |UsageScope: $FG,2$G$FG$lbl / Asm$FG,2$L$FG$ocal / $FG,2$R$FG$emainder / $FG,2$g$FG$lblThisBlkAndRemainder
+						| | | || $FG,2$S$FG$taticVarInit / $FG,2$D$FG$ynamicVarInitAllowed / $FG,2$N$FG$oInitAllowed
+						| | | || | Are dups allowed within the namespace? A dup overshadows the original.
+						| | | || | $FG,2$D$FG$upsAllowed / $FG,2$N$FG$oDups / NoDupsBut$FG,2$P$FG$ad / $FG,2$W$FG$arningUnlessClosedOut
 
-asm export $FG,2$label::$FG$	G C S Tg	 N
-asm 			 $FG,2$label:$FG$ 	G C 	BG	 N
-asm local  $FG,2$@@label:$FG$ G C 	AL	 N
-asm $FG,2$IMPORT label;$FG$ 	G C 	TR	 N
-asm export $FG,2$label::$FG$	F C 	BG	 N
-asm 			 $FG,2$label:$FG$ 	F C 	BG	 N
-asm local  $FG,2$@@label:$FG$ F C 	AL	 N
-asm $FG,2$IMPORT label;$FG$ 	F C 	BR	 N
-C 	goto	 $FG,2$label:$FG$ 	F C 	FG	 N
+asm export	$FG,2$label::$FG$		G C S Tg   N
+asm 		$FG,2$label:$FG$		G C   BG   N
+asm local	$FG,2$@@label:$FG$	G C   AL   N
+asm $FG,2$IMPORT	label;$FG$ 		G C   TR   N
+asm export	$FG,2$label::$FG$		F C   BG   N
+asm 		$FG,2$label:$FG$ 		F C   BG   N
+asm local	$FG,2$@@label:$FG$	F C   AL   N
+asm $FG,2$IMPORT	label;$FG$		F C   BR   N
+C 	goto	$FG,2$label:$FG$		F C   FG   N
 
-					 $FG,2$#define$FG$	x 	D TR	 D
-					 function G C F TR	 D
-					 var			F R 	FR	 N
-					 var			F S 	FR	 N
-$FG,2$static$FG$		 var			F C 	FR D N
-					 var			G C G TR D D
-					 var			G D G TR S D
-					 $FG,2$class$FG$		G 	C TR	 D
-class 		 member 	G 		TR	 P
-$FG,2$extern		 class$FG$		G 	C TR	 D
-$FG,2$extern$FG$		 function G C F TR	 W
-$FG,2$extern$FG$		 var			G C G TR	 D
-$FG,2$extern$FG$		 var			G D G TR	 D
-$FG,2$_extern$FG$ 	 function G C F TR	 D
-$FG,2$_extern$FG$ 	 var			G C G TR	 D
+			$FG,2$#define$FG$		x 	D TR   D
+			function	G C F TR   D
+			var			F R   FR   N
+			var			F S   FR   N
+$FG,2$static$FG$		var			F C   FR D N
+			var			G C G TR D D
+			var			G D G TR S D
+			$FG,2$class$FG$		G 	C TR   D
+class 		member		G	  TR   P
+$FG,2$extern		class$FG$		G 	C TR   D
+$FG,2$extern$FG$		function	G C F TR   W
+$FG,2$extern$FG$		var			G C G TR   D
+$FG,2$extern$FG$		var			G D G TR   D
+$FG,2$_extern$FG$ 	function	G C F TR   D
+$FG,2$_extern$FG$ 	var			G C G TR   D
 
 $WW,1$
 * Goto labels must not have the same name as global scope objects.	GoTo's are rare and I don't want to slow the compiler and add code to fix this.  You will get errors if a collision happens, so it's not very dangerous, but the error message is baffling.
