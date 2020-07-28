@@ -23,7 +23,7 @@ class CUDPSocket
 	U8 *receive_buffer;
 	I64 receive_len;
 
-	CSocketAddressStorage receive_address; // based on ->family, cast or assign pointer as IPV4/IPV6 CSocketAddress
+	CSocketAddressStorage receive_address; // based on ->family, cast or assign to a var as IPV4/IPV6 CSocketAddress
 
 	U16	bound_to; // represents the currently bound port
 };
@@ -124,25 +124,25 @@ CUDPTreeNode *UDPTreeNodeFind(I64 port, CUDPTreeNode *tree)
 CUDPTreeNode *UDPTreeNodePop(I64 port, CUDPTreeNode *tree)
 { // mimics TreeNodeFind. pops whole sub-tree, original tree loses whole branch.
 	CUDPTreeNode *parent_tree = tree;
-	CUDPTreeNode *temp_tree	= parent_tree;
-	Bool is_left = FALSE;
+	CUDPTreeNode *temp_tree	  = parent_tree;
+	Bool is_left  = FALSE;
 	Bool is_right = FALSE;
 
 	while (temp_tree)
 	{
 		if (port < temp_tree->port)
 		{
-			parent_tree = temp_tree;
-			temp_tree = temp_tree->left;
-			is_right = FALSE;
-			is_left = TRUE;
+			parent_tree	= temp_tree;
+			temp_tree	= temp_tree->left;
+			is_right	= FALSE;
+			is_left		= TRUE;
 		}
 		else if (port > temp_tree->port)
 		{
-			parent_tree = temp_tree;
-			temp_tree = temp_tree->right;
-			is_right = TRUE;
-			is_left = FALSE;
+			parent_tree	= temp_tree;
+			temp_tree	= temp_tree->right;
+			is_right	= TRUE;
+			is_left		= FALSE;
 		}
 		else // if value equal, match found.
 			break;	
@@ -167,9 +167,9 @@ CUDPTreeNode *UDPTreeNodeSinglePop(I64 port, CUDPTreeNode *tree)
 {	// pop a tree off, then add back in its sub-trees to main tree.
 	// original node sub-trees are cleared.
 	// TODO: double check this logic ensure it's sound.
-	CUDPTreeNode *node = UDPTreeNodePop(port, tree);
-	CUDPTreeNode *left = node->left;
-	CUDPTreeNode *right = node->right;
+	CUDPTreeNode *node	= UDPTreeNodePop(port, tree);
+	CUDPTreeNode *left	= node->left;
+	CUDPTreeNode *right	= node->right;
 
 	if (node)
 	{
@@ -243,24 +243,30 @@ CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node
 	return NULL;
 }
 
-CUDPTreeQueue *UDPTreeNodeQueueFind(U32 address, CUDPTreeNode *node)
+CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 { // address should be pulled from an instance of CIPV4Address (TODO... double check what bit order we're in ?)
 
 	CUDPTreeQueue *temp_queue;
+	CSocketAddressIPV4 *temp_ip;
 
 	if (node->queue)
 	{
-		if (node->queue->socket->receive_address.family != AF_INET)
-			Debug("This method was made for IPV4, UDP can be IPV4 or IPV6. excessive casting bad, TODO: revise method.");
-
-		if (node->queue->socket->receive_address(CSocketAddressIPV4).address == address)
-			return node->queue;
+		if (node->queue->socket->receive_address.family == AF_INET)
+		{
+			temp_ip = &node->queue->socket->receive_address;
+			if (temp_ip->address == address)
+				return node->queue;
+		}
 
 		temp_queue = node->queue->next;
 		while (temp_queue != node->queue)
 		{
-			if (temp_queue->socket->receive_address(CSocketAddressIPV4).address == address)
-				return temp_queue;
+			if (temp_queue->socket->receive_address.family == AF_INET)
+			{
+				temp_ip = &temp_queue->socket->receive_address;
+				if (temp_ip->address == address)
+					return temp_queue;
+			}
 
 			temp_queue = temp_queue->next;
 		}
@@ -282,10 +288,11 @@ CUDPTreeQueue *UDPTreeNodeQueueSocketSinglePop(CUDPSocket *socket, CUDPTreeNode 
 
 		if (temp_queue != temp_next)
 		{ // if 2 or more entries in queue, stitch next&last, loop found queue
-			temp_last->next = temp_next;
-			temp_next->last = temp_last;
+			temp_last->next  = temp_next;
+			temp_next->last  = temp_last;
 			temp_queue->next = temp_queue;
 			temp_queue->last = temp_queue;
+
 			if (temp_queue == node->queue) // if entry to pop is node queue head, change head to next
 				node->queue = temp_next;
 		}
@@ -334,21 +341,21 @@ U0 UDPGlobalsInit()
 }
 
 I64 UDPPacketAllocate(U8 **frame_out,
-						U32 source_ip,
-						U16 source_port,
-						U32 destination_ip,
-						U16 destination_port,
-						I64 length)
+					  U32 source_ip,
+					  U16 source_port,
+					  U32 destination_ip,
+					  U16 destination_port,
+					  I64 length)
 {
 	U8 *ethernet_frame;
 	I64 de_index;
 	CUDPHeader *header;
 
 	de_index = IPV4PacketAllocate(&ethernet_frame,
-									IP_PROTOCOL_UDP,
-									source_ip,
-									destination_ip,
-									sizeof(CUDPHeader) + length);
+								  IP_PROTOCOL_UDP,
+								  source_ip,
+								  destination_ip,
+								  sizeof(CUDPHeader) + length);
 	if (de_index < 0)
 	{
 		ZenithLog("UDP Ethernet Frame Allocate failed.\n");
@@ -357,10 +364,10 @@ I64 UDPPacketAllocate(U8 **frame_out,
 
 	header = ethernet_frame;
 
-	header->source_port = EndianU16(source_port);
-	header->destination_port = EndianU16(destination_port);
-	header->length = EndianU16(sizeof(CUDPHeader) + length);
-	header->checksum = 0;
+	header->source_port			= EndianU16(source_port);
+	header->destination_port	= EndianU16(destination_port);
+	header->length				= EndianU16(sizeof(CUDPHeader) + length);
+	header->checksum			= 0;
 
 	*frame_out = ethernet_frame + sizeof(CUDPHeader);
 
@@ -372,10 +379,10 @@ U0 UDPPacketFinish(I64 de_index)
 }
 
 I64 UDPParsePacket(U16 *source_port_out,
-					U16 *destination_port_out,
-					U8 **data_out,
-					I64 *length_out,
-					CIPV4Packet *packet)
+				   U16 *destination_port_out,
+				   U8 **data_out,
+				   I64 *length_out,
+				   CIPV4Packet *packet)
 {
 
 	// check ip protocol? probably redundant
@@ -384,11 +391,11 @@ I64 UDPParsePacket(U16 *source_port_out,
 
 	// Shrine has FIXME, validate packet length!
 
-	*source_port_out = EndianU16(header->source_port);
-	*destination_port_out = EndianU16(header->destination_port);
+	*source_port_out		= EndianU16(header->source_port);
+	*destination_port_out	= EndianU16(header->destination_port);
 
-	*data_out = packet->data + sizeof(CUDPHeader);
-	*length_out = packet->length - sizeof(CUDPHeader);
+	*data_out	= packet->data   + sizeof(CUDPHeader);
+	*length_out	= packet->length - sizeof(CUDPHeader);
 
 	return 0;
 
@@ -457,7 +464,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_in) // 
 
 		if (temp_node)
 		{ // if we find we have bound sockets at port, check address before adding to queue
-			if (UDPTreeNodeQueueFind(udp_socket->receive_address(CSocketAddressIPV4).address.address, temp_node))
+			if (UDPTreeNodeQueueIPV4Find(udp_socket->receive_address(CSocketAddressIPV4).address.address, temp_node))
 			{
 				ZenithErr("Attempted UDP Socket Bind at an address already in Bound Socket Tree !\n");
 				return -1;
