@@ -417,29 +417,34 @@ public U0 DocPutKey(CDoc *doc,I64 ch=0,I64 sc=0)
 					}
 					break;
 				case CH_BACKSPACE: //<CTRL-H>
-					if (!(sc&SCF_SHIFT)) {
-						if (sc&SCF_KEY_DESC)
-							KeyDescSet("Char  /Back Space");
-						else {
-							DocCaptureUndo(doc);
-							doc_ce=doc->cur_entry;
-							if (doc->cur_col<=doc_ce->min_col) {
-								doc_ce=doc->cur_entry=doc_ce->last;
-								if (doc_ce!=doc && doc_ce->type_u8==DOCT_SOFT_NEW_LINE)
-									doc_ce=doc->cur_entry=doc_ce->last;
-								if (doc_ce==doc || doc_ce->type_u8==DOCT_PROMPT) {
-									doc_ce=doc->cur_entry=doc_ce->next;
-									doc->cur_col=doc_ce->min_col;
-								} else {
-									doc->cur_col=doc_ce->max_col;
-									if (doc->cur_col>doc_ce->min_col)
-										doc->cur_col--;
-									EdCharDel(doc);
-								}
-							} else {
-								doc->cur_col--;
+					if (sc & SCF_KEY_DESC)
+						KeyDescSet("Char  /Back Space");
+					else
+					{
+						DocCaptureUndo(doc);
+						doc_ce = doc->cur_entry;
+						if (doc->cur_col <= doc_ce->min_col)
+						{
+							doc_ce = doc->cur_entry = doc_ce->last;
+							if (doc_ce != doc && doc_ce->type_u8 == DOCT_SOFT_NEW_LINE)
+								doc_ce = doc->cur_entry = doc_ce->last;
+							if (doc_ce == doc || doc_ce->type_u8 == DOCT_PROMPT)
+							{
+								doc_ce = doc->cur_entry = doc_ce->next;
+								doc->cur_col = doc_ce->min_col;
+							}
+							else
+							{
+								doc->cur_col = doc_ce->max_col;
+								if (doc->cur_col > doc_ce->min_col)
+									doc->cur_col--;
 								EdCharDel(doc);
 							}
+						}
+						else
+						{
+							doc->cur_col--;
+							EdCharDel(doc);
 						}
 					}
 					break;
