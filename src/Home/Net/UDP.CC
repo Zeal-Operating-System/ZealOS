@@ -65,7 +65,7 @@ U0 UDPTreeNodeAdd(CUDPTreeNode *node, CUDPTreeNode *tree)
 	CUDPTreeNode *last_tree = temp_tree;
 
 	while (temp_tree)
-	{
+	{ // loop ends when temp_tree hits a NULL node.
 		if (node->port < temp_tree->port)
 		{ // if node smaller, go left
 			last_tree = temp_tree;
@@ -75,9 +75,12 @@ U0 UDPTreeNodeAdd(CUDPTreeNode *node, CUDPTreeNode *tree)
 		{ // if node equal or larger, go right
 			last_tree = temp_tree;
 			temp_tree = temp_tree->right;
-		}	// at the end of this, this _should_ result in last_tree
-	}		// being the resulting tree to store the node inside of. i guess recompute the direction and set.
+		}
+	}
+	// once while loop ends, this results in last_tree
+	// being the resulting tree to store the node inside of.
 
+	// recompute the direction and set.
 	if (node->port < last_tree->port)// if node smaller, go left
 		last_tree->left = node;
 	else // if node equal or larger, go right
@@ -112,7 +115,7 @@ CUDPTreeNode *UDPTreeNodeFind(I64 port, CUDPTreeNode *tree)
 			temp_tree = temp_tree->left;
 		else if (port > temp_tree->port) // if value larger, go right
 			temp_tree = temp_tree->right;
-		else // if value equal, match! i guess?
+		else // if value equal, match found.
 			break;
 	}
 	return temp_tree; // ! NULL if not found.
@@ -141,7 +144,7 @@ CUDPTreeNode *UDPTreeNodePop(I64 port, CUDPTreeNode *tree)
 			is_right = TRUE;
 			is_left = FALSE;
 		}
-		else
+		else // if value equal, match found.
 			break;	
 	}
 
@@ -161,7 +164,9 @@ CUDPTreeNode *UDPTreeNodePop(I64 port, CUDPTreeNode *tree)
 }
 
 CUDPTreeNode *UDPTreeNodeSinglePop(I64 port, CUDPTreeNode *tree)
-{ // pop whole sub-tree, then add back in its sub-trees. TODO: should we leave the pointers in the node or clear them ?
+{	// pop a tree off, then add back in its sub-trees to main tree.
+	// original node sub-trees are cleared.
+	// TODO: double check this logic ensure it's sound.
 	CUDPTreeNode *node = UDPTreeNodePop(port, tree);
 	CUDPTreeNode *left = node->left;
 	CUDPTreeNode *right = node->right;
@@ -169,26 +174,26 @@ CUDPTreeNode *UDPTreeNodeSinglePop(I64 port, CUDPTreeNode *tree)
 	if (node)
 	{
 		if (left)
-		{
+		{ // if node has left tree, add the tree
 			UDPTreeNodeAdd(left, tree);
+			node->left = NULL;
 		}
 		if (right)
-		{
+		{ // if node has right tree, add the tree.
 			UDPTreeNodeAdd(right, tree);
+			node->right = NULL;
 		}
 	}
-
-// ... see the TODO ^
-//	node->left = NULL;
-//	node->right = NULL;
 
 	return node;
 }
 
 U0 UDPTreeNodeFree(CUDPTreeNode *node)
-{ // only clears and frees the node. !! if node has subtrees, they will be left floating. use with caution to avoid memory leaks
+{	// only clears and frees the node. !! if node has subtrees, 
+	// they will be left floating. use with caution to avoid memory leaks
 	// ... uh.. what to do with the inner CTreeQueue floating around ..? we need to fix that too right?
-	// .. what does CQueue functions give us. QueueRemove is our best bet, i guess it will just try to swap around the next last ptrs.
+	// .. what does CQueue functions give us. QueueRemove is our best bet,
+	// i guess it will just try to swap around the next last ptrs.
 }
 
 U0 UDPTreeNodeQueueInit(CUDPTreeNode *node)
@@ -215,10 +220,9 @@ U0 UDPTreeNodeQueueAdd(CUDPSocket *socket, CUDPTreeNode *node)
 	}
 }
 
-// refactored to UDPTreeNodeQueueSocketFind for Socket-call level functions9
+// refactored to UDPTreeNodeQueueSocketFind for Socket-call level functions
 CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node)
 {
-
 	CUDPTreeQueue *temp_queue;
 
 	if (node->queue)
@@ -240,7 +244,7 @@ CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node
 }
 
 CUDPTreeQueue *UDPTreeNodeQueueFind(U32 address, CUDPTreeNode *node)
-{ // address should be pulled from an instance of CIPV4Address (todo.. double check what bit order we're in ?)
+{ // address should be pulled from an instance of CIPV4Address (TODO... double check what bit order we're in ?)
 
 	CUDPTreeQueue *temp_queue;
 
@@ -265,24 +269,43 @@ CUDPTreeQueue *UDPTreeNodeQueueFind(U32 address, CUDPTreeNode *node)
 CUDPTreeQueue *UDPTreeNodeQueueSocketSinglePop(CUDPSocket *socket, CUDPTreeNode *node)
 { // search by socket, pop a single UDPTreeQueue off the node, return popped queue.
 	CUDPTreeQueue *temp_queue = UDPTreeNodeQueueSocketFind(socket, node);
+	CUDPTreeQueue *temp_next;
+	CUDPTreeQueue *temp_last;
 
 	if (temp_queue)
-		QueueRemove(temp_queue); // links between queue entries pop out this and stitch back together. popped entry might have old links?
+	{
+		temp_next = temp_queue->next;
+		temp_last = temp_queue->last;
 
+		if (temp_queue != temp_next)
+		{ // if 2 or more entries in queue, stitch next&last, loop found queue
+			temp_last->next = temp_next;
+			temp_next->last = temp_last;
+			temp_queue->next = temp_queue;
+			temp_queue->last = temp_queue;
+			if (temp_queue == node->queue) // if entry to pop is node queue head, change head to next
+				node->queue = temp_next;
+		}
+		else if (temp_queue == temp_next == temp_last)
+			node->queue = NULL; // only one entry in queue, NULL node-queue link and pop the queue.
+	}
 	return temp_queue; // if not found, NULL.
 }
 
-
+/*
 CUDPTreeQueue *UDPTreeNodeQueueSinglePop(U32 address, CUDPTreeNode *node)
 { // pop a single UDPTreeQueue off the node, return popped queue.
 	CUDPTreeQueue *temp_queue = UDPTreeNodeQueueFind(address, node);
 
 	if (temp_queue)
-		QueueRemove(temp_queue); // links between queue entries pop out this and stitch back together. popped entry might have old links?
+		Debug("When is this method needed ?");
+
+		//QueueRemove(temp_queue);
+		// links between queue entries pop out this and stitch back together. popped entry might have old links?
 
 	return temp_queue; // if not found, NULL.
 }
-
+*/
 // end UDP Bound Socket functions & classes
 ////////////////////////////////////////////////////
 
@@ -488,16 +511,16 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 	{
 		if (queue == queue->next == queue->last)
 		{ // queue is alone. Means port only has this address bound.
-			Debug("queue==next==last");
+			Debug("queue==next==last. implemented(?) this in SocketSinglePop, test it");
 		}
 		else
 		{ // queue has other addresses bound at this port. only Free the queue entry, after removing it.
-//			QueueRemove(queue); // QueueRemove acted strange and did not move the links?.....
-//			UDPTreeNodeQueueSocketSinglePop(udp_socket, node); /// ???? wtf is going on haha
+			UDPTreeNodeQueueSocketSinglePop(udp_socket, node);
 
-//			Free(udp_socket->socket);
-//			Free(udp_socket);// is it even possible to free a param?
-//			Free(queue);
+			Free(udp_socket->socket);
+			Free(udp_socket->receive_buffer);
+			Free(udp_socket);
+			Free(queue);
 		}
 	}
 	else
@@ -521,10 +544,9 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 
 // UDPHandle
 
-// so i guess the socket functions would just act on the socket state machine.
+// the socket functions just act on the socket state machine.
 // ZenithErr and return fail vals if socket FSM improperly used.
-// if we're using a global for the bit map and socket pointer map, be careful
-// with how Free is done.
+// Careful with Free()'s.
 
 UDPGlobalsInit;
 
