@@ -23,7 +23,7 @@ class CUDPSocket
 	U8 *receive_buffer;
 	I64 receive_len;
 
-	CSocketAddressIPV4 receive_address; // should this change to Storage class for IPV6 later ?
+	CSocketAddressStorage receive_address; // based on ->family, cast or assign pointer as IPV4/IPV6 CSocketAddress
 
 	U16	bound_to; // represents the currently bound port
 };
@@ -250,13 +250,16 @@ CUDPTreeQueue *UDPTreeNodeQueueFind(U32 address, CUDPTreeNode *node)
 
 	if (node->queue)
 	{
-		if (node->queue->socket->receive_address.address == address)
+		if (node->queue->socket->receive_address.family != AF_INET)
+			Debug("This method was made for IPV4, UDP can be IPV4 or IPV6. excessive casting bad, TODO: revise method.");
+
+		if (node->queue->socket->receive_address(CSocketAddressIPV4).address == address)
 			return node->queue;
 
 		temp_queue = node->queue->next;
 		while (temp_queue != node->queue)
 		{
-			if (temp_queue->socket->receive_address.address == address)
+			if (temp_queue->socket->receive_address(CSocketAddressIPV4).address == address)
 				return temp_queue;
 
 			temp_queue = temp_queue->next;
@@ -406,13 +409,13 @@ CUDPSocket *UDPSocket(U16 domain)
 
 	udp_socket->socket = Socket(domain, type);
 	
-	udp_socket->receive_address.family = domain; // should be INET (or INET6 i guess)
+	udp_socket->receive_address.family = domain; // INET or INET6
 
 	return udp_socket;
 
 }
 
-I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddress *address_in) // I64 addr_len ?? does it really matter that much
+I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_in) // I64 addr_len ?? does it really matter that much
 {
 	//if we put in addr len do a check its valid for ipv4 and ipv6 based on family
 
@@ -439,8 +442,11 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddress *address_in) // I64 add
 	if (address_in->family != AF_INET) Debug("Non IPV4 socket binds not implemented !");
 
 	ipv4_socket_addr = address_in;
-	udp_socket->receive_address.address.address = ipv4_socket_addr->address.address; // bind socket to address in parameter.
-	udp_socket->receive_address.port = ipv4_socket_addr->port; // ... consistency would say keep in Big Endian ...
+
+	udp_socket->receive_address(CSocketAddressIPV4).address.address = ipv4_socket_addr->address.address;
+	// bind socket to address in parameter.
+	udp_socket->receive_address(CSocketAddressIPV4).port = ipv4_socket_addr->port;
+	// ... consistency would say keep in Big Endian ...
 
 	port = EndianU16(ipv4_socket_addr->port); // port member should be Big Endian,  so now we're going L.E (?)
 
@@ -451,7 +457,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddress *address_in) // I64 add
 
 		if (temp_node)
 		{ // if we find we have bound sockets at port, check address before adding to queue
-			if (UDPTreeNodeQueueFind(udp_socket->receive_address.address.address, temp_node))
+			if (UDPTreeNodeQueueFind(udp_socket->receive_address(CSocketAddressIPV4).address.address, temp_node))
 			{
 				ZenithErr("Attempted UDP Socket Bind at an address already in Bound Socket Tree !\n");
 				return -1;
@@ -512,7 +518,7 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 		UDPTreeNodeQueueSocketSinglePop(udp_socket, node);
 
 		Free(udp_socket->socket);
-		Free(udp_socket->receive_buffer);
+//		Free(udp_socket->receive_buffer); // i think we'll still need to keep this
 		Free(udp_socket);
 		Free(queue);
 	}
@@ -529,7 +535,47 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 
 // UDPSocketConnect (Shrine just has FIXME: 'implement')
 
-// UDPSocketReceiveFrom
+// UDPListen (Shrine just has no_warns, not implemented)
+
+I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *src_address)
+{ // ommitted I64 addrlen, flags not implemented
+	CSocketAddressIPV4 *ipv4_socket_addr;
+	CSocketAddressIPV6 *ipv6_socket_addr;
+
+	udp_socket->receive_buffer	= buffer;
+	udp_socket->receive_len		= len;
+
+	if (udp_socket->receive_timeout_ms != 0)
+		udp_socket->receive_max_timeout = counts.jiffies + udp_socket->receive_timeout_ms * JIFFY_FREQ / 1000;
+
+	while (udp_socket->receive_buffer != NULL)
+	{ // 'Check for timeout'
+		if (udp_socket->receive_timeout_ms != 0 && counts.jiffies > udp_socket->receive_max_timeout)
+		{ // Shrine has TODO: 'seterror(EWOULDBLOCK)' investigate this
+			udp_socket->receive_len = -1; // ?
+			break;
+		}
+
+		Yield;
+	}
+
+	if (src_address)
+	{
+		switch (udp_socket->receive_address.family)
+		{
+			case AF_INET:
+				ipv4_socket_addr = src_address;
+				MemCopy(ipv4_socket_addr, &udp_socket->receive_address, sizeof(CSocketAddressIPV4));
+				break;
+			case AF_INET6:
+				ipv6_socket_addr = src_address;
+				MemCopy(ipv6_socket_addr, &udp_socket->receive_address, sizeof(CSocketAddressIPV6));
+				break;
+		}
+	}
+
+	return udp_socket->receive_len;
+}
 
 // UDPSocketSendTo
 
