@@ -1,0 +1,182 @@
+
+Sockets... not planning to conform to unix-y socket standards unless absolutely required.
+All over socket code is these global vars, lowercase functions.. its a mess.
+
+Shrine does some pretty gnarly stuff to do their NativeSockets.
+
+They have a class, called a CSocket, which is just a bunch of function pointers. 
+
+Then, they have another, called CSocketClass, which is a single direction list of
+a domain, a type, some padding (...), and a pointer to a CSocket..
+
+I don't even want to get into the CAddrResolver which is a yet another
+function pointer to some resolver function.
+
+Then, the socketclass and addrresolver are made into globals!
+
+When they try to find a socket class, they have to loop through all
+of the defined socket classes until they find one that matches the
+params of domain and type..
+
+
+Since UDP is regarded apparently as more simple than TCP,
+looking at Shrine's UDP code gives a little insight into
+what's going on without getting too caught up in high
+level intricacies.
+
+When UDP registers their socketclass , they pass in the #defined
+type and domain, then pass in the socketclass itself.
+
+All the typical socket functions as defined in shrine,
+basically just take in this socketclass and then redirect
+execution to the function defined in the socketclass.
+
+
+
+At first, I thought "oh, why not just make the args a class!" but
+this doesn't address the need to store functions as members, which
+is a little niggerlicious still.
+
+So I need a better way to do these socket function calls, without
+having to rely on a pointer magic backend. The immediate thought
+I have, is to ditch general use socket functions and enforce
+application specific function definitions. In a way, that might
+kinda end up meaning that a hell of a lot of the other way
+of doing things would be stripped.
+
+Maybe, analyze what passed variables are manipulated, and hardcode 
+functions with higher specificity.
+
+
+...
+
+/* Zenith Sockets are non-standard.
+
+----------------------
+Shrine implementation:
+
+in_addr
+sockaddr
+sockaddr_in
+addrinfo
+
+inet_aton
+inet_ntoa
+
+socket
+accept
+close
+bind
+connect
+listen
+recv
+recvfrom
+send
+sendto
+setsockopt
+getaddrinfo
+freeaddrinfo
+
+AddrInfoCopy
+gai_strerror
+create_connection
+RegisterSocketClass
+----------------------
+Zenith implementation:
+
+
+
+----------------------
+
+*/
+
+
+
+/*	I think a class for a socket is a good idea.
+	But i do not think that the class should have
+	function pointers.
+
+	A CSocket is literally just a list of function pointers.
+
+	In Shrine, for example, the only UDP socket functions
+	that actually do anything are UDPSocketBind, UDPSocketClose,
+	UDPSocketRecvFrom, UDPSocketSendTo, and UDPSocketSetSockopt.
+	The rest just make the compiler happy by saying no_warn on the
+	args ...
+
+	If not function pointers, how would it work?
+
+	STREAMS / XTI / TPI lookin sexy rn ngl haha.
+
+	Maybe a hybrid of the alternatives and sockets.
+
+	One thought is to reserve sockets as some unique class thing,
+	and have functions that take args that go to a switch statement
+	to determine which code to next execute.
+
+	Perhaps, two Socket related files would make more sense,
+	one which defines some low-level things, and another that
+	(like NetHandler) is all-knowing and would discern based
+	on a switch statement which socket-related functions to run.
+	If doing this, must make sure that UDP/TCP/etc won't
+	need to know things only the SocketHandler or whatever we'd
+	call that would know.
+
+	At the root of ShrineSockets, all sockets made in later
+	files must be put into a RegisterSocketClass call,
+	which keeps track of which functions go where based on
+	the searched-for domain and type. So, I'd think a
+	beginning to an unfuck would be, if it ends up needed,
+	using a hash table, maybe the key would be (domain << 64 | type)
+	as a string, assuming the args are still I64.
+
+	I fight and I fight.. these bold ideas might be forced
+	to take place only after I've un-fucked sockets code alone.
+	Then maybe after massive unfucking/refucking, it can be more
+	quickly discerened what the better way to go from there is.
+
+	
+
+
+
+*/
+
+	//at the end of the day , one distinction MUST be made...
+			//What IS a socket ?  ...
+
+....
+
+
+---------------------
+
+Thoughts.
+
+
+Sense in SocketNextState(CSocket *socket, U8 state) ?
+
+Sense in having two socket states, current and requested?
+	With one, if we try to modify the value, we modify it.
+	There's no way of conveying or interacting with
+	higher-defined (TCP, UDP, etc) socket functions.
+	With a current and requested state, we would be
+	able to show both what the socket is doing right
+	now, and what the user/code has requested the
+	socket to change to. Say, there is a failure
+	in the higher level code when it sees a socket
+	and its requested next state: it will process
+	appropriate higher-level code and then ask for
+	another Socket State change accordingly or something.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

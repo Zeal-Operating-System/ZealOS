@@ -2,35 +2,35 @@
 	(in our case, Queues) for pending and
 	empty frames. If logical to implement,
 	perhaps Zenith NetQueue code should
-	do something similar to that idea. */
+	do something similar to that idea.
 
-/*	Each Ethernet Frame will be represented
+	Each Ethernet Frame will be represented
 	as an entry in a CQueue. */
+
 class CNetQueueEntry:CQueue
 {
 	I64 length; //todo: change to packet_length?
-	U8 frame[ETHERNET_FRAME_SIZE];
+	U8	frame[ETHERNET_FRAME_SIZE];
 };
-
 
 /*	global variable, holds pointer of Ethernet Queue.
 	This acts as the Head of the Queue, Entries act
 	as the Tail of the Queue. 
 	Upon QueueInit, ->next and ->last are set to
 	itself, the Head. */
+
 CQueue *net_queue; // no QueueRemove the Head! only Entries!
 
 /*	Net Handler Task is set idle and active depending
-	on if entries in Net Queue. See NetHandlerTask.CC */
-CTask *net_handler_task = NULL;
+	on if entries in Net Queue. See $LK,"NetHandlerTask",A="FF:C:/Home/Net/NetHandlerTask.CC,net_handler_task"$ */
 
+CTask *net_handler_task = NULL;
 
 U0 NetQueueInit()
 {
 	net_queue = CAlloc(sizeof(CQueue));
 	QueueInit(net_queue);
 }
-
 
 CNetQueueEntry *NetQueuePull()
 {/*	Returns a pointer to a CNetQueueEntry,
@@ -49,8 +49,6 @@ CNetQueueEntry *NetQueuePull()
 
 	return entry;
 }
-
-
 
 U0 NetQueuePushCopy(U8 *data, I64 length)
 {/*	Pushes a copy of the packet data and length
@@ -73,26 +71,3 @@ U0 NetQueuePushCopy(U8 *data, I64 length)
 }
 
 NetQueueInit;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

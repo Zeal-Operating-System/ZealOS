@@ -81,7 +81,8 @@
 class CPCNet
 {
 	CPCIDev *pci;
-	U8 mac_address[6];			// MAC address is first 6 bytes of PCNet EEPROM	(page # ? )
+
+	U8	mac_address[6];			// MAC address is first 6 bytes of PCNet EEPROM	(page # ? )
 
 	I64 current_rx_de_index;	// Current Receive DE being processed.  Gets incremented, wrapped to 0 at max of PCNET_RX_BUFF_COUNT.
 	I64 current_tx_de_index;	// Current Transmit DE being processed. Gets incremented, wrapped to 0 at max of PCNET_TX_BUFF_COUNT.
@@ -102,6 +103,7 @@ class CPCNetDescriptorEntry
 	but have different registers and functions.
 	The RX and TX DE buffers of the CPCNet class
 	are allocated to a certain amount of these DEs. */
+
 	U32	buffer_addr;
 	U32 status1;
 	U32 status2;

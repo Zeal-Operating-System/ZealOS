@@ -8,48 +8,40 @@ class CUDPHeader
 {
 	U16 source_port;
 	U16 destination_port;
-
 	U16 length;
 	U16 checksum;
 };
 
 class CUDPSocket
 {
-	CSocket *socket;
-
-	I64 receive_timeout_ms;
-	I64 receive_max_timeout;
-
-	U8 *receive_buffer;
-	I64 receive_len;
-
-	CSocketAddressStorage receive_address; // based on ->family, cast or assign to a var as IPV4/IPV6 CSocketAddress
-
-	U16	bound_to;	// represents the currently bound port
+	CSocket					*socket;
+	I64						 receive_timeout_ms;
+	I64						 receive_max_timeout;
+	U8						*receive_buffer;
+	I64						 receive_len;
+	CSocketAddressStorage	 receive_address;	// based on ->family, cast or assign to a var as IPV4/IPV6 CSocketAddress
+	U16						 bound_to;			// represents the currently bound port
 };
 
+/***************************************************
 
+UDP Bound Socket Tree Classes & Functions
 
-
-////////////////////////////////////////////////////
-// UDP Bound Socket Tree Classes & Functions
+***************************************************/
 
 class CUDPTreeQueue
 { // next, last for CQueue implementation.
-	CUDPTreeQueue *next;
-	CUDPTreeQueue *last;
-
-	CUDPSocket *socket;
+	CUDPTreeQueue	*next;
+	CUDPTreeQueue	*last;
+	CUDPSocket		*socket;
 };
 
 class CUDPTreeNode
 {
-	I64 port;
-
-	CUDPTreeNode *left;
-	CUDPTreeNode *right;
-
-	CUDPTreeQueue *queue;
+	I64				 port;
+	CUDPTreeNode	*left;
+	CUDPTreeNode	*right;
+	CUDPTreeQueue	*queue;
 };
 
 CUDPTreeNode *UDPTreeNodeInit()
@@ -316,16 +308,8 @@ CUDPTreeQueue *UDPTreeNodeQueueSinglePop(U32 address, CUDPTreeNode *node)
 	return temp_queue; // if not found, NULL.
 }
 */
-// end UDP Bound Socket functions & classes
-////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
+/***************************************************/
 
 class CUDPGlobals
 {

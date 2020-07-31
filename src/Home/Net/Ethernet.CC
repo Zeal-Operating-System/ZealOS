@@ -44,7 +44,7 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 
 	frame_out->data		 = frame + ETHERNET_DATA_OFFSET;
 
-	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH + 4;	//TODO: He has a comment literally just saying "??".
+	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH + 4;	// He has a comment literally just saying "??".
 }
 
 EthernetInitGlobals;

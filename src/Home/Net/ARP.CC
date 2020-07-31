@@ -46,7 +46,6 @@ U0 ARPCacheInit()
 	arp_globals.local_ipv4 = 0;
 }
 
-
 I64 ARPSend(U16 operation,
 			U8 *dest_mac_address,
 			U8 *send_mac_address,
@@ -68,13 +67,11 @@ I64 ARPSend(U16 operation,
 
 	header = ethernet_frame;
 
-	header->hardware_type = EndianU16(HTYPE_ETHERNET);
-	header->protocol_type = EndianU16(ETHERTYPE_IPV4);
-
-	header->hardware_addr_len = MAC_ADDRESS_LENGTH;
-	header->protocol_addr_len = IP_ADDRESS_LENGTH;
-
-	header->operation = EndianU16(operation);
+	header->hardware_type		= EndianU16(HTYPE_ETHERNET);
+	header->protocol_type		= EndianU16(ETHERTYPE_IPV4);
+	header->hardware_addr_len	= MAC_ADDRESS_LENGTH;
+	header->protocol_addr_len	= IP_ADDRESS_LENGTH;
+	header->operation			= EndianU16(operation);
 
 	MemCopy(header->sender_hardware_addr, send_mac_address, MAC_ADDRESS_LENGTH);
 	header->sender_protocol_addr = send_ip;
@@ -85,9 +82,6 @@ I64 ARPSend(U16 operation,
 	EthernetFrameFinish(de_index);
 	return 0;
 }
-
-
-
 
 CARPHash *ARPCacheFindByIP(U32 ip_address)
 {
@@ -103,11 +97,19 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 {
 	CARPHash *entry = ARPCacheFindByIP(ip_address);
-	Free(entry);
+	//Free(entry); // something seems wrong about this...
 
-	entry = CAlloc(sizeof(CARPHash));
-	entry->str = MStrPrint("%d", ip_address);
-	MemCopy(entry->mac_address, mac_address, 6);
+	if (!entry)
+	{
+		entry = CAlloc(sizeof(CARPHash));
+		entry->str = MStrPrint("%d", ip_address);
+		MemCopy(entry->mac_address, mac_address, 6);
+
+		HashAdd(entry, arp_cache);
+	}
+	else
+		ZenithWarn("ARP Cache Put attempted but entry was already found in Cache. TODO: overwrite?\n");
+
 	return entry;
 }
 
@@ -122,8 +124,6 @@ U0 ARPSetIPV4Address(U32 ip_address)
 			ethernet_globals.ethernet_broadcast,
 			arp_globals.local_ipv4);
 }
-
-
 
 //ARP Handler? Takes an eth_frame CEthFrame* ?
 //Seems like a weird way to do this,
@@ -164,7 +164,6 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 		ZenithErr("ARP Handler caught wrong frame hardware type.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
-
 	if (EndianU16(header->protocol_type) != ETHERTYPE_IPV4)
 	{
 		ZenithErr("ARP Handler caught wrong frame protocol type.");
@@ -180,8 +179,6 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 		ZenithErr("ARP Handler caught wrong frame protocol address length.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
-
-
 
 	switch (operation)
 	{
@@ -200,43 +197,4 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ARPCacheInit;

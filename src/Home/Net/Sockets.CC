@@ -45,14 +45,14 @@
 #define IP_PARSE_STATE_NUM			0
 #define IP_PARSE_STATE_DOT			1
 
-
+/*
 class CSocketAddress
 {
 	U16	family;		// 'address family, AF_xxx'
 
 	U8	data[14];	// '14 bytes of protocol address'
 };
-
+*/
 class CIPV4Address
 {
 	U32 address;	// 'in Network Byte order' ... Big Endian
@@ -70,24 +70,19 @@ class CIPAddressStorage
 
 class CSocketAddressIPV4
 {
-	I16	family;		// 'AF_INET'
-	U16	port;		// 'in Network Byte order' ... Big Endian
-
-	CIPV4Address address;
-
-	U8	zeroes[8];	// 'same size as socket address'
+	I16				family;		// 'AF_INET'
+	U16				port;		// 'in Network Byte order' ... Big Endian
+	CIPV4Address	address;
+	U8				zeroes[8];	// 'same size as socket address'
 };
 
 class CSocketAddressIPV6
 {
-	U16	family;	// 'AF_INET6'
-	U16 port;	// 'in Network Byte order'... Big Endian
-
-	U32 flow_info;
-
-	CIPV6Address address;
-
-	U32	scope_id;
+	U16				family;	// 'AF_INET6'
+	U16				port;	// 'in Network Byte order'... Big Endian
+	U32				flow_info;
+	CIPV6Address	address;
+	U32				scope_id;
 };
 
 class CSocketAddressStorage
@@ -95,25 +90,20 @@ class CSocketAddressStorage
 	hold both IPV4 and IPV6 structures.' */
 
 	U16 family;
-
-	U8 padding[26];
+	U8	padding[26];
 
 };
 
 class CAddressInfo
 {
-	I32	flags;
-	I32 family;
-	I32 socket_type;
-	I32 protocol;
-
-	I64 address_length;
-
-	CSocketAddress *address;
-
-	U8 *canonical_name;
-
-	CAddressInfo *next;
+	I32						 flags;
+	I32						 family;
+	I32						 socket_type;
+	I32						 protocol;
+	I64						 address_length;
+	CSocketAddressStorage	*address;
+	U8						*canonical_name;
+	CAddressInfo			*next;
 };
 
 class CSocket
@@ -123,6 +113,22 @@ class CSocket
 	U16	type;
 	U16 domain;
 };
+
+U0 AddressInfoCopy(CAddressInfo *out, CAddressInfo *in)
+{ // assumes *out already exists
+	MemCopy(out, in, sizeof(CAddressInfo));
+
+	if (in->address)
+	{
+		out->address = CAlloc(in->address_length);
+		MemCopy(out->address, in->address, in->address_length);
+	}
+
+	if (in->canonical_name)
+	{
+		out->canonical_name = StrNew(in->canonical_name);
+	}
+}
 
 Bool IPV4AddressParse(U8 *string, U32 *destination)
 {
@@ -338,9 +344,6 @@ U0 SocketStateErr(U8 *request, U8 state)
 	}
 	ZenithErr("Socket attempted %s while in %s state.\n", request, state_string);
 }
-
-
-
 
 U0 SocketAccept(CSocket *socket)
 {

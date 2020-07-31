@@ -36,6 +36,7 @@ NetQueue
 
 
 Ethernet
+	EthernetInitGlobals
 	EthernetFrameParse (has a fixme)
 
 
@@ -46,10 +47,17 @@ ARP
 	ARPCachePut
 	ARPHandler
 	ARPSetIPV4Address
+	ARPHandler
 
 
 Sockets (just finite state modifiers.)
+	AddressInfoCopy
+	IPV4AddressParse
+	PresentationToNetwork
+	NetworkToPresentation
+
 	SocketStateErr
+	Socket
 	SocketAccept
 	SocketClose
 	SocketBind
@@ -61,6 +69,7 @@ Sockets (just finite state modifiers.)
 	SocketSendTo
 
 IPV4
+	InitIPV4Globals (should change this to IPV4InitGlobals ...)
 	IPV4Checksum
 	GetMACAddressForIP
 	IPV4PacketAllocate
@@ -78,14 +87,37 @@ TCP
 
 
 UDP
+	UDPTreeNodeInit
+	UDPTreeNodeAdd
+	UDPTreeNodeParamAdd
+	UDPTreeNodeParamInit
+	UDPTreeNodeFind
+	UDPTreeNodePop
+	UDPTreeNodeSinglePop
+	UDPTreeNodeQueueInit
+	UDPTreeNodeQueueSocketFind
+	UDPTreeNodeQueueIPV4Find
+	UDPTreeNodeQueueSocketSinglePop
 
+	UDPGlobalsInit
+	UDPPacketAllocate
+	UDPPacketFinish
+	UDPParsePacket
+
+	UDPSocket
+	UDPSocketBind
+	UDPSocketClose
+	UDPSocketReceiveFrom
+	UDPSocketSendTo
 
 DNS
-
+	DNSCacheInit
+	DNSCacheFind
+	DNSCachePut
 
 NetHandlerTask
 	NetHandlerTask
-	HandleNetQueueEntry	(4 million context swaps per second!)
+	HandleNetQueueEntry	(TODO: investigate 4 million context swaps per second)
 	IPV4Handler
 
 NetConfig

@@ -4,6 +4,8 @@ Departures from Shrine:
 
 	ARP Cache is Hashtable. Keys are U32 ip addresses to "%d" string.
 
+	DNS Cache is Hashtable. Keys are U8 *hostname.
+
 	NetFIFO is NetQueue. If problems arise, maybe set a #define max
 	for the length of the Queue.
 
@@ -16,9 +18,9 @@ Departures from Shrine:
 Stack progress: (# done, ~ WIP, . N/A)
 
 	# PCNet-II Driver
+	. Other Network Card Drivers? See $LK,"Roadmap",A="FF:C:/Home/Roadmap.DD,most common ethernet cards"$.
 
 	# NetQueue
-		- no NetHandler currently
 
 	# Ethernet
 		- double check.
@@ -34,6 +36,9 @@ Stack progress: (# done, ~ WIP, . N/A)
 			socket state. Protocols will
 			need to detect socket states
 			and respond appropriately.
+		- had to go back and alter low level
+			logic recently, keep eyes on verifying
+			socket logic sanity.
 
 
 	# IPV4 (Internet Protocol version 4)
@@ -44,11 +49,12 @@ Stack progress: (# done, ~ WIP, . N/A)
 
 	. TCP (Transmission Control Protocol)
 
-	. UDP (User Datagram Protocol)
+	~ UDP (User Datagram Protocol)
+		- needs more testing. could use a UDPRep func to render bound tree.
 
-	. DNS (Domain Name System)
+	~ DNS (Domain Name System)
 
-	. NetHandlerTask
+	~ NetHandlerTask
 		- thinking maybe for this, instead of using this whole
 		handler function pointer nonsense, it can be done
 		more seamlessly with a switch(ethertype). Shrine

@@ -1,0 +1,43 @@
+
+
+
+$FG,0$So. We don't have any way to REMOVE or POP treenodes or treequeues.
+
+Goal?
+	- CUDPTreeNode* UDPTreeNodePop (args?)
+
+	- U0 UDPTreeNodeFree(CUDPTreeNode *node)
+
+
+
+	- CUDPTreeQueue* UDPTreeNodeQueuePop (args?)
+
+	- U0 UDPTreeNodeQueueFree(CUDPTreeQueue *queue)
+
+
+Pop will give you the now-popped-out node pointer.
+Free will take that popped node and Free its resources from mem.
+
+
+To POP a node, different steps necessary.
+	If node has no left/right, it's simple. Just free it all.
+
+	If node has only left or only right, pop it by storing its
+	pointer for returning, then altering the left/right pointers
+	for the above tree, and below tree, to stitch it one link closer
+
+	If node has both a left and right branch...
+	Well, i dunno. harder to stitch because conflicting trees.
+	Hail-mary approach is to take all the branches and respective
+	branches and just filter back into tree with Add. 
+	
+	It sounds painful.
+
+	Is it feasible to just take the Whole sub-Trees of a node,
+	cut ties between node and tree, then add back in the left,
+	then right sub trees? If we're getting rid of a central node,
+	that splits off into higher or lowers... ultimately, if we sever
+	the original node, either direction is still going to replace
+	the position of where the original node was, because it will
+	still be higher/lower than the higher-up-node. Adding back in
+	nodes would just leave the tree a little funky-lookin.

@@ -5,8 +5,8 @@
 
 class CICMPHeader // Shrine's use of id and seq indicate this header is for Address Mask Reply/Request
 {
-	U8 type;
-	U8 code;
+	U8	type;
+	U8	code;
 	U16 checksum;
 
 	U16 identifier;
@@ -38,16 +38,12 @@ I64 ICMPSendReply(U32 destination_ip_address,
 
 	header = frame;
 
-
-	header->type = ICMP_TYPE_ECHO_REPLY;
-
-	header->code = 0; // why is 0 okay?
-
-	header->checksum = EndianU16(EndianU16(request_checksum) + 0x0800);// TODO: this is awful. Shrine says hack alert.
-
-	header->identifier = identifier;
-
-	header->sequence_number = sequence_number;
+	header->type				= ICMP_TYPE_ECHO_REPLY;
+	header->code				= 0;	// why is 0 okay?
+	header->checksum			= EndianU16(EndianU16(request_checksum) + 0x0800);
+	header->identifier			= identifier;
+	header->sequence_number		= sequence_number;
+	// TODO: header checksum is awful. Shrine says hack alert.
 
 	MemCopy(frame + sizeof(CICMPHeader), payload, length);
 

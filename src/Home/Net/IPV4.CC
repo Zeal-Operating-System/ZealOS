@@ -11,39 +11,32 @@
 #define IP_PROTOCOL_TCP		0x06
 #define IP_PROTOCOL_UDP		0x11
 
-
 class CIPV4Packet
 {
-	CEthernetFrame *ethernet_frame;
+	CEthernetFrame	*ethernet_frame;
 
-	U32 source_ip_address;
-	U32 destination_ip_address;
+	U32				 source_ip_address;
+	U32				 destination_ip_address;
 
-	U8 protocol;
+	U8				 protocol;
+	U8				 padding[7];
 
-	U8 padding[7];
-
-	U8 *data;
-
-	I64 length;
+	U8				*data;
+	I64				 length;
 };
 
 class CIPV4Header
 { // note: U4's in some U8s.
-	U8 version_ihl;				// Version for IPV4 is 4. IHL=Internet Header Length
-
-	U8 dscp_ecn;				// DSCP=Differentiated Services Code Point. ECN=Explicit Congestion Notification
+	U8	version_ihl;			// Version for IPV4 is 4. IHL=Internet Header Length
+	U8	dscp_ecn;				// DSCP=Differentiated Services Code Point. ECN=Explicit Congestion Notification
 
 	U16 total_length;			// min 20B max 65535
-
 	U16 identification;
-
 	U16 flags_fragment_offset;	// flags first(?) 3 bits. fragment offset min 0 max 65528
-	// flag: bit 0: reserved must be 0. bit 1: don't fragment. bit 2: more fragments
+								// flag: bit 0: reserved must be 0. bit 1: don't fragment. bit 2: more fragments
 
-	U8 time_to_live;			// specified in seconds, wikipedia says nowadays serves as a hop count
-
-	U8 protocol;
+	U8	time_to_live;			// specified in seconds, wikipedia says nowadays serves as a hop count
+	U8	protocol;
 
 	U16 header_checksum;
 
@@ -69,9 +62,8 @@ U0 InitIPV4Globals()
 	ipv4_globals.ipv4_subnet_mask	 = 0;
 }
 
-
 // For now, trusting Shrine's implement
-// of this. Shrine links back to
+// of checksum. Shrine links back to
 // http://stackoverflow.com/q/26774761/2524350
 
 U16 IPV4Checksum(U8* header, I64 length)
@@ -99,8 +91,6 @@ U16 IPV4Checksum(U8* header, I64 length)
 
 }
 
-
-
 I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 {
 	CARPHash *entry;
@@ -116,7 +106,6 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 			return 0;
 	}
 */
-
 	if (ip_address == 0)
 	{
 		ZenithLog("Get MAC for IP failed. Address = 0\n");
@@ -129,11 +118,10 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		return 0;
 	}
 
-
 	// "outside this subnet; needs routing"
 	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != (ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
 	{
-		// Shrine recurses here... and says FIXME infinite loop if mis-configured...
+		// TODO: Shrine recurses here... and says FIXME infinite loop if mis-configured...
 	}
 	else // "local network"
 	{
@@ -182,16 +170,13 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 {
 	U8 *ethernet_frame;
 	U8 *destination_mac_address;
-
 	I64 error;
 	I64 de_index;
-
 	I64 internet_header_length;
-
 	CIPV4Header *header;
 
-
 	error = GetMACAddressForIP(destination_ip_address, &destination_mac_address);
+
 	if (error < 0)
 	{
 		ZenithLog("IPV4 Packet Allocate failed to get MAC for destination.\n");
@@ -211,9 +196,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 
 	internet_header_length = 5;// ... why. need a #define
 
-
 	header = ethernet_frame;
-
 
 	header->version_ihl				= internet_header_length | (4 << 4);// whaaat the fuck is this? #define!
 	header->dscp_ecn				= 0; // a clear define of what this actually means would be good
@@ -278,32 +261,4 @@ U0 IPV4ParsePacket(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 }
 
 // IPV4 handler moved to NetHandlerTask file.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 InitIPV4Globals;
