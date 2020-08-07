@@ -13,6 +13,7 @@ class CNetQueueEntry:CQueue
 	U8	frame[ETHERNET_FRAME_SIZE];
 };
 
+
 /*	global variable, holds pointer of Ethernet Queue.
 	This acts as the Head of the Queue, Entries act
 	as the Tail of the Queue. 
@@ -21,10 +22,13 @@ class CNetQueueEntry:CQueue
 
 CQueue *net_queue; // no QueueRemove the Head! only Entries!
 
+
 /*	Net Handler Task is set idle and active depending
 	on if entries in Net Queue. See $LK,"NetHandlerTask",A="FF:C:/Home/Net/NetHandlerTask.CC,net_handler_task"$ */
 
 CTask *net_handler_task = NULL;
+
+
 
 U0 NetQueueInit()
 {
@@ -35,11 +39,14 @@ U0 NetQueueInit()
 CNetQueueEntry *NetQueuePull()
 {/*	Returns a pointer to a CNetQueueEntry,
 	or NULL pointer if Net Queue is empty. */
+
 	CNetQueueEntry *entry;
 
 	if (net_queue->next != net_queue)
 	{
 		entry = net_queue->next;
+
+		ZenithLog("NETQUEUE PULL: Removing entry from queue.\n");
 		QueueRemove(entry);
 	}
 	else // Queue is empty if head->next is head itself.
@@ -55,19 +62,20 @@ U0 NetQueuePushCopy(U8 *data, I64 length)
 	into the Net Queue. The NetQueueEntry is inserted
 	after the last entry of net_queue to keep new
 	items in the back of the Queue, old in front. */ 
+
 	CNetQueueEntry *entry = CAlloc(sizeof(CNetQueueEntry));
 
 	entry->length = length;
+
 	MemCopy(entry->frame, data, length);
 
 	QueueInsert(entry, net_queue->last);
 
 	//Set Net Handler Task active.
-	ZenithLog("ACTIVE: NetHandler\n");
+	ZenithLog("NETQUEUE PUSH COPY: Setting NetHandler ACTIVE.\n");
 	if (net_handler_task)
 		LBtr(&net_handler_task->task_flags, TASKf_IDLE);
-
-
 }
+
 
 NetQueueInit;

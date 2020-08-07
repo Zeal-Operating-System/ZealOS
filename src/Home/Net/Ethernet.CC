@@ -36,6 +36,8 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 	//of the current system should be done with less extra allocation
 	//altogether, more passing.
 
+	ZenithLog("ETHERNET FRAME PARSE: Parsing frame, copying out to frame_out param.\n");
+
 	MemCopy(frame_out->destination_address, frame,						MAC_ADDRESS_LENGTH);
 
 	MemCopy(frame_out->source_address,		frame + MAC_ADDRESS_LENGTH, MAC_ADDRESS_LENGTH);
@@ -44,7 +46,7 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 
 	frame_out->data		 = frame + ETHERNET_DATA_OFFSET;
 
-	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH + 4;	// He has a comment literally just saying "??".
+	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH - 4;	// He has a comment literally just saying "??". + or - 4?
 }
 
 EthernetInitGlobals;

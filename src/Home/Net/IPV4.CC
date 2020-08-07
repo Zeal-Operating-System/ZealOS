@@ -1,4 +1,4 @@
-#include "ARP"
+//#include "ARP"
 
 #define IPV4_ERR_ADDR_INVALID		-200001
 #define IPV4_ERR_HOST_UNREACHABLE	-200002
@@ -42,7 +42,7 @@ class CIPV4Header
 
 	U32 source_ip_address;
 	U32 destination_ip_address;
-}
+};
 
 class CIPV4Globals
 { // _be indicates Big Endian
@@ -60,7 +60,7 @@ U0 InitIPV4Globals()
 	ipv4_globals.local_ip_be		 = 0;
 	ipv4_globals.ipv4_router_address = 0;
 	ipv4_globals.ipv4_subnet_mask	 = 0;
-}
+};
 
 // For now, trusting Shrine's implement
 // of checksum. Shrine links back to
@@ -96,25 +96,26 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 	CARPHash *entry;
 	I64 retries;
 	I64 attempt;
-/*
-	switch (ip_address)
-	{
-		case 0:
-			return IPV4_ERR_ADDR_INVALID;
-		case 0xFFFFFFFF:
-			*mac_out = ethernet_globals.ethernet_broadcast;
-			return 0;
-	}
-*/
+
 	if (ip_address == 0)
 	{
-		ZenithLog("Get MAC for IP failed. Address = 0\n");
+		ZenithErr("GET MAC FOR IP: Failed. Address = 0\n");
 		return IPV4_ERR_ADDR_INVALID;
 	}
 	if (ip_address == 0xFFFFFFFF)
 	{
-		ZenithLog("Get MAC for IP requested and returning ethernet broadcast\n");
+		ZenithLog("GET MAC FOR IP: Returning ethernet broadcast\n");
 		*mac_out = ethernet_globals.ethernet_broadcast;
+
+/*		I64 i;
+		"\nEthernet Global Broadcast\n";
+		for (i = 0; i < 6; i++)
+			" %X", ethernet_globals.ethernet_broadcast[i];
+		"\nMac Out\n";
+		for (i = 0; i < 6; i++)
+			" %X", (*mac_out)[i];
+		"\n";
+*/
 		return 0;
 	}
 
@@ -122,9 +123,12 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != (ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
 	{
 		// TODO: Shrine recurses here... and says FIXME infinite loop if mis-configured...
+		ZenithWarn("GET MAC FOR IP: TODO: Doing GetMACAddressForIP recursion, could infinite loop and overflow stack.");
+		return GetMACAddressForIP(ipv4_globals.ipv4_router_address, mac_out);
 	}
 	else // "local network"
 	{
+		ZenithLog("GET MAC FOR IP: Attempting ARP Find by IP for address: %d.\n", ip_address);
 		entry = ARPCacheFindByIP(ip_address);
 
 		if (entry)
@@ -138,6 +142,13 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		retries = 4;
 		while (retries)
 		{
+			ARPSend(ARP_REQUEST,
+					ethernet_globals.ethernet_broadcast,
+					EthernetGetMAC,
+					ipv4_globals.local_ip_be,
+					ethernet_globals.ethernet_null,
+					EndianU32(ip_address));
+
 			attempt = 0;
 			for (attempt = 0; attempt < 50; attempt++)
 			{
@@ -157,7 +168,7 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		}
 
 		//Shrine does some in_addr mess to log error
-		ZenithLog("Failed to resolve address %d", ip_address);
+		ZenithErr("GET MAC FOR IP: Failed to resolve address %d\n", ip_address);
 		return IPV4_ERR_HOST_UNREACHABLE;
 	}
 }
@@ -179,7 +190,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 
 	if (error < 0)
 	{
-		ZenithLog("IPV4 Packet Allocate failed to get MAC for destination.\n");
+		ZenithLog("IPV4 PACKET ALLOCATE: Failed to get MAC for destination.\n");
 		return error;
 	}
 
@@ -190,7 +201,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 									 sizeof(CIPV4Header) + length);
 	if (de_index < 0)
 	{
-		ZenithLog("IPV4 Ethernet Frame Allocate failed.\n");
+		ZenithLog("IPV4 PACKET ALLOCATE: Ethernet Frame Allocate failed.\n");
 		return de_index;
 	}
 
@@ -208,7 +219,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	header->header_checksum			= 0; // why is 0 ok?
 	header->source_ip_address		= EndianU32(source_ip_address);
 	header->destination_ip_address	= EndianU32(destination_ip_address);
-	header->header_checksum			= IPV4Checksum(header, internet_header_length + 4);//why the 4's...
+	header->header_checksum			= IPV4Checksum(header, internet_header_length * 4);//why the 4's...
 
 	*frame_out = ethernet_frame + sizeof(CIPV4Header);
 	return de_index;

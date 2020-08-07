@@ -1,4 +1,4 @@
-#include "UDP";
+//#include "UDP";
 
 // https://www2.cs.duke.edu/courses/fall16/compsci356/DNS/DNS-primer.pdf
 // https://en.wikipedia.org/wiki/Domain_Name_System
@@ -17,6 +17,9 @@
 #define DNS_CLASS_IN	1
 
 #define DNS_TIMEOUT		5000
+
+#define DNS_MAX_RETRIES	5	// Shrine has 3, why not 5? :^)
+
 class CDNSHash:CHash
 {	// store U8 *hostname as CHash->str U8 *
 	CAddressInfo info;
@@ -82,25 +85,30 @@ CDNSHash *DNSCacheFind(U8 *hostname)
 	CDNSHash *entry = HashFind(hostname, dns_cache, HTT_DNS);
 
 	if (entry == NULL)
-		ZenithErr("Could not find a hostname in the DNS Cache.\n");
+		ZenithWarn("DNS CACHE FIND: Could not find a hostname in the DNS Cache.\n");
 
 	return entry;
 }
 
 CDNSHash *DNSCachePut(U8 *hostname, CAddressInfo *info)
 {
+	ZenithLog("DNS CACHE PUT: Attempting Find DNS Entry in Cache: hostname: %s\n", hostname);
+/*	"==\n";ClassRep(info);
+	ClassRep(info->address(CSocketAddressIPV4 *));"==\n";*/
 	CDNSHash *entry = DNSCacheFind(hostname);
 
 	if (!entry)
 	{
 		entry = CAlloc(sizeof(CDNSHash));
-		entry->str = StrNew(hostname);
+		entry->str	= StrNew(hostname);
+		entry->type = HTT_DNS;
+
 		AddressInfoCopy(&entry->info, info);
 
 		HashAdd(entry, dns_cache);
 	}
 	else
-		ZenithWarn("DNS Cache Put attempted but entry was already found in Cache. TODO: overwrite?");
+		ZenithWarn("DNS CACHE PUT: Entry was already found in Cache. TODO: overwrite?");
 
 	return entry;
 }
@@ -150,17 +158,21 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 	switch (dns_globals.addr_family)
 	{
 		case AF_UNSPEC: // 0, global dns ip not set
+			ZenithErr("DNS SEND QUESTION: Failed, global dns addr family was AF_UNSPEC.\n");
 			return -1;
 
 		case AF_INET6:
-			ZenithErr("IPV6 not supported yet in DNS.\n");
+			ZenithErr("DNS SEND QUESTION: Failed, IPV6 not supported yet in DNS.\n");
 			throw('DNS');
 
 		case AF_INET:
 			ipv4_addr = &dns_globals.dns_ip;
 
 			if (!*ipv4_addr)
+			{
+				ZenithErr("DNS SEND QUESTION: Failed, ipv4_addr had no value set.\n");
 				return -1;
+			}
 	}
 
 	// UDPPacketAllocate currently only accepts IPV4 ...
@@ -171,7 +183,10 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 								 53,
 								 sizeof(CDNSHeader) + DNSCalculateQuestionSize(q));
 	if (de_index < 0)
+	{
+		ZenithErr("DNS SEND QUESTION: Failed, UDPPacketAllocate returned error.\n");
 		return de_index;
+	}
 
 	flags = (DNS_OP_QUERY << 11) | DNS_FLAG_RD;
 
@@ -202,7 +217,7 @@ I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 
 	if (length < 1)
 	{
-		ZenithErr("DNS parsed domain name, hit length of 0 or less\n");
+		ZenithErr("DNS PARSE DOMAIN NAME: Length less than one.\n");
 		return -1;
 	}
 
@@ -228,7 +243,7 @@ I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 				*data_inout		= data   + 1;
 				*length_inout	= length - 1;
 				jump_taken		= TRUE;
-				ZenithLog("UDP parsed domain name, jump taken\n");
+				ZenithLog("DNS PARSE DOMAIN NAME: Jump taken\n");
 			}
 
 			data	= packet_data + ((label_len << 8) | *data);
@@ -317,7 +332,7 @@ I64 DNSParseRR(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_
 	return 0;
 }
 
-I64 DNSParseResponse(U16 id, U8 *data, I64 len, CDNSHeader **header_out, CDNSQuestion **questions_out, CDNSRR **answers_out)
+I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNSQuestion **questions_out, CDNSRR **answers_out)
 {
 	CDNSHeader		*header;
 	CDNSQuestion	*question;
@@ -328,7 +343,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 len, CDNSHeader **header_out, CDNSQue
 
 	if (length < sizeof(CDNSHeader))
 	{
-		ZenithErr("DNS Response Parsed, length too short.\n");
+		ZenithErr("DNS PARSE RESPONSE: Length too short.\n");
 		return -1;
 	}
 
@@ -337,7 +352,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 len, CDNSHeader **header_out, CDNSQue
 
 	if (id != 0 && EndianU16(header->id) != id)
 	{
-		ZenithErr("DNS Response Parsed, header id mismatch.\n");
+		ZenithErr("DNS PARSE RESPONSE: Header ID mismatch.\n");
 		return -1;
 	}
 
@@ -399,7 +414,7 @@ U0 DNSFreeQuestion(CDNSQuestion *q)
 	Free(q->q_name.labels[0]);
 }
 
-U0 DNSFreeRR(CDNSRR *r)
+U0 DNSFreeRR(CDNSRR *rr)
 {
 	Free(rr->name.labels[0]);
 }
@@ -430,17 +445,18 @@ U0 DNSFreeRRChain(CDNSRR *rrs)
 	}
 }
 
-/*
+
 I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **result_out)
-{ // IPV4-UDP-based
+{	// IPV4-UDP-based, TODO: take good look at this method to ensure no floating pointers after.
+	// note: UDP Socket created in this method is not closed in this method, gets closed e.g. in DNSGetAddressInfo
 	I64  retries	= 0;
 	I64	 timeout	= DNS_TIMEOUT;
-	U16	 local_port	= RandU16;
+	U16	 local_port	= RandU16;	// TODO: is rand needed? would a local port 0 work? (would improve lookup speed)
 	U16  id			= RandU16;
 	I64  error		= 0;
-	U8  *buffer;
+	U8   buffer[2048];
 	I64  count;
-	Bool have;
+	Bool have;	// ??
 
 	CDNSQuestion	 q;
 	CDNSHeader		*header;
@@ -450,24 +466,214 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 
 	CSocketAddressIPV4	 ipv4_addr;
 	CSocketAddressIPV4	 ipv4_addr_in; // ?
+	CSocketAddressIPV4	*ipv4_addr_temp;
 	CAddressInfo		*res;
 
 	//setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO_MS, &timeout, sizeof(timeout))
 	udp_socket->receive_timeout_ms = timeout;
 
-	
+	ipv4_addr.family			= AF_INET;
+	ipv4_addr.port				= EndianU16(local_port);
+	ipv4_addr.address.address	= INADDR_ANY;
 
+	// UDPSocketBind will be attempted on the udp_socket param, method expects a UDPSocket() result to be made already
+	if (UDPSocketBind(udp_socket, &ipv4_addr)) // expected return value is 0
+	{
+		ZenithErr("DNS RUN QUERY: Failed to bind UDP socket.\n");
+		return -1;
+	}
+
+	DNSBuildQuestion(&q, name);
+
+	while (TRUE) // Shrine uses while (1) infinite loop, need to be careful not to lock
+	{
+		error = DNSSendQuestion(id, local_port, &q);
+		if (error < 0)
+		{
+			ZenithErr("DNS RUN QUERY: Failed to Send Question.\n");
+			return -1;
+		}
+
+		count = UDPSocketReceiveFrom(udp_socket, buffer, sizeof(buffer), &ipv4_addr_in);
+
+		if (count > 0)
+		{
+			ZenithLog("DNS RUN QUERY: Trying Parse Response.\n");
+
+			header		= NULL;
+			questions	= NULL;
+			answers		= NULL;
+
+			error = DNSParseResponse(id, buffer, count, &header, &questions, &answers);
+
+			if (error == 0) // Shrine has (error >= 0), but DNSParseResponse can only return 0 or 1 ..
+			{
+				have = FALSE;
+
+				a = answers;
+				while (a)
+				{
+					// Shrine has TODO: if multiple acceptable answers, pick one at random, not just first one.
+					// perhaps we could use r_count in header for that ?
+
+					if (EndianU16(a->type)		== DNS_TYPE_A	&&
+						EndianU16(a->rr_class)	== DNS_CLASS_IN &&
+						EndianU16(a->rd_length)	== 4)
+					{
+						res = CAlloc(sizeof(CAddressInfo));
+
+						res->flags			= 0;
+						res->family			= AF_INET;
+						res->socket_type	= 0;	// ??
+						res->protocol		= 0;	// ??
+						res->address_length	= sizeof(CSocketAddressIPV4);
+						res->address		= CAlloc(sizeof(CSocketAddressIPV4));
+						res->canonical_name	= 0;
+						res->next			= NULL;
+
+						ipv4_addr_temp = res->address;
+
+						ipv4_addr_temp->family	= AF_INET;
+						ipv4_addr_temp->port	= port;
+						MemCopy(&ipv4_addr_temp->address.address, answers->r_data, 4);
+
+						DNSCachePut(name, res);
+						*result_out = res;
+						have = TRUE;
+
+						break;
+					}
+
+					a = a->next;
+				}
+
+				DNSFreeQuestionChain(questions);
+				DNSFreeRRChain(answers);
+
+				if (have)
+					break;
+
+				// Shrine comment: 'at this point, we could try iterative resolution,
+				// but all end-user DNS servers would have tried that already'
+
+				ZenithErr("DNS RUN QUERY: Failed to find suitable answer in reply.\n");
+				error = -1;
+			}
+			else
+			{
+				ZenithErr("DNS RUN QUERY: Failed a DNS Parse Response.\n");
+			}
+		}
+
+		if (++retries == DNS_MAX_RETRIES)
+		{
+			ZenithErr("DNS RUN QUERY: Failed, max retries reached.\n");
+			error = -1;
+			break;
+		}
+	}
+
+	DNSFreeQuestion(&q);
+	return error;
 }
-*/
 
-/*
-I64 DNSRunQuery(socket?, U8 *name, U16 port, CAddressInfo **result_out)
+// Shrine has port arg as U8 *service with a no_warn and says it should be parsed as port, allowing that here
+// Also has CAddressInfo *hints with a no_warn, omitting that for now
+I64 DNSGetAddressInfo(U8 *node_name, U16 port, CAddressInfo **result)
+{
+	I64			 error;
+	CUDPSocket	*udp_socket;
+	CDNSHash	*cached_entry = DNSCacheFind(node_name);
 
-I64 DNSGetAddressInfo(U8 *node, U8 *service, CAddressInfo *hints, CAddressInfo **result)
+	if (cached_entry)
+	{
+		*result = CAlloc(sizeof(CAddressInfo));
+		AddressInfoCopy(*result, &cached_entry->info);
+		//(*res)->flags |= AI_CACHED; // TODO: add AI_CACHED define (maybe a better name?) not used anywhere i don't think..
+		return 0;
+	}
 
-U0 DNSSetResolverIPV4(U32 ip) // funny enough he explicitly labeled IPV4.........
+	udp_socket = UDPSocket(AF_INET);
+	error = 0;
+
+	if (udp_socket)
+	{
+		error = DNSRunQuery(udp_socket, node_name, port, result);
+
+		UDPSocketClose(udp_socket);
+	}
+	else
+	{
+		ZenithErr("DNS GET ADDRESS INFO: Failed to make UDP Socket.\n");
+		error = -1;
+	}
+
+	return error;
+}
+
+U0 DNSSetResolverIPV4(U32 ip)
+{
+	CIPV4Address *address = &dns_globals.dns_ip;
+
+	dns_globals.addr_family	= AF_INET;
+	address->address		= ip;
+}
 
 U0 Host(U8 *hostname)
+{ // getaddrinfo() for whole system in Shrine ends up as pointer to DNSGetAddressInfo.. should we do something similar?
+	CAddressInfo	*current;
+	CAddressInfo	*result	= NULL;
+	I64				 error	= DNSGetAddressInfo(hostname, NULL, &result);
+	I64				 i = 0;
+
+	if (error < 0)
+	{
+		ZenithErr("HOST(): Failed at DNS Get Address Info.\n");
+	}
+	else
+	{
+		"Host() Results:\n\n";
+		current = result;
+		while (current)
+		{
+			"Result %d:\n", ++i;
+
+			"	flags:			%04Xh \n", current->flags;
+			"	family:			%d    \n", current->family;
+			"	socket type:	%d    \n", current->socket_type;
+			"	protocol:		%d    \n", current->protocol;
+			"	address length:	%d    \n", current->address_length;
+			"	address:		%s    \n", NetworkToPresentation(AF_INET, &current->address(CSocketAddressIPV4 *)->address);
+
+			current = current->next;
+		}
+	}
+
+	AddressInfoFree(result);
+}
+
+U0 DNSRep()
+{ // TODO: primitive, needs refine. switch() on Socket Address types for NetworkToPresentation, etc
+	I64			 i;
+	CDNSHash	*temp_hash;
+
+	"\n";
+	Who(, dns_cache);
+	"\n";
+
+	for (i = 0; i <= dns_cache->mask; i++)
+	{
+		temp_hash = dns_cache->body[i];
+
+		while (temp_hash)
+		{
+			ClassRep(temp_hash,, 5);
+			temp_hash = temp_hash->next;
+		}
+	}
+}
+
+/*
 
 U0 DNSInit()
 

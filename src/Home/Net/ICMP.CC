@@ -1,4 +1,4 @@
-#include "IPV4"
+//#include "IPV4"
 
 #define ICMP_TYPE_ECHO_REPLY	0
 #define ICMP_TYPE_ECHO_REQUEST	8
@@ -32,7 +32,7 @@ I64 ICMPSendReply(U32 destination_ip_address,
 								  sizeof(CICMPHeader) + length);
 	if (de_index < 0)
 	{
-		ZenithLog("ICMP Send Reply failed to allocate IPV4 packet.\n");
+		ZenithErr("ICMP SEND REPLY: Failed to allocate IPV4 packet.\n");
 		return de_index;
 	}
 
@@ -57,7 +57,7 @@ I64 ICMPHandler(CIPV4Packet *packet)
 
 	if (packet->length < sizeof(CICMPHeader))
 	{
-		ZenithLog("ICMP Handler caught wrong IPV4 length.\n");
+		ZenithErr("ICMP HANDLER: Caught wrong IPV4 length.\n");
 		return -1;
 	}
 

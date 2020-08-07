@@ -35,6 +35,8 @@
 #define	AF_INET		2
 #define AF_INET6	10
 
+#define INADDR_ANY	0
+
 #define INET_ADDRSTRLEN		16 //pubs.opengroup.com netinit/in.h
 #define INET6_ADDRSTRLEN	46
 
@@ -70,7 +72,8 @@ class CIPAddressStorage
 
 class CSocketAddressIPV4
 {
-	I16				family;		// 'AF_INET'
+//	I16				family;		// 'AF_INET'
+	U16				family;		// 'AF_INET'
 	U16				port;		// 'in Network Byte order' ... Big Endian
 	CIPV4Address	address;
 	U8				zeroes[8];	// 'same size as socket address'
@@ -130,6 +133,22 @@ U0 AddressInfoCopy(CAddressInfo *out, CAddressInfo *in)
 	}
 }
 
+U0 AddressInfoFree(CAddressInfo *info)
+{
+	CAddressInfo *next;
+
+	while (info)
+	{
+		next = info->next;
+
+		Free(info->address);
+		Free(info->canonical_name);
+		Free(info);
+
+		info = next;
+	}
+}
+
 Bool IPV4AddressParse(U8 *string, U32 *destination)
 {
 //	U8* lexable_string;
@@ -159,12 +178,12 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 					case TK_I64:
 						if (cc->cur_i64 > 255 || cc->cur_i64 < 0)
 						{
-							ZenithErr("Invalid value, must be 0 - 255.\n");
+							ZenithErr("IPV4 ADDRESS PARSE: Invalid value, must be 0 - 255.\n");
 							return FALSE;
 						}
 						if (current_section > 3)
 						{
-							ZenithErr("IP Address can only have 4 sections.\n");
+							ZenithErr("IPV4 ADDRESS PARSE: IP Address can only have 4 sections.\n");
 							return FALSE;
 						}
 
@@ -176,7 +195,7 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 						break;
 
 					default:
-						ZenithErr("Expected decimal. \n");
+						ZenithErr("IPV4 ADDRESS PARSE: Expected decimal. \n");
 						return FALSE;
 				}
 				break;
@@ -189,7 +208,7 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 						break;
 
 					default:
-						ZenithErr("Expected dot. \n");
+						ZenithErr("IPV4 ADDRESS PARSE: Expected dot. \n");
 						return FALSE;
 				}
 				break;
@@ -275,11 +294,17 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 
 			ipv4_source = source;
 
-			StrPrint(ip_string, "%d.%d.%d.%d",
+/*			StrPrint(ip_string, "%d.%d.%d.%d",
 					 ipv4_source->address.u8[3],
 					 ipv4_source->address.u8[2],
 					 ipv4_source->address.u8[1],
-					 ipv4_source->address.u8[0]);
+					 ipv4_source->address.u8[0]);*/
+
+			StrPrint(ip_string, "%d.%d.%d.%d",
+					 ipv4_source->address.u8[0],
+					 ipv4_source->address.u8[1],
+					 ipv4_source->address.u8[2],
+					 ipv4_source->address.u8[3]);
 			break;
 		case AF_INET6:
 

@@ -8,7 +8,7 @@
 
 /*	Ethernet Frame Size.
 	Linux uses 1544, OSDev and Shrine use 1548. Based on IEEE 802.3as, max frame size was agreed upon as 2000 bytes. */
-#define ETHERNET_FRAME_SIZE	2000
+#define ETHERNET_FRAME_SIZE	2048//2000
 
 #define HTYPE_ETHERNET	1
 #define HLEN_ETHERNET	6

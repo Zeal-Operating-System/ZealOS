@@ -1,5 +1,5 @@
-#include "PCNet"
-#include "Ethernet"
+//#include "PCNet"
+//#include "Ethernet"
 
 #define ARP_HASHTABLE_SIZE	1024
 
@@ -54,8 +54,9 @@ I64 ARPSend(U16 operation,
 			U32 target_ip)
 {//method currently assumes send_ and target_ip EndianU16 already...
 
-	U8 *ethernet_frame;
-	CARPHeader *header;
+	U8			*ethernet_frame;
+	CARPHeader	*header;
+
 	I64 de_index = EthernetFrameAllocate(&ethernet_frame,
 										 send_mac_address,
 										 dest_mac_address,
@@ -85,10 +86,14 @@ I64 ARPSend(U16 operation,
 
 CARPHash *ARPCacheFindByIP(U32 ip_address)
 {
-	U8 *ip_string = MStrPrint("%d", ip_address);
-	CARPHash *entry = HashFind(ip_string, arp_cache, HTT_ARP);
+	U8			*ip_string	= MStrPrint("%X", ip_address);
+	CARPHash	*entry		= HashFind(ip_string, arp_cache, HTT_ARP);
+
 	if (entry == NULL)
-		ZenithErr("Could not find an IP in ARP cache.");
+	{
+		ZenithWarn("ARP CACHE FIND BY IP: Could not find an IP in ARP cache.\n");
+//		CallerRep;
+	}
 
 	Free(ip_string);
 	return entry;
@@ -96,19 +101,24 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 
 CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 {
+	ZenithLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.\n");
 	CARPHash *entry = ARPCacheFindByIP(ip_address);
 	//Free(entry); // something seems wrong about this...
 
 	if (!entry)
 	{
 		entry = CAlloc(sizeof(CARPHash));
-		entry->str = MStrPrint("%d", ip_address);
+		ZenithLog("ARP CACHE PUT: Attempting add to cache: addr, mac: \n");
+		ZenithLog("               0x%0X, 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X\n",
+					ip_address, mac_address[0], mac_address[1], mac_address[2], mac_address[3], mac_address[4], mac_address[5]);
+		entry->str	= MStrPrint("%X", ip_address);
+		entry->type = HTT_ARP;
 		MemCopy(entry->mac_address, mac_address, 6);
 
 		HashAdd(entry, arp_cache);
 	}
 	else
-		ZenithWarn("ARP Cache Put attempted but entry was already found in Cache. TODO: overwrite?\n");
+		ZenithWarn("ARP CACHE Put: Entry was already found in Cache. TODO: overwrite?\n");
 
 	return entry;
 }
@@ -139,16 +149,18 @@ U0 ARPSetIPV4Address(U32 ip_address)
 //the NetQueueHandler
 I64 ARPHandler(CEthernetFrame *ethernet_frame)
 {
+	ZenithLog("ARP HANDLER: Entering ARP Handler.\n");
+
 	// shrine checks if frame ethertype is ARP and ensures length is not less than CARPHeader
 	// since revising Shrine implement, will do same checks for now ..
 	if (ethernet_frame->ethertype != ETHERTYPE_ARP)
 	{
-		ZenithErr("ARP Handler caught wrong frame ethertype.");
+		ZenithErr("ARP HANDLER: Caught wrong frame ethertype.\n");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (ethernet_frame->length < sizeof(CARPHeader))
 	{
-		ZenithErr("ARP Handler caught wrong frame length.");
+		ZenithErr("ARP HANDLER: Caught wrong frame length.\n");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 
@@ -161,22 +173,22 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 	// hlen(?) != 6(?), and that plen(?) == 4 (?)
 	if (EndianU16(header->hardware_type) != HTYPE_ETHERNET)
 	{
-		ZenithErr("ARP Handler caught wrong frame hardware type.");
+		ZenithErr("ARP HANDLER: Caught wrong frame hardware type.\n");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (EndianU16(header->protocol_type) != ETHERTYPE_IPV4)
 	{
-		ZenithErr("ARP Handler caught wrong frame protocol type.");
+		ZenithErr("ARP HANDLER: Caught wrong frame protocol type.\n");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (header->hardware_addr_len != HLEN_ETHERNET)
 	{
-		ZenithErr("ARP Handler caught wrong frame hardware address length.");
+		ZenithErr("ARP HANDLER: Caught wrong frame hardware address length.\n");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (header->protocol_addr_len != PLEN_IPV4)
 	{
-		ZenithErr("ARP Handler caught wrong frame protocol address length.");
+		ZenithErr("ARP HANDLER: Caught wrong frame protocol address length.\n");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 
@@ -196,5 +208,27 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 			break;
 	}
 }
+
+U0 ARPRep()
+{ // TODO: primitive, needs refine.
+	I64			 i;
+	CARPHash	*temp_hash;
+
+	"\n";
+	Who(, arp_cache);
+	"\n";
+
+	for (i = 0; i <= arp_cache->mask; i++)
+	{
+		temp_hash = arp_cache->body[i];
+
+		while (temp_hash)
+		{
+			ClassRep(temp_hash);
+			temp_hash = temp_hash->next;
+		}
+	}
+}
+
 
 ARPCacheInit;
