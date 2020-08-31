@@ -1,5 +1,4 @@
 ![Website](https://img.shields.io/website?down_color=lightgray&down_message=offline&style=flat-square&up_color=green&up_message=online&url=https%3A%2F%2Fzenithos.org)
-![goto counter](https://img.shields.io/github/search/TomAwezome/ZenithOS/goto?style=flat-square)
 # ZenithOS
 
 The Zenith Operating System is a modernized, professional fork of the 64-bit Temple Operating System.
