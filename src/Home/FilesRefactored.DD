@@ -74,6 +74,26 @@ StartOS.CC
 	Compiler.PRJ
 
 /Kernel/
+	Display.CC
+	EdLite.CC
+	FunSeg.CC
+	Job.CC
+	KConfig.CC
+	KDataTypes.CC
+	KDate.CC
+	KDebug.CC
+	KDefine.CC
+	KExcept.CC
+	KExterns.CC
+	KGlobals.CC
+	KHashA.CC
+	KHashB.CC
+	KInterrupts.CC
+	KLoad.CC
+	KMain.CC
+
+	KStart16.CC
+	KStart32.CC
 	KStart64.CC
 
 	BlkDev/

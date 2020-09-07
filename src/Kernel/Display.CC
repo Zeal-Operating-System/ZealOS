@@ -6,58 +6,66 @@ the normal screen text output routine.
 
 See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 */
-	I64 i,row,col,x,y;
+	I64  i, row, col, x, y;
 	U32 *framebuffer;
-	U64 ch_bitmap;
+	U64  ch_bitmap;
 
-	if (!(text.raw_flags&RAWF_SHOW_DOLLAR)) {
-		if (ch=='$$') {
-			if (text.raw_flags&RAWF_IN_DOLLAR) {
-				text.raw_flags&=~RAWF_IN_DOLLAR;
-				if (!(text.raw_flags & RAWF_LAST_DOLLAR)) {
-					text.raw_flags&=~RAWF_LAST_DOLLAR;
+	if (!(text.raw_flags & RAWF_SHOW_DOLLAR))
+	{
+		if (ch == '$$')
+		{
+			if (text.raw_flags & RAWF_IN_DOLLAR)
+			{
+				text.raw_flags &= ~RAWF_IN_DOLLAR;
+				if (!(text.raw_flags & RAWF_LAST_DOLLAR))
+				{
+					text.raw_flags &= ~RAWF_LAST_DOLLAR;
 					return;
 				}
-			} else {
-				text.raw_flags|=RAWF_IN_DOLLAR|RAWF_LAST_DOLLAR;
+			}
+			else
+			{
+				text.raw_flags |= RAWF_IN_DOLLAR | RAWF_LAST_DOLLAR;
 				return;
 			}
 		}
-		text.raw_flags&=~RAWF_LAST_DOLLAR;
-		if (text.raw_flags&RAWF_IN_DOLLAR)
+		text.raw_flags &= ~RAWF_LAST_DOLLAR;
+		if (text.raw_flags & RAWF_IN_DOLLAR)
 			return;
 	}
-	if (ch=='\t')
+	if (ch == '\t')
 	{
 		RawPutChar(CH_SPACE);
 		while (text.raw_col & 7)
 			RawPutChar(CH_SPACE);
 	}
-	else if (ch==CH_BACKSPACE)
+	else if (ch == CH_BACKSPACE)
 	{
 		text.raw_col--;
 		RawPutChar(CH_SPACE);
 		text.raw_col--;
 	}
-	else if (ch=='\n')
+	else if (ch == '\n')
 	{
 		RawPutChar(CH_SPACE);
 		while (text.raw_col % text.cols)
 			RawPutChar(CH_SPACE);
 	}
-	else if (Bt(char_bmp_displayable,ch))
+	else if (Bt(char_bmp_displayable, ch))
 	{
 		row = text.raw_col / text.cols % text.rows;
 		col = text.raw_col % text.cols;
 
-		if (text.raw_flags&RAWF_SCROLL && text.raw_col && !row && !col)
+		if (text.raw_flags & RAWF_SCROLL && text.raw_col && !row && !col)
 		{//Scroll screen down
+
 			MemCopy(text.fb_alias,
-								text.fb_alias 	 + sys_vbe_mode.width * FONT_HEIGHT,
-								(text.screen_size - sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
+					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+
 			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
-			text.raw_col-=text.cols;
-			row=text.rows-1;
+			text.raw_col -= text.cols;
+			row = text.rows - 1;
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;
@@ -72,7 +80,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 				*framebuffer++ = WHITE32;
 			else
 				*framebuffer++ = BLACK32;
-			if (i & (FONT_WIDTH-1) == FONT_WIDTH-1)
+			if (i & (FONT_WIDTH - 1) == FONT_WIDTH - 1)
 				framebuffer += sys_vbe_mode.width - FONT_WIDTH;
 			ch_bitmap >>= 1;
 		}
@@ -83,34 +91,41 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 
 U0 LFBFlush()
 {//Flush winmgr screen cache, so updates whole screen.
-	LBts(&sys_semas[SEMA_FLUSH_VBE_IMAGE],0);
+	LBts(&sys_semas[SEMA_FLUSH_VBE_IMAGE], 0);
 }
 
 U0 WinDerivedValsUpdate(CTask *task)
 {//Those things calculated from other variables.
-	if (!task) task=Fs;
+	if (!task)
+		task = Fs;
 	//Assert: This is called with TASKf_TASK_LOCK set
 	PUSHFD
 	CLI
-	task->win_width =task->win_right-task->win_left+1;
-	task->win_height=task->win_bottom-task->win_top+1;
-	task->pix_left				=FONT_WIDTH*task->win_left;
-	task->pix_right 			=FONT_WIDTH*(task->win_right+1)-1;
-	task->pix_width 			=task->pix_right-task->pix_left+1;
-	task->pix_top 				=FONT_HEIGHT*task->win_top;
-	task->pix_bottom			=FONT_HEIGHT*(task->win_bottom+1)-1;
-	task->pix_height			=task->pix_bottom-task->pix_top+1;
+	task->win_width		= task->win_right  - task->win_left + 1;
+	task->win_height	= task->win_bottom - task->win_top + 1;
+
+	task->pix_left		= FONT_WIDTH * task->win_left;
+	task->pix_right 	= FONT_WIDTH * (task->win_right + 1) - 1;
+
+	task->pix_width 	= task->pix_right  - task->pix_left + 1;
+
+	task->pix_top 		= FONT_HEIGHT * task->win_top;
+	task->pix_bottom	= FONT_HEIGHT * (task->win_bottom + 1) - 1;
+
+	task->pix_height	= task->pix_bottom - task->pix_top + 1;
 	POPFD
 }
 
-Bool WinInside(I64 x,I64 y,CTask *task=NULL,I64 border=0)
+Bool WinInside(I64 x, I64 y, CTask *task=NULL, I64 border=0)
 {//Is pixel (x,y) inside task's win? Border to FONT_WIDTH.
-	if (!task) task=Fs;
-	if (TaskValidate(task) && Bt(&task->display_flags,DISPLAYf_SHOW)) {
-		if (Bt(&task->display_flags,DISPLAYf_NO_BORDER))
-			border=0;
-		if (task->pix_left-border<=x<=task->pix_right+border &&
-					task->pix_top-border<=y<=task->pix_bottom+border)
+	if (!task)
+		task = Fs;
+	if (TaskValidate(task) && Bt(&task->display_flags, DISPLAYf_SHOW))
+	{
+		if (Bt(&task->display_flags, DISPLAYf_NO_BORDER))
+			border = 0;
+		if (task->pix_left - border <= x <= task->pix_right  + border &&
+			task->pix_top  - border <= y <= task->pix_bottom + border)
 			return TRUE;
 	}
 	return FALSE;

@@ -1,8 +1,10 @@
 asm {
 USE32
+
 //************************************
 //	ASM Global vars not required for 16-bit start-up
-		ALIGN 	8,OC_NOP
+		ALIGN 	8, OC_NOP
+
 MEM_HEAP_BASE:: 	DU64	0;
 MEM_HEAP_LIMIT::	DU64	0;
 MEM_PAGE_SIZE:: 	DU64	0;
@@ -15,20 +17,24 @@ MEM_PML3::			DU64	0;
 MEM_PML4::			DU64	0;
 
 #exe {
-StreamPrint(
-"SYS_MEM_INIT_FLAG::	DU8	%d;"
-"SYS_MEM_INIT_VAL:: 	DU8	%d;"
-"SYS_HEAP_INIT_FLAG:: 	DU8	%d;"
-"SYS_HEAP_INIT_VAL::	DU8	%d;"
-"SYS_VAR_INIT_FLAG::	DU8	%d;"
-"SYS_VAR_INIT_VAL:: 	DU8	%d;",
-kernel_config->opts[CONFIG_MEM_INIT], kernel_config->mem_init_val,
-kernel_config->opts[CONFIG_HEAP_INIT],kernel_config->heap_init_val,
-kernel_config->opts[CONFIG_VAR_INIT], kernel_config->var_init_val);
+
+	StreamPrint("SYS_MEM_INIT_FLAG::	DU8	%d;"
+				"SYS_MEM_INIT_VAL:: 	DU8	%d;"
+				"SYS_HEAP_INIT_FLAG:: 	DU8	%d;"
+				"SYS_HEAP_INIT_VAL::	DU8	%d;"
+				"SYS_VAR_INIT_FLAG::	DU8	%d;"
+				"SYS_VAR_INIT_VAL:: 	DU8	%d;",
+
+				kernel_config->opts[CONFIG_MEM_INIT],
+				kernel_config->mem_init_val,
+				kernel_config->opts[CONFIG_HEAP_INIT],
+				kernel_config->heap_init_val,
+				kernel_config->opts[CONFIG_VAR_INIT],
+				kernel_config->var_init_val);
 };
 SYS_HEAP_DEBUG_FLAG:: 	DU8	_CONFIG_HEAP_DEBUG;
 
-		ALIGN 	8,0
+		ALIGN 	8, 0
 SYS_CTRL_ALT_FLAGS::	DU64	0;
 SYS_EXTERN_TABLE::		DU64	0;
 
@@ -56,7 +62,7 @@ SYS_PROGRESS4_MAX:: 	DU64	0;
 SYS_PROGRESS4_T0::		DU64	0;
 SYS_PROGRESS4_TF::		DU64	0;
 SYS_PROGRESS4_DESC::	DU8 	PROGRESS_DESC_LEN DUP(0);
-#assert $$-SYS_PROGRESSES==sizeof(CProgress) * 4
+#assert $$ - SYS_PROGRESSES == sizeof(CProgress) * 4
 
 SYS_FOCUS_TASK::		DU64		0;
 SYS_CPU_STRUCTS:: 		DU64		0;
@@ -70,24 +76,25 @@ SYS_CACHE_LINE_WIDTH::	DU64	DEFAULT_CACHE_LINE_WIDTH;
 SYS_SEMAS::				DU8 	SEMA_SEMAS_NUM * DEFAULT_CACHE_LINE_WIDTH DUP(0);
 //************************************
 		ALIGN 	16, OC_NOP
+
 CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		PUSH	U32 RFLAGG_START
 		POPFD
 		MOV 	EAX, SYS_START_CR0
 		MOV_CR0_EAX
 
-		MOV		AX , CGDT.boot_ds //LOAD DS SELECTOR
-		MOV 	DS , AX
-		BTS 	U32 [SYS_RUN_LEVEL],RLf_32BIT
+		MOV		AX,  CGDT.boot_ds //LOAD DS SELECTOR
+		MOV 	DS,  AX
+		BTS 	U32 [SYS_RUN_LEVEL], RLf_32BIT
 		MOV 	ESI, U32 [SYS_BOOT_PATCH_TABLE_BASE]
 		MOV 	EDI, U32 [MEM_BOOT_BASE]
 
-		MOV		AX , CGDT.ds
-		MOV		DS , AX
-		MOV		ES , AX
-		MOV		FS , AX
-		MOV		GS , AX
-		MOV		SS , AX
+		MOV		AX, CGDT.ds
+		MOV		DS,  AX
+		MOV		ES,  AX
+		MOV		FS,  AX
+		MOV		GS,  AX
+		MOV		SS,  AX
 		MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
 
 //Patch abs addresses
@@ -95,7 +102,7 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		LEA		ESI, U32 CPatchTableAbsAddr.abs_addres[ESI]
 @@05: 	LODSD
 		ADD		EAX, EDI
-		ADD		U32 [EAX],EDI
+		ADD		U32 [EAX], EDI
 		LOOP	@@05
 
 		DU8 	0xEA; //JMP CGDT.cs32:@@10

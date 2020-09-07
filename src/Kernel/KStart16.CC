@@ -13,63 +13,66 @@ SYS_KERNEL:: //This must match $LK,"CKernel",A="MN:CKernel"$.
 
 //************************************
 //	ASM Global vars required for 16-bit start-up
-		ALIGN 	4,OC_NOP
-SYS_BOOT_SRC::	DU32	BOOT_SRC_NULL;
-SYS_BOOT_BLK::	DU32	0;
+		ALIGN 	4, OC_NOP
+
+SYS_BOOT_SRC::				DU32	BOOT_SRC_NULL;
+SYS_BOOT_BLK::				DU32	0;
 SYS_BOOT_PATCH_TABLE_BASE::	DU32	0;
-SYS_RUN_LEVEL:: DU32	0;
+SYS_RUN_LEVEL::				DU32	0;
+
 #exe
-{StreamPrint(
-"SYS_COMPILE_TIME:: DU64 0x%X;", Now);//See $LK,"BootDVDProbe",A="MN:BootDVDProbe"$
+{
+	StreamPrint("SYS_COMPILE_TIME:: DU64 0x%X;", Now); //See $LK,"BootDVDProbe",A="MN:BootDVDProbe"$
 };
 
 #assert SYS_COMPILE_TIME + sizeof(CDate) + sizeof(CBinFile) < DVD_BLK_SIZE
 
-MEM_BOOT_BASE::	DU32	0;			//Offset from start used by reboot
-MEM_E801::		DU16	0, 0;
-MEM_E820::		DU8 	MEM_E820_ENTRIES_NUM*sizeof(CMemE820) DUP (0);
+MEM_BOOT_BASE::			DU32	0;	//Offset from start used by reboot
+MEM_E801::				DU16	0, 0;
+MEM_E820::				DU8 	MEM_E820_ENTRIES_NUM * sizeof(CMemE820) DUP (0);
 MEM_PHYSICAL_SPACE::	DU64	0;
-SYS_GDT_PTR::	DU16	sizeof(CGDT)-1;
-				DU64	0;
-SYS_PCI_BUSES:: DU16	0;
+SYS_GDT_PTR::			DU16	sizeof(CGDT) - 1;
+						DU64	0;
+SYS_PCI_BUSES::			DU16	0;
 
-		ALIGN 	16,OC_NOP
+		ALIGN 	16, OC_NOP
+
 SYS_GDT:: //See $LK,"CGDT",A="MN:CGDT"$
 GDT_NULL:		DU64	0,0;
-GDT_BOOT_DS:	DU64	0x00CF92000000FFFF,0; //Gets patched.
-GDT_BOOT_CS:	DU64	0x00CF9A000000FFFF,0; //Gets patched.
-GDT_CS32: 		DU64	0x00CF9A000000FFFF,0;
-GDT_CS64: 		DU64	0x00209A0000000000,0; //The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring0.
-GDT_CS64_RING3: DU64	0x0020FA0000000000,0; //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, so you can play with.
-GDT_DS: 		DU64	0x00CF92000000FFFF,0;
-GDT_DS_RING3: 	DU64	0x00CFF2000000FFFF,0;
-GDT_TR: 		DU8 	MP_PROCESSORS_NUM*16 DUP(0);
-GDT_TR_RING3: 	DU8 	MP_PROCESSORS_NUM*16 DUP(0);
+GDT_BOOT_DS:	DU64	0x00CF92000000FFFF, 0; //Gets patched.
+GDT_BOOT_CS:	DU64	0x00CF9A000000FFFF, 0; //Gets patched.
+GDT_CS32: 		DU64	0x00CF9A000000FFFF, 0;
+GDT_CS64: 		DU64	0x00209A0000000000, 0; //The $LK,"Charter",A="FI:::/Doc/Charter.DD"$ says just ring0.
+GDT_CS64_RING3: DU64	0x0020FA0000000000, 0; //$LK,"Ring3",A="FI:::/Demo/Lectures/Ring3.CC"$, so you can play with.
+GDT_DS: 		DU64	0x00CF92000000FFFF, 0;
+GDT_DS_RING3: 	DU64	0x00CFF2000000FFFF, 0;
+GDT_TR: 		DU8 	MP_PROCESSORS_NUM * 16 DUP(0);
+GDT_TR_RING3: 	DU8 	MP_PROCESSORS_NUM * 16 DUP(0);
 #assert $$ - SYS_GDT == sizeof(CGDT)
 
 SYS_FONT_PTR::	DU32	0;
 
-SYS_VBE_INFO::	DU8 	sizeof(CVBEInfo) DUP(0);
-SYS_VBE_MODES:: DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM DUP(0);
-SYS_VBE_FINAL_MODE::	DU8 	sizeof(CVBEMode) DUP(0);
+SYS_VBE_INFO::			DU8 	sizeof(CVBEInfo)						DUP(0);
+SYS_VBE_MODES::			DU8 	sizeof(CVBEModeShort) * VBE_MODES_NUM	DUP(0);
+SYS_VBE_FINAL_MODE::	DU8 	sizeof(CVBEMode)						DUP(0);
 SYS_VBE_FINAL_MODE_NUM::DU16	0; //mode number of final mode set
 #assert $$ - SYS_KERNEL == sizeof(CKernel) - sizeof(CBinFile)
 
-TEMP_VBE_MODE:		DU8 	sizeof(CVBEMode) DUP(0);
-MAX_VBE_MODE:		DU8 	sizeof(CVBEModeShort) DUP(0);
+TEMP_VBE_MODE:		DU8 	sizeof(CVBEMode)		DUP(0);
+MAX_VBE_MODE:		DU8 	sizeof(CVBEModeShort)	DUP(0);
 MAX_SCREEN_HEIGHT:	DU16	0;
 
 #exe
-{StreamPrint(
-"SCREEN_WIDTH:	DU16		%d;"
-"SCREEN_HEIGHT: DU16		%d;",
-kernel_config->screen_width, kernel_config->screen_height);
+{
+	StreamPrint("SCREEN_WIDTH:	DU16		%d;"
+				"SCREEN_HEIGHT: DU16		%d;", kernel_config->screen_width, kernel_config->screen_height);
 };
+
 //************************************
 CORE0_16BIT_INIT::
 //EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
 		MOV		ECX, EAX
-		MOV		AX, (BOOT_RAM_LIMIT-BOOT_STACK_SIZE) /	16
+		MOV		AX, (BOOT_RAM_LIMIT - BOOT_STACK_SIZE) / 16
 		MOV		SS, AX
 		MOV		SP, BOOT_STACK_SIZE
 		PUSH	ECX 		//Will be $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$ & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.
@@ -87,7 +90,7 @@ GET_IP: POP 	BX
 @@04: 	STI
 		MOV 	AX, CS
 		MOV 	DS, AX
-		MOV 	U32 [SYS_RUN_LEVEL],RLF_16BIT
+		MOV 	U32 [SYS_RUN_LEVEL], RLF_16BIT
 
 //Our variables are on the data segment, but VBE functions require ES.
 //moving DS into ES, while preserving ES
@@ -164,7 +167,7 @@ GET_IP: POP 	BX
 		JL		@@07
 
 		MOV		[MAX_SCREEN_HEIGHT], BX
-		MOV		[MAX_VBE_MODE], CX
+		MOV		[MAX_VBE_MODE],      CX
 
 @@07: 	MOV		AX, CVBEMode.width[DI]
 		MOV		CVBEModeShort.width[DX], AX
@@ -237,11 +240,11 @@ GET_IP: POP 	BX
 		MOV 	U16 [MEM_E801+2], BX
 
 //Get E820 memory map.
-		MOV 	CX , MEM_E820_ENTRIES_NUM - 1 //Leave one to terminate
+		MOV 	CX,  MEM_E820_ENTRIES_NUM - 1 //Leave one to terminate
 		XOR 	EBX, EBX
 		PUSH	DS
 		POP		ES
-		MOV 	DI , MEM_E820
+		MOV 	DI,  MEM_E820
 @@15: 	PUSH	CX
 		MOV 	EAX, 0xE820
 		MOV 	ECX, sizeof(CMemE820)
@@ -252,23 +255,23 @@ GET_IP: POP 	BX
 		JNE 	@@20
 		TEST	EBX, EBX
 		JZ		@@20
-		ADD 	DI , sizeof(CMemE820)
+		ADD 	DI,  sizeof(CMemE820)
 		POP 	CX
 		LOOP	@@15
-		SUB 	SP , 2
-@@20: 	ADD		SP , 2 //if called failed we want to nullify the PUSHed CX value.
+		SUB 	SP,  2
+@@20: 	ADD		SP,  2 //if called failed we want to nullify the PUSHed CX value.
 
 //Find how much space to map, start with E801 limit.
-		XOR 	EAX,EAX
-		MOV 	AX, [MEM_E801+2]
-		SHL 	EAX,16
-		ADD 	EAX,SYS_16MEG_AREA_LIMIT
-		XOR 	EDX,EDX
+		XOR 	EAX, EAX
+		MOV 	AX,  [MEM_E801+2]
+		SHL 	EAX, 16
+		ADD 	EAX, SYS_16MEG_AREA_LIMIT
+		XOR 	EDX, EDX
 
 //Find max of E820 to set mapped space.
-		MOV 	SI , MEM_E820
-@@25: 	MOV 	CL , CMemE820.type[SI]
-		TEST	CL , CL
+		MOV 	SI,  MEM_E820
+@@25: 	MOV 	CL,  CMemE820.type[SI]
+		TEST	CL,  CL
 		JZ		@@35
 		MOV 	EBX, CMemE820.base  [SI]
 		MOV 	ECX, CMemE820.base+4[SI]
@@ -277,62 +280,62 @@ GET_IP: POP 	BX
 		SUB 	EBX, EAX
 		SBB 	ECX, EDX
 		JC		@@30
-		MOV		EAX, CMemE820.base[SI]
+		MOV		EAX, CMemE820.base  [SI]
 		MOV		EDX, CMemE820.base+4[SI]
-		ADD		EAX, CMemE820.len[SI]
-		ADC		EDX, CMemE820.len+4[SI]
-@@30: 	ADD		SI,sizeof(CMemE820)
+		ADD		EAX, CMemE820.len   [SI]
+		ADC		EDX, CMemE820.len+4 [SI]
+@@30: 	ADD		SI,  sizeof(CMemE820)
 		JMP		@@25
 
-@@35: 	MOV		[MEM_PHYSICAL_SPACE],EAX
-		MOV		[MEM_PHYSICAL_SPACE+4],EDX
+@@35: 	MOV		[MEM_PHYSICAL_SPACE],   EAX
+		MOV		[MEM_PHYSICAL_SPACE+4], EDX
 
 //Get PCI Bus Info
-		MOV		U16 [SYS_PCI_BUSES],256
-		XOR		DX,DX
-		MOV		AX,0xB101
+		MOV		U16 [SYS_PCI_BUSES], 256
+		XOR		DX, DX
+		MOV		AX, 0xB101
 		INT		0x1A
-		CMP		DX,'PC'
+		CMP		DX, 'PC'
 		JNE		@@40
-		MOV		CH,0
+		MOV		CH, 0
 		INC		CX
-		MOV		U16 [SYS_PCI_BUSES],CX
+		MOV		U16 [SYS_PCI_BUSES], CX
 @@40:
 		CLI
 //Enable A20
-		IN		AL,0x92
-		OR		AL,2
-		OUT		0x92,AL
+		IN		AL, 0x92
+		OR		AL, 2
+		OUT		0x92, AL
 
 		POP		U32 [SYS_BOOT_BLK]
-		POP		U32 [SYS_BOOT_SRC]			//See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.
+		POP		U32 [SYS_BOOT_SRC]	//See $LK,"BootHD",A="FF:::/Zenith/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/Zenith/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/Zenith/Boot/BootRAM.CC,BOOT_SRC_RAM"$.
 
 		CLD		
-		XOR 	EAX,EAX
-		MOV 	AX,CS
-		MOV 	DS,AX
-		MOV 	ES,AX
-		SHL 	EAX,4
+		XOR 	EAX, EAX
+		MOV 	AX,  CS
+		MOV 	DS,  AX
+		MOV 	ES,  AX
+		SHL 	EAX, 4
 
-		MOV		U32 [MEM_BOOT_BASE],EAX
+		MOV		U32 [MEM_BOOT_BASE], EAX
 
-		MOV 	DX,CS
-		SUB 	DX,sizeof(CBinFile)/16
+		MOV 	DX, CS
+		SUB 	DX, sizeof(CBinFile) / 16
 #assert !(sizeof(CBinFile) & 0xF)
-		MOV 		GS,DX
+		MOV 	GS, DX
 
-		MOV		EDX,EAX
-		ADD		EDX,U32 GS:[CBinFile.patch_table_offset]
-		SUB		EDX,sizeof(CBinFile)
-		MOV		U32 [SYS_BOOT_PATCH_TABLE_BASE],EDX
+		MOV		EDX, EAX
+		ADD		EDX, U32 GS:[CBinFile.patch_table_offset]
+		SUB		EDX, sizeof(CBinFile)
+		MOV		U32 [SYS_BOOT_PATCH_TABLE_BASE], EDX
 
-		ADD		U32 [GDT_BOOT_DS+2],EAX
-		ADD		U32 [GDT_BOOT_CS+2],EAX
-		ADD		EAX,I32 SYS_GDT
-		MOV		U32 [SYS_GDT_PTR+CSysLimitBase.base],EAX
+		ADD		U32 [GDT_BOOT_DS+2], EAX
+		ADD		U32 [GDT_BOOT_CS+2], EAX
+		ADD		EAX, I32 SYS_GDT
+		MOV		U32 [SYS_GDT_PTR + CSysLimitBase.base], EAX
 		LGDT	U32 [SYS_GDT_PTR]
 
-		MOV		EAX,SYS_START_CR0
+		MOV		EAX, SYS_START_CR0
 		MOV_CR0_EAX
 
 /* The assembler doesn't support far jumps so
@@ -342,8 +345,8 @@ enough to fully implement in the assembler.
 To complete the switch to 32-bit mode, we have to load
 the code segment with a far jump.
 */
-		DU8 		0x66,0xEA; //JMP CGDT.boot_cs:CORE0_32BIT_INIT
+		DU8 		0x66, 0xEA; //JMP CGDT.boot_cs:CORE0_32BIT_INIT
 		DU32		CORE0_32BIT_INIT;
 		DU16		CGDT.boot_cs;
-#assert $$+16<=0xFFFF
+#assert $$ + 16 <= 0xFFFF
 }

@@ -1,139 +1,142 @@
 asm {
 //************************************
 SYS_HASH_STR::
-// IN:	RSI=Addr of string
+// IN:	RSI = Addr of string
 // OUT: RAX
-				XOR 		RAX,RAX
-				TEST		RSI,RSI
+				XOR 		RAX, RAX
+				TEST		RSI, RSI
 				JZ			@@15
 
 				PUSH		RSI
 				PUSH		RBX
-				XOR 		RBX,RBX
+				XOR 		RBX, RBX
 				JMP 		@@10
 
-@@05: 	SHL1		RBX
-				ADC 		RBX,RAX
-@@10: 	LODSB
-				TEST		AL,AL
+@@05:			SHL1		RBX
+				ADC 		RBX, RAX
+@@10:			LODSB
+				TEST		AL, AL
 				JNZ 		@@05
 
-				MOV 		RAX,RBX
-				SHR 		RBX,16
-				ADC 		RAX,RBX
+				MOV 		RAX, RBX
+				SHR 		RBX, 16
+				ADC 		RAX, RBX
 				POP 		RBX
 				POP 		RSI
 
-@@15: 	RET
+@@15:			RET
+
 //************************************
 SYS_HASH_SINGLE_TABLE_FIND1::
-// IN:	RAX=HASHED STRING VAL
-//			RSI=STR
-//			RBX=TYPE MASK
-//			RDI=TABLE
-//			RCX=INSTANCE, NOT ZERO
-// OUT: RAX=ENTRY OR ZERO NOT FOUND
-//			RDX=POINTER TO POINTER TO ENTRY
-//			RCX IF NOT FOUND ENOUGH, DECREMENTED BY NUM MATCHES
-//			ZERO FLAG SET NOT FOUND
-				MOV 		RCX,1
+// IN:	RAX = HASHED STRING VAL
+//		RSI = STR
+//		RBX = TYPE MASK
+//		RDI = TABLE
+//		RCX = INSTANCE, NOT ZERO
+// OUT: RAX = ENTRY OR ZERO NOT FOUND
+//		RDX = POINTER TO POINTER TO ENTRY
+//		RCX IF NOT FOUND ENOUGH, DECREMENTED BY NUM MATCHES
+//		ZERO FLAG SET NOT FOUND
+				MOV 		RCX, 1
 SYS_HASH_SINGLE_TABLE_FIND::
-				TEST		RCX,RCX
+				TEST		RCX, RCX
 				JNZ 		@@05
-				XOR 		RAX,RAX
+				XOR 		RAX, RAX
 				RET
-@@05: 	AND 		RAX,U64 CHashTable.mask[RDI]
-				MOV 		RDX,U64 CHashTable.body[RDI]
-				LEA 		RDX,U64 [RDX+RAX*8]
-@@10: 	MOV 		RAX,U64 [RDX]
-				TEST		RAX,RAX
+@@05:			AND 		RAX, U64 CHashTable.mask[RDI]
+				MOV 		RDX, U64 CHashTable.body[RDI]
+				LEA 		RDX, U64 [RDX + RAX * 8]
+@@10:			MOV 		RAX, U64 [RDX]
+				TEST		RAX, RAX
 				JNZ 		@@15
 				RET
 
-@@15: 	TEST		U32 CHash.type[RAX],EBX
+@@15:			TEST		U32 CHash.type[RAX], EBX
 				JZ			@@30
 				PUSH		RAX
 				PUSH		RDI
 				PUSH		RSI
-				MOV 		RDI,U64 CHash.str[RAX]
-@@20: 	LODSB
-				CMP 		U8 [RDI],AL
+				MOV 		RDI, U64 CHash.str[RAX]
+@@20:			LODSB
+				CMP 		U8 [RDI], AL
 				JNE 		@@25
 				INC 		RDI
-				TEST		AL,AL
+				TEST		AL, AL
 				JNZ 		@@20
 				POP 		RSI
 				POP 		RDI
 				POP 		RAX
 				LOOP		@@30
 				INC 		U32 CHash.use_count[RAX]
-				TEST		RAX,RAX
+				TEST		RAX, RAX
 				RET
 
-@@25: 	POP 		RSI
+@@25:			POP 		RSI
 				POP 		RDI
 				POP 		RAX
 
-@@30: 	LEA 		RDX,U64 CHash.next[RAX]
+@@30:			LEA 		RDX, U64 CHash.next[RAX]
 				JMP 		@@10
+
 //************************************
 SYS_HASH_FIND1::
-// IN:	RSI=STR
-//			RBX=TYPE MASK
-//			RDI=TABLE
-//			RCX=INSTANCE NUM
-// OUT: RAX=ENTRY OR ZERO NOT FOUND
-//			ZERO FLAG SET NOT FOUND
-				MOV 		RCX,1
+// IN:	RSI = STR
+//		RBX = TYPE MASK
+//		RDI = TABLE
+//		RCX = INSTANCE NUM
+// OUT: RAX = ENTRY OR ZERO NOT FOUND
+//		ZERO FLAG SET NOT FOUND
+				MOV 		RCX, 1
 SYS_HASH_FIND::
 				PUSH		RDI
 				CALL		SYS_HASH_STR
  
-@@05: 	PUSH		RAX
+@@05:			PUSH		RAX
 				CALL		SYS_HASH_SINGLE_TABLE_FIND
 				JNZ 		@@15
 				POP 		RAX
-@@10: 	MOV 		RDI,U64 CHashTable.next[RDI]
-				TEST		RDI,RDI
+@@10:			MOV 		RDI, U64 CHashTable.next[RDI]
+				TEST		RDI, RDI
 				JNZ 		@@05
 				POP 		RDI
-				XOR 		RAX,RAX
+				XOR 		RAX, RAX
 				RET
 
-@@15: 	ADD 		RSP,8
+@@15:			ADD 		RSP, 8
 				POP 		RDI
-				TEST		RAX,RAX
+				TEST		RAX, RAX
 				RET
+
 //************************************
 SYS_HASH_BUCKET_FIND::
-// IN:	RSI=STR
-//			RDI=TABLE
-// OUT: RAX=BUCKET
+// IN:	RSI = STR
+//		RDI = TABLE
+// OUT: RAX = BUCKET
 				PUSH		RDX
 				CALL		SYS_HASH_STR
-				AND 		RAX,U64 CHashTable.mask[RDI]
-				MOV 		RDX,U64 CHashTable.body[RDI]
-				LEA 		RAX,U64 [RDX+RAX*8]
+				AND 		RAX, U64 CHashTable.mask[RDI]
+				MOV 		RDX, U64 CHashTable.body[RDI]
+				LEA 		RAX, U64 [RDX+RAX * 8]
 				POP 		RDX
 				RET
 _HASH_STR::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
-				MOV 		RSI,U64 SF_ARG1[RBP]
+				MOV 		RSI, U64 SF_ARG1[RBP]
 				CALL		SYS_HASH_STR
 				POP 		RSI
 				POP 		RBP
 				RET1		8
 _HASH_FIND::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
 				PUSH		RDI
-				MOV 		RSI,U64 SF_ARG1[RBP]
-				MOV 		RDI,U64 SF_ARG2[RBP]
-				MOV 		RBX,U64 SF_ARG3[RBP]
-				MOV 		RCX,U64 SF_ARG4[RBP]
+				MOV 		RSI, U64 SF_ARG1[RBP]
+				MOV 		RDI, U64 SF_ARG2[RBP]
+				MOV 		RBX, U64 SF_ARG3[RBP]
+				MOV 		RCX, U64 SF_ARG4[RBP]
 				CALL		SYS_HASH_FIND
 				POP 		RDI
 				POP 		RSI
@@ -141,13 +144,13 @@ _HASH_FIND::
 				RET1		32
 _HASH_SINGLE_TABLE_FIND::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
 				PUSH		RDI
-				MOV 		RSI,U64 SF_ARG1[RBP]
-				MOV 		RDI,U64 SF_ARG2[RBP]
-				MOV 		RBX,U64 SF_ARG3[RBP]
-				MOV 		RCX,U64 SF_ARG4[RBP]
+				MOV 		RSI, U64 SF_ARG1[RBP]
+				MOV 		RDI, U64 SF_ARG2[RBP]
+				MOV 		RBX, U64 SF_ARG3[RBP]
+				MOV 		RCX, U64 SF_ARG4[RBP]
 				CALL		SYS_HASH_STR
 				CALL		SYS_HASH_SINGLE_TABLE_FIND
 				POP 		RDI
@@ -156,11 +159,11 @@ _HASH_SINGLE_TABLE_FIND::
 				RET1		32
 _HASH_BUCKET_FIND::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
 				PUSH		RDI
-				MOV 		RSI,U64 SF_ARG1[RBP]
-				MOV 		RDI,U64 SF_ARG2[RBP]
+				MOV 		RSI, U64 SF_ARG1[RBP]
+				MOV 		RDI, U64 SF_ARG2[RBP]
 				CALL		SYS_HASH_BUCKET_FIND
 				POP 		RDI
 				POP 		RSI
@@ -168,19 +171,19 @@ _HASH_BUCKET_FIND::
 				RET1		16
 _HASH_ADD::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
 				PUSH		RDI
-				MOV 		RCX,U64 SF_ARG1[RBP]
-				MOV 		RSI,U64 CHash.str[RCX]
-				MOV 		RDI,U64 SF_ARG2[RBP]
+				MOV 		RCX, U64 SF_ARG1[RBP]
+				MOV 		RSI, U64 CHash.str[RCX]
+				MOV 		RDI, U64 SF_ARG2[RBP]
 				CALL		SYS_HASH_BUCKET_FIND
-				MOV 		RCX,U64 SF_ARG1[RBP]
+				MOV 		RCX, U64 SF_ARG1[RBP]
 				PUSHFD
 				CLI
-				MOV 		RBX,U64 [RAX]
-				MOV 		U64 CHash.next[RCX],RBX
-				MOV 		U64 [RAX],RCX
+				MOV 		RBX, U64 [RAX]
+				MOV 		U64 CHash.next[RCX], RBX
+				MOV 		U64 [RAX], RCX
 
 				POPFD
 				POP 		RDI
@@ -189,16 +192,16 @@ _HASH_ADD::
 				RET1		16
 _HASH_ADD_AFTER::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RDI
-				MOV 		RCX,U64 SF_ARG1[RBP]
-				MOV 		RDI,U64 SF_ARG3[RBP]
+				MOV 		RCX, U64 SF_ARG1[RBP]
+				MOV 		RDI, U64 SF_ARG3[RBP]
 				PUSHFD
 				CLI
-				MOV 		RAX,SF_ARG2[RBP]
-				MOV 		RBX,U64 [RAX]
-				MOV 		U64 CHash.next[RCX],RBX
-				MOV 		U64 [RAX],RCX
+				MOV 		RAX, SF_ARG2[RBP]
+				MOV 		RBX, U64 [RAX]
+				MOV 		U64 CHash.next[RCX], RBX
+				MOV 		U64 [RAX], RCX
 
 				POPFD
 				POP 		RDI
@@ -206,29 +209,29 @@ _HASH_ADD_AFTER::
 				RET1		24
 _HASH_REM_DEL::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
 				PUSH		RDI
-				MOV 		RCX,U64 SF_ARG1[RBP]
-				TEST		RCX,RCX
+				MOV 		RCX, U64 SF_ARG1[RBP]
+				TEST		RCX, RCX
 				JZ			@@10
-				MOV 		RSI,U64 CHash.str[RCX]
-				XOR 		RBX,RBX
-				MOV 		EBX,U32 CHash.type[RCX]
-				AND 		EBX,~HTG_FLAGS_MASK&0xFFFFFFFF
-				MOV 		RDI,U64 SF_ARG2[RBP]
-				MOV 		RCX,U64 SF_ARG3[RBP]
+				MOV 		RSI, U64 CHash.str[RCX]
+				XOR 		RBX, RBX
+				MOV 		EBX, U32 CHash.type[RCX]
+				AND 		EBX, ~HTG_FLAGS_MASK & 0xFFFFFFFF
+				MOV 		RDI, U64 SF_ARG2[RBP]
+				MOV 		RCX, U64 SF_ARG3[RBP]
 				CALL		SYS_HASH_STR
 
 				PUSHFD
 				CLI
 				CALL		SYS_HASH_SINGLE_TABLE_FIND
 				JZ			@@05
-				CMP 		RAX,U64 SF_ARG1[RBP]
+				CMP 		RAX, U64 SF_ARG1[RBP]
 				JNE 		@@05
 
-				MOV 		RBX,U64 CHash.next[RAX]
-				MOV 		U64 [RDX],RBX
+				MOV 		RBX, U64 CHash.next[RAX]
+				MOV 		U64 [RDX], RBX
 
 				POPFD
 
@@ -239,27 +242,28 @@ _HASH_REM_DEL::
 
 				POP 		RDI
 				POP 		RSI
-				MOV 		RAX,1
+				MOV 		RAX, 1
 				POP 		RBP
 				RET1		24
 
-@@05: 	POPFD
-@@10: 	POP 		RDI
+@@05:			POPFD
+@@10:			POP 		RDI
 				POP 		RSI
-				XOR 		RAX,RAX
+				XOR 		RAX, RAX
 				POP 		RBP
 				RET1		24
 }
 
-_extern _HASH_STR I64 HashStr(U8 *st); //Hash a string.
-_extern _HASH_FIND CHash *HashFind(U8 *needle_str,CHashTable *haystack_table,
-				I64 mask,I64 instance=1);//Find string in hash table.
-_extern _HASH_SINGLE_TABLE_FIND CHash *HashSingleTableFind(U8 *needle_str,
-				CHashTable *haystack_table,
-				I64 mask,I64 instance=1);//Find string in single hash table.
-_extern _HASH_BUCKET_FIND CHash **HashBucketFind(U8 *needle_str,
-				CHashTable *haystack_table); //Find hash bucket.
-_extern _HASH_ADD U0 HashAdd(CHash *tmph,
-				CHashTable *table); //Add entry to hash table.
-_extern _HASH_REM_DEL Bool HashRemDel(CHash *tmph,CHashTable *table,
-				I64 instance=1);//Remove hash entry and del. Instance must match.
+// Hash a string.
+_extern _HASH_STR				I64		HashStr(U8 *st);
+// Find string in hash table.
+_extern _HASH_FIND				CHash  *HashFind(U8 *needle_str, CHashTable *haystack_table, I64 mask, I64 instance=1);
+// Find string in single hash table.
+_extern _HASH_SINGLE_TABLE_FIND	CHash  *HashSingleTableFind(U8 *needle_str, CHashTable *haystack_table,
+															I64 mask, I64 instance=1);
+// Find hash bucket.
+_extern _HASH_BUCKET_FIND		CHash **HashBucketFind(U8 *needle_str, CHashTable *haystack_table);
+// Add entry to hash table.
+_extern _HASH_ADD				U0		HashAdd(CHash *tmph, CHashTable *table);
+// Remove hash entry and del. Instance must match.
+_extern _HASH_REM_DEL			Bool	HashRemDel(CHash *tmph, CHashTable *table, I64 instance=1);
