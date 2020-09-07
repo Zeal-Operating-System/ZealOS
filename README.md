@@ -15,6 +15,7 @@ Features in development include:
   - Fully-functional AHCI support
   - ~~VBE support~~ 32-bit color VBE graphics
   - A new GUI framework in 32-bit color
+  - [Gr2](https://github.com/TempleProgramming/Gr2)
   - Compiler optimizations for speed improvements
   - SSE2+ instruction support in compiler and assembler
   - Network card drivers and a networking stack
