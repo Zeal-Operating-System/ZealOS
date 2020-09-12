@@ -37,18 +37,23 @@ $HL,1$*/
 
 U0 TaskFocusNext()
 {
-	CTask *task,*_task=sys_focus_task;
-	sys_focus_task=NULL;
-	if (!_task) _task=zenith_task;
-	task=_task->next_task;
-	do {
-		if (!Bt(&task->win_inhibit,WIf_SELF_FOCUS)) {
-			sys_focus_task=task;
-			CallExtNum(EXT_WIN_TO_TOP,task,TRUE);
+	CTask *task, *_task = sys_focus_task;
+
+	sys_focus_task = NULL;
+	if (!_task)
+		_task = zenith_task;
+	task = _task->next_task;
+	do
+	{
+		if (!Bt(&task->win_inhibit, WIf_SELF_FOCUS))
+		{
+			sys_focus_task = task;
+			CallExtNum(EXT_WIN_TO_TOP, task, TRUE);
 			return;
 		}
-		task=task->next_task;
-	} while (task!=_task);
+		task = task->next_task;
+	}
+	while (task != _task);
 }
 
 asm {
@@ -56,18 +61,18 @@ TASK_CONTEXT_SAVE::
 //OUT:	RSI=FS
 				PUSH		RSI
 				PUSHFD
-				XOR 		RSI,RSI
-				MOV 		RSI,FS:CTask.addr[RSI]
+				XOR 		RSI, RSI
+				MOV 		RSI, FS:CTask.addr[RSI]
 				POP 		U64 CTask.rflags[RSI]
 				POP 		U64 CTask.rsi[RSI]
-				MOV 		U64 CTask.rax[RSI],RAX
+				MOV 		U64 CTask.rax[RSI], RAX
 
 /*Divert the stack to the Task memory
 and push onto it and divert it back.
 It's a little faster.
 */
-				MOV 		RAX,RSP
-				LEA 		RSP,U64 CTask.r15+8[RSI]
+				MOV 		RAX, RSP
+				LEA 		RSP, U64 CTask.r15+8[RSI]
 				PUSH		R15
 				PUSH		R14
 				PUSH		R13
@@ -81,45 +86,46 @@ It's a little faster.
 				PUSH		RBX
 				PUSH		RDX
 				PUSH		RCX
-				MOV 		RSP,RAX
+				MOV 		RSP, RAX
 
-				MOV 		RAX,U64 CTask.fpu_mmx[RSI]
-				FXSAVE	U64 [RAX]
+				MOV 		RAX, U64 CTask.fpu_mmx[RSI]
+				FXSAVE		U64 [RAX]
 
-				MOV 		RDX,U64 CTask.bpt_list[RSI]
-@@05: 	TEST		RDX,RDX
+				MOV 		RDX, U64 CTask.bpt_list[RSI]
+@@05:			TEST		RDX, RDX
 				JZ			@@10
-				MOV 		RDI,U64 CBpt.addr[RDX]
-				MOV 		AL,U8 CBpt.val[RDX]
-				MOV 		U8 [RDI],AL
-				MOV 		RDX,U64 CBpt.next[RDX]
+				MOV 		RDI, U64 CBpt.addr[RDX]
+				MOV 		AL,  U8 CBpt.val[RDX]
+				MOV 		U8 [RDI], AL
+				MOV 		RDX, U64 CBpt.next[RDX]
 				JMP 		@@05
-@@10: 	RET
+@@10:			RET
+
 //************************************
 _TASK_CONTEXT_RESTORE::
-				XOR 		RAX,RAX
+				XOR 		RAX, RAX
 				INC 		U64 GS:CCPU.swap_counter[RAX]
-				MOV 		RSI,FS:CTask.addr[RAX]
-				BT			U32 CTask.rflags[RSI],RFLAGf_INT
+				MOV 		RSI, FS:CTask.addr[RAX]
+				BT			U32 CTask.rflags[RSI], RFLAGf_INT
 				JNC 		@@05
-				BTS 		U32 GS:CCPU.cpu_flags[RAX],CPUf_RAN_A_TASK
-@@05: 	BT			U64 CTask.task_flags[RSI],TASKf_DISABLE_BPTS
+				BTS 		U32 GS:CCPU.cpu_flags[RAX], CPUf_RAN_A_TASK
+@@05:			BT			U64 CTask.task_flags[RSI], TASKf_DISABLE_BPTS
 				JC			@@15
-				MOV 		RDX,U64 CTask.bpt_list[RSI]
-@@10: 	TEST		RDX,RDX
+				MOV 		RDX, U64 CTask.bpt_list[RSI]
+@@10:			TEST		RDX, RDX
 				JZ			@@15
-				MOV 		RDI,U64 CBpt.addr[RDX]
-				MOV 		U8 [RDI],OC_BPT
-				MOV 		RDX,U64 CBpt.next[RDX]
+				MOV 		RDI, U64 CBpt.addr[RDX]
+				MOV 		U8 [RDI], OC_BPT
+				MOV 		RDX, U64 CBpt.next[RDX]
 				JMP 		@@10
 
-@@15: 	INC 		U64 CTask.swap_counter[RSI]
+@@15:			INC 		U64 CTask.swap_counter[RSI]
 
-				MOV 		RAX,U64 CTask.fpu_mmx[RSI]
-				FXRSTOR U64 [RAX]
+				MOV 		RAX, U64 CTask.fpu_mmx[RSI]
+				FXRSTOR		U64 [RAX]
 
-				MOV 		RAX,RSP
-				LEA 		RSP,U64 CTask.rcx[RSI]
+				MOV 		RAX, RSP
+				LEA 		RSP, U64 CTask.rcx[RSI]
 				POP 		RCX
 				POP 		RDX
 				POP 		RBX
@@ -133,70 +139,69 @@ _TASK_CONTEXT_RESTORE::
 				POP 		R13
 				POP 		R14
 				POP 		R15
-				MOV 		RSP,RAX
+				MOV 		RSP, RAX
 
-				MOV 		RAX,U64 CTask.rax[RSI]
+				MOV 		RAX, U64 CTask.rax[RSI]
 				PUSH		CGDT.ds
 				PUSH		U64 CTask.rsp[RSI]
 				PUSH		U64 CTask.rflags[RSI]
 				PUSH		CGDT.cs64
 				PUSH		U64 CTask.rip[RSI]
-				MOV 		RSI,U64 CTask.rsi[RSI]
+				MOV 		RSI, U64 CTask.rsi[RSI]
 				IRET
+
 //************************************
 END_RSI_TASK:
-				MOV 		RAX,RSI
+				MOV 		RAX, RSI
 				CALL		SET_FS_BASE
 _TASK_END_NOW::
 				CALL		&TaskEnd
-				MOV 		RSI,RAX
+				MOV 		RSI, RAX
 				CALL		SET_FS_BASE
 				JMP 		I8 RESTORE_RSI_TASK
 
 _YIELD::
 				PUSHFD
-				TEST		U8 [SYS_SEMAS+SEMA_SINGLE_USER*DEFAULT_CACHE_LINE_WIDTH],1
+				TEST		U8 [SYS_SEMAS + SEMA_SINGLE_USER * DEFAULT_CACHE_LINE_WIDTH], 1
 				JZ			@@05
 				POPFD 					//If single user, don't change task.
 				RET
 
-@@05: 	CLI
+@@05:			CLI
 				CALL		TASK_CONTEXT_SAVE
-				MOV 		EBX,U32 _RET
-				MOV 		U64 CTask.rip[RSI],RBX
+				MOV 		EBX, U32 _RET
+				MOV 		U64 CTask.rip[RSI], RBX
 				POP 		U64 CTask.rflags[RSI]
-				MOV 		U64 CTask.rsp[RSI],RSP
-				MOV 		RSI,U64 CTask.next_task[RSI]
+				MOV 		U64 CTask.rsp[RSI], RSP
+				MOV 		RSI, U64 CTask.next_task[RSI]
 
 RESTORE_RSI_TASK:
-				TEST		U64 [SYS_CTRL_ALT_FLAGS],1<<CTRL_ALT_DEL|
-1<<CTRL_ALT_TAB|1<<CTRL_ALT_X|1<<CTRL_ALT_C
+				TEST		U64 [SYS_CTRL_ALT_FLAGS], 1 << CTRL_ALT_DEL|1 << CTRL_ALT_TAB|1 << CTRL_ALT_X|1 << CTRL_ALT_C
 				JNZ 		HANDLE_SYSF_KEY_EVENT
 
 RESTORE_RSI_TASK2:
-@@20: 	BT			U64 CTask.task_flags[RSI],TASKf_KILL_TASK
+@@20:			BT			U64 CTask.task_flags[RSI], TASKf_KILL_TASK
 				JC			END_RSI_TASK
-				TEST		U64 CTask.task_flags[RSI],
-								1<<TASKf_AWAITING_MESSAGE|1<<TASKf_SUSPENDED
+				TEST		U64 CTask.task_flags[RSI], 1 << TASKf_AWAITING_MESSAGE | 1 << TASKf_SUSPENDED
 				JNZ 		@@25
 
-				MOV 		RAX,U64 [&counts.jiffies]
-				CMP 		U64 CTask.wake_jiffy[RSI],RAX
+				MOV 		RAX, U64 [&counts.jiffies]
+				CMP 		U64 CTask.wake_jiffy[RSI], RAX
 				JG			@@25		//Jmp if not ready, yet.
 
-				MOV 		RAX,RSI
+				MOV 		RAX, RSI
 				CALL		SET_FS_BASE
 				JMP 		I32 _TASK_CONTEXT_RESTORE
 
-@@25: 	MOV 		RSI,U64 CTask.next_task[RSI]
-				XOR 		RAX,RAX
-				CMP 		U64 GS:CCPU.daemon_task[RAX],RSI
+@@25:			MOV 		RSI, U64 CTask.next_task[RSI]
+				XOR 		RAX, RAX
+				CMP 		U64 GS:CCPU.daemon_task[RAX], RSI
 				JNE 		@@20		//Jmp if not Daemon
-				BTR 		U32 GS:CCPU.cpu_flags[RAX],CPUf_RAN_A_TASK
+				BTR 		U32 GS:CCPU.cpu_flags[RAX], CPUf_RAN_A_TASK
 				JC			@@20		//Jmp if had chance for IRQ already
-				MOV 		RAX,U64 GS:CCPU.idle_task[RAX]
-				MOV 		RSP,U64 CTask.stack[RAX]
-				ADD 		RSP,MEM_DEFAULT_STACK+CTaskStack.stack_base 		//Reset to top
+				MOV 		RAX, U64 GS:CCPU.idle_task[RAX]
+				MOV 		RSP, U64 CTask.stack[RAX]
+				ADD 		RSP, MEM_DEFAULT_STACK + CTaskStack.stack_base 	//Reset to top
 				CALL		SET_FS_BASE
 				STI 		//Restore idle task so we can unmask IRQs.
 				HLT
@@ -204,122 +209,126 @@ SYS_IDLE_PT::
 				CLI
 
 RESTORE_DAEMON_TASK_IF_READY:
-				XOR 		RAX,RAX
-				MOV 		RSI,GS:CCPU.daemon_task[RAX]
+				XOR 		RAX, RAX
+				MOV 		RSI, GS:CCPU.daemon_task[RAX]
 				JMP 		RESTORE_RSI_TASK
 
 HANDLE_SYSF_KEY_EVENT:
-				MOV 		RAX,RSI
+				MOV 		RAX, RSI
 				CALL		SET_FS_BASE
-				XOR 		RBX,RBX
-				MOV 		RAX,GS:CCPU.num[RBX]
-				TEST		RAX,RAX
+				XOR 		RBX, RBX
+				MOV 		RAX, GS:CCPU.num[RBX]
+				TEST		RAX, RAX
 				JNZ 		I32 RESTORE_RSI_TASK2
 
-				MOV 		EAX,U32 SYS_CTRL_ALT_FLAGS
+				MOV 		EAX, U32 SYS_CTRL_ALT_FLAGS
 				LOCK
-				BTR 		U32 [RAX],CTRL_ALT_DEL
+				BTR 		U32 [RAX], CTRL_ALT_DEL
 				JC			I32 &Reboot
 
-				CMP 		U64 GS:CCPU.idle_task[RBX],RSI
+				CMP 		U64 GS:CCPU.idle_task[RBX], RSI
 				JE			RESTORE_DAEMON_TASK_IF_READY
 
 				LOCK
-				BTR 		U32 [RAX],CTRL_ALT_TAB
+				BTR 		U32 [RAX], CTRL_ALT_TAB
 				JNC 		@@05
 				CALL		&TaskFocusNext
 				JMP 		I32 RESTORE_FS_TASK
 
-@@05: 	LOCK
-				BTR 		U32 [RAX],CTRL_ALT_X
+@@05:			LOCK
+				BTR 		U32 [RAX], CTRL_ALT_X
 				JC			END_FOCUS_USER
 				LOCK
-				BTR 		U32 [RAX],CTRL_ALT_C
+				BTR 		U32 [RAX], CTRL_ALT_C
 				JNC 		I32 RESTORE_RSI_TASK
 
 BREAK_FOCUS_USER:
-				MOV 		RSI,U64 [SYS_FOCUS_TASK]
-				TEST		RSI,RSI
+				MOV 		RSI, U64 [SYS_FOCUS_TASK]
+				TEST		RSI, RSI
 				JZ			RESTORE_DAEMON_TASK_IF_READY
-				BT			U64 CTask.win_inhibit[RSI],WIf_SELF_FOCUS
+				BT			U64 CTask.win_inhibit[RSI], WIf_SELF_FOCUS
 				JC			I32 RESTORE_RSI_TASK
 				LOCK
-				BTR 		U64 CTask.task_flags[RSI],TASKf_BREAK_LOCKED
+				BTR 		U64 CTask.task_flags[RSI], TASKf_BREAK_LOCKED
 				JNC 		@@10
 				LOCK
-				BTS 		U64 CTask.task_flags[RSI],TASKf_PENDING_BREAK
+				BTS 		U64 CTask.task_flags[RSI], TASKf_PENDING_BREAK
 				JMP 		I32 RESTORE_RSI_TASK
 
-@@10: 	MOV 		RAX,&Break
-				MOV 		U64 CTask.rip[RSI],RAX
-				BT			U64 CTask.task_flags[RSI],TASKf_BREAK_TO_SHIFT_ESC
+@@10:			MOV 		RAX, &Break
+				MOV 		U64 CTask.rip[RSI], RAX
+				BT			U64 CTask.task_flags[RSI], TASKf_BREAK_TO_SHIFT_ESC
 				JC			I32 RESTORE_RSI_TASK
 
 //Do these now, in case interrupt happens.
-				MOV 		U64 CTask.wake_jiffy[RSI],0
+				MOV 		U64 CTask.wake_jiffy[RSI], 0
 				PUSH		RSI
 				CALL		&TaskResetAwaitingMessage
 				JMP 		I32 RESTORE_RSI_TASK
 
 END_FOCUS_USER:
-				MOV 		RSI,U64 [SYS_FOCUS_TASK]
+				MOV 		RSI, U64 [SYS_FOCUS_TASK]
 				CALL		&TaskFocusNext
-				TEST		RSI,RSI
+				TEST		RSI, RSI
 				JZ			I32 RESTORE_DAEMON_TASK_IF_READY
-				MOV 		RAX,RSI
+				MOV 		RAX, RSI
 				CALL		SET_FS_BASE
-				BT			U64 CTask.win_inhibit[RSI],WIf_SELF_FOCUS
+				BT			U64 CTask.win_inhibit[RSI], WIf_SELF_FOCUS
 				JC			I32 RESTORE_RSI_TASK
 				LOCK
-				BTS 		U64 CTask.task_flags[RSI],TASKf_KILL_TASK
+				BTS 		U64 CTask.task_flags[RSI], TASKf_KILL_TASK
 				JMP 		I32 END_RSI_TASK
 
 RESTORE_FS_TASK:
-				XOR 		RSI,RSI
-				MOV 		RSI,FS:CTask.addr[RSI]
+				XOR 		RSI, RSI
+				MOV 		RSI, FS:CTask.addr[RSI]
 				JMP 		I32 RESTORE_RSI_TASK
 }
 
-_extern _TASK_CONTEXT_RESTORE U0 TaskContextRestore(); //Restore a task context.
-_extern _YIELD U0 Yield(); //Yield cpu to next task.
-_extern _TASK_END_NOW U0 TaskEndNow(); //Terminate current task.
+_extern _TASK_CONTEXT_RESTORE	U0 TaskContextRestore(); //Restore a task context.
+_extern _YIELD					U0 Yield();				 //Yield cpu to next task.
+_extern _TASK_END_NOW			U0 TaskEndNow();		 //Terminate current task.
 
-U0 TaskQueueIns(CTask *task,CTask *pred=NULL)
+U0 TaskQueueIns(CTask *task, CTask *pred=NULL)
 {//Insert a task in the scheduler running task queue.
 //You have no business with this, probably.
 	CTask *last;
+
 	PUSHFD
 	CLI
-	if (!pred) pred=Fs;
-	last=pred->last_task;
-	last->next_task=pred->last_task=task;
-	task->last_task=last;
-	task->next_task=pred;
+	if (!pred)
+		pred = Fs;
+	last = pred->last_task;
+	last->next_task = pred->last_task = task;
+	task->last_task = last;
+	task->next_task = pred;
 	POPFD
 }
 
 U0 TaskQueueRemove(CTask *task)
 {//Remove a task from the scheduler running task queue.
 //Use $LK,"Suspend",A="MN:Suspend"$().
-	CTask *next,*last;
+	CTask *next, *last;
+
 	PUSHFD
 	CLI
-	next=task->next_task;
-	last=task->last_task;
-	last->next_task=next;
-	next->last_task=last;
+	next = task->next_task;
+	last = task->last_task;
+	last->next_task = next;
+	next->last_task = last;
 	POPFD
 }
 
 U0 TaskQueueInsChild(CTask *task)
 {
-	CTask *last,*pred;
+	CTask *last, *pred;
+
 	PUSHFD
 	CLI
-	pred=task->parent_task->last_child_task;
-	last=pred->last_sibling_task;
-	last->next_sibling_task=pred->last_sibling_task=task;
-	task->last_sibling_task=last;
-	task->next_sibling_task=pred;
+	pred = task->parent_task->last_child_task;
+	last = pred->last_sibling_task;
+	last->next_sibling_task = pred->last_sibling_task = task;
+	task->last_sibling_task = last;
+	task->next_sibling_task = pred;
 	POPFD
 }

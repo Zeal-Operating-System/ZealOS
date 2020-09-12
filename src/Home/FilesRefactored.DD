@@ -91,10 +91,27 @@ StartOS.CC
 	KInterrupts.CC
 	KLoad.CC
 	KMain.CC
-
+	KMathA.CC
+	KMathB.CC
+	KMisc.CC
 	KStart16.CC
 	KStart32.CC
 	KStart64.CC
+	KTask.CC
+	KUtils.CC
+	KeyDev.CC
+	MultiProc.CC
+	PCIBIOS.CC
+	QuickSort.CC
+	Sched.CC
+	StrA.CC
+	StrB.CC
+	StrPrint.CC
+	StrScan.CC
+	KernelA.HH
+	KernelB.HH
+	KernelC.HH
+	Kernel.PRJ
 
 	BlkDev/
 		DiskATA.CC
