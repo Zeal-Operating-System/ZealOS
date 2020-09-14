@@ -1,11 +1,11 @@
 Bool ISOInit(CDrive *drive, I64 blk)
 {
-	CBlkDev *bd = drive->bd;
-	I64 spc = bd->blk_size >> BLK_SIZE_BITS, i = blk / spc, drv_offset = 0;
-	CISOPriDesc *iso = MAlloc(bd->blk_size);
-	CISODirEntry *de;
-	Bool unlock, res = FALSE;
-	U8 buf[8];
+	CBlkDev			*bd  = drive->bd;
+	I64				 spc = bd->blk_size >> BLK_SIZE_BITS, i = blk / spc, drv_offset = 0;
+	CISOPriDesc		*iso = MAlloc(bd->blk_size);
+	CISODirEntry	*de;
+	Bool			 unlock, res = FALSE;
+	U8				 buf[8];
 
 	try
 	{
@@ -71,11 +71,12 @@ di_done:
 
 U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 {//Read entire CD/DVD image into ISO file.
-	CDrive *drive = Letter2Drive(dvd_drive_let);
-	CBlkDev *bd = drive->bd;
-	U8 *buf = MAlloc(COPY_BUF_BLKS << BLK_SIZE_BITS), *out_name2 = ExtDefault(out_name, "ISO");
-	CFile *f = FOpen(out_name2, "w");
-	I64 n, spc = bd->blk_size >> BLK_SIZE_BITS, blk = 0, count, retry;
+	CDrive	*drive	= Letter2Drive(dvd_drive_let);
+	CBlkDev	*bd		= drive->bd;
+	U8		*buf	= MAlloc(COPY_BUF_BLKS << BLK_SIZE_BITS), *out_name2 = ExtDefault(out_name, "ISO");
+	CFile	*f		= FOpen(out_name2, "w");
+	I64		 n, spc = bd->blk_size >> BLK_SIZE_BITS, blk = 0, count, retry;
+
 	BlkDevInit(bd);
 	if (bd->type != BDT_ATAPI)
 		throw('BlkDev');
@@ -111,17 +112,18 @@ U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 
 class CDualBuf
 {
-	U8 *buf0, *buf1;
-	I64 in_buf, out_buf, count;
-	U8 *filename;
-	CBlkDev *dvd_bd;
+	U8		*buf0, *buf1;
+	I64		 in_buf, out_buf, count;
+	U8		*filename;
+	CBlkDev	*dvd_bd;
 };
 
 U0 DVDImageWriteTask(CDualBuf *d)
 {
-	U8 *buf;
-	I64 n, blk = 0, count = d->count;
-	CFile *f;
+	U8		*buf;
+	I64		 n, blk = 0, count = d->count;
+	CFile	*f;
+
 	if (FileAttr(d->filename) & RS_ATTR_CONTIGUOUS)
 		f = FOpen(d->filename, "rc");
 	else
@@ -150,13 +152,13 @@ U0 DVDImageWriteTask(CDualBuf *d)
 
 U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 {//Write CD/DVD ISO file to disk.
-	CDualBuf *d = CAlloc(sizeof(CDualBuf));
-	U8 *buf, *in_name2, *in_name3;
-	I64 i, n, spc, blk = 0, count;
-	CDrive *drive = Letter2Drive(dvd_drive_let);
-	CBlkDev *bd = drive->bd, *bd2;
-	CTask *task;
-	CFile *f;
+	CDualBuf	*d = CAlloc(sizeof(CDualBuf));
+	U8			*buf, *in_name2, *in_name3;
+	I64			 i, n, spc, blk = 0, count;
+	CDrive		*drive = Letter2Drive(dvd_drive_let);
+	CBlkDev		*bd = drive->bd, *bd2;
+	CTask		*task;
+	CFile		*f;
 
 	if (!in_name)
 		in_name = blkdev.default_iso_filename;

@@ -1,15 +1,16 @@
 U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 {//Read whole file from disk.
-	CHashGeneric *tmph;
-	U8 *absname,  *res = NULL;
-	I64 size= 0 , attr = 0;
-	CDirContext *dirc;
+	CHashGeneric	*tmph;
+	U8				*absname, *res = NULL;
+	I64				 size = 0, attr = 0;
+	CDirContext		*dirc;
+
 	absname = FileNameAbs(filename);
 	if (tmph = HashFind(absname, zenith_task->hash_table, HTT_FILE))
 	{
 		size = tmph->user_data1;
 		res = MAlloc(size + 1);
-		MemCopy(res , tmph->user_data0,  size);
+		MemCopy(res, tmph->user_data0, size);
 		res[size] = 0; //Terminate
 		attr = FileAttr(tmph->str, attr);
 	}
@@ -34,12 +35,13 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 
 	if (!res)
 	{
-		if (dirc=DirContextNew(absname))
+		if (dirc = DirContextNew(absname))
 		{
 			while (!res && StrCompare(Fs->cur_dir, "/"))
 			{
 				Cd("..");
-				switch (Fs->cur_dv->fs_type) {
+				switch (Fs->cur_dv->fs_type)
+				{
 					case FSt_REDSEA:
 						res = RedSeaFileRead(dirc->drive, Fs->cur_dir, dirc->mask, &size, &attr);
 						break;
@@ -58,23 +60,27 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 	if (res && attr & RS_ATTR_RESIDENT)
 		HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(res), size, 0, zenith_task);
 
-	if (_attr) *_attr=attr;
-	if (_size) *_size=size;
+	if (_attr)
+		*_attr = attr;
+	if (_size)
+		*_size = size;
 	Free(absname);
+
 	return res;
 }
 
 I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 {//Write whole file to disk.
-	I64 c = 0;
-	CHashGeneric *tmph;
-	CDirContext *dirc;
-	U8 *absname = FileNameAbs(filename);
+	I64				 c = 0;
+	CHashGeneric	*tmph;
+	CDirContext		*dirc;
+	U8				*absname = FileNameAbs(filename);
+
 	if (dirc = DirContextNew(filename, FALSE, TRUE))
 	{
 		attr = FileAttr(dirc->mask, attr);
 		if (!cdt)
-			cdt=Now;
+			cdt = Now;
 		switch (dirc->drive->fs_type)
 		{
 			case FSt_REDSEA:
@@ -96,10 +102,12 @@ I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 			}
 			else
 				HashRemDel(tmph, zenith_task->hash_table);
-		} else if (attr & RS_ATTR_RESIDENT)
+		}
+		else if (attr & RS_ATTR_RESIDENT)
 			HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(fbuf), size, 0, zenith_task);
 		DirContextDel(dirc);
 	}
 	Free(absname);
+
 	return c;
 }

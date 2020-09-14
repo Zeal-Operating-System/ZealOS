@@ -1,9 +1,10 @@
 #define ZERO_BUF_SIZE 	2048
 U0 BlkWriteZero(CDrive *drive, I64 blk, I64 count)
 {//Fill blk count with zeros in Drive.
-	I64 n;
-	U8 *z = CAlloc(ZERO_BUF_SIZE << BLK_SIZE_BITS);
+	I64  n;
+	U8	*z = CAlloc(ZERO_BUF_SIZE << BLK_SIZE_BITS);
 	Bool show_progress;
+
 	if (count > ZERO_BUF_SIZE && drive->bd->type != BDT_RAM)
 	{
 		progress1 = 0;
@@ -35,8 +36,9 @@ U0 BlkWriteZero(CDrive *drive, I64 blk, I64 count)
 
 Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 {//Read blk count from Drive to buf.
-	Bool res = TRUE, unlock;
-	CBlkDev *bd = drive->bd;
+	Bool	 res = TRUE, unlock;
+	CBlkDev	*bd  = drive->bd;
+
 	if (count <= 0)
 		return TRUE;
 	DriveCheck(drive);
@@ -74,13 +76,15 @@ Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	catch
 		if (unlock)
 			DriveUnlock(drive);
+
 	return res;
 }
 
 Bool BlkWrite(CDrive *drive, U8 *buf, I64 blk, I64 count)
 {//Write blk count from buf to Drive.
-	Bool res = TRUE, unlock;
-	CBlkDev *bd = drive->bd;
+	Bool	 res = TRUE, unlock;
+	CBlkDev	*bd  = drive->bd;
+
 	if (count <= 0)
 		return TRUE;
 	DriveCheck(drive);
@@ -118,5 +122,6 @@ Bool BlkWrite(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	catch
 		if (unlock)
 			DriveUnlock(drive);
+
 	return res;
 }

@@ -1,7 +1,8 @@
 U0 BlkDevLockFwdingSet(CBlkDev *bd)
 {  //If two blkdevs on same controller, use just one lock
-	CBlkDev *bd1;
-	I64 i;
+	CBlkDev	*bd1;
+	I64		 i;
+
 	switch (bd->type)
 	{
 		case BDT_RAM:
@@ -30,10 +31,10 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free)
 {//It will mount just one partition of prt_num>=0.
 //When repartitioing whole drive, whole_drive=TRUE.
-	I64 i, j, ext_base, offset, res = 0, num = 0;
-	CDrive *drive;
-	CRedSeaBoot br;
-	CMasterBoot mbr;
+	I64			 i, j, ext_base, offset, res = 0, num = 0;
+	CDrive		*drive;
+	CRedSeaBoot	 br;
+	CMasterBoot	 mbr;
 
 	bd->bd_signature = BD_SIGNATURE_VAL;
 	if (make_free)
@@ -178,12 +179,14 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 		BlkDevLockFwdingSet(bd);
 	else
 		BlkDevDel(bd);
+
 	return res;
 }
 
 Bool DriveEnable(U8 drv_let, Bool val)
 {//Can unmount or remount, but not mount the first time.
 	CDrive *drive;
+
 	if (drive = Letter2Drive(drv_let,FALSE))
 		return !LBEqual(&drive->fs_type,FStf_DISABLE,!val);
 	else
@@ -199,14 +202,16 @@ I64 SysI64Get()
 
 Bool GetBaseUnit(CBlkDev *bd)
 {
-	I64 ch;
+	I64  ch;
 	Bool probe;
+
 	#exe {
 		if (kernel_config->opts[CONFIG_DONT_PROBE])
 			StreamPrint("probe = FALSE;");
 		else
 			StreamPrint("probe = TRUE;");
 	};
+
 	if (!probe || !BootDVDProbeAll(bd))
 	{
 		"\nDon't worry.  This is not a product\n"
@@ -243,12 +248,14 @@ Bool GetBaseUnit(CBlkDev *bd)
 
 U0 BlkDevsInitAll()
 {
-	CBlkDev *bd;
-	I64 i;
+	CBlkDev	*bd;
+	I64		 i;
+
 	blkdev.blkdevs = CAlloc(sizeof(CBlkDev) * BLKDEVS_NUM);
 	blkdev.drvs = CAlloc(sizeof(CDrive) * DRIVES_NUM);
 	for (i = 0; i < DRIVES_NUM; i++)
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
+
 	#exe {
 		if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])
 			StreamPrint("MountIDEAuto;");

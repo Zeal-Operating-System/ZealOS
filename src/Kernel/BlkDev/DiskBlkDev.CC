@@ -1,12 +1,15 @@
 Bool BlkDevLock(CBlkDev *bd)
 {//Make this task have exclusive access to BlkDev.
 	BlkDevCheck(bd);
+
 	while (bd->lock_fwding)
 		bd = bd->lock_fwding; //If two blkdevs on same controller, use just one lock
+
 	if (!Bt(&bd->locked_flags, BDlf_LOCKED) || bd->owning_task != Fs)
 	{
 		while (LBts(&bd->locked_flags, BDlf_LOCKED))
 			Yield;
+
 		bd->owning_task = Fs;
 		return TRUE;
 	}
@@ -17,8 +20,10 @@ Bool BlkDevLock(CBlkDev *bd)
 Bool BlkDevUnlock(CBlkDev *bd, Bool reset=FALSE)
 {//Release exclusive lock on access to BlkDev.
 	BlkDevCheck(bd);
+
 	while (bd->lock_fwding)
 		bd = bd->lock_fwding; //If two blkdevs on same controller, use just one lock
+
 	if (Bt(&bd->locked_flags, BDlf_LOCKED) && bd->owning_task == Fs)
 	{
 		if (reset)
@@ -34,10 +39,11 @@ Bool BlkDevUnlock(CBlkDev *bd, Bool reset=FALSE)
 
 Bool BlkDevInit(CBlkDev *bd)
 {
-	CDirEntry de;
-	U8 buf[STR_LEN];
-	CDrive *drive = Letter2Drive(bd->first_drive_let);
-	Bool res = FALSE;
+	CDirEntry	 de;
+	U8			 buf[STR_LEN];
+	CDrive		*drive = Letter2Drive(bd->first_drive_let);
+	Bool		 res   = FALSE;
+
 	if (!LBts(&bd->flags, BDf_INITIALIZED))
 	{
 		bd->flags |= BDF_INIT_IN_PROGRESS;
@@ -122,13 +128,15 @@ Bool BlkDevInit(CBlkDev *bd)
 	}
 	else
 		res = TRUE;
+
 	return res;
 }
 
 U0 BlkDevsRelease()
 {//When task dies, release all owned BlkDevs.
-	I64 i;
-	CBlkDev *bd;
+	I64		 i;
+	CBlkDev	*bd;
+
 	for (i = 0; i < BLKDEVS_NUM; i++)
 	{
 		bd = &blkdev.blkdevs[i];
@@ -139,8 +147,9 @@ U0 BlkDevsRelease()
 
 CBlkDev *BlkDevNextFreeSlot(U8 first_drive_let, I64 type)
 {//Locate free slot for new BlkDev, like during $LK,"Mount",A="MN:Mount"$().
-	I64 i = 0;
-	CBlkDev *res;
+	I64		 i = 0;
+	CBlkDev	*res;
+
 	if (Letter2BlkDevType(first_drive_let) != type)
 		throw('BlkDev');
 	do
@@ -201,6 +210,7 @@ CBlkDev *BlkDevCheck(CBlkDev *bd, Bool except=TRUE)
 CBlkDev *Letter2BlkDev(U8 drv_let=0, Bool except=TRUE)
 {//Drive letter to BlkDev ptr.
 	CDrive *drive;
+
 	if (drive = Letter2Drive(drv_let, except))
 		return BlkDevCheck(drive->bd, except);
 	else

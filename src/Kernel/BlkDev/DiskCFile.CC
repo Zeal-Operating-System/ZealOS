@@ -9,10 +9,10 @@ I64 FSize(CFile *f)
 CFile *FOpen(U8 *filename, U8 *flags, I64 count=0)
 {//Allows flags "r","w","w+". "c" for contiguous.
 //(It uses $LK,"StrOcc",A="MN:StrOcc"$() for 'w', 'r', '+', 'c')
-	CFile *f = CAlloc(sizeof(CFile));
-	CDirContext *dirc;
-	U8 *full_name;
-	Bool contiguous = StrOcc(flags, 'c');
+	CFile		*f = CAlloc(sizeof(CFile));
+	CDirContext	*dirc;
+	U8			*full_name;
+	Bool		 contiguous = StrOcc(flags, 'c');
 
 	f->clus = INVALID_CLUS;
 	f->fblk_num = 0;
@@ -75,12 +75,14 @@ CFile *FOpen(U8 *filename, U8 *flags, I64 count=0)
 	Free(f->clus_buf);
 	Free(full_name);
 	Free(f);
+
 	return NULL;
 }
 
 U0 FClose(CFile *f)
 {//Close CFile, updating directory.
 	CDirContext *dirc;
+
 	if (f)
 	{
 		if (f->flags & FF_BUF_DIRTY)
@@ -111,8 +113,9 @@ U0 FClose(CFile *f)
 
 I64 FSetClus(CFile *f, I64 c, I64 blk, Bool read)
 {
-	CDrive *drive = f->drive;
-	I64 i;
+	CDrive	*drive = f->drive;
+	I64		 i;
+
 	if (f->clus != c)
 	{
 		if (f->flags & FF_BUF_DIRTY)
@@ -141,13 +144,14 @@ I64 FSetClus(CFile *f, I64 c, I64 blk, Bool read)
 			c = ClusBlkRead(drive, f->clus_buf, c, i);
 		}
 	}
+
 	return c;
 }
 
 Bool FBlkRead(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
 {//Read [nth,n+count) blks of file.
-	CDrive *drive = f->drive;
-	I64 spc = drive->spc, i, j, c = f->de.clus;
+	CDrive	*drive = f->drive;
+	I64		 spc   = drive->spc, i, j, c = f->de.clus;
 
 	if (!f || !drive)
 		return FALSE;
@@ -203,13 +207,14 @@ Bool FBlkRead(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
 		}
 	}
 	f->fblk_num = blk;
+
 	return TRUE;
 }
 
 Bool FBlkWrite(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
 {//Write [nth,n+count) blks of file.
-	CDrive *drive = f->drive;
-	I64 spc = drive->spc, i, j, c = f->de.clus, c1;
+	CDrive	*drive = f->drive;
+	I64		 spc   = drive->spc, i, j, c = f->de.clus, c1;
 
 	if (!f || !drive)
 		return FALSE;
@@ -305,5 +310,6 @@ Bool FBlkWrite(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
 			f->de.size = blk << BLK_SIZE_BITS;
 	}
 	f->fblk_num = blk;
+
 	return TRUE;
 }

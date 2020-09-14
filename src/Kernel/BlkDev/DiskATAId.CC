@@ -1,8 +1,9 @@
 Bool BootDVDProbe(CBlkDev *bd)
 {
-	U8 *img = CAlloc(DVD_BLK_SIZE);
-	I64 i;
-	Bool res = FALSE;
+	U8		*img = CAlloc(DVD_BLK_SIZE);
+	I64		 i;
+	Bool	 res = FALSE;
+
 	"Port: %04X,%04X Unit: %02X  ", bd->base0, bd->base1, bd->unit;
 	if (ATAProbe(bd->base0, bd->base1, bd->unit) == BDT_ATAPI)
 	{
@@ -29,6 +30,7 @@ Bool BootDVDProbe(CBlkDev *bd)
 	}
 	" Nope\n";
 	Free(img);
+
 	return res;
 }
 
@@ -104,10 +106,11 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 
 U0 ATARepEntry(I64 base0, I64 base1, I64 unit, U8 *message, CATARep **_head, I64 *num_hints)
 {
-	I64 type;
+	I64		 type;
 	base0 &= -8;
 	base1 &= -4;
-	CATARep *tmpha;
+	CATARep	*tmpha;
+
 	if (type = ATAProbe(base0,base1,unit))
 	{
 		*num_hints += 1;
@@ -148,6 +151,7 @@ Bool ATARepExitAllApplications()
 public I64 ATARep(Bool prompt=TRUE, Bool just_ide=FALSE, CATARep **_head=NULL)
 {//Report possible ATA devices by probing.	Hard disks and CD/DVDs.
 	I64 d1, d2, i, j, k, count = 0, unlock_flags = 0, num_hints = 0;
+
 #assert BLKDEVS_NUM <= 64
 	if (_head)
 		*_head = NULL;
@@ -233,9 +237,10 @@ CATARep *ATARepFind(CATARep *haystack_head, I64 needle_num)
 
 CATARep *ATAIDDrives(CATARep *head, CATARep **_ata_drive, CATARep **_atapi_drive)
 {//This is for when trying to sort-out main hard drives and CD/DVD drives.
-	CATARep *res = NULL, *tmpha = head, *ata_drive = NULL, *atapi_drive = NULL;
-	CBlkDev *bd;
-	Bool was_silent = Silent, ins_found = FALSE;
+	CATARep	*res = NULL, *tmpha = head, *ata_drive = NULL, *atapi_drive = NULL;
+	CBlkDev	*bd;
+	Bool	 was_silent = Silent, ins_found = FALSE;
+
 	bd = Letter2BlkDev(':', FALSE);
 	Silent(was_silent);
 	while (tmpha)
@@ -282,12 +287,14 @@ CATARep *ATAIDDrives(CATARep *head, CATARep **_ata_drive, CATARep **_atapi_drive
 		*_ata_drive = ata_drive;
 	if (_atapi_drive)
 		*_atapi_drive = atapi_drive;
+
 	return res;
 }
 
 CBlkDev *ATAMount(U8 first_drive_let, I64 type, I64 base0, I64 base1, I64 unit)
 {
 	CBlkDev *res;
+
 	if (0 <= first_drive_let - 'A' < DRIVES_NUM && (type == BDT_ATA || type == BDT_ATAPI) && 0 <= unit <= 1)
 	{
 		res = BlkDevNextFreeSlot(first_drive_let, type);
@@ -297,6 +304,7 @@ CBlkDev *ATAMount(U8 first_drive_let, I64 type, I64 base0, I64 base1, I64 unit)
 		if (BlkDevAdd(res,, FALSE, FALSE))
 			return res;
 	}
+
 	return NULL;
 }
 
@@ -304,8 +312,9 @@ I64 MountIDEAuto()
 {//Try to mount hard drive and CD/DVD, automatically. (Kernel.Config option).
 //It uses 'C' and 'T' as first drive letters or whatever you set
 	//in config when compiling Kernel.BIN.
-	I64 res = 0;
-	CATARep *head = NULL, *ata_drive = NULL, *atapi_drive = NULL, *tmpha;
+	I64		 res  = 0;
+	CATARep	*head = NULL, *ata_drive = NULL, *atapi_drive = NULL, *tmpha;
+
 	ATARep(FALSE, TRUE, &head);
 	ATAIDDrives(head, &ata_drive, &atapi_drive);
 	if (ata_drive && ATAMount(blkdev.first_hd_drive_let, BDT_ATA, ata_drive->base0, ata_drive->base1, ata_drive->unit))
@@ -329,5 +338,6 @@ I64 MountIDEAuto()
 	}
 	LinkedListDel(head);
 	blkdev.mount_ide_auto_count = res;
+
 	return res;
 }
