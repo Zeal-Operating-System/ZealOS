@@ -28,7 +28,6 @@ Changes include:
   - HolyC -> CosmiC
   - System-wide renaming for clarity
   - Removed shift-space mechanism
-  - Caps Lock is reassigned as Backspace
   - Reformatted code for readability
   - Added comments and documentation
 

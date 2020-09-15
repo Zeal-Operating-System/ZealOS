@@ -1,100 +1,107 @@
 U0 GridInit()
 {//Init mouse grid struct. See $LK,"::/Demo/Graphics/Grid.CC"$.
-	mouse_grid.x=mouse_grid.y=mouse_grid.z=8;
-	mouse_grid.x_offset=mouse_grid.y_offset=mouse_grid.z_offset=0;
-	mouse_grid.x_speed =mouse_grid.y_speed =mouse_grid.z_speed =1;
-	mouse_grid.show=mouse_grid.snap=mouse_grid.coord=FALSE;
+	mouse_grid.x		= mouse_grid.y			= mouse_grid.z			= 8;
+	mouse_grid.x_offset	= mouse_grid.y_offset	= mouse_grid.z_offset	= 0;
+	mouse_grid.x_speed	= mouse_grid.y_speed	= mouse_grid.z_speed	= 1;
+	mouse_grid.show		= mouse_grid.snap		= mouse_grid.coord		= FALSE;
 }
 
-U0 MouseUpdate(I64 x,I64 y,I64 z,Bool l,Bool r)
+U0 MouseUpdate(I64 x, I64 y, I64 z, Bool l, Bool r)
 {
-	mouse.presnap.x=ToI64(mouse.scale.x*x)+mouse.offset.x;
-	mouse.presnap.y=ToI64(mouse.scale.y*y)+mouse.offset.y;
-	mouse.presnap.z=ToI64(mouse.scale.z*z)+mouse.offset.z;
-	if (mouse_grid.snap) {
-		mouse.pos.x=Trunc(mouse.presnap.x/mouse_grid.x)*mouse_grid.x+mouse_grid.x_offset;
-		mouse.pos.y=Trunc(mouse.presnap.y/mouse_grid.y)*mouse_grid.y+mouse_grid.y_offset;
-		mouse.pos.z=Trunc(mouse.presnap.z/mouse_grid.z)*mouse_grid.z+mouse_grid.z_offset;
-	} else {
-		mouse.pos.x=mouse.presnap.x;
-		mouse.pos.y=mouse.presnap.y;
-		mouse.pos.z=mouse.presnap.z;
+	mouse.presnap.x = ToI64(mouse.scale.x * x) + mouse.offset.x;
+	mouse.presnap.y = ToI64(mouse.scale.y * y) + mouse.offset.y;
+	mouse.presnap.z = ToI64(mouse.scale.z * z) + mouse.offset.z;
+	if (mouse_grid.snap)
+	{
+		mouse.pos.x = Trunc(mouse.presnap.x / mouse_grid.x) * mouse_grid.x + mouse_grid.x_offset;
+		mouse.pos.y = Trunc(mouse.presnap.y / mouse_grid.y) * mouse_grid.y + mouse_grid.y_offset;
+		mouse.pos.z = Trunc(mouse.presnap.z / mouse_grid.z) * mouse_grid.z + mouse_grid.z_offset;
+	}
+	else
+	{
+		mouse.pos.x = mouse.presnap.x;
+		mouse.pos.y = mouse.presnap.y;
+		mouse.pos.z = mouse.presnap.z;
 	}
 
-	mouse.pos.x=ClampI64(mouse.pos.x,0,sys_vbe_mode.width-1);
-	mouse.pos.y=ClampI64(mouse.pos.y,0,sys_vbe_mode.height-1);
-	mouse.pos_text.x=mouse.pos.x/FONT_WIDTH;
-	if (mouse.pos_text.x>=text.cols) {
-		mouse.pos_text.x=text.cols-1;
-		mouse.pos.x=text.cols*FONT_WIDTH-1;
+	mouse.pos.x = ClampI64(mouse.pos.x, 0, sys_vbe_mode.width  - 1);
+	mouse.pos.y = ClampI64(mouse.pos.y, 0, sys_vbe_mode.height - 1);
+	mouse.pos_text.x = mouse.pos.x / FONT_WIDTH;
+	if (mouse.pos_text.x >= text.cols)
+	{
+		mouse.pos_text.x = text.cols - 1;
+		mouse.pos.x		 = text.cols * FONT_WIDTH - 1;
 	}
-	mouse.pos_text.y=mouse.pos.y/FONT_HEIGHT;
-	if (mouse.pos_text.y>=text.rows) {
-		mouse.pos_text.y=text.rows-1;
-		mouse.pos.y=text.rows*FONT_HEIGHT-1;
+	mouse.pos_text.y = mouse.pos.y / FONT_HEIGHT;
+	if (mouse.pos_text.y >= text.rows)
+	{
+		mouse.pos_text.y = text.rows - 1;
+		mouse.pos.y		 = text.rows * FONT_HEIGHT - 1;
 	}
-	mouse.lb=l;
-	mouse.rb=r;
-	LBEqual(&kbd.scan_code,SCf_MS_L_DOWN,mouse.lb);
-	LBEqual(&kbd.scan_code,SCf_MS_R_DOWN,mouse.rb);
+	mouse.lb = l;
+	mouse.rb = r;
+	LBEqual(&kbd.scan_code, SCf_MS_L_DOWN, mouse.lb);
+	LBEqual(&kbd.scan_code, SCf_MS_R_DOWN, mouse.rb);
 }
 
-U0 MouseSet(I64 x=I64_MAX,I64 y=I64_MAX,I64 z=I64_MAX,I64 l=I64_MAX,I64 r=I64_MAX)
+U0 MouseSet(I64 x=I64_MAX, I64 y=I64_MAX, I64 z=I64_MAX, I64 l=I64_MAX, I64 r=I64_MAX)
 {//Note: Generates a message. See $LK,"MouseSet",A="FF:::/Demo/Games/Zing.CC,MouseSet"$().
-	if (!(0<=x<sys_vbe_mode.width))
-		x=mouse.pos.x;
-	if (!(0<=y<sys_vbe_mode.height))
-		y=mouse.pos.y;
-	if (z==I64_MAX)
-		z=mouse.pos.z;
+	if (!(0 <= x < sys_vbe_mode.width))
+		x = mouse.pos.x;
+	if (!(0 <= y < sys_vbe_mode.height))
+		y = mouse.pos.y;
+	if (z == I64_MAX)
+		z = mouse.pos.z;
 
-	if (!(FALSE<=l<=TRUE))
-		l=mouse.lb;
-	if (!(FALSE<=r<=TRUE))
-		r=mouse.rb;
+	if (!(FALSE <= l <= TRUE))
+		l = mouse.lb;
+	if (!(FALSE <= r <= TRUE))
+		r = mouse.rb;
 
-	x=(x-mouse.offset.x)/mouse.scale.x;
-	y=(y-mouse.offset.y)/mouse.scale.y;
-	z=(z-mouse.offset.z)/mouse.scale.z;
-	MouseUpdate(x,y,z,l,r);
-	MouseHardSet(x,y,z,l,r);
+	x = (x - mouse.offset.x) / mouse.scale.x;
+	y = (y - mouse.offset.y) / mouse.scale.y;
+	z = (z - mouse.offset.z) / mouse.scale.z;
+	MouseUpdate(x, y, z, l, r);
+	MouseHardSet(x, y, z, l, r);
 }
 
 U0 MouseInit()
 {
-	MemSet(&mouse,0,sizeof(CMouseStateGlobals));
-	MemSet(&mouse_last,0,sizeof(CMouseStateGlobals));
-	mouse.offset.x=mouse.offset.y=mouse.offset.z=0;
-	mouse.scale.x=mouse.scale.y=mouse.scale.z=1.0;
-	mouse.pos_text.x=mouse.pos_text.y=mouse.pos_text.z=0;
-	mouse.has_wheel=FALSE;
-	mouse.show=TRUE;
-	mouse.speed=0;
-	mouse.timestamp=TSCGet;
-	mouse.dbl_time=0.350;
+	MemSet(&mouse, 0, sizeof(CMouseStateGlobals));
+	MemSet(&mouse_last, 0, sizeof(CMouseStateGlobals));
+	mouse.offset.x	 = mouse.offset.y	= mouse.offset.z	= 0;
+	mouse.scale.x	 = mouse.scale.y	= mouse.scale.z		= 1.0;
+	mouse.pos_text.x = mouse.pos_text.y = mouse.pos_text.z	= 0;
+	mouse.has_wheel	 = FALSE;
+	mouse.show		 = TRUE;
+	mouse.speed		 = 0;
+	mouse.timestamp	 = TSCGet;
+	mouse.dbl_time	 = 0.350;
 	GridInit;
 }
 
 U0 MouseHardPacketRead()
 {
 	U8 j;
-	if (TSCGet>mouse_hard.timestamp+counts.time_stamp_freq>>3)
+
+	if (TSCGet > mouse_hard.timestamp + counts.time_stamp_freq >> 3)
 		FifoU8Flush(mouse_hard.fifo);
-	mouse_hard.timestamp=TSCGet;
-	FifoU8Insert(mouse_hard.fifo,InU8(KBD_PORT));
-	if (FifoU8Count(mouse_hard.fifo)==mouse_hard.pkt_size)
-		while (FifoU8Remove(mouse_hard.fifo,&j))
-			FifoU8Insert(mouse_hard.fifo2,j);
+	mouse_hard.timestamp = TSCGet;
+	FifoU8Insert(mouse_hard.fifo, InU8(KBD_PORT));
+	if (FifoU8Count(mouse_hard.fifo) == mouse_hard.pkt_size)
+		while (FifoU8Remove(mouse_hard.fifo, &j))
+			FifoU8Insert(mouse_hard.fifo2, j);
 }
 
 interrupt U0 IRQMouseHard()
 {
 	CLD
-	OutU8(PIC_2,PIC_EOI);
-	OutU8(PIC_1,PIC_EOI);
-	mouse_hard.irqs_working=TRUE;
-	if (mouse_hard.install_in_progress || !mouse_hard.installed) {
-		kbd.reset=TRUE;
+	OutU8(PIC_2, PIC_EOI);
+	OutU8(PIC_1, PIC_EOI);
+	mouse_hard.irqs_working = TRUE;
+	if (mouse_hard.install_in_progress || !mouse_hard.installed)
+	{
+		kbd.reset = TRUE;
 		return;
 	}
 	MouseHardPacketRead;
@@ -103,181 +110,193 @@ interrupt U0 IRQMouseHard()
 U0 MouseHardGetType()
 {
 	I64 b;
+
 	KbdMouseCmdAck(0xF2);
-	b=KbdCmdRead;
-	if (b==3)
-		mouse_hard.has_wheel=TRUE;
-	else if (b==4)
-		mouse_hard.has_ext_bttns=TRUE;
+	b = KbdCmdRead;
+	if (b == 3)
+		mouse_hard.has_wheel = TRUE;
+	else if (b == 4)
+		mouse_hard.has_ext_bttns = TRUE;
 }
 
 Bool MouseHardReset()
 {
-	U8 b,*_b;
-	F64 timeout;
-	Bool res=FALSE;
+	U8   b, *_b;
+	F64  timeout;
+	Bool res = FALSE;
 
-	mouse_hard.has_wheel=FALSE;
-	mouse_hard.has_ext_bttns=FALSE;
+	mouse_hard.has_wheel	 = FALSE;
+	mouse_hard.has_ext_bttns = FALSE;
 
-	if (*0x40E(U16 *)==0x9FC0) {
-		_b=0x9FC00+0x30;
-		*_b=1; //This enables my mouse.  It might be for one machine.
+	if (*0x40E(U16 *) == 0x9FC0)
+	{
+		_b =  0x9FC00+0x30;
+		*_b = 1; //This enables my mouse.  It might be for one machine.
 //USB DMA packets, set-up by BIOS to make legacy PS/2?
 	}
 
-	try {
+	try
+	{
 		KbdCmdFlush;
-		KbdCmdSend(KBD_CTRL,0xAD); //Disable Kbd
-		KbdCmdSend(KBD_CTRL,0xA8); //Enable Mouse
+		KbdCmdSend(KBD_CTRL, 0xAD); //Disable Kbd
+		KbdCmdSend(KBD_CTRL, 0xA8); //Enable Mouse
 
 		KbdMouseCmdAck(0xFF); //Reset
 
-		timeout=tS+10.0;
+		timeout = tS + 10.0;
 		do
-			try {
+			try
+			{
 				KbdCmdRead;
-				timeout=0; //force exit
-			} catch
-				Fs->catch_except=TRUE;
-		while (tS<timeout);
+				timeout = 0; //force exit
+			}
+			catch
+				Fs->catch_except = TRUE;
+		while (tS < timeout);
 
 		try
-						KbdCmdRead;
+			KbdCmdRead;
 		catch
-			Fs->catch_except=TRUE;
+			Fs->catch_except = TRUE;
 
-		KbdMouseCmdAck(0xF3,200,0xF3,100,0xF3,80);
+		KbdMouseCmdAck(0xF3, 200, 0xF3, 100, 0xF3, 80);
 		MouseHardGetType;
-		KbdMouseCmdAck(0xF3,10);
+		KbdMouseCmdAck(0xF3, 10);
 		MouseHardGetType;
-		KbdMouseCmdAck(0xE8,0x03,0xE6,0xF3,100,0xF4);
-		res=TRUE;
+		KbdMouseCmdAck(0xE8, 0x03, 0xE6, 0xF3, 100, 0xF4);
+		res = TRUE;
 
 		//Enable IRQ 12
-		KbdCmdSend(KBD_CTRL,0x20);
-		b=KbdCmdRead;
-		KbdCmdSend(KBD_CTRL,0x60);
-		KbdCmdSend(KBD_PORT,(b|2)&~0x20);
+		KbdCmdSend(KBD_CTRL, 0x20);
+		b = KbdCmdRead;
+		KbdCmdSend(KBD_CTRL, 0x60);
+		KbdCmdSend(KBD_PORT, (b | 2) & ~0x20);
 
-	} catch
-		Fs->catch_except=TRUE;
+	}
+	catch
+		Fs->catch_except = TRUE;
 
-		//This is been added to override failure
-		//because the mouse sometimes still works.
-	res=TRUE;
+	//This is been added to override failure
+	//because the mouse sometimes still works.
+	res = TRUE;
 
 	try
-					KbdCmdSend(KBD_CTRL,0xAE); //Enable Keyboard
+		KbdCmdSend(KBD_CTRL, 0xAE); //Enable Keyboard
 	catch
-		Fs->catch_except=TRUE;
+		Fs->catch_except = TRUE;
 	if (mouse_hard.has_wheel || mouse_hard.has_ext_bttns)
-		mouse_hard.pkt_size=4;
+		mouse_hard.pkt_size = 4;
 	else
-		mouse_hard.pkt_size=3;
+		mouse_hard.pkt_size = 3;
 	if (!res)
 		try
-						KbdCmdSend(KBD_CTRL,0xA7); //Disable Mouse
+			KbdCmdSend(KBD_CTRL, 0xA7); //Disable Mouse
 		catch
-			Fs->catch_except=TRUE;
+			Fs->catch_except = TRUE;
+
 	return res;
 }
 
 U0 MouseHardSpeedSet()
 {
-	I64 dd,tmp;
-	if ((dd=SqrI64(mouse_hard_last.pos.x-mouse_hard.pos.x)
-				+SqrI64(mouse_hard_last.pos.y-mouse_hard.pos.y)) &&
-				(tmp=mouse_hard.timestamp-mouse_hard_last.timestamp))
-		mouse_hard.speed=Sqrt(dd)*counts.time_stamp_freq/tmp;
-	mouse_hard_last.timestamp=mouse_hard.timestamp;
+	I64 dd, tmp;
+
+	if ((dd = SqrI64(mouse_hard_last.pos.x - mouse_hard.pos.x) + SqrI64(mouse_hard_last.pos.y - mouse_hard.pos.y)) &&
+			(tmp = mouse_hard.timestamp - mouse_hard_last.timestamp))
+		mouse_hard.speed = Sqrt(dd) * counts.time_stamp_freq / tmp;
+	mouse_hard_last.timestamp = mouse_hard.timestamp;
 }
 
 U0 MouseHardSetPre()
 {
-	I64 old_timestamp=mouse_hard_last.timestamp;
-	MemCopy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
-	mouse_hard_last.timestamp=old_timestamp;
+	I64 old_timestamp = mouse_hard_last.timestamp;
+
+	MemCopy(&mouse_hard_last, &mouse_hard, sizeof(CMouseHardStateGlobals));
+	mouse_hard_last.timestamp = old_timestamp;
 }
 
 U0 MouseHardSetPost()
 {
 	I64 i;
-	mouse_hard.pos.x=mouse_hard.prescale.x*mouse_hard.scale.x*mouse_grid.x_speed;
-	mouse_hard.pos.y=mouse_hard.prescale.y*mouse_hard.scale.y*mouse_grid.y_speed;
-	mouse_hard.pos.z=mouse_hard.prescale.z*mouse_hard.scale.z*mouse_grid.z_speed;
 
-	i=Trunc(mouse.scale.x*mouse_hard.pos.x/mouse_grid.x)*mouse_grid.x+mouse.offset.x;
+	mouse_hard.pos.x = mouse_hard.prescale.x * mouse_hard.scale.x * mouse_grid.x_speed;
+	mouse_hard.pos.y = mouse_hard.prescale.y * mouse_hard.scale.y * mouse_grid.y_speed;
+	mouse_hard.pos.z = mouse_hard.prescale.z * mouse_hard.scale.z * mouse_grid.z_speed;
+
+	i = Trunc(mouse.scale.x * mouse_hard.pos.x / mouse_grid.x) * mouse_grid.x + mouse.offset.x;
 //TODO mouse_grid.x_offset?
-	if (i<0)
-		mouse.offset.x-=i;
-	else if (i>=sys_vbe_mode.width)
-		mouse.offset.x+=sys_vbe_mode.width-1-i;
+	if (i < 0)
+		mouse.offset.x -= i;
+	else if (i >= sys_vbe_mode.width)
+		mouse.offset.x += sys_vbe_mode.width - 1 - i;
 
-	i=Trunc(mouse.scale.y*mouse_hard.pos.y/mouse_grid.y)*mouse_grid.y+mouse.offset.y;
-	if (i<0)
-		mouse.offset.y-=i;
-	else if (i>=sys_vbe_mode.height)
-		mouse.offset.y+=sys_vbe_mode.height-1-i;
+	i = Trunc(mouse.scale.y * mouse_hard.pos.y / mouse_grid.y) * mouse_grid.y + mouse.offset.y;
+	if (i < 0)
+		mouse.offset.y -= i;
+	else if (i >= sys_vbe_mode.height)
+		mouse.offset.y += sys_vbe_mode.height - 1 - i;
 
-	if (mouse_hard.pos.x!=mouse_hard_last.pos.x || mouse_hard.pos.y!=mouse_hard_last.pos.y ||
-				mouse_hard.pos.z!=mouse_hard_last.pos.z) {
-		mouse_hard.event=TRUE;
+	if (mouse_hard.pos.x != mouse_hard_last.pos.x || mouse_hard.pos.y != mouse_hard_last.pos.y ||
+		mouse_hard.pos.z != mouse_hard_last.pos.z)
+	{
+		mouse_hard.event = TRUE;
 		MouseHardSpeedSet;
-	} else
-		for (i=0;i<5;i++)
-			if (mouse_hard.bttns[i]!=mouse_hard_last.bttns[i]) {
-				mouse_hard.event=TRUE;
+	}
+	else
+		for (i = 0; i < 5; i++)
+			if (mouse_hard.bttns[i] != mouse_hard_last.bttns[i])
+			{
+				mouse_hard.event = TRUE;
 				break;
 			}
 }
 
 U0 MouseHardHandler()
 {
-	I64 i,dx,dy,dz;
-	U8 mouse_buf[4];
+	I64 i, dx, dy, dz;
+	U8  mouse_buf[4];
 
 	MouseHardSetPre;
-	for (i=0;i<4;i++)
-		mouse_buf[i]=0;
-	for (i=0;i<mouse_hard.pkt_size;i++)
-		if (!FifoU8Remove(mouse_hard.fifo2,&mouse_buf[i]))
-			mouse_buf[i]=0;
+	for (i = 0; i < 4; i++)
+		mouse_buf[i] = 0;
+	for (i = 0; i < mouse_hard.pkt_size; i++)
+		if (!FifoU8Remove(mouse_hard.fifo2, &mouse_buf[i]))
+			mouse_buf[i] = 0;
 
-	mouse_hard.bttns[0] = mouse_buf[0] & 1;
-	mouse_hard.bttns[1] = (mouse_buf[0] & 2) >> 1;
-	mouse_hard.bttns[2] = (mouse_buf[0] & 4) >> 2;
+	mouse_hard.bttns[0] =  mouse_buf[0] & 1;
+	mouse_hard.bttns[1] = (mouse_buf[0] & 2)    >> 1;
+	mouse_hard.bttns[2] = (mouse_buf[0] & 4)    >> 2;
 	mouse_hard.bttns[3] = (mouse_buf[3] & 0x10) >> 4;
 	mouse_hard.bttns[4] = (mouse_buf[3] & 0x20) >> 5;
 	if (mouse_buf[0] & 0x10)
-		dx=mouse_buf[1]-256;
+		dx = mouse_buf[1]-256;
 	else
-		dx=mouse_buf[1];
+		dx = mouse_buf[1];
 	if (mouse_buf[0] & 0x20)
-		dy=256-mouse_buf[2];
+		dy = 256 - mouse_buf[2];
 	else
-		dy=-mouse_buf[2];
+		dy = -mouse_buf[2];
 	if (mouse_buf[3] & 0x08)
-		dz=mouse_buf[3]&7-8;
+		dz = mouse_buf[3] & 7 - 8;
 	else
-		dz=mouse_buf[3]&7;
+		dz = mouse_buf[3] & 7;
 
-	mouse_hard.prescale.x+=dx;
-	mouse_hard.prescale.y+=dy;
-	mouse_hard.prescale.z+=dz;
+	mouse_hard.prescale.x += dx;
+	mouse_hard.prescale.y += dy;
+	mouse_hard.prescale.z += dz;
 
 	MouseHardSetPost;
 }
 
-U0 MouseHardSet(I64 x,I64 y,I64 z,I64 l,I64 r)
+U0 MouseHardSet(I64 x, I64 y, I64 z, I64 l, I64 r)
 {
-	mouse_hard.timestamp=TSCGet;
+	mouse_hard.timestamp = TSCGet;
 	MouseHardSetPre;
-	mouse_hard.prescale.x=x/mouse_hard.scale.x/mouse_grid.x_speed;
-	mouse_hard.prescale.y=y/mouse_hard.scale.y/mouse_grid.y_speed;
-	mouse_hard.prescale.z=z/mouse_hard.scale.z/mouse_grid.z_speed;
-	mouse_hard.bttns[0]=l;
-	mouse_hard.bttns[1]=r;
+	mouse_hard.prescale.x	= x / mouse_hard.scale.x / mouse_grid.x_speed;
+	mouse_hard.prescale.y	= y / mouse_hard.scale.y / mouse_grid.y_speed;
+	mouse_hard.prescale.z	= z / mouse_hard.scale.z / mouse_grid.z_speed;
+	mouse_hard.bttns[0]		= l;
+	mouse_hard.bttns[1]		= r;
 	MouseHardSetPost;
 }
 
@@ -287,13 +306,14 @@ U0 KbdMouseReset()
 	FifoU8Flush(kbd.fifo2);
 	FifoU8Flush(mouse_hard.fifo2);
 	FifoI64Flush(kbd.scan_code_fifo);
-	kbd.scan_code=0;
-	kbd.reset=FALSE;
+	kbd.scan_code	= 0;
+	kbd.reset		= FALSE;
 }
 
 Bool MouseHardEnable(Bool val=TRUE)
 {
 	Bool old_val = mouse_hard.enabled;
+
 	if (val)
 	{
 		KbdCmdSend(KBD_CTRL, KBDC_ENABLE_MS);
@@ -301,7 +321,7 @@ Bool MouseHardEnable(Bool val=TRUE)
 	}
 	else
 	{
-		KbdCmdSend(KBD_CTRL, KBDC_DISABLE_MS);
+		KbdCmdSend(KBD_CTRL,  KBDC_DISABLE_MS);
 		mouse_hard.enabled = FALSE;
 	}
 	return old_val;
@@ -311,45 +331,50 @@ Bool MouseHardDriverInstall(I64 dummy=0) //can be spawned
 {
 	no_warn dummy;
 	I64 i;
-	mouse_hard.install_in_progress=TRUE;
-	OutU8(PIC_2_DATA,InU8(PIC_2_DATA)|0x10);
-	mouse_hard.installed=mouse_hard.irqs_working=FALSE;
-	IntEntrySet(0x2C,&IRQMouseHard);
-	for(i=0;i<5;i++)
-		mouse_hard.bttns[i]=0;
-	if (i=MouseHardReset)
-		OutU8(PIC_2_DATA,InU8(PIC_2_DATA)&~0x10);
+
+	mouse_hard.install_in_progress = TRUE;
+	OutU8(PIC_2_DATA, InU8(PIC_2_DATA) | 0x10);
+	mouse_hard.installed = mouse_hard.irqs_working = FALSE;
+	IntEntrySet(0x2C, &IRQMouseHard);
+	for(i = 0; i < 5; i++)
+		mouse_hard.bttns[i] = 0;
+	if (i = MouseHardReset)
+		OutU8(PIC_2_DATA, InU8(PIC_2_DATA) & ~0x10);
 	KbdMouseReset;
 	mouse_hard.install_attempts++;
-	mouse_hard.installed=mouse_hard.event=i;
-	mouse_hard.install_in_progress=FALSE;
+	mouse_hard.installed			= mouse_hard.event=i;
+	mouse_hard.install_in_progress	= FALSE;
 	return mouse_hard.installed;
 }
 
-U0 KbdMouseHandler(Bool poll_kbd,Bool poll_mouse)
+U0 KbdMouseHandler(Bool poll_kbd, Bool poll_mouse)
 {
-	if (mouse_hard.install_in_progress) {
+	if (mouse_hard.install_in_progress)
+	{
 		Yield;
 		return;
 	}
 	if (kbd.reset)
 		KbdMouseReset;
-	else {
-		if (poll_mouse && mouse_hard.installed && !mouse_hard.irqs_working) {
+	else
+	{
+		if (poll_mouse && mouse_hard.installed && !mouse_hard.irqs_working)
+		{
 			PUSHFD
 			CLI
-			while (InU8(KBD_CTRL)&1)
+			while (InU8(KBD_CTRL) & 1)
 				MouseHardPacketRead;
 			POPFD
 		}
 
 		if (poll_kbd)
-			while (InU8(KBD_CTRL)&1)
+			while (InU8(KBD_CTRL) & 1)
 				KbdPacketRead;
 
 		if (kbd.reset)
 			KbdMouseReset;
-		else {
+		else
+		{
 			while (FifoU8Count(kbd.fifo2))
 				KbdHandler;
 			while (FifoU8Count(mouse_hard.fifo2))
@@ -363,22 +388,22 @@ U0 KbdMouseHandler(Bool poll_kbd,Bool poll_mouse)
 
 U0 KbdMouseInit()
 {
-	MemSet(&kbd,0,sizeof(CKbdStateGlobals));
-	kbd.fifo=FifoU8New(8);
-	kbd.fifo2=FifoU8New(0x1000);
-	kbd.scan_code_fifo=FifoI64New(0x1000);
-	kbd.irqs_working=FALSE;
-	MemSet(&mouse_hard,0,sizeof(CMouseHardStateGlobals));
-	mouse_hard.enabled=TRUE;
-	mouse_hard.fifo=FifoU8New(8);
-	mouse_hard.fifo2=FifoU8New(0x1000);
-	mouse_hard.scale.x=0.5;
-	mouse_hard.scale.y=0.5;
-	mouse_hard.scale.z=1.0;
-	mouse_hard.prescale.x=sys_vbe_mode.width/mouse_hard.scale.x/2.0;
-	mouse_hard.prescale.y=sys_vbe_mode.height/mouse_hard.scale.y/2.0;
-	mouse_hard.prescale.z=0/mouse_hard.scale.z;
-	mouse_hard.pos.x=sys_vbe_mode.width>>1;
-	mouse_hard.pos.y=sys_vbe_mode.height>>1;
-	MemCopy(&mouse_hard_last,&mouse_hard,sizeof(CMouseHardStateGlobals));
+	MemSet(&kbd, 0, sizeof(CKbdStateGlobals));
+	kbd.fifo			= FifoU8New(8);
+	kbd.fifo2			= FifoU8New(0x1000);
+	kbd.scan_code_fifo	= FifoI64New(0x1000);
+	kbd.irqs_working	= FALSE;
+	MemSet(&mouse_hard, 0, sizeof(CMouseHardStateGlobals));
+	mouse_hard.enabled		= TRUE;
+	mouse_hard.fifo			= FifoU8New(8);
+	mouse_hard.fifo2		= FifoU8New(0x1000);
+	mouse_hard.scale.x		= 0.5;
+	mouse_hard.scale.y		= 0.5;
+	mouse_hard.scale.z		= 1.0;
+	mouse_hard.prescale.x	= sys_vbe_mode.width  / mouse_hard.scale.x / 2.0;
+	mouse_hard.prescale.y	= sys_vbe_mode.height / mouse_hard.scale.y / 2.0;
+	mouse_hard.prescale.z	= 0 / mouse_hard.scale.z;
+	mouse_hard.pos.x		= sys_vbe_mode.width >> 1;
+	mouse_hard.pos.y		= sys_vbe_mode.height >> 1;
+	MemCopy(&mouse_hard_last, &mouse_hard, sizeof(CMouseHardStateGlobals));
 }

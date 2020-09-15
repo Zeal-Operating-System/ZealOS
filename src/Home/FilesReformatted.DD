@@ -146,4 +146,10 @@ StartOS.CC
 		MemPhysical.CC
 		PageTables.CC
 
+	SerialDev/
+		Keyboard.CC
+		MakeSerialDev.CC
+		Message.CC
+		Mouse.CC
+
 $FG,7$-Tom$FG,0$
