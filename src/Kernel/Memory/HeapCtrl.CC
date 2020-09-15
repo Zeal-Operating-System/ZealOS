@@ -1,33 +1,37 @@
-CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL,CTask *task=NULL,CBlkPool *bp)
+CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL, CTask *task=NULL, CBlkPool *bp)
 {//See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 //Duplicated for $LK,"Zenith Task",A="FF:::/Kernel/KStart64.CC,CHeapCtrl.bp"$.
 	if (!hc)
-		hc=ZCAlloc(sizeof(CHeapCtrl));
-	hc->hc_signature=HEAP_CTRL_SIGNATURE_VAL;
-	hc->mem_task=task;
-	hc->bp=bp;
+		hc = ZCAlloc(sizeof(CHeapCtrl));
+	hc->hc_signature	= HEAP_CTRL_SIGNATURE_VAL;
+	hc->mem_task		= task;
+	hc->bp				= bp;
 	QueueInit(&hc->next_mem_blk);
-	hc->last_mergable=NULL;
-	hc->next_um=hc->last_um=(&hc->next_um)(U8 *)-offset(CMemUsed.next);
+	hc->last_mergable	= NULL;
+	hc->next_um	= hc->last_um = (&hc->next_um)(U8 *) - offset(CMemUsed.next);
 	return hc;
 }
 
 U0 HeapCtrlDel(CHeapCtrl *hc)
 {//Free all blks alloced to a HeapCtrl.
-	CMemBlk *m,*m1;
-	if (hc) {
+	CMemBlk *m, *m1;
+
+	if (hc)
+	{
 		PUSHFD
 		CLI
-		while (LBts(&hc->locked_flags,HClf_LOCKED))
+		while (LBts(&hc->locked_flags, HClf_LOCKED))
 			PAUSE
-		m=hc->next_mem_blk;
-		while (m!=&hc->next_mem_blk) {
-			m1=m->next;
-			MemPagTaskFree(m,hc);
-			m=m1;
+		m = hc->next_mem_blk;
+		while (m != &hc->next_mem_blk)
+		{
+			m1 = m->next;
+			MemPagTaskFree(m, hc);
+			m = m1;
 		}
-		LBtr(&hc->locked_flags,HClf_LOCKED);
+		LBtr(&hc->locked_flags, HClf_LOCKED);
 		POPFD
+
 		Free(hc);
 	}
 }

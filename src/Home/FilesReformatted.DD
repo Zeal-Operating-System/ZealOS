@@ -136,4 +136,14 @@ StartOS.CC
 		FileSysFAT.CC
 		FileSysRedSea.CC
 		MakeBlkDev.CC
+
+	Memory/
+		BlkPool.CC
+		HeapCtrl.CC
+		MAllocFree.CC
+		MakeMemory.CC
+		MemPag.CC
+		MemPhysical.CC
+		PageTables.CC
+
 $FG,7$-Tom$FG,0$
