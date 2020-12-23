@@ -48,6 +48,7 @@ Bool MyPutKey(I64 ch, I64 sc)
 								"$$PURPLE$$";
 						}
 						return TRUE;
+
 					case SC_F2:
 						if (sc & SCF_SHIFT)
 						{
@@ -64,6 +65,7 @@ Bool MyPutKey(I64 ch, I64 sc)
 								"$$RED$$";
 						}
 						return TRUE;
+
 					case SC_F3:
 						if (sc & SCF_SHIFT)
 						{
@@ -80,6 +82,7 @@ Bool MyPutKey(I64 ch, I64 sc)
 								"$$GREEN$$";
 						}
 						return TRUE;
+
 					case SC_F4:
 						if (sc & SCF_SHIFT)
 						{
@@ -96,17 +99,21 @@ Bool MyPutKey(I64 ch, I64 sc)
 								"$$BLUE$$";
 						}
 						return TRUE;
+
 					case SC_F7:
-						if (!(sc & SCF_SHIFT)) {
+						if (!(sc & SCF_SHIFT))
+						{
 							if (sc & SCF_KEY_DESC)
 								KeyDescSet("Cmd /TimeIns");
 							else
 								TimeIns;
 						}
 						return TRUE;
+
 					case SC_DELETE:
-						if(sc & SCF_SHIFT) {
-							if(sc & SCF_KEY_DESC)
+						if (sc & SCF_SHIFT)
+						{
+							if (sc & SCF_KEY_DESC)
 								KeyDescSet("Cmd /Soft Reboot");
 							else
 								BootRAM;
@@ -120,84 +127,99 @@ Bool MyPutKey(I64 ch, I64 sc)
 				else
 					AutoComplete(ON);
 				return TRUE;
+
 			case 'A':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Cmd /AutoComplete Off");
 				else
 					AutoComplete;
 				return TRUE;
+
 			case 'h':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Cmd /WinTileHorz");
 				else
 					WinTileHorz;
 				return TRUE;
+
 			case 'm':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Cmd /WinMax");
-				else {
+				else
+				{
 					WinBorder;
 					WinMax;
 				}
 				return TRUE;
+
 			case 'v':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Cmd /WinTileVert");
 				else
 					WinTileVert;
 				return TRUE;
+
 			case 'l':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Edit/Put Link to Cur Pos on Clip");
-				else {
+				else
+				{
 					ClipDel;
 					st = FileNameAbs(DocPut->filename.name);
 					DocPrint(sys_clip_doc, "$$LK,\"FL:%s,%d\"$$", st, DocPut->cur_entry->y + 1);
 					Free(st);
 				}
 				return TRUE;
+
 			case 'L':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Edit/Place Anchor, Put Link to Clip");
-				else {
+				else
+				{
 					i = RandU32;
 					ClipDel;
 					DocPrint(sys_clip_doc, "$$LK,\"<TODO>\",A=\"FA:%s,ANC%d\"$$", DocPut->filename.name, i);
-					"$$AN,\"<TODO>\",A=\"ANC%d\"$$",i;
+					"$$AN,\"<TODO>\",A=\"ANC%d\"$$", i;
 				}
 				return TRUE;
 
 				//Ins your own ALT-key plug-ins
+
 			case '1':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Dol /ã");
 				else
 					'ã';
 				return TRUE;
+
 			case '2':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Dol /é");
 				else
 					'é';
 				return TRUE;
+
 			case '3':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Dol /è");
 				else
 					'è';
 				return TRUE;
+
 			case '4':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Dol /ê");
 				else
 					'ê';
 				return TRUE;
+
 			case '9':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Dol /Indent 5");
 				else
 					"$$ID,5$$";
 				return TRUE;
+
 			case '0':
 				if (sc & SCF_KEY_DESC)
 					KeyDescSet("Dol /Unindent 5");

@@ -17,22 +17,26 @@ divine.fifo = FifoU8New(2048 * 8);
 U8 *TimeStampCB(CDoc *, CDocEntry *, CTask *mem_task)
 {
 	U8 *st = MAlloc(64, mem_task);
+
 	StrPrint(st, "%X", TSCGet >> DIVN_BAD_BITS);
+
 	return st;
 }
 
 U8 *KbdMouseTimeCB(CDoc *, CDocEntry *, CTask *mem_task)
 {
 	U8 *st = MAlloc(64, mem_task);
+
 	StrPrint(st, "%X", KbdMouseEventTime >> DIVN_BAD_BITS);
+
 	return st;
 }
 
 I64 PopUpTimerOk(U8 *msg=NULL)
 {
-	I64 i;
-	CDocEntry *doc_e;
-	CDoc *doc = DocNew;
+	I64			 i;
+	CDocEntry	*doc_e;
+	CDoc		*doc = DocNew;
 
 	if (msg)
 		DocPrint(doc, "%s", msg);
@@ -46,6 +50,7 @@ I64 PopUpTimerOk(U8 *msg=NULL)
 	DocPrint(doc, "$$CM+CX,0,4$$$$BT,\"OKAY\",LE=1$$\n");
 	i = PopUpMenu(doc);
 	DocDel(doc);
+
 	return i;
 }
 
@@ -62,6 +67,7 @@ I64 DivinePick(U8 *msg=NULL)
 public U0 DivineBitsInsert(I64 num_bits, I64 bitfield)
 {//Insert bits info divination bit fifo.
 	I64 i;
+
 	for (i = 0; i < num_bits; i++)
 	{
 		FifoU8Insert(divine.fifo, bitfield & 1);
@@ -71,7 +77,7 @@ public U0 DivineBitsInsert(I64 num_bits, I64 bitfield)
 
 public I64 DivineBitsRemove(I64 num_bits, U8 *msg=NULL)
 {//Return N bits. If low on entropy pop-up okay.
-	U8 b;
+	U8  b;
 	I64 res = 0;
 
 	while (num_bits)
@@ -84,14 +90,15 @@ public I64 DivineBitsRemove(I64 num_bits, U8 *msg=NULL)
 		else
 			DivineBitsInsert(DIVN_GOOD_BITS, DivinePick(msg));
 	}
+
 	return res;
 }
 
 I64 DivineInit(U8 *files_find_mask="/Misc/Vocab.DD")
 {
-	I64 i, ch, fuf_flags = 0;;
-	U8 *buf, *ptr, *ptr2;
-	CDirEntry *tmpde, *tmpde1;
+	I64			 i, ch, fuf_flags = 0;;
+	U8			*buf, *ptr, *ptr2;
+	CDirEntry	*tmpde, *tmpde1;
 
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), "+r+f+F+T+O");
 	if (fuf_flags & ~FUG_FILES_FIND)
@@ -155,6 +162,7 @@ I64 DivineInit(U8 *files_find_mask="/Misc/Vocab.DD")
 		tmpde = tmpde->next;
 	}
 	DirTreeDel(tmpde1);
+
 	return divine.word_count;
 }
 
@@ -164,11 +172,12 @@ public U8 *DivineWordStr(I64 bits=17)
 {//Divine a word.
 	if (divine.word_count)
 		return divine.words[DivineBitsRemove(bits) % divine.word_count];
+
 	return NULL;
 }
 
 public U0 DivineWord(I64 bits=17)
 {//Divine a word.
-	if(divine.word_count)
+	if (divine.word_count)
 		"%s ", divine.words[DivineBitsRemove(bits) % divine.word_count];
 }

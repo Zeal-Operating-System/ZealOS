@@ -13,6 +13,7 @@ winmgr.t->last_calc_idle_time = tS;
 U0 ProgressBarsRegTf(U8 *path = NULL)
 {
 	F64 t, p1, p2, p3, p4;
+
 	if (path)
 	{
 		t = tS;
@@ -21,7 +22,7 @@ U0 ProgressBarsRegTf(U8 *path = NULL)
 		if (progress3_t0) p3 = t - progress3_t0; else p3 = 0;
 		if (progress4_t0) p4 = t - progress4_t0; else p4 = 0;
 		RegWrite(path, "progress1_tf=%0.3f;progress2_tf=%0.3f;\n"
-					"progress3_tf=%0.3f;progress4_tf=%0.3f;\n", p1, p2, p3, p4);
+					   "progress3_tf=%0.3f;progress4_tf=%0.3f;\n", p1, p2, p3, p4);
 	}
 }
 
@@ -31,6 +32,7 @@ U0 DrawProgressBars(CDC *dc)
 {
 	I64 i, j, k, n, m;
 	U8 *st, *st2;
+
 	for (i = 0; i < PROGRESS_BARS_NUM; i++)
 	{
 		if (m = sys_progresses[i].max)
@@ -90,6 +92,7 @@ U0 DrawProgressBars(CDC *dc)
 U0 DrawWinGrid(CDC *dc)
 {
 	F64 d;
+
 	dc->color = BLACK;
 	dc->thick = 1;
 	for (d = mouse_grid.x_offset; d < GR_WIDTH; d += mouse_grid.x)
@@ -101,6 +104,7 @@ U0 DrawWinGrid(CDC *dc)
 U0 WinGrid(Bool val)
 {
 	CGridGlobals last_grid;
+
 	MemCopy(&last_grid, &mouse_grid, sizeof(CGridGlobals));
 	if (!val || PopUpForm(&mouse_grid))
 	{
@@ -125,8 +129,9 @@ CtrlAltCBSet('G', &CtrlAltG, "Cmd /Grid On", "Cmd /Grid Off");
 CTask *ext_ASCII_task;
 U0 ExtendedASCII()
 {
-	I64 i;
+	I64   i;
 	CDoc *doc = DocNew;
+
 	DocPrint(doc, "Sel Char and Press <ESC>\n$$LTBLUE$$");
 	for (i = 0; i<256; i++)
 	{
@@ -177,6 +182,7 @@ public U0 WinScrollRestore(CTask *task, CD3I64 *s)
 U0 DrawMouse(CDC *dc)
 {
 	I64 x, y;
+
 	PUSHFD
 	CLI
 	x = mouse.pos.x;
@@ -212,8 +218,9 @@ gr.fp_final_screen_update = &WinFinalUpdate;
 
 U0 WinMouseUpdate()
 {
-	I64 dd;
+	I64  dd;
 	Bool set = FALSE;
+
 	if (mouse_hard.installed)
 	{
 		mouse.has_wheel = mouse_hard.has_wheel;
@@ -277,8 +284,9 @@ public CTask *WinRefocus(CTask *task = NULL)
 
 I64 WinOnTopWindows()
 {
-	CTask *task, *task1, *first_moved_fwd = NULL;
-	I64 res=0;
+	CTask	*task, *task1, *first_moved_fwd = NULL;
+	I64		 res=0;
+
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	task = sys_winmgr_task->next_task;
@@ -306,14 +314,17 @@ I64 WinOnTopWindows()
 
 public I64 WinToTop(CTask *task = NULL, Bool update_z_buf = TRUE)
 {//Put task's win on top of window stack.
-	CTask *task1;
-	I64 res = 0;
-	if (!task) task = Fs;
+	CTask	*task1;
+	I64		 res = 0;
+
+	if (!task)
+		task = Fs;
 	if (!TaskValidate(task) || task->gs->num)
 		return 0;
 	TaskDerivedValsUpdate(task, FALSE);
 	if (!sys_winmgr_task || task==sys_winmgr_task)
 		return 0;
+
 	PUSHFD
 	CLI
 	if (!TaskValidate(task))
@@ -343,22 +354,27 @@ public I64 WinToTop(CTask *task = NULL, Bool update_z_buf = TRUE)
 			res += WinToTop(task->popup_task, FALSE);
 	}
 	POPFD
+
 	res += WinOnTopWindows;
 	if (res && update_z_buf)
 		WinZBufUpdate;
+
 	return res;
 }
 ext[EXT_WIN_TO_TOP] = &WinToTop;
 
 public CTask *WinFocus(CTask *task = NULL)
 {//Set task as focus task.
-	if (!task) task = Fs;
+	if (!task)
+		task = Fs;
+
 	PUSHFD
 	CLI
 	if (!TaskValidate(task) || Bt(&task->win_inhibit, WIf_SELF_FOCUS))
 		task = WinRefocus(sys_focus_task);
 	WinToTop(sys_focus_task = task);
 	POPFD
+
 	return sys_focus_task;
 }
 ext[EXT_WIN_FOCUS] = &WinFocus;
@@ -366,8 +382,11 @@ ext[EXT_WIN_FOCUS] = &WinFocus;
 public Bool WinHorz(I64 left, I64 right, CTask *task = NULL)
 {//Set task's win left and right columns.
 	I64 d = right - left;
-	if (!task) task = Fs;
-	if (!TaskValidate(task)) return FALSE;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return FALSE;
 	if (d < 0) d = 0;
 	if (left >= TEXT_COLS)
 	{
@@ -386,6 +405,7 @@ public Bool WinHorz(I64 left, I64 right, CTask *task = NULL)
 		else
 			left = right;
 	}
+
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	if (task->win_left != left || task->win_right != right)
@@ -406,8 +426,11 @@ public Bool WinHorz(I64 left, I64 right, CTask *task = NULL)
 public Bool WinVert(I64 top, I64 bottom, CTask *task = NULL)
 {//Set task's win top and bottom rows.
 	I64 d = bottom-top;
-	if (!task) task = Fs;
-	if (!TaskValidate(task)) return FALSE;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return FALSE;
 	if (d < 0) d = 0;
 	if (top >= TEXT_ROWS)
 	{
@@ -426,6 +449,7 @@ public Bool WinVert(I64 top, I64 bottom, CTask *task = NULL)
 		else
 			top = bottom;
 	}
+
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	if (task->win_top != top || task->win_bottom != bottom) {
@@ -444,8 +468,8 @@ public Bool WinVert(I64 top, I64 bottom, CTask *task = NULL)
 
 public U0 WinTileHorz()
 {//Tile windows horizontally top-to-bottom.
-	CTask *task, *last_task = Fs;
-	I64 count, c, i, vert_size, no_border;
+	CTask	*task, *last_task = Fs;
+	I64		 count, c, i, vert_size, no_border;
 
 	PUSHFD
 	CLI //TODO Multiprocessor safe
@@ -456,7 +480,8 @@ public U0 WinTileHorz()
 		if (!Bt(&task->win_inhibit, WIf_SELF_FOCUS))
 			count++;
 		task = task->last_task;
-	} while (task != sys_winmgr_task);
+	}
+	while (task != sys_winmgr_task);
 
 	task = sys_winmgr_task;
 	i = 0;
@@ -480,15 +505,18 @@ public U0 WinTileHorz()
 			i++;
 		}
 		task = task->last_task;
-	} while (task != sys_winmgr_task);
+	}
+	while (task != sys_winmgr_task);
+
 	WinVert(last_task->win_top, TEXT_ROWS - 2, last_task);
 	POPFD
 }
 
 public U0 WinTileVert()
 {//Tile windows vertically side-by-side.
-	CTask *task, *last_task = Fs;
-	I64 count, c, i, horz_size, no_border;
+	CTask	*task, *last_task = Fs;
+	I64		 count, c, i, horz_size, no_border;
+
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	task = sys_winmgr_task;
@@ -498,7 +526,8 @@ public U0 WinTileVert()
 		if (!Bt(&task->win_inhibit, WIf_SELF_FOCUS))
 			count++;
 		task = task->last_task;
-	} while (task != sys_winmgr_task);
+	}
+	while (task != sys_winmgr_task);
 
 	task = sys_winmgr_task;
 	i = 0;
@@ -521,7 +550,9 @@ public U0 WinTileVert()
 			i++;
 		}
 		task = task->last_task;
-	} while (task != sys_winmgr_task);
+	}
+	while (task != sys_winmgr_task);
+
 	WinHorz(last_task->win_left, TEXT_COLS - 2, last_task);
 	POPFD
 }
@@ -529,8 +560,12 @@ public U0 WinTileVert()
 public U0 WinMax(CTask *task = NULL)
 {//Maximize task's window
 	I64 no_border;
-	if (!task) task = Fs;
-	if (!TaskValidate(task)) return;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return;
+
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	no_border = Bt(&task->display_flags, DISPLAYf_NO_BORDER);
@@ -543,8 +578,12 @@ public U0 WinMax(CTask *task = NULL)
 public Bool WinBorder(Bool val = OFF, CTask *task = NULL)
 {//Turn off (or on) window border.
 	Bool old_has_border;
-	if (!task) task = Fs;
-	if (!TaskValidate(task)) return FALSE;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return FALSE;
+
 	PUSHFD
 	CLI //TODO Multiprocessor safe
 	old_has_border = !Bt(&task->display_flags, DISPLAYf_NO_BORDER);
@@ -572,5 +611,6 @@ public Bool WinBorder(Bool val = OFF, CTask *task = NULL)
 		}
 	}
 	POPFD
+
 	return old_has_border;
 }

@@ -16,9 +16,10 @@ See $LK,"Debugging",A="HI:Debugging"$
 
 U0 DebugDemo()
 {
-	I64 i=0;
+	I64 i = 0;
+
 	while (TRUE)
-		if (!(i++%2000000))
+		if (!(i++ % 2000000))
 			".";
 }
 

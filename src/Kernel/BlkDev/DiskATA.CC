@@ -413,7 +413,7 @@ Bool ATAInit(CBlkDev *bd)
 			{
 				if (ATAPIStartStop(bd, 0, TRUE))
 				{
-					if(!ATAPISetMaxSpeed(bd))
+					if (!ATAPISetMaxSpeed(bd))
 						okay = FALSE;
 				}
 				else

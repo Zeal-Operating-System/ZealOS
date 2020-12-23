@@ -27,12 +27,13 @@ Returns the type of an Expression for use
 in int<-->F64 conversions of fun
 args.
 */
-	I64 code, i;
-	Bool is_unsigned;
-	CHashClass *tmpc, *tmpc1, *tmpc2;
-	CIntermediateCode *tmpi, *tmpi1, *tmpi2, *tmpi3, *tmpi_push, *last_with_class = NULL;
-	CCodeMisc *lb, *lb1, *lb2;
-	CParseStack *ps;
+	I64					 code, i;
+	Bool				 is_unsigned;
+	CHashClass			*tmpc, *tmpc1, *tmpc2;
+	CIntermediateCode	*tmpi, *tmpi1, *tmpi2, *tmpi3, *tmpi_push, *last_with_class = NULL;
+	CCodeMisc			*lb, *lb1, *lb2;
+	CParseStack			*ps;
+
 	if (!(ps = cc->ps))
 		ps = cc->ps = MAlloc(sizeof(CParseStack));
 	ps->ptr = 0;
@@ -50,17 +51,20 @@ args.
 			case IS_V_ARG:
 				ps->ptr -= tmpi->ic_data >> 2;
 				break;
+
 			case IS_2_ARG:
 				tmpi2 = ParsePop(ps);
 				tmpc2 = tmpi2->ic_class;
 				tmpi->t.arg2_tree = tmpi2;
 				tmpi->t.arg2_class = ParsePop(ps);
+
 			case IS_1_ARG:
 				tmpi1 = ParsePop(ps);
 				tmpc1 = tmpi1->ic_class;
 				tmpi->t.arg1_tree = tmpi1;
 				tmpi->t.arg1_class = ParsePop(ps);
 				break;
+
 			case IS_0_ARG: //nobound switch
 				break;
 		}
@@ -78,6 +82,7 @@ args.
 					tmpi->ic_class = cmp.internal_types[RT_I64];
 				}
 				break;
+
 			case IC_IMM_I64:
 				tmpi->ic_flags &= ~ICF_RES_TO_INT;
 				if (cc->pass == 2 && tmpi->ic_flags & ICF_RES_TO_F64)
@@ -88,6 +93,7 @@ args.
 					tmpi->ic_class = cmp.internal_types[RT_F64];
 				}
 				break;
+
 			case IC_HOLYC_TYPECAST:
 				if (tmpi1->ic_code == IC_IMM_I64 || tmpi1->ic_code == IC_IMM_F64)
 				{
@@ -121,6 +127,7 @@ args.
 					}
 				}
 				break;
+
 			case IC_FS:
 			case IC_GS:
 //CALL,FS/GS,CALL_END,IMM,ADD,DEREF-->MOV_FS/GS
@@ -149,6 +156,7 @@ args.
 					OptSetNOP1(tmpi2);
 				}
 				break;
+
 			case IC_PUSH_CMP:
 				if (tmpi1 = OptLag(tmpi))
 				{
@@ -162,6 +170,7 @@ args.
 				if (tmpi->ic_class->raw_type == RT_F64)
 					tmpi->ic_flags |= ICF_USE_F64;
 				break;
+
 			case IC_COM:
 				if (tmpi1->ic_code == IC_IMM_I64)
 				{
@@ -192,6 +201,7 @@ args.
 						OptSetNOP1(tmpi1);
 					}
 					break;
+
 				case IC_UNARY_MINUS:
 					if (i = OptFixupUnaryOp(tmpi, tmpi1, &is_unsigned))
 					{
@@ -209,6 +219,7 @@ args.
 					if (tmpc1->type & HTT_INTERNAL_TYPE && tmpc1->raw_type & RTF_UNSIGNED)
 						tmpi->ic_class = cmp.internal_types[tmpc1->raw_type - 1];
 					break;
+
 				case IC_SHL_CONST:
 					if (i = OptFixupUnaryOp(tmpi, tmpi1, &is_unsigned))
 					{
@@ -233,6 +244,7 @@ args.
 						OptSetNOP1(tmpi1);
 					}
 					break;
+
 				case IC_SHR_CONST:
 					if (i = OptFixupUnaryOp(tmpi, tmpi1, &is_unsigned))
 					{
@@ -257,6 +269,7 @@ args.
 						OptSetNOP1(tmpi1);
 					}
 					break;
+
 				case IC_SHL:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -282,6 +295,7 @@ args.
 						OptSetNOP1(tmpi2);
 					}
 					break;
+
 				case IC_SHR:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -316,6 +330,7 @@ args.
 						tmpi_push->ic_class2 = cmp.internal_types[RT_I64];
 				}
 				break;
+
 			case IC_DEREF:
 				if (cc->pass == 2)
 				{
@@ -338,6 +353,7 @@ args.
 					}
 				}
 				break;
+
 			case IC__PP:
 			case IC__MM:
 			case IC_PP_:
@@ -345,6 +361,7 @@ args.
 				if (cc->pass == 2 && !tmpc->size)
 					LexWarn(cc, "Dereference U0 ");
 				break;
+
 			case IC_POWER:
 				tmpc = tmpi->ic_class = cmp.internal_types[RT_F64];
 				if (tmpc1->raw_type != RT_F64)
@@ -379,6 +396,7 @@ args.
 							{
 								case 0:
 									break;
+
 								case 1:
 									tmpi2->ic_flags |= tmpi->ic_flags | tmpi1->ic_flags;
 									tmpi2->ic_class2 = tmpi->ic_class2;
@@ -386,6 +404,7 @@ args.
 									OptSetNOP1(tmpi1);
 									OptSetNOP1(tmpi);
 									break;
+
 								default:
 									if (Bsf(i) == Bsr(i))
 									{
@@ -403,6 +422,7 @@ args.
 							{
 								case 0:
 									break;
+
 								case 1:
 									tmpi1->ic_flags |= tmpi->ic_flags | tmpi2->ic_flags;
 									tmpi1->ic_class2 = tmpi->ic_class2;
@@ -410,6 +430,7 @@ args.
 									OptSetNOP1(tmpi2);
 									OptSetNOP1(tmpi);
 									break;
+
 								default:
 									if (Bsf(i) == Bsr(i))
 									{
@@ -475,6 +496,7 @@ args.
 						}
 					}
 					break;
+
 				case IC_DIV:
 					if ((tmpi2->ic_data || tmpi2->ic_code != IC_IMM_I64 && tmpi2->ic_code != IC_IMM_F64) &&
 						(i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned)))
@@ -515,6 +537,7 @@ args.
 						}
 					}
 					break;
+
 				case IC_MOD:
 					if ((tmpi2->ic_data || tmpi2->ic_code != IC_IMM_I64 && tmpi2->ic_code != IC_IMM_F64) &&
 						(i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned)))
@@ -540,6 +563,7 @@ args.
 						tmpi->ic_code = IC_AND;
 					}
 					break;
+
 				case IC_AND:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -550,6 +574,7 @@ args.
 							tmpi->ic_code = IC_IMM_F64;
 					}
 					break;
+
 				case IC_OR:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -560,6 +585,7 @@ args.
 							tmpi->ic_code = IC_IMM_F64;
 					}
 					break;
+
 				case IC_XOR:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -570,6 +596,7 @@ args.
 							tmpi->ic_code = IC_IMM_F64;
 					}
 					break;
+
 				case IC_ADD:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -739,6 +766,7 @@ args.
 						}
 					}
 					break;
+
 				case IC_SUB:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -833,6 +861,7 @@ args.
 						}
 					}
 					break;
+
 				case IC_AND_AND:
 					if (OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -841,6 +870,7 @@ args.
 					}
 					tmpi->ic_class = cmp.internal_types[RT_I64];
 					break;
+
 				case IC_OR_OR:
 					if (OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -849,6 +879,7 @@ args.
 					}
 					tmpi->ic_class = cmp.internal_types[RT_I64];
 					break;
+
 				case IC_XOR_XOR:
 					if (OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -879,6 +910,7 @@ args.
 						if (tmpi->ic_class->raw_type == RT_F64)
 							tmpi->ic_flags |= ICF_USE_F64;
 					break;
+
 				case IC_NOT_EQU:
 					if (OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -889,6 +921,7 @@ args.
 						if (tmpi->ic_class->raw_type == RT_F64)
 							tmpi->ic_flags |= ICF_USE_F64;
 					break;
+
 				case IC_LESS:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -911,6 +944,7 @@ args.
 							tmpi->ic_flags |= ICF_USE_F64;
 					}
 					break;
+
 				case IC_GREATER_EQU:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -933,6 +967,7 @@ args.
 							tmpi->ic_flags |= ICF_USE_F64;
 					}
 					break;
+
 				case IC_GREATER:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -955,6 +990,7 @@ args.
 							tmpi->ic_flags |= ICF_USE_F64;
 					}
 					break;
+
 				case IC_LESS_EQU:
 					if (i = OptFixupBinaryOp1(tmpi, tmpi1, tmpi2, &is_unsigned))
 					{
@@ -1010,6 +1046,7 @@ args.
 							}
 						}
 						break;
+
 					case IC_DIV_EQU:
 						if (tmpi2->ic_code == IC_IMM_I64 && tmpc->raw_type != RT_F64 && tmpc2->raw_type != RT_F64 &&
 							(i = tmpi2->ic_data) && Bsf(i) == Bsr(i))
@@ -1018,6 +1055,7 @@ args.
 							tmpi->ic_code = IC_SHR_EQU;
 						}
 						break;
+
 					case IC_MOD_EQU:
 						if (tmpi2->ic_code == IC_IMM_I64 && tmpc->raw_type != RT_F64 && tmpc2->raw_type != RT_F64 &&
 							(i = tmpi2->ic_data) && Bsf(i) == Bsr(i))
@@ -1026,6 +1064,7 @@ args.
 							tmpi->ic_code = IC_AND_EQU;
 						}
 						break;
+
 					case IC_ADD_EQU:
 					case IC_SUB_EQU:
 						break;
@@ -1038,6 +1077,7 @@ args.
 							tmpi2->ic_flags |= ICF_RES_TO_F64;
 					}
 					break;
+
 				case IC_ASSIGN:
 					if (tmpc->raw_type == RT_F64)
 					{
@@ -1067,6 +1107,7 @@ args.
 						}
 					}
 					break;
+
 				case IC_SHL_EQU:
 				case IC_SHR_EQU:
 				case IC_AND_EQU:
@@ -1077,10 +1118,12 @@ args.
 					break;
 			end:
 				break;
+
 			case IC_ENTER:
 			case IC_LEAVE:
 				tmpi->ic_data = -cc->htc.fun->size;
 				break;
+
 			case IC_ADD_RSP:
 				if (tmpi1 = OptLag(tmpi))
 				{
@@ -1093,6 +1136,7 @@ args.
 				}
 			case IC_ADD_RSP1:
 				break;
+
 			case IC_BSF:
 				if (tmpi1->ic_code == IC_IMM_I64)
 				{
@@ -1105,6 +1149,7 @@ args.
 					OptSetNOP1(tmpi); 			//BSF
 				}
 				break;
+
 			case IC_BSR:
 				if (tmpi1->ic_code == IC_IMM_I64)
 				{
@@ -1117,6 +1162,7 @@ args.
 					OptSetNOP1(tmpi); 			//BSR
 				}
 				break;
+
 			case IC_POPCNT:
 				if (tmpi1->ic_code == IC_IMM_I64)
 				{
@@ -1129,11 +1175,13 @@ args.
 					OptSetNOP1(tmpi); 			//POPCNT
 				}
 				break;
+
 			case IC_LBTS:
 			case IC_LBTR:
 			case IC_LBTC:
 				tmpi->ic_flags |= ICF_LOCK;
 				break;
+
 			case IC_TO_I64:
 				if (tmpi1->ic_code == IC_IMM_F64)
 				{
@@ -1206,6 +1254,7 @@ args.
 					OptSetNOP1(tmpi);
 				}
 				break;
+
 			case IC_TO_F64:
 				if (tmpi1->ic_code == IC_IMM_I64)
 				{
@@ -1278,6 +1327,7 @@ args.
 					OptSetNOP1(tmpi);
 				}
 				break;
+
 			case IC_TO_BOOL:
 				if (tmpi1->ic_code == IC_IMM_I64 || tmpi1->ic_code == IC_IMM_F64)
 				{
@@ -1300,12 +1350,15 @@ args.
 					OptSetNOP1(tmpi1);
 				}
 				break;
+
 			case IC_BR_ZERO:
 				tmpi_push = OptBrZero(cc, tmpi);
 				break;
+
 			case IC_BR_NOT_ZERO:
 				tmpi_push = OptBrNotZero(cc, tmpi);
 				break;
+
 			case IC_NOP1:
 				if (tmpi->ic_flags & ICF_PUSH_RES)
 				{
@@ -1318,9 +1371,11 @@ args.
 					tmpi->ic_flags &= ~ICF_PUSH_RES;
 				}
 				break;
+
 			case IC_NOP2:
 				ps->ptr += tmpi->ic_data << 1;
 				break;
+
 			case IC_LABEL:
 				lb = OptLabelFwd(tmpi->ic_data);
 				lb1 = tmpi->ic_data;
@@ -1364,6 +1419,7 @@ args.
 					}
 				}
 				break;
+
 			case IC_JMP:
 				if (tmpi1 = OptLag(tmpi))
 				{
@@ -1376,6 +1432,7 @@ args.
 					}
 				}
 				break;
+
 			case IC_STR_CONST:
 			case IC_RBP:
 			case IC_MOV_FS:
@@ -1478,6 +1535,7 @@ args.
 			case IC_SWITCH:
 			case IC_ASM:
 				break;
+
 			default:
 				"Pass:%d Missing IC handler\n", cc->pass;
 				ICPut(cc, tmpi);

@@ -5,9 +5,9 @@
 
 class CPlannedDrive
 {
-	CPlannedDrive *next, *last;
-	I64 size;
-	Bool pri;
+	CPlannedDrive	*next, *last;
+	I64				 size;
+	Bool			 pri;
 };
 
 public I64 DiskPart(U8 drv_let=0, ...)
@@ -18,22 +18,22 @@ drv_let=0 means add new drive that is not already mounted.
 >DiskPart('C',0.5,0.25,0.25); //Make three.  50% C, 25% D, 25% E, round-up to blk.
 
 */
-	CBlkDev *bd;
-	CPlannedDrive head, *tmppp;
-	CMasterBoot mbr;
-	Bool pri = TRUE;
-	I64 ext_base, drv_let2, pri_count = 0, i, start_offset, offset, total, remaining, cur_arg = 0;
+	CBlkDev			*bd;
+	CPlannedDrive	 head, *tmppp;
+	CMasterBoot		 mbr;
+	Bool			 pri = TRUE;
+	I64				 ext_base, drv_let2, pri_count = 0, i, start_offset, offset, total, remaining, cur_arg = 0;
 
 	"This command does not play well\n"
-		"with other operating systems.\n"
-		"You really should use another\n"
-		"operating system's partitioner.\n"
-		"If you use this, it may, in fact,\n"
-		"make your hard drive impossible\n"
-		"to repartition with other operating\n"
-		"until you set block zero to zero\n"
-		"with $$LK,\"BootMHDZero\",\"MN:BootMHDZero\"$$()\n\n\n"
-		"Continue";
+	"with other operating systems.\n"
+	"You really should use another\n"
+	"operating system's partitioner.\n"
+	"If you use this, it may, in fact,\n"
+	"make your hard drive impossible\n"
+	"to repartition with other operating\n"
+	"until you set block zero to zero\n"
+	"with $$LK,\"BootMHDZero\",\"MN:BootMHDZero\"$$()\n\n\n"
+	"Continue";
 	if (argc <= cur_arg && !YorN)
 		return 0;
 	'\n';
@@ -174,5 +174,6 @@ drv_let=0 means add new drive that is not already mounted.
 		QueueRemove(tmppp);
 		Free(tmppp);
 	}
+
 	return total;
 }

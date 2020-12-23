@@ -1,126 +1,143 @@
 CMathODE *SpanNew()
 {
-	CMathODE *ode=ODENew(0,1e-4,ODEF_HAS_MASSES|ODEF_PAUSED);
-	ode->derive=&MyDerivative;
-	ode->drag_v2=0.002;
-	ode->drag_v3=0.00001;
-	ode->acceleration_limit=5e3;
-	QueueInsert(ode,Fs->last_ode);
+	CMathODE *ode = ODENew(0, 1e-4, ODEF_HAS_MASSES | ODEF_PAUSED);
+
+	ode->derive				= &MyDerivative;
+	ode->drag_v2			= 0.002;
+	ode->drag_v3			= 0.00001;
+	ode->acceleration_limit	= 5e3;
+	QueueInsert(ode, Fs->last_ode);
+
 	return ode;
 }
 
 U0 SpanDel(CMathODE *ode)
 {
-	if (ode) {
+	if (ode)
+	{
 		QueueRemove(ode);
-		QueueDel(&ode->next_mass,TRUE);
-		QueueDel(&ode->next_spring,TRUE);
+		QueueDel(&ode->next_mass, TRUE);
+		QueueDel(&ode->next_spring, TRUE);
 		ODEDel(ode);
 	}
 }
 
-#define M_SIZE (sizeof(MyMass)	-offset(CMass.start))
-#define S_SIZE (sizeof(MySpring)-offset(CSpring.start))
+#define M_SIZE (sizeof(MyMass)	 - offset(CMass.start))
+#define S_SIZE (sizeof(MySpring) - offset(CSpring.start))
 
-U8 *SpanSave(CMathODE *ode,I64 *_size=NULL)
+U8 *SpanSave(CMathODE *ode, I64 *_size=NULL)
 {
-	I64 count;
-	U8 *res,*ptr;
-	MyMass	 *tmpm;
-	MySpring *tmps;
-	SpanHeader h;
+	I64			 count;
+	U8			*res, *ptr;
+	MyMass		*tmpm;
+	MySpring	*tmps;
+	SpanHeader	 h;
 
 	ODERenum(ode);
-	h.version=SPAN_VERSION;
-	if (ode->next_mass!=&ode->next_mass)
-		h.num_masses=ode->last_mass->num+1;
+	h.version = SPAN_VERSION;
+	if (ode->next_mass != &ode->next_mass)
+		h.num_masses = ode->last_mass->num + 1;
 	else
-		h.num_masses=0;
-	if (ode->next_spring!=&ode->next_spring)
-		h.num_springs=ode->last_spring->num+1;
+		h.num_masses = 0;
+	if (ode->next_spring != &ode->next_spring)
+		h.num_springs = ode->last_spring->num + 1;
 	else
-		h.num_springs=0;
+		h.num_springs = 0;
 
-	count=sizeof(SpanHeader)+h.num_masses*M_SIZE+h.num_springs*S_SIZE;
+	count = sizeof(SpanHeader) + h.num_masses * M_SIZE + h.num_springs * S_SIZE;
 
-	ptr=res=MAlloc(count);
-	MemCopy(ptr,&h,sizeof(SpanHeader));
-	ptr+=sizeof(SpanHeader);
+	ptr = res = MAlloc(count);
+	MemCopy(ptr, &h, sizeof(SpanHeader));
+	ptr += sizeof(SpanHeader);
 
-	tmpm=ode->next_mass;
-	while (tmpm!=&ode->next_mass) {
-		MemCopy(ptr,&tmpm->start,M_SIZE);
-		ptr+=M_SIZE;
-		tmpm=tmpm->next;
+	tmpm = ode->next_mass;
+	while (tmpm != &ode->next_mass)
+	{
+		MemCopy(ptr, &tmpm->start, M_SIZE);
+		ptr += M_SIZE;
+		tmpm = tmpm->next;
 	}
 
-	tmps=ode->next_spring;
-	while (tmps!=&ode->next_spring) {
-		MemCopy(ptr,&tmps->start,S_SIZE);
-		ptr+=S_SIZE;
-		tmps=tmps->next;
+	tmps = ode->next_spring;
+	while (tmps != &ode->next_spring)
+	{
+		MemCopy(ptr, &tmps->start, S_SIZE);
+		ptr += S_SIZE;
+		tmps = tmps->next;
 	}
-	if (_size) *_size=count;
+	if (_size)
+		*_size = count;
+
 	return res;
 }
 
 Bool SpanWrite(CMathODE *ode)
 {
-	U8 *name,*buf;
-	I64 size;
-	Bool res=FALSE,old_silent=Silent;
+	U8	*name, *buf;
+	I64	 size;
+	Bool res = FALSE, old_silent = Silent;
+
 	DirMake("~/Span");
 	Silent(old_silent);
-	if (name=PopUpFileName("~/Span/Game.DATA")) {
-		if (buf=SpanSave(ode,&size)) {
-			FileWrite(name,buf,size);
+	if (name = PopUpFileName("~/Span/Game.DATA"))
+	{
+		if (buf = SpanSave(ode, &size))
+		{
+			FileWrite(name, buf, size);
 			Free(buf);
-			res=TRUE;
+			res = TRUE;
 		}
 		Free(name);
 	}
+
 	return res;
 }
 
-U0 SpanLoad(CMathODE *ode,U8 *src)
+U0 SpanLoad(CMathODE *ode, U8 *src)
 {
-	I64 i;
-	MyMass	 *tmpm;
-	MySpring *tmps;
+	I64		   i;
+	MyMass	  *tmpm;
+	MySpring  *tmps;
 	SpanHeader h;
 
-	if (!src) return;
+	if (!src)
+		return;
 
-	MemCopy(&h,src,sizeof(SpanHeader));
-	src+=sizeof(SpanHeader);
+	MemCopy(&h, src, sizeof(SpanHeader));
+	src += sizeof(SpanHeader);
 
-	for (i=0;i<h.num_masses;i++) {
-		tmpm=CAlloc(sizeof(MyMass));
-		MemCopy(&tmpm->start,src,M_SIZE);
-		src+=M_SIZE;
-		QueueInsert(tmpm,ode->last_mass);
+	for (i = 0; i < h.num_masses; i++)
+	{
+		tmpm = CAlloc(sizeof(MyMass));
+		MemCopy(&tmpm->start, src, M_SIZE);
+		src += M_SIZE;
+		QueueInsert(tmpm, ode->last_mass);
 	}
 
-	for (i=0;i<h.num_springs;i++) {
-		tmps=CAlloc(sizeof(MySpring));
-		MemCopy(&tmps->start,src,S_SIZE);
-		src+=S_SIZE;
-		QueueInsert(tmps,ode->last_spring);
-		tmps->end1=MassFindNum(ode,tmps->end1_num);
-		tmps->end2=MassFindNum(ode,tmps->end2_num);
+	for (i = 0; i < h.num_springs; i++)
+	{
+		tmps = CAlloc(sizeof(MySpring));
+		MemCopy(&tmps->start, src, S_SIZE);
+		src += S_SIZE;
+		QueueInsert(tmps, ode->last_spring);
+		tmps->end1 = MassFindNum(ode, tmps->end1_num);
+		tmps->end2 = MassFindNum(ode, tmps->end2_num);
 	}
 }
 
 U8 *SpanRead()
 {
-	U8 *src=NULL,*name;
-	Bool old_silent=Silent;
+	U8	*src = NULL, *name;
+	Bool old_silent = Silent;
+
 	DirMake("~/Span");
 	Silent(old_silent);
-	if (name=PopUpPickFile("~/Span")) {
-		src=FileRead(name);
+	if (name = PopUpPickFile("~/Span"))
+	{
+		src = FileRead(name);
 		Free(name);
 	}
+
 	return src;
 }
 

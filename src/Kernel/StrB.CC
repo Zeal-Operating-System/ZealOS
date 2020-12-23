@@ -37,6 +37,7 @@ U8 *Tabs2Spaces(U8 *src)
 		}
 	}
 	dst[col] = 0;
+
 	return dst;
 }
 
@@ -62,6 +63,7 @@ U8 *ScaleIndent(U8 *src, F64 indent_scale_factor)
 	for (i = col & 7; i > 0; i--)
 		*dst2++ = CH_SPACE;
 	StrCopy(dst2, src);
+
 	return dst;
 }
 
@@ -81,6 +83,7 @@ U8 *MStrUtil(U8 *src, I64 flags, F64 indent_scale_factor=0)
 	else
 		dst2 = StrNew(dst); //Shorten to just right size.
 	Free(dst);
+
 	return dst2;
 }
 
@@ -219,5 +222,6 @@ U8 *FlagsStrPrint(U8 *dst, U8 *list, I64 flags, Bool print_all=FALSE, I64 print_
 			CatPrint(dst, "-%z", i, list);
 		i++;
 	}
+
 	return dst;
 }

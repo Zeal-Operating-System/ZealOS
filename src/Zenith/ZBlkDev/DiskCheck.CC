@@ -13,8 +13,9 @@ Bool CheckDiskConfirm(Bool *_fix, Bool *_confirm)
 
 I64 RedSeaCheckDiskList(CDrive *drive, CDirEntry *tmpde1, U8 *bits, U8 *bits2, I64 size, I64 bpc)
 {
-	CDirEntry *tmpde2;
-	I64 i, j, errs = 0;
+	CDirEntry	*tmpde2;
+	I64			 i, j, errs = 0;
+
 	while (tmpde1)
 	{
 		tmpde2 = tmpde1->next;
@@ -43,17 +44,18 @@ I64 RedSeaCheckDiskList(CDrive *drive, CDirEntry *tmpde1, U8 *bits, U8 *bits2, I
 		DirEntryDel(tmpde1);
 		tmpde1 = tmpde2;
 	}
+
 	return errs;
 }
 
 I64 RedSeaCheckDisk(U8 drv_let, Bool *_fix, Bool *_confirm)
 {
-	I64 i, j, bpc, size, errs = 0;
-	CDrive *drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
-	U8	*files_find_mask = MStrPrint("%c:/*", Drive2Letter(drive)),
-		*old_dir = StrNew(Fs->cur_dir),
-		*bits, *bits2;
-	CDirEntry *ptr,*ptr2;
+	I64			 i, j, bpc, size, errs = 0;
+	CDrive		*drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
+	U8			*files_find_mask = MStrPrint("%c:/*", Drive2Letter(drive)),
+				*old_dir = StrNew(Fs->cur_dir),
+				*bits, *bits2;
+	CDirEntry	*ptr,*ptr2;
 
 	Drive(drv_let);
 	"Scanning...\n";
@@ -106,13 +108,15 @@ I64 RedSeaCheckDisk(U8 drv_let, Bool *_fix, Bool *_confirm)
 	Drive(Drive2Letter(old_dv));
 	Cd(old_dir);
 	Free(old_dir);
+
 	return errs;
 }
 
 I64 FAT32CheckDiskList(CDrive *drive, CDirEntry *tmpde1, U8 *bits, U32 *bits2, I64 size, I64 bpc)
 {
-	CDirEntry *tmpde2;
-	I64 i, c, errs = 0;
+	CDirEntry	*tmpde2;
+	I64			 i, c, errs = 0;
+
 	while (tmpde1)
 	{
 		tmpde2 = tmpde1->next;
@@ -165,12 +169,13 @@ I64 FAT32CheckDiskList(CDrive *drive, CDirEntry *tmpde1, U8 *bits, U32 *bits2, I
 
 I64 FAT32CheckDisk(U8 drv_let, Bool *_fix, Bool *_confirm)
 {
-	I64 i, bpc, size, c, errs = 0;
-	CDrive *drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
-	U8	*files_find_mask = MStrPrint("%c:/*", Drive2Letter(drive)),
-		*old_dir = StrNew(Fs->cur_dir),
-		*bits;
-	U32 *bits2;
+	I64		 i, bpc, size, c, errs = 0;
+	CDrive	*drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
+	U8		*files_find_mask = MStrPrint("%c:/*", Drive2Letter(drive)),
+			*old_dir = StrNew(Fs->cur_dir),
+			*bits;
+	U32		*bits2;
+
 	Drive(drv_let);
 	"Scanning...\n";
 	size = (drive->size - (drive->data_area - drive->drv_offset)) / drive->spc;
@@ -220,22 +225,26 @@ I64 FAT32CheckDisk(U8 drv_let, Bool *_fix, Bool *_confirm)
 	Drive(Drive2Letter(old_dv));
 	Cd(old_dir);
 	Free(old_dir);
+
 	return errs;
 }
 
 public I64 DiskCheck(U8 drv_let=0, Bool fix=FALSE, Bool confirm=TRUE)
 {//Check disk for allocation errors and, optionally, fix.
 //You probably want to reformat and reinstall.
-	I64 errs = 0;
-	CDrive *drive = Letter2Drive(drv_let);
+	I64		 errs = 0;
+	CDrive	*drive = Letter2Drive(drv_let);
+
 	switch (drive->fs_type)
 	{
 		case FSt_REDSEA:
 			errs = RedSeaCheckDisk(drv_let, &fix, &confirm);
 			break;
+
 		case FSt_FAT32:
 			errs = FAT32CheckDisk(drv_let, &fix, &confirm);
 			break;
+
 		default:
 			PrintErr("File System Not Supported\n");
 	}
@@ -247,17 +256,18 @@ public I64 DiskCheck(U8 drv_let=0, Bool fix=FALSE, Bool confirm=TRUE)
 			"reformat, and copy back.  "
 			"Or, copy from a back-up.\n";
 	}
+
 	return errs;
 }
 
 U0 RedSeaDriveView(U8 drv_let=0)
 {
-	CDrive *drive = Letter2Drive(drv_let);
-	I64 lohi, c1, i, x, y,
-		l = (GR_HEIGHT - 3 * FONT_HEIGHT) * (GR_WIDTH - FONT_WIDTH << 1),
-		s = drive->size + drive->drv_offset - drive->data_area;
-	U8 *bitmap;
-	CDC *dc = DCAlias;
+	CDrive	*drive = Letter2Drive(drv_let);
+	I64		 lohi, c1, i, x, y,
+			 l = (GR_HEIGHT - 3 * FONT_HEIGHT) * (GR_WIDTH - FONT_WIDTH << 1),
+			 s = drive->size + drive->drv_offset - drive->data_area;
+	U8		*bitmap;
+	CDC 	*dc = DCAlias;
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	WinMax;
@@ -299,12 +309,12 @@ U0 RedSeaDriveView(U8 drv_let=0)
 }
 U0 FAT32DriveView(U8 drv_let=0)
 {
-	CDrive *drive = Letter2Drive(drv_let);
-	I64 lohi, c1, i, x, y,
-		l = (GR_HEIGHT - 3 * FONT_HEIGHT) * (GR_WIDTH - FONT_WIDTH << 1),
-		s = (drive->size + drive->spc - 1) / drive->spc - (2 + drive->data_area - drive->drv_offset);
-	U32 *bitmap;
-	CDC *dc = DCAlias;
+	CDrive	*drive = Letter2Drive(drv_let);
+	I64		 lohi, c1, i, x, y,
+			 l = (GR_HEIGHT - 3 * FONT_HEIGHT) * (GR_WIDTH - FONT_WIDTH << 1),
+			 s = (drive->size + drive->spc - 1) / drive->spc - (2 + drive->data_area - drive->drv_offset);
+	U32		*bitmap;
+	CDC		*dc = DCAlias;
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	WinMax;
@@ -344,18 +354,22 @@ U0 FAT32DriveView(U8 drv_let=0)
 	DCFill;
 	DCDel(dc);
 }
+
 public U0 DriveView(U8 drv_let=0)
 {//Drive view. Graph the allocation map's fragmentation.
 	CDrive *drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
+
 	Drive(drv_let);
 	switch (drive->fs_type)
 	{
 		case FSt_REDSEA:
 			RedSeaDriveView(drv_let);
 			break;
+
 		case FSt_FAT32:
 			FAT32DriveView(drv_let);
 			break;
+
 		default:
 			PrintErr("File System Not Supported\n");
 	}
@@ -364,14 +378,14 @@ public U0 DriveView(U8 drv_let=0)
 
 public U0 DiskView(U8 drv_let=0)
 {//Disk view. Pie chart of partition sizes.
-	I64 i, j, attr,
-		h = Fs->pix_width,
-		v = Fs->pix_height,
-		radius;
-	CDrive *drive;
-	CBlkDev *bd = Letter2BlkDev(drv_let);
-	CDC *dc = DCAlias;
-	F64 sect_start, sect_end;
+	I64		 i, j, attr,
+			 h = Fs->pix_width,
+			 v = Fs->pix_height,
+			 radius;
+	CDrive	*drive;
+	CBlkDev	*bd = Letter2BlkDev(drv_let);
+	CDC		*dc = DCAlias;
+	F64		 sect_start, sect_end;
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	DocCursor;
@@ -421,9 +435,10 @@ public U0 DiskView(U8 drv_let=0)
 
 I64 RedSeaUnusedDriveSpace(U8 drv_let=0)
 {
-	CDrive *drive = Letter2Drive(drv_let);
-	I64 res = 0, i, l;
-	U8 *bitmap;
+	CDrive	*drive = Letter2Drive(drv_let);
+	I64		 res = 0, i, l;
+	U8		*bitmap;
+
 	try
 	{
 		l = drive->size + drive->drv_offset - drive->data_area;
@@ -437,13 +452,15 @@ I64 RedSeaUnusedDriveSpace(U8 drv_let=0)
 	}
 	catch
 		DriveUnlock(drive);
+
 	return res * BLK_SIZE * drive->spc;
 }
 I64 FAT32UnusedDriveSpace(U8 drv_let=0)
 {
-	CDrive *drive = Letter2Drive(drv_let);
-	I64 res = 0, i, l;
-	U32 *bitmap;
+	CDrive	*drive = Letter2Drive(drv_let);
+	I64		 res = 0, i, l;
+	U32		*bitmap;
+
 	try
 	{
 		l = (drive->size + drive->spc - 1) / drive->spc - (2 + drive->data_area - drive->drv_offset);
@@ -457,27 +474,32 @@ I64 FAT32UnusedDriveSpace(U8 drv_let=0)
 	}
 	catch
 		DriveUnlock(drive);
+
 	return res * BLK_SIZE * drive->spc;
 }
 public I64 DriveUnused(U8 drv_let=0)
 {//Returns unused size in bytes.
-	CDrive *drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
-	U8 *old_dir = StrNew(Fs->cur_dir);
-	I64 res = 0;
+	CDrive	*drive = Letter2Drive(drv_let), *old_dv = Fs->cur_dv;
+	U8		*old_dir = StrNew(Fs->cur_dir);
+	I64		 res = 0;
+
 	Drive(drv_let);
 	switch (drive->fs_type)
 	{
 		case FSt_REDSEA:
 			res = RedSeaUnusedDriveSpace(drv_let);
 			break;
+
 		case FSt_FAT32:
 			res = FAT32UnusedDriveSpace(drv_let);
 			break;
+
 		default:
 			PrintErr("File System Not Supported\n");
 	}
 	Drive(Drive2Letter(old_dv));
 	Cd(old_dir);
 	Free(old_dir);
+
 	return res;
 }

@@ -1,17 +1,15 @@
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\nCd(\"::/Demo/Games\");Dir;\n";
 
-TourPut(
-"Now, we're going to add the CastleFrankenstein.CC program "
-"to your PersonalMenu.\n\n"
-"Press $$GREEN$$<CTRL-m>$$FG$$ to get to your PersonalMenu.\n");
+TourPut(	"Now, we're going to add the CastleFrankenstein.CC program "
+			"to your PersonalMenu.\n\n"
+			"Press $$GREEN$$<CTRL-m>$$FG$$ to get to your PersonalMenu.\n");
 InCharGet(CH_CTRLM);
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_UP | SCF_CTRL);
 
-TourPut(
-"Press $$GREEN$$<CTRL-l>$$FG$$ to invoke the insert text widgets wizard.\n\n"
-"(Pressing $$GREEN$$<CTRL-r>$$FG$$ invokes the graphic sprite resource editor.)\n");
+TourPut(	"Press $$GREEN$$<CTRL-l>$$FG$$ to invoke the insert text widgets wizard.\n\n"
+			"(Pressing $$GREEN$$<CTRL-r>$$FG$$ invokes the graphic sprite resource editor.)\n");
 InCharGet(CH_CTRLL);
 
 Sleep(500);
@@ -19,80 +17,71 @@ WinToTop;//Kludge
 
 TourPut("$$GREEN$$<CURSOR-DOWN>$$FG$$ until you reach \"Macro\".\n");
 I64 i;
-for (i=0;i<6;i++)
+for (i = 0; i < 6; i++)
 	InKeyGet(SC_CURSOR_DOWN);
 
 TourPut("Press $$GREEN$$<SPACE>$$FG$$.\n");
 InGetStr(" ");
 
-TourPut(
-"Now, we'll fill-in the visible tag of the macro.  Then, "
-"we'll fill-in the macro text.\n",TRUE);
-InPrint(,"Click Here");
+TourPut(	"Now, we'll fill-in the visible tag of the macro.  Then, "
+			"we'll fill-in the macro text.\n", TRUE);
+InPrint(, "Click Here");
 
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
-InPrint(,"Cd(\"::/Demo/Games\");;#include \"CastleFrankenstein\";\\n");
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN);
+InPrint(,"Cd(\"::/Demo/Games\");; #include \"CastleFrankenstein\";\\n");
 
 TourPut("Press $$GREEN$$<ESC>$$FG$$ to exit the form.\n");
 InCharGet(CH_ESC);
 
-TourPut(
-"Press $$GREEN$$<CTRL-SHIFT-ENTER>$$FG$$ to insert a line feed.  "
-"($$GREEN$$<CTRL-ENTER>$$FG$$ does a page break.  "
-"$$GREEN$$<ENTER>$$FG$$ would execute the macro.)\n");
-InKeyGet(SC_ENTER|SCF_CTRL|SCF_SHIFT);
+TourPut(	"Press $$GREEN$$<CTRL-SHIFT-ENTER>$$FG$$ to insert a line feed.  "
+			"($$GREEN$$<CTRL-ENTER>$$FG$$ does a page break.  "
+			"$$GREEN$$<ENTER>$$FG$$ would execute the macro.)\n");
+InKeyGet(SC_ENTER | SCF_CTRL | SCF_SHIFT);
 
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_UP | SCF_CTRL);
 TourPut("Press $$GREEN$$<SPACE>$$FG$$ to test it.\n");
 InGetStr(" ");
-TourPut(
-"Move around with cursor keys and press $$GREEN$$<SHIFT-ESC>$$FG$$ when you "
-"are done.\n");
-InUntilChar(CH_ESC,CH_SHIFT_ESC);
+TourPut(	"Move around with cursor keys and press $$GREEN$$<SHIFT-ESC>$$FG$$ when you "
+			"are done.\n");
+InUntilChar(CH_ESC, CH_SHIFT_ESC);
 
-TourPut(
-"Now, we'll do a fancier macro that pops-up a new window which dies when "
-"finished, returning mem to the system.\n",TRUE);
-Message(MESSAGE_KEY_DOWN,CH_CTRLM,0x43200000432);
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
-Message(MESSAGE_KEY_DOWN,CH_CTRLL,0x42600000426);
-for (i=0;i<6;i++)
-	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
+TourPut(	"Now, we'll do a fancier macro that pops-up a new window which dies when "
+			"finished, returning mem to the system.\n",TRUE);
+Message(MESSAGE_KEY_DOWN, CH_CTRLM, 0x43200000432);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_UP | SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, CH_CTRLL, 0x42600000426);
+for (i = 0; i < 6; i++)
+	Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN);
 InPrint(," Click here for Pop-up version");
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
-InPrint(,"Cd(\"::/Demo/Games\");;#include \"CastleFrankenstein\";\\n");
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_LEFT|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN);
+InPrint(,"Cd(\"::/Demo/Games\");; #include \"CastleFrankenstein\";\\n");
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_LEFT | SCF_CTRL);
 
-TourPut(
-"Press $$GREEN$$<CURSOR-DOWN>$$FG$$ until you reach the \"Pop-Up\" check-box.\n");
-for (i=0;i<2;i++)
+TourPut("Press $$GREEN$$<CURSOR-DOWN>$$FG$$ until you reach the \"Pop-Up\" check-box.\n");
+for (i = 0; i < 2; i++)
 	InKeyGet(SC_CURSOR_DOWN);
-TourPut(
-"Press $$GREEN$$<SPACE>$$FG$$ to check the box.\n");
+TourPut("Press $$GREEN$$<SPACE>$$FG$$ to check the box.\n");
 InGetStr(" ");
 
 TourPut("Press $$GREEN$$<ESC>$$FG$$ to exit the form.\n");
 InCharGet(CH_ESC);
 
 TourPut("Press $$GREEN$$<CTRL-SHIFT-ENTER>$$FG$$ to insert a line feed.\n");
-InKeyGet(SC_ENTER|SCF_CTRL|SCF_SHIFT);
+InKeyGet(SC_ENTER | SCF_CTRL | SCF_SHIFT);
 
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
-TourPut(
-"Press $$GREEN$$<SPACE>$$FG$$ to test it.\n");
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_UP | SCF_CTRL);
+TourPut("Press $$GREEN$$<SPACE>$$FG$$ to test it.\n");
 InGetStr(" ");
 
 Sleep(500);
 WinToTop;//Kludge
 
-TourPut(
-"Move around with cursor keys and press $$GREEN$$<SHIFT-ESC>$$FG$$ when you "
-"are done.\n");
-InUntilChar(CH_ESC,CH_SHIFT_ESC);
+TourPut(	"Move around with cursor keys and press $$GREEN$$<SHIFT-ESC>$$FG$$ when you "
+			"are done.\n");
+InUntilChar(CH_ESC, CH_SHIFT_ESC);
 
-TourPut(
-"$$GREEN$$<CTRL-S>$$FG$$ to save your PersonalMenu file, if you wish.  "
-"Your PersonalMenu is special and does not save on $$GREEN$$<ESC>$$FG$$.\n",TRUE);
+TourPut(	"$$GREEN$$<CTRL-S>$$FG$$ to save your PersonalMenu file, if you wish.  "
+			"Your PersonalMenu is special and does not save on $$GREEN$$<ESC>$$FG$$.\n", TRUE);
 
 '' CH_SHIFT_ESC;				//exit menu
 

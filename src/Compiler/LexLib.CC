@@ -1,18 +1,21 @@
 U0 LexBackupLastChar(CCompCtrl *cc)
 {
 	CLexFile *tmpf = cc->lex_include_stack;
+
 	tmpf->buf_ptr = cc->cur_buf_ptr;
 	if (cc->flags & CCF_USE_LAST_U16)
 	{
 		tmpf->last_U16 = cc->last_U16;
 		cc->flags &= ~CCF_USE_LAST_U16;
-	} else
+	}
+	else
 		tmpf->last_U16 = 0;
 }
 
 U0 LexPush(CCompCtrl *cc)
 {//Create token-stream save point.
 	CLexFile *tmpf;
+
 	LexBackupLastChar(cc);
 	if (cc->lex_include_stack->last_U16)
 		cc->flags |= CCF_USE_LAST_U16;
@@ -25,6 +28,7 @@ U0 LexPopRestore(CCompCtrl *cc)
 {//Restore token-stream saved-point.
 //Bad things can happen if you cross an #include file boundary.
 	CLexFile *tmpf = cc->lex_parse_stack;
+
 	cc->cur_buf_ptr = tmpf->buf_ptr;
 	if (cc->last_U16 = tmpf->last_U16)
 		cc->flags |= CCF_USE_LAST_U16;
@@ -38,6 +42,7 @@ U0 LexPopRestore(CCompCtrl *cc)
 U0 LexPopNoRestore(CCompCtrl *cc)
 {//Don't restore token-stream saved-point.
 	CLexFile *tmpf = cc->lex_parse_stack;
+
 	cc->lex_parse_stack = tmpf->next;
 	Free(tmpf);
 }
@@ -45,31 +50,36 @@ U0 LexPopNoRestore(CCompCtrl *cc)
 I64 MemberMetaData(U8 *needle_str, CMemberList *haystack_member_list)
 {//Find meta data name, return meta data val. See $LK,"::/Demo/ClassMeta.CC"$.
 	CMemberListMeta *meta = haystack_member_list->meta;
+
 	while (meta)
 	{
 		if (!StrCompare(meta->str, needle_str))
 			return meta->user_data;
 		meta = meta->next;
 	}
+
 	return 0;
 }
 
 CMemberListMeta *MemberMetaFind(U8 *needle_str, CMemberList *haystack_member_list)
 {//Find meta data name, return meta data struct. See $LK,"::/Demo/ClassMeta.CC"$.
 	CMemberListMeta *meta = haystack_member_list->meta;
+
 	while (meta)
 	{
 		if (!StrCompare(meta->str, needle_str))
 			return meta;
 		meta = meta->next;
 	}
+
 	return NULL;
 }
 
 CMemberList *MemberFind(U8 *needle_str, CHashClass *haystack_class)
 {//Find class member. See $LK,"ClassRep",A="MN:ClassRep"$() and $LK,"DocForm",A="MN:DocForm"$().
-	I64 i;
-	CMemberList *tmpm;
+	I64			 i;
+	CMemberList	*tmpm;
+
 	do
 	{
 		tmpm = haystack_class->member_list_and_root;
@@ -94,6 +104,7 @@ CMemberList *MemberFind(U8 *needle_str, CHashClass *haystack_class)
 CMemberList *MemberClassBaseFind(CHashClass *needle_class, CHashClass *haystack_class)
 {//Find class member class base. For finding dup class local vars.
 	CMemberList *tmpm;
+
 	tmpm = haystack_class->member_class_base_root;
 	while (tmpm)
 	{
@@ -104,13 +115,14 @@ CMemberList *MemberClassBaseFind(CHashClass *needle_class, CHashClass *haystack_
 		else
 			tmpm = tmpm->right_class_base;
 	}
+
 	return NULL;
 }
 
 U0 MemberAdd(CCompCtrl *cc, CMemberList *tmpm, CHashClass *tmpc, I64 mode)
 {
-	U8 *st = tmpm->str;
-	CMemberList **tmpm1, *tmpm2;
+	U8			 *st = tmpm->str;
+	CMemberList	**tmpm1, *tmpm2;
 
 	if (MemberFind(st, tmpc) && StrCompare(st, "pad") && StrCompare(st, "reserved") && StrCompare(st, "_anon_"))
 		LexExcept(cc, "Duplicate member at ");
@@ -159,7 +171,9 @@ U0 MemberAdd(CCompCtrl *cc, CMemberList *tmpm, CHashClass *tmpc, I64 mode)
 CMemberList *MemberListNew(I64 _reg)
 {
 	CMemberList *res = CAlloc(sizeof(CMemberList));
+
 	res->reg = _reg;
+
 	return res;
 }
 
@@ -195,8 +209,9 @@ Bool MemberListCmp(CMemberList *tmpm1, CMemberList *tmpm2, I64 count=I64_MAX)
 
 U0 MemberListDel(CMemberList *tmpm)
 {
-	CMemberList *tmpm1;
-	CMemberListMeta *tmp_meta, *tmp_meta1;
+	CMemberList		*tmpm1;
+	CMemberListMeta	*tmp_meta, *tmp_meta1;
+
 	while (tmpm)
 	{
 		tmpm1 = tmpm->next;
@@ -235,9 +250,10 @@ U0 ClassMemberListDel(CHashClass *tmpc)
 
 I64 MemberListSize(CHashClass *tmpc)
 {
-	CMemberList *tmpm;
-	CMemberListMeta *tmp_meta;
-	I64 res = 0;
+	CMemberList		*tmpm;
+	CMemberListMeta	*tmp_meta;
+	I64				 res = 0;
+
 	tmpm = tmpc->member_list_and_root;
 	while (tmpm)
 	{
@@ -259,6 +275,7 @@ I64 MemberListSize(CHashClass *tmpc)
 		res += MSize2(tmpm);
 		tmpm = tmpm->next;
 	}
+
 	return res;
 }
 
@@ -266,6 +283,7 @@ U8 *LexExtStr(CCompCtrl *cc, I64 *_size=NULL, Bool lex_next=TRUE)
 {//Lex $LK,"TK_STR",A="MN:TK_STR"$'s to one combined str. _size includes terminator.
 	I64 len = cc->cur_str_len, len1, len2;
 	U8 *st = cc->cur_str, *st1, *st2;
+
 	cc->cur_str = NULL;
 	while (cc->token == TK_STR)
 	{
@@ -292,5 +310,6 @@ U8 *LexExtStr(CCompCtrl *cc, I64 *_size=NULL, Bool lex_next=TRUE)
 	}
 	if (_size)
 		*_size = len;
+
 	return st;
 }

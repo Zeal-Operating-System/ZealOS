@@ -4,6 +4,7 @@ F64 Clamp(F64 d, F64 lo, F64 hi)
 		return lo;
 	if (d > hi)
 		return hi;
+
 	return d;
 }
 
@@ -41,6 +42,7 @@ U64 FloorU64(U64 num, U64 to)
 U64 CeilU64(U64 num, U64 to)
 {//Int multiples of num.
 	num += to - 1;
+
 	return num - num % to;
 }
 
@@ -81,10 +83,12 @@ I64 CeilI64(I64 num, I64 to)
 I64 RandInt()
 {//Don't use this. Use the functions below.
 	I64 res = Fs->rand_seed;
+
 	res = LIN_CONGRUE_A * res ^ (res & 0xFFFFFFFF0000) >> 16 + LIN_CONGRUE_C;
 	if (!Bt(&Fs->task_flags, TASKf_NONTIMER_RAND))
 		res ^= TSCGet;
 	Fs->rand_seed = res;
+
 	return res;
 }
 
@@ -96,6 +100,7 @@ U8 RandU8()
 I16 RandI16()
 {//Random I16.
 	I64 res = RandInt;
+
 	return res.i16[0];
 }
 
@@ -107,6 +112,7 @@ U16 RandU16()
 I32 RandI32()
 {//Random I32.
 	I64 res = RandInt;
+
 	return res.i32[0];
 }
 

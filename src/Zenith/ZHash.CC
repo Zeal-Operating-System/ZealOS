@@ -8,17 +8,20 @@ class CWho
 I64 HashEntriesCompare(CWho *h1, CWho *h2)
 {
 	I64 i1, i2;
+
 	if (i1 = StrCompare(h1->h->str, h2->h->str))
 		return i1;
 	i1 = HashTypeNum(h1->h);
 	i2 = HashTypeNum(h2->h);
+
 	return i1 - i2;
 }
 
 I64 HashEntriesCompare2(CWho *h1, CWho *h2)
 {
-	CHashFun *tmpf1 = h1->h, *tmpf2 = h2->h;
-	I64 i1 = HashVal(tmpf1), i2 = HashVal(tmpf2);
+	CHashFun	*tmpf1 = h1->h, *tmpf2 = h2->h;
+	I64			 i1 = HashVal(tmpf1), i2 = HashVal(tmpf2);
+
 	if (i1 == i2)
 	{
 		i1 = HashTypeNum(tmpf1);
@@ -26,12 +29,14 @@ I64 HashEntriesCompare2(CWho *h1, CWho *h2)
 		if (i1 == i2)
 			return StrCompare(tmpf1->str, tmpf2->str);
 	}
+
 	return i1 - i2;
 }
 
 I64 HelpIndexCount(U8 *ptr, U8 *idx)
 {
 	I64 count = 0, ch, idx_len = StrLen(idx);
+
 	while (*ptr)
 	{
 		if (!StrNCompare(ptr, idx, idx_len))
@@ -42,6 +47,7 @@ I64 HelpIndexCount(U8 *ptr, U8 *idx)
 		if (!ch)
 			ptr--;
 	}
+
 	return count;
 }
 
@@ -49,6 +55,7 @@ U8 *HelpIndexStr(U8 **_ptr, U8 *idx)
 {
 	U8 *ptr = *_ptr, *ptr2, *res;
 	I64 ch, idx_len = StrLen(idx);
+
 	while (*ptr)
 	{
 		ptr2 = ptr;
@@ -68,14 +75,15 @@ U8 *HelpIndexStr(U8 **_ptr, U8 *idx)
 			return res;
 		}
 	}
+
 	return NULL;
 }
 
 U8 *HelpComment(CTask *task, CHash *tmph, U8 *_src_link)
 {
-	CDoc *doc;
-	CDocEntry *doc_e;
-	U8 *res = NULL, *ptr, *ptr2, *src_link = StrNew(_src_link);
+	CDoc		*doc;
+	CDocEntry	*doc_e;
+	U8			*res = NULL, *ptr, *ptr2, *src_link = StrNew(_src_link);
 
 	if (*src_link == 'F' && src_link[2] == ':')
 		*src_link = 'P';
@@ -133,12 +141,14 @@ U8 *HelpComment(CTask *task, CHash *tmph, U8 *_src_link)
 		Free(res);
 		res = ptr;
 	}
+
 	return res;
 }
 
 I64 HashEntriesCompare3(CWho *h1, CWho *h2)
 {
 	I64 i, i1 = 0, i2 = 0;
+
 	i = StrCompare(h1->idx, h2->idx);
 	if (i)
 		return i;
@@ -161,14 +171,14 @@ public U0 Who(U8 *fu_flags=NULL, CHashTable *h=NULL, U8 *idx=NULL, CDoc *doc=NUL
 	// "+p" for only public symbols
 	// "+m" to order by number (normally alphabetical)
 	// "-r" just local hash table
-	CHashTable *table;
-	CHashSrcSym *tmph;
-	CHashGeneric *ptr;
-	CWho *list;
-	I64 count, i, j, k, f = 0;
-	U8 buf[512], *last_idx = StrNew(""), *cur_idx, *comment;
-	Bool recurse, publics, map;
-	CTask *task;
+	CHashTable		*table;
+	CHashSrcSym		*tmph;
+	CHashGeneric	*ptr;
+	CWho			*list;
+	I64				 count, i, j, k, f = 0;
+	U8				 buf[512], *last_idx = StrNew(""), *cur_idx, *comment;
+	Bool			 recurse, publics, map;
+	CTask			*task;
 
 	FlagsScan(&f, Define("ST_FILE_UTIL_FLAGS"), "+r");
 	FlagsScan(&f, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
@@ -360,8 +370,9 @@ wh_done:
 public I64 HashDepthRep(CHashTable *table=NULL)
 {	//Hash table linked-list chain depth report.
 	//Histogram of collision count.
-	I64 i, j, longest = 0, count = 0, a[HDR_NUM];
-	CHash *tmph;
+	I64		 i, j, longest = 0, count = 0, a[HDR_NUM];
+	CHash	*tmph;
+
 	if (!table)
 		table = Fs->hash_table;
 	MemSet(a, 0, sizeof(a));
@@ -383,6 +394,7 @@ public I64 HashDepthRep(CHashTable *table=NULL)
 		if (a[i])
 			"%02d:%d\n", i, a[i];
 	"Size:%d Count:%d Longest:%d\n", table->mask + 1, count, longest;
+
 	return longest;
 }
 
@@ -397,6 +409,7 @@ public U0 DocHelpIdx(CDoc *doc, U8 *idx)
 public U0 PopUpHelpIndex(U8 *idx, CTask *parent=NULL)
 {//PopUp win report for given help idx.
 	U8 *buf;
+
 	buf = MStrPrint("DocHelpIdx(DocPut, \"%s\"); View;", idx);
 	PopUp(buf, parent);
 	Free(buf);
@@ -405,12 +418,12 @@ public U0 PopUpHelpIndex(U8 *idx, CTask *parent=NULL)
 #help_index "Hash/System"
 public U0 MapFileLoad(U8 *filename)
 {//Load map file so we have src line info.
-	U8 *st, *ptr, *name = ExtDefault(filename, "MAP"), *absname = FileNameAbs(name);
-	CDoc *doc = DocRead(name);
-	CDocEntry *doc_e;
-	CHashSrcSym *tmph;
-	I64 i, j, base=0;
-	CDebugInfo *debug_info;
+	U8			*st, *ptr, *name = ExtDefault(filename, "MAP"), *absname = FileNameAbs(name);
+	CDoc		*doc = DocRead(name);
+	CDocEntry	*doc_e;
+	CHashSrcSym	*tmph;
+	I64			 i, j, base=0;
+	CDebugInfo	*debug_info;
 
 	FileExtRemove(absname);
 	if (absname[1] == ':' && StrLen(absname) > 2 && (tmph = HashSingleTableFind(absname + 2, Fs->hash_table, HTT_MODULE)))

@@ -1,6 +1,7 @@
 U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 {
 	I64 i;
+
 	while (TRUE)
 	{
 		switch (cc->token)
@@ -13,6 +14,7 @@ U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 				}
 				else
 					return;
+
 			case TK_I64:
 				if (cc->cur_i64 == 16)
 					tmpins->flags |= IEF_OP_SIZE16;
@@ -21,6 +23,7 @@ U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 				else
 					return;
 				break;
+
 			case '+':
 				tmpins->flags |= IEF_PLUS_OPCODE;
 			case '/':
@@ -57,14 +60,14 @@ U0 AsmParseInsFlags(CCompCtrl *cc, CInst *tmpins)
 
 U0 AsmHashLoad()
 {//See $LK,"::/Compiler/OpCodes.DD"$.
-	I64 i, j, size, size_max;
-	CInternalType *tmpit;
-	CCompCtrl *cc;
-	CHashGeneric *tmph;
-	CHashReg *tmpr;
-	CHashOpcode *tmpo, *tmpo2, *tmpo_max;
-	CInst *tmpins;
-	CHashClass *tmpc;
+	I64				 i, j, size, size_max;
+	CInternalType	*tmpit;
+	CCompCtrl		*cc;
+	CHashGeneric	*tmph;
+	CHashReg		*tmpr;
+	CHashOpcode		*tmpo, *tmpo2, *tmpo_max;
+	CInst			*tmpins;
+	CHashClass		*tmpc;
 
 	cmp.size_arg_mask[0] = 0x3FF0FFFFFE;
 	cmp.size_arg_mask[1] = 0x1110111112;
@@ -104,6 +107,7 @@ U0 AsmHashLoad()
 				HashAdd(tmpr, cmp.asm_hash);
 				Lex(cc); //Skip INT
 				break;
+
 			case: //OPCODE
 				if (cc->token != TK_IDENT)
 					LexExcept(cc, "Expecting opcode at ");
@@ -185,6 +189,7 @@ U0 AsmHashLoad()
 					}
 				}
 				break;
+
 			case: //KEYWORD
 			case: //ASM_KEYWORD
 				tmph = CAlloc(sizeof(CHashGeneric));

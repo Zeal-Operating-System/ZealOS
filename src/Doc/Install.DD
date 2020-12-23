@@ -23,12 +23,12 @@ $BK,1$WARNING:$BK,0$	This command erases everything on a hard drive.  It reparti
 
 $BK,1$WARNING:$BK,0$	This command doesn't play well with other operating systems.	You'll need to do a $LK,"BootMHDZero",A="MN:BootMHDZero"$() to restore your drive to a state where other operating systems can partition it.
 $ID,-2$
-$ID,-2$2) $LK,"Format",A="MN:Format"$($FG,2$'D'$FG$,$FG,2$TRUE,FALSE,FSt_FAT32$FG$)
+$ID,-2$2) $LK,"Format",A="MN:Format"$($FG,2$'D'$FG$,$FG,2$ TRUE$FG$,$FG,2$ FALSE$FG$,$FG,2$ FSt_FAT32$FG$)
 $ID,2$This command formats a drive with $FG,2$FAT32$FG$ or the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system type.	Use the drive letter of the partition in place of $FG,2$'D'$FG$.
 
 $BK,1$WARNING:$BK,0$	If you are upgrading, be sure not to lose the file, $FG,2$/0000Boot/OldMBR.BIN.C$FG$.
 
-$ID,-2$3) $LK,"CopyTree",A="MN:CopyTree"$($FG,2$"T:/"$FG$,$FG,2$"D:/"$FG$)
+$ID,-2$3) $LK,"CopyTree",A="MN:CopyTree"$($FG,2$"T:/"$FG$,$FG,2$ "D:/"$FG$)
 $ID,2$This command is used to copy files onto a hard drive partition from the CD/DVD.  Use the drive letter of the partition in place of $FG,2$'D'$FG$.
 
 $ID,-2$4) $LK,"BootHDIns",A="MN:BootHDIns"$($FG,2$'D'$FG$)

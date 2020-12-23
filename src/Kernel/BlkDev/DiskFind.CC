@@ -9,9 +9,11 @@ CDirEntry *FilesFind2(U8 *files_find_mask, I64 fuf_flags)
 		case FSt_REDSEA:
 			res = RedSeaFilesFind(files_find_mask, fuf_flags);
 			break;
+
 		case FSt_FAT32:
 			res = FAT32FilesFind(files_find_mask, fuf_flags);
 			break;
+
 		default:
 			PrintErr("File System Not Supported\n");
 			res = NULL;
@@ -82,9 +84,11 @@ Bool FileFind(U8 *filename, CDirEntry *_de=NULL, I64 fuf_flags=0)
 			case FSt_REDSEA:
 				res = RedSeaFileFind(dirc->drive, cur_dir_clus, dirc->mask, &de, fuf_flags);
 				break;
+
 			case FSt_FAT32:
 				res = FAT32FileFind(dirc->drive, cur_dir_clus, dirc->mask, &de, fuf_flags);
 				break;
+
 			default:
 				PrintErr("File System Not Supported\n");
 		}
@@ -111,9 +115,11 @@ Bool FileFind(U8 *filename, CDirEntry *_de=NULL, I64 fuf_flags=0)
 					case FSt_REDSEA:
 						res = RedSeaFileFind(dirc->drive, cur_dir_clus, dirc->mask, &de, fuf_flags);
 						break;
+
 					case FSt_FAT32:
 						res = FAT32FileFind(dirc->drive, cur_dir_clus, dirc->mask, &de, fuf_flags);
 						break;
+
 					default:
 						PrintErr("File System Not Supported\n");
 				}

@@ -20,16 +20,16 @@ See $LK,"::/Doc/DolDocOverview.DD"$
 
 public class CDolDocGlobals
 {
-	CHashTable *hash;
-	I64 	default_de_flags								[DOCT_TYPES_NUM],
-				type_flags_nontag_invis [(DOCT_TYPES_NUM+63)/64],
-				type_flags_form 				[(DOCT_TYPES_NUM+63)/64],
-				type_flags_data 				[(DOCT_TYPES_NUM+63)/64],
-				type_flags_chk_dup			[(DOCT_TYPES_NUM+63)/64],
-				clean_scan_codes				[4];
-	I32 	default_type_flags							[DOCT_TYPES_NUM];
+	CHashTable	*hash;
+	I64			 default_de_flags			[DOCT_TYPES_NUM],
+				 type_flags_nontag_invis	[(DOCT_TYPES_NUM + 63) / 64],
+				 type_flags_form 			[(DOCT_TYPES_NUM + 63) / 64],
+				 type_flags_data 			[(DOCT_TYPES_NUM + 63) / 64],
+				 type_flags_chk_dup			[(DOCT_TYPES_NUM + 63) / 64],
+				 clean_scan_codes			[4];
+	I32			 default_type_flags			[DOCT_TYPES_NUM];
 } doldoc;
-MemSet(&doldoc,0,sizeof(CDolDocGlobals));
+MemSet(&doldoc, 0, sizeof(CDolDocGlobals));
 
 #include "DocExterns"
 #include "DocBin"
@@ -59,8 +59,8 @@ MemSet(&doldoc,0,sizeof(CDolDocGlobals));
 #include "DocTree"
 #include "DocTerm"
 
-KeyDevAdd(&KDDocPutKey,&KDDocPutS,0x80000000,TRUE);
-fp_getstr2=&DocGetStr2;
-fp_doc_put=&DocPut;
+KeyDevAdd(&KDDocPutKey, &KDDocPutS, 0x80000000, TRUE);
+fp_getstr2 = &DocGetStr2;
+fp_doc_put = &DocPut;
 
 Cd("..");;

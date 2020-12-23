@@ -1,24 +1,29 @@
-U0 SongPuppet(CTask *task,I64 passes)
+U0 SongPuppet(CTask *task, I64 passes)
 {
 	CDebugInfo *debug_info;
-	I64 i,start,end,rip,last_rip;
+	I64 i, start, end, rip, last_rip;
 	CHashFun *tmpf=NULL;
-	for (i=0;i<250 && TaskValidate(task);i++) {
-		if (tmpf=HashFind("Song",task->hash_table,HTT_FUN))
+
+	for (i = 0; i < 250 && TaskValidate(task); i++)
+	{
+		if (tmpf = HashFind("Song", task->hash_table, HTT_FUN))
 			break;
 		Sleep(1);
 	}
-	if (tmpf && (debug_info=tmpf->debug_info)) {
-		start=debug_info->body[0];
-		end  =debug_info->body[debug_info->max_line+1-debug_info->min_line];
-		last_rip=0;
-		while (TRUE) {
-			i=0;
-			while (TaskValidate(task) && (rip=TaskCaller(task,i++))) {
-				if (start<=rip<end) {
-					if (rip<last_rip && --passes<=0)
+	if (tmpf && (debug_info = tmpf->debug_info))
+	{
+		start = debug_info->body[0];
+		end   = debug_info->body[debug_info->max_line + 1 - debug_info->min_line];
+		last_rip = 0;
+		while (TRUE)
+		{
+			i = 0;
+			while (TaskValidate(task) && (rip = TaskCaller(task, i++)))
+			{
+				if (start <= rip < end) {
+					if (rip < last_rip && --passes <= 0)
 						return;
-					last_rip=rip;
+					last_rip = rip;
 				}
 			}
 			Sleep(1);
@@ -26,69 +31,74 @@ U0 SongPuppet(CTask *task,I64 passes)
 	}
 }
 
-U0 JukeSongPuppet(CTask *juke_task,I64 passes,I64 song_num,U8 *name)
+U0 JukeSongPuppet(CTask *juke_task, I64 passes, I64 song_num, U8 *name)
 {
-	Bool found;
-	CTask *task;
-	I64 i;
+	Bool	found;
+	CTask  *task;
+	I64		i;
 
 	if (FileExtDot(name))
 		FileExtRemove(name);
 	BirthWait(&juke_task->popup_task);
 	TaskWait(juke_task->popup_task);
-	MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);
+	MessagePost(juke_task->popup_task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP + SCF_CTRL);
 	TaskWait(juke_task->popup_task);
-	for (i=0;i<song_num;i++) {
-		MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_RIGHT);
+	for (i = 0; i < song_num; i++)
+	{
+		MessagePost(juke_task->popup_task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_RIGHT);
 		TaskWait(juke_task->popup_task);
 	}
 
-	MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,CH_SPACE,0);
+	MessagePost(juke_task->popup_task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
 	TaskWait(juke_task->popup_task);
 	Sleep(500);
 
-	found=FALSE;
-	task=Fs->next_task;
-	while (task!=Fs) {
-		if (!StrCompare(task->task_title,name)) {
-			found=TRUE;
+	found = FALSE;
+	task = Fs->next_task;
+	while (task != Fs) {
+		if (!StrCompare(task->task_title, name))
+		{
+			found = TRUE;
 			break;
 		}
-		task=task->next_task;
+		task = task->next_task;
 	}
 
-	if (found) {//Position cursor on song title during song
+	if (found)
+	{//Position cursor on song title during song
 		TaskWait(juke_task->popup_task);
-		MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_UP+SCF_CTRL);
+		MessagePost(juke_task->popup_task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP + SCF_CTRL);
 		TaskWait(juke_task->popup_task);
-		for (i=0;i<song_num;i++) {
-			MessagePost(juke_task->popup_task,MESSAGE_KEY_DOWN_UP,0,SC_CURSOR_RIGHT);
+		for (i = 0; i < song_num; i++)
+		{
+			MessagePost(juke_task->popup_task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_RIGHT);
 			TaskWait(juke_task->popup_task);
 		}
-		SongPuppet(task,passes);
+		SongPuppet(task, passes);
 	}
 	Kill(task);
 }
 
-public U0 JukeSongsPuppet(U8 *dirname="~/Psalmody",I64 passes=2,
-				I64 start_song=0,I64 end_song=I64_MAX)
+public U0 JukeSongsPuppet(U8 *dirname="~/Psalmody", I64 passes=2, I64 start_song=0, I64 end_song=I64_MAX)
 {//Help make music video by puppeting JukeBox task.
-	I64 i;
-	CDirEntry *tmpde,*tmpde1;
-	CTask *juke_task=User("JukeBox(0x%X);\n",dirname);
-	F64 t0;
+	I64			 i;
+	CDirEntry	*tmpde, *tmpde1;
+	CTask		*juke_task = User("JukeBox(0x%X);\n", dirname);
+	F64			 t0;
+
 	Cd(dirname);
-	tmpde1=FilesFind("*",FUF_RECURSE|FUF_JUST_TXT|FUF_JUST_FILES);
-	for (tmpde=tmpde1,i=0;tmpde && i<start_song;i++)
-		tmpde=tmpde->next;
+	tmpde1 = FilesFind("*", FUF_RECURSE | FUF_JUST_TXT | FUF_JUST_FILES);
+	for (tmpde = tmpde1, i = 0; tmpde && i < start_song; i++)
+		tmpde = tmpde->next;
 	if (screencast.record)
-		t0=screencast.t0_tS;
+		t0 = screencast.t0_tS;
 	else
-		t0=tS;
-	for (i=start_song;tmpde && i<end_song;i++) {
-		"%12.6fs %s\n",tS-t0,tmpde->full_name;
-		JukeSongPuppet(juke_task,passes,i,tmpde->name);
-		tmpde=tmpde->next;
+		t0 = tS;
+	for (i = start_song; tmpde && i < end_song; i++)
+	{
+		"%12.6fs %s\n", tS - t0, tmpde->full_name;
+		JukeSongPuppet(juke_task, passes, i, tmpde->name);
+		tmpde = tmpde->next;
 	}
 	DirTreeDel(tmpde1);
 	Kill(juke_task);

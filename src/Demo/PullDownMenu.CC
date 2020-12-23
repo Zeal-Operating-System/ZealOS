@@ -5,11 +5,10 @@
 
 U0 PullDownMenuDemo()
 {
-	I64 message_code,arg1,arg2;
+	I64			message_code, arg1, arg2;
 	CMenuEntry *tmpse;
 
-	MenuPush(
-				"File {"
+	MenuPush(	"File {"
 				"  Open(,'O');"
 				"  Save(,'S');"
 				"  Exit(,CH_SHIFT_ESC);"
@@ -29,33 +28,40 @@ U0 PullDownMenuDemo()
 				"}");
 
 	"A pull-down menu will appear "
-				"if you move the mouse to the top "
-				"of the screen.\n\n";
+	"if you move the mouse to the top "
+	"of the screen.\n\n";
 
-	do {
-		message_code=MessageGet(&arg1,&arg2,1<<MESSAGE_KEY_DOWN+1<<MESSAGE_CMD);
-		"\nCmd:%d ARG1:%X ARG2:%X\n\n",message_code,arg1,arg2;
+	do
+	{
+		message_code = MessageGet(&arg1, &arg2, 1 << MESSAGE_KEY_DOWN + 1 << MESSAGE_CMD);
+		"\nCmd:%d ARG1:%X ARG2:%X\n\n", message_code, arg1, arg2;
 
-		switch (message_code) {
+		switch (message_code)
+		{
 			case MESSAGE_KEY_DOWN:
-				switch (arg1) {//ASCII
+				switch (arg1)
+				{//ASCII
 					case CH_SPACE:
 						Beep;
 						break;
+
 					case 0:
-						switch (arg2.u8[0]) {//arg2=Scan code
+						switch (arg2.u8[0])
+						{//arg2=Scan code
 							case SC_F1:
-								if (arg2&SCF_SHIFT)
+								if (arg2 & SCF_SHIFT)
 									"About PullDown Demo\n";
 								else
 									"Test the menu.\n";
 								break;
+
 							case SC_DELETE:
-								if (arg2&SCF_SHIFT)
+								if (arg2 & SCF_SHIFT)
 									"Cut\n";
 								break;
+
 							case SC_INS:
-								if (arg2&SCF_SHIFT)
+								if (arg2 & SCF_SHIFT)
 									"Paste\n";
 								break;
 						}
@@ -64,25 +70,29 @@ U0 PullDownMenuDemo()
 				break;
 
 			case MESSAGE_CMD:
-//I Recommend making your menu
+			//I Recommend making your menu
 			//drive by key strokes, but you can
 			//use the $LK,"MESSAGE_CMD",A="MN:MESSAGE_CMD"$ val.
-				switch (arg1) {
+				switch (arg1)
+				{
 					case M_OPTION1:
 						"Option # 1\n";
-						if (tmpse=MenuEntryFind(Fs->cur_menu,"Misc/Opt1"))
-							tmpse->checked=!tmpse->checked;
+						if (tmpse = MenuEntryFind(Fs->cur_menu, "Misc/Opt1"))
+							tmpse->checked = !tmpse->checked;
 						break;
+
 					case M_OPTION2:
 						"Option # 2\n";
-						if (tmpse=MenuEntryFind(Fs->cur_menu,"Misc/Opt2"))
-							tmpse->checked=!tmpse->checked;
+						if (tmpse = MenuEntryFind(Fs->cur_menu, "Misc/Opt2"))
+							tmpse->checked = !tmpse->checked;
 						break;
 				}
 				break;
 		}
 
-	} while (message_code!=MESSAGE_KEY_DOWN||(arg1!=CH_SHIFT_ESC && arg1!=CH_ESC));
+	}
+	while (message_code != MESSAGE_KEY_DOWN || (arg1 != CH_SHIFT_ESC && arg1 != CH_ESC));
+
 	MenuPop;
 }
 

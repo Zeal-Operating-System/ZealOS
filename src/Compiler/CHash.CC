@@ -1,22 +1,27 @@
 I64 HashEntrySize(CHashSrcSym *tmph)
 {//Logical size of a std system hash entry.
-	CDebugInfo *debug_info;
-	CBinFile *bfh;
+	CDebugInfo	*debug_info;
+	CBinFile	*bfh;
+
 	switch (HashTypeNum(tmph))
 	{
 		case HTt_DEFINE_STR:
 			return MSize(tmph(CHashDefineStr *)->data);
+
 		case HTt_GLOBAL_VAR:
 		case HTt_CLASS:
 		case HTt_INTERNAL_TYPE:
 			return tmph(CHashClass *)->size;
+
 		case HTt_FUN:
 			if (debug_info = tmph->debug_info)
 				return debug_info->body[debug_info->max_line + 1 - debug_info->min_line] - debug_info->body[0];
 			else
 				return -1;
+
 		case HTt_FILE:
 			return MSize(tmph(CHashGeneric *)->user_data0);
+
 		case HTt_MODULE:
 			if (StrCompare(tmph->str, KERNEL_MODULE_NAME))
 				return MSize(tmph(CHashGeneric *)->user_data0);
@@ -25,16 +30,19 @@ I64 HashEntrySize(CHashSrcSym *tmph)
 				bfh = mem_boot_base - sizeof(CBinFile);
 				return bfh->file_size;
 			}
+
 		case HTt_WORD:
 			return StrLen(tmph->str);
 	}
+
 	return -1;
 }
 
 I64 HashEntrySize2(CHashSrcSym *tmph)
 {//Memory size of a std system hash entry.
-	CDebugInfo *debug_info;
-	I64 res = MSize2(tmph);
+	CDebugInfo	*debug_info;
+	I64			 res = MSize2(tmph);
+
 	if (!(tmph->type & HTT_DICT_WORD))
 		res += MSize2(tmph->str);
 	if (tmph->type & HTG_SRC_SYM)
@@ -69,13 +77,15 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
 		res += MSize2(tmph(CHashGeneric *)->user_data0);
 	else if (tmph->type & HTT_MODULE && StrCompare(tmph->str, KERNEL_MODULE_NAME))
 		res += MSize2(tmph(CHashGeneric *)->user_data0);
+
 	return res;
 }
 
 I64 HashTableSize2(CHashTable *table)
 {//Memory size of std system hash table and all entries.
-	I64 i, res = 0;
-	CHashSrcSym *tmph;
+	I64			 i, res = 0;
+	CHashSrcSym	*tmph;
+
 	if (!table)
 		return 0;
 	for (i = 0; i <= table->mask; i++)
@@ -94,12 +104,12 @@ I64 HashTableSize2(CHashTable *table)
 
 U0 MapFileWrite(CHashTable *h, U8 *map_name, U8 drv_let)
 {
-	CHashSrcSym *tmph;
-	I64 i, size;
-	U8 *src_link;
-	CDoc *doc;
-	CDocBin *tmpb;
-	CDebugInfo *debug_info;
+	CHashSrcSym	*tmph;
+	I64			 i, size;
+	U8			*src_link;
+	CDoc		*doc;
+	CDocBin		*tmpb;
+	CDebugInfo	*debug_info;
 
 	doc = DocNew(map_name);
 	doc->flags |= DOCF_NO_CURSOR;

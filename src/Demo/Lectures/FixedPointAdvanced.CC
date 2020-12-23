@@ -1,4 +1,5 @@
-/*"Fixed point" means you use ints
+/*
+"Fixed point" means you use ints
 that are scaled by a value.  A common
 example would be using number of pennies
 instead of dollars with a float.
@@ -22,48 +23,48 @@ I32 coordinates[65536];
 asm {
 _ASM_FIXED_POINT::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
 				PUSH		RDI
-				MOV 		RSI,coordinates
-				MOV 		RDI,ToI64(Sin(1.0)*0x100000000)
-				XOR 		RBX,RBX //SUM
-				MOV 		RCX,SAMPLE_SIZE-1
-@@05: 	XOR 		RDX,RDX
-				MOV 		DX,CX
-				MOVSXD	RAX,U32 [RSI+RDX*4]
+				MOV 		RSI, coordinates
+				MOV 		RDI, ToI64(Sin(1.0) * 0x100000000)
+				XOR 		RBX, RBX //SUM
+				MOV 		RCX, SAMPLE_SIZE-1
+@@05: 			XOR 		RDX, RDX
+				MOV 		DX,  CX
+				MOVSXD		RAX, U32 [RSI + RDX * 4]
 				IMUL		RDI
-				SAR 		RAX,32
-				ADD 		RBX,RAX
+				SAR 		RAX, 32
+				ADD 		RBX, RAX
 				DEC 		RCX
 				JGE 		@@05
-				MOV 		RAX,RBX
+				MOV 		RAX, RBX
 				POP 		RDI
 				POP 		RSI
 				POP 		RBP
 				RET
 
-SINE_VAL: 			DU64		Sin(1.0);
-RET_VAL:				DU64		0;
+SINE_VAL: 		DU64		Sin(1.0);
+RET_VAL:		DU64		0;
 
 _ASM_FLOAT::
 				PUSH		RBP
-				MOV 		RBP,RSP
+				MOV 		RBP, RSP
 				PUSH		RSI
-				MOV 		RSI,coordinates
+				MOV 		RSI, coordinates
 				FLD 		U64 [SINE_VAL]
 				FLDZ
-				MOV 		RCX,SAMPLE_SIZE-1
-@@05: 	XOR 		RDX,RDX
-				MOV 		DX,CX
-				FILD		U32 [RSI+RDX*4]
-				FMUL		ST0,ST2
-				FADDP 	ST1,ST0
+				MOV 		RCX, SAMPLE_SIZE - 1
+@@05: 			XOR 		RDX, RDX
+				MOV 		DX,  CX
+				FILD		U32 [RSI + RDX * 4]
+				FMUL		ST0, ST2
+				FADDP 		ST1, ST0
 				DEC 		RCX
 				JGE 		@@05
-				FISTP 	U64 [RET_VAL]
-				MOV 		RAX,U64 [RET_VAL]
-				FFREE 	ST0
+				FISTP 		U64 [RET_VAL]
+				MOV 		RAX, U64 [RET_VAL]
+				FFREE 		ST0
 				FINCSTP
 				POP 		RSI
 				POP 		RBP
@@ -71,74 +72,71 @@ _ASM_FLOAT::
 }
 
 _extern _ASM_FIXED_POINT I64 AsmFixedPt();
-_extern _ASM_FLOAT I64 AsmFloat();
+_extern _ASM_FLOAT		 I64 AsmFloat();
 
 U0 Main()
 {
-	I64 start,end,overhead_time,test_time;
-	F64 d1,fsum;
-	I64 reg i,tmp,reg d2,reg sum;
+	I64 start, end, overhead_time, test_time;
+	F64 d1, fsum;
+	I64 reg i, tmp, reg d2, reg sum;
 
 	CPURep;
 
 	//Set-up some sample coordinates
-	for (i=0;i<65536;i++)
-		coordinates[i]=RandU32;
+	for (i = 0; i < 65536; i++)
+		coordinates[i] = RandU32;
 
 		//Measure Loop Overhead
-	start=TSCGet;
-	for (i=SAMPLE_SIZE-1;i>=0;i--) {
+	start = TSCGet;
+	for (i = SAMPLE_SIZE - 1; i >= 0; i--)
+	{
 	}
-	end=TSCGet;
-	overhead_time=end-start;
-	"$$RED$$Overhead Cycles       :%10.5f$$FG$$\n",
-				ToF64(overhead_time)/SAMPLE_SIZE;
+	end = TSCGet;
+	overhead_time = end-start;
+	"$$RED$$Overhead Cycles       :%10.5f$$FG$$\n", ToF64(overhead_time) / SAMPLE_SIZE;
 
 	//Measure F64 arithmetic
 	// (Some of this is due to crappy
 	// compiler code.)
-	d1=Sin(1.0);
-	fsum=0;
-	start=TSCGet;
-	for (i=SAMPLE_SIZE-1;i>=0;i--)
-		fsum+=d1*coordinates[i&65535];
-	end=TSCGet;
-	test_time=end-start;
-	"Float Sum             :%X\n",ToI64(fsum);
-	"$$RED$$Float Cycles          :%10.5f$$FG$$\n",
-				ToF64(test_time)/SAMPLE_SIZE;
+	d1 = Sin(1.0);
+	fsum = 0;
+	start = TSCGet;
+	for (i = SAMPLE_SIZE - 1; i >= 0; i--)
+		fsum += d1 * coordinates[i & 65535];
+	end = TSCGet;
+	test_time = end-start;
+	"Float Sum             :%X\n", ToI64(fsum);
+	"$$RED$$Float Cycles          :%10.5f$$FG$$\n", ToF64(test_time) / SAMPLE_SIZE;
 
 	//Measure fixed point arithmetic
-	d2=Sin(1.0)*0x100000000;
-	sum=0;
-	start=TSCGet;
-	for (i=SAMPLE_SIZE-1;i>=0;i--) {
-		tmp=d2*coordinates[i&65535];
-		sum+=tmp.i32[1];
+	d2 = Sin(1.0) * 0x100000000;
+	sum = 0;
+	start = TSCGet;
+	for (i = SAMPLE_SIZE - 1; i >= 0; i--)
+	{
+		tmp = d2  *coordinates[i & 65535];
+		sum += tmp.i32[1];
 	}
-	end=TSCGet;
-	test_time=end-start;
-	"Fixed-Point Sum       :%X\n",sum;
-	"$$RED$$Fixed-Point Cycles    :%10.5f$$FG$$\n",
-				ToF64(test_time)/SAMPLE_SIZE;
+	end = TSCGet;
+	test_time = end - start;
+	"Fixed-Point Sum       :%X\n", sum;
+	"$$RED$$Fixed-Point Cycles    :%10.5f$$FG$$\n", ToF64(test_time) / SAMPLE_SIZE;
 
 	//Measure fixed point arithmetic
-	start=TSCGet;
-	sum=AsmFixedPt;
-	end=TSCGet;
-	test_time=end-start;
-	"Asm Fixed-Point Sum   :%X\n",sum;
-	"$$RED$$Asm Fixed-Point Cycles:%10.5f$$FG$$\n",
-				ToF64(test_time)/SAMPLE_SIZE;
+	start = TSCGet;
+	sum = AsmFixedPt;
+	end = TSCGet;
+	test_time = end - start;
+	"Asm Fixed-Point Sum   :%X\n", sum;
+	"$$RED$$Asm Fixed-Point Cycles:%10.5f$$FG$$\n", ToF64(test_time) / SAMPLE_SIZE;
 
 	//Measure float arithmetic
-	start=TSCGet;
-	sum=AsmFloat;
-	end=TSCGet;
-	test_time=end-start;
-	"Asm Float Sum         :%X\n",sum;
-	"$$RED$$Asm Float Cycles      :%10.5f$$FG$$\n",
-				ToF64(test_time)/SAMPLE_SIZE;
+	start = TSCGet;
+	sum = AsmFloat;
+	end = TSCGet;
+	test_time = end - start;
+	"Asm Float Sum         :%X\n", sum;
+	"$$RED$$Asm Float Cycles      :%10.5f$$FG$$\n", ToF64(test_time) / SAMPLE_SIZE;
 
 }
 

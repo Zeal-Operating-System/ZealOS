@@ -1,14 +1,14 @@
 U0 ParseVarInit(CCompCtrl *cc, U8 **_dst, CHashClass *tmpc, CArrayDim *tmpad,
 				U8 *data_addr_rip, U8 **_base, Bool data_heap, I64 pass)
 {
-	U8 *dst = *_dst, *machine_code;
-	I64 i, j, r, old_flags, type, size;
-	CMemberList *tmpm;
-	CIntermediateCode *tmpi;
-	CAOTCtrl *aotc = cc->aotc;
-	CAOTAbsAddr *tmpa;
-	CAOTImportExport *tmpie;
-	Bool is_str;
+	U8					*dst = *_dst, *machine_code;
+	I64					 i, j, r, old_flags, type, size;
+	CMemberList			*tmpm;
+	CIntermediateCode	*tmpi;
+	CAOTCtrl			*aotc = cc->aotc;
+	CAOTAbsAddr			*tmpa;
+	CAOTImportExport	*tmpie;
+	Bool				 is_str;
 
 	tmpc = OptClassFwd(tmpc);
 	if (tmpm = tmpc->member_list_and_root)
@@ -123,16 +123,17 @@ U0 ParseVarInit(CCompCtrl *cc, U8 **_dst, CHashClass *tmpc, CArrayDim *tmpad,
 class CVI2
 {
 	CVI2 *next, *last;
-	U0 base;
+	U0	  base;
 };
 
 U0 ParseVarInit2(CCompCtrl *cc, U8 **_dst, CHashClass *tmpc, CArrayDim *tmpad,
 				 U8 *data_addr_rip, U8 **_base, Bool data_heap, I64 pass)
 {
-	I64 i, j, count;
-	U8 *st, *_b;
-	CVI2 head, *tmpvi, *tmpvi1;
-	CArrayDim *tmpad1;
+	I64			 i, j, count;
+	U8			*st, *_b;
+	CVI2		 head, *tmpvi, *tmpvi1;
+	CArrayDim	*tmpad1;
+
 	tmpc = OptClassFwd(tmpc);
 	if (tmpad1 = tmpad->next)
 	{
@@ -226,16 +227,17 @@ U0 ParseVarInit2(CCompCtrl *cc, U8 **_dst, CHashClass *tmpc, CArrayDim *tmpad,
 U0 ParseGlobalInit(CCompCtrl *cc, CHashGlobalVar *tmpg, I64 pass)
 {
 	U8 *dst = tmpg->data_addr;
+
 	ParseVarInit2(cc, &dst, tmpg->var_class, &tmpg->dim, tmpg->data_addr_rip, &tmpg->data_addr,
 				  Bt(&cc->opts, OPTf_GLOBALS_ON_DATA_HEAP) || Bt(&cc->flags, CCf_AOT_COMPILE), pass);
 }
 
 U0 ParseStaticInit(CCompCtrl *cc, CMemberList *tmpm, I64 pass)
 {
-	U8 *machine_code, *dst = tmpm->static_data;
-	CHashClass *tmpc = tmpm->member_class;
-	I64 i, size;
-	CAOTImportExport *tmpie;
+	U8					*machine_code, *dst = tmpm->static_data;
+	CHashClass			*tmpc = tmpm->member_class;
+	I64					 i, size;
+	CAOTImportExport	*tmpie;
 
 	if (cc->flags & CCF_AOT_COMPILE && pass == 2)
 	{
@@ -269,8 +271,9 @@ U0 ParseStaticInit(CCompCtrl *cc, CMemberList *tmpm, I64 pass)
 
 U0 ParseArrayDims(CCompCtrl *cc, I64 mode, CArrayDim *dim)
 {//dim->next!=0 for array
-	CArrayDim *tmpad, *tmpad1;
-	I64 j;
+	CArrayDim	*tmpad, *tmpad1;
+	I64			 j;
+
 	dim->next = NULL;
 	dim->count = 0;
 	dim->total_count = 1;
@@ -316,10 +319,10 @@ U0 ParseArrayDims(CCompCtrl *cc, I64 mode, CArrayDim *dim)
 CHashClass *ParseType(CCompCtrl *cc, CHashClass **_tmpc1, I64 *_mode, CMemberList *tmpm, U8 **_ident, CHashFun **_fun_ptr,
 					  CHashExport **_tmpex, CArrayDim *tmpad, I64 fsp_flags)
 {
-	I64 k, ptr_stars_count, mode = *_mode;
-	CHashClass *tmpc1 = *_tmpc1, *tmpc2;
-	CHashFun *fun_ptr = NULL;
-	CHashExport *tmpex = NULL;
+	I64			 k, ptr_stars_count, mode = *_mode;
+	CHashClass	*tmpc1 = *_tmpc1, *tmpc2;
+	CHashFun	*fun_ptr = NULL;
+	CHashExport	*tmpex = NULL;
 
 	pt_start:
 	if (!tmpc1 || !(tmpc1->type & (HTT_CLASS | HTT_INTERNAL_TYPE)))
@@ -414,13 +417,14 @@ CHashClass *ParseType(CCompCtrl *cc, CHashClass **_tmpc1, I64 *_mode, CMemberLis
 		*_fun_ptr = fun_ptr;
 	if (_tmpex)
 		*_tmpex = tmpex;
+
 	return tmpc1;
 }
 
 U0 ParseDotDotDot(CCompCtrl *cc, CHashFun *tmpf, I64 _reg)
 {
-	CMemberList *tmpm;
-	CArrayDim *tmpad;
+	CMemberList	*tmpm;
+	CArrayDim	*tmpad;
 
 	Bts(&tmpf->flags, Ff_DOT_DOT_DOT);
 
@@ -454,13 +458,14 @@ U0 ParseDotDotDot(CCompCtrl *cc, CHashFun *tmpf, I64 _reg)
 
 U0 ParseVarList(CCompCtrl *cc, CHashClass *tmpc, I64 mode, I64 union_base=0)
 {
-	I64 i, k, old_flags = cc->flags, old_flags2, type, _reg;
-	CHashClass *tmpc1, *tmpc2;
-	CHash *tmph;
-	CMemberList *tmpm;
-	CMemberListMeta *tmp_meta;
-	U8 *machine_code;
-	Bool undef_array_size, first;
+	I64				 i, k, old_flags = cc->flags, old_flags2, type, _reg;
+	CHashClass		*tmpc1, *tmpc2;
+	CHash			*tmph;
+	CMemberList		*tmpm;
+	CMemberListMeta	*tmp_meta;
+	U8				*machine_code;
+	Bool			 undef_array_size, first;
+
 	cc->flags |= CCF_DONT_MAKE_RES;
 	if (mode.u8[1] == PRS1B_CLASS)
 		cc->flags |= CCF_CLASS_DOL_OFFSET;
@@ -511,6 +516,7 @@ pvl_restart1:
 					}
 				}
 				goto pvl_restart1;
+
 			case KW_NOREG:
 				_reg = REG_NONE;
 				Lex(cc);
@@ -571,6 +577,7 @@ pvl_restart3:
 							}
 						}
 						goto pvl_restart3;
+
 					case KW_NOREG:
 						tmpm->reg = REG_NONE;
 						LexPopNoRestore(cc);
@@ -654,6 +661,7 @@ pvl_restart3:
 					if (cc->flags & CCF_AOT_COMPILE)
 						Free(tmpm->static_data);
 					break;
+
 				case PRS1B_LOCAL_VAR:
 					if (mode & PRSF_UNION)
 					{
@@ -685,6 +693,7 @@ pvl_restart3:
 					else
 						LexPopNoRestore(cc);
 					break;
+
 				case PRS1B_FUN_ARG:
 					if (mode & PRSF_UNION)
 					{
@@ -737,6 +746,7 @@ pvl_restart3:
 					}
 					LexPopNoRestore(cc);
 					break;
+
 				case PRS1B_CLASS:
 					if (mode & PRSF_UNION)
 					{
@@ -785,10 +795,12 @@ pvl_restart3:
 						goto pvl_restart2;
 					}
 					break;
+
 				case ')':
 				case '}':
 					Lex(cc);
 					goto pvl_done;
+
 				case ';':
 					cc->flags = cc->flags & ~CCF_DONT_MAKE_RES | old_flags & CCF_DONT_MAKE_RES;
 					Lex(cc);
@@ -796,6 +808,7 @@ pvl_restart3:
 					if ((mode.u8[1] == PRS1B_LOCAL_VAR || mode.u8[1] == PRS1B_STATIC_LOCAL_VAR) && !(mode & PRSF_UNION))
 						goto pvl_done;
 					break;
+
 				default:
 					LexExcept(cc, "Missing ';' at");
 			}

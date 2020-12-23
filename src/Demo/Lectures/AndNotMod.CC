@@ -4,35 +4,34 @@
 
 U0 TimeIns()
 {
-	I64 start1,end1,start2,end2,overhead_time,test_time;
-	I64 reg i,reg tmp;
+	I64 start1, end1, start2, end2, overhead_time, test_time;
+	I64 reg i, reg tmp;
 
 	CPURep;
 
 	//Measure Loop Overhead
-	start1=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++) {
+	start1 = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++)
+	{
 	}
-	end1=TSCGet;
-	overhead_time=end1-start1;
+	end1 = TSCGet;
+	overhead_time = end1 - start1;
 
 	//Measure remainder...
-	start2=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++)
-		tmp=i%0x400;
-	end2=TSCGet;
-	test_time=end2-start2;
-	"Remainder Version #1 Cycles\t: %10.5f\n",
-				ToF64(test_time-overhead_time)/SAMPLE_SIZE;
+	start2 = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++)
+		tmp = i % 0x400;
+	end2 = TSCGet;
+	test_time = end2 - start2;
+	"Remainder Version #1 Cycles\t: %10.5f\n", ToF64(test_time - overhead_time) / SAMPLE_SIZE;
 
 	//Measure remainder...
-	start2=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++)
-		tmp=i&0x3FF;
-	end2=TSCGet;
-	test_time=end2-start2;
-	"Remainder Version #2 Cycles\t: %10.5f\n",
-				ToF64(test_time-overhead_time)/SAMPLE_SIZE;
+	start2 = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++)
+		tmp = i & 0x3FF;
+	end2 = TSCGet;
+	test_time = end2 - start2;
+	"Remainder Version #2 Cycles\t: %10.5f\n", ToF64(test_time - overhead_time) / SAMPLE_SIZE;
 }
 
 TimeIns;

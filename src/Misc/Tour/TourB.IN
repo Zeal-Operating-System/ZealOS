@@ -1,12 +1,11 @@
-TourPut(
-"All text widgets work everywhere.  The $$GREEN$$Type()$$FG$$ command is like "
-"the DOS command of the same name or the UNIX, $$GREEN$$cat$$FG$$ command.  "
-"We will, now, send your menu document to the command line.  It uses the "
-"same document format and the icons are even active!!\n\n"
-"Press $$GREEN$$<ENTER>$$FG$$.\n");
+TourPut(	"All text widgets work everywhere.  The $$GREEN$$Type()$$FG$$ command is like "
+			"the DOS command of the same name or the UNIX, $$GREEN$$cat$$FG$$ command.  "
+			"We will, now, send your menu document to the command line.  It uses the "
+			"same document format and the icons are even active!!\n\n"
+			"Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\n";
 
 "Type(\"~/PersonalMenu.DD\");";
@@ -16,5 +15,4 @@ Sleep(1500);
 InPrint(250,"Dir;\n");
 
 Sleep(1500);
-TourPut(
-"$$GREEN$$Type()$$FG$$ can also be used on $$GREEN$$.GR$$FG$$ files!",TRUE);
+TourPut("$$GREEN$$Type()$$FG$$ can also be used on $$GREEN$$.GR$$FG$$ files!", TRUE);

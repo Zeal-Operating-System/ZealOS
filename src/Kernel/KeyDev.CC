@@ -92,6 +92,7 @@ CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch, I64 sc), Bool (*fp_puts)(U8 *
 	QueueInsert(tmpk1, tmpk);
 	if (tmpk->priority == priority)
 		KeyDevRemove(tmpk);
+
 	return tmpk1;
 }
 

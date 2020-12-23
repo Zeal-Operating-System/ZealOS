@@ -1,8 +1,9 @@
 U0 OptPass5(CCompCtrl *cc)
 {
-	CIntermediateCode *tmpi, *tmpi1;
-	I64 code,i;
-	CParseStack *ps = cc->ps;
+	CIntermediateCode	*tmpi, *tmpi1;
+	I64					 code, i;
+	CParseStack			*ps = cc->ps;
+
 	ps->ptr = 0;
 	ps->ptr2 = 0;
 
@@ -98,7 +99,8 @@ U0 OptPass5(CCompCtrl *cc)
 		}
 		tmpi = tmpi->next;
 	}
-	if (ps->ptr > 2) {
+	if (ps->ptr > 2)
+	{
 		"Pass:%d Stack:%08X\n", cc->pass, ps->ptr;
 		LexExcept(cc, "Compiler Optimization Error at ");
 	}

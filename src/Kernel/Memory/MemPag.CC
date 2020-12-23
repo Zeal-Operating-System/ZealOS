@@ -33,8 +33,10 @@ Return: NULL if out of memory.
 			goto at_done;
 		}
 		i = Bsr(MEM_FREE_PAG_HASH_SIZE) + 1;
-	} else {
-//We'll now round-up to a power of two.
+	}
+	else
+	{
+		//We'll now round-up to a power of two.
 		//There is some overhead on allocations and
 		//we wouldn't want to round to the next
 		//power of two if a power of two was requested.
@@ -53,7 +55,7 @@ Return: NULL if out of memory.
 	{
 		if (!(res = m->next))
 		{
-//We're probably out of luck, but lets search for a
+			//We're probably out of luck, but lets search for a
 			//freed larger size block... and, screw-it, return the whole thing.
 			do
 			{

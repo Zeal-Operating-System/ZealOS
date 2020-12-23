@@ -16,7 +16,7 @@ U0 (*old_wall_paper)(CTask *task);
 
 U0 WallPaperStars(CTask *task)
 {
-	I64 i;
+	I64  i;
 	CDC *dc = DCAlias(gr.dc2, task);
 
 	dc->color = YELLOW;

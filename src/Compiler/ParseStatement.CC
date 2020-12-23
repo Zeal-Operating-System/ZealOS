@@ -1,6 +1,7 @@
 CHashClass *ParseClass(CCompCtrl *cc, I64 keyword, I64 fsp_flags, Bool is_extern)
 {
 	CHashClass *tmpc, *base_class;
+
 	if (cc->token != TK_IDENT)
 		LexExcept(cc, "Expecting identifier at ");
 	if (is_extern)
@@ -68,11 +69,12 @@ CHashClass *ParseClass(CCompCtrl *cc, I64 keyword, I64 fsp_flags, Bool is_extern
 
 CHashFun *ParseFunJoin(CCompCtrl *cc, CHashClass *tmp_return, U8 *name, I64 fsp_flags)
 {
-	CMemberList *tmpm, *header_list;
-	CAOTCtrl *aotc = cc->aotc;
-	CHashClass *header_return;
-	CHashFun *tmpf;
-	I64 header_arg_count;
+	CMemberList	*tmpm, *header_list;
+	CAOTCtrl	*aotc = cc->aotc;
+	CHashClass	*header_return;
+	CHashFun	*tmpf;
+	I64			 header_arg_count;
+
 	if (name)
 	{//if not fun_ptr
 		if (cc->flags & CCF_AOT_COMPILE)
@@ -150,15 +152,16 @@ CHashFun *ParseFunJoin(CCompCtrl *cc, CHashClass *tmp_return, U8 *name, I64 fsp_
 		}
 		MemberListDel(header_list);
 	}
+
 	return tmpf;
 }
 
 U0 ParseFun(CCompCtrl *cc, CHashClass *tmp_return, U8 *name, I64 fsp_flags)
 {
-	CMemberList *tmpm;
-	CCodeMisc *saved_leave_label;
-	I64 i, j, size, *r;
-	Bool old_trace;
+	CMemberList	*tmpm;
+	CCodeMisc	*saved_leave_label;
+	I64			 i, j, size, *r;
+	Bool		 old_trace;
 
 	cc->fun_lex_file = cc->lex_include_stack;
 	cc->min_line=cc->max_line = cc->lex_include_stack->line_num;
@@ -229,16 +232,17 @@ U0 ParseFun(CCompCtrl *cc, CHashClass *tmp_return, U8 *name, I64 fsp_flags)
 
 U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64 saved_val, I64 fsp_flags)
 {
-	I64 i, j, mode, k, val;
-	U8 *st;
-	CHashExport *tmpex;
-	CHashGlobalVar *tmpg;
-	CAOTCtrl *aotc = cc->aotc;
-	CAOTHeapGlobal *tmphg;
-	CHashClass *tmpc;
-	CHashFun *tmpf, *tmpf_fun_ptr;
-	CArrayDim tmpad;
-	Bool has_alias, undef_array_size, is_array;
+	I64				 i, j, mode, k, val;
+	U8				*st;
+	CHashExport		*tmpex;
+	CHashGlobalVar	*tmpg;
+	CAOTCtrl		*aotc = cc->aotc;
+	CAOTHeapGlobal	*tmphg;
+	CHashClass		*tmpc;
+	CHashFun		*tmpf, *tmpf_fun_ptr;
+	CArrayDim		 tmpad;
+	Bool			 has_alias, undef_array_size, is_array;
+
 	while (TRUE)
 	{
 		tmpc = ParseType(cc, &saved_tmpc, &saved_mode, NULL, &st, &tmpf_fun_ptr, &tmpex, &tmpad, fsp_flags);
@@ -272,6 +276,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 					Bts(&tmpf->flags, Ff_INTERNAL);
 					LBtr(&tmpf->flags, Cf_EXTERN);
 					return;
+
 				case PRS0__EXTERN:
 					if (!(fsp_flags & FSF__) && !(mode & PRS1_NOT_REALLY__EXTERN))
 						LexExcept(cc, "Expecting label with underscore at ");
@@ -284,12 +289,15 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 					if (cc->flags & CCF_AOT_COMPILE)
 						tmpf->type |= HTF_RESOLVE;
 					return;
+
 				case PRS0_EXTERN:
 					ParseFunJoin(cc, tmpc, st, fsp_flags);
 					return;
+
 				case PRS0__IMPORT:
 					if (!(fsp_flags & FSF__))
 						LexExcept(cc, "Expecting label with underscore at ");
+
 				case PRS0_IMPORT:
 					if (!(cc->flags & CCF_AOT_COMPILE))
 						LexExcept(cc, "import not needed at ");
@@ -303,6 +311,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 							tmpf->import_name = StrNew(st);
 					}
 					return;
+
 				default:
 					ParseFun(cc, tmpc, st, fsp_flags);
 					return;
@@ -344,6 +353,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 					}
 					tmpg->flags |= GVF_ALIAS;
 					break;
+
 				case PRS0__IMPORT:
 				case PRS0_IMPORT:
 					if (!(cc->flags & CCF_AOT_COMPILE))
@@ -358,6 +368,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 							tmpg->import_name = StrNew(st);
 					}
 					break;
+
 				case PRS0_EXTERN:
 					if (cc->flags & CCF_AOT_COMPILE)
 					{
@@ -370,6 +381,7 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 						tmpg->type = HTT_GLOBAL_VAR | HTF_UNRESOLVED;
 					}
 					break;
+
 				default:
 					if (cc->flags & CCF_AOT_COMPILE)
 					{
@@ -510,8 +522,9 @@ U0 ParseGlobalVarList(CCompCtrl *cc, I64 saved_mode, CHashClass *saved_tmpc, I64
 
 U0 ParseIf(CCompCtrl *cc, I64 try_count, CCodeMisc *lb_break)
 {
-	CCodeMisc *lb, *lb1;
-	I64 k;
+	CCodeMisc	*lb, *lb1;
+	I64			 k;
+
 	if (cc->token != '(')
 		LexExcept(cc, "Expecting '(' at ");
 	Lex(cc);
@@ -540,6 +553,7 @@ U0 ParseIf(CCompCtrl *cc, I64 try_count, CCodeMisc *lb_break)
 U0 ParseWhile(CCompCtrl *cc, I64 try_count)
 {
 	CCodeMisc *lb, *lb_done;
+
 	if (cc->token != '(')
 		LexExcept(cc, "Expecting '(' at ");
 	Lex(cc);
@@ -560,6 +574,7 @@ U0 ParseWhile(CCompCtrl *cc, I64 try_count)
 U0 ParseDoWhile(CCompCtrl *cc, I64 try_count)
 {
 	CCodeMisc *lb, *lb_done;
+
 	lb = COCMiscNew(cc, CMT_LABEL);
 	lb_done = COCMiscNew(cc, CMT_LABEL);
 	ICAdd(cc, IC_LABEL, lb, 0);
@@ -620,25 +635,25 @@ U0 ParseFor(CCompCtrl *cc, I64 try_count)
 class CSubSwitch
 {
 	CSubSwitch *next, *last;
-	CCodeMisc *lb_start, *lb_break;
+	CCodeMisc  *lb_start, *lb_break;
 };
 
 class CSwitchCase
 {
-	CSwitchCase *next;
-	CCodeMisc *label;
-	I64 val;
-	CSubSwitch *ss;
+	CSwitchCase	*next;
+	CCodeMisc	*label;
+	I64			 val;
+	CSubSwitch	*ss;
 };
 
 U0 ParseSwitch(CCompCtrl *cc, I64 try_count)
 {
-	CSwitchCase *header = NULL, *tmps, *tmps1;	//Leaks on except
-	CSubSwitch head, *tmpss; 					//Leaks on except
-	CCodeMisc *lb_default, *lb_fwd_case, *mc_jt, *lb_entry, **jmp_table;
-	CIntermediateCode *tmpi_sub, *tmpi_cmp, *tmpi_jmp, *tmpi_start;
-	Bool default_found = FALSE, nobound;
-	I64 i, k_start = I64_MIN, k_end, lo = I64_MAX, hi = I64_MIN, range;
+	CSwitchCase			*header = NULL, *tmps, *tmps1;	//Leaks on except
+	CSubSwitch			 head, *tmpss; 					//Leaks on except
+	CCodeMisc			*lb_default, *lb_fwd_case, *mc_jt, *lb_entry, **jmp_table;
+	CIntermediateCode	*tmpi_sub, *tmpi_cmp, *tmpi_jmp, *tmpi_start;
+	Bool				 default_found = FALSE, nobound;
+	I64					 i, k_start = I64_MIN, k_end, lo = I64_MAX, hi = I64_MIN, range;
 
 	if (cc->token == '(')
 		nobound = FALSE;
@@ -686,6 +701,7 @@ sw_cont:
 			{
 				case KW_END:
 					goto sw_sub_end;
+
 				case KW_START:
 					if (Lex(cc) == ':')
 						Lex(cc);
@@ -707,6 +723,7 @@ sw_cont:
 							case KW_END:
 								OptFree(tmpi_jmp);
 								goto sw_sub_end;
+
 							case KW_START:
 							case KW_CASE:
 							case KW_DEFAULT:
@@ -722,11 +739,13 @@ sw_cont:
 									ICAdd(cc, IC_SUB_CALL, tmpss->lb_start, 0);//In case fall-thru
 								}
 								goto sw_cont;
+
 							default:
 								ParseStatement(cc, try_count);
 						}
 					}
 					break;
+
 				case KW_CASE:
 					if (head.next != &head)
 					{
@@ -799,6 +818,7 @@ sw_cont:
 					else
 						LexExcept(cc, "Expecting ':' at ");
 					break;
+
 				case KW_DEFAULT:
 					if (head.next != &head)
 					{
@@ -824,6 +844,7 @@ sw_cont:
 					}
 					default_found = TRUE;
 					break;
+
 				default:
 					ParseStatement(cc, try_count, head.last->lb_break);
 			}
@@ -881,6 +902,7 @@ sw_sub_end:
 U0 ParseNoWarn(CCompCtrl *cc)
 {
 	CMemberList *tmpm;
+
 	while (cc->token == TK_IDENT)
 	{
 		if (!(tmpm = cc->local_var_entry))
@@ -895,8 +917,9 @@ U0 ParseNoWarn(CCompCtrl *cc)
 
 U0 ParseStreamBlk(CCompCtrl *cc)
 {
-	CLexHashTableContext *htc = MAlloc(sizeof(CLexHashTableContext));
-	CStreamBlk *tmpe = MAlloc(sizeof(CStreamBlk));
+	CLexHashTableContext	*htc = MAlloc(sizeof(CLexHashTableContext));
+	CStreamBlk				*tmpe = MAlloc(sizeof(CStreamBlk));
+
 	tmpe->body = StrNew("");
 	QueueInsert(tmpe, cc->last_stream_blk);
 	COCPush(cc);
@@ -996,12 +1019,13 @@ U0 ParseTryBlk(CCompCtrl *cc, I64 try_count)
 
 Bool ParseStatement(CCompCtrl *cc, I64 try_count=0, CCodeMisc *lb_break=NULL, I64 comp_flags=CMPF_PRS_SEMICOLON)
 {
-	I64 i, fsp_flags = 0;
-	CHashExport *tmpex;
-	CCodeMisc *g_lb;
-	U8 *import_name;
-	CHashFun *tmp_untry;
-	CAOT *tmpaot;
+	I64			 i, fsp_flags = 0;
+	CHashExport	*tmpex;
+	CCodeMisc	*g_lb;
+	U8			*import_name;
+	CHashFun	*tmp_untry;
+	CAOT		*tmpaot;
+
 	if (comp_flags & CMPF_ONE_ASM_INS)
 	{
 		if (cc->flags & CCF_AOT_COMPILE || cc->aot_depth)
@@ -1079,21 +1103,27 @@ Bool ParseStatement(CCompCtrl *cc, I64 try_count=0, CCodeMisc *lb_break=NULL, I6
 											ParseStatement(cc, try_count);
 											cc->lock_count--;
 											break;
+
 										case KW_TRY:
 											ParseTryBlk(cc, try_count);
 											break;
+
 										case KW_IF:
 											ParseIf(cc, try_count, lb_break);
 											break;
+
 										case KW_FOR:
 											ParseFor(cc, try_count);
 											break;
+
 										case KW_WHILE:
 											ParseWhile(cc, try_count);
 											break;
+
 										case KW_DO:
 											ParseDoWhile(cc, try_count);
 											break;
+
 										case KW_SWITCH:
 											ParseSwitch(cc, try_count);
 											break;
@@ -1122,6 +1152,7 @@ Bool ParseStatement(CCompCtrl *cc, I64 try_count=0, CCodeMisc *lb_break=NULL, I6
 										Lex(cc);
 										ParseGlobalVarList(cc, PRS0__EXTERN | PRS1_NULL, tmpex, i, fsp_flags);
 										break;
+
 									case KW__IMPORT:
 sm_underscore_import:
 										if (cc->token != TK_IDENT)
@@ -1137,6 +1168,7 @@ sm_underscore_import:
 										ParseGlobalVarList(cc, PRS0__IMPORT | PRS1_NULL, tmpex, import_name, fsp_flags);
 										Free(import_name);
 										break;
+
 									case KW_EXTERN:
 										if (cc->token != TK_IDENT)
 											LexExcept(cc, "Expecting type at ");
@@ -1156,6 +1188,7 @@ sm_underscore_import:
 										Lex(cc);
 										ParseGlobalVarList(cc, PRS0_EXTERN | PRS1_NULL, tmpex, 0, fsp_flags);
 										break;
+
 									case KW_IMPORT:
 										if (cc->token != TK_IDENT || !(tmpex = cc->hash_entry) ||
 												!(tmpex->type & (HTT_CLASS | HTT_INTERNAL_TYPE)))
@@ -1164,6 +1197,7 @@ sm_import:
 										Lex(cc);
 										ParseGlobalVarList(cc, PRS0_IMPORT | PRS1_NULL, tmpex, 0, fsp_flags);
 										break;
+
 									case KW__INTERN:
 										i = LexExpressionI64(cc);
 										if (cc->token != TK_IDENT || !(tmpex = cc->hash_entry) ||
@@ -1179,24 +1213,30 @@ sm_import:
 									case KW_STATIC:
 										fsp_flags = FSF_STATIC | fsp_flags & FSF_ASM;
 										break;
+
 									case KW_INTERRUPT:
 										fsp_flags = FSF_INTERRUPT | FSF_NOARGPOP | fsp_flags & (FSG_FUN_FLAGS2 | FSF_ASM);
 										break;
+
 									case KW_HASERRCODE:
 										fsp_flags = FSF_HASERRCODE | fsp_flags & (FSG_FUN_FLAGS2 | FSF_ASM);
 										break;
+
 									case KW_ARGPOP:
 										fsp_flags = FSF_ARGPOP | fsp_flags & (FSG_FUN_FLAGS2 | FSF_ASM);
 										break;
+
 									case KW_NOARGPOP:
 										fsp_flags = FSF_NOARGPOP | fsp_flags & (FSG_FUN_FLAGS2 | FSF_ASM);
 										break;
+
 									case KW_PUBLIC:
 										fsp_flags = FSF_PUBLIC | fsp_flags & (FSG_FUN_FLAGS2 | FSF_ASM);
 										break;
 								end:
 									Lex(cc);
 									break;
+
 								case KW_RETURN:
 									if (!cc->htc.fun)
 										LexExcept(cc, "Not in fun.  Can't return a val ");
@@ -1231,6 +1271,7 @@ sm_import:
 										LexWarn(cc, "Function should return val ");
 									ICAdd(cc, IC_JMP, cc->lb_leave, 0);
 									goto sm_semicolon;
+
 								case KW_GOTO:
 									if (Lex(cc) != TK_IDENT)
 										LexExcept(cc, "Expecting identifier at ");
@@ -1244,16 +1285,19 @@ sm_import:
 									ICAdd(cc, IC_JMP, g_lb, 0);
 									Lex(cc);
 									goto sm_semicolon;
+
 								case KW_BREAK:
 									Lex(cc);
 									if (!lb_break)
 										LexExcept(cc, "'break' not allowed\n");
 									ICAdd(cc, IC_JMP, lb_break, 0);
 									goto sm_semicolon;
+
 								case KW_NO_WARN:
 									Lex(cc);
 									ParseNoWarn(cc);
 									goto sm_semicolon;
+
 								case KW_UNION:
 								case KW_CLASS:
 									Lex(cc);
@@ -1360,5 +1404,6 @@ sm_semicolon:
 			}
 		}
 sm_done:
+
 	return fsp_flags & FSF_ASM;
 }

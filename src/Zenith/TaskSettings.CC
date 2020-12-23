@@ -5,10 +5,13 @@ public CTaskSettings *SettingsPush(CTask *task = NULL, I64 flags = 0)
 //It saves many settings so they can be restored
 	//at the end of the application with $LK,"SettingsPop",A="MN:SettingsPop"$().
 
-	CTaskSettings *tmpse;
-	CDoc *doc;
-	if (!task) task = Fs;
-	if (!TaskValidate(task)) return NULL;
+	CTaskSettings	*tmpse;
+	CDoc			*doc;
+
+	if (!task)
+		task = Fs;
+	if (!TaskValidate(task))
+		return NULL;
 	tmpse = CAlloc(sizeof(CTaskSettings), task);
 	tmpse->cur_dir = DirCur(task, task);
 	tmpse->draw_it = task->draw_it;
@@ -22,35 +25,35 @@ public CTaskSettings *SettingsPush(CTask *task = NULL, I64 flags = 0)
 			Suspend(task->song_task);
 			Sound;
 		}
-		task->song_task=NULL;
+		task->song_task = NULL;
 	}
 
 	if (tmpse->animate_task = task->animate_task)
 		Suspend(task->animate_task);
-	task->animate_task=NULL;
+	task->animate_task = NULL;
 
 	if (doc = DocPut(task))
 	{
-		tmpse->hide_cursor = !Bt(&doc->flags, DOCf_HIDE_CURSOR);
-		tmpse->highlight_cursor = !Bt(&doc->flags, DOCf_DONT_HIGHLIGHT_CURSOR);
-		tmpse->scroll = !Bt(&doc->flags, DOCf_NO_SCROLL_BARS);
+		tmpse->hide_cursor		= !Bt(&doc->flags, DOCf_HIDE_CURSOR);
+		tmpse->highlight_cursor	= !Bt(&doc->flags, DOCf_DONT_HIGHLIGHT_CURSOR);
+		tmpse->scroll			= !Bt(&doc->flags, DOCf_NO_SCROLL_BARS);
 	}
 
-	tmpse->left = task->win_left;
-	tmpse->right = task->win_right;
-	tmpse->top = task->win_top;
-	tmpse->bottom = task->win_bottom;
+	tmpse->left		= task->win_left;
+	tmpse->right	= task->win_right;
+	tmpse->top		= task->win_top;
+	tmpse->bottom	= task->win_bottom;
 
 	tmpse->scroll_x = task->scroll_x;
 	tmpse->scroll_y = task->scroll_y;
 	tmpse->scroll_z = task->scroll_z;
 
-	tmpse->win_inhibit = task->win_inhibit;
-	tmpse->text_attr = task->text_attr;
+	tmpse->win_inhibit	= task->win_inhibit;
+	tmpse->text_attr	= task->text_attr;
 	StrCopy(tmpse->task_title, task->task_title);
-	tmpse->title_src = task->title_src;
-	tmpse->border_attr = task->border_attr;
-	tmpse->border_src = task->border_src;
+	tmpse->title_src	= task->title_src;
+	tmpse->border_attr	= task->border_attr;
+	tmpse->border_src	= task->border_src;
 	tmpse->border = !Bt(&task->display_flags, DISPLAYf_NO_BORDER);
 	if (TaskValidate(ac.task))
 		tmpse->autocomplete = TRUE;
@@ -59,6 +62,7 @@ public CTaskSettings *SettingsPush(CTask *task = NULL, I64 flags = 0)
 
 	tmpse->next = task->next_settings;
 	task->next_settings = tmpse;
+
 	return tmpse;
 }
 
@@ -76,14 +80,14 @@ U0 SettingsPop2(CTask *task, CTaskSettings *tmpse)
 	WinBorder(tmpse->border, task);
 	WinHorz(tmpse->left, tmpse->right, task);
 	WinVert(tmpse->top, tmpse->bottom, task);
-	task->scroll_x = tmpse->scroll_x;
-	task->scroll_y = tmpse->scroll_y;
-	task->scroll_z = tmpse->scroll_z;
-	task->win_inhibit = tmpse->win_inhibit;
-	task->text_attr = tmpse->text_attr;
-	task->border_attr = tmpse->border_attr;
-	task->border_src  = tmpse->border_src;
-	task->title_src   = tmpse->title_src;
+	task->scroll_x		= tmpse->scroll_x;
+	task->scroll_y		= tmpse->scroll_y;
+	task->scroll_z		= tmpse->scroll_z;
+	task->win_inhibit	= tmpse->win_inhibit;
+	task->text_attr		= tmpse->text_attr;
+	task->border_attr	= tmpse->border_attr;
+	task->border_src	= tmpse->border_src;
+	task->title_src		= tmpse->title_src;
 	StrCopy(task->task_title, tmpse->task_title);
 	AutoComplete(tmpse->autocomplete);
 	GrPaletteSet(tmpse->palette);
@@ -93,10 +97,12 @@ U0 SettingsPop2(CTask *task, CTaskSettings *tmpse)
 public U0 SettingsPop(CTask *task=NULL,I64 flags=0)
 {//Typically, called at end of an application.
 	CTaskSettings *tmpse;
-	if (!task) task=Fs;
+
+	if (!task)
+		task = Fs;
 	if (!TaskValidate(task))
 		return;
-	if (tmpse=task->next_settings)
+	if (tmpse = task->next_settings)
 	{
 		task->next_settings = tmpse->next;
 		Cd(tmpse->cur_dir);
@@ -118,7 +124,7 @@ public U0 SettingsPop(CTask *task=NULL,I64 flags=0)
 		}
 
 		SettingsPop2(task, tmpse); //Do it to get ress fast
-		Refresh(,TRUE);
+		Refresh(, TRUE);
 		SettingsPop2(task, tmpse); //Redo in case was lost by old update
 
 		Free(tmpse);

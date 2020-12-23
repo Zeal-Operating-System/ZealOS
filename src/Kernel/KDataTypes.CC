@@ -19,6 +19,7 @@ U8 *LinkedListCopy(U8 **_list, CTask *mem_task=NULL)
 		tmpl = *tmpl = MAllocIdent(_list, mem_task);
 		_list = *_list;
 	}
+
 	return res;
 }
 
@@ -31,6 +32,7 @@ I64 LinkedListCount(U8 **_list)
 		res++;
 		_list = *_list;
 	}
+
 	return res;
 }
 
@@ -43,6 +45,7 @@ I64 LinkedListSize(U8 **_list)
 		res += MSize2(_list);
 		_list = *_list;
 	}
+
 	return res;
 }
 
@@ -71,6 +74,7 @@ CQueue *QueueCopy(CQueue *head, CTask *mem_task=NULL)
 		QueueInsert(tmpq1, res->last);
 		tmpq = tmpq->next;
 	}
+
 	return res;
 }
 
@@ -84,6 +88,7 @@ I64 QueueCount(CQueue *head)
 		res++;
 		tmpq = tmpq->next;
 	}
+
 	return res;
 }
 
@@ -97,6 +102,7 @@ I64 QueueSize(CQueue *head)
 		res += MSize2(tmpq);
 		tmpq = tmpq->next;
 	}
+
 	return res;
 }
 
@@ -107,6 +113,7 @@ CQueueVectU8 *QueueVectU8New(I64 min_idx=0)
 	QueueInit(res);
 	res->total_count = res->node_count = 0;
 	res->min_idx = min_idx;
+
 	return res;
 }
 
@@ -285,6 +292,7 @@ I64 FifoU8Count(CFifoU8 *f)
 	else
 		res = f->in_ptr - f->out_ptr;
 	POPFD
+
 	return res;
 }
 
@@ -300,6 +308,7 @@ CFifoI64 *FifoI64New(I64 size, CTask *mem_task=NULL)
 	f->mask		= size - 1;
 	f->in_ptr	= 0;
 	f->out_ptr	= 0;
+
 	return f;
 }
 
@@ -384,5 +393,6 @@ I64 FifoI64Count(CFifoI64 *f)
 	else
 		res = f->in_ptr - f->out_ptr;
 	POPFD
+
 	return res;
 }

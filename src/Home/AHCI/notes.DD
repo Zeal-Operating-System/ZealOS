@@ -4,3 +4,25 @@ $WW$
 - Perhaps make more references to spec in comments
 
 - ATAPI RW
+
+
+$FG,7$ZenithOS DVD IDE Boot function order$FG$
+$HL,1$
+KMain												// Kernel/KMain.CC
+	...
+	BlkDevsInitAll									// Kernel/BlkDev/DiskAddDev.CC
+		[KConfigAddDev]								// Kernel/KConfig.CC
+			Mount2									// Zenith/ZBlkDev/Mount.CC
+				BlkDevNextFreeSlot					// Kernel/BlkDev/DiskBlkDev.CC
+				...
+				GetBaseUnit							// Kernel/BlkDev/DiskAddDev.CC
+					BootDVDProbeAll					// Kernel/BlkDev/DiskATAId.CC
+						j = PCIClassFind(0x010100 + k, ++i);
+						...
+						BootDVDProbe				// Kernel/BlkDev/DiskATAId.CC
+							ATAProbe				// Kernel/BlkDev/DiskATA.CC
+							ATAPIStartStop			// Kernel/BlkDev/DiskATA.CC
+							ATAPIReadBlks2			// Kernel/BlkDev/DiskATA.CC
+				BlkDevAdd							// Kernel/BlkDev/DiskAddDev.CC
+
+$HL,0$

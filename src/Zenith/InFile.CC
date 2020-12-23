@@ -4,7 +4,8 @@
 public U0 InGetStr(U8 *st)
 {//Wait for user to type certain str.
 	I64 ch, sc;
-	U8 buf[256], *st2;
+	U8  buf[256], *st2;
+
 	while (*st)
 	{
 		ch=KeyGet(&sc,FALSE);
@@ -32,6 +33,7 @@ public U0 InPrint(I64 mS=100, U8 *format,...)
 {//Print message with delay after each char.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st=buf;
 	I64 ch;
+
 	while (ch = *st++)
 	{
 		'' ch;
@@ -43,7 +45,8 @@ public U0 InPrint(I64 mS=100, U8 *format,...)
 public U0 InKeyGet(I64 scan_code, I64 sc_mask = 0xFF | SCF_SHIFT | SCF_CTRL | SCF_ALT)
 {//Wait for user to press certain key.
 	I64 sc, ch;
-	U8 buf[STR_LEN], *st;
+	U8  buf[STR_LEN], *st;
+
 	do
 	{
 		ch = KeyGet(&sc);
@@ -60,14 +63,17 @@ public U0 InKeyGet(I64 scan_code, I64 sc_mask = 0xFF | SCF_SHIFT | SCF_CTRL | SC
 				PopUpOk(buf);
 			}
 		}
-	} while (sc & sc_mask != scan_code & sc_mask);
+	}
+	while (sc & sc_mask != scan_code & sc_mask);
+
 	Message(MESSAGE_KEY_DOWN, ch, sc);
 }
 
 public I64 InCharGet(...)
 {//Wait for user to press one of set of chars.
 	I64 i, sc, ch;
-	U8 buf[512], *st;
+	U8  buf[512], *st;
+
 	while (TRUE)
 	{
 		ch = KeyGet(&sc);
@@ -100,16 +106,19 @@ public I64 InCharGet(...)
 public U0 InUntilKey(I64 scan_code, I64 sc_mask = 0xFF | SCF_SHIFT | SCF_CTRL | SCF_ALT)
 {//Let user type until he presses certain key.
 	I64 sc, ch;
+
 	do
 	{
 		ch = KeyGet(&sc);
 		Message(MESSAGE_KEY_DOWN, ch, sc);
-	} while (sc & sc_mask != scan_code & sc_mask);
+	}
+	while (sc & sc_mask != scan_code & sc_mask);
 }
 
 public I64 InUntilChar(...)
 {//Let user type until he presses one of set of chars.
 	I64 i, sc, ch;
+
 	while (TRUE)
 	{
 		ch = KeyGet(&sc);
@@ -123,7 +132,9 @@ public I64 InUntilChar(...)
 public Bool InView()
 {//Let user type until <ESC> or <SHIFT-ESC>.
 	Bool res = View;
+
 	DocBottom;
+
 	return res;
 }
 
@@ -134,11 +145,11 @@ Bool InSetMousePlot(I64 mS, I64 x, I64 y, I64 z)
 {
 	MouseSet(x, y, z, in_plot_l, in_plot_r);
 	Sleep(mS);
+
 	return TRUE;
 }
 
-public U0 InSetMouse(I64 mS=7, I64 x = I64_MAX, I64 y = I64_MAX, I64 z = I64_MAX,
-								I64 l = I64_MAX, I64 r = I64_MAX)
+public U0 InSetMouse(I64 mS=7, I64 x = I64_MAX, I64 y = I64_MAX, I64 z = I64_MAX, I64 l = I64_MAX, I64 r = I64_MAX)
 {//Move mouse to spot at certain speed.
 	if (!(0 <= x < GR_WIDTH))
 		x = mouse.pos.x;

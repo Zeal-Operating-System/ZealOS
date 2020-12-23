@@ -39,8 +39,8 @@ $ID,-2$
 * When doing something like
 $FG,2$$ID,2$$ID,2$U0 Main()
 {
-	U16 *_w=0xA0000;
-	*_w|=0x8000;
+	U16 *_w = 0xA0000;
+	*_w |= 0x8000;
 }
 $ID,-2$$FG$The $FG,2$|=$FG$ will be coded as a $FG,2$U32 Bts$FG$ inst resulting in a $FG,2$U32$FG$ access instead of a $FG,2$U16$FG$ access.	This affects some hardware operations.
 $ID,-2$

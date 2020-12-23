@@ -1,29 +1,29 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.CC"$.
 
-RegDefault("ZenithOS/Talons","F64 best_score=9999;\n");
+RegDefault("ZenithOS/Talons", "F64 best_score=9999;\n");
 RegExe("ZenithOS/Talons");
 
 //Keep these power of two so shift is used instead of multiply
 //to index arrays.
-#define MAP_WIDTH 							1024
-#define MAP_HEIGHT							1024
+#define MAP_WIDTH 			1024
+#define MAP_HEIGHT			1024
 
-#define MAP_SCALE 							150
-#define DISPLAY_SCALE 					100
-#define CTRLS_SCALE 						0.05
+#define MAP_SCALE 			150
+#define DISPLAY_SCALE 		100
+#define CTRLS_SCALE 		0.05
 
 //I think I did these so the heads-up showed intelligable numbers.
 //Scaling is a mess.
-#define COORDINATE_SCALE				256
-#define COORDINATE_BITS 				8
+#define COORDINATE_SCALE	256
+#define COORDINATE_BITS 	8
 
-#define WATER_ELEVATION 				15
-#define BIRD_ELEVATION					10
-#define ROCK_ELEVATION					45
-#define SNOW_ELEVATION					55
+#define WATER_ELEVATION 	15
+#define BIRD_ELEVATION		10
+#define ROCK_ELEVATION		45
+#define SNOW_ELEVATION		55
 
 //Too big makes off-screen draws take place.
-#define PANEL_SIZE_MAX					16
+#define PANEL_SIZE_MAX		16
 
 
 
@@ -138,90 +138,108 @@ RegExe("ZenithOS/Talons");
 
 
 
-#define LS_TYPES				3
-U8			*landscape_small_imgs[LS_TYPES]={$IB,"<4>",BI=4$,$IB,"<5>",BI=5$,$IB,"<6>",BI=6$},
-				*landscape_large_imgs[LS_TYPES];
 
-#define B_NUM 	256
+
+
+
+
+
+#define LS_TYPES	3
+U8 *landscape_small_imgs[LS_TYPES] = {$IB,"<4>",BI=4$, $IB,"<5>",BI=5$, $IB,"<6>",BI=6$}, *landscape_large_imgs[LS_TYPES];
+
+#define B_NUM		256
 class Bird
 {
-	Bird *next,*last;
-	CD3I64 p;
-	F64 é;
+	Bird	*next, *last;
+	CD3I64	 p;
+	F64		 é;
+
 } b_head[mp_count];
 
 class Obj
 {
-	Obj *next,*last;
-	CD3I64 p;
-	U8 *img;
-	Bool fish;
+	Obj		*next, *last;
+	CD3I64	 p;
+	U8		*img;
+	Bool	 fish;
 };
 
 class Panel
 {//Polygon or Obj
-	Panel *next;
-	CD3I32 *pts;
-	I64 count;
-	U16 update,num_sides;
-	CColorROPU32 color;
-	Obj *next_obj,*last_obj;
-} *panel_head,*panels[MAP_HEIGHT][MAP_WIDTH];
+	Panel			*next;
+	CD3I32			*pts;
+	I64				count;
+	U16				update, num_sides;
+	CColorROPU32	color;
+	Obj				*next_obj, *last_obj;
+
+} *panel_head, *panels[MAP_HEIGHT][MAP_WIDTH];
 
 I64 critical_section_flag;
 I16 elevations[MAP_HEIGHT][MAP_WIDTH];
 CD3 normals[MAP_HEIGHT][MAP_WIDTH];
 
-class MPCtrl {
-	I64 init_not_done_flags,update_not_done_flags,app_not_done_flags;
+class MPCtrl
+{
+	I64 init_not_done_flags, update_not_done_flags, app_not_done_flags;
 	I64 strip_width[MP_PROCESSORS_NUM];
 	Bool app_done;
 } mp;
 
-F64 game_t0,game_tf,pitch,roll,heading,è,speed;
-Bool invert_pitch,rolled_over;
-I64 strip_height,x,y,z,fish_left;
-CD3 v;
+F64  game_t0, game_tf, pitch, roll, heading, è, speed;
+Bool invert_pitch, rolled_over;
+I64  strip_height, x, y, z, fish_left;
+CD3  v;
 
 U0 WrapAngles()
 {
-	I64 r[4][4],x,y,z;
+	I64 r[4][4], x, y, z;
 
-	è=Wrap(è);
-	pitch=Wrap(-è-ã/2);
-	if (Abs(pitch)>ã/2) {
-		invert_pitch=TRUE;
-		pitch=Wrap(ã-pitch);
-	} else
-		invert_pitch=FALSE;
-	roll=Wrap(roll);
-	if (invert_pitch ^^ -ã/2<=roll<ã/2)
-		rolled_over=FALSE;
+	è = Wrap(è);
+	pitch = Wrap(-è - ã / 2);
+	if (Abs(pitch) > ã / 2)
+	{
+		invert_pitch = TRUE;
+		pitch = Wrap(ã - pitch);
+	}
 	else
-		rolled_over=TRUE;
-	heading=Wrap(heading,0);
+		invert_pitch = FALSE;
+	roll = Wrap(roll);
+	if (invert_pitch ^^ -ã / 2 <= roll < ã / 2)
+		rolled_over = FALSE;
+	else
+		rolled_over = TRUE;
+	heading = Wrap(heading, 0);
 
 	//World to screen coordinates
 	Mat4x4IdentEqu(r);
-	Mat4x4RotZ(r,heading);
-	Mat4x4RotX(r,è);
-	Mat4x4RotZ(r,roll);
+	Mat4x4RotZ(r, heading);
+	Mat4x4RotX(r, è);
+	Mat4x4RotZ(r, roll);
 
 	//We use velocity vector for dog-fighting.
-	x=0x100000000*speed; y=0; z=0;
-	Mat4x4MulXYZ(r,&x,&y,&z);
-	v.x=x/ToF64(0x100000000); v.y=y/ToF64(0x100000000); v.z=z/ToF64(0x100000000);
+	x = 0x100000000 * speed;
+	y = 0;
+	z = 0;
+	Mat4x4MulXYZ(r, &x, &y, &z);
+	v.x = x / ToF64(0x100000000);
+	v.y = y / ToF64(0x100000000);
+	v.z = z / ToF64(0x100000000);
 }
 
-U0 EDTransform(CDC *dc,I64 *x,I64 *y,I64 *z)
+U0 EDTransform(CDC *dc, I64 *x, I64 *y, I64 *z)
 {
 	I64 zz;
-	Mat4x4MulXYZ(dc->r,x,y,z);
-	*z=zz=-*z;
-	if (zz>0) {
-		*x = dc->x + *x * DISPLAY_SCALE/zz; //Foreshortening
-		*y = dc->y - *y * DISPLAY_SCALE/zz;
-	} else {
+
+	Mat4x4MulXYZ(dc->r, x, y, z);
+	*z = zz = -*z;
+	if (zz > 0)
+	{
+		*x = dc->x + *x * DISPLAY_SCALE / zz; //Foreshortening
+		*y = dc->y - *y * DISPLAY_SCALE / zz;
+	}
+	else
+	{
 		*x = dc->x + *x;
 		*y = dc->y - *y;
 	}
@@ -239,193 +257,232 @@ i  j	k
 
 Normal:  dz1*i + dz2*j - k
 */
-	I64 i,j;
-	for (j=0;j<MAP_HEIGHT-1;j++) {
-		for (i=0;i<MAP_WIDTH-1;i++) {
-			normals[j][i].x=elevations[j][i+1]-elevations[j][i];
-			normals[j][i].y=elevations[j+1][i]-elevations[j][i];
-			normals[j][i].z=-1;
+	I64 i, j;
+
+	for (j = 0; j < MAP_HEIGHT - 1; j++)
+	{
+		for (i = 0; i < MAP_WIDTH - 1; i++)
+		{
+			normals[j][i].x = elevations[j][i + 1] - elevations[j][i];
+			normals[j][i].y = elevations[j + 1][i] - elevations[j][i];
+			normals[j][i].z = -1;
 			D3Unit(&normals[j][i]);
 		}
-		MemSet(&normals[j][i],0,sizeof(CD3));
+		MemSet(&normals[j][i], 0, sizeof(CD3));
 	}
-	for (i=0;i<MAP_WIDTH-1;i++)
-		MemSet(&normals[j][i],0,sizeof(CD3));
+	for (i = 0; i < MAP_WIDTH - 1; i++)
+		MemSet(&normals[j][i], 0, sizeof(CD3));
 }
 
-Bool TestSameSlope(I64 x,I64 y,I64 w,I64 h)
+Bool TestSameSlope(I64 x, I64 y, I64 w, I64 h)
 {
-	CD3 p,*s;
-	I64 k1,k2;
-	if (!(0<=x && x+w<MAP_WIDTH && 0<=y && y+h<MAP_HEIGHT))
+	CD3 p, *s;
+	I64 k1, k2;
+
+	if (!(0 <= x && x + w < MAP_WIDTH && 0 <= y && y + h < MAP_HEIGHT))
 		return FALSE;
-	s=&normals[y][x];
-	for (k2=0;k2<h;k2++)
-		for (k1=0;k1<w;k1++)
-			if (D3NormSqr(D3Sub(&p,&normals[y+k2][x+k1],s))>.10)
+	s = &normals[y][x];
+	for (k2 = 0; k2 < h; k2++)
+		for (k1 = 0; k1 < w; k1++)
+			if (D3NormSqr(D3Sub(&p, &normals[y + k2][x + k1], s)) > .10)
 				return FALSE;
+
 	return TRUE;
 }
 
 U0 MPDoPanels(CTask *task)
 {
-	I64 i,j,l,k1,k2,w,h,threshold,lo,hi;
-	Bool cont;
-	Panel *tmpp,*start_ptr=NULL,*end_ptr=NULL;
-	CD3I32 *poly;
-	Obj *tmpo;
-	lo=Gs->num*(MAP_HEIGHT-1)/mp_count;
-	hi=(Gs->num+1)*(MAP_HEIGHT-1)/mp_count;
-	for (threshold=8;threshold>=1;threshold--)
-		for (j=lo;j<hi;j++) {
-			for (i=0;i<MAP_WIDTH-1;i++) {
-				if (!panels[j][i]) {
-					w=1;
-					h=1;
-					do {
-						cont=FALSE;
-						if (w<PANEL_SIZE_MAX && TestSameSlope(i,j,w+1,h)) {
+	I64		 i, j, l, k1, k2, w, h, threshold, lo, hi;
+	Bool	 cont;
+	Panel	*tmpp, *start_ptr = NULL, *end_ptr = NULL;
+	CD3I32	*poly;
+	Obj		*tmpo;
+
+	lo = Gs->num * (MAP_HEIGHT - 1) / mp_count;
+	hi = (Gs->num + 1) * (MAP_HEIGHT - 1) / mp_count;
+	for (threshold = 8; threshold >= 1; threshold--)
+		for (j = lo; j < hi; j++)
+		{
+			for (i = 0; i < MAP_WIDTH - 1; i++)
+			{
+				if (!panels[j][i])
+				{
+					w = 1;
+					h = 1;
+					do
+					{
+						cont = FALSE;
+						if (w < PANEL_SIZE_MAX && TestSameSlope(i, j, w + 1, h))
+						{
 							w++;
-							cont=TRUE;
+							cont = TRUE;
 						}
-						if (h<PANEL_SIZE_MAX && TestSameSlope(i,j,w,h+1)) {
+						if (h < PANEL_SIZE_MAX && TestSameSlope(i, j, w, h + 1))
+						{
 							h++;
-							cont=TRUE;
+							cont = TRUE;
 						}
-					} while (cont);
-					if (w>=threshold || h>=threshold) {
-						tmpp=CAlloc(sizeof(Panel),task);
+					}
+					while (cont);
+
+					if (w >= threshold || h >= threshold)
+					{
+						tmpp = CAlloc(sizeof(Panel), task);
 						QueueInit(&tmpp->next_obj);
-						l=elevations[j][i];
-						if (l<=WATER_ELEVATION*MAP_SCALE &&
-									elevations[j][i+w-1]<=WATER_ELEVATION*MAP_SCALE &&
-									elevations[j+h-1][i]<=WATER_ELEVATION*MAP_SCALE &&
-									elevations[j+h-1][i+w-1]<=WATER_ELEVATION*MAP_SCALE) {
-							tmpp->color=BLUE;
-							if (Rand<0.05) {
-								tmpo=MAlloc(sizeof(Obj),task);
-								tmpo->p.x=(i+w/2)*MAP_SCALE;
-								tmpo->p.y=(j+h/2)*MAP_SCALE;
-								if (Rand<0.1) {
-									tmpo->fish=FALSE;
-									if (RandI16&1)
-										tmpo->img=landscape_large_imgs[0]; //Boat
+						l = elevations[j][i];
+						if (l									<= WATER_ELEVATION * MAP_SCALE &&
+							elevations[j][i + w - 1]			<= WATER_ELEVATION * MAP_SCALE &&
+							elevations[j + h - 1][i]			<= WATER_ELEVATION * MAP_SCALE &&
+							elevations[j + h - 1][i + w - 1]	<= WATER_ELEVATION * MAP_SCALE)
+						{
+							tmpp->color = BLUE;
+							if (Rand < 0.05)
+							{
+								tmpo = MAlloc(sizeof(Obj), task);
+								tmpo->p.x = (i + w / 2) * MAP_SCALE;
+								tmpo->p.y = (j + h / 2) * MAP_SCALE;
+								if (Rand < 0.1)
+								{
+									tmpo->fish = FALSE;
+									if (RandI16 & 1)
+										tmpo->img = landscape_large_imgs[0]; //Boat
 									else
-										tmpo->img=landscape_large_imgs[1]; //Boat
-									tmpo->p.z=(WATER_ELEVATION+2)*MAP_SCALE;
-								} else {
-									tmpo->fish=TRUE;
-									tmpo->img=$IB,"<1>",BI=1$; //Fish
-									tmpo->p.z=WATER_ELEVATION*MAP_SCALE;
+										tmpo->img = landscape_large_imgs[1]; //Boat
+									tmpo->p.z = (WATER_ELEVATION + 2) * MAP_SCALE;
 								}
-								QueueInsert(tmpo,tmpp->last_obj);
-							}
-						} else {
-							if (l<ROCK_ELEVATION*MAP_SCALE) {
-								if (RandI16&1)
-									tmpp->color=LTGREEN;
 								else
-									tmpp->color=GREEN+LTGREEN<<16+ROPF_DITHER;
-								if (Rand<0.03) {
-									tmpo=MAlloc(sizeof(Obj),task);
-									tmpo->p.x=(i+w/2)*MAP_SCALE;
-									tmpo->p.y=(j+h/2)*MAP_SCALE;
-									tmpo->p.z=l;
-									tmpo->img=landscape_large_imgs[2]; //Tree
-									tmpo->fish=FALSE;
-									QueueInsert(tmpo,tmpp->last_obj);
+								{
+									tmpo->fish	= TRUE;
+									tmpo->img	= $IB,"<1>",BI=1$; //Fish
+									tmpo->p.z	= WATER_ELEVATION * MAP_SCALE;
 								}
-							} else if (l<SNOW_ELEVATION*MAP_SCALE) {
-								if (!(RandU16&3)) {
-									if (RandI16&1)
-										tmpp->color=LTGRAY;
-									else
-										tmpp->color=DKGRAY+LTGRAY<<16+ROPF_DITHER;
-								} else {
-									if (RandI16&1)
-										tmpp->color=LTGREEN;
-									else
-										tmpp->color=GREEN+LTGREEN<<16+ROPF_DITHER;
+								QueueInsert(tmpo, tmpp->last_obj);
+							}
+						}
+						else
+						{
+							if (l < ROCK_ELEVATION * MAP_SCALE)
+							{
+								if (RandI16 & 1)
+									tmpp->color = LTGREEN;
+								else
+									tmpp->color = GREEN + LTGREEN << 16 + ROPF_DITHER;
+								if (Rand < 0.03)
+								{
+									tmpo = MAlloc(sizeof(Obj),task);
+									tmpo->p.x  = (i + w / 2) * MAP_SCALE;
+									tmpo->p.y  = (j + h / 2) * MAP_SCALE;
+									tmpo->p.z  = l;
+									tmpo->img  = landscape_large_imgs[2]; //Tree
+									tmpo->fish = FALSE;
+									QueueInsert(tmpo, tmpp->last_obj);
 								}
-							} else {
-								if (!(RandU16&3)) {
-									if (RandI16&1)
-										tmpp->color=WHITE;
+							}
+							else if (l < SNOW_ELEVATION * MAP_SCALE)
+							{
+								if (!(RandU16 & 3))
+								{
+									if (RandI16 & 1)
+										tmpp->color = LTGRAY;
 									else
-										tmpp->color=LTGRAY;
-								} else {
-									if (RandI16&1)
-										tmpp->color=LTGRAY+WHITE<<16+ROPF_DITHER;
+										tmpp->color = DKGRAY + LTGRAY << 16 + ROPF_DITHER;
+								}
+								else
+								{
+									if (RandI16 & 1)
+										tmpp->color = LTGREEN;
 									else
-										tmpp->color=DKGRAY+LTGRAY<<16+ROPF_DITHER;
+										tmpp->color = GREEN + LTGREEN << 16 + ROPF_DITHER;
+								}
+							}
+							else
+							{
+								if (!(RandU16 & 3))
+								{
+									if (RandI16 & 1)
+										tmpp->color = WHITE;
+									else
+										tmpp->color = LTGRAY;
+								}
+								else
+								{
+									if (RandI16 & 1)
+										tmpp->color = LTGRAY + WHITE << 16 + ROPF_DITHER;
+									else
+										tmpp->color = DKGRAY + LTGRAY << 16 + ROPF_DITHER;
 								}
 							}
 						}
-						tmpp->num_sides=4;
-						poly=tmpp->pts=MAlloc(sizeof(CD3I32)*tmpp->num_sides,task);
-						poly[0].x=MAP_SCALE*i;
-						poly[0].y=MAP_SCALE*j;
-						poly[0].z=elevations[j][i];
-						poly[1].x=MAP_SCALE*(i+w);
-						poly[1].y=MAP_SCALE*j;
-						poly[1].z=elevations[j][i+w];
-						poly[2].x=MAP_SCALE*(i+w);
-						poly[2].y=MAP_SCALE*(j+h);
-						poly[2].z=elevations[j+h][i+w];
-						poly[3].x=MAP_SCALE*i;
-						poly[3].y=MAP_SCALE*(j+h);
-						poly[3].z=elevations[j+h][i];
-						tmpp->next=start_ptr;
-						start_ptr=tmpp;
+						tmpp->num_sides = 4;
+						poly = tmpp->pts = MAlloc(sizeof(CD3I32) * tmpp->num_sides, task);
+						poly[0].x = MAP_SCALE * i;
+						poly[0].y = MAP_SCALE * j;
+						poly[0].z = elevations[j][i];
+						poly[1].x = MAP_SCALE * (i + w);
+						poly[1].y = MAP_SCALE * j;
+						poly[1].z = elevations[j][i + w];
+						poly[2].x = MAP_SCALE * (i + w);
+						poly[2].y = MAP_SCALE * (j + h);
+						poly[2].z = elevations[j + h][i + w];
+						poly[3].x = MAP_SCALE * i;
+						poly[3].y = MAP_SCALE * (j + h);
+						poly[3].z = elevations[j + h][i];
+						tmpp->next = start_ptr;
+						start_ptr = tmpp;
 						if (!end_ptr)
-							end_ptr=tmpp;
-						for (k2=0;k2<h;k2++)
-							for (k1=0;k1<w;k1++)
-								panels[j+k2][i+k1]=tmpp;
+							end_ptr = tmpp;
+						for (k2 = 0; k2 < h; k2++)
+							for (k1 = 0; k1 < w; k1++)
+								panels[j + k2][i + k1] = tmpp;
 					}
 				}
 			}
 		}
-	if (end_ptr) {
-		while (LBts(&critical_section_flag,0))
+	if (end_ptr)
+	{
+		while (LBts(&critical_section_flag, 0))
 			Yield;
 		if (end_ptr)
-			end_ptr->next=panel_head;
-		panel_head=start_ptr;
-		LBtr(&critical_section_flag,0);
+			end_ptr->next = panel_head;
+		panel_head = start_ptr;
+		LBtr(&critical_section_flag, 0);
 	}
-	LBtr(&mp.init_not_done_flags,Gs->num);
+	LBtr(&mp.init_not_done_flags, Gs->num);
 }
 
 U0 InitElevations()
 {
-	I64 i,j,l,x,y,xx,yy,x1,y1,x2,y2;
-	MemSet(elevations,0,sizeof(elevations));
-	for (i=0;i<MAP_WIDTH*MAP_HEIGHT/128;i++) {
-		x=RandU32%MAP_WIDTH;
-		y=RandU32%MAP_HEIGHT;
-		j=1<<(RandU32%6);
-		l=0;
-		while (j--) {
-			if (!l && RandU16<U16_MAX/4)
-				l=RandU16%(j+1);
-			if (l) {
-				x1=ClampI64(x-j,0,MAP_WIDTH-1);
-				x2=ClampI64(x+j,0,MAP_WIDTH-1);
-				y1=ClampI64(y-j,0,MAP_HEIGHT-1);
-				y2=ClampI64(y+j,0,MAP_HEIGHT-1);
-				for (yy=y1;yy<y2;yy++)
-					for (xx=x1;xx<x2;xx++)
-						elevations[yy][xx]+=MAP_SCALE/2;
+	I64 i, j, l, x, y, xx, yy, x1, y1, x2, y2;
+
+	MemSet(elevations, 0, sizeof(elevations));
+	for (i = 0; i < MAP_WIDTH * MAP_HEIGHT / 128; i++)
+	{
+		x = RandU32 % MAP_WIDTH;
+		y = RandU32 % MAP_HEIGHT;
+		j = 1 << (RandU32 % 6);
+		l = 0;
+		while (j--)
+		{
+			if (!l && RandU16 < U16_MAX / 4)
+				l = RandU16 % (j + 1);
+			if (l)
+			{
+				x1 = ClampI64(x - j, 0, MAP_WIDTH  - 1);
+				x2 = ClampI64(x + j, 0, MAP_WIDTH  - 1);
+				y1 = ClampI64(y - j, 0, MAP_HEIGHT - 1);
+				y2 = ClampI64(y + j, 0, MAP_HEIGHT - 1);
+				for (yy = y1; yy < y2; yy++)
+					for (xx = x1; xx < x2; xx++)
+						elevations[yy][xx] += MAP_SCALE / 2;
 				l--;
 			}
 		}
 	}
 
-	for (j=0;j<MAP_HEIGHT;j++)
-		for (i=0;i<MAP_WIDTH;i++)
-			if (elevations[j][i]<WATER_ELEVATION*MAP_SCALE)
-				elevations[j][i]=WATER_ELEVATION*MAP_SCALE;
+	for (j = 0; j < MAP_HEIGHT; j++)
+		for (i = 0; i < MAP_WIDTH; i++)
+			if (elevations[j][i] < WATER_ELEVATION * MAP_SCALE)
+				elevations[j][i] = WATER_ELEVATION * MAP_SCALE;
 }
 
 U0 InitMap()
@@ -434,21 +491,22 @@ and convert it to panels. "panels[][]" holds the panels
 for each spot.
 */
 	I64 i;
+
 	InitElevations;
-	MemSet(panels,0,sizeof(panels));
+	MemSet(panels, 0, sizeof(panels));
 	CalcNormals;
-	panel_head=NULL;
-	mp.init_not_done_flags=1<<mp_count-1;
-	for (i=0;i<mp_count;i++)
-		Spawn(&MPDoPanels,Fs,"Do Panels",i);
+	panel_head = NULL;
+	mp.init_not_done_flags = 1 << mp_count - 1;
+	for (i = 0; i < mp_count; i++)
+		Spawn(&MPDoPanels, Fs, "Do Panels", i);
 	while (mp.init_not_done_flags)
 		Sleep(1);
 }
 
 F64 claws_down;
 
-#define HAND_X	(1.0-claws_down)*(0.3*w)+claws_down*(0.4*w)
-#define HAND_Y	(1.0-claws_down)*(h-125)+claws_down*h
+#define HAND_X	(1.0 - claws_down) * (0.3 * w) + claws_down * (0.4 * w)
+#define HAND_Y	(1.0 - claws_down) * (h - 125) + claws_down * h
 
 
 
@@ -458,56 +516,54 @@ $SP,"<8>",BI=8$
 
 
 
-U0 ClawDraw(CDC *dc,I64 x1,I64 y1,I64 x2,I64 y2,I64 w,I64 segments,Bool talon)
+U0 ClawDraw(CDC *dc, I64 x1, I64 y1, I64 x2, I64 y2, I64 w, I64 segments, Bool talon)
 {
-	I64 i,j;
-	for (i=0,j=segments;i<segments;i++,j--) {
-		dc->thick=w;
-		dc->color=BLACK;
-		GrLine3(dc,
-				j*x1/segments+i*x2/segments,
-				j*y1/segments+i*y2/segments,0,
-				(j-1)*x1/segments+(i+1)*x2/segments,
-				(j-1)*y1/segments+(i+1)*y2/segments,0);
-		dc->thick=w-2;
-		dc->color=YELLOW;
-		GrLine3(dc,
-				j*x1/segments+i*x2/segments,
-				j*y1/segments+i*y2/segments,0,
-				(j-1)*x1/segments+(i+1)*x2/segments,
-				(j-1)*y1/segments+(i+1)*y2/segments,0);
+	I64 i, j;
+
+	for (i = 0, j = segments; i < segments; i++,j--)
+	{
+		dc->thick = w;
+		dc->color = BLACK;
+		GrLine3(dc, j * x1 / segments + i * x2 / segments, j * y1 / segments + i * y2 / segments, 0,
+				(j - 1) * x1 / segments + (i + 1) * x2 / segments, (j - 1) * y1 / segments + (i + 1) * y2 / segments, 0);
+		dc->thick = w - 2;
+		dc->color = YELLOW;
+		GrLine3(dc, j * x1 / segments + i * x2 / segments, j * y1 / segments + i * y2 / segments, 0,
+				(j - 1) * x1 / segments + (i + 1) * x2 / segments, (j - 1) * y1 / segments + (i + 1) * y2 / segments, 0);
 	}
-	if (talon) {
-		if (y1<y2)
-			Sprite3B(dc,x1,y1,0,$IB,"<7>",BI=7$);
+	if (talon)
+	{
+		if (y1 < y2)
+			Sprite3B(dc, x1, y1, 0, $IB,"<7>",BI=7$);
 		else
-			Sprite3B(dc,x1,y1,0,$IB,"<8>",BI=8$);
+			Sprite3B(dc, x1, y1, 0, $IB,"<8>",BI=8$);
 	}
 }
 
-U0 ClawsDraw(CTask *task,CDC *dc)
+U0 ClawsDraw(CTask *task, CDC *dc)
 {
-	F64 claws_up=1.0-claws_down;
-	I64 w=task->pix_width,h=task->pix_height;
-	dc->flags|=DCF_SYMMETRY;
-	DCSymmetrySet(dc,w>>1,0,w>>1,1);
+	F64 claws_up = 1.0 - claws_down;
+	I64 w = task->pix_width, h = task->pix_height;
 
-	ClawDraw(dc,HAND_X-30,HAND_Y-50*claws_up,HAND_X-5,HAND_Y, 		22,4,TRUE);
-	ClawDraw(dc,HAND_X-10,HAND_Y-60*claws_up,HAND_X,HAND_Y, 			22,4,TRUE);
-	ClawDraw(dc,HAND_X+10,HAND_Y-60*claws_up,HAND_X,HAND_Y, 			22,4,TRUE);
-	ClawDraw(dc,HAND_X+30,HAND_Y-50*claws_up,HAND_X+5,HAND_Y, 		22,4,TRUE);
-	ClawDraw(dc,HAND_X+25,HAND_Y+40*claws_up,HAND_X+5,HAND_Y, 		22,4,TRUE);
+	dc->flags |= DCF_SYMMETRY;
+	DCSymmetrySet(dc, w >> 1, 0, w >> 1, 1);
 
-	ClawDraw(dc,HAND_X,HAND_Y,6*w/20,h,38,5,FALSE);
+	ClawDraw(dc, HAND_X - 30, HAND_Y - 50 * claws_up, HAND_X - 5, HAND_Y, 22, 4, TRUE);
+	ClawDraw(dc, HAND_X - 10, HAND_Y - 60 * claws_up, HAND_X,	  HAND_Y, 22, 4, TRUE);
+	ClawDraw(dc, HAND_X + 10, HAND_Y - 60 * claws_up, HAND_X,	  HAND_Y, 22, 4, TRUE);
+	ClawDraw(dc, HAND_X + 30, HAND_Y - 50 * claws_up, HAND_X + 5, HAND_Y, 22, 4, TRUE);
+	ClawDraw(dc, HAND_X + 25, HAND_Y + 40 * claws_up, HAND_X + 5, HAND_Y, 22, 4, TRUE);
+
+	ClawDraw(dc, HAND_X, HAND_Y, 6 * w / 20, h, 38, 5, FALSE);
 }
 
 CDC *main_dc;
-U0 DrawIt(CTask *task,CDC *dc)
+U0 DrawIt(CTask *task, CDC *dc)
 {
-	main_dc->flags|=DCF_NO_TRANSPARENTS;
-	GrBlot(dc,0,0,main_dc);
+	main_dc->flags |= DCF_NO_TRANSPARENTS;
+	GrBlot(dc, 0, 0, main_dc);
 	if (claws_down)
-		ClawsDraw(task,dc);
+		ClawsDraw(task, dc);
 }
 
 /*
@@ -572,25 +628,25 @@ so we get some glitches.
 
 I64 update_jiffy_limit;
 
-U0 MPDrawIt(CTask *task,CDC *dc)
+U0 MPDrawIt(CTask *task, CDC *dc)
 {
-	I64 j,update=winmgr.updates&65535,strip_width,*s2w,x1,y1,z1,xx,yy,
-				xh,yh,zh,yh2,xh2,x1h,y1h,x1wa,y1wa,x1wb,y1wb,x3,y3,z3,dd,dd_old,
-				cx=task->pix_width>>1,cy=task->pix_height>>1,r[16],*elems1,*elems_hard;
-	Panel reg *tmpp;
-	Bird	*tmpb;
-	Obj 	*tmpo;
-	Bool	w_on_map,h_on_map;
+	I64 		j, update = winmgr.updates & 65535, strip_width, *s2w, x1, y1, z1, xx, yy,
+				xh, yh, zh, yh2, xh2, x1h, y1h, x1wa, y1wa, x1wb, y1wb, x3, y3, z3, dd, dd_old,
+				cx = task->pix_width >> 1, cy = task->pix_height >> 1, r[16], *elems1, *elems_hard;
+	Panel   reg *tmpp;
+	Bird		*tmpb;
+	Obj 		*tmpo;
+	Bool		w_on_map, h_on_map;
 
-	xx=x/(MAP_SCALE*COORDINATE_SCALE);
-	yy=y/(MAP_SCALE*COORDINATE_SCALE);
+	xx = x / (MAP_SCALE * COORDINATE_SCALE);
+	yy = y / (MAP_SCALE * COORDINATE_SCALE);
 
 	//World to screen coordinates
 	Mat4x4IdentEqu(dc->r);
-	Mat4x4RotZ(dc->r,heading);
-	Mat4x4RotX(dc->r,è);
-	Mat4x4RotZ(dc->r,roll);
-	DCMat4x4Set(dc,dc->r);
+	Mat4x4RotZ(dc->r, heading);
+	Mat4x4RotX(dc->r, è);
+	Mat4x4RotZ(dc->r, roll);
+	DCMat4x4Set(dc, dc->r);
 
 	//Screen to world coordinates
 
@@ -599,444 +655,512 @@ U0 MPDrawIt(CTask *task,CDC *dc)
 	//and use the reciprocal slope principle
 	//y=mx+b and y=(-1/m)x+b are perpendicular.
 
-	s2w=Mat4x4IdentNew;
-	Mat4x4RotZ(s2w,-roll);
-	Mat4x4RotX(s2w,-è);
-	Mat4x4RotZ(s2w,-heading);
+	s2w = Mat4x4IdentNew;
+	Mat4x4RotZ(s2w, -roll);
+	Mat4x4RotX(s2w, -è);
+	Mat4x4RotZ(s2w, -heading);
 
-	xh=0;
-	yh=0;
-	zh=-256;
-	Mat4x4MulXYZ(s2w,&xh,&yh,&zh);
+	xh = 0;
+	yh = 0;
+	zh = -256;
+	Mat4x4MulXYZ(s2w, &xh, &yh, &zh);
 
 	//The layer for core1 is not cleared automatically
 	//it is persistent.  I have carefully syncronized to the update
 	//cycle initiated by Core0 to prevent flicker.
 
-	dc->flags|=DCF_TRANSFORMATION;
-	dc->transform=&EDTransform;
-	dc->x=cx;
-	dc->y=cy;
+	dc->flags |= DCF_TRANSFORMATION;
+	dc->transform = &EDTransform;
+	dc->x = cx;
+	dc->y = cy;
 
 	//dc->x and the translation part of dc->r are ident in effect,
 	//but we use both to show-off.				We could add offsets together and
 	//use one or the other.
 
-	x1=-x>>COORDINATE_BITS;
-	y1=-y>>COORDINATE_BITS;
-	z1=-z>>COORDINATE_BITS;
-	Mat4x4MulXYZ(dc->r,&x1,&y1,&z1);
-	Mat4x4TranslationEqu(dc->r,x1,y1,z1);
+	x1 = -x >> COORDINATE_BITS;
+	y1 = -y >> COORDINATE_BITS;
+	z1 = -z >> COORDINATE_BITS;
+	Mat4x4MulXYZ(dc->r, &x1, &y1, &z1);
+	Mat4x4TranslationEqu(dc->r, x1, y1, z1);
 
 	//This is a refinement.
-	if (Abs(è*180/ã)>90) {
-		x3=0;
-		y3=-cy;
-		z3=0;
-		Mat4x4MulXYZ(s2w,&x3,&y3,&z3);
-		xx+=x3;
-		yy+=y3;
+	if (Abs(è * 180 / ã) > 90)
+	{
+		x3 = 0;
+		y3 = -cy;
+		z3 = 0;
+		Mat4x4MulXYZ(s2w, &x3, &y3, &z3);
+		xx += x3;
+		yy += y3;
 	}
 
-	if (Gs->num&1) {//alt left-right,right-left
-		yh2=-yh;
-		xh2=-xh;
-	} else {
-		yh2=yh;
-		xh2=xh;
+	if (Gs->num & 1) {//alt left-right,right-left
+		yh2 = -yh;
+		xh2 = -xh;
+	}
+	else
+	{
+		yh2 = yh;
+		xh2 = xh;
 	}
 
 	//Calc starting point.
-	x1wa=xx<<8+xh*strip_height>>1/1.3*(Gs->num+1.15);
-	y1wa=yy<<8+yh*strip_height>>1/1.3*(Gs->num+1.15);
-	x1wb=0;
-	y1wb=0;
+	x1wa = xx << 8 + xh * strip_height >> 1 / 1.3 * (Gs->num + 1.15);
+	y1wa = yy << 8 + yh * strip_height >> 1 / 1.3 * (Gs->num + 1.15);
+	x1wb = 0;
+	y1wb = 0;
 
-	xh=-xh; //Back to front to help with depth.
-	yh=-yh;
+	xh = -xh; //Back to front to help with depth.
+	yh = -yh;
 
 	//Take half steps to cover whole grid.
-	xh>>=1;  yh>>=1;
-	xh2>>=1; yh2>>=1;
-	w_on_map=FALSE;
-	dd_old=I64_MAX;
-	for (strip_width=0;counts.jiffies<update_jiffy_limit;strip_width++) {
-		x1h=x1wa;
-		y1h=y1wa;
-		h_on_map=FALSE;
-		for (j=0;j<strip_height && counts.jiffies<update_jiffy_limit;j++) {
-			x1=x1h>>8; y1=y1h>>8;
-			if (0<=x1<MAP_WIDTH && 0<=y1<MAP_HEIGHT) {
-				if ((tmpp=panels[y1][x1]) && tmpp->update!=update) {
-					tmpp->update=update;
-					if (tmpp->count>8*(1.1-Gs->idle_factor)) {
-						dc->color=tmpp->color;
-						tmpp->count=GrFillPoly3(dc,tmpp->num_sides,tmpp->pts);
-					} else
+	xh  >>= 1;
+	yh  >>= 1;
+	xh2 >>= 1;
+	yh2 >>= 1;
+	w_on_map = FALSE;
+	dd_old = I64_MAX;
+	for (strip_width = 0; counts.jiffies < update_jiffy_limit; strip_width++)
+	{
+		x1h = x1wa;
+		y1h = y1wa;
+		h_on_map = FALSE;
+		for (j = 0; j < strip_height && counts.jiffies < update_jiffy_limit; j++)
+		{
+			x1 = x1h >> 8;
+			y1 = y1h >> 8;
+			if (0 <= x1 < MAP_WIDTH && 0 <= y1 < MAP_HEIGHT)
+			{
+				if ((tmpp = panels[y1][x1]) && tmpp->update != update)
+				{
+					tmpp->update = update;
+					if (tmpp->count > 8 * (1.1 - Gs->idle_factor))
+					{
+						dc->color = tmpp->color;
+						tmpp->count = GrFillPoly3(dc, tmpp->num_sides, tmpp->pts);
+					}
+					else
 						tmpp->count++;
-					tmpo=tmpp->next_obj;
-					while (tmpo!=&tmpp->next_obj) {
-						Sprite3(dc,tmpo->p.x,tmpo->p.y,tmpo->p.z,tmpo->img);
-						tmpo=tmpo->next;
+					tmpo = tmpp->next_obj;
+					while (tmpo != &tmpp->next_obj)
+					{
+						Sprite3(dc, tmpo->p.x, tmpo->p.y, tmpo->p.z, tmpo->img);
+						tmpo = tmpo->next;
 					}
 				}
-				h_on_map=TRUE;
-			} else if (h_on_map)
+				h_on_map = TRUE;
+			}
+			else if (h_on_map)
 				break;
-			x1h+=xh;
-			y1h+=yh;
+			x1h += xh;
+			y1h += yh;
 		}
 		if (h_on_map)
-			w_on_map=TRUE;
-		else if (w_on_map) {
-			strip_width=I64_MAX;
+			w_on_map = TRUE;
+		else if (w_on_map)
+		{
+			strip_width = I64_MAX;
 			break;
 		}
-		x1wb-=yh2;
-		y1wb+=xh2;
-		if (strip_width&1) {
-			x1wa-=x1wb;
-			y1wa-=y1wb;
-		} else {
-			x1wa+=x1wb;
-			y1wa+=y1wb;
+		x1wb -= yh2;
+		y1wb += xh2;
+		if (strip_width & 1)
+		{
+			x1wa -= x1wb;
+			y1wa -= y1wb;
 		}
-		if (!w_on_map) {
-			dd=SqrI64(x1wa>>8-MAP_WIDTH>>1)+SqrI64(y1wa>>8-MAP_HEIGHT>>1);
-			if (dd>dd_old)
+		else
+		{
+			x1wa += x1wb;
+			y1wa += y1wb;
+		}
+		if (!w_on_map)
+		{
+			dd = SqrI64(x1wa >> 8 - MAP_WIDTH >> 1) + SqrI64(y1wa >> 8 - MAP_HEIGHT >> 1);
+			if (dd > dd_old)
 				break;
-			dd_old=dd;
+			dd_old = dd;
 		}
 	}
 
-	tmpb=b_head[Gs->num].next;
-	while (tmpb!=&b_head[Gs->num]) {
-		elems1=SpriteInterpolate(Tri(tS,0.2),$IB,"<2>",BI=2$,$IB,"<3>",BI=3$);
+	tmpb = b_head[Gs->num].next;
+	while (tmpb != &b_head[Gs->num])
+	{
+		elems1 = SpriteInterpolate(Tri(tS, 0.2), $IB,"<2>",BI=2$, $IB,"<3>",BI=3$);
 
 		Mat4x4IdentEqu(r);
-		Mat4x4RotZ(r,tmpb->é);
-		elems_hard=SpriteTransform(elems1,r);
+		Mat4x4RotZ(r, tmpb->é);
+		elems_hard = SpriteTransform(elems1, r);
 
-		Sprite3(dc,tmpb->p.x,tmpb->p.y,tmpb->p.z,elems_hard);
+		Sprite3(dc, tmpb->p.x, tmpb->p.y, tmpb->p.z, elems_hard);
 		Free(elems_hard);
 		Free(elems1);
 
-		tmpb=tmpb->next;
+		tmpb = tmpb->next;
 	}
 
 	Free(s2w);
-	mp.strip_width[Gs->num]=strip_width;
-	LBtr(&mp.update_not_done_flags,Gs->num);
+	mp.strip_width[Gs->num] = strip_width;
+	LBtr(&mp.update_not_done_flags, Gs->num);
 }
 
 U0 CoreAPTalonsTask(CTask *master_task)
 {
-	CDC *dc=DCAlias(main_dc,master_task);
-	while (!mp.app_done) {
-		while (!Bt(&mp.update_not_done_flags,Gs->num) && !mp.app_done)
+	CDC *dc = DCAlias(main_dc, master_task);
+
+	while (!mp.app_done)
+	{
+		while (!Bt(&mp.update_not_done_flags, Gs->num) && !mp.app_done)
 			Sleep(1);
 		if (!mp.app_done)
-			MPDrawIt(master_task,dc);
+			MPDrawIt(master_task, dc);
 	}
 
 	//We made an alias of this we don't want freed.
-	dc->depth_buf=NULL;
+	dc->depth_buf = NULL;
 
 	DCDel(dc);
-	LBtr(&mp.app_not_done_flags,Gs->num);
+	LBtr(&mp.app_not_done_flags, Gs->num);
 }
 
 U0 DrawHorizon(CDC *dc)
 {
-	I64 x1,y1,z1,x2,y2,z2,xh,yh,zh,*s2w=Mat4x4IdentNew,
-				cx=Fs->pix_width>>1,
-				cy=Fs->pix_height>>1;
-	CD3I32 p[4];
-	I32 *old_db=dc->depth_buf;
-	dc->depth_buf=NULL;
-	CColorROPU32 ground_color;
+	I64				 x1, y1, z1, x2, y2, z2, xh, yh, zh, *s2w = Mat4x4IdentNew,
+					 cx = Fs->pix_width  >> 1,
+					 cy = Fs->pix_height >> 1;
+	CD3I32			 p[4];
+	I32				*old_db = dc->depth_buf;
+	dc->depth_buf = NULL;
+	CColorROPU32	 ground_color;
 
 	if (game_tf && fish_left)
-		DCFill(dc,BLACK);
-	else if (-ã/4<=Wrap(è-ã)<ã/4)
-		DCFill(dc,LTCYAN);
-	else {
-		if (z/COORDINATE_SCALE<(WATER_ELEVATION+3)*MAP_SCALE)
-			ground_color=BLUE;
+		DCFill(dc, BLACK);
+	else if (-ã / 4 <= Wrap(è - ã) < ã / 4)
+		DCFill(dc, LTCYAN);
+	else
+	{
+		if (z / COORDINATE_SCALE < (WATER_ELEVATION + 3) * MAP_SCALE)
+			ground_color = BLUE;
 		else
-			ground_color=LTGREEN;
+			ground_color = LTGREEN;
 
 		Mat4x4IdentEqu(dc->r);
-		Mat4x4RotZ(dc->r,heading);
-		Mat4x4RotX(dc->r,è);
-		Mat4x4RotZ(dc->r,roll);
+		Mat4x4RotZ(dc->r, heading);
+		Mat4x4RotX(dc->r, è);
+		Mat4x4RotZ(dc->r, roll);
 
-		DCMat4x4Set(dc,dc->r);
-		dc->flags&=~DCF_TRANSFORMATION;
-		dc->transform=&EDTransform;
-		dc->x=cx;
-		dc->y=cy;
+		DCMat4x4Set(dc, dc->r);
+		dc->flags &= ~DCF_TRANSFORMATION;
+		dc->transform = &EDTransform;
+		dc->x = cx;
+		dc->y = cy;
 
-		Mat4x4RotZ(s2w,-roll);
-		Mat4x4RotX(s2w,-è);
-		Mat4x4RotZ(s2w,-heading);
+		Mat4x4RotZ(s2w, -roll);
+		Mat4x4RotX(s2w, -è);
+		Mat4x4RotZ(s2w, -heading);
 
-		xh=0;
-		yh=0;
-		zh=-256;
-		Mat4x4MulXYZ(s2w,&xh,&yh,&zh);
+		xh = 0;
+		yh = 0;
+		zh = -256;
+		Mat4x4MulXYZ(s2w, &xh, &yh, &zh);
 		Free(s2w);
 
-		x1=xh+yh*32; y1=yh-xh*32; z1=0;
-		(*dc->transform)(dc,&x1,&y1,&z1);
-		x2=xh-yh*32; y2=yh+xh*32; z2=0;
-		(*dc->transform)(dc,&x2,&y2,&z2);
-		DCClipLine(dc,&x1,&y1,&x2,&y2);
+		x1 = xh + yh * 32;
+		y1 = yh - xh * 32;
+		z1 = 0;
+		(*dc->transform)(dc, &x1, &y1, &z1);
+		x2 = xh - yh * 32;
+		y2 = yh + xh * 32;
+		z2 = 0;
+		(*dc->transform)(dc, &x2, &y2, &z2);
+		DCClipLine(dc, &x1, &y1, &x2, &y2);
 
-		MemSet(p,0,sizeof(p));
-		if (x2<x1) {
-			SwapI64(&x1,&x2);
-			SwapI64(&y1,&y2);
+		MemSet(p, 0, sizeof(p));
+		if (x2 < x1)
+		{
+			SwapI64(&x1, &x2);
+			SwapI64(&y1, &y2);
 		}
-		if (!x1 && x2==dc->width-1) {
-			p[0].x=0;
-			p[0].y=0;
-			p[1].x=dc->width-1;
-			p[1].y=0;
-			p[2].x=dc->width-1;
-			p[2].y=y2;
-			p[3].x=0;
-			p[3].y=y1;
+		if (!x1 && x2 == dc->width - 1)
+		{
+			p[0].x = 0;
+			p[0].y = 0;
+			p[1].x = dc->width - 1;
+			p[1].y = 0;
+			p[2].x = dc->width - 1;
+			p[2].y = y2;
+			p[3].x = 0;
+			p[3].y = y1;
 			if (rolled_over)
-				dc->color=ground_color;
+				dc->color = ground_color;
 			else
-				dc->color=LTCYAN;
-			GrFillPoly3(dc,4,p);
-			p[0].y=dc->height-1;
-			p[1].y=dc->height-1;
+				dc->color = LTCYAN;
+			GrFillPoly3(dc, 4, p);
+			p[0].y = dc->height - 1;
+			p[1].y = dc->height - 1;
 			if (rolled_over)
-				dc->color=LTCYAN;
+				dc->color = LTCYAN;
 			else
-				dc->color=ground_color;
-			GrFillPoly3(dc,4,p);
-		} else {
-			if (y2<y1) {
-				SwapI64(&x1,&x2);
-				SwapI64(&y1,&y2);
+				dc->color = ground_color;
+			GrFillPoly3(dc, 4, p);
+		}
+		else
+		{
+			if (y2 < y1)
+			{
+				SwapI64(&x1, &x2);
+				SwapI64(&y1, &y2);
 			}
-			if (!y1 && y2==dc->height-1) {
-				p[0].x=0;
-				p[0].y=0;
-				p[1].x=0;
-				p[1].y=dc->height-1;
-				p[2].x=x2;
-				p[2].y=dc->height-1;
-				p[3].x=x1;
-				p[3].y=0;
-				if (x1<x2 ^^ rolled_over)
-					dc->color=ground_color;
+			if (!y1 && y2 == dc->height - 1)
+			{
+				p[0].x = 0;
+				p[0].y = 0;
+				p[1].x = 0;
+				p[1].y = dc->height - 1;
+				p[2].x = x2;
+				p[2].y = dc->height - 1;
+				p[3].x = x1;
+				p[3].y = 0;
+				if (x1 < x2 ^^ rolled_over)
+					dc->color = ground_color;
 				else
-					dc->color=LTCYAN;
-				GrFillPoly3(dc,4,p);
-				p[0].x=dc->width-1;
-				p[1].x=dc->width-1;
-				if (x1<x2 ^^ rolled_over)
-					dc->color=LTCYAN;
+					dc->color = LTCYAN;
+				GrFillPoly3(dc, 4, p);
+				p[0].x = dc->width - 1;
+				p[1].x = dc->width - 1;
+				if (x1 < x2 ^^ rolled_over)
+					dc->color = LTCYAN;
 				else
-					dc->color=ground_color;
-				GrFillPoly3(dc,4,p);
-			} else
-				DCFill(dc,LTCYAN); //Not correct.
+					dc->color = ground_color;
+				GrFillPoly3(dc, 4, p);
+			}
+			else
+				DCFill(dc, LTCYAN); //Not correct.
 		}
 	}
 
-	dc->depth_buf=old_db;
+	dc->depth_buf = old_db;
 }
 
 U0 Core0Talons()
 {
-	CDC *dc=DCAlias(main_dc,Fs);
-	I64 i,xx,yy,elev,height,cx=Fs->pix_width>>1,cy=Fs->pix_height>>1;
-	F64 min_strip_width,tt;
+	CDC *dc = DCAlias(main_dc,Fs);
+	I64  i, xx, yy, elev, height, cx = Fs->pix_width >> 1, cy = Fs->pix_height >> 1;
+	F64  min_strip_width, tt;
 
-	update_jiffy_limit=counts.jiffies+JIFFY_FREQ/40;
+	update_jiffy_limit = counts.jiffies + JIFFY_FREQ / 40;
 
-	xx=x/(MAP_SCALE*COORDINATE_SCALE);
-	yy=y/(MAP_SCALE*COORDINATE_SCALE);
-	if (0<=xx<MAP_WIDTH && 0<=yy<MAP_HEIGHT)
-		elev=elevations[yy][xx];
+	xx = x / (MAP_SCALE * COORDINATE_SCALE);
+	yy = y / (MAP_SCALE * COORDINATE_SCALE);
+	if (0 <= xx < MAP_WIDTH && 0 <= yy < MAP_HEIGHT)
+		elev = elevations[yy][xx];
 	else
-		elev=I64_MAX;
+		elev = I64_MAX;
 
-	height=z/COORDINATE_SCALE-elev;
-	if (height<0 && elev>WATER_ELEVATION*MAP_SCALE && !game_tf) {
-		music.mute=TRUE;
+	height = z / COORDINATE_SCALE - elev;
+	if (height < 0 && elev > WATER_ELEVATION * MAP_SCALE && !game_tf)
+	{
+		music.mute = TRUE;
 		Beep;
-		game_tf=tS;
-		music.mute=FALSE;
+		game_tf = tS;
+		music.mute = FALSE;
 	}
 
 	DrawHorizon(dc);
 
-	if (game_tf) {
-		tt=game_tf-game_t0;
-		if (Blink) {
-			dc->color=RED;
-			GrPrint(dc,(Fs->pix_width-9*FONT_WIDTH)/2,
-						(Fs->pix_height-FONT_HEIGHT)/2,"Game Over");
+	if (game_tf)
+	{
+		tt = game_tf - game_t0;
+		if (Blink)
+		{
+			dc->color = RED;
+			GrPrint(dc, (Fs->pix_width - 9 * FONT_WIDTH) / 2, (Fs->pix_height - FONT_HEIGHT) / 2, "Game Over");
 		}
-	} else {
+	}
+	else
+	{
 		DCDepthBufReset(dc);
-		mp.update_not_done_flags=1<<mp_count-1;
-		MPDrawIt(Fs,dc);
+		mp.update_not_done_flags = 1 << mp_count - 1;
+		MPDrawIt(Fs, dc);
 		while (mp.update_not_done_flags)
 			Sleep(1);
 
-		min_strip_width=F64_MAX;
-		for (i=0;i<mp_count;i++)
-			min_strip_width=Min(min_strip_width,32.0*mp.strip_width[i]/(i+32.0));
-		strip_height=ClampI64(
-					strip_height*Clamp(0.25*min_strip_width/strip_height,0.9,1.1),
-					64,1024);
+		min_strip_width = F64_MAX;
+		for (i = 0; i < mp_count; i++)
+			min_strip_width = Min(min_strip_width, 32.0 * mp.strip_width[i] / (i + 32.0));
+		strip_height = ClampI64(strip_height * Clamp(0.25 * min_strip_width / strip_height, 0.9, 1.1), 64, 1024);
 
-		tt=tS-game_t0;
-		if (tt<5.0 && Blink) {
-			dc->color=WHITE;
-			GrPrint(dc,(Fs->pix_width-13*FONT_WIDTH)/2,
-						(Fs->pix_height-FONT_HEIGHT)/2-4*FONT_HEIGHT,"Catch 10 Fish");
+		tt = tS - game_t0;
+		if (tt < 5.0 && Blink)
+		{
+			dc->color = WHITE;
+			GrPrint(dc, (Fs->pix_width - 13 * FONT_WIDTH) / 2,
+						(Fs->pix_height - FONT_HEIGHT) / 2 - 4 * FONT_HEIGHT, "Catch 10 Fish");
 		}
 	}
 
-	dc->thick=2;
+	dc->thick = 2;
 	if (game_tf && fish_left)
-		dc->color=WHITE;
+		dc->color = WHITE;
 	else
-		dc->color=BLACK;
-	dc->flags&=~DCF_TRANSFORMATION;
-	GrLine3(dc,cx+5,cy,0,cx-5,cy,0);
-	GrLine3(dc,cx,cy+5,0,cx,cy-5,0);
+		dc->color = BLACK;
+	dc->flags &= ~DCF_TRANSFORMATION;
+	GrLine3(dc, cx + 5, cy, 0, cx - 5, cy, 0);
+	GrLine3(dc, cx, cy + 5, 0, cx, cy - 5, 0);
 	if (invert_pitch)
-		GrPrint(dc,0,0,"Pitch:%5.1f Roll:%5.1f Heading:%5.1f "
-					"Height:%5d [Core Strip:%3d]",
-					pitch*180/ã,Wrap(roll+ã)*180/ã,Wrap(heading+ã,0)*180/ã,
-					height,strip_height);
+		GrPrint(dc, 0, 0,	"Pitch:%5.1f Roll:%5.1f Heading:%5.1f "
+							"Height:%5d [Core Strip:%3d]",
+							pitch * 180 / ã,
+							Wrap(roll + ã) * 180 / ã,
+							Wrap(heading + ã, 0) * 180 / ã,
+							height,
+							strip_height);
 	else
-		GrPrint(dc,0,0,"Pitch:%5.1f Roll:%5.1f Heading:%5.1f "
-					"Height:%5d [Core Strip:%3d]",
-					pitch*180/ã,roll*180/ã,heading*180/ã,height,strip_height);
-	GrPrint(dc,0,FONT_HEIGHT,"Fish Remaining:%d Time:%3.2f Best:%3.2f",
-				fish_left,tt,best_score);
+		GrPrint(dc, 0, 0,	"Pitch:%5.1f Roll:%5.1f Heading:%5.1f "
+							"Height:%5d [Core Strip:%3d]",
+							pitch * 180 / ã,
+							roll * 180 / ã,
+							heading * 180 / ã,
+							height,
+							strip_height);
+	GrPrint(dc, 0, FONT_HEIGHT, "Fish Remaining:%d Time:%3.2f Best:%3.2f", fish_left, tt, best_score);
 
 	//We made an alias of this we don't want freed.
-	dc->depth_buf=NULL;
+	dc->depth_buf = NULL;
 	DCDel(dc);
 	Refresh;
 }
 
 
-Obj *FishFind(I64 x1,I64 y1,I64 *_dd)
+Obj *FishFind(I64 x1, I64 y1, I64 *_dd)
 {
-	I64 dd,best_dd=I64_MAX;
-	Obj *res=NULL,*tmpo;
-	Panel *tmpp=panel_head;
-	while (tmpp) {
-		tmpo=tmpp->next_obj;
-		while (tmpo!=&tmpp->next_obj) {
-			if (tmpo->fish) {
-				dd=SqrI64(tmpo->p.x-x1)+SqrI64(tmpo->p.y-y1);
-				if (dd<best_dd) {
-					best_dd=dd;
-					res=tmpo;
+	I64		 dd, best_dd = I64_MAX;
+	Obj		*res = NULL, *tmpo;
+	Panel	*tmpp = panel_head;
+
+	while (tmpp)
+	{
+		tmpo = tmpp->next_obj;
+		while (tmpo != &tmpp->next_obj)
+		{
+			if (tmpo->fish)
+			{
+				dd = SqrI64(tmpo->p.x - x1) + SqrI64(tmpo->p.y - y1);
+				if (dd < best_dd)
+				{
+					best_dd = dd;
+					res = tmpo;
 				}
 			}
-			tmpo=tmpo->next;
+			tmpo = tmpo->next;
 		}
-		tmpp=tmpp->next;
+		tmpp = tmpp->next;
 	}
-	*_dd=best_dd;
+	*_dd = best_dd;
+
 	return res;
 }
 
-#define ANIMATE_MS			10
+#define ANIMATE_MS	10
 
 U0 AnimateTask(I64)
 {//Steadily moves the airplane forward.
-	I64 i,*s2w,x1,y1,z1,dx,dy,dz,dd;
-	F64 t0=tS,mouse,é,d;
-	Obj *tmpo;
+	I64		 i, *s2w, x1, y1, z1, dx, dy, dz, dd;
+	F64		 t0 = tS,mouse, é, d;
+	Obj		*tmpo;
 	Bird	*tmpb;
-	while (TRUE) {
-		mouse=1000*(tS-t0);
-		t0=tS;
-		if (!game_tf) {
-//Screen to world coordinates
-			s2w=Mat4x4IdentNew;
-			Mat4x4RotZ(s2w,-roll);
-			Mat4x4RotX(s2w,-è);
-			Mat4x4RotZ(s2w,-heading);
 
-			dx=0;dy=0;dz=1<<16;
-			Mat4x4MulXYZ(s2w,&dx,&dy,&dz);
-			x-=speed*mouse*COORDINATE_SCALE*dx/1<<16;
-			y-=speed*mouse*COORDINATE_SCALE*dy/1<<16;
-			z-=speed*mouse*COORDINATE_SCALE*dz/1<<16;
+	while (TRUE)
+	{
+		mouse = 1000 * (tS - t0);
+		t0 = tS;
+		if (!game_tf)
+		{
+			//Screen to world coordinates
+			s2w = Mat4x4IdentNew;
+			Mat4x4RotZ(s2w, -roll);
+			Mat4x4RotX(s2w, -è);
+			Mat4x4RotZ(s2w, -heading);
+
+			dx = 0;
+			dy = 0;
+			dz = 1 << 16;
+			Mat4x4MulXYZ(s2w, &dx, &dy, &dz);
+			x -= speed * mouse * COORDINATE_SCALE * dx / 1 << 16;
+			y -= speed * mouse * COORDINATE_SCALE * dy / 1 << 16;
+			z -= speed * mouse * COORDINATE_SCALE * dz / 1 << 16;
 			Free(s2w);
-			x1=x/COORDINATE_SCALE; y1=y/COORDINATE_SCALE; z1=z/COORDINATE_SCALE;
-			if (z1<(WATER_ELEVATION+3)*MAP_SCALE) {
-				if (z1<WATER_ELEVATION*MAP_SCALE) {
-					z=WATER_ELEVATION*MAP_SCALE*COORDINATE_SCALE;
-					if (invert_pitch) {
-						if (pitch<-ã/8)
-							è+=mouse/1000.0*Sign(3*ã/8-è);
-					} else if (pitch<-ã/8)
-						è+=mouse/1000.0*Sign(-3*ã/8-è);
+			x1 = x / COORDINATE_SCALE;
+			y1 = y / COORDINATE_SCALE;
+			z1 = z / COORDINATE_SCALE;
+			if (z1 < (WATER_ELEVATION + 3) * MAP_SCALE)
+			{
+				if (z1 < WATER_ELEVATION * MAP_SCALE)
+				{
+					z = WATER_ELEVATION * MAP_SCALE * COORDINATE_SCALE;
+					if (invert_pitch)
+					{
+						if (pitch < -ã / 8)
+							è += mouse / 1000.0 * Sign(3 * ã / 8 - è);
+					}
+					else if (pitch < -ã / 8)
+						è += mouse / 1000.0 * Sign(-3 * ã / 8 - è);
 					WrapAngles;
 				}
-				speed=1.0;
-				if (rolled_over || !(tmpo=FishFind(x1,y1,&dd)))
-					claws_down=0;
-				else {
-					d=Sqrt(dd);
-					x1-=tmpo->p.x;
-					y1-=tmpo->p.y;
-					é=ACos((dx*x1+dy*y1)/(d*1<<16));
-					if (é>0 && d<MAP_SCALE*4)
-						claws_down=Saw(d,MAP_SCALE*4);
+				speed = 1.0;
+				if (rolled_over || !(tmpo = FishFind(x1, y1, &dd)))
+					claws_down = 0;
+				else
+				{
+					d = Sqrt(dd);
+					x1 -= tmpo->p.x;
+					y1 -= tmpo->p.y;
+					é = ACos((dx * x1 + dy * y1) / (d * 1 << 16));
+					if (é > 0 && d < MAP_SCALE * 4)
+						claws_down = Saw(d, MAP_SCALE * 4);
 					else
-						claws_down=0.01;
-					if (d<MAP_SCALE*2) {
-						if (!--fish_left) {
-							game_tf=tS;
-							if (game_tf-game_t0<best_score)
-								best_score=game_tf-game_t0;
+						claws_down = 0.01;
+					if (d < MAP_SCALE * 2)
+					{
+						if (!--fish_left)
+						{
+							game_tf = tS;
+							if (game_tf - game_t0 < best_score)
+								best_score = game_tf - game_t0;
 						}
 						QueueRemove(tmpo);
 						Free(tmpo);
-						music.mute=TRUE;
-						Sound(74); Sleep(200); Sound;
-						music.mute=FALSE;
+						music.mute = TRUE;
+						Sound(74);
+						Sleep(200);
+						Sound;
+						music.mute = FALSE;
 					}
 				}
-			} else {
-				claws_down=0;
-				if (-ã/4<=è<=ã/4)
-					speed+=0.0005;
-				else if (-3*ã/4<=è<=3*ã/4)
-					speed+=0.0001;
+			}
+			else
+			{
+				claws_down = 0;
+				if (-ã / 4 <= è <= ã / 4)
+					speed += 0.0005;
+				else if (-3 * ã / 4 <= è <= 3 * ã / 4)
+					speed += 0.0001;
 				else
-					speed-=0.0001;
-				speed=Clamp(speed+(0.0005-0.0002*Abs(è)/(ã/4)),0.1,5.0);
+					speed -= 0.0001;
+				speed = Clamp(speed + (0.0005 - 0.0002 * Abs(è) / (ã / 4)), 0.1, 5.0);
 			}
 
-			for (i=0;i<mp_count;i++) {
-				tmpb=b_head[i].next;
-				while (tmpb!=&b_head[i]) {
-					tmpb->p.x+=10*mouse/1000*MAP_SCALE*Cos(tmpb->é);
-					tmpb->p.y+=10*mouse/1000*MAP_SCALE*Sin(tmpb->é);
-					tmpb->p.z=BIRD_ELEVATION*MAP_SCALE+
-								elevations[tmpb->p.y/MAP_SCALE][tmpb->p.x/MAP_SCALE];
-					tmpb->é+=2*ã*mouse/1000/10;
-					tmpb=tmpb->next;
+			for (i = 0; i < mp_count; i++)
+			{
+				tmpb = b_head[i].next;
+				while (tmpb != &b_head[i])
+				{
+					tmpb->p.x += 10 * mouse / 1000 * MAP_SCALE * Cos(tmpb->é);
+					tmpb->p.y += 10 * mouse / 1000 * MAP_SCALE * Sin(tmpb->é);
+					tmpb->p.z = BIRD_ELEVATION * MAP_SCALE + elevations[tmpb->p.y / MAP_SCALE][tmpb->p.x / MAP_SCALE];
+					tmpb->é += 2 * ã * mouse / 1000 / 10;
+					tmpb = tmpb->next;
 				}
 			}
 		}
@@ -1046,9 +1170,9 @@ U0 AnimateTask(I64)
 
 U0 MPEnd()
 {
-	update_jiffy_limit=0;
-	mp.app_not_done_flags=1<<mp_count-1-1;
-	mp.app_done=TRUE;
+	update_jiffy_limit = 0;
+	mp.app_not_done_flags = 1 << mp_count - 1 - 1;
+	mp.app_done = TRUE;
 //Wait for all cores to exit
 	while (mp.app_not_done_flags)
 		Sleep(1);
@@ -1062,9 +1186,10 @@ U0 TaskEndCB()
 
 U0 SongTask(I64)
 {
-	Fs->task_end_cb=&SoundTaskEndCB;
+	Fs->task_end_cb = &SoundTaskEndCB;
 	MusicSettingsReset;
-	while (TRUE) {
+	while (TRUE)
+	{
 		Play("5eCGFsD4A5e.C4sG5eGDqCDeGsGG4qG");
 		Play("5eCGFsD4A5e.C4sG5eGDqCDeGsGG4qG");
 		Play("5eGECGC4A5FCsC4B5C4B5e.GsG4qGB");
@@ -1074,83 +1199,88 @@ U0 SongTask(I64)
 
 U0 PreInit()
 {
-	I64 i,*r=Mat4x4IdentNew;
-	Mat4x4Scale(r,10.0);
-	for (i=0;i<LS_TYPES;i++)
-		landscape_large_imgs[i]=SpriteTransform(landscape_small_imgs[i],r);
+	I64 i, *r = Mat4x4IdentNew;
+
+	Mat4x4Scale(r, 10.0);
+	for (i = 0; i < LS_TYPES; i++)
+		landscape_large_imgs[i] = SpriteTransform(landscape_small_imgs[i], r);
 	Free(r);
 }
 
 U0 PostCleanUp()
 {
 	I64 i;
-	for (i=0;i<LS_TYPES;i++)
+
+	for (i = 0; i < LS_TYPES; i++)
 		Free(landscape_large_imgs[i]);
 }
 
 U0 Init()
 {
-	I64 i,xx,yy;
+	I64   i, xx, yy;
 	Bird *tmpb;
 
-	main_dc=DCNew(GR_WIDTH,GR_HEIGHT);
-	critical_section_flag=0;
-	game_tf=0;
-	fish_left=10;
+	main_dc = DCNew(GR_WIDTH, GR_HEIGHT);
+	critical_section_flag = 0;
+	game_tf = 0;
+	fish_left = 10;
 
-	MemSet(&mp,0,sizeof(MPCtrl));
+	MemSet(&mp, 0, sizeof(MPCtrl));
 	InitMap;
 	DCDepthBufAlloc(main_dc);
 
-	strip_height=128;
+	strip_height = 128;
 
-	è 		=-90.0*ã/180.0;
-	roll	=0;
-	heading=0;
-	speed =2.5;
-	claws_down=0;
+	è 			= -90.0 * ã / 180.0;
+	roll		= 0;
+	heading 	= 0;
+	speed		= 2.5;
+	claws_down	= 0;
 	WrapAngles;
 
-	x=MAP_WIDTH>>1 *COORDINATE_SCALE*MAP_SCALE;
-	y=MAP_HEIGHT>>1*COORDINATE_SCALE*MAP_SCALE;
-	z=64					 *COORDINATE_SCALE*MAP_SCALE;
+	x = MAP_WIDTH  >> 1 * COORDINATE_SCALE * MAP_SCALE;
+	y = MAP_HEIGHT >> 1 * COORDINATE_SCALE * MAP_SCALE;
+	z = 64				* COORDINATE_SCALE * MAP_SCALE;
 
-	xx=x/(MAP_SCALE*COORDINATE_SCALE);
-	yy=y/(MAP_SCALE*COORDINATE_SCALE);
-	z+=elevations[yy][xx]*COORDINATE_SCALE;
+	xx = x / (MAP_SCALE * COORDINATE_SCALE);
+	yy = y / (MAP_SCALE * COORDINATE_SCALE);
+	z += elevations[yy][xx] * COORDINATE_SCALE;
 
-	for (i=0;i<mp_count;i++)
+	for (i = 0; i < mp_count; i++)
 		QueueInit(&b_head[i]);
 
-	for (i=0;i<B_NUM;i++) {
-		tmpb=MAlloc(sizeof(Bird));
-		tmpb->p.x=Rand*MAP_WIDTH*MAP_SCALE;
-		tmpb->p.y=Rand*MAP_HEIGHT*MAP_SCALE;
-		tmpb->p.z=BIRD_ELEVATION*MAP_SCALE+
-					elevations[tmpb->p.y/MAP_SCALE][tmpb->p.x/MAP_SCALE];
-		tmpb->é=2*ã*Rand;
-		QueueInsert(tmpb,b_head[i%mp_count].last);
+	for (i = 0; i < B_NUM; i++)
+	{
+		tmpb = MAlloc(sizeof(Bird));
+		tmpb->p.x = Rand * MAP_WIDTH  * MAP_SCALE;
+		tmpb->p.y = Rand * MAP_HEIGHT * MAP_SCALE;
+		tmpb->p.z = BIRD_ELEVATION * MAP_SCALE + elevations[tmpb->p.y / MAP_SCALE][tmpb->p.x / MAP_SCALE];
+		tmpb->é = 2 * ã * Rand;
+		QueueInsert(tmpb, b_head[i % mp_count].last);
 	}
 
-	for (i=1;i<mp_count;i++)
-		Spawn(&CoreAPTalonsTask,Fs,"AP Talons",i);
-	Fs->task_end_cb=&TaskEndCB;
-	game_t0=tS;
+	for (i = 1; i < mp_count; i++)
+		Spawn(&CoreAPTalonsTask, Fs, "AP Talons", i);
+	Fs->task_end_cb = &TaskEndCB;
+	game_t0 = tS;
 }
 
 U0 CleanUp()
 {
-	I64 i;
-	Panel *tmpp=panel_head,*tmpp1;
+	I64		i;
+	Panel  *tmpp = panel_head, *tmpp1;
+
 	MPEnd;
-	while (tmpp) {
-		tmpp1=tmpp->next;
+	while (tmpp)
+	{
+		tmpp1 = tmpp->next;
 		QueueDel(&tmpp->next_obj);
 		Free(tmpp->pts);
 		Free(tmpp);
-		tmpp=tmpp1;
+		tmpp = tmpp1;
 	}
-	for (i=0;i<mp_count;i++) {
+	for (i = 0; i < mp_count; i++)
+	{
 		QueueDel(&b_head[i]);
 		QueueInit(&b_head[i]);
 	}
@@ -1159,7 +1289,8 @@ U0 CleanUp()
 
 U0 Talons()
 {
-	I64 ch,sc;
+	I64 ch, sc;
+
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	MenuPush(
 				"File {"
@@ -1173,61 +1304,72 @@ U0 Talons()
 				"  Left(,,SC_CURSOR_LEFT);"
 				"  Right(,,SC_CURSOR_RIGHT);"
 				"}"
-				);
+			);
 	AutoComplete;
 	WinBorder;
 	WinMax;
 	DocCursor;
 	DocClear;
 	"Initializing...\n";
-	Fs->song_task=Spawn(&SongTask,NULL,"Song",,Fs);
+	Fs->song_task = Spawn(&SongTask, NULL, "Song",, Fs);
 	PreInit;
 	Init;
-	Fs->animate_task=Spawn(&AnimateTask,NULL,"Animate",,Fs);
-	Fs->draw_it=&DrawIt;
+	Fs->animate_task = Spawn(&AnimateTask, NULL, "Animate",, Fs);
+	Fs->draw_it		 = &DrawIt;
 	try //in case <CTRL-ALT-c> is pressed.
-		do {
-			if (KeyScan(&ch,&sc)) {
-				switch (ch) {
+		do
+		{
+			if (KeyScan(&ch, &sc))
+			{
+				switch (ch)
+				{
 					case 0:
-						switch (sc.u8[0]) {
+						switch (sc.u8[0])
+						{
 							start:
 								case SC_CURSOR_DOWN:
-									è-=CTRLS_SCALE*Cos(roll);
-									heading-=CTRLS_SCALE*Sin(roll)*Sin(è);
+									è		-= CTRLS_SCALE * Cos(roll);
+									heading -= CTRLS_SCALE * Sin(roll) * Sin(è);
 									break;
+
 								case SC_CURSOR_UP:
-									è+=CTRLS_SCALE*Cos(roll);
-									heading+=CTRLS_SCALE*Sin(roll)*Sin(è);
+									è		+= CTRLS_SCALE * Cos(roll);
+									heading += CTRLS_SCALE * Sin(roll) * Sin(è);
 									break;
+
 								case SC_CURSOR_RIGHT:
-									roll+=CTRLS_SCALE;
+									roll += CTRLS_SCALE;
 									break;
+
 								case SC_CURSOR_LEFT:
-									roll-=CTRLS_SCALE;
+									roll -= CTRLS_SCALE;
 									break;
 							end:
 								WrapAngles;
 						}
 						break;
+
 					case '\n':
-						Fs->draw_it=NULL;
+						Fs->draw_it = NULL;
 						CleanUp;
 						Refresh;
 						Init;
-						Fs->draw_it=&DrawIt;
+						Fs->draw_it = &DrawIt;
 						break;
 				}
-			} else
+			}
+			else
 				Core0Talons;
-		} while (ch!=CH_SHIFT_ESC && ch!=CH_ESC);
+		}
+		while (ch != CH_SHIFT_ESC && ch != CH_ESC);
+
 	catch
 		PutExcept;
 	SettingsPop;
 	CleanUp;
 	PostCleanUp;
 	MenuPop;
-	RegWrite("ZenithOS/Talons","F64 best_score=%5.4f;\n",best_score);
+	RegWrite("ZenithOS/Talons", "F64 best_score=%5.4f;\n", best_score);
 }
 
 Talons;

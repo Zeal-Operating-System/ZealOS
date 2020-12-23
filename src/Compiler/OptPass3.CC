@@ -1,14 +1,15 @@
 U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 {
-	CHashClass *tmpc, *tmpc1, *tmpc2;
-	CCodeMisc *lb;
-	CIntermediateCode *tmpi,*tmpi1, *tmpi2, *tmpi_next, *tmpil1, *tmpil2;
-	I64 code, i, j, l, member_count, used_reg_mask = 0;
-	CMemberList *tmpm;
-	COptMemberVar *mv = NULL;
-	CAOT *tmpaot;
-	CAOTImportExport *tmpie;
-	CParseStack *ps = cc->ps;
+	CHashClass			*tmpc, *tmpc1, *tmpc2;
+	CCodeMisc			*lb;
+	CIntermediateCode	*tmpi,*tmpi1, *tmpi2, *tmpi_next, *tmpil1, *tmpil2;
+	I64					 code, i, j, l, member_count, used_reg_mask = 0;
+	CMemberList			*tmpm;
+	COptMemberVar		*mv = NULL;
+	CAOT				*tmpaot;
+	CAOTImportExport	*tmpie;
+	CParseStack			*ps = cc->ps;
+
 	ps->ptr = 0;
 	ps->ptr2 = 0;
 
@@ -76,6 +77,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 				case IS_V_ARG:
 					ps->ptr -= tmpi->ic_data >> 3;
 					break;
+
 				case IS_2_ARG:
 					tmpi2 = ParsePop(ps);
 					if (tmpi2->ic_flags & ICF_RES_TO_F64)
@@ -86,6 +88,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						tmpc2 = tmpi->t.arg2_class;
 					tmpi->arg2.type = MDF_STACK + CompRawType(tmpc2);
 					tmpi->ic_flags |= ICF_ARG2_WAS_STACK;
+
 				case IS_1_ARG:
 					tmpi1 = ParsePop(ps);
 					if (tmpi1->ic_flags & ICF_RES_TO_F64)
@@ -98,6 +101,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 					tmpi->arg1_type_pointed_to = CompRawTypePointed(tmpc1);
 					tmpi->ic_flags |= ICF_ARG1_WAS_STACK;
 					break;
+
 				case IS_0_ARG: //nobound switch
 					break;
 			}
@@ -118,6 +122,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						tmpi->ic_code = IC_IMM_I64;
 					}
 					break;
+
 				case IC_IMM_I64:
 					tmpi->ic_flags &= ~ICF_RES_TO_INT;
 					if (tmpi->ic_flags & ICF_RES_TO_F64)
@@ -127,10 +132,12 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						tmpi->ic_code = IC_IMM_F64;
 					}
 					break;
+
 				case IC_RBP:
 					tmpi->ic_code = IC_REG;
 					tmpi->arg1.reg = REG_RBP;
 					break;
+
 				case IC_DEREF:
 					tmpi->arg1_type_pointed_to = tmpi->res.type.raw_type;
 					if (tmpi1->ic_code == IC_LEA)
@@ -165,6 +172,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						}
 					}
 					break;
+
 				case IC__PP:
 				case IC__MM:
 				case IC_PP_:
@@ -182,6 +190,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 							}
 					tmpi->arg1_type_pointed_to = tmpi->res.type.raw_type;
 					break;
+
 				case IC_MUL:
 				case IC_DIV:
 					if (tmpc->raw_type == RT_F64)
@@ -190,6 +199,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						break;
 					}
 					break;
+
 				case IC_ADD:
 					if (tmpc->raw_type == RT_F64)
 					{
@@ -224,6 +234,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						}
 					}
 					break;
+
 				case IC_SUB:
 					if (tmpc->raw_type == RT_F64)
 					{
@@ -239,6 +250,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						OptFree(tmpi2);
 					}
 					break;
+
 				case IC_LESS:
 				case IC_GREATER_EQU:
 				case IC_GREATER:
@@ -246,6 +258,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 					if (tmpi->ic_flags & ICF_USE_F64)
 						CompF2PushPop(tmpi, tmpi1, tmpi2);
 					break;
+
 				case IC_MUL_EQU:
 				case IC_DIV_EQU:
 				case IC_ADD_EQU:
@@ -272,6 +285,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 					tmpi->arg1_type_pointed_to = tmpi->res.type.raw_type;
 					CompMinTypePointed(tmpi, CompRawTypePointed(tmpi->t.arg1_class));
 					break;
+
 				case IC_RETURN_VAL:
 				case IC_RETURN_VAL2:
 					if (tmpc)
@@ -282,6 +296,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 							tmpil1->ic_flags |= ICF_RES_TO_INT;
 					}
 					break;
+
 				case IC_SQR:
 				case IC_ABS:
 				case IC_SQRT:
@@ -292,11 +307,13 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 					if (tmpc->raw_type == RT_F64)
 						CompF1PushPop(tmpi, tmpi1);
 					break;
+
 				case IC_NOBOUND_SWITCH:
 				case IC_SWITCH:
 					lb = OptLabelFwd(tmpi->ic_data(CCodeMisc *)->default);
 					lb->use_count++;
 					break;
+
 				case IC_ASM:
 					tmpaot = tmpi->ic_data;
 					tmpie = tmpaot->next_ie;
@@ -308,6 +325,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 						tmpie = tmpie->next;
 					}
 					break;
+
 				case IC_BR_NOT_EQU:
 				case IC_BR_EQU_EQU:
 					if ((tmpi1->ic_code == IC_IMM_I64 || tmpi1->ic_code == IC_IMM_F64) && !tmpi1->ic_data)
@@ -409,6 +427,7 @@ U0 OptPass3(CCompCtrl *cc, COptReg *reg_offsets)
 							}
 					tmpi->arg1_type_pointed_to = CompRawType(tmpc);
 					goto here1;
+
 				case IC_BR_LESS:
 				case IC_BR_GREATER_EQU:
 				case IC_BR_GREATER:
@@ -436,12 +455,15 @@ here1:
 						lb = OptLabelFwd(tmpi->ic_data);
 					lb->use_count++;
 					break;
+
 				case IC_NOP1:
 					tmpi = OptFree(tmpi);
 					break;
+
 				case IC_NOP2:
 					ps->ptr += tmpi->ic_data;
 					break;
+
 				case IC_SHL_CONST:
 				case IC_SHR_CONST:
 				case IC_ENTER:
@@ -544,6 +566,7 @@ here1:
 				case IC_POP_REGS:
 				case IC_LABEL:
 					break;
+
 				default:
 					"Pass:%d Missing IC handler\n", cc->pass;
 					ICPut(cc, tmpi);

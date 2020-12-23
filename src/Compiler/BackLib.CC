@@ -58,8 +58,9 @@ U0 ICU64(CIntermediateCode *tmpi, U64 q)
 
 U0 ICAddRSP(CIntermediateCode *tmpi, I64 i, Bool optimize=TRUE)
 {
-	I64 j, last_start;
-	CIntermediateCode *tmpil1;
+	I64					 j, last_start;
+	CIntermediateCode	*tmpil1;
+
 	if (optimize)
 	{
 		tmpil1 = tmpi;
@@ -152,6 +153,7 @@ I64 ICModr1(I64 r, CICType t2, I64 r2, I64 d2)
 	//res.u8[2] is ModR
 	//res.u8[3] is SIB
 	I64 res = 0;
+
 	if (t2.raw_type < RT_I64)
 		res.u8[1] = 0x40;
 	else
@@ -173,6 +175,7 @@ I64 ICModr1(I64 r, CICType t2, I64 r2, I64 d2)
 			if (res.u8[1] == 0x40 && (t2.raw_type >= RT_I16 || r < 4 && r2 < 4))
 				res.u8[1] = 0;
 			break;
+
 		case MDf_DISP:
 			if (r2 > 7)
 			{
@@ -197,6 +200,7 @@ I64 ICModr1(I64 r, CICType t2, I64 r2, I64 d2)
 			if (res.u8[1] == 0x40 && (t2.raw_type >= RT_I16 || r < 4))
 				res.u8[1] = 0;
 			break;
+
 		case MDf_SIB:
 			if (7 < r2.u8[0] < REG_NONE)
 				res.u8[1]++;
@@ -230,6 +234,7 @@ I64 ICModr1(I64 r, CICType t2, I64 r2, I64 d2)
 			if (res.u8[1] == 0x40 && (t2.raw_type >= RT_I16 || r < 4))
 				res.u8[1] = 0;
 			break;
+
 		case MDf_RIP_DISP32:
 			res.u8[2] = 0x05 + r << 3;
 			res.u8[0] = MODR_RIP_REL;
@@ -237,6 +242,7 @@ I64 ICModr1(I64 r, CICType t2, I64 r2, I64 d2)
 				res.u8[1] = 0;
 			break;
 	}
+
 	return res;
 }
 
@@ -246,25 +252,32 @@ U0 ICModr2(CIntermediateCode *tmpi, I64 i, CICType t=0, I64 d, I64 rip=0)
 	{
 		case MODR_REG:
 			break;
+
 		case MODR_INDIRECT_REG:
 			break;
+
 		case MODR_D8_INDIRECT_REG:
 			ICU8(tmpi, d);
 			break;
+
 		case MODR_D32_INDIRECT_REG:
 			ICU32(tmpi, d);
 			break;
+
 		case MODR_SIB_INDIRECT_REG:
 			ICU8(tmpi, i.u8[3]);
 			break;
+
 		case MODR_SIB_D8_INDIRECT_REG:
 			ICU8(tmpi, i.u8[3]);
 			ICU8(tmpi, d);
 			break;
+
 		case MODR_SIB_D32_INDIRECT_REG:
 			ICU8(tmpi, i.u8[3]);
 			ICU32(tmpi, d);
 			break;
+
 		case MODR_RIP_REL_IMM_U32:
 			switch (t.raw_type)
 			{
@@ -272,10 +285,12 @@ U0 ICModr2(CIntermediateCode *tmpi, I64 i, CICType t=0, I64 d, I64 rip=0)
 				case RT_U8:
 					d--;
 					break;
+
 				case RT_I16:
 				case RT_U16:
 					d -= 2;
 					break;
+
 				default:
 					d -= 4;
 			}
@@ -325,11 +340,13 @@ U0 ICSlashOp(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 op, I64 ri
 			ICRex(tmpi, i.u8[1]);
 			ICU16(tmpi, i.u8[2] << 8 + op.u8[1]);
 			break;
+
 		case RT_I16:
 		case RT_U16:
 			ICOpSizeRex(tmpi, i.u8[1]);
 			ICU16(tmpi, i.u8[2] << 8 + op.u8[2]);
 			break;
+
 		default:
 			if (i.u8[1] != 0x48 || !op.u8[3])
 				ICRex(tmpi, i.u8[1]);
@@ -350,6 +367,7 @@ U0 ICPush(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 rip)
 			else
 				ICU8(tmpi, 0x50 + r1);
 			return;
+
 		case MDf_IMM:
 			if (I8_MIN <= d1 <= I8_MAX)
 				ICU16(tmpi, 0x6A + d1 << 8);
@@ -364,8 +382,10 @@ U0 ICPush(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 rip)
 				ICU8(tmpi, 0x50 + REG_RBX);
 			}
 			return;
+
 		case MDf_STACK:
 			return;
+
 		case MDf_DISP:
 		case MDf_SIB:
 		case MDf_RIP_DISP32:
@@ -386,6 +406,7 @@ U0 ICPush(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 rip)
 U0 ICPushRegs(CIntermediateCode *tmpi, I64 mask)
 {
 	I64 i;
+
 	for (i = 0; i < REG_REGS_NUM; i++)
 	{
 		if (Bt(&mask, i))
@@ -408,6 +429,7 @@ U0 ICPop(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 rip)
 			else
 				ICU8(tmpi, 0x58 + r1);
 			break;
+
 		case MDf_DISP:
 		case MDf_RIP_DISP32:
 		case MDf_SIB:
@@ -419,11 +441,13 @@ U0 ICPop(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 rip)
 			else
 				ICSlashOp(tmpi, t1, r1, d1, SLASH_OP_POP, rip);
 			break;
+
 		case MDf_STACK:
 		case MDf_IMM:
 			ICU8(tmpi, 0x58 + REG_RBX);
 			ICMov(tmpi, t1, r1, d1, MDF_REG + RT_I64, REG_RBX, 0, rip);
 			break;
+
 		default:
 			ICAddRSP(tmpi, 8);
 	}
@@ -432,6 +456,7 @@ U0 ICPop(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, I64 rip)
 U0 ICPopRegs(CIntermediateCode *tmpi, I64 mask)
 {
 	I64 i;
+
 	for (i = REG_REGS_NUM - 1; i >= 0; i--)
 	{
 		if (Bt(&mask,i))
@@ -458,6 +483,7 @@ U0 ICZero(CIntermediateCode *tmpi, I64 r)
 U0 ICTest(CIntermediateCode *tmpi, I64 r)
 {
 	I64 i = 0xC08548; // TEST R,R
+
 	if (r > 7)
 	{
 		i += 5;
@@ -490,9 +516,11 @@ I64 ICBuiltInFloatConst(F64 d)
 
 U0 ICMov(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2, I64 d2, I64 rip)
 {
-	I64 i, count1, count2, b1_rex, b2_rex, b1, b2, b1_modr, b2_modr, b1_r1, b1_r2, b2_r1, b2_r2, last_start = tmpi->ic_count;
-	CIntermediateCode *tmpil1;
-	Bool old_lock = Btr(&tmpi->ic_flags, ICf_LOCK);
+	I64					 i, count1, count2, b1_rex, b2_rex, b1, b2, b1_modr, b2_modr, b1_r1, b1_r2, b2_r1, b2_r2,
+						 last_start = tmpi->ic_count;
+	CIntermediateCode	*tmpil1;
+	Bool				 old_lock = Btr(&tmpi->ic_flags, ICf_LOCK);
+
 	switch (Bsr(t1))
 	{
 		case MDf_REG:
@@ -586,9 +614,11 @@ U0 ICMov(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2
 					case RT_I8:
 						ICU24(tmpi, i.u8[2] << 16 + 0xBE0F);
 						break;
+
 					case RT_I16:
 						ICU24(tmpi, i.u8[2] << 16 + 0xBF0F);
 						break;
+
 					case RT_I32:
 						ICU16(tmpi, i.u8[2] << 8 + 0x63);
 						break;
@@ -596,15 +626,18 @@ U0 ICMov(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2
 					case RT_U8:
 						ICU24(tmpi, i.u8[2] << 16 + 0xB60F);
 						break;
+
 					case RT_U16:
 						ICU24(tmpi, i.u8[2] << 16 + 0xB70F);
 						break;
+
 					default:
 						ICU16(tmpi, i.u8[2] << 8 + 0x8B);
 				}
 				ICModr2(tmpi, i,, d2, rip);
 			}
 			break;
+
 		case MDf_STACK:
 			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				ICPopRegs(tmpi, 1 << REG_RBX);
@@ -615,6 +648,7 @@ U0 ICMov(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2
 			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				ICPushRegs(tmpi, 1 << REG_RBX);
 			break;
+
 		case MDf_DISP:
 		case MDf_RIP_DISP32:
 		case MDf_SIB:
@@ -627,10 +661,12 @@ U0 ICMov(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2
 					case RT_U8:
 						ICU8(tmpi, d2);
 						break;
+
 					case RT_I16:
 					case RT_U16:
 						ICU16(tmpi, d2);
 						break;
+
 					default:
 						ICU32(tmpi, d2);
 				}
@@ -748,8 +784,9 @@ move_redundant:
 
 U0 ICLea(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2, I64 d2, CCompCtrl *cc, U8 *buf, I64 rip)
 {
-	I64 i;
-	CAOTAbsAddr *tmpa;
+	I64			 i;
+	CAOTAbsAddr	*tmpa;
+
 	switch (Bsr(t1))
 	{
 		case MDf_REG:
@@ -758,6 +795,7 @@ U0 ICLea(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2
 			ICU24(tmpi, i.u8[2] << 16 + 0x8D00 + i.u8[1]);
 			ICModr2(tmpi, i,, d2, rip);
 			break;
+
 		case MDf_STACK:
 			if (t2 & MDF_RIP_DISP32)
 			{
@@ -783,6 +821,7 @@ U0 ICLea(CIntermediateCode *tmpi, CICType t1, I64 r1, I64 d1, CICType t2, I64 r2
 U0 ICDeref(CIntermediateCode *tmpi, I64 rip)
 {
 	CICType t;
+
 	t = tmpi->res.type.raw_type;
 	if (t > tmpi->arg1_type_pointed_to)
 		t = tmpi->arg1_type_pointed_to;

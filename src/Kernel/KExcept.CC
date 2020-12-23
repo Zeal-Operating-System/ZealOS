@@ -156,5 +156,6 @@ Bool BreakUnlock(CTask *task=NULL)
 		else
 			task->rip = &Break;
 	}
+
 	return res;
 }

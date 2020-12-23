@@ -6,30 +6,32 @@ The USB creators banned generic devices, requiring a signed, certified driver fo
 
 A mouse packet interface should be similar to this:
 
-$ID,5$TX: 			<ENTER>
+$ID,5$TX: 		<ENTER>
 RX: 		X:+3 Y:+0 Wheel:+0 LB:OFF RB:OFF
 TX: 		<ENTER>
 RX: 		X:+0 Y:-1 Wheel:+0 LB:ON	RB:OFF
 $ID,-5$
 We aspire to be as simple as a Commodore 64 joystick driver:
 
-$ID,5$VAL=PEEK(56321)
-if VAL AND 1 THEN y=y-1
-if VAL AND 2 THEN y=y+1
-if VAL AND 4 THEN x=x-1
-if VAL AND 8 THEN x=x+1
+$ID,5$VAL = PEEK(56321)
+if VAL AND 1 THEN y = y - 1
+if VAL AND 2 THEN y = y + 1
+if VAL AND 4 THEN x = x - 1
+if VAL AND 8 THEN x = x + 1
 $ID,-5$
 The game controller will be more complicated, but much simpler than USB.	It will use a standard text packet of some kind.
 
 On the other end, you might hook-up a thermostat microcontroller and interface as a generic serial device.	The microcontroller in the thermostat would have something simple, not a crazy overkill ethernet connection.
 
 $ID,5$$HL,1$U8 b;
-while (TRUE) {
-	b=ReadU8(2); //Read byte from high speed serial channel 2.
+
+while (TRUE)
+{
+	b = ReadU8(2); //Read byte from high speed serial channel 2.
 //(Has been configured for low baud because thermostat should be slow.)
-	if (b==CMD_UP)
+	if (b == CMD_UP)
 		temperature++;
-	else if (b==CMD_DOWN)
+	else if (b == CMD_DOWN)
 		temperature--;
 }$HL,0$
 $ID,-5$

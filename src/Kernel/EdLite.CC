@@ -1,7 +1,7 @@
 class CLine
 {
-	CLine *next, *last;
-	U8 *line;
+	CLine	*next, *last;
+	U8		*line;
 };
 
 U0 EdLiteUpdate(CLine *head, CLine *cur_line, I64 cur_col, I64 line_start_col)
@@ -228,6 +228,7 @@ Bool EdLite(U8 *filename, I64 num=1, I64 edf_dof_flags=0)
 						break;
 				}
 				break;
+
 			case '\n':
 			case '\r':
 				tmpl = MAlloc(sizeof(CLine));
@@ -289,7 +290,8 @@ Bool EdLite(U8 *filename, I64 num=1, I64 edf_dof_flags=0)
 					cur_col++;
 				}
 		}
-	} while (ch != CH_SHIFT_ESC && ch != CH_ESC);
+	}
+	while (ch != CH_SHIFT_ESC && ch != CH_ESC);
 
 	if (ch != CH_ESC)
 	{
@@ -342,6 +344,7 @@ Bool EdLite(U8 *filename, I64 num=1, I64 edf_dof_flags=0)
 	SingleUser(old_single);
 	text.raw_flags = text.raw_flags & ~RAWF_SHOW_DOLLAR | old_raw_flags & RAWF_SHOW_DOLLAR;
 	POPFD
+
 	return res;
 }
 
@@ -349,6 +352,7 @@ U0 ToFileLine(U8 *_fl_file_line, U8 **_filename, I64 *_linenum)
 {//"FI:D:/Dir/File.CC,123" to "D:/Dir/File.CC" and 123.
 	U8 *st, *fl_file_line = StrNew(_fl_file_line);
 	I64 linenum;
+
 	StrFirstRemove(fl_file_line, ":");
 	st = StrNew(fl_file_line);
 	StrLastRemove(fl_file_line, ",", st);
@@ -361,17 +365,20 @@ U0 ToFileLine(U8 *_fl_file_line, U8 **_filename, I64 *_linenum)
 Bool EdLiteFileLine(U8 *fl_file_line, I64 edf_dof_flags=0)
 {
 	Bool res;
-	U8 *filename;
-	I64 linenum;
+	U8  *filename;
+	I64  linenum;
+
 	ToFileLine(fl_file_line, &filename, &linenum);
 	res = EdLite(filename, linenum, edf_dof_flags);
 	Free(filename);
+
 	return res;
 }
 
 U0 FixSet(U8 *filename, I64 line)
 {//Compiler calls this to set file line for Fix
 	U8 *st = MStrPrint("FL:%s,%d", filename, line);
+
 	while (LBts(&sys_semas[SEMA_FIX], 0))
 		Yield;
 	Free(debug.fix_file_line);
@@ -381,7 +388,7 @@ U0 FixSet(U8 *filename, I64 line)
 
 Bool Fix(I64 edf_dof_flags=0)
 {//Jump to last error src code to fix it.
-	U8 *st;
+	U8  *st;
 	Bool res = FALSE;
 
 	while (LBts(&sys_semas[SEMA_FIX], 0))
@@ -397,5 +404,6 @@ Bool Fix(I64 edf_dof_flags=0)
 			res = Ed(st, edf_dof_flags);
 	}
 	Free(st);
+
 	return res;
 }

@@ -5,42 +5,53 @@
 //and it will report args.
 Bool Prompt(I64 i)
 {
-	"%d ",i;
+	"%d ", i;
 	return YorN;
 }
 
 U0 D1()
 {
 	"D1\n";
-	if (Prompt(1)) throw('Point1');
-	if (Prompt(2)) throw('Point2');
+	if (Prompt(1))
+		throw('Point1');
+	if (Prompt(2))
+		throw('Point2');
 }
 
 U0 D2()
 {
 	"D2\n";
-	try {
+	try
+	{
 		D1;
-		if (Prompt(4)) throw('Point4');
-	} catch {
+		if (Prompt(4))
+			throw('Point4');
+	}
+	catch
+	{
 		"D2 handler\n"
-					"Ch:%c:%P\n",Fs->except_ch,Fs->except_callers[0];
-		if (Fs->except_ch=='Point1') {
+		"Ch:%c:%P\n", Fs->except_ch, Fs->except_callers[0];
+		if (Fs->except_ch == 'Point1')
+		{
 			"Caught in D2\n";
-			Fs->catch_except=TRUE;
+			Fs->catch_except = TRUE;
 		}
 	}
 }
 
 U0 Demo()
 {
-	try {
+	try
+	{
 		D2;
-		if (Prompt(3)) throw('Point3');
-	} catch {
+		if (Prompt(3))
+			throw('Point3');
+	}
+	catch
+	{
 		"Demo handler\n"
-					"Ch:%c:%P\n",Fs->except_ch,Fs->except_callers[0];
-		Fs->catch_except=TRUE;
+					"Ch:%c:%P\n", Fs->except_ch, Fs->except_callers[0];
+		Fs->catch_except = TRUE;
 	}
 }
 

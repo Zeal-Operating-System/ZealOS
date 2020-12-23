@@ -103,6 +103,7 @@ U8 *IntEntryGet(I64 irq)
 	handler_addr.u16[0] = entry->offset_low;
 	handler_addr.u16[1] = entry->offset_mid;
 	handler_addr.u32[1] = entry->offset_hi;
+
 	return handler_addr;
 }
 
@@ -181,6 +182,7 @@ U8 *IntFaultHandlersNew()
 		*dst(I32 *) = INT_FAULT - dst - 4;
 		dst += 4;
 	}
+
 	return res;
 }
 

@@ -7,10 +7,10 @@ See $LK,"CMouseStateGlobals",A="MN:CMouseStateGlobals"$ and $LK,"CMouseHardState
 The $FG,2$hard$FG$ designation, as in $FG,2$mouse_hard$FG$, represents hardware layer items before the application of an abstraction layer.
 
 $HL,1$//****
-mouse_hard.pos.x=mouse_hard.prescale.x*mouse_hard.scale.x*mouse_grid.x_speed;
-mouse.presnap.x=ToI64(mouse.scale.x*mouse_hard.pos.x)+mouse.offset.x;
+mouse_hard.pos.x = mouse_hard.prescale.x * mouse_hard.scale.x * mouse_grid.x_speed;
+mouse.presnap.x = ToI64(mouse.scale.x * mouse_hard.pos.x) + mouse.offset.x;
 if (mouse_grid.snap)
-	mouse.pos.x=Trunc(mouse.presnap.x/mouse_grid.x)*mouse_grid.x+mouse_grid.x_offset;
+	mouse.pos.x = Trunc(mouse.presnap.x / mouse_grid.x) * mouse_grid.x + mouse_grid.x_offset;
 else
-	mouse.pos.x=mouse.presnap.x;
+	mouse.pos.x = mouse.presnap.x;
 //****$HL,0$

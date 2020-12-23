@@ -1,8 +1,8 @@
 U0 ICFOpEqu(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
 {//for ADD,SUB,DIV,MUL
-	CICArg *arg1 = &tmpi->arg1, *arg2 = &tmpi->arg2;
-	Bool dont_push_float, dont_pop_float, p1_mem;
-	I64 rsp_size = 0, builtin2 = 0, t1, r1, d1, t2, r2, d2;
+	CICArg	*arg1 = &tmpi->arg1, *arg2 = &tmpi->arg2;
+	Bool	 dont_push_float, dont_pop_float, p1_mem;
+	I64		 rsp_size = 0, builtin2 = 0, t1, r1, d1, t2, r2, d2;
 
 	if (cc->flags & CCF_AOT_COMPILE)
 		buf2 = cc->aotc->rip;
@@ -130,6 +130,7 @@ U0 ICFOpEqu(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
 			case 4:
 				op = SLASH_OP_FSUBR;
 				break;
+
 			case 6:
 				op = SLASH_OP_FDIVR;
 				break;
@@ -263,6 +264,7 @@ U0 ICFOpEqu(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
 			case 4:
 				op = SLASH_OP_FSUBR;
 				break;
+
 			case 6:
 				op = SLASH_OP_FDIVR;
 				break;
@@ -296,11 +298,11 @@ U0 ICFOpEqu(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
  
 U0 ICFCmpAndBranch(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip, I64 us, I64 not_us, U8 *buf, I64 rip2)
 {
-	CICArg *arg1, *arg2;
-	Bool dont_push_float, dont_pop_float, alt, short_jmp;
-	I64 i, rsp_size = 0, builtin1 = 0, builtin2 = 0, t1, r1, d1, t2, r2, d2;
-	CCodeMisc *lb;
-	U8 *buf2;
+	CICArg		*arg1, *arg2;
+	Bool		 dont_push_float, dont_pop_float, alt, short_jmp;
+	I64			 i, rsp_size = 0, builtin1 = 0, builtin2 = 0, t1, r1, d1, t2, r2, d2;
+	CCodeMisc	*lb;
+	U8			*buf2;
 
 	if (tmpi->ic_flags & ICF_ALT_TEMPLATE)
 	{
@@ -620,7 +622,7 @@ U0 ICFCmpAndBranch(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip, I64 us, I64 
 		i = lb->addr - (rip + 2);
 		if (lb->flags & CMF_POP_CMP)
 		{
-			if(tmpi->ic_flags & ICF_PUSH_CMP)
+			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				i += 4;
 			else
 				i += 8;
@@ -635,7 +637,7 @@ U0 ICFCmpAndBranch(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip, I64 us, I64 
 		i = lb->addr - (rip + 2);
 		if (lb->flags & CMF_POP_CMP)
 		{
-			if(tmpi->ic_flags & ICF_PUSH_CMP)
+			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				i += 4;
 			else
 				i += 8;
@@ -648,7 +650,7 @@ U0 ICFCmpAndBranch(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip, I64 us, I64 
 		i = lb->addr - (rip + 6);
 		if (lb->flags & CMF_POP_CMP)
 		{
-			if(tmpi->ic_flags & ICF_PUSH_CMP)
+			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				i += 4;
 			else
 				i += 8;
@@ -688,6 +690,7 @@ U0 ICFDiv(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf, I64 rip)
 U0 ICFAdd(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf, I64 rip)
 {
 	Bool dont_push_float, dont_pop_float;
+
 	CompSetFloatOpPushPop(cc, tmpi, &dont_push_float, &dont_pop_float);
 	if (tmpi->arg1.type & MDF_IMM && !tmpi->arg1.disp)
 	{
@@ -732,6 +735,7 @@ U0 ICFAdd(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf, I64 rip)
 U0 ICFSub(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf, I64 rip)
 {
 	Bool dont_push_float, dont_pop_float;
+
 	if (tmpi->arg2.type & MDF_IMM && !tmpi->arg2.disp)
 	{
 		CompSetFloatOpPushPop(cc, tmpi, &dont_push_float, &dont_pop_float);

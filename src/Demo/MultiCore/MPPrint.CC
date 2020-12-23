@@ -1,15 +1,17 @@
 U0 Job(CDoc *doc)
 {
 	I64 i;
-	for (i=0;i<2;i++)
-		DocPrint(doc,"$$FG,%d$$CPU%d ",Gs->num&15,Gs->num);
+
+	for (i = 0; i < 2; i++)
+		DocPrint(doc, "$$FG,%d$$CPU%d ", Gs->num & 15, Gs->num);
 }
 
 U0 MPPrintDemo()
 {
 	I64 i;
-	for (i=0;i<500;i++)
-		JobQueue(&Job,DocPut,i%mp_count);
+
+	for (i = 0; i < 500; i++)
+		JobQueue(&Job, DocPut, i % mp_count);
 	Sleep(500);
 	"$$FG$$\n";
 }

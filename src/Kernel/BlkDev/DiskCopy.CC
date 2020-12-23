@@ -108,9 +108,11 @@ I64 Del(U8 *files_find_mask, Bool make_mask=FALSE, Bool del_dir=FALSE, Bool prin
 			case FSt_REDSEA:
 				res = RedSeaFilesDel(dirc->drive, Fs->cur_dir, dirc->mask, 0, del_dir, print_message);
 				break;
+
 			case FSt_FAT32:
 				res = FAT32FilesDel(dirc->drive, Fs->cur_dir, dirc->mask, 0, del_dir, print_message);
 				break;
+
 			default:
 				PrintErr("File System Not Supported\n");
 		}

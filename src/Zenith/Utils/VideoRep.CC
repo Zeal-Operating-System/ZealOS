@@ -3,7 +3,7 @@ public I64 VideoRep(Bool full=TRUE)
 	I64 i, mode_count = 0;
 	CVBEModeShort *mode;
 
-	if(full)
+	if (full)
 	{
 		"\nVBE Version %X.%X\n\n", sys_vbe_info.version.u8[1], sys_vbe_info.version.u8[0];
 		"$$PURPLE$$Manufacturer      $$FG$$: $$BLACK$$%s$$FG$$\n", sys_vbe_info.oem;

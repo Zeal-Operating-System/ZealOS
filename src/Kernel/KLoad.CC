@@ -242,7 +242,7 @@ CBinFile *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR)
 				bfh_addr = MAllocAligned(size, module_align, Fs->code_heap, misalignment);
 			}
 			else if (module_align > 8)
-				bfh_addr = MAllocAligned(size, module_align, , misalignment);
+				bfh_addr = MAllocAligned(size, module_align,, misalignment);
 			else
 			{//Less than 2Gig system memory
 				bfh_addr = bfh;
@@ -272,6 +272,7 @@ CBinFile *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR)
 
 	Free(absname);
 	Free(fbuf);
+
 	return bfh_addr;
 }
 

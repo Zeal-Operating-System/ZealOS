@@ -12,6 +12,7 @@ I64 ClusNumNext(CDrive *drive, I64 c, I64 count=1)
 			case FSt_REDSEA:
 				c += count;
 				break;
+
 			case FSt_FAT32:
 				while (count-- > 0 && 0 < c < 0x0FFFFFF8)
 				{
@@ -21,6 +22,7 @@ I64 ClusNumNext(CDrive *drive, I64 c, I64 count=1)
 				if (!(0 < c < 0x0FFFFFF8))
 					c = INVALID_CLUS;
 				break;
+
 			default:
 				throw('Drive');
 		}
@@ -41,8 +43,10 @@ I64 Clus2Blk(CDrive *drive, I64 c)
 	{
 		case FSt_REDSEA:
 			return c;
+
 		case FSt_FAT32:
 			return drive->data_area + c * drive->spc;
+
 		default:
 			throw('Drive');
 	}
@@ -64,6 +68,7 @@ I64 ClusBlkRead(CDrive *drive, U8 *buf, I64 c, I64 blks)
 				BlkRead(drive, buf, c, blks);
 				c += blks;
 				break;
+
 			case FSt_FAT32:
 				while (blks && 0 < c < 0x0FFFFFF8)
 				{
@@ -78,6 +83,7 @@ I64 ClusBlkRead(CDrive *drive, U8 *buf, I64 c, I64 blks)
 				if (blks)
 					throw('Drive');
 				break;
+
 			default:
 				throw('Drive');
 		}
@@ -112,6 +118,7 @@ I64 ClusBlkWrite(CDrive *drive, U8 *buf, I64 c, I64 blks)
 				BlkWrite(drive, buf, c, blks);
 				c = 0;
 				break;
+
 			case FSt_FAT32:
 				while (blks)
 				{
@@ -126,6 +133,7 @@ I64 ClusBlkWrite(CDrive *drive, U8 *buf, I64 c, I64 blks)
 					blks -= i;
 				}
 				break;
+
 			default:
 				throw('Drive');
 		}
@@ -153,6 +161,7 @@ I64 ClusAlloc(CDrive *drive, I64 c=0, I64 count=1, Bool contiguous=FALSE)
 	{
 		case FSt_REDSEA:
 			return RedSeaAllocClus(drive, count);
+
 		case FSt_FAT32:
 			if (contiguous)
 			{
@@ -161,6 +170,7 @@ I64 ClusAlloc(CDrive *drive, I64 c=0, I64 count=1, Bool contiguous=FALSE)
 			}
 			else
 				return FAT32AllocClus(drive, c, count);
+
 		default:
 			throw('Drive');
 	}

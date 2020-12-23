@@ -1,16 +1,20 @@
 CCodeMisc *OptLabelFwd(CCodeMisc *lb)
 {
 	CCodeMisc *lb1;
+
 	while (lb1 = lb->forward)
 		lb = lb1;
+
 	return lb;
 }
 
 CHashClass *OptClassFwd(CHashClass *tmpc)
 {//Class forwarding for unions and subclasses.
 	CHashClass *tmpc1;
+
 	while (tmpc1 = tmpc->fwd_class)
 		tmpc = tmpc1;
+
 	return tmpc;
 }
 
@@ -34,6 +38,7 @@ CIntermediateCode *OptFree(CIntermediateCode *tmpi)
 {//We might access freed entries in CICTreeLinks
 	QueueRemove(tmpi);
 	Free(tmpi);
+
 	return NULL;
 }
 
@@ -45,7 +50,8 @@ CIntermediateCode *OptLag(CIntermediateCode *tmpi)
 			return NULL;
 		else
 			tmpi = tmpi->last;
-	} while (tmpi->ic_code <= IC_END_EXP);
+	}
+	while (tmpi->ic_code <= IC_END_EXP);
 
 	return tmpi;
 }
@@ -58,7 +64,8 @@ CIntermediateCode *OptLag1(CIntermediateCode *tmpi)
 			return NULL;
 		else
 			tmpi = tmpi->last;
-	} while (tmpi->ic_code == IC_NOP1 || tmpi->ic_code == IC_NOP2);
+	}
+	while (tmpi->ic_code == IC_NOP1 || tmpi->ic_code == IC_NOP2);
 
 	return tmpi;
 }
@@ -71,7 +78,8 @@ CIntermediateCode *OptLag2(CIntermediateCode *tmpi)
 			return NULL;
 		else
 			tmpi = tmpi->last;
-	} while (tmpi->ic_code < IC_END_EXP);
+	}
+	while (tmpi->ic_code < IC_END_EXP);
 
 	return tmpi;
 }
@@ -83,7 +91,8 @@ CIntermediateCode *OptLead1(CIntermediateCode *tmpi)
 		tmpi = tmpi->next;
 		if (!tmpi->ic_code)
 			return NULL;
-	} while (tmpi->ic_code == IC_NOP1 || tmpi->ic_code == IC_NOP2);
+	}
+	while (tmpi->ic_code == IC_NOP1 || tmpi->ic_code == IC_NOP2);
 
 	return tmpi;
 }
@@ -91,9 +100,11 @@ CIntermediateCode *OptLead1(CIntermediateCode *tmpi)
 I64 CompOffset2Reg(I64 offset, COptReg *reg_offsets)
 {
 	I64 i;
+
 	for (i = 0; i < REG_REGS_NUM; i++)
 		if (offset == reg_offsets[i].offset)
 			return i;
+
 	return -1;
 }
 
@@ -103,8 +114,8 @@ I64 CompOffset2Reg(I64 offset, COptReg *reg_offsets)
 
 Bool OptFixupBinaryOp1(CIntermediateCode *tmpi, CIntermediateCode *tmpi1, CIntermediateCode *tmpi2, Bool *is_unsigned)
 {
-	CIntermediateCode *tmpii;
-	CHashClass *tmpc = tmpi->ic_class, *tmpc1, *tmpc2;
+	CIntermediateCode	*tmpii;
+	CHashClass			*tmpc = tmpi->ic_class, *tmpc1, *tmpc2;
 
 	if (tmpi1->ic_flags & ICF_RES_TO_INT)
 		tmpc1 = cmp.internal_types[RT_I64];
@@ -203,6 +214,7 @@ fb_here2:
 Bool OptFixupBinaryOp2(CIntermediateCode **tmpi1, CIntermediateCode **tmpi2)
 {
 	CIntermediateCode *tmpii1 = *tmpi1, *tmpii2 = *tmpi2;
+
 	if (tmpii1->ic_code == IC_IMM_I64 && !(tmpii1->ic_flags & ICF_RES_TO_F64))
 		return TRUE;
 	if (tmpii2->ic_code == IC_IMM_I64 && !(tmpii2->ic_flags & ICF_RES_TO_F64))
@@ -211,12 +223,14 @@ Bool OptFixupBinaryOp2(CIntermediateCode **tmpi1, CIntermediateCode **tmpi2)
 		*tmpi2 = tmpii1;
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
 Bool OptFixupUnaryOp(CIntermediateCode *tmpi, CIntermediateCode *tmpi1, Bool *is_unsigned)
 {
 	CHashClass *tmpc, *tmpc1;
+
 	tmpc1 = OptClassFwd(tmpi1->ic_class);
 	tmpi->ic_class = tmpc1;
 	tmpc = tmpi->ic_class;
@@ -256,8 +270,9 @@ extern CIntermediateCode *OptBrNotZero(CCompCtrl *cc, CIntermediateCode *tmpi);
 
 CIntermediateCode *OptBrZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 {
-	CCodeMisc *lb_true, *lb_false;
-	CIntermediateCode *tmpii = OptLag(tmpi), *tmpii2;
+	CCodeMisc			*lb_true, *lb_false;
+	CIntermediateCode	*tmpii = OptLag(tmpi), *tmpii2;
+
 	switch (tmpii->ic_code)
 	{
 		case IC_NOT:
@@ -268,22 +283,28 @@ CIntermediateCode *OptBrZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 			tmpi->t.arg1_tree = tmpii->t.arg1_tree;
 			OptFree(tmpii);
 			return OptBrNotZero(cc, tmpi);
+
 		case IC_EQU_EQU...IC_LESS_EQU:
 			tmpi->ic_code = (tmpii->ic_code - IC_EQU_EQU) ^ 1 + IC_BR_EQU_EQU;
 			break;
+
 		case IC_OR_OR:
 			tmpi->ic_code = IC_BR_OR_OR_ZERO;
 			break;
+
 		case IC_AND_AND:
 			tmpi->ic_code = IC_BR_AND_AND_ZERO;
 			break;
+
 		case IC_AND:
 			tmpi->ic_code = IC_BR_AND_ZERO;
 			break;
+
 		case IC_MM_:
 			if (cc->pass == 2 && !(tmpii->ic_flags & ICF_RES_TO_F64) && tmpii->ic_class->raw_type != RT_F64)
 				tmpi->ic_code = IC_BR_MM_ZERO;
 			break;
+
 		case IC_CALL_END:
 			tmpii2 = OptLag(tmpii);
 			switch (tmpii2->ic_code)
@@ -292,19 +313,23 @@ CIntermediateCode *OptBrZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 					case IC_CARRY:
 						tmpii2->ic_code = IC_BR_NOT_CARRY;
 						break;
+
 					case IC_BT:
 						tmpii2->ic_code = IC_BR_NOT_BT;
 						break;
+
 					case IC_LBTS:
 						tmpii2->ic_flags |= ICF_LOCK;
 					case IC_BTS:
 						tmpii2->ic_code = IC_BR_NOT_BTS;
 						break;
+
 					case IC_LBTR:
 						tmpii2->ic_flags |= ICF_LOCK;
 					case IC_BTR:
 						tmpii2->ic_code = IC_BR_NOT_BTR;
 						break;
+
 					case IC_LBTC:
 						tmpii2->ic_flags |= ICF_LOCK;
 					case IC_BTC:
@@ -390,8 +415,9 @@ CIntermediateCode *OptBrZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 
 CIntermediateCode *OptBrNotZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 {
-	CCodeMisc *lb_true, *lb_false;
-	CIntermediateCode *tmpii = OptLag(tmpi), *tmpii2;
+	CCodeMisc			*lb_true, *lb_false;
+	CIntermediateCode	*tmpii = OptLag(tmpi), *tmpii2;
+
 	switch (tmpii->ic_code)
 	{
 		case IC_NOT:
@@ -402,22 +428,28 @@ CIntermediateCode *OptBrNotZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 			tmpi->t.arg1_tree = tmpii->t.arg1_tree;
 			OptFree(tmpii);
 			return OptBrZero(cc, tmpi);
+
 		case IC_EQU_EQU...IC_LESS_EQU:
 			tmpi->ic_code = tmpii->ic_code + IC_BR_EQU_EQU - IC_EQU_EQU;
 			break;
+
 		case IC_OR_OR:
 			tmpi->ic_code = IC_BR_OR_OR_NOT_ZERO;
 			break;
+
 		case IC_AND_AND:
 			tmpi->ic_code = IC_BR_AND_AND_NOT_ZERO;
 			break;
+
 		case IC_AND:
 			tmpi->ic_code = IC_BR_AND_NOT_ZERO;
 			break;
+
 		case IC_MM_:
 			if (cc->pass == 2 && !(tmpii->ic_flags & ICF_RES_TO_F64) && tmpii->ic_class->raw_type != RT_F64)
 				tmpi->ic_code = IC_BR_MM_NOT_ZERO;
 			break;
+
 		case IC_CALL_END:
 			tmpii2 = OptLag(tmpii);
 			switch (tmpii2->ic_code)
@@ -426,19 +458,23 @@ CIntermediateCode *OptBrNotZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 					case IC_CARRY:
 						tmpii2->ic_code = IC_BR_CARRY;
 						break;
+
 					case IC_BT:
 						tmpii2->ic_code = IC_BR_BT;
 						break;
+
 					case IC_LBTS:
 						tmpii2->ic_flags |= ICF_LOCK;
 					case IC_BTS:
 						tmpii2->ic_code = IC_BR_BTS;
 						break;
+
 					case IC_LBTR:
 						tmpii2->ic_flags |= ICF_LOCK;
 					case IC_BTR:
 						tmpii2->ic_code = IC_BR_BTR;
 						break;
+
 					case IC_LBTC:
 						tmpii2->ic_flags |= ICF_LOCK;
 					case IC_BTC:
@@ -519,6 +555,7 @@ CIntermediateCode *OptBrNotZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 		}
 		return tmpii;
 	}
+
 	return tmpi;
 }
 
@@ -557,6 +594,7 @@ I64 CompRawType(CHashClass *tmpc)
 		tmpc = OptClassFwd(tmpc);
 		return tmpc->raw_type;
 	}
+
 	return 0;
 }
 
@@ -569,12 +607,14 @@ I64 CompRawTypePointed(CHashClass *tmpc)
 		tmpc = OptClassFwd(tmpc);
 		return tmpc->raw_type;
 	}
+
 	return 0;
 }
 
 U0 CompMinTypePointed(CIntermediateCode *tmpi, I64 pt1)
 {
 	I64 pt;
+
 	if ((pt = tmpi->arg1_type_pointed_to) && pt != RT_F64 && 0 < pt1 < pt)
 		tmpi->arg1_type_pointed_to = pt;
 }
@@ -597,8 +637,8 @@ U0 CompF2PushPop(CIntermediateCode *tmpi, CIntermediateCode *tmpi1, CIntermediat
 
 class COptMemberVar
 {
-	I64 score, offset_start, offset_end, lea_balance;
-	CMemberList *m;
+	I64			 score, offset_start, offset_end, lea_balance;
+	CMemberList	*m;
 };
 
 I64 OptMVCompare(COptMemberVar *mv1, COptMemberVar *mv2)

@@ -7,27 +7,28 @@ parallel and out-of-order execution.
 
 U0 TimeIns()
 {
-	I64 i,start,end,overhead_time,test_time;
-	F64 d=5.0;
+	I64 i, start, end, overhead_time, test_time;
+	F64 d = 5.0;
 
 	//Measure Loop Overhead
-	start=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++);
-	end=TSCGet;
-	overhead_time=end-start;
-	"\nOverhead Cycles:%12.6f\n",ToF64(overhead_time)/SAMPLE_SIZE;
+	start = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++);
+	end = TSCGet;
+	overhead_time = end - start;
+	"\nOverhead Cycles:%12.6f\n", ToF64(overhead_time) / SAMPLE_SIZE;
 
-	start=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++) {
+	start = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++)
+	{
 		#exe {PassTrace(0b10000000000);};
 //Time these insts
-		d*=1.00001;
+		d *= 1.00001;
 		#exe {PassTrace(0);};
 	}
-	end=TSCGet;
-	test_time=end-start;
+	end = TSCGet;
+	test_time = end - start;
 
-	"Measured Cycles:%12.6f\n",ToF64(test_time-overhead_time)/SAMPLE_SIZE;
+	"Measured Cycles:%12.6f\n", ToF64(test_time - overhead_time) / SAMPLE_SIZE;
 }
 
 TimeIns;

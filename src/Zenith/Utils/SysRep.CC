@@ -3,117 +3,663 @@
 U0 SMBIOSInit()
 {
 	//Section 7.1.1 line 925 (BIOS characteristics)
-	DefineListLoad("ST_SMBIOS_BIOS_FLAGS", " \0 \0 \0 \0ISA\0MCA\0EISA\0PCI\0PC Card\0Plug and Play\0APM\0Flashable BIOS\0BIOS shadowing\0"
-		"VESA Local Bus\0ESCD\0CD Boot\0Selectable boot\0BIOS ROM socketed\0PC Card Boot\0Enhanced Disk Drive Services\0"
-		" \0 \0INT 0x13 5.25\"/360 KB Floppy Support\0INT 0x13 5.25\"/1.2 MB Floppy Support\0INT 0x13 3.5\"/720 KB Floppy Support\0"
+	DefineListLoad("ST_SMBIOS_BIOS_FLAGS",
+
+		" \0"
+		" \0"
+		" \0"
+		" \0"
+		"ISA\0"
+		"MCA\0"
+		"EISA\0"
+		"PCI\0"
+		"PC Card\0"
+		"Plug and Play\0"
+		"APM\0"
+		"Flashable BIOS\0"
+		"BIOS shadowing\0"
+		"VESA Local Bus\0"
+		"ESCD\0"
+		"CD Boot\0"
+		"Selectable boot\0"
+		"BIOS ROM socketed\0"
+		"PC Card Boot\0"
+		"Enhanced Disk Drive Services\0"
+		" \0"
+		" \0"
+		"INT 0x13 5.25\"/360 KB Floppy Support\0"
+		"INT 0x13 5.25\"/1.2 MB Floppy Support\0"
+		"INT 0x13 3.5\"/720 KB Floppy Support\0"
 		"INT 0x13 3.5\"/2.88 MB Floppy Support\0"
-		"INT 0x05 Screen Printing\0INT 0x09 8042 Keyboard\0INT 0x14 Serial\0INT 0x17 Printer\0INT 0x10 CGA/Mono Video");
+		"INT 0x05 Screen Printing\0"
+		"INT 0x09 8042 Keyboard\0"
+		"INT 0x14 Serial\0"
+		"INT 0x17 Printer\0"
+		"INT 0x10 CGA/Mono Video");
+
 	//Section 7.1.2.1 line 931 (BIOS characteristics extension byte 1)
 	DefineListLoad("ST_SMBIOS_BIOS_FLAGSEXT1",
-		"ACPI\0USB Legacy\0 \0 \0 \0 \0Serial Boot\0Smart Battery"); 
+
+		"ACPI\0"
+		"USB Legacy\0"
+		" \0"
+		" \0"
+		" \0"
+		" \0"
+		"Serial Boot\0"
+		"Smart Battery"); 
+
 	//Section 7.1.2.2 line 935 (BIOS characteristics extension byte 2)
-	DefineListLoad("ST_SMBIOS_BIOS_FLAGSEXT2", "BIOS Boot\0Network Boot\0Targeted Content Distribution\0UEFI\0Virtual Machine");
+	DefineListLoad("ST_SMBIOS_BIOS_FLAGSEXT2",
+
+		"BIOS Boot\0"
+		"Network Boot\0"
+		"Targeted Content Distribution\0"
+		"UEFI\0"
+		"Virtual Machine");
+
 	//Section 7.2.2 line 959 (system wakeup types)
 	DefineListLoad("ST_SMBIOS_WAKEUP_TYPES",
-		" \0Other\0Unknown\0APM Timer\0Modem Ring\0LAN Remote\0Power Switch\0PCI PME#\0AC Power Restored");
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"APM Timer\0"
+		"Modem Ring\0"
+		"LAN Remote\0"
+		"Power Switch\0"
+		"PCI PME#\0"
+		"AC Power Restored");
+
 	//Section 7.3.1 line 972 (baseboard feature flags)
-	DefineListLoad("ST_SMBIOS_BASEBOARD_FLAGS","Hosting Board (Motherboard)\0Requires Auxilary Board\0Removable\0Replaceable\0Hot Swappable");
+	DefineListLoad("ST_SMBIOS_BASEBOARD_FLAGS",
+
+		"Hosting Board (Motherboard)\0"
+		"Requires Auxilary Board\0"
+		"Removable\0"
+		"Replaceable\0"
+		"Hot Swappable");
+
 	//Section 7.3.2 line 977 (baseboard board types)
-	DefineListLoad("ST_SMBIOS_BASEBOARD_TYPES", " \0Unknown\0Other\0Server Blade\0Connectivity Switch\0"
-		"System Management Module\0Processor Module\0I/O Module\0Daughterboard\0Motherboard\0Processor/Memory Module\0"
-		"Processor/IO Module\0Interconnect Board\0");
+	DefineListLoad("ST_SMBIOS_BASEBOARD_TYPES",
+
+		" \0"
+		"Unknown\0"
+		"Other\0"
+		"Server Blade\0"
+		"Connectivity Switch\0"
+		"System Management Module\0"
+		"Processor Module\0"
+		"I/O Module\0"
+		"Daughterboard\0"
+		"Motherboard\0"
+		"Processor/Memory Module\0"
+		"Processor/IO Module\0"
+		"Interconnect Board\0");
+
 	//Section 7.4.1 line 988 (system enclosure types)
-	DefineListLoad("ST_SMBIOS_ENCLOSURE_TYPES", " \0Other\0Unknown\0Desktop\0Low Profile Desktop\0Pizza Box\0"
-		"Mini Tower\0Tower\0Portable\0Laptop\0Notebook\0Hand Held\0Docking Station\0All-in-One\0Sub Notebook\0"
-		"Space-saving\0Lunch box\0Main Server Chassis\0Expansion Chassis\0SubChassis\0Bus Expansion Chassis\0"
-		"Peripheral Chassis\0RAID Chassis\0Rack Mount Chassis\0Sealed-case PC\0Multi-system Chassis\0Compact PCI\0"
-		"Advanced TCA\0Blade\0Blade Enclosure\0Tablet\0Convertible\0Detachable\0IoT Gateway\0Embedded PC\0Mini PC\0Stick PC");
+	DefineListLoad("ST_SMBIOS_ENCLOSURE_TYPES",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"Desktop\0"
+		"Low Profile Desktop\0"
+		"Pizza Box\0"
+		"Mini Tower\0"
+		"Tower\0"
+		"Portable\0"
+		"Laptop\0"
+		"Notebook\0"
+		"Hand Held\0"
+		"Docking Station\0"
+		"All-in-One\0"
+		"Sub Notebook\0"
+		"Space-saving\0"
+		"Lunch box\0"
+		"Main Server Chassis\0"
+		"Expansion Chassis\0"
+		"SubChassis\0"
+		"Bus Expansion Chassis\0"
+		"Peripheral Chassis\0"
+		"RAID Chassis\0"
+		"Rack Mount Chassis\0"
+		"Sealed-case PC\0"
+		"Multi-system Chassis\0"
+		"Compact PCI\0"
+		"Advanced TCA\0"
+		"Blade\0"
+		"Blade Enclosure\0"
+		"Tablet\0"
+		"Convertible\0"
+		"Detachable\0"
+		"IoT Gateway\0"
+		"Embedded PC\0"
+		"Mini PC\0"
+		"Stick PC");
+
 	//Section 7.4.2 line 991 (enclosure states)
-	DefineListLoad("ST_SMBIOS_ENCLOSURE_STATES", " \0Other\0Unknown\0Safe\0Warning\0Critical\0Non-Recoverable");
+	DefineListLoad("ST_SMBIOS_ENCLOSURE_STATES",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"Safe\0"
+		"Warning\0"
+		"Critical\0"
+		"Non-Recoverable");
+
 	//Section 7.4.3 line 994 (enclosure security status field)
 	DefineListLoad("ST_SMBIOS_ENCLOSURE_SECURITY_STATUSES",
-		" \0Other\0Unknown\0None\0External Interface Locked Out\0External Interface Enabled");
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"None\0"
+		"External Interface Locked Out\0"
+		"External Interface Enabled");
+
 	//Section 7.5.1 line 1014 (processor type field)
-	DefineListLoad("ST_SMBIOS_PROCESSOR_TYPES", " \0Other\0Unknown\0Central Processor\0Math Processor\0DSP Processor\0Video Processor");
+	DefineListLoad("ST_SMBIOS_PROCESSOR_TYPES",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"Central Processor\0"
+		"Math Processor\0"
+		"DSP Processor\0"
+		"Video Processor");
 	//Section 7.5.4 line 1050 (processor voltage field)
-	DefineListLoad("ST_SMBIOS_PROCESSOR_VOLTAGE_LEVELS", "5V\03.3V\02.9V");
-	DefineListLoad("ST_CPUID_1_EDX_FLAGS", "x87 FPU\0Virtual 8086 Mode Enhancements\0Debugging Extensions\0Page Size Extensions\0"
-		"Time Stamp Counter\0MSRs\0Page Address Extension\0Machine Check Exceptions\0CMPXCHG8B\0APIC\0 \0SYSENTER/SYSEXIT\0"
-		"Memory Type Range Registers\0Page Global Bit\0Machine Check Architecture\0CMOV Instructions\0Page Attribute Table\0"
-		"36 Bit Page Size Extension\0Processor Serial Number\0CLFLUSH\0 \0Debug Store\0ACPI\0MMX\0FXSAVE/FXRSTOR\0SSE\0SSE2\0"
-		"Self Snoop\0HTT\0Thermal Monitor\0 \0Pending Break Enable\0");
-	DefineListLoad("ST_CPUID_1_ECX_FLAGS", "SSE3\0PCLMULQDQ\064 bit DS AREA\0MONITOR/MWAIT\0CPL Qualified Debug Store\0"
-		"Virtual Machine Extensions\0Safer Mode Extensions\0 \0Thermal Monitor 2\0SSSE3\0L1 Context ID\0"
-		"IA32_DEBUG_INTERFACE\0FMA Extensions\0CMPXCHG16B\0xTPR Update Control\0Perfmon and Debug Capability\0 \0"
-		"Process Context Identifiers\0MMIO Prefetch\0SSE4.1\0SSE4.2\0x2APIC\0MOVBE\0POPCNT\0TSC Deadline\0AESNI\0XSAVE\0"
-		"OSXSAVE\0AVX\0F16C\0RDRAND");
+
+	DefineListLoad("ST_SMBIOS_PROCESSOR_VOLTAGE_LEVELS",
+
+		"5V\0"
+		"3.3V\0"
+		"2.9V");
+
+	DefineListLoad("ST_CPUID_1_EDX_FLAGS",
+
+		"x87 FPU\0"
+		"Virtual 8086 Mode Enhancements\0"
+		"Debugging Extensions\0"
+		"Page Size Extensions\0"
+		"Time Stamp Counter\0"
+		"MSRs\0"
+		"Page Address Extension\0"
+		"Machine Check Exceptions\0"
+		"CMPXCHG8B\0"
+		"APIC\0"
+		" \0"
+		"SYSENTER/SYSEXIT\0"
+		"Memory Type Range Registers\0"
+		"Page Global Bit\0"
+		"Machine Check Architecture\0"
+		"CMOV Instructions\0"
+		"Page Attribute Table\0"
+		"36 Bit Page Size Extension\0"
+		"Processor Serial Number\0"
+		"CLFLUSH\0"
+		" \0"
+		"Debug Store\0"
+		"ACPI\0"
+		"MMX\0"
+		"FXSAVE/FXRSTOR\0"
+		"SSE\0"
+		"SSE2\0"
+		"Self Snoop\0"
+		"HTT\0"
+		"Thermal Monitor\0"
+		" \0"
+		"Pending Break Enable\0");
+
+	DefineListLoad("ST_CPUID_1_ECX_FLAGS",
+
+		"SSE3\0"
+		"PCLMULQDQ\0"
+		"64 bit DS AREA\0"
+		"MONITOR/MWAIT\0"
+		"CPL Qualified Debug Store\0"
+		"Virtual Machine Extensions\0"
+		"Safer Mode Extensions\0"
+		" \0"
+		"Thermal Monitor 2\0"
+		"SSSE3\0"
+		"L1 Context ID\0"
+		"IA32_DEBUG_INTERFACE\0"
+		"FMA Extensions\0"
+		"CMPXCHG16B\0"
+		"xTPR Update Control\0"
+		"Perfmon and Debug Capability\0"
+		" \0"
+		"Process Context Identifiers\0"
+		"MMIO Prefetch\0"
+		"SSE4.1\0"
+		"SSE4.2\0"
+		"x2APIC\0"
+		"MOVBE\0"
+		"POPCNT\0"
+		"TSC Deadline\0"
+		"AESNI\0"
+		"XSAVE\0"
+		"OSXSAVE\0"
+		"AVX\0"
+		"F16C\0"
+		"RDRAND");
+
 	//Section 7.5.5 line 1058 (upgrade field)
-	DefineListLoad("ST_SMBIOS_PROCESSOR_UPGRADES", " \0Other\0Unknown\0Daughterboard\0ZIF Socket\0Replacable Piggy Back\0"
-		"None\0LIF Socket\0Slot 1\0Slot2\0370-pin Socket\0Slot A\0Slot M\0Socket 423\0Socket A (Socket 462)\0Socket 478\0"
-		"754\0940\0939\0mPGA604\0LGA771\0LGA775\0S1\0AM2\0F (1207)\0LGA1366\0G34\0AM3\0C32\0LGA1156\0LGA1567\0PGA988A\0"
-		"BGA1288\0rPGA988B\0BGA1023\0BGA1224\0LGA1155\0LGA1356\0LGA2011\0FS1\0FS2\0FM1\FM2\0LGA2011-3\0LGA1356-3\0LGA1150\0"
-		"BGA1168\0BGA1234\BGA1364\0AM4\0LGA1151\0BGA1440\0BGA1515\0LGA3647-1\0SP3\0SP3r2\0LGA2066\0BGA1932\0BGA1510\0BGA1528");
+	DefineListLoad("ST_SMBIOS_PROCESSOR_UPGRADES",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"Daughterboard\0"
+		"ZIF Socket\0"
+		"Replacable Piggy Back\0"
+		"None\0"
+		"LIF Socket\0"
+		"Slot 1\0"
+		"Slot2\0"
+		"370-pin Socket\0"
+		"Slot A\0"
+		"Slot M\0"
+		"Socket 423\0"
+		"Socket A (Socket 462)\0"
+		"Socket 478\0"
+		"754\0"
+		"940\0"
+		"939\0"
+		"mPGA604\0"
+		"LGA771\0"
+		"LGA775\0"
+		"S1\0"
+		"AM2\0"
+		"F (1207)\0"
+		"LGA1366\0"
+		"G34\0"
+		"AM3\0"
+		"C32\0"
+		"LGA1156\0"
+		"LGA1567\0"
+		"PGA988A\0"
+		"BGA1288\0"
+		"rPGA988B\0"
+		"BGA1023\0"
+		"BGA1224\0"
+		"LGA1155\0"
+		"LGA1356\0"
+		"LGA2011\0"
+		"FS1\0"
+		"FS2\0"
+		"FM1\FM2\0"
+		"LGA2011-3\0"
+		"LGA1356-3\0"
+		"LGA1150\0"
+		"BGA1168\0"
+		"BGA1234\BGA1364\0"
+		"AM4\0"
+		"LGA1151\0"
+		"BGA1440\0"
+		"BGA1515\0"
+		"LGA3647-1\0"
+		"SP3\0"
+		"SP3r2\0"
+		"LGA2066\0"
+		"BGA1932\0"
+		"BGA1510\0"
+		"BGA1528");
+
 	//Section 7.5.9 line 1110 (processor characteristics)
-	DefineListLoad("ST_SMBIOS_PROCESSOR_FLAGS",  " \0 \064 Bit\0Multicore\0HyperThreading\0NX/XD Protection\0Enhanced Virtualization\0"
-		"Power/Performance Control\0128 Bit Capable");
+	DefineListLoad("ST_SMBIOS_PROCESSOR_FLAGS",
+
+		" \0"
+		" \0"
+		"64 Bit\0"
+		"Multicore\0"
+		"HyperThreading\0"
+		"NX/XD Protection\0"
+		"Enhanced Virtualization\0"
+		"Power/Performance Control\0"
+		"128 Bit Capable");
+
 	//Section 7.8.2 line 1178 (cache information SRAM type field)
-	DefineListLoad("ST_SMBIOS_CACHE_SRAM_TYPES", "Other\0Unknown\0Non-Burst\0Burst\0Pipeline Burst\0Synchronous\0Asynchronous");
+	DefineListLoad("ST_SMBIOS_CACHE_SRAM_TYPES",
+
+		"Other\0"
+		"Unknown\0"
+		"Non-Burst\0"
+		"Burst\0"
+		"Pipeline Burst\0"
+		"Synchronous\0"
+		"Asynchronous");
+
 	//Section 7.8.6 line 1193 (cache information associativity field)
-	DefineListLoad("ST_SMBIOS_CACHE_ASSOCIATIVITY", " \0Other\0Unknown\0Direct Mapped\02-way Set-Associative\04-way Set-Associative\0"
-		"Fully Associative\08-way Set-Associative\016-way Set-Associative\012-way Set-Associative\024-way Set-Associative\0"
-		"32-way Set-Associative\048-way Set-Associative\064-way Set-Associative\020-way Set-Associative");
+	DefineListLoad("ST_SMBIOS_CACHE_ASSOCIATIVITY",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"Direct Mapped\0"
+		"2-way Set-Associative\0"
+		"4-way Set-Associative\0"
+		"Fully Associative\0"
+		"8-way Set-Associative\0"
+		"16-way Set-Associative\0"
+		"12-way Set-Associative\0"
+		"24-way Set-Associative\0"
+		"32-way Set-Associative\0"
+		"48-way Set-Associative\0"
+		"64-way Set-Associative\0"
+		"20-way Set-Associative");
+
 	//Section 7.9.2 line 1219 (connector type field)
-	DefineListLoad("ST_SMBIOS_CONNECTOR_TYPES", "None\0Centronics\0Mini Centronics\0Proprietary\0DB-25 Pin Male\0DB-25 Pin Female\0"
-		"DB-15 Pin Male\0DB-15 Pin Female\0DB-9 Pin Male\0DB-9 Pin Female\0RJ-11\0RJ-45\050-Pin MiniSCSI\0Mini-DIN\0Micro-DIN\0PS/2\0"
-		"Infrared\0HP-HIL\0Access Bus (USB)\0SSA SCSI\0Circular DIN-8 Male\0Circular DIN-8 Female\0Onboard IDE\0Onboard Floppy\0"
-		"9-Pin Dual Inline (Pin 10 Cut)\025-Pin Dual Inline (Pin 26 Cut)\050-Pin Dual Inline\068-Pin Dual Inline\0Onboard CD-ROM Sound Input\0"
-		"Mini-Centronics Type-14\0Mini-Centronics Type-26\0Mini-Jack (Headphones)\0BNC\01394\0SAS\SATA Plug\0USB Type-C");
+	DefineListLoad("ST_SMBIOS_CONNECTOR_TYPES",
+
+		"None\0"
+		"Centronics\0"
+		"Mini Centronics\0"
+		"Proprietary\0"
+		"DB-25 Pin Male\0"
+		"DB-25 Pin Female\0"
+		"DB-15 Pin Male\0"
+		"DB-15 Pin Female\0"
+		"DB-9 Pin Male\0"
+		"DB-9 Pin Female\0"
+		"RJ-11\0"
+		"RJ-45\0"
+		"50-Pin MiniSCSI\0"
+		"Mini-DIN\0"
+		"Micro-DIN\0"
+		"PS/2\0"
+		"Infrared\0"
+		"HP-HIL\0"
+		"Access Bus (USB)\0"
+		"SSA SCSI\0"
+		"Circular DIN-8 Male\0"
+		"Circular DIN-8 Female\0"
+		"Onboard IDE\0"
+		"Onboard Floppy\0"
+		"9-Pin Dual Inline (Pin 10 Cut)\0"
+		"25-Pin Dual Inline (Pin 26 Cut)\0"
+		"50-Pin Dual Inline\0"
+		"68-Pin Dual Inline\0"
+		"Onboard CD-ROM Sound Input\0"
+		"Mini-Centronics Type-14\0"
+		"Mini-Centronics Type-26\0"
+		"Mini-Jack (Headphones)\0"
+		"BNC\0"
+		"1394\0"
+		"SAS\SATA Plug\0"
+		"USB Type-C");
+
 	//Section 7.9.3 line 1222 (port type field)
-	DefineListLoad("ST_SMBIOS_PORT_TYPES", "None\0Parallel Port XT/AT Compatible\0Parallel Port PS/2\0Parallel Port ECP\0Parallel Port EPP\0"
-		"Parallel Port ECP/EPP\0Serial Port XT/AT Compatible\0Serial Port 16450 Compatible\0Serial Port 16550 Compatible\0"
-		"Serial Port 16550A Compatible\0SCSI Port\0MIDI Port\0Joystick Port\0Keyboard Port\0Mouse Port\0SSA SCSI\0USB\0FireWire (IEEE 1394)\0"
-		"PCMCIA Type I\0PCMCIA Type II\0PCMCIA Type III\0Cardbus\0Access Bus Port\0SCSI II\0SCSI Wide\0 \0 \0 \0Video Port\0Audio Port\0"
-		"Modem Port\0Network Port\0SATA\0SAS\0MFDP (Multi-Function Display Port\0Thunderbolt\08251 Compatible\08251 FIFO Compatible");
+	DefineListLoad("ST_SMBIOS_PORT_TYPES",
+
+		"None\0"
+		"Parallel Port XT/AT Compatible\0"
+		"Parallel Port PS/2\0"
+		"Parallel Port ECP\0"
+		"Parallel Port EPP\0"
+		"Parallel Port ECP/EPP\0"
+		"Serial Port XT/AT Compatible\0"
+		"Serial Port 16450 Compatible\0"
+		"Serial Port 16550 Compatible\0"
+		"Serial Port 16550A Compatible\0"
+		"SCSI Port\0"
+		"MIDI Port\0"
+		"Joystick Port\0"
+		"Keyboard Port\0"
+		"Mouse Port\0"
+		"SSA SCSI\0"
+		"USB\0"
+		"FireWire (IEEE 1394)\0"
+		"PCMCIA Type I\0"
+		"PCMCIA Type II\0"
+		"PCMCIA Type III\0"
+		"Cardbus\0"
+		"Access Bus Port\0"
+		"SCSI II\0"
+		"SCSI Wide\0"
+		" \0"
+		" \0"
+		" \0"
+		"Video Port\0"
+		"Audio Port\0"
+		"Modem Port\0"
+		"Network Port\0"
+		"SATA\0"
+		"SAS\0"
+		"MFDP (Multi-Function Display Port\0"
+		"Thunderbolt\0"
+		"8251 Compatible\0"
+		"8251 FIFO Compatible");
+
 	//Section 7.10.1 line 1229 (slot type)
-	DefineListLoad("ST_SMBIOS_SLOT_TYPES1", " \0Other\0Unknown\0ISA\0MCA\0EISA\0PCI\0PC Card (PCMCIA)\0VESA Local Bus\0Proprietary\0"
-		"Proprietary Card Slot\0Proprietary Memory Card Slot\0I/O Riser Card Slot\0NuBus\0PCI - 66 MHz Capable\0AGP\0AGP 2X\0AGP 4X\0"
-		"PCI-X\0AGP 8X\0M.2 Socket 1-DP (Mechanical Key A)\0M.2 Socket 1-SD (Mechanical Key E)\0M.2 Socket 2 (Mechanical Key B)\0"
-		"M.2 Socket 3 (Mechanical Key M)\0MXM Type I\0MXM Type II\0MXM Type III (Standard Connector)\0MXM Type III (HE Connector)\0"
-		"MXM Type IV\0MXM 3.0 Type A\0MXM 3.0 Type B\0PCI Express Gen 2 SFF-8639\0PCI Express Gen 3 SFF-8639\0"
-		"PCI Express Mini 52-Pin with bottom-side keep-outs\0PCI Express Mini 52-Pin without bottom-side keep-outs\0"
-		"PCI Express Mini 76-Pin\0CXL Flexbus 1.0");
-	DefineListLoad("ST_SMBIOS_SLOT_TYPES2", " \0 \0 \0 \0 \0PCI Express\0PCI Express 1x\0PCI Express 2x\0PCI Express 4x\0PCI Express 8x\0"
-		"PCI Express 16x\0PCI Express Gen 2\0PCI Express Gen 2 1x\0PCI Express Gen 2 2x\0PCI Express Gen 2 4x\0PCI Express Gen 2 8x\0"
-		"PCI Express Gen 2 16x\0PCI Express Gen 3\0PCI Express Gen 3 1x\0PCI Express Gen 3 2x\0PCI Express Gen 3 4x\0PCI Express Gen 3 8x\0"
-		"PCI Express Gen 3 16x\0PCI Express Gen 4\0PCI Express Gen 4 1x\0PCI Express Gen 4 2x\0PCI Express Gen 4 4x\0PCI Express Gen 4 8x\0"
+	DefineListLoad("ST_SMBIOS_SLOT_TYPES1",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"ISA\0"
+		"MCA\0"
+		"EISA\0"
+		"PCI\0"
+		"PC Card (PCMCIA)\0"
+		"VESA Local Bus\0"
+		"Proprietary\0"
+		"Proprietary Card Slot\0"
+		"Proprietary Memory Card Slot\0"
+		"I/O Riser Card Slot\0"
+		"NuBus\0"
+		"PCI - 66 MHz Capable\0"
+		"AGP\0"
+		"AGP 2X\0"
+		"AGP 4X\0"
+		"PCI-X\0"
+		"AGP 8X\0"
+		"M.2 Socket 1-DP (Mechanical Key A)\0"
+		"M.2 Socket 1-SD (Mechanical Key E)\0"
+		"M.2 Socket 2 (Mechanical Key B)\0"
+		"M.2 Socket 3 (Mechanical Key M)\0"
+		"MXM Type I\0"
+		"MXM Type II\0"
+		"MXM Type III (Standard Connector)\0"
+		"MXM Type III (HE Connector)\0"
+		"MXM Type IV\0"
+		"MXM 3.0 Type A\0"
+		"MXM 3.0 Type B\0"
+		"PCI Express Gen 2 SFF-8639\0"
+		"PCI Express Gen 3 SFF-8639\0"
+		"PCI Express Mini 52-Pin with bottom-side keep-outs\0"
+		"PCI Express Mini 52-Pin without bottom-side keep-outs\0"
+		"PCI Express Mini 76-Pin\0"
+		"CXL Flexbus 1.0");
+
+	DefineListLoad("ST_SMBIOS_SLOT_TYPES2",
+
+		" \0"
+		" \0"
+		" \0"
+		" \0"
+		" \0"
+		"PCI Express\0"
+		"PCI Express 1x\0"
+		"PCI Express 2x\0"
+		"PCI Express 4x\0"
+		"PCI Express 8x\0"
+		"PCI Express 16x\0"
+		"PCI Express Gen 2\0"
+		"PCI Express Gen 2 1x\0"
+		"PCI Express Gen 2 2x\0"
+		"PCI Express Gen 2 4x\0"
+		"PCI Express Gen 2 8x\0"
+		"PCI Express Gen 2 16x\0"
+		"PCI Express Gen 3\0"
+		"PCI Express Gen 3 1x\0"
+		"PCI Express Gen 3 2x\0"
+		"PCI Express Gen 3 4x\0"
+		"PCI Express Gen 3 8x\0"
+		"PCI Express Gen 3 16x\0"
+		"PCI Express Gen 4\0"
+		"PCI Express Gen 4 1x\0"
+		"PCI Express Gen 4 2x\0"
+		"PCI Express Gen 4 4x\0"
+		"PCI Express Gen 4 8x\0"
 		"PCI Express Gen 4 16x");
+
 	//Section 7.10.2 line 1244 (slot data bus width field)
-	DefineListLoad("ST_SMBIOS_SLOT_DATA_BUS_WIDTHS"," \0Other\0Unknown\08 Bit\016 Bit\032 Bit\064 Bit\0128 Bit\01x\02x\04x\08x\012x\016x\032x");
+	DefineListLoad("ST_SMBIOS_SLOT_DATA_BUS_WIDTHS",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"8 Bit\0"
+		"16 Bit\0"
+		"32 Bit\0"
+		"64 Bit\0"
+		"128 Bit\0"
+		"1x\0"
+		"2x\0"
+		"4x\0"
+		"8x\0"
+		"12x\0"
+		"16x\0"
+		"32x");
+
 	//Section 7.10.6 line 1259 (slot characteristics 1 field)
-	DefineListLoad("ST_SMBIOS_SLOT_FLAGS1", " \05.0 V\03.3 V\0Shared Slot Opening\0PC Card 16\0CardBus\0Zoom Video\0Modem Ring Resume");
+	DefineListLoad("ST_SMBIOS_SLOT_FLAGS1",
+
+		" \0"
+		"5.0 V\0"
+		"3.3 V\0"
+		"Shared Slot Opening\0"
+		"PC Card 16\0"
+		"CardBus\0"
+		"Zoom Video\0"
+		"Modem Ring Resume");
+
 	//Section 7.10.7 line 1262 (slot characteristics 2 field)
-	DefineListLoad("ST_SMBIOS_SLOT_FLAGS2", "PCI Power Management Event (PME#) Signal\0HotPlug\0SMBus\0Bifurcation");
+	DefineListLoad("ST_SMBIOS_SLOT_FLAGS2",
+
+		"PCI Power Management Event (PME#) Signal\0"
+		"HotPlug\0"
+		"SMBus\0"
+		"Bifurcation");
+
 	//Section 7.17.1 line 1523 (memory array location field)
-	DefineListLoad("ST_SMBIOS_PHYMEM_LOCATIONS", " \0Other\0Unknown\0Motherboard\0ISA Add-On Card\0EISA Add-On Card\0PCI Add-On Card\0"
-		"MCA Add-On Card\0PCMCIA Add-On Card\0Proprietary Add-On Card\0NuBus\0 \0 \0 \0 \0 \0");
+	DefineListLoad("ST_SMBIOS_PHYMEM_LOCATIONS",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"Motherboard\0"
+		"ISA Add-On Card\0"
+		"EISA Add-On Card\0"
+		"PCI Add-On Card\0"
+		"MCA Add-On Card\0"
+		"PCMCIA Add-On Card\0"
+		"Proprietary Add-On Card\0"
+		"NuBus\0"
+		" \0"
+		" \0"
+		" \0"
+		" \0"
+		" \0");
+
 	//Section 7.17.2 line 1527 (memory array use field)
-	DefineListLoad("ST_SMBIOS_PHYMEM_USES", " \0Other\0Unknown\0System Memory\0Video Memory\0Flash Memory\0Non-Volatile RAM\0Cache Memory");
+	DefineListLoad("ST_SMBIOS_PHYMEM_USES",
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"System Memory\0"
+		"Video Memory\0"
+		"Flash Memory\0"
+		"Non-Volatile RAM\0"
+		"Cache Memory");
+
 	//Section 7.18.1 line 1542 (form factor field)
 	DefineListLoad("ST_SMBIOS_MEMDEV_FORM_FACTORS",
-		" \0Other\0Unknown\0SIMM\0SIP\0DIP\0ZIP\0Proprietary Card\0DIMM\0TSOP\0Row of Chips\0RIMM\0SODIMM\0SRIMM\0FB-DIMM\0Die");
+
+		" \0"
+		"Other\0"
+		"Unknown\0"
+		"SIMM\0"
+		"SIP\0"
+		"DIP\0"
+		"ZIP\0"
+		"Proprietary Card\0"
+		"DIMM\0"
+		"TSOP\0"
+		"Row of Chips\0"
+		"RIMM\0"
+		"SODIMM\0"
+		"SRIMM\0"
+		"FB-DIMM\0"
+		"Die");
+
 	//Section 7.18.2 line 1546 (type field)
-	DefineListLoad("ST_SMBIOS_MEMDEV_TYPES", " \0Unknown\0DRAM\0EDRAM\0VRAM\0SRAM\0RAM\0ROM\0FLASH\0EEPROM\0FEPROM\0EPROM\0CDRAM\0"
-		"3DRAM\0SDRAM\0SGRAM\0RDRAM\0DDR\0DDR2\0DDR2 FB-DIMM\0 \0 \0 \0DDR3\0FBD2\0DDR4\0LPDDR\0LPDDR2\0LPDDR3\0LPDDR4\0"
-		"Logical Non-Volatile Device\0HBM (High Bandwidth Memory)\0HBM2 (High Bandwidth Memory Gen 2)");
+	DefineListLoad("ST_SMBIOS_MEMDEV_TYPES",
+
+		" \0"
+		"Unknown\0"
+		"DRAM\0"
+		"EDRAM\0"
+		"VRAM\0"
+		"SRAM\0"
+		"RAM\0"
+		"ROM\0"
+		"FLASH\0"
+		"EEPROM\0"
+		"FEPROM\0"
+		"EPROM\0"
+		"CDRAM\0"
+		"3DRAM\0"
+		"SDRAM\0"
+		"SGRAM\0"
+		"RDRAM\0"
+		"DDR\0"
+		"DDR2\0"
+		"DDR2 FB-DIMM\0"
+		" \0"
+		" \0"
+		" \0"
+		"DDR3\0"
+		"FBD2\0"
+		"DDR4\0"
+		"LPDDR\0"
+		"LPDDR2\0"
+		"LPDDR3\0"
+		"LPDDR4\0"
+		"Logical Non-Volatile Device\0"
+		"HBM (High Bandwidth Memory)\0"
+		"HBM2 (High Bandwidth Memory Gen 2)");
+
 	//Section 7.18.3 line 1550 (type detail field)
-	DefineListLoad("ST_SMBIOS_MEMDEV_TYPE_DETAILS", " \0 \0 \0Fast Paged\0Static Column\0Psuedo Static\0RAMBUS\0Synchronous\0"
-		"CMOS\0EDO\0Window DRAM\0Cache DRAM\0Non Volatile\0Registered (Buffered)\0Unregistered (Unbuffered)\0LRDIMM");
+	DefineListLoad("ST_SMBIOS_MEMDEV_TYPE_DETAILS",
+
+		" \0"
+		" \0"
+		" \0"
+		"Fast Paged\0"
+		"Static Column\0"
+		"Psuedo Static\0"
+		"RAMBUS\0"
+		"Synchronous\0"
+		"CMOS\0"
+		"EDO\0"
+		"Window DRAM\0"
+		"Cache DRAM\0"
+		"Non Volatile\0"
+		"Registered (Buffered)\0"
+		"Unregistered (Unbuffered)\0"
+		"LRDIMM");
 } SMBIOSInit;
 
 Bool SMBIOSEntryScan(CSMBIOSEntryPoint **entry)
 {//Search 0xF0000 - 0x100000 for SMBIOS Entry Point structure.
-	I64 i;
+	I64		 i;
 	U8 noreg checksum = 0, *mem = 0xF0000;
+
 	do
 	{
 		if (!MemCompare(mem, "_SM_", 4))
@@ -125,7 +671,9 @@ Bool SMBIOSEntryScan(CSMBIOSEntryPoint **entry)
 			if (checksum == 0) //valid checksums sum to zero
 				break;
 		}
-	} while ((mem += 16) < 0x100000); //anchor sits on 16-byte boundary
+	}
+	while ((mem += 16) < 0x100000); //anchor sits on 16-byte boundary
+
 	return mem != 0x100000;
 }
 
@@ -134,7 +682,8 @@ U8 *SMBIOSStr(CSMBIOSHeader *header, I64 str_num, U8 *default="None")
 	I64 i;
 	U8* ptr = header(U8 *) + header->length;
 
-	if (!str_num) return default;
+	if (!str_num)
+		return default;
 
 	for (i = 1; i < str_num; i++)
 	{
@@ -142,13 +691,15 @@ U8 *SMBIOSStr(CSMBIOSHeader *header, I64 str_num, U8 *default="None")
 		if (!ptr[0] && !ptr[1])  //structure ends in double NULL
 			return default;
 	}
+
 	return ptr;
 }
 
 CSMBIOSHeader *SMBIOSStructGet(I64 type=0xFFFFF, I64 handle=0xFFFFF, CSMBIOSHeader *head=NULL)
 {//Search for struct with type or handle. Return NULL if not found.
-	I64 i;
-	CSMBIOSEntryPoint *entry;
+	I64					 i;
+	CSMBIOSEntryPoint	*entry;
+
 	if (!head)
 	{
 		if (!SMBIOSEntryScan(&entry))
@@ -166,6 +717,7 @@ CSMBIOSHeader *SMBIOSStructGet(I64 type=0xFFFFF, I64 handle=0xFFFFF, CSMBIOSHead
 		for (i = 1; head(U8 *)[i - 1] || head(U8 *)[i]; i++);
 		head = head(U8 *) + i + 1;	
 	}
+
 	return NULL;
 }
 
@@ -180,15 +732,16 @@ U8 *SysRepFlagsMake(U8 *buf)
 
 	str = MStrPrint("$$ID,17$$%s$$ID,-17$$", tmp);
 	Free(tmp);
+
 	return str;
 }
 
 public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE, I64 memdev_handle=0xFFFF)
 {//Display info of System Management BIOS (SMBIOS) structures.  Returns structure count of displayed structures.
-	I64 i = 1, structure_count = 0, cache_count = 0;
-	CSMBIOSEntryPoint *entry;
-	CSMBIOSHeader *header;
-	U8 buffer[2048], buffer2[512], *str;
+	I64					 i = 1, structure_count = 0, cache_count = 0;
+	CSMBIOSEntryPoint	*entry;
+	CSMBIOSHeader		*header;
+	U8					buffer[2048], buffer2[512], *str;
 
 	if (!SMBIOSEntryScan(&entry))
 	{
@@ -239,6 +792,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					}
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_SYSTEM:
 					CSMBIOSSystemInfo *sys_info = header;
 					"$$TR-C,\"System\"$$\n";
@@ -255,6 +809,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					"Family\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, sys_info->family);
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_ENCLOSURE:
 					CSMBIOSEnclosureInfo *info = header;
 					"$$TR-C,\"Enclosure\"$$\n";
@@ -280,6 +835,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 //					"Contained Elements:$$BLACK$$",r,'\t';  //TODO: maybe implement this?
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_PROCESSOR:
 					CSMBIOSProcessorInfo *p_info = header;
 					CRAXRBXRCXRDX regs;
@@ -360,6 +916,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					}
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_CACHE:
 					if (!handle)
 						break;
@@ -398,6 +955,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					"Associativity\t\t\t:$$BLACK$$%Z$$FG$$\n", c_info->associativity, "ST_SMBIOS_CACHE_ASSOCIATIVITY";
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_PHYMEM:
 					CSMBIOSMemArrayInfo *ma_info = header;
 					"$$TR,\"Memory Array\"$$\n";
@@ -418,6 +976,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					"$$ID,-3$$";
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_MEM_DEVICE:
 					CSMBIOSMemDeviceInfo *mem_info = header;
 					if (type != SMBIOSt_MEM_DEVICE)
@@ -488,6 +1047,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					Free(str);
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_BASEBOARD:
 					CSMBIOSBaseboardInfo *b_info = header;
 					"$$TR-C,\"Baseboard\"$$\n";
@@ -507,6 +1067,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					Free(str);
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_CONNECTOR:
 					CSMBIOSConnectorInfo *con_info = header;
 					"$$TR,\"Port Connector\"$$\n";
@@ -531,6 +1092,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 						"%Z$$FG$$\n", con_info->internal_type, "ST_SMBIOS_CONNECTOR_TYPES";
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_BATTERY:
 					CSMBIOSBatteryInfo *bat_info = header;
 					"$$TR,\"Battery\"$$\n";
@@ -571,6 +1133,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 						"%d$$FG$$\n", bat_info->sbds_serial_number;
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_OEM_STRINGS:
 				case SMBIOSt_SYS_CONFIG_OPTIONS:
 					if (header->type == SMBIOSt_OEM_STRINGS)	
@@ -584,6 +1147,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 						"\t\t\t\t\t:$$BLACK$$%s$$FG$$\n", SMBIOSStr(header, i);
 					"$$ID,-3$$";
 					break;
+
 				case SMBIOSt_SLOT:
 					CSMBIOSSlotInfo *slot_info = header;
 					"$$TR,\"Slot\"$$\n";
@@ -627,6 +1191,7 @@ public I64 SysRep(I64 type=SMBIOSt_ALL, I64 handle=0, Bool show_all_flags=FALSE,
 					}
 					"$$ID,-3$$";
 					break;
+
 				case 28:
 					"$$TR,\"Temperature Probe\"$$\n";
 					break;
@@ -641,6 +1206,7 @@ loop_end:
 	}
 	if (!handle)
 		"$$FD,BLUE$$";
+
 	return structure_count;
 }
 

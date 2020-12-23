@@ -28,6 +28,7 @@ U0 TaskResetAwaitingMessage(CTask *task=NULL)
 {//Pop-ups get parent messages so wake-up our pop-ups if we got a message.
 	if (!task)
 		task = Fs;
+
 	PUSHFD
 	CLI
 	do
@@ -80,6 +81,7 @@ CJob *TaskExe(CTask *server, CTask *master, U8 *data, I64 flags)
 		}
 	}
 	POPFD
+
 	return res;
 }
 
@@ -134,6 +136,7 @@ CJob *TaskText(CTask *server, CTask *master, U8 *data, I64 flags)
 		LBtr(&task->server_ctrl.flags, JOBCf_LOCKED);
 	}
 	POPFD
+
 	return res;
 }
 
@@ -188,6 +191,7 @@ CJob *TaskMessage(CTask *_server, CTask *master, I64 message_code, I64 arg1, I64
 
 	if (message_code < 0) //Down-Up
 		TaskMessage(_server, master, -message_code + 1, arg1, arg2, flags);
+
 	return tmpc;
 }
 
@@ -231,6 +235,7 @@ Bool JobResScan(CJob *request=NULL, I64 *_res=NULL)
 	}
 	if (_res)
 		*_res = 0;
+
 	return FALSE;
 }
 
@@ -258,6 +263,7 @@ I64 JobResGet(CJob *request=NULL)
 	LBtr(&Fs->task_flags, TASKf_IDLE);
 //Could get taken by someone else.
 	JobResScan(request, &res);
+
 	return res;
 }
 
@@ -399,6 +405,7 @@ I64 JobRunOne(I64 run_flags, CJobCtrl *ctrl)
 			RFlagsSet(old_flags);
 		}
 	}
+
 	return res;
 }
 
@@ -421,8 +428,10 @@ I64 JobsHandler(I64 run_flags, CTask *task=NULL)
 				case JOB_CONT:
 					count++;
 					break;
+
 				case JOB_EXIT:
 					Exit;
+
 				case JOB_DONE:
 					goto jh_done;
 			}
@@ -491,6 +500,7 @@ I64 Zenith(U8 *format, ...)
 	}
 	JobResScan(tmpc, &res);
 	Free(buf);
+
 	return res;
 }
 

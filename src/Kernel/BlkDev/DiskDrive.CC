@@ -140,9 +140,11 @@ U0 DriveFATBlkSet(CDrive *drive, I64 c, I64 fat_sel=3)
 		case FSt_FAT32:
 			fat_blk_num = c >> (BLK_SIZE_BITS - 2);
 			break;
+
 		case FSt_REDSEA:
 			fat_blk_num = (c-drive->data_area) >> (BLK_SIZE_BITS + 3);
 			break;
+
 		default:
 			throw('Drive');
 	}
@@ -317,6 +319,7 @@ Bool Drive(U8 drv_let)
 		case FSt_REDSEA:
 		case FSt_FAT32:
 			return TRUE;
+
 		default:
 			PrintErr("File System Not Supported\n");
 			return FALSE;

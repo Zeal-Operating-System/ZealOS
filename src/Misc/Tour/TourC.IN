@@ -1,10 +1,9 @@
-TourPut(
-"We will now run a test-suite that automatically executes most ZenithOS "
-"demos.  It takes a few minutes, so kick-back.\n\n"
-"Press $$GREEN$$<ENTER>$$FG$$.\n");
+TourPut(	"We will now run a test-suite that automatically executes most ZenithOS "
+			"demos.  It takes a few minutes, so kick-back.\n\n"
+			"Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 "#include \"::/Misc/OSTestSuite\";";
 InGetStr("\n");
 
-if (LBtr(&tour_put->display_flags,DISPLAYf_SHOW))
+if (LBtr(&tour_put->display_flags, DISPLAYf_SHOW))
 	WinZBufUpdate;

@@ -32,9 +32,11 @@ Bool DriveTypeSet(U8 drv_let, I64 type=FSt_REDSEA)
 									case FSt_REDSEA:
 										mbr.p[i].type = MBR_PT_REDSEA;
 										break;
+
 									case FSt_FAT32:
 										mbr.p[i].type = MBR_PT_FAT32a;
 										break;
+
 									default:
 										throw('Drive');
 								}
@@ -100,6 +102,7 @@ U0 Format(I64 drv_let, Bool quick=TRUE, Bool confirm=TRUE, I64 type=FSt_FAT32)
 			DiskCacheInvalidate(Letter2Drive(drv_let));
 			Drive(drv_let);
 			break;
+
 		default:
 			PrintErr("File System Not Supported\n");
 	}

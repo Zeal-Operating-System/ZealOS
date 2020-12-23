@@ -1,10 +1,11 @@
 Bool app_done;
-I64 app_done_ack;
+I64  app_done_ack;
 
 U0 Job1(I64)
 {//Compile Compiler
 	Silent;
-	while (!app_done) {
+	while (!app_done)
+	{
 		Cd("::/Compiler");
 		Comp("Compiler");
 	}
@@ -13,8 +14,9 @@ U0 Job1(I64)
 
 U0 Job2(I64)
 {//Log a file
-	while (!app_done) {
-		ZenithLog("%F","::/Demo/MultiCore/LoadTest.CC");
+	while (!app_done)
+	{
+		ZenithLog("%F", "::/Demo/MultiCore/LoadTest.CC");
 		Yield;
 	}
 	lock {app_done_ack--;}
@@ -22,9 +24,10 @@ U0 Job2(I64)
 
 U0 Job3(I64)
 {//Log a file
-	while (!app_done) {
+	while (!app_done)
+	{
 		Cd("::/Compiler");
-		ZenithLog("%F","Compiler.PRJ");
+		ZenithLog("%F", "Compiler.PRJ");
 		Yield;
 	}
 	lock {app_done_ack--;}
@@ -32,15 +35,15 @@ U0 Job3(I64)
 
 U0 Main()
 {
-	app_done=FALSE;
+	app_done = FALSE;
 	"Running MultiCore Test...\n";
-	Spawn(&Job1,,,1); //core #1
-	Spawn(&Job2,,,1);
-	Spawn(&Job3,,,1);
+	Spawn(&Job1,,, 1); //core #1
+	Spawn(&Job2,,, 1);
+	Spawn(&Job3,,, 1);
 	PressAKey;
-//We don't want to yank code from under MP cores.
-	app_done_ack=3;
-	app_done=TRUE;
+	//We don't want to yank code from under MP cores.
+	app_done_ack = 3;
+	app_done = TRUE;
 	while (app_done_ack)
 		Yield;
 }

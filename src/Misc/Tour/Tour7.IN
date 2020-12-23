@@ -1,44 +1,41 @@
-TourPut(
-"$$RED$$$$TX+L+PU+UL,\"F\",A=\"MN:F\"$$$$FG$$() is a handy function.  "
-"It is a wrapper around $$RED$$$$TX+L+PU+UL,\"Find\",A=\"MN:Find\"$$$$FG$$().  "
-"It searches for a sym.\n",TRUE);
+TourPut(	"$$RED$$$$TX+L+PU+UL,\"F\",A=\"MN:F\"$$$$FG$$() is a handy function.  "
+			"It is a wrapper around $$RED$$$$TX+L+PU+UL,\"Find\",A=\"MN:Find\"$$$$FG$$().  "
+			"It searches for a sym.\n", TRUE);
 
 TourPut("Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\n";
 
 "F(\"RED\");";
 InGetStr("\n");
 Sleep(2000);
 
-TourPut("Notice the number of matches.\n",TRUE);
+TourPut("Notice the number of matches.\n", TRUE);
 
-TourPut(
-"Try it with the $$GREEN$$+l$$FG$$ flag.  This limits to whole labels, not "
-"partials.\n",TRUE);
+TourPut(	"Try it with the $$GREEN$$+l$$FG$$ flag.  This limits to whole labels, not "
+			"partials.\n", TRUE);
 
 TourPut("Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\n";
 
 "F(\"RED\",\"+l\");";
 InGetStr("\n");
 Sleep(2000);
 
-TourPut("Notice the number of matches.\n",TRUE);
+TourPut("Notice the number of matches.\n", TRUE);
 
-TourPut(
-"Try it with the $$GREEN$$+l-i$$FG$$ flag.  This does not ignore case and "
-"limits to whole labels, not partials.\n",TRUE);
+TourPut(	"Try it with the $$GREEN$$+l-i$$FG$$ flag.  This does not ignore case and "
+			"limits to whole labels, not partials.\n", TRUE);
 
 TourPut("Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\n";
 
 "F(\"RED\",\"+l-i\");";
@@ -47,23 +44,21 @@ Sleep(2000);
 
 TourPut("Notice the number of matches.\n",TRUE);
 
-TourPut(
-"The wrapper function is in your $$RED$$~/HomeWrappers.CC$$FG$$ file.  "
-"There is a function $$RED$$$$TX+L+PU+UL,\"R\",A=\"MN:R\"$$$$FG$$() for "
-"find and replace.  Feel free to customize.\n",TRUE);
+TourPut(	"The wrapper function is in your $$RED$$~/HomeWrappers.CC$$FG$$ file.  "
+			"There is a function $$RED$$$$TX+L+PU+UL,\"R\",A=\"MN:R\"$$$$FG$$() for "
+			"find and replace.  Feel free to customize.\n", TRUE);
 
 TourPut("Press $$GREEN$$<ENTER>$$FG$$.\n");
 
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\n";
 
 "Ed(\"~/HomeWrappers.CC\");";
 InGetStr("\n");
 
 TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort the source code.\n");
-InUntilChar(CH_ESC,CH_SHIFT_ESC);
+InUntilChar(CH_ESC, CH_SHIFT_ESC);
 
-TourPut(
-"$$GREEN$$+lb$$FG$$ is whole label just before.\n"
-"$$GREEN$$+la$$FG$$ is whole label just after.\n",TRUE);
+TourPut(	"$$GREEN$$+lb$$FG$$ is whole label just before.\n"
+			"$$GREEN$$+la$$FG$$ is whole label just after.\n", TRUE);

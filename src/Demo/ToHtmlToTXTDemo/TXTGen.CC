@@ -5,4 +5,4 @@ an plain ASCII text document named, "OutPage.DD".
 
 Cd(__DIR__);;
 
-ToTXT("DemoInPage.DD","~/DemoOutPage");
+ToTXT("DemoInPage.DD", "~/DemoOutPage");

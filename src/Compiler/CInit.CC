@@ -459,7 +459,7 @@ U0 CompLoadDefines()
 
 U0 CompFillTables()
 {
-	I64 i;
+	I64  i;
 	U32 *d;
 
 	cmp.to_reg_vars_map = CAlloc(REG_REGS_NUM * sizeof(U8));

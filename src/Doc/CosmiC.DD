@@ -4,19 +4,19 @@ $WW,1$$FG,5$$TX+CX,"CosmiC"$$FG$
 
 * See $LK,"Scoping and Linkage",A="FI:::/Doc/ScopingLinkage.DD"$ for details on $FG,2$extern$FG$, $FG,2$import$FG$, $FG,2$_extern$FG$, $FG,2$_import$FG$, etc.
 
-* Built-in types include $FG,2$I0,I8,I16,I32,I64$FG$ for signed 0-8 byte ints and $FG,2$U0,U8,U16,U32,U64$FG$ for unsigned 0-8 byte ints and $FG,2$F64$FG$ for 8 byte floats.
+* Built-in types include $FG,2$I0, I8, I16, I32, I64$FG$ for signed 0-8 byte ints and $FG,2$U0, U8, U16, U32, U64$FG$ for unsigned 0-8 byte ints and $FG,2$F64$FG$ for 8 byte floats.
 
-$FG,2$				U0			void, but ZERO size!
-				I8			char
-				U8			unsigned char
-				I16 		short
-				U16 		unsigned short
-				I32 		int
-				U32 		unsigned int
-				I64 		long (64-bit)
-				U64 		unsigned long (64-bit)
-				F64 		double$FG$
-				$FG,4$no F32 float.$FG$
+$FG,2$	U0			void, but ZERO size!
+	I8			char
+	U8			unsigned char
+	I16 		short
+	U16 		unsigned short
+	I32 		int
+	U32 		unsigned int
+	I64 		long (64-bit)
+	U64 		unsigned long (64-bit)
+	F64 		double$FG$
+	$FG,4$no F32 float.$FG$
 
 * Function with no args, or just default args can be called without parentheses.
 
@@ -25,29 +25,29 @@ $FG,2$				U0			void, but ZERO size!
 	>$FG,2$Dir;$FG$
 
 * Default args don't have to be on the end.  This code is valid:
-$ID,2$$FG,2$U0 Test(I64 i=4,I64 j,I64 k=5)
+$ID,2$$FG,2$U0 Test(I64 i=4, I64 j, I64 k=5)
 {
-	Print("%X %X %X\n",i,j,k);
+	Print("%X %X %X\n", i, j, k);
 }
 
-Test(,3);$FG$
+Test(, 3);$FG$
 $ID,-2$
 * A char const all alone is sent to $LK,"PutChars",A="MN:PutChars"$().	A string with or without args is sent to $LK,"Print",A="MN:Print"$().  An empty string literal signals a variable format_str follows.
 
-$ID,2$$FG,2$void DemoC(char drv,char *format,char *name,int age)
+$ID,2$$FG,2$void DemoC(char drv, char *format, char *name, int age)
 {
 	printf("Hello World!\n");
-	printf("%s age %d\n",name,age);
-	printf(format,name,age);
+	printf("%s age %d\n", name, age);
+	printf(format, name, age);
 	putchar(drv);
 	putchar('*');
 }
 
-U0 DemoCosmiC(U8 drive,U8 *format,U8 *name,I64 age)
+U0 DemoCosmiC(U8 drive, U8 *format, U8 *name, I64 age)
 {
 	"Hello World!\n";
-	"%s age %d\n",name,age;
-	"" format,name,age;
+	"%s age %d\n", name, age;
+	"" format, name, age;
 	'' drive;
 	'*';
 }
@@ -60,7 +60,7 @@ $FG$$ID,-2$
 
 * There are no bit fields, but there are $LK,"bit access",A="HI:Bit"$ routines and you can access bytes or words within any int.	See $LK,"I64 declaration",A="MN:I64"$.	A class can be accessed as a whole are subints, if you put a type in front of the $FG,2$class$FG$ declaration.
 $ID,2$
-$FG,2$public I64i union I64 						//"I64i" is intrinsic.	We are defining "I64".
+$FG,2$public I64i union I64 	//"I64i" is intrinsic.	We are defining "I64".
 {
 	I8i i8[8];
 	U8i u8[8];
@@ -70,40 +70,43 @@ $FG,2$public I64i union I64 						//"I64i" is intrinsic.	We are defining "I64".
 	U32 u32[2];
 };
 
-I64 i=0x123456780000DEF0;
-i.u16[1]=0x9ABC;
+I64 i = 0x123456780000DEF0;
+i.u16[1] = 0x9ABC;
 $FG$$ID,-2$
 * Variable arg count functions ($FG,2$...$FG$) can access their args with built-in variables similar to '$FG,2$this$FG$' in C++.	They are '$FG,2$I64 argc$FG$' and '$FG,2$I64 argv[]$FG$'.
 $ID,2$$WW,0$
 $FG,2$I64 AddNums(...)
 {
-	I64 i,res=0;
-	for (i=0;i<argc;i++)
-		res+=argv[i];
+	I64 i, res = 0;
+
+	for (i = 0; i < argc; i++)
+		res += argv[i];
+
 	return res;
 }
 
-$FG$>$FG,2$AddNums(1,2,3);$FG$
-ans=6
+$FG$>$FG,2$AddNums(1, 2, 3);$FG$
+ans = 6
 $FG,2$
 
-public U0 GrPrint(CDC *dc,I64 x,I64 y,U8 *format,...)
+public U0 GrPrint(CDC *dc, I64 x, I64 y, U8 *format, ...)
 {
-	U8 *buf=$LK,"StrPrintJoin",A="MN:StrPrintJoin"$(NULL,format,argc,argv);//SPrintF() with $LK,"MAlloc",A="MN:MAlloc"$()ed string.
-	$LK,"GrPutS",A="MN:GrPutS"$(dc,x,y,buf); //Plot string at x,y pixels. GrPutS is not public.
+	U8 *buf = $LK,"StrPrintJoin",A="MN:StrPrintJoin"$(NULL, format, argc, argv); //SPrintF() with $LK,"MAlloc",A="MN:MAlloc"$()ed string.
+
+	$LK,"GrPutS",A="MN:GrPutS"$(dc, x, y, buf); //Plot string at x,y pixels. GrPutS is not public.
 	Free(buf);
 }
 
 	...
 
-	GrPrint(gr.dc,(GR_WIDTH-10*FONT_WIDTH)>>1,(GR_HEIGHT-FONT_HEIGHT)>>1,
-				"Score:%4d",score);  //Print score in the center of the screen.
+	GrPrint(gr.dc, (GR_WIDTH - 10 * FONT_WIDTH) >> 1, (GR_HEIGHT - FONT_HEIGHT) >> 1, "Score:%4d", score);
+		//Print score in the center of the screen.
 	...
 
 $WW,1$$FG$$ID,-2$
-* Allows "$FG,2$5<i<j+1<20$FG$" instead of "$FG,2$5<i && i<j+1 && j+1<20$FG$".
+* Allows "$FG,2$5 < i < j + 1 < 20$FG$" instead of "$FG,2$5 < i && i < j + 1 && j + 1 < 20$FG$".
 $ID,2$
-$FG,2$if (13<=age<20)
+$FG,2$if (13 <= age < 20)
 	"Teen-ager";
 $FG$$ID,-2$
 * if you know a switch stmt will not exceed the lowest or highest case values.	$FG,2$switch []$FG$ is a little faster because it doesn't check.
@@ -115,12 +118,14 @@ $FG$$ID,-2$
 * A no case number causes next higher int case in $FG,2$switch$FG$ statements.	See $LK,"::/Demo/NullCase.CC"$.
 
 $ID,2$$FG,2$I64 i;
-for (i=0;i<20;i++)
-	switch (i) {
-		case: "Zero\n"; 		break; //Starts at zero
-		case: "One\n";			break; //One plus prev case.
-		case: "Two\n";			break;
-		case: "Three\n";		break;
+
+for (i = 0; i < 20; i++)
+	switch (i)
+	{
+		case: "Zero\n";		break; //Starts at zero
+		case: "One\n";		break; //One plus prev case.
+		case: "Two\n";		break;
+		case: "Three\n";	break;
 		case 10: "Ten\n"; 	break;
 		case: "Eleven\n"; 	break; //One plus prev case.
 	}$FG$$ID,-2$
@@ -128,15 +133,17 @@ for (i=0;i<20;i++)
 * Switch statements can be nestled with a single switch expression!  This is known as a "sub_switch" statement.  $FG,2$start$FG$/$FG,2$end$FG$ are used to group cases.  Don't goto out of, throw an exception out of, or return out of the $FG,2$start$FG$ front porch area.  See $LK,"::/Demo/SubSwitch.CC"$.
 
 $ID,2$$FG,2$I64 i;
-for (i=0;i<10;i++)
-	switch (i) {
+
+for (i = 0; i < 10; i++)
+	switch (i)
+	{
 		case 0: "Zero ";		break;
 		case 2: "Two "; 		break;
 		case 4: "Four ";		break;
 		start:
 			"[";
 			case 1: "One";		break;
-			case 3: "Three";break;
+			case 3: "Three";	break;
 			case 5: "Five"; 	break;
 		end:
 			"] ";
@@ -154,16 +161,16 @@ $ID,-2$
 $ID,2$$FG,2$U0 Main()
 {
 	//Only use $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$ or $LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$ for reg vars or else clobbered.
-	I64 reg R15 i=5, noreg j=4;
+	I64 reg R15 i = 5, noreg j = 4;
 	no_warn i;
 	asm {
-				MOV 		RAX,R15
+				MOV 		RAX, R15
 				CALL		&PUT_HEX_U64
-				MOV 		RAX,'\n'
+				MOV 		RAX, '\n'
 				CALL		&PUT_CHARS
-				MOV 		RAX,U64 &j[RBP]
+				MOV 		RAX, U64 &j[RBP]
 				CALL		&PUT_HEX_U64
-				MOV 		RAX,'\n'
+				MOV 		RAX, '\n'
 				CALL		&PUT_CHARS
 	}
 }
@@ -175,10 +182,10 @@ $FG$$ID,-2$
 $ID,2$$FG,2$asm {
 HELLO_WORLD::
 				PUSH		RBP
-				MOV 		RBP,RSP
-				MOV 		RAX,'Hello '
+				MOV 		RBP, RSP
+				MOV 		RAX, 'Hello '
 				CALL		&PUT_CHARS
-				MOV 		RAX,'World\n'
+				MOV 		RAX, 'World\n'
 				CALL		&PUT_CHARS
 				LEAVE
 				RET
@@ -192,22 +199,22 @@ $FG$$ID,-2$
 * There is no question-colon operator.
 
 * ZenithOS $LK,"operator precedence",A="FF:::/Compiler/CInit.CC,cmp.binary_ops"$
-	$FG,2$`$FG$,$FG,2$>>$FG$,$FG,2$<<$FG$
-	$FG,2$*$FG$,$FG,2$/$FG$,$FG,2$%$FG$
+	$FG,2$`$FG$, $FG,2$>>$FG$, $FG,2$<<$FG$
+	$FG,2$*$FG$, $FG,2$/$FG$, $FG,2$%$FG$
 	$FG,2$&$FG$
 	$FG,2$^$FG$
 	$FG,2$|$FG$
-	$FG,2$+$FG$,$FG,2$-$FG$
-	$FG,2$<$FG$,$FG,2$>$FG$,$FG,2$<=$FG$,$FG,2$>=$FG$
-	$FG,2$==$FG$,$FG,2$!=$FG$
+	$FG,2$+$FG$, $FG,2$-$FG$
+	$FG,2$<$FG$, $FG,2$>$FG$, $FG,2$<=$FG$, $FG,2$>=$FG$
+	$FG,2$==$FG$, $FG,2$!=$FG$
 	$FG,2$&&$FG$
 	$FG,2$^^$FG$
 	$FG,2$||$FG$
-	$FG,2$=$FG$,$FG,2$<<=$FG$,$FG,2$>>=$FG$,$FG,2$*=$FG$,$FG,2$/=$FG$,$FG,2$&=$FG$,$FG,2$|=$FG$,$FG,2$^=$FG$,$FG,2$+=$FG$,$FG,2$-=$FG$
+	$FG,2$=$FG$, $FG,2$<<=$FG$, $FG,2$>>=$FG$, $FG,2$*=$FG$, $FG,2$/=$FG$, $FG,2$&=$FG$, $FG,2$|=$FG$, $FG,2$^=$FG$, $FG,2$+=$FG$, $FG,2$-=$FG$
 
-* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$,ON) to find unnecessary parentheses in code.
+* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$, ON) to find unnecessary parentheses in code.
 
-* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find dup local var type statements.
+* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$, ON) to find dup local var type statements.
 
 * With the $FG,2$#exe{}$FG$ feature in your src code, you can place programs that insert text into the stream of code being compiled.  See $LK,"#exe {}",A="FF:::/Kernel/KMain.CC,#exe {"$ for an example where the date/time and compile-time prompting for configuration data is placed into a program.  $LK,"StreamPrint",A="MN:StreamPrint"$() places text into a src program stream following the conclusion of the $FG,2$#exe{}$FG$ blk.
 
@@ -251,18 +258,19 @@ $ID,2$$FG,2$U0 Main()
 {
 	I16 i1;
 	I32 j1;
-	j1=i1=0x12345678; 						//Resulting i1 is 0x5678 but j1 is 0x12345678
 
-	I64 i2=0x8000000000000000;
-	Print("%X\n",i2>>1);	//Res is 0xC000000000000000 as expected
+	j1 = i1 = 0x12345678;	//Resulting i1 is 0x5678 but j1 is 0x12345678
 
-	U64 u3=0x8000000000000000;
-	Print("%X\n",u3>>1);	//Res is 0x4000000000000000 as expected
+	I64 i2 = 0x8000000000000000;
+	Print("%X\n", i2 >> 1);	//Res is 0xC000000000000000 as expected
 
-	I32 i4=0x80000000;						//const is loaded into a 64-bit reg var.
-	Print("%X\n",i4>>1);	//Res is 0x40000000
+	U64 u3 = 0x8000000000000000;
+	Print("%X\n", u3 >> 1);	//Res is 0x4000000000000000 as expected
 
-	I32 i5=-0x80000000;
-	Print("%X\n",i5>>1);	//Res is 0xFFFFFFFFC0000000
+	I32 i4 = 0x80000000;	//const is loaded into a 64-bit reg var.
+	Print("%X\n", i4 >> 1);	//Res is 0x40000000
+
+	I32 i5 = -0x80000000;
+	Print("%X\n", i5 >> 1);	//Res is 0xFFFFFFFFC0000000
 }
 $ID,-2$$FG$

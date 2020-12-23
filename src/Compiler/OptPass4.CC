@@ -1,7 +1,7 @@
 Bool OptIC4(CIntermediateCode *tmpi)
 {
-	I64 i;
-	CIntermediateCode *tmpil1, *tmpil2;
+	I64					 i;
+	CIntermediateCode	*tmpil1, *tmpil2;
 
 	if (tmpi->ic_code < IC_IMM_I64)
 		return FALSE;
@@ -144,17 +144,19 @@ Bool OptIC4(CIntermediateCode *tmpi)
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
 U0 OptPass4(CCompCtrl *cc, COptReg *reg_offsets, I64 *_type)
 {
-	CHashClass *tmpc, *tmpc1, *tmpc2;
-	CIntermediateCode *tmpi, *tmpi1, *tmpi2, *tmpil1, *tmpil2, *tmpil3, *tmpi_next;
-	I64 code, i;
-	Bool dead_code = FALSE;
-	CCodeMisc *lb;
-	CParseStack *ps = cc->ps;
+	CHashClass			*tmpc, *tmpc1, *tmpc2;
+	CIntermediateCode	*tmpi, *tmpi1, *tmpi2, *tmpil1, *tmpil2, *tmpil3, *tmpi_next;
+	I64					 code, i;
+	Bool				 dead_code = FALSE;
+	CCodeMisc			*lb;
+	CParseStack			*ps = cc->ps;
+
 	ps->ptr = 0;
 	ps->ptr2 = 0;
 
@@ -196,6 +198,7 @@ U0 OptPass4(CCompCtrl *cc, COptReg *reg_offsets, I64 *_type)
 				case IS_V_ARG:
 					ps->ptr -= tmpi->ic_data >> 3;
 					break;
+
 				case IS_2_ARG:
 					tmpi2 = ParsePop(ps);
 					tmpc2 = tmpi2->ic_class;
@@ -203,6 +206,7 @@ U0 OptPass4(CCompCtrl *cc, COptReg *reg_offsets, I64 *_type)
 					tmpi1 = ParsePop(ps);
 					tmpc1 = tmpi1->ic_class;
 					break;
+
 				case IS_0_ARG: //nobound switch
 					break;
 			}
@@ -214,12 +218,14 @@ U0 OptPass4(CCompCtrl *cc, COptReg *reg_offsets, I64 *_type)
 					tmpi->arg1.disp = tmpi->ic_data;
 					tmpi->ic_code = IC_MOV;
 					break;
+
 				case IC_IMM_F64:
 					tmpi->arg1.type = MDF_IMM + RT_I64;
 					tmpi->arg1.disp = tmpi->ic_data;
 					tmpi->arg1_type_pointed_to = RT_F64;
 					tmpi->ic_code = IC_MOV;
 					break;
+
 				case IC_MOV:
 					if (tmpi->arg1.type & MDF_DISP && tmpi->arg1.reg == REG_RBP)
 					{
@@ -232,6 +238,7 @@ U0 OptPass4(CCompCtrl *cc, COptReg *reg_offsets, I64 *_type)
 						}
 					}
 					break;
+
 				case IC_DEREF:
 					if (tmpi1->ic_code == IC_LEA)
 					{
@@ -264,6 +271,7 @@ U0 OptPass4(CCompCtrl *cc, COptReg *reg_offsets, I64 *_type)
 						OptFree(tmpi1);
 					}
 					break;
+
 				case IC_BR_MM_ZERO:
 				case IC_BR_MM_NOT_ZERO:
 //(branch ++ to zero is unlikely)
@@ -316,6 +324,7 @@ p4_lea_gone:
 						OptFree(tmpi1);
 					}
 					break;
+
 				case IC_ADD:
 					if (tmpi1->ic_code == IC_MOV && tmpi1->arg1.type == MDF_REG + RT_I64 || tmpi1->ic_code == IC_REG)
 					{
@@ -397,6 +406,7 @@ p4_sib:
 						}
 					}
 					break;
+
 				case IC_ASSIGN_PP:
 				case IC_ASSIGN_MM:
 //this val was stashed during pass012 for pointer arithmetic
@@ -474,6 +484,7 @@ p4_sib:
 						OptSetNOP2(tmpi1);
 					}
 					break;
+
 				case IC_RETURN_VAL:
 				case IC_RETURN_VAL2:
 					if (!tmpi->ic_class)
@@ -498,9 +509,11 @@ p4_sib:
 					else if (_type)
 						*_type = tmpi->ic_class->raw_type;
 					break;
+
 				case IC_NOP1:
 					tmpi = OptFree(tmpi);
 					break;
+
 				case IC_BR_BT:
 				case IC_BR_BTS:
 				case IC_BR_BTR:
@@ -591,6 +604,7 @@ p4_sib:
 						}
 					}
 					break;
+
 				case IC_BR_EQU_EQU ...IC_BR_LESS_EQU:
 				case IC_BR_EQU_EQU2...IC_BR_LESS_EQU2:
 				case IC_BR_CARRY:
@@ -604,18 +618,22 @@ p4_sib:
 						lb->forward = NULL;
 					}
 					break;
+
 				case IC_LABEL:
 					lb = tmpi->ic_data;
 					if (lb->use_count)
 						dead_code = FALSE;
 					break;
+
 				case IC_JMP:
 				case IC_RET:
 					dead_code = TRUE;
 					break;
+
 				case IC_NOP2:
 					ps->ptr += tmpi->ic_data;
 					break;
+
 				case IC_CALL_END:
 				case IC_END_EXP:
 					if (!(tmpil1->ic_flags & ICF_PUSH_RES))
@@ -644,6 +662,7 @@ p4_sib:
 						}
 					}
 					break;
+
 				case IC_STR_CONST:
 				case IC_FS:
 				case IC_GS:
@@ -754,6 +773,7 @@ p4_sib:
 				case IC_SUB_CALL:
 				case IC_CALL_END2:
 					break;
+
 				default:
 					"Pass:%d Missing IC handler\n", cc->pass;
 					ICPut(cc, tmpi);

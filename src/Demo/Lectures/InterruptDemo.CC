@@ -30,8 +30,8 @@ F_UNARY_MINUS_CALL::
 //with a C callable function.
 _F_UM_INT::
 				PUSH		RBP
-				MOV 		RBP,RSP
-				MOV 		RAX,SF_ARG1[RBP]
+				MOV 		RBP, RSP
+				MOV 		RAX, SF_ARG1[RBP]
 				INT 		I_F_UNARY_MINUS
 				POP 		RBP
 				RET1		8
@@ -40,40 +40,40 @@ _F_UM_INT::
 //with a C callable function.
 _F_UM_CALL::
 				PUSH		RBP
-				MOV 		RBP,RSP
-				MOV 		RAX,SF_ARG1[RBP]
+				MOV 		RBP, RSP
+				MOV 		RAX, SF_ARG1[RBP]
 				CALL		F_UNARY_MINUS_CALL
 				POP 		RBP
 				RET1		8
 }
 
-_extern _F_UM_INT F64 UnaryMinusInt(F64 d);
+_extern _F_UM_INT  F64 UnaryMinusInt(F64 d);
 _extern _F_UM_CALL F64 UnaryMinusCall(F64 d);
 
 #define SAMPLE_SIZE 		1000000
 U0 TimeIns()
 {
-	I64 start,end;
-	I64 i,old_irq;
+	I64 start, end;
+	I64 i, old_irq;
 
 	CPURep;
-	old_irq=IntEntrySet(I_F_UNARY_MINUS,F_UNARY_MINUS_INT,IDTET_TRAP);
+	old_irq = IntEntrySet(I_F_UNARY_MINUS, F_UNARY_MINUS_INT, IDTET_TRAP);
 
 	//Measure interrupt time
-	start=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++)
+	start = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++)
 		UnaryMinusInt(ã);
-	end=TSCGet;
-	"Interrupt Cycles: %10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
+	end = TSCGet;
+	"Interrupt Cycles: %10.5f\n", ToF64(end - start) / SAMPLE_SIZE;
 
 	//Measure call time
-	start=TSCGet;
-	for (i=0;i<SAMPLE_SIZE;i++)
+	start = TSCGet;
+	for (i = 0; i < SAMPLE_SIZE; i++)
 		UnaryMinusCall(ã);
-	end=TSCGet;
-	"Call      Cycles: %10.5f\n",ToF64(end-start)/SAMPLE_SIZE;
+	end = TSCGet;
+	"Call      Cycles: %10.5f\n", ToF64(end - start) / SAMPLE_SIZE;
 
-	IntEntrySet(I_F_UNARY_MINUS,old_irq,IDTET_IRQ);
+	IntEntrySet(I_F_UNARY_MINUS, old_irq, IDTET_IRQ);
 }
 
 TimeIns;

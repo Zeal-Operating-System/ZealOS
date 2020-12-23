@@ -1,6 +1,7 @@
 CLexFile *LexFilePush(CCompCtrl *cc)
 {//#include file push.
 	CLexFile *res = CAlloc(sizeof(CLexFile));
+
 	if (res->next = cc->lex_include_stack)
 		res->depth = res->next->depth + 1;
 	else
@@ -35,7 +36,8 @@ CCompCtrl *CompCtrlNew(U8 *buf=NULL, I64 flags=0, U8 *filename=NULL)
 	//FileName is for error reporting.	If files are #included,
 	//new names are used.  See $LK,"Psalmody CompCtrlNew",A="FF:::/Apps/Psalmody/PsalmodyFile.CC,CompCtrlNew"$.
 	CCompCtrl *cc = CAlloc(sizeof(CCompCtrl));
-	CLexFile *tmpf;
+	CLexFile  *tmpf;
+
 	QueueInit(cc);
 	cc->flags = flags;
 	cc->opts = 1 << OPTf_WARN_UNUSED_VAR | 1 << OPTf_WARN_HEADER_MISMATCH;
@@ -73,8 +75,9 @@ U0 CompCtrlDel(CCompCtrl *cc)
 
 I64 CompCtrlSize(CCompCtrl *cc)
 {//Mem size of CCompCtrl and its members.
-	CLexFile *tmpf = cc->lex_include_stack;
-	I64 res = 0;
+	CLexFile	*tmpf = cc->lex_include_stack;
+	I64			 res = 0;
+
 	while (tmpf)
 	{
 		if (tmpf->next || !(cc->flags & CCF_DONT_FREE_BUF))
@@ -101,6 +104,7 @@ U32 lex_zeros = 0;
 Bool LexDollar(CCompCtrl *cc, CDoc *doc, CDocEntry *doc_e)
 {
 	U8 *st;
+
 	if (cc->flags & CCF_IN_QUOTES)
 	{
 		Free(cc->dollar_buf);
@@ -116,10 +120,11 @@ Bool LexDollar(CCompCtrl *cc, CDoc *doc, CDocEntry *doc_e)
 
 I64 LexCharGet(CCompCtrl *cc)
 {//Get one char from stream. Allow put-back one.
-	U8 *ptr, *src;
-	CLexFile *tmpf;
-	CDoc *doc;
-	CDocEntry *doc_e;
+	U8			*ptr, *src;
+	CLexFile	*tmpf;
+	CDoc		*doc;
+	CDocEntry	*doc_e;
+
 	if (!Btr(&cc->flags, CCf_USE_LAST_U16))
 	{
 lgc_start1:
@@ -161,6 +166,7 @@ lgc_start2:
 									goto lgc_start2;
 								}
 								break;
+
 							case DOCT_NEW_LINE:
 								tmpf->buf_ptr = cc->cur_buf_ptr = &lex_zeros;
 								tmpf->line_start = doc_e->next;
@@ -169,11 +175,13 @@ lgc_start2:
 								cmp.compiled_lines++;
 								cc->last_U16 = '\n';
 								goto lgc_done;
+
 							case DOCT_TAB:
 								tmpf->buf_ptr = cc->cur_buf_ptr = &lex_zeros;
 								tmpf->line_num = doc_e->y + 1;
 								cc->last_U16 = '\t';
 								goto lgc_done;
+
 							case DOCT_INS_BIN:
 								tmpf->buf_ptr = cc->cur_buf_ptr = &lex_zeros;
 								tmpf->line_num = doc_e->y + 1;
@@ -190,6 +198,7 @@ lgc_start2:
 								}
 								cc->last_U16 = TK_INS_BIN;
 								goto lgc_done;
+
 							case DOCT_INS_BIN_SIZE:
 								tmpf->buf_ptr = cc->cur_buf_ptr = &lex_zeros;
 								if (doc_e->bin_data)
@@ -199,6 +208,7 @@ lgc_start2:
 								tmpf->line_num = doc_e->y + 1;
 								cc->last_U16 = TK_INS_BIN_SIZE;
 								goto lgc_done;
+
 							case DOCT_SHIFTED_Y:
 								if (LexDollar(cc, doc, doc_e) && *(src = cc->dollar_buf))
 								{
@@ -218,10 +228,12 @@ lgc_start2:
 									goto lgc_done;
 								}
 								break;
+
 							case DOCT_MARKER:
 							case DOCT_CURSOR:
 								doc_e = doc_e->next;
 								goto lgc_start2;
+
 							case 0xFF: // nobound switch
 							default:
 								if (LexDollar(cc, doc, doc_e) && *(src = cc->dollar_buf))
@@ -272,8 +284,10 @@ lgc_start2:
 					}
 				}
 				break;
+
 			case CH_CURSOR:
 				goto lgc_start1;
+
 			case '\n':
 				tmpf = cc->lex_include_stack;
 				if (!(tmpf->flags & LFSF_DOC))
@@ -283,28 +297,33 @@ lgc_start2:
 					tmpf->line_start = src;
 				}
 				break;
+
 			case 0xFF: //nobound switch
 		}
 lgc_done:
 		if (cc->opts & OPTF_ECHO && cc->last_U16 < 256 && Bt(char_bmp_printable, cc->last_U16))
 			'' cc->last_U16;
 	}
+
 	return cc->last_U16;
 }
 
 U0 LexSkipEol(CCompCtrl *cc)
 {//$LK,"LexCharGet",A="MN:LexCharGet"$ to NULL until end-of-line.
 	I64 ch;
+
 	do ch = LexCharGet(cc);
 	while (Bt(char_bmp_non_eol, ch));
 }
 
 U8 *LexFirstRemove(CCompCtrl *cc, U8 *marker, I64 _len=NULL)
 {//$LK,"LexCharGet",A="MN:LexCharGet"$() chars making str until marker.
-	U8 *res, *ptr;
-	CQueueVectU8 *tmpv = QueueVectU8New;
-	I64 i, len = 0;
-	while (TRUE) {
+	U8				*res, *ptr;
+	CQueueVectU8	*tmpv = QueueVectU8New;
+	I64				 i, len = 0;
+
+	while (TRUE)
+	{
 		i = LexCharGet(cc);
 		if (!i || StrOcc(marker, i))
 			break;
@@ -319,6 +338,7 @@ U8 *LexFirstRemove(CCompCtrl *cc, U8 *marker, I64 _len=NULL)
 	QueueVectU8Del(tmpv);
 	if (_len)
 		*_len = len;
+
 	return res;
 }
 
@@ -326,6 +346,7 @@ U0 LexIncludeStr(CCompCtrl *cc, U8 *abs_filename, U8 *src, Bool actual_file)
 {
 	LexBackupLastChar(cc);
 	CLexFile *tmpf = LexFilePush(cc);
+
 	if (actual_file)
 		tmpf->full_name = StrNew(abs_filename);
 	else
@@ -336,9 +357,10 @@ U0 LexIncludeStr(CCompCtrl *cc, U8 *abs_filename, U8 *src, Bool actual_file)
 
 CDoc *LexDocRead(U8 *abs_filename, I64 flags)
 {
-	CDoc *doc = DocNew(abs_filename);
-	U8 *src;
-	I64 size = 0;
+	CDoc	*doc = DocNew(abs_filename);
+	U8		*src;
+	I64		 size = 0;
+
 	doc->flags |= flags;
 	src = FileRead(abs_filename, &size);
 	if (!src || !size)
@@ -349,6 +371,7 @@ CDoc *LexDocRead(U8 *abs_filename, I64 flags)
 	}
 	DocLoad(doc, src, size);
 	Free(src);
+
 	return doc;
 }
 
@@ -407,6 +430,7 @@ U0 LexAttachDoc(CCompCtrl *cc, CLexFile *tmpf=NULL, CDoc *doc=NULL, U8 *abs_file
 I64 LexInStr(CCompCtrl *cc, U8 *buf, I64 size, Bool *done)
 {
 	I64 i = 0, j, k, ch;
+
 	*done = TRUE;
 	while (i < size - 1)
 	{
@@ -423,30 +447,39 @@ I64 LexInStr(CCompCtrl *cc, U8 *buf, I64 size, Bool *done)
 				case '0':
 					buf[i++] = 0;
 					break;
+
 				case '\'':
 					buf[i++] = '\'';
 					break;
+
 				case '\`':
 					buf[i++] = '\`';
 					break;
+
 				case '\\':
 					buf[i++] = '\\';
 					break;
+
 				case '"':
 					buf[i++] = '"';
 					break;
+
 				case 'd':
 					buf[i++] = '$$';
 					break;
+
 				case 'n':
 					buf[i++] = '\n';
 					break;
+
 				case 'r':
 					buf[i++] = '\r';
 					break;
+
 				case 't':
 					buf[i++] = '\t';
 					break;
+
 				case 'x':
 				case 'X':
 					j = 0;
@@ -468,6 +501,7 @@ I64 LexInStr(CCompCtrl *cc, U8 *buf, I64 size, Bool *done)
 					}
 					buf[i++] = j;
 					break;
+
 				default:
 					cc->flags |= CCF_USE_LAST_U16;
 					buf[i++] = '\\';
@@ -488,15 +522,17 @@ I64 LexInStr(CCompCtrl *cc, U8 *buf, I64 size, Bool *done)
 			buf[i++] = ch;
 	}
 	*done = FALSE;
+
 	return i;
 }
 
 I64 Lex(CCompCtrl *cc)
 {//Fetch next token.
-	I64 i, j, k, l, ch;
-	CHash *tmph;
-	Bool str_done, in_str, neg_e;
-	U8 *fbuf, *buf2, *buf3, buf[STR_LEN];
+	I64		 i, j, k, l, ch;
+	CHash	*tmph;
+	Bool	 str_done, in_str, neg_e;
+	U8		*fbuf, *buf2, *buf3, buf[STR_LEN];
+
 	cc->last_line_num = cc->lex_include_stack->line_num;
 	while (TRUE)
 	{
@@ -505,15 +541,19 @@ lex_cont:
 		{
 			case 0:
 				return cc->token = TK_EOF;
+
 			case TK_SUPERSCRIPT:
 				ch = '>';
 				goto lex_ident;
+
 			case TK_SUBSCRIPT:
 				ch = '<';
 				goto lex_ident;
+
 			case TK_NORMALSCRIPT:
 				ch = '=';
 				goto lex_ident;
+
 			case '@':
 				if (cc->flags & CCF_KEEP_AT_SIGN)
 				{
@@ -573,6 +613,7 @@ lex_ident:
 					goto lex_end;
 				}
 				break;
+
 			case '0'...'9':
 				i = ch - '0';
 				ch = ToUpper(LexCharGet(cc));
@@ -686,6 +727,7 @@ lex_float_start:
 					ch = LexCharGet(cc);
 				}
 				break;
+
 			case '"':
 				cc->flags |= CCF_IN_QUOTES;
 				buf2 = NULL;
@@ -718,6 +760,7 @@ lex_float_start:
 				cc->flags &= ~CCF_IN_QUOTES;
 				cc->token = TK_STR;
 				goto lex_end;
+
 			case '\'':
 				if (cc->flags & CCF_NO_CHAR_CONST)
 					break;
@@ -760,6 +803,7 @@ lex_float_start:
 								}
 								k.u8[j] = i;
 								break;
+
 							default:
 								k.u8[j] = '\\';
 								cc->flags |= CCF_USE_LAST_U16;
@@ -780,6 +824,7 @@ lex_float_start:
 				cc->cur_i64 = k;
 				cc->token = TK_CHAR_CONST;
 				goto lex_end;
+
 			case '#':
 				if (cc->flags & CCF_KEEP_SIGN_NUM)
 				{
@@ -806,6 +851,7 @@ lex_float_start:
 							LexIncludeStr(cc, buf2, FileRead(buf2), TRUE);
 						Free(buf2);
 						break;
+
 					case KW_DEFINE:
 						cc->flags |= CCF_NO_DEFINES;
 						if (Lex(cc) == TK_IDENT)
@@ -913,7 +959,8 @@ lex_float_start:
 											j = 0;
 										}
 									}
-								} while (ch == '\\');
+								}
+								while (ch == '\\');
 
 							}
 							buf[j++] = 0;
@@ -936,6 +983,7 @@ lex_float_start:
 						}
 						cc->flags &= ~CCF_NO_DEFINES;
 						break;
+
 					case KW_ELSE:
 						if (cc->flags & CCF_IN_IF)
 						{
@@ -964,7 +1012,8 @@ lex_else:
 								cc->token = TK_EOF;
 								goto lex_end;
 							}
-						} while (j);
+						}
+						while (j);
 
 						break;
 
@@ -1030,11 +1079,13 @@ lex_if:
 										cc->token = TK_EOF;
 										goto lex_end;
 									}
-								} while (j);
+								}
+								while (j);
 
 							}
 						}
 						break;
+
 					case KW_IFDEF:
 						if (cc->flags & CCF_IN_IF)
 						{
@@ -1076,9 +1127,11 @@ lex_ifdef:
 								cc->token = TK_EOF;
 								goto lex_end;
 							}
-						} while (j);
+						}
+						while (j);
 
 						break;
+
 					case KW_IFNDEF:
 						if (cc->flags & CCF_IN_IF)
 						{
@@ -1120,9 +1173,11 @@ lex_ifndef:
 								cc->token = TK_EOF;
 								goto lex_end;
 							}
-						} while (j);
+						}
+						while (j);
 
 						break;
+
 					case KW_IFAOT:
 						if (cc->flags & CCF_IN_IF)
 						{
@@ -1155,9 +1210,11 @@ lex_ifaot:
 								cc->token = TK_EOF;
 								goto lex_end;
 							}
-						} while (j);
+						}
+						while (j);
 
 						break;
+
 					case KW_IFJIT:
 						if (cc->flags & CCF_IN_IF)
 						{
@@ -1190,9 +1247,11 @@ lex_ifjit:
 								cc->token = TK_EOF;
 								goto lex_end;
 							}
-						} while (j);
+						}
+						while (j);
 
 						break;
+
 					case KW_ENDIF:
 						if (cc->flags & CCF_IN_IF)
 						{
@@ -1200,23 +1259,27 @@ lex_ifjit:
 							goto lex_end;
 						}
 						break;
+
 					case KW_ASSERT:
 						if (!Lex(cc))
 							goto lex_end;
 						if (!LexExpression(cc))
 							LexWarn(cc, "Assert Failed ");
 						goto lex_end;
+
 					case KW_EXE:
 						if (!Lex(cc))
 							goto lex_end;
 						ParseStreamBlk(cc);
 						goto lex_end;
+
 					case KW_HELP_INDEX:
 						if (Lex(cc) != TK_STR)
 							goto lex_end;
 						Free(cc->cur_help_idx);
 						cc->cur_help_idx = LexExtStr(cc,, FALSE);
 						break;
+
 					case KW_HELP_FILE:
 						if (Lex(cc) != TK_STR)
 							goto lex_end;
@@ -1230,13 +1293,16 @@ lex_ifjit:
 						break;
 				}
 				break;
+
 			case '\n':
 				if (!(cc->flags & CCF_KEEP_NEW_LINES))
 					break; //else fall through
+
 			case TK_INS_BIN:
 			case TK_INS_BIN_SIZE:
 				cc->token = ch;
 				goto lex_end;
+
 			case '.':
 				if (cc->flags & CCF_KEEP_DOT)
 				{
@@ -1267,6 +1333,7 @@ lex_dot_dot:
 				cc->flags |= CCF_USE_LAST_U16;
 				cc->token = '.';
 				goto lex_end;
+
 			case '!':
 			case '$$'...'&':
 			case '('...'-':
@@ -1342,7 +1409,8 @@ lex_check_comment:
 									else
 										goto lex_check_comment;
 								}
-							} while (j);
+							}
+							while (j);
 
 							goto lex_cont;
 						}
@@ -1407,5 +1475,6 @@ lex_check_comment:
 lex_end:
 	LexCharGet(cc); //Do this so WAS_NEW_LINE is right
 	cc->flags |= CCF_USE_LAST_U16;
+
 	return cc->token;
 }

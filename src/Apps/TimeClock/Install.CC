@@ -1,4 +1,5 @@
-if (!FileFind("~/TimeClock",,FUF_JUST_DIRS)) {
+if (!FileFind("~/TimeClock",, FUF_JUST_DIRS))
+	{
 	DirMake("~/TimeClock");
 	DocClear;
 	"After Loading, type $$GREEN$$PunchIn;$$FG$$, "

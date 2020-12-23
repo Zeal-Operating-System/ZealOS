@@ -57,10 +57,12 @@ Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 				case BDT_RAM:
 					MemCopy(buf, bd->RAM_disk + blk << BLK_SIZE_BITS, count << BLK_SIZE_BITS);
 					break;
+
 				case BDT_ISO_FILE_READ:
 				case BDT_ISO_FILE_WRITE:
 					FBlkRead(bd->file_disk, buf, blk, count);
 					break;
+
 				case BDT_ATA:
 				case BDT_ATAPI:
 					res = ATARBlks(drive, buf, blk, count);
@@ -103,10 +105,12 @@ Bool BlkWrite(CDrive *drive, U8 *buf, I64 blk, I64 count)
 				case BDT_RAM:
 					MemCopy(bd->RAM_disk + blk << BLK_SIZE_BITS, buf, count << BLK_SIZE_BITS);
 					break;
+
 				case BDT_ISO_FILE_READ:
 				case BDT_ISO_FILE_WRITE:
 					FBlkWrite(bd->file_disk, buf, blk, count);
 					break;
+
 				case BDT_ATA:
 				case BDT_ATAPI:
 					res = ATAWBlks(drive, buf, blk, count);

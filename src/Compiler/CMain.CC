@@ -1,7 +1,8 @@
 U8 *LexStatement2Bin(CCompCtrl *cc, I64 *_type, I64 comp_flags=0)
 {//Compile one cc statement to bin code.
-	I64 size, i, j, k, *res = INVALID_PTR;
-	CCodeCtrl *tmpcbh;
+	I64			 size, i, j, k, *res = INVALID_PTR;
+	CCodeCtrl	*tmpcbh;
+
 	if (_type)
 		*_type = RT_I64;
 	Btr(&cc->flags, CCf_PASS_TRACE_PRESENT);
@@ -35,19 +36,21 @@ U8 *LexStatement2Bin(CCompCtrl *cc, I64 *_type, I64 comp_flags=0)
 		tmpcbh = COCPopNoFree(cc);
 		COCAppend(cc, tmpcbh);
 	}
+
 	return res;
 }
 
 CAOT *CompJoin(CCompCtrl *cc, I64 comp_flags, U8 *map_name=NULL, U8 mapfile_drive_let=0)
 {
-	CAOTCtrl *aotc, *old_aot = cc->aotc;
-	I64 i, j, l;
-	U8 *buf;
-	CAOTBinBlk *tmpbin;
-	CAOTImportExport *tmpie;
-	Bool okay = TRUE;
-	CLexHashTableContext *htc = MAlloc(sizeof(CLexHashTableContext));
-	CAOT *res = CAlloc(sizeof(CAOT)), *parent;
+	CAOTCtrl				*aotc, *old_aot = cc->aotc;
+	I64						 i, j, l;
+	U8						*buf;
+	CAOTBinBlk				*tmpbin;
+	CAOTImportExport		*tmpie;
+	Bool					 okay = TRUE;
+	CLexHashTableContext	*htc = MAlloc(sizeof(CLexHashTableContext));
+	CAOT					*res = CAlloc(sizeof(CAOT)), *parent;
+
 	if (parent = cc->aot)
 	{
 		res->parent_aot = parent;
@@ -175,13 +178,15 @@ CAOT *CompJoin(CCompCtrl *cc, I64 comp_flags, U8 *map_name=NULL, U8 mapfile_driv
 	Free(aotc);
 	cc->aotc = old_aot;
 	cc->aot_depth--;
+
 	return res;
 }
 
 CAOT *CompBuf(U8 *buf, U8 *map_name=NULL, I64 *error_count=NULL, I64 *warning_count=NULL, U8 mapfile_drive_let=0)
 {
-	CCompCtrl *cc;
-	CAOT *res = NULL;
+	CCompCtrl	*cc;
+	CAOT		*res = NULL;
+
 	cc = CompCtrlNew(buf, CCF_DONT_FREE_BUF);
 	cc->flags |= CCF_AOT_COMPILE;
 	QueueInsert(cc, Fs->last_cc);
@@ -193,17 +198,18 @@ CAOT *CompBuf(U8 *buf, U8 *map_name=NULL, I64 *error_count=NULL, I64 *warning_co
 	QueueRemove(cc);
 	if (res)
 		CompCtrlDel(cc);
+
 	return res;
 }
 
 U0 CompFixUpJITAsm(CCompCtrl *cc, CAOT *tmpaot)
 {
-	I64 i, rip2 = tmpaot->buf + tmpaot->rip, *str = NULL;
-	U8 *ptr;
-	CCodeMisc *g_lb;
-	CAOTAbsAddr *tmpa, *tmpa1;
-	CAOTImportExport *tmpie, *tmpie1;
-	CHashExport *tmpex;
+	I64					 i, rip2 = tmpaot->buf + tmpaot->rip, *str = NULL;
+	U8					*ptr;
+	CCodeMisc			*g_lb;
+	CAOTAbsAddr			*tmpa, *tmpa1;
+	CAOTImportExport	*tmpie, *tmpie1;
+	CHashExport			*tmpex;
 
 	tmpa = tmpaot->abss;
 	while (tmpa)
@@ -252,12 +258,13 @@ U0 CompFixUpJITAsm(CCompCtrl *cc, CAOT *tmpaot)
 				HashAdd(tmpex, Fs->hash_table);
 				SysSymImportsResolve(tmpex->str);
 				break;
+
 			case IET_REL_I0...IET_IMM_I64:
 				if (tmpie->str)
 				{
 					if (tmpie->flags & IEF_GOTO_LABEL)
 					{
-						if(!(g_lb = COCGoToLabelFind(cc, str)))
+						if (!(g_lb = COCGoToLabelFind(cc, str)))
 							"Unresolved Reference:%s\n", str;
 						else
 						{
@@ -291,33 +298,41 @@ U0 CompFixUpJITAsm(CCompCtrl *cc, CAOT *tmpaot)
 						case IET_REL_I0:
 						case IET_IMM_U0:
 							break;
+
 						case IET_REL_I8:
 							if (!(I8_MIN <= i - ptr - 1 <= I8_MAX))
 								LexExcept(cc, "Branch out of range at ");
 							*ptr(U8 *) = i - ptr - 1;
 							break;
+
 						case IET_IMM_U8:
 							*ptr(U8 *) = i;
 							break;
+
 						case IET_REL_I16:
 							if (!(I16_MIN <= i - ptr - 2 <= I16_MAX))
 								LexExcept(cc, "Branch out of range at ");
 							*ptr(U16 *) = i - ptr - 2;
 							break;
+
 						case IET_IMM_U16:
 							*ptr(U16 *) = i;
 							break;
+
 						case IET_REL_I32:
 							if (!(I32_MIN <= i - ptr - 4 <= I32_MAX))
 								LexExcept(cc, "Branch out of range at ");
 							*ptr(U32 *) = i - ptr - 4;
 							break;
+
 						case IET_IMM_U32:
 							*ptr(U32 *) = i;
 							break;
+
 						case IET_REL_I64:
 							*ptr(I64 *) = i - ptr - 8;
 							break;
+
 						case IET_IMM_I64:
 							*ptr(I64 *) = i;
 							break;
@@ -338,12 +353,12 @@ U0 CompFixUpJITAsm(CCompCtrl *cc, CAOT *tmpaot)
 
 U0 CompFixUpAOTAsm(CCompCtrl *cc, CAOT *tmpaot)
 {
-	CAOTCtrl *aotc = cc->aotc;
-	I64 i, rip2 = tmpaot->rip + cc->aotc->rip;
-	U8 *ptr;
-	CCodeMisc *g_lb = NULL;
-	CAOTAbsAddr *tmpa, *tmpa1;
-	CAOTImportExport *tmpie, *tmpie1;
+	CAOTCtrl			*aotc = cc->aotc;
+	I64					 i, rip2 = tmpaot->rip + cc->aotc->rip;
+	U8					*ptr;
+	CCodeMisc			*g_lb = NULL;
+	CAOTAbsAddr			*tmpa, *tmpa1;
+	CAOTImportExport	*tmpie, *tmpie1;
 
 	tmpa = tmpaot->abss;
 	while (tmpa)
@@ -378,7 +393,7 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc, CAOT *tmpaot)
 			{
 				if (tmpie->flags & IEF_GOTO_LABEL)
 				{
-					if(!(g_lb = COCGoToLabelFind(cc, tmpie->str)))
+					if (!(g_lb = COCGoToLabelFind(cc, tmpie->str)))
 						"Unresolved Reference:%s\n", tmpie->str;
 					else
 					{
@@ -402,33 +417,41 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc, CAOT *tmpaot)
 				case IET_REL_I0:
 				case IET_IMM_U0:
 					break;
+
 				case IET_REL_I8:
 					if (!(I8_MIN <= i - ptr - 1 <= I8_MAX))
 						LexExcept(cc, "Branch out of range at ");
 					*ptr(U8 *) = i - ptr - 1;
 					break;
+
 				case IET_IMM_U8:
 					*ptr(U8 *) = i;
 					break;
+
 				case IET_REL_I16:
 					if (!(I16_MIN <= i - ptr - 2 <= I16_MAX))
 						LexExcept(cc, "Branch out of range at ");
 					*ptr(U16 *) = i - ptr - 2;
 					break;
+
 				case IET_IMM_U16:
 					*ptr(U16 *) = i;
 					break;
+
 				case IET_REL_I32:
 					if (!(I32_MIN <= i - ptr - 4 <= I32_MAX))
 						LexExcept(cc, "Branch out of range at ");
 					*ptr(U32 *) = i - ptr - 4;
 					break;
+
 				case IET_IMM_U32:
 					*ptr(U32 *) = i;
 					break;
+
 				case IET_REL_I64:
 					*ptr(I64 *) = i - ptr - 8;
 					break;
+
 				case IET_IMM_I64:
 					*ptr(I64 *) = i;
 					break;
@@ -452,6 +475,7 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc, CAOT *tmpaot)
 					case IET_IMM_I64:
 					case IET_REL_I0:
 						break;
+
 					case IET_REL_I8:	*ptr(U8  *) -= rip2;	break;
 					case IET_REL_I16:	*ptr(U16 *) -= rip2;	break;
 					case IET_REL_I32:	*ptr(U32 *) -= rip2;	break;
@@ -469,14 +493,14 @@ U0 CompFixUpAOTAsm(CCompCtrl *cc, CAOT *tmpaot)
 
 I64 Comp(U8 *filename, U8 *map_name=NULL, U8 *out_name=NULL, U8 mapfile_drive_let=0)
 {//AOT Compile CC or PRJ file a and output BIN file. Returns err_count.
-	U8 *ptr, *fbuf = NULL, *fbuf2 = NULL, *fbuf3 = NULL, *patch_table = MAlloc(0x20000);
-	CAOT *tmpaot;
-	I64 i, count, size = 0, error_count = 0, warning_count = 0, aot_U8s = 0;
-	CBinFile *bfh;
-	CAOTImportExport *tmpie, *tmpie1;
-	CAOTAbsAddr *tmpa, *tmpa1;
-	CAOTHeapGlobalRef *tmphgr, *tmphgr1;
-	CAOTHeapGlobal *tmphg, *tmphg1;
+	U8					*ptr, *fbuf = NULL, *fbuf2 = NULL, *fbuf3 = NULL, *patch_table = MAlloc(0x20000);
+	CAOT				*tmpaot;
+	I64					 i, count, size = 0, error_count = 0, warning_count = 0, aot_U8s = 0;
+	CBinFile			*bfh;
+	CAOTImportExport	*tmpie, *tmpie1;
+	CAOTAbsAddr			*tmpa, *tmpa1;
+	CAOTHeapGlobalRef	*tmphgr, *tmphgr1;
+	CAOTHeapGlobal		*tmphg, *tmphg1;
 
 	fbuf = ExtDefault(filename, "PRJ");
 	fbuf2 = MStrPrint("#include \"%s\"", fbuf);
@@ -630,14 +654,16 @@ I64 Comp(U8 *filename, U8 *map_name=NULL, U8 *out_name=NULL, U8 mapfile_drive_le
 	Free(fbuf2);
 	Free(fbuf3);
 	Print("Errs:%d Warns:%d Code:%X Size:%X\n", error_count, warning_count, aot_U8s, size);
+
 	return error_count;
 }
 
 I64 ExePutS(U8 *buf, U8 *filename=NULL, I64 ccf_flags=0, CLexHashTableContext *htc=NULL)
 {//JIT Compile and execute text from a puts("").
-	I64 res;
-	Bool okay = TRUE;
-	CCompCtrl *cc;
+	I64			 res;
+	Bool		 okay = TRUE;
+	CCompCtrl	*cc;
+
 	if (!filename)
 		filename = blkdev.tmp_filename;
 	cc = CompCtrlNew(buf, ccf_flags | CCF_DONT_FREE_BUF, filename);
@@ -675,8 +701,10 @@ I64 ExePrint(U8 *format, ...)
 {//JIT Compile and execute text from a printf().
 	I64 res;
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
+
 	res = ExePutS(buf);
 	Free(buf);
+
 	return res;
 }
 
@@ -684,22 +712,26 @@ I64 ExeFile(U8 *name, I64 ccf_flags=0)
 {//JIT Compile and execute a file.
 	I64 res;
 	U8 *name2 = ExtDefault(name, "CC"), *st = MStrPrint("#include \"%s\";", name2);
+
 	res = ExePutS(st, name, ccf_flags);
 	Free(st);
 	Free(name2);
+
 	return res;
 }
 
 I64 RunFile(U8 *name, I64 ccf_flags=0, ...)
 {//$LK,"ExeFile",A="MN:ExeFile"$() with args using $LK,"LastFun",A="MN:LastFun"$().
 	ExeFile(name, ccf_flags);
+
 	return LastFun(argc, argv);
 }
 
 I64 ExePutS2(U8 *buf, U8 *filename=NULL, I64 ccf_flags=0)
 {//throws exceptions
-	I64 res;
-	CCompCtrl *cc;
+	I64			 res;
+	CCompCtrl	*cc;
+
 	if (!filename)
 		filename = blkdev.tmp_filename;
 	cc = CompCtrlNew(buf, ccf_flags | CCF_DONT_FREE_BUF, filename);
@@ -710,6 +742,7 @@ I64 ExePutS2(U8 *buf, U8 *filename=NULL, I64 ccf_flags=0)
 	res = ExeCmdLine(cc);
 	QueueRemove(cc);
 	CompCtrlDel(cc);
+
 	return res;
 }
 
@@ -717,8 +750,10 @@ I64 ExePrint2(U8 *format, ...)
 {//throws exceptions
 	I64 res;
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
+
 	res = ExePutS2(buf);
 	Free(buf);
+
 	return res;
 }
 
@@ -726,24 +761,28 @@ I64 ExeFile2(U8 *name, I64 ccf_flags=0)
 {//throws exceptions
 	I64 res;
 	U8 *name2 = ExtDefault(name, "CC"), *st = MStrPrint("#include \"%s\";", name2);
+
 	res = ExePutS2(st, name, ccf_flags);
 	Free(st);
 	Free(name2);
+
 	return res;
 }
 
 I64 RunFile2(U8 *name, I64 ccf_flags=0, ...)
 {//$LK,"ExeFile2",A="MN:ExeFile2"$() with args using $LK,"LastFun",A="MN:LastFun"$(). throws exceptions.
 	ExeFile2(name, ccf_flags);
+
 	return LastFun(argc, argv);
 }
 
 I64 StreamExePrint(U8 *format, ...)
 {//Causes value from stream to be used in an #exe{} block.
-	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
-	I64 res = 0;
-	CLexHashTableContext *htc;
-	CCompCtrl *cc = Fs->last_cc;
+	U8						*buf = StrPrintJoin(NULL, format, argc, argv);
+	I64						 res = 0;
+	CLexHashTableContext	*htc;
+	CCompCtrl				*cc = Fs->last_cc;
+
 	if (cc == &Fs->next_cc)
 		PrintErr("Not Compiling\n");
 	else
@@ -754,6 +793,7 @@ I64 StreamExePrint(U8 *format, ...)
 			res = ExePutS(buf,,, htc);
 	}
 	Free(buf);
+
 	return res;
 }
 

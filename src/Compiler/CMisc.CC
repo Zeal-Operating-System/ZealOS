@@ -50,9 +50,11 @@ _extern _LAST_FUN I64 LastFun(I64 argc, I64 *argv); //Execute last fun with args
 I64 PassTrace(I64 i=0b10001111101)
 {//Ctrls which optimizer passes are displayed.
 	I64 old = Fs->last_cc->pass_trace;
+
 	if (i)
 		Fs->last_cc->saved_pass_trace = i;
 	Fs->last_cc->pass_trace = i;
+
 	return old;
 }
 
@@ -68,9 +70,10 @@ Bool Echo(Bool val)
 
 U0 StreamPrint(U8 *format, ...)
 {//Injects text into the compile stream. Used in #exe{} blocks.
-	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st;
-	CCompCtrl *cc = Fs->last_cc;
-	CStreamBlk *tmpe = cc->last_stream_blk;
+	U8			*buf = StrPrintJoin(NULL, format, argc, argv), *st;
+	CCompCtrl	*cc = Fs->last_cc;
+	CStreamBlk	*tmpe = cc->last_stream_blk;
+
 	if (tmpe != &cc->next_stream_blk)
 	{
 		st = MStrPrint("%s%s", tmpe->body, buf);
@@ -85,6 +88,7 @@ U0 StreamPrint(U8 *format, ...)
 U0 StreamDir()
 {
 	U8 *dirname;
+
 	if (dirname = DirFile(Fs->last_cc->lex_include_stack->full_name))
 	{
 		StreamPrint("\"%s\"", dirname);
@@ -105,6 +109,7 @@ CD2I32 *LexD2I32(CCompCtrl *cc, CD2I32 *p)
 	if (cc->token != ')')
 		LexExcept(cc, "Expecting ')' at ");
 	Lex(cc); // Skip )
+
 	return p;
 }
 
@@ -125,6 +130,7 @@ CD3I32 *LexD3I32(CCompCtrl *cc,CD3I32 *p)
 	if (cc->token != ')')
 		LexExcept(cc, "Expecting ')' at ");
 	Lex(cc); // Skip )
+
 	return p;
 }
 
@@ -132,6 +138,7 @@ U8 *CmdLinePrompt()
 {
 	I64 i;
 	U8 *res, *st;
+
 	if (Fs->new_answer)
 	{
 		if (Fs->answer_type & ~1 != RT_I0)
@@ -174,5 +181,6 @@ U8 *CmdLinePrompt()
 	res[i] = 0;
 
 	Free(st);
+
 	return res;
 }

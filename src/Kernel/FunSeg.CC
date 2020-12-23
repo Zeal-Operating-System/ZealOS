@@ -107,6 +107,7 @@ fs_abort_task:
 		}
 	}
 	*_offset = best;
+
 	return res;
 }
 
@@ -310,6 +311,7 @@ I64 SrcLineNum(U8 *addr, I64 count=1)
 			}
 		}
 	}
+
 	return -1;
 }
 
@@ -377,6 +379,7 @@ U8 *SrcEdLink(U8 *addr, I64 count=1, CTask *mem_task=NULL)
 		Free(st2);
 		return st;
 	}
+
 	return NULL;
 }
 
@@ -395,6 +398,7 @@ Bool PutSrcLink(U8 *addr, I64 count=1, U8 *buf=NULL)
 	}
 	else if (buf)
 		*buf = 0;
+
 	return FALSE;
 }
 
@@ -411,6 +415,7 @@ Bool E(U8 *addr, I64 count=512, I64 edf_dof_flags=0)
 			res = Ed(st, edf_dof_flags);
 		Free(st);
 	}
+
 	return res;
 }
 
@@ -431,5 +436,6 @@ Bool Man(U8 *st, I64 edf_dof_flags=0)
 		res = Ed(st2, edf_dof_flags);
 		Free(st2);
 	}
+
 	return res;
 }

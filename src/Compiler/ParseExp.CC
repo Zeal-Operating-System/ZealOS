@@ -14,8 +14,9 @@
 
 CIntermediateCode *ParseAddOp(CCompCtrl *cc, I64 stack_op, CHashClass *tmpc)
 {
-	CIntermediateCode *tmpi = cc->coc.coc_head.last;
-	Bool div_sizeof = FALSE;
+	CIntermediateCode	*tmpi = cc->coc.coc_head.last;
+	Bool				 div_sizeof = FALSE;
+
 	switch (stack_op.u16[0])
 	{
 		case IC_ADD:
@@ -70,16 +71,18 @@ CIntermediateCode *ParseAddOp(CCompCtrl *cc, I64 stack_op, CHashClass *tmpc)
 			tmpc = cmp.internal_types[RT_I64];
 		}
 	}
+
 	return tmpi;
 }
 
 U0 ParseExpression2(CCompCtrl *cc, I64 *_max_prec, CParseStack *ps)
 {
-	I64 i, cur_op, stack_op, state, max_prec = PREC_NULL, unary_pre_prec, paren_prec, unary_post_prec, left_prec = PREC_MAX;
-	CIntermediateCode *tmpi;
-	CHashClass *tmpc;
-	CMemberList *local_var;
-	CArrayDim *tmpad = NULL;
+	I64					 i, cur_op, stack_op, state,
+						 max_prec = PREC_NULL, unary_pre_prec, paren_prec, unary_post_prec, left_prec = PREC_MAX;
+	CIntermediateCode	*tmpi;
+	CHashClass			*tmpc;
+	CMemberList			*local_var;
+	CArrayDim			*tmpad = NULL;
 
 	goto pe_unary_term1;
 	while (TRUE)
@@ -208,6 +211,7 @@ pe_do_binary_op:
 							ICAdd(cc, IC_MUL, 0, cmp.internal_types[RT_I64]);
 						}
 						break;
+
 					case IC_AND_AND:
 					case IC_OR_OR:
 						ICAdd(cc, IC_NOP1, 0, cmp.internal_types[RT_I64]);
@@ -297,9 +301,10 @@ pe_done:
 
 Bool ParseExpression(CCompCtrl *cc, I64 *_max_prec, Bool end_exp, CParseStack *_ps=NULL)
 {
-	Bool res = TRUE;
-	I64 old_flags = cc->flags;
-	CParseStack *ps;
+	Bool		 res = TRUE;
+	I64			 old_flags = cc->flags;
+	CParseStack	*ps;
+
 	if (_ps)
 		ps = _ps;
 	else
@@ -335,15 +340,17 @@ Bool ParseExpression(CCompCtrl *cc, I64 *_max_prec, Bool end_exp, CParseStack *_
 			LexWarn(cc, "U0 Expression ");
 	}
 	cc->flags |= old_flags & (CCF_PREINC | CCF_PREDEC);
+
 	return res;
 }
 
 U0 ParseSizeOf(CCompCtrl *cc)
 {
-	CHashClass *tmpc;
-	CMemberList *tmpm;
-	CDebugInfo *debug_info;
-	I64 i;
+	CHashClass	*tmpc;
+	CMemberList	*tmpm;
+	CDebugInfo	*debug_info;
+	I64			 i;
+
 	if (cc->token != TK_IDENT)
 		LexExcept(cc, "Invalid class at ");
 	if (tmpm = cc->local_var_entry)
@@ -396,9 +403,10 @@ pu_sizeof_member:
 
 U0 ParseOffsetOf(CCompCtrl *cc)
 {
-	CHashClass *tmpc;
-	CMemberList *tmpm;
-	I64 i;
+	CHashClass	*tmpc;
+	CMemberList	*tmpm;
+	I64			 i;
+
 	if (cc->token != TK_IDENT)
 		LexExcept(cc, "Invalid class at ");
 	if (tmpm = cc->local_var_entry)
@@ -430,13 +438,13 @@ U0 ParseOffsetOf(CCompCtrl *cc)
 
 I64 ParseFunCall(CCompCtrl *cc, CParseStack *ps, Bool indirect, CHashFun *tmpf)
 {
-	I64 i, argc_count, default_val;
-	Bool is_first_arg = TRUE, needs_right_paren, is_print, is_putchars, is_template_fun;
-	CHashClass *tmpc2, *last_class = NULL;
-	CMemberList *tmpm;
-	CCodeCtrl *tmpcbh,*tmpcbh1;
-	CCodeMisc *cm;
-	CIntermediateCode *tmpi;
+	I64					 i, argc_count, default_val;
+	Bool				 is_first_arg = TRUE, needs_right_paren, is_print, is_putchars, is_template_fun;
+	CHashClass			*tmpc2, *last_class = NULL;
+	CMemberList			*tmpm;
+	CCodeCtrl			*tmpcbh, *tmpcbh1;
+	CCodeMisc			*cm;
+	CIntermediateCode	*tmpi;
 
 	if (!tmpf)
 	{
@@ -676,21 +684,22 @@ I64 ParseFunCall(CCompCtrl *cc, CParseStack *ps, Bool indirect, CHashFun *tmpf)
 	if (is_print || is_putchars)
 		ICAdd(cc, IC_END_EXP, 0, 0, ICF_RES_NOT_USED);
 	cc->flags = (cc->flags | CCF_RAX) & ~(CCF_ARRAY | CCF_FUN_EXP);
+
 	return PE_UNARY_MODIFIERS;
 }
 
 I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CArrayDim **_tmpad,
 				   I64 *max_prec, I64 *unary_pre_prec, I64 *paren_prec)
 {
-	I64 i, j;
-	CHashExport *tmpex;
-	CHashClass *tmpc;
-	CHashFun *tmpf;
-	CHashGlobalVar *tmpg;
-	CMemberList *tmpm;
-	CAsmUndefHash *tmpauh;
-	CCodeMisc *cm;
-	Bool paren_warn;
+	I64				 i, j;
+	CHashExport		*tmpex;
+	CHashClass		*tmpc;
+	CHashFun		*tmpf;
+	CHashGlobalVar	*tmpg;
+	CMemberList		*tmpm;
+	CAsmUndefHash	*tmpauh;
+	CCodeMisc		*cm;
+	Bool			 paren_warn;
 
 	*_local_var = NULL;
 	*paren_prec = PREC_NULL;
@@ -1060,6 +1069,7 @@ pu_export_sys_sym:
 								Lex(cc);
 							}
 							return PE_MAYBE_MODIFIERS;
+
 						case KW_OFFSET:
 							if (PREC_TERM > *max_prec)
 								*max_prec = PREC_TERM;
@@ -1074,6 +1084,7 @@ pu_export_sys_sym:
 								Lex(cc);
 							}
 							return PE_MAYBE_MODIFIERS;
+
 						case KW_DEFINED:
 							if (PREC_TERM > *max_prec)
 								*max_prec = PREC_TERM;
@@ -1100,14 +1111,14 @@ pu_export_sys_sym:
 
 I64 ParseUnaryModifier(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CArrayDim **_tmpad, I64 *unary_post_prec)
 {
-	CHashClass *tmpc, *tmpc1;
-	CHashFun *fun_ptr;
-	CMemberList *tmpm = *_local_var;
-	CIntermediateCode *tmpi, *tmpi1;
-	CArrayDim *tmpad1, tmpad2;
-	CCodeMisc *cm;
-	I64 mode, old_flags;
-	Bool was_paren = Btr(&cc->flags, CCf_PAREN);
+	CHashClass			*tmpc, *tmpc1;
+	CHashFun			*fun_ptr;
+	CMemberList			*tmpm = *_local_var;
+	CIntermediateCode	*tmpi, *tmpi1;
+	CArrayDim			*tmpad1, tmpad2;
+	CCodeMisc			*cm;
+	I64					 mode, old_flags;
+	Bool				 was_paren = Btr(&cc->flags, CCf_PAREN);
 
 	*_local_var = NULL;
 	switch (cc->token)
@@ -1147,7 +1158,7 @@ I64 ParseUnaryModifier(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var,
 				*_tmpad = tmpm->dim.next;
 				cc->flags |= CCF_ARRAY;
 			}
-			if(tmpm->flags & MLF_FUN)
+			if (tmpm->flags & MLF_FUN)
 			{
 				ParsePopDeref(ps);
 				ParsePush2(ps, tmpm->fun_ptr - tmpm->fun_ptr->ptr_stars_count);
@@ -1253,6 +1264,7 @@ I64 ParseUnaryModifier(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var,
 			case TK_PLUS_PLUS:
 				cc->flags |= CCF_POSTINC;
 				break;
+
 			case TK_MINUS_MINUS:
 				cc->flags |= CCF_POSTDEC;
 				break;
@@ -1262,14 +1274,16 @@ I64 ParseUnaryModifier(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var,
 			Lex(cc);
 			return PE_DEREFERENCE;
 	}
+
 	return PE_DEREFERENCE;
 }
 
 U8 *LexExpression2Bin(CCompCtrl *cc, I64 *_type=NULL)
 {//Compile cc expression. You call the code.
-	U8 *res;
-	I64 size;
+	U8	*res;
+	I64	 size;
 	Bool old_trace = Btr(&cc->flags, CCf_PASS_TRACE_PRESENT);
+
 	COCPush(cc);
 	COCInit(cc);
 	if (ParseExpression(cc, NULL, FALSE))
@@ -1282,6 +1296,7 @@ U8 *LexExpression2Bin(CCompCtrl *cc, I64 *_type=NULL)
 		res = NULL;
 	COCPop(cc);
 	BEqual(&cc->flags, CCf_PASS_TRACE_PRESENT, old_trace);
+
 	return res;
 }
 
@@ -1294,6 +1309,7 @@ I64 LexExpressionI64(CCompCtrl *cc)
 {//Compile cc expression, forcing to I64 and eval.
 	U8 *machine_code;
 	I64 res, type;
+
 	if (machine_code = LexExpression2Bin(cc, &type))
 	{
 		res = Call(machine_code);
@@ -1303,6 +1319,7 @@ I64 LexExpressionI64(CCompCtrl *cc)
 	}
 	else
 		res = 0;
+
 	return res;
 }
 
@@ -1310,6 +1327,7 @@ F64 LexExpressionF64(CCompCtrl *cc)
 {//Compile cc expression, forcing to F64 and eval.
 	U8 *machine_code;
 	I64 res, type;
+
 	if (machine_code = LexExpression2Bin(cc, &type))
 	{
 		res = Call(machine_code);
@@ -1319,6 +1337,7 @@ F64 LexExpressionF64(CCompCtrl *cc)
 	}
 	else
 		res = 0;
+
 	return res(F64);
 }
 
@@ -1326,6 +1345,7 @@ I64 LexExpression(CCompCtrl *cc)
 {//Compile cc expression and eval.	Might be I64 or F64.
 	U8 *machine_code;
 	I64 res;
+
 	if (machine_code = LexExpression2Bin(cc))
 	{
 		res = Call(machine_code);
@@ -1333,5 +1353,6 @@ I64 LexExpression(CCompCtrl *cc)
 	}
 	else
 		res = 0;
+
 	return res;
 }

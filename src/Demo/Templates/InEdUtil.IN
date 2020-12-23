@@ -4,21 +4,22 @@ U0 InEdUtil(U8 *filename)
 {
 	I64 i;
 
-	"Ed(\"%s\");\n",filename;
+	"Ed(\"%s\");\n", filename;
 
 	//Go to start of file
-	Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
-	for (i=0;i<10000;i++) {
+	Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_UP | SCF_CTRL);
+	for (i = 0; i < 10000; i++)
+	{
 		if (i)
-			Message(MESSAGE_KEY_DOWN_UP,0,SC_F3);
+			Message(MESSAGE_KEY_DOWN_UP, 0, SC_F3);
 		else
-			"%c0x%c",CH_CTRLF,CH_ESC;
-		Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-		Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-		"%02X",i;
-		Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-		Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_RIGHT);
-		"%c%c",CH_BACKSPACE,CH_BACKSPACE;
+			"%c0x%c", CH_CTRLF, CH_ESC;
+		Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_RIGHT);
+		Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_RIGHT);
+		"%02X", i;
+		Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_RIGHT);
+		Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_RIGHT);
+		"%c%c",CH_BACKSPACE, CH_BACKSPACE;
 	}
 }
 

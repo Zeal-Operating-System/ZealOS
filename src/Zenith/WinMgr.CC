@@ -7,9 +7,10 @@ public U0 Refresh(I64 count = 1, Bool force = FALSE)
 	//1 Count Wait and Pump Messages.
 	//2 Count Make Sure to do a Full Refresh
 	//and Set Cur Pos.
-	Bool	old_full_refresh, old_idle = LBts(&Fs->task_flags, TASKf_IDLE);
-	CDoc *old_doc = DocPut;
-	I64 update_count;
+	Bool	 old_full_refresh, old_idle = LBts(&Fs->task_flags, TASKf_IDLE);
+	CDoc	*old_doc = DocPut;
+	I64		 update_count;
+
 	if (!count && force)
 		LBts(&sys_semas[SEMA_JUST_PUMP_MESSAGES], 0);
 	while (Bt(&sys_semas[SEMA_REFRESH_IN_PROGRESS], 0))
@@ -36,10 +37,10 @@ public U0 Refresh(I64 count = 1, Bool force = FALSE)
 
 I64 WinQueueIPMessages(Bool que)
 {
-	static CD3I64 single_mouse = {0, 0, 0};
-	F64 time = tS;
-	I64 message_code = 0, arg1, arg2, single_arg1, single_arg2;
-	CTask *task_focus = sys_focus_task;
+	static CD3I64	 single_mouse = {0, 0, 0};
+	F64				 time = tS;
+	I64				 message_code = 0, arg1, arg2, single_arg1, single_arg2;
+	CTask			*task_focus = sys_focus_task;
 
 	if (task_focus && !winmgr.grab_scroll)
 	{
@@ -210,22 +211,23 @@ I64 WinQueueIPMessages(Bool que)
 		MemCopy(&mouse_last, &mouse, sizeof(CMouseStateGlobals));
 		MemCopy(&old_mouse, &mouse, sizeof(CMouseStateGlobals));
 	}
+
 	return message_code;
 }
 
 U0 WinCalcIdles()
 {
-	F64 calc_idle_time;
-	I64 i, k, total_jiffies, total_jiffies_delta, idle_pt_hits[MP_PROCESSORS_NUM];
-	CCPU *c;
-	CWinMgrTimingGlobals *t = winmgr.t;
+	F64						 calc_idle_time;
+	I64						 i, k, total_jiffies, total_jiffies_delta, idle_pt_hits[MP_PROCESSORS_NUM];
+	CCPU					*c;
+	CWinMgrTimingGlobals	*t = winmgr.t;
 
 	if ((t->calc_idle_delta_time = (calc_idle_time = tS) - t->last_calc_idle_time) > .25)
 	{
 		PUSHFD
 		CLI
 		total_jiffies = cpu_structs[0].total_jiffies;
-		for (i=0; i < mp_count; i++)
+		for (i = 0; i < mp_count; i++)
 			idle_pt_hits[i] = cpu_structs[i].idle_pt_hits;
 		POPFD
 
@@ -248,12 +250,12 @@ U0 WinCalcIdles()
 I64 WinMgrSleep(Bool flush_messages = FALSE)
 {
 	I64 timeout_val, message_code=0;
-	CCtrl *c;
-	Bool que;
-	F64 t, t_delta;
-	U8 *st;
-	CDC *diff;
-	CDate cdt;
+	CCtrl	*c;
+	Bool	 que;
+	F64		 t, t_delta;
+	U8		*st;
+	CDC		*diff;
+	CDate	 cdt;
 
 	TimeCal;
 	if ((t_delta = (t = tS) - winmgr.last_refresh_tS) > 0.01)
@@ -352,15 +354,18 @@ I64 WinMgrSleep(Bool flush_messages = FALSE)
 			KbdMouseHandler(FALSE, TRUE);
 		SleepUntil(timeout_val);
 	}
+
 	return message_code;
 }
 
 CDoc *WinCursorPosSet(CTask *task, I64 mouse_x, I64 mouse_y, Bool set_cursor = TRUE)
 {
 	CDoc *res = NULL;
-	Bool unlock;
-	I64 x0, y0;
-	if (!task) task = Fs;
+	Bool  unlock;
+	I64   x0, y0;
+
+	if (!task)
+		task = Fs;
 	if (WinInside(mouse_x, mouse_y, task))
 	{
 		if ((res = DocDisplay(task)) && res->flags & DOCF_DONT_SHOW)
@@ -387,16 +392,18 @@ CDoc *WinCursorPosSet(CTask *task, I64 mouse_x, I64 mouse_y, Bool set_cursor = T
 		}
 		WinToTop(task);
 	}
+
 	return res;
 }
 
 Bool WinKeyNavMenu()
 {
-	I64 i, old_key_count;
-	CD3I64 old_pos, new_pos;
-	CMenu *m;
-	CMenuEntry *tmpme;
-	CTask *focus = MenuTask;
+	I64			 i, old_key_count;
+	CD3I64		 old_pos, new_pos;
+	CMenu		*m;
+	CMenuEntry	*tmpme;
+	CTask		*focus = MenuTask;
+
 	if (Bt(kbd.down_bitmap, SC_GUI) && focus && (m = focus->cur_menu))
 	{
 		winmgr.show_menu = TRUE;
@@ -475,17 +482,19 @@ Bool WinKeyNavMenu()
 		mouse.pos.y = old_pos.y;
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
 U0 WinMgrTask(I64)
 {
-	CTask *task = Fs;
-	CDoc *doc;
-	CDocEntry *doc_e;
-	I64 x, y, z, message_code, my_mouse_z = 0, left, top, old_flags = RFlagsGet;
-	Bool has_border;
-	CCtrl *c;
+	CTask		*task = Fs;
+	CDoc		*doc;
+	CDocEntry	*doc_e;
+	I64			 x, y, z, message_code, my_mouse_z = 0, left, top, old_flags = RFlagsGet;
+	Bool		 has_border;
+	CCtrl		*c;
+
 	WinHorz(0, TEXT_COLS - 1);
 	WinVert(0, TEXT_ROWS - 1);
 	LBts(&Fs->display_flags, DISPLAYf_NO_BORDER);

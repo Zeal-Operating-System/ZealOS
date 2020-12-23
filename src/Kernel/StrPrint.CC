@@ -996,7 +996,9 @@ sp_out_eng: //Engineering notation
 								tmp_buf[k] += 'A' - 0x3A;
 							k++;
 							m >>= 4;
-						} while (m && k<TMP_BUF_LEN-SLOP);
+						}
+						while (m && k < TMP_BUF_LEN - SLOP);
+
 						goto sp_out_num;
 					}
 
@@ -1101,6 +1103,7 @@ U8 *CatPrint(U8 *_dst, U8 *format, ...)
 	while (*dst)
 		dst++;
 	StrPrintJoin(dst, format, argc, argv);
+
 	return _dst;
 }
 
@@ -1119,6 +1122,7 @@ U8 *MStrPrint(U8 *format, ...)
 
 	res = StrNew(buf);
 	Free(buf);
+
 	return res;
 }
 

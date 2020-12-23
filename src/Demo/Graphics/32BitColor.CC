@@ -8,8 +8,8 @@ I0 DrawPixel(I64 x, I64 y, CBGR24 color)
 
 I0 Color32Demo()
 {
-	I64 i, j, x, y;
-	CBGR24 color;
+	I64		i, j, x, y;
+	CBGR24	color;
 
 	while (TRUE)
 	{

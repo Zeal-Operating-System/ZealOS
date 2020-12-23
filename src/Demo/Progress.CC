@@ -15,9 +15,9 @@ U0 Main1()
 {
 	"\nWith description.\n";
 	PressAKey;
-	progress1_max=200;
-	StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
-	while (progress1++!=progress1_max)
+	progress1_max = 200;
+	StrCopy(progress1_desc, "Progress Demo"); //PROGRESS_DESC_LEN is max
+	while (progress1++ != progress1_max)
 		Sleep(20);
 	ProgressBarsReset;
 }
@@ -27,10 +27,10 @@ U0 Main2()
 {
 	"\nWith description and elapsed time.\n";
 	PressAKey;
-	progress1_max=200;
-	progress1_t0=tS;
-	StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
-	while (progress1++!=progress1_max)
+	progress1_max = 200;
+	progress1_t0 = tS;
+	StrCopy(progress1_desc, "Progress Demo"); //PROGRESS_DESC_LEN is max
+	while (progress1++ != progress1_max)
 		Sleep(20);
 	ProgressBarsReset;
 }
@@ -40,11 +40,11 @@ U0 Main3()
 {
 	"\nWith description, elapsed time and registry total time.\n";
 	PressAKey;
-	progress1_max=200;
-	progress1_t0=tS;
+	progress1_max = 200;
+	progress1_t0 = tS;
 	RegExe("DemoCompany/ProgressBars");
-	StrCopy(progress1_desc,"Progress Demo"); //PROGRESS_DESC_LEN is max
-	while (progress1++!=progress1_max)
+	StrCopy(progress1_desc, "Progress Demo"); //PROGRESS_DESC_LEN is max
+	while (progress1++ != progress1_max)
 		Sleep(20);
 	ProgressBarsReset("DemoCompany/ProgressBars");
 }
@@ -54,8 +54,8 @@ U0 Main4()
 {
 	"\nNo description.\n";
 	PressAKey;
-	progress1_max=200;
-	while (progress1++!=progress1_max)
+	progress1_max = 200;
+	while (progress1++ != progress1_max)
 		Sleep(20);
 	ProgressBarsReset;
 }
@@ -69,12 +69,13 @@ PressAKey;
 
 asm {
 _PROGRESS_DEMO::
-				MOV 		RCX,12000000
-@@05: 	MOV 		U64 [&progress1],RCX
+				MOV 		RCX, 12000000
+@@05: 			MOV 		U64 [&progress1], RCX
 				CALL		&Yield
 				LOOP		@@05
-				MOV 		U64 [&progress1],RCX
+				MOV 		U64 [&progress1], RCX
 				RET
 }
+
 _extern _PROGRESS_DEMO U0 AsmProgressDemo();
 AsmProgressDemo;

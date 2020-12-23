@@ -6,6 +6,7 @@
 U0 CompNoteFloatOp(CCompCtrl *cc, CIntermediateCode *tmpi, Bool dont_pushable, Bool dont_popable, I64 pos)
 {
 	Bool link = FALSE;
+
 	if (cc->pass == 7 && cc->last_float_op_ic && cc->last_dont_popable && dont_pushable)
 	{
 		switch [pos]
@@ -14,10 +15,12 @@ U0 CompNoteFloatOp(CCompCtrl *cc, CIntermediateCode *tmpi, Bool dont_pushable, B
 				if (cc->last_float_op_ic != tmpi && cc->dont_push_float)
 					link = TRUE;
 				break;
+
 			case CN_A1:
 				if (cc->last_float_op_ic != tmpi && cc->dont_push_float)
 					link = TRUE;
 				break;
+
 			case CN_INST:
 				if (cc->last_float_op_ic != tmpi)
 				{
@@ -40,6 +43,7 @@ U0 CompNoteFloatOp(CCompCtrl *cc, CIntermediateCode *tmpi, Bool dont_pushable, B
 					link = TRUE;
 				}
 				break;
+
 			case CN_RES:
 				if (cc->last_float_op_ic == tmpi && cc->last_float_op_pos == CN_INST)
 					link = TRUE;
@@ -81,8 +85,9 @@ U0 ICCopyTemplate(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op,
 				  Bool off_the_record, Bool dont_pushable, Bool dont_popable, I64 pos)
 {
 	Bool dont_push_float, dont_pop_float, alt;
-	U8 *ptr;
-	I64 i = 0;
+	U8  *ptr;
+	I64  i = 0;
+
 	if (!off_the_record)
 	{
 		if (tmpi->ic_flags & ICF_ALT_TEMPLATE)
@@ -139,7 +144,7 @@ U0 ICCopyTemplate(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op,
 
 U0 ICFConvert(CCompCtrl *cc, CIntermediateCode *tmpi, I64 r1, CICType t2, I64 r2, I64 d2, Bool to_int, I64 pos, I64 rip)
 {
-	I64 rsp_size = 0, op1, op2;
+	I64  rsp_size = 0, op1, op2;
 	Bool dont_push_float, dont_pop_float;
 
 	if (to_int)
@@ -201,6 +206,7 @@ U0 ICFConvert(CCompCtrl *cc, CIntermediateCode *tmpi, I64 r1, CICType t2, I64 r2
 U0 ICFConvert2(CCompCtrl *cc, CIntermediateCode *tmpi, I64 r1, CICType t2, I64 r2, I64 d2, Bool to_int, I64 rip)
 {
 	I64 rsp_size = 0, op1, op2;
+
 	if (to_int)
 	{
 		op1 = SLASH_OP_FLD;
@@ -232,9 +238,9 @@ U0 ICFConvert2(CCompCtrl *cc, CIntermediateCode *tmpi, I64 r1, CICType t2, I64 r
 
 U0 ICFUnaryMinus(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf2, I64 rip)
 {
-	CICArg *arg1 = &tmpi->arg1;
-	I64 rsp_size = 0, builtin1 = 0, t1, r1, d1;
-	Bool dont_push_float, dont_pop_float;
+	CICArg	*arg1 = &tmpi->arg1;
+	I64		 rsp_size = 0, builtin1 = 0, t1, r1, d1;
+	Bool	 dont_push_float, dont_pop_float;
 
 	if (cc->flags & CCF_AOT_COMPILE)
 		buf2 = cc->aotc->rip;
@@ -295,6 +301,7 @@ U0 ICFUnaryMinus(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf2, I64 rip)
 U0 ICFMod(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip)
 {//for MOD
 	Bool dont_push_float, dont_pop_float;
+
 	CompSetFloatOpPushPop(cc, tmpi, &dont_push_float, &dont_pop_float);
 	if (dont_push_float)
 	{
@@ -316,9 +323,9 @@ U0 ICFMod(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip)
 
 U0 ICFPow(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf, I64 rip)
 {//for POW
-	I64 i;
-	CAOTImportExport *tmpie;
-	CHashExport *tmpex = HashFind("SYS_POW", cc->htc.hash_table_list, HTT_EXPORT_SYS_SYM);
+	I64					 i;
+	CAOTImportExport	*tmpie;
+	CHashExport			*tmpex = HashFind("SYS_POW", cc->htc.hash_table_list, HTT_EXPORT_SYS_SYM);
 
 	ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, rip);
 	ICMov(tmpi, MDF_REG + RT_I64, REG_RDX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip);
@@ -404,9 +411,9 @@ U0 ICFPow(CCompCtrl *cc, CIntermediateCode *tmpi, U8 *buf, I64 rip)
 
 U0 ICFOp(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
 {//for ADD,SUB,DIV,MUL
-	CICArg *arg1, *arg2;
-	Bool dont_push_float, dont_pop_float, alt;
-	I64 rsp_size = 0, builtin1 = 0, builtin2 = 0, t1, r1, d1, t2, r2, d2;
+	CICArg	*arg1, *arg2;
+	Bool	 dont_push_float, dont_pop_float, alt;
+	I64		 rsp_size = 0, builtin1 = 0, builtin2 = 0, t1, r1, d1, t2, r2, d2;
 
 	if (tmpi->ic_flags & ICF_ALT_TEMPLATE)
 	{
@@ -629,6 +636,7 @@ U0 ICFOp(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
 			case 4:
 				op = SLASH_OP_FSUBR;
 				break;
+
 			case 6:
 				op = SLASH_OP_FDIVR;
 				break;
@@ -662,6 +670,7 @@ U0 ICFOp(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, U8 *buf2, I64 rip)
 U0 ICFCmp(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, I64 rip)
 {
 	Bool dont_push_float, dont_pop_float;
+
 	CompSetFloatOpPushPop(cc, tmpi, &dont_push_float, &dont_pop_float);
 	if (dont_push_float)
 	{
@@ -692,6 +701,7 @@ U0 ICFCmp(CCompCtrl *cc, CIntermediateCode *tmpi, I64 op, I64 rip)
 U0 ICFModEqu(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip)
 {
 	Bool dont_push_float, dont_pop_float;
+
 	CompSetFloatOpPushPop(cc, tmpi, &dont_push_float, &dont_pop_float);
 	if (tmpi->ic_flags & ICF_BY_VAL)
 	{

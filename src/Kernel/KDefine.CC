@@ -9,6 +9,7 @@ CHashDefineStr *DefineLoad(U8 *dname, U8 *st)
 	tmph->src_link	= MStrPrint("AD:0x%X", Caller);
 
 	HashAdd(tmph, Fs->hash_table);
+
 	return tmph;
 }
 
@@ -43,6 +44,7 @@ CHashDefineStr *DefineListLoad(U8 *dname, U8 *list)
 	}
 
 	HashAdd(tmph, Fs->hash_table);
+
 	return tmph;
 }
 
@@ -101,6 +103,7 @@ I64 DefineMatch(U8 *needle, U8 *haystack_list_dname, I64 flags=0)
 U0 DefinePrint(U8 *dname, U8 *src, ...)
 {//Create DEFINE entry with $LK,"Print",A="FI:::/Doc/Print.DD"$()ed string.
 	U8 *buf = StrPrintJoin(NULL, src, argc, argv);
+
 	DefineLoad(dname, buf);
 	Free(buf);
 }
@@ -295,6 +298,7 @@ U8 *Color2Str(U8 *buf, CColorROPU32 c)
 		else
 			CatPrint(buf, "INVALID");
 	}
+
 	return buf;
 }
 

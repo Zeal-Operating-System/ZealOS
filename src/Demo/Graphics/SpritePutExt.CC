@@ -16,10 +16,12 @@ You can link to a tag string instead of a num.
 U0 SpritePutExt()
 {
 	I64 i;
-	for (i=0;i<3;i++) {
+
+	for (i = 0; i < 3; i++)
+	{
 		"US Map:";
 		Sprite($IB,"<1>",BI=1,BP="::/Demo/Graphics/SpritePut.CC,2"$);
-		"%h12c",'\n'; //"h" is a secondary arg.  $LK,"Print",A="FI:::/Doc/Print.DD"$ 12 newline chars.
+		"%h12c", '\n'; //"h" is a secondary arg.  $LK,"Print",A="FI:::/Doc/Print.DD"$ 12 newline chars.
 	}
 }
 

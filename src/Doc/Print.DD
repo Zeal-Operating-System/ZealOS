@@ -56,40 +56,40 @@ $ID,-2$
 
 $FG,5$$TX+CX,"Print Family"$$FG$
 
-$LK,"MStrPrint",A="MN:MStrPrint"$(U8 *format,...) is like $LK,"StrPrint",A="MN:StrPrint"$(U8 *dst,U8 *format,...) but it returns a $LK,"MAlloc",A="MN:MAlloc"$ated str.  It is vary handy because you don't have to worry about overflow.
+$LK,"MStrPrint",A="MN:MStrPrint"$(U8 *format, ...) is like $LK,"StrPrint",A="MN:StrPrint"$(U8 *dst,U8 *format,...) but it returns a $LK,"MAlloc",A="MN:MAlloc"$ated str.  It is vary handy because you don't have to worry about overflow.
 
-$LK,"CatPrint",A="MN:CatPrint"$(U8 *_dst,U8 *format,...) concatenates a formated string.
+$LK,"CatPrint",A="MN:CatPrint"$(U8 *_dst, U8 *format, ...) concatenates a formated string.
 
-$LK,"In",A="MN:In"$(U8 *format,...) sends text to the current task's input buffer.
-$LK,"InStr",A="MN:InStr"$(U8 *format,...) sends text of an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$ to the keyboard stream of the current TASK but can also do mouse cmds.
+$LK,"In",A="MN:In"$(U8 *format, ...) sends text to the current task's input buffer.
+$LK,"InStr",A="MN:InStr"$(U8 *format, ...) sends text of an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$ to the keyboard stream of the current TASK but can also do mouse cmds.
 
-$LK,"XTalk",A="MN:XTalk"$(CTask *task,U8 *format,...) and text to another task's input buffer.
-$LK,"XTalkStr",A="MN:XTalkStr"$(CTask *task,U8 *format,...) sends text of an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$ to the keyboard stream of another TASK but can also do mouse cmds.
+$LK,"XTalk",A="MN:XTalk"$(CTask *task, U8 *format, ...) and text to another task's input buffer.
+$LK,"XTalkStr",A="MN:XTalkStr"$(CTask *task, U8 *format, ...) sends text of an $LK,"InFile",A="FF:::/Doc/Glossary.DD,InFile"$ to the keyboard stream of another TASK but can also do mouse cmds.
 
-$LK,"DocPrint",A="MN:DocPrint"$(CDoc *doc,U8 *format,...) sends text to a document.  You can buffer to a Doc and save it, providing the functionality of $FG,2$fprintf$FG$.  See $LK,"::/Demo/Disk/FPrintF.CC"$.
+$LK,"DocPrint",A="MN:DocPrint"$(CDoc *doc, U8 *format, ...) sends text to a document.  You can buffer to a Doc and save it, providing the functionality of $FG,2$fprintf$FG$.  See $LK,"::/Demo/Disk/FPrintF.CC"$.
 
-$LK,"Zenith",A="MN:Zenith"$(U8 *format,...) sends text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be compiled and run.
-$LK,"ZenithLog",A="MN:ZenithLog"$(U8 *format,...) and $LK,"ZenithErr",A="MN:ZenithErr"$(U8 *format,...) send text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be displayed.
+$LK,"Zenith",A="MN:Zenith"$(U8 *format, ...) sends text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be compiled and run.
+$LK,"ZenithLog",A="MN:ZenithLog"$(U8 *format, ...) and $LK,"ZenithErr",A="MN:ZenithErr"$(U8 *format,...) send text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be displayed.
 
-$LK,"StreamPrint",A="MN:StreamPrint"$(U8 *format,...) sends text to the stream of code being compiled and must reside in a $FG,2$#exe{}$FG$ blk.
+$LK,"StreamPrint",A="MN:StreamPrint"$(U8 *format, ...) sends text to the stream of code being compiled and must reside in a $FG,2$#exe{}$FG$ blk.
 
-$LK,"GrPrint",A="MN:GrPrint"$(CDC *dc,I64 x,I64 y,U8 *format,...) and $LK,"GrVPrint",A="MN:GrVPrint"$() plots text in graphics mode.
+$LK,"GrPrint",A="MN:GrPrint"$(CDC *dc, I64 x, I64 y, U8 *format,...) and $LK,"GrVPrint",A="MN:GrVPrint"$() plots text in graphics mode.
 
-$LK,"TextPrint",A="MN:TextPrint"$(CTask *task,I64 x,I64 y,I64 attr,U8 *format,...) plots to $LK,"gr.text_base",A="HI:TextBase Layer"$.
+$LK,"TextPrint",A="MN:TextPrint"$(CTask *task, I64 x, I64 y, I64 attr, U8 *format, ...) plots to $LK,"gr.text_base",A="HI:TextBase Layer"$.
 
-$LK,"ExePrint",A="MN:ExePrint"$(U8 *format,...) compiles and execute a string.	Note: It returns the res of the last executed expression.
+$LK,"ExePrint",A="MN:ExePrint"$(U8 *format, ...) compiles and execute a string.	Note: It returns the res of the last executed expression.
 
-$LK,"Once",A="MN:Once"$(U8 *format,...) Writes User code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
+$LK,"Once",A="MN:Once"$(U8 *format, ...) Writes User code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
 
-$LK,"ZOnce",A="MN:ZOnce"$(U8 *format,...) Writes Zenith code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
+$LK,"ZOnce",A="MN:ZOnce"$(U8 *format, ...) Writes Zenith code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
 
-$LK,"InPrint",A="MN:InPrint"$(I64 mS,U8 *format,...) $LK,"PutChars",A="MN:PutChars"$()s one at a time with a delay.
+$LK,"InPrint",A="MN:InPrint"$(I64 mS, U8 *format, ...) $LK,"PutChars",A="MN:PutChars"$()s one at a time with a delay.
 
-$LK,"RawPrint",A="MN:RawPrint"$(I64 mS,U8 *format,...) sends direct to screen memory, bypassing window manager.
+$LK,"RawPrint",A="MN:RawPrint"$(I64 mS, U8 *format, ...) sends direct to screen memory, bypassing window manager.
 
-$LK,"User",A="MN:User"$(U8 *format,...) Spawns a user and execute a string on start-up.
+$LK,"User",A="MN:User"$(U8 *format, ...) Spawns a user and execute a string on start-up.
 
-$LK,"PopUpPrint",A="MN:PopUpPrint"$(U8 *format,...) compiles and execute a string in a pop-up win.	Note: It returns the res of the last executed expression.
-$LK,"PopUpViewPrint",A="MN:PopUpViewPrint"$(U8 *format,...) creates a pop-up window and views text.
+$LK,"PopUpPrint",A="MN:PopUpPrint"$(U8 *format, ...) compiles and execute a string in a pop-up win.	Note: It returns the res of the last executed expression.
+$LK,"PopUpViewPrint",A="MN:PopUpViewPrint"$(U8 *format, ...) creates a pop-up window and views text.
 
 $BK,1$Note:$BK,0$ Use $FG,2$Print("%s",src)$FG$ if you need an unmodified string.

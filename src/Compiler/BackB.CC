@@ -8,6 +8,7 @@ U0 ICUnaries(CIntermediateCode *tmpi, I64 op, I64 rip)
 U0 ICNot(CIntermediateCode *tmpi, I64 rip)
 {
 	I64 i;
+
 	if (tmpi->arg1.type.raw_type <= RT_U8 && tmpi->arg1.type & MDG_DISP_SIB_RIP)
 	{
 		i = ICModr1(tmpi, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp);
@@ -29,6 +30,7 @@ U0 ICNot(CIntermediateCode *tmpi, I64 rip)
 U0 ICAndAnd(CIntermediateCode *tmpi, I64 rip)
 {
 	I64 r2;
+
 	ICMov(tmpi, MDF_REG + RT_I64, REG_RCX, 0, tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, rip);
 	if (!(tmpi->arg1.type & MDF_REG) || tmpi->arg1.reg == REG_RAX)
 	{
@@ -49,6 +51,7 @@ U0 ICAndAnd(CIntermediateCode *tmpi, I64 rip)
 U0 ICOrOr(CIntermediateCode *tmpi, I64 rip)
 {
 	I64 i = 0x48, r2;
+
 	ICMov(tmpi, MDF_REG + RT_I64, REG_RCX, 0, tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, rip);
 	if (!(tmpi->arg1.type & MDF_REG) || tmpi->arg1.reg == REG_RAX)
 	{
@@ -73,6 +76,7 @@ U0 ICOrOr(CIntermediateCode *tmpi, I64 rip)
 U0 ICXorXor(CIntermediateCode *tmpi, I64 rip)
 {
 	I64 r2;
+
 	ICMov(tmpi, MDF_REG + RT_I64, REG_RCX, 0, tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, rip);
 	if (!(tmpi->arg1.type & MDF_REG))
 	{
@@ -99,6 +103,7 @@ U0 ICXorXor(CIntermediateCode *tmpi, I64 rip)
 U0 ICComp(CIntermediateCode *tmpi, I64 us, I64 is, I64 rip)
 {
 	I64 r1, d1, r2, i = 0x48, j = tmpi->arg2.disp;
+
 	if (tmpi->arg2.type & MDF_IMM && I32_MIN <= j <= I32_MAX)
 	{
 		if (!(tmpi->ic_flags & (ICF_POP_CMP | ICF_PUSH_CMP)) &&
@@ -214,7 +219,8 @@ U0 ICComp(CIntermediateCode *tmpi, I64 us, I64 is, I64 rip)
 U0 ICBitOps(CIntermediateCode *tmpi, CICArg *arg1, CICArg *arg2, CIntermediateCode *tmpi2, I64 op, I64 op_imm, I64 rip)
 {//TODO:not fully utilizing Modr
 	Bool res_not_used = ToBool(tmpi2->ic_flags & ICF_RES_NOT_USED);
-	I64 r1, t2, r2, d2, i = 0x48;
+	I64  r1, t2, r2, d2, i = 0x48;
+
 	if (tmpi->ic_flags & ICF_BY_VAL)
 	{
 		t2 = arg2->type & MDG_MASK + RT_I64; //TODO: check overflow
@@ -312,6 +318,7 @@ U0 ICToF64(CCompCtrl *cc, CIntermediateCode *tmpi, I64 rip)
 U0 ICToBool(CCompCtrl *, CIntermediateCode *tmpi, I64 rip)
 {
 	I64 r;
+
 	if (tmpi->arg1.type & MDF_REG)
 		r = tmpi->arg1.reg;
 	else
@@ -326,8 +333,9 @@ U0 ICToBool(CCompCtrl *, CIntermediateCode *tmpi, I64 rip)
 
 U0 ICPreIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 {
-	I64 r;
-	CHashClass *tmpc = tmpi->ic_class, *tmpc1 = tmpc - 1;
+	I64			 r;
+	CHashClass	*tmpc = tmpi->ic_class, *tmpc1 = tmpc - 1;
+
 	if (tmpi->ic_flags & ICF_BY_VAL)
 	{
 		if (tmpc->ptr_stars_count && tmpc1->size != 1)
@@ -372,8 +380,9 @@ U0 ICPreIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 
 U0 ICPostIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 {
-	I64 r;
-	CHashClass *tmpc = tmpi->ic_class, *tmpc1 = tmpc - 1;
+	I64			 r;
+	CHashClass	*tmpc = tmpi->ic_class, *tmpc1 = tmpc - 1;
+
 	if (tmpi->ic_flags & ICF_BY_VAL)
 	{
 		if (tmpi->res.type.mode)
@@ -413,9 +422,10 @@ U0 ICPostIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 
 U0 ICDerefPostIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 {
-	CICType t;
-	I64 r;
-	CHashClass *tmpc1 = tmpi->ic_class;
+	CICType		 t;
+	I64			 r;
+	CHashClass	*tmpc1 = tmpi->ic_class;
+
 	t = tmpi->res.type.raw_type;
 	if (t > tmpi->arg1_type_pointed_to)
 		t = tmpi->arg1_type_pointed_to;
@@ -460,8 +470,9 @@ U0 ICDerefPostIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 
 U0 ICAssignPostIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 {
-	CHashClass *tmpc1 = tmpi->ic_class2 - 1;
-	I64 r;
+	CHashClass	*tmpc1 = tmpi->ic_class2 - 1;
+	I64			 r;
+
 	if (tmpi->ic_flags & ICF_BY_VAL)
 	{
 		if (tmpi->arg1.type & MDF_REG)
@@ -497,11 +508,11 @@ U0 ICAssignPostIncDec(CIntermediateCode *tmpi, I64 op, I64 rip)
 
 U0 ICCompAndBranch(CIntermediateCode *tmpi, Bool has_res, I64 rip, I64 us, I64 is, I64 not_us, I64 not_is, U8 *buf, I64 rip2)
 {
-	I64 r1, r2, i = 0x48, j, res_reg;
-	CICType t1, t2;
-	Bool short_jmp, swap, done;
-	CCodeMisc *lb;
-	CICArg *arg1 = &tmpi->arg1, *arg2 = &tmpi->arg2;
+	I64			 r1, r2, i = 0x48, j, res_reg;
+	CICType		 t1, t2;
+	Bool		 short_jmp, swap, done;
+	CCodeMisc	*lb;
+	CICArg		*arg1 = &tmpi->arg1, *arg2 = &tmpi->arg2;
 
 	j = arg1->disp;
 	if (arg1->type & MDF_IMM && I32_MIN <= j <= I32_MAX)
@@ -656,7 +667,7 @@ U0 ICCompAndBranch(CIntermediateCode *tmpi, Bool has_res, I64 rip, I64 us, I64 i
 		i = lb->addr - (rip + 2);
 		if (lb->flags & CMF_POP_CMP)
 		{
-			if(tmpi->ic_flags & ICF_PUSH_CMP)
+			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				i += 4;
 			else
 				i += 8;
@@ -671,7 +682,7 @@ U0 ICCompAndBranch(CIntermediateCode *tmpi, Bool has_res, I64 rip, I64 us, I64 i
 		i = lb->addr - (rip + 2);
 		if (lb->flags & CMF_POP_CMP)
 		{
-			if(tmpi->ic_flags & ICF_PUSH_CMP)
+			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				i += 4;
 			else
 				i += 8;
@@ -684,7 +695,7 @@ U0 ICCompAndBranch(CIntermediateCode *tmpi, Bool has_res, I64 rip, I64 us, I64 i
 		i = lb->addr - (rip + 6);
 		if (lb->flags & CMF_POP_CMP)
 		{
-			if(tmpi->ic_flags & ICF_PUSH_CMP)
+			if (tmpi->ic_flags & ICF_PUSH_CMP)
 				i += 4;
 			else
 				i += 8;
@@ -698,9 +709,9 @@ U0 ICCompAndBranch(CIntermediateCode *tmpi, Bool has_res, I64 rip, I64 us, I64 i
 
 U0 ICTestAndBranch(CIntermediateCode *tmpi, I64 rip, I64 is, U8 *buf, I64 rip2)
 {
-	I64 i;
-	Bool short_jmp;
-	CCodeMisc *lb;
+	I64			 i;
+	Bool		 short_jmp;
+	CCodeMisc	*lb;
 
 	if (!(tmpi->arg1.type & MDF_REG))
 	{
@@ -754,9 +765,9 @@ U0 ICTestAndBranch(CIntermediateCode *tmpi, I64 rip, I64 is, U8 *buf, I64 rip2)
 
 U0 ICFlagBranch(CIntermediateCode *tmpi, I64 rip, I64 is, U8 *buf)
 {
-	I64 i;
-	Bool short_jmp;
-	CCodeMisc *lb;
+	I64			 i;
+	Bool		 short_jmp;
+	CCodeMisc	*lb;
 
 	rip += tmpi->ic_count;
 	lb = OptLabelFwd(tmpi->ic_data);

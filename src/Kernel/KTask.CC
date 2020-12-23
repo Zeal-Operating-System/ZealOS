@@ -32,6 +32,7 @@ I64 BirthWait(CTask **_task, I64 task_num=-1)
 {//Wait for task valid and not task_num.
 	while (!TaskValidate(*_task) || (*_task)->task_num == task_num)
 		Yield;
+
 	return (*_task)->task_num;
 }
 
@@ -80,6 +81,7 @@ Bool Kill(CTask *task, Bool wait=TRUE, Bool just_break=FALSE)
 			}
 		}
 	}
+
 	return FALSE;
 }
 
@@ -193,6 +195,7 @@ argpop I64 CallStackGrow(I64 stack_size_threshold, I64 stack_size, /*argpop*/I64
 			JMP 			RBX 			//return
 		};
 	}
+
 	return 0; //dummy to get rid of warning
 }
 ;
@@ -447,7 +450,8 @@ U0 UserTaskCont()
 				DocUnlock(doc);
 			PutExcept;
 		}
-	} while (cont);
+	}
+	while (cont);
 }
 
 U0 ServerCmdLine(I64 dummy=0)
@@ -480,6 +484,7 @@ CTask *User(U8 *format=NULL, ...)
 		XTalk(task, st);
 		Free(st);
 	}
+
 	return task;
 }
 

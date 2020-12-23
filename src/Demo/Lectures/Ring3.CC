@@ -9,17 +9,17 @@ fault, switches to ring 3, and generates
 a fault to switch back.
 */
 
-U8 *old_stack,*new_rip;
+U8 *old_stack, *new_rip;
 
 asm {
 INT_TO_RING0::	//Set to handle general protection 0xD fault temporarily.
 				INC 		U64 [SYS_PROGRESS1]
 				PUSH		U32 CGDT.ds 		//STACKSEG
-				MOV 		RAX,U64 [&old_stack]
+				MOV 		RAX, U64 [&old_stack]
 				PUSH		RAX
 				PUSH		U32 0 					//FLAGS--interrupts off
 				PUSH		U32 CGDT.cs64
-				MOV 		RAX,U64 [&new_rip]
+				MOV 		RAX, U64 [&new_rip]
 				PUSH		RAX
 				IRET
 }
@@ -27,30 +27,31 @@ INT_TO_RING0::	//Set to handle general protection 0xD fault temporarily.
 U0 Ring3Demo()
 {
 	U8 *old_vect;
-	"Progress1 Before:%X\n",progress1;
-	CLI
-	old_vect=IntEntrySet(0x0D,INT_TO_RING0,IDTET_TRAP);
 
-	TSSBusy(Gs->tss->tr_ring3,OFF);
-	RAXSet(Gs->tss->tr_ring3+3);
+	"Progress1 Before:%X\n", progress1;
+	CLI
+	old_vect = IntEntrySet(0x0D, INT_TO_RING0, IDTET_TRAP);
+
+	TSSBusy(Gs->tss->tr_ring3, OFF);
+	RAXSet(Gs->tss->tr_ring3 + 3);
 	LTR 	AX
 
 	asm {
-		MOV U64 [&old_stack],RSP
+		MOV U64 [&old_stack], RSP
 
-		LEA RAX,[R3_CALLBACK]
-		MOV U64 [&new_rip],RAX
+		LEA		RAX, [R3_CALLBACK]
+		MOV		U64 [&new_rip], RAX
 
-		MOV AX,CGDT.ds_ring3+3
-		MOV DS,AX
-		MOV ES,AX
+		MOV		AX, CGDT.ds_ring3 + 3
+		MOV		DS, AX
+		MOV		ES, AX
 
-		PUSH				U32 CGDT.ds_ring3+3 		//STACKSEG
-		PUSH				U64 [&old_stack]
-		PUSH				U32 0 					//FLAGS--interrupts off
-		PUSH				U32 CGDT.cs64_ring3+3
-		LEA RAX,[R3_START]
-		PUSH				RAX
+		PUSH	U32 CGDT.ds_ring3 + 3 		//STACKSEG
+		PUSH	U64 [&old_stack]
+		PUSH	U32 0 					//FLAGS--interrupts off
+		PUSH	U32 CGDT.cs64_ring3 + 3
+		LEA		RAX, [R3_START]
+		PUSH	RAX
 		IRET
 
 		R3_START:
@@ -58,18 +59,18 @@ U0 Ring3Demo()
 		CLI //This causes general protection fault #13
 
 		R3_CALLBACK:
-		MOV AX,CGDT.ds
-		MOV DS,AX
-		MOV ES,AX
+		MOV AX, CGDT.ds
+		MOV DS, AX
+		MOV ES, AX
 	}
 
-	TSSBusy(Gs->tss->tr,OFF);
+	TSSBusy(Gs->tss->tr, OFF);
 	RAXSet(Gs->tss->tr);
 	LTR 	AX
 
-	IntEntrySet(0x0D,old_vect,IDTET_IRQ);
+	IntEntrySet(0x0D, old_vect, IDTET_IRQ);
 	STI
-	"Progress1 After :%X\n",progress1;
+	"Progress1 After :%X\n", progress1;
 }
 
 Ring3Demo;

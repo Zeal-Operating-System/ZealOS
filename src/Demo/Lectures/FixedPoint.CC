@@ -1,4 +1,5 @@
-/*"Fixed point" means you use ints
+/*
+"Fixed point" means you use ints
 that are scaled by a value.  A common
 example would be using number of pennies
 instead of dollars with a float.
@@ -20,32 +21,32 @@ features, see $LK,"::/Doc/CosmiC.DD"$.
 
 U0 Main()
 {
-	F64 t0,f_sum=0,f_val;
-	I64 i ,i_sum=0,i_val;
+	F64 t0, f_sum=0, f_val;
+	I64 i , i_sum=0, i_val;
 
-	i_val= 2.0000002 *0x100000000;
-	t0=tS;
-	for (i=1000000000;i;i--)
-		i_sum+=i_val;
-	"Int Sum\t\t:%.9f Time:%7.3fs\n",i_sum/ToF64(0x100000000),tS-t0;
+	i_val =  2.0000002 * 0x100000000;
+	t0 = tS;
+	for (i = 1000000000; i; i--)
+		i_sum += i_val;
+	"Int Sum\t\t:%.9f Time:%7.3fs\n", i_sum / ToF64(0x100000000), tS - t0;
 
-	f_val= 2.0000002;
-	t0=tS;
-	for (i=1000000000;i;i--)
-		f_sum+=f_val;
-	"Float Sum\t:%.9f Time:%7.3fs\n",f_sum,tS-t0;
+	f_val = 2.0000002;
+	t0 = tS;
+	for (i = 1000000000; i; i--)
+		f_sum += f_val;
+	"Float Sum\t:%.9f Time:%7.3fs\n", f_sum, tS - t0;
 	'\n';
 }
 
 U0 DoIt2()
 {
-	I64 i=0x123456789ABCDEF0;
-	"i\t\t=%X\n",i;
+	I64 i = 0x123456789ABCDEF0;
+	"i\t\t=%X\n", i;
 
-	"i&0xFFFFFFFF\t=%X\n",i&0xFFFFFFFF;
-	"i>>32\t\t=%X\n",i>>32;
+	"i&0xFFFFFFFF\t=%X\n", i & 0xFFFFFFFF;
+	"i>>32\t\t=%X\n", i >> 32;
 
-	/*	Standard int types are declared
+/*	Standard int types are declared
 with a special compiler feature which
 allows a structure to be accessed as a
 whole.  That's why the i variable can
@@ -72,8 +73,8 @@ For a complete list of nonstandard compiler
 features, see $LK,"::/Doc/CosmiC.DD"$.
 */
 
-	"i.u32[0]\t=%X\n",i.u32[0];
-	"i.u32[1]\t=%X\n",i.u32[1];
+	"i.u32[0]\t=%X\n", i.u32[0];
+	"i.u32[1]\t=%X\n", i.u32[1];
 }
 
 CPURep;

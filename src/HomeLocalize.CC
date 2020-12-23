@@ -8,8 +8,8 @@ KbdTypeMatic(0);
 local_time_offset = 0 * 60 * 60 * CDATE_FREQ; //Do daylight savings by hand
 
 //$AN,"",A="mouse_move_scale"$adjust these to set mouse move scale
-mouse_hard.scale.x = 0.5;
-mouse_hard.scale.y = 0.5;
+mouse_hard.scale.x = 0.7;
+mouse_hard.scale.y = 0.7;
 mouse_hard.scale.z = 1.0; //wheel
 
 //don't change these

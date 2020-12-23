@@ -6,28 +6,27 @@ $HL,1$#define CDIR_FILENAME_LEN 38 //Must include terminator zero
 
 The following bit field shows valid 8-Bit ASCII filename characters.
 
-U32 char_bmp_filename[8]=
-{0x0000000, 0x03FF73FB, 0xEFFFFFFF, 0x2FFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF};
+U32 char_bmp_filename[8] = {0x0000000, 0x03FF73FB, 0xEFFFFFFF, 0x2FFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF};
 
 public class CDirEntry //64-byte fixed-size
 {
-	U16 attr; 		//See $LK,"RS_ATTR_DIR",A="MN:RS_ATTR_DIR"$.	I would like to change these.
-	U8 name[CDIR_FILENAME_LEN]; //See $LK,"char_bmp_filename",A="MN:char_bmp_filename"$, $LK,"FileNameCheck",A="MN:FileNameCheck"$
-	I64 clus; (blk) //One sector per clus.
-	I64 size; 		//In bytes
-	CDate datetime; //See  $LK,"DateTime",A="::/Doc/TimeDate.DD"$, $LK,"Implementation of DateTime",A="FI:::/Kernel/KDate.CC"$
+	U16		attr; 						//See $LK,"RS_ATTR_DIR",A="MN:RS_ATTR_DIR"$.	I would like to change these.
+	U8		name[CDIR_FILENAME_LEN];	//See $LK,"char_bmp_filename",A="MN:char_bmp_filename"$, $LK,"FileNameCheck",A="MN:FileNameCheck"$
+	I64		clus; $HL,0$$FG,7$(blk)$FG,0$$HL,1$ 				//One sector per clus.
+	I64		size; 						//In bytes
+	CDate	datetime; 					//See  $LK,"DateTime",A="::/Doc/TimeDate.DD"$, $LK,"Implementation of DateTime",A="FI:::/Kernel/KDate.CC"$
 };
 
 public class CRedSeaBoot //RedSea is type FAT32 in partition table to fool BIOS.
 {
-	U8 jump_and_nop[3];
-	U8 signature,reserved[4]; //MBR_PT_REDSEA=0x88. Distinguish from real FAT32.
+	U8	jump_and_nop[3];
+	U8	signature, reserved[4]; //MBR_PT_REDSEA=0x88. Distinguish from real FAT32.
 	I64 drv_offset; 			//For CD/DVD image copy.
 	I64 sects;
-	I64 root_clus; (root_blk)
+	I64 root_clus; $HL,0$$FG,7$(root_blk)$FG,0$$HL,1$
 	I64 bitmap_sects;
 	I64 unique_id;
-	U8 code[462];
+	U8	code[462];
 	U16 signature2; 			//0xAA55
 };
 $HL,0$

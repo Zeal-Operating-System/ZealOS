@@ -1,15 +1,18 @@
 U0 BgtTemplatePurge(CBgtTemplate *tmpt)
 {
-	CBgtEntry 		*tmpb,*tmpb1;
+	CBgtEntry *tmpb, *tmpb1;
+
 	tmpb=b_head.next;
-	while (tmpb!=&b_head) {
-		tmpb1=tmpb->next;
-		if (tmpb->template==tmpt) {
+	while (tmpb != &b_head)
+	{
+		tmpb1 = tmpb->next;
+		if (tmpb->template == tmpt)
+		{
 			QueueRemove(tmpb);
 			BgtEntryDel2(tmpb);
 			Free(tmpb);
 		}
-		tmpb=tmpb1;
+		tmpb = tmpb1;
 	}
 }
 
@@ -20,122 +23,149 @@ U0 BgtTemplateDel(CBgtTemplate *tmpt)
 	Free(tmpt);
 }
 
-U0 BgtTemplateExpand(CBgtTemplate *tmpt,Bool periodic_copy=FALSE)
+U0 BgtTemplateExpand(CBgtTemplate *tmpt, Bool periodic_copy=FALSE)
 {
-	CDate 				d,start,end;
-	CDateStruct 	ds;
-	CBgtEntry 		*tmpb;
-	Bool					first=TRUE;
+	CDate		 d, start, end;
+	CDateStruct  ds;
+	CBgtEntry 	*tmpb;
+	Bool		 first = TRUE;
 
-	start=MyStr2Date(tmpt->start_date);
-	end  =MyStr2Date(tmpt->end_date);
-	tmpt->b.template=tmpt;
-	switch (tmpt->type) {
+	start = MyStr2Date(tmpt->start_date);
+	end   = MyStr2Date(tmpt->end_date);
+	tmpt->b.template = tmpt;
+	switch (tmpt->type)
+	{
 		case BT_INTERVAL:
-			d=start;
-			while (d<=end) {
-				if (!first || !periodic_copy) {
-					tmpb=BgtEntryCopy(&tmpt->b,periodic_copy);
-					tmpb->date=d;
+			d = start;
+			while (d <= end)
+			{
+				if (!first || !periodic_copy)
+				{
+					tmpb = BgtEntryCopy(&tmpt->b, periodic_copy);
+					tmpb->date = d;
 					if (periodic_copy)
-						tmpb->template=NULL;
+						tmpb->template = NULL;
 					else
-						tmpb->type=BE_TEMPLATE_COPY;
+						tmpb->type = BE_TEMPLATE_COPY;
 					BgtIns(tmpb);
 				}
-				d+=tmpt->period*0x100000000;
-				first=FALSE;
+				d += tmpt->period * 0x100000000;
+				first = FALSE;
 			}
 			break;
+
 		case BT_MONTHLY:
-			Date2Struct(&ds,start);
-			while (TRUE) {
-				d=Struct2Date(&ds);
-				if (d<=end) {
-					if (!first || !periodic_copy) {
-						tmpb=BgtEntryCopy(&tmpt->b,periodic_copy);
-						tmpb->date=d;
+			Date2Struct(&ds, start);
+			while (TRUE)
+			{
+				d = Struct2Date(&ds);
+				if (d <= end)
+				{
+					if (!first || !periodic_copy)
+					{
+						tmpb = BgtEntryCopy(&tmpt->b, periodic_copy);
+						tmpb->date = d;
 						if (periodic_copy)
-							tmpb->template=NULL;
+							tmpb->template = NULL;
 						else
-							tmpb->type=BE_TEMPLATE_COPY;
+							tmpb->type = BE_TEMPLATE_COPY;
 						BgtIns(tmpb);
 					}
-				} else
+				}
+				else
 					break;
-				if (++ds.mon>12) {
-					ds.mon=1;
+				if (++ds.mon > 12)
+				{
+					ds.mon = 1;
 					ds.year++;
 				}
-				first=FALSE;
+				first = FALSE;
 			}
 			break;
+
 		case BT_BIMONTHLY:
-			Date2Struct(&ds,start);
-			while (TRUE) {
-				d=Struct2Date(&ds);
-				if (d<=end) {
-					if (!first || !periodic_copy) {
-						tmpb=BgtEntryCopy(&tmpt->b,periodic_copy);
-						tmpb->date=d;
+			Date2Struct(&ds, start);
+			while (TRUE)
+			{
+				d = Struct2Date(&ds);
+				if (d <= end)
+				{
+					if (!first || !periodic_copy)
+					{
+						tmpb = BgtEntryCopy(&tmpt->b, periodic_copy);
+						tmpb->date = d;
 						if (periodic_copy)
-							tmpb->template=NULL;
+							tmpb->template = NULL;
 						else
-							tmpb->type=BE_TEMPLATE_COPY;
+							tmpb->type = BE_TEMPLATE_COPY;
 						BgtIns(tmpb);
 					}
-				} else
+				}
+				else
 					break;
-				ds.mon+=2;
-				if (ds.mon>12) {
-					ds.mon-=12;
+
+				ds.mon += 2;
+				if (ds.mon > 12)
+				{
+					ds.mon -= 12;
 					ds.year++;
 				}
-				first=FALSE;
+				first = FALSE;
 			}
 			break;
+
 		case BT_SEMIANNUAL:
-			Date2Struct(&ds,start);
-			while (TRUE) {
-				d=Struct2Date(&ds);
-				if (d<=end) {
-					if (!first || !periodic_copy) {
-						tmpb=BgtEntryCopy(&tmpt->b,periodic_copy);
-						tmpb->date=d;
+			Date2Struct(&ds, start);
+			while (TRUE)
+			{
+				d = Struct2Date(&ds);
+				if (d <= end)
+				{
+					if (!first || !periodic_copy)
+					{
+						tmpb = BgtEntryCopy(&tmpt->b, periodic_copy);
+						tmpb->date = d;
 						if (periodic_copy)
-							tmpb->template=NULL;
+							tmpb->template = NULL;
 						else
-							tmpb->type=BE_TEMPLATE_COPY;
+							tmpb->type = BE_TEMPLATE_COPY;
 						BgtIns(tmpb);
 					}
-				} else
+				}
+				else
 					break;
-				ds.mon+=6;
-				if (ds.mon>12) {
-					ds.mon-=12;
+				ds.mon += 6;
+				if (ds.mon>12)
+				{
+					ds.mon -= 12;
 					ds.year++;
 				}
-				first=FALSE;
+				first = FALSE;
 			}
 			break;
+
 		case BT_ANNUAL:
-			Date2Struct(&ds,start);
-			while (TRUE) {
-				d=Struct2Date(&ds);
-				if (d<=end) {
-					if (!first || !periodic_copy) {
-						tmpb=BgtEntryCopy(&tmpt->b,periodic_copy);
-						tmpb->date=d;
+			Date2Struct(&ds, start);
+			while (TRUE)
+			{
+				d = Struct2Date(&ds);
+				if (d <= end)
+				{
+					if (!first || !periodic_copy)
+					{
+						tmpb = BgtEntryCopy(&tmpt->b, periodic_copy);
+						tmpb->date = d;
 						if (periodic_copy)
-							tmpb->template=NULL;
+							tmpb->template = NULL;
 						else
-							tmpb->type=BE_TEMPLATE_COPY;
+							tmpb->type = BE_TEMPLATE_COPY;
 						BgtIns(tmpb);
 					}
-				} else
+				}
+				else
 					break;
 				ds.year++;
-				first=FALSE;
+				first = FALSE;
 			}
 			break;
 	}
@@ -143,40 +173,49 @@ U0 BgtTemplateExpand(CBgtTemplate *tmpt,Bool periodic_copy=FALSE)
 
 U0 CBgtTemplatesExpand()
 {
-	CBgtTemplate	*tmpt=t_head.next;
-	while (tmpt!=&t_head) {
+	CBgtTemplate *tmpt = t_head.next;
+
+	while (tmpt != &t_head)
+	{
 		BgtTemplateExpand(tmpt);
-		tmpt=tmpt->next;
+		tmpt = tmpt->next;
 	}
 }
 
-CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *default_t=NULL,CBgtEntry *default_b=NULL)
+CBgtTemplate *BgtTemplatePrompt(CBgtTemplate *default_t=NULL, CBgtEntry *default_b=NULL)
 {
-	CBgtTemplate	t,*tmpt;
+	CBgtTemplate	 t, *tmpt;
 	CBgtEntry 		*tmpb;
-	MemSet(&t,0,sizeof(CBgtTemplate));
-	if (default_t) {
-		MemCopy(&t.start,&default_t->start,BT_SIZE);
-		default_b=&default_t->b;
-	} else {
-		t.type=BT_INTERVAL;
+
+	MemSet(&t, 0, sizeof(CBgtTemplate));
+	if (default_t)
+	{
+		MemCopy(&t.start, &default_t->start, BT_SIZE);
+		default_b = &default_t->b;
+	}
+	else
+	{
+		t.type = BT_INTERVAL;
 		if (default_b)
-			StrPrint(&t.start_date,"%D",default_b->date);
+			StrPrint(&t.start_date, "%D", default_b->date);
 		else
-			StrCopy(&t.start_date,"[");
-		StrCopy(&t.end_date,"]");
+			StrCopy(&t.start_date, "[");
+		StrCopy(&t.end_date, "]");
 	}
 	while (TRUE)
-		if (PopUpForm(&t) && ((t.type==BT_INTERVAL && t.period>0) ||
-					t.type>BT_INTERVAL)) {
-			if (tmpb=BgtEntryPrompt(default_b)) {
-				tmpt=CAlloc(sizeof(CBgtTemplate));
-				MemCopy(&tmpt->start,&t.start,BT_SIZE);
-				MemCopy(&tmpt->b,tmpb,sizeof(CBgtEntry));
+		if (PopUpForm(&t) && ((t.type == BT_INTERVAL && t.period > 0) || t.type > BT_INTERVAL))
+		{
+			if (tmpb = BgtEntryPrompt(default_b))
+			{
+				tmpt = CAlloc(sizeof(CBgtTemplate));
+				MemCopy(&tmpt->start, &t.start, BT_SIZE);
+				MemCopy(&tmpt->b, tmpb, sizeof(CBgtEntry));
 				Free(tmpb);
 				return tmpt;
 			}
-		} else
+		}
+		else
 			break;
+
 	return NULL;
 }

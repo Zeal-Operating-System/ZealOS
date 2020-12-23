@@ -11,8 +11,9 @@ F64 LowPass1(F64 a, F64 y0, F64 y, F64 dt=1.0)
 
 U0 ODEResetPtrs(CMathODE *ode)
 {
-	I64 s = ode->n_internal * sizeof(F64);
+	I64  s = ode->n_internal * sizeof(F64);
 	F64 *ptr = ode->array_base;
+
 	ode->state_internal = ptr;	ptr(I64) += s;
 	ode->state_scale = ptr; 	ptr(I64) += s;
 	ode->DstateDt = ptr;		ptr(I64) += s;
@@ -33,8 +34,9 @@ public CMathODE *ODENew(I64 n, F64 max_tolerance=1e-6, I64 flags=0)
 	//You can min_tolerance and it will
 	//dynamically adjust tolerance to utilize
 	//the CPU.
-	I64 s = n * sizeof(F64);
-	CMathODE *ode = CAlloc(sizeof(CMathODE));
+	I64			 s = n * sizeof(F64);
+	CMathODE	*ode = CAlloc(sizeof(CMathODE));
+
 	ode->t_scale = 1.0;
 	ode->flags = flags;
 	ode->n_internal = ode->n = n;
@@ -48,6 +50,7 @@ public CMathODE *ODENew(I64 n, F64 max_tolerance=1e-6, I64 flags=0)
 	ode->state = CAlloc(s);
 	ode->array_base = MAlloc(12 * s);
 	ODEResetPtrs(ode);
+
 	return ode;
 }
 
@@ -55,18 +58,21 @@ public CMathODE *ODENew(I64 n, F64 max_tolerance=1e-6, I64 flags=0)
 public Bool ODEPause(CMathODE *ode, Bool val=ON)
 {//Pause ODE.
 	Bool res;
+
 	if (!ode)
 		return OFF;
 	res = LBEqual(&ode->flags, ODEf_PAUSED, val);
 	if (val)
 		while (Bt(&ode->flags, ODEf_BUSY))
 			Yield;
+
 	return res;
 }
 
 public U0 ODEDel(CMathODE *ode)
 {//Free ODE node, but not masses or springs.
 	I64 i;
+
 	if (!ode)
 		return;
 	ODEPause(ode);
@@ -91,8 +97,9 @@ public I64 ODESize(CMathODE *ode)
 
 U0 ODESetMassesPtrs(CMathODE *ode, F64 *state, F64 *DstateDt)
 {
-	COrder2D3 *ptr1 = state(F64 *) + ode->n, *ptr2 = DstateDt(F64 *) + ode->n;
-	CMass *tmpm = ode->next_mass;
+	COrder2D3	*ptr1 = state(F64 *) + ode->n, *ptr2 = DstateDt(F64 *) + ode->n;
+	CMass		*tmpm = ode->next_mass;
+
 	while (tmpm != &ode->next_mass)
 	{
 		tmpm->state = ptr1++;
@@ -103,9 +110,9 @@ U0 ODESetMassesPtrs(CMathODE *ode, F64 *state, F64 *DstateDt)
 
 U0 ODEState2Internal(CMathODE *ode)
 {
-	CMass *tmpm;
-	F64 *old_array_base;
-	I64 mass_count;
+	CMass	*tmpm;
+	F64		*old_array_base;
+	I64		 mass_count;
 
 	if (ode->flags & ODEF_HAS_MASSES)
 	{
@@ -136,6 +143,7 @@ U0 ODEState2Internal(CMathODE *ode)
 U0 ODEInternal2State(CMathODE *ode)
 {
 	CMass *tmpm;
+
 	MemCopy(ode->state, ode->state_internal, ode->n * sizeof(F64));
 	if (ode->flags & ODEF_HAS_MASSES)
 	{
@@ -151,9 +159,9 @@ U0 ODEInternal2State(CMathODE *ode)
 
 public U0 ODERenum(CMathODE *ode)
 {//Renumber masses and springs.
-	I64 i;
-	CSpring *tmps;
-	CMass *tmpm;
+	I64		 i;
+	CSpring	*tmps;
+	CMass	*tmpm;
 
 	i = 0;
 	tmpm = ode->next_mass;
@@ -176,8 +184,8 @@ public U0 ODERenum(CMathODE *ode)
 
 public CMass *MassFind(CMathODE *ode, F64 x, F64 y, F64 z=0)
 {//Search for mass nearest to x,y,z.
-	CMass *tmpm, *best_mass = NULL;
-	F64 dd, best_dd = F64_MAX;
+	CMass	*tmpm, *best_mass = NULL;
+	F64		 dd, best_dd = F64_MAX;
 
 	tmpm = ode->next_mass;
 	while (tmpm != &ode->next_mass)
@@ -190,13 +198,14 @@ public CMass *MassFind(CMathODE *ode, F64 x, F64 y, F64 z=0)
 		}
 		tmpm = tmpm->next;
 	}
+
 	return best_mass;
 }
 
 public CSpring *SpringFind(CMathODE *ode, F64 x, F64 y, F64 z=0)
 {//Find spring midpoint nearest x,y,z.
-	CSpring *tmps, *best_spring = NULL;
-	F64 dd, best_dd = F64_MAX;
+	CSpring	*tmps, *best_spring = NULL;
+	F64		 dd, best_dd = F64_MAX;
 
 	tmps = ode->next_spring;
 	while (tmps != &ode->next_spring)
@@ -212,14 +221,15 @@ public CSpring *SpringFind(CMathODE *ode, F64 x, F64 y, F64 z=0)
 		}
 		tmps = tmps->next;
 	}
+
 	return best_spring;
 }
 
 public U0 MassOrSpringFind(CMathODE *ode, CMass **res_mass, CSpring **res_spring, F64 x, F64 y, F64 z=0)
 {//Find spring or mass nearest x,y,z.
-	CMass 	*tmpm, *best_mass = NULL;
-	CSpring *tmps, *best_spring = NULL;
-	F64 dd, best_dd = F64_MAX;
+	CMass	*tmpm, *best_mass = NULL;
+	CSpring	*tmps, *best_spring = NULL;
+	F64		dd, best_dd = F64_MAX;
 
 	tmpm = ode->next_mass;
 	while (tmpm != &ode->next_mass)
@@ -257,19 +267,22 @@ public U0 MassOrSpringFind(CMathODE *ode, CMass **res_mass, CSpring **res_spring
 public CMass *MassFindNum(CMathODE *ode, I64 num)
 {//Return mass number N.
 	CMass *tmpm = ode->next_mass;
+
 	while (tmpm != &ode->next_mass)
 	{
 		if (tmpm->num == num)
 			return tmpm;
 		tmpm = tmpm->next;
 	}
+
 	return NULL;
 }
 
 public U0 ODEResetInactive(CMathODE *ode)
 {//Set all masses and springs to ACTIVE for new trial.
-	CMass *tmpm;
-	CSpring *tmps;
+	CMass	*tmpm;
+	CSpring	*tmps;
+
 	tmpm = ode->next_mass;
 	while (tmpm != &ode->next_mass)
 	{
@@ -286,10 +299,11 @@ public U0 ODEResetInactive(CMathODE *ode)
 
 U0 ODECalcSprings(CMathODE *ode)
 {
-	CSpring *tmps = ode->next_spring;
-	CMass *e1, *e2;
-	F64 d;
-	CD3 p;
+	CSpring	*tmps = ode->next_spring;
+	CMass	*e1, *e2;
+	F64		 d;
+	CD3		 p;
+
 	while (tmps != &ode->next_spring)
 	{
 		if (tmps->flags & SSF_INACTIVE)
@@ -321,9 +335,10 @@ U0 ODECalcSprings(CMathODE *ode)
 
 U0 ODECalcDrag(CMathODE *ode)
 {
-	CMass *tmpm;
-	F64 d, dd;
-	CD3 p;
+	CMass	*tmpm;
+	F64		 d, dd;
+	CD3		 p;
+
 	if (ode->drag_v || ode->drag_v2 || ode->drag_v3)
 	{
 		tmpm = ode->next_mass;
@@ -345,8 +360,9 @@ U0 ODECalcDrag(CMathODE *ode)
 
 U0 ODEApplyAccelerationLimit(CMathODE *ode)
 {
-	CMass *tmpm;
-	F64 d;
+	CMass	*tmpm;
+	F64		 d;
+
 	if (ode->acceleration_limit)
 	{
 		tmpm = ode->next_mass;
@@ -374,6 +390,7 @@ U0 ODEMPTask(CMathODE *ode)
 U0 ODEMPWake(CMathODE *ode)
 {
 	I64 i;
+
 	if (!ode->slave_tasks)
 	{
 		ode->slave_tasks = CAlloc(mp_count * sizeof(CTask *));
@@ -390,6 +407,7 @@ U0 ODEMPWake(CMathODE *ode)
 U0 ODEMPSleep(CMathODE *ode)
 {
 	I64 i;
+
 	if (ode->slave_tasks)
 	{
 		while (ode->mp_not_done_flags)
@@ -401,10 +419,10 @@ U0 ODEMPSleep(CMathODE *ode)
 
 U0 ODECallMPDerivative(CMathODE *ode, F64 t, F64 *state, F64 *DstateDt)
 {
-	ode->mp_t = t;
-	ode->mp_state = state;
-	ode->mp_DstateDt = DstateDt;
-	ode->mp_not_done_flags = 1 << mp_count - 1;
+	ode->mp_t				= t;
+	ode->mp_state			= state;
+	ode->mp_DstateDt		= DstateDt;
+	ode->mp_not_done_flags	= 1 << mp_count - 1;
 	do
 		Yield;
 	while (ode->mp_not_done_flags);
@@ -413,6 +431,7 @@ U0 ODECallMPDerivative(CMathODE *ode, F64 t, F64 *state, F64 *DstateDt)
 U0 ODECallDerivative(CMathODE *ode, F64 t, F64 *state, F64 *DstateDt)
 {
 	CMass *tmpm;
+
 	if (ode->flags & ODEF_HAS_MASSES)
 	{
 		ODESetMassesPtrs(ode, state, DstateDt);
@@ -461,6 +480,7 @@ U0 ODECallDerivative(CMathODE *ode, F64 t, F64 *state, F64 *DstateDt)
 U0 ODEOneStep(CMathODE *ode)
 {
 	I64 i;
+
 	ODECallDerivative(ode, ode->t, ode->state_internal, ode->DstateDt);
 	for (i = 0; i < ode->n_internal; i++)
 		ode->state_internal[i] += ode->h * ode->DstateDt[i];
@@ -573,6 +593,7 @@ U0 ODERK5OneStep(CMathODE *ode)
 {
 	I64 i;
 	F64 errmax, tmp, *tmpstate = ode->tmp6, *stateerr = ode->tmp7;
+
 	while (TRUE)
 	{
 		ode->h = Clamp(ode->h, ode->h_min, ode->h_max);
@@ -614,9 +635,9 @@ It is adaptive step-sized, so it slows down when an important
 event is taking place to improve accuracy, but in my implementation
 it has a timeout.
 */
-	I64 i;
-	F64 d, start_time, timeout_time, t_desired, t_initial, interpolation;
-	CMathODE *ode;
+	I64			 i;
+	F64			 d, start_time, timeout_time, t_desired, t_initial, interpolation;
+	CMathODE	*ode;
 
 	if (task->next_ode == &task->next_ode)
 		task->last_ode_time = 0;

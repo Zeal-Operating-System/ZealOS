@@ -4,8 +4,9 @@ U0 ICAddEct(CIntermediateCode *tmpi,
 			CICType t3, I64 r3, I64 d3,
 			I64 op, I64 rip)
 {
-	I64 i, tmp,res_reg = REG_RAX;
+	I64  i, tmp,res_reg = REG_RAX;
 	Bool swap = FALSE;
+
 	if (r3 != res_reg)
 	{
 		swap ^= TRUE;
@@ -69,6 +70,7 @@ U0 ICAddSubEctImm(CIntermediateCode *tmpi,
 				  I64 d, I64 op, I64 rip)
 {
 	I64 i;
+
 	if (op.u8[0] == 0x2B)
 	{
 		op = 0x0003;
@@ -154,11 +156,13 @@ U0 ICAddSubEctImm(CIntermediateCode *tmpi,
 						ICRex(tmpi, i.u8[1]);
 						ICU16(tmpi, i.u8[2] << 8 + 0xFE);
 						break;
+
 					case RT_I16:
 					case RT_U16:
 						ICOpSizeRex(tmpi, i.u8[1]);
 						ICU16(tmpi, i.u8[2] << 8 + 0xFF);
 						break;
+
 					default:
 						ICRex(tmpi, i.u8[1]);
 						ICU16(tmpi, i.u8[2] << 8 + 0xFF);
@@ -182,6 +186,7 @@ U0 ICAddSubEctImm(CIntermediateCode *tmpi,
 				return;
 			}
 			break;
+
 		case MDf_STACK:
 			ICAddSubEctImm(tmpi, MDF_REG + RT_I64, REG_RAX, 0, t2, r2, d2, d, op, rip);
 			ICPushRegs(tmpi, 1 << REG_RAX);
@@ -196,8 +201,9 @@ U0 ICSub(CIntermediateCode *tmpi,
 		 CICType t3, I64 r3, I64 d3,
 		 I64 rip)
 {
-	I64 i = 0x48, op = 0x2B;
+	I64  i = 0x48, op = 0x2B;
 	Bool swap = FALSE;
+
 	if (r3 != REG_RAX)
 	{
 		swap = TRUE;
@@ -266,9 +272,10 @@ U0 ICSub(CIntermediateCode *tmpi,
 
 U0 ICMul(CIntermediateCode *tmpi, I64 rip)
 {
-	I64 i, r2, r = REG_RAX, j;
-	CICArg *arg1, *arg2;
-	Bool alt;
+	I64		 i, r2, r = REG_RAX, j;
+	CICArg	*arg1, *arg2;
+	Bool	 alt;
+
 	if (tmpi->arg1.type & MDF_IMM)
 	{
 		arg1 = &tmpi->arg2;
@@ -339,6 +346,7 @@ U0 ICMul(CIntermediateCode *tmpi, I64 rip)
 U0 ICMulEqu(CIntermediateCode *tmpi, I64 rip)
 {
 	I64 i = tmpi->arg2.disp, r = REG_RAX, j;
+
 	if (!(tmpi->ic_class->raw_type & RTF_UNSIGNED) && tmpi->arg2.type & MDF_IMM && I32_MIN <= i <= I32_MAX)
 	{
 		if (tmpi->ic_flags & ICF_BY_VAL)
@@ -505,7 +513,8 @@ U0 ICAddSubEctEqu(CIntermediateCode *tmpi, U8 type_pointed_to,
 				  I64 op, I64 rip)
 {
 	Bool done;
-	I64 res_reg, tmp, i;
+	I64  res_reg, tmp, i;
+
 	if (tmpi->ic_flags & ICF_BY_VAL)
 	{
 		if (t3 & MDF_IMM)
@@ -654,6 +663,7 @@ U0 ICShift(CIntermediateCode *tmpi,
 		   I64 us, I64 is, I64 rip)
 {
 	I64 i = 0x48, res_reg;
+
 	if (tmpi->ic_class->raw_type & RTF_UNSIGNED || tmpi->ic_flags & ICF_USE_UNSIGNED)
 		is = us;
 	if (t1 & MDF_REG)
@@ -691,6 +701,7 @@ U0 ICShiftEqu(CIntermediateCode *tmpi,U8 type_pointed_to,
 			  I64 us, I64 is, I64 rip)
 {
 	I64 res_reg;
+
 	if (tmpi->ic_class->raw_type & RTF_UNSIGNED || tmpi->ic_flags & ICF_USE_UNSIGNED)
 		is = us;
 	if (tmpi->ic_flags & ICF_BY_VAL)

@@ -4,8 +4,10 @@ Bool DirNew(CDrive *drive, U8 *cur_dir, CDirEntry *tmpde, Bool free_old_chain=TR
 	{
 		case FSt_REDSEA:
 			return RedSeaDirNew(drive, cur_dir, tmpde, free_old_chain);
+
 		case FSt_FAT32:
 			return FAT32DirNew(drive, cur_dir, tmpde, free_old_chain);
+
 		default:
 			PrintErr("File System Not Supported\n");
 			return FALSE;
@@ -117,6 +119,7 @@ U0 DirFilesSort(CDirEntry **_tmpde, I64 key)
 				case SK_NAME:
 					QuickSortI64(sort_buf, count, &DirEntryCompareName);
 					break;
+
 				case SK_CLUS:
 					QuickSortI64(sort_buf, count, &DirEntryCompareClus);
 					break;

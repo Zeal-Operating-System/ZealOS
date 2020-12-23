@@ -4,8 +4,10 @@
 CTask *MenuTask()
 {
 	CTask *res = sys_focus_task;
+
 	while (res && !res->cur_menu)
 		res = res->parent_task;
+
 	return res;
 }
 
@@ -19,14 +21,16 @@ public CMenuEntry *MenuSubEntryFind(CMenuEntry *haystack_first, U8 *needle_entry
 			return haystack_first;
 		haystack_first = haystack_first->next;
 	}
+
 	return NULL;
 }
 
 public CMenuEntry *MenuEntryFind(CMenu *haystack_menu, U8 *needle_full_name)
 {//Find pulldown entry. Fs->cur_menu is probably the menu you want.
 //Just 2 levels -- across top and down are valid, currently.
-	U8 *st, *st2;
-	CMenuEntry *tmpse;
+	U8			*st, *st2;
+	CMenuEntry	*tmpse;
+
 	if (!haystack_menu || !needle_full_name)
 		return NULL;
 	st = StrNew(needle_full_name);
@@ -39,12 +43,14 @@ public CMenuEntry *MenuEntryFind(CMenu *haystack_menu, U8 *needle_full_name)
 	}
 	Free(st);
 	Free(st2);
+
 	return tmpse;
 }
 
 CMenuEntry *MenuNewSub(CCompCtrl *cc, CTask *task)
 {
 	CMenuEntry *tmpme = NULL, *tmpse;
+
 	if (cc->token==TK_IDENT)
 	{
 		tmpme = CAlloc(sizeof(CMenuEntry),task);
@@ -90,34 +96,40 @@ CMenuEntry *MenuNewSub(CCompCtrl *cc, CTask *task)
 
 public CMenu *MenuNew(U8 *st, I64 flags = 0, CTask *task = NULL)
 {//Parse a menu. You probably don't need this.
-	CMenu *m;
-	CMenuEntry *tmpse;
-	CCompCtrl *cc = CompCtrlNew(st, CCF_DONT_FREE_BUF);
-	if (!task) task = Fs;
+	CMenu		*m;
+	CMenuEntry	*tmpse;
+	CCompCtrl	*cc = CompCtrlNew(st, CCF_DONT_FREE_BUF);
+
+	if (!task)
+		task = Fs;
 	Lex(cc);
 	m = CAlloc(sizeof(CMenu), task);
-	m->task = task;
+	m->task  = task;
 	m->flags = flags;
-	m->attr = BLUE << 4 + YELLOW;
+	m->attr  = BLUE << 4 + YELLOW;
 	tmpse = &m->sub;
 	while (tmpse)
 		tmpse = tmpse->next = MenuNewSub(cc, task);
 	CompCtrlDel(cc);
+
 	return m;
 }
 
 public CMenu *MenuFile(U8 *filename, I64 flags = 0, CTask *task = NULL)
 {//Parse a pulldown menu file. You probably don't need this.
-	CMenu *m;
-	U8 *st = MStrPrint("#include \"%s\"", filename);
+	CMenu	*m;
+	U8		*st = MStrPrint("#include \"%s\"", filename);
+
 	m = MenuNew(st, flags, task);
 	Free(st);
+
 	return m;
 }
 
 U0 MenuDelSub(CMenuEntry *tmpme)
 {
 	CMenuEntry *tmpse, *tmpse1;
+
 	if (tmpme)
 	{
 		tmpse = tmpme->sub;
@@ -134,7 +146,9 @@ U0 MenuDelSub(CMenuEntry *tmpme)
 public U0 MenuDel(CMenu *m)
 {//Delete a manu. You probably don't need this.
 	CMenuEntry *tmpme, *tmpme1;
-	if (!m) return;
+
+	if (!m)
+		return;
 	tmpme = m->sub;
 	while (tmpme)
 	{
@@ -147,47 +161,56 @@ public U0 MenuDel(CMenu *m)
 
 I64 MenuEntryWidth(CMenuEntry *tmpme)
 {
-	I64 res = StrLen(tmpme->name);
-	CMenuEntry *tmpse = tmpme->sub;
+	I64			 res = StrLen(tmpme->name);
+	CMenuEntry	*tmpse = tmpme->sub;
+
 	while (tmpse)
 	{
 		res = MaxI64(res, StrLen(tmpse->name));
 		tmpse = tmpse->next;
 	}
+
 	return res + 1;
 }
 
 public CMenu *MenuPush(U8 *st)
 {//Save old pulldown menu and replace with new from str.
 	CMenu *m = MenuNew(st);
+
 	m->next = Fs->cur_menu;
 	Fs->cur_menu = m;
+
 	return m;
 }
 
 public CMenu *MenuFilePush(U8 *filename)
 {//Save old pulldown menu and replace with new from file.
 	CMenu *m = MenuFile(filename);
+
 	m->next = Fs->cur_menu;
 	Fs->cur_menu = m;
+
 	return m;
 }
 
 public U0 MenuPop()
 {//Restore old pulldown menu. Delete just-deactivated menu.
 	CMenu *m = Fs->cur_menu;
-	if (!m) return;
+
+	if (!m)
+		return;
 	Fs->cur_menu = m->next;
 	MenuDel(m);
 }
 
 U0 DrawMenu(CDC *dc)
 {
-	CMenu *m;
-	CMenuEntry *tmpme, *tmpse, *cur_submenu = NULL;
-	U8 *st = NULL;
-	CTask *task = MenuTask;
-	I64 i, w, x0, y0, x1 = mouse.pos.x, y1 = mouse.pos.y;
+	CMenu		*m;
+	CMenuEntry	*tmpme, *tmpse, *cur_submenu = NULL;
+	U8			*st = NULL;
+	CTask		*task = MenuTask;
+	I64			 i, w, x0, y0, x1 = mouse.pos.x, y1 = mouse.pos.y;
+
 	if (!TaskValidate(task) || !(m = task->cur_menu))
 	{
 		sys_cur_submenu_entry = NULL;

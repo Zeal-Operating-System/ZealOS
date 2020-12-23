@@ -83,6 +83,7 @@ I64 FirstDayOfMon(I64 i)
 	Date2Struct(&ds, cdt);
 	ds.day_of_mon = 1;
 	cdt = Struct2Date(&ds);
+
 	return cdt.date;
 }
 
@@ -101,6 +102,7 @@ I64 LastDayOfMon(I64 i)
 	}
 	ds.day_of_mon = 1;
 	cdt = Struct2Date(&ds);
+
 	return cdt.date - 1;
 }
 
@@ -114,6 +116,7 @@ I64 FirstDayOfYear(I64 i)
 	ds.day_of_mon = 1;
 	ds.mon = 1;
 	cdt = Struct2Date(&ds);
+
 	return cdt.date;
 }
 
@@ -128,12 +131,14 @@ I64 LastDayOfYear(I64 i)
 	ds.mon = 1;
 	ds.year++;
 	cdt = Struct2Date(&ds);
+
 	return cdt.date - 1;
 }
 
 U8 CMOSRegRead(I64 register)
 {//Read val from CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
 	OutU8(CMOS_SEL, register);
+
 	return InU8(CMOS_DATA);
 }
 
@@ -152,11 +157,13 @@ Bool CMOSIsBcd()
 I64 Bcd2Binary(U64 b)
 {
 	I64 i, res = 0;
+
 	for (i = 0; i < 16; i++)
 	{
 		res = res * 10 + b >> 60;
 		b <<= 4;
 	}
+
 	return res;
 }
 

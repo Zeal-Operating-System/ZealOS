@@ -1,8 +1,7 @@
 #define M_DASH_THRESHOLD	0.140
-#define M_SPACE_THRESHOLD 0.300
+#define M_SPACE_THRESHOLD	0.300
 
-U8 *morse_list=
-
+U8 *morse_list =
 "A.-\0"
 "B-...\0"
 "C-.-.\0"
@@ -59,28 +58,32 @@ U8 *morse_list=
 U0 MorseTable()
 {
 	U8 *st;
-	I64 i=0;
-	for (i=0;i<13;i++ ) {
-		if (st=ListSub(i,morse_list))
-			"$$RED$$%C$$FG$$ %-7s ",*st,st+1;
-		if (st=ListSub(i+13,morse_list))
-			"$$RED$$%C$$FG$$ %-7s ",*st,st+1;
-		if (st=ListSub(i+26,morse_list))
-			"$$RED$$%C$$FG$$ %-7s ",*st,st+1;
-		if (st=ListSub(i+39,morse_list))
-			"$$RED$$%C$$FG$$ %-7s ",*st,st+1;
+	I64 i = 0;
+
+	for (i = 0; i < 13; i++ )
+	{
+		if (st = ListSub(i ,morse_list))
+			"$$RED$$%C$$FG$$ %-7s ", *st, st + 1;
+		if (st = ListSub(i + 13, morse_list))
+			"$$RED$$%C$$FG$$ %-7s ", *st, st + 1;
+		if (st = ListSub(i + 26, morse_list))
+			"$$RED$$%C$$FG$$ %-7s ", *st, st + 1;
+		if (st = ListSub(i + 39, morse_list))
+			"$$RED$$%C$$FG$$ %-7s ", *st, st + 1;
 		'\n';
 	}
 	'\n';
 }
 
-F64 m_start,m_end,dt_down,dt_up;
+F64  m_start, m_end, dt_down, dt_up;
 Bool space_sent;
 
-U8 *MorseTimes(CDoc *,CDocEntry *,CTask *mem_task)
+U8 *MorseTimes(CDoc *, CDocEntry *, CTask *mem_task)
 {
-	U8 *st=MAlloc(64,mem_task);
-	StrPrint(st,"Down:%10.6f Up:%10.6f",dt_down,dt_up);
+	U8 *st = MAlloc(64, mem_task);
+
+	StrPrint(st, "Down:%10.6f Up:%10.6f", dt_down, dt_up);
+
 	return st;
 }
 
@@ -88,40 +91,51 @@ I64 MorseWaitKey()
 {
 	I64 ch;
 	F64 dt;
-	while (TRUE) {
-		if (m_start) {
-			MessageGet(NULL,NULL,1<<MESSAGE_KEY_UP);
-			m_end=tS;
+
+	while (TRUE)
+	{
+		if (m_start)
+		{
+			MessageGet(NULL, NULL, 1 << MESSAGE_KEY_UP);
+			m_end = tS;
 			Sound;
-			dt_down=m_end-m_start;
-			m_start=0;
-			space_sent=FALSE;
-			if (dt_down<M_DASH_THRESHOLD)
+			dt_down = m_end - m_start;
+			m_start = 0;
+			space_sent = FALSE;
+			if (dt_down < M_DASH_THRESHOLD)
 				return '.';
 			else
 				return '-';
-		} else {
-			if (!space_sent) {
-				while (!MessageScan(&ch,NULL,1<<MESSAGE_KEY_DOWN)) {
-					dt=tS-m_end;
-					if (dt>=M_SPACE_THRESHOLD) {
-						space_sent=TRUE;
+		}
+		else
+		{
+			if (!space_sent)
+			{
+				while (!MessageScan(&ch, NULL, 1 << MESSAGE_KEY_DOWN))
+				{
+					dt = tS - m_end;
+					if (dt >= M_SPACE_THRESHOLD)
+					{
+						space_sent = TRUE;
 						return CH_SPACE;
 					}
 					Yield;
 				}
-			} else
-				ch=CharGet(,FALSE);
-			m_start=tS;
+			}
+			else
+				ch = CharGet(, FALSE);
+			m_start = tS;
 			Sound(74);
-			if (ch==CH_SHIFT_ESC || ch==CH_ESC) {
+			if (ch == CH_SHIFT_ESC || ch == CH_ESC)
+			{
 				'\n';
 				Sound;
 				throw; //exit program
 			}
-			dt_up=m_start-m_end;
-			if (!space_sent && dt_up>=M_SPACE_THRESHOLD) {
-				space_sent=TRUE;
+			dt_up = m_start - m_end;
+			if (!space_sent && dt_up >= M_SPACE_THRESHOLD)
+			{
+				space_sent = TRUE;
 				return CH_SPACE;
 			}
 		}
@@ -132,41 +146,48 @@ U0 Morse()
 {
 	CDocEntry *doc_e;
 	I64 ch;
-	U8 buf[8],*dst,*src;
+	U8 buf[8], *dst, *src;
 
 	MorseTable;
-	m_start=0;
-	m_end=tS;
-	dt_down=0;
-	dt_up=0;
-	space_sent=TRUE;
+	m_start = 0;
+	m_end = tS;
+	dt_down = 0;
+	dt_up = 0;
+	space_sent = TRUE;
 
 	"$$GREEN$$";
 
-	doc_e=DocPrint(DocPut,"$$TX+TC,\" \"$$");
-	doc_e->tag_cb=&MorseTimes;
+	doc_e = DocPrint(DocPut, "$$TX+TC,\" \"$$");
+	doc_e->tag_cb = &MorseTimes;
 
 	"$$FG$$\n";
 
-	dst=buf;
-	while (TRUE) {
-		ch=MorseWaitKey;
-		if (ch==CH_SPACE) {
-			*dst=0;
-			src=morse_list;
+	dst = buf;
+	while (TRUE)
+	{
+		ch = MorseWaitKey;
+		if (ch == CH_SPACE)
+		{
+			*dst = 0;
+			src = morse_list;
 			while (*src) {
-				if (!StrCompare(src+1,buf)) {
-					"$$GREEN$$%C$$FG$$",*src;
+				if (!StrCompare(src + 1, buf))
+				{
+					"$$GREEN$$%C$$FG$$", *src;
 					break;
-				} else
-					src+=StrLen(src)+1;
+				}
+				else
+					src += StrLen(src) + 1;
 			}
 			'' CH_SPACE;
-			dst=buf;
-		} else {
-			if (dst-buf<sizeof(buf)-1) {
+			dst = buf;
+		}
+		else
+		{
+			if (dst - buf < sizeof(buf) - 1)
+			{
 				'' ch;
-				*dst++=ch;
+				*dst++ = ch;
 			}
 		}
 	}

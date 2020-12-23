@@ -5,8 +5,9 @@
 U0 MakeMyISO(U8 *_out_iso_filename)
 {//Does everything with current drive.
 //If you have not recompiled $FG,2$Kernel$FG$ and defined your CD/DVD drive, use $LK,"Mount",A="MN:Mount"$.
-	U8 *out_iso_filename=FileNameAbs(_out_iso_filename);
-	if (!DriveIsWritable) {
+	U8 *out_iso_filename = FileNameAbs(_out_iso_filename);
+	if (!DriveIsWritable)
+	{
 		"Drive must be writable.	Install on Hard drive, first.\n";
 		return;
 	}
@@ -24,18 +25,18 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	CopyTree("/Home", 		"/Distro/Home");
 	CopyTree("/Zenith", 	"/Distro/Zenith");
 	CopyTree("/Apps", 		"/Distro/Apps");
-	CopyTree("/Compiler", "/Distro/Compiler");
+	CopyTree("/Compiler",	"/Distro/Compiler");
 	CopyTree("/Demo", 		"/Distro/Demo");
-	CopyTree("/Doc",			"/Distro/Doc");
+	CopyTree("/Doc",		"/Distro/Doc");
 	CopyTree("/Kernel", 	"/Distro/Kernel");
 	CopyTree("/Misc", 		"/Distro/Misc");
 
 	//To save space, optionally delete dictionary.
 	//Del("/Distro/Zenith/AutoComplete/ACDefs.DATA");
-	CopyTree("/Downloads","/Distro/Downloads"); 		//You can leave this out.
+	CopyTree("/Downloads", "/Distro/Downloads"); 		//You can leave this out.
 	DirMake("/Distro/Tmp");
 	DirMake("/Distro/Tmp/ScreenShots");
-	RedSeaISO(out_iso_filename,"/Distro","/Distro" BOOT_DIR_KERNEL_BIN_C);
+	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_BIN_C);
 
 	//If CD-ROM use MT_CD instead of MT_DVD.
 	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.

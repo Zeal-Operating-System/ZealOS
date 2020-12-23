@@ -68,9 +68,11 @@ Bool Cd(U8 *dirname=NULL, Bool make_dirs=FALSE)
 				case FSt_REDSEA:
 					res = RedSeaCd(buf, cur_dir_clus);
 					break;
+
 				case FSt_FAT32:
 					res = FAT32Cd(buf, cur_dir_clus);
 					break;
+
 				default:
 					PrintErr("File System Not Supported\n");
 					res = FALSE;
@@ -203,9 +205,11 @@ Bool DirMake(U8 *filename, I64 entry_count=0)
 					case FSt_REDSEA:
 						res = RedSeaMkDir(dirc->drive, Fs->cur_dir, name, entry_count);
 						break;
+
 					case FSt_FAT32:
 						res = FAT32MkDir(dirc->drive, Fs->cur_dir, name, entry_count);
 						break;
+
 					default:
 						PrintErr("File System Not Supported\n");
 				}

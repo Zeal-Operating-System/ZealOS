@@ -241,6 +241,7 @@ today.
 		res.date += Str2I64(ptr);
 	Free(src);
 	Free(v);
+
 	return res - local_time_offset;
 }
 
@@ -395,5 +396,6 @@ and take addr.
 		else
 			src++;
 	}
+
 	return src;
 }

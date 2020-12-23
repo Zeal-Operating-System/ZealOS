@@ -24,6 +24,7 @@ U8 *LexPutLine(CCompCtrl *cc, U8 *start)
 {//Print cur pos to end of line to StdOut.
 	I64 ch;
 	U8 *ptr;
+
 	if (!start)
 		return NULL;
 	if (cc->lex_include_stack->flags & LFSF_DOC)
@@ -52,6 +53,7 @@ U8 *LexPutLine(CCompCtrl *cc, U8 *start)
 		'\n';
 		return ptr;
 	}
+
 	return NULL;
 }
 
@@ -130,6 +132,7 @@ U0 ParenWarning(CCompCtrl *cc)
 U0 ICClassPut(CHashClass *c)
 {
 	I64 i;
+
 	if (!c)
 		return;
 	if (c->ptr_stars_count > 4)
@@ -166,18 +169,23 @@ U0 ICArgPut(CICArg *a, I64 type_pointed_to)
 		case MDf_STACK:
 			"STACK";
 			break;
+
 		case MDf_IMM:
 			"#%X", a->disp;
 			break;
+
 		case MDf_REG:
 			"%Z", a->reg, "ST_U64_REGS";
 			break;
+
 		case MDf_DISP:
 			"%X[%Z]", a->disp, a->reg, "ST_U64_REGS";
 			break;
+
 		case MDf_RIP_DISP32:
 			"[%X]", a->disp;
 			break;
+
 		case MDf_SIB:
 			if (a->disp)
 				"%X", a->disp;
@@ -201,6 +209,7 @@ U0 ICArgPut(CICArg *a, I64 type_pointed_to)
 U0 ICPut(CCompCtrl *cc, CIntermediateCode *tmpi)
 {
 	I64 opcode = tmpi->ic_code, i;
+
 	if (opcode >= IC_END_EXP && opcode != IC_NOP2)
 	{
 		"%15ts %016X ", intermediate_code_table[opcode].name, tmpi->ic_data;

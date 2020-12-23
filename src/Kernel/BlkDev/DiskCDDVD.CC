@@ -27,6 +27,7 @@ Bool ISOInit(CDrive *drive, I64 blk)
 						case ISOT_BOOT_RECORD:
 							drv_offset += (2 * DVD_BLK_SIZE + DVD_BLK_SIZE) / BLK_SIZE;
 							break;
+
 						case ISOT_SUPPLEMENTARY_DESC:
 							de = &iso->root_dir_record;
 							drive->size = iso->vol_space_size.little * bd->blk_size >> BLK_SIZE_BITS;
@@ -42,10 +43,12 @@ Bool ISOInit(CDrive *drive, I64 blk)
 								drive->root_clus = de->loc.little;
 							res = TRUE;
 							goto di_done;
+
 						case ISOT_TERMINATOR:
 							throw('Drive');
 					}
 					break;
+
 				default: //Its normal for ISO3346 to read NULL blk as terminator
 					PrintErr("File System Not Supported\n");
 					throw('Drive');
@@ -66,6 +69,7 @@ di_done:
 		if (unlock)
 			DriveUnlock(drive);
 	}
+
 	return res;
 }
 

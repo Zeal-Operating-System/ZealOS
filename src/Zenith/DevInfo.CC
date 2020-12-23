@@ -54,9 +54,10 @@ public U0 PCIDevFileGen()
 //$LK,"::/Misc/PCIDevices.DD",A="PI:::/Misc/PCIDevices.DD"$
 U0 PCILookUpSingle(CDoc *doc, I64 m, I64 d, U8 **_vendor, U8 **_dev)
 {
-	Bool first = TRUE;
-	U8 buf[8], *vendor = NULL, *dev = NULL;
-	CDocEntry *doc_e = doc->head.next;
+	Bool		 first = TRUE;
+	U8			 buf[8], *vendor = NULL, *dev = NULL;
+	CDocEntry	*doc_e = doc->head.next;
+
 	while (doc_e != doc)
 	{
 		if (first)
@@ -132,9 +133,10 @@ U0 PCILookUpSingle(CDoc *doc, I64 m, I64 d, U8 **_vendor, U8 **_dev)
 
 U0 PCILookUpDevs()
 {
-	CPCIDev *tmppci;
-	I64 w1, w2, b, d, f, timeout = 32 * 8 * 2;
-	CDoc *doc;
+	CPCIDev	*tmppci;
+	I64		 w1, w2, b, d, f, timeout = 32 * 8 * 2;
+	CDoc	*doc;
+
 	if (dev.pci_head.next != &dev.pci_head)
 		return;
 	doc = DocRead(PCI_DEV_FILE, DOCF_PLAIN_TEXT | DOCF_NO_CURSOR);
@@ -172,7 +174,8 @@ U0 PCILookUpDevs()
 					PCILookUpSingle(doc, w1, w2, &tmppci->vendor_str, &tmppci->dev_id_str);
 					QueueInsert(tmppci, dev.pci_head.last);
 					timeout = 32 * 8 * 2;
-				} else if (sys_pci_buses == 256 && --timeout <= 0)
+				}
+				else if (sys_pci_buses == 256 && --timeout <= 0)
 					goto lud_done;
 			}
 lud_done:
@@ -185,9 +188,10 @@ public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 {//return first device with matching class & subcode, vendor & device id, or a specific device.
 	PCILookUpDevs;
 	CPCIDev *p = dev.pci_head.next;
+
 	while (p != &dev.pci_head)
 	{
-		if(p->vendor_id == vendor_id && p->device_id == device_id ||
+		if (p->vendor_id == vendor_id && p->device_id == device_id ||
 				p->class_code == class_code && p->sub_code == sub_code ||
 				p->bus == _bus && p->dev == _dev && p->fun == _fun)
 
@@ -201,14 +205,17 @@ public CPCIDev *PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL,
 public U0 PCIRep()
 {//Report description of PCI devices.
 	CPCIDev *tmppci;
+
 	"PCI Buses:%d\n", sys_pci_buses;
-	if (!FileFind(PCI_DEV_FILE)) {
+	if (!FileFind(PCI_DEV_FILE))
+	{
 		"You don't have the PCI device file.\n";
 		return;
 	}
 	PCILookUpDevs;
 	tmppci = dev.pci_head.next;
-	while (tmppci != &dev.pci_head) {
+	while (tmppci != &dev.pci_head)
+	{
 		"%02X:%02X:%01X %02X-%02X-%02X $$GREEN$$%s $$CYAN$$%s$$FG$$\n",
 					tmppci->bus, tmppci->dev, tmppci->fun,
 					tmppci->class_code, tmppci->sub_code, tmppci->prog_if,
@@ -220,23 +227,23 @@ public U0 PCIRep()
 #help_index "Info;Memory/Info"
 public U0 MemBIOSRep()
 {//Report the memory ranges reported by the BIOS at boot.
-	U16 					*m01 = MEM_E801;
-	CMemE820			*m20 = MEM_E820;
-	CMemRange 		*tmpmr;
+	U16 		*m01 = MEM_E801;
+	CMemE820	*m20 = MEM_E820;
+	CMemRange	*tmpmr;
 
 	"$$PURPLE$$Standard Addresses$$FG$$\n"
-				"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n"
+			"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n"
 
 	"$$PURPLE$$VBE Linear Framebuffer$$FG$$\n"
-				"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
+			"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
 																																								text.fb_alias(U8 *) + text.buffer_size - 1;
 	"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
 	while (LBts(&sys_semas[SEMA_DEV_MEM], 0))
 		Yield;
 	tmpmr = dev.mem32_head.next;
-	while (tmpmr != &dev.mem32_head) {
-		"%z:%08X-%08X\n",
-					tmpmr->type, "Unused\0RAM\0Device", tmpmr->base, tmpmr->base + tmpmr->size - 1;
+	while (tmpmr != &dev.mem32_head)
+	{
+		"%z:%08X-%08X\n", tmpmr->type, "Unused\0RAM\0Device", tmpmr->base, tmpmr->base + tmpmr->size - 1;
 		tmpmr = tmpmr->next;
 	}
 	LBtr(&sys_semas[SEMA_DEV_MEM], 0);
@@ -256,15 +263,19 @@ public U0 MemBIOSRep()
 				case MEM_E820t_USABLE:
 					"$$GREEN$$Usable     :";
 					break;
+
 				case MEM_E820t_ACPI:
 				case MEM_E820t_ACPI_NVS:
 					"ACPI       :";
 					 break;
+
 				case MEM_E820t_BAD_MEM:
 					"Bad memory :";
 					 break;
+
 				case MEM_E820t_PERM_MEM:
 					"Perm memory:";
+
 				case MEM_E820t_RESERVED:
 				default:
 					"Reserved   :";

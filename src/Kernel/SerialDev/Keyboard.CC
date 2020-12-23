@@ -238,26 +238,33 @@ U8 *Char2KeyName(I64 ch, Bool include_ctrl=TRUE)
 			case '\n':
 				StrCopy(buf, "ENTER");
 				break;
+
 			case CH_BACKSPACE:
 				StrCopy(buf, "BACKSPACE");
 				break;
+
 			case '\t':
 				StrCopy(buf, "TAB");
 				break;
+
 			case CH_ESC:
 				StrCopy(buf, "ESC");
 				break;
+
 			case CH_SHIFT_ESC:
 				StrCopy(buf, "SHIFT_ESC");
 				break;
+
 			case 0: //nobound switch
 			case 29:
 			case 30:
 				*buf = 0;
 				break;
+
 			case CH_SPACE:
 				StrCopy(buf, "SPACE");
 				break;
+
 			default:
 				if (include_ctrl)
 					StrCopy(buf, "CTRL ");
@@ -384,17 +391,21 @@ U0 KbdBuildSC(U8 raw_byte, Bool in_irq, U8 *_last_raw_byte, I64 *_last_sc)
 				if (Bts(&sc_flags, SCf_SHIFT))
 					new_key_f = 0;
 				break;
+
 			case SC_CTRL:
 				if (Bts(&sc_flags, SCf_CTRL))
 					new_key_f = 0;
 				break;
+
 			case SC_ALT:
 				if (Bts(&sc_flags, SCf_ALT))
 					new_key_f = 0;
 				break;
+
 			case SC_DELETE:
 				sc_flags |= SCF_DELETE;
 				break;
+
 			case SC_INS:
 				sc_flags |= SCF_INS;
 				break;

@@ -128,5 +128,6 @@ Bool WinInside(I64 x, I64 y, CTask *task=NULL, I64 border=0)
 			task->pix_top  - border <= y <= task->pix_bottom + border)
 			return TRUE;
 	}
+
 	return FALSE;
 }

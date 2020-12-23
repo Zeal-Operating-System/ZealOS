@@ -30,9 +30,11 @@ I64 Name2DirClus(CDrive *drive, U8 *dirname)
 					case FSt_REDSEA:
 						cont = RedSeaFileFind(drive, cur_dir_clus, buf2, &de, FUF_JUST_DIRS);
 						break;
+
 					case FSt_FAT32:
 						cont = FAT32FileFind(drive, cur_dir_clus, buf2, &de, FUF_JUST_DIRS);
 						break;
+
 					default:
 						throw('Drive');
 				}
@@ -79,9 +81,11 @@ I64 Name2ParentDirClus(CDrive *drive, U8 *dirname)
 					case FSt_REDSEA:
 						cont = RedSeaFileFind(drive, cur_dir_clus, buf2, &de, FUF_JUST_DIRS);
 						break;
+
 					case FSt_FAT32:
 						cont = FAT32FileFind(drive, cur_dir_clus, buf2, &de, FUF_JUST_DIRS);
 						break;
+
 					default:
 						throw('Drive');
 				}

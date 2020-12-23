@@ -1,11 +1,13 @@
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
 U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 {//If _doc, called by $LK,"::/Kernel/KConfig.CC"$ else called by $LK,"Mount",A="MN:Mount"$().
-	I64 count, total = 0, num_hints, drv_let, type, unit, prt_num;
-	U8 blks_buf[STR_LEN], addr_buf[STR_LEN], base0_buf[STR_LEN], base1_buf[STR_LEN], *filename = NULL, *filename2 = NULL, res = 0;
-	CATARep *head = NULL, *tmpha;
-	Bool whole_drive, make_free;
-	CDoc *doc;
+	I64		 count, total = 0, num_hints, drv_let, type, unit, prt_num;
+	U8		 blks_buf[STR_LEN], addr_buf[STR_LEN], base0_buf[STR_LEN], base1_buf[STR_LEN],
+			*filename = NULL, *filename2 = NULL, res = 0;
+	CATARep	*head = NULL, *tmpha;
+	Bool	 whole_drive, make_free;
+	CDoc	*doc;
+
 	if (boot_drive_let)
 		boot_drive_let = Letter2Letter(boot_drive_let);
 	do
@@ -13,13 +15,14 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 		count = 0;
 		if (!_doc)
 			DriveRep;
+
 		"\n****** Mount Drives ******\n"
-					"$$GREEN$$A$$FG$$-$$GREEN$$B$$FG$$ are RAM drives.\n"
-					"$$GREEN$$C$$FG$$-$$GREEN$$L$$FG$$ are ATA hard drives.\n"
-					"$$GREEN$$M$$FG$$-$$GREEN$$P$$FG$$ are ISO file read drives.\n"
-					"$$GREEN$$Q$$FG$$-$$GREEN$$S$$FG$$ are ISO file write drives.\n"
-					"$$GREEN$$T$$FG$$-$$GREEN$$Z$$FG$$ are ATAPI CD/DVD drives.\n"
-					"\nDrive Letter ($$PURPLE$$<ENTER>$$FG$$ to exit):";
+		"$$GREEN$$A$$FG$$-$$GREEN$$B$$FG$$ are RAM drives.\n"
+		"$$GREEN$$C$$FG$$-$$GREEN$$L$$FG$$ are ATA hard drives.\n"
+		"$$GREEN$$M$$FG$$-$$GREEN$$P$$FG$$ are ISO file read drives.\n"
+		"$$GREEN$$Q$$FG$$-$$GREEN$$S$$FG$$ are ISO file write drives.\n"
+		"$$GREEN$$T$$FG$$-$$GREEN$$Z$$FG$$ are ATAPI CD/DVD drives.\n"
+		"\nDrive Letter ($$PURPLE$$<ENTER>$$FG$$ to exit):";
 		drv_let = Letter2Letter(CharGet);
 		'\n';
 		if (type = Letter2BlkDevType(drv_let))
@@ -47,9 +50,11 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 					"Blks of 512 bytes:";
 					StrNGet(blks_buf, STR_LEN);
 					break;
+
 				case BDT_ISO_FILE_READ:
 					filename = StrGet("File Name:");
 					break;
+
 				case BDT_ATA:
 					prt_num = I64Get("Partition Num (Default=All):", prt_num);
 				case BDT_ATAPI:
@@ -60,7 +65,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 					{
 						if (num_hints)
 							"Enter dev number or\nport with $$PURPLE$$0x$$FG$$ prefix.\n"
-										"I/O Port Base0:\n";
+							"I/O Port Base0:\n";
 						else
 							"Include $$PURPLE$$0x$$FG$$ prefix.\nI/O Port Base0:\n";
 						StrNGet(base0_buf, STR_LEN);
@@ -96,6 +101,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 					LinkedListDel(head);
 					break;
 			}
+			DocPrint(doc, "\"bd = BlkDevNextFreeSlot('%C', %d); bd->unit = %d;\n\";\n", drv_let, type, unit);
 			DocPrint(doc, "bd = BlkDevNextFreeSlot(\'%C\', %d); bd->unit = %d;\n", drv_let, type, unit);
 			switch (type)
 			{
@@ -107,15 +113,18 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 					DocPrint(doc, "bd->max_blk = (%s) - 1;\n", blks_buf);
 					DocPrint(doc, "bd->drv_offset = 19 << 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;\n");
 					break;
+
 				case BDT_ISO_FILE_READ:
 					filename2 = FileNameAbs(filename);
 					DocPrint(doc, "bd->file_disk_name = ZStrNew(\"%s\");\n", filename2);
 					DocPrint(doc, "bd->drv_offset = 19 << 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;\n");
 					break;
+
 				case BDT_ATA:
 				case BDT_ATAPI:
 					if (type == BDT_ATAPI && !*base0_buf)
 					{
+						DocPrint(doc, "\"GetBaseUnit(bd);\n\";\n");
 						DocPrint(doc, "GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$
 						if (drv_let == boot_drive_let)
 							make_free = TRUE;
@@ -129,6 +138,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 					}
 					break;
 			}
+			DocPrint(doc, "\"BlkDevAdd(bd, %d, %d, %d);\n\";\n", prt_num, whole_drive, make_free);
 			DocPrint(doc, "BlkDevAdd(bd, %d, %d, %d);\n", prt_num, whole_drive, make_free);
 			if (_doc) //Called by $LK,"::/Kernel/KConfig.CC"$
 				count++;
@@ -150,8 +160,10 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 		total += count;
 	}
 	while (count && !_caller_is_prtdisk || !total && _doc); //At least 1 if Called by $LK,"::/Kernel/KConfig.CC"$
+
 	Free(filename);
 	Free(filename2);
+
 	return res;
 }
 
@@ -167,13 +179,15 @@ public U0 Unmount(U8 drv_let=0)
 
 public U8 MountFile(U8 *filename)
 {//Mount ISO.C file.
-	U8 *filename2 = ExtDefault(filename, "ISO.C"), *filename3 = FileNameAbs(filename2);
-	CDrive *drive = DriveMakeFreeSlot(DriveNextFreeLet('M')); //First $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$
-	CBlkDev *bd = BlkDevNextFreeSlot(drive->drv_let, BDT_ISO_FILE_READ);
+	U8		*filename2 = ExtDefault(filename, "ISO.C"), *filename3 = FileNameAbs(filename2);
+	CDrive	*drive = DriveMakeFreeSlot(DriveNextFreeLet('M')); //First $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$
+	CBlkDev	*bd = BlkDevNextFreeSlot(drive->drv_let, BDT_ISO_FILE_READ);
+
 	bd->drv_offset = 19 << 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;
 	bd->file_disk_name = ZStrNew(filename3);
 	BlkDevAdd(bd,, TRUE, TRUE);
 	Free(filename3);
 	Free(filename2);
+
 	return drive->drv_let;
 }

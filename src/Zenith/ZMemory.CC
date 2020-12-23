@@ -2,6 +2,7 @@
 public I64 TaskMemAlloced(CTask *task=NULL, Bool override_validate=FALSE)
 {//Count of bytes alloced to a task, used+unused.
 	I64 res;
+
 	if (!task)
 		task = Fs;
 	if (override_validate || TaskValidate(task))
@@ -18,6 +19,7 @@ public I64 TaskMemAlloced(CTask *task=NULL, Bool override_validate=FALSE)
 public I64 TaskMemUsed(CTask *task=NULL, Bool override_validate=FALSE)
 {//Count of bytes alloced to a task and in use.
 	I64 res;
+
 	if (!task)
 		task = Fs;
 	if (override_validate || TaskValidate(task))
@@ -34,8 +36,8 @@ public I64 TaskMemUsed(CTask *task=NULL, Bool override_validate=FALSE)
 #help_index "Memory/Task;Debugging/Heap;Memory/Debugging"
 public Bool HeapRep(CTask *task)
 {//Report status of task's heap.
-	I64 i, count;
-	CMemUnused *uum;
+	I64			 i, count;
+	CMemUnused	*uum;
 
 	if (!task || task == Fs)
 	{
@@ -104,12 +106,13 @@ public Bool HeapRep(CTask *task)
 public Bool IsInHeapCtrl(U8 *a, CHeapCtrl *hc, Bool lock=TRUE)
 {//Check addr if in HeapCtrl.
 	CMemBlk *m;
+
 	PUSHFD
 	CLI
 	if (lock)
 		while (LBts(&hc->locked_flags, HClf_LOCKED))
 			PAUSE
-	m=hc->next_mem_blk;
+	m = hc->next_mem_blk;
 	while (m != &hc->next_mem_blk)
 	{
 		if (a >= m && a < m(U8 *) + m->pags << MEM_PAG_BITS)
@@ -124,13 +127,14 @@ public Bool IsInHeapCtrl(U8 *a, CHeapCtrl *hc, Bool lock=TRUE)
 	if (lock)
 		LBtr(&hc->locked_flags, HClf_LOCKED);
 	POPFD
+
 	return FALSE;
 }
 
 public Bool HeapCtrlWalk(CHeapCtrl *hc)
 {//Check integrity of HeapCtrl.
-	I64 i;
-	CMemUnused *uum;
+	I64			 i;
+	CMemUnused	*uum;
 
 	PUSHFD
 	CLI
@@ -174,6 +178,7 @@ public Bool HeapCtrlWalk(CHeapCtrl *hc)
 	hc_false:
 	LBtr(&hc->locked_flags, HClf_LOCKED);
 	POPFD
+
 	return FALSE;
 }
 

@@ -2,6 +2,7 @@ I64 HashTypeNum(CHash *tmph)
 {//Return bit num of hash type, limited to just types.
 	if (tmph)
 		return Bsf(tmph->type & HTG_TYPE_MASK);
+
 	return -1;
 }
 
@@ -60,6 +61,7 @@ CHashTable *HashTableNew(I64 size, CTask *mem_task=NULL)
 	table = CAlloc(sizeof(CHashTable), mem_task);
 	table->body = CAlloc(size << 3, mem_task);
 	table->mask = size - 1;
+
 	return table;
 }
 
@@ -173,13 +175,14 @@ CHashGeneric *HashGenericAdd(U8 *name, I64 type, I64 u0=0, I64 u1=0, I64 u2=0, C
 	res->user_data2	= u2;
 	res->str		= StrNew(name, task);
 	HashAdd(res, task->hash_table);
+
 	return res;
 }
 
 U0 HashSrcFileSet(CCompCtrl *cc, CHashSrcSym *h, I64 line_num_offset=0)
 {//Set $LK,"CHashSrcSym",A="MN:CHashSrcSym"$ link and help_index by cur cc pos.
-	CLexFile *tmpf = cc->lex_include_stack;
-	I64 line_num = tmpf->line_num + line_num_offset;
+	CLexFile	*tmpf = cc->lex_include_stack;
+	I64			 line_num = tmpf->line_num + line_num_offset;
 
 	if (line_num < 1)
 		line_num = 1;
@@ -233,6 +236,7 @@ I64 HashListAdd(U8 *list, I64 type, CHashTable *table)
 			while (*list++);
 		}
 	}
+
 	return i;
 }
 
@@ -287,5 +291,6 @@ I64 FramePtrDel(U8 *name, CTask *task=NULL)
 		res = tmph->user_data0;
 		HashRemDel(tmph, task->hash_table);
 	}
+
 	return res;
 }

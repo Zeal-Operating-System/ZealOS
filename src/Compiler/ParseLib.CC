@@ -20,8 +20,9 @@ I64 ParsePop2(CParseStack *ps)
 
 U0 ParsePopDeref(CParseStack *ps)
 {
-	I64 i = ParsePop(ps);
+	I64			i = ParsePop(ps);
 	CHashClass *tmpc = ParsePop(ps);
+
 	if (i.u16[0] != IC_DEREF)
 	{
 		ParsePush(ps, tmpc);
@@ -32,6 +33,7 @@ U0 ParsePopDeref(CParseStack *ps)
 I64 ParseKeyWord(CCompCtrl *cc)
 {//Convert cur token to $LK,"KEYWORD",A="FF:::/Compiler/OpCodes.DD,KEYWORD"$ or -1.
 	CHashGeneric *tmph;
+
 	if (cc->token == TK_IDENT &&(tmph = cc->hash_entry) && tmph->type & HTT_KEYWORD)
 		return tmph->user_data0;
 	else
@@ -45,8 +47,9 @@ new class and representing a pointer
 to a class by advancing 1 struct forward
 for one * and two forward for two **.
 */
-	I64 i;
+	I64			i;
 	CHashClass *res = CAlloc(sizeof(CHashClass) * (PTR_STARS_NUM + 1), Fs->code_heap), *tmpc = res;
+
 	for (i = 0; i <= PTR_STARS_NUM; i++)
 	{
 		tmpc->type = HTT_CLASS;
@@ -57,13 +60,15 @@ for one * and two forward for two **.
 	}
 	res->last_in_member_list = &res->member_list_and_root;
 	res->size = 0;
+
 	return res;
 }
 
 CHashFun *ParseFunNew()
 {
-	I64 i;
-	CHashFun *res = CAlloc(sizeof(CHashFun) * (PTR_STARS_NUM + 1), Fs->code_heap), *tmpf = res;
+	I64			 i;
+	CHashFun	*res = CAlloc(sizeof(CHashFun) * (PTR_STARS_NUM + 1), Fs->code_heap), *tmpf = res;
+
 	for (i = 0; i <= PTR_STARS_NUM; i++)
 	{
 		tmpf->type = HTT_FUN;
@@ -74,12 +79,14 @@ CHashFun *ParseFunNew()
 	}
 	res->last_in_member_list = &res->member_list_and_root;
 	res->size = 0;
+
 	return res;
 }
 
 CIntermediateCode *ICAdd(CCompCtrl *cc, I64 opcode_and_precedence, I64 arg, CHashClass *c, I64 flags=0)
 {
 	CIntermediateCode *tmpi = MAlloc(sizeof(CIntermediateCode));
+
 	tmpi->ic_code = opcode_and_precedence.u16[0];
 	tmpi->ic_precedence = opcode_and_precedence.u16[1];
 	tmpi->ic_data = arg;
@@ -100,6 +107,7 @@ CIntermediateCode *ICAdd(CCompCtrl *cc, I64 opcode_and_precedence, I64 arg, CHas
 U0 COCInit(CCompCtrl *cc)
 {
 	CCodeCtrl *tmpcbh = &cc->coc;
+
 	QueueInit(&tmpcbh->coc_head.next);
 	QueueInit(&tmpcbh->coc_next_misc);
 	tmpcbh->coc_head.ic_code = IC_END;
@@ -108,6 +116,7 @@ U0 COCInit(CCompCtrl *cc)
 U0 COCPush(CCompCtrl *cc)
 {
 	CCodeCtrl *tmpcbh = MAlloc(sizeof(CCodeCtrl));
+
 	MemCopy(tmpcbh, &cc->coc, sizeof(CCodeCtrl));
 	cc->coc.coc_next = tmpcbh;
 }
@@ -115,7 +124,9 @@ U0 COCPush(CCompCtrl *cc)
 CCompCtrl *COCPopNoFree(CCompCtrl *cc)
 {
 	CCodeCtrl *tmpcbh = cc->coc.coc_next;
+
 	MemCopy(&cc->coc, tmpcbh, sizeof(CCodeCtrl));
+
 	return tmpcbh;
 }
 
@@ -146,28 +157,33 @@ U0 COCAppend(CCompCtrl *cc, CCodeCtrl *tmpcbh)
 CCodeMisc *COCMiscNew(CCompCtrl *cc, I64 ty)
 {
 	CCodeMisc *res = CAlloc(sizeof(CCodeMisc));
+
 	res->addr = INVALID_PTR;
 	res->type = ty;
 	QueueInsert(res, cc->coc.coc_last_misc);
+
 	return res;
 }
 
 CCodeMisc *COCGoToLabelFind(CCompCtrl *cc, U8 *name)
 {
 	CCodeMisc *cm = cc->coc.coc_next_misc;
+
 	while (cm != &cc->coc.coc_next_misc)
 	{
 		if ((cm->type == CMT_GOTO_LABEL || cm->type == CMT_ASM_LABEL) && !StrCompare(cm->str, name))
 			return cm;
 		cm = cm->next;
 	}
+
 	return NULL;
 }
 
 I64 COCFloatConstFind(CCompCtrl *cc, F64 d)
 {
-	I64 i;
-	CCodeMisc *cm = cc->coc.coc_next_misc;
+	I64			 i;
+	CCodeMisc	*cm = cc->coc.coc_next_misc;
+
 	while (cm != &cc->coc.coc_next_misc)
 	{
 		if (cm->type == CMT_FLOAT_CONSTS)
@@ -186,13 +202,15 @@ I64 COCFloatConstFind(CCompCtrl *cc, F64 d)
 	cm = COCMiscNew(cc, CMT_FLOAT_CONSTS);
 	cm->float_consts = MAlloc(CM_CONSTS_NUM * sizeof(F64));
 	cm->float_consts[cm->num_consts++] = d;
+
 	return cm->addr;
 }
 
 U0 COCDel(CCompCtrl *cc, CCodeCtrl *coc)
 {
-	CCodeMisc *cm, *cm1;
-	U8 *undef = NULL;
+	CCodeMisc 	*cm, *cm1;
+	U8			*undef = NULL;
+
 	QueueDel(&coc->coc_head.next);
 	cm = coc->coc_next_misc;
 	while (cm != &coc->coc_next_misc)
@@ -213,15 +231,19 @@ U0 COCDel(CCompCtrl *cc, CCodeCtrl *coc)
 					LexWarn(cc, "Unused label at ");
 				}
 				break;
+
 			case CMT_JMP_TABLE:
 				Free(cm->jmp_table);
 				break;
+
 			case CMT_FLOAT_CONSTS:
 				Free(cm->float_consts);
 				break;
+
 			case CMT_ARRAY_DIM:
 				LinkedListDel(cm->dim);
 				break;
+
 			case CMT_HASH_ENTRY:
 				HashDel(cm->h);
 				break;
@@ -241,6 +263,7 @@ U0 COCDel(CCompCtrl *cc, CCodeCtrl *coc)
 U0 COCHeaderPut(CCompCtrl *cc, I64 pass, Bool put)
 {
 	CIntermediateCode *tmpi;
+
 	if (Bt(&cc->flags, CCf_PASS_TRACE_PRESENT))
 	{
 		if (put)
@@ -265,9 +288,9 @@ U0 COCHeaderPut(CCompCtrl *cc, I64 pass, Bool put)
 
 U8 *COCCompile(CCompCtrl *cc, I64 *_code_size, CDebugInfo **_debug, I64 *_type)
 {
-	U8 *res;
-	CCodeMisc *lb;
-	I64 i, code_size, last_code_size;
+	U8			*res;
+	CCodeMisc	*lb;
+	I64			 i, code_size, last_code_size;
 
 	COptReg reg_offsets[REG_REGS_NUM];
 	if (_debug)
@@ -347,5 +370,6 @@ U8 *COCCompile(CCompCtrl *cc, I64 *_code_size, CDebugInfo **_debug, I64 *_type)
 	if (_code_size)
 		*_code_size = code_size;
 	cc->saved_pass_trace = cc->pass_trace;
+
 	return res;
 }

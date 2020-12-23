@@ -38,6 +38,38 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 {
 	I64 d1, d2, i, j, k;
 
+
+	/* AHCI Prototyping */
+	CAHCIHba *hba;
+	CAHCIPort *port;
+	#exe {Option(OPTf_WARN_DUP_TYPES, OFF);};
+	I64 bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0);
+	#exe {Option(OPTf_WARN_DUP_TYPES, ON);};
+
+	if (bdf != -1)
+	{
+		"\nAHCI is not yet supported.\n\n";
+		hba = dev.uncached_alias + PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F;
+		Bts(&hba->ghc, AHCI_GHCf_HBA_RESET);
+		while (Bt(&hba->ghc, AHCI_GHCf_HBA_RESET));
+		Bts(&hba->ghc, AHCI_GHCf_AHCI_ENABLE);
+		for (i = 0; i < AHCI_MAX_PORTS; i++)
+		{
+			if (Bt(&hba->ports_implemented, i))
+			{
+				port = &hba->ports[i];
+				if (port->signature == AHCI_PxSIG_ATAPI)
+					"ATAPI drive detected on AHCI Port %d\n", i;
+				else if (port->signature == AHCI_PxSIG_ATA)
+					"ATA   drive detected on AHCI Port %d\n", i;
+			}
+		}
+		"\n\nReboot with IDE Compatibility mode set in the BIOS.\n";
+		SysHlt;
+	}
+	/********************/
+
+
 	bd->base1 = 0;
 	for (k = 0; k < 256; k++)
 	{
@@ -311,7 +343,7 @@ CBlkDev *ATAMount(U8 first_drive_let, I64 type, I64 base0, I64 base1, I64 unit)
 I64 MountIDEAuto()
 {//Try to mount hard drive and CD/DVD, automatically. (Kernel.Config option).
 //It uses 'C' and 'T' as first drive letters or whatever you set
-	//in config when compiling Kernel.BIN.
+//in config when compiling Kernel.BIN.
 	I64		 res  = 0;
 	CATARep	*head = NULL, *ata_drive = NULL, *atapi_drive = NULL, *tmpha;
 
@@ -330,7 +362,7 @@ I64 MountIDEAuto()
 			if (tmpha->type == BDT_ATA && ATAMount(blkdev.first_hd_drive_let, BDT_ATA,
 					tmpha->base0, tmpha->base1, tmpha->unit))
 				res++;
-			else if (tmpha->type==BDT_ATAPI && ATAMount(blkdev.first_dvd_drive_let, BDT_ATAPI,
+			else if (tmpha->type == BDT_ATAPI && ATAMount(blkdev.first_dvd_drive_let, BDT_ATAPI,
 						tmpha->base0, tmpha->base1, tmpha->unit))
 				res++;
 		}

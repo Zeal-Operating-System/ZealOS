@@ -50,6 +50,7 @@ CDoc *KConfigAddDev(CKConfig *c)
 	"\n\n$$BK,1$$$$PURPLE$$Mount drives so they will be present when you boot.$$FG$$$$BK,0$$\n";
 
 	Mount2(c->boot_drive_let, doc, FALSE);
+
 	return doc;
 }
 
@@ -162,7 +163,9 @@ U0 KConfigOptions(CKConfig *c)
 						break;
 				}
 			}
-	} while (*st);
+	}
+	while (*st);
+
 	Free(st);
 }
 
@@ -193,6 +196,7 @@ CKConfig *KConfigNew()
 									"($$PURPLE$$<ENTER>$$FG$$ will use default.):",
 									"Scale2Mem(0x80000,0x8000000)");
 	KConfigOptions(c);
+
 	return c;
 }
  

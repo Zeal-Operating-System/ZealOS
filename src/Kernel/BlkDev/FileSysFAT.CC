@@ -233,6 +233,7 @@ Bool DirLongNameFill(CDirEntry *tmpde, CFAT32DirEntryLong *de, I64 *xsum)
 				if (!(tmpde->name[i] = ptr[fat_long_name_map[i]]))
 					return TRUE;
 			break;
+
 		case 2:
 			for (i = 0; i < 12; i++)
 				if (!(tmpde->name[i + 13] = ptr[fat_long_name_map[i]]))

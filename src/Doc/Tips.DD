@@ -49,11 +49,11 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * There is a utility $LK,"LinkCheck",A="MN:LinkCheck"$() which will check for broken links in documentation.
 
-* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$,ON) to find unnecessary parentheses in code.
+* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$, ON) to find unnecessary parentheses in code.
 
-* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$,ON) to find unnecessary local var type statements.
+* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$, ON) to find unnecessary local var type statements.
 
-* $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$,ON) can be placed in $LK,"StartOS.CC",A="FI:::/StartOS.CC"$ to echo start-up scripts.
+* $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$, ON) can be placed in $LK,"StartOS.CC",A="FI:::/StartOS.CC"$ to echo start-up scripts.
 
 * Use $LK,"Plain",A="MN:Plain"$() to edit a plain text file.	You'll need this if your file has $FG,2$$$$FG$'s.  Use the $LK,"ToDolDoc",A="MN:ToDolDoc"$() utility to convert plain text to DolDoc's by doubling $FG,2$$$$FG$'s.
 
@@ -121,7 +121,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * The editor's sel-text mechanism allows for disjoint portions of sel text.  This is a feature, not a bug -- you can cut-and-paste disjoint text.
 
-* $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ is continuously calibrated.  Be careful because expressions might decrease.  Take a snap-shot, like this: $FG,2$timeout=$LK,"TSCGet",A="MN:TSCGet"$+$LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ x seconds;$FG$ and compare against $LK,"TSCGet",A="MN:TSCGet"$().  I recommend just using $LK,"tS",A="MN:tS"$ or $LK,"counts.jiffies",A="MN:CCountsGlobals"$.
+* $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ is continuously calibrated.  Be careful because expressions might decrease.  Take a snap-shot, like this: $FG,2$timeout = $LK,"TSCGet",A="MN:TSCGet"$ + $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$ x seconds;$FG$ and compare against $LK,"TSCGet",A="MN:TSCGet"$().  I recommend just using $LK,"tS",A="MN:tS"$ or $LK,"counts.jiffies",A="MN:CCountsGlobals"$.
 
 * Use $LK,"HeapLog",A="MN:HeapLog"$(), $LK,"HeapLogAddrRep",A="MN:HeapLogAddrRep"$() and $LK,"HeapLogSizeRep",A="MN:HeapLogSizeRep"$() to find leaks.  Don't be confused by $LK,"CDoc",A="MN:CDoc"$ allocations.	Those are generated when text is written to the cmd line buffer.
 
@@ -141,6 +141,4 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check my changes.
 
 * The first line of the $MA-X+PU,"Psalmody",LM="#include \"::/Apps/Psalmody/Run\"\n"$ $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ song files is a comment with a category recognized by $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$().	The categories are $FG,2$"no nothing"$FG$, $FG,2$"has words"$FG$, $FG,2$"has graphics"$FG$, or $FG,2$"special"$FG$.  The third character in the song comment is a digit rating number, shown in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$().	You can set the song rating in $LK,"JukeBox",A="FF:::/Apps/Psalmody/JukeBox.CC,JukeBox"$() by pressing $FG,2$0$FG$-$FG,2$9$FG$.  You can press $FG,2$<DEL>$FG$ to delete songs.
 
-$FG,8$
-* "Linux" is a trademark owned by Linus Torvalds.
-$FG$
+* $FG,8$"Linux" is a trademark owned by Linus Torvalds.$FG$

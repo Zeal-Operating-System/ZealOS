@@ -7,15 +7,13 @@ documentation.
 
 */
 
-DefineLoad("COMPANY","Acme Inc");
+DefineLoad("COMPANY", "Acme Inc");
 "Company: $$TX,\"\",D=\"COMPANY\"$$\n";
 
-DefinePrint("COMPANY_TIME","%T",Now);
+DefinePrint("COMPANY_TIME", "%T", Now);
 
 #exe {
-	StreamPrint(
-		"#define COMPANY_AGE %0.1f\n",
-		(Now-Str2Date("8/1/2003"))/ToF64(1<<32)/CDATE_YEAR_DAYS);
+	StreamPrint("#define COMPANY_AGE %0.1f\n", (Now - Str2Date("8/1/2003")) / ToF64(1 << 32) / CDATE_YEAR_DAYS);
 };
 
 "Age : $$TX,\"\",D=\"COMPANY_AGE\"$$ years\n";

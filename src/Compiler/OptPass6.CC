@@ -1,6 +1,7 @@
 Bool OptIC6(CIntermediateCode *tmpi)
 {
 	CIntermediateCode *tmpil1;
+
 	if (tmpi->ic_code < IC_IMM_I64 || !(tmpil1 = OptLag1(tmpi)))
 		return FALSE;
 	if (tmpil1->ic_code == IC_ADD_CONST && tmpi->ic_code == IC_DEREF && tmpi->ic_flags & ICF_ARG1_WAS_STACK &&
@@ -25,14 +26,16 @@ Bool OptIC6(CIntermediateCode *tmpi)
 		}
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
 U0 OptPass6Lag(CCompCtrl *cc, CParseStack *ps, CIntermediateCode *tmpi, I64 *_stack_ptr, I64 reg_stack_size,
 			   I64 *_clobbered_reg_mask)
 {
-	I64 stack_ptr = *_stack_ptr, code, clobbered_stack_tmp_mask, clobbered_reg_mask = *_clobbered_reg_mask;
-	CHashFun *tmpf;
+	I64			 stack_ptr = *_stack_ptr, code, clobbered_stack_tmp_mask, clobbered_reg_mask = *_clobbered_reg_mask;
+	CHashFun	*tmpf;
+
 	code = tmpi->ic_code;
 	if (tmpi->ic_flags & ICF_PASS_TRACE && Bt(&cc->saved_pass_trace, 6))
 	{
@@ -111,9 +114,10 @@ U0 OptPass6Lag(CCompCtrl *cc, CParseStack *ps, CIntermediateCode *tmpi, I64 *_st
 
 U0 OptPass6(CCompCtrl *cc)
 {
-	CIntermediateCode *tmpi, *tmpi_next, *tmpil1, *tmpil2, *old_tmpil2;
-	I64 stack_ptr = 0, reg_stack_size, clobbered_reg_mask = REGG_CLOBBERED;
-	CParseStack *ps = cc->ps;
+	CIntermediateCode	*tmpi, *tmpi_next, *tmpil1, *tmpil2, *old_tmpil2;
+	I64					 stack_ptr = 0, reg_stack_size, clobbered_reg_mask = REGG_CLOBBERED;
+	CParseStack			*ps = cc->ps;
+
 	ps->ptr = 0;
 	ps->ptr2 = 0;
 	if (Bt(&cc->opts, OPTf_NO_REG_VAR) || cc->flags & CCF_NO_REG_OPT)

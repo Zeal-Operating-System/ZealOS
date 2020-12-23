@@ -7,26 +7,26 @@ $WW,1$$FG,5$$TX+CX,"64-Bit Assembly Quiz"$$FG$
 
 2) What happens to the upper 32-bits?
 
-				XOR 		EAX,EAX
-				MOV 		EAX,0x12345678
-				MOV 		EAX,0x80000000
+				XOR 		EAX, EAX
+				MOV 		EAX, 0x12345678
+				MOV 		EAX, 0x80000000
 
 3) How do you set FS or GS values?
 
 4) If FS points to current task record, what's wrong with this instruction?
 
-				MOV 		RAX,U64 FS:[TSS_SOME_MEMBER]
+				MOV 		RAX, U64 FS:[TSS_SOME_MEMBER]
 
 5) Which instruction takes more bytes?
 
-				MOV 		RAX,U64 [R8]
-				MOV 		RAX,U64 [R13]
+				MOV 		RAX, U64 [R8]
+				MOV 		RAX, U64 [R13]
 
 6) Are these the same number of bytes?
 
-				MOV 		RAX,1234
-				MOV 		R8,1234
-				MOV 		EAX,1234
+				MOV 		RAX, 1234
+				MOV 		R8,  1234
+				MOV 		EAX, 1234
 
 7) True or False
 

@@ -8,6 +8,7 @@ U8 *StrPrintHex(U8 *dst, I64 num; I64 width)
 		*--dst = "0123456789ABCDEF"(U8 *)[num & 15];
 		num >>= 4;
 	}
+
 	return res;
 }
 
@@ -449,6 +450,7 @@ I64 ListMatch(U8 *needle, U8 *haystack_list, I64 flags=0)
 		haystack_list++;				//Skip trailing zero
 		sub++;
 	}
+
 	return res;
 }
 
@@ -461,6 +463,7 @@ I64 StrOcc(U8 *src, I64 ch)
 	while (*src)
 		if (*src++ == ch)
 			i++;
+
 	return i;
 }
 
@@ -518,6 +521,7 @@ I64 Spaces2Tabs(U8 *dst, U8 *src)
 			src = ++src2;
 		}
 	*dst = 0;
+
 	return chged;
 }
 
@@ -574,6 +578,7 @@ U8 *StrUtil(U8 *_src, I64 flags)
 		}
 	if (flags & SUF_S2T)
 		Spaces2Tabs(_src, _src);
+
 	return _src;
 }
 
@@ -605,6 +610,7 @@ U8 *StrFirstRemove(U8 *src, U8 *marker, U8 *dst=NULL)
 		StrCopy(src, ptr);
 	else
 		*src = 0;
+
 	return res;
 }
 
@@ -616,6 +622,7 @@ U8 *StrLastOcc(U8 *src, U8 *marker)
 	while (ch = *src++)
 		if (StrOcc(marker, ch))
 			res = src - 1;
+
 	return res;
 }
 
@@ -635,6 +642,7 @@ U8 *StrLastRemove(U8 *src, U8 *marker, U8 *dst=NULL)
 			StrCopy(dst, src);
 		*src = 0;
 	}
+
 	return dst;
 }
 

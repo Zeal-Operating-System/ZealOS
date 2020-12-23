@@ -1,8 +1,9 @@
 U0 AsmResolve(CCompCtrl *cc, CAsmUnresolvedRef *tmpu, U8 *label, Bool undefined)
 {
-	CAOTImportExport *tmpie;
-	CAsmUndefHash *tmpauh;
-	I64 res = Call(tmpu->machine_code);
+	CAOTImportExport	*tmpie;
+	CAsmUndefHash		*tmpauh;
+	I64					 res = Call(tmpu->machine_code);
+
 	if (undefined)
 	{
 		tmpauh = tmpu->asm_undef_hash;
@@ -48,11 +49,11 @@ U0 AsmResolve(CCompCtrl *cc, CAsmUnresolvedRef *tmpu, U8 *label, Bool undefined)
 
 U0 AOTLocalsResolve(CCompCtrl *cc)
 {
-	CAOTCtrl *aotc = cc->aotc;
-	CAsmUnresolvedRef *tmpu = aotc->local_unresolved, *tmpu1;
-	CAsmUndefHash *tmpauh;
-	Bool undefined;
-	U8 *label = NULL;
+	CAOTCtrl			*aotc = cc->aotc;
+	CAsmUnresolvedRef	*tmpu = aotc->local_unresolved, *tmpu1;
+	CAsmUndefHash		*tmpauh;
+	Bool				 undefined;
+	U8					*label = NULL;
 
 	while (tmpu)
 	{
@@ -84,16 +85,16 @@ U0 AOTLocalsResolve(CCompCtrl *cc)
 
 U0 AOTGlobalsResolve(CCompCtrl *cc, CAOT *tmpaot)
 {
-	CAOTCtrl *aotc = cc->aotc;
-	CHashFun *tmpf;
-	CAsmUnresolvedRef *tmpu = aotc->global_unresolved, *tmpu1;
-	I64 i, j;
-	CAOTImportExport *tmpie, *tmpie1;
-	CAsmUndefHash *tmpauh;
-	CHashExport *tmpex;
-	U8 *label;
-	Bool undefined;
-	CExternUsage *tmpeu, *tmpeu8;
+	CAOTCtrl			*aotc = cc->aotc;
+	CHashFun			*tmpf;
+	CAsmUnresolvedRef	*tmpu = aotc->global_unresolved, *tmpu1;
+	I64					 i, j;
+	CAOTImportExport	*tmpie, *tmpie1;
+	CAsmUndefHash		*tmpauh;
+	CHashExport			*tmpex;
+	U8					*label;
+	Bool				 undefined;
+	CExternUsage		*tmpeu, *tmpeu8;
 
 	while (tmpu)
 	{

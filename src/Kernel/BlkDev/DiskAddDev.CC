@@ -7,10 +7,12 @@ U0 BlkDevLockFwdingSet(CBlkDev *bd)
 	{
 		case BDT_RAM:
 			break;
+
 		case BDT_ISO_FILE_READ:
 		case BDT_ISO_FILE_WRITE:
 			bd->lock_fwding = Letter2BlkDev(*bd->file_disk_name);
 			break;
+
 		case BDT_ATA:
 		case BDT_ATAPI:
 			for (i = 0; i < BLKDEVS_NUM; i++)
@@ -64,6 +66,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 			else
 				drive->drive_signature = 0;
 			break;
+
 		case BDT_ATA:
 			drive->drive_signature = DRIVE_SIGNATURE_VAL; //Temporarily validate
 			if (!BlkDevInit(bd))
@@ -111,6 +114,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 									drive->fs_type = FSt_REDSEA;
 									RedSeaInit(drive);
 									break;
+
 								case MBR_PT_FAT32a:
 								case MBR_PT_FAT32b:
 								case MBR_PT_FAT32c:
@@ -132,16 +136,19 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 										FAT32Init(drive);
 									}
 									break;
+
 								case MBR_PT_NTFS:
 									drive->drive_signature = DRIVE_SIGNATURE_VAL;
 									drive->prt_num = num;
 									res++;
 									drive->fs_type = FSt_NTFS;
 									break;
+
 								case 5:
 								case 15:
 									j = i;
 									break;
+
 								default:
 									drive->drive_signature = DRIVE_SIGNATURE_VAL;
 									drive->prt_num = num;
@@ -167,6 +174,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 				}
 			}
 			break;
+
 		case BDT_ATAPI:
 			drive->drive_signature = DRIVE_SIGNATURE_VAL;
 			drive->prt_num = num;
@@ -187,8 +195,8 @@ Bool DriveEnable(U8 drv_let, Bool val)
 {//Can unmount or remount, but not mount the first time.
 	CDrive *drive;
 
-	if (drive = Letter2Drive(drv_let,FALSE))
-		return !LBEqual(&drive->fs_type,FStf_DISABLE,!val);
+	if (drive = Letter2Drive(drv_let, FALSE))
+		return !LBEqual(&drive->fs_type, FStf_DISABLE, !val);
 	else
 		return FALSE;
 }
@@ -196,7 +204,9 @@ Bool DriveEnable(U8 drv_let, Bool val)
 I64 SysI64Get()
 {
 	U8 st[STR_LEN];
+
 	StrNGet(st, STR_LEN, FALSE);
+
 	return Str2I64(st, 16);
 }
 
@@ -251,8 +261,8 @@ U0 BlkDevsInitAll()
 	CBlkDev	*bd;
 	I64		 i;
 
-	blkdev.blkdevs = CAlloc(sizeof(CBlkDev) * BLKDEVS_NUM);
-	blkdev.drvs = CAlloc(sizeof(CDrive) * DRIVES_NUM);
+	blkdev.blkdevs	= CAlloc(sizeof(CBlkDev) * BLKDEVS_NUM);
+	blkdev.drvs		= CAlloc(sizeof(CDrive)  * DRIVES_NUM);
 	for (i = 0; i < DRIVES_NUM; i++)
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 

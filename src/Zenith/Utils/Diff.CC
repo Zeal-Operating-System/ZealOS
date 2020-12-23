@@ -1,304 +1,333 @@
 #help_index "Cmd Line (Typically)"
 
-#define DS_USE_FILE1		0
-#define DS_USE_FILE2		1
+#define DS_USE_FILE1	0
+#define DS_USE_FILE2	1
 #define DS_REMAINDER_1	2
 #define DS_REMAINDER_2	3
 #define DS_ABORT_FILE 	4
 
 I64 PopUpDiffMenu()
 {
-	I64 i;
-	CDoc *doc=DocNew;
-	DocPrint(doc,"$$CM+LX,2,4$$$$FG$$$$BT,\"USE FILE1\",LE=DS_USE_FILE1$$"
-				"$$CM+LX,24,0$$$$CYAN$$$$BT,\"USE FILE2\",LE=DS_USE_FILE2$$"
-				"$$CM+LX,2,4$$$$FG$$$$BT,\"REMAINDER ALL FILE1\",LE=DS_REMAINDER_1$$"
-				"$$CM+LX,24,0$$$$CYAN$$$$BT,\"REMAINDER ALL FILE2\",LE=DS_REMAINDER_2$$"
-				"$$CM+LX,2,4$$$$FG$$$$BT,\"ABORT FILE\",LE=DS_ABORT_FILE$$"
-				"$$CM+LX,24,0$$$$FG$$$$BT,\"ABORT ALL FILES\",LE=DOCM_CANCEL$$\n");
-	i=PopUpMenu(doc);
+	I64   i;
+	CDoc *doc = DocNew;
+
+	DocPrint(doc,	"$$CM+LX,2,4$$$$FG$$$$BT,\"USE FILE1\",LE=DS_USE_FILE1$$"
+					"$$CM+LX,24,0$$$$CYAN$$$$BT,\"USE FILE2\",LE=DS_USE_FILE2$$"
+					"$$CM+LX,2,4$$$$FG$$$$BT,\"REMAINDER ALL FILE1\",LE=DS_REMAINDER_1$$"
+					"$$CM+LX,24,0$$$$CYAN$$$$BT,\"REMAINDER ALL FILE2\",LE=DS_REMAINDER_2$$"
+					"$$CM+LX,2,4$$$$FG$$$$BT,\"ABORT FILE\",LE=DS_ABORT_FILE$$"
+					"$$CM+LX,24,0$$$$FG$$$$BT,\"ABORT ALL FILES\",LE=DOCM_CANCEL$$\n");
+	i = PopUpMenu(doc);
 	DocDel(doc);
+
 	return i;
 }
 
-I64 DiffEntriesCompare(CDocEntry *doc_e1,CDocEntry *doc_e2)
+I64 DiffEntriesCompare(CDocEntry *doc_e1, CDocEntry *doc_e2)
 {
-	return StrCompare(doc_e1->tag,doc_e2->tag);
+	return StrCompare(doc_e1->tag, doc_e2->tag);
 }
 
-#define DF_MODIFIED 										0x01
-#define DF_DONT_MODIFIED								0x02
-#define DF_REMAINDER_ALL_FILE1					0x04
-#define DF_REMAINDER_ALL_FILE2					0x08
-#define DF_ABORT_FILE 									0x10
-#define DF_ABORT_ALL_FILES							0x20
-#define DF_NO_MORE_PROMPTS_THIS_FILE		0x40
+#define DF_MODIFIED 					0x01
+#define DF_DONT_MODIFIED				0x02
+#define DF_REMAINDER_ALL_FILE1			0x04
+#define DF_REMAINDER_ALL_FILE2			0x08
+#define DF_ABORT_FILE 					0x10
+#define DF_ABORT_ALL_FILES				0x20
+#define DF_NO_MORE_PROMPTS_THIS_FILE	0x40
 
-U0 DiffSel(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,
-				I64 j2_lo,I64 j2_hi,I64 count1,I64 count2,
-				CDocEntry **doc_unsorted1,CDocEntry **doc_unsorted2)
+U0 DiffSel(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi, I64 count1, I64 count2,
+		   CDocEntry **doc_unsorted1, CDocEntry **doc_unsorted2)
 {
-	CDocEntry *doc_e,*doc_e1,*doc_e2;
-	Bool use_file1;
-	I64 i,old_flags;
-	CDoc *cur_l;
-	if (!(*_df_flags & (DF_ABORT_FILE|DF_ABORT_ALL_FILES))) {
+	CDocEntry	*doc_e, *doc_e1, *doc_e2;
+	Bool		 use_file1;
+	I64			 i, old_flags;
+	CDoc		*cur_l;
+
+	if (!(*_df_flags & (DF_ABORT_FILE | DF_ABORT_ALL_FILES)))
+	{
 		"$$RED$$";
-		if (0<=j1_lo<count1)
-			"%d,",doc_unsorted1[j1_lo]->y+1;
-		else if (0<=j1_hi-1<count1)
-			"%d,",doc_unsorted1[j1_hi-1]->y+1;
+		if (0 <= j1_lo < count1)
+			"%d,", doc_unsorted1[j1_lo]->y + 1;
+		else if (0 <= j1_hi - 1 < count1)
+			"%d,", doc_unsorted1[j1_hi - 1]->y + 1;
 		else
 			"***,";
-		if (0<=j2_lo<count2)
-			"%d",doc_unsorted2[j2_lo]->y+1;
-		else if (0<=j2_hi-1<count2)
-			"%d",doc_unsorted2[j2_hi-1]->y+1;
+		if (0 <= j2_lo < count2)
+			"%d", doc_unsorted2[j2_lo]->y + 1;
+		else if (0 <= j2_hi - 1 < count2)
+			"%d", doc_unsorted2[j2_hi - 1]->y + 1;
 		else
 			"***";
 		"---------------------$$FG$$\n";
-		if (j1_lo<=0)
-			i=0;
+		if (j1_lo <= 0)
+			i = 0;
 		else
-			i=j1_lo-1;
-		while (i<j1_hi) {
-			if (cur_l=DocPut) {
-				old_flags=cur_l->flags&DOCF_PLAIN_TEXT;
-				cur_l->flags|=DOCF_PLAIN_TEXT;
+			i = j1_lo - 1;
+		while (i < j1_hi)
+		{
+			if (cur_l = DocPut)
+			{
+				old_flags = cur_l->flags & DOCF_PLAIN_TEXT;
+				cur_l->flags |= DOCF_PLAIN_TEXT;
 			}
-			"%s",doc_unsorted1[i++]->tag;
+			"%s", doc_unsorted1[i++]->tag;
 			if (cur_l)
-				cur_l->flags= cur_l->flags&~DOCF_PLAIN_TEXT |old_flags;
+				cur_l->flags = cur_l->flags & ~DOCF_PLAIN_TEXT | old_flags;
 			'\n';
 		}
 		"$$CYAN$$";
-		if (j2_lo<=0)
-			i=0;
+		if (j2_lo <= 0)
+			i = 0;
 		else
-			i=j2_lo-1;
-		while (i<j2_hi) {
-			if (cur_l=DocPut) {
-				old_flags=cur_l->flags&DOCF_PLAIN_TEXT;
-				cur_l->flags|=DOCF_PLAIN_TEXT;
+			i = j2_lo - 1;
+		while (i < j2_hi)
+		{
+			if (cur_l = DocPut)
+			{
+				old_flags = cur_l->flags & DOCF_PLAIN_TEXT;
+				cur_l->flags |= DOCF_PLAIN_TEXT;
 			}
-			"%s",doc_unsorted2[i++]->tag;
+			"%s", doc_unsorted2[i++]->tag;
 			if (cur_l)
-				cur_l->flags= cur_l->flags&~DOCF_PLAIN_TEXT |old_flags;
+				cur_l->flags = cur_l->flags & ~DOCF_PLAIN_TEXT | old_flags;
 			'\n';
 		}
 		"$$FG$$";
 
-		use_file1=TRUE;
-		if (!(*_df_flags & DF_NO_MORE_PROMPTS_THIS_FILE)) {
-			switch (PopUpDiffMenu) {
+		use_file1 = TRUE;
+		if (!(*_df_flags & DF_NO_MORE_PROMPTS_THIS_FILE))
+		{
+			switch (PopUpDiffMenu)
+			{
 				case DS_USE_FILE1:
 					break;
+
 				case DS_USE_FILE2:
-					use_file1=FALSE;
+					use_file1 = FALSE;
 					break;
+
 				case DS_REMAINDER_1:
-					*_df_flags=*_df_flags&~DF_REMAINDER_ALL_FILE2|
-								DF_REMAINDER_ALL_FILE1|DF_NO_MORE_PROMPTS_THIS_FILE;
+					*_df_flags = *_df_flags & ~DF_REMAINDER_ALL_FILE2 | DF_REMAINDER_ALL_FILE1 | DF_NO_MORE_PROMPTS_THIS_FILE;
 					break;
+
 				case DS_REMAINDER_2:
-					*_df_flags=*_df_flags&~DF_REMAINDER_ALL_FILE1|
-								DF_REMAINDER_ALL_FILE2|DF_NO_MORE_PROMPTS_THIS_FILE;
+					*_df_flags = *_df_flags & ~DF_REMAINDER_ALL_FILE1 | DF_REMAINDER_ALL_FILE2 | DF_NO_MORE_PROMPTS_THIS_FILE;
 					break;
+
 				case DS_ABORT_FILE:
-					*_df_flags|=DF_DONT_MODIFIED|DF_ABORT_FILE|
-								DF_NO_MORE_PROMPTS_THIS_FILE;
+					*_df_flags |= DF_DONT_MODIFIED | DF_ABORT_FILE | DF_NO_MORE_PROMPTS_THIS_FILE;
 					break;
+
 				default:
-					*_df_flags|=DF_DONT_MODIFIED|DF_ABORT_ALL_FILES|
-								DF_NO_MORE_PROMPTS_THIS_FILE;
+					*_df_flags |= DF_DONT_MODIFIED | DF_ABORT_ALL_FILES | DF_NO_MORE_PROMPTS_THIS_FILE;
 			}
 		}
-		if (*_df_flags & DF_REMAINDER_ALL_FILE2 &&
-					!(*_df_flags & (DF_DONT_MODIFIED|DF_REMAINDER_ALL_FILE1)))
-			use_file1=FALSE;
-		if (!use_file1) {
-			*_df_flags|=DF_MODIFIED;
-			doc_e1=doc_unsorted1[j1_lo]->last;
-			if (j1_lo<j1_hi) {
-				doc_e=doc_unsorted1[j1_lo];
-				while (doc_e!=doc_unsorted1[j1_hi]) {
-					doc_e2=doc_e->next;
-					DocEntryDel(doc,doc_e);
-					doc_e=doc_e2;
+		if (*_df_flags & DF_REMAINDER_ALL_FILE2 && !(*_df_flags & (DF_DONT_MODIFIED | DF_REMAINDER_ALL_FILE1)))
+			use_file1 = FALSE;
+		if (!use_file1)
+		{
+			*_df_flags |= DF_MODIFIED;
+			doc_e1 = doc_unsorted1[j1_lo]->last;
+			if (j1_lo < j1_hi)
+			{
+				doc_e = doc_unsorted1[j1_lo];
+				while (doc_e != doc_unsorted1[j1_hi])
+				{
+					doc_e2 = doc_e->next;
+					DocEntryDel(doc, doc_e);
+					doc_e = doc_e2;
 				}
 			}
-			if (j2_lo<j2_hi) {
-				doc_e=doc_unsorted2[j2_lo];
-				while (doc_e!=doc_unsorted2[j2_hi]) {
-					doc_e2=DocEntryCopy(doc,doc_e);
-					QueueInsert(doc_e2,doc_e1);
-					doc_e1=doc_e2;
-					doc_e=doc_e->next;
+			if (j2_lo < j2_hi)
+			{
+				doc_e = doc_unsorted2[j2_lo];
+				while (doc_e != doc_unsorted2[j2_hi])
+				{
+					doc_e2 = DocEntryCopy(doc, doc_e);
+					QueueInsert(doc_e2, doc_e1);
+					doc_e1 = doc_e2;
+					doc_e = doc_e->next;
 				}
 			}
 		}
 	}
 }
 
-Bool DiffSub(CDoc *doc,I64 *_df_flags,I64 j1_lo,I64 j1_hi,I64 j2_lo,I64 j2_hi,
-				I64 count1,I64 count2,CDocEntry **doc_sorted1,CDocEntry **doc_sorted2,
-				CDocEntry **doc_unsorted1,CDocEntry **doc_unsorted2)
+Bool DiffSub(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi, I64 count1, I64 count2,
+			 CDocEntry **doc_sorted1, CDocEntry **doc_sorted2, CDocEntry **doc_unsorted1, CDocEntry **doc_unsorted2)
 {
-	I64 i,i1=0,i2=0,i2b,j1,j2,n,
-				best_j1,best_j2,best_score=0,score;
-	Bool res=FALSE;
+	I64  i, i1 = 0, i2 = 0, i2b, j1, j2, n, best_j1, best_j2, best_score = 0, score;
+	Bool res = FALSE;
 
-	if (j1_lo>=j1_hi || j2_lo>=j2_hi) {
-		if (j1_lo<j1_hi || j2_lo<j2_hi) {
-			DiffSel(doc,_df_flags,j1_lo,j1_hi,j2_lo,j2_hi,count1,count2,
-						doc_unsorted1,doc_unsorted2);
+	if (j1_lo >= j1_hi || j2_lo >= j2_hi)
+	{
+		if (j1_lo < j1_hi || j2_lo < j2_hi)
+		{
+			DiffSel(doc, _df_flags, j1_lo, j1_hi, j2_lo, j2_hi, count1, count2, doc_unsorted1, doc_unsorted2);
 			return TRUE;
-		} else
+		}
+		else
 			return FALSE;
 	}
 
 	//Locate longest matching str in intervals
-	while (i1<count1 && i2<count2) {
-		if (!(j1_lo<=doc_sorted1[i1]->user_data<j1_hi)) //user_data is the new y
+	while (i1 < count1 && i2 < count2)
+	{
+		if (!(j1_lo <= doc_sorted1[i1]->user_data < j1_hi)) //user_data is the new y
 			i1++;
-		else if (!(j2_lo<=doc_sorted2[i2]->user_data<j2_hi)) //user_data is new y
+		else if (!(j2_lo <= doc_sorted2[i2]->user_data < j2_hi)) //user_data is new y
 			i2++;
-		else {
-			i=StrCompare(doc_sorted1[i1]->tag,doc_sorted2[i2]->tag);
-			if (i>0)
+		else
+		{
+			i = StrCompare(doc_sorted1[i1]->tag, doc_sorted2[i2]->tag);
+			if (i > 0)
 				i2++;
-			else if (i<0)
+			else if (i < 0)
 				i1++;
-			else {
-				i2b=i2;
-				while (!StrCompare(doc_sorted1[i1]->tag,doc_sorted2[i2]->tag)) {
-					if (j2_lo<=doc_sorted2[i2]->user_data<j2_hi) {//user_data is the new y
-						score=0;
-						j1=doc_sorted1[i1]->user_data; //user_data is the new y
-						j2=doc_sorted2[i2]->user_data; //user_data is the new y
-						n=j1_hi-j1;
-						if (j2_hi-j2<n)
-							n=j2_hi-j2;
-						while (score<n) {
-							if (!StrCompare(doc_unsorted1[j1+score]->tag,
-										doc_unsorted2[j2+score]->tag))
+			else
+			{
+				i2b = i2;
+				while (!StrCompare(doc_sorted1[i1]->tag, doc_sorted2[i2]->tag))
+				{
+					if (j2_lo <= doc_sorted2[i2]->user_data < j2_hi)
+					{//user_data is the new y
+						score = 0;
+						j1 = doc_sorted1[i1]->user_data; //user_data is the new y
+						j2 = doc_sorted2[i2]->user_data; //user_data is the new y
+						n = j1_hi - j1;
+						if (j2_hi - j2 < n)
+							n = j2_hi - j2;
+						while (score < n)
+						{
+							if (!StrCompare(doc_unsorted1[j1 + score]->tag, doc_unsorted2[j2 + score]->tag))
 								score++;
 							else
 								break;
 						}
-						if (score>best_score) {
-							best_score=score;
-							best_j1=j1;
-							best_j2=j2;
+						if (score > best_score)
+						{
+							best_score = score;
+							best_j1 = j1;
+							best_j2 = j2;
 						}
 					}
 					i2++;
-					if (i2>=count2)
+					if (i2 >= count2)
 						break;
 				}
-				i2=i2b;
+				i2 = i2b;
 				i1++;
 			}
 		}
 	}
-	if (!best_score) {
-		DiffSel(doc,_df_flags,j1_lo,j1_hi,j2_lo,j2_hi,count1,count2,
-					doc_unsorted1,doc_unsorted2);
+	if (!best_score)
+	{
+		DiffSel(doc, _df_flags, j1_lo, j1_hi, j2_lo, j2_hi, count1, count2, doc_unsorted1, doc_unsorted2);
 		return TRUE;
-	} else {
-		if (DiffSub(doc,_df_flags,j1_lo,best_j1,j2_lo,best_j2,count1,count2,
-					doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2))
-			res=TRUE;
-		if (DiffSub(doc,_df_flags,best_j1+best_score,j1_hi,best_j2+best_score,
-					j2_hi,count1,count2,
-					doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2))
-			res=TRUE;
+	}
+	else
+	{
+		if (DiffSub(doc, _df_flags, j1_lo, best_j1, j2_lo, best_j2, count1, count2,
+					doc_sorted1, doc_sorted2, doc_unsorted1, doc_unsorted2))
+			res = TRUE;
+		if (DiffSub(doc, _df_flags, best_j1 + best_score, j1_hi, best_j2 + best_score, j2_hi, count1, count2,
+					doc_sorted1, doc_sorted2, doc_unsorted1, doc_unsorted2))
+			res = TRUE;
+
 		return res;
 	}
 }
 
-Bool DiffBins(CDoc *doc1,CDoc *doc2)
+Bool DiffBins(CDoc *doc1, CDoc *doc2)
 {
-	CDocBin *tmpb1=doc1->bin_head.next,
-				*tmpb2=doc2->bin_head.next;
+	CDocBin *tmpb1 = doc1->bin_head.next, *tmpb2 = doc2->bin_head.next;
 
-	if (tmpb1->last->last->num!=tmpb2->last->last->num)
+	if (tmpb1->last->last->num != tmpb2->last->last->num)
 		return TRUE;
-	while (tmpb1!=&doc1->bin_head) {
-		if (tmpb1->size!=tmpb2->size ||
-					MemCompare(tmpb1->data,tmpb2->data,tmpb1->size))
+	while (tmpb1 != &doc1->bin_head)
+	{
+		if (tmpb1->size != tmpb2->size || MemCompare(tmpb1->data, tmpb2->data, tmpb1->size))
 			return TRUE;
-		tmpb1=tmpb1->next;
-		tmpb2=tmpb2->next;
+		tmpb1 = tmpb1->next;
+		tmpb2 = tmpb2->next;
 	}
+
 	return FALSE;
 }
 
-public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
+public Bool Diff(U8 *dst_file, U8 *src_file, I64 *_df_flags=NULL)
 {//Report differences between two files and merge differences
 //from src_file to dst_file.	Don't use _df_flags arg. (Used by $LK,"Merge",A="MN:Merge"$().)
-	CDoc *doc1=DocRead(dst_file,DOCF_PLAIN_TEXT_TABS|DOCF_NO_CURSOR),
-				*doc2=DocRead(src_file,DOCF_PLAIN_TEXT_TABS|DOCF_NO_CURSOR);
-	CDocEntry *doc_e,**doc_sorted1,**doc_sorted2,**doc_unsorted1,**doc_unsorted2;
-	I64 i,count1=0,count2=0,df_flags;
-	Bool res=FALSE;
+	CDoc		*doc1 = DocRead(dst_file, DOCF_PLAIN_TEXT_TABS | DOCF_NO_CURSOR),
+				*doc2 = DocRead(src_file, DOCF_PLAIN_TEXT_TABS | DOCF_NO_CURSOR);
+	CDocEntry	*doc_e, **doc_sorted1, **doc_sorted2, **doc_unsorted1, **doc_unsorted2;
+	I64			 i, count1 = 0, count2 = 0,df_flags;
+	Bool		 res = FALSE;
 
 	if (_df_flags)
-		df_flags=*_df_flags;
+		df_flags = *_df_flags;
 	else
-		df_flags=0;
-	df_flags&=DF_ABORT_ALL_FILES;
+		df_flags = 0;
+	df_flags &= DF_ABORT_ALL_FILES;
 
-	doc_e=doc1->head.next;
-	while (doc_e!=doc1) {
-		if (doc_e->type_u8==DOCT_TEXT)
-			doc_e->user_data=count1++; //user_data is the new y
-		doc_e=doc_e->next;
+	doc_e = doc1->head.next;
+	while (doc_e != doc1)
+	{
+		if (doc_e->type_u8 == DOCT_TEXT)
+			doc_e->user_data = count1++; //user_data is the new y
+		doc_e = doc_e->next;
 	}
 
-	doc_e=doc2->head.next;
-	while (doc_e!=doc2) {
-		if (doc_e->type_u8==DOCT_TEXT)
-			doc_e->user_data=count2++; //user_data is the new y
-		doc_e=doc_e->next;
+	doc_e = doc2->head.next;
+	while (doc_e != doc2)
+	{
+		if (doc_e->type_u8 == DOCT_TEXT)
+			doc_e->user_data = count2++; //user_data is the new y
+		doc_e = doc_e->next;
 	}
 
-	doc_sorted1=MAlloc(count1*sizeof(CDocEntry *));
-	doc_unsorted1=MAlloc((count1+1)*sizeof(CDocEntry *));
-	i=0;
-	doc_e=doc1->head.next;
-	while (doc_e!=doc1) {
-		if (doc_e->type_u8==DOCT_TEXT) {
-			doc_sorted1[i]=doc_e;
-			doc_unsorted1[i++]=doc_e;
+	doc_sorted1 = MAlloc(count1 * sizeof(CDocEntry *));
+	doc_unsorted1 = MAlloc((count1 + 1) * sizeof(CDocEntry *));
+	i = 0;
+	doc_e = doc1->head.next;
+	while (doc_e != doc1)
+	{
+		if (doc_e->type_u8 == DOCT_TEXT)
+		{
+			doc_sorted1[i] = doc_e;
+			doc_unsorted1[i++] = doc_e;
 		}
-		doc_e=doc_e->next;
+		doc_e = doc_e->next;
 	}
-	doc_unsorted1[i]=doc1;
-	QuickSortI64(doc_sorted1,count1,&DiffEntriesCompare);
+	doc_unsorted1[i] = doc1;
+	QuickSortI64(doc_sorted1, count1, &DiffEntriesCompare);
 
-	doc_sorted2=MAlloc(count2*sizeof(CDocEntry *));
-	doc_unsorted2=MAlloc((count2+1)*sizeof(CDocEntry *));
-	i=0;
-	doc_e=doc2->head.next;
-	while (doc_e!=doc2) {
-		if (doc_e->type_u8==DOCT_TEXT) {
-			doc_sorted2[i]=doc_e;
-			doc_unsorted2[i++]=doc_e;
+	doc_sorted2 = MAlloc(count2 * sizeof(CDocEntry *));
+	doc_unsorted2 = MAlloc((count2 + 1) * sizeof(CDocEntry *));
+	i = 0;
+	doc_e = doc2->head.next;
+	while (doc_e != doc2)
+	{
+		if (doc_e->type_u8 == DOCT_TEXT)
+		{
+			doc_sorted2[i] = doc_e;
+			doc_unsorted2[i++] = doc_e;
 		}
-		doc_e=doc_e->next;
+		doc_e = doc_e->next;
 	}
-	doc_unsorted2[i]=doc2;
-	QuickSortI64(doc_sorted2,count2,&DiffEntriesCompare);
+	doc_unsorted2[i] = doc2;
+	QuickSortI64(doc_sorted2, count2, &DiffEntriesCompare);
 
-	res=DiffSub(doc1,&df_flags,0,count1,0,count2,count1,count2,
-				doc_sorted1,doc_sorted2,doc_unsorted1,doc_unsorted2);
-	if (df_flags&DF_MODIFIED && !(df_flags&DF_DONT_MODIFIED))
+	res = DiffSub(doc1, &df_flags, 0, count1, 0, count2, count1, count2,
+				  doc_sorted1, doc_sorted2, doc_unsorted1, doc_unsorted2);
+	if (df_flags & DF_MODIFIED && !(df_flags & DF_DONT_MODIFIED))
 		DocWrite(doc1);
 
-	if (DiffBins(doc1,doc2)) {
+	if (DiffBins(doc1, doc2))
+	{
 		"$$RED$$Bin Data is Different$$FG$$\n";
-		res=TRUE;
+		res = TRUE;
 	}
 
 	DocDel(doc1);
@@ -308,6 +337,7 @@ public Bool Diff(U8 *dst_file,U8 *src_file,I64 *_df_flags=NULL)
 	Free(doc_unsorted1);
 	Free(doc_unsorted2);
 	if (_df_flags)
-		*_df_flags=df_flags;
+		*_df_flags = df_flags;
+
 	return res;
 }

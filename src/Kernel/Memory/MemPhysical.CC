@@ -183,7 +183,7 @@ I64 MemBIOSTotal()
 	{
 		while (mem20->type)
 		{
-			if(mem20->type == MEM_E820t_USABLE)
+			if (mem20->type == MEM_E820t_USABLE)
 				total20 += mem20->len;
 			mem20++;
 		}

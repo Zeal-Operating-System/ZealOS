@@ -16,9 +16,9 @@ Cd(__DIR__);;
 #include "GrComposites"
 #include "ScreenCast"
 
-#define SPE_ABORT 			(-1)
-#define SPE_EXIT				0
-#define SPE_CONT				1
+#define SPE_ABORT 	(-1)
+#define SPE_EXIT	0
+#define SPE_CONT	1
 #include "SpriteNew"
 #include "GrSpritePlot"
 #include "SpriteMesh"

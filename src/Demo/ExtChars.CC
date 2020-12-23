@@ -1,5 +1,4 @@
-U8 face[8]={
-
+U8 face[8] = {
 0b00111100,
 0b01000010,
 0b10100101,
@@ -12,7 +11,7 @@ U8 face[8]={
 };
 
 
-text.font[255]=face[0](U64);
+text.font[255] = face[0](U64);
 
 "Face:ÿ\n";
 
@@ -24,8 +23,8 @@ text.font[255]=face[0](U64);
 
 U0 SrcExample()
 {
-	I64 fÿÿ=12345;
-	"fÿÿ=%d\n",fÿÿ;
+	I64 fÿÿ = 12345;
+	"fÿÿ=%d\n", fÿÿ;
 }
 
 SrcExample;

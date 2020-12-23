@@ -1,14 +1,13 @@
 //This is an example of how you do documentation.
 
 //Puts the cursor at the bottom.
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN|SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN | SCF_CTRL);
 "\nEd(\"::/Misc/Tour/Tour5.IN\");\n";
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_UP|SCF_CTRL);
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_UP | SCF_CTRL);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN);
 "//";
 
-TourPut(
-"Now, we'll add a link to a file using the $$GREEN$$<F4>$$FG$$ filename chooser.\n",
+TourPut("Now, we'll add a link to a file using the $$GREEN$$<F4>$$FG$$ filename chooser.\n",
 TRUE);
 
 '' CH_CTRLL;
@@ -17,12 +16,11 @@ Sleep(2000);
 Sleep(1500);
 '' CH_SPACE;
 Sleep(1500);
-Message(MESSAGE_KEY_DOWN,0,SC_CURSOR_DOWN);
+Message(MESSAGE_KEY_DOWN, 0, SC_CURSOR_DOWN);
 Sleep(1500);
 
-TourPut(
-"Press $$GREEN$$<F4>$$FG$$ for the file chooser.  Then, "
-"pick a file and press $$GREEN$$<ESC>$$FG$$.");
+TourPut(	"Press $$GREEN$$<F4>$$FG$$ for the file chooser.  Then, "
+			"pick a file and press $$GREEN$$<ESC>$$FG$$.");
 InKeyGet(SC_F4);
 Sleep(5000);
 TourPut("Press $$GREEN$$<ESC>$$FG$$ to exit the form.\n");
@@ -31,4 +29,4 @@ InCharGet(CH_ESC);
 TourPut("Press $$GREEN$$<SHIFT-ESC>$$FG$$ to abort.\n");
 InCharGet(CH_SHIFT_ESC);
 
-TourPut("Use $$GREEN$$<SHIFT F4>$$FG$$ to pick directories.\n",TRUE);
+TourPut("Use $$GREEN$$<SHIFT F4>$$FG$$ to pick directories.\n", TRUE);

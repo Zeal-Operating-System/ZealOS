@@ -1,6 +1,7 @@
 I64 InstEntriesCompare(CInst *tmpins1, CInst *tmpins2)
 {
 	I64 i1, i2, j = 0, res = 0, oc_count1 = tmpins1->opcode_count, oc_count2 = tmpins2->opcode_count;
+
 	if (tmpins1->flags & IEF_STI_LIKE)
 		oc_count1--;
 	if (tmpins2->flags & IEF_STI_LIKE)
@@ -65,8 +66,9 @@ U0 DumpUAsmTables()
 
 CInst *InstEntryFind(U8 *rip, I64 opsize, I64 seg_size)
 {//Binary Search
-	I64 i, j, n, m, k, arg1, arg2, o1, o2, oc_count;
-	CInst *tmpins, **table;
+	I64		 i, j, n, m, k, arg1, arg2, o1, o2, oc_count;
+	CInst	*tmpins, **table;
+
 	i = 0;
 	if (seg_size == 64)
 	{
@@ -144,13 +146,16 @@ CInst *InstEntryFind(U8 *rip, I64 opsize, I64 seg_size)
 						else if ((Bt(&uasm.mem_arg_mask, arg1) || Bt(&uasm.mem_arg_mask, arg2)) && rip[n] & 0xC0 == 0xC0)
 							m = 1;
 						goto ief_compare_done;
+
 					case SV_I_REG:
 						m = rip[n] >> 3 - tmpins->opcode[tmpins->opcode_count - 1] >> 3;
 						goto ief_compare_done;
+
 					case SV_STI_LIKE:
 						if (!(m = rip[n] >> 3 - tmpins->opcode[tmpins->opcode_count - 1] >> 3))
 							m = rip[n] - tmpins->opcode[tmpins->opcode_count - 1];
 						goto ief_compare_done;
+
 					case SV_R_REG:
 					case SV_NONE:
 						m = 0;
@@ -222,9 +227,9 @@ ief_compare_done:
 
 U0 UAsmHashLoad()
 {
-	CHashOpcode *tmph;
-	CInst *tmpins;
-	I64 i, j1, j2, k;
+	CHashOpcode	*tmph;
+	CInst		*tmpins;
+	I64			 i, j1, j2, k;
 
 	uasm.ins64_arg_mask = 0x0880888880 + 1 << ARGT_ST0 + 1 << ARGT_STI;
 	uasm.signed_arg_mask = 1 << ARGT_REL8 + 1 << ARGT_REL16 + 1 << ARGT_REL32+
@@ -280,14 +285,14 @@ U0 UAsmHashLoad()
 
 U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FALSE)
 {//Unassembles one inst
-	I64 i, disp, imm, opsize, opadd, arg1, arg2, reloced_arg1, reloced_arg2,
-		arg1_size = 0, arg2_size = 0, reloced_arg1_size, reloced_arg2_size,
-		ModrM = -1, SIB = -1, scale, r1, r2, Mod = -1, RM1 = -1, RM2 = -1, REX = -1, REX_r = 0, REX_x = 0, REX_b = 0;
-	Bool cont;
-	CInst *tmpins, *tmpins2;
-	CHashOpcode *tmpo;
-	U8 *rip = *_rip, *ptr, *reloced_arg1_st, *reloced_arg2_st, *bin_data_area1, *bin_data_area2,
-		line1[512], line2[512], buf2[512], arg1_st[512], arg2_st[512], seg_overrides[32];
+	I64			 i, disp, imm, opsize, opadd, arg1, arg2, reloced_arg1, reloced_arg2,
+				 arg1_size = 0, arg2_size = 0, reloced_arg1_size, reloced_arg2_size,
+				 ModrM = -1, SIB = -1, scale, r1, r2, Mod = -1, RM1 = -1, RM2 = -1, REX = -1, REX_r = 0, REX_x = 0, REX_b = 0;
+	Bool		 cont;
+	CInst		*tmpins, *tmpins2;
+	CHashOpcode	*tmpo;
+	U8			*rip = *_rip, *ptr, *reloced_arg1_st, *reloced_arg2_st, *bin_data_area1, *bin_data_area2,
+				 line1[512], line2[512], buf2[512], arg1_st[512], arg2_st[512], seg_overrides[32];
 
 	if (_jmp_dst)
 		*_jmp_dst = -1;
@@ -333,39 +338,47 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			case 0x2E:
 				if (StrLen(seg_overrides) < 24)
 					CatPrint(seg_overrides, "CS:");
-					break;
+				break;
+
 			case 0x36:
 				if (StrLen(seg_overrides) < 24)
 					CatPrint(seg_overrides, "SS:");
-					break;
+				break;
+
 			case 0x3E:
 				if (StrLen(seg_overrides) < 24)
 					CatPrint(seg_overrides, "DS:");
-					break;
+				break;
+
 			case 0x26:
 				if (StrLen(seg_overrides) < 24)
 					CatPrint(seg_overrides, "ES:");
-					break;
+				break;
+
 			case 0x64:
 				if (StrLen(seg_overrides) < 24)
 					CatPrint(seg_overrides, "FS:");
 				break;
+
 			case 0x65:
 				if (StrLen(seg_overrides) < 24)
 					CatPrint(seg_overrides, "GS:");
 				break;
+
 			case OC_OP_SIZE_PREFIX:
 				if (opsize == 16)
 					opsize = 32;
 				else
 					opsize = 16;
 				break;
+
 			case OC_ADDR_SIZE_PREFIX:
 				if (opadd == 16)
 					opadd = 32;
 				else
 					opadd = 16;
 				break;
+
 			case 0x40...0x4F:
 				if (seg_size == 64)
 				{
@@ -623,14 +636,17 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			if (tmpins->opcode[0] == 0xCD && (ptr = DefineSub(imm, "ST_INT_NAMES")))
 				CatPrint(arg1_st, " %s", ptr);
 			break;
+
 		case ARGT_IMM16:
 		case ARGT_UIMM16:
 			CatPrint(arg1_st, "%04X", *rip(U16 *)++);
 			break;
+
 		case ARGT_IMM32:
 		case ARGT_UIMM32:
 			CatPrint(arg1_st, "%08X", *rip(U32 *)++);
 			break;
+
 		case ARGT_IMM64:
 		case ARGT_UIMM64:
 			CatPrint(arg1_st, "%016X", *rip(I64 *)++);
@@ -639,9 +655,11 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			case ARGT_REL8:
 				disp = *rip(I8 *)++;
 				break;
+
 			case ARGT_REL16:
 				disp = *rip(I16 *)++;
 				break;
+
 			case ARGT_REL32:
 				disp = *rip(I32 *)++;
 				break;
@@ -656,6 +674,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			if (_jmp_dst)
 				*_jmp_dst = disp;
 			break;
+
 		case ARGT_MOFFS8...ARGT_MOFFS64:
 			CatPrint(arg1_st, seg_overrides);
 			if (arg1_size == 8)
@@ -666,10 +685,12 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 				disp = *rip(U32 *)++;
 			CatPrint(arg1_st, "[%X]",disp);
 			break;
+
 		case ARGT_AL ... ARGT_DX:
 		case ARGT_SS ... ARGT_ST0:
 			CatPrint(arg1_st, "%z", arg1 - ARGT_AL, "AL\0AX\0EAX\0RAX\0CL\0DX\0 \0 \0SS\0DS\0ES\0FS\0GS\0CS\0ST0\0");
 			break;
+
 		case ARGT_STI:
 			rip--;
 			CatPrint(arg1_st, "%Z", *rip++ - tmpins->opcode[tmpins->opcode_count - 1], "ST_FSTACK_REGS");
@@ -682,18 +703,22 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 		case ARGT_UIMM8:
 			CatPrint(arg2_st, "%02X", *rip(U8 *)++);
 			break;
+
 		case ARGT_IMM16:
 		case ARGT_UIMM16:
 			CatPrint(arg2_st, "%04X", *rip(U16 *)++);
 			break;
+
 		case ARGT_IMM32:
 		case ARGT_UIMM32:
 			CatPrint(arg2_st, "%08X", *rip(U32 *)++);
 			break;
+
 		case ARGT_IMM64:
 		case ARGT_UIMM64:
 			CatPrint(arg2_st, "%016X", *rip(I64 *)++);
 			break;
+
 		case ARGT_MOFFS8...ARGT_MOFFS64:
 			CatPrint(arg2_st, seg_overrides);
 			if (arg2_size == 8)
@@ -704,10 +729,12 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 				disp = *rip(U32 *)++;
 			CatPrint(arg2_st, "[%X]", disp);
 			break;
+
 		case ARGT_AL ... ARGT_DX:
 		case ARGT_SS ... ARGT_ST0:
 			CatPrint(arg2_st, "%z",arg2 - ARGT_AL, "AL\0AX\0EAX\0RAX\0CL\0DX\0 \0 \0SS\0DS\0ES\0FS\0GS\0CS\0ST0\0");
 			break;
+
 		case ARGT_STI:
 			rip--;
 			CatPrint(arg2_st, "%Z", *rip++ - tmpins->opcode[tmpins->opcode_count - 1], "ST_FSTACK_REGS");
@@ -744,7 +771,8 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 U8 *U(U8 *rip, I64 count=20, I64 seg_size=64)
 {//Unassembles a num of insts.
 	I64 i;
-	U8 buf[1024];
+	U8  buf[1024];
+
 	if (seg_size == 16)
 		PrintWarn("16-bit unassembly is not well supported.\n");
 	"$$HL,1$$";
@@ -754,13 +782,15 @@ U8 *U(U8 *rip, I64 count=20, I64 seg_size=64)
 		"%s", buf;
 	}
 	"$$HL,0$$";
+
 	return rip;
 }
 
 I64 Un(U8 *rip, I64 count=0x80, I64 seg_size=64)
 {//Unassembles a num of bytes
 	I64 i = 0;
-	U8 buf[1024], *end_rip = rip(I64) + count;
+	U8  buf[1024], *end_rip = rip(I64) + count;
+
 	if (seg_size == 16)
 		PrintWarn("16-bit unassembly is not well supported.\n");
 	"$$HL,1$$";
@@ -771,5 +801,6 @@ I64 Un(U8 *rip, I64 count=0x80, I64 seg_size=64)
 		i++;
 	}
 	"$$HL,0$$";
+
 	return i;
 }

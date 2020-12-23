@@ -10,28 +10,31 @@
 U0 Tmp()
 {
 	OnceExe;
-	switch (sys_boot_src.u16[0]) {
+	switch (sys_boot_src.u16[0])
+	{
 		case BOOT_SRC_DVD:
 			"\nIf you answer 'No' you can play with\n"
-						"the live CD without installing.\n\n"
-						"Install onto hard drive ";
-			if (YorN) {
+			"the live CD without installing.\n\n"
+			"Install onto hard drive ";
+			if (YorN)
+			{
 				DocBottom;
-				if (RunFile("::/Misc/OSInstall",,FALSE)) {
+				if (RunFile("::/Misc/OSInstall",, FALSE))
+				{
 					Del("C:/Home/DoDistro.CC");
 					Del("D:/Home/DoDistro.CC");
-					OnceDrive('C',"\"\n\nRun TOSStaffIns;\n\n\n\";");
-					OnceDrive('D',""); //This command uses cached Registry file.
-					if (PressAKey!=CH_SHIFT_ESC)
+					OnceDrive('C', "\"\n\nRun TOSStaffIns;\n\n\n\";");
+					OnceDrive('D', ""); //This command uses cached Registry file.
+					if (PressAKey != CH_SHIFT_ESC)
 						Reboot; //Too dangerous for amateurs until reboot.
 				}
 			}
 			break;
 	}
-	if (FileFind("D:/Tmp/Logs/access.log")) {
-		In("\n\n%C",CH_ESC);
-		RunFile("::/Demo/WebLogDemo/WebLogRep",,
-					"D:/Tmp/Logs/*.log","D:/Home/WebLogRep.DD");
+	if (FileFind("D:/Tmp/Logs/access.log"))
+	{
+		In("\n\n%C", CH_ESC);
+		RunFile("::/Demo/WebLogDemo/WebLogRep",, "D:/Tmp/Logs/*.log", "D:/Home/WebLogRep.DD");
 		Del("D:/Tmp/Logs/*.log");
 	}
 }

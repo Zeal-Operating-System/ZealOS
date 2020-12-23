@@ -38,6 +38,7 @@ I64 SysTimerRead()
 	LBtr(&sys_semas[SEMA_SYS_TIMER], 0);
 
 	POPFD
+
 	return res;
 }
 
@@ -67,6 +68,7 @@ I64 TimeCal()
 	timer_start = SysTimerRead;
 	time_stamp_start = TSCGet;
 	POPFD
+
 	return counts.time_stamp_freq;
 }
 
@@ -79,6 +81,7 @@ Bool Blink(F64 Hz=2.5)
 {//Return TRUE, then FALSE, then TRUE at given frequency.
 	if (!Hz)
 		return 0;
+
 	return ToI64(counts.jiffies * 2 * Hz / JIFFY_FREQ) & 1;
 }
 
@@ -176,6 +179,7 @@ Bool ScreenCast(Bool val=ON, Bool just_audio=FALSE, U8 *print_format="B:/Tmp/%X.
 	else
 		old_val = LBtr(&screencast.record, 0);
 	Sound;
+
 	return old_val;
 }
 
@@ -221,6 +225,7 @@ Bool Mute(Bool val)
 	}
 	else
 		res = LBtr(&sys_semas[SEMA_MUTE], 0);
+
 	return res;
 }
 

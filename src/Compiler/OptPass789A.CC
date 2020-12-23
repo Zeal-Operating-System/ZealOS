@@ -7,22 +7,22 @@ cc->pass == 9 is fourth time and repeated until size stops shrinking
 size is now known
 cc->pass == 10 is final pass, code is placed into buf.
 */
-	CIntermediateCode *tmpi, *tmpi_next;
-	I64 i, count,num_lines = cc->max_line + 1 - cc->min_line, rip = 0,rip2;
-	U8	*ptr, saved_arg1_arg2_r[3 * sizeof(CICArg)];
-	CCodeMisc *lb;
-	CAOT *tmpaot;
-	CAOTAbsAddr *tmpa;
-	CAOTImportExport *tmpie;
-	CAOTHeapGlobal *tmphg;
-	CAOTHeapGlobalRef *tmphgr;
-	CDebugInfo *debug_info;
-	CAOTCtrl *aotc = cc->aotc;
-	Bool short_jmp;
-	CHashClass *tmpc;
-	CHashFun *tmpf;
-	CHashGlobalVar *tmpg;
-	CExternUsage *tmpeu;
+	CIntermediateCode	*tmpi, *tmpi_next;
+	I64					 i, count,num_lines = cc->max_line + 1 - cc->min_line, rip = 0,rip2;
+	U8					*ptr, saved_arg1_arg2_r[3 * sizeof(CICArg)];
+	CCodeMisc			*lb;
+	CAOT				*tmpaot;
+	CAOTAbsAddr			*tmpa;
+	CAOTImportExport	*tmpie;
+	CAOTHeapGlobal		*tmphg;
+	CAOTHeapGlobalRef	*tmphgr;
+	CDebugInfo			*debug_info;
+	CAOTCtrl			*aotc = cc->aotc;
+	Bool				short_jmp;
+	CHashClass			*tmpc;
+	CHashFun			*tmpf;
+	CHashGlobalVar		*tmpg;
+	CExternUsage		*tmpeu;
 
 	if (_debug)
 	{
@@ -116,6 +116,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 								tmpa->rip = rip2 + tmpi->ic_count - 8;
 							}
 							break;
+
 						case IC_HEAP_GLOBAL:
 							ICU16(tmpi, 0xB848);
 							ICU64(tmpi, 0);
@@ -128,6 +129,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 								tmphgr->rip = rip2 + tmpi->ic_count - 8;
 							}
 							break;
+
 						case IC_ADDR_IMPORT:
 							ICU8(tmpi, 0xB8);
 							ICU32(tmpi, 0);
@@ -142,6 +144,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							}
 							ICU24(tmpi, 0xC06348);
 							break;
+
 						case IC_RIP:
 							ICU16(tmpi, 0xB848);
 							ICU64(tmpi, rip2 + tmpi->ic_count - 2);
@@ -157,109 +160,139 @@ cc->pass == 10 is final pass, code is placed into buf.
 					end:
 						ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip2);
 						break;
+
 					case IC_BR_CARRY:
 						ICFlagBranch(tmpi, rip, 0x72820F, buf);
 						break;
+
 					case IC_BR_NOT_CARRY:
 						ICFlagBranch(tmpi, rip, 0x73830F, buf);
 						break;
+
 					case IC_BR_ZERO:
 						ICTestAndBranch(tmpi, rip, 0x74840F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_ZERO:
 						ICTestAndBranch(tmpi, rip, 0x75850F, buf, rip2);
 						break;
+
 					case IC_BR_MM_ZERO:
 						ICPreIncDec(tmpi, SLASH_OP_DEC, rip2);
 						ICFlagBranch(tmpi, rip, 0x74840F, buf);
 						break;
+
 					case IC_BR_MM_NOT_ZERO:
 						ICPreIncDec(tmpi, SLASH_OP_DEC, rip2);
 						ICFlagBranch(tmpi, rip, 0x75850F, buf);
 						break;
+
 					case IC_BR_EQU_EQU:
 						ICCompAndBranch(tmpi, FALSE, rip, 0x74840F, 0x74840F, 0x74840F, 0x74840F, buf, rip2);
 						break;
+
 					case IC_BR_EQU_EQU2:
 						ICCompAndBranch(tmpi, TRUE, rip, 0x74840F, 0x74840F, 0x74840F, 0x74840F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_EQU:
 						ICCompAndBranch(tmpi, FALSE, rip, 0x75850F, 0x75850F, 0x75850F, 0x75850F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_EQU2:
 						ICCompAndBranch(tmpi, TRUE, rip, 0x75850F, 0x75850F, 0x75850F, 0x75850F, buf, rip2);
 						break;
+
 					case IC_BR_LESS:
 						if (tmpi->ic_flags & ICF_USE_F64)
 							ICFCmpAndBranch(cc, tmpi, rip, 0x72820F, 0x77870F, buf, rip2);
 						else
 							ICCompAndBranch(tmpi, FALSE, rip, 0x72820F, 0x7C8C0F, 0x77870F, 0x7F8F0F, buf, rip2);
 						break;
+
 					case IC_BR_LESS2:
 						ICCompAndBranch(tmpi, TRUE, rip, 0x72820F, 0x7C8C0F, 0x77870F, 0x7F8F0F, buf, rip2);
 						break;
+
 					case IC_BR_GREATER_EQU:
 						if (tmpi->ic_flags & ICF_USE_F64)
 							ICFCmpAndBranch(cc, tmpi, rip, 0x73830F, 0x76860F, buf, rip2);
 						else
 							ICCompAndBranch(tmpi, FALSE, rip, 0x73830F, 0x7D8D0F, 0x76860F, 0x7E8E0F, buf, rip2);
 						break;
+
 					case IC_BR_GREATER_EQU2:
 						ICCompAndBranch(tmpi, TRUE, rip, 0x73830F, 0x7D8D0F, 0x76860F, 0x7E8E0F, buf, rip2);
 						break;
+
 					case IC_BR_GREATER:
 						if (tmpi->ic_flags & ICF_USE_F64)
 							ICFCmpAndBranch(cc, tmpi, rip, 0x77870F, 0x72820F, buf, rip2);
 						else
 							ICCompAndBranch(tmpi, FALSE, rip, 0x77870F, 0x7F8F0F, 0x72820F, 0x7C8C0F, buf, rip2);
 						break;
+
 					case IC_BR_GREATER2:
 						ICCompAndBranch(tmpi, TRUE, rip, 0x77870F, 0x7F8F0F, 0x72820F, 0x7C8C0F, buf, rip2);
 						break;
+
 					case IC_BR_LESS_EQU:
 						if (tmpi->ic_flags & ICF_USE_F64)
 							ICFCmpAndBranch(cc, tmpi, rip, 0x76860F, 0x73830F, buf, rip2);
 						else
 							ICCompAndBranch(tmpi, FALSE, rip, 0x76860F, 0x7E8E0F, 0x73830F, 0x7D8D0F, buf, rip2);
 						break;
+
 					case IC_BR_LESS_EQU2:
 						ICCompAndBranch(tmpi, TRUE, rip, 0x76860F, 0x7E8E0F, 0x73830F, 0x7D8D0F, buf, rip2);
 						break;
+
 					case IC_BR_BT:
 						ICBrBitOps(tmpi, rip, 0xA30F, 0x20BA0F, 0x72820F, buf, rip2);
 						break;
+
 					case IC_BR_BTS:
 						ICBrBitOps(tmpi, rip, 0xAB0F, 0x28BA0F, 0x72820F, buf, rip2);
 						break;
+
 					case IC_BR_BTR:
 						ICBrBitOps(tmpi, rip, 0xB30F, 0x30BA0F, 0x72820F, buf, rip2);
 						break;
+
 					case IC_BR_BTC:
 						ICBrBitOps(tmpi, rip, 0xBB0F, 0x38BA0F, 0x72820F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_BT:
 						ICBrBitOps(tmpi, rip, 0xA30F, 0x20BA0F, 0x73830F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_BTS:
 						ICBrBitOps(tmpi, rip, 0xAB0F, 0x28BA0F, 0x73830F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_BTR:
 						ICBrBitOps(tmpi, rip, 0xB30F, 0x30BA0F, 0x73830F, buf, rip2);
 						break;
+
 					case IC_BR_NOT_BTC:
 						ICBrBitOps(tmpi, rip, 0xBB0F, 0x38BA0F, 0x73830F, buf, rip2);
 						break;
+
 					case IC_BR_AND_ZERO:
 						ICAndBranch(tmpi, rip, 0x74840F, buf, rip2);
 						break;
+
 					case IC_BR_AND_NOT_ZERO:
 						ICAndBranch(tmpi, rip, 0x75850F, buf, rip2);
 						break;
+
 					case IC_SUB_CALL:
 						lb = OptLabelFwd(tmpi->ic_data);
 						ICU8(tmpi, 0xE8);
 						ICU32(tmpi, lb->addr - (rip + 5));
 						break;
+
 					case IC_JMP:
 						lb = OptLabelFwd(tmpi->ic_data);
 						short_jmp = ToBool(tmpi->ic_flags & ICF_SHORT_JMP);
@@ -281,6 +314,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							ICU32(tmpi, i);
 						}
 						break;
+
 					case IC_LABEL:
 						lb = tmpi->ic_data;
 						lb->addr = rip;
@@ -292,6 +326,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						if (lb->type == CMT_ASM_LABEL)
 							lb->addr += lb->rip;
 						break;
+
 					case IC_STR_CONST:
 					case IC_GET_LABEL:
 						lb = tmpi->ic_data;
@@ -302,6 +337,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICLea(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 							  MDF_RIP_DISP32 + RT_PTR, 0, i, cc, buf, rip2);
 						break;
+
 					case IC_ASM:
 						tmpaot = tmpi->ic_data;
 						tmpi->ic_count += tmpaot->aot_U8s;
@@ -320,6 +356,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							goto op789A_skip_copy;
 						}
 						break;
+
 					case IC_CALL:
 						i = tmpi->ic_data - (rip2 + 5);
 						if (!(I32_MIN <= i <= I32_MAX) && !(cc->flags & CCF_AOT_COMPILE))
@@ -334,6 +371,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							ICU32(tmpi, i);
 						}
 						break;
+
 					case IC_CALL_EXTERN: //Only for static modules
 						ICU8(tmpi, 0xE8);
 						ICU32(tmpi, 0);
@@ -346,6 +384,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							tmpeu->rip = rip2 + 1;
 						}
 						break;
+
 					case IC_CALL_INDIRECT2:
 						ICU16(tmpi, 0xBB48);
 						if (cc->flags & CCF_AOT_COMPILE)
@@ -361,6 +400,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 							tmpa->rip = i;
 						}
 						break;
+
 					case IC_CALL_IMPORT:
 						if (OptionGet(OPTf_USE_IMM64))
 						{
@@ -395,6 +435,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 				end:
 					tmpi->ic_flags &= ~ICF_CODE_FINAL;
 					break;
+
 				case IC_LEAVE:
 					if (cc->htc.fun)
 					{
@@ -432,137 +473,165 @@ cc->pass == 10 is final pass, code is placed into buf.
 					else
 						ICU8(tmpi, 0xC3);
 					break;
+
 				case IC_RET:
 					ICU8(tmpi, 0xC3);
 					break;
+
 				case IC_FS:
 					ICZero(tmpi, REG_RAX);
 					ICU32(tmpi, 0x8B4864);
 					break;
+
 				case IC_GS:
 					ICZero(tmpi, REG_RAX);
 					ICU32(tmpi, 0x8B4865);
 					break;
+
 				case IC_MOV_FS:
 					ICZero(tmpi, REG_RAX);
 					ICU8(tmpi, 0x64);
-//It's ugly to use ic_class here
+					//It's ugly to use ic_class here
 					ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_DISP + CompRawType(tmpi->ic_class),
 						  REG_RAX, tmpi->ic_data, rip2);
 					break;
+
 				case IC_MOV_GS:
 					ICZero(tmpi, REG_RAX);
 					ICU8(tmpi, 0x65);
-//It's ugly to use ic_class here
+					//It's ugly to use ic_class here
 					ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_DISP + CompRawType(tmpi->ic_class),
 						  REG_RAX, tmpi->ic_data, rip2);
 					break;
+
 				case IC_HOLYC_TYPECAST:
 					ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;
+
 				case IC_COM:
 					ICUnaries(tmpi, SLASH_OP_NOT,rip2);
 					break;
+
 				case IC_NOT:
 					ICNot(tmpi, rip2);
 					break;
+
 				case IC_UNARY_MINUS:
 					if (tmpi->res.type.raw_type == RT_F64)
 						ICFUnaryMinus(cc, tmpi, buf, rip2);
 					else
 						ICUnaries(tmpi, SLASH_OP_NEG, rip2);
 					break;
+
 				case IC_ADDR:
 				case IC_MOV:
 					ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;
+
 				case IC_DEREF:
 					ICDeref(tmpi, rip2);
 					break;
+
 				case IC_DEREF_PP:
 					ICDerefPostIncDec(tmpi, SLASH_OP_INC, rip2);
 					break;
+
 				case IC_DEREF_MM:
 					ICDerefPostIncDec(tmpi, SLASH_OP_DEC, rip2);
 					break;
+
 				case IC__PP:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICPostIncDec(tmpi, SLASH_OP_INC, rip2);
 					else
 						ICFPostIncDec(cc, tmpi, CMP_TEMPLATE_INC, rip2);
 					break;
+
 				case IC__MM:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICPostIncDec(tmpi, SLASH_OP_DEC, rip2);
 					else
 						ICFPostIncDec(cc, tmpi, CMP_TEMPLATE_DEC, rip2);
 					break;
+
 				case IC_PP_:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICPreIncDec(tmpi, SLASH_OP_INC, rip2);
 					else
 						ICFPreIncDec(cc, tmpi, CMP_TEMPLATE_INC, rip2);
 					break;
+
 				case IC_MM_:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICPreIncDec(tmpi, SLASH_OP_DEC, rip2);
 					else
 						ICFPreIncDec(cc, tmpi, CMP_TEMPLATE_DEC, rip2);
 					break;
+
 				case IC_LEA:
 					ICLea(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, cc, buf, rip2);
 					break;
+
 				case IC_POWER:
 					ICFPow(cc, tmpi, buf, rip2);
 					break;
+
 				case IC_SHL:
 					ICShift(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp,
 								0xE0D1E0D3E0C1, 0xE0D1E0D3E0C1, rip2);
 					break;
+
 				case IC_SHR:
 					ICShift(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp,
 								0xE8D1E8D3E8C1, 0xF8D1F8D3F8C1, rip2);
 					break;
+
 				case IC_MUL:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICMul(tmpi, rip2);
 					else
 						ICFMul(cc, tmpi, buf, rip2);
 					break;
+
 				case IC_DIV:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICDiv(tmpi, rip2);
 					else
 						ICFDiv(cc, tmpi, buf, rip2);
 					break;
+
 				case IC_MOD:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICMod(tmpi, rip2);
 					else
 						ICFMod(cc, tmpi, rip2);
 					break;
+
 				case IC_AND:
 					ICAddEct(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								  tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								  tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, 0x23, rip2);
 					break;
+
 				case IC_OR:
 					ICAddEct(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								  tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								  tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, 0x0B, rip2);
 					break;
+
 				case IC_XOR:
 					ICAddEct(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								  tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								  tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp, 0x33, rip2);
 					break;
+
 				case IC_ADD:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICAddEct(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
@@ -571,6 +640,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 					else
 						ICFAdd(cc, tmpi, buf, rip2);
 					break;
+
 				case IC_SUB:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICSub(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
@@ -579,54 +649,67 @@ cc->pass == 10 is final pass, code is placed into buf.
 					else
 						ICFSub(cc, tmpi, buf, rip2);
 					break;
+
 				case IC_EQU_EQU:
 					ICComp(tmpi, 0x75, 0x75, rip2);
 					break;
+
 				case IC_NOT_EQU:
 					ICComp(tmpi, 0x74, 0x74, rip2);
 					break;
+
 				case IC_LESS:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICComp(tmpi, 0x73, 0x7D, rip2);
 					else
 						ICFCmp(cc, tmpi, CMP_TEMPLATE_LESS, rip2);
 					break;
+
 				case IC_GREATER_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICComp(tmpi, 0x72, 0x7C, rip2);
 					else
 						ICFCmp(cc, tmpi, CMP_TEMPLATE_GREATER_EQU, rip2);
 					break;
+
 				case IC_GREATER:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICComp(tmpi, 0x76, 0x7E, rip2);
 					else
 						ICFCmp(cc, tmpi, CMP_TEMPLATE_GREATER, rip2);
 					break;
+
 				case IC_LESS_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICComp(tmpi, 0x77, 0x7F, rip2);
 					else
 						ICFCmp(cc, tmpi, CMP_TEMPLATE_LESS_EQU, rip2);
 					break;
+
 				case IC_AND_AND:
 					ICAndAnd(tmpi, rip2);
 					break;
+
 				case IC_OR_OR:
 					ICOrOr(tmpi, rip2);
 					break;
+
 				case IC_XOR_XOR:
 					ICXorXor(tmpi, rip2);
 					break;
+
 				case IC_ASSIGN:
 					ICAssign(tmpi, rip2);
 					break;
+
 				case IC_ASSIGN_PP:
 					ICAssignPostIncDec(tmpi, SLASH_OP_INC, rip2);
 					break;
+
 				case IC_ASSIGN_MM:
 					ICAssignPostIncDec(tmpi, SLASH_OP_DEC, rip2);
 					break;
+
 				case IC_SHL_EQU:
 					ICShiftEqu(tmpi, tmpi->arg1_type_pointed_to,
 								tmpi->res.type,  tmpi->res.reg,  tmpi->res.disp,
@@ -634,6 +717,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 								tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp,
 								0xE0D1E0D3E0C1, 0xE0D1E0D3E0C1, rip2);
 					break;
+
 				case IC_SHR_EQU:
 					ICShiftEqu(tmpi, tmpi->arg1_type_pointed_to,
 								tmpi->res.type,  tmpi->res.reg,  tmpi->res.disp,
@@ -641,33 +725,40 @@ cc->pass == 10 is final pass, code is placed into buf.
 								tmpi->arg2.type, tmpi->arg2.reg, tmpi->arg2.disp,
 								0xE8D1E8D3E8C1, 0xF8D1F8D3F8C1, rip2);
 					break;
+
 				case IC_MUL_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICMulEqu(tmpi, rip2);
 					else
 						ICFOpEqu(cc, tmpi, SLASH_OP_FMUL, buf, rip2);
 					break;
+
 				case IC_DIV_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICDivEqu(tmpi, FALSE, rip2);
 					else
 						ICFOpEqu(cc, tmpi, SLASH_OP_FDIV, buf, rip2);
 					break;
+
 				case IC_MOD_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICDivEqu(tmpi, TRUE, rip2);
 					else
 						ICFModEqu(cc, tmpi, rip2);
 					break;
+
 				case IC_AND_EQU:
 					ICAndEqu(tmpi, rip2);
 					break;
+
 				case IC_OR_EQU:
 					ICOrEqu(tmpi, rip2);
 					break;
+
 				case IC_XOR_EQU:
 					ICXorEqu(tmpi, rip2);
 					break;
+
 				case IC_ADD_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICAddSubEctEqu(tmpi, tmpi->arg1_type_pointed_to,
@@ -678,6 +769,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 					else
 						ICFOpEqu(cc, tmpi, SLASH_OP_FADD, buf, rip2);
 					break;
+
 				case IC_SUB_EQU:
 					if (tmpi->ic_flags & ICF_USE_INT)
 						ICAddSubEctEqu(tmpi, tmpi->arg1_type_pointed_to,
@@ -688,24 +780,29 @@ cc->pass == 10 is final pass, code is placed into buf.
 					else
 						ICFOpEqu(cc, tmpi, SLASH_OP_FSUB, buf, rip2);
 					break;
+
 				case IC_SHL_CONST:
 					ICShift(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								MDF_IMM + RT_I64, 0, tmpi->ic_data, 0xE0D1E0D3E0C1, 0xE0D1E0D3E0C1, rip2);
 					break;
+
 				case IC_SHR_CONST:
 					ICShift(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 								tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp,
 								MDF_IMM + RT_I64, 0, tmpi->ic_data, 0xE8D1E8D3E8C1, 0xF8D1F8D3F8C1, rip2);
 					break;
+
 				case IC_ADD_CONST:
 					ICAddSubEctImm(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 										tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, tmpi->ic_data, 0x0003, rip2);
 					break;
+
 				case IC_SUB_CONST:
 					ICAddSubEctImm(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp,
 										tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, tmpi->ic_data, 0x052B, rip2);
 					break;
+
 				case IC_ENTER:
 					ICU32(tmpi, 0xEC8B4855);
 					if (tmpi->ic_data)
@@ -730,9 +827,11 @@ cc->pass == 10 is final pass, code is placed into buf.
 							}
 					}
 					break;
+
 				case IC_ADD_RSP:
 					ICAddRSP(tmpi, tmpi->ic_data);
 					break;
+
 				case IC_CALL_INDIRECT:
 					if (I8_MIN <= tmpi->ic_data <= I8_MAX)
 					{
@@ -745,172 +844,220 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU32(tmpi, tmpi->ic_data);
 					}
 					break;
+
 				case IC_PUSH:
 					ICPush(tmpi, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;
+
 				case IC_POP:
 					ICU8(tmpi, 0x58);
 					break;
+
 				case IC_INVLPG:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU24(tmpi, 0x38010F);
 					break;
+
 				case IC_CLFLUSH:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU24(tmpi, 0x38AE0F);
 					break;
+
 				case IC_RFLAGS_GET:
 					ICU8(tmpi, 0x9C);
 					ICPop(tmpi, MDF_REG + RT_I64, REG_RAX, 0, rip2);
 					break;
+
 				case IC_CARRY:
 					ICU24(tmpi, 0xC0920F); //SETC AL
 					ICU24(tmpi, 0x01E083); //AND EAX,1
 					break;
+
 				case IC_RDTSC:
 					ICCopyTemplate(cc, tmpi, CMP_TEMPLATE_RDTSC, TRUE, FALSE, FALSE, CN_INST);
 					break;
+
 				case IC_RFLAGS_SET:
 					ICPush(tmpi, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU8(tmpi, 0x9D);
 					break;
+
 				case IC_RBP_GET:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, MDF_REG + RT_I64, REG_RBP, 0, rip2);
 					break;
+
 				case IC_RBP_SET:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RBP, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;
+
 				case IC_RSP_GET:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, MDF_REG + RT_I64, REG_RSP, 0, rip2);
 					break;
+
 				case IC_RSP_SET:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RSP, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;
+
 				case IC_RETURN_VAL:
 				case IC_RAX_SET:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					break;
+
 				case IC_RETURN_VAL2:
 				case IC_RAX_GET:
 					break;
+
 				case IC_BT:
 					ICBitOps(tmpi, &tmpi->arg1, &tmpi->arg2, tmpi->next, 0xA30F, 0x20BA0F, rip2);
 					break;
+
 				case IC_BTS:
 				case IC_LBTS:
 					ICBitOps(tmpi, &tmpi->arg1, &tmpi->arg2, tmpi->next, 0xAB0F, 0x28BA0F, rip2);
 					break;
+
 				case IC_BTR:
 				case IC_LBTR:
 					ICBitOps(tmpi, &tmpi->arg1, &tmpi->arg2, tmpi->next, 0xB30F, 0x30BA0F, rip2);
 					break;
+
 				case IC_BTC:
 				case IC_LBTC:
 					ICBitOps(tmpi, &tmpi->arg1, &tmpi->arg2, tmpi->next, 0xBB0F, 0x38BA0F, rip2);
 					break;
+
 				case IC_BSF:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU32(tmpi, 0xC0BC0F48);
 					ICU16(tmpi, 0x0375);
 					ICU24(tmpi, 0xD0F748);
 					break;
+
 				case IC_BSR:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU32(tmpi, 0xC0BD0F48);
 					ICU16(tmpi, 0x0375);
 					ICU24(tmpi, 0xD0F748);
 					break;
+
 				case IC_POPCNT:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU16(tmpi, 0xF348);
 					ICU32(tmpi, 0xC0B80F48);
 					break;
+
 				case IC_SIGN_I64:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICCopyTemplate(cc, tmpi, CMP_TEMPLATE_SIGN_I64, TRUE, FALSE, FALSE, CN_INST);
 					break;
+
 				case IC_TOUPPER:
 					ICToUpper(tmpi, rip2);
 					break;
+
 				case IC_TO_I64:
 					ICToI64(cc, tmpi, rip2);
 					break;
+
 				case IC_TO_F64:
 					ICToF64(cc, tmpi, rip2);
 					break;
+
 				case IC_TO_BOOL:
 					ICToBool(cc, tmpi, rip2);
 					break;
+
 				case IC_SQR:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_SQR, rip2);
 					break;
+
 				case IC_ABS:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_ABS, rip2);
 					break;
+
 				case IC_SQRT:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_SQRT, rip2);
 					break;
+
 				case IC_SIN:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_SIN, rip2);
 					break;
+
 				case IC_COS:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_COS, rip2);
 					break;
+
 				case IC_TAN:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_TAN, rip2);
 					break;
+
 				case IC_ATAN:
 					ICFTemplateFun(cc, tmpi, CMP_TEMPLATE_ATAN, rip2);
 					break;
+
 				case IC_ABS_I64:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICU24(tmpi, 0xC08548);
 					ICU16(tmpi, 0x0379);
 					ICU24(tmpi, 0xD8F748);
 					break;
+
 				case IC_MIN_I64:
 					ICMinMax(tmpi, 0x4F, rip2);
 					break;
+
 				case IC_MAX_I64:
 					ICMinMax(tmpi, 0x4C, rip2);
 					break;
+
 				case IC_MIN_U64:
 					ICMinMax(tmpi, 0x47, rip2);
 					break;
+
 				case IC_MAX_U64:
 					ICMinMax(tmpi, 0x42, rip2);
 					break;
+
 				case IC_MOD_U64:
 					ICModU64(tmpi, rip2);
 					break;
+
 				case IC_SQR_I64:
 					ICSqr(tmpi, SLASH_OP_IMUL, rip2);
 					break;
+
 				case IC_SQR_U64:
 					ICSqr(tmpi, SLASH_OP_MUL, rip2);
 					break;
+
 				case IC_SWAP_U8:
 				case IC_SWAP_U16:
 				case IC_SWAP_U32:
 				case IC_SWAP_I64:
 					ICSwap(tmpi, rip2);
 					break;
+
 				case IC_QUEUE_INIT:
 					ICQueueInit(tmpi, rip2);
 					break;
+
 				case IC_QUEUE_INSERT:
 					ICQueueInsert(tmpi, rip2);
 					break;
+
 				case IC_QUEUE_INSERT_REV:
 					ICQueueInsertRev(tmpi, rip2);
 					break;
+
 				case IC_QUEUE_REMOVE:
 					ICQueueRemove(tmpi, rip2);
 					break;
+
 				case IC_STRLEN:
 					ICMov(tmpi, MDF_REG + RT_I64, REG_RAX, 0, tmpi->arg1.type, tmpi->arg1.reg, tmpi->arg1.disp, rip2);
 					ICCopyTemplate(cc, tmpi, CMP_TEMPLATE_STRLEN, TRUE, FALSE, FALSE, CN_INST);
 					break;
+
 				case IC_IN_U32:
 					if (tmpi->arg1.type & MDF_IMM)
 					{
@@ -930,6 +1077,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU8(tmpi, 0xED);
 					}
 					break;
+
 				case IC_IN_U16:
 					if (tmpi->arg1.type & MDF_IMM)
 					{
@@ -949,6 +1097,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU16(tmpi, 0xED00 + OC_OP_SIZE_PREFIX);
 					}
 					break;
+
 				case IC_IN_U8:
 					if (tmpi->arg1.type & MDF_IMM)
 					{
@@ -968,6 +1117,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU8(tmpi, 0xEC);
 					}
 					break;
+
 				case IC_OUT_U32:
 					if (tmpi->arg2.type & MDF_IMM)
 					{
@@ -987,6 +1137,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU8(tmpi, 0xEF);
 					}
 					break;
+
 				case IC_OUT_U16:
 					if (tmpi->arg2.type & MDF_IMM)
 					{
@@ -1006,6 +1157,7 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU16(tmpi, 0xEF00 + OC_OP_SIZE_PREFIX);
 					}
 					break;
+
 				case IC_OUT_U8:
 					if (tmpi->arg2.type & MDF_IMM)
 					{
@@ -1025,33 +1177,41 @@ cc->pass == 10 is final pass, code is placed into buf.
 						ICU8(tmpi, 0xEE);
 					}
 					break;
+
 				case IC_NOBOUND_SWITCH:
 					ICSwitch(tmpi, rip, TRUE, cc, buf, rip2);
 					break;
+
 				case IC_SWITCH:
 					ICSwitch(tmpi, rip, FALSE, cc, buf, rip2);
 					break;
+
 				case IC_NOP1:
 				case IC_NOP2:
 					OptFree(tmpi);
 					goto op789A_next;
+
 				case IC_CALL_START:
 				case IC_PUSH_REGS:
 					ICPushRegs(tmpi, tmpi->ic_data);
 					break;
+
 				case IC_CALL_END:
 					ICPopRegs(tmpi, tmpi->ic_data);
 					if (tmpi->res.type.mode)
 						ICMov(tmpi, tmpi->res.type, tmpi->res.reg, tmpi->res.disp, MDF_REG + RT_I64, REG_RAX, 0, rip2);
 					break;
+
 				case IC_POP_REGS:
 					ICPopRegs(tmpi, tmpi->ic_data);
 					break;
+
 				case IC_PUSH_CMP:
 				case IC_CALL_END2:
 				case IC_END:
 				case IC_ADD_RSP1:
 					break;
+
 				default:
 					"Pass:%d Missing IC handler\n", cc->pass;
 					ICPut(cc, tmpi);
@@ -1178,5 +1338,6 @@ op789A_next:
 		else
 			debug_info->body[num_lines] = rip + buf;
 	}
+
 	return rip;
 }

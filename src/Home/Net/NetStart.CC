@@ -1,3 +1,7 @@
+WinVert(2, zenith_task->win_bottom + zenith_task->win_bottom / 3, zenith_task);
+WinVert(zenith_task->win_bottom + 3, TEXT_ROWS - 2);
+Sleep(100);
+
 #include "C:/Home/Net/Net.HH"
 
 #include "C:/Home/Net/NetQueue"

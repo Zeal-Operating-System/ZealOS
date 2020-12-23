@@ -76,25 +76,31 @@ Bool FilesFindMatch(U8 *_test_name,U8 *files_find_mask,I64 fuf_flags=0)
 				if (WildMatch(ptr, mask2))
 				{
 					if (Bt(&fuf_flags, FUf_JUST_TXT) && !FilesFindMatch(_test_name, FILEMASK_TXT)) {
-						res=FALSE;
+						res = FALSE;
 						break;
-					} else if (Bt(&fuf_flags, FUf_JUST_DD) && !FilesFindMatch(_test_name, FILEMASK_DD)) {
-						res=FALSE;
+					}
+					else if (Bt(&fuf_flags, FUf_JUST_DD) && !FilesFindMatch(_test_name, FILEMASK_DD)) {
+						res = FALSE;
 						break;
-					} else if (Bt(&fuf_flags, FUf_JUST_SRC) && !FilesFindMatch(_test_name, FILEMASK_SRC)) {
-						res=FALSE;
+					}
+					else if (Bt(&fuf_flags, FUf_JUST_SRC) && !FilesFindMatch(_test_name, FILEMASK_SRC)) {
+						res = FALSE;
 						break;
-					} else if (Bt(&fuf_flags, FUf_JUST_AOT) && !FilesFindMatch(_test_name, FILEMASK_AOT)) {
-						res=FALSE;
+					}
+					else if (Bt(&fuf_flags, FUf_JUST_AOT) && !FilesFindMatch(_test_name, FILEMASK_AOT)) {
+						res = FALSE;
 						break;
-					} else if (Bt(&fuf_flags, FUf_JUST_JIT) && !FilesFindMatch(_test_name, FILEMASK_JIT)) {
-						res=FALSE;
+					}
+					else if (Bt(&fuf_flags, FUf_JUST_JIT) && !FilesFindMatch(_test_name, FILEMASK_JIT)) {
+						res = FALSE;
 						break;
-					} else if (Bt(&fuf_flags, FUf_JUST_GR) && !FilesFindMatch(_test_name, FILEMASK_GR)) {
-						res=FALSE;
+					}
+					else if (Bt(&fuf_flags, FUf_JUST_GR) && !FilesFindMatch(_test_name, FILEMASK_GR)) {
+						res = FALSE;
 						break;
-					} else
-						res=TRUE;
+					}
+					else
+						res = TRUE;
 				}
 			}
 		}

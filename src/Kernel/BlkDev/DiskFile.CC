@@ -23,9 +23,11 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 				case FSt_REDSEA:
 					res = RedSeaFileRead(dirc->drive, Fs->cur_dir, dirc->mask, &size, &attr);
 					break;
+
 				case FSt_FAT32:
 					res = FAT32FileRead(dirc->drive, Fs->cur_dir, dirc->mask, &size, &attr);
 					break;
+
 				default:
 					PrintErr("File System Not Supported\n");
 			}
@@ -45,9 +47,11 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 					case FSt_REDSEA:
 						res = RedSeaFileRead(dirc->drive, Fs->cur_dir, dirc->mask, &size, &attr);
 						break;
+
 					case FSt_FAT32:
 						res = FAT32FileRead(dirc->drive, Fs->cur_dir, dirc->mask, &size, &attr);
 						break;
+
 					default:
 						PrintErr("File System Not Supported\n");
 				}
@@ -86,9 +90,11 @@ I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 			case FSt_REDSEA:
 				c = RedSeaFileWrite(dirc->drive, Fs->cur_dir, dirc->mask, fbuf, size, cdt, attr);
 				break;
+
 			case FSt_FAT32:
 				c = FAT32FileWrite(dirc->drive, Fs->cur_dir, dirc->mask, fbuf, size, cdt, attr);
 				break;
+
 			default:
 				PrintErr("File System Not Supported\n");
 		}

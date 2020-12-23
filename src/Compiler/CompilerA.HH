@@ -12,9 +12,9 @@
  
 class CIntermediateStruct
 {
-	U8 arg_count, res_count, type;
-	Bool fpop, not_const, pad[3];
-	U8 *name;
+	U8		 arg_count, res_count, type;
+	Bool	 fpop, not_const, pad[3];
+	U8		*name;
 };
 
 #define IC_END					0x00
@@ -395,8 +395,8 @@ class CIntermediateStruct
 
 class COptReg
 {
-	I64 	offset;
-	CMemberList *m;
+	I64			 offset;
+	CMemberList	*m;
 };
 
 #define CMPF_ASM_BLK		1

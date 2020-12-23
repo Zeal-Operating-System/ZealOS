@@ -38,7 +38,8 @@ Bool ParseAsmImm(CCompCtrl *cc, CAsmArg *arg)
 U0 ParseAsmArg(CCompCtrl *cc, CAsmArg *arg, Bool rel)
 {
 	CHashGeneric *tmph, *tmph1;
-	CHashReg *tmpr;
+	CHashReg	 *tmpr;
+
 	MemSet(arg, 0, sizeof(CAsmArg));
 	arg->seg  = REG_NONE;
 	arg->reg1 = REG_NONE;
@@ -60,23 +61,28 @@ U0 ParseAsmArg(CCompCtrl *cc, CAsmArg *arg, Bool rel)
 							case REGT_R8:
 								arg->size = 1;
 								break;
+
 							case REGT_R16:
 								arg->size = 2;
 								break;
+
 							case REGT_R32:
 								arg->size = 4;
 								break;
+
 							case REGT_R64:
 							case REGT_FSTACK:
 							case REGT_MM:
 								arg->size = 8;
 								break;
+
 							case REGT_XMM:
 								arg->size = 16;
 						end:
 							arg->reg1 = tmpr->reg_num;
 							Lex(cc);
 							return;
+
 						case REGT_SEG:
 							arg->seg = tmpr->reg_num;
 							if (Lex(cc) != ':')
@@ -102,18 +108,22 @@ U0 ParseAsmArg(CCompCtrl *cc, CAsmArg *arg, Bool rel)
 							case AKW_U8:
 								arg->size = 1;
 								break;
+
 							case AKW_I16:
 							case AKW_U16:
 								arg->size = 2;
 								break;
+
 							case AKW_I32:
 							case AKW_U32:
 								arg->size = 4;
 								break;
+
 							case AKW_I64:
 							case AKW_U64:
 								arg->size = 8;
 								break;
+
 							default:
 								LexExcept(cc, "syntax error at ");
 						}
@@ -209,8 +219,9 @@ pa_asm_indirect_imm:
 
 I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 {
-	CAOTCtrl *aotc = cc->aotc;
-	I64 res;
+	CAOTCtrl	*aotc = cc->aotc;
+	I64			 res;
+
 	if (arg->just_seg)
 	{
 		switch (arg->seg)
@@ -218,18 +229,23 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 			case 0:
 				res = 1 << ARGT_ES | 1 << ARGT_SREG;
 				break;
+
 			case 1:
 				res = 1 << ARGT_CS | 1 << ARGT_SREG;
 				break;
+
 			case 2:
 				res = 1 << ARGT_SS | 1 << ARGT_SREG;
 				break;
+
 			case 3:
 				res = 1 << ARGT_DS | 1 << ARGT_SREG;
 				break;
+
 			case 4:
 				res = 1 << ARGT_FS | 1 << ARGT_SREG;
 				break;
+
 			case 5:
 				res = 1 << ARGT_GS | 1 << ARGT_SREG;
 				break;
@@ -318,12 +334,15 @@ I64 AsmMakeArgMask(CCompCtrl *cc, CAsmArg *arg)
 		case REG_RAX:
 			res &= ~0x3000000000;
 			break;
+
 		case REG_RCX:
 			res &= ~0x2F00000000;
 			break;
+
 		case REG_RDX:
 			res &= ~0x1F00000000;
 			break;
+
 		default:
 			res &= ~0x3F00000000;
 	}
@@ -333,9 +352,9 @@ mm_done:
 
 Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 {
-	CAOTCtrl *aotc = cc->aotc;
-	I64 i;
-	CAOTAbsAddr *tmpa;
+	CAOTCtrl	*aotc = cc->aotc;
+	I64			 i;
+	CAOTAbsAddr	*tmpa;
 
 	if (!num2->imm_flag)
 		num2->num.i -= num2->rel;
@@ -478,6 +497,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 			}
 		}
 	}
+
 	return TRUE;
 }
 
@@ -485,12 +505,12 @@ U8 asm_seg_prefixes[6] = {0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65};
 
 Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 {
-	CAOTCtrl *aotc = cc->aotc;
-	I64 i, j, arg1, arg2, om, seg, arg1mask, arg2mask;
-	CAsmArg *tmpa1, *tmpa2;
-	Bool ModrM_complete, U8_avail = FALSE, found_second_possible = FALSE;
-	CInst *tmpins;
-	CAsmIns cur, best;
+	CAOTCtrl	*aotc = cc->aotc;
+	I64			 i, j, arg1, arg2, om, seg, arg1mask, arg2mask;
+	CAsmArg		*tmpa1, *tmpa2;
+	Bool		 ModrM_complete, U8_avail = FALSE, found_second_possible = FALSE;
+	CInst		*tmpins;
+	CAsmIns		 cur, best;
 
 	best.U8_count = 255;
 	if (argcount > 0)
@@ -999,10 +1019,11 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 
 U0 ParseAsmDefine(CCompCtrl *cc, I64 U8_count)
 {
-	Bool is_dup;
-	I64 i, dup_val;
-	U8 *ptr;
-	CAsmNum2 num2;
+	Bool		 is_dup;
+	I64			 i, dup_val;
+	U8			*ptr;
+	CAsmNum2	 num2;
+
 	num2.U8_count = U8_count;
 
 	while (cc->token && cc->token != ';')
@@ -1090,6 +1111,7 @@ U0 ParseBinFile(CCompCtrl *cc)
 {
 	I64 i, size;
 	U8 *buf, *st;
+
 	if (cc->token != TK_STR)
 		LexExcept(cc, "Expecting string at ");
 	st = ExtDefault(cc->cur_str, "BIN");
@@ -1152,6 +1174,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 							LexExcept(cc, "Missing ';' at");
 						Lex(cc); //skip ';';
 						break;
+
 					case AKW_ORG:
 						if (cc->htc.local_var_list)
 							LexExcept(cc, "ORG not allowed in fun asm blk ");
@@ -1161,6 +1184,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 							LexExcept(cc, "ORG must be at beginning ");
 						aotc->org = AsmLexExpression(cc);
 						break;
+
 					case AKW_ALIGN:
 						if (cc->htc.local_var_list)
 							LexExcept(cc, "ALIGN not allowed in fun asm blk ");
@@ -1180,36 +1204,47 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 						for (j = aotc->rip; j < i; j++)
 							AOTStoreCodeU8(cc, k);
 						break;
+
 					case AKW_DU8:
 						ParseAsmDefine(cc, 1);
 						break;
+
 					case AKW_DU16:
 						ParseAsmDefine(cc, 2);
 						break;
+
 					case AKW_DU32:
 						ParseAsmDefine(cc, 4);
 						break;
+
 					case AKW_DU64:
 						ParseAsmDefine(cc, 8);
 						break;
+
 					case AKW_BINFILE:
 						ParseBinFile(cc);
 						break;
+
 					case AKW_LIST:
 						aotc->list = TRUE;
 						break;
+
 					case AKW_NOLIST:
 						aotc->list = FALSE;
 						break;
+
 					case AKW_USE16:
 						aotc->seg_size = 16;
 						break;
+
 					case AKW_USE32:
 						aotc->seg_size = 32;
 						break;
+
 					case AKW_USE64:
 						aotc->seg_size = 64;
 						break;
+
 					default:
 						LexExcept(cc, "Syntax error at ");
 				}

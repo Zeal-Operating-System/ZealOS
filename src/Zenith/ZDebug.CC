@@ -1,11 +1,13 @@
 #help_index "Debugging/Dump"
-Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool force, I64 depth, I64 max_depth, Bool dynamic, I64 types=HTT_CLASS, I64 offset=0)
+Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool force,
+			   I64 depth, I64 max_depth, Bool dynamic, I64 types=HTT_CLASS, I64 offset=0)
 {//See $LK,"::/Demo/LastClass.CC"$.
-	I64 i, j, stars, *ptr;
+	I64			 i, j, stars, *ptr;
 	CMemberList *ml;
-	CDocEntry *doc_e;
-	Bool unlock;
-	CHashClass *tmpc, *tmpc2;
+	CDocEntry	*doc_e;
+	Bool		 unlock;
+	CHashClass	*tmpc, *tmpc2;
+
 	if (depth >= max_depth)
 		return TRUE;
 	if (!(tmpc = HashFind(class_name, Fs->hash_table, types)))
@@ -83,6 +85,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 						case RT_I0:
 						case RT_U0:
 							break;
+
 						case RT_I8:
 							if (dynamic)
 							{
@@ -92,6 +95,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%02X ", *ptr(I8 *)++);
 							break;
+
 						case RT_U8:
 							if (dynamic)
 							{
@@ -101,6 +105,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%02X ", *ptr(U8 *)++);
 							break;
+
 						case RT_I16:
 							if (dynamic)
 							{
@@ -110,6 +115,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%04X ", *ptr(I16 *)++);
 							break;
+
 						case RT_U16:
 							if (dynamic)
 							{
@@ -119,6 +125,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%04X ", *ptr(U16 *)++);
 							break;
+
 						case RT_I32:
 							if (dynamic)
 							{
@@ -128,6 +135,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%08X ", *ptr(I32 *)++);
 							break;
+
 						case RT_U32:
 							if (dynamic)
 							{
@@ -137,6 +145,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%08X ", *ptr(U32 *)++);
 							break;
+
 						case RT_U64:
 							if (dynamic)
 							{
@@ -146,6 +155,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%08X ", *ptr(U64 *)++);
 							break;
+
 						case RT_F64:
 							if (dynamic)
 							{
@@ -155,6 +165,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 							else
 								DocPrint(doc, "%16g ", *ptr(I64 *)++);
 							break;
+
 						default:
 							if (dynamic)
 							{
@@ -198,13 +209,15 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 	}
 	if (unlock)
 		DocUnlock(doc);
+
 	return TRUE;
 }
 
-public U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_chars=FALSE, Bool force=FALSE, Bool fun=FALSE, I64 offset=0)
+public U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_chars=FALSE, Bool force=FALSE,
+				   Bool fun=FALSE, I64 offset=0)
 {//Displays members of a record by using the compiler's info.
 	CDoc *doc;
-	I64 type;
+	I64   type;
 
 	if (IsRaw)
 		doc = DocNew;
@@ -213,7 +226,7 @@ public U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_ch
 		DocMax;
 		doc = DocPut;
 	}
-	if(fun)
+	if (fun)
 		type = HTT_FUN;
 	else
 		type = HTT_CLASS;
@@ -230,9 +243,11 @@ public U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_ch
 	}
 }
 
-public U0 ClassRepD(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_chars=FALSE, Bool force=FALSE, Bool fun=FALSE, I64 offset=0)
+public U0 ClassRepD(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_chars=FALSE, Bool force=FALSE,
+					Bool fun=FALSE, I64 offset=0)
 {//Dynamic ClassRep. Uses hex_ed widget for live changes.
 	CDoc *doc;
+
 	if (IsRaw)
 		doc = DocNew;
 	else
@@ -253,10 +268,11 @@ public U0 ClassRepD(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_c
 	}
 }
 
-U0 UpdateRegVarImg(CHashFun *tmpf, U8 *_b,CTask *task)
+U0 UpdateRegVarImg(CHashFun *tmpf, U8 *_b, CTask *task)
 {
-	CMemberList *ml;
-	CHashClass *tmpc;
+	CMemberList	*ml;
+	CHashClass	*tmpc;
+
 	ml = tmpf->member_list_and_root;
 	while (ml)
 	{
@@ -271,10 +287,11 @@ U0 UpdateRegVarImg(CHashFun *tmpf, U8 *_b,CTask *task)
 
 public U0 FunRep(U8 *st, U8 *rbp=NULL, I64 max_depth=2, CTask *task=NULL)
 {//Shows names and vals of a fun's local vars using compiler's info.
-	I64 size;
-	U8 *img;
-	CHashFun *tmpf = HashFind(st, Fs->hash_table, HTT_FUN);
-	CMemberList *tmpm;
+	I64			 size;
+	U8			*img;
+	CHashFun	*tmpf = HashFind(st, Fs->hash_table, HTT_FUN);
+	CMemberList	*tmpm;
+
 	if (tmpf)
 	{
 		if (rbp)
@@ -312,9 +329,10 @@ public U0 FunRep(U8 *st, U8 *rbp=NULL, I64 max_depth=2, CTask *task=NULL)
 #help_index "Debugging/Unassemble"
 public U0 Uf(U8 *st)
 {//Unassembles a named fun
-	I64 i;
-	CHashSrcSym *tmpf;
-	CDebugInfo *debug_info;
+	I64			 i;
+	CHashSrcSym	*tmpf;
+	CDebugInfo	*debug_info;
+
 	if (tmpf = HashFind(st, Fs->hash_table, HTT_FUN | HTT_EXPORT_SYS_SYM))
 	{
 		if (tmpf->type & HTT_FUN)

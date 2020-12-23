@@ -64,7 +64,7 @@ U0 SysGlobalsInit()
 	QueueInit(&dev.pci_head);
 	dev.mem64_ptr = mem_mapped_space;
 
-	if(sys_boot_src.u8[0] != BOOT_SRC_RAM)
+	if (sys_boot_src.u8[0] != BOOT_SRC_RAM)
 	{//framebuffer pointer is already linear
 		Seg2Linear(&sys_vbe_info.video_modes);
 		Seg2Linear(&sys_vbe_info.oem);
@@ -177,6 +177,7 @@ U0 KMain()
 	LBts(&sys_run_level, RLf_INTERRUPTS);
 
 	TimeCal;
+	"BlkDevsInitAll;\n";
 	BlkDevsInitAll;
 	"DiskChange(':');\n";
 	DiskChange(':');

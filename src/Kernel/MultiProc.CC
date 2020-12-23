@@ -128,6 +128,7 @@ CCPU *CPUStructInit(I64 num, CCPU *c, CTask *daemon_task)
 		c->tss = TSSNew(num);
 	}
 	c->daemon_task = daemon_task;// It waits for this to be filled-in: $LK,"daemon_task",A="FF:::/Kernel/MultiProc.CC,daemon_task"$
+
 	return c;
 }
 

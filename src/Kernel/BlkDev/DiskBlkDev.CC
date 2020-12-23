@@ -63,6 +63,7 @@ Bool BlkDevInit(CBlkDev *bd)
 					RedSeaFormat(bd->first_drive_let);
 				res = TRUE;
 				break;
+
 			case BDT_ISO_FILE_READ:
 				if (FileFind(bd->file_disk_name, &de, FUF_JUST_FILES))
 				{
@@ -89,6 +90,7 @@ Bool BlkDevInit(CBlkDev *bd)
 					}
 				}
 				break;
+
 			case BDT_ISO_FILE_WRITE:
 				if (!bd->file_disk_name)
 				{
@@ -104,11 +106,13 @@ Bool BlkDevInit(CBlkDev *bd)
 				CallExtStr("RedSeaISO9660", bd->file_disk_name, bd->first_drive_let);
 				res = TRUE;
 				break;
+
 			case BDT_ATA:
 				bd->max_reads = 128;
 				bd->max_writes = 1;
 				res = ATAInit(bd);
 				break;
+
 			case BDT_ATAPI:
 //0xFFFF*4 is too big for my taste
 				bd->max_reads = 0x800 * 4;
@@ -168,9 +172,11 @@ CBlkDev *BlkDevNextFreeSlot(U8 first_drive_let, I64 type)
 				case BDT_RAM:
 					res->flags &= ~BDF_READ_CACHE;
 					break;
+
 				case BDT_ISO_FILE_READ:
 					res->flags |= BDF_READ_ONLY;
 					break;
+
 				case BDT_ATAPI:
 					res->flags |= BDF_REMOVABLE|BDF_READ_ONLY;
 					res->blk_size = DVD_BLK_SIZE;

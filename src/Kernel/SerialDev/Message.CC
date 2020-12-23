@@ -251,7 +251,7 @@ U8 *StrGet(U8 *message=NULL, U8 *default=NULL, I64 flags=NONE)
 I64 StrNGet(U8 *buf, I64 size, Bool allow_ext=TRUE)
 {//Prompt into fixed length string. Size must include terminator.
 	U8 *st;
-	I64 ch, i=0;
+	I64 ch, i = 0;
 
 	if (!size || !buf)
 		return 0;
