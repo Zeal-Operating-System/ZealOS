@@ -166,7 +166,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 		{
 			c = &cpu_structs[i];
 			k += TSSSize(c->tss);
-			task1 = c->daemon_task;
+			task1 = c->seth_task;
 			do
 			{
 				if (task1 != zenith_task) {//zenith task located in Kernel mem
@@ -178,7 +178,7 @@ Bool MemRepTask(CTask *task,Bool override_validate=FALSE)
 				n += TaskQueueSize(task1);
 				task1 = task1->next_task;
 			}
-			while (task1 != c->daemon_task);
+			while (task1 != c->seth_task);
 
 			task1 = c->idle_task;
 			j += MSize2(task1);
@@ -244,14 +244,14 @@ public U0 MemRep()
 	{
 		c = &cpu_structs[i];
 		"$$PURPLE$$CPU%d$$FG$$\n$$ID,2$$", i;
-		task = c->daemon_task;
+		task = c->seth_task;
 		do
 		{
 			if (!MemRepTask(task))
 				break;
 			task = task->next_task;
 		}
-		while (task != c->daemon_task);
+		while (task != c->seth_task);
 
 		MemRepTask(c->idle_task, TRUE);
 		"$$ID,-2$$";

@@ -55,7 +55,7 @@ IRQ_TIMER::  //I_TIMER
 @@20: 	CALL	&IntCore0TimerHandler 	//Only Core 0 calls this.
 @@25: 	XOR 	RAX, RAX
 		CMP 	RSI, U64 GS:CCPU.idle_task[RAX]
-		JE		I32 RESTORE_DAEMON_TASK_IF_READY
+		JE		I32 RESTORE_SETH_TASK_IF_READY
 		JMP 	I32 RESTORE_RSI_TASK
 
 //************************************

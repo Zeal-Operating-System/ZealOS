@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----01/11/21 23:39:21----$IV,0$
+* Restored "Daemon" -> "Seth".
+
 $IV,1$----06/04/20 18:01:46----$IV,0$
 * Added $LK,"BIOSRep",A="MN:BIOSRep"$() as convenience function to view BIOS info from $LK,"SysRep",A="MN:SysRep"$().
 

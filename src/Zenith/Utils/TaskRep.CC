@@ -27,7 +27,7 @@ public U0 TaskRep()
 	{
 		c = &cpu_structs[i];
 		"$$PURPLE$$CPU%02X$$FG$$\n", i;
-		TaskRepTask(c->daemon_task, 2);
+		TaskRepTask(c->seth_task, 2);
 	}
 	POPFD
 }

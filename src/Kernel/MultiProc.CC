@@ -59,7 +59,7 @@ USE64
 				FNINIT
 				MOV 		RAX, RSI
 				CALL		SET_GS_BASE
-@@10:			MOV 		RAX, U64 CCPU.daemon_task[RSI]
+@@10:			MOV 		RAX, U64 CCPU.seth_task[RSI]
 				TEST		RAX, RAX
 				JZ			@@10
 				MOV 		U64 CTask.gs[RAX], RSI
@@ -114,8 +114,8 @@ CTSS *TSSNew(I64 cpu_num)
 	return tss;
 }
 
-CCPU *CPUStructInit(I64 num, CCPU *c, CTask *daemon_task)
-{//Daemon is null when called by zenith on CSysFixedArea.boot_cpu0
+CCPU *CPUStructInit(I64 num, CCPU *c, CTask *seth_task)
+{//Seth is null when called by zenith on CSysFixedArea.boot_cpu0
 	MemSet(c, 0, sizeof(CCPU));
 	c->addr			= c;
 	c->num			= num;
@@ -127,7 +127,7 @@ CCPU *CPUStructInit(I64 num, CCPU *c, CTask *daemon_task)
 		LBts(&c->idle_task->task_flags, TASKf_IDLE);
 		c->tss = TSSNew(num);
 	}
-	c->daemon_task = daemon_task;// It waits for this to be filled-in: $LK,"daemon_task",A="FF:::/Kernel/MultiProc.CC,daemon_task"$
+	c->seth_task = seth_task;// It waits for this to be filled-in: $LK,"seth_task",A="FF:::/Kernel/MultiProc.CC,seth_task"$
 
 	return c;
 }
@@ -197,7 +197,7 @@ U0 MPAPICInit()
 
 #assert !offset(CJobCtrl.next_waiting)
 
-U0 CoreAPDaemonTask()
+U0 CoreAPSethTask()
 {
 	CJobCtrl *ctrl = &Fs->server_ctrl;
 
@@ -223,12 +223,12 @@ U0 CoreAPDaemonTask()
 
 CJob *JobQueue(I64 (*fp_addr)(U8 *data), U8 *data=NULL, I64 target_cpu=1, I64 flags=1<<JOBf_FREE_ON_COMPLETE, 
 			   I64 job_code=JOBT_CALL, U8 *aux_str=NULL, I64 aux1=0, I64 aux2=0)
-{//Queue multicore jobs, handled by Daemon tasks.
+{//Queue multicore jobs, handled by Seth tasks.
 //Set flags to zero if you wish to get the res.
 	//See $LK,"::/Demo/MultiCore/Lock.CC"$
 	CJobCtrl	*ctrl;
 	CJob		*tmpc;
-	CTask		*daemon;
+	CTask		*seth;
 
 	if (!(0 <= target_cpu < mp_count))
 		throw('MultCore');
@@ -241,14 +241,14 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data), U8 *data=NULL, I64 target_cpu=1, I64 fl
 	tmpc->flags		= flags;
 	tmpc->aux1		= aux1;
 	tmpc->aux2		= aux2;
-	daemon = cpu_structs[target_cpu].daemon_task;
-	tmpc->ctrl = ctrl = &daemon->server_ctrl;
+	seth = cpu_structs[target_cpu].seth_task;
+	tmpc->ctrl = ctrl = &seth->server_ctrl;
 
 	PUSHFD
 	CLI
 	while (LBts(&ctrl->flags, JOBCf_LOCKED))
 		Yield;
-	if (ctrl->next_waiting == ctrl && LBtr(&daemon->task_flags, TASKf_AWAITING_MESSAGE))
+	if (ctrl->next_waiting == ctrl && LBtr(&seth->task_flags, TASKf_AWAITING_MESSAGE))
 		MPInt(I_WAKE, target_cpu);
 	QueueInsert(tmpc, ctrl->last_waiting);
 	LBtr(&ctrl->flags, JOBCf_LOCKED);
@@ -287,11 +287,11 @@ CTask *SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL,
 	return res;
 }
 
-U0 CoreAPDaemonInit()
-{//Called by multicore's daemon dask after $LK,"Core0StartMP",A="MN:Core0StartMP"$()
+U0 CoreAPSethInit()
+{//Called by multicore's seth dask after $LK,"Core0StartMP",A="MN:Core0StartMP"$()
 //as the first thing a CPU does before waiting for jobs.
 	MPAPICInit;
-	Fs->rip = &CoreAPDaemonTask;
+	Fs->rip = &CoreAPSethTask;
 	TaskContextRestore;
 }
 
@@ -312,8 +312,8 @@ U0 Core0StartMP()
 		for (i = 1; i < my_mp_count; i++)
 		{
 			c = &cpu_structs[i];
-			JobQueueDel(&c->daemon_task->server_ctrl.next_waiting);
-			JobQueueDel(&c->daemon_task->server_ctrl.next_done);
+			JobQueueDel(&c->seth_task->server_ctrl.next_waiting);
+			JobQueueDel(&c->seth_task->server_ctrl.next_done);
 		}
 	}
 	MemSet(&cpu_structs[1], 0, sizeof(CCPU) * (MP_PROCESSORS_NUM - 1));
@@ -346,17 +346,17 @@ U0 Core0StartMP()
 
 	for (i = 1; i < my_mp_count; i++)
 	{
-		StrPrint(buf, "Daemon Task CPU%02X", i);
-		task = Spawn(&CoreAPDaemonInit, NULL, buf,,, MEM_DAEMON_STACK, 0);
+		StrPrint(buf, "Seth Task CPU%02X", i);
+		task = Spawn(&CoreAPSethInit, NULL, buf,,, MEM_SETH_STACK, 0);
 		task->rflags = RFLAGG_START;
-//$LK,"CTask",A="MN:CTask"$ alloced off this core's daemon_task's heap (Which is Zenith)
+//$LK,"CTask",A="MN:CTask"$ alloced off this core's seth_task's heap (Which is Zenith)
 		CPUStructInit(i, &cpu_structs[i], task);
 		WBINVD //Not sure why this is needed.  Might just need delay.
 	}
 
 	//Make sure they're all up-and-running
 	for (i = 1; i < my_mp_count; i++)
-		while (!Bt(&cpu_structs[i].daemon_task->task_flags, TASKf_AWAITING_MESSAGE))
+		while (!Bt(&cpu_structs[i].seth_task->task_flags, TASKf_AWAITING_MESSAGE))
 			PAUSE;
 
 	POPFD

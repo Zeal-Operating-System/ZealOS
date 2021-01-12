@@ -3474,7 +3474,7 @@ class CMemRange
 #define MEM_EXTRA_HASH2_PAGS	2
 
 #define MEM_ZENITH_STACK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
-#define MEM_DAEMON_STACK		(MEM_PAG_SIZE*512)
+#define MEM_SETH_STACK		(MEM_PAG_SIZE*512)
 #define MEM_INTERRUPT_STACK 	(MEM_PAG_SIZE*512)
 #define MEM_DEFAULT_STACK 		(MEM_PAG_SIZE*512)
 
@@ -4035,7 +4035,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
 				 idle_pt_hits;
 	F64			 idle_factor;
 	I64			 total_jiffies;
-	CTask		*daemon_task, *idle_task;
+	CTask		*seth_task, *idle_task;
 	I64			 tr, 	//task reg
 				 swap_counter;
 	U0		   (*profiler_timer_irq)(CTask *task);
