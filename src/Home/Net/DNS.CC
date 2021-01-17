@@ -632,21 +632,22 @@ U0 Host(U8 *hostname)
 	}
 	else
 	{
-		"Host() Results:\n\n";
+		"Results:\n\n";
 		current = result;
 		while (current)
 		{
-			"Result %d:\n", ++i;
+			"Result $FG,4$%d$FG$:\n", ++i;
 
-			"	flags:			%04Xh \n", current->flags;
-			"	family:			%d    \n", current->family;
-			"	socket type:	%d    \n", current->socket_type;
-			"	protocol:		%d    \n", current->protocol;
-			"	address length:	%d    \n", current->address_length;
-			"	address:		%s    \n", NetworkToPresentation(AF_INET, &current->address(CSocketAddressIPV4 *)->address);
+			"	flags:			$FG,6$0x%04X$FG$ \n", current->flags;
+			"	family:			$FG,6$%d$FG$    \n", current->family;
+			"	socket type:	$FG,6$%d$FG$    \n", current->socket_type;
+			"	protocol:		$FG,6$%d$FG$    \n", current->protocol;
+			"	address length:	$FG,6$%d$FG$    \n", current->address_length;
+			"	address:		$FG,6$%s$FG$    \n", NetworkToPresentation(AF_INET, &current->address(CSocketAddressIPV4 *)->address);
 
 			current = current->next;
 		}
+		"\n";
 	}
 
 	AddressInfoFree(result);
@@ -658,19 +659,25 @@ U0 DNSRep()
 	CDNSHash	*temp_hash;
 
 	"\n";
-	Who(, dns_cache);
-	"\n";
-
 	for (i = 0; i <= dns_cache->mask; i++)
 	{
 		temp_hash = dns_cache->body[i];
 
 		while (temp_hash)
 		{
-			ClassRep(temp_hash,, 5);
+			
+			"DNS Hash @ $FG,3$0x%X$FG$:\n", temp_hash;
+			"	Hostname:	$FG,6$%s$FG$\n", temp_hash->str;
+			"	Address:	$FG,6$%s$FG$\n",
+				NetworkToPresentation(temp_hash->info.family,
+									 &temp_hash->info.address(CSocketAddressIPV4 *)->address);
+									 // TODO: IPV4 kludge
+
+			"\n";
 			temp_hash = temp_hash->next;
 		}
 	}
+	"\n";
 }
 
 /*

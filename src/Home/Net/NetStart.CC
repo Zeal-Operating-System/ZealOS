@@ -1,6 +1,8 @@
-WinVert(2, zenith_task->win_bottom + zenith_task->win_bottom / 3, zenith_task);
-WinVert(zenith_task->win_bottom + 3, TEXT_ROWS - 2);
-Sleep(100);
+if (Fs != zenith_task)
+{
+	WinVert(2, zenith_task->win_bottom + zenith_task->win_bottom / 3, zenith_task);
+	WinVert(zenith_task->win_bottom + 3, TEXT_ROWS - 2);
+}
 
 #include "C:/Home/Net/Net.HH"
 
@@ -21,12 +23,5 @@ Sleep(100);
 
 #include "C:/Home/Net/NetHandlerTask" // needs IPV4, UDP, ICMP
 
+"\nNow run $FG,0$NetConfigure;$FG$ or run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n\n";
 
-
-XTalk(Fs, "NetConfigure;\n");
-
-XTalk(Fs, "Host(\"zenithos.org\");\n");
-
-XTalk(Fs, "DNSRep;\n");
-
-XTalk(Fs, "ARPRep;\n");

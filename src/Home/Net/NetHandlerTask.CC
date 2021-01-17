@@ -63,4 +63,3 @@ U0 NetHandlerTask(I64)
 }
 
 net_handler_task = Spawn(&NetHandlerTask, NULL, "NetQueueHandler");
-

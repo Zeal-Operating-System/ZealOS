@@ -211,11 +211,10 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 
 U0 ARPRep()
 { // TODO: primitive, needs refine.
-	I64			 i;
+	I64			 i, j;
 	CARPHash	*temp_hash;
+	U32			 address;
 
-	"\n";
-	Who(, arp_cache);
 	"\n";
 
 	for (i = 0; i <= arp_cache->mask; i++)
@@ -224,11 +223,20 @@ U0 ARPRep()
 
 		while (temp_hash)
 		{
-			ClassRep(temp_hash);
+			"ARP Hash @ $FG,3$0x%X$FG$:\n", temp_hash;
+			address = EndianU32(Str2I64(temp_hash->str, 16)(U32));
+			"	IP Address:		$FG,6$%d.%d.%d.%d$FG$\n",
+				(&address)(U8 *)[0], (&address)(U8 *)[1], (&address)(U8 *)[2], (&address)(U8 *)[3]; // todo: kludge
+			"	MAC Address:	$FG,6$";$FG$
+			for (j = 0; j < MAC_ADDRESS_LENGTH; j++)
+				"%02X ", temp_hash->mac_address[j];
+			"$FG$\n";
+
+			"\n";
 			temp_hash = temp_hash->next;
 		}
 	}
+	"\n";
 }
-
 
 ARPCacheInit;
