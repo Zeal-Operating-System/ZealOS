@@ -16,9 +16,9 @@
 
 #define DNS_CLASS_IN	1
 
-#define DNS_TIMEOUT		5000
+#define DNS_TIMEOUT		1000
 
-#define DNS_MAX_RETRIES	5	// Shrine has 3, why not 5? :^)
+#define DNS_MAX_RETRIES	20	// Shrine has 3, why not 5? :^)
 
 class CDNSHash:CHash
 {	// store U8 *hostname as CHash->str U8 *
