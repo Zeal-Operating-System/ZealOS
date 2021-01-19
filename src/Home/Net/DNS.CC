@@ -93,8 +93,6 @@ CDNSHash *DNSCacheFind(U8 *hostname)
 CDNSHash *DNSCachePut(U8 *hostname, CAddressInfo *info)
 {
 	ZenithLog("DNS CACHE PUT: Attempting Find DNS Entry in Cache: hostname: %s\n", hostname);
-/*	"==\n";ClassRep(info);
-	ClassRep(info->address(CSocketAddressIPV4 *));"==\n";*/
 	CDNSHash *entry = DNSCacheFind(hostname);
 
 	if (!entry)
@@ -149,11 +147,11 @@ U0 DNSSerializeQuestion(U8 *buffer, CDNSQuestion *q)
 
 I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 {
-	CIPV4Address* ipv4_addr;
-	U8 *frame;
-	U16 flags;
-	CDNSHeader *header;
-	I64 de_index;
+	CIPV4Address *ipv4_addr;
+	U8			 *frame;
+	U16			  flags;
+	CDNSHeader	 *header;
+	I64			  de_index;
 
 	switch (dns_globals.addr_family)
 	{
@@ -209,10 +207,10 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 
 I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSDomainName *name_out)
 { // these methods look not-so-good, ngl.
-	U8 *data = *data_inout;
-	U8 *name_buf;
-	I64 length = *length_inout;
-	I64 label_len;
+	U8  *data = *data_inout;
+	U8  *name_buf;
+	I64  length = *length_inout;
+	I64  label_len;
 	Bool jump_taken = FALSE;
 
 	if (length < 1)
@@ -654,7 +652,7 @@ U0 Host(U8 *hostname)
 }
 
 U0 DNSRep()
-{ // TODO: primitive, needs refine. switch() on Socket Address types for NetworkToPresentation, etc
+{ // TODO: switch() on Socket Address types for NetworkToPresentation, etc
 	I64			 i;
 	CDNSHash	*temp_hash;
 

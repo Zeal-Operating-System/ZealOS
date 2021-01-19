@@ -85,6 +85,7 @@ U0 UDPTreeNodeAdd(CUDPTreeNode *node, CUDPTreeNode *tree)
 CUDPTreeNode *UDPTreeNodeParamAdd(I64 node_port, CUDPTreeNode *tree)
 { // add a node using params, return pointer to the node
 	CUDPTreeNode *result = UDPTreeNodeInit;
+
 	result->port = node_port;
 
 	UDPTreeNodeAdd(result, tree);
@@ -95,6 +96,7 @@ CUDPTreeNode *UDPTreeNodeParamAdd(I64 node_port, CUDPTreeNode *tree)
 CUDPTreeNode *UDPTreeNodeParamInit(I64 port)
 {
 	CUDPTreeNode *result = UDPTreeNodeInit;
+
 	result->port = port;
 
 	return result;
@@ -120,8 +122,8 @@ CUDPTreeNode *UDPTreeNodePop(I64 port, CUDPTreeNode *tree)
 { // mimics TreeNodeFind. pops whole sub-tree, original tree loses whole branch.
 	CUDPTreeNode *parent_tree = tree;
 	CUDPTreeNode *temp_tree	  = parent_tree;
-	Bool is_left  = FALSE;
-	Bool is_right = FALSE;
+	Bool		  is_left  = FALSE;
+	Bool		  is_right = FALSE;
 
 	while (temp_tree)
 	{
@@ -335,9 +337,9 @@ I64 UDPPacketAllocate(U8 **frame_out,
 					  U16 destination_port,
 					  I64 length)
 {
-	U8 *ethernet_frame;
-	I64 de_index;
-	CUDPHeader *header;
+	U8			*ethernet_frame;
+	I64			 de_index;
+	CUDPHeader	*header;
 
 	de_index = IPV4PacketAllocate(&ethernet_frame,
 								  IP_PROTOCOL_UDP,
@@ -356,8 +358,6 @@ I64 UDPPacketAllocate(U8 **frame_out,
 	header->destination_port	= EndianU16(destination_port);
 	header->length				= EndianU16(sizeof(CUDPHeader) + length);
 	header->checksum			= 0;
-
-//	ClassRep(header);
 
 	*frame_out = ethernet_frame + sizeof(CUDPHeader);
 
@@ -395,7 +395,7 @@ I64 UDPParsePacket(U16 *source_port_out,
 //CUDPSocket *UDPSocket(U16 domain, U16 type) // should this even be allowed? why not just UDPSocket; ? it could just know its domain and type.
 CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 {
-	U16 type = SOCKET_DATAGRAM;
+	U16			type = SOCKET_DATAGRAM;
 	CUDPSocket *udp_socket = CAlloc(sizeof(CUDPSocket));
 
 	udp_socket->socket = Socket(domain, type);
@@ -408,12 +408,12 @@ CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 
 I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 {
-	CUDPTreeNode *temp_node;
+	CUDPTreeNode	   *temp_node;
 	CSocketAddressIPV4 *ipv4_source;
 	CSocketAddressIPV4 *ipv4_receive;
 	CSocketAddressIPV6 *ipv6_source;
 	CSocketAddressIPV6 *ipv6_receive;
-	U16 port;
+	U16					port;
 
 	switch (udp_socket->socket->state)
 	{
@@ -541,7 +541,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 
 I64 UDPSocketClose(CUDPSocket *udp_socket)
 { // close, pop, and free the socket from the bound tree.
-	CUDPTreeNode *node;
+	CUDPTreeNode  *node;
 	CUDPTreeQueue *queue;
 
 	SocketClose(udp_socket->socket); // TODO: testing on closing a socket while another task is using it
@@ -603,7 +603,6 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 	if (udp_socket->receive_timeout_ms != 0)
 		udp_socket->receive_max_timeout = counts.jiffies + udp_socket->receive_timeout_ms * JIFFY_FREQ / 1000;
 
-//	ClassRep(udp_socket);
 	ZenithLog("UDP SOCKET RECEIVE FROM: udp_socket->receive_buffer: 0x%0X.\n", udp_socket->receive_buffer);
 	while (udp_socket->receive_buffer != NULL)
 	{ // 'Check for timeout'
@@ -645,11 +644,11 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 
 I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *destination_addr)
 {
-	CSocketAddressStorage *dest;
-	CSocketAddressIPV4 *ipv4_destination;
-	CSocketAddressIPV6 *ipv6_destination;
-	U8 *ethernet_frame;
-	I64 de_index;
+	CSocketAddressStorage	*dest;
+	CSocketAddressIPV4		*ipv4_destination;
+	CSocketAddressIPV6		*ipv6_destination;
+	U8						*ethernet_frame;
+	I64						 de_index;
 
 	switch (udp_socket->socket->state)
 	{
@@ -714,12 +713,6 @@ I64 UDPHandler(CIPV4Packet *packet)
 	I64					 num_receive;
 
 	ZenithLog("UDP HANDLER: Beginning handling UDP Packet.\n");
-/*	ZenithWarn("UDP HANDLER:		Yielding for a little bit as a debug.\n");
-	ZenithWarn("UDP HANDLER:		...\n");
-	I64 c = counts.jiffies;
-	while (counts.jiffies < c + 1000)
-		Yield;
-	ZenithWarn("UDP HANDLER:		...\n");*/
 
 	I64 error = UDPParsePacket(&source_port, &destination_port, &data, &length, packet);
 

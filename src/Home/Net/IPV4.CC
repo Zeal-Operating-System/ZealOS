@@ -3,7 +3,6 @@
 #define IPV4_ERR_ADDR_INVALID		-200001
 #define IPV4_ERR_HOST_UNREACHABLE	-200002
 
-//i'd like to know why 64 was chosen
 #define IPV4_TTL	64
 
 //Look up IP Protocol Numbers online to see many more.
@@ -66,11 +65,11 @@ U0 InitIPV4Globals()
 // of checksum. Shrine links back to
 // http://stackoverflow.com/q/26774761/2524350
 
-U16 IPV4Checksum(U8* header, I64 length)
+U16 IPV4Checksum(U8 *header, I64 length)
 {	//todo. make names clearer, and better comments.
-	I64 nleft = length;
+	I64  nleft = length;
 	U16 *w = header;
-	I64 sum = 0;
+	I64  sum = 0;
 
 	while (nleft > 1)
 	{
@@ -93,9 +92,9 @@ U16 IPV4Checksum(U8* header, I64 length)
 
 I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 {
-	CARPHash *entry;
-	I64 retries;
-	I64 attempt;
+	CARPHash	*entry;
+	I64			 retries;
+	I64			 attempt;
 
 	if (ip_address == 0)
 	{
@@ -107,15 +106,6 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		ZenithLog("GET MAC FOR IP: Returning ethernet broadcast\n");
 		*mac_out = ethernet_globals.ethernet_broadcast;
 
-/*		I64 i;
-		"\nEthernet Global Broadcast\n";
-		for (i = 0; i < 6; i++)
-			" %X", ethernet_globals.ethernet_broadcast[i];
-		"\nMac Out\n";
-		for (i = 0; i < 6; i++)
-			" %X", (*mac_out)[i];
-		"\n";
-*/
 		return 0;
 	}
 
@@ -179,11 +169,11 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 					   U32 destination_ip_address,
 					   I64 length)
 {
-	U8 *ethernet_frame;
-	U8 *destination_mac_address;
-	I64 error;
-	I64 de_index;
-	I64 internet_header_length;
+	U8			*ethernet_frame;
+	U8			*destination_mac_address;
+	I64			 error;
+	I64			 de_index;
+	I64			 internet_header_length;
 	CIPV4Header *header;
 
 	error = GetMACAddressForIP(destination_ip_address, &destination_mac_address);
@@ -258,8 +248,8 @@ U0 IPV4ParsePacket(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 	//Shrine says FIXME check ethernet_frame length !! ... we need to know what's appropriate
 
 	CIPV4Header *header = ethernet_frame->data;
-	I64 header_length = (header->version_ihl & 0x0F) * 4;//this Has to go. at least abstract or something..
-	U16 total_length = EndianU16(header->total_length);
+	I64			 header_length = (header->version_ihl & 0x0F) * 4;//this Has to go. at least abstract or something..
+	U16			 total_length = EndianU16(header->total_length);
 
 	packet_out->ethernet_frame			= ethernet_frame;
 	packet_out->source_ip_address		= EndianU32(header->source_ip_address);

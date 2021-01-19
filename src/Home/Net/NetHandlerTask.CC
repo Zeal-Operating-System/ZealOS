@@ -12,8 +12,10 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 			ZenithLog("IPV4 HANDLER: ICMP.\n");
 			ICMPHandler(&packet);
 			break;
+
 		case IP_PROTOCOL_TCP:
 			break;
+
 		case IP_PROTOCOL_UDP:
 			ZenithLog("IPV4 HANDLER: UDP.\n");
 			UDPHandler(&packet);
@@ -33,6 +35,7 @@ U0 HandleNetQueueEntry(CNetQueueEntry *entry)
 			ZenithLog("HANDLE NETQUEUE ENTRY: ARP.\n");
 			ARPHandler(&ethernet_frame);
 			break;
+
 		case ETHERTYPE_IPV4:
 			ZenithLog("HANDLE NETQUEUE ENTRY: IPV4.\n");
 			IPV4Handler(&ethernet_frame);

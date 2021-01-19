@@ -1,5 +1,3 @@
-NetConfigure;
-
 
 "Host(\"zenithos.org\");\n";
 Host("zenithos.org");

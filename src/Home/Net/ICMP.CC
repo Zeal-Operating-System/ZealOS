@@ -21,9 +21,9 @@ I64 ICMPSendReply(U32 destination_ip_address,
 				  U8 *payload,
 				  I64 length)
 {
-	U8 *frame;
-	I64 de_index;
-	CICMPHeader *header;
+	U8			*frame;
+	I64			 de_index;
+	CICMPHeader	*header;
 
 	de_index = IPV4PacketAllocate(&frame,
 								  IP_PROTOCOL_ICMP,

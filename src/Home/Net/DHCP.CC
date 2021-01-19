@@ -494,11 +494,11 @@ I64 DHCPConfigure()
 {
 	CUDPSocket		*udp_socket = UDPSocket(AF_INET);
 	CIPV4Address	 address;
-	U32 your_ip;
-	U32 dns_ip;
-	U32 router_ip;
-	U32 subnet_mask;
-	I64 state = DHCPConfigureInner(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
+	U32				 your_ip;
+	U32				 dns_ip;
+	U32				 router_ip;
+	U32				 subnet_mask;
+	I64				 state = DHCPConfigureInner(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
 
 	UDPSocketClose(udp_socket);
 

@@ -92,7 +92,6 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 	if (entry == NULL)
 	{
 		ZenithWarn("ARP CACHE FIND BY IP: Could not find an IP in ARP cache.\n");
-//		CallerRep;
 	}
 
 	Free(ip_string);
@@ -101,8 +100,9 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 
 CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 {
-	ZenithLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.\n");
 	CARPHash *entry = ARPCacheFindByIP(ip_address);
+	ZenithLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.\n");
+
 	//Free(entry); // something seems wrong about this...
 
 	if (!entry)
@@ -149,6 +149,9 @@ U0 ARPSetIPV4Address(U32 ip_address)
 //the NetQueueHandler
 I64 ARPHandler(CEthernetFrame *ethernet_frame)
 {
+	CARPHeader *header;
+	U16			operation;
+
 	ZenithLog("ARP HANDLER: Entering ARP Handler.\n");
 
 	// shrine checks if frame ethertype is ARP and ensures length is not less than CARPHeader
@@ -165,8 +168,8 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 	}
 
 
-	CARPHeader *header = ethernet_frame->data;
-	U16 operation = EndianU16(header->operation);
+	header = ethernet_frame->data;
+	operation = EndianU16(header->operation);
 
 	// shrine checks to ensure header->htype is 1,
 	// EndianU16(header->protocol_type) == ethertype ipv4,
@@ -210,13 +213,12 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 }
 
 U0 ARPRep()
-{ // TODO: primitive, needs refine.
+{
 	I64			 i, j;
 	CARPHash	*temp_hash;
 	U32			 address;
 
 	"\n";
-
 	for (i = 0; i <= arp_cache->mask; i++)
 	{
 		temp_hash = arp_cache->body[i];
@@ -230,9 +232,8 @@ U0 ARPRep()
 			"	MAC Address:	$FG,6$";$FG$
 			for (j = 0; j < MAC_ADDRESS_LENGTH; j++)
 				"%02X ", temp_hash->mac_address[j];
-			"$FG$\n";
+			"$FG$\n\n";
 
-			"\n";
 			temp_hash = temp_hash->next;
 		}
 	}

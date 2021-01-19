@@ -94,8 +94,10 @@ class CPCNet
 	U8 *rx_de_buffer_phys;		// Pointer to the buffer of RX Descriptor Entries. (Code Heap, lower 2Gb)
 	U8 *tx_de_buffer_phys;		// Pointer to the buffer of TX Descriptor Entries. (Code Heap, lower 2Gb)
 
-	U32 rx_buffer_addr;			// 'Physical address of actual receive buffers  (< 4 Gb)'
-	U32 tx_buffer_addr;			// 'Physical address of actual transmit buffers (< 4 Gb)'
+	U32 rx_buffer_addr;			// Uncached-alias of address of receive buffers.
+	U32 tx_buffer_addr;			// Uncached-alias of address of transmit buffers.
+	U32 rx_buffer_addr_phys;	// Physical address of actual receive buffers  (< 4 Gb)
+	U32 tx_buffer_addr_phys;	// Physical address of actual transmit buffers (< 4 Gb)
 
 } pcnet; // pcnet is the global variable we store all of this into.
 
@@ -201,8 +203,7 @@ U0 PCNetSetSWStyle()
 
 	U32 csr = PCNetReadCSR(PCNET_CSR_SOFTWARESTYLE);
 
-//	csr &= ~0xFF; // clears first 8 bits: SWSTYLE 8-bit register.
-	csr &= 0xFFF0;
+	csr &= ~0xFF; // clears first 8 bits: SWSTYLE 8-bit register.
 	csr |= PCNET_SWSTYLE_SELECTION; // set SWSTYLE to PCNet-PCI mode.
 	Bts(&csr, PCNET_SWSTYLE_SSIZE32); // set SSIZE32 bit 1
 
@@ -228,6 +229,8 @@ U0 PCNetGetMAC()
 
 U0 PCNetInitDescriptorEntry(CPCNetDescriptorEntry *entry, U32 buffer_address, I64 is_rx)
 {
+	U16 buffer_byte_count;
+
 	entry->buffer_addr = buffer_address;
 
 	/*	AMD PCNet datasheet p.1-991.
@@ -236,7 +239,7 @@ U0 PCNetInitDescriptorEntry(CPCNetDescriptorEntry *entry, U32 buffer_address, I6
 		Bits 0-11 of a DE are for the buffer byte count (BCNT),
 		and bits 12-15 of a DE must be written all ones (ONES) */
 
-	U16 buffer_byte_count = -ETHERNET_FRAME_SIZE;	// Sets up as 2s complement of the desired length.
+	buffer_byte_count = -ETHERNET_FRAME_SIZE;		// Sets up as 2s complement of the desired length.
 	buffer_byte_count &= 0x0FFF;					// Masks 0 over everything except bits 0-11.
 
 	entry->status1 |= buffer_byte_count;			// Sets BCNT reg (first 12 bits) in DE TMD1/RMD1.
@@ -245,8 +248,6 @@ U0 PCNetInitDescriptorEntry(CPCNetDescriptorEntry *entry, U32 buffer_address, I6
 	//if this is a Receive DE, give ownership to the card so the PCNet can fill them.
 	if (is_rx)
 		Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
-
-//	ClassRep(entry);
 }
 
 U0 PCNetAllocateBuffers()
@@ -270,19 +271,18 @@ U0 PCNetAllocateBuffers()
 	pcnet.rx_de_buffer = dev.uncached_alias + pcnet.rx_de_buffer_phys; // we want uncached
 	pcnet.tx_de_buffer = dev.uncached_alias + pcnet.tx_de_buffer_phys; // access to these.
 
-	pcnet.rx_buffer_addr = CAlloc(ETHERNET_FRAME_SIZE * PCNET_RX_BUFF_COUNT,	//Shrine has a TODO to figure out
-								  Fs->code_heap);
+	pcnet.rx_buffer_addr_phys = CAlloc(ETHERNET_FRAME_SIZE * PCNET_RX_BUFF_COUNT, Fs->code_heap);
 
-	pcnet.tx_buffer_addr = CAlloc(ETHERNET_FRAME_SIZE * PCNET_TX_BUFF_COUNT,	//if these should be uncached too.
-								  Fs->code_heap);								//note, p.1-991,1-994: RBADR is only 32 bits wide.
+	pcnet.tx_buffer_addr_phys = CAlloc(ETHERNET_FRAME_SIZE * PCNET_TX_BUFF_COUNT, Fs->code_heap);
 
 	//Shrine does a check and returns -1 here, if the end of either buffer exceeds 0x100000000
 
+	pcnet.rx_buffer_addr = dev.uncached_alias + pcnet.rx_buffer_addr_phys;
+	pcnet.tx_buffer_addr = dev.uncached_alias + pcnet.tx_buffer_addr_phys;
 
 	CPCNetDescriptorEntry *entry = pcnet.rx_de_buffer;
 	for (de_index = 0; de_index < PCNET_RX_BUFF_COUNT; de_index++)
 	{
-		//PCNetInitDescriptorEntry(&entry[de_index], pcnet.rx_buffer_addr, TRUE); // TRUE for is_rx.
 		PCNetInitDescriptorEntry(&entry[de_index],
 								 pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
 								 TRUE); // TRUE for is_rx.
@@ -291,7 +291,6 @@ U0 PCNetAllocateBuffers()
 	entry = pcnet.tx_de_buffer;
 	for (de_index = 0; de_index < PCNET_TX_BUFF_COUNT; de_index++)
 	{
-		//PCNetInitDescriptorEntry(&entry[de_index], pcnet.tx_buffer_addr, FALSE); // FALSE for is_rx.
 		PCNetInitDescriptorEntry(&entry[de_index],
 								 pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
 								 FALSE); // FALSE for is_rx.
@@ -471,7 +470,6 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 		throw('PCNet');
 	}
 
-//	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index];
 	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
 	if (!PCNetDriverOwns(entry))
@@ -493,13 +491,13 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 		12 bits of 2s-complement of desired length.
 		Bits 0-11 of a DE are for the buffer byte count (BCNT),
 		and bits 12-15 of a DE must be written all ones (ONES) */
-	buffer_byte_count = -length;	// Sets up as 2s complement of the desired length.
-	buffer_byte_count &= 0x0FFF;					// Masks 0 over everything except bits 0-11.
+	buffer_byte_count = -length;			// Sets up as 2s complement of the desired length.
+	buffer_byte_count &= 0x0FFF;			// Masks 0 over everything except bits 0-11.
 
-	entry->status1 &= 0xFFFFF000; // Clear first 12 bits and retain other bits in DE TMD1.
+	entry->status1 &= 0xFFFFF000;			// Clear first 12 bits and retain other bits in DE TMD1.
 
-	entry->status1 |= buffer_byte_count;			// Sets BCNT reg (first 12 bits) in DE TMD1.
-	entry->status1 |= 0xF000;						// Sets bits 12-15 (ONES) in DE TMD1 as all ones.
+	entry->status1 |= buffer_byte_count;	// Sets BCNT reg (first 12 bits) in DE TMD1.
+	entry->status1 |= 0xF000;				// Sets bits 12-15 (ONES) in DE TMD1 as all ones.
 
 	pcnet.current_tx_de_index = (pcnet.current_tx_de_index + 1) & (PCNET_TX_BUFF_COUNT - 1);
 
@@ -515,14 +513,11 @@ U0 PCNetFinishTransmitPacket(I64 de_index)
 {/* Release ownership of the packet to the PCNet card
 	by setting the OWN bit to 1. */ 
 
-//	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index];
 	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
 	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
 	ZenithLog("PCNet FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.\n",
 				de_index, Bt(&entry->status1, PCNET_DESCRIPTORf_OWN));
-//	CallerRep;
-
 }
 
 U0 EthernetFrameFinish(I64 de_index)
@@ -541,16 +536,16 @@ I64 PCNetReceivePacket(U8 **packet_buffer_out, U16 *packet_length_out)
 	value of incrementing it AND the max DE index-1. This will increment it
 	as well as wrap back to 0 if we hit the max DE index. */
 
-	ZenithLog("PCNET RECEIVE PACKET: PCNet received packet. %X , %X \n", packet_buffer_out, packet_length_out);
 	I64 de_index = pcnet.current_rx_de_index;
+	U16 packet_length;
 
-//	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index];
+	ZenithLog("PCNET RECEIVE PACKET: PCNet received packet. %X , %X \n", packet_buffer_out, packet_length_out);
+
 	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
-	U16 packet_length = entry->status2 & 0xFFFF;
+	packet_length = entry->status2 & 0xFFFF;
 
 	pcnet.current_rx_de_index = (pcnet.current_rx_de_index + 1) & (PCNET_RX_BUFF_COUNT - 1);
-
 
 	*packet_buffer_out = pcnet.rx_buffer_addr + (de_index * ETHERNET_FRAME_SIZE);
 	*packet_length_out = packet_length;
@@ -562,7 +557,6 @@ U0 PCNetReleaseReceivePacket(I64 de_index)
 {/* Release ownership of the packet to the PCNet card
 	by setting the OWN bit to 1. */ 
 
-//	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index];
 	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
 	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
@@ -627,6 +621,8 @@ U0 PCNetSetupInterrupts()
 
 U0 PCNetInit()
 {
+	U8 *setup; // PCNetInitBlockSetup
+
 	MemSet(&pcnet, 0, sizeof(CPCNet)); // pcnet global var will hold member data the driver uses often.
 
 	pcnet.pci = PCNetPCIDevFind;
@@ -656,19 +652,19 @@ U0 PCNetInit()
 	PCNetSetSWStyle;
 
 	PCNetGetMAC;
-	// OSDev has code ensuring auto selected connection...
+//	OSDev has code ensuring auto selected connection...
 
 	PCNetAllocateBuffers;
 
 //	PCNetDirectInit;
-	U8 *setup = PCNetInitBlockSetup();
+	setup = PCNetInitBlockSetup();
 
 	PCNetSetInterruptCSR;
 
 	PCNetEnableTXAutoPad;
 
 	PCNetWriteCSR(0, PCNetReadCSR(0) | 1 | (1<<6));
-//	Bt(&(csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS)), 8);
+
 	csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
 	ZenithLog("PCNET INIT UPLOAD: what is INIT ?: %d\n", Bt(&csr, PCNET_CTRL_INIT));
 	ZenithLog("PCNET INIT UPLOAD: what is STRT ?: %d\n", Bt(&csr, PCNET_CTRL_STRT));
@@ -682,8 +678,8 @@ U0 PCNetInit()
 
 	PCNetSetupInterrupts;
 
+	Sleep(100); //? necessary?
 
-	Sleep(100);//? necessary?
 /*	ClassRep(&pcnet);
 
 	"pcnet->rx_de_buffer: %X\n",		pcnet.rx_de_buffer;
