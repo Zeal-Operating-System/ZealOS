@@ -11,7 +11,7 @@ U0 EthernetSendTrash()
 	{
 		de_index = EthernetFrameAllocate(&packet_buffer, src, dst, 0x0000, 8);
 
-		*(packet_buffer(U64 *)) = EndianU64(0xDEADBEEFC0DEFADE);
+		*(packet_buffer(U64 *)) = EndianU64(0xC0DEFADEDEADBEEF);
 
 		EthernetFrameFinish(de_index);
 		Sleep(300);

@@ -496,12 +496,16 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 	buffer_byte_count = -length;	// Sets up as 2s complement of the desired length.
 	buffer_byte_count &= 0x0FFF;					// Masks 0 over everything except bits 0-11.
 
+	entry->status1 &= 0xFFFFF000; // Clear first 12 bits and retain other bits in DE TMD1.
+
 	entry->status1 |= buffer_byte_count;			// Sets BCNT reg (first 12 bits) in DE TMD1.
 	entry->status1 |= 0xF000;						// Sets bits 12-15 (ONES) in DE TMD1 as all ones.
 
 	pcnet.current_tx_de_index = (pcnet.current_tx_de_index + 1) & (PCNET_TX_BUFF_COUNT - 1);
 
 	*packet_buffer_out = pcnet.tx_buffer_addr + (de_index * ETHERNET_FRAME_SIZE);
+
+	MemSet(*packet_buffer_out, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
 
 	ZenithLog("PCNET ALLOCATE TX PACKET: de_index: %X.\n", de_index);
 	return de_index;

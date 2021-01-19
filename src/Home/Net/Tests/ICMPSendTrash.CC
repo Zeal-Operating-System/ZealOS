@@ -7,7 +7,7 @@ U0 ICMPSendTrash()
 {
 	U8 *data_payload = CAlloc(8);
 
-	*(data_payload(U64 *)) = EndianU64(0xDEADBEEFC0DEFADE);
+	*(data_payload(U64 *)) = EndianU64(0xDEADC0DEBEEFFADE);
 
 	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with GetMACAddressForIP
 

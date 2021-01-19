@@ -14,7 +14,7 @@ U0 IPV4SendTrash()
 	{
 		de_index = IPV4PacketAllocate(&ipv4_packet_buffer, 0xFF, src_ip, dst_ip, 8);
 
-		*(ipv4_packet_buffer(U64 *)) = EndianU64(0xDEADBEEFC0DEFADE);
+		*(ipv4_packet_buffer(U64 *)) = EndianU64(0xBEEFDEADFADEC0DE);
 
 		IPV4PacketFinish(de_index);
 		Sleep(300);

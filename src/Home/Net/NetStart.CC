@@ -23,5 +23,6 @@ if (Fs != zenith_task)
 
 #include "C:/Home/Net/NetHandlerTask" // needs IPV4, UDP, ICMP
 
-"\nNow run $FG,0$NetConfigure;$FG$ or run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n\n";
+NetConfigure;
 
+"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n\n";
