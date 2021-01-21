@@ -1,15 +1,6 @@
-if (Fs != zenith_task)
-{
-	WinVert(2, zenith_task->win_bottom + zenith_task->win_bottom / 3, zenith_task);
-	WinVert(zenith_task->win_bottom + 3, TEXT_ROWS - 2);
-}
-else
-{
-	WinVert(2, zenith_task->win_bottom + zenith_task->win_bottom / 3, zenith_task);
-	WinVert(zenith_task->win_bottom + 3, TEXT_ROWS - 2, zenith_task->next_task);
-}
-
 #include "C:/Home/Net/Net.HH"
+
+#include "C:/Home/Net/NetLog"
 
 #include "C:/Home/Net/NetQueue"
 #include "C:/Home/Net/PCNet"
@@ -26,15 +17,26 @@ else
 #include "C:/Home/Net/DNS"
 #include "C:/Home/Net/DHCP"
 
-#include "C:/Home/Net/NetHandlerTask" // needs IPV4, UDP, ICMP
+#include "C:/Home/Net/NetHandler" // needs IPV4, UDP, ICMP
 
 if (Fs != zenith_task)
 {
 	NetConfigure;
 
-	"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n\n";
+	if (ipv4_globals.local_ip != 0) // is set if NetConfigure is successful
+	{
+		"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n";
+
+		"\nIf a test crashes to Debug, try typing $FG,0$G2;$FG$\n\n";
+	}
+	else
+	{
+		"\nNetConfigure unsuccessful. See Network Log for details.\n\n";
+	}
+
 }
 else
 {
 	XTalkStr(zenith_task->next_task, "NetConfigure;\n");
 }
+

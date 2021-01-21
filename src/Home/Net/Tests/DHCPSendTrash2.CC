@@ -11,6 +11,12 @@ U0 DHCPSendTrash()
 	U8 *packet_buffer;
 	I64 de_index;
 
+	if (ipv4_globals.local_ip != 0)
+	{
+		"\nThis test will only work on unconfigured network.\n";
+		"To force for testing, comment out $FG,0$NetConfigure;$FG$ in $LK,"NetStart",A="FF:C:/Home/Net/NetStart.CC,NetConfigure"$.\n\n";
+		return;
+	}
 
 	DHCPConfigureInner(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
 

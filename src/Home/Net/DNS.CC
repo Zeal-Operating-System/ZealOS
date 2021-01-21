@@ -16,9 +16,9 @@
 
 #define DNS_CLASS_IN	1
 
-#define DNS_TIMEOUT		1000
+#define DNS_TIMEOUT		5000
 
-#define DNS_MAX_RETRIES	20	// Shrine has 3, why not 5? :^)
+#define DNS_MAX_RETRIES	5
 
 class CDNSHash:CHash
 {	// store U8 *hostname as CHash->str U8 *
@@ -85,14 +85,14 @@ CDNSHash *DNSCacheFind(U8 *hostname)
 	CDNSHash *entry = HashFind(hostname, dns_cache, HTT_DNS);
 
 	if (entry == NULL)
-		ZenithWarn("DNS CACHE FIND: Could not find a hostname in the DNS Cache.\n");
+		NetWarn("DNS CACHE FIND: Could not find a hostname in the DNS Cache.");
 
 	return entry;
 }
 
 CDNSHash *DNSCachePut(U8 *hostname, CAddressInfo *info)
 {
-	ZenithLog("DNS CACHE PUT: Attempting Find DNS Entry in Cache: hostname: %s\n", hostname);
+	NetLog("DNS CACHE PUT: Attempting Find DNS Entry in Cache: hostname: %s", hostname);
 	CDNSHash *entry = DNSCacheFind(hostname);
 
 	if (!entry)
@@ -106,7 +106,7 @@ CDNSHash *DNSCachePut(U8 *hostname, CAddressInfo *info)
 		HashAdd(entry, dns_cache);
 	}
 	else
-		ZenithWarn("DNS CACHE PUT: Entry was already found in Cache. TODO: overwrite?");
+		NetWarn("DNS CACHE PUT: Entry was already found in Cache. TODO: overwrite?");
 
 	return entry;
 }
@@ -156,11 +156,11 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 	switch (dns_globals.addr_family)
 	{
 		case AF_UNSPEC: // 0, global dns ip not set
-			ZenithErr("DNS SEND QUESTION: Failed, global dns addr family was AF_UNSPEC.\n");
+			NetErr("DNS SEND QUESTION: Failed, global dns addr family was AF_UNSPEC.");
 			return -1;
 
 		case AF_INET6:
-			ZenithErr("DNS SEND QUESTION: Failed, IPV6 not supported yet in DNS.\n");
+			NetErr("DNS SEND QUESTION: Failed, IPV6 not supported yet in DNS.");
 			throw('DNS');
 
 		case AF_INET:
@@ -168,7 +168,7 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 
 			if (!*ipv4_addr)
 			{
-				ZenithErr("DNS SEND QUESTION: Failed, ipv4_addr had no value set.\n");
+				NetErr("DNS SEND QUESTION: Failed, ipv4_addr had no value set.");
 				return -1;
 			}
 	}
@@ -182,7 +182,7 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 								 sizeof(CDNSHeader) + DNSCalculateQuestionSize(q));
 	if (de_index < 0)
 	{
-		ZenithErr("DNS SEND QUESTION: Failed, UDPPacketAllocate returned error.\n");
+		NetErr("DNS SEND QUESTION: Failed, UDPPacketAllocate returned error.");
 		return de_index;
 	}
 
@@ -215,7 +215,7 @@ I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 
 	if (length < 1)
 	{
-		ZenithErr("DNS PARSE DOMAIN NAME: Length less than one.\n");
+		NetErr("DNS PARSE DOMAIN NAME: Length less than one.");
 		return -1;
 	}
 
@@ -241,7 +241,7 @@ I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 				*data_inout		= data   + 1;
 				*length_inout	= length - 1;
 				jump_taken		= TRUE;
-				ZenithLog("DNS PARSE DOMAIN NAME: Jump taken\n");
+				NetLog("DNS PARSE DOMAIN NAME: Jump taken");
 			}
 
 			data	= packet_data + ((label_len << 8) | *data);
@@ -341,7 +341,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNS
 
 	if (length < sizeof(CDNSHeader))
 	{
-		ZenithErr("DNS PARSE RESPONSE: Length too short.\n");
+		NetErr("DNS PARSE RESPONSE: Length too short.");
 		return -1;
 	}
 
@@ -350,7 +350,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNS
 
 	if (id != 0 && EndianU16(header->id) != id)
 	{
-		ZenithErr("DNS PARSE RESPONSE: Header ID mismatch.\n");
+		NetErr("DNS PARSE RESPONSE: Header ID mismatch.");
 		return -1;
 	}
 
@@ -477,7 +477,7 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 	// UDPSocketBind will be attempted on the udp_socket param, method expects a UDPSocket() result to be made already
 	if (UDPSocketBind(udp_socket, &ipv4_addr)) // expected return value is 0
 	{
-		ZenithErr("DNS RUN QUERY: Failed to bind UDP socket.\n");
+		NetErr("DNS RUN QUERY: Failed to bind UDP socket.");
 		return -1;
 	}
 
@@ -488,7 +488,7 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 		error = DNSSendQuestion(id, local_port, &q);
 		if (error < 0)
 		{
-			ZenithErr("DNS RUN QUERY: Failed to Send Question.\n");
+			NetErr("DNS RUN QUERY: Failed to Send Question.");
 			return -1;
 		}
 
@@ -496,7 +496,7 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 
 		if (count > 0)
 		{
-			ZenithLog("DNS RUN QUERY: Trying Parse Response.\n");
+			NetLog("DNS RUN QUERY: Trying Parse Response.");
 
 			header		= NULL;
 			questions	= NULL;
@@ -554,18 +554,18 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 				// Shrine comment: 'at this point, we could try iterative resolution,
 				// but all end-user DNS servers would have tried that already'
 
-				ZenithErr("DNS RUN QUERY: Failed to find suitable answer in reply.\n");
+				NetErr("DNS RUN QUERY: Failed to find suitable answer in reply.");
 				error = -1;
 			}
 			else
 			{
-				ZenithErr("DNS RUN QUERY: Failed a DNS Parse Response.\n");
+				NetErr("DNS RUN QUERY: Failed a DNS Parse Response.");
 			}
 		}
 
 		if (++retries == DNS_MAX_RETRIES)
 		{
-			ZenithErr("DNS RUN QUERY: Failed, max retries reached.\n");
+			NetErr("DNS RUN QUERY: Failed, max retries reached.");
 			error = -1;
 			break;
 		}
@@ -602,7 +602,7 @@ I64 DNSGetAddressInfo(U8 *node_name, U16 port, CAddressInfo **result)
 	}
 	else
 	{
-		ZenithErr("DNS GET ADDRESS INFO: Failed to make UDP Socket.\n");
+		NetErr("DNS GET ADDRESS INFO: Failed to make UDP Socket.");
 		error = -1;
 	}
 
@@ -626,7 +626,7 @@ U0 Host(U8 *hostname)
 
 	if (error < 0)
 	{
-		ZenithErr("HOST(): Failed at DNS Get Address Info.\n");
+		NetErr("HOST(): Failed at DNS Get Address Info.");
 	}
 	else
 	{

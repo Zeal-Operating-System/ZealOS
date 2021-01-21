@@ -23,12 +23,17 @@ class CNetQueueEntry:CQueue
 CQueue *net_queue; // no QueueRemove the Head! only Entries!
 
 
-/*	Net Handler Task is set idle and active depending
-	on if entries in Net Queue. See $LK,"NetHandlerTask",A="FF:C:/Home/Net/NetHandlerTask.CC,net_handler_task"$ */
+/*	PCNet reroutes PCI interrupts to software. See $LK,"PCNet",A="FF:C:/Home/Net/PCNet.CC,I_PCNET0"$.
+	Net Handler interrupt is generated whenever an entry is
+	pushed to the NetQueue. See $LK,"NetHandler",A="FF:C:/Home/Net/NetHandler.CC,I_NETHANDLER"$ */
 
-CTask *net_handler_task = NULL;
+#define I_PCNET0		I_USER + 0
+#define I_PCNET1		I_USER + 1
+#define I_PCNET2		I_USER + 2
+#define I_PCNET3		I_USER + 3
+#define I_NETHANDLER	I_USER + 4
 
-
+#define INT_DEST_CPU	0
 
 U0 NetQueueInit()
 {
@@ -46,7 +51,7 @@ CNetQueueEntry *NetQueuePull()
 	{
 		entry = net_queue->next;
 
-		ZenithLog("NETQUEUE PULL: Removing entry from queue.\n");
+		NetLog("NETQUEUE PULL: Removing entry from queue.");
 		QueueRemove(entry);
 	}
 	else // Queue is empty if head->next is head itself.
@@ -71,10 +76,9 @@ U0 NetQueuePushCopy(U8 *data, I64 length)
 
 	QueueInsert(entry, net_queue->last);
 
-	//Set Net Handler Task active.
-	ZenithLog("NETQUEUE PUSH COPY: Setting NetHandler ACTIVE.\n");
-	if (net_handler_task)
-		LBtr(&net_handler_task->task_flags, TASKf_IDLE);
+	// Generate Net Handler interrupt.
+	NetLog("NETQUEUE PUSH COPY: Generating NetHandler interrupt.");
+	MPInt(I_NETHANDLER, INT_DEST_CPU);
 }
 
 

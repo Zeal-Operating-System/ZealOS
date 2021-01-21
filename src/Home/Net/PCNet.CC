@@ -78,8 +78,6 @@
 #define PCNET_DESCRIPTORf_OWN	31 // AMD PCNet datasheet p.1-992, 1-994
 //#define PCNET_DESCRIPTORF_OWN	(1 << PCNET_DESCRIPTORf_OWN)
 
-#define INT_DEST_CPU	0
-
 class CPCNet
 {
 	CPCIDev *pci;
@@ -217,14 +215,12 @@ U0 PCNetGetMAC()
 	APROM accessible at first 16 bytes of PCI IO space. */
 
 	I64 i;
-	ZenithLog("PCNET GET MAC: Getting VM MAC.\n");
-	ZenithLog("              ");
+	NetLog("PCNET GET MAC: Getting VM MAC.");
 	for (i = 0; i < 6; i++)
 	{
 		pcnet.mac_address[i] = InU8(PCNetGetIOBase() + i);
-		ZenithLog(" %02X", pcnet.mac_address[i]);
+		NetLog(" %02X", pcnet.mac_address[i]);
 	}
-	ZenithLog("\n");
 }
 
 U0 PCNetInitDescriptorEntry(CPCNetDescriptorEntry *entry, U32 buffer_address, I64 is_rx)
@@ -322,11 +318,11 @@ U0 PCNetDirectInit()
 		The OR and bit-shift of 8 allows writing
 		separate U8 values in the correct locations
 		of the CSR. */
-	ZenithLog("PCNetDirectInit: Write MAC to CSR: 0x%X \n", pcnet.mac_address[0] | (pcnet.mac_address[1] << 8));
+	NetLog("PCNetDirectInit: Write MAC to CSR: 0x%X ", pcnet.mac_address[0] | (pcnet.mac_address[1] << 8));
 	PCNetWriteCSR(PCNET_CSR_PADR0, pcnet.mac_address[0] | (pcnet.mac_address[1] << 8));
-	ZenithLog("PCNetDirectInit: Write MAC to CSR: 0x%X \n", pcnet.mac_address[2] | (pcnet.mac_address[3] << 8));
+	NetLog("PCNetDirectInit: Write MAC to CSR: 0x%X ", pcnet.mac_address[2] | (pcnet.mac_address[3] << 8));
 	PCNetWriteCSR(PCNET_CSR_PADR1, pcnet.mac_address[2] | (pcnet.mac_address[3] << 8));
-	ZenithLog("PCNetDirectInit: Write MAC to CSR: 0x%X \n", pcnet.mac_address[4] | (pcnet.mac_address[5] << 8));
+	NetLog("PCNetDirectInit: Write MAC to CSR: 0x%X ", pcnet.mac_address[4] | (pcnet.mac_address[5] << 8));
 	PCNetWriteCSR(PCNET_CSR_PADR2, pcnet.mac_address[4] | (pcnet.mac_address[5] << 8));
 
 	/*	AMD PCNet datasheet p.1-961, 1-962, 1-963
@@ -466,7 +462,7 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 
 	if (length > 0xFFF)
 	{ // Max packet length must fit into BCNT 12-bit register.
-		ZenithErr("PCNET ALLOCATE TX PACKET: Invalid TX Packet Length\n");
+		NetErr("PCNET ALLOCATE TX PACKET: Invalid TX Packet Length");
 		throw('PCNet');
 	}
 
@@ -474,12 +470,12 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 
 	if (!PCNetDriverOwns(entry))
 	{
-		ZenithErr("PCNET ALLOCATE TX PACKET: TX FIFO Full\n");
+		NetErr("PCNET ALLOCATE TX PACKET: TX FIFO Full");
 		return -1; // Positive value expected. Functions calling this must factor this in.
 	}
 	else
 	{
-		ZenithLog("PCNET ALLOCATE TX PACKET: Driver owns TX DE at index %d.\n", de_index);
+		NetLog("PCNET ALLOCATE TX PACKET: Driver owns TX DE at index %d.", de_index);
 	}
 
 	Bts(&entry->status1, PCNET_DESCRIPTORf_STP);
@@ -505,7 +501,7 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 
 	MemSet(*packet_buffer_out, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
 
-	ZenithLog("PCNET ALLOCATE TX PACKET: de_index: %X.\n", de_index);
+	NetLog("PCNET ALLOCATE TX PACKET: de_index: %X.", de_index);
 	return de_index;
 }
 
@@ -516,7 +512,7 @@ U0 PCNetFinishTransmitPacket(I64 de_index)
 	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
 	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
-	ZenithLog("PCNet FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.\n",
+	NetLog("PCNet FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.",
 				de_index, Bt(&entry->status1, PCNET_DESCRIPTORf_OWN));
 }
 
@@ -539,7 +535,7 @@ I64 PCNetReceivePacket(U8 **packet_buffer_out, U16 *packet_length_out)
 	I64 de_index = pcnet.current_rx_de_index;
 	U16 packet_length;
 
-	ZenithLog("PCNET RECEIVE PACKET: PCNet received packet. %X , %X \n", packet_buffer_out, packet_length_out);
+	NetLog("PCNET RECEIVE PACKET: PCNet received packet. %X , %X ", packet_buffer_out, packet_length_out);
 
 	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
@@ -576,13 +572,13 @@ interrupt U0 PCNetIRQ()
 
 	while (PCNetDriverOwns(&entry[pcnet.current_rx_de_index]))
 	{
-		ZenithLog("PCNET IRQ: Saw owned RX DE index %d.\n", pcnet.current_rx_de_index);
+		NetLog("PCNET IRQ: Saw owned RX DE index %d.", pcnet.current_rx_de_index);
 
 		de_index = PCNetReceivePacket(&packet_buffer, &packet_length);
 
 		if (de_index >= 0) // necessary? check increment logic in PCNetReceivePacket.
 		{
-			ZenithLog("PCNET IRQ: Pushing copy into Net Queue, Releasing Receive Packet\n");
+			NetLog("PCNET IRQ: Pushing copy into Net Queue, Releasing Receive Packet");
 			NetQueuePushCopy(packet_buffer, packet_length);
 			PCNetReleaseReceivePacket(de_index);
 		}
@@ -612,11 +608,11 @@ U0 PCIRerouteInterrupts(I64 base)
 
 U0 PCNetSetupInterrupts()
 { // todo: comments explaining process
-	IntEntrySet(I_USER + 0, &PCNetIRQ, IDTET_IRQ);
-	IntEntrySet(I_USER + 1, &PCNetIRQ, IDTET_IRQ);
-	IntEntrySet(I_USER + 2, &PCNetIRQ, IDTET_IRQ);
-	IntEntrySet(I_USER + 3, &PCNetIRQ, IDTET_IRQ);
-	PCIRerouteInterrupts(I_USER);
+	IntEntrySet(I_PCNET0, &PCNetIRQ);
+	IntEntrySet(I_PCNET1, &PCNetIRQ);
+	IntEntrySet(I_PCNET2, &PCNetIRQ);
+	IntEntrySet(I_PCNET3, &PCNetIRQ);
+	PCIRerouteInterrupts(I_PCNET0);
 }
 
 U0 PCNetInit()
@@ -643,10 +639,10 @@ U0 PCNetInit()
 	PCNetEnter32BitMode;
 
 	U32 csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
-	ZenithLog("PCNET INIT START: what is INIT ?: %d\n", Bt(&csr, PCNET_CTRL_INIT));
-	ZenithLog("PCNET INIT START: what is STRT ?: %d\n", Bt(&csr, PCNET_CTRL_STRT));
-	ZenithLog("PCNET INIT START: what is STOP ?: %d\n", Bt(&csr, PCNET_CTRL_STOP));
-	ZenithLog("PCNET INIT START: what is RINT ?: %d\n", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT START: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT START: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT START: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT START: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 
 	PCNetSetSWStyle;
@@ -666,10 +662,10 @@ U0 PCNetInit()
 	PCNetWriteCSR(0, PCNetReadCSR(0) | 1 | (1<<6));
 
 	csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
-	ZenithLog("PCNET INIT UPLOAD: what is INIT ?: %d\n", Bt(&csr, PCNET_CTRL_INIT));
-	ZenithLog("PCNET INIT UPLOAD: what is STRT ?: %d\n", Bt(&csr, PCNET_CTRL_STRT));
-	ZenithLog("PCNET INIT UPLOAD: what is STOP ?: %d\n", Bt(&csr, PCNET_CTRL_STOP));
-	ZenithLog("PCNET INIT UPLOAD: what is RINT ?: %d\n", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT UPLOAD: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 	while (!(PCNetReadCSR(0) & (1<<8)))
 		Yield;
@@ -688,15 +684,15 @@ U0 PCNetInit()
 	"pcnet->rx_de_buffer_phys: %X\n",	pcnet.tx_de_buffer_phys;
 */
 	csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
-	ZenithLog("PCNET INIT END: what is INIT ?: %d\n", Bt(&csr, PCNET_CTRL_INIT));
-	ZenithLog("PCNET INIT END: what is STRT ?: %d\n", Bt(&csr, PCNET_CTRL_STRT));
-	ZenithLog("PCNET INIT END: what is STOP ?: %d\n", Bt(&csr, PCNET_CTRL_STOP));
-	ZenithLog("PCNET INIT END: what is RINT ?: %d\n", Bt(&csr, PCNET_CTRL_RINT));
-	ZenithLog("PCNET INIT END: what is TXON ?: %d\n", Bt(&csr, 4));
-	ZenithLog("PCNET INIT END: what is RXON ?: %d\n", Bt(&csr, 5));
+	NetLog("PCNET INIT END: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
+	NetLog("PCNET INIT END: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
+	NetLog("PCNET INIT END: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
+	NetLog("PCNET INIT END: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT END: what is TXON ?: %d", Bt(&csr, 4));
+	NetLog("PCNET INIT END: what is RXON ?: %d", Bt(&csr, 5));
 
 	csr =  PCNetReadCSR(PCNET_CSR_POLLINT);
-	ZenithLog("PCNET INIT END: what is POLLINT ?: %d\n", Bt(&csr, PCNET_CTRL_RINT));
+	NetLog("PCNET INIT END: what is POLLINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 	Free(setup);
 }
@@ -719,7 +715,7 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	//need to see if 3 years later VirtualBox supports APAD_XMT!
 	if (packet_length < ETHERNET_MIN_FRAME_SIZE)
 	{
-		ZenithWarn("ETHERNET FRAME ALLOCATE: PCNET APAD XMT TRUNCATE ? ...\n");
+		NetWarn("ETHERNET FRAME ALLOCATE: PCNET APAD XMT TRUNCATE ? ...");
 		packet_length = ETHERNET_MIN_FRAME_SIZE;
 	}
 
@@ -727,7 +723,7 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 
 	if (de_index < 0)
 	{
-		ZenithErr("ETHERNET FRAME ALLOCATE: Failure\n");
+		NetErr("ETHERNET FRAME ALLOCATE: Failure");
 		return -1; // Positive value expected. Functions calling this must factor this in.
 	}
 

@@ -95,7 +95,7 @@ I64 DHCPSendDiscover(U32 xid)
 								 sizeof(CDHCPHeader) + sizeof(CDHCPDiscoverOptions));
 	if (de_index < 0)
 	{
-		ZenithErr("DHCP SEND DISCOVER: Failed, UDP Packet Allocate error.\n");
+		NetErr("DHCP SEND DISCOVER: Failed, UDP Packet Allocate error.");
 		return de_index;
 	}
 
@@ -151,7 +151,7 @@ I64 DHCPSendRequest(U32 xid, U32 requested_ip, U32 server_ip)
 								 sizeof(CDHCPHeader) + sizeof(CDHCPRequestOptions));
 	if (de_index < 0)
 	{
-		ZenithErr("DHCP SEND REQUEST: Failed, UDP Packet Allocate error.\n");
+		NetErr("DHCP SEND REQUEST: Failed, UDP Packet Allocate error.");
 	}
 
 	dhcp = ethernet_frame;
@@ -197,7 +197,7 @@ I64 DHCPParseBegin(U8 **data_inout, I64 *length_inout, CDHCPHeader **header_out)
 
 	if (length < sizeof(CDHCPHeader) + 4) // + 4?
 	{
-		ZenithErr("DHCP PARSE BEGIN: Failed, length too short.\n");
+		NetErr("DHCP PARSE BEGIN: Failed, length too short.");
 		return -1;
 	}
 
@@ -205,7 +205,7 @@ I64 DHCPParseBegin(U8 **data_inout, I64 *length_inout, CDHCPHeader **header_out)
 
 	if (EndianU32(*cookie) != DHCP_COOKIE)
 	{
-		ZenithErr("DHCP PARSE BEGIN: Failed, cookie doesn't match DHCP-cookie.\n");
+		NetErr("DHCP PARSE BEGIN: Failed, cookie doesn't match DHCP-cookie.");
 		return -1;
 	}
 
@@ -223,13 +223,13 @@ I64 DHCPParseOption(U8 **data_inout, I64 *length_inout, U8 *type_out, U8 *value_
 
 	if (length < 2 || length < 2 + data[1]) // ??? what is the 1
 	{
-		ZenithErr("DHCP PARSE OPTION: Failed, length too short.\n");
+		NetErr("DHCP PARSE OPTION: Failed, length too short.");
 		return -1;
 	}
 
 	if (data[0] == 0xFF) // ahead, data[0] is type_out, so data[0] is perhaps usually type?
 	{
-		ZenithLog("DHCP PARSE OPTION: Saw 0xFF, returning 0.\n");
+		NetLog("DHCP PARSE OPTION: Saw 0xFF, returning 0.");
 		return 0;
 	}
 
@@ -262,7 +262,7 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 
 	if (EndianU32(header->xid) != xid)
 	{
-		ZenithErr("DHCP PARSE OFFER: Failed, parsed and parameter Transaction IDs do not match.\n");
+		NetErr("DHCP PARSE OFFER: Failed, parsed and parameter Transaction IDs do not match.");
 		return -1;
 	}
 
@@ -272,7 +272,7 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 
 		if (error < 0)
 		{
-			ZenithErr("DHCP PARSE OFFER: Failed at DHCP Parse Option.\n");
+			NetErr("DHCP PARSE OFFER: Failed at DHCP Parse Option.");
 			return error;
 		}
 		if (error == 0)
@@ -283,13 +283,13 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 		switch (type)
 		{
 			case DHCP_OPTION_MESSAGETYPE:
-				ZenithLog("DHCP PARSE OFFER: Parsed Option, Type MESSAGETYPE.\n");
+				NetLog("DHCP PARSE OFFER: Parsed Option, Type MESSAGETYPE.");
 				if (value_length == 1 && value[0] == DHCP_MESSAGETYPE_OFFER)
 					have_type = TRUE;
 				break;
 
 			case DHCP_OPTION_DNS:
-				ZenithLog("DHCP PARSE OFFER: Parsed Option, Type DNS.\n");
+				NetLog("DHCP PARSE OFFER: Parsed Option, Type DNS.");
 				if (value_length == 4)
 				{
 					*dns_ip_out = EndianU32(*(value(U32 *)));		// TODO: this syntax used on last 3 cases is gross, alter it
@@ -298,7 +298,7 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 				break;
 
 			case DHCP_OPTION_ROUTER:
-				ZenithLog("DHCP PARSE OFFER: Parsed Option, Type ROUTER.\n");
+				NetLog("DHCP PARSE OFFER: Parsed Option, Type ROUTER.");
 				if (value_length == 4)
 				{
 					*router_ip_out	= EndianU32(*(value(U32 *)));	//
@@ -307,7 +307,7 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 				break;
 
 			case DHCP_OPTION_SUBNET_MASK:
-				ZenithLog("DHCP PARSE OFFER: Parsed Option, Type SUBNET MASK.\n");
+				NetLog("DHCP PARSE OFFER: Parsed Option, Type SUBNET MASK.");
 				if (value_length == 4)
 				{
 					*subnet_mask_out = EndianU32(*(value(U32 *)));	//
@@ -320,16 +320,16 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 	if (have_type && have_dns && have_subnet && have_router)
 	{
 		*your_ip_out = EndianU32(header->your_ip);
-		ZenithLog("DHCP PARSE OFFER: Success, got your-ip from DHCP Header.\n");
+		NetLog("DHCP PARSE OFFER: Success, got your-ip from DHCP Header.");
 		return 0;
 	}
 	else
 	{
-		ZenithErr("DHCP PARSE OFFER: Failed, did not have needed Options.\n");
-		ZenithErr("                  have_type: %Z\n", have_type, "ST_FALSE_TRUE");
-		ZenithErr("                  have_dns: %Z\n", have_dns, "ST_FALSE_TRUE");
-		ZenithErr("                  have_router: %Z\n", have_router, "ST_FALSE_TRUE");
-		ZenithErr("                  have_subnet: %Z\n", have_subnet, "ST_FALSE_TRUE");
+		NetErr("DHCP PARSE OFFER: Failed, did not have needed Options.");
+		NetErr("                  have_type: %Z", have_type, "ST_FALSE_TRUE");
+		NetErr("                  have_dns: %Z", have_dns, "ST_FALSE_TRUE");
+		NetErr("                  have_router: %Z", have_router, "ST_FALSE_TRUE");
+		NetErr("                  have_subnet: %Z", have_subnet, "ST_FALSE_TRUE");
 		return -1;
 	}
 }
@@ -344,7 +344,7 @@ I64 DHCPParseAck(U32 xid, U8 *data, I64 length)
 
 	if (EndianU32(header->xid) != xid)
 	{
-		ZenithErr("DHCP PARSE ACK: Failed, parsed and parameter Transaction IDs do not match.\n");
+		NetErr("DHCP PARSE ACK: Failed, parsed and parameter Transaction IDs do not match.");
 		return -1;
 	}
 
@@ -354,7 +354,7 @@ I64 DHCPParseAck(U32 xid, U8 *data, I64 length)
 
 		if (error < 0)
 		{
-			ZenithErr("DHCP PARSE ACK: Failed at DHCP Parse Option.\n");
+			NetErr("DHCP PARSE ACK: Failed at DHCP Parse Option.");
 			return error;
 		}
 		if (error == 0)
@@ -371,7 +371,7 @@ I64 DHCPParseAck(U32 xid, U8 *data, I64 length)
 		}
 	}
 
-	ZenithErr("DHCP PARSE ACK: Failed.\n");
+	NetErr("DHCP PARSE ACK: Failed.");
 	return -1;
 }
 
@@ -402,7 +402,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 
 	if (UDPSocketBind(udp_socket, &ipv4_addr) < 0)
 	{
-		ZenithErr("DHCP CONFIGURE INNER: Failed to Bind UDP Socket.\n");
+		NetErr("DHCP CONFIGURE INNER: Failed to Bind UDP Socket.");
 		return -1;
 	}
 
@@ -419,11 +419,11 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 				break;
 
 			case DHCP_STATE_CLIENT_DISCOVER:
-				ZenithLog("DHCP CONFIGURE INNER: Trying Discover.\n");
+				NetLog("DHCP CONFIGURE INNER: Trying Discover.");
 				error = DHCPSendDiscover(xid);
 				if (error < 0)
 				{
-					ZenithErr("DHCP CONFIGURE INNER: Failed, DHCP Send Discover error.\n");
+					NetErr("DHCP CONFIGURE INNER: Failed, DHCP Send Discover error.");
 					return error;
 				}
 
@@ -431,11 +431,11 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 
 				if (count > 0)
 				{ // 'Try a parse offer'
-					ZenithLog("DHCP CONFIGURE INNER: Trying Parse Offer.\n");
+					NetLog("DHCP CONFIGURE INNER: Trying Parse Offer.");
 					error = DHCPParseOffer(xid, buffer, count, your_ip_out, dns_ip_out, router_ip_out, subnet_mask_out);
 
 					if (error < 0)
-						ZenithWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Offer.\n");
+						NetWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Offer.");
 				}
 
 				if (count > 0 && error >= 0) // TODO: >= ? can DHCPSendDiscover or DHCPParseOffer return greater than zero?
@@ -446,19 +446,19 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 				}
 				else if (++retries == DHCP_MAX_RETRIES)
 				{
-					ZenithErr("DHCP CONFIGURE INNER: Failed, hit max retries in DHCP DISCOVER state.\n");
+					NetErr("DHCP CONFIGURE INNER: Failed, hit max retries in DHCP DISCOVER state.");
 					return -1;
 				}
 
 				break;
 
 			case DHCP_STATE_CLIENT_REQUEST:
-				ZenithLog("DHCP CONFIGURE INNER: Trying Send Request.\n");
+				NetLog("DHCP CONFIGURE INNER: Trying Send Request.");
 				error = DHCPSendRequest(xid, *your_ip_out, dhcp_addr);
 
 				if (error < 0)
 				{
-					ZenithErr("DHCP CONFIGURE INNER: Failed, unsuccessful DHCP Send Request.\n");
+					NetErr("DHCP CONFIGURE INNER: Failed, unsuccessful DHCP Send Request.");
 					return error;
 				}
 
@@ -469,7 +469,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 					error = DHCPParseAck(xid, buffer, count);
 
 					if (error < 0)
-						ZenithWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Ack.\n");
+						NetWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Ack.");
 				}
 
 				if (count > 0 && error >= 0) // see above TODO
@@ -479,7 +479,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 				}
 				else if (++retries == DHCP_MAX_RETRIES)
 				{
-					ZenithErr("DHCP CONFIGURE INNER: Failed, hit max retries in DHCP REQUEST state.\n");
+					NetErr("DHCP CONFIGURE INNER: Failed, hit max retries in DHCP REQUEST state.");
 					return -1;
 				}
 
@@ -505,7 +505,7 @@ I64 DHCPConfigure()
 	if (state == DHCP_STATE_CLIENT_REQ_ACCEPTED)
 	{
 		address.address = EndianU32(your_ip);
-		ZenithLog("$$FG,2$$DHCP CONFIGURE: Obtained IPV4 Address! : %s $$FG$$\n", NetworkToPresentation(AF_INET, &address));
+		NetLog("$$BG,2$$$$FG,15$$DHCP CONFIGURE: Obtained IPV4 Address! : %s $$BG$$$$FG$$", NetworkToPresentation(AF_INET, &address));
 
 		IPV4SetAddress(your_ip);
 		IPV4SetSubnet(router_ip, subnet_mask);
@@ -514,7 +514,7 @@ I64 DHCPConfigure()
 	}
 	else
 	{
-		ZenithErr("$$FG,4$$DHCP CONFIGURE: Failed, incorrect state.$$FG$$\n");
+		NetErr("$$BG,4$$DHCP CONFIGURE: Failed, incorrect state.$$BG$$");
 		return -1;
 	}
 }
@@ -524,11 +524,11 @@ U0 NetConfigure()
 {
 	I64 error;
 
-	ZenithLog("==== Configuring Network. ====\n");
+	NetLog("==== Configuring Network. ====");
 	error = DHCPConfigure();
 
 	if (error < 0)
-		ZenithLog("$$FG,4$$==== Network Configure Failed ====$$FG$$\n");
+		NetErr("==== Network Configure Failed ====");
 	else
-		ZenithLog("$$FG,2$$==== Network Configure Success ====$$FG$$\n");
+		NetLog("$$BG,2$$$$FG,15$$==== Network Configure Success ====$$FG$$$$BG$$");
 }

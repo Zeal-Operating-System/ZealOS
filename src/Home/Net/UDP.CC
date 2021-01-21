@@ -254,12 +254,12 @@ CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 			if (temp_queue->socket->receive_address.family == AF_INET)
 			{
 				temp_ip = &temp_queue->socket->receive_address;
-				ZenithLog("UDPTreeNodeQueueIPV4Find: addr, nodequeue addr: %08X, %08X\n",
+				NetLog("UDPTreeNodeQueueIPV4Find: addr, nodequeue addr: %08X, %08X",
 							address, temp_ip->address.address);
 
 				if (temp_ip->address.address == address || temp_ip->address.address == INADDR_ANY)
 				{
-					ZenithLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue: %08X, %08X \n",
+					NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue: %08X, %08X ",
 								address, temp_ip->address.address);
 					return temp_queue;
 				}
@@ -348,7 +348,7 @@ I64 UDPPacketAllocate(U8 **frame_out,
 								  sizeof(CUDPHeader) + length);
 	if (de_index < 0)
 	{
-		ZenithLog("UDP PACKET ALLOCATE: Ethernet Frame Allocate failed.\n");
+		NetLog("UDP PACKET ALLOCATE: Ethernet Frame Allocate failed.");
 		return de_index;
 	}
 
@@ -421,13 +421,13 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 			break;
 
 		default:
-			ZenithErr("UDP SOCKET BIND: Failed, Socket state-machine must be in READY state.\n");
+			NetErr("UDP SOCKET BIND: Failed, Socket state-machine must be in READY state.");
 			return -1;
 	}
 
 	if (udp_socket->bound_to) 
 	{
-		ZenithErr("UDP SOCKET BIND: UDP Socket currently Bound.\n");
+		NetErr("UDP SOCKET BIND: UDP Socket currently Bound.");
 		return -1;
 	}
 
@@ -437,7 +437,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 
 			if (udp_socket->receive_address.family == AF_INET6)
 			{
-				ZenithErr("UDP SOCKET BIND: Incompatible Address type.\n");
+				NetErr("UDP SOCKET BIND: Incompatible Address type.");
 				return -1;
 			}
 
@@ -455,7 +455,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 
 			if (udp_socket->receive_address.family == AF_INET)
 			{
-				ZenithErr("UDP SOCKET BIND: Incompatible Address type.\n");
+				NetErr("UDP SOCKET BIND: Incompatible Address type.");
 				return -1;
 			}
 
@@ -491,7 +491,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 					// TODO: will any INADDR_ANY sockets bound at the port break this?
 					if (UDPTreeNodeQueueIPV4Find(ipv4_receive->address.address, temp_node))
 					{
-						ZenithErr("UDP SOCKET BIND: Address already in Bound Socket Tree !\n");
+						NetErr("UDP SOCKET BIND: Address already in Bound Socket Tree !");
 						return -1;
 					}
 					else
@@ -532,7 +532,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 			break;
 
 		default:
-			ZenithErr("UDP SOCKET BIND: Failed, Misconfigured Socket state-machine.\n");
+			NetErr("UDP SOCKET BIND: Failed, Misconfigured Socket state-machine.");
 			return -1;
 	}
 
@@ -593,7 +593,7 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 			break;
 
 		default:
-			ZenithErr("UDP SOCKET RECEIVE FROM: Socket state-machine must be in OPEN or BOUND state.\n");
+			NetErr("UDP SOCKET RECEIVE FROM: Socket state-machine must be in OPEN or BOUND state.");
 			return -1;
 	}
 
@@ -603,13 +603,13 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 	if (udp_socket->receive_timeout_ms != 0)
 		udp_socket->receive_max_timeout = counts.jiffies + udp_socket->receive_timeout_ms * JIFFY_FREQ / 1000;
 
-	ZenithLog("UDP SOCKET RECEIVE FROM: udp_socket->receive_buffer: 0x%0X.\n", udp_socket->receive_buffer);
+	NetLog("UDP SOCKET RECEIVE FROM: udp_socket->receive_buffer: 0x%0X.", udp_socket->receive_buffer);
 	while (udp_socket->receive_buffer != NULL)
 	{ // 'Check for timeout'
 		if (udp_socket->receive_timeout_ms != 0 && counts.jiffies > udp_socket->receive_max_timeout)
 		{ // Shrine has TODO: 'seterror(EWOULDBLOCK)' investigate this
 			udp_socket->receive_len = -1; // ?
-			ZenithErr("UDP SOCKET RECEIVE FROM: Timed out.\n");
+			NetErr("UDP SOCKET RECEIVE FROM: Timed out.");
 			break;
 		}
 
@@ -632,7 +632,7 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 				MemCopy(ipv6_socket_addr, &udp_socket->from_address, sizeof(CSocketAddressIPV6));
 				break;
 			case AF_UNSPEC:
-				Debug("TODO: UDP Receive From Error AF_UNSPEC UDPSocket Address Family\n");
+				NetWarn("UDP Receive From AF_UNSPEC UDPSocket Address Family\n");
 				break;
 		}
 	}
@@ -658,13 +658,13 @@ I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressS
 			break;								 // and use stored address as send address.
 
 		case SOCKET_STATE_READY: // If socket state is initial, attempt to bind it to destination.
-			ZenithLog("UDP SOCKET SEND TO: Socket unbound. Attempting Bind at address parameter.\n");
+			NetLog("UDP SOCKET SEND TO: Socket unbound. Attempting Bind at address parameter.");
 			UDPSocketBind(udp_socket, destination_addr);
 			dest = destination_addr;
 			break;
 
 		default:
-			ZenithErr("UDP SOCKET SEND TO: Socket state-machine must be in OPEN, BOUND or READY  state.\n");
+			NetErr("UDP SOCKET SEND TO: Socket state-machine must be in OPEN, BOUND or READY  state.");
 			return -1;
 	}
 
@@ -712,13 +712,13 @@ I64 UDPHandler(CIPV4Packet *packet)
 	CSocketAddressIPV4	*ipv4_addr;
 	I64					 num_receive;
 
-	ZenithLog("UDP HANDLER: Beginning handling UDP Packet.\n");
+	NetLog("UDP HANDLER: Beginning handling UDP Packet.");
 
 	I64 error = UDPParsePacket(&source_port, &destination_port, &data, &length, packet);
 
 	if (error < 0)
 	{
-		ZenithErr("UDP HANDLER: Packet Parse Error.\n");
+		NetErr("UDP HANDLER: Packet Parse Error.");
 		return error;
 	}
 
@@ -731,38 +731,38 @@ I64 UDPHandler(CIPV4Packet *packet)
 			if (queue)
 			{
 				udp_socket = queue->socket;
-				ZenithLog("UDP HANDLER: Port and Address are in bound tree.\n");
+				NetLog("UDP HANDLER: Port and Address are in bound tree.");
 			}
 			else
 			{
-				ZenithWarn("UDP HANDLER: Found node for port, but address is not in node queue.\n");
-				ZenithWarn("             UDP packet dest ip: 0x%0X.\n", packet->destination_ip_address);
+				NetWarn("UDP HANDLER: Found node for port, but address is not in node queue.");
+				NetWarn("             UDP packet dest ip: 0x%0X.", packet->destination_ip_address);
 				return -1;
 			}
 		}
 		else
 		{
-			ZenithWarn("UDP HANDLER: Node for Port is not in tree.\n");
+			NetWarn("UDP HANDLER: Node for Port is not in tree.");
 			return -1;
 		}
 	}
 	else
 	{
-		ZenithWarn("UDP HANDLER: Socket tree is currently empty.\n");
+		NetWarn("UDP HANDLER: Socket tree is currently empty.");
 		return -1;
 	}
 
-	ZenithLog("UDP HANDLER: Checking if UDP Socket's Receive-Buffer exists. UDPSocket at: 0x%0X \n", udp_socket);
-	ZenithLog("             It probably exists, wtf going on ? udp_socket->receive_buffer: 0x%0X.\n", udp_socket->receive_buffer);
+	NetLog("UDP HANDLER: Checking if UDP Socket's Receive-Buffer exists. UDPSocket at: 0x%0X ", udp_socket);
+	NetLog("             It probably exists, wtf going on ? udp_socket->receive_buffer: 0x%0X.", udp_socket->receive_buffer);
 	// at this point, udp_socket is set, otherwise has already returned -1.
 	if (udp_socket->receive_buffer)
 	{
-		ZenithLog("UDP HANDLER: Saw UDP Socket receive buffer exists, about to copy data into it.\n");
+		NetLog("UDP HANDLER: Saw UDP Socket receive buffer exists, about to copy data into it.");
 		num_receive = udp_socket->receive_len;
 
 		if (num_receive > length)
 		{
-			ZenithWarn("UDP HANDLER: Truncating UDP socket receive length. num_receive , len : %d, %d\n",
+			NetWarn("UDP HANDLER: Truncating UDP socket receive length. num_receive , len : %d, %d",
 				num_receive, length);
 			num_receive = length;
 		}
@@ -783,14 +783,14 @@ I64 UDPHandler(CIPV4Packet *packet)
 		ipv4_addr->family			= AF_INET;
 		ipv4_addr->port				= EndianU16(source_port);
 		ipv4_addr->address.address	= EndianU32(packet->source_ip_address);
-		ZenithLog("UDP HANDLER: Copying packet source IP (BE) to FROM_ADDRESS of UDP Socket: %08X \n", ipv4_addr->address.address);
+		NetLog("UDP HANDLER: Copying packet source IP (BE) to FROM_ADDRESS of UDP Socket: %08X ", ipv4_addr->address.address);
 	}
 
 	return error;
 }
 
 // the socket functions just act on the socket state machine.
-// ZenithErr and return fail vals if socket FSM improperly used.
+// NetErr and return fail vals if socket FSM improperly used.
 // Careful with Free()'s.
 
 UDPGlobalsInit;

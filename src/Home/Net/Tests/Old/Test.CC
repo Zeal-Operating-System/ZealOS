@@ -48,7 +48,7 @@ I64	IPV4AddressParse(U8 *string, U32 destination)
 						break;
 
 					default:
-						ZenithErr("IPV4 Parse Failure: Unexpected char.\n");
+						NetErr("IPV4 Parse Failure: Unexpected char.\n");
 						parse_state = IP_PARSE_STATE_ERROR;
 						break;
 
@@ -59,7 +59,7 @@ I64	IPV4AddressParse(U8 *string, U32 destination)
 				"%s, %X\n", digit_buffer, Str2I64(digit_buffer);
 				if (Str2I64(digit_buffer) > 255)
 				{
-					ZenithErr("IPV4 Parse Failure: Chunk exceeds 0 - 255 range.\n");
+					NetErr("IPV4 Parse Failure: Chunk exceeds 0 - 255 range.\n");
 					parse_state = IP_PARSE_STATE_ERROR;
 					break;
 				}
@@ -73,7 +73,7 @@ I64	IPV4AddressParse(U8 *string, U32 destination)
 				current_chunk_index++;
 				if (current_chunk_index > 3)
 				{
-					ZenithErr("IPV4 Parse Failure: Too many dots in address string.\n");
+					NetErr("IPV4 Parse Failure: Too many dots in address string.\n");
 					parse_state = IP_PARSE_STATE_ERROR;
 					break;
 				}
@@ -83,7 +83,7 @@ I64	IPV4AddressParse(U8 *string, U32 destination)
 				break;
 
 			case IP_PARSE_STATE_ERROR:
-				ZenithErr("IPV4 Parse Failure: Invalid Address String.\n");
+				NetErr("IPV4 Parse Failure: Invalid Address String.\n");
 				return -1; // error state!
 		}
 	}

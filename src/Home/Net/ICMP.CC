@@ -32,7 +32,7 @@ I64 ICMPSendReply(U32 destination_ip_address,
 								  sizeof(CICMPHeader) + length);
 	if (de_index < 0)
 	{
-		ZenithErr("ICMP SEND REPLY: Failed to allocate IPV4 packet.\n");
+		NetErr("ICMP SEND REPLY: Failed to allocate IPV4 packet.");
 		return de_index;
 	}
 
@@ -57,7 +57,7 @@ I64 ICMPHandler(CIPV4Packet *packet)
 
 	if (packet->length < sizeof(CICMPHeader))
 	{
-		ZenithErr("ICMP HANDLER: Caught wrong IPV4 length.\n");
+		NetErr("ICMP HANDLER: Caught wrong IPV4 length.");
 		return -1;
 	}
 

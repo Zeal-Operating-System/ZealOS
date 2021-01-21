@@ -98,12 +98,12 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 
 	if (ip_address == 0)
 	{
-		ZenithErr("GET MAC FOR IP: Failed. Address = 0\n");
+		NetErr("GET MAC FOR IP: Failed. Address = 0");
 		return IPV4_ERR_ADDR_INVALID;
 	}
 	if (ip_address == 0xFFFFFFFF)
 	{
-		ZenithLog("GET MAC FOR IP: Returning ethernet broadcast\n");
+		NetLog("GET MAC FOR IP: Returning ethernet broadcast");
 		*mac_out = ethernet_globals.ethernet_broadcast;
 
 		return 0;
@@ -113,12 +113,12 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != (ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
 	{
 		// TODO: Shrine recurses here... and says FIXME infinite loop if mis-configured...
-		ZenithWarn("GET MAC FOR IP: TODO: Doing GetMACAddressForIP recursion, could infinite loop and overflow stack.");
+		NetWarn("GET MAC FOR IP: TODO: Doing GetMACAddressForIP recursion, could infinite loop and overflow stack.");
 		return GetMACAddressForIP(ipv4_globals.ipv4_router_address, mac_out);
 	}
 	else // "local network"
 	{
-		ZenithLog("GET MAC FOR IP: Attempting ARP Find by IP for address: %d.\n", ip_address);
+		NetLog("GET MAC FOR IP: Attempting ARP Find by IP for address: %d.", ip_address);
 		entry = ARPCacheFindByIP(ip_address);
 
 		if (entry)
@@ -158,7 +158,7 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		}
 
 		//Shrine does some in_addr mess to log error
-		ZenithErr("GET MAC FOR IP: Failed to resolve address %d\n", ip_address);
+		NetErr("GET MAC FOR IP: Failed to resolve address %d", ip_address);
 		return IPV4_ERR_HOST_UNREACHABLE;
 	}
 }
@@ -180,7 +180,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 
 	if (error < 0)
 	{
-		ZenithLog("IPV4 PACKET ALLOCATE: Failed to get MAC for destination.\n");
+		NetLog("IPV4 PACKET ALLOCATE: Failed to get MAC for destination.");
 		return error;
 	}
 
@@ -191,7 +191,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 									 sizeof(CIPV4Header) + length);
 	if (de_index < 0)
 	{
-		ZenithLog("IPV4 PACKET ALLOCATE: Ethernet Frame Allocate failed.\n");
+		NetLog("IPV4 PACKET ALLOCATE: Ethernet Frame Allocate failed.");
 		return de_index;
 	}
 

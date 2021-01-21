@@ -91,7 +91,7 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 
 	if (entry == NULL)
 	{
-		ZenithWarn("ARP CACHE FIND BY IP: Could not find an IP in ARP cache.\n");
+		NetWarn("ARP CACHE FIND BY IP: Could not find an IP in ARP cache.");
 	}
 
 	Free(ip_string);
@@ -101,15 +101,15 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 {
 	CARPHash *entry = ARPCacheFindByIP(ip_address);
-	ZenithLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.\n");
+	NetLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.");
 
 	//Free(entry); // something seems wrong about this...
 
 	if (!entry)
 	{
 		entry = CAlloc(sizeof(CARPHash));
-		ZenithLog("ARP CACHE PUT: Attempting add to cache: addr, mac: \n");
-		ZenithLog("               0x%0X, 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X\n",
+		NetLog("ARP CACHE PUT: Attempting add to cache: addr, mac:");
+		NetLog("               0x%0X, 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X",
 					ip_address, mac_address[0], mac_address[1], mac_address[2], mac_address[3], mac_address[4], mac_address[5]);
 		entry->str	= MStrPrint("%X", ip_address);
 		entry->type = HTT_ARP;
@@ -118,7 +118,7 @@ CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 		HashAdd(entry, arp_cache);
 	}
 	else
-		ZenithWarn("ARP CACHE Put: Entry was already found in Cache. TODO: overwrite?\n");
+		NetWarn("ARP CACHE Put: Entry was already found in Cache. TODO: overwrite?");
 
 	return entry;
 }
@@ -152,18 +152,18 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 	CARPHeader *header;
 	U16			operation;
 
-	ZenithLog("ARP HANDLER: Entering ARP Handler.\n");
+	NetLog("ARP HANDLER: Entering ARP Handler.");
 
 	// shrine checks if frame ethertype is ARP and ensures length is not less than CARPHeader
 	// since revising Shrine implement, will do same checks for now ..
 	if (ethernet_frame->ethertype != ETHERTYPE_ARP)
 	{
-		ZenithErr("ARP HANDLER: Caught wrong frame ethertype.\n");
+		NetErr("ARP HANDLER: Caught wrong frame ethertype.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (ethernet_frame->length < sizeof(CARPHeader))
 	{
-		ZenithErr("ARP HANDLER: Caught wrong frame length.\n");
+		NetErr("ARP HANDLER: Caught wrong frame length.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 
@@ -176,22 +176,22 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 	// hlen(?) != 6(?), and that plen(?) == 4 (?)
 	if (EndianU16(header->hardware_type) != HTYPE_ETHERNET)
 	{
-		ZenithErr("ARP HANDLER: Caught wrong frame hardware type.\n");
+		NetErr("ARP HANDLER: Caught wrong frame hardware type.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (EndianU16(header->protocol_type) != ETHERTYPE_IPV4)
 	{
-		ZenithErr("ARP HANDLER: Caught wrong frame protocol type.\n");
+		NetErr("ARP HANDLER: Caught wrong frame protocol type.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (header->hardware_addr_len != HLEN_ETHERNET)
 	{
-		ZenithErr("ARP HANDLER: Caught wrong frame hardware address length.\n");
+		NetErr("ARP HANDLER: Caught wrong frame hardware address length.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 	if (header->protocol_addr_len != PLEN_IPV4)
 	{
-		ZenithErr("ARP HANDLER: Caught wrong frame protocol address length.\n");
+		NetErr("ARP HANDLER: Caught wrong frame protocol address length.");
 		return -1; // External use of ARPHandler must account for -1 error codes
 	}
 

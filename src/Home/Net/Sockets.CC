@@ -178,12 +178,12 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 					case TK_I64:
 						if (cc->cur_i64 > 255 || cc->cur_i64 < 0)
 						{
-							ZenithErr("IPV4 ADDRESS PARSE: Invalid value, must be 0 - 255.\n");
+							NetErr("IPV4 ADDRESS PARSE: Invalid value, must be 0 - 255.");
 							return FALSE;
 						}
 						if (current_section > 3)
 						{
-							ZenithErr("IPV4 ADDRESS PARSE: IP Address can only have 4 sections.\n");
+							NetErr("IPV4 ADDRESS PARSE: IP Address can only have 4 sections.");
 							return FALSE;
 						}
 
@@ -195,7 +195,7 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 						break;
 
 					default:
-						ZenithErr("IPV4 ADDRESS PARSE: Expected decimal. \n");
+						NetErr("IPV4 ADDRESS PARSE: Expected decimal. ");
 						return FALSE;
 				}
 				break;
@@ -208,7 +208,7 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 						break;
 
 					default:
-						ZenithErr("IPV4 ADDRESS PARSE: Expected dot. \n");
+						NetErr("IPV4 ADDRESS PARSE: Expected dot. ");
 						return FALSE;
 				}
 				break;
@@ -245,7 +245,7 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 		case AF_INET:
 			if (string_length > INET_ADDRSTRLEN || string_length < INET_MIN_ADDRSTRLEN)
 			{
-				ZenithErr("IP to Socket Address failed: Invalid Input String Size.\n");
+				NetErr("IP to Socket Address failed: Invalid Input String Size.");
 				return -1;
 			}
 			ipv4_address = destination;
@@ -257,7 +257,7 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 		case AF_INET6:
 			if (string_length > INET6_ADDRSTRLEN || string_length < INET6_MIN_ADDRSTRLEN)
 			{
-				ZenithErr("IP to Socket Address failed: Invalid Input String Size.\n");
+				NetErr("IP to Socket Address failed: Invalid Input String Size.");
 				return -1;
 			}
 			ipv6_address = destination;
@@ -269,7 +269,7 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 			break;
 
 		default:
-			ZenithErr("IP to Socket Address failed: Invalid Address Family.\n");
+			NetErr("IP to Socket Address failed: Invalid Address Family.");
 			return -1;
 	}
 
@@ -314,7 +314,7 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 
 			break;
 		default:
-			ZenithErr("Socket Address to IP failed: Invalid Address Family.\n");
+			NetErr("Socket Address to IP failed: Invalid Address Family.");
 			break;
 	}
 
@@ -367,7 +367,7 @@ U0 SocketStateErr(U8 *request, U8 state)
 			state_string = StrNew("CLOSED");
 			break;
 	}
-	ZenithErr("Socket attempted %s while in %s state.\n", request, state_string);
+	NetErr("Socket attempted %s while in %s state.", request, state_string);
 }
 
 U0 SocketAccept(CSocket *socket)

@@ -13,7 +13,7 @@ U0 UDPSendTrash()
 	error = DNSGetAddressInfo("zenithos.org", NULL, &result);
 	if (error < 0)
 	{
-		ZenithErr("failed at DNS Get Address Info.\n");
+		NetErr("failed at DNS Get Address Info.");
 	}
 	else
 	{

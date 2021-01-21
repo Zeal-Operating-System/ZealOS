@@ -9,8 +9,11 @@ U0 DNSSendTrash()
 	U8			**l = labels;
 	CDNSQuestion *q = CAlloc(sizeof(CDNSQuestion));
 
-	ARPCachePut(dns_ip, dns_mac);	// Force entry into ARP Cache so IPV4 can match it with GetMACAddressForIP
-	DNSSetResolverIPV4(dns_ip);		// Forcing so DNSSendQuestion succeeds
+	if (dns_globals.addr_family == AF_UNSPEC)
+	{
+		ARPCachePut(dns_ip, dns_mac);	// Force entry into ARP Cache so IPV4 can match it with GetMACAddressForIP
+		DNSSetResolverIPV4(dns_ip);		// Forcing so DNSSendQuestion succeeds
+	}
 
 	q->q_name.labels		= labels;
 	q->q_name.num_labels	= 4;
