@@ -374,8 +374,6 @@ $ID,-5$
 $FG,5$$TX+CX,"Test"$$FG$
 * $LK,"SpriteBitMap",A="FI:::/Zenith/Gr/SpriteBitMap.CC"$: Grabscroll?
 
-* $LK,"DriveMap",A="MN:DriveMap"$() in $LK,"MountFile",A="MN:MountFile"$().
-
 * Return ress for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
 * Collision counts for $LK,"GrBlot",A="MN:GrBlot"$, $LK,"GrRect",A="MN:GrRect"$, $LK,"GrPutChar",A="MN:GrPutChar"$?
 
@@ -456,7 +454,7 @@ Not rich, nor poor, but my portion			$TX,"Proverbs 30:8",HTML="http://www.bibleg
 Be hot or cold. Lukewarm I spit you out $TX,"Revelation 3:16",HTML="http://www.biblegateway.com/verse/en/Revelation%203:16"$
 
 $TX,"Linus Torvalds (Dec 28, 1969)",HTML="https://en.wikipedia.org/wiki/Linus_Torvalds"$
-$TX,"John Carmack 	(Aug 20, 1970)",HTML="https://en.wikipedia.org/wiki/John_Carmack"$
+$TX,"John Carmack   (Aug 20, 1970)",HTML="https://en.wikipedia.org/wiki/John_Carmack"$
 $TX,"Terry A. Davis (Dec 15, 1969)",HTML="https://motherboard.vice.com/en_us/article/gods-lonely-programmer"$
 $TX,"Dr. David Pheanis",HTML="https://webapp4.asu.edu/directory/person/77201"$
 $TX,"Dr. Konstantinos S. Tsakalis",HTML="http://ecee.engineering.asu.edu/directory/tenured-and-tenure-track-faculty/kostantinos-s-tsakalis"$

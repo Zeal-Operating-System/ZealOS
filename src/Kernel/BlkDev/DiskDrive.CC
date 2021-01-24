@@ -43,7 +43,6 @@ U0 DrivesRelease()
 
 CDrive *DriveMakeFreeSlot(U8 drv_let)
 {//Make a slot free for a new drv, like during $LK,"Mount",A="MN:Mount"$().
-//!!! drv_let is not a $LK,"remapped",A="MN:DriveMap"$ drv.
 	I64		 i = Letter2Letter(drv_let) - 'A';
 	CDrive	*res;
 
@@ -57,7 +56,6 @@ CDrive *DriveMakeFreeSlot(U8 drv_let)
 
 U8 DriveNextFreeLet(U8 first_drive_let='C')
 {//Locate free slot for new drv, like during $LK,"Mount",A="MN:Mount"$().
-//!!! first_drive_let is not a $LK,"remapped",A="MN:DriveMap"$ drv.
 	I64 i = Letter2Letter(first_drive_let) - 'A', type = Letter2BlkDevType(first_drive_let);
 
 	if (!(0 <= i < DRIVES_NUM))
@@ -283,19 +281,6 @@ U0 DiskChange(U8 drv_let=0)
 	}
 	Drive(drv_let);
 	RedSeaFreeFreeList(drive);
-}
-
-Bool DriveMap(U8 drv_let, CDrive *drive)
-{//Make drive letter map to another.
-	drv_let = Letter2Letter(drv_let);
-	if ('A' <= drv_let <= 'Z')
-	{
-		blkdev.let_to_drive[drv_let - 'A'] = drive;
-		drive->drv_let = drv_let;
-		return TRUE;
-	}
-	else
-		return FALSE;
 }
 
 Bool Drive(U8 drv_let)

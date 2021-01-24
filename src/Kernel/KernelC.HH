@@ -269,9 +269,6 @@ public extern Bool	Drive(     U8 drv_let);
 public extern U0	DiskChange(U8 drv_let=0);
 public extern U0	HomeSet(U8 *dirname);
 
-#help_index "File/Cmd Line (Typically);Cmd Line (Typically);Install"
-public extern Bool DriveMap(U8 drv_let, CDrive *drive);
-
 #help_index "File/FileNames"
 extern			CDirEntry	*Cd2DirEntry(CDirEntry *tmpde, U8 *abs_name);
 public extern	U8			*DirCur(CTask *task=NULL, CTask *mem_task=NULL);

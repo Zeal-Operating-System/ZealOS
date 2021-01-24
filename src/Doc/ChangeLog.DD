@@ -1,4 +1,10 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----01/24/21 01:51:12----$IV,0$
+* Removed DriveMap().
+
+$IV,1$----12/23/20 18:27:18----$IV,0$
+* Reformatting of files is now virtually complete.
+
 $IV,1$----01/11/21 23:39:21----$IV,0$
 * Restored "Daemon" -> "Seth".
 
@@ -49,7 +55,7 @@ $IV,1$----04/02/20 01:50:52----$IV,0$
 * 'Fixed' $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ window lock up on exit. Brute-forcing zero, but somewhere $LK,"mp_not_done_flags",A="FF:::/Demo/Games/Varoom.CC,mp_not_done_flags"$ isn't getting cleared when shift-esc is entered with the new key implementation.
 
 $IV,1$----04/01/20 01:49:47----$IV,0$
-* Made the boats in $LK,"Talons",A="FI:::/Demo/Games/Talons.CC"$ brown instead of black.
+* Changed boat color in $LK,"Talons",A="FI:::/Demo/Games/Talons.CC"$ from black to brown.
 
 $IV,1$----04/01/20 01:42:55----$IV,0$
 * Cleaned up $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ control fix some. Bug remains: run from Menu, ESC out, ESC again; a window locks up.
@@ -106,7 +112,7 @@ $IV,1$----03/16/20 14:44:00----$IV,0$
 
 $IV,1$----03/12/20 22:00:36----$IV,0$
 * Added $LK,"PaletteSetGruvboxDark",A="MN:PaletteSetGruvboxDark"$().
-* Remove shift-space, as we use tab indentation now. $LK,"S2T",A="MN:S2T"$() is still present if needed.
+* Removed shift-space, as we use tab indentation now. $LK,"S2T",A="MN:S2T"$() is still present if needed.
 
 $IV,1$----02/24/20 00:42:00----$IV,0$
 $BK,1$* Zenith 1.1 released.$BK,0$
@@ -146,7 +152,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Updated $LK,"MemRep",A="MN:MemRep"$() to report on VBE variables.
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
-* Shorten $LK,"CheckPtr",A="MN:"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
+* Shortened $LK,"CheckPtr",A="MN:"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
 * $LK,"RawDr",A="MN:RawDr"$() is 40 columns off the right of the screen, instead of fixed at column 40.
 * Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. Zenith task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
