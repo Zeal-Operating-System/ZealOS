@@ -21,6 +21,8 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 			UDPHandler(&packet);
 			break;
 	}
+
+	NetLog("IPV4 HANDLER: Exiting.");
 }
 
 U0 HandleNetQueueEntry(CNetQueueEntry *entry)
@@ -41,15 +43,17 @@ U0 HandleNetQueueEntry(CNetQueueEntry *entry)
 			IPV4Handler(&ethernet_frame);
 			break;
 	}
+
+	NetLog("HANDLE NETQUEUE ENTRY: Exiting.");
 }
 
 interrupt U0 NetHandler()
 {
-	CNetQueueEntry *entry = NetQueuePull();
+	CNetQueueEntry *entry;
 
-	if (entry)
+	while (entry = NetQueuePull())
 	{
-		NetLog("NET HANDLER TASK: Caught NetQueue Entry, handling.");
+		NetLog("NET HANDLER: Caught NetQueue Entry, handling.");
 		HandleNetQueueEntry(entry);
 	}
 

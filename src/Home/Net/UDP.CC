@@ -12,18 +12,25 @@ class CUDPHeader
 	U16 checksum;
 };
 
+class CUDPMessageQueue
+{ // each bound socket queues data. recv functions & handler use this.
+	CUDPMessageQueue		*next;
+	CUDPMessageQueue		*last;
+	U8						*data;				// contains the UDP payload data.
+	I64						 data_length;		// size of payload data.
+	I64						 received_length;	// amount of the data received so far.
+	CSocketAddressStorage	 from_address;	// when UDP Handler sees UDP packet, this is filled with where packet came from.
+											// recvfrom uses this to fill its address_out parameter.
+};
+
 class CUDPSocket
 {
 	CSocket					*socket;
 	I64						 receive_timeout_ms;
 	I64						 receive_max_timeout;
-	U8						*receive_buffer;
-	I64						 receive_len;
+	CUDPMessageQueue		*receive_queue;
 	CSocketAddressStorage	 receive_address;	// based on ->family, cast or assign to a var as IPV4/IPV6 CSocketAddress
 	U16						 bound_to;			// represents the currently bound port
-
-	CSocketAddressStorage	 from_address;	// when UDP Handler sees UDP packet, this is filled with where the packet came from.
-											// recvfrom uses this to fill its address_out parameter.
 };
 
 /***************************************************
@@ -33,7 +40,7 @@ UDP Bound Socket Tree Classes & Functions
 ***************************************************/
 
 class CUDPTreeQueue
-{ // next, last for CQueue implementation.
+{ // next, last for queue implementation.
 	CUDPTreeQueue	*next;
 	CUDPTreeQueue	*last;
 	CUDPSocket		*socket;
@@ -408,7 +415,9 @@ CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 
 I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 {
+	CUDPTreeNode	   *head = udp_globals.bound_socket_tree;
 	CUDPTreeNode	   *temp_node;
+	CUDPMessageQueue   *message_queue;
 	CSocketAddressIPV4 *ipv4_source;
 	CSocketAddressIPV4 *ipv4_receive;
 	CSocketAddressIPV6 *ipv6_source;
@@ -478,10 +487,10 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 
 	// at this point, Socket and Address have matching family values
 
-	if (udp_globals.bound_socket_tree)
+	if (head)
 	{
 		// look for our port.
-		temp_node = UDPTreeNodeFind(port, udp_globals.bound_socket_tree);
+		temp_node = UDPTreeNodeFind(port, head);
 
 		if (temp_node)
 		{ // if we find we have bound sockets at port, check address before adding to queue
@@ -510,18 +519,21 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 		}
 		else
 		{ // if we get no node back from port search, we didn't find it and are free to add a new node.
-			temp_node = UDPTreeNodeParamAdd(port, udp_globals.bound_socket_tree); // add new node with port, return its *.
+			temp_node = UDPTreeNodeParamAdd(port, head); // add new node with port, return its *.
 			UDPTreeNodeQueueAdd(udp_socket, temp_node);
 		}
 	}
 	else // if no bound sockets, we init the tree as a new node
 	{
-		udp_globals.bound_socket_tree = UDPTreeNodeParamInit(port); //... shouuuld be in L.E .. ?
-		UDPTreeNodeQueueAdd(udp_socket, udp_globals.bound_socket_tree); // add the udp socket to the port queue
+		udp_globals.bound_socket_tree = head = UDPTreeNodeParamInit(port); //... shouuuld be in L.E .. ?
+		UDPTreeNodeQueueAdd(udp_socket, head); // add the udp socket to the port queue
 		// maybe more checks to do before this, dunno rn.
 	}
 
 	udp_socket->bound_to = port;
+
+	udp_socket->receive_queue = message_queue = CAlloc(sizeof(CUDPMessageQueue));
+	QueueInit(message_queue); // acts as head. add messages to but don't remove head.
 
 	SocketBind(udp_socket->socket); // Advance Socket state-machine to BIND REQ state.
 
@@ -541,13 +553,15 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 
 I64 UDPSocketClose(CUDPSocket *udp_socket)
 { // close, pop, and free the socket from the bound tree.
-	CUDPTreeNode  *node;
-	CUDPTreeQueue *queue;
+	CUDPTreeNode		*head = udp_globals.bound_socket_tree;
+	CUDPTreeNode		*node;
+	CUDPTreeQueue		*queue;
+	CUDPMessageQueue	*message;
 
 	SocketClose(udp_socket->socket); // TODO: testing on closing a socket while another task is using it
 	// after low-level socket close, even if protocol level socket fails close, it is now disabled (state is close request)
 
-	node = UDPTreeNodeFind(udp_socket->bound_to, udp_globals.bound_socket_tree);
+	node = UDPTreeNodeFind(udp_socket->bound_to, head);
 
 	if (node)
 		queue = UDPTreeNodeQueueSocketFind(udp_socket, node);
@@ -561,8 +575,41 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 	{
 		UDPTreeNodeQueueSocketSinglePop(udp_socket, node);
 
+		if (!node->queue)
+		{ // if we popped the only queue on the node, remove the node.
+			if (node == head)
+			{ // head is the global. if node is the global, change it and add branches.
+				if (node->left)
+				{
+					udp_globals.bound_socket_tree = head = node->left;
+					if (node->right)
+						UDPTreeNodeAdd(node->right, head);
+				}
+				else if (node->right)
+					udp_globals.bound_socket_tree = node->right;
+				else
+					udp_globals.bound_socket_tree = NULL;
+			}
+			else // if node is not the global, just pop it from the tree
+				UDPTreeNodeSinglePop(node->port, head);
+
+			Free(node);
+		}
+
 		Free(udp_socket->socket);
-//		Free(udp_socket->receive_buffer); // i think we'll still need to keep this
+
+		message = udp_socket->receive_queue->next;
+		while (message != udp_socket->receive_queue)
+		{
+			NetWarn("UDP SOCKET CLOSE: Freeing message @ 0x%X", message);
+			Free(message->data);
+			QueueRemove(message);
+			Free(message);
+			message = udp_socket->receive_queue->next;
+		}
+
+		NetWarn("UDP SOCKET CLOSE: Freeing message queue & socket.");
+		Free(udp_socket->receive_queue);
 		Free(udp_socket);
 		Free(queue);
 	}
@@ -583,8 +630,9 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 
 I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *address_out)
 { // ommitted I64 addrlen, flags not implemented
-	CSocketAddressIPV4 *ipv4_socket_addr;
-	CSocketAddressIPV6 *ipv6_socket_addr;
+	CSocketAddressIPV4	*ipv4_socket_addr;
+	CSocketAddressIPV6	*ipv6_socket_addr;
+	CUDPMessageQueue	*message;
 
 	switch (udp_socket->socket->state)
 	{
@@ -597,39 +645,43 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 			return -1;
 	}
 
-	udp_socket->receive_buffer	= buffer;
-	udp_socket->receive_len		= len;
+	if (len < 0)
+	{
+		NetErr("UDP SOCKET RECEIVE FROM: Invalid length requested.");
+		return -1;
+	}
 
 	if (udp_socket->receive_timeout_ms != 0)
 		udp_socket->receive_max_timeout = counts.jiffies + udp_socket->receive_timeout_ms * JIFFY_FREQ / 1000;
 
-	NetLog("UDP SOCKET RECEIVE FROM: udp_socket->receive_buffer: 0x%0X.", udp_socket->receive_buffer);
-	while (udp_socket->receive_buffer != NULL)
-	{ // 'Check for timeout'
+	message = udp_socket->receive_queue;
+
+	while (message == message->next)
+	{ // wait for a message to be added to queue. head is non-message.
 		if (udp_socket->receive_timeout_ms != 0 && counts.jiffies > udp_socket->receive_max_timeout)
 		{ // Shrine has TODO: 'seterror(EWOULDBLOCK)' investigate this
-			udp_socket->receive_len = -1; // ?
 			NetErr("UDP SOCKET RECEIVE FROM: Timed out.");
-			break;
+			return -1;
 		}
 
 		Yield;
 	}
 
+	NetLog("UDP SOCKET RECEIVE FROM: Saw message in receive queue.");
+
+	message = message->next;
+
 	if (address_out)
 	{
-//		switch (udp_socket->receive_address.family)
-		switch (udp_socket->from_address.family)
+		switch (message->from_address.family)
 		{
 			case AF_INET:
 				ipv4_socket_addr = address_out;
-//				MemCopy(ipv4_socket_addr, &udp_socket->receive_address, sizeof(CSocketAddressIPV4));
-				MemCopy(ipv4_socket_addr, &udp_socket->from_address, sizeof(CSocketAddressIPV4));
+				MemCopy(ipv4_socket_addr, &message->from_address, sizeof(CSocketAddressIPV4));
 				break;
 			case AF_INET6:
 				ipv6_socket_addr = address_out;
-//				MemCopy(ipv6_socket_addr, &udp_socket->receive_address, sizeof(CSocketAddressIPV6));
-				MemCopy(ipv6_socket_addr, &udp_socket->from_address, sizeof(CSocketAddressIPV6));
+				MemCopy(ipv6_socket_addr, &message->from_address, sizeof(CSocketAddressIPV6));
 				break;
 			case AF_UNSPEC:
 				NetWarn("UDP Receive From AF_UNSPEC UDPSocket Address Family\n");
@@ -637,9 +689,29 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 		}
 	}
 
+
+	if (len >= message->data_length - message->received_length)
+	{
+		NetLog("UDP SOCKET RECEIVE FROM: Requested length longer than data. Truncating.");
+		len = message->data_length - message->received_length;
+		MemCopy(buffer, message->data + message->received_length, len);
+
+		NetWarn("UDP SOCKET RECEIVE FROM: Freeing message and removing from queue.");
+		// all data pulled, release message
+		QueueRemove(message);
+		Free(message->data);
+		Free(message);
+	}
+	else
+	{
+		NetLog("UDP SOCKET RECEIVE FROM: Requsted length shorter than data at message.");
+		MemCopy(buffer, message->data + message->received_length, len);
+		message->received_length += len;
+	}
+
 	SocketReceiveFrom(udp_socket->socket);
 
-	return udp_socket->receive_len;
+	return len;
 }
 
 I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressStorage *destination_addr)
@@ -706,11 +778,14 @@ I64 UDPHandler(CIPV4Packet *packet)
 	U16					 destination_port;
 	U8					*data;
 	I64					 length;
+	CUDPTreeNode		*head = udp_globals.bound_socket_tree;
 	CUDPTreeNode		*node;
 	CUDPTreeQueue		*queue;
+	CUDPMessageQueue	*messages_head;
+	CUDPMessageQueue	*message;
 	CUDPSocket			*udp_socket;
 	CSocketAddressIPV4	*ipv4_addr;
-	I64					 num_receive;
+//	I64					 num_receive;
 
 	NetLog("UDP HANDLER: Beginning handling UDP Packet.");
 
@@ -722,9 +797,9 @@ I64 UDPHandler(CIPV4Packet *packet)
 		return error;
 	}
 
-	if (udp_globals.bound_socket_tree)
+	if (head)
 	{
-		node = UDPTreeNodeFind(destination_port, udp_globals.bound_socket_tree);
+		node = UDPTreeNodeFind(destination_port, head);
 		if (node)
 		{
 			queue = UDPTreeNodeQueueIPV4Find(packet->destination_ip_address, node); // TODO: make sure bit order is correct here!!
@@ -751,40 +826,28 @@ I64 UDPHandler(CIPV4Packet *packet)
 		NetWarn("UDP HANDLER: Socket tree is currently empty.");
 		return -1;
 	}
-
-	NetLog("UDP HANDLER: Checking if UDP Socket's Receive-Buffer exists. UDPSocket at: 0x%0X ", udp_socket);
-	NetLog("             It probably exists, wtf going on ? udp_socket->receive_buffer: 0x%0X.", udp_socket->receive_buffer);
 	// at this point, udp_socket is set, otherwise has already returned -1.
-	if (udp_socket->receive_buffer)
-	{
-		NetLog("UDP HANDLER: Saw UDP Socket receive buffer exists, about to copy data into it.");
-		num_receive = udp_socket->receive_len;
 
-		if (num_receive > length)
-		{
-			NetWarn("UDP HANDLER: Truncating UDP socket receive length. num_receive , len : %d, %d",
-				num_receive, length);
-			num_receive = length;
-		}
 
-		MemCopy(udp_socket->receive_buffer, data, num_receive);
+	NetLog("UDP HANDLER: Putting data payload into message queue.");
 
-		// Shrine has comment 'signal that we received something'
-		// In UDPSocketRecvFrom, a given buffer is set as receive buffer.
-		// Handler sees socket has buffer, copies data to that buffer,
-		// then clears the socket's pointer for it. Actual buffer location
-		// itself is untouched.
-		udp_socket->receive_buffer	= NULL;
-		udp_socket->receive_len		= num_receive;
+	messages_head = udp_socket->receive_queue;
 
-//		ipv4_addr = &udp_socket->receive_address;
-		ipv4_addr = &udp_socket->from_address;
+	message = CAlloc(sizeof(CUDPMessageQueue));
+	QueueInsertRev(message, messages_head);
 
-		ipv4_addr->family			= AF_INET;
-		ipv4_addr->port				= EndianU16(source_port);
-		ipv4_addr->address.address	= EndianU32(packet->source_ip_address);
-		NetLog("UDP HANDLER: Copying packet source IP (BE) to FROM_ADDRESS of UDP Socket: %08X ", ipv4_addr->address.address);
-	}
+	message->data = CAlloc(length);
+	MemCopy(message->data, data, length);
+	message->data_length = length;
+
+	ipv4_addr = &message->from_address;
+
+	ipv4_addr->family			= AF_INET;
+	ipv4_addr->port				= EndianU16(source_port);
+	ipv4_addr->address.address	= EndianU32(packet->source_ip_address);
+	NetLog("UDP HANDLER: Copying packet source IP (BE) to FROM_ADDRESS of UDP Socket: %08X ", ipv4_addr->address.address);
+
+	NetLog("UDP HANDLER: Data payload succesfully placed in message queue.");
 
 	return error;
 }

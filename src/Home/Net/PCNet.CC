@@ -672,8 +672,6 @@ U0 PCNetInit()
 
 	PCNetExitConfigMode;	
 
-	PCNetSetupInterrupts;
-
 	Sleep(100); //? necessary?
 
 /*	ClassRep(&pcnet);
@@ -693,6 +691,10 @@ U0 PCNetInit()
 
 	csr =  PCNetReadCSR(PCNET_CSR_POLLINT);
 	NetLog("PCNET INIT END: what is POLLINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
+
+	NetLog("PCNET INIT END: Redirecting interrupts.");
+	PCNetSetupInterrupts;
+
 
 	Free(setup);
 }

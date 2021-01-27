@@ -75,5 +75,7 @@ I64 ICMPHandler(CIPV4Packet *packet)
 					  packet->length - sizeof(CICMPHeader)); // TODO: ??
 	}
 
+	NetLog("ICMP HANDLER: Exiting.");
+
 	return 0;
 }

@@ -199,17 +199,23 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 	{
 		case ARP_REQUEST:
 			if (header->target_protocol_addr == arp_globals.local_ipv4)
+			{
+				NetLog("ARP HANDLER: Saw request, sending back reply.");
 				ARPSend(ARP_REPLY,
 						header->sender_hardware_addr,
 						EthernetGetMAC(),
 						arp_globals.local_ipv4,
 						header->sender_hardware_addr,
 						header->sender_protocol_addr);
+			}
 			break;
 		case ARP_REPLY:
+			NetLog("ARP HANDLER: Saw reply, putting into ARP Cache.");
 			ARPCachePut(EndianU32(header->sender_protocol_addr), header->sender_hardware_addr);
 			break;
 	}
+
+	NetLog("ARP HANDLER: Exiting.");
 }
 
 U0 ARPRep()

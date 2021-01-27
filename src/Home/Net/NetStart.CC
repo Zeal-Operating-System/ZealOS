@@ -19,10 +19,10 @@
 
 #include "C:/Home/Net/NetHandler" // needs IPV4, UDP, ICMP
 
+NetConfigure;
+
 if (Fs != zenith_task)
 {
-	NetConfigure;
-
 	if (ipv4_globals.local_ip != 0) // is set if NetConfigure is successful
 	{
 		"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n";
@@ -35,8 +35,3 @@ if (Fs != zenith_task)
 	}
 
 }
-else
-{
-	XTalkStr(zenith_task->next_task, "NetConfigure;\n");
-}
-
