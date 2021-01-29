@@ -1,9 +1,12 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----01/28/21 19:08:16----$IV,0$
+* Added $LK,"MSRGet",A="MN:MSRGet"$().
+
 $IV,1$----01/24/21 01:51:12----$IV,0$
 * Removed DriveMap().
 
 $IV,1$----12/23/20 18:27:18----$IV,0$
-* Reformatting of files is now virtually complete.
+* Reformatting of files is virtually complete now.
 
 $IV,1$----01/11/21 23:39:21----$IV,0$
 * Restored "Daemon" -> "Seth".

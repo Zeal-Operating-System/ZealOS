@@ -549,7 +549,19 @@ _RET::
 		RET
 
 /***********************************/
-_SET_MSR::
+_MSR_GET::
+		PUSH	RBP
+		MOV		RBP, RSP
+		MOV		RCX, SF_ARG1[RBP]
+		RDMSR
+		SHL		RDX, 32
+		MOV		EDX, EAX
+		MOV		RAX, RDX
+		POP		RBP
+		RET1	8
+
+/***********************************/
+_MSR_SET::
 		PUSH	RBP
 		MOV 	RBP, RSP
 		MOV 	RAX, SF_ARG2[RBP]
