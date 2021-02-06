@@ -64,6 +64,13 @@ interrupt U0 NetHandler()
 {
 	CNetQueueEntry *entry;
 
+	NetLog("$$BG,DKGRAY$$$$FG,BLACK$$"
+		   "=== NET HANDLER ==="
+		   "$$BG$$$$FG$$");
+
+	NetLog("$$BD,LTGRAY$$$$FD,WHITE$$"
+		   "NET HANDLER: Entering interrupt.");
+
 	while (entry = NetQueuePull())
 	{
 		NetLog("NET HANDLER: Caught NetQueue Entry, handling.");
@@ -73,7 +80,11 @@ interrupt U0 NetHandler()
 
 	}
 
-	NetLog("NET HANDLER: NetQueue empty, exiting interrupt.");
+	NetLog("NET HANDLER: NetQueue empty, exiting interrupt.\n"
+		   "$$BD,WHITE$$$$FD,LTGRAY$$"
+		   "$$BG,DKGRAY$$$$FG,BLACK$$"
+		   "==================="
+		   "$$BG$$$$FG$$");
 
 	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
 }

@@ -261,12 +261,12 @@ CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 			if (temp_queue->socket->receive_address.family == AF_INET)
 			{
 				temp_ip = &temp_queue->socket->receive_address;
-				NetLog("UDPTreeNodeQueueIPV4Find: addr, nodequeue addr: %08X, %08X",
+				NetLog("UDPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X",
 							address, temp_ip->address.address);
 
 				if (temp_ip->address.address == address || temp_ip->address.address == INADDR_ANY)
 				{
-					NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue: %08X, %08X ",
+					NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X ",
 								address, temp_ip->address.address);
 					return temp_queue;
 				}
@@ -658,7 +658,11 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 
 	while (message == message->next)
 	{ // wait for a message to be added to queue. head is non-message.
-		if (udp_socket->receive_timeout_ms != 0 && counts.jiffies > udp_socket->receive_max_timeout)
+//		if (udp_socket->receive_timeout_ms != 0 && counts.jiffies > udp_socket->receive_max_timeout)
+		if (udp_socket->receive_timeout_ms == 0)
+			return -1; // if no timeout set and didn't see message, bail early
+
+		if (counts.jiffies > udp_socket->receive_max_timeout)
 		{ // Shrine has TODO: 'seterror(EWOULDBLOCK)' investigate this
 			NetErr("UDP SOCKET RECEIVE FROM: Timed out.");
 			return -1;
@@ -802,7 +806,8 @@ I64 UDPHandler(CIPV4Packet *packet)
 		node = UDPTreeNodeFind(destination_port, head);
 		if (node)
 		{
-			queue = UDPTreeNodeQueueIPV4Find(packet->destination_ip_address, node); // TODO: make sure bit order is correct here!!
+//			queue = UDPTreeNodeQueueIPV4Find(packet->destination_ip_address, node); // TODO: make sure bit order is correct here!!
+			queue = UDPTreeNodeQueueIPV4Find(packet->source_ip_address, node); // TODO: make sure bit order is correct here!!
 			if (queue)
 			{
 				udp_socket = queue->socket;

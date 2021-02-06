@@ -154,7 +154,8 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 //	U8* lexable_string;
 //	lexable_string = StrReplace(string, ",", ","); // swap any commas with an unexpected value
 
-	U8 *lexable_string = StrReplace(string, ".", ","); // swap dots with commas since Lex is easier with them.
+	U8 *lexable_string = StrNew(string);
+	lexable_string = StrReplace(lexable_string, ".", ","); // swap dots with commas since Lex is easier with them.
 
 	CCompCtrl *cc = CompCtrlNew(lexable_string);
 	//Bts(&cc->opts, OPTf_DECIMAL_ONLY);
@@ -215,6 +216,8 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 		}
 	}
 
+	CompCtrlDel(cc);
+
 	temp_destination = EndianU32(temp_destination); // store the address in Network Byte Order (Big-Endian)
 	*destination = temp_destination;
 	"\n\n%X\n\n", temp_destination;
@@ -250,7 +253,8 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 			}
 			ipv4_address = destination;
 
-			IPV4AddressParse(string, &ipv4_address->address);
+			if (!IPV4AddressParse(string, &ipv4_address->address))
+				return -1;
 
 			break;
 

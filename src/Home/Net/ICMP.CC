@@ -74,6 +74,8 @@ I64 ICMPHandler(CIPV4Packet *packet)
 					  packet->data   + sizeof(CICMPHeader),
 					  packet->length - sizeof(CICMPHeader)); // TODO: ??
 	}
+	else
+		NetWarn("ICMP HANDLER: Unhandled ICMP packet. type, code: 0x%X, 0x%X", header->type, header->code);
 
 	NetLog("ICMP HANDLER: Exiting.");
 

@@ -524,7 +524,7 @@ U0 NetConfigure()
 {
 	I64 error;
 
-	NetLog("==== Configuring Network. ====");
+	NetLog("\n==== Configuring Network. ====\n");
 	error = DHCPConfigure();
 
 	if (error < 0)

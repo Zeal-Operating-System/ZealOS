@@ -512,7 +512,7 @@ U0 PCNetFinishTransmitPacket(I64 de_index)
 	CPCNetDescriptorEntry *entry = &pcnet.tx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
 	Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
-	NetLog("PCNet FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.",
+	NetLog("PCNET FINISH TX PACKET: TX DE index: %X, OWN bit of entry at entry: %b.",
 				de_index, Bt(&entry->status1, PCNET_DESCRIPTORf_OWN));
 }
 
@@ -535,7 +535,7 @@ I64 PCNetReceivePacket(U8 **packet_buffer_out, U16 *packet_length_out)
 	I64 de_index = pcnet.current_rx_de_index;
 	U16 packet_length;
 
-	NetLog("PCNET RECEIVE PACKET: PCNet received packet. %X , %X ", packet_buffer_out, packet_length_out);
+	NetLog("PCNET RECEIVE PACKET: Output buffer ptr, output length ptr: %X, %X ", packet_buffer_out, packet_length_out);
 
 	CPCNetDescriptorEntry *entry = &pcnet.rx_de_buffer[de_index * sizeof(CPCNetDescriptorEntry)];
 
@@ -572,13 +572,18 @@ interrupt U0 PCNetIRQ()
 
 	while (PCNetDriverOwns(&entry[pcnet.current_rx_de_index]))
 	{
-		NetLog("PCNET IRQ: Saw owned RX DE index %d.", pcnet.current_rx_de_index);
+		NetLog("$$BG,LTCYAN$$$$FG,WHITE$$"
+			   "==== PCNET IRQ ===="
+			   "$$BG$$$$FG$$");
+
+		NetLog("$$BD,CYAN$$$$FD,WHITE$$"
+			   "PCNET IRQ: Saw owned RX DE index %d.", pcnet.current_rx_de_index);
 
 		de_index = PCNetReceivePacket(&packet_buffer, &packet_length);
 
-		if (de_index >= 0) // necessary? check increment logic in PCNetReceivePacket.
+		if (de_index >= 0) // todo: necessary? check increment logic in PCNetReceivePacket.
 		{
-			NetLog("PCNET IRQ: Pushing copy into Net Queue, Releasing Receive Packet");
+			NetLog("PCNET IRQ: Pushing copy into Net Queue, releasing receive packet.");
 			NetQueuePushCopy(packet_buffer, packet_length);
 			PCNetReleaseReceivePacket(de_index);
 		}
@@ -586,6 +591,12 @@ interrupt U0 PCNetIRQ()
 		Bts(&csr, PCNET_CTRL_RINT);
 
 		PCNetWriteCSR(PCNET_CSR_CTRLSTATUS, csr);
+
+		NetLog("PCNET IRQ: Exiting.\n"
+			   "$$BD,WHITE$$$$FD,LTGRAY$$"
+			   "$$BG,LTCYAN$$$$FG,WHITE$$"
+			   "==================="
+			   "$$BG$$$$FG$$");
 	}
 
 	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;

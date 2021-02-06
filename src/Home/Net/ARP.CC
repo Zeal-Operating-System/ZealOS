@@ -91,7 +91,7 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 
 	if (entry == NULL)
 	{
-		NetWarn("ARP CACHE FIND BY IP: Could not find an IP in ARP cache.");
+		NetLog("ARP CACHE FIND BY IP: Could not find an IP in ARP cache.");
 	}
 
 	Free(ip_string);
@@ -100,17 +100,20 @@ CARPHash *ARPCacheFindByIP(U32 ip_address)
 
 CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 {
-	CARPHash *entry = ARPCacheFindByIP(ip_address);
+	CARPHash *entry;
+
 	NetLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.");
 
-	//Free(entry); // something seems wrong about this...
+	entry = ARPCacheFindByIP(ip_address);
 
 	if (!entry)
 	{
 		entry = CAlloc(sizeof(CARPHash));
+
 		NetLog("ARP CACHE PUT: Attempting add to cache: addr, mac:");
 		NetLog("               0x%0X, 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X 0x%0X",
-					ip_address, mac_address[0], mac_address[1], mac_address[2], mac_address[3], mac_address[4], mac_address[5]);
+				ip_address, mac_address[0], mac_address[1], mac_address[2], mac_address[3], mac_address[4], mac_address[5]);
+
 		entry->str	= MStrPrint("%X", ip_address);
 		entry->type = HTT_ARP;
 		MemCopy(entry->mac_address, mac_address, 6);
@@ -135,64 +138,46 @@ U0 ARPSetIPV4Address(U32 ip_address)
 			arp_globals.local_ipv4);
 }
 
-//ARP Handler? Takes an eth_frame CEthFrame* ?
-//Seems like a weird way to do this,
-//and then it goes into a a RegisterL3Protocol
-//function that does some function-handler
-//magic. Idk why it _has_ to do that, it seems
-//like a choice they made. I really do wonder if
-//their is a slicker way to implement this.
-//Less of this fucky function syntax mess.
-
-//We'll just make the ARP handle function
-//and directly call it based on a switch in
-//the NetQueueHandler
 I64 ARPHandler(CEthernetFrame *ethernet_frame)
-{
+{ // Use of ARPHandler must account for -1 error codes.
 	CARPHeader *header;
 	U16			operation;
 
 	NetLog("ARP HANDLER: Entering ARP Handler.");
 
-	// shrine checks if frame ethertype is ARP and ensures length is not less than CARPHeader
-	// since revising Shrine implement, will do same checks for now ..
 	if (ethernet_frame->ethertype != ETHERTYPE_ARP)
 	{
 		NetErr("ARP HANDLER: Caught wrong frame ethertype.");
-		return -1; // External use of ARPHandler must account for -1 error codes
+		return -1;
 	}
 	if (ethernet_frame->length < sizeof(CARPHeader))
 	{
 		NetErr("ARP HANDLER: Caught wrong frame length.");
-		return -1; // External use of ARPHandler must account for -1 error codes
+		return -1;
 	}
-
 
 	header = ethernet_frame->data;
 	operation = EndianU16(header->operation);
 
-	// shrine checks to ensure header->htype is 1,
-	// EndianU16(header->protocol_type) == ethertype ipv4,
-	// hlen(?) != 6(?), and that plen(?) == 4 (?)
 	if (EndianU16(header->hardware_type) != HTYPE_ETHERNET)
 	{
 		NetErr("ARP HANDLER: Caught wrong frame hardware type.");
-		return -1; // External use of ARPHandler must account for -1 error codes
+		return -1;
 	}
 	if (EndianU16(header->protocol_type) != ETHERTYPE_IPV4)
 	{
 		NetErr("ARP HANDLER: Caught wrong frame protocol type.");
-		return -1; // External use of ARPHandler must account for -1 error codes
+		return -1;
 	}
 	if (header->hardware_addr_len != HLEN_ETHERNET)
 	{
 		NetErr("ARP HANDLER: Caught wrong frame hardware address length.");
-		return -1; // External use of ARPHandler must account for -1 error codes
+		return -1;
 	}
 	if (header->protocol_addr_len != PLEN_IPV4)
 	{
 		NetErr("ARP HANDLER: Caught wrong frame protocol address length.");
-		return -1; // External use of ARPHandler must account for -1 error codes
+		return -1;
 	}
 
 	switch (operation)
@@ -208,10 +193,17 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 						header->sender_hardware_addr,
 						header->sender_protocol_addr);
 			}
+			else
+				NetWarn("ARP HANDLER: Saw request, target IP address is not this machine.");
 			break;
+
 		case ARP_REPLY:
 			NetLog("ARP HANDLER: Saw reply, putting into ARP Cache.");
 			ARPCachePut(EndianU32(header->sender_protocol_addr), header->sender_hardware_addr);
+			break;
+
+		default:
+			NetErr("ARP HANDLER: Unrecognized operation: 0x%X", operation);
 			break;
 	}
 
@@ -232,12 +224,16 @@ U0 ARPRep()
 		while (temp_hash)
 		{
 			"ARP Hash @ $FG,3$0x%X$FG$:\n", temp_hash;
+
 			address = EndianU32(Str2I64(temp_hash->str, 16)(U32));
 			"	IP Address:		$FG,6$%d.%d.%d.%d$FG$\n",
 				(&address)(U8 *)[0], (&address)(U8 *)[1], (&address)(U8 *)[2], (&address)(U8 *)[3]; // todo: kludge
+
 			"	MAC Address:	$FG,6$";$FG$
+
 			for (j = 0; j < MAC_ADDRESS_LENGTH; j++)
 				"%02X ", temp_hash->mac_address[j];
+
 			"$FG$\n\n";
 
 			temp_hash = temp_hash->next;
