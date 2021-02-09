@@ -549,7 +549,7 @@ _RET::
 		RET
 
 /***********************************/
-_MSR_GET::
+_MSR_READ::
 		PUSH	RBP
 		MOV		RBP, RSP
 		MOV		RCX, SF_ARG1[RBP]
@@ -561,7 +561,7 @@ _MSR_GET::
 		RET1	8
 
 /***********************************/
-_MSR_SET::
+_MSR_WRITE::
 		PUSH	RBP
 		MOV 	RBP, RSP
 		MOV 	RAX, SF_ARG2[RBP]

@@ -1,29 +1,33 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----02/07/21 10:20:33----$IV,0$
+* $LK,"R",A="MN:R"$("MSRGet", "$LK,"MSRRead",A="MN:MSRRead"$");
+* $LK,"R",A="MN:R"$("MSRSet", "$LK,"MSRWrite",A="MN:MSRWrite"$");
+
 $IV,1$----01/28/21 19:08:16----$IV,0$
-* Added $LK,"MSRGet",A="MN:MSRGet"$().
+* Added MSRGet().
 
 $IV,1$----01/24/21 01:51:12----$IV,0$
 * Removed DriveMap().
 
-$IV,1$----12/23/20 18:27:18----$IV,0$
-* Reformatting of files is virtually complete now.
-
 $IV,1$----01/11/21 23:39:21----$IV,0$
 * Restored "Daemon" -> "Seth".
+
+$IV,1$----12/23/20 18:27:18----$IV,0$
+* Reformatting of files is virtually complete now.
 
 $IV,1$----06/04/20 18:01:46----$IV,0$
 * Added $LK,"BIOSRep",A="MN:BIOSRep"$() as convenience function to view BIOS info from $LK,"SysRep",A="MN:SysRep"$().
 
 $IV,1$----04/27/20 15:34:42----$IV,0$
-* Changed $LK+PU,"GrBitMap",A="FI:::/Zenith/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.$IV,1$
+* Changed $LK+PU,"GrBitMap",A="FI:::/Zenith/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.
 
-----04/21/20 18:54:47----$IV,0$
-* Altered $LK+PU,"Tom Palettes",A="FF:::/Zenith/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.$IV,1$
+$IV,1$----04/21/20 18:54:47----$IV,0$
+* Altered $LK+PU,"Tom Palettes",A="FF:::/Zenith/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.
 
-----04/21/20 16:13:01----$IV,0$
+$IV,1$----04/21/20 16:13:01----$IV,0$
 * Added start-up intro $LK+PU,"Splash",A="FI:::/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/Once.CC,PopUpRunFile"$, after performing a full boot (excludes soft reboots).
-$IV,1$
-----04/13/20 13:48:15----$IV,0$
+
+$IV,1$----04/13/20 13:48:15----$IV,0$
 * Added $LK,"PIC_INIT",A="MN:PIC_INIT"$ and comments to $LK,"IntPICInit",A="MN:IntPICInit"$().
 * $LK,"R",A="MN:R"$("IntsInit", "$LK,"IntPICInit",A="MN:IntPICInit"$"); 
 * $LK,"R",A="MN:R"$("LAPIC_ARIBITRATION_PRIORITY", "$LK,"LAPIC_ARBITRATION_PRIORITY",A="MN:LAPIC_ARBITRATION_PRIORITY"$"); 
