@@ -8,7 +8,7 @@
 CIPV4Address *addr = CAlloc(sizeof(CIPV4Address));
 PresentationToNetwork(AF_INET, "192.168.1.254", addr);
 
-DNSSetResolverIPV4(addr->address);
+DNSResolverIPV4Set(addr->address);
 */
 "Trying Host() at \"google.com\".\n";
 Host("google.com");

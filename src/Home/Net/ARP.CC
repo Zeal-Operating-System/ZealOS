@@ -81,7 +81,7 @@ I64 ARPSend(U16 operation,
 	return 0;
 }
 
-CARPHash *ARPCacheFindByIP(U32 ip_address)
+CARPHash *ARPCacheFind(U32 ip_address)
 {
 	U8			*ip_string	= MStrPrint("%X", ip_address);
 	CARPHash	*entry		= HashFind(ip_string, arp_cache, HTT_ARP);
@@ -101,7 +101,7 @@ CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 
 	NetLog("ARP CACHE PUT: Attempting to look for entry in ARP Cache.");
 
-	entry = ARPCacheFindByIP(ip_address);
+	entry = ARPCacheFind(ip_address);
 
 	if (!entry)
 	{
@@ -123,13 +123,13 @@ CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 	return entry;
 }
 
-U0 ARPSetIPV4Address(U32 ip_address)
+U0 ARPLocalIPV4Set(U32 ip_address)
 { // takes in little endian IP, stores into globals as Big Endian
 	arp_globals.local_ipv4 = EndianU32(ip_address);
 
 	ARPSend(ARP_REPLY,
 			ethernet_globals.ethernet_broadcast,
-			EthernetGetMAC(),
+			EthernetMACGet(),
 			arp_globals.local_ipv4,
 			ethernet_globals.ethernet_broadcast,
 			arp_globals.local_ipv4);
@@ -185,7 +185,7 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 				NetLog("ARP HANDLER: Saw request, sending back reply.");
 				ARPSend(ARP_REPLY,
 						header->sender_hardware_addr,
-						EthernetGetMAC(),
+						EthernetMACGet(),
 						arp_globals.local_ipv4,
 						header->sender_hardware_addr,
 						header->sender_protocol_addr);

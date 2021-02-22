@@ -62,7 +62,7 @@ CNetQueueEntry *NetQueuePull()
 	return entry;
 }
 
-U0 NetQueuePushCopy(U8 *data, I64 length)
+U0 NetQueuePush(U8 *data, I64 length)
 {/*	Pushes a copy of the packet data and length
 	into the Net Queue. The NetQueueEntry is inserted
 	after the last entry of net_queue to keep new

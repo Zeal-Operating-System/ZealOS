@@ -72,12 +72,12 @@ class CDHCPRequestOptions
 	U8	end;
 };
 
-U32 DHCPBeginTransaction()
+U32 DHCPTransactionBegin()
 {
 	return RandU32();
 }
 
-I64 DHCPSendDiscover(U32 xid)
+I64 DHCPDiscoverSend(U32 xid)
 {
 	U8						*ethernet_frame;
 	I64						 de_index;
@@ -106,12 +106,12 @@ I64 DHCPSendDiscover(U32 xid)
 	dhcp->hops			= 0;
 	dhcp->xid			= EndianU32(xid);
 	dhcp->seconds		= 0;
-	dhcp->flags			= EndianU16(0x8000); // TODO: what is this
+	dhcp->flags			= EndianU16(0x8000); // DHCP flag: accept Offer from Broadcast.
 	dhcp->client_ip		= 0;
 	dhcp->your_ip		= 0;
 	dhcp->server_ip		= 0;
 	dhcp->gateway_ip	= 0;
-	MemCopy(dhcp->client_hw_addr, EthernetGetMAC(), MAC_ADDRESS_LENGTH);
+	MemCopy(dhcp->client_hw_addr, EthernetMACGet(), MAC_ADDRESS_LENGTH);
 
 	opts = ethernet_frame + sizeof(CDHCPHeader);
 
@@ -131,7 +131,7 @@ I64 DHCPSendDiscover(U32 xid)
 	return de_index;
 }
 
-I64 DHCPSendRequest(U32 xid, U32 requested_ip, U32 server_ip)
+I64 DHCPRequestSend(U32 xid, U32 requested_ip, U32 server_ip)
 {
 	U8					*ethernet_frame;
 	I64					 de_index;
@@ -158,12 +158,12 @@ I64 DHCPSendRequest(U32 xid, U32 requested_ip, U32 server_ip)
 	dhcp->hops			= 0;
 	dhcp->xid			= EndianU32(xid);
 	dhcp->seconds		= 0;
-	dhcp->flags			= EndianU16(0x0000); // seems redundant ...
+	dhcp->flags			= EndianU16(0x0000); // DHCP flag: accept ACK from Unicast.
 	dhcp->client_ip		= 0;
 	dhcp->your_ip		= 0;
 	dhcp->server_ip		= EndianU32(server_ip);
 	dhcp->gateway_ip	= 0;
-	MemCopy(dhcp->client_hw_addr, EthernetGetMAC(), MAC_ADDRESS_LENGTH);
+	MemCopy(dhcp->client_hw_addr, EthernetMACGet(), MAC_ADDRESS_LENGTH);
 
 	opts = ethernet_frame + sizeof(CDHCPHeader);
 
@@ -183,7 +183,7 @@ I64 DHCPSendRequest(U32 xid, U32 requested_ip, U32 server_ip)
 	return 0;
 }
 
-I64 DHCPParseBegin(U8 **data_inout, I64 *length_inout, CDHCPHeader **header_out)
+I64 DHCPBeginParse(U8 **data_inout, I64 *length_inout, CDHCPHeader **header_out)
 {
 	U8	*data	= *data_inout;
 	I64  length	= *length_inout;
@@ -210,7 +210,7 @@ I64 DHCPParseBegin(U8 **data_inout, I64 *length_inout, CDHCPHeader **header_out)
 	return 0;
 }
 
-I64 DHCPParseOption(U8 **data_inout, I64 *length_inout, U8 *type_out, U8 *value_length_out, U8 **value_out)
+I64 DHCPOptionParse(U8 **data_inout, I64 *length_inout, U8 *type_out, U8 *value_length_out, U8 **value_out)
 {
 	U8 *data	= *data_inout;
 	I64 length	= *length_inout;
@@ -237,14 +237,14 @@ I64 DHCPParseOption(U8 **data_inout, I64 *length_inout, U8 *type_out, U8 *value_
 	return data[0]; // returns ... type?
 }
 
-I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
+I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				   U32 *your_ip_out,
 				   U32 *dns_ip_out,
 				   U32 *router_ip_out,
 				   U32 *subnet_mask_out)
 {
 	CDHCPHeader *header;
-	I64			 error		 = DHCPParseBegin(&data, &length, &header);
+	I64			 error		 = DHCPBeginParse(&data, &length, &header);
 	Bool		 have_type	 = FALSE;
 	Bool		 have_dns	 = FALSE;
 	Bool		 have_router = FALSE;
@@ -262,7 +262,7 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 
 	while (length)
 	{
-		error = DHCPParseOption(&data, &length, &type, &value_length, &value);
+		error = DHCPOptionParse(&data, &length, &type, &value_length, &value);
 
 		if (error < 0)
 		{
@@ -328,10 +328,10 @@ I64 DHCPParseOffer(U32 xid, U8 *data, I64 length,
 	}
 }
 
-I64 DHCPParseAck(U32 xid, U8 *data, I64 length)
+I64 DHCPAckParse(U32 xid, U8 *data, I64 length)
 {
 	CDHCPHeader *header;
-	I64			 error = DHCPParseBegin(&data, &length, &header);
+	I64			 error = DHCPBeginParse(&data, &length, &header);
 	U8			 type;
 	U8			 value_length;
 	U8			*value;
@@ -344,7 +344,7 @@ I64 DHCPParseAck(U32 xid, U8 *data, I64 length)
 
 	while (length)
 	{
-		error = DHCPParseOption(&data, &length, &type, &value_length, &value);
+		error = DHCPOptionParse(&data, &length, &type, &value_length, &value);
 
 		if (error < 0)
 		{
@@ -369,7 +369,7 @@ I64 DHCPParseAck(U32 xid, U8 *data, I64 length)
 	return -1;
 }
 
-I64 DHCPConfigureInner(CUDPSocket *udp_socket,
+I64 DHCPInnerConfigure(CUDPSocket *udp_socket,
 					   U32 *your_ip_out,
 					   U32 *dns_ip_out,
 					   U32 *router_ip_out,
@@ -400,7 +400,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 		return -1;
 	}
 
-	xid = DHCPBeginTransaction();
+	xid = DHCPTransactionBegin();
 
 	while (state != DHCP_STATE_CLIENT_REQ_ACCEPTED)
 	{
@@ -414,7 +414,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 
 			case DHCP_STATE_CLIENT_DISCOVER:
 				NetLog("DHCP CONFIGURE INNER: Trying Discover.");
-				error = DHCPSendDiscover(xid);
+				error = DHCPDiscoverSend(xid);
 				if (error < 0)
 				{
 					NetErr("DHCP CONFIGURE INNER: Failed, DHCP Send Discover error.");
@@ -426,13 +426,13 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 				if (count > 0)
 				{ // 'Try a parse offer'
 					NetLog("DHCP CONFIGURE INNER: Trying Parse Offer.");
-					error = DHCPParseOffer(xid, buffer, count, your_ip_out, dns_ip_out, router_ip_out, subnet_mask_out);
+					error = DHCPOfferParse(xid, buffer, count, your_ip_out, dns_ip_out, router_ip_out, subnet_mask_out);
 
 					if (error < 0)
 						NetWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Offer.");
 				}
 
-				if (count > 0 && error >= 0) // TODO: >= ? can DHCPSendDiscover or DHCPParseOffer return greater than zero?
+				if (count > 0 && error >= 0) // TODO: >= ? can DHCPDiscoverSend or DHCPOfferParse return greater than zero?
 				{
 					dhcp_addr	= EndianU32(ipv4_addr_in.address.address);
 					state		= DHCP_STATE_CLIENT_REQUEST;
@@ -448,7 +448,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 
 			case DHCP_STATE_CLIENT_REQUEST:
 				NetLog("DHCP CONFIGURE INNER: Trying Send Request.");
-				error = DHCPSendRequest(xid, *your_ip_out, dhcp_addr);
+				error = DHCPRequestSend(xid, *your_ip_out, dhcp_addr);
 
 				if (error < 0)
 				{
@@ -460,7 +460,7 @@ I64 DHCPConfigureInner(CUDPSocket *udp_socket,
 
 				if (count > 0)
 				{ // 'Try parse Ack'
-					error = DHCPParseAck(xid, buffer, count);
+					error = DHCPAckParse(xid, buffer, count);
 
 					if (error < 0)
 						NetWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Ack.");
@@ -492,7 +492,7 @@ I64 DHCPConfigure()
 	U32				 dns_ip;
 	U32				 router_ip;
 	U32				 subnet_mask;
-	I64				 state = DHCPConfigureInner(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
+	I64				 state = DHCPInnerConfigure(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
 
 	UDPSocketClose(udp_socket);
 
@@ -501,9 +501,9 @@ I64 DHCPConfigure()
 		address.address = EndianU32(your_ip);
 		NetLog("$$BG,2$$$$FG,15$$DHCP CONFIGURE: Obtained IPV4 Address! : %s $$BG$$$$FG$$", NetworkToPresentation(AF_INET, &address));
 
-		IPV4SetAddress(your_ip);
-		IPV4SetSubnet(router_ip, subnet_mask);
-		DNSSetResolverIPV4(dns_ip);
+		IPV4AddressSet(your_ip);
+		IPV4SubnetSet(router_ip, subnet_mask);
+		DNSResolverIPV4Set(dns_ip);
 		return 0;
 	}
 	else

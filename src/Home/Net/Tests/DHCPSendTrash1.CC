@@ -8,7 +8,7 @@ U0 DHCPSendTrash()
 	U8 *udp_payload;
 	I64 de_index;
 
-	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with GetMACAddressForIP
+	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet
 
 	if (ipv4_globals.local_ip == 0)
 		DHCPConfigure;

@@ -1,7 +1,8 @@
 #define ICMP_TYPE_ECHO_REPLY	0
 #define ICMP_TYPE_ECHO_REQUEST	8
+#define ICMP_CODE_ECHO			0 // RFC 792: "Echo or Echo Reply Message". 0 is the only code explicitly defined for Echo.
 
-class CICMPHeader // Shrine's use of id and seq indicate this header is for Address Mask Reply/Request
+class CICMPHeader
 {
 	U8	type;
 	U8	code;
@@ -12,7 +13,7 @@ class CICMPHeader // Shrine's use of id and seq indicate this header is for Addr
 };
 
 
-U0 ICMPSendReply(U32 destination_ip_address,
+U0 ICMPReplySend(U32 destination_ip_address,
 				  U16 identifier,
 				  U16 sequence_number,
 				  U16 request_checksum,
@@ -25,7 +26,7 @@ U0 ICMPSendReply(U32 destination_ip_address,
 
 	de_index = IPV4PacketAllocate(&frame,
 								  IP_PROTOCOL_ICMP,
-								  IPV4GetAddress(),
+								  IPV4AddressGet(),
 								  destination_ip_address,
 								  sizeof(CICMPHeader) + length);
 	if (de_index < 0)
@@ -60,16 +61,16 @@ I64 ICMPHandler(CIPV4Packet *packet)
 
 	header = packet->data;
 
-	if (header->type == ICMP_TYPE_ECHO_REQUEST && header->code == 0)//why zero? need more #defines in here
+	if (header->type == ICMP_TYPE_ECHO_REQUEST && header->code == ICMP_CODE_ECHO)
 	{
 		ARPCachePut(packet->source_ip_address, packet->ethernet_frame->source_address);
 
-		ICMPSendReply(packet->source_ip_address,
+		ICMPReplySend(packet->source_ip_address,
 					  header->identifier,
 					  header->sequence_number,
 					  header->checksum,
-					  packet->data   + sizeof(CICMPHeader),
-					  packet->length - sizeof(CICMPHeader)); // TODO: ??
+					  packet->data   + sizeof(CICMPHeader),	// Data payload at IPV4Packet data location after the ICMP header
+					  packet->length - sizeof(CICMPHeader));// Payload length is size of packet after dropping header.
 	}
 	else
 		NetWarn("ICMP HANDLER: Unhandled ICMP packet. type, code: 0x%X, 0x%X", header->type, header->code);

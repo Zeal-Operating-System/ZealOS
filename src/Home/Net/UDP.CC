@@ -308,7 +308,7 @@ U0 UDPPacketFinish(I64 de_index)
 	IPV4PacketFinish(de_index);
 }
 
-I64 UDPParsePacket(U16 *source_port_out,
+I64 UDPPacketParse(U16 *source_port_out,
 				   U16 *destination_port_out,
 				   U8 **data_out,
 				   I64 *length_out,
@@ -680,7 +680,7 @@ I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressS
 			ipv4_destination = dest;
 
 			de_index = UDPPacketAllocate(&ethernet_frame,
-										 IPV4GetAddress(),
+										 IPV4AddressGet(),
 										 0,
 										 EndianU32(ipv4_destination->address.address),
 										 EndianU16(ipv4_destination->port),
@@ -722,7 +722,7 @@ I64 UDPHandler(CIPV4Packet *packet)
 
 	NetLog("UDP HANDLER: Beginning handling UDP Packet.");
 
-	I64 error = UDPParsePacket(&source_port, &destination_port, &data, &length, packet);
+	I64 error = UDPPacketParse(&source_port, &destination_port, &data, &length, packet);
 
 	if (error < 0)
 	{

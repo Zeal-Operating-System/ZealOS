@@ -126,7 +126,7 @@ CPCIDev *PCNetPCIDevFind()
 	return PCIDevFind(,, PCNET_VENDOR_ID, PCNET_DEVICE_ID);
 }
 
-U32 PCNetGetIOBase()
+U32 PCNetIOBaseGet()
 {/* Return memory IO base address
 	of PCNet card. Bits 0-4 are not
 	for the IO base, so an AND with
@@ -141,52 +141,52 @@ U0 PCNetReset()
 	which, regardless of which mode the card is in,
 	will reset it back to 16-bit mode. */
 
-	InU32(PCNetGetIOBase() + PCNET_DW_RESET);
-	InU16(PCNetGetIOBase() + PCNET_WD_RESET);
+	InU32(PCNetIOBaseGet() + PCNET_DW_RESET);
+	InU16(PCNetIOBaseGet() + PCNET_WD_RESET);
 	Busy(5); // OSDev says minimum 1 ÊS
 }
 
-U0 PCNetEnter32BitMode()
+U0 PCNet32BitModeEnable()
 {/* AMD PCNet datasheet p. 1-930
 	Summary: A 32-bit write (while in 16-bit mode)
 	to RDP  will cause 16-bit mode exit
 	and immediate enter into 32-bit mode. */
 
-	OutU32(PCNetGetIOBase() + PCNET_DW_RDP, 0);
+	OutU32(PCNetIOBaseGet() + PCNET_DW_RDP, 0);
 }
 
-U0 PCNetWriteRAP(U32 value)
+U0 PCNetRAPWrite(U32 value)
 {/* AMD PCNet datasheet p. 1-952
 	Summary: Register Address Pointer register
 	value will indicate which CSR / BCR register
 	we want to access in RDP / BDP. */
 
-	OutU32(PCNetGetIOBase() + PCNET_DW_RAP, value);
+	OutU32(PCNetIOBaseGet() + PCNET_DW_RAP, value);
 }
 
-U0 PCNetWriteCSR(U32 csr, U32 value)
+U0 PCNetCSRWrite(U32 csr, U32 value)
 {/* AMD PCNet datasheet p. 1-952
 	Summary: Control and Status Registers are
 	accessed via the RDP (Register Data Port).
 	Which CSR is selected is based on the value
 	in the RAP. */
 
-	PCNetWriteRAP(csr);
-	OutU32(PCNetGetIOBase() + PCNET_DW_RDP, value);
+	PCNetRAPWrite(csr);
+	OutU32(PCNetIOBaseGet() + PCNET_DW_RDP, value);
 }
 
-U32 PCNetReadCSR(U32 csr)
+U32 PCNetCSRRead(U32 csr)
 {/* AMD PCNet datasheet p. 1-952
 	Summary: Control and Status Registers are
 	accessed via the RDP (Register Data Port).
 	Which CSR is selected is based on the value
 	in the RAP. */
 
-	PCNetWriteRAP(csr);
-	return InU32(PCNetGetIOBase() + PCNET_DW_RDP);
+	PCNetRAPWrite(csr);
+	return InU32(PCNetIOBaseGet() + PCNET_DW_RDP);
 }
 
-U0 PCNetSetSWStyle()
+U0 PCNetSWStyleSet()
 {/* AMD PCNet datasheet p. 1-968
 	In CSR58 (Software Style), the 8-bit
 	SWSTYLE register dictates interpretation of certain
@@ -195,16 +195,16 @@ U0 PCNetSetSWStyle()
 	function as defined in the datasheet , and TMD1[29]
 	functions as ADD_FCS. */
 
-	U32 csr = PCNetReadCSR(PCNET_CSR_SOFTWARESTYLE);
+	U32 csr = PCNetCSRRead(PCNET_CSR_SOFTWARESTYLE);
 
 	csr &= ~0xFF; // clears first 8 bits: SWSTYLE 8-bit register.
 	csr |= PCNET_SWSTYLE_SELECTION; // set SWSTYLE to PCNet-PCI mode.
 	Bts(&csr, PCNET_SWSTYLE_SSIZE32); // set SSIZE32 bit 1
 
-	PCNetWriteCSR(PCNET_CSR_SOFTWARESTYLE, csr);
+	PCNetCSRWrite(PCNET_CSR_SOFTWARESTYLE, csr);
 }
 
-U0 PCNetGetMAC()
+U0 PCNetMACGet()
 {/* AMD PCNet datasheet p. 1-887, 1-931, 1-937
 	MAC address stored at first 6 bytes of PCNet EEPROM.
 	EEPROM addresses shadow-copied to APROM at hardware init.
@@ -214,12 +214,12 @@ U0 PCNetGetMAC()
 	NetLog("PCNET GET MAC: Getting VM MAC.");
 	for (i = 0; i < 6; i++)
 	{
-		pcnet.mac_address[i] = InU8(PCNetGetIOBase() + i);
+		pcnet.mac_address[i] = InU8(PCNetIOBaseGet() + i);
 		NetLog(" %02X", pcnet.mac_address[i]);
 	}
 }
 
-U0 PCNetInitDescriptorEntry(CPCNetDescriptorEntry *entry, U32 buffer_address, I64 is_rx)
+U0 PCNetDescriptorEntryInit(CPCNetDescriptorEntry *entry, U32 buffer_address, I64 is_rx)
 {
 	U16 buffer_byte_count;
 
@@ -242,7 +242,7 @@ U0 PCNetInitDescriptorEntry(CPCNetDescriptorEntry *entry, U32 buffer_address, I6
 		Bts(&entry->status1, PCNET_DESCRIPTORf_OWN);
 }
 
-U0 PCNetAllocateBuffers()
+U0 PCNetBuffersAllocate()
 {
 	I64 de_index; // used in for loops for TX and RX DE access.
 
@@ -275,7 +275,7 @@ U0 PCNetAllocateBuffers()
 	CPCNetDescriptorEntry *entry = pcnet.rx_de_buffer;
 	for (de_index = 0; de_index < PCNET_RX_BUFF_COUNT; de_index++)
 	{
-		PCNetInitDescriptorEntry(&entry[de_index],
+		PCNetDescriptorEntryInit(&entry[de_index],
 								 pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
 								 TRUE); // TRUE for is_rx.
 	}
@@ -283,7 +283,7 @@ U0 PCNetAllocateBuffers()
 	entry = pcnet.tx_de_buffer;
 	for (de_index = 0; de_index < PCNET_TX_BUFF_COUNT; de_index++)
 	{
-		PCNetInitDescriptorEntry(&entry[de_index],
+		PCNetDescriptorEntryInit(&entry[de_index],
 								 pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
 								 FALSE); // FALSE for is_rx.
 	}
@@ -300,10 +300,10 @@ U0 PCNetDirectInit()
 		If Logical Address Filter is set as
 		all 0, all incoming logical addresses
 		are rejected. Disables multicast. */
-	PCNetWriteCSR(PCNET_CSR_LADRF0, 0);
-	PCNetWriteCSR(PCNET_CSR_LADRF1, 0);
-	PCNetWriteCSR(PCNET_CSR_LADRF2, 0);
-	PCNetWriteCSR(PCNET_CSR_LADRF3, 0);
+	PCNetCSRWrite(PCNET_CSR_LADRF0, 0);
+	PCNetCSRWrite(PCNET_CSR_LADRF1, 0);
+	PCNetCSRWrite(PCNET_CSR_LADRF2, 0);
+	PCNetCSRWrite(PCNET_CSR_LADRF3, 0);
 
 	/*	The Physical Address is the MAC.
 		AMD PCNet datasheet p.1-960, 1-961
@@ -315,18 +315,18 @@ U0 PCNetDirectInit()
 		separate U8 values in the correct locations
 		of the CSR. */
 	NetLog("PCNetDirectInit: Write MAC to CSR: 0x%X ", pcnet.mac_address[0] | (pcnet.mac_address[1] << 8));
-	PCNetWriteCSR(PCNET_CSR_PADR0, pcnet.mac_address[0] | (pcnet.mac_address[1] << 8));
+	PCNetCSRWrite(PCNET_CSR_PADR0, pcnet.mac_address[0] | (pcnet.mac_address[1] << 8));
 	NetLog("PCNetDirectInit: Write MAC to CSR: 0x%X ", pcnet.mac_address[2] | (pcnet.mac_address[3] << 8));
-	PCNetWriteCSR(PCNET_CSR_PADR1, pcnet.mac_address[2] | (pcnet.mac_address[3] << 8));
+	PCNetCSRWrite(PCNET_CSR_PADR1, pcnet.mac_address[2] | (pcnet.mac_address[3] << 8));
 	NetLog("PCNetDirectInit: Write MAC to CSR: 0x%X ", pcnet.mac_address[4] | (pcnet.mac_address[5] << 8));
-	PCNetWriteCSR(PCNET_CSR_PADR2, pcnet.mac_address[4] | (pcnet.mac_address[5] << 8));
+	PCNetCSRWrite(PCNET_CSR_PADR2, pcnet.mac_address[4] | (pcnet.mac_address[5] << 8));
 
 	/*	AMD PCNet datasheet p.1-961, 1-962, 1-963
 		Refer to datasheet for specifics.
 		Most relevant, when setting Mode to 0,
 		promiscuous mode is is disabled, TX and
 		RX enabled, enable RX broadcast and unicast. */
-	PCNetWriteCSR(PCNET_CSR_MODE, 0);
+	PCNetCSRWrite(PCNET_CSR_MODE, 0);
 
 	/* 	AMD PCNet datasheet p.1-964
 		CSR 24 and 25 need to be filled
@@ -341,18 +341,18 @@ U0 PCNetDirectInit()
 		Bitshift right of 16 will replace
 		first 16 bits  with upper 16 bits,
 		remaining bits cleared.*/
-	PCNetWriteCSR(PCNET_CSR_BADRL, pcnet.rx_buffer_addr & 0xFFFF);
-	PCNetWriteCSR(PCNET_CSR_BADRU, pcnet.rx_buffer_addr >> 16);
+	PCNetCSRWrite(PCNET_CSR_BADRL, pcnet.rx_buffer_addr & 0xFFFF);
+	PCNetCSRWrite(PCNET_CSR_BADRU, pcnet.rx_buffer_addr >> 16);
 
-	PCNetWriteCSR(PCNET_CSR_BADTL, pcnet.tx_buffer_addr & 0xFFFF);
-	PCNetWriteCSR(PCNET_CSR_BADTU, pcnet.tx_buffer_addr >> 16);
+	PCNetCSRWrite(PCNET_CSR_BADTL, pcnet.tx_buffer_addr & 0xFFFF);
+	PCNetCSRWrite(PCNET_CSR_BADTU, pcnet.tx_buffer_addr >> 16);
 
 	/*	AMD PCNet datasheet p. 1-967
 		Default value at hardware init is
 		all 0. Standard init block process
 		sets this, but if doing directly
 		it is imperative to manually set it 0. */
-	PCNetWriteCSR(PCNET_CSR_POLLINT, 0);
+	PCNetCSRWrite(PCNET_CSR_POLLINT, 0);
 
 	/*	AMD PCNet datasheet p. 1-970
 		Receive and Transmit Ring Length CSRs
@@ -360,8 +360,8 @@ U0 PCNetDirectInit()
 		of the ring length. The AND with 0xFFFF clears
 		the upper Reserved bits, which are to be written
 		as zeroes read undefined. */
-	PCNetWriteCSR(PCNET_CSR_RXRINGLEN, -PCNET_RX_BUFF_COUNT & 0xFFFF);
-	PCNetWriteCSR(PCNET_CSR_TXRINGLEN, -PCNET_TX_BUFF_COUNT & 0xFFFF);
+	PCNetCSRWrite(PCNET_CSR_RXRINGLEN, -PCNET_RX_BUFF_COUNT & 0xFFFF);
+	PCNetCSRWrite(PCNET_CSR_TXRINGLEN, -PCNET_TX_BUFF_COUNT & 0xFFFF);
 }
 */
 
@@ -381,13 +381,13 @@ U8 *PCNetInitBlockSetup()
 	u_setup->txbuf		= pcnet.tx_de_buffer_phys;
 
 	p_setup = setup;
-	PCNetWriteCSR(1, p_setup & 0xFFFF);
-	PCNetWriteCSR(2, p_setup >> 16);
+	PCNetCSRWrite(1, p_setup & 0xFFFF);
+	PCNetCSRWrite(2, p_setup >> 16);
 	
 	return setup;
 }
 
-U0 PCNetSetInterruptCSR()
+U0 PCNetInterruptCSRSet()
 {/* AMD PCNet datasheet p.1-952, 1-953, 1-954, 1-955, 1-956, 1-957
 	Refer to datasheet for specifics on the Interrupt Masks.
 	Most of these, when set 0, allow interrupts to be set in CSR0.
@@ -395,7 +395,7 @@ U0 PCNetSetInterruptCSR()
 	enabled, Init Done interrupt disabled, and TX interrupt
 	disabled. */
 
-	U32 csr = PCNetReadCSR(PCNET_CSR_INTERRUPTS);
+	U32 csr = PCNetCSRRead(PCNET_CSR_INTERRUPTS);
 
 	Btr(&csr, PCNET_INT_BSWP);
 	Btr(&csr, PCNET_INT_RINTM);
@@ -403,23 +403,23 @@ U0 PCNetSetInterruptCSR()
 	Bts(&csr, PCNET_INT_IDONM);
 	Bts(&csr, PCNET_INT_TINTM);
 	
-	PCNetWriteCSR(PCNET_CSR_INTERRUPTS, csr);
+	PCNetCSRWrite(PCNET_CSR_INTERRUPTS, csr);
 }
 
-U0 PCNetEnableTXAutoPad()
+U0 PCNetTXAutoPadEnable()
 {/* AMD PCNet datasheet p.1-958
 	Setting bit 11 (Auto Pad Transmit) allows
 	shoft transmit frames to be automatically
 	extended to 64 bytes. */
 
-	U32 csr = PCNetReadCSR(PCNET_CSR_FEATURECTRL);
+	U32 csr = PCNetCSRRead(PCNET_CSR_FEATURECTRL);
 
 	Bts(&csr, PCNET_FEATURE_APADXMT);
 
-	PCNetWriteCSR(PCNET_CSR_FEATURECTRL, csr);
+	PCNetCSRWrite(PCNET_CSR_FEATURECTRL, csr);
 }
 
-U0 PCNetExitConfigMode()
+U0 PCNetConfigModeExit()
 {/* AMD PCNet datasheet p.1-954
 	PCNet controller can be started
 	after configuring by ensuring INIT
@@ -427,14 +427,14 @@ U0 PCNetExitConfigMode()
 	is set, in Status and Control Register
 	(CSR0). */
 
-	U32 csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
+	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 
 	Btr(&csr, PCNET_CTRL_INIT);
 	Btr(&csr, PCNET_CTRL_STOP);
 
 	Bts(&csr, PCNET_CTRL_STRT);
 
-	PCNetWriteCSR(PCNET_CSR_CTRLSTATUS, csr);
+	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 }
 
 I64 PCNetDriverOwns(CPCNetDescriptorEntry* entry)
@@ -445,7 +445,7 @@ I64 PCNetDriverOwns(CPCNetDescriptorEntry* entry)
 	return !Bt(&entry->status1, PCNET_DESCRIPTORf_OWN);
 }
 
-I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
+I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 {/* Transmits the packet at the current TX DE index. The packet_buffer_out
 	is a pointer, since we modify its value, ending with returning the
 	index of the DE we just processed. Length is validated to fit in BCNT.
@@ -501,7 +501,7 @@ I64 PCNetAllocateTransmitPacket(U8 **packet_buffer_out, I64 length)
 	return de_index;
 }
 
-U0 PCNetFinishTransmitPacket(I64 de_index)
+U0 PCNetTransmitPacketFinish(I64 de_index)
 {/* Release ownership of the packet to the PCNet card
 	by setting the OWN bit to 1. */ 
 
@@ -514,10 +514,10 @@ U0 PCNetFinishTransmitPacket(I64 de_index)
 
 U0 EthernetFrameFinish(I64 de_index)
 {//Alias for driver Finish TX function.
-	PCNetFinishTransmitPacket(de_index);
+	PCNetTransmitPacketFinish(de_index);
 }
 
-I64 PCNetReceivePacket(U8 **packet_buffer_out, U16 *packet_length_out)
+I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 {/* Receives the packet at the current RX DE index. Parameters
 	are both pointers, since we modify the value at the packet_buffer_out,
 	and at the packet_length, ending with returning the index of the DE
@@ -545,7 +545,7 @@ I64 PCNetReceivePacket(U8 **packet_buffer_out, U16 *packet_length_out)
 	return de_index;
 }
 
-U0 PCNetReleaseReceivePacket(I64 de_index)
+U0 PCNetReceivePacketRelease(I64 de_index)
 {/* Release ownership of the packet to the PCNet card
 	by setting the OWN bit to 1. */ 
 
@@ -561,7 +561,7 @@ interrupt U0 PCNetIRQ()
 	U16 packet_length;
 	I64 de_index;
 
-	U32 csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
+	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 //	"Interrupt Reason: %X , %b\n",csr,csr;Debug;
 
 	CPCNetDescriptorEntry *entry = pcnet.rx_de_buffer;
@@ -575,18 +575,18 @@ interrupt U0 PCNetIRQ()
 		NetLog("$$BD,CYAN$$$$FD,WHITE$$"
 			   "PCNET IRQ: Saw owned RX DE index %d.", pcnet.current_rx_de_index);
 
-		de_index = PCNetReceivePacket(&packet_buffer, &packet_length);
+		de_index = PCNetPacketReceive(&packet_buffer, &packet_length);
 
-		if (de_index >= 0) // todo: necessary? check increment logic in PCNetReceivePacket.
+		if (de_index >= 0) // todo: necessary? check increment logic in PCNetPacketReceive.
 		{
 			NetLog("PCNET IRQ: Pushing copy into Net Queue, releasing receive packet.");
-			NetQueuePushCopy(packet_buffer, packet_length);
-			PCNetReleaseReceivePacket(de_index);
+			NetQueuePush(packet_buffer, packet_length);
+			PCNetReceivePacketRelease(de_index);
 		}
 
 		Bts(&csr, PCNET_CTRL_RINT);
 
-		PCNetWriteCSR(PCNET_CSR_CTRLSTATUS, csr);
+		PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
 
 		NetLog("PCNET IRQ: Exiting.\n"
 			   "$$BD,WHITE$$$$FD,LTGRAY$$"
@@ -598,7 +598,7 @@ interrupt U0 PCNetIRQ()
 	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
 }
 
-U0 PCIRerouteInterrupts(I64 base)
+U0 PCIInterruptsReroute(I64 base)
 { // todo: comments explaining process, maybe better var names
 	I64	 i;
 	U8	*da = dev.uncached_alias + IOAPIC_REG;
@@ -613,13 +613,13 @@ U0 PCIRerouteInterrupts(I64 base)
 	}
 }
 
-U0 PCNetSetupInterrupts()
+U0 PCNetInterruptsSetup()
 { // todo: comments explaining process
 	IntEntrySet(I_PCNET0, &PCNetIRQ);
 	IntEntrySet(I_PCNET1, &PCNetIRQ);
 	IntEntrySet(I_PCNET2, &PCNetIRQ);
 	IntEntrySet(I_PCNET3, &PCNetIRQ);
-	PCIRerouteInterrupts(I_PCNET0);
+	PCIInterruptsReroute(I_PCNET0);
 }
 
 U0 PCNetInit()
@@ -643,45 +643,45 @@ U0 PCNetInit()
 
 	PCNetReset;
 
-	PCNetEnter32BitMode;
+	PCNet32BitModeEnable;
 
-	U32 csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
+	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 	NetLog("PCNET INIT START: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
 	NetLog("PCNET INIT START: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
 	NetLog("PCNET INIT START: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
 	NetLog("PCNET INIT START: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 
-	PCNetSetSWStyle;
+	PCNetSWStyleSet;
 
-	PCNetGetMAC;
+	PCNetMACGet;
 //	OSDev has code ensuring auto selected connection...
 
-	PCNetAllocateBuffers;
+	PCNetBuffersAllocate;
 
 //	PCNetDirectInit;
 	setup = PCNetInitBlockSetup();
 
-	PCNetSetInterruptCSR;
+	PCNetInterruptCSRSet;
 
-	PCNetEnableTXAutoPad;
+	PCNetTXAutoPadEnable;
 
-	PCNetWriteCSR(0, PCNetReadCSR(0) | 1 | (1<<6));
+	PCNetCSRWrite(0, PCNetCSRRead(0) | 1 | (1<<6));
 
-	csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
+	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
 	NetLog("PCNET INIT UPLOAD: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
 	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
 	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
-	while (!(PCNetReadCSR(0) & (1 << 8)))
+	while (!(PCNetCSRRead(0) & (1 << 8)))
 		Yield;
 
-	PCNetExitConfigMode;	
+	PCNetConfigModeExit;	
 
 	Sleep(100); //? necessary?
 
-	csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
+	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 	NetLog("PCNET INIT END: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
 	NetLog("PCNET INIT END: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
 	NetLog("PCNET INIT END: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
@@ -689,11 +689,11 @@ U0 PCNetInit()
 	NetLog("PCNET INIT END: what is TXON ?: %d", Bt(&csr, 4));
 	NetLog("PCNET INIT END: what is RXON ?: %d", Bt(&csr, 5));
 
-	csr =  PCNetReadCSR(PCNET_CSR_POLLINT);
+	csr =  PCNetCSRRead(PCNET_CSR_POLLINT);
 	NetLog("PCNET INIT END: what is POLLINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
 	NetLog("PCNET INIT END: Redirecting interrupts.");
-	PCNetSetupInterrupts;
+	PCNetInterruptsSetup;
 
 
 	Free(setup);
@@ -720,7 +720,7 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 		packet_length = ETHERNET_MIN_FRAME_SIZE;
 	}
 
-	de_index = PCNetAllocateTransmitPacket(&ethernet_frame, ETHERNET_MAC_HEADER_LENGTH + packet_length);
+	de_index = PCNetTransmitPacketAllocate(&ethernet_frame, ETHERNET_MAC_HEADER_LENGTH + packet_length);
 
 	if (de_index < 0)
 	{
@@ -739,7 +739,7 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	return de_index;
 }
 
-U8 *EthernetGetMAC()
+U8 *EthernetMACGet()
 {
 	return pcnet.mac_address;
 }

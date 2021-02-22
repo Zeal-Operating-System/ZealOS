@@ -1,57 +1,59 @@
 PCNet
 	PCNetPCIDevFind
-	PCNetGetIOBase
+	PCNetIOBaseGet
 	PCNetReset
-	PCNetEnter32BitMode
-	PCNetWriteRAP
-	PCNetWriteCSR
-	PCNetReadCSR
-	PCNetSetSWStyle
-	PCNetGetMAC
-	PCNetInitDescriptorEntry
-	PCNetAllocateBuffers
-	PCNetDirectInit
-	PCNetSetInterruptCSR
-	PCNetEnableTXAutoPad
-	PCNetExitConfigMode
+	PCNet32BitModeEnable
+	PCNetRAPWrite
+	PCNetCSRWrite
+	PCNetCSRRead
+	PCNetSWStyleSet
+	PCNetMACGet
+	PCNetDescriptorEntryInit
+	PCNetBuffersAllocate
+	$FG,7$PCNetDirectInit$FG$
+	PCNetInitBlockSetup
+	PCNetInterruptCSRSet
+	PCNetTXAutoPadEnable
+	PCNetConfigModeExit
 	PCNetDriverOwns
-	PCNetAllocateTransmitPacket
-	PCNetFinishTransmitPacket
-	PCNetReceivePacket
-	PCNetReleasePacket
+	PCNetTransmitPacketAllocate
+	PCNetTransmitPacketFinish
+	PCNetPacketReceive
+	PCNetReceivePacketRelease
 	PCNetIRQ
-	PCIRerouteInterrupts
-	PCNetSetupInterrupts
+	PCNetInterruptsSetup
 	PCNetInit
 
-	EthernetFrameFinish (driver alias of PCNetFinishTransmitPacket)
-	EthernetFrameAllocate
-	EthernetGetMAC
-	
+	PCIInterruptsReroute
 
+	EthernetFrameFinish (driver alias of PCNetTransmitPacketFinish)
+	EthernetFrameAllocate
+	EthernetMACGet
+	
 NetQueue
 	NetQueueInit
 	NetQueuePull
-	NetQueuePushCopy
-
+	NetQueuePush
 
 Ethernet
-	EthernetInitGlobals
-	EthernetFrameParse (has a fixme)
-
+	EthernetGlobalsInit
+	EthernetFrameParse
 
 ARP
 	ARPCacheInit
-	ARPSend
-	ARPCacheFindByIP
+	ARPCacheFind
 	ARPCachePut
+
+	ARPSend
 	ARPHandler
-	ARPSetIPV4Address
+	ARPLocalIPV4Set
 	ARPHandler
 
+	ARPRep
 
-Sockets (just finite state modifiers.)
+Sockets (just finite state modifiers)
 	AddressInfoCopy
+	AddressInfoFree
 	IPV4AddressParse
 	PresentationToNetwork
 	NetworkToPresentation
@@ -69,22 +71,24 @@ Sockets (just finite state modifiers.)
 	SocketSendTo
 
 IPV4
-	InitIPV4Globals (should change this to IPV4InitGlobals ...)
+	IPV4GlobalsInit
 	IPV4Checksum
-	GetMACAddressForIP
+	IPV4AddressMACGet
+
 	IPV4PacketAllocate
-	IPV4PacketFinish	(alias for EthernetFrameFinish)
-	IPV4GetAddress
-	IPV4SetAddress
-	IPV4SetSubnet
-	IPV4ParsePacket
+	IPV4PacketFinish (alias for EthernetFrameFinish)
+
+	IPV4AddressGet
+	IPV4AddressSet
+
+	IPV4SubnetSet
+	IPV4PacketParse
 
 ICMP
-	ICMPSendReply
+	ICMPReplySend
 	ICMPHandler
 
 TCP
-
 
 UDP
 	UDPTreeNodeInit
@@ -94,15 +98,17 @@ UDP
 	UDPTreeNodeFind
 	UDPTreeNodePop
 	UDPTreeNodeSinglePop
-	UDPTreeNodeQueueInit
+
+	UDPTreeNodeQueueAdd
 	UDPTreeNodeQueueSocketFind
 	UDPTreeNodeQueueIPV4Find
 	UDPTreeNodeQueueSocketSinglePop
 
 	UDPGlobalsInit
+
 	UDPPacketAllocate
-	UDPPacketFinish
-	UDPParsePacket
+	UDPPacketFinish (alias for IPV4PacketFinish)
+	UDPPacketParse
 
 	UDPSocket
 	UDPSocketBind
@@ -110,14 +116,56 @@ UDP
 	UDPSocketReceiveFrom
 	UDPSocketSendTo
 
+	UDPHandler
+
 DNS
 	DNSCacheInit
 	DNSCacheFind
 	DNSCachePut
 
-NetHandlerTask
-	NetHandlerTask
-	HandleNetQueueEntry	(TODO: investigate 4 million context swaps per second)
+	DNSQuestionSizeCalculate
+	DNSQuestionSerialize
+	DNSQuestionSend
+	DNSQuestionParse
+	DNSQuestionBuild
+	DNSQuestionFree
+	DNSQuestionChainFree
+
+	DNSDomainNameParse
+
+	DNSRRParse
+	DNSRRFree
+	DNSRRChainFree
+
+	DNSResponseParse
+
+	DNSQueryRun
+	DNSAddressInfoGet
+	DNSResolverIPV4Set
+	Host
+
+	DNSRep
+
+DHCP
+	DHCPTransactionBegin
+	DHCPDiscoverSend
+	DHCPRequestSend
+
+	DHCPBeginParse
+	DHCPOptionParse
+	DHCPOfferParse
+	DHCPAckParse
+
+	DHCPInnerConfigure
+	DHCPConfigure
+
+	NetConfigure
+
+NetHandler
 	IPV4Handler
+	NetQueueEntryHandle
+	NetHandler
+
+	NetHandlerInit
 
 NetConfig

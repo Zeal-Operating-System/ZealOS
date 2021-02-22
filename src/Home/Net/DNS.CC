@@ -109,7 +109,7 @@ CDNSHash *DNSCachePut(U8 *hostname, CAddressInfo *info)
 	return entry;
 }
 
-I64 DNSCalculateQuestionSize(CDNSQuestion *q)
+I64 DNSQuestionSizeCalculate(CDNSQuestion *q)
 { // ??
 	I64 i, size = 0;
 
@@ -121,7 +121,7 @@ I64 DNSCalculateQuestionSize(CDNSQuestion *q)
 	return size + 1 + 4;
 }
 
-U0 DNSSerializeQuestion(U8 *buffer, CDNSQuestion *q)
+U0 DNSQuestionSerialize(U8 *buffer, CDNSQuestion *q)
 { // ??
 	I64 i;
 	U8 *label;
@@ -143,7 +143,7 @@ U0 DNSSerializeQuestion(U8 *buffer, CDNSQuestion *q)
 	*(buffer++) = q->q_class & 0xFF;
 }
 
-I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
+I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 {
 	CIPV4Address *ipv4_addr;
 	U8			 *frame;
@@ -173,11 +173,11 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 
 	// UDPPacketAllocate currently only accepts IPV4 ...
 	de_index = UDPPacketAllocate(&frame,
-								 IPV4GetAddress(),
+								 IPV4AddressGet(),
 								 local_port,
 								 *ipv4_addr,
 								 53,
-								 sizeof(CDNSHeader) + DNSCalculateQuestionSize(q));
+								 sizeof(CDNSHeader) + DNSQuestionSizeCalculate(q));
 	if (de_index < 0)
 	{
 		NetErr("DNS SEND QUESTION: Failed, UDPPacketAllocate returned error.");
@@ -195,7 +195,7 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 	header->ns_count	= 0;
 	header->ar_count	= 0;
 
-	DNSSerializeQuestion(frame + sizeof(CDNSHeader), q);
+	DNSQuestionSerialize(frame + sizeof(CDNSHeader), q);
 
 	UDPPacketFinish(de_index);
 	return 0;
@@ -203,7 +203,7 @@ I64 DNSSendQuestion(U16 id, U16 local_port, CDNSQuestion *q)
 }
 
 
-I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSDomainName *name_out)
+I64 DNSDomainNameParse(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSDomainName *name_out)
 { // these methods look not-so-good, ngl.
 	U8  *data = *data_inout;
 	U8  *name_buf;
@@ -271,11 +271,11 @@ I64 DNSParseDomainName(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 }
 
 
-I64 DNSParseQuestion(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSQuestion *q_out)
+I64 DNSQuestionParse(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSQuestion *q_out)
 {
 	U8 *data;
 	I64 length;
-	I64 error = DNSParseDomainName(packet_data, packet_length, data_inout, length_inout, &q_out->q_name);
+	I64 error = DNSDomainNameParse(packet_data, packet_length, data_inout, length_inout, &q_out->q_name);
 
 	if (error < 0)
 		return error;
@@ -296,12 +296,12 @@ I64 DNSParseQuestion(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *l
 	return 0;
 }
 
-I64 DNSParseRR(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSRR *rr_out)
+I64 DNSRRParse(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_inout, CDNSRR *rr_out)
 {
 	U8 *data;
 	I64 length;
 	I64 record_length;
-	I64 error = DNSParseDomainName(packet_data, packet_length, data_inout, length_inout, &rr_out->name);
+	I64 error = DNSDomainNameParse(packet_data, packet_length, data_inout, length_inout, &rr_out->name);
 
 	if (error < 0)
 		return error;
@@ -328,7 +328,7 @@ I64 DNSParseRR(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *length_
 	return 0;
 }
 
-I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNSQuestion **questions_out, CDNSRR **answers_out)
+I64 DNSResponseParse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNSQuestion **questions_out, CDNSRR **answers_out)
 {
 	CDNSHeader		*header;
 	CDNSQuestion	*question;
@@ -355,7 +355,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNS
 	for (i = 0; i < EndianU16(header->q_count); i++)
 	{
 		question = CAlloc(sizeof(CDNSQuestion));
-		if (DNSParseQuestion(packet_data, packet_length, &data, &length, question) < 0)
+		if (DNSQuestionParse(packet_data, packet_length, &data, &length, question) < 0)
 			return -1;
 
 		question->next = *questions_out;
@@ -365,7 +365,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNS
 	for (i = 0; i < EndianU16(header->a_count); i++)
 	{
 		answer = CAlloc(sizeof(CDNSRR));
-		if (DNSParseRR(packet_data, packet_length, &data, &length, answer) < 0)
+		if (DNSRRParse(packet_data, packet_length, &data, &length, answer) < 0)
 			return -1;
 
 		answer->next = *answers_out;
@@ -377,7 +377,7 @@ I64 DNSParseResponse(U16 id, U8 *data, I64 length, CDNSHeader **header_out, CDNS
 
 }
 
-U0 DNSBuildQuestion(CDNSQuestion *q, U8 *name)
+U0 DNSQuestionBuild(CDNSQuestion *q, U8 *name)
 {
 	U8 *copy = StrNew(name);
 	U8 *dot;
@@ -405,49 +405,49 @@ U0 DNSBuildQuestion(CDNSQuestion *q, U8 *name)
 }
 
 // these Free methods bother me a bit...
-U0 DNSFreeQuestion(CDNSQuestion *q)
+U0 DNSQuestionFree(CDNSQuestion *q)
 {
 	Free(q->q_name.labels[0]);
 }
 
-U0 DNSFreeRR(CDNSRR *rr)
+U0 DNSRRFree(CDNSRR *rr)
 {
 	Free(rr->name.labels[0]);
 }
 
-U0 DNSFreeQuestionChain(CDNSQuestion *questions)
+U0 DNSQuestionChainFree(CDNSQuestion *questions)
 {
 	CDNSQuestion *next;
 
 	while (questions)
 	{
 		next = questions->next;
-		DNSFreeQuestion(questions);
+		DNSQuestionFree(questions);
 		Free(questions);
 		questions = next;
 	}
 }
 
-U0 DNSFreeRRChain(CDNSRR *rrs)
+U0 DNSRRChainFree(CDNSRR *rrs)
 { // Shrine sets rrs->next to a CDNSQuestion when it would be a CDNSRR ... assuming it's wrong and fixing it here..
 	CDNSRR *next;
 
 	while (rrs)
 	{
 		next = rrs->next;
-		DNSFreeRR(rrs);
+		DNSRRFree(rrs);
 		Free(rrs);
 		rrs = next;
 	}
 }
 
 
-I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **result_out)
+I64 DNSQueryRun(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **result_out)
 {	// IPV4-UDP-based, TODO: take good look at this method to ensure no floating pointers after.
-	// note: UDP Socket created in this method is not closed in this method, gets closed e.g. in DNSGetAddressInfo
+	// note: UDP Socket created in this method is not closed in this method, gets closed e.g. in DNSAddressInfoGet
 	I64  retries	= 0;
 	I64	 timeout	= DNS_TIMEOUT;
-	U16	 local_port	= RandU16;	// TODO: is rand needed? would a local port 0 work? (would improve lookup speed)
+	U16	 local_port	= MaxI64(1024, RandU16); // Pick a random port above 1023. (within standard application port range)
 	U16  id			= RandU16;
 	I64  error		= 0;
 	U8   buffer[2048];
@@ -479,11 +479,11 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 		return -1;
 	}
 
-	DNSBuildQuestion(&q, name);
+	DNSQuestionBuild(&q, name);
 
 	while (TRUE) // Shrine uses while (1) infinite loop, need to be careful not to lock
 	{
-		error = DNSSendQuestion(id, local_port, &q);
+		error = DNSQuestionSend(id, local_port, &q);
 		if (error < 0)
 		{
 			NetErr("DNS RUN QUERY: Failed to Send Question.");
@@ -500,9 +500,9 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 			questions	= NULL;
 			answers		= NULL;
 
-			error = DNSParseResponse(id, buffer, count, &header, &questions, &answers);
+			error = DNSResponseParse(id, buffer, count, &header, &questions, &answers);
 
-			if (error == 0) // Shrine has (error >= 0), but DNSParseResponse can only return 0 or 1 ..
+			if (error == 0) // Shrine has (error >= 0), but DNSResponseParse can only return 0 or 1 ..
 			{
 				have = FALSE;
 
@@ -543,8 +543,8 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 					a = a->next;
 				}
 
-				DNSFreeQuestionChain(questions);
-				DNSFreeRRChain(answers);
+				DNSQuestionChainFree(questions);
+				DNSRRChainFree(answers);
 
 				if (have)
 					break;
@@ -569,13 +569,13 @@ I64 DNSRunQuery(CUDPSocket *udp_socket, U8 *name, U16 port, CAddressInfo **resul
 		}
 	}
 
-	DNSFreeQuestion(&q);
+	DNSQuestionFree(&q);
 	return error;
 }
 
 // Shrine has port arg as U8 *service with a no_warn and says it should be parsed as port, allowing that here
 // Also has CAddressInfo *hints with a no_warn, omitting that for now
-I64 DNSGetAddressInfo(U8 *node_name, U16 port, CAddressInfo **result)
+I64 DNSAddressInfoGet(U8 *node_name, U16 port, CAddressInfo **result)
 {
 	I64			 error;
 	CUDPSocket	*udp_socket;
@@ -594,7 +594,7 @@ I64 DNSGetAddressInfo(U8 *node_name, U16 port, CAddressInfo **result)
 
 	if (udp_socket)
 	{
-		error = DNSRunQuery(udp_socket, node_name, port, result);
+		error = DNSQueryRun(udp_socket, node_name, port, result);
 
 		UDPSocketClose(udp_socket);
 	}
@@ -607,7 +607,7 @@ I64 DNSGetAddressInfo(U8 *node_name, U16 port, CAddressInfo **result)
 	return error;
 }
 
-U0 DNSSetResolverIPV4(U32 ip)
+U0 DNSResolverIPV4Set(U32 ip)
 {
 	CIPV4Address *address = &dns_globals.dns_ip;
 
@@ -616,10 +616,10 @@ U0 DNSSetResolverIPV4(U32 ip)
 }
 
 U0 Host(U8 *hostname)
-{ // getaddrinfo() for whole system in Shrine ends up as pointer to DNSGetAddressInfo.. should we do something similar?
+{ // getaddrinfo() for whole system in Shrine ends up as pointer to DNSAddressInfoGet.. should we do something similar?
 	CAddressInfo	*current;
 	CAddressInfo	*result	= NULL;
-	I64				 error	= DNSGetAddressInfo(hostname, NULL, &result);
+	I64				 error	= DNSAddressInfoGet(hostname, NULL, &result);
 	I64				 i = 0;
 
 	if (error < 0)

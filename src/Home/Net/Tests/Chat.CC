@@ -1,7 +1,8 @@
 /*
-
 	Chat program proof-of-concept using UDP.
-	Needs Bridged Mode working on two VMs under the same router.
+
+	Tested on Bridged Mode with two VMs under the same router (same and different computers),
+	and on NAT Network Mode with two VMs using the same virtualized NAT.
 
 */
 

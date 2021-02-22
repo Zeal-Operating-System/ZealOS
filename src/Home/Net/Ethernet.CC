@@ -17,7 +17,7 @@ class CEthernetGlobals
 
 } ethernet_globals;
 
-U0 EthernetInitGlobals()
+U0 EthernetGlobalsInit()
 {
 	I64 i;
 	for (i = 0; i < 6; i++)
@@ -49,4 +49,4 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 	frame_out->length	 = length - ETHERNET_MAC_HEADER_LENGTH - 4;	// He has a comment literally just saying "??". + or - 4?
 }
 
-EthernetInitGlobals;
+EthernetGlobalsInit;

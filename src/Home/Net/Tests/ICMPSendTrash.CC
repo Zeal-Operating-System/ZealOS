@@ -9,11 +9,11 @@ U0 ICMPSendTrash()
 
 	*(data_payload(U64 *)) = EndianU64(0xDEADC0DEBEEFFADE);
 
-	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with GetMACAddressForIP
+	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet
 
 	while (TRUE)
 	{
-		ICMPSendReply(dst_ip, EndianU16(0xDEAD), EndianU16(0xBEEF), EndianU16(0xC0DE), data_payload, 8);
+		ICMPReplySend(dst_ip, EndianU16(0xDEAD), EndianU16(0xBEEF), EndianU16(0xC0DE), data_payload, 8);
 		Sleep(300);
 	}
 

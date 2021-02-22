@@ -10,7 +10,7 @@ U0 UDPSendTrash()
 		NetConfigure;
 	}
 
-	error = DNSGetAddressInfo("zenithos.org", NULL, &result);
+	error = DNSAddressInfoGet("zenithos.org", NULL, &result);
 	if (error < 0)
 	{
 		NetErr("failed at DNS Get Address Info.");

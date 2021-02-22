@@ -2,7 +2,7 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 {
 	CIPV4Packet packet;
 
-	IPV4ParsePacket(&packet, ethernet_frame);
+	IPV4PacketParse(&packet, ethernet_frame);
 
 	ARPCachePut(packet.source_ip_address, ethernet_frame->source_address);
 
@@ -30,7 +30,7 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 	NetLog("IPV4 HANDLER: Exiting.");
 }
 
-U0 HandleNetQueueEntry(CNetQueueEntry *entry)
+U0 NetQueueEntryHandle(CNetQueueEntry *entry)
 {
 	CEthernetFrame ethernet_frame;
 
@@ -74,7 +74,7 @@ interrupt U0 NetHandler()
 	while (entry = NetQueuePull())
 	{
 		NetLog("NET HANDLER: Caught NetQueue Entry, handling.");
-		HandleNetQueueEntry(entry);
+		NetQueueEntryHandle(entry);
 		NetLog("NET HANDLER: Finished handling NetQueue Entry, Freeing.");
 		Free(entry);
 

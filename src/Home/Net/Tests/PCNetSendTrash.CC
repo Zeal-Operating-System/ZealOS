@@ -5,11 +5,11 @@ U0 PCNetSendTrash()
 
 	while (TRUE)
 	{
-		de_index = PCNetAllocateTransmitPacket(&packet_buffer, 8);
+		de_index = PCNetTransmitPacketAllocate(&packet_buffer, 8);
 
 		*(packet_buffer(U64 *)) = EndianU64(0xDEADBEEFC0DEFADE);
 
-		PCNetFinishTransmitPacket(de_index);
+		PCNetTransmitPacketFinish(de_index);
 		Sleep(300);
 	}
 }

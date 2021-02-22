@@ -8,7 +8,7 @@ U0 IPV4SendTrash()
 	U8 *ipv4_packet_buffer;
 	I64 de_index;
 
-	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with GetMACAddressForIP
+	ARPCachePut(dst_ip, dst_mac); // Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet
 
 	while (TRUE)
 	{

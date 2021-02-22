@@ -18,7 +18,7 @@ U0 DHCPSendTrash()
 		return;
 	}
 
-	DHCPConfigureInner(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
+	DHCPInnerConfigure(udp_socket, &your_ip, &dns_ip, &router_ip, &subnet_mask);
 
 	UDPSocketClose(udp_socket);
 

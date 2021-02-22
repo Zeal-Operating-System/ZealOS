@@ -51,7 +51,7 @@ class CIPV4Globals
 
 } ipv4_globals;
 
-U0 InitIPV4Globals()
+U0 IPV4GlobalsInit()
 {
 	ipv4_globals.local_ip			 = 0;
 	ipv4_globals.local_ip_be		 = 0;
@@ -88,7 +88,7 @@ U16 IPV4Checksum(U8 *header, I64 length)
 
 }
 
-I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
+I64 IPV4AddressMACGet(U32 ip_address, U8 **mac_out)
 {
 	CARPHash	*entry;
 	I64			 retries;
@@ -111,13 +111,13 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != (ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
 	{
 		// TODO: Shrine recurses here... and says FIXME infinite loop if mis-configured...
-		NetWarn("GET MAC FOR IP: TODO: Doing GetMACAddressForIP recursion, could infinite loop and overflow stack.");
-		return GetMACAddressForIP(ipv4_globals.ipv4_router_address, mac_out);
+		NetWarn("GET MAC FOR IP: TODO: Doing IPV4AddressMACGet recursion, could infinite loop and overflow stack.");
+		return IPV4AddressMACGet(ipv4_globals.ipv4_router_address, mac_out);
 	}
 	else // "local network"
 	{
 		NetLog("GET MAC FOR IP: Attempting ARP Find by IP for address: %d.", ip_address);
-		entry = ARPCacheFindByIP(ip_address);
+		entry = ARPCacheFind(ip_address);
 
 		if (entry)
 		{
@@ -132,7 +132,7 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 		{
 			ARPSend(ARP_REQUEST,
 					ethernet_globals.ethernet_broadcast,
-					EthernetGetMAC,
+					EthernetMACGet,
 					ipv4_globals.local_ip_be,
 					ethernet_globals.ethernet_null,
 					EndianU32(ip_address));
@@ -141,7 +141,7 @@ I64 GetMACAddressForIP(U32 ip_address, U8 **mac_out)
 			for (attempt = 0; attempt < 50; attempt++)
 			{
 				Sleep(10);
-				entry = ARPCacheFindByIP(ip_address);
+				entry = ARPCacheFind(ip_address);
 				if (entry)
 					break;
 			}
@@ -174,7 +174,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	I64			 internet_header_length;
 	CIPV4Header *header;
 
-	error = GetMACAddressForIP(destination_ip_address, &destination_mac_address);
+	error = IPV4AddressMACGet(destination_ip_address, &destination_mac_address);
 
 	if (error < 0)
 	{
@@ -183,7 +183,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	}
 
 	de_index = EthernetFrameAllocate(&ethernet_frame,
-									 EthernetGetMAC(),
+									 EthernetMACGet(),
 									 destination_mac_address,
 									 ETHERTYPE_IPV4,
 									 sizeof(CIPV4Header) + length);
@@ -218,28 +218,28 @@ U0 IPV4PacketFinish(I64 de_index) //alias for EthernetFrameFinish
 	EthernetFrameFinish(de_index);
 }
 
-U32 IPV4GetAddress()
+U32 IPV4AddressGet()
 {
 	return ipv4_globals.local_ip;
 }
 
-U0 IPV4SetAddress(U32 ip_address)
+U0 IPV4AddressSet(U32 ip_address)
 {
 	ipv4_globals.local_ip	 = ip_address;
 	ipv4_globals.local_ip_be = EndianU32(ip_address);
 
-	ARPSetIPV4Address(ip_address);
+	ARPLocalIPV4Set(ip_address);
 	
 }
 
-U0 IPV4SetSubnet(U32 router_address, U32 subnet_mask)
+U0 IPV4SubnetSet(U32 router_address, U32 subnet_mask)
 {
 	ipv4_globals.ipv4_router_address = router_address;
 	ipv4_globals.ipv4_subnet_mask	 = subnet_mask;
 }
 
 //I64
-U0 IPV4ParsePacket(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
+U0 IPV4PacketParse(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 {
 	//...if ethertype not ipv4 error?
 
@@ -260,4 +260,4 @@ U0 IPV4ParsePacket(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 }
 
 // IPV4 handler moved to NetHandlerTask file.
-InitIPV4Globals;
+IPV4GlobalsInit;
