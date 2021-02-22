@@ -1,7 +1,5 @@
 //www.networksorcery.com/enp/protocol/dhcp.htm
 
-//#include "DNS";
-
 #define DHCP_OPCODE_BOOTREQUEST		0x01
 
 #define DHCP_OPTION_SUBNET_MASK		1
@@ -114,8 +112,6 @@ I64 DHCPSendDiscover(U32 xid)
 	dhcp->server_ip		= 0;
 	dhcp->gateway_ip	= 0;
 	MemCopy(dhcp->client_hw_addr, EthernetGetMAC(), MAC_ADDRESS_LENGTH);
-//	"DHCP Send Discover\n";
-//	ClassRep(dhcp);
 
 	opts = ethernet_frame + sizeof(CDHCPHeader);
 
@@ -130,7 +126,6 @@ I64 DHCPSendDiscover(U32 xid)
 	opts->param_req_list[2]		= DHCP_OPTION_DNS;
 	opts->param_req_list[3]		= DHCP_OPTION_DOMAIN_NAME;
 	opts->end					= 0xFF; // ??
-//	ClassRep(opts);
 
 	UDPPacketFinish(de_index);
 	return de_index;
@@ -184,7 +179,6 @@ I64 DHCPSendRequest(U32 xid, U32 requested_ip, U32 server_ip)
 	opts->server_id				= EndianU32(server_ip);
 	opts->end					= 0xFF;
 
-//	ClassRep(opts);
 	UDPPacketFinish(de_index);
 	return 0;
 }

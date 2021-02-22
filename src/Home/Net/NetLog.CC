@@ -1,4 +1,3 @@
-
 CTask *net_log_task = NULL;
 
 U0 NetLogTask(I64)

@@ -13,9 +13,6 @@
 	-	Clear documentation.
 */
 
-//#include "Net.HH"
-//#include "NetQueue"
-
 #define	PCNET_DEVICE_ID	0x2000
 #define	PCNET_VENDOR_ID	0x1022
 
@@ -76,7 +73,6 @@
 #define PCNET_DESCRIPTORf_ENP	24
 #define PCNET_DESCRIPTORf_STP	25
 #define PCNET_DESCRIPTORf_OWN	31 // AMD PCNet datasheet p.1-992, 1-994
-//#define PCNET_DESCRIPTORF_OWN	(1 << PCNET_DESCRIPTORf_OWN)
 
 class CPCNet
 {
@@ -678,20 +674,13 @@ U0 PCNetInit()
 	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
 	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
-	while (!(PCNetReadCSR(0) & (1<<8)))
+	while (!(PCNetReadCSR(0) & (1 << 8)))
 		Yield;
 
 	PCNetExitConfigMode;	
 
 	Sleep(100); //? necessary?
 
-/*	ClassRep(&pcnet);
-
-	"pcnet->rx_de_buffer: %X\n",		pcnet.rx_de_buffer;
-	"pcnet->tx_de_buffer: %X\n",		pcnet.tx_de_buffer;
-	"pcnet->rx_de_buffer_phys: %X\n",	pcnet.rx_de_buffer_phys;
-	"pcnet->rx_de_buffer_phys: %X\n",	pcnet.tx_de_buffer_phys;
-*/
 	csr = PCNetReadCSR(PCNET_CSR_CTRLSTATUS);
 	NetLog("PCNET INIT END: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
 	NetLog("PCNET INIT END: what is STRT ?: %d", Bt(&csr, PCNET_CTRL_STRT));
@@ -721,7 +710,6 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	parameter has the value at its pointer set to the
 	payload of the Ethernet Frame. */
 
-//todo: un magic number the rest of this
 	U8 *ethernet_frame;
 	I64 de_index;
 
@@ -743,7 +731,7 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	MemCopy(ethernet_frame,						 destination_address, MAC_ADDRESS_LENGTH);
 	MemCopy(ethernet_frame + MAC_ADDRESS_LENGTH, source_address,	  MAC_ADDRESS_LENGTH);
 
-	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET]		= ethertype >> 8; // << or >> ? Shrine has >>
+	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET]		= ethertype >> 8;
 	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET + 1]	= ethertype & 0xFF;
 
 	*packet_buffer_out = ethernet_frame + ETHERNET_MAC_HEADER_LENGTH;

@@ -165,7 +165,7 @@ CUDPTreeNode *UDPTreeNodePop(I64 port, CUDPTreeNode *tree)
 CUDPTreeNode *UDPTreeNodeSinglePop(I64 port, CUDPTreeNode *tree)
 {	// pop a tree off, then add back in its sub-trees to main tree.
 	// original node sub-trees are cleared.
-	// TODO: double check this logic ensure it's sound.
+
 	CUDPTreeNode *node	= UDPTreeNodePop(port, tree);
 	CUDPTreeNode *left	= node->left;
 	CUDPTreeNode *right	= node->right;
@@ -196,7 +196,6 @@ U0 UDPTreeNodeQueueAdd(CUDPSocket *socket, CUDPTreeNode *node)
 	QueueInsert(new_entry, node->queue->last);
 }
 
-// refactored to UDPTreeNodeQueueSocketFind for Socket-call level functions
 CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node)
 {
 	CUDPTreeQueue *temp_queue;
@@ -245,8 +244,6 @@ CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 CUDPTreeQueue *UDPTreeNodeQueueSocketSinglePop(CUDPSocket *socket, CUDPTreeNode *node)
 { // search by socket, pop a single UDPTreeQueue off the node, return popped queue.
 	CUDPTreeQueue *temp_queue = UDPTreeNodeQueueSocketFind(socket, node);
-	CUDPTreeQueue *temp_next;
-	CUDPTreeQueue *temp_last;
 
 	if (temp_queue)
 	{
@@ -334,7 +331,6 @@ I64 UDPParsePacket(U16 *source_port_out,
 
 }
 
-//CUDPSocket *UDPSocket(U16 domain, U16 type) // should this even be allowed? why not just UDPSocket; ? it could just know its domain and type.
 CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 {
 	U16			type = SOCKET_DATAGRAM;
@@ -593,7 +589,6 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 
 	while (message == message->next)
 	{ // wait for a message to be added to queue. head is non-message.
-//		if (udp_socket->receive_timeout_ms != 0 && counts.jiffies > udp_socket->receive_max_timeout)
 		if (udp_socket->receive_timeout_ms == 0)
 			return -1; // if no timeout set and didn't see message, bail early
 
@@ -724,7 +719,6 @@ I64 UDPHandler(CIPV4Packet *packet)
 	CUDPMessageQueue	*message;
 	CUDPSocket			*udp_socket;
 	CSocketAddressIPV4	*ipv4_addr;
-//	I64					 num_receive;
 
 	NetLog("UDP HANDLER: Beginning handling UDP Packet.");
 
@@ -741,7 +735,6 @@ I64 UDPHandler(CIPV4Packet *packet)
 		node = UDPTreeNodeFind(destination_port, head);
 		if (node)
 		{
-//			queue = UDPTreeNodeQueueIPV4Find(packet->destination_ip_address, node); // TODO: make sure bit order is correct here!!
 			queue = UDPTreeNodeQueueIPV4Find(packet->source_ip_address, node); // TODO: make sure bit order is correct here!!
 			if (queue)
 			{

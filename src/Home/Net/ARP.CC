@@ -1,6 +1,3 @@
-//#include "PCNet"
-//#include "Ethernet"
-
 #define ARP_HASHTABLE_SIZE	1024
 
 #define HTT_ARP	0x00100	//identical to HTT_DICT_WORD
@@ -27,7 +24,7 @@ class CARPHeader
 };
 
 class CARPHash:CHash
-{	//store U32 ip_address as CHash->str U8*, MStrPrint("%d")
+{	//store U32 ip_address as CHash->str U8*, MStrPrint("%X")
 //	U32 ip_address;
 	U8	mac_address[MAC_ADDRESS_LENGTH];
 };

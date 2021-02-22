@@ -1,5 +1,3 @@
-//#include "IPV4"
-
 #define ICMP_TYPE_ECHO_REPLY	0
 #define ICMP_TYPE_ECHO_REQUEST	8
 
@@ -14,7 +12,7 @@ class CICMPHeader // Shrine's use of id and seq indicate this header is for Addr
 };
 
 
-I64 ICMPSendReply(U32 destination_ip_address,
+U0 ICMPSendReply(U32 destination_ip_address,
 				  U16 identifier,
 				  U16 sequence_number,
 				  U16 request_checksum,
@@ -33,7 +31,7 @@ I64 ICMPSendReply(U32 destination_ip_address,
 	if (de_index < 0)
 	{
 		NetErr("ICMP SEND REPLY: Failed to allocate IPV4 packet.");
-		return de_index;
+		return;
 	}
 
 	header = frame;
@@ -48,7 +46,6 @@ I64 ICMPSendReply(U32 destination_ip_address,
 	MemCopy(frame + sizeof(CICMPHeader), payload, length);
 
 	IPV4PacketFinish(de_index);
-	//return IPV4PacketFinish
 }
 
 I64 ICMPHandler(CIPV4Packet *packet)

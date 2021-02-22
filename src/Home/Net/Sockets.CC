@@ -47,14 +47,6 @@
 #define IP_PARSE_STATE_NUM			0
 #define IP_PARSE_STATE_DOT			1
 
-/*
-class CSocketAddress
-{
-	U16	family;		// 'address family, AF_xxx'
-
-	U8	data[14];	// '14 bytes of protocol address'
-};
-*/
 class CIPV4Address
 {
 	U32 address;	// 'in Network Byte order' ... Big Endian
@@ -72,7 +64,6 @@ class CIPAddressStorage
 
 class CSocketAddressIPV4
 {
-//	I16				family;		// 'AF_INET'
 	U16				family;		// 'AF_INET'
 	U16				port;		// 'in Network Byte order' ... Big Endian
 	CIPV4Address	address;
@@ -94,7 +85,6 @@ class CSocketAddressStorage
 
 	U16 family;
 	U8	padding[26];
-
 };
 
 class CAddressInfo
@@ -151,10 +141,8 @@ U0 AddressInfoFree(CAddressInfo *info)
 
 Bool IPV4AddressParse(U8 *string, U32 *destination)
 {
-//	U8* lexable_string;
-//	lexable_string = StrReplace(string, ",", ","); // swap any commas with an unexpected value
-
 	U8 *lexable_string = StrNew(string);
+
 	lexable_string = StrReplace(lexable_string, ".", ","); // swap dots with commas since Lex is easier with them.
 
 	CCompCtrl *cc = CompCtrlNew(lexable_string);
@@ -220,23 +208,17 @@ Bool IPV4AddressParse(U8 *string, U32 *destination)
 
 	temp_destination = EndianU32(temp_destination); // store the address in Network Byte Order (Big-Endian)
 	*destination = temp_destination;
-	"\n\n%X\n\n", temp_destination;
+
 	return TRUE;
 }
 
 I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *destination)
-{/*	Converts IP string to internet address class, our inet_pton().
+{
+/*	Converts IP string to internet address class, our inet_pton().
 	Destination written as CIPV4Address or CIPV6Address depending
 	on value of address_family.
 	The destination address is the generic class, functions
-	calling this method must cast their classes in the params. 
-
-	TODO:	test it more... clarify above comment? is casting shit needed if we do it like this?.. 
-			if we declare the possible address classes, then just set them to where the
-			destination is from param, wouldn't that suffice fully? I noticed that it wrote fine to
-			a pointer to CIPV4Address without any complaints that it wasn't CIPAddressStorage .. */
-
-	//CCompCtrl *cc = CompCtrlNew(string);
+	calling this method must cast their classes in the params. */
 
 	CIPV4Address *ipv4_address;
 	CIPV6Address *ipv6_address;
@@ -277,7 +259,6 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 			return -1;
 	}
 
-	//CompCtrlDel(cc);
 	return 0;
 	
 }
@@ -285,10 +266,8 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 { // converts socket address to IP string, our inet_ntop. Taking Shrine approach of function returns U8* .
 
-//	I64 i;
 
-	U8 *ip_string;
-//	U8* ip_string[INET_ADDRSTRLEN];
+	U8			 *ip_string;
 	CIPV4Address *ipv4_source;
 	CIPV4Address *ipv6_source;
 
@@ -297,12 +276,6 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 		case AF_INET:
 
 			ipv4_source = source;
-
-/*			StrPrint(ip_string, "%d.%d.%d.%d",
-					 ipv4_source->address.u8[3],
-					 ipv4_source->address.u8[2],
-					 ipv4_source->address.u8[1],
-					 ipv4_source->address.u8[0]);*/
 
 			StrPrint(ip_string, "%d.%d.%d.%d",
 					 ipv4_source->address.u8[0],
@@ -395,22 +368,6 @@ U0 SocketClose(CSocket *socket)
 	request state before destroying the socket at
 	the protocol level. */
 	socket->state = SOCKET_STATE_CLOSE_REQ;
-
-	/*
-	switch (socket->state)
-	{
-		case SOCKET_STATE_LISTENING:
-		case SOCKET_STATE_OPEN:
-			/*	Sockets can only be closed if
-				they were opened or listening
-				to incoming connections. */
-			socket->state = SOCKET_STATE_CLOSE_REQ;
-			break;
-
-		default:
-			SocketStateErr("CLOSE", socket->state);
-			break;
-	}*/
 }
 
 U0 SocketBind(CSocket *socket)

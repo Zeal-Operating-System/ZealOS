@@ -32,6 +32,8 @@ U0 WallPaperStars(CTask *task)
 		}
 	}
 
+	DCDel(dc);
+
 	//Uncomment the following if you wish. Will draw the old wallpaper over this one.
 	//old_wall_paper(task);
 

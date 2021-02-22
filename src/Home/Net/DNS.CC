@@ -1,5 +1,3 @@
-//#include "UDP";
-
 // https://www2.cs.duke.edu/courses/fall16/compsci356/DNS/DNS-primer.pdf
 // https://en.wikipedia.org/wiki/Domain_Name_System
 
@@ -677,11 +675,5 @@ U0 DNSRep()
 	}
 	"\n";
 }
-
-/*
-
-U0 DNSInit()
-
-*/
 
 DNSCacheInit;
