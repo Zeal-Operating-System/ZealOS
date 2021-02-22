@@ -1,7 +1,3 @@
-//#include "IPV4"
-//#include "ICMP" // this is wrong and only doing this because we're just in dev right now. probably need approach like Shrine, MakeNet, idk.
-//#include "Sockets"
-
 #define UDP_MAX_PORT	65535
 
 class CUDPHeader
@@ -12,10 +8,8 @@ class CUDPHeader
 	U16 checksum;
 };
 
-class CUDPMessageQueue
+class CUDPMessageQueue:CQueue
 { // each bound socket queues data. recv functions & handler use this.
-	CUDPMessageQueue		*next;
-	CUDPMessageQueue		*last;
 	U8						*data;				// contains the UDP payload data.
 	I64						 data_length;		// size of payload data.
 	I64						 received_length;	// amount of the data received so far.
@@ -26,10 +20,10 @@ class CUDPMessageQueue
 class CUDPSocket
 {
 	CSocket					*socket;
-	I64						 receive_timeout_ms;
-	I64						 receive_max_timeout;
 	CUDPMessageQueue		*receive_queue;
 	CSocketAddressStorage	 receive_address;	// based on ->family, cast or assign to a var as IPV4/IPV6 CSocketAddress
+	I64						 receive_timeout_ms;
+	I64						 receive_max_timeout;
 	U16						 bound_to;			// represents the currently bound port
 };
 
@@ -39,24 +33,25 @@ UDP Bound Socket Tree Classes & Functions
 
 ***************************************************/
 
-class CUDPTreeQueue
-{ // next, last for queue implementation.
-	CUDPTreeQueue	*next;
-	CUDPTreeQueue	*last;
+class CUDPTreeQueue:CQueue
+{
 	CUDPSocket		*socket;
 };
 
 class CUDPTreeNode
 {
-	I64				 port;
 	CUDPTreeNode	*left;
 	CUDPTreeNode	*right;
 	CUDPTreeQueue	*queue;
+	I64				 port;
 };
 
 CUDPTreeNode *UDPTreeNodeInit()
-{ // init new empty tree/node.
+{ // init new empty tree/node. Init socket queue head links.
 	CUDPTreeNode *tree_node = CAlloc(sizeof(CUDPTreeNode));
+
+	tree_node->queue = CAlloc(sizeof(CQueue));
+	QueueInit(tree_node->queue);
 
 	return tree_node;
 }
@@ -191,37 +186,14 @@ CUDPTreeNode *UDPTreeNodeSinglePop(I64 port, CUDPTreeNode *tree)
 
 	return node;
 }
-/* TODO: determine if necessary to implement
-U0 UDPTreeNodeFree(CUDPTreeNode *node)
-{	// only clears and frees the node. !! if node has subtrees, 
-	// they will be left floating. use with caution to avoid memory leaks
-	// ... uh.. what to do with the inner CTreeQueue floating around ..? we need to fix that too right?
-	// .. what does CQueue functions give us. QueueRemove is our best bet,
-	// i guess it will just try to swap around the next last ptrs.
-}
-*/
-U0 UDPTreeNodeQueueInit(CUDPTreeNode *node)
-{
-	node->queue = CAlloc(sizeof(CUDPTreeQueue));
-	QueueInit(node->queue);
-}
 
 U0 UDPTreeNodeQueueAdd(CUDPSocket *socket, CUDPTreeNode *node)
 {
 	CUDPTreeQueue *new_entry;
 
-	if (!node->queue)
-	{
-		UDPTreeNodeQueueInit(node);
-		node->queue->socket = socket;
-	}
-	else
-	{
-		new_entry = CAlloc(sizeof(CUDPTreeQueue));
-		QueueInit(new_entry);
-		new_entry->socket = socket;
-		QueueInsert(new_entry, node->queue->last);
-	}
+	new_entry = CAlloc(sizeof(CUDPTreeQueue));
+	new_entry->socket = socket;
+	QueueInsert(new_entry, node->queue->last);
 }
 
 // refactored to UDPTreeNodeQueueSocketFind for Socket-call level functions
@@ -229,19 +201,12 @@ CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node
 {
 	CUDPTreeQueue *temp_queue;
 
-	if (node->queue)
+	temp_queue = node->queue->next;
+	while (temp_queue != node->queue)
 	{
-
-		if (node->queue->socket == socket)
-			return node->queue;
-
-		temp_queue = node->queue->next;
-		while (temp_queue != node->queue)
-		{
-			if (temp_queue->socket == socket)
-				return temp_queue;
-			temp_queue = temp_queue->next;
-		}
+		if (temp_queue->socket == socket)
+			return temp_queue;
+		temp_queue = temp_queue->next;
 	}
 
 	return NULL;
@@ -251,30 +216,27 @@ CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 {	// address should be pulled from an instance of CIPV4Address (TODO... double check what bit order we're in ?)
 	// TODO: should INADDR_ANY entries be stored and looped, or keep current returning ASAP at INNADDR_ANY ?
 
-	CUDPTreeQueue		*temp_queue = node->queue;
+	CUDPTreeQueue		*temp_queue = node->queue->next;
 	CSocketAddressIPV4	*temp_ip;
 
-	if (temp_queue)
+	while (temp_queue != node->queue)
 	{
-		do
+		if (temp_queue->socket->receive_address.family == AF_INET)
 		{
-			if (temp_queue->socket->receive_address.family == AF_INET)
+			temp_ip = &temp_queue->socket->receive_address;
+			NetLog("UDPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X",
+					address, temp_ip->address.address);
+
+			if (temp_ip->address.address == address || temp_ip->address.address == INADDR_ANY)
 			{
-				temp_ip = &temp_queue->socket->receive_address;
-				NetLog("UDPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X",
-							address, temp_ip->address.address);
+				NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X ",
+						address, temp_ip->address.address);
 
-				if (temp_ip->address.address == address || temp_ip->address.address == INADDR_ANY)
-				{
-					NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X ",
-								address, temp_ip->address.address);
-					return temp_queue;
-				}
+				return temp_queue;
 			}
-
-			temp_queue = temp_queue->next;
 		}
-		while (temp_queue != node->queue);
+
+		temp_queue = temp_queue->next;
 	}
 
 	return NULL;
@@ -288,39 +250,12 @@ CUDPTreeQueue *UDPTreeNodeQueueSocketSinglePop(CUDPSocket *socket, CUDPTreeNode 
 
 	if (temp_queue)
 	{
-		temp_next = temp_queue->next;
-		temp_last = temp_queue->last;
+		QueueRemove(temp_queue);
 
-		if (temp_queue != temp_next)
-		{ // if 2 or more entries in queue, stitch next&last, loop found queue
-			temp_last->next  = temp_next;
-			temp_next->last  = temp_last;
-			temp_queue->next = temp_queue;
-			temp_queue->last = temp_queue;
-
-			if (temp_queue == node->queue) // if entry to pop is node queue head, change head to next
-				node->queue = temp_next;
-		}
-		else if (temp_queue == temp_next == temp_last)
-			node->queue = NULL; // only one entry in queue, NULL node-queue link and pop the queue.
 	}
-	return temp_queue; // if not found, NULL.
-}
-
-/*
-CUDPTreeQueue *UDPTreeNodeQueueSinglePop(U32 address, CUDPTreeNode *node)
-{ // pop a single UDPTreeQueue off the node, return popped queue.
-	CUDPTreeQueue *temp_queue = UDPTreeNodeQueueFind(address, node);
-
-	if (temp_queue)
-		Debug("When is this method needed ?");
-
-		//QueueRemove(temp_queue);
-		// links between queue entries pop out this and stitch back together. popped entry might have old links?
 
 	return temp_queue; // if not found, NULL.
 }
-*/
 
 /***************************************************/
 
@@ -575,7 +510,7 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 	{
 		UDPTreeNodeQueueSocketSinglePop(udp_socket, node);
 
-		if (!node->queue)
+		if (node->queue == node->queue->next)
 		{ // if we popped the only queue on the node, remove the node.
 			if (node == head)
 			{ // head is the global. if node is the global, change it and add branches.
