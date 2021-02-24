@@ -71,20 +71,20 @@ U16 IPV4Checksum(U8 *header, I64 length)
 
 	while (nleft > 1)
 	{
-		sum += *(w++);
+		sum += *w++;
 		nleft -= 2;
 	}
 
 	// "mop up an odd byte, if necessary"
 	if (nleft == 1)
 	{
-		sum += ((*w) & 0x00FF);
+		sum += *w & 0x00FF;
 	}
 
 	// "add back carry outs from top 16 bits to low 16 bits"
-	sum = (sum >> 16) + (sum & 0xFFFF); // "add hi 16 to low 16"
-	sum += (sum >> 16); // add carry
-	return (~sum) & 0xFFFF;
+	sum = sum >> 16 + sum & 0xFFFF; // "add hi 16 to low 16"
+	sum += sum >> 16; // add carry
+	return ~sum & 0xFFFF;
 
 }
 
@@ -108,7 +108,7 @@ I64 IPV4AddressMACGet(U32 ip_address, U8 **mac_out)
 	}
 
 	// "outside this subnet; needs routing"
-	if ((ip_address & ipv4_globals.ipv4_subnet_mask) != (ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask))
+	if (ip_address & ipv4_globals.ipv4_subnet_mask != ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask)
 	{
 		// TODO: Shrine recurses here... and says FIXME infinite loop if mis-configured...
 		NetWarn("GET MAC FOR IP: TODO: Doing IPV4AddressMACGet recursion, could infinite loop and overflow stack.");
@@ -183,7 +183,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	}
 
 	de_index = EthernetFrameAllocate(&ethernet_frame,
-									 EthernetMACGet(),
+									 EthernetMACGet,
 									 destination_mac_address,
 									 ETHERTYPE_IPV4,
 									 sizeof(CIPV4Header) + length);
@@ -197,7 +197,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 
 	header = ethernet_frame;
 
-	header->version_ihl				= internet_header_length | (4 << 4);// whaaat the fuck is this? #define!
+	header->version_ihl				= internet_header_length | 4 << 4;// ? TODO: needs #define
 	header->dscp_ecn				= 0; // a clear define of what this actually means would be good
 	header->total_length			= EndianU16(internet_header_length * 4 + length); //...why?
 	header->identification			= 0; // define would be clearer

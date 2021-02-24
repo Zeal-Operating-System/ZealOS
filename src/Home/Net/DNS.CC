@@ -130,17 +130,17 @@ U0 DNSQuestionSerialize(U8 *buffer, CDNSQuestion *q)
 	{
 		label = q->q_name.labels[i];
 
-		*(buffer++) = StrLen(label);
+		*buffer++ = StrLen(label);
 
 		while (*label)
-			*(buffer++) = *(label++);
+			*buffer++ = *label++;
 	}
 
-	*(buffer++) = 0;
-	*(buffer++) = q->q_type >> 8;
-	*(buffer++) = q->q_type & 0xFF;
-	*(buffer++) = q->q_class >> 8;
-	*(buffer++) = q->q_class & 0xFF;
+	*buffer++ = 0;
+	*buffer++ = q->q_type >> 8;
+	*buffer++ = q->q_type & 0xFF;
+	*buffer++ = q->q_class >> 8;
+	*buffer++ = q->q_class & 0xFF;
 }
 
 I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
@@ -173,7 +173,7 @@ I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 
 	// UDPPacketAllocate currently only accepts IPV4 ...
 	de_index = UDPPacketAllocate(&frame,
-								 IPV4AddressGet(),
+								 IPV4AddressGet,
 								 local_port,
 								 *ipv4_addr,
 								 53,
@@ -184,7 +184,7 @@ I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 		return de_index;
 	}
 
-	flags = (DNS_OP_QUERY << 11) | DNS_FLAG_RD;
+	flags = DNS_OP_QUERY << 11 | DNS_FLAG_RD;
 
 	header = frame;
 
@@ -225,7 +225,7 @@ I64 DNSDomainNameParse(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 
 	while (length)
 	{
-		label_len = *(data++);
+		label_len = *data++;
 		length--;
 
 		if (label_len == 0)
@@ -242,7 +242,7 @@ I64 DNSDomainNameParse(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 
 				NetLog("DNS PARSE DOMAIN NAME: Jump taken");
 			}
 
-			data	= packet_data + ((label_len << 8) | *data);
+			data	= packet_data + (label_len << 8 | *data);
 			length	= packet_data + packet_length - data;
 		}
 		else
@@ -287,8 +287,8 @@ I64 DNSQuestionParse(U8 *packet_data, I64 packet_length, U8 **data_inout, I64 *l
 		return -1;
 
 	q_out->next		= NULL;
-	q_out->q_type	= (data[1] << 8) | data[0];
-	q_out->q_class	= (data[3] << 8) | data[2];
+	q_out->q_type	= data[1] << 8 | data[0];
+	q_out->q_class	= data[3] << 8 | data[2];
 
 	*data_inout		= data   + 4;
 	*length_inout	= length - 4;

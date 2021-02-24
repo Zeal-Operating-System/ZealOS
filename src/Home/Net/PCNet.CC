@@ -141,8 +141,8 @@ U0 PCNetReset()
 	which, regardless of which mode the card is in,
 	will reset it back to 16-bit mode. */
 
-	InU32(PCNetIOBaseGet() + PCNET_DW_RESET);
-	InU16(PCNetIOBaseGet() + PCNET_WD_RESET);
+	InU32(PCNetIOBaseGet + PCNET_DW_RESET);
+	InU16(PCNetIOBaseGet + PCNET_WD_RESET);
 	Busy(5); // OSDev says minimum 1 ÊS
 }
 
@@ -152,7 +152,7 @@ U0 PCNet32BitModeEnable()
 	to RDP  will cause 16-bit mode exit
 	and immediate enter into 32-bit mode. */
 
-	OutU32(PCNetIOBaseGet() + PCNET_DW_RDP, 0);
+	OutU32(PCNetIOBaseGet + PCNET_DW_RDP, 0);
 }
 
 U0 PCNetRAPWrite(U32 value)
@@ -161,7 +161,7 @@ U0 PCNetRAPWrite(U32 value)
 	value will indicate which CSR / BCR register
 	we want to access in RDP / BDP. */
 
-	OutU32(PCNetIOBaseGet() + PCNET_DW_RAP, value);
+	OutU32(PCNetIOBaseGet + PCNET_DW_RAP, value);
 }
 
 U0 PCNetCSRWrite(U32 csr, U32 value)
@@ -172,7 +172,7 @@ U0 PCNetCSRWrite(U32 csr, U32 value)
 	in the RAP. */
 
 	PCNetRAPWrite(csr);
-	OutU32(PCNetIOBaseGet() + PCNET_DW_RDP, value);
+	OutU32(PCNetIOBaseGet + PCNET_DW_RDP, value);
 }
 
 U32 PCNetCSRRead(U32 csr)
@@ -183,7 +183,7 @@ U32 PCNetCSRRead(U32 csr)
 	in the RAP. */
 
 	PCNetRAPWrite(csr);
-	return InU32(PCNetIOBaseGet() + PCNET_DW_RDP);
+	return InU32(PCNetIOBaseGet + PCNET_DW_RDP);
 }
 
 U0 PCNetSWStyleSet()
@@ -214,7 +214,7 @@ U0 PCNetMACGet()
 	NetLog("PCNET GET MAC: Getting VM MAC.");
 	for (i = 0; i < 6; i++)
 	{
-		pcnet.mac_address[i] = InU8(PCNetIOBaseGet() + i);
+		pcnet.mac_address[i] = InU8(PCNetIOBaseGet + i);
 		NetLog(" %02X", pcnet.mac_address[i]);
 	}
 }
@@ -493,7 +493,7 @@ I64 PCNetTransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 
 	pcnet.current_tx_de_index = (pcnet.current_tx_de_index + 1) & (PCNET_TX_BUFF_COUNT - 1);
 
-	*packet_buffer_out = pcnet.tx_buffer_addr + (de_index * ETHERNET_FRAME_SIZE);
+	*packet_buffer_out = pcnet.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
 
 	MemSet(*packet_buffer_out, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
 
@@ -539,7 +539,7 @@ I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 
 	pcnet.current_rx_de_index = (pcnet.current_rx_de_index + 1) & (PCNET_RX_BUFF_COUNT - 1);
 
-	*packet_buffer_out = pcnet.rx_buffer_addr + (de_index * ETHERNET_FRAME_SIZE);
+	*packet_buffer_out = pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
 	*packet_length_out = packet_length;
 
 	return de_index;
@@ -666,7 +666,7 @@ U0 PCNetInit()
 
 	PCNetTXAutoPadEnable;
 
-	PCNetCSRWrite(0, PCNetCSRRead(0) | 1 | (1<<6));
+	PCNetCSRWrite(0, PCNetCSRRead(0) | 1 | 1 << 6); // ?
 
 	csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
 	NetLog("PCNET INIT UPLOAD: what is INIT ?: %d", Bt(&csr, PCNET_CTRL_INIT));
@@ -674,7 +674,7 @@ U0 PCNetInit()
 	NetLog("PCNET INIT UPLOAD: what is STOP ?: %d", Bt(&csr, PCNET_CTRL_STOP));
 	NetLog("PCNET INIT UPLOAD: what is RINT ?: %d", Bt(&csr, PCNET_CTRL_RINT));
 
-	while (!(PCNetCSRRead(0) & (1 << 8)))
+	while (!(PCNetCSRRead(0) & 1 << 8)) // ?
 		Yield;
 
 	PCNetConfigModeExit;	

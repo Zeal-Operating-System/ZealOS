@@ -26,7 +26,7 @@ U0 ICMPReplySend(U32 destination_ip_address,
 
 	de_index = IPV4PacketAllocate(&frame,
 								  IP_PROTOCOL_ICMP,
-								  IPV4AddressGet(),
+								  IPV4AddressGet,
 								  destination_ip_address,
 								  sizeof(CICMPHeader) + length);
 	if (de_index < 0)

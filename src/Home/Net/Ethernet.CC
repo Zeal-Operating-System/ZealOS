@@ -42,7 +42,7 @@ U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 
 	MemCopy(frame_out->source_address,		frame + MAC_ADDRESS_LENGTH, MAC_ADDRESS_LENGTH);
 
-	frame_out->ethertype = frame[ETHERNET_ETHERTYPE_OFFSET + 1] | (frame[ETHERNET_ETHERTYPE_OFFSET] << 8);
+	frame_out->ethertype = frame[ETHERNET_ETHERTYPE_OFFSET + 1] | frame[ETHERNET_ETHERTYPE_OFFSET] << 8;
 
 	frame_out->data		 = frame + ETHERNET_DATA_OFFSET;
 

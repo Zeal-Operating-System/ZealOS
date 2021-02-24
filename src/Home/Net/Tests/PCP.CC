@@ -38,7 +38,7 @@ I64 PCPSendMapRequest(U16 internal_port, U16 external_port=NULL, U32 external_ip
 	I64				 i;
 
 	de_index = UDPPacketAllocate(&frame,
-								 IPV4AddressGet(),
+								 IPV4AddressGet,
 								 5351,
 								 ipv4_globals.ipv4_router_address,
 								 5351,
@@ -62,7 +62,7 @@ I64 PCPSendMapRequest(U16 internal_port, U16 external_port=NULL, U32 external_ip
 	for (; i < 10 + 2; i++) // next 16 bits 1
 		request->header.pcp_client_ip[i] = 0xFF;
 
-	*(&request->header.pcp_client_ip[i](U32 *)) = EndianU32(IPV4AddressGet());
+	*(&request->header.pcp_client_ip[i](U32 *)) = EndianU32(IPV4AddressGet);
 	//
 
 	// set random 'nonce'

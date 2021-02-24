@@ -129,7 +129,7 @@ U0 ARPLocalIPV4Set(U32 ip_address)
 
 	ARPSend(ARP_REPLY,
 			ethernet_globals.ethernet_broadcast,
-			EthernetMACGet(),
+			EthernetMACGet,
 			arp_globals.local_ipv4,
 			ethernet_globals.ethernet_broadcast,
 			arp_globals.local_ipv4);
@@ -185,7 +185,7 @@ I64 ARPHandler(CEthernetFrame *ethernet_frame)
 				NetLog("ARP HANDLER: Saw request, sending back reply.");
 				ARPSend(ARP_REPLY,
 						header->sender_hardware_addr,
-						EthernetMACGet(),
+						EthernetMACGet,
 						arp_globals.local_ipv4,
 						header->sender_hardware_addr,
 						header->sender_protocol_addr);

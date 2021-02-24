@@ -71,7 +71,7 @@ interrupt U0 NetHandler()
 	NetLog("$$BD,LTGRAY$$$$FD,WHITE$$"
 		   "NET HANDLER: Entering interrupt.");
 
-	while (entry = NetQueuePull())
+	while (entry = NetQueuePull)
 	{
 		NetLog("NET HANDLER: Caught NetQueue Entry, handling.");
 		NetQueueEntryHandle(entry);

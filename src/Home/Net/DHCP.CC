@@ -74,7 +74,7 @@ class CDHCPRequestOptions
 
 U32 DHCPTransactionBegin()
 {
-	return RandU32();
+	return RandU32;
 }
 
 I64 DHCPDiscoverSend(U32 xid)
@@ -111,7 +111,7 @@ I64 DHCPDiscoverSend(U32 xid)
 	dhcp->your_ip		= 0;
 	dhcp->server_ip		= 0;
 	dhcp->gateway_ip	= 0;
-	MemCopy(dhcp->client_hw_addr, EthernetMACGet(), MAC_ADDRESS_LENGTH);
+	MemCopy(dhcp->client_hw_addr, EthernetMACGet, MAC_ADDRESS_LENGTH);
 
 	opts = ethernet_frame + sizeof(CDHCPHeader);
 
@@ -163,7 +163,7 @@ I64 DHCPRequestSend(U32 xid, U32 requested_ip, U32 server_ip)
 	dhcp->your_ip		= 0;
 	dhcp->server_ip		= EndianU32(server_ip);
 	dhcp->gateway_ip	= 0;
-	MemCopy(dhcp->client_hw_addr, EthernetMACGet(), MAC_ADDRESS_LENGTH);
+	MemCopy(dhcp->client_hw_addr, EthernetMACGet, MAC_ADDRESS_LENGTH);
 
 	opts = ethernet_frame + sizeof(CDHCPHeader);
 
@@ -286,7 +286,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				NetLog("DHCP PARSE OFFER: Parsed Option, Type DNS.");
 				if (value_length == 4)
 				{
-					*dns_ip_out = EndianU32(*(value(U32 *)));		// TODO: this syntax used on last 3 cases is gross, alter it
+					*dns_ip_out = EndianU32(*value(U32 *));		// TODO: this syntax used on last 3 cases is gross, alter it
 					have_dns	= TRUE;
 				}
 				break;
@@ -295,7 +295,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				NetLog("DHCP PARSE OFFER: Parsed Option, Type ROUTER.");
 				if (value_length == 4)
 				{
-					*router_ip_out	= EndianU32(*(value(U32 *)));	//
+					*router_ip_out	= EndianU32(*value(U32 *));	//
 					have_router		= TRUE;
 				}
 				break;
@@ -304,7 +304,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				NetLog("DHCP PARSE OFFER: Parsed Option, Type SUBNET MASK.");
 				if (value_length == 4)
 				{
-					*subnet_mask_out = EndianU32(*(value(U32 *)));	//
+					*subnet_mask_out = EndianU32(*value(U32 *));	//
 					have_subnet		 = TRUE;
 				}
 				break;
@@ -400,7 +400,7 @@ I64 DHCPInnerConfigure(CUDPSocket *udp_socket,
 		return -1;
 	}
 
-	xid = DHCPTransactionBegin();
+	xid = DHCPTransactionBegin;
 
 	while (state != DHCP_STATE_CLIENT_REQ_ACCEPTED)
 	{
@@ -519,7 +519,7 @@ U0 NetConfigure()
 	I64 error;
 
 	NetLog("\n==== Configuring Network. ====\n");
-	error = DHCPConfigure();
+	error = DHCPConfigure;
 
 	if (error < 0)
 		NetErr("==== Network Configure Failed ====");
