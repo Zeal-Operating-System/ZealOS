@@ -267,7 +267,7 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 { // converts socket address to IP string, our inet_ntop. Taking Shrine approach of function returns U8* .
 
 
-	U8			 *ip_string;
+	U8			 *ip_string = NULL;
 	CIPV4Address *ipv4_source;
 	CIPV4Address *ipv6_source;
 
@@ -277,12 +277,13 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 
 			ipv4_source = source;
 
-			StrPrint(ip_string, "%d.%d.%d.%d",
+			ip_string = MStrPrint("%d.%d.%d.%d",
 					 ipv4_source->address.u8[0],
 					 ipv4_source->address.u8[1],
 					 ipv4_source->address.u8[2],
 					 ipv4_source->address.u8[3]);
 			break;
+
 		case AF_INET6:
 
 			ipv6_source = source;

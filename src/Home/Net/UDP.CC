@@ -439,6 +439,8 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 						UDPTreeNodeQueueAdd(udp_socket, temp_node);
 					}
 
+					break;
+
 				case AF_INET6:
 					Debug("TODO: IPV6 UDP BIND");
 					break;
@@ -788,5 +790,153 @@ I64 UDPHandler(CIPV4Packet *packet)
 // the socket functions just act on the socket state machine.
 // NetErr and return fail vals if socket FSM improperly used.
 // Careful with Free()'s.
+
+
+class CUDPRepEntry:CQueue
+{
+	CUDPTreeNode *node;
+};
+
+U0 UDPTreeNodeRep(CUDPTreeNode *node)
+{
+	CUDPTreeQueue		*queue = node->queue->next;
+	CUDPSocket			*socket;
+	CSocketAddressIPV4	*ipv4_addr;
+	CSocketAddressIPV6	*ipv6_addr;
+	U8					*string;
+
+	"Port $$YELLOW$$%d$$FG$$:\n", node->port;
+
+	while (queue != node->queue)
+	{
+
+		socket = queue->socket;
+
+		switch (socket->receive_address.family)
+		{
+
+			case AF_UNSPEC:
+				break;
+
+			case AF_INET:
+				ipv4_addr = &socket->receive_address;
+				string = MStrPrint("%d.%d.%d.%d$FG$",
+							ipv4_addr->address.address.u8[3],
+							ipv4_addr->address.address.u8[2],
+							ipv4_addr->address.address.u8[1],
+							ipv4_addr->address.address.u8[0]); // todo: kludge, endianness...
+
+				"	$$LTGREEN$$%s$$FG$$\n", string;
+				Free(string);
+
+				break;
+
+			case AF_INET6:
+				ipv6_addr = &socket->receive_address;
+
+				break;
+
+			default:
+				break;
+
+		}
+
+		queue = queue->next;
+	}
+
+	"\n";
+
+}
+
+U0 UDPRep()
+{
+	CUDPTreeNode	*node = udp_globals.bound_socket_tree;
+	CUDPRepEntry	*head;
+	CUDPRepEntry	*entry;
+	CUDPRepEntry	*temp_entry;
+
+	if (node)
+	{
+		head = CAlloc(sizeof(CUDPRepEntry));
+		QueueInit(head); // no QueueRemove the head
+
+		entry = CAlloc(sizeof(CUDPRepEntry));
+		entry->node = node;
+		QueueInsert(entry, head);
+
+		// perform depth-first-search while Entry Queue has nodes not fully visited.
+		while (entry != head)
+		{
+			if (entry->node->left)
+			{ // if node has one, add an Entry for the left branch, continue loop.
+				temp_entry = CAlloc(sizeof(CUDPRepEntry));
+				temp_entry->node = entry->node->left;
+				QueueInsertRev(temp_entry, head);
+
+				// if left branch, but no right: toss early, now fully traveled.
+				if (!entry->node->right)
+				{
+					QueueRemove(entry);
+					UDPTreeNodeRep(entry->node);
+					Free(entry);
+				}
+
+				entry = temp_entry;
+			}
+			else if (entry->node->right)
+			{ // if no left, but right: add right to queue, pop Entry, Rep, set entry to right.
+				temp_entry = CAlloc(sizeof(CUDPRepEntry));
+				temp_entry->node = entry->node->right;
+				QueueInsertRev(temp_entry, head);
+
+				QueueRemove(entry);
+				UDPTreeNodeRep(entry->node);
+				Free(entry);
+
+				entry = temp_entry;
+			}
+			else
+			{ // pop Entry, Rep, if last Entry in Queue has right add it, pop & Rep travelled Entry, entry = right.
+				QueueRemove(entry);
+				UDPTreeNodeRep(entry->node);
+				Free(entry);
+
+				if (head->last != head)
+				{
+					temp_entry = head->last;
+
+					if (temp_entry->node->right)
+					{
+						entry = temp_entry;
+
+						temp_entry = CAlloc(sizeof(CUDPRepEntry));
+						temp_entry->node = entry->node->right;
+						QueueInsertRev(temp_entry, head);
+
+						QueueRemove(entry);
+						UDPTreeNodeRep(entry->node);
+						Free(entry);
+
+						entry = temp_entry;
+					}
+					else
+					{
+						QueueRemove(temp_entry);
+						UDPTreeNodeRep(temp_entry->node);
+						Free(temp_entry);
+
+						entry = head->last;
+					}
+				}
+				else
+					break;
+			}
+		}
+
+		Free(head);
+	}
+	else
+		"No UDP Sockets currently bound.\n";
+}
 
 UDPGlobalsInit;

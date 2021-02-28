@@ -112,6 +112,9 @@ U0 Chat()
 
 	}
 
+	Free(sock_addr);
+	UDPSocketClose(udp_socket);
+
 }
 
 Chat;

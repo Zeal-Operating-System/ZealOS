@@ -224,7 +224,7 @@ U0 ARPRep()
 
 			address = EndianU32(Str2I64(temp_hash->str, 16)(U32));
 			"	IP Address:		$FG,6$%d.%d.%d.%d$FG$\n",
-				(&address)(U8 *)[0], (&address)(U8 *)[1], (&address)(U8 *)[2], (&address)(U8 *)[3]; // todo: kludge
+				address.u8[0], address.u8[1], address.u8[2], address.u8[3]; // todo: kludge
 
 			"	MAC Address:	$FG,6$";$FG$
 
