@@ -213,7 +213,13 @@ U0 ARPRep()
 	CARPHash	*temp_hash;
 	U32			 address;
 
-	"\n";
+	"$$LTBLUE$$ARP Report:$$FG$$\n\n";
+	"ARP Local Address:	$FG,6$%d.%d.%d.%d$FG$\n\n",
+		arp_globals.local_ipv4.u8[0],
+		arp_globals.local_ipv4.u8[1],
+		arp_globals.local_ipv4.u8[2],
+		arp_globals.local_ipv4.u8[3];
+
 	for (i = 0; i <= arp_cache->mask; i++)
 	{
 		temp_hash = arp_cache->body[i];

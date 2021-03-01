@@ -259,5 +259,27 @@ U0 IPV4PacketParse(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 //	return 0;
 }
 
+U0 IPV4Rep()
+{
+	"$$LTBLUE$$IPV4 Report:$$FG$$\n\n";
+
+	"Local IPV4:$FG,6$			%d.%d.%d.%d$FG$\n",
+		ipv4_globals.local_ip.u8[3],
+		ipv4_globals.local_ip.u8[2],
+		ipv4_globals.local_ip.u8[1],
+		ipv4_globals.local_ip.u8[0];
+	"Router IPV4:$FG,6$		%d.%d.%d.%d$FG$\n",
+		ipv4_globals.ipv4_router_address.u8[3],
+		ipv4_globals.ipv4_router_address.u8[2],
+		ipv4_globals.ipv4_router_address.u8[1],
+		ipv4_globals.ipv4_router_address.u8[0];
+	"Subnet IPV4:$FG,6$		%d.%d.%d.%d$FG$\n",
+		ipv4_globals.ipv4_subnet_mask.u8[3],
+		ipv4_globals.ipv4_subnet_mask.u8[2],
+		ipv4_globals.ipv4_subnet_mask.u8[1],
+		ipv4_globals.ipv4_subnet_mask.u8[0];
+	"\n";
+}
+
 // IPV4 handler moved to NetHandlerTask file.
 IPV4GlobalsInit;

@@ -804,8 +804,9 @@ U0 UDPTreeNodeRep(CUDPTreeNode *node)
 	CSocketAddressIPV4	*ipv4_addr;
 	CSocketAddressIPV6	*ipv6_addr;
 	U8					*string;
+	CUDPMessageQueue	*message;
 
-	"Port $$YELLOW$$%d$$FG$$:\n", node->port;
+	"Port $$YELLOW$$%d$$FG$$ (UDP Node @ $$CYAN$$0x%X$$FG$$):\n", node->port, node;
 
 	while (queue != node->queue)
 	{
@@ -820,13 +821,13 @@ U0 UDPTreeNodeRep(CUDPTreeNode *node)
 
 			case AF_INET:
 				ipv4_addr = &socket->receive_address;
-				string = MStrPrint("%d.%d.%d.%d$FG$",
+				string = MStrPrint("%d.%d.%d.%d",
 							ipv4_addr->address.address.u8[3],
 							ipv4_addr->address.address.u8[2],
 							ipv4_addr->address.address.u8[1],
 							ipv4_addr->address.address.u8[0]); // todo: kludge, endianness...
 
-				"	$$LTGREEN$$%s$$FG$$\n", string;
+				"	$$BROWN$$%s$$FG$$ (UDP Tree Queue @ $$CYAN$$0x%X$$FG$$):\n", string, queue;
 				Free(string);
 
 				break;
@@ -841,11 +842,43 @@ U0 UDPTreeNodeRep(CUDPTreeNode *node)
 
 		}
 
+		"		Timeout: %dms\n", socket->receive_timeout_ms;
+		if (socket->receive_queue) // todo: move socket messages Queue alloc from bind to creation to avoid check?
+		{
+			message = socket->receive_queue->next;
+			while (message != socket->receive_queue)
+			{
+				"		Queued Message @ $$CYAN$$0x%X$$FG$$:\n", message;
+				switch (message->from_address.family)
+				{
+					case AF_UNSPEC:
+						string = StrNew("AF_UNSPEC");
+						break;
+					case AF_INET:
+						ipv4_addr = &message->from_address;
+						string = NetworkToPresentation(ipv4_addr->family, &ipv4_addr->address);
+						break;
+					case AF_INET6:
+						string = StrNew("IPV6");
+						break;
+					default:
+						string = StrNew("INVALID");
+						break;
+				}
+				"			From Address:			$$BROWN$$%s$$FG$$\n", string;
+				"			Data length:			%d\n", message->data_length;
+				"			Received data length:	%d\n", message->received_length;
+
+				Free(string);
+
+				message = message->next;
+			}
+		}
+
 		queue = queue->next;
 	}
 
 	"\n";
-
 }
 
 U0 UDPRep()
@@ -854,6 +887,8 @@ U0 UDPRep()
 	CUDPRepEntry	*head;
 	CUDPRepEntry	*entry;
 	CUDPRepEntry	*temp_entry;
+
+	"$$LTBLUE$$UDP Report:$$FG$$\n\n";
 
 	if (node)
 	{
@@ -936,7 +971,7 @@ U0 UDPRep()
 		Free(head);
 	}
 	else
-		"No UDP Sockets currently bound.\n";
+		"No UDP Sockets currently bound.\n\n";
 }
 
 UDPGlobalsInit;

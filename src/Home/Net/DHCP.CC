@@ -526,3 +526,12 @@ U0 NetConfigure()
 	else
 		NetLog("$$BG,2$$$$FG,15$$==== Network Configure Success ====$$FG$$$$BG$$");
 }
+
+U0 NetRep()
+{
+	"\n$$LTGREEN$$Network Report:$$FG$$\n\n";
+	UDPRep;
+	DNSRep;
+	ARPRep;
+	IPV4Rep;
+}

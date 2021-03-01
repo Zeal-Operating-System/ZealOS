@@ -25,6 +25,8 @@ if (Fs != zenith_task)
 {
 	if (ipv4_globals.local_ip != 0) // is set if NetConfigure is successful
 	{
+		NetRep;
+
 		"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n";
 
 		"\nIf a test crashes to Debug, try typing $FG,0$G2;$FG$\n\n";

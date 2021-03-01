@@ -654,7 +654,7 @@ U0 DNSRep()
 	I64			 i;
 	CDNSHash	*temp_hash;
 
-	"\n";
+	"$$LTBLUE$$DNS Report:$$FG$$\n\n";
 	for (i = 0; i <= dns_cache->mask; i++)
 	{
 		temp_hash = dns_cache->body[i];
@@ -663,8 +663,8 @@ U0 DNSRep()
 		{
 			
 			"DNS Hash @ $FG,3$0x%X$FG$:\n", temp_hash;
-			"	Hostname:	$FG,6$%s$FG$\n", temp_hash->str;
-			"	Address:	$FG,6$%s$FG$\n",
+			"	Hostname:		$FG,6$%s$FG$\n", temp_hash->str;
+			"	IP Address:		$FG,6$%s$FG$\n",
 				NetworkToPresentation(temp_hash->info.family,
 									 &temp_hash->info.address(CSocketAddressIPV4 *)->address);
 									 // TODO: IPV4 kludge
@@ -673,7 +673,6 @@ U0 DNSRep()
 			temp_hash = temp_hash->next;
 		}
 	}
-	"\n";
 }
 
 DNSCacheInit;
