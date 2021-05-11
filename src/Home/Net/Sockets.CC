@@ -348,7 +348,7 @@ U0 SocketStateErr(U8 *request, U8 state)
 	NetErr("Socket attempted %s while in %s state.", request, state_string);
 }
 
-U0 SocketAccept(CSocket *socket)
+Bool SocketAccept(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -356,22 +356,23 @@ U0 SocketAccept(CSocket *socket)
 			/*	Socket expected to stay listening.
 				At protocol level, a new socket 'connected'
 				to this one is expected to be made. */
-			return;
+			return TRUE;
 
 		default:
 			SocketStateErr("ACCEPT", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketClose(CSocket *socket)
+Bool SocketClose(CSocket *socket)
 {	/* Sockets attempting close will enter close
 	request state before destroying the socket at
 	the protocol level. */
 	socket->state = SOCKET_STATE_CLOSE_REQ;
+	return TRUE;
 }
 
-U0 SocketBind(CSocket *socket)
+Bool SocketBind(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -379,15 +380,15 @@ U0 SocketBind(CSocket *socket)
 			/*	Sockets can only be bound
 				if they are in initial state. */
 			socket->state = SOCKET_STATE_BIND_REQ;
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("BIND", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketConnect(CSocket *socket)
+Bool SocketConnect(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -395,15 +396,15 @@ U0 SocketConnect(CSocket *socket)
 			/*	Sockets can only be connected
 				if they are in initial state. */
 			socket->state = SOCKET_STATE_CONNECT_REQ;
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("CONNECT", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketListen(CSocket *socket)
+Bool SocketListen(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -411,15 +412,15 @@ U0 SocketListen(CSocket *socket)
 			/*	A socket must be bound to
 				set it to listening. */
 			socket->state = SOCKET_STATE_LISTEN_REQ;
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("LISTEN", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketReceive(CSocket *socket)
+Bool SocketReceive(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -427,15 +428,15 @@ U0 SocketReceive(CSocket *socket)
 		case SOCKET_STATE_BOUND:
 			/*	Sockets can only recv when
 				connected to or bound. */
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("RECEIVE", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketReceiveFrom(CSocket *socket)
+Bool SocketReceiveFrom(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -443,30 +444,30 @@ U0 SocketReceiveFrom(CSocket *socket)
 		case SOCKET_STATE_BOUND:
 			/*	Sockets can only recvfrom when
 				connected to or bound. */
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("RECEIVE FROM", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketSend(CSocket *socket)
+Bool SocketSend(CSocket *socket)
 {
 	switch (socket->state)
 	{
 		case SOCKET_STATE_OPEN:
 			/*	Sockets can only send when
 				they have been connected to. */
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("SEND", socket->state);
-			break;
+			return FALSE;
 	}
 }
 
-U0 SocketSendTo(CSocket *socket)
+Bool SocketSendTo(CSocket *socket)
 {
 	switch (socket->state)
 	{
@@ -478,10 +479,10 @@ U0 SocketSendTo(CSocket *socket)
 				initial state. Protocol logic
 				will determine how to change
 				state based on params. */
-			break;
+			return TRUE;
 
 		default:
 			SocketStateErr("SEND TO", socket->state);
-			break;
+			return FALSE;
 	}
 }

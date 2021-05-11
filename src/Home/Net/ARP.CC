@@ -51,10 +51,10 @@ I64 ARPSend(U16 operation,
 			U32 target_ip)
 {//method currently assumes send_ and target_ip EndianU16 already...
 
-	U8			*ethernet_frame;
+	U8			*arp_frame;
 	CARPHeader	*header;
 
-	I64 de_index = EthernetFrameAllocate(&ethernet_frame,
+	I64 de_index = EthernetFrameAllocate(&arp_frame,
 										 send_mac_address,
 										 dest_mac_address,
 										 ETHERTYPE_ARP,
@@ -63,7 +63,7 @@ I64 ARPSend(U16 operation,
 	if (de_index < 0)
 		return de_index; // error state
 
-	header = ethernet_frame;
+	header = arp_frame;
 
 	header->hardware_type		= EndianU16(HTYPE_ETHERNET);
 	header->protocol_type		= EndianU16(ETHERTYPE_IPV4);

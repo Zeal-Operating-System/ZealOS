@@ -29,7 +29,10 @@ PCNet
 	EthernetFrameFinish (driver alias of PCNetTransmitPacketFinish)
 	EthernetFrameAllocate
 	EthernetMACGet
-	
+
+	NetStop
+	NetStart
+
 NetQueue
 	NetQueueInit
 	NetQueuePull
@@ -89,6 +92,47 @@ ICMP
 	ICMPHandler
 
 TCP
+	IsTCPStateSync
+	TCPGlobalsInit
+	TCPChecksumPartial
+	TCPChecksumFinal
+	TCPPacketAllocate
+	TCPPacketFinish
+	TCPSend
+	TCPSendFlags
+	TCPSendData
+	TCPPacketParse
+	TCPAcknowledgePacket
+	TCPCheckACKQueue
+	TCPSocket
+	TCPSocketBind
+	TCPSocketClose
+	TCPSocketConnect
+	TCPSocketListen
+	TCPSocketAccept
+	TCPSocketReceive
+	TCPSocketSend
+
+	TCPHandler
+	TCPHandleRefuse
+	TCPHandleSocket
+	TCPHandleSocketListen
+	TCPHandleReset
+	TCPHandleACK
+	TCPHandleValidSEQ
+
+	TCPTreeNodeInit
+	TCPTreeNodeAdd
+	TCPTreeNodeParamAdd
+	TCPTreeNodeParamInit
+	TCPTreeNodeFind
+	TCPTreeNodePop
+	TCPTreeNodeSinglePop
+
+	TCPTreeNodeQueueAdd
+	TCPTreeNodeQueueSocketFind
+	TCPTreeNodeQueueIPV4Find
+	TCPTreeNodeQueueSocketSinglePop
 
 UDP
 	UDPTreeNodeInit
@@ -167,5 +211,3 @@ NetHandler
 	NetHandler
 
 	NetHandlerInit
-
-NetConfig

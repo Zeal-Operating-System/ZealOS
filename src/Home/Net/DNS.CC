@@ -146,7 +146,7 @@ U0 DNSQuestionSerialize(U8 *buffer, CDNSQuestion *q)
 I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 {
 	CIPV4Address *ipv4_addr;
-	U8			 *frame;
+	U8			 *dns_frame;
 	U16			  flags;
 	CDNSHeader	 *header;
 	I64			  de_index;
@@ -172,7 +172,7 @@ I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 	}
 
 	// UDPPacketAllocate currently only accepts IPV4 ...
-	de_index = UDPPacketAllocate(&frame,
+	de_index = UDPPacketAllocate(&dns_frame,
 								 IPV4AddressGet,
 								 local_port,
 								 *ipv4_addr,
@@ -186,7 +186,7 @@ I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 
 	flags = DNS_OP_QUERY << 11 | DNS_FLAG_RD;
 
-	header = frame;
+	header = dns_frame;
 
 	header->id			= EndianU16(id);
 	header->flags		= EndianU16(flags);
@@ -195,7 +195,7 @@ I64 DNSQuestionSend(U16 id, U16 local_port, CDNSQuestion *q)
 	header->ns_count	= 0;
 	header->ar_count	= 0;
 
-	DNSQuestionSerialize(frame + sizeof(CDNSHeader), q);
+	DNSQuestionSerialize(dns_frame + sizeof(CDNSHeader), q);
 
 	UDPPacketFinish(de_index);
 	return 0;

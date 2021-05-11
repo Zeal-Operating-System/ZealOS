@@ -56,4 +56,14 @@ U0 NetErr(U8 *format, ...)
 	Free(buf);
 }
 
+U0 NetDebug(U8 *format, ...)
+{ // Output text to NetLogTask as Debug.
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
+
+	DocBottom(net_log_task->put_doc);
+	DocPrint(net_log_task->put_doc, "$$BG,YELLOW$$$$DKGRAY$$%s$$BG$$$$FG$$\n", buf);
+
+	Free(buf);
+}
+
 NetLogInit;

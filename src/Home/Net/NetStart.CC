@@ -12,7 +12,17 @@
 
 #include "C:/Home/Net/Sockets"
 
-#include "C:/Home/Net/UDP"
+#include "C:/Home/Net/Utilities/BST"
+
+#include "C:/Home/Net/UDP/UDP.HH"
+#include "C:/Home/Net/UDP/UDPTree"
+#include "C:/Home/Net/UDP/UDP.CC"
+
+#include "C:/Home/Net/TCP/TCP.HH"
+#include "C:/Home/Net/TCP/TCPTree"
+#include "C:/Home/Net/TCP/TCP.CC"
+#include "C:/Home/Net/TCP/TCPHandler.CC"
+
 
 #include "C:/Home/Net/DNS"
 #include "C:/Home/Net/DHCP"

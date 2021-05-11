@@ -79,13 +79,13 @@ U32 DHCPTransactionBegin()
 
 I64 DHCPDiscoverSend(U32 xid)
 {
-	U8						*ethernet_frame;
+	U8						*dhcp_frame;
 	I64						 de_index;
 	CDHCPHeader				*dhcp;
 	CDHCPDiscoverOptions	*opts;
 
 
-	de_index = UDPPacketAllocate(&ethernet_frame,
+	de_index = UDPPacketAllocate(&dhcp_frame,
 								 0x00000000,
 								 68,
 								 0xFFFFFFFF,
@@ -97,7 +97,7 @@ I64 DHCPDiscoverSend(U32 xid)
 		return de_index;
 	}
 
-	dhcp = ethernet_frame;
+	dhcp = dhcp_frame;
 	MemSet(dhcp, 0, sizeof(CDHCPHeader));
 
 	dhcp->opcode		= DHCP_OPCODE_BOOTREQUEST;
@@ -113,7 +113,7 @@ I64 DHCPDiscoverSend(U32 xid)
 	dhcp->gateway_ip	= 0;
 	MemCopy(dhcp->client_hw_addr, EthernetMACGet, MAC_ADDRESS_LENGTH);
 
-	opts = ethernet_frame + sizeof(CDHCPHeader);
+	opts = dhcp_frame + sizeof(CDHCPHeader);
 
 	opts->cookie				= EndianU32(DHCP_COOKIE);
 	opts->message_type			= DHCP_OPTION_MESSAGETYPE;
@@ -133,12 +133,12 @@ I64 DHCPDiscoverSend(U32 xid)
 
 I64 DHCPRequestSend(U32 xid, U32 requested_ip, U32 server_ip)
 {
-	U8					*ethernet_frame;
+	U8					*dhcp_frame;
 	I64					 de_index;
 	CDHCPHeader			*dhcp;
 	CDHCPRequestOptions	*opts;
 
-	de_index = UDPPacketAllocate(&ethernet_frame,
+	de_index = UDPPacketAllocate(&dhcp_frame,
 								 0x00000000,
 								 68,
 								 0xFFFFFFFF,
@@ -149,7 +149,7 @@ I64 DHCPRequestSend(U32 xid, U32 requested_ip, U32 server_ip)
 		NetErr("DHCP SEND REQUEST: Failed, UDP Packet Allocate error.");
 	}
 
-	dhcp = ethernet_frame;
+	dhcp = dhcp_frame;
 	MemSet(dhcp, 0, sizeof(CDHCPHeader));
 
 	dhcp->opcode		= DHCP_OPCODE_BOOTREQUEST;
@@ -165,7 +165,7 @@ I64 DHCPRequestSend(U32 xid, U32 requested_ip, U32 server_ip)
 	dhcp->gateway_ip	= 0;
 	MemCopy(dhcp->client_hw_addr, EthernetMACGet, MAC_ADDRESS_LENGTH);
 
-	opts = ethernet_frame + sizeof(CDHCPHeader);
+	opts = dhcp_frame + sizeof(CDHCPHeader);
 
 	opts->cookie				= EndianU32(DHCP_COOKIE);
 	opts->message_type			= DHCP_OPTION_MESSAGETYPE;

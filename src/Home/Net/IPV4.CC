@@ -116,7 +116,7 @@ I64 IPV4AddressMACGet(U32 ip_address, U8 **mac_out)
 	}
 	else // "local network"
 	{
-		NetLog("GET MAC FOR IP: Attempting ARP Find by IP for address: %d.", ip_address);
+		NetLog("GET MAC FOR IP: Attempting ARP Find by IP for address: %0X.", ip_address);
 		entry = ARPCacheFind(ip_address);
 
 		if (entry)
@@ -167,7 +167,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 					   U32 destination_ip_address,
 					   I64 length)
 {
-	U8			*ethernet_frame;
+	U8			*ipv4_frame;
 	U8			*destination_mac_address;
 	I64			 error;
 	I64			 de_index;
@@ -182,7 +182,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 		return error;
 	}
 
-	de_index = EthernetFrameAllocate(&ethernet_frame,
+	de_index = EthernetFrameAllocate(&ipv4_frame,
 									 EthernetMACGet,
 									 destination_mac_address,
 									 ETHERTYPE_IPV4,
@@ -195,7 +195,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 
 	internet_header_length = 5;// ... why. need a #define
 
-	header = ethernet_frame;
+	header = ipv4_frame;
 
 	header->version_ihl				= internet_header_length | 4 << 4;// ? TODO: needs #define
 	header->dscp_ecn				= 0; // a clear define of what this actually means would be good
@@ -209,7 +209,7 @@ I64 IPV4PacketAllocate(U8 **frame_out,
 	header->destination_ip_address	= EndianU32(destination_ip_address);
 	header->header_checksum			= IPV4Checksum(header, internet_header_length * 4);//why the 4's...
 
-	*frame_out = ethernet_frame + sizeof(CIPV4Header);
+	*frame_out = ipv4_frame + sizeof(CIPV4Header);
 	return de_index;
 }
 

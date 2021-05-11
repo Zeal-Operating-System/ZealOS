@@ -45,10 +45,12 @@ Stack progress: (# done, ~ WIP, . N/A)
 	~ ICMP (Internet Control Message Protocol)
 		- needs ICMPSendRequest implemented.
 
-	. TCP (Transmission Control Protocol)
+	~ TCP (Transmission Control Protocol)
+		- needs much testing, still many bugs/oddities.
+		- needs reviewing RFC for better compliance.
 
-	~ UDP (User Datagram Protocol)
-		- needs UDPRep function implemented to render bound tree.
+	# UDP (User Datagram Protocol)
+		- double check, some FIXMEs.
 
 	~ DNS (Domain Name System)
 		- needs clarifying/rewriting in certain methods.

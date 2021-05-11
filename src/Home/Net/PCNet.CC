@@ -744,5 +744,23 @@ U8 *EthernetMACGet()
 	return pcnet.mac_address;
 }
 
+U0 NetStop()
+{ // Halt network activity by setting STOP bit on Status CSR.
+	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
+
+	Bts(&csr, PCNET_CTRL_STOP);
+
+	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
+
+}
+
+U0 NetStart()
+{ // Continue network activity. Setting START bit clears STOP/INIT.
+	U32 csr = PCNetCSRRead(PCNET_CSR_CTRLSTATUS);
+
+	Bts(&csr, PCNET_CTRL_STRT);
+
+	PCNetCSRWrite(PCNET_CSR_CTRLSTATUS, csr);
+}
 
 PCNetInit;

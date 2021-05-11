@@ -14,7 +14,9 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 			break;
 
 		case IP_PROTOCOL_TCP:
-			NetWarn("IPV4 HANDLER: TCP. TODO.");
+			NetWarn("IPV4 HANDLER: TCP.");
+			TCPHandler(&packet);
+//			NetWarn("IPV4 HANDLER: TCP. TODO.");
 			break;
 
 		case IP_PROTOCOL_UDP:

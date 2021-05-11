@@ -14,6 +14,9 @@ U0 UDPSocketTest()
 	i1->address.address = 0xF00DBABE;
 
 	UDPSocketBind(u0, i0);
+
+	ClassRep(udp_globals.bound_socket_tree);
+
 	UDPSocketBind(u1, i1);
 
 	"Before remove first socket\n";

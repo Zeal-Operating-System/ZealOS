@@ -20,11 +20,11 @@ U0 ICMPReplySend(U32 destination_ip_address,
 				  U8 *payload,
 				  I64 length)
 {
-	U8			*frame;
+	U8			*icmp_frame;
 	I64			 de_index;
 	CICMPHeader	*header;
 
-	de_index = IPV4PacketAllocate(&frame,
+	de_index = IPV4PacketAllocate(&icmp_frame,
 								  IP_PROTOCOL_ICMP,
 								  IPV4AddressGet,
 								  destination_ip_address,
@@ -35,7 +35,7 @@ U0 ICMPReplySend(U32 destination_ip_address,
 		return;
 	}
 
-	header = frame;
+	header = icmp_frame;
 
 	header->type				= ICMP_TYPE_ECHO_REPLY;
 	header->code				= 0;	// why is 0 okay?
@@ -44,7 +44,7 @@ U0 ICMPReplySend(U32 destination_ip_address,
 	header->sequence_number		= sequence_number;
 	// TODO: header checksum is awful. Shrine says hack alert.
 
-	MemCopy(frame + sizeof(CICMPHeader), payload, length);
+	MemCopy(icmp_frame + sizeof(CICMPHeader), payload, length);
 
 	IPV4PacketFinish(de_index);
 }
