@@ -76,7 +76,7 @@ U0 MouseInit()
 	mouse.show		 = TRUE;
 	mouse.speed		 = 0;
 	mouse.timestamp	 = TSCGet;
-	mouse.dbl_time	 = 0.350;
+	mouse.dbl_time	 = 0.175;
 	GridInit;
 }
 

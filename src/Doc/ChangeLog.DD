@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----05/12/21 15:42:22----$IV,0$
+* Renamed PaletteSetTomLight() to $LK,"PaletteSetLight",A="MN:PaletteSetLight"$(), brightened LTRED, PURPLE, and LTPURPLE.
+* Lowered $LK,"double-click wait time",A="FF:::/Kernel/SerialDev/Mouse.CC,mouse.dbl_time"$ from 0.350 to 0.175 to improve system response time.
+
 $IV,1$----02/07/21 10:20:33----$IV,0$
 * $LK,"R",A="MN:R"$("MSRGet", "$LK,"MSRRead",A="MN:MSRRead"$");
 * $LK,"R",A="MN:R"$("MSRSet", "$LK,"MSRWrite",A="MN:MSRWrite"$");
