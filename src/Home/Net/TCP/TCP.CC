@@ -94,7 +94,8 @@ I64 TCPPacketAllocate(U8 **frame_out,
 	header->source_port			= EndianU16(source_port);
 	header->destination_port	= EndianU16(destination_port);
 
-	NetDebug("TCP PACKET ALLOCATE: Outputting header port src/dest 0x%0X/0x%0X:", header->source_port, header->destination_port);
+	NetDebug("TCP PACKET ALLOCATE: Outputting header port src/dest 0x%0X/0x%0X:",
+				header->source_port, header->destination_port);
 
 	header->seq_num				= EndianU32(seq_num);
 	header->ack_num				= EndianU32(ack_num);
@@ -205,7 +206,8 @@ I64 TCPSendFlags(CTCPSocket *tcp_socket, U8 flags)
 				case AF_INET:
 					source_ipv4 = source;
 
-					NetDebug("TCP SEND FLAGS: Trying TCP Packet Allocate... port src/dest 0x%0X/0x%0X", source_ipv4->port, dest_ipv4->port);
+					NetDebug("TCP SEND FLAGS: Trying TCP Packet Allocate... port src/dest 0x%0X/0x%0X",
+								source_ipv4->port, dest_ipv4->port);
 
 					de_index = TCPPacketAllocate(&payload_frame,
 												 source_ipv4->address.address,
@@ -329,7 +331,8 @@ I64 TCPSendData(CTCPSocket *tcp_socket, U8 flags, U8 *data, I64 length)
 				case AF_INET:
 					source_ipv4 = source;
 
-					NetDebug("TCP SEND DATA: Trying TCP Packet Allocate... port src/dest 0x%0X/0x%0X", source_ipv4->port, dest_ipv4->port);
+					NetDebug("TCP SEND DATA: Trying TCP Packet Allocate... port src/dest 0x%0X/0x%0X",
+								source_ipv4->port, dest_ipv4->port);
 
 					de_index = TCPPacketAllocate(&payload_frame,
 												 source_ipv4->address.address,
@@ -474,6 +477,8 @@ U0 TCPAcknowledgePacket(CTCPSocket *tcp_socket, U32 segment_ack)
 	I64				 segment_ack_relative;
 	I64				 send_next_relative;
 
+	NetDebug("TCP ACKNOWLEDGE PACKET: Looking to see if there are any send buffers");
+
 	while (send_buffer != tcp_socket->ack_queue)
 	{
 		segment_ack_relative	= (segment_ack - send_buffer->end_seq_num) & 0xFFFFFFFF;
@@ -482,8 +487,11 @@ U0 TCPAcknowledgePacket(CTCPSocket *tcp_socket, U32 segment_ack)
 
 		if (segment_ack_relative <= send_next_relative)
 		{
+			NetDebug("TCP ACKNOWLEDGE PACKET: Saw send buffer entry with ACK <= next relative send ACK, removing.");
 			rtt = time - send_buffer->time_sent; // Round-Trip Time
-			tcp_socket->srtt = (tcp_socket->srtt * TCP_SRTT_ALPHA) + ((1.0 - TCP_SRTT_ALPHA) * rtt); // Smoothed Round-Trip Time
+
+			tcp_socket->srtt = (tcp_socket->srtt * TCP_SRTT_ALPHA) + ((1.0 - TCP_SRTT_ALPHA) * rtt);
+			// Smoothed Round-Trip Time
 
 			QueueRemove(send_buffer);
 			Free(send_buffer->tcp_packet);
@@ -1050,8 +1058,8 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 
 	tcp_socket->connection_time = tS;
 
-	TCPSendFlags(tcp_socket, TCPF_SYN);
 	tcp_socket->state = TCP_STATE_SYN_SENT;
+	TCPSendFlags(tcp_socket, TCPF_SYN);
 
 	timeout = counts.jiffies + tcp_socket->timeout * JIFFY_FREQ / 1000;
 	while (counts.jiffies < timeout)
@@ -1161,7 +1169,9 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 	ipv4_address.port				= temp_addr->port;
 	ipv4_address.address.address	= pending->ipv4_address;
 
-	NetDebug("TCP SOCKET ACCEPT: Attempting to Bind to pending connection %0X @ src/dst ports %d,%d.", pending->ipv4_address, ipv4_address.port, pending->port);
+	NetDebug("TCP SOCKET ACCEPT: Attempting to Bind to pending connection %0X @ src/dst ports %d,%d.",
+				pending->ipv4_address, ipv4_address.port, pending->port);
+
 	TCPSocketBind(new_socket, &ipv4_address);
 
 	temp_addr = &new_socket->destination_address;
@@ -1193,6 +1203,8 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 		TCPSocketClose(new_socket);
 		return NULL;
 	}
+
+	new_socket->socket->state = SOCKET_STATE_OPEN;
 
 	return new_socket;
 }
@@ -1274,7 +1286,9 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 		return NULL;
 	}
 
-	while (counts.jiffies < timeout && (tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_CLOSE_WAIT) && length)
+	while (counts.jiffies < timeout &&
+		   (tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_CLOSE_WAIT) &&
+		   length)
 	{
 		send_length = (tcp_socket->first_unacked_seq + tcp_socket->send_window - tcp_socket->next_send_seq_num) & 0xFFFFFFFF;
 
@@ -1298,6 +1312,7 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 			if (send_length > tcp_socket->max_segment_size)
 				send_length = tcp_socket->max_segment_size;
 
+			NetDebug("TCP SOCKET SEND: Trying TCPSendData().");
 			if (TCPSendData(tcp_socket, TCPF_ACK, buffer, send_length) < 0)
 			{ // Stall until outgoing data acknowledged.
 				if (sent_total > 0)
@@ -1311,8 +1326,9 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 			}
 			else
 			{
-				buffer += send_length;
-				length -= send_length;
+				buffer		+= send_length;
+				length		-= send_length;
+				sent_total	+= send_length;
 			}
 		}
 	}

@@ -80,9 +80,22 @@ CUDPTreeQueue *UDPTreeNodeQueueSocketFind(CUDPSocket *socket, CUDPTreeNode *node
 	return NULL;
 }
 
-CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
+CUDPTreeQueue *UDPTreeNodeQueueSocketSinglePop(CUDPSocket *socket, CUDPTreeNode *node)
+{ // search by socket, pop a single UDPTreeQueue off the node, return popped queue.
+	CUDPTreeQueue *temp_queue = UDPTreeNodeQueueSocketFind(socket, node);
+
+	if (temp_queue)
+	{
+		QueueRemove(temp_queue);
+
+	}
+
+	return temp_queue; // if not found, NULL.
+}
+
+CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node, Bool specific=FALSE)
 {	// address should be pulled from an instance of CIPV4Address (TODO... double check what bit order we're in ?)
-	// TODO: should INADDR_ANY entries be stored and looped, or keep current returning ASAP at INNADDR_ANY ?
+	// use TRUE or FALSE in specific arg to dictate how to handle INADDR_ANY.
 
 	CUDPTreeQueue		*temp_queue = node->queue->next;
 	CSocketAddressIPV4	*temp_ip;
@@ -95,7 +108,7 @@ CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 			NetLog("UDPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X",
 					address, temp_ip->address.address);
 
-			if (temp_ip->address.address == address || temp_ip->address.address == INADDR_ANY)
+			if (temp_ip->address.address == address)
 			{
 				NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X ",
 						address, temp_ip->address.address);
@@ -103,22 +116,41 @@ CUDPTreeQueue *UDPTreeNodeQueueIPV4Find(U32 address, CUDPTreeNode *node)
 				return temp_queue;
 			}
 		}
+		else
+			NetErr("UDPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X",
+					temp_queue->socket->receive_address.family);
 
 		temp_queue = temp_queue->next;
 	}
 
-	return NULL;
-}
-
-CUDPTreeQueue *UDPTreeNodeQueueSocketSinglePop(CUDPSocket *socket, CUDPTreeNode *node)
-{ // search by socket, pop a single UDPTreeQueue off the node, return popped queue.
-	CUDPTreeQueue *temp_queue = UDPTreeNodeQueueSocketFind(socket, node);
-
-	if (temp_queue)
+	if (!specific)
 	{
-		QueueRemove(temp_queue);
+		temp_queue = node->queue->next;
+		NetDebug("UDPTreeNodeQueueIPV4Find: Exact match not found, looking for an INADDR_ANY address.");
 
+		while (temp_queue != node->queue)
+		{
+			if (temp_queue->socket->receive_address.family == AF_INET)
+			{
+				temp_ip = &temp_queue->socket->receive_address;
+				NetLog("UDPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X",
+						address, temp_ip->address.address);
+
+				if (temp_ip->address.address == INADDR_ANY)
+				{
+					NetLog("UDPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X ",
+							address, temp_ip->address.address);
+
+					return temp_queue;
+				}
+			}
+			else
+				NetErr("UDPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X",
+						temp_queue->socket->receive_address.family);
+
+			temp_queue = temp_queue->next;
+		}
 	}
 
-	return temp_queue; // if not found, NULL.
+	return NULL;
 }

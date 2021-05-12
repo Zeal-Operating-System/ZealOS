@@ -23,7 +23,7 @@ while (TRUE)
 
 	if (new)
 	{
-		"\n\nSocket accepted, HOOoOO BOOYYY\n\n";
+		"\n\nSocket accepted\n\n";
 		ClassRep(new);
 		break;
 	}

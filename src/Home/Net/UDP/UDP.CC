@@ -172,7 +172,7 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 			{
 				case AF_INET:
 					// TODO: will any INADDR_ANY sockets bound at the port break this?
-					if (UDPTreeNodeQueueIPV4Find(ipv4_receive->address.address, temp_node))
+					if (UDPTreeNodeQueueIPV4Find(ipv4_receive->address.address, temp_node, TRUE))
 					{
 						NetErr("UDP SOCKET BIND: Address already in Bound Socket Tree !");
 						return -1;

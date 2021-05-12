@@ -71,7 +71,8 @@ Bool TCPHandleValidSEQ(CTCPSocket *tcp_socket, CTCPHeader *header, U32 segment_s
 }
 
 
-Bool TCPHandleACK(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *header, U32 segment_seq_num, U32 segment_ack_num, U32 segment_length)
+Bool TCPHandleACK(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *header,
+				  U32 segment_seq_num, U32 segment_ack_num, U32 segment_length)
 { // returns the value of must_ack, used later in TCPHandleSocket
 	I64  ack_relative;
 	I64  ack_next_relative;
@@ -93,6 +94,7 @@ Bool TCPHandleACK(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *heade
 			switch (tcp_socket->state)
 			{
 				case TCP_STATE_SYN_SENT:
+					NetDebug("TCP HANDLE ACK: Acceptable ACK; state: SYN_SENT");
 					if (!Bt(&header->flags, TCPf_SYN))
 						break;
 					// else, fall-through
@@ -105,6 +107,7 @@ Bool TCPHandleACK(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *heade
 				default:
 					break;
 			}
+			NetDebug("TCP HANDLE ACK: Acceptable ACK returning; state: 0x%0X", tcp_socket->state);
 		}
 		else
 		{
@@ -228,6 +231,7 @@ U0 TCPHandleSocket(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *head
 
 			if (segment_length == 0 && tcp_socket->receive_window == 0)
 			{
+				NetDebug("TCP HANDLE SOCKET: segment length == 0 && receive window == 0, SEQ valid if seq == next recv seq");
 				is_seq_valid = (segment_seq_num == tcp_socket->next_recv_seq_num);
 			}
 			else
@@ -242,7 +246,7 @@ U0 TCPHandleSocket(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *head
 			if (!is_seq_valid)
 				NetWarn("TCP HANDLE SOCKET: Invalid SEQ.");
 
-			must_ack = TCPHandleACK(tcp_socket, packet, header, segment_seq_num, segment_ack_num, segment_length);
+			must_ack |= TCPHandleACK(tcp_socket, packet, header, segment_seq_num, segment_ack_num, segment_length);
 
 
 			if (TCPHandleReset(tcp_socket, header, is_seq_valid))
@@ -252,7 +256,7 @@ U0 TCPHandleSocket(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *head
 			// make sure to double check.
 
 			if (is_seq_valid)
-				must_ack = TCPHandleValidSEQ(tcp_socket, header, segment_seq_num, length, data);
+				must_ack |= TCPHandleValidSEQ(tcp_socket, header, segment_seq_num, length, data);
 
 			if (must_ack)
 				TCPSendFlags(tcp_socket, TCPF_ACK);

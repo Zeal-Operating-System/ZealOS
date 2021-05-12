@@ -6,7 +6,7 @@ ClassRep(tcp);
 CSocketAddressIPV4 *socket_addr = CAlloc(sizeof(CSocketAddressIPV4));
 
 CIPV4Address addr;
-PresentationToNetwork(AF_INET, "127.0.0.1", &addr);
+PresentationToNetwork(AF_INET, "10.0.2.7", &addr);
 
 socket_addr->port = EndianU16(0xBEEF);
 socket_addr->family = AF_INET;

@@ -117,7 +117,8 @@ CTCPTreeQueue *TCPTreeNodeQueueIPV4Find(U32 address, CTCPTreeNode *node, Bool sp
 			}
 		}
 		else
-			NetErr("TCPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X", temp_queue->socket->destination_address.family);
+			NetErr("TCPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X",
+					temp_queue->socket->destination_address.family);
 
 		temp_queue = temp_queue->next;
 	}
@@ -144,7 +145,8 @@ CTCPTreeQueue *TCPTreeNodeQueueIPV4Find(U32 address, CTCPTreeNode *node, Bool sp
 				}
 			}
 			else
-				NetErr("TCPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X", temp_queue->socket->destination_address.family);
+				NetErr("TCPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X",
+						temp_queue->socket->destination_address.family);
 
 			temp_queue = temp_queue->next;
 		}
