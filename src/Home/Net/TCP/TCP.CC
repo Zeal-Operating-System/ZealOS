@@ -1057,6 +1057,7 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 	}
 
 	tcp_socket->connection_time = tS;
+	tcp_socket->receive_window	= TCP_WINDOW_SIZE;
 
 	tcp_socket->state = TCP_STATE_SYN_SENT;
 	TCPSendFlags(tcp_socket, TCPF_SYN);

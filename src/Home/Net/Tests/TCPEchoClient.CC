@@ -1,16 +1,16 @@
 CTCPSocket	*tcp			= TCPSocket(AF_INET);
-U8			 buffer_size	= 16;
-U8			*buffer			= CAlloc(buffer_size);
+//U8			 buffer_size	= 16;
+//U8			*buffer			= CAlloc(buffer_size);
+U8			*buffer			= "Hello world";
+U8			 buffer_size	= StrLen(buffer);
 
 CSocketAddressIPV4 *socket_addr = CAlloc(sizeof(CSocketAddressIPV4));
 
-*buffer = EndianU64(0xDEADBEEFC0DEFADE);
+//*buffer = EndianU64(0xDEADBEEFC0DEFADE);
 
 U0 TCPTest()
 {
 	tcp->timeout = TCP_TIMEOUT * 3;
-
-	ClassRep(tcp);
 
 	CIPV4Address addr;
 	PresentationToNetwork(AF_INET, "10.0.2.7", &addr);
@@ -18,6 +18,8 @@ U0 TCPTest()
 	socket_addr->port			 = EndianU16(0xBEEF);
 	socket_addr->family			 = AF_INET;
 	socket_addr->address.address = addr.address;
+
+	ClassRep(tcp);
 
 	"\nTrying to connect the socket\n";
 	if (TCPSocketConnect(tcp, socket_addr) == 0)
