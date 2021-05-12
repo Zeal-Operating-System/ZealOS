@@ -1,6 +1,6 @@
 CTCPSocket	*tcp			= TCPSocket(AF_INET);
 CTCPSocket	*new;
-U8			 buffer_size	= 16;
+U8			 buffer_size	= TCP_MSS;
 U8			*buffer			= CAlloc(buffer_size);
 
 CSocketAddressIPV4 *socket_addr = CAlloc(sizeof(CSocketAddressIPV4));
@@ -45,7 +45,7 @@ U0 TCPTest()
 
 	"\n\n";
 
-	Dm(buffer, buffer_size);
+	D(buffer, buffer_size, FALSE);
 
 	"\n\n";
 

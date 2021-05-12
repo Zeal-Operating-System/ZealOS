@@ -1227,9 +1227,14 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	timeout = counts.jiffies + tcp_socket->timeout * JIFFY_FREQ / 1000;
 
 	while ((tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_FIN_WAIT1) &&
-		   tcp_socket->read_position == tcp_socket->write_position &&
-		   counts.jiffies < timeout)
+		   tcp_socket->read_position == tcp_socket->write_position)
 	{
+		if (counts.jiffies > timeout)
+		{
+			NetErr("TCP SOCKET RECEIVE: Timed out.");
+			return -1;
+		}
+
 		TCPCheckACKQueue(tcp_socket);
 		Sleep(1);
 	}
@@ -1287,10 +1292,15 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 		return NULL;
 	}
 
-	while (counts.jiffies < timeout &&
-		   (tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_CLOSE_WAIT) &&
+	while ((tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_CLOSE_WAIT) &&
 		   length)
 	{
+		if (counts.jiffies > timeout)
+		{
+			NetErr("TCP SOCKET SEND: Timed out.");
+			return -1;
+		}
+
 		send_length = (tcp_socket->first_unacked_seq + tcp_socket->send_window - tcp_socket->next_send_seq_num) & 0xFFFFFFFF;
 
 		// Shrine has TODO: Keep trying, tie to timeout: RFC 793 "Managing The Window"
