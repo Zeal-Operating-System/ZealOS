@@ -1,0 +1,135 @@
+CTask		*chat_display_task	= NULL;
+CTask		*chat_message_task	= NULL;
+CTCPSocket	*tcp = TCPSocket(AF_INET);
+
+U0 ChatDisplayTask(I64)
+{ // display received messages.
+	DocTermNew;
+	DocCursor;
+	DocPrint(, "$$WW,1$$");
+
+	while (TaskValidate(chat_message_task))
+	{
+		Refresh;
+	}
+}
+
+U0 ChatMessageTask(I64)
+{ // take in text.
+	U8	*message;
+
+	DocTermNew;
+	DocPrint(, "$$WW,1$$");
+
+	while (message = StrGet("> ",, SGF_SHIFT_ESC_EXIT))
+	{
+		DocBottom(chat_display_task->put_doc);
+		DocPrint(chat_display_task->put_doc,
+				 "$$BG,BLUE$$$$BLACK$$<local>$$FG$$$$BG$$ %s\n", message);
+
+		TCPSocketSend(tcp, message, StrLen(message));
+
+		DocClear;
+		DocPrint(, "$$WW,1$$");
+
+	}
+}
+
+U0 ChatInit()
+{
+	chat_message_task = Spawn(&ChatMessageTask, NULL, "TCP Chat Message");
+	chat_display_task = Spawn(&ChatDisplayTask, NULL, "TCP Chat");
+	chat_message_task->win_inhibit = WIG_USER_TASK_DEFAULT;
+	chat_display_task->win_inhibit = WIG_USER_TASK_DEFAULT;
+	LBts(&chat_message_task->display_flags, DISPLAYf_SHOW);
+	LBts(&chat_display_task->display_flags, DISPLAYf_SHOW);
+
+	WinFocus(chat_display_task);
+	WinFocus(chat_message_task);
+
+	chat_display_task->win_top		= 2;
+	chat_display_task->win_bottom	= TEXT_ROWS / 3;
+	chat_display_task->win_left		= TEXT_COLS / 3;
+	chat_display_task->win_right	= TEXT_COLS / 3 * 2;
+
+	chat_message_task->win_top		= chat_display_task->win_bottom + 2;
+	chat_message_task->win_bottom	= chat_message_task->win_top + 3;
+	chat_message_task->win_left		= chat_display_task->win_left;
+	chat_message_task->win_right	= chat_display_task->win_right;
+
+}
+
+U0 Chat()
+{
+	CSocketAddressIPV4	 socket_addr;
+	CIPV4Address		 ip_addr;
+	U8					*ip_string	 = StrGet("Server IPV4: ");
+	U8					*port_string = StrGet("Server Port: ");
+	I64					 port		 = Str2I64(port_string);
+	U8					*buffer[ETHERNET_FRAME_SIZE];
+	I64					 receive_val;
+
+	while (PresentationToNetwork(AF_INET, ip_string, &ip_addr) == -1)
+	{
+		"\nERROR: Bad IP entered. Retry.\n";
+		ip_string = StrGet("Server IPV4: ");
+	}
+
+
+	Free(ip_string);
+	Free(port_string);
+
+	socket_addr.port			= EndianU16(port);
+	socket_addr.family			= AF_INET;
+	socket_addr.address.address	= ip_addr.address;
+
+	tcp->timeout = TCP_TIMEOUT; // use normal timeout for connect()
+
+	"\nConnecting to server...\n";
+	if (TCPSocketConnect(tcp, &socket_addr) != 0)
+	{
+		"\nFailed to connect to server.\n";
+		TCPSocketClose(tcp);
+		return;
+	}
+	else
+		"\nSuccessfully connected.\n";
+
+	ChatInit;
+
+	tcp->timeout = 0;
+
+	while (TaskValidate(chat_message_task))
+	{
+
+		if ((receive_val = TCPSocketReceive(tcp, buffer, ETHERNET_FRAME_SIZE)) != -1)
+		{
+			if (receive_val == 0)
+			{
+				"\nServer closed the connection.\n";
+				Kill(chat_message_task);
+				break;
+			}
+			else if (receive_val > 0)
+			{
+				DocBottom(chat_display_task->put_doc);
+				DocPrint(chat_display_task->put_doc,
+						 "%s\n", buffer);
+				MemSet(buffer, 0, ETHERNET_FRAME_SIZE);
+			}
+		}
+
+		Refresh;
+
+	}
+
+	tcp->timeout = TCP_TIMEOUT;
+
+	"\nClosing connected socket...\n";
+	if (TCPSocketClose(tcp) == 0)
+		"\nSocket closed.\n";
+	else
+		"\nSocket failed to close.\n";
+}
+
+Chat;

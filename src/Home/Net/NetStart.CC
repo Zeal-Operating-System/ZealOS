@@ -21,7 +21,7 @@
 #include "C:/Home/Net/TCP/TCP.HH"
 #include "C:/Home/Net/TCP/TCPTree"
 #include "C:/Home/Net/TCP/TCP.CC"
-#include "C:/Home/Net/TCP/TCPHandler.CC"
+#include "C:/Home/Net/TCP/TCPHandler"
 
 
 #include "C:/Home/Net/DNS"

@@ -5,7 +5,8 @@ Bool TCPHandleValidSEQ(CTCPSocket *tcp_socket, CTCPHeader *header, U32 segment_s
 	I64  next_position;
 	I64  i;
 
-	tcp_socket->send_window = header->window_size;
+//	tcp_socket->send_window = header->window_size;
+	tcp_socket->send_window = EndianU16(header->window_size);
 	// Shrine doesn't use EndianU16 (ntohs)? are these all being stored network byte order? ...
 
 	switch (tcp_socket->state)
@@ -28,7 +29,8 @@ Bool TCPHandleValidSEQ(CTCPSocket *tcp_socket, CTCPHeader *header, U32 segment_s
 
 			for (i = 0; i < length; i++)
 			{
-				next_position = (write_position + 1) & (tcp_socket->receive_buffer_size - 1);
+//				next_position = (write_position + 1) & (tcp_socket->receive_buffer_size - 1);
+				next_position = (write_position + 1) % tcp_socket->receive_buffer_size;
 
 				if (next_position == tcp_socket->read_position)
 					break; // ...?

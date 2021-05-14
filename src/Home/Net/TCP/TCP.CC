@@ -735,7 +735,6 @@ I64 TCPSocketBind(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 			switch (address->family)
 			{
 				case AF_INET:
-					// TODO: will any INADDR_ANY sockets bound at the port break this?
 					if (TCPTreeNodeQueueIPV4Find(ipv4_destination->address.address, temp_node, TRUE))
 					{
 						NetErr("TCP SOCKET BIND: Address already in Bound Socket Tree !");
@@ -1142,10 +1141,10 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 	if (tcp_socket->state != TCP_STATE_LISTEN)
 	{
 		NetErr("TCP SOCKET LISTEN: TCP Socket must be in LISTEN state.");
-		return -1;
+		return NULL;
 	}
 
-	timeout = counts.jiffies + new_socket->timeout * JIFFY_FREQ / 1000;
+	timeout = counts.jiffies + tcp_socket->timeout * JIFFY_FREQ / 1000;
 	while ((pending = tcp_socket->accept_queue->next) == tcp_socket->accept_queue)
 	{
 		if (counts.jiffies > timeout)
@@ -1154,6 +1153,8 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 			Sleep(1);
 			// Yield;
 	}
+
+	QueueRemove(pending); // whether successful accept() or not, remove pending connection.
 
 // TODO: rework accept logic to handle IPV6 addresses
 	new_socket = TCPSocket(AF_INET);
@@ -1173,7 +1174,11 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 	NetDebug("TCP SOCKET ACCEPT: Attempting to Bind to pending connection %0X @ src/dst ports %d,%d.",
 				pending->ipv4_address, ipv4_address.port, pending->port);
 
-	TCPSocketBind(new_socket, &ipv4_address);
+	if (TCPSocketBind(new_socket, &ipv4_address) == -1)
+	{
+		Free(pending);
+		return NULL;
+	}
 
 	temp_addr = &new_socket->destination_address;
 
@@ -1202,8 +1207,11 @@ CTCPSocket *TCPSocketAccept(CTCPSocket *tcp_socket)
 	if (new_socket->state != TCP_STATE_ESTABLISHED)
 	{
 		TCPSocketClose(new_socket);
+		Free(pending);
 		return NULL;
 	}
+
+	Free(pending);
 
 	new_socket->socket->state = SOCKET_STATE_OPEN;
 
@@ -1229,20 +1237,35 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	while ((tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_FIN_WAIT1) &&
 		   tcp_socket->read_position == tcp_socket->write_position)
 	{
-		if (counts.jiffies > timeout)
-		{
-			NetErr("TCP SOCKET RECEIVE: Timed out.");
-			return -1;
-		}
-
 		TCPCheckACKQueue(tcp_socket);
 		Sleep(1);
+
+		if (counts.jiffies > timeout)
+		{
+//			if (tcp_socket->timeout != 0) // Don't flood NetLog on non-blocking receives.
+//				NetErr("TCP SOCKET RECEIVE: Timed out.");
+
+//			return -1;
+			break;
+		}
+
+
 	}
 
 	// Shrine has TODO: Should still be able to receive in closing states ...
 	if ((tcp_socket->state != TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_FIN_WAIT1) &&
 		tcp_socket->read_position == tcp_socket->write_position || length == 0)
 		return 0;
+
+
+	if (counts.jiffies > timeout)
+	{
+		if (tcp_socket->timeout != 0) // Don't flood NetLog on non-blocking receives.
+			NetErr("TCP SOCKET RECEIVE: Timed out.");
+
+		return -1;
+	}
+
 
 	read_position	= tcp_socket->read_position;
 	write_position	= tcp_socket->write_position;
@@ -1257,15 +1280,16 @@ I64 TCPSocketReceive(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 		MemCopy(buffer, tcp_socket->receive_buffer + read_position, step);
 		buffer += step;
 		length -= step;
-		read_position = (read_position + step) & (tcp_socket->receive_buffer_size - 1);
+//		read_position = (read_position + step) & (tcp_socket->receive_buffer_size - 1);
+		read_position = (read_position + step) % tcp_socket->receive_buffer_size;
 		read_total += step;
 	}
 
-	if (length)
+	if (length > 0)
 	{
 		step = write_position - read_position;
 
-		if (step < length)
+		if (step > length)
 			step = length;
 
 		MemCopy(buffer, tcp_socket->receive_buffer + read_position, step);
@@ -1289,18 +1313,12 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	if (!SocketSend(tcp_socket->socket))
 	{
 		NetErr("TCP SOCKET SEND: Failed, Socket state-machine must be in OPEN state.");
-		return NULL;
+		return -1;
 	}
 
 	while ((tcp_socket->state == TCP_STATE_ESTABLISHED || tcp_socket->state == TCP_STATE_CLOSE_WAIT) &&
 		   length)
 	{
-		if (counts.jiffies > timeout)
-		{
-			NetErr("TCP SOCKET SEND: Timed out.");
-			return -1;
-		}
-
 		send_length = (tcp_socket->first_unacked_seq + tcp_socket->send_window - tcp_socket->next_send_seq_num) & 0xFFFFFFFF;
 
 		// Shrine has TODO: Keep trying, tie to timeout: RFC 793 "Managing The Window"
@@ -1323,7 +1341,7 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 			if (send_length > tcp_socket->max_segment_size)
 				send_length = tcp_socket->max_segment_size;
 
-			NetDebug("TCP SOCKET SEND: Trying TCPSendData().");
+			NetDebug("TCP SOCKET SEND: Trying TCPSendData() of %d bytes.", send_length);
 			if (TCPSendData(tcp_socket, TCPF_ACK, buffer, send_length) < 0)
 			{ // Stall until outgoing data acknowledged.
 				if (sent_total > 0)
@@ -1341,6 +1359,14 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 				length		-= send_length;
 				sent_total	+= send_length;
 			}
+		}
+
+		if (counts.jiffies > timeout)
+		{
+			if (tcp_socket->timeout != 0) // Don't flood NetLog on non-blocking sends.
+				NetErr("TCP SOCKET SEND: Timed out.");
+
+			break;
 		}
 	}
 
