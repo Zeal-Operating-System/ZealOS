@@ -101,7 +101,7 @@ I64 TCPPacketAllocate(U8 **frame_out,
 	header->ack_num				= EndianU32(ack_num);
 	header->data_offset			= (sizeof(CTCPHeader) / 4) << 4; // ???
 	header->flags				= flags;
-	header->window_size			= EndianU16(TCP_WINDOW_SIZE / 2);// shrine has FIXME ... what should window size be...
+	header->window_size			= EndianU16(TCP_WINDOW_SIZE / 2);// TODO: What is window size supposed to be ?
 	header->checksum			= 0;
 	header->urgent_pointer		= 0;
 
@@ -227,20 +227,20 @@ I64 TCPSendFlags(CTCPSocket *tcp_socket, U8 flags)
 					break;
 				case AF_INET6:
 					source_ipv6 = source;
-					Debug("TODO: IPV6 Not implemented yet");
+					NetErr("TCP SEND FLAGS: FIXME, IPV6 not implemented yet");
 					return -1;
 				case AF_UNSPEC:
-					Debug("TODO: Error TCP Send from AF_UNSPEC\n");
+					NetErr("TCP SEND FLAGS: Error, TCP Send from AF_UNSPEC\n");
 					return -1;
 			}
 
 			break;
 		case AF_INET6:
 			dest_ipv6 = dest;
-			Debug("TODO: IPV6 Not implemented yet");
+			NetErr("TCP SEND FLAGS: FIXME, IPV6 not implemented yet");
 			return -1;
 		case AF_UNSPEC:
-			Debug("TODO: Error TCP Send to AF_UNSPEC\n");
+			NetErr("TCP SEND FLAGS: Error, TCP Send to AF_UNSPEC\n");
 			return -1;
 	}
 
@@ -288,20 +288,20 @@ I64 TCPSendFlags(CTCPSocket *tcp_socket, U8 flags)
 					break;
 				case AF_INET6:
 					source_ipv6 = source;
-					Debug("TODO: IPV6 Not implemented yet");
+					NetErr("TCP SEND FLAGS: FIXME, IPV6 not implemented yet");
 					return -1;
 				case AF_UNSPEC:
-					Debug("TODO: Error TCP Send from AF_UNSPEC\n");
+					NetErr("TCP SEND FLAGS: Error, TCP Send from AF_UNSPEC\n");
 					return -1;
 			}
 
 			break;
 		case AF_INET6:
 			dest_ipv6 = dest;
-			Debug("TODO: IPV6 Not implemented yet");
+			NetErr("TCP SEND FLAGS: FIXME, IPV6 not implemented yet");
 			return -1;
 		case AF_UNSPEC:
-			Debug("TODO: Error TCP Send to AF_UNSPEC\n");
+			NetErr("TCP SEND FLAGS: Error, TCP Send to AF_UNSPEC\n");
 			return -1;
 	}
 }
@@ -345,27 +345,27 @@ I64 TCPSendData(CTCPSocket *tcp_socket, U8 flags, U8 *data, I64 length)
 												 length);
 					if (de_index < 0)
 					{
-						NetLog("TCP SEND FLAGS: TCP Packet Allocate failed.");
+						NetLog("TCP SEND DATA: TCP Packet Allocate failed.");
 						return de_index;
 					}
 
 					break;
 				case AF_INET6:
 					source_ipv6 = source;
-					Debug("TODO: IPV6 Not implemented yet");
+					NetErr("TCP SEND DATA: FIXME, IPV6 not implemented yet");
 					return -1;
 				case AF_UNSPEC:
-					Debug("TODO: Error TCP Send from AF_UNSPEC\n");
+					NetErr("TCP SEND DATA: Error, TCP Send from AF_UNSPEC\n");
 					return -1;
 			}
 
 			break;
 		case AF_INET6:
 			dest_ipv6 = dest;
-			Debug("TODO: IPV6 Not implemented yet");
+			NetErr("TCP SEND DATA: FIXME, IPV6 not implemented yet");
 			return -1;
 		case AF_UNSPEC:
-			Debug("TODO: Error TCP Send to AF_UNSPEC\n");
+			NetErr("TCP SEND DATA: Error, TCP Send to AF_UNSPEC\n");
 			return -1;
 	}
 
@@ -408,20 +408,20 @@ I64 TCPSendData(CTCPSocket *tcp_socket, U8 flags, U8 *data, I64 length)
 					break;
 				case AF_INET6:
 					source_ipv6 = source;
-					Debug("TODO: IPV6 Not implemented yet");
+					NetErr("TCP SEND DATA: FIXME, IPV6 not implemented yet");
 					return -1;
 				case AF_UNSPEC:
-					Debug("TODO: Error TCP Send from AF_UNSPEC\n");
+					NetErr("TCP SEND DATA: Error, TCP Send from AF_UNSPEC\n");
 					return -1;
 			}
 
 			break;
 		case AF_INET6:
 			dest_ipv6 = dest;
-			Debug("TODO: IPV6 Not implemented yet");
+			NetErr("TCP SEND DATA: FIXME, IPV6 not implemented yet");
 			return -1;
 		case AF_UNSPEC:
-			Debug("TODO: Error TCP Send to AF_UNSPEC\n");
+			NetErr("TCP SEND DATA: Error, TCP Send to AF_UNSPEC\n");
 			return -1;
 	}
 }
@@ -436,7 +436,7 @@ I64 TCPPacketParse(CTCPHeader **header_out,
 //	U32				  checksum, sum;
 //	CTCPPseudoHeader *pseudoheader	= CAlloc(sizeof(CTCPPseudoHeader));
 
-	// TODO: Shrine has FIXME, validate packet->length!
+	// TODO: Validate packet->length !
 
 	// Verify Checksum:
 /*	NetWarn("DEBUG: TCPPACKETPARSE:		0x%X = checksum from packet, verifying...", EndianU16(header->checksum));
@@ -570,20 +570,20 @@ U0 TCPCheckACKQueue(CTCPSocket *tcp_socket)
 
 						case AF_INET6:
 							source_ipv6 = source;
-							Debug("TODO: IPV6 Not implemented yet");
+							NetErr("TCP CHECK ACK QUEUE: FIXME, IPV6 not implemented yet");
 							return;// -1;
 						case AF_UNSPEC:
-							Debug("TODO: Error TCP Send from AF_UNSPEC\n");
+							NetErr("TCP CHECK ACK QUEUE: Error, TCP Send from AF_UNSPEC\n");
 							return;// -1;
 					}
 
 					break;
 				case AF_INET6:
 					dest_ipv6 = dest;
-					Debug("TODO: IPV6 Not implemented yet");
+					NetErr("TCP CHECK ACK QUEUE: FIXME, IPV6 not implemented yet");
 					return;// -1;
 				case AF_UNSPEC:
-					Debug("TODO: Error TCP Send to AF_UNSPEC\n");
+					NetErr("TCP CHECK ACK QUEUE: Error, TCP Send to AF_UNSPEC\n");
 					return;// -1;
 			}
 
@@ -631,11 +631,11 @@ CTCPSocket TCPSocket(U16 domain=AF_UNSPEC)
 
 		case AF_INET6:
 			ipv6_address = &tcp_socket->source_address;
-			Debug("TODO: IPV6 Not implemented yet");
+			NetErr("TCP SOCKET: FIXME, IPV6 not implemented yet");
 			return NULL;
 
 		case AF_UNSPEC:
-			Debug("TODO: Error TCP Socket to AF_UNSPEC");
+			NetErr("TCP SOCKET: Error TCP Socket to AF_UNSPEC");
 			return NULL;
 	}
 
@@ -682,7 +682,7 @@ I64 TCPSocketBind(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 
 			if (tcp_socket->source_address.family == AF_INET6)
 			{
-				Debug("TODO: IPV6->IPV4 TCP BIND");
+				NetErr("TCP SOCKET BIND: FIXME, IPV6->IPV4 TCP BIND");
 				return -1;
 			}
 
@@ -716,12 +716,12 @@ I64 TCPSocketBind(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 
 			port = EndianU16(ipv6_address->port); // port member should be Big Endian,  so now we're going L.E (?)
 
-			Debug("TODO: IPV6 TCP BIND");
+			NetErr("TCP SOCKET BIND: FIXME, IPV6 TCP BIND");
 
 			break;
 
 		case AF_UNSPEC:
-			Debug("TODO: AF_UNSPEC TCP BIND -- param family");
+			NetErr("TCP SOCKET BIND: Error, AF_UNSPEC TCP BIND -- param family");
 			break;
 	}
 
@@ -749,11 +749,11 @@ I64 TCPSocketBind(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 					break;
 
 				case AF_INET6:
-					Debug("TODO: IPV6 TCP BIND");
+					NetErr("TCP SOCKET BIND: FIXME, IPV6 TCP BIND");
 					break;
 
 				case AF_UNSPEC:
-					Debug("TODO: AF_UNSPEC TCP BIND -- found in bound tree");
+					NetErr("TCP SOCKET BIND: Error, AF_UNSPEC TCP BIND -- found in bound tree");
 					break;
 			}
 		}
@@ -867,7 +867,7 @@ I64 TCPSocketClose(CTCPSocket *tcp_socket)
 		queue = TCPTreeNodeQueueSocketFind(tcp_socket, node);
 	else
 	{
-		Debug("Didn't find node at socket during TCPSocketClose!\n");
+		Debug("TODO: Didn't find node at socket during TCPSocketClose!\n");
 		return -1;
 	}
 
@@ -926,7 +926,7 @@ I64 TCPSocketClose(CTCPSocket *tcp_socket)
 	}
 	else
 	{
-		Debug("Didn't find queue at socket during TCPSocketClose!\n");
+		Debug("TODO: Didn't find queue at socket during TCPSocketClose!\n");
 		return -1;
 	}
 	
@@ -966,7 +966,7 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 
 			if (tcp_socket->source_address.family == AF_INET6)
 			{
-				Debug("TODO: IPV6->IPV4 TCP CONNECT");
+				NetErr("TCP SOCKET CONNECT: FIXME, IPV6->IPV4 TCP CONNECT");
 				return -1;
 			}
 
@@ -1000,12 +1000,12 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 
 			port = EndianU16(source_port); // port member should be Big Endian,  so now we're going L.E (?)
 
-			Debug("TODO: IPV6 TCP CONNECT");
+			NetErr("TCP SOCKET CONNECT: FIXME, IPV6 TCP CONNECT");
 
 			break;
 
 		case AF_UNSPEC:
-			Debug("TODO: AF_UNSPEC TCP CONNECT -- param family");
+			NetErr("TCP SOCKET CONNECT: Error, AF_UNSPEC TCP CONNECT -- param family");
 			break;
 	}
 
@@ -1019,7 +1019,6 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 			switch (address->family)
 			{
 				case AF_INET:
-					// TODO: will any INADDR_ANY sockets bound at the port break this?
 					if (TCPTreeNodeQueueIPV4Find(ipv4_destination->address.address, temp_node, TRUE))
 					{
 						NetErr("TCP SOCKET CONNECT: Address already in Bound Socket Tree !");
@@ -1034,11 +1033,11 @@ I64 TCPSocketConnect(CTCPSocket *tcp_socket, CSocketAddressStorage *address)
 					break;
 
 				case AF_INET6:
-					Debug("TODO: IPV6 TCP CONNECT");
+					NetErr("TCP SOCKET CONNECT: FIXME, IPV6 TCP CONNECT");
 					break;
 
 				case AF_UNSPEC:
-					Debug("TODO: AF_UNSPEC TCP CONNECT -- found in bound tree");
+					NetErr("TCP SOCKET CONNECT: Error, AF_UNSPEC TCP CONNECT -- found in bound tree");
 					break;
 			}
 		}
@@ -1373,6 +1372,168 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	return sent_total;
 }
 
-// TODO: TCPRep()
+
+U0 TCPTreeNodeRep(CTCPTreeNode *node)
+{
+	CTCPTreeQueue		*queue = node->queue->next;
+	CTCPSocket			*socket;
+	CSocketAddressIPV4	*ipv4_addr;
+	CSocketAddressIPV6	*ipv6_addr;
+	U8					*string;
+	CTCPAcceptQueue		*pending;
+	
+
+	"Local Port $$YELLOW$$%d$$FG$$ (TCP Node @ $$CYAN$$0x%X$$FG$$):\n", node->value, node;
+
+	while (queue != node->queue)
+	{
+
+		socket = queue->socket;
+
+		switch (socket->destination_address.family)
+		{
+
+			case AF_UNSPEC:
+				break;
+
+			case AF_INET:
+				ipv4_addr = &socket->destination_address;
+				string = MStrPrint("%d.%d.%d.%d",
+							ipv4_addr->address.address.u8[3],
+							ipv4_addr->address.address.u8[2],
+							ipv4_addr->address.address.u8[1],
+							ipv4_addr->address.address.u8[0]); // todo: kludge, endianness...
+
+				"	$$BROWN$$%s$$FG$$ Destination Port $$YELLOW$$%d$$FG$$ (TCP Tree Queue @ $$CYAN$$0x%X$$FG$$):\n",
+					string, EndianU16(ipv4_addr->port), queue;
+				Free(string);
+
+				break;
+
+			case AF_INET6:
+				ipv6_addr = &socket->destination_address;
+
+				break;
+
+			default:
+				break;
+
+		}
+
+		"		Timeout: %dms\n", socket->timeout;
+
+		pending = socket->accept_queue->next;
+
+		while (pending != socket->accept_queue->next)
+		{
+			"		Pending connection from $$BROWN$$%d.%d.%d.%d$$FG$$:",
+				pending->ipv4_address.u8[3],
+				pending->ipv4_address.u8[2],
+				pending->ipv4_address.u8[1],
+				pending->ipv4_address.u8[0]; //todo: kludge, endianness?
+
+			pending = pending->next;
+		}
+
+
+		queue = queue->next;
+	}
+
+	"\n";
+}
+
+U0 TCPRep()
+{
+	CTCPTreeNode	*node = tcp_globals.bound_socket_tree;
+	CTCPRepEntry	*head;
+	CTCPRepEntry	*entry;
+	CTCPRepEntry	*temp_entry;
+
+	"$$LTBLUE$$TCP Report:$$FG$$\n\n";
+
+	if (node)
+	{
+		head = CAlloc(sizeof(CTCPRepEntry));
+		QueueInit(head); // no QueueRemove the head
+
+		entry = CAlloc(sizeof(CTCPRepEntry));
+		entry->node = node;
+		QueueInsert(entry, head);
+
+		// perform depth-first-search while Entry Queue has nodes not fully visited.
+		while (entry != head)
+		{
+			if (entry->node->left)
+			{ // if node has one, add an Entry for the left branch, continue loop.
+				temp_entry = CAlloc(sizeof(CTCPRepEntry));
+				temp_entry->node = entry->node->left;
+				QueueInsertRev(temp_entry, head);
+
+				// if left branch, but no right: toss early, now fully traveled.
+				if (!entry->node->right)
+				{
+					QueueRemove(entry);
+					TCPTreeNodeRep(entry->node);
+					Free(entry);
+				}
+
+				entry = temp_entry;
+			}
+			else if (entry->node->right)
+			{ // if no left, but right: add right to queue, pop Entry, Rep, set entry to right.
+				temp_entry = CAlloc(sizeof(CTCPRepEntry));
+				temp_entry->node = entry->node->right;
+				QueueInsertRev(temp_entry, head);
+
+				QueueRemove(entry);
+				TCPTreeNodeRep(entry->node);
+				Free(entry);
+
+				entry = temp_entry;
+			}
+			else
+			{ // pop Entry, Rep, if last Entry in Queue has right add it, pop & Rep travelled Entry, entry = right.
+				QueueRemove(entry);
+				TCPTreeNodeRep(entry->node);
+				Free(entry);
+
+				if (head->last != head)
+				{
+					temp_entry = head->last;
+
+					if (temp_entry->node->right)
+					{
+						entry = temp_entry;
+
+						temp_entry = CAlloc(sizeof(CTCPRepEntry));
+						temp_entry->node = entry->node->right;
+						QueueInsertRev(temp_entry, head);
+
+						QueueRemove(entry);
+						TCPTreeNodeRep(entry->node);
+						Free(entry);
+
+						entry = temp_entry;
+					}
+					else
+					{
+						QueueRemove(temp_entry);
+						TCPTreeNodeRep(temp_entry->node);
+						Free(temp_entry);
+
+						entry = head->last;
+					}
+				}
+				else
+					break;
+			}
+		}
+
+		Free(head);
+	}
+	else
+		"No TCP Sockets currently bound.\n\n";
+}
+
 
 TCPGlobalsInit;

@@ -103,6 +103,11 @@ class CTCPTreeNode:CBST
 	CTCPTreeQueue	*queue;
 };
 
+class CTCPRepEntry:CQueue
+{
+	CTCPTreeNode *node;
+};
+
 
 class CTCPHeader
 {

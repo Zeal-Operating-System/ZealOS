@@ -9,7 +9,7 @@
 
 class CNetQueueEntry:CQueue
 {
-	I64 length; //todo: change to packet_length?
+	I64 packet_length;
 	U8	frame[ETHERNET_FRAME_SIZE];
 };
 
@@ -70,7 +70,7 @@ U0 NetQueuePush(U8 *data, I64 length)
 
 	CNetQueueEntry *entry = CAlloc(sizeof(CNetQueueEntry));
 
-	entry->length = length;
+	entry->packet_length = length;
 
 	MemCopy(entry->frame, data, length);
 

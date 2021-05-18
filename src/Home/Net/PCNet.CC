@@ -537,7 +537,9 @@ I64 PCNetPacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 
 	packet_length = entry->status2 & 0xFFFF;
 
+	NetDebug("PCNET RECEIVE PACKET: de_index = 0x%0X", de_index);
 	pcnet.current_rx_de_index = (pcnet.current_rx_de_index + 1) & (PCNET_RX_BUFF_COUNT - 1);
+	NetDebug("PCNET RECEIVE PACKET: de_index incremented = 0x%0X", pcnet.current_rx_de_index);
 
 	*packet_buffer_out = pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
 	*packet_length_out = packet_length;

@@ -249,10 +249,8 @@ I64 PresentationToNetwork(I64 address_family, U8 *string, CIPAddressStorage *des
 			ipv6_address = destination;
 
 
-			Debug("IPV6 support not implemented yet.\n");
-
-
-			break;
+			NetErr("IP to Socket Address failed: FIXME, IPV6 support not implemented yet.\n");
+			return -1;
 
 		default:
 			NetErr("IP to Socket Address failed: Invalid Address Family.");
@@ -288,7 +286,8 @@ U8 *NetworkToPresentation(I64 address_family, CIPAddressStorage *source)
 
 			ipv6_source = source;
 
-			Debug("IPV6 support not implemented yet.\n");
+			NetErr("Socket Address to IP failed: FIXME, IPV6 support not implemented yet.\n");
+			return -1;
 
 			break;
 		default:

@@ -118,7 +118,10 @@ CARPHash *ARPCachePut(U32 ip_address, U8 *mac_address)
 		HashAdd(entry, arp_cache);
 	}
 	else
-		NetWarn("ARP CACHE Put: Entry was already found in Cache. TODO: overwrite?");
+	{
+		NetWarn("ARP CACHE Put: Entry was already found in Cache. Overwriting.");
+		MemCopy(entry->mac_address, mac_address, 6);
+	}
 
 	return entry;
 }

@@ -30,7 +30,7 @@ U0 EthernetGlobalsInit()
 //TODO: check length , figure out the length+4 
 U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 {
-	//Shrine has a FIXME for check length! We need to figure out what
+	//TODO: Check length ! We need to figure out what
 	//lengths are appropriate ...... Shrine also says MemCopy has a
 	//high overhead. I'm almost tempted to say that means that a lot
 	//of the current system should be done with less extra allocation

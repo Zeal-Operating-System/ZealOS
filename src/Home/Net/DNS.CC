@@ -104,7 +104,11 @@ CDNSHash *DNSCachePut(U8 *hostname, CAddressInfo *info)
 		HashAdd(entry, dns_cache);
 	}
 	else
-		NetWarn("DNS CACHE PUT: Entry was already found in Cache. TODO: overwrite?");
+	{
+		NetWarn("DNS CACHE PUT: Entry was already found in Cache. Overwriting.");
+		Free(entry->info.address);
+		AddressInfoCopy(&entry->info, info);
+	}
 
 	return entry;
 }
@@ -617,10 +621,11 @@ U0 DNSResolverIPV4Set(U32 ip)
 
 U0 Host(U8 *hostname)
 { // getaddrinfo() for whole system in Shrine ends up as pointer to DNSAddressInfoGet.. should we do something similar?
-	CAddressInfo	*current;
-	CAddressInfo	*result	= NULL;
-	I64				 error	= DNSAddressInfoGet(hostname, NULL, &result);
-	I64				 i = 0;
+	CAddressInfo		*current;
+	CAddressInfo		*result	= NULL;
+	I64					 error	= DNSAddressInfoGet(hostname, NULL, &result);
+	I64					 i = 0;
+	CSocketAddressIPV4	*ipv4_address;
 
 	if (error < 0)
 	{
@@ -639,7 +644,25 @@ U0 Host(U8 *hostname)
 			"	socket type:	$FG,6$%d$FG$    \n", current->socket_type;
 			"	protocol:		$FG,6$%d$FG$    \n", current->protocol;
 			"	address length:	$FG,6$%d$FG$    \n", current->address_length;
-			"	address:		$FG,6$%s$FG$    \n", NetworkToPresentation(AF_INET, &current->address(CSocketAddressIPV4 *)->address);
+			switch (current->family)
+			{
+				case AF_INET:
+					ipv4_address = current->address;
+					"	address:		$FG,6$%s$FG$    \n", NetworkToPresentation(AF_INET, &ipv4_address->address);
+					break;
+
+				case AF_INET6:
+					"	address:		$FG,6$IPV6$FG$    \n"; // FIXME
+					break;
+
+				case AF_UNSPEC:
+					"	address:		$FG,6$AF_UNSPEC$FG$    \n";
+					break;
+
+				default:
+					"	address:		$FG,6$INVALID$FG$    \n";
+					break;
+			}
 
 			current = current->next;
 		}
@@ -650,9 +673,10 @@ U0 Host(U8 *hostname)
 }
 
 U0 DNSRep()
-{ // TODO: switch() on Socket Address types for NetworkToPresentation, etc
-	I64			 i;
-	CDNSHash	*temp_hash;
+{
+	I64					 i;
+	CDNSHash			*temp_hash;
+	CSocketAddressIPV4	*ipv4_address;
 
 	"$$LTBLUE$$DNS Report:$$FG$$\n\n";
 	for (i = 0; i <= dns_cache->mask; i++)
@@ -661,13 +685,30 @@ U0 DNSRep()
 
 		while (temp_hash)
 		{
-			
 			"DNS Hash @ $FG,3$0x%X$FG$:\n", temp_hash;
 			"	Hostname:		$FG,6$%s$FG$\n", temp_hash->str;
-			"	IP Address:		$FG,6$%s$FG$\n",
-				NetworkToPresentation(temp_hash->info.family,
-									 &temp_hash->info.address(CSocketAddressIPV4 *)->address);
-									 // TODO: IPV4 kludge
+
+			switch (temp_hash->info.family)
+			{
+				case AF_INET:
+					ipv4_address = temp_hash->info.address;
+
+					"	IP Address:		$FG,6$%s$FG$\n",
+						NetworkToPresentation(temp_hash->info.family,
+											 &ipv4_address->address);
+					break;
+				case AF_INET6:
+					"	IP Address:		$FG,6$IPV6$FG$\n"; // FIXME
+					break;
+
+				case AF_UNSPEC:
+					"	IP Address:		$FG,6$AF_UNSPEC$FG$";
+					break;
+
+				default:
+					"	IP Address:		$FG,6$INVALID$FG$";
+					break;
+			}
 
 			"\n";
 			temp_hash = temp_hash->next;

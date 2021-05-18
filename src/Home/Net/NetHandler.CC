@@ -16,7 +16,6 @@ U0 IPV4Handler(CEthernetFrame *ethernet_frame)
 		case IP_PROTOCOL_TCP:
 			NetWarn("IPV4 HANDLER: TCP.");
 			TCPHandler(&packet);
-//			NetWarn("IPV4 HANDLER: TCP. TODO.");
 			break;
 
 		case IP_PROTOCOL_UDP:
@@ -36,7 +35,7 @@ U0 NetQueueEntryHandle(CNetQueueEntry *entry)
 {
 	CEthernetFrame ethernet_frame;
 
-	EthernetFrameParse(&ethernet_frame, entry->frame, entry->length);
+	EthernetFrameParse(&ethernet_frame, entry->frame, entry->packet_length);
 
 	switch (ethernet_frame.ethertype)
 	{
@@ -51,7 +50,7 @@ U0 NetQueueEntryHandle(CNetQueueEntry *entry)
 			break;
 
 		case ETHERTYPE_IPV6:
-			NetWarn("HANDLE NETQUEUE ENTRY: IPV6. TODO.");
+			NetWarn("HANDLE NETQUEUE ENTRY: IPV6. FIXME");
 			break;
 
 		default:

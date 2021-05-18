@@ -40,7 +40,7 @@ Stack progress: (# done, ~ WIP, . N/A)
 		- keep eyes on verifying socket logic sanity.
 
 	# IPV4 (Internet Protocol Version 4)
-		- double check, some FIXMEs.
+		- double check, some TODOs.
 
 	~ ICMP (Internet Control Message Protocol)
 		- needs ICMPSendRequest implemented.
@@ -50,7 +50,7 @@ Stack progress: (# done, ~ WIP, . N/A)
 		- needs reviewing RFC for better compliance.
 
 	# UDP (User Datagram Protocol)
-		- double check, some FIXMEs.
+		- double check, some TODOs.
 
 	~ DNS (Domain Name System)
 		- needs clarifying/rewriting in certain methods.

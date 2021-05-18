@@ -110,7 +110,6 @@ I64 IPV4AddressMACGet(U32 ip_address, U8 **mac_out)
 	// "outside this subnet; needs routing"
 	if (ip_address & ipv4_globals.ipv4_subnet_mask != ipv4_globals.local_ip & ipv4_globals.ipv4_subnet_mask)
 	{
-		// TODO: Shrine recurses here... and says FIXME infinite loop if mis-configured...
 		NetWarn("GET MAC FOR IP: TODO: Doing IPV4AddressMACGet recursion, could infinite loop and overflow stack.");
 		return IPV4AddressMACGet(ipv4_globals.ipv4_router_address, mac_out);
 	}
@@ -243,7 +242,7 @@ U0 IPV4PacketParse(CIPV4Packet *packet_out, CEthernetFrame *ethernet_frame)
 {
 	//...if ethertype not ipv4 error?
 
-	//Shrine says FIXME check ethernet_frame length !! ... we need to know what's appropriate
+	// TODO: Check ethernet_frame length ! ... we need to know what's appropriate
 
 	CIPV4Header *header = ethernet_frame->data;
 	I64			 header_length = (header->version_ihl & 0x0F) * 4;//this Has to go. at least abstract or something..

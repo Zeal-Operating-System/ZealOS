@@ -252,6 +252,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 	U8			 type;
 	U8			 value_length;
 	U8			*value;
+	U32			 address;
 	
 
 	if (EndianU32(header->xid) != xid)
@@ -274,6 +275,8 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 			break;
 		}
 
+		address = EndianU32(*value(U32 *));
+
 		switch (type)
 		{
 			case DHCP_OPTION_MESSAGETYPE:
@@ -286,7 +289,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				NetLog("DHCP PARSE OFFER: Parsed Option, Type DNS.");
 				if (value_length == 4)
 				{
-					*dns_ip_out = EndianU32(*value(U32 *));		// TODO: this syntax used on last 3 cases is gross, alter it
+					*dns_ip_out = address;
 					have_dns	= TRUE;
 				}
 				break;
@@ -295,7 +298,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				NetLog("DHCP PARSE OFFER: Parsed Option, Type ROUTER.");
 				if (value_length == 4)
 				{
-					*router_ip_out	= EndianU32(*value(U32 *));	//
+					*router_ip_out	= address;
 					have_router		= TRUE;
 				}
 				break;
@@ -304,7 +307,7 @@ I64 DHCPOfferParse(U32 xid, U8 *data, I64 length,
 				NetLog("DHCP PARSE OFFER: Parsed Option, Type SUBNET MASK.");
 				if (value_length == 4)
 				{
-					*subnet_mask_out = EndianU32(*value(U32 *));	//
+					*subnet_mask_out = address;
 					have_subnet		 = TRUE;
 				}
 				break;
@@ -432,7 +435,7 @@ I64 DHCPInnerConfigure(CUDPSocket *udp_socket,
 						NetWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Offer.");
 				}
 
-				if (count > 0 && error >= 0) // TODO: >= ? can DHCPDiscoverSend or DHCPOfferParse return greater than zero?
+				if (count > 0 && error >= 0)
 				{
 					dhcp_addr	= EndianU32(ipv4_addr_in.address.address);
 					state		= DHCP_STATE_CLIENT_REQUEST;
@@ -466,7 +469,7 @@ I64 DHCPInnerConfigure(CUDPSocket *udp_socket,
 						NetWarn("DHCP CONFIGURE INNER: Unsuccessful DHCP Parse Ack.");
 				}
 
-				if (count > 0 && error >= 0) // see above TODO
+				if (count > 0 && error >= 0)
 				{
 					dhcp_addr	= EndianU32(ipv4_addr_in.address.address);
 					state		= DHCP_STATE_CLIENT_REQ_ACCEPTED;
@@ -531,6 +534,7 @@ U0 NetRep()
 {
 	"\n$$LTGREEN$$Network Report:$$FG$$\n\n";
 	UDPRep;
+	TCPRep;
 	DNSRep;
 	ARPRep;
 	IPV4Rep;

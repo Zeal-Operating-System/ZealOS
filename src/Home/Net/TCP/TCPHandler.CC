@@ -254,9 +254,6 @@ U0 TCPHandleSocket(CTCPSocket *tcp_socket, CIPV4Packet *packet, CTCPHeader *head
 			if (TCPHandleReset(tcp_socket, header, is_seq_valid))
 				return;
 
-			// shrine has FIXME check remote addr and port... we already do that.. right ?
-			// make sure to double check.
-
 			if (is_seq_valid)
 				must_ack |= TCPHandleValidSEQ(tcp_socket, header, segment_seq_num, length, data);
 

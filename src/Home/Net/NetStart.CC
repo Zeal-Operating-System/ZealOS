@@ -37,9 +37,9 @@ if (Fs != zenith_task)
 	{
 		NetRep;
 
-		"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$.\n";
+		"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$ or $MA,"Programs",LM="Cd(\"C:/Home/Net/Programs\");Dir;\n"$.\n";
 
-		"\nIf a test crashes to Debug, try typing $FG,0$G2;$FG$\n\n";
+		"\nIf a test crashes to Debug, try typing $BLACK$G2;$FG$\n\n";
 	}
 	else
 	{

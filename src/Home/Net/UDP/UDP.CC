@@ -59,7 +59,7 @@ I64 UDPPacketParse(U16 *source_port_out,
 
 	CUDPHeader *header = packet->data;
 
-	// TODO: Shrine has FIXME, validate packet length!
+	// TODO: Validate packet length !
 
 //	NetDebug("UDP PACKET PARSE: Caught packet, src  port: 0x%0X (B.E.)", header->source_port);
 //	NetDebug("UDP PACKET PARSE: Caught packet, dest port: 0x%0X (B.E.)", header->destination_port);
@@ -87,6 +87,9 @@ CUDPSocket *UDPSocket(U16 domain=AF_UNSPEC)
 	
 	udp_socket->receive_address.family = domain; // INET, INET6, or unspecified
 
+	udp_socket->receive_queue = CAlloc(sizeof(CUDPMessageQueue));
+	QueueInit(udp_socket->receive_queue); // acts as head. add messages to but don't remove head.
+
 	return udp_socket;
 
 }
@@ -95,7 +98,6 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 {
 	CUDPTreeNode	   *head = udp_globals.bound_socket_tree;
 	CUDPTreeNode	   *temp_node;
-	CUDPMessageQueue   *message_queue;
 	CSocketAddressIPV4 *ipv4_source;
 	CSocketAddressIPV4 *ipv4_receive;
 	CSocketAddressIPV6 *ipv6_source;
@@ -149,12 +151,12 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 
 			port = EndianU16(ipv6_source->port); // port member should be Big Endian,  so now we're going L.E (?)
 
-			Debug("TODO: IPV6 UDP BIND");
+			NetErr("UDP SOCKET BIND: FIXME, IPV6 UDP BIND");
 
 			break;
 
 		case AF_UNSPEC:
-			Debug("TODO: AF_UNSPEC UDP BIND -- param family");
+			NetErr("UDP SOCKET BIND: Error, AF_UNSPEC UDP BIND -- param family");
 
 			break;
 	}
@@ -171,7 +173,6 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 			switch (address_source->family)
 			{
 				case AF_INET:
-					// TODO: will any INADDR_ANY sockets bound at the port break this?
 					if (UDPTreeNodeQueueIPV4Find(ipv4_receive->address.address, temp_node, TRUE))
 					{
 						NetErr("UDP SOCKET BIND: Address already in Bound Socket Tree !");
@@ -185,11 +186,11 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 					break;
 
 				case AF_INET6:
-					Debug("TODO: IPV6 UDP BIND");
+					NetErr("UDP SOCKET BIND: FIXME, IPV6 UDP BIND");
 					break;
 
 				case AF_UNSPEC:
-					Debug("TODO: AF_UNSPEC UDP BIND -- found in bound tree");
+					NetErr("UDP SOCKET BIND: Error, AF_UNSPEC UDP BIND -- found in bound tree");
 					break;
 			}
 		}
@@ -207,9 +208,6 @@ I64 UDPSocketBind(CUDPSocket *udp_socket, CSocketAddressStorage *address_source)
 	}
 
 	udp_socket->bound_to = port;
-
-	udp_socket->receive_queue = message_queue = CAlloc(sizeof(CUDPMessageQueue));
-	QueueInit(message_queue); // acts as head. add messages to but don't remove head.
 
 	switch (udp_socket->socket->state)
 	{
@@ -241,7 +239,7 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 		queue = UDPTreeNodeQueueSocketFind(udp_socket, node);
 	else
 	{
-		Debug("Didn't find node at socket during UDPSocketClose!\n");
+		Debug("TODO: Didn't find node at socket during UDPSocketClose!\n");
 		return -1;
 	}
 
@@ -289,7 +287,7 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 	}
 	else
 	{
-		Debug("Didn't find queue at socket during UDPSocketClose!\n");
+		Debug("TODO: Didn't find queue at socket during UDPSocketClose!\n");
 		return -1;
 	}
 	
@@ -298,7 +296,7 @@ I64 UDPSocketClose(CUDPSocket *udp_socket)
 	return 0;
 }
 
-// UDPSocketConnect (Shrine just has FIXME: 'implement')
+// UDPSocketConnect (TODO)
 
 // UDPListen (Shrine just has no_warns, not implemented)
 
@@ -331,7 +329,7 @@ I64 UDPSocketReceiveFrom(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAdd
 			return -1; // if no timeout set and didn't see message, bail early
 
 		if (counts.jiffies > udp_socket->receive_max_timeout)
-		{ // Shrine has TODO: 'seterror(EWOULDBLOCK)' investigate this
+		{
 			NetErr("UDP SOCKET RECEIVE FROM: Timed out.");
 			return -1;
 		}
@@ -427,10 +425,10 @@ I64 UDPSocketSendTo(CUDPSocket *udp_socket, U8 *buffer, I64 len, CSocketAddressS
 			break;
 		case AF_INET6:
 			ipv6_destination = dest;
-			Debug("TODO: IPV6 Not implemented yet");
+			NetErr("UDP SOCKET SEND TO: FIXME, IPV6 not implemented yet");
 			break;
 		case AF_UNSPEC:
-			Debug("TODO: Error UDP Send To AF_UNSPEC\n");
+			NetErr("UDP SOCKET SEND TO: Error, UDP Send To AF_UNSPEC\n");
 			break;
 	}
 
@@ -577,36 +575,34 @@ U0 UDPTreeNodeRep(CUDPTreeNode *node)
 		}
 
 		"		Timeout: %dms\n", socket->receive_timeout_ms;
-		if (socket->receive_queue) // todo: move socket messages Queue alloc from bind to creation to avoid check?
+
+		message = socket->receive_queue->next;
+		while (message != socket->receive_queue)
 		{
-			message = socket->receive_queue->next;
-			while (message != socket->receive_queue)
+			"		Queued Message @ $$CYAN$$0x%X$$FG$$:\n", message;
+			switch (message->from_address.family)
 			{
-				"		Queued Message @ $$CYAN$$0x%X$$FG$$:\n", message;
-				switch (message->from_address.family)
-				{
-					case AF_UNSPEC:
-						string = StrNew("AF_UNSPEC");
-						break;
-					case AF_INET:
-						ipv4_addr = &message->from_address;
-						string = NetworkToPresentation(ipv4_addr->family, &ipv4_addr->address);
-						break;
-					case AF_INET6:
-						string = StrNew("IPV6");
-						break;
-					default:
-						string = StrNew("INVALID");
-						break;
-				}
-				"			From Address:			$$BROWN$$%s$$FG$$\n", string;
-				"			Data length:			%d\n", message->data_length;
-				"			Received data length:	%d\n", message->received_length;
-
-				Free(string);
-
-				message = message->next;
+				case AF_UNSPEC:
+					string = StrNew("AF_UNSPEC");
+					break;
+				case AF_INET:
+					ipv4_addr = &message->from_address;
+					string = NetworkToPresentation(ipv4_addr->family, &ipv4_addr->address);
+					break;
+				case AF_INET6:
+					string = StrNew("IPV6");
+					break;
+				default:
+					string = StrNew("INVALID");
+					break;
 			}
+			"			From Address:			$$BROWN$$%s$$FG$$\n", string;
+			"			Data length:			%d\n", message->data_length;
+			"			Received data length:	%d\n", message->received_length;
+
+			Free(string);
+
+			message = message->next;
 		}
 
 		queue = queue->next;
