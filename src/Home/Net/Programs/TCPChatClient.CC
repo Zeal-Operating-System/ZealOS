@@ -27,7 +27,7 @@ U0 ChatMessageTask(I64)
 		DocPrint(chat_display_task->put_doc,
 				 "$$BG,BLUE$$$$BLACK$$<local>$$FG$$$$BG$$ %s\n", message);
 
-		TCPSocketSend(tcp, message, StrLen(message));
+		TCPSocketSendString(tcp, message);
 
 		DocClear;
 		DocPrint(, "$$WW,1$$");

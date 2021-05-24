@@ -1372,6 +1372,32 @@ I64 TCPSocketSend(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
 	return sent_total;
 }
 
+I64 TCPSocketSendAll(CTCPSocket *tcp_socket, U8 *buffer, I64 length)
+{
+	I64 total	= 0;
+	I64 sent	= 0;
+
+	while (length)
+	{
+		sent = TCPSocketSend(tcp_socket, buffer, length);
+
+		if (sent > 0)
+		{
+			buffer	+= sent;
+			total	+= sent;
+			length	-= sent;
+		}
+		else
+			break;
+	}
+
+	return total;
+}
+
+I64 TCPSocketSendString(CTCPSocket *tcp_socket, U8 *string)
+{
+	return TCPSocketSendAll(tcp_socket, string, StrLen(string));
+}
 
 U0 TCPTreeNodeRep(CTCPTreeNode *node)
 {

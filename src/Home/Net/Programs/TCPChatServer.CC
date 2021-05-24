@@ -55,7 +55,7 @@ U0 ChatServerBroadcast(CTCPSocket *tcp_socket, I64 length)
 
 			message = MStrPrint(message_prefix, buffer);
 
-			TCPSocketSend(dest_socket, message, StrLen(message));
+			TCPSocketSendString(dest_socket, message);
 
 			Free(message);
 			Free(message_prefix);
@@ -79,7 +79,7 @@ U0 ChatServerBroadcastDisconnect()
 	{
 		conn_socket = conn->socket;
 
-		TCPSocketSend(conn_socket, message, StrLen(message));
+		TCPSocketSendString(conn_socket, message);
 
 		conn = conn->next;
 	}
@@ -195,7 +195,7 @@ U0 ChatServer()
 
 			join_msg = MStrPrint("$$BG,LTGRAY$$$$DKGRAY$$Connected clients: %d$$FG$$$$BG$$", QueueCount(connections) + 1);
 
-			TCPSocketSend(new_socket, join_msg, StrLen(join_msg));
+			TCPSocketSendString(new_socket, join_msg);
 			Free(join_msg);
 
 			join_msg = MStrPrint("$$BG,LTGRAY$$$$DKGRAY$$New connection. Connected clients: %d$$FG$$$$BG$$",
@@ -207,7 +207,7 @@ U0 ChatServer()
 			{
 				"\nNotifying clients of new connection.\n";
 				conn_socket = conn->socket;
-				TCPSocketSend(conn_socket, join_msg, StrLen(join_msg));
+				TCPSocketSendString(conn_socket, join_msg);
 				conn = conn->next;
 			}
 			Free(join_msg);
