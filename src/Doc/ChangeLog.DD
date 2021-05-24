@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----05/24/21 04:24:00----$IV,0$
+* Fixed Titanium crashing due to a broken sprite mesh.
+
 $IV,1$----05/12/21 15:42:22----$IV,0$
 * Renamed PaletteSetTomLight() to $LK,"PaletteSetLight",A="MN:PaletteSetLight"$(), brightened LTRED, PURPLE, and LTPURPLE.
 * Lowered $LK,"double-click wait time",A="FF:::/Kernel/SerialDev/Mouse.CC,mouse.dbl_time"$ from 0.350 to 0.175 to improve system response time.
