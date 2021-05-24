@@ -954,7 +954,13 @@ U0 AIMove(GameState *state)
 			cj = MAlloc(sizeof(ChessJob));
 			cj->state = state;
 			cj->mv	  = ptr;
-			JobQueue(&AIMove1, cj, i % (mp_count - 1));
+			if (mp_count > 1)
+				JobQueue(&AIMove1, cj, i % (mp_count - 1));
+			else
+			{
+				AIMove1(cj);
+				Yield;
+			}
 		}
 
 		//Wait for finish
