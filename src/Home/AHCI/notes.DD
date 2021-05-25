@@ -6,23 +6,62 @@ $WW$
 - ATAPI RW
 
 
-$FG,7$ZenithOS DVD IDE Boot function order$FG$
+$FG,7$ZenithOS IDE DVD Boot function order list and summary$FG$ 
+
 $HL,1$
-KMain												// Kernel/KMain.CC
+KMain														// $LK+PU,"Kernel/KMain.CC",A="FF:::/Kernel/KMain.CC,KMain"$
 	...
-	BlkDevsInitAll									// Kernel/BlkDev/DiskAddDev.CC
-		[KConfigAddDev]								// Kernel/KConfig.CC
-			Mount2									// Zenith/ZBlkDev/Mount.CC
-				BlkDevNextFreeSlot					// Kernel/BlkDev/DiskBlkDev.CC
+
+	BlkDevsInitAll											// $LK+PU,"Kernel/BlkDev/DiskAddDev.CC",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,BlkDevsInitAll"$
+		[KConfigAddDev]										// $LK+PU,"Kernel/KConfig.CC",A="FF:::/Kernel/KConfig.CC,KConfigAddDev"$
+			Mount2											// $LK+PU,"Zenith/ZBlkDev/Mount.CC",A="FF:::/Zenith/ZBlkDev/Mount.CC,Mount2"$
+				BlkDevNextFreeSlot							// $LK+PU,"Kernel/BlkDev/DiskBlkDev.CC",A="FF:::/Kernel/BlkDev/DiskBlkDev.CC,BlkDevNextFreeSlot"$
 				...
-				GetBaseUnit							// Kernel/BlkDev/DiskAddDev.CC
-					BootDVDProbeAll					// Kernel/BlkDev/DiskATAId.CC
+				GetBaseUnit									// $LK+PU,"Kernel/BlkDev/DiskAddDev.CC",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,GetBaseUnit"$
+					BootDVDProbeAll							// $LK+PU,"Kernel/BlkDev/DiskATAId.CC",A="FF:::/Kernel/BlkDev/DiskATAId.CC,BootDVDProbeAll"$
 						j = PCIClassFind(0x010100 + k, ++i);
 						...
-						BootDVDProbe				// Kernel/BlkDev/DiskATAId.CC
-							ATAProbe				// Kernel/BlkDev/DiskATA.CC
-							ATAPIStartStop			// Kernel/BlkDev/DiskATA.CC
-							ATAPIReadBlks2			// Kernel/BlkDev/DiskATA.CC
-				BlkDevAdd							// Kernel/BlkDev/DiskAddDev.CC
+						BootDVDProbe						// $LK+PU,"Kernel/BlkDev/DiskATAId.CC",A="FF:::/Kernel/BlkDev/DiskATAId.CC,BootDVDProbe"$
+							ATAProbe						// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAProbe"$
+								ATAGetDevId					// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAGetDevId"$
 
-$HL,0$
+							ATAPIStartStop					// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIStartStop"$
+								ATAPIWritePacketWord		// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIWritePacketWord"$
+
+							ATAPIReadBlks2					// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIReadBlks2"$
+								ATAInit						// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAInit"$
+									ATAReadNativeMax		// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAReadNativeMax"$
+										ATAGetDevId			// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAGetDevId"$
+									ATABlkSel				// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATABlkSel"$
+									ATAPIStartStop			// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIStartStop"$
+										ATAPIWritePacketWord// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIWritePacketWord"$
+
+				BlkDevAdd									// $LK+PU,"Kernel/BlkDev/DiskAddDev.CC",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,BlkDevAdd"$
+					DriveMakeFreeSlot						// $LK+PU,"Kernel/BlkDev/DiskDrive.CC",A="FF:::/Kernel/BlkDev/DiskDrive.CC,DriveMakeFreeSlot"$
+
+	DiskChange												// $LK+PU,"Kernel/BlkDev/DiskDrive.CC",A="FF:::/Kernel/BlkDev/DiskDrive.CC,U0 DiskChange"$
+		BlkDevInit											// $LK+PU,"Kernel/BlkDev/DiskBlkDev.CC",A="FF:::/Kernel/BlkDev/DiskBlkDev.CC,BlkDevInit"$
+			ATAInit											// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAInit"$
+				ATAReadNativeMax							// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAReadNativeMax"$
+					ATAGetDevId								// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAGetDevId"$
+				ATABlkSel									// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATABlkSel"$
+				ATAPIStartStop								// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIStartStop"$
+					ATAPIWritePacketWord					// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIWritePacketWord"$
+
+		DiskCacheInvalidate									// $LK+PU,"Kernel/BlkDev/DiskDrive.CC",A="FF:::/Kernel/BlkDev/DiskDrive.CC,U0 DiskCacheInvalidate"$
+			DiskCheck										// $LK+PU,"Zenith/ZBlkDev/DiskCheck.CC",A="FF:::/Zenith/ZBlkDev/DiskCheck.CC,DiskCheck"$
+			BlkDevInit										// $LK+PU,"Kernel/BlkDev/DiskBlkDev.CC",A="FF:::/Kernel/BlkDev/DiskBlkDev.CC,BlkDevInit"$
+				...
+			ISOInit											// $LK+PU,"Kernel/BlkDev/DiskCDDVD.CC",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,ISOInit"$
+				BlkRead										// $LK+PU,"Kernel/BlkDev/DiskBlk.CC",A="FF:::/Kernel/BlkDev/DiskBlk.CC,BlkRead"$
+					ATARBlks								// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATARBlks"$
+						ATAPIReadBlks						// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIReadBlks:2"$
+							ATAPIReadBlks2					// $LK+PU,"Kernel/BlkDev/DiskATA.CC",A="FF:::/Kernel/BlkDev/DiskATA.CC,ATAPIReadBlks2"$
+								...
+
+		Drive												// $LK+PU,"Kernel/BlkDev/DiskDrive.CC",A="FF:::/Kernel/BlkDev/DiskDrive.CC,Bool Drive("$
+			BlkDevCheck										// $LK+PU,"Kernel/BlkDev/DiskBlkDev.CC",A="FF:::/Kernel/BlkDev/DiskBlkDev.CC,CBlkDev *BlkDevCheck("$
+
+
+	...$HL,0$
+
