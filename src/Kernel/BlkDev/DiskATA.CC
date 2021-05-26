@@ -1,13 +1,3 @@
-#define ATAPI_FORMAT_UNIT			EndianU16(0x04)
-#define ATAPI_START_STOP_UNIT		EndianU16(0x1B)
-#define ATAPI_READ_CAPACITY			EndianU16(0x25)
-#define ATAPI_SEEK					EndianU16(0x2B)
-#define ATAPI_SYNC_CACHE			EndianU16(0x35)
-#define ATAPI_READ_TRACK_INFO		EndianU16(0x52)
-#define ATAPI_CLOSE_TRACK_SESSION	EndianU16(0x5B)
-#define ATAPI_READ					EndianU16(0xA8)
-#define ATAPI_WRITE					EndianU16(0xAA)
-#define ATAPI_SET_CD_SPEED			EndianU16(0xBB)
 
 U0 ATABlkSel(CBlkDev *bd, I64 blk, I64 count)
 {

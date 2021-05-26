@@ -5,9 +5,10 @@ I64 AHCILBA48CapacityGet(U16 *id_record)
 	return	(id_record)(U64 *)[ATA_IDENT_LBA48_CAPACITY / 4] - 1;
 }
 
-I64 AHCIPortCmdSlotGet(CAHCIPort *port)
+I64 AHCIPortCmdSlotGet(I64 port_num)
 {//Get next free command slot in port; if none, return -1.
 	I64 i;
+	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
 	U32 slots = port->sata_active | port->cmd_issue;
 
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
@@ -19,28 +20,31 @@ I64 AHCIPortCmdSlotGet(CAHCIPort *port)
 	return -1;
 }
 
-Bool AHCIPortIsIdle(CAHCIPort *port)
+Bool AHCIPortIsIdle(I64 port_num)
 {//Check if the command engine is running on port.
-	return !(port->command & (AHCI_PxCMDF_ST | AHCI_PxCMDF_CR | AHCI_PxCMDF_FR | AHCI_PxCMDF_FRE));
+	return !(blkdev.ahci_hba->ports[port_num].command & (AHCI_PxCMDF_ST | AHCI_PxCMDF_CR | AHCI_PxCMDF_FR | AHCI_PxCMDF_FRE));
 }
 
-U0 AHCIPortCmdStop(CAHCIPort *port)
+U0 AHCIPortCmdStop(I64 port_num)
 {//Stop command engine on port.
+	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
 	Btr(&port->command, AHCI_PxCMDf_ST);
 	Btr(&port->command, AHCI_PxCMDf_FRE);
 //	while (port->command & (AHCI_PxCMDF_CR | AHCI_PxCMDF_FR));
 	while (Bt(&port->command, AHCI_PxCMDf_CR) || Bt(&port->command, AHCI_PxCMDf_FR));
 }
 
-U0 AHCIPortCmdStart(CAHCIPort *port)
+U0 AHCIPortCmdStart(I64 port_num)
 {//Start command engine on port.
+	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
 	while (Bt(&port->command, AHCI_PxCMDf_CR));
 	Bts(&port->command, AHCI_PxCMDf_FRE);
 	Bts(&port->command, AHCI_PxCMDf_ST);
 }
 
-Bool AHCIPortWait(CAHCIPort *port, F64 timeout)
+Bool AHCIPortWait(I64 port_num, F64 timeout)
 {//Wait until DRQ & BSY are clear in port task file.
+	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
 	do
 	{
 		if (!(port->task_file_data & (ATAS_DRQ | ATAS_BSY)))
@@ -50,13 +54,14 @@ Bool AHCIPortWait(CAHCIPort *port, F64 timeout)
 	return FALSE;
 }
 
-U0 AHCIPortReset(CAHCIPort *port)
+U0 AHCIPortReset(I64 port_num)
 {//Software reset of port. Port command engine must be started after this.
  //If port is not responsive we do a full reset.
-	AHCIPortCmdStop(port);
+	CAHCIPort *port = &blkdev.ahci_hba->ports[port_num];
+	AHCIPortCmdStop(port_num);
 	port->interrupt_status = port->interrupt_status; //Acknowledge all interrupt statuses.
 
-	if (!AHCIPortWait(port, tS + 1))
+	if (!AHCIPortWait(port_num, tS + 1))
 	{//Perform 'more intrusive' HBA<->Port comm reset (sec. 10.4.2 of spec).
 		port->sata_ctrl = AHCI_PxSCTLF_DET_INIT;
 		Sleep(2); //Spec says 1 millisecond
@@ -73,7 +78,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	CFisH2D		   *cmd_fis;
 	U16			   *dev_id_record;
 	CAHCIPort 	   *port = bd->ahci_port;
-	I64			   *cmd_slot = AHCIPortCmdSlotGet(port);
+	I64			   *cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
 
 	if (cmd_slot < 0)
 	{
@@ -112,7 +117,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 
 	cmd_fis->device  = 0; //No bits need to be set in the device register.
 
-	if (!AHCIPortWait(port, tS + 2))
+	if (!AHCIPortWait(bd->port_num, tS + 2))
 	{
 		ZenithErr("AHCI: Port %d hung while attempting IDENTIFY!\n", bd->port_num);
 		throw('AHCI');
@@ -139,9 +144,21 @@ id_error:
 	"%X\n", bd->max_blk;
 	Free(bd->dev_id_record);
 	bd->dev_id_record = dev_id_record;
+/*	U16		*st;
+	U8 *res;
+	I64		 i;
+
+	st = CAlloc(20 + 1);
+	for (i = 0; i < 10; i++)
+		st[i] = EndianU16(bd->dev_id_record[10 + i]);
+	res = MStrUtil(st, SUF_REM_LEADING | SUF_REM_TRAILING);
+	Free(st);
+	"%s\n", res;
+	Free(res);
+*/
 }
 
-U8 *AHCIBufferFix(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
+U8 *AHCIBufferAlign(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
 {//Make sure buffer is accessible by AHCI HBA controller.
 //Controller requires a U16-aligned buffer, and, if not 64-bit capable (ahci64),
 //it requires the buffer to be in the 32-bit address space.
@@ -178,7 +195,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	CPortCmdTable  *cmd_table;
 	CFisH2D		   *cmd_fis;
 	CAHCIPort	   *port = bd->ahci_port;
-	I64			    buf_size, buf_size2, byte_count, prdt_len, i, cmd_slot = AHCIPortCmdSlotGet(port);
+	I64			    buf_size, buf_size2, byte_count, prdt_len, i, cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
 	U8			   *internal_buf;
 
 	if (count < 1) return 0;
@@ -196,7 +213,6 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	//Obtain command header and zero it.
 	cmd_header = *&port->cmd_list_base(I64 *); //Read cmd_list_base and adjacent cmd_list_base_upper as one full I64 value.
 	cmd_header += cmd_slot; //Move up pointer to the slot we have in the command list.
-	MemSet(cmd_header, 0, sizeof(CPortCmdHeader));
 
 	//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.
 	cmd_header->desc = (cmd_header->desc & ~0x1F) + sizeof(CFisH2D) / sizeof(U32);
@@ -217,7 +233,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 
 	cmd_header->prdt_len = prdt_len; //Set PRDTL in cmd header.
 
-	internal_buf = AHCIBufferFix(bd, buf, buf_size, write); 
+	internal_buf = AHCIBufferAlign(bd, buf, buf_size, write); 
 	"Buffer:\t\t\t0x%X\n", internal_buf;
 
 	if (!buf) throw('AHCI'); //Will probably never happen.
@@ -260,7 +276,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	cmd_fis->lba5 = blk.u8[5];
 	cmd_fis->count = count;
 
-	if (!AHCIPortWait(port, tS + 2))
+	if (!AHCIPortWait(bd->port_num, tS + 2))
 	{//2 second timeout for last command to complete.
 		ZenithErr("AHCI: Port %d hung during %z!\n", bd->port_num, write, "read\0write");
 		throw('AHCI');
@@ -293,6 +309,170 @@ rw_error:	ZenithErr("AHCI: Disk %z error on port %d!\n", write, "read\0write", b
 	return cmd_header->prd_byte_count;
 }
 
+I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{
+	CPortCmdHeader *cmd_header;
+	CPortCmdTable  *cmd_table;
+	CFisH2D		   *cmd_fis;
+	CAHCIPort *port = bd->ahci_port;
+	I64 byte_count, buf_size, buf_size2, prdt_len, i, cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
+	U8			   *internal_buf;
+
+	if (count < 1)
+		return 0;
+
+	if (cmd_slot < 0)
+	{
+		ZenithErr("AHCI: No empty command slots on port %d!\n", bd->port_num);
+		throw('AHCI');
+	}
+	//$BG,10$no check for max read yet$BG$
+	cmd_header = *&port->cmd_list_base(I64 *);
+	cmd_header += cmd_slot;
+	cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
+	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
+
+	cmd_table = *&cmd_header->cmd_table_base(I64 *);
+	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
+
+	buf_size = buf_size2 = count * DVD_BLK_SIZE;
+	prdt_len = (buf_size - 1) / AHCI_PRD_MAX_BYTES + 1;
+
+	"PRDT Length:\t%d\n", prdt_len;
+	"Count:\t\t\t%d\n", count;
+	"Buffer size:\t%X\n", buf_size;
+
+	cmd_header->prdt_len = prdt_len;
+
+	internal_buf = AHCIBufferAlign(bd, buf, buf_size, FALSE);
+	"Buffer:\t\t\t0x%X\n", internal_buf;
+
+	if (!buf) throw('AHCI');
+
+	for (i = 0; i < prdt_len; i++)
+	{
+		if (buf_size2 > AHCI_PRD_MAX_BYTES)
+			byte_count = AHCI_PRD_MAX_BYTES;
+		else
+			byte_count = buf_size2;
+
+		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf;
+		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
+		cmd_table->prdt[i].data_base	   = internal_buf(I64).u32[0];
+		cmd_table->prdt[i].data_base_upper = internal_buf(I64).u32[1];
+		cmd_table->prdt[i].data_byte_count = byte_count - 1; //Zero-based value
+		buf_size2 -= byte_count;
+		internal_buf += byte_count;
+	}
+
+	cmd_fis = &cmd_table->cmd_fis;
+	MemSet(cmd_fis, 0, sizeof(CFisH2D));
+
+	cmd_fis->type = FISt_H2D;
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS 
+
+	cmd_fis->feature_low = 1;
+	cmd_fis->command = ATA_PACKET;
+
+	CAtapiReadCmd read_cmd;
+	MemSet(&read_cmd, 0, sizeof(CAtapiReadCmd));
+	read_cmd.command = ATAPI_READ >> 8; //$BK,1$FIX$BK,0$
+	read_cmd.lba = EndianU32(blk);
+	read_cmd.count = EndianU32(count);
+	MemCopy(&cmd_table->acmd, &read_cmd, 16);
+	
+	cmd_fis->count = count;
+
+	if (!AHCIPortWait(bd->port_num, tS + 2))
+	{//2 second timeout for last command to complete.
+		ZenithErr("AHCI: Port %d hung during read!\n", bd->port_num);
+		throw('AHCI');
+	}
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command
+
+	while (TRUE)
+	{
+		if (!Bt(&port->cmd_issue, cmd_slot)) //when command has been processed
+			break;
+
+		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
+		{
+rw_error:	ZenithErr("AHCI: Drive read error on port %d!\n", bd->port_num);
+			throw('AHCI');
+		}
+	}
+	//Second check for safety
+	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE))
+		goto rw_error;
+
+	if (bd->flags & BDF_INTERNAL_BUF)
+	{
+		"Writeback the internal buffer\n";
+		//internal_buf was consumed while creating PRD entries so we push it back
+		MemCopy(buf, internal_buf - buf_size, buf_size); 
+	}
+
+	"internal_buf: %X\n", internal_buf;
+	"buf_size: %X\n", buf_size;
+	internal_buf -= buf_size;
+	"corrected buffer: %X\n", internal_buf;
+	return cmd_header->prd_byte_count; 
+}
+
+I64 AHCIBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Read 'blk' amount of blocks from AHCI disk device. Returns num of bytes transferred between disk and memory.
+	I64 byte_count = 0;
+	if (!count)
+		return 0;
+	if (count <= AHCI_PRDT_MAX_BLOCKS)
+	{
+		"$$GREEN$$READ less than MAX_BLOCKS$$FG$$\n";
+		return AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
+	}
+	else
+	{
+		"$$GREEN$$READ greater than MAX_BLOCKS\n";
+		"read count: %d\n$$FG$$", count;
+		while (count > AHCI_PRDT_MAX_BLOCKS)
+		{
+			byte_count += AHCIAtaBlksRW(bd, buf, blk, AHCI_PRDT_MAX_BLOCKS, FALSE);
+			count -= AHCI_PRDT_MAX_BLOCKS;
+			blk += AHCI_PRDT_MAX_BLOCKS;
+			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
+			"$$GREEN$$read count: %d\n$$FG$$", count;
+		}$ER$
+		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
+	}
+	return byte_count;
+}
+
+I64 AHCIBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+{//Write 'blk' amount of blocks to AHCI disk device. Returns num of bytes transferred between memory and disk.
+	I64 byte_count = 0;
+	if (!count)
+		return 0;
+	if (count <= AHCI_PRDT_MAX_BLOCKS)
+	{
+		"$$GREEN$$WRITE less than MAX_BLOCKS$$FG$$\n";
+		return AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
+	}
+	else
+	{
+		"$$GREEN$$WRITE greater than MAX_BLOCKS\n";
+		"write count: %d$$FG$$\n", count;
+		while (count > AHCI_PRDT_MAX_BLOCKS)
+		{
+			byte_count += AHCIAtaBlksRW(bd, buf, blk, AHCI_PRDT_MAX_BLOCKS, TRUE);
+			count -= AHCI_PRDT_MAX_BLOCKS;
+			blk += AHCI_PRDT_MAX_BLOCKS;
+			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
+			"$$GREEN$$write count: %d\n$$FG$$\n", count;
+		}
+		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
+	}
+	return byte_count;
+}
+
 U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 {
 	CPortCmdHeader *cmd_header;
@@ -301,13 +481,13 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	bd->ahci_port = port;
 	bd->port_num = port_num;
 
-	AHCIPortReset(port);
-	AHCIPortCmdStart(port);
+	AHCIPortReset(port_num);
+	AHCIPortCmdStart(port_num);
 
 	//Spin up, power on device. If the capability isn't suppport the bits will be read-only and this won't do anything.
 	port->command |= AHCI_PxCMDF_POD | AHCI_PxCMDF_SUD;
 	Sleep(100); //Why?
-	AHCIPortCmdStop(port);
+	AHCIPortCmdStop(port_num);
 
 	if (blkdev.ahci64)
 	{
@@ -349,7 +529,7 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 
 		}
 	}
-	AHCIPortCmdStart(port);
+	AHCIPortCmdStart(port_num);
 	AHCIPortIdentify(bd);
 }
 
@@ -385,11 +565,11 @@ U0 AHCIInit()
 	blkdev.ahci64		  = Bt(&hba->caps, AHCI_CAPSf_S64A);
 	blkdev.cmd_slot_count = (hba->caps & 0x1F00) >> 8;
 	blkdev.ahci_hba		  = hba;
-//	blkdev.ahci64 = 0;
+	//blkdev.ahci64 = 0;
 
 	"ahci64: %Z\n", blkdev.ahci64, "ST_FALSE_TRUE";
 
-	for (i = 0; i < AHCI_MAX_PORTS; i++)
+/*	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
 		if (Bt(&hba->ports_implemented, i))
 		{
@@ -400,34 +580,41 @@ U0 AHCIInit()
 				if (port->signature == AHCI_PxSIG_ATAPI)
 					Bts(&port->command, AHCI_PxCMDf_ATAPI);
 
-				if (!AHCIPortIsIdle(port))
+				if (!AHCIPortIsIdle(i))
 				{
 					"Port not idle\n";
-					AHCIPortCmdStop(port);
+					AHCIPortCmdStop(i);
 				}
 				AHCIPortInit(BlkDevNextFreeSlot('G', BDT_ATA), port, i); //gay
 			}
 		}
 	}
+*/
 }
 
 AHCIInit;
-#define BLKS 20000
+#define BLKS 1
 
 U0 Test()
 {
 	U8 *buf = MAlloc(BLKS * BLK_SIZE);
-	U8 *buf2 = MAlloc(BLKS * BLK_SIZE);
+	U8 *buf2 = MAlloc(BLKS * DVD_BLK_SIZE);
 
-	MemSet(buf, 0xFF, BLKS * BLK_SIZE);
+	MemSet(buf, 0xF3, BLKS * BLK_SIZE);
 
 	CBlkDev *bd = CAlloc(sizeof(CBlkDev));
-	bd->ahci_port = &blkdev.ahci_hba->ports[0];
+	AHCIPortInit(bd, &blkdev.ahci_hba->ports[1], 1);
+	
 
-	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtaBlksRW(bd, buf,  0, BLKS, TRUE); //write
-	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtaBlksRW(bd, buf2, 0, BLKS, FALSE);//read
+//	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIBlksWrite(bd, buf,  0, BLKS); //write
+//	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIBlksRead(bd, buf2, 0, BLKS);//read
 
-	D(buf2 + (BLKS - 5) * BLK_SIZE, 5 * BLK_SIZE); //Dump last 5 blocks
+	
+	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtapiBlksRead(bd, buf2, 240, BLKS); //read
+//	"Capacity %d\n", AHCIAtapiCapacityRead(bd);
+
+	D(buf2 + (BLKS - 5) * DVD_BLK_SIZE, 5 * DVD_BLK_SIZE); //Dump last 5 blocks
+//	D(buf2, DVD_BLK_SIZE);
 	Free(buf);
 	Free(buf2);
 }

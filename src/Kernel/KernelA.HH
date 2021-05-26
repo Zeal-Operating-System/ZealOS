@@ -2720,6 +2720,8 @@ public class CATARep
 #define AHCI_BOHCf_BB		4	//BIOS Busy (polling bit while BIOS cleans up things after ownership transfer)
 
 //Command Header flags
+#define AHCI_CH_DESCf_A		5	//'ATAPI' bit. Set when ATAPI command is being sent.
+#define AHCI_CH_DESCF_A		(1 << AHCI_CH_DESCf_A)
 #define AHCI_CH_DESCf_W		6	//'Write' bit. Set when data is being written.
 #define AHCI_CH_DESCF_W		(1 << AHCI_CH_DESCf_W)
 
@@ -2876,6 +2878,17 @@ class CPortCmdTable
 	CPrdtEntry	prdt[8];
 };
 
+class CAtapiReadCmd
+{
+	U8	command,
+		reserved;
+	U32 lba,
+		count;
+	U8	reserved,
+		ctrl,
+		zero[4];
+};
+
 //ATA_IDENTIFY command array indexes (array of U16s)
 #define ATA_IDENT_SERIAL_NUM		10
 #define ATA_IDENT_MODEL_NUM			27
@@ -2897,6 +2910,17 @@ class CPortCmdTable
 #define ATA_WRITE_DMA_EXT		0x35
 #define ATA_IDENTIFY			0xEC
 #define ATA_IDENTIFY_PACKET		0xA1 // IDENTIFY PACKET DEVICE, mirror of ATA_IDENTIFY for ATAPI
+
+#define ATAPI_FORMAT_UNIT			0x0400
+#define ATAPI_START_STOP_UNIT		0x1B00
+#define ATAPI_READ_CAPACITY			0x2500
+#define ATAPI_SEEK					0x2B00
+#define ATAPI_SYNC_CACHE			0x3500
+#define ATAPI_READ_TRACK_INFO		0x5200
+#define ATAPI_CLOSE_TRACK_SESSION	0x5B00
+#define ATAPI_READ					0xA800
+#define ATAPI_WRITE					0xAA00
+#define ATAPI_SET_CD_SPEED			0xBB00
 
 #define ATAS_ERR	0x01
 #define ATAS_DRQ	0x08
