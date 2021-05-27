@@ -359,6 +359,13 @@ extern			I64				 BlkDevAdd(   CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive
 extern			U0				 DiskCacheInit(I64 size_in_U8s);
 public extern	U0				 DiskCacheInvalidate(CDrive *drive);
 public extern	I64				 MountIDEAuto();
+extern			U0				 AHCIHbaReset();
+extern			U0				 AHCIPortReset(I64 port_num);
+extern			U0				 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num);
+extern			I64				 AHCIAtaBlksRW(    CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write);
+extern			I64				 AHCIAtaBlksRead(  CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+extern 			I64				 AHCIAtaBlksWrite( CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+extern			I64				 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count);
 public extern	CBlkDevGlobals	 blkdev;
 
 #help_index "Graphics/Color"

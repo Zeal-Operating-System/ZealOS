@@ -38,56 +38,6 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 {
 	I64 d1, d2, i, j, k;
 
-
-	/* AHCI Prototyping */
-	CAHCIHba *hba;
-	CAHCIPort *port;
-	#exe {Option(OPTf_WARN_DUP_TYPES, OFF);};
-	I64 bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0);
-	#exe {Option(OPTf_WARN_DUP_TYPES, ON);};
-
-	if (bdf != -1)
-	{
-		"\nAHCI is not yet supported.\n\n";
-		hba = dev.uncached_alias + PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F;
-		Bts(&hba->ghc, AHCI_GHCf_HBA_RESET);
-		while (Bt(&hba->ghc, AHCI_GHCf_HBA_RESET));
-		Bts(&hba->ghc, AHCI_GHCf_AHCI_ENABLE);
-		if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
-		{
-			"Transferring AHCI ownership from BIOS.\n\n";
-			Bt(&hba->bohc, AHCI_BOHCf_OOS);
-			while (Bt(&hba->bohc, AHCI_BOHCf_BOS));
-			Sleep(25);
-			if (Bt(&hba->bohc, AHCI_BOHCf_BB)) //if Bios Busy is still set after 25 mS, wait 2 seconds.
-				Sleep(2000);
-		}
-		blkdev.ahci64		  = Bt(&hba->caps, AHCI_CAPSf_S64A);
-		blkdev.cmd_slot_count = (hba->caps & 0x1F00) >> 8;
-		blkdev.ahci_hba		  = hba;
-		"ahci64: %Z\n", blkdev.ahci64, "ST_FALSE_TRUE";
-		"ahci cmd slots: %d\n\n", blkdev.cmd_slot_count;
-
-		for (i = 0; i < AHCI_MAX_PORTS; i++)
-		{
-			if (Bt(&hba->ports_implemented, i))
-			{
-				"AHCI Port %d implemented.\n", i;
-				port = &hba->ports[i];
-				"Port Signature: 0x%08X\n", port->signature;
-				if (port->signature == AHCI_PxSIG_ATAPI)
-					"ATAPI drive detected on AHCI Port %d.\n", i;
-				else if (port->signature == AHCI_PxSIG_ATA)
-					"ATA   drive detected on AHCI Port %d.\n", i;
-
-				"\n";
-			}
-		}
-		"Reboot with IDE Compatibility mode set in the BIOS.\n";
-		SysHlt;
-	}
-	/********************/
-
 	bd->base1 = 0;
 	for (k = 0; k < 256; k++)
 	{

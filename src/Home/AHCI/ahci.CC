@@ -90,7 +90,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
-	cmd_header = *&port->cmd_list_base(I64 *); //Read cmd_list_base and cmd_list_base_upper as one full I64 value.
+	cmd_header = *&port->cmd_list_base(I64 *);
 	cmd_header += cmd_slot; //Move up pointer to the slot we have in the command list.
 
 	//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.
@@ -513,6 +513,8 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
 	{
 		cmd_header = &port->cmd_list_base(CPortCmdHeader *)[i];
+		//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.
+		cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
 
 		if (blkdev.ahci64)
 		{
@@ -613,8 +615,9 @@ U0 Test()
 	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtapiBlksRead(bd, buf2, 240, BLKS); //read
 //	"Capacity %d\n", AHCIAtapiCapacityRead(bd);
 
-	D(buf2 + (BLKS - 5) * DVD_BLK_SIZE, 5 * DVD_BLK_SIZE); //Dump last 5 blocks
-//	D(buf2, DVD_BLK_SIZE);
+	D(bd->dev_id_record, 512);
+//	D(buf2 + (BLKS - 5) * DVD_BLK_SIZE, 5 * DVD_BLK_SIZE); //Dump last 5 blocks
+	D(buf2, DVD_BLK_SIZE);
 	Free(buf);
 	Free(buf2);
 }

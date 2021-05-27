@@ -266,6 +266,8 @@ U0 BlkDevsInitAll()
 	for (i = 0; i < DRIVES_NUM; i++)
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 
+	AHCIInit;
+
 	#exe {
 		if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])
 			StreamPrint("MountIDEAuto;");

@@ -1,6 +1,7 @@
 #exe {Cd(__DIR__);};
 #include "DiskStrA"
 #include "DiskCache"
+#include "DiskAHCI"
 #include "DiskATA"
 #include "DiskATAId"
 #include "DiskBlkDev"

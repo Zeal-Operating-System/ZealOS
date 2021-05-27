@@ -3398,8 +3398,8 @@ public class CBlkDevGlobals
 				ins_base0,
 				ins_base1;	//Install cd/dvd controller.
 	Bool		dvd_boot_is_good,
-				ins_unit,
 				ahci64,
+				ins_unit,
 				pad[2];
 };
 
