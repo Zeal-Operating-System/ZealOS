@@ -243,16 +243,16 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	buf_size = buf_size_tmp = count * BLK_SIZE;
 	prdt_len = (buf_size - 1) / AHCI_PRD_MAX_BYTES + 1;
 
-	"PRDT Length:\t%d\n", prdt_len;
-	"Count:\t\t\t%d\n", count;
-	"Buffer size:\t%X\n", buf_size;
+//	"PRDT Length:\t%d\n", prdt_len;
+//	"Count:\t\t\t%d\n", count;
+//	"Buffer size:\t%X\n", buf_size;
 
 	cmd_header->prdt_len = prdt_len; //Set PRD table length in cmd header.
 	//Set 'write' bit depending on 'write' argument.
 	BEqual(&cmd_header->desc, AHCI_CH_DESCf_W, write);
 
 	internal_buf = internal_buf_tmp = AHCIBufferAlign(bd, buf, buf_size, write);
-	"Buffer:\t\t\t0x%X\n", internal_buf;
+//	"Buffer:\t\t\t0x%X\n", internal_buf;
 
 	if (!internal_buf) throw('AHCI'); //Will probably never happen.
 
@@ -268,8 +268,8 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 		else
 			byte_count = buf_size_tmp;
 
-		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf_tmp;
-		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
+//		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf_tmp;
+//		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
 
 		cmd_table->prdt[i].data_base = internal_buf_tmp;
 		cmd_table->prdt[i].data_byte_count = byte_count - 1; //Zero-based value
@@ -306,7 +306,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	if (!write) //If internal_buf was created it back to argument buf.
 		if (bd->flags & BDF_INTERNAL_BUF)
 		{
-			"Writing back internal buffer\n";
+//			"Writing back internal buffer\n";
 			MemCopy(buf, internal_buf, buf_size);
 		}
 	return cmd_header->prd_byte_count;
@@ -319,23 +319,26 @@ I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		return 0;
 	if (count <= AHCI_PRDT_MAX_BLOCKS)
 	{
-		"$$GREEN$$READ less than MAX_BLOCKS$$FG$$\n";
+//		"$$GREEN$$READ less than MAX_BLOCKS$$FG$$\n";
 		return AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
 	}
 	else
 	{
-		"$$GREEN$$READ greater than MAX_BLOCKS\n";
-		"read count: %d\n$$FG$$", count;
+//		"$$GREEN$$READ greater than MAX_BLOCKS\n";
+//		"read count: %d\n$$FG$$", count;
 		while (count > AHCI_PRDT_MAX_BLOCKS)
 		{
 			byte_count += AHCIAtaBlksRW(bd, buf, blk, AHCI_PRDT_MAX_BLOCKS, FALSE);
 			count -= AHCI_PRDT_MAX_BLOCKS;
 			blk += AHCI_PRDT_MAX_BLOCKS;
 			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
-			"$$GREEN$$read count: %d\n$$FG$$", count;
+//			"$$GREEN$$read count: %d\n$$FG$$", count;
 		}$ER$
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, FALSE);
 	}
+
+	blkdev.read_count += (count * bd->blk_size) >> BLK_SIZE_BITS;
+
 	return byte_count;
 }
 
@@ -346,20 +349,20 @@ I64 AHCIAtaBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		return 0;
 	if (count <= AHCI_PRDT_MAX_BLOCKS)
 	{
-		"$$GREEN$$WRITE less than MAX_BLOCKS$$FG$$\n";
+//		"$$GREEN$$WRITE less than MAX_BLOCKS$$FG$$\n";
 		return AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
 	}
 	else
 	{
-		"$$GREEN$$WRITE greater than MAX_BLOCKS\n";
-		"write count: %d$$FG$$\n", count;
+//		"$$GREEN$$WRITE greater than MAX_BLOCKS\n";
+//		"write count: %d$$FG$$\n", count;
 		while (count > AHCI_PRDT_MAX_BLOCKS)
 		{
 			byte_count += AHCIAtaBlksRW(bd, buf, blk, AHCI_PRDT_MAX_BLOCKS, TRUE);
 			count -= AHCI_PRDT_MAX_BLOCKS;
 			blk += AHCI_PRDT_MAX_BLOCKS;
 			buf += AHCI_PRDT_MAX_BLOCKS * BLK_SIZE;
-			"$$GREEN$$write count: %d\n$$FG$$\n", count;
+//			"$$GREEN$$write count: %d\n$$FG$$\n", count;
 		}
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
 	}
@@ -386,14 +389,14 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	buf_size = buf_size_tmp = count * DVD_BLK_SIZE;
 	prdt_len = (buf_size - 1) / AHCI_PRD_MAX_BYTES + 1;
 
-	"PRDT Length:\t%d\n", prdt_len;
-	"Count:\t\t\t%d\n", count;
-	"Buffer size:\t%X\n", buf_size;
+//	"PRDT Length:\t%d\n", prdt_len;
+//	"Count:\t\t\t%d\n", count;
+//	"Buffer size:\t%X\n", buf_size;
 
 	cmd_header->prdt_len = prdt_len;
 
 	internal_buf = internal_buf_tmp = AHCIBufferAlign(bd, buf, buf_size, FALSE);
-	"Buffer:\t\t\t0x%X\n", internal_buf;
+//	"Buffer:\t\t\t0x%X\n", internal_buf;
 
 	if (!internal_buf) throw('AHCI');
 
@@ -408,8 +411,8 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		else
 			byte_count = buf_size_tmp;
 
-		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf_tmp;
-		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
+//		"prdt[%d].data_base_addr  = 0x%X\n"  , i, internal_buf_tmp;
+//		"prdt[%d].data_byte_count = 0x%X\n\n", i, byte_count;
 		cmd_table->prdt[i].data_base = internal_buf_tmp;
 		cmd_table->prdt[i].data_byte_count = byte_count - 1; //Zero-based value
 		buf_size_tmp -= byte_count;
@@ -441,7 +444,7 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	
 	if (bd->flags & BDF_INTERNAL_BUF)
 	{
-		"Writing back internal buffer\n";
+//		"Writing back internal buffer\n";
 		MemCopy(buf, internal_buf, buf_size);
 	}
 	return cmd_header->prd_byte_count;
@@ -542,6 +545,138 @@ U0 AHCIInit()
 			}
 		}
 	}
+}
+
+Bool AHCIBootDVDProbeAll(CBlkDev *bd)
+{
+	I64			 i;
+	CAHCIPort	*port;
+	U8			*buf = CAlloc(DVD_BLK_SIZE);
+	CKernel 	*kernel;
+
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
+	{
+		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+			if (port->signature == AHCI_PxSIG_ATAPI)
+			{
+				AHCIPortInit(bd, port, i);
+
+				AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1);
+
+				kernel = buf + sys_boot_src.u16[1] << BLK_SIZE_BITS;
+
+				if (kernel->compile_time == sys_compile_time)
+				{
+					"Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
+					return TRUE;
+				}
+				else
+					"Did not find matching sys_compile_time on Port %d\n", i;
+			}
+		}
+	}
+
+	return FALSE;
+}
+
+Bool AHCIAtapiRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
+{
+	CBlkDev	*bd			= drive->bd;
+	I64		 nn, spc	= bd->blk_size >> BLK_SIZE_BITS, n, blk2, l2;
+	U8		*dvd_buf;//	= MAlloc(l2 << BLK_SIZE_BITS);
+
+	while (count > 0)
+	{
+		nn = count;
+		if (nn > bd->max_reads)
+			nn = bd->max_reads;
+
+		if (bd->type == BDT_ATAPI)
+		{
+//			"AHCIAtapiBlksRead(bd, buf, %d, %d);\n", blk, nn;
+//			AHCIAtapiBlksRead(bd, buf, blk, nn);
+
+
+			l2 = bd->max_reads << 1 + spc << 1;
+			dvd_buf	= MAlloc(l2 << BLK_SIZE_BITS);
+
+			if (blk <= bd->max_reads)
+				blk2 = 0;
+			else
+				blk2 = FloorU64(blk - bd->max_reads, spc);
+
+			if (blk2 + l2 > drive->size + drive->drv_offset)
+				l2 = drive->size + drive->drv_offset - blk2;
+
+			n = (l2 + spc - 1) / spc;
+
+			"AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);", blk2 / spc, n;
+			AHCIAtapiBlksRead(bd, dvd_buf, blk2 / spc, n);
+
+			if (bd->flags & BDF_READ_CACHE)
+				DiskCacheAdd(drive, dvd_buf, blk2, n * spc);
+
+			MemCopy(buf, dvd_buf + (blk - blk2) << BLK_SIZE_BITS, nn << BLK_SIZE_BITS);
+			Free(dvd_buf);
+
+		}
+		else
+			return FALSE;
+
+		buf += nn << BLK_SIZE_BITS;
+		blk += nn;
+		count -= nn;
+	}
+
+	return TRUE;
+}
+//IDEATARBlks
+
+Bool AHCIAtaRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
+{
+	I64		 n;
+	CBlkDev	*bd = drive->bd;
+
+	while (count > 0)
+	{
+		n = count;
+		if (n > bd->max_reads)
+			n = bd->max_reads;
+
+		if (bd->type == BDT_ATA)
+			AHCIAtaBlksRead(bd, buf, blk, n);
+		else
+			return FALSE;
+
+		buf += n << BLK_SIZE_BITS;
+		blk += n;
+		count -= n;
+	}
+	return TRUE;
+}
+
+Bool AHCIAtaWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
+{
+	I64		 n;
+	CBlkDev	*bd = drive->bd;
+//	Bool	 unlock;
+
+	while (count > 0)
+	{
+		n = count;
+		if (n > bd->max_writes)
+			n = bd->max_writes;
+			AHCIAtaBlksWrite(bd, buf, blk, n);
+
+		buf += n << BLK_SIZE_BITS;
+		blk += n;
+		count -= n;
+		blkdev.write_count += n;
+	}
+
+	return TRUE;
 }
 
 /*

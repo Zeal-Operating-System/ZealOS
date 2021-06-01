@@ -83,14 +83,16 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 					drive->size = bd->max_blk + 1 - bd->drv_offset;
 //The following read is a test read.
 					//if it hangs, the drive is not supported.
-					ATAReadBlks(bd, &mbr, 0, 1);
+//					IDEATAReadBlks(bd, &mbr, 0, 1);
+					AHCIAtaBlksRead(bd, &mbr, 0, 1); // ahci
 					break;
 				}
 				offset = 0;
 				ext_base = INVALID_CLUS;
 				while (prt_num < 0 || num <= prt_num)
 				{
-					ATAReadBlks(bd, &mbr, offset, 1);
+//					IDEATAReadBlks(bd, &mbr, offset, 1);
+					AHCIAtaBlksRead(bd, &mbr, offset, 1); // ahci
 					if (mbr.signature != 0xAA55)
 						break;
 					j = -1;
@@ -121,7 +123,9 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 								case MBR_PT_FAT32d:
 								case MBR_PT_FAT32e:
 								case MBR_PT_FAT32f:
-									ATAReadBlks(bd, &br, drive->drv_offset, 1);
+//									IDEATAReadBlks(bd, &br, drive->drv_offset, 1);
+									AHCIAtaBlksRead(bd, &br, drive->drv_offset, 1); // ahci
+
 									drive->drive_signature = DRIVE_SIGNATURE_VAL;
 									drive->prt_num = num;
 									res++;
@@ -222,7 +226,7 @@ Bool GetBaseUnit(CBlkDev *bd)
 			StreamPrint("probe = TRUE;");
 	};
 
-	if (!probe || !BootDVDProbeAll(bd))
+	if (!probe || !IDEBootDVDProbeAll(bd))
 	{
 		"\nDon't worry.  This is not a product\n"
 		"registration.				ZenithOS just needs the\n"
@@ -244,7 +248,7 @@ Bool GetBaseUnit(CBlkDev *bd)
 			while (!('0' <= ch <= '1'));
 			'' ch;
 			bd->unit = ch - '0';
-			blkdev.dvd_boot_is_good = BootDVDProbe(bd);
+			blkdev.dvd_boot_is_good = IDEBootDVDProbe(bd);
 			return TRUE;
 		}
 		else
@@ -267,6 +271,22 @@ U0 BlkDevsInitAll()
 		blkdev.let_to_drive[i] = &blkdev.drvs[i];
 
 	AHCIInit;
+
+	if (!blkdev.ahci_hba)
+	{
+		"\nZenithOS requires AHCI.\n\n"
+		"If in IDE compatibility mode, switch to SATA mode.\n"
+		"If running in a VM, ensure disks are organized under a SATA controller.\n\n"
+		"Rebooting in 10 seconds...\n";
+		Sleep(10*1000);
+//		Reboot; // illegal forward ref compiler error?
+		*0x472(U16 *) = 0; // Manual reboot
+		OutU8(0x70, 0x8F);
+		OutU8(0x71, 0x00);
+		OutU8(0x70, 0x00);
+		OutU8(0x92, InU8(0x92) | 1);
+		SysHlt;
+	}
 
 	#exe {
 		if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])

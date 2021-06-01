@@ -1,19 +1,19 @@
-Bool BootDVDProbe(CBlkDev *bd)
+Bool IDEBootDVDProbe(CBlkDev *bd)
 {
 	U8		*img = CAlloc(DVD_BLK_SIZE);
 	I64		 i;
 	Bool	 res = FALSE;
 
 	"Port: %04X,%04X Unit: %02X  ", bd->base0, bd->base1, bd->unit;
-	if (ATAProbe(bd->base0, bd->base1, bd->unit) == BDT_ATAPI)
+	if (IDEATAProbe(bd->base0, bd->base1, bd->unit) == BDT_ATAPI)
 	{
 		" ATAPI";
-		if (ATAPIStartStop(bd, tS + 5.0, TRUE))
+		if (IDEATAPIStartStop(bd, tS + 5.0, TRUE))
 		{
 			" Started";
 			for (i = 0; i < 2; i++)
 			{//Retry
-				if (ATAPIReadBlks2(bd, tS + 7.0, img, sys_boot_blk, 1, FALSE))
+				if (IDEATAPIReadBlks2(bd, tS + 7.0, img, sys_boot_blk, 1, FALSE))
 				{
 					if ((img + sys_boot_src.u16[1] << BLK_SIZE_BITS)(CKernel *)->compile_time == sys_compile_time)
 					{
@@ -34,7 +34,7 @@ Bool BootDVDProbe(CBlkDev *bd)
 	return res;
 }
 
-Bool BootDVDProbeAll(CBlkDev *bd)
+Bool IDEBootDVDProbeAll(CBlkDev *bd)
 {
 	I64 d1, d2, i, j, k;
 
@@ -55,10 +55,10 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 				if (bd->base0 = d1 & ~7)
 				{
 					bd->unit = 0;
-					if (BootDVDProbe(bd))
+					if (IDEBootDVDProbe(bd))
 						return TRUE;
 					bd->unit = 1;
-					if (BootDVDProbe(bd))
+					if (IDEBootDVDProbe(bd))
 						return TRUE;
 				}
 			}
@@ -69,10 +69,10 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 				if (bd->base0 = d1 & ~7)
 				{
 					bd->unit = 0;
-					if (BootDVDProbe(bd))
+					if (IDEBootDVDProbe(bd))
 						return TRUE;
 					bd->unit = 1;
-					if (BootDVDProbe(bd))
+					if (IDEBootDVDProbe(bd))
 						return TRUE;
 				}
 			}
@@ -84,10 +84,10 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 	if (bd->base0 = d1 & ~7)
 	{
 		bd->unit = 0;
-		if (BootDVDProbe(bd))
+		if (IDEBootDVDProbe(bd))
 			return TRUE;
 		bd->unit = 1;
-		if (BootDVDProbe(bd))
+		if (IDEBootDVDProbe(bd))
 			return TRUE;
 	}
 
@@ -96,10 +96,10 @@ Bool BootDVDProbeAll(CBlkDev *bd)
 	if (bd->base0 = d1 & ~7)
 	{
 		bd->unit = 0;
-		if (BootDVDProbe(bd))
+		if (IDEBootDVDProbe(bd))
 			return TRUE;
 		bd->unit = 1;
-		if (BootDVDProbe(bd))
+		if (IDEBootDVDProbe(bd))
 			return TRUE;
 	}
 }
@@ -111,7 +111,7 @@ U0 ATARepEntry(I64 base0, I64 base1, I64 unit, U8 *message, CATARep **_head, I64
 	base1 &= -4;
 	CATARep	*tmpha;
 
-	if (type = ATAProbe(base0,base1,unit))
+	if (type = IDEATAProbe(base0,base1,unit))
 	{
 		*num_hints += 1;
 		"\n$$PURPLE$$ $$BT+X,\"%d\",LM=\"%d\\n\"$$$$FG$$$$LM,4$$", *num_hints, *num_hints;

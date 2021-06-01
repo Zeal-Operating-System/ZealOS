@@ -14,7 +14,8 @@ Bool DriveTypeSet(U8 drv_let, I64 type=FSt_REDSEA)
 			ext_base = INVALID_CLUS;
 			while (TRUE)
 			{
-				ATAReadBlks(bd, &mbr, offset, 1);
+//				IDEATAReadBlks(bd, &mbr, offset, 1);
+				AHCIAtaBlksRead(bd, &mbr, offset, 1); // ahci
 				j =- 1;
 				for (i = 0; i < 4; i++)
 				{
@@ -41,7 +42,8 @@ Bool DriveTypeSet(U8 drv_let, I64 type=FSt_REDSEA)
 										throw('Drive');
 								}
 								mbr.p[i].active = 0x80;
-								ATAWriteBlks(bd, &mbr, offset, 1);
+//								IDEATAWriteBlks(bd, &mbr, offset, 1);
+								AHCIAtaBlksWrite(bd, &mbr, offset, 1); // ahci
 								return TRUE;
 							}
 							drv_num++;

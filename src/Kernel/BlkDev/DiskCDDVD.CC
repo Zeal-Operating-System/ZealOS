@@ -16,7 +16,10 @@ Bool ISOInit(CDrive *drive, I64 blk)
 		while (TRUE)
 		{
 			drive->size = MaxI64(drive->size, (i + 1) * spc);
+			"BlkRead(drive, iso, %d, %d);", i * spc, spc;
 			BlkRead(drive, iso, i * spc, spc);
+			D(iso);
+//			Sleep(3000);
 			buf[0](U32) = iso->id[0](U32);
 			buf[4](U16) = iso->id[4](U8);
 			switch (ListMatch(buf, "CD001\0CDW02\0BEA01\0BOOT2\0NSR02\0NSR03\0TEA01\0", LMF_EXACT))
@@ -98,12 +101,12 @@ U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 
 		retry = 4;
 		while (--retry)
-			if (ATAPIReadBlks2(bd, tS + 7.0 + 0.004 * n / spc, buf, blk / spc, n / spc, TRUE))
+			if (IDEATAPIReadBlks2(bd, tS + 7.0 + 0.004 * n / spc, buf, blk / spc, n / spc, TRUE))
 //n is 0x800 if max_reads.	Up to 8 additional seconds
 				break;
 
 		if (!retry)
-			ATAPIReadBlks2(bd, 0, buf, blk / spc, n / spc, TRUE);
+			IDEATAPIReadBlks2(bd, 0, buf, blk / spc, n / spc, TRUE);
 
 		FBlkWrite(f, buf, blk, n);
 		count -= n;
@@ -204,7 +207,7 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 		Yield;
 
 	BlkDevLock(bd);
-	ATAPIWaitReady(bd, 0);
+	IDEATAPIWaitReady(bd, 0);
 
 	progress1 = 0;
 	progress1_max = count;
@@ -223,31 +226,31 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 			buf = d->buf0;
 		while (d->in_buf <= d->out_buf)
 			Yield;
-		ATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
+		IDEATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
 		d->out_buf++;
 		count -= n;
 		blk += n;
 		progress1 += n;
 	}
-	ATAPISync(bd);
+	IDEATAPISync(bd);
 
 	progress1 = 0;
 	progress1_max = 2;
 	StrCopy(progress1_desc, "Closing");
 	for (i = 0; i < 2; i++)
 	{
-		ATAPIClose(bd, 0x100, i); //Close tracks
+		IDEATAPIClose(bd, 0x100, i); //Close tracks
 		progress1++;
 	}
 
-	ATAPISync(bd);
+	IDEATAPISync(bd);
 
-	ATAPIClose(bd, 0x200); //close disk
-	ATAPISync(bd);
+	IDEATAPIClose(bd, 0x200); //close disk
+	IDEATAPISync(bd);
 	if (media_type == MT_DVD)
 	{
-		ATAPIClose(bd, 0x300);
-		ATAPISync(bd);
+		IDEATAPIClose(bd, 0x300);
+		IDEATAPISync(bd);
 	}
 
 	*progress1_desc = 0;

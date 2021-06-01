@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----06/01/21 16:02:38----$IV,0$
+* Overhauled entire OS to use AHCI routines instead of IDE.
+$BK,1$* Raised version number to ZenithOS 2.0.$BK,0$
+
 $IV,1$----05/24/21 05:08:09----$IV,0$
 * Fixed $LK+PU,"Chess",A="FF:::/Demo/Games/Chess.CC,JobQueue"$ crashing when only one CPU core available.
 

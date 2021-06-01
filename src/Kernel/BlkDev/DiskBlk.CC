@@ -46,7 +46,7 @@ Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	{
 		unlock = DriveLock(drive);
 		BlkDevInit(bd);
-		if (drive->drv_offset && blk<drive->drv_offset || blk + count>drive->drv_offset + drive->size)
+		if (drive->drv_offset && blk < drive->drv_offset || blk + count > drive->drv_offset + drive->size)
 			throw('Drive');
 		if (bd->flags & BDF_READ_CACHE)
 			RCache(drive, &buf, &blk, &count);
@@ -64,8 +64,13 @@ Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 					break;
 
 				case BDT_ATA:
-				case BDT_ATAPI:
-					res = ATARBlks(drive, buf, blk, count);
+//				case BDT_ATAPI:
+//					res = IDEATARBlks(drive, buf, blk, count);
+					res = AHCIAtaRBlks(drive, buf, blk, count); // ahci
+					break;
+				case BDT_ATAPI: // ahci
+					res = AHCIAtapiRBlks(drive, buf, blk, count);
+					D(buf, count);
 					break;
 			}
 			bd->last_time = tS;
@@ -113,7 +118,8 @@ Bool BlkWrite(CDrive *drive, U8 *buf, I64 blk, I64 count)
 
 				case BDT_ATA:
 				case BDT_ATAPI:
-					res = ATAWBlks(drive, buf, blk, count);
+//					res = IDEATAWBlks(drive, buf, blk, count);
+					res = AHCIAtaWBlks(drive, buf, blk, count); // ahci
 					break;
 			}
 			bd->last_time = tS;

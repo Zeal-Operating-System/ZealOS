@@ -22,7 +22,7 @@ SYS_RUN_LEVEL::				DU32	0;
 
 #exe
 {
-	StreamPrint("SYS_COMPILE_TIME:: DU64 0x%X;", Now); //See $LK,"BootDVDProbe",A="MN:BootDVDProbe"$
+	StreamPrint("SYS_COMPILE_TIME:: DU64 0x%X;", Now); //See $LK,"IDEBootDVDProbe",A="MN:IDEBootDVDProbe"$
 };
 
 #assert SYS_COMPILE_TIME + sizeof(CDate) + sizeof(CBinFile) < DVD_BLK_SIZE

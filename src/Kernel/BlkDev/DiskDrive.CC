@@ -276,7 +276,7 @@ U0 DiskChange(U8 drv_let=0)
 	else if (bd->flags & BDF_REMOVABLE)
 	{
 		if (bd->type == BDT_ATAPI)
-			ATAInit(bd); //TODO: This is a kludge for QEMU?
+			//IDEATAInit(bd); //TODO: This is a kludge for QEMU?
 		DiskCacheInvalidate(drive);
 	}
 	Drive(drv_let);

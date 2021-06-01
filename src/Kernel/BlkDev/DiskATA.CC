@@ -1,5 +1,5 @@
 
-U0 ATABlkSel(CBlkDev *bd, I64 blk, I64 count)
+U0 IDEATABlkSel(CBlkDev *bd, I64 blk, I64 count)
 {
 	if (bd->type != BDT_ATAPI && bd->base1)
 		OutU8(bd->base1 + ATAR1_CTRL, 0x8);
@@ -25,7 +25,7 @@ U0 ATABlkSel(CBlkDev *bd, I64 blk, I64 count)
 	}
 }
 
-Bool ATAWaitNotBUSY(CBlkDev *bd, F64 timeout)
+Bool IDEATAWaitNotBUSY(CBlkDev *bd, F64 timeout)
 {
 	I64 i;
 
@@ -41,7 +41,7 @@ Bool ATAWaitNotBUSY(CBlkDev *bd, F64 timeout)
 	return FALSE;
 }
 
-Bool ATAWaitDRQ(CBlkDev *bd, F64 timeout)
+Bool IDEATAWaitDRQ(CBlkDev *bd, F64 timeout)
 {
 	I64 i;
 
@@ -57,7 +57,7 @@ Bool ATAWaitDRQ(CBlkDev *bd, F64 timeout)
 	return FALSE;
 }
 
-Bool ATANop(CBlkDev *bd, F64 timeout)
+Bool IDEATANop(CBlkDev *bd, F64 timeout)
 {
 	if (bd->flags & BDF_EXT_SIZE)
 		OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -66,10 +66,10 @@ Bool ATANop(CBlkDev *bd, F64 timeout)
 
 	OutU8(bd->base0 + ATAR0_FEAT,	0);
 	OutU8(bd->base0 + ATAR0_CMD,	ATA_NOP);
-	return ATAWaitNotBUSY(bd, timeout);
+	return IDEATAWaitNotBUSY(bd, timeout);
 }
 
-U0 ATACmd(CBlkDev *bd, U8 cmd)
+U0 IDEATACmd(CBlkDev *bd, U8 cmd)
 {
 	OutU8(bd->base0 + ATAR0_FEAT,	0);
 	OutU8(bd->base0 + ATAR0_CMD,	cmd);
@@ -77,7 +77,7 @@ U0 ATACmd(CBlkDev *bd, U8 cmd)
 	PortNop;
 }
 
-Bool ATAGetRes(CBlkDev *bd, F64 timeout, U8 *buf, I64 count, I64 _avail, Bool one_read)
+Bool IDEATAGetRes(CBlkDev *bd, F64 timeout, U8 *buf, I64 count, I64 _avail, Bool one_read)
 {
 	I64 avail, overflow;
 
@@ -85,7 +85,7 @@ Bool ATAGetRes(CBlkDev *bd, F64 timeout, U8 *buf, I64 count, I64 _avail, Bool on
 	MemSet(buf, 0, count);
 	while (count > 0)
 	{
-		if (!ATAWaitDRQ(bd, timeout))
+		if (!IDEATAWaitDRQ(bd, timeout))
 			return FALSE;
 		if (_avail)
 			avail = _avail;
@@ -121,16 +121,16 @@ Bool ATAGetRes(CBlkDev *bd, F64 timeout, U8 *buf, I64 count, I64 _avail, Bool on
 		else
 			Yield;
 	}
-	return ATAWaitNotBUSY(bd, timeout);
+	return IDEATAWaitNotBUSY(bd, timeout);
 }
 
-Bool ATAPIWritePacketWord(CBlkDev *bd, F64 timeout, ...)
+Bool IDEATAPIWritePacketWord(CBlkDev *bd, F64 timeout, ...)
 {
 	I64 i;
 
 	for (i = 0; i < argc; i++)
 	{
-		if (!ATAWaitDRQ(bd, timeout))
+		if (!IDEATAWaitDRQ(bd, timeout))
 			return FALSE;
 
 		OutU16(bd->base0 + ATAR0_DATA, EndianU16(argv[i]));
@@ -140,7 +140,7 @@ Bool ATAPIWritePacketWord(CBlkDev *bd, F64 timeout, ...)
 	return TRUE;
 }
 
-Bool ATAPISetMaxSpeed(CBlkDev *bd)
+Bool IDEATAPISetMaxSpeed(CBlkDev *bd)
 {
 	if (bd->flags & BDF_EXT_SIZE)
 		OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -149,13 +149,13 @@ Bool ATAPISetMaxSpeed(CBlkDev *bd)
 
 	OutU8(bd->base0 + ATAR0_LCYL, 0);
 	OutU8(bd->base0 + ATAR0_HCYL, 0);
-	ATACmd(bd, ATA_PACKET);
-	ATAPIWritePacketWord(bd, 0, ATAPI_SET_CD_SPEED, 0xFFFF, 0xFFFF, 0, 0, 0);
+	IDEATACmd(bd, ATA_PACKET);
+	IDEATAPIWritePacketWord(bd, 0, ATAPI_SET_CD_SPEED, 0xFFFF, 0xFFFF, 0, 0, 0);
 
-	return ATAWaitNotBUSY(bd, 0);
+	return IDEATAWaitNotBUSY(bd, 0);
 }
 
-Bool ATAPISeek(CBlkDev *bd, I64 native_blk)
+Bool IDEATAPISeek(CBlkDev *bd, I64 native_blk)
 {
 	if (bd->flags & BDF_EXT_SIZE)
 		OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -164,13 +164,13 @@ Bool ATAPISeek(CBlkDev *bd, I64 native_blk)
 
 	OutU8(bd->base0 + ATAR0_LCYL, 0);
 	OutU8(bd->base0 + ATAR0_HCYL, 0);
-	ATACmd(bd, ATA_PACKET);
-	ATAPIWritePacketWord(bd, 0, ATAPI_SEEK, native_blk >> 16, native_blk, 0, 0, 0);
+	IDEATACmd(bd, ATA_PACKET);
+	IDEATAPIWritePacketWord(bd, 0, ATAPI_SEEK, native_blk >> 16, native_blk, 0, 0, 0);
 
-	return ATAWaitNotBUSY(bd, 0);
+	return IDEATAWaitNotBUSY(bd, 0);
 }
 
-Bool ATAPIStartStop(CBlkDev *bd, F64 timeout, Bool start)
+Bool IDEATAPIStartStop(CBlkDev *bd, F64 timeout, Bool start)
 {
 	I64 i;
 
@@ -183,15 +183,15 @@ Bool ATAPIStartStop(CBlkDev *bd, F64 timeout, Bool start)
 	else
 		OutU8(bd->base0 + ATAR0_SEL, 0xE0 | bd->unit << 4);
 
-	ATACmd(bd, ATA_PACKET);
+	IDEATACmd(bd, ATA_PACKET);
 //Start/Stop
-	if (ATAPIWritePacketWord(bd, timeout, ATAPI_START_STOP_UNIT, 0, i, 0, 0, 0))
-		return ATAWaitNotBUSY(bd, timeout);
+	if (IDEATAPIWritePacketWord(bd, timeout, ATAPI_START_STOP_UNIT, 0, i, 0, 0, 0))
+		return IDEATAWaitNotBUSY(bd, timeout);
 	else
 		return FALSE;
 }
 
-I64 ATAGetDevId(CBlkDev *bd, F64 timeout, Bool keep_id_record)
+I64 IDEATAGetDevId(CBlkDev *bd, F64 timeout, Bool keep_id_record)
 {
 	I64  res		= BDT_NULL;
 	U16 *id_record	= NULL;
@@ -203,15 +203,15 @@ I64 ATAGetDevId(CBlkDev *bd, F64 timeout, Bool keep_id_record)
 	else
 		OutU8(bd->base0 + ATAR0_SEL, 0xE0 | bd->unit << 4);
 
-	ATACmd(bd, ATA_IDENTIFY);
-	if (ATAWaitNotBUSY(bd, timeout))
+	IDEATACmd(bd, ATA_IDENTIFY);
+	if (IDEATAWaitNotBUSY(bd, timeout))
 	{
 		if (InU8(bd->base0 + ATAR0_STAT) & ATAS_ERR)
 			res = BDT_ATAPI;
 		else
 		{
 			id_record = ZCAlloc(512);
-			if (ATAGetRes(bd, timeout, id_record, 512, 512, FALSE))
+			if (IDEATAGetRes(bd, timeout, id_record, 512, 512, FALSE))
 				res = BDT_ATA;
 			else
 			{
@@ -229,7 +229,7 @@ I64 ATAGetDevId(CBlkDev *bd, F64 timeout, Bool keep_id_record)
 	return res;
 }
 
-I64 ATAReadNativeMax(CBlkDev *bd, F64 timeout)
+I64 IDEATAReadNativeMax(CBlkDev *bd, F64 timeout)
 {//Returns zero on error
 	I64  res  = 0;
 	Bool okay = TRUE;
@@ -241,8 +241,8 @@ I64 ATAReadNativeMax(CBlkDev *bd, F64 timeout)
 		else
 			OutU8(bd->base0 + ATAR0_SEL, 0xE0 | bd->unit << 4);
 
-		ATACmd(bd, ATA_DEV_RST);
-		if (!ATAWaitNotBUSY(bd, 0))
+		IDEATACmd(bd, ATA_DEV_RST);
+		if (!IDEATAWaitNotBUSY(bd, 0))
 			okay = FALSE;
 	}
 	else
@@ -257,7 +257,7 @@ I64 ATAReadNativeMax(CBlkDev *bd, F64 timeout)
 			if (0 < timeout < tS)
 				return FALSE;
 		}
-		if (ATAGetDevId(bd, timeout, TRUE) == BDT_NULL)
+		if (IDEATAGetDevId(bd, timeout, TRUE) == BDT_NULL)
 			okay = FALSE;
 		else
 			BEqual(&bd->flags, BDf_EXT_SIZE, Bt(&bd->dev_id_record[86], 10));
@@ -269,8 +269,8 @@ I64 ATAReadNativeMax(CBlkDev *bd, F64 timeout)
 			OutU8(bd->base1 + ATAR1_CTRL,	0x8);
 			OutU8(bd->base0 + ATAR0_SEL,	0xEF | bd->unit << 4);
 
-			ATACmd(bd, ATA_READ_NATIVE_MAX_EXT);
-			if (ATAWaitNotBUSY(bd, timeout))
+			IDEATACmd(bd, ATA_READ_NATIVE_MAX_EXT);
+			if (IDEATAWaitNotBUSY(bd, timeout))
 			{
 				res.u8[0] = InU8(bd->base0 + ATAR0_SECT);
 				res.u8[1] = InU8(bd->base0 + ATAR0_LCYL);
@@ -293,8 +293,8 @@ I64 ATAReadNativeMax(CBlkDev *bd, F64 timeout)
 			if (bd->type != BDT_ATAPI && bd->base1)
 				OutU8(bd->base1 + ATAR1_CTRL, 0x8);
 			OutU8(bd->base0 + ATAR0_SEL, 0xE0 | bd->unit << 4);
-			ATACmd(bd, ATA_READ_NATIVE_MAX);
-			if (ATAWaitNotBUSY(bd, timeout))
+			IDEATACmd(bd, ATA_READ_NATIVE_MAX);
+			if (IDEATAWaitNotBUSY(bd, timeout))
 			{
 				res.u8[0] = InU8(bd->base0 + ATAR0_SECT);
 				res.u8[1] = InU8(bd->base0 + ATAR0_LCYL);
@@ -306,13 +306,13 @@ I64 ATAReadNativeMax(CBlkDev *bd, F64 timeout)
 	return bd->max_blk = res;
 }
 
-I64 ATAPIReadCapacity(CBlkDev *bd, I64 *_blk_size=NULL)
+I64 IDEATAPIReadCapacity(CBlkDev *bd, I64 *_blk_size=NULL)
 {//Supposedly this can return a res +/- 75 sects.
 //Error might just be for music.
 	Bool unlock = BlkDevLock(bd);
 	U32  buf[2];
 
-	if (ATAWaitNotBUSY(bd, 0))
+	if (IDEATAWaitNotBUSY(bd, 0))
 	{
 		if (bd->flags & BDF_EXT_SIZE)
 			OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -321,10 +321,10 @@ I64 ATAPIReadCapacity(CBlkDev *bd, I64 *_blk_size=NULL)
 
 		OutU8(bd->base0 + ATAR0_LCYL, 8);
 		OutU8(bd->base0 + ATAR0_HCYL, 0);
-		ATACmd(bd, ATA_PACKET);
-		ATAPIWritePacketWord(bd, 0, ATAPI_READ_CAPACITY, 0, 0, 0, 0, 0);
+		IDEATACmd(bd, ATA_PACKET);
+		IDEATAPIWritePacketWord(bd, 0, ATAPI_READ_CAPACITY, 0, 0, 0, 0, 0);
 
-		if (!ATAGetRes(bd, 0, buf, 8, 0, TRUE))
+		if (!IDEATAGetRes(bd, 0, buf, 8, 0, TRUE))
 			buf[0] = buf[1] = 0;
 	}
 	else
@@ -338,12 +338,12 @@ I64 ATAPIReadCapacity(CBlkDev *bd, I64 *_blk_size=NULL)
 	return EndianU32(buf[0]);
 }
 
-CATAPITrack *ATAPIReadTrackInfo(CBlkDev *bd, I64 blk)
+CATAPITrack *IDEATAPIReadTrackInfo(CBlkDev *bd, I64 blk)
 {
 	CATAPITrack	*res	= CAlloc(sizeof(CATAPITrack));
 	Bool		 unlock	= BlkDevLock(bd);
 
-	if (ATAWaitNotBUSY(bd, 0))
+	if (IDEATAWaitNotBUSY(bd, 0))
 	{
 		if (bd->flags & BDF_EXT_SIZE)
 			OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -353,8 +353,8 @@ CATAPITrack *ATAPIReadTrackInfo(CBlkDev *bd, I64 blk)
 		OutU8(bd->base0 + ATAR0_LCYL, sizeof(CATAPITrack) & 0xFF);
 		OutU8(bd->base0 + ATAR0_HCYL, sizeof(CATAPITrack) >> 8);
 
-		ATACmd(bd, ATA_PACKET);
-		ATAPIWritePacketWord(bd,
+		IDEATACmd(bd, ATA_PACKET);
+		IDEATAPIWritePacketWord(bd,
 							 0,
 							 ATAPI_READ_TRACK_INFO,
 							 blk.u16[1],
@@ -363,7 +363,7 @@ CATAPITrack *ATAPIReadTrackInfo(CBlkDev *bd, I64 blk)
 							 (sizeof(CATAPITrack) & 0x00FF) << 8,
 							 0);
 
-		if (!ATAGetRes(bd, 0, res, sizeof(CATAPITrack), 0, TRUE))
+		if (!IDEATAGetRes(bd, 0, res, sizeof(CATAPITrack), 0, TRUE))
 		{
 			Free(res);
 			res = NULL;
@@ -379,7 +379,7 @@ CATAPITrack *ATAPIReadTrackInfo(CBlkDev *bd, I64 blk)
 	return res;
 }
 
-Bool ATAInit(CBlkDev *bd)
+Bool IDEATAInit(CBlkDev *bd)
 {
 	Bool unlock = BlkDevLock(bd), okay = FALSE;
 
@@ -388,22 +388,22 @@ Bool ATAInit(CBlkDev *bd)
 	else
 		bd->flags |= BDF_EXT_SIZE;
 
-	if (ATAReadNativeMax(bd, tS + 0.1))
+	if (IDEATAReadNativeMax(bd, tS + 0.1))
 	{
-		ATABlkSel(bd, bd->max_blk, 0);
+		IDEATABlkSel(bd, bd->max_blk, 0);
 		if (bd->flags & BDF_EXT_SIZE)
-			ATACmd(bd, ATA_SET_MAX_EXT);
+			IDEATACmd(bd, ATA_SET_MAX_EXT);
 		else
-			ATACmd(bd, ATA_SET_MAX);
+			IDEATACmd(bd, ATA_SET_MAX);
 
-		if (ATAWaitNotBUSY(bd, 0))
+		if (IDEATAWaitNotBUSY(bd, 0))
 		{
 			okay = TRUE;
 			if (bd->type == BDT_ATAPI)
 			{
-				if (ATAPIStartStop(bd, 0, TRUE))
+				if (IDEATAPIStartStop(bd, 0, TRUE))
 				{
-					if (!ATAPISetMaxSpeed(bd))
+					if (!IDEATAPISetMaxSpeed(bd))
 						okay = FALSE;
 				}
 				else
@@ -417,16 +417,16 @@ Bool ATAInit(CBlkDev *bd)
 	return okay;
 }
 
-Bool ATAPIWaitReady(CBlkDev *bd, F64 timeout)
+Bool IDEATAPIWaitReady(CBlkDev *bd, F64 timeout)
 {
 	do
 	{
-		if (!ATAWaitNotBUSY(bd, timeout) || !ATANop(bd, timeout) || !ATAPIStartStop(bd, timeout, TRUE))
+		if (!IDEATAWaitNotBUSY(bd, timeout) || !IDEATANop(bd, timeout) || !IDEATAPIStartStop(bd, timeout, TRUE))
 			return FALSE;
 		if (InU8(bd->base0 + ATAR0_STAT) & ATAS_DRDY && !InU8(bd->base0 + ATAR0_FEAT));
 			return TRUE;
 
-		ATAInit(bd);
+		IDEATAInit(bd);
 		Yield;
 	}
 	while (!(0 < timeout < tS));
@@ -434,23 +434,23 @@ Bool ATAPIWaitReady(CBlkDev *bd, F64 timeout)
 	return FALSE;
 }
 
-U0 ATAReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+U0 IDEATAReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {
 	I64  retries = 3;
 	Bool unlock  = BlkDevLock(bd);
 
 	retry:
-	ATABlkSel(bd, blk, count);
+	IDEATABlkSel(bd, blk, count);
 	if (bd->flags & BDF_EXT_SIZE)
-		ATACmd(bd, ATA_READ_MULTI_EXT);
+		IDEATACmd(bd, ATA_READ_MULTI_EXT);
 	else
-		ATACmd(bd, ATA_READ_MULTI);
+		IDEATACmd(bd, ATA_READ_MULTI);
 
-	if (!ATAGetRes(bd, tS + 1.0, buf, count * bd->blk_size, BLK_SIZE, FALSE))
+	if (!IDEATAGetRes(bd, tS + 1.0, buf, count * bd->blk_size, BLK_SIZE, FALSE))
 	{
 		if (retries--)
 		{
-			ATAWaitNotBUSY(bd, 0);
+			IDEATAWaitNotBUSY(bd, 0);
 			goto retry;
 		}
 		else
@@ -463,7 +463,7 @@ U0 ATAReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		BlkDevUnlock(bd);
 }
 
-I64 ATAProbe(I64 base0, I64 base1, I64 unit)
+I64 IDEATAProbe(I64 base0, I64 base1, I64 unit)
 {
 	CBlkDev bd;
 
@@ -474,10 +474,10 @@ I64 ATAProbe(I64 base0, I64 base1, I64 unit)
 	bd.unit = unit;
 	bd.blk_size = DVD_BLK_SIZE;
 
-	return ATAGetDevId(&bd, tS + 0.1, FALSE);
+	return IDEATAGetDevId(&bd, tS + 0.1, FALSE);
 }
 
-Bool ATAPIReadBlks2(CBlkDev *bd, F64 timeout, U8 *buf, I64 native_blk, I64 count, Bool lock)
+Bool IDEATAPIReadBlks2(CBlkDev *bd, F64 timeout, U8 *buf, I64 native_blk, I64 count, Bool lock)
 {
 	Bool res = FALSE, unlock;
 
@@ -485,7 +485,7 @@ Bool ATAPIReadBlks2(CBlkDev *bd, F64 timeout, U8 *buf, I64 native_blk, I64 count
 		return FALSE;
 	if (lock)
 		unlock = BlkDevLock(bd);
-	if (ATAPIWaitReady(bd, timeout))
+	if (IDEATAPIWaitReady(bd, timeout))
 	{
 		if (bd->flags & BDF_EXT_SIZE)
 			OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -494,23 +494,23 @@ Bool ATAPIReadBlks2(CBlkDev *bd, F64 timeout, U8 *buf, I64 native_blk, I64 count
 
 		OutU8(bd->base0 + ATAR0_LCYL, bd->blk_size);
 		OutU8(bd->base0 + ATAR0_HCYL, bd->blk_size.u8[1]);
-		ATACmd(bd, ATA_PACKET);
+		IDEATACmd(bd, ATA_PACKET);
 
-		if (ATAPIWritePacketWord(bd, timeout, ATAPI_READ, native_blk.u16[1], native_blk, count.u16[1], count, 0) &&
-			ATAGetRes(bd, timeout, buf, count * bd->blk_size, 0, FALSE))
+		if (IDEATAPIWritePacketWord(bd, timeout, ATAPI_READ, native_blk.u16[1], native_blk, count.u16[1], count, 0) &&
+			IDEATAGetRes(bd, timeout, buf, count * bd->blk_size, 0, FALSE))
 		{
 			blkdev.read_count += (count * bd->blk_size) >> BLK_SIZE_BITS;
 			res = TRUE;
 		}
 	}
-//	ATAPIStartStop(bd, 0, FALSE);
+//	IDEATAPIStartStop(bd, 0, FALSE);
 	if (lock && unlock)
 		BlkDevUnlock(bd);
 
 	return res;
 }
 
-U0 ATAPIReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+U0 IDEATAPIReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {
 	CDrive	*drive		= Letter2Drive(bd->first_drive_let);
 	I64		 retry, spc = bd->blk_size >> BLK_SIZE_BITS, n, blk2, l2 = bd->max_reads << 1 + spc << 1;
@@ -530,11 +530,11 @@ U0 ATAPIReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 
 		retry = 4;
 		while (--retry)
-			if (ATAPIReadBlks2(bd, tS + 7.0 + 0.004 * n, dvd_buf, blk2 / spc, n, TRUE))
+			if (IDEATAPIReadBlks2(bd, tS + 7.0 + 0.004 * n, dvd_buf, blk2 / spc, n, TRUE))
 //n is 0x800 if max_reads.	Up to 8 additional seconds
 				break;
 		if (!retry)
-			ATAPIReadBlks2(bd, 0, dvd_buf, blk2 / spc, n, TRUE);
+			IDEATAPIReadBlks2(bd, 0, dvd_buf, blk2 / spc, n, TRUE);
 		if (bd->flags & BDF_READ_CACHE)
 			DiskCacheAdd(drive, dvd_buf, blk2, n * spc);
 
@@ -543,7 +543,7 @@ U0 ATAPIReadBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	Free(dvd_buf);
 }
 
-Bool ATARBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
+Bool IDEATARBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 {
 	I64		 n;
 	CBlkDev	*bd = drive->bd;
@@ -555,9 +555,9 @@ Bool ATARBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 			n = bd->max_reads;
 
 		if (bd->type == BDT_ATAPI)
-			ATAPIReadBlks(bd, buf, blk, n);
+			IDEATAPIReadBlks(bd, buf, blk, n);
 		else
-			ATAReadBlks(bd, buf, blk, n);
+			IDEATAReadBlks(bd, buf, blk, n);
 
 		buf += n << BLK_SIZE_BITS;
 		blk += n;
@@ -566,7 +566,7 @@ Bool ATARBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	return TRUE;
 }
 
-U0 ATAWriteBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+U0 IDEATAWriteBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {//For low level disk access.
 //Use BlkWrite() instead.
 	I64  i, U32s_avail, sects_avail, retries = 3;
@@ -574,11 +574,11 @@ U0 ATAWriteBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	Bool unlock = BlkDevLock(bd);
 
 retry:
-	ATABlkSel(bd, blk, count);
+	IDEATABlkSel(bd, blk, count);
 	if (bd->flags & BDF_EXT_SIZE)
-		ATACmd(bd, ATA_WRITE_MULTI_EXT);
+		IDEATACmd(bd, ATA_WRITE_MULTI_EXT);
 	else
-		ATACmd(bd, ATA_WRITE_MULTI);
+		IDEATACmd(bd, ATA_WRITE_MULTI);
 
 	bd->flags |= BDF_LAST_WAS_WRITE;
 	while (count > 0)
@@ -597,7 +597,7 @@ retry:
 			{
 				if (retries--)
 				{
-					ATAWaitNotBUSY(bd, 0);
+					IDEATAWaitNotBUSY(bd, 0);
 					goto retry;
 				}
 				else
@@ -611,16 +611,16 @@ retry:
 		count -= sects_avail;
 		retries = 3;
 	}
-	ATAWaitNotBUSY(bd, 0);
+	IDEATAWaitNotBUSY(bd, 0);
 	if (unlock)
 		BlkDevUnlock(bd);
 }
 
-Bool ATAPISync(CBlkDev *bd)
+Bool IDEATAPISync(CBlkDev *bd)
 {
 	Bool okay = TRUE;
 
-	if (!ATAWaitNotBUSY(bd, 0))
+	if (!IDEATAWaitNotBUSY(bd, 0))
 		okay = FALSE;
 	else
 	{
@@ -631,17 +631,17 @@ Bool ATAPISync(CBlkDev *bd)
 
 		OutU8(bd->base0 + ATAR0_LCYL, 0);
 		OutU8(bd->base0 + ATAR0_HCYL, 0);
-		ATACmd(bd, ATA_PACKET);
-		ATAPIWritePacketWord(bd, 0, ATAPI_SYNC_CACHE, 0, 0, 0, 0, 0);
+		IDEATACmd(bd, ATA_PACKET);
+		IDEATAPIWritePacketWord(bd, 0, ATAPI_SYNC_CACHE, 0, 0, 0, 0, 0);
 
-		if (!ATAWaitNotBUSY(bd, 0))
+		if (!IDEATAWaitNotBUSY(bd, 0))
 			okay = FALSE;
 	}
 
 	return okay;
 }
 
-U0 ATAPIClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
+U0 IDEATAPIClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
 {//0x200 CD/DVD part 1
 // 0x300		DVD part 2
 	if (bd->flags & BDF_EXT_SIZE)
@@ -651,19 +651,19 @@ U0 ATAPIClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
 
 	OutU8(bd->base0 + ATAR0_LCYL, 0);
 	OutU8(bd->base0 + ATAR0_HCYL, 0);
-	ATACmd(bd, ATA_PACKET);
-	ATAPIWritePacketWord(bd, 0, ATAPI_CLOSE_TRACK_SESSION, close_field, track, 0, 0, 0);
+	IDEATACmd(bd, ATA_PACKET);
+	IDEATAPIWritePacketWord(bd, 0, ATAPI_CLOSE_TRACK_SESSION, close_field, track, 0, 0, 0);
 
-	ATAWaitNotBUSY(bd, 0);
+	IDEATAWaitNotBUSY(bd, 0);
 }
 
-U0 ATAPIWriteBlks(CBlkDev *bd, U8 *buf, I64 native_blk, I64 count)
+U0 IDEATAPIWriteBlks(CBlkDev *bd, U8 *buf, I64 native_blk, I64 count)
 {
 	I64 U32s_avail;
 	U8 *buf2;
 
-	ATAWaitNotBUSY(bd, 0);
-	ATAPISeek(bd, native_blk);
+	IDEATAWaitNotBUSY(bd, 0);
+	IDEATAPISeek(bd, native_blk);
 
 	OutU8(bd->base0 + ATAR0_FEAT, 0);
 	OutU8(bd->base0 + ATAR0_LCYL, bd->blk_size);
@@ -675,12 +675,12 @@ U0 ATAPIWriteBlks(CBlkDev *bd, U8 *buf, I64 native_blk, I64 count)
 		OutU8(bd->base0 + ATAR0_SEL, 0xE0 | bd->unit << 4);
 
 	OutU8(bd->base0 + ATAR0_CMD, ATA_PACKET);
-	ATAPIWritePacketWord(bd, 0, ATAPI_FORMAT_UNIT, native_blk.u16[1], native_blk, count.u16[1], count, 0);
+	IDEATAPIWritePacketWord(bd, 0, ATAPI_FORMAT_UNIT, native_blk.u16[1], native_blk, count.u16[1], count, 0);
 
 	bd->flags |= BDF_LAST_WAS_WRITE;
 
-	ATAWaitNotBUSY(bd, 0);
-	ATAPISeek(bd, native_blk);
+	IDEATAWaitNotBUSY(bd, 0);
+	IDEATAPISeek(bd, native_blk);
 
 	if (bd->flags & BDF_EXT_SIZE)
 		OutU8(bd->base0 + ATAR0_SEL, 0xEF | bd->unit << 4);
@@ -689,13 +689,13 @@ U0 ATAPIWriteBlks(CBlkDev *bd, U8 *buf, I64 native_blk, I64 count)
 
 	OutU8(bd->base0 + ATAR0_LCYL, bd->blk_size);
 	OutU8(bd->base0 + ATAR0_HCYL, bd->blk_size.u8[1]);
-	ATACmd(bd, ATA_PACKET);
-	ATAPIWritePacketWord(bd, 0, ATAPI_WRITE, native_blk.u16[1], native_blk, count.u16[1], count, 0);
+	IDEATACmd(bd, ATA_PACKET);
+	IDEATAPIWritePacketWord(bd, 0, ATAPI_WRITE, native_blk.u16[1], native_blk, count.u16[1], count, 0);
 
 	buf2 = buf + bd->blk_size * count;
 	while (buf < buf2)
 	{
-		ATAWaitDRQ(bd, 0);
+		IDEATAWaitDRQ(bd, 0);
 		U32s_avail = (InU8(bd->base0 + ATAR0_HCYL) << 8 + InU8(bd->base0 + ATAR0_LCYL)) >> 2;
 		if (buf + U32s_avail << 2 > buf2)
 			U32s_avail = (buf2-buf) >> 2;
@@ -706,10 +706,10 @@ U0 ATAPIWriteBlks(CBlkDev *bd, U8 *buf, I64 native_blk, I64 count)
 			blkdev.write_count += U32s_avail >> (BLK_SIZE_BITS - 2);
 		}
 	}
-	ATAWaitNotBUSY(bd, 0);
+	IDEATAWaitNotBUSY(bd, 0);
 }
 
-Bool ATAWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
+Bool IDEATAWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 {
 	I64		 n, spc;
 	CBlkDev	*bd = drive->bd;
@@ -720,7 +720,7 @@ Bool ATAWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	if (bd->type == BDT_ATAPI)
 	{
 		unlock = BlkDevLock(bd);
-		ATAPIWaitReady(bd, 0);
+		IDEATAPIWaitReady(bd, 0);
 	}
 	while (count > 0)
 	{
@@ -729,9 +729,9 @@ Bool ATAWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 			n = bd->max_writes;
 
 		if (bd->type == BDT_ATAPI)
-			ATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
+			IDEATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
 		else
-			ATAWriteBlks(bd, buf, blk, n);
+			IDEATAWriteBlks(bd, buf, blk, n);
 
 		buf += n << BLK_SIZE_BITS;
 		blk += n;
@@ -740,8 +740,8 @@ Bool ATAWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	}
 	if (bd->type == BDT_ATAPI)
 	{
-		ATAPISync(bd);
-//		ATAPIStartStop(bd,0,FALSE);
+		IDEATAPISync(bd);
+//		IDEATAPIStartStop(bd,0,FALSE);
 		if (unlock)
 			BlkDevUnlock(bd);
 	}

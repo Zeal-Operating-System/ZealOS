@@ -130,7 +130,8 @@ drv_let=0 means add new drive that is not already mounted.
 		mbr.p[i].size		= remaining;
 		ext_base = offset;
 	}
-	ATAWriteBlks(bd, &mbr, 0, 1);
+//	IDEATAWriteBlks(bd, &mbr, 0, 1);
+	AHCIAtaBlksWrite(bd, &mbr, 0, 1); // ahci
 
 	while (tmppp != &head)
 	{
@@ -159,7 +160,8 @@ drv_let=0 means add new drive that is not already mounted.
 			mbr.p[1].offset		= offset - ext_base;
 			mbr.p[1].size		= tmppp->size;
 		}
-		ATAWriteBlks(bd, &mbr, start_offset, 1);
+//		IDEATAWriteBlks(bd, &mbr, start_offset, 1);
+		AHCIAtaBlksWrite(bd, &mbr, start_offset, 1); // ahci
 	}
 
 	bd->flags &= ~(BDF_INITIALIZED | BDF_INIT_IN_PROGRESS);

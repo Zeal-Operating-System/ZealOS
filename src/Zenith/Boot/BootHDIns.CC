@@ -48,7 +48,7 @@ public U0 BootHDIns(U8 drv_let=0)
 				{
 					Free(de.full_name);
 					"Modifying partition boot record.\n";
-					BlkRead(drive, &br,drive->drv_offset, 1);
+					BlkRead(drive, &br, drive->drv_offset, 1);
 
 					br.jump_and_nop[0] = OC_JMP_REL8;
 					br.jump_and_nop[1] = offset(CFAT32Boot.code) - 2;

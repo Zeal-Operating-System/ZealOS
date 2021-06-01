@@ -1,7 +1,60 @@
+I64 SATARep()
+{
+	I64			 /*bdf, */i, num = 0;
+	CAHCIPort	*port;
+//	CPCIDev		*pci;
+
+	"\nAHCI version %X.%1X%1X\n",
+		blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
+/*
+	if (dev.pci_head)
+	{
+		pci = PCIDevFind(PCIC_STORAGE, PCISC_AHCI);
+//		ClassRep(pci);
+		"$$PURPLE$$$$HL,1$$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$$HL,0$$$$FG$$\n\n", pci->bus, pci->dev, pci->fun;
+		"$$PURPLE$$Vendor$$FG$$: $$BLACK$$%s$$FG$$\n", pci->vendor_str;
+		"$$PURPLE$$Device$$FG$$: $$BLACK$$%s$$FG$$\n", pci->dev_id_str;
+	}	
+	else
+	{
+		bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0);
+		"Bus:%02X, Dev:%02X, Fun:%02X", bdf.u8[2], bdf.u8[1], bdf.u8[0];
+		"HBA Base Address: 0x%X", PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F;
+	}
+*/
+	if (blkdev.ahci_hba)
+	{
+		"\nImplemented Ports:\n\n";
+		for (i = 0; i < AHCI_MAX_PORTS; i++)
+		{
+			if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+			{
+				port = &blkdev.ahci_hba->ports[i];
+				"$$PURPLE$$ $$BT,\"%d\",LM=\"%d\n\"$$$$FG$$", i, i;
+
+				if (port->signature == AHCI_PxSIG_ATA)
+					"$$LM,4$$$$RED$$Hard Drive   $$LTBLUE$$ATA$$FG$$\n";
+				else if (port->signature == AHCI_PxSIG_ATAPI)
+					"$$LM,4$$$$RED$$CD/DVD Drive $$LTBLUE$$ATAPI$$FG$$\n";
+				else
+					"$$LM,4$$$$RED$$Unknown      $$LTBLUE$$0x%0X$$FG$$\n", port->signature;
+
+				"$$LM,0$$\n\n";
+				num++;
+			}
+		}
+	}
+	else
+		"$$HL,1$$blkdev.ahci_hba$$HL,0$$ is NULL !\n";
+	"\n";
+
+	return num;
+}
+
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
 U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 {//If _doc, called by $LK,"::/Kernel/KConfig.CC"$ else called by $LK,"Mount",A="MN:Mount"$().
-	I64		 count, total = 0, num_hints, drv_let, type, unit, prt_num;
+	I64		 count, total = 0, num_hints, drv_let, type, unit, prt_num, port = -1; // ahci
 	U8		 blks_buf[STR_LEN], addr_buf[STR_LEN], base0_buf[STR_LEN], base1_buf[STR_LEN],
 			*filename = NULL, *filename2 = NULL, res = 0;
 	CATARep	*head = NULL, *tmpha;
@@ -58,21 +111,26 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 				case BDT_ATA:
 					prt_num = I64Get("Partition Num (Default=All):", prt_num);
 				case BDT_ATAPI:
-					num_hints = ATARep(,, &head);
+//					num_hints = ATARep(,, &head);
+					num_hints = SATARep; // ahci
 					if (type == BDT_ATAPI && boot_drive_let)
 						"<ENTER> to use booted CD/DVD\n"; //Only $LK,"::/Kernel/KConfig.CC"$
 					do
 					{
 						if (num_hints)
-							"Enter dev number or\nport with $$PURPLE$$0x$$FG$$ prefix.\n"
-							"I/O Port Base0:\n";
-						else
-							"Include $$PURPLE$$0x$$FG$$ prefix.\nI/O Port Base0:\n";
+							"Enter port number: \n"; // ahci (!! using base0_buf for port num !!)
+//							"Enter dev number or\nport with $$PURPLE$$0x$$FG$$ prefix.\n"
+//							"I/O Port Base0:\n";
+//						else
+//							"Include $$PURPLE$$0x$$FG$$ prefix.\nI/O Port Base0:\n";
 						StrNGet(base0_buf, STR_LEN);
 					}
-					while (!Str2I64(base0_buf) && (type != BDT_ATAPI || !boot_drive_let));
-
-					if (1 <= Str2I64(base0_buf) <= num_hints)
+//					while (!Str2I64(base0_buf) && (type != BDT_ATAPI || !boot_drive_let));
+					while ((0 > Str2I64(base0_buf) || Str2I64(base0_buf) > num_hints - 1) &&
+							(type != BDT_ATAPI || !boot_drive_let)); // ahci
+					port = Str2I64(base0_buf);
+					
+/*					if (1 <= Str2I64(base0_buf) <= num_hints)
 					{
 						tmpha = ATARepFind(head, Str2I64(base0_buf));
 						StrPrint(base0_buf, "0x%X", tmpha->base0);
@@ -98,11 +156,18 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 						while (!(0 <= unit <= 1));
 						'\n';
 					}
-					LinkedListDel(head);
+					LinkedListDel(head);*/
 					break;
 			}
 			DocPrint(doc, "\"bd = BlkDevNextFreeSlot('%C', %d); bd->unit = %d;\n\";\n", drv_let, type, unit);
 			DocPrint(doc, "bd = BlkDevNextFreeSlot(\'%C\', %d); bd->unit = %d;\n", drv_let, type, unit);
+			if (port != -1) // ahci
+			{
+				DocPrint(doc, "\"AHCIPortInit(bd, &blkdev.ahci_hba->ports[%d], %d);\n\";\n", port, port);
+				DocPrint(doc, "AHCIPortInit(bd, &blkdev.ahci_hba->ports[%d], %d);\n", port, port);
+
+			}
+
 			switch (type)
 			{
 				case BDT_RAM:
@@ -124,13 +189,16 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 				case BDT_ATAPI:
 					if (type == BDT_ATAPI && !*base0_buf)
 					{
-						DocPrint(doc, "\"GetBaseUnit(bd);\n\";\n");
-						DocPrint(doc, "GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$
+//						DocPrint(doc, "\"GetBaseUnit(bd);\n\";\n");
+//						DocPrint(doc, "GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$
+						DocPrint(doc, "\"AHCIBootDVDProbeAll(bd);\n\";\n");
+						DocPrint(doc, "AHCIBootDVDProbeAll(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$
+
 						if (drv_let == boot_drive_let)
 							make_free = TRUE;
 					}
-					else
-						DocPrint(doc, "bd->base0 = %s; bd->base1 = %s;\n", base0_buf, base1_buf);
+//					else
+//						DocPrint(doc, "bd->base0 = %s; bd->base1 = %s;\n", base0_buf, base1_buf);
 					if (type == BDT_ATA && _caller_is_prtdisk)
 					{
 						"\nReformat WHOLE drive!";
