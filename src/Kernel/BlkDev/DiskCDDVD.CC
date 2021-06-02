@@ -16,9 +16,9 @@ Bool ISOInit(CDrive *drive, I64 blk)
 		while (TRUE)
 		{
 			drive->size = MaxI64(drive->size, (i + 1) * spc);
-			"BlkRead(drive, iso, %d, %d);", i * spc, spc;
+//			"BlkRead(drive, iso, %d, %d);", i * spc, spc;
 			BlkRead(drive, iso, i * spc, spc);
-			D(iso);
+//			D(iso);
 //			Sleep(3000);
 			buf[0](U32) = iso->id[0](U32);
 			buf[4](U16) = iso->id[4](U8);

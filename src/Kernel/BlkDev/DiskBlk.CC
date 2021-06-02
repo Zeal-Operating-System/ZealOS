@@ -70,7 +70,7 @@ Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 					break;
 				case BDT_ATAPI: // ahci
 					res = AHCIAtapiRBlks(drive, buf, blk, count);
-					D(buf, count);
+//					D(buf, count);
 					break;
 			}
 			bd->last_time = tS;

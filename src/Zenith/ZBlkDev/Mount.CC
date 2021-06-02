@@ -6,8 +6,8 @@ I64 SATARep()
 
 	"\nAHCI version %X.%1X%1X\n",
 		blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
-/*
-	if (dev.pci_head)
+
+/*	if (dev.pci_head)
 	{
 		pci = PCIDevFind(PCIC_STORAGE, PCISC_AHCI);
 //		ClassRep(pci);
@@ -55,9 +55,9 @@ I64 SATARep()
 U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 {//If _doc, called by $LK,"::/Kernel/KConfig.CC"$ else called by $LK,"Mount",A="MN:Mount"$().
 	I64		 count, total = 0, num_hints, drv_let, type, unit, prt_num, port = -1; // ahci
-	U8		 blks_buf[STR_LEN], addr_buf[STR_LEN], base0_buf[STR_LEN], base1_buf[STR_LEN],
+	U8		 blks_buf[STR_LEN], addr_buf[STR_LEN], base0_buf[STR_LEN],// base1_buf[STR_LEN],
 			*filename = NULL, *filename2 = NULL, res = 0;
-	CATARep	*head = NULL, *tmpha;
+//	CATARep	*head = NULL, *tmpha;
 	Bool	 whole_drive, make_free;
 	CDoc	*doc;
 
@@ -161,7 +161,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 			}
 			DocPrint(doc, "\"bd = BlkDevNextFreeSlot('%C', %d); bd->unit = %d;\n\";\n", drv_let, type, unit);
 			DocPrint(doc, "bd = BlkDevNextFreeSlot(\'%C\', %d); bd->unit = %d;\n", drv_let, type, unit);
-			if (port != -1) // ahci
+			if (port != -1 && *base0_buf) // ahci
 			{
 				DocPrint(doc, "\"AHCIPortInit(bd, &blkdev.ahci_hba->ports[%d], %d);\n\";\n", port, port);
 				DocPrint(doc, "AHCIPortInit(bd, &blkdev.ahci_hba->ports[%d], %d);\n", port, port);
@@ -187,7 +187,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 
 				case BDT_ATA:
 				case BDT_ATAPI:
-					if (type == BDT_ATAPI && !*base0_buf)
+					if (type == BDT_ATAPI && !*base0_buf && _doc)
 					{
 //						DocPrint(doc, "\"GetBaseUnit(bd);\n\";\n");
 //						DocPrint(doc, "GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$

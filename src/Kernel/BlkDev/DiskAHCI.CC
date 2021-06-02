@@ -50,6 +50,7 @@ Bool AHCIPortWait(I64 port_num, F64 timeout, Bool throwing=TRUE)
 	{
 		if (!(port->task_file_data & (ATAS_DRQ | ATAS_BSY)))
 			return TRUE;
+		Yield; // don't hang OS
 	}
 	while (timeout > tS);
 	if (throwing)
@@ -96,6 +97,7 @@ error:
 			ZenithErr("AHCI: Port %d: Command failed!\n", port_num);
 			throw('AHCI');
 		}
+		Yield; // don't hang OS
 	}
 	if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Second safety check
 		goto error;
@@ -204,7 +206,7 @@ U8 *AHCIBufferAlign(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
 //In the case of an inadequate buffer address being passed in, we will use a MAlloced internal buffer.
 	if(user_buf + buf_size > U32_MAX || user_buf & 1)
 	{//if the buffer is not within 32-bit address space or not U16-aligned
-		"Aligning buffer under 32-bit range\n";
+//		"Aligning buffer under 32-bit range\n";
 		Free(bd->prd_buf);
 		bd->prd_buf = MAlloc(buf_size, Fs->code_heap);
 		Bts(&bd->flags, BDf_INTERNAL_BUF);
@@ -590,8 +592,8 @@ Bool AHCIAtapiRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	while (count > 0)
 	{
 		nn = count;
-		if (nn > bd->max_reads)
-			nn = bd->max_reads;
+//		if (nn > bd->max_reads)
+//			nn = bd->max_reads;
 
 		if (bd->type == BDT_ATAPI)
 		{
@@ -612,7 +614,7 @@ Bool AHCIAtapiRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 
 			n = (l2 + spc - 1) / spc;
 
-			"AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);", blk2 / spc, n;
+//			"AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);", blk2 / spc, n;
 			AHCIAtapiBlksRead(bd, dvd_buf, blk2 / spc, n);
 
 			if (bd->flags & BDF_READ_CACHE)
@@ -642,8 +644,8 @@ Bool AHCIAtaRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	while (count > 0)
 	{
 		n = count;
-		if (n > bd->max_reads)
-			n = bd->max_reads;
+//		if (n > bd->max_reads)
+//			n = bd->max_reads;
 
 		if (bd->type == BDT_ATA)
 			AHCIAtaBlksRead(bd, buf, blk, n);
@@ -666,8 +668,8 @@ Bool AHCIAtaWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 	while (count > 0)
 	{
 		n = count;
-		if (n > bd->max_writes)
-			n = bd->max_writes;
+//		if (n > bd->max_writes)
+//			n = bd->max_writes;
 			AHCIAtaBlksWrite(bd, buf, blk, n);
 
 		buf += n << BLK_SIZE_BITS;

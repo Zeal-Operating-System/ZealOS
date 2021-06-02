@@ -2,7 +2,8 @@ U0 InstallDrive(U8 drv_let)
 {
 	U8 *st;
 
-	Sleep(3000);
+	while (!DriveCheck(blkdev.let_to_drive[drv_let - 'A'], FALSE))
+		Sleep(100);
 
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
