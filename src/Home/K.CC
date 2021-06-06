@@ -1,6 +1,6 @@
 //Ed("/Doc/ChangeLog.DD");
 
-//In("CC\n\n1\n\n5\n\n\n");
+In("CC\n0\n\n5\n\n\n");
 BootHDIns;
 
 "\n\nSuccessful? ";
