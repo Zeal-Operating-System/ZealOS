@@ -21,8 +21,8 @@ U0 ServerStartUp()
 
 U0 StartUpTasks()
 {
-	if (sys_boot_src.u16[0] != BOOT_SRC_RAM)
-		PopUpRunFile("::/Zenith/ZSplash.CC");
+//	if (sys_boot_src.u16[0] != BOOT_SRC_RAM)
+//		PopUpRunFile("::/Zenith/ZSplash.CC");
 	CTask *user = User;
 	WinToTop(user);
 	WinTileVert;

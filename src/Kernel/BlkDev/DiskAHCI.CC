@@ -550,13 +550,18 @@ U0 AHCIInit()
 	hba = dev.uncached_alias + PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F; //Last 4 bits not part of address.
 	blkdev.ahci_hba = hba;
 
-	AHCIHbaReset;
-	"AHCI: HBA reset\n";
+
+	Bts(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
+	"AHCI: GHC.AE\n";
+
+//	AHCIHbaReset;
+//	"AHCI: HBA reset\n";
 
 	//Transferring ownership from BIOS if supported.
 	if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
 	{
 		Bt(&hba->bohc, AHCI_BOHCf_OOS);
+		"AHCI: Transferring ownership from BIOS\n";
 
 		while (Bt(&hba->bohc, AHCI_BOHCf_BOS));
 
@@ -573,11 +578,17 @@ U0 AHCIInit()
 		if (Bt(&hba->ports_implemented, i))
 		{//$BK,1$Make ports idle?$BK,0$
 			port = &hba->ports[i];
+			"AHCI: port on %d, signature 0x%0X\n", i, port->signature;
 			if (port->signature == AHCI_PxSIG_ATA || port->signature == AHCI_PxSIG_ATAPI)
 			{
-				"AHCI: port on %d\n", i;
 				if (port->signature == AHCI_PxSIG_ATAPI)
+				{
 					Bts(&port->command, AHCI_PxCMDf_ATAPI);
+					"      ATAPI drive\n";
+				}
+				else
+					"      ATAPI drive\n";
+
 				if (!AHCIPortIsIdle(i))
 				{
 					"AHCI: Port not idle\n";
@@ -600,8 +611,12 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
+			"AHCI: BootDVDProbeAll: Saw port at %d with signature 0x%0X\n", i, port->signature;
+
 			if (port->signature == AHCI_PxSIG_ATAPI)
 			{
+				"AHCI: Probing ATAPI drive at port %d\n", i;
+
 				AHCIPortInit(bd, port, i);
 
 				AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1);
