@@ -105,7 +105,7 @@ U0 VMInstallWiz()
 U0 RegularInstallWiz()
 {
 	I64		 drv_let;
-	U8		*st;
+	U8		*st, *port_st;
 	I64		 ch, res_num;
 	CTask	*task;
 
@@ -127,16 +127,16 @@ U0 RegularInstallWiz()
 	"Hard Drive Port: ";
 	while (TRUE)
 	{
-		st = StrGet;
-		if ((0 <= Str2I64(st) < AHCI_MAX_PORTS) &&
-			((&blkdev.ahci_hba->ports[Str2I64(st)])->signature == AHCI_PxSIG_ATA))
+		port_st = StrGet;
+		if ((0 <= Str2I64(port_st) < AHCI_MAX_PORTS) &&
+			((&blkdev.ahci_hba->ports[Str2I64(port_st)])->signature == AHCI_PxSIG_ATA))
 		{
 			break;
 		}
-		Free(st);
+		Free(port_st);
 	}
 
-	XTalkWait(task, "%s\n\n", st);
+	XTalkWait(task, "%s\n\n", port_st);
 
 	DriveRep;
 	do
@@ -174,7 +174,7 @@ U0 RegularInstallWiz()
 	InstallDrive(drv_let);
 
 
-	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, st);
+	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
 	VideoRep;
 	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
 	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options

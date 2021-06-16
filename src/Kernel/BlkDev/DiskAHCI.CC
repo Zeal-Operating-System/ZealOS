@@ -234,6 +234,7 @@ U8 *AHCIBufferAlign(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
 	if(user_buf + buf_size > U32_MAX || user_buf & 1)
 	{//if the buffer is not within 32-bit address space or not U16-aligned
 //		"Aligning buffer under 32-bit range\n";
+
 		Free(bd->prd_buf);
 		bd->prd_buf = MAlloc(buf_size, Fs->code_heap);
 
