@@ -343,6 +343,7 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 	I64 i, buf_size, buf_size_tmp, byte_count, prdt_len, cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
 	CPortCmdHeader *cmd_header = AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 	U8             *internal_buf_tmp, *internal_buf;
+	Bool			unlock;
 
 	if (port->signature != AHCI_PxSIG_ATA)
 	{
@@ -356,6 +357,8 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 		ZenithErr("AHCI: Block count %d max allowed in one command (%d)", count, AHCI_PRDT_MAX_BLOCKS);
 		throw('AHCI');
 	}
+
+	unlock = BlkDevLock(bd);
 
 	//Determine buffer size and PRDT length.
 	buf_size = buf_size_tmp = count * BLK_SIZE;
@@ -429,6 +432,9 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 			MemCopy(buf, internal_buf, buf_size);
 		}
 
+	if (unlock)
+		BlkDevUnlock(bd);
+
 	return cmd_header->prd_byte_count;
 }
 
@@ -464,7 +470,8 @@ I64 AHCIAtaBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 
 I64 AHCIAtaBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 {//Write 'blk' amount of blocks to AHCI disk device. Returns num of bytes transferred between memory and disk.
-	I64 byte_count = 0;
+	I64  byte_count = 0;
+
 	if (!count)
 		return 0;
 	if (count <= AHCI_PRDT_MAX_BLOCKS)
@@ -486,10 +493,11 @@ I64 AHCIAtaBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 		}
 		byte_count += AHCIAtaBlksRW(bd, buf, blk, count, TRUE);
 	}
+
 	return byte_count;
 }
 
-I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
+I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 {//Read 'blk' amount of blocks from from AHCI ATAPI device. Returns num of bytes transferred.
 	CPortCmdTable	*cmd_table;
 	CFisH2D			*cmd_fis;
@@ -498,6 +506,7 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	CPortCmdHeader	*cmd_header = AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 	U8				*internal_buf, *internal_buf_tmp;
 	CAtapiReadCmd	 read_cmd;
+	Bool			 unlock;
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
@@ -506,6 +515,9 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 	}
 	if (count < 1)
 		return 0;
+
+	if (lock)
+		unlock = BlkDevLock(bd);
 
 	buf_size = buf_size_tmp = count * DVD_BLK_SIZE;
 	prdt_len = (buf_size - 1) / AHCI_PRD_MAX_BYTES + 1;
@@ -570,6 +582,9 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count)
 //		"Writing back internal buffer\n";
 		MemCopy(buf, internal_buf, buf_size);
 	}
+
+	if (lock && unlock)
+		BlkDevUnlock(bd);
 
 	return cmd_header->prd_byte_count;
 }
@@ -704,7 +719,7 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 
 				AHCIPortInit(bd, port, i);
 
-				AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1);
+				AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1, FALSE);
 
 				kernel = buf + sys_boot_src.u16[1] << BLK_SIZE_BITS;
 
