@@ -101,12 +101,14 @@ U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 
 		retry = 4;
 		while (--retry)
-			if (IDEATAPIReadBlks2(bd, tS + 7.0 + 0.004 * n / spc, buf, blk / spc, n / spc, TRUE))
+//			if (IDEATAPIReadBlks2(bd, tS + 7.0 + 0.004 * n / spc, buf, blk / spc, n / spc, TRUE))
+			if (AHCIAtapiBlksRead(bd, buf, blk / spc, n / spc)) // ahci
 //n is 0x800 if max_reads.	Up to 8 additional seconds
 				break;
 
 		if (!retry)
-			IDEATAPIReadBlks2(bd, 0, buf, blk / spc, n / spc, TRUE);
+//			IDEATAPIReadBlks2(bd, 0, buf, blk / spc, n / spc, TRUE);
+			AHCIAtapiBlksRead(bd, buf, blk / spc, n / spc); // ahci
 
 		FBlkWrite(f, buf, blk, n);
 		count -= n;

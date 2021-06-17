@@ -168,6 +168,90 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 	return EndianU32(buf[0]);
 }
 
+Bool AHCIAtapiSeek(CBlkDev *bd, I64 blk)
+{
+	CPortCmdTable	*cmd_table;
+	CFisH2D			*cmd_fis;
+	CAHCIPort		*port		= bd->ahci_port;
+	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
+	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+
+	if (port->signature != AHCI_PxSIG_ATAPI)
+	{
+		ZenithErr("AHCI: Drive is not an ATAPI drive!\n");
+		throw('AHCI');	
+	}
+
+	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
+
+	cmd_table = cmd_header->cmd_table_base;
+	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
+
+	cmd_fis	= &cmd_table->cmd_fis;
+
+	cmd_fis->type		= FISt_H2D;
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
+	cmd_fis->command	= ATA_PACKET;
+	cmd_table->acmd[0]	= ATAPI_SEEK >> 8;
+	cmd_table->acmd[2]	= blk.u8[4];
+	cmd_table->acmd[3]	= blk.u8[3];
+	cmd_table->acmd[4]	= blk.u8[2];
+	cmd_table->acmd[5]	= blk.u8[1];
+
+	AHCIPortWait(bd->port_num, tS + 2);
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+
+	try
+		AHCIPortCmdWait(bd->port_num, cmd_slot);
+	catch
+	{
+		Fs->catch_except = TRUE;
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
+{
+	CPortCmdTable	*cmd_table;
+	CFisH2D			*cmd_fis;
+	CAHCIPort		*port		= bd->ahci_port;
+	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
+	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+
+	if (port->signature != AHCI_PxSIG_ATAPI)
+	{
+		ZenithErr("AHCI: Drive is not an ATAPI drive!\n");
+		throw('AHCI');	
+	}
+
+	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
+
+	cmd_table = cmd_header->cmd_table_base;
+	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
+
+	cmd_fis	= &cmd_table->cmd_fis;
+
+	cmd_fis->type		= FISt_H2D;
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
+	cmd_fis->command	= ATA_PACKET;
+	cmd_table->acmd[0]	= ATAPI_START_STOP_UNIT >> 8;
+	cmd_table->acmd[4]	= start;
+
+	AHCIPortWait(bd->port_num, tS + 2);
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+
+	try
+		AHCIPortCmdWait(bd->port_num, cmd_slot);
+	catch
+	{
+		Fs->catch_except = TRUE;
+		return FALSE;
+	}
+
+	return TRUE;
+}
 
 U0 AHCIPortIdentify(CBlkDev *bd)
 {//Perform ATA_IDENTIFY command on ATA/ATAPI drive and store capacity and id record.

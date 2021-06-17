@@ -362,10 +362,14 @@ public extern	I64				 MountIDEAuto();
 extern			U0				 AHCIHbaReset();
 extern			U0				 AHCIPortReset(I64 port_num);
 extern			U0				 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num);
-extern			I64				 AHCIAtaBlksRW(    CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write);
-extern			I64				 AHCIAtaBlksRead(  CBlkDev *bd, U8 *buf, I64 blk, I64 count);
-extern 			I64				 AHCIAtaBlksWrite( CBlkDev *bd, U8 *buf, I64 blk, I64 count);
-extern			I64				 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+extern			I64				 AHCIAtaBlksRW(		CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write);
+extern			I64				 AHCIAtaBlksRead(	CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+extern 			I64				 AHCIAtaBlksWrite(	CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+extern			I64				 AHCIAtapiBlksRead(	CBlkDev *bd, U8 *buf, I64 blk, I64 count);
+extern			Bool			 AHCIAtapiSeek(		CBlkDev *bd, I64 blk);
+extern			Bool			 AHCIAtapiStartStop(CBlkDev *bd, Bool start);
+
+
 public extern	CBlkDevGlobals	 blkdev;
 
 #help_index "Graphics/Color"
