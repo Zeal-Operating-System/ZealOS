@@ -320,7 +320,7 @@ U8 *AHCIBufferAlign(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
 //		"Aligning buffer under 32-bit range\n";
 
 		Free(bd->prd_buf);
-		bd->prd_buf = MAlloc(buf_size, Fs->code_heap);
+		bd->prd_buf = MAlloc(buf_size, zenith_task->code_heap);
 
 		Bts(&bd->flags, BDf_INTERNAL_BUF);
 

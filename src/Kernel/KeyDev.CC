@@ -190,6 +190,7 @@ U0 CtrlAltT(I64)
 U0 CtrlAltV(I64)
 {
 	LFBFlush;
+	text.is_fb_busy = FALSE;
 }
 
 U0 CtrlAltX(I64)

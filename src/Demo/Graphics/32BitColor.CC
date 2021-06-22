@@ -11,7 +11,13 @@ I0 Color32Demo()
 	I64		i, j, x, y;
 	CBGR24	color;
 
-	while (TRUE)
+	"\nPress any key to exit demo.\n\n";
+
+	Sleep(500);
+
+	text.is_fb_busy = TRUE;
+
+	while (!CharScan)
 	{
 		x = FloorI64(RandU16 % GR_WIDTH, SQUARE_SIZE + SQUARE_GAP);
 		y = FloorI64(RandU16 % GR_WIDTH, SQUARE_SIZE + SQUARE_GAP);
@@ -21,8 +27,12 @@ I0 Color32Demo()
 			for (j = 0; j < SQUARE_SIZE; j++)
 				DrawPixel(x + i, y + j, color);
 
-		Busy(1000);
+		Sleep(100);
 	}
+
+	text.is_fb_busy = FALSE;
+	LFBFlush;
+
 }
 
 Color32Demo;

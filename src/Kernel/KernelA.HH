@@ -4208,6 +4208,7 @@ public class CTextGlobals
 	U64 	*font, *aux_font, screen_size, buffer_size;
 	U8		*vga_alias;
 	U8		 border_chars[16];
+	Bool	 is_fb_busy;
 };
 
 #define FONT_WIDTH		8

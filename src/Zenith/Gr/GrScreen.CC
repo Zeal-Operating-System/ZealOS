@@ -416,6 +416,9 @@ U0 GrUpdateScreen()
 {//Called by the Window Manager $LK,"HERE",A="FF:::/Zenith/WinMgr.CC,GrUpdateScreen"$, 30 times a second.
 	CDC *dc;
 
+	if (text.is_fb_busy)
+		return;
+
 	GrUpdateTextBG;
 	GrUpdateTextFG;
 	GrUpdateTasks;
