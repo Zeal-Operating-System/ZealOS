@@ -50,6 +50,7 @@
 #include "KTask"
 #include "Job"
 #include "PCIBIOS"
+#include "PCI"
 #include "MultiProc"
 #include "EdLite"
 #include "BlkDev/MakeBlkDev"

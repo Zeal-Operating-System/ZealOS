@@ -161,7 +161,7 @@ _extern SYS_PCI_SERVICES U32 sys_pci_services;
 
 _extern _FAR_CALL32 Bool FarCall32(U0 (*fp_addr)());//Not reentrant.For PCIBIOS.
 
-U8 PCIReadU8(I64 bus, I64 dev, I64 fun, I64 rg)
+U8 PCIBIOSReadU8(I64 bus, I64 dev, I64 fun, I64 rg)
 {//Read U8 in PCI configspace at bus, dev, fun, reg.
 	I64 res;
 
@@ -182,7 +182,7 @@ U8 PCIReadU8(I64 bus, I64 dev, I64 fun, I64 rg)
 	return res;
 }
 
-U16 PCIReadU16(I64 bus, I64 dev, I64 fun, I64 rg)
+U16 PCIBIOSReadU16(I64 bus, I64 dev, I64 fun, I64 rg)
 {//Read U16 in PCI configspace at bus, dev, fun, reg.
 	I64 res;
 
@@ -203,7 +203,7 @@ U16 PCIReadU16(I64 bus, I64 dev, I64 fun, I64 rg)
 	return res;
 }
 
-U32 PCIReadU32(I64 bus, I64 dev, I64 fun, I64 rg)
+U32 PCIBIOSReadU32(I64 bus, I64 dev, I64 fun, I64 rg)
 {//Read U32 in PCI configspace at bus, dev, fun, reg.
 	I64 res;
 
@@ -224,7 +224,7 @@ U32 PCIReadU32(I64 bus, I64 dev, I64 fun, I64 rg)
 	return res;
 }
 
-U0 PCIWriteU8(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
+U0 PCIBIOSWriteU8(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
 {//Write U8 in PCI configspace at bus, dev, fun, reg.
 	PUSHFD
 	CLI
@@ -239,7 +239,7 @@ U0 PCIWriteU8(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
 	POPFD
 }
 
-U0 PCIWriteU16(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
+U0 PCIBIOSWriteU16(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
 {//Write U16 in PCI configspace at bus, dev, fun, reg.
 	PUSHFD
 	CLI
@@ -254,7 +254,7 @@ U0 PCIWriteU16(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
 	POPFD
 }
 
-U0 PCIWriteU32(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
+U0 PCIBIOSWriteU32(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
 {//Write U32 in PCI configspace at bus, dev, fun, reg.
 	PUSHFD
 	CLI
@@ -269,7 +269,7 @@ U0 PCIWriteU32(I64 bus, I64 dev, I64 fun, I64 rg, I64 val)
 	POPFD
 }
 
-I64 PCIClassFind(I64 class_code, I64 n)
+I64 PCIBIOSClassFind(I64 class_code, I64 n)
 {/*Find bus, dev, fun of Nth class_code dev.
 
 class_code is low three bytes

@@ -2658,6 +2658,10 @@ class CSMBIOSBatteryInfo
 #define PCISC_ETHERNET	0x0
 #define PCISC_AHCI		0x6
 
+//PCI I/O ports
+#define PCI_ADDR	0xCF8
+#define PCI_DATA	0xCFC
+
 class CPCIDev
 {
 	CPCIDev	*next, *last;

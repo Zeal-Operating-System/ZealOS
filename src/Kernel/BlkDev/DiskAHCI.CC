@@ -657,10 +657,11 @@ U0 AHCIInit()
 //	AHCIHbaReset;
 //	"AHCI: HBA reset\n";
 
+
 	//Transferring ownership from BIOS if supported.
 	if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
 	{
-		Bt(&hba->bohc, AHCI_BOHCf_OOS);
+		Bts(&hba->bohc, AHCI_BOHCf_OOS);
 		"AHCI: Transferring ownership from BIOS\n";
 
 		while (Bt(&hba->bohc, AHCI_BOHCf_BOS));

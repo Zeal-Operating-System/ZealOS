@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----06/24/21 01:01:06----$IV,0$
+* Implemented PCI fall-back functions for when PCIBIOS is unsupported, to improve bare-metal support.
+* Abstracted $LK+PU,"PCI functions",A="FI:::/Kernel/PCI.CC"$ out from $LK+PU,"PCIBIOS",A="FI:::/Kernel/PCIBIOS.CC"$ file.
+* Raised version number to ZenithOS 2.1.
+
 $IV,1$----06/01/21 16:02:38----$IV,0$
 * Overhauled entire OS to use AHCI routines instead of IDE.
 $BK,1$* Raised version number to ZenithOS 2.0.$BK,0$
