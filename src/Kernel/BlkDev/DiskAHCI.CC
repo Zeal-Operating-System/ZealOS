@@ -688,7 +688,7 @@ U0 AHCIInit()
 					"      ATAPI drive\n";
 				}
 				else
-					"      ATAPI drive\n";
+					"      ATA drive\n";
 
 				if (!AHCIPortIsIdle(i))
 				{
@@ -734,6 +734,8 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 			}
 		}
 	}
+
+	Panic("Could not find ATAPI boot drive");
 
 	return FALSE;
 }
