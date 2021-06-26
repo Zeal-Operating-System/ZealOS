@@ -1,8 +1,10 @@
 I64 SATARep()
 {
-	I64			 /*bdf, */i, num = 0;
+	I64			 /*bdf, */i, j, num = 0;
 	CAHCIPort	*port;
 //	CPCIDev		*pci;
+	CBlkDev		*temp_blkdev;
+	U16			*st, *model, *serial;
 
 	"\nAHCI version %X.%1X%1X\n",
 		blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
@@ -22,6 +24,8 @@ I64 SATARep()
 		"HBA Base Address: 0x%X", PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F;
 	}
 */
+
+
 	if (blkdev.ahci_hba)
 	{
 		"\nImplemented Ports:\n\n";
@@ -30,23 +34,54 @@ I64 SATARep()
 			if (Bt(&blkdev.ahci_hba->ports_implemented, i))
 			{
 				port = &blkdev.ahci_hba->ports[i];
-				"$$PURPLE$$ $$BT,\"%d\",LM=\"%d\n\"$$$$FG$$", i, i;
 
-				if (port->signature == AHCI_PxSIG_ATA)
-					"$$LM,4$$$$RED$$Hard Drive   $$LTBLUE$$ATA$$FG$$\n";
-				else if (port->signature == AHCI_PxSIG_ATAPI)
-					"$$LM,4$$$$RED$$CD/DVD Drive $$LTBLUE$$ATAPI$$FG$$\n";
-				else
-					"$$LM,4$$$$RED$$Unknown      $$LTBLUE$$0x%0X$$FG$$\n", port->signature;
+				if (port->signature == AHCI_PxSIG_ATAPI || port->signature == AHCI_PxSIG_ATA)
+				{
+					"$$PURPLE$$ $$BT,\"%d\",LM=\"%d\n\"$$$$FG$$", i, i;
 
-				"$$LM,0$$\n\n";
+					if (port->signature == AHCI_PxSIG_ATA)
+						"$$LM,4$$$$RED$$Hard Drive   $$LTBLUE$$ATA$$FG$$\n";
+					else if (port->signature == AHCI_PxSIG_ATAPI)
+						"$$LM,4$$$$RED$$CD/DVD Drive $$LTBLUE$$ATAPI$$FG$$\n";
+//					else
+//						"$$LM,4$$$$RED$$Unknown      $$LTBLUE$$0x%0X$$FG$$\n", port->signature;
+
+					"$$LM,0$$\n\t";
+
+					temp_blkdev = CAlloc(sizeof(CBlkDev));
+					AHCIPortInit(temp_blkdev, port, i);
+					"\n\t";
+
+					if (temp_blkdev->dev_id_record)
+					{
+						st = CAlloc(40 + 1);
+						for (j = 0; j < 20; j++)
+							st[j] = EndianU16(temp_blkdev->dev_id_record[27 + j]);
+						model = MStrUtil(st, SUF_REM_LEADING | SUF_REM_TRAILING);
+						"Model:  %s\n\t", model;
+						Free(st);
+						Free(model);
+
+						st = CAlloc(20 + 1);
+						for (j = 0; j < 10; j++)
+							st[j] = EndianU16(temp_blkdev->dev_id_record[10 + j]);
+						serial = MStrUtil(st, SUF_REM_LEADING | SUF_REM_TRAILING);
+						"Serial: %s\n", serial;
+						Free(st);
+						Free(serial);
+					}
+
+					"\n";
+
+					BlkDevDel(temp_blkdev);
+					Free(temp_blkdev);
+				}
 				num++;
 			}
 		}
 	}
 	else
-		"$$HL,1$$blkdev.ahci_hba$$HL,0$$ is NULL !\n";
-	"\n";
+		"$$HL,1$$blkdev.ahci_hba$$HL,0$$ is NULL !\n\n";
 
 	return num;
 }

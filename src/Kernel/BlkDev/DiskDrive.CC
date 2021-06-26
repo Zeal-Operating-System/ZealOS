@@ -277,6 +277,7 @@ U0 DiskChange(U8 drv_let=0)
 	{
 		if (bd->type == BDT_ATAPI)
 			//IDEATAInit(bd); //TODO: This is a kludge for QEMU?
+			AHCIAtaInit(bd); //TODO: This is a kludge for QEMU? // ahci
 		DiskCacheInvalidate(drive);
 	}
 	Drive(drv_let);

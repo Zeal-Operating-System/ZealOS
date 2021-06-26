@@ -135,7 +135,7 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 		throw('AHCI');	
 	}
 
-	buf = CAlloc(8, Fs->code_heap);
+	buf = CAlloc(8, zenith_task->code_heap);
 
 	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
 
@@ -253,6 +253,28 @@ Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 	return TRUE;
 }
 
+Bool DiscEject(U8 drv_let)
+{ // returns whether disc tray was successfully ejected.
+	try
+		return AHCIAtapiStartStop(Letter2BlkDev(drv_let), 2);
+	catch
+	{
+		Fs->catch_except = TRUE;
+		return FALSE;
+	}
+}
+
+Bool DiscLoad(U8 drv_let)
+{ // returns whether disc tray was successfully closed & disc loaded.
+	try
+		return AHCIAtapiStartStop(Letter2BlkDev(drv_let), 3);
+	catch
+	{
+		Fs->catch_except = TRUE;
+		return FALSE;
+	}
+}
+
 U0 AHCIPortIdentify(CBlkDev *bd)
 {//Perform ATA_IDENTIFY command on ATA/ATAPI drive and store capacity and id record.
 	CPortCmdTable	*cmd_table;
@@ -265,7 +287,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
 	//Using the code heap for this alloc to stay under 32-bit address space.
-	dev_id_record = CAlloc(512, Fs->code_heap);
+	dev_id_record = CAlloc(512, zenith_task->code_heap);
 
 	cmd_table = cmd_header->cmd_table_base;
 	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
@@ -606,11 +628,11 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	AHCIPortCmdStop(port_num);
 
 	//'1K-byte' align as per SATA spec.
-	port->cmd_list_base = CAllocAligned(sizeof(CPortCmdHeader) * blkdev.cmd_slot_count, 1024, Fs->code_heap);
+	port->cmd_list_base = CAllocAligned(sizeof(CPortCmdHeader) * blkdev.cmd_slot_count, 1024, zenith_task->code_heap);
 	port->cmd_list_base_upper = 0;
 
 	//Alloc where received FISes will be copied to. '256-byte' align as per spec.
-	port->fis_base = CAllocAligned(sizeof(CFisReceived), 256, Fs->code_heap);
+	port->fis_base = CAllocAligned(sizeof(CFisReceived), 256, zenith_task->code_heap);
 	port->fis_base_upper = 0;
 
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
@@ -620,11 +642,54 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 		cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
 
 		//'128-byte' align as per SATA spec, minus 1 since length is 1-based.
-		cmd_header->cmd_table_base = CAllocAligned(sizeof(CPortCmdTable) + sizeof(CPrdtEntry) * (AHCI_PRDT_MAX_LEN - 1), 128, Fs->code_heap);
+		cmd_header->cmd_table_base = CAllocAligned(sizeof(CPortCmdTable) + sizeof(CPrdtEntry) * (AHCI_PRDT_MAX_LEN - 1), 128, zenith_task->code_heap);
 		cmd_header->cmd_table_base_upper = 0;
 	}
 	AHCIPortCmdStart(port_num);
 	AHCIPortIdentify(bd);
+}
+
+Bool AHCIAtaInit(CBlkDev *bd)
+{
+	Bool			unlock, okay = FALSE;
+	CPortCmdHeader *cmd_header;
+	I64				i;
+
+	if (!bd->ahci_port)
+		return FALSE;
+
+	unlock = BlkDevLock(bd);
+
+	// if we re-init a port, keep memory from leaking.
+	for (i = 0; i < blkdev.cmd_slot_count; i++)
+	{
+		cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
+		Free(cmd_header->cmd_table_base);
+	}
+	Free(bd->ahci_port->cmd_list_base);
+	Free(bd->ahci_port->fis_base);
+
+	// try to init the port, catch if fails.
+	try
+	{
+		AHCIPortInit(bd, bd->ahci_port, bd->port_num);
+
+		if (bd->type == BDT_ATAPI)
+			okay = AHCIAtapiStartStop(bd, TRUE);
+		else
+			okay = TRUE;
+	}
+	catch
+	{
+		Fs->catch_except = TRUE;
+		okay = FALSE;
+		ST_WARN_ST "AHCIAtaInit";
+	}
+
+	if (unlock)
+		BlkDevUnlock(bd);
+
+	return okay;
 }
 
 U0 AHCIHbaReset()

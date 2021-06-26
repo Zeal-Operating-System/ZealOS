@@ -236,7 +236,10 @@ Bool DoInstall(Bool prompt_reboot)
 	{
 		"Reboot Now ";
 		if (YorN)
+		{
+			DiscEject(':');
 			Reboot;
+		};
 	}
 	return res;
 }
