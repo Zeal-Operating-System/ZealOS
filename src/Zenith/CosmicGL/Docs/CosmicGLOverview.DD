@@ -1,0 +1,247 @@
+
+$FG,5$Using this Library$FG$
+$HL,1$#include "MakeCosmicGL"$HL,0$
+$FG,2$Simply include MakeCosmicGL.CC located at the root of this repository in your
+project. The #include's beneath each title in the documentation are to help 
+you find where these functions/classes are implemented.
+
+$FG,5$Creating/Freeing Textures and Framebuffers$FG$ 
+$HL,1$#include "Texture"
+$HL,0$
+$FG,2$CTex2D is used for both textures and framebuffers:$FG$
+
+$HL,1$U0 Tex2DInit(CTex2D *tex, I64 type, I64 w, I64 h);
+U0 Tex2DFree(CTex2D *tex);$HL,0$
+
+$FG,2$Where $FG$$FG,9$type$FG$ $FG,2$can be:$FG$
+$FG,3$
+TEX2D_RAW$FG$		$FG,2$CBGR24 format$FG$
+$FG,3$TEX2D_DEPTH$FG$		$FG,2$F64 format$FG$
+$FG,3$TEX2D_WAD$FG$		$FG,2$WAD/BMP 8-bit 256-CBGR24 palette compression$FG$
+
+$FG,2$Textures must be made for the frame and depth buffer, which can later be drawn
+to a window after the image is rendered onto them. Textures that you intend to
+use as render targets such as framebuffers can not be compressed:$FG$
+
+$HL,1$CTex2D frameBuf, depthBuf;
+Tex2DInit(&frameBuf, TEX2D_RAW, 640, 480);
+Tex2DInit(&depthBuf, TEX2D_DEPTH, 640, 480);$HL,0$
+
+$FG,5$Loading/Clearing Textures$FG$
+$FG,2$Tex2DInit merely allocates space, you can then clear the textures with the 
+following:$FG$
+
+$HL,1$U0 Tex2DColorFill(CTex2D *tex, CBGR24 color);
+U0 Tex2DDepthReset(CTex2D *tex);
+U0 Tex2DLoadWAD(CTex2D *tex, CWAD *wad, U8 *texName);
+$HL,0$
+$FG,5$Sampling Textures$FG$
+$FG,2$To sample a texture location (such as when texture mapping in a fragment
+shader), the following are available:$FG$
+
+$HL,1$U0 Tex2DSampleNorm(CBGR24 *col, CTex2D *tex, F64 u, F64 v);$HL,0$		$FG,2$Samples with normalized 0.0-1.0 uv coordinates.$FG$
+$HL,1$U0 Tex2DSampleCoord(CBGR24 *col, CTex2D *tex, I64 u, I64 v);$HL,0$	$FG,2$Samples with raw pixel uv coordinates.$FG$
+
+$FG,5$Displaying Textures$FG$
+$FG,2$All texture types can be rendered to the OS framebuffer. Textures and
+non-color data (depth) are rendered in grayscale.$FG$
+
+$HL,1$U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y);$HL,0$	$FG,2$Copies directly to OS display buffer rather than window, will be replaced.$FG$
+
+$FG,5$Loading Textures From Common Formats$FG$
+$HL,1$#include "TextureImport"
+$HL,0$
+$FG,5$WAD Textures$FG$
+$FG,2$WAD files were a common method of storing textures in early game engines, 
+popularized by the DOOM/Quake/GldSrc engines. Textures are compressed with
+8-bit color pointing to a 256 24-bit color palette. See the WAD section to
+learn how to load the CWAD object to pass to this function.
+
+$FG,2$Example WAD loading:$FG$
+$HL,1$
+CWAD wad;
+CTex2D tex;
+WADLoad(&wad, "Assets/Textures/HALFLIFE.WAD");
+Tex2DLoadWAD(&tex, &wad, "!waterblue");$HL,1$$HL,0$	$FG,2$The loader will initialize the texture.$FG$
+WADFree(&wad);
+$HL,0$
+$FG,5$BMP Images$FG$
+$FG,2$BMP images are an extremely simple format to read. You can load 24-bit uncompressed
+BMPs like so:$FG$
+
+$HL,1$CTex2D tex;
+Tex2DLoadBMP(&tex, "SaintTerry.bmp");$HL,0$	$FG,2$The loader will initialize the texture.$FG$
+
+$FG,5$Loading and Reading WAD Files$FG$
+$HL,1$#include "WAD/WADTypes"
+#include "WAD/WAD"$HL,0$
+$FG,2$WAD files are a general purpose format for storing a flat hierarchy of
+directories called "lumps." They were first used by the DOOM engine to hold
+game assets, however they have been used by subsequent engines such as Quake
+and GldSrc to hold textures. The general purpose WAD manipulation functions
+below can be used to access all WAD formats, although some functionality from
+other functions may be limited to specific WAD types.$FG$
+$HL,1$
+U0 WADLoad(CWAD *wad, U8 *fname);
+U0 WADFree(CWAD *wad);
+$HL,0$
+$FG,2$WAD types:$FG$$FG,3$
+WAD_TYPE_HL
+WAD_TYPE_DOOM
+$FG$
+$FG,5$Lumps$FG$
+$FG,2$These are named directories with no hierarchy. The format for lumps is slightly
+different for DOOM and Quake/Half-Life WADs, so a CWADFileLump union is available
+to pass general purpose lump pointers.
+
+Lump classes:$FG$
+$HL,1$class CWADFileLumpDoom;
+class CWADFileLumpHL;
+class CWADFileLump;$HL,0$
+
+$FG,2$CWADFileLump can be "interpreted" as either with:$FG$
+CWADFileLump.doom
+CWADFileLump.hl
+
+$FG,2$CWAD has an internal hash file for fast lump reading. To find a lump by name, use:$FG$
+
+$HL,1$I64 WADFindLump(CWAD *wad, U8 *name, CWADFileLump **lump=NULL);$HL,0$
+
+$FG,2$It returns the lump index, or -1 if not found. **lump can be optionally used to get
+the handle to the target lump.$FG$
+
+$FG,5$Shaders$FG$
+$HL,1$#include "Shader"
+$HL,0$
+$FG,2$Shaders are functions that calculate the vertex positions of each triangle in
+NDC (normalized device coordinates), and then calculate the color of each
+individual fragment (pixel) within the triangles. You can use any model format
+you like, as you get to decide what vertex coordinates are returned for each
+triangle. $FG$
+
+$FG,5$Uniforms$FG$
+$FG,2$Uniforms are unchanging values that will be used by the shader for every
+triangle in the model. These are often values like transformation matrices,
+texture pointers, or any other material parameters you need. You can provide a 
+pointer to your uniforms to use in the shader.$FG$
+
+$FG,5$Vertex to Fragment Vertex Attributes$FG$
+$FG,2$The vertex shader returns not only the coordinates of the vertices for each 
+triangle, but also other attributes such as UV coordinates, normals, colors,
+etc. Every time the fragment shader is called, the interpolated attributes 
+for that frag (pixel) are given to the shader.) 
+
+$FG,2$You can choose the structure of the F64 array of attributes to be interpolated
+by setting the nVertValues and *vertValues from CShader:$FG$
+$HL,1$
+CShader shd;
+shd.nVertValues = 2;			$FG,2$In this example, the vertex shader will pass two attributes.$FG$
+shd.vertValues = MAlloc(2 * sizeof(I64));
+shd.vertValues[0] = SHD_CVEC2;	$FG,2$For passing UV coordinate to fragment shader.$FG$
+shd.vertValues[1] = SHD_CVEC3;$HL,0$	$FG,2$For passing normal to fragment shader.$FG$
+
+$FG,2$Where the vertValues can be of type:$FG$
+$FG,3$
+SHD_F64
+SHD_CVEC2
+SHD_CVEC3
+SHD_CVEC4
+SHD_CMat4
+$FG$
+$FG,5$Vertex Shader$FG$
+$FG,2$The purpose of the vertex shader is to calculate each triangle's vertex
+coordinates in NDC (noramalized device coordinates). The renderer will "plot"
+or rasterize these coordinates to the specified render target texture.
+Fragments outside of the -1:1 range will not be rendered (as they are
+off-texture). $FG$
+
+$SP,"NDC Coordinates:",BI=1$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+$HL,1$U0 (*VertShd)(CTri *tri, F64 *vertOutBuf,, U8 *mdlPtr, U8 *uniforms, I64 iTri, i64 nTris);$HL,0$
+
+$FG,3$*tri$FG$		$FG,2$OUTPUT: Final triangle coordinates in NDC$FG$	
+$FG,3$*mdlPtr$FG$		$FG,2$INPUT:  Pointer to model data.$FG$	
+$FG,3$*vertOutBuf$FG$	$FG,2$OUTPUT: Array of attributes to be interpolated for the frag shader. In order of: [V0 Attr, V1 Attr, V2 Attr] $FG$
+$FG,3$*uniforms$FG$	$FG,2$INPUT:  Pointer to uniforms.$FG$
+$FG,3$iTri$FG$		$FG,2$INPUT:  Current triangle.$FG$
+$FG,3$nTris$FG$		$FG,2$INPUT:  Total number of triangles in model.$FG$
+
+$FG,2$Example of creating and attaching a vertex shader to a CShader:$FG$
+
+$HL,1$CShader shd;
+U0 vShader(CTri *tri, F64 *vertOutBuf, U8 *mdlPtr, U8 *uniforms, I64 iTri, I64 nTris)
+{
+	// Set *tri with the iTri from mdlPtr. 
+}
+shd.VertShd = &vShader;$HL,0$
+
+$FG,5$Fragment Shader$FG$
+$FG,2$The fragment shader returns the CBGR24 color for a particular fragment (pixel).
+It takes uniforms as well as interpolated values from the vertex shader to 
+calculate each frag's color. 
+
+For example, each vertex of a triangle may have a UV coordinate pointing to the 
+part of the texture it maps to. The three UV coordinate attributes from the 
+vertex shader will be interpolated into one UV coordinate sent to the fragment 
+shader. The fragment shader can then sample that pixel color from the texture
+included in the uniforms and return that color. Fragment shaders can be used
+for all sorts of purposes, including rendering lighting, shadows, warping,
+color filtering, etc.$FG$
+
+$HL,1$U0 (*FragShd)(CBGR24 *color, F64 *fragInBuf, U8 *uniforms);$HL,0$
+
+$FG,2$Fragment shaders can be created and attached in the same way as vertex shaders:$FG$
+
+$HL,1$CShader shd;
+U0 fShader(CBGR24 *color, F64 *fragInBuf, U8 *uniforms)
+{
+	// Set *color using interpolated F64's from fragInBuf and uniforms
+}
+shd.FragShd = &fShader;$HL,0$
+ 
+
+
+$FG,5$Rendering$FG$
+$HL,1$#include "Math"
+#include "Rasterize"
+$HL,0$
+$FG,2$After models, textures, and shaders are initialized, you can render with these
+functions. Currently only triangles can be rendered, however support for all
+sprite primitives will be added for performance and ease of use (saves the 
+steps of rendering textured triangles to draw 2D primitives like in GPU 
+libraries).$FG$
+$HL,1$
+U0 RenderTris(CShader *shd, CTex2D *frameBuf, CTex2D *depthBuf, U8 *mdl, U8 *uniforms, I64 nTris);
+$HL,0$
+
+        õ     
+¢ÿÿÿ4   ·ÿÿÿ#   ÿ 
+”ÿÿÿ   Ôÿÿÿ   
+”ÿÿÿW   ÔÿÿÿW   
+”ÿÿÿ   ”ÿÿÿW   
+Ôÿÿÿ   ÔÿÿÿW   ´ÿÿÿ7   ´ÿÿÿ   ´ÿÿÿ7   Óÿÿÿ7   ´ÿÿÿ7   Ëÿÿÿ    ¡ÿÿÿ   Y: +1 Ùÿÿÿ4   X: +1 Ðÿÿÿ   Z: +1 ­ÿÿÿ[   -1 „ÿÿÿ4   -1 šÿÿÿJ   -1     A   NDC maps to texture
+coordinates when
+rasterizing. 
+   8   £   8   
+·      ¸   P   
+¸   P     P   
+  P        
+¸                
+œÿÿÿ*   §ÿÿÿB   
+§ÿÿÿB   Áÿÿÿ>   
+Áÿÿÿ>   œÿÿÿ*   
+Ä   +   ú   =   
+ú   =   Î   C   
+Î   C   Ä   +    

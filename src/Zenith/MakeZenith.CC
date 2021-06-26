@@ -24,4 +24,5 @@ LBts(&sys_run_level, RLf_DOC);
 #include "ZDefine"
 #include "WallPaper"
 #include "ZMouse"
+#include "CosmicGL/MakeCosmicGL"
 Cd("..");;
