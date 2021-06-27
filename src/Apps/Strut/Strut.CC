@@ -716,6 +716,7 @@ U0 Strut()
 	PressAKey;
 	bt_main_mode = CtrlBttnNew((GR_WIDTH - 4 * FONT_WIDTH - 16) >> 1, 1 * FONT_HEIGHT + 4, 80,, MMD_MODES_NUM, 
 								Define("ST_MAIN_MODES"), main_mode_colors, &main_mode_bttn);
+	PaletteSetLight(FALSE);
 	DocClear;
 	Init;
 	Fs->draw_it = &DrawIt;

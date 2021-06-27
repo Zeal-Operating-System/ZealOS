@@ -13,7 +13,7 @@
 #define FIXED_X3			(TEXT_COLS * FONT_WIDTH >> 1)
 #define FIXED_Y1			((SKY_LINES + 1) * FONT_HEIGHT)
 #define FIXED_Y2			((SKY_LINES + 5) * FONT_HEIGHT)
-#define FIXED_Y3			((TEXT_ROWS - 8) * FONT_HEIGHT)
+#define FIXED_Y3			((SKY_LINES + 12) * FONT_HEIGHT)
 
 #define LOAD_WEIGHTS		8
 

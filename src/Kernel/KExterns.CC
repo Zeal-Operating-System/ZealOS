@@ -112,6 +112,8 @@ extern U0 Print(U8 *format, ...);
 extern U0 PutChars(U64 ch);
 extern U0 PutS(U8 *st); //Use $LK,"Print",A="MN:Print"$()
 
+extern U0 Reboot(Bool format_ramdisks=FALSE);
+
 extern I64	RedSeaAllocClus(CDrive *drive, I64 count);
 extern Bool	RedSeaDirNew(CDrive *drive, U8 *cur_dir, CDirEntry *tmpde, Bool free_old_chain);
 extern Bool	RedSeaFileFind(CDrive *drive, I64 cur_dir_clus, U8 *name, CDirEntry *_res, I64 fuf_flags=0);

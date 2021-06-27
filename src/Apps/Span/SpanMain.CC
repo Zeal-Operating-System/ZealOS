@@ -72,7 +72,7 @@ U0 DrawIt(CTask *task, CDC *dc)
 	}
 
 	dc->color = BLACK;
-	GrPrint(dc, 90, 0, "Cost:%12.2, f", Cost(ode));
+	GrPrint(dc, 90, 0, "Cost:%12.2,f", Cost(ode));
 	GrPrint(dc, 90, FONT_HEIGHT, "Time:%12.2f", SpanTime);
 }
 

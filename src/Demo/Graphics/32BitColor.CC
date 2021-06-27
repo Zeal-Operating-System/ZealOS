@@ -1,5 +1,6 @@
-#define SQUARE_SIZE 20
-#define SQUARE_GAP	5
+#define SQUARE_SIZE		20
+#define SQUARE_GAP		5
+#define SQUARE_DELAY	5 // mS
 
 I0 DrawPixel(I64 x, I64 y, CBGR24 color)
 {
@@ -27,7 +28,7 @@ I0 Color32Demo()
 			for (j = 0; j < SQUARE_SIZE; j++)
 				DrawPixel(x + i, y + j, color);
 
-		Sleep(100);
+		Sleep(SQUARE_DELAY);
 	}
 
 	text.is_fb_busy = FALSE;

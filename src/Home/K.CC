@@ -1,6 +1,26 @@
 //Ed("/Doc/ChangeLog.DD");
 
-In("CC\n0\n\n5\n\n\n");
+CAHCIPort	*port;
+I64			 i, ata_drive = -1;
+
+// Find first-available ATA drive for BootHDIns.
+for (i = 0; i < AHCI_MAX_PORTS; i++)
+{
+	if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+	{
+		port = &blkdev.ahci_hba->ports[i];
+		if (port->signature == AHCI_PxSIG_ATA)
+		{
+			ata_drive = i;
+			break;
+		}
+	}
+}
+
+if (ata_drive < 0)
+	throw('No ATA');
+
+In("CC\n%d\n\n1024\n768\n\n\n", ata_drive);
 BootHDIns;
 
 "\n\nSuccessful? ";

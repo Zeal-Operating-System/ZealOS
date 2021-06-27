@@ -564,7 +564,8 @@ U0 MoveMan(F64 é)
 	while (step);
 }
 
-#define MICRO_STEPS 	4
+//#define MICRO_STEPS 	4
+#define MICRO_STEPS 	24
 U0 RotateMan(F64 d)
 {
 	I64 i;
@@ -572,7 +573,8 @@ U0 RotateMan(F64 d)
 	for (i = 0; i < MICRO_STEPS; i++)
 	{
 		man_é += d / MICRO_STEPS;
-		Sleep(15);
+//		Sleep(15);
+		Sleep(1);
 	}
 }
 
@@ -628,11 +630,13 @@ U0 CastleFrankenstein()
 					switch (sc.u8[0])
 					{
 						case SC_CURSOR_RIGHT:
-							Spawn(&RotateMan, (ã / 32)(I64));
+//							Spawn(&RotateMan, (ã / 32)(I64));
+							RotateMan(ã / 32);
 							break;
 
 						case SC_CURSOR_LEFT:
-							Spawn(&RotateMan, (-ã / 32)(I64));
+//							Spawn(&RotateMan, (-ã / 32)(I64));
+							RotateMan(-ã / 32);
 							break;
 
 						case SC_CURSOR_UP:

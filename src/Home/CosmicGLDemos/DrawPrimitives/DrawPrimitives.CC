@@ -44,7 +44,7 @@ calls singing moist days excellence.", gr_palette[GREEN]);
 
 while (CharScan() == 0)
 {
-	Tex2DDebugDisp(&frameBuf, wX, wY);
+	Tex2DDebugDisp(&frameBuf, wX, wY);
 	Sleep(1);
 }
 

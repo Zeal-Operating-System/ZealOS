@@ -1071,6 +1071,8 @@ U0 Chess()
 	brd_dc = BrdNew;
 
 	SetMouseCursor;
+
+	PaletteSetLight(FALSE);
 	Fs->draw_it = &DrawIt;
 
 	try

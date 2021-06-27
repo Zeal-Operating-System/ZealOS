@@ -6,7 +6,7 @@ U0 InitDefines()
 		throw;
 	DefinePrint("UNITS_NUM", "%d", 4096 / SqrI64(rad) & ~1);
 	DefinePrint("CIRCLE_RAD", "%d", rad);
-	DefinePrint("MOVE_CIRCLES", "%d", 40 / rad);
+	DefinePrint("MOVE_CIRCLES", "%d", 65 / rad);
 
 	cols = (w - 8 - rad) / (2 * rad) & ~1 - 1;
 	DefinePrint("BORDER_X", "%d", (w + rad - cols * 2 * rad) / 2);

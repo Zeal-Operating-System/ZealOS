@@ -279,13 +279,7 @@ U0 BlkDevsInitAll()
 		"If running in a VM, ensure disks are organized under a SATA controller.\n\n"
 		"Rebooting in 10 seconds...\n";
 		Sleep(10*1000);
-//		Reboot; // illegal forward ref compiler error?
-		*0x472(U16 *) = 0; // Manual reboot
-		OutU8(0x70, 0x8F);
-		OutU8(0x71, 0x00);
-		OutU8(0x70, 0x00);
-		OutU8(0x92, InU8(0x92) | 1);
-		SysHlt;
+		Reboot;
 	}
 
 	#exe {
