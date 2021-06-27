@@ -434,6 +434,26 @@ U0 Shoot(Obj *o)
 	}
 }
 
+U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
+{//Make white noise for given number of mS.
+// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+	CSoundEffectFrame *ns;
+
+	if (mS > 0)
+	{
+		ns = MAlloc(sizeof(CSoundEffectFrame));
+		ns->type = SE_NOISE;
+		ns->duration = mS / 1000.0;
+		ns->ona1 = min_ona;
+		ns->ona2 = max_ona;
+		music.mute++;
+		SoundEffectTask(ns);
+		Sound;
+	}
+
+	return;
+}
+
 U0 AnimateTask(CTask *parent_task)
 {
 	F64  d, dx, dy, dt, dx2, dy2, t0 = tS;
@@ -528,7 +548,7 @@ U0 AnimateTask(CTask *parent_task)
 												score1 += 6;
 											else
 												score1 += 2;
-											Noise(250, 74, 74);
+											MyNoise(250, 74, 74);
 										}
 										else
 										{
@@ -536,7 +556,7 @@ U0 AnimateTask(CTask *parent_task)
 												score0 += 6;
 											else
 												score0 += 2;
-											Noise(250, 86, 86);
+											MyNoise(250, 86, 86);
 										}
 										last_owner = o;
 									}
@@ -595,7 +615,7 @@ U0 AnimateTask(CTask *parent_task)
 											if (o == human && t0 > o->foul_t0 + 1.0 &&
 												dt && d / dt>FOUL_VELOCITY_THRESHOLD && objs[j].team)
 											{
-												Noise(250, 62, 62);
+												MyNoise(250, 62, 62);
 												score1 += 1;
 												foul_t_end = t0 + 1.0;
 											}
@@ -624,14 +644,14 @@ U0 AnimateTask(CTask *parent_task)
 					o->x = parent_task->pix_width - COURT_BORDER - 1 - o->radius;
 					o->DxDt = -COLLISION_DAMP * o->DxDt;
 					if (o == ball)
-						Noise(10, 74, 86);
+						MyNoise(10, 74, 86);
 				}
 				if (o->x - o->radius < COURT_BORDER)
 				{
 					o->x = COURT_BORDER + o->radius;
 					o->DxDt = -COLLISION_DAMP * o->DxDt;
 					if (o == ball)
-						Noise(10, 74, 86);
+						MyNoise(10, 74, 86);
 				}
 
 				if (o->y + o->radius * 2 >= (parent_task->pix_height - COURT_BORDER) * 2)
@@ -639,14 +659,14 @@ U0 AnimateTask(CTask *parent_task)
 					o->y = (parent_task->pix_height - COURT_BORDER) * 2 - 1 - o->radius * 2;
 					o->DyDt = -COLLISION_DAMP * o->DyDt;
 					if (o == ball)
-						Noise(10, 74, 86);
+						MyNoise(10, 74, 86);
 				}
 				if (o->y - o->radius * 2 < 2 * COURT_BORDER)
 				{
 					o->y = COURT_BORDER * 2 + o->radius * 2;
 					o->DyDt = -COLLISION_DAMP*  o->DyDt;
 					if (o == ball)
-						Noise(10, 74, 86);
+						MyNoise(10, 74, 86);
 				}
 
 				if (o->z - o->radius * 2 < 0)
@@ -654,7 +674,7 @@ U0 AnimateTask(CTask *parent_task)
 					o->z = o->radius * 2;
 					o->DzDt = -COLLISION_DAMP * o->DzDt;
 					if (o->DzDt > ROLL_VELOCITY_THRESHOLD)
-						Noise(10, 74, 86);
+						MyNoise(10, 74, 86);
 					if (o != ball)
 						o->DzDt = 0;
 				}

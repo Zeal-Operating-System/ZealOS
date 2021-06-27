@@ -702,6 +702,26 @@ U0 ShipFix(Obj *tmpo, F64 d)
 			d -= 20.0 / (FIRE_WIDTH * FIRE_HEIGHT);
 }
 
+U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
+{//Make white noise for given number of mS.
+// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+	CSoundEffectFrame *ns;
+
+	if (mS > 0)
+	{
+		ns = MAlloc(sizeof(CSoundEffectFrame));
+		ns->type = SE_NOISE;
+		ns->duration = mS / 1000.0;
+		ns->ona1 = min_ona;
+		ns->ona2 = max_ona;
+		music.mute++;
+		SoundEffectTask(ns);
+		Sound;
+	}
+
+	return;
+}
+
 U0 Combat(F64 period)
 {
 	F64		 d;
@@ -744,7 +764,7 @@ U0 Combat(F64 period)
 					}
 					if (tS > next_noise)
 					{
-						Noise(100, 29, 46);
+						MyNoise(100, 29, 46);
 						next_noise = tS + 0.1;
 					}
 				}
@@ -762,7 +782,7 @@ U0 Combat(F64 period)
 					}
 					if (tS > next_noise)
 					{
-						Noise(25, 62, 86);
+						MyNoise(25, 62, 86);
 						next_noise = tS + 0.025;
 					}
 				}

@@ -1027,6 +1027,26 @@ U0 MyDerivative(CMathODE *ode, F64, COrder2D3 *, COrder2D3 *)
 	}
 }
 
+U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
+{//Make white noise for given number of mS.
+// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+	CSoundEffectFrame *ns;
+
+	if (mS > 0)
+	{
+		ns = MAlloc(sizeof(CSoundEffectFrame));
+		ns->type = SE_NOISE;
+		ns->duration = mS / 1000.0;
+		ns->ona1 = min_ona;
+		ns->ona2 = max_ona;
+		music.mute++;
+		SoundEffectTask(ns);
+		Sound;
+	}
+
+	return;
+}
+
 U0 CheckDamage()
 {
 	I64 	 i, j, death_score;
@@ -1202,7 +1222,7 @@ U0 CheckDamage()
 				tmpsp->exploding = TRUE;
 				tmpsp->die_time = tS;
 				tmpsp->die_timeout = tS + 0.75;
-				Noise(750, 74, 93);
+				MyNoise(750, 74, 93);
 				if (tmpsp->type == ST_HUMAN1)
 					game_over = TRUE;
 			}
@@ -1275,7 +1295,7 @@ U0 FireOneGun(Ship *tmpsp, I64 n, F64 r, F64 fuse_time)
 	D3SubEqu(&tmpsp->p[n].DxDt, &p);
 	tmpsp->reload_timeout = tS + r / tmpsp->fire_rate;
 	ona = Freq2Ona(500 / r);
-	Noise(100, ona, ona + 12);
+	MyNoise(100, ona, ona + 12);
 }
 
 U0 FireOneMissile(Ship *tmpsp, I64 n)
@@ -1428,7 +1448,7 @@ U0 ExpireMissiles()
 				tmpmi->p_front.mass = 10.0; //They go flying, if too light.
 				tmpmi->p_back.mass = 10.0;
 				tmpmi->exploding = TRUE;
-				Noise(50, 93, 105);
+				MyNoise(50, 93, 105);
 			}
 			else if (tS > tmpmi->die_timeout)
 				MissileDel(tmpmi);

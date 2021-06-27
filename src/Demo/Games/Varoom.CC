@@ -723,7 +723,7 @@ U0 CleanUp()
 
 U0 Varoom()
 {
-	I64 sc;
+	I64 sc, last = counts.timer;
 
 	Bool is_up_pressed;
 	Bool is_down_pressed;
@@ -760,6 +760,7 @@ U0 Varoom()
 		DocCursor;
 		DocClear;
 		Init;
+		PaletteSetLight(FALSE);
 		Fs->draw_it = &DrawIt;
 		Fs->animate_task = Spawn(&AnimateTask, NULL, "Animate",, Fs);
 		while (TRUE)
@@ -771,12 +772,12 @@ U0 Varoom()
 			is_nl_pressed		= Bt(kbd.down_bitmap, sc_nl);
 			is_esc_pressed		= Bt(kbd.down_bitmap, SC_ESC);
 
-			if (is_left_pressed)	c[0].dé		-= .0000015;
-			if (is_right_pressed)	c[0].dé		+= .0000015;
-			if (is_up_pressed) 		c[0].speed  += .004;
+			if (is_left_pressed)	c[0].dé		-= .000003 * (counts.timer - last);
+			if (is_right_pressed)	c[0].dé		+= .000003 * (counts.timer - last);
+			if (is_up_pressed) 		c[0].speed  += .01 * (counts.timer - last);
 			if (is_down_pressed)
 			{
-				c[0].speed -= .01;
+				c[0].speed -= .03 * (counts.timer - last);
 				if (c[0].speed < 0)
 					c[0].speed = 0;
 			}
@@ -788,9 +789,12 @@ U0 Varoom()
 			if (is_esc_pressed)
 				goto vr_done;
 
+			last = counts.timer;
+
 			LBts(&Fs->task_flags, TASKf_IDLE);
 			Yield;
 			LBtr(&Fs->task_flags, TASKf_IDLE);
+
 
 /*			switch (KeyGet(&sc))
 			{

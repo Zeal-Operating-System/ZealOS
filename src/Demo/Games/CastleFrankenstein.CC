@@ -565,7 +565,7 @@ U0 MoveMan(F64 é)
 }
 
 //#define MICRO_STEPS 	4
-#define MICRO_STEPS 	24
+#define MICRO_STEPS 	32
 U0 RotateMan(F64 d)
 {
 	I64 i;
@@ -632,11 +632,13 @@ U0 CastleFrankenstein()
 						case SC_CURSOR_RIGHT:
 //							Spawn(&RotateMan, (ã / 32)(I64));
 							RotateMan(ã / 32);
+							FlushMessages;
 							break;
 
 						case SC_CURSOR_LEFT:
 //							Spawn(&RotateMan, (-ã / 32)(I64));
 							RotateMan(-ã / 32);
+							FlushMessages;
 							break;
 
 						case SC_CURSOR_UP:

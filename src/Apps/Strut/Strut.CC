@@ -369,6 +369,26 @@ U0 CleanUp()
 	}
 }
 
+U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
+{//Make white noise for given number of mS.
+// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+	CSoundEffectFrame *ns;
+
+	if (mS > 0)
+	{
+		ns = MAlloc(sizeof(CSoundEffectFrame));
+		ns->type = SE_NOISE;
+		ns->duration = mS / 1000.0;
+		ns->ona1 = min_ona;
+		ns->ona2 = max_ona;
+		music.mute++;
+		SoundEffectTask(ns);
+		Sound;
+	}
+
+	return;
+}
+
 U0 PlayShip()
 {
 	I64  arg1, arg2;
@@ -417,7 +437,7 @@ U0 PlayShip()
 						case '0'...'9':
 							if (tS > last_noise + 0.25)
 							{
-								Noise(250, 18, 46);
+								MyNoise(250, 18, 46);
 								last_noise = tS;
 							}
 							break;
