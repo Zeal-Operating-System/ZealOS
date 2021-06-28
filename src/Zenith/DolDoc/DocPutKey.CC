@@ -440,13 +440,19 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 									case SC_F7:
 										if (sc & SCF_KEY_DESC)
 										{
-											KeyDescSet("Cmd /God Word");
+											if (sc & SCF_SHIFT)
+												KeyDescSet("Cmd /God Passage");
+											else
+												KeyDescSet("Cmd /God Word");
 										}
 										else
 										{
-											FifoU8Flush(divine.fifo);
-											DivineBitsInsert(DIVN_GOOD_BITS, KbdMouseEventTime >> DIVN_BAD_BITS);
-											DivineWord;
+											FifoU8Flush(god.fifo);
+											GodBitsInsert(GOD_GOOD_BITS, KbdMouseEventTime >> GOD_BAD_BITS);
+											if (sc & SCF_SHIFT)
+												GodBiblePassage;
+											else
+												GodWord;
 										}
 										break;
 								}

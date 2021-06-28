@@ -69,7 +69,7 @@ $FG$I didn't like that, so I made parentheses optional on calls with no args and
 
 The syntax change created an ambiguity when specifying function addresses, like for calling $LK,"QuickSort",A="MN:QuickSort"$().	To resolve it, I	made a '$FG,2$&$FG$' required in front of function names when specifying an address of a function, which is better anyway.
 
-Once I was no longer using standard C/C++ syntax, I decided to change everything I didn't like and call it $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.  Here are the new $LK,"operator precedence",A="FF:::/Doc/CosmiC.DD,operator precedence"$ rules.
+Once I was no longer using standard C/C++ syntax, I decided to change everything I didn't like and call it $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$. Here are the new $LK,"operator precedence",A="FF:::/Doc/CosmiC.DD,operator precedence"$ rules. It's Biblical! See $LK,"Luke 5:37",A="BF:Luke,5:37"$.
 
 There are no object files in ZenithOS and, normally, you don't make executable files either, but you can.  That's known as $LK,"Ahead-of-Time",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ compilation.  Instead, you $LK,"Just in Time",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ compile.
 

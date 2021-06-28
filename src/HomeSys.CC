@@ -27,7 +27,7 @@ U0 StartUpTasks()
 	"Boot Time:%7.3fs\n", tS;
 	XTalk(user, "Cd;#include \"Once\";\n");
 	Silent; //no output to screen
-	ACInit("/*");
+	ACInit("/*;!*/Bible.TXT");
 	Silent(OFF); //no output to screen
 
 	if (sys_boot_src.u16[0] != BOOT_SRC_RAM)

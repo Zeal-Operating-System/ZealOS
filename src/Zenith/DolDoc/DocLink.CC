@@ -12,6 +12,7 @@
 "PF:haystack_filename,needle_str"
 "PF:haystack_filename,needle_str:occurnum"
 "PL:filename,linenum"
+"BF:haystack_bible_book,needle_str"
 "DN:word"
 "DN:word,defnum"
 "HI:index"
@@ -33,14 +34,15 @@ To edit a doc structure already in memory. See $LK,"SpriteEdText",A="MN:SpriteEd
 #define LK_PLAIN		5
 #define LK_PLAIN_FIND 	6
 #define LK_PLAIN_LINE 	7
-#define LK_DEF			8
-#define LK_HELP_INDEX 	9
-#define LK_ADDR 		10
-#define LK_DOC			11 //See $LK,"SpriteEdText",A="MN:SpriteEdText"$()
-#define LK_DOC_ANCHOR 	12
-#define LK_DOC_FIND 	13
-#define LK_DOC_LINE 	14
-#define LK_PLACE_ANCHOR 15
+#define LK_BIBLE_FIND	8
+#define LK_DEF			9
+#define LK_HELP_INDEX 	10
+#define LK_ADDR 		11
+#define LK_DOC			12 //See $LK,"SpriteEdText",A="MN:SpriteEdText"$()
+#define LK_DOC_ANCHOR 	13
+#define LK_DOC_FIND 	14
+#define LK_DOC_LINE 	15
+#define LK_PLACE_ANCHOR 16
 
 public U8 *DocEntryLink(CDoc *doc, CDocEntry *doc_e)
 {//MAlloc new str, either tag or aux_str if link.
@@ -87,6 +89,9 @@ Bool DocFileEd(I64 _type, U8 *filename, U8 *needle_str, I64 *_num, I64 edf_dof_f
 				flags = DOCF_PLAIN_TEXT | DOCF_NO_CURSOR;
 			case LK_DOC_LINE:
 				type = LK_FILE_LINE;
+				break;
+			case LK_BIBLE_FIND:
+				flags = DOCF_PLAIN_TEXT | DOCF_NO_CURSOR;
 				break;
 		}
 
@@ -142,6 +147,9 @@ Bool DocFileEd(I64 _type, U8 *filename, U8 *needle_str, I64 *_num, I64 edf_dof_f
 					case LK_FILE_FIND:
 						res = DocFind(doc,, needle_str, *_num);
 						break;
+					case LK_BIBLE_FIND:
+						res = DocFind(doc, *_num, needle_str);
+						break;
 
 					default:
 						DocCenter(doc);
@@ -190,7 +198,7 @@ Bool DocFileEd(I64 _type, U8 *filename, U8 *needle_str, I64 *_num, I64 edf_dof_f
 
 public I64 EdLinkConvert(U8 *link_st, U8 **_filename=NULL, U8 **_needle_str=NULL, I64 *_num=NULL, I64 edf_dof_flags=0)
 {//$LK,"Editor Link",A="MN:LK_FILE"$--> filename, needle_str and line number.
-	U8			*st, *ptr, *filename = NULL, *needle_str = NULL, *filename2;
+	U8			*st, *ptr, *src, *filename = NULL, *needle_str = NULL, *filename2;
 	I64			 res, i, num = 1;
 	CHashSrcSym	*tmph;
 
@@ -247,6 +255,29 @@ public I64 EdLinkConvert(U8 *link_st, U8 **_filename=NULL, U8 **_needle_str=NULL
 			case LK_HELP_INDEX:
 				filename = StrNew(filename2);
 				goto lc_done;
+
+			case LK_BIBLE_FIND:
+				if (ptr = StrLastOcc(filename2, ","))
+				{
+					*ptr = 0;
+					src = ptr + 1;
+					while (*src)
+					{//We do not allow ending verse
+						if (*src == '-')
+							*src = 0;
+						src++;
+					}
+					needle_str = StrNew(ptr + 1);
+				}
+				i = DefineMatch(filename2, "ST_BIBLE_BOOKS", LMF_IGNORE_CASE);
+				if (i < 0)
+					res = -1;
+				else
+				{
+					num = Str2I64(DefineSub(i, "ST_BIBLE_BOOK_LINES"));
+					filename2 = BIBLE_FILENAME;
+				}
+				break;
 
 			case LK_FILE_LINE:
 			case LK_PLAIN_LINE:
@@ -331,6 +362,15 @@ public Bool DocLinkCheck(CDoc *doc, U8 *link_st)
 				res = FileFind(filename,, FUF_JUST_FILES | FUF_SCAN_PARENTS);
 				break;
 
+			case LK_BIBLE_FIND:
+				st = StrNew(link_st + 3);
+				if (StrOcc(st, ','))
+					StrLastRemove(st, ",");
+				if (DefineMatch(st, "ST_BIBLE_BOOKS", LMF_IGNORE_CASE) >= 0)
+					res = TRUE;
+				Free(st);
+				break;
+
 			default://TODO: Need to validate HI: and DN:
 				if (Ed(link_st, EDF_BAIL))
 					res = TRUE;
@@ -342,7 +382,7 @@ public Bool DocLinkCheck(CDoc *doc, U8 *link_st)
 	return res;
 }
 
-public U8 *DocLinkFile(U8 *link_st)
+public U8 *DocLinkFile(U8 *link_st, CTask *mem_task=NULL)
 {//Return the file for an $LK,"Editor Link Types",A="MN:LK_FILE"$.
 	U8 *filename = NULL, *st, *res = NULL;
 
@@ -360,6 +400,9 @@ public U8 *DocLinkFile(U8 *link_st)
 				st = FileNameAbs(filename, FUF_SCAN_PARENTS);
 				res = StrNew(st);
 				Free(st);
+				break;
+			case LK_BIBLE_FIND:
+				res = StrNew(BIBLE_FILENAME, mem_task);
 				break;
 		}
 		Free(filename);

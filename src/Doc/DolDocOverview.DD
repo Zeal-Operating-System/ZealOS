@@ -99,7 +99,7 @@ See $LK,"::/Demo/DolDoc/CursorMove.CC"$.
 
 $ID,-2$$TR,"AN Anchor"$
 $ID,2$The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the anchor.	I don't use these very often, but they're good sometimes.
-$ID,-2$$TR,"LK Link"$
+$ID,-2$$TR-C,"LK Link"$
 $ID,2$The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the link text.  With no aux the tag becomes the link text, as in example 3.
 
 See $LK,"Link Types",A="MN:LK_FILE"$.
@@ -114,9 +114,10 @@ Examples: <CTRL-t> to see
 6)$LK,"Manual page link",A="MN:Print"$
 7)$LK,"File line num link",A="FL:::/Kernel/KernelA.HH,200"$
 8)$LK,"File anchor link -- <CTRL-t> to see anchor after you click",A="FA:::/Demo/DolDoc/DemoDoc.DD,MyLittleAnchor"$
-9) $LK,"Help Index Link",A="HI:DolDoc"$.
-10) $LK,"Address Link",A="AD:0x11000"$.
-11) For in-memory document address links, see $LK,"SpriteEdText",A="MN:SpriteEdText"$().
+9)$LK,"Bible link",A="BF:Acts,2:3"$ The chapter:verse actually just does a text search.
+10) $LK,"Help Index Link",A="HI:DolDoc"$.
+11) $LK,"Address Link",A="AD:0x11000"$.
+12) For in-memory document address links, see $LK,"SpriteEdText",A="MN:SpriteEdText"$().
 
 $ID,-2$$TR,"BT Bttn"$
 $ID,2$See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.

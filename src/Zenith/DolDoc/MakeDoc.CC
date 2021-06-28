@@ -31,6 +31,9 @@ public class CDolDocGlobals
 } doldoc;
 MemSet(&doldoc, 0, sizeof(CDolDocGlobals));
 
+#help_index "God"
+#define BIBLE_FILENAME	"::/Misc/Bible.TXT"
+
 #include "DocExterns"
 #include "DocBin"
 #include "DocNew"

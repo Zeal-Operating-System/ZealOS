@@ -34,7 +34,8 @@ Insert
 	GraphicResource(,CH_CTRLR,0x41300000413);
 	FileName(,,0x3E0000003E);
 	DirName(,,0x23E0000023E);
-	DivineWord(,,0x4100000041);
+	GodWord(,,0x4100000041);
+	GodBiblePassage(,,0x24100000241);
 	IndentIn(,CH_CTRLI,0x41700000417);
 	IndentOut(,CH_CTRLI,0x61700000617);
 	WordWrapOn(,CH_CTRLW,0x41100000411);

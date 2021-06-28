@@ -97,4 +97,4 @@ U0 Palindrome(U8 *filename)
 	"Time:%9.5f\n", tS - t0;
 }
 
-Palindrome("/Misc/Vocab.DD");
+Palindrome(BIBLE_FILENAME);

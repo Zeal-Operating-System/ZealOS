@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----06/28/21 06:20:21----$IV,0$
+* Restored /Zenith/God directory, the $LK,"Bible",A="FI:::/Misc/Bible.TXT"$, $LK,"Bible Links",A="BF:Exodus,20:1"$, and $MA-X+PU,"GodBiblePassage",LM="GodBiblePassage;View;\n"$ with SHIFT-F7.
+
 $IV,1$----06/24/21 01:01:06----$IV,0$
 * Implemented PCI fall-back functions for when PCIBIOS is unsupported, to improve bare-metal support.
 * Abstracted $LK+PU,"PCI functions",A="FI:::/Kernel/PCI.CC"$ out from $LK+PU,"PCIBIOS",A="FI:::/Kernel/PCIBIOS.CC"$ file.
@@ -158,7 +161,7 @@ $IV,1$----02/23/20 02:36:28----$IV,0$
 $IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
 * Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
-* Removed the /Zenith/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/Zenith/Divination.CC",A="FI:::/Zenith/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:DivineWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
+* Removed the /Zenith/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/Zenith/Divination.CC",A="FI:::/Zenith/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:GodWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 
 $IV,1$----02/21/20 17:30:17----$IV,0$

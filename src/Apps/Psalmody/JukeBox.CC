@@ -101,7 +101,7 @@ Bool JBPutKey(CDoc *doc, U8 *, I64 ch, I64 sc)
 			{
 				for (i = 0; i < 5; i++)
 				{
-					st = MStrPrint("%s %s %s %s ", DivineWordStr, DivineWordStr, DivineWordStr, DivineWordStr);
+					st = MStrPrint("%s %s %s %s ", GodWordStr, GodWordStr, GodWordStr, GodWordStr);
 					DocTreeFAppend(tmpde->full_name, "Reward1/Reward2", "\"%s\"\n", st);
 					Free(st);
 				}

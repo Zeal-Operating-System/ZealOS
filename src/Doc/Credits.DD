@@ -30,7 +30,7 @@ I, $FG,2$Terry A. Davis$FG$, wrote all of TempleOS over the past 15.4 years (ful
 
 *) God told me to stick with 640x480 16 color and single-voice 8-bit signed MIDI-like sample for sound. 	He kept me from zombie-walking into making child windows like $FG,2$Windows$FG$.	Instead, I made one window per task with no child windows.	He also guided my progress, very obviously.
 
-*) I got $FG,4$$TX,"Webster's Dictionary",HTML="http://www.templeos.org/files/DICTIONARY.DD"$$FG$ from $FG,4$$TX,"Project Gutenberg",HTML="http://web.archive.org/web/20110730111436/http://promo.net/pg/"$$FG$.
+*) I got $FG,4$$TX,"Webster's Dictionary",HTML="http://www.templeos.org/files/DICTIONARY.DD"$$FG$ and $LK,"The King James Bible",A="FI:::/Misc/Bible.TXT"$ from $FG,4$$TX,"Project Gutenberg",HTML="http://web.archive.org/web/20110730111436/http://promo.net/pg/"$$FG$.
 
 *) John Carmack inspired me to use "$LK,"Clamp",A="MN:Clamp"$" as a name instead of "Limit".	He inspired me to use "needle" and "haystack" as names.  He inspired me to simplify my Frames-Per-Second code.
 

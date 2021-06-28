@@ -1478,6 +1478,14 @@ U0 DoPrompt()
 	DeathWait(&task, TRUE);
 }
 
+U0 DoNumBible()
+{
+	CTask *task = User;
+	XTalkWait(task, "#include \"::/Demo/DolDoc/NumBible\";\n");
+	Del("~/DemoNumBible.DD");
+	DeathWait(&task, TRUE);
+}
+
 U0 DoForm()
 {
 	CTask *task = User;
@@ -1656,7 +1664,7 @@ U0 OSTestSuite()
 	TS("RadixDort");		TSFile("::/Demo/RadixSort");
 	TS("MPAdd");			DoMPAdd;
 	TS("Primes"); 			TSFile("::/Demo/MultiCore/Primes");
-	TS("Palindrome"); 		TSFile("::/Demo/MultiCore/Palindrome");
+	TS("Palindrome");		if (FileFind(BIBLE_FILENAME)) TSFile("::/Demo/MultiCore/Palindrome");
 	TS("MPRadix");			if (mp_count > 1) TSFile("::/Demo/MultiCore/MPRadix");
 	TS("LoadTest"); 		if (mp_count > 1 && DriveIsWritable(':')) TSFileChar("::/Demo/MultiCore/LoadTest");
 	TS("MPPrint");			if (mp_count > 1) TSFile("::/Demo/MultiCore/MPPrint");
@@ -1764,6 +1772,7 @@ U0 OSTestSuite()
 	TS("Data"); 			TSFile("::/Demo/DolDoc/Data");
 	TS("CallBack"); 		TSFile("::/Demo/DolDoc/CallBack");
 	TS("ClassMeta");		TSFile("::/Demo/ClassMeta");
+	TS("NumBible");			if (DriveIsWritable('~')) DoNumBible;
 	TS("Form"); 			DoForm;
 	TS("ClickCallBack");	DoClickCallBack;
 	TS("MenuBttn"); 		DoMenuBttn;

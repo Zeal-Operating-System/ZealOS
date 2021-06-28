@@ -19,7 +19,7 @@ U0 DocInit()
 
 	DefineListLoad("ST_LINK_TYPES",
 
-				"FI\0FA\0FF\0FL\0MN\0PI\0PF\0PL\0DN\0HI\0AD\0AI\0AA\0AF\0AL\0");
+				"FI\0FA\0FF\0FL\0MN\0PI\0PF\0PL\0BF\0DN\0HI\0AD\0AI\0AA\0AF\0AL\0");
 
 	doldoc.hash = HashTableNew(512);
 	HashDefineListAdd("ST_DOC_CMDS",	DHT_DOC_CMD,	doldoc.hash);

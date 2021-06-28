@@ -16,6 +16,7 @@ I64 PopUpLinkType(Bool include_anchor)
 					"$$MU,\"To line in file\",LE=LK_FILE_LINE$$\n"
 					"$$MU,\"To man page\",LE=LK_MAN_PAGE$$\n"
 					"$$MU,\"To plain-text file\",LE=LK_PLAIN$$\n"
+					"$$MU,\"To Bible chapter line and verse\",LE=LK_BIBLE_FIND$$\n"
 					"$$MU,\"To str in plain-text file\",LE=LK_PLAIN_FIND$$\n"
 					"$$MU,\"To line in plain-text file\",LE=LK_PLAIN_LINE$$\n"
 					"$$MU,\"To Dictionary Definition\",LE=LK_DEF$$\n"
@@ -121,6 +122,19 @@ class CEdPlaceAnchor
 	Bool	pop_up,
 			quote 			format "$$CB,\"Quote\"$$\n",
 			hide			format "$$CB,\"Hide\"$$\n";
+};
+
+class CEdBibleLink
+{
+	U8		tag[512]		format "$$DA-P,A=\"Tag Text      :%s\"$$\n",
+			file[512];
+	I64		book			format "$$LS,D=\"ST_BIBLE_BOOKS\"$$\n";
+	U8		aux[512]		format "$$DA-P,A=\"Chapter Verse :%s\"$$\n";
+	I64		num;
+	U8		html_link[512]	format "$$DA-P,A=\"Html Link     :%s\"$$\n";
+	Bool	pop_up			format "$$CB,\"PopUp\"$$\n",
+			quote			format "$$CB,\"Quote\"$$\n",
+			hide;
 };
 
 class CEdDefLink
@@ -291,6 +305,18 @@ Bool GetLink(I64 type, U8 **_tag, U8 **_link, Bool *_pop_up, Bool *_quote, U8 **
 					else
 						*_tag = StrNew(e->tag);
 					*_link = StrNew(e->aux);
+				}
+				break;
+
+			case LK_BIBLE_FIND:
+				if (DocForm(e, "CEdBibleLink",,, ctrl_L_footer))
+				{
+					res = TRUE;
+					if (!*e->tag)
+						*_tag = MStrPrint("%Z,%s", e->book, "ST_BIBLE_BOOKS", e->aux);
+					else
+						*_tag = StrNew(e->tag);
+					*_link = MStrPrint("BF:%Z,%s", e->book, "ST_BIBLE_BOOKS", e->aux);
 				}
 				break;
 
