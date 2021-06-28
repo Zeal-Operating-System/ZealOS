@@ -1,12 +1,18 @@
 
 $FG,5$Using this Library$FG$
 $HL,1$#include "MakeCosmicGL"$HL,0$
-$FG,2$Simply include MakeCosmicGL.CC located at the root of this repository in your
-project. The #include's beneath each title in the documentation are to help 
-you find where these functions/classes are implemented.
+$FG,2$To rebuild, simply include MakeCosmicGL.CC located at the root of this 
+repository. By default, this entire library is compiled on boot, so this should
+not be necessary unless you modify the library itself. The #include's beneath
+each title in the documentation are to help you find where these
+functions/classes are implemented.
+
+Every function has extensive JavaDoc/Doxygen style documentation, so be sure
+to read those. Not every function is included in this document yet, however
+they are self-explanatory (such as Draw functions).
 
 $FG,5$Creating/Freeing Textures and Framebuffers$FG$ 
-$HL,1$#include "Texture"
+$HL,1$#include "Texture/Texture"
 $HL,0$
 $FG,2$CTex2D is used for both textures and framebuffers:$FG$
 
@@ -49,7 +55,7 @@ non-color data (depth) are rendered in grayscale.$FG$
 $HL,1$U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y);$HL,0$	$FG,2$Copies directly to OS display buffer rather than window, will be replaced.$FG$
 
 $FG,5$Loading Textures From Common Formats$FG$
-$HL,1$#include "TextureImport"
+$HL,1$#include "Texture/TextureImport"
 $HL,0$
 $FG,5$WAD Textures$FG$
 $FG,2$WAD files were a common method of storing textures in early game engines, 
@@ -111,7 +117,7 @@ $FG,2$It returns the lump index, or -1 if not found. **lump can be optionally us
 the handle to the target lump.$FG$
 
 $FG,5$Shaders$FG$
-$HL,1$#include "Shader"
+$HL,1$#include "Render/Shader"
 $HL,0$
 $FG,2$Shaders are functions that calculate the vertex positions of each triangle in
 NDC (normalized device coordinates), and then calculate the color of each
@@ -173,7 +179,8 @@ $HL,1$U0 (*VertShd)(CTri *tri, F64 *vertOutBuf,, U8 *mdlPtr, U8 *uniforms, I64 i
 
 $FG,3$*tri$FG$		$FG,2$OUTPUT: Final triangle coordinates in NDC$FG$	
 $FG,3$*mdlPtr$FG$		$FG,2$INPUT:  Pointer to model data.$FG$	
-$FG,3$*vertOutBuf$FG$	$FG,2$OUTPUT: Array of attributes to be interpolated for the frag shader. In order of: [V0 Attr, V1 Attr, V2 Attr] $FG$
+$FG,3$*vertOutBuf$FG$	$FG,2$OUTPUT: Array of attributes to be interpolated for the frag shader.
+					In order of: [V0 Attr, V1 Attr, V2 Attr] $FG$
 $FG,3$*uniforms$FG$	$FG,2$INPUT:  Pointer to uniforms.$FG$
 $FG,3$iTri$FG$		$FG,2$INPUT:  Current triangle.$FG$
 $FG,3$nTris$FG$		$FG,2$INPUT:  Total number of triangles in model.$FG$
@@ -214,8 +221,8 @@ shd.FragShd = &fShader;$HL,0$
 
 
 $FG,5$Rendering$FG$
-$HL,1$#include "Math"
-#include "Rasterize"
+$HL,1$#include "Math/Math"
+#include "Render/Rasterize"
 $HL,0$
 $FG,2$After models, textures, and shaders are initialized, you can render with these
 functions. Currently only triangles can be rendered, however support for all

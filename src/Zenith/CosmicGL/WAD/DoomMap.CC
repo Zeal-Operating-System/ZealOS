@@ -50,11 +50,12 @@ class CDoomMap
 	@param[in,out] map			Doom map to load into.
 	@param[in]     wad			WAD to load from.
 	@param[in]     lumpIndex	Index of BLOCKMAP lump in WAD.
-*/
+
 U0 DoomMapLoadBlockmap(CDoomMap *map, CWAD *wad, I64 lumpIndex)
 {
 
 }
+*/
 
 /**
 	@internal
@@ -110,11 +111,12 @@ U0 DoomMapLoadVertexes(CDoomMap *map, CWAD *wad, I64 lumpIndex)
 	@param[in,out] map			Doom map to load into.
 	@param[in]     wad			WAD to load from.
 	@param[in]     lumpIndex	Index of SECTORS lump in WAD.
-*/
+
 U0 DoomMapLoadSectors(CDoomMap *map, CWAD *wad, I64 lumpIndex)
 {
 
 }
+*/
 
 /**
 	@internal
@@ -204,12 +206,13 @@ U0 DoomMapLoadLines(CDoomMap *map, CWAD *wad, I64 lumpIndex)
 	bounding boxes for sectors.
 
 	@param[in,out] map	Map to modify.
-*/
+
 U0 DoomMapGroupLines(CDoomMap *map)
 {
 	// Look up sector number for each subsector
 	
 }
+*/
 
 /**
 	@ingroup Doom
@@ -254,10 +257,11 @@ U0 DoomMapLoad(CDoomMap *map, CWAD *wad, U8 *mapName)
 	@brief Free Doom map.
 
 	@param[in,out] map	Doom map to free.
-*/
+
 U0 DoomMapFree(CDoomMap *map)
 {
 	// Free(map->vertexes);
 	// Free(map->lines);
 	// Free(map->sides);
 }
+*/

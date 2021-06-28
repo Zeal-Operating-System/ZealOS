@@ -148,11 +148,12 @@ U0 Tex2DLoadWADSprite(CTex2D *tex, CWAD *wad, U8 *sprName)
 	@param[in,out] tex		Uninitialized texture to load into.
 	@param[in]     wad		WAD file to load from.
 	@param[in]     wallName	Name of wall in WAD file to load.
-*/
+
 U0 Tex2DLoadWADWall(CTex2D *tex, CWAD *wad, U8 *wallName)
 {
 
 }
+*/
 
 /**
 	@internal
@@ -197,8 +198,7 @@ class CBMPHeader
 	@param[in,out] tex		Uninitialized texture to load into.
 	@param[in]     fname	File name of BMP.
 */
-U0 Tex2DLoadBMP(CTex2D *tex, U8 *fname, Bool mask = FALSE, 
-	Bool invert = TRUE)
+U0 Tex2DLoadBMP(CTex2D *tex, U8 *fname, Bool mask = FALSE)
 {
 	U8 *bmp = FileRead(fname);
 
@@ -225,7 +225,7 @@ U0 Tex2DLoadBMP(CTex2D *tex, U8 *fname, Bool mask = FALSE,
 	I64 xPx, yPx;
 	
 	// For checking if a color channel is greater than 0 for masks
-	U8 channel;
+	// U8 channel;
 
 	if (mask)
 	{

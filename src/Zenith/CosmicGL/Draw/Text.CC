@@ -40,7 +40,6 @@ U0 DrawString(CTex2D *tex, I64 x, I64 y, U8 *str, CBGR24 color,
 	I64 cur = 0;	// String cursor
 	I64 xCur = x;	// Screen cursors 
 	I64 yCur = y;
-	U8 char = 0;	// Character to draw
 
 	while (str[cur] != NULL)
 	{

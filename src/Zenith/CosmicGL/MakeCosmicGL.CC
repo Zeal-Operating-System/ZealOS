@@ -7,7 +7,6 @@ Cd(__DIR__);;
 #include "Draw/Texture"
 #include "Draw/Rectangle"
 #include "Draw/Text"
-#include "Draw/UISmooth"
 #include "Render/Shader"
 #include "Render/Rasterize"
 #include "WAD/WADTypes"

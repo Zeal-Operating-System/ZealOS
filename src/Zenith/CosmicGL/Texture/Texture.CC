@@ -163,8 +163,7 @@ U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y)
 	@brief Sample color from color textures at normalized UV coordinate 
 	(0.0-1.0). Coordinates over 1.0 loop causing a repeating texture effect. 
 
-	Does not handle filtering or mip maps (yet). The MemCopy's are dumb
-	I will replace with simply returning the color soon.
+	Does not handle filtering or mip maps (yet).
 
 	@param[in,out] col	Sets color at this address to sampled color.
 	@param[in]     tex	Texture to sample from.
@@ -178,7 +177,7 @@ U0 Tex2DSampleNorm(CBGR24 *col, CTex2D *tex, F64 u, F64 v)
 	x %= tex->w;
 	y %= tex->h;
 
-	MemCopy(col, &tex->rawBuf[x + y * tex->w], sizeof(CBGR24));
+	*col = tex->rawBuf[x + y * tex->w];
 }
 
 /**
@@ -195,5 +194,5 @@ U0 Tex2DSampleCoord(CBGR24 *col, CTex2D *tex, I64 u, I64 v)
 	u %= tex->w;
 	v %= tex->h;
 
-	MemCopy(col, &tex->rawBuf[u + v * tex->w], sizeof(CBGR24));
+	*col = tex->rawBuf[u + v * tex->w];
 }

@@ -2,6 +2,8 @@
 	@ingroup Render
 	@brief Renders triangles to texture.
 
+	Limitations: Triangles must be clipped to NDC.
+
 	@param[in]     shd		Shader.
 	@param[in,out] frameBuf	Color texture to render to.
 	@param[in,out] depthBuf	Depth texture to render to and check against.
@@ -21,14 +23,12 @@ U0 RenderTris(CShader *shd, CTex2D *frameBuf, CTex2D *depthBuf, U8 *mdl,
 	F64 right_x;
 	I64 y, lX, rX;
 	I64 left_index, right_index;
-	I64 width;
 
 	I64 i, j, temp;
 	F64 ftemp;
 	F64 z; // Interpolated value to depth check
 
 	// Stores baryocentric coordinates for current fragment
-	F64 u, v, w;
 	F64 bc[3];
 
 	// Vertex coordinates. P is the point to get baryocentric coordinate for
@@ -201,7 +201,7 @@ U0 RenderTris(CShader *shd, CTex2D *frameBuf, CTex2D *depthBuf, U8 *mdl,
 							// Get barycentric coordinates (u, v, w)
 							p.x = i;
 							p.y = y;
-							Barycentric2(&p, &a, &b, &c, &bc[VI[0]], &bc[VI[1]], &bc[VI[2]]);
+							Vec2Barycentric(&p, &a, &b, &c, &bc[VI[0]], &bc[VI[1]], &bc[VI[2]]);
 
 							z = (bc[VI[0]] * cTri.p[VI[0]].z) + (bc[VI[1]] * cTri.p[VI[1]].z) + (bc[VI[2]] * cTri.p[VI[2]].z);
 
@@ -213,10 +213,10 @@ U0 RenderTris(CShader *shd, CTex2D *frameBuf, CTex2D *depthBuf, U8 *mdl,
 									fIn[j] = (vOut[j] * bc[0]) + (vOut[j+attrBufSize] * bc[1]) + (vOut[j+(2*attrBufSize)] * bc[2]);
 								}
 
-								depthBuf->depthBuf[y * frameBuf->w + i] = z;
-								shd->FragShd(&fragColor, fIn, uniforms);
 								left_index = y * frameBuf->w + i;
-								MemSetU32(frameBuf->rawBuf + left_index, fragColor, 1);
+								depthBuf->depthBuf[left_index] = z;
+								shd->FragShd(&fragColor, fIn, uniforms);
+								frameBuf->rawBuf[left_index] = fragColor;
 							}
 						}
 					} 
@@ -291,7 +291,7 @@ U0 RenderTris(CShader *shd, CTex2D *frameBuf, CTex2D *depthBuf, U8 *mdl,
 							// Get barycentric coordinates (u, v, w)
 							p.x = i;
 							p.y = y;
-							Barycentric2(&p, &a, &b, &c, &bc[VI[0]], &bc[VI[1]], &bc[VI[2]]);
+							Vec2Barycentric(&p, &a, &b, &c, &bc[VI[0]], &bc[VI[1]], &bc[VI[2]]);
 
 							z = (bc[VI[0]] * cTri.p[VI[0]].z) + (bc[VI[1]] * cTri.p[VI[1]].z) + (bc[VI[2]] * cTri.p[VI[2]].z);
 
@@ -303,10 +303,10 @@ U0 RenderTris(CShader *shd, CTex2D *frameBuf, CTex2D *depthBuf, U8 *mdl,
 									fIn[j] = (vOut[j] * bc[0]) + (vOut[j+attrBufSize] * bc[1]) + (vOut[j+(2*attrBufSize)] * bc[2]);
 								}
 
-								depthBuf->depthBuf[y * frameBuf->w + i] = z;
-								shd->FragShd(&fragColor, fIn, uniforms);
 								left_index = y * frameBuf->w + i;
-								MemSetU32(frameBuf->rawBuf + left_index, fragColor, 1);
+								depthBuf->depthBuf[left_index] = z;
+								shd->FragShd(&fragColor, fIn, uniforms);
+								frameBuf->rawBuf[left_index] = fragColor;
 							}
 						}
 					}
