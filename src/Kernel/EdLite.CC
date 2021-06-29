@@ -22,7 +22,7 @@ U0 EdLiteUpdate(CLine *head, CLine *cur_line, I64 cur_col, I64 line_start_col)
 			k = 0;
 			for (j = 0; j < cur_col; j++)
 				if (tmpl->line[j] == '\t')
-					k = (k + 4) & ~3;
+					k = (k + 8) & ~7;
 				else
 					k++;
 			cursor_col = k;
@@ -36,7 +36,7 @@ U0 EdLiteUpdate(CLine *head, CLine *cur_line, I64 cur_col, I64 line_start_col)
 			while (ch = *st++)
 			{
 				if (ch == '\t')
-					k2 = (k + 4) & ~3;
+					k2 = (k + 8) & ~7;
 				else
 					k2 = k + 1;
 				if (line_start_col <= k < line_start_col + text.cols)

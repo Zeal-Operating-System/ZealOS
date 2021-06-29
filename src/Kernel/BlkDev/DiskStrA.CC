@@ -327,7 +327,7 @@ returns default.
 ("/Kernel/KHashA.CC",NULL,NULL) returns "D:/Kernel"
 ("/Kernel",NULL,"PRJ")					returns "D:/Kernel/Kernel.PRJ"
 ("/Kernel/BlkDev",NULL,"PRJ") 					returns "D:/Kernel/Kernel.PRJ"
-("/Apps/Psalmody","Load","HC")	returns "D:/Apps/Psalmody/Load.CC"
+("/Apps/Psalmody","Load","CC")	returns "D:/Apps/Psalmody/Load.CC"
 */
 	U8 *st = DirNameAbs(dirname), *st2, *st3, *res, *default = NULL, *ext;
 

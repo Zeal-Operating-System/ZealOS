@@ -305,7 +305,7 @@ public F64 PopUpRangeF64Log(F64 lo, F64 hi, I64 steps, U8 *format="%9.4f", U8 *h
 public I64 ZenithFile(U8 *filename, Bool warn_ext=TRUE)
 {//Make zenith_task execute file.
 	Bool okay = TRUE;
-	U8	*name = FileNameAbs(filename), *name2 = ExtDefault(name, "HC");
+	U8	*name = FileNameAbs(filename), *name2 = ExtDefault(name, "CC");
 	I64  res = 0;
 
 	if (warn_ext && !FilesFindMatch(name2, FILEMASK_JIT) && !PopUpCancelOk(ST_WARN_ST "Not .CC File\n\n"))
@@ -321,7 +321,7 @@ public I64 ZenithFile(U8 *filename, Bool warn_ext=TRUE)
 public I64 PopUpFile(U8 *filename, Bool warn_ext=TRUE, CTask *parent=NULL, CTask **_pu_task=NULL)
 {//$LK,"ExeFile2",A="MN:ExeFile2"$() in $LK,"PopUp",A="MN:PopUp"$ task. Cont as User.
 	Bool okay = TRUE;
-	U8	*st, *name = FileNameAbs(filename), *name2 = ExtDefault(name, "HC");
+	U8	*st, *name = FileNameAbs(filename), *name2 = ExtDefault(name, "CC");
 	I64  res = 0;
 
 	if (warn_ext && !FilesFindMatch(name2, FILEMASK_JIT) && !PopUpCancelOk(ST_WARN_ST "Not .CC File\n\n"))
@@ -340,7 +340,7 @@ public I64 PopUpFile(U8 *filename, Bool warn_ext=TRUE, CTask *parent=NULL, CTask
 
 public I64 PopUpRunFile(U8 *filename, I64 ccf_flags=0, ...)
 {//$LK,"ExeFile",A="MN:ExeFile"$() with args using $LK,"LastFun",A="MN:LastFun"$() in $LK,"PopUp",A="MN:PopUp"$ task.
-	U8 *st, *name = FileNameAbs(filename), *name2 = ExtDefault(name, "HC");
+	U8 *st, *name = FileNameAbs(filename), *name2 = ExtDefault(name, "CC");
 	I64 res = 0;
 
 	st = MStrPrint("\"$$$$WW+H,1$$$$\";ExeFile2(\"%s\",0x%X);LastFun(0x%X,0x%X);", name2, ccf_flags, argc, argv);

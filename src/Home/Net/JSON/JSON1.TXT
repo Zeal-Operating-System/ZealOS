@@ -1,0 +1,28 @@
+{
+	"key1":		"value1",
+	"key2":		"value2",
+	"key3":		"value3",
+	"hex":		0x333,
+	"floats":	444.4,
+	"twos":		222222,
+	"listkey":
+	[
+		123,
+		456,
+		789,
+		99.99,
+		"stringval",
+		{
+			"objlist":
+				[1, 2, 3, 4, 5, 6, 7],
+			"objobj":
+			{
+				"objobjlist":
+					[23.22, 534.44, true]
+			}
+		}
+	],
+	"boolkey1":		true,
+	"twentythree":	23,
+	"boolkey2":		false
+}

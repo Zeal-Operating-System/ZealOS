@@ -3,7 +3,7 @@
 #include "C:/Home/Net/NetLog"
 
 #include "C:/Home/Net/NetQueue"
-#include "C:/Home/Net/PCNet"
+#include "C:/Home/Net/Drivers/PCNet"
 #include "C:/Home/Net/Ethernet"
 
 #include "C:/Home/Net/ARP"
@@ -39,7 +39,7 @@ if (Fs != zenith_task)
 
 		"\nNow run one of the $MA,"Tests",LM="Cd(\"C:/Home/Net/Tests\");Dir;\n"$ or $MA,"Programs",LM="Cd(\"C:/Home/Net/Programs\");Dir;\n"$.\n";
 
-		"\nIf a test crashes to Debug, try typing $BLACK$G2;$FG$\n\n";
+		"\nIf a test crashes to Debug, try typing $FG,0$G2;$FG$\n\n";
 	}
 	else
 	{
