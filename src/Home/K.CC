@@ -20,21 +20,19 @@ for (i = 0; i < AHCI_MAX_PORTS; i++)
 if (ata_drive < 0)
 	throw('No ATA');
 
-In("CC\n%d\n\n5\n\n\n", ata_drive);
+In("CC\n%d\n\n1024\n768\n\n\n", ata_drive);
 BootHDIns;
 
 "\n\nSuccessful? ";
 if (YorN)
 {
 	Once(	"CursorRemove(\"/*\");;;"
-			"#include \"DoDistro\";;"
+			"PopUp(\"#include \\\"DoDistro\\\";;"
 			"if (DriveIsWritable)"
 			"{"
-				"Del(\"~/Registry.CC\");"
+				"Del(\\\"~/Registry.CC\\\");"
 				"OutU16(0x4004, 0x3400);"
-			"}");
+			"}\");");
 
-//	Once(
-//			"#include \"DoDistro\";;");
 	BootRAM;
 }
