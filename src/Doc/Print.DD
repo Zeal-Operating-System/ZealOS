@@ -68,8 +68,8 @@ $LK,"XTalkStr",A="MN:XTalkStr"$(CTask *task, U8 *format, ...) sends text of an $
 
 $LK,"DocPrint",A="MN:DocPrint"$(CDoc *doc, U8 *format, ...) sends text to a document.  You can buffer to a Doc and save it, providing the functionality of $FG,2$fprintf$FG$.  See $LK,"::/Demo/Disk/FPrintF.CC"$.
 
-$LK,"Zenith",A="MN:Zenith"$(U8 *format, ...) sends text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be compiled and run.
-$LK,"ZenithLog",A="MN:ZenithLog"$(U8 *format, ...) and $LK,"ZenithErr",A="MN:ZenithErr"$(U8 *format,...) send text to the $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ to be displayed.
+$LK,"Sys",A="MN:Sys"$(U8 *format, ...) sends text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ to be compiled and run.
+$LK,"SysLog",A="MN:SysLog"$(U8 *format, ...) and $LK,"SysErr",A="MN:SysErr"$(U8 *format,...) send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ to be displayed.
 
 $LK,"StreamPrint",A="MN:StreamPrint"$(U8 *format, ...) sends text to the stream of code being compiled and must reside in a $FG,2$#exe{}$FG$ blk.
 
@@ -81,7 +81,7 @@ $LK,"ExePrint",A="MN:ExePrint"$(U8 *format, ...) compiles and execute a string.	
 
 $LK,"Once",A="MN:Once"$(U8 *format, ...) Writes User code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
 
-$LK,"ZOnce",A="MN:ZOnce"$(U8 *format, ...) Writes Zenith code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
+$LK,"ZOnce",A="MN:ZOnce"$(U8 *format, ...) Writes Zeal code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
 
 $LK,"InPrint",A="MN:InPrint"$(I64 mS, U8 *format, ...) $LK,"PutChars",A="MN:PutChars"$()s one at a time with a delay.
 

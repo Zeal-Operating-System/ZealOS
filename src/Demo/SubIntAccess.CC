@@ -1,4 +1,4 @@
-/*ZenithOS has a feature that allows access to bytes and words of larger ints.
+/*ZealOS has a feature that allows access to bytes and words of larger ints.
 
 See $LK,"U64i union",A="FF:::/Kernel/KernelA.HH,U64i union"$.
  

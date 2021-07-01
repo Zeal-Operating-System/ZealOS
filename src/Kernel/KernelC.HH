@@ -86,7 +86,7 @@ public extern					Bool	 WildMatch(U8 *test_str, U8 *wild_str);
 #help_index "Char/Operations;Memory"
 public extern U8 *CatPrint(U8 *dst, U8 *format, ...);
 
-#help_index "Char/Operations;Memory/Zenith Heap"
+#help_index "Char/Operations;Memory/System Heap"
 public extern U8 *ZStrNew(U8 *buf);
 
 #help_index "Char/Operations;Memory/Heap"
@@ -436,9 +436,9 @@ public extern U0 Format(U8 drv_let, Bool quick=TRUE, Bool confirm=TRUE, I64 type
 public extern I64 Scale2Mem(I64 min, I64 max, I64 limit=2*1024*1024*1024);
 
 #help_index "Job/Exe;Task/Job/Exe"
-public extern	U0		 ZenithErr( U8 *format, ...);
-public extern	U0		 ZenithWarn(U8 *format, ...);
-public extern	U0		 ZenithLog( U8 *format, ...);
+public extern	U0		 SysErr( U8 *format, ...);
+public extern	U0		 SysWarn(U8 *format, ...);
+public extern	U0		 SysLog( U8 *format, ...);
 public extern	I64		 ExeCmdLine(CCompCtrl *cc);
 public extern	U0		 JobDel(CJob *tmpc);
 public extern	I64		 JobsHandler(I64 run_flags, CTask *task=NULL);
@@ -449,7 +449,7 @@ public extern	U0		 TaskResetAwaitingMessage(CTask *task=NULL);
 public extern	U0		 UserTaskCont();
 
 #help_index "Job/Exe;Task/Job/Exe;Compiler"
-public extern I64 Zenith(U8 *format, ...);
+public extern I64 Sys(U8 *format, ...);
 public extern I64 PopUp(U8 *buf, CTask *parent=NULL, CTask **_pu_task=NULL);
 public extern I64 PopUpPrint(U8 *format, ...);
 
@@ -534,7 +534,7 @@ public extern I64 Seed(I64 seed=0, CTask *task=NULL);
 #help_index "Memory/Info"
 public extern I64 MemBIOSTotal();
 
-#help_index "Memory/Zenith Heap"
+#help_index "Memory/System Heap"
 public extern U8 *ZCAlloc(I64 size);
 public extern U8 *ZMAlloc(I64 size);
 public extern U8 *ZMAllocIdent(U8 *src);
@@ -604,7 +604,7 @@ public extern	U0		 MPInt(U8 num, I64 cpu_num=1);
 public extern	U0		 MPIntAll(U8 num);
 public extern	U0		 MPNMInt();
 extern			CTask	*SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL, I64 target_cpu, 
-									CTask *parent=NULL, //NULL means zenith
+									CTask *parent=NULL, //NULL means zeal
 									I64 stack_size=0, I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "MultiCore;Boot"
@@ -669,7 +669,7 @@ public extern					U0		TaskWait(       CTask *task=NULL, Bool cmd_line_prompt=FAL
 public extern					CTask	*User(U8 *format=NULL, ...);
 public extern					U0		UserCmdLine();
 public _extern _YIELD			U0		Yield();
-public extern					CTask	*zenith_task;
+public extern					CTask	*sys_task;
 public extern					I64		sys_num_spawned_tasks;
 extern							CTask	*sys_winmgr_task, *sys_task_being_screen_updated;
 
@@ -691,7 +691,7 @@ public extern	U0   WinDerivedValsUpdate( CTask *task);
 #help_index "Task;Job/Exe;Task/Job/Exe;MultiCore"
 public extern CTask *Spawn(U0 (*fp_addr)(U8 *data), U8 *data=NULL, 
 						   U8 *task_name=NULL, I64 target_cpu=-1, 	//-1 means current CPU
-						   CTask *parent=NULL, //NULL means zenith
+						   CTask *parent=NULL, //NULL means zeal
 						   I64 stack_size=0, I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "Time/CPU Cycles;Time/Jiffies"

@@ -66,7 +66,7 @@ U0 LexPutPos(CCompCtrl *cc)
 	else
 	{
 		PutFileLink(cc->lex_include_stack->full_name,, cc->lex_include_stack->line_num);
-		ZenithErr("%s,%d\n", cc->lex_include_stack->full_name, cc->lex_include_stack->line_num);
+		SysErr("%s,%d\n", cc->lex_include_stack->full_name, cc->lex_include_stack->line_num);
 		'' CH_SPACE;
 	}
 	LexPutLine(cc, cc->lex_include_stack->line_start);
@@ -84,7 +84,7 @@ U0 LexWarn(CCompCtrl *cc, U8 *str=NULL)
 		else
 		{
 			"$$LK,\"%s\"$$\n", cc->htc.fun->src_link;
-			ZenithErr("%s\n", cc->htc.fun->src_link);
+			SysErr("%s\n", cc->htc.fun->src_link);
 		}
 	}
 	else
@@ -94,7 +94,7 @@ U0 LexWarn(CCompCtrl *cc, U8 *str=NULL)
 
 U0 LexExcept(CCompCtrl *cc, U8 *str=NULL)
 {//Print error message, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
-	if (!Bt(&sys_run_level, RLf_ZENITH_SERVER))
+	if (!Bt(&sys_run_level, RLf_ZEAL_SERVER))
 	{
 		Raw(ON);
 		"Note: Still in boot phase.\n";
@@ -102,11 +102,11 @@ U0 LexExcept(CCompCtrl *cc, U8 *str=NULL)
 	if (str)
 		PrintErr(str);
 	if (!IsRaw)
-		ZenithErr("Task:%08X %s\n", Fs,str);
+		SysErr("Task:%08X %s\n", Fs,str);
 	LexPutPos(cc);
 	cc->error_count++;
 	FlushMessages;
-	if (!Bt(&sys_run_level, RLf_ZENITH_SERVER))
+	if (!Bt(&sys_run_level, RLf_ZEAL_SERVER))
 		Debug("Type \"Fix;\"");
 	throw('Compiler');
 }

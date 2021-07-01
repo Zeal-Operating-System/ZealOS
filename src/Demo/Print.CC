@@ -1,4 +1,4 @@
-//ZenithOS supports standard $LK,"Print",A="MN:Print"$()
+//ZealOS supports standard $LK,"Print",A="MN:Print"$()
 //codes and extended ones.
 //See $LK,"Print(\"\") Format Strings",A="FI:::/Doc/Print.DD"$.
 

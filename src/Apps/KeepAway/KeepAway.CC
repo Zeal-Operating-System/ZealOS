@@ -217,8 +217,8 @@ Frame imgs[LAST_STOPPED_DRIBBLING+1] = {
 	{{$IB,"<22>",BI=22$, $IB,"<23>",BI=23$}, DRIBBLE_T / STOPPED_DRIBBLING_IMGS_NUM}, 
 };
 
-RegDefault("ZenithOS/KeepAway", "I64 best_score0=0,best_score1=9999;\n");
-RegExe("ZenithOS/KeepAway");
+RegDefault("ZealOS/KeepAway", "I64 best_score0=0,best_score1=9999;\n");
+RegExe("ZealOS/KeepAway");
 
 F64 game_t_end, foul_t_end;
 I64 score0, score1;
@@ -436,7 +436,7 @@ U0 Shoot(Obj *o)
 
 U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
 {//Make white noise for given number of mS.
-// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+// See $LK+PU,"Noise",A="FF:::/System/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
 	CSoundEffectFrame *ns;
 
 	if (mS > 0)
@@ -798,7 +798,7 @@ ka_done: //Don't goto out of try
 		PutExcept;
 	SettingsPop;
 	MenuPop;
-	RegWrite("ZenithOS/KeepAway", "I64 best_score0=%d,best_score1=%d;\n", best_score0, best_score1);
+	RegWrite("ZealOS/KeepAway", "I64 best_score0=%d,best_score1=%d;\n", best_score0, best_score1);
 }
         Ê     p   ¨      ­ÿÿÿûÿÿÿûÿÿÿ­ÿÿÿûÿÿÿ   ·ÿÿÿûÿÿÿûÿÿÿ·ÿÿÿûÿÿÿ   ­ÿÿÿ   ûÿÿÿ­ÿÿÿ      ·ÿÿÿ   ûÿÿÿ·ÿÿÿ   
    ·ÿÿÿûÿÿÿöÿÿÿ·ÿÿÿûÿÿÿ

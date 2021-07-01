@@ -114,14 +114,14 @@ U0 DebugDistroFilePrep()
 
 	Copy("C:/Home/Sup1/Sup1Distro/DebugStartOS.CC", "A:/StartOS.CC");
 
-	DirMake("A:/Zenith");
-	Copy("C:/Home/Sup1/Sup1Distro/DebugMakeZenith.CC", "A:/Zenith/MakeZenith.CC");
-	Copy("C:/Home/Sup1/Sup1Distro/DebugMount.CC", "A:/Zenith");
-	Copy("C:/Zenith/AExts.CC",		"A:/Zenith");
-	Copy("C:/Zenith/AMath.CC",		"A:/Zenith");
-	Copy("C:/Zenith/Training.CC",	"A:/Zenith");
-	Copy("C:/Zenith/AMem.CC", 		"A:/Zenith");
-	Copy("C:/Zenith/TaskRep.CC",	"A:/Zenith");
+	DirMake("A:/System");
+	Copy("C:/Home/Sup1/Sup1Distro/DebugMakeSystem.CC", "A:/System/MakeSystem.CC");
+	Copy("C:/Home/Sup1/Sup1Distro/DebugMount.CC", "A:/System");
+	Copy("C:/System/AExts.CC",		"A:/System");
+	Copy("C:/System/AMath.CC",		"A:/System");
+	Copy("C:/System/Training.CC",	"A:/System");
+	Copy("C:/System/AMem.CC", 		"A:/System");
+	Copy("C:/System/TaskRep.CC",	"A:/System");
 
 	FileWrite("C:" CONFIG_DEBUG_DISTRO_FILE, bd->RAM_disk, (bd->max_blk + 1) << BLK_SIZE_BITS);
 }
@@ -146,7 +146,7 @@ U0 MakeStdDistro()
 {
 	StdDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZenithOS V1.13",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
+	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.13",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -168,15 +168,15 @@ U0 LiteDistroPrep()
 	Del(TOS_DISTRO_DIR "/" KERNEL_BIN_C);
 	Del(TOS_DISTRO_DIR BOOT_DIR "/OldMBR.BIN.C");
 	Del(TOS_DISTRO_DIR BOOT_DIR "/BootMHD2.BIN.C");
-	Del(TOS_DISTRO_DIR "/Zenith/AutoComplete/ACDefs.DATA");
-	Del(TOS_DISTRO_DIR "/Zenith/AutoComplete/ACWords.DATA");
+	Del(TOS_DISTRO_DIR "/System/AutoComplete/ACDefs.DATA");
+	Del(TOS_DISTRO_DIR "/System/AutoComplete/ACWords.DATA");
 	Del(TOS_DISTRO_DIR "/Misc/Bible.TXT");
 }
 U0 MakeLiteDistro()
 {
 	LiteDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZenithOS V1.13",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
+	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.13",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -201,7 +201,7 @@ U0 MakeDebugDistro()
 {
 	DebugDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOS_DEBUG_SIZE", "Download $TX,"ZenithOS V1.13",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)", 
+	DefinePrint("DD_TEMPLEOS_DEBUG_SIZE", "Download $TX,"ZealOS V1.13",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -224,7 +224,7 @@ U0 MakeStaffDistro()
 {
 	StaffDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOS_STAFF_SIZE", "Download $TX,"ZenithOS V1.13",D="DD_OS_NAME_VERSION"$ - T.S. Company Internal Distro (%0.1fMB)", 
+	DefinePrint("DD_TEMPLEOS_STAFF_SIZE", "Download $TX,"ZealOS V1.13",D="DD_OS_NAME_VERSION"$ - T.S. Company Internal Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -244,11 +244,11 @@ I64 UpdateLineCounts()
 
 	DocMax;
 	DocClear;
-	res = LineRep("C:/*", "-r") + LineRep("C:/Zenith/*") + LineRep("C:/Compiler/*", "-S+$$") + LineRep("C:/Kernel/*");
+	res = LineRep("C:/*", "-r") + LineRep("C:/System/*") + LineRep("C:/Compiler/*", "-S+$$") + LineRep("C:/Kernel/*");
 	CopyTree("B:/TOS/TOS", "C:/Home");
 	DelTree("B:/TOS/TOS");
 
-	DocTreeFWrite("C:/Zenith/ZDefine.CC", "LineRep", "DefinePrint(\"DD_TEMPLEOS_LOC\",\"%,d\");\n", res);
+	DocTreeFWrite("C:/System/ZDefine.CC", "LineRep", "DefinePrint(\"DD_TEMPLEOS_LOC\",\"%,d\");\n", res);
 	DefinePrint("DD_TEMPLEOS_LOC", "%,d", res);
 
 	"Total LOC:%12,d\n\n", res;
@@ -260,7 +260,7 @@ U0 UpdateISODocDefines()
 {
 	try
 	{
-		DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZenithOS V1.13",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
+		DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.13",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
 					0.1 * (10 * Size("D:/Downloads/TOS_Distro.ISO", "+s") / 1024 / 1024));
 		DefinePrint("DD_TEMPLEOSCD_K_SIZE", "%dKB", Size("D:/Downloads/TOS_Distro.ISO", "+s") / 1024);
 	}
@@ -295,7 +295,7 @@ U0 TOSRegen2()
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	tos_progress = -1;
 	tos_progress_t0 = tS;
-	RegExe("ZenithOS/TOSRegen");
+	RegExe("ZealOS/TOSRegen");
 
 	TOSProgress("DiskCheck All");
 	AutoComplete;
@@ -366,7 +366,7 @@ U0 TOSRegen2()
 	SettingsPop;
 	"F2(\"/Home\") Count\t:%d\n", slash_home;
 	"Elapsed Time\t:%5.3fs\n", tS - progress4_t0;
-	ProgressBarsReset("ZenithOS/TOSRegen");
+	ProgressBarsReset("ZealOS/TOSRegen");
 }
 
 public U0 TOSPreRegen()

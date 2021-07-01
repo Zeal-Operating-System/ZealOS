@@ -23,7 +23,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 
 	CopyTree(BOOT_DIR,		"/Distro" BOOT_DIR);
 	CopyTree("/Home", 		"/Distro/Home");
-	CopyTree("/Zenith", 	"/Distro/Zenith");
+	CopyTree("/System", 	"/Distro/System");
 	CopyTree("/Apps", 		"/Distro/Apps");
 	CopyTree("/Compiler",	"/Distro/Compiler");
 	CopyTree("/Demo", 		"/Distro/Demo");
@@ -32,7 +32,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	CopyTree("/Misc", 		"/Distro/Misc");
 
 	//To save space, optionally delete dictionary.
-	//Del("/Distro/Zenith/AutoComplete/ACDefs.DATA");
+	//Del("/Distro/System/AutoComplete/ACDefs.DATA");
 	CopyTree("/Downloads", "/Distro/Downloads"); 		//You can leave this out.
 	DirMake("/Distro/Tmp");
 	DirMake("/Distro/Tmp/ScreenShots");

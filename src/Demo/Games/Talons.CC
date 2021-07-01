@@ -1,7 +1,7 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.CC"$.
 
-RegDefault("ZenithOS/Talons", "F64 best_score=9999;\n");
-RegExe("ZenithOS/Talons");
+RegDefault("ZealOS/Talons", "F64 best_score=9999;\n");
+RegExe("ZealOS/Talons");
 
 //Keep these power of two so shift is used instead of multiply
 //to index arrays.
@@ -1369,7 +1369,7 @@ U0 Talons()
 	CleanUp;
 	PostCleanUp;
 	MenuPop;
-	RegWrite("ZenithOS/Talons", "F64 best_score=%5.4f;\n", best_score);
+	RegWrite("ZealOS/Talons", "F64 best_score=%5.4f;\n", best_score);
 }
 
 Talons;

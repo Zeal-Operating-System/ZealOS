@@ -8,8 +8,8 @@ import U8	*DocSave(CDoc *doc, I64 *_size=NULL);
 import Bool	 DocUnlock(CDoc *doc);
 import Bool	 Ed(U8 *link_st, I64 edf_dof_flags=0);
 
-extern U0 ZenithErr(U8 *format, ...);
-extern U0 ZenithLog(U8 *format, ...);
+extern U0 SysErr(U8 *format, ...);
+extern U0 SysLog(U8 *format, ...);
 
 extern I64 MemBIOSTotal();
 
@@ -123,7 +123,7 @@ extern U0	RedSeaInit(CDrive *drive);
 extern Bool	RedSeaValidate(U8 drv_let);
 
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, 
-		U8 *task_name=NULL, I64 target_cpu, CTask *parent=NULL,  //NULL means zenith
+		U8 *task_name=NULL, I64 target_cpu, CTask *parent=NULL,  //NULL means system_task
 		I64 stack_size=0, I64 flags=1<<JOBf_ADD_TO_QUE);
 
 extern U8 *StrPrint(U8 *dst, U8 *format, ...);

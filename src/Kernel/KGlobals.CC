@@ -5,7 +5,7 @@ CJob	 sys_macro_head;
 CTask	*sys_macro_task;
 CDoc	*sys_clip_doc;
 
-CTask	*zenith_task;
+CTask	*sys_task;
 I64		 sys_num_spawned_tasks;
 
 CTask	*sys_winmgr_task,
@@ -13,7 +13,7 @@ CTask	*sys_winmgr_task,
 U8		*rev_bits_table; //Table with U8 bits reversed
 CDate	 local_time_offset;
 F64		*pow10_I64,
-		 sys_os_version = 2.01;
+		 sys_os_version = 0.01;
 
 CAutoCompleteDictGlobals acd;
 CAutoCompleteGlobals	 ac;

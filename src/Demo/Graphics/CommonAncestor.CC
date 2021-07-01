@@ -125,7 +125,7 @@ U0 TreeCommonAncestor()
 
 TreeCommonAncestor;
 /*
-Be careful with recursive routines in ZenithOS
+Be careful with recursive routines in ZealOS
 because the stack does not grow and will overflow.
 
 See $LK,"::/Demo/StackGrow.CC"$.

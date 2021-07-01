@@ -1,9 +1,9 @@
-$WW,1$ZenithOS has a string indirection feature implemented with the same hash symbol table entry as $FG,2$#define$FG$ macros, $LK,"HTT_DEFINE_STR",A="MN:HTT_DEFINE_STR"$.  Support for string lists is also provided, but it's not very efficient, though, you can make a hash table with a list using $LK,"HashDefineListAdd",A="MN:HashDefineListAdd"$().  See $LK,"::/Zenith/DolDoc/DocInit.CC",A="FF:::/Zenith/DolDoc/DocInit.CC,HashDefineListAdd"$.
+$WW,1$ZealOS has a string indirection feature implemented with the same hash symbol table entry as $FG,2$#define$FG$ macros, $LK,"HTT_DEFINE_STR",A="MN:HTT_DEFINE_STR"$.  Support for string lists is also provided, but it's not very efficient, though, you can make a hash table with a list using $LK,"HashDefineListAdd",A="MN:HashDefineListAdd"$().  See $LK,"::/System/DolDoc/DocInit.CC",A="FF:::/System/DolDoc/DocInit.CC,HashDefineListAdd"$.
 
 If you have an $FG,2$@$FG$ as the first char of a define list entry, it is an alias for the prev entry num.
 
 Each task can load its own Define strings.	Remember, when a $LK,"Hash",A="HI:Hash"$ table is searched for a string, if it is not found, the parent task's table is searched.
 
-The $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ framework supports text that changes based on entries in the task's symbol table.  Set a text entry with a $FG,2$D=$FG$ arg, as in $FG,2$$$TX,"",D="DD_MYSTRING"$$$FG$.  See $LK,"::/Demo/DolDoc/DefineStr.CC"$, $LK,"::/Zenith/ZDefine.CC"$ and $LK,"::/Doc/MemoryOverview.DD"$.
+The $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ framework supports text that changes based on entries in the task's symbol table.  Set a text entry with a $FG,2$D=$FG$ arg, as in $FG,2$$$TX,"",D="DD_MYSTRING"$$$FG$.  See $LK,"::/Demo/DolDoc/DefineStr.CC"$, $LK,"::/System/ZDefine.CC"$ and $LK,"::/Doc/MemoryOverview.DD"$.
 
 See $LK,"::/Demo/Define.CC"$.

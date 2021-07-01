@@ -1,4 +1,4 @@
-$TR-UL,"Zenith"$
+$TR-UL,"Zeal"$
 $ID,2$$TR,"SysMessageFlags"$
 $ID,2$sys_message_flags[0]=0xFF;
 $ID,-2$$TR,"SysRegVer"$
@@ -21,7 +21,7 @@ HashPublic("INS_REG_MACHINE_NUM",HTT_DEFINE_STR);
 "InsReg:%s:%d\n",INS_REG_PERSONAL_INITIALS,INS_REG_MACHINE_NUM;
 
 #help_index ""
-$ID,-2$$ID,-2$$TR-UL,"ZenithOS"$
+$ID,-2$$ID,-2$$TR-UL,"ZealOS"$
 $ID,2$$TR,"EagleDive"$
 $ID,2$F64 best_score=147.6932;
 $ID,-2$$TR,"DiningStars"$
@@ -64,7 +64,7 @@ progress3_tf=0.000;progress4_tf=113.560;
 $ID,-2$$TR,"TempleTetris"$
 $ID,2$I64 hiscore=0;
 $ID,-2$$ID,-2$$TR,"Once"$
-$ID,2$$TR,"Zenith"$
+$ID,2$$TR,"Zeal"$
 $ID,2$$ID,-2$$TR,"User"$
 $ID,2$$ID,-2$$ID,-2$$TR,"DemoCompany"$
 $ID,2$$TR,"Game1"$

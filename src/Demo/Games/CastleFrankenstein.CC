@@ -1,7 +1,7 @@
 //Uses $LK,"fixed-point",A="FI:::/Demo/Lectures/FixedPoint.CC"$.
 
-RegDefault("ZenithOS/CastleFrankenstein", "F64 best_score=9999;\n");
-RegExe("ZenithOS/CastleFrankenstein");
+RegDefault("ZealOS/CastleFrankenstein", "F64 best_score=9999;\n");
+RegExe("ZealOS/CastleFrankenstein");
 
 //Set snap to 4 and width to 4
 //if you edit this map.
@@ -660,7 +660,7 @@ fs_done:
 	SettingsPop;
 	CleanUp;
 	MenuPop;
-	RegWrite("ZenithOS/CastleFrankenstein", "F64 best_score=%5.4f;\n", best_score);
+	RegWrite("ZealOS/CastleFrankenstein", "F64 best_score=%5.4f;\n", best_score);
 }
 
 CastleFrankenstein;

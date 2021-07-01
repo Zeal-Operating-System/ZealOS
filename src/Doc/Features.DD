@@ -1,4 +1,4 @@
-				 $WW,1$$FG,5$$TX+CX,"ZenithOS' Features"$$FG$
+				 $WW,1$$FG,5$$TX+CX,"ZealOS' Features"$$FG$
 
 * Oracle with $FG,2$<F7>$FG$ for words or $FG,2$<SHIFT-F7>$FG$ for passages.
 
@@ -50,4 +50,4 @@
 
 * Many games, $LK,"demos",A="FI:::/Doc/DemoIndex.DD"$ and $LK,"documentation",A="FI:::/Doc/HelpIndex.DD"$.
 
-* $FG,2$All source code$FG$ included.  Only compiles with the included ZenithOS compiler and assembler.
+* $FG,2$All source code$FG$ included.  Only compiles with the included ZealOS compiler and assembler.

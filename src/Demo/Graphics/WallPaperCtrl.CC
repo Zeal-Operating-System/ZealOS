@@ -9,7 +9,7 @@ See $LK,"::/Demo/Graphics/Slider.CC"$
 and $LK,"::/Demo/Graphics/WallPaperFish.CC"$
 before messing with this program.
 
-It must be "Zenith Included".
+It must be "System Included".
 */
 
 #define SLIDER_RANGE	30
@@ -86,9 +86,9 @@ CCtrl *SliderNew()
 {
 	CCtrl *c;
 
-	if (Fs != zenith_task)
+	if (Fs != sys_task)
 	{
-		"Must be Zenith Included with SHIFT-F5.\n"
+		"Must be System Included with SHIFT-F5.\n"
 		"(Would crash when code mem was freed.)\n";
 		return NULL;
 	}

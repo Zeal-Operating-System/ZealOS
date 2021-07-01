@@ -1,1 +1,1 @@
-$WW,1$Intel/AMD have an inst that returns the num of CPU cycles since boot.  This is not a steady, calibrated real time value.	ZenithOS measures it and you can convert with $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$, a value continuously calibrated from other counts.
+$WW,1$Intel/AMD have an inst that returns the num of CPU cycles since boot.  This is not a steady, calibrated real time value.	ZealOS measures it and you can convert with $LK,"counts.time_stamp_freq",A="MN:CCountsGlobals"$, a value continuously calibrated from other counts.

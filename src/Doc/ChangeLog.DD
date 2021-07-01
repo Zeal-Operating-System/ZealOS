@@ -1,15 +1,31 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/01/21 19:04:09----$IV,0$
+$BK,1$* Forked ZealOS from ZenithOS. Version number 2.01 --> 0.01.$BK,0$
+* Update Roadmap.
+* Restructured Net/ directories.
+* Removed unnecessary files in Home/ directory.
+* Renames:
+	- ZenithOS		--> ZealOS
+	- Zenith Task	--> System Task
+
+	- $FG,5$Zenith$FG$		--> $FG,5$Sys$FG$
+	- $FG,5$ZenithErr$FG$		--> $FG,5$SysErr$FG$
+	- $FG,5$ZenithWarn$FG$	--> $FG,5$SysWarn$FG$
+	- $FG,5$ZenithLog$FG$		--> $FG,5$SysLog$FG$
+
+	- Zenith/		--> System/
+
 $IV,1$----06/28/21 06:20:21----$IV,0$
-* Restored /Zenith/God directory, the $LK,"Bible",A="FI:::/Misc/Bible.TXT"$, $LK,"Bible Links",A="BF:Exodus,20:1"$, and $MA-X+PU,"GodBiblePassage",LM="GodBiblePassage;View;\n"$ with SHIFT-F7.
+* Restored /System/God directory, the $LK,"Bible",A="FI:::/Misc/Bible.TXT"$, $LK,"Bible Links",A="BF:Exodus,20:1"$, and $MA-X+PU,"GodBiblePassage",LM="GodBiblePassage;View;\n"$ with SHIFT-F7.
 
 $IV,1$----06/24/21 01:01:06----$IV,0$
+* Raised version number to ZenithOS 2.1.
 * Implemented PCI fall-back functions for when PCIBIOS is unsupported, to improve bare-metal support.
 * Abstracted $LK+PU,"PCI functions",A="FI:::/Kernel/PCI.CC"$ out from $LK+PU,"PCIBIOS",A="FI:::/Kernel/PCIBIOS.CC"$ file.
-* Raised version number to ZenithOS 2.1.
 
 $IV,1$----06/01/21 16:02:38----$IV,0$
-* Overhauled entire OS to use AHCI routines instead of IDE.
 $BK,1$* Raised version number to ZenithOS 2.0.$BK,0$
+* Overhauled entire OS to use AHCI routines instead of IDE.
 
 $IV,1$----05/24/21 05:08:09----$IV,0$
 * Fixed $LK+PU,"Chess",A="FF:::/Demo/Games/Chess.CC,JobQueue"$ crashing when only one CPU core available.
@@ -41,10 +57,10 @@ $IV,1$----06/04/20 18:01:46----$IV,0$
 * Added $LK,"BIOSRep",A="MN:BIOSRep"$() as convenience function to view BIOS info from $LK,"SysRep",A="MN:SysRep"$().
 
 $IV,1$----04/27/20 15:34:42----$IV,0$
-* Changed $LK+PU,"GrBitMap",A="FI:::/Zenith/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.
+* Changed $LK+PU,"GrBitMap",A="FI:::/System/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.
 
 $IV,1$----04/21/20 18:54:47----$IV,0$
-* Altered $LK+PU,"Tom Palettes",A="FF:::/Zenith/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.
+* Altered $LK+PU,"Tom Palettes",A="FF:::/System/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.
 
 $IV,1$----04/21/20 16:13:01----$IV,0$
 * Added start-up intro $LK+PU,"Splash",A="FI:::/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/Once.CC,PopUpRunFile"$, after performing a full boot (excludes soft reboots).
@@ -78,7 +94,7 @@ $IV,1$----04/04/20 19:15:21----$IV,0$
 * Added $LK,"SysRep",A="MN:SysRep"$(). Various $LK,"CSM*Info",A="MN:CSMBIOSBIOSInfo"$ classes added. Pass in a $LK,"SMBIOSt_*",A="MN:SMBIOSt_BIOS"$ to get info for that specific structure type. It parses SMBIOS structures located in low memory. Question-colon operator would have saved many lines of code.
 
 $IV,1$----04/02/20 03:27:03----$IV,0$
-* Added camera rotation via mouse in 3D $LK,"SpriteMesh",A="FF:::/Zenith/Gr/SpriteMesh.CC,SpriteMeshEd"$ editor. 360 used as magic number, trying $LK,"VIEWANGLES_RANGE",A="FF:::/Zenith/Ctrls/CtrlsA.CC,VIEWANGLES_RANGE"$ crashed it.
+* Added camera rotation via mouse in 3D $LK,"SpriteMesh",A="FF:::/System/Gr/SpriteMesh.CC,SpriteMeshEd"$ editor. 360 used as magic number, trying $LK,"VIEWANGLES_RANGE",A="FF:::/System/Ctrls/CtrlsA.CC,VIEWANGLES_RANGE"$ crashed it.
 
 $IV,1$----04/02/20 01:50:52----$IV,0$
 * 'Fixed' $LK,"Varoom",A="FF:::/Demo/Games/Varoom.CC,kbd.down_bitmap"$ window lock up on exit. Brute-forcing zero, but somewhere $LK,"mp_not_done_flags",A="FF:::/Demo/Games/Varoom.CC,mp_not_done_flags"$ isn't getting cleared when shift-esc is entered with the new key implementation.
@@ -161,7 +177,7 @@ $IV,1$----02/23/20 02:36:28----$IV,0$
 $IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
 * Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
-* Removed the /Zenith/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/Zenith/Divination.CC",A="FI:::/Zenith/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:GodWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
+* Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/System/Divination.CC",A="FI:::/System/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:GodWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 
 $IV,1$----02/21/20 17:30:17----$IV,0$
@@ -183,7 +199,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
 * Shortened $LK,"CheckPtr",A="MN:"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
 * $LK,"RawDr",A="MN:RawDr"$() is 40 columns off the right of the screen, instead of fixed at column 40.
-* Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. Zenith task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
+* Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
 * Removed VGA text mode support, and all definitions relating to it, including from the $LK,"kernel config",A="FI:::/Kernel/KConfig.CC"$.
 * Added $MA-X+PU,"screen resolution selection",LM="F(\"->screen_w\");View;"$ to kernel configuration procedure.
@@ -195,16 +211,16 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 	- Added $FG,2$screen_size$FG$, $FG,2$buffer_size$FG$, $FG,2$fb_alias$FG$ members to $LK,"CTextGlobals",A="MN:CTextGlobals"$.
 	- $LK,"SysGrInit",A="FF:::/Kernel/KMain.CC,text.screen_size"$() -- using $LK,"Seg2Linear",A="FF:::/Kernel/KMain.CC,Seg2Linear"$() to convert pointers.
 	- $LK,"raw text drawing routine",A="FF:::/Kernel/Display.CC,text.fb_alias"$ updated. $LK,"BLACK32, WHITE32",A="MN:BLACK32"$.
-	- Dynamic definition of $LK,"GR_WIDTH and GR_HEIGHT",A="FF:::/Zenith/Gr/GrGlobals.CC,GR_WIDTH:2"$.
+	- Dynamic definition of $LK,"GR_WIDTH and GR_HEIGHT",A="FF:::/System/Gr/GrGlobals.CC,GR_WIDTH:2"$.
 	- $LK,"GrUpdateScreen32",A="MN:GrUpdateScreen32"$() -- $LK,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$() is used to reduce CPU usage. Added $FG,2$screen_cache$FG$ member to $LK,"CGrGlobals",A="MN:CGrGlobals"$.
-	- $LK,"gr_palette",A="MN:gr_palette"$ global variable. We use $LK,"CBGR24",A="MN:CBGR24"$ in $LK,"GrPalette.CC",A="FI:::/Zenith/Gr/GrPalette.CC"$.
+	- $LK,"gr_palette",A="MN:gr_palette"$ global variable. We use $LK,"CBGR24",A="MN:CBGR24"$ in $LK,"GrPalette.CC",A="FI:::/System/Gr/GrPalette.CC"$.
 
 * Added $LK,"BinRep",A="MN:BinRep"$() from Sup1 ISO.
 * $LK,"R",A="MN:R"$("sys_pci_busses", "$LK,"sys_pci_buses",A="MN:sys_pci_buses"$");
 * Renamed RWF flags -> $LK,"RAWF",A="MN:RAWF_IN_DOLLAR"$.
 * Renamed mon_start_days1 and mon_start_days2 -> $LK,"month_start_days",A="MN:month_start_days"$ and $LK,"month_start_days_leap",A="MN:month_start_days_leap"$, respectively.
 * Moved random number generation algorithm into $LK,"seperate function",A="MN:RandInt"$ to reduce line count. Added $LK,"RandU8",A="MN:RandU8"$().
-* Added syntax highlighting for numbers. $LK,"DocHighlight",A="FF:::/Zenith/DolDoc/DocHighlight.CC,DOC_COLOR_NUMBER"$(), $LK,"DOC_COLOR_NUMBER",A="MN:DOC_COLOR_NUMBER"$.
+* Added syntax highlighting for numbers. $LK,"DocHighlight",A="FF:::/System/DolDoc/DocHighlight.CC,DOC_COLOR_NUMBER"$(), $LK,"DOC_COLOR_NUMBER",A="MN:DOC_COLOR_NUMBER"$.
 * Removed unnecessary checks for the presence of the $LK,"APIC",A="MN:LAPIC_BASE"$ in $LK,"MultiProc.CC",A="FI:::/Kernel/MultiProc.CC"$, as it is present on all x86 CPUs after the P5 microarchitecture.
 * Added untested $LK,"ReAlloc",A="MN:ReAlloc"$(), as it could be useful for certain programs.
 * Added definitions for the $LK,"PCI registers",A="MN:PCIR_VENDOR_ID"$. Expanded the $LK,"CPCIDev",A="MN:CPCIDev"$ class to contain the values of the read-only registers. Added $LK,"PCIDevFind",A="MN:"$() as a simpler/abstracted alternative to $LK,"PCIClassFind",A="MN:PCIClassFind"$().
@@ -232,8 +248,8 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Added several palettes. See the $LK,"palette setting functions",A="MN:PaletteSetDark"$.
 * Added option to format RAMdisks on $LK,"Reboot",A="MN:Reboot"$().
 * Removed MemSetU8() as it was just an alias for $LK,"MemSet",A="MN:MemSet"$().  
-* Moved TaskRep.CC and MemRep.CC from /Zenith to /Zenith/Utils
-* Removed /Zenith/Opt directory, moved subdirectories up.
+* Moved TaskRep.CC and MemRep.CC from /Zenith to /System/Utils
+* Removed /System/Opt directory, moved subdirectories up.
 * Disabled blinking MENU.
 * Disabled scrolling title in editor.
 * One User terminal on startup.

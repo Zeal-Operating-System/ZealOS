@@ -156,7 +156,7 @@ The compiler doesn't go out of it's way
 to know if something is const.;-)  This
 just compiles with the val at compile
 time, an advantage of just-in-time over
-AOT binaries.  ZenithOS has a limited
+AOT binaries.  ZealOS has a limited
 stack size, so don't get in the habit.
 $LK,"MAlloc",A="MN:MAlloc"$() would probably be the better choice.
 */

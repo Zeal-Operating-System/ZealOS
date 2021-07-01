@@ -4,7 +4,7 @@ U8 char_map[26]="22233344455566677778889999";
 Format of word list entry:
 	U8 ACD_WORD_CHAR
 	U8 word[] with terminating zero
-	I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA
+	I16 block; //definition offset in ::/System/AutoComplete/ACDefs.DATA
 */
 U0 PhoneNumWords(U8 *num)
 {

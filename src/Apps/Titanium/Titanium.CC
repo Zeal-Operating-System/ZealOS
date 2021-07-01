@@ -1,5 +1,5 @@
-RegDefault("ZenithOS/Titanium","I64 best_score=0;\n");
-RegExe("ZenithOS/Titanium");
+RegDefault("ZealOS/Titanium","I64 best_score=0;\n");
+RegExe("ZealOS/Titanium");
 
 #define MAP_HEIGHT	4096
 
@@ -1069,7 +1069,7 @@ to_done:
 		PutExcept;
 	SettingsPop;
 	MenuPop;
-	RegWrite("ZenithOS/Titanium", "I64 best_score=%d;\n", best_score);
+	RegWrite("ZealOS/Titanium", "I64 best_score=%d;\n", best_score);
 }
         R     óÿÿÿÏÿÿÿ   2   ÿÿÿÿÿÿÿÿÿÿÿÿ    ÿÿÿÿÿÿÿÿÿÿÿÿ    ÿÿÿÿÿÿÿÿÿÿÿ  
  ÿÿÿÿÿÿÿÿÿÿÿÿ    ÿÿÿÿÿÿÿÿÿÿ  

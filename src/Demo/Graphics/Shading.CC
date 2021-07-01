@@ -36,7 +36,7 @@ U0 Lighting(CDC *dc, CD3I32 *ls, CD3I32 *poly, I64 color)
 	//vect and the surface normal
 	//gives an illumination number.
 
-	//ZenithOS will generate a random U16
+	//ZealOS will generate a random U16
 	//and compare to dither_probability_u16 and
 	//will pick from two colors.
 	//Probability dithering does not work with thick>1 at this time.

@@ -22,6 +22,10 @@ U0 ServerStartUp()
 U0 StartUpTasks()
 {
 	CTask *user = User;
+
+	if (sys_boot_src.u16[0] != BOOT_SRC_DVD)
+		User;
+
 	WinToTop(user);
 	WinTileVert;
 	"Boot Time:%7.3fs\n", tS;
@@ -31,9 +35,9 @@ U0 StartUpTasks()
 	Silent(OFF); //no output to screen
 
 	if (sys_boot_src.u16[0] != BOOT_SRC_RAM)
-		PopUp("ExeFile2(\"::/Zenith/ZSplash.CC\");");
+		PopUp("ExeFile2(\"::/System/ZSplash.CC\");");
 }
 
 StartUpTasks;
 
-"\nZenithOS V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;
+"\nZealOS V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;

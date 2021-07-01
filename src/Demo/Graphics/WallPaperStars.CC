@@ -1,5 +1,5 @@
 /*
-	You "Zenith include" this because you want the wallpaper
+	You "System Include" this because you want the wallpaper
 	routine to stay in mem even if this task is killed.
 */
 
@@ -48,9 +48,9 @@ U0 WallInit()
 {
 	I64 i;
 
-	if (Fs != zenith_task)
+	if (Fs != sys_task)
 	{
-		"\nMust be Zenith Included. (SHIFT-F5 / RightClick->Zenith Include) \n";
+		"\nMust be System Included. (SHIFT-F5 / RightClick->System Include) \n";
 		return;
 	}
 	old_wall_paper = gr.fp_wall_paper;

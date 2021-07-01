@@ -204,7 +204,7 @@ U0 DoInstructions()
 
 Bool DoInstall(Bool prompt_reboot)
 {
-	I64					 res = FALSE, vm_install = TRUE;
+	I64					 res = FALSE, vm_install = TRUE, ch;
 	CSMBIOSSystemInfo	*sys_info = SMBIOSStructGet(SMBIOSt_SYSTEM);
 	U8					*company = SMBIOSStr(sys_info, sys_info->manufacturer);
 
@@ -226,8 +226,22 @@ Bool DoInstall(Bool prompt_reboot)
 				"Continue Install Wizard ";
 		if (YorN)
 		{
-			RegularInstallWiz();
-			res = TRUE;
+			"\n\nUpgrade an existing install, or create new Installation? (U/I): ";
+			do
+				ch = ToUpper(CharGet(, FALSE));
+			while (ch != 'U' && ch != 'I');
+
+			if (ch == 'I')
+			{
+				RegularInstallWiz();
+				res = TRUE;
+			}
+			else if (ch == 'U')
+			{
+				"\n\n!!! TODO !!! #include \"::/Misc/OSMerge\" and do it manually...\n\n";
+				prompt_reboot = FALSE;
+				res = TRUE;
+			}
 		}
 		else
 			prompt_reboot = FALSE;

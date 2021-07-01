@@ -41,7 +41,7 @@ U0 TaskFocusNext()
 
 	sys_focus_task = NULL;
 	if (!_task)
-		_task = zenith_task;
+		_task = sys_task;
 	task = _task->next_task;
 	do
 	{

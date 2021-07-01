@@ -34,7 +34,7 @@ Bool ISOInit(CDrive *drive, I64 blk)
 						case ISOT_SUPPLEMENTARY_DESC:
 							de = &iso->root_dir_record;
 							drive->size = iso->vol_space_size.little * bd->blk_size >> BLK_SIZE_BITS;
-							if (!StrCompare(iso->publisher_id, "ZenithOS RedSea"))
+							if (!StrCompare(iso->publisher_id, "ZealOS RedSea"))
 							{
 								drive->fs_type = FSt_REDSEA;
 								bd->drv_offset = drive->drv_offset = 19 << 2 + drv_offset;

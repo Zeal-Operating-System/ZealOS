@@ -87,8 +87,8 @@
 
 
 
-RegDefault("ZenithOS/Varoom", "F64 best_score=9999;\n");
-RegExe("ZenithOS/Varoom");
+RegDefault("ZealOS/Varoom", "F64 best_score=9999;\n");
+RegExe("ZealOS/Varoom");
 
 F64  distance, t0, tf;
 Bool game_over;
@@ -840,7 +840,7 @@ vr_done: //Don't goto out of try
 	mp_not_done_flags = 0; // fix for CleanUp hanging on a Yield while loop ...
 	CleanUp;
 	MenuPop;
-	RegWrite("ZenithOS/Varoom", "F64 best_score=%5.4f;\n", best_score);
+	RegWrite("ZealOS/Varoom", "F64 best_score=%5.4f;\n", best_score);
 }
 
 Varoom;

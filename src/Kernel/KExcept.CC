@@ -96,7 +96,7 @@ U0 throw(I64 ch=0, Bool no_log=FALSE)
 	Fs->except_rbp = RBPGet;
 	Fs->catch_except = FALSE;
 	if (!no_log)
-		ZenithLog("Except:%c:%p:%p:%p:%p:%p:%p\n", ch,
+		SysLog("Except:%c:%p:%p:%p:%p:%p:%p\n", ch,
 					Fs->except_callers[0], Fs->except_callers[1], Fs->except_callers[2], Fs->except_callers[3],
 					Fs->except_callers[4], Fs->except_callers[5], Fs->except_callers[6], Fs->except_callers[7]);
 

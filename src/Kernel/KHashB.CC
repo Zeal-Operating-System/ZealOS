@@ -66,7 +66,7 @@ CHashTable *HashTableNew(I64 size, CTask *mem_task=NULL)
 }
 
 U0 HashDel(CHashSrcSym *tmph)
-{//Free a std ZenithOS system hash entry.
+{//Free a std ZealOS system hash entry.
 	if (!tmph)
 		return;
 	if (!(tmph->type & HTT_DICT_WORD))
@@ -241,7 +241,7 @@ I64 HashListAdd(U8 *list, I64 type, CHashTable *table)
 }
 
 I64 HashDefineListAdd(U8 *dname, I64 type, CHashTable *table)
-{//Add define list to a hash table. See $LK,"::/Zenith/DolDoc/DocInit.CC",A="FF:::/Zenith/DolDoc/DocInit.CC,HashDefineListAdd"$.
+{//Add define list to a hash table. See $LK,"::/System/DolDoc/DocInit.CC",A="FF:::/System/DolDoc/DocInit.CC,HashDefineListAdd"$.
 	CHashDefineStr *tmph;
 
 	if (tmph = HashFind(dname, Fs->hash_table, HTT_DEFINE_STR))

@@ -1,4 +1,4 @@
-$FG,5$$TX+CX,"ZenithOS Demo Index"$$FG$
+$FG,5$$TX+CX,"ZealOS Demo Index"$$FG$
 
 $WW,1$These are arranged in increasing order of difficulty, more or less.  This can be used as a tutorial if you start at the beginning and work your way forward.
 
@@ -27,7 +27,7 @@ $LK,"::/Demo/RandDemo.CC"$
 $LK,"::/Demo/KeyBitMap.CC"$
 $LK,"::/Demo/Graphics/WinZBuf.CC"$
 $LK,"::/Demo/Graphics/Elephant.CC"$
-$LK,"::/Demo/Graphics/WallPaperFish.CC"$ //Press SHIFT-F5 to Zenith Include
+$LK,"::/Demo/Graphics/WallPaperFish.CC"$ //Press SHIFT-F5 to System Include
 $LK,"::/Demo/Games/Digits.CC"$
 $LK,"::/Demo/Progress.CC"$ //has some ASM, just ignore
 $LK,"::/Demo/Graphics/Symmetry.CC"$
@@ -77,7 +77,7 @@ $LK,"::/Demo/MultiCore/Palindrome.CC"$
 $LK,"::/Demo/MultiCore/MPAdd.CC"$
 $LK,"::/Demo/MultiCore/Lock.CC"$
 $LK,"::/Demo/Graphics/Slider.CC"$
-$LK,"::/Demo/Graphics/WallPaperCtrl.CC"$ //Press SHIFT-F5 to Zenith Include
+$LK,"::/Demo/Graphics/WallPaperCtrl.CC"$ //Press SHIFT-F5 to System Include
 $LK,"::/Demo/Graphics/ScrollBars.CC"$
 $LK,"::/Demo/RegistryDemo.CC"$
 $LK,"::/Demo/Games/FlapBat.CC"$
@@ -147,7 +147,7 @@ $MA-X+PU,"::/Apps/TimeClock",LM="Cd(\"::/Apps/TimeClock\");Dir;View;\n"$
 $MA-X+PU,"::/Apps/Logic",LM="Cd(\"::/Apps/Logic\");Dir;View;\n"$
 $MA-X+PU,"::/Demo/Lectures",LM="Cd(\"::/Demo/Lectures\");Dir;View;\n"$
 $MA-X+PU,"::/Apps/Budget",LM="Cd(\"::/Apps/Budget\");Dir;View;\n"$
-$ID,-2$$TR,"ZenithOS Specific"$
+$ID,-2$$TR,"ZealOS Specific"$
 $ID,2$$MA-X+PU,"::/Demo/InFile",LM="Cd(\"::/Demo/InFile\");Dir;View;\n"$
 $LK,"::/Demo/Print.CC"$
 $LK,"::/Demo/SubIntAccess.CC"$
@@ -189,5 +189,5 @@ $LK,"::/Demo/Asm/AsmAndC2.CC"$
 $LK,"::/Demo/Asm/AsmAndC3.CC"$
 $LK,"::/Demo/GlobalVars.CC"$
 $LK,"::/Misc/OSTestSuite.CC"$
-$MA-X+PU,"::/Zenith",LM="Cd(\"::/Zenith\");Dir;View;\n"$
+$MA-X+PU,"::/System",LM="Cd(\"::/System\");Dir;View;\n"$
 $ID,-2$

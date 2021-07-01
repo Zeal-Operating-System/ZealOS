@@ -1,5 +1,5 @@
-//This is executed by the Zenith task at boot.
-//See $LK,"Zenith Start-up",A="FF:::/Kernel/KMain.CC,\"StartOS"$.
+//This is executed by the System task at boot.
+//See $LK,"System Start-up",A="FF:::/Kernel/KMain.CC,\"StartOS"$.
 
 #help_index "Compiler/Directive"
 public extern I8i Option(I64i num, I8i val);
@@ -13,9 +13,9 @@ Option(0,0); //(0,0)=EchoOff	 (0,1)=EchoOn
 
 Option(OPTf_WARN_PAREN, ON);
 Option(OPTf_WARN_DUP_TYPES, ON);
-HashTablePurge(zenith_task->hash_table);
+HashTablePurge(sys_task->hash_table);
 
-#include "/Zenith/MakeZenith"
+#include "/System/MakeSystem"
 
 //Debug("Type 'G;'");
 DocTermNew;
@@ -40,4 +40,4 @@ LBts(&sys_run_level, RLf_HOME);
 #help_index ""
 #include "~/MakeHome"
 
-//After this file, the Zenith task enters $LK,"server mode",A="HI:Job"$.
+//After this file, the System task enters $LK,"server mode",A="HI:Job"$.

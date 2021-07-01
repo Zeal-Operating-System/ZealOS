@@ -54,7 +54,7 @@ I64 TimeCal()
 		counts.time_stamp_freq = SYS_TIMER_FREQ * (TSCGet - time_stamp_start);
 		i = SysTimerRead - timer_start;
 		if (!i)
-			ZenithErr("Timer Cal Error");
+			SysErr("Timer Cal Error");
 		else
 		{
 			counts.time_stamp_freq		/= i;

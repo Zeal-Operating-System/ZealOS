@@ -843,7 +843,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CAr
 
 		case '(':
 			if (Lex(cc) == TK_IDENT && cc->hash_entry && cc->hash_entry->type & (HTT_CLASS | HTT_INTERNAL_TYPE))
-				LexExcept(cc, "Use ZenithOS postfix typecasting at ");
+				LexExcept(cc, "Use ZealOS postfix typecasting at ");
 			else
 			{
 				if (PREC_TERM > *max_prec)

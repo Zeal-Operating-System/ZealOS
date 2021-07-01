@@ -22,7 +22,7 @@ U0 DrawIt(CTask *task, CDC *)
 //We would put these as local vars
 //in SolveMaze() but the system stack size
 //is limited, so it's a bad habit.  The heap
-//is the normal ZenithOS technique, but
+//is the normal ZealOS technique, but
 //it's a pain in this case.
 I64 stack_ptr,  stack_x  [STACK_SIZE], 
 				stack_y  [STACK_SIZE], 

@@ -54,7 +54,7 @@ $WW,1$$FG,5$$TX+CX,"64-Bit Assembly Quiz"$$FG$
 
 ----
 
-ZenithOS identity-maps everything, all the time, so the usual convention of upper memory being for kernel does not apply.  It uses physical addresses, basically.  It puts all code in the lowest 2-Gig memory range so that it can use the CALL REL32 instruction, the fastest.	It never changes privilege levels or messes with page tables, once it is up-and-running.
+ZealOS identity-maps everything, all the time, so the usual convention of upper memory being for kernel does not apply.  It uses physical addresses, basically.  It puts all code in the lowest 2-Gig memory range so that it can use the CALL REL32 instruction, the fastest.	It never changes privilege levels or messes with page tables, once it is up-and-running.
 
 ----
 

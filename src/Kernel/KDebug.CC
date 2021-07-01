@@ -652,7 +652,7 @@ U0 Fault3(I64 fault_num, I64 fault_err_code)
 		SysHlt;
 	}
 
-	"\n\tZenithOS Debugger\n\n"
+	"\n\tZealOS Debugger\n\n"
 	">Help;\t//For help.\n\n";
 
 	Beep(62, TRUE);

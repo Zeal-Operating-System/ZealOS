@@ -2,15 +2,15 @@ $WW,1$$FG,5$$TX+CX,"Memory Overview"$$FG$
 
 Paging is practically not used.  64-bit mode requires paging, however, so it is identity-mapped -- virtual identical to physical.  All tasks on all cores use the same page table map, just as though all addresses are physical addresses.  2Meg or 1Gig page table entries are used.	Nothing swaps to disk.
 
-In ZenithOS, the lowest 2Gig of memory is called the $FG,2$code heap$FG$.  ZenithOS's compiler always uses 32-bit signed relative JMP & CALL insts because 64-bit CALLs take two insts.  With signed +/- 32-bit values, code can only call a function within 2Gig distance.  Therefore, ZenithOS keeps all code in the lowest 2Gig memory addresses including what would normally be called "the kernel".  Two Gig is plenty for code, don't worry.
+In ZealOS, the lowest 2Gig of memory is called the $FG,2$code heap$FG$.  ZealOS's compiler always uses 32-bit signed relative JMP & CALL insts because 64-bit CALLs take two insts.  With signed +/- 32-bit values, code can only call a function within 2Gig distance.  Therefore, ZealOS keeps all code in the lowest 2Gig memory addresses including what would normally be called "the kernel".  Two Gig is plenty for code, don't worry.
 
 You can create new, independent heaps using $LK,"HeapCtrlInit",A="MN:HeapCtrlInit"$().	Then, use the $LK,"CHeapCtrl",A="MN:CHeapCtrl"$ as the 2nd arg to $LK,"MAlloc",A="MN:MAlloc"$().	See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 
-Memory alloced by a task will be freed when the task is killed.  The $LK,"Zenith Task",A="FF:::/Doc/Glossary.DD,Zenith Task"$ is a task that never dies.	His memory is like kernel memory in other operating systems.	See $LK,"ZCAlloc",A="MN:ZCAlloc"$(), $LK,"ZMAlloc",A="MN:ZMAlloc"$(), $LK,"ZMAllocIdent",A="MN:ZMAllocIdent"$() and $LK,"ZStrNew",A="MN:ZStrNew"$().
+Memory alloced by a task will be freed when the task is killed.  The $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ is a task that never dies.	His memory is like kernel memory in other operating systems.	See $LK,"ZCAlloc",A="MN:ZCAlloc"$(), $LK,"ZMAlloc",A="MN:ZMAlloc"$(), $LK,"ZMAllocIdent",A="MN:ZMAllocIdent"$() and $LK,"ZStrNew",A="MN:ZStrNew"$().
 
 All of the regular page tables are marked, "cached".	When accessing hardware, however, you need uncached page table.  The lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, $FG,2$0x$TX,"01A0000000",D="DD_UNCACHED_ALIAS"$$FG$.	See $LK,"dev.uncached_alias",A="FF:::/Kernel/MultiProc.CC,dev.uncached_alias"$.
 
-During an extended powered-on session of ZenithOS, in theory, memory will become fragmented, requiring a reboot.	It has never happens to me.
+During an extended powered-on session of ZealOS, in theory, memory will become fragmented, requiring a reboot.	It has never happens to me.
 
 See $LK,"MemRep",A="MN:MemRep"$() and $LK,"::/Demo/MemDemo.CC"$.
 
@@ -21,7 +21,7 @@ $FG,2$ 0x00$TX,"00007C00",D="DD_KERNEL"$- 0x00$TX,"000368EF",D="DD_KERNEL_END"$$
 $ID,2$Kernel module, placed here by the boot-loader, $LK,"BOOT_RAM_BASE",A="MN:BOOT_RAM_BASE"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00096600",D="DD_BOOT_HIGH_LOC_DVD"$- 0x00$TX,"00096FFF",D="DD_BOOT_HIGH_LOC_DVD_END"$$FG$
-$ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/Zenith/Boot/BootDVD.CC"$ & $LK,"BootHD",A="FI:::/Zenith/Boot/BootHD.CC"$.
+$ID,2$$FG$Boot block relocated here before loading the Kernel module, $LK,"BootDVD",A="FI:::/System/Boot/BootDVD.CC"$ & $LK,"BootHD",A="FI:::/System/Boot/BootHD.CC"$.
 $ID,-2$
 $FG,2$ 0x00$TX,"00097000",D="DD_MP_VECT"$- 0x00$TX,"00097030",D="DD_MP_VECT_END"$$FG$ Multicore start-up vect code, $LK,"MPN_VECT",A="MN:MPN_VECT"$.
 $FG,2$~0x000009F000- 0x000009FFFF$FG$ Extended BIOS data area.

@@ -1,7 +1,7 @@
-/*ZenithOS runs exclusively in ring 0.
+/*ZealOS runs exclusively in ring 0.
 Ring 0 is part of the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 This demo is for you to play around
-with ring 3.	ZenithOS is for
+with ring 3.	ZealOS is for
 recreational programming, after all.
 
 This redirects the general protection

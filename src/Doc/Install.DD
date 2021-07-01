@@ -1,18 +1,18 @@
-$WW,1$$FG,5$$TX+CX,"Installing ZenithOS"$$FG$
+$WW,1$$FG,5$$TX+CX,"Installing ZealOS"$$FG$
 
 Burn a CD with software that supports ISO files.	Then, boot it.	It's a live CD, so you can look around with or without installing.
 
-Dual booting with another operating system is the best way to use ZenithOS.  I only use it in a virtual machine because it won't boot natively on my machine, though.  For native dual booting, you need a partition for ZenithOS.	Windows often comes with a restore disk that does not allow repartitioning.  I recommend connecting a spare additional hard drive and using the $FG,2$BIOS$FG$ to select which drive to boot.
+Dual booting with another operating system is the best way to use ZealOS.  I only use it in a virtual machine because it won't boot natively on my machine, though.  For native dual booting, you need a partition for ZealOS.	Windows often comes with a restore disk that does not allow repartitioning.  I recommend connecting a spare additional hard drive and using the $FG,2$BIOS$FG$ to select which drive to boot.
 
 The $LK,"::/Misc/OSInstall.CC"$ script will automate much of this.	It runs if you boot the CD/DVD-ROM.
 
 See $LK,"Boot.DD",A="FI:::/Doc/Boot.DD"$ for an overview of booting.	See $LK,"Requirements",A="FI:::/Doc/Requirements.DD"$ for supported hardware.
 
-Two ZenithOS partitions are highly recommended, so you can boot to a back-up and fix the primary when you work on it.  Odds are, you only need a couple gigabytes for your ZenithOS partitions.
+Two ZealOS partitions are highly recommended, so you can boot to a back-up and fix the primary when you work on it.  Odds are, you only need a couple gigabytes for your ZealOS partitions.
 
 1)
 $ID,2$$LK,"Mount",A="MN:Mount"$() use if the drive is partitioned.
-$ID,2$This command mounts a drive making it accessible.  For simplicity, sel $FG,2$'C'$FG$ as the first drive letter for your hard drive.  The first partition will be $FG,2$'C'$FG$, second, $FG,2$'D'$FG$, etc.  ZenithOS needs 3 numbers to utilize a hard drive -- base0, base1, and unit.	When you enter a hexadecimal number, do it like in $FG,2$C$FG$ with a $FG,2$0x$FG$ prefix.	If the probe was successful, you can just enter the number in the probe box instead of base0.
+$ID,2$This command mounts a drive making it accessible.  For simplicity, sel $FG,2$'C'$FG$ as the first drive letter for your hard drive.  The first partition will be $FG,2$'C'$FG$, second, $FG,2$'D'$FG$, etc.  ZealOS needs 3 numbers to utilize a hard drive -- base0, base1, and unit.	When you enter a hexadecimal number, do it like in $FG,2$C$FG$ with a $FG,2$0x$FG$ prefix.	If the probe was successful, you can just enter the number in the probe box instead of base0.
 $ID,-2$
 $LK,"DiskPart",A="MN:DiskPart"$($FG,2$'C'$FG$) use if drive is not partitioned
 
@@ -34,11 +34,11 @@ $ID,2$This command is used to copy files onto a hard drive partition from the CD
 $ID,-2$4) $LK,"BootHDIns",A="MN:BootHDIns"$($FG,2$'D'$FG$)
 $ID,2$This command recompiles the source code on a drive and writes to the $UL,1$drive's$UL,0$ boot record.  You'll need to reenter the $LK,"Mount",A="MN:Mount"$ information so it can be stored in the kernel.
 
-$ID,-2$5) Use Linux's Grub or ZenithOS' $LK,"BootMHDIns",A="MN:BootMHDIns"$($FG,2$'D'$FG$)
+$ID,-2$5) Use Linux's Grub or ZealOS' $LK,"BootMHDIns",A="MN:BootMHDIns"$($FG,2$'D'$FG$)
 $ID,2$
 The $LK,"BootMHDIns",A="MN:BootMHDIns"$() command places a boot loader on a drive.	It saves the old master boot record to $FG,2$/0000Boot/OldMBR.BIN.C$FG$ and replaces it.	When you boot, you will have the option of booting the old master boot record.	This command can be skipped if you already have a boot loader.	Be sure not to lose the copy of the old boot record, like if you reformat the drive.
 
-Delete $FG,2$/0000Boot/OldMBR.BIN.C$FG$ if you want to get a fresh copy of a mbr, like if installing from your own custom CD containing it's own $FG,2$/0000Boot/OldMBR.BIN.C$FG$ onto a system with a non-ZenithOS boot loader.
+Delete $FG,2$/0000Boot/OldMBR.BIN.C$FG$ if you want to get a fresh copy of a mbr, like if installing from your own custom CD containing it's own $FG,2$/0000Boot/OldMBR.BIN.C$FG$ onto a system with a non-ZealOS boot loader.
 
 If you have anti-virus software, it might object to having a different master boot record.
 $ID,-2$

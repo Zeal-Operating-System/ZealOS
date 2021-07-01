@@ -3,7 +3,7 @@
 //gives a name to it.  Strings like
 //this are known as Define entries.
 
-//See $LK,"ST_RAINBOW_10",A="FF:::/Zenith/Gr/GrPalette.CC,ST_RAINBOW_10"$
+//See $LK,"ST_RAINBOW_10",A="FF:::/System/Gr/GrPalette.CC,ST_RAINBOW_10"$
 
 U0 PrintDigit(U8 ch)
 {

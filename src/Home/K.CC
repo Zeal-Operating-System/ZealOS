@@ -31,6 +31,7 @@ if (YorN)
 			"if (DriveIsWritable)"
 			"{"
 				"Del(\\\"~/Registry.CC\\\");"
+				"Del(\\\"~/MakeHome.CC\\\");"
 				"OutU16(0x4004, 0x3400);"
 			"}\");");
 

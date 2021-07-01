@@ -55,7 +55,7 @@ I64 AsmAndC1()
 
 								//U0 $LK,"Sound",A="MN:Sound"$(I8 ona);
 		MOV 		RAX, RCX //ona=loop*10+50
-		IMUL2 		RAX, 10 //ZenithOS uses nonstandard opcodes
+		IMUL2 		RAX, 10 //ZealOS uses nonstandard opcodes
 							//to avoid multiple form of the same one.
 							//See $LK,"::/Compiler/OpCodes.DD"$.
 		ADD 		RAX, 40

@@ -6,7 +6,7 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 	CDirContext		*dirc;
 
 	absname = FileNameAbs(filename);
-	if (tmph = HashFind(absname, zenith_task->hash_table, HTT_FILE))
+	if (tmph = HashFind(absname, sys_task->hash_table, HTT_FILE))
 	{
 		size = tmph->user_data1;
 		res = MAlloc(size + 1);
@@ -62,7 +62,7 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 	if (!res)
 		PrintErr("File not found: \"%s\".\n", filename);
 	if (res && attr & RS_ATTR_RESIDENT)
-		HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(res), size, 0, zenith_task);
+		HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(res), size, 0, sys_task);
 
 	if (_attr)
 		*_attr = attr;
@@ -98,7 +98,7 @@ I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 			default:
 				PrintErr("File System Not Supported\n");
 		}
-		if (tmph = HashFind(absname, zenith_task->hash_table, HTT_FILE))
+		if (tmph = HashFind(absname, sys_task->hash_table, HTT_FILE))
 		{
 			if (attr & RS_ATTR_RESIDENT)
 			{
@@ -107,10 +107,10 @@ I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 				tmph->user_data1 = size;
 			}
 			else
-				HashRemDel(tmph, zenith_task->hash_table);
+				HashRemDel(tmph, sys_task->hash_table);
 		}
 		else if (attr & RS_ATTR_RESIDENT)
-			HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(fbuf), size, 0, zenith_task);
+			HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(fbuf), size, 0, sys_task);
 		DirContextDel(dirc);
 	}
 	Free(absname);

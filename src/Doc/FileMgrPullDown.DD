@@ -27,5 +27,5 @@ CDDVD
 Program
 {
 	Include(,0,0x3F0000003F);
-	ZenithInclude(,0,0x23F0000023F);
+	ZealInclude(,0,0x23F0000023F);
 }

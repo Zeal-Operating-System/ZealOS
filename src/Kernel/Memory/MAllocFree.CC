@@ -392,8 +392,8 @@ _extern _MALLOC		U8			*MAlloc(I64 size, CTask *mem_task=NULL); //Alloc memory ch
 //Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$. NULL allocs off current task's heap.
 
 U8 *ZMAlloc(I64 size)
-{//Alloc memory in Zenith's heap.
-	return MAlloc(size, zenith_task);
+{//Alloc memory in System task's heap.
+	return MAlloc(size, sys_task);
 }
 
 U8 *CAlloc(I64 size, CTask *mem_task=NULL)
@@ -406,8 +406,8 @@ U8 *CAlloc(I64 size, CTask *mem_task=NULL)
 }
 
 U8 *ZCAlloc(I64 size)
-{//Alloc and set to zero memory in Zenith's heap.
-	return CAlloc(size, zenith_task);
+{//Alloc and set to zero memory in System task's heap.
+	return CAlloc(size, sys_task);
 }
 
 U8 *MAllocIdent(U8 *src, CTask *mem_task=NULL)
@@ -425,8 +425,8 @@ U8 *MAllocIdent(U8 *src, CTask *mem_task=NULL)
 }
 
 U8 *ZMAllocIdent(U8 *src)
-{//Alloc in Zenith's heap, ident copy of heap node.
-	return MAllocIdent(src, zenith_task);
+{//Alloc in System task's heap, ident copy of heap node.
+	return MAllocIdent(src, sys_task);
 }
 
 U8 *MAllocAligned(I64 size, I64 alignment, CTask *mem_task=NULL, I64 misalignment=0)
@@ -477,8 +477,8 @@ U8 *ReAlloc(U8 *ptr, U64 new_size, CTask *mem_task=NULL)
 }
 
 U8 *ZReAlloc(U8 *ptr, I64 new_size)
-{//Realloc in Zenith's heap.
-	return ReAlloc(ptr, new_size, zenith_task);
+{//Realloc in System task's heap.
+	return ReAlloc(ptr, new_size, sys_task);
 }
 
 U8 *StrNew(U8 *buf, CTask *mem_task=NULL)
@@ -501,6 +501,6 @@ U8 *StrNew(U8 *buf, CTask *mem_task=NULL)
 }
 
 U8 *ZStrNew(U8 *buf)
-{//Alloc copy of string in Zenith's heap.
-	return StrNew(buf, zenith_task);
+{//Alloc copy of string in System task's heap.
+	return StrNew(buf, sys_task);
 }

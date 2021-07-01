@@ -30,7 +30,7 @@ U8 *SuggestMatchForm(U8 *src)
 /*Format of word list entry:
 	U8 ACD_WORD_CHAR
 	U8 word[] with terminating zero
-	I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA
+	I16 block; //definition offset in ::/System/AutoComplete/ACDefs.DATA
 */
 
 Bool SuggestSpelling(U8 *word)
@@ -80,7 +80,7 @@ U0 SuggestSpellingDemo()
 	}
 }
 
-//If you "Zenith Include" this file, it will
+//If you "System Include" this file, it will
 //install this command as a hot-key.
 
 U0 CtrlAltL(I64)
@@ -95,12 +95,12 @@ U0 CtrlAltL(I64)
 	PopUp("if (SuggestSpelling(ac.cur_word)) View;");
 }
 
-if (Fs != zenith_task)
+if (Fs != sys_task)
 	SuggestSpellingDemo;
 else
 {
 	CtrlAltCBSet('L', &CtrlAltL, "Cmd /Suggest Spelling");
-//Appears in the Zenith Task Window
+//Appears in the System Task Window
 	"<CTRL-ALT-l> installed\n";
 }
 

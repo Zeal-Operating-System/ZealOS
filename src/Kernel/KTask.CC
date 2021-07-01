@@ -249,7 +249,7 @@ I64 TaskInit(CTask *task, I64 stack_size)
 	task->win_bottom			= text.rows - 2;
 
 	if (blkdev.home_dir)
-	{//Beware Zenith $LK,"TaskInit",A="FF:::/Kernel/KStart64.CC,TaskInit"$. I guess ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.CC,DiskChange"$().
+	{//Beware System $LK,"TaskInit",A="FF:::/Kernel/KStart64.CC,TaskInit"$. I guess ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.CC,DiskChange"$().
 		task->cur_dv	= blkdev.let_to_drive[*blkdev.home_dir - 'A'];
 		task->cur_dir	= StrNew(blkdev.home_dir + 2, task);
 	}
@@ -263,7 +263,7 @@ I64 TaskInit(CTask *task, I64 stack_size)
 
 CTask *Spawn(U0 (*fp_start_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL,
 				I64 target_cpu=-1,	// -1 for current CPU. See $LK,"multi-core",A="FI:::/Demo/MultiCore/LoadTest.CC"$.
-				CTask *parent=NULL,	// NULL means zenith
+				CTask *parent=NULL,	// NULL means system_task
 				I64 stack_size=0,	// 0=default
 				I64 flags=1 << JOBf_ADD_TO_QUE)
 {//Create task on core running at address.
@@ -274,7 +274,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL,
 	if (target_cpu >= 0)
 		return SpawnQueue(fp_start_addr, data, task_name, target_cpu, parent, stack_size, flags);
 
-	task = CAlloc(sizeof(CTask), zenith_task->code_heap);
+	task = CAlloc(sizeof(CTask), sys_task->code_heap);
 	task->task_signature = TASK_SIGNATURE_VAL;
 	if (!task_name)
 		task_name = "Unnamed Task";

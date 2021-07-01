@@ -1,4 +1,4 @@
-// Main ZenithOS header
+// Main ZealOS header
 
 #help_index ""
 extern class CAOT;
@@ -293,7 +293,7 @@ public class CMathODE
 				 h, h_min, h_max;
 
 	//This is not precise, just a ballpark.
-	//ZenithOS CMathODE's are for video games
+	//ZealOS CMathODE's are for video games
 	//not science.	It bails if it takes
 	//too long.
 	F64			 min_tolerance, max_tolerance;
@@ -447,7 +447,7 @@ class CMemE820
 #define LDF_JUST_LOAD 	2
 #define LDF_SILENT		4
 
-#define BIN_SIGNATURE_VAL 	'ZCCB' //Zenith CosmiC Binary
+#define BIN_SIGNATURE_VAL 	'ZCCB' //Zeal CosmiC Binary
 class CBinFile
 {//$LK,"Bin File Header Generation",A="FF:::/Compiler/CMain.CC,16 ALIGN"$ by compiler.
 	U16 jmp;
@@ -577,7 +577,7 @@ class CKernel
 #define RLf_PATCHED 				3
 #define RLf_16MEG_SYS_CODE_BP 		4
 #define RLf_64BIT 					5
-#define RLf_16MEG_ZENITH_HEAP_CTRL	6
+#define RLf_16MEG_ZEAL_HEAP_CTRL	6
 #define RLf_FULL_HEAPS				7
 #define RLf_RAW 					8
 #define RLf_INTERRUPTS				9
@@ -589,8 +589,8 @@ class CKernel
 #define RLf_REGISTRY				15
 #define RLf_HOME					16
 #define RLf_AUTOCOMPLETE			17
-#define RLf_ZENITH_SERVER 			18
-#define RLf_ONCE_ZENITH 			19
+#define RLf_ZEAL_SERVER 			18
+#define RLf_ONCE_ZEAL 			19
 #define RLf_ONCE_USER 				20
 
 #define RLF_16BIT 					(1 << RLf_16BIT)
@@ -599,7 +599,7 @@ class CKernel
 #define RLF_PATCHED 				(1 << RLf_PATCHED)
 #define RLF_16MEG_SYS_CODE_BP 		(1 << RLf_16MEG_SYS_CODE_BP)
 #define RLF_64BIT 					(1 << RLf_64BIT)
-#define RLF_16MEG_ZENITH_HEAP_CTRL	(1 << RLf_16MEG_ZENITH_HEAP_CTRL)
+#define RLF_16MEG_ZEAL_HEAP_CTRL	(1 << RLf_16MEG_ZEAL_HEAP_CTRL)
 #define RLF_FULL_HEAPS				(1 << RLf_FULL_HEAPS)
 #define RLF_RAW 					(1 << RLf_RAW)
 #define RLF_INTERRUPTS				(1 << RLf_INTERRUPTS)
@@ -611,8 +611,8 @@ class CKernel
 #define RLF_REGISTRY				(1 << RLf_REGISTRY)
 #define RLF_HOME					(1 << RLf_HOME)
 #define RLF_AUTOCOMPLETE			(1 << RLf_AUTOCOMPLETE)
-#define RLF_ZENITH_SERVER 			(1 << RLf_ZENITH_SERVER)
-#define RLF_ONCE_ZENITH 			(1 << RLf_ONCE_ZENITH)
+#define RLF_ZEAL_SERVER 			(1 << RLf_ZEAL_SERVER)
+#define RLF_ONCE_ZEAL 			(1 << RLf_ONCE_ZEAL)
 #define RLF_ONCE_USER 				(1 << RLf_ONCE_USER)
 
 #help_index "Processor"
@@ -1636,8 +1636,8 @@ public class CAutoCompleteGlobals
 };
 
 #help_index "AutoComplete/Dictionary"
-#define ACD_WORD_FILENAME 	"/Zenith/AutoComplete/ACWords.DATA"
-#define ACD_DEF_FILENAME	"/Zenith/AutoComplete/ACDefs.DATA"
+#define ACD_WORD_FILENAME 	"/System/AutoComplete/ACWords.DATA"
+#define ACD_DEF_FILENAME	"/System/AutoComplete/ACDefs.DATA"
 
 #define ACD_H1					0
 #define ACD_H1_END				1
@@ -3501,7 +3501,7 @@ class CMemRange
 //We add 2 pags, so a request is not rounded-up to next power of two.
 #define MEM_EXTRA_HASH2_PAGS	2
 
-#define MEM_ZENITH_STACK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
+#define MEM_ZEAL_STACK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
 #define MEM_SETH_STACK		(MEM_PAG_SIZE*512)
 #define MEM_INTERRUPT_STACK 	(MEM_PAG_SIZE*512)
 #define MEM_DEFAULT_STACK 		(MEM_PAG_SIZE*512)
@@ -4083,9 +4083,9 @@ public class CSysFixedArea
 {
 	CFPU		init_fpu_mmx;
 	CCPU		boot_cpu;
-	CTask		zenith;
+	CTask		zeal;
 	CBlkPool	sys_code_bp;
-	CHeapCtrl	zenith_hc;
+	CHeapCtrl	zeal_hc;
 	$$ = ($$ + 0x1000 - 1) & -0x1000;
 };
 
@@ -4157,7 +4157,7 @@ public class CSysFixedArea
 #define SCF_NO_SHIFT	(1 << SCf_NO_SHIFT)
 #define SCF_KEY_DESC	(1 << SCf_KEY_DESC)
 
-//ZenithOS places a 1 in bit 7 for
+//ZealOS places a 1 in bit 7 for
 //keys with an E0 prefix.
 //See $LK,"::/Doc/CharOverview.DD"$ and $LK,"KbdHandler",A="MN:KbdHandler"$().
 #define SC_ESC			0x01

@@ -1,10 +1,10 @@
 #define  XMESSAGEF_ANTISPIN 	0
 #define  XMESSAGEF_SOLAR_STORM	1
 
-RegDefault("ZenithOS/XCaliber",
+RegDefault("ZealOS/XCaliber",
 			"I64 best_score=0;\n"
 			"I64 message_flags=0;\n");
-RegExe("ZenithOS/XCaliber");
+RegExe("ZealOS/XCaliber");
 
 #define MT_HUMAN_SHIP			0
 #define MT_ENEMY_SHIP			1
@@ -1029,7 +1029,7 @@ U0 MyDerivative(CMathODE *ode, F64, COrder2D3 *, COrder2D3 *)
 
 U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
 {//Make white noise for given number of mS.
-// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+// See $LK+PU,"Noise",A="FF:::/System/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
 	CSoundEffectFrame *ns;
 
 	if (mS > 0)
@@ -1738,7 +1738,7 @@ U0 XCaliber()
 	SettingsPop;
 	CtrlPanelDel(cp);
 	MenuPop;
-	RegWrite("ZenithOS/XCaliber", 
+	RegWrite("ZealOS/XCaliber", 
 			 "I64 best_score=%d;\n"
 			 "I64 message_flags=%d;\n", best_score, message_flags);
 }

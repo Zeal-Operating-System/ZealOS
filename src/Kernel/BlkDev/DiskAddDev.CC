@@ -229,7 +229,7 @@ Bool GetBaseUnit(CBlkDev *bd)
 	if (!probe || !IDEBootDVDProbeAll(bd))
 	{
 		"\nDon't worry.  This is not a product\n"
-		"registration.				ZenithOS just needs the\n"
+		"registration.				ZealOS just needs the\n"
 		"I/O port numbers for the CD/DVD.\n"
 		"\nRetry the ports above or check Windows\n"
 		"system information under I/O ports for\n"
@@ -274,7 +274,7 @@ U0 BlkDevsInitAll()
 
 	if (!blkdev.ahci_hba)
 	{
-		"\nZenithOS requires AHCI.\n\n"
+		"\nZealOS requires AHCI.\n\n"
 		"If in IDE compatibility mode, switch to SATA mode.\n"
 		"If running in a VM, ensure disks are organized under a SATA controller.\n\n"
 		"Rebooting in 10 seconds...\n";

@@ -1,3 +1,13 @@
+/*
+- Perhaps make more references to spec in comments
+
+- ATAPI RW
+
+- Remove Buffer alignment check and just do it on every call
+
+- AHCIATAPISetMaxSpeed?
+*/
+
 I64 AHCILBA48CapacityGet(U16 *id_record)
 {//Get capacity of drive, in LBA blocks.
 //Capacity is stored in a U64, so we take the shortcut
@@ -19,7 +29,7 @@ I64 AHCIPortCmdSlotGet(I64 port_num)
 		slots >>= 1;
 	}
 
-	ZenithErr("AHCI: No empty command slots on port %d!\n", port_num);
+	SysErr("AHCI: No empty command slots on port %d!\n", port_num);
 	throw('AHCI');
 }
 
@@ -61,7 +71,7 @@ Bool AHCIPortWait(I64 port_num, F64 timeout, Bool throwing=TRUE)
 	while (timeout > tS);
 
 	if (throwing)
-	{	ZenithErr("AHCI: Port %d hung.\n", port_num);
+	{	SysErr("AHCI: Port %d hung.\n", port_num);
 		throw('AHCI');
 	}
 
@@ -109,7 +119,7 @@ U0 AHCIPortCmdWait(I64 port_num, I64 cmd_slot)
 		if (Bt(&port->interrupt_status, AHCI_PxIf_TFE)) //Task File Error ($LK,"ATAS_ERR",A="MN:ATAS_ERR"$)
 		{
 error:
-			ZenithErr("AHCI: Port %d: Command failed!\n", port_num);
+			SysErr("AHCI: Port %d: Command failed!\n", port_num);
 			throw('AHCI');
 		}
 
@@ -131,11 +141,11 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
-		ZenithErr("AHCI: Drive is not an ATAPI drive!\n");
+		SysErr("AHCI: Drive is not an ATAPI drive!\n");
 		throw('AHCI');	
 	}
 
-	buf = CAlloc(8, zenith_task->code_heap);
+	buf = CAlloc(8, sys_task->code_heap);
 
 	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
 
@@ -178,7 +188,7 @@ Bool AHCIAtapiSeek(CBlkDev *bd, I64 blk)
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
-		ZenithErr("AHCI: Drive is not an ATAPI drive!\n");
+		SysErr("AHCI: Drive is not an ATAPI drive!\n");
 		throw('AHCI');	
 	}
 
@@ -222,7 +232,7 @@ Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
-		ZenithErr("AHCI: Drive is not an ATAPI drive!\n");
+		SysErr("AHCI: Drive is not an ATAPI drive!\n");
 		throw('AHCI');	
 	}
 
@@ -287,7 +297,7 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	port->interrupt_status = port->interrupt_status; //TODO: Why?
 
 	//Using the code heap for this alloc to stay under 32-bit address space.
-	dev_id_record = CAlloc(512, zenith_task->code_heap);
+	dev_id_record = CAlloc(512, sys_task->code_heap);
 
 	cmd_table = cmd_header->cmd_table_base;
 	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
@@ -342,7 +352,7 @@ U8 *AHCIBufferAlign(CBlkDev *bd, U8 *user_buf, I64 buf_size, Bool write)
 //		"Aligning buffer under 32-bit range\n";
 
 		Free(bd->prd_buf);
-		bd->prd_buf = MAlloc(buf_size, zenith_task->code_heap);
+		bd->prd_buf = MAlloc(buf_size, sys_task->code_heap);
 
 		Bts(&bd->flags, BDf_INTERNAL_BUF);
 
@@ -369,14 +379,14 @@ I64 AHCIAtaBlksRW(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write)
 
 	if (port->signature != AHCI_PxSIG_ATA)
 	{
-		ZenithErr("AHCI: Drive is not an ATA drive!\n");
+		SysErr("AHCI: Drive is not an ATA drive!\n");
 		throw('AHCI');
 	}
 
 	if (count < 1) return 0;
 	if (count > AHCI_PRDT_MAX_BLOCKS)
 	{
-		ZenithErr("AHCI: Block count %d max allowed in one command (%d)", count, AHCI_PRDT_MAX_BLOCKS);
+		SysErr("AHCI: Block count %d max allowed in one command (%d)", count, AHCI_PRDT_MAX_BLOCKS);
 		throw('AHCI');
 	}
 
@@ -532,7 +542,7 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
-		ZenithErr("AHCI: Drive is not an ATAPI drive!\n");
+		SysErr("AHCI: Drive is not an ATAPI drive!\n");
 		throw('AHCI');
 	}
 	if (count < 1)
@@ -628,11 +638,11 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 	AHCIPortCmdStop(port_num);
 
 	//'1K-byte' align as per SATA spec.
-	port->cmd_list_base = CAllocAligned(sizeof(CPortCmdHeader) * blkdev.cmd_slot_count, 1024, zenith_task->code_heap);
+	port->cmd_list_base = CAllocAligned(sizeof(CPortCmdHeader) * blkdev.cmd_slot_count, 1024, sys_task->code_heap);
 	port->cmd_list_base_upper = 0;
 
 	//Alloc where received FISes will be copied to. '256-byte' align as per spec.
-	port->fis_base = CAllocAligned(sizeof(CFisReceived), 256, zenith_task->code_heap);
+	port->fis_base = CAllocAligned(sizeof(CFisReceived), 256, sys_task->code_heap);
 	port->fis_base_upper = 0;
 
 	for (i = 0; i < blkdev.cmd_slot_count; i++)
@@ -642,7 +652,7 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 		cmd_header->desc = sizeof(CFisH2D) / sizeof(U32);
 
 		//'128-byte' align as per SATA spec, minus 1 since length is 1-based.
-		cmd_header->cmd_table_base = CAllocAligned(sizeof(CPortCmdTable) + sizeof(CPrdtEntry) * (AHCI_PRDT_MAX_LEN - 1), 128, zenith_task->code_heap);
+		cmd_header->cmd_table_base = CAllocAligned(sizeof(CPortCmdTable) + sizeof(CPrdtEntry) * (AHCI_PRDT_MAX_LEN - 1), 128, sys_task->code_heap);
 		cmd_header->cmd_table_base_upper = 0;
 	}
 	AHCIPortCmdStart(port_num);
@@ -707,11 +717,11 @@ U0 AHCIInit()
 
 	if (bdf == -1)
 	{
-		"No AHCI controller found.\n";
+		"AHCI: No AHCI controller found.\n";
 		return;
 	}
 
-	"AHCI: controller found\n";
+	"AHCI: Controller found\n";
 	hba = dev.uncached_alias + PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F; //Last 4 bits not part of address.
 	blkdev.ahci_hba = hba;
 
@@ -720,7 +730,7 @@ U0 AHCIInit()
 	"AHCI: GHC.AE\n";
 
 //	AHCIHbaReset;
-//	"AHCI: HBA reset\n";
+//	"AHCI: HBA Reset\n";
 
 
 	//Transferring ownership from BIOS if supported.
@@ -737,14 +747,14 @@ U0 AHCIInit()
 	}
 
 	blkdev.cmd_slot_count = (hba->caps & 0x1F00) >> 8;
-	"AHCI: cmd slot count: %d\n", blkdev.cmd_slot_count;
+	"AHCI: Command slot count: %d\n", blkdev.cmd_slot_count;
 
 	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
 		if (Bt(&hba->ports_implemented, i))
 		{//$BK,1$Make ports idle?$BK,0$
 			port = &hba->ports[i];
-			"AHCI: port on %d, signature 0x%0X\n", i, port->signature;
+			"AHCI: Port on %d, signature 0x%0X\n", i, port->signature;
 			if (port->signature == AHCI_PxSIG_ATA || port->signature == AHCI_PxSIG_ATAPI)
 			{
 				if (port->signature == AHCI_PxSIG_ATAPI)
@@ -791,11 +801,11 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 
 				if (kernel->compile_time == sys_compile_time)
 				{
-					"Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
+					"AHCI: Found sys_compile_time at BLK %d on Port %d\n", sys_boot_blk, i;
 					return TRUE;
 				}
 				else
-					"Did not find matching sys_compile_time on Port %d\n", i;
+					"AHCI: Did not find matching sys_compile_time on Port %d\n", i;
 			}
 		}
 	}

@@ -704,7 +704,7 @@ U0 ShipFix(Obj *tmpo, F64 d)
 
 U0 MyNoise(I64 mS, F64 min_ona, F64 max_ona)
 {//Make white noise for given number of mS.
-// See $LK+PU,"Noise",A="FF:::/Zenith/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
+// See $LK+PU,"Noise",A="FF:::/System/ZSound.CC,*Noise("$. On bare-metal, Spawn() hogs CPU.
 	CSoundEffectFrame *ns;
 
 	if (mS > 0)

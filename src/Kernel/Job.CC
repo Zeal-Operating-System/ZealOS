@@ -482,21 +482,21 @@ I64 PopUpPrint(U8 *format, ...)
 	return res;
 }
 
-I64 Zenith(U8 *format, ...)
-{//Make zenith_task execute code.
+I64 Sys(U8 *format, ...)
+{//Make sys_task execute code.
 	I64   res;
 	U8   *buf = StrPrintJoin(NULL, format, argc, argv);
 	CJob *tmpc;
 
-	if (Fs  == zenith_task)
+	if (Fs  == sys_task)
 	{
-		tmpc = TaskExe(zenith_task, Fs, buf, 0);
+		tmpc = TaskExe(sys_task, Fs, buf, 0);
 		JobsHandler(RFlagsGet);
 	}
 	else
 	{
-		TaskWait(zenith_task);
-		tmpc = TaskExe(zenith_task, Fs, buf, 1 << JOBf_WAKE_MASTER);
+		TaskWait(sys_task);
+		tmpc = TaskExe(sys_task, Fs, buf, 1 << JOBf_WAKE_MASTER);
 	}
 	JobResScan(tmpc, &res);
 	Free(buf);
@@ -504,37 +504,37 @@ I64 Zenith(U8 *format, ...)
 	return res;
 }
 
-U0 ZenithLog(U8 *format, ...)
-{//Display text in zenith_task.
+U0 SysLog(U8 *format, ...)
+{//Display text in sys_task.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	if (Fs == zenith_task)
+	if (Fs == sys_task)
 		"%s", buf;
 	else if (!IsSingleUser)
-		Zenith("\"%%s\",%d;", buf);
+		Sys("\"%%s\",%d;", buf);
 	Free(buf);
 }
 
-U0 ZenithWarn(U8 *format, ...)
-{//Display pink blinking Warn text in zenith_task.
+U0 SysWarn(U8 *format, ...)
+{//Display pink blinking Warn text in sys_task.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = MStrPrint(ST_WARN_ST "%s", buf);
 
-	if (Fs == zenith_task)
+	if (Fs == sys_task)
 		"%s", st;
 	else if (!IsSingleUser)
-		Zenith("\"%%s\",%d;", st);
+		Sys("\"%%s\",%d;", st);
 	Free(st);
 	Free(buf);
 }
 
-U0 ZenithErr(U8 *format, ...)
-{//Display red blinking Err text in zenith_task.
+U0 SysErr(U8 *format, ...)
+{//Display red blinking Err text in sys_task.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = MStrPrint(ST_ERR_ST "%s", buf);
 
-	if (Fs == zenith_task)
+	if (Fs == sys_task)
 		"%s", st;
 	else if (!IsSingleUser)
-		Zenith("\"%%s\",%d;", st);
+		Sys("\"%%s\",%d;", st);
 	Free(st);
 	Free(buf);
 }

@@ -148,7 +148,7 @@ U0 FlagsScan(U8 *_dst_flags, U8 *list, U8 *src)
 {/*More than 64 flags. Flags passed by ref.
 
 Examples:
-$LK,"FlagsScan",A="FF:::/Zenith/Utils/Find.CC,FlagsScan:2"$(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
+$LK,"FlagsScan",A="FF:::/System/Utils/Find.CC,FlagsScan:2"$(&fuf_flags,Define("ST_FILE_UTIL_FLAGS"),fu_flags);
 
 I64 flags=0;
 FlagsScan(&flags,"R\0L\0Dump\0Scan\0","+Dump-R"); //Sets Bit#2, Clears Bit#0.

@@ -102,7 +102,7 @@ I64 WordsCompare(U8 *e1, U8 *e2)
 /*Format of word list entry:
 	U8 ACD_WORD_CHAR
 	U8 word[] with terminating zero
-	I16 block; //definition offset in ::/Zenith/AutoComplete/ACDefs.DATA
+	I16 block; //definition offset in ::/System/AutoComplete/ACDefs.DATA
 */
 
 U0 DisplayWords(I64 n)

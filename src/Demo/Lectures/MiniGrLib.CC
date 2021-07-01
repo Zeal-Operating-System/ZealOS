@@ -136,10 +136,10 @@ U0 MiniGrLibDemo()
 	MGUpdate;
 	Busy(1500000);
 /*
-We are returning graphics to normal operations under ZenithOS.
-It is not normal to by-pass the ZenithOS graphcis routines.
-The ZenithOS graphics don't know VGA has changed.
-This bit tells ZenithOS to update whole screen.
+We are returning graphics to normal operations under ZealOS.
+It is not normal to by-pass the ZealOS graphcis routines.
+The ZealOS graphics don't know VGA has changed.
+This bit tells ZealOS to update whole screen.
 */
 	//<CTRL-ALT-v> will flush screen VGA cache.
 	LFBFlush;

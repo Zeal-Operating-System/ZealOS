@@ -151,7 +151,7 @@ U8 *TOSLinkConvert1(U8 *link_st)
 				while (LBts(&locks, 0))
 					Yield;
 				if (!bible)
-					bible = Zenith("DocRead(\"%s\");", filename);
+					bible = Sys("DocRead(\"%s\");", filename);
 				if (DocFind(bible, num, needle))
 					res = URLBibleGateway(link_st);
 				LBtr(&locks, 0);
@@ -202,7 +202,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 					"<head>\n"
 					"<meta http-equiv=\"Content-Type\" "
 					"content=\"text/html;charset=US-ASCII\">\n"
-					"<meta name=\"generator\" content=\"$TX,"ZenithOS V2.01",D="DD_OS_NAME_VERSION"$\">\n";
+					"<meta name=\"generator\" content=\"$TX,"ZealOS V2.01",D="DD_OS_NAME_VERSION"$\">\n";
 	if (!body_header)
 		body_header =
 					"<body>\n"

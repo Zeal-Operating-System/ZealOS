@@ -48,7 +48,7 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 }
 
 U0 OSFilesMerge(U8 *dst_files_find_mask="/*", U8 *src_files_find_mask="/*", U8 *fu_flags=NULL)
-{ // See $LK+PU,"Merge",A="FF:::/Zenith/Utils/Merge.CC,public U0 Merge"$.
+{ // See $LK+PU,"Merge",A="FF:::/System/Utils/Merge.CC,public U0 Merge"$.
 	I64			 df_flags = 0, fuf_flags = 0;
 	CDirEntry	*tmpde1 = NULL, *tmpde2 = NULL;
 

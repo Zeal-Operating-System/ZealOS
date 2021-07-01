@@ -16,7 +16,7 @@ U0 TS(U8 *desc)
 	progress4_max = 171;
 	progress4_t0 = ts_t0;
 	*progress4_desc = 0;
-	RegExe("ZenithOS/OSTestSuite");
+	RegExe("ZealOS/OSTestSuite");
 }
 
 U0 TSFile(U8 *name, I64 mS=750)
@@ -1814,7 +1814,7 @@ U0 OSTestSuite()
 								MessagePostWait(task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
 							}
 	TS("ATARep"); 			XTalkWait(task, "ATARep;\npSleep(750);\n");
-	TS("HashDepthRep"); 	XTalkWait(task, "HashDepthRep(zenith_task->hash_table);Sleep(750);\n");
+	TS("HashDepthRep"); 	XTalkWait(task, "HashDepthRep(sys_task->hash_table);Sleep(750);\n");
 	TS("Who");				XTalkWait(task, "Who;Sleep(750);\n");
 	TS("DriveRep"); 		XTalkWait(task, "DriveRep;Sleep(750);\n");
 	TS("TaskRep");			XTalkWait(task, "TaskRep;Sleep(750);\n");
@@ -1822,7 +1822,7 @@ U0 OSTestSuite()
 	TS("SysRep");			XTalkWait(task, "SysRep;Sleep(750);\n");
 	DeathWait(&task, TRUE);
 
-	ProgressBarsReset("ZenithOS/OSTestSuite");
+	ProgressBarsReset("ZealOS/OSTestSuite");
 	"Elapsed Time:%5.3f\n", tS - ts_t0;
 }
 

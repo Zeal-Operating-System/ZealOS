@@ -1,5 +1,5 @@
 /* RS232 serial ports no longer exist.
-Be sure to Zenith Include this by placing
+Be sure to System Include this by placing
 it in your start-up scripts.
 */
 

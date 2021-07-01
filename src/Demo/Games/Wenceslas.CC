@@ -1,5 +1,5 @@
-RegDefault("ZenithOS/Wenceslas", "F64 best_score=9999;\n");
-RegExe("ZenithOS/Wenceslas");
+RegDefault("ZealOS/Wenceslas", "F64 best_score=9999;\n");
+RegExe("ZealOS/Wenceslas");
 
 #define BORDER			5
 #define KING_STEP 		6
@@ -647,7 +647,7 @@ ws_done:
 	SettingsPop;
 	CleanUp;
 	MenuPop;
-	RegWrite("ZenithOS/Wenceslas", "F64 best_score=%5.4f;\n", best_score);
+	RegWrite("ZealOS/Wenceslas", "F64 best_score=%5.4f;\n", best_score);
 }
 
 Wenceslas;

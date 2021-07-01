@@ -16,7 +16,7 @@ U0 Job2(I64)
 {//Log a file
 	while (!app_done)
 	{
-		ZenithLog("%F", "::/Demo/MultiCore/LoadTest.CC");
+		SysLog("%F", "::/Demo/MultiCore/LoadTest.CC");
 		Yield;
 	}
 	lock {app_done_ack--;}
@@ -27,7 +27,7 @@ U0 Job3(I64)
 	while (!app_done)
 	{
 		Cd("::/Compiler");
-		ZenithLog("%F", "Compiler.PRJ");
+		SysLog("%F", "Compiler.PRJ");
 		Yield;
 	}
 	lock {app_done_ack--;}

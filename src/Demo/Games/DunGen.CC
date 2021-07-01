@@ -1,5 +1,5 @@
-RegDefault("ZenithOS/DunGen", "F64 best_score=9999;\n");
-RegExe("ZenithOS/DunGen");
+RegDefault("ZealOS/DunGen", "F64 best_score=9999;\n");
+RegExe("ZealOS/DunGen");
 
 //Set snap to 4 and width to 4
 //if you edit this map.
@@ -490,7 +490,7 @@ dg_done:
 	SettingsPop;
 	CleanUp;
 	MenuPop;
-	RegWrite("ZenithOS/DunGen", "F64 best_score=%5.4f;\n", best_score);
+	RegWrite("ZealOS/DunGen", "F64 best_score=%5.4f;\n", best_score);
 }
 
 DunGen;

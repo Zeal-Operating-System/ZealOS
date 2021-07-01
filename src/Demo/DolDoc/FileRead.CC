@@ -34,7 +34,7 @@ public U0 DocProfile(U8 *filename,I64 flags)
 	"See $$LK,\"CDocEntry\",A=\"MN:CDocEntry\"$$, "
 	"$$LK,\"Doc Type Defines\",A=\"MN:DOCT_TEXT\"$$ and "
 	"$$LK,\"Doc Type Codes\","
-	"A=\"FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_CMDS\"$$.\n"
+	"A=\"FF:::/System/DolDoc/DocInit.CC,ST_DOC_CMDS\"$$.\n"
 	"$$FG$$";
 	for (i = 0; i < DOCT_TYPES_NUM; i++)
 		if (cmd_stats[i])
@@ -54,7 +54,7 @@ public U0 DocProfile(U8 *filename,I64 flags)
 	"$$GREEN$$\n'$$PURPLE$$doc_e->de_flags$$GREEN$$' is 64-bit.  "
 	"See $$LK,\"Doc Flag Defines\",A=\"MN:DOCEf_TAG\"$$ and "
 	"$$LK,\"Doc Flag Codes\","
-	"A=\"FF:::/Zenith/DolDoc/DocInit.CC,ST_DOC_FLAGS\"$$.\n"
+	"A=\"FF:::/System/DolDoc/DocInit.CC,ST_DOC_FLAGS\"$$.\n"
 	"$$FG$$";
 	for (i = 0; i < 64; i++)
 		if (flags_stats[i])

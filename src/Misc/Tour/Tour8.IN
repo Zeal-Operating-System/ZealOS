@@ -1,6 +1,6 @@
 "FF(\"/Kernel/*\");";
 TourPut(	"Let's list files in the $$GREEN$$/Kernel$$FG$$ and sub directories.\n\n"
-			"ZenithOS masks have one base directory and multiple filename masks.\n\n"
+			"ZealOS masks have one base directory and multiple filename masks.\n\n"
 			"Press $$GREEN$$<ENTER>$$FG$$.\n");
 InGetStr("\n");
 

@@ -15,7 +15,7 @@ $ID,2$For this mini compiler, some things you should know about 64-bit asm:
 
 * "PUSH EAX", "POP EAX" and "XOR EAX,EAX" will behave as 64-bit even without REX because the stack is always 64 bit and because the XOR clears the upper 32-bits.
 
-It is okay in ZenithOS to change RAX, RBX, RCX, RDX, R8 and R9 without restoring them to their original values.
+It is okay in ZealOS to change RAX, RBX, RCX, RDX, R8 and R9 without restoring them to their original values.
 $ID,-2$$WW,0$*/
 
 #define TK_EOF					0

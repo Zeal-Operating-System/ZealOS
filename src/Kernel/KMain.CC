@@ -142,14 +142,14 @@ U0 KMain()
 	CBlkDev *bd;
 
 	OutU8(PCSPKR, InU8(PCSPKR) & ~3); //Sound;
-	zenith_task = Fs;
+	sys_task = Fs;
 	BlkPoolsInit;
 	SysGlobalsInit;
 	Mem32DevInit;
 	UncachedAliasAlloc;
 	LoadKernel;
 	SysGrInit;
-	StrCopy(Fs->task_name, "Zenith Task CPU00");
+	StrCopy(Fs->task_name, "System Task CPU00");
 	StrCopy(Fs->task_title, Fs->task_name);
 	Fs->title_src = TTS_TASK_NAME;
 	Fs->win_right = text.cols - 2;
@@ -163,7 +163,7 @@ U0 KMain()
 	//Before this point use $LK,"Sound",A="MN:Sound"$() and $LK,"Busy",A="MN:Busy"$()
 	//to debug.  After this point, use $LK,"RawPrint",A="MN:RawPrint"$()
 	LBts(&sys_run_level, RLf_RAW);
-	"ZenithOS V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;
+	"ZealOS V%0.2f\t%D %T\n\n", sys_os_version, sys_compile_time, sys_compile_time;
 
 	TimerInit;
 	if (MemBIOSTotal < ToI64 (0.95 * MEM_MIN_MEG * 0x100000) )
@@ -237,7 +237,7 @@ U0 KMain()
 		Debug;
 	}
 
-	LBts(&sys_run_level, RLf_ZENITH_SERVER);
+	LBts(&sys_run_level, RLf_ZEAL_SERVER);
 	ServerTaskCont; //Never to return
 }
 
