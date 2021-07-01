@@ -1,6 +1,6 @@
 
 /**
-	@ingroup Draw
+	@ingroup GLDraw
 	@brief Draw non-transformed color texture with blit operation.
 
 	Does not yet check if texture being drawn is entirely inside the texture
@@ -12,14 +12,15 @@
 	@param[in]     y			Y location to draw texture.
 	@param[in]     transparent	(optional) use alpha as mask. False by default.
 */
-U0 DrawTexture(CTex2D *dst, CTex2D *src, I64 x, I64 y, 
+U0 GLDrawTexture(CGLTex2D *dst, CGLTex2D *src, I64 x, I64 y, 
 	Bool transparent = FALSE)
 {
-	I64 xC, yC; // Current width/height position being copied from
+	I64 xC, yC, 			// Current width/height position being copied from
+		srcW, srcH, dstW;
 
-	I64 srcW = src->w;	// Don't think the compiler is optimizing this so I am
-	I64 srcH = src->h;
-	I64 dstW = dst->w;
+	srcW = src->w;
+	srcH = src->h;
+	dstW = dst->w;
 
 	if (transparent)
 	{
@@ -30,7 +31,7 @@ U0 DrawTexture(CTex2D *dst, CTex2D *src, I64 x, I64 y,
 				if (src->rawBuf[xC + yC * srcW].pad == 255)
 				{
 					// Assume target doesn't care about alpha byte being copied
-					dst->rawBuf[(x + xC) + (y + yC) * dstW] =
+					dst->rawBuf[x + xC + (y + yC) * dstW] =
 						src->rawBuf[xC + yC * srcW];
 				}
 			} 

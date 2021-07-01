@@ -1,29 +1,28 @@
 /**
-    @defgroup Tex2D Texture
+    @defgroup GLTex2D Texture
     @brief The core of the library, almost all functions either read from
     or write to textures.
 */
 
-
 /**
-	@ingroup Tex2D 
+	@ingroup GLTex2D 
 	@brief Raw format is a CBGR24 rawBuf array of size w * h in row-major 
 	order. 
 */
 #define TEX2D_RAW	1
 
 /** 
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Depth format is a F64 depthBuf array of size w * h in row-major 
 	order. 
 */
 #define TEX2D_DEPTH	2
 
 /**
-    @ingroup Tex2D
-    @brief The CTex2D class
+    @ingroup GLTex2D
+    @brief The texture class, just about everything reads from or writes to this.
 */
-class CTex2D
+class CGLTex2D
 {
 	I64 type;			// Type, see TEX2D_ macros above
 	I64 w;				// Width
@@ -36,7 +35,7 @@ class CTex2D
 };
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
     @brief Initialize texture.
 
     @param[in,out] tex	Uninitialized texture to initialize.
@@ -46,7 +45,7 @@ class CTex2D
     @param[in]     l	(Optional) left offset for use with sprite textures.
     @param[in]     t	(Optional) top offset for use with sprite textures.
 */
-U0 Tex2DInit(CTex2D *tex, I64 type, I64 w, I64 h, I64 l = 0, I64 t = 0)
+U0 GLTex2DInit(CGLTex2D *tex, I64 type, I64 w, I64 h, I64 l = 0, I64 t = 0)
 {
 	tex->w = w;
 	tex->h = h;
@@ -56,23 +55,23 @@ U0 Tex2DInit(CTex2D *tex, I64 type, I64 w, I64 h, I64 l = 0, I64 t = 0)
 
 	switch (type)
 	{
-		case (TEX2D_RAW):
+		case TEX2D_RAW:
 			tex->rawBuf = MAlloc(4 * tex->w * tex->h);
 		break;
 
-		case (TEX2D_DEPTH):
+		case TEX2D_DEPTH:
 			tex->depthBuf = MAlloc(sizeof(F64) * tex->w * tex->h);
 		break;
 	}
 }
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Free texture.
 	
 	@param[in,out] tex	Texture to free.
 */
-U0 Tex2DFree(CTex2D *tex)
+U0 GLTex2DFree(CGLTex2D *tex)
 {
 	switch (tex->type)
 	{
@@ -87,24 +86,24 @@ U0 Tex2DFree(CTex2D *tex)
 }
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Fill texture with color. Only works with raw textures.
 
 	@param[in,out] tex		Texture to color fill.
 	@param[in]     color	Color to fill texture with.
 */
-U0 Tex2DColorFill(CTex2D *tex, CBGR24 color)
+U0 GLTex2DColorFill(CGLTex2D *tex, CBGR24 color)
 {
 	MemSetU32(tex->rawBuf, color, tex->w * tex->h);
 }
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Reset depth texture. Set all pixels to far depth.
 
 	@param[in,out] tex	Depth texture to reset.
 */
-U0 Tex2DDepthReset(CTex2D *tex)
+U0 GLTex2DDepthReset(CGLTex2D *tex)
 {
 	F64 depth = 2.0;
 	I64 *iDepth = &depth;
@@ -112,7 +111,7 @@ U0 Tex2DDepthReset(CTex2D *tex)
 } 
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Draw texture directly to display buffer. Maps non-visible textures
 	like depth to a visible palette when drawing for visual debugging.
 
@@ -125,7 +124,7 @@ U0 Tex2DDepthReset(CTex2D *tex)
 	@param[in] x	X position on screen to draw texture.
 	@param[in] y	Y position on screen to draw texture. 
 */
-U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y)
+U0 GLTex2DDebugDisp(CGLTex2D *tex, I64 x, I64 y)
 {
 	// i, j = sampling x, y position on texture
 	I64 i, j;
@@ -141,7 +140,7 @@ U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y)
 			switch (tex->type)
 			{
 				case TEX2D_RAW:
-					text.fb_alias[(x + i) + (y + j) * GR_WIDTH] 
+					text.fb_alias[x + i + (y + j) * GR_WIDTH] 
 						= tex->rawBuf[i + j * tex->w];
 				break;
 
@@ -151,7 +150,7 @@ U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y)
 					color.r = scaled;
 					color.g = scaled;
 					color.b = scaled;
-					text.fb_alias[(x + i) + (y + j) * GR_WIDTH] = color;
+					text.fb_alias[x + i + (y + j) * GR_WIDTH] = color;
 				break;
 			}
 		}
@@ -159,7 +158,7 @@ U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y)
 }
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Sample color from color textures at normalized UV coordinate 
 	(0.0-1.0). Coordinates over 1.0 loop causing a repeating texture effect. 
 
@@ -170,10 +169,12 @@ U0 Tex2DDebugDisp(CTex2D *tex, I64 x, I64 y)
 	@param[in]     u	Normalized (0.0-1.0) x coordinate to sample from.
 	@param[in]     v	Normalized (0.0-1.0) y coordinate to sample from.
 */
-U0 Tex2DSampleNorm(CBGR24 *col, CTex2D *tex, F64 u, F64 v)
+U0 GLTex2DSampleNorm(CBGR24 *col, CGLTex2D *tex, F64 u, F64 v)
 {
-	I64 x = u * tex->w;
-	I64 y = v * tex->h;
+	I64 x, y;
+
+	x = u * tex->w;
+	y = v * tex->h;
 	x %= tex->w;
 	y %= tex->h;
 
@@ -181,7 +182,7 @@ U0 Tex2DSampleNorm(CBGR24 *col, CTex2D *tex, F64 u, F64 v)
 }
 
 /**
-	@ingroup Tex2D
+	@ingroup GLTex2D
 	@brief Sample color from color textures at UV coordinate. Coordinates
 	over texture dimensions loop causing a repeating texture effect.
 
@@ -189,7 +190,7 @@ U0 Tex2DSampleNorm(CBGR24 *col, CTex2D *tex, F64 u, F64 v)
 	@param[in]     u	X coordinate to sample from.
 	@param[in]     v	Y coordinate to sample from.
 */
-U0 Tex2DSampleCoord(CBGR24 *col, CTex2D *tex, I64 u, I64 v)
+U0 GLTex2DSampleCoord(CBGR24 *col, CGLTex2D *tex, I64 u, I64 v)
 {
 	u %= tex->w;
 	v %= tex->h;

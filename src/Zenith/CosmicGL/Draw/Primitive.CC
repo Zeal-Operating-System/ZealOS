@@ -1,10 +1,10 @@
 /**
-	@defgroup Draw Draw
+	@defgroup GLDraw Draw
 	@brief Functions for drawing to textures.
 */
 
 /**
-	@ingroup Draw
+	@ingroup GLDraw
 	@brief Draw pixel on color texture. Does not check boundaries, point
 	must be fully inside texture.
 
@@ -13,14 +13,14 @@
 	@param[in]     y		Y position.
 	@param[in]     color	Color of point.
 */
-U0 DrawPixel(CTex2D *tex, I64 x, I64 y, CBGR24 color)
+U0 GLDrawPixel(CGLTex2D *tex, I64 x, I64 y, CBGR24 color)
 {
     tex->rawBuf[x + y * tex->w] = color;
 }
 
 
 /**
-	@ingroup Draw
+	@ingroup GLDraw
 	@brief Draw line on color texture. Does not check boundaries, line must
 	be fully inside texture.
 
@@ -31,11 +31,14 @@ U0 DrawPixel(CTex2D *tex, I64 x, I64 y, CBGR24 color)
 	@param[in]     y1		End y.
 	@param[in]     color	Color of line.
 */
-U0 DrawLine(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, CBGR24 color)
+U0 GLDrawLine(CGLTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, CBGR24 color)
 {
-	Bool steep = (Abs(y1 - y0) > Abs(x1 - x0));
+	Bool steep;
+	I64 temp,
+		delta_x, delta_y, error,
+		step_y, x, y;
 
-	I64 temp;
+	steep = Abs(y1 - y0) > Abs(x1 - x0);
 
 	if (steep == TRUE)
     {
@@ -57,11 +60,11 @@ U0 DrawLine(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, CBGR24 color)
 		y1 = temp;	
 	}
 
-	I64 delta_x = x1 - x0;
-	I64 delta_y = Abs(y1 - y0);
-	I64 error = delta_x / 2;
+	delta_x = x1 - x0;
+	delta_y = Abs(y1 - y0);
+	error = delta_x / 2;
 
-	I64 step_y;
+	step_y;
 	
 	if (y0 < y1)
 	{
@@ -72,11 +75,9 @@ U0 DrawLine(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, CBGR24 color)
 		step_y = -1;
 	}
 
-	I64 y = y0;
+	y = y0;
 	
-
-	I64 x;
-	for (x = x0; x < (x1 + 1); x++)
+	for (x = x0; x < x1 + 1; x++)
 	{
 		if (steep == TRUE)
 		{
@@ -98,7 +99,7 @@ U0 DrawLine(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, CBGR24 color)
 }
 
 /**
-	@ingroup Draw
+	@ingroup GLDraw
 	@brief Draw single color triangle to color texture. Does not check
 	boundaries, triangle must be fully inside texture.
 
@@ -111,11 +112,18 @@ U0 DrawLine(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, CBGR24 color)
 	@param[in]     y2		Third vertex y.
 	@param[in]     color	Color of triangle.
 */
-U0 DrawTriangle(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, I64 x2, I64 y2, 
+U0 GLDrawTriangle(CGLTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, I64 x2, I64 y2,
 	CBGR24 color)
 {
+	Bool middle_line_drawn;
 	I64 temp;
-	F64 ftemp;
+	F64 ftemp,
+		x_delta, y_delta,
+		left_delta, right_delta,
+		left_x, right_x,
+		y, lX, rX,
+		left_index, right_index,
+		width;
 	
 	if (y0 > y1)
 	{
@@ -147,25 +155,16 @@ U0 DrawTriangle(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, I64 x2, I64 y2,
 		y2 = temp;
 	}
 
-	Bool middle_line_drawn = FALSE;
-	F64 x_delta;
-	F64 y_delta;
-	F64 left_delta;
-	F64 right_delta;
-	F64 left_x;
-	F64 right_x;
-	I64 y, lX, rX;
-	I64 left_index, right_index;
-	I64 width;
+	middle_line_drawn = FALSE;
 
 	// Bottom Half
 	if (y0 != y1)
 	{
-		x_delta = (x1 - x0);
-		y_delta = (y1 - y0);
+		x_delta = x1 - x0;
+		y_delta = y1 - y0;
 		left_delta = x_delta / y_delta;
-		x_delta = (x2 - x0);
-		y_delta = (y2 - y0);
+		x_delta = x2 - x0;
+		y_delta = y2 - y0;
 		right_delta = x_delta / y_delta;
 
 		if (left_delta > right_delta)
@@ -180,7 +179,7 @@ U0 DrawTriangle(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, I64 x2, I64 y2,
 
 		middle_line_drawn = TRUE;
 
-		for (y = y0; y < (y1 + 1); y++)
+		for (y = y0; y < y1 + 1; y++)
 		{
 			lX = left_x + 0.5;
 			rX = right_x + 0.5;
@@ -196,11 +195,11 @@ U0 DrawTriangle(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, I64 x2, I64 y2,
 	// Top Half
 	if (y1 != y2)
 	{
-		x_delta = -(x1 - x2);
-		y_delta = (y1 - y2);
+		x_delta = -x1 - x2;
+		y_delta = y1 - y2;
 		left_delta = x_delta / y_delta;
-		x_delta = -(x0 - x2);
-		y_delta = (y0 - y2);
+		x_delta = -x0 - x2;
+		y_delta = y0 - y2;
 		right_delta = x_delta / y_delta;
 
 		if (left_delta > right_delta)
@@ -218,7 +217,7 @@ U0 DrawTriangle(CTex2D *tex, I64 x0, I64 y0, I64 x1, I64 y1, I64 x2, I64 y2,
 			y1 += 1;
 		}
 
-		for (y = y2; y > (y1 - 1); y--)
+		for (y = y2; y > y1 - 1; y--)
 		{
 			lX = left_x + 0.5;
 			rX = right_x + 0.5;

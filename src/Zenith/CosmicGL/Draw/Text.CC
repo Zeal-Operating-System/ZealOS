@@ -1,12 +1,14 @@
 /**
-	@ingroup Draw
+	@ingroup GLDraw
 	@brief Draw a single color character to color texture.
+
+	Will not draw character if partially off-screen.
 
 	@param[in,out] tex	Texture to draw to.
 	@param[in]     x	X position to draw character at.
 	@param[in]     y	Y position to draw character at.
 */
-U0 DrawChar(CTex2D *tex, I64 x, I64 y, U8 char, CBGR24 color, 
+U0 GLDrawChar(CGLTex2D *tex, I64 x, I64 y, U8 char, CBGR24 color, 
 	U64 *font = text.font)
 {
 	// Check if off-screen
@@ -18,15 +20,17 @@ U0 DrawChar(CTex2D *tex, I64 x, I64 y, U8 char, CBGR24 color,
 	{
 		for (i = 0; i < FONT_WIDTH; i++)
 		{
-			if (font[char].u8[j] & (1 << i))
+			if (font[char].u8[j] & 1 << i)
 				tex->rawBuf[x + i + (y + j) * tex->w] = color;
 		}
 	}
 }
 
 /**
-	@ingroup Draw
+	@ingroup GLDraw
 	@brief Draw a single color string to color texture.
+
+	Escape sequences are not working correctly.
 
 	@param[in,out] tex		Texture to draw to.
 	@param[in]     x		X position to draw text at.
@@ -34,12 +38,14 @@ U0 DrawChar(CTex2D *tex, I64 x, I64 y, U8 char, CBGR24 color,
 	@param[in]     color	Color of text.
 	@param[in]     font		Pointer to font buffer. System font by default.
 */
-U0 DrawString(CTex2D *tex, I64 x, I64 y, U8 *str, CBGR24 color,
+U0 GLDrawString(CGLTex2D *tex, I64 x, I64 y, U8 *str, CBGR24 color,
 	U64 *font = text.font)
 {
-	I64 cur = 0;	// String cursor
-	I64 xCur = x;	// Screen cursors 
-	I64 yCur = y;
+	I64 cur = 0,	// String cursor
+		xCur, yCur;	// Screen cursors 
+
+	xCur = x;
+	yCur = y;
 
 	while (str[cur] != NULL)
 	{
@@ -47,7 +53,6 @@ U0 DrawString(CTex2D *tex, I64 x, I64 y, U8 *str, CBGR24 color,
 		{
 			// Escape sequence
 			case '\\':
-				"ESCAPE SEQ\n";
 				switch (str[cur + 1])
 				{
 					case 'n':
@@ -62,7 +67,7 @@ U0 DrawString(CTex2D *tex, I64 x, I64 y, U8 *str, CBGR24 color,
 						break;
 					
 					case '\\':
-						DrawChar(tex, xCur, yCur, '\\', color, font);
+						GLDrawChar(tex, xCur, yCur, '\\', color, font);
 						xCur += FONT_WIDTH;
 						break;
 						
@@ -76,7 +81,7 @@ U0 DrawString(CTex2D *tex, I64 x, I64 y, U8 *str, CBGR24 color,
 				break;
 
 			default:
-				DrawChar(tex, xCur, yCur, str[cur], color, font);
+				GLDrawChar(tex, xCur, yCur, str[cur], color, font);
 				cur++;
 				xCur += FONT_WIDTH;
 				break;

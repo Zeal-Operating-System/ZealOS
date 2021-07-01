@@ -16,15 +16,15 @@ WinHorz(wXC, wXC + wWC - 1);
 WinVert(wYC, wYC + wHC - 1);
 DocClear;
 
-CTex2D texture;
-Tex2DLoadBMP(&texture, "SaintTerry.bmp");
+CGLTex2D texture;
+GLTex2DLoadBMP(&texture, "SaintTerry.bmp");
 
 while (CharScan() == 0)
 {
-	Tex2DDebugDisp(&texture, wX, wY);
+	GLTex2DDebugDisp(&texture, wX, wY);
 	Sleep(1);
 }
 
-Tex2DFree(&texture);
+GLTex2DFree(&texture);
 SettingsPop;
 Exit;
