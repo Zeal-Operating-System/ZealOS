@@ -151,7 +151,7 @@ $ID,2$The System task is immortal. The system task is created at start-up and ap
 $ID,-2$$TR,"Executive Tasks"$
 $ID,2$Each CPU core has an $FG,2$Executive$FG$ task that is immortal.  The System task on $FG,2$Core0$FG$ is also its $FG,2$Executive$FG$ task.
 $ID,-2$$TR,"Code and Data Heaps"$
-$ID,2$ZealOS uses the asm $FG,2$CALL$FG$ inst, exclusively, and that inst is limited to calling routines $FG,2$+/-2Gig$FG$ from the current code location.	To prevent out-of-range issues, I decided to separate code and data, placing all code within the lowest $FG,2$2Gig$FG$ of memory, addresses $FG,2$00000000$FG$-$FG,2$7FFFFFFF$FG$.	The compiler and $LK,"Load",A="MN:Load"$()er alloc memory from the code heap to store code and global vars, unless the compiler option $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$ is used.  When programs call $LK,"MAlloc",A="MN:MAlloc"$() is from the data heap, which in not limited in size, except by physical RAM memory.  You can alloc from any heap in any task at any time on any core, even making $LK,"independent",A="MN:MemPagAlloc"$ heaps.
+$ID,2$ZealOS uses the asm $FG,2$CALL$FG$ inst, exclusively, and that inst is limited to calling routines $FG,2$+/-2Gig$FG$ from the current code location.	To prevent out-of-range issues, code and data are separated, placing all code within the lowest $FG,2$2Gig$FG$ of memory, addresses $FG,2$00000000$FG$-$FG,2$7FFFFFFF$FG$.	The compiler and $LK,"Load",A="MN:Load"$()er alloc memory from the code heap to store code and global vars, unless the compiler option $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$ is used.  When programs call $LK,"MAlloc",A="MN:MAlloc"$() is from the data heap, which in not limited in size, except by physical RAM memory.  You can alloc from any heap in any task at any time on any core, even making $LK,"independent",A="MN:MemPagAlloc"$ heaps.
 $ID,-2$$TR,"Parent, Child and PopUp Tasks"$
 $ID,2$Often a task will $LK,"Spawn",A="MN:Spawn"$() or $LK,"PopUp",A="MN:PopUp"$() a task as a helper.	The helper is known as a child Task, though you can $LK,"Spawn",A="MN:Spawn"$ a task and assign it a different parent... like $FG,2$System$FG$.  Links are kept as to who's whose child, so when one task is $LK,"Kill",A="MN:Kill"$()ed the child helper tasks die, too.  You can get a report of current system tasks with $LK,"TaskRep",A="MN:TaskRep"$().  There is just one window per task, so child tasks are needed for pop-ups.
 $ID,-2$$TR,"CosmiC"$
@@ -230,7 +230,7 @@ $LK,"FILEMASK_AOT",A="MN:FILEMASK_AOT"$
 $LK,"FILEMASK_JIT",A="MN:FILEMASK_JIT"$
 $LK,"FILEMASK_GR",A="MN:FILEMASK_GR"$
 $ID,-2$$TR,"Naming Convention"$
-$ID,2$Since there are no $FG,2$namespaces$FG$ and I don't plan to implement name spaces, I highly recommend putting a 2-3 character module code prefix on syms. e.g. $FG,2$WS$FG$, $FG,2$Doc$FG$, $FG,2$Lex$FG$
+$ID,2$Since there are no $FG,2$namespaces$FG$, it is highly recommended to put a 2-3 character module code prefix on syms. e.g. $FG,2$WS$FG$, $FG,2$Doc$FG$, $FG,2$Lex$FG$
 
 $FG,5$ALL_CAPS$FG$
 	Assembly Language labels are capitalized with underscores between words.	So are $FG,2$#define$FG$'s.
@@ -255,7 +255,7 @@ $FG,5$DOCG_????$FG$
 
 $FG,5$res$FG$ is reserved for local variables that hold the function return val.
 
-$FG,5$*$FG$ I used C++ like naming.  I place $FG,2$New$FG$, $FG,2$Del$FG$, $FG,2$Init$FG$, $FG,2$Reset$FG$, ect. on the end of a function name instead of at the beginning.  $FG,2$ResetMusicSettings$FG$ should be $FG,2$MusicSettingsReset$FG$.
+$FG,5$*$FG$ C++ like naming is used.  $FG,2$New$FG$, $FG,2$Del$FG$, $FG,2$Init$FG$, $FG,2$Reset$FG$, ect. are placed on the end of a function name instead of at the beginning.  $FG,2$ResetMusicSettings$FG$ should be $FG,2$MusicSettingsReset$FG$.
 $ID,-2$$TR,"Fs"$
 $ID,2$The CPU FS segment reg.  This reg points to the current task's $LK,"CTask",A="MN:CTask"$.
 $ID,-2$$TR,"Gs"$
@@ -266,6 +266,6 @@ $ID,-2$$TR,"Join"$
 $ID,2$When two parts of a program have a common low-level routine, that routine is often labeled SomethingJoin.
 $ID,-2$$TR,"user_data"$
 $ID,2$Many operating system structures have space set aside for you to store values.	You are on your own managing these with multiple applications and libraries.
-$ID,-2$$TR-C,"Multicore Core0/CoreAP"$
+$ID,-2$$TR,"Multicore Core0/CoreAP"$
 $ID,2$Core0, has the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$, and it is the master.	The $FG,2$application processors$FG$ have an $LK,"Executive Task",A="FF:::/Doc/Glossary.DD,Executive Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQueue",A="MN:JobQueue"$() a job on them.
 $ID,-2$

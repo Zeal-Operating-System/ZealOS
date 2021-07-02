@@ -6,9 +6,9 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * While debugging, you specify addresses of assembly routines with just the label, as in $FG,2$_MALLOC+0x20$FG$.	You specify $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ function names with $FG,2$&$FG$ before functions as in $FG,2$&Print+0x10$FG$.
 
-* I use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ for debugging because they show on the wallpaper.  They're just global int vars.
+* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ for debugging because they show on the wallpaper.  They're just global int vars.
 
-* You can use $LK,"SysLog",A="MN:SysLog"$() to send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ window.	It works like $LK,"Print",A="MN:Print"$().	I never use that.  Instead, I use $LK,"RawPrint",A="MN:RawPrint"$().
+* You can use $LK,"SysLog",A="MN:SysLog"$() to send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ window.	It works like $LK,"Print",A="MN:Print"$().	You could also use $LK,"RawPrint",A="MN:RawPrint"$().
 
 * $LK,"D",A="MN:D"$(), $LK,"DocD",A="MN:DocD"$(), $LK,"RawD",A="MN:RawD"$() to do 16 column hex dump mem with numbering from zero.	With $LK,"DocD",A="MN:DocD"$ the values are updated continually and you can alter mem by editing.
 

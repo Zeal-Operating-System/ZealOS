@@ -10,10 +10,10 @@
 '$$'= IEF_ENDING_ZERO 		Ending zero for ENTER.
 
 $FG,4$Note:$FG$ ZealOS uses nonstandard opcodes.
-Asm is kind-of a bonus and I made changes
+Asm is kind-of a bonus and Terry made changes
 to make the assembler simpler. For opcodes
 which can have different numbers of
-args, I separated them out -- Like IMUL and IMUL2.
+args, he separated them out -- Like IMUL and IMUL2.
 The assembler will not report certain invalid
 forms. Get an Intel datasheet and learn
 which forms are valid.

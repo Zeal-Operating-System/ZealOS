@@ -80,3 +80,9 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	BootHDIns(dst_drv);
 }
 
+U0 OSUpgrade()
+{
+	"\n\nTODO: OSUpgrade (base off OSInstall)\n\n";
+}
+
+OSUpgrade;

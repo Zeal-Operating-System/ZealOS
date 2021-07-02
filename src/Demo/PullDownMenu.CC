@@ -70,7 +70,7 @@ U0 PullDownMenuDemo()
 				break;
 
 			case MESSAGE_CMD:
-			//I Recommend making your menu
+			//Feel free to make your menu
 			//drive by key strokes, but you can
 			//use the $LK,"MESSAGE_CMD",A="MN:MESSAGE_CMD"$ val.
 				switch (arg1)

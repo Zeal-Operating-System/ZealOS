@@ -6,7 +6,7 @@ it from the cmd line.
 */
 
 asm {
-//Opcodes are slightly different to make writing my x86_64 assembler easier.
+//Opcodes are slightly different to make writing the x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
 				IMPORT	Beep;
@@ -33,7 +33,7 @@ _BEEPS::
 }
 
 //_extern binds a asm sym to a function.
-//My convention is to put an underscore
+//The convention is to put an underscore
 //on C callable asm routines.
 _extern _BEEPS U0 Beeps(I64 count);
 

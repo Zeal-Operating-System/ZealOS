@@ -5,8 +5,8 @@ don't matter much on a modern Intel CPU
 because they convert complex insts
 to a stream of RISC insts.
 
-I learned this the hard way when I thought
-I was greatly improving my compiler by
+Terry learned this the hard way when he thought
+he was greatly improving the compiler by
 cutting code by a third.	No significant
 speed-up.  Depressing.
 */

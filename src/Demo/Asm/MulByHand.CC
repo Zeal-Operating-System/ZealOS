@@ -1,10 +1,10 @@
-/*When I was a kid with a Commodore 64,
+/*When Terry Davis was a kid with a Commodore 64,
 the 6502 chip had no multiply inst
-and this is how we had to do it, except,
-I used more regs in this example.
+and this is how he had to do it, except,
+he used more regs in this example.
 */
 asm {
-//Opcodes are slightly different to make writing my x86_64 assembler easier.
+//Opcodes are slightly different to make writing the x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
 //You can clobber RAX,RBX,RCX,RDX,R8,R9.	The compiler expects that.
@@ -44,7 +44,7 @@ _MUL_U64_U64_TO_U128::
 				RET1		24
 };
 
-//My convention is to put an underscore
+//The convention is to put an underscore
 //on C callable asm routines.
 _extern _MUL_BY_HAND_U8_U8_TO_U16 U16 MulU8(U8 n1, U8 n2);
 

@@ -1,12 +1,12 @@
 /*
-I got tricky by not defining a color
+Terry got tricky by not defining a color
 right away in these $LK,"CSprite",A="MN:CSprite"$s so they can
 work for both players by setting dc->color
-before drawing them.  I actually made these
+before drawing them.  He actually made these
 graphics by defining a color in the <CTRL-r>
 menu, drawing the unit and deleting the color.
 
-I had to leave a gap between the tank tread
+He had to leave a gap between the tank tread
 and body because of how it is rendered when rotated.
 */
 

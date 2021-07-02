@@ -159,7 +159,7 @@ U0 BgtRegen()
 		//It's tricky -- can't use old line num because of editor filters.
 
 		//The price we pay for using the standard document editor is this kludge.
-		//When I originally wrote my budget program, I did not have separate budget
+		//When Terry originally wrote the budget program, he did not have separate budget
 		//and line entries, so we never had to resync.
 
 		doc_ce = pdoc->cur_entry;

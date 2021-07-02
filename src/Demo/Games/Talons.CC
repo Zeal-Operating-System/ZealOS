@@ -12,7 +12,7 @@ RegExe("ZealOS/Talons");
 #define DISPLAY_SCALE 		100
 #define CTRLS_SCALE 		0.05
 
-//I think I did these so the heads-up showed intelligable numbers.
+//Terry thought he did these so the heads-up showed intelligable numbers.
 //Scaling is a mess.
 #define COORDINATE_SCALE	256
 #define COORDINATE_BITS 	8
@@ -249,7 +249,7 @@ U0 CalcNormals()
 {/*Find the normal vect with a curl.
 
 i,j and k are the axis unit vectors,
-not to be confused with my local index variables.
+not to be confused with local index variables.
 
 i  j	k
 0  1	dz2
@@ -666,7 +666,7 @@ U0 MPDrawIt(CTask *task, CDC *dc)
 	Mat4x4MulXYZ(s2w, &xh, &yh, &zh);
 
 	//The layer for core1 is not cleared automatically
-	//it is persistent.  I have carefully syncronized to the update
+	//it is persistent.  Terry carefully syncronized the update
 	//cycle initiated by Core0 to prevent flicker.
 
 	dc->flags |= DCF_TRANSFORMATION;

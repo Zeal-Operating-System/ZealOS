@@ -57,7 +57,7 @@ U0 Main()
 	Sleep(1000);
 	"The keyboard and timer seem to be active.\n"
 	"IntA:%d IntB:%d IntC:%d IntD:%d\n\n"
-	"IntB is my keyboard and regs a single KEY-UP.\n"
+	"IntB is Terry's keyboard and regs a single KEY-UP.\n"
 	"Rerun and press a few keys.\n", progress1, progress2, progress3, progress4;
 
 	//Disable vects

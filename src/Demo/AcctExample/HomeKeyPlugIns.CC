@@ -13,7 +13,7 @@ U0 FileLinkIns()
 {
 	U8 *st = PopUpPickFile;
 
-	st[0] = ':';	//This is my personal code, not production. LOL
+	st[0] = ':';	//This is Terry's personal code, not production. LOL
 	"$$LK,\"%s\",A=\"FI:%s\"$$", st + 2, st;
 	Free(st);
 }
@@ -23,7 +23,7 @@ U0 DirLinksIns()
 	CDirEntry	*tmpde, *tmpde1;
 	U8			*st = PopUpPickDir, *st2;
 
-	st[0] = ':';	//This is my personal code, not production. LOL
+	st[0] = ':';	//This is Terry's personal code, not production. LOL
 	st2 = MStrPrint("%s/*", st);
 	tmpde = tmpde1 = FilesFind(st2, FUF_JUST_FILES);
 	while (tmpde)

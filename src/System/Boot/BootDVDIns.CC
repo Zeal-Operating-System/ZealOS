@@ -1,5 +1,5 @@
 //See $LK,"Install Documentation",A="FI:::/Doc/Install.DD"$.
-//Study my account examples: $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.CC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.CC,1"$
+//Study the account examples: $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.CC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.CC,1"$
 
 #include "BootDVD"
 #include "DiskISORedSea"

@@ -131,7 +131,7 @@ Bool MouseHardReset()
 	if (*0x40E(U16 *) == 0x9FC0)
 	{
 		_b =  0x9FC00+0x30;
-		*_b = 1; //This enables my mouse.  It might be for one machine.
+		*_b = 1; //This enables Terry's mouse.  It might be for one machine.
 //USB DMA packets, set-up by BIOS to make legacy PS/2?
 	}
 

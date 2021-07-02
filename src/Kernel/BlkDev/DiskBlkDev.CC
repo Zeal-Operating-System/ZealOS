@@ -115,7 +115,7 @@ Bool BlkDevInit(CBlkDev *bd)
 				break;
 
 			case BDT_ATAPI:
-//0xFFFF*4 is too big for my taste
+//0xFFFF*4 is too big for Terry's taste
 				bd->max_reads = 0x800 * 4;
 //max of maybe a quarter of disk cache
 				if (bd->max_reads > blkdev.cache_size / BLK_SIZE / 4)

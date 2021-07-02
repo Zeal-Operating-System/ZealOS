@@ -27,8 +27,7 @@ U0 Tmp()
 			if (YorN)
 			{
 				DocBottom;
-//				RunFile("::/Misc/OSInstall",, TRUE);
-				RunFile("::/Misc/AHCIOSInstall",, TRUE);
+				RunFile("::/Misc/OSInstall",, TRUE);
 			}
 			if (FileFind("::/Misc/Tour"))
 			{

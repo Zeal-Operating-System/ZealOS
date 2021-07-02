@@ -239,16 +239,16 @@ class Obj
 } objs[OBJS_NUM], *ball, *human, *last_owner;
 
 /*
-Just to be different, I didn't use the built-in
+Just to be different, Terry didn't use the built-in
 DCF_TRANSFORMATION flag in this game.
-Instead, I chose a 45 degree angle
+Instead, he chose a 45 degree angle
 between Y and Z as the view point.
-If I had used the transform, I would
-have to make all my men taller.
+If he had used the transform, he would
+have to make all the men taller.
 This is a little simpler, and faster,
 but adds lots of factor 2 vals.
 
-I also didn't use the $LK,"CMathODE",A="MN:CMathODE"$ feat,
+Terry also didn't use the $LK,"CMathODE",A="MN:CMathODE"$ feat,
 just to be different.
 */
 
@@ -323,7 +323,7 @@ U0 DrawIt(CTask *task, CDC *dc)
 			{
 				if (o->has_ball && (ball->z + ball->radius * 2 >= o->z + HAND_Z_OFFSET || Abs(ball->DzDt) < 30))
 				{
-					//This is an approximation.  My instinct tells me the viscosity term
+					//This is an approximation.  Terry's instinct told him the viscosity term
 					//needs an $LK,"Exp",A="MN:Exp"$().  However,  we should be syncronized to img frames, 
 					//so we don't have to be perfect.
 					d_down	= 1.0;

@@ -10,7 +10,7 @@ it from the cmd line.
 I64 global_ona = Freq2Ona(400), global_ona_step = 10, global_ona_base = Freq2Ona(100);
 
 asm {
-//Opcodes are slightly different to make writing my x86_64 assembler easier.
+//Opcodes are slightly different to make writing the x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
 JIFFIES_MESSAGE:	DU8 "Jiffies:", 0;
@@ -50,7 +50,7 @@ _BEEPS2::
 				RET1		8
 }
 
-//My convention is to put an underscore
+//The convention is to put an underscore
 //on C callable asm routines.
 _extern _BEEPS2 U0 Beeps2(I64 count);
 

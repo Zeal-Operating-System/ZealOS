@@ -1,5 +1,5 @@
 /*$LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ are just global vars
-shown on the wallpaper. I use them in debugging a lot.
+shown on the wallpaper. Terry used them in debugging a lot.
 
 If you set $LK,"progress1_max",A="MN:progress1_max"$-$LK,"progress4_max",A="MN:progress4_max"$,
 then a progress bar will display.

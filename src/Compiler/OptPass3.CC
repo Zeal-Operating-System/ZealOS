@@ -590,7 +590,7 @@ RAX and R8 links intermediate codes together. R9 is used for stack machine
 temporaries. RBP is used as stack frame.
 
 RSI, RDI, R10, R11, R12, R13, R14, R15 are used for reg vars. R12 and R13, however,
-have a unusual ModR addressing mode in the x86_64 architecture, so I only use
+have a unusual ModR addressing mode in the x86_64 architecture, so we only use
 R12 and R13 as non-pointer register variables, such as index variables i, j, k.
 
 */

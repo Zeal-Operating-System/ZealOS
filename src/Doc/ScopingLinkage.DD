@@ -90,7 +90,7 @@ $FG,2$_extern$FG$ 	function	G C F TR   D
 $FG,2$_extern$FG$ 	var			G C G TR   D
 
 $WW,1$
-* Goto labels must not have the same name as global scope objects.	GoTo's are rare and I don't want to slow the compiler and add code to fix this.  You will get errors if a collision happens, so it's not very dangerous, but the error message is baffling.
+* Goto labels must not have the same name as global scope objects.	GoTo's are rare and we don't want to slow the compiler and add code to fix this.  You will get errors if a collision happens, so it's not very dangerous, but the error message is baffling.
 
 * The member names $FG,2$pad$FG$ and $FG,2$reserved$FG$ are special because multiple instances with the same name are allowed in a class.
 

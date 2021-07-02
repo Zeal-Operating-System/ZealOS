@@ -1,4 +1,4 @@
-//$WW,1$You may wonder why I use "&" instead of "%".
+//$WW,1$You may wonder why "&" is used instead of "%".
 
 #define SAMPLE_SIZE 		100000000
 

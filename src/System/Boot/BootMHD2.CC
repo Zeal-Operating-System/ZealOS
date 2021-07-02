@@ -24,7 +24,7 @@ BMHD2_START::
 				MOV 		AX, BOOT_HIGH_LOC_MHD2
 				MOV 		DS, AX
 
-//My assembler doesn't support 16-bit very well.
+//The assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP BOOT_HIGH_LOC_MHD2:BMHD2_HISTART
 				DU16		BMHD2_HISTART - BMHD2_START, BOOT_HIGH_LOC_MHD2;
 
@@ -111,7 +111,7 @@ BMHD2_HISTART:
 				POP 		DS
 				POPF
 
-//My assembler doesn't support 16-bit very well.
+//The assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP xxxx:yyyy
 BMHD2_OLD_CS_RIP:
 				DU16		0, 0;

@@ -20,7 +20,7 @@ from C, preserve all other regs.
 */
 
 asm {
-//Opcodes are slightly different to make writing my x86_64 assembler easier.
+//Opcodes are slightly different to make writing the x86_64 assembler easier.
 //See $LK,"::/Compiler/OpCodes.DD"$.
 
 MY_WORLD_MESSAGE:
@@ -28,7 +28,7 @@ MY_WORLD_MESSAGE:
 //on strings.
 				DU8 		"World\n", 0;
 
-//My convention is to put an underscore
+//The convention is to put an underscore
 //on C callable asm routines.
 _HELLO_WORLD::
 				PUSH		RSI 			//See $LK,"REGG_LOCAL_VARS",A="MN:REGG_LOCAL_VARS"$ & $LK,"REGG_LOCAL_NON_PTR_VARS",A="MN:REGG_LOCAL_NON_PTR_VARS"$

@@ -2,6 +2,10 @@ U0 InstallDrive(U8 drv_let)
 {
 	U8 *st;
 
+	while (!DriveCheck(blkdev.let_to_drive[drv_let - 'A'], FALSE))
+		Sleep(1);
+	Sleep(1000);
+
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
 	ExePrint("DirMake(\"%C:/Tmp/ScreenShots\");",	drv_let);
@@ -18,32 +22,33 @@ U0 InstallDrive(U8 drv_let)
 	Free(st);
 }
 
-Bool VMPartDisk(CTask *task, CATARep *ata_drive)
+Bool VMPartDisk(CTask *task, I64 ata_port)
 {
-	if (ata_drive)
+	if (ata_port > -1)
 	{
-		XTalkWait(task, "DiskPart(,0.5,0.5);\nC\np%d\nY", ata_drive->num);
+		XTalkWait(task, "DiskPart(,0.5,0.5);\nC\n%d\nY", ata_port); // DOUBLE CHECK INFILE
 		return TRUE;
 	}
 	else
 		return FALSE;
 }
 
-U0 VMInstallDrive(CTask *task, U8 drv_let, CATARep *ata_drive, CATARep *atapi_drive)
-{
+U0 VMInstallDrive(CTask *task, U8 drv_let, I64 ata_port, I64 atapi_port)
+{// DOUBLE CHECK INFILE
 	InstallDrive(drv_let);
 	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n", drv_let);
-	if (ata_drive)
-		XTalkWait(task, "C\np%d\n", ata_drive->num);
-	if (atapi_drive)
-		XTalkWait(task, "Tp%d\n", atapi_drive->num);
+	if (ata_port > -1)
+		XTalkWait(task, "C\n%d\n", ata_port);
+	if (atapi_port > -1)
+		XTalkWait(task, "T%d\n", atapi_port);
 	XTalkWait(task, "\n1024\n768\n\n\n"); //Exit Drives,  set Screen Resolution, skip Disk Cache and Options
 }
 
 U0 VMInstallWiz()
 {
-	CATARep *head = NULL, *ata_drive = NULL, *atapi_drive = NULL;
-	CTask	*task;
+	CTask		*task;
+	I64			 i, atapi_port = -1, ata_port = -1;
+	CAHCIPort	*port;
 
 	task = User;
 	TaskWait(task);
@@ -56,25 +61,52 @@ U0 VMInstallWiz()
 	WinVert(task->win_bottom + 3, Fs->win_bottom);
 	WinToTop(Fs);
 
-	ATARep(FALSE, TRUE, &head);
-	ATAIDDrives(head, &ata_drive, &atapi_drive);
-	if (VMPartDisk(task, ata_drive))
+
+	////////////////////////////////////
+	SATARep;
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
 	{
-		VMInstallDrive(task, 'C', ata_drive, atapi_drive);
-		VMInstallDrive(task, 'D', ata_drive, atapi_drive);
+		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+			if (port->signature == AHCI_PxSIG_ATA)
+			{
+				ata_port = i;
+				break;
+			}
+		}
+	}
+	for (i = 0; i < AHCI_MAX_PORTS; i++)
+	{
+		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
+		{
+			port = &blkdev.ahci_hba->ports[i];
+			if (port->signature == AHCI_PxSIG_ATAPI)
+			{
+				atapi_port = i;
+				break;
+			}
+		}
+	}
+
+	if (VMPartDisk(task, ata_port))
+	{
+		VMInstallDrive(task, 'C', ata_port, atapi_port);
+		VMInstallDrive(task, 'D', ata_port, atapi_port);
 		BootMHDIns('C');
 	}
-	LinkedListDel(head);
+
+	////////////////////////////////////
+
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
 }
 
 U0 RegularInstallWiz()
 {
-	I64		 unit, drv_let;
-	U8		*st, *base0, *base1;
-	CATARep	*head = NULL, *tmpha;
-	I64		 ch, num_hints, res_num;
+	I64		 drv_let;
+	U8		*st, *port_st;
+	I64		 ch, res_num;
 	CTask	*task;
 
 	task = User;
@@ -87,46 +119,25 @@ U0 RegularInstallWiz()
 	WinVert(Fs->win_top,  (Fs->win_top + Fs->win_bottom) >> 2 - 1, task);
 	WinVert(task->win_bottom + 3, Fs->win_bottom);
 	WinToTop(Fs);
-	XTalk(task, "Mount;\nC\np");
 
-	num_hints = ATARep(FALSE,, &head);
-	"\nInclude '$$PURPLE$$0x$$FG$$' for hexidecimal numbers.\n\n";
+	XTalk(task, "Mount;\nC\n");
+
+	"\nSelect the port of the ATA drive to install on.\n";
+
+	"Hard Drive Port: ";
 	while (TRUE)
 	{
-		base0 = StrGet("Hard Drive I/O Port Base0  : ");
-		if (0 < Str2I64(base0) <= 0xFFFF)
+		port_st = StrGet;
+		if ((0 <= Str2I64(port_st) < AHCI_MAX_PORTS) &&
+			((&blkdev.ahci_hba->ports[Str2I64(port_st)])->signature == AHCI_PxSIG_ATA))
+		{
 			break;
-		Free(base0);
-	}
-	if (1 <= Str2I64(base0) <= num_hints)
-	{
-		tmpha = ATARepFind(&head, Str2I64(base0));
-		Free(base0);
-		base0 = MStrPrint("0x%X", tmpha->base0);
-		base1 = MStrPrint("0x%X", tmpha->base1);
-		st	  = MStrPrint("0x%X", tmpha->unit);
-		unit = Str2I64(st);
-		Free(st);
-	}
-	else
-	{
-		while (TRUE)
-		{
-			base1 = StrGet("Hard Drive I/O Port Base1  : ");
-			if (0 < Str2I64(base1) <= 0xFFFF)
-				break;
-			Free(base1);
 		}
-		do
-		{
-			st = StrGet("Unit--$$PURPLE$$0$$FG$$=Master or $$PURPLE$$1$$FG$$=Slave: ", "0");
-			unit = Str2I64(st);
-			Free(st);
-		}
-		while (!(0 <= unit <= 1));
+		Free(port_st);
 	}
-	LinkedListDel(head);
-	XTalkWait(task, "%s\n%s\n%C\n", base0, base1, '0' + unit);
+
+	XTalkWait(task, "%s\n\n", port_st);
+
 	DriveRep;
 	do
 	{
@@ -161,7 +172,9 @@ U0 RegularInstallWiz()
 			Format(drv_let,, FALSE, FSt_REDSEA);
 	}
 	InstallDrive(drv_let);
-	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\ns%s\n%s\n%C\n", drv_let, base0, base1, '0' + unit);
+
+
+	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n", drv_let, port_st);
 	VideoRep;
 	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
 	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
@@ -171,11 +184,12 @@ U0 RegularInstallWiz()
 		'\n';
 		BootMHDIns(drv_let);
 	}
-	Free(base0);
-	Free(base1);
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
+
+
+
 }
 
 U0 DoInstructions()
@@ -190,10 +204,10 @@ U0 DoInstructions()
 
 Bool DoInstall(Bool prompt_reboot)
 {
-	I64					 res = FALSE, vm_install = TRUE;
+	I64					 res = FALSE, vm_install = TRUE, ch;
 	CSMBIOSSystemInfo	*sys_info = SMBIOSStructGet(SMBIOSt_SYSTEM);
 	U8					*company = SMBIOSStr(sys_info, sys_info->manufacturer);
-	
+
 	if (StrCompare(company, "VMware, Inc.") && StrCompare(company, "innotek GmbH") && StrCompare(company, "QEMU"))
 	{
 		"\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox or a similar virtual machine? ";
@@ -212,8 +226,23 @@ Bool DoInstall(Bool prompt_reboot)
 				"Continue Install Wizard ";
 		if (YorN)
 		{
-			RegularInstallWiz();
-			res = TRUE;
+			"\n\nUpgrade an existing install,"
+			"\nor create new Installation? (U/I): ";
+			do
+				ch = ToUpper(CharGet(, FALSE));
+			while (ch != 'U' && ch != 'I');
+
+			if (ch == 'I')
+			{
+				RegularInstallWiz();
+				res = TRUE;
+			}
+			else if (ch == 'U')
+			{
+				XTalk(Fs, "#include \"::/Misc/OSMerge\";;\n");
+				prompt_reboot = FALSE;
+				res = TRUE;
+			}
 		}
 		else
 			prompt_reboot = FALSE;
@@ -222,7 +251,10 @@ Bool DoInstall(Bool prompt_reboot)
 	{
 		"Reboot Now ";
 		if (YorN)
+		{
+			DiscEject(':');
 			Reboot;
+		};
 	}
 	return res;
 }

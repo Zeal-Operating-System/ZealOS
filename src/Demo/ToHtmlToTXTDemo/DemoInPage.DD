@@ -4,7 +4,7 @@ $FG,4$$TX,"ZealOS File Downloads (100% Public Domain)",HTML="http://www.templeos
 
 ZealOS is a free, public domain, open source, x86_64, non-preemptive multi-tasking, multi-cored, ring-0-only, single-address-map (identity-mapped), non-networked, PC operating system.  Paging is, basically, not used.
 
-The CIA obsfucates to foil India, China, Russia and Korea.	They make things more complicated than necessary.  ZealOS is more simple than necessary.	It is obnoxiously simple.  If you look at this $TX,"\"Hello World\" joke",HTML="http://www.ariel.com.au/jokes/The_Evolution_of_a_Programmer.html"$, you can see why I capped the line count of TempleOS at 100,000.
+The CIA obsfucates to foil India, China, Russia and Korea.	They make things more complicated than necessary.  ZealOS is more simple than necessary.	It is obnoxiously simple.  If you look at this $TX,"\"Hello World\" joke",HTML="http://www.ariel.com.au/jokes/The_Evolution_of_a_Programmer.html"$, you can see why Terry capped the line count of TempleOS at 100,000.
 
 God said TempleOS must be perfect, so backward compatibility is not promised.
 

@@ -1,41 +1,37 @@
 $WW,1$$FG,5$$TX+CX,"Frequently Asked Queuestions"$$FG$
 
 $TR,"How come it is public domain, not GPL?"$
-$ID,2$I, $FG,2$Terry A. Davis$FG$, wrote all of ZealOS over the past $TX,"13.8",D="DD_TEMPLEOS_AGE"$ years (full-time).  It can run on some bare metal 64-bit PC's from about 2005-2010 with no layering, libraries, tools, modules or anything from other sources.  Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.  It is independent and stands alone.	It has no networking, so it certainly doesn't call home.	100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!  See $LK,"::/Doc/Credits.DD"$.
+$ID,2$$FG,2$Terry A. Davis$FG$, wrote all of TempleOS over the past $TX,"17.9",D="DD_TEMPLEOS_AGE"$ years (full-time).  It can run on some bare metal 64-bit PC's from about 2005-2010 with no layering, libraries, tools, modules or anything from other sources.  Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.  It is independent and stands alone.	It has no networking, so it certainly doesn't call home.	100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!  See $LK,"::/Doc/Credits.DD"$.
 $ID,-2$$TR,"Shouldn't it be GNU/ZealOS?"$
-$ID,2$ZealOS executes no code not written by me at any time except for a few $FG,2$BIOS$FG$ calls for configuration.	I even wrote boot-loaders, so I do not need Grub.  See $LK,"::/Doc/Credits.DD"$.
+$ID,2$ZealOS executes 100% public-domain code.	Boot-loaders were even written, so we do not need Grub.  See $LK,"::/Doc/Credits.DD"$.
 $ID,-2$$TR,"Don't you use GNU's gcc?"$
-$ID,2$ZealOS was written from scratch, starting with $FG,2$TASM$FG$ long ago, launching from real-mode DOS.  Now, there is no $FG,2$Linux$FG$ or $FG,2$GNU$FG$ or any other code in ZealOS.  Yes, I wrote the compiler from scratch.	See $LK,"::/Doc/Credits.DD"$.
+$ID,2$ZealOS was written from scratch, starting with $FG,2$TASM$FG$ long ago, launching from real-mode DOS.  Now, there is no $FG,2$Linux$FG$ or $FG,2$GNU$FG$ or any other code in ZealOS.  Yes, the compiler was written from scratch.	See $LK,"::/Doc/Credits.DD"$.
 $ID,-2$$TR,"Why do you dual boot?"$
-$ID,2$ZealOS is 100% independent -- it does not access the files of your primary operating system and ZealOS will work as the only operating system on your computer, but it has no networking.  In your off hours, you will use your other operating system.
+$ID,2$ZealOS is 100% independent -- it does not access the files of your primary operating system and ZealOS will work as the only operating system on your computer.  In your off hours, you will probably use your other operating system.
 $ID,-2$$TR,"It has links, so is it a browser?"$
 $ID,2$ZealOS is an operating system, not a browser.  $LK,"ZealOS links",A="MN:LK_FILE"$ are a special format and only link too local files and symbol source addresses.
 $ID,-2$$TR,"Where are the animated 3D icon GIFs?"$
 $ID,2$3D $LK,"Sprites",A="FI:::/Doc/Sprite.DD"$ are stored as a mesh of triangles.	There are no GIF files.  It $LK,"rotates",A="MN:Mat4x4MulXYZ"$ 3D sprite objects on the fly.
 $ID,-2$$TR,"If the compiler is JIT, isn't it an interpretor?"$
-$ID,2$ZealOS compiles, doesn't $FG,2$interpret$FG$, and uses no $FG,2$byte code$FG$ anywhere.  I loosely use the word $FG,2$script$FG$ sometimes, but it's actually compiled.  The compiler's $LK,"optimization",A="MN:OptPass012"$ code is actually where the compiler evaluates constants to simplify them, like every optimizing compiler.
-$ID,-2$$TR,"Are you a Creationist?"$
-$ID,2$I am an evolutionist.  $FG,2$System$FG$ is a better term for the first father of all tasks than $FG,2$root$FG$ was!
+$ID,2$ZealOS compiles, doesn't $FG,2$interpret$FG$, and uses no $FG,2$byte code$FG$ anywhere.  Terry Davis loosely used the word $FG,2$script$FG$ sometimes, but it's actually compiled.  The compiler's $LK,"optimization",A="MN:OptPass012"$ code is actually where the compiler evaluates constants to simplify them, like every optimizing compiler.
 $ID,-2$$TR,"Is 'Bt()' in the code Bit Torrent?"$
 $ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ inst, not $FG,2$bit torrent$FG$.
 $ID,-2$$TR,"Is 'Fs->' in the code file system?"$
 $ID,2$$LK,"Fs",A="MN:Fs"$ is a segment reg, not $FG,2$file system$FG$.	($LK,"Fs",A="MN:Fs"$ is kept pointing to the current task's record.)	There is no memory segmentation.	It is 64-bit and flat. FS and GS are used as general purpose regs, more or less.
 $ID,-2$$TR,"Is it Pascal?"$
-$ID,2$ZealOS uses a dialect of C/C++ called $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.	It is not $FG,2$Pascal$FG$.  I altered the syntax making parenthesis optional on function calls with no paramaters.
+$ID,2$ZealOS uses a dialect of C/C++ called $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.	It is not $FG,2$Pascal$FG$.  The syntax was altered making parenthesis optional on function calls with no parameters.
 $ID,-2$$TR,"Why doesn't Sleep() make my laptop hibernate?"$
 $ID,2$$LK,"Sleep",A="MN:Sleep"$() makes a program pause.	It is not hibernation for a laptop.
 $ID,-2$$TR,"What is Yield() for in loops?"$
 $ID,2$$LK,"Yield",A="MN:Yield"$() saves the current task's regs (context) and loads in the next task.  In a loop waiting for disk IO, it executes $LK,"Yield",A="MN:Yield"$() which pegs the CPU load, yet the system is responsive.
 $ID,-2$$TR,"What is JIT Compiled Mode?"$
 $ID,2$The term $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ means it compiles and executes code placed into mem, not stored on disk.
-$ID,-2$$TR,"Why do files end in .Z?  Are they encrypted?"$
-$ID,2$Files with names ending in $FG,2$.Z$FG$ are individually compressed using $LK,"ZealOS Compression",A="FI:::/Kernel/Compress.CC"$.  They are not encrypted.	$LK,"Copy",A="MN:Copy"$() or rename them with $LK,"Move",A="MN:Move"$() to a name without $FG,2$.Z$FG$ and they will be stored in an uncompressed form.  See $LK,"TOSZ",A="FI:::/Doc/TOSZ.DD"$ for Linux or Windows uncompress C/C++ code.
-$ID,-2$$TR,"Is it open source?\tHow do I build it?"$
-$ID,2$ZealOS is 100% open src.	All the src code is included in the distro.  Use $LK,"BootHDIns",A="MN:BootHDIns"$() to compile the kernel and compiler.	The rest is $LK,"JIT Compiled",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ during boot.  See $LK,"::/StartOS.CC"$.
+$ID,-2$$TR,"Is it open source? How do I build it?"$
+$ID,2$ZealOS is 100% open source.	All the source code is included in the distro.  Use $LK,"BootHDIns",A="MN:BootHDIns"$() to compile the kernel and compiler.	The rest is $LK,"JIT Compiled",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ during boot.  See $LK,"::/StartOS.CC"$.
 $ID,-2$$TR,"Where are object files?  How do I link?"$
 $ID,2$ZealOS does not use object files or a linker.  $LK,"AOT Compile Mode",A="FF:::/Doc/Glossary.DD,AOT Compile Mode"$ is used to directly create flat binary files, $LK,"::/Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ and $LK,"::/Compiler/Compiler.BIN",A="FI:::/Compiler/Compiler.PRJ"$ with no object files and linking.$FG$	$LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ place code in memory, ready to run, with no object files or linking.  Linking is done when $FG,2$BIN$FG$ modules are $LK,"Load",A="MN:Load"$()ed.
 $ID,-2$$TR,"What is the FPS refresh rate?"$
-$ID,2$The refresh rate is $TX,"(30000.0/1001)",D="WINMGR_FPS"$ frames-per-second.  That is how often ZealOS updates screen mem.  It is not syncronized to the hardware.
+$ID,2$The refresh rate is $TX,"(60000.0 / 1001)",D="WINMGR_FPS"$ frames-per-second.  That is how often ZealOS updates screen mem.  It is not synchronized to the hardware.
 $ID,-2$$TR,"How does a task own the speaker?"$
 $ID,2$No task or application has a lock on the speaker so apps will interfere with each other.
 $ID,-2$$TR,"Why does it leak memory?"$
@@ -45,7 +41,7 @@ $ID,2$The editor periodically takes a snap-shot of the document for $FG,2$UNDO$F
 $ID,-2$$TR,"Why is it in text mode?"$
 $ID,2$ZealOS runs in $FG,2$High-res 32-bit color VBE$FG$ graphics modes, not text mode.  It changes to this mode with a $LK,"BIOS call",A="FF:::/Kernel/KStart16.CC,INT:9"$ while in real-mode before it switches to 64-bit mode.	The text is $LK,"drawn by hand",A="MN:GrUpdateTextFG"$.  See $LK,"::/Kernel/FontStd.CC"$.
 $ID,-2$$TR,"Where is the kernel memory?"$
-$ID,2$ZealOS identity-maps all memory, all the time.	It is like paging is not used.	There is no special kernel $FG,2$high half$FG$ memory space.	ZealOS is ring-0-only, so everything is kernel, even user programs.  There is a special task called $FG,2$System$FG$ and he doesn't die, so his heap never gets freed.	That's as close to $FG,2$kernel memory$FG$ as it gets.	All code goes in the lowest 2Gig of addresses, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.	See $LK,"MemoryOverview",A="FI:::/Doc/MemoryOverview.DD"$.
+$ID,2$ZealOS identity-maps all memory, all the time.	It is like paging is not used.	There is no special kernel $FG,2$high half$FG$ memory space.	ZealOS is ring-0-only, so everything is kernel, even user programs.  There is a special task called $FG,2$System$FG$ and it doesn't die, so its heap never gets freed.	That's as close to $FG,2$kernel memory$FG$ as it gets.	All code goes in the lowest 2Gig of addresses, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.	See $LK,"MemoryOverview",A="FI:::/Doc/MemoryOverview.DD"$.
 $ID,-2$$TR,"Why does it run code from stack addresses?"$
 $ID,2$ZealOS puts all code in the lowest 2Gig, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.	ZealOS is 64-bit, but $FG,2$2Gig$FG$ is enough for code.	It actually puts global variables there, too, but you can turn that off with $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$.  $LK,"MAlloc",A="MN:MAlloc"$() allocs higher memory.
 $ID,-2$$TR,"How does it SYSCALL?"$
@@ -59,7 +55,7 @@ $ID,2$If you use Grub, you $FG,2$chain-load$FG$ like Windows.  See $LK,"Boot",A=
 $ID,-2$$TR,"How do I get Kernel.BIN to boot?"$
 $ID,2$The boot-loaders must be patched by you running $LK,"BootHDIns",A="MN:BootHDIns"$() or $LK,"BootMHDIns",A="MN:BootMHDIns"$().  Those will write the block address into the boot-loader because the boot-loaders do not navigate file systems to find the $LK,"Stage2",A="FI:::/Kernel/KStart16.CC"$ if you relocate it.
 $ID,-2$$TR,"Why is there some 16-Bit code?"$
-$ID,2$ZealOS is 64-bit.  Like all PC operating systems, the boot-loader starts in 16-bit real-mode.  ZealOS calls a few $FG,2$BIOS$FG$ info routines, switches to VGA-640x480x4bit, switches to 32-bit, then, 64-bit mode.	There is an odd thing called a $FG,2$$TX,"PCI BIOS",HTML="http://www.o3one.org/hwdocs/bios_doc/pci_bios_21.pdf"$$FG$ which is 32-bit used for $FG,2$PCI$FG$ config space access.	ZealOS calls $LK,"that",A="FI:::/Kernel/PCIBIOS.CC"$ a couple times.	It must temporarily drop-out-of 64-bit mode for that and stop multi-tasking.
+$ID,2$ZealOS is 64-bit.  Like all PC operating systems, the boot-loader starts in 16-bit real-mode.  ZealOS calls a few $FG,2$BIOS$FG$ info routines, switches to VGA-640x480x4bit, switches to 32-bit, then, 64-bit mode.	There is an odd thing called a $FG,2$$TX,"PCI BIOS",HTML="http://www.o3one.org/hwdocs/bios_doc/pci_bios_21.pdf"$$FG$ which is 32-bit used for $FG,2$PCI$FG$ config space access.	If supported, ZealOS calls $LK,"that",A="FI:::/Kernel/PCIBIOS.CC"$ a couple times, otherwise using Port I/O for PCI.	It must temporarily drop-out-of 64-bit mode for that and stop multi-tasking.
 $ID,-2$$TR,"Why are you pushing 32-bit values on the stack?"$
 $ID,2$$FG,2$PUSH EAX$FG$ : All stack operations in 64-bit mode are 64-bits.
 $ID,-2$$TR,"Why are you using 32-bit insts and not setting high 32-bits?"$
@@ -85,7 +81,7 @@ $ID,2$Sprites can be stored as vector graphics so they might take shockingly lit
 $ID,-2$$TR,"Why don't I need to recompile /System and /Home files?"$
 $ID,2$If you change code in the $FG,2$/System$FG$ or your $FG,2$/Home$FG$ directory, you don't need to recompile, you just need to reboot because those directories get recompiled when you boot.  It uses $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$.	There is no $FG,2$.BIN$FG$ file for $FG,2$JIT$FG$ compilation.	See $LK,"::/StartOS.CC"$.
 $ID,-2$$TR,"Why does it finds files that aren't there?"$
-$ID,2$If not found, $FG,2$.Z$FG$ is added or removed from filename and a search is done again.	If a file is still not found, the parent directories are searched for a file of the same name.
+$ID,2$If a file is not found, the parent directories are searched for a file of the same name.
 $ID,-2$
 $FG,8$
 * "Windows" is a trademark owned by MicroSoft Corp.

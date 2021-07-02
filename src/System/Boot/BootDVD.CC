@@ -33,7 +33,7 @@ BDVD_GET_RIP:
 				MOV 		AX, BOOT_HIGH_LOC_DVD
 				MOV 		DS, AX
 
-//My assembler doesn't support 16-bit very well.
+//The assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP BOOT_HIGH_LOC_DVD:BDVD_MAIN
 				DU16		BDVD_MAIN - BDVD_START, BOOT_HIGH_LOC_DVD;
 
@@ -174,7 +174,7 @@ BDVD_MAIN::
 				SHL 		EAX, 16
 				MOV 		AX,  BOOT_SRC_DVD  //$MA-X+PU,"See sys_boot_src",LM="Find(\"sys_boot_src\",\"/*\");View;\n"$
 
-//My assembler doesn't support 16-bit very well.
+//The assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP BOOT_RAM_BASE:0000
 				DU16		0, BOOT_RAM_BASE / 16;
 //Continues here $LK,"::/Kernel/KStart16.CC",A="FL:::/Kernel/KStart16.CC,1"$

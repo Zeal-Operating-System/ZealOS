@@ -51,4 +51,4 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 
 MakeMyISO("/Tmp/MyDistro.ISO.C");
 
-// Study my account examples $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.CC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.CC,1"$.
+// Study the account examples $LK,"Config Strs",A="FL:::/Demo/AcctExample/TOS/TOSConfig.CC,1"$, $LK,"Update Funs",A="FL:::/Demo/AcctExample/TOS/TOSDistro.CC,1"$.

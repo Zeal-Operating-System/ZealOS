@@ -1,4 +1,4 @@
-$WW,1$$FG,5$$TX+CX,"64-Bit Assembly Quiz"$$FG$
+$WW,1$$PURPLE$$TX+CX,"64-Bit Assembly Quiz"$$FG$
 
 1) In 64-bit mode, how many bytes are always pushed?
 
@@ -82,7 +82,7 @@ ANSWERS:
 
 11) PUSHAD is not available for 64-bit mode, so you do it by hand.
 
-12) The TSS is no longer used to hold the task state because there are 16 regs and they are 64-bits, not 32-bits.  I guess Intel decided doing it by hand was better than TSSes.
+12) The TSS is no longer used to hold the task state because there are 16 regs and they are 64-bits, not 32-bits.
 
 13) 64-bit mode has 4K or 2Meg page size.
 

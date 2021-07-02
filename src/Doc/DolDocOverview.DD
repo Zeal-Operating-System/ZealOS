@@ -98,8 +98,8 @@ The expressions are relative to the current cursor location, unless you make the
 See $LK,"::/Demo/DolDoc/CursorMove.CC"$.
 
 $ID,-2$$TR,"AN Anchor"$
-$ID,2$The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the anchor.	I don't use these very often, but they're good sometimes.
-$ID,-2$$TR-C,"LK Link"$
+$ID,2$The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the anchor.	Terry didn't use these very often, but they're good sometimes.
+$ID,-2$$TR,"LK Link"$
 $ID,2$The $LK,"CDocEntry",A="MN:CDocEntry"$.aux_str arg $FG,2$A=""$FG$ is used for the link text.  With no aux the tag becomes the link text, as in example 3.
 
 See $LK,"Link Types",A="MN:LK_FILE"$.
@@ -175,7 +175,7 @@ You can, optionally, include tag text to be displayed for the $FG,2$$$IB...$$$FG
 The reason for the $FG,2$$$IB...$$$FG$ cmd is to pass a arg to $LK,"Sprite",A="MN:Sprite"$() and $LK,"Sprite3",A="MN:Sprite3"$().  See $LK,"::/Demo/Graphics/SpritePlot.CC"$.
 
 $ID,-2$$TR,"IS Insert Binary Size"$
-$ID,2$Inserts a number into the compiled stream describing the size of binary data associated with a bin number.	I never use this.
+$ID,2$Inserts a number into the compiled stream describing the size of binary data associated with a bin number.	Terry never used this.
 $ID,-2$$TR,"SO Song"$
 $ID,2$See $LK,"Play",A="MN:Play"$().	$LK,"CDocEntry",A="MN:CDocEntry"$.aux_str $FG,2$A=""$FG$ stores the song note text.
 $ID,-2$$TR,"HL Highlighting"$

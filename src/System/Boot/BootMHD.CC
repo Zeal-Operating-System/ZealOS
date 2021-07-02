@@ -50,7 +50,7 @@ BMHD_GET_RIP:
 				MOV 		AX, BOOT_HIGH_LOC_MHD
 				MOV 		DS, AX
 
-//My assembler doesn't support 16-bit very well.
+//The assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP BOOT_HIGH_LOC_MHD:BMHD_HISTART
 				DU16		BMHD_HISTART - BMHD_START, BOOT_HIGH_LOC_MHD;
 
@@ -96,7 +96,7 @@ BMHD_HISTART:
 
 				MOV 		DL,  U8  [BMHD_BIOS_DRIVE_NUM - BMHD_START]
 				MOV 		EBX, U32 [BMHD_OLD_CS_RIP     - BMHD_START]
-//My assembler doesn't support 16-bit very well.
+//The assembler doesn't support 16-bit very well.
 				DU8 		0xEA; 	//JMP BOOT_RAM_BASE:0000
 				DU16		0, BOOT_RAM_BASE / 16;
 //Continues here $LK,"BMHD2_START",A="FF:::/System/Boot/BootMHD2.CC,BMHD2_START"$
