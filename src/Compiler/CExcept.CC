@@ -94,7 +94,7 @@ U0 LexWarn(CCompCtrl *cc, U8 *str=NULL)
 
 U0 LexExcept(CCompCtrl *cc, U8 *str=NULL)
 {//Print error message, $LK,"LexPutPos",A="MN:LexPutPos"$() and throw exception.
-	if (!Bt(&sys_run_level, RLf_ZEAL_SERVER))
+	if (!Bt(&sys_run_level, RLf_SYSTEM_SERVER))
 	{
 		Raw(ON);
 		"Note: Still in boot phase.\n";
@@ -106,7 +106,7 @@ U0 LexExcept(CCompCtrl *cc, U8 *str=NULL)
 	LexPutPos(cc);
 	cc->error_count++;
 	FlushMessages;
-	if (!Bt(&sys_run_level, RLf_ZEAL_SERVER))
+	if (!Bt(&sys_run_level, RLf_SYSTEM_SERVER))
 		Debug("Type \"Fix;\"");
 	throw('Compiler');
 }

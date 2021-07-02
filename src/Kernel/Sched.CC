@@ -1,6 +1,6 @@
 /*On each core, tasks are linked in a
 circular doubly-linked list queue with
-the Seth task as the head.  On Core0,
+the Executive task as the head.  On Core0,
 the queue order represents the front-to-back
 window stack order with the window mgr
 as the wallpaper.
@@ -30,9 +30,9 @@ The scheduler checks for a few keys:
 <CTRL-ALT-c> breaks execution of a program.
 
 Each core has its own circular task queue.
-For AP processors, they have a "Seth" task
+For AP processors, they have an "Executive" task
 which stays in a loop waiting for jobs or
-requests to spawn tasks.  See $LK,"CoreAPSethTask",A="MN:CoreAPSethTask"$().
+requests to spawn tasks.  See $LK,"CoreAPExecutiveTask",A="MN:CoreAPExecutiveTask"$().
 $HL,1$*/
 
 U0 TaskFocusNext()
@@ -195,8 +195,8 @@ RESTORE_RSI_TASK2:
 
 @@25:			MOV 		RSI, U64 CTask.next_task[RSI]
 				XOR 		RAX, RAX
-				CMP 		U64 GS:CCPU.seth_task[RAX], RSI
-				JNE 		@@20		//Jmp if not Seth
+				CMP 		U64 GS:CCPU.executive_task[RAX], RSI
+				JNE 		@@20		//Jmp if not Executive
 				BTR 		U32 GS:CCPU.cpu_flags[RAX], CPUf_RAN_A_TASK
 				JC			@@20		//Jmp if had chance for IRQ already
 				MOV 		RAX, U64 GS:CCPU.idle_task[RAX]
@@ -208,9 +208,9 @@ RESTORE_RSI_TASK2:
 SYS_IDLE_PT::
 				CLI
 
-RESTORE_SETH_TASK_IF_READY:
+RESTORE_EXECUTIVE_TASK_IF_READY:
 				XOR 		RAX, RAX
-				MOV 		RSI, GS:CCPU.seth_task[RAX]
+				MOV 		RSI, GS:CCPU.executive_task[RAX]
 				JMP 		RESTORE_RSI_TASK
 
 HANDLE_SYSF_KEY_EVENT:
@@ -227,7 +227,7 @@ HANDLE_SYSF_KEY_EVENT:
 				JC			I32 &Reboot
 
 				CMP 		U64 GS:CCPU.idle_task[RBX], RSI
-				JE			RESTORE_SETH_TASK_IF_READY
+				JE			RESTORE_EXECUTIVE_TASK_IF_READY
 
 				LOCK
 				BTR 		U32 [RAX], CTRL_ALT_TAB
@@ -245,7 +245,7 @@ HANDLE_SYSF_KEY_EVENT:
 BREAK_FOCUS_USER:
 				MOV 		RSI, U64 [SYS_FOCUS_TASK]
 				TEST		RSI, RSI
-				JZ			RESTORE_SETH_TASK_IF_READY
+				JZ			RESTORE_EXECUTIVE_TASK_IF_READY
 				BT			U64 CTask.win_inhibit[RSI], WIf_SELF_FOCUS
 				JC			I32 RESTORE_RSI_TASK
 				LOCK
@@ -270,7 +270,7 @@ END_FOCUS_USER:
 				MOV 		RSI, U64 [SYS_FOCUS_TASK]
 				CALL		&TaskFocusNext
 				TEST		RSI, RSI
-				JZ			I32 RESTORE_SETH_TASK_IF_READY
+				JZ			I32 RESTORE_EXECUTIVE_TASK_IF_READY
 				MOV 		RAX, RSI
 				CALL		SET_FS_BASE
 				BT			U64 CTask.win_inhibit[RSI], WIf_SELF_FOCUS

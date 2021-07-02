@@ -237,7 +237,7 @@ U0 KMain()
 		Debug;
 	}
 
-	LBts(&sys_run_level, RLf_ZEAL_SERVER);
+	LBts(&sys_run_level, RLf_SYSTEM_SERVER);
 	ServerTaskCont; //Never to return
 }
 

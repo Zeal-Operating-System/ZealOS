@@ -9,4 +9,4 @@ U0 OnceDemo()
 
 OnceDemo;
 
-//There are variants for zeal $LK,"ZOnce",A="MN:ZOnce"$().
+//There are variants for system_task $LK,"ZOnce",A="MN:ZOnce"$().

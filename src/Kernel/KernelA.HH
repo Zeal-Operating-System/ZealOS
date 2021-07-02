@@ -577,7 +577,7 @@ class CKernel
 #define RLf_PATCHED 				3
 #define RLf_16MEG_SYS_CODE_BP 		4
 #define RLf_64BIT 					5
-#define RLf_16MEG_ZEAL_HEAP_CTRL	6
+#define RLf_16MEG_SYSTEM_HEAP_CTRL	6
 #define RLf_FULL_HEAPS				7
 #define RLf_RAW 					8
 #define RLf_INTERRUPTS				9
@@ -589,8 +589,8 @@ class CKernel
 #define RLf_REGISTRY				15
 #define RLf_HOME					16
 #define RLf_AUTOCOMPLETE			17
-#define RLf_ZEAL_SERVER 			18
-#define RLf_ONCE_ZEAL 			19
+#define RLf_SYSTEM_SERVER 			18
+#define RLf_ONCE_SYSTEM 			19
 #define RLf_ONCE_USER 				20
 
 #define RLF_16BIT 					(1 << RLf_16BIT)
@@ -599,7 +599,7 @@ class CKernel
 #define RLF_PATCHED 				(1 << RLf_PATCHED)
 #define RLF_16MEG_SYS_CODE_BP 		(1 << RLf_16MEG_SYS_CODE_BP)
 #define RLF_64BIT 					(1 << RLf_64BIT)
-#define RLF_16MEG_ZEAL_HEAP_CTRL	(1 << RLf_16MEG_ZEAL_HEAP_CTRL)
+#define RLF_16MEG_SYSTEM_HEAP_CTRL	(1 << RLf_16MEG_SYSTEM_HEAP_CTRL)
 #define RLF_FULL_HEAPS				(1 << RLf_FULL_HEAPS)
 #define RLF_RAW 					(1 << RLf_RAW)
 #define RLF_INTERRUPTS				(1 << RLf_INTERRUPTS)
@@ -611,8 +611,8 @@ class CKernel
 #define RLF_REGISTRY				(1 << RLf_REGISTRY)
 #define RLF_HOME					(1 << RLf_HOME)
 #define RLF_AUTOCOMPLETE			(1 << RLf_AUTOCOMPLETE)
-#define RLF_ZEAL_SERVER 			(1 << RLf_ZEAL_SERVER)
-#define RLF_ONCE_ZEAL 			(1 << RLf_ONCE_ZEAL)
+#define RLF_SYSTEM_SERVER 			(1 << RLf_SYSTEM_SERVER)
+#define RLF_ONCE_SYSTEM 			(1 << RLf_ONCE_SYSTEM)
 #define RLF_ONCE_USER 				(1 << RLf_ONCE_USER)
 
 #help_index "Processor"
@@ -3501,10 +3501,10 @@ class CMemRange
 //We add 2 pags, so a request is not rounded-up to next power of two.
 #define MEM_EXTRA_HASH2_PAGS	2
 
-#define MEM_ZEAL_STACK		(MEM_PAG_SIZE*512) //Like 16384*MEM_PAG_SIZE
-#define MEM_SETH_STACK		(MEM_PAG_SIZE*512)
-#define MEM_INTERRUPT_STACK 	(MEM_PAG_SIZE*512)
-#define MEM_DEFAULT_STACK 		(MEM_PAG_SIZE*512)
+#define MEM_SYSTEM_STACK		(MEM_PAG_SIZE * 512) //Like 16384*MEM_PAG_SIZE
+#define MEM_EXECUTIVE_STACK		(MEM_PAG_SIZE * 512)
+#define MEM_INTERRUPT_STACK 	(MEM_PAG_SIZE * 512)
+#define MEM_DEFAULT_STACK 		(MEM_PAG_SIZE * 512)
 
 #define TASK_HASH_TABLE_SIZE	(1 << 10)
 
@@ -4063,7 +4063,7 @@ public class CCPU //The Gs segment reg points to current CCPU.
 				 idle_pt_hits;
 	F64			 idle_factor;
 	I64			 total_jiffies;
-	CTask		*seth_task, *idle_task;
+	CTask		*executive_task, *idle_task;
 	I64			 tr, 	//task reg
 				 swap_counter;
 	U0		   (*profiler_timer_irq)(CTask *task);
@@ -4083,9 +4083,9 @@ public class CSysFixedArea
 {
 	CFPU		init_fpu_mmx;
 	CCPU		boot_cpu;
-	CTask		zeal;
+	CTask		system;
 	CBlkPool	sys_code_bp;
-	CHeapCtrl	zeal_hc;
+	CHeapCtrl	system_hc;
 	$$ = ($$ + 0x1000 - 1) & -0x1000;
 };
 

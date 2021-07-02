@@ -510,7 +510,7 @@ U0 WinMgrTask(I64)
 		try
 		{
 wmt_start:
-			if (Bt(&sys_run_level, RLf_ZEAL_SERVER))
+			if (Bt(&sys_run_level, RLf_SYSTEM_SERVER))
 				TaskKillDying;
 			WinMgrSleep;
 

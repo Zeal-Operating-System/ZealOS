@@ -224,8 +224,6 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 				case BDT_ATAPI:
 					if (type == BDT_ATAPI && !*base0_buf && _doc)
 					{
-//						DocPrint(doc, "\"GetBaseUnit(bd);\n\";\n");
-//						DocPrint(doc, "GetBaseUnit(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$
 						DocPrint(doc, "\"AHCIBootDVDProbeAll(bd);\n\";\n");
 						DocPrint(doc, "AHCIBootDVDProbeAll(bd);\n"); //Only $LK,"::/Kernel/KConfig.CC"$
 
@@ -241,8 +239,8 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 					}
 					break;
 			}
-			DocPrint(doc, "\"BlkDevAdd(bd, %d, %d, %d);\n\";\n", prt_num, whole_drive, make_free);
-			DocPrint(doc, "BlkDevAdd(bd, %d, %d, %d);\n", prt_num, whole_drive, make_free);
+			DocPrint(doc, "\"BlkDevAdd(bd, 0x%0X, %d, %d);\n\";\n", prt_num, whole_drive, make_free);
+			DocPrint(doc, "BlkDevAdd(bd, 0x%0X, %d, %d);\n", prt_num, whole_drive, make_free);
 			if (_doc) //Called by $LK,"::/Kernel/KConfig.CC"$
 				count++;
 			else

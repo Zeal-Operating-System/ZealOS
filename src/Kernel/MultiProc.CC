@@ -59,7 +59,7 @@ USE64
 				FNINIT
 				MOV 		RAX, RSI
 				CALL		SET_GS_BASE
-@@10:			MOV 		RAX, U64 CCPU.seth_task[RSI]
+@@10:			MOV 		RAX, U64 CCPU.executive_task[RSI]
 				TEST		RAX, RAX
 				JZ			@@10
 				MOV 		U64 CTask.gs[RAX], RSI
@@ -114,20 +114,20 @@ CTSS *TSSNew(I64 cpu_num)
 	return tss;
 }
 
-CCPU *CPUStructInit(I64 num, CCPU *c, CTask *seth_task)
-{//Seth is null when called by system_task on CSysFixedArea.boot_cpu0
+CCPU *CPUStructInit(I64 num, CCPU *c, CTask *executive_task)
+{//Executive is null when called by system_task on CSysFixedArea.boot_cpu0
 	MemSet(c, 0, sizeof(CCPU));
 	c->addr			= c;
 	c->num			= num;
 	c->idle_factor	= 0.01;
 	QueueInit(&c->next_dying);
-	if (Bt(&sys_run_level, RLf_16MEG_ZEAL_HEAP_CTRL))
+	if (Bt(&sys_run_level, RLf_16MEG_SYSTEM_HEAP_CTRL))
 	{
 		c->idle_task = Spawn(0, NULL, "Idle Task",, Fs,, 0);
 		LBts(&c->idle_task->task_flags, TASKf_IDLE);
 		c->tss = TSSNew(num);
 	}
-	c->seth_task = seth_task;// It waits for this to be filled-in: $LK,"seth_task",A="FF:::/Kernel/MultiProc.CC,seth_task"$
+	c->executive_task = executive_task;// It waits for this to be filled-in: $LK,"executive_task",A="FF:::/Kernel/MultiProc.CC,executive_task"$
 
 	return c;
 }
@@ -197,7 +197,7 @@ U0 MPAPICInit()
 
 #assert !offset(CJobCtrl.next_waiting)
 
-U0 CoreAPSethTask()
+U0 CoreAPExecutiveTask()
 {
 	CJobCtrl *ctrl = &Fs->server_ctrl;
 
@@ -223,12 +223,12 @@ U0 CoreAPSethTask()
 
 CJob *JobQueue(I64 (*fp_addr)(U8 *data), U8 *data=NULL, I64 target_cpu=1, I64 flags=1<<JOBf_FREE_ON_COMPLETE, 
 			   I64 job_code=JOBT_CALL, U8 *aux_str=NULL, I64 aux1=0, I64 aux2=0)
-{//Queue multicore jobs, handled by Seth tasks.
+{//Queue multicore jobs, handled by Executive tasks.
 //Set flags to zero if you wish to get the res.
 	//See $LK,"::/Demo/MultiCore/Lock.CC"$
 	CJobCtrl	*ctrl;
 	CJob		*tmpc;
-	CTask		*seth;
+	CTask		*executive;
 
 	if (!(0 <= target_cpu < mp_count))
 		throw('MultCore');
@@ -241,14 +241,14 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data), U8 *data=NULL, I64 target_cpu=1, I64 fl
 	tmpc->flags		= flags;
 	tmpc->aux1		= aux1;
 	tmpc->aux2		= aux2;
-	seth = cpu_structs[target_cpu].seth_task;
-	tmpc->ctrl = ctrl = &seth->server_ctrl;
+	executive = cpu_structs[target_cpu].executive_task;
+	tmpc->ctrl = ctrl = &executive->server_ctrl;
 
 	PUSHFD
 	CLI
 	while (LBts(&ctrl->flags, JOBCf_LOCKED))
 		Yield;
-	if (ctrl->next_waiting == ctrl && LBtr(&seth->task_flags, TASKf_AWAITING_MESSAGE))
+	if (ctrl->next_waiting == ctrl && LBtr(&executive->task_flags, TASKf_AWAITING_MESSAGE))
 		MPInt(I_WAKE, target_cpu);
 	QueueInsert(tmpc, ctrl->last_waiting);
 	LBtr(&ctrl->flags, JOBCf_LOCKED);
@@ -287,11 +287,11 @@ CTask *SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL,
 	return res;
 }
 
-U0 CoreAPSethInit()
-{//Called by multicore's seth dask after $LK,"Core0StartMP",A="MN:Core0StartMP"$()
+U0 CoreAPExecutiveInit()
+{//Called by multicore's executive task after $LK,"Core0StartMP",A="MN:Core0StartMP"$()
 //as the first thing a CPU does before waiting for jobs.
 	MPAPICInit;
-	Fs->rip = &CoreAPSethTask;
+	Fs->rip = &CoreAPExecutiveTask;
 	TaskContextRestore;
 }
 
@@ -312,8 +312,8 @@ U0 Core0StartMP()
 		for (i = 1; i < my_mp_count; i++)
 		{
 			c = &cpu_structs[i];
-			JobQueueDel(&c->seth_task->server_ctrl.next_waiting);
-			JobQueueDel(&c->seth_task->server_ctrl.next_done);
+			JobQueueDel(&c->executive_task->server_ctrl.next_waiting);
+			JobQueueDel(&c->executive_task->server_ctrl.next_done);
 		}
 	}
 	MemSet(&cpu_structs[1], 0, sizeof(CCPU) * (MP_PROCESSORS_NUM - 1));
@@ -346,17 +346,17 @@ U0 Core0StartMP()
 
 	for (i = 1; i < my_mp_count; i++)
 	{
-		StrPrint(buf, "Seth Task CPU%02X", i);
-		task = Spawn(&CoreAPSethInit, NULL, buf,,, MEM_SETH_STACK, 0);
+		StrPrint(buf, "Executive Task CPU%02X", i);
+		task = Spawn(&CoreAPExecutiveInit, NULL, buf,,, MEM_EXECUTIVE_STACK, 0);
 		task->rflags = RFLAGG_START;
-//$LK,"CTask",A="MN:CTask"$ alloced off this core's seth_task's heap (Which is System task)
+//$LK,"CTask",A="MN:CTask"$ alloced off this core's executive_task's heap (Which is System task)
 		CPUStructInit(i, &cpu_structs[i], task);
 		WBINVD //Not sure why this is needed.  Might just need delay.
 	}
 
 	//Make sure they're all up-and-running
 	for (i = 1; i < my_mp_count; i++)
-		while (!Bt(&cpu_structs[i].seth_task->task_flags, TASKf_AWAITING_MESSAGE))
+		while (!Bt(&cpu_structs[i].executive_task->task_flags, TASKf_AWAITING_MESSAGE))
 			PAUSE;
 
 	POPFD

@@ -599,12 +599,12 @@ extern U0 MouseUpdate(I64 x, I64 y, I64 z, Bool l, Bool r);
 
 #help_index "MultiCore"
 extern			U0		 Core0StartMP();
-extern			U0		 CoreAPSethTask();
+extern			U0		 CoreAPExecutiveTask();
 public extern	U0		 MPInt(U8 num, I64 cpu_num=1);
 public extern	U0		 MPIntAll(U8 num);
 public extern	U0		 MPNMInt();
 extern			CTask	*SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL, I64 target_cpu, 
-									CTask *parent=NULL, //NULL means zeal
+									CTask *parent=NULL, //NULL means system_task
 									I64 stack_size=0, I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "MultiCore;Boot"
@@ -691,7 +691,7 @@ public extern	U0   WinDerivedValsUpdate( CTask *task);
 #help_index "Task;Job/Exe;Task/Job/Exe;MultiCore"
 public extern CTask *Spawn(U0 (*fp_addr)(U8 *data), U8 *data=NULL, 
 						   U8 *task_name=NULL, I64 target_cpu=-1, 	//-1 means current CPU
-						   CTask *parent=NULL, //NULL means zeal
+						   CTask *parent=NULL, //NULL means system_task
 						   I64 stack_size=0, I64 flags=1<<JOBf_ADD_TO_QUE);
 
 #help_index "Time/CPU Cycles;Time/Jiffies"

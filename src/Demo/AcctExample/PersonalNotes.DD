@@ -365,7 +365,7 @@ $ID,5$$$=-CTASK_NEG_OFFSET
 offset(CTask.addr)==0
 Spawn(): CAlloc()
 TaskDel(): Free()
-CSysFixedArea.Zeal
+CSysFixedArea.system
 Looks like task_flags,locked_flags cause problems with neg offset.
 $ID,-5$
 * Make a game, S.E.T.I., with radio telescope array.	Put God on air.

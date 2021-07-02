@@ -15,7 +15,7 @@ $ID,2$3D $LK,"Sprites",A="FI:::/Doc/Sprite.DD"$ are stored as a mesh of triangle
 $ID,-2$$TR,"If the compiler is JIT, isn't it an interpretor?"$
 $ID,2$ZealOS compiles, doesn't $FG,2$interpret$FG$, and uses no $FG,2$byte code$FG$ anywhere.  I loosely use the word $FG,2$script$FG$ sometimes, but it's actually compiled.  The compiler's $LK,"optimization",A="MN:OptPass012"$ code is actually where the compiler evaluates constants to simplify them, like every optimizing compiler.
 $ID,-2$$TR,"Are you a Creationist?"$
-$ID,2$I am an evolutionist.  $FG,2$Zeal$FG$ is a better term for the first father of all tasks than $FG,2$root$FG$ was!
+$ID,2$I am an evolutionist.  $FG,2$System$FG$ is a better term for the first father of all tasks than $FG,2$root$FG$ was!
 $ID,-2$$TR,"Is 'Bt()' in the code Bit Torrent?"$
 $ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ inst, not $FG,2$bit torrent$FG$.
 $ID,-2$$TR,"Is 'Fs->' in the code file system?"$
@@ -45,7 +45,7 @@ $ID,2$The editor periodically takes a snap-shot of the document for $FG,2$UNDO$F
 $ID,-2$$TR,"Why is it in text mode?"$
 $ID,2$ZealOS runs in $FG,2$High-res 32-bit color VBE$FG$ graphics modes, not text mode.  It changes to this mode with a $LK,"BIOS call",A="FF:::/Kernel/KStart16.CC,INT:9"$ while in real-mode before it switches to 64-bit mode.	The text is $LK,"drawn by hand",A="MN:GrUpdateTextFG"$.  See $LK,"::/Kernel/FontStd.CC"$.
 $ID,-2$$TR,"Where is the kernel memory?"$
-$ID,2$ZealOS identity-maps all memory, all the time.	It is like paging is not used.	There is no special kernel $FG,2$high half$FG$ memory space.	ZealOS is ring-0-only, so everything is kernel, even user programs.  There is a special task called $FG,2$Zeal$FG$ and he doesn't die, so his heap never gets freed.	That's as close to $FG,2$kernel memory$FG$ as it gets.	All code goes in the lowest 2Gig of addresses, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.	See $LK,"MemoryOverview",A="FI:::/Doc/MemoryOverview.DD"$.
+$ID,2$ZealOS identity-maps all memory, all the time.	It is like paging is not used.	There is no special kernel $FG,2$high half$FG$ memory space.	ZealOS is ring-0-only, so everything is kernel, even user programs.  There is a special task called $FG,2$System$FG$ and he doesn't die, so his heap never gets freed.	That's as close to $FG,2$kernel memory$FG$ as it gets.	All code goes in the lowest 2Gig of addresses, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.	See $LK,"MemoryOverview",A="FI:::/Doc/MemoryOverview.DD"$.
 $ID,-2$$TR,"Why does it run code from stack addresses?"$
 $ID,2$ZealOS puts all code in the lowest 2Gig, known as the $LK,"Code Heap",A="FF:::/Doc/Glossary.DD,Code and Data Heaps"$, so that the $FG,2$REL32$FG$ addressing mode can be used.	ZealOS is 64-bit, but $FG,2$2Gig$FG$ is enough for code.	It actually puts global variables there, too, but you can turn that off with $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$.  $LK,"MAlloc",A="MN:MAlloc"$() allocs higher memory.
 $ID,-2$$TR,"How does it SYSCALL?"$

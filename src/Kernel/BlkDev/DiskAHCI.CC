@@ -715,6 +715,8 @@ U0 AHCIInit()
 	CAHCIPort	*port;
 	I64			 i, bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0); //0x010601, last byte prog_if, AHCI version 1.0
 
+	"\n";
+
 	if (bdf == -1)
 	{
 		"AHCI: No AHCI controller found.\n";
@@ -754,16 +756,16 @@ U0 AHCIInit()
 		if (Bt(&hba->ports_implemented, i))
 		{//$BK,1$Make ports idle?$BK,0$
 			port = &hba->ports[i];
-			"AHCI: Port on %d, signature 0x%0X\n", i, port->signature;
+			"AHCI: Port %2d signature 0x%08X ", i, port->signature;
 			if (port->signature == AHCI_PxSIG_ATA || port->signature == AHCI_PxSIG_ATAPI)
 			{
 				if (port->signature == AHCI_PxSIG_ATAPI)
 				{
 					Bts(&port->command, AHCI_PxCMDf_ATAPI);
-					"      ATAPI drive\n";
+					"ATAPI drive\n";
 				}
-				else
-					"      ATA drive\n";
+				else if (port->signature == AHCI_PxSIG_ATA)
+					"ATA drive\n";
 
 				if (!AHCIPortIsIdle(i))
 				{
@@ -771,8 +773,11 @@ U0 AHCIInit()
 					AHCIPortCmdStop(i);
 				}
 			}
+			else
+				"Unknown\n";
 		}
 	}
+	"\n";
 }
 
 Bool AHCIBootDVDProbeAll(CBlkDev *bd)
@@ -787,7 +792,7 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 		if (Bt(&blkdev.ahci_hba->ports_implemented, i))
 		{
 			port = &blkdev.ahci_hba->ports[i];
-			"AHCI: BootDVDProbeAll: Saw port at %d with signature 0x%0X\n", i, port->signature;
+			"AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n", i, port->signature;
 
 			if (port->signature == AHCI_PxSIG_ATAPI)
 			{

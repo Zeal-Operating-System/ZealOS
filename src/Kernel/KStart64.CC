@@ -17,14 +17,14 @@ USE64
 		FXSAVE	U64 [RAX]
 
 //Init CPU0 Struct
-		PUSH	SYS_FIXED_AREA + CSysFixedArea.zeal
+		PUSH	SYS_FIXED_AREA + CSysFixedArea.system
 		PUSH	SYS_FIXED_AREA + CSysFixedArea.boot_cpu
 		PUSH	0
 		CALL	&CPUStructInit
 		CALL	SET_GS_BASE
 
 //Init System HeapCtrl
-		MOV 	EDI, U32 SYS_FIXED_AREA + CSysFixedArea.zeal_hc
+		MOV 	EDI, U32 SYS_FIXED_AREA + CSysFixedArea.system_hc
 		MOV 	EAX, U32 SYS_FIXED_AREA + CSysFixedArea.sys_code_bp
 		MOV 	U64 CHeapCtrl.bp[RDI],RAX
 		MOV 	U32 CHeapCtrl.hc_signature[RDI], HEAP_CTRL_SIGNATURE_VAL
@@ -33,16 +33,16 @@ USE64
 		MOV 	U64 CHeapCtrl.next_um[RDI], RAX
 		MOV 	U64 CHeapCtrl.last_um[RDI], RAX
 
-		MOV 	EAX, U32 SYS_FIXED_AREA + CSysFixedArea.zeal
+		MOV 	EAX, U32 SYS_FIXED_AREA + CSysFixedArea.system
 		MOV 	U64 CHeapCtrl.mem_task[RDI], RAX
 		MOV 	U64 CTask.code_heap[RAX], RDI
 		MOV 	U64 CTask.data_heap[RAX], RDI
 		MOV 	U32 CTask.task_signature[RAX], TASK_SIGNATURE_VAL
 
-		BTS 	U32 [SYS_RUN_LEVEL], RLf_16MEG_ZEAL_HEAP_CTRL
+		BTS 	U32 [SYS_RUN_LEVEL], RLf_16MEG_SYSTEM_HEAP_CTRL
 
-		PUSH	MEM_ZEAL_STACK
-		PUSH	U32 SYS_FIXED_AREA + CSysFixedArea.zeal
+		PUSH	MEM_SYSTEM_STACK
+		PUSH	U32 SYS_FIXED_AREA + CSysFixedArea.system
 		CALL	&TaskInit
 		CALL	SET_FS_BASE
 		MOV 	RSP, U64 CTask.rsp[RAX]

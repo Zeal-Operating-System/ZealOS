@@ -31,6 +31,6 @@ public U0 Cls()
 }
 
 public U0 ZCls()
-{//Clear zeal terminal.
+{//Clear System terminal.
 	Sys("DocClear;\n");
 }

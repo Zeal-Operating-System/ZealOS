@@ -148,8 +148,8 @@ $ID,2$There is no distinction between $FG,2$task$FG$, $FG,2$process$FG$ or $FG,2
 Since there is not friendly disk sharing and all tasks have the same address map, it might be accurate to call ZealOS, "multi-thread/single-process".  You run a single application process on $FG,2$Core0$FG$ and it can create threads on the same core or others.	If you run multiple processes, it should be safe, but one process will wait until another completely finishes a long disk access.
 $ID,-2$$TR,"System Task"$
 $ID,2$The System task is immortal. The system task is created at start-up and appears in the small window at the top beneath the user terminal windows.  Since the System task is immortal, on its heap go all memory objects which you don't want destroyed by any single task's death.  When created, the System task runs the file $LK,"::/StartOS.CC"$.  When start-up is finished, the system task enters a server mode where it accepts requests from other tasks.	The $LK,"Sys",A="MN:Sys"$("") routine will make the System task compile and run text src code.  $FG,2$#include$FG$ statements can be sent to $LK,"Sys",A="MN:Sys"$(""), creating system-wide code and data which are immortal.
-$ID,-2$$TR,"Seth Tasks"$
-$ID,2$Each CPU core has an executive task called $FG,2$Seth$FG$ that is immortal.  The System task on $FG,2$Core0$FG$ is also its $FG,2$Seth$FG$ task.
+$ID,-2$$TR,"Executive Tasks"$
+$ID,2$Each CPU core has an $FG,2$Executive$FG$ task that is immortal.  The System task on $FG,2$Core0$FG$ is also its $FG,2$Executive$FG$ task.
 $ID,-2$$TR,"Code and Data Heaps"$
 $ID,2$ZealOS uses the asm $FG,2$CALL$FG$ inst, exclusively, and that inst is limited to calling routines $FG,2$+/-2Gig$FG$ from the current code location.	To prevent out-of-range issues, I decided to separate code and data, placing all code within the lowest $FG,2$2Gig$FG$ of memory, addresses $FG,2$00000000$FG$-$FG,2$7FFFFFFF$FG$.	The compiler and $LK,"Load",A="MN:Load"$()er alloc memory from the code heap to store code and global vars, unless the compiler option $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$ is used.  When programs call $LK,"MAlloc",A="MN:MAlloc"$() is from the data heap, which in not limited in size, except by physical RAM memory.  You can alloc from any heap in any task at any time on any core, even making $LK,"independent",A="MN:MemPagAlloc"$ heaps.
 $ID,-2$$TR,"Parent, Child and PopUp Tasks"$
@@ -266,6 +266,6 @@ $ID,-2$$TR,"Join"$
 $ID,2$When two parts of a program have a common low-level routine, that routine is often labeled SomethingJoin.
 $ID,-2$$TR,"user_data"$
 $ID,2$Many operating system structures have space set aside for you to store values.	You are on your own managing these with multiple applications and libraries.
-$ID,-2$$TR,"Multicore Core0/CoreAP"$
-$ID,2$Core0, has the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$, and it is the master.	The $FG,2$application processors$FG$ have an executive $LK,"Seth Task",A="FF:::/Doc/Glossary.DD,Seth Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQueue",A="MN:JobQueue"$() a job on them.
+$ID,-2$$TR-C,"Multicore Core0/CoreAP"$
+$ID,2$Core0, has the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$, and it is the master.	The $FG,2$application processors$FG$ have an $LK,"Executive Task",A="FF:::/Doc/Glossary.DD,Executive Tasks"$ and are the slave processors.  Only $FG,2$Core0$FG$ tasks can have windows and can launch applications.  Slave cores are used if the application explicitly $LK,"Spawn",A="MN:Spawn"$s() a task or $LK,"JobQueue",A="MN:JobQueue"$() a job on them.
 $ID,-2$

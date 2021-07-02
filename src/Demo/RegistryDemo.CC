@@ -1,5 +1,5 @@
 /*The ~/Registry.CC file is CosmiC code.
-You can execute a tree branch of it.  The Zeal
+You can execute a tree branch of it.  The System
 branch is executed in the System task boot phase.
 Normally, you will place var declarations
 in the branch you make, but since an arthmetic expression

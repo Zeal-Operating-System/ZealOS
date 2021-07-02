@@ -1,4 +1,10 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/01/21 23:51:14----$IV,0$
+* Raised version number to 0.02.
+* Added support for reading TempleOS, ZenithOS, and ZealOS ISOs.
+* Renames:
+	- Seth	--> Executive
+
 $IV,1$----07/01/21 19:04:09----$IV,0$
 $BK,1$* Forked ZealOS from ZenithOS. Version number 2.01 --> 0.01.$BK,0$
 * Update Roadmap.

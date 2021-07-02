@@ -20,7 +20,7 @@ Bool RegCache()
 		return TRUE;
 }
 
-public Bool RegDefault(U8 *path, U8 *val, Bool is_zeal_entry=FALSE)
+public Bool RegDefault(U8 *path, U8 *val, Bool is_system_entry=FALSE)
 {//Add code doc tree branch to registry.
 	Bool res, unlock_doc;
 
@@ -30,7 +30,7 @@ public Bool RegDefault(U8 *path, U8 *val, Bool is_zeal_entry=FALSE)
 	{
 		DocTreeMake(sys_registry_doc, path);
 		DocPrint(sys_registry_doc, "%s", val);
-		if (is_zeal_entry)
+		if (is_system_entry)
 		{
 			if (Fs == sys_task)
 				ExePrint("%s", val);
@@ -134,11 +134,11 @@ U0 RegInit()
 	RegDefault("System/SysMessageFlags", "sys_message_flags[0]=0;\n", TRUE);
 	StrPrint(buf, "registry_version=%4.3f;\n", sys_os_version);
 	version_present = RegDefault("System/SysRegVer", buf, TRUE);
-	RegExe("Zeal");
+	RegExe("System");
 	if (registry_version != sys_os_version)
 	{
 		RegWrite("System/SysRegVer", buf);
-		RegExe("Zeal");
+		RegExe("System");
 	}
 }
 
@@ -147,7 +147,7 @@ U0 RegInit()
 
 public U0 ZOnceFlush()
 {//Flush ZOnce() buf.
-	RegWrite("Once/Zeal", "");
+	RegWrite("Once/System", "");
 }
 
 public U0 OnceFlush()
@@ -156,12 +156,12 @@ public U0 OnceFlush()
 }
 
 public U0 ZOnce(U8 *format, ...)
-{//Add Zeal code to $LK,"~/Registry.CC"$, executed next boot.
+{//Add System code to $LK,"~/Registry.CC"$, executed next boot.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
-	if (!Bt(&sys_run_level, RLf_ONCE_ZEAL))
+	if (!Bt(&sys_run_level, RLf_ONCE_SYSTEM))
 		ZOnceFlush;
-	RegAppend("Once/Zeal", "%s\n", buf);
+	RegAppend("Once/System", "%s\n", buf);
 	Free(buf);
 }
 
@@ -176,15 +176,15 @@ public U0 Once(U8 *format, ...)
 }
 
 public U0 ZOnceDrive(U8 drv_let=0, U8 *format, ...)
-{//Add Zeal code to drv $LK,"~/Registry.CC"$, executed next boot.
+{//Add System code to drv $LK,"~/Registry.CC"$, executed next boot.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 	I64 old_drive_let = *sys_registry_doc->filename.name;
 
 	if (drv_let)
 		*sys_registry_doc->filename.name = drv_let;
-	if (!Bt(&sys_run_level, RLf_ONCE_ZEAL))
+	if (!Bt(&sys_run_level, RLf_ONCE_SYSTEM))
 		ZOnceFlush;
-	RegAppend("Once/Zeal", "%s\n", buf);
+	RegAppend("Once/System", "%s\n", buf);
 	Free(buf);
 	*sys_registry_doc->filename.name = old_drive_let;
 }
@@ -208,13 +208,13 @@ public U0 OnceExe()
 	try
 	{
 
-		RegDefault("Once/Zeal", "");
-		if (RegCount("Once/Zeal") > 2)
+		RegDefault("Once/System", "");
+		if (RegCount("Once/System") > 2)
 		{
-			Sys("RegExe(\"Once/Zeal\");");
+			Sys("RegExe(\"Once/System\");");
 			ZOnceFlush;
 		}
-		LBts(&sys_run_level, RLf_ONCE_ZEAL);
+		LBts(&sys_run_level, RLf_ONCE_SYSTEM);
 
 		RegDefault("Once/User", "");
 		if (RegCount("Once/User") > 2)
@@ -228,7 +228,7 @@ public U0 OnceExe()
 	catch
 	{
 		ZOnceFlush;
-		LBts(&sys_run_level, RLf_ONCE_ZEAL);
+		LBts(&sys_run_level, RLf_ONCE_SYSTEM);
 		OnceFlush;
 		LBts(&sys_run_level, RLf_ONCE_USER);
 	}

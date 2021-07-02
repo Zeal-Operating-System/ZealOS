@@ -560,7 +560,7 @@ U0 FMCopy(CDoc *doc)
 }
 
 #define FMR_INCLUDE 			0
-#define FMR_ZEAL_INCLUDE		1
+#define FMR_SYSTEM_INCLUDE		1
 #define FMR_DELETE				2
 #define FMR_RENAME				3
 #define FMR_MKDIR 				4
@@ -582,7 +582,7 @@ I64 PopUpFMRight(U8 *header=NULL, U8 *footer=NULL)
 		DocPrint(doc, "%s",header);
 
 	DocPrint(doc,	"$$CM+LX,1,1$$$$BT,\"INCLUDE                 \",LE=FMR_INCLUDE$$"
-					"$$CM+LX,29,0$$$$BT,\"SYSTEM INCLUDE          \",LE=FMR_ZEAL_INCLUDE$$"
+					"$$CM+LX,29,0$$$$BT,\"SYSTEM INCLUDE          \",LE=FMR_SYSTEM_INCLUDE$$"
 					"$$CM+LX,1,3 $$$$BT,\"DELETE                  \",LE=FMR_DELETE$$"
 					"$$CM+LX,29,0$$$$BT,\"RENAME                  \",LE=FMR_RENAME$$"
 					"$$CM+LX,1,3 $$$$BT,\"MAKE DIRECTORY          \",LE=FMR_MKDIR$$"
@@ -612,7 +612,7 @@ U0 FMRightClick()
 			Message(MESSAGE_KEY_DOWN, 0, 0x3F0000003F);
 			break;
 
-		case FMR_ZEAL_INCLUDE:
+		case FMR_SYSTEM_INCLUDE:
 			Message(MESSAGE_KEY_DOWN, 0, 0x23F0000023F);
 			break;
 

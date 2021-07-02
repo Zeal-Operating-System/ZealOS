@@ -91,7 +91,7 @@ U0 GrUpdateTasks()
 
 		for (i = 0; i < mp_count; i++)
 		{ //Loop through all cores.
-			task1 = task = cpu_structs[i].seth_task;
+			task1 = task = cpu_structs[i].executive_task;
 			do
 			{
 				if (!TaskValidate(task))

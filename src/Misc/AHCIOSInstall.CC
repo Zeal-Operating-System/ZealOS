@@ -3,8 +3,8 @@ U0 InstallDrive(U8 drv_let)
 	U8 *st;
 
 	while (!DriveCheck(blkdev.let_to_drive[drv_let - 'A'], FALSE))
-		Yield;
-	Sleep(500);
+		Sleep(1);
+	Sleep(1000);
 
 	ExePrint("CopyTree(\"::/\",\"%C:/\");",			drv_let);
 	ExePrint("DirMake(\"%C:/Tmp\");",				drv_let);
@@ -226,7 +226,8 @@ Bool DoInstall(Bool prompt_reboot)
 				"Continue Install Wizard ";
 		if (YorN)
 		{
-			"\n\nUpgrade an existing install, or create new Installation? (U/I): ";
+			"\n\nUpgrade an existing install,"
+			"\nor create new Installation? (U/I): ";
 			do
 				ch = ToUpper(CharGet(, FALSE));
 			while (ch != 'U' && ch != 'I');

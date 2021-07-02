@@ -79,7 +79,7 @@ CHash *FunSegFind(U8 *addr, I64 *_offset)
 		for (i = 0; i < mp_count; i++)
 		{
 			c = &cpu_structs[i];
-			task = c->seth_task;
+			task = c->executive_task;
 			do
 			{
 				if (!TaskValidate(task))
@@ -93,7 +93,7 @@ CHash *FunSegFind(U8 *addr, I64 *_offset)
 				}
 				task = task->next_task;
 			}
-			while (task != c->seth_task);
+			while (task != c->executive_task);
 
 fs_abort_task:
 		}
