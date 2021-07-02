@@ -353,8 +353,6 @@ public extern	CATARep			*ATAIDDrives(CATARep *head, CATARep **_ata_drive, CATARe
 extern			CBlkDev			*ATAMount(U8 first_drive_let, I64 type, I64 base0, I64 base1, I64 unit);
 extern			Bool			 IDEATAPIStartStop(CBlkDev *bd, F64 timeout, Bool start);
 extern			I64				 IDEATAProbe(I64 base0, I64 base1, I64 unit);
-extern			U0				 IDEATAReadBlks( CBlkDev *bd, U8 *buf, I64 blk, I64 count);
-extern			U0				 IDEATAWriteBlks(CBlkDev *bd, U8 *buf, I64 blk, I64 count);
 extern			I64				 BlkDevAdd(   CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free);
 extern			U0				 DiskCacheInit(I64 size_in_U8s);
 public extern	U0				 DiskCacheInvalidate(CDrive *drive);

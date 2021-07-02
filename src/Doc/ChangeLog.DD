@@ -1,4 +1,10 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/02/21 19:30:19----$IV,0$
+* Raised version number to 0.04.
+* Implemented default NULL filename args for $LK+PU,"Ed",A="FF:::/System/DolDoc/DocEd.CC,Ed(U"$, $LK+PU,"PopUpEd",A="FF:::/System/DolDoc/DocEd.CC,PopUpEd(U"$.
+* Removed some deprecated IDE functions.
+* Changed window borders. Added color to $LK+PU,"[X]",A="FF:::/System/DolDoc/DocTerm.CC,[X]"$ and $LK+PU,"MENU",A="FF:::/System/DolDoc/DocTerm.CC,MENU"$, hide for System Task and AutoComplete Task.
+
 $IV,1$----07/02/21 03:58:09----$IV,0$
 * Raised version number to 0.03.
 * Update all documentation, change 1st-person --> 3rd-person.

@@ -64,13 +64,10 @@ Bool BlkRead(CDrive *drive, U8 *buf, I64 blk, I64 count)
 					break;
 
 				case BDT_ATA:
-//				case BDT_ATAPI:
-//					res = IDEATARBlks(drive, buf, blk, count);
-					res = AHCIAtaRBlks(drive, buf, blk, count); // ahci
+					res = AHCIAtaRBlks(drive, buf, blk, count);
 					break;
-				case BDT_ATAPI: // ahci
+				case BDT_ATAPI:
 					res = AHCIAtapiRBlks(drive, buf, blk, count);
-//					D(buf, count);
 					break;
 			}
 			bd->last_time = tS;
@@ -118,8 +115,7 @@ Bool BlkWrite(CDrive *drive, U8 *buf, I64 blk, I64 count)
 
 				case BDT_ATA:
 				case BDT_ATAPI:
-//					res = IDEATAWBlks(drive, buf, blk, count);
-					res = AHCIAtaWBlks(drive, buf, blk, count); // ahci
+					res = AHCIAtaWBlks(drive, buf, blk, count);
 					break;
 			}
 			bd->last_time = tS;

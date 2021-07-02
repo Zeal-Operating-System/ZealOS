@@ -110,8 +110,7 @@ Bool BlkDevInit(CBlkDev *bd)
 			case BDT_ATA:
 				bd->max_reads = 128;
 				bd->max_writes = 1;
-//				res = IDEATAInit(bd);
-				res = AHCIAtaInit(bd); // ahci
+				res = AHCIAtaInit(bd);
 				break;
 
 			case BDT_ATAPI:
@@ -123,8 +122,7 @@ Bool BlkDevInit(CBlkDev *bd)
 				if (bd->max_reads < 128)
 					bd->max_reads = 128;
 				bd->max_writes = 0xFFFF * 4;
-//				if (res = IDEATAInit(bd))
-				if (res = AHCIAtaInit(bd)) // ahci
+				if (res = AHCIAtaInit(bd))
 					drive->size = bd->max_blk + 1;
 				break;
 		}

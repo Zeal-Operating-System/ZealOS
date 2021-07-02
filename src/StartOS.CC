@@ -19,7 +19,7 @@ HashTablePurge(sys_task->hash_table);
 
 //Debug("Type 'G;'");
 DocTermNew;
-WinVert(2, text.rows / 5);
+WinVert(2, text.rows / 8);
 
 sys_winmgr_task = Spawn(&WinMgrTask, NULL, "Window Mgr");
 Fs->win_inhibit = WIG_TASK_DEFAULT - WIF_SELF_BORDER - WIF_SELF_GRAB_SCROLL - WIF_SELF_CTRLS;

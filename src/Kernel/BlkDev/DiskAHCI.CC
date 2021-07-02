@@ -856,7 +856,6 @@ Bool AHCIAtapiRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 
 	return TRUE;
 }
-//IDEATARBlks
 
 Bool AHCIAtaRBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 {

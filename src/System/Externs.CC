@@ -40,7 +40,7 @@ extern U0	DocTop(CDoc *doc=NULL);
 extern Bool	DocUnlock(CDoc *doc);
 extern U0	DocUpdateTaskDocs(CTask *task);
 extern U0	DrawCtrls(CTask *task);
-extern Bool	Ed(U8 *link_st, I64 edf_dof_flags=0);
+extern Bool	Ed(U8 *link_st=NULL, I64 edf_dof_flags=0);
 extern U0	EdCodeTools(CDoc *doc);
 extern U8  *EdSprite(I64 bin_num);
 extern I64	ExeDoc(CDoc *doc, I64 ccf_flags=0);

@@ -127,13 +127,16 @@ U0 DrawWinScroll(CDC *dc, CCtrl *c)
 		dc->color = s->color >> 4;
 	else
 		dc->color = s->color & 0xF;
-	GrRect(dc, c->left, c->top, c->right - c->left + 1, c->bottom - c->top + 1);
+//	GrRect(dc, c->left, c->top, c->right - c->left + 1, c->bottom - c->top + 1);
+	GrPutS(dc, c->left, c->top, "Û");
 
 	if (c->flags & CTRLF_CLICKED)
 		dc->color = s->color & 0xF;
 	else
 		dc->color = s->color >> 4;
-	GrRect(dc, c->left + 2, c->top + 2, c->right - c->left + 1 - 4, c->bottom - c->top + 1 - 4);
+//	GrRect(dc, c->left + 2, c->top + 2, c->right - c->left + 1 - 4, c->bottom - c->top + 1 - 4);
+	GrPutS(dc, c->left, c->top, "±");
+
 }
 
 U0 WinDerivedScrollValsUpdate(CCtrl *c)

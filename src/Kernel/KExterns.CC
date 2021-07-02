@@ -6,7 +6,7 @@ import U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_ch
 
 import U8	*DocSave(CDoc *doc, I64 *_size=NULL);
 import Bool	 DocUnlock(CDoc *doc);
-import Bool	 Ed(U8 *link_st, I64 edf_dof_flags=0);
+import Bool	 Ed(U8 *link_st=NULL, I64 edf_dof_flags=0);
 
 extern U0 SysErr(U8 *format, ...);
 extern U0 SysLog(U8 *format, ...);

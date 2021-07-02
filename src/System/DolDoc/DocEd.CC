@@ -118,8 +118,8 @@ public Bool DocEd(CDoc *doc, I64 dof_flags=0)
 	bdoc = DocNew;
 	bdoc->flags |= DOCF_BORDER_DOC;
 	DocPrint(bdoc, "$$CM+TY+LX+NC,0,-1$$");
-	DocPrint(bdoc, "$$TX+RX+BD,\"[X]\"$$");
-	DocPrint(bdoc, "$$TX+LX+BD,\"MENU\"$$");
+	DocPrint(bdoc, "$$BG,LTRED$$$$LTGRAY$$$$TX+RX+BD,\"[X]\"$$$$FG$$$$BG$$");
+	DocPrint(bdoc, "$$BG,BROWN$$$$YELLOW$$$$TX+LX+BD,\"MENU\"$$$$FG$$$$BG$$");
 
 	old_task_title = StrNew(Fs->task_title);
 	if (Fs->title_src != TTS_LOCKED_CONST)
@@ -225,12 +225,15 @@ public Bool DocEd(CDoc *doc, I64 dof_flags=0)
 }
 
 #help_index "DolDoc/Cmd Line (Typically);Cmd Line (Typically)"
-public Bool Ed(U8 *link_st, I64 edf_dof_flags=0)
+public Bool Ed(U8 *link_st=NULL, I64 edf_dof_flags=0)
 {//Invoke document editor.
 	U8		*filename, *needle_str;
 	I64		 i, num;
 	Bool	 cont, res = FALSE;
 	CDoc	*doc;
+
+	if (!link_st)
+		link_st = "";
 
 	switch (i = EdLinkConvert(link_st, &filename, &needle_str, &num, edf_dof_flags))
 	{
@@ -289,7 +292,7 @@ public Bool Plain(U8 *filename, I64 edf_dof_flags=0)
 }
 
 #help_index "DolDoc;Job/Exe;Task/Job/Exe"
-public I64 PopUpEd(U8 *filename, CTask *parent=NULL, CTask **_pu_task=NULL)
+public I64 PopUpEd(U8 *filename=NULL, CTask *parent=NULL, CTask **_pu_task=NULL)
 {//Create PopUp win task and edit a doc.
 	U8 *st = MStrPrint("Ed(\"%Q\");", filename);
 	I64 res = PopUp(st, parent, _pu_task);

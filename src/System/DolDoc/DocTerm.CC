@@ -31,8 +31,10 @@ public CDoc *DocBorderNew(CDoc *pdoc)
 	doc_e->data = &Fs->task_title;
 	DocDataFormat(bdoc, doc_e);
 	DocPrint(bdoc, "$$CM+H+NC,1,0$$$$TX+H+BD+IV,\"%X\"$$", Fs);
-	DocPrint(bdoc, "$$TX+H+RX+BD,\"[X]\"$$");
-	DocPrint(bdoc, "$$TX+H+LX+BD,\"MENU\"$$");
+	if (pdoc->win_task != sys_task)
+		DocPrint(bdoc, "$$BG+H,LTRED$$$$LTGRAY+H$$$$TX+H+RX+BD,\"[X]\"$$$$BG+H$$$$FG+H$$");
+	if (pdoc->win_task != sys_task && pdoc->win_task != ac.task)
+		DocPrint(bdoc, "$$BG+H,BROWN$$$$YELLOW+H$$$$TX+H+LX+BD,\"MENU\"$$$$FG+H$$$$BG+H$$");
 
 	return bdoc;
 }

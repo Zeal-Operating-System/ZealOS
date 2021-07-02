@@ -83,16 +83,14 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 					drive->size = bd->max_blk + 1 - bd->drv_offset;
 //The following read is a test read.
 					//if it hangs, the drive is not supported.
-//					IDEATAReadBlks(bd, &mbr, 0, 1);
-					AHCIAtaBlksRead(bd, &mbr, 0, 1); // ahci
+					AHCIAtaBlksRead(bd, &mbr, 0, 1);
 					break;
 				}
 				offset = 0;
 				ext_base = INVALID_CLUS;
 				while (prt_num < 0 || num <= prt_num)
 				{
-//					IDEATAReadBlks(bd, &mbr, offset, 1);
-					AHCIAtaBlksRead(bd, &mbr, offset, 1); // ahci
+					AHCIAtaBlksRead(bd, &mbr, offset, 1);
 					if (mbr.signature != 0xAA55)
 						break;
 					j = -1;
@@ -123,8 +121,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 								case MBR_PT_FAT32d:
 								case MBR_PT_FAT32e:
 								case MBR_PT_FAT32f:
-//									IDEATAReadBlks(bd, &br, drive->drv_offset, 1);
-									AHCIAtaBlksRead(bd, &br, drive->drv_offset, 1); // ahci
+									AHCIAtaBlksRead(bd, &br, drive->drv_offset, 1);
 
 									drive->drive_signature = DRIVE_SIGNATURE_VAL;
 									drive->prt_num = num;
@@ -212,52 +209,6 @@ I64 SysI64Get()
 	StrNGet(st, STR_LEN, FALSE);
 
 	return Str2I64(st, 16);
-}
-
-Bool GetBaseUnit(CBlkDev *bd)
-{
-	I64  ch;
-	Bool probe;
-
-	#exe {
-		if (kernel_config->opts[CONFIG_DONT_PROBE])
-			StreamPrint("probe = FALSE;");
-		else
-			StreamPrint("probe = TRUE;");
-	};
-
-	if (!probe || !IDEBootDVDProbeAll(bd))
-	{
-		"\nDon't worry.  This is not a product\n"
-		"registration.				ZealOS just needs the\n"
-		"I/O port numbers for the CD/DVD.\n"
-		"\nRetry the ports above or check Windows\n"
-		"system information under I/O ports for\n"
-		"'IDE', 'ATA' or 'SATA'.\n"
-		"In Linux, use 'lspci -v' for ports.\n"
-		"\n\nEnter 4-digit hex I/O Port number.\n"
-		"CD/DVD I/O Port Base0: 0x";
-
-		bd->base0 = SysI64Get;
-		bd->base1 = 0;
-		bd->unit  = 0;
-		if (bd->base0)
-		{
-			"\nUnit (0 or 1): ";
-			do ch = CharGet(, FALSE);
-			while (!('0' <= ch <= '1'));
-			'' ch;
-			bd->unit = ch - '0';
-			blkdev.dvd_boot_is_good = IDEBootDVDProbe(bd);
-			return TRUE;
-		}
-		else
-		{
-			blkdev.dvd_boot_is_good = FALSE;
-			return FALSE;
-		}
-	}
-	return FALSE;
 }
 
 U0 BlkDevsInitAll()
