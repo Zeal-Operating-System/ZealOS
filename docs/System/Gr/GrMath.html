@@ -36,7 +36,7 @@ body {background-color:#000000;}
 <a name="l9"></a>                                </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_plot</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *aux, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z</span><span class=cF7>)</span><span class=cF0>,
 <a name="l10"></a>                                </span><span class=cF9>I64</span><span class=cF0> step=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>=</span><span class=cFE>0</span><span class=cF0>)
 <a name="l11"></a>{</span><span class=cF2>//Step through line segment calling callback.</span><span class=cF0>
-<a name="l12"></a></span><span class=cF2>//Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l12"></a></span><span class=cF2>//Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l13"></a>        </span><span class=cF9>I64</span><span class=cF0>  i, j, d, dx = x2 - x1, dy = y2 - y1, dz = z2 - z1, _x, _y, _z, adx = </span><span class=cF5>AbsI64</span><span class=cF0>(dx), ady = </span><span class=cF5>AbsI64</span><span class=cF0>(dy), adz = </span><span class=cF5>AbsI64</span><span class=cF0>(dz);
 <a name="l14"></a>        </span><span class=cF1>Bool</span><span class=cF0> first = </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l15"></a>
@@ -129,7 +129,7 @@ body {background-color:#000000;}
 <a name="l102"></a>
 <a name="l103"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Math/3D Transformation&quot;</span><span class=cF0>
 <a name="l104"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4MulMat4x4Equ</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *dst, </span><span class=cF9>I64</span><span class=cF0> *m1, </span><span class=cF9>I64</span><span class=cF0> *m2)
-<a name="l105"></a>{</span><span class=cF2>//Multiply 4x4 matrices and store in dst. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l105"></a>{</span><span class=cF2>//Multiply 4x4 matrices and store in dst. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l106"></a></span><span class=cF2>//Conceptually,  the transform m1 is applied after m2</span><span class=cF0>
 <a name="l107"></a>        </span><span class=cF9>I64</span><span class=cF0> i, j, k;
 <a name="l108"></a>        </span><span class=cF1>F64</span><span class=cF0> sum;
@@ -149,7 +149,7 @@ body {background-color:#000000;}
 <a name="l122"></a>}
 <a name="l123"></a>
 <a name="l124"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4MulMat4x4New</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *m1, </span><span class=cF9>I64</span><span class=cF0> *m2, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l125"></a>{</span><span class=cF2>//Multiply 4x4 matrices. Return MAlloced matrix. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l125"></a>{</span><span class=cF2>//Multiply 4x4 matrices. Return MAlloced matrix. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l126"></a></span><span class=cF2>//Conceptually, the transform m1 is applied after m2</span><span class=cF0>
 <a name="l127"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Mat4x4MulMat4x4Equ</span><span class=cF0>(</span><span class=cF5>MAlloc</span><span class=cF7>(</span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0>) * </span><span class=cFE>16</span><span class=cF0>, mem_task</span><span class=cF7>)</span><span class=cF0>, m1, m2);
 <a name="l128"></a>}
@@ -167,7 +167,7 @@ body {background-color:#000000;}
 <a name="l140"></a>}
 <a name="l141"></a>
 <a name="l142"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4RotX</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *m, </span><span class=cF1>F64</span><span class=cF0> phi)
-<a name="l143"></a>{</span><span class=cF2>//Rot matrix about X axis. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l143"></a>{</span><span class=cF2>//Rot matrix about X axis. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l144"></a>        </span><span class=cF1>F64</span><span class=cF0> my_cos = </span><span class=cF5>Cos</span><span class=cF0>(phi) * </span><span class=cF3>GR_SCALE</span><span class=cF0>, my_sin = </span><span class=cF5>Sin</span><span class=cF0>(phi) * </span><span class=cF3>GR_SCALE</span><span class=cF0>;
 <a name="l145"></a>        </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>], r2[</span><span class=cFE>16</span><span class=cF0>];
 <a name="l146"></a>
@@ -183,7 +183,7 @@ body {background-color:#000000;}
 <a name="l156"></a>}
 <a name="l157"></a>
 <a name="l158"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4RotY</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *m, </span><span class=cF1>F64</span><span class=cF0> omega)
-<a name="l159"></a>{</span><span class=cF2>//Rot matrix about Y axis. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l159"></a>{</span><span class=cF2>//Rot matrix about Y axis. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l160"></a>        </span><span class=cF1>F64</span><span class=cF0> my_cos = </span><span class=cF5>Cos</span><span class=cF0>(omega) * </span><span class=cF3>GR_SCALE</span><span class=cF0>, my_sin = </span><span class=cF5>Sin</span><span class=cF0>(omega) * </span><span class=cF3>GR_SCALE</span><span class=cF0>;
 <a name="l161"></a>        </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>], r2[</span><span class=cFE>16</span><span class=cF0>];
 <a name="l162"></a>
@@ -199,7 +199,7 @@ body {background-color:#000000;}
 <a name="l172"></a>}
 <a name="l173"></a>
 <a name="l174"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *m, </span><span class=cF1>F64</span><span class=cF0> theta)
-<a name="l175"></a>{</span><span class=cF2>//Rot matrix about Z axis. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l175"></a>{</span><span class=cF2>//Rot matrix about Z axis. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l176"></a>        </span><span class=cF1>F64</span><span class=cF0> my_cos=</span><span class=cF5>Cos</span><span class=cF0>(theta)*</span><span class=cF3>GR_SCALE</span><span class=cF0>, my_sin=</span><span class=cF5>Sin</span><span class=cF0>(theta)*</span><span class=cF3>GR_SCALE</span><span class=cF0>;
 <a name="l177"></a>        </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>], r2[</span><span class=cFE>16</span><span class=cF0>];
 <a name="l178"></a>
@@ -241,7 +241,7 @@ body {background-color:#000000;}
 <a name="l214"></a>}
 <a name="l215"></a>
 <a name="l216"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4TranslationEqu</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *r, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z)
-<a name="l217"></a>{</span><span class=cF2>//Set translation values in 4x4 matrix. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l217"></a>{</span><span class=cF2>//Set translation values in 4x4 matrix. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l218"></a>        r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>] = x &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
 <a name="l219"></a>        r[</span><span class=cFE>1</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>] = y &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
 <a name="l220"></a>        r[</span><span class=cFE>2</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>] = z &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
@@ -251,7 +251,7 @@ body {background-color:#000000;}
 <a name="l224"></a>}
 <a name="l225"></a>
 <a name="l226"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4TranslationAdd</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *r, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z)
-<a name="l227"></a>{</span><span class=cF2>//Add translation to 4x4 matrix. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l227"></a>{</span><span class=cF2>//Add translation to 4x4 matrix. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l228"></a>        r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>] += x &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
 <a name="l229"></a>        r[</span><span class=cFE>1</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>] += y &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
 <a name="l230"></a>        r[</span><span class=cFE>2</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>] += z &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
@@ -328,7 +328,7 @@ body {background-color:#000000;}
 <a name="l301"></a>}
 <a name="l302"></a>
 <a name="l303"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCReflect</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> *_x, </span><span class=cF9>I64</span><span class=cF0> *_y, </span><span class=cF9>I64</span><span class=cF0> *_z)
-<a name="l304"></a>{</span><span class=cF2>//Reflect 3D point about device context's symmetry. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l304"></a>{</span><span class=cF2>//Reflect 3D point about device context's symmetry. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l305"></a>        </span><span class=cF9>I64</span><span class=cF0> x = *_x &lt;&lt; </span><span class=cFE>32</span><span class=cF0>,
 <a name="l306"></a>                y = *_y &lt;&lt; </span><span class=cFE>32</span><span class=cF0>,
 <a name="l307"></a>                z = *_z &lt;&lt; </span><span class=cFE>32</span><span class=cF0>, 

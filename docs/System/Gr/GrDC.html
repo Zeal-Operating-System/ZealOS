@@ -31,7 +31,7 @@ body {background-color:#000000;}
 <a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GR_SCALE</span><span class=cF0>                                (</span><span class=cFE>1</span><span class=cF0>&lt;&lt;</span><span class=cFE>32</span><span class=cF0>)
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Mat4x4MulXYZ</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *r, </span><span class=cF9>I64</span><span class=cF0> *_x, </span><span class=cF9>I64</span><span class=cF0> *_y, </span><span class=cF9>I64</span><span class=cF0> *_z)
-<a name="l7"></a>{</span><span class=cF2>//Rotate 3D point using 4x4 matrix. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a>{</span><span class=cF2>//Rotate 3D point using 4x4 matrix. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l8"></a>        </span><span class=cF9>I64</span><span class=cF0> x1, y1, z1, xx = *_x, yy = *_y, zz = *_z;
 <a name="l9"></a>
 <a name="l10"></a>        x1 = (r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>] * xx + r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] * yy + r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>] * zz + r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>]) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
@@ -44,7 +44,7 @@ body {background-color:#000000;}
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCTransform</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> *_x, </span><span class=cF9>I64</span><span class=cF0> *_y, </span><span class=cF9>I64</span><span class=cF0> *_z)
 <a name="l19"></a>{</span><span class=cF2>//This is the default dc-&gt;transform() callback.</span><span class=cF0>
-<a name="l20"></a></span><span class=cF2>//Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l20"></a></span><span class=cF2>//Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l21"></a>        </span><span class=cF5>Mat4x4MulXYZ</span><span class=cF0>(dc-&gt;r, _x, _y, _z);
 <a name="l22"></a>        *_x += dc-&gt;x;
 <a name="l23"></a>        *_y += dc-&gt;y;
@@ -52,7 +52,7 @@ body {background-color:#000000;}
 <a name="l25"></a>}
 <a name="l26"></a>
 <a name="l27"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *r)
-<a name="l28"></a>{</span><span class=cF2>//Set matrix to identity. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l28"></a>{</span><span class=cF2>//Set matrix to identity. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l29"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(r, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>*</span><span class=cFE>16</span><span class=cF0>);
 <a name="l30"></a>        r[</span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>].i32[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>1</span><span class=cF0>;
 <a name="l31"></a>        r[</span><span class=cFE>1</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>].i32[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>1</span><span class=cF0>;
@@ -63,7 +63,7 @@ body {background-color:#000000;}
 <a name="l36"></a>}
 <a name="l37"></a>
 <a name="l38"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>Mat4x4IdentNew</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l39"></a>{</span><span class=cF2>//MAlloc an identity matrix. Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l39"></a>{</span><span class=cF2>//MAlloc an identity matrix. Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l40"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(</span><span class=cF5>MAlloc</span><span class=cF7>(</span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0>) * </span><span class=cFE>16</span><span class=cF0>, mem_task</span><span class=cF7>)</span><span class=cF0>);
 <a name="l41"></a>}
 <a name="l42"></a>
@@ -76,7 +76,7 @@ body {background-color:#000000;}
 <a name="l49"></a>}
 <a name="l50"></a>
 <a name="l51"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> *r)
-<a name="l52"></a>{</span><span class=cF2>//Set device context's rot matrix. Will be </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF2>d() in </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l230"><span class=cF4>DCDel</span></a><span class=cF2>().Uses </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l52"></a>{</span><span class=cF2>//Set device context's rot matrix. Will be </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF2>d() in </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l230"><span class=cF4>DCDel</span></a><span class=cF2>().Uses </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l53"></a></span><span class=cF2>//The main purpose is to set matrix norm for thick scaling.</span><span class=cF0>
 <a name="l54"></a>        </span><span class=cF2>//NULL as dc means gr.dc</span><span class=cF0>
 <a name="l55"></a>        </span><span class=cF1>if</span><span class=cF0> (!dc)
@@ -172,7 +172,7 @@ body {background-color:#000000;}
 <a name="l145"></a>}
 <a name="l146"></a>
 <a name="l147"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCReset</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc)
-<a name="l148"></a>{</span><span class=cF2>//Reset </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF2> structure members but not image body, itself.</span><span class=cF0>
+<a name="l148"></a>{</span><span class=cF2>//Reset </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF2> structure members but not image body, itself.</span><span class=cF0>
 <a name="l149"></a>        dc-&gt;color                       = </span><span class=cF3>BLACK</span><span class=cF0>;
 <a name="l150"></a>        dc-&gt;color2                      = </span><span class=cF3>BLACK</span><span class=cF0>;
 <a name="l151"></a>        dc-&gt;bkcolor                     = </span><span class=cF3>BLACK</span><span class=cF0>;
@@ -195,7 +195,7 @@ body {background-color:#000000;}
 <a name="l168"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCExtentsInit</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l169"></a>{</span><span class=cF2>//Init markers for extent of next newly drawn graphics.</span><span class=cF0>
 <a name="l170"></a></span><span class=cF2>//NULL means gr.dc</span><span class=cF0>
-<a name="l171"></a>        </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/Extents.html#l1"><span class=cF4>::/Demo/Graphics/Extents.CC</span></a><span class=cF0>
+<a name="l171"></a>        </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Graphics/Extents.html#l1"><span class=cF4>::/Demo/Graphics/Extents.CC</span></a><span class=cF0>
 <a name="l172"></a>        </span><span class=cF2>//You should clear the record flag yourself</span><span class=cF0>
 <a name="l173"></a>        </span><span class=cF1>if</span><span class=cF0> (!dc)
 <a name="l174"></a>                dc = </span><span class=cFB>gr</span><span class=cF0>.dc;

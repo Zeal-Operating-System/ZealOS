@@ -28,7 +28,7 @@ body {background-color:#000000;}
 <a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Math/ODE&quot;</span><span class=cF0>
 <a name="l2"></a>#</span><span class=cF1>help_file</span><span class=cF0> </span><span class=cF6>&quot;::/Doc/ODE&quot;</span><span class=cF0>
 <a name="l3"></a>
-<a name="l4"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Credits.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Credits.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>LowPass1</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> a, </span><span class=cF1>F64</span><span class=cF0> y0, </span><span class=cF1>F64</span><span class=cF0> y, </span><span class=cF1>F64</span><span class=cF0> dt=</span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
 <a name="l7"></a>{</span><span class=cF2>//First order low pass filter</span><span class=cF0>
@@ -56,7 +56,7 @@ body {background-color:#000000;}
 <a name="l29"></a>}
 <a name="l30"></a>
 <a name="l31"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CMathODE</span><span class=cF0> *</span><span class=cF5>ODENew</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF1>F64</span><span class=cF0> max_tolerance=</span><span class=cFE>1</span><span class=cF0>e-</span><span class=cFE>6</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l32"></a>{</span><span class=cF2>//Make differential equation ctrl struct. See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l271"><span class=cF4>flags</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l32"></a>{</span><span class=cF2>//Make differential equation ctrl struct. See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l271"><span class=cF4>flags</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l33"></a>        </span><span class=cF2>//The tolerance is not precise.</span><span class=cF0>
 <a name="l34"></a>        </span><span class=cF2>//You can min_tolerance and it will</span><span class=cF0>
 <a name="l35"></a>        </span><span class=cF2>//dynamically adjust tolerance to utilize</span><span class=cF0>
@@ -653,7 +653,7 @@ body {background-color:#000000;}
 <a name="l626"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cFB>ode_alloced_factor</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0>;
 <a name="l627"></a>
 <a name="l628"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ODEsUpdate</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
-<a name="l629"></a>{</span><span class=cF2>/* This routine is called by the </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l7"><span class=cF4>window mgr</span></a><span class=cF2>on a continuous</span><span class=cF0>
+<a name="l629"></a>{</span><span class=cF2>/* This routine is called by the </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l7"><span class=cF4>window mgr</span></a><span class=cF2>on a continuous</span><span class=cF0>
 <a name="l630"></a></span><span class=cF2>basis to allow real-time simulation.  It is intended</span><span class=cF0>
 <a name="l631"></a></span><span class=cF2>to provide ress good enough for games.  It uses a runge-kutta</span><span class=cF0>
 <a name="l632"></a></span><span class=cF2>integrator which is a better algorithm than doing it with Euler.</span><span class=cF0>
@@ -669,7 +669,7 @@ body {background-color:#000000;}
 <a name="l642"></a>        </span><span class=cF1>if</span><span class=cF0> (task-&gt;next_ode == &amp;task-&gt;next_ode)
 <a name="l643"></a>                task-&gt;last_ode_time = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l644"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_ODE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l645"></a>        </span><span class=cF7>{</span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l69"><span class=cF4>GrUpdateTasks</span></a><span class=cF2>() and </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l3"><span class=cF4>GrUpdateTaskODEs</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l645"></a>        </span><span class=cF7>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l69"><span class=cF4>GrUpdateTasks</span></a><span class=cF2>() and </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l3"><span class=cF4>GrUpdateTaskODEs</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l646"></a>                </span><span class=cF2>//We will not pick a time limit based on</span><span class=cF0>
 <a name="l647"></a>                </span><span class=cF2>//how busy the CPU is, what percent of the</span><span class=cF0>
 <a name="l648"></a>                </span><span class=cF2>//last refresh cycle was spent on ODE's</span><span class=cF0>

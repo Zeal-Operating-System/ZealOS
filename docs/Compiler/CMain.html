@@ -538,7 +538,7 @@ body {background-color:#000000;}
 <a name="l511"></a>        </span><span class=cF7>{</span><span class=cF0>
 <a name="l512"></a>                aot_U8s = tmpaot-&gt;aot_U8s;
 <a name="l513"></a>                ptr = patch_table;
-<a name="l514"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l514"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l515"></a>                count = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l516"></a>                tmpa = tmpaot-&gt;abss;
 <a name="l517"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpa)
@@ -748,7 +748,7 @@ body {background-color:#000000;}
 <a name="l721"></a>}
 <a name="l722"></a>
 <a name="l723"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>RunFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> ccf_flags=</span><span class=cFE>0</span><span class=cF0>, ...)
-<a name="l724"></a>{</span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l711"><span class=cF4>ExeFile</span></a><span class=cF2>() with args using </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l48"><span class=cF4>LastFun</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l724"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l711"><span class=cF4>ExeFile</span></a><span class=cF2>() with args using </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l48"><span class=cF4>LastFun</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l725"></a>        </span><span class=cF5>ExeFile</span><span class=cF0>(name, ccf_flags);
 <a name="l726"></a>
 <a name="l727"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>LastFun</span><span class=cF0>(argc, argv);
@@ -797,7 +797,7 @@ body {background-color:#000000;}
 <a name="l770"></a>}
 <a name="l771"></a>
 <a name="l772"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>RunFile2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> ccf_flags=</span><span class=cFE>0</span><span class=cF0>, ...)
-<a name="l773"></a>{</span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l760"><span class=cF4>ExeFile2</span></a><span class=cF2>() with args using </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l48"><span class=cF4>LastFun</span></a><span class=cF2>(). throws exceptions.</span><span class=cF0>
+<a name="l773"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l760"><span class=cF4>ExeFile2</span></a><span class=cF2>() with args using </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l48"><span class=cF4>LastFun</span></a><span class=cF2>(). throws exceptions.</span><span class=cF0>
 <a name="l774"></a>        </span><span class=cF5>ExeFile2</span><span class=cF0>(name, ccf_flags);
 <a name="l775"></a>
 <a name="l776"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>LastFun</span><span class=cF0>(argc, argv);

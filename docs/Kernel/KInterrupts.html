@@ -65,7 +65,7 @@ body {background-color:#000000;}
 <a name="l38"></a>                </span><span class=cF1>TEST</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
 <a name="l39"></a>                </span><span class=cF1>JZ</span><span class=cF0>              @@10
 <a name="l40"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RSI</span><span class=cF0>
-<a name="l41"></a>                </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>             </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Utils/Profiler.html#l11"><span class=cF4>ProfTimerInt</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l41"></a>                </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>             </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/Utils/Profiler.html#l11"><span class=cF4>ProfTimerInt</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l42"></a>                </span><span class=cF1>JMP</span><span class=cF0>     @@15
 <a name="l43"></a>@@10:   </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>
 <a name="l44"></a>@@15:   </span><span class=cF1>CLI</span><span class=cF0>
@@ -89,7 +89,7 @@ body {background-color:#000000;}
 <a name="l62"></a></span><span class=cFD>INT_FAULT</span><span class=cF0>::
 <a name="l63"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RBX</span><span class=cF0>
 <a name="l64"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>
-<a name="l65"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>BL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]  </span><span class=cF2>//We pushed fault_num </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l172"><span class=cF4>IntFaultHandlersNew</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l65"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>BL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]  </span><span class=cF2>//We pushed fault_num </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l172"><span class=cF4>IntFaultHandlersNew</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l66"></a>                </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
 <a name="l67"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>FS</span><span class=cF0>:</span><span class=cF1>U8</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cFC>BL</span><span class=cF0>
 <a name="l68"></a>                </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>
@@ -115,7 +115,7 @@ body {background-color:#000000;}
 <a name="l88"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_err_code[</span><span class=cFC>RSI</span><span class=cF0>]
 <a name="l89"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RSI</span><span class=cF0>]
 <a name="l90"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0>.rsi[</span><span class=cFC>RSI</span><span class=cF0>]
-<a name="l91"></a>                </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>Fault2</span><span class=cF0>                                 </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDebug.html#l675"><span class=cF4>Fault2</span></a><span class=cF0>
+<a name="l91"></a>                </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>Fault2</span><span class=cF0>                                 </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDebug.html#l675"><span class=cF4>Fault2</span></a><span class=cF0>
 <a name="l92"></a>                </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I32</span><span class=cF0> RESTORE_FS_TASK
 <a name="l93"></a>
 <a name="l94"></a></span><span class=cFD>INT_FAULT_ERR_CODE_BITMAP</span><span class=cF0>::
@@ -135,9 +135,9 @@ body {background-color:#000000;}
 <a name="l108"></a>}
 <a name="l109"></a>
 <a name="l110"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> irq, </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_new_handler</span><span class=cF7>)()</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> type=</span><span class=cF3>IDTET_IRQ</span><span class=cF0>)
-<a name="l111"></a>{</span><span class=cF2>//Set interrupt handler. Returns old handler. See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l322"><span class=cF4>IDTET_IRQ</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l112"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/InterruptDemo.html#l1"><span class=cF4>::/Demo/Lectures/InterruptDemo.CC</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l113"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/MultiCore/Interrupts.html#l1"><span class=cF4>::/Demo/MultiCore/Interrupts.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l111"></a>{</span><span class=cF2>//Set interrupt handler. Returns old handler. See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l322"><span class=cF4>IDTET_IRQ</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l112"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/InterruptDemo.html#l1"><span class=cF4>::/Demo/Lectures/InterruptDemo.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l113"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/MultiCore/Interrupts.html#l1"><span class=cF4>::/Demo/MultiCore/Interrupts.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l114"></a>        </span><span class=cF9>I64</span><span class=cF0>                      fp = fp_new_handler;
 <a name="l115"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *old_handler;
 <a name="l116"></a>        </span><span class=cF9>CIDTEntry</span><span class=cF0>       *entry;
@@ -218,7 +218,7 @@ body {background-color:#000000;}
 <a name="l191"></a>        </span><span class=cF9>I64</span><span class=cF0>                             i;
 <a name="l192"></a>        </span><span class=cF9>CSysLimitBase</span><span class=cF0>   tmp_ptr;
 <a name="l193"></a>
-<a name="l194"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4058"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
+<a name="l194"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4058"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
 <a name="l195"></a>        </span><span class=cF7>{</span><span class=cF0>
 <a name="l196"></a>                </span><span class=cFB>dev</span><span class=cF0>.idt = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CIDTEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
 <a name="l197"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
@@ -242,7 +242,7 @@ body {background-color:#000000;}
 <a name="l215"></a></span><span class=cF2>/*In theory, we use the PIC mask reg to insure we don't get</span><span class=cF0>
 <a name="l216"></a></span><span class=cF2>anything but keyboard, mouse and timer IRQs.</span><span class=cF0>    </span><span class=cF2>In practice, I've</span><span class=cF0>
 <a name="l217"></a></span><span class=cF2>gotten IRQ 0x27, perhaps because I didn't initialize the APIC.</span><span class=cF0>
-<a name="l218"></a></span><span class=cF2>I go ahead and ACK PIC in </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l148"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l218"></a></span><span class=cF2>I go ahead and ACK PIC in </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l148"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l219"></a></span><span class=cF2>I have no idea why I got a IRQ 0x27.</span><span class=cF0>
 <a name="l220"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l221"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_NMI</span><span class=cF0>,               </span><span class=cFD>_SYS_HLT</span><span class=cF0>);

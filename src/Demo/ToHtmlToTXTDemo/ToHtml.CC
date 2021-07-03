@@ -93,7 +93,7 @@ U8 *TOSLinkConvert2(U8 *filename, I64 line_num)
 	{
 		st = ExtChange(filename, "html");
 		if (st && StrLen(st) > 3 && !StrNCompare(st + 1, ":/", 2))
-			res = MStrPrint("http://www.tomawezome.github.io/ZealOS/%s#l%d", st + 3, line_num);
+			res = MStrPrint("https://www.tomawezome.github.io/ZealOS/%s#l%d", st + 3, line_num);
 		Free(st);
 	}
 
@@ -202,7 +202,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 					"<head>\n"
 					"<meta http-equiv=\"Content-Type\" "
 					"content=\"text/html;charset=US-ASCII\">\n"
-					"<meta name=\"generator\" content=\"$TX,"ZealOS V0.04",D="DD_OS_NAME_VERSION"$\">\n";
+					"<meta name=\"generator\" content=\"$TX,"ZealOS V0.05",D="DD_OS_NAME_VERSION"$\">\n";
 	if (!body_header)
 		body_header =
 					"<body>\n"

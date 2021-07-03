@@ -28,10 +28,10 @@ body {background-color:#000000;}
 <a name="l1"></a><span class=cF1>asm</span><span class=cF0> {
 <a name="l2"></a>                                </span><span class=cF1>ALIGN</span><span class=cF0>   </span><span class=cFE>16</span><span class=cF0>, </span><span class=cF3>OC_NOP</span><span class=cF0>
 <a name="l3"></a></span><span class=cF1>USE16</span><span class=cF0>
-<a name="l4"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/MultiCore.html#l1"><span class=cF4>ZealOS MultiCore</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/MultiCore.html#l1"><span class=cF4>ZealOS MultiCore</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l5"></a>
-<a name="l6"></a></span><span class=cF2>//This code gets copied to </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l7"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l324"><span class=cF4>MemCopy(MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l6"></a></span><span class=cF2>//This code gets copied to </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l324"><span class=cF4>MemCopy(MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l8"></a></span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>::
 <a name="l9"></a>                                </span><span class=cF1>JMP</span><span class=cF0>             @@05
 <a name="l10"></a>
@@ -43,7 +43,7 @@ body {background-color:#000000;}
 <a name="l16"></a>                                </span><span class=cF1>WBINVD</span><span class=cF0>
 <a name="l17"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF3>MP_VECT_ADDR</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>
 <a name="l18"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
-<a name="l19"></a>                                </span><span class=cF1>LGDT</span><span class=cF0>            </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cF9>CAP16BitInit</span><span class=cF0>.ap_gdt_ptr]  </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l325"><span class=cF4>mp-&gt;ap_gdt_ptr</span></a><span class=cF0>
+<a name="l19"></a>                                </span><span class=cF1>LGDT</span><span class=cF0>            </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cF9>CAP16BitInit</span><span class=cF0>.ap_gdt_ptr]  </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l325"><span class=cF4>mp-&gt;ap_gdt_ptr</span></a><span class=cF0>
 <a name="l20"></a>
 <a name="l21"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF3>SYS_START_CR0</span><span class=cF0>
 <a name="l22"></a>                                </span><span class=cF1>MOV_CR0_EAX</span><span class=cF0>
@@ -96,7 +96,7 @@ body {background-color:#000000;}
 <a name="l69"></a>}
 <a name="l70"></a>
 <a name="l71"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TSSBusy</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> tr, </span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>OFF</span><span class=cF0>)
-<a name="l72"></a>{</span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/Ring3.html#l1"><span class=cF4>::/Demo/Lectures/Ring3.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l72"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/Ring3.html#l1"><span class=cF4>::/Demo/Lectures/Ring3.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l73"></a>        </span><span class=cF5>LBEqual</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_gdt</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + tr + </span><span class=cFE>4</span><span class=cF0>, </span><span class=cFE>9</span><span class=cF0>, val);
 <a name="l74"></a>}
 <a name="l75"></a>
@@ -154,7 +154,7 @@ body {background-color:#000000;}
 <a name="l127"></a>                </span><span class=cF5>LBts</span><span class=cF0>(&amp;c-&gt;idle_task-&gt;task_flags, </span><span class=cF3>TASKf_IDLE</span><span class=cF0>);
 <a name="l128"></a>                c-&gt;tss = </span><span class=cFD>TSSNew</span><span class=cF0>(num);
 <a name="l129"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l130"></a>        c-&gt;executive_task = executive_task;</span><span class=cF2>// It waits for this to be filled-in: </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l62"><span class=cF4>executive_task</span></a><span class=cF0>
+<a name="l130"></a>        c-&gt;executive_task = executive_task;</span><span class=cF2>// It waits for this to be filled-in: </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l62"><span class=cF4>executive_task</span></a><span class=cF0>
 <a name="l131"></a>
 <a name="l132"></a>        </span><span class=cF1>return</span><span class=cF0> c;
 <a name="l133"></a>}
@@ -203,7 +203,7 @@ body {background-color:#000000;}
 <a name="l176"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>MPAPICInit</span><span class=cF0>()
 <a name="l177"></a>{</span><span class=cF2>//Called by system_task during start-up</span><span class=cF0>
 <a name="l178"></a></span><span class=cF2>//and other cores during initialization</span><span class=cF0>
-<a name="l179"></a>        </span><span class=cF2>//after </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l179"></a>        </span><span class=cF2>//after </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l180"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_SVR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) |= </span><span class=cF3>LAPICF_APIC_ENABLED</span><span class=cF0>;
 <a name="l181"></a>        </span><span class=cFB>dev</span><span class=cF0>.mp_apic_ids[</span><span class=cF5>Gs</span><span class=cF0>-&gt;num] = *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_APIC_ID</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) &gt;&gt; </span><span class=cFE>24</span><span class=cF0>;
 <a name="l182"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_LDR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFB>dev</span><span class=cF0>.mp_apic_ids[</span><span class=cF5>Gs</span><span class=cF0>-&gt;num] &lt;&lt; </span><span class=cFE>24</span><span class=cF0>;
@@ -252,7 +252,7 @@ body {background-color:#000000;}
 <a name="l225"></a>                           </span><span class=cF9>I64</span><span class=cF0> job_code=</span><span class=cF3>JOBT_CALL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *aux_str=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> aux1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> aux2=</span><span class=cFE>0</span><span class=cF0>)
 <a name="l226"></a>{</span><span class=cF2>//Queue multicore jobs, handled by Executive tasks.</span><span class=cF0>
 <a name="l227"></a></span><span class=cF2>//Set flags to zero if you wish to get the res.</span><span class=cF0>
-<a name="l228"></a>        </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>
+<a name="l228"></a>        </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>
 <a name="l229"></a>        </span><span class=cF9>CJobCtrl</span><span class=cF0>        *ctrl;
 <a name="l230"></a>        </span><span class=cF9>CJob</span><span class=cF0>            *tmpc;
 <a name="l231"></a>        </span><span class=cF9>CTask</span><span class=cF0>           *executive;
@@ -315,7 +315,7 @@ body {background-color:#000000;}
 <a name="l288"></a>}
 <a name="l289"></a>
 <a name="l290"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>()
-<a name="l291"></a>{</span><span class=cF2>//Called by multicore's executive task after </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l291"></a>{</span><span class=cF2>//Called by multicore's executive task after </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l292"></a></span><span class=cF2>//as the first thing a CPU does before waiting for jobs.</span><span class=cF0>
 <a name="l293"></a>        </span><span class=cFD>MPAPICInit</span><span class=cF0>;
 <a name="l294"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip = &amp;</span><span class=cF5>CoreAPExecutiveTask</span><span class=cF0>;
@@ -323,7 +323,7 @@ body {background-color:#000000;}
 <a name="l296"></a>}
 <a name="l297"></a>
 <a name="l298"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Core0StartMP</span><span class=cF0>()
-<a name="l299"></a>{</span><span class=cF2>//Called by system_task during </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KMain.html#l218"><span class=cF4>start-up</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l299"></a>{</span><span class=cF2>//Called by system_task during </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMain.html#l218"><span class=cF4>start-up</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l300"></a>        </span><span class=cF9>CTask</span><span class=cF0>                   *task;
 <a name="l301"></a>        </span><span class=cF1>U8</span><span class=cF0>                               buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
 <a name="l302"></a>        </span><span class=cF9>CAP16BitInit</span><span class=cF0>    *mp = </span><span class=cF3>MP_VECT_ADDR</span><span class=cF0>;
@@ -346,15 +346,15 @@ body {background-color:#000000;}
 <a name="l319"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>);
 <a name="l320"></a>
 <a name="l321"></a>        </span><span class=cF2>//When you start-up other cores, they jump to an addr</span><span class=cF0>
-<a name="l322"></a>        </span><span class=cF2>//specified by a byte vect number, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l664"><span class=cF4>MPN_VECT</span></a><span class=cF2> which corresponds</span><span class=cF0>
-<a name="l323"></a>        </span><span class=cF2>//to a location 4096*vect number, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l322"></a>        </span><span class=cF2>//specified by a byte vect number, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l664"><span class=cF4>MPN_VECT</span></a><span class=cF2> which corresponds</span><span class=cF0>
+<a name="l323"></a>        </span><span class=cF2>//to a location 4096*vect number, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l324"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(mp, </span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>, </span><span class=cFD>COREAP_16BIT_INIT_END</span><span class=cF0>-</span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>);
 <a name="l325"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;mp-&gt;ap_gdt_ptr, </span><span class=cFD>SYS_GDT_PTR</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSysLimitBase</span><span class=cF7>)</span><span class=cF0>);
 <a name="l326"></a>        </span><span class=cFB>mp_count_initial</span><span class=cF0> = </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
 <a name="l327"></a>        </span><span class=cFB>mp_count_lock</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l328"></a>
 <a name="l329"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_LVT_ERR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_LVT_ERR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) &amp; </span><span class=cFE>0xFFFFFF00</span><span class=cF0> + </span><span class=cF3>MPN_VECT</span><span class=cF0>;
-<a name="l330"></a>        </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed. Might just need delay. </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l135"><span class=cF4>MemCopy</span></a><span class=cF2> above?</span><span class=cF0>
+<a name="l330"></a>        </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed. Might just need delay. </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l135"><span class=cF4>MemCopy</span></a><span class=cF2> above?</span><span class=cF0>
 <a name="l331"></a>
 <a name="l332"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xC4500</span><span class=cF0>; </span><span class=cF2>//assert init IPI</span><span class=cF0>
 <a name="l333"></a>        </span><span class=cF5>Busy</span><span class=cF0>(</span><span class=cFE>10000</span><span class=cF0>);
@@ -376,7 +376,7 @@ body {background-color:#000000;}
 <a name="l349"></a>                </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Executive Task CPU%02X&quot;</span><span class=cF0>, i);
 <a name="l350"></a>                task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, buf,,, </span><span class=cF3>MEM_EXECUTIVE_STACK</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l351"></a>                task-&gt;rflags = </span><span class=cF3>RFLAGG_START</span><span class=cF0>;
-<a name="l352"></a></span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
+<a name="l352"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
 <a name="l353"></a>                </span><span class=cFD>CPUStructInit</span><span class=cF0>(i, &amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[i], task);
 <a name="l354"></a>                </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed.  Might just need delay.</span><span class=cF0>
 <a name="l355"></a>        </span><span class=cF7>}</span><span class=cF0>

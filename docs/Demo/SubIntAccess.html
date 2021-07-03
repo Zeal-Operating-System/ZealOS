@@ -27,13 +27,13 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF2>/*ZealOS has a feature that allows access to bytes and words of larger ints.</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a></span><span class=cF2>See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l93"><span class=cF4>U64i union</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l93"><span class=cF4>U64i union</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l4"></a></span><span class=cF2> </span><span class=cF0>
 <a name="l5"></a></span><span class=cF2>The versions with &quot;i&quot; are internal data types. Use &quot;I64&quot; instead of &quot;U64i&quot; and you will have access to subbytes and subwords.</span><span class=cF0>
 <a name="l6"></a>
 <a name="l7"></a></span><span class=cF2>Unfortunately, byte access causes the compiler to not use a reg for the variable.</span><span class=cF0>
 <a name="l8"></a>
-<a name="l9"></a></span><span class=cF2>See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l9"></a></span><span class=cF2>See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l10"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l11"></a>
 <a name="l12"></a></span><span class=cF9>I64</span><span class=cF0> q = </span><span class=cFE>0xFEDCBA9876543210</span><span class=cF0>, q1;

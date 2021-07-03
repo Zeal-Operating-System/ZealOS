@@ -108,7 +108,7 @@ body {background-color:#000000;}
 <a name="l81"></a>                        </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;debug_info);
 <a name="l82"></a>                </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTT_FUN</span><span class=cF0> | </span><span class=cF3>HTT_CLASS</span><span class=cF7>)</span><span class=cF0>)
 <a name="l83"></a></span><span class=cF2>//Assumes code not on heap, so doesn't Free.</span><span class=cF0>
-<a name="l84"></a>                </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/LexLib.html#l239"><span class=cF4>ClassMemberListDel</span></a><span class=cF2>() is an import to the Kernel module</span><span class=cF0>
+<a name="l84"></a>                </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/LexLib.html#l239"><span class=cF4>ClassMemberListDel</span></a><span class=cF2>() is an import to the Kernel module</span><span class=cF0>
 <a name="l85"></a>                        </span><span class=cF5>ClassMemberListDel</span><span class=cF0>(tmph);
 <a name="l86"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>)
 <a name="l87"></a>                        </span><span class=cF5>Free</span><span class=cF0>(tmph</span><span class=cF7>(</span><span class=cF9>CHashDefineStr</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;data);
@@ -127,7 +127,7 @@ body {background-color:#000000;}
 <a name="l100"></a>}
 <a name="l101"></a>
 <a name="l102"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HashTableDel</span><span class=cF0>(</span><span class=cF9>CHashTable</span><span class=cF0> *table)
-<a name="l103"></a>{</span><span class=cF2>//Free std system hash table, calling </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KHashB.html#l68"><span class=cF4>HashDel</span></a><span class=cF2>() on entries.</span><span class=cF0>
+<a name="l103"></a>{</span><span class=cF2>//Free std system hash table, calling </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KHashB.html#l68"><span class=cF4>HashDel</span></a><span class=cF2>() on entries.</span><span class=cF0>
 <a name="l104"></a>        </span><span class=cF9>I64</span><span class=cF0>                      i;
 <a name="l105"></a>        </span><span class=cF9>CHashSrcSym</span><span class=cF0>     *tmph, *tmph1;
 <a name="l106"></a>
@@ -207,7 +207,7 @@ body {background-color:#000000;}
 <a name="l180"></a>}
 <a name="l181"></a>
 <a name="l182"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HashSrcFileSet</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CHashSrcSym</span><span class=cF0> *h, </span><span class=cF9>I64</span><span class=cF0> line_num_offset=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l183"></a>{</span><span class=cF2>//Set </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l862"><span class=cF4>CHashSrcSym</span></a><span class=cF2> link and help_index by cur cc pos.</span><span class=cF0>
+<a name="l183"></a>{</span><span class=cF2>//Set </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l862"><span class=cF4>CHashSrcSym</span></a><span class=cF2> link and help_index by cur cc pos.</span><span class=cF0>
 <a name="l184"></a>        </span><span class=cF9>CLexFile</span><span class=cF0>        *tmpf = cc-&gt;lex_include_stack;
 <a name="l185"></a>        </span><span class=cF9>I64</span><span class=cF0>                      line_num = tmpf-&gt;line_num + line_num_offset;
 <a name="l186"></a>
@@ -225,7 +225,7 @@ body {background-color:#000000;}
 <a name="l198"></a>}
 <a name="l199"></a>
 <a name="l200"></a></span><span class=cF9>CHashGeneric</span><span class=cF0> *</span><span class=cF5>HashPublic</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF9>I64</span><span class=cF0> mask, </span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l201"></a>{</span><span class=cF2>//Mark a hash entry as public and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KHashB.html#l182"><span class=cF4>HashSrcFileSet</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l201"></a>{</span><span class=cF2>//Mark a hash entry as public and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KHashB.html#l182"><span class=cF4>HashSrcFileSet</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l202"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *res;
 <a name="l203"></a>
 <a name="l204"></a>        </span><span class=cF1>if</span><span class=cF0> (res = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, mask</span><span class=cF7>)</span><span class=cF0>)
@@ -268,7 +268,7 @@ body {background-color:#000000;}
 <a name="l241"></a>}
 <a name="l242"></a>
 <a name="l243"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>HashDefineListAdd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dname, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>CHashTable</span><span class=cF0> *table)
-<a name="l244"></a>{</span><span class=cF2>//Add define list to a hash table. See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l25"><span class=cF4>::/System/DolDoc/DocInit.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l244"></a>{</span><span class=cF2>//Add define list to a hash table. See </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l25"><span class=cF4>::/System/DolDoc/DocInit.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l245"></a>        </span><span class=cF9>CHashDefineStr</span><span class=cF0> *tmph;
 <a name="l246"></a>
 <a name="l247"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>dname, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF7>)</span><span class=cF0>)

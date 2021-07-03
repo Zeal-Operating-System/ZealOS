@@ -33,19 +33,19 @@ body {background-color:#000000;}
 <a name="l5"></a>
 <a name="l6"></a>Here is the grammar:
 <a name="l7"></a>
-<a name="l8"></a>&lt;DolDocCmd&gt; := </span><span class=cF2>$</span><span class=cF0>&lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;[&lt;FlagList&gt;][</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]</span><span class=cF2>$</span><span class=cF0> | </span><span class=cF2>$</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l246"><span class=cF4>ColorName</span></a><span class=cF2>$</span><span class=cF0>
+<a name="l8"></a>&lt;DolDocCmd&gt; := </span><span class=cF2>$</span><span class=cF0>&lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;[&lt;FlagList&gt;][</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]</span><span class=cF2>$</span><span class=cF0> | </span><span class=cF2>$</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l246"><span class=cF4>ColorName</span></a><span class=cF2>$</span><span class=cF0>
 <a name="l9"></a>
-<a name="l10"></a>&lt;FlagList&gt; := </span><span class=cF2>+</span><span class=cF0>|</span><span class=cF2>-</span><span class=cF0> &lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;[&lt;FlagList&gt;]
+<a name="l10"></a>&lt;FlagList&gt; := </span><span class=cF2>+</span><span class=cF0>|</span><span class=cF2>-</span><span class=cF0> &lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;[&lt;FlagList&gt;]
 <a name="l11"></a>
-<a name="l12"></a>&lt;ArgList&gt; := &lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>&lt;ArgExpression&gt;[</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]
+<a name="l12"></a>&lt;ArgList&gt; := &lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>&lt;ArgExpression&gt;[</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]
 <a name="l13"></a>
 <a name="l14"></a>
 <a name="l15"></a>The format of DolDoc cmds is a two character code, +/-flags, a comma and args separated by commas.      Some commands have mandatory 
-<a name="l16"></a>args.   Optional args are indicated with &lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>.  A </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l246"><span class=cF4>ColorName</span></a><span class=cF0> bracked by dollars, will change the foreground color.
+<a name="l16"></a>args.   Optional args are indicated with &lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>.  A </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l246"><span class=cF4>ColorName</span></a><span class=cF0> bracked by dollars, will change the foreground color.
 <a name="l17"></a>
-<a name="l18"></a>See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Widget.html#l1"><span class=cF4>::/Doc/Widget.DD</span></a><span class=cF0>, </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/DolDoc/DemoDoc.html#l1"><span class=cF4>::/Demo/DolDoc/DemoDoc.DD</span></a><span class=cF0>, and </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/ToHtml.CC</span></a><span class=cF0>.
+<a name="l18"></a>See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Widget.html#l1"><span class=cF4>::/Doc/Widget.DD</span></a><span class=cF0>, </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/DolDoc/DemoDoc.html#l1"><span class=cF4>::/Demo/DolDoc/DemoDoc.DD</span></a><span class=cF0>, and </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/ToHtml.CC</span></a><span class=cF0>.
 <a name="l19"></a>
-<a name="l20"></a>&lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;  See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1040"><span class=cF4>Type Defines</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l272"><span class=cF4>ParseDollarCmd</span></a><span class=cF0>().</span><span class=cF5>
+<a name="l20"></a>&lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1040"><span class=cF4>Type Defines</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l272"><span class=cF4>ParseDollarCmd</span></a><span class=cF0>().</span><span class=cF5>
 <a name="l21"></a><u>+] TX Text
 <a name="l22"></a>+] CR Hard New Line
 <a name="l23"></a>+] SR Soft New Line
@@ -86,7 +86,7 @@ body {background-color:#000000;}
 <a name="l58"></a>+] HC html
 <a name="l59"></a>+] ER Error</span><span class=cF0>
 <a name="l60"></a>
-<a name="l61"></a></u>&lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;  See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1208"><span class=cF4>Flag Defines</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Widget.html#l1"><span class=cF4>Simple Flags</span></a><span class=cF0>.</span><span class=cF5>
+<a name="l61"></a></u>&lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1208"><span class=cF4>Flag Defines</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Widget.html#l1"><span class=cF4>Simple Flags</span></a><span class=cF0>.</span><span class=cF5>
 <a name="l62"></a><u>+] +H Hold
 <a name="l63"></a>+] +L Link
 <a name="l64"></a>+] +TR Tree
@@ -102,7 +102,7 @@ body {background-color:#000000;}
 <a name="l74"></a>+] +LC Left CallBack
 <a name="l75"></a>+] +RC Right CallBack</span><span class=cF0>
 <a name="l76"></a>
-<a name="l77"></a></u>&lt;</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;       See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1190"><span class=cF4>Arg Defines</span></a><span class=cF0>.</span><span class=cF5>
+<a name="l77"></a></u>&lt;</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;       See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1190"><span class=cF4>Arg Defines</span></a><span class=cF0>.</span><span class=cF5>
 <a name="l78"></a><u>+] T=&quot;&quot; Tag Str
 <a name="l79"></a>+] LEN=&quot;&quot; Field Length
 <a name="l80"></a>+] A=&quot;&quot; Auxilliary Str

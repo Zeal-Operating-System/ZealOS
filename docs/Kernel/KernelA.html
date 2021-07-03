@@ -69,7 +69,7 @@ body {background-color:#000000;}
 <a name="l42"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>STR_LEN</span><span class=cF0>         </span><span class=cFE>144</span><span class=cF0>
 <a name="l43"></a>
 <a name="l44"></a></span><span class=cF2>//(Int to F64 conversion is signed)</span><span class=cF0>
-<a name="l45"></a></span><span class=cF2>//Turn off 80-bit float constants with </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1686"><span class=cF4>OPTf_NO_BUILTIN_CONST</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l45"></a></span><span class=cF2>//Turn off 80-bit float constants with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1686"><span class=cF4>OPTf_NO_BUILTIN_CONST</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l46"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>U64_F64_MAX</span><span class=cF0> (</span><span class=cFE>0x43F0000000000000</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>)
 <a name="l47"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_MAX</span><span class=cF0>         (</span><span class=cFE>0x7FEFFFFFFFFFFFFF</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>)
 <a name="l48"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>F64_MIN</span><span class=cF0>         (</span><span class=cFE>0xFFEFFFFFFFFFFFFF</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>)
@@ -87,7 +87,7 @@ body {background-color:#000000;}
 <a name="l60"></a>
 <a name="l61"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Data Types/Simple&quot;</span><span class=cF0>
 <a name="l62"></a></span><span class=cF2>//CosmiC union structure is treated as a whole if no member is specified, similar to bit fields.</span><span class=cF0>
-<a name="l63"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/SubIntAccess.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l63"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/SubIntAccess.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l64"></a>
 <a name="l65"></a></span><span class=cF1>U16i</span><span class=cF0> </span><span class=cF1>union</span><span class=cF0> </span><span class=cF9>U16</span><span class=cF0>
 <a name="l66"></a>{
@@ -265,8 +265,8 @@ body {background-color:#000000;}
 <a name="l238"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CMass</span><span class=cF0>
 <a name="l239"></a>{
 <a name="l240"></a>        </span><span class=cF9>CMass</span><span class=cF0>           *next, *last;
-<a name="l241"></a>        </span><span class=cF9>COrder2D3</span><span class=cF0>       *state,         </span><span class=cF2>//Point to entries in </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l281"><span class=cF4>CMathODE</span></a><span class=cF2>.state[]</span><span class=cF0>
-<a name="l242"></a>                                *DstateDt;      </span><span class=cF2>//Point to entries in </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l281"><span class=cF4>CMathODE</span></a><span class=cF2>.DstateDt[]</span><span class=cF0>
+<a name="l241"></a>        </span><span class=cF9>COrder2D3</span><span class=cF0>       *state,         </span><span class=cF2>//Point to entries in </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l281"><span class=cF4>CMathODE</span></a><span class=cF2>.state[]</span><span class=cF0>
+<a name="l242"></a>                                *DstateDt;      </span><span class=cF2>//Point to entries in </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l281"><span class=cF4>CMathODE</span></a><span class=cF2>.DstateDt[]</span><span class=cF0>
 <a name="l243"></a>
 <a name="l244"></a>        </span><span class=cF1>U0</span><span class=cF0>                       </span><span class=cF1>start</span><span class=cF0>;
 <a name="l245"></a>        </span><span class=cF9>U32</span><span class=cF0>              flags,
@@ -362,7 +362,7 @@ body {background-color:#000000;}
 <a name="l335"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_MP_CRASH</span><span class=cF0>              </span><span class=cFE>0x30</span><span class=cF0>
 <a name="l336"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_WAKE</span><span class=cF0>                  </span><span class=cFE>0x31</span><span class=cF0>
 <a name="l337"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>I_DEBUG</span><span class=cF0>                 </span><span class=cFE>0x32</span><span class=cF0>
-<a name="l338"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l273"><span class=cF4>ST_INT_NAMES</span></a><span class=cF0>
+<a name="l338"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l273"><span class=cF4>ST_INT_NAMES</span></a><span class=cF0>
 <a name="l339"></a>
 <a name="l340"></a></span><span class=cF2>//You might want to start backward from</span><span class=cF0>
 <a name="l341"></a></span><span class=cF2>//0xFF for your own interrupts.</span><span class=cF0>
@@ -425,8 +425,8 @@ body {background-color:#000000;}
 <a name="l398"></a>                          boot_ds,
 <a name="l399"></a>                          boot_cs,
 <a name="l400"></a>                          cs32,
-<a name="l401"></a>                          cs64,                         </span><span class=cF2>//The </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Charter.html#l1"><span class=cF4>Charter</span></a><span class=cF2> says just ring-0.</span><span class=cF0>
-<a name="l402"></a>                          cs64_ring3, </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Lectures/Ring3.html#l1"><span class=cF4>Ring3</span></a><span class=cF2>, in case you want to play around.</span><span class=cF0>
+<a name="l401"></a>                          cs64,                         </span><span class=cF2>//The </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Charter.html#l1"><span class=cF4>Charter</span></a><span class=cF2> says just ring-0.</span><span class=cF0>
+<a name="l402"></a>                          cs64_ring3, </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/Ring3.html#l1"><span class=cF4>Ring3</span></a><span class=cF2>, in case you want to play around.</span><span class=cF0>
 <a name="l403"></a>                          ds,
 <a name="l404"></a>                          ds_ring3,
 <a name="l405"></a>                          tr[</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>],
@@ -476,25 +476,25 @@ body {background-color:#000000;}
 <a name="l449"></a>
 <a name="l450"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BIN_SIGNATURE_VAL</span><span class=cF0>       </span><span class=cF6>'ZCCB'</span><span class=cF0> </span><span class=cF2>//Zeal CosmiC Binary</span><span class=cF0>
 <a name="l451"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CBinFile</span><span class=cF0>
-<a name="l452"></a>{</span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l628"><span class=cF4>Bin File Header Generation</span></a><span class=cF2> by compiler.</span><span class=cF0>
+<a name="l452"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l628"><span class=cF4>Bin File Header Generation</span></a><span class=cF2> by compiler.</span><span class=cF0>
 <a name="l453"></a>        </span><span class=cF9>U16</span><span class=cF0> jmp;
 <a name="l454"></a>        </span><span class=cF1>U8</span><span class=cF0>      module_align_bits,
 <a name="l455"></a>                reserved;
 <a name="l456"></a>        </span><span class=cF9>U32</span><span class=cF0> bin_signature;
 <a name="l457"></a>        </span><span class=cF9>I64</span><span class=cF0> org,
-<a name="l458"></a>                patch_table_offset, </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
+<a name="l458"></a>                patch_table_offset, </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMain.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
 <a name="l459"></a>                file_size;
 <a name="l460"></a>};
 <a name="l461"></a>
 <a name="l462"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CPatchTableAbsAddr</span><span class=cF0>
 <a name="l463"></a>{
-<a name="l464"></a>        </span><span class=cF1>U8</span><span class=cF0>      eit_abs_addr;   </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l489"><span class=cF4>IET_ABS_ADDR</span></a><span class=cF0>
+<a name="l464"></a>        </span><span class=cF1>U8</span><span class=cF0>      eit_abs_addr;   </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l489"><span class=cF4>IET_ABS_ADDR</span></a><span class=cF0>
 <a name="l465"></a>        </span><span class=cF9>U32</span><span class=cF0> abs_addres_count;
 <a name="l466"></a>        </span><span class=cF1>U8</span><span class=cF0>      zero;
 <a name="l467"></a>        </span><span class=cF9>U32</span><span class=cF0> abs_addres[</span><span class=cFE>1</span><span class=cF0>];
 <a name="l468"></a>};
 <a name="l469"></a>
-<a name="l470"></a></span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2103"><span class=cF4>CAOTImportExport</span></a><span class=cF2> Types. Used in PatchTable.</span><span class=cF0>
+<a name="l470"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2103"><span class=cF4>CAOTImportExport</span></a><span class=cF2> Types. Used in PatchTable.</span><span class=cF0>
 <a name="l471"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IET_END</span><span class=cF0>                         </span><span class=cFE>0</span><span class=cF0>
 <a name="l472"></a></span><span class=cF2>//reserved</span><span class=cF0>
 <a name="l473"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IET_REL_I0</span><span class=cF0>                      </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Fictitious</span><span class=cF0>
@@ -572,7 +572,7 @@ body {background-color:#000000;}
 <a name="l545"></a>
 <a name="l546"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Boot&quot;</span><span class=cF0>
 <a name="l547"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CKernel</span><span class=cF0>
-<a name="l548"></a>{</span><span class=cF2>//Must match </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KStart16.html#l30"><span class=cF4>OSStartUp</span></a><span class=cF0>
+<a name="l548"></a>{</span><span class=cF2>//Must match </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KStart16.html#l30"><span class=cF4>OSStartUp</span></a><span class=cF0>
 <a name="l549"></a>        </span><span class=cF9>CBinFile</span><span class=cF0>                h;
 <a name="l550"></a>        </span><span class=cF9>U32</span><span class=cF0>                             jmp,
 <a name="l551"></a>                                        boot_src,
@@ -721,8 +721,8 @@ body {background-color:#000000;}
 <a name="l694"></a>
 <a name="l695"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CCountsGlobals</span><span class=cF0>
 <a name="l696"></a>{
-<a name="l697"></a>        </span><span class=cF9>I64</span><span class=cF0>     jiffies,                                </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l705"><span class=cF4>JIFFY_FREQ</span></a><span class=cF0>
-<a name="l698"></a>                        timer,                                  </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l707"><span class=cF4>SYS_TIMER_FREQ</span></a><span class=cF2>. Use </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l22"><span class=cF4>SysTimerRead</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l697"></a>        </span><span class=cF9>I64</span><span class=cF0>     jiffies,                                </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l705"><span class=cF4>JIFFY_FREQ</span></a><span class=cF0>
+<a name="l698"></a>                        timer,                                  </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l707"><span class=cF4>SYS_TIMER_FREQ</span></a><span class=cF2>. Use </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l22"><span class=cF4>SysTimerRead</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l699"></a>                        time_stamp_freq,
 <a name="l700"></a>                        time_stamp_kHz_freq,
 <a name="l701"></a>                        time_stamp_freq_initial; </span><span class=cF2>//Initial freq, sampled once at boot time.</span><span class=cF0>
@@ -753,7 +753,7 @@ body {background-color:#000000;}
 <a name="l726"></a>};
 <a name="l727"></a>
 <a name="l728"></a></span><span class=cF2>//Asm callable function pointers.</span><span class=cF0>
-<a name="l729"></a></span><span class=cF2>//They work with </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l39"><span class=cF4>CallExtNum</span></a><span class=cF2>() when calling from CosmiC.</span><span class=cF0>
+<a name="l729"></a></span><span class=cF2>//They work with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l39"><span class=cF4>CallExtNum</span></a><span class=cF2>() when calling from CosmiC.</span><span class=cF0>
 <a name="l730"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EXT_WIN_TO_TOP</span><span class=cF0>          </span><span class=cFE>0</span><span class=cF0>
 <a name="l731"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EXT_WIN_FOCUS</span><span class=cF0>           </span><span class=cFE>1</span><span class=cF0>
 <a name="l732"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EXT_HEAPLOG_MALLOC</span><span class=cF0>      </span><span class=cFE>2</span><span class=cF0>
@@ -814,7 +814,7 @@ body {background-color:#000000;}
 <a name="l787"></a>};
 <a name="l788"></a>
 <a name="l789"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Hash/System&quot;</span><span class=cF0>
-<a name="l790"></a></span><span class=cF2>//Hash table types: </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l121"><span class=cF4>ST_HTT_TYPES</span></a><span class=cF0>
+<a name="l790"></a></span><span class=cF2>//Hash table types: </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l121"><span class=cF4>ST_HTT_TYPES</span></a><span class=cF0>
 <a name="l791"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTt_EXPORT_SYS_SYM</span><span class=cF0>      </span><span class=cFE>0</span><span class=cF0>
 <a name="l792"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTt_IMPORT_SYS_SYM</span><span class=cF0>      </span><span class=cFE>1</span><span class=cF0>
 <a name="l793"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTt_DEFINE_STR</span><span class=cF0>          </span><span class=cFE>2</span><span class=cF0>
@@ -854,8 +854,8 @@ body {background-color:#000000;}
 <a name="l827"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_FUN</span><span class=cF0>                         </span><span class=cFE>0x00040</span><span class=cF0> </span><span class=cF2>//CHashFun</span><span class=cF0>
 <a name="l828"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_WORD</span><span class=cF0>                        </span><span class=cFE>0x00080</span><span class=cF0> </span><span class=cF2>//CHashAC only in AutoComplete table</span><span class=cF0>
 <a name="l829"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_DICT_WORD</span><span class=cF0>           </span><span class=cFE>0x00100</span><span class=cF0> </span><span class=cF2>//CHashGeneric only in AutoComplete tbl</span><span class=cF0>
-<a name="l830"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>             </span><span class=cFE>0x00200</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l147"><span class=cF4>KEYWORD</span></a><span class=cF0>
-<a name="l831"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>         </span><span class=cFE>0x00400</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l196"><span class=cF4>ASM_KEYWORD</span></a><span class=cF0>
+<a name="l830"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>             </span><span class=cFE>0x00200</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l147"><span class=cF4>KEYWORD</span></a><span class=cF0>
+<a name="l831"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>         </span><span class=cFE>0x00400</span><span class=cF0> </span><span class=cF2>//CHashGeneric </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l196"><span class=cF4>ASM_KEYWORD</span></a><span class=cF0>
 <a name="l832"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_OPCODE</span><span class=cF0>                      </span><span class=cFE>0x00800</span><span class=cF0> </span><span class=cF2>//CHashOpcode</span><span class=cF0>
 <a name="l833"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_REG</span><span class=cF0>                         </span><span class=cFE>0x01000</span><span class=cF0> </span><span class=cF2>//CHashReg</span><span class=cF0>
 <a name="l834"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>HTT_FILE</span><span class=cF0>                        </span><span class=cFE>0x02000</span><span class=cF0> </span><span class=cF2>//CHashGeneric</span><span class=cF0>
@@ -997,7 +997,7 @@ body {background-color:#000000;}
 <a name="l970"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>Cf_INTERNAL_TYPE</span><span class=cF0>                                </span><span class=cFE>1</span><span class=cF0>
 <a name="l971"></a>
 <a name="l972"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CHashClass</span><span class=cF0>:</span><span class=cF9>CHashSrcSym</span><span class=cF0>
-<a name="l973"></a>{</span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l43"><span class=cF4>ParseClassNew</span></a><span class=cF2>(). base_class of </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l995"><span class=cF4>CHashFun</span></a><span class=cF0>
+<a name="l973"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l43"><span class=cF4>ParseClassNew</span></a><span class=cF2>(). base_class of </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l995"><span class=cF4>CHashFun</span></a><span class=cF0>
 <a name="l974"></a>        </span><span class=cF9>I64</span><span class=cF0>              size, neg_offset;
 <a name="l975"></a>        </span><span class=cF9>U32</span><span class=cF0>              member_count;
 <a name="l976"></a>        </span><span class=cF1>U8</span><span class=cF0>                       ptr_stars_count, raw_type;
@@ -1020,7 +1020,7 @@ body {background-color:#000000;}
 <a name="l993"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>Ff_RET1</span><span class=cF0>                         </span><span class=cFE>15</span><span class=cF0>
 <a name="l994"></a>
 <a name="l995"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CHashFun</span><span class=cF0>:</span><span class=cF9>CHashClass</span><span class=cF0>
-<a name="l996"></a>{</span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l67"><span class=cF4>ParseFunNew</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l996"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l67"><span class=cF4>ParseFunNew</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l997"></a>        </span><span class=cF9>CHashClass</span><span class=cF0>              *return_class;
 <a name="l998"></a>        </span><span class=cF9>U32</span><span class=cF0>                              arg_count, pad,
 <a name="l999"></a>                                         used_reg_mask, clobbered_reg_mask;
@@ -1171,7 +1171,7 @@ body {background-color:#000000;}
 <a name="l1144"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_CHECK_COLLAPSABLE</span><span class=cF0> </span><span class=cFE>0x100000000000</span><span class=cF0>
 <a name="l1145"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_REFRESH_DATA</span><span class=cF0>              </span><span class=cFE>0x200000000000</span><span class=cF0>
 <a name="l1146"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_UPDATE_DATA</span><span class=cF0>               </span><span class=cFE>0x400000000000</span><span class=cF0>
-<a name="l1147"></a></span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1149"><span class=cF4>DOCEF_DEREF_DATA</span></a><span class=cF2> is confusing. </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() makes doc_e-&gt;data point to members</span><span class=cF0>
+<a name="l1147"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1149"><span class=cF4>DOCEF_DEREF_DATA</span></a><span class=cF2> is confusing. </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() makes doc_e-&gt;data point to members</span><span class=cF0>
 <a name="l1148"></a></span><span class=cF2>//of class. For ints, it derefs doc_e-&gt;data as a ptr.  For strings, it doesn't.</span><span class=cF0>
 <a name="l1149"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_DEREF_DATA</span><span class=cF0>                </span><span class=cFE>0x800000000000</span><span class=cF0>
 <a name="l1150"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCEF_REMALLOC_DATA</span><span class=cF0>     </span><span class=cFE>0x1000000000000</span><span class=cF0>
@@ -1376,7 +1376,7 @@ body {background-color:#000000;}
 <a name="l1349"></a>                          *my_format_data;
 <a name="l1350"></a>        </span><span class=cF9>I64</span><span class=cF0>        hex_ed_width;
 <a name="l1351"></a>        </span><span class=cF9>I32</span><span class=cF0>        scroll_len,
-<a name="l1352"></a>                           len, </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1323"><span class=cF4>DOCE_LEN_DEFAULT</span></a><span class=cF0>
+<a name="l1352"></a>                           len, </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1323"><span class=cF4>DOCE_LEN_DEFAULT</span></a><span class=cF0>
 <a name="l1353"></a>                           bin_num;
 <a name="l1354"></a>        </span><span class=cF1>U8</span><span class=cF0>                 raw_type, pad[</span><span class=cFE>3</span><span class=cF0>];
 <a name="l1355"></a>        </span><span class=cF9>CDocBin</span><span class=cF0>   *bin_data;
@@ -1384,7 +1384,7 @@ body {background-color:#000000;}
 <a name="l1357"></a>#</span><span class=cF1>assert</span><span class=cF0> !($ &amp; </span><span class=cFE>7</span><span class=cF0>)
 <a name="l1358"></a>};
 <a name="l1359"></a>
-<a name="l1360"></a></span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>() </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocEd.html#l97"><span class=cF4>DocEd</span></a><span class=cF2>() </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l411"><span class=cF4>PopUpMenu</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1360"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>() </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>() </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocEd.html#l97"><span class=cF4>DocEd</span></a><span class=cF2>() </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l411"><span class=cF4>PopUpMenu</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1361"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_SIZE_MIN</span><span class=cF0>                    </span><span class=cFE>0x01</span><span class=cF0>
 <a name="l1362"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_INTERCEPT_TASK_END</span><span class=cF0>  </span><span class=cFE>0x02</span><span class=cF0>
 <a name="l1363"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_DONT_HOME</span><span class=cF0>                   </span><span class=cFE>0x04</span><span class=cF0>
@@ -1392,7 +1392,7 @@ body {background-color:#000000;}
 <a name="l1365"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_DONT_TEXT_ATTR</span><span class=cF0>              </span><span class=cFE>0x10</span><span class=cF0>
 <a name="l1366"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_DONT_WINMGR_SYNC</span><span class=cF0>    </span><span class=cFE>0x20</span><span class=cF0>
 <a name="l1367"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOF_DONT_SHOW</span><span class=cF0>                   </span><span class=cFE>0x40</span><span class=cF0>
-<a name="l1368"></a></span><span class=cF2>//Combines with  </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1391"><span class=cF4>Editor Flags</span></a><span class=cF0>
+<a name="l1368"></a></span><span class=cF2>//Combines with  </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1391"><span class=cF4>Editor Flags</span></a><span class=cF0>
 <a name="l1369"></a>
 <a name="l1370"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CEdFindText</span><span class=cF0>
 <a name="l1371"></a>{
@@ -1414,12 +1414,12 @@ body {background-color:#000000;}
 <a name="l1387"></a>        </span><span class=cF1>U8</span><span class=cF0>                      name[</span><span class=cFE>256</span><span class=cF0>] format </span><span class=cF6>&quot;$DA-P,LEN=255,A=\&quot;FileName:%s\&quot;$&quot;</span><span class=cF0>;
 <a name="l1388"></a>};
 <a name="l1389"></a>
-<a name="l1390"></a></span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocEd.html#l228"><span class=cF4>Ed</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1390"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocEd.html#l228"><span class=cF4>Ed</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1391"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_BAIL</span><span class=cF0>                </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l1392"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_COLLAPSE</span><span class=cF0>    </span><span class=cFE>0x200</span><span class=cF0>
 <a name="l1393"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_UNCOLLAPSE</span><span class=cF0>  </span><span class=cFE>0x400</span><span class=cF0>
 <a name="l1394"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDF_WAS_WRITE</span><span class=cF0>   </span><span class=cFE>0x800</span><span class=cF0> </span><span class=cF2>//Was exit ESC or SHIFT_ESC?</span><span class=cF0>
-<a name="l1395"></a></span><span class=cF2>//Combines with </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1361"><span class=cF4>Document Flags</span></a><span class=cF0>
+<a name="l1395"></a></span><span class=cF2>//Combines with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1361"><span class=cF4>Document Flags</span></a><span class=cF0>
 <a name="l1396"></a>
 <a name="l1397"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDf_BAIL</span><span class=cF0>                </span><span class=cFE>8</span><span class=cF0>
 <a name="l1398"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>EDf_COLLAPSE</span><span class=cF0>    </span><span class=cFE>9</span><span class=cF0>
@@ -1438,9 +1438,9 @@ body {background-color:#000000;}
 <a name="l1411"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_BORDER_DOC</span><span class=cF0>                         </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l1412"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_FORM</span><span class=cF0>                                       </span><span class=cFE>0x200</span><span class=cF0>
 <a name="l1413"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_SIZE_MIN</span><span class=cF0>                           </span><span class=cFE>0x400</span><span class=cF0>
-<a name="l1414"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_HIDE_CURSOR</span><span class=cF0>                        </span><span class=cFE>0x800</span><span class=cF0>  </span><span class=cF2>//use </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l151"><span class=cF4>DocCursor</span></a><span class=cF0>
-<a name="l1415"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>      </span><span class=cFE>0x1000</span><span class=cF0> </span><span class=cF2>//use </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l158"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
-<a name="l1416"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_NO_SCROLL_BARS</span><span class=cF0>             </span><span class=cFE>0x2000</span><span class=cF0> </span><span class=cF2>//use </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l165"><span class=cF4>DocScroll</span></a><span class=cF0>
+<a name="l1414"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_HIDE_CURSOR</span><span class=cF0>                        </span><span class=cFE>0x800</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l151"><span class=cF4>DocCursor</span></a><span class=cF0>
+<a name="l1415"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>      </span><span class=cFE>0x1000</span><span class=cF0> </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l158"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
+<a name="l1416"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_NO_SCROLL_BARS</span><span class=cF0>             </span><span class=cFE>0x2000</span><span class=cF0> </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l165"><span class=cF4>DocScroll</span></a><span class=cF0>
 <a name="l1417"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_ALLOW_UNDO</span><span class=cF0>                         </span><span class=cFE>0x4000</span><span class=cF0>
 <a name="l1418"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>                          </span><span class=cFE>0x8000</span><span class=cF0>
 <a name="l1419"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCF_HAS_SONG</span><span class=cF0>                           </span><span class=cFE>0x10000</span><span class=cF0>
@@ -1475,9 +1475,9 @@ body {background-color:#000000;}
 <a name="l1448"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_BORDER_DOC</span><span class=cF0>                         </span><span class=cFE>8</span><span class=cF0>
 <a name="l1449"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_FORM</span><span class=cF0>                                       </span><span class=cFE>9</span><span class=cF0>
 <a name="l1450"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_SIZE_MIN</span><span class=cF0>                           </span><span class=cFE>10</span><span class=cF0>
-<a name="l1451"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_HIDE_CURSOR</span><span class=cF0>                        </span><span class=cFE>11</span><span class=cF0>      </span><span class=cF2>//use </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l151"><span class=cF4>DocCursor</span></a><span class=cF0>
-<a name="l1452"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>      </span><span class=cFE>12</span><span class=cF0>  </span><span class=cF2>//use </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l158"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
-<a name="l1453"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_NO_SCROLL_BARS</span><span class=cF0>             </span><span class=cFE>13</span><span class=cF0>      </span><span class=cF2>//use </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l165"><span class=cF4>DocScroll</span></a><span class=cF0>
+<a name="l1451"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_HIDE_CURSOR</span><span class=cF0>                        </span><span class=cFE>11</span><span class=cF0>      </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l151"><span class=cF4>DocCursor</span></a><span class=cF0>
+<a name="l1452"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>      </span><span class=cFE>12</span><span class=cF0>  </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l158"><span class=cF4>DocHighlightCursor</span></a><span class=cF0>
+<a name="l1453"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_NO_SCROLL_BARS</span><span class=cF0>             </span><span class=cFE>13</span><span class=cF0>      </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l165"><span class=cF4>DocScroll</span></a><span class=cF0>
 <a name="l1454"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_ALLOW_UNDO</span><span class=cF0>                         </span><span class=cFE>14</span><span class=cF0>
 <a name="l1455"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_DONT_SHOW</span><span class=cF0>                          </span><span class=cFE>15</span><span class=cF0>
 <a name="l1456"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCf_HAS_SONG</span><span class=cF0>                           </span><span class=cFE>16</span><span class=cF0>
@@ -1511,7 +1511,7 @@ body {background-color:#000000;}
 <a name="l1484"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *body;
 <a name="l1485"></a>};
 <a name="l1486"></a>
-<a name="l1487"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1487"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l363"><span class=cF4>DocMenu</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1488"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOCM_CANCEL</span><span class=cF0>                     (-</span><span class=cFE>1</span><span class=cF0>)
 <a name="l1489"></a>
 <a name="l1490"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>               </span><span class=cF6>'DocS'</span><span class=cF0>
@@ -1548,13 +1548,13 @@ body {background-color:#000000;}
 <a name="l1521"></a>        </span><span class=cF9>I64</span><span class=cF0>                        (*left_click_link)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
 <a name="l1522"></a>        </span><span class=cF9>I64</span><span class=cF0>                (*right_click_link)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
 <a name="l1523"></a>
-<a name="l1524"></a>        </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Apps/Psalmody/JukeBox.html#l1"><span class=cF4>::/Apps/Psalmody/JukeBox.CC</span></a><span class=cF0>
+<a name="l1524"></a>        </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Apps/Psalmody/JukeBox.html#l1"><span class=cF4>::/Apps/Psalmody/JukeBox.CC</span></a><span class=cF0>
 <a name="l1525"></a>        </span><span class=cF1>U8</span><span class=cF0>                              *user_put_data; </span><span class=cF2>//Passed to user_put_key() and user_put_s()</span><span class=cF0>
 <a name="l1526"></a>        </span><span class=cF1>Bool</span><span class=cF0>               (*user_put_key)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *data, </span><span class=cF9>I64</span><span class=cF0> ch, </span><span class=cF9>I64</span><span class=cF0> sc);
 <a name="l1527"></a>        </span><span class=cF1>Bool</span><span class=cF0>               (*user_put_s)(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *data, </span><span class=cF1>U8</span><span class=cF0> *st);
 <a name="l1528"></a>
 <a name="l1529"></a>        </span><span class=cF9>CDoc</span><span class=cF0>                    *parent_doc; </span><span class=cF2>//(When browsing deeper, opening deeper docs.)</span><span class=cF0>
-<a name="l1530"></a>        </span><span class=cF9>U64</span><span class=cF0>                              desc; </span><span class=cF2>//8 characters. See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l51"><span class=cF4>DocBorderListDraw</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1530"></a>        </span><span class=cF9>U64</span><span class=cF0>                              desc; </span><span class=cF2>//8 characters. See </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l51"><span class=cF4>DocBorderListDraw</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l1531"></a>
 <a name="l1532"></a>        </span><span class=cF9>CDocBin</span><span class=cF0>                  bin_head;
 <a name="l1533"></a>        </span><span class=cF9>CDocSettings</span><span class=cF0>     settings_head;
@@ -1695,7 +1695,7 @@ body {background-color:#000000;}
 <a name="l1668"></a>};
 <a name="l1669"></a>
 <a name="l1670"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Directive&quot;</span><span class=cF0>
-<a name="l1671"></a></span><span class=cF2>//Compiler </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l1"><span class=cF4>Option</span></a><span class=cF2>()s</span><span class=cF0>
+<a name="l1671"></a></span><span class=cF2>//Compiler </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l1"><span class=cF4>Option</span></a><span class=cF2>()s</span><span class=cF0>
 <a name="l1672"></a></span><span class=cF2>//You might need to do #exe {Option();}</span><span class=cF0>
 <a name="l1673"></a></span><span class=cF2>//Note: The #exe stmt is lexed-ahead,</span><span class=cF0>
 <a name="l1674"></a></span><span class=cF2>//so it takes effect earlier than you might expect.</span><span class=cF0>
@@ -1718,7 +1718,7 @@ body {background-color:#000000;}
 <a name="l1691"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTF_ECHO</span><span class=cF0>                                       (</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>OPTf_ECHO</span><span class=cF0>)
 <a name="l1692"></a>
 <a name="l1693"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Intermediate Code&quot;</span><span class=cF0>
-<a name="l1694"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CInit.html#l235"><span class=cF4>ST_RAW_TYPES</span></a><span class=cF0>
+<a name="l1694"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CInit.html#l235"><span class=cF4>ST_RAW_TYPES</span></a><span class=cF0>
 <a name="l1695"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_I0</span><span class=cF0>                   </span><span class=cFE>2</span><span class=cF0>
 <a name="l1696"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_U0</span><span class=cF0>                   </span><span class=cFE>3</span><span class=cF0>
 <a name="l1697"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_I8</span><span class=cF0>                   </span><span class=cFE>4</span><span class=cF0>
@@ -1728,7 +1728,7 @@ body {background-color:#000000;}
 <a name="l1701"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_I32</span><span class=cF0>                  </span><span class=cFE>8</span><span class=cF0>
 <a name="l1702"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_U32</span><span class=cF0>                  </span><span class=cFE>9</span><span class=cF0>
 <a name="l1703"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_I64</span><span class=cF0>                  </span><span class=cFE>10</span><span class=cF0>
-<a name="l1704"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_PTR</span><span class=cF0>                  </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//Signed to allow negative error codes. </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1488"><span class=cF4>DOCM_CANCEL</span></a><span class=cF0>
+<a name="l1704"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_PTR</span><span class=cF0>                  </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//Signed to allow negative error codes. </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1488"><span class=cF4>DOCM_CANCEL</span></a><span class=cF0>
 <a name="l1705"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_U64</span><span class=cF0>                  </span><span class=cFE>11</span><span class=cF0>
 <a name="l1706"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_F32</span><span class=cF0>                  </span><span class=cFE>12</span><span class=cF0> </span><span class=cF2>//Not implemented</span><span class=cF0>
 <a name="l1707"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RT_UF32</span><span class=cF0>                 </span><span class=cFE>13</span><span class=cF0> </span><span class=cF2>//Not implemented, Fictitious</span><span class=cF0>
@@ -1828,7 +1828,7 @@ body {background-color:#000000;}
 <a name="l1801"></a>                                 ic_line;
 <a name="l1802"></a>        </span><span class=cF9>CHashClass</span><span class=cF0>      *ic_class, *ic_class2;
 <a name="l1803"></a>        </span><span class=cF9>CICArg</span><span class=cF0>           arg1, arg2, res;
-<a name="l1804"></a>        </span><span class=cF1>U8</span><span class=cF0>                       arg1_type_pointed_to; </span><span class=cF2>//Used for </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l10"><span class=cF4>IST_ASSIGN</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l9"><span class=cF4>IST_DEREF</span></a><span class=cF2> </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/CInit.html#l26"><span class=cF4>ic_codes</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l1804"></a>        </span><span class=cF1>U8</span><span class=cF0>                       arg1_type_pointed_to; </span><span class=cF2>//Used for </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l10"><span class=cF4>IST_ASSIGN</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l9"><span class=cF4>IST_DEREF</span></a><span class=cF2> </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CInit.html#l26"><span class=cF4>ic_codes</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l1805"></a>        </span><span class=cF1>union</span><span class=cF0>
 <a name="l1806"></a>        </span><span class=cF7>{</span><span class=cF0>
 <a name="l1807"></a>                </span><span class=cF1>U8</span><span class=cF0> ic_body[</span><span class=cF3>IC_BODY_SIZE</span><span class=cF0>];
@@ -1910,7 +1910,7 @@ body {background-color:#000000;}
 <a name="l1883"></a></span><span class=cF2>//Slash value</span><span class=cF0>
 <a name="l1884"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_R_REG</span><span class=cF0>                </span><span class=cFE>8</span><span class=cF0>
 <a name="l1885"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_I_REG</span><span class=cF0>                </span><span class=cFE>9</span><span class=cF0>
-<a name="l1886"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>     </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/AsmInit.html#l136"><span class=cF4>uasm_slash_val</span></a><span class=cF2> only.</span><span class=cF0>
+<a name="l1886"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_STI_LIKE</span><span class=cF0>     </span><span class=cFE>10</span><span class=cF0> </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/AsmInit.html#l136"><span class=cF4>uasm_slash_val</span></a><span class=cF2> only.</span><span class=cF0>
 <a name="l1887"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SV_NONE</span><span class=cF0>                 </span><span class=cFE>11</span><span class=cF0>
 <a name="l1888"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CInst</span><span class=cF0>
 <a name="l1889"></a>{
@@ -1982,7 +1982,7 @@ body {background-color:#000000;}
 <a name="l1955"></a>};
 <a name="l1956"></a>
 <a name="l1957"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAsmUndefHash</span><span class=cF0>
-<a name="l1958"></a>{</span><span class=cF2>//Only place created is </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l972"><span class=cF4>Exp Parser</span></a><span class=cF2> when an undef is found in an ASM exp.</span><span class=cF0>
+<a name="l1958"></a>{</span><span class=cF2>//Only place created is </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l972"><span class=cF4>Exp Parser</span></a><span class=cF2> when an undef is found in an ASM exp.</span><span class=cF0>
 <a name="l1959"></a>        </span><span class=cF9>CAsmUndefHash</span><span class=cF0>   *next;
 <a name="l1960"></a>        </span><span class=cF9>CHashExport</span><span class=cF0>     *hash;
 <a name="l1961"></a>};
@@ -2649,7 +2649,7 @@ body {background-color:#000000;}
 <a name="l2622"></a>
 <a name="l2623"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Devices;PCI&quot;</span><span class=cF0>
 <a name="l2624"></a>
-<a name="l2625"></a></span><span class=cF2>//PCI Registers, used with </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/PCI.html#l38"><span class=cF4>PCIRead</span></a><span class=cF2> functions.</span><span class=cF0>
+<a name="l2625"></a></span><span class=cF2>//PCI Registers, used with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/PCI.html#l38"><span class=cF4>PCIRead</span></a><span class=cF2> functions.</span><span class=cF0>
 <a name="l2626"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCIR_VENDOR_ID</span><span class=cF0>                  </span><span class=cFE>0x00</span><span class=cF0>
 <a name="l2627"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCIR_DEVICE_ID</span><span class=cF0>                  </span><span class=cFE>0x02</span><span class=cF0>
 <a name="l2628"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCIR_COMMAND</span><span class=cF0>                    </span><span class=cFE>0x04</span><span class=cF0>
@@ -2784,7 +2784,7 @@ body {background-color:#000000;}
 <a name="l2757"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>AHCI_PxSIG_PM</span><span class=cF0>           </span><span class=cFE>0x96690101</span><span class=cF0> </span><span class=cF2>//Port multiplier... not relevant to PC-type systems.</span><span class=cF0>
 <a name="l2758"></a>
 <a name="l2759"></a></span><span class=cF2>//Interrupt flags (same in PxIE and PxIS)</span><span class=cF0>
-<a name="l2760"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>AHCI_PxIf_TFE</span><span class=cF0>   </span><span class=cFE>30</span><span class=cF0>      </span><span class=cF2>//Task File Error, see </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2929"><span class=cF4>ATAS_ERR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2760"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>AHCI_PxIf_TFE</span><span class=cF0>   </span><span class=cFE>30</span><span class=cF0>      </span><span class=cF2>//Task File Error, see </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2929"><span class=cF4>ATAS_ERR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l2761"></a>
 <a name="l2762"></a></span><span class=cF2>//COMRESET flags</span><span class=cF0>
 <a name="l2763"></a></span><span class=cF2>//SATA Control register flags</span><span class=cF0>
@@ -2840,7 +2840,7 @@ body {background-color:#000000;}
 <a name="l2813"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CFisH2D</span><span class=cF0>
 <a name="l2814"></a>{</span><span class=cF2>//Host To Device</span><span class=cF0>
 <a name="l2815"></a>        </span><span class=cF1>U8</span><span class=cF0>      type,
-<a name="l2816"></a>                desc,   </span><span class=cF2>//We are concerned with bit #7 (</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2733"><span class=cF4>AHCI_CF_DESCf_C</span></a><span class=cF2>) 1=command, 0=control.</span><span class=cF0>
+<a name="l2816"></a>                desc,   </span><span class=cF2>//We are concerned with bit #7 (</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2733"><span class=cF4>AHCI_CF_DESCf_C</span></a><span class=cF2>) 1=command, 0=control.</span><span class=cF0>
 <a name="l2817"></a>                command,
 <a name="l2818"></a>                feature_low,
 <a name="l2819"></a>                lba0,
@@ -2882,7 +2882,7 @@ body {background-color:#000000;}
 <a name="l2855"></a></span><span class=cF2>Bits of first U32:</span><span class=cF0>
 <a name="l2856"></a>        </span><span class=cF2>4:0 - Command FIS Length, in U32s</span><span class=cF0>
 <a name="l2857"></a>        </span><span class=cF2>  5 - ATAPI bit (A) for ATAPI command</span><span class=cF0>
-<a name="l2858"></a>        </span><span class=cF2>  6 - Write bit (W) for write commands </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2729"><span class=cF4>AHCI_CH_DESCf_W</span></a><span class=cF2> 1=write 0=read</span><span class=cF0>
+<a name="l2858"></a>        </span><span class=cF2>  6 - Write bit (W) for write commands </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2729"><span class=cF4>AHCI_CH_DESCf_W</span></a><span class=cF2> 1=write 0=read</span><span class=cF0>
 <a name="l2859"></a>        </span><span class=cF2>  7 - Prefetchable (P)</span><span class=cF0>
 <a name="l2860"></a>        </span><span class=cF2>  8 - Reset (R)</span><span class=cF0>
 <a name="l2861"></a>        </span><span class=cF2>  9 - Built-in Self Test (BIST)</span><span class=cF0>
@@ -2925,7 +2925,7 @@ body {background-color:#000000;}
 <a name="l2898"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ATA_IDENT_MODEL_NUM</span><span class=cF0>                     </span><span class=cFE>27</span><span class=cF0>
 <a name="l2899"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ATA_IDENT_LBA48_CAPACITY</span><span class=cF0>        </span><span class=cFE>100</span><span class=cF0>
 <a name="l2900"></a>
-<a name="l2901"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Credits.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2901"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Credits.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l2902"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ATA_NOP</span><span class=cF0>                                 </span><span class=cFE>0x00</span><span class=cF0>
 <a name="l2903"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ATA_DEV_RST</span><span class=cF0>                     </span><span class=cFE>0x08</span><span class=cF0>
 <a name="l2904"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ATA_PACKET</span><span class=cF0>                              </span><span class=cFE>0xA0</span><span class=cF0>
@@ -3169,7 +3169,7 @@ body {background-color:#000000;}
 <a name="l3142"></a>};
 <a name="l3143"></a>
 <a name="l3144"></a></span><span class=cF2>//Red Sea Attributes</span><span class=cF0>
-<a name="l3145"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
+<a name="l3145"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
 <a name="l3146"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_READ_ONLY</span><span class=cF0>               </span><span class=cFE>0x01</span><span class=cF0> </span><span class=cF2>//R</span><span class=cF0>
 <a name="l3147"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_HIDDEN</span><span class=cF0>                  </span><span class=cFE>0x02</span><span class=cF0> </span><span class=cF2>//H</span><span class=cF0>
 <a name="l3148"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_SYSTEM</span><span class=cF0>                  </span><span class=cFE>0x04</span><span class=cF0> </span><span class=cF2>//S</span><span class=cF0>
@@ -3184,12 +3184,12 @@ body {background-color:#000000;}
 <a name="l3157"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RS_ATTR_FIXED</span><span class=cF0>                   </span><span class=cFE>0x800</span><span class=cF0> </span><span class=cF2>//F</span><span class=cF0>
 <a name="l3158"></a>
 <a name="l3159"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/CD DVD&quot;</span><span class=cF0>
-<a name="l3160"></a></span><span class=cF2>//Media types for </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskCDDVD.html#l162"><span class=cF4>DVDImageWrite</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l3160"></a></span><span class=cF2>//Media types for </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskCDDVD.html#l162"><span class=cF4>DVDImageWrite</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l3161"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MT_CD</span><span class=cF0>                                   </span><span class=cFE>1</span><span class=cF0>
 <a name="l3162"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MT_DVD</span><span class=cF0>                                  </span><span class=cFE>2</span><span class=cF0>
 <a name="l3163"></a>
 <a name="l3164"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Low Level;File/Program Routines&quot;</span><span class=cF0>
-<a name="l3165"></a></span><span class=cF2>//CDirEntry flags (Used by </span><a href="http://www.tomawezome.github.io/ZealOS/System/BlkDev/FileMgr.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>())</span><span class=cF0>
+<a name="l3165"></a></span><span class=cF2>//CDirEntry flags (Used by </span><a href="https://www.tomawezome.github.io/ZealOS/System/BlkDev/FileMgr.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>())</span><span class=cF0>
 <a name="l3166"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0>                       </span><span class=cFE>38</span><span class=cF0> </span><span class=cF2>//Must include terminator zero</span><span class=cF0>
 <a name="l3167"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDirEntry</span><span class=cF0>
 <a name="l3168"></a>{
@@ -3207,7 +3207,7 @@ body {background-color:#000000;}
 <a name="l3180"></a>
 <a name="l3181"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Program Routines&quot;</span><span class=cF0>
 <a name="l3182"></a></span><span class=cF2>//File Util Flags</span><span class=cF0>
-<a name="l3183"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l212"><span class=cF4>ST_FILE_UTIL_FLAGS</span></a><span class=cF0>
+<a name="l3183"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l212"><span class=cF4>ST_FILE_UTIL_FLAGS</span></a><span class=cF0>
 <a name="l3184"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUf_RECURSE</span><span class=cF0>                     </span><span class=cFE>0</span><span class=cF0>       </span><span class=cF2>// r</span><span class=cF0>
 <a name="l3185"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUf_DIFF</span><span class=cF0>                                </span><span class=cFE>1</span><span class=cF0>       </span><span class=cF2>// d</span><span class=cF0>
 <a name="l3186"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUf_DEL</span><span class=cF0>                                 </span><span class=cFE>1</span><span class=cF0>       </span><span class=cF2>// d</span><span class=cF0>
@@ -3263,7 +3263,7 @@ body {background-color:#000000;}
 <a name="l3236"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FUG_FILE_FIND</span><span class=cF0>   (</span><span class=cF3>FUF_JUST_DIRS</span><span class=cF0> | </span><span class=cF3>FUF_JUST_FILES</span><span class=cF0> | </span><span class=cF3>FUF_SCAN_PARENTS</span><span class=cF0>)
 <a name="l3237"></a>
 <a name="l3238"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Low Level&quot;</span><span class=cF0>
-<a name="l3239"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l220"><span class=cF4>ST_BLKDEV_TYPES</span></a><span class=cF0>
+<a name="l3239"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l220"><span class=cF4>ST_BLKDEV_TYPES</span></a><span class=cF0>
 <a name="l3240"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BDT_NULL</span><span class=cF0>                                </span><span class=cFE>0</span><span class=cF0>
 <a name="l3241"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>                                 </span><span class=cFE>1</span><span class=cF0>
 <a name="l3242"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>                                 </span><span class=cFE>2</span><span class=cF0>
@@ -3332,7 +3332,7 @@ body {background-color:#000000;}
 <a name="l3305"></a></span><span class=cF2>//Drive locked_flags</span><span class=cF0>
 <a name="l3306"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DVlf_LOCKED</span><span class=cF0>     </span><span class=cFE>0</span><span class=cF0>
 <a name="l3307"></a>
-<a name="l3308"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l228"><span class=cF4>ST_DRIVE_TYPES</span></a><span class=cF0>
+<a name="l3308"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l228"><span class=cF4>ST_DRIVE_TYPES</span></a><span class=cF0>
 <a name="l3309"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FSt_NULL</span><span class=cF0>                </span><span class=cFE>0</span><span class=cF0>
 <a name="l3310"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FSt_REDSEA</span><span class=cF0>              </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//Supported</span><span class=cF0>
 <a name="l3311"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FSt_FAT32</span><span class=cF0>               </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Supported except for short names, to some degree</span><span class=cF0>
@@ -3366,7 +3366,7 @@ body {background-color:#000000;}
 <a name="l3339"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDrive</span><span class=cF0>
 <a name="l3340"></a>{
 <a name="l3341"></a></span><span class=cF2>//Don't access -&gt;drv_let directly in case a drive has been remapped.</span><span class=cF0>
-<a name="l3342"></a>        </span><span class=cF2>//Use </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l173"><span class=cF4>Drive2Letter</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l3342"></a>        </span><span class=cF2>//Use </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l173"><span class=cF4>Drive2Letter</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l3343"></a>        </span><span class=cF9>I64</span><span class=cF0>                                      locked_flags;
 <a name="l3344"></a>        </span><span class=cF9>U32</span><span class=cF0>                                      drive_signature;
 <a name="l3345"></a>        </span><span class=cF1>U8</span><span class=cF0>                                       drv_let, pad;
@@ -3451,7 +3451,7 @@ body {background-color:#000000;}
 <a name="l3424"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FF_CONTIGUOUS</span><span class=cF0>                   </span><span class=cFE>16</span><span class=cF0>
 <a name="l3425"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FF_USE_OLD_DATETIME</span><span class=cF0>     </span><span class=cFE>32</span><span class=cF0>
 <a name="l3426"></a>
-<a name="l3427"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CFile</span><span class=cF0> </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Disk/DataBase.html#l1"><span class=cF4>::/Demo/Disk/DataBase.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3427"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CFile</span><span class=cF0> </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Disk/DataBase.html#l1"><span class=cF4>::/Demo/Disk/DataBase.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l3428"></a>{
 <a name="l3429"></a>        </span><span class=cF9>I64</span><span class=cF0>                      flags;
 <a name="l3430"></a>        </span><span class=cF9>CDirEntry</span><span class=cF0>        de;
@@ -3524,7 +3524,7 @@ body {background-color:#000000;}
 <a name="l3497"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>                    (</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>)
 <a name="l3498"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_HEAP_HASH_SIZE</span><span class=cF0>              </span><span class=cFE>1024</span><span class=cF0>
 <a name="l3499"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_FREE_PAG_HASH_SIZE</span><span class=cF0>  </span><span class=cFE>0x100</span><span class=cF0>
-<a name="l3500"></a></span><span class=cF2>//It is common to </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>() exact powers of two.</span><span class=cF0> </span><span class=cF2>There is some overhead.</span><span class=cF0>
+<a name="l3500"></a></span><span class=cF2>//It is common to </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>() exact powers of two.</span><span class=cF0> </span><span class=cF2>There is some overhead.</span><span class=cF0>
 <a name="l3501"></a></span><span class=cF2>//We add 2 pags, so a request is not rounded-up to next power of two.</span><span class=cF0>
 <a name="l3502"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MEM_EXTRA_HASH2_PAGS</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0>
 <a name="l3503"></a>
@@ -3591,8 +3591,8 @@ body {background-color:#000000;}
 <a name="l3564"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROP_COLLISION</span><span class=cF0>   (</span><span class=cF3>ROPB_COLLISION</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0>)
 <a name="l3565"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROP_MONO</span><span class=cF0>                (</span><span class=cF3>ROPB_MONO</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0>)
 <a name="l3566"></a>
-<a name="l3567"></a></span><span class=cF2>//These are just for </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3574"><span class=cF4>ROPF_PROBABILITY_DITHER</span></a><span class=cF0>
-<a name="l3568"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l3567"></a></span><span class=cF2>//These are just for </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3574"><span class=cF4>ROPF_PROBABILITY_DITHER</span></a><span class=cF0>
+<a name="l3568"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l3569"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROPF_HALF_RANGE_COLOR</span><span class=cF0>   </span><span class=cFE>0x1000</span><span class=cF0>
 <a name="l3570"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ROPF_TWO_SIDED</span><span class=cF0>                  </span><span class=cFE>0x2000</span><span class=cF0>
 <a name="l3571"></a>
@@ -3656,15 +3656,15 @@ body {background-color:#000000;}
 <a name="l3629"></a>
 <a name="l3630"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CKbdStateGlobals</span><span class=cF0>
 <a name="l3631"></a>{
-<a name="l3632"></a>        </span><span class=cF9>I64</span><span class=cF0>                      scan_code,                     </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan codes</span></a><span class=cF0>
+<a name="l3632"></a>        </span><span class=cF9>I64</span><span class=cF0>                      scan_code,                     </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan codes</span></a><span class=cF0>
 <a name="l3633"></a>                                 last_down_scan_code,
 <a name="l3634"></a>                                 count,                         </span><span class=cF2>//Count of keys pressed since boot.</span><span class=cF0>
 <a name="l3635"></a>                                 timestamp,                     </span><span class=cF2>//Output: TSCGet when event.</span><span class=cF0>
 <a name="l3636"></a>                                 new_key_timestamp;     </span><span class=cF2>//Output: TSCGet when new key event.</span><span class=cF0>
 <a name="l3637"></a>        </span><span class=cF9>CFifoU8</span><span class=cF0>         *fifo, *fifo2;          </span><span class=cF2>//Private</span><span class=cF0>
 <a name="l3638"></a>        </span><span class=cF9>CFifoI64</span><span class=cF0>        *scan_code_fifo;
-<a name="l3639"></a>        </span><span class=cF9>U32</span><span class=cF0>                      down_bitmap[</span><span class=cFE>8</span><span class=cF0>],        </span><span class=cF2>//BitTest, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l11"><span class=cF4>Bt</span></a><span class=cF2>(), with a merged scan code. (Left and right shift merged, for example.)</span><span class=cF0>
-<a name="l3640"></a>                                 down_bitmap2[</span><span class=cFE>8</span><span class=cF0>];       </span><span class=cF2>//BitTest, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l11"><span class=cF4>Bt</span></a><span class=cF2>(), with an unmerged scan code.</span><span class=cF0>
+<a name="l3639"></a>        </span><span class=cF9>U32</span><span class=cF0>                      down_bitmap[</span><span class=cFE>8</span><span class=cF0>],        </span><span class=cF2>//BitTest, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l11"><span class=cF4>Bt</span></a><span class=cF2>(), with a merged scan code. (Left and right shift merged, for example.)</span><span class=cF0>
+<a name="l3640"></a>                                 down_bitmap2[</span><span class=cFE>8</span><span class=cF0>];       </span><span class=cF2>//BitTest, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l11"><span class=cF4>Bt</span></a><span class=cF2>(), with an unmerged scan code.</span><span class=cF0>
 <a name="l3641"></a>        </span><span class=cF1>Bool</span><span class=cF0>             reset,                         </span><span class=cF2>//Private: Reset KbdMouse</span><span class=cF0>
 <a name="l3642"></a>                                 irqs_working;          </span><span class=cF2>//Private</span><span class=cF0>
 <a name="l3643"></a>};
@@ -3832,12 +3832,12 @@ body {background-color:#000000;}
 <a name="l3805"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBf_FREE_ON_COMPLETE</span><span class=cF0>   </span><span class=cFE>7</span><span class=cF0>
 <a name="l3806"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBf_ADD_TO_QUE</span><span class=cF0>                 </span><span class=cFE>8</span><span class=cF0>
 <a name="l3807"></a>
-<a name="l3808"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_TEXT_INPUT</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0> </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l88"><span class=cF4>TaskText</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Feed StdIn</span><span class=cF0>
-<a name="l3809"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_MESSAGE</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l143"><span class=cF4>TaskMessage</span></a><span class=cF2>() </span><span class=cF0>              </span><span class=cF2>Post message</span><span class=cF0>
-<a name="l3810"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_EXE_STR</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l45"><span class=cF4>TaskExe</span></a><span class=cF2>() </span><span class=cF0>          </span><span class=cF2>Compile &amp; execute src code text</span><span class=cF0>
+<a name="l3808"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_TEXT_INPUT</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0> </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l88"><span class=cF4>TaskText</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Feed StdIn</span><span class=cF0>
+<a name="l3809"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_MESSAGE</span><span class=cF0>    </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l143"><span class=cF4>TaskMessage</span></a><span class=cF2>() </span><span class=cF0>              </span><span class=cF2>Post message</span><span class=cF0>
+<a name="l3810"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_EXE_STR</span><span class=cF0>    </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l45"><span class=cF4>TaskExe</span></a><span class=cF2>() </span><span class=cF0>          </span><span class=cF2>Compile &amp; execute src code text</span><span class=cF0>
 <a name="l3811"></a></span><span class=cF2>//MP cmds</span><span class=cF0>
-<a name="l3812"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_CALL</span><span class=cF0>               </span><span class=cFE>3</span><span class=cF0> </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l224"><span class=cF4>JobQueue</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Tell MP to call function</span><span class=cF0>
-<a name="l3813"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_SPAWN_TASK</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0> </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF2>() Tell MP to spawn task</span><span class=cF0>
+<a name="l3812"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_CALL</span><span class=cF0>               </span><span class=cFE>3</span><span class=cF0> </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l224"><span class=cF4>JobQueue</span></a><span class=cF2>() </span><span class=cF0> </span><span class=cF2>Tell MP to call function</span><span class=cF0>
+<a name="l3813"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>JOBT_SPAWN_TASK</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0> </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF2>() Tell MP to spawn task</span><span class=cF0>
 <a name="l3814"></a>
 <a name="l3815"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CJob</span><span class=cF0>
 <a name="l3816"></a>{
@@ -3865,11 +3865,11 @@ body {background-color:#000000;}
 <a name="l3838"></a>};
 <a name="l3839"></a>
 <a name="l3840"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Messages&quot;</span><span class=cF0>
-<a name="l3841"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/MessageLoop.html#l1"><span class=cF4>::/Demo/MessageLoop.CC</span></a><span class=cF0>
+<a name="l3841"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/MessageLoop.html#l1"><span class=cF4>::/Demo/MessageLoop.CC</span></a><span class=cF0>
 <a name="l3842"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_NULL</span><span class=cF0>                    </span><span class=cFE>0</span><span class=cF0>
 <a name="l3843"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_CMD</span><span class=cF0>                     </span><span class=cFE>1</span><span class=cF0>
-<a name="l3844"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>                </span><span class=cFE>2</span><span class=cF0>  </span><span class=cF2>//(</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF2>,</span><a href="http://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan code</span></a><span class=cF2>) Press &lt;CTRL-SHIFT-L&gt;</span><span class=cF0>
-<a name="l3845"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>                  </span><span class=cFE>3</span><span class=cF0>  </span><span class=cF2>//(</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF2>,</span><a href="http://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan code</span></a><span class=cF2>) Press &lt;CTRL-SHIFT-L&gt;</span><span class=cF0>
+<a name="l3844"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>                </span><span class=cFE>2</span><span class=cF0>  </span><span class=cF2>//(</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF2>,</span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan code</span></a><span class=cF2>) Press &lt;CTRL-SHIFT-L&gt;</span><span class=cF0>
+<a name="l3845"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>                  </span><span class=cFE>3</span><span class=cF0>  </span><span class=cF2>//(</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF2>,</span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan code</span></a><span class=cF2>) Press &lt;CTRL-SHIFT-L&gt;</span><span class=cF0>
 <a name="l3846"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>                 </span><span class=cFE>4</span><span class=cF0>  </span><span class=cF2>//(x,y)</span><span class=cF0>
 <a name="l3847"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>               </span><span class=cFE>5</span><span class=cF0>  </span><span class=cF2>//(x,y)</span><span class=cF0>
 <a name="l3848"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>                 </span><span class=cFE>6</span><span class=cF0>  </span><span class=cF2>//(x,y)</span><span class=cF0>
@@ -3993,7 +3993,7 @@ body {background-color:#000000;}
 <a name="l3966"></a>                                         scroll_x, scroll_y, scroll_z;
 <a name="l3967"></a>
 <a name="l3968"></a>        </span><span class=cF2>//These must be in this order</span><span class=cF0>
-<a name="l3969"></a>        </span><span class=cF2>//for </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l60"><span class=cF4>TASK_CONTEXT_SAVE</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l105"><span class=cF4>_TASK_CONTEXT_RESTORE</span></a><span class=cF0>
+<a name="l3969"></a>        </span><span class=cF2>//for </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l60"><span class=cF4>TASK_CONTEXT_SAVE</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l105"><span class=cF4>_TASK_CONTEXT_RESTORE</span></a><span class=cF0>
 <a name="l3970"></a>        </span><span class=cF9>I64</span><span class=cF0>                              rip, rflags, rsp, rsi, rax, rcx, rdx, rbx, rbp, rdi, r8, r9, r10, r11, r12, r13, r14, r15;
 <a name="l3971"></a>        </span><span class=cF9>CCPU</span><span class=cF0>                    *gs;
 <a name="l3972"></a>        </span><span class=cF9>CFPU</span><span class=cF0>                    *fpu_mmx;
@@ -4186,7 +4186,7 @@ body {background-color:#000000;}
 <a name="l4159"></a>
 <a name="l4160"></a></span><span class=cF2>//ZealOS places a 1 in bit 7 for</span><span class=cF0>
 <a name="l4161"></a></span><span class=cF2>//keys with an E0 prefix.</span><span class=cF0>
-<a name="l4162"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>::/Doc/CharOverview.DD</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.html#l511"><span class=cF4>KbdHandler</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l4162"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>::/Doc/CharOverview.DD</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.html#l511"><span class=cF4>KbdHandler</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l4163"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SC_ESC</span><span class=cF0>                  </span><span class=cFE>0x01</span><span class=cF0>
 <a name="l4164"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SC_BACKSPACE</span><span class=cF0>    </span><span class=cFE>0x0E</span><span class=cF0>
 <a name="l4165"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SC_TAB</span><span class=cF0>                  </span><span class=cFE>0x0F</span><span class=cF0>
@@ -4254,15 +4254,15 @@ body {background-color:#000000;}
 <a name="l4227"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Device Contexts&quot;</span><span class=cF0>
 <a name="l4228"></a></span><span class=cF2>//Low 8 bits reserved for flags that go into saved bitmaps</span><span class=cF0>
 <a name="l4229"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_PALETTE</span><span class=cF0>                     </span><span class=cFE>1</span><span class=cF0>
-<a name="l4230"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_NO_TRANSPARENTS</span><span class=cF0>     </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Can be used to optimized </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrBitMap.html#l93"><span class=cF4>GrBlot</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l4230"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_NO_TRANSPARENTS</span><span class=cF0>     </span><span class=cFE>2</span><span class=cF0> </span><span class=cF2>//Can be used to optimized </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrBitMap.html#l93"><span class=cF4>GrBlot</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l4231"></a>
 <a name="l4232"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>              </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l4233"></a>
-<a name="l4234"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4234"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4235"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>                    </span><span class=cFE>0x200</span><span class=cF0>
 <a name="l4236"></a>
 <a name="l4237"></a></span><span class=cF2>//Must be used with DCF_SYMMETRY set also.</span><span class=cF0>
-<a name="l4238"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Games/BigGuns.html#l1"><span class=cF4>::/Demo/Games/BigGuns.CC</span></a><span class=cF0>
+<a name="l4238"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Games/BigGuns.html#l1"><span class=cF4>::/Demo/Games/BigGuns.CC</span></a><span class=cF0>
 <a name="l4239"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>                 </span><span class=cFE>0x400</span><span class=cF0>
 <a name="l4240"></a>
 <a name="l4241"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_LOCATE_NEAREST</span><span class=cF0>              </span><span class=cFE>0x800</span><span class=cF0>
@@ -4273,7 +4273,7 @@ body {background-color:#000000;}
 <a name="l4246"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_RECORD_EXTENTS</span><span class=cF0>              </span><span class=cFE>0x10000</span><span class=cF0>
 <a name="l4247"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_ON_TOP</span><span class=cF0>                              </span><span class=cFE>0x20000</span><span class=cF0>
 <a name="l4248"></a>
-<a name="l4249"></a></span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l318"><span class=cF4>DCSave</span></a><span class=cF2>() flags.</span><span class=cF0>
+<a name="l4249"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l318"><span class=cF4>DCSave</span></a><span class=cF2>() flags.</span><span class=cF0>
 <a name="l4250"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCSF_PALETTE_GET</span><span class=cF0>        </span><span class=cFE>1</span><span class=cF0>
 <a name="l4251"></a>
 <a name="l4252"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCS_SIGNATURE_VAL</span><span class=cF0>       </span><span class=cF6>'DvCS'</span><span class=cF0>
@@ -4298,21 +4298,21 @@ body {background-color:#000000;}
 <a name="l4271"></a>
 <a name="l4272"></a>        </span><span class=cF2>//public (Change directly)</span><span class=cF0>
 <a name="l4273"></a>        </span><span class=cF9>CColorROPU32</span><span class=cF0>     color,
-<a name="l4274"></a>                                         bkcolor, </span><span class=cF2>//Set for use with </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3564"><span class=cF4>ROP_COLLISION</span></a><span class=cF0>
-<a name="l4275"></a>                                         color2; </span><span class=cF2>//Internally used for </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrPrimatives.html#l279"><span class=cF4>GrFloodFill</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4274"></a>                                         bkcolor, </span><span class=cF2>//Set for use with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3564"><span class=cF4>ROP_COLLISION</span></a><span class=cF0>
+<a name="l4275"></a>                                         color2; </span><span class=cF2>//Internally used for </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrPrimatives.html#l279"><span class=cF4>GrFloodFill</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4276"></a>        </span><span class=cF9>CD3I32</span><span class=cF0>                   ls; </span><span class=cF2>//Light source (should be normalized to 65536).</span><span class=cF0>
 <a name="l4277"></a>
 <a name="l4278"></a>        </span><span class=cF2>//dither_probability_u16 is basically a U16.</span><span class=cF0>
-<a name="l4279"></a>        </span><span class=cF2>//It is activated by </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3574"><span class=cF4>ROPF_PROBABILITY_DITHER</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l4279"></a>        </span><span class=cF2>//It is activated by </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3574"><span class=cF4>ROPF_PROBABILITY_DITHER</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l4280"></a>        </span><span class=cF2>//0x0000 =100% color.c0</span><span class=cF0>
 <a name="l4281"></a>        </span><span class=cF2>//0x8000 =50%  color.c0 </span><span class=cF0>        </span><span class=cF2>50% color.c1</span><span class=cF0>
 <a name="l4282"></a>        </span><span class=cF2>//0x10000=100% color.c1</span><span class=cF0>
-<a name="l4283"></a>        </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/SunMoon.html#l1"><span class=cF4>::/Demo/Graphics/SunMoon.CC</span></a><span class=cF2> and</span><span class=cF0>   </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/Shading.html#l1"><span class=cF4>::/Demo/Graphics/Shading.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l4283"></a>        </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Graphics/SunMoon.html#l1"><span class=cF4>::/Demo/Graphics/SunMoon.CC</span></a><span class=cF2> and</span><span class=cF0>   </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Graphics/Shading.html#l1"><span class=cF4>::/Demo/Graphics/Shading.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l4284"></a>        </span><span class=cF9>U64</span><span class=cF0>                              dither_probability_u16;
 <a name="l4285"></a>
 <a name="l4286"></a>        </span><span class=cF9>CDC</span><span class=cF0>                             *brush;
 <a name="l4287"></a>
-<a name="l4288"></a>        </span><span class=cF2>//Set with </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l51"><span class=cF4>DCMat4x4Set</span></a><span class=cF2>().  </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF2>() before setting.</span><span class=cF0>
+<a name="l4288"></a>        </span><span class=cF2>//Set with </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l51"><span class=cF4>DCMat4x4Set</span></a><span class=cF2>().  </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF2>() before setting.</span><span class=cF0>
 <a name="l4289"></a>        </span><span class=cF9>I64</span><span class=cF0>                             *r, </span><span class=cF2>//rotation matrix of quads decimal in lo</span><span class=cF0>
 <a name="l4290"></a>                                         r_norm; </span><span class=cF2>//shifted 32 bits.</span><span class=cF0>     </span><span class=cF2>Used for scaling thick</span><span class=cF0>
 <a name="l4291"></a>
@@ -4320,27 +4320,27 @@ body {background-color:#000000;}
 <a name="l4293"></a>        </span><span class=cF9>I32</span><span class=cF0>                              x, y, z,
 <a name="l4294"></a>                                         thick;
 <a name="l4295"></a>
-<a name="l4296"></a>        </span><span class=cF2>//Can be changed from the default </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l18"><span class=cF4>DCTransform</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4296"></a>        </span><span class=cF2>//Can be changed from the default </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l18"><span class=cF4>DCTransform</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4297"></a>        </span><span class=cF1>U0</span><span class=cF0>                         (*transform)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> *x, </span><span class=cF9>I64</span><span class=cF0> *y, </span><span class=cF9>I64</span><span class=cF0> *z);
 <a name="l4298"></a>
-<a name="l4299"></a>        </span><span class=cF2>//Can be changed from the default </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4299"></a>        </span><span class=cF2>//Can be changed from the default </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4300"></a>        </span><span class=cF1>U0</span><span class=cF0>                         (*lighting)(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>CD3I32</span><span class=cF0> *p1, </span><span class=cF9>CD3I32</span><span class=cF0> *p2, </span><span class=cF9>CD3I32</span><span class=cF0> *p3, </span><span class=cF9>CColorROPU32</span><span class=cF0> color);
 <a name="l4301"></a>
-<a name="l4302"></a>        </span><span class=cF2>//Set by </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4302"></a>        </span><span class=cF2>//Set by </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF2>() or </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4303"></a>        </span><span class=cF9>CGrSym</span><span class=cF0>                   sym;
 <a name="l4304"></a>
 <a name="l4305"></a>        </span><span class=cF9>I32</span><span class=cF0>                              cur_x, cur_y, cur_z, pad;
 <a name="l4306"></a>        </span><span class=cF9>I64</span><span class=cF0>                              collision_count;
 <a name="l4307"></a>
 <a name="l4308"></a>        </span><span class=cF9>I64</span><span class=cF0>                              nearest_dist,
-<a name="l4309"></a>                                         min_x, max_x, min_y, max_y; </span><span class=cF2>//Set by </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4246"><span class=cF4>DCF_RECORD_EXTENTS</span></a><span class=cF2> (screen coordinates)</span><span class=cF0>
+<a name="l4309"></a>                                         min_x, max_x, min_y, max_y; </span><span class=cF2>//Set by </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4246"><span class=cF4>DCF_RECORD_EXTENTS</span></a><span class=cF2> (screen coordinates)</span><span class=cF0>
 <a name="l4310"></a>
 <a name="l4311"></a>        </span><span class=cF9>U32</span><span class=cF0>                              dc_signature, pad;
 <a name="l4312"></a>        </span><span class=cF9>CTask</span><span class=cF0>                   *mem_task, *win_task;
 <a name="l4313"></a>        </span><span class=cF9>CDC</span><span class=cF0>                             *alias;
 <a name="l4314"></a>        </span><span class=cF1>U8</span><span class=cF0>                              *body;
 <a name="l4315"></a>
-<a name="l4316"></a>        </span><span class=cF2>//Set by </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l260"><span class=cF4>DCDepthBufAlloc</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4316"></a>        </span><span class=cF2>//Set by </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l260"><span class=cF4>DCDepthBufAlloc</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4317"></a>        </span><span class=cF9>I32</span><span class=cF0>                             *depth_buf;
 <a name="l4318"></a>        </span><span class=cF9>I64</span><span class=cF0>                              db_z; </span><span class=cF2>//private</span><span class=cF0>
 <a name="l4319"></a>#</span><span class=cF1>assert</span><span class=cF0> !($ &amp; </span><span class=cFE>7</span><span class=cF0>)
@@ -4473,11 +4473,11 @@ body {background-color:#000000;}
 <a name="l4446"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_SRC_HARDDRIVE</span><span class=cF0>      </span><span class=cFE>3</span><span class=cF0>
 <a name="l4447"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_SRC_DVD</span><span class=cF0>            </span><span class=cFE>4</span><span class=cF0>
 <a name="l4448"></a>
-<a name="l4449"></a></span><span class=cF2>// </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l580"><span class=cF4>In</span></a><span class=cF2>(&quot;&quot;) StdIn for call to </span><a href="http://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l4449"></a></span><span class=cF2>// </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l580"><span class=cF4>In</span></a><span class=cF2>(&quot;&quot;) StdIn for call to </span><a href="https://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l4450"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>STD_DISTRO_DVD_CONFIG</span><span class=cF0>   </span><span class=cF6>&quot;TB\nScale2Mem(2048,0x40000)\nT \n\n\n\n&quot;</span><span class=cF0>
 <a name="l4451"></a>
 <a name="l4452"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Registry&quot;</span><span class=cF0>
-<a name="l4453"></a></span><span class=cF2>//Registry sys_message_flags. </span><a href="http://www.tomawezome.github.io/ZealOS/System/Registry.html#l123"><span class=cF4>RegOneTimePopUp</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l4453"></a></span><span class=cF2>//Registry sys_message_flags. </span><a href="https://www.tomawezome.github.io/ZealOS/System/Registry.html#l123"><span class=cF4>RegOneTimePopUp</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l4454"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARf_FLOODFILL</span><span class=cF0>                           </span><span class=cFE>0</span><span class=cF0>
 <a name="l4455"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARf_CSPRITE_INS_CLIP</span><span class=cF0>            </span><span class=cFE>1</span><span class=cF0>
 <a name="l4456"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>ARf_PLANAR_SYMMETRY</span><span class=cF0>             </span><span class=cFE>2</span><span class=cF0>

@@ -155,7 +155,7 @@ body {background-color:#000000;}
 <a name="l128"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_NO_REG_VAR</span><span class=cF0>, </span><span class=cF3>ON</span><span class=cF0>);};
 <a name="l129"></a></span><span class=cF1>argpop</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>CallStackGrow</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> stack_size_threshold, </span><span class=cF9>I64</span><span class=cF0> stack_size, </span><span class=cF2>/*argpop*/</span><span class=cF9>I64</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_addr</span><span class=cF7>)(</span><span class=cF0>...</span><span class=cF7>)</span><span class=cF0>, ...)
 <a name="l130"></a>{</span><span class=cF2>//Grow stack in call with any fixed num of args.</span><span class=cF0>
-<a name="l131"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/StackGrow.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l131"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/StackGrow.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l132"></a>        </span><span class=cF9>CTaskStack</span><span class=cF0>      *tmps, *tmps2, **_stack;
 <a name="l133"></a>        </span><span class=cF9>I64</span><span class=cF0>                      res, *rsp, *rsp2, *old_stack;
 <a name="l134"></a>
@@ -276,7 +276,7 @@ body {background-color:#000000;}
 <a name="l249"></a>        task-&gt;win_bottom                        = </span><span class=cFB>text</span><span class=cF0>.rows - </span><span class=cFE>2</span><span class=cF0>;
 <a name="l250"></a>
 <a name="l251"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>blkdev</span><span class=cF0>.home_dir)
-<a name="l252"></a>        </span><span class=cF7>{</span><span class=cF2>//Beware System </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KStart64.html#l46"><span class=cF4>TaskInit</span></a><span class=cF2>. I guess ok until </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KMain.html#l188"><span class=cF4>DiskChange</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l252"></a>        </span><span class=cF7>{</span><span class=cF2>//Beware System </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KStart64.html#l46"><span class=cF4>TaskInit</span></a><span class=cF2>. I guess ok until </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMain.html#l188"><span class=cF4>DiskChange</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l253"></a>                task-&gt;cur_dv    = </span><span class=cFB>blkdev</span><span class=cF0>.let_to_drive[*</span><span class=cFB>blkdev</span><span class=cF0>.home_dir - </span><span class=cF6>'A'</span><span class=cF0>];
 <a name="l254"></a>                task-&gt;cur_dir   = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.home_dir + </span><span class=cFE>2</span><span class=cF0>, task);
 <a name="l255"></a>        </span><span class=cF7>}</span><span class=cF0>
@@ -289,12 +289,12 @@ body {background-color:#000000;}
 <a name="l262"></a>}
 <a name="l263"></a>
 <a name="l264"></a></span><span class=cF9>CTask</span><span class=cF0> *</span><span class=cF5>Spawn</span><span class=cF0>(</span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_start_addr</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *data</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *data=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *task_name=</span><span class=cF3>NULL</span><span class=cF0>,
-<a name="l265"></a>                                </span><span class=cF9>I64</span><span class=cF0> target_cpu=-</span><span class=cFE>1</span><span class=cF0>,      </span><span class=cF2>// -1 for current CPU. See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/MultiCore/LoadTest.html#l1"><span class=cF4>multi-core</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l265"></a>                                </span><span class=cF9>I64</span><span class=cF0> target_cpu=-</span><span class=cFE>1</span><span class=cF0>,      </span><span class=cF2>// -1 for current CPU. See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/MultiCore/LoadTest.html#l1"><span class=cF4>multi-core</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l266"></a>                                </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>,     </span><span class=cF2>// NULL means system_task</span><span class=cF0>
 <a name="l267"></a>                                </span><span class=cF9>I64</span><span class=cF0> stack_size=</span><span class=cFE>0</span><span class=cF0>,       </span><span class=cF2>// 0=default</span><span class=cF0>
 <a name="l268"></a>                                </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_ADD_TO_QUE</span><span class=cF0>)
 <a name="l269"></a>{</span><span class=cF2>//Create task on core running at address.</span><span class=cF0>
-<a name="l270"></a></span><span class=cF2>//Alloc </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> structure from code heap so addr will be short.</span><span class=cF0>
+<a name="l270"></a></span><span class=cF2>//Alloc </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> structure from code heap so addr will be short.</span><span class=cF0>
 <a name="l271"></a>        </span><span class=cF2>//Could be alloced off of data heap.</span><span class=cF0>
 <a name="l272"></a>        </span><span class=cF9>CTask</span><span class=cF0> *task;
 <a name="l273"></a>
@@ -617,7 +617,7 @@ body {background-color:#000000;}
 <a name="l590"></a>
 <a name="l591"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TaskKillDying</span><span class=cF0>()
 <a name="l592"></a>{</span><span class=cF2>//Delay freeing to prevent asking for trouble with quick reincarnations.</span><span class=cF0>
-<a name="l593"></a></span><span class=cF2>//What if the user is doing this: </span><a href="http://www.tomawezome.github.io/ZealOS/Misc/OSTestSuite.html#l479"><span class=cF4>DoTreeCheckers</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l593"></a></span><span class=cF2>//What if the user is doing this: </span><a href="https://www.tomawezome.github.io/ZealOS/Misc/OSTestSuite.html#l479"><span class=cF4>DoTreeCheckers</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l594"></a>        </span><span class=cF9>CTaskDying</span><span class=cF0> *task, *task1;
 <a name="l595"></a>
 <a name="l596"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;kill_jiffy &lt; </span><span class=cFB>counts</span><span class=cF0>.jiffies)

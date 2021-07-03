@@ -26,7 +26,7 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>asm</span><span class=cF0> {
-<a name="l2"></a></span><span class=cF2>// </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/MemoryOverview.html#l1"><span class=cF4>::/Doc/MemoryOverview.DD</span></a><span class=cF0>
+<a name="l2"></a></span><span class=cF2>// </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/MemoryOverview.html#l1"><span class=cF4>::/Doc/MemoryOverview.DD</span></a><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a></span><span class=cF1>USE32</span><span class=cF0>
 <a name="l5"></a></span><span class=cFD>SYS_INIT_PAGE_TABLES</span><span class=cF0>::
@@ -78,7 +78,7 @@ body {background-color:#000000;}
 <a name="l51"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             [</span><span class=cFD>MEM_512GIG_NUM</span><span class=cF0>],     </span><span class=cFC>EAX</span><span class=cF0>
 <a name="l52"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             [</span><span class=cFD>MEM_512GIG_NUM</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>], </span><span class=cFC>EDX</span><span class=cF0>
 <a name="l53"></a>
-<a name="l54"></a></span><span class=cF2>//Set </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4082"><span class=cF4>CSysFixedArea</span></a><span class=cF2> to zero</span><span class=cF0>
+<a name="l54"></a></span><span class=cF2>//Set </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4082"><span class=cF4>CSysFixedArea</span></a><span class=cF2> to zero</span><span class=cF0>
 <a name="l55"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>EDI</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0>
 <a name="l56"></a>                                </span><span class=cF1>XOR</span><span class=cF0>             </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFC>EAX</span><span class=cF0>
 <a name="l57"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>ECX</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CSysFixedArea</span><span class=cF0>) / </span><span class=cFE>4</span><span class=cF0>
@@ -182,7 +182,7 @@ body {background-color:#000000;}
 <a name="l155"></a>
 <a name="l156"></a></span><span class=cFD>SYS_INIT_16MEG_SYS_CODE_BP</span><span class=cF0>::
 <a name="l157"></a></span><span class=cF2>// Init sys_code_bp to BIOS E801 lowest 16Meg val.</span><span class=cF0>
-<a name="l158"></a></span><span class=cF2>// </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Memory/BlkPool.html#l31"><span class=cF4>BlkPoolsInit</span></a><span class=cF2>() adds the rest.</span><span class=cF0>
+<a name="l158"></a></span><span class=cF2>// </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/BlkPool.html#l31"><span class=cF4>BlkPoolsInit</span></a><span class=cF2>() adds the rest.</span><span class=cF0>
 <a name="l159"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_CODE_BP</span><span class=cF0>],     </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.</span><span class=cFB>sys_code_bp</span><span class=cF0>
 <a name="l160"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_CODE_BP</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
 <a name="l161"></a>

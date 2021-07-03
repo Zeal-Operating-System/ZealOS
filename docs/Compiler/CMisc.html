@@ -26,17 +26,17 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num, </span><span class=cF1>Bool</span><span class=cF0> val)
-<a name="l2"></a>{</span><span class=cF2>//Set compiler </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Options.html#l1"><span class=cF4>Option</span></a><span class=cF2> to val.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Set compiler </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Options.html#l1"><span class=cF4>Option</span></a><span class=cF2> to val.</span><span class=cF0>
 <a name="l3"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>BEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;last_cc-&gt;opts, num, val);
 <a name="l4"></a>}
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>OptionGet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num)
-<a name="l7"></a>{</span><span class=cF2>//Get state of compiler </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1675"><span class=cF4>option</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a>{</span><span class=cF2>//Get state of compiler </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1675"><span class=cF4>option</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l8"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Bt</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;last_cc-&gt;opts, num);
 <a name="l9"></a>}
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF1>asm</span><span class=cF0> {
-<a name="l12"></a></span><span class=cFD>_LAST_FUN</span><span class=cF0>::             </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l415"><span class=cF4>_CALL_IND</span></a><span class=cF0>
+<a name="l12"></a></span><span class=cFD>_LAST_FUN</span><span class=cF0>::             </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l415"><span class=cF4>_CALL_IND</span></a><span class=cF0>
 <a name="l13"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l14"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
 <a name="l15"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>

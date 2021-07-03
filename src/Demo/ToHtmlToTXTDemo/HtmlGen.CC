@@ -23,10 +23,20 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 {
 	CDirEntry	*tmpde1 = NULL, *tmpde2;
 	I64			 res = 0;
-	U8			*dest_path, *dest_file, *dest_abs, dest_ext[STR_LEN];
+	U8			*dest_path,
+				*dest_file,
+				*dest_abs,
+				*src_abs,
+				dest_ext[STR_LEN],
+				*index_path,
+				*index_path_out,
+				*index_exe;
+	CTask		*index_task;
+	CDoc		*index_doc;
 
 	tmpde1 = FilesFind(src_files_find_mask, FUF_RECURSE);
-	dest_abs = DirNameAbs(dst_files_find_mask);
+	dest_abs	= DirNameAbs(dst_files_find_mask);
+	src_abs		= DirNameAbs(src_files_find_mask);
 
 	if (tmpde1)
 	{
@@ -46,6 +56,7 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 			{
 				if (StrCompare(dest_ext, "BIN.C")	&&
 					StrCompare(dest_ext, "BIN")		&&
+					StrCompare(dest_ext, "ISO.C")	&&
 					StrCompare(dest_ext, "html")	&&
 					StrCompare(dest_ext, "DATA")	&&
 					StrCompare(dest_ext, "MAP"))
@@ -55,7 +66,33 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 				}
 			}
 			else
-				Dir2Html(tmpde1->full_name, dest_path);
+			{
+				index_path		= MStrPrint("%s/index.DD", dest_path);
+				index_path_out	= MStrPrint("%s/index.html", dest_path);
+				"%s\n", index_path;
+
+				index_exe = MStrPrint("Cls;Dir(\"%s\");View;\n", tmpde1->full_name);
+				PopUp(index_exe,, &index_task);
+				TaskWait(index_task);
+
+				index_doc = DocNew(index_path);
+				DocInsDoc(index_doc, index_task->put_doc);
+				DocWrite(index_doc);
+				DocDel(index_doc);
+
+				TaskWait(index_task);
+				Kill(index_task);
+
+				ToHtml(index_path, index_path_out);
+				Del(index_path);
+
+				Free(index_path);
+				Free(index_path_out);
+				Free(index_exe);
+
+				if (StrCompare(tmpde1->full_name, dest_abs))
+					Dir2Html(tmpde1->full_name, dest_path);
+			}
 
 			DirEntryDel(tmpde1);
 			tmpde1 = tmpde2;
@@ -73,10 +110,37 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 
 I64 HtmlGen()
 {
+	U8			*index_path,
+				*index_path_out;
+	CTask		*index_task;
+	CDoc		*index_doc;
+
 	DocMax;
 	DocMax;
 	DelTree("::/HTML/");
-	Dir2Html("::/", "::/HTML/");
+
+	index_path		= MStrPrint("::/HTML/index.DD");
+	index_path_out	= MStrPrint("::/HTML/index.html");
+	"%s\n", index_path;
+
+	PopUp("Cls;Dir(\"::/\");View;\n",, &index_task);
+	TaskWait(index_task);
+
+	index_doc = DocNew(index_path);
+	DocInsDoc(index_doc, index_task->put_doc);
+	DocWrite(index_doc);
+	DocDel(index_doc);
+
+	TaskWait(index_task);
+	Kill(index_task);
+
+	ToHtml(index_path, index_path_out);
+	Del(index_path);
+
+	Free(index_path);
+	Free(index_path_out);
+
+	return Dir2Html("::/", "::/HTML/");
 }
 
-HtmlGen;
+//HtmlGen;

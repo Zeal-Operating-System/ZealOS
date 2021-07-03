@@ -38,30 +38,30 @@ body {background-color:#000000;}
 <a name="l11"></a>
 <a name="l12"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l13"></a></span><span class=cF2>//Opcodes are slightly different to make writing the x86_64 assembler easier.</span><span class=cF0>
-<a name="l14"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l1"><span class=cF4>::/Compiler/OpCodes.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l14"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l1"><span class=cF4>::/Compiler/OpCodes.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l15"></a>
 <a name="l16"></a>JIFFIES_MESSAGE:        </span><span class=cF1>DU8</span><span class=cF0> </span><span class=cF6>&quot;Jiffies:&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
 <a name="l17"></a>
-<a name="l18"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/StrA.html#l1"><span class=cF4>::/Kernel/StrA.CC</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l1"><span class=cF4>::/Kernel/KUtils.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l18"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrA.html#l1"><span class=cF4>::/Kernel/StrA.CC</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l1"><span class=cF4>::/Kernel/KUtils.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l19"></a>
 <a name="l20"></a>_BEEPS2::
 <a name="l21"></a></span><span class=cF2>//You can clobber RAX,RBX,RCX,RDX,R8,R9.</span><span class=cF0>        </span><span class=cF2>The compiler expects that.</span><span class=cF0>
-<a name="l22"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1935"><span class=cF4>REGG_CLOBBERED</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1937"><span class=cF4>REGG_STACK_TMP</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l22"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1935"><span class=cF4>REGG_CLOBBERED</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1937"><span class=cF4>REGG_STACK_TMP</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l23"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l24"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
-<a name="l25"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l714"><span class=cF4>SF_ARG1</span></a><span class=cF0>
+<a name="l25"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l714"><span class=cF4>SF_ARG1</span></a><span class=cF0>
 <a name="l26"></a>
 <a name="l27"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cF9>U64</span><span class=cF0> [&amp;</span><span class=cFB>counts</span><span class=cF0>.jiffies]
 <a name="l28"></a>
 <a name="l29"></a>@@05:                   </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RCX</span><span class=cF0>
-<a name="l30"></a></span><span class=cF2>//U0 </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l200"><span class=cF4>Beep</span></a><span class=cF2>(I8 ona=62, Bool busy=FALSE)</span><span class=cF0>
+<a name="l30"></a></span><span class=cF2>//U0 </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l200"><span class=cF4>Beep</span></a><span class=cF2>(I8 ona=62, Bool busy=FALSE)</span><span class=cF0>
 <a name="l31"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cF3>FALSE</span><span class=cF0>   </span><span class=cF2>//Do not busy (spin) wait</span><span class=cF0>
 <a name="l32"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cF9>U64</span><span class=cF0> [&amp;global_ona] </span><span class=cF2>//evaluated at run time</span><span class=cF0>
 <a name="l33"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            &amp;</span><span class=cF5>Beep</span><span class=cF0>
 <a name="l34"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RCX</span><span class=cF0>
 <a name="l35"></a>                                </span><span class=cF1>LOOP</span><span class=cF0>            @@05
 <a name="l36"></a>
-<a name="l37"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>             </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l37"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>             </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
 <a name="l38"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, JIFFIES_MESSAGE
 <a name="l39"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_STR</span><span class=cF0>
 <a name="l40"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>
@@ -94,7 +94,7 @@ body {background-color:#000000;}
 <a name="l67"></a>                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cFC>R15</span><span class=cF0> </span><span class=cF2>//You can clobber RAX,RBX,RCX,RDX. Preserve the rest.</span><span class=cF0>
 <a name="l68"></a>                @@05:   </span><span class=cF1>PUSH</span><span class=cF0> </span><span class=cFC>RCX</span><span class=cF0>
 <a name="l69"></a>
-<a name="l70"></a></span><span class=cF2>//U0 </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l129"><span class=cF4>Sound</span></a><span class=cF2>(I8 ona);</span><span class=cF0>
+<a name="l70"></a></span><span class=cF2>//U0 </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l129"><span class=cF4>Sound</span></a><span class=cF2>(I8 ona);</span><span class=cF0>
 <a name="l71"></a>                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RCX</span><span class=cF0> </span><span class=cF2>//ona=loop*10+100.0Hz</span><span class=cF0>
 <a name="l72"></a>                </span><span class=cF1>IMUL2</span><span class=cF0>   </span><span class=cFC>RAX</span><span class=cF0>, global_ona_step </span><span class=cF2>//Intentionally evaluated at compile time</span><span class=cF0>
 <a name="l73"></a>                </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> [&amp;global_ona_base]     </span><span class=cF2>//Intentionally evaluated at run time</span><span class=cF0>

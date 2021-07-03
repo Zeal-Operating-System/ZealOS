@@ -53,7 +53,7 @@ body {background-color:#000000;}
 <a name="l26"></a>}
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FindFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF1>U8</span><span class=cF0> *haystack_filename, </span><span class=cF9>I64</span><span class=cF0> *_fuf_flags, </span><span class=cF1>U8</span><span class=cF0> *replace_text)
-<a name="l29"></a>{</span><span class=cF2>//Have you confused with </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.html#l65"><span class=cF4>FileFind</span></a><span class=cF2>()?</span><span class=cF0>
+<a name="l29"></a>{</span><span class=cF2>//Have you confused with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.html#l65"><span class=cF4>FileFind</span></a><span class=cF2>()?</span><span class=cF0>
 <a name="l30"></a>        </span><span class=cF1>Bool</span><span class=cF0>             first_on_line, write_this_file = </span><span class=cF3>FALSE</span><span class=cF0>, cont = !</span><span class=cF5>Bt</span><span class=cF0>(_fuf_flags, </span><span class=cF3>FUf_CANCEL</span><span class=cF0>);
 <a name="l31"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *src, *dst, *dst2, *name_buf = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l32"></a>        </span><span class=cF9>I64</span><span class=cF0>                      i, j, plen, rlen, dlen, count = </span><span class=cFE>0</span><span class=cF0>,old_flags, ss_flags;

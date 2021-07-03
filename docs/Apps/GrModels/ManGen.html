@@ -214,7 +214,7 @@ body {background-color:#000000;}
 <a name="l187"></a>
 <a name="l188"></a></span><span class=cF1>U8</span><span class=cF0> *Man2CSprite()
 <a name="l189"></a>{
-<a name="l190"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrSpritePlot.html#l1"><span class=cF4>::/System/Gr/GrSpritePlot.CC</span></a><span class=cF2> for how CSprite are stored.</span><span class=cF0>
+<a name="l190"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrSpritePlot.html#l1"><span class=cF4>::/System/Gr/GrSpritePlot.CC</span></a><span class=cF2> for how CSprite are stored.</span><span class=cF0>
 <a name="l191"></a>        </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSpriteMeshU8s</span><span class=cF7>)</span><span class=cF0> +
 <a name="l192"></a>                                         m-&gt;vertex_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0> + m-&gt;tri_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMeshTri</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFB>sprite_elem_base_sizes</span><span class=cF0>[</span><span class=cF3>SPT_END</span><span class=cF0>]), 
 <a name="l193"></a>                *dst = res;

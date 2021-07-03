@@ -143,7 +143,7 @@ body {background-color:#000000;}
 <a name="l116"></a>                                </span><span class=cF1>else</span><span class=cF0>
 <a name="l117"></a>                                {
 <a name="l118"></a>                                        ptr2 = </span><span class=cF5>MAlloc</span><span class=cF0>(i + </span><span class=cFE>8</span><span class=cF0>, doc-&gt;mem_task);
-<a name="l119"></a>                                        doc_e-&gt;len = </span><span class=cF5>MSize</span><span class=cF0>(ptr2) - doc_e-&gt;min_col - </span><span class=cFE>2</span><span class=cF0>;   </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l435"><span class=cF4>DataTagWidth</span></a><span class=cF0>
+<a name="l119"></a>                                        doc_e-&gt;len = </span><span class=cF5>MSize</span><span class=cF0>(ptr2) - doc_e-&gt;min_col - </span><span class=cFE>2</span><span class=cF0>;   </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l435"><span class=cF4>DataTagWidth</span></a><span class=cF0>
 <a name="l120"></a>                                        </span><span class=cF5>MemCopy</span><span class=cF0>(ptr2, ptr, i + </span><span class=cFE>1</span><span class=cF0>);
 <a name="l121"></a>                                        </span><span class=cF5>Free</span><span class=cF0>(doc_e-&gt;tag);
 <a name="l122"></a>                                        doc_e-&gt;tag = ptr2;
@@ -289,7 +289,7 @@ body {background-color:#000000;}
 <a name="l262"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;StdIn/DolDoc&quot;</span><span class=cF0>
 <a name="l263"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocForm</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_d, </span><span class=cF1>U8</span><span class=cF0> *class_name=</span><span class=cF1>lastclass</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> dof_flags=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l264"></a>{</span><span class=cF2>//User input. Supply a class name that has format definitions.</span><span class=cF0>
-<a name="l265"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/DolDoc/Form.html#l1"><span class=cF4>::/Demo/DolDoc/Form.CC</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l265"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/DolDoc/Form.html#l1"><span class=cF4>::/Demo/DolDoc/Form.CC</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l266"></a>        </span><span class=cF9>CMemberList</span><span class=cF0>     *ml;
 <a name="l267"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e;
 <a name="l268"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *format;
@@ -327,7 +327,7 @@ body {background-color:#000000;}
 <a name="l300"></a>                                                        doc_e-&gt;len = ml-&gt;dim.total_count;
 <a name="l301"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_HAS_TERMINATOR</span><span class=cF0>)
 <a name="l302"></a>                                                                doc_e-&gt;len--;
-<a name="l303"></a>                                                        </span><span class=cF5>Free</span><span class=cF0>(doc_e-&gt;tag);  </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l435"><span class=cF4>DataTagWidth</span></a><span class=cF0>
+<a name="l303"></a>                                                        </span><span class=cF5>Free</span><span class=cF0>(doc_e-&gt;tag);  </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l435"><span class=cF4>DataTagWidth</span></a><span class=cF0>
 <a name="l304"></a>                                                        doc_e-&gt;tag = </span><span class=cF5>MAlloc</span><span class=cF0>(doc_e-&gt;len + doc_e-&gt;min_col + </span><span class=cFE>2</span><span class=cF0>, doc-&gt;mem_task); </span><span class=cF2>//+2 because &quot;_\0&quot;</span><span class=cF0>
 <a name="l305"></a>                                                }
 <a name="l306"></a>                                        </span><span class=cF7>}</span><span class=cF0>
@@ -443,7 +443,7 @@ body {background-color:#000000;}
 <a name="l416"></a>}
 <a name="l417"></a>
 <a name="l418"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpForm</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_d, </span><span class=cF1>U8</span><span class=cF0> *class_name=</span><span class=cF1>lastclass</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> dof_flags=</span><span class=cF3>DOF_SIZE_MIN</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l419"></a>{</span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/DolDoc/Form.html#l1"><span class=cF4>::/Demo/DolDoc/Form.CC</span></a><span class=cF2> and </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l419"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/DolDoc/Form.html#l1"><span class=cF4>::/Demo/DolDoc/Form.CC</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l420"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUpPrint</span><span class=cF0>(</span><span class=cF6>&quot;DocForm(0x%X,0x%X,0x%X,0x%X,0x%X);&quot;</span><span class=cF0>, _d, class_name, dof_flags, header, footer);
 <a name="l421"></a>}
 </span></pre></body>

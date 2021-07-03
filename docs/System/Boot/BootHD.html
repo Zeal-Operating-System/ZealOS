@@ -69,12 +69,12 @@ body {background-color:#000000;}
 <a name="l42"></a>
 <a name="l43"></a>BHD_BIOS_DRIVE_NUM:     </span><span class=cF1>DU8</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
 <a name="l44"></a>
-<a name="l45"></a></span><span class=cF2>//Gets patched by </span><a href="http://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l45"></a></span><span class=cF2>//Gets patched by </span><a href="https://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l46"></a></span><span class=cFD>BHD_BLK_COUNT</span><span class=cF0>:: </span><span class=cF1>DU16</span><span class=cF0>            </span><span class=cFE>0</span><span class=cF0>;
 <a name="l47"></a>
 <a name="l48"></a>BHD_DAP:                </span><span class=cF1>DU8</span><span class=cF0>             </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//One blk at a time</span><span class=cF0>
 <a name="l49"></a>BHD_DAP_BUF:    </span><span class=cF1>DU16</span><span class=cF0>            </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
-<a name="l50"></a></span><span class=cF2>//Gets patched by </span><a href="http://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l50"></a></span><span class=cF2>//Gets patched by </span><a href="https://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l51"></a></span><span class=cFD>BHD_DAP_BLK</span><span class=cF0>::   </span><span class=cF2>//64-bit</span><span class=cF0>
 <a name="l52"></a>BHD_DAP_BLK_LO: </span><span class=cF1>DU32</span><span class=cF0>            </span><span class=cFE>0</span><span class=cF0>;
 <a name="l53"></a>BHD_DAP_BLK_HI: </span><span class=cF1>DU32</span><span class=cF0>            </span><span class=cFE>0</span><span class=cF0>;
@@ -112,7 +112,7 @@ body {background-color:#000000;}
 <a name="l85"></a></u></span><span class=cF2>//The assembler doesn't support 16-bit very well.</span><span class=cF0>
 <a name="l86"></a>                                </span><span class=cF1>DU8</span><span class=cF0>             </span><span class=cFE>0xEA</span><span class=cF0>;   </span><span class=cF2>//JMP BOOT_RAM_BASE:0000</span><span class=cF0>
 <a name="l87"></a>                                </span><span class=cF1>DU16</span><span class=cF0>            </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BOOT_RAM_BASE</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>;
-<a name="l88"></a></span><span class=cF2>//Continues here </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KStart16.html#l1"><span class=cF4>::/Kernel/KStart16.CC</span></a><span class=cF0>
+<a name="l88"></a></span><span class=cF2>//Continues here </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KStart16.html#l1"><span class=cF4>::/Kernel/KStart16.CC</span></a><span class=cF0>
 <a name="l89"></a></span><span class=cFD>BHD_END</span><span class=cF0>::
 <a name="l90"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cFD>BHD_END</span><span class=cF0> - </span><span class=cF3>BHD_START</span><span class=cF0> &lt; </span><span class=cF3>MODULE_SIZE</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>
 <a name="l91"></a>}

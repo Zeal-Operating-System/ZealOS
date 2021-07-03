@@ -32,7 +32,7 @@ body {background-color:#000000;}
 <a name="l5"></a>}
 <a name="l6"></a>
 <a name="l7"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntCore0TimerHandler</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *)
-<a name="l8"></a>{</span><span class=cF2>//Called from </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l55"><span class=cF4>IntCore0TimerHandler</span></a><span class=cF0>
+<a name="l8"></a>{</span><span class=cF2>//Called from </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l55"><span class=cF4>IntCore0TimerHandler</span></a><span class=cF0>
 <a name="l9"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l10"></a>
 <a name="l11"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mp_count</span><span class=cF0> &gt; </span><span class=cFE>1</span><span class=cF0>)
@@ -169,7 +169,7 @@ body {background-color:#000000;}
 <a name="l142"></a>                {
 <a name="l143"></a>                        </span><span class=cFB>screencast</span><span class=cF0>.ona = ona;
 <a name="l144"></a>                        period = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cF3>SYS_TIMER_FREQ</span><span class=cF0> / </span><span class=cF5>Ona2Freq</span><span class=cF7>(</span><span class=cF0>ona</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>U16_MAX</span><span class=cF0>);
-<a name="l145"></a>                        </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/PIT.html#l1"><span class=cF4>::/Doc/PIT.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l145"></a>                        </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/PIT.html#l1"><span class=cF4>::/Doc/PIT.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l146"></a>                        </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIT_CMD</span><span class=cF0>, </span><span class=cF3>PIT_CMDF_CHANNEL2</span><span class=cF0> | </span><span class=cF3>PIT_CMDF_OPMODE_SQUARE_WAVE</span><span class=cF0> | </span><span class=cF3>PIT_CMDF_ACCESS_WORD</span><span class=cF0>);
 <a name="l147"></a>                        </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIT_2</span><span class=cF0>, period);
 <a name="l148"></a>                        </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIT_2</span><span class=cF0>, period.u8[</span><span class=cFE>1</span><span class=cF0>]);

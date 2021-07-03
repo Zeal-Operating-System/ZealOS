@@ -55,22 +55,22 @@ body {background-color:#000000;}
 <a name="l28"></a>There is a symbol (hash) table for each task.  When a sym is not found, the parent task's sym table is checked.  All tasks chain 
 <a name="l29"></a>back to the </span><span class=cF2>System</span><span class=cF0> task.
 <a name="l30"></a>
-<a name="l31"></a>ZealOS sym tables are implemented with an array of linked-lists.        A num is generated from a string by </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KHashA.html#l258"><span class=cF4>HashStr</span></a><span class=cF0>() to index into 
+<a name="l31"></a>ZealOS sym tables are implemented with an array of linked-lists.        A num is generated from a string by </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KHashA.html#l258"><span class=cF4>HashStr</span></a><span class=cF0>() to index into 
 <a name="l32"></a>the array of linked-lists.      Multiple strings can generate the same num, so linked-lists are built.  Newer entries overshadow 
 <a name="l33"></a>older ones.
 <a name="l34"></a>
-<a name="l35"></a>There are various types of entries.  See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l821"><span class=cF4>Hash Entry Types</span></a><span class=cF0>.
+<a name="l35"></a>There are various types of entries.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l821"><span class=cF4>Hash Entry Types</span></a><span class=cF0>.
 <a name="l36"></a>
-<a name="l37"></a></span><span class=cF5>Symbol Look-up</span><span class=cF0> (Used many places including the </span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l596"><span class=cF4>JIT Compiler</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l24"><span class=cF4>Loader</span></a><span class=cF0>.)
-<a name="l38"></a>1) Symbol name is </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KHashA.html#l4"><span class=cF4>hashed</span></a><span class=cF0> by adding and shifting the ASCII of all chars.
-<a name="l39"></a>2) </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;body[] array is indexed.
+<a name="l37"></a></span><span class=cF5>Symbol Look-up</span><span class=cF0> (Used many places including the </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l596"><span class=cF4>JIT Compiler</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l24"><span class=cF4>Loader</span></a><span class=cF0>.)
+<a name="l38"></a>1) Symbol name is </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KHashA.html#l4"><span class=cF4>hashed</span></a><span class=cF0> by adding and shifting the ASCII of all chars.
+<a name="l39"></a>2) </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;body[] array is indexed.
 <a name="l40"></a>3) Linked-list is traversed until match of text and type of entry.
-<a name="l41"></a>4) If not found, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;next table is searched.
+<a name="l41"></a>4) If not found, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;next table is searched.
 <a name="l42"></a>
 <a name="l43"></a>Duplicate entries are allowed -- they overshadow old entries.
 <a name="l44"></a>
 <a name="l45"></a></span><span class=cF5>Address-to-Symbol Look-up</span><span class=cF0> (Slow because not important. We could use trees.)
-<a name="l46"></a>1) FunSeg Cache is </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/FunSeg.html#l137"><span class=cF4>scanned</span></a><span class=cF0>.
-<a name="l47"></a>2) Hash Tables are </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/FunSeg.html#l64"><span class=cF4>scanned</span></a><span class=cF0>.
+<a name="l46"></a>1) FunSeg Cache is </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/FunSeg.html#l137"><span class=cF4>scanned</span></a><span class=cF0>.
+<a name="l47"></a>2) Hash Tables are </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/FunSeg.html#l64"><span class=cF4>scanned</span></a><span class=cF0>.
 </span></pre></body>
 </html>
