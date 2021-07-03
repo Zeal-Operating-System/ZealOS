@@ -18,4 +18,5 @@ god.fifo = FifoU8New(2048 * 8);
 
 extern U0 GodBiblePassage(I64 num_lines=20);
 extern U0 GodBitsInsert(I64 num_bits, I64 bitfield);
+extern U0 GodSong();
 extern U0 GodWord(I64 bits=17);

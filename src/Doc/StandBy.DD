@@ -19,5 +19,6 @@ $FG,2$      <ALT-V>$FG$ Vert Tile
 $FG,2$     <CTRL-L>$FG$ Text Menu
 $FG,2$         <F7>$FG$ God Word
 $FG,2$   <SHIFT-F7>$FG$ God Passage
+$FG,2$         <F6>$FG$ God Song
 $FG,2$<SHIFT-ALT-A>$FG$ Close AC
 $FG,2$      <ALT-A>$FG$ Open AC

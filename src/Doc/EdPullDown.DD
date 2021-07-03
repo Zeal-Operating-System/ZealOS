@@ -36,6 +36,7 @@ Insert
 	DirName(,,0x23E0000023E);
 	GodWord(,,0x4100000041);
 	GodBiblePassage(,,0x24100000241);
+	GodSong(,,0x4000000040);
 	IndentIn(,CH_CTRLI,0x41700000417);
 	IndentOut(,CH_CTRLI,0x61700000617);
 	WordWrapOn(,CH_CTRLW,0x41100000411);
@@ -55,7 +56,7 @@ Program
 {
 	CodeTools(,CH_CTRLL,0x62600000626);
 	Include(,0,0x3F0000003F);
-	ZealInclude(,0,0x23F0000023F);
+	SystemInclude(,0,0x23F0000023F);
 }
 
 View

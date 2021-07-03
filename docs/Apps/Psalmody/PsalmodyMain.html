@@ -694,18 +694,18 @@ body {background-color:#000000;}
 <a name="l667"></a>                                                                                </span><span class=cF1>break</span><span class=cF0>;
 <a name="l668"></a>                                                                }
 <a name="l669"></a>                                                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l670"></a></span><span class=cF2>//</span><span class=cF0>                                                      </span><span class=cF2>case ',':</span><span class=cF0>
-<a name="l671"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>Free(filename);</span><span class=cF0>
-<a name="l672"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>filename=NULL;</span><span class=cF0>
-<a name="l673"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>PsmPopMode;</span><span class=cF0>
-<a name="l674"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>music.octave=psm_octave;</span><span class=cF0>
-<a name="l675"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>if (st2=GodSongStr) {</span><span class=cF0>
-<a name="l676"></a></span><span class=cF2>//</span><span class=cF0>                                                                      </span><span class=cF2>PsmLoadSongStr(st2, &amp;psm_octave, &amp;psm_duration);</span><span class=cF0>
-<a name="l677"></a></span><span class=cF2>//</span><span class=cF0>                                                                      </span><span class=cF2>Free(st2);</span><span class=cF0>
-<a name="l678"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>}</span><span class=cF0>
-<a name="l679"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>PsmPushMode(psm_octave);</span><span class=cF0>
-<a name="l680"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>col=0;</span><span class=cF0>
-<a name="l681"></a></span><span class=cF2>//</span><span class=cF0>                                                              </span><span class=cF2>break;</span><span class=cF0>
+<a name="l670"></a>                                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>','</span><span class=cF0>:
+<a name="l671"></a>                                                                </span><span class=cF5>Free</span><span class=cF0>(filename);
+<a name="l672"></a>                                                                filename = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l673"></a>                                                                PsmPopMode;
+<a name="l674"></a>                                                                </span><span class=cFB>music</span><span class=cF0>.octave = psm_octave;
+<a name="l675"></a>                                                                </span><span class=cF1>if</span><span class=cF0> (st2 = </span><span class=cF5>GodSongStr</span><span class=cF0>) {
+<a name="l676"></a>                                                                        PsmLoadSongStr(st2, &amp;psm_octave, &amp;psm_duration);
+<a name="l677"></a>                                                                        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l678"></a>                                                                }
+<a name="l679"></a>                                                                PsmPushMode(psm_octave);
+<a name="l680"></a>                                                                col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l681"></a>                                                                </span><span class=cF1>break</span><span class=cF0>;
 <a name="l682"></a>
 <a name="l683"></a>                                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLO</span><span class=cF0>:
 <a name="l684"></a>                                                                PsmPopMode;

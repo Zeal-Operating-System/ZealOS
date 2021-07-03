@@ -4,4 +4,5 @@ Cd(__DIR__);;
 
 #include "GodBible"
 #include "HolySpirit"
+#include "GodSong"
 Cd("..");;

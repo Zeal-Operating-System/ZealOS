@@ -437,6 +437,13 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 										}
 										break;
 
+									case SC_F6:
+										if (sc & SCF_KEY_DESC)
+											KeyDescSet("Cmd /God Song");
+										else
+											GodSong;
+										break;
+
 									case SC_F7:
 										if (sc & SCF_KEY_DESC)
 										{
