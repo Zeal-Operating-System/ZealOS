@@ -93,7 +93,7 @@ U8 *TOSLinkConvert2(U8 *filename, I64 line_num)
 	{
 		st = ExtChange(filename, "html");
 		if (st && StrLen(st) > 3 && !StrNCompare(st + 1, ":/", 2))
-			res = MStrPrint("http://www.templeos.org/Wb/%s#l%d", st + 3, line_num);
+			res = MStrPrint("http://www.tomawezome.github.io/ZealOS/%s#l%d", st + 3, line_num);
 		Free(st);
 	}
 
@@ -176,7 +176,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 	I64			 i, y, old_y = I64_MIN, col, old_u32_attr = DOCET_UNDEF_COLOR, old_attr, digits;
 	U32			*hl, *src;
 	U8			*st, st_2[2], *link_st, *style_bitmap = CAlloc(256 / 8);
-	CBGR48		 p[COLORS_NUM];
+	CBGR24		 p[COLORS_NUM];
 	GrPaletteGet(p);
 	CDoc		*doc_out = DocNew;
 	Bool		 unlock_doc_in = DocLock(doc_in), no_bwd;
@@ -202,7 +202,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 					"<head>\n"
 					"<meta http-equiv=\"Content-Type\" "
 					"content=\"text/html;charset=US-ASCII\">\n"
-					"<meta name=\"generator\" content=\"$TX,"ZealOS V2.01",D="DD_OS_NAME_VERSION"$\">\n";
+					"<meta name=\"generator\" content=\"$TX,"ZealOS V0.04",D="DD_OS_NAME_VERSION"$\">\n";
 	if (!body_header)
 		body_header =
 					"<body>\n"
@@ -369,12 +369,13 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 	DocPrint(doc_out, "%s", html_footer);
 
 	doc_out->cur_entry = style->next;
+	DocPrint(doc_out, "body {background-color:#%02x%02x%02x;}\n", p[WHITE].r, p[WHITE].g, p[WHITE].b);
 	for (i = 0; i < 256; i++)
 		if (Bt(style_bitmap, i))
 			DocPrint(doc_out, 
 						".c%02X{color:#%02x%02x%02x;background-color:#%02x%02x%02x;}\n", 
-						i, p[i & 15].r >> 8, p[i & 15].g >> 8, p[i & 15].b >> 8, 
-						p[i/16].r >> 8, p[i / 16].g >> 8, p[i / 16].b >> 8);
+						i, p[i & 15].r, p[i & 15].g, p[i & 15].b, 
+						p[i/16].r, p[i / 16].g, p[i / 16].b);
 	doc_out->cur_entry = &doc_out->head;
 	DocRecalc(doc_out);
 
@@ -389,7 +390,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 #help_index "Cmd Line (Typically);DolDoc/Conversion;DolDoc/Cmd Line (Typically)"
 public U0 ToHtml(U8 *_in_name, U8 *_out_name=NULL, U8 *html_header=NULL, 
 				 U8 *body_header=NULL, U8 *body_footer=NULL, U8 *html_footer=NULL, 
-				 I64 width=80, Bool line_anchors=TRUE, 
+				 I64 width=128, Bool line_anchors=TRUE, 
 				 U8 (*link_convert)(U8 *link_st)=&TOSLinkConvert1, Bool line_nums=FALSE)
 {//Convert $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$file to HTML.
 //Supply your own link_convert routine.

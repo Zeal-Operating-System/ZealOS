@@ -42,8 +42,8 @@ U0 Tmp()
 		case BOOT_SRC_HARDDRIVE:
 		case BOOT_SRC_RAM:
 			"$$PURPLE$$$$TX+CX,\"Tips of the Day\"$$$$FG$$\n";
-			TipOfDay;Sleep((Now + counts.timer) & 0x7F);
-			TipOfDay;Sleep((Now + counts.timer) & 0x7F);
+			TipOfDay;Sleep(500);
+			TipOfDay;Sleep(500);
 			TipOfDay;
 //			Type("::/Doc/Customize.DD");
 //		if (FileFind("::/Misc/Tour"))
