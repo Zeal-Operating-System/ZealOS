@@ -95,7 +95,7 @@ body {background-color:#000000;}
 <a name="l68"></a>}
 <a name="l69"></a>
 <a name="l70"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>MStrUtil</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF9>I64</span><span class=cF0> flags, </span><span class=cF1>F64</span><span class=cF0> indent_scale_factor=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l71"></a>{</span><span class=cF2>//MAlloc </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrA.html#l528"><span class=cF4>StrUtil</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l71"></a>{</span><span class=cF2>//MAlloc </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrA.html#l528"><span class=cF4>StrUtil</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l72"></a>        </span><span class=cF1>U8</span><span class=cF0> *dst = </span><span class=cF5>StrNew</span><span class=cF0>(src), *dst2, *tmp;
 <a name="l73"></a>
 <a name="l74"></a>        </span><span class=cF5>StrUtil</span><span class=cF0>(dst, flags);
@@ -152,7 +152,7 @@ body {background-color:#000000;}
 <a name="l125"></a>}
 <a name="l126"></a>
 <a name="l127"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PressAKey</span><span class=cF0>()
-<a name="l128"></a>{</span><span class=cF2>//Print &quot;Press a key&quot; and wait for non-zero </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF2> key.</span><span class=cF0>
+<a name="l128"></a>{</span><span class=cF2>//Print &quot;Press a key&quot; and wait for non-zero </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF2> key.</span><span class=cF0>
 <a name="l129"></a>        </span><span class=cF6>&quot;$BK,1$PRESS A KEY$BK,0$\n&quot;</span><span class=cF0>;
 <a name="l130"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l131"></a>}
@@ -175,7 +175,7 @@ body {background-color:#000000;}
 <a name="l148"></a>{</span><span class=cF2>/*More than 64 flags. Flags passed by ref.</span><span class=cF0>
 <a name="l149"></a>
 <a name="l150"></a></span><span class=cF2>Examples:</span><span class=cF4>
-<a name="l151"></a></span><a href="https://www.tomawezome.github.io/ZealOS/System/Utils/Find.html#l187"><span class=cF4>FlagsScan</span></a><span class=cF2>(&amp;fuf_flags,Define(&quot;ST_FILE_UTIL_FLAGS&quot;),fu_flags);</span><span class=cF0>
+<a name="l151"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Find.html#l187"><span class=cF4>FlagsScan</span></a><span class=cF2>(&amp;fuf_flags,Define(&quot;ST_FILE_UTIL_FLAGS&quot;),fu_flags);</span><span class=cF0>
 <a name="l152"></a>
 <a name="l153"></a></span><span class=cF2>I64 flags=0;</span><span class=cF0>
 <a name="l154"></a></span><span class=cF2>FlagsScan(&amp;flags,&quot;R\0L\0Dump\0Scan\0&quot;,&quot;+Dump-R&quot;); //Sets Bit#2, Clears Bit#0.</span><span class=cF0>

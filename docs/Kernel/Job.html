@@ -169,7 +169,7 @@ body {background-color:#000000;}
 <a name="l142"></a>
 <a name="l143"></a></span><span class=cF9>CJob</span><span class=cF0> *</span><span class=cF5>TaskMessage</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *_server, </span><span class=cF9>CTask</span><span class=cF0> *master, </span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags)
 <a name="l144"></a>{</span><span class=cF2>//Post message to servant task.</span><span class=cF0>        </span><span class=cF2>Tell who the master task is.</span><span class=cF0>
-<a name="l145"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3797"><span class=cF4>flags</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l145"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3797"><span class=cF4>flags</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l146"></a>        </span><span class=cF9>CJob</span><span class=cF0>  *tmpc1, *tmpc;
 <a name="l147"></a>        </span><span class=cF9>CTask</span><span class=cF0> *server = _server;
 <a name="l148"></a>
@@ -267,7 +267,7 @@ body {background-color:#000000;}
 <a name="l240"></a>}
 <a name="l241"></a>
 <a name="l242"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>JobResGet</span><span class=cF0>(</span><span class=cF9>CJob</span><span class=cF0> *request=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l243"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>
+<a name="l243"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>
 <a name="l244"></a>        </span><span class=cF9>I64</span><span class=cF0>   res;
 <a name="l245"></a>        </span><span class=cF9>CJob</span><span class=cF0> *tmpc1;
 <a name="l246"></a>
@@ -320,7 +320,7 @@ body {background-color:#000000;}
 <a name="l293"></a>}
 <a name="l294"></a>
 <a name="l295"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MessagePost</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l296"></a>{</span><span class=cF2>//Post message to a task and return immediately.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l296"></a>{</span><span class=cF2>//Post message to a task and return immediately.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l297"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
 <a name="l298"></a>        </span><span class=cF7>{</span><span class=cF0>
 <a name="l299"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_INPUT_FILTER_TASK</span><span class=cF7>)</span><span class=cF0>)
@@ -331,13 +331,13 @@ body {background-color:#000000;}
 <a name="l304"></a>}
 <a name="l305"></a>
 <a name="l306"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MessagePostWait</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l307"></a>{</span><span class=cF2>//Post message to a task and wait until task is idle.See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l307"></a>{</span><span class=cF2>//Post message to a task and wait until task is idle.See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l308"></a>        </span><span class=cF5>MessagePost</span><span class=cF0>(task, message_code, arg1, arg2, flags);
 <a name="l309"></a>        </span><span class=cF5>TaskWait</span><span class=cF0>(task);
 <a name="l310"></a>}
 <a name="l311"></a>
 <a name="l312"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l313"></a>{</span><span class=cF2>//Post message to current task and return immediately. See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l313"></a>{</span><span class=cF2>//Post message to current task and return immediately. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3843"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l314"></a>        </span><span class=cF5>MessagePost</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>, message_code, arg1, arg2, flags);
 <a name="l315"></a>}
 <a name="l316"></a>
@@ -472,7 +472,7 @@ body {background-color:#000000;}
 <a name="l445"></a>}
 <a name="l446"></a>
 <a name="l447"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUp</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> **_pu_task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l448"></a>{</span><span class=cF2>//Execute code in </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF2> task.</span><span class=cF0>
+<a name="l448"></a>{</span><span class=cF2>//Execute code in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF2> task.</span><span class=cF0>
 <a name="l449"></a>        </span><span class=cF9>I64</span><span class=cF0>    res;
 <a name="l450"></a>        </span><span class=cF9>CJob</span><span class=cF0>  *tmpc;
 <a name="l451"></a>        </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>ServerCmdLine</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Server&quot;</span><span class=cF0>,, parent);
@@ -500,7 +500,7 @@ body {background-color:#000000;}
 <a name="l473"></a>}
 <a name="l474"></a>
 <a name="l475"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l476"></a>{</span><span class=cF2>//Execute code in </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF2> task.</span><span class=cF0>
+<a name="l476"></a>{</span><span class=cF2>//Execute code in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF2> task.</span><span class=cF0>
 <a name="l477"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l478"></a>        </span><span class=cF9>I64</span><span class=cF0> res;
 <a name="l479"></a>
@@ -567,7 +567,7 @@ body {background-color:#000000;}
 <a name="l540"></a>}
 <a name="l541"></a>
 <a name="l542"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>XTalk</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l543"></a>{</span><span class=cF2>//Sends text to other task. See </span><a href="https://www.tomawezome.github.io/ZealOS/Misc/OSTestSuite.html#l1"><span class=cF4>::/Misc/OSTestSuite.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l543"></a>{</span><span class=cF2>//Sends text to other task. See </span><a href="https://tomawezome.github.io/ZealOS/Misc/OSTestSuite.html#l1"><span class=cF4>::/Misc/OSTestSuite.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l544"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf), *st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);
 <a name="l545"></a>
 <a name="l546"></a>        </span><span class=cF5>TaskText</span><span class=cF0>(task, </span><span class=cF3>NULL</span><span class=cF0>, st2, </span><span class=cFE>0</span><span class=cF0>);
@@ -605,7 +605,7 @@ body {background-color:#000000;}
 <a name="l578"></a>}
 <a name="l579"></a>
 <a name="l580"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>In</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l581"></a>{</span><span class=cF2>//Send text to own input buffer. See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSDistro.html#l1"><span class=cF4>::/Demo/AcctExample/TOS/TOSDistro.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l581"></a>{</span><span class=cF2>//Send text to own input buffer. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSDistro.html#l1"><span class=cF4>::/Demo/AcctExample/TOS/TOSDistro.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l582"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf);
 <a name="l583"></a>
 <a name="l584"></a>        </span><span class=cF5>InStr</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);

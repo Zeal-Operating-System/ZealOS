@@ -32,7 +32,7 @@ body {background-color:#000000;}
 <a name="l5"></a></span><span class=cF2>it from the cmd line.</span><span class=cF0>
 <a name="l6"></a>
 <a name="l7"></a></span><span class=cF2>These are many useful kernel</span><span class=cF0>
-<a name="l8"></a></span><span class=cF2>routines </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrA.html#l56"><span class=cF4>::/Kernel/StrA.CC</span></a><span class=cF0>
+<a name="l8"></a></span><span class=cF2>routines </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrA.html#l56"><span class=cF4>::/Kernel/StrA.CC</span></a><span class=cF0>
 <a name="l9"></a></span><span class=cF2>intended to be called from</span><span class=cF0>
 <a name="l10"></a></span><span class=cF2>asm.  Generally, they preserve</span><span class=cF0>
 <a name="l11"></a></span><span class=cF2>regs.</span><span class=cF0>
@@ -48,7 +48,7 @@ body {background-color:#000000;}
 <a name="l21"></a>
 <a name="l22"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l23"></a></span><span class=cF2>//Opcodes are slightly different to make writing the x86_64 assembler easier.</span><span class=cF0>
-<a name="l24"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l1"><span class=cF4>::/Compiler/OpCodes.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l24"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l1"><span class=cF4>::/Compiler/OpCodes.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l25"></a>
 <a name="l26"></a>MY_WORLD_MESSAGE:
 <a name="l27"></a></span><span class=cF2>//Define U8 does not put terminating zeros</span><span class=cF0>
@@ -58,7 +58,7 @@ body {background-color:#000000;}
 <a name="l31"></a></span><span class=cF2>//The convention is to put an underscore</span><span class=cF0>
 <a name="l32"></a></span><span class=cF2>//on C callable asm routines.</span><span class=cF0>
 <a name="l33"></a>_HELLO_WORLD::
-<a name="l34"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>                     </span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l34"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>                     </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
 <a name="l35"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>
 <a name="l36"></a>@@05:                   </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RCX</span><span class=cF0>
 <a name="l37"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_HEX_U8</span><span class=cF0>

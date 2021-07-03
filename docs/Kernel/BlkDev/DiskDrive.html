@@ -69,7 +69,7 @@ body {background-color:#000000;}
 <a name="l42"></a>}
 <a name="l43"></a>
 <a name="l44"></a></span><span class=cF9>CDrive</span><span class=cF0> *</span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l45"></a>{</span><span class=cF2>//Make a slot free for a new drv, like during </span><a href="https://www.tomawezome.github.io/ZealOS/System/BlkDev/Mount.html#l235"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l45"></a>{</span><span class=cF2>//Make a slot free for a new drv, like during </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/Mount.html#l235"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l46"></a>        </span><span class=cF9>I64</span><span class=cF0>              i = </span><span class=cF5>Letter2Letter</span><span class=cF0>(drv_let) - </span><span class=cF6>'A'</span><span class=cF0>;
 <a name="l47"></a>        </span><span class=cF9>CDrive</span><span class=cF0>  *res;
 <a name="l48"></a>
@@ -82,7 +82,7 @@ body {background-color:#000000;}
 <a name="l55"></a>}
 <a name="l56"></a>
 <a name="l57"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>DriveNextFreeLet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> first_drive_let=</span><span class=cF6>'C'</span><span class=cF0>)
-<a name="l58"></a>{</span><span class=cF2>//Locate free slot for new drv, like during </span><a href="https://www.tomawezome.github.io/ZealOS/System/BlkDev/Mount.html#l235"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l58"></a>{</span><span class=cF2>//Locate free slot for new drv, like during </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/Mount.html#l235"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l59"></a>        </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cF5>Letter2Letter</span><span class=cF0>(first_drive_let) - </span><span class=cF6>'A'</span><span class=cF0>, type = </span><span class=cF5>Letter2BlkDevType</span><span class=cF0>(first_drive_let);
 <a name="l60"></a>
 <a name="l61"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= i &lt; </span><span class=cF3>DRIVES_NUM</span><span class=cF7>)</span><span class=cF0>)
@@ -218,7 +218,7 @@ body {background-color:#000000;}
 <a name="l191"></a>}
 <a name="l192"></a>
 <a name="l193"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Letter2BlkDevType</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l194"></a>{</span><span class=cF2>//Drive letter to BlkDev Type. drv_let=0 not allowed. See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3240"><span class=cF4>BDT_NULL</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l194"></a>{</span><span class=cF2>//Drive letter to BlkDev Type. drv_let=0 not allowed. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3240"><span class=cF4>BDT_NULL</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l195"></a>        drv_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(drv_let);
 <a name="l196"></a>
 <a name="l197"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'A'</span><span class=cF0> &lt;= drv_let &lt;= </span><span class=cF6>'B'</span><span class=cF0>)
@@ -272,7 +272,7 @@ body {background-color:#000000;}
 <a name="l245"></a>}
 <a name="l246"></a>
 <a name="l247"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DiskCacheInvalidate</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive)
-<a name="l248"></a>{</span><span class=cF2>//Needed for removable media. Called by </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l269"><span class=cF4>DiskChange</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l248"></a>{</span><span class=cF2>//Needed for removable media. Called by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l269"><span class=cF4>DiskChange</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l249"></a>        </span><span class=cF1>Bool</span><span class=cF0>     unlock;
 <a name="l250"></a>        </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
 <a name="l251"></a>
@@ -311,7 +311,7 @@ body {background-color:#000000;}
 <a name="l284"></a>}
 <a name="l285"></a>
 <a name="l286"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l287"></a>{</span><span class=cF2>//Change drive.</span><span class=cF0>        </span><span class=cF2>You can set drive with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l9"><span class=cF4>Cd</span></a><span class=cF2>() as well.</span><span class=cF0>
+<a name="l287"></a>{</span><span class=cF2>//Change drive.</span><span class=cF0>        </span><span class=cF2>You can set drive with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l9"><span class=cF4>Cd</span></a><span class=cF2>() as well.</span><span class=cF0>
 <a name="l288"></a>        </span><span class=cF9>CDrive</span><span class=cF0>  *drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(drv_let);
 <a name="l289"></a>        </span><span class=cF9>CBlkDev</span><span class=cF0> *bd;
 <a name="l290"></a>

@@ -93,11 +93,11 @@ body {background-color:#000000;}
 <a name="l66"></a>
 <a name="l67"></a>2) The upper 32-bits are set to zero.
 <a name="l68"></a>
-<a name="l69"></a>3) To set FS or GS, you use WRMSR to write a model specific reg.        See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l625"><span class=cF4>IA32_FS_BASE</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0>.
+<a name="l69"></a>3) To set FS or GS, you use WRMSR to write a model specific reg.        See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l625"><span class=cF4>IA32_FS_BASE</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0>.
 <a name="l70"></a>
 <a name="l71"></a>4) Displacement addressing is now RIP relative, so RIP would be added to TSS_SOME_MEMBER.  (Useless)
 <a name="l72"></a>
-<a name="l73"></a>5) The R13 instruction takes one more byte because it is like </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1923"><span class=cF4>REG_RBP</span></a><span class=cF0> in the ModR.
+<a name="l73"></a>5) The R13 instruction takes one more byte because it is like </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1923"><span class=cF4>REG_RBP</span></a><span class=cF0> in the ModR.
 <a name="l74"></a>
 <a name="l75"></a>6) The R8 instruction needs a REX byte prefix to specify upper-8 reg.
 <a name="l76"></a>
@@ -105,7 +105,7 @@ body {background-color:#000000;}
 <a name="l78"></a>
 <a name="l79"></a>8) To call a subroutine farther than 2Gig away, you put the address into RAX, then CALL RAX.
 <a name="l80"></a>
-<a name="l81"></a>9) CALL REL32 is significantly faster.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/Lectures/InterruptDemo.html#l1"><span class=cF4>::/Demo/Lectures/InterruptDemo.CC</span></a><span class=cF0>.
+<a name="l81"></a>9) CALL REL32 is significantly faster.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/InterruptDemo.html#l1"><span class=cF4>::/Demo/Lectures/InterruptDemo.CC</span></a><span class=cF0>.
 <a name="l82"></a>
 <a name="l83"></a>10) IN or OUT instructions happen at a fixed speed based on the original ISA bus clock.
 <a name="l84"></a>

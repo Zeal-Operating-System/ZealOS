@@ -40,36 +40,36 @@ body {background-color:#000000;}
 <a name="l13"></a></span><span class=cF2>/Doc</span><span class=cF0> Here you can find documentation.
 <a name="l14"></a>
 <a name="l15"></a></span><span class=cF2>/Kernel</span><span class=cF0> The core of the operating system is found here.  Since priviledge levels are not used, calling it a </span><span class=cF2>kernel</span><span class=cF0> is deceptive.        
-<a name="l16"></a>It is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>().      It is loaded by the boot loader and must fit in 640K.
+<a name="l16"></a>It is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>().      It is loaded by the boot loader and must fit in 640K.
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cF2>/Compiler</span><span class=cF0> The compiler module src code is found here.  The compiler is </span><span class=cF2>AOT</span><span class=cF0> compiled to produce a binary file which is loaded at 
-<a name="l19"></a>boot.  It, too, is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://www.tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>().
+<a name="l19"></a>boot.  It, too, is </span><span class=cF2>AOT</span><span class=cF0> compiled by </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>().
 <a name="l20"></a>
-<a name="l21"></a></span><span class=cF2>/System</span><span class=cF0> The non-kernel part of the operating system is found here.      It is </span><span class=cF2>JIT</span><span class=cF0> compiled during boot.  The </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is the most 
+<a name="l21"></a></span><span class=cF2>/System</span><span class=cF0> The non-kernel part of the operating system is found here.      It is </span><span class=cF2>JIT</span><span class=cF0> compiled during boot.  The </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is the most 
 <a name="l22"></a>important task. It never dies.
 <a name="l23"></a>
 <a name="l24"></a></span><span class=cF2>/0000Boot</span><span class=cF0> Boot files go here.  Stage 2 of the ZealOS hard drive master boot loader, the old hard drive master boot record which 
-<a name="l25"></a>is just blk#0, and the CD/DVD </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Kernel.html#l1"><span class=cF4>0000Kernel.BIN.C</span></a><span class=cF0> file go here.  ASCII </span><span class=cF2>0000</span><span class=cF0> is near the top, alphabetically, in case you use 
+<a name="l25"></a>is just blk#0, and the CD/DVD </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.html#l1"><span class=cF4>0000Kernel.BIN.C</span></a><span class=cF0> file go here.  ASCII </span><span class=cF2>0000</span><span class=cF0> is near the top, alphabetically, in case you use 
 <a name="l26"></a></span><a href="http://www.magiciso.com"><span class=cF0>MagicISO</span></a><span class=cF0>.
 <a name="l27"></a>
 <a name="l28"></a>
 <a name="l29"></a>
 <a name="l30"></a></span><span class=cF5>                                                         ::/Home Files</span><span class=cF0>
 <a name="l31"></a>
-<a name="l32"></a>The home dir is specified with </span><span class=cF2>'~'</span><span class=cF0>.  The home dir is </span><span class=cF2>::/Home</span><span class=cF0> unless you change it with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l1"><span class=cF4>HomeSet</span></a><span class=cF0>() or compile the kernel with a 
+<a name="l32"></a>The home dir is specified with </span><span class=cF2>'~'</span><span class=cF0>.  The home dir is </span><span class=cF2>::/Home</span><span class=cF0> unless you change it with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l1"><span class=cF4>HomeSet</span></a><span class=cF0>() or compile the kernel with a 
 <a name="l33"></a>config option.  An empty </span><span class=cF2>/Home</span><span class=cF0> dir should be valid because it will get default files from the root dir.
 <a name="l34"></a></span><span class=cF4>
-<a name="l35"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Home/PersonalMenu.html#l1"><span class=cF4>~/PersonalMenu.DD</span></a><span class=cF0> a menu viewed with the </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> key or by clicking &quot;</span><span class=cF2>MENU</span><span class=cF0>&quot; in the upper left border area of a window.
+<a name="l35"></a></span><a href="https://tomawezome.github.io/ZealOS/Home/PersonalMenu.html#l1"><span class=cF4>~/PersonalMenu.DD</span></a><span class=cF0> a menu viewed with the </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> key or by clicking &quot;</span><span class=cF2>MENU</span><span class=cF0>&quot; in the upper left border area of a window.
 <a name="l36"></a></span><span class=cF4>
-<a name="l37"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Home/PersonalNotes.html#l1"><span class=cF4>~/PersonalNotes.DD</span></a><span class=cF0> a personal note file viewed with the </span><span class=cF2>&lt;CTRL-SHIFT-M&gt;</span><span class=cF0> key.
+<a name="l37"></a></span><a href="https://tomawezome.github.io/ZealOS/Home/PersonalNotes.html#l1"><span class=cF4>~/PersonalNotes.DD</span></a><span class=cF0> a personal note file viewed with the </span><span class=cF2>&lt;CTRL-SHIFT-M&gt;</span><span class=cF0> key.
 <a name="l38"></a></span><span class=cF4>
-<a name="l39"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Home/MakeHome.html#l1"><span class=cF4>~/MakeHome.CC</span></a><span class=cF0> a file compiled by the </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> during </span><a href="https://www.tomawezome.github.io/ZealOS/StartOS.html#l41"><span class=cF4>StartOS</span></a><span class=cF0>.
+<a name="l39"></a></span><a href="https://tomawezome.github.io/ZealOS/Home/MakeHome.html#l1"><span class=cF4>~/MakeHome.CC</span></a><span class=cF0> a file compiled by the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> during </span><a href="https://tomawezome.github.io/ZealOS/StartOS.html#l41"><span class=cF4>StartOS</span></a><span class=cF0>.
 <a name="l40"></a>
-<a name="l41"></a></span><span class=cF4>~/Home*</span><span class=cF0> Copy </span><span class=cF2>Home*</span><span class=cF0> files from the root into </span><span class=cF2>~</span><span class=cF0> and customize them.  These files are invoked when the </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> starts-up.
+<a name="l41"></a></span><span class=cF4>~/Home*</span><span class=cF0> Copy </span><span class=cF2>Home*</span><span class=cF0> files from the root into </span><span class=cF2>~</span><span class=cF0> and customize them.  These files are invoked when the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> starts-up.
 <a name="l42"></a></span><span class=cF4>
-<a name="l43"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Home/Once.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF0> a file invoked at the start-up of the first user.     Customize this!
+<a name="l43"></a></span><a href="https://tomawezome.github.io/ZealOS/Home/Once.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF0> a file invoked at the start-up of the first user.     Customize this!
 <a name="l44"></a></span><span class=cF4>
-<a name="l45"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF0> can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
+<a name="l45"></a></span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF0> can be edited by hand or deleted to reset to defaults.  Takes affect next boot.
 <a name="l46"></a>
 <a name="l47"></a>
 <a name="l48"></a>
@@ -82,7 +82,7 @@ body {background-color:#000000;}
 <a name="l55"></a>* Make a file called </span><span class=cF2>Run.CC</span><span class=cF0> to load and run the application, preferable by </span><span class=cF2>#include</span><span class=cF0>ing the </span><span class=cF2>Load.CC</span><span class=cF0> file.
 <a name="l56"></a>
 <a name="l57"></a>* Place user data in a subdirectory of </span><span class=cF2>/Home</span><span class=cF0>, preferably naming the subdirectory the same as the </span><span class=cF2>/Apps</span><span class=cF0> subdirectory.    Or, 
-<a name="l58"></a>place data in the </span><span class=cF2>Registry.CC</span><span class=cF0> file.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Demo/RegistryDemo.html#l1"><span class=cF4>::/Demo/RegistryDemo.CC</span></a><span class=cF0>.
+<a name="l58"></a>place data in the </span><span class=cF2>Registry.CC</span><span class=cF0> file.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/RegistryDemo.html#l1"><span class=cF4>::/Demo/RegistryDemo.CC</span></a><span class=cF0>.
 <a name="l59"></a>
 <a name="l60"></a>* If the app needs files in the </span><span class=cF2>/Home</span><span class=cF0> directory, make an </span><span class=cF2>/Apps</span><span class=cF0> file called </span><span class=cF2>Install.CC</span><span class=cF0> or </span><span class=cF2>Install.IN</span><span class=cF0> to create the </span><span class=cF2>/Home</span><span class=cF0> 
 <a name="l61"></a>subdirectory.
@@ -92,16 +92,16 @@ body {background-color:#000000;}
 <a name="l65"></a></span><span class=cF5>                                                     Programming Guidelines</span><span class=cF0>
 <a name="l66"></a>
 <a name="l67"></a>* Virtual mem/Paging is not used -- it is identity mapped in </span><span class=cF2>x86_64</span><span class=cF0> mode.  The stack does not grow, so alloc enough when the 
-<a name="l68"></a>task (process) is </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>ed and use the heap for most things.     (The </span><span class=cF2>heap</span><span class=cF0> refers to </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF0>().)
+<a name="l68"></a>task (process) is </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>ed and use the heap for most things.     (The </span><span class=cF2>heap</span><span class=cF0> refers to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF0>().)
 <a name="l69"></a>
-<a name="l70"></a>* You can </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF0>(</span><span class=cF2>NULL</span><span class=cF0>).
+<a name="l70"></a>* You can </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF0>(</span><span class=cF2>NULL</span><span class=cF0>).
 <a name="l71"></a>
-<a name="l72"></a>* See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l259"><span class=cF4>Naming Convention</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l3"><span class=cF4>Abbreviations</span></a><span class=cF0>.
+<a name="l72"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l259"><span class=cF4>Naming Convention</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l3"><span class=cF4>Abbreviations</span></a><span class=cF0>.
 <a name="l73"></a>
-<a name="l74"></a>* There are two modes of compiling, </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l178"><span class=cF4>AOT Compile Mode</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l186"><span class=cF4>JIT Compile Mode</span></a><span class=cF0>.      Compilation is done in both -- neither is 
-<a name="l75"></a>&quot;interpreted&quot;.  Use </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l186"><span class=cF4>JIT Mode</span></a><span class=cF0>.
+<a name="l74"></a>* There are two modes of compiling, </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l178"><span class=cF4>AOT Compile Mode</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l186"><span class=cF4>JIT Compile Mode</span></a><span class=cF0>.      Compilation is done in both -- neither is 
+<a name="l75"></a>&quot;interpreted&quot;.  Use </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l186"><span class=cF4>JIT Mode</span></a><span class=cF0>.
 <a name="l76"></a>
-<a name="l77"></a>* </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0>
+<a name="l77"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0>
 <a name="l78"></a>
 <a name="l79"></a>* Use </span><span class=cF2>I64</span><span class=cF0> instead of smaller int sizes because the compiler converts everything to 64-bit.      Don't use unsigned unless it 
 <a name="l80"></a>actually breaks.  A policy of signed keeps it simple so you don't have to agonize over choices.
@@ -119,7 +119,7 @@ body {background-color:#000000;}
 <a name="l92"></a>* In-order, short circuit logic is assumed.
 <a name="l93"></a>
 <a name="l94"></a>* Avoid boolean expression assignments.  Boolean assignments don't have short circuit logic and are not compiled efficiently.  
-<a name="l95"></a>The </span><span class=cF2>Bool</span><span class=cF0> type is just an alias for a 1 byte signed int -- nothing forces it to </span><span class=cF2>1</span><span class=cF0> or </span><span class=cF2>0</span><span class=cF0>.  There is a </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l90"><span class=cF4>ToBool</span></a><span class=cF0>() function that will 
+<a name="l95"></a>The </span><span class=cF2>Bool</span><span class=cF0> type is just an alias for a 1 byte signed int -- nothing forces it to </span><span class=cF2>1</span><span class=cF0> or </span><span class=cF2>0</span><span class=cF0>.  There is a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l90"><span class=cF4>ToBool</span></a><span class=cF0>() function that will 
 <a name="l96"></a>for to </span><span class=cF2>1</span><span class=cF0> ot </span><span class=cF2>0</span><span class=cF0>, however.
 <a name="l97"></a>
 <a name="l98"></a>* Global vars in </span><span class=cF2>AOT</span><span class=cF0> BIN modules are initialized to zero.  They occupy space in BIN files.
@@ -128,7 +128,7 @@ body {background-color:#000000;}
 <a name="l101"></a>against multiple cores, you need a locked semaphore.  Semaphores might need to be in their own cache line.  Lock bits are used 
 <a name="l102"></a>in a lot of places not aligned.
 <a name="l103"></a>
-<a name="l104"></a>* </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l247"><span class=cF4>SysDebug</span></a><span class=cF0>() and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KMisc.html#l252"><span class=cF4>IsSysDebug</span></a><span class=cF0>() are really handy when working on the compiler or kernel.  It's just a bit you can set and test.
+<a name="l104"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l247"><span class=cF4>SysDebug</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l252"><span class=cF4>IsSysDebug</span></a><span class=cF0>() are really handy when working on the compiler or kernel.  It's just a bit you can set and test.
 <a name="l105"></a>
 <a name="l106"></a>* </span><span class=cF2>U0 *</span><span class=cF0> is not used because the size is zero for ptr arithmetic.
 <a name="l107"></a>
@@ -138,36 +138,36 @@ body {background-color:#000000;}
 <a name="l111"></a>
 <a name="l112"></a></span><span class=cF5>                                                        Hash Sym Tables</span><span class=cF0>
 <a name="l113"></a>
-<a name="l114"></a>* See </span><a href="https://www.tomawezome.github.io/ZealOS/System/ZHash.html#l1"><span class=cF4>::/System/ZHash.CC</span></a><span class=cF0> for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child 
+<a name="l114"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/System/ZHash.html#l1"><span class=cF4>::/System/ZHash.CC</span></a><span class=cF0> for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child 
 <a name="l115"></a>process hash tables are chained to parents.     This provides scopes for vars and functions.
 <a name="l116"></a>
-<a name="l117"></a>* </span><span class=cF2>sys_task-&gt;hash_table</span><span class=cF0> holds the </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> syms loaded in on start-up.
+<a name="l117"></a>* </span><span class=cF2>sys_task-&gt;hash_table</span><span class=cF0> holds the </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> syms loaded in on start-up.
 <a name="l118"></a>
 <a name="l119"></a>* </span><span class=cF2>Fs-&gt;hash_table</span><span class=cF0> holds user CosmiC syms and if a sym is not found, it checks parents.  When a duplicate sym is added to the 
 <a name="l120"></a>table, it overshadows the prev sym.  When developing software, typically you include the file at the cmd prompt, make changes 
 <a name="l121"></a>and reinclude it.  Old syms are overshadowed but they are still there.  Periodically, kill the TASK and start fresh when mem is 
-<a name="l122"></a>low.    If you wish your applications to free themselves instead of staying in mem, spawn or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF0>() a task to run the 
+<a name="l122"></a>low.    If you wish your applications to free themselves instead of staying in mem, spawn or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF0>() a task to run the 
 <a name="l123"></a>application and kill it when it's done.
 <a name="l124"></a>
-<a name="l125"></a>* To display the contents of a hash table, use the </span><a href="https://www.tomawezome.github.io/ZealOS/System/Hash.html#l169"><span class=cF4>Who</span></a><span class=cF0>() routine or the varients.  </span><a href="https://www.tomawezome.github.io/ZealOS/System/Hash.html#l370"><span class=cF4>HashDepthRep</span></a><span class=cF0>() gives a histogram     of how long 
+<a name="l125"></a>* To display the contents of a hash table, use the </span><a href="https://tomawezome.github.io/ZealOS/System/Hash.html#l169"><span class=cF4>Who</span></a><span class=cF0>() routine or the varients.  </span><a href="https://tomawezome.github.io/ZealOS/System/Hash.html#l370"><span class=cF4>HashDepthRep</span></a><span class=cF0>() gives a histogram     of how long 
 <a name="l126"></a>the chains are, in case you wish to make hash table sizes bigger.
 <a name="l127"></a>
 <a name="l128"></a>
 <a name="l129"></a>
 <a name="l130"></a></span><span class=cF5>                                                       Assembly Language</span><span class=cF0>
 <a name="l131"></a>
-<a name="l132"></a>See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Asm.html#l1"><span class=cF4>::/Doc/Asm.DD</span></a><span class=cF0>.
+<a name="l132"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Asm.html#l1"><span class=cF4>::/Doc/Asm.DD</span></a><span class=cF0>.
 <a name="l133"></a>
-<a name="l134"></a>* </span><span class=cF2>FS</span><span class=cF0> must always point to the cur </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF0>.
+<a name="l134"></a>* </span><span class=cF2>FS</span><span class=cF0> must always point to the cur </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF0>.
 <a name="l135"></a>
-<a name="l136"></a>* </span><span class=cF2>GS</span><span class=cF0> must always point to the cur </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4058"><span class=cF4>CCPU</span></a><span class=cF0>.
+<a name="l136"></a>* </span><span class=cF2>GS</span><span class=cF0> must always point to the cur </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4058"><span class=cF4>CCPU</span></a><span class=cF0>.
 <a name="l137"></a>
-<a name="l138"></a>* Don't change the segment regs unless interrupts are off.      It's hard to do, anyway.        </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l522"><span class=cF4>SET_GS_BASE</span></a><span class=cF0>.
+<a name="l138"></a>* Don't change the segment regs unless interrupts are off.      It's hard to do, anyway.        </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l522"><span class=cF4>SET_GS_BASE</span></a><span class=cF0>.
 <a name="l139"></a>
-<a name="l140"></a>* When interacting with </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> compiled code, preserve </span><span class=cF2>RBP, RSI, RDI, R10-R15</span><span class=cF0> because the compiler uses these for reg vars.     You 
-<a name="l141"></a>are free to clobber </span><span class=cF2>RAX, RBX, RCX, RDX</span><span class=cF0>, </span><span class=cF2>R8</span><span class=cF0> and </span><span class=cF2>R9</span><span class=cF0>.      See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>Compiler Reg Masks</span></a><span class=cF0>, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1910"><span class=cF4>PUSH_C_REGS</span></a><span class=cF0> and </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1911"><span class=cF4>POP_C_REGS</span></a><span class=cF0>
+<a name="l140"></a>* When interacting with </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> compiled code, preserve </span><span class=cF2>RBP, RSI, RDI, R10-R15</span><span class=cF0> because the compiler uses these for reg vars.     You 
+<a name="l141"></a>are free to clobber </span><span class=cF2>RAX, RBX, RCX, RDX</span><span class=cF0>, </span><span class=cF2>R8</span><span class=cF0> and </span><span class=cF2>R9</span><span class=cF0>.      See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>Compiler Reg Masks</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1910"><span class=cF4>PUSH_C_REGS</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1911"><span class=cF4>POP_C_REGS</span></a><span class=cF0>
 <a name="l142"></a>
-<a name="l143"></a>* It is recommended to use the standard stack frame for functions because </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KDebug.html#l53"><span class=cF4>Caller</span></a><span class=cF0>() is used to display the call stack, such as 
+<a name="l143"></a>* It is recommended to use the standard stack frame for functions because </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.html#l53"><span class=cF4>Caller</span></a><span class=cF0>() is used to display the call stack, such as 
 <a name="l144"></a>for the wallpaper.
 <a name="l145"></a></span><span class=cF2>                                PUSH            RBP
 <a name="l146"></a>                                MOV             RBP, RSP

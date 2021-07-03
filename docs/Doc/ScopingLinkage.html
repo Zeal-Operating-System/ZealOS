@@ -27,27 +27,27 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF5>                                                      Scoping and Linkage</span><span class=cF0>
 <a name="l2"></a></span><span class=cF4>
-<a name="l3"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l186"><span class=cF4>JIT Compile Mode</span></a><span class=cF0> makes use of the current task's hash sym table and its parent tasks' tables.  It fetches syms from parent 
+<a name="l3"></a></span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l186"><span class=cF4>JIT Compile Mode</span></a><span class=cF0> makes use of the current task's hash sym table and its parent tasks' tables.  It fetches syms from parent 
 <a name="l4"></a>tasks' tables if not found locally in the current task's table and it places new syms in the current task's table.  
 <a name="l5"></a>Conceptually, syms are at the scope of environment vars in other operating systems.
 <a name="l6"></a>
 <a name="l7"></a>When a sym is placed into a table, older syms with ident names will be overshadowed if they exist.      Duplicates are not allowed 
 <a name="l8"></a>in many cases, especially in asm blks.  Dupicates are allowed, by design in other cases, so that you can repeatedly </span><span class=cF2>#include</span><span class=cF0> the 
 <a name="l9"></a>same file from the cmd line while developing it.        Or, so you can repeatedly declare a function with a standard name, like </span><span class=cF2>Draw
-<a name="l10"></a>It()</span><span class=cF0>.  This case might occur when the </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is starting-up loading-in many little utilities.
+<a name="l10"></a>It()</span><span class=cF0>.  This case might occur when the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is starting-up loading-in many little utilities.
 <a name="l11"></a>
-<a name="l12"></a></span><span class=cF2>extern</span><span class=cF0> binds a new </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to an existing sym of the same name if it exists in the sym table (just in 
+<a name="l12"></a></span><span class=cF2>extern</span><span class=cF0> binds a new </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to an existing sym of the same name if it exists in the sym table (just in 
 <a name="l13"></a>just-in-time code).     It also can be used to generate a forward reference.
 <a name="l14"></a>
-<a name="l15"></a></span><span class=cF2>import</span><span class=cF0> binds a new </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to a sym of the same name imported from the task's sym table at </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() time.  
-<a name="l16"></a>If no sym exists to bind to at </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() time, the code using this sym will be left incomplete until the sym is defined.
+<a name="l15"></a></span><span class=cF2>import</span><span class=cF0> binds a new </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to a sym of the same name imported from the task's sym table at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() time.  
+<a name="l16"></a>If no sym exists to bind to at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() time, the code using this sym will be left incomplete until the sym is defined.
 <a name="l17"></a>
 <a name="l18"></a>
-<a name="l19"></a></span><span class=cF2>_extern</span><span class=cF0> binds a new </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to an existing sym, of a <blink>different</blink> name.  It must exists in the sym table.  
+<a name="l19"></a></span><span class=cF2>_extern</span><span class=cF0> binds a new </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to an existing sym, of a <blink>different</blink> name.  It must exists in the sym table.  
 <a name="l20"></a>Basically, this binds C to asm.
 <a name="l21"></a>
-<a name="l22"></a></span><span class=cF2>_import</span><span class=cF0> binds a new </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to a sym, of a <blink>different</blink> name imported from the task's sym table at </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() 
-<a name="l23"></a>time.   If no sym exists to bind to at </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() time, the code using this sym will be left incomplete until the sym is defined.   
+<a name="l22"></a></span><span class=cF2>_import</span><span class=cF0> binds a new </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l827"><span class=cF4>HTT_FUN</span></a><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l824"><span class=cF4>HTT_GLOBAL_VAR</span></a><span class=cF0> sym to a sym, of a <blink>different</blink> name imported from the task's sym table at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() 
+<a name="l23"></a>time.   If no sym exists to bind to at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() time, the code using this sym will be left incomplete until the sym is defined.   
 <a name="l24"></a>Basically, this binds C to asm from elsewhere.
 <a name="l25"></a>
 <a name="l26"></a>
@@ -149,16 +149,16 @@ body {background-color:#000000;}
 <a name="l122"></a>
 <a name="l123"></a>* The </span><span class=cF2>sizeof()</span><span class=cF0> and CosmiC structure members can be used in asm blks.
 <a name="l124"></a>
-<a name="l125"></a>* Using </span><span class=cF2>&amp;i</span><span class=cF0> in </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> or </span><span class=cF2>i.u8[2]</span><span class=cF0> on a local var, </span><span class=cF2>i</span><span class=cF0>, will force it to </span><span class=cF2>noreg</span><span class=cF0>.
+<a name="l125"></a>* Using </span><span class=cF2>&amp;i</span><span class=cF0> in </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> or </span><span class=cF2>i.u8[2]</span><span class=cF0> on a local var, </span><span class=cF2>i</span><span class=cF0>, will force it to </span><span class=cF2>noreg</span><span class=cF0>.
 <a name="l126"></a>
 <a name="l127"></a>* Using </span><span class=cF2>try</span><span class=cF0>/</span><span class=cF2>catch</span><span class=cF0> in a function will force all local vars to </span><span class=cF2>noreg</span><span class=cF0>.
 <a name="l128"></a>
 <a name="l129"></a>* An unused gap on the stack is left for </span><span class=cF2>reg</span><span class=cF0> vars.
 <a name="l130"></a>
-<a name="l131"></a>* Note: </span><span class=cF2>static</span><span class=cF0> function vars do not go on the data heap, no matter the setting of the </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1684"><span class=cF4>OPTf_GLOBALS_ON_DATA_HEAP</span></a><span class=cF0>.        They may in 
+<a name="l131"></a>* Note: </span><span class=cF2>static</span><span class=cF0> function vars do not go on the data heap, no matter the setting of the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1684"><span class=cF4>OPTf_GLOBALS_ON_DATA_HEAP</span></a><span class=cF0>.        They may in 
 <a name="l132"></a>the future.
 <a name="l133"></a>
-<a name="l134"></a>* </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1681"><span class=cF4>OPTf_EXTERNS_TO_IMPORTS</span></a><span class=cF0> will treat </span><span class=cF2>_extern</span><span class=cF0> as </span><span class=cF2>_import</span><span class=cF0> and </span><span class=cF2>extern</span><span class=cF0> as </span><span class=cF2>import</span><span class=cF0>.  This allows a header to be used either as a </span><span class=cF2>JIT 
+<a name="l134"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1681"><span class=cF4>OPTf_EXTERNS_TO_IMPORTS</span></a><span class=cF0> will treat </span><span class=cF2>_extern</span><span class=cF0> as </span><span class=cF2>_import</span><span class=cF0> and </span><span class=cF2>extern</span><span class=cF0> as </span><span class=cF2>import</span><span class=cF0>.  This allows a header to be used either as a </span><span class=cF2>JIT 
 <a name="l135"></a>compiled</span><span class=cF0> or </span><span class=cF2>AOT compiled</span><span class=cF0> header.
 </span></pre></body>
 </html>

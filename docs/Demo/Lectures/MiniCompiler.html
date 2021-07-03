@@ -28,14 +28,14 @@ body {background-color:#000000;}
 <a name="l1"></a><span class=cF2>/*</span><span class=cF5>
 <a name="l2"></a><u>-] Main Compiler</span><span class=cF0>
 <a name="l3"></a></u>  </span><span class=cF2>The mini compiler is like the main compiler, except the main compiler's lexical analyser removes comments and does </span><span class=cF0>
-<a name="l4"></a>  </span><span class=cF2>preprocessing.  </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>(),</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l66"><span class=cF4>Echo</span></a><span class=cF2>(ON).</span><span class=cF0>
+<a name="l4"></a>  </span><span class=cF2>preprocessing.  </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>(),</span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l66"><span class=cF4>Echo</span></a><span class=cF2>(ON).</span><span class=cF0>
 <a name="l5"></a>  
-<a name="l6"></a>  </span><span class=cF2>The main compiler generates </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l20"><span class=cF4>Intermediate Code</span></a><span class=cF2> at the parser stage.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>(), </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseStatement.html#l1020"><span class=cF4>ParseStatement</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l6"></a>  </span><span class=cF2>The main compiler generates </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l20"><span class=cF4>Intermediate Code</span></a><span class=cF2> at the parser stage.  See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>(), </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseStatement.html#l1020"><span class=cF4>ParseStatement</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l7"></a>  
-<a name="l8"></a>  </span><span class=cF2>The main compiler optimizes   See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CInit.html#l26"><span class=cF4>Intermediate Code Attributes</span></a><span class=cF2>, </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OptPass012.html#l374"><span class=cF4>Combining Consts</span></a><span class=cF2>, </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OptPass3.html#l627"><span class=cF4>Choosing Reg Vars</span></a><span class=cF2>.  Use </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l50"><span class=cF4>PassTrace</span></a><span class=cF2>() to see </span><span class=cF0>
+<a name="l8"></a>  </span><span class=cF2>The main compiler optimizes   See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CInit.html#l26"><span class=cF4>Intermediate Code Attributes</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OptPass012.html#l374"><span class=cF4>Combining Consts</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OptPass3.html#l627"><span class=cF4>Choosing Reg Vars</span></a><span class=cF2>.  Use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l50"><span class=cF4>PassTrace</span></a><span class=cF2>() to see </span><span class=cF0>
 <a name="l9"></a>  </span><span class=cF2>the optimization stages.</span><span class=cF0>
 <a name="l10"></a>  
-<a name="l11"></a>  </span><span class=cF2>The main compiler makes machine code in the back end.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1797"><span class=cF4>IC Struct</span></a><span class=cF2>, </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l289"><span class=cF4>COCCompile</span></a><span class=cF2> and </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OptPass789A.html#l596"><span class=cF4>OptPass789A</span></a><span class=cF2>(), </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/BackA.html#l273"><span class=cF4>BackEnd</span></a><span class=cF2>.  Set </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CMisc.html#l61"><span class=cF4>Trace</span></a><span class=cF2>(ON) to </span><span class=cF0>
+<a name="l11"></a>  </span><span class=cF2>The main compiler makes machine code in the back end.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1797"><span class=cF4>IC Struct</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l289"><span class=cF4>COCCompile</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OptPass789A.html#l596"><span class=cF4>OptPass789A</span></a><span class=cF2>(), </span><a href="https://tomawezome.github.io/ZealOS/Compiler/BackA.html#l273"><span class=cF4>BackEnd</span></a><span class=cF2>.  Set </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l61"><span class=cF4>Trace</span></a><span class=cF2>(ON) to </span><span class=cF0>
 <a name="l12"></a>  </span><span class=cF2>see the output of the backend.</span><span class=cF0>
 <a name="l13"></a></span><span class=cF5>
 <a name="l14"></a><u>-] Mini Compiler</span><span class=cF0>
@@ -61,7 +61,7 @@ body {background-color:#000000;}
 <a name="l34"></a>#</span><span class=cF1>define</span><span class=cF0> OP_SUB                                  </span><span class=cFE>4</span><span class=cF0>
 <a name="l35"></a>
 <a name="l36"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Lex</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF9>I64</span><span class=cF0> *num)
-<a name="l37"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l37"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l38"></a>        </span><span class=cF1>U8</span><span class=cF0> *src = *_src;
 <a name="l39"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l40"></a>
@@ -136,7 +136,7 @@ body {background-color:#000000;}
 <a name="l109"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> Parse(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> **_dst);
 <a name="l110"></a>
 <a name="l111"></a></span><span class=cF1>U0</span><span class=cF0> ParseTerm(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> **_dst, </span><span class=cF9>I64</span><span class=cF0> prec)
-<a name="l112"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l112"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l113"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l114"></a>        </span><span class=cF1>U8</span><span class=cF0> *src2;
 <a name="l115"></a>        </span><span class=cF1>U8</span><span class=cF0> *dst2;
@@ -162,8 +162,8 @@ body {background-color:#000000;}
 <a name="l135"></a>}
 <a name="l136"></a>
 <a name="l137"></a></span><span class=cF9>I64</span><span class=cF0> Parse(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> **_dst)
-<a name="l138"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>().</span><span class=cF0>
-<a name="l139"></a></span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l716"><span class=cF4>Opcode Formats</span></a><span class=cF2> for details on asm insts.</span><span class=cF0>
+<a name="l138"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l139"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l716"><span class=cF4>Opcode Formats</span></a><span class=cF2> for details on asm insts.</span><span class=cF0>
 <a name="l140"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l141"></a>        </span><span class=cF1>U8</span><span class=cF0> *dst = *_dst;
 <a name="l142"></a>
@@ -280,8 +280,8 @@ body {background-color:#000000;}
 <a name="l253"></a>                                        </span><span class=cF5>throw</span><span class=cF0>;
 <a name="l254"></a>                                </span><span class=cF6>&quot;$RED$This code is not efficient, but the compiler is simple.$FG$\n&quot;</span><span class=cF0>;
 <a name="l255"></a>                                </span><span class=cF5>Un</span><span class=cF0>(code, dst - code); </span><span class=cF2>//Unassemble the code we created.</span><span class=cF0>
-<a name="l256"></a></span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l32"><span class=cF4>Call</span></a><span class=cF2>() is a function.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l165"><span class=cF4>_CALL</span></a><span class=cF2>::</span><span class=cF0>
-<a name="l257"></a>                                </span><span class=cF2>//See also </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l35"><span class=cF4>CallInd</span></a><span class=cF2>().  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KUtils.html#l415"><span class=cF4>_CALL_IND</span></a><span class=cF2>::</span><span class=cF0>
+<a name="l256"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l32"><span class=cF4>Call</span></a><span class=cF2>() is a function.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l165"><span class=cF4>_CALL</span></a><span class=cF2>::</span><span class=cF0>
+<a name="l257"></a>                                </span><span class=cF2>//See also </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l35"><span class=cF4>CallInd</span></a><span class=cF2>().  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l415"><span class=cF4>_CALL_IND</span></a><span class=cF2>::</span><span class=cF0>
 <a name="l258"></a>                                </span><span class=cF6>&quot;$LTBLUE$Answer:%d$FG$\n&quot;</span><span class=cF0>, </span><span class=cF5>Call</span><span class=cF0>(code);
 <a name="l259"></a>                        </span><span class=cF7>}</span><span class=cF0>
 <a name="l260"></a>                        </span><span class=cF1>catch</span><span class=cF0>

@@ -58,7 +58,7 @@ body {background-color:#000000;}
 <a name="l31"></a>}
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ParseKeyWord</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc)
-<a name="l34"></a>{</span><span class=cF2>//Convert cur token to </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l147"><span class=cF4>KEYWORD</span></a><span class=cF2> or -1.</span><span class=cF0>
+<a name="l34"></a>{</span><span class=cF2>//Convert cur token to </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l147"><span class=cF4>KEYWORD</span></a><span class=cF2> or -1.</span><span class=cF0>
 <a name="l35"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph;
 <a name="l36"></a>
 <a name="l37"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0> &amp;&amp;</span><span class=cF7>(</span><span class=cF0>tmph = cc-&gt;hash_entry</span><span class=cF7>)</span><span class=cF0> &amp;&amp; tmph-&gt;type &amp; </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>)

@@ -86,7 +86,7 @@ body {background-color:#000000;}
 <a name="l59"></a>                {
 <a name="l60"></a>                        res += </span><span class=cFD>MemberListSize</span><span class=cF0>(tmph);
 <a name="l61"></a>                        </span><span class=cF1>if</span><span class=cF0> (debug_info = tmph-&gt;debug_info)
-<a name="l62"></a></span><span class=cF2>//This should be </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l388"><span class=cF4>MSize</span></a><span class=cF2>() but it would crash on AOT .BIN file funs.</span><span class=cF0>
+<a name="l62"></a></span><span class=cF2>//This should be </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l388"><span class=cF4>MSize</span></a><span class=cF2>() but it would crash on AOT .BIN file funs.</span><span class=cF0>
 <a name="l63"></a>                                res += debug_info-&gt;body[debug_info-&gt;max_line + </span><span class=cFE>1</span><span class=cF0> - debug_info-&gt;min_line] - debug_info-&gt;body[</span><span class=cFE>0</span><span class=cF0>];
 <a name="l64"></a>                }
 <a name="l65"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>)

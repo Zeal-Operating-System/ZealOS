@@ -44,9 +44,9 @@ body {background-color:#000000;}
 <a name="l17"></a></span><span class=cF2>waiting for a certain time or waiting</span><span class=cF0>
 <a name="l18"></a></span><span class=cF2>on a message and skips if not ready.</span><span class=cF0>
 <a name="l19"></a></span><span class=cF2>A task runs until it voluntarily yields ctrl</span><span class=cF0>
-<a name="l20"></a></span><span class=cF2>with a call to </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l289"><span class=cF4>Yield</span></a><span class=cF2>().  Tasks waiting on I/O</span><span class=cF0>
+<a name="l20"></a></span><span class=cF2>with a call to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.html#l289"><span class=cF4>Yield</span></a><span class=cF2>().  Tasks waiting on I/O</span><span class=cF0>
 <a name="l21"></a></span><span class=cF2>often loop, checking for a status and</span><span class=cF4>
-<a name="l22"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l289"><span class=cF4>Yield</span></a><span class=cF2>ing.  This does not really degrade</span><span class=cF0>
+<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.html#l289"><span class=cF4>Yield</span></a><span class=cF2>ing.  This does not really degrade</span><span class=cF0>
 <a name="l23"></a></span><span class=cF2>performance, but pegs the CPU Load.</span><span class=cF0>
 <a name="l24"></a>
 <a name="l25"></a></span><span class=cF2>The scheduler checks for a few keys:</span><span class=cF0>
@@ -59,7 +59,7 @@ body {background-color:#000000;}
 <a name="l32"></a></span><span class=cF2>Each core has its own circular task queue.</span><span class=cF0>
 <a name="l33"></a></span><span class=cF2>For AP processors, they have an &quot;Executive&quot; task</span><span class=cF0>
 <a name="l34"></a></span><span class=cF2>which stays in a loop waiting for jobs or</span><span class=cF0>
-<a name="l35"></a></span><span class=cF2>requests to spawn tasks.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l200"><span class=cF4>CoreAPExecutiveTask</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l35"></a></span><span class=cF2>requests to spawn tasks.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l200"><span class=cF4>CoreAPExecutiveTask</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l36"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l37"></a>
 <a name="l38"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>TaskFocusNext</span><span class=cF0>()
@@ -334,7 +334,7 @@ body {background-color:#000000;}
 <a name="l307"></a>
 <a name="l308"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TaskQueueRemove</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
 <a name="l309"></a>{</span><span class=cF2>//Remove a task from the scheduler running task queue.</span><span class=cF0>
-<a name="l310"></a></span><span class=cF2>//Use </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KTask.html#l88"><span class=cF4>Suspend</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l310"></a></span><span class=cF2>//Use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l88"><span class=cF4>Suspend</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l311"></a>        </span><span class=cF9>CTask</span><span class=cF0> *next, *last;
 <a name="l312"></a>
 <a name="l313"></a>        </span><span class=cF1>PUSHFD</span><span class=cF0>

@@ -274,7 +274,7 @@ body {background-color:#000000;}
 <a name="l247"></a>#</span><span class=cF1>define</span><span class=cF0> SLOP                    </span><span class=cFE>8</span><span class=cF0>
 <a name="l248"></a>
 <a name="l249"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *format, </span><span class=cF9>I64</span><span class=cF0> argc, </span><span class=cF9>I64</span><span class=cF0> *argv)
-<a name="l250"></a>{</span><span class=cF2>/*</span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF0>
+<a name="l250"></a>{</span><span class=cF2>/*</span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF0>
 <a name="l251"></a></span><span class=cF2>In float formatting, do not exceed 18-digits</span><span class=cF0>
 <a name="l252"></a></span><span class=cF2>before or after the decimal point</span><span class=cF0>
 <a name="l253"></a></span><span class=cF2>because the numbers before and after</span><span class=cF0>
@@ -1119,12 +1119,12 @@ body {background-color:#000000;}
 <a name="l1092"></a>}
 <a name="l1093"></a>
 <a name="l1094"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l1095"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1095"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l1096"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrPrintJoin</span><span class=cF0>(dst, format, argc, argv);
 <a name="l1097"></a>}
 <a name="l1098"></a>
 <a name="l1099"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>CatPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_dst, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l1100"></a>{</span><span class=cF2>//StrCat().  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1100"></a>{</span><span class=cF2>//StrCat().  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l1101"></a>        </span><span class=cF1>U8</span><span class=cF0> *dst = _dst;
 <a name="l1102"></a>
 <a name="l1103"></a>        </span><span class=cF1>while</span><span class=cF0> (*dst)
@@ -1135,16 +1135,16 @@ body {background-color:#000000;}
 <a name="l1108"></a>}
 <a name="l1109"></a>
 <a name="l1110"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Print</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l1111"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF2>.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
-<a name="l1112"></a></span><span class=cF2>//Don't use this.  </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
+<a name="l1111"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF2>.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1112"></a></span><span class=cF2>//Don't use this.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
 <a name="l1113"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l1114"></a>
-<a name="l1115"></a>        </span><span class=cF5>PutS</span><span class=cF0>(buf);</span><span class=cF2>//Don't use PutS().  </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
+<a name="l1115"></a>        </span><span class=cF5>PutS</span><span class=cF0>(buf);</span><span class=cF2>//Don't use PutS().  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
 <a name="l1116"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
 <a name="l1117"></a>}
 <a name="l1118"></a>
 <a name="l1119"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l1120"></a>{</span><span class=cF2>//MAlloc StrPrint.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1120"></a>{</span><span class=cF2>//MAlloc StrPrint.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l1121"></a>        </span><span class=cF1>U8</span><span class=cF0> *res, *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l1122"></a>
 <a name="l1123"></a>        res = </span><span class=cF5>StrNew</span><span class=cF0>(buf);

@@ -125,7 +125,7 @@ body {background-color:#000000;}
 <a name="l98"></a>}
 <a name="l99"></a> 
 <a name="l100"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>OneTimePopUp</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_flags, </span><span class=cF9>I64</span><span class=cF0> flag_num, </span><span class=cF1>U8</span><span class=cF0> *message)
-<a name="l101"></a>{</span><span class=cF2>//See </span><a href="https://www.tomawezome.github.io/ZealOS/Apps/X-Caliber/X-Caliber.html#l1"><span class=cF4>::/Apps/X-Caliber/X-Caliber.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l101"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Apps/X-Caliber/X-Caliber.html#l1"><span class=cF4>::/Apps/X-Caliber/X-Caliber.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l102"></a>        </span><span class=cF1>Bool</span><span class=cF0>             res = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l103"></a>        </span><span class=cF9>CDoc</span><span class=cF0>            *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
 <a name="l104"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e;
@@ -183,7 +183,7 @@ body {background-color:#000000;}
 <a name="l156"></a>}
 <a name="l157"></a>
 <a name="l158"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ZOnce</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l159"></a>{</span><span class=cF2>//Add System code to </span><a href="https://www.tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
+<a name="l159"></a>{</span><span class=cF2>//Add System code to </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l160"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l161"></a>
 <a name="l162"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_SYSTEM</span><span class=cF7>)</span><span class=cF0>)
@@ -193,7 +193,7 @@ body {background-color:#000000;}
 <a name="l166"></a>}
 <a name="l167"></a>
 <a name="l168"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Once</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l169"></a>{</span><span class=cF2>//Add User code to </span><a href="https://www.tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
+<a name="l169"></a>{</span><span class=cF2>//Add User code to </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l170"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l171"></a>
 <a name="l172"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_USER</span><span class=cF7>)</span><span class=cF0>)
@@ -203,7 +203,7 @@ body {background-color:#000000;}
 <a name="l176"></a>}
 <a name="l177"></a>
 <a name="l178"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ZOnceDrive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l179"></a>{</span><span class=cF2>//Add System code to drv </span><a href="https://www.tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
+<a name="l179"></a>{</span><span class=cF2>//Add System code to drv </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l180"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l181"></a>        </span><span class=cF9>I64</span><span class=cF0> old_drive_let = *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name;
 <a name="l182"></a>
@@ -217,7 +217,7 @@ body {background-color:#000000;}
 <a name="l190"></a>}
 <a name="l191"></a>
 <a name="l192"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>OnceDrive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l193"></a>{</span><span class=cF2>//Add User code to drv </span><a href="https://www.tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
+<a name="l193"></a>{</span><span class=cF2>//Add User code to drv </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l194"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l195"></a>        </span><span class=cF9>I64</span><span class=cF0> old_drive_let = *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name;
 <a name="l196"></a>
@@ -231,7 +231,7 @@ body {background-color:#000000;}
 <a name="l204"></a>}
 <a name="l205"></a>
 <a name="l206"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>OnceExe</span><span class=cF0>()
-<a name="l207"></a>{</span><span class=cF2>//Execute Once code. Call goes in </span><a href="https://www.tomawezome.github.io/ZealOS/Home/Once.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l207"></a>{</span><span class=cF2>//Execute Once code. Call goes in </span><a href="https://tomawezome.github.io/ZealOS/Home/Once.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l208"></a>        </span><span class=cF1>try</span><span class=cF0>
 <a name="l209"></a>        </span><span class=cF7>{</span><span class=cF0>
 <a name="l210"></a>

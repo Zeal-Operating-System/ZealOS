@@ -32,8 +32,8 @@ body {background-color:#000000;}
 <a name="l5"></a>                *flags_stats            = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>64</span><span class=cF0>),
 <a name="l6"></a>                *type_flags_stats       = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>64</span><span class=cF0>);
 <a name="l7"></a>        </span><span class=cF2>//Note: word wrap is determined by</span><span class=cF0>
-<a name="l8"></a>        </span><span class=cF2>//doc-&gt;win_task when a </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF2> is recalculated</span><span class=cF0>
-<a name="l9"></a>        </span><span class=cF2>//use </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalc.html#l305"><span class=cF4>DocRecalc</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l8"></a>        </span><span class=cF2>//doc-&gt;win_task when a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF2> is recalculated</span><span class=cF0>
+<a name="l9"></a>        </span><span class=cF2>//use </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalc.html#l305"><span class=cF4>DocRecalc</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l10"></a>        </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocRead</span><span class=cF0>(filename, flags);
 <a name="l11"></a>
 <a name="l12"></a>        </span><span class=cF2>//doc-&gt;head which is equ to doc is the</span><span class=cF0>
@@ -93,16 +93,16 @@ body {background-color:#000000;}
 <a name="l66"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
 <a name="l67"></a>}
 <a name="l68"></a>
-<a name="l69"></a></span><span class=cF2>/*See </span><a href="https://www.tomawezome.github.io/ZealOS/System/Training.html#l174"><span class=cF4>TipOfDay</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l69"></a></span><span class=cF2>/*See </span><a href="https://tomawezome.github.io/ZealOS/System/Training.html#l174"><span class=cF4>TipOfDay</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l70"></a>
-<a name="l71"></a></span><span class=cF2>Note: Not all </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1325"><span class=cF4>CDocEntry</span></a><span class=cF2>'s are full-sized nodes.</span><span class=cF0>
-<a name="l72"></a></span><span class=cF2>Some are </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>ed with a smaller size to save</span><span class=cF0>
-<a name="l73"></a></span><span class=cF2>mem.</span><span class=cF0>            </span><span class=cF2>They all have at least the size </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1302"><span class=cF4>CDocEntryBase</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l71"></a></span><span class=cF2>Note: Not all </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1325"><span class=cF4>CDocEntry</span></a><span class=cF2>'s are full-sized nodes.</span><span class=cF0>
+<a name="l72"></a></span><span class=cF2>Some are </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>ed with a smaller size to save</span><span class=cF0>
+<a name="l73"></a></span><span class=cF2>mem.</span><span class=cF0>            </span><span class=cF2>They all have at least the size </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1302"><span class=cF4>CDocEntryBase</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l74"></a>
-<a name="l75"></a></span><span class=cF2>Note: </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1325"><span class=cF4>CDocEntry</span></a><span class=cF2>'s should be alloced from the</span><span class=cF0>
+<a name="l75"></a></span><span class=cF2>Note: </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1325"><span class=cF4>CDocEntry</span></a><span class=cF2>'s should be alloced from the</span><span class=cF0>
 <a name="l76"></a></span><span class=cF2>heap of the owning task, doc-&gt;mem_task.</span><span class=cF0>
 <a name="l77"></a>
-<a name="l78"></a></span><span class=cF2>The flag arrays </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/MakeDoc.html#l21"><span class=cF4>doldoc.type_flags_form</span></a><span class=cF2>, etc</span><span class=cF0>
+<a name="l78"></a></span><span class=cF2>The flag arrays </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/MakeDoc.html#l21"><span class=cF4>doldoc.type_flags_form</span></a><span class=cF2>, etc</span><span class=cF0>
 <a name="l79"></a></span><span class=cF2>are useful.</span><span class=cF0>
 <a name="l80"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l81"></a>

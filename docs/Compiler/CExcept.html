@@ -85,7 +85,7 @@ body {background-color:#000000;}
 <a name="l58"></a>}
 <a name="l59"></a>
 <a name="l60"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>LexPutPos</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc)
-<a name="l61"></a>{</span><span class=cF2>//Print token, line link and, then, </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CExcept.html#l23"><span class=cF4>LexPutLine</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l61"></a>{</span><span class=cF2>//Print token, line link and, then, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CExcept.html#l23"><span class=cF4>LexPutLine</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l62"></a>        </span><span class=cF5>LexPutToken</span><span class=cF0>(cc);
 <a name="l63"></a>        </span><span class=cF5>FixSet</span><span class=cF0>(cc-&gt;lex_include_stack-&gt;full_name, cc-&gt;lex_include_stack-&gt;line_num);
 <a name="l64"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsRaw</span><span class=cF0>)
@@ -100,7 +100,7 @@ body {background-color:#000000;}
 <a name="l73"></a>}
 <a name="l74"></a>
 <a name="l75"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>LexWarn</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF1>U8</span><span class=cF0> *str=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l76"></a>{</span><span class=cF2>//Print warn message, then, </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CExcept.html#l60"><span class=cF4>LexPutPos</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l76"></a>{</span><span class=cF2>//Print warn message, then, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CExcept.html#l60"><span class=cF4>LexPutPos</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l77"></a>        </span><span class=cF1>if</span><span class=cF0> (str)
 <a name="l78"></a>                </span><span class=cF5>PrintWarn</span><span class=cF0>(str);
 <a name="l79"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun)
@@ -120,7 +120,7 @@ body {background-color:#000000;}
 <a name="l93"></a>}
 <a name="l94"></a>
 <a name="l95"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>LexExcept</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF1>U8</span><span class=cF0> *str=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l96"></a>{</span><span class=cF2>//Print error message, </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/CExcept.html#l60"><span class=cF4>LexPutPos</span></a><span class=cF2>() and throw exception.</span><span class=cF0>
+<a name="l96"></a>{</span><span class=cF2>//Print error message, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CExcept.html#l60"><span class=cF4>LexPutPos</span></a><span class=cF2>() and throw exception.</span><span class=cF0>
 <a name="l97"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_SYSTEM_SERVER</span><span class=cF7>)</span><span class=cF0>)
 <a name="l98"></a>        </span><span class=cF7>{</span><span class=cF0>
 <a name="l99"></a>                </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);

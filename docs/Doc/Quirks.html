@@ -31,28 +31,28 @@ body {background-color:#000000;}
 <a name="l4"></a>mechanism</blink>.  Generally, the last write wins.
 <a name="l5"></a>
 <a name="l6"></a>* When using </span><span class=cF2>FAT32</span><span class=cF0>, ZealOS does not generate unique short-entry names, the ones with the </span><span class=cF2>~</span><span class=cF0>s.    Not all </span><span class=cF2>FAT32</span><span class=cF0> filenames are 
-<a name="l7"></a>valid ZealOS names and it will complain.        Do not access </span><span class=cF2>FAT32</span><span class=cF0> drives not dedicated to ZealOS.  Disable them with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAddDev.html#l195"><span class=cF4>DriveEnable</span></a><span class=cF0>(O
+<a name="l7"></a>valid ZealOS names and it will complain.        Do not access </span><span class=cF2>FAT32</span><span class=cF0> drives not dedicated to ZealOS.  Disable them with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAddDev.html#l195"><span class=cF4>DriveEnable</span></a><span class=cF0>(O
 <a name="l8"></a>FF), or they will generate error messages.      </span><span class=cF2>FAT32</span><span class=cF0> involves a long and short name for each file.
 <a name="l9"></a>
 <a name="l10"></a>* The stack does not grow because virtual mem is not used.      It is recommended that you allocate large local vars from the heap.     
-<a name="l11"></a>You can change </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
+<a name="l11"></a>You can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
 <a name="l12"></a>
 <a name="l13"></a>* The syntax highlighting occassionally glitches.  The compiler doesn't.
 <a name="l14"></a>
-<a name="l15"></a>* Call </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() when you insert a new removable media.
+<a name="l15"></a>* Call </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() when you insert a new removable media.
 <a name="l16"></a>
-<a name="l17"></a>* Accessing CD/DVD's is flacky.  Try </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l286"><span class=cF4>Drive</span></a><span class=cF0>() or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() twice.
+<a name="l17"></a>* Accessing CD/DVD's is flacky.  Try </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l286"><span class=cF4>Drive</span></a><span class=cF0>() or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.html#l269"><span class=cF4>DiskChange</span></a><span class=cF0>() twice.
 <a name="l18"></a>
 <a name="l19"></a>* You can only </span><span class=cF2>extern</span><span class=cF0> something once.  There is a varient called </span><span class=cF2>_extern</span><span class=cF0> which binds a CosmiC definition to a asm sym.  This, 
 <a name="l20"></a>too, can only be done once.
 <a name="l21"></a>
-<a name="l22"></a>* A terminal task has a </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> document structure that remains active even when you change </span><span class=cF4>Fs-&gt;draw_it</span><span class=cF0>.   To prevent links in the </span><span class=cF4>
-<a name="l23"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> from being activated when the user clicks in the window, do one of three things:
+<a name="l22"></a>* A terminal task has a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> document structure that remains active even when you change </span><span class=cF4>Fs-&gt;draw_it</span><span class=cF0>.   To prevent links in the </span><span class=cF4>
+<a name="l23"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> from being activated when the user clicks in the window, do one of three things:
 <a name="l24"></a>  
-<a name="l25"></a>  A) </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l121"><span class=cF4>DocBottom</span></a><span class=cF0>() followed by </span><a href="https://www.tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l135"><span class=cF4>DocClear</span></a><span class=cF0>() to clear the </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> so it has no active widgets.
+<a name="l25"></a>  A) </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l121"><span class=cF4>DocBottom</span></a><span class=cF0>() followed by </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l135"><span class=cF4>DocClear</span></a><span class=cF0>() to clear the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> so it has no active widgets.
 <a name="l26"></a>  
-<a name="l27"></a>  B) Disable window mgr bttn click checking with </span><span class=cF4>Fs-&gt;win_inhibit</span><span class=cF0> set to mask </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1551"><span class=cF4>WIF_SELF_MS_L</span></a><span class=cF0>|</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1565"><span class=cF4>WIF_FOCUS_TASK_MS_L_D</span></a><span class=cF0>|</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1553"><span class=cF4>WIF_SELF_MS_R</span></a><span class=cF0>|</span><span class=cF4>
-<a name="l28"></a>  </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1567"><span class=cF4>WIF_FOCUS_TASK_MS_R_D</span></a><span class=cF0>.  This inhibits window mgr operations but still generates messages from bttn clicks.
+<a name="l27"></a>  B) Disable window mgr bttn click checking with </span><span class=cF4>Fs-&gt;win_inhibit</span><span class=cF0> set to mask </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1551"><span class=cF4>WIF_SELF_MS_L</span></a><span class=cF0>|</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1565"><span class=cF4>WIF_FOCUS_TASK_MS_L_D</span></a><span class=cF0>|</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1553"><span class=cF4>WIF_SELF_MS_R</span></a><span class=cF0>|</span><span class=cF4>
+<a name="l28"></a>  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1567"><span class=cF4>WIF_FOCUS_TASK_MS_R_D</span></a><span class=cF0>.  This inhibits window mgr operations but still generates messages from bttn clicks.
 <a name="l29"></a>
 <a name="l30"></a>* </span><span class=cF2>switch/case</span><span class=cF0> statements alloc a single jump table--do not use with wide, sparse ranges of case values.
 <a name="l31"></a>
@@ -61,9 +61,9 @@ body {background-color:#000000;}
 <a name="l34"></a>* A </span><span class=cF2>goto</span><span class=cF0> label name must not match a global scope object's name.        (It's not worth slowing-down the compiler to handle this 
 <a name="l35"></a>case.)
 <a name="l36"></a>
-<a name="l37"></a>* </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelB.html#l135"><span class=cF4>MemCopy</span></a><span class=cF0>() only goes forward.
+<a name="l37"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l135"><span class=cF4>MemCopy</span></a><span class=cF0>() only goes forward.
 <a name="l38"></a>
-<a name="l39"></a>* A </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() cmd must be followed by two semicolons if a </span><span class=cF2>#include</span><span class=cF0> is after it.  This is because the preprocessor processes the next 
+<a name="l39"></a>* A </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l9"><span class=cF4>Cd</span></a><span class=cF0>() cmd must be followed by two semicolons if a </span><span class=cF2>#include</span><span class=cF0> is after it.  This is because the preprocessor processes the next 
 <a name="l40"></a>token ahead.
 <a name="l41"></a>
 <a name="l42"></a>* The assembler's error messages are often off by a line and undefines are cryptic.

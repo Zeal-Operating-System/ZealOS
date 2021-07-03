@@ -128,7 +128,7 @@ body {background-color:#000000;}
 <a name="l101"></a>}
 <a name="l102"></a>
 <a name="l103"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dname, </span><span class=cF1>U8</span><span class=cF0> *src, ...)
-<a name="l104"></a>{</span><span class=cF2>//Create DEFINE entry with </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print</span></a><span class=cF2>()ed string.</span><span class=cF0>
+<a name="l104"></a>{</span><span class=cF2>//Create DEFINE entry with </span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print</span></a><span class=cF2>()ed string.</span><span class=cF0>
 <a name="l105"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, src, argc, argv);
 <a name="l106"></a>
 <a name="l107"></a>        </span><span class=cF5>DefineLoad</span><span class=cF0>(dname, buf);
@@ -299,7 +299,7 @@ body {background-color:#000000;}
 <a name="l272"></a>}
 <a name="l273"></a>
 <a name="l274"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Color2Str</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>CColorROPU32</span><span class=cF0> c)
-<a name="l275"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3603"><span class=cF4>CColorROPU32</span></a><span class=cF2> with flags to </span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2> str.</span><span class=cF0>
+<a name="l275"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3603"><span class=cF4>CColorROPU32</span></a><span class=cF2> with flags to </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2> str.</span><span class=cF0>
 <a name="l276"></a>        *buf = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l277"></a>        </span><span class=cF1>if</span><span class=cF0> (c.c0.rop &amp; </span><span class=cF3>ROPBF_TWO_SIDED</span><span class=cF0>)
 <a name="l278"></a>                </span><span class=cF5>CatPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;TWO|&quot;</span><span class=cF0>);
@@ -332,7 +332,7 @@ body {background-color:#000000;}
 <a name="l305"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>str2color_list</span><span class=cF0> = </span><span class=cF6>&quot;/,)}&gt;&quot;</span><span class=cF0>;
 <a name="l306"></a>
 <a name="l307"></a></span><span class=cF9>CColorROPU16</span><span class=cF0> </span><span class=cF5>Str2ColorU16</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
-<a name="l308"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2> color str with flags to </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3599"><span class=cF4>CColorROPU16</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l308"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2> color str with flags to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3599"><span class=cF4>CColorROPU16</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l309"></a>        </span><span class=cF9>CColorROPU16</span><span class=cF0>     res = </span><span class=cF3>COLOR_INVALID</span><span class=cF0>;
 <a name="l310"></a>        </span><span class=cF9>I64</span><span class=cF0>                              i;
 <a name="l311"></a>        </span><span class=cF1>U8</span><span class=cF0>                              *ptr, *ptr2, *st2;
@@ -387,7 +387,7 @@ body {background-color:#000000;}
 <a name="l360"></a>}
 <a name="l361"></a>
 <a name="l362"></a></span><span class=cF9>CColorROPU32</span><span class=cF0> </span><span class=cF5>Str2ColorU32</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
-<a name="l363"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2> color str with flags to </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3603"><span class=cF4>CColorROPU32</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l363"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l62"><span class=cF4>DCLighting</span></a><span class=cF2> color str with flags to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3603"><span class=cF4>CColorROPU32</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l364"></a>        </span><span class=cF1>U8</span><span class=cF0>                              *st2;
 <a name="l365"></a>        </span><span class=cF9>CColorROPU32</span><span class=cF0>     res = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l366"></a>

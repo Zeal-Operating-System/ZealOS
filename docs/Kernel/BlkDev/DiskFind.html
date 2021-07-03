@@ -57,12 +57,12 @@ body {background-color:#000000;}
 <a name="l30"></a>}
 <a name="l31"></a>
 <a name="l32"></a></span><span class=cF9>CDirEntry</span><span class=cF0> *</span><span class=cF5>FilesFind</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask, </span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l33"></a>{</span><span class=cF2>/* See </span><a href="https://www.tomawezome.github.io/ZealOS/Doc/FileUtils.html#l1"><span class=cF4>::/Doc/FileUtils.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l33"></a>{</span><span class=cF2>/* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/FileUtils.html#l1"><span class=cF4>::/Doc/FileUtils.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l34"></a>
 <a name="l35"></a></span><span class=cF2>Find files and make a directory tree in memory.</span><span class=cF0>
 <a name="l36"></a>
-<a name="l37"></a></span><span class=cF2>When done,  you free with </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l17"><span class=cF4>DirEntryDel</span></a><span class=cF2>(), </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l27"><span class=cF4>DirEntryDel2</span></a><span class=cF2>(), </span><span class=cF4>
-<a name="l38"></a></span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l38"><span class=cF4>DirTreeDel</span></a><span class=cF2>() or </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l53"><span class=cF4>DirTreeDel2</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l37"></a></span><span class=cF2>When done,  you free with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l17"><span class=cF4>DirEntryDel</span></a><span class=cF2>(), </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l27"><span class=cF4>DirEntryDel2</span></a><span class=cF2>(), </span><span class=cF4>
+<a name="l38"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l38"><span class=cF4>DirTreeDel</span></a><span class=cF2>() or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirA.html#l53"><span class=cF4>DirTreeDel2</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l39"></a>
 <a name="l40"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l41"></a>        </span><span class=cF9>CDirEntry</span><span class=cF0>       *res;
@@ -90,7 +90,7 @@ body {background-color:#000000;}
 <a name="l63"></a>}
 <a name="l64"></a>
 <a name="l65"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FileFind</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>CDirEntry</span><span class=cF0> *_de=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l66"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3219"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>,  </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3220"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF2>, </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3228"><span class=cF4>FUF_SCAN_PARENTS</span></a><span class=cF0>
+<a name="l66"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3219"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>,  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3220"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3228"><span class=cF4>FUF_SCAN_PARENTS</span></a><span class=cF0>
 <a name="l67"></a></span><span class=cF2>//If you pass _de,  you must Free(_de-&gt;full_name);</span><span class=cF0>
 <a name="l68"></a>        </span><span class=cF9>I64</span><span class=cF0>                      cur_dir_clus;
 <a name="l69"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *full_name = </span><span class=cF3>NULL</span><span class=cF0>;

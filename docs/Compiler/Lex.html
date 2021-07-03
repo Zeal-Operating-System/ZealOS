@@ -59,9 +59,9 @@ body {background-color:#000000;}
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF9>CCompCtrl</span><span class=cF0> *</span><span class=cF5>CompCtrlNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *filename=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l34"></a>{</span><span class=cF2>//MAlloc and Init CCompCtrl.</span><span class=cF0>
-<a name="l35"></a>        </span><span class=cF2>//Frees buf in </span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l64"><span class=cF4>CompCtrlDel</span></a><span class=cF2> unless </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2272"><span class=cF4>CCF_DONT_FREE_BUF</span></a><span class=cF2> flag is set.</span><span class=cF0>
+<a name="l35"></a>        </span><span class=cF2>//Frees buf in </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l64"><span class=cF4>CompCtrlDel</span></a><span class=cF2> unless </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2272"><span class=cF4>CCF_DONT_FREE_BUF</span></a><span class=cF2> flag is set.</span><span class=cF0>
 <a name="l36"></a>        </span><span class=cF2>//FileName is for error reporting.</span><span class=cF0>      </span><span class=cF2>If files are #included,</span><span class=cF0>
-<a name="l37"></a>        </span><span class=cF2>//new names are used.  See </span><a href="https://www.tomawezome.github.io/ZealOS/Apps/Psalmody/PsalmodyFile.html#l235"><span class=cF4>Psalmody CompCtrlNew</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l37"></a>        </span><span class=cF2>//new names are used.  See </span><a href="https://tomawezome.github.io/ZealOS/Apps/Psalmody/PsalmodyFile.html#l235"><span class=cF4>Psalmody CompCtrlNew</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l38"></a>        </span><span class=cF9>CCompCtrl</span><span class=cF0> *cc = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCompCtrl</span><span class=cF7>)</span><span class=cF0>);
 <a name="l39"></a>        </span><span class=cF9>CLexFile</span><span class=cF0>  *tmpf;
 <a name="l40"></a>
@@ -336,7 +336,7 @@ body {background-color:#000000;}
 <a name="l309"></a>}
 <a name="l310"></a>
 <a name="l311"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>LexSkipEol</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc)
-<a name="l312"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l121"><span class=cF4>LexCharGet</span></a><span class=cF2> to NULL until end-of-line.</span><span class=cF0>
+<a name="l312"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l121"><span class=cF4>LexCharGet</span></a><span class=cF2> to NULL until end-of-line.</span><span class=cF0>
 <a name="l313"></a>        </span><span class=cF9>I64</span><span class=cF0> ch;
 <a name="l314"></a>
 <a name="l315"></a>        </span><span class=cF1>do</span><span class=cF0> ch = </span><span class=cF5>LexCharGet</span><span class=cF0>(cc);
@@ -344,7 +344,7 @@ body {background-color:#000000;}
 <a name="l317"></a>}
 <a name="l318"></a>
 <a name="l319"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>LexFirstRemove</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF1>U8</span><span class=cF0> *marker, </span><span class=cF9>I64</span><span class=cF0> _len=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l320"></a>{</span><span class=cF2>//</span><a href="https://www.tomawezome.github.io/ZealOS/Compiler/Lex.html#l121"><span class=cF4>LexCharGet</span></a><span class=cF2>() chars making str until marker.</span><span class=cF0>
+<a name="l320"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l121"><span class=cF4>LexCharGet</span></a><span class=cF2>() chars making str until marker.</span><span class=cF0>
 <a name="l321"></a>        </span><span class=cF1>U8</span><span class=cF0>                              *res, *ptr;
 <a name="l322"></a>        </span><span class=cF9>CQueueVectU8</span><span class=cF0>    *tmpv = </span><span class=cF5>QueueVectU8New</span><span class=cF0>;
 <a name="l323"></a>        </span><span class=cF9>I64</span><span class=cF0>                              i, len = </span><span class=cFE>0</span><span class=cF0>;

@@ -35,7 +35,7 @@ body {background-color:#000000;}
 <a name="l8"></a>}
 <a name="l9"></a>
 <a name="l10"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ClipCopy</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
-<a name="l11"></a>{</span><span class=cF2>//Copy </span><a href="https://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1089"><span class=cF4>DOCET_SEL</span></a><span class=cF2> flagged entries to clip.</span><span class=cF0>
+<a name="l11"></a>{</span><span class=cF2>//Copy </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1089"><span class=cF4>DOCET_SEL</span></a><span class=cF2> flagged entries to clip.</span><span class=cF0>
 <a name="l12"></a>        </span><span class=cF9>CDoc</span><span class=cF0>            *doc2 = </span><span class=cFB>sys_clip_doc</span><span class=cF0>;
 <a name="l13"></a>        </span><span class=cF1>Bool</span><span class=cF0>             unlock_doc = </span><span class=cF5>DocLock</span><span class=cF0>(doc), unlock_doc2 = </span><span class=cF5>DocLock</span><span class=cF0>(doc2);
 <a name="l14"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e = doc-&gt;head.next, *doc_ne;

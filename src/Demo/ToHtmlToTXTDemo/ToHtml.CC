@@ -93,7 +93,7 @@ U8 *TOSLinkConvert2(U8 *filename, I64 line_num)
 	{
 		st = ExtChange(filename, "html");
 		if (st && StrLen(st) > 3 && !StrNCompare(st + 1, ":/", 2))
-			res = MStrPrint("https://www.tomawezome.github.io/ZealOS/%s#l%d", st + 3, line_num);
+			res = MStrPrint("https://tomawezome.github.io/ZealOS/%s#l%d", st + 3, line_num);
 		Free(st);
 	}
 
