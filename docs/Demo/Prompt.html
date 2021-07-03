@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> PromptDemo()
+<a name="l2"></a>{
+<a name="l3"></a>        </span><span class=cF1>F64</span><span class=cF0>              d;
+<a name="l4"></a>        </span><span class=cF9>I64</span><span class=cF0>              i;
+<a name="l5"></a>        </span><span class=cF1>U8</span><span class=cF0>              *name;
+<a name="l6"></a>        </span><span class=cF9>CDate</span><span class=cF0>    cdt;
+<a name="l7"></a>
+<a name="l8"></a>        </span><span class=cF6>&quot;\n\nNow prompting from the cmd line.\n\n&quot;</span><span class=cF0>
+<a name="l9"></a>        </span><span class=cF6>&quot;$GREEN$&lt;ENTER&gt;$FG$ keeps default.\n\n&quot;</span><span class=cF0>;
+<a name="l10"></a>
+<a name="l11"></a>        i = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter int expression(%d):&quot;</span><span class=cF0>, </span><span class=cFE>123</span><span class=cF0>);
+<a name="l12"></a>        </span><span class=cF6>&quot;Int=%d\n&quot;</span><span class=cF0>, i;
+<a name="l13"></a>
+<a name="l14"></a>        d = </span><span class=cF5>F64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter float expression(%12g):&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>2</span><span class=cF0>e3);
+<a name="l15"></a>        </span><span class=cF6>&quot;Float=%e\n&quot;</span><span class=cF0>, d;
+<a name="l16"></a>
+<a name="l17"></a>        name = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Name (%s):&quot;</span><span class=cF0>, </span><span class=cF6>&quot;John&quot;</span><span class=cF0>);
+<a name="l18"></a>        </span><span class=cF6>&quot;Name:%s\n&quot;</span><span class=cF0>, name;
+<a name="l19"></a>        </span><span class=cF5>Free</span><span class=cF0>(name);
+<a name="l20"></a>
+<a name="l21"></a>        cdt = </span><span class=cF5>DateGet</span><span class=cF0>(</span><span class=cF6>&quot;Date (%D):&quot;</span><span class=cF0>, </span><span class=cF5>Now</span><span class=cF0>);
+<a name="l22"></a>        </span><span class=cF6>&quot;Date=%D\n&quot;</span><span class=cF0>, cdt;
+<a name="l23"></a>}
+<a name="l24"></a>
+<a name="l25"></a>PromptDemo;
+</span></pre></body>
+</html>

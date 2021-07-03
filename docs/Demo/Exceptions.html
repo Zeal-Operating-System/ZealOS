@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF2>//WARNING: Don't return out of a catch{}.  This</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//might get fixed.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>//You can use </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KExcept.html#l46"><span class=cF4>PutExcept</span></a><span class=cF2>() in a catch stmt</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>//and it will report args.</span><span class=cF0>
+<a name="l6"></a></span><span class=cF1>Bool</span><span class=cF0> Prompt(</span><span class=cF9>I64</span><span class=cF0> i)
+<a name="l7"></a>{
+<a name="l8"></a>        </span><span class=cF6>&quot;%d &quot;</span><span class=cF0>, i;
+<a name="l9"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>YorN</span><span class=cF0>;
+<a name="l10"></a>}
+<a name="l11"></a>
+<a name="l12"></a></span><span class=cF1>U0</span><span class=cF0> D1()
+<a name="l13"></a>{
+<a name="l14"></a>        </span><span class=cF6>&quot;D1\n&quot;</span><span class=cF0>;
+<a name="l15"></a>        </span><span class=cF1>if</span><span class=cF0> (Prompt</span><span class=cF7>(</span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>)
+<a name="l16"></a>                </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Point1'</span><span class=cF0>);
+<a name="l17"></a>        </span><span class=cF1>if</span><span class=cF0> (Prompt</span><span class=cF7>(</span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l18"></a>                </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Point2'</span><span class=cF0>);
+<a name="l19"></a>}
+<a name="l20"></a>
+<a name="l21"></a></span><span class=cF1>U0</span><span class=cF0> D2()
+<a name="l22"></a>{
+<a name="l23"></a>        </span><span class=cF6>&quot;D2\n&quot;</span><span class=cF0>;
+<a name="l24"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l25"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l26"></a>                D1;
+<a name="l27"></a>                </span><span class=cF1>if</span><span class=cF0> (Prompt</span><span class=cF7>(</span><span class=cFE>4</span><span class=cF7>)</span><span class=cF0>)
+<a name="l28"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Point4'</span><span class=cF0>);
+<a name="l29"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l30"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l31"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l32"></a>                </span><span class=cF6>&quot;D2 handler\n&quot;</span><span class=cF0>
+<a name="l33"></a>                </span><span class=cF6>&quot;Ch:%c:%P\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_ch, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l34"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;except_ch == </span><span class=cF6>'Point1'</span><span class=cF0>)
+<a name="l35"></a>                {
+<a name="l36"></a>                        </span><span class=cF6>&quot;Caught in D2\n&quot;</span><span class=cF0>;
+<a name="l37"></a>                        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l38"></a>                }
+<a name="l39"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l40"></a>}
+<a name="l41"></a>
+<a name="l42"></a></span><span class=cF1>U0</span><span class=cF0> Demo()
+<a name="l43"></a>{
+<a name="l44"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l45"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l46"></a>                D2;
+<a name="l47"></a>                </span><span class=cF1>if</span><span class=cF0> (Prompt</span><span class=cF7>(</span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>)
+<a name="l48"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Point3'</span><span class=cF0>);
+<a name="l49"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l50"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l51"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>                </span><span class=cF6>&quot;Demo handler\n&quot;</span><span class=cF0>
+<a name="l53"></a>                                        </span><span class=cF6>&quot;Ch:%c:%P\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_ch, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l54"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l55"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l56"></a>}
+<a name="l57"></a>
+<a name="l58"></a>Demo;
+</span></pre></body>
+</html>

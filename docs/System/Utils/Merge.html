@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Cmd Line (Typically)&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF9>CDirEntry</span><span class=cF0> </span><span class=cF5>MGFind</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *needle_entry, </span><span class=cF9>CDirEntry</span><span class=cF0> *haystack_list)
+<a name="l4"></a>{
+<a name="l5"></a>        </span><span class=cF1>while</span><span class=cF0> (haystack_list)
+<a name="l6"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l7"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>needle_entry-&gt;name, haystack_list-&gt;name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l8"></a>                        </span><span class=cF1>return</span><span class=cF0> haystack_list;
+<a name="l9"></a>                haystack_list = haystack_list-&gt;next;
+<a name="l10"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l11"></a>
+<a name="l12"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l13"></a>}
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Merge2</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde1, </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde2, </span><span class=cF9>I64</span><span class=cF0> *_fuf_flags, </span><span class=cF9>I64</span><span class=cF0> *_df_flags)
+<a name="l16"></a>{
+<a name="l17"></a>        </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde;
+<a name="l18"></a>
+<a name="l19"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpde1 &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>*_df_flags &amp; </span><span class=cF3>DF_ABORT_ALL_FILES</span><span class=cF7>)</span><span class=cF0>)
+<a name="l20"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l21"></a>                tmpde = </span><span class=cF5>MGFind</span><span class=cF0>(tmpde1, tmpde2);
+<a name="l22"></a>                </span><span class=cF1>if</span><span class=cF0> (!tmpde)
+<a name="l23"></a>                        </span><span class=cF6>&quot;$BROWN$Does Not Exist:%s$FG$\n&quot;</span><span class=cF0>, tmpde1-&gt;full_name;
+<a name="l24"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l25"></a>                {
+<a name="l26"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l27"></a>                                </span><span class=cF5>Merge2</span><span class=cF0>(tmpde1-&gt;sub, tmpde-&gt;sub, _fuf_flags, _df_flags);
+<a name="l28"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l29"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l30"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cF0>tmpde1-&gt;datetime - tmpde-&gt;datetime</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cF3>CDATE_FREQ</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>) {</span><span class=cF2>//slop</span><span class=cF0>
+<a name="l31"></a>                                        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, tmpde1-&gt;full_name;
+<a name="l32"></a>                                        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l33"></a>                                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>_fuf_flags, </span><span class=cF3>FUf_DIFF</span><span class=cF7>)</span><span class=cF0>)
+<a name="l34"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l35"></a>                                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>tmpde1-&gt;full_name, </span><span class=cF3>FILEMASK_TXT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l36"></a>                                                        </span><span class=cF5>Diff</span><span class=cF0>(tmpde-&gt;full_name, tmpde1-&gt;full_name, _df_flags);
+<a name="l37"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l38"></a>                                }
+<a name="l39"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l40"></a>                }
+<a name="l41"></a>                tmpde1 = tmpde1-&gt;next;
+<a name="l42"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l43"></a>}
+<a name="l44"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Merge</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst_files_find_mask=</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *src_files_find_mask=</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l45"></a>{</span><span class=cF2>/*Merge text files from one list into another.</span><span class=cF0>
+<a name="l46"></a></span><span class=cF2>Report files whos date/time is different.</span><span class=cF0>
+<a name="l47"></a>
+<a name="l48"></a></span><span class=cF2>&quot;+d&quot; will do </span><a href="http://www.tomawezome.github.io/ZealOS/System/Utils/Diff.html#l259"><span class=cF4>Diff</span></a><span class=cF2>() on files and prompt to</span><span class=cF0>
+<a name="l49"></a></span><span class=cF2>merge changes from source files into</span><span class=cF0>
+<a name="l50"></a></span><span class=cF2>destination files.</span><span class=cF0>
+<a name="l51"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l52"></a>        </span><span class=cF9>I64</span><span class=cF0>                      df_flags = </span><span class=cFE>0</span><span class=cF0>, fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l53"></a>        </span><span class=cF9>CDirEntry</span><span class=cF0>       *tmpde1 = </span><span class=cF3>NULL</span><span class=cF0>, *tmpde2 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l54"></a>
+<a name="l55"></a>        </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r&quot;</span><span class=cF0>);
+<a name="l56"></a>        </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l57"></a>        </span><span class=cF1>if</span><span class=cF0> (fuf_flags &amp; ~</span><span class=cF7>(</span><span class=cF3>FUG_FILES_FIND</span><span class=cF0> | </span><span class=cF3>FUF_DIFF</span><span class=cF7>)</span><span class=cF0>)
+<a name="l58"></a>                </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'FUF'</span><span class=cF0>);
+<a name="l59"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;This is based strictly on file dates.\n&quot;</span><span class=cF0>);
+<a name="l60"></a>        tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(src_files_find_mask, fuf_flags &amp; </span><span class=cF3>FUG_FILES_FIND</span><span class=cF0>);
+<a name="l61"></a>        tmpde2 = </span><span class=cF5>FilesFind</span><span class=cF0>(dst_files_find_mask, fuf_flags &amp; </span><span class=cF3>FUG_FILES_FIND</span><span class=cF0>);
+<a name="l62"></a>        fuf_flags &amp;= </span><span class=cF3>FUF_DIFF</span><span class=cF0>;
+<a name="l63"></a>        </span><span class=cF5>Merge2</span><span class=cF0>(tmpde1, tmpde2, &amp;fuf_flags, &amp;df_flags);
+<a name="l64"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l65"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde2);
+<a name="l66"></a>}
+<a name="l67"></a>
+<a name="l68"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Utils;Cmd Line (Typically)&quot;</span><span class=cF0>
+<a name="l69"></a>
+<a name="l70"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>NewFiles</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask=</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF9>CDate</span><span class=cF0> cdt=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l71"></a>{</span><span class=cF2>//Report files newer than a certain date.</span><span class=cF0>
+<a name="l72"></a>        </span><span class=cF9>I64</span><span class=cF0>                      fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l73"></a>        </span><span class=cF9>CDirEntry</span><span class=cF0>       *tmpde, *tmpde1;
+<a name="l74"></a>
+<a name="l75"></a>        </span><span class=cF1>if</span><span class=cF0> (!cdt)
+<a name="l76"></a>                cdt = </span><span class=cFB>sys_compile_time</span><span class=cF0>;
+<a name="l77"></a>        </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r+F&quot;</span><span class=cF0>);
+<a name="l78"></a>        </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l79"></a>        tmpde = tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(files_find_mask, fuf_flags);
+<a name="l80"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l81"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l82"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;datetime &gt; cdt)
+<a name="l83"></a>                        </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, tmpde-&gt;full_name;
+<a name="l84"></a>                tmpde = tmpde-&gt;next;
+<a name="l85"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l86"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l87"></a>}
+</span></pre></body>
+</html>

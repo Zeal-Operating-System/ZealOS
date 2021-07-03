@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/03/21 00:01:32----$IV,0$
+
+* Raised version number to 0.05.
+* Fixed HTML Demo, implemented it into DoDistro process. Outputs to ::/HTML/.
+
 $IV,1$----07/02/21 19:30:19----$IV,0$
 * Raised version number to 0.04.
 * Implemented default NULL filename args for $LK+PU,"Ed",A="FF:::/System/DolDoc/DocEd.CC,Ed(U"$, $LK+PU,"PopUpEd",A="FF:::/System/DolDoc/DocEd.CC,PopUpEd(U"$.

@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;God&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BibleInit</span><span class=cF0>()
+<a name="l4"></a>{
+<a name="l5"></a>        </span><span class=cF5>DefineListLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>,
+<a name="l6"></a>                                </span><span class=cF6>&quot;Genesis\0&quot;</span><span class=cF0>
+<a name="l7"></a>                                </span><span class=cF6>&quot;Exodus\0&quot;</span><span class=cF0>
+<a name="l8"></a>                                </span><span class=cF6>&quot;Leviticus\0&quot;</span><span class=cF0>
+<a name="l9"></a>                                </span><span class=cF6>&quot;Numbers\0&quot;</span><span class=cF0>
+<a name="l10"></a>                                </span><span class=cF6>&quot;Deuteronomy\0&quot;</span><span class=cF0>
+<a name="l11"></a>                                </span><span class=cF6>&quot;Joshua\0&quot;</span><span class=cF0>
+<a name="l12"></a>                                </span><span class=cF6>&quot;Judges\0&quot;</span><span class=cF0>
+<a name="l13"></a>                                </span><span class=cF6>&quot;Ruth\0&quot;</span><span class=cF0>
+<a name="l14"></a>                                </span><span class=cF6>&quot;1 Samuel\0&quot;</span><span class=cF0>
+<a name="l15"></a>                                </span><span class=cF6>&quot;2 Samuel\0&quot;</span><span class=cF0>
+<a name="l16"></a>                                </span><span class=cF6>&quot;1 Kings\0&quot;</span><span class=cF0>
+<a name="l17"></a>                                </span><span class=cF6>&quot;2 Kings\0&quot;</span><span class=cF0>
+<a name="l18"></a>                                </span><span class=cF6>&quot;1 Chronicles\0&quot;</span><span class=cF0>
+<a name="l19"></a>                                </span><span class=cF6>&quot;2 Chronicles\0&quot;</span><span class=cF0>
+<a name="l20"></a>                                </span><span class=cF6>&quot;Ezra\0&quot;</span><span class=cF0>
+<a name="l21"></a>                                </span><span class=cF6>&quot;Nehemiah\0&quot;</span><span class=cF0>
+<a name="l22"></a>                                </span><span class=cF6>&quot;Esther\0&quot;</span><span class=cF0>
+<a name="l23"></a>                                </span><span class=cF6>&quot;Job\0&quot;</span><span class=cF0>
+<a name="l24"></a>                                </span><span class=cF6>&quot;Psalms\0&quot;</span><span class=cF0>
+<a name="l25"></a>                                </span><span class=cF6>&quot;Proverbs\0&quot;</span><span class=cF0>
+<a name="l26"></a>                                </span><span class=cF6>&quot;Ecclesiastes\0&quot;</span><span class=cF0>
+<a name="l27"></a>                                </span><span class=cF6>&quot;Song of Songs\0&quot;</span><span class=cF0>
+<a name="l28"></a>                                </span><span class=cF6>&quot;Isaiah\0&quot;</span><span class=cF0>
+<a name="l29"></a>                                </span><span class=cF6>&quot;Jeremiah\0&quot;</span><span class=cF0>
+<a name="l30"></a>                                </span><span class=cF6>&quot;Lamentations\0&quot;</span><span class=cF0>
+<a name="l31"></a>                                </span><span class=cF6>&quot;Ezekiel\0&quot;</span><span class=cF0>
+<a name="l32"></a>                                </span><span class=cF6>&quot;Daniel\0&quot;</span><span class=cF0>
+<a name="l33"></a>                                </span><span class=cF6>&quot;Hosea\0&quot;</span><span class=cF0>
+<a name="l34"></a>                                </span><span class=cF6>&quot;Joel\0&quot;</span><span class=cF0>
+<a name="l35"></a>                                </span><span class=cF6>&quot;Amos\0&quot;</span><span class=cF0>
+<a name="l36"></a>                                </span><span class=cF6>&quot;Obadiah\0&quot;</span><span class=cF0>
+<a name="l37"></a>                                </span><span class=cF6>&quot;Jonah\0&quot;</span><span class=cF0>
+<a name="l38"></a>                                </span><span class=cF6>&quot;Micah\0&quot;</span><span class=cF0>
+<a name="l39"></a>                                </span><span class=cF6>&quot;Nahum\0&quot;</span><span class=cF0>
+<a name="l40"></a>                                </span><span class=cF6>&quot;Habakkuk\0&quot;</span><span class=cF0>
+<a name="l41"></a>                                </span><span class=cF6>&quot;Zephaniah\0&quot;</span><span class=cF0>
+<a name="l42"></a>                                </span><span class=cF6>&quot;Haggai\0&quot;</span><span class=cF0>
+<a name="l43"></a>                                </span><span class=cF6>&quot;Zechariah\0&quot;</span><span class=cF0>
+<a name="l44"></a>                                </span><span class=cF6>&quot;Malachi\0&quot;</span><span class=cF0>
+<a name="l45"></a>                                </span><span class=cF6>&quot;Matthew\0&quot;</span><span class=cF0>
+<a name="l46"></a>                                </span><span class=cF6>&quot;Mark\0&quot;</span><span class=cF0>
+<a name="l47"></a>                                </span><span class=cF6>&quot;Luke\0&quot;</span><span class=cF0>
+<a name="l48"></a>                                </span><span class=cF6>&quot;John\0&quot;</span><span class=cF0>
+<a name="l49"></a>                                </span><span class=cF6>&quot;Acts\0&quot;</span><span class=cF0>
+<a name="l50"></a>                                </span><span class=cF6>&quot;Romans\0&quot;</span><span class=cF0>
+<a name="l51"></a>                                </span><span class=cF6>&quot;1 Corinthians\0&quot;</span><span class=cF0>
+<a name="l52"></a>                                </span><span class=cF6>&quot;2 Corinthians\0&quot;</span><span class=cF0>
+<a name="l53"></a>                                </span><span class=cF6>&quot;Galatians\0&quot;</span><span class=cF0>
+<a name="l54"></a>                                </span><span class=cF6>&quot;Ephesians\0&quot;</span><span class=cF0>
+<a name="l55"></a>                                </span><span class=cF6>&quot;Philippians\0&quot;</span><span class=cF0>
+<a name="l56"></a>                                </span><span class=cF6>&quot;Colossians\0&quot;</span><span class=cF0>
+<a name="l57"></a>                                </span><span class=cF6>&quot;1 Thessalonians\0&quot;</span><span class=cF0>
+<a name="l58"></a>                                </span><span class=cF6>&quot;2 Thessalonians\0&quot;</span><span class=cF0>
+<a name="l59"></a>                                </span><span class=cF6>&quot;1 Timothy\0&quot;</span><span class=cF0>
+<a name="l60"></a>                                </span><span class=cF6>&quot;2 Timothy\0&quot;</span><span class=cF0>
+<a name="l61"></a>                                </span><span class=cF6>&quot;Titus\0&quot;</span><span class=cF0>
+<a name="l62"></a>                                </span><span class=cF6>&quot;Philemon\0&quot;</span><span class=cF0>
+<a name="l63"></a>                                </span><span class=cF6>&quot;Hebrews\0&quot;</span><span class=cF0>
+<a name="l64"></a>                                </span><span class=cF6>&quot;James\0&quot;</span><span class=cF0>
+<a name="l65"></a>                                </span><span class=cF6>&quot;1 Peter\0&quot;</span><span class=cF0>
+<a name="l66"></a>                                </span><span class=cF6>&quot;2 Peter\0&quot;</span><span class=cF0>
+<a name="l67"></a>                                </span><span class=cF6>&quot;1 John\0&quot;</span><span class=cF0>
+<a name="l68"></a>                                </span><span class=cF6>&quot;2 John\0&quot;</span><span class=cF0>
+<a name="l69"></a>                                </span><span class=cF6>&quot;3 John\0&quot;</span><span class=cF0>
+<a name="l70"></a>                                </span><span class=cF6>&quot;Jude\0&quot;</span><span class=cF0>
+<a name="l71"></a>                                </span><span class=cF6>&quot;Revelation\0&quot;</span><span class=cF0>);
+<a name="l72"></a>        </span><span class=cF5>DefineListLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF0>,
+<a name="l73"></a>                                </span><span class=cF6>&quot;297\0&quot;</span><span class=cF0>
+<a name="l74"></a>                                </span><span class=cF6>&quot;5068\0&quot;</span><span class=cF0>
+<a name="l75"></a>                                </span><span class=cF6>&quot;9123\0&quot;</span><span class=cF0>
+<a name="l76"></a>                                </span><span class=cF6>&quot;12005\0&quot;</span><span class=cF0>
+<a name="l77"></a>                                </span><span class=cF6>&quot;15977\0&quot;</span><span class=cF0>
+<a name="l78"></a>                                </span><span class=cF6>&quot;19168\0&quot;</span><span class=cF0>
+<a name="l79"></a>                                </span><span class=cF6>&quot;21329\0&quot;</span><span class=cF0>
+<a name="l80"></a>                                </span><span class=cF6>&quot;23598\0&quot;</span><span class=cF0>
+<a name="l81"></a>                                </span><span class=cF6>&quot;23902\0&quot;</span><span class=cF0>
+<a name="l82"></a>                                </span><span class=cF6>&quot;26892\0&quot;</span><span class=cF0>
+<a name="l83"></a>                                </span><span class=cF6>&quot;29345\0&quot;</span><span class=cF0>
+<a name="l84"></a>                                </span><span class=cF6>&quot;32241\0&quot;</span><span class=cF0>
+<a name="l85"></a>                                </span><span class=cF6>&quot;34961\0&quot;</span><span class=cF0>
+<a name="l86"></a>                                </span><span class=cF6>&quot;37633\0&quot;</span><span class=cF0>
+<a name="l87"></a>                                </span><span class=cF6>&quot;40756\0&quot;</span><span class=cF0>
+<a name="l88"></a>                                </span><span class=cF6>&quot;41671\0&quot;</span><span class=cF0>
+<a name="l89"></a>                                </span><span class=cF6>&quot;42963\0&quot;</span><span class=cF0>
+<a name="l90"></a>                                </span><span class=cF6>&quot;43605\0&quot;</span><span class=cF0>
+<a name="l91"></a>                                </span><span class=cF6>&quot;46190\0&quot;</span><span class=cF0>
+<a name="l92"></a>                                </span><span class=cF6>&quot;53793\0&quot;</span><span class=cF0>
+<a name="l93"></a>                                </span><span class=cF6>&quot;56267\0&quot;</span><span class=cF0>
+<a name="l94"></a>                                </span><span class=cF6>&quot;56966\0&quot;</span><span class=cF0>
+<a name="l95"></a>                                </span><span class=cF6>&quot;57332\0&quot;</span><span class=cF0>
+<a name="l96"></a>                                </span><span class=cF6>&quot;61806\0&quot;</span><span class=cF0>
+<a name="l97"></a>                                </span><span class=cF6>&quot;66736\0&quot;</span><span class=cF0>
+<a name="l98"></a>                                </span><span class=cF6>&quot;67217\0&quot;</span><span class=cF0>
+<a name="l99"></a>                                </span><span class=cF6>&quot;71804\0&quot;</span><span class=cF0>
+<a name="l100"></a>                                </span><span class=cF6>&quot;73189\0&quot;</span><span class=cF0>
+<a name="l101"></a>                                </span><span class=cF6>&quot;73876\0&quot;</span><span class=cF0>
+<a name="l102"></a>                                </span><span class=cF6>&quot;74130\0&quot;</span><span class=cF0>
+<a name="l103"></a>                                </span><span class=cF6>&quot;74615\0&quot;</span><span class=cF0>
+<a name="l104"></a>                                </span><span class=cF6>&quot;74697\0&quot;</span><span class=cF0>
+<a name="l105"></a>                                </span><span class=cF6>&quot;74860\0&quot;</span><span class=cF0>
+<a name="l106"></a>                                </span><span class=cF6>&quot;75241\0&quot;</span><span class=cF0>
+<a name="l107"></a>                                </span><span class=cF6>&quot;75416\0&quot;</span><span class=cF0>
+<a name="l108"></a>                                </span><span class=cF6>&quot;75604\0&quot;</span><span class=cF0>
+<a name="l109"></a>                                </span><span class=cF6>&quot;75806\0&quot;</span><span class=cF0>
+<a name="l110"></a>                                </span><span class=cF6>&quot;75932\0&quot;</span><span class=cF0>
+<a name="l111"></a>                                </span><span class=cF6>&quot;76684\0&quot;</span><span class=cF0>
+<a name="l112"></a>                                </span><span class=cF6>&quot;76908\0&quot;</span><span class=cF0>
+<a name="l113"></a>                                </span><span class=cF6>&quot;79970\0&quot;</span><span class=cF0>
+<a name="l114"></a>                                </span><span class=cF6>&quot;81941\0&quot;</span><span class=cF0>
+<a name="l115"></a>                                </span><span class=cF6>&quot;85266\0&quot;</span><span class=cF0>
+<a name="l116"></a>                                </span><span class=cF6>&quot;87803\0&quot;</span><span class=cF0>
+<a name="l117"></a>                                </span><span class=cF6>&quot;90914\0&quot;</span><span class=cF0>
+<a name="l118"></a>                                </span><span class=cF6>&quot;92110\0&quot;</span><span class=cF0>
+<a name="l119"></a>                                </span><span class=cF6>&quot;93323\0&quot;</span><span class=cF0>
+<a name="l120"></a>                                </span><span class=cF6>&quot;94088\0&quot;</span><span class=cF0>
+<a name="l121"></a>                                </span><span class=cF6>&quot;94514\0&quot;</span><span class=cF0>
+<a name="l122"></a>                                </span><span class=cF6>&quot;94869\0&quot;</span><span class=cF0>
+<a name="l123"></a>                                </span><span class=cF6>&quot;95153\0&quot;</span><span class=cF0>
+<a name="l124"></a>                                </span><span class=cF6>&quot;95402\0&quot;</span><span class=cF0>
+<a name="l125"></a>                                </span><span class=cF6>&quot;95647\0&quot;</span><span class=cF0>
+<a name="l126"></a>                                </span><span class=cF6>&quot;95772\0&quot;</span><span class=cF0>
+<a name="l127"></a>                                </span><span class=cF6>&quot;96090\0&quot;</span><span class=cF0>
+<a name="l128"></a>                                </span><span class=cF6>&quot;96320\0&quot;</span><span class=cF0>
+<a name="l129"></a>                                </span><span class=cF6>&quot;96440\0&quot;</span><span class=cF0>
+<a name="l130"></a>                                </span><span class=cF6>&quot;96500\0&quot;</span><span class=cF0>
+<a name="l131"></a>                                </span><span class=cF6>&quot;97370\0&quot;</span><span class=cF0>
+<a name="l132"></a>                                </span><span class=cF6>&quot;97687\0&quot;</span><span class=cF0>
+<a name="l133"></a>                                </span><span class=cF6>&quot;97976\0&quot;</span><span class=cF0>
+<a name="l134"></a>                                </span><span class=cF6>&quot;98163\0&quot;</span><span class=cF0>
+<a name="l135"></a>                                </span><span class=cF6>&quot;98506\0&quot;</span><span class=cF0>
+<a name="l136"></a>                                </span><span class=cF6>&quot;98552\0&quot;</span><span class=cF0>
+<a name="l137"></a>                                </span><span class=cF6>&quot;98597\0&quot;</span><span class=cF0>
+<a name="l138"></a>                                </span><span class=cF6>&quot;98684\0&quot;</span><span class=cF0>
+<a name="l139"></a>                                </span><span class=cF6>&quot;100111\0&quot;</span><span class=cF0>);
+<a name="l140"></a>        </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;ST_BIBLE_LINES&quot;</span><span class=cF0>,</span><span class=cF6>&quot;%d&quot;</span><span class=cF0>,
+<a name="l141"></a>                                </span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF5>DefineSub</span><span class=cF0>(</span><span class=cF5>DefineCount</span><span class=cF7>(</span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF7>)</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l142"></a>} </span><span class=cF5>BibleInit</span><span class=cF0>;
+<a name="l143"></a>
+<a name="l144"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>BibleLine2Verse</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> line, </span><span class=cF9>I64</span><span class=cF0> separate_ch=</span><span class=cF3>CH_SPACE</span><span class=cF0>)
+<a name="l145"></a>{</span><span class=cF2>//Line number to verse str, Malloc()ed.</span><span class=cF0>
+<a name="l146"></a></span><span class=cF2>//Separate with &lt;SPACE&gt; or ','.  If you pass '%', it uses &quot;%20&quot;.</span><span class=cF0>
+<a name="l147"></a>        </span><span class=cF9>CDoc</span><span class=cF0>      *doc;
+<a name="l148"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e;
+<a name="l149"></a>        </span><span class=cF9>I64</span><span class=cF0>                i = </span><span class=cFE>0</span><span class=cF0>,
+<a name="l150"></a>               count = </span><span class=cF5>DefineCount</span><span class=cF0>(</span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>),
+<a name="l151"></a>               </span><span class=cF1>start</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>,
+<a name="l152"></a>               last_start = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l153"></a>        </span><span class=cF1>U8</span><span class=cF0>        *ptr = </span><span class=cF5>DefineSub</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF0>),
+<a name="l154"></a>              *ptr2;
+<a name="l155"></a>
+<a name="l156"></a>        </span><span class=cF1>while</span><span class=cF0> (i &lt;= count)
+<a name="l157"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l158"></a>                last_start = </span><span class=cF1>start</span><span class=cF0>;
+<a name="l159"></a>                </span><span class=cF1>start</span><span class=cF0> = </span><span class=cF5>Str2I64</span><span class=cF0>(ptr);
+<a name="l160"></a>                </span><span class=cF1>if</span><span class=cF0> (line &lt; </span><span class=cF1>start</span><span class=cF0>)
+<a name="l161"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l162"></a>                i++;
+<a name="l163"></a>                ptr += </span><span class=cF5>StrLen</span><span class=cF0>(ptr) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l164"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l165"></a>
+<a name="l166"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= --i &lt; count)
+<a name="l167"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l168"></a>                doc = </span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF3>BIBLE_FILENAME</span><span class=cF0>, </span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>);
+<a name="l169"></a>                </span><span class=cF5>DocGoToLine</span><span class=cF0>(doc, line); </span><span class=cF2>//one based</span><span class=cF0>
+<a name="l170"></a>                doc_e = doc-&gt;cur_entry;
+<a name="l171"></a>                </span><span class=cF1>while</span><span class=cF0> (doc_e != doc &amp;&amp; </span><span class=cF7>(</span><span class=cF0>doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_TEXT</span><span class=cF0> || !*doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0>)
+<a name="l172"></a>                        doc_e = doc_e-&gt;next;
+<a name="l173"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; </span><span class=cF6>'0'</span><span class=cF0> &lt;= *doc_e-&gt;tag &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l174"></a>                {
+<a name="l175"></a>                        ptr = ptr2=doc_e-&gt;tag;
+<a name="l176"></a>                        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *ptr2 &lt;= </span><span class=cF6>'9'</span><span class=cF0> || *ptr2 == </span><span class=cF6>':'</span><span class=cF0>)
+<a name="l177"></a>                                ptr2++;
+<a name="l178"></a>                        *ptr2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l179"></a>                        </span><span class=cF1>if</span><span class=cF0> (separate_ch == </span><span class=cF6>'%'</span><span class=cF0>)
+<a name="l180"></a>                                ptr = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%Z%%20%s&quot;</span><span class=cF0>, i, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>, ptr);
+<a name="l181"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l182"></a>                                ptr = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%Z%c%s&quot;</span><span class=cF0>, i, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>, separate_ch, ptr);
+<a name="l183"></a>                }
+<a name="l184"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l185"></a>                {
+<a name="l186"></a>                        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l187"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l188"></a>                                doc_e = doc_e-&gt;last;
+<a name="l189"></a>                                </span><span class=cF1>if</span><span class=cF0> (doc_e == doc)
+<a name="l190"></a>                                {
+<a name="l191"></a>                                        ptr = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l192"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l193"></a>                                }
+<a name="l194"></a>                                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0> &lt; last_start)
+<a name="l195"></a>                                {
+<a name="l196"></a>                                        ptr = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%Z&quot;</span><span class=cF0>, i, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>);
+<a name="l197"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l198"></a>                                }
+<a name="l199"></a>                                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cFE>3</span><span class=cF0>)
+<a name="l200"></a>                                {
+<a name="l201"></a>                                        ptr = doc_e-&gt;tag + </span><span class=cF5>StrLen</span><span class=cF0>(doc_e-&gt;tag) - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l202"></a>                                        </span><span class=cF1>while</span><span class=cF0> (ptr &gt; doc_e-&gt;tag &amp;&amp; </span><span class=cF7>(</span><span class=cF0>!(</span><span class=cF6>'0'</span><span class=cF0> &lt;= *</span><span class=cF7>(</span><span class=cF0>ptr - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &lt;= </span><span class=cF6>'9'</span><span class=cF0>) || *ptr != </span><span class=cF6>':'</span><span class=cF0> || !(</span><span class=cF6>'0'</span><span class=cF0> &lt;= *</span><span class=cF7>(</span><span class=cF0>ptr + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &lt;= </span><span class=cF6>'9'</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l203"></a>                                                ptr--;
+<a name="l204"></a>                                        ptr--;
+<a name="l205"></a>                                        </span><span class=cF1>while</span><span class=cF0> (ptr &gt;= doc_e-&gt;tag &amp;&amp; </span><span class=cF6>'0'</span><span class=cF0> &lt;= *ptr &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l206"></a>                                                ptr--;
+<a name="l207"></a>                                        ptr2 = ++ptr;
+<a name="l208"></a>                                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *ptr2++ &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l209"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l210"></a>                                                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *ptr2 &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l211"></a>                                                        ptr2++;
+<a name="l212"></a>                                                </span><span class=cF1>if</span><span class=cF0> (*ptr2++ == </span><span class=cF6>':'</span><span class=cF0> &amp;&amp; </span><span class=cF6>'0'</span><span class=cF0> &lt;= *ptr2++ &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l213"></a>                                                {
+<a name="l214"></a>                                                        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *ptr2 &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l215"></a>                                                                ptr2++;
+<a name="l216"></a>                                                        *ptr2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l217"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (separate_ch == </span><span class=cF6>'%'</span><span class=cF0>)
+<a name="l218"></a>                                                                ptr = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%Z%%20%s&quot;</span><span class=cF0>, i, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>, ptr);
+<a name="l219"></a>                                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l220"></a>                                                                ptr = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%Z%c%s&quot;</span><span class=cF0>, i, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>, separate_ch, ptr);
+<a name="l221"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l222"></a>                                                }
+<a name="l223"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l224"></a>                                }
+<a name="l225"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l226"></a>                }
+<a name="l227"></a>                </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l228"></a>                </span><span class=cF1>return</span><span class=cF0> ptr;
+<a name="l229"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l230"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l231"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l232"></a>}
+<a name="l233"></a>
+<a name="l234"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BookLines</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc_out=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> lines, </span><span class=cF1>U8</span><span class=cF0> *book_filename=</span><span class=cF3>BIBLE_FILENAME</span><span class=cF0>)
+<a name="l235"></a>{</span><span class=cF2>//Put N line starting at line M into doc.</span><span class=cF0>
+<a name="l236"></a>        </span><span class=cF9>CDoc</span><span class=cF0>      *doc_in;
+<a name="l237"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e;
+<a name="l238"></a>
+<a name="l239"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc_out) doc_out = </span><span class=cF5>DocPut</span><span class=cF0>;
+<a name="l240"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_out &amp;&amp; </span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>book_filename</span><span class=cF7>)</span><span class=cF0>)
+<a name="l241"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l242"></a>                doc_in = </span><span class=cF5>DocRead</span><span class=cF0>(book_filename, </span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>);
+<a name="l243"></a>                </span><span class=cF5>DocGoToLine</span><span class=cF0>(doc_in, </span><span class=cF1>start</span><span class=cF0>); </span><span class=cF2>//one based</span><span class=cF0>
+<a name="l244"></a>                doc_e = doc_in-&gt;cur_entry;
+<a name="l245"></a>                </span><span class=cF1>while</span><span class=cF0> (lines &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; doc_e != doc_in)
+<a name="l246"></a>                {
+<a name="l247"></a>                        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
+<a name="l248"></a>                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, doc_e-&gt;tag);
+<a name="l249"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l250"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l251"></a>                                </span><span class=cF5>DocPutKey</span><span class=cF0>(doc_out, </span><span class=cF6>'\n'</span><span class=cF0>);
+<a name="l252"></a>                                lines--;
+<a name="l253"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l254"></a>                        doc_e = doc_e-&gt;next;
+<a name="l255"></a>                }
+<a name="l256"></a>                </span><span class=cF5>DocDel</span><span class=cF0>(doc_in);
+<a name="l257"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l258"></a>}
+<a name="l259"></a>
+<a name="l260"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BibleVerse</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc_out=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *verse, </span><span class=cF9>I64</span><span class=cF0> lines)
+<a name="l261"></a>{</span><span class=cF2>//Put N lines starting at verse str into doc.</span><span class=cF0>
+<a name="l262"></a>        </span><span class=cF9>I64</span><span class=cF0>        i;
+<a name="l263"></a>        </span><span class=cF9>CDoc</span><span class=cF0>      *doc_in;
+<a name="l264"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e;
+<a name="l265"></a>        </span><span class=cF1>U8</span><span class=cF0>        *st, *st2;
+<a name="l266"></a>
+<a name="l267"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc_out) doc_out = </span><span class=cF5>DocPut</span><span class=cF0>;
+<a name="l268"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_out &amp;&amp; </span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF3>BIBLE_FILENAME</span><span class=cF7>)</span><span class=cF0>)
+<a name="l269"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l270"></a>                st  = </span><span class=cF5>StrNew</span><span class=cF0>(verse);
+<a name="l271"></a>                st2 = </span><span class=cF5>StrNew</span><span class=cF0>(verse);
+<a name="l272"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF6>','</span><span class=cF7>)</span><span class=cF0>)
+<a name="l273"></a>                        </span><span class=cF5>StrLastRemove</span><span class=cF0>(st, </span><span class=cF6>&quot;,&quot;</span><span class=cF0>, st2);
+<a name="l274"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l275"></a>                        *st2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l276"></a>
+<a name="l277"></a>                i = </span><span class=cF5>DefineMatch</span><span class=cF0>(st, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
+<a name="l278"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l279"></a>                {
+<a name="l280"></a>                        i = </span><span class=cF5>Str2I64</span><span class=cF0>(</span><span class=cF5>DefineSub</span><span class=cF7>(</span><span class=cF0>i, </span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF7>)</span><span class=cF0>);
+<a name="l281"></a>                        doc_in = </span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF3>BIBLE_FILENAME</span><span class=cF0>, </span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>);
+<a name="l282"></a>                        </span><span class=cF5>DocGoToLine</span><span class=cF0>(doc_in, i); </span><span class=cF2>//one based</span><span class=cF0>
+<a name="l283"></a>                        </span><span class=cF1>if</span><span class=cF0> (*st2)
+<a name="l284"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l285"></a>                                </span><span class=cF5>StrCopy</span><span class=cF0>(doc_in-&gt;find_replace-&gt;find_text, st2);
+<a name="l286"></a>                                </span><span class=cF5>EdFindNext</span><span class=cF0>(doc_in);
+<a name="l287"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l288"></a>                        doc_e = doc_in-&gt;cur_entry;
+<a name="l289"></a>                        </span><span class=cF1>while</span><span class=cF0> (lines &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; doc_e != doc_in)
+<a name="l290"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l291"></a>                                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
+<a name="l292"></a>                                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, doc_e-&gt;tag);
+<a name="l293"></a>                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l294"></a>                                {
+<a name="l295"></a>                                        </span><span class=cF5>DocPutKey</span><span class=cF0>(doc_out, </span><span class=cF6>'\n'</span><span class=cF0>);
+<a name="l296"></a>                                        lines--;
+<a name="l297"></a>                                }
+<a name="l298"></a>                                doc_e = doc_e-&gt;next;
+<a name="l299"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l300"></a>                        </span><span class=cF5>DocDel</span><span class=cF0>(doc_in);
+<a name="l301"></a>                }
+<a name="l302"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l303"></a>                </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l304"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l305"></a>}
+<a name="l306"></a>
+<a name="l307"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>BibleDoc</span><span class=cF0>()
+<a name="l308"></a>{</span><span class=cF2>//Return Bible as DolDoc with trees.</span><span class=cF0>
+<a name="l309"></a>        </span><span class=cF9>CDoc</span><span class=cF0>      *res = </span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF3>BIBLE_FILENAME</span><span class=cF0>);
+<a name="l310"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e = res-&gt;head.next,*doc_e1;
+<a name="l311"></a>        </span><span class=cF1>Bool</span><span class=cF0>       open_chapter = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l312"></a>        </span><span class=cF1>U8</span><span class=cF0>                *ptr = </span><span class=cF5>Define</span><span class=cF0>(</span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF0>);
+<a name="l313"></a>        </span><span class=cF9>I64</span><span class=cF0>        book,
+<a name="l314"></a>                           book_count = </span><span class=cF5>DefineCount</span><span class=cF0>(</span><span class=cF6>&quot;ST_BIBLE_BOOK_LINES&quot;</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>,
+<a name="l315"></a>               chapter,
+<a name="l316"></a>               line = </span><span class=cF5>Str2I64</span><span class=cF0>(ptr,, &amp;ptr);
+<a name="l317"></a>
+<a name="l318"></a>        ptr++;
+<a name="l319"></a>        </span><span class=cF1>for</span><span class=cF0> (book = </span><span class=cFE>0</span><span class=cF0>; book &lt; book_count; book++)
+<a name="l320"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l321"></a>                </span><span class=cF1>while</span><span class=cF0> (doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0> &lt; line)
+<a name="l322"></a>                {
+<a name="l323"></a>                        doc_e1 = doc_e-&gt;next;
+<a name="l324"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(res, doc_e);
+<a name="l325"></a>                        doc_e = doc_e1;
+<a name="l326"></a>                }
+<a name="l327"></a>                res-&gt;cur_entry = doc_e;
+<a name="l328"></a>                res-&gt;cur_col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l329"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(res, </span><span class=cF6>&quot;$TR,\&quot;%Z\&quot;$\n$ID,2$&quot;</span><span class=cF0>, book, </span><span class=cF6>&quot;ST_BIBLE_BOOKS&quot;</span><span class=cF0>);
+<a name="l330"></a>                line = </span><span class=cF5>Str2I64</span><span class=cF0>(ptr,, &amp;ptr);
+<a name="l331"></a>                ptr++;
+<a name="l332"></a>                chapter = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l333"></a>                </span><span class=cF1>while</span><span class=cF0> (doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0> &lt; line)
+<a name="l334"></a>                {
+<a name="l335"></a>                        doc_e1 = doc_e-&gt;next;
+<a name="l336"></a>                        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrMatch</span><span class=cF7>(</span><span class=cF6>&quot;:1 &quot;</span><span class=cF0>, doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0>)
+<a name="l337"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l338"></a>                                res-&gt;cur_entry = doc_e;
+<a name="l339"></a>                                res-&gt;cur_col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l340"></a>                                </span><span class=cF1>if</span><span class=cF0> (open_chapter)
+<a name="l341"></a>                                {
+<a name="l342"></a>                                        </span><span class=cF5>DocPrint</span><span class=cF0>(res, </span><span class=cF6>&quot;$ID,-2$&quot;</span><span class=cF0>);
+<a name="l343"></a>                                        open_chapter = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l344"></a>                                }
+<a name="l345"></a>                                </span><span class=cF5>DocPrint</span><span class=cF0>(res, </span><span class=cF6>&quot;$TR,\&quot;%d\&quot;$\n$ID,2$&quot;</span><span class=cF0>, chapter++);
+<a name="l346"></a>                                open_chapter = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l347"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l348"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (chapter == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l349"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l350"></a>                                doc_e1 = doc_e-&gt;next;
+<a name="l351"></a>                                </span><span class=cF5>DocEntryDel</span><span class=cF0>(res, doc_e);
+<a name="l352"></a>                                doc_e = doc_e1;
+<a name="l353"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l354"></a>                        doc_e = doc_e1;
+<a name="l355"></a>                }
+<a name="l356"></a>                res-&gt;cur_entry = doc_e;
+<a name="l357"></a>                res-&gt;cur_col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l358"></a>                </span><span class=cF1>if</span><span class=cF0> (open_chapter)
+<a name="l359"></a>                {
+<a name="l360"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(res, </span><span class=cF6>&quot;$ID,-2$&quot;</span><span class=cF0>);
+<a name="l361"></a>                        open_chapter = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l362"></a>                }
+<a name="l363"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(res, </span><span class=cF6>&quot;$ID,-2$&quot;</span><span class=cF0>);
+<a name="l364"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l365"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != res)
+<a name="l366"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l367"></a>                doc_e1 = doc_e-&gt;next;
+<a name="l368"></a>                </span><span class=cF5>DocEntryDel</span><span class=cF0>(res, doc_e);
+<a name="l369"></a>                doc_e = doc_e1;
+<a name="l370"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l371"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l372"></a>}
+<a name="l373"></a>
+<a name="l374"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BibleView</span><span class=cF0>()
+<a name="l375"></a>{</span><span class=cF2>//View Bible as DolDoc with trees.</span><span class=cF0>
+<a name="l376"></a>        </span><span class=cF1>U8</span><span class=cF0>    buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l377"></a>        </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>BibleDoc</span><span class=cF0>;
+<a name="l378"></a>
+<a name="l379"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;AL:%d,1&quot;</span><span class=cF0>, doc);
+<a name="l380"></a>        </span><span class=cF5>Ed</span><span class=cF0>(buf);
+<a name="l381"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l382"></a>}
+<a name="l383"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>CtrlAltB</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0>)
+<a name="l384"></a>{
+<a name="l385"></a>        </span><span class=cF5>PopUp</span><span class=cF0>(</span><span class=cF6>&quot;BibleView;&quot;</span><span class=cF0>);
+<a name="l386"></a>}
+<a name="l387"></a></span><span class=cF5>CtrlAltCBSet</span><span class=cF0>(</span><span class=cF6>'B'</span><span class=cF0>, &amp;</span><span class=cF5>CtrlAltB</span><span class=cF0>, </span><span class=cF6>&quot;Cmd /Bible&quot;</span><span class=cF0>);
+</span></pre></body>
+</html>

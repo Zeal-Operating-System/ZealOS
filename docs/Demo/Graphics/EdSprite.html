@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF2>/*Add an outline to Sprites and</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>print them to the cmd line.  They</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>can be cut/pasted from there.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>*/</span><span class=cFA>
+<a name="l5"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cFA>
+<a name="l8"></a>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l9"></a>
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cFA>
+<a name="l12"></a>&lt;3&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l13"></a>
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cFA>
+<a name="l16"></a>&lt;4&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l17"></a>
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cFA>
+<a name="l20"></a>&lt;5&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l21"></a>
+<a name="l22"></a>
+<a name="l23"></a></span><span class=cFA>
+<a name="l24"></a>&lt;6&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l25"></a>
+<a name="l26"></a>
+<a name="l27"></a></span><span class=cFA>
+<a name="l28"></a>&lt;7&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l29"></a>
+<a name="l30"></a></span><span class=cFA>
+<a name="l31"></a>&lt;8&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l32"></a>
+<a name="l33"></a>
+<a name="l34"></a></span><span class=cFA>
+<a name="l35"></a>&lt;9&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l36"></a>
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cFA>
+<a name="l39"></a>&lt;10&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l40"></a>
+<a name="l41"></a>
+<a name="l42"></a></span><span class=cFA>
+<a name="l43"></a>&lt;11&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l44"></a>
+<a name="l45"></a>
+<a name="l46"></a></span><span class=cFA>
+<a name="l47"></a>&lt;12&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l48"></a>
+<a name="l49"></a>
+<a name="l50"></a>
+<a name="l51"></a>#</span><span class=cF1>define</span><span class=cF0> NUM             </span><span class=cFE>12</span><span class=cF0>
+<a name="l52"></a>
+<a name="l53"></a></span><span class=cF1>U8</span><span class=cF0> *in_img[NUM] = {</span><span class=cFA>&lt;1&gt;</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>, </span><span class=cFA>&lt;3&gt;</span><span class=cF0>, </span><span class=cFA>&lt;4&gt;</span><span class=cF0>, </span><span class=cFA>&lt;5&gt;</span><span class=cF0>, </span><span class=cFA>&lt;6&gt;</span><span class=cF0>, </span><span class=cFA>&lt;7&gt;</span><span class=cF0>, </span><span class=cFA>&lt;8&gt;</span><span class=cF0>, </span><span class=cFA>&lt;9&gt;</span><span class=cF0>, </span><span class=cFA>&lt;10&gt;</span><span class=cF0>, </span><span class=cFA>&lt;11&gt;</span><span class=cF0>, </span><span class=cFA>&lt;12&gt;</span><span class=cF0>};
+<a name="l54"></a>
+<a name="l55"></a></span><span class=cF1>U0</span><span class=cF0> OutLine()
+<a name="l56"></a>{
+<a name="l57"></a>        </span><span class=cF9>I64</span><span class=cF0>  n, minx, maxx, miny, maxy, w, h, i, j, k, c;
+<a name="l58"></a>        </span><span class=cF1>U8</span><span class=cF0>  *out_img;
+<a name="l59"></a>        </span><span class=cF9>CDC</span><span class=cF0> *dc;
+<a name="l60"></a>
+<a name="l61"></a>        </span><span class=cF1>for</span><span class=cF0> (n = </span><span class=cFE>0</span><span class=cF0>; n &lt; NUM; n++)
+<a name="l62"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l63"></a>                </span><span class=cF5>SpriteExtents</span><span class=cF0>(in_img[n], &amp;minx, &amp;maxx, &amp;miny, &amp;maxy);
+<a name="l64"></a>                w = maxx - minx + </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>;
+<a name="l65"></a>                h = maxy - miny + </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>;
+<a name="l66"></a>                dc = </span><span class=cF5>DCNew</span><span class=cF0>(w, h);
+<a name="l67"></a>                dc-&gt;color = </span><span class=cF3>TRANSPARENT</span><span class=cF0>;
+<a name="l68"></a>                </span><span class=cF5>GrRect</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, w, h);
+<a name="l69"></a>                </span><span class=cF5>Sprite3</span><span class=cF0>(dc, -minx + </span><span class=cFE>1</span><span class=cF0>, -miny + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, in_img[n]);
+<a name="l70"></a>
+<a name="l71"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; h; i++)
+<a name="l72"></a>                        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; w; j++)
+<a name="l73"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>GrPeek</span><span class=cF7>(</span><span class=cF0>dc, j, i</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>TRANSPARENT</span><span class=cF0>)
+<a name="l74"></a>                                {
+<a name="l75"></a>                                        </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; </span><span class=cFE>8</span><span class=cF0>; k++)
+<a name="l76"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l77"></a>                                                c = </span><span class=cF5>GrPeek</span><span class=cF0>(dc, j + </span><span class=cFB>gr_x_offsets</span><span class=cF0>[k], i + </span><span class=cFB>gr_y_offsets</span><span class=cF0>[k]);
+<a name="l78"></a>                                                </span><span class=cF1>if</span><span class=cF0> (c != -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; c != </span><span class=cF3>BLACK</span><span class=cF0> &amp;&amp; c != </span><span class=cF3>TRANSPARENT</span><span class=cF0>)
+<a name="l79"></a>                                                {
+<a name="l80"></a>                                                        dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l81"></a>                                                        </span><span class=cF5>GrPlot</span><span class=cF0>(dc, j, i);
+<a name="l82"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l83"></a>                                                }
+<a name="l84"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l85"></a>                                }
+<a name="l86"></a>
+<a name="l87"></a>                out_img = </span><span class=cF5>DC2Sprite</span><span class=cF0>(dc);
+<a name="l88"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l89"></a>                </span><span class=cF5>Sprite</span><span class=cF0>(out_img);
+<a name="l90"></a>                </span><span class=cF6>'\n\n\n\n'</span><span class=cF0>;
+<a name="l91"></a>
+<a name="l92"></a>                </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l93"></a>                </span><span class=cF5>Free</span><span class=cF0>(out_img);
+<a name="l94"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>}
+<a name="l96"></a>
+<a name="l97"></a>OutLine;
+</span></pre></body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FSize</span><span class=cF0>(</span><span class=cF9>CFile</span><span class=cF0> *f)
+<a name="l2"></a>{</span><span class=cF2>//Report size of opened file in bytes.</span><span class=cF0>
+<a name="l3"></a>        </span><span class=cF1>if</span><span class=cF0> (f)
+<a name="l4"></a>                </span><span class=cF1>return</span><span class=cF0> f-&gt;de.size;
+<a name="l5"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l6"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l7"></a>}
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF9>CFile</span><span class=cF0> *</span><span class=cF5>FOpen</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>U8</span><span class=cF0> *flags, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l10"></a>{</span><span class=cF2>//Allows flags &quot;r&quot;,&quot;w&quot;,&quot;w+&quot;. &quot;c&quot; for contiguous.</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>//(It uses </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/StrA.html#l457"><span class=cF4>StrOcc</span></a><span class=cF2>() for 'w', 'r', '+', 'c')</span><span class=cF0>
+<a name="l12"></a>        </span><span class=cF9>CFile</span><span class=cF0>           *f = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFile</span><span class=cF7>)</span><span class=cF0>);
+<a name="l13"></a>        </span><span class=cF9>CDirContext</span><span class=cF0>     *dirc;
+<a name="l14"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *full_name;
+<a name="l15"></a>        </span><span class=cF1>Bool</span><span class=cF0>             contiguous = </span><span class=cF5>StrOcc</span><span class=cF0>(flags, </span><span class=cF6>'c'</span><span class=cF0>);
+<a name="l16"></a>
+<a name="l17"></a>        f-&gt;clus = </span><span class=cF3>INVALID_CLUS</span><span class=cF0>;
+<a name="l18"></a>        f-&gt;fblk_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l19"></a>        </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l20"></a>                f-&gt;max_blk = count - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l21"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l22"></a>                f-&gt;max_blk = </span><span class=cF3>I64_MAX</span><span class=cF0>;
+<a name="l23"></a>        f-&gt;file_clus_num = </span><span class=cF3>INVALID_CLUS</span><span class=cF0>;
+<a name="l24"></a>        full_name = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename);
+<a name="l25"></a>        f-&gt;drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(*full_name);
+<a name="l26"></a>        </span><span class=cF1>if</span><span class=cF0> (f-&gt;drive-&gt;fs_type == </span><span class=cF3>FSt_REDSEA</span><span class=cF0>)
+<a name="l27"></a>                contiguous = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l28"></a>        </span><span class=cF1>if</span><span class=cF0> (contiguous)
+<a name="l29"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l30"></a>                f-&gt;flags |= </span><span class=cF3>FF_CONTIGUOUS</span><span class=cF0>;
+<a name="l31"></a>                </span><span class=cF1>if</span><span class=cF0> (f-&gt;drive-&gt;fs_type != </span><span class=cF3>FSt_REDSEA</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF5>FileAttr</span><span class=cF0>(filename) &amp; </span><span class=cF3>RS_ATTR_CONTIGUOUS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l32"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'File'</span><span class=cF0>);
+<a name="l33"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l34"></a>        f-&gt;clus_buf = </span><span class=cF5>CAlloc</span><span class=cF0>(f-&gt;drive-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l35"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF0>flags, </span><span class=cF6>'w'</span><span class=cF7>)</span><span class=cF0>)
+<a name="l36"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>                f-&gt;flags = f-&gt;flags | </span><span class=cF3>FF_WRITE</span><span class=cF0> | </span><span class=cF3>FF_NEEDS_WRITE</span><span class=cF0>;
+<a name="l38"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF0>flags, </span><span class=cF6>'+'</span><span class=cF7>)</span><span class=cF0>)
+<a name="l39"></a>                {
+<a name="l40"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>full_name, &amp;f-&gt;de, </span><span class=cF3>FUF_JUST_FILES</span><span class=cF7>)</span><span class=cF0>)
+<a name="l41"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l42"></a>                                </span><span class=cF5>Free</span><span class=cF0>(full_name);
+<a name="l43"></a>                                </span><span class=cF1>if</span><span class=cF0> (contiguous)
+<a name="l44"></a>                                        f-&gt;max_blk = (</span><span class=cF5>FSize</span><span class=cF7>(</span><span class=cF0>f</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>BLK_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l45"></a>                                </span><span class=cF1>return</span><span class=cF0> f;
+<a name="l46"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>                }
+<a name="l48"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l49"></a>                        </span><span class=cF5>Del</span><span class=cF0>(full_name,,, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l50"></a>                f-&gt;de.full_name = full_name;
+<a name="l51"></a>                f-&gt;flags |= </span><span class=cF3>FF_NEW_FILE</span><span class=cF0>;
+<a name="l52"></a>                </span><span class=cF1>if</span><span class=cF0> (dirc = </span><span class=cF5>DirContextNew</span><span class=cF7>(</span><span class=cF0>full_name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l53"></a>                {
+<a name="l54"></a>                        </span><span class=cF5>StrCopy</span><span class=cF0>(f-&gt;de.name, dirc-&gt;mask);
+<a name="l55"></a>                        </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l56"></a>                        </span><span class=cF7>{</span><span class=cF2>//We pre-alloc the whole thing.</span><span class=cF0>
+<a name="l57"></a>                                f-&gt;de.clus = </span><span class=cF5>ClusAlloc</span><span class=cF0>(f-&gt;drive,</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>count + f-&gt;drive-&gt;spc - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / f-&gt;drive-&gt;spc, contiguous);
+<a name="l58"></a>                                f-&gt;de.size = count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l59"></a>                                </span><span class=cF5>DirNew</span><span class=cF0>(dirc-&gt;drive, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dir, &amp;f-&gt;de, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l60"></a>                                f-&gt;flags &amp;= ~</span><span class=cF3>FF_NEW_FILE</span><span class=cF0>;
+<a name="l61"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l62"></a>                        </span><span class=cF5>DirContextDel</span><span class=cF0>(dirc);
+<a name="l63"></a>                        </span><span class=cF1>return</span><span class=cF0> f;
+<a name="l64"></a>                }
+<a name="l65"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l66"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l67"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l68"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>full_name, &amp;f-&gt;de, </span><span class=cF3>FUF_JUST_FILES</span><span class=cF7>)</span><span class=cF0>)
+<a name="l69"></a>                {
+<a name="l70"></a>                        </span><span class=cF5>Free</span><span class=cF0>(full_name);
+<a name="l71"></a>                        f-&gt;max_blk = (</span><span class=cF5>FSize</span><span class=cF7>(</span><span class=cF0>f</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>BLK_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l72"></a>                        </span><span class=cF1>return</span><span class=cF0> f;
+<a name="l73"></a>                }
+<a name="l74"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l75"></a>        </span><span class=cF5>Free</span><span class=cF0>(f-&gt;clus_buf);
+<a name="l76"></a>        </span><span class=cF5>Free</span><span class=cF0>(full_name);
+<a name="l77"></a>        </span><span class=cF5>Free</span><span class=cF0>(f);
+<a name="l78"></a>
+<a name="l79"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l80"></a>}
+<a name="l81"></a>
+<a name="l82"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FClose</span><span class=cF0>(</span><span class=cF9>CFile</span><span class=cF0> *f)
+<a name="l83"></a>{</span><span class=cF2>//Close CFile, updating directory.</span><span class=cF0>
+<a name="l84"></a>        </span><span class=cF9>CDirContext</span><span class=cF0> *dirc;
+<a name="l85"></a>
+<a name="l86"></a>        </span><span class=cF1>if</span><span class=cF0> (f)
+<a name="l87"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l88"></a>                </span><span class=cF1>if</span><span class=cF0> (f-&gt;flags &amp; </span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>)
+<a name="l89"></a>                {
+<a name="l90"></a>                        </span><span class=cF5>ClusWrite</span><span class=cF0>(f-&gt;drive, f-&gt;clus_buf, f-&gt;clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l91"></a>                        f-&gt;flags &amp;= ~</span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>;
+<a name="l92"></a>                }
+<a name="l93"></a>                </span><span class=cF1>if</span><span class=cF0> (f-&gt;flags &amp; </span><span class=cF3>FF_NEEDS_WRITE</span><span class=cF0>)
+<a name="l94"></a>                {
+<a name="l95"></a>                        </span><span class=cF1>if</span><span class=cF0> (dirc = </span><span class=cF5>DirContextNew</span><span class=cF7>(</span><span class=cF0>f-&gt;de.full_name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l96"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l97"></a>                                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>f-&gt;flags &amp; </span><span class=cF3>FF_USE_OLD_DATETIME</span><span class=cF7>)</span><span class=cF0>)
+<a name="l98"></a>                                        f-&gt;de.datetime = </span><span class=cF5>Now</span><span class=cF0>;
+<a name="l99"></a>                                </span><span class=cF1>if</span><span class=cF0> (f-&gt;flags &amp; </span><span class=cF3>FF_NEW_FILE</span><span class=cF0>)
+<a name="l100"></a>                                        </span><span class=cF5>DirNew</span><span class=cF0>(dirc-&gt;drive, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dir, &amp;f-&gt;de, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l101"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l102"></a>                                        </span><span class=cF5>DirNew</span><span class=cF0>(dirc-&gt;drive, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dir, &amp;f-&gt;de, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l103"></a>                                </span><span class=cF5>DirContextDel</span><span class=cF0>(dirc);
+<a name="l104"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l105"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l106"></a>                                </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'File'</span><span class=cF0>);
+<a name="l107"></a>                }
+<a name="l108"></a>                </span><span class=cF5>Free</span><span class=cF0>(f-&gt;clus_buf);
+<a name="l109"></a>                </span><span class=cF5>Free</span><span class=cF0>(f-&gt;de.full_name);
+<a name="l110"></a>                </span><span class=cF5>Free</span><span class=cF0>(f);
+<a name="l111"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l112"></a>}
+<a name="l113"></a>
+<a name="l114"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>FSetClus</span><span class=cF0>(</span><span class=cF9>CFile</span><span class=cF0> *f, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF1>Bool</span><span class=cF0> read)
+<a name="l115"></a>{
+<a name="l116"></a>        </span><span class=cF9>CDrive</span><span class=cF0>  *drive = f-&gt;drive;
+<a name="l117"></a>        </span><span class=cF9>I64</span><span class=cF0>              i;
+<a name="l118"></a>
+<a name="l119"></a>        </span><span class=cF1>if</span><span class=cF0> (f-&gt;clus != c)
+<a name="l120"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l121"></a>                </span><span class=cF1>if</span><span class=cF0> (f-&gt;flags &amp; </span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>)
+<a name="l122"></a>                {
+<a name="l123"></a>                        i = drive-&gt;spc;
+<a name="l124"></a>                        </span><span class=cF1>if</span><span class=cF0> (f-&gt;max_blk != </span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l125"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l126"></a>                                i = f-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0> - f-&gt;file_clus_num * drive-&gt;spc;
+<a name="l127"></a>                                </span><span class=cF1>if</span><span class=cF0> (i &gt; drive-&gt;spc)
+<a name="l128"></a>                                        i = drive-&gt;spc;
+<a name="l129"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l130"></a>                        </span><span class=cF5>ClusBlkWrite</span><span class=cF0>(drive, f-&gt;clus_buf, f-&gt;clus, i);
+<a name="l131"></a>                        f-&gt;flags = f-&gt;flags &amp; ~</span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>;
+<a name="l132"></a>                }
+<a name="l133"></a>                f-&gt;clus = c;
+<a name="l134"></a>                f-&gt;file_clus_num = blk / drive-&gt;spc;
+<a name="l135"></a>                </span><span class=cF1>if</span><span class=cF0> (read)
+<a name="l136"></a>                {
+<a name="l137"></a>                        i = drive-&gt;spc;
+<a name="l138"></a>                        </span><span class=cF1>if</span><span class=cF0> (f-&gt;max_blk != </span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l139"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l140"></a>                                i = f-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0> - f-&gt;file_clus_num * drive-&gt;spc;
+<a name="l141"></a>                                </span><span class=cF1>if</span><span class=cF0> (i &gt; drive-&gt;spc)
+<a name="l142"></a>                                        i = drive-&gt;spc;
+<a name="l143"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l144"></a>                        c = </span><span class=cF5>ClusBlkRead</span><span class=cF0>(drive, f-&gt;clus_buf, c, i);
+<a name="l145"></a>                }
+<a name="l146"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l147"></a>
+<a name="l148"></a>        </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l149"></a>}
+<a name="l150"></a>
+<a name="l151"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FBlkRead</span><span class=cF0>(</span><span class=cF9>CFile</span><span class=cF0> *f, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk=</span><span class=cF3>FFB_NEXT_BLK</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>)
+<a name="l152"></a>{</span><span class=cF2>//Read [nth,n+count) blks of file.</span><span class=cF0>
+<a name="l153"></a>        </span><span class=cF9>CDrive</span><span class=cF0>  *drive = f-&gt;drive;
+<a name="l154"></a>        </span><span class=cF9>I64</span><span class=cF0>              spc   = drive-&gt;spc, i, j, c = f-&gt;de.clus;
+<a name="l155"></a>
+<a name="l156"></a>        </span><span class=cF1>if</span><span class=cF0> (!f || !drive)
+<a name="l157"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l158"></a>        </span><span class=cF1>if</span><span class=cF0> (blk == </span><span class=cF3>FFB_NEXT_BLK</span><span class=cF0>)
+<a name="l159"></a>                blk = f-&gt;fblk_num;
+<a name="l160"></a>        </span><span class=cF1>if</span><span class=cF0> (blk + count - </span><span class=cFE>1</span><span class=cF0> &gt; f-&gt;max_blk)
+<a name="l161"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l162"></a>        </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l163"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l164"></a>
+<a name="l165"></a>        </span><span class=cF1>if</span><span class=cF0> (f-&gt;flags &amp; </span><span class=cF3>FF_CONTIGUOUS</span><span class=cF0>)
+<a name="l166"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l167"></a>                </span><span class=cF5>BlkRead</span><span class=cF0>(drive, buf, </span><span class=cF5>Clus2Blk</span><span class=cF7>(</span><span class=cF0>drive, c</span><span class=cF7>)</span><span class=cF0> + blk, count);
+<a name="l168"></a>                blk += count;
+<a name="l169"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l170"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l171"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l172"></a>                i = blk / spc;
+<a name="l173"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= f-&gt;file_clus_num &lt;= i)
+<a name="l174"></a>                {
+<a name="l175"></a>                        c = f-&gt;clus;
+<a name="l176"></a>                        i -= f-&gt;file_clus_num;
+<a name="l177"></a>                }
+<a name="l178"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l179"></a>                        c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, c, i);
+<a name="l180"></a>
+<a name="l181"></a>                </span><span class=cF1>if</span><span class=cF0> (i = blk % spc)
+<a name="l182"></a>                {
+<a name="l183"></a>                        c = </span><span class=cFD>FSetClus</span><span class=cF0>(f, c, blk, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l184"></a>                        </span><span class=cF1>if</span><span class=cF0> (count &lt; spc - i)
+<a name="l185"></a>                                j = count;
+<a name="l186"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l187"></a>                                j = spc - i;
+<a name="l188"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, f-&gt;clus_buf + i &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, j &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l189"></a>                        buf += j &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l190"></a>                        count -= j;
+<a name="l191"></a>                        blk += j;
+<a name="l192"></a>                }
+<a name="l193"></a>                </span><span class=cF1>while</span><span class=cF0> (count &gt;= spc)
+<a name="l194"></a>                {
+<a name="l195"></a>                        c = </span><span class=cFD>FSetClus</span><span class=cF0>(f, c, blk, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l196"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, f-&gt;clus_buf, spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l197"></a>                        buf += spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l198"></a>                        count -= spc;
+<a name="l199"></a>                        blk += spc;
+<a name="l200"></a>                }
+<a name="l201"></a>                </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l202"></a>                {
+<a name="l203"></a>                        c = </span><span class=cFD>FSetClus</span><span class=cF0>(f, c, blk, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l204"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, f-&gt;clus_buf, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l205"></a>                        buf += count&lt;&lt;</span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l206"></a>                        blk += count;
+<a name="l207"></a>                }
+<a name="l208"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l209"></a>        f-&gt;fblk_num = blk;
+<a name="l210"></a>
+<a name="l211"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l212"></a>}
+<a name="l213"></a>
+<a name="l214"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FBlkWrite</span><span class=cF0>(</span><span class=cF9>CFile</span><span class=cF0> *f, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk=</span><span class=cF3>FFB_NEXT_BLK</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>)
+<a name="l215"></a>{</span><span class=cF2>//Write [nth,n+count) blks of file.</span><span class=cF0>
+<a name="l216"></a>        </span><span class=cF9>CDrive</span><span class=cF0>  *drive = f-&gt;drive;
+<a name="l217"></a>        </span><span class=cF9>I64</span><span class=cF0>              spc   = drive-&gt;spc, i, j, c = f-&gt;de.clus, c1;
+<a name="l218"></a>
+<a name="l219"></a>        </span><span class=cF1>if</span><span class=cF0> (!f || !drive)
+<a name="l220"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l221"></a>        </span><span class=cF1>if</span><span class=cF0> (blk == </span><span class=cF3>FFB_NEXT_BLK</span><span class=cF0>)
+<a name="l222"></a>                blk = f-&gt;fblk_num;
+<a name="l223"></a>        </span><span class=cF1>if</span><span class=cF0> (blk + count - </span><span class=cFE>1</span><span class=cF0> &gt; f-&gt;max_blk)
+<a name="l224"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l225"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>f-&gt;flags &amp; </span><span class=cF3>FF_WRITE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l226"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l227"></a>        </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l228"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l229"></a>        </span><span class=cF1>if</span><span class=cF0> (f-&gt;flags &amp; </span><span class=cF3>FF_CONTIGUOUS</span><span class=cF0>)
+<a name="l230"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l231"></a>                </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, buf, </span><span class=cF5>Clus2Blk</span><span class=cF7>(</span><span class=cF0>drive, c</span><span class=cF7>)</span><span class=cF0> + blk, count);
+<a name="l232"></a>                blk += count;
+<a name="l233"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l234"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l235"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l236"></a>                </span><span class=cF1>if</span><span class=cF0> (!c)
+<a name="l237"></a>                {
+<a name="l238"></a>                        c = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l239"></a>                        f-&gt;file_clus_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l240"></a>                        f-&gt;clus = c;
+<a name="l241"></a>                        f-&gt;de.clus = c;
+<a name="l242"></a>                        f-&gt;flags |= </span><span class=cF3>FF_NEEDS_WRITE</span><span class=cF0> | </span><span class=cF3>FF_NEW_FILE</span><span class=cF0>;
+<a name="l243"></a>                }
+<a name="l244"></a>                i = blk / spc;
+<a name="l245"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= f-&gt;file_clus_num &lt;= i)
+<a name="l246"></a>                {
+<a name="l247"></a>                        c = f-&gt;clus;
+<a name="l248"></a>                        i -= f-&gt;file_clus_num;
+<a name="l249"></a>                }
+<a name="l250"></a>                </span><span class=cF1>while</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l251"></a>                {
+<a name="l252"></a>                        c1 = c;
+<a name="l253"></a>                        c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, c1, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l254"></a>                        </span><span class=cF1>if</span><span class=cF0> (c == </span><span class=cF3>INVALID_CLUS</span><span class=cF0>)
+<a name="l255"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l256"></a>                                c = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, c1, i, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l257"></a>                                </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l258"></a>                                        c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, c, i - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l259"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l260"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l261"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l262"></a>                                i--;
+<a name="l263"></a>                }
+<a name="l264"></a>
+<a name="l265"></a>                </span><span class=cF1>if</span><span class=cF0> (i = blk % spc)
+<a name="l266"></a>                {
+<a name="l267"></a>                        </span><span class=cFD>FSetClus</span><span class=cF0>(f, c, blk, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l268"></a>                        </span><span class=cF1>if</span><span class=cF0> (count &lt; spc - i)
+<a name="l269"></a>                                j = count;
+<a name="l270"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l271"></a>                                j = spc - i;
+<a name="l272"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(f-&gt;clus_buf + </span><span class=cF3>BLK_SIZE</span><span class=cF0> * i, buf, j &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l273"></a>                        f-&gt;flags |= </span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>;
+<a name="l274"></a>                        buf += j &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l275"></a>                        count -= j;
+<a name="l276"></a>                        blk += j;
+<a name="l277"></a>                        </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l278"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l279"></a>                                c1 = c;
+<a name="l280"></a>                                c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, c1, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l281"></a>                                </span><span class=cF1>if</span><span class=cF0> (c == </span><span class=cF3>INVALID_CLUS</span><span class=cF0>)
+<a name="l282"></a>                                        c = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, c1, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l283"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l284"></a>                }
+<a name="l285"></a>                </span><span class=cF1>while</span><span class=cF0> (count &gt;= spc)
+<a name="l286"></a>                {
+<a name="l287"></a>                        </span><span class=cFD>FSetClus</span><span class=cF0>(f, c, blk, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l288"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(f-&gt;clus_buf, buf, spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l289"></a>                        f-&gt;flags |= </span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>;
+<a name="l290"></a>                        buf += spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l291"></a>                        count -= spc;
+<a name="l292"></a>                        blk += spc;
+<a name="l293"></a>                        </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l294"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l295"></a>                                c1 = c;
+<a name="l296"></a>                                c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, c1, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l297"></a>                                </span><span class=cF1>if</span><span class=cF0> (c == </span><span class=cF3>INVALID_CLUS</span><span class=cF0>)
+<a name="l298"></a>                                        c = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, c1, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l299"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l300"></a>                }
+<a name="l301"></a>                </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l302"></a>                {
+<a name="l303"></a>                        </span><span class=cFD>FSetClus</span><span class=cF0>(f, c, blk, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l304"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(f-&gt;clus_buf, buf, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l305"></a>                        f-&gt;flags |= </span><span class=cF3>FF_BUF_DIRTY</span><span class=cF0>;
+<a name="l306"></a>                        buf += count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l307"></a>                        blk += count;
+<a name="l308"></a>                }
+<a name="l309"></a>                </span><span class=cF1>if</span><span class=cF0> (f-&gt;de.size &lt; blk &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>)
+<a name="l310"></a>                        f-&gt;de.size = blk &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l311"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l312"></a>        f-&gt;fblk_num = blk;
+<a name="l313"></a>
+<a name="l314"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l315"></a>}
+</span></pre></body>
+</html>

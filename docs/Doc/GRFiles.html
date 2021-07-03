@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>GR graphics files are 8-bits-per-pixels but only 4-bits of color, with transparency and no palette.  Compression is the standard 
+<a name="l2"></a>ZealOS LZW compression.
+<a name="l3"></a>
+<a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> DCF_COMPRESSED  </span><span class=cFE>1</span><span class=cF0> </span><span class=cF2>//This is the only saved flag.</span><span class=cF0>
+<a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DCF_PALETTE</span><span class=cF0>     </span><span class=cFE>2</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>TRANSPARENT</span><span class=cF0>     </span><span class=cFE>0xFF</span><span class=cF0>
+<a name="l8"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BLACK</span><span class=cF0>           </span><span class=cFE>0</span><span class=cF0>
+<a name="l9"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BLUE</span><span class=cF0>            </span><span class=cFE>1</span><span class=cF0>
+<a name="l10"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GREEN</span><span class=cF0>           </span><span class=cFE>2</span><span class=cF0>
+<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CYAN</span><span class=cF0>            </span><span class=cFE>3</span><span class=cF0>
+<a name="l12"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>RED</span><span class=cF0>                     </span><span class=cFE>4</span><span class=cF0>
+<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PURPLE</span><span class=cF0>          </span><span class=cFE>5</span><span class=cF0>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BROWN</span><span class=cF0>           </span><span class=cFE>6</span><span class=cF0>
+<a name="l15"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LTGRAY</span><span class=cF0>          </span><span class=cFE>7</span><span class=cF0>
+<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DKGRAY</span><span class=cF0>          </span><span class=cFE>8</span><span class=cF0>
+<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LTBLUE</span><span class=cF0>          </span><span class=cFE>9</span><span class=cF0>
+<a name="l18"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LTGREEN</span><span class=cF0>         </span><span class=cFE>10</span><span class=cF0>
+<a name="l19"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LTCYAN</span><span class=cF0>          </span><span class=cFE>11</span><span class=cF0>
+<a name="l20"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LTRED</span><span class=cF0>           </span><span class=cFE>12</span><span class=cF0>
+<a name="l21"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>LTPURPLE</span><span class=cF0>        </span><span class=cFE>13</span><span class=cF0>
+<a name="l22"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>YELLOW</span><span class=cF0>          </span><span class=cFE>14</span><span class=cF0>
+<a name="l23"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>WHITE</span><span class=cF0>           </span><span class=cFE>15</span><span class=cF0>
+<a name="l24"></a>
+<a name="l25"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CBGR48</span><span class=cF0>
+<a name="l26"></a>{
+<a name="l27"></a>        </span><span class=cF9>U16</span><span class=cF0>     r, g, b, pad;
+<a name="l28"></a>};
+<a name="l29"></a>
+<a name="l30"></a></span><span class=cF9>CBGR48</span><span class=cF0> </span><span class=cFB>gr_palette_std</span><span class=cF0>[</span><span class=cFE>16</span><span class=cF0>] = {
+<a name="l31"></a>
+<a name="l32"></a></span><span class=cFE>0x000000000000</span><span class=cF0>, </span><span class=cFE>0x00000000AAAA</span><span class=cF0>, </span><span class=cFE>0x0000AAAA0000</span><span class=cF0>, </span><span class=cFE>0x0000AAAAAAAA</span><span class=cF0>,
+<a name="l33"></a></span><span class=cFE>0xAAAA00000000</span><span class=cF0>, </span><span class=cFE>0xAAAA0000AAAA</span><span class=cF0>, </span><span class=cFE>0xAAAA55550000</span><span class=cF0>, </span><span class=cFE>0xAAAAAAAAAAAA</span><span class=cF0>,
+<a name="l34"></a></span><span class=cFE>0x555555555555</span><span class=cF0>, </span><span class=cFE>0x55555555FFFF</span><span class=cF0>, </span><span class=cFE>0x5555FFFF5555</span><span class=cF0>, </span><span class=cFE>0x5555FFFFFFFF</span><span class=cF0>,
+<a name="l35"></a></span><span class=cFE>0xFFFF55555555</span><span class=cF0>, </span><span class=cFE>0xFFFF5555FFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF5555</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFFFFFF</span><span class=cF0>};
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF1>class</span><span class=cF0> GRFile
+<a name="l38"></a>{
+<a name="l39"></a>        </span><span class=cF9>I32</span><span class=cF0>     width;
+<a name="l40"></a>        </span><span class=cF9>I32</span><span class=cF0>     width_internal; </span><span class=cF2>//Rounded-up to multiple of 8.</span><span class=cF0>
+<a name="l41"></a>        </span><span class=cF9>I32</span><span class=cF0>     height;
+<a name="l42"></a>        </span><span class=cF9>I32</span><span class=cF0>     flags;                  </span><span class=cF2>//DCF_COMPRESSED? See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Compress.html#l1"><span class=cF4>::/Kernel/Compress.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l43"></a>        </span><span class=cF9>CBGR48</span><span class=cF0>  palette[</span><span class=cFE>16</span><span class=cF0>];    </span><span class=cF2>//Included if DCF_PALETTE.</span><span class=cF0>
+<a name="l44"></a>        </span><span class=cF1>U8</span><span class=cF0>              body[];
+<a name="l45"></a>};
+<a name="l46"></a>
+<a name="l47"></a>See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l318"><span class=cF4>DCSave</span></a><span class=cF0>(), </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l404"><span class=cF4>GRWrite</span></a><span class=cF0>(), </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l362"><span class=cF4>DCLoad</span></a><span class=cF0>(), and </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l415"><span class=cF4>GRRead</span></a><span class=cF0>().
+</span></pre></body>
+</html>

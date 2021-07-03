@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF2>/*</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>Char graphics are how games on the C64 were made.  You don't need to do it</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>this way, unless for fun.  You can just make device context bigger than</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>the screen and scroll around.</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF2>See  </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Games/RawHide.html#l1"><span class=cF4>::/Demo/Games/RawHide.CC</span></a><span class=cF2> or </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Games/BigGuns.html#l1"><span class=cF4>::/Demo/Games/BigGuns.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF2>The nice thing about character graphics are the animations.</span><span class=cF0>
+<a name="l9"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l10"></a>
+<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_WIDTH               (</span><span class=cF3>TEXT_COLS</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l12"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_HEIGHT              (</span><span class=cF3>TEXT_ROWS</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l13"></a>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> CH_WATER                </span><span class=cF6>'^'</span><span class=cF0>
+<a name="l15"></a>#</span><span class=cF1>define</span><span class=cF0> CH_LAND                 </span><span class=cF3>CH_SPACE</span><span class=cF0>
+<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> CH_TREE                 </span><span class=cF6>'*'</span><span class=cF0>
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF9>U16</span><span class=cF0> map[MAP_HEIGHT][MAP_WIDTH];
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF9>I64</span><span class=cF0> screen_pix_x, screen_pix_y;
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *)
+<a name="l23"></a>{
+<a name="l24"></a>        </span><span class=cF9>U16</span><span class=cF0> *ptr;
+<a name="l25"></a>        </span><span class=cF9>I64</span><span class=cF0>  i, j, y = screen_pix_y &gt;&gt; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l26"></a>
+<a name="l27"></a>        </span><span class=cFB>gr</span><span class=cF0>.hide_col = </span><span class=cFB>gr</span><span class=cF0>.hide_row = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l28"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_x = </span><span class=cFE>7</span><span class=cF0> - screen_pix_x &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l29"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_y = </span><span class=cFE>7</span><span class=cF0> - screen_pix_y &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l30"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; task-&gt;win_height; i++)
+<a name="l31"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l32"></a>                ptr = &amp;map[y++][screen_pix_x &gt;&gt; </span><span class=cFE>3</span><span class=cF0>];
+<a name="l33"></a>                </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; task-&gt;win_width; j++)
+<a name="l34"></a>                        </span><span class=cF2>//By the time you clip to window and handle Fs-&gt;scroll_x, Fs-&gt;scroll_y,</span><span class=cF0>
+<a name="l35"></a>                        </span><span class=cF2>//it is too much trouble to do raw access to gr.text_base like we do</span><span class=cF0>
+<a name="l36"></a>                        </span><span class=cF2>//in </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Games/Maze.html#l1"><span class=cF4>::/Demo/Games/Maze.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l37"></a>                        </span><span class=cF5>TextChar</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>, j, i, *ptr++);
+<a name="l38"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l39"></a>}
+<a name="l40"></a>
+<a name="l41"></a></span><span class=cF1>U8</span><span class=cF0> *old_font = </span><span class=cFB>text</span><span class=cF0>.font;
+<a name="l42"></a></span><span class=cF9>U64</span><span class=cF0> waves[</span><span class=cFE>4</span><span class=cF0>] = {</span><span class=cFE>0x0011AA440011AA44</span><span class=cF0>, </span><span class=cFE>0x0022558800225588</span><span class=cF0>, </span><span class=cFE>0x0044AA110044AA11</span><span class=cF0>, </span><span class=cFE>0x0088552200885522</span><span class=cF0>};
+<a name="l43"></a>
+<a name="l44"></a></span><span class=cF1>U0</span><span class=cF0> AnimateEndCB()
+<a name="l45"></a>{
+<a name="l46"></a>        </span><span class=cFB>text</span><span class=cF0>.font = old_font;
+<a name="l47"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l48"></a>}
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>U0</span><span class=cF0> AnimateTask(</span><span class=cF9>I64</span><span class=cF0>)
+<a name="l51"></a>{
+<a name="l52"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l53"></a>        </span><span class=cF9>U64</span><span class=cF0> *font = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
+<a name="l54"></a>
+<a name="l55"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;AnimateEndCB;
+<a name="l56"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(font, </span><span class=cFB>text</span><span class=cF0>.font, </span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
+<a name="l57"></a>        </span><span class=cFB>text</span><span class=cF0>.font = font;
+<a name="l58"></a>        font[CH_TREE] = </span><span class=cFE>0x18187E7E3C3C18</span><span class=cF0>;
+<a name="l59"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l60"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l61"></a>                font[CH_WATER] = waves[i++ &amp; </span><span class=cFE>0x3</span><span class=cF0>];
+<a name="l62"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>200</span><span class=cF0>);
+<a name="l63"></a>                </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l64"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l65"></a>}
+<a name="l66"></a>
+<a name="l67"></a></span><span class=cF1>U0</span><span class=cF0> ScrollTaskX(</span><span class=cF9>I64</span><span class=cF0> sign)
+<a name="l68"></a>{
+<a name="l69"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l70"></a>
+<a name="l71"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>32</span><span class=cF0>; i++)
+<a name="l72"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l73"></a>                screen_pix_x = </span><span class=cF5>ClampI64</span><span class=cF0>(screen_pix_x + sign, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>MAP_WIDTH - </span><span class=cF3>TEXT_COLS</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>);
+<a name="l74"></a>                </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l75"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l76"></a>}
+<a name="l77"></a>
+<a name="l78"></a></span><span class=cF1>U0</span><span class=cF0> ScrollTaskY(</span><span class=cF9>I64</span><span class=cF0> sign)
+<a name="l79"></a>{
+<a name="l80"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l81"></a>
+<a name="l82"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>32</span><span class=cF0>; i++)
+<a name="l83"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l84"></a>                screen_pix_y = </span><span class=cF5>ClampI64</span><span class=cF0>(screen_pix_y + sign, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>MAP_HEIGHT - </span><span class=cF3>TEXT_ROWS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>);
+<a name="l85"></a>                </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l86"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l87"></a>}
+<a name="l88"></a>
+<a name="l89"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l90"></a>{
+<a name="l91"></a>        </span><span class=cF9>I64</span><span class=cF0> i, j, x, y;
+<a name="l92"></a>
+<a name="l93"></a>        screen_pix_x = (MAP_WIDTH  - </span><span class=cF3>TEXT_COLS</span><span class=cF0>) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l94"></a>        screen_pix_y = (MAP_HEIGHT - </span><span class=cF3>TEXT_ROWS</span><span class=cF0>) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;
+<a name="l95"></a>
+<a name="l96"></a>        </span><span class=cF5>MemSetU16</span><span class=cF0>(map, CH_WATER + </span><span class=cF7>(</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>LTBLUE</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0>, MAP_WIDTH * MAP_HEIGHT);
+<a name="l97"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; MAP_WIDTH - </span><span class=cFE>1</span><span class=cF0>; i++)
+<a name="l98"></a>                map[</span><span class=cFE>0</span><span class=cF0>][i] = map[MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>][i] = </span><span class=cF6>'.'</span><span class=cF0> + (</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>RED</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l99"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>; i++)
+<a name="l100"></a>                map[i][</span><span class=cFE>0</span><span class=cF0>] = map[i][MAP_WIDTH - </span><span class=cFE>1</span><span class=cF0>]  = </span><span class=cF6>'.'</span><span class=cF0> + (</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>RED</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l101"></a>
+<a name="l102"></a>        map[</span><span class=cFE>0</span><span class=cF0>][</span><span class=cFE>0</span><span class=cF0>]                                                       = </span><span class=cF6>'.'</span><span class=cF0> + (</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>RED</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l103"></a>        map[</span><span class=cFE>0</span><span class=cF0>][MAP_WIDTH - </span><span class=cFE>1</span><span class=cF0>]                           = </span><span class=cF6>'.'</span><span class=cF0> + (</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>RED</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l104"></a>        map[MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>][</span><span class=cFE>0</span><span class=cF0>]                          = </span><span class=cF6>'.'</span><span class=cF0> + (</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>RED</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l105"></a>        map[MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>][MAP_WIDTH - </span><span class=cFE>1</span><span class=cF0>]      = </span><span class=cF6>'.'</span><span class=cF0> + (</span><span class=cF3>BLUE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>RED</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l106"></a>
+<a name="l107"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>20</span><span class=cF0>; i++)
+<a name="l108"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l109"></a>                x = MAP_WIDTH  * </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l110"></a>                y = MAP_HEIGHT * </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l111"></a>                </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>1000</span><span class=cF0>; j++)
+<a name="l112"></a>                {
+<a name="l113"></a>                        map[y][x] = CH_LAND + (</span><span class=cF3>YELLOW</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLACK</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l114"></a>                        x = </span><span class=cF5>ClampI64</span><span class=cF0>(x + </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH  - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l115"></a>                        y = </span><span class=cF5>ClampI64</span><span class=cF0>(y + </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l116"></a>                }
+<a name="l117"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l118"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>100</span><span class=cF0>; i++)
+<a name="l119"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l120"></a>                </span><span class=cF1>do</span><span class=cF0>
+<a name="l121"></a>                {
+<a name="l122"></a>                        x = MAP_WIDTH  * </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l123"></a>                        y = MAP_HEIGHT * </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l124"></a>                }
+<a name="l125"></a>                </span><span class=cF1>while</span><span class=cF0> (map[y][x].u8[</span><span class=cFE>0</span><span class=cF0>] != CH_LAND);
+<a name="l126"></a>
+<a name="l127"></a>                </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>100</span><span class=cF0>; j++)
+<a name="l128"></a>                {
+<a name="l129"></a>                        map[y][x] = CH_TREE + (</span><span class=cF3>YELLOW</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>GREEN</span><span class=cF0>) &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l130"></a>                        x = </span><span class=cF5>ClampI64</span><span class=cF0>(x + </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH  - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l131"></a>                        y = </span><span class=cF5>ClampI64</span><span class=cF0>(y + </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l132"></a>                }
+<a name="l133"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l134"></a>}
+<a name="l135"></a>
+<a name="l136"></a></span><span class=cF1>U0</span><span class=cF0> CleanUp()
+<a name="l137"></a>{
+<a name="l138"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_x = </span><span class=cFB>gr</span><span class=cF0>.pan_text_y = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l139"></a>        </span><span class=cFB>gr</span><span class=cF0>.hide_col = </span><span class=cFB>gr</span><span class=cF0>.hide_row = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l140"></a>}
+<a name="l141"></a>
+<a name="l142"></a></span><span class=cF1>U0</span><span class=cF0> CharDemo()
+<a name="l143"></a>{
+<a name="l144"></a>        </span><span class=cF9>I64</span><span class=cF0> sc;
+<a name="l145"></a>
+<a name="l146"></a>        </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l147"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>YELLOW</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l148"></a>        </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l149"></a>        </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l150"></a>        </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l151"></a>        </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l152"></a>
+<a name="l153"></a>        </span><span class=cF5>MenuPush</span><span class=cF0>(       </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l154"></a>                                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l155"></a>                                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l156"></a>                                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l157"></a>                                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l158"></a>                                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l159"></a>                                </span><span class=cF6>&quot;  Left(,,SC_CURSOR_LEFT);&quot;</span><span class=cF0>
+<a name="l160"></a>                                </span><span class=cF6>&quot;  Right(,,SC_CURSOR_RIGHT);&quot;</span><span class=cF0>
+<a name="l161"></a>                                </span><span class=cF6>&quot;  Up(,,SC_CURSOR_UP);&quot;</span><span class=cF0>
+<a name="l162"></a>                                </span><span class=cF6>&quot;  Down(,,SC_CURSOR_DOWN);&quot;</span><span class=cF0>
+<a name="l163"></a>                                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l164"></a>                                );
+<a name="l165"></a>        Init;
+<a name="l166"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l167"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it              = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l168"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l169"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l170"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l171"></a>                {
+<a name="l172"></a>                        </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>KeyGet</span><span class=cF7>(</span><span class=cF0>&amp;sc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l173"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l174"></a>                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l175"></a>                                        </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l176"></a>                                        {
+<a name="l177"></a>                                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l178"></a>                                                        </span><span class=cF5>Spawn</span><span class=cF0>(&amp;ScrollTaskX, -</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Scroll&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l179"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l180"></a>
+<a name="l181"></a>                                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l182"></a>                                                        </span><span class=cF5>Spawn</span><span class=cF0>(&amp;ScrollTaskX, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Scroll&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l183"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l184"></a>
+<a name="l185"></a>                                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l186"></a>                                                        </span><span class=cF5>Spawn</span><span class=cF0>(&amp;ScrollTaskY, -</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Scroll&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l187"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l188"></a>
+<a name="l189"></a>                                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l190"></a>                                                        </span><span class=cF5>Spawn</span><span class=cF0>(&amp;ScrollTaskY, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Scroll&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l191"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l192"></a>                                        }
+<a name="l193"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l194"></a>
+<a name="l195"></a>                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l196"></a>                                        CleanUp;
+<a name="l197"></a>                                        Init;
+<a name="l198"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l199"></a>
+<a name="l200"></a>                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l201"></a>                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l202"></a>                                        </span><span class=cF1>goto</span><span class=cF0> sq_done;
+<a name="l203"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l204"></a>                }
+<a name="l205"></a>sq_done: </span><span class=cF2>//Don't goto out of try</span><span class=cF0>
+<a name="l206"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l207"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l208"></a>                </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l209"></a>        </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l210"></a>        CleanUp;
+<a name="l211"></a>        </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l212"></a>}
+<a name="l213"></a>
+<a name="l214"></a>CharDemo;
+</span></pre></body>
+</html>

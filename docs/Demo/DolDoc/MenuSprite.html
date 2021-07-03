@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cFA>
+<a name="l2"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> MenuSprite()
+<a name="l6"></a>{
+<a name="l7"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l8"></a>
+<a name="l9"></a>        </span><span class=cF5>DocPut</span><span class=cF0>-&gt;flags |= </span><span class=cF3>DOCF_FORM</span><span class=cF0>; </span><span class=cF2>//Cursor navigation will skip empty locations.</span><span class=cF0>
+<a name="l10"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l11"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l12"></a>                </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l13"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l14"></a>
+<a name="l15"></a>                </span><span class=cF2>//Sprite with flags for left-expression and an exit.</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/MakeDoc.html#l21"><span class=cF4>doldoc.default_de_flags</span></a><span class=cF2>. Note the %d in the string for the sprite number.</span><span class=cF0>
+<a name="l17"></a>                </span><span class=cF5>Sprite</span><span class=cF0>(</span><span class=cFA>&lt;1&gt;</span><span class=cF0>, </span><span class=cF6>&quot;$LTBLUE$$SP+X,\&quot;50 Hz\&quot;,LE=50,BI=%d$&quot;</span><span class=cF0>);
+<a name="l18"></a>
+<a name="l19"></a>                </span><span class=cF6>&quot;\n\n\n&quot;</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF6>&quot;$MU,\&quot;100 Hz\&quot;,LE=100$\n&quot;</span><span class=cF0>
+<a name="l21"></a>                </span><span class=cF6>&quot;$MU,\&quot;200 Hz\&quot;,LE=200$\n&quot;</span><span class=cF0>
+<a name="l22"></a>                </span><span class=cF6>&quot;$MU,\&quot;CANCEL\&quot;,LE=DOCM_CANCEL$\n&quot;</span><span class=cF0>;
+<a name="l23"></a>                i = </span><span class=cF5>DocMenu</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>);
+<a name="l24"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l25"></a>                        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cF5>Freq2Ona</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>);
+<a name="l26"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l27"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l28"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l29"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l30"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l31"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l32"></a>        </span><span class=cF5>DocPut</span><span class=cF0>-&gt;flags &amp;= ~</span><span class=cF3>DOCF_FORM</span><span class=cF0>;
+<a name="l33"></a>}
+<a name="l34"></a>
+<a name="l35"></a>MenuSprite;</span></pre></body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>The editor mostly stays in a </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/SerialDev/Message.html#l170"><span class=cF4>KeyGet</span></a><span class=cF0>()/</span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KeyDev.html#l1"><span class=cF4>PutKey</span></a><span class=cF0>() loop.    The putkey portion is where keys are acted-upon.        ZealOS has a chain 
+<a name="l2"></a>of putkey handlers in a </span><span class=cF4><u>Circular Queue</u></span><span class=cF0> with priorities.  The highest priority handlers can choose to terminate handling, 
+<a name="l3"></a>otherwise, the keys get sent on down the chain.
+<a name="l4"></a></span><span class=cF4>
+<a name="l5"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KeyDev.html#l81"><span class=cF4>KeyDevAdd</span></a><span class=cF0>() defines a putkey device with a priority.    &quot;Device&quot; might be a misnomer.  Currently, the following are defined:
+<a name="l6"></a>
+<a name="l7"></a>Priority                Handler
+<a name="l8"></a>---------- ---------
+<a name="l9"></a></span><span class=cF2>0x20000000</span><span class=cF0> </span><a href="http://www.tomawezome.github.io/ZealOS/Home/HomeKeyPlugIns.html#l11"><span class=cF4>MyPutKey</span></a><span class=cF0>() user handler
+<a name="l10"></a></span><span class=cF2>0x40000000</span><span class=cF0> </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KeyDev.html#l124"><span class=cF4>KDInputFilterPutKey</span></a><span class=cF0>() for </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l580"><span class=cF4>In</span></a><span class=cF0>(), </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l561"><span class=cF4>InStr</span></a><span class=cF0>(), and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Job.html#l572"><span class=cF4>InFile</span></a><span class=cF0>() handling.
+<a name="l11"></a></span><span class=cF2>0x60000000</span><span class=cF0> </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KeyDev.html#l99"><span class=cF4>KDRawPutKey</span></a><span class=cF0>() nonwindowed direct to video mem debug output.
+<a name="l12"></a></span><span class=cF2>0x80000000</span><span class=cF0> </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocPutKey.html#l925"><span class=cF4>KDDocPutKey</span></a><span class=cF0>() standard document cmds
+<a name="l13"></a>
+<a name="l14"></a>Since handling individual keys is slow, ZealOS supports PutS() as well.  If no puts handler is defined, individual keys are 
+<a name="l15"></a>sent.
+<a name="l16"></a></span><span class=cF4>
+<a name="l17"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF2>.user_put_key</span><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF2>.user_put_s</span><span class=cF0> are call back routines which offer some neat tricks.      See </span><a href="http://www.tomawezome.github.io/ZealOS/Apps/Psalmody/JukeBox.html#l1"><span class=cF4>::/Apps/Psalmody/JukeBox.CC</span></a><span class=cF0>.  
+<a name="l18"></a>There is a var </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1501"><span class=cF4>CDoc</span></a><span class=cF2>.user_put_data</span><span class=cF0> which gets passed to them.
+</span></pre></body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AsmResolve</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CAsmUnresolvedRef</span><span class=cF0> *tmpu, </span><span class=cF1>U8</span><span class=cF0> *label, </span><span class=cF1>Bool</span><span class=cF0> undefined)
+<a name="l2"></a>{
+<a name="l3"></a>        </span><span class=cF9>CAOTImportExport</span><span class=cF0>        *tmpie;
+<a name="l4"></a>        </span><span class=cF9>CAsmUndefHash</span><span class=cF0>           *tmpauh;
+<a name="l5"></a>        </span><span class=cF9>I64</span><span class=cF0>                                      res = </span><span class=cF5>Call</span><span class=cF0>(tmpu-&gt;machine_code);
+<a name="l6"></a>
+<a name="l7"></a>        </span><span class=cF1>if</span><span class=cF0> (undefined)
+<a name="l8"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l9"></a>                tmpauh = tmpu-&gt;asm_undef_hash;
+<a name="l10"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpauh)
+<a name="l11"></a>                {
+<a name="l12"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpauh-&gt;hash-&gt;type &amp; </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>)
+<a name="l13"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>                                tmpie = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTImportExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l15"></a>                                tmpie-&gt;next = tmpauh-&gt;hash-&gt;ie_list;
+<a name="l16"></a>                                tmpauh-&gt;hash-&gt;ie_list = tmpie;
+<a name="l17"></a>                                tmpie-&gt;rip = tmpu-&gt;rip;
+<a name="l18"></a>                                tmpie-&gt;aot = cc-&gt;aot;
+<a name="l19"></a>                                tmpie-&gt;type = tmpu-&gt;type;
+<a name="l20"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>                        tmpauh = tmpauh-&gt;next; </span><span class=cF2>//Technically, more than one won't work.</span><span class=cF0>
+<a name="l22"></a>                }
+<a name="l23"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l24"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpu-&gt;type &amp; </span><span class=cF3>IEF_IMM_NOT_REL</span><span class=cF7>)</span><span class=cF0>)
+<a name="l25"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l26"></a>                res -= tmpu-&gt;rel_rip;
+<a name="l27"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;type == </span><span class=cF3>IET_REL_I8</span><span class=cF0>  &amp;&amp; !</span><span class=cF7>(</span><span class=cF3>I8_MIN</span><span class=cF0>  &lt;= res &lt;= </span><span class=cF3>I8_MAX</span><span class=cF7>)</span><span class=cF0> ||
+<a name="l28"></a>                        tmpu-&gt;type == </span><span class=cF3>IET_REL_I16</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF3>I16_MIN</span><span class=cF0> &lt;= res &lt;= </span><span class=cF3>I16_MAX</span><span class=cF7>)</span><span class=cF0>)
+<a name="l29"></a>                {
+<a name="l30"></a>                        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Branch out of range at line:%04d %s\n&quot;</span><span class=cF0>,
+<a name="l31"></a>                                                tmpu-&gt;line_num, label);
+<a name="l32"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc);
+<a name="l33"></a>                }
+<a name="l34"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;U8_avail &amp;&amp; tmpu-&gt;type &gt; </span><span class=cF3>IET_IMM_U8</span><span class=cF0> &amp;&amp; -</span><span class=cFE>124</span><span class=cF0> &lt;= res &lt;= </span><span class=cFE>123</span><span class=cF0>)
+<a name="l35"></a>                        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;could use I8 displacement at line:%04d %s %s\n&quot;</span><span class=cF0>, tmpu-&gt;line_num, cc-&gt;aotc-&gt;last_label, label);
+<a name="l36"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l37"></a>        </span><span class=cFD>AOTStoreCodeU8At</span><span class=cF0>(cc, tmpu-&gt;rip, res.u8[</span><span class=cFE>0</span><span class=cF0>]);
+<a name="l38"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;type &gt;= </span><span class=cF3>IET_REL_I16</span><span class=cF0>)
+<a name="l39"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l40"></a>                </span><span class=cFD>AOTStoreCodeU8At</span><span class=cF0>(cc, tmpu-&gt;rip + </span><span class=cFE>1</span><span class=cF0>, res.u8[</span><span class=cFE>1</span><span class=cF0>]);
+<a name="l41"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;type &gt;= </span><span class=cF3>IET_REL_I32</span><span class=cF0>)
+<a name="l42"></a>                {
+<a name="l43"></a>                        </span><span class=cFD>AOTStoreCodeU8At</span><span class=cF0>(cc, tmpu-&gt;rip + </span><span class=cFE>2</span><span class=cF0>, res.u8[</span><span class=cFE>2</span><span class=cF0>], res.u8[</span><span class=cFE>3</span><span class=cF0>]);
+<a name="l44"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;type &gt;= </span><span class=cF3>IET_REL_I64</span><span class=cF0>)
+<a name="l45"></a>                                </span><span class=cFD>AOTStoreCodeU8At</span><span class=cF0>(cc, tmpu-&gt;rip + </span><span class=cFE>4</span><span class=cF0>, res.u8[</span><span class=cFE>4</span><span class=cF0>], res.u8[</span><span class=cFE>5</span><span class=cF0>], res.u8[</span><span class=cFE>6</span><span class=cF0>], res.u8[</span><span class=cFE>7</span><span class=cF0>]);
+<a name="l46"></a>                }
+<a name="l47"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l48"></a>}
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AOTLocalsResolve</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc)
+<a name="l51"></a>{
+<a name="l52"></a>        </span><span class=cF9>CAOTCtrl</span><span class=cF0>                        *aotc = cc-&gt;aotc;
+<a name="l53"></a>        </span><span class=cF9>CAsmUnresolvedRef</span><span class=cF0>       *tmpu = aotc-&gt;local_unresolved, *tmpu1;
+<a name="l54"></a>        </span><span class=cF9>CAsmUndefHash</span><span class=cF0>           *tmpauh;
+<a name="l55"></a>        </span><span class=cF1>Bool</span><span class=cF0>                             undefined;
+<a name="l56"></a>        </span><span class=cF1>U8</span><span class=cF0>                                      *label = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l57"></a>
+<a name="l58"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpu)
+<a name="l59"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>                undefined = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l61"></a>                tmpu1 = tmpu-&gt;next;
+<a name="l62"></a>                tmpauh = tmpu-&gt;asm_undef_hash;
+<a name="l63"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpauh)
+<a name="l64"></a>                {
+<a name="l65"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpauh-&gt;hash-&gt;type &amp; </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>)
+<a name="l66"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l67"></a>                                </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Undefined sym at line:%04d %s %s\n&quot;</span><span class=cF0>, tmpu-&gt;line_num, aotc-&gt;last_label, tmpauh-&gt;hash-&gt;str);
+<a name="l68"></a>                                </span><span class=cF5>LexExcept</span><span class=cF0>(cc);
+<a name="l69"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l70"></a>                        label = tmpauh-&gt;hash-&gt;str;
+<a name="l71"></a>                        tmpauh = tmpauh-&gt;next;
+<a name="l72"></a>                }
+<a name="l73"></a>                </span><span class=cF1>if</span><span class=cF0> (!undefined)
+<a name="l74"></a>                        </span><span class=cFD>AsmResolve</span><span class=cF0>(cc, tmpu, label, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l75"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpu-&gt;machine_code);
+<a name="l76"></a>                </span><span class=cF5>LinkedListDel</span><span class=cF0>(tmpu-&gt;asm_undef_hash);
+<a name="l77"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpu);
+<a name="l78"></a>                tmpu = tmpu1;
+<a name="l79"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l80"></a>        </span><span class=cF5>HashTableDel</span><span class=cF0>(cc-&gt;htc.local_hash_table);
+<a name="l81"></a>        cc-&gt;htc.hash_table_list = cc-&gt;htc.local_hash_table = </span><span class=cF5>HashTableNew</span><span class=cF0>(</span><span class=cFE>16</span><span class=cF0>);
+<a name="l82"></a>        cc-&gt;htc.local_hash_table-&gt;next = cc-&gt;htc.global_hash_table;
+<a name="l83"></a>        aotc-&gt;local_unresolved = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l84"></a>}
+<a name="l85"></a>
+<a name="l86"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AOTGlobalsResolve</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CAOT</span><span class=cF0> *tmpaot)
+<a name="l87"></a>{
+<a name="l88"></a>        </span><span class=cF9>CAOTCtrl</span><span class=cF0>                        *aotc = cc-&gt;aotc;
+<a name="l89"></a>        </span><span class=cF9>CHashFun</span><span class=cF0>                        *tmpf;
+<a name="l90"></a>        </span><span class=cF9>CAsmUnresolvedRef</span><span class=cF0>       *tmpu = aotc-&gt;global_unresolved, *tmpu1;
+<a name="l91"></a>        </span><span class=cF9>I64</span><span class=cF0>                                      i, j;
+<a name="l92"></a>        </span><span class=cF9>CAOTImportExport</span><span class=cF0>        *tmpie, *tmpie1;
+<a name="l93"></a>        </span><span class=cF9>CAsmUndefHash</span><span class=cF0>           *tmpauh;
+<a name="l94"></a>        </span><span class=cF9>CHashExport</span><span class=cF0>                     *tmpex;
+<a name="l95"></a>        </span><span class=cF1>U8</span><span class=cF0>                                      *label;
+<a name="l96"></a>        </span><span class=cF1>Bool</span><span class=cF0>                             undefined;
+<a name="l97"></a>        </span><span class=cF9>CExternUsage</span><span class=cF0>            *tmpeu, *tmpeu8;
+<a name="l98"></a>
+<a name="l99"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpu)
+<a name="l100"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l101"></a>                label = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l102"></a>                undefined = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l103"></a>                tmpu1 = tmpu-&gt;next;
+<a name="l104"></a>                tmpauh = tmpu-&gt;asm_undef_hash;
+<a name="l105"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpauh)
+<a name="l106"></a>                {
+<a name="l107"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpauh-&gt;hash-&gt;type &amp; </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>)
+<a name="l108"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l109"></a>                                tmpex = tmpauh-&gt;hash;
+<a name="l110"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0> &amp;&amp; tmpex-&gt;type &amp; </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0> &amp;&amp;
+<a name="l111"></a>                                        !</span><span class=cF7>(</span><span class=cF0>tmpex-&gt;type &amp; </span><span class=cF3>HTF_IMPORT</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l112"></a>                                        </span><span class=cF7>(</span><span class=cF0>tmpf = </span><span class=cF5>HashFind</span><span class=cF0>(tmpex-&gt;str, cc-&gt;htc.hash_table_list, </span><span class=cF3>HTT_FUN</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l113"></a>                                        !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpf-&gt;flags, </span><span class=cF3>Cf_EXTERN</span><span class=cF7>)</span><span class=cF0>)
+<a name="l114"></a>                                {
+<a name="l115"></a>                                        tmpex-&gt;val = tmpf-&gt;exe_addr;
+<a name="l116"></a>                                        tmpex-&gt;type &amp;= ~</span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>;
+<a name="l117"></a>                                        label = tmpauh-&gt;hash-&gt;str;
+<a name="l118"></a>                                }
+<a name="l119"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l120"></a>                                {
+<a name="l121"></a>                                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpex-&gt;type &amp; </span><span class=cF3>HTF_IMPORT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l122"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l123"></a>                                                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
+<a name="l124"></a>                                                {
+<a name="l125"></a>                                                        tmpex-&gt;type |= </span><span class=cF3>HTF_GOTO_LABEL</span><span class=cF0>;
+<a name="l126"></a>                                                        tmpex-&gt;use_count++;
+<a name="l127"></a>                                                }
+<a name="l128"></a>                                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l129"></a>                                                {
+<a name="l130"></a>                                                        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Undefined sym at line:%04d %s\n&quot;</span><span class=cF0>, tmpu-&gt;line_num, tmpex-&gt;str);
+<a name="l131"></a>                                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc);
+<a name="l132"></a>                                                }
+<a name="l133"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l134"></a>                                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (undefined)
+<a name="l135"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l136"></a>                                                </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Two imports in same expression &quot;</span><span class=cF0>
+<a name="l137"></a>                                                                        </span><span class=cF6>&quot;not allowed at line:%04d %s\n&quot;</span><span class=cF0>, tmpu-&gt;line_num, tmpex-&gt;str);
+<a name="l138"></a>                                                </span><span class=cF5>LexExcept</span><span class=cF0>(cc);
+<a name="l139"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l140"></a>                                        undefined = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l141"></a>                                }
+<a name="l142"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l143"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l144"></a>                                label = tmpauh-&gt;hash-&gt;str;
+<a name="l145"></a>                        tmpauh = tmpauh-&gt;next;
+<a name="l146"></a>                }
+<a name="l147"></a>                </span><span class=cFD>AsmResolve</span><span class=cF0>(cc, tmpu, label, undefined);
+<a name="l148"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpu-&gt;machine_code);
+<a name="l149"></a>                </span><span class=cF5>LinkedListDel</span><span class=cF0>(tmpu-&gt;asm_undef_hash);
+<a name="l150"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpu);
+<a name="l151"></a>                tmpu = tmpu1;
+<a name="l152"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l153"></a>
+<a name="l154"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= cc-&gt;htc.global_hash_table-&gt;mask; i++)
+<a name="l155"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l156"></a>                tmpex = cc-&gt;htc.global_hash_table-&gt;body[i];
+<a name="l157"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpex)
+<a name="l158"></a>                {
+<a name="l159"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTF_IMPORT</span><span class=cF0> | </span><span class=cF3>HTF_GOTO_LABEL</span><span class=cF7>)</span><span class=cF0>)
+<a name="l160"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l161"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;use_count &amp;&amp; </span><span class=cF7>(</span><span class=cF0>tmpie = tmpex-&gt;ie_list</span><span class=cF7>)</span><span class=cF0>)
+<a name="l162"></a>                                {
+<a name="l163"></a>                                        </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_GOTO_LABEL</span><span class=cF0>)
+<a name="l164"></a>                                                tmpie-&gt;flags |= </span><span class=cF3>IEF_GOTO_LABEL</span><span class=cF0>;
+<a name="l165"></a>                                        </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;import_name)
+<a name="l166"></a>                                                tmpie-&gt;str = </span><span class=cF5>StrNew</span><span class=cF0>(tmpex-&gt;import_name);
+<a name="l167"></a>                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l168"></a>                                                tmpie-&gt;str = </span><span class=cF5>StrNew</span><span class=cF0>(tmpex-&gt;str);
+<a name="l169"></a>                                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l170"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l171"></a>                                                tmpie1 = tmpie-&gt;next;
+<a name="l172"></a>                                                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpie, tmpaot-&gt;last_ie);
+<a name="l173"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l174"></a>                                        </span><span class=cF1>while</span><span class=cF0> (tmpie = tmpie1);
+<a name="l175"></a>
+<a name="l176"></a>                                        tmpex-&gt;ie_list = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l177"></a>                                }
+<a name="l178"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l179"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTF_EXPORT</span><span class=cF0> | </span><span class=cF3>HTF_RESOLVE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l180"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l181"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>)
+<a name="l182"></a>                                {
+<a name="l183"></a>                                        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Undefined sym at %s\n&quot;</span><span class=cF0>, tmpex-&gt;str);
+<a name="l184"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc);
+<a name="l185"></a>                                }
+<a name="l186"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_RESOLVE</span><span class=cF0>)
+<a name="l187"></a>                                {
+<a name="l188"></a>                                        tmpf = tmpex;
+<a name="l189"></a>                                        tmpeu = tmpf-&gt;ext_list;
+<a name="l190"></a>                                        </span><span class=cF1>while</span><span class=cF0> (tmpeu)
+<a name="l191"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l192"></a>                                                tmpeu8 = tmpeu-&gt;next;
+<a name="l193"></a>                                                j = tmpf-&gt;exe_addr - (tmpeu-&gt;rip + </span><span class=cFE>4</span><span class=cF0>);
+<a name="l194"></a>                                                </span><span class=cFD>AOTStoreCodeU8At</span><span class=cF0>(cc, tmpeu-&gt;rip, j.u8[</span><span class=cFE>0</span><span class=cF0>], j.u8[</span><span class=cFE>1</span><span class=cF0>], j.u8[</span><span class=cFE>2</span><span class=cF0>], j.u8[</span><span class=cFE>3</span><span class=cF0>]);
+<a name="l195"></a>                                                </span><span class=cF5>Free</span><span class=cF0>(tmpeu);
+<a name="l196"></a>                                                tmpeu = tmpeu8;
+<a name="l197"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>                                }
+<a name="l199"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_EXPORT</span><span class=cF0>)
+<a name="l200"></a>                                {
+<a name="l201"></a>                                        tmpie = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTImportExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l202"></a>                                        tmpie-&gt;type = </span><span class=cF3>IET_REL32_EXPORT</span><span class=cF0>;
+<a name="l203"></a>                                        </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTT_FUN</span><span class=cF0>)
+<a name="l204"></a>                                                tmpie-&gt;rip = tmpf-&gt;exe_addr;
+<a name="l205"></a>                                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTT_GLOBAL_VAR</span><span class=cF0>)
+<a name="l206"></a>                                                tmpie-&gt;rip = tmpex(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *)-&gt;data_addr_rip;
+<a name="l207"></a>                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l208"></a>                                                tmpie-&gt;rip = tmpex-&gt;val;
+<a name="l209"></a>                                        tmpie-&gt;aot = cc-&gt;aot;
+<a name="l210"></a>                                        </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_IMM</span><span class=cF0>)
+<a name="l211"></a>                                                tmpie-&gt;type++;
+<a name="l212"></a>                                        tmpie-&gt;str = </span><span class=cF5>StrNew</span><span class=cF0>(tmpex-&gt;str);
+<a name="l213"></a>                                        tmpie-&gt;src_link = </span><span class=cF5>StrNew</span><span class=cF0>(tmpex-&gt;src_link);
+<a name="l214"></a>                                        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpie, tmpaot-&gt;last_ie);
+<a name="l215"></a>                                }
+<a name="l216"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l217"></a>                        tmpex = tmpex-&gt;next;
+<a name="l218"></a>                }
+<a name="l219"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l220"></a>}
+<a name="l221"></a>
+<a name="l222"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AsmUnresolvedAdd</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF1>U8</span><span class=cF0> *machine_code, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>I64</span><span class=cF0> rip, </span><span class=cF9>I64</span><span class=cF0> rel_rip,
+<a name="l223"></a>                                </span><span class=cF9>CAsmUndefHash</span><span class=cF0> *local_asm_undef_hash, </span><span class=cF9>CAsmUndefHash</span><span class=cF0> *global_asm_undef_hash,
+<a name="l224"></a>                                </span><span class=cF9>I64</span><span class=cF0> line_num, </span><span class=cF1>Bool</span><span class=cF0> U8_avail)
+<a name="l225"></a>{
+<a name="l226"></a>        </span><span class=cF9>CAsmUnresolvedRef</span><span class=cF0> *tmpu = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmUnresolvedRef</span><span class=cF7>)</span><span class=cF0>);
+<a name="l227"></a>
+<a name="l228"></a>        tmpu-&gt;machine_code      = machine_code;
+<a name="l229"></a>        tmpu-&gt;type                      = type;
+<a name="l230"></a>        tmpu-&gt;rip                       = rip;
+<a name="l231"></a>        tmpu-&gt;rel_rip           = rel_rip;
+<a name="l232"></a>        tmpu-&gt;aot                       = cc-&gt;aot;
+<a name="l233"></a>        tmpu-&gt;imm_flag          = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l234"></a>        tmpu-&gt;line_num          = line_num;
+<a name="l235"></a>        tmpu-&gt;U8_avail          = U8_avail;
+<a name="l236"></a>        tmpu-&gt;str                       = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l237"></a>
+<a name="l238"></a>        </span><span class=cF1>if</span><span class=cF0> (local_asm_undef_hash)
+<a name="l239"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l240"></a>                tmpu-&gt;asm_undef_hash = local_asm_undef_hash;
+<a name="l241"></a>                tmpu-&gt;next = cc-&gt;aotc-&gt;local_unresolved;
+<a name="l242"></a>                cc-&gt;aotc-&gt;local_unresolved = tmpu;
+<a name="l243"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l244"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l245"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l246"></a>                tmpu-&gt;asm_undef_hash = global_asm_undef_hash;
+<a name="l247"></a>                tmpu-&gt;next = cc-&gt;aotc-&gt;global_unresolved;
+<a name="l248"></a>                cc-&gt;aotc-&gt;global_unresolved = tmpu;
+<a name="l249"></a>                </span><span class=cF1>if</span><span class=cF0> (global_asm_undef_hash-&gt;hash-&gt;type &amp; </span><span class=cF3>HTF_IMPORT</span><span class=cF0>)
+<a name="l250"></a>                {
+<a name="l251"></a>                        tmpu-&gt;str = </span><span class=cF5>StrNew</span><span class=cF0>(global_asm_undef_hash-&gt;hash-&gt;str);
+<a name="l252"></a>                        </span><span class=cF1>if</span><span class=cF0> (global_asm_undef_hash-&gt;hash-&gt;type &amp; </span><span class=cF3>HTF_IMM</span><span class=cF0>)
+<a name="l253"></a>                                tmpu-&gt;imm_flag = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l254"></a>                }
+<a name="l255"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l256"></a>}
+</span></pre></body>
+</html>

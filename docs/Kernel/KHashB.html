@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>HashTypeNum</span><span class=cF0>(</span><span class=cF9>CHash</span><span class=cF0> *tmph)
+<a name="l2"></a>{</span><span class=cF2>//Return bit num of hash type, limited to just types.</span><span class=cF0>
+<a name="l3"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph)
+<a name="l4"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Bsf</span><span class=cF0>(tmph-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0>);
+<a name="l5"></a>
+<a name="l6"></a>        </span><span class=cF1>return</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l7"></a>}
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>HashVal</span><span class=cF0>(</span><span class=cF9>CHash</span><span class=cF0> *tmph)
+<a name="l10"></a>{</span><span class=cF2>//Returns most likely desired value.</span><span class=cF0>
+<a name="l11"></a>        </span><span class=cF1>switch</span><span class=cF0> [</span><span class=cF5>HashTypeNum</span><span class=cF0>(tmph)]
+<a name="l12"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l13"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_EXPORT_SYS_SYM</span><span class=cF0>:
+<a name="l14"></a>                        </span><span class=cF1>return</span><span class=cF0> tmph(</span><span class=cF9>CHashExport</span><span class=cF0> *)-&gt;val;
+<a name="l15"></a>
+<a name="l16"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_IMPORT_SYS_SYM</span><span class=cF0>:
+<a name="l17"></a>                        </span><span class=cF1>return</span><span class=cF0> tmph(</span><span class=cF9>CHashImport</span><span class=cF0> *)-&gt;module_base;
+<a name="l18"></a>
+<a name="l19"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_DEFINE_STR</span><span class=cF0>:
+<a name="l20"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_CLASS</span><span class=cF0>:
+<a name="l21"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_INTERNAL_TYPE</span><span class=cF0>:
+<a name="l22"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_WORD</span><span class=cF0>:
+<a name="l23"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_DICT_WORD</span><span class=cF0>:
+<a name="l24"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_OPCODE</span><span class=cF0>:
+<a name="l25"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_HELP_FILE</span><span class=cF0>:
+<a name="l26"></a>                        </span><span class=cF1>return</span><span class=cF0> tmph;
+<a name="l27"></a>
+<a name="l28"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_GLOBAL_VAR</span><span class=cF0>:
+<a name="l29"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmph</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;flags &amp; </span><span class=cF3>GVF_EXTERN</span><span class=cF0>)
+<a name="l30"></a>                                </span><span class=cF1>return</span><span class=cF0> &amp;tmph(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *)-&gt;data_addr;
+<a name="l31"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l32"></a>                                </span><span class=cF1>return</span><span class=cF0> tmph(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *)-&gt;data_addr;
+<a name="l33"></a>
+<a name="l34"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_FUN</span><span class=cF0>:
+<a name="l35"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmph(</span><span class=cF9>CHashFun</span><span class=cF0> *)-&gt;flags, </span><span class=cF3>Cf_EXTERN</span><span class=cF7>)</span><span class=cF0>)
+<a name="l36"></a>                                </span><span class=cF1>return</span><span class=cF0> tmph;
+<a name="l37"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l38"></a>                                </span><span class=cF1>return</span><span class=cF0> tmph(</span><span class=cF9>CHashFun</span><span class=cF0> *)-&gt;exe_addr;
+<a name="l39"></a>
+<a name="l40"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_REG</span><span class=cF0>:
+<a name="l41"></a>                        </span><span class=cF1>return</span><span class=cF0> tmph(</span><span class=cF9>CHashReg</span><span class=cF0> *)-&gt;reg_num | tmph(</span><span class=cF9>CHashReg</span><span class=cF0> *)-&gt;reg_type &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l42"></a>
+<a name="l43"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_KEYWORD</span><span class=cF0>:
+<a name="l44"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_ASM_KEYWORD</span><span class=cF0>:
+<a name="l45"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_MODULE</span><span class=cF0>:
+<a name="l46"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_FILE</span><span class=cF0>:
+<a name="l47"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_FRAME_PTR</span><span class=cF0>:
+<a name="l48"></a>                        </span><span class=cF1>return</span><span class=cF0> tmph(</span><span class=cF9>CHashGeneric</span><span class=cF0> *)-&gt;user_data0;
+<a name="l49"></a>
+<a name="l50"></a>                </span><span class=cF1>case</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>:                        </span><span class=cF2>//nobound switch</span><span class=cF0>
+<a name="l51"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>HTt_TYPES_NUM</span><span class=cF0>: </span><span class=cF2>//nobound switch</span><span class=cF0>
+<a name="l52"></a>                </span><span class=cF1>default</span><span class=cF0>:
+<a name="l53"></a>                        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l54"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l55"></a>}
+<a name="l56"></a>
+<a name="l57"></a></span><span class=cF9>CHashTable</span><span class=cF0> *</span><span class=cF5>HashTableNew</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l58"></a>{</span><span class=cF2>//New hash table, power-of-two in size.</span><span class=cF0>
+<a name="l59"></a>        </span><span class=cF9>CHashTable</span><span class=cF0> *table;
+<a name="l60"></a>
+<a name="l61"></a>        table = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashTable</span><span class=cF7>)</span><span class=cF0>, mem_task);
+<a name="l62"></a>        table-&gt;body = </span><span class=cF5>CAlloc</span><span class=cF0>(size &lt;&lt; </span><span class=cFE>3</span><span class=cF0>, mem_task);
+<a name="l63"></a>        table-&gt;mask = size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l64"></a>
+<a name="l65"></a>        </span><span class=cF1>return</span><span class=cF0> table;
+<a name="l66"></a>}
+<a name="l67"></a>
+<a name="l68"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HashDel</span><span class=cF0>(</span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmph)
+<a name="l69"></a>{</span><span class=cF2>//Free a std ZealOS system hash entry.</span><span class=cF0>
+<a name="l70"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmph)
+<a name="l71"></a>                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l72"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmph-&gt;type &amp; </span><span class=cF3>HTT_DICT_WORD</span><span class=cF7>)</span><span class=cF0>)
+<a name="l73"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;str);
+<a name="l74"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTG_SRC_SYM</span><span class=cF0>)
+<a name="l75"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l76"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;src_link);
+<a name="l77"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;idx);
+<a name="l78"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;import_name);
+<a name="l79"></a>                </span><span class=cF5>LinkedListDel</span><span class=cF0>(tmph-&gt;ie_list);
+<a name="l80"></a>                </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTT_FUN</span><span class=cF0> | </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF7>)</span><span class=cF0>)
+<a name="l81"></a>                        </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;debug_info);
+<a name="l82"></a>                </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTT_FUN</span><span class=cF0> | </span><span class=cF3>HTT_CLASS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l83"></a></span><span class=cF2>//Assumes code not on heap, so doesn't Free.</span><span class=cF0>
+<a name="l84"></a>                </span><span class=cF2>//</span><a href="http://www.tomawezome.github.io/ZealOS/Compiler/LexLib.html#l239"><span class=cF4>ClassMemberListDel</span></a><span class=cF2>() is an import to the Kernel module</span><span class=cF0>
+<a name="l85"></a>                        </span><span class=cF5>ClassMemberListDel</span><span class=cF0>(tmph);
+<a name="l86"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF0>)
+<a name="l87"></a>                        </span><span class=cF5>Free</span><span class=cF0>(tmph</span><span class=cF7>(</span><span class=cF9>CHashDefineStr</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;data);
+<a name="l88"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTT_GLOBAL_VAR</span><span class=cF0>)
+<a name="l89"></a>                {
+<a name="l90"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmph(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *)-&gt;flags &amp; </span><span class=cF3>GVF_ALIAS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l91"></a>                                </span><span class=cF5>Free</span><span class=cF0>(tmph</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;data_addr);
+<a name="l92"></a>                        </span><span class=cF5>LinkedListDel</span><span class=cF0>(tmph</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;dim.next);
+<a name="l93"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmph</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;fun_ptr)
+<a name="l94"></a>                                </span><span class=cF5>HashDel</span><span class=cF0>(tmph</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;fun_ptr - tmph</span><span class=cF7>(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;fun_ptr-&gt;ptr_stars_count);
+<a name="l95"></a>                }
+<a name="l96"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l97"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTT_FILE</span><span class=cF0>)
+<a name="l98"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmph</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;user_data0);
+<a name="l99"></a>        </span><span class=cF5>Free</span><span class=cF0>(tmph);
+<a name="l100"></a>}
+<a name="l101"></a>
+<a name="l102"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HashTableDel</span><span class=cF0>(</span><span class=cF9>CHashTable</span><span class=cF0> *table)
+<a name="l103"></a>{</span><span class=cF2>//Free std system hash table, calling </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KHashB.html#l68"><span class=cF4>HashDel</span></a><span class=cF2>() on entries.</span><span class=cF0>
+<a name="l104"></a>        </span><span class=cF9>I64</span><span class=cF0>                      i;
+<a name="l105"></a>        </span><span class=cF9>CHashSrcSym</span><span class=cF0>     *tmph, *tmph1;
+<a name="l106"></a>
+<a name="l107"></a>        </span><span class=cF1>if</span><span class=cF0> (!table)
+<a name="l108"></a>                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l109"></a>
+<a name="l110"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= table-&gt;mask; i++)
+<a name="l111"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l112"></a>                tmph = table-&gt;body[i];
+<a name="l113"></a>                </span><span class=cF1>while</span><span class=cF0> (tmph)
+<a name="l114"></a>                {
+<a name="l115"></a>                        tmph1 = tmph-&gt;next;
+<a name="l116"></a>                        </span><span class=cF5>HashDel</span><span class=cF0>(tmph);
+<a name="l117"></a>                        tmph = tmph1;
+<a name="l118"></a>                }
+<a name="l119"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l120"></a>        </span><span class=cF5>Free</span><span class=cF0>(table-&gt;body);
+<a name="l121"></a>        </span><span class=cF5>Free</span><span class=cF0>(table);
+<a name="l122"></a>}
+<a name="l123"></a>
+<a name="l124"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>HashTablePurge</span><span class=cF0>(</span><span class=cF9>CHashTable</span><span class=cF0> *table)
+<a name="l125"></a>{</span><span class=cF2>//Eliminate ExportSysSyms that have been usurped.</span><span class=cF0>
+<a name="l126"></a>        </span><span class=cF9>I64</span><span class=cF0>                      i, res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l127"></a>        </span><span class=cF9>CHashSrcSym</span><span class=cF0>     *tmph, *tmph1, *tmph2;
+<a name="l128"></a>
+<a name="l129"></a>        </span><span class=cF1>if</span><span class=cF0> (!table)
+<a name="l130"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l131"></a>
+<a name="l132"></a>        </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l133"></a>        </span><span class=cF1>CLI</span><span class=cF0>      </span><span class=cF2>//Precaution</span><span class=cF0>
+<a name="l134"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= table-&gt;mask; i++)
+<a name="l135"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l136"></a>                tmph = table-&gt;body[i];
+<a name="l137"></a>                </span><span class=cF1>while</span><span class=cF0> (tmph)
+<a name="l138"></a>                {
+<a name="l139"></a>                        tmph1 = tmph-&gt;next; </span><span class=cF2>//We delete only older ones</span><span class=cF0>
+<a name="l140"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTT_FUN</span><span class=cF0> | </span><span class=cF3>HTT_GLOBAL_VAR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l141"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l142"></a>                                tmph2 = tmph-&gt;next; </span><span class=cF2>//Older always later in chain</span><span class=cF0>
+<a name="l143"></a>                                </span><span class=cF1>while</span><span class=cF0> (tmph2)
+<a name="l144"></a>                                {
+<a name="l145"></a>                                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>tmph2-&gt;type &amp; </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0> ||
+<a name="l146"></a>                                                tmph2-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_INVALID</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l147"></a>                                                !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>tmph2-&gt;str, tmph-&gt;str</span><span class=cF7>)</span><span class=cF0>)
+<a name="l148"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l149"></a>                                                </span><span class=cF1>if</span><span class=cF0> (tmph2-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_INVALID</span><span class=cF0>)
+<a name="l150"></a>                                                        tmph2-&gt;type = </span><span class=cF3>HTT_KEYWORD</span><span class=cF0>;</span><span class=cF2>//Won't delete HTT_INVALID</span><span class=cF0>
+<a name="l151"></a>                                                </span><span class=cF5>HashRemDel</span><span class=cF0>(tmph2, table);
+<a name="l152"></a>                                                res++;
+<a name="l153"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l154"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l155"></a>                                        tmph2 = tmph2-&gt;next;
+<a name="l156"></a>                                }
+<a name="l157"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l158"></a>                        tmph = tmph1;
+<a name="l159"></a>                }
+<a name="l160"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l161"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l162"></a>
+<a name="l163"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l164"></a>}
+<a name="l165"></a>
+<a name="l166"></a></span><span class=cF9>CHashGeneric</span><span class=cF0> *</span><span class=cF5>HashGenericAdd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>I64</span><span class=cF0> u0=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> u1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> u2=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l167"></a>{</span><span class=cF2>//Add any type to task hash_table, 3 user_data values.</span><span class=cF0>
+<a name="l168"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l169"></a>                task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l170"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0>, task);
+<a name="l171"></a>
+<a name="l172"></a>        res-&gt;type               = type;
+<a name="l173"></a>        res-&gt;user_data0 = u0;
+<a name="l174"></a>        res-&gt;user_data1 = u1;
+<a name="l175"></a>        res-&gt;user_data2 = u2;
+<a name="l176"></a>        res-&gt;str                = </span><span class=cF5>StrNew</span><span class=cF0>(name, task);
+<a name="l177"></a>        </span><span class=cF5>HashAdd</span><span class=cF0>(res, task-&gt;hash_table);
+<a name="l178"></a>
+<a name="l179"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l180"></a>}
+<a name="l181"></a>
+<a name="l182"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HashSrcFileSet</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CHashSrcSym</span><span class=cF0> *h, </span><span class=cF9>I64</span><span class=cF0> line_num_offset=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l183"></a>{</span><span class=cF2>//Set </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l862"><span class=cF4>CHashSrcSym</span></a><span class=cF2> link and help_index by cur cc pos.</span><span class=cF0>
+<a name="l184"></a>        </span><span class=cF9>CLexFile</span><span class=cF0>        *tmpf = cc-&gt;lex_include_stack;
+<a name="l185"></a>        </span><span class=cF9>I64</span><span class=cF0>                      line_num = tmpf-&gt;line_num + line_num_offset;
+<a name="l186"></a>
+<a name="l187"></a>        </span><span class=cF1>if</span><span class=cF0> (line_num &lt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l188"></a>                line_num = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l189"></a>        </span><span class=cF5>Free</span><span class=cF0>(h-&gt;src_link);
+<a name="l190"></a>        h-&gt;src_link = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;FL:%s,%d&quot;</span><span class=cF0>, tmpf-&gt;full_name, line_num);
+<a name="l191"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;opts, </span><span class=cF3>OPTf_KEEP_PRIVATE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l192"></a>                h-&gt;type |= </span><span class=cF3>HTF_PRIVATE</span><span class=cF0>;
+<a name="l193"></a>        </span><span class=cF5>Free</span><span class=cF0>(h-&gt;idx);
+<a name="l194"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;cur_help_idx &amp;&amp; *cc-&gt;cur_help_idx)
+<a name="l195"></a>                h-&gt;idx = </span><span class=cF5>StrNew</span><span class=cF0>(cc-&gt;cur_help_idx);
+<a name="l196"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l197"></a>                h-&gt;idx = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l198"></a>}
+<a name="l199"></a>
+<a name="l200"></a></span><span class=cF9>CHashGeneric</span><span class=cF0> *</span><span class=cF5>HashPublic</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF9>I64</span><span class=cF0> mask, </span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l201"></a>{</span><span class=cF2>//Mark a hash entry as public and </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KHashB.html#l182"><span class=cF4>HashSrcFileSet</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l202"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *res;
+<a name="l203"></a>
+<a name="l204"></a>        </span><span class=cF1>if</span><span class=cF0> (res = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>st, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, mask</span><span class=cF7>)</span><span class=cF0>)
+<a name="l205"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l206"></a>                </span><span class=cF1>if</span><span class=cF0> (val)
+<a name="l207"></a>                        res-&gt;type |= </span><span class=cF3>HTF_PUBLIC</span><span class=cF0>;
+<a name="l208"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l209"></a>                        res-&gt;type &amp;= ~</span><span class=cF3>HTF_PUBLIC</span><span class=cF0>;
+<a name="l210"></a>                </span><span class=cF1>if</span><span class=cF0> (res-&gt;type &amp; </span><span class=cF3>HTG_SRC_SYM</span><span class=cF0>)
+<a name="l211"></a>                        </span><span class=cF5>HashSrcFileSet</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;last_cc, res);
+<a name="l212"></a>                </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l213"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l214"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l215"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l216"></a>}
+<a name="l217"></a>
+<a name="l218"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>HashListAdd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *list, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>CHashTable</span><span class=cF0> *table)
+<a name="l219"></a>{</span><span class=cF2>//Add a list to a hash table.</span><span class=cF0>
+<a name="l220"></a>        </span><span class=cF9>I64</span><span class=cF0>                              i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l221"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0>    *tmph;
+<a name="l222"></a>
+<a name="l223"></a>        </span><span class=cF1>if</span><span class=cF0> (list)
+<a name="l224"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l225"></a>                </span><span class=cF1>while</span><span class=cF0> (*list)
+<a name="l226"></a>                {
+<a name="l227"></a>                        </span><span class=cF1>if</span><span class=cF0> (*list == </span><span class=cF6>'@'</span><span class=cF0>)
+<a name="l228"></a>                                list++;
+<a name="l229"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l230"></a>                                i++;
+<a name="l231"></a>                        tmph = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0>);
+<a name="l232"></a>                        tmph-&gt;user_data0        = i - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l233"></a>                        tmph-&gt;str                       = </span><span class=cF5>StrNew</span><span class=cF0>(list);
+<a name="l234"></a>                        tmph-&gt;type                      = type;
+<a name="l235"></a>                        </span><span class=cF5>HashAdd</span><span class=cF0>(tmph, table);
+<a name="l236"></a>                        </span><span class=cF1>while</span><span class=cF0> (*list++);
+<a name="l237"></a>                }
+<a name="l238"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l239"></a>
+<a name="l240"></a>        </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l241"></a>}
+<a name="l242"></a>
+<a name="l243"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>HashDefineListAdd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dname, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>CHashTable</span><span class=cF0> *table)
+<a name="l244"></a>{</span><span class=cF2>//Add define list to a hash table. See </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l25"><span class=cF4>::/System/DolDoc/DocInit.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l245"></a>        </span><span class=cF9>CHashDefineStr</span><span class=cF0> *tmph;
+<a name="l246"></a>
+<a name="l247"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>dname, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_DEFINE_STR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l248"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>HashListAdd</span><span class=cF0>(tmph-&gt;data, type, table);
+<a name="l249"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l250"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l251"></a>}
+<a name="l252"></a>
+<a name="l253"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FramePtr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l254"></a>{</span><span class=cF2>//Find entry in task-&gt;hash_table, Return user_data.</span><span class=cF0>
+<a name="l255"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph;
+<a name="l256"></a>
+<a name="l257"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l258"></a>                task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l259"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>name, task-&gt;hash_table, </span><span class=cF3>HTT_FRAME_PTR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l260"></a>                </span><span class=cF1>return</span><span class=cF0> tmph-&gt;user_data0;
+<a name="l261"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l262"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l263"></a>}
+<a name="l264"></a>
+<a name="l265"></a></span><span class=cF9>CHashGeneric</span><span class=cF0> *</span><span class=cF5>FramePtrAdd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> val=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l266"></a>{</span><span class=cF2>//Add named value to task-&gt;hash_table.</span><span class=cF0>
+<a name="l267"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>HashGenericAdd</span><span class=cF0>(name, </span><span class=cF3>HTT_FRAME_PTR</span><span class=cF0>, val, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, task);
+<a name="l268"></a>}
+<a name="l269"></a>
+<a name="l270"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FramePtrSet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> val, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l271"></a>{</span><span class=cF2>//Find hash entry in task-&gt;hash_table. Change user_data0.</span><span class=cF0>
+<a name="l272"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph;
+<a name="l273"></a>
+<a name="l274"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l275"></a>                task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l276"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>name, task-&gt;hash_table, </span><span class=cF3>HTT_FRAME_PTR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l277"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>LXchgI64</span><span class=cF0>(&amp;tmph-&gt;user_data0, val);
+<a name="l278"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l279"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l280"></a>}
+<a name="l281"></a>
+<a name="l282"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FramePtrDel</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l283"></a>{</span><span class=cF2>//Remove entry and delete.</span><span class=cF0>
+<a name="l284"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0>    *tmph;
+<a name="l285"></a>        </span><span class=cF9>I64</span><span class=cF0>                              res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l286"></a>
+<a name="l287"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l288"></a>                task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l289"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>name, task-&gt;hash_table, </span><span class=cF3>HTT_FRAME_PTR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l290"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l291"></a>                res = tmph-&gt;user_data0;
+<a name="l292"></a>                </span><span class=cF5>HashRemDel</span><span class=cF0>(tmph, task-&gt;hash_table);
+<a name="l293"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l294"></a>
+<a name="l295"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l296"></a>}
+</span></pre></body>
+</html>

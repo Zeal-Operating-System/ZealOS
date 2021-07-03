@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
+<a name="l2"></a></span><span class=cF9>CDC</span><span class=cF0> *img1 = </span><span class=cF5>DCNew</span><span class=cF0>(</span><span class=cFE>64</span><span class=cF0>, </span><span class=cFE>64</span><span class=cF0>);
+<a name="l3"></a></span><span class=cF9>CDC</span><span class=cF0> *img2 = </span><span class=cF5>DCNew</span><span class=cF0>(</span><span class=cFE>512</span><span class=cF0>, </span><span class=cFE>512</span><span class=cF0>);
+<a name="l4"></a>
+<a name="l5"></a>img1-&gt;color = </span><span class=cF3>COLOR_MONO</span><span class=cF0>;
+<a name="l6"></a>img1-&gt;thick = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l7"></a></span><span class=cF5>GrCircle</span><span class=cF0>(img1, </span><span class=cFE>30</span><span class=cF0>, </span><span class=cFE>30</span><span class=cF0>, </span><span class=cFE>20</span><span class=cF0>);
+<a name="l8"></a></span><span class=cF5>GrFloodFill3</span><span class=cF0>(img1, </span><span class=cFE>30</span><span class=cF0>, </span><span class=cFE>30</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l9"></a></span><span class=cF5>GrLine3</span><span class=cF0>(img1, </span><span class=cFE>60</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>60</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF5>DCFill</span><span class=cF0>(img2);
+<a name="l12"></a>img2-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l13"></a>img2-&gt;brush = img1;
+<a name="l14"></a></span><span class=cF5>GrCircle</span><span class=cF0>(img2, </span><span class=cFE>256</span><span class=cF0>-</span><span class=cFE>30</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0>-</span><span class=cFE>30</span><span class=cF0>, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>67</span><span class=cF0>);
+<a name="l15"></a>img2-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l16"></a>img2-&gt;thick = </span><span class=cFE>6</span><span class=cF0>;
+<a name="l17"></a>img2-&gt;brush = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l18"></a></span><span class=cF5>GrLine3</span><span class=cF0>(img2, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0> + </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0> + </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l19"></a></span><span class=cF5>GrLine3</span><span class=cF0>(img2, </span><span class=cFE>256</span><span class=cF0> + </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0> + </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l20"></a>
+<a name="l21"></a>img2-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l22"></a></span><span class=cF5>GrRect</span><span class=cF0>(img2, </span><span class=cFE>256</span><span class=cF0> - </span><span class=cFE>20</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0> - </span><span class=cFE>20</span><span class=cF0>, </span><span class=cFE>40</span><span class=cF0>, </span><span class=cFE>40</span><span class=cF0>);
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l25"></a></span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i += </span><span class=cFE>4</span><span class=cF0>)
+<a name="l26"></a>{
+<a name="l27"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l28"></a>        </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l29"></a>        </span><span class=cF5>GrBlot</span><span class=cF0>(dc, i - </span><span class=cFE>256</span><span class=cF0>, i - </span><span class=cFE>256</span><span class=cF0>, img2);
+<a name="l30"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>);
+<a name="l31"></a>}
+<a name="l32"></a></span><span class=cF1>U8</span><span class=cF0> *tmpg = </span><span class=cF5>DC2Sprite</span><span class=cF0>(img1);
+<a name="l33"></a></span><span class=cF5>Sprite</span><span class=cF0>(tmpg);
+<a name="l34"></a></span><span class=cF5>Free</span><span class=cF0>(tmpg);
+<a name="l35"></a></span><span class=cF6>&quot;%h9c&quot;</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF5>DCDel</span><span class=cF0>(img1);
+<a name="l38"></a></span><span class=cF5>DCDel</span><span class=cF0>(img2);
+<a name="l39"></a></span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l40"></a>
+<a name="l41"></a></span><span class=cF5>PressAKey</span><span class=cF0>;
+<a name="l42"></a></span><span class=cF5>DCFill</span><span class=cF0>;
+</span></pre></body>
+</html>

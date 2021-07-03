@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>The basics of the CosmiC language. Requirements: Knowledge of basic integer mathematics and number sense.
+<a name="l2"></a>
+<a name="l3"></a>There are 4 main types of symbols. A symbol is just a fancy name for something with a name.
+<a name="l4"></a>
+<a name="l5"></a>We have:
+<a name="l6"></a>        - Functions
+<a name="l7"></a>        - Variables
+<a name="l8"></a>        - Definitions
+<a name="l9"></a>        - Classes
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF2>//This is a variable</span><span class=cF0>
+<a name="l12"></a></span><span class=cF9>I64</span><span class=cF0> my_var;
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF2>//This is another variable of a different type.</span><span class=cF0>
+<a name="l15"></a></span><span class=cF1>U8</span><span class=cF0> my_u8;
+<a name="l16"></a>
+<a name="l17"></a>Variables are declared as certain <u>types</u>. There are types for numbers. You just saw two of them above, I64 and U8.
+<a name="l18"></a>
+<a name="l19"></a>The compiler gives us 8 types for numbers. These types are different <u>sizes</u> of numbers, and if they are <u>signed</u> or <u>unsigned</u>.
+<a name="l20"></a>
+<a name="l21"></a>A <u>byte</u> is 8 bits. The range of numbers you can store in a byte is 0 to 255. In a signed byte that range is from -128 to 127.
+<a name="l22"></a>
+<a name="l23"></a>* Unsigned types cannot be a negative value.
+<a name="l24"></a>* Only signed types can store negative numbers.
+<a name="l25"></a>
+<a name="l26"></a>Now you might be thinking, how does it know if a number is negative or not? After all, a number is just a series of bits!
+<a name="l27"></a>
+<a name="l28"></a>The way we store a signed number is we reserve a single bit in the number to tell us whether or not it is signed.
+<a name="l29"></a>
+<a name="l30"></a>If we have a number that is 8 bits wide, then we have to use a single bit as a <u>sign bit</u>.
+<a name="l31"></a>The sign bit is always the highest bit available.
+<a name="l32"></a>
+<a name="l33"></a>In a signed byte, bits #0-6 will be used to store the actual value of the number.
+<a name="l34"></a>
+<a name="l35"></a>Bit #7 will be the sign bit. If the sign bit is 1, then it is a negative number.
+<a name="l36"></a>
+<a name="l37"></a>#       7       6       5       4       3       2       1       0
+<a name="l38"></a>
+<a name="l39"></a></span><span class=cF4>0b      0       0       0       0       0       0       1       1</span><span class=cF0>       =&gt;  </span><span class=cF1>3</span><span class=cF0>
+<a name="l40"></a>        |                                               |       |
+<a name="l41"></a>  sign   the number &quot;3&quot; in binary                                       
+<a name="l42"></a>
+<a name="l43"></a>
+<a name="l44"></a>If it a number is signed that means that it cannot use all of its bits to represent a value.
+<a name="l45"></a>Therefore, the range of numbers it can represent is split between the negative side and the positive side of numbers.
+<a name="l46"></a>
+<a name="l47"></a>                                  </span><span class=cF6>                                        Unsigned byte range
+<a name="l48"></a>
+<a name="l49"></a>                                                                |----------------------------|
+<a name="l50"></a>                                  </span><span class=cF5>     Signed byte range
+<a name="l51"></a>                                  |--------------------------|
+<a name="l52"></a></span><span class=cF0>-255            -127            0           127             255
+<a name="l53"></a>
+<a name="l54"></a>
+<a name="l55"></a>Now, you can imagine how this plays out with numbers that are bigger than 1 byte.
+<a name="l56"></a>
+<a name="l57"></a>For 2-byte numbers, the unsigned range becomes 0 to 65535, and the signed range becomes -32768 to 32767. 
+<a name="l58"></a>The sign bit is bit #15.
+<a name="l59"></a>
+<a name="l60"></a>Unsigned number types:
+<a name="l61"></a>
+<a name="l62"></a>        </span><span class=cF1>U8</span><span class=cF0>      -- </span><span class=cFE>1</span><span class=cF0> byte (</span><span class=cFE>8</span><span class=cF0> bits) unsigned number
+<a name="l63"></a>        </span><span class=cF1>I8</span><span class=cF0>      -- </span><span class=cFE>1</span><span class=cF0> byte (</span><span class=cFE>8</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>7</span><span class=cF0> bits) signed number
+<a name="l64"></a>
+<a name="l65"></a>        </span><span class=cF9>U16</span><span class=cF0> -- </span><span class=cFE>2</span><span class=cF0> byte (</span><span class=cFE>16</span><span class=cF0> bits) unsigned number
+<a name="l66"></a>        </span><span class=cF9>I16</span><span class=cF0> -- </span><span class=cFE>2</span><span class=cF0> byte (</span><span class=cFE>16</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>15</span><span class=cF0> bits) signed number
+<a name="l67"></a>
+<a name="l68"></a>        </span><span class=cF9>U32</span><span class=cF0> -- </span><span class=cFE>4</span><span class=cF0> byte (</span><span class=cFE>32</span><span class=cF0> bits) unsigned number
+<a name="l69"></a>        </span><span class=cF9>I32</span><span class=cF0> -- </span><span class=cFE>4</span><span class=cF0> byte (</span><span class=cFE>32</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>31</span><span class=cF0> bits) signed number
+<a name="l70"></a>
+<a name="l71"></a>        </span><span class=cF9>U64</span><span class=cF0>     -- </span><span class=cFE>8</span><span class=cF0> byte (</span><span class=cFE>64</span><span class=cF0> bits) unsigned number
+<a name="l72"></a>        </span><span class=cF9>I64</span><span class=cF0>     -- </span><span class=cFE>8</span><span class=cF0> byte (</span><span class=cFE>64</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>63</span><span class=cF0> bits) signed number
+<a name="l73"></a>
+<a name="l74"></a>
+<a name="l75"></a>Try it out on the command line:
+<a name="l76"></a>
+<a name="l77"></a>Declare a I8 variable named 'x' and assign(=) it the value 3, and press ENTER.
+<a name="l78"></a>
+<a name="l79"></a></span><span class=cF1>C:/Home&gt;</span><span class=cF2>I8 x = 3;</span><span class=cF0>
+<a name="l80"></a>
+<a name="l81"></a>Now type </span><span class=cF2>Bts(&amp;x, 7);</span><span class=cF0> and press ENTER. This will set bit #7 to 1. Bts is &quot;Bit test and set&quot;. Don't forget the </span><span class=cF2>&amp;</span><span class=cF0>.
+<a name="l82"></a>
+<a name="l83"></a>Now if you want to see the value of x, you can simply type </span><span class=cF2>x;</span><span class=cF0> and press ENTER.
+<a name="l84"></a>
+<a name="l85"></a></span><span class=cF1>C:/Home&gt;</span><span class=cF2>x;
+<a name="l86"></a></span><span class=cF1>0.000007s ans=0xFFFFFFFFFFFFFF83=-125</span><span class=cF0>
+<a name="l87"></a>
+<a name="l88"></a>Ignore the extra F's for now. You are interested in this hexadecimal '83' value. 
+<a name="l89"></a>
+<a name="l90"></a>So what happened? When you flipped the sign bit, the number 3 became -125. It started counting up from -128, instead of 0.
+<a name="l91"></a>
+<a name="l92"></a>You can type </span><span class=cF2>&quot;%8tb\n&quot;, x;</span><span class=cF0> to print out the number in binary, if you wish.
+<a name="l93"></a>
+<a name="l94"></a>For most purposes in programming, an </span><span class=cF9>I64</span><span class=cF0> number will work fine.
+<a name="l95"></a>
+<a name="l96"></a>You are currently reading this on a 64-bit operating system, running on a 64-bit computer.
+<a name="l97"></a>We hear about the greatness of 64-bit machines all the time, but what exactly does that mean?
+<a name="l98"></a>
+<a name="l99"></a>The CPU is designed to work with 64-bit numbers, natively. 
+</span></pre></body>
+</html>

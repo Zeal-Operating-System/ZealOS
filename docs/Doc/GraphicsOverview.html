@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF5>                                                       Graphics Overview</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>Dive into </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/DemoIndex.html#l1"><span class=cF4>Demo Index</span></a><span class=cF0> to learn.
+<a name="l4"></a>
+<a name="l5"></a>The order layers are drawn on top of each other is:
+<a name="l6"></a>
+<a name="l7"></a>
+<a name="l8"></a>
+<a name="l9"></a>
+<a name="l10"></a>
+<a name="l11"></a>
+<a name="l12"></a>
+<a name="l13"></a>
+<a name="l14"></a>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cFA>
+<a name="l17"></a>/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l18"></a>
+<a name="l19"></a>
+<a name="l20"></a>
+<a name="l21"></a>
+<a name="l22"></a>
+<a name="l23"></a>
+<a name="l24"></a>
+<a name="l25"></a>
+<a name="l26"></a>
+<a name="l27"></a>
+<a name="l28"></a>
+<a name="l29"></a>
+<a name="l30"></a>
+<a name="l31"></a>
+<a name="l32"></a>
+<a name="l33"></a>
+<a name="l34"></a>
+<a name="l35"></a>
+<a name="l36"></a>
+<a name="l37"></a>
+<a name="l38"></a>
+<a name="l39"></a>
+<a name="l40"></a>
+<a name="l41"></a>
+<a name="l42"></a>
+<a name="l43"></a>
+<a name="l44"></a>
+<a name="l45"></a>* See </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l415"><span class=cF4>GrUpdateScreen</span></a><span class=cF0>(), </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l69"><span class=cF4>GrUpdateTasks</span></a><span class=cF0>() and </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l19"><span class=cF4>GrUpdateTaskWin</span></a><span class=cF0>() called by the WinMgr task 60fps.  Notice the task's </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l41"><span class=cF4>draw_it</span></a><span class=cF0>() 
+<a name="l46"></a>callback being called.  Only tasks on </span><span class=cF2>Core0</span><span class=cF0> are allowed to have windows.        There is one window per task, no child windows.  You 
+<a name="l47"></a>can have pop-up child tasks.
+<a name="l48"></a>
+<a name="l49"></a>* </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF0>s (device contexts) are a data type for controlling graphics on the screen or graphics in mem.  The device context 
+<a name="l50"></a>structure has thick and color.  You use </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l182"><span class=cF4>DCAlias</span></a><span class=cF0>() to create your own structure, with its own color and thick.  Free it with </span><span class=cF4>
+<a name="l51"></a></span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l230"><span class=cF4>DCDel</span></a><span class=cF0>() when finished.
+<a name="l52"></a>
+<a name="l53"></a>* </span><span class=cF4>gr.dc</span><span class=cF0> is a device context for persistent data on the screen, not needing to be redrawn.  You create an alias for this by using </span><span class=cF4>
+<a name="l54"></a></span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l182"><span class=cF4>DCAlias</span></a><span class=cF0>() and work with that.   See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/NetOfDots.html#l1"><span class=cF4>::/Demo/Graphics/NetOfDots.CC</span></a><span class=cF0>.
+<a name="l55"></a>
+<a name="l56"></a>* There are various flavors of line and point plotting routines.        </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrPrimatives.html#l663"><span class=cF4>GrLine</span></a><span class=cF0>() and </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrPrimatives.html#l61"><span class=cF4>GrPlot</span></a><span class=cF0>() are the simplest.  The others allow 3D 
+<a name="l57"></a>graphics and rotations.
+<a name="l58"></a>
+<a name="l59"></a>* See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Transform.html#l1"><span class=cF4>::/Doc/Transform.DD</span></a><span class=cF0> for adding a transformation.
+<a name="l60"></a>
+<a name="l61"></a>* You change the </span><span class=cF2>Fs-&gt;draw_it</span><span class=cF0> var to point to your </span><span class=cF2>DrawIt()</span><span class=cF0> function which gets called each screen refresh (60 fps).  You draw 
+<a name="l62"></a>everything in the window over and over again.  See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/Box.html#l1"><span class=cF4>::/Demo/Graphics/Box.CC</span></a><span class=cF0>.
+<a name="l63"></a>
+<a name="l64"></a>* Use the graphic sprite resource editor, </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0>, to create a sprite that can be plotted with </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrSpritePlot.html#l18"><span class=cF4>Sprite3</span></a><span class=cF0>() or output to the cmd 
+<a name="l65"></a>line with </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrSpritePlot.html#l536"><span class=cF4>Sprite</span></a><span class=cF0>().  Use </span><span class=cF2>$IB,&quot;&quot;,BI=1$</span><span class=cF0> in a src program to insert the addr of sprite binary data item #1.        To learn how the 
+<a name="l66"></a>numbers work, after creating a sprite with </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0>, toggle to plain text with </span><span class=cF2>&lt;CTRL-t&gt;</span><span class=cF0> and check its num.  Make an assignment 
+<a name="l67"></a>to a ptr var or pass to </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrSpritePlot.html#l18"><span class=cF4>Sprite3</span></a><span class=cF0>() with </span><span class=cF2>$IB,&quot;&quot;,BI=n$</span><span class=cF0>.    Use </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0>'s &quot;Pointer to Sprite&quot; to make a </span><span class=cF2>$IB...$</span><span class=cF0> entry.  See </span><span class=cF4>
+<a name="l68"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/SpritePlot.html#l1"><span class=cF4>::/Demo/Graphics/SpritePlot.CC</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/SpritePlot3D.html#l1"><span class=cF4>::/Demo/Graphics/SpritePlot3D.CC</span></a><span class=cF0>.  The origin (zero point) for a sprite is defined by the 
+<a name="l69"></a>cursor location when you pressed </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0> to make it.  You can edit a sprite by clicking the cursor on it and pressing </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0> 
+<a name="l70"></a>again.
+<a name="l71"></a>
+<a name="l72"></a>* Set </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4235"><span class=cF4>DCF_SYMMETRY</span></a><span class=cF0> in the </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF2>.flags</span><span class=cF0> and call </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l236"><span class=cF4>DCSymmetrySet</span></a><span class=cF0>() or </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l259"><span class=cF4>DCSymmetry3Set</span></a><span class=cF0>().  This will plot a mirror image in addition to 
+<a name="l73"></a>the primary image.      Set </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4239"><span class=cF4>DCF_JUST_MIRROR</span></a><span class=cF0> to plot just the image, but this required </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4235"><span class=cF4>DCF_SYMMETRY</span></a><span class=cF0> to be set at the same time.  
+<a name="l74"></a>Note: You can only have one symmetry active at a time including in </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF0>s.
+<a name="l75"></a>
+<a name="l76"></a>* Use </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l205"><span class=cF4>DCNew</span></a><span class=cF0>() to create a mem bitmap which can be used to work off-screen and which can be </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrBitMap.html#l93"><span class=cF4>GrBlot</span></a><span class=cF0>ed onto the screen.  If you set </span><span class=cF2>
+<a name="l77"></a>brush</span><span class=cF0> member of </span><span class=cF2>CDC</span><span class=cF0> to another </span><span class=cF2>CDC</span><span class=cF0>, all the graphic routines will </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrBitMap.html#l93"><span class=cF4>GrBlot</span></a><span class=cF0>() the brush instead of </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/GrPrimatives.html#l61"><span class=cF4>GrPlot</span></a><span class=cF0>().  See </span><span class=cF4>
+<a name="l78"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/Blot.html#l1"><span class=cF4>::/Demo/Graphics/Blot.CC</span></a><span class=cF0>.
+<a name="l79"></a>
+<a name="l80"></a>* There are a few </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3562"><span class=cF4>raster operations</span></a><span class=cF0> available.  They go in bits 8-11 of the </span><span class=cF2>dc-&gt;color</span><span class=cF0> member var which is a </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3603"><span class=cF4>CColorROPU32</span></a><span class=cF0>.       </span><span class=cF4>
+<a name="l81"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3564"><span class=cF4>ROP_COLLISION</span></a><span class=cF0> is special.  It counts the num of pixs drawn on non-background locations.  Using </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3564"><span class=cF4>ROP_COLLISION</span></a><span class=cF0> with vector </span><span class=cF4>
+<a name="l82"></a></span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF0>'s is tricky because overlapping pixs from lines in the </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF0> reg as collisions.       You can either work with a nonzero 
+<a name="l83"></a>count or convert your </span><a href="http://www.tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF0> to a bitmap if your subelements draw on top of each other.  Be sure to set </span><span class=cF4>-&gt;bkcolor</span><span class=cF0> before using </span><span class=cF4>
+<a name="l84"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3564"><span class=cF4>ROP_COLLISION</span></a><span class=cF0>.  See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/Collision.html#l1"><span class=cF4>::/Demo/Graphics/Collision.CC</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/Apps/Titanium/Titanium.html#l555"><span class=cF4>Titanium</span></a><span class=cF0>.
+<a name="l85"></a> 
+<a name="l86"></a>* The </span><span class=cF4>-&gt;dither_probability_u16</span><span class=cF0> member of </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF0> is a </span><span class=cF2>U16</span><span class=cF0> used to statistically sel between two colors to get something resembling 
+<a name="l87"></a>more shades of color.   See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/SunMoon.html#l1"><span class=cF4>::/Demo/Graphics/SunMoon.CC</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Graphics/Shading.html#l1"><span class=cF4>::/Demo/Graphics/Shading.CC</span></a><span class=cF0>.        It works with many graphic routines, 
+<a name="l88"></a>but not those with pens.
+<a name="l89"></a>
+<a name="l90"></a>* There is a mechanism built-in for generating motion based on differential equations, which allows realistic physics.  You 
+<a name="l91"></a>create an </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l281"><span class=cF4>CMathODE</span></a><span class=cF0> struct with </span><a href="http://www.tomawezome.github.io/ZealOS/System/MathODE.html#l31"><span class=cF4>ODENew</span></a><span class=cF0>(), passing it the num of vars in the state vect.  For realistic physics, you usually have 
+<a name="l92"></a>2 state vars for each dimension (for each mass) because motion is governed by F=mA which is a 2nd order equation.  The two 
+<a name="l93"></a>states are pos and velocity and to solve these you need to supply the derivative of pos and velocity.   The derivative of pos is 
+<a name="l94"></a>usually simply the current velocity and the derivative of velocity is the acceleration (the sum of forces on a mass divided by 
+<a name="l95"></a>mass).  To help provide meaningful names for values in the state vect, you can create an </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l230"><span class=cF4>COrder2D3</span></a><span class=cF0> ptr and point it to a mass in 
+<a name="l96"></a>the state vect. Six elements in the state vect are required for each mass.
+<a name="l97"></a>
+<a name="l98"></a>See </span><span class=cF4><u>Math/CMathODE</u></span><span class=cF0>.
+<a name="l99"></a>See </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/Games/Rocket.html#l1"><span class=cF4>::/Demo/Games/Rocket.CC</span></a><span class=cF0>.
+</span></pre></body>
+</html>

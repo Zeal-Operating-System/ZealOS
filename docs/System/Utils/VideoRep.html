@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>VideoRep</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> full=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l2"></a>{</span><span class=cF2>//List available VBE modes as indicated by the BIOS. Show current mode;</span><span class=cF0>
+<a name="l3"></a>        </span><span class=cF9>I64</span><span class=cF0> i, mode_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l4"></a>        </span><span class=cF9>CVBEModeShort</span><span class=cF0> *mode;
+<a name="l5"></a>
+<a name="l6"></a>        </span><span class=cF1>if</span><span class=cF0> (full)
+<a name="l7"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l8"></a>                </span><span class=cF6>&quot;\nVBE Version %X.%X\n\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.version.u8[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFB>sys_vbe_info</span><span class=cF0>.version.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l9"></a>                </span><span class=cF6>&quot;$PURPLE$Manufacturer      $FG$: $BLACK$%s$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.oem;
+<a name="l10"></a>                </span><span class=cF6>&quot;$PURPLE$Vendor name       $FG$: $BLACK$%s$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.vendor;
+<a name="l11"></a>                </span><span class=cF6>&quot;$PURPLE$Product name      $FG$: $BLACK$%s$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.product_name;
+<a name="l12"></a>                </span><span class=cF6>&quot;$PURPLE$Product revision  $FG$: $BLACK$%s$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.product_revision;
+<a name="l13"></a>                </span><span class=cF6>&quot;$PURPLE$Software revision $FG$: $BLACK$%X.%X$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.software_revision.u8[</span><span class=cFE>1</span><span class=cF0>],  </span><span class=cFB>sys_vbe_info</span><span class=cF0>.software_revision.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l14"></a>                </span><span class=cF6>&quot;$PURPLE$Hardware memory   $FG$: $BLACK$%d MiB$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_vbe_info</span><span class=cF0>.total_memory * </span><span class=cFE>64</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>;
+<a name="l15"></a>                </span><span class=cF6>&quot;\n\nAll modes shown are 32-bit color.\n\n&quot;</span><span class=cF0>;
+<a name="l16"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l17"></a>        </span><span class=cF6>&quot;$CYAN$ #    W  x   H\t\t Mode$FG$\n\n&quot;</span><span class=cF0>;
+<a name="l18"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>VBE_MODES_NUM</span><span class=cF0>; i++)
+<a name="l19"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l20"></a>                mode = &amp;</span><span class=cFB>sys_vbe_modes</span><span class=cF0>[i];
+<a name="l21"></a>                </span><span class=cF1>if</span><span class=cF0> (mode-&gt;height)
+<a name="l22"></a>                {
+<a name="l23"></a>                 </span><span class=cF6>&quot;$PURPLE$ $BT+X,\&quot;%d\&quot;,LM=\&quot;%d\\n\&quot;$$FG$$LM,4$&quot;</span><span class=cF0>, i+</span><span class=cFE>1</span><span class=cF0>, i+</span><span class=cFE>1</span><span class=cF0>;
+<a name="l24"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>sys_vbe_mode_num</span><span class=cF0> == mode-&gt;mode_num)
+<a name="l25"></a>                                </span><span class=cF6>&quot;$RED$%4d x %4d </span><span class=cF0>        </span><span class=cF6>0x%X (Current mode)$FG$$LM,0$&quot;</span><span class=cF0>, mode-&gt;width, mode-&gt;height, mode-&gt;mode_num;
+<a name="l26"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l27"></a>                                </span><span class=cF6>&quot;$BLACK$%4d x %4d </span><span class=cF0>      </span><span class=cF6>$FG$0x%X$LM,0$&quot;</span><span class=cF0>, mode-&gt;width, mode-&gt;height, mode-&gt;mode_num;
+<a name="l28"></a>                        </span><span class=cF6>&quot;\n\n\n&quot;</span><span class=cF0>;
+<a name="l29"></a>                        mode_count++;
+<a name="l30"></a>                }
+<a name="l31"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l32"></a>        </span><span class=cF1>return</span><span class=cF0> mode_count;
+<a name="l33"></a>}
+<a name="l34"></a>
+</span></pre></body>
+</html>

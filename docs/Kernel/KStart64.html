@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF1>asm</span><span class=cF0> {
+<a name="l2"></a></span><span class=cF1>USE64</span><span class=cF0>
+<a name="l3"></a>                </span><span class=cF1>BTS</span><span class=cF0>             </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_RUN_LEVEL</span><span class=cF0>], </span><span class=cF3>RLf_64BIT</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF2>//Set required bits for SSE instruction execution</span><span class=cF0>
+<a name="l6"></a>                </span><span class=cF1>MOV_RAX_CR4</span><span class=cF0>
+<a name="l7"></a>                </span><span class=cF1>BTS</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>CR4f_OSFXSR</span><span class=cF0>
+<a name="l8"></a>                </span><span class=cF1>MOV_CR4_RAX</span><span class=cF0>
+<a name="l9"></a>
+<a name="l10"></a>                </span><span class=cF1>MOV_EAX_CR0</span><span class=cF0>
+<a name="l11"></a>                </span><span class=cF1>BTR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>CR0f_EM</span><span class=cF0>
+<a name="l12"></a>                </span><span class=cF1>BTR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>CR0f_MP</span><span class=cF0>
+<a name="l13"></a>                </span><span class=cF1>BTS</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>CR0f_NE</span><span class=cF0>
+<a name="l14"></a>                </span><span class=cF1>MOV_CR0_EAX</span><span class=cF0>
+<a name="l15"></a>                </span><span class=cF1>FNINIT</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.init_fpu_mmx
+<a name="l17"></a>                </span><span class=cF1>FXSAVE</span><span class=cF0>  </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cF2>//Init CPU0 Struct</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.system
+<a name="l21"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.boot_cpu
+<a name="l22"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFE>0</span><span class=cF0>
+<a name="l23"></a>                </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>CPUStructInit</span><span class=cF0>
+<a name="l24"></a>                </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>SET_GS_BASE</span><span class=cF0>
+<a name="l25"></a>
+<a name="l26"></a></span><span class=cF2>//Init System HeapCtrl</span><span class=cF0>
+<a name="l27"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EDI</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.system_hc
+<a name="l28"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.</span><span class=cFB>sys_code_bp</span><span class=cF0>
+<a name="l29"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CHeapCtrl</span><span class=cF0>.bp[</span><span class=cFC>RDI</span><span class=cF0>],</span><span class=cFC>RAX</span><span class=cF0>
+<a name="l30"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CHeapCtrl</span><span class=cF0>.hc_signature[</span><span class=cFC>RDI</span><span class=cF0>], </span><span class=cF3>HEAP_CTRL_SIGNATURE_VAL</span><span class=cF0>
+<a name="l31"></a>
+<a name="l32"></a>                </span><span class=cF1>LEA</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CHeapCtrl</span><span class=cF0>.next_um - </span><span class=cF9>CMemUsed</span><span class=cF0>.next[</span><span class=cFC>RDI</span><span class=cF0>]
+<a name="l33"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CHeapCtrl</span><span class=cF0>.next_um[</span><span class=cFC>RDI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l34"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CHeapCtrl</span><span class=cF0>.last_um[</span><span class=cFC>RDI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l35"></a>
+<a name="l36"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.system
+<a name="l37"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CHeapCtrl</span><span class=cF0>.mem_task[</span><span class=cFC>RDI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.code_heap[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cFC>RDI</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.data_heap[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cFC>RDI</span><span class=cF0>
+<a name="l40"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.task_signature[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cF3>TASK_SIGNATURE_VAL</span><span class=cF0>
+<a name="l41"></a>
+<a name="l42"></a>                </span><span class=cF1>BTS</span><span class=cF0>     </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_RUN_LEVEL</span><span class=cF0>], </span><span class=cF3>RLf_16MEG_SYSTEM_HEAP_CTRL</span><span class=cF0>
+<a name="l43"></a>
+<a name="l44"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF3>MEM_SYSTEM_STACK</span><span class=cF0>
+<a name="l45"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.system
+<a name="l46"></a>                </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>TaskInit</span><span class=cF0>
+<a name="l47"></a>                </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>SET_FS_BASE</span><span class=cF0>
+<a name="l48"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rsp[</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l49"></a>
+<a name="l50"></a>                </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I32</span><span class=cF0> &amp;</span><span class=cFD>KMain</span><span class=cF0>
+<a name="l51"></a>
+<a name="l52"></a></span><span class=cF2>//************************************</span><span class=cF0>
+<a name="l53"></a></span><span class=cF1>USE32</span><span class=cF0>
+<a name="l54"></a></span><span class=cFD>SYS_ENTER_LONG_MODE</span><span class=cF0>:: </span><span class=cF2>//Switch to long 64-bit mode</span><span class=cF0>
+<a name="l55"></a>                </span><span class=cF1>MOV_EAX_CR4</span><span class=cF0>
+<a name="l56"></a>                </span><span class=cF1>OR</span><span class=cF0>              </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF3>CR4F_PAE</span><span class=cF0> | </span><span class=cF3>CR4F_PGE</span><span class=cF0>
+<a name="l57"></a>                </span><span class=cF1>MOV_CR4_EAX</span><span class=cF0>
+<a name="l58"></a>
+<a name="l59"></a>                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>EAX</span><span class=cF0>, [</span><span class=cFD>MEM_PML4</span><span class=cF0>]
+<a name="l60"></a>                </span><span class=cF1>MOV_CR3_EAX</span><span class=cF0>
+<a name="l61"></a>
+<a name="l62"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>ECX</span><span class=cF0>, </span><span class=cF3>IA32_EFER</span><span class=cF0>
+<a name="l63"></a>                </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>EDX</span><span class=cF0>, </span><span class=cFC>EDX</span><span class=cF0>
+<a name="l64"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF3>IA32F_LME</span><span class=cF0>
+<a name="l65"></a>                </span><span class=cF1>WRMSR</span><span class=cF0>
+<a name="l66"></a>
+<a name="l67"></a>                </span><span class=cF1>MOV_EAX_CR0</span><span class=cF0>
+<a name="l68"></a>                </span><span class=cF1>BTS</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFE>31</span><span class=cF0> </span><span class=cF2>//Enable paging (required for 64-bit mode)</span><span class=cF0>
+<a name="l69"></a>                </span><span class=cF1>MOV_CR0_EAX</span><span class=cF0>
+<a name="l70"></a>
+<a name="l71"></a>                </span><span class=cF1>DU8</span><span class=cF0>     </span><span class=cFE>0xEA</span><span class=cF0>;            </span><span class=cF2>//JMP CGDT.cs64:@@05</span><span class=cF0>
+<a name="l72"></a>                </span><span class=cF1>DU32</span><span class=cF0>    @@05;
+<a name="l73"></a>                </span><span class=cF1>DU16</span><span class=cF0>    </span><span class=cF9>CGDT</span><span class=cF0>.cs64;
+<a name="l74"></a></span><span class=cF1>USE64</span><span class=cF0>
+<a name="l75"></a>@@05:   </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF9>CGDT</span><span class=cF0>.ds
+<a name="l76"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l77"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>ES</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l78"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>SS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l79"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>FS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l80"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>GS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l81"></a>                </span><span class=cF1>RET</span><span class=cF0>
+<a name="l82"></a>
+<a name="l83"></a></span><span class=cF2>//************************************</span><span class=cF0>
+<a name="l84"></a></span><span class=cFD>SYS_RAM_REBOOT</span><span class=cF0>:: </span><span class=cF2>//This gets copied high.  </span><a href="http://www.tomawezome.github.io/ZealOS/System/Boot/BootRAM.html#l43"><span class=cF4>SYS_RAM_REBOOT</span></a><span class=cF0>
+<a name="l85"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.ds             </span><span class=cF2>//stack seg</span><span class=cF0>
+<a name="l86"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>BOOT_RAM_LIMIT</span><span class=cF0>      </span><span class=cF2>//stack</span><span class=cF0>
+<a name="l87"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>                           </span><span class=cF2>//flags</span><span class=cF0>
+<a name="l88"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.cs32
+<a name="l89"></a>                </span><span class=cF1>LEA</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, [@@10]
+<a name="l90"></a>                </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l91"></a>                </span><span class=cF1>IRET</span><span class=cF0>
+<a name="l92"></a></span><span class=cF1>USE32</span><span class=cF0>
+<a name="l93"></a>@@10:   </span><span class=cF1>WBINVD</span><span class=cF0>
+<a name="l94"></a>
+<a name="l95"></a></span><span class=cF2>//Disable paging</span><span class=cF0>
+<a name="l96"></a>                </span><span class=cF1>MOV_EAX_CR0</span><span class=cF0>
+<a name="l97"></a>                </span><span class=cF1>BTR</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFE>31</span><span class=cF0>
+<a name="l98"></a>                </span><span class=cF1>MOV_CR0_EAX</span><span class=cF0>
+<a name="l99"></a>
+<a name="l100"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>ECX</span><span class=cF0>, </span><span class=cF3>IA32_EFER</span><span class=cF0>
+<a name="l101"></a>                </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>EDX</span><span class=cF0>, </span><span class=cFC>EDX</span><span class=cF0>
+<a name="l102"></a>                </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFC>EAX</span><span class=cF0>
+<a name="l103"></a>                </span><span class=cF1>WRMSR</span><span class=cF0>
+<a name="l104"></a>
+<a name="l105"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EBX</span><span class=cF0>, </span><span class=cF3>BOOT_SRC_RAM</span><span class=cF0>
+<a name="l106"></a>                </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF9>I32</span><span class=cF0> </span><span class=cFD>CORE0_32BIT_INIT</span><span class=cF0>
+<a name="l107"></a>                </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>
+<a name="l108"></a></span><span class=cFD>SYS_RAM_REBOOT_END</span><span class=cF0>::
+<a name="l109"></a></span><span class=cF1>USE64</span><span class=cF0>
+<a name="l110"></a>}
+</span></pre></body>
+</html>

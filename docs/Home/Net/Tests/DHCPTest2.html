@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF1>U8</span><span class=cF0> src[</span><span class=cFE>6</span><span class=cF0>] = {</span><span class=cFE>0xDE</span><span class=cF0>, </span><span class=cFE>0xAD</span><span class=cF0>, </span><span class=cFE>0xBE</span><span class=cF0>, </span><span class=cFE>0xEF</span><span class=cF0>, </span><span class=cFE>0xC0</span><span class=cF0>, </span><span class=cFE>0xDE</span><span class=cF0>};
+<a name="l2"></a></span><span class=cF1>U8</span><span class=cF0> dst[</span><span class=cFE>6</span><span class=cF0>] = {</span><span class=cFE>0xF0</span><span class=cF0>, </span><span class=cFE>0x0D</span><span class=cF0>, </span><span class=cFE>0xBE</span><span class=cF0>, </span><span class=cFE>0xAD</span><span class=cF0>, </span><span class=cFE>0xDE</span><span class=cF0>, </span><span class=cFE>0xAF</span><span class=cF0>};
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF1>U0</span><span class=cF0> DHCPTest()
+<a name="l5"></a>{
+<a name="l6"></a>        CUDPSocket *udp_socket = UDPSocket(AF_INET);
+<a name="l7"></a>        </span><span class=cF9>U32</span><span class=cF0> your_ip;
+<a name="l8"></a>        </span><span class=cF9>U32</span><span class=cF0> dns_ip;
+<a name="l9"></a>        </span><span class=cF9>U32</span><span class=cF0> router_ip;
+<a name="l10"></a>        </span><span class=cF9>U32</span><span class=cF0> subnet_mask;
+<a name="l11"></a>        </span><span class=cF1>U8</span><span class=cF0> *packet_buffer;
+<a name="l12"></a>        </span><span class=cF9>I64</span><span class=cF0> de_index;
+<a name="l13"></a>
+<a name="l14"></a>        </span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip != </span><span class=cFE>0</span><span class=cF0>)
+<a name="l15"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF6>&quot;\nThis test will only work on unconfigured network.\n&quot;</span><span class=cF0>;
+<a name="l17"></a>                </span><span class=cF6>&quot;To force for testing, comment out NetConfigure; in </span><span class=cF4><u>NetStart</u></span><span class=cF6>.\n\n&quot;</span><span class=cF0>;
+<a name="l18"></a>                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l19"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l20"></a>
+<a name="l21"></a>        DHCPInnerConfigure(udp_socket, &amp;your_ip, &amp;dns_ip, &amp;router_ip, &amp;subnet_mask);
+<a name="l22"></a>
+<a name="l23"></a>        UDPSocketClose(udp_socket);
+<a name="l24"></a>
+<a name="l25"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l26"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l27"></a>                de_index = EthernetFrameAllocate(&amp;packet_buffer, src, dst, </span><span class=cFE>0x0000</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l28"></a>
+<a name="l29"></a>                *(packet_buffer</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xDEADBEEFC0DEFADE</span><span class=cF0>);
+<a name="l30"></a>
+<a name="l31"></a>                EthernetFrameFinish(de_index);
+<a name="l32"></a>
+<a name="l33"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
+<a name="l34"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l35"></a>
+<a name="l36"></a>
+<a name="l37"></a>}
+<a name="l38"></a>
+<a name="l39"></a>DHCPTest;
+</span></pre></body>
+</html>

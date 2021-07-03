@@ -23,9 +23,9 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 {
 	CDirEntry	*tmpde1 = NULL, *tmpde2;
 	I64			 res = 0;
-	U8			*dest_path, *dest_file, *dest_abs;
+	U8			*dest_path, *dest_file, *dest_abs, dest_ext[STR_LEN];
 
-	tmpde1 = FilesFind(src_files_find_mask);
+	tmpde1 = FilesFind(src_files_find_mask, FUF_RECURSE);
 	dest_abs = DirNameAbs(dst_files_find_mask);
 
 	if (tmpde1)
@@ -36,16 +36,26 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 			res++;
 
 			dest_file = StrNew(tmpde1->name);
-			FileExtRemove(dest_file);
+			FileExtRemove(dest_file, dest_ext);
 
 			dest_path = MStrPrint("%s/%s", dest_abs, dest_file);
 
-			if (!(tmpde1->attr & RS_ATTR_DIR)	&&
-				StrCompare(DirFile(dest_path), DirFile(tmpde1->full_name)))
+			"%s\n", tmpde1->full_name;
+
+			if (!(tmpde1->attr & RS_ATTR_DIR))
 			{
-				ToHtml(tmpde1->full_name, dest_path);
-//				PutFileLink(tmpde1->name, tmpde1->full_name);
+				if (StrCompare(dest_ext, "BIN.C")	&&
+					StrCompare(dest_ext, "BIN")		&&
+					StrCompare(dest_ext, "html")	&&
+					StrCompare(dest_ext, "DATA")	&&
+					StrCompare(dest_ext, "MAP"))
+				{
+					"%s.html\n\n", dest_path;
+					ToHtml(tmpde1->full_name, dest_path);
+				}
 			}
+			else
+				Dir2Html(tmpde1->full_name, dest_path);
 
 			DirEntryDel(tmpde1);
 			tmpde1 = tmpde2;
@@ -58,6 +68,15 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 	Free(dest_abs);
 
 	return res;
+
 }
 
-Dir2Html("::/", "::/HTML/");
+I64 HtmlGen()
+{
+	DocMax;
+	DocMax;
+	DelTree("::/HTML/");
+	Dir2Html("::/", "::/HTML/");
+}
+
+HtmlGen;

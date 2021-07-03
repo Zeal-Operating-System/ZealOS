@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF2>/* This converts </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/DemoInPage.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/DemoInPage.DD</span></a><span class=cF2> to</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>an html document named &quot;OutPage.html&quot;.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>Notice that an entry like $TX,&quot;GOOGLE&quot;,HTML=&quot;http://www.google.com&quot;$</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>will be converted to text in the html with an html link.</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cF2>Terry cheated by hardcoding </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l88"><span class=cF4>www.templeos.org</span></a><span class=cF2> as the website</span><span class=cF0>
+<a name="l8"></a></span><span class=cF2>for </span><a href="http://www.tomawezome.github.io/ZealOS/System/DolDoc/DocLink.html#l29"><span class=cF4>ZealOS Links</span></a><span class=cF2>.  Why don't you copy</span><span class=cF4>
+<a name="l9"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/ToHtml.CC</span></a><span class=cF2> to your /Home directory</span><span class=cF0>
+<a name="l10"></a></span><span class=cF2>and modify it?</span><span class=cF0>  </span><span class=cF2>You are welcome to link to</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>http://www.templeos.org if you want file that come on the</span><span class=cF0>
+<a name="l12"></a></span><span class=cF2>ZealOS distribution.</span><span class=cF0>
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF2>You can pass html meta data as args to </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l391"><span class=cF4>ToHtml</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l15"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l16"></a>
+<a name="l17"></a></span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF3>__DIR__</span><span class=cF0>);;
+<a name="l18"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;ToHtml&quot;</span><span class=cF0>
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF2>//ToHtml(&quot;DemoInPage.DD&quot;, &quot;~/DemoOutPage&quot;);</span><span class=cF0>
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF9>I64</span><span class=cF0>     Dir2Html(</span><span class=cF1>U8</span><span class=cF0> *src_files_find_mask, </span><span class=cF1>U8</span><span class=cF0> *dst_files_find_mask)
+<a name="l23"></a>{
+<a name="l24"></a>        </span><span class=cF9>CDirEntry</span><span class=cF0>       *tmpde1 = </span><span class=cF3>NULL</span><span class=cF0>, *tmpde2;
+<a name="l25"></a>        </span><span class=cF9>I64</span><span class=cF0>                      res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l26"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *dest_path, *dest_file, *dest_abs, dest_ext[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l27"></a>
+<a name="l28"></a>        tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(src_files_find_mask, </span><span class=cF3>FUF_RECURSE</span><span class=cF0>);
+<a name="l29"></a>        dest_abs = </span><span class=cF5>DirNameAbs</span><span class=cF0>(dst_files_find_mask);
+<a name="l30"></a>
+<a name="l31"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde1)
+<a name="l32"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l33"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l34"></a>                {
+<a name="l35"></a>                        tmpde2 = tmpde1-&gt;next;
+<a name="l36"></a>                        res++;
+<a name="l37"></a>
+<a name="l38"></a>                        dest_file = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;name);
+<a name="l39"></a>                        </span><span class=cF5>FileExtRemove</span><span class=cF0>(dest_file, dest_ext);
+<a name="l40"></a>
+<a name="l41"></a>                        dest_path = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s/%s&quot;</span><span class=cF0>, dest_abs, dest_file);
+<a name="l42"></a>
+<a name="l43"></a>                        </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, tmpde1-&gt;full_name;
+<a name="l44"></a>
+<a name="l45"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l46"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l47"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dest_ext, </span><span class=cF6>&quot;BIN.C&quot;</span><span class=cF7>)</span><span class=cF0>       &amp;&amp;
+<a name="l48"></a>                                        </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dest_ext, </span><span class=cF6>&quot;BIN&quot;</span><span class=cF7>)</span><span class=cF0>             &amp;&amp;
+<a name="l49"></a>                                        </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dest_ext, </span><span class=cF6>&quot;html&quot;</span><span class=cF7>)</span><span class=cF0>    &amp;&amp;
+<a name="l50"></a>                                        </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dest_ext, </span><span class=cF6>&quot;DATA&quot;</span><span class=cF7>)</span><span class=cF0>    &amp;&amp;
+<a name="l51"></a>                                        </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dest_ext, </span><span class=cF6>&quot;MAP&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l52"></a>                                {
+<a name="l53"></a>                                        </span><span class=cF6>&quot;%s.html\n\n&quot;</span><span class=cF0>, dest_path;
+<a name="l54"></a>                                        ToHtml(tmpde1-&gt;full_name, dest_path);
+<a name="l55"></a>                                }
+<a name="l56"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l57"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l58"></a>                                Dir2Html(tmpde1-&gt;full_name, dest_path);
+<a name="l59"></a>
+<a name="l60"></a>                        </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde1);
+<a name="l61"></a>                        tmpde1 = tmpde2;
+<a name="l62"></a>
+<a name="l63"></a>                        </span><span class=cF5>Free</span><span class=cF0>(dest_path);
+<a name="l64"></a>                        </span><span class=cF5>Free</span><span class=cF0>(dest_file);
+<a name="l65"></a>                }
+<a name="l66"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l67"></a>
+<a name="l68"></a>        </span><span class=cF5>Free</span><span class=cF0>(dest_abs);
+<a name="l69"></a>
+<a name="l70"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l71"></a>
+<a name="l72"></a>}
+<a name="l73"></a>
+<a name="l74"></a></span><span class=cF9>I64</span><span class=cF0> HtmlGen()
+<a name="l75"></a>{
+<a name="l76"></a>        </span><span class=cF5>DocMax</span><span class=cF0>;
+<a name="l77"></a>        </span><span class=cF5>DocMax</span><span class=cF0>;
+<a name="l78"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;::/HTML/&quot;</span><span class=cF0>);
+<a name="l79"></a>        Dir2Html(</span><span class=cF6>&quot;::/&quot;</span><span class=cF0>, </span><span class=cF6>&quot;::/HTML/&quot;</span><span class=cF0>);
+<a name="l80"></a>}
+<a name="l81"></a>
+<a name="l82"></a>HtmlGen;
+</span></pre></body>
+</html>

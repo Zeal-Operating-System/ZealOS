@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;AutoComplete/Dictionary&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ACDDefGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF9>I64</span><span class=cF0> def_num=</span><span class=cFE>1</span><span class=cF0>)
+<a name="l3"></a>{</span><span class=cF2>//MAlloc str holding single dict definition of word.</span><span class=cF0>
+<a name="l4"></a>        </span><span class=cF9>CFile</span><span class=cF0>            *f;
+<a name="l5"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph;
+<a name="l6"></a>        </span><span class=cF1>U8</span><span class=cF0>                       *res = </span><span class=cF3>NULL</span><span class=cF0>, *buf, *in_ptr, *st2 = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_TO_UPPER</span><span class=cF0>);
+<a name="l7"></a>
+<a name="l8"></a>        tmph = </span><span class=cF5>HashFind</span><span class=cF0>(st2, </span><span class=cFB>ac</span><span class=cF0>.hash_table, </span><span class=cF3>HTT_DICT_WORD</span><span class=cF0>);
+<a name="l9"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l10"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph)
+<a name="l11"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l12"></a>                </span><span class=cF1>if</span><span class=cF0> (f = </span><span class=cF5>FOpen</span><span class=cF7>(</span><span class=cF3>ACD_DEF_FILENAME</span><span class=cF0>, </span><span class=cF6>&quot;r&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l13"></a>                {
+<a name="l14"></a>                        buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l15"></a>                        buf[</span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//terminate</span><span class=cF0>
+<a name="l16"></a>                        </span><span class=cF5>FBlkRead</span><span class=cF0>(f, buf, tmph-&gt;user_data0 * </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> / </span><span class=cF3>BLK_SIZE</span><span class=cF0>, </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> / </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l17"></a>                        </span><span class=cF5>FClose</span><span class=cF0>(f);
+<a name="l18"></a>                        in_ptr = buf;
+<a name="l19"></a>                        </span><span class=cF1>while</span><span class=cF0> (in_ptr &lt; buf + </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l20"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l21"></a>                                </span><span class=cF1>while</span><span class=cF0> (*in_ptr != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; in_ptr &lt; buf + </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l22"></a>                                        in_ptr++;
+<a name="l23"></a>                                </span><span class=cF1>if</span><span class=cF0> (*in_ptr++ == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l24"></a>                                {
+<a name="l25"></a>                                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrICompare</span><span class=cF7>(</span><span class=cF0>st, in_ptr</span><span class=cF7>)</span><span class=cF0>)
+<a name="l26"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l27"></a>                                                </span><span class=cF1>while</span><span class=cF0> (def_num &amp;&amp; *in_ptr != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; in_ptr &lt; buf + </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l28"></a>                                                {
+<a name="l29"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (*in_ptr == </span><span class=cF3>ACD_DEF_CHAR</span><span class=cF0>)
+<a name="l30"></a>                                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l31"></a>                                                                </span><span class=cF1>if</span><span class=cF0> (!--def_num)
+<a name="l32"></a>                                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l33"></a>                                                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l34"></a>                                                                        in_ptr++;
+<a name="l35"></a>                                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l36"></a>                                                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l37"></a>                                                                in_ptr++;
+<a name="l38"></a>                                                }
+<a name="l39"></a>                                                </span><span class=cF1>if</span><span class=cF0> (*in_ptr++ == </span><span class=cF3>ACD_DEF_CHAR</span><span class=cF0>)
+<a name="l40"></a>                                                {
+<a name="l41"></a>                                                        res = </span><span class=cF5>StrNew</span><span class=cF0>(in_ptr);
+<a name="l42"></a>                                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l43"></a>                                                }
+<a name="l44"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l45"></a>                                }
+<a name="l46"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>                        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l48"></a>                }
+<a name="l49"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l50"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l51"></a>}
+<a name="l52"></a>
+<a name="l53"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ACDDefsGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l54"></a>{</span><span class=cF2>//MAlloc str with all dict definitions of word.</span><span class=cF0>
+<a name="l55"></a>        </span><span class=cF9>CFile</span><span class=cF0>            *f;
+<a name="l56"></a>        </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph;
+<a name="l57"></a>        </span><span class=cF1>U8</span><span class=cF0>                       *res = </span><span class=cF3>NULL</span><span class=cF0>, *buf, *in_ptr, *in_ptr2, *st2 = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_TO_UPPER</span><span class=cF0>);
+<a name="l58"></a>
+<a name="l59"></a>        tmph = </span><span class=cF5>HashFind</span><span class=cF0>(st2, </span><span class=cFB>ac</span><span class=cF0>.hash_table, </span><span class=cF3>HTT_DICT_WORD</span><span class=cF0>);
+<a name="l60"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l61"></a>
+<a name="l62"></a>        </span><span class=cF1>if</span><span class=cF0> (tmph)
+<a name="l63"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l64"></a>                </span><span class=cF1>if</span><span class=cF0> (f = </span><span class=cF5>FOpen</span><span class=cF7>(</span><span class=cF3>ACD_DEF_FILENAME</span><span class=cF0>, </span><span class=cF6>&quot;r&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l65"></a>                {
+<a name="l66"></a>                        buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l67"></a>                        buf[</span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//terminate</span><span class=cF0>
+<a name="l68"></a>                        </span><span class=cF5>FBlkRead</span><span class=cF0>(f, buf, tmph-&gt;user_data0 * </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> / </span><span class=cF3>BLK_SIZE</span><span class=cF0>, </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> / </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l69"></a>                        </span><span class=cF5>FClose</span><span class=cF0>(f);
+<a name="l70"></a>                        in_ptr = buf;
+<a name="l71"></a>                        </span><span class=cF1>while</span><span class=cF0> (in_ptr &lt; buf + </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l72"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l73"></a>                                </span><span class=cF1>while</span><span class=cF0> (*in_ptr != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; in_ptr &lt; buf + </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l74"></a>                                        in_ptr++;
+<a name="l75"></a>                                </span><span class=cF1>if</span><span class=cF0> (*in_ptr++ == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l76"></a>                                {
+<a name="l77"></a>                                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrICompare</span><span class=cF7>(</span><span class=cF0>st, in_ptr</span><span class=cF7>)</span><span class=cF0>)
+<a name="l78"></a>                                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l79"></a>                                                in_ptr2 = in_ptr;
+<a name="l80"></a>                                                in_ptr--;
+<a name="l81"></a>                                                </span><span class=cF1>while</span><span class=cF0> (*in_ptr2 != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; in_ptr2 &lt; buf + </span><span class=cF3>ACD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>)
+<a name="l82"></a>                                                {
+<a name="l83"></a>                                                        in_ptr2++;
+<a name="l84"></a>                                                }
+<a name="l85"></a>                                                res = </span><span class=cF5>MAlloc</span><span class=cF0>(in_ptr2 + </span><span class=cFE>1</span><span class=cF0> - in_ptr);
+<a name="l86"></a>                                                </span><span class=cF5>MemCopy</span><span class=cF0>(res, in_ptr, in_ptr2 - in_ptr);
+<a name="l87"></a>                                                res[in_ptr2 - in_ptr] = </span><span class=cF3>ACD_END_CHAR</span><span class=cF0>;
+<a name="l88"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l89"></a>                                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l90"></a>                                }
+<a name="l91"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l92"></a>                        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l93"></a>                }
+<a name="l94"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l96"></a>}
+<a name="l97"></a>
+<a name="l98"></a></span><span class=cF2>/*Format of word list entry:</span><span class=cF0>
+<a name="l99"></a>        </span><span class=cF2>U8 ACD_WORD_CHAR</span><span class=cF0>
+<a name="l100"></a>        </span><span class=cF2>U8 word[] with terminating zero</span><span class=cF0>
+<a name="l101"></a>        </span><span class=cF2>I16 block;</span><span class=cF0>
+<a name="l102"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l103"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ACDWordPtAt</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l104"></a>{</span><span class=cF2>//Point to word in word list.</span><span class=cF0>
+<a name="l105"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l106"></a>        </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF1>start</span><span class=cF0> = </span><span class=cFB>acd</span><span class=cF0>.word_list, *r = </span><span class=cF1>start</span><span class=cF0>, *</span><span class=cF1>end</span><span class=cF0> = </span><span class=cFB>acd</span><span class=cF0>.word_list + </span><span class=cFB>acd</span><span class=cF0>.word_list_size;
+<a name="l107"></a>
+<a name="l108"></a>        </span><span class=cF1>if</span><span class=cF0> (!st || !*st)
+<a name="l109"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFB>acd</span><span class=cF0>.word_list;
+<a name="l110"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>acd</span><span class=cF0>.word_list_size)
+<a name="l111"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l112"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF1>start</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0> &lt; </span><span class=cF1>end</span><span class=cF0>)
+<a name="l113"></a>                {
+<a name="l114"></a>                        r = (</span><span class=cF1>start</span><span class=cF0> + </span><span class=cF1>end</span><span class=cF0>) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l115"></a>                        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l116"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l117"></a>                                </span><span class=cF1>while</span><span class=cF0> (*r != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; r &gt; </span><span class=cFB>acd</span><span class=cF0>.word_list)
+<a name="l118"></a>                                        r--;
+<a name="l119"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>r[</span><span class=cFE>2</span><span class=cF0>] == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> || r[</span><span class=cFE>1</span><span class=cF0>] == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF7>)</span><span class=cF0>&amp;&amp; r - </span><span class=cFE>3</span><span class=cF0> &gt; </span><span class=cFB>acd</span><span class=cF0>.word_list)
+<a name="l120"></a>                                        r--;
+<a name="l121"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l122"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l123"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l124"></a>                        </span><span class=cF1>if</span><span class=cF0> (*r == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l125"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l126"></a>                                i = </span><span class=cF5>StrICompare</span><span class=cF0>(st, r + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l127"></a>                                </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l128"></a>                                        </span><span class=cF1>end</span><span class=cF0> = r - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l129"></a>                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l130"></a>                                        </span><span class=cF1>start</span><span class=cF0> = r + </span><span class=cF5>StrLen</span><span class=cF0>(r) + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l131"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l132"></a>                                        </span><span class=cF1>return</span><span class=cF0> r;
+<a name="l133"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l134"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l135"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l136"></a>                }
+<a name="l137"></a>                r = (</span><span class=cF1>start</span><span class=cF0> + </span><span class=cF1>end</span><span class=cF0>) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l138"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l139"></a>                {
+<a name="l140"></a>                        </span><span class=cF1>while</span><span class=cF0> (*r != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; r &gt; </span><span class=cFB>acd</span><span class=cF0>.word_list)
+<a name="l141"></a>                                r--;
+<a name="l142"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>r[</span><span class=cFE>2</span><span class=cF0>] == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> || r[</span><span class=cFE>1</span><span class=cF0>] == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF7>)</span><span class=cF0> &amp;&amp; r - </span><span class=cFE>3</span><span class=cF0> &gt; </span><span class=cFB>acd</span><span class=cF0>.word_list)
+<a name="l143"></a>                                r--;
+<a name="l144"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l145"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l146"></a>                }
+<a name="l147"></a>                </span><span class=cF1>if</span><span class=cF0> (*r == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrICompare</span><span class=cF7>(</span><span class=cF0>st, r + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l148"></a>                        r += </span><span class=cF5>StrLen</span><span class=cF0>(r) + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l149"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l150"></a>        </span><span class=cF1>if</span><span class=cF0> (*r == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l151"></a>                </span><span class=cF1>return</span><span class=cF0> r;
+<a name="l152"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l153"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFB>acd</span><span class=cF0>.word_list;
+<a name="l154"></a>}
+<a name="l155"></a>
+<a name="l156"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACDFillin</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> n)
+<a name="l157"></a>{
+<a name="l158"></a>        </span><span class=cF1>U8</span><span class=cF0> *s;
+<a name="l159"></a>        </span><span class=cF9>I64</span><span class=cF0> len;
+<a name="l160"></a>
+<a name="l161"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= n &lt; </span><span class=cFB>acd</span><span class=cF0>.num_fillins)
+<a name="l162"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l163"></a>                s = </span><span class=cFB>acd</span><span class=cF0>.fillins[n] + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l164"></a>                len = </span><span class=cF5>StrLen</span><span class=cF0>(s);
+<a name="l165"></a>                </span><span class=cF1>if</span><span class=cF0> (len &gt; </span><span class=cFB>ac</span><span class=cF0>.partial_len)
+<a name="l166"></a>                        </span><span class=cF5>In</span><span class=cF0>(s + </span><span class=cFB>ac</span><span class=cF0>.partial_len);
+<a name="l167"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l168"></a>}
+<a name="l169"></a>
+<a name="l170"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACDDefsPut</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF9>I64</span><span class=cF0> num=-</span><span class=cFE>1</span><span class=cF0>)
+<a name="l171"></a>{</span><span class=cF2>//Put to doc a dictionary definition(s) of a word.</span><span class=cF0>
+<a name="l172"></a>        </span><span class=cF1>U8</span><span class=cF0> *st2, *st3;
+<a name="l173"></a>        </span><span class=cF9>I64</span><span class=cF0> ch, i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l174"></a>
+<a name="l175"></a>        </span><span class=cF1>if</span><span class=cF0> (!st)
+<a name="l176"></a>                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l177"></a>        </span><span class=cF1>if</span><span class=cF0> (*st == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l178"></a>                st++;
+<a name="l179"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$WW,1$$RED$%s:$FG$\n\n&quot;</span><span class=cF0>, st);
+<a name="l180"></a>        </span><span class=cF1>if</span><span class=cF0> (num &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l181"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l182"></a>                </span><span class=cF1>if</span><span class=cF0> (st3 = </span><span class=cF5>ACDDefsGet</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0>)
+<a name="l183"></a>                {
+<a name="l184"></a>                        st2 = st3;
+<a name="l185"></a>                        </span><span class=cF1>while</span><span class=cF0> (ch = *st2++)
+<a name="l186"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l187"></a>                                </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l188"></a>                                {
+<a name="l189"></a>                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>:
+<a name="l190"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l191"></a>
+<a name="l192"></a>                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ACD_DEF_CHAR</span><span class=cF0>:
+<a name="l193"></a>                                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$GREEN$(%d)$FG$ %s\n&quot;</span><span class=cF0>, ++i, st2);
+<a name="l194"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l195"></a>
+<a name="l196"></a>                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ACD_PRONUNCIATION_CHAR</span><span class=cF0>:
+<a name="l197"></a>                                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTGREEN$%s$FG$\n&quot;</span><span class=cF0>, st2);
+<a name="l198"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l199"></a>
+<a name="l200"></a>                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ACD_POS_CHAR</span><span class=cF0>:
+<a name="l201"></a>                                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$BLACK$%s$FG$\n&quot;</span><span class=cF0>, st2);
+<a name="l202"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l203"></a>
+<a name="l204"></a>                                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ACD_EXTRA_CHAR</span><span class=cF0>:
+<a name="l205"></a>                                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, st2);
+<a name="l206"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l207"></a>                                }
+<a name="l208"></a>                                st2 += </span><span class=cF5>StrLen</span><span class=cF0>(st2) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l209"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l210"></a>                        </span><span class=cF5>Free</span><span class=cF0>(st3);
+<a name="l211"></a>                }
+<a name="l212"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l213"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l214"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l215"></a>                </span><span class=cF1>while</span><span class=cF0> (st2 = </span><span class=cF5>ACDDefGet</span><span class=cF7>(</span><span class=cF0>st, ++i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l216"></a>                {
+<a name="l217"></a>                        </span><span class=cF1>if</span><span class=cF0> (i == num)
+<a name="l218"></a>                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$GREEN$(%d)$FG$ %s\n&quot;</span><span class=cF0>, i, st2);
+<a name="l219"></a>                        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l220"></a>                }
+<a name="l221"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l222"></a>}
+<a name="l223"></a>
+<a name="l224"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACDPopUpDef</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF9>I64</span><span class=cF0> num=-</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l225"></a>{
+<a name="l226"></a>        </span><span class=cF1>U8</span><span class=cF0> *buf;
+<a name="l227"></a>
+<a name="l228"></a>        buf = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;ACDDefsPut(DocPut,\&quot;%s\&quot;,%d);View;&quot;</span><span class=cF0>, st, num);
+<a name="l229"></a>        </span><span class=cF5>PopUp</span><span class=cF0>(buf, parent);
+<a name="l230"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l231"></a>}
+<a name="l232"></a>
+<a name="l233"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACDDef</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l234"></a>{
+<a name="l235"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= n &lt; </span><span class=cFB>acd</span><span class=cF0>.num_fillins)
+<a name="l236"></a>                </span><span class=cF5>ACDPopUpDef</span><span class=cF0>(</span><span class=cFB>acd</span><span class=cF0>.fillins[n], -</span><span class=cFE>1</span><span class=cF0>, parent);
+<a name="l237"></a>}
+<a name="l238"></a>
+<a name="l239"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;AutoComplete&quot;</span><span class=cF0>
+<a name="l240"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACFillIn</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> n)
+<a name="l241"></a>{
+<a name="l242"></a>        </span><span class=cF1>U8</span><span class=cF0> *s;
+<a name="l243"></a>
+<a name="l244"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= --n &lt; </span><span class=cFB>ac</span><span class=cF0>.num_fillins)
+<a name="l245"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l246"></a>                s = </span><span class=cFB>ac</span><span class=cF0>.fillin_matches[n]-&gt;str;
+<a name="l247"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>s</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFB>ac</span><span class=cF0>.partial_len)
+<a name="l248"></a>                        </span><span class=cF5>In</span><span class=cF0>(s + </span><span class=cFB>ac</span><span class=cF0>.partial_len);
+<a name="l249"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l250"></a>}
+<a name="l251"></a>
+<a name="l252"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ACMan</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF9>CTask</span><span class=cF0> *parent_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l253"></a>{
+<a name="l254"></a>        </span><span class=cF9>CHashAC</span><span class=cF0> *tmpw;
+<a name="l255"></a>        </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmph;
+<a name="l256"></a>
+<a name="l257"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= --n &lt; </span><span class=cFB>ac</span><span class=cF0>.num_fillins &amp;&amp;
+<a name="l258"></a>                        </span><span class=cF7>(</span><span class=cF0>tmpw = </span><span class=cFB>ac</span><span class=cF0>.fillin_matches[n]</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>tmph = </span><span class=cF5>HashFind</span><span class=cF0>(tmpw-&gt;str, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTG_SRC_SYM</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; tmph-&gt;src_link)
+<a name="l259"></a>                </span><span class=cF5>PopUpEd</span><span class=cF0>(tmph-&gt;src_link, parent_task);
+<a name="l260"></a>}
+</span></pre></body>
+</html>

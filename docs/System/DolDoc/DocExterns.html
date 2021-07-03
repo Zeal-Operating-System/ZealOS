@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0>                      </span><span class=cF5>DocEd</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> dof_flags=</span><span class=cFE>0</span><span class=cF0>);
+<a name="l3"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>                       </span><span class=cF5>DocEntryRun</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e, </span><span class=cF1>Bool</span><span class=cF0> exited, </span><span class=cF9>I64</span><span class=cF0> *_has_action=</span><span class=cF3>NULL</span><span class=cF0>);
+<a name="l4"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                        </span><span class=cF5>DocFormBwd</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>Bool</span><span class=cF0> giveup=</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l5"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0>                      </span><span class=cF5>DocGoToLine</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> line_num);
+<a name="l6"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                        </span><span class=cF5>DocLoad</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *src2, </span><span class=cF9>I64</span><span class=cF0> size);
+<a name="l7"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                        </span><span class=cF5>DocPrintAtomic</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format,...);
+<a name="l8"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0>                        </span><span class=cF5>DocPrintPartial</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format,...);
+<a name="l9"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CDocEntry</span><span class=cF0>        *</span><span class=cF5>DocPutS</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *st);
+<a name="l10"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0>                       *</span><span class=cF5>DocSave</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> *_size=</span><span class=cF3>NULL</span><span class=cF0>);
+<a name="l11"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>                       </span><span class=cF5>EdLeftClickLink</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
+<a name="l12"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>                       </span><span class=cF5>PopUpPickList</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *list);
+<a name="l13"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0>                       </span><span class=cF5>TermRightClickLink</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e);
+</span></pre></body>
+</html>

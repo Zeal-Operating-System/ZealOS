@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF5>                                                 Decisions Making ZealOS Simple
+<a name="l2"></a></span><span class=cF0>
+<a name="l3"></a>Linux is a semi-tractor -- you need professional drivers for 20 gears.  Linux has file permissions.  Common people are hurt by 
+<a name="l4"></a>file permissions.
+<a name="l5"></a>
+<a name="l6"></a>Windows is a car.
+<a name="l7"></a>
+<a name="l8"></a>ZealOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.    Don't do that!  There are no side air bags on a 
+<a name="l9"></a>motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude 
+<a name="l10"></a>complexity.
+<a name="l11"></a>
+<a name="l12"></a>Linux and Windows are general purpose operating systems.        They attempt to do any task you want.  ZealOS cherry-picks tasks and 
+<a name="l13"></a>is designed to do the same things a C64 did.  This saves and order of magnitude complexity.     For example, the </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/RedSea.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system 
+<a name="l14"></a>allocates just contiguous files -- you load and save whole files at once.       A benefit is this allows compression.  Also, ZealOS 
+<a name="l15"></a>does not do multimedia.  In theory, memory will fragment with lots of big files.        The system would fall to pieces with 
+<a name="l16"></a>multimedia.
+<a name="l17"></a>
+<a name="l18"></a>A three bttn mouse is like a leg you cannot put weight on.      ZealOS just does hardware everybody has, with no divergent code 
+<a name="l19"></a>bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order 
+<a name="l20"></a>of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
+<a name="l21"></a>
+<a name="l22"></a>
+<a name="l23"></a>
+<a name="l24"></a>* Everything runs in kernel, </span><span class=cF2>ring 0</span><span class=cF0>, mode.
+<a name="l25"></a>
+<a name="l26"></a>* </span><span class=cF2>One memory map</span><span class=cF0> for all tasks on all cores with virtual addresses set equal to physical, just as though paging is not used.
+<a name="l27"></a>
+<a name="l28"></a>* One platform -- </span><a href="http://en.wikipedia.org/wiki/Amd64#AMD64"><span class=cF4>x86_64</span></a><span class=cF0> PC's, no 32-bit support.
+<a name="l29"></a>
+<a name="l30"></a>* No security or cryptography.
+<a name="l31"></a>
+<a name="l32"></a>* Least (greatest) common denominator hardware support.  Mostly, one driver for each device class.      We can't be in the business 
+<a name="l33"></a>of different drivers.   Compatibility is the greatest challenge for PC operating systems.  Disk code does not use interrupts, 
+<a name="l34"></a>avoiding compatibility risks.  </span><span class=cF2>PS/2</span><span class=cF0> keyboard/mouse is used instead of </span><span class=cF2>USB</span><span class=cF0>, also more compatible.
+<a name="l35"></a>
+<a name="l36"></a>* Updates whole screen at </span><span class=cF2>60 fps</span><span class=cF0>, optimized for full screen games where </span><span class=cF2>InvalidRectangle</span><span class=cF0>s are counter-productive.
+<a name="l37"></a>
+<a name="l38"></a>* One font, 8x8. Text and graphic layers done in software with text normally on an 8x8 grid.
+<a name="l39"></a>
+<a name="l40"></a>* Compiler extends all values to 64-bit when fetched and does only 64-bit computations intermediately.  Assembler has minimal 
+<a name="l41"></a>16-bit support, good enough for compiling boot loaders.
+<a name="l42"></a>
+<a name="l43"></a>* No object files.      Use </span><span class=cF2>JIT</span><span class=cF0>.
+<a name="l44"></a>
+<a name="l45"></a>* Whole files are processed almost exclusively.
+<a name="l46"></a>
+<a name="l47"></a>* </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>One language</span></a><span class=cF0> and compiler for command-line, scripts, songs, automations and code.
+<a name="l48"></a>
+<a name="l49"></a>* One editor/word processor/browser for the command-line window, source code, documentation browser, dialog forms.
+<a name="l50"></a>
+<a name="l51"></a>* No child windows.  One window per task.  Bttns are widgets, not child windows.        There are child tasks, however.
+<a name="l52"></a>
+<a name="l53"></a>* No distinction between </span><span class=cF2>thread</span><span class=cF0>, </span><span class=cF2>process</span><span class=cF0> or </span><span class=cF2>task</span><span class=cF0>.
+<a name="l54"></a>
+<a name="l55"></a>* The </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Sched.html#l1"><span class=cF4>Scheduler</span></a><span class=cF0> is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.       It's 
+<a name="l56"></a>wonderfully simple.
+<a name="l57"></a>
+<a name="l58"></a>* </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/MultiCore.html#l1"><span class=cF4>MultiCore</span></a><span class=cF0> is done </span><span class=cF2>master/slave</span><span class=cF0>, instead of </span><span class=cF2>SMP</span><span class=cF0>.  </span><span class=cF2>Core0</span><span class=cF0> applications explicitly assigns jobs.  Locks are present allowing 
+<a name="l59"></a>multicore file, heap, and hardware access, though.
+<a name="l60"></a>
+<a name="l61"></a>* </span><span class=cF4><u>Sound</u></span><span class=cF0> has single-voice 8-bit signed MIDI-like samples.
+<a name="l62"></a>
+<a name="l63"></a>* All tasks have a heap and a sym table.        Scope is that of environment vars in other operating systems.  As text is typed at 
+<a name="l64"></a>the command line or you run programs by </span><span class=cF2>#include</span><span class=cF0>ing them, the syms go in the table.     If a sym is not found, the parent task's 
+<a name="l65"></a>table is checked.       The father of all tasks has the API syms you'll need waiting in it's table.  No need to </span><span class=cF2>#include</span><span class=cF0> headers.
+<a name="l66"></a>
+<a name="l67"></a>* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0>'s symbol 
+<a name="l68"></a>system-wide global.
+<a name="l69"></a>
+<a name="l70"></a>* Sometimes, we </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/CutCorners.html#l1"><span class=cF4>cut corners</span></a><span class=cF0> in the interest of keeping the code beautiful.
+</span></pre></body>
+</html>

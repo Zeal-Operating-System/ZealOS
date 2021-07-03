@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF5>                                                       RedSea File System</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>The RedSea file system is a simple, 64-bit, file system which is similar to FAT32, but with absolute block addresses instead of 
+<a name="l4"></a>clus, fixed-sized 64-byte directory entries and no FAT table, just an allocation bitmap.        A clus is just one 512 byte sector.  
+<a name="l5"></a>Files are stored in contiguous blocks and cannot grow in size.
+<a name="l6"></a>
+<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0> </span><span class=cFE>38</span><span class=cF0> </span><span class=cF2>//Must include terminator zero</span><span class=cF0>
+<a name="l8"></a>
+<a name="l9"></a>The following bit field shows valid </span><span class=cFE>8</span><span class=cF0>-Bit ASCII filename characters.
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF9>U32</span><span class=cF0> </span><span class=cFB>char_bmp_filename</span><span class=cF0>[</span><span class=cFE>8</span><span class=cF0>] = {</span><span class=cFE>0x0000000</span><span class=cF0>, </span><span class=cFE>0x03FF73FB</span><span class=cF0>, </span><span class=cFE>0xEFFFFFFF</span><span class=cF0>, </span><span class=cFE>0x2FFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>};
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDirEntry</span><span class=cF0> </span><span class=cF2>//64-byte fixed-size</span><span class=cF0>
+<a name="l14"></a>{
+<a name="l15"></a>        </span><span class=cF9>U16</span><span class=cF0>             attr;                                           </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3150"><span class=cF4>RS_ATTR_DIR</span></a><span class=cF2>.</span><span class=cF0>      </span><span class=cF2>Terry wanted to change these.</span><span class=cF0>
+<a name="l16"></a>        </span><span class=cF1>U8</span><span class=cF0>              name[</span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0>];        </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/StrA.html#l336"><span class=cF4>char_bmp_filename</span></a><span class=cF2>, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskStrA.html#l278"><span class=cF4>FileNameCheck</span></a><span class=cF0>
+<a name="l17"></a>        </span><span class=cF9>I64</span><span class=cF0>             clus; </span><span class=cF7>(blk)</span><span class=cF0>                             </span><span class=cF2>//One sector per clus.</span><span class=cF0>
+<a name="l18"></a>        </span><span class=cF9>I64</span><span class=cF0>             size;                                           </span><span class=cF2>//In bytes</span><span class=cF0>
+<a name="l19"></a>        </span><span class=cF9>CDate</span><span class=cF0>   datetime;                                       </span><span class=cF2>//See  </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/TimeDate.html#l1"><span class=cF4>DateTime</span></a><span class=cF2>, </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDate.html#l1"><span class=cF4>Implementation of DateTime</span></a><span class=cF0>
+<a name="l20"></a>};
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CRedSeaBoot</span><span class=cF0> </span><span class=cF2>//RedSea is type FAT32 in partition table to fool BIOS.</span><span class=cF0>
+<a name="l23"></a>{
+<a name="l24"></a>        </span><span class=cF1>U8</span><span class=cF0>      jump_and_nop[</span><span class=cFE>3</span><span class=cF0>];
+<a name="l25"></a>        </span><span class=cF1>U8</span><span class=cF0>      signature, reserved[</span><span class=cFE>4</span><span class=cF0>]; </span><span class=cF2>//MBR_PT_REDSEA=0x88. Distinguish from real FAT32.</span><span class=cF0>
+<a name="l26"></a>        </span><span class=cF9>I64</span><span class=cF0> drv_offset;                         </span><span class=cF2>//For CD/DVD image copy.</span><span class=cF0>
+<a name="l27"></a>        </span><span class=cF9>I64</span><span class=cF0> sects;
+<a name="l28"></a>        </span><span class=cF9>I64</span><span class=cF0> root_clus; </span><span class=cF7>(root_blk)</span><span class=cF0>
+<a name="l29"></a>        </span><span class=cF9>I64</span><span class=cF0> bitmap_sects;
+<a name="l30"></a>        </span><span class=cF9>I64</span><span class=cF0> unique_id;
+<a name="l31"></a>        </span><span class=cF1>U8</span><span class=cF0>      code[</span><span class=cFE>462</span><span class=cF0>];
+<a name="l32"></a>        </span><span class=cF9>U16</span><span class=cF0> signature2;                         </span><span class=cF2>//0xAA55</span><span class=cF0>
+<a name="l33"></a>};
+<a name="l34"></a>
+<a name="l35"></a>See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/BlkDev/FileSysRedSea.html#l1"><span class=cF4>::/Kernel/BlkDev/FileSysRedSea.CC</span></a><span class=cF0> and </span><a href="http://www.tomawezome.github.io/ZealOS/System/Boot/DiskISORedSea.html#l1"><span class=cF4>::/System/Boot/DiskISORedSea.CC</span></a><span class=cF0>.
+<a name="l36"></a>
+<a name="l37"></a>Files with names ending in      are compressed.  See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/Compress.html#l1"><span class=cF4>::/Kernel/Compress.CC</span></a><span class=cF0>.
+<a name="l38"></a>
+<a name="l39"></a>To replace ISO9660, make hard-drive partition image of a measured size and copy onto a CD/DVD starting at about sector 20, with 
+<a name="l40"></a>EL TORITO booting.      512-byte sectors will be placed on top of 2048-byte CD/DCD sectors, so there will be four blocks per CD/DVD 
+<a name="l41"></a>sector.
+<a name="l42"></a>
+<a name="l43"></a>RedSea file system has no bad block table and no redundant allocation table.
+<a name="l44"></a>
+<a name="l45"></a>See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/BlkChain.html#l1"><span class=cF4>Block Chain</span></a><span class=cF0> for RedSea allocation bitmap discussion.
+<a name="l46"></a>
+<a name="l47"></a>See </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Reliability.html#l1"><span class=cF4>Reliability</span></a><span class=cF0> for RedSea reliability discussion.
+</span></pre></body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF5>                                                       DolDoc Widget Help</span><span class=cF0>
+<a name="l2"></a></span><span class=cF4>
+<a name="l3"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0> is a ZealOS document type.
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF2>&quot;Expression&quot;</span><span class=cF0> a num or CosmiC algebraic term with operators and CosmiC syms can be entered.
+<a name="l6"></a></span><span class=cF2>&quot;Macro&quot;</span><span class=cF0> Most entries can behave like macro entries if you assign them macro strs.
+<a name="l7"></a></span><span class=cF2>&quot;InStr&quot;</span><span class=cF0> Like a macro except it is an </span><a href="http://www.tomawezome.github.io/ZealOS/Doc/Glossary.html#l218"><span class=cF4>InFile</span></a><span class=cF0>.    You can't have both an in_str and macro text defined.
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF5>Tag Text</span><span class=cF0> is the text that will be displayed for the item.  For links, you can leave it blank and the details of the link will be 
+<a name="l10"></a>shown.
+<a name="l11"></a></span><span class=cF5>Hide</span><span class=cF0> means display nothing, making an entry invis.
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF5>Left X</span><span class=cF0> relative to the left margin.
+<a name="l14"></a></span><span class=cF5>Center X</span><span class=cF0> relative to the horizontal center of the window.
+<a name="l15"></a></span><span class=cF5>Right X</span><span class=cF0> relative to the right margin.
+<a name="l16"></a></span><span class=cF5>Top Y</span><span class=cF0> relative to the top of the window.
+<a name="l17"></a></span><span class=cF5>Center Y</span><span class=cF0> relative to the vertical center of the window.
+<a name="l18"></a></span><span class=cF5>Bottom Y</span><span class=cF0> relative to the bottom of the window.
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF5>Blink</span><span class=cF0> make the text blink.
+<a name="l21"></a></span><span class=cF5>Invert</span><span class=cF0> make the text inverted.
+<a name="l22"></a></span><span class=cF5>Underline</span><span class=cF0> make the text underlined.
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cF5>Scroll X Length Expression</span><span class=cF0> if a value is entered, the text will scroll in an area of this width.
+<a name="l25"></a></span><span class=cF5>Y Offset Expression</span><span class=cF0> if a value is entered, the text will be shifted vertically by this many pixs, so you can make superscripts 
+<a name="l26"></a>or subscripts.
+<a name="l27"></a></span><span class=cF5>X Offset Expression</span><span class=cF0> if a value is entered, the text will be shifted horizontally by this many pixs.
+<a name="l28"></a>
+<a name="l29"></a></span><span class=cF5>Tree</span><span class=cF0> The item will behave like a tree widget, with this as the root.
+<a name="l30"></a></span><span class=cF5>Collapsed</span><span class=cF0> The tree or hidden widget will begin collapsed.
+<a name="l31"></a></span><span class=cF5>Define Str</span><span class=cF0> will substitute a </span><span class=cF2>#define</span><span class=cF0> or </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KDefine.html#l1"><span class=cF4>DefineLoad</span></a><span class=cF0>() string for the tag.
+<a name="l32"></a>
+<a name="l33"></a></span><span class=cF5>Quote</span><span class=cF0> Make the res suitable for including in a program, in quotes, especially </span><span class=cF2>format</span><span class=cF0> entries in class definitions.
+<a name="l34"></a>
+<a name="l35"></a></span><span class=cF5>X Expression</span><span class=cF0> For cursor movements, the horizontal value.
+<a name="l36"></a></span><span class=cF5>Y Expression</span><span class=cF0> For cursor movements, the vertical value.
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cF5>PopUp</span><span class=cF0> For macro's, run the macro in a PopUp window.  Do this when making a macro to run a program, so it doesn't tie-up memory.
+<a name="l39"></a>
+<a name="l40"></a></span><span class=cF5>Escape</span><span class=cF0> For macro's, send an </span><span class=cF2>&lt;ESC&gt;</span><span class=cF0> char to exit before running the macro.        Without this, the macro runs in the wrong window, 
+<a name="l41"></a>usually.
+<a name="l42"></a>
+<a name="l43"></a></span><span class=cF5>Refresh Data</span><span class=cF0>    updates </span><span class=cF2>$DA...$</span><span class=cF0> entry continuously.
+<a name="l44"></a>
+<a name="l45"></a></span><span class=cF5>Html Link</span><span class=cF0>  stores a link which will be embedded if you generate a html version of a document with </span><span class=cF4>
+<a name="l46"></a></span><a href="http://www.tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/ToHtml.CC</span></a><span class=cF0>.
+</span></pre></body>
+</html>

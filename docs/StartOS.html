@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF2>//This is executed by the System task at boot.</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/Kernel/KMain.html#l236"><span class=cF4>System Start-up</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Directive&quot;</span><span class=cF0>
+<a name="l5"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>I8i</span><span class=cF0> </span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF1>I64i</span><span class=cF0> num, </span><span class=cF1>I8i</span><span class=cF0> val);
+<a name="l6"></a></span><span class=cF5>Option</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>,</span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//(0,0)=EchoOff</span><span class=cF0>    </span><span class=cF2> (0,1)=EchoOn</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Kernel/KernelA.HH&quot;</span><span class=cF0>
+<a name="l9"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Compiler/CompilerA.HH&quot;</span><span class=cF0>
+<a name="l10"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Kernel/KernelB.HH&quot;</span><span class=cF0>
+<a name="l11"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Kernel/KernelC.HH&quot;</span><span class=cF0>
+<a name="l12"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Compiler/CompilerB.HH&quot;</span><span class=cF0>
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>, </span><span class=cF3>ON</span><span class=cF0>);
+<a name="l15"></a></span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_DUP_TYPES</span><span class=cF0>, </span><span class=cF3>ON</span><span class=cF0>);
+<a name="l16"></a></span><span class=cF5>HashTablePurge</span><span class=cF0>(</span><span class=cFB>sys_task</span><span class=cF0>-&gt;hash_table);
+<a name="l17"></a>
+<a name="l18"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/System/MakeSystem&quot;</span><span class=cF0>
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF2>//Debug(&quot;Type 'G;'&quot;);</span><span class=cF0>
+<a name="l21"></a></span><span class=cF5>DocTermNew</span><span class=cF0>;
+<a name="l22"></a></span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.rows / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cFB>sys_winmgr_task</span><span class=cF0> = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>WinMgrTask</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Window Mgr&quot;</span><span class=cF0>);
+<a name="l25"></a></span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0> - </span><span class=cF3>WIF_SELF_CTRLS</span><span class=cF0>;
+<a name="l26"></a></span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_CHILDREN_NOT_ON_TOP</span><span class=cF0>);
+<a name="l27"></a></span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF0>);
+<a name="l28"></a></span><span class=cF5>RegInit</span><span class=cF0>;
+<a name="l29"></a></span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_REGISTRY</span><span class=cF0>);
+<a name="l30"></a>
+<a name="l31"></a></span><span class=cF5>WallPaperInit</span><span class=cF0>;
+<a name="l32"></a>
+<a name="l33"></a></span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>DriveIsWritable</span><span class=cF0>)
+<a name="l34"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Tmp&quot;</span><span class=cF0>); </span><span class=cF2>//Good to have a Tmp</span><span class=cF0>
+<a name="l35"></a>
+<a name="l36"></a></span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>, </span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l37"></a></span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_DUP_TYPES</span><span class=cF0>, </span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l38"></a></span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_HOME</span><span class=cF0>);
+<a name="l39"></a>
+<a name="l40"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;&quot;</span><span class=cF0>
+<a name="l41"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;~/MakeHome&quot;</span><span class=cF0>
+<a name="l42"></a>
+<a name="l43"></a></span><span class=cF2>//After this file, the System task enters </span><span class=cF4><u>server mode</u></span><span class=cF2>.</span><span class=cF0>
+</span></pre></body>
+</html>

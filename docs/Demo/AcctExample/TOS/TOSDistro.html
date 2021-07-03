@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:courier;font-size:10pt">
+<a name="l1"></a><span class=cF2>//The CONFIG defines are </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSConfig.html#l1"><span class=cF4>~/TOS/TOSConfig.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Misc/TOS/Distro&quot;</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> MAKE_LITE                       </span><span class=cFE>1</span><span class=cF0>
+<a name="l6"></a>#</span><span class=cF1>define</span><span class=cF0> MAKE_DEBUG                      </span><span class=cFE>0</span><span class=cF0>
+<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> MAKE_STAFF                      </span><span class=cFE>1</span><span class=cF0>
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> TOSGetDrive()
+<a name="l10"></a>{</span><span class=cF2>//Prompt for drv let.</span><span class=cF0>
+<a name="l11"></a>        </span><span class=cF9>I64</span><span class=cF0> res;
+<a name="l12"></a>
+<a name="l13"></a>        </span><span class=cF6>&quot;Drive (%s):&quot;</span><span class=cF0>, TOS_HDS;
+<a name="l14"></a>        res = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
+<a name="l15"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l16"></a>
+<a name="l17"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l18"></a>}
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSBootHDIns(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l21"></a>{</span><span class=cF2>//Make Compiler and Kernel. Reinstall Kernel.</span><span class=cF0>
+<a name="l22"></a>        drv_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(drv_let);
+<a name="l23"></a>        </span><span class=cF5>In</span><span class=cF0>(TOS_CONFIG);
+<a name="l24"></a>        </span><span class=cF5>BootHDIns</span><span class=cF0>(drv_let);
+<a name="l25"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF0>TOS_MASTER_BOOT_DRIVES, drv_let</span><span class=cF7>)</span><span class=cF0>)
+<a name="l26"></a>                </span><span class=cF5>BootMHDIns</span><span class=cF0>(drv_let);
+<a name="l27"></a>}
+<a name="l28"></a>
+<a name="l29"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSCopyDrive(</span><span class=cF1>U8</span><span class=cF0> src, </span><span class=cF1>U8</span><span class=cF0> dst)
+<a name="l30"></a>{</span><span class=cF2>//Format dst and copy entire drv.</span><span class=cF0>
+<a name="l31"></a>        </span><span class=cF1>U8</span><span class=cF0> buf_s[</span><span class=cF3>STR_LEN</span><span class=cF0>], buf_d[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l32"></a>
+<a name="l33"></a>        src = </span><span class=cF5>Letter2Letter</span><span class=cF0>(src);
+<a name="l34"></a>        dst = </span><span class=cF5>Letter2Letter</span><span class=cF0>(dst);
+<a name="l35"></a>
+<a name="l36"></a>        </span><span class=cF1>if</span><span class=cF0> (dst == </span><span class=cF6>'D'</span><span class=cF0>)
+<a name="l37"></a>                </span><span class=cF5>Format</span><span class=cF0>(dst,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_FAT32</span><span class=cF0>);
+<a name="l38"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF5>Format</span><span class=cF0>(dst,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l40"></a>
+<a name="l41"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf_s, </span><span class=cF6>&quot;%c:/&quot;</span><span class=cF0>, src);
+<a name="l42"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf_d, </span><span class=cF6>&quot;%c:/&quot;</span><span class=cF0>, dst);
+<a name="l43"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(buf_s, buf_d);
+<a name="l44"></a>
+<a name="l45"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l46"></a>        </span><span class=cF5>Drive</span><span class=cF0>(dst);
+<a name="l47"></a>        TOSBootHDIns(dst);
+<a name="l48"></a>}
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSPromptAndCopyDrive()
+<a name="l51"></a>{</span><span class=cF2>//Prompt for drv lets. Then, Format dst and copy entire drv.</span><span class=cF0>
+<a name="l52"></a>        </span><span class=cF9>I64</span><span class=cF0> src, dst;
+<a name="l53"></a>
+<a name="l54"></a>        </span><span class=cF6>&quot;$RED$\nCopy Src Drive:\n$FG$&quot;</span><span class=cF0>;
+<a name="l55"></a>        src = TOSGetDrive;
+<a name="l56"></a>        </span><span class=cF6>&quot;$RED$\nCopy Dst Drive:\n$FG$&quot;</span><span class=cF0>;
+<a name="l57"></a>        dst = TOSGetDrive;
+<a name="l58"></a>        TOSCopyDrive(src, dst);
+<a name="l59"></a>}
+<a name="l60"></a>
+<a name="l61"></a></span><span class=cF1>U0</span><span class=cF0> DistroPrep()
+<a name="l62"></a>{
+<a name="l63"></a>        </span><span class=cF5>ZOnceFlush</span><span class=cF0>; </span><span class=cF2>//Don't want in Registry</span><span class=cF0>
+<a name="l64"></a>        </span><span class=cF5>OnceFlush</span><span class=cF0>;
+<a name="l65"></a>
+<a name="l66"></a>        </span><span class=cF5>Del</span><span class=cF0>(</span><span class=cF6>&quot;/Home/Demo*&quot;</span><span class=cF0>);
+<a name="l67"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Home/*Tmp.DD&quot;</span><span class=cF0>);
+<a name="l68"></a>
+<a name="l69"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Tmp&quot;</span><span class=cF0>);
+<a name="l70"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Tmp&quot;</span><span class=cF0>);
+<a name="l71"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;/Tmp/ScreenShots&quot;</span><span class=cF0>);
+<a name="l72"></a>
+<a name="l73"></a>        </span><span class=cF5>Touch</span><span class=cF0>(</span><span class=cF6>&quot;/PersonalMenu.DD&quot;</span><span class=cF0>, </span><span class=cF6>&quot;+T&quot;</span><span class=cF0>);
+<a name="l74"></a>        </span><span class=cF5>Touch</span><span class=cF0>(</span><span class=cF6>&quot;/Home/PersonalMenu.DD&quot;</span><span class=cF0>, </span><span class=cF6>&quot;+T&quot;</span><span class=cF0>);
+<a name="l75"></a>
+<a name="l76"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/AcctExample&quot;</span><span class=cF0>);
+<a name="l77"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>, </span><span class=cF6>&quot;/Demo/AcctExample&quot;</span><span class=cF0>);
+<a name="l78"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/AcctExample/TAD&quot;</span><span class=cF0>);
+<a name="l79"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/AcctExample/Sup1&quot;</span><span class=cF0>);
+<a name="l80"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/AcctExample/Sup2&quot;</span><span class=cF0>);
+<a name="l81"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/AcctExample/Sup3&quot;</span><span class=cF0>);
+<a name="l82"></a>        </span><span class=cF5>Del</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/AcctExample/Test*&quot;</span><span class=cF0>);
+<a name="l83"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF6>&quot;~/Sup1/Sup1Utils/SortHeaders.CC&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l84"></a>                </span><span class=cF5>ExeFile</span><span class=cF0>(</span><span class=cF6>&quot;~/Sup1/Sup1Utils/SortHeaders.CC&quot;</span><span class=cF0>);
+<a name="l85"></a>
+<a name="l86"></a>        </span><span class=cF5>CursorRemove</span><span class=cF0>(</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>);
+<a name="l87"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/*.BI*&quot;</span><span class=cF0>);
+<a name="l88"></a>        </span><span class=cF5>S2T</span><span class=cF0>(</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;+r+S&quot;</span><span class=cF0>);
+<a name="l89"></a>        </span><span class=cF5>DocOpt</span><span class=cF0>(</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;+R&quot;</span><span class=cF0>);
+<a name="l90"></a>        </span><span class=cF5>Move</span><span class=cF0>(</span><span class=cF3>ACD_DEF_FILENAME</span><span class=cF0>, ACD_DEF_FILENAME_Z);
+<a name="l91"></a>}
+<a name="l92"></a>
+<a name="l93"></a></span><span class=cF1>U0</span><span class=cF0> DebugDistroFilePrep()
+<a name="l94"></a>{
+<a name="l95"></a>        </span><span class=cF9>CBlkDev</span><span class=cF0> *bd;
+<a name="l96"></a>
+<a name="l97"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Letter2Drive</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l98"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l99"></a>                </span><span class=cF5>In</span><span class=cF0>(CONFIG_DEBUG_DISTRO </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l100"></a>                </span><span class=cF5>Mount</span><span class=cF0>;
+<a name="l101"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l102"></a>        bd = </span><span class=cF5>Letter2BlkDev</span><span class=cF0>(</span><span class=cF6>'A'</span><span class=cF0>);
+<a name="l103"></a>        </span><span class=cF5>Format</span><span class=cF0>(</span><span class=cF6>'A'</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l104"></a>
+<a name="l105"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;A:/Compiler&quot;</span><span class=cF0>);
+<a name="l106"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Compiler/Compiler.BIN&quot;</span><span class=cF0>,        </span><span class=cF6>&quot;A:/Compiler&quot;</span><span class=cF0>);
+<a name="l107"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Compiler/OpCodes.DD&quot;</span><span class=cF0>,          </span><span class=cF6>&quot;A:/Compiler&quot;</span><span class=cF0>);
+<a name="l108"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Compiler/CompilerA.HH&quot;</span><span class=cF0>,        </span><span class=cF6>&quot;A:/Compiler&quot;</span><span class=cF0>);
+<a name="l109"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Compiler/CompilerB.HH&quot;</span><span class=cF0>,        </span><span class=cF6>&quot;A:/Compiler&quot;</span><span class=cF0>);
+<a name="l110"></a>
+<a name="l111"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;A:/Kernel&quot;</span><span class=cF0>);
+<a name="l112"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Kernel/*.HH*&quot;</span><span class=cF0>,                 </span><span class=cF6>&quot;A:/Kernel&quot;</span><span class=cF0>);
+<a name="l113"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/Kernel/BlkDev&quot;</span><span class=cF0>,    </span><span class=cF6>&quot;A:/Kernel/BlkDev&quot;</span><span class=cF0>);
+<a name="l114"></a>
+<a name="l115"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Sup1/Sup1Distro/DebugStartOS.CC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;A:/StartOS.CC&quot;</span><span class=cF0>);
+<a name="l116"></a>
+<a name="l117"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(</span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l118"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Sup1/Sup1Distro/DebugMakeSystem.CC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;A:/System/MakeSystem.CC&quot;</span><span class=cF0>);
+<a name="l119"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Sup1/Sup1Distro/DebugMount.CC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l120"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/AExts.CC&quot;</span><span class=cF0>,              </span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l121"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/AMath.CC&quot;</span><span class=cF0>,              </span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l122"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/Training.CC&quot;</span><span class=cF0>,   </span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l123"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/AMem.CC&quot;</span><span class=cF0>,               </span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l124"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/TaskRep.CC&quot;</span><span class=cF0>,    </span><span class=cF6>&quot;A:/System&quot;</span><span class=cF0>);
+<a name="l125"></a>
+<a name="l126"></a>        </span><span class=cF5>FileWrite</span><span class=cF0>(</span><span class=cF6>&quot;C:&quot;</span><span class=cF0> CONFIG_DEBUG_DISTRO_FILE, bd-&gt;RAM_disk, </span><span class=cF7>(</span><span class=cF0>bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l127"></a>}
+<a name="l128"></a>
+<a name="l129"></a>
+<a name="l130"></a></span><span class=cF1>U0</span><span class=cF0> StdDistroPrep()
+<a name="l131"></a>{
+<a name="l132"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l133"></a>        DistroPrep;
+<a name="l134"></a>        </span><span class=cF5>In</span><span class=cF0>(</span><span class=cF3>STD_DISTRO_DVD_CONFIG</span><span class=cF0>);
+<a name="l135"></a>        </span><span class=cF5>BootDVDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l136"></a>        </span><span class=cF5>Format</span><span class=cF0>(</span><span class=cF6>'B'</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l137"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR);
+<a name="l138"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/&quot;</span><span class=cF0>, TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l139"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l140"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l141"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>);
+<a name="l142"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/OldMBR.BIN.C&quot;</span><span class=cF0>);
+<a name="l143"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/BootMHD2.BIN.C&quot;</span><span class=cF0>);
+<a name="l144"></a>}
+<a name="l145"></a></span><span class=cF1>U0</span><span class=cF0> MakeStdDistro()
+<a name="l146"></a>{
+<a name="l147"></a>        StdDistroPrep;
+<a name="l148"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l149"></a>        </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOSCD_SIZE&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Download ZealOS V0.05 - Standard Distro (%0.1fMB)&quot;</span><span class=cF0>,
+<a name="l150"></a>                                </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF7>(</span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Size</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;+s&quot;</span><span class=cF0>) / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF7>)</span><span class=cF0>);
+<a name="l151"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l152"></a>}
+<a name="l153"></a>
+<a name="l154"></a></span><span class=cF1>U0</span><span class=cF0> LiteDistroPrep()
+<a name="l155"></a>{
+<a name="l156"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l157"></a>        DistroPrep;
+<a name="l158"></a>        </span><span class=cF5>In</span><span class=cF0>(</span><span class=cF3>STD_DISTRO_DVD_CONFIG</span><span class=cF0>);
+<a name="l159"></a>        </span><span class=cF5>BootDVDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l160"></a>        </span><span class=cF5>Format</span><span class=cF0>(</span><span class=cF6>'B'</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l161"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR);
+<a name="l162"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/&quot;</span><span class=cF0>, TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l163"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l164"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l165"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Apps&quot;</span><span class=cF0>);
+<a name="l166"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Demo&quot;</span><span class=cF0>);
+<a name="l167"></a>        </span><span class=cF5>Copy</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Demo/Games/Talons.CC&quot;</span><span class=cF0>, TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l168"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>);
+<a name="l169"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/OldMBR.BIN.C&quot;</span><span class=cF0>);
+<a name="l170"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/BootMHD2.BIN.C&quot;</span><span class=cF0>);
+<a name="l171"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/System/AutoComplete/ACDefs.DATA&quot;</span><span class=cF0>);
+<a name="l172"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/System/AutoComplete/ACWords.DATA&quot;</span><span class=cF0>);
+<a name="l173"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Misc/Bible.TXT&quot;</span><span class=cF0>);
+<a name="l174"></a>}
+<a name="l175"></a></span><span class=cF1>U0</span><span class=cF0> MakeLiteDistro()
+<a name="l176"></a>{
+<a name="l177"></a>        LiteDistroPrep;
+<a name="l178"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l179"></a>        </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOSCD_SIZE&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Download ZealOS V0.05 - Standard Distro (%0.1fMB)&quot;</span><span class=cF0>, 
+<a name="l180"></a>                                </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF7>(</span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Size</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;+s&quot;</span><span class=cF0>) / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF7>)</span><span class=cF0>);
+<a name="l181"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l182"></a>}
+<a name="l183"></a>
+<a name="l184"></a></span><span class=cF1>U0</span><span class=cF0> DebugDistroPrep()
+<a name="l185"></a>{
+<a name="l186"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l187"></a>        DistroPrep;
+<a name="l188"></a>        DebugDistroFilePrep;
+<a name="l189"></a>        </span><span class=cF5>In</span><span class=cF0>(TOS_DVD_DEBUG_CONFIG);
+<a name="l190"></a>        </span><span class=cF5>BootDVDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l191"></a>        </span><span class=cF5>Format</span><span class=cF0>(</span><span class=cF6>'B'</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l192"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR);
+<a name="l193"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/&quot;</span><span class=cF0>, TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l194"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l195"></a>        </span><span class=cF5>DirMake</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>);
+<a name="l196"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>);
+<a name="l197"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/OldMBR.BIN.C&quot;</span><span class=cF0>);
+<a name="l198"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/BootMHD2.BIN.C&quot;</span><span class=cF0>);
+<a name="l199"></a>}
+<a name="l200"></a></span><span class=cF1>U0</span><span class=cF0> MakeDebugDistro()
+<a name="l201"></a>{
+<a name="l202"></a>        DebugDistroPrep;
+<a name="l203"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l204"></a>        </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOS_DEBUG_SIZE&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Download ZealOS V0.05 - Debug Distro (%0.1fMB)&quot;</span><span class=cF0>, 
+<a name="l205"></a>                                </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF7>(</span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Size</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;+s&quot;</span><span class=cF0>) / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF7>)</span><span class=cF0>);
+<a name="l206"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l207"></a>}
+<a name="l208"></a>
+<a name="l209"></a></span><span class=cF1>U0</span><span class=cF0> StaffDistroPrep()
+<a name="l210"></a>{
+<a name="l211"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l212"></a>        DistroPrep;
+<a name="l213"></a>        </span><span class=cF5>In</span><span class=cF0>(TOS_DVD_CONFIG);
+<a name="l214"></a>        </span><span class=cF5>BootDVDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l215"></a>        </span><span class=cF5>Format</span><span class=cF0>(</span><span class=cF6>'B'</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l216"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR);
+<a name="l217"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/&quot;</span><span class=cF0>, TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l218"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home/Sup1&quot;</span><span class=cF0>);
+<a name="l219"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home/Sup2&quot;</span><span class=cF0>);
+<a name="l220"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/Home/Sup3&quot;</span><span class=cF0>);
+<a name="l221"></a>        </span><span class=cF5>Del</span><span class=cF0>(TOS_DISTRO_DIR </span><span class=cF6>&quot;/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>);
+<a name="l222"></a>}
+<a name="l223"></a></span><span class=cF1>U0</span><span class=cF0> MakeStaffDistro()
+<a name="l224"></a>{
+<a name="l225"></a>        StaffDistroPrep;
+<a name="l226"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l227"></a>        </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOS_STAFF_SIZE&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Download ZealOS V0.05 - T.S. Company Internal Distro (%0.1fMB)&quot;</span><span class=cF0>, 
+<a name="l228"></a>                                </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF7>(</span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Size</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;+s&quot;</span><span class=cF0>) / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF7>)</span><span class=cF0>);
+<a name="l229"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l230"></a>}
+<a name="l231"></a>
+<a name="l232"></a></span><span class=cF9>I64</span><span class=cF0> UpdateLineCounts()
+<a name="l233"></a>{
+<a name="l234"></a>        </span><span class=cF9>I64</span><span class=cF0> res;
+<a name="l235"></a>
+<a name="l236"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l237"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l238"></a>        DistroPrep;
+<a name="l239"></a>
+<a name="l240"></a>        </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF6>&quot;C:/&quot;</span><span class=cF0>);
+<a name="l241"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;B:/TOS/TOS&quot;</span><span class=cF0>);
+<a name="l242"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home&quot;</span><span class=cF0>, </span><span class=cF6>&quot;B:/TOS/TOS&quot;</span><span class=cF0>);
+<a name="l243"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home&quot;</span><span class=cF0>);
+<a name="l244"></a>
+<a name="l245"></a>        </span><span class=cF5>DocMax</span><span class=cF0>;
+<a name="l246"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l247"></a>        res = </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;C:/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-r&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/*&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;C:/Compiler/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-S+$&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;C:/Kernel/*&quot;</span><span class=cF0>);
+<a name="l248"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;B:/TOS/TOS&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home&quot;</span><span class=cF0>);
+<a name="l249"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;B:/TOS/TOS&quot;</span><span class=cF0>);
+<a name="l250"></a>
+<a name="l251"></a>        </span><span class=cF5>DocTreeFWrite</span><span class=cF0>(</span><span class=cF6>&quot;C:/System/ZDefine.CC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;LineRep&quot;</span><span class=cF0>, </span><span class=cF6>&quot;DefinePrint(\&quot;DD_TEMPLEOS_LOC\&quot;,\&quot;%,d\&quot;);\n&quot;</span><span class=cF0>, res);
+<a name="l252"></a>        </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOS_LOC&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%,d&quot;</span><span class=cF0>, res);
+<a name="l253"></a>
+<a name="l254"></a>        </span><span class=cF6>&quot;Total LOC:%12,d\n\n&quot;</span><span class=cF0>, res;
+<a name="l255"></a>
+<a name="l256"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l257"></a>}
+<a name="l258"></a>
+<a name="l259"></a></span><span class=cF1>U0</span><span class=cF0> UpdateISODocDefines()
+<a name="l260"></a>{
+<a name="l261"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l262"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l263"></a>                </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOSCD_SIZE&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Download ZealOS V0.05 - Standard Distro (%0.1fMB)&quot;</span><span class=cF0>, 
+<a name="l264"></a>                                        </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF7>(</span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Size</span><span class=cF0>(</span><span class=cF6>&quot;D:/Downloads/TOS_Distro.ISO&quot;</span><span class=cF0>, </span><span class=cF6>&quot;+s&quot;</span><span class=cF0>) / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF7>)</span><span class=cF0>);
+<a name="l265"></a>                </span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_TEMPLEOSCD_K_SIZE&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%dKB&quot;</span><span class=cF0>, </span><span class=cF5>Size</span><span class=cF7>(</span><span class=cF6>&quot;D:/Downloads/TOS_Distro.ISO&quot;</span><span class=cF0>, </span><span class=cF6>&quot;+s&quot;</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>);
+<a name="l266"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l267"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l268"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l269"></a>}
+<a name="l270"></a>UpdateISODocDefines;
+<a name="l271"></a>
+<a name="l272"></a>
+<a name="l273"></a></span><span class=cF9>I64</span><span class=cF0> tos_progress;
+<a name="l274"></a></span><span class=cF1>F64</span><span class=cF0> tos_progress_t0;
+<a name="l275"></a>
+<a name="l276"></a></span><span class=cF1>U0</span><span class=cF0> TOSProgress(</span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l277"></a>{
+<a name="l278"></a>        </span><span class=cF1>U8</span><span class=cF0> buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l279"></a>
+<a name="l280"></a>        </span><span class=cFB>progress4</span><span class=cF0>               = tos_progress;
+<a name="l281"></a>        </span><span class=cFB>progress3_max</span><span class=cF0>   = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l282"></a>        *</span><span class=cFB>progress4_desc</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l283"></a>        </span><span class=cFB>progress4_max</span><span class=cF0>   = </span><span class=cFE>9</span><span class=cF0> + MAKE_LITE + MAKE_DEBUG + MAKE_STAFF;
+<a name="l284"></a>        </span><span class=cFB>progress4_t0</span><span class=cF0>    = tos_progress_t0;
+<a name="l285"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;%d. %s&quot;</span><span class=cF0>, ++</span><span class=cFB>progress4</span><span class=cF0>, st);
+<a name="l286"></a>        </span><span class=cF6>&quot;$PURPLE$$TX+CX,\&quot;%s\&quot;$$FG$\n&quot;</span><span class=cF0>, buf;
+<a name="l287"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress3_desc</span><span class=cF0>, buf);
+<a name="l288"></a>        tos_progress = </span><span class=cFB>progress4</span><span class=cF0>;
+<a name="l289"></a>}
+<a name="l290"></a>
+<a name="l291"></a></span><span class=cF1>U0</span><span class=cF0> TOSRegen2()
+<a name="l292"></a>{
+<a name="l293"></a>        </span><span class=cF9>I64</span><span class=cF0> slash_home = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l294"></a>
+<a name="l295"></a>        </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="http://www.tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l296"></a>        tos_progress = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l297"></a>        tos_progress_t0 = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l298"></a>        </span><span class=cF5>RegExe</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/TOSRegen&quot;</span><span class=cF0>);
+<a name="l299"></a>
+<a name="l300"></a>        TOSProgress(</span><span class=cF6>&quot;DiskCheck All&quot;</span><span class=cF0>);
+<a name="l301"></a>        </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l302"></a>        </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l303"></a>        </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l304"></a>        DiskCheckAll;
+<a name="l305"></a>
+<a name="l306"></a>        TOSProgress(</span><span class=cF6>&quot;Update Line Counts&quot;</span><span class=cF0>);
+<a name="l307"></a>        UpdateLineCounts;
+<a name="l308"></a>
+<a name="l309"></a>        TOSProgress(</span><span class=cF6>&quot;Copy C to D&quot;</span><span class=cF0>);
+<a name="l310"></a>        TOSCopyDrive(</span><span class=cF6>'C'</span><span class=cF0>, </span><span class=cF6>'D'</span><span class=cF0>);
+<a name="l311"></a>
+<a name="l312"></a>        TOSProgress(</span><span class=cF6>&quot;Make Standard Distro ISO&quot;</span><span class=cF0>);
+<a name="l313"></a>        MakeStdDistro;
+<a name="l314"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l315"></a>        </span><span class=cF5>Move</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;D:/Downloads/TOS_Distro.ISO&quot;</span><span class=cF0>);
+<a name="l316"></a>
+<a name="l317"></a>        TOSProgress(</span><span class=cF6>&quot;Make Supplemental1 ISO&quot;</span><span class=cF0>);
+<a name="l318"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(</span><span class=cF6>&quot;D:/Downloads/TOS_Supplemental1&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home/Sup1&quot;</span><span class=cF0>);
+<a name="l319"></a>
+<a name="l320"></a>        TOSProgress(</span><span class=cF6>&quot;Make Supplemental2 ISO&quot;</span><span class=cF0>);
+<a name="l321"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(</span><span class=cF6>&quot;D:/Downloads/TOS_Supplemental2&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home/Sup2&quot;</span><span class=cF0>);
+<a name="l322"></a>
+<a name="l323"></a>        TOSProgress(</span><span class=cF6>&quot;Make Supplemental3 ISO&quot;</span><span class=cF0>);
+<a name="l324"></a>        </span><span class=cF5>RedSeaISO</span><span class=cF0>(</span><span class=cF6>&quot;D:/Downloads/TOS_Supplemental3&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home/Sup3&quot;</span><span class=cF0>);
+<a name="l325"></a>
+<a name="l326"></a>#</span><span class=cF1>if</span><span class=cF0> MAKE_LITE
+<a name="l327"></a>        TOSProgress(</span><span class=cF6>&quot;Make Lite Distro ISO&quot;</span><span class=cF0>);
+<a name="l328"></a>        MakeLiteDistro;
+<a name="l329"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l330"></a>        </span><span class=cF5>Move</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;D:/Downloads/TOS_Lite.ISO&quot;</span><span class=cF0>);
+<a name="l331"></a>#</span><span class=cF1>endif</span><span class=cF0>
+<a name="l332"></a>#</span><span class=cF1>if</span><span class=cF0> MAKE_DEBUG
+<a name="l333"></a>        TOSProgress(</span><span class=cF6>&quot;Make Debug Distro ISO&quot;</span><span class=cF0>);
+<a name="l334"></a>        MakeDebugDistro;
+<a name="l335"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l336"></a>        </span><span class=cF5>Move</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;D:/Downloads/TOS_Debug.ISO&quot;</span><span class=cF0>);
+<a name="l337"></a>#</span><span class=cF1>endif</span><span class=cF0>
+<a name="l338"></a>#</span><span class=cF1>if</span><span class=cF0> MAKE_STAFF
+<a name="l339"></a>        TOSProgress(</span><span class=cF6>&quot;Make Staff Distro ISO&quot;</span><span class=cF0>);
+<a name="l340"></a>        MakeStaffDistro;
+<a name="l341"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l342"></a>        </span><span class=cF5>Move</span><span class=cF0>(TOS_ISO_NAME, </span><span class=cF6>&quot;D:/Downloads/TOS_Staff.ISO&quot;</span><span class=cF0>);
+<a name="l343"></a>#</span><span class=cF1>endif</span><span class=cF0>
+<a name="l344"></a>
+<a name="l345"></a>        UpdateISODocDefines;
+<a name="l346"></a>        </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF6>&quot;C:/&quot;</span><span class=cF0>);
+<a name="l347"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l348"></a>
+<a name="l349"></a>        TOSProgress(</span><span class=cF6>&quot;Check for Long Lines&quot;</span><span class=cF0>);
+<a name="l350"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LongLines</span><span class=cF0>)
+<a name="l351"></a>                </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l352"></a>
+<a name="l353"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l354"></a>        TOSProgress(</span><span class=cF6>&quot;Check for Broken DolDoc Links&quot;</span><span class=cF0>);
+<a name="l355"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LinkCheck</span><span class=cF0>)
+<a name="l356"></a>                </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l357"></a>
+<a name="l358"></a>        TOSProgress(</span><span class=cF6>&quot;Find /Home&quot;</span><span class=cF0>);
+<a name="l359"></a>        slash_home = F2(</span><span class=cF6>&quot;/Home&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-i+la&quot;</span><span class=cF0>);
+<a name="l360"></a>
+<a name="l361"></a>        TOSProgress(</span><span class=cF6>&quot;DiskCheck All&quot;</span><span class=cF0>);
+<a name="l362"></a>        </span><span class=cF5>Drive</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l363"></a>        DiskCheckAll;
+<a name="l364"></a>
+<a name="l365"></a>        TOSProgress(</span><span class=cF6>&quot;Done&quot;</span><span class=cF0>);
+<a name="l366"></a>        </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l367"></a>        </span><span class=cF6>&quot;F2(\&quot;/Home\&quot;) Count\t:%d\n&quot;</span><span class=cF0>, slash_home;
+<a name="l368"></a>        </span><span class=cF6>&quot;Elapsed Time\t:%5.3fs\n&quot;</span><span class=cF0>, </span><span class=cF5>tS</span><span class=cF0> - </span><span class=cFB>progress4_t0</span><span class=cF0>;
+<a name="l369"></a>        </span><span class=cF5>ProgressBarsReset</span><span class=cF0>(</span><span class=cF6>&quot;ZealOS/TOSRegen&quot;</span><span class=cF0>);
+<a name="l370"></a>}
+<a name="l371"></a>
+<a name="l372"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSPreRegen()
+<a name="l373"></a>{</span><span class=cF2>//Copy bins from D:/Home/Sup1 to C:/Home/Sup1</span><span class=cF0>
+<a name="l374"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;D:/Home/&quot;</span><span class=cF0> INS_REG_PERSONAL_INITIALS </span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home/&quot;</span><span class=cF0> INS_REG_PERSONAL_INITIALS);
+<a name="l375"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Sup1/Sup1Bin&quot;</span><span class=cF0>);
+<a name="l376"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;D:/Home/Sup1/Sup1Bin&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home/Sup1/Sup1Bin&quot;</span><span class=cF0>);
+<a name="l377"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;D:/Home/Sup1/Sup1CodeScraps/Comm/TOSSocket*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Home/Sup1/Sup1CodeScraps/Comm&quot;</span><span class=cF0>);
+<a name="l378"></a>        </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;C:/Downloads/Linux&quot;</span><span class=cF0>);
+<a name="l379"></a>        </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF6>&quot;D:/Downloads/Linux&quot;</span><span class=cF0>, </span><span class=cF6>&quot;C:/Downloads/Linux&quot;</span><span class=cF0>);
+<a name="l380"></a>}
+<a name="l381"></a>
+<a name="l382"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSRegen()
+<a name="l383"></a>{</span><span class=cF2>//Generate distro ISO's</span><span class=cF0>
+<a name="l384"></a>        TOSBootHDIns(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l385"></a>        </span><span class=cF5>Once</span><span class=cF0>(</span><span class=cF6>&quot;TOSRegen2;&quot;</span><span class=cF0>);
+<a name="l386"></a>        </span><span class=cF5>BootRAM</span><span class=cF0>(</span><span class=cF6>&quot;C:/Kernel/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>); </span><span class=cF2>//Boot to load </span><a href="http://www.tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSConfig.html#l55"><span class=cF4>TOS_CONFIG</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l387"></a>}
+</span></pre></body>
+</html>
