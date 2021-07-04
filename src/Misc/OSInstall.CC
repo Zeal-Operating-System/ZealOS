@@ -77,12 +77,75 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	Format(dst_drv);
 	CopyTree("B:/", dst);
 
-	BootHDIns(dst_drv);
+//	BootHDIns(dst_drv);
 }
 
 U0 OSUpgrade()
 {
-	"\n\nTODO: OSUpgrade (base off OSInstall)\n\n";
+	I64		 drv_let;
+	U8		*st, *port_st;
+	I64		 ch, res_num;
+	CTask	*task;
+
+	task = User;
+	TaskWait(task);
+	task->border_src	= BDS_CONST;
+	task->border_attr	= LTGRAY << 4 + DriveTextAttrGet(':') & 15;
+	task->text_attr		= LTGRAY << 4 + BLUE;
+	task->win_inhibit	= WIG_TASK_DEFAULT - WIF_SELF_BORDER;
+	WinHorz(Fs->win_left, Fs->win_right, task);
+	WinVert(Fs->win_top,  (Fs->win_top + Fs->win_bottom) >> 2 - 1, task);
+	WinVert(task->win_bottom + 3, Fs->win_bottom);
+	WinToTop(Fs);
+
+	XTalk(task, "Mount;\nC\n");
+
+	"\nSelect the port of the ATA drive with an existing installation.\n";
+
+	"Hard Drive Port: ";
+	while (TRUE)
+	{
+		port_st = StrGet;
+		if ((0 <= Str2I64(port_st) < AHCI_MAX_PORTS) &&
+			((&blkdev.ahci_hba->ports[Str2I64(port_st)])->signature == AHCI_PxSIG_ATA))
+		{
+			break;
+		}
+		Free(port_st);
+	}
+
+	XTalkWait(task, "%s\n\n", port_st);
+
+	DriveRep;
+	do
+	{
+		st = StrGet("\nInstallation Partition Letter: ");
+		if (*st)
+			drv_let = Letter2Letter(*st);
+		else
+			drv_let = 0;
+		Free(st);
+	}
+	while (!('A' <= drv_let <= 'Z'));
+
+	'\n';
+
+//	InstallDrive(drv_let);
+	OSMerge(drv_let); // src_drv needed?
+
+	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n", drv_let, drv_let, port_st);
+	VideoRep;
+	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
+	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
+//	"$$RED$$Install Master Boot loader?$$FG$$";
+//	if (YorN)
+//	{
+//		'\n';
+//		BootMHDIns(drv_let);
+//	}
+
+	WinVert(task->win_top, Fs->win_bottom);
+	Kill(task);
 }
 
 U0 InstallDrive(U8 drv_let)
@@ -274,9 +337,6 @@ U0 RegularInstallWiz()
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);
-
-
-
 }
 
 U0 DoInstructions()

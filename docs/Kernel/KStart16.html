@@ -26,7 +26,7 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>asm</span><span class=cF0> {</span><span class=cF2>/* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Boot.html#l1"><span class=cF4>::/Doc/Boot.DD</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l2"></a></span><span class=cF2>ZealOS starts in real, calls some BIOS routines, switches to 32 bit, and 64 bit mode and continues in </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF2> at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l146"><span class=cF4>KMain</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>ZealOS starts in real, calls some BIOS routines, switches to 32 bit, and 64 bit mode and continues in </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF2> at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l151"><span class=cF4>KMain</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a></span><span class=cF2>The boot loader jumps here in real-mode (16-bit).</span><span class=cF0>
 <a name="l5"></a></span><span class=cF2>It actually jumps to the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l451"><span class=cF4>CBinFile</span></a><span class=cF2> header which is placed just before this by </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l628"><span class=cF4>the compiler</span></a><span class=cF2>.</span><span class=cF0>

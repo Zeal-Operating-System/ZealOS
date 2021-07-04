@@ -101,6 +101,11 @@ U0 SysGrInit()
 	text.aux_font['É']		= text.font['É'];
 	text.aux_font['Í']		= text.font['Í'];
 
+	text.aux_font['¿']		= text.font['¿'];
+	text.aux_font['Ù']		= text.font['Ù'];
+	text.aux_font['À']		= text.font['À'];
+	text.aux_font['Ú']		= text.font['Ú'];
+
 	text.border_chars[2] (I64) = 'ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32) = 'ÀÈÙ¼';
 

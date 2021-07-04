@@ -115,7 +115,7 @@ CTSS *TSSNew(I64 cpu_num)
 }
 
 CCPU *CPUStructInit(I64 num, CCPU *c, CTask *executive_task)
-{//Executive is null when called by system_task on CSysFixedArea.boot_cpu0
+{//Executive is null when called by sys_task on CSysFixedArea.boot_cpu0
 	MemSet(c, 0, sizeof(CCPU));
 	c->addr			= c;
 	c->num			= num;
@@ -174,7 +174,7 @@ U0 MPHalt()
 }
 
 U0 MPAPICInit()
-{//Called by system_task during start-up
+{//Called by sys_task during start-up
 //and other cores during initialization
 	//after $LK,"Core0StartMP",A="MN:Core0StartMP"$().
 	*(dev.uncached_alias + LAPIC_SVR)(U32 *) |= LAPICF_APIC_ENABLED;
@@ -258,7 +258,7 @@ CJob *JobQueue(I64 (*fp_addr)(U8 *data), U8 *data=NULL, I64 target_cpu=1, I64 fl
 }
 
 CTask *SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL, 
-				  I64 target_cpu,  CTask *parent=NULL,  //NULL means system_task
+				  I64 target_cpu,  CTask *parent=NULL,  //NULL means sys_task
 				  I64 stack_size=0, I64 flags=1 << JOBf_ADD_TO_QUE)
 {
 	CTask		*res;
@@ -296,7 +296,7 @@ U0 CoreAPExecutiveInit()
 }
 
 U0 Core0StartMP()
-{//Called by system_task during $LK,"start-up",A="FF:::/Kernel/KMain.CC,Core0StartMP"$.
+{//Called by sys_task during $LK,"start-up",A="FF:::/Kernel/KMain.CC,Core0StartMP"$.
 	CTask			*task;
 	U8				 buf[STR_LEN];
 	CAP16BitInit	*mp = MP_VECT_ADDR;
@@ -364,7 +364,7 @@ U0 Core0StartMP()
 }
 
 U0 Core0Init()
-{//Called by system_task during start-up
+{//Called by sys_task during start-up
 	mp_count_initial = mp_count = 1;
 	mp_count_lock = 0;
 

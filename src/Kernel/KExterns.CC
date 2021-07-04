@@ -123,7 +123,7 @@ extern U0	RedSeaInit(CDrive *drive);
 extern Bool	RedSeaValidate(U8 drv_let);
 
 extern CTask *SpawnQueue(U0 (*fp_addr)(U8 *data), U8 *data=NULL, 
-		U8 *task_name=NULL, I64 target_cpu, CTask *parent=NULL,  //NULL means system_task
+		U8 *task_name=NULL, I64 target_cpu, CTask *parent=NULL,  //NULL means sys_task
 		I64 stack_size=0, I64 flags=1<<JOBf_ADD_TO_QUE);
 
 extern U8 *StrPrint(U8 *dst, U8 *format, ...);

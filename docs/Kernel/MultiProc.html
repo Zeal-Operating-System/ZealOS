@@ -142,7 +142,7 @@ body {background-color:#000000;}
 <a name="l115"></a>}
 <a name="l116"></a>
 <a name="l117"></a></span><span class=cF9>CCPU</span><span class=cF0> *</span><span class=cFD>CPUStructInit</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num, </span><span class=cF9>CCPU</span><span class=cF0> *c, </span><span class=cF9>CTask</span><span class=cF0> *executive_task)
-<a name="l118"></a>{</span><span class=cF2>//Executive is null when called by system_task on CSysFixedArea.boot_cpu0</span><span class=cF0>
+<a name="l118"></a>{</span><span class=cF2>//Executive is null when called by sys_task on CSysFixedArea.boot_cpu0</span><span class=cF0>
 <a name="l119"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(c, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0>);
 <a name="l120"></a>        c-&gt;addr                 = c;
 <a name="l121"></a>        c-&gt;num                  = num;
@@ -201,7 +201,7 @@ body {background-color:#000000;}
 <a name="l174"></a>}
 <a name="l175"></a>
 <a name="l176"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>MPAPICInit</span><span class=cF0>()
-<a name="l177"></a>{</span><span class=cF2>//Called by system_task during start-up</span><span class=cF0>
+<a name="l177"></a>{</span><span class=cF2>//Called by sys_task during start-up</span><span class=cF0>
 <a name="l178"></a></span><span class=cF2>//and other cores during initialization</span><span class=cF0>
 <a name="l179"></a>        </span><span class=cF2>//after </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l180"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_SVR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) |= </span><span class=cF3>LAPICF_APIC_ENABLED</span><span class=cF0>;
@@ -285,7 +285,7 @@ body {background-color:#000000;}
 <a name="l258"></a>}
 <a name="l259"></a>
 <a name="l260"></a></span><span class=cF9>CTask</span><span class=cF0> *</span><span class=cF5>SpawnQueue</span><span class=cF0>(</span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_addr</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *data</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *data=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *task_name=</span><span class=cF3>NULL</span><span class=cF0>, 
-<a name="l261"></a>                                  </span><span class=cF9>I64</span><span class=cF0> target_cpu,  </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>,  </span><span class=cF2>//NULL means system_task</span><span class=cF0>
+<a name="l261"></a>                                  </span><span class=cF9>I64</span><span class=cF0> target_cpu,  </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>,  </span><span class=cF2>//NULL means sys_task</span><span class=cF0>
 <a name="l262"></a>                                  </span><span class=cF9>I64</span><span class=cF0> stack_size=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_ADD_TO_QUE</span><span class=cF0>)
 <a name="l263"></a>{
 <a name="l264"></a>        </span><span class=cF9>CTask</span><span class=cF0>           *res;
@@ -323,7 +323,7 @@ body {background-color:#000000;}
 <a name="l296"></a>}
 <a name="l297"></a>
 <a name="l298"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Core0StartMP</span><span class=cF0>()
-<a name="l299"></a>{</span><span class=cF2>//Called by system_task during </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l218"><span class=cF4>start-up</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l299"></a>{</span><span class=cF2>//Called by sys_task during </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l223"><span class=cF4>start-up</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l300"></a>        </span><span class=cF9>CTask</span><span class=cF0>                   *task;
 <a name="l301"></a>        </span><span class=cF1>U8</span><span class=cF0>                               buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
 <a name="l302"></a>        </span><span class=cF9>CAP16BitInit</span><span class=cF0>    *mp = </span><span class=cF3>MP_VECT_ADDR</span><span class=cF0>;
@@ -391,7 +391,7 @@ body {background-color:#000000;}
 <a name="l364"></a>}
 <a name="l365"></a>
 <a name="l366"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Core0Init</span><span class=cF0>()
-<a name="l367"></a>{</span><span class=cF2>//Called by system_task during start-up</span><span class=cF0>
+<a name="l367"></a>{</span><span class=cF2>//Called by sys_task during start-up</span><span class=cF0>
 <a name="l368"></a>        </span><span class=cFB>mp_count_initial</span><span class=cF0> = </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
 <a name="l369"></a>        </span><span class=cFB>mp_count_lock</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l370"></a>

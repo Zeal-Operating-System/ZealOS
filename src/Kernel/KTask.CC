@@ -245,7 +245,7 @@ I64 TaskInit(CTask *task, I64 stack_size)
 	task->title_src 			= TTS_CONST;
 	task->win_left				= 1;
 	task->win_right 			= text.cols - 2;
-	task->win_top 				= text.rows / 5 + 3;
+	task->win_top 				= text.rows / 8 + 3;
 	task->win_bottom			= text.rows - 2;
 
 	if (blkdev.home_dir)
@@ -263,7 +263,7 @@ I64 TaskInit(CTask *task, I64 stack_size)
 
 CTask *Spawn(U0 (*fp_start_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL,
 				I64 target_cpu=-1,	// -1 for current CPU. See $LK,"multi-core",A="FI:::/Demo/MultiCore/LoadTest.CC"$.
-				CTask *parent=NULL,	// NULL means system_task
+				CTask *parent=NULL,	// NULL means sys_task
 				I64 stack_size=0,	// 0=default
 				I64 flags=1 << JOBf_ADD_TO_QUE)
 {//Create task on core running at address.
