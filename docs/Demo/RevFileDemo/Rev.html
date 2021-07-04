@@ -34,17 +34,17 @@ body {background-color:#000000;}
 <a name="l7"></a>
 <a name="l8"></a></span><span class=cF1>U0</span><span class=cF0> Rev(</span><span class=cF1>U8</span><span class=cF0> *in_name, </span><span class=cF1>U8</span><span class=cF0> *out_name)
 <a name="l9"></a>{
-<a name="l10"></a>        </span><span class=cF9>CDoc</span><span class=cF0>    *doc_in  = </span><span class=cF5>DocRead</span><span class=cF0>(in_name),
-<a name="l11"></a>                        *doc_out = </span><span class=cF5>DocNew</span><span class=cF0>(out_name);
-<a name="l12"></a>        </span><span class=cF5>DocTop</span><span class=cF0>(doc_in);
-<a name="l13"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_in-&gt;head.next != doc_in)
-<a name="l14"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l15"></a>                </span><span class=cF5>EdLineDown</span><span class=cF0>(doc_in, </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF0>);
-<a name="l16"></a>                </span><span class=cF5>ClipCut</span><span class=cF0>(doc_in);
-<a name="l17"></a>                </span><span class=cF5>DocTop</span><span class=cF0>(doc_out);
-<a name="l18"></a>                </span><span class=cF5>ClipPaste</span><span class=cF0>(doc_out);
-<a name="l19"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l20"></a>        </span><span class=cF5>DocWrite</span><span class=cF0>(doc_out);
+<a name="l10"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc_in  = </span><span class=cF5>DocRead</span><span class=cF0>(in_name),
+<a name="l11"></a>            *doc_out = </span><span class=cF5>DocNew</span><span class=cF0>(out_name);
+<a name="l12"></a>    </span><span class=cF5>DocTop</span><span class=cF0>(doc_in);
+<a name="l13"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_in-&gt;head.next != doc_in)
+<a name="l14"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l15"></a>        </span><span class=cF5>EdLineDown</span><span class=cF0>(doc_in, </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF0>);
+<a name="l16"></a>        </span><span class=cF5>ClipCut</span><span class=cF0>(doc_in);
+<a name="l17"></a>        </span><span class=cF5>DocTop</span><span class=cF0>(doc_out);
+<a name="l18"></a>        </span><span class=cF5>ClipPaste</span><span class=cF0>(doc_out);
+<a name="l19"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF5>DocWrite</span><span class=cF0>(doc_out);
 <a name="l21"></a>}
 <a name="l22"></a>
 <a name="l23"></a>Rev(</span><span class=cF6>&quot;DemoPoemBwd.DD&quot;</span><span class=cF0>, </span><span class=cF6>&quot;~/DemoPoemFwd.DD&quot;</span><span class=cF0>);

@@ -27,12 +27,12 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> UnusedSpaceRep()
 <a name="l2"></a>{
-<a name="l3"></a>        </span><span class=cF9>I64</span><span class=cF0>             i;
-<a name="l4"></a>        </span><span class=cF9>CDrive</span><span class=cF0> *drive;
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
+<a name="l4"></a>    </span><span class=cF9>CDrive</span><span class=cF0> *drive;
 <a name="l5"></a>
-<a name="l6"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>26</span><span class=cF0>; i++)
-<a name="l7"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(i + </span><span class=cF6>'A'</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>drive-&gt;fs_type == </span><span class=cF3>FSt_FAT32</span><span class=cF0> || drive-&gt;fs_type == </span><span class=cF3>FSt_REDSEA</span><span class=cF7>)</span><span class=cF0>)
-<a name="l8"></a>                        </span><span class=cF6>&quot;%C: %7.3f%% Free\n&quot;</span><span class=cF0>, </span><span class=cF5>Drive2Letter</span><span class=cF0>(drive), </span><span class=cF5>DriveUnused</span><span class=cF0>(</span><span class=cF5>Drive2Letter</span><span class=cF7>(</span><span class=cF0>drive</span><span class=cF7>)</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (drive-&gt;size * </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l6"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>26</span><span class=cF0>; i++)
+<a name="l7"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(i + </span><span class=cF6>'A'</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>drive-&gt;fs_type == </span><span class=cF3>FSt_FAT32</span><span class=cF0> || drive-&gt;fs_type == </span><span class=cF3>FSt_REDSEA</span><span class=cF7>)</span><span class=cF0>)
+<a name="l8"></a>            </span><span class=cF6>&quot;%C: %7.3f%% Free\n&quot;</span><span class=cF0>, </span><span class=cF5>Drive2Letter</span><span class=cF0>(drive), </span><span class=cF5>DriveUnused</span><span class=cF0>(</span><span class=cF5>Drive2Letter</span><span class=cF7>(</span><span class=cF0>drive</span><span class=cF7>)</span><span class=cF0>) * </span><span class=cFE>100</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / (drive-&gt;size * </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l9"></a>}
 <a name="l10"></a>
 <a name="l11"></a>UnusedSpaceRep;

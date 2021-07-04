@@ -32,20 +32,20 @@ body {background-color:#000000;}
 <a name="l5"></a>
 <a name="l6"></a>#pragma pack(1)
 <a name="l7"></a>
-<a name="l8"></a>#define TRUE            1
-<a name="l9"></a>#define FALSE           0
-<a name="l10"></a>#define BYTE_MAX        0xFF
-<a name="l11"></a>#define CHAR_MIN        (-0x80)
-<a name="l12"></a>#define CHAR_MAX        0x7F
-<a name="l13"></a>#define SHORT_MIN       (-0x8000)
-<a name="l14"></a>#define SHORT_MAX       0x7FFF
-<a name="l15"></a>#define INT_MIN         (-0x80000000)
-<a name="l16"></a>#define INT_MAX         0x7FFFFFFF
+<a name="l8"></a>#define TRUE        1
+<a name="l9"></a>#define FALSE       0
+<a name="l10"></a>#define BYTE_MAX    0xFF
+<a name="l11"></a>#define CHAR_MIN    (-0x80)
+<a name="l12"></a>#define CHAR_MAX    0x7F
+<a name="l13"></a>#define SHORT_MIN   (-0x8000)
+<a name="l14"></a>#define SHORT_MAX   0x7FFF
+<a name="l15"></a>#define INT_MIN     (-0x80000000)
+<a name="l16"></a>#define INT_MAX     0x7FFFFFFF
 <a name="l17"></a>#define LONG_LONG_MIN   (-0x8000000000000000l)
 <a name="l18"></a>#define LONG_LONG_MAX   0x7FFFFFFFFFFFFFFFl
-<a name="l19"></a>#define DWORD_MIN       0
-<a name="l20"></a>#define DWORD_MAX       0xFFFFFFFF
-<a name="l21"></a>#define CDATE_FREQ      49710 // Hz
+<a name="l19"></a>#define DWORD_MIN   0
+<a name="l20"></a>#define DWORD_MAX   0xFFFFFFFF
+<a name="l21"></a>#define CDATE_FREQ  49710 // Hz
 <a name="l22"></a>
 <a name="l23"></a>typedef unsigned char BYTE;
 <a name="l24"></a>typedef unsigned short WORD;
@@ -66,7 +66,7 @@ body {background-color:#000000;}
 <a name="l39"></a>DWORD EndianDWORD(DWORD d)
 <a name="l40"></a>{
 <a name="l41"></a>  return ((d&amp;255)&lt;&lt;24)|(((d&gt;&gt;8)&amp;255)&lt;&lt;16)|
-<a name="l42"></a>        (((d&gt;&gt;16)&amp;255)&lt;&lt;8)|((d&gt;&gt;24)&amp;255);
+<a name="l42"></a>    (((d&gt;&gt;16)&amp;255)&lt;&lt;8)|((d&gt;&gt;24)&amp;255);
 <a name="l43"></a>}
 <a name="l44"></a>
 <a name="l45"></a>DWORD StrOcc(char *src, char ch)
@@ -152,9 +152,9 @@ body {background-color:#000000;}
 <a name="l125"></a>
 <a name="l126"></a>#define ARC_MAX_BITS 12
 <a name="l127"></a>
-<a name="l128"></a>#define CT_NONE         1
-<a name="l129"></a>#define CT_7_BIT        2
-<a name="l130"></a>#define CT_8_BIT        3
+<a name="l128"></a>#define CT_NONE     1
+<a name="l129"></a>#define CT_7_BIT    2
+<a name="l130"></a>#define CT_8_BIT    3
 <a name="l131"></a>
 <a name="l132"></a>class CArcEntry
 <a name="l133"></a>{ public:
@@ -166,24 +166,24 @@ body {background-color:#000000;}
 <a name="l139"></a>class CArcCtrl //control structure
 <a name="l140"></a>{ public:
 <a name="l141"></a>  DWORD src_pos,src_size,
-<a name="l142"></a>        dst_pos,dst_size;
+<a name="l142"></a>    dst_pos,dst_size;
 <a name="l143"></a>  BYTE *src_buf,*dst_buf;
 <a name="l144"></a>  DWORD min_bits,min_table_entry;
 <a name="l145"></a>  CArcEntry *cur_entry,*next_entry;
 <a name="l146"></a>  DWORD cur_bits_in_use,next_bits_in_use;
 <a name="l147"></a>  BYTE *stk_ptr,*stk_base;
 <a name="l148"></a>  DWORD free_idx,free_limit,
-<a name="l149"></a>        saved_basecode,
-<a name="l150"></a>        entry_used,
-<a name="l151"></a>        last_ch;
+<a name="l149"></a>    saved_basecode,
+<a name="l150"></a>    entry_used,
+<a name="l151"></a>    last_ch;
 <a name="l152"></a>  CArcEntry compress[1&lt;&lt;ARC_MAX_BITS],
-<a name="l153"></a>        *hash[1&lt;&lt;ARC_MAX_BITS];
+<a name="l153"></a>    *hash[1&lt;&lt;ARC_MAX_BITS];
 <a name="l154"></a>};
 <a name="l155"></a>
 <a name="l156"></a>class CArcCompress
 <a name="l157"></a>{ public:
 <a name="l158"></a>  DWORD compressed_size,compressed_size_hi,
-<a name="l159"></a>        expanded_size,expanded_size_hi;
+<a name="l159"></a>    expanded_size,expanded_size_hi;
 <a name="l160"></a>  BYTE  compression_type;
 <a name="l161"></a>  BYTE body[1];
 <a name="l162"></a>};
@@ -228,8 +228,8 @@ body {background-color:#000000;}
 <a name="l201"></a>    if (c-&gt;next_bits_in_use&lt;ARC_MAX_BITS) {
 <a name="l202"></a>      c-&gt;next_entry = &amp;c-&gt;compress[i++];
 <a name="l203"></a>      if (i==c-&gt;free_limit) {
-<a name="l204"></a>        c-&gt;next_bits_in_use++;
-<a name="l205"></a>        c-&gt;free_limit=1&lt;&lt;c-&gt;next_bits_in_use;
+<a name="l204"></a>    c-&gt;next_bits_in_use++;
+<a name="l205"></a>    c-&gt;free_limit=1&lt;&lt;c-&gt;next_bits_in_use;
 <a name="l206"></a>      }
 <a name="l207"></a>    } else {
 <a name="l208"></a>      do if (++i==c-&gt;free_limit) i=c-&gt;min_table_entry;
@@ -238,9 +238,9 @@ body {background-color:#000000;}
 <a name="l211"></a>      c-&gt;next_entry=tmp;
 <a name="l212"></a>      tmp1=(CArcEntry *)&amp;c-&gt;hash[tmp-&gt;basecode];
 <a name="l213"></a>      while (tmp1 &amp;&amp; tmp1-&gt;next!=tmp)
-<a name="l214"></a>        tmp1=tmp1-&gt;next;
+<a name="l214"></a>    tmp1=tmp1-&gt;next;
 <a name="l215"></a>      if (tmp1)
-<a name="l216"></a>        tmp1-&gt;next=tmp-&gt;next;
+<a name="l216"></a>    tmp1-&gt;next=tmp-&gt;next;
 <a name="l217"></a>    }
 <a name="l218"></a>    c-&gt;free_idx=i;
 <a name="l219"></a>  }
@@ -261,7 +261,7 @@ body {background-color:#000000;}
 <a name="l234"></a>  if (c-&gt;stk_ptr==c-&gt;stk_base &amp;&amp; dst_ptr&lt;dst_limit) {
 <a name="l235"></a>    if (c-&gt;saved_basecode==0xFFFFFFFFl) {
 <a name="l236"></a>      lastcode=BFieldExtDWORD(c-&gt;src_buf,c-&gt;src_pos,
-<a name="l237"></a>            c-&gt;next_bits_in_use);
+<a name="l237"></a>        c-&gt;next_bits_in_use);
 <a name="l238"></a>      c-&gt;src_pos=c-&gt;src_pos+c-&gt;next_bits_in_use;
 <a name="l239"></a>      *dst_ptr++=lastcode;
 <a name="l240"></a>      ArcEntryGet(c);
@@ -270,16 +270,16 @@ body {background-color:#000000;}
 <a name="l243"></a>      lastcode=c-&gt;saved_basecode;
 <a name="l244"></a>    while (dst_ptr&lt;dst_limit &amp;&amp; c-&gt;src_pos+c-&gt;next_bits_in_use&lt;=c-&gt;src_size) {
 <a name="l245"></a>      basecode=BFieldExtDWORD(c-&gt;src_buf,c-&gt;src_pos,
-<a name="l246"></a>            c-&gt;next_bits_in_use);
+<a name="l246"></a>        c-&gt;next_bits_in_use);
 <a name="l247"></a>      c-&gt;src_pos=c-&gt;src_pos+c-&gt;next_bits_in_use;
 <a name="l248"></a>      if (c-&gt;cur_entry==&amp;c-&gt;compress[basecode]) {
-<a name="l249"></a>        *c-&gt;stk_ptr++=c-&gt;last_ch;
-<a name="l250"></a>        code=lastcode;
+<a name="l249"></a>    *c-&gt;stk_ptr++=c-&gt;last_ch;
+<a name="l250"></a>    code=lastcode;
 <a name="l251"></a>      } else
-<a name="l252"></a>        code=basecode;
+<a name="l252"></a>    code=basecode;
 <a name="l253"></a>      while (code&gt;=c-&gt;min_table_entry) {
-<a name="l254"></a>        *c-&gt;stk_ptr++=c-&gt;compress[code].ch;
-<a name="l255"></a>        code=c-&gt;compress[code].basecode;
+<a name="l254"></a>    *c-&gt;stk_ptr++=c-&gt;compress[code].ch;
+<a name="l255"></a>    code=c-&gt;compress[code].basecode;
 <a name="l256"></a>      }
 <a name="l257"></a>      *c-&gt;stk_ptr++=code;
 <a name="l258"></a>      c-&gt;last_ch=code;
@@ -294,7 +294,7 @@ body {background-color:#000000;}
 <a name="l267"></a>
 <a name="l268"></a>      ArcEntryGet(c);
 <a name="l269"></a>      while (dst_ptr&lt;dst_limit &amp;&amp; c-&gt;stk_ptr!=c-&gt;stk_base)
-<a name="l270"></a>        *dst_ptr++ = * -- c-&gt;stk_ptr;
+<a name="l270"></a>    *dst_ptr++ = * -- c-&gt;stk_ptr;
 <a name="l271"></a>      lastcode=basecode;
 <a name="l272"></a>    }
 <a name="l273"></a>    c-&gt;saved_basecode=lastcode;
@@ -337,7 +337,7 @@ body {background-color:#000000;}
 <a name="l310"></a>  BYTE *res;
 <a name="l311"></a>
 <a name="l312"></a>  if (!(CT_NONE&lt;=arc-&gt;compression_type &amp;&amp; arc-&gt;compression_type&lt;=CT_8_BIT) ||
-<a name="l313"></a>        arc-&gt;expanded_size&gt;=0x20000000l)
+<a name="l313"></a>    arc-&gt;expanded_size&gt;=0x20000000l)
 <a name="l314"></a>    return NULL;
 <a name="l315"></a>
 <a name="l316"></a>  res=(BYTE *)malloc(arc-&gt;expanded_size+1);
@@ -377,23 +377,23 @@ body {background-color:#000000;}
 <a name="l350"></a>    printf(&quot;%-45s %d--&gt;%d\r\n&quot;,in_name,(DWORD) in_size,out_size);
 <a name="l351"></a>    fclose(io_file);
 <a name="l352"></a>    if (arc-&gt;compressed_size==in_size &amp;&amp;
-<a name="l353"></a>        arc-&gt;compression_type &amp;&amp; arc-&gt;compression_type&lt;=3) {
+<a name="l353"></a>    arc-&gt;compression_type &amp;&amp; arc-&gt;compression_type&lt;=3) {
 <a name="l354"></a>      if (out_buf=ExpandBuf(arc)) {
-<a name="l355"></a>        if (cvt_ascii) {
-<a name="l356"></a>          j=0;
-<a name="l357"></a>          for (i=0;i&lt;out_size;i++)
-<a name="l358"></a>            if (out_buf[i]==31)
-<a name="l359"></a>              out_buf[j++]=32;
-<a name="l360"></a>            else if (out_buf[i]!=5)
-<a name="l361"></a>              out_buf[j++]=out_buf[i];
-<a name="l362"></a>          out_size=j;
-<a name="l363"></a>        }
-<a name="l364"></a>        if (io_file=fopen(out_name,&quot;wb&quot;)) {
-<a name="l365"></a>          fwrite(out_buf,1,out_size,io_file);
-<a name="l366"></a>          fclose(io_file);
-<a name="l367"></a>          okay=TRUE;
-<a name="l368"></a>        }
-<a name="l369"></a>        Free(out_buf);
+<a name="l355"></a>    if (cvt_ascii) {
+<a name="l356"></a>      j=0;
+<a name="l357"></a>      for (i=0;i&lt;out_size;i++)
+<a name="l358"></a>        if (out_buf[i]==31)
+<a name="l359"></a>          out_buf[j++]=32;
+<a name="l360"></a>        else if (out_buf[i]!=5)
+<a name="l361"></a>          out_buf[j++]=out_buf[i];
+<a name="l362"></a>      out_size=j;
+<a name="l363"></a>    }
+<a name="l364"></a>    if (io_file=fopen(out_name,&quot;wb&quot;)) {
+<a name="l365"></a>      fwrite(out_buf,1,out_size,io_file);
+<a name="l366"></a>      fclose(io_file);
+<a name="l367"></a>      okay=TRUE;
+<a name="l368"></a>    }
+<a name="l369"></a>    Free(out_buf);
 <a name="l370"></a>      }
 <a name="l371"></a>    }
 <a name="l372"></a>    Free(arc);
@@ -467,7 +467,7 @@ body {background-color:#000000;}
 <a name="l440"></a>0x40CB800000000000,0x40CD229EC465C8A4,0x40CEDE22007F7915,0x40D05A0250C2B956,
 <a name="l441"></a>0x40D152EC0E758E71,0x40D25AA2E3AF0B1E,0x40D3720820155763,0x40D49A0A791E127D};
 <a name="l442"></a>
-<a name="l443"></a>#define ONA_REST        CHAR_MIN
+<a name="l443"></a>#define ONA_REST    CHAR_MIN
 <a name="l444"></a>
 <a name="l445"></a>double Ona2Freq(char ona)
 <a name="l446"></a>{//Ona to freq. Ona=60 is 440.0Hz.
@@ -544,16 +544,16 @@ body {background-color:#000000;}
 <a name="l517"></a>  }
 <a name="l518"></a>}
 <a name="l519"></a>
-<a name="l520"></a>#define SNDFILE_SAMPLE_RATE     8000
+<a name="l520"></a>#define SNDFILE_SAMPLE_RATE 8000
 <a name="l521"></a>//Header for a &quot;.SND&quot; file
 <a name="l522"></a>class CFileSND
 <a name="l523"></a>{public:
-<a name="l524"></a>  DWORD signature;      //0x646e732e
-<a name="l525"></a>  DWORD offset;         //24
+<a name="l524"></a>  DWORD signature;  //0x646e732e
+<a name="l525"></a>  DWORD offset;     //24
 <a name="l526"></a>  DWORD data_size;
-<a name="l527"></a>  DWORD coding;         //3=16bit uncompressed
+<a name="l527"></a>  DWORD coding;     //3=16bit uncompressed
 <a name="l528"></a>  DWORD sample_rate;    //Hz
-<a name="l529"></a>  DWORD channels;       //1=mono
+<a name="l529"></a>  DWORD channels;   //1=mono
 <a name="l530"></a>  short body[1];
 <a name="l531"></a>};
 <a name="l532"></a>
@@ -593,7 +593,7 @@ body {background-color:#000000;}
 <a name="l566"></a>          break;
 <a name="l567"></a>      }
 <a name="l568"></a>      SndWaveAddBuf(swc,(BYTE *)&amp;s-&gt;body[k],i1-i,
-<a name="l569"></a>            Ona2Freq(tmpsd-&gt;last-&gt;ona),vol);
+<a name="l569"></a>        Ona2Freq(tmpsd-&gt;last-&gt;ona),vol);
 <a name="l570"></a>      k+=i1-i;
 <a name="l571"></a>      i=i1;
 <a name="l572"></a>    }
@@ -651,9 +651,9 @@ body {background-color:#000000;}
 <a name="l624"></a>  }
 <a name="l625"></a>}
 <a name="l626"></a>
-<a name="l627"></a>#define GR_WIDTH        640
-<a name="l628"></a>#define GR_HEIGHT       480
-<a name="l629"></a>#define COLORS_NUM              16
+<a name="l627"></a>#define GR_WIDTH    640
+<a name="l628"></a>#define GR_HEIGHT   480
+<a name="l629"></a>#define COLORS_NUM      16
 <a name="l630"></a>
 <a name="l631"></a>class CBGR24
 <a name="l632"></a>{public:
@@ -673,16 +673,16 @@ body {background-color:#000000;}
 <a name="l646"></a>{0x5555,0x5555,0xFFFF,0},{0xFFFF,0x5555,0xFFFF,0},
 <a name="l647"></a>{0x5555,0xFFFF,0xFFFF,0},{0xFFFF,0xFFFF,0xFFFF,0}};
 <a name="l648"></a>
-<a name="l649"></a>#define DCF_COMPRESSED          1
-<a name="l650"></a>#define DCF_PALETTE             2
+<a name="l649"></a>#define DCF_COMPRESSED      1
+<a name="l650"></a>#define DCF_PALETTE     2
 <a name="l651"></a>
 <a name="l652"></a>class CDC
 <a name="l653"></a>{public:
 <a name="l654"></a>  long long cdt;
 <a name="l655"></a>  int   x0,y0,
-<a name="l656"></a>        width,width_internal,
-<a name="l657"></a>        height,
-<a name="l658"></a>        flags;
+<a name="l656"></a>    width,width_internal,
+<a name="l657"></a>    height,
+<a name="l658"></a>    flags;
 <a name="l659"></a>  CBGR48 palette[COLORS_NUM];
 <a name="l660"></a>  BYTE  *body;
 <a name="l661"></a>};
@@ -793,7 +793,7 @@ body {background-color:#000000;}
 <a name="l766"></a>  CBGR48 palette[COLORS_NUM];
 <a name="l767"></a>  CFileBMP *bmp =(CFileBMP *)CAlloc(sizeof(CFileBMP)+
 <a name="l768"></a>        2*(dc-&gt;width+1)*dc-&gt;height);
-<a name="l769"></a>  bmp-&gt;type     ='B'+('M'&lt;&lt;8);
+<a name="l769"></a>  bmp-&gt;type ='B'+('M'&lt;&lt;8);
 <a name="l770"></a>  bmp-&gt;planes   =1;
 <a name="l771"></a>  bmp-&gt;data_offset=sizeof(CFileBMP);
 <a name="l772"></a>  bmp-&gt;header_size=sizeof(CFileBMP)-BMP_COLORS_NUM*sizeof(CBGR24)-14;
@@ -819,19 +819,19 @@ body {background-color:#000000;}
 <a name="l792"></a>        cnt=2;
 <a name="l793"></a>        x+=2;
 <a name="l794"></a>        while ((x&lt;w) &amp;&amp; (cnt&lt;BYTE_MAX)) {
-<a name="l795"></a>          if ((*src&amp;15)==(pattern&amp;15)) {
-<a name="l796"></a>            src++;
-<a name="l797"></a>            cnt++;
-<a name="l798"></a>            x++;
-<a name="l799"></a>          } else
-<a name="l800"></a>            break;
+<a name="l795"></a>      if ((*src&amp;15)==(pattern&amp;15)) {
+<a name="l796"></a>        src++;
+<a name="l797"></a>        cnt++;
+<a name="l798"></a>        x++;
+<a name="l799"></a>      } else
+<a name="l800"></a>        break;
 <a name="l801"></a>        }
 <a name="l802"></a>      } else {
 <a name="l803"></a>        src+=2;
 <a name="l804"></a>        if (x+1&lt;w)
-<a name="l805"></a>          cnt=2;
+<a name="l805"></a>      cnt=2;
 <a name="l806"></a>        else
-<a name="l807"></a>          cnt=1;
+<a name="l807"></a>      cnt=1;
 <a name="l808"></a>        x+=2;
 <a name="l809"></a>      }
 <a name="l810"></a>      *ptr++=cnt;
@@ -907,25 +907,25 @@ body {background-color:#000000;}
 <a name="l880"></a>      while (cont &amp;&amp; remaining&gt;0) {
 <a name="l881"></a>        dc=DCLoad(src,&amp;size);
 <a name="l882"></a>        if (!size) {
-<a name="l883"></a>          cont=FALSE;
-<a name="l884"></a>          break;
+<a name="l883"></a>      cont=FALSE;
+<a name="l884"></a>      break;
 <a name="l885"></a>        }
 <a name="l886"></a>        GrBlot(base,dc-&gt;x0,dc-&gt;y0,dc);
 <a name="l887"></a>        if (cdt==LONG_LONG_MIN) 
-<a name="l888"></a>          cdt=dc-&gt;cdt;
+<a name="l888"></a>      cdt=dc-&gt;cdt;
 <a name="l889"></a>        while (cdt&lt;=dc-&gt;cdt) {
-<a name="l890"></a>          if (bmp_percent_cnt)
-<a name="l891"></a>            sprintf(st_bmp,bmp_print_fmt,bmp_num);
-<a name="l892"></a>          else
-<a name="l893"></a>            strcpy(st_bmp,bmp_print_fmt);
-<a name="l894"></a>          sprintf(st,&quot;%s/%s&quot;,st_dir,st_bmp);
-<a name="l895"></a>          BMPWrite(st,base);
-<a name="l896"></a>          cdt+=(DWORD)(CDATE_FREQ/fps);
-<a name="l897"></a>          if (!bmp_percent_cnt) {
-<a name="l898"></a>            cont=FALSE;
-<a name="l899"></a>            break;
-<a name="l900"></a>          }
-<a name="l901"></a>          bmp_num++;
+<a name="l890"></a>      if (bmp_percent_cnt)
+<a name="l891"></a>        sprintf(st_bmp,bmp_print_fmt,bmp_num);
+<a name="l892"></a>      else
+<a name="l893"></a>        strcpy(st_bmp,bmp_print_fmt);
+<a name="l894"></a>      sprintf(st,&quot;%s/%s&quot;,st_dir,st_bmp);
+<a name="l895"></a>      BMPWrite(st,base);
+<a name="l896"></a>      cdt+=(DWORD)(CDATE_FREQ/fps);
+<a name="l897"></a>      if (!bmp_percent_cnt) {
+<a name="l898"></a>        cont=FALSE;
+<a name="l899"></a>        break;
+<a name="l900"></a>      }
+<a name="l901"></a>      bmp_num++;
 <a name="l902"></a>        }
 <a name="l903"></a>        DCDel(dc);
 <a name="l904"></a>        src+=size;
@@ -944,7 +944,7 @@ body {background-color:#000000;}
 <a name="l917"></a>      sprintf(st,&quot;ffmpeg -framerate %0.16f -i %s/%s &quot;
 <a name="l918"></a>            &quot;-c:v libx264 -vf \&quot;scale=2*trunc(iw/2):-2,setsar=1\&quot; &quot;
 <a name="l919"></a>            &quot;-profile:v main -pix_fmt yuv420p %s&quot;,
-<a name="l920"></a>            fps,st_dir,bmp_print_fmt,st_mp4);
+<a name="l920"></a>        fps,st_dir,bmp_print_fmt,st_mp4);
 <a name="l921"></a>      system(st);
 <a name="l922"></a>      fprintf(lst_file,&quot;file '%s'\r\n&quot;,st_mp4);
 <a name="l923"></a>    }
@@ -966,7 +966,7 @@ body {background-color:#000000;}
 <a name="l939"></a>}
 <a name="l940"></a>
 <a name="l941"></a>int SND2MP4Lst(char *snd_print_fmt,char *mp4_print_fmt,char *out_name,
-<a name="l942"></a>        int rate=24000)
+<a name="l942"></a>    int rate=24000)
 <a name="l943"></a>{//Cvt SND lst to MP4
 <a name="l944"></a>  int num=0,snd_percent_cnt,mp4_percent_cnt,mkdir_percent_cnt;
 <a name="l945"></a>  char st[512],st_snd[512],st_mp4[512];
@@ -1015,7 +1015,7 @@ body {background-color:#000000;}
 <a name="l988"></a>}
 <a name="l989"></a>
 <a name="l990"></a>int AU2SNDLst(char *au_name,char *snd_print_fmt,
-<a name="l991"></a>        char *mp4_print_fmt,char *out_name,double vol=1.0,int rate=24000)
+<a name="l991"></a>    char *mp4_print_fmt,char *out_name,double vol=1.0,int rate=24000)
 <a name="l992"></a>{//Cvt AU file to SND lst to MP4
 <a name="l993"></a>  int num=0,snd_percent_cnt;
 <a name="l994"></a>  FILE *au_file;
@@ -1047,10 +1047,10 @@ body {background-color:#000000;}
 <a name="l1020"></a>    else
 <a name="l1021"></a>      au_name=(char *)&quot;AUDIO.AU&quot;;
 <a name="l1022"></a>    MV2BMPLst(mv_print_fmt,(char *)&quot;TOSZTEMP%03d&quot;,
-<a name="l1023"></a>          (char *)&quot;TOSZTEMP%06d.BMP&quot;,(char *)&quot;TOSZTEMPVID%03d.MP4&quot;,
-<a name="l1024"></a>          (char *)&quot;TOSZVIDEO.MP4&quot;);
+<a name="l1023"></a>      (char *)&quot;TOSZTEMP%06d.BMP&quot;,(char *)&quot;TOSZTEMPVID%03d.MP4&quot;,
+<a name="l1024"></a>      (char *)&quot;TOSZVIDEO.MP4&quot;);
 <a name="l1025"></a>    AU2SNDLst(au_name,(char *)&quot;TOSZTEMP%03d.SND&quot;,
-<a name="l1026"></a>          (char *)&quot;TOSZTEMPAUD%03d.MP4&quot;,(char *)&quot;TOSZAUDIO.MP4&quot;,vol);
+<a name="l1026"></a>      (char *)&quot;TOSZTEMPAUD%03d.MP4&quot;,(char *)&quot;TOSZAUDIO.MP4&quot;,vol);
 <a name="l1027"></a>    if (argc&gt;i) 
 <a name="l1028"></a>      out_name=argv[i++];
 <a name="l1029"></a>    else
@@ -1073,8 +1073,8 @@ body {background-color:#000000;}
 <a name="l1046"></a>        strcpy(st,in_name);
 <a name="l1047"></a>        l=strlen(st);
 <a name="l1048"></a>        if (l&gt;2 &amp;&amp; st[l-1]=='Z' &amp;&amp; st[l-2]=='.') {
-<a name="l1049"></a>          st[l-2]=0;
-<a name="l1050"></a>          del_in=TRUE;
+<a name="l1049"></a>      st[l-2]=0;
+<a name="l1050"></a>      del_in=TRUE;
 <a name="l1051"></a>        }
 <a name="l1052"></a>        out_name=st;
 <a name="l1053"></a>      }
@@ -1084,27 +1084,27 @@ body {background-color:#000000;}
 <a name="l1057"></a>        strcpy(st,in_name);
 <a name="l1058"></a>        l=strlen(st);
 <a name="l1059"></a>        if (l&gt;2 &amp;&amp; st[l-1]=='Z' &amp;&amp; st[l-2]=='.') {
-<a name="l1060"></a>          st[l-2]=0;
-<a name="l1061"></a>          del_in=TRUE;
+<a name="l1060"></a>      st[l-2]=0;
+<a name="l1061"></a>      del_in=TRUE;
 <a name="l1062"></a>        }
 <a name="l1063"></a>        out_name=st;
 <a name="l1064"></a>      }
 <a name="l1065"></a>      if (Cvt(in_name,out_name,cvt_ascii)) {
 <a name="l1066"></a>        if (del_in) {
-<a name="l1067"></a>          sprintf(st,&quot;rm %s&quot;,in_name);
-<a name="l1068"></a>          system(st);
+<a name="l1067"></a>      sprintf(st,&quot;rm %s&quot;,in_name);
+<a name="l1068"></a>      system(st);
 <a name="l1069"></a>        }
 <a name="l1070"></a>      } else
 <a name="l1071"></a>        printf(&quot;Fail: %s %s\r\n&quot;,in_name,out_name);
 <a name="l1072"></a>    } else {
 <a name="l1073"></a>      puts(&quot;TOSZ [-ascii] in_name [out_name]\r\n&quot;
-<a name="l1074"></a>            &quot;expands a single TempleOS file.  &quot;
-<a name="l1075"></a>            &quot;The -ascii flag will convert &quot;
-<a name="l1076"></a>            &quot;nonstandard TempleOS ASCII &quot;
-<a name="l1077"></a>            &quot;characters to regular ASCII.\r\n\r\n&quot;
-<a name="l1078"></a>            &quot;TOSZ -mp4 VID%03d.MV AUDIO.AU MOVIE.MP4\r\n&quot;
-<a name="l1079"></a>            &quot;will call ffmpeg to convert MV files and an AU file &quot;
-<a name="l1080"></a>            &quot;to a combined MP4 file.\r\n&quot;);
+<a name="l1074"></a>        &quot;expands a single TempleOS file.  &quot;
+<a name="l1075"></a>        &quot;The -ascii flag will convert &quot;
+<a name="l1076"></a>        &quot;nonstandard TempleOS ASCII &quot;
+<a name="l1077"></a>        &quot;characters to regular ASCII.\r\n\r\n&quot;
+<a name="l1078"></a>        &quot;TOSZ -mp4 VID%03d.MV AUDIO.AU MOVIE.MP4\r\n&quot;
+<a name="l1079"></a>        &quot;will call ffmpeg to convert MV files and an AU file &quot;
+<a name="l1080"></a>        &quot;to a combined MP4 file.\r\n&quot;);
 <a name="l1081"></a>    }
 <a name="l1082"></a>  }
 <a name="l1083"></a>  return EXIT_SUCCESS;

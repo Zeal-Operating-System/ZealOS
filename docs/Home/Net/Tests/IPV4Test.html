@@ -32,20 +32,20 @@ body {background-color:#000000;}
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>U0</span><span class=cF0> IPV4Test()
 <a name="l7"></a>{
-<a name="l8"></a>        </span><span class=cF1>U8</span><span class=cF0> *ipv4_packet_buffer;
-<a name="l9"></a>        </span><span class=cF9>I64</span><span class=cF0> de_index;
+<a name="l8"></a>    </span><span class=cF1>U8</span><span class=cF0> *ipv4_packet_buffer;
+<a name="l9"></a>    </span><span class=cF9>I64</span><span class=cF0> de_index;
 <a name="l10"></a>
-<a name="l11"></a>        ARPCachePut(dst_ip, dst_mac); </span><span class=cF2>// Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet</span><span class=cF0>
+<a name="l11"></a>    ARPCachePut(dst_ip, dst_mac); </span><span class=cF2>// Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet</span><span class=cF0>
 <a name="l12"></a>
-<a name="l13"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l14"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l15"></a>                de_index = IPV4PacketAllocate(&amp;ipv4_packet_buffer, </span><span class=cFE>0xFF</span><span class=cF0>, src_ip, dst_ip, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l13"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l14"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l15"></a>        de_index = IPV4PacketAllocate(&amp;ipv4_packet_buffer, </span><span class=cFE>0xFF</span><span class=cF0>, src_ip, dst_ip, </span><span class=cFE>8</span><span class=cF0>);
 <a name="l16"></a>
-<a name="l17"></a>                *(ipv4_packet_buffer</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xBEEFDEADFADEC0DE</span><span class=cF0>);
+<a name="l17"></a>        *(ipv4_packet_buffer</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xBEEFDEADFADEC0DE</span><span class=cF0>);
 <a name="l18"></a>
-<a name="l19"></a>                IPV4PacketFinish(de_index);
-<a name="l20"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
-<a name="l21"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l19"></a>        IPV4PacketFinish(de_index);
+<a name="l20"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
+<a name="l21"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l22"></a>}
 <a name="l23"></a>
 <a name="l24"></a>IPV4Test;</span></pre></body>

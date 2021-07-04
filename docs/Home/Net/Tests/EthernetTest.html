@@ -31,18 +31,18 @@ body {background-color:#000000;}
 <a name="l4"></a>
 <a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> EthernetTest()
 <a name="l6"></a>{
-<a name="l7"></a>        </span><span class=cF1>U8</span><span class=cF0> *packet_buffer;
-<a name="l8"></a>        </span><span class=cF9>I64</span><span class=cF0> de_index;
+<a name="l7"></a>    </span><span class=cF1>U8</span><span class=cF0> *packet_buffer;
+<a name="l8"></a>    </span><span class=cF9>I64</span><span class=cF0> de_index;
 <a name="l9"></a>
-<a name="l10"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l11"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l12"></a>                de_index = EthernetFrameAllocate(&amp;packet_buffer, src, dst, </span><span class=cFE>0x0000</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l10"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l11"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l12"></a>        de_index = EthernetFrameAllocate(&amp;packet_buffer, src, dst, </span><span class=cFE>0x0000</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
 <a name="l13"></a>
-<a name="l14"></a>                *(packet_buffer</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xC0DEFADEDEADBEEF</span><span class=cF0>);
+<a name="l14"></a>        *(packet_buffer</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xC0DEFADEDEADBEEF</span><span class=cF0>);
 <a name="l15"></a>
-<a name="l16"></a>                EthernetFrameFinish(de_index);
-<a name="l17"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
-<a name="l18"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l16"></a>        EthernetFrameFinish(de_index);
+<a name="l17"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
+<a name="l18"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l19"></a>}
 <a name="l20"></a>
 <a name="l21"></a>EthernetTest;</span></pre></body>

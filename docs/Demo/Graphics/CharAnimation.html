@@ -34,23 +34,23 @@ body {background-color:#000000;}
 <a name="l7"></a>
 <a name="l8"></a></span><span class=cF1>U0</span><span class=cF0> AnimateEndCB()
 <a name="l9"></a>{
-<a name="l10"></a>        </span><span class=cFB>text</span><span class=cF0>.font = old_font;
-<a name="l11"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l10"></a>    </span><span class=cFB>text</span><span class=cF0>.font = old_font;
+<a name="l11"></a>    </span><span class=cF5>Exit</span><span class=cF0>;
 <a name="l12"></a>}
 <a name="l13"></a>
 <a name="l14"></a></span><span class=cF1>U0</span><span class=cF0> AnimateTask(</span><span class=cF9>I64</span><span class=cF0>)
 <a name="l15"></a>{
-<a name="l16"></a>        </span><span class=cF9>I64</span><span class=cF0>  i;
-<a name="l17"></a>        </span><span class=cF9>U64</span><span class=cF0> *font = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l17"></a>    </span><span class=cF9>U64</span><span class=cF0> *font = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
 <a name="l18"></a>
-<a name="l19"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;AnimateEndCB;
-<a name="l20"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(font, </span><span class=cFB>text</span><span class=cF0>.font, </span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
-<a name="l21"></a>        </span><span class=cFB>text</span><span class=cF0>.font = font;
-<a name="l22"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l23"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l24"></a>                font[</span><span class=cF3>CH_SPACE</span><span class=cF0>] = waves[i++ &amp; </span><span class=cFE>0x3</span><span class=cF0>];
-<a name="l25"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>);
-<a name="l26"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l19"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;AnimateEndCB;
+<a name="l20"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(font, </span><span class=cFB>text</span><span class=cF0>.font, </span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
+<a name="l21"></a>    </span><span class=cFB>text</span><span class=cF0>.font = font;
+<a name="l22"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l23"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l24"></a>        font[</span><span class=cF3>CH_SPACE</span><span class=cF0>] = waves[i++ &amp; </span><span class=cFE>0x3</span><span class=cF0>];
+<a name="l25"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>);
+<a name="l26"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l27"></a>}
 <a name="l28"></a>
 <a name="l29"></a></span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);

@@ -31,55 +31,55 @@ body {background-color:#000000;}
 <a name="l4"></a>
 <a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> Init()
 <a name="l6"></a>{
-<a name="l7"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
-<a name="l8"></a>        </span><span class=cF1>F64</span><span class=cF0> theta;
+<a name="l7"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l8"></a>    </span><span class=cF1>F64</span><span class=cF0> theta;
 <a name="l9"></a>
-<a name="l10"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(x, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>x</span><span class=cF7>)</span><span class=cF0>);
-<a name="l11"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>y</span><span class=cF7>)</span><span class=cF0>);
-<a name="l12"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>16</span><span class=cF0>; i++)
-<a name="l13"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l14"></a>                theta = </span><span class=cF5>Rand</span><span class=cF0>*</span><span class=cFE>2</span><span class=cF0>*</span><span class=cF3>pi</span><span class=cF0>;
-<a name="l15"></a>                dx[i] = </span><span class=cF3>I32_MAX</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(theta);
-<a name="l16"></a>                dy[i] = </span><span class=cF3>I32_MAX</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(theta);
-<a name="l17"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l10"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(x, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>x</span><span class=cF7>)</span><span class=cF0>);
+<a name="l11"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l12"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>16</span><span class=cF0>; i++)
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        theta = </span><span class=cF5>Rand</span><span class=cF0>*</span><span class=cFE>2</span><span class=cF0>*</span><span class=cF3>pi</span><span class=cF0>;
+<a name="l15"></a>        dx[i] = </span><span class=cF3>I32_MAX</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(theta);
+<a name="l16"></a>        dy[i] = </span><span class=cF3>I32_MAX</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(theta);
+<a name="l17"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l18"></a>}
 <a name="l19"></a> 
 <a name="l20"></a></span><span class=cF1>U0</span><span class=cF0> Bounce()
 <a name="l21"></a>{
-<a name="l22"></a>        </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
-<a name="l23"></a>        </span><span class=cF9>I64</span><span class=cF0>  i, ch;
+<a name="l22"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
+<a name="l23"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, ch;
 <a name="l24"></a>
-<a name="l25"></a>        Init;
-<a name="l26"></a>        </span><span class=cF1>try</span><span class=cF0>
-<a name="l27"></a>        </span><span class=cF7>{</span><span class=cF2>//Catch &lt;CTRL-ALT-c&gt;</span><span class=cF0>
-<a name="l28"></a>                </span><span class=cF1>do</span><span class=cF0>
-<a name="l29"></a>                {
-<a name="l30"></a>                        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>16</span><span class=cF0>; i++)
-<a name="l31"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l32"></a>                                dc-&gt;color  =i;
-<a name="l33"></a>                                </span><span class=cF5>GrPlot</span><span class=cF0>(dc, x[i].i32[</span><span class=cFE>1</span><span class=cF0>], y[i].i32[</span><span class=cFE>1</span><span class=cF0>]);
-<a name="l34"></a>                                x[i] += dx[i];
-<a name="l35"></a>                                y[i] += dy[i];
-<a name="l36"></a>                                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= x[i] &lt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &lt;&lt; </span><span class=cFE>32</span><span class=cF7>)</span><span class=cF0>)
-<a name="l37"></a>                                {
-<a name="l38"></a>                                        x[i] -= dx[i];
-<a name="l39"></a>                                        dx[i] = -dx[i];
-<a name="l40"></a>                                }
-<a name="l41"></a>                                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= y[i] &lt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height &lt;&lt; </span><span class=cFE>32</span><span class=cF7>)</span><span class=cF0>)
-<a name="l42"></a>                                {
-<a name="l43"></a>                                        y[i] -= dy[i];
-<a name="l44"></a>                                        dy[i] = -dy[i];
-<a name="l45"></a>                                }
-<a name="l46"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l47"></a>                        </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l48"></a>                }
-<a name="l49"></a>                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>ch = </span><span class=cF5>CharScan</span><span class=cF7>)</span><span class=cF0> || </span><span class=cF7>(</span><span class=cF0>ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_ESC</span><span class=cF7>)</span><span class=cF0>);
+<a name="l25"></a>    Init;
+<a name="l26"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l27"></a>    </span><span class=cF7>{</span><span class=cF2>//Catch &lt;CTRL-ALT-c&gt;</span><span class=cF0>
+<a name="l28"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l29"></a>        {
+<a name="l30"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>16</span><span class=cF0>; i++)
+<a name="l31"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l32"></a>                dc-&gt;color  =i;
+<a name="l33"></a>                </span><span class=cF5>GrPlot</span><span class=cF0>(dc, x[i].i32[</span><span class=cFE>1</span><span class=cF0>], y[i].i32[</span><span class=cFE>1</span><span class=cF0>]);
+<a name="l34"></a>                x[i] += dx[i];
+<a name="l35"></a>                y[i] += dy[i];
+<a name="l36"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= x[i] &lt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &lt;&lt; </span><span class=cFE>32</span><span class=cF7>)</span><span class=cF0>)
+<a name="l37"></a>                {
+<a name="l38"></a>                    x[i] -= dx[i];
+<a name="l39"></a>                    dx[i] = -dx[i];
+<a name="l40"></a>                }
+<a name="l41"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= y[i] &lt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height &lt;&lt; </span><span class=cFE>32</span><span class=cF7>)</span><span class=cF0>)
+<a name="l42"></a>                {
+<a name="l43"></a>                    y[i] -= dy[i];
+<a name="l44"></a>                    dy[i] = -dy[i];
+<a name="l45"></a>                }
+<a name="l46"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>            </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l48"></a>        }
+<a name="l49"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>ch = </span><span class=cF5>CharScan</span><span class=cF7>)</span><span class=cF0> || </span><span class=cF7>(</span><span class=cF0>ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_ESC</span><span class=cF7>)</span><span class=cF0>);
 <a name="l50"></a>
-<a name="l51"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l52"></a>        </span><span class=cF1>catch</span><span class=cF0>
-<a name="l53"></a>                </span><span class=cF5>PutExcept</span><span class=cF0>;
-<a name="l54"></a>        </span><span class=cF5>DCFill</span><span class=cF0>(dc);
-<a name="l55"></a>        </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l51"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l53"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l54"></a>    </span><span class=cF5>DCFill</span><span class=cF0>(dc);
+<a name="l55"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
 <a name="l56"></a>}
 <a name="l57"></a> 
 <a name="l58"></a>Bounce;

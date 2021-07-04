@@ -32,9 +32,9 @@ body {background-color:#000000;}
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CPlannedDrive</span><span class=cF0>
 <a name="l7"></a>{
-<a name="l8"></a>        </span><span class=cF9>CPlannedDrive</span><span class=cF0>   *next, *last;
-<a name="l9"></a>        </span><span class=cF9>I64</span><span class=cF0>                              size;
-<a name="l10"></a>        </span><span class=cF1>Bool</span><span class=cF0>                     pri;
+<a name="l8"></a>    </span><span class=cF9>CPlannedDrive</span><span class=cF0>   *next, *last;
+<a name="l9"></a>    </span><span class=cF9>I64</span><span class=cF0>              size;
+<a name="l10"></a>    </span><span class=cF1>Bool</span><span class=cF0>             pri;
 <a name="l11"></a>};
 <a name="l12"></a>
 <a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DiskPart</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, ...)
@@ -45,164 +45,164 @@ body {background-color:#000000;}
 <a name="l18"></a></span><span class=cF2>&gt;DiskPart('C',0.5,0.25,0.25); //Make three.  50% C, 25% D, 25% E, round-up to blk.</span><span class=cF0>
 <a name="l19"></a>
 <a name="l20"></a></span><span class=cF2>*/</span><span class=cF0>
-<a name="l21"></a>        </span><span class=cF9>CBlkDev</span><span class=cF0>                 *bd;
-<a name="l22"></a>        </span><span class=cF9>CPlannedDrive</span><span class=cF0>    head, *tmppp;
-<a name="l23"></a>        </span><span class=cF9>CMasterBoot</span><span class=cF0>              mbr;
-<a name="l24"></a>        </span><span class=cF1>Bool</span><span class=cF0>                     pri = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l25"></a>        </span><span class=cF9>I64</span><span class=cF0>                              ext_base, drv_let2, pri_count = </span><span class=cFE>0</span><span class=cF0>, i, start_offset, </span><span class=cF1>offset</span><span class=cF0>, total, remaining, cur_arg = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l21"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>         *bd;
+<a name="l22"></a>    </span><span class=cF9>CPlannedDrive</span><span class=cF0>    head, *tmppp;
+<a name="l23"></a>    </span><span class=cF9>CMasterBoot</span><span class=cF0>      mbr;
+<a name="l24"></a>    </span><span class=cF1>Bool</span><span class=cF0>             pri = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF9>I64</span><span class=cF0>              ext_base, drv_let2, pri_count = </span><span class=cFE>0</span><span class=cF0>, i, start_offset, </span><span class=cF1>offset</span><span class=cF0>, total, remaining, cur_arg = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l26"></a>
-<a name="l27"></a>        </span><span class=cF6>&quot;This command does not play well\n&quot;</span><span class=cF0>
-<a name="l28"></a>        </span><span class=cF6>&quot;with other operating systems.\n&quot;</span><span class=cF0>
-<a name="l29"></a>        </span><span class=cF6>&quot;You really should use another\n&quot;</span><span class=cF0>
-<a name="l30"></a>        </span><span class=cF6>&quot;operating system's partitioner.\n&quot;</span><span class=cF0>
-<a name="l31"></a>        </span><span class=cF6>&quot;If you use this, it may, in fact,\n&quot;</span><span class=cF0>
-<a name="l32"></a>        </span><span class=cF6>&quot;make your hard drive impossible\n&quot;</span><span class=cF0>
-<a name="l33"></a>        </span><span class=cF6>&quot;to repartition with other operating\n&quot;</span><span class=cF0>
-<a name="l34"></a>        </span><span class=cF6>&quot;until you set block zero to zero\n&quot;</span><span class=cF0>
-<a name="l35"></a>        </span><span class=cF6>&quot;with $LK,\&quot;BootMHDZero\&quot;,\&quot;MN:BootMHDZero\&quot;$()\n\n\n&quot;</span><span class=cF0>
-<a name="l36"></a>        </span><span class=cF6>&quot;Continue&quot;</span><span class=cF0>;
-<a name="l37"></a>        </span><span class=cF1>if</span><span class=cF0> (argc &lt;= cur_arg &amp;&amp; !</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l38"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l39"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l27"></a>    </span><span class=cF6>&quot;This command does not play well\n&quot;</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF6>&quot;with other operating systems.\n&quot;</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF6>&quot;You really should use another\n&quot;</span><span class=cF0>
+<a name="l30"></a>    </span><span class=cF6>&quot;operating system's partitioner.\n&quot;</span><span class=cF0>
+<a name="l31"></a>    </span><span class=cF6>&quot;If you use this, it may, in fact,\n&quot;</span><span class=cF0>
+<a name="l32"></a>    </span><span class=cF6>&quot;make your hard drive impossible\n&quot;</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF6>&quot;to repartition with other operating\n&quot;</span><span class=cF0>
+<a name="l34"></a>    </span><span class=cF6>&quot;until you set block zero to zero\n&quot;</span><span class=cF0>
+<a name="l35"></a>    </span><span class=cF6>&quot;with $LK,\&quot;BootMHDZero\&quot;,\&quot;MN:BootMHDZero\&quot;$()\n\n\n&quot;</span><span class=cF0>
+<a name="l36"></a>    </span><span class=cF6>&quot;Continue&quot;</span><span class=cF0>;
+<a name="l37"></a>    </span><span class=cF1>if</span><span class=cF0> (argc &lt;= cur_arg &amp;&amp; !</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l38"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l39"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
 <a name="l40"></a>
-<a name="l41"></a>        </span><span class=cF1>if</span><span class=cF0> (drv_let &amp;&amp; !</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l42"></a>                drv_let = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l43"></a>        </span><span class=cF1>if</span><span class=cF0> (!drv_let &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>drv_let = </span><span class=cF5>Mount</span><span class=cF0>(</span><span class=cF3>TRUE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> || !</span><span class=cF7>(</span><span class=cF0>bd = </span><span class=cF5>Letter2BlkDev</span><span class=cF0>(drv_let, </span><span class=cF3>FALSE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> || bd-&gt;type != </span><span class=cF3>BDT_ATA</span><span class=cF0>)
-<a name="l44"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l41"></a>    </span><span class=cF1>if</span><span class=cF0> (drv_let &amp;&amp; !</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l42"></a>        drv_let = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l43"></a>    </span><span class=cF1>if</span><span class=cF0> (!drv_let &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>drv_let = </span><span class=cF5>Mount</span><span class=cF0>(</span><span class=cF3>TRUE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> || !</span><span class=cF7>(</span><span class=cF0>bd = </span><span class=cF5>Letter2BlkDev</span><span class=cF0>(drv_let, </span><span class=cF3>FALSE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> || bd-&gt;type != </span><span class=cF3>BDT_ATA</span><span class=cF0>)
+<a name="l44"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
 <a name="l45"></a>
-<a name="l46"></a>        total = bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l47"></a>        </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;head);
-<a name="l48"></a>        drv_let2 = bd-&gt;first_drive_let;
-<a name="l49"></a>        remaining = </span><span class=cF5>FloorU64</span><span class=cF0>(bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>);
-<a name="l50"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>FloorU64</span><span class=cF7>(</span><span class=cF0>remaining, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>)
-<a name="l51"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l52"></a>                tmppp = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPlannedDrive</span><span class=cF7>)</span><span class=cF0>);
-<a name="l53"></a>                </span><span class=cF1>do</span><span class=cF0>
-<a name="l54"></a>                {
-<a name="l55"></a>                        </span><span class=cF6>&quot;$RED$Partition %C$FG$\n&quot;</span><span class=cF0>, drv_let2;
-<a name="l56"></a>                        tmppp-&gt;pri = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l57"></a>                        </span><span class=cF1>if</span><span class=cF0> (pri)
-<a name="l58"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l59"></a>                                </span><span class=cF6>&quot;Primary Partition&quot;</span><span class=cF0>;
-<a name="l60"></a>                                </span><span class=cF1>if</span><span class=cF0> (argc&gt;cur_arg || </span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l61"></a>                                {
-<a name="l62"></a>                                        pri_count++;
-<a name="l63"></a>                                        tmppp-&gt;pri = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l64"></a>                                        </span><span class=cF1>if</span><span class=cF0> (pri_count == </span><span class=cFE>3</span><span class=cF0>)
-<a name="l65"></a>                                                pri = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l66"></a>                                }
-<a name="l67"></a>                                </span><span class=cF1>else</span><span class=cF0>
-<a name="l68"></a>                                        pri = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l69"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l70"></a>                        </span><span class=cF6>&quot;\nBlocks Remaining:%d (0x%X)\n&quot;</span><span class=cF0>, remaining - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>, remaining - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
-<a name="l71"></a>                        </span><span class=cF1>if</span><span class=cF0> (argc &gt; cur_arg)
-<a name="l72"></a>                                tmppp-&gt;size = </span><span class=cF5>MinI64</span><span class=cF0>(</span><span class=cF5>CeilU64</span><span class=cF7>(</span><span class=cF5>MaxI64</span><span class=cF0>(remaining, </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>), </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF7>)</span><span class=cF0>,
-<a name="l73"></a>                                                                </span><span class=cF5>CeilU64</span><span class=cF7>(</span><span class=cF0>argv[cur_arg++](</span><span class=cF1>F64</span><span class=cF0>) * total, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF7>)</span><span class=cF0>);
-<a name="l74"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l75"></a>                                tmppp-&gt;size = </span><span class=cF5>CeilU64</span><span class=cF0>(</span><span class=cF5>I64Get</span><span class=cF7>(</span><span class=cF6>&quot;Size in Blocks  :&quot;</span><span class=cF0>, remaining - </span><span class=cF3>DRIVE_HEADER</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>);
-<a name="l76"></a>                }
-<a name="l77"></a>                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0> &lt;= tmppp-&gt;size &lt;= </span><span class=cF5>FloorU64</span><span class=cF0>(remaining, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>);
+<a name="l46"></a>    total = bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l47"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;head);
+<a name="l48"></a>    drv_let2 = bd-&gt;first_drive_let;
+<a name="l49"></a>    remaining = </span><span class=cF5>FloorU64</span><span class=cF0>(bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>);
+<a name="l50"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>FloorU64</span><span class=cF7>(</span><span class=cF0>remaining, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>)
+<a name="l51"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>        tmppp = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPlannedDrive</span><span class=cF7>)</span><span class=cF0>);
+<a name="l53"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l54"></a>        {
+<a name="l55"></a>            </span><span class=cF6>&quot;$RED$Partition %C$FG$\n&quot;</span><span class=cF0>, drv_let2;
+<a name="l56"></a>            tmppp-&gt;pri = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l57"></a>            </span><span class=cF1>if</span><span class=cF0> (pri)
+<a name="l58"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l59"></a>                </span><span class=cF6>&quot;Primary Partition&quot;</span><span class=cF0>;
+<a name="l60"></a>                </span><span class=cF1>if</span><span class=cF0> (argc&gt;cur_arg || </span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l61"></a>                {
+<a name="l62"></a>                    pri_count++;
+<a name="l63"></a>                    tmppp-&gt;pri = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l64"></a>                    </span><span class=cF1>if</span><span class=cF0> (pri_count == </span><span class=cFE>3</span><span class=cF0>)
+<a name="l65"></a>                        pri = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l66"></a>                }
+<a name="l67"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l68"></a>                    pri = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l69"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l70"></a>            </span><span class=cF6>&quot;\nBlocks Remaining:%d (0x%X)\n&quot;</span><span class=cF0>, remaining - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>, remaining - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
+<a name="l71"></a>            </span><span class=cF1>if</span><span class=cF0> (argc &gt; cur_arg)
+<a name="l72"></a>                tmppp-&gt;size = </span><span class=cF5>MinI64</span><span class=cF0>(</span><span class=cF5>CeilU64</span><span class=cF7>(</span><span class=cF5>MaxI64</span><span class=cF0>(remaining, </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>), </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF7>)</span><span class=cF0>,
+<a name="l73"></a>                                </span><span class=cF5>CeilU64</span><span class=cF7>(</span><span class=cF0>argv[cur_arg++](</span><span class=cF1>F64</span><span class=cF0>) * total, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF7>)</span><span class=cF0>);
+<a name="l74"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l75"></a>                tmppp-&gt;size = </span><span class=cF5>CeilU64</span><span class=cF0>(</span><span class=cF5>I64Get</span><span class=cF7>(</span><span class=cF6>&quot;Size in Blocks  :&quot;</span><span class=cF0>, remaining - </span><span class=cF3>DRIVE_HEADER</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>);
+<a name="l76"></a>        }
+<a name="l77"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0> &lt;= tmppp-&gt;size &lt;= </span><span class=cF5>FloorU64</span><span class=cF0>(remaining, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>);
 <a name="l78"></a>
-<a name="l79"></a>                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmppp, head.last);
-<a name="l80"></a>                remaining -= tmppp-&gt;size;
-<a name="l81"></a>                drv_let2++;
-<a name="l82"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l79"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmppp, head.last);
+<a name="l80"></a>        remaining -= tmppp-&gt;size;
+<a name="l81"></a>        drv_let2++;
+<a name="l82"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l83"></a>
-<a name="l84"></a>        </span><span class=cF6>&quot;\n\n!!! Repartition Drive !!!\n\n&quot;</span><span class=cF0>;
-<a name="l85"></a>        tmppp = head.next;
-<a name="l86"></a>        drv_let2 = bd-&gt;first_drive_let;
-<a name="l87"></a>        </span><span class=cF1>while</span><span class=cF0> (tmppp != &amp;head)
-<a name="l88"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l89"></a>                </span><span class=cF6>&quot;Drive %C:%08X &quot;</span><span class=cF0>, drv_let2, tmppp-&gt;size;
-<a name="l90"></a>                </span><span class=cF1>if</span><span class=cF0> (tmppp-&gt;pri)
-<a name="l91"></a>                        </span><span class=cF6>&quot;Primary\n&quot;</span><span class=cF0>;
-<a name="l92"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l93"></a>                        </span><span class=cF6>&quot;Logical\n&quot;</span><span class=cF0>;
-<a name="l94"></a>                tmppp = tmppp-&gt;next;
-<a name="l95"></a>                drv_let2++;
-<a name="l96"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l97"></a>        </span><span class=cF1>if</span><span class=cF0> (!argc &amp;&amp; !</span><span class=cF5>AreYouSure</span><span class=cF0>)
-<a name="l98"></a>                </span><span class=cF1>goto</span><span class=cF0> pd_done;
+<a name="l84"></a>    </span><span class=cF6>&quot;\n\n!!! Repartition Drive !!!\n\n&quot;</span><span class=cF0>;
+<a name="l85"></a>    tmppp = head.next;
+<a name="l86"></a>    drv_let2 = bd-&gt;first_drive_let;
+<a name="l87"></a>    </span><span class=cF1>while</span><span class=cF0> (tmppp != &amp;head)
+<a name="l88"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l89"></a>        </span><span class=cF6>&quot;Drive %C:%08X &quot;</span><span class=cF0>, drv_let2, tmppp-&gt;size;
+<a name="l90"></a>        </span><span class=cF1>if</span><span class=cF0> (tmppp-&gt;pri)
+<a name="l91"></a>            </span><span class=cF6>&quot;Primary\n&quot;</span><span class=cF0>;
+<a name="l92"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l93"></a>            </span><span class=cF6>&quot;Logical\n&quot;</span><span class=cF0>;
+<a name="l94"></a>        tmppp = tmppp-&gt;next;
+<a name="l95"></a>        drv_let2++;
+<a name="l96"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l97"></a>    </span><span class=cF1>if</span><span class=cF0> (!argc &amp;&amp; !</span><span class=cF5>AreYouSure</span><span class=cF0>)
+<a name="l98"></a>        </span><span class=cF1>goto</span><span class=cF0> pd_done;
 <a name="l99"></a>
-<a name="l100"></a>        remaining = </span><span class=cF5>FloorU64</span><span class=cF0>(bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>) - </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>;
-<a name="l101"></a>        tmppp = head.next;
-<a name="l102"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;mbr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
-<a name="l103"></a>        mbr.signature = </span><span class=cFE>0xAA55</span><span class=cF0>;
-<a name="l104"></a>        </span><span class=cF1>offset</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l105"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; pri_count; i++)
-<a name="l106"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l107"></a>                mbr.p[i].active         = </span><span class=cFE>0x80</span><span class=cF0>;
-<a name="l108"></a>                mbr.p[i].start_head     = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l109"></a>                mbr.p[i].start_cyl      = </span><span class=cFE>0x101</span><span class=cF0>;
-<a name="l110"></a>                mbr.p[i].type           = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Will get set different.</span><span class=cF0>
-<a name="l111"></a>                mbr.p[i].end_head       = </span><span class=cFE>0xFE</span><span class=cF0>;
-<a name="l112"></a>                mbr.p[i].end_cyl        = </span><span class=cFE>0xFFFF</span><span class=cF0>;
-<a name="l113"></a>                mbr.p[i].</span><span class=cF1>offset</span><span class=cF0>         = </span><span class=cF3>DRIVE_HEADER</span><span class=cF0> + </span><span class=cF1>offset</span><span class=cF0>;
-<a name="l114"></a>                mbr.p[i].size           = tmppp-&gt;size - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
-<a name="l115"></a>                </span><span class=cF1>offset</span><span class=cF0> += tmppp-&gt;size;
-<a name="l116"></a>                remaining -= tmppp-&gt;size;
-<a name="l117"></a>                tmppp = tmppp-&gt;next;
-<a name="l118"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l119"></a>        </span><span class=cF1>if</span><span class=cF0> (!i)
-<a name="l120"></a>                i++;
-<a name="l121"></a>        </span><span class=cF1>if</span><span class=cF0> (tmppp != &amp;head)
-<a name="l122"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l123"></a>                mbr.p[i].active         = </span><span class=cFE>0x80</span><span class=cF0>;
-<a name="l124"></a>                mbr.p[i].start_head     = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l125"></a>                mbr.p[i].start_cyl      = </span><span class=cFE>0x101</span><span class=cF0>;
-<a name="l126"></a>                mbr.p[i].type           = </span><span class=cFE>0xF</span><span class=cF0>;
-<a name="l127"></a>                mbr.p[i].end_head       = </span><span class=cFE>0xFE</span><span class=cF0>;
-<a name="l128"></a>                mbr.p[i].end_cyl        = </span><span class=cFE>0xFFFF</span><span class=cF0>;
-<a name="l129"></a>                mbr.p[i].</span><span class=cF1>offset</span><span class=cF0>         = </span><span class=cF1>offset</span><span class=cF0>;
-<a name="l130"></a>                mbr.p[i].size           = remaining;
-<a name="l131"></a>                ext_base = </span><span class=cF1>offset</span><span class=cF0>;
-<a name="l132"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l133"></a>        </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, &amp;mbr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l100"></a>    remaining = </span><span class=cF5>FloorU64</span><span class=cF0>(bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>) - </span><span class=cF3>ROUND_DRIVE_TO</span><span class=cF0>;
+<a name="l101"></a>    tmppp = head.next;
+<a name="l102"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;mbr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l103"></a>    mbr.signature = </span><span class=cFE>0xAA55</span><span class=cF0>;
+<a name="l104"></a>    </span><span class=cF1>offset</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l105"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; pri_count; i++)
+<a name="l106"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l107"></a>        mbr.p[i].active     = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l108"></a>        mbr.p[i].start_head = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l109"></a>        mbr.p[i].start_cyl  = </span><span class=cFE>0x101</span><span class=cF0>;
+<a name="l110"></a>        mbr.p[i].type       = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Will get set different.</span><span class=cF0>
+<a name="l111"></a>        mbr.p[i].end_head   = </span><span class=cFE>0xFE</span><span class=cF0>;
+<a name="l112"></a>        mbr.p[i].end_cyl    = </span><span class=cFE>0xFFFF</span><span class=cF0>;
+<a name="l113"></a>        mbr.p[i].</span><span class=cF1>offset</span><span class=cF0>     = </span><span class=cF3>DRIVE_HEADER</span><span class=cF0> + </span><span class=cF1>offset</span><span class=cF0>;
+<a name="l114"></a>        mbr.p[i].size       = tmppp-&gt;size - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
+<a name="l115"></a>        </span><span class=cF1>offset</span><span class=cF0> += tmppp-&gt;size;
+<a name="l116"></a>        remaining -= tmppp-&gt;size;
+<a name="l117"></a>        tmppp = tmppp-&gt;next;
+<a name="l118"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l119"></a>    </span><span class=cF1>if</span><span class=cF0> (!i)
+<a name="l120"></a>        i++;
+<a name="l121"></a>    </span><span class=cF1>if</span><span class=cF0> (tmppp != &amp;head)
+<a name="l122"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l123"></a>        mbr.p[i].active     = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l124"></a>        mbr.p[i].start_head = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l125"></a>        mbr.p[i].start_cyl  = </span><span class=cFE>0x101</span><span class=cF0>;
+<a name="l126"></a>        mbr.p[i].type       = </span><span class=cFE>0xF</span><span class=cF0>;
+<a name="l127"></a>        mbr.p[i].end_head   = </span><span class=cFE>0xFE</span><span class=cF0>;
+<a name="l128"></a>        mbr.p[i].end_cyl    = </span><span class=cFE>0xFFFF</span><span class=cF0>;
+<a name="l129"></a>        mbr.p[i].</span><span class=cF1>offset</span><span class=cF0>     = </span><span class=cF1>offset</span><span class=cF0>;
+<a name="l130"></a>        mbr.p[i].size       = remaining;
+<a name="l131"></a>        ext_base = </span><span class=cF1>offset</span><span class=cF0>;
+<a name="l132"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l133"></a>    </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, &amp;mbr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
 <a name="l134"></a>
-<a name="l135"></a>        </span><span class=cF1>while</span><span class=cF0> (tmppp != &amp;head)
-<a name="l136"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l137"></a>                start_offset = </span><span class=cF1>offset</span><span class=cF0>;
-<a name="l138"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(&amp;mbr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
-<a name="l139"></a>                mbr.signature = </span><span class=cFE>0xAA55</span><span class=cF0>;
+<a name="l135"></a>    </span><span class=cF1>while</span><span class=cF0> (tmppp != &amp;head)
+<a name="l136"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l137"></a>        start_offset = </span><span class=cF1>offset</span><span class=cF0>;
+<a name="l138"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;mbr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l139"></a>        mbr.signature = </span><span class=cFE>0xAA55</span><span class=cF0>;
 <a name="l140"></a>
-<a name="l141"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].active         = </span><span class=cFE>0x80</span><span class=cF0>;
-<a name="l142"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].start_head     = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l143"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].start_cyl      = </span><span class=cFE>0x101</span><span class=cF0>;
-<a name="l144"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].type           = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Will get set different.</span><span class=cF0>
-<a name="l145"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].end_head       = </span><span class=cFE>0xFE</span><span class=cF0>;
-<a name="l146"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].end_cyl        = </span><span class=cFE>0xFFFF</span><span class=cF0>;
-<a name="l147"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].</span><span class=cF1>offset</span><span class=cF0>         = </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
-<a name="l148"></a>                mbr.p[</span><span class=cFE>0</span><span class=cF0>].size           = tmppp-&gt;size - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
-<a name="l149"></a>                </span><span class=cF1>offset</span><span class=cF0> += tmppp-&gt;size;
-<a name="l150"></a>                tmppp = tmppp-&gt;next;
-<a name="l151"></a>                </span><span class=cF1>if</span><span class=cF0> (tmppp != &amp;head)
-<a name="l152"></a>                {
-<a name="l153"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].active         = </span><span class=cFE>0x80</span><span class=cF0>;
-<a name="l154"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].start_head     = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l155"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].start_cyl      = </span><span class=cFE>0x101</span><span class=cF0>;
-<a name="l156"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].type           = </span><span class=cFE>5</span><span class=cF0>;
-<a name="l157"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].end_head       = </span><span class=cFE>0xFE</span><span class=cF0>;
-<a name="l158"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].end_cyl        = </span><span class=cFE>0xFFFF</span><span class=cF0>;
-<a name="l159"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].</span><span class=cF1>offset</span><span class=cF0>         = </span><span class=cF1>offset</span><span class=cF0> - ext_base;
-<a name="l160"></a>                        mbr.p[</span><span class=cFE>1</span><span class=cF0>].size           = tmppp-&gt;size;
-<a name="l161"></a>                }
-<a name="l162"></a>                </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, &amp;mbr, start_offset, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l163"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l141"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].active     = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l142"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].start_head = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l143"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].start_cyl  = </span><span class=cFE>0x101</span><span class=cF0>;
+<a name="l144"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].type       = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Will get set different.</span><span class=cF0>
+<a name="l145"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].end_head   = </span><span class=cFE>0xFE</span><span class=cF0>;
+<a name="l146"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].end_cyl    = </span><span class=cFE>0xFFFF</span><span class=cF0>;
+<a name="l147"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].</span><span class=cF1>offset</span><span class=cF0>     = </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
+<a name="l148"></a>        mbr.p[</span><span class=cFE>0</span><span class=cF0>].size       = tmppp-&gt;size - </span><span class=cF3>DRIVE_HEADER</span><span class=cF0>;
+<a name="l149"></a>        </span><span class=cF1>offset</span><span class=cF0> += tmppp-&gt;size;
+<a name="l150"></a>        tmppp = tmppp-&gt;next;
+<a name="l151"></a>        </span><span class=cF1>if</span><span class=cF0> (tmppp != &amp;head)
+<a name="l152"></a>        {
+<a name="l153"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].active     = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l154"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].start_head = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l155"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].start_cyl  = </span><span class=cFE>0x101</span><span class=cF0>;
+<a name="l156"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].type       = </span><span class=cFE>5</span><span class=cF0>;
+<a name="l157"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].end_head   = </span><span class=cFE>0xFE</span><span class=cF0>;
+<a name="l158"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].end_cyl    = </span><span class=cFE>0xFFFF</span><span class=cF0>;
+<a name="l159"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].</span><span class=cF1>offset</span><span class=cF0>     = </span><span class=cF1>offset</span><span class=cF0> - ext_base;
+<a name="l160"></a>            mbr.p[</span><span class=cFE>1</span><span class=cF0>].size       = tmppp-&gt;size;
+<a name="l161"></a>        }
+<a name="l162"></a>        </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, &amp;mbr, start_offset, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l163"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l164"></a>
-<a name="l165"></a>        bd-&gt;flags &amp;= ~(</span><span class=cF3>BDF_INITIALIZED</span><span class=cF0> | </span><span class=cF3>BDF_INIT_IN_PROGRESS</span><span class=cF0>);
-<a name="l166"></a>        </span><span class=cF5>BlkDevAdd</span><span class=cF0>(bd,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l167"></a>        </span><span class=cF1>for</span><span class=cF0> (i = bd-&gt;first_drive_let; i &lt; drv_let2; i++)
-<a name="l168"></a>                </span><span class=cF5>Format</span><span class=cF0>(i,, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l165"></a>    bd-&gt;flags &amp;= ~(</span><span class=cF3>BDF_INITIALIZED</span><span class=cF0> | </span><span class=cF3>BDF_INIT_IN_PROGRESS</span><span class=cF0>);
+<a name="l166"></a>    </span><span class=cF5>BlkDevAdd</span><span class=cF0>(bd,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l167"></a>    </span><span class=cF1>for</span><span class=cF0> (i = bd-&gt;first_drive_let; i &lt; drv_let2; i++)
+<a name="l168"></a>        </span><span class=cF5>Format</span><span class=cF0>(i,, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l169"></a>
-<a name="l170"></a>                pd_done:
-<a name="l171"></a>        </span><span class=cF1>while</span><span class=cF0> (head.next != &amp;head)
-<a name="l172"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l173"></a>                tmppp = head.next;
-<a name="l174"></a>                </span><span class=cF5>QueueRemove</span><span class=cF0>(tmppp);
-<a name="l175"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmppp);
-<a name="l176"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l170"></a>        pd_done:
+<a name="l171"></a>    </span><span class=cF1>while</span><span class=cF0> (head.next != &amp;head)
+<a name="l172"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l173"></a>        tmppp = head.next;
+<a name="l174"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(tmppp);
+<a name="l175"></a>        </span><span class=cF5>Free</span><span class=cF0>(tmppp);
+<a name="l176"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l177"></a>
-<a name="l178"></a>        </span><span class=cF1>return</span><span class=cF0> total;
+<a name="l178"></a>    </span><span class=cF1>return</span><span class=cF0> total;
 <a name="l179"></a>}
 </span></pre></body>
 </html>

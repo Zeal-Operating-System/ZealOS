@@ -8,7 +8,14 @@ I64 DirIndexList(U8 *files_find_mask)
 
 	if (tmpde1)
 	{
-		"%s\n", tmpde1->full_name;
+		st = MAllocIdent(tmpde1->full_name);
+		StrLastRemove(st, "/");
+		if (!st[2])
+			StrCopy(st + 2, "/");
+
+		"Directory of %s\n", st;
+
+		Free(st);
 
 		while (tmpde1)
 		{
@@ -17,12 +24,13 @@ I64 DirIndexList(U8 *files_find_mask)
 
 			if (tmpde1->attr & RS_ATTR_DIR)
 			{
-				st		= MStrPrint("%s/%s", tmpde1->name, "index.html");
+				st		= MStrPrint("%s/", tmpde1->name);
 				st_full	= MStrPrint("%s/%s", tmpde1->full_name, "index.html");
+				"$$BG,BLACK$$";
 				PutFileLink(st, st_full);
+				"$$BG$$";
 				Free(st);
 				Free(st_full);
-//				PutDirLink(tmpde1->name, tmpde1->full_name);
 			}
 			else
 				PutFileLink(tmpde1->name, tmpde1->full_name);
@@ -37,3 +45,5 @@ I64 DirIndexList(U8 *files_find_mask)
 
 	return res;
 }
+
+

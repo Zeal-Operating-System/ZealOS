@@ -29,12 +29,12 @@ body {background-color:#000000;}
 <a name="l2"></a></span><span class=cF2>//Don't do it directly.  See </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l20"><span class=cF4>Comp(&quot;/Kernel/Kernel&quot;)</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a>#</span><span class=cF1>exe</span><span class=cF0> {
-<a name="l5"></a>        </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF3>__DIR__</span><span class=cF0>);;
-<a name="l6"></a>        </span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>,         </span><span class=cF3>ON</span><span class=cF0>);
-<a name="l7"></a>        </span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_DUP_TYPES</span><span class=cF0>, </span><span class=cF3>ON</span><span class=cF0>);
-<a name="l8"></a>        #</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KConfig&quot;</span><span class=cF0>
-<a name="l9"></a>        CKConfig *kernel_config;
-<a name="l10"></a>        kernel_config = KConfigNew;
+<a name="l5"></a>    </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF3>__DIR__</span><span class=cF0>);;
+<a name="l6"></a>    </span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>,     </span><span class=cF3>ON</span><span class=cF0>);
+<a name="l7"></a>    </span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_DUP_TYPES</span><span class=cF0>, </span><span class=cF3>ON</span><span class=cF0>);
+<a name="l8"></a>    #</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KConfig&quot;</span><span class=cF0>
+<a name="l9"></a>    CKConfig *kernel_config;
+<a name="l10"></a>    kernel_config = KConfigNew;
 <a name="l11"></a>};
 <a name="l12"></a>
 <a name="l13"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KernelA.HH&quot;</span><span class=cF0>
@@ -43,12 +43,12 @@ body {background-color:#000000;}
 <a name="l16"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KStart64&quot;</span><span class=cF0>
 <a name="l17"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KMathA&quot;</span><span class=cF0>
 <a name="l18"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KUtils&quot;</span><span class=cF0>
-<a name="l19"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_KEEP_PRIVATE</span><span class=cF0>,                 </span><span class=cF3>ON</span><span class=cF0>);};
+<a name="l19"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_KEEP_PRIVATE</span><span class=cF0>,         </span><span class=cF3>ON</span><span class=cF0>);};
 <a name="l20"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Compiler/CompilerA.HH&quot;</span><span class=cF0>
 <a name="l21"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_EXTERNS_TO_IMPORTS</span><span class=cF0>,   </span><span class=cF3>ON</span><span class=cF0>);};
 <a name="l22"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;/Compiler/CompilerB.HH&quot;</span><span class=cF0>
 <a name="l23"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_EXTERNS_TO_IMPORTS</span><span class=cF0>,   </span><span class=cF3>OFF</span><span class=cF0>);};
-<a name="l24"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_KEEP_PRIVATE</span><span class=cF0>,                 </span><span class=cF3>OFF</span><span class=cF0>);};
+<a name="l24"></a>#</span><span class=cF1>exe</span><span class=cF0> {</span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_KEEP_PRIVATE</span><span class=cF0>,         </span><span class=cF3>OFF</span><span class=cF0>);};
 <a name="l25"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KernelB.HH&quot;</span><span class=cF0>
 <a name="l26"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;KExterns&quot;</span><span class=cF0>
 <a name="l27"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;StrA&quot;</span><span class=cF0>

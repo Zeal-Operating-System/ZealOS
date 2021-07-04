@@ -31,33 +31,33 @@ body {background-color:#000000;}
 <a name="l4"></a>implemented. 16-bit asm support is limited.
 <a name="l5"></a>
 <a name="l6"></a>Here are example inst formats:
-<a name="l7"></a>                </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cFC>FS</span><span class=cF0>:DISP[</span><span class=cFC>RSI</span><span class=cF0> + </span><span class=cFC>RDI</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>]
-<a name="l8"></a>                </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> [DISP]
+<a name="l7"></a>        </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cFC>FS</span><span class=cF0>:DISP[</span><span class=cFC>RSI</span><span class=cF0> + </span><span class=cFC>RDI</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>]
+<a name="l8"></a>        </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> [DISP]
 <a name="l9"></a>
-<a name="l10"></a></span><span class=cF2>$</span><span class=cF0> Current compiler output pos (inst ptr).       Even works in CosmiC expressions.
+<a name="l10"></a></span><span class=cF2>$</span><span class=cF0> Current compiler output pos (inst ptr).   Even works in CosmiC expressions.
 <a name="l11"></a>
 <a name="l12"></a></span><span class=cF2>$</span><span class=cF0> works in </span><span class=cF2>class</span><span class=cF0>es.
-<a name="l13"></a>        </span><span class=cF2>class MyFun
-<a name="l14"></a>        {
-<a name="l15"></a>                $ = -16;
-<a name="l16"></a>                I64 local1;
-<a name="l17"></a>                I64 local2;
-<a name="l18"></a>                $ = $ + 256;
-<a name="l19"></a>                I64 crazy;
-<a name="l20"></a>        };</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF2>class MyFun
+<a name="l14"></a>    {
+<a name="l15"></a>        $ = -16;
+<a name="l16"></a>        I64 local1;
+<a name="l17"></a>        I64 local2;
+<a name="l18"></a>        $ = $ + 256;
+<a name="l19"></a>        I64 crazy;
+<a name="l20"></a>    };</span><span class=cF0>
 <a name="l21"></a>
 <a name="l22"></a></span><span class=cF4>LABEL</span><span class=cF2>::
-<a name="l23"></a></span><span class=cF0>        Defines an exported global label.
+<a name="l23"></a></span><span class=cF0>    Defines an exported global label.
 <a name="l24"></a>
 <a name="l25"></a></span><span class=cF4>LABEL</span><span class=cF2>:
-<a name="l26"></a></span><span class=cF0>        Defines an non-exported global label.
+<a name="l26"></a></span><span class=cF0>    Defines an non-exported global label.
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF2>@@</span><span class=cF4>LABEL</span><span class=cF2>:
-<a name="l29"></a></span><span class=cF0>        Defines a local label with scope valid between two global labels.
+<a name="l29"></a></span><span class=cF0>    Defines a local label with scope valid between two global labels.
 <a name="l30"></a>
 <a name="l31"></a></span><span class=cF2>DU8</span><span class=cF0>, </span><span class=cF2>DU16</span><span class=cF0>, </span><span class=cF2>DU32</span><span class=cF0>, </span><span class=cF2>DU64</span><span class=cF0>
-<a name="l32"></a>        Define BYTE, WORD, DWORD or QWORD. Can be used with </span><span class=cF2>DUP()</span><span class=cF0> and ASCII strings.    For your convenience, the ASCII strings do 
-<a name="l33"></a>not have terminating zeros.     Define cmds must end with a semicolon.
+<a name="l32"></a>    Define BYTE, WORD, DWORD or QWORD. Can be used with </span><span class=cF2>DUP()</span><span class=cF0> and ASCII strings.    For your convenience, the ASCII strings do 
+<a name="l33"></a>not have terminating zeros. Define cmds must end with a semicolon.
 <a name="l34"></a>
 <a name="l35"></a></span><span class=cF2>USE16</span><span class=cF0>, </span><span class=cF2>USE32</span><span class=cF0>, </span><span class=cF2>USE64</span><span class=cF0>
 <a name="l36"></a>
@@ -66,10 +66,10 @@ body {background-color:#000000;}
 <a name="l39"></a></span><span class=cF2>LIST</span><span class=cF0>, </span><span class=cF2>NOLIST</span><span class=cF0>
 <a name="l40"></a>
 <a name="l41"></a></span><span class=cF2>ALIGN</span><span class=cF0> </span><span class=cF4>num</span><span class=cF0>, </span><span class=cF4>fill_byte</span><span class=cF0>
-<a name="l42"></a>        Align to </span><span class=cF4>num</span><span class=cF0> boundary and fill with </span><span class=cF4>fill_byte</span><span class=cF0>.
+<a name="l42"></a>    Align to </span><span class=cF4>num</span><span class=cF0> boundary and fill with </span><span class=cF4>fill_byte</span><span class=cF0>.
 <a name="l43"></a>
 <a name="l44"></a></span><span class=cF2>ORG</span><span class=cF0> </span><span class=cF4>num</span><span class=cF0>
-<a name="l45"></a>        Set code addr for JIT or set module </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() addr -- has 16-byte </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l451"><span class=cF4>CBinFile</span></a><span class=cF0> header and patch table trailing.
+<a name="l45"></a>    Set code addr for JIT or set module </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l208"><span class=cF4>Load</span></a><span class=cF0>() addr -- has 16-byte </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l451"><span class=cF4>CBinFile</span></a><span class=cF0> header and patch table trailing.
 <a name="l46"></a>
 <a name="l47"></a></span><span class=cF2>BINFILE</span><span class=cF4> &quot;FileName.BIN&quot;</span><span class=cF0>;
 <a name="l48"></a>

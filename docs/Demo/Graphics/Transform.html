@@ -43,107 +43,107 @@ body {background-color:#000000;}
 <a name="l16"></a>
 <a name="l17"></a></span><span class=cF1>class</span><span class=cF0> CSliderState
 <a name="l18"></a>{
-<a name="l19"></a>        </span><span class=cF9>I64</span><span class=cF0> s1, s2, s3;
-<a name="l20"></a>        </span><span class=cF1>F64</span><span class=cF0> arg1, arg2, scale;
+<a name="l19"></a>    </span><span class=cF9>I64</span><span class=cF0> s1, s2, s3;
+<a name="l20"></a>    </span><span class=cF1>F64</span><span class=cF0> arg1, arg2, scale;
 <a name="l21"></a>} s;
 <a name="l22"></a>
 <a name="l23"></a></span><span class=cF1>U0</span><span class=cF0> DrawCtrlSlider(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>CCtrl</span><span class=cF0> *c)
 <a name="l24"></a>{
-<a name="l25"></a>        CSliderState *s = c-&gt;state;
+<a name="l25"></a>    CSliderState *s = c-&gt;state;
 <a name="l26"></a>
-<a name="l27"></a>        dc-&gt;color = </span><span class=cF3>LTGREEN</span><span class=cF0>;
-<a name="l28"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left, c-&gt;top, SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>, SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE);
-<a name="l29"></a>        dc-&gt;color = </span><span class=cF3>BROWN</span><span class=cF0>;
-<a name="l30"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + SLIDER_BORDER, c-&gt;top + SLIDER_BORDER, 
-<a name="l31"></a>                                SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> * SLIDER_BORDER, 
-<a name="l32"></a>                                SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE - </span><span class=cFE>2</span><span class=cF0> * SLIDER_BORDER);
-<a name="l33"></a>        dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
-<a name="l34"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(dc,      c-&gt;left + SLIDER_SPACING, c-&gt;top + SLIDER_SPACING, 
-<a name="l35"></a>                                c-&gt;left + SLIDER_SPACING, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l27"></a>    dc-&gt;color = </span><span class=cF3>LTGREEN</span><span class=cF0>;
+<a name="l28"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left, c-&gt;top, SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>, SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE);
+<a name="l29"></a>    dc-&gt;color = </span><span class=cF3>BROWN</span><span class=cF0>;
+<a name="l30"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + SLIDER_BORDER, c-&gt;top + SLIDER_BORDER, 
+<a name="l31"></a>                SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> * SLIDER_BORDER, 
+<a name="l32"></a>                SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE - </span><span class=cFE>2</span><span class=cF0> * SLIDER_BORDER);
+<a name="l33"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l34"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc,  c-&gt;left + SLIDER_SPACING, c-&gt;top + SLIDER_SPACING, 
+<a name="l35"></a>                c-&gt;left + SLIDER_SPACING, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
 <a name="l36"></a>
-<a name="l37"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(dc,      c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0>, c-&gt;top + SLIDER_SPACING, 
-<a name="l38"></a>                                c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0>, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l37"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc,  c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0>, c-&gt;top + SLIDER_SPACING, 
+<a name="l38"></a>                c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0>, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
 <a name="l39"></a>
-<a name="l40"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(dc,      c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0>, c-&gt;top + SLIDER_SPACING, 
-<a name="l41"></a>                                c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0>, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l40"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc,  c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0>, c-&gt;top + SLIDER_SPACING, 
+<a name="l41"></a>                c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0>, c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
 <a name="l42"></a>
-<a name="l43"></a>        dc-&gt;color = </span><span class=cF3>LTGREEN</span><span class=cF0>;
-<a name="l44"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + SLIDER_SPACING - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l45"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
-<a name="l46"></a>                                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;s1 * </span><span class=cFE>10</span><span class=cF0> / SLIDER_RANGE);
-<a name="l47"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l48"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
-<a name="l49"></a>                                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;s2 * </span><span class=cFE>10</span><span class=cF0> / SLIDER_RANGE);
-<a name="l50"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l51"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
-<a name="l52"></a>                                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;s3 * </span><span class=cFE>10</span><span class=cF0> / SLIDER_RANGE);
-<a name="l53"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,      c-&gt;left + SLIDER_SPACING - </span><span class=cFE>3</span><span class=cF0>, 
-<a name="l54"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s1 - </span><span class=cFE>2</span><span class=cF0> , </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
-<a name="l55"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,      c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0>, 
-<a name="l56"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s2 - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
-<a name="l57"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,      c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0>, 
-<a name="l58"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s3 - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
-<a name="l59"></a>        dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
-<a name="l60"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,      c-&gt;left + SLIDER_SPACING - </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l61"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s1 - </span><span class=cFE>1</span><span class=cF0> , </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
-<a name="l62"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,      c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l63"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s2 - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
-<a name="l64"></a>        </span><span class=cF5>GrRect</span><span class=cF0>(dc,      c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l65"></a>                                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s3 - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l43"></a>    dc-&gt;color = </span><span class=cF3>LTGREEN</span><span class=cF0>;
+<a name="l44"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + SLIDER_SPACING - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l45"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l46"></a>                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;s1 * </span><span class=cFE>10</span><span class=cF0> / SLIDER_RANGE);
+<a name="l47"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l48"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l49"></a>                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;s2 * </span><span class=cFE>10</span><span class=cF0> / SLIDER_RANGE);
+<a name="l50"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l51"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE + </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l52"></a>                </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, s-&gt;s3 * </span><span class=cFE>10</span><span class=cF0> / SLIDER_RANGE);
+<a name="l53"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + SLIDER_SPACING - </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l54"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s1 - </span><span class=cFE>2</span><span class=cF0> , </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l55"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l56"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s2 - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l57"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l58"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s3 - </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l59"></a>    dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l60"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + SLIDER_SPACING - </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l61"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s1 - </span><span class=cFE>1</span><span class=cF0> , </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l62"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l63"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s2 - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l64"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(dc,  c-&gt;left + </span><span class=cFE>3</span><span class=cF0> * SLIDER_SPACING + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l65"></a>                c-&gt;top + SLIDER_SPACING + SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - s-&gt;s3 - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
 <a name="l66"></a>}
 <a name="l67"></a>
 <a name="l68"></a></span><span class=cF1>U0</span><span class=cF0> UpdateDerivedCtrlSlider(</span><span class=cF9>CCtrl</span><span class=cF0> *c)
 <a name="l69"></a>{
-<a name="l70"></a>        CSliderState *s = c-&gt;state;
+<a name="l70"></a>    CSliderState *s = c-&gt;state;
 <a name="l71"></a>
-<a name="l72"></a>        c-&gt;left         = c-&gt;win_task-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0> - (SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>) / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l73"></a>        c-&gt;right        = c-&gt;left + SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>;
-<a name="l74"></a>        c-&gt;top          = c-&gt;win_task-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0> - (SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE) / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l75"></a>        c-&gt;bottom       = c-&gt;top + SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE;
-<a name="l76"></a>        s-&gt;s1           = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;s1, </span><span class=cFE>0</span><span class=cF0>, SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l77"></a>        s-&gt;s2           = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;s2, </span><span class=cFE>0</span><span class=cF0>, SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l78"></a>        s-&gt;s3           = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;s3, </span><span class=cFE>1</span><span class=cF0>, SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l79"></a>        s-&gt;arg1         = </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * s-&gt;s1 / SLIDER_RANGE;
-<a name="l80"></a>        s-&gt;arg2         = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * (s-&gt;s2 - SLIDER_RANGE / </span><span class=cFE>2</span><span class=cF0>) / SLIDER_RANGE;
-<a name="l81"></a>        s-&gt;scale        = </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * s-&gt;s3 / SLIDER_RANGE;
+<a name="l72"></a>    c-&gt;left     = c-&gt;win_task-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0> - (SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l73"></a>    c-&gt;right    = c-&gt;left + SLIDER_SPACING * </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l74"></a>    c-&gt;top      = c-&gt;win_task-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0> - (SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l75"></a>    c-&gt;bottom   = c-&gt;top + SLIDER_SPACING * </span><span class=cFE>2</span><span class=cF0> + SLIDER_RANGE;
+<a name="l76"></a>    s-&gt;s1       = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;s1, </span><span class=cFE>0</span><span class=cF0>, SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l77"></a>    s-&gt;s2       = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;s2, </span><span class=cFE>0</span><span class=cF0>, SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l78"></a>    s-&gt;s3       = </span><span class=cF5>ClampI64</span><span class=cF0>(s-&gt;s3, </span><span class=cFE>1</span><span class=cF0>, SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l79"></a>    s-&gt;arg1     = </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * s-&gt;s1 / SLIDER_RANGE;
+<a name="l80"></a>    s-&gt;arg2     = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * (s-&gt;s2 - SLIDER_RANGE / </span><span class=cFE>2</span><span class=cF0>) / SLIDER_RANGE;
+<a name="l81"></a>    s-&gt;scale    = </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * s-&gt;s3 / SLIDER_RANGE;
 <a name="l82"></a>}
 <a name="l83"></a>
 <a name="l84"></a></span><span class=cF1>U0</span><span class=cF0> LeftClickSlider(</span><span class=cF9>CCtrl</span><span class=cF0> *c, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>Bool</span><span class=cF0>)
 <a name="l85"></a>{
-<a name="l86"></a>        CSliderState *s = c-&gt;state;
+<a name="l86"></a>    CSliderState *s = c-&gt;state;
 <a name="l87"></a>
-<a name="l88"></a>        </span><span class=cF1>if</span><span class=cF0> (x &lt; c-&gt;left + </span><span class=cF7>(</span><span class=cF0>c-&gt;right - c-&gt;left</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>3</span><span class=cF0>)
-<a name="l89"></a>                s-&gt;s1 = SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + SLIDER_SPACING</span><span class=cF7>)</span><span class=cF0>);
-<a name="l90"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (x &lt; c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>c-&gt;right - c-&gt;left</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>3</span><span class=cF0>)
-<a name="l91"></a>                s-&gt;s2 = SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + SLIDER_SPACING</span><span class=cF7>)</span><span class=cF0>);
-<a name="l92"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l93"></a>                s-&gt;s3 = SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + SLIDER_SPACING</span><span class=cF7>)</span><span class=cF0>);
-<a name="l94"></a>        </span><span class=cF1>if</span><span class=cF0> (c-&gt;update_derived_vals)
-<a name="l95"></a>                (*c-&gt;update_derived_vals)(c);
+<a name="l88"></a>    </span><span class=cF1>if</span><span class=cF0> (x &lt; c-&gt;left + </span><span class=cF7>(</span><span class=cF0>c-&gt;right - c-&gt;left</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>3</span><span class=cF0>)
+<a name="l89"></a>        s-&gt;s1 = SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + SLIDER_SPACING</span><span class=cF7>)</span><span class=cF0>);
+<a name="l90"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (x &lt; c-&gt;left + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>c-&gt;right - c-&gt;left</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>3</span><span class=cF0>)
+<a name="l91"></a>        s-&gt;s2 = SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + SLIDER_SPACING</span><span class=cF7>)</span><span class=cF0>);
+<a name="l92"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l93"></a>        s-&gt;s3 = SLIDER_RANGE - </span><span class=cFE>1</span><span class=cF0> - (y - </span><span class=cF7>(</span><span class=cF0>c-&gt;top + SLIDER_SPACING</span><span class=cF7>)</span><span class=cF0>);
+<a name="l94"></a>    </span><span class=cF1>if</span><span class=cF0> (c-&gt;update_derived_vals)
+<a name="l95"></a>        (*c-&gt;update_derived_vals)(c);
 <a name="l96"></a>}
 <a name="l97"></a>
 <a name="l98"></a></span><span class=cF9>CCtrl</span><span class=cF0> *SliderNew()
 <a name="l99"></a>{
-<a name="l100"></a>        </span><span class=cF9>CCtrl</span><span class=cF0> *c = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCtrl</span><span class=cF7>)</span><span class=cF0>);
+<a name="l100"></a>    </span><span class=cF9>CCtrl</span><span class=cF0> *c = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCtrl</span><span class=cF7>)</span><span class=cF0>);
 <a name="l101"></a>
-<a name="l102"></a>        c-&gt;win_task     = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l103"></a>        c-&gt;flags        = </span><span class=cF3>CTRLF_SHOW</span><span class=cF0> | </span><span class=cF3>CTRLF_CAPTURE_LEFT_MS</span><span class=cF0>;
-<a name="l104"></a>        c-&gt;type         = </span><span class=cF3>CTRLT_GENERIC</span><span class=cF0>;
-<a name="l105"></a>        c-&gt;state        = &amp;s;
-<a name="l106"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;s, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s</span><span class=cF7>)</span><span class=cF0>);
-<a name="l107"></a>        c-&gt;draw_it                              = &amp;DrawCtrlSlider;
-<a name="l108"></a>        c-&gt;left_click                   = &amp;LeftClickSlider;
-<a name="l109"></a>        c-&gt;update_derived_vals  = &amp;UpdateDerivedCtrlSlider;
-<a name="l110"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(c, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ctrl);
-<a name="l111"></a>        </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>;
+<a name="l102"></a>    c-&gt;win_task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l103"></a>    c-&gt;flags    = </span><span class=cF3>CTRLF_SHOW</span><span class=cF0> | </span><span class=cF3>CTRLF_CAPTURE_LEFT_MS</span><span class=cF0>;
+<a name="l104"></a>    c-&gt;type     = </span><span class=cF3>CTRLT_GENERIC</span><span class=cF0>;
+<a name="l105"></a>    c-&gt;state    = &amp;s;
+<a name="l106"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;s, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>s</span><span class=cF7>)</span><span class=cF0>);
+<a name="l107"></a>    c-&gt;draw_it              = &amp;DrawCtrlSlider;
+<a name="l108"></a>    c-&gt;left_click           = &amp;LeftClickSlider;
+<a name="l109"></a>    c-&gt;update_derived_vals  = &amp;UpdateDerivedCtrlSlider;
+<a name="l110"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(c, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ctrl);
+<a name="l111"></a>    </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>;
 <a name="l112"></a>
-<a name="l113"></a>        </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l113"></a>    </span><span class=cF1>return</span><span class=cF0> c;
 <a name="l114"></a>}
 <a name="l115"></a>
 <a name="l116"></a></span><span class=cF1>U0</span><span class=cF0> SliderDel(</span><span class=cF9>CCtrl</span><span class=cF0> *c)
 <a name="l117"></a>{
-<a name="l118"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(c);
-<a name="l119"></a>        </span><span class=cF5>Free</span><span class=cF0>(c);
+<a name="l118"></a>    </span><span class=cF5>QueueRemove</span><span class=cF0>(c);
+<a name="l119"></a>    </span><span class=cF5>Free</span><span class=cF0>(c);
 <a name="l120"></a>}
 <a name="l121"></a>
 <a name="l122"></a>
@@ -152,18 +152,18 @@ body {background-color:#000000;}
 <a name="l125"></a></span><span class=cFA>
 <a name="l126"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
 <a name="l127"></a>
-<a name="l128"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_HEIGHT                      </span><span class=cFE>2048</span><span class=cF0>
-<a name="l129"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_WIDTH                       </span><span class=cFE>2048</span><span class=cF0>
+<a name="l128"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_HEIGHT          </span><span class=cFE>2048</span><span class=cF0>
+<a name="l129"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_WIDTH           </span><span class=cFE>2048</span><span class=cF0>
 <a name="l130"></a>
-<a name="l131"></a>#</span><span class=cF1>define</span><span class=cF0> TREES_NUM                       </span><span class=cFE>256</span><span class=cF0>
+<a name="l131"></a>#</span><span class=cF1>define</span><span class=cF0> TREES_NUM           </span><span class=cFE>256</span><span class=cF0>
 <a name="l132"></a>
 <a name="l133"></a></span><span class=cF9>I64</span><span class=cF0> tree_x[TREES_NUM], tree_y[TREES_NUM];
 <a name="l134"></a>
 <a name="l135"></a></span><span class=cF1>class</span><span class=cF0> MPCtrl
 <a name="l136"></a>{
-<a name="l137"></a>        </span><span class=cF9>I64</span><span class=cF0> </span><span class=cFB>mp_count</span><span class=cF0>;
-<a name="l138"></a>        </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>];
-<a name="l139"></a>        </span><span class=cF1>F64</span><span class=cF0> a;
+<a name="l137"></a>    </span><span class=cF9>I64</span><span class=cF0> </span><span class=cFB>mp_count</span><span class=cF0>;
+<a name="l138"></a>    </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>];
+<a name="l139"></a>    </span><span class=cF1>F64</span><span class=cF0> a;
 <a name="l140"></a>
 <a name="l141"></a>} mp;
 <a name="l142"></a>
@@ -171,90 +171,90 @@ body {background-color:#000000;}
 <a name="l144"></a>
 <a name="l145"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MPDrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
 <a name="l146"></a>{
-<a name="l147"></a>        </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc2, task);
-<a name="l148"></a>        </span><span class=cF9>I64</span><span class=cF0>  i, lo = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num * TREES_NUM / mp.</span><span class=cFB>mp_count</span><span class=cF0>, hi = (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num + </span><span class=cFE>1</span><span class=cF0>) * TREES_NUM / mp.</span><span class=cFB>mp_count</span><span class=cF0>;
+<a name="l147"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc2, task);
+<a name="l148"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, lo = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num * TREES_NUM / mp.</span><span class=cFB>mp_count</span><span class=cF0>, hi = (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num + </span><span class=cFE>1</span><span class=cF0>) * TREES_NUM / mp.</span><span class=cFB>mp_count</span><span class=cF0>;
 <a name="l149"></a>
-<a name="l150"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(dc-&gt;r, mp.r, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>16</span><span class=cF0>);
-<a name="l151"></a>        dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
-<a name="l152"></a>        </span><span class=cF1>for</span><span class=cF0> (i = lo; i &lt; hi; i++)
-<a name="l153"></a>                </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, tree_x[i], tree_y[i], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;tree&gt;</span><span class=cF0>, mp.a);
-<a name="l154"></a>        </span><span class=cF5>DCDel</span><span class=cF0>(dc);
-<a name="l155"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;mp_not_done_flags, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num);
+<a name="l150"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(dc-&gt;r, mp.r, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>16</span><span class=cF0>);
+<a name="l151"></a>    dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l152"></a>    </span><span class=cF1>for</span><span class=cF0> (i = lo; i &lt; hi; i++)
+<a name="l153"></a>        </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, tree_x[i], tree_y[i], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;tree&gt;</span><span class=cF0>, mp.a);
+<a name="l154"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l155"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;mp_not_done_flags, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num);
 <a name="l156"></a>}
 <a name="l157"></a>
 <a name="l158"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
 <a name="l159"></a>{
-<a name="l160"></a>        </span><span class=cF9>I64</span><span class=cF0> i, h, v;
+<a name="l160"></a>    </span><span class=cF9>I64</span><span class=cF0> i, h, v;
 <a name="l161"></a>
-<a name="l162"></a>        task-&gt;horz_scroll.min = -s.scale * MAP_HEIGHT * </span><span class=cF5>Sin</span><span class=cF0>(s.arg1);
-<a name="l163"></a>        task-&gt;horz_scroll.max =  s.scale * MAP_WIDTH  * </span><span class=cF5>Cos</span><span class=cF0>(s.arg1) - task-&gt;pix_width;
-<a name="l164"></a>        task-&gt;vert_scroll.min = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l165"></a>        task-&gt;vert_scroll.max = s.scale * (MAP_HEIGHT * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>s.arg1</span><span class=cF7>)</span><span class=cF0> + MAP_WIDTH * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>s.arg1</span><span class=cF7>)</span><span class=cF0>)
-<a name="l166"></a>        -task-&gt;pix_height;
-<a name="l167"></a>        </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>(task);
+<a name="l162"></a>    task-&gt;horz_scroll.min = -s.scale * MAP_HEIGHT * </span><span class=cF5>Sin</span><span class=cF0>(s.arg1);
+<a name="l163"></a>    task-&gt;horz_scroll.max =  s.scale * MAP_WIDTH  * </span><span class=cF5>Cos</span><span class=cF0>(s.arg1) - task-&gt;pix_width;
+<a name="l164"></a>    task-&gt;vert_scroll.min = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l165"></a>    task-&gt;vert_scroll.max = s.scale * (MAP_HEIGHT * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>s.arg1</span><span class=cF7>)</span><span class=cF0> + MAP_WIDTH * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>s.arg1</span><span class=cF7>)</span><span class=cF0>)
+<a name="l166"></a>    -task-&gt;pix_height;
+<a name="l167"></a>    </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>(task);
 <a name="l168"></a>
-<a name="l169"></a>        h = task-&gt;horz_scroll.pos;
-<a name="l170"></a>        v = task-&gt;vert_scroll.pos;
+<a name="l169"></a>    h = task-&gt;horz_scroll.pos;
+<a name="l170"></a>    v = task-&gt;vert_scroll.pos;
 <a name="l171"></a>
-<a name="l172"></a>        </span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(dc-&gt;r, s.arg1);
-<a name="l173"></a>        </span><span class=cF5>Mat4x4Scale</span><span class=cF0>(dc-&gt;r, s.scale);
-<a name="l174"></a>        </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(dc, dc-&gt;r);
-<a name="l175"></a>        </span><span class=cF5>Mat4x4TranslationEqu</span><span class=cF0>(dc-&gt;r, -h, -v, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l176"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(mp.r, dc-&gt;r, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>16</span><span class=cF0>);
-<a name="l177"></a>        mp.a = s.arg2;
+<a name="l172"></a>    </span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(dc-&gt;r, s.arg1);
+<a name="l173"></a>    </span><span class=cF5>Mat4x4Scale</span><span class=cF0>(dc-&gt;r, s.scale);
+<a name="l174"></a>    </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(dc, dc-&gt;r);
+<a name="l175"></a>    </span><span class=cF5>Mat4x4TranslationEqu</span><span class=cF0>(dc-&gt;r, -h, -v, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l176"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(mp.r, dc-&gt;r, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>16</span><span class=cF0>);
+<a name="l177"></a>    mp.a = s.arg2;
 <a name="l178"></a>
-<a name="l179"></a>        mp_not_done_flags = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFB>mp_count</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
-<a name="l180"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; mp.</span><span class=cFB>mp_count</span><span class=cF0>; i++)
-<a name="l181"></a>                </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;</span><span class=cF5>MPDrawIt</span><span class=cF0>, task, i);
-<a name="l182"></a>        </span><span class=cF1>while</span><span class=cF0> (mp_not_done_flags)
-<a name="l183"></a>                </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l179"></a>    mp_not_done_flags = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFB>mp_count</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l180"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; mp.</span><span class=cFB>mp_count</span><span class=cF0>; i++)
+<a name="l181"></a>        </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;</span><span class=cF5>MPDrawIt</span><span class=cF0>, task, i);
+<a name="l182"></a>    </span><span class=cF1>while</span><span class=cF0> (mp_not_done_flags)
+<a name="l183"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
 <a name="l184"></a>
-<a name="l185"></a>        dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
-<a name="l186"></a>        dc-&gt;color = </span><span class=cF3>BROWN</span><span class=cF0>;
-<a name="l187"></a>        dc-&gt;thick = </span><span class=cFE>4</span><span class=cF0>;
-<a name="l188"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l189"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, </span><span class=cFE>2</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l190"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l191"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l185"></a>    dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l186"></a>    dc-&gt;color = </span><span class=cF3>BROWN</span><span class=cF0>;
+<a name="l187"></a>    dc-&gt;thick = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l188"></a>    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l189"></a>    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, </span><span class=cFE>2</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l190"></a>    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l191"></a>    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH - </span><span class=cFE>3</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l192"></a>}
 <a name="l193"></a>
 <a name="l194"></a></span><span class=cF1>U0</span><span class=cF0> Init()
 <a name="l195"></a>{
-<a name="l196"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l196"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l197"></a>
-<a name="l198"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TREES_NUM; i++)
-<a name="l199"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l200"></a>                tree_x[i] = </span><span class=cF5>RandU16</span><span class=cF0> % MAP_WIDTH;
-<a name="l201"></a>                tree_y[i] = </span><span class=cF5>RandU16</span><span class=cF0> % MAP_HEIGHT;
-<a name="l202"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TREES_NUM; i++)
+<a name="l199"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l200"></a>        tree_x[i] = </span><span class=cF5>RandU16</span><span class=cF0> % MAP_WIDTH;
+<a name="l201"></a>        tree_y[i] = </span><span class=cF5>RandU16</span><span class=cF0> % MAP_HEIGHT;
+<a name="l202"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l203"></a>}
 <a name="l204"></a>
 <a name="l205"></a></span><span class=cF1>U0</span><span class=cF0> TransformDemo(</span><span class=cF9>I64</span><span class=cF0> _mp_count=</span><span class=cFB>mp_count</span><span class=cF0>)
 <a name="l206"></a>{
-<a name="l207"></a>        </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
-<a name="l208"></a>        Init;
-<a name="l209"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> -
-<a name="l210"></a>                                                </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0> - </span><span class=cF3>WIF_FOCUS_TASK_MENU</span><span class=cF0> - </span><span class=cF3>WIF_SELF_CTRLS</span><span class=cF0>;
-<a name="l211"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l212"></a>        </span><span class=cF5>WinBorder</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l213"></a>        </span><span class=cF5>DocCursor</span><span class=cF0>;
-<a name="l214"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l215"></a>        </span><span class=cF5>DocScroll</span><span class=cF0>;
+<a name="l207"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l208"></a>    Init;
+<a name="l209"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> -
+<a name="l210"></a>                        </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0> - </span><span class=cF3>WIF_FOCUS_TASK_MENU</span><span class=cF0> - </span><span class=cF3>WIF_SELF_CTRLS</span><span class=cF0>;
+<a name="l211"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l212"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l213"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l214"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l215"></a>    </span><span class=cF5>DocScroll</span><span class=cF0>;
 <a name="l216"></a>
-<a name="l217"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;horz_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l218"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;vert_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l217"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;horz_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l218"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;vert_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l219"></a>
-<a name="l220"></a>        </span><span class=cF9>CCtrl</span><span class=cF0> *c = SliderNew;
-<a name="l221"></a>        s.s1 = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l222"></a>        s.s2 = SLIDER_RANGE / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l223"></a>        s.s3 = SLIDER_RANGE / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l220"></a>    </span><span class=cF9>CCtrl</span><span class=cF0> *c = SliderNew;
+<a name="l221"></a>    s.s1 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l222"></a>    s.s2 = SLIDER_RANGE / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l223"></a>    s.s3 = SLIDER_RANGE / </span><span class=cFE>2</span><span class=cF0>;
 <a name="l224"></a>
-<a name="l225"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;mp, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>MPCtrl</span><span class=cF7>)</span><span class=cF0>);
-<a name="l226"></a>        mp.</span><span class=cFB>mp_count</span><span class=cF0> = _mp_count;
+<a name="l225"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;mp, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>MPCtrl</span><span class=cF7>)</span><span class=cF0>);
+<a name="l226"></a>    mp.</span><span class=cFB>mp_count</span><span class=cF0> = _mp_count;
 <a name="l227"></a>
-<a name="l228"></a>        </span><span class=cF5>View</span><span class=cF0>;
-<a name="l229"></a>        SliderDel(c);
-<a name="l230"></a>        </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l228"></a>    </span><span class=cF5>View</span><span class=cF0>;
+<a name="l229"></a>    SliderDel(c);
+<a name="l230"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
 <a name="l231"></a></span><span class=cF2>//You might want to save the original state of the scroll bars.</span><span class=cF0>
 <a name="l232"></a>}
 <a name="l233"></a>

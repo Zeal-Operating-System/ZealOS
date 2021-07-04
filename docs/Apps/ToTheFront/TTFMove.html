@@ -26,158 +26,158 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U8</span><span class=cF0> movement_costs[</span><span class=cFE>16</span><span class=cF0>];
-<a name="l2"></a>movement_costs[PLAINS]          = </span><span class=cFE>2</span><span class=cF0>;
-<a name="l3"></a>movement_costs[TREES]           = </span><span class=cFE>6</span><span class=cF0>;
-<a name="l4"></a>movement_costs[MOUNTAINS]       = </span><span class=cFE>10</span><span class=cF0>;
+<a name="l2"></a>movement_costs[PLAINS]      = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l3"></a>movement_costs[TREES]       = </span><span class=cFE>6</span><span class=cF0>;
+<a name="l4"></a>movement_costs[MOUNTAINS]   = </span><span class=cFE>10</span><span class=cF0>;
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF9>I64</span><span class=cF0> HexMoveOneCost(Unit *tmpu, </span><span class=cF9>I64</span><span class=cF0> r, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> facing)
 <a name="l7"></a>{
-<a name="l8"></a>        </span><span class=cF9>I64</span><span class=cF0> res;
+<a name="l8"></a>    </span><span class=cF9>I64</span><span class=cF0> res;
 <a name="l9"></a>
-<a name="l10"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;infantry)
-<a name="l11"></a>                res = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l12"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l13"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l14"></a>                res = FacingChange(facing, tmpu-&gt;facing);
-<a name="l15"></a>                </span><span class=cF1>if</span><span class=cF0> (res &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l16"></a>                        res--;
-<a name="l17"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF1>if</span><span class=cF0> (roads[r][c] &amp;&amp; roads[tmpu-&gt;row][tmpu-&gt;col])
-<a name="l19"></a>                res += </span><span class=cFE>1</span><span class=cF0>;
-<a name="l20"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l21"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l22"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;infantry)
-<a name="l23"></a>                        res += </span><span class=cFE>2</span><span class=cF0>;
-<a name="l24"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l25"></a>                {
-<a name="l26"></a>                        res += movement_costs[terrain[r][c]];
-<a name="l27"></a>                        </span><span class=cF1>if</span><span class=cF0> (rivers[r][c])
-<a name="l28"></a>                                res = tmpu-&gt;movement;
-<a name="l29"></a>                }
-<a name="l30"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l10"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;infantry)
+<a name="l11"></a>        res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l12"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        res = FacingChange(facing, tmpu-&gt;facing);
+<a name="l15"></a>        </span><span class=cF1>if</span><span class=cF0> (res &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l16"></a>            res--;
+<a name="l17"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cF1>if</span><span class=cF0> (roads[r][c] &amp;&amp; roads[tmpu-&gt;row][tmpu-&gt;col])
+<a name="l19"></a>        res += </span><span class=cFE>1</span><span class=cF0>;
+<a name="l20"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l22"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;infantry)
+<a name="l23"></a>            res += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l24"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l25"></a>        {
+<a name="l26"></a>            res += movement_costs[terrain[r][c]];
+<a name="l27"></a>            </span><span class=cF1>if</span><span class=cF0> (rivers[r][c])
+<a name="l28"></a>                res = tmpu-&gt;movement;
+<a name="l29"></a>        }
+<a name="l30"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l31"></a>
-<a name="l32"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l32"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l33"></a>}
 <a name="l34"></a>
 <a name="l35"></a></span><span class=cF9>I64</span><span class=cF0> HexMoveOne(</span><span class=cF9>I64</span><span class=cF0> *_row, </span><span class=cF9>I64</span><span class=cF0> *_col, </span><span class=cF1>F64</span><span class=cF0> x, </span><span class=cF1>F64</span><span class=cF0> y)
 <a name="l36"></a>{
-<a name="l37"></a>        </span><span class=cF9>I64</span><span class=cF0> direction, best_direction = -</span><span class=cFE>1</span><span class=cF0>, r, c;
-<a name="l38"></a>        </span><span class=cF1>F64</span><span class=cF0> dd, best_dd, x1, y1;
+<a name="l37"></a>    </span><span class=cF9>I64</span><span class=cF0> direction, best_direction = -</span><span class=cFE>1</span><span class=cF0>, r, c;
+<a name="l38"></a>    </span><span class=cF1>F64</span><span class=cF0> dd, best_dd, x1, y1;
 <a name="l39"></a>
-<a name="l40"></a>        RowCol2XY(&amp;x1, &amp;y1, *_row, *_col);
-<a name="l41"></a>        best_dd = </span><span class=cF5>Sqr</span><span class=cF0>(x1 - x) + </span><span class=cF5>Sqr</span><span class=cF0>(y1 - y);
-<a name="l42"></a>        </span><span class=cF1>for</span><span class=cF0> (direction = </span><span class=cFE>0</span><span class=cF0>; direction &lt; </span><span class=cFE>6</span><span class=cF0>; direction++)
-<a name="l43"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l44"></a>                r = *_row;
-<a name="l45"></a>                c = *_col;
-<a name="l46"></a>                Toward(&amp;r, &amp;c, direction);
-<a name="l47"></a>                RowCol2XY(&amp;x1, &amp;y1, r, c);
-<a name="l48"></a>                dd = </span><span class=cF5>Sqr</span><span class=cF0>(x1 - x) + </span><span class=cF5>Sqr</span><span class=cF0>(y1 - y);
-<a name="l49"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= r &lt; map_rows &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= c &lt; map_cols &amp;&amp; dd&lt;best_dd)
-<a name="l50"></a>                {
-<a name="l51"></a>                        best_dd = dd;
-<a name="l52"></a>                        best_direction = direction;
-<a name="l53"></a>                }
-<a name="l54"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l55"></a>        </span><span class=cF1>if</span><span class=cF0> (best_direction &gt;= </span><span class=cFE>0</span><span class=cF0>)
-<a name="l56"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l57"></a>                Toward(_row, _col, best_direction);
-<a name="l58"></a>                </span><span class=cF1>return</span><span class=cF0> best_direction;
-<a name="l59"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l60"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l61"></a>                </span><span class=cF1>return</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l40"></a>    RowCol2XY(&amp;x1, &amp;y1, *_row, *_col);
+<a name="l41"></a>    best_dd = </span><span class=cF5>Sqr</span><span class=cF0>(x1 - x) + </span><span class=cF5>Sqr</span><span class=cF0>(y1 - y);
+<a name="l42"></a>    </span><span class=cF1>for</span><span class=cF0> (direction = </span><span class=cFE>0</span><span class=cF0>; direction &lt; </span><span class=cFE>6</span><span class=cF0>; direction++)
+<a name="l43"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l44"></a>        r = *_row;
+<a name="l45"></a>        c = *_col;
+<a name="l46"></a>        Toward(&amp;r, &amp;c, direction);
+<a name="l47"></a>        RowCol2XY(&amp;x1, &amp;y1, r, c);
+<a name="l48"></a>        dd = </span><span class=cF5>Sqr</span><span class=cF0>(x1 - x) + </span><span class=cF5>Sqr</span><span class=cF0>(y1 - y);
+<a name="l49"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= r &lt; map_rows &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= c &lt; map_cols &amp;&amp; dd&lt;best_dd)
+<a name="l50"></a>        {
+<a name="l51"></a>            best_dd = dd;
+<a name="l52"></a>            best_direction = direction;
+<a name="l53"></a>        }
+<a name="l54"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l55"></a>    </span><span class=cF1>if</span><span class=cF0> (best_direction &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l56"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l57"></a>        Toward(_row, _col, best_direction);
+<a name="l58"></a>        </span><span class=cF1>return</span><span class=cF0> best_direction;
+<a name="l59"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l60"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l61"></a>        </span><span class=cF1>return</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>;
 <a name="l62"></a>}
 <a name="l63"></a>
 <a name="l64"></a></span><span class=cF1>Bool</span><span class=cF0> UnitMovePlot(</span><span class=cF1>U0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0>)
 <a name="l65"></a>{
-<a name="l66"></a>        move_x = x;
-<a name="l67"></a>        move_y = y;
-<a name="l68"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0> * animation_delay);
+<a name="l66"></a>    move_x = x;
+<a name="l67"></a>    move_y = y;
+<a name="l68"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0> * animation_delay);
 <a name="l69"></a>
-<a name="l70"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l70"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l71"></a>}
 <a name="l72"></a>
 <a name="l73"></a></span><span class=cF1>U0</span><span class=cF0> UnitMoveAnimation(Unit *tmpu, </span><span class=cF9>I64</span><span class=cF0> r, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> facing)
 <a name="l74"></a>{
-<a name="l75"></a>        </span><span class=cF1>F64</span><span class=cF0> x1, y1, x2, y2, f = facing * </span><span class=cFE>60</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l75"></a>    </span><span class=cF1>F64</span><span class=cF0> x1, y1, x2, y2, f = facing * </span><span class=cFE>60</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
 <a name="l76"></a>
-<a name="l77"></a>        moving_unit = tmpu;
-<a name="l78"></a>        RowCol2XY(&amp;x1, &amp;y1, tmpu-&gt;row, tmpu-&gt;col);
-<a name="l79"></a>        move_x = x1;
-<a name="l80"></a>        move_y = y1;
-<a name="l81"></a>        moving = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l82"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;infantry)
-<a name="l83"></a>                </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>53</span><span class=cF0>);
-<a name="l84"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l85"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l86"></a>                move_facing = tmpu-&gt;facing * </span><span class=cFE>60</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l87"></a>                </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>41</span><span class=cF0>);
-<a name="l88"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Wrap</span><span class=cF7>(</span><span class=cF0>f - move_facing, -</span><span class=cF3>pi</span><span class=cF7>)</span><span class=cF0> &lt;= </span><span class=cFE>0</span><span class=cF0>)
-<a name="l89"></a>                {
-<a name="l90"></a>                        move_facing -= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>03</span><span class=cF0>;
-<a name="l91"></a>                        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0>  *animation_delay);
-<a name="l92"></a>                }
-<a name="l93"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Wrap</span><span class=cF7>(</span><span class=cF0>f - move_facing, -</span><span class=cF3>pi</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l94"></a>                {
-<a name="l95"></a>                        move_facing += </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>03</span><span class=cF0>;
-<a name="l96"></a>                        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0> * animation_delay);
-<a name="l97"></a>                }
-<a name="l98"></a>                </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
-<a name="l99"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l100"></a>        move_facing = f;
-<a name="l101"></a>        RowCol2XY(&amp;x2, &amp;y2, r, c);
-<a name="l102"></a>        </span><span class=cF5>Line</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>, &amp;UnitMovePlot);
-<a name="l103"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l104"></a>        moving_unit = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l105"></a>        moving = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l77"></a>    moving_unit = tmpu;
+<a name="l78"></a>    RowCol2XY(&amp;x1, &amp;y1, tmpu-&gt;row, tmpu-&gt;col);
+<a name="l79"></a>    move_x = x1;
+<a name="l80"></a>    move_y = y1;
+<a name="l81"></a>    moving = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l82"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;infantry)
+<a name="l83"></a>        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>53</span><span class=cF0>);
+<a name="l84"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l85"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l86"></a>        move_facing = tmpu-&gt;facing * </span><span class=cFE>60</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l87"></a>        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>41</span><span class=cF0>);
+<a name="l88"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Wrap</span><span class=cF7>(</span><span class=cF0>f - move_facing, -</span><span class=cF3>pi</span><span class=cF7>)</span><span class=cF0> &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l89"></a>        {
+<a name="l90"></a>            move_facing -= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>03</span><span class=cF0>;
+<a name="l91"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0>  *animation_delay);
+<a name="l92"></a>        }
+<a name="l93"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Wrap</span><span class=cF7>(</span><span class=cF0>f - move_facing, -</span><span class=cF3>pi</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l94"></a>        {
+<a name="l95"></a>            move_facing += </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>03</span><span class=cF0>;
+<a name="l96"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5</span><span class=cF0> * animation_delay);
+<a name="l97"></a>        }
+<a name="l98"></a>        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
+<a name="l99"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l100"></a>    move_facing = f;
+<a name="l101"></a>    RowCol2XY(&amp;x2, &amp;y2, r, c);
+<a name="l102"></a>    </span><span class=cF5>Line</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>, &amp;UnitMovePlot);
+<a name="l103"></a>    </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l104"></a>    moving_unit = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l105"></a>    moving = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l106"></a>}
 <a name="l107"></a> 
 <a name="l108"></a></span><span class=cF1>Bool</span><span class=cF0> UnitMove(Unit *tmpu, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y)
 <a name="l109"></a>{
-<a name="l110"></a>        Unit *target;
-<a name="l111"></a>        </span><span class=cF9>I64</span><span class=cF0>   r, c, r0 = tmpu-&gt;row, c0=tmpu-&gt;col, i, facing;
+<a name="l110"></a>    Unit *target;
+<a name="l111"></a>    </span><span class=cF9>I64</span><span class=cF0>   r, c, r0 = tmpu-&gt;row, c0=tmpu-&gt;col, i, facing;
 <a name="l112"></a>
-<a name="l113"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpu-&gt;remaining_movement &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l114"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l115"></a>                r = tmpu-&gt;row;
-<a name="l116"></a>                c = tmpu-&gt;col;
-<a name="l117"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>facing = HexMoveOne(&amp;r, &amp;c, x, y)</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l118"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l119"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l120"></a>                {
-<a name="l121"></a>                        i = HexMoveOneCost(tmpu, r, c, facing);
-<a name="l122"></a>                        </span><span class=cF1>if</span><span class=cF0> (i &gt; tmpu-&gt;movement)
-<a name="l123"></a>                                i = tmpu-&gt;movement;
-<a name="l124"></a>                        </span><span class=cF1>if</span><span class=cF0> (!tmpu-&gt;fired &amp;&amp; tmpu-&gt;remaining_movement &gt;= i &amp;&amp;
-<a name="l125"></a>                                tmpu-&gt;remaining_movement &gt;= tmpu-&gt;movement &gt;&gt; </span><span class=cFE>1</span><span class=cF0> &amp;&amp;
-<a name="l126"></a>                                </span><span class=cF7>(</span><span class=cF0>target = UnitFind(r, c)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; target-&gt;player != tmpu-&gt;player &amp;&amp;
-<a name="l127"></a>                                tmpu-&gt;infantry != target-&gt;infantry)
-<a name="l128"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l129"></a>                                </span><span class=cF1>if</span><span class=cF0> (!HexOccupy</span><span class=cF7>(</span><span class=cF5>ToBool</span><span class=cF0>(target-&gt;infantry), tmpu, target</span><span class=cF7>)</span><span class=cF0>)
-<a name="l130"></a>                                {
-<a name="l131"></a>                                        tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l132"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l133"></a>                                }
-<a name="l134"></a>                                i = tmpu-&gt;remaining_movement;
-<a name="l135"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l136"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;remaining_movement &gt;= i &amp;&amp; !UnitFind</span><span class=cF7>(</span><span class=cF0>r, c</span><span class=cF7>)</span><span class=cF0>)
-<a name="l137"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l138"></a>                                UnitMoveAnimation(tmpu, r, c, facing);
-<a name="l139"></a>                                tmpu-&gt;facing=facing;
-<a name="l140"></a>                                tmpu-&gt;remaining_movement -= i;
-<a name="l141"></a>                                tmpu-&gt;row = r;
-<a name="l142"></a>                                tmpu-&gt;col = c;
-<a name="l143"></a>                                VisRecalc(VR_UPDATE_FRIENDLY_UNIT, tmpu);
-<a name="l144"></a>                                </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;tmpu-&gt;vis[enemy_player], </span><span class=cFE>0</span><span class=cF0>, VisRecalc</span><span class=cF7>(</span><span class=cF0>VR_ONE_ENEMY_UNIT, tmpu</span><span class=cF7>)</span><span class=cF0>);
-<a name="l145"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l146"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l147"></a>                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l148"></a>                }
-<a name="l149"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l150"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpu || tmpu-&gt;row != r0 || tmpu-&gt;col != c0)
-<a name="l151"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l152"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l153"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l113"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpu-&gt;remaining_movement &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l114"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l115"></a>        r = tmpu-&gt;row;
+<a name="l116"></a>        c = tmpu-&gt;col;
+<a name="l117"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>facing = HexMoveOne(&amp;r, &amp;c, x, y)</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l118"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l119"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l120"></a>        {
+<a name="l121"></a>            i = HexMoveOneCost(tmpu, r, c, facing);
+<a name="l122"></a>            </span><span class=cF1>if</span><span class=cF0> (i &gt; tmpu-&gt;movement)
+<a name="l123"></a>                i = tmpu-&gt;movement;
+<a name="l124"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpu-&gt;fired &amp;&amp; tmpu-&gt;remaining_movement &gt;= i &amp;&amp;
+<a name="l125"></a>                tmpu-&gt;remaining_movement &gt;= tmpu-&gt;movement &gt;&gt; </span><span class=cFE>1</span><span class=cF0> &amp;&amp;
+<a name="l126"></a>                </span><span class=cF7>(</span><span class=cF0>target = UnitFind(r, c)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; target-&gt;player != tmpu-&gt;player &amp;&amp;
+<a name="l127"></a>                tmpu-&gt;infantry != target-&gt;infantry)
+<a name="l128"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l129"></a>                </span><span class=cF1>if</span><span class=cF0> (!HexOccupy</span><span class=cF7>(</span><span class=cF5>ToBool</span><span class=cF0>(target-&gt;infantry), tmpu, target</span><span class=cF7>)</span><span class=cF0>)
+<a name="l130"></a>                {
+<a name="l131"></a>                    tmpu = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l132"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l133"></a>                }
+<a name="l134"></a>                i = tmpu-&gt;remaining_movement;
+<a name="l135"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l136"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;remaining_movement &gt;= i &amp;&amp; !UnitFind</span><span class=cF7>(</span><span class=cF0>r, c</span><span class=cF7>)</span><span class=cF0>)
+<a name="l137"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l138"></a>                UnitMoveAnimation(tmpu, r, c, facing);
+<a name="l139"></a>                tmpu-&gt;facing=facing;
+<a name="l140"></a>                tmpu-&gt;remaining_movement -= i;
+<a name="l141"></a>                tmpu-&gt;row = r;
+<a name="l142"></a>                tmpu-&gt;col = c;
+<a name="l143"></a>                VisRecalc(VR_UPDATE_FRIENDLY_UNIT, tmpu);
+<a name="l144"></a>                </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;tmpu-&gt;vis[enemy_player], </span><span class=cFE>0</span><span class=cF0>, VisRecalc</span><span class=cF7>(</span><span class=cF0>VR_ONE_ENEMY_UNIT, tmpu</span><span class=cF7>)</span><span class=cF0>);
+<a name="l145"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l146"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l147"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l148"></a>        }
+<a name="l149"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l150"></a>    </span><span class=cF1>if</span><span class=cF0> (!tmpu || tmpu-&gt;row != r0 || tmpu-&gt;col != c0)
+<a name="l151"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l152"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l153"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l154"></a>}
 </span></pre></body>
 </html>

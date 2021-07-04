@@ -30,78 +30,78 @@ body {background-color:#000000;}
 <a name="l3"></a>
 <a name="l4"></a></span><span class=cF1>U0</span><span class=cF0> PrimesJob(</span><span class=cF9>I64</span><span class=cF0> i)
 <a name="l5"></a>{
-<a name="l6"></a>        </span><span class=cF9>I64</span><span class=cF0> j, k, l = </span><span class=cF5>Sqrt</span><span class=cF0>(prime_range), 
-<a name="l7"></a>                lo = i * prime_range / my_mp_count, 
-<a name="l8"></a>                hi = (i + </span><span class=cFE>1</span><span class=cF0>) * prime_range / my_mp_count, 
-<a name="l9"></a>                lo2 = lo + </span><span class=cFB>sys_cache_line_width</span><span class=cF0>, 
-<a name="l10"></a>                hi2 = hi - </span><span class=cFB>sys_cache_line_width</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF9>I64</span><span class=cF0> j, k, l = </span><span class=cF5>Sqrt</span><span class=cF0>(prime_range), 
+<a name="l7"></a>        lo = i * prime_range / my_mp_count, 
+<a name="l8"></a>        hi = (i + </span><span class=cFE>1</span><span class=cF0>) * prime_range / my_mp_count, 
+<a name="l9"></a>        lo2 = lo + </span><span class=cFB>sys_cache_line_width</span><span class=cF0>, 
+<a name="l10"></a>        hi2 = hi - </span><span class=cFB>sys_cache_line_width</span><span class=cF0>;
 <a name="l11"></a>
-<a name="l12"></a>        </span><span class=cF1>if</span><span class=cF0> (lo2 &gt; hi2)
-<a name="l13"></a>                lo2 = hi2;
-<a name="l14"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>2</span><span class=cF0>; j &lt;= l; j++)
-<a name="l15"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l16"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>master_bitmap, j</span><span class=cF7>)</span><span class=cF0>)
-<a name="l17"></a>                {
-<a name="l18"></a>                        </span><span class=cF1>if</span><span class=cF0> (j &gt;= lo)
-<a name="l19"></a>                                k = j + j;
-<a name="l20"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l21"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l22"></a>                                k = lo - lo % j;
-<a name="l23"></a>                                </span><span class=cF1>if</span><span class=cF0> (k &lt; lo)
-<a name="l24"></a>                                        k += j;
-<a name="l25"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l26"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; lo2)
-<a name="l27"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l28"></a>                                </span><span class=cF5>LBts</span><span class=cF0>(master_bitmap, k);
-<a name="l29"></a>                                k += j;
-<a name="l30"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l31"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; hi2)
-<a name="l32"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l33"></a>                                </span><span class=cF5>Bts</span><span class=cF0>(master_bitmap, k);
-<a name="l34"></a>                                k += j;
-<a name="l35"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l36"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; hi)
-<a name="l37"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l38"></a>                                </span><span class=cF5>LBts</span><span class=cF0>(master_bitmap, k);
-<a name="l39"></a>                                k += j;
-<a name="l40"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l41"></a>                }
-<a name="l42"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l43"></a>        </span><span class=cF1>lock</span><span class=cF0> pending--;
+<a name="l12"></a>    </span><span class=cF1>if</span><span class=cF0> (lo2 &gt; hi2)
+<a name="l13"></a>        lo2 = hi2;
+<a name="l14"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>2</span><span class=cF0>; j &lt;= l; j++)
+<a name="l15"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>master_bitmap, j</span><span class=cF7>)</span><span class=cF0>)
+<a name="l17"></a>        {
+<a name="l18"></a>            </span><span class=cF1>if</span><span class=cF0> (j &gt;= lo)
+<a name="l19"></a>                k = j + j;
+<a name="l20"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l21"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l22"></a>                k = lo - lo % j;
+<a name="l23"></a>                </span><span class=cF1>if</span><span class=cF0> (k &lt; lo)
+<a name="l24"></a>                    k += j;
+<a name="l25"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l26"></a>            </span><span class=cF1>while</span><span class=cF0> (k &lt; lo2)
+<a name="l27"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l28"></a>                </span><span class=cF5>LBts</span><span class=cF0>(master_bitmap, k);
+<a name="l29"></a>                k += j;
+<a name="l30"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l31"></a>            </span><span class=cF1>while</span><span class=cF0> (k &lt; hi2)
+<a name="l32"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l33"></a>                </span><span class=cF5>Bts</span><span class=cF0>(master_bitmap, k);
+<a name="l34"></a>                k += j;
+<a name="l35"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l36"></a>            </span><span class=cF1>while</span><span class=cF0> (k &lt; hi)
+<a name="l37"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF5>LBts</span><span class=cF0>(master_bitmap, k);
+<a name="l39"></a>                k += j;
+<a name="l40"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l41"></a>        }
+<a name="l42"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l43"></a>    </span><span class=cF1>lock</span><span class=cF0> pending--;
 <a name="l44"></a>}
 <a name="l45"></a>
 <a name="l46"></a></span><span class=cF9>I64</span><span class=cF0> Primes(</span><span class=cF9>I64</span><span class=cF0> range, </span><span class=cF9>I64</span><span class=cF0> _my_mp_count)
 <a name="l47"></a>{
-<a name="l48"></a>        </span><span class=cF9>I64</span><span class=cF0> i, prime_count = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l49"></a>        </span><span class=cF1>F64</span><span class=cF0> t0 = </span><span class=cF5>tS</span><span class=cF0>, tf;
+<a name="l48"></a>    </span><span class=cF9>I64</span><span class=cF0> i, prime_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l49"></a>    </span><span class=cF1>F64</span><span class=cF0> t0 = </span><span class=cF5>tS</span><span class=cF0>, tf;
 <a name="l50"></a>
-<a name="l51"></a>        prime_range = range;
-<a name="l52"></a>        </span><span class=cF1>if</span><span class=cF0> (_my_mp_count &lt;= </span><span class=cFB>mp_count</span><span class=cF0>)
-<a name="l53"></a>                my_mp_count = _my_mp_count;
-<a name="l54"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l55"></a>                my_mp_count = </span><span class=cFB>mp_count</span><span class=cF0>;
-<a name="l56"></a>        master_bitmap = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>prime_range + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
-<a name="l57"></a>        </span><span class=cF5>Bts</span><span class=cF0>(master_bitmap, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l58"></a>        </span><span class=cF5>Bts</span><span class=cF0>(master_bitmap, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l59"></a>        pending = my_mp_count;
-<a name="l60"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; my_mp_count; i++)
-<a name="l61"></a>                </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;PrimesJob, i, i);
-<a name="l62"></a>        </span><span class=cF1>while</span><span class=cF0> (pending)
-<a name="l63"></a>                </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l64"></a>        tf = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l51"></a>    prime_range = range;
+<a name="l52"></a>    </span><span class=cF1>if</span><span class=cF0> (_my_mp_count &lt;= </span><span class=cFB>mp_count</span><span class=cF0>)
+<a name="l53"></a>        my_mp_count = _my_mp_count;
+<a name="l54"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l55"></a>        my_mp_count = </span><span class=cFB>mp_count</span><span class=cF0>;
+<a name="l56"></a>    master_bitmap = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>prime_range + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l57"></a>    </span><span class=cF5>Bts</span><span class=cF0>(master_bitmap, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l58"></a>    </span><span class=cF5>Bts</span><span class=cF0>(master_bitmap, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l59"></a>    pending = my_mp_count;
+<a name="l60"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; my_mp_count; i++)
+<a name="l61"></a>        </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;PrimesJob, i, i);
+<a name="l62"></a>    </span><span class=cF1>while</span><span class=cF0> (pending)
+<a name="l63"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l64"></a>    tf = </span><span class=cF5>tS</span><span class=cF0>;
 <a name="l65"></a>
-<a name="l66"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prime_range; i++)
-<a name="l67"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>master_bitmap, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l68"></a>                        prime_count++;
+<a name="l66"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prime_range; i++)
+<a name="l67"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>master_bitmap, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l68"></a>            prime_count++;
 <a name="l69"></a>
-<a name="l70"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cF5>MaxI64</span><span class=cF7>(</span><span class=cF0>prime_range - </span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>; i &lt; prime_range; i++)
-<a name="l71"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>master_bitmap, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l72"></a>                        </span><span class=cF6>&quot;%d &quot;</span><span class=cF0>, i;
+<a name="l70"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cF5>MaxI64</span><span class=cF7>(</span><span class=cF0>prime_range - </span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>; i &lt; prime_range; i++)
+<a name="l71"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>master_bitmap, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l72"></a>            </span><span class=cF6>&quot;%d &quot;</span><span class=cF0>, i;
 <a name="l73"></a>
-<a name="l74"></a>        </span><span class=cF6>&quot;\n$RED$CPUs:%d PrimeRange:%,d PrimeCount:%,d Time:%9.7,f$FG$\n&quot;</span><span class=cF0>, my_mp_count, prime_range, prime_count, tf - t0;
+<a name="l74"></a>    </span><span class=cF6>&quot;\n$RED$CPUs:%d PrimeRange:%,d PrimeCount:%,d Time:%9.7,f$FG$\n&quot;</span><span class=cF0>, my_mp_count, prime_range, prime_count, tf - t0;
 <a name="l75"></a>
-<a name="l76"></a>        </span><span class=cF5>Free</span><span class=cF0>(master_bitmap);
-<a name="l77"></a>        </span><span class=cF1>return</span><span class=cF0> prime_count;
+<a name="l76"></a>    </span><span class=cF5>Free</span><span class=cF0>(master_bitmap);
+<a name="l77"></a>    </span><span class=cF1>return</span><span class=cF0> prime_count;
 <a name="l78"></a>}
 <a name="l79"></a>
 <a name="l80"></a>Primes(</span><span class=cFE>100</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);

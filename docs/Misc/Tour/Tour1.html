@@ -30,11 +30,11 @@ body {background-color:#000000;}
 <a name="l3"></a></span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l4"></a>
 <a name="l5"></a>TourPut(</span><span class=cF6>&quot;Press $GREEN$&lt;F1&gt;$FG$ for the main help index.\n&quot;</span><span class=cF0>
-<a name="l6"></a>                </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l7"></a>                </span><span class=cF6>&quot;The $GREEN$&lt;F1&gt;$FG$ key works both in &quot;</span><span class=cF0>
-<a name="l8"></a>                </span><span class=cF6>&quot;the editor and at the command line.\n&quot;</span><span class=cF0>
-<a name="l9"></a>                </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l10"></a>                </span><span class=cF6>&quot;You can find the </span><a href="https://tomawezome.github.io/ZealOS/Doc/DemoIndex.html#l1"><span class=cF4>Demo Index</span></a><span class=cF6> on the help index.\n&quot;</span><span class=cF0>);
+<a name="l6"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l7"></a>        </span><span class=cF6>&quot;The $GREEN$&lt;F1&gt;$FG$ key works both in &quot;</span><span class=cF0>
+<a name="l8"></a>        </span><span class=cF6>&quot;the editor and at the command line.\n&quot;</span><span class=cF0>
+<a name="l9"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l10"></a>        </span><span class=cF6>&quot;You can find the </span><a href="https://tomawezome.github.io/ZealOS/Doc/DemoIndex.html#l1"><span class=cF4>Demo Index</span></a><span class=cF6> on the help index.\n&quot;</span><span class=cF0>);
 <a name="l11"></a></span><span class=cF5>InKeyGet</span><span class=cF0>(</span><span class=cF3>SC_F1</span><span class=cF0>);
 <a name="l12"></a>
 <a name="l13"></a>TourPut(</span><span class=cF6>&quot;Press $GREEN$&lt;SHIFT-ESC&gt;$FG$ to abort and exit.\n&quot;</span><span class=cF0>);
@@ -42,46 +42,46 @@ body {background-color:#000000;}
 <a name="l15"></a>
 <a name="l16"></a></span><span class=cF1>U0</span><span class=cF0> RevealPopUpHelp(</span><span class=cF9>I64</span><span class=cF0> scf)
 <a name="l17"></a>{
-<a name="l18"></a>        </span><span class=cF1>F64</span><span class=cF0>  t0;
-<a name="l19"></a>        </span><span class=cF1>U8</span><span class=cF0>  *st, *st2;
-<a name="l20"></a>        </span><span class=cF1>Bool</span><span class=cF0> old_key_desc;
+<a name="l18"></a>    </span><span class=cF1>F64</span><span class=cF0>  t0;
+<a name="l19"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st, *st2;
+<a name="l20"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_key_desc;
 <a name="l21"></a>
-<a name="l22"></a>        </span><span class=cF1>do</span><span class=cF0>
-<a name="l23"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l24"></a>                </span><span class=cF5>AutoComplete</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l25"></a>                st = </span><span class=cF5>ScanCode2KeyName</span><span class=cF0>(scf);
-<a name="l26"></a>                st2 = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_REM_TRAILING</span><span class=cF0>);
-<a name="l27"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l28"></a>                st = </span><span class=cF5>MStrPrint</span><span class=cF0>( </span><span class=cF6>&quot;If you have $GREEN$AutoComplete$FG$ on, you &quot;</span><span class=cF0>
-<a name="l29"></a>                                                </span><span class=cF6>&quot;can list the key commands.  This works both &quot;</span><span class=cF0>
-<a name="l30"></a>                                                </span><span class=cF6>&quot;in the editor and at the command line.\n&quot;</span><span class=cF0>
-<a name="l31"></a>                                                </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l32"></a>                                                </span><span class=cF6>&quot;You can click the links to jump to source code.\n&quot;</span><span class=cF0>
-<a name="l33"></a>                                                </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l34"></a>                                                </span><span class=cF6>&quot;Press and hold the $GREEN$&lt;%s&gt;$FG$ key.\n&quot;</span><span class=cF0>
-<a name="l35"></a>                                                </span><span class=cF6>&quot;Hold it for more than 1.0 seconds.\n&quot;</span><span class=cF0>,st2);
-<a name="l36"></a>                </span><span class=cF5>Free</span><span class=cF0>(st2);
-<a name="l37"></a>                TourPut(st);
-<a name="l38"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l22"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l23"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l24"></a>        </span><span class=cF5>AutoComplete</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l25"></a>        st = </span><span class=cF5>ScanCode2KeyName</span><span class=cF0>(scf);
+<a name="l26"></a>        st2 = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_REM_TRAILING</span><span class=cF0>);
+<a name="l27"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l28"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>( </span><span class=cF6>&quot;If you have $GREEN$AutoComplete$FG$ on, you &quot;</span><span class=cF0>
+<a name="l29"></a>                        </span><span class=cF6>&quot;can list the key commands.  This works both &quot;</span><span class=cF0>
+<a name="l30"></a>                        </span><span class=cF6>&quot;in the editor and at the command line.\n&quot;</span><span class=cF0>
+<a name="l31"></a>                        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l32"></a>                        </span><span class=cF6>&quot;You can click the links to jump to source code.\n&quot;</span><span class=cF0>
+<a name="l33"></a>                        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l34"></a>                        </span><span class=cF6>&quot;Press and hold the $GREEN$&lt;%s&gt;$FG$ key.\n&quot;</span><span class=cF0>
+<a name="l35"></a>                        </span><span class=cF6>&quot;Hold it for more than 1.0 seconds.\n&quot;</span><span class=cF0>,st2);
+<a name="l36"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l37"></a>        TourPut(st);
+<a name="l38"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l39"></a>
-<a name="l40"></a>                old_key_desc = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>);
-<a name="l41"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFB>kbd</span><span class=cF0>.scan_code &amp; </span><span class=cF7>(</span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0> != scf)
-<a name="l42"></a>                        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l40"></a>        old_key_desc = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>);
+<a name="l41"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFB>kbd</span><span class=cF0>.scan_code &amp; </span><span class=cF7>(</span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0> != scf)
+<a name="l42"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
 <a name="l43"></a>
-<a name="l44"></a>                t0 = </span><span class=cF5>tS</span><span class=cF0>;
-<a name="l45"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFB>kbd</span><span class=cF0>.scan_code &amp; </span><span class=cF7>(</span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0> == scf)
-<a name="l46"></a>                {
-<a name="l47"></a>                        </span><span class=cF5>KeyScan</span><span class=cF0>(,, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l48"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> &lt; </span><span class=cF5>tS</span><span class=cF0> - t0 &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>15</span><span class=cF0>)
-<a name="l49"></a>                                </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
-<a name="l50"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l51"></a>                                </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l52"></a>                        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l53"></a>                }
-<a name="l54"></a>                </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>, old_key_desc);
-<a name="l55"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l56"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l57"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> - t0 &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
+<a name="l44"></a>        t0 = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l45"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFB>kbd</span><span class=cF0>.scan_code &amp; </span><span class=cF7>(</span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0> == scf)
+<a name="l46"></a>        {
+<a name="l47"></a>            </span><span class=cF5>KeyScan</span><span class=cF0>(,, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l48"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> &lt; </span><span class=cF5>tS</span><span class=cF0> - t0 &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>15</span><span class=cF0>)
+<a name="l49"></a>                </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
+<a name="l50"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l51"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l52"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l53"></a>        }
+<a name="l54"></a>        </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>, old_key_desc);
+<a name="l55"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l56"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l57"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> - t0 &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
 <a name="l58"></a>}
 <a name="l59"></a>
 <a name="l60"></a>RevealPopUpHelp(</span><span class=cF3>SCF_CTRL</span><span class=cF0>);

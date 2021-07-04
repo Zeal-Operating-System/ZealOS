@@ -49,7 +49,7 @@ U0 HtmlPutS(CDoc *doc, I64 u32_attr, I64 *_old_u32_attr, Bool underline_update, 
 					DocPutKey(doc, CH_SPACE, 0);
 					*_col = *_col + 1;
 				}
-				while (*_col & 7);
+				while (*_col & 3);
 				break;
 
 			start:

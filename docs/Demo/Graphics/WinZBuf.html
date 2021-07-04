@@ -27,25 +27,25 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *,</span><span class=cF9>CDC</span><span class=cF0> *dc)
 <a name="l2"></a>{
-<a name="l3"></a>        </span><span class=cF9>I64</span><span class=cF0>  i, j;
-<a name="l4"></a>        </span><span class=cF9>U16</span><span class=cF0> *ptr = </span><span class=cFB>gr</span><span class=cF0>.win_z_buf;
-<a name="l5"></a>        dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
-<a name="l6"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF6>&quot;Move the windows around and watch.&quot;</span><span class=cF0>);
-<a name="l7"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>TEXT_ROWS</span><span class=cF0>; i++)
-<a name="l8"></a>                </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt;</span><span class=cF3>TEXT_COLS</span><span class=cF0>; j++)
-<a name="l9"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l10"></a>                        dc-&gt;color = *ptr++ &amp; </span><span class=cFE>15</span><span class=cF0>;
-<a name="l11"></a>                        </span><span class=cF5>GrPlot</span><span class=cF0>(dc, j, i + </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>);
-<a name="l12"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, j;
+<a name="l4"></a>    </span><span class=cF9>U16</span><span class=cF0> *ptr = </span><span class=cFB>gr</span><span class=cF0>.win_z_buf;
+<a name="l5"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF6>&quot;Move the windows around and watch.&quot;</span><span class=cF0>);
+<a name="l7"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>TEXT_ROWS</span><span class=cF0>; i++)
+<a name="l8"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt;</span><span class=cF3>TEXT_COLS</span><span class=cF0>; j++)
+<a name="l9"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l10"></a>            dc-&gt;color = *ptr++ &amp; </span><span class=cFE>15</span><span class=cF0>;
+<a name="l11"></a>            </span><span class=cF5>GrPlot</span><span class=cF0>(dc, j, i + </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>);
+<a name="l12"></a>        </span><span class=cF7>}</span><span class=cF0>
 <a name="l13"></a>}
 <a name="l14"></a>
 <a name="l15"></a></span><span class=cF1>U0</span><span class=cF0> ScrollBars()
 <a name="l16"></a>{
-<a name="l17"></a>        </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
-<a name="l18"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l19"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l20"></a>        </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l21"></a>        </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l17"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l18"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l19"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l20"></a>    </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l21"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
 <a name="l22"></a>}
 <a name="l23"></a>
 <a name="l24"></a>ScrollBars;

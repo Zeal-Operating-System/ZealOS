@@ -27,94 +27,94 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> UDPSocketTest()
 <a name="l2"></a>{
-<a name="l3"></a>        </span><span class=cF6>&quot;Before any sockets added:\n&quot;</span><span class=cF0>;
-<a name="l4"></a>        UDPRep;
+<a name="l3"></a>    </span><span class=cF6>&quot;Before any sockets added:\n&quot;</span><span class=cF0>;
+<a name="l4"></a>    UDPRep;
 <a name="l5"></a>
-<a name="l6"></a>        CUDPSocket                      *u0 = UDPSocket(AF_INET);
-<a name="l7"></a>        CUDPSocket                      *u1 = UDPSocket(AF_INET);
-<a name="l8"></a>        CUDPSocket                      *u2 = UDPSocket(AF_INET);
-<a name="l9"></a>        CUDPSocket                      *u3 = UDPSocket(AF_INET);
-<a name="l10"></a>        CUDPSocket                      *u4 = UDPSocket(AF_INET);
-<a name="l11"></a>        CUDPSocket                      *u5 = UDPSocket(AF_INET);
+<a name="l6"></a>    CUDPSocket          *u0 = UDPSocket(AF_INET);
+<a name="l7"></a>    CUDPSocket          *u1 = UDPSocket(AF_INET);
+<a name="l8"></a>    CUDPSocket          *u2 = UDPSocket(AF_INET);
+<a name="l9"></a>    CUDPSocket          *u3 = UDPSocket(AF_INET);
+<a name="l10"></a>    CUDPSocket          *u4 = UDPSocket(AF_INET);
+<a name="l11"></a>    CUDPSocket          *u5 = UDPSocket(AF_INET);
 <a name="l12"></a>
-<a name="l13"></a>        CSocketAddressIPV4      *i0 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
-<a name="l14"></a>        CSocketAddressIPV4      *i1 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
-<a name="l15"></a>        CSocketAddressIPV4      *i2 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
-<a name="l16"></a>        CSocketAddressIPV4      *i3 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
-<a name="l17"></a>        CSocketAddressIPV4      *i4 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
-<a name="l18"></a>        CSocketAddressIPV4      *i5 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l13"></a>    CSocketAddressIPV4  *i0 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l14"></a>    CSocketAddressIPV4  *i1 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l15"></a>    CSocketAddressIPV4  *i2 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l16"></a>    CSocketAddressIPV4  *i3 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l17"></a>    CSocketAddressIPV4  *i4 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l18"></a>    CSocketAddressIPV4  *i5 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
 <a name="l19"></a>
-<a name="l20"></a>        i0-&gt;port                        = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>30</span><span class=cF0>);
-<a name="l21"></a>        i0-&gt;family                      = AF_INET;
-<a name="l22"></a>        i0-&gt;address.address     = </span><span class=cFE>0xDEADBEEF</span><span class=cF0>;
+<a name="l20"></a>    i0-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>30</span><span class=cF0>);
+<a name="l21"></a>    i0-&gt;family          = AF_INET;
+<a name="l22"></a>    i0-&gt;address.address = </span><span class=cFE>0xDEADBEEF</span><span class=cF0>;
 <a name="l23"></a>
-<a name="l24"></a>        i1-&gt;port                        = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
-<a name="l25"></a>        i1-&gt;family                      = AF_INET;
-<a name="l26"></a>        i1-&gt;address.address = </span><span class=cFE>0xF00DBABE</span><span class=cF0>;
+<a name="l24"></a>    i1-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
+<a name="l25"></a>    i1-&gt;family          = AF_INET;
+<a name="l26"></a>    i1-&gt;address.address = </span><span class=cFE>0xF00DBABE</span><span class=cF0>;
 <a name="l27"></a>
-<a name="l28"></a>        i2-&gt;port                        = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>35</span><span class=cF0>);
-<a name="l29"></a>        i2-&gt;family                      = AF_INET;
-<a name="l30"></a>        i2-&gt;address.address = </span><span class=cFE>0xC0C0D0D0</span><span class=cF0>;
+<a name="l28"></a>    i2-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>35</span><span class=cF0>);
+<a name="l29"></a>    i2-&gt;family          = AF_INET;
+<a name="l30"></a>    i2-&gt;address.address = </span><span class=cFE>0xC0C0D0D0</span><span class=cF0>;
 <a name="l31"></a>
-<a name="l32"></a>        i3-&gt;port                        = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>20</span><span class=cF0>);
-<a name="l33"></a>        i3-&gt;family                      = AF_INET;
-<a name="l34"></a>        i3-&gt;address.address = </span><span class=cFE>0xF007BA11</span><span class=cF0>;
+<a name="l32"></a>    i3-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>20</span><span class=cF0>);
+<a name="l33"></a>    i3-&gt;family          = AF_INET;
+<a name="l34"></a>    i3-&gt;address.address = </span><span class=cFE>0xF007BA11</span><span class=cF0>;
 <a name="l35"></a>
-<a name="l36"></a>        i4-&gt;port                        = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>28</span><span class=cF0>);
-<a name="l37"></a>        i4-&gt;family                      = AF_INET;
-<a name="l38"></a>        i4-&gt;address.address = </span><span class=cFE>0x0B0E5EED</span><span class=cF0>;
+<a name="l36"></a>    i4-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>28</span><span class=cF0>);
+<a name="l37"></a>    i4-&gt;family          = AF_INET;
+<a name="l38"></a>    i4-&gt;address.address = </span><span class=cFE>0x0B0E5EED</span><span class=cF0>;
 <a name="l39"></a>
-<a name="l40"></a>        i5-&gt;port                        = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>37</span><span class=cF0>);
-<a name="l41"></a>        i5-&gt;family                      = AF_INET;
-<a name="l42"></a>        i5-&gt;address.address = </span><span class=cFE>0x00ABCDEF</span><span class=cF0>;
+<a name="l40"></a>    i5-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>37</span><span class=cF0>);
+<a name="l41"></a>    i5-&gt;family          = AF_INET;
+<a name="l42"></a>    i5-&gt;address.address = </span><span class=cFE>0x00ABCDEF</span><span class=cF0>;
 <a name="l43"></a>
-<a name="l44"></a>        UDPSocketBind(u0, i0);
-<a name="l45"></a>        UDPSocketBind(u1, i1);
-<a name="l46"></a>        UDPSocketBind(u2, i2);
-<a name="l47"></a>        UDPSocketBind(u3, i3);
-<a name="l48"></a>        UDPSocketBind(u4, i4);
-<a name="l49"></a>        UDPSocketBind(u5, i5);
+<a name="l44"></a>    UDPSocketBind(u0, i0);
+<a name="l45"></a>    UDPSocketBind(u1, i1);
+<a name="l46"></a>    UDPSocketBind(u2, i2);
+<a name="l47"></a>    UDPSocketBind(u3, i3);
+<a name="l48"></a>    UDPSocketBind(u4, i4);
+<a name="l49"></a>    UDPSocketBind(u5, i5);
 <a name="l50"></a>
-<a name="l51"></a>        </span><span class=cF6>&quot;All sockets now bound. Currently bound:\n&quot;</span><span class=cF0>;
-<a name="l52"></a>        UDPRep;
-<a name="l53"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l51"></a>    </span><span class=cF6>&quot;All sockets now bound. Currently bound:\n&quot;</span><span class=cF0>;
+<a name="l52"></a>    UDPRep;
+<a name="l53"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l54"></a>
-<a name="l55"></a>        UDPSocketClose(u0);
-<a name="l56"></a>        </span><span class=cF6>&quot;After remove first socket\n&quot;</span><span class=cF0>;
-<a name="l57"></a>        UDPRep;
-<a name="l58"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l55"></a>    UDPSocketClose(u0);
+<a name="l56"></a>    </span><span class=cF6>&quot;After remove first socket\n&quot;</span><span class=cF0>;
+<a name="l57"></a>    UDPRep;
+<a name="l58"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l59"></a>
-<a name="l60"></a>        UDPSocketClose(u1);
-<a name="l61"></a>        </span><span class=cF6>&quot;After remove second socket\n&quot;</span><span class=cF0>;
-<a name="l62"></a>        UDPRep;
-<a name="l63"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l60"></a>    UDPSocketClose(u1);
+<a name="l61"></a>    </span><span class=cF6>&quot;After remove second socket\n&quot;</span><span class=cF0>;
+<a name="l62"></a>    UDPRep;
+<a name="l63"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l64"></a>
-<a name="l65"></a>        UDPSocketClose(u2);
-<a name="l66"></a>        </span><span class=cF6>&quot;After remove third socket\n&quot;</span><span class=cF0>;
-<a name="l67"></a>        UDPRep;
-<a name="l68"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l65"></a>    UDPSocketClose(u2);
+<a name="l66"></a>    </span><span class=cF6>&quot;After remove third socket\n&quot;</span><span class=cF0>;
+<a name="l67"></a>    UDPRep;
+<a name="l68"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l69"></a>
-<a name="l70"></a>        UDPSocketClose(u3);
-<a name="l71"></a>        </span><span class=cF6>&quot;After remove fourth socket\n&quot;</span><span class=cF0>;
-<a name="l72"></a>        UDPRep;
-<a name="l73"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l70"></a>    UDPSocketClose(u3);
+<a name="l71"></a>    </span><span class=cF6>&quot;After remove fourth socket\n&quot;</span><span class=cF0>;
+<a name="l72"></a>    UDPRep;
+<a name="l73"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l74"></a>
-<a name="l75"></a>        UDPSocketClose(u4);
-<a name="l76"></a>        </span><span class=cF6>&quot;After remove fifth socket\n&quot;</span><span class=cF0>;
-<a name="l77"></a>        UDPRep;
-<a name="l78"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l75"></a>    UDPSocketClose(u4);
+<a name="l76"></a>    </span><span class=cF6>&quot;After remove fifth socket\n&quot;</span><span class=cF0>;
+<a name="l77"></a>    UDPRep;
+<a name="l78"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l79"></a>
-<a name="l80"></a>        UDPSocketClose(u5);
-<a name="l81"></a>        </span><span class=cF6>&quot;After remove sixth socket\n&quot;</span><span class=cF0>;
-<a name="l82"></a>        UDPRep;
-<a name="l83"></a>        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l80"></a>    UDPSocketClose(u5);
+<a name="l81"></a>    </span><span class=cF6>&quot;After remove sixth socket\n&quot;</span><span class=cF0>;
+<a name="l82"></a>    UDPRep;
+<a name="l83"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l84"></a>
-<a name="l85"></a>        </span><span class=cF5>Free</span><span class=cF0>(i0);
-<a name="l86"></a>        </span><span class=cF5>Free</span><span class=cF0>(i1);
-<a name="l87"></a>        </span><span class=cF5>Free</span><span class=cF0>(i2);
-<a name="l88"></a>        </span><span class=cF5>Free</span><span class=cF0>(i3);
-<a name="l89"></a>        </span><span class=cF5>Free</span><span class=cF0>(i4);
-<a name="l90"></a>        </span><span class=cF5>Free</span><span class=cF0>(i5);
+<a name="l85"></a>    </span><span class=cF5>Free</span><span class=cF0>(i0);
+<a name="l86"></a>    </span><span class=cF5>Free</span><span class=cF0>(i1);
+<a name="l87"></a>    </span><span class=cF5>Free</span><span class=cF0>(i2);
+<a name="l88"></a>    </span><span class=cF5>Free</span><span class=cF0>(i3);
+<a name="l89"></a>    </span><span class=cF5>Free</span><span class=cF0>(i4);
+<a name="l90"></a>    </span><span class=cF5>Free</span><span class=cF0>(i5);
 <a name="l91"></a>}
 <a name="l92"></a>
 <a name="l93"></a>UDPSocketTest;</span></pre></body>

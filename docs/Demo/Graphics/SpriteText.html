@@ -26,7 +26,7 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF0>
-<a name="l2"></a>                                                                </span><span class=cFA>/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l2"></a>                                </span><span class=cFA>/* Graphics Not Rendered in HTML */</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a>
 <a name="l5"></a>
@@ -59,16 +59,16 @@ body {background-color:#000000;}
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF1>U0</span><span class=cF0> SpriteText(</span><span class=cF1>U8</span><span class=cF0> *elems)
 <a name="l34"></a>{
-<a name="l35"></a>        </span><span class=cF9>CSprite</span><span class=cF0> *tmpg = elems - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF0>);
-<a name="l36"></a>        </span><span class=cF1>U8</span><span class=cF0>              *st;
+<a name="l35"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *tmpg = elems - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF0>);
+<a name="l36"></a>    </span><span class=cF1>U8</span><span class=cF0>      *st;
 <a name="l37"></a>
-<a name="l38"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpg-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
-<a name="l39"></a>        </span><span class=cF7>{</span><span class=cF2>//Study this routine </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteNew.html#l143"><span class=cF4>SpriteElem2Summary</span></a><span class=cF2>().</span><span class=cF0>
-<a name="l40"></a>                st = </span><span class=cF5>SpriteElem2Summary</span><span class=cF0>(tmpg);
-<a name="l41"></a>                </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, st;
-<a name="l42"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l43"></a>                tmpg(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF5>SpriteElemSize</span><span class=cF0>(tmpg);
-<a name="l44"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l38"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpg-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
+<a name="l39"></a>    </span><span class=cF7>{</span><span class=cF2>//Study this routine </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteNew.html#l143"><span class=cF4>SpriteElem2Summary</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l40"></a>        st = </span><span class=cF5>SpriteElem2Summary</span><span class=cF0>(tmpg);
+<a name="l41"></a>        </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, st;
+<a name="l42"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l43"></a>        tmpg(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF5>SpriteElemSize</span><span class=cF0>(tmpg);
+<a name="l44"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l45"></a>}
 <a name="l46"></a>
 <a name="l47"></a></span><span class=cF6>&quot;$PURPLE$**** LINE SUMMARIES ****$FG$\n&quot;</span><span class=cF0>;

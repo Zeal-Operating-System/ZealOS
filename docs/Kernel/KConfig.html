@@ -28,212 +28,212 @@ body {background-color:#000000;}
 <a name="l1"></a><span class=cF2>//This is run in a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.html#l8"><span class=cF4>#exe</span></a><span class=cF2>{}.</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a></span><span class=cF1>U8</span><span class=cF0> *kernel_config_options = </span><span class=cF6>&quot;MemInit\0&quot;</span><span class=cF0>
-<a name="l4"></a>                                                        </span><span class=cF6>&quot;HeapInit\0&quot;</span><span class=cF0>
-<a name="l5"></a>                                                        </span><span class=cF6>&quot;VarInit\0&quot;</span><span class=cF0>
-<a name="l6"></a>                                                        </span><span class=cF6>&quot;HomeDir\0&quot;</span><span class=cF0>
-<a name="l7"></a>                                                        </span><span class=cF6>&quot;NoMP\0&quot;</span><span class=cF0>
-<a name="l8"></a>                                                        </span><span class=cF6>&quot;DontProbe\0&quot;</span><span class=cF0>
-<a name="l9"></a>                                                        </span><span class=cF6>&quot;MountIDEAuto\0&quot;</span><span class=cF0>
-<a name="l10"></a>                                                        </span><span class=cF6>&quot;DebugDistro\0&quot;</span><span class=cF0>
-<a name="l11"></a>                                                        </span><span class=cF6>&quot;Help&quot;</span><span class=cF0>;
+<a name="l4"></a>                            </span><span class=cF6>&quot;HeapInit\0&quot;</span><span class=cF0>
+<a name="l5"></a>                            </span><span class=cF6>&quot;VarInit\0&quot;</span><span class=cF0>
+<a name="l6"></a>                            </span><span class=cF6>&quot;HomeDir\0&quot;</span><span class=cF0>
+<a name="l7"></a>                            </span><span class=cF6>&quot;NoMP\0&quot;</span><span class=cF0>
+<a name="l8"></a>                            </span><span class=cF6>&quot;DontProbe\0&quot;</span><span class=cF0>
+<a name="l9"></a>                            </span><span class=cF6>&quot;MountIDEAuto\0&quot;</span><span class=cF0>
+<a name="l10"></a>                            </span><span class=cF6>&quot;DebugDistro\0&quot;</span><span class=cF0>
+<a name="l11"></a>                            </span><span class=cF6>&quot;Help&quot;</span><span class=cF0>;
 <a name="l12"></a>
-<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_MEM_INIT                 </span><span class=cFE>0</span><span class=cF0>
-<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_HEAP_INIT                </span><span class=cFE>1</span><span class=cF0>
-<a name="l15"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_VAR_INIT                 </span><span class=cFE>2</span><span class=cF0>
-<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_HOME_DIR                 </span><span class=cFE>3</span><span class=cF0>
-<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_NO_MP                    </span><span class=cFE>4</span><span class=cF0>
-<a name="l18"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DONT_PROBE               </span><span class=cFE>5</span><span class=cF0>
+<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_MEM_INIT         </span><span class=cFE>0</span><span class=cF0>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_HEAP_INIT        </span><span class=cFE>1</span><span class=cF0>
+<a name="l15"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_VAR_INIT         </span><span class=cFE>2</span><span class=cF0>
+<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_HOME_DIR         </span><span class=cFE>3</span><span class=cF0>
+<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_NO_MP            </span><span class=cFE>4</span><span class=cF0>
+<a name="l18"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DONT_PROBE       </span><span class=cFE>5</span><span class=cF0>
 <a name="l19"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_MOUNT_IDE_AUTO   </span><span class=cFE>6</span><span class=cF0>
 <a name="l20"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DEBUG_DISTRO     </span><span class=cFE>7</span><span class=cF0>
-<a name="l21"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_OPTIONS_NUM              </span><span class=cFE>8</span><span class=cF0>
+<a name="l21"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_OPTIONS_NUM      </span><span class=cFE>8</span><span class=cF0>
 <a name="l22"></a>
-<a name="l23"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_HELP                             </span><span class=cFE>8</span><span class=cF0>
+<a name="l23"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_HELP             </span><span class=cFE>8</span><span class=cF0>
 <a name="l24"></a>
 <a name="l25"></a></span><span class=cF1>class</span><span class=cF0> CKConfig
 <a name="l26"></a>{
-<a name="l27"></a>        </span><span class=cF1>U8</span><span class=cF0>              *disk_cache_size_exp;
-<a name="l28"></a>        </span><span class=cF9>CDoc</span><span class=cF0>    *add_dev;
-<a name="l29"></a>        </span><span class=cF1>U8</span><span class=cF0>              *debug_distro_file, *debug_distro_start;
-<a name="l30"></a>        </span><span class=cF1>U8</span><span class=cF0>              *home_dir;
-<a name="l31"></a>        </span><span class=cF9>U16</span><span class=cF0>             screen_width, screen_height;
-<a name="l32"></a>        </span><span class=cF1>Bool</span><span class=cF0>    opts[CONFIG_OPTIONS_NUM];
-<a name="l33"></a>        </span><span class=cF1>U8</span><span class=cF0>              mem_init_val, heap_init_val, var_init_val, boot_drive_let, mount_ide_auto_hd_let, mount_ide_auto_cd_let;
+<a name="l27"></a>    </span><span class=cF1>U8</span><span class=cF0>      *disk_cache_size_exp;
+<a name="l28"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *add_dev;
+<a name="l29"></a>    </span><span class=cF1>U8</span><span class=cF0>      *debug_distro_file, *debug_distro_start;
+<a name="l30"></a>    </span><span class=cF1>U8</span><span class=cF0>      *home_dir;
+<a name="l31"></a>    </span><span class=cF9>U16</span><span class=cF0>     screen_width, screen_height;
+<a name="l32"></a>    </span><span class=cF1>Bool</span><span class=cF0>    opts[CONFIG_OPTIONS_NUM];
+<a name="l33"></a>    </span><span class=cF1>U8</span><span class=cF0>      mem_init_val, heap_init_val, var_init_val, boot_drive_let, mount_ide_auto_hd_let, mount_ide_auto_cd_let;
 <a name="l34"></a>};
 <a name="l35"></a>
 <a name="l36"></a></span><span class=cF9>CDoc</span><span class=cF0> *KConfigAddDev(CKConfig *c)
 <a name="l37"></a>{
-<a name="l38"></a>        </span><span class=cF9>I64</span><span class=cF0>   ch;
-<a name="l39"></a>        </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l38"></a>    </span><span class=cF9>I64</span><span class=cF0>   ch;
+<a name="l39"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
 <a name="l40"></a>
-<a name="l41"></a>        </span><span class=cF6>&quot;\n\nIn anticipation of the drives you will define shortly, enter the drive letter\n&quot;</span><span class=cF0>
-<a name="l42"></a>        </span><span class=cF6>&quot;of the drive with your Home directory. ($PURPLE$&lt;ENTER&gt;$FG$ for current drive) Boot Drive:&quot;</span><span class=cF0>;
+<a name="l41"></a>    </span><span class=cF6>&quot;\n\nIn anticipation of the drives you will define shortly, enter the drive letter\n&quot;</span><span class=cF0>
+<a name="l42"></a>    </span><span class=cF6>&quot;of the drive with your Home directory. ($PURPLE$&lt;ENTER&gt;$FG$ for current drive) Boot Drive:&quot;</span><span class=cF0>;
 <a name="l43"></a>
-<a name="l44"></a>        ch = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
-<a name="l45"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'A'</span><span class=cF0> &lt;= ch &lt;= </span><span class=cF6>'Z'</span><span class=cF0>)
-<a name="l46"></a>                c-&gt;boot_drive_let = ch;
-<a name="l47"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l48"></a>                c-&gt;boot_drive_let = </span><span class=cF5>Drive2Letter</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv);
+<a name="l44"></a>    ch = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
+<a name="l45"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'A'</span><span class=cF0> &lt;= ch &lt;= </span><span class=cF6>'Z'</span><span class=cF0>)
+<a name="l46"></a>        c-&gt;boot_drive_let = ch;
+<a name="l47"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l48"></a>        c-&gt;boot_drive_let = </span><span class=cF5>Drive2Letter</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv);
 <a name="l49"></a>
-<a name="l50"></a>        </span><span class=cF6>&quot;\n\n$BK,1$$PURPLE$Mount drives so they will be present when you boot.$FG$$BK,0$\n&quot;</span><span class=cF0>;
+<a name="l50"></a>    </span><span class=cF6>&quot;\n\n$BK,1$$PURPLE$Mount drives so they will be present when you boot.$FG$$BK,0$\n&quot;</span><span class=cF0>;
 <a name="l51"></a>
-<a name="l52"></a>        </span><span class=cF5>Mount2</span><span class=cF0>(c-&gt;boot_drive_let, doc, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l52"></a>    </span><span class=cF5>Mount2</span><span class=cF0>(c-&gt;boot_drive_let, doc, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l53"></a>
-<a name="l54"></a>        </span><span class=cF1>return</span><span class=cF0> doc;
+<a name="l54"></a>    </span><span class=cF1>return</span><span class=cF0> doc;
 <a name="l55"></a>}
 <a name="l56"></a>
 <a name="l57"></a></span><span class=cF1>U0</span><span class=cF0> KConfigOptions(CKConfig *c)
 <a name="l58"></a>{
-<a name="l59"></a>        </span><span class=cF9>I64</span><span class=cF0>  i;
-<a name="l60"></a>        </span><span class=cF1>U8</span><span class=cF0>  *st = </span><span class=cF3>NULL</span><span class=cF0>, *st2, *st3;
-<a name="l61"></a>        </span><span class=cF1>Bool</span><span class=cF0> state;
-<a name="l62"></a>        </span><span class=cF1>do</span><span class=cF0>
-<a name="l63"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l64"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l65"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; CONFIG_OPTIONS_NUM; i++)
-<a name="l66"></a>                        </span><span class=cF1>if</span><span class=cF0> (i == CONFIG_HOME_DIR)
-<a name="l67"></a>                                </span><span class=cF6>&quot;$PURPLE$%13tz$FG$:\&quot;%s\&quot;\n&quot;</span><span class=cF0>, i, kernel_config_options, c-&gt;home_dir;
-<a name="l68"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l69"></a>                                </span><span class=cF6>&quot;$PURPLE$%13tz$FG$:%Z\n&quot;</span><span class=cF0>, i, kernel_config_options, c-&gt;opts[i], </span><span class=cF6>&quot;ST_OFF_ON&quot;</span><span class=cF0>;
-<a name="l70"></a>                </span><span class=cF6>&quot;\nType '$PURPLE$Help$FG$' for help.\n&quot;</span><span class=cF0>;
-<a name="l71"></a>                st = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Option ($PURPLE$&lt;ENTER&gt;$FG$ when done):&quot;</span><span class=cF0>, </span><span class=cF6>&quot;&quot;</span><span class=cF0>);
-<a name="l72"></a>                i = </span><span class=cF5>ListMatch</span><span class=cF0>(st, kernel_config_options, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
-<a name="l73"></a>                </span><span class=cF1>if</span><span class=cF0> (i == CONFIG_HELP)
-<a name="l74"></a>                        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l75"></a>                        </span><span class=cF6>&quot;$PURPLE$MemInit$FG$ Initializes memory above 0x100000 &quot;</span><span class=cF0>
-<a name="l76"></a>                        </span><span class=cF6>&quot;to a val at boot.\n&quot;</span><span class=cF0>
-<a name="l77"></a>                        </span><span class=cF6>&quot;$PURPLE$HeapInit$FG$ Initializes MAlloc() memory to a val.\n&quot;</span><span class=cF0>
-<a name="l78"></a>                        </span><span class=cF6>&quot;$PURPLE$VarInit$FG$ Initializes global var memory to a val.\n&quot;</span><span class=cF0>
-<a name="l79"></a>                        </span><span class=cF6>&quot;$PURPLE$HomeDir$FG$ Set home dir.\n&quot;</span><span class=cF0>
-<a name="l80"></a>                        </span><span class=cF6>&quot;$PURPLE$NoMP$FG$ No multicore.\n&quot;</span><span class=cF0>
-<a name="l81"></a>                        </span><span class=cF6>&quot;$PURPLE$DontProbe$FG$ Just prompt CD/DVD ports, don't probe.\n&quot;</span><span class=cF0>
-<a name="l82"></a>                        </span><span class=cF6>&quot;$PURPLE$MountIDEAuto$FG$ Auto Mount IDE drives to 'C' and 'T'.\n&quot;</span><span class=cF0>
-<a name="l83"></a>                        </span><span class=cF6>&quot;$PURPLE$DebugDistro$FG$ Include RAM Drive in Kernel.BIN.\n&quot;</span><span class=cF0>
-<a name="l84"></a>                        </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
-<a name="l85"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l86"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= i &lt; CONFIG_OPTIONS_NUM)
-<a name="l87"></a>                        {
-<a name="l88"></a>                                state = c-&gt;opts[i] = !c-&gt;opts[i];
-<a name="l89"></a>                                </span><span class=cF1>switch</span><span class=cF0> (i)
-<a name="l90"></a>                                </span><span class=cF7>{</span><span class=cF0>
-<a name="l91"></a>                                        </span><span class=cF1>case</span><span class=cF0> CONFIG_MEM_INIT:
-<a name="l92"></a>                                                </span><span class=cF1>if</span><span class=cF0> (state)
-<a name="l93"></a>                                                        c-&gt;mem_init_val = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Val (0-255):&quot;</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>);
-<a name="l94"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l59"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l60"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st = </span><span class=cF3>NULL</span><span class=cF0>, *st2, *st3;
+<a name="l61"></a>    </span><span class=cF1>Bool</span><span class=cF0> state;
+<a name="l62"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l63"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l64"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l65"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; CONFIG_OPTIONS_NUM; i++)
+<a name="l66"></a>            </span><span class=cF1>if</span><span class=cF0> (i == CONFIG_HOME_DIR)
+<a name="l67"></a>                </span><span class=cF6>&quot;$PURPLE$%13tz$FG$:\&quot;%s\&quot;\n&quot;</span><span class=cF0>, i, kernel_config_options, c-&gt;home_dir;
+<a name="l68"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l69"></a>                </span><span class=cF6>&quot;$PURPLE$%13tz$FG$:%Z\n&quot;</span><span class=cF0>, i, kernel_config_options, c-&gt;opts[i], </span><span class=cF6>&quot;ST_OFF_ON&quot;</span><span class=cF0>;
+<a name="l70"></a>        </span><span class=cF6>&quot;\nType '$PURPLE$Help$FG$' for help.\n&quot;</span><span class=cF0>;
+<a name="l71"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Option ($PURPLE$&lt;ENTER&gt;$FG$ when done):&quot;</span><span class=cF0>, </span><span class=cF6>&quot;&quot;</span><span class=cF0>);
+<a name="l72"></a>        i = </span><span class=cF5>ListMatch</span><span class=cF0>(st, kernel_config_options, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
+<a name="l73"></a>        </span><span class=cF1>if</span><span class=cF0> (i == CONFIG_HELP)
+<a name="l74"></a>            </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l75"></a>            </span><span class=cF6>&quot;$PURPLE$MemInit$FG$ Initializes memory above 0x100000 &quot;</span><span class=cF0>
+<a name="l76"></a>            </span><span class=cF6>&quot;to a val at boot.\n&quot;</span><span class=cF0>
+<a name="l77"></a>            </span><span class=cF6>&quot;$PURPLE$HeapInit$FG$ Initializes MAlloc() memory to a val.\n&quot;</span><span class=cF0>
+<a name="l78"></a>            </span><span class=cF6>&quot;$PURPLE$VarInit$FG$ Initializes global var memory to a val.\n&quot;</span><span class=cF0>
+<a name="l79"></a>            </span><span class=cF6>&quot;$PURPLE$HomeDir$FG$ Set home dir.\n&quot;</span><span class=cF0>
+<a name="l80"></a>            </span><span class=cF6>&quot;$PURPLE$NoMP$FG$ No multicore.\n&quot;</span><span class=cF0>
+<a name="l81"></a>            </span><span class=cF6>&quot;$PURPLE$DontProbe$FG$ Just prompt CD/DVD ports, don't probe.\n&quot;</span><span class=cF0>
+<a name="l82"></a>            </span><span class=cF6>&quot;$PURPLE$MountIDEAuto$FG$ Auto Mount IDE drives to 'C' and 'T'.\n&quot;</span><span class=cF0>
+<a name="l83"></a>            </span><span class=cF6>&quot;$PURPLE$DebugDistro$FG$ Include RAM Drive in Kernel.BIN.\n&quot;</span><span class=cF0>
+<a name="l84"></a>            </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l85"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l86"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= i &lt; CONFIG_OPTIONS_NUM)
+<a name="l87"></a>            {
+<a name="l88"></a>                state = c-&gt;opts[i] = !c-&gt;opts[i];
+<a name="l89"></a>                </span><span class=cF1>switch</span><span class=cF0> (i)
+<a name="l90"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l91"></a>                    </span><span class=cF1>case</span><span class=cF0> CONFIG_MEM_INIT:
+<a name="l92"></a>                        </span><span class=cF1>if</span><span class=cF0> (state)
+<a name="l93"></a>                            c-&gt;mem_init_val = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Val (0-255):&quot;</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>);
+<a name="l94"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l95"></a>
-<a name="l96"></a>                                        </span><span class=cF1>case</span><span class=cF0> CONFIG_HEAP_INIT:
-<a name="l97"></a>                                                </span><span class=cF1>if</span><span class=cF0> (state)
-<a name="l98"></a>                                                        c-&gt;heap_init_val = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Val (0-255):&quot;</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>);
-<a name="l99"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l96"></a>                    </span><span class=cF1>case</span><span class=cF0> CONFIG_HEAP_INIT:
+<a name="l97"></a>                        </span><span class=cF1>if</span><span class=cF0> (state)
+<a name="l98"></a>                            c-&gt;heap_init_val = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Val (0-255):&quot;</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>);
+<a name="l99"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l100"></a>
-<a name="l101"></a>                                        </span><span class=cF1>case</span><span class=cF0> CONFIG_VAR_INIT:
-<a name="l102"></a>                                                </span><span class=cF1>if</span><span class=cF0> (state)
-<a name="l103"></a>                                                        c-&gt;var_init_val = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Val (0-255):&quot;</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>);
-<a name="l104"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l101"></a>                    </span><span class=cF1>case</span><span class=cF0> CONFIG_VAR_INIT:
+<a name="l102"></a>                        </span><span class=cF1>if</span><span class=cF0> (state)
+<a name="l103"></a>                            c-&gt;var_init_val = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Val (0-255):&quot;</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>255</span><span class=cF0>);
+<a name="l104"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l105"></a>
-<a name="l106"></a>                                        </span><span class=cF1>case</span><span class=cF0> CONFIG_HOME_DIR:
-<a name="l107"></a>                                                st2 = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Home Dir(\&quot;%s\&quot;):&quot;</span><span class=cF0>, c-&gt;home_dir);
-<a name="l108"></a>                                                </span><span class=cF1>if</span><span class=cF0> (!*st2)
-<a name="l109"></a>                                                        st2 = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;::/Home&quot;</span><span class=cF0>);
-<a name="l110"></a>                                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (st2[</span><span class=cFE>1</span><span class=cF0>] != </span><span class=cF6>':'</span><span class=cF0>)
-<a name="l111"></a>                                                {
-<a name="l112"></a>                                                        st3 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;::%s&quot;</span><span class=cF0>, st2);
-<a name="l113"></a>                                                        </span><span class=cF5>Free</span><span class=cF0>(st2);
-<a name="l114"></a>                                                        st2 = st3;
-<a name="l115"></a>                                                }
-<a name="l116"></a>                                                </span><span class=cF5>Free</span><span class=cF0>(c-&gt;home_dir);
-<a name="l117"></a>                                                c-&gt;home_dir = st2;
-<a name="l118"></a>                                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>c-&gt;home_dir, </span><span class=cF6>&quot;::/Home&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l119"></a>                                                        c-&gt;opts[i] = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l120"></a>                                                </span><span class=cF1>else</span><span class=cF0>
-<a name="l121"></a>                                                        c-&gt;opts[i] = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l122"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l106"></a>                    </span><span class=cF1>case</span><span class=cF0> CONFIG_HOME_DIR:
+<a name="l107"></a>                        st2 = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Home Dir(\&quot;%s\&quot;):&quot;</span><span class=cF0>, c-&gt;home_dir);
+<a name="l108"></a>                        </span><span class=cF1>if</span><span class=cF0> (!*st2)
+<a name="l109"></a>                            st2 = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;::/Home&quot;</span><span class=cF0>);
+<a name="l110"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (st2[</span><span class=cFE>1</span><span class=cF0>] != </span><span class=cF6>':'</span><span class=cF0>)
+<a name="l111"></a>                        {
+<a name="l112"></a>                            st3 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;::%s&quot;</span><span class=cF0>, st2);
+<a name="l113"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l114"></a>                            st2 = st3;
+<a name="l115"></a>                        }
+<a name="l116"></a>                        </span><span class=cF5>Free</span><span class=cF0>(c-&gt;home_dir);
+<a name="l117"></a>                        c-&gt;home_dir = st2;
+<a name="l118"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>c-&gt;home_dir, </span><span class=cF6>&quot;::/Home&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l119"></a>                            c-&gt;opts[i] = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l120"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l121"></a>                            c-&gt;opts[i] = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l122"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l123"></a>
-<a name="l124"></a>                                        </span><span class=cF1>case</span><span class=cF0> CONFIG_MOUNT_IDE_AUTO:
-<a name="l125"></a>                                                </span><span class=cF1>if</span><span class=cF0> (state)
-<a name="l126"></a>                                                {
-<a name="l127"></a>                                                        </span><span class=cF6>&quot;First HD Drive Let:&quot;</span><span class=cF0>;
-<a name="l128"></a>                                                        c-&gt;mount_ide_auto_hd_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
-<a name="l129"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0> &lt;= c-&gt;mount_ide_auto_hd_let &lt;= </span><span class=cF6>'Z'</span><span class=cF7>)</span><span class=cF0>)
-<a name="l130"></a>                                                                c-&gt;mount_ide_auto_hd_let = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l131"></a>                                                        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l132"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (c-&gt;mount_ide_auto_hd_let)
-<a name="l133"></a>                                                                </span><span class=cF6>&quot;First HD Drive:%C\n&quot;</span><span class=cF0>, c-&gt;mount_ide_auto_hd_let;
-<a name="l134"></a>                                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l135"></a>                                                                </span><span class=cF6>&quot;First HD Drive:%C\n&quot;</span><span class=cF0>, </span><span class=cF6>'C'</span><span class=cF0>;
+<a name="l124"></a>                    </span><span class=cF1>case</span><span class=cF0> CONFIG_MOUNT_IDE_AUTO:
+<a name="l125"></a>                        </span><span class=cF1>if</span><span class=cF0> (state)
+<a name="l126"></a>                        {
+<a name="l127"></a>                            </span><span class=cF6>&quot;First HD Drive Let:&quot;</span><span class=cF0>;
+<a name="l128"></a>                            c-&gt;mount_ide_auto_hd_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
+<a name="l129"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0> &lt;= c-&gt;mount_ide_auto_hd_let &lt;= </span><span class=cF6>'Z'</span><span class=cF7>)</span><span class=cF0>)
+<a name="l130"></a>                                c-&gt;mount_ide_auto_hd_let = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l131"></a>                            </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l132"></a>                            </span><span class=cF1>if</span><span class=cF0> (c-&gt;mount_ide_auto_hd_let)
+<a name="l133"></a>                                </span><span class=cF6>&quot;First HD Drive:%C\n&quot;</span><span class=cF0>, c-&gt;mount_ide_auto_hd_let;
+<a name="l134"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l135"></a>                                </span><span class=cF6>&quot;First HD Drive:%C\n&quot;</span><span class=cF0>, </span><span class=cF6>'C'</span><span class=cF0>;
 <a name="l136"></a>
-<a name="l137"></a>                                                        </span><span class=cF6>&quot;First CD Drive Let:&quot;</span><span class=cF0>;
-<a name="l138"></a>                                                        c-&gt;mount_ide_auto_cd_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
-<a name="l139"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0> &lt;= c-&gt;mount_ide_auto_cd_let &lt;= </span><span class=cF6>'Z'</span><span class=cF7>)</span><span class=cF0>)
-<a name="l140"></a>                                                                c-&gt;mount_ide_auto_cd_let = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l141"></a>                                                        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l142"></a>                                                        </span><span class=cF1>if</span><span class=cF0> (c-&gt;mount_ide_auto_cd_let)
-<a name="l143"></a>                                                                </span><span class=cF6>&quot;First CD Drive:%C\n&quot;</span><span class=cF0>, c-&gt;mount_ide_auto_cd_let;
-<a name="l144"></a>                                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l145"></a>                                                                </span><span class=cF6>&quot;First CD Drive:%C\n&quot;</span><span class=cF0>, </span><span class=cF6>'T'</span><span class=cF0>;
-<a name="l146"></a>                                                }
-<a name="l147"></a>                                                </span><span class=cF1>else</span><span class=cF0>
-<a name="l148"></a>                                                {
-<a name="l149"></a>                                                        c-&gt;mount_ide_auto_hd_let = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l150"></a>                                                        c-&gt;mount_ide_auto_cd_let = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l151"></a>                                                }
-<a name="l152"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l137"></a>                            </span><span class=cF6>&quot;First CD Drive Let:&quot;</span><span class=cF0>;
+<a name="l138"></a>                            c-&gt;mount_ide_auto_cd_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
+<a name="l139"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0> &lt;= c-&gt;mount_ide_auto_cd_let &lt;= </span><span class=cF6>'Z'</span><span class=cF7>)</span><span class=cF0>)
+<a name="l140"></a>                                c-&gt;mount_ide_auto_cd_let = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l141"></a>                            </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l142"></a>                            </span><span class=cF1>if</span><span class=cF0> (c-&gt;mount_ide_auto_cd_let)
+<a name="l143"></a>                                </span><span class=cF6>&quot;First CD Drive:%C\n&quot;</span><span class=cF0>, c-&gt;mount_ide_auto_cd_let;
+<a name="l144"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l145"></a>                                </span><span class=cF6>&quot;First CD Drive:%C\n&quot;</span><span class=cF0>, </span><span class=cF6>'T'</span><span class=cF0>;
+<a name="l146"></a>                        }
+<a name="l147"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l148"></a>                        {
+<a name="l149"></a>                            c-&gt;mount_ide_auto_hd_let = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l150"></a>                            c-&gt;mount_ide_auto_cd_let = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l151"></a>                        }
+<a name="l152"></a>                        </span><span class=cF1>break</span><span class=cF0>;
 <a name="l153"></a>
-<a name="l154"></a>                                        </span><span class=cF1>case</span><span class=cF0> CONFIG_DEBUG_DISTRO:
-<a name="l155"></a>                                                </span><span class=cF5>Free</span><span class=cF0>(c-&gt;debug_distro_file);
-<a name="l156"></a>                                                c-&gt;debug_distro_file  = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l157"></a>                                                c-&gt;debug_distro_start = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l158"></a>                                                </span><span class=cF1>if</span><span class=cF0> (state)
-<a name="l159"></a>                                                {
-<a name="l160"></a>                                                        c-&gt;debug_distro_file  = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Debug Distro File:&quot;</span><span class=cF0>);
-<a name="l161"></a>                                                        c-&gt;debug_distro_start = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Debug Distro Start:&quot;</span><span class=cF0>);
-<a name="l162"></a>                                                }
-<a name="l163"></a>                                                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l164"></a>                                </span><span class=cF7>}</span><span class=cF0>
-<a name="l165"></a>                        }
-<a name="l166"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l167"></a>        </span><span class=cF1>while</span><span class=cF0> (*st);
+<a name="l154"></a>                    </span><span class=cF1>case</span><span class=cF0> CONFIG_DEBUG_DISTRO:
+<a name="l155"></a>                        </span><span class=cF5>Free</span><span class=cF0>(c-&gt;debug_distro_file);
+<a name="l156"></a>                        c-&gt;debug_distro_file  = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l157"></a>                        c-&gt;debug_distro_start = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l158"></a>                        </span><span class=cF1>if</span><span class=cF0> (state)
+<a name="l159"></a>                        {
+<a name="l160"></a>                            c-&gt;debug_distro_file  = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Debug Distro File:&quot;</span><span class=cF0>);
+<a name="l161"></a>                            c-&gt;debug_distro_start = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Debug Distro Start:&quot;</span><span class=cF0>);
+<a name="l162"></a>                        }
+<a name="l163"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l164"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l165"></a>            }
+<a name="l166"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l167"></a>    </span><span class=cF1>while</span><span class=cF0> (*st);
 <a name="l168"></a>
-<a name="l169"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l169"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l170"></a>}
 <a name="l171"></a>
 <a name="l172"></a>CKConfig *KConfigNew()
 <a name="l173"></a>{
-<a name="l174"></a>        </span><span class=cF9>I64</span><span class=cF0>               resolution_num;
-<a name="l175"></a>        CKConfig *c = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CKConfig</span><span class=cF7>)</span><span class=cF0>);
+<a name="l174"></a>    </span><span class=cF9>I64</span><span class=cF0>       resolution_num;
+<a name="l175"></a>    CKConfig *c = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CKConfig</span><span class=cF7>)</span><span class=cF0>);
 <a name="l176"></a>
-<a name="l177"></a>        c-&gt;add_dev = KConfigAddDev(c);
-<a name="l178"></a>        c-&gt;home_dir = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;::/Home&quot;</span><span class=cF0>);
+<a name="l177"></a>    c-&gt;add_dev = KConfigAddDev(c);
+<a name="l178"></a>    c-&gt;home_dir = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;::/Home&quot;</span><span class=cF0>);
 <a name="l179"></a>
-<a name="l180"></a>        </span><span class=cF5>VideoRep</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l181"></a>        resolution_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter list number of desired resolution, &quot;</span><span class=cF0>
-<a name="l182"></a>                                                        </span><span class=cF6>&quot;or desired width. ($PURPLE$&lt;ENTER&gt;$FG$ for auto maximum): &quot;</span><span class=cF0>,, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l183"></a>        </span><span class=cF1>if</span><span class=cF0> (resolution_num &lt;= </span><span class=cF3>VBE_MODES_NUM</span><span class=cF0>)
-<a name="l184"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l185"></a>                c-&gt;screen_width  = </span><span class=cFB>sys_vbe_modes</span><span class=cF0>[resolution_num - </span><span class=cFE>1</span><span class=cF0>].width;
-<a name="l186"></a>                c-&gt;screen_height = </span><span class=cFB>sys_vbe_modes</span><span class=cF0>[resolution_num - </span><span class=cFE>1</span><span class=cF0>].height;
-<a name="l187"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l188"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l189"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l190"></a>                c-&gt;screen_width  = resolution_num;
-<a name="l191"></a>                c-&gt;screen_height = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter Height: &quot;</span><span class=cF0>,, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l192"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l180"></a>    </span><span class=cF5>VideoRep</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l181"></a>    resolution_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter list number of desired resolution, &quot;</span><span class=cF0>
+<a name="l182"></a>                            </span><span class=cF6>&quot;or desired width. ($PURPLE$&lt;ENTER&gt;$FG$ for auto maximum): &quot;</span><span class=cF0>,, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l183"></a>    </span><span class=cF1>if</span><span class=cF0> (resolution_num &lt;= </span><span class=cF3>VBE_MODES_NUM</span><span class=cF0>)
+<a name="l184"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l185"></a>        c-&gt;screen_width  = </span><span class=cFB>sys_vbe_modes</span><span class=cF0>[resolution_num - </span><span class=cFE>1</span><span class=cF0>].width;
+<a name="l186"></a>        c-&gt;screen_height = </span><span class=cFB>sys_vbe_modes</span><span class=cF0>[resolution_num - </span><span class=cFE>1</span><span class=cF0>].height;
+<a name="l187"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l188"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l189"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l190"></a>        c-&gt;screen_width  = resolution_num;
+<a name="l191"></a>        c-&gt;screen_height = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter Height: &quot;</span><span class=cF0>,, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l192"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l193"></a> 
 <a name="l194"></a>
-<a name="l195"></a>        c-&gt;disk_cache_size_exp = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;\nDisk Cache Size in Bytes, gets rounded-up funny, &quot;</span><span class=cF0>
-<a name="l196"></a>                                                                        </span><span class=cF6>&quot;($PURPLE$&lt;ENTER&gt;$FG$ will use default.):&quot;</span><span class=cF0>,
-<a name="l197"></a>                                                                        </span><span class=cF6>&quot;Scale2Mem(0x80000,0x8000000)&quot;</span><span class=cF0>);
-<a name="l198"></a>        KConfigOptions(c);
+<a name="l195"></a>    c-&gt;disk_cache_size_exp = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;\nDisk Cache Size in Bytes, gets rounded-up funny, &quot;</span><span class=cF0>
+<a name="l196"></a>                                    </span><span class=cF6>&quot;($PURPLE$&lt;ENTER&gt;$FG$ will use default.):&quot;</span><span class=cF0>,
+<a name="l197"></a>                                    </span><span class=cF6>&quot;Scale2Mem(0x80000,0x8000000)&quot;</span><span class=cF0>);
+<a name="l198"></a>    KConfigOptions(c);
 <a name="l199"></a>
-<a name="l200"></a>        </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l200"></a>    </span><span class=cF1>return</span><span class=cF0> c;
 <a name="l201"></a>}
 <a name="l202"></a> 
 <a name="l203"></a></span><span class=cF1>U0</span><span class=cF0> KConfigDel(CKConfig *c)
 <a name="l204"></a>{
-<a name="l205"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(c-&gt;add_dev);
-<a name="l206"></a>        </span><span class=cF5>Free</span><span class=cF0>(c-&gt;debug_distro_file);
-<a name="l207"></a>        </span><span class=cF5>Free</span><span class=cF0>(c-&gt;home_dir);
-<a name="l208"></a>        </span><span class=cF5>Free</span><span class=cF0>(c-&gt;disk_cache_size_exp);
-<a name="l209"></a>        </span><span class=cF5>Free</span><span class=cF0>(c);
+<a name="l205"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(c-&gt;add_dev);
+<a name="l206"></a>    </span><span class=cF5>Free</span><span class=cF0>(c-&gt;debug_distro_file);
+<a name="l207"></a>    </span><span class=cF5>Free</span><span class=cF0>(c-&gt;home_dir);
+<a name="l208"></a>    </span><span class=cF5>Free</span><span class=cF0>(c-&gt;disk_cache_size_exp);
+<a name="l209"></a>    </span><span class=cF5>Free</span><span class=cF0>(c);
 <a name="l210"></a>}
 </span></pre></body>
 </html>

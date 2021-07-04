@@ -66,7 +66,7 @@ body {background-color:#000000;}
 <a name="l39"></a>
 <a name="l40"></a>* Investigate why packet loss </span><a href="https://tomawezome.github.io/ZealOS/System/Training.html#l122"><span class=cF4>Training Sleep(1)</span></a><span class=cF0>.
 <a name="l41"></a>
-<a name="l42"></a>* Add AVL or red/black binary tree library support.  We have fixed-size stack.  Auto-balancing binary tree is very needed.      I've 
+<a name="l42"></a>* Add AVL or red/black binary tree library support.  We have fixed-size stack.  Auto-balancing binary tree is very needed.  I've 
 <a name="l43"></a>done everything myself. I don't want to ruin a perfect record.  I'm in no hurry.
 <a name="l44"></a>
 <a name="l45"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteEd.html#l1"><span class=cF4>SpriteEd</span></a><span class=cF0> shift pts, Ctrl pt for ellipse/polygon w,h is off when rotated.
@@ -95,11 +95,11 @@ body {background-color:#000000;}
 <a name="l68"></a>
 <a name="l69"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1408"><span class=cF4>DOCF_DBL_DOLLARS</span></a><span class=cF0> in </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocCodeTools.html#l490"><span class=cF4>Reindention</span></a><span class=cF0>.
 <a name="l70"></a>
-<a name="l71"></a>* Compiler Optimization: Local array vars --&gt; reg.      Might exist.
+<a name="l71"></a>* Compiler Optimization: Local array vars --&gt; reg.  Might exist.
 <a name="l72"></a>
-<a name="l73"></a>* Make function as a better word processor.  Justify text.      Page numbers.  Header and footer templates?
+<a name="l73"></a>* Make function as a better word processor.  Justify text.  Page numbers.  Header and footer templates?
 <a name="l74"></a>
-<a name="l75"></a>* Compiler Optimization: heap_globals with added offset.        Might exist.
+<a name="l75"></a>* Compiler Optimization: heap_globals with added offset.    Might exist.
 <a name="l76"></a>
 <a name="l77"></a>* Bug: Find-and-replace text on $PT$ line before it.
 <a name="l78"></a>* 12/25/2015 Copy-Paste index.html glitch if source window 40 columns.
@@ -117,7 +117,7 @@ body {background-color:#000000;}
 <a name="l90"></a>
 <a name="l91"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Demo/Games/FlatTops.html#l1"><span class=cF4>::/Demo/Games/FlatTops.CC</span></a><span class=cF0> is torpedo, not bombs.
 <a name="l92"></a>
-<a name="l93"></a>* Reset MPs with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF0>() after boot.     Free old task memory?
+<a name="l93"></a>* Reset MPs with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF0>() after boot. Free old task memory?
 <a name="l94"></a>
 <a name="l95"></a>* Use thick and pen_height when clipping with thick&gt;1.
 <a name="l96"></a>
@@ -152,7 +152,7 @@ body {background-color:#000000;}
 <a name="l125"></a>
 <a name="l126"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteEd.html#l1"><span class=cF4>SpriteEd</span></a><span class=cF0>: Strip </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l127"><span class=cF4>SPT_SHIFT</span></a><span class=cF0> origin cmds?
 <a name="l127"></a>
-<a name="l128"></a>* Clean-up ASCII #127 delete char?      (No. Maybe, we want a new usage for 127 in future centuries.)
+<a name="l128"></a>* Clean-up ASCII #127 delete char?  (No. Maybe, we want a new usage for 127 in future centuries.)
 <a name="l129"></a>
 <a name="l130"></a>* Compiler: Exceptions don't free </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2310"><span class=cF4>CCompCtrl</span></a><span class=cF0> stuff.
 <a name="l131"></a>
@@ -208,7 +208,7 @@ body {background-color:#000000;}
 <a name="l181"></a>* 1/12/16 make RAM drive 2288 blks, </span><span class=cF2>CopyTree(&quot;C:/Home&quot;,&quot;B:/Home&quot;); </span><span class=cF0>  Disk runs-out of space and hangs instead of reporting 
 <a name="l182"></a>errors.
 <a name="l183"></a>
-<a name="l184"></a>* Bug introduced around 11/1/15.        Changed </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.html#l1"><span class=cF4>::/Kernel/Sched.CC</span></a><span class=cF0> and now </span><a href="https://tomawezome.github.io/ZealOS/System/Win.html#l315"><span class=cF4>WinToTop</span></a><span class=cF0> is called on System task at start-up, sometimes.    
+<a name="l184"></a>* Bug introduced around 11/1/15.    Changed </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.html#l1"><span class=cF4>::/Kernel/Sched.CC</span></a><span class=cF0> and now </span><a href="https://tomawezome.github.io/ZealOS/System/Win.html#l315"><span class=cF4>WinToTop</span></a><span class=cF0> is called on System task at start-up, sometimes.    
 <a name="l185"></a>Might be user's fault because of bad keys pressed during VMware power-on init.  Might be fixed by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1622"><span class=cF4>ACf_INIT_IN_PROGRESS</span></a><span class=cF0>.
 <a name="l186"></a>
 <a name="l187"></a>* 1/12/16 </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskATAId.html#l1"><span class=cF4>ATARepEntry</span></a><span class=cF0> shows corrupted bttns.    Weird.  Perhaps, my imagination.
@@ -314,14 +314,14 @@ body {background-color:#000000;}
 <a name="l287"></a>* Eliminate?    </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l6"><span class=cF4>Mat4x4MulXYZ</span></a><span class=cF0>() change to 3x3?
 <a name="l288"></a>* Eliminate?    </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3563"><span class=cF4>ROP_XOR</span></a><span class=cF0>?
 <a name="l289"></a>
-<a name="l290"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/WinMgr.html#l489"><span class=cF4>WinMgrTask</span></a><span class=cF0> needs to do doc operations on </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l295"><span class=cF4>MessagePost</span></a><span class=cF0>() messages for mouse_hard.       Already works for </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Mouse.html#l47"><span class=cF4>MouseSet</span></a><span class=cF0>()?
+<a name="l290"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/WinMgr.html#l489"><span class=cF4>WinMgrTask</span></a><span class=cF0> needs to do doc operations on </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l295"><span class=cF4>MessagePost</span></a><span class=cF0>() messages for mouse_hard.   Already works for </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Mouse.html#l47"><span class=cF4>MouseSet</span></a><span class=cF0>()?
 <a name="l291"></a>
 <a name="l292"></a>* Should Messages in PopUp queue get fwded to parent when task dies?
 <a name="l293"></a>
 <a name="l294"></a>* Import Intel datasheets so we can use links in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/PageTables.html#l1"><span class=cF4>Code</span></a><span class=cF0> for documentation.  I tried a PDF-to-text convertor and it wasn't 
 <a name="l295"></a>acceptible.
 <a name="l296"></a>
-<a name="l297"></a>* Switch stmt with sparse cases?        Maybe, ban sparse switch statements.
+<a name="l297"></a>* Switch stmt with sparse cases?    Maybe, ban sparse switch statements.
 <a name="l298"></a>
 <a name="l299"></a>* Compiler Optimization: Postpone LocalVar init until last possible moment in case of return.
 <a name="l300"></a>
@@ -340,7 +340,7 @@ body {background-color:#000000;}
 <a name="l313"></a>* I use fixed-point in </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l341"><span class=cF4>Circle</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l390"><span class=cF4>Ellipse</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l6"><span class=cF4>Mat4x4MulXYZ</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l124"><span class=cF4>Mat4x4MulMat4x4New</span></a><span class=cF0>() and others.  God says I might want to change to 
 <a name="l314"></a>float.  </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF0> </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPointAdvanced.html#l1"><span class=cF4>::/Demo/Lectures/FixedPointAdvanced.CC</span></a><span class=cF0>.
 <a name="l315"></a>
-<a name="l316"></a>* Note: We will never put multiple </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.html#l1"><span class=cF4>Keyboard Tables</span></a><span class=cF0>.  Each country must make their own version of ZealOS.        The </span><span class=cF4>
+<a name="l316"></a>* Note: We will never put multiple </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.html#l1"><span class=cF4>Keyboard Tables</span></a><span class=cF0>.  Each country must make their own version of ZealOS.    The </span><span class=cF4>
 <a name="l317"></a><u>Intel Factory ROM</u></span><span class=cF0> will have just English.  Our </span><a href="https://tomawezome.github.io/ZealOS/Doc/Charter.html#l1"><span class=cF4>Charter</span></a><span class=cF0> bans multiple country or architectures in the same version.
 <a name="l318"></a>
 <a name="l319"></a>* 12 border chars in screen font codes 0x02-0x0D.  </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrTextBase.html#l333"><span class=cF4>TextBorder</span></a><span class=cF0>() </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.html#l313"><span class=cF4>RawDr</span></a><span class=cF0>() </span><a href="https://tomawezome.github.io/ZealOS/Demo/Games/CharDemo.html#l1"><span class=cF4>::/Demo/Games/CharDemo.CC</span></a><span class=cF0>. LineFeed shows-up in </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> 
@@ -362,7 +362,7 @@ body {background-color:#000000;}
 <a name="l335"></a>
 <a name="l336"></a>* Get rid of &quot;Char&quot;.
 <a name="l337"></a>
-<a name="l338"></a>* Get rid of having two terms and pick one, &quot;Disk&quot; and &quot;BlkDev&quot;?        (Probably, not that one.)
+<a name="l338"></a>* Get rid of having two terms and pick one, &quot;Disk&quot; and &quot;BlkDev&quot;?    (Probably, not that one.)
 <a name="l339"></a>
 <a name="l340"></a>* Could switch to having just C and D drives and RAMDrive and CD/DVD?
 <a name="l341"></a>
@@ -416,7 +416,7 @@ body {background-color:#000000;}
 <a name="l389"></a>
 <a name="l390"></a>* Test on Dad's computer or other people's?
 <a name="l391"></a>
-<a name="l392"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Compiler/BackA.html#l437"><span class=cF4>ICDivEqu</span></a><span class=cF0>() assumes RBX.       Is it okay?
+<a name="l392"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Compiler/BackA.html#l437"><span class=cF4>ICDivEqu</span></a><span class=cF0>() assumes RBX.   Is it okay?
 <a name="l393"></a>
 <a name="l394"></a>* InFile PopUp of PopUp?
 <a name="l395"></a>
@@ -440,8 +440,8 @@ body {background-color:#000000;}
 <a name="l413"></a>* MOV U8 [RSP+RCX],DL
 <a name="l414"></a>
 <a name="l415"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l3"><span class=cF4>gr.screen_image</span></a><span class=cF0>
-<a name="l416"></a>        &gt;Might want to do ZOOM in U8 graphics and convert screen capture to U8
-<a name="l417"></a>        &gt;Might want to rev bit order
+<a name="l416"></a>    &gt;Might want to do ZOOM in U8 graphics and convert screen capture to U8
+<a name="l417"></a>    &gt;Might want to rev bit order
 <a name="l418"></a>
 <a name="l419"></a>* This </span><span class=cF4><u>Fs-&gt;catch_except=TRUE</u></span><span class=cF0> causes problems because it
 <a name="l420"></a>catches divide and out-of-mem.  Not sure what to do, yet.
@@ -462,30 +462,30 @@ body {background-color:#000000;}
 <a name="l435"></a>
 <a name="l436"></a>
 <a name="l437"></a></span><span class=cF5>                                                         Bible Passages</span><span class=cF0>
-<a name="l438"></a>It is love I desire                                                                             </span><a href="http://www.biblegateway.com/verse/en/Hosea%206:6"><span class=cF0>Hosea 6:6</span></a><span class=cF0>
-<a name="l439"></a>Males appear three times, not empty             </span><a href="http://www.biblegateway.com/verse/en/Deuteronomy%2016:16"><span class=cF0>Deuteronomy 16:16</span></a><span class=cF0>
-<a name="l440"></a>Offer a sacrifice of praise                                             </span><a href="http://www.biblegateway.com/verse/en/Hebrews%2013:15"><span class=cF0>Hebrews 13:15</span></a><span class=cF0>
+<a name="l438"></a>It is love I desire                                         </span><a href="http://www.biblegateway.com/verse/en/Hosea%206:6"><span class=cF0>Hosea 6:6</span></a><span class=cF0>
+<a name="l439"></a>Males appear three times, not empty         </span><a href="http://www.biblegateway.com/verse/en/Deuteronomy%2016:16"><span class=cF0>Deuteronomy 16:16</span></a><span class=cF0>
+<a name="l440"></a>Offer a sacrifice of praise                         </span><a href="http://www.biblegateway.com/verse/en/Hebrews%2013:15"><span class=cF0>Hebrews 13:15</span></a><span class=cF0>
 <a name="l441"></a>Do I drink blood of goats? Offer praise </span><a href="http://www.biblegateway.com/verse/en/Psalms%2050:14"><span class=cF0>Psalms 50:14</span></a><span class=cF0>
-<a name="l442"></a>When a servant becomes king...                                  </span><a href="http://www.biblegateway.com/verse/en/Proverb%2030:22"><span class=cF0>Proverb 30:22</span></a><span class=cF0>
-<a name="l443"></a>Runner's stride                                                                                                 </span><a href="http://www.biblegateway.com/verse/en/Psalms%20147:10"><span class=cF0>Psalms 147:10</span></a><span class=cF0>
-<a name="l444"></a>Buckling armor                                                                                                  </span><a href="http://www.biblegateway.com/verse/en/1%20Kings%2020:11"><span class=cF0>1 Kings 20:11</span></a><span class=cF0>
-<a name="l445"></a>Lot cast in the lap                                                                             </span><a href="http://www.biblegateway.com/verse/en/Proverbs%2016:33"><span class=cF0>Proverbs 16:33</span></a><span class=cF0>
-<a name="l446"></a>Lord does not repeat                                                                            </span><a href="http://www.biblegateway.com/verse/en/Job%2033:14"><span class=cF0>Job 33:14</span></a><span class=cF0>
-<a name="l447"></a>Offer only in approved place                                            </span><a href="http://www.biblegateway.com/passage/?search=Deuteronomy%2012:13-18&version=NIV"><span class=cF0>Deuteronomy 12:13-18</span></a><span class=cF0>
-<a name="l448"></a>Jesus' zeal for the Temple                                                      </span><a href="http://www.biblegateway.com/passage/?search=John%202:14-19&version=NIV"><span class=cF0>John 2:14-19</span></a><span class=cF0>
-<a name="l449"></a>Famine not for bread                                                                            </span><a href="http://www.biblegateway.com/passage/?search=Amos%208:11-12&version=NIV"><span class=cF0>Amos 8:11-12</span></a><span class=cF0>
-<a name="l450"></a>To the honest, you are honest                                   </span><a href="http://www.biblegateway.com/verse/en/Psalm%2018:26"><span class=cF0>Psalm 18:26</span></a><span class=cF0>
-<a name="l451"></a>Meek and humble of heart                                                                </span><a href="http://www.biblegateway.com/verse/en/Matthew%2011:29"><span class=cF0>Matthew 11:29</span></a><span class=cF0>
-<a name="l452"></a>Moses gets Aaron                                                                                                </span><a href="http://www.biblegateway.com/passage/?search=Exodus%204:10-16&version=NIV"><span class=cF0>Exodus 4:10-16</span></a><span class=cF0>
-<a name="l453"></a>There is no council against the Lord            </span><a href="http://www.biblegateway.com/verse/en/Proverbs%2021:30"><span class=cF0>Proverbs 21:30</span></a><span class=cF0>
-<a name="l454"></a>Human help is worthless                                                                 </span><a href="http://www.biblegateway.com/verse/en/Psalm%20108:12"><span class=cF0>Psalm 108:12</span></a><span class=cF0>
-<a name="l455"></a>Do not seek your own wealth                                             </span><a href="http://www.biblegateway.com/verse/en/1%20Corinthians%2010:24"><span class=cF0>1 Corinthians 10:24</span></a><span class=cF0>
-<a name="l456"></a>Abundance of Spirits                                                                            </span><a href="http://www.usccb.org/bible/1corinthians/14:12"><span class=cF0>1 Corinthians 14:12</span></a><span class=cF0>
-<a name="l457"></a>The stone rejected is cornerstone                       </span><a href="http://www.biblegateway.com/verse/en/Matthew%2021:42"><span class=cF0>Matthew 21:42</span></a><span class=cF0>
-<a name="l458"></a>Egypt rise like flood                                                                   </span><a href="http://www.biblegateway.com/passage/?search=Jeremiah%2046:7-8&version=NIV"><span class=cF0>Jeremiah 46:7-8</span></a><span class=cF0>
-<a name="l459"></a>New wineskins                                                                                                   </span><a href="http://www.biblegateway.com/verse/en/Mark%202:22"><span class=cF0>Mark 2:22</span></a><span class=cF0>
-<a name="l460"></a>Thousand songs of Solomon                                                       </span><a href="http://www.biblegateway.com/passage/?search=1%20Kings%204:32&version=NIV"><span class=cF0>1 Kings 4:32</span></a><span class=cF0>
-<a name="l461"></a>Not rich, nor poor, but my portion                      </span><a href="http://www.biblegateway.com/verse/en/Proverbs%2030:8"><span class=cF0>Proverbs 30:8</span></a><span class=cF0>
+<a name="l442"></a>When a servant becomes king...                  </span><a href="http://www.biblegateway.com/verse/en/Proverb%2030:22"><span class=cF0>Proverb 30:22</span></a><span class=cF0>
+<a name="l443"></a>Runner's stride                                                 </span><a href="http://www.biblegateway.com/verse/en/Psalms%20147:10"><span class=cF0>Psalms 147:10</span></a><span class=cF0>
+<a name="l444"></a>Buckling armor                                                  </span><a href="http://www.biblegateway.com/verse/en/1%20Kings%2020:11"><span class=cF0>1 Kings 20:11</span></a><span class=cF0>
+<a name="l445"></a>Lot cast in the lap                                         </span><a href="http://www.biblegateway.com/verse/en/Proverbs%2016:33"><span class=cF0>Proverbs 16:33</span></a><span class=cF0>
+<a name="l446"></a>Lord does not repeat                                        </span><a href="http://www.biblegateway.com/verse/en/Job%2033:14"><span class=cF0>Job 33:14</span></a><span class=cF0>
+<a name="l447"></a>Offer only in approved place                        </span><a href="http://www.biblegateway.com/passage/?search=Deuteronomy%2012:13-18&version=NIV"><span class=cF0>Deuteronomy 12:13-18</span></a><span class=cF0>
+<a name="l448"></a>Jesus' zeal for the Temple                          </span><a href="http://www.biblegateway.com/passage/?search=John%202:14-19&version=NIV"><span class=cF0>John 2:14-19</span></a><span class=cF0>
+<a name="l449"></a>Famine not for bread                                        </span><a href="http://www.biblegateway.com/passage/?search=Amos%208:11-12&version=NIV"><span class=cF0>Amos 8:11-12</span></a><span class=cF0>
+<a name="l450"></a>To the honest, you are honest                   </span><a href="http://www.biblegateway.com/verse/en/Psalm%2018:26"><span class=cF0>Psalm 18:26</span></a><span class=cF0>
+<a name="l451"></a>Meek and humble of heart                                </span><a href="http://www.biblegateway.com/verse/en/Matthew%2011:29"><span class=cF0>Matthew 11:29</span></a><span class=cF0>
+<a name="l452"></a>Moses gets Aaron                                                </span><a href="http://www.biblegateway.com/passage/?search=Exodus%204:10-16&version=NIV"><span class=cF0>Exodus 4:10-16</span></a><span class=cF0>
+<a name="l453"></a>There is no council against the Lord        </span><a href="http://www.biblegateway.com/verse/en/Proverbs%2021:30"><span class=cF0>Proverbs 21:30</span></a><span class=cF0>
+<a name="l454"></a>Human help is worthless                                 </span><a href="http://www.biblegateway.com/verse/en/Psalm%20108:12"><span class=cF0>Psalm 108:12</span></a><span class=cF0>
+<a name="l455"></a>Do not seek your own wealth                         </span><a href="http://www.biblegateway.com/verse/en/1%20Corinthians%2010:24"><span class=cF0>1 Corinthians 10:24</span></a><span class=cF0>
+<a name="l456"></a>Abundance of Spirits                                        </span><a href="http://www.usccb.org/bible/1corinthians/14:12"><span class=cF0>1 Corinthians 14:12</span></a><span class=cF0>
+<a name="l457"></a>The stone rejected is cornerstone           </span><a href="http://www.biblegateway.com/verse/en/Matthew%2021:42"><span class=cF0>Matthew 21:42</span></a><span class=cF0>
+<a name="l458"></a>Egypt rise like flood                                   </span><a href="http://www.biblegateway.com/passage/?search=Jeremiah%2046:7-8&version=NIV"><span class=cF0>Jeremiah 46:7-8</span></a><span class=cF0>
+<a name="l459"></a>New wineskins                                                   </span><a href="http://www.biblegateway.com/verse/en/Mark%202:22"><span class=cF0>Mark 2:22</span></a><span class=cF0>
+<a name="l460"></a>Thousand songs of Solomon                           </span><a href="http://www.biblegateway.com/passage/?search=1%20Kings%204:32&version=NIV"><span class=cF0>1 Kings 4:32</span></a><span class=cF0>
+<a name="l461"></a>Not rich, nor poor, but my portion          </span><a href="http://www.biblegateway.com/verse/en/Proverbs%2030:8"><span class=cF0>Proverbs 30:8</span></a><span class=cF0>
 <a name="l462"></a>Be hot or cold. Lukewarm I spit you out </span><a href="http://www.biblegateway.com/verse/en/Revelation%203:16"><span class=cF0>Revelation 3:16</span></a><span class=cF0>
 <a name="l463"></a>
 <a name="l464"></a></span><a href="https://en.wikipedia.org/wiki/Linus_Torvalds"><span class=cF0>Linus Torvalds (Dec 28, 1969)</span></a><span class=cF0>

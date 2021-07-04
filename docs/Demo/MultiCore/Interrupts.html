@@ -27,24 +27,24 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> IntBeepOn()
 <a name="l2"></a>{
-<a name="l3"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//signal end of interrupt</span><span class=cF0>
-<a name="l4"></a>        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
+<a name="l3"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//signal end of interrupt</span><span class=cF0>
+<a name="l4"></a>    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
 <a name="l5"></a>}
 <a name="l6"></a>
 <a name="l7"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> IntBeepOff()
 <a name="l8"></a>{
-<a name="l9"></a>        *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias+</span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l10"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l9"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias+</span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l10"></a>    </span><span class=cF5>Sound</span><span class=cF0>;
 <a name="l11"></a>}
 <a name="l12"></a>
 <a name="l13"></a></span><span class=cF1>U0</span><span class=cF0> IntTest()
 <a name="l14"></a>{</span><span class=cF2>//Modify interrupt descriptor table use by all cores.</span><span class=cF0>
-<a name="l15"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0>, &amp;IntBeepOn, </span><span class=cF3>IDTET_TRAP</span><span class=cF0>);
-<a name="l16"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, &amp;IntBeepOff, </span><span class=cF3>IDTET_TRAP</span><span class=cF0>);
-<a name="l17"></a>        </span><span class=cF2>//Issue interupt to core1</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l19"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0>);
-<a name="l20"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l15"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0>, &amp;IntBeepOn, </span><span class=cF3>IDTET_TRAP</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, &amp;IntBeepOff, </span><span class=cF3>IDTET_TRAP</span><span class=cF0>);
+<a name="l17"></a>    </span><span class=cF2>//Issue interupt to core1</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l19"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0>);
+<a name="l20"></a>    </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
 <a name="l21"></a>}
 <a name="l22"></a>
 <a name="l23"></a>IntTest;

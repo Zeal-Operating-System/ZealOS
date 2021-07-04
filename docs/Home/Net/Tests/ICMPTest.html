@@ -32,17 +32,17 @@ body {background-color:#000000;}
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>U0</span><span class=cF0> ICMPTest()
 <a name="l7"></a>{
-<a name="l8"></a>        </span><span class=cF1>U8</span><span class=cF0> *data_payload = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>8</span><span class=cF0>);
+<a name="l8"></a>    </span><span class=cF1>U8</span><span class=cF0> *data_payload = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>8</span><span class=cF0>);
 <a name="l9"></a>
-<a name="l10"></a>        *(data_payload</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xDEADC0DEBEEFFADE</span><span class=cF0>);
+<a name="l10"></a>    *(data_payload</span><span class=cF7>(</span><span class=cF9>U64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) = </span><span class=cF5>EndianU64</span><span class=cF0>(</span><span class=cFE>0xDEADC0DEBEEFFADE</span><span class=cF0>);
 <a name="l11"></a>
-<a name="l12"></a>        ARPCachePut(dst_ip, dst_mac); </span><span class=cF2>// Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet</span><span class=cF0>
+<a name="l12"></a>    ARPCachePut(dst_ip, dst_mac); </span><span class=cF2>// Force entry into ARP Cache so IPV4 can match it with IPV4AddressMACGet</span><span class=cF0>
 <a name="l13"></a>
-<a name="l14"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l15"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l16"></a>                ICMPReplySend(dst_ip, </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cFE>0xDEAD</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cFE>0xBEEF</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cFE>0xC0DE</span><span class=cF7>)</span><span class=cF0>, data_payload, </span><span class=cFE>8</span><span class=cF0>);
-<a name="l17"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
-<a name="l18"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l14"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l15"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>        ICMPReplySend(dst_ip, </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cFE>0xDEAD</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cFE>0xBEEF</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>EndianU16</span><span class=cF7>(</span><span class=cFE>0xC0DE</span><span class=cF7>)</span><span class=cF0>, data_payload, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l17"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
+<a name="l18"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l19"></a>
 <a name="l20"></a>}
 <a name="l21"></a>

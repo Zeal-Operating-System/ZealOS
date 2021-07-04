@@ -25,87 +25,87 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:courier;font-size:10pt">
-<a name="l1"></a><span class=cF2>/*</span><span class=cF0>      </span><span class=cF2>Shrine mentions possibly using two FIFOs</span><span class=cF0>
-<a name="l2"></a>        </span><span class=cF2>(in our case, Queues) for pending and</span><span class=cF0>
-<a name="l3"></a>        </span><span class=cF2>empty frames. If logical to implement,</span><span class=cF0>
-<a name="l4"></a>        </span><span class=cF2>perhaps Zeal NetQueue code should</span><span class=cF0>
-<a name="l5"></a>        </span><span class=cF2>do something similar to that idea.</span><span class=cF0>
+<a name="l1"></a><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>Shrine mentions possibly using two FIFOs</span><span class=cF0>
+<a name="l2"></a>    </span><span class=cF2>(in our case, Queues) for pending and</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF2>empty frames. If logical to implement,</span><span class=cF0>
+<a name="l4"></a>    </span><span class=cF2>perhaps Zeal NetQueue code should</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF2>do something similar to that idea.</span><span class=cF0>
 <a name="l6"></a>
-<a name="l7"></a>        </span><span class=cF2>Each Ethernet Frame will be represented</span><span class=cF0>
-<a name="l8"></a>        </span><span class=cF2>as an entry in a CQueue. */</span><span class=cF0>
+<a name="l7"></a>    </span><span class=cF2>Each Ethernet Frame will be represented</span><span class=cF0>
+<a name="l8"></a>    </span><span class=cF2>as an entry in a CQueue. */</span><span class=cF0>
 <a name="l9"></a>
 <a name="l10"></a></span><span class=cF1>class</span><span class=cF0> CNetQueueEntry:</span><span class=cF9>CQueue</span><span class=cF0>
 <a name="l11"></a>{
-<a name="l12"></a>        </span><span class=cF9>I64</span><span class=cF0> packet_length;
-<a name="l13"></a>        </span><span class=cF1>U8</span><span class=cF0>      frame[ETHERNET_FRAME_SIZE];
+<a name="l12"></a>    </span><span class=cF9>I64</span><span class=cF0> packet_length;
+<a name="l13"></a>    </span><span class=cF1>U8</span><span class=cF0>  frame[ETHERNET_FRAME_SIZE];
 <a name="l14"></a>};
 <a name="l15"></a>
 <a name="l16"></a>
-<a name="l17"></a></span><span class=cF2>/*</span><span class=cF0>      </span><span class=cF2>global variable, holds pointer of Ethernet Queue.</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF2>This acts as the Head of the Queue, Entries act</span><span class=cF0>
-<a name="l19"></a>        </span><span class=cF2>as the Tail of the Queue. </span><span class=cF0>
-<a name="l20"></a>        </span><span class=cF2>Upon QueueInit, -&gt;next and -&gt;last are set to</span><span class=cF0>
-<a name="l21"></a>        </span><span class=cF2>itself, the Head. */</span><span class=cF0>
+<a name="l17"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>global variable, holds pointer of Ethernet Queue.</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cF2>This acts as the Head of the Queue, Entries act</span><span class=cF0>
+<a name="l19"></a>    </span><span class=cF2>as the Tail of the Queue. </span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF2>Upon QueueInit, -&gt;next and -&gt;last are set to</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF2>itself, the Head. */</span><span class=cF0>
 <a name="l22"></a>
 <a name="l23"></a></span><span class=cF9>CQueue</span><span class=cF0> *net_queue; </span><span class=cF2>// no QueueRemove the Head! only Entries!</span><span class=cF0>
 <a name="l24"></a>
 <a name="l25"></a>
-<a name="l26"></a></span><span class=cF2>/*</span><span class=cF0>      </span><span class=cF2>PCNet reroutes PCI interrupts to software. See </span><span class=cF4><u>PCNet</u></span><span class=cF2>.</span><span class=cF0>
-<a name="l27"></a>        </span><span class=cF2>Net Handler interrupt is generated whenever an entry is</span><span class=cF0>
-<a name="l28"></a>        </span><span class=cF2>pushed to the NetQueue. See </span><span class=cF4><u>NetHandler</u></span><span class=cF2> */</span><span class=cF0>
+<a name="l26"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>PCNet reroutes PCI interrupts to software. See </span><span class=cF4><u>PCNet</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l27"></a>    </span><span class=cF2>Net Handler interrupt is generated whenever an entry is</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF2>pushed to the NetQueue. See </span><span class=cF4><u>NetHandler</u></span><span class=cF2> */</span><span class=cF0>
 <a name="l29"></a>
-<a name="l30"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET0                </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>
-<a name="l31"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET1                </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>
-<a name="l32"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET2                </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>
-<a name="l33"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET3                </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>
+<a name="l30"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET0        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>
+<a name="l31"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET1        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>
+<a name="l32"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET2        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>
+<a name="l33"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET3        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>
 <a name="l34"></a>#</span><span class=cF1>define</span><span class=cF0> I_NETHANDLER    </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>
 <a name="l35"></a>
 <a name="l36"></a>#</span><span class=cF1>define</span><span class=cF0> INT_DEST_CPU    </span><span class=cFE>0</span><span class=cF0>
 <a name="l37"></a>
 <a name="l38"></a></span><span class=cF1>U0</span><span class=cF0> NetQueueInit()
 <a name="l39"></a>{
-<a name="l40"></a>        net_queue = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CQueue</span><span class=cF7>)</span><span class=cF0>);
-<a name="l41"></a>        </span><span class=cF5>QueueInit</span><span class=cF0>(net_queue);
+<a name="l40"></a>    net_queue = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CQueue</span><span class=cF7>)</span><span class=cF0>);
+<a name="l41"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(net_queue);
 <a name="l42"></a>}
 <a name="l43"></a>
 <a name="l44"></a>CNetQueueEntry *NetQueuePull()
-<a name="l45"></a>{</span><span class=cF2>/*</span><span class=cF0>     </span><span class=cF2>Returns a pointer to a CNetQueueEntry,</span><span class=cF0>
-<a name="l46"></a>        </span><span class=cF2>or NULL pointer if Net Queue is empty. */</span><span class=cF0>
+<a name="l45"></a>{</span><span class=cF2>/*</span><span class=cF0> </span><span class=cF2>Returns a pointer to a CNetQueueEntry,</span><span class=cF0>
+<a name="l46"></a>    </span><span class=cF2>or NULL pointer if Net Queue is empty. */</span><span class=cF0>
 <a name="l47"></a>
-<a name="l48"></a>        CNetQueueEntry *entry;
+<a name="l48"></a>    CNetQueueEntry *entry;
 <a name="l49"></a>
-<a name="l50"></a>        </span><span class=cF1>if</span><span class=cF0> (net_queue-&gt;next != net_queue)
-<a name="l51"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l52"></a>                entry = net_queue-&gt;next;
+<a name="l50"></a>    </span><span class=cF1>if</span><span class=cF0> (net_queue-&gt;next != net_queue)
+<a name="l51"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>        entry = net_queue-&gt;next;
 <a name="l53"></a>
-<a name="l54"></a>                NetLog(</span><span class=cF6>&quot;NETQUEUE PULL: Removing entry from queue.&quot;</span><span class=cF0>);
-<a name="l55"></a>                </span><span class=cF5>QueueRemove</span><span class=cF0>(entry);
-<a name="l56"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l57"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF2>// Queue is empty if head-&gt;next is head itself.</span><span class=cF0>
-<a name="l58"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l59"></a>                entry = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l60"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l54"></a>        NetLog(</span><span class=cF6>&quot;NETQUEUE PULL: Removing entry from queue.&quot;</span><span class=cF0>);
+<a name="l55"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(entry);
+<a name="l56"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l57"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF2>// Queue is empty if head-&gt;next is head itself.</span><span class=cF0>
+<a name="l58"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l59"></a>        entry = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l60"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l61"></a>
-<a name="l62"></a>        </span><span class=cF1>return</span><span class=cF0> entry;
+<a name="l62"></a>    </span><span class=cF1>return</span><span class=cF0> entry;
 <a name="l63"></a>}
 <a name="l64"></a>
 <a name="l65"></a></span><span class=cF1>U0</span><span class=cF0> NetQueuePush(</span><span class=cF1>U8</span><span class=cF0> *data, </span><span class=cF9>I64</span><span class=cF0> length)
-<a name="l66"></a>{</span><span class=cF2>/*</span><span class=cF0>     </span><span class=cF2>Pushes a copy of the packet data and length</span><span class=cF0>
-<a name="l67"></a>        </span><span class=cF2>into the Net Queue. The NetQueueEntry is inserted</span><span class=cF0>
-<a name="l68"></a>        </span><span class=cF2>after the last entry of net_queue to keep new</span><span class=cF0>
-<a name="l69"></a>        </span><span class=cF2>items in the back of the Queue, old in front. */</span><span class=cF0> 
+<a name="l66"></a>{</span><span class=cF2>/*</span><span class=cF0> </span><span class=cF2>Pushes a copy of the packet data and length</span><span class=cF0>
+<a name="l67"></a>    </span><span class=cF2>into the Net Queue. The NetQueueEntry is inserted</span><span class=cF0>
+<a name="l68"></a>    </span><span class=cF2>after the last entry of net_queue to keep new</span><span class=cF0>
+<a name="l69"></a>    </span><span class=cF2>items in the back of the Queue, old in front. */</span><span class=cF0> 
 <a name="l70"></a>
-<a name="l71"></a>        CNetQueueEntry *entry = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CNetQueueEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l71"></a>    CNetQueueEntry *entry = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CNetQueueEntry</span><span class=cF7>)</span><span class=cF0>);
 <a name="l72"></a>
-<a name="l73"></a>        entry-&gt;packet_length = length;
+<a name="l73"></a>    entry-&gt;packet_length = length;
 <a name="l74"></a>
-<a name="l75"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(entry-&gt;frame, data, length);
+<a name="l75"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(entry-&gt;frame, data, length);
 <a name="l76"></a>
-<a name="l77"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(entry, net_queue-&gt;last);
+<a name="l77"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(entry, net_queue-&gt;last);
 <a name="l78"></a>
-<a name="l79"></a>        </span><span class=cF2>// Generate Net Handler interrupt.</span><span class=cF0>
-<a name="l80"></a>        NetLog(</span><span class=cF6>&quot;NETQUEUE PUSH COPY: Generating NetHandler interrupt.&quot;</span><span class=cF0>);
-<a name="l81"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(I_NETHANDLER, INT_DEST_CPU);
+<a name="l79"></a>    </span><span class=cF2>// Generate Net Handler interrupt.</span><span class=cF0>
+<a name="l80"></a>    NetLog(</span><span class=cF6>&quot;NETQUEUE PUSH COPY: Generating NetHandler interrupt.&quot;</span><span class=cF0>);
+<a name="l81"></a>    </span><span class=cF5>MPInt</span><span class=cF0>(I_NETHANDLER, INT_DEST_CPU);
 <a name="l82"></a>}
 <a name="l83"></a>
 <a name="l84"></a>

@@ -31,26 +31,26 @@ body {background-color:#000000;}
 <a name="l4"></a>
 <a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> F64FileGenTXT(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>I64</span><span class=cF0> n)
 <a name="l6"></a>{
-<a name="l7"></a>        </span><span class=cF9>I64</span><span class=cF0>       i;
-<a name="l8"></a>        </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>(filename);
+<a name="l7"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l8"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>(filename);
 <a name="l9"></a>
-<a name="l10"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc,</span><span class=cF6>&quot;//This is unsorted.\n&quot;</span><span class=cF0>);
-<a name="l11"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; n; i++)
-<a name="l12"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%12.6f\n&quot;</span><span class=cF0>, </span><span class=cF5>Rand</span><span class=cF0>);
-<a name="l13"></a>        </span><span class=cF5>DocWrite</span><span class=cF0>(doc);
-<a name="l14"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l10"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,</span><span class=cF6>&quot;//This is unsorted.\n&quot;</span><span class=cF0>);
+<a name="l11"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; n; i++)
+<a name="l12"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%12.6f\n&quot;</span><span class=cF0>, </span><span class=cF5>Rand</span><span class=cF0>);
+<a name="l13"></a>    </span><span class=cF5>DocWrite</span><span class=cF0>(doc);
+<a name="l14"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
 <a name="l15"></a>}
 <a name="l16"></a>F64FileGenTXT(</span><span class=cF6>&quot;~/DemoUnsortedF64.DD&quot;</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>);
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cF1>U0</span><span class=cF0> F64FileGenDAT(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>I64</span><span class=cF0> n)
 <a name="l19"></a>{</span><span class=cF2>//</span><span class=cF4><u>File/CFile</u></span><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/DataBase.html#l1"><span class=cF4>::/Demo/Disk/DataBase.CC</span></a><span class=cF0>
-<a name="l20"></a>        </span><span class=cF9>I64</span><span class=cF0>  i;
-<a name="l21"></a>        </span><span class=cF1>F64</span><span class=cF0> *a = </span><span class=cF5>MAlloc</span><span class=cF0>(n * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>);
+<a name="l20"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l21"></a>    </span><span class=cF1>F64</span><span class=cF0> *a = </span><span class=cF5>MAlloc</span><span class=cF0>(n * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>);
 <a name="l22"></a>
-<a name="l23"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; n; i++)
-<a name="l24"></a>                a[i] = </span><span class=cF5>Rand</span><span class=cF0>;
-<a name="l25"></a>        </span><span class=cF5>FileWrite</span><span class=cF0>(filename, a, n * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>);
-<a name="l26"></a>        </span><span class=cF5>Free</span><span class=cF0>(a);
+<a name="l23"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; n; i++)
+<a name="l24"></a>        a[i] = </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF5>FileWrite</span><span class=cF0>(filename, a, n * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>F64</span><span class=cF7>)</span><span class=cF0>);
+<a name="l26"></a>    </span><span class=cF5>Free</span><span class=cF0>(a);
 <a name="l27"></a>}
 <a name="l28"></a>F64FileGenDAT(</span><span class=cF6>&quot;~/DemoUnsortedF64.DATA&quot;</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>);
 </span></pre></body>

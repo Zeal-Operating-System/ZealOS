@@ -27,24 +27,24 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> UDPSocketTest()
 <a name="l2"></a>{
-<a name="l3"></a>        CUDPSocket                      *u = UDPSocket(AF_INET);
-<a name="l4"></a>        CSocketAddressIPV4      *i = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l3"></a>    CUDPSocket          *u = UDPSocket(AF_INET);
+<a name="l4"></a>    CSocketAddressIPV4  *i = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
 <a name="l5"></a>
-<a name="l6"></a>        i-&gt;port                         = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>64222</span><span class=cF0>);
-<a name="l7"></a>        i-&gt;family                       = AF_INET;
-<a name="l8"></a>        i-&gt;address.address      = INADDR_ANY;
+<a name="l6"></a>    i-&gt;port             = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>64222</span><span class=cF0>);
+<a name="l7"></a>    i-&gt;family           = AF_INET;
+<a name="l8"></a>    i-&gt;address.address  = INADDR_ANY;
 <a name="l9"></a>
-<a name="l10"></a>        UDPSocketBind(u, i);
+<a name="l10"></a>    UDPSocketBind(u, i);
 <a name="l11"></a>
-<a name="l12"></a>        </span><span class=cF6>&quot;UDP Socket bound at port %d.\n&quot;</span><span class=cF0>, </span><span class=cF5>EndianU16</span><span class=cF0>(i-&gt;port);
-<a name="l13"></a>        </span><span class=cF6>&quot;Send UDP data to the VM, then run UDPRep to see received message data in report.\n&quot;</span><span class=cF0>;
+<a name="l12"></a>    </span><span class=cF6>&quot;UDP Socket bound at port %d.\n&quot;</span><span class=cF0>, </span><span class=cF5>EndianU16</span><span class=cF0>(i-&gt;port);
+<a name="l13"></a>    </span><span class=cF6>&quot;Send UDP data to the VM, then run UDPRep to see received message data in report.\n&quot;</span><span class=cF0>;
 <a name="l14"></a>
-<a name="l15"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>CharScan</span><span class=cF0>)
-<a name="l16"></a>                </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l15"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>CharScan</span><span class=cF0>)
+<a name="l16"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
 <a name="l17"></a>
-<a name="l18"></a>        UDPSocketClose(u);
+<a name="l18"></a>    UDPSocketClose(u);
 <a name="l19"></a>
-<a name="l20"></a>        </span><span class=cF5>Free</span><span class=cF0>(i);
+<a name="l20"></a>    </span><span class=cF5>Free</span><span class=cF0>(i);
 <a name="l21"></a>}
 <a name="l22"></a>
 <a name="l23"></a>UDPSocketTest;</span></pre></body>

@@ -26,12 +26,12 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l151"><span class=cF4>KMain</span></a><span class=cF0>()
-<a name="l2"></a>        includes </span><a href="https://tomawezome.github.io/ZealOS/StartOS.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0>
-<a name="l3"></a>                includes </span><a href="https://tomawezome.github.io/ZealOS/Home/MakeHome.html#l1"><span class=cF4>~/MakeHome.CC</span></a><span class=cF0>
-<a name="l4"></a>                        includes </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.html#l1"><span class=cF4>~/HomeSys.CC</span></a><span class=cF0>
-<a name="l5"></a>                                calls </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.html#l22"><span class=cF4>StartUpTasks</span></a><span class=cF0>()
-<a name="l6"></a>                                        includes </span><a href="https://tomawezome.github.io/ZealOS/Home/Once.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF0>
-<a name="l7"></a>                                                calls </span><a href="https://tomawezome.github.io/ZealOS/System/Registry.html#l206"><span class=cF4>OnceExe</span></a><span class=cF0>().
+<a name="l2"></a>    includes </span><a href="https://tomawezome.github.io/ZealOS/StartOS.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0>
+<a name="l3"></a>        includes </span><a href="https://tomawezome.github.io/ZealOS/Home/MakeHome.html#l1"><span class=cF4>~/MakeHome.CC</span></a><span class=cF0>
+<a name="l4"></a>            includes </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.html#l1"><span class=cF4>~/HomeSys.CC</span></a><span class=cF0>
+<a name="l5"></a>                calls </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.html#l22"><span class=cF4>StartUpTasks</span></a><span class=cF0>()
+<a name="l6"></a>                    includes </span><a href="https://tomawezome.github.io/ZealOS/Home/Once.html#l1"><span class=cF4>~/Once.CC</span></a><span class=cF0>
+<a name="l7"></a>                        calls </span><a href="https://tomawezome.github.io/ZealOS/System/Registry.html#l206"><span class=cF4>OnceExe</span></a><span class=cF0>().
 <a name="l8"></a></span><span class=cF4>
 <a name="l9"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Registry.html#l158"><span class=cF4>ZOnce</span></a><span class=cF0>() appends src code to </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF0> </span><span class=cF2>Once/System</span><span class=cF0> tree, executed at next boot by </span><span class=cF2>System</span><span class=cF0>.
 <a name="l10"></a></span><span class=cF4>

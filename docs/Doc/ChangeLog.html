@@ -46,7 +46,7 @@ body {background-color:#000000;}
 <a name="l18"></a>* Raised version number to 0.02.
 <a name="l19"></a>* Added support for reading TempleOS, ZenithOS, and ZealOS ISOs.
 <a name="l20"></a>* Renames:
-<a name="l21"></a>        - Seth  --&gt; Executive
+<a name="l21"></a>    - Seth  --&gt; Executive
 <a name="l22"></a>
 <a name="l23"></a></span><span class=c0F>----07/01/21 19:04:09----</span><span class=cF0>
 <a name="l24"></a><blink>* Forked ZealOS from ZenithOS. Version number 2.01 --&gt; 0.01.</blink>
@@ -54,15 +54,15 @@ body {background-color:#000000;}
 <a name="l26"></a>* Restructured Net/ directories.
 <a name="l27"></a>* Removed unnecessary files in Home/ directory.
 <a name="l28"></a>* Renames:
-<a name="l29"></a>        - ZenithOS              --&gt; ZealOS
-<a name="l30"></a>        - Zenith Task   --&gt; System Task
+<a name="l29"></a>    - ZenithOS      --&gt; ZealOS
+<a name="l30"></a>    - Zenith Task   --&gt; System Task
 <a name="l31"></a>
-<a name="l32"></a>        - </span><span class=cF5>Zenith</span><span class=cF0>                --&gt; </span><span class=cF5>Sys</span><span class=cF0>
-<a name="l33"></a>        - </span><span class=cF5>ZenithErr</span><span class=cF0>             --&gt; </span><span class=cF5>SysErr</span><span class=cF0>
-<a name="l34"></a>        - </span><span class=cF5>ZenithWarn</span><span class=cF0>    --&gt; </span><span class=cF5>SysWarn</span><span class=cF0>
-<a name="l35"></a>        - </span><span class=cF5>ZenithLog</span><span class=cF0>             --&gt; </span><span class=cF5>SysLog</span><span class=cF0>
+<a name="l32"></a>    - </span><span class=cF5>Zenith</span><span class=cF0>        --&gt; </span><span class=cF5>Sys</span><span class=cF0>
+<a name="l33"></a>    - </span><span class=cF5>ZenithErr</span><span class=cF0>     --&gt; </span><span class=cF5>SysErr</span><span class=cF0>
+<a name="l34"></a>    - </span><span class=cF5>ZenithWarn</span><span class=cF0>    --&gt; </span><span class=cF5>SysWarn</span><span class=cF0>
+<a name="l35"></a>    - </span><span class=cF5>ZenithLog</span><span class=cF0>     --&gt; </span><span class=cF5>SysLog</span><span class=cF0>
 <a name="l36"></a>
-<a name="l37"></a>        - Zenith/               --&gt; System/
+<a name="l37"></a>    - Zenith/       --&gt; System/
 <a name="l38"></a>
 <a name="l39"></a></span><span class=c0F>----06/28/21 06:20:21----</span><span class=cF0>
 <a name="l40"></a>* Restored /System/God directory, the </span><a href="https://tomawezome.github.io/ZealOS/Misc/Bible.html#l1"><span class=cF4>Bible</span></a><span class=cF0>, </span><a href="http://www.biblegateway.com/verse/en/Exodus+20:1"><span class=cF4>Bible Links</span></a><span class=cF0>, and </span><span class=cF9><u>GodBiblePassage</u></span><span class=cF0> with SHIFT-F7.
@@ -268,15 +268,15 @@ body {background-color:#000000;}
 <a name="l240"></a>* <u>Added VBE graphics support.</u> Screen zooming is non-functional at the moment. We are setting 32-bit color graphics modes but the 
 <a name="l241"></a>graphics library is still 4-bit (16 color) internally. </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/MiniGrLib.html#l1"><span class=cF4>MiniGrLib</span></a><span class=cF0> broken for obvious reasons. Keeping it because its intention is 
 <a name="l242"></a>to teach a how a graphics library works, generically. Removed 2 smaller VGA hardware programming demos.
-<a name="l243"></a>        Rundown:
-<a name="l244"></a>        - Added classes </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l502"><span class=cF4>CVBEInfo</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l519"><span class=cF4>CVBEMode</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l538"><span class=cF4>CVBEModeShort</span></a><span class=cF0>
-<a name="l245"></a>        - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart16.html#l104"><span class=cF4>real-mode assembly</span></a><span class=cF0> -- </span><span class=cF9><u>added kernel symbols</u></span><span class=cF0>.
-<a name="l246"></a>        - Added </span><span class=cF2>screen_size</span><span class=cF0>, </span><span class=cF2>buffer_size</span><span class=cF0>, </span><span class=cF2>fb_alias</span><span class=cF0> members to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4207"><span class=cF4>CTextGlobals</span></a><span class=cF0>.
-<a name="l247"></a>        - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l115"><span class=cF4>SysGrInit</span></a><span class=cF0>() -- using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l69"><span class=cF4>Seg2Linear</span></a><span class=cF0>() to convert pointers.
-<a name="l248"></a>        - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Display.html#l62"><span class=cF4>raw text drawing routine</span></a><span class=cF0> updated. </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l498"><span class=cF4>BLACK32, WHITE32</span></a><span class=cF0>.
-<a name="l249"></a>        - Dynamic definition of </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l50"><span class=cF4>GR_WIDTH and GR_HEIGHT</span></a><span class=cF0>.
-<a name="l250"></a>        - </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l392"><span class=cF4>GrUpdateScreen32</span></a><span class=cF0>() -- </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l379"><span class=cF4>GrCalcScreenUpdates</span></a><span class=cF0>() is used to reduce CPU usage. Added </span><span class=cF2>screen_cache</span><span class=cF0> member to </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l3"><span class=cF4>CGrGlobals</span></a><span class=cF0>.
-<a name="l251"></a>        - </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l44"><span class=cF4>gr_palette</span></a><span class=cF0> global variable. We use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3610"><span class=cF4>CBGR24</span></a><span class=cF0> in </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrPalette.html#l1"><span class=cF4>GrPalette.CC</span></a><span class=cF0>.
+<a name="l243"></a>    Rundown:
+<a name="l244"></a>    - Added classes </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l502"><span class=cF4>CVBEInfo</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l519"><span class=cF4>CVBEMode</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l538"><span class=cF4>CVBEModeShort</span></a><span class=cF0>
+<a name="l245"></a>    - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart16.html#l104"><span class=cF4>real-mode assembly</span></a><span class=cF0> -- </span><span class=cF9><u>added kernel symbols</u></span><span class=cF0>.
+<a name="l246"></a>    - Added </span><span class=cF2>screen_size</span><span class=cF0>, </span><span class=cF2>buffer_size</span><span class=cF0>, </span><span class=cF2>fb_alias</span><span class=cF0> members to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4207"><span class=cF4>CTextGlobals</span></a><span class=cF0>.
+<a name="l247"></a>    - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l115"><span class=cF4>SysGrInit</span></a><span class=cF0>() -- using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l69"><span class=cF4>Seg2Linear</span></a><span class=cF0>() to convert pointers.
+<a name="l248"></a>    - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Display.html#l62"><span class=cF4>raw text drawing routine</span></a><span class=cF0> updated. </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l498"><span class=cF4>BLACK32, WHITE32</span></a><span class=cF0>.
+<a name="l249"></a>    - Dynamic definition of </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l50"><span class=cF4>GR_WIDTH and GR_HEIGHT</span></a><span class=cF0>.
+<a name="l250"></a>    - </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l392"><span class=cF4>GrUpdateScreen32</span></a><span class=cF0>() -- </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l379"><span class=cF4>GrCalcScreenUpdates</span></a><span class=cF0>() is used to reduce CPU usage. Added </span><span class=cF2>screen_cache</span><span class=cF0> member to </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l3"><span class=cF4>CGrGlobals</span></a><span class=cF0>.
+<a name="l251"></a>    - </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l44"><span class=cF4>gr_palette</span></a><span class=cF0> global variable. We use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3610"><span class=cF4>CBGR24</span></a><span class=cF0> in </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrPalette.html#l1"><span class=cF4>GrPalette.CC</span></a><span class=cF0>.
 <a name="l252"></a>
 <a name="l253"></a>* Added </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/BinRep.html#l27"><span class=cF4>BinRep</span></a><span class=cF0>() from Sup1 ISO.
 <a name="l254"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeWrappers.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;sys_pci_busses&quot;, &quot;</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l200"><span class=cF4>sys_pci_buses</span></a><span class=cF0>&quot;);
@@ -338,51 +338,51 @@ body {background-color:#000000;}
 <a name="l310"></a>files. Removal of compression planned for the future.
 <a name="l311"></a>* <u>Renamed all files from .HC -&gt; .CC to reflect language name change.
 <a name="l312"></a></u>* Renaming:
-<a name="l313"></a>        TempleOS -&gt; ZenithOS
-<a name="l314"></a>        HolyC -&gt; CosmiC
-<a name="l315"></a>        Adam -&gt; Zenith
-<a name="l316"></a>        Seth -&gt; Daemon
-<a name="l317"></a>        Chk -&gt; Check
-<a name="l318"></a>        Que -&gt; Queue
-<a name="l319"></a>        Scrn -&gt; Screen
-<a name="l320"></a>        Pmt -&gt; Prompt
-<a name="l321"></a>        Cmp -&gt; Comp (Compiler) or Compare
-<a name="l322"></a>        Prs -&gt; Parse
-<a name="l323"></a>        Rem -&gt; Remove
-<a name="l324"></a>        Ins -&gt; Insert
-<a name="l325"></a>        Hndlr -&gt; Handler
-<a name="l326"></a>        Glbls -&gt; Globals
-<a name="l327"></a>        Stmt -&gt; Statement
-<a name="l328"></a>        Dbg -&gt; Debug
-<a name="l329"></a>        Dsk -&gt; Disk
-<a name="l330"></a>        Drv -&gt; Drive
-<a name="l331"></a>        Let -&gt; Letter
-<a name="l332"></a>        Chg -&gt; Change
-<a name="l333"></a>        Fmt -&gt; Format
-<a name="l334"></a>        Stk -&gt; Stack
-<a name="l335"></a>        Snd -&gt; Sound
-<a name="l336"></a>        Msg -&gt; Message
-<a name="l337"></a>        Cnt -&gt; Count
-<a name="l338"></a>        Lst -&gt; List
-<a name="l339"></a>        QSort -&gt; QuickSort
-<a name="l340"></a>        Dft -&gt; Default
-<a name="l341"></a>        Rst -&gt; Reset
-<a name="l342"></a>        Exts -&gt; Externs
-<a name="l343"></a>        Ms -&gt; Mouse
-<a name="l344"></a>        Fwd -&gt; Forward
-<a name="l345"></a>        Bwd -&gt; Backward
-<a name="l346"></a>        Cpy -&gt; Copy
-<a name="l347"></a>        Cfg -&gt; Config
-<a name="l348"></a>        Cvt -&gt; Convert
-<a name="l349"></a>        Srv -&gt; Server
-<a name="l350"></a>        Evt -&gt; Event
-<a name="l351"></a>        Prs -&gt; Parse
-<a name="l352"></a>        Mk -&gt; Make
-<a name="l353"></a>        InvlPg -&gt; InvalidatePage
-<a name="l354"></a>        BEqu -&gt; BEqual
-<a name="l355"></a>        Pkt -&gt; Packet
-<a name="l356"></a>        Rqst -&gt; Request
-<a name="l357"></a>        ... and more.
+<a name="l313"></a>    TempleOS -&gt; ZenithOS
+<a name="l314"></a>    HolyC -&gt; CosmiC
+<a name="l315"></a>    Adam -&gt; Zenith
+<a name="l316"></a>    Seth -&gt; Daemon
+<a name="l317"></a>    Chk -&gt; Check
+<a name="l318"></a>    Que -&gt; Queue
+<a name="l319"></a>    Scrn -&gt; Screen
+<a name="l320"></a>    Pmt -&gt; Prompt
+<a name="l321"></a>    Cmp -&gt; Comp (Compiler) or Compare
+<a name="l322"></a>    Prs -&gt; Parse
+<a name="l323"></a>    Rem -&gt; Remove
+<a name="l324"></a>    Ins -&gt; Insert
+<a name="l325"></a>    Hndlr -&gt; Handler
+<a name="l326"></a>    Glbls -&gt; Globals
+<a name="l327"></a>    Stmt -&gt; Statement
+<a name="l328"></a>    Dbg -&gt; Debug
+<a name="l329"></a>    Dsk -&gt; Disk
+<a name="l330"></a>    Drv -&gt; Drive
+<a name="l331"></a>    Let -&gt; Letter
+<a name="l332"></a>    Chg -&gt; Change
+<a name="l333"></a>    Fmt -&gt; Format
+<a name="l334"></a>    Stk -&gt; Stack
+<a name="l335"></a>    Snd -&gt; Sound
+<a name="l336"></a>    Msg -&gt; Message
+<a name="l337"></a>    Cnt -&gt; Count
+<a name="l338"></a>    Lst -&gt; List
+<a name="l339"></a>    QSort -&gt; QuickSort
+<a name="l340"></a>    Dft -&gt; Default
+<a name="l341"></a>    Rst -&gt; Reset
+<a name="l342"></a>    Exts -&gt; Externs
+<a name="l343"></a>    Ms -&gt; Mouse
+<a name="l344"></a>    Fwd -&gt; Forward
+<a name="l345"></a>    Bwd -&gt; Backward
+<a name="l346"></a>    Cpy -&gt; Copy
+<a name="l347"></a>    Cfg -&gt; Config
+<a name="l348"></a>    Cvt -&gt; Convert
+<a name="l349"></a>    Srv -&gt; Server
+<a name="l350"></a>    Evt -&gt; Event
+<a name="l351"></a>    Prs -&gt; Parse
+<a name="l352"></a>    Mk -&gt; Make
+<a name="l353"></a>    InvlPg -&gt; InvalidatePage
+<a name="l354"></a>    BEqu -&gt; BEqual
+<a name="l355"></a>    Pkt -&gt; Packet
+<a name="l356"></a>    Rqst -&gt; Request
+<a name="l357"></a>    ... and more.
 <a name="l358"></a>* <u>Start of Zenith Development. Changes up until version 1.0 are not timestamped.
 <a name="l359"></a>
 <a name="l360"></a></u>At this point, Terry removed his changelog. Changes made by him after 4/30/17 are not documented.

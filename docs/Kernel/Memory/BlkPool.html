@@ -27,85 +27,85 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(</span><span class=cF9>CBlkPool</span><span class=cF0> *bp, </span><span class=cF9>CMemBlk</span><span class=cF0> *m, </span><span class=cF9>I64</span><span class=cF0> pags)
 <a name="l2"></a>{</span><span class=cF2>//Add mem to BlkPool.</span><span class=cF0>
-<a name="l3"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>sys_mem_init_flag</span><span class=cF0>)
-<a name="l4"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(m, </span><span class=cFB>sys_mem_init_val</span><span class=cF0>, pags * </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>);
+<a name="l3"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>sys_mem_init_flag</span><span class=cF0>)
+<a name="l4"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(m, </span><span class=cFB>sys_mem_init_val</span><span class=cF0>, pags * </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>);
 <a name="l5"></a>
-<a name="l6"></a>        </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l7"></a>        </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l8"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;bp-&gt;locked_flags, </span><span class=cF3>BPlf_LOCKED</span><span class=cF7>)</span><span class=cF0>)
-<a name="l9"></a>                </span><span class=cF1>PAUSE</span><span class=cF0>
-<a name="l10"></a>        m-&gt;next                 = bp-&gt;mem_free_list;
-<a name="l11"></a>        m-&gt;pags                 = pags;
-<a name="l12"></a>        m-&gt;mb_signature = </span><span class=cF3>MBS_UNUSED_SIGNATURE_VAL</span><span class=cF0>;
-<a name="l13"></a>        bp-&gt;alloced_u8s  += pags &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>;
-<a name="l14"></a>        bp-&gt;mem_free_list = m;
-<a name="l15"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;bp-&gt;locked_flags, </span><span class=cF3>BPlf_LOCKED</span><span class=cF0>);
-<a name="l16"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l6"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l7"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l8"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;bp-&gt;locked_flags, </span><span class=cF3>BPlf_LOCKED</span><span class=cF7>)</span><span class=cF0>)
+<a name="l9"></a>        </span><span class=cF1>PAUSE</span><span class=cF0>
+<a name="l10"></a>    m-&gt;next         = bp-&gt;mem_free_list;
+<a name="l11"></a>    m-&gt;pags         = pags;
+<a name="l12"></a>    m-&gt;mb_signature = </span><span class=cF3>MBS_UNUSED_SIGNATURE_VAL</span><span class=cF0>;
+<a name="l13"></a>    bp-&gt;alloced_u8s  += pags &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>;
+<a name="l14"></a>    bp-&gt;mem_free_list = m;
+<a name="l15"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;bp-&gt;locked_flags, </span><span class=cF3>BPlf_LOCKED</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
 <a name="l17"></a>}
 <a name="l18"></a>
 <a name="l19"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BlkPoolInit</span><span class=cF0>(</span><span class=cF9>CBlkPool</span><span class=cF0> *bp, </span><span class=cF9>I64</span><span class=cF0> pags)
 <a name="l20"></a>{</span><span class=cF2>//Make mem chunk into a BlkPool.</span><span class=cF0>
-<a name="l21"></a>        </span><span class=cF9>I64</span><span class=cF0>              num;
-<a name="l22"></a>        </span><span class=cF9>CMemBlk</span><span class=cF0> *m;
+<a name="l21"></a>    </span><span class=cF9>I64</span><span class=cF0>      num;
+<a name="l22"></a>    </span><span class=cF9>CMemBlk</span><span class=cF0> *m;
 <a name="l23"></a>
-<a name="l24"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(bp, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBlkPool</span><span class=cF7>)</span><span class=cF0>);
-<a name="l25"></a>        m = (bp</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBlkPool</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) &amp; ~(</span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l26"></a>        num = (bp</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + pags &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0> - m</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>;
-<a name="l27"></a>        bp-&gt;alloced_u8s = (pags-num) &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>; </span><span class=cF2>//Compensate before num added.</span><span class=cF0>
-<a name="l28"></a>        </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(bp, m, num);
+<a name="l24"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(bp, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBlkPool</span><span class=cF7>)</span><span class=cF0>);
+<a name="l25"></a>    m = (bp</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBlkPool</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) &amp; ~(</span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l26"></a>    num = (bp</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + pags &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0> - m</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>) &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>;
+<a name="l27"></a>    bp-&gt;alloced_u8s = (pags-num) &lt;&lt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>; </span><span class=cF2>//Compensate before num added.</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(bp, m, num);
 <a name="l29"></a>}
 <a name="l30"></a>
 <a name="l31"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>BlkPoolsInit</span><span class=cF0>()
 <a name="l32"></a>{
-<a name="l33"></a>        </span><span class=cF9>I64</span><span class=cF0>                      i, total, lo, hi, code_heap_limit;
-<a name="l34"></a>        </span><span class=cF9>CMemE820</span><span class=cF0>        *m20   = </span><span class=cFD>MEM_E820</span><span class=cF0>;
-<a name="l35"></a>        </span><span class=cF1>Bool</span><span class=cF0>             first = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, total, lo, hi, code_heap_limit;
+<a name="l34"></a>    </span><span class=cF9>CMemE820</span><span class=cF0>    *m20   = </span><span class=cFD>MEM_E820</span><span class=cF0>;
+<a name="l35"></a>    </span><span class=cF1>Bool</span><span class=cF0>         first = </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l36"></a>
-<a name="l37"></a>        total = </span><span class=cF5>MemBIOSTotal</span><span class=cF0>;
+<a name="l37"></a>    total = </span><span class=cF5>MemBIOSTotal</span><span class=cF0>;
 <a name="l38"></a>
-<a name="l39"></a>        </span><span class=cF1>if</span><span class=cF0> (total &lt;= </span><span class=cFE>0x80000000</span><span class=cF0>)
-<a name="l40"></a>                code_heap_limit = total;
-<a name="l41"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (total &lt;= </span><span class=cFE>0x100000000</span><span class=cF0>)
-<a name="l42"></a>                code_heap_limit = total / </span><span class=cFE>4</span><span class=cF0>;
-<a name="l43"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l44"></a>                code_heap_limit = </span><span class=cFE>0x80000000</span><span class=cF0>;
+<a name="l39"></a>    </span><span class=cF1>if</span><span class=cF0> (total &lt;= </span><span class=cFE>0x80000000</span><span class=cF0>)
+<a name="l40"></a>        code_heap_limit = total;
+<a name="l41"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (total &lt;= </span><span class=cFE>0x100000000</span><span class=cF0>)
+<a name="l42"></a>        code_heap_limit = total / </span><span class=cFE>4</span><span class=cF0>;
+<a name="l43"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l44"></a>        code_heap_limit = </span><span class=cFE>0x80000000</span><span class=cF0>;
 <a name="l45"></a>
-<a name="l46"></a>        i = code_heap_limit - </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/PageTables.html#l195"><span class=cF4>RLf_16MEG_SYS_CODE_BP</span></a><span class=cF0>
-<a name="l47"></a>        </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(</span><span class=cFB>sys_code_bp</span><span class=cF0>, </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0>, i &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>);
-<a name="l48"></a>        </span><span class=cFB>mem_heap_limit</span><span class=cF0> = i + </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l46"></a>    i = code_heap_limit - </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/PageTables.html#l195"><span class=cF4>RLf_16MEG_SYS_CODE_BP</span></a><span class=cF0>
+<a name="l47"></a>    </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(</span><span class=cFB>sys_code_bp</span><span class=cF0>, </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0>, i &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>);
+<a name="l48"></a>    </span><span class=cFB>mem_heap_limit</span><span class=cF0> = i + </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l49"></a>
-<a name="l50"></a>        </span><span class=cF1>if</span><span class=cF0> (code_heap_limit&lt;total)
-<a name="l51"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l52"></a>                </span><span class=cF1>while</span><span class=cF0> (m20-&gt;type)
-<a name="l53"></a>                {
-<a name="l54"></a>                        </span><span class=cF1>if</span><span class=cF0> (m20-&gt;type == </span><span class=cF3>MEM_E820t_USABLE</span><span class=cF0>)
-<a name="l55"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l56"></a>                                lo = m20-&gt;base;
-<a name="l57"></a>                                hi = m20-&gt;base + m20-&gt;len;
-<a name="l58"></a>                                </span><span class=cF1>if</span><span class=cF0> (lo&lt;code_heap_limit)
-<a name="l59"></a>                                {
-<a name="l60"></a>                                        </span><span class=cF1>if</span><span class=cF0> (hi &gt; code_heap_limit)
-<a name="l61"></a>                                                lo = code_heap_limit;
-<a name="l62"></a>                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l63"></a>                                                hi = lo; </span><span class=cF2>//cancel</span><span class=cF0>
-<a name="l64"></a>                                }
-<a name="l65"></a>                                </span><span class=cF1>if</span><span class=cF0> (code_heap_limit &lt;= lo &lt; hi)
-<a name="l66"></a>                                {
-<a name="l67"></a>                                        </span><span class=cF1>if</span><span class=cF0> (first)
-<a name="l68"></a>                                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l69"></a>                                                </span><span class=cF5>BlkPoolInit</span><span class=cF0>(lo, </span><span class=cF7>(</span><span class=cF0>hi - lo</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>);
-<a name="l70"></a>                                                </span><span class=cFB>sys_data_bp</span><span class=cF0> = lo;
-<a name="l71"></a>                                                </span><span class=cF5>Fs</span><span class=cF0>-&gt;data_heap = </span><span class=cF5>HeapCtrlInit</span><span class=cF0>(, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cFB>sys_data_bp</span><span class=cF0>);
-<a name="l72"></a>                                                first = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l73"></a>                                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l74"></a>                                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l75"></a>                                                </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(</span><span class=cFB>sys_data_bp</span><span class=cF0>, lo, </span><span class=cF7>(</span><span class=cF0>hi - lo</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>);
-<a name="l76"></a>                                }
-<a name="l77"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l78"></a>                        m20++;
-<a name="l79"></a>                }
-<a name="l80"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l81"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_FULL_HEAPS</span><span class=cF0>);
+<a name="l50"></a>    </span><span class=cF1>if</span><span class=cF0> (code_heap_limit&lt;total)
+<a name="l51"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>        </span><span class=cF1>while</span><span class=cF0> (m20-&gt;type)
+<a name="l53"></a>        {
+<a name="l54"></a>            </span><span class=cF1>if</span><span class=cF0> (m20-&gt;type == </span><span class=cF3>MEM_E820t_USABLE</span><span class=cF0>)
+<a name="l55"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l56"></a>                lo = m20-&gt;base;
+<a name="l57"></a>                hi = m20-&gt;base + m20-&gt;len;
+<a name="l58"></a>                </span><span class=cF1>if</span><span class=cF0> (lo&lt;code_heap_limit)
+<a name="l59"></a>                {
+<a name="l60"></a>                    </span><span class=cF1>if</span><span class=cF0> (hi &gt; code_heap_limit)
+<a name="l61"></a>                        lo = code_heap_limit;
+<a name="l62"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l63"></a>                        hi = lo; </span><span class=cF2>//cancel</span><span class=cF0>
+<a name="l64"></a>                }
+<a name="l65"></a>                </span><span class=cF1>if</span><span class=cF0> (code_heap_limit &lt;= lo &lt; hi)
+<a name="l66"></a>                {
+<a name="l67"></a>                    </span><span class=cF1>if</span><span class=cF0> (first)
+<a name="l68"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l69"></a>                        </span><span class=cF5>BlkPoolInit</span><span class=cF0>(lo, </span><span class=cF7>(</span><span class=cF0>hi - lo</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>);
+<a name="l70"></a>                        </span><span class=cFB>sys_data_bp</span><span class=cF0> = lo;
+<a name="l71"></a>                        </span><span class=cF5>Fs</span><span class=cF0>-&gt;data_heap = </span><span class=cF5>HeapCtrlInit</span><span class=cF0>(, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cFB>sys_data_bp</span><span class=cF0>);
+<a name="l72"></a>                        first = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l73"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l74"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l75"></a>                        </span><span class=cF5>BlkPoolAdd</span><span class=cF0>(</span><span class=cFB>sys_data_bp</span><span class=cF0>, lo, </span><span class=cF7>(</span><span class=cF0>hi - lo</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>MEM_PAG_BITS</span><span class=cF0>);
+<a name="l76"></a>                }
+<a name="l77"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l78"></a>            m20++;
+<a name="l79"></a>        }
+<a name="l80"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l81"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_FULL_HEAPS</span><span class=cF0>);
 <a name="l82"></a>}
 </span></pre></body>
 </html>

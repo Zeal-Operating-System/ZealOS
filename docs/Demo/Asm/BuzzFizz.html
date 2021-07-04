@@ -25,88 +25,88 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:courier;font-size:10pt">
-<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> RANGE_START             </span><span class=cFE>1</span><span class=cF0>
-<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> RANGE_END                       </span><span class=cFE>100</span><span class=cF0>
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> RANGE_START         </span><span class=cFE>1</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> RANGE_END           </span><span class=cFE>100</span><span class=cF0>
 <a name="l3"></a> 
-<a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> FIZZ_SPAN                       </span><span class=cFE>6</span><span class=cF0>
-<a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> BUZZ_SPAN                       </span><span class=cFE>7</span><span class=cF0>
+<a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> FIZZ_SPAN           </span><span class=cFE>6</span><span class=cF0>
+<a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> BUZZ_SPAN           </span><span class=cFE>7</span><span class=cF0>
 <a name="l6"></a> 
 <a name="l7"></a></span><span class=cF1>asm</span><span class=cF0> {
 <a name="l8"></a>_BUZZ_FIZZ::
-<a name="l9"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RBP</span><span class=cF0>
-<a name="l10"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0> </span><span class=cF2>//Always set-up stack frame.</span><span class=cF0>   </span><span class=cF2>(Stack Gets Traced)</span><span class=cF0>
-<a name="l11"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>             </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
-<a name="l12"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RDI</span><span class=cF0>
-<a name="l13"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, FIZZ_SPAN - RANGE_START % FIZZ_SPAN + </span><span class=cFE>1</span><span class=cF0>
-<a name="l14"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RDI</span><span class=cF0>, BUZZ_SPAN - RANGE_START % BUZZ_SPAN + </span><span class=cFE>1</span><span class=cF0>
-<a name="l15"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, RANGE_START
+<a name="l9"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
+<a name="l10"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0> </span><span class=cF2>//Always set-up stack frame.</span><span class=cF0>   </span><span class=cF2>(Stack Gets Traced)</span><span class=cF0>
+<a name="l11"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>         </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l12"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RDI</span><span class=cF0>
+<a name="l13"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>, FIZZ_SPAN - RANGE_START % FIZZ_SPAN + </span><span class=cFE>1</span><span class=cF0>
+<a name="l14"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RDI</span><span class=cF0>, BUZZ_SPAN - RANGE_START % BUZZ_SPAN + </span><span class=cFE>1</span><span class=cF0>
+<a name="l15"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, RANGE_START
 <a name="l16"></a> 
-<a name="l17"></a>@@05:                   </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_HEX_U64</span><span class=cF0>
-<a name="l18"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RAX</span><span class=cF0>
-<a name="l19"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>
-<a name="l20"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_CHARS</span><span class=cF0>
+<a name="l17"></a>@@05:           </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_HEX_U64</span><span class=cF0>
+<a name="l18"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l19"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_CHARS</span><span class=cF0>
 <a name="l21"></a>
-<a name="l22"></a>                                </span><span class=cF1>DEC</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>
-<a name="l23"></a>                                </span><span class=cF1>JNZ</span><span class=cF0>             @@10
-<a name="l24"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'FIZZ '</span><span class=cF0>
-<a name="l25"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_CHARS</span><span class=cF0>
-<a name="l26"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, FIZZ_SPAN
+<a name="l22"></a>                </span><span class=cF1>DEC</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l23"></a>                </span><span class=cF1>JNZ</span><span class=cF0>         @@10
+<a name="l24"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'FIZZ '</span><span class=cF0>
+<a name="l25"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_CHARS</span><span class=cF0>
+<a name="l26"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>, FIZZ_SPAN
 <a name="l27"></a>
-<a name="l28"></a>@@10:                   </span><span class=cF1>DEC</span><span class=cF0>             </span><span class=cFC>RDI</span><span class=cF0>
-<a name="l29"></a>                                </span><span class=cF1>JNZ</span><span class=cF0>             @@15
-<a name="l30"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'BUZZ '</span><span class=cF0>
-<a name="l31"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_CHARS</span><span class=cF0>
-<a name="l32"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RDI</span><span class=cF0>, BUZZ_SPAN
+<a name="l28"></a>@@10:           </span><span class=cF1>DEC</span><span class=cF0>         </span><span class=cFC>RDI</span><span class=cF0>
+<a name="l29"></a>                </span><span class=cF1>JNZ</span><span class=cF0>         @@15
+<a name="l30"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'BUZZ '</span><span class=cF0>
+<a name="l31"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_CHARS</span><span class=cF0>
+<a name="l32"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RDI</span><span class=cF0>, BUZZ_SPAN
 <a name="l33"></a> 
-<a name="l34"></a>@@15:                   </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>
-<a name="l35"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_CHARS</span><span class=cF0>
-<a name="l36"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>
-<a name="l37"></a>                                </span><span class=cF1>INC</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>
-<a name="l38"></a>                                </span><span class=cF1>CMP</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, RANGE_END  </span><span class=cF2>//Actually only a 32-bit inst.</span><span class=cF0>
-<a name="l39"></a>                                </span><span class=cF1>JBE</span><span class=cF0>             @@05
+<a name="l34"></a>@@15:           </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>
+<a name="l35"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_CHARS</span><span class=cF0>
+<a name="l36"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l37"></a>                </span><span class=cF1>INC</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF1>CMP</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, RANGE_END  </span><span class=cF2>//Actually only a 32-bit inst.</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF1>JBE</span><span class=cF0>         @@05
 <a name="l40"></a>
-<a name="l41"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RDI</span><span class=cF0>
-<a name="l42"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>
-<a name="l43"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RBP</span><span class=cF0>
-<a name="l44"></a>                                </span><span class=cF1>RET</span><span class=cF0>
+<a name="l41"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RDI</span><span class=cF0>
+<a name="l42"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l43"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>
+<a name="l44"></a>                </span><span class=cF1>RET</span><span class=cF0>
 <a name="l45"></a>}
 <a name="l46"></a> 
 <a name="l47"></a></span><span class=cF5>Call</span><span class=cF0>(_BUZZ_FIZZ);
 <a name="l48"></a>
 <a name="l49"></a></span><span class=cF2>/*</span><span class=cF0>
-<a name="l50"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0000 55 </span><span class=cF0>                          </span><span class=cF2>PUSH</span><span class=cF0>                    </span><span class=cF2>U64 RBP</span><span class=cF0>
-<a name="l51"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0001 488BEC </span><span class=cF0>                      </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U64 RBP,U64 RSP</span><span class=cF0>
-<a name="l52"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0004 56 </span><span class=cF0>                          </span><span class=cF2>PUSH</span><span class=cF0>                    </span><span class=cF2>U64 RSI</span><span class=cF0>
-<a name="l53"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0005 57 </span><span class=cF0>                          </span><span class=cF2>PUSH</span><span class=cF0>                    </span><span class=cF2>U64 RDI</span><span class=cF0>
-<a name="l54"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0006 BE06000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 ESI,U32 00000006</span><span class=cF0>
-<a name="l55"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x000B BF07000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 EDI,U32 00000007</span><span class=cF0>
-<a name="l56"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0010 B801000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 EAX,U32 00000001</span><span class=cF0>
-<a name="l57"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0015 E8C51F2BC0 </span><span class=cF0>          </span><span class=cF2>CALL</span><span class=cF0>                    </span><span class=cF2>I32 PUT_HEX_U64+0x0000</span><span class=cF0>
-<a name="l58"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x001A 50 </span><span class=cF0>                          </span><span class=cF2>PUSH</span><span class=cF0>                    </span><span class=cF2>U64 RAX</span><span class=cF0>
-<a name="l59"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x001B B820000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 EAX,U32 00000020</span><span class=cF0>
-<a name="l60"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0020 E81E202BC0 </span><span class=cF0>          </span><span class=cF2>CALL</span><span class=cF0>                    </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
-<a name="l61"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0025 48FFCE </span><span class=cF0>                      </span><span class=cF2>DEC </span><span class=cF0>                    </span><span class=cF2>U64 RSI</span><span class=cF0>
-<a name="l62"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0028 7514 </span><span class=cF0>                        </span><span class=cF2>JNZ </span><span class=cF0>                    </span><span class=cF2>I8 _BUZZ_FIZZ+0x003E</span><span class=cF0>
-<a name="l63"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x002A 48B846495A5A </span><span class=cF0>        </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U64 RAX,I64 000000205A5A4946</span><span class=cF0>
-<a name="l64"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0030 20000000</span><span class=cF0>
-<a name="l65"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0034 E80A202BC0 </span><span class=cF0>          </span><span class=cF2>CALL</span><span class=cF0>                    </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
-<a name="l66"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0039 BE06000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 ESI,U32 00000006</span><span class=cF0>
-<a name="l67"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x003E 48FFCF </span><span class=cF0>                      </span><span class=cF2>DEC </span><span class=cF0>                    </span><span class=cF2>U64 RDI</span><span class=cF0>
-<a name="l68"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0041 7514 </span><span class=cF0>                        </span><span class=cF2>JNZ </span><span class=cF0>                    </span><span class=cF2>I8 _BUZZ_FIZZ+0x0057</span><span class=cF0>
-<a name="l69"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0043 48B842555A5A </span><span class=cF0>        </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U64 RAX,I64 000000205A5A5542</span><span class=cF0>
-<a name="l70"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0049 20000000</span><span class=cF0>
-<a name="l71"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x004D E8F11F2BC0 </span><span class=cF0>          </span><span class=cF2>CALL</span><span class=cF0>                    </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
-<a name="l72"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0052 BF07000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 EDI,U32 00000007</span><span class=cF0>
-<a name="l73"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0057 B80A000000 </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>                    </span><span class=cF2>U32 EAX,U32 0000000A</span><span class=cF0>
-<a name="l74"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x005C E8E21F2BC0 </span><span class=cF0>          </span><span class=cF2>CALL</span><span class=cF0>                    </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
-<a name="l75"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0061 58 </span><span class=cF0>                          </span><span class=cF2>POP </span><span class=cF0>                    </span><span class=cF2>U64 RAX</span><span class=cF0>
-<a name="l76"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0062 48FFC0 </span><span class=cF0>                      </span><span class=cF2>INC </span><span class=cF0>                    </span><span class=cF2>U64 RAX</span><span class=cF0>
-<a name="l77"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0065 4883F864 </span><span class=cF0>            </span><span class=cF2>CMP </span><span class=cF0>                    </span><span class=cF2>U64 RAX,I8 64</span><span class=cF0>
-<a name="l78"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x0069 76AA </span><span class=cF0>                        </span><span class=cF2>JNA </span><span class=cF0>                    </span><span class=cF2>I8 _BUZZ_FIZZ+0x0015</span><span class=cF0>
-<a name="l79"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x006B 5F </span><span class=cF0>                          </span><span class=cF2>POP </span><span class=cF0>                    </span><span class=cF2>U64 RDI</span><span class=cF0>
-<a name="l80"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x006C 5E </span><span class=cF0>                          </span><span class=cF2>POP </span><span class=cF0>                    </span><span class=cF2>U64 RSI</span><span class=cF0>
-<a name="l81"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x006D 5D </span><span class=cF0>                          </span><span class=cF2>POP </span><span class=cF0>                    </span><span class=cF2>U64 RBP</span><span class=cF0>
-<a name="l82"></a>                        </span><span class=cF2> _BUZZ_FIZZ+0x006E C3 </span><span class=cF0>                          </span><span class=cF2>RET</span><span class=cF0>
+<a name="l50"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0000 55 </span><span class=cF0>              </span><span class=cF2>PUSH</span><span class=cF0>            </span><span class=cF2>U64 RBP</span><span class=cF0>
+<a name="l51"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0001 488BEC </span><span class=cF0>          </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U64 RBP,U64 RSP</span><span class=cF0>
+<a name="l52"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0004 56 </span><span class=cF0>              </span><span class=cF2>PUSH</span><span class=cF0>            </span><span class=cF2>U64 RSI</span><span class=cF0>
+<a name="l53"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0005 57 </span><span class=cF0>              </span><span class=cF2>PUSH</span><span class=cF0>            </span><span class=cF2>U64 RDI</span><span class=cF0>
+<a name="l54"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0006 BE06000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 ESI,U32 00000006</span><span class=cF0>
+<a name="l55"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x000B BF07000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 EDI,U32 00000007</span><span class=cF0>
+<a name="l56"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0010 B801000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 EAX,U32 00000001</span><span class=cF0>
+<a name="l57"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0015 E8C51F2BC0 </span><span class=cF0>      </span><span class=cF2>CALL</span><span class=cF0>            </span><span class=cF2>I32 PUT_HEX_U64+0x0000</span><span class=cF0>
+<a name="l58"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x001A 50 </span><span class=cF0>              </span><span class=cF2>PUSH</span><span class=cF0>            </span><span class=cF2>U64 RAX</span><span class=cF0>
+<a name="l59"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x001B B820000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 EAX,U32 00000020</span><span class=cF0>
+<a name="l60"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0020 E81E202BC0 </span><span class=cF0>      </span><span class=cF2>CALL</span><span class=cF0>            </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
+<a name="l61"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0025 48FFCE </span><span class=cF0>          </span><span class=cF2>DEC </span><span class=cF0>            </span><span class=cF2>U64 RSI</span><span class=cF0>
+<a name="l62"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0028 7514 </span><span class=cF0>            </span><span class=cF2>JNZ </span><span class=cF0>            </span><span class=cF2>I8 _BUZZ_FIZZ+0x003E</span><span class=cF0>
+<a name="l63"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x002A 48B846495A5A </span><span class=cF0>    </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U64 RAX,I64 000000205A5A4946</span><span class=cF0>
+<a name="l64"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0030 20000000</span><span class=cF0>
+<a name="l65"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0034 E80A202BC0 </span><span class=cF0>      </span><span class=cF2>CALL</span><span class=cF0>            </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
+<a name="l66"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0039 BE06000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 ESI,U32 00000006</span><span class=cF0>
+<a name="l67"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x003E 48FFCF </span><span class=cF0>          </span><span class=cF2>DEC </span><span class=cF0>            </span><span class=cF2>U64 RDI</span><span class=cF0>
+<a name="l68"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0041 7514 </span><span class=cF0>            </span><span class=cF2>JNZ </span><span class=cF0>            </span><span class=cF2>I8 _BUZZ_FIZZ+0x0057</span><span class=cF0>
+<a name="l69"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0043 48B842555A5A </span><span class=cF0>    </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U64 RAX,I64 000000205A5A5542</span><span class=cF0>
+<a name="l70"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0049 20000000</span><span class=cF0>
+<a name="l71"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x004D E8F11F2BC0 </span><span class=cF0>      </span><span class=cF2>CALL</span><span class=cF0>            </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
+<a name="l72"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0052 BF07000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 EDI,U32 00000007</span><span class=cF0>
+<a name="l73"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0057 B80A000000 </span><span class=cF0>      </span><span class=cF2>MOV </span><span class=cF0>            </span><span class=cF2>U32 EAX,U32 0000000A</span><span class=cF0>
+<a name="l74"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x005C E8E21F2BC0 </span><span class=cF0>      </span><span class=cF2>CALL</span><span class=cF0>            </span><span class=cF2>I32 PUT_CHARS+0x0000</span><span class=cF0>
+<a name="l75"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0061 58 </span><span class=cF0>              </span><span class=cF2>POP </span><span class=cF0>            </span><span class=cF2>U64 RAX</span><span class=cF0>
+<a name="l76"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0062 48FFC0 </span><span class=cF0>          </span><span class=cF2>INC </span><span class=cF0>            </span><span class=cF2>U64 RAX</span><span class=cF0>
+<a name="l77"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0065 4883F864 </span><span class=cF0>        </span><span class=cF2>CMP </span><span class=cF0>            </span><span class=cF2>U64 RAX,I8 64</span><span class=cF0>
+<a name="l78"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x0069 76AA </span><span class=cF0>            </span><span class=cF2>JNA </span><span class=cF0>            </span><span class=cF2>I8 _BUZZ_FIZZ+0x0015</span><span class=cF0>
+<a name="l79"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x006B 5F </span><span class=cF0>              </span><span class=cF2>POP </span><span class=cF0>            </span><span class=cF2>U64 RDI</span><span class=cF0>
+<a name="l80"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x006C 5E </span><span class=cF0>              </span><span class=cF2>POP </span><span class=cF0>            </span><span class=cF2>U64 RSI</span><span class=cF0>
+<a name="l81"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x006D 5D </span><span class=cF0>              </span><span class=cF2>POP </span><span class=cF0>            </span><span class=cF2>U64 RBP</span><span class=cF0>
+<a name="l82"></a>            </span><span class=cF2> _BUZZ_FIZZ+0x006E C3 </span><span class=cF0>              </span><span class=cF2>RET</span><span class=cF0>
 <a name="l83"></a>
 <a name="l84"></a></span><span class=cF2>0000000000000001</span><span class=cF0>
 <a name="l85"></a></span><span class=cF2>0000000000000002</span><span class=cF0>

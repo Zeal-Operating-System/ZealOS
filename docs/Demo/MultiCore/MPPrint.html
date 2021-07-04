@@ -27,20 +27,20 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> Job(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
 <a name="l2"></a>{
-<a name="l3"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l4"></a>
-<a name="l5"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>2</span><span class=cF0>; i++)
-<a name="l6"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$FG,%d$CPU%d &quot;</span><span class=cF0>, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num &amp; </span><span class=cFE>15</span><span class=cF0>, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num);
+<a name="l5"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>2</span><span class=cF0>; i++)
+<a name="l6"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$FG,%d$CPU%d &quot;</span><span class=cF0>, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num &amp; </span><span class=cFE>15</span><span class=cF0>, </span><span class=cF5>Gs</span><span class=cF0>-&gt;num);
 <a name="l7"></a>}
 <a name="l8"></a>
 <a name="l9"></a></span><span class=cF1>U0</span><span class=cF0> MPPrintDemo()
 <a name="l10"></a>{
-<a name="l11"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l11"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l12"></a>
-<a name="l13"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>500</span><span class=cF0>; i++)
-<a name="l14"></a>                </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;Job, </span><span class=cF5>DocPut</span><span class=cF0>, i % </span><span class=cFB>mp_count</span><span class=cF0>);
-<a name="l15"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
-<a name="l16"></a>        </span><span class=cF6>&quot;$FG$\n&quot;</span><span class=cF0>;
+<a name="l13"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>500</span><span class=cF0>; i++)
+<a name="l14"></a>        </span><span class=cF5>JobQueue</span><span class=cF0>(&amp;Job, </span><span class=cF5>DocPut</span><span class=cF0>, i % </span><span class=cFB>mp_count</span><span class=cF0>);
+<a name="l15"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF6>&quot;$FG$\n&quot;</span><span class=cF0>;
 <a name="l17"></a>}
 <a name="l18"></a>
 <a name="l19"></a>MPPrintDemo;

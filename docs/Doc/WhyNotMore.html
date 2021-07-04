@@ -27,10 +27,10 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF5>                                                         Why Not More?</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a>If a feature cannot be made to work correctly and consistently, professional companies usually remove the feature.      Because PC 
+<a name="l3"></a>If a feature cannot be made to work correctly and consistently, professional companies usually remove the feature.  Because PC 
 <a name="l4"></a>hardware is so diverse, getting things to work on all people's computers is really difficult.   For one thing, you practically 
 <a name="l5"></a>have to own all the different hardware to write drivers for it. If a company wanted to sell a PC operating system, they would 
-<a name="l6"></a>offer a warranty and, therefore, could not get away with amateur behavior.      ZealOS absolutely requires 64-bit computers, so we 
+<a name="l6"></a>offer a warranty and, therefore, could not get away with amateur behavior.  ZealOS absolutely requires 64-bit computers, so we 
 <a name="l7"></a>leave behind much trouble, but plenty remains.
 <a name="l8"></a>
 <a name="l9"></a>The PCI bus interface is what modern hardware uses.  Before PCI, life was simple and devices used I/O ports.    After studying </span><span class=cF4>
@@ -38,13 +38,13 @@ body {background-color:#000000;}
 <a name="l11"></a>code and he cannot even come close to making them work on everyone's machine because with PCI devices there are several models 
 <a name="l12"></a>to worry about, unlike with the older ISA bus devices which can be done with one driver.
 <a name="l13"></a>
-<a name="l14"></a>Currently, ZealOS has no PCI drivers beyond AHCI and networking.  Most drivers use I/O ports and operate in ISA bus mode.       At 
+<a name="l14"></a>Currently, ZealOS has no PCI drivers beyond AHCI and networking.  Most drivers use I/O ports and operate in ISA bus mode.   At 
 <a name="l15"></a>this point, we only have one driver for each type of device and it is delightfully simple that way.  ZealOS has one </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.html#l1"><span class=cF4>keyboard</span></a><span class=cF0> 
 <a name="l16"></a>driver, one </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Mouse.html#l1"><span class=cF4>mouse</span></a><span class=cF0> driver, one </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.html#l1"><span class=cF4>ATA hard drive</span></a><span class=cF0> driver, one </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.html#l1"><span class=cF4>ATAPI CD/DVD</span></a><span class=cF0> driver, one </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l1"><span class=cF4>32-bit color high-res VBE graphics</span></a><span class=cF0> video 
 <a name="l17"></a>driver and one </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l129"><span class=cF4>PC Speaker</span></a><span class=cF0> driver.  We use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l124"><span class=cF4>PIT timer</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l133"><span class=cF4>PIC Interrupt Controller</span></a><span class=cF0>.  We use   IRQ0 for timer, IRQ1 for 
 <a name="l18"></a>keyboard, and IRQ12 for mouse.  If IRQ12 is not firing, we are able to poll the mouse.
 <a name="l19"></a>
-<a name="l20"></a>In the CPU department, ZealOS has state of the art 64-bit </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart64.html#l1"><span class=cF4>long mode</span></a><span class=cF0> with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l1"><span class=cF4>multicore</span></a><span class=cF0> support.     We use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l176"><span class=cF4>APIC</span></a><span class=cF0> and start-up </span><span class=cF4>
+<a name="l20"></a>In the CPU department, ZealOS has state of the art 64-bit </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart64.html#l1"><span class=cF4>long mode</span></a><span class=cF0> with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l1"><span class=cF4>multicore</span></a><span class=cF0> support. We use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l176"><span class=cF4>APIC</span></a><span class=cF0> and start-up </span><span class=cF4>
 <a name="l21"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>multicore</span></a><span class=cF0> operation.
 <a name="l22"></a>
 <a name="l23"></a>Terry Davis made an incredible accomplishment by getting it to work on practically everyone's computer as long as it is 64-bit 
@@ -52,15 +52,15 @@ body {background-color:#000000;}
 <a name="l25"></a>
 <a name="l26"></a>Adding a USB driver would be really ugly with UHCI, EHCI, OHCI, USB1, USB2, USB3, ICH6, ICH7, ICH8, ICH9, ICH10, ICH11, ICH12, 
 <a name="l27"></a>boot mode and regular mode for keyboard/mouse and a diversity of HID reports.   It's hopeless.  It could never offer anything 
-<a name="l28"></a>but crappy, limited support and it would just add a ton of crappy code that mostly didn't work. What would ZealOS gain? Nothing.        
-<a name="l29"></a>A keyboard or mouse would not be improved.      Solid State USB drives would be nice, but it's not going to happen.
+<a name="l28"></a>but crappy, limited support and it would just add a ton of crappy code that mostly didn't work. What would ZealOS gain? Nothing.    
+<a name="l29"></a>A keyboard or mouse would not be improved.  Solid State USB drives would be nice, but it's not going to happen.
 <a name="l30"></a>
 <a name="l31"></a>The same story is basically true for GPUs and audio drivers.  If you attempt multimedia, everything will break because memory 
 <a name="l32"></a>will get fragmented with huge multimedia files. 
 <a name="l33"></a>
-<a name="l34"></a>UEFI is pointless.      If ZealOS is forced to run in VMware, QEMU or VirtualBox, they will always support non-UEFI mode.       Without 
+<a name="l34"></a>UEFI is pointless.  If ZealOS is forced to run in VMware, QEMU or VirtualBox, they will always support non-UEFI mode.   Without 
 <a name="l35"></a>working, native hard drive and CD/DVD drivers, you can't get very far with UEFI on a native install, not to mention SecureBoot.  
-<a name="l36"></a>UEFI is, first of all, redundant.       If non-UEFI works in a virtual machine, supporting UEFI would only be redundant, ugly nasty 
+<a name="l36"></a>UEFI is, first of all, redundant.   If non-UEFI works in a virtual machine, supporting UEFI would only be redundant, ugly nasty 
 <a name="l37"></a>code.  The compiler does not create an ELF or PE format.  We would have to ruin the beauty of the compiler.
 <a name="l38"></a>
 <a name="l39"></a>God talks.

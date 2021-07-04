@@ -34,19 +34,19 @@ body {background-color:#000000;}
 <a name="l7"></a>
 <a name="l8"></a></span><span class=cF1>U0</span><span class=cF0> AsmAndC3()
 <a name="l9"></a>{
-<a name="l10"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l10"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l11"></a>
-<a name="l12"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0>; i++)
-<a name="l13"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l14"></a>                </span><span class=cF6>&quot;Meaning of life:&quot;</span><span class=cF0>;
-<a name="l15"></a>                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>AL</span><span class=cF0>, </span><span class=cFE>0x41</span><span class=cF0>
-<a name="l16"></a>                </span><span class=cF1>STC</span><span class=cF0>
-<a name="l17"></a>                </span><span class=cF1>ADC</span><span class=cF0>             </span><span class=cFC>AL</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0> </span><span class=cF2>//Round-about way to make the not-special constant, 0x42.</span><span class=cF0>
-<a name="l18"></a>                </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>PUT_HEX_U8</span><span class=cF0>
-<a name="l19"></a>                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cFB>counts</span><span class=cF0>.time_stamp_freq &gt;&gt; </span><span class=cFE>5</span><span class=cF0> </span><span class=cF2>//JIT Const.</span><span class=cF0>   </span><span class=cF2>Simple delay loop.</span><span class=cF0>
+<a name="l12"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0>; i++)
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        </span><span class=cF6>&quot;Meaning of life:&quot;</span><span class=cF0>;
+<a name="l15"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>AL</span><span class=cF0>, </span><span class=cFE>0x41</span><span class=cF0>
+<a name="l16"></a>        </span><span class=cF1>STC</span><span class=cF0>
+<a name="l17"></a>        </span><span class=cF1>ADC</span><span class=cF0>     </span><span class=cFC>AL</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0> </span><span class=cF2>//Round-about way to make the not-special constant, 0x42.</span><span class=cF0>
+<a name="l18"></a>        </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>PUT_HEX_U8</span><span class=cF0>
+<a name="l19"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cFB>counts</span><span class=cF0>.time_stamp_freq &gt;&gt; </span><span class=cFE>5</span><span class=cF0> </span><span class=cF2>//JIT Const.</span><span class=cF0>   </span><span class=cF2>Simple delay loop.</span><span class=cF0>
 <a name="l20"></a>@@1:    </span><span class=cF1>LOOP</span><span class=cF0>    @@1
-<a name="l21"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l22"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l22"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l23"></a>}
 <a name="l24"></a>
 <a name="l25"></a>AsmAndC3;

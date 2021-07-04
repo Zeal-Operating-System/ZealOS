@@ -31,10 +31,10 @@ body {background-color:#000000;}
 <a name="l4"></a>mechanism</blink>.  Generally, the last write wins.
 <a name="l5"></a>
 <a name="l6"></a>* When using </span><span class=cF2>FAT32</span><span class=cF0>, ZealOS does not generate unique short-entry names, the ones with the </span><span class=cF2>~</span><span class=cF0>s.    Not all </span><span class=cF2>FAT32</span><span class=cF0> filenames are 
-<a name="l7"></a>valid ZealOS names and it will complain.        Do not access </span><span class=cF2>FAT32</span><span class=cF0> drives not dedicated to ZealOS.  Disable them with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAddDev.html#l195"><span class=cF4>DriveEnable</span></a><span class=cF0>(O
-<a name="l8"></a>FF), or they will generate error messages.      </span><span class=cF2>FAT32</span><span class=cF0> involves a long and short name for each file.
+<a name="l7"></a>valid ZealOS names and it will complain.    Do not access </span><span class=cF2>FAT32</span><span class=cF0> drives not dedicated to ZealOS.  Disable them with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAddDev.html#l195"><span class=cF4>DriveEnable</span></a><span class=cF0>(O
+<a name="l8"></a>FF), or they will generate error messages.  </span><span class=cF2>FAT32</span><span class=cF0> involves a long and short name for each file.
 <a name="l9"></a>
-<a name="l10"></a>* The stack does not grow because virtual mem is not used.      It is recommended that you allocate large local vars from the heap.     
+<a name="l10"></a>* The stack does not grow because virtual mem is not used.  It is recommended that you allocate large local vars from the heap. 
 <a name="l11"></a>You can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
 <a name="l12"></a>
 <a name="l13"></a>* The syntax highlighting occassionally glitches.  The compiler doesn't.
@@ -58,7 +58,7 @@ body {background-color:#000000;}
 <a name="l31"></a>
 <a name="l32"></a>* Don't do a </span><span class=cF2>goto</span><span class=cF0> out of a </span><span class=cF2>try{}</span><span class=cF0>.
 <a name="l33"></a>
-<a name="l34"></a>* A </span><span class=cF2>goto</span><span class=cF0> label name must not match a global scope object's name.        (It's not worth slowing-down the compiler to handle this 
+<a name="l34"></a>* A </span><span class=cF2>goto</span><span class=cF0> label name must not match a global scope object's name.    (It's not worth slowing-down the compiler to handle this 
 <a name="l35"></a>case.)
 <a name="l36"></a>
 <a name="l37"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l135"><span class=cF4>MemCopy</span></a><span class=cF0>() only goes forward.
@@ -80,10 +80,10 @@ body {background-color:#000000;}
 <a name="l53"></a>        U16 *_w = 0xA0000;
 <a name="l54"></a>        *_w |= 0x8000;
 <a name="l55"></a>    }
-<a name="l56"></a>  </span><span class=cF0>The </span><span class=cF2>|=</span><span class=cF0> will be coded as a </span><span class=cF2>U32 Bts</span><span class=cF0> inst resulting in a </span><span class=cF2>U32</span><span class=cF0> access instead of a </span><span class=cF2>U16</span><span class=cF0> access.     This affects some hardware 
+<a name="l56"></a>  </span><span class=cF0>The </span><span class=cF2>|=</span><span class=cF0> will be coded as a </span><span class=cF2>U32 Bts</span><span class=cF0> inst resulting in a </span><span class=cF2>U32</span><span class=cF0> access instead of a </span><span class=cF2>U16</span><span class=cF0> access. This affects some hardware 
 <a name="l57"></a>  operations.
 <a name="l58"></a>
-<a name="l59"></a>* Compiler warning or error message line numbers will be off if you have a block of word-wrapped comments.      You might press </span><span class=cF2>&lt;CTR
+<a name="l59"></a>* Compiler warning or error message line numbers will be off if you have a block of word-wrapped comments.  You might press </span><span class=cF2>&lt;CTR
 <a name="l60"></a>L-t&gt;</span><span class=cF0> before doing an editor goto-line-number command.
 </span></pre></body>
 </html>

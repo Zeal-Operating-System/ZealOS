@@ -29,108 +29,108 @@ body {background-color:#000000;}
 <a name="l2"></a>
 <a name="l3"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SpriteSideBar2SpriteQueue</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CSprite</span><span class=cF0> *head, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num)
 <a name="l4"></a>{</span><span class=cF2>//For the side-bar</span><span class=cF0>
-<a name="l5"></a>        </span><span class=cF9>CSprite</span><span class=cF0>         *res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSprite</span><span class=cF7>)</span><span class=cF0>),*tmpg;
-<a name="l6"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e = doc-&gt;head.next;
-<a name="l7"></a>        </span><span class=cF1>Bool</span><span class=cF0>             found = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l8"></a>        </span><span class=cF9>I64</span><span class=cF0>                      num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF9>CSprite</span><span class=cF0>     *res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSprite</span><span class=cF7>)</span><span class=cF0>),*tmpg;
+<a name="l6"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e = doc-&gt;head.next;
+<a name="l7"></a>    </span><span class=cF1>Bool</span><span class=cF0>         found = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l8"></a>    </span><span class=cF9>I64</span><span class=cF0>          num = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l9"></a>
-<a name="l10"></a>        </span><span class=cF5>QueueInit</span><span class=cF0>(res);
-<a name="l11"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
-<a name="l12"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l13"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_MENU_VAL</span><span class=cF0> &amp;&amp; doc_e-&gt;left_exp &gt;= </span><span class=cFE>0</span><span class=cF0>)
-<a name="l14"></a>                {
-<a name="l15"></a>                        tmpg = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(, head, doc_e-&gt;left_exp);
-<a name="l16"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpg != head)
-<a name="l17"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l18"></a>                                tmpg = </span><span class=cF5>MAllocIdent</span><span class=cF0>(tmpg);
-<a name="l19"></a>                                </span><span class=cF5>BEqual</span><span class=cF0>(&amp;tmpg-&gt;type, </span><span class=cF3>SPf_SEL</span><span class=cF0>, </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;doc_e-&gt;type, </span><span class=cF3>DOCEt_SEL</span><span class=cF7>)</span><span class=cF0>);
-<a name="l20"></a>                                </span><span class=cF1>if</span><span class=cF0> (*_cur_elem_num == doc_e-&gt;left_exp)
-<a name="l21"></a>                                {
-<a name="l22"></a>                                        *_cur_elem_num = num;
-<a name="l23"></a>                                        found = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l24"></a>                                }
-<a name="l25"></a>                                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, res-&gt;last);
-<a name="l26"></a>                                num++;
-<a name="l27"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l28"></a>                }
-<a name="l29"></a>                doc_e = doc_e-&gt;next;
-<a name="l30"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l31"></a>        </span><span class=cF1>if</span><span class=cF0> (!found)
-<a name="l32"></a>                *_cur_elem_num = num;
-<a name="l33"></a>        </span><span class=cF5>QueueDel</span><span class=cF0>(head);
-<a name="l34"></a>        </span><span class=cF5>Free</span><span class=cF0>(head);
+<a name="l10"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(res);
+<a name="l11"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l12"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l13"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_MENU_VAL</span><span class=cF0> &amp;&amp; doc_e-&gt;left_exp &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l14"></a>        {
+<a name="l15"></a>            tmpg = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(, head, doc_e-&gt;left_exp);
+<a name="l16"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpg != head)
+<a name="l17"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l18"></a>                tmpg = </span><span class=cF5>MAllocIdent</span><span class=cF0>(tmpg);
+<a name="l19"></a>                </span><span class=cF5>BEqual</span><span class=cF0>(&amp;tmpg-&gt;type, </span><span class=cF3>SPf_SEL</span><span class=cF0>, </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;doc_e-&gt;type, </span><span class=cF3>DOCEt_SEL</span><span class=cF7>)</span><span class=cF0>);
+<a name="l20"></a>                </span><span class=cF1>if</span><span class=cF0> (*_cur_elem_num == doc_e-&gt;left_exp)
+<a name="l21"></a>                {
+<a name="l22"></a>                    *_cur_elem_num = num;
+<a name="l23"></a>                    found = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l24"></a>                }
+<a name="l25"></a>                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, res-&gt;last);
+<a name="l26"></a>                num++;
+<a name="l27"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l28"></a>        }
+<a name="l29"></a>        doc_e = doc_e-&gt;next;
+<a name="l30"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l31"></a>    </span><span class=cF1>if</span><span class=cF0> (!found)
+<a name="l32"></a>        *_cur_elem_num = num;
+<a name="l33"></a>    </span><span class=cF5>QueueDel</span><span class=cF0>(head);
+<a name="l34"></a>    </span><span class=cF5>Free</span><span class=cF0>(head);
 <a name="l35"></a>
-<a name="l36"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l36"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l37"></a>}
 <a name="l38"></a>
 <a name="l39"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SpriteSideBarPickNew</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CSprite</span><span class=cF0> *head, </span><span class=cF9>I64</span><span class=cF0> old_num)
 <a name="l40"></a>{
-<a name="l41"></a>        </span><span class=cF9>CSprite</span><span class=cF0>         *tmpg;
-<a name="l42"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_cur_e = </span><span class=cF3>NULL</span><span class=cF0>, *doc_e;
-<a name="l43"></a>        </span><span class=cF9>I64</span><span class=cF0>                      cur_elem_num = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l44"></a>        </span><span class=cF1>U8</span><span class=cF0>                      *st;
+<a name="l41"></a>    </span><span class=cF9>CSprite</span><span class=cF0>     *tmpg;
+<a name="l42"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_cur_e = </span><span class=cF3>NULL</span><span class=cF0>, *doc_e;
+<a name="l43"></a>    </span><span class=cF9>I64</span><span class=cF0>          cur_elem_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l44"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
 <a name="l45"></a>
-<a name="l46"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc,   </span><span class=cF6>&quot;$PURPLE$$TX+CX,\&quot;Sprite SideBar\&quot;$\n&quot;</span><span class=cF0>
-<a name="l47"></a>                                        </span><span class=cF6>&quot;$LK+PU+CX,\&quot;Click for Help\&quot;,&quot;</span><span class=cF0>
-<a name="l48"></a>                                        </span><span class=cF6>&quot;A=\&quot;FI:::/Doc/SpriteSideBar.DD\&quot;$\n\n&quot;</span><span class=cF0>);
-<a name="l49"></a>        tmpg = head-&gt;next;
-<a name="l50"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpg != head)
-<a name="l51"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l52"></a>                st = </span><span class=cF5>SpriteElem2Summary</span><span class=cF0>(tmpg);
-<a name="l53"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_elem_num == old_num)
-<a name="l54"></a>                        doc_cur_e = doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTRED$$MU-UL,\&quot;%$Q\&quot;,LE=%d$\n&quot;</span><span class=cF0>, st, cur_elem_num++);
-<a name="l55"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l56"></a>                        doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$$MU-UL,\&quot;%$Q\&quot;,LE=%d$\n&quot;</span><span class=cF0>, st, cur_elem_num++);
-<a name="l57"></a>                </span><span class=cF5>BEqual</span><span class=cF0>(&amp;doc_e-&gt;de_flags, </span><span class=cF3>DOCEf_SEL</span><span class=cF0>, </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpg-&gt;type, &amp;</span><span class=cF3>SPf_SEL</span><span class=cF7>)</span><span class=cF0>);
-<a name="l58"></a>                </span><span class=cF5>BEqual</span><span class=cF0>(&amp;doc_e-&gt;type, </span><span class=cF3>DOCEt_SEL</span><span class=cF0>, </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpg-&gt;type, </span><span class=cF3>SPf_SEL</span><span class=cF7>)</span><span class=cF0>);
-<a name="l59"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l60"></a>                tmpg = tmpg-&gt;next;
-<a name="l61"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l62"></a>        </span><span class=cF1>if</span><span class=cF0> (cur_elem_num == old_num)
-<a name="l63"></a>                doc_cur_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTRED$$MU-UL,\&quot;END\&quot;,LE=%d$\n&quot;</span><span class=cF0>, cur_elem_num);
-<a name="l64"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l65"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$$MU-UL,\&quot;END\&quot;,LE=%d$\n&quot;</span><span class=cF0>, cur_elem_num);
-<a name="l66"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_cur_e)
-<a name="l67"></a>                doc-&gt;cur_entry = doc_cur_e;
+<a name="l46"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,   </span><span class=cF6>&quot;$PURPLE$$TX+CX,\&quot;Sprite SideBar\&quot;$\n&quot;</span><span class=cF0>
+<a name="l47"></a>                    </span><span class=cF6>&quot;$LK+PU+CX,\&quot;Click for Help\&quot;,&quot;</span><span class=cF0>
+<a name="l48"></a>                    </span><span class=cF6>&quot;A=\&quot;FI:::/Doc/SpriteSideBar.DD\&quot;$\n\n&quot;</span><span class=cF0>);
+<a name="l49"></a>    tmpg = head-&gt;next;
+<a name="l50"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpg != head)
+<a name="l51"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>        st = </span><span class=cF5>SpriteElem2Summary</span><span class=cF0>(tmpg);
+<a name="l53"></a>        </span><span class=cF1>if</span><span class=cF0> (cur_elem_num == old_num)
+<a name="l54"></a>            doc_cur_e = doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTRED$$MU-UL,\&quot;%$Q\&quot;,LE=%d$\n&quot;</span><span class=cF0>, st, cur_elem_num++);
+<a name="l55"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l56"></a>            doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$$MU-UL,\&quot;%$Q\&quot;,LE=%d$\n&quot;</span><span class=cF0>, st, cur_elem_num++);
+<a name="l57"></a>        </span><span class=cF5>BEqual</span><span class=cF0>(&amp;doc_e-&gt;de_flags, </span><span class=cF3>DOCEf_SEL</span><span class=cF0>, </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpg-&gt;type, &amp;</span><span class=cF3>SPf_SEL</span><span class=cF7>)</span><span class=cF0>);
+<a name="l58"></a>        </span><span class=cF5>BEqual</span><span class=cF0>(&amp;doc_e-&gt;type, </span><span class=cF3>DOCEt_SEL</span><span class=cF0>, </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpg-&gt;type, </span><span class=cF3>SPf_SEL</span><span class=cF7>)</span><span class=cF0>);
+<a name="l59"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l60"></a>        tmpg = tmpg-&gt;next;
+<a name="l61"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l62"></a>    </span><span class=cF1>if</span><span class=cF0> (cur_elem_num == old_num)
+<a name="l63"></a>        doc_cur_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTRED$$MU-UL,\&quot;END\&quot;,LE=%d$\n&quot;</span><span class=cF0>, cur_elem_num);
+<a name="l64"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l65"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$$MU-UL,\&quot;END\&quot;,LE=%d$\n&quot;</span><span class=cF0>, cur_elem_num);
+<a name="l66"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_cur_e)
+<a name="l67"></a>        doc-&gt;cur_entry = doc_cur_e;
 <a name="l68"></a>}
 <a name="l69"></a>
 <a name="l70"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SpriteSideBarTask2</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *grand_parent)
 <a name="l71"></a>{
-<a name="l72"></a>        </span><span class=cF9>I64</span><span class=cF0>              w,h;
-<a name="l73"></a>        </span><span class=cF9>CTask</span><span class=cF0>   *parent = </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task,*pu_task;
+<a name="l72"></a>    </span><span class=cF9>I64</span><span class=cF0>      w,h;
+<a name="l73"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *parent = </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task,*pu_task;
 <a name="l74"></a>
-<a name="l75"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l76"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l77"></a>                pu_task = grand_parent-&gt;popup_task;
-<a name="l78"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>pu_task</span><span class=cF7>)</span><span class=cF0>)
-<a name="l79"></a>                {
-<a name="l80"></a>                        w = parent-&gt;win_right - parent-&gt;win_left;
-<a name="l81"></a>                        </span><span class=cF5>WinHorz</span><span class=cF0>(pu_task-&gt;win_right + </span><span class=cFE>2</span><span class=cF0>, pu_task-&gt;win_right + </span><span class=cFE>2</span><span class=cF0> + w, parent);
-<a name="l82"></a>                        h = parent-&gt;win_bottom - parent-&gt;win_top;
-<a name="l83"></a>                        </span><span class=cF5>WinVert</span><span class=cF0>(pu_task-&gt;win_top, pu_task-&gt;win_top + h, parent);
-<a name="l84"></a>                }
-<a name="l85"></a>                </span><span class=cF5>Refresh</span><span class=cF0>;
-<a name="l86"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l75"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l76"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l77"></a>        pu_task = grand_parent-&gt;popup_task;
+<a name="l78"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>pu_task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l79"></a>        {
+<a name="l80"></a>            w = parent-&gt;win_right - parent-&gt;win_left;
+<a name="l81"></a>            </span><span class=cF5>WinHorz</span><span class=cF0>(pu_task-&gt;win_right + </span><span class=cFE>2</span><span class=cF0>, pu_task-&gt;win_right + </span><span class=cFE>2</span><span class=cF0> + w, parent);
+<a name="l82"></a>            h = parent-&gt;win_bottom - parent-&gt;win_top;
+<a name="l83"></a>            </span><span class=cF5>WinVert</span><span class=cF0>(pu_task-&gt;win_top, pu_task-&gt;win_top + h, parent);
+<a name="l84"></a>        }
+<a name="l85"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l86"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l87"></a>}
 <a name="l88"></a>
 <a name="l89"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SpriteSideBarTask</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *parent, </span><span class=cF9>CSprite</span><span class=cF0> **_head, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num)
 <a name="l90"></a>{
-<a name="l91"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e;
-<a name="l92"></a>        </span><span class=cF9>CDoc</span><span class=cF0>            *doc = </span><span class=cF5>DocPut</span><span class=cF0>;
+<a name="l91"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e;
+<a name="l92"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocPut</span><span class=cF0>;
 <a name="l93"></a>
-<a name="l94"></a>        </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>SpriteSideBarTask2</span><span class=cF0>, parent, </span><span class=cF6>&quot;CSpriteTask&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l95"></a>        doc-&gt;flags |= </span><span class=cF3>DOCF_SIZE_MIN</span><span class=cF0> | </span><span class=cF3>DOCF_FORM</span><span class=cF0>;
-<a name="l96"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l97"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l98"></a>                </span><span class=cF5>SpriteSideBarPickNew</span><span class=cF0>(doc, *_head, *_cur_elem_num);
-<a name="l99"></a>                </span><span class=cF5>DocHighlightCursor</span><span class=cF0>(, doc);
-<a name="l100"></a>                </span><span class=cF5>View</span><span class=cF0>;
-<a name="l101"></a>                doc_e = doc-&gt;cur_entry;
-<a name="l102"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_MENU_VAL</span><span class=cF0>)
-<a name="l103"></a>                        *_cur_elem_num = doc_e-&gt;left_exp;
-<a name="l104"></a>                *_head = </span><span class=cF5>SpriteSideBar2SpriteQueue</span><span class=cF0>(doc, *_head, _cur_elem_num);
-<a name="l105"></a>                </span><span class=cF5>DocClear</span><span class=cF0>(doc);
-<a name="l106"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l94"></a>    </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>SpriteSideBarTask2</span><span class=cF0>, parent, </span><span class=cF6>&quot;CSpriteTask&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l95"></a>    doc-&gt;flags |= </span><span class=cF3>DOCF_SIZE_MIN</span><span class=cF0> | </span><span class=cF3>DOCF_FORM</span><span class=cF0>;
+<a name="l96"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l97"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l98"></a>        </span><span class=cF5>SpriteSideBarPickNew</span><span class=cF0>(doc, *_head, *_cur_elem_num);
+<a name="l99"></a>        </span><span class=cF5>DocHighlightCursor</span><span class=cF0>(, doc);
+<a name="l100"></a>        </span><span class=cF5>View</span><span class=cF0>;
+<a name="l101"></a>        doc_e = doc-&gt;cur_entry;
+<a name="l102"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_MENU_VAL</span><span class=cF0>)
+<a name="l103"></a>            *_cur_elem_num = doc_e-&gt;left_exp;
+<a name="l104"></a>        *_head = </span><span class=cF5>SpriteSideBar2SpriteQueue</span><span class=cF0>(doc, *_head, _cur_elem_num);
+<a name="l105"></a>        </span><span class=cF5>DocClear</span><span class=cF0>(doc);
+<a name="l106"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l107"></a>}
 </span></pre></body>
 </html>

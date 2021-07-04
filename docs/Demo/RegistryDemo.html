@@ -40,16 +40,16 @@ body {background-color:#000000;}
 <a name="l13"></a>
 <a name="l14"></a></span><span class=cF1>U0</span><span class=cF0> Game()
 <a name="l15"></a>{
-<a name="l16"></a>        </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cF5>RegExe</span><span class=cF0>(</span><span class=cF6>&quot;DemoCompany/Game1/SimpleVal&quot;</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cF5>RegExe</span><span class=cF0>(</span><span class=cF6>&quot;DemoCompany/Game1/SimpleVal&quot;</span><span class=cF0>);
 <a name="l17"></a>
-<a name="l18"></a>        </span><span class=cF6>&quot;High Score:%6.5f\n&quot;</span><span class=cF0>, best_score;
-<a name="l19"></a>        </span><span class=cF6>&quot;Val:%d\n&quot;</span><span class=cF0>, i;
-<a name="l20"></a>        i++;
-<a name="l21"></a>        best_score = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l18"></a>    </span><span class=cF6>&quot;High Score:%6.5f\n&quot;</span><span class=cF0>, best_score;
+<a name="l19"></a>    </span><span class=cF6>&quot;Val:%d\n&quot;</span><span class=cF0>, i;
+<a name="l20"></a>    i++;
+<a name="l21"></a>    best_score = </span><span class=cF5>tS</span><span class=cF0>;
 <a name="l22"></a></span><span class=cF2>//You could combine these into one write by making</span><span class=cF0>
-<a name="l23"></a>        </span><span class=cF2>//the $TR...$ and $ID,2$, $ID,-2$, cmds yourself.</span><span class=cF0>
-<a name="l24"></a>        </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;DemoCompany/Game1&quot;</span><span class=cF0>, </span><span class=cF6>&quot;F64 best_score=%9.5f;\n&quot;</span><span class=cF0>, best_score);
-<a name="l25"></a>        </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;DemoCompany/Game1/SimpleVal&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%d;\n&quot;</span><span class=cF0>, i);
+<a name="l23"></a>    </span><span class=cF2>//the $TR...$ and $ID,2$, $ID,-2$, cmds yourself.</span><span class=cF0>
+<a name="l24"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;DemoCompany/Game1&quot;</span><span class=cF0>, </span><span class=cF6>&quot;F64 best_score=%9.5f;\n&quot;</span><span class=cF0>, best_score);
+<a name="l25"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;DemoCompany/Game1/SimpleVal&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%d;\n&quot;</span><span class=cF0>, i);
 <a name="l26"></a>}
 <a name="l27"></a>
 <a name="l28"></a>Game;

@@ -27,15 +27,15 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> BlkDevRep()
 <a name="l2"></a>{</span><span class=cF2>//Block Device Report.</span><span class=cF0>
-<a name="l3"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l4"></a>
-<a name="l5"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>BLKDEVS_NUM</span><span class=cF0>; i++)
-<a name="l6"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>blkdev</span><span class=cF0>.blkdevs[i].bd_signature == </span><span class=cF3>BD_SIGNATURE_VAL</span><span class=cF0>)
-<a name="l7"></a>                        </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Debug.html#l216"><span class=cF4>ClassRep</span></a><span class=cF2>() dumps any structure, automatically.</span><span class=cF0>
-<a name="l8"></a>                        </span><span class=cF5>ClassRep</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.blkdevs[i]);
-<a name="l9"></a>                        </span><span class=cF2>//The lastclass arg tells ClassRep the datatype.</span><span class=cF0>
-<a name="l10"></a>                        </span><span class=cF2>//lastclass is a language feature of </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l11"></a>                        </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>BLKDEVS_NUM</span><span class=cF0>; i++)
+<a name="l6"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>blkdev</span><span class=cF0>.blkdevs[i].bd_signature == </span><span class=cF3>BD_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l7"></a>            </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Debug.html#l216"><span class=cF4>ClassRep</span></a><span class=cF2>() dumps any structure, automatically.</span><span class=cF0>
+<a name="l8"></a>            </span><span class=cF5>ClassRep</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.blkdevs[i]);
+<a name="l9"></a>            </span><span class=cF2>//The lastclass arg tells ClassRep the datatype.</span><span class=cF0>
+<a name="l10"></a>            </span><span class=cF2>//lastclass is a language feature of </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l11"></a>            </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l12"></a>}
 <a name="l13"></a>
 <a name="l14"></a>BlkDevRep;

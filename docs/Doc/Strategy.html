@@ -36,13 +36,13 @@ body {background-color:#000000;}
 <a name="l9"></a>motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude 
 <a name="l10"></a>complexity.
 <a name="l11"></a>
-<a name="l12"></a>Linux and Windows are general purpose operating systems.        They attempt to do any task you want.  ZealOS cherry-picks tasks and 
-<a name="l13"></a>is designed to do the same things a C64 did.  This saves and order of magnitude complexity.     For example, the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system 
-<a name="l14"></a>allocates just contiguous files -- you load and save whole files at once.       A benefit is this allows compression.  Also, ZealOS 
-<a name="l15"></a>does not do multimedia.  In theory, memory will fragment with lots of big files.        The system would fall to pieces with 
+<a name="l12"></a>Linux and Windows are general purpose operating systems.    They attempt to do any task you want.  ZealOS cherry-picks tasks and 
+<a name="l13"></a>is designed to do the same things a C64 did.  This saves and order of magnitude complexity. For example, the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system 
+<a name="l14"></a>allocates just contiguous files -- you load and save whole files at once.   A benefit is this allows compression.  Also, ZealOS 
+<a name="l15"></a>does not do multimedia.  In theory, memory will fragment with lots of big files.    The system would fall to pieces with 
 <a name="l16"></a>multimedia.
 <a name="l17"></a>
-<a name="l18"></a>A three bttn mouse is like a leg you cannot put weight on.      ZealOS just does hardware everybody has, with no divergent code 
+<a name="l18"></a>A three bttn mouse is like a leg you cannot put weight on.  ZealOS just does hardware everybody has, with no divergent code 
 <a name="l19"></a>bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order 
 <a name="l20"></a>of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
 <a name="l21"></a>
@@ -56,7 +56,7 @@ body {background-color:#000000;}
 <a name="l29"></a>
 <a name="l30"></a>* No security or cryptography.
 <a name="l31"></a>
-<a name="l32"></a>* Least (greatest) common denominator hardware support.  Mostly, one driver for each device class.      We can't be in the business 
+<a name="l32"></a>* Least (greatest) common denominator hardware support.  Mostly, one driver for each device class.  We can't be in the business 
 <a name="l33"></a>of different drivers.   Compatibility is the greatest challenge for PC operating systems.  Disk code does not use interrupts, 
 <a name="l34"></a>avoiding compatibility risks.  </span><span class=cF2>PS/2</span><span class=cF0> keyboard/mouse is used instead of </span><span class=cF2>USB</span><span class=cF0>, also more compatible.
 <a name="l35"></a>
@@ -67,7 +67,7 @@ body {background-color:#000000;}
 <a name="l40"></a>* Compiler extends all values to 64-bit when fetched and does only 64-bit computations intermediately.  Assembler has minimal 
 <a name="l41"></a>16-bit support, good enough for compiling boot loaders.
 <a name="l42"></a>
-<a name="l43"></a>* No object files.      Use </span><span class=cF2>JIT</span><span class=cF0>.
+<a name="l43"></a>* No object files.  Use </span><span class=cF2>JIT</span><span class=cF0>.
 <a name="l44"></a>
 <a name="l45"></a>* Whole files are processed almost exclusively.
 <a name="l46"></a>
@@ -75,11 +75,11 @@ body {background-color:#000000;}
 <a name="l48"></a>
 <a name="l49"></a>* One editor/word processor/browser for the command-line window, source code, documentation browser, dialog forms.
 <a name="l50"></a>
-<a name="l51"></a>* No child windows.  One window per task.  Bttns are widgets, not child windows.        There are child tasks, however.
+<a name="l51"></a>* No child windows.  One window per task.  Bttns are widgets, not child windows.    There are child tasks, however.
 <a name="l52"></a>
 <a name="l53"></a>* No distinction between </span><span class=cF2>thread</span><span class=cF0>, </span><span class=cF2>process</span><span class=cF0> or </span><span class=cF2>task</span><span class=cF0>.
 <a name="l54"></a>
-<a name="l55"></a>* The </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.html#l1"><span class=cF4>Scheduler</span></a><span class=cF0> is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.       It's 
+<a name="l55"></a>* The </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.html#l1"><span class=cF4>Scheduler</span></a><span class=cF0> is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.   It's 
 <a name="l56"></a>wonderfully simple.
 <a name="l57"></a>
 <a name="l58"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Doc/MultiCore.html#l1"><span class=cF4>MultiCore</span></a><span class=cF0> is done </span><span class=cF2>master/slave</span><span class=cF0>, instead of </span><span class=cF2>SMP</span><span class=cF0>.  </span><span class=cF2>Core0</span><span class=cF0> applications explicitly assigns jobs.  Locks are present allowing 
@@ -87,9 +87,9 @@ body {background-color:#000000;}
 <a name="l60"></a>
 <a name="l61"></a>* </span><span class=cF4><u>Sound</u></span><span class=cF0> has single-voice 8-bit signed MIDI-like samples.
 <a name="l62"></a>
-<a name="l63"></a>* All tasks have a heap and a sym table.        Scope is that of environment vars in other operating systems.  As text is typed at 
-<a name="l64"></a>the command line or you run programs by </span><span class=cF2>#include</span><span class=cF0>ing them, the syms go in the table.     If a sym is not found, the parent task's 
-<a name="l65"></a>table is checked.       The father of all tasks has the API syms you'll need waiting in it's table.  No need to </span><span class=cF2>#include</span><span class=cF0> headers.
+<a name="l63"></a>* All tasks have a heap and a sym table.    Scope is that of environment vars in other operating systems.  As text is typed at 
+<a name="l64"></a>the command line or you run programs by </span><span class=cF2>#include</span><span class=cF0>ing them, the syms go in the table. If a sym is not found, the parent task's 
+<a name="l65"></a>table is checked.   The father of all tasks has the API syms you'll need waiting in it's table.  No need to </span><span class=cF2>#include</span><span class=cF0> headers.
 <a name="l66"></a>
 <a name="l67"></a>* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System Task</span></a><span class=cF0>'s symbol 
 <a name="l68"></a>system-wide global.

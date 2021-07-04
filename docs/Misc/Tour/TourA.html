@@ -32,9 +32,9 @@ body {background-color:#000000;}
 <a name="l5"></a>TourPut(</span><span class=cF6>&quot;Press $GREEN$&lt;SHIFT-ESC&gt;$FG$ to abort.\n&quot;</span><span class=cF0>);
 <a name="l6"></a></span><span class=cF5>InUntilChar</span><span class=cF0>(</span><span class=cF3>CH_ESC</span><span class=cF0>, </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>);
 <a name="l7"></a>
-<a name="l8"></a>TourPut(        </span><span class=cF6>&quot;We will now use $RED$$TX+L+PU+UL,\&quot;Uf\&quot;,A=\&quot;MN:Uf\&quot;$$FG$() to &quot;</span><span class=cF0>
-<a name="l9"></a>                        </span><span class=cF6>&quot;unassemble a function.  It takes the function name as a string arg.\n\n&quot;</span><span class=cF0>
-<a name="l10"></a>                        </span><span class=cF6>&quot;Press $GREEN$&lt;ENTER&gt;$FG$.\n&quot;</span><span class=cF0>);
+<a name="l8"></a>TourPut(    </span><span class=cF6>&quot;We will now use $RED$$TX+L+PU+UL,\&quot;Uf\&quot;,A=\&quot;MN:Uf\&quot;$$FG$() to &quot;</span><span class=cF0>
+<a name="l9"></a>            </span><span class=cF6>&quot;unassemble a function.  It takes the function name as a string arg.\n\n&quot;</span><span class=cF0>
+<a name="l10"></a>            </span><span class=cF6>&quot;Press $GREEN$&lt;ENTER&gt;$FG$.\n&quot;</span><span class=cF0>);
 <a name="l11"></a>
 <a name="l12"></a></span><span class=cF6>&quot;WinBorder; WinMax; \nUf(\&quot;CAlloc\&quot;);&quot;</span><span class=cF0>;
 <a name="l13"></a></span><span class=cF5>InGetStr</span><span class=cF0>(</span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
@@ -42,7 +42,7 @@ body {background-color:#000000;}
 <a name="l15"></a>TourPut(</span><span class=cF6>&quot;Press $GREEN$&lt;CURSOR-UP&gt;$FG$ eight times..&quot;</span><span class=cF0>);
 <a name="l16"></a></span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l17"></a></span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>8</span><span class=cF0>; i++)
-<a name="l18"></a>        </span><span class=cF5>InKeyGet</span><span class=cF0>(</span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
+<a name="l18"></a>    </span><span class=cF5>InKeyGet</span><span class=cF0>(</span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
 <a name="l19"></a>
 <a name="l20"></a>TourPut(</span><span class=cF6>&quot;Press $GREEN$&lt;SPACE&gt;$FG$.\n&quot;</span><span class=cF0>);
 <a name="l21"></a></span><span class=cF5>InGetStr</span><span class=cF0>(</span><span class=cF6>&quot; &quot;</span><span class=cF0>);
@@ -53,9 +53,9 @@ body {background-color:#000000;}
 <a name="l26"></a></span><span class=cF2>//Puts the cursor at the bottom.</span><span class=cF0>
 <a name="l27"></a></span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0> | </span><span class=cF3>SCF_CTRL</span><span class=cF0>);
 <a name="l28"></a>
-<a name="l29"></a>TourPut(        </span><span class=cF6>&quot;We can unassemble a numeric address with &quot;</span><span class=cF0>
-<a name="l30"></a>                        </span><span class=cF6>&quot;$RED$$TX+L+PU+UL,\&quot;U\&quot;,A=\&quot;MN:U\&quot;$$FG$().\n\n&quot;</span><span class=cF0>
-<a name="l31"></a>                        </span><span class=cF6>&quot;Press $GREEN$&lt;ENTER&gt;$FG$.\n&quot;</span><span class=cF0>);
+<a name="l29"></a>TourPut(    </span><span class=cF6>&quot;We can unassemble a numeric address with &quot;</span><span class=cF0>
+<a name="l30"></a>            </span><span class=cF6>&quot;$RED$$TX+L+PU+UL,\&quot;U\&quot;,A=\&quot;MN:U\&quot;$$FG$().\n\n&quot;</span><span class=cF0>
+<a name="l31"></a>            </span><span class=cF6>&quot;Press $GREEN$&lt;ENTER&gt;$FG$.\n&quot;</span><span class=cF0>);
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF6>&quot;U(&amp;CAlloc);&quot;</span><span class=cF0>;
 <a name="l34"></a></span><span class=cF5>InGetStr</span><span class=cF0>(</span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);

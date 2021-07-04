@@ -37,19 +37,19 @@ body {background-color:#000000;}
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *)
 <a name="l12"></a>{
-<a name="l13"></a>        </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l13"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l14"></a>
-<a name="l15"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
-<a name="l16"></a>                </span><span class=cF5>TextChar</span><span class=cF0>(task,, </span><span class=cF7>(</span><span class=cF0>i &amp; </span><span class=cFE>15</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>i / </span><span class=cFE>16</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>, i + </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>12</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0>);
+<a name="l15"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
+<a name="l16"></a>        </span><span class=cF5>TextChar</span><span class=cF0>(task,, </span><span class=cF7>(</span><span class=cF0>i &amp; </span><span class=cFE>15</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>i / </span><span class=cFE>16</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>, i + </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>12</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0>);
 <a name="l17"></a>}
 <a name="l18"></a>
 <a name="l19"></a></span><span class=cF1>U0</span><span class=cF0> ScreenCodes()
 <a name="l20"></a>{
-<a name="l21"></a>        </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
-<a name="l22"></a>        </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l23"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
-<a name="l24"></a>        </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l25"></a>        </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l21"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l22"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l23"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l24"></a>    </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l25"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
 <a name="l26"></a>}
 <a name="l27"></a>
 <a name="l28"></a>ScreenCodes;

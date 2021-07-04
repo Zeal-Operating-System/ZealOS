@@ -32,79 +32,79 @@ body {background-color:#000000;}
 <a name="l5"></a>
 <a name="l6"></a></span><span class=cF1>U8</span><span class=cF0> *SuggestMatchForm(</span><span class=cF1>U8</span><span class=cF0> *src)
 <a name="l7"></a>{
-<a name="l8"></a>        </span><span class=cF9>I64</span><span class=cF0> ch, ch1 = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l9"></a>        </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF5>MStrUtil</span><span class=cF0>(src, </span><span class=cF3>SUF_TO_UPPER</span><span class=cF0>), *dst;
+<a name="l8"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, ch1 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l9"></a>    </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF5>MStrUtil</span><span class=cF0>(src, </span><span class=cF3>SUF_TO_UPPER</span><span class=cF0>), *dst;
 <a name="l10"></a>
-<a name="l11"></a>        dst = src = res;
-<a name="l12"></a>        </span><span class=cF1>while</span><span class=cF0> (ch = *src++)
-<a name="l13"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l14"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF6>&quot;AEIOU&quot;</span><span class=cF0>, ch</span><span class=cF7>)</span><span class=cF0>)
-<a name="l15"></a>                {
-<a name="l16"></a>                        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'C'</span><span class=cF0>)
-<a name="l17"></a>                                ch = </span><span class=cF6>'K'</span><span class=cF0>;
-<a name="l18"></a>                        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'Z'</span><span class=cF0>)
-<a name="l19"></a>                                ch = </span><span class=cF6>'S'</span><span class=cF0>;
-<a name="l20"></a>                        </span><span class=cF1>if</span><span class=cF0> (ch != ch1) </span><span class=cF2>//double chars to single</span><span class=cF0>
-<a name="l21"></a>                                *dst++ = ch;
-<a name="l22"></a>                }
-<a name="l23"></a>                ch1 = ch;
-<a name="l24"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l25"></a>        *dst = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l11"></a>    dst = src = res;
+<a name="l12"></a>    </span><span class=cF1>while</span><span class=cF0> (ch = *src++)
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF6>&quot;AEIOU&quot;</span><span class=cF0>, ch</span><span class=cF7>)</span><span class=cF0>)
+<a name="l15"></a>        {
+<a name="l16"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'C'</span><span class=cF0>)
+<a name="l17"></a>                ch = </span><span class=cF6>'K'</span><span class=cF0>;
+<a name="l18"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'Z'</span><span class=cF0>)
+<a name="l19"></a>                ch = </span><span class=cF6>'S'</span><span class=cF0>;
+<a name="l20"></a>            </span><span class=cF1>if</span><span class=cF0> (ch != ch1) </span><span class=cF2>//double chars to single</span><span class=cF0>
+<a name="l21"></a>                *dst++ = ch;
+<a name="l22"></a>        }
+<a name="l23"></a>        ch1 = ch;
+<a name="l24"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l25"></a>    *dst = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l26"></a>
-<a name="l27"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l27"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l28"></a>}
 <a name="l29"></a>
 <a name="l30"></a></span><span class=cF2>/*Format of word list entry:</span><span class=cF0>
-<a name="l31"></a>        </span><span class=cF2>U8 ACD_WORD_CHAR</span><span class=cF0>
-<a name="l32"></a>        </span><span class=cF2>U8 word[] with terminating zero</span><span class=cF0>
-<a name="l33"></a>        </span><span class=cF2>I16 block; //definition offset in ::/System/AutoComplete/ACDefs.DATA</span><span class=cF0>
+<a name="l31"></a>    </span><span class=cF2>U8 ACD_WORD_CHAR</span><span class=cF0>
+<a name="l32"></a>    </span><span class=cF2>U8 word[] with terminating zero</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF2>I16 block; //definition offset in ::/System/AutoComplete/ACDefs.DATA</span><span class=cF0>
 <a name="l34"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l35"></a>
 <a name="l36"></a></span><span class=cF1>Bool</span><span class=cF0> SuggestSpelling(</span><span class=cF1>U8</span><span class=cF0> *word)
 <a name="l37"></a>{
-<a name="l38"></a>        </span><span class=cF1>U8</span><span class=cF0>      *dict = </span><span class=cFB>acd</span><span class=cF0>.word_list,
-<a name="l39"></a>                *pf = SuggestMatchForm(word),
-<a name="l40"></a>                *wf;
-<a name="l41"></a>        </span><span class=cF9>I64</span><span class=cF0>  len = </span><span class=cF5>StrLen</span><span class=cF0>(pf),
-<a name="l42"></a>                 num_cols = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_width / </span><span class=cFE>16</span><span class=cF0>,
-<a name="l43"></a>                 col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l38"></a>    </span><span class=cF1>U8</span><span class=cF0>  *dict = </span><span class=cFB>acd</span><span class=cF0>.word_list,
+<a name="l39"></a>        *pf = SuggestMatchForm(word),
+<a name="l40"></a>        *wf;
+<a name="l41"></a>    </span><span class=cF9>I64</span><span class=cF0>  len = </span><span class=cF5>StrLen</span><span class=cF0>(pf),
+<a name="l42"></a>         num_cols = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_width / </span><span class=cFE>16</span><span class=cF0>,
+<a name="l43"></a>         col = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l44"></a>
-<a name="l45"></a>        </span><span class=cF1>if</span><span class=cF0> (len)
-<a name="l46"></a>                </span><span class=cF1>while</span><span class=cF0> (*dict)
-<a name="l47"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l48"></a>                        wf = SuggestMatchForm(dict + </span><span class=cFE>1</span><span class=cF0>);
-<a name="l49"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrNCompare</span><span class=cF7>(</span><span class=cF0>pf, wf, len</span><span class=cF7>)</span><span class=cF0>)
-<a name="l50"></a>                        {
-<a name="l51"></a>                                </span><span class=cF6>&quot;%16s&quot;</span><span class=cF0>, dict + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l52"></a>                                </span><span class=cF1>if</span><span class=cF0> (++col &gt;= num_cols)
-<a name="l53"></a>                                </span><span class=cF7>{</span><span class=cF0>
-<a name="l54"></a>                                        col=</span><span class=cFE>0</span><span class=cF0>;
-<a name="l55"></a>                                        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l56"></a>                                </span><span class=cF7>}</span><span class=cF0>
-<a name="l57"></a>                        }
-<a name="l58"></a>                        </span><span class=cF5>Free</span><span class=cF0>(wf);
-<a name="l59"></a>                        dict += </span><span class=cF5>StrLen</span><span class=cF0>(dict + </span><span class=cFE>1</span><span class=cF0>) + </span><span class=cFE>4</span><span class=cF0>;
-<a name="l60"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l61"></a>        </span><span class=cF5>Free</span><span class=cF0>(pf);
-<a name="l62"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l45"></a>    </span><span class=cF1>if</span><span class=cF0> (len)
+<a name="l46"></a>        </span><span class=cF1>while</span><span class=cF0> (*dict)
+<a name="l47"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l48"></a>            wf = SuggestMatchForm(dict + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l49"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrNCompare</span><span class=cF7>(</span><span class=cF0>pf, wf, len</span><span class=cF7>)</span><span class=cF0>)
+<a name="l50"></a>            {
+<a name="l51"></a>                </span><span class=cF6>&quot;%16s&quot;</span><span class=cF0>, dict + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l52"></a>                </span><span class=cF1>if</span><span class=cF0> (++col &gt;= num_cols)
+<a name="l53"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l54"></a>                    col=</span><span class=cFE>0</span><span class=cF0>;
+<a name="l55"></a>                    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l56"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l57"></a>            }
+<a name="l58"></a>            </span><span class=cF5>Free</span><span class=cF0>(wf);
+<a name="l59"></a>            dict += </span><span class=cF5>StrLen</span><span class=cF0>(dict + </span><span class=cFE>1</span><span class=cF0>) + </span><span class=cFE>4</span><span class=cF0>;
+<a name="l60"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l61"></a>    </span><span class=cF5>Free</span><span class=cF0>(pf);
+<a name="l62"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
 <a name="l63"></a>
-<a name="l64"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ToBool</span><span class=cF0>(len);
+<a name="l64"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ToBool</span><span class=cF0>(len);
 <a name="l65"></a>}
 <a name="l66"></a>
 <a name="l67"></a></span><span class=cF1>U0</span><span class=cF0> SuggestSpellingDemo()
 <a name="l68"></a>{
-<a name="l69"></a>        </span><span class=cF1>U8</span><span class=cF0> *w;
+<a name="l69"></a>    </span><span class=cF1>U8</span><span class=cF0> *w;
 <a name="l70"></a>
-<a name="l71"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l72"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l73"></a>                w = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Word:&quot;</span><span class=cF0>);
-<a name="l74"></a>                </span><span class=cF1>if</span><span class=cF0> (*w) {
-<a name="l75"></a>                        SuggestSpelling(w);
-<a name="l76"></a>                        </span><span class=cF5>Free</span><span class=cF0>(w);
-<a name="l77"></a>                }
-<a name="l78"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l79"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l80"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l71"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l72"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l73"></a>        w = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Word:&quot;</span><span class=cF0>);
+<a name="l74"></a>        </span><span class=cF1>if</span><span class=cF0> (*w) {
+<a name="l75"></a>            SuggestSpelling(w);
+<a name="l76"></a>            </span><span class=cF5>Free</span><span class=cF0>(w);
+<a name="l77"></a>        }
+<a name="l78"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l79"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l80"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l81"></a>}
 <a name="l82"></a>
 <a name="l83"></a></span><span class=cF2>//If you &quot;System Include&quot; this file, it will</span><span class=cF0>
@@ -113,22 +113,22 @@ body {background-color:#000000;}
 <a name="l86"></a></span><span class=cF1>U0</span><span class=cF0> CtrlAltL(</span><span class=cF9>I64</span><span class=cF0>)
 <a name="l87"></a>{
 <a name="l88"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1626"><span class=cF4>ac.cur_word</span></a><span class=cF2> is only set if AutoComplete</span><span class=cF0>
-<a name="l89"></a>        </span><span class=cF2>//is running.</span><span class=cF0>
-<a name="l90"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.task</span><span class=cF7>)</span><span class=cF0>)
-<a name="l91"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l92"></a>                </span><span class=cF5>AutoComplete</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l93"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
-<a name="l94"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l95"></a>        </span><span class=cF5>PopUp</span><span class=cF0>(</span><span class=cF6>&quot;if (SuggestSpelling(ac.cur_word)) View;&quot;</span><span class=cF0>);
+<a name="l89"></a>    </span><span class=cF2>//is running.</span><span class=cF0>
+<a name="l90"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l91"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l92"></a>        </span><span class=cF5>AutoComplete</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l93"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
+<a name="l94"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>    </span><span class=cF5>PopUp</span><span class=cF0>(</span><span class=cF6>&quot;if (SuggestSpelling(ac.cur_word)) View;&quot;</span><span class=cF0>);
 <a name="l96"></a>}
 <a name="l97"></a>
 <a name="l98"></a></span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0> != </span><span class=cFB>sys_task</span><span class=cF0>)
-<a name="l99"></a>        SuggestSpellingDemo;
+<a name="l99"></a>    SuggestSpellingDemo;
 <a name="l100"></a></span><span class=cF1>else</span><span class=cF0>
 <a name="l101"></a>{
-<a name="l102"></a>        </span><span class=cF5>CtrlAltCBSet</span><span class=cF0>(</span><span class=cF6>'L'</span><span class=cF0>, &amp;CtrlAltL, </span><span class=cF6>&quot;Cmd /Suggest Spelling&quot;</span><span class=cF0>);
+<a name="l102"></a>    </span><span class=cF5>CtrlAltCBSet</span><span class=cF0>(</span><span class=cF6>'L'</span><span class=cF0>, &amp;CtrlAltL, </span><span class=cF6>&quot;Cmd /Suggest Spelling&quot;</span><span class=cF0>);
 <a name="l103"></a></span><span class=cF2>//Appears in the System Task Window</span><span class=cF0>
-<a name="l104"></a>        </span><span class=cF6>&quot;&lt;CTRL-ALT-l&gt; installed\n&quot;</span><span class=cF0>;
+<a name="l104"></a>    </span><span class=cF6>&quot;&lt;CTRL-ALT-l&gt; installed\n&quot;</span><span class=cF0>;
 <a name="l105"></a>}
 <a name="l106"></a>
 <a name="l107"></a></span><span class=cF2>//Note: It would be more appropriate</span><span class=cF0>

@@ -25,8 +25,8 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:courier;font-size:10pt">
-<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> M_DASH_THRESHOLD        </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>140</span><span class=cF0>
-<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> M_SPACE_THRESHOLD       </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>300</span><span class=cF0>
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> M_DASH_THRESHOLD    </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>140</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> M_SPACE_THRESHOLD   </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>300</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a></span><span class=cF1>U8</span><span class=cF0> *morse_list =
 <a name="l5"></a></span><span class=cF6>&quot;A.-\0&quot;</span><span class=cF0>
@@ -84,22 +84,22 @@ body {background-color:#000000;}
 <a name="l57"></a>
 <a name="l58"></a></span><span class=cF1>U0</span><span class=cF0> MorseTable()
 <a name="l59"></a>{
-<a name="l60"></a>        </span><span class=cF1>U8</span><span class=cF0> *st;
-<a name="l61"></a>        </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l60"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l61"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l62"></a>
-<a name="l63"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>13</span><span class=cF0>; i++ )
-<a name="l64"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l65"></a>                </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i ,morse_list</span><span class=cF7>)</span><span class=cF0>)
-<a name="l66"></a>                        </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l67"></a>                </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>13</span><span class=cF0>, morse_list</span><span class=cF7>)</span><span class=cF0>)
-<a name="l68"></a>                        </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l69"></a>                </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>26</span><span class=cF0>, morse_list</span><span class=cF7>)</span><span class=cF0>)
-<a name="l70"></a>                        </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l71"></a>                </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>39</span><span class=cF0>, morse_list</span><span class=cF7>)</span><span class=cF0>)
-<a name="l72"></a>                        </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l73"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l74"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l75"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l63"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>13</span><span class=cF0>; i++ )
+<a name="l64"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l65"></a>        </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i ,morse_list</span><span class=cF7>)</span><span class=cF0>)
+<a name="l66"></a>            </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l67"></a>        </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>13</span><span class=cF0>, morse_list</span><span class=cF7>)</span><span class=cF0>)
+<a name="l68"></a>            </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l69"></a>        </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>26</span><span class=cF0>, morse_list</span><span class=cF7>)</span><span class=cF0>)
+<a name="l70"></a>            </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l71"></a>        </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>ListSub</span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>39</span><span class=cF0>, morse_list</span><span class=cF7>)</span><span class=cF0>)
+<a name="l72"></a>            </span><span class=cF6>&quot;$RED$%C$FG$ %-7s &quot;</span><span class=cF0>, *st, st + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l73"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l74"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l75"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
 <a name="l76"></a>}
 <a name="l77"></a>
 <a name="l78"></a></span><span class=cF1>F64</span><span class=cF0>  m_start, m_end, dt_down, dt_up;
@@ -107,118 +107,118 @@ body {background-color:#000000;}
 <a name="l80"></a>
 <a name="l81"></a></span><span class=cF1>U8</span><span class=cF0> *MorseTimes(</span><span class=cF9>CDoc</span><span class=cF0> *, </span><span class=cF9>CDocEntry</span><span class=cF0> *, </span><span class=cF9>CTask</span><span class=cF0> *mem_task)
 <a name="l82"></a>{
-<a name="l83"></a>        </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>64</span><span class=cF0>, mem_task);
+<a name="l83"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>64</span><span class=cF0>, mem_task);
 <a name="l84"></a>
-<a name="l85"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(st, </span><span class=cF6>&quot;Down:%10.6f Up:%10.6f&quot;</span><span class=cF0>, dt_down, dt_up);
+<a name="l85"></a>    </span><span class=cF5>StrPrint</span><span class=cF0>(st, </span><span class=cF6>&quot;Down:%10.6f Up:%10.6f&quot;</span><span class=cF0>, dt_down, dt_up);
 <a name="l86"></a>
-<a name="l87"></a>        </span><span class=cF1>return</span><span class=cF0> st;
+<a name="l87"></a>    </span><span class=cF1>return</span><span class=cF0> st;
 <a name="l88"></a>}
 <a name="l89"></a>
 <a name="l90"></a></span><span class=cF9>I64</span><span class=cF0> MorseWaitKey()
 <a name="l91"></a>{
-<a name="l92"></a>        </span><span class=cF9>I64</span><span class=cF0> ch;
-<a name="l93"></a>        </span><span class=cF1>F64</span><span class=cF0> dt;
+<a name="l92"></a>    </span><span class=cF9>I64</span><span class=cF0> ch;
+<a name="l93"></a>    </span><span class=cF1>F64</span><span class=cF0> dt;
 <a name="l94"></a>
-<a name="l95"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l96"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l97"></a>                </span><span class=cF1>if</span><span class=cF0> (m_start)
-<a name="l98"></a>                {
-<a name="l99"></a>                        </span><span class=cF5>MessageGet</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
-<a name="l100"></a>                        m_end = </span><span class=cF5>tS</span><span class=cF0>;
-<a name="l101"></a>                        </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l102"></a>                        dt_down = m_end - m_start;
-<a name="l103"></a>                        m_start = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l104"></a>                        space_sent = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l105"></a>                        </span><span class=cF1>if</span><span class=cF0> (dt_down &lt; M_DASH_THRESHOLD)
-<a name="l106"></a>                                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF6>'.'</span><span class=cF0>;
-<a name="l107"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l108"></a>                                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>;
-<a name="l109"></a>                }
-<a name="l110"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l111"></a>                {
-<a name="l112"></a>                        </span><span class=cF1>if</span><span class=cF0> (!space_sent)
-<a name="l113"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l114"></a>                                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF7>)</span><span class=cF0>)
-<a name="l115"></a>                                {
-<a name="l116"></a>                                        dt = </span><span class=cF5>tS</span><span class=cF0> - m_end;
-<a name="l117"></a>                                        </span><span class=cF1>if</span><span class=cF0> (dt &gt;= M_SPACE_THRESHOLD)
-<a name="l118"></a>                                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l119"></a>                                                space_sent = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l120"></a>                                                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l121"></a>                                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l122"></a>                                        </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l123"></a>                                }
-<a name="l124"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l125"></a>                        </span><span class=cF1>else</span><span class=cF0>
-<a name="l126"></a>                                ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l127"></a>                        m_start = </span><span class=cF5>tS</span><span class=cF0>;
-<a name="l128"></a>                        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>74</span><span class=cF0>);
-<a name="l129"></a>                        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_ESC</span><span class=cF0>)
-<a name="l130"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l131"></a>                                </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l132"></a>                                </span><span class=cF5>Sound</span><span class=cF0>;
-<a name="l133"></a>                                </span><span class=cF5>throw</span><span class=cF0>; </span><span class=cF2>//exit program</span><span class=cF0>
-<a name="l134"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l135"></a>                        dt_up = m_start - m_end;
-<a name="l136"></a>                        </span><span class=cF1>if</span><span class=cF0> (!space_sent &amp;&amp; dt_up &gt;= M_SPACE_THRESHOLD)
-<a name="l137"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l138"></a>                                space_sent = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l139"></a>                                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l140"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l141"></a>                }
-<a name="l142"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l96"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l97"></a>        </span><span class=cF1>if</span><span class=cF0> (m_start)
+<a name="l98"></a>        {
+<a name="l99"></a>            </span><span class=cF5>MessageGet</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l100"></a>            m_end = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l101"></a>            </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l102"></a>            dt_down = m_end - m_start;
+<a name="l103"></a>            m_start = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l104"></a>            space_sent = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l105"></a>            </span><span class=cF1>if</span><span class=cF0> (dt_down &lt; M_DASH_THRESHOLD)
+<a name="l106"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l107"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l108"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>;
+<a name="l109"></a>        }
+<a name="l110"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l111"></a>        {
+<a name="l112"></a>            </span><span class=cF1>if</span><span class=cF0> (!space_sent)
+<a name="l113"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l114"></a>                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF7>)</span><span class=cF0>)
+<a name="l115"></a>                {
+<a name="l116"></a>                    dt = </span><span class=cF5>tS</span><span class=cF0> - m_end;
+<a name="l117"></a>                    </span><span class=cF1>if</span><span class=cF0> (dt &gt;= M_SPACE_THRESHOLD)
+<a name="l118"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l119"></a>                        space_sent = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l120"></a>                        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l121"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l122"></a>                    </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l123"></a>                }
+<a name="l124"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l125"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l126"></a>                ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l127"></a>            m_start = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l128"></a>            </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>74</span><span class=cF0>);
+<a name="l129"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_ESC</span><span class=cF0>)
+<a name="l130"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l131"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l132"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l133"></a>                </span><span class=cF5>throw</span><span class=cF0>; </span><span class=cF2>//exit program</span><span class=cF0>
+<a name="l134"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l135"></a>            dt_up = m_start - m_end;
+<a name="l136"></a>            </span><span class=cF1>if</span><span class=cF0> (!space_sent &amp;&amp; dt_up &gt;= M_SPACE_THRESHOLD)
+<a name="l137"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l138"></a>                space_sent = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l139"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l140"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l141"></a>        }
+<a name="l142"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l143"></a>}
 <a name="l144"></a>
 <a name="l145"></a></span><span class=cF1>U0</span><span class=cF0> Morse()
 <a name="l146"></a>{
-<a name="l147"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e;
-<a name="l148"></a>        </span><span class=cF9>I64</span><span class=cF0> ch;
-<a name="l149"></a>        </span><span class=cF1>U8</span><span class=cF0> buf[</span><span class=cFE>8</span><span class=cF0>], *dst, *src;
+<a name="l147"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e;
+<a name="l148"></a>    </span><span class=cF9>I64</span><span class=cF0> ch;
+<a name="l149"></a>    </span><span class=cF1>U8</span><span class=cF0> buf[</span><span class=cFE>8</span><span class=cF0>], *dst, *src;
 <a name="l150"></a>
-<a name="l151"></a>        MorseTable;
-<a name="l152"></a>        m_start = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l153"></a>        m_end = </span><span class=cF5>tS</span><span class=cF0>;
-<a name="l154"></a>        dt_down = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l155"></a>        dt_up = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l156"></a>        space_sent = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l151"></a>    MorseTable;
+<a name="l152"></a>    m_start = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l153"></a>    m_end = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l154"></a>    dt_down = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l155"></a>    dt_up = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l156"></a>    space_sent = </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l157"></a>
-<a name="l158"></a>        </span><span class=cF6>&quot;$GREEN$&quot;</span><span class=cF0>;
+<a name="l158"></a>    </span><span class=cF6>&quot;$GREEN$&quot;</span><span class=cF0>;
 <a name="l159"></a>
-<a name="l160"></a>        doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, </span><span class=cF6>&quot;$TX+TC,\&quot; \&quot;$&quot;</span><span class=cF0>);
-<a name="l161"></a>        doc_e-&gt;tag_cb = &amp;MorseTimes;
+<a name="l160"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, </span><span class=cF6>&quot;$TX+TC,\&quot; \&quot;$&quot;</span><span class=cF0>);
+<a name="l161"></a>    doc_e-&gt;tag_cb = &amp;MorseTimes;
 <a name="l162"></a>
-<a name="l163"></a>        </span><span class=cF6>&quot;$FG$\n&quot;</span><span class=cF0>;
+<a name="l163"></a>    </span><span class=cF6>&quot;$FG$\n&quot;</span><span class=cF0>;
 <a name="l164"></a>
-<a name="l165"></a>        dst = buf;
-<a name="l166"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l167"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l168"></a>                ch = MorseWaitKey;
-<a name="l169"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SPACE</span><span class=cF0>)
-<a name="l170"></a>                {
-<a name="l171"></a>                        *dst = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l172"></a>                        src = morse_list;
-<a name="l173"></a>                        </span><span class=cF1>while</span><span class=cF0> (*src) </span><span class=cF7>{</span><span class=cF0>
-<a name="l174"></a>                                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>src + </span><span class=cFE>1</span><span class=cF0>, buf</span><span class=cF7>)</span><span class=cF0>)
-<a name="l175"></a>                                {
-<a name="l176"></a>                                        </span><span class=cF6>&quot;$GREEN$%C$FG$&quot;</span><span class=cF0>, *src;
-<a name="l177"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l178"></a>                                }
-<a name="l179"></a>                                </span><span class=cF1>else</span><span class=cF0>
-<a name="l180"></a>                                        src += </span><span class=cF5>StrLen</span><span class=cF0>(src) + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l181"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l182"></a>                        </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l183"></a>                        dst = buf;
-<a name="l184"></a>                }
-<a name="l185"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l186"></a>                {
-<a name="l187"></a>                        </span><span class=cF1>if</span><span class=cF0> (dst - buf &lt; </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>buf</span><span class=cF7>)</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)
-<a name="l188"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l189"></a>                                </span><span class=cF6>''</span><span class=cF0> ch;
-<a name="l190"></a>                                *dst++ = ch;
-<a name="l191"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l192"></a>                }
-<a name="l193"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l194"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l165"></a>    dst = buf;
+<a name="l166"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l167"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l168"></a>        ch = MorseWaitKey;
+<a name="l169"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SPACE</span><span class=cF0>)
+<a name="l170"></a>        {
+<a name="l171"></a>            *dst = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l172"></a>            src = morse_list;
+<a name="l173"></a>            </span><span class=cF1>while</span><span class=cF0> (*src) </span><span class=cF7>{</span><span class=cF0>
+<a name="l174"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>src + </span><span class=cFE>1</span><span class=cF0>, buf</span><span class=cF7>)</span><span class=cF0>)
+<a name="l175"></a>                {
+<a name="l176"></a>                    </span><span class=cF6>&quot;$GREEN$%C$FG$&quot;</span><span class=cF0>, *src;
+<a name="l177"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l178"></a>                }
+<a name="l179"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l180"></a>                    src += </span><span class=cF5>StrLen</span><span class=cF0>(src) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l181"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l182"></a>            </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l183"></a>            dst = buf;
+<a name="l184"></a>        }
+<a name="l185"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l186"></a>        {
+<a name="l187"></a>            </span><span class=cF1>if</span><span class=cF0> (dst - buf &lt; </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>buf</span><span class=cF7>)</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)
+<a name="l188"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l189"></a>                </span><span class=cF6>''</span><span class=cF0> ch;
+<a name="l190"></a>                *dst++ = ch;
+<a name="l191"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l192"></a>        }
+<a name="l193"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l194"></a>    </span><span class=cF5>Sound</span><span class=cF0>;
 <a name="l195"></a>}
 <a name="l196"></a>
 <a name="l197"></a>Morse;

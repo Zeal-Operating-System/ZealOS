@@ -37,31 +37,31 @@ body {background-color:#000000;}
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF6>&quot;Spanish&quot;</span><span class=cF0>;
 <a name="l12"></a></span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>) {
-<a name="l13"></a>        </span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>, </span><span class=cF6>&quot;(Si or No)&quot;</span><span class=cF0>);
-<a name="l14"></a>        </span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Salida&quot;</span><span class=cF0>);
-<a name="l15"></a>        </span><span class=cF5>DefineListLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF6>&quot;No\0Si\0&quot;</span><span class=cF0>);
+<a name="l13"></a>    </span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>, </span><span class=cF6>&quot;(Si or No)&quot;</span><span class=cF0>);
+<a name="l14"></a>    </span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Salida&quot;</span><span class=cF0>);
+<a name="l15"></a>    </span><span class=cF5>DefineListLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF6>&quot;No\0Si\0&quot;</span><span class=cF0>);
 <a name="l16"></a>}
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cF1>Bool</span><span class=cF0> Quit()
 <a name="l19"></a>{
-<a name="l20"></a>        </span><span class=cF1>Bool</span><span class=cF0> res;
-<a name="l21"></a>        </span><span class=cF1>U8</span><span class=cF0>  *st;
-<a name="l22"></a>        </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l20"></a>    </span><span class=cF1>Bool</span><span class=cF0> res;
+<a name="l21"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st;
+<a name="l22"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
 <a name="l23"></a>
-<a name="l24"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l25"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l26"></a>                </span><span class=cF6>&quot;%S %S?&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>;
-<a name="l27"></a>                st = </span><span class=cF5>StrGet</span><span class=cF0>;
-<a name="l28"></a>                i = </span><span class=cF5>DefineMatch</span><span class=cF0>(st, </span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
-<a name="l29"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
-<a name="l30"></a>                {
-<a name="l31"></a>                        res = i;
-<a name="l32"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l33"></a>                }
-<a name="l34"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l35"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l24"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l25"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l26"></a>        </span><span class=cF6>&quot;%S %S?&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>;
+<a name="l27"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l28"></a>        i = </span><span class=cF5>DefineMatch</span><span class=cF0>(st, </span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
+<a name="l29"></a>        </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l30"></a>        {
+<a name="l31"></a>            res = i;
+<a name="l32"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l33"></a>        }
+<a name="l34"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l35"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l36"></a>
-<a name="l37"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l37"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l38"></a>}
 <a name="l39"></a>
 <a name="l40"></a>Quit;

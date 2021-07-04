@@ -33,17 +33,17 @@ body {background-color:#000000;}
 <a name="l6"></a></span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0> | </span><span class=cF3>SCF_CTRL</span><span class=cF0>);
 <a name="l7"></a></span><span class=cF6>&quot;\nCd(\&quot;::/Demo\&quot;);\n&quot;</span><span class=cF0>;
 <a name="l8"></a>
-<a name="l9"></a>TourPut(        </span><span class=cF6>&quot;AutoComplete is a feature which also lets you jump to source code of &quot;</span><span class=cF0>
-<a name="l10"></a>                        </span><span class=cF6>&quot;symbols.  The function keys jump to code, while the number keys jump to &quot;</span><span class=cF0>
-<a name="l11"></a>                        </span><span class=cF6>&quot;dictionary definitions.\n\n&quot;</span><span class=cF0>
-<a name="l12"></a>                        </span><span class=cF6>&quot;We will now place some text on the command line and jump to source code.\n&quot;</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l9"></a>TourPut(    </span><span class=cF6>&quot;AutoComplete is a feature which also lets you jump to source code of &quot;</span><span class=cF0>
+<a name="l10"></a>            </span><span class=cF6>&quot;symbols.  The function keys jump to code, while the number keys jump to &quot;</span><span class=cF0>
+<a name="l11"></a>            </span><span class=cF6>&quot;dictionary definitions.\n\n&quot;</span><span class=cF0>
+<a name="l12"></a>            </span><span class=cF6>&quot;We will now place some text on the command line and jump to source code.\n&quot;</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l13"></a>
 <a name="l14"></a></span><span class=cF6>&quot;BootHD&quot;</span><span class=cF0>;
 <a name="l15"></a>
-<a name="l16"></a>TourPut(        </span><span class=cF6>&quot;Look at the $GREEN$BootHDIns$FG$ entry in the AutoComplete &quot;</span><span class=cF0>
-<a name="l17"></a>                        </span><span class=cF6>&quot;window.  Notice it is underlined.  This means a source code link is &quot;</span><span class=cF0>
-<a name="l18"></a>                        </span><span class=cF6>&quot;available.\n\n&quot;</span><span class=cF0>
-<a name="l19"></a>                        </span><span class=cF6>&quot;Press $GREEN$&lt;CTRL-SHIFT-F1&gt;$FG$ to jump to source code.\n&quot;</span><span class=cF0>);
+<a name="l16"></a>TourPut(    </span><span class=cF6>&quot;Look at the $GREEN$BootHDIns$FG$ entry in the AutoComplete &quot;</span><span class=cF0>
+<a name="l17"></a>            </span><span class=cF6>&quot;window.  Notice it is underlined.  This means a source code link is &quot;</span><span class=cF0>
+<a name="l18"></a>            </span><span class=cF6>&quot;available.\n\n&quot;</span><span class=cF0>
+<a name="l19"></a>            </span><span class=cF6>&quot;Press $GREEN$&lt;CTRL-SHIFT-F1&gt;$FG$ to jump to source code.\n&quot;</span><span class=cF0>);
 <a name="l20"></a></span><span class=cF5>InKeyGet</span><span class=cF0>(</span><span class=cF3>SC_F1</span><span class=cF0> | </span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF0>);
 <a name="l21"></a></span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
 <a name="l22"></a></span><span class=cF5>WinToTop</span><span class=cF0>;</span><span class=cF2>//Kludge</span><span class=cF0>
@@ -58,12 +58,12 @@ body {background-color:#000000;}
 <a name="l31"></a></span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>, </span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF0>);
 <a name="l32"></a></span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
 <a name="l33"></a>
-<a name="l34"></a>TourPut(        </span><span class=cF6>&quot;Tip: You can restart the AutoComplete window if you have closed it by &quot;</span><span class=cF0>
-<a name="l35"></a>                        </span><span class=cF6>&quot;pressing $GREEN$&lt;CTRL-F1&gt;$FG$.\n&quot;</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l34"></a>TourPut(    </span><span class=cF6>&quot;Tip: You can restart the AutoComplete window if you have closed it by &quot;</span><span class=cF0>
+<a name="l35"></a>            </span><span class=cF6>&quot;pressing $GREEN$&lt;CTRL-F1&gt;$FG$.\n&quot;</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l36"></a>
-<a name="l37"></a>TourPut(        </span><span class=cF6>&quot;You can also use the $GREEN$Man()$FG$ function to jump to source code.  &quot;</span><span class=cF0>
-<a name="l38"></a>                        </span><span class=cF6>&quot;(I use AutoComplete.)  The $GREEN$Man()$FG$ is good for short symbol &quot;</span><span class=cF0>
-<a name="l39"></a>                        </span><span class=cF6>&quot;names or when inside the debugger.\n&quot;</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l37"></a>TourPut(    </span><span class=cF6>&quot;You can also use the $GREEN$Man()$FG$ function to jump to source code.  &quot;</span><span class=cF0>
+<a name="l38"></a>            </span><span class=cF6>&quot;(I use AutoComplete.)  The $GREEN$Man()$FG$ is good for short symbol &quot;</span><span class=cF0>
+<a name="l39"></a>            </span><span class=cF6>&quot;names or when inside the debugger.\n&quot;</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l40"></a></span><span class=cF5>InPrint</span><span class=cF0>(, </span><span class=cF6>&quot;Man(\&quot;U\&quot;);&quot;</span><span class=cF0>);
 <a name="l41"></a></span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1500</span><span class=cF0>);
 <a name="l42"></a></span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;

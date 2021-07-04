@@ -25,39 +25,39 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:courier;font-size:10pt">
-<a name="l1"></a><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>This makes a new Bible file</span><span class=cF0>
+<a name="l1"></a><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>This makes a new Bible file</span><span class=cF0>
 <a name="l2"></a></span><span class=cF2>//with line numbers.</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a></span><span class=cF1>U0</span><span class=cF0> NumBible()
 <a name="l5"></a>{
-<a name="l6"></a>        </span><span class=cF9>CDoc</span><span class=cF0>            *doc_in  = </span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/Bible.TXT&quot;</span><span class=cF0>, </span><span class=cF3>DOCF_PLAIN_TEXT_TABS</span><span class=cF0>),
-<a name="l7"></a>                                *doc_out = </span><span class=cF5>DocNew</span><span class=cF0>(</span><span class=cF6>&quot;~/DemoNumBible.DD&quot;</span><span class=cF0>);
-<a name="l8"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e = doc_in-&gt;head.next;
+<a name="l6"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc_in  = </span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/Bible.TXT&quot;</span><span class=cF0>, </span><span class=cF3>DOCF_PLAIN_TEXT_TABS</span><span class=cF0>),
+<a name="l7"></a>                *doc_out = </span><span class=cF5>DocNew</span><span class=cF0>(</span><span class=cF6>&quot;~/DemoNumBible.DD&quot;</span><span class=cF0>);
+<a name="l8"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e = doc_in-&gt;head.next;
 <a name="l9"></a>
-<a name="l10"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc_in)
-<a name="l11"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l12"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
-<a name="l13"></a>                {
-<a name="l14"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;%05d %s&quot;</span><span class=cF0>, doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0>, doc_e-&gt;tag);
-<a name="l15"></a>                        doc_e = doc_e-&gt;next;
-<a name="l16"></a>                        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
-<a name="l17"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l18"></a>                                </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
-<a name="l19"></a>                                doc_e = doc_e-&gt;next;
-<a name="l20"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l21"></a>                }
-<a name="l22"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
-<a name="l23"></a>                {
-<a name="l24"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;%05d\n&quot;</span><span class=cF0>, doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0>);
-<a name="l25"></a>                        doc_e = doc_e-&gt;next;
-<a name="l26"></a>                }
-<a name="l27"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l28"></a>                        doc_e = doc_e-&gt;next;
-<a name="l29"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l30"></a>        doc_out-&gt;flags |= </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>;
-<a name="l31"></a>        </span><span class=cF5>DocWrite</span><span class=cF0>(doc_out);
-<a name="l32"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(doc_out);
-<a name="l33"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(doc_in);
+<a name="l10"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc_in)
+<a name="l11"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l12"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
+<a name="l13"></a>        {
+<a name="l14"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;%05d %s&quot;</span><span class=cF0>, doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0>, doc_e-&gt;tag);
+<a name="l15"></a>            doc_e = doc_e-&gt;next;
+<a name="l16"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l17"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l18"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l19"></a>                doc_e = doc_e-&gt;next;
+<a name="l20"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>        }
+<a name="l22"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l23"></a>        {
+<a name="l24"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc_out, </span><span class=cF6>&quot;%05d\n&quot;</span><span class=cF0>, doc_e-&gt;y + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l25"></a>            doc_e = doc_e-&gt;next;
+<a name="l26"></a>        }
+<a name="l27"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l28"></a>            doc_e = doc_e-&gt;next;
+<a name="l29"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l30"></a>    doc_out-&gt;flags |= </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>;
+<a name="l31"></a>    </span><span class=cF5>DocWrite</span><span class=cF0>(doc_out);
+<a name="l32"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc_out);
+<a name="l33"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc_in);
 <a name="l34"></a>}
 <a name="l35"></a>
 <a name="l36"></a>NumBible;</span></pre></body>

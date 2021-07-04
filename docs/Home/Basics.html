@@ -30,10 +30,10 @@ body {background-color:#000000;}
 <a name="l3"></a>There are 4 main types of symbols. A symbol is just a fancy name for something with a name.
 <a name="l4"></a>
 <a name="l5"></a>We have:
-<a name="l6"></a>        - Functions
-<a name="l7"></a>        - Variables
-<a name="l8"></a>        - Definitions
-<a name="l9"></a>        - Classes
+<a name="l6"></a>    - Functions
+<a name="l7"></a>    - Variables
+<a name="l8"></a>    - Definitions
+<a name="l9"></a>    - Classes
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF2>//This is a variable</span><span class=cF0>
 <a name="l12"></a></span><span class=cF9>I64</span><span class=cF0> my_var;
@@ -61,21 +61,21 @@ body {background-color:#000000;}
 <a name="l34"></a>
 <a name="l35"></a>Bit #7 will be the sign bit. If the sign bit is 1, then it is a negative number.
 <a name="l36"></a>
-<a name="l37"></a>#       7       6       5       4       3       2       1       0
+<a name="l37"></a>#   7   6   5   4   3   2   1   0
 <a name="l38"></a>
-<a name="l39"></a></span><span class=cF4>0b      0       0       0       0       0       0       1       1</span><span class=cF0>       =&gt;  </span><span class=cF1>3</span><span class=cF0>
-<a name="l40"></a>        |                                               |       |
-<a name="l41"></a>  sign   the number &quot;3&quot; in binary                                       
+<a name="l39"></a></span><span class=cF4>0b  0   0   0   0   0   0   1   1</span><span class=cF0>   =&gt;  </span><span class=cF1>3</span><span class=cF0>
+<a name="l40"></a>    |                       |   |
+<a name="l41"></a>  sign   the number &quot;3&quot; in binary                   
 <a name="l42"></a>
 <a name="l43"></a>
 <a name="l44"></a>If it a number is signed that means that it cannot use all of its bits to represent a value.
 <a name="l45"></a>Therefore, the range of numbers it can represent is split between the negative side and the positive side of numbers.
 <a name="l46"></a>
-<a name="l47"></a>                                  </span><span class=cF6>                                        Unsigned byte range
+<a name="l47"></a>                  </span><span class=cF6>                    Unsigned byte range
 <a name="l48"></a>
-<a name="l49"></a>                                                                |----------------------------|
-<a name="l50"></a>                                  </span><span class=cF5>     Signed byte range
-<a name="l51"></a>                                  |--------------------------|
+<a name="l49"></a>                                |----------------------------|
+<a name="l50"></a>                  </span><span class=cF5>     Signed byte range
+<a name="l51"></a>                  |--------------------------|
 <a name="l52"></a></span><span class=cF0>-255            -127            0           127             255
 <a name="l53"></a>
 <a name="l54"></a>
@@ -86,17 +86,17 @@ body {background-color:#000000;}
 <a name="l59"></a>
 <a name="l60"></a>Unsigned number types:
 <a name="l61"></a>
-<a name="l62"></a>        </span><span class=cF1>U8</span><span class=cF0>      -- </span><span class=cFE>1</span><span class=cF0> byte (</span><span class=cFE>8</span><span class=cF0> bits) unsigned number
-<a name="l63"></a>        </span><span class=cF1>I8</span><span class=cF0>      -- </span><span class=cFE>1</span><span class=cF0> byte (</span><span class=cFE>8</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>7</span><span class=cF0> bits) signed number
+<a name="l62"></a>    </span><span class=cF1>U8</span><span class=cF0>  -- </span><span class=cFE>1</span><span class=cF0> byte (</span><span class=cFE>8</span><span class=cF0> bits) unsigned number
+<a name="l63"></a>    </span><span class=cF1>I8</span><span class=cF0>  -- </span><span class=cFE>1</span><span class=cF0> byte (</span><span class=cFE>8</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>7</span><span class=cF0> bits) signed number
 <a name="l64"></a>
-<a name="l65"></a>        </span><span class=cF9>U16</span><span class=cF0> -- </span><span class=cFE>2</span><span class=cF0> byte (</span><span class=cFE>16</span><span class=cF0> bits) unsigned number
-<a name="l66"></a>        </span><span class=cF9>I16</span><span class=cF0> -- </span><span class=cFE>2</span><span class=cF0> byte (</span><span class=cFE>16</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>15</span><span class=cF0> bits) signed number
+<a name="l65"></a>    </span><span class=cF9>U16</span><span class=cF0> -- </span><span class=cFE>2</span><span class=cF0> byte (</span><span class=cFE>16</span><span class=cF0> bits) unsigned number
+<a name="l66"></a>    </span><span class=cF9>I16</span><span class=cF0> -- </span><span class=cFE>2</span><span class=cF0> byte (</span><span class=cFE>16</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>15</span><span class=cF0> bits) signed number
 <a name="l67"></a>
-<a name="l68"></a>        </span><span class=cF9>U32</span><span class=cF0> -- </span><span class=cFE>4</span><span class=cF0> byte (</span><span class=cFE>32</span><span class=cF0> bits) unsigned number
-<a name="l69"></a>        </span><span class=cF9>I32</span><span class=cF0> -- </span><span class=cFE>4</span><span class=cF0> byte (</span><span class=cFE>32</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>31</span><span class=cF0> bits) signed number
+<a name="l68"></a>    </span><span class=cF9>U32</span><span class=cF0> -- </span><span class=cFE>4</span><span class=cF0> byte (</span><span class=cFE>32</span><span class=cF0> bits) unsigned number
+<a name="l69"></a>    </span><span class=cF9>I32</span><span class=cF0> -- </span><span class=cFE>4</span><span class=cF0> byte (</span><span class=cFE>32</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>31</span><span class=cF0> bits) signed number
 <a name="l70"></a>
-<a name="l71"></a>        </span><span class=cF9>U64</span><span class=cF0>     -- </span><span class=cFE>8</span><span class=cF0> byte (</span><span class=cFE>64</span><span class=cF0> bits) unsigned number
-<a name="l72"></a>        </span><span class=cF9>I64</span><span class=cF0>     -- </span><span class=cFE>8</span><span class=cF0> byte (</span><span class=cFE>64</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>63</span><span class=cF0> bits) signed number
+<a name="l71"></a>    </span><span class=cF9>U64</span><span class=cF0> -- </span><span class=cFE>8</span><span class=cF0> byte (</span><span class=cFE>64</span><span class=cF0> bits) unsigned number
+<a name="l72"></a>    </span><span class=cF9>I64</span><span class=cF0> -- </span><span class=cFE>8</span><span class=cF0> byte (</span><span class=cFE>64</span><span class=cF0> bits - </span><span class=cFE>1</span><span class=cF0> sign bit = </span><span class=cFE>63</span><span class=cF0> bits) signed number
 <a name="l73"></a>
 <a name="l74"></a>
 <a name="l75"></a>Try it out on the command line:

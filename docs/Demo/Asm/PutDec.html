@@ -29,48 +29,48 @@ body {background-color:#000000;}
 <a name="l2"></a>PUT_DEC_U64::
 <a name="l3"></a></span><span class=cF2>//RAX is number to print in decimal.</span><span class=cF0>
 <a name="l4"></a></span><span class=cF2>//Preserves all regs.</span><span class=cF0>
-<a name="l5"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RBP</span><span class=cF0>
-<a name="l6"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RBP</span><span class=cF0>,</span><span class=cFC>RSP</span><span class=cF0>
-<a name="l7"></a>                                </span><span class=cF1>SUB</span><span class=cF0>             </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cFE>24</span><span class=cF0>                                 </span><span class=cF2>//24 char buffer on stack</span><span class=cF0>
+<a name="l5"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
+<a name="l6"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>,</span><span class=cFC>RSP</span><span class=cF0>
+<a name="l7"></a>                </span><span class=cF1>SUB</span><span class=cF0>         </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cFE>24</span><span class=cF0>                 </span><span class=cF2>//24 char buffer on stack</span><span class=cF0>
 <a name="l8"></a>
 <a name="l9"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1910"><span class=cF4>Save regs</span></a><span class=cF2> which C code is free to clobber.  We don't have to for C callers,</span><span class=cF0>
 <a name="l10"></a></span><span class=cF2>//but this function will be nice for ASM callers if it saves all regs.</span><span class=cF0>
-<a name="l11"></a>                                </span><span class=cF3>PUSH_C_REGS</span><span class=cF0>
+<a name="l11"></a>                </span><span class=cF3>PUSH_C_REGS</span><span class=cF0>
 <a name="l12"></a>
-<a name="l13"></a>                                </span><span class=cF1>PUSH</span><span class=cF0>            </span><span class=cFC>RSI</span><span class=cF0>                             </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2>&amp;</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
-<a name="l14"></a>                                </span><span class=cF1>LEA</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]            </span><span class=cF2>//Load addr of end of buffer.</span><span class=cF0>
-<a name="l15"></a>                                                                                                                                </span><span class=cF2>//We picked RSI because of PUT_STR</span><span class=cF0>
-<a name="l16"></a>                                                                                                                                </span><span class=cF2>//We'll move backward</span><span class=cF0>
-<a name="l17"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF1>U8</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>                     </span><span class=cF2>//Terminator</span><span class=cF0>
+<a name="l13"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>                 </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2>&amp;</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l14"></a>                </span><span class=cF1>LEA</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]        </span><span class=cF2>//Load addr of end of buffer.</span><span class=cF0>
+<a name="l15"></a>                                                                </span><span class=cF2>//We picked RSI because of PUT_STR</span><span class=cF0>
+<a name="l16"></a>                                                                </span><span class=cF2>//We'll move backward</span><span class=cF0>
+<a name="l17"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF1>U8</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>         </span><span class=cF2>//Terminator</span><span class=cF0>
 <a name="l18"></a>
-<a name="l19"></a>                                </span><span class=cF1>TEST</span><span class=cF0>            </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>                        </span><span class=cF2>//Special case -- zero</span><span class=cF0>
-<a name="l20"></a>                                </span><span class=cF1>JNZ</span><span class=cF0>             @@05
-<a name="l21"></a>                                </span><span class=cF1>DEC</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>
-<a name="l22"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF1>U8</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cF6>'0'</span><span class=cF0>
-<a name="l23"></a>                                </span><span class=cF1>JMP</span><span class=cF0>             @@15
+<a name="l19"></a>                </span><span class=cF1>TEST</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>            </span><span class=cF2>//Special case -- zero</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF1>JNZ</span><span class=cF0>         @@05
+<a name="l21"></a>                </span><span class=cF1>DEC</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l22"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF1>U8</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cF6>'0'</span><span class=cF0>
+<a name="l23"></a>                </span><span class=cF1>JMP</span><span class=cF0>         @@15
 <a name="l24"></a>
-<a name="l25"></a>@@05:                   </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>                         </span><span class=cF2>//Divides by 10</span><span class=cF0>
+<a name="l25"></a>@@05:           </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>             </span><span class=cF2>//Divides by 10</span><span class=cF0>
 <a name="l26"></a>
-<a name="l27"></a>@@10:                   </span><span class=cF1>XOR</span><span class=cF0>             </span><span class=cFC>RDX</span><span class=cF0>, </span><span class=cFC>RDX</span><span class=cF0>
-<a name="l28"></a>                                </span><span class=cF1>DIV</span><span class=cF0>             </span><span class=cFC>RBX</span><span class=cF0>                             </span><span class=cF2>//RAX=(RDX:RAX)/RBX with remainder in RDX</span><span class=cF0>
-<a name="l29"></a>                                </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RDX</span><span class=cF0>, </span><span class=cF6>'0'</span><span class=cF0>
-<a name="l30"></a>                                </span><span class=cF1>DEC</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>
-<a name="l31"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF1>U8</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>DL</span><span class=cF0>
-<a name="l32"></a>                                </span><span class=cF1>TEST</span><span class=cF0>            </span><span class=cFC>RAX</span><span class=cF0>,</span><span class=cFC>RAX</span><span class=cF0>
-<a name="l33"></a>                                </span><span class=cF1>JNZ</span><span class=cF0>             @@10
+<a name="l27"></a>@@10:           </span><span class=cF1>XOR</span><span class=cF0>         </span><span class=cFC>RDX</span><span class=cF0>, </span><span class=cFC>RDX</span><span class=cF0>
+<a name="l28"></a>                </span><span class=cF1>DIV</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>                 </span><span class=cF2>//RAX=(RDX:RAX)/RBX with remainder in RDX</span><span class=cF0>
+<a name="l29"></a>                </span><span class=cF1>ADD</span><span class=cF0>         </span><span class=cFC>RDX</span><span class=cF0>, </span><span class=cF6>'0'</span><span class=cF0>
+<a name="l30"></a>                </span><span class=cF1>DEC</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l31"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF1>U8</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>DL</span><span class=cF0>
+<a name="l32"></a>                </span><span class=cF1>TEST</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>,</span><span class=cFC>RAX</span><span class=cF0>
+<a name="l33"></a>                </span><span class=cF1>JNZ</span><span class=cF0>         @@10
 <a name="l34"></a>
-<a name="l35"></a>@@15:                   </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_STR</span><span class=cF0>
-<a name="l36"></a>                                </span><span class=cF1>POP</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>
-<a name="l37"></a>                                </span><span class=cF3>POP_C_REGS</span><span class=cF0>
-<a name="l38"></a>                                </span><span class=cF1>LEAVE</span><span class=cF0>
-<a name="l39"></a>                                </span><span class=cF1>RET</span><span class=cF0>
+<a name="l35"></a>@@15:           </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_STR</span><span class=cF0>
+<a name="l36"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l37"></a>                </span><span class=cF3>POP_C_REGS</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF1>LEAVE</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF1>RET</span><span class=cF0>
 <a name="l40"></a>
-<a name="l41"></a>_DO_IT::                </span><span class=cF2>//The convention is C-callable routines have underscores.</span><span class=cF0>
-<a name="l42"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFE>122333221</span><span class=cF0>
-<a name="l43"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            PUT_DEC_U64
-<a name="l44"></a>                                </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>
-<a name="l45"></a>                                </span><span class=cF1>CALL</span><span class=cF0>            </span><span class=cFD>PUT_CHARS</span><span class=cF0>
-<a name="l46"></a>                                </span><span class=cF1>RET</span><span class=cF0>
+<a name="l41"></a>_DO_IT::        </span><span class=cF2>//The convention is C-callable routines have underscores.</span><span class=cF0>
+<a name="l42"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFE>122333221</span><span class=cF0>
+<a name="l43"></a>                </span><span class=cF1>CALL</span><span class=cF0>        PUT_DEC_U64
+<a name="l44"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>
+<a name="l45"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_CHARS</span><span class=cF0>
+<a name="l46"></a>                </span><span class=cF1>RET</span><span class=cF0>
 <a name="l47"></a>}
 <a name="l48"></a>
 <a name="l49"></a></span><span class=cF5>Call</span><span class=cF0>(_DO_IT);

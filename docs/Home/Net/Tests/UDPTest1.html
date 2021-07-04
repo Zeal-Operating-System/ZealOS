@@ -28,38 +28,38 @@ body {background-color:#000000;}
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> UDPTest()
 <a name="l2"></a>{
 <a name="l3"></a>
-<a name="l4"></a>        CAddressInfo    *result = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l5"></a>        </span><span class=cF9>I64</span><span class=cF0>                              error;
-<a name="l6"></a>        </span><span class=cF1>U8</span><span class=cF0>                              *b;
+<a name="l4"></a>    CAddressInfo    *result = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>              error;
+<a name="l6"></a>    </span><span class=cF1>U8</span><span class=cF0>              *b;
 <a name="l7"></a>
-<a name="l8"></a>        </span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip == </span><span class=cFE>0</span><span class=cF0>)
-<a name="l9"></a>        </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>// This test needs to have the network configured first.</span><span class=cF0>
-<a name="l10"></a>                NetConfigure;
-<a name="l11"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l8"></a>    </span><span class=cF1>if</span><span class=cF0> (ipv4_globals.local_ip == </span><span class=cFE>0</span><span class=cF0>)
+<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>// This test needs to have the network configured first.</span><span class=cF0>
+<a name="l10"></a>        NetConfigure;
+<a name="l11"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l12"></a>
-<a name="l13"></a>        error = DNSAddressInfoGet(</span><span class=cF6>&quot;zenithos.org&quot;</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, &amp;result);
-<a name="l14"></a>        </span><span class=cF1>if</span><span class=cF0> (error &lt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l15"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l16"></a>                NetErr(</span><span class=cF6>&quot;failed at DNS Get Address Info.&quot;</span><span class=cF0>);
-<a name="l17"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l19"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l20"></a>                CUDPSocket                      *u = UDPSocket(AF_INET);
-<a name="l21"></a>                CSocketAddressIPV4      *ipv4_addr = result-&gt;address;
+<a name="l13"></a>    error = DNSAddressInfoGet(</span><span class=cF6>&quot;zenithos.org&quot;</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, &amp;result);
+<a name="l14"></a>    </span><span class=cF1>if</span><span class=cF0> (error &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l15"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>        NetErr(</span><span class=cF6>&quot;failed at DNS Get Address Info.&quot;</span><span class=cF0>);
+<a name="l17"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l19"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l20"></a>        CUDPSocket          *u = UDPSocket(AF_INET);
+<a name="l21"></a>        CSocketAddressIPV4  *ipv4_addr = result-&gt;address;
 <a name="l22"></a>
-<a name="l23"></a>                ipv4_addr-&gt;port = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>80</span><span class=cF0>);
-<a name="l24"></a>                b = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>4</span><span class=cF0>);
-<a name="l25"></a>                b[</span><span class=cFE>0</span><span class=cF0>] = </span><span class=cFE>0xDE</span><span class=cF0>;
-<a name="l26"></a>                b[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>0xAD</span><span class=cF0>;
-<a name="l27"></a>                b[</span><span class=cFE>2</span><span class=cF0>] = </span><span class=cFE>0xBE</span><span class=cF0>;
-<a name="l28"></a>                b[</span><span class=cFE>3</span><span class=cF0>] = </span><span class=cFE>0xEF</span><span class=cF0>;
+<a name="l23"></a>        ipv4_addr-&gt;port = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>80</span><span class=cF0>);
+<a name="l24"></a>        b = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>4</span><span class=cF0>);
+<a name="l25"></a>        b[</span><span class=cFE>0</span><span class=cF0>] = </span><span class=cFE>0xDE</span><span class=cF0>;
+<a name="l26"></a>        b[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>0xAD</span><span class=cF0>;
+<a name="l27"></a>        b[</span><span class=cFE>2</span><span class=cF0>] = </span><span class=cFE>0xBE</span><span class=cF0>;
+<a name="l28"></a>        b[</span><span class=cFE>3</span><span class=cF0>] = </span><span class=cFE>0xEF</span><span class=cF0>;
 <a name="l29"></a>
-<a name="l30"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l31"></a>                {
-<a name="l32"></a>                        UDPSocketSendTo(u, b, </span><span class=cFE>4</span><span class=cF0>, ipv4_addr);
-<a name="l33"></a>                        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
-<a name="l34"></a>                }
-<a name="l35"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l30"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l31"></a>        {
+<a name="l32"></a>            UDPSocketSendTo(u, b, </span><span class=cFE>4</span><span class=cF0>, ipv4_addr);
+<a name="l33"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>300</span><span class=cF0>);
+<a name="l34"></a>        }
+<a name="l35"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l36"></a>}
 <a name="l37"></a>
 <a name="l38"></a>UDPTest;</span></pre></body>

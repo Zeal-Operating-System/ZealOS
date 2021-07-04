@@ -27,122 +27,122 @@ body {background-color:#000000;}
 <pre style="font-family:courier;font-size:10pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> Main()
 <a name="l2"></a>{
-<a name="l3"></a>        </span><span class=cF1>F64</span><span class=cF0>              theta = </span><span class=cFE>0</span><span class=cF0>, phi = </span><span class=cFE>0</span><span class=cF0>, omega = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l4"></a>        </span><span class=cF9>CD3I32</span><span class=cF0>   poly[</span><span class=cFE>4</span><span class=cF0>];
-<a name="l5"></a>        </span><span class=cF9>CDC</span><span class=cF0>             *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
+<a name="l3"></a>    </span><span class=cF1>F64</span><span class=cF0>      theta = </span><span class=cFE>0</span><span class=cF0>, phi = </span><span class=cFE>0</span><span class=cF0>, omega = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l4"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>   poly[</span><span class=cFE>4</span><span class=cF0>];
+<a name="l5"></a>    </span><span class=cF9>CDC</span><span class=cF0>     *dc = </span><span class=cF5>DCAlias</span><span class=cF0>;
 <a name="l6"></a>
-<a name="l7"></a>        </span><span class=cF5>DCDepthBufAlloc</span><span class=cF0>(dc);
-<a name="l8"></a>        dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
-<a name="l9"></a>        </span><span class=cF1>try</span><span class=cF0>
-<a name="l10"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l11"></a>                </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>CharScan</span><span class=cF0>)
-<a name="l12"></a>                {
-<a name="l13"></a>                        </span><span class=cF5>DCDepthBufReset</span><span class=cF0>(dc);
-<a name="l14"></a>                        </span><span class=cF5>DCSymmetrySet</span><span class=cF0>(dc, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>,
-<a name="l15"></a>                                                        </span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x, 
-<a name="l16"></a>                                                        </span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y);
-<a name="l17"></a>                        dc-&gt;color = </span><span class=cF3>LTBLUE</span><span class=cF0>;
-<a name="l18"></a>                        </span><span class=cF5>GrLine</span><span class=cF0>(dc, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>, 
-<a name="l19"></a>                                                        </span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x, 
-<a name="l20"></a>                                                        </span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y);
+<a name="l7"></a>    </span><span class=cF5>DCDepthBufAlloc</span><span class=cF0>(dc);
+<a name="l8"></a>    dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l9"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>CharScan</span><span class=cF0>)
+<a name="l12"></a>        {
+<a name="l13"></a>            </span><span class=cF5>DCDepthBufReset</span><span class=cF0>(dc);
+<a name="l14"></a>            </span><span class=cF5>DCSymmetrySet</span><span class=cF0>(dc, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>,
+<a name="l15"></a>                            </span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x, 
+<a name="l16"></a>                            </span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y);
+<a name="l17"></a>            dc-&gt;color = </span><span class=cF3>LTBLUE</span><span class=cF0>;
+<a name="l18"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(dc, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l19"></a>                            </span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x, 
+<a name="l20"></a>                            </span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y);
 <a name="l21"></a>
-<a name="l22"></a>                        </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(dc-&gt;r);
-<a name="l23"></a>                        </span><span class=cF5>Mat4x4RotX</span><span class=cF0>(dc-&gt;r, omega);
-<a name="l24"></a>                        </span><span class=cF5>Mat4x4RotY</span><span class=cF0>(dc-&gt;r, phi);
-<a name="l25"></a>                        </span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(dc-&gt;r, theta);
-<a name="l26"></a>                        </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(dc, dc-&gt;r);
+<a name="l22"></a>            </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(dc-&gt;r);
+<a name="l23"></a>            </span><span class=cF5>Mat4x4RotX</span><span class=cF0>(dc-&gt;r, omega);
+<a name="l24"></a>            </span><span class=cF5>Mat4x4RotY</span><span class=cF0>(dc-&gt;r, phi);
+<a name="l25"></a>            </span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(dc-&gt;r, theta);
+<a name="l26"></a>            </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(dc, dc-&gt;r);
 <a name="l27"></a>
-<a name="l28"></a>                        dc-&gt;x = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width  / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l29"></a>                        dc-&gt;y = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l30"></a>                        dc-&gt;z = </span><span class=cFE>500</span><span class=cF0>;
+<a name="l28"></a>            dc-&gt;x = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width  / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l29"></a>            dc-&gt;y = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l30"></a>            dc-&gt;z = </span><span class=cFE>500</span><span class=cF0>;
 <a name="l31"></a>
-<a name="l32"></a>                        dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
-<a name="l33"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l34"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
-<a name="l35"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l36"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
-<a name="l37"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l38"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l39"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
-<a name="l40"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l41"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l42"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l43"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l44"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l45"></a>                        </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
+<a name="l32"></a>            dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l33"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l34"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
+<a name="l35"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l36"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
+<a name="l37"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l38"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l39"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
+<a name="l40"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l41"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l42"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l43"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l44"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l45"></a>            </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
 <a name="l46"></a>
-<a name="l47"></a>                        dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
-<a name="l48"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l49"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
-<a name="l50"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l51"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
-<a name="l52"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l53"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l54"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
-<a name="l55"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l56"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l57"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l58"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l59"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l60"></a>                        </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
+<a name="l47"></a>            dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l48"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l49"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
+<a name="l50"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l51"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
+<a name="l52"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l53"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l54"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
+<a name="l55"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l56"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l57"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l58"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l59"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l60"></a>            </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
 <a name="l61"></a>
-<a name="l62"></a>                        dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
-<a name="l63"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l64"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
-<a name="l65"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
-<a name="l66"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
-<a name="l67"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l68"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
-<a name="l69"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
-<a name="l70"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l71"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
-<a name="l72"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l73"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l74"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
-<a name="l75"></a>                        </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
+<a name="l62"></a>            dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l63"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l64"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
+<a name="l65"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
+<a name="l66"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
+<a name="l67"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l68"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
+<a name="l69"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
+<a name="l70"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l71"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
+<a name="l72"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l73"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l74"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
+<a name="l75"></a>            </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
 <a name="l76"></a>
-<a name="l77"></a>                        dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0> + </span><span class=cF3>GREEN</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>ROPF_DITHER</span><span class=cF0>;
-<a name="l78"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l79"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
-<a name="l80"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l81"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
-<a name="l82"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l83"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l84"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
-<a name="l85"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l86"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l87"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
-<a name="l88"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
-<a name="l89"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l90"></a>                        </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
+<a name="l77"></a>            dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0> + </span><span class=cF3>GREEN</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>ROPF_DITHER</span><span class=cF0>;
+<a name="l78"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l79"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
+<a name="l80"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l81"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
+<a name="l82"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l83"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].z = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l84"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>275</span><span class=cF0>;
+<a name="l85"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l86"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l87"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l88"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>150</span><span class=cF0>;
+<a name="l89"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l90"></a>            </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
 <a name="l91"></a>
-<a name="l92"></a>                        dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0> + </span><span class=cF3>GREEN</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>ROPF_DITHER</span><span class=cF0>;
-<a name="l93"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l94"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l95"></a>                        poly[</span><span class=cFE>0</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
-<a name="l96"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
-<a name="l97"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l98"></a>                        poly[</span><span class=cFE>1</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
-<a name="l99"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
-<a name="l100"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l101"></a>                        poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l102"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
-<a name="l103"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
-<a name="l104"></a>                        poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l105"></a>                        </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
+<a name="l92"></a>            dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0> + </span><span class=cF3>GREEN</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>ROPF_DITHER</span><span class=cF0>;
+<a name="l93"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l94"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l95"></a>            poly[</span><span class=cFE>0</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
+<a name="l96"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
+<a name="l97"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l98"></a>            poly[</span><span class=cFE>1</span><span class=cF0>].z = -</span><span class=cFE>50</span><span class=cF0>;
+<a name="l99"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].x = </span><span class=cFE>155</span><span class=cF0>;
+<a name="l100"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l101"></a>            poly[</span><span class=cFE>2</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l102"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].x = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l103"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].y = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l104"></a>            poly[</span><span class=cFE>3</span><span class=cF0>].z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l105"></a>            </span><span class=cF5>GrFillPoly3</span><span class=cF0>(dc, </span><span class=cFE>4</span><span class=cF0>, poly);
 <a name="l106"></a>
-<a name="l107"></a>                        </span><span class=cF5>Refresh</span><span class=cF0>;
-<a name="l108"></a>                        </span><span class=cF5>DCFill</span><span class=cF0>;
-<a name="l109"></a>                        theta += </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l110"></a>                        phi += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l111"></a>                        omega += </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
-<a name="l112"></a>                }
-<a name="l113"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l114"></a>        </span><span class=cF1>catch</span><span class=cF0>
-<a name="l115"></a>                </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l107"></a>            </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l108"></a>            </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l109"></a>            theta += </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l110"></a>            phi += </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l111"></a>            omega += </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l112"></a>        }
+<a name="l113"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l115"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
 <a name="l116"></a>
-<a name="l117"></a>        </span><span class=cF5>DCFill</span><span class=cF0>;
-<a name="l118"></a>        </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l117"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l118"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
 <a name="l119"></a>}
 <a name="l120"></a>
 <a name="l121"></a>Main;

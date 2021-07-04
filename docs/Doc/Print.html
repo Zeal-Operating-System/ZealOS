@@ -41,14 +41,14 @@ body {background-color:#000000;}
 <a name="l14"></a>&lt;aux_format_num&gt;:
 <a name="l15"></a>
 <a name="l16"></a>  For </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>, </span><span class=cF2>&quot;%d&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%u&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; causes thousands mode.  </span><span class=cF2>&quot;%h?n&quot;</span><span class=cF0> will pick a var exponent multiples of three unit, 
-<a name="l17"></a>  while </span><span class=cF2>&quot;%h-3n&quot;</span><span class=cF0> will display milli units or </span><span class=cF2>&quot;%h6n&quot;</span><span class=cF0> will display mega units.  The </span><span class=cF2>'k'</span><span class=cF0> flag is always on for </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>.        See </span><span class=cF4>
+<a name="l17"></a>  while </span><span class=cF2>&quot;%h-3n&quot;</span><span class=cF0> will display milli units or </span><span class=cF2>&quot;%h6n&quot;</span><span class=cF0> will display mega units.  The </span><span class=cF2>'k'</span><span class=cF0> flag is always on for </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>.    See </span><span class=cF4>
 <a name="l18"></a>  </span><a href="https://tomawezome.github.io/ZealOS/Demo/Print.html#l1"><span class=cF4>::/Demo/Print.CC</span></a><span class=cF0>.
 <a name="l19"></a>  
 <a name="l20"></a>For </span><span class=cF2>&quot;%c&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%C&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; repeats the char that many times.
 <a name="l21"></a>
 <a name="l22"></a>&lt;format_code&gt;:
 <a name="l23"></a>
-<a name="l24"></a>  </span><span class=cF2>&quot;%n&quot;</span><span class=cF0> floating point in engineering notation, exponents being multiples of three.      If it has a &lt;aux_format&gt; code, it will 
+<a name="l24"></a>  </span><span class=cF2>&quot;%n&quot;</span><span class=cF0> floating point in engineering notation, exponents being multiples of three.  If it has a &lt;aux_format&gt; code, it will 
 <a name="l25"></a>  display scientific units letters.
 <a name="l26"></a>  
 <a name="l27"></a>  </span><span class=cF2>&quot;%S&quot;</span><span class=cF0> </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.html#l57"><span class=cF4>Define</span></a><span class=cF0>() entry.
@@ -77,7 +77,7 @@ body {background-color:#000000;}
 <a name="l50"></a>  
 <a name="l51"></a>  </span><span class=cF2>&quot;%z&quot;</span><span class=cF0> sub_entry of an enumerated list of text entries.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrA.html#l377"><span class=cF4>ListSub</span></a><span class=cF0>().  Pass sub_entry_num first, list second.
 <a name="l52"></a>  
-<a name="l53"></a>  </span><span class=cF2>&quot;%Z&quot;</span><span class=cF0> </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.html#l16"><span class=cF4>DefineListLoad</span></a><span class=cF0>() subentry.       Pass sub_entry_num first, define_name second.
+<a name="l53"></a>  </span><span class=cF2>&quot;%Z&quot;</span><span class=cF0> </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.html#l16"><span class=cF4>DefineListLoad</span></a><span class=cF0>() subentry.   Pass sub_entry_num first, define_name second.
 <a name="l54"></a>  
 <a name="l55"></a>  </span><span class=cF2>&quot;%Q&quot;</span><span class=cF0> convert &quot;\&quot; to &quot;\\&quot; and quote to backslash quote. (For use in creating strs in strs.)
 <a name="l56"></a>  
@@ -110,7 +110,7 @@ body {background-color:#000000;}
 <a name="l83"></a></span><span class=cF4>
 <a name="l84"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrTextBase.html#l324"><span class=cF4>TextPrint</span></a><span class=cF0>(CTask *task, I64 x, I64 y, I64 attr, U8 *format, ...) plots to </span><span class=cF4><u>gr.text_base</u></span><span class=cF0>.
 <a name="l85"></a></span><span class=cF4>
-<a name="l86"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l700"><span class=cF4>ExePrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string.        Note: It returns the res of the last executed expression.
+<a name="l86"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l700"><span class=cF4>ExePrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string.    Note: It returns the res of the last executed expression.
 <a name="l87"></a></span><span class=cF4>
 <a name="l88"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Registry.html#l168"><span class=cF4>Once</span></a><span class=cF0>(U8 *format, ...) Writes User code to </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.html#l1"><span class=cF4>Registry</span></a><span class=cF0> to be executed next boot.
 <a name="l89"></a></span><span class=cF4>
@@ -122,7 +122,7 @@ body {background-color:#000000;}
 <a name="l95"></a></span><span class=cF4>
 <a name="l96"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l475"><span class=cF4>User</span></a><span class=cF0>(U8 *format, ...) Spawns a user and execute a string on start-up.
 <a name="l97"></a></span><span class=cF4>
-<a name="l98"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l475"><span class=cF4>PopUpPrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string in a pop-up win.      Note: It returns the res of the last executed 
+<a name="l98"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l475"><span class=cF4>PopUpPrint</span></a><span class=cF0>(U8 *format, ...) compiles and execute a string in a pop-up win.  Note: It returns the res of the last executed 
 <a name="l99"></a>expression.</span><span class=cF4>
 <a name="l100"></a></span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPopUp.html#l13"><span class=cF4>PopUpViewPrint</span></a><span class=cF0>(U8 *format, ...) creates a pop-up window and views text.
 <a name="l101"></a>

@@ -30,236 +30,236 @@ body {background-color:#000000;}
 <a name="l3"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DocCharDist</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y)
 <a name="l4"></a>{
 <a name="l5"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cF3>FONT_WIDTH</span><span class=cF0> == </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>
-<a name="l6"></a>        </span><span class=cF1>return</span><span class=cF0> (</span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF0>doc-&gt;x - x</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF0>doc-&gt;y - y</span><span class=cF7>)</span><span class=cF0>) * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF1>return</span><span class=cF0> (</span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF0>doc-&gt;x - x</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF0>doc-&gt;y - y</span><span class=cF7>)</span><span class=cF0>) * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
 <a name="l7"></a>}
 <a name="l8"></a>
 <a name="l9"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocDelToNum</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> num)
 <a name="l10"></a>{
-<a name="l11"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e = doc-&gt;head.next, *doc_e2;
+<a name="l11"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e = doc-&gt;head.next, *doc_e2;
 <a name="l12"></a>
-<a name="l13"></a>        </span><span class=cF1>while</span><span class=cF0> (num-- &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; doc_e != doc)
-<a name="l14"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l15"></a>                doc_e2 = doc_e-&gt;next;
-<a name="l16"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; (</span><span class=cF3>DOCEF_HOLD</span><span class=cF0> | </span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
-<a name="l17"></a>                {
-<a name="l18"></a>                        </span><span class=cF1>if</span><span class=cF0> (doc_e == doc-&gt;cur_entry)
-<a name="l19"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l20"></a>                                doc-&gt;cur_entry  = doc_e2;
-<a name="l21"></a>                                doc-&gt;cur_col    = doc_e2-&gt;min_col;
-<a name="l22"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l23"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_e);
-<a name="l24"></a>                }
-<a name="l25"></a>                doc_e = doc_e2;
-<a name="l26"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF1>while</span><span class=cF0> (num-- &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; doc_e != doc)
+<a name="l14"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l15"></a>        doc_e2 = doc_e-&gt;next;
+<a name="l16"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; (</span><span class=cF3>DOCEF_HOLD</span><span class=cF0> | </span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l17"></a>        {
+<a name="l18"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e == doc-&gt;cur_entry)
+<a name="l19"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l20"></a>                doc-&gt;cur_entry  = doc_e2;
+<a name="l21"></a>                doc-&gt;cur_col    = doc_e2-&gt;min_col;
+<a name="l22"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l23"></a>            </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_e);
+<a name="l24"></a>        }
+<a name="l25"></a>        doc_e = doc_e2;
+<a name="l26"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l27"></a>}
 <a name="l28"></a>
 <a name="l29"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocDelToEntry</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *clear_entry, </span><span class=cF1>Bool</span><span class=cF0> clear_holds)
 <a name="l30"></a>{
-<a name="l31"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e = doc-&gt;head.next, *doc_e2;
+<a name="l31"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e = doc-&gt;head.next, *doc_e2;
 <a name="l32"></a>
-<a name="l33"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
-<a name="l34"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l35"></a>                doc_e2 = doc_e-&gt;next;
-<a name="l36"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; (</span><span class=cF3>DOCEF_HOLD</span><span class=cF0> | </span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> || clear_holds)
-<a name="l37"></a>                {
-<a name="l38"></a>                        </span><span class=cF1>if</span><span class=cF0> (doc_e == doc-&gt;cur_entry)
-<a name="l39"></a>                        </span><span class=cF7>{</span><span class=cF0>
-<a name="l40"></a>                                doc-&gt;cur_entry  = doc_e2;
-<a name="l41"></a>                                doc-&gt;cur_col    = doc_e2-&gt;min_col;
-<a name="l42"></a>                        </span><span class=cF7>}</span><span class=cF0>
-<a name="l43"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_e);
-<a name="l44"></a>                }
-<a name="l45"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e == clear_entry)
-<a name="l46"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l47"></a>                doc_e = doc_e2;
-<a name="l48"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l34"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l35"></a>        doc_e2 = doc_e-&gt;next;
+<a name="l36"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; (</span><span class=cF3>DOCEF_HOLD</span><span class=cF0> | </span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> || clear_holds)
+<a name="l37"></a>        {
+<a name="l38"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e == doc-&gt;cur_entry)
+<a name="l39"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l40"></a>                doc-&gt;cur_entry  = doc_e2;
+<a name="l41"></a>                doc-&gt;cur_col    = doc_e2-&gt;min_col;
+<a name="l42"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l43"></a>            </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_e);
+<a name="l44"></a>        }
+<a name="l45"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e == clear_entry)
+<a name="l46"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l47"></a>        doc_e = doc_e2;
+<a name="l48"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l49"></a>}
 <a name="l50"></a>
 <a name="l51"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocBorderListDraw</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
 <a name="l52"></a>{
-<a name="l53"></a>        </span><span class=cF9>CTask</span><span class=cF0>   *win_task = doc-&gt;win_task;
-<a name="l54"></a>        </span><span class=cF9>I64</span><span class=cF0>              i, y = -</span><span class=cFE>1</span><span class=cF0>, attr = win_task-&gt;border_attr &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
-<a name="l55"></a>        </span><span class=cF9>U64</span><span class=cF0>              ch;
-<a name="l56"></a>        </span><span class=cF9>CDoc</span><span class=cF0>    *tmpl = doc;
-<a name="l57"></a>        </span><span class=cF9>CD3I64</span><span class=cF0>   saved_scroll;
+<a name="l53"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *win_task = doc-&gt;win_task;
+<a name="l54"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, y = -</span><span class=cFE>1</span><span class=cF0>, attr = win_task-&gt;border_attr &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l55"></a>    </span><span class=cF9>U64</span><span class=cF0>      ch;
+<a name="l56"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *tmpl = doc;
+<a name="l57"></a>    </span><span class=cF9>CD3I64</span><span class=cF0>   saved_scroll;
 <a name="l58"></a>
-<a name="l59"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpl &amp;&amp; tmpl-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
-<a name="l60"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l61"></a>                y += (</span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>tmpl-&gt;desc</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>7</span><span class=cF0>) &gt;&gt; </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//StrLen+1</span><span class=cF0>
-<a name="l62"></a>                tmpl = tmpl-&gt;parent_doc;
-<a name="l63"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l64"></a>        tmpl = doc;
-<a name="l65"></a>        </span><span class=cF1>if</span><span class=cF0> (y &gt; win_task-&gt;win_height)
-<a name="l66"></a>                y = win_task-&gt;win_height;
-<a name="l67"></a>        </span><span class=cF5>WinScrollNull</span><span class=cF0>(win_task, &amp;saved_scroll);
-<a name="l68"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpl &amp;&amp; tmpl-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
-<a name="l69"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l70"></a>                ch = tmpl-&gt;desc;
-<a name="l71"></a>                i = (</span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>ch</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>7</span><span class=cF0>) &gt;&gt; </span><span class=cFE>3</span><span class=cF0>;         </span><span class=cF2>//StrLen</span><span class=cF0>
-<a name="l72"></a>                ch = </span><span class=cF5>EndianU64</span><span class=cF0>(ch &lt;&lt; </span><span class=cF7>(</span><span class=cF0>(</span><span class=cFE>8</span><span class=cF0> - i) &lt;&lt; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>);
-<a name="l73"></a>                attr = win_task-&gt;border_attr &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
-<a name="l74"></a>                </span><span class=cF1>while</span><span class=cF0> (i-- &amp;&amp; y &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l75"></a>                {
-<a name="l76"></a>                        </span><span class=cF5>TextChar</span><span class=cF0>(win_task, </span><span class=cF3>TRUE</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>, --y, attr + ch &amp; </span><span class=cFE>0xFF</span><span class=cF0>);
-<a name="l77"></a>                        ch &gt;&gt;= </span><span class=cFE>8</span><span class=cF0>;
-<a name="l78"></a>                }
-<a name="l79"></a>                y--;
-<a name="l80"></a>                tmpl = tmpl-&gt;parent_doc;
-<a name="l81"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l82"></a>        </span><span class=cF5>WinScrollRestore</span><span class=cF0>(win_task, &amp;saved_scroll);
+<a name="l59"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpl &amp;&amp; tmpl-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l60"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l61"></a>        y += (</span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>tmpl-&gt;desc</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>7</span><span class=cF0>) &gt;&gt; </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//StrLen+1</span><span class=cF0>
+<a name="l62"></a>        tmpl = tmpl-&gt;parent_doc;
+<a name="l63"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l64"></a>    tmpl = doc;
+<a name="l65"></a>    </span><span class=cF1>if</span><span class=cF0> (y &gt; win_task-&gt;win_height)
+<a name="l66"></a>        y = win_task-&gt;win_height;
+<a name="l67"></a>    </span><span class=cF5>WinScrollNull</span><span class=cF0>(win_task, &amp;saved_scroll);
+<a name="l68"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpl &amp;&amp; tmpl-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l69"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l70"></a>        ch = tmpl-&gt;desc;
+<a name="l71"></a>        i = (</span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>ch</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>7</span><span class=cF0>) &gt;&gt; </span><span class=cFE>3</span><span class=cF0>;     </span><span class=cF2>//StrLen</span><span class=cF0>
+<a name="l72"></a>        ch = </span><span class=cF5>EndianU64</span><span class=cF0>(ch &lt;&lt; </span><span class=cF7>(</span><span class=cF0>(</span><span class=cFE>8</span><span class=cF0> - i) &lt;&lt; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>);
+<a name="l73"></a>        attr = win_task-&gt;border_attr &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l74"></a>        </span><span class=cF1>while</span><span class=cF0> (i-- &amp;&amp; y &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l75"></a>        {
+<a name="l76"></a>            </span><span class=cF5>TextChar</span><span class=cF0>(win_task, </span><span class=cF3>TRUE</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>, --y, attr + ch &amp; </span><span class=cFE>0xFF</span><span class=cF0>);
+<a name="l77"></a>            ch &gt;&gt;= </span><span class=cFE>8</span><span class=cF0>;
+<a name="l78"></a>        }
+<a name="l79"></a>        y--;
+<a name="l80"></a>        tmpl = tmpl-&gt;parent_doc;
+<a name="l81"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l82"></a>    </span><span class=cF5>WinScrollRestore</span><span class=cF0>(win_task, &amp;saved_scroll);
 <a name="l83"></a>}
 <a name="l84"></a>
 <a name="l85"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocTop</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l86"></a>{</span><span class=cF2>//Move cursor, cur_entry, to top.</span><span class=cF0>
-<a name="l87"></a>        </span><span class=cF1>Bool</span><span class=cF0> unlock;
+<a name="l87"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
 <a name="l88"></a>
-<a name="l89"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l90"></a>                </span><span class=cF1>return</span><span class=cF0>;
-<a name="l91"></a>        unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
-<a name="l92"></a>        doc-&gt;cur_entry          = doc-&gt;head.next;
-<a name="l93"></a>        doc-&gt;cur_col            = doc-&gt;cur_entry-&gt;min_col;
-<a name="l94"></a>        doc-&gt;x                          = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l95"></a>        doc-&gt;y                          = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l96"></a>        doc-&gt;line_start_col     = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l97"></a>        doc-&gt;top_line_num       = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l89"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l90"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l91"></a>    unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l92"></a>    doc-&gt;cur_entry      = doc-&gt;head.next;
+<a name="l93"></a>    doc-&gt;cur_col        = doc-&gt;cur_entry-&gt;min_col;
+<a name="l94"></a>    doc-&gt;x              = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l95"></a>    doc-&gt;y              = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l96"></a>    doc-&gt;line_start_col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l97"></a>    doc-&gt;top_line_num   = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l98"></a>
-<a name="l99"></a>        </span><span class=cF5>DocFormFwd</span><span class=cF0>(doc);
-<a name="l100"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
-<a name="l101"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l102"></a>                </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l99"></a>    </span><span class=cF5>DocFormFwd</span><span class=cF0>(doc);
+<a name="l100"></a>    </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l101"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l102"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
 <a name="l103"></a>}
 <a name="l104"></a>
 <a name="l105"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocCenter</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> recalc_flags=</span><span class=cF3>RECALCt_NORMAL</span><span class=cF0>)
 <a name="l106"></a>{</span><span class=cF2>//Center win on doc cursor, cur_entry.</span><span class=cF0>
-<a name="l107"></a>        </span><span class=cF1>Bool</span><span class=cF0>   unlock;
-<a name="l108"></a>        </span><span class=cF9>CTask</span><span class=cF0> *task;
+<a name="l107"></a>    </span><span class=cF1>Bool</span><span class=cF0>   unlock;
+<a name="l108"></a>    </span><span class=cF9>CTask</span><span class=cF0> *task;
 <a name="l109"></a>
-<a name="l110"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l111"></a>                </span><span class=cF1>return</span><span class=cF0>;
-<a name="l112"></a>        unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
-<a name="l113"></a>        task = doc-&gt;win_task;
-<a name="l114"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, recalc_flags);
-<a name="l115"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; </span><span class=cF3>DOCF_BORDER_DOC</span><span class=cF7>)</span><span class=cF0>)
-<a name="l116"></a>                doc-&gt;top_line_num = doc-&gt;y - (task-&gt;win_height + </span><span class=cFE>1</span><span class=cF0>) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
-<a name="l117"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l118"></a>                </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l110"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l111"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l112"></a>    unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l113"></a>    task = doc-&gt;win_task;
+<a name="l114"></a>    </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, recalc_flags);
+<a name="l115"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; </span><span class=cF3>DOCF_BORDER_DOC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l116"></a>        doc-&gt;top_line_num = doc-&gt;y - (task-&gt;win_height + </span><span class=cFE>1</span><span class=cF0>) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l117"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l118"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
 <a name="l119"></a>}
 <a name="l120"></a>
 <a name="l121"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocBottom</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l122"></a>{</span><span class=cF2>//Move cursor, cur_entry, to bottom.</span><span class=cF0>
-<a name="l123"></a>        </span><span class=cF1>Bool</span><span class=cF0> unlock;
+<a name="l123"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
 <a name="l124"></a>
-<a name="l125"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l126"></a>                </span><span class=cF1>return</span><span class=cF0>;
-<a name="l127"></a>        unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
-<a name="l128"></a>        doc-&gt;cur_entry  = doc;
-<a name="l129"></a>        doc-&gt;cur_col    = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l130"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
-<a name="l131"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l132"></a>                </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l125"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l126"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l127"></a>    unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l128"></a>    doc-&gt;cur_entry  = doc;
+<a name="l129"></a>    doc-&gt;cur_col    = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l130"></a>    </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l131"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l132"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
 <a name="l133"></a>}
 <a name="l134"></a>
 <a name="l135"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocClear</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> clear_holds=</span><span class=cF3>FALSE</span><span class=cF0>)
 <a name="l136"></a>{</span><span class=cF2>//Clear all doc entries, except +H, hold entries.</span><span class=cF0>
-<a name="l137"></a>        </span><span class=cF1>Bool</span><span class=cF0> unlock;
-<a name="l138"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l139"></a>                </span><span class=cF1>return</span><span class=cF0>;
-<a name="l140"></a>        unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
-<a name="l141"></a>        </span><span class=cF5>DocBottom</span><span class=cF0>(doc);
-<a name="l142"></a>        </span><span class=cF1>if</span><span class=cF0> (clear_holds)
-<a name="l143"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CL+H$&quot;</span><span class=cF0>);
-<a name="l144"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l145"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CL$&quot;</span><span class=cF0>);
-<a name="l146"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
-<a name="l147"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l148"></a>                </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l137"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
+<a name="l138"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l139"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l140"></a>    unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l141"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>(doc);
+<a name="l142"></a>    </span><span class=cF1>if</span><span class=cF0> (clear_holds)
+<a name="l143"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CL+H$&quot;</span><span class=cF0>);
+<a name="l144"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l145"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CL$&quot;</span><span class=cF0>);
+<a name="l146"></a>    </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l147"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l148"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
 <a name="l149"></a>}
 <a name="l150"></a>
 <a name="l151"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocCursor</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> show=</span><span class=cF3>OFF</span><span class=cF0>, </span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l152"></a>{</span><span class=cF2>//Show or hide cursor.</span><span class=cF0>
-<a name="l153"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l154"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l155"></a>        </span><span class=cF1>return</span><span class=cF0> !</span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_HIDE_CURSOR</span><span class=cF0>, !show);
+<a name="l153"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l154"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l155"></a>    </span><span class=cF1>return</span><span class=cF0> !</span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_HIDE_CURSOR</span><span class=cF0>, !show);
 <a name="l156"></a>}
 <a name="l157"></a>
 <a name="l158"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocHighlightCursor</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> show=</span><span class=cF3>OFF</span><span class=cF0>, </span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l159"></a>{</span><span class=cF2>//Highlight or Don't highlight cursor.</span><span class=cF0>
-<a name="l160"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l161"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l162"></a>        </span><span class=cF1>return</span><span class=cF0> !</span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>, !show);
+<a name="l160"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l161"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l162"></a>    </span><span class=cF1>return</span><span class=cF0> !</span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_DONT_HIGHLIGHT_CURSOR</span><span class=cF0>, !show);
 <a name="l163"></a>}
 <a name="l164"></a>
 <a name="l165"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocScroll</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>OFF</span><span class=cF0>, </span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l166"></a>{</span><span class=cF2>//Turn scroll bars OFF/ON.</span><span class=cF0>
-<a name="l167"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l168"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l169"></a>        </span><span class=cF1>return</span><span class=cF0> !</span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_NO_SCROLL_BARS</span><span class=cF0>, !val);
+<a name="l167"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l168"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l169"></a>    </span><span class=cF1>return</span><span class=cF0> !</span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_NO_SCROLL_BARS</span><span class=cF0>, !val);
 <a name="l170"></a>}
 <a name="l171"></a>
 <a name="l172"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocCollapse</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> collapse=</span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l173"></a>{</span><span class=cF2>//Collapse or uncollapse all tree widgets.</span><span class=cF0>
-<a name="l174"></a>        </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e;
-<a name="l175"></a>        </span><span class=cF1>Bool</span><span class=cF0>             unlock;
+<a name="l174"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e;
+<a name="l175"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock;
 <a name="l176"></a>
-<a name="l177"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
-<a name="l178"></a>                </span><span class=cF1>return</span><span class=cF0>;
-<a name="l179"></a>        unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
-<a name="l180"></a>        doc_e = doc-&gt;head.next;
-<a name="l181"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
-<a name="l182"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l183"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TREE</span><span class=cF0>)
-<a name="l184"></a>                        </span><span class=cF5>BEqual</span><span class=cF0>(&amp;doc_e-&gt;de_flags, </span><span class=cF3>DOCEf_CHECKED_COLLAPSED</span><span class=cF0>, collapse);
-<a name="l185"></a>                doc_e = doc_e-&gt;next;
-<a name="l186"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l187"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
-<a name="l188"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l189"></a>                </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l177"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l178"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l179"></a>    unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l180"></a>    doc_e = doc-&gt;head.next;
+<a name="l181"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l182"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l183"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TREE</span><span class=cF0>)
+<a name="l184"></a>            </span><span class=cF5>BEqual</span><span class=cF0>(&amp;doc_e-&gt;de_flags, </span><span class=cF3>DOCEf_CHECKED_COLLAPSED</span><span class=cF0>, collapse);
+<a name="l185"></a>        doc_e = doc_e-&gt;next;
+<a name="l186"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l187"></a>    </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l188"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l189"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
 <a name="l190"></a>}
 <a name="l191"></a>
 <a name="l192"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Cmd Line (Typically);Cmd Line (Typically)&quot;</span><span class=cF0>
 <a name="l193"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DocMax</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> i=</span><span class=cF3>I64_MAX</span><span class=cF0>)
 <a name="l194"></a>{</span><span class=cF2>//Set max document entries. (Cmd line buffer size.)</span><span class=cF0>
 <a name="l195"></a></span><span class=cF2>//Adjusts the size of the cmd line buf.</span><span class=cF0>
-<a name="l196"></a>        </span><span class=cF2>//Normally, the cmd line deletes entries</span><span class=cF0>
-<a name="l197"></a>        </span><span class=cF2>//when more are added and the old scroll up.</span><span class=cF0>
-<a name="l198"></a>        </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocTerm.html#l47"><span class=cF4>max_entries</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l199"></a>        </span><span class=cF9>I64</span><span class=cF0>   res;
-<a name="l200"></a>        </span><span class=cF9>CDoc</span><span class=cF0> *doc;
+<a name="l196"></a>    </span><span class=cF2>//Normally, the cmd line deletes entries</span><span class=cF0>
+<a name="l197"></a>    </span><span class=cF2>//when more are added and the old scroll up.</span><span class=cF0>
+<a name="l198"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocTerm.html#l47"><span class=cF4>max_entries</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l199"></a>    </span><span class=cF9>I64</span><span class=cF0>   res;
+<a name="l200"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc;
 <a name="l201"></a>
-<a name="l202"></a>        </span><span class=cF1>if</span><span class=cF0> (doc = </span><span class=cF5>DocPut</span><span class=cF0>)
-<a name="l203"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l204"></a>                res = doc-&gt;max_entries;
-<a name="l205"></a>                doc-&gt;max_entries = i;
-<a name="l206"></a>                </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l207"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l208"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l209"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l202"></a>    </span><span class=cF1>if</span><span class=cF0> (doc = </span><span class=cF5>DocPut</span><span class=cF0>)
+<a name="l203"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l204"></a>        res = doc-&gt;max_entries;
+<a name="l205"></a>        doc-&gt;max_entries = i;
+<a name="l206"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l207"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l208"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l209"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
 <a name="l210"></a>}
 <a name="l211"></a>
 <a name="l212"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Task;StdOut/Task&quot;</span><span class=cF0>
 <a name="l213"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocUpdateTaskDocs</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
 <a name="l214"></a>{</span><span class=cF2>//This is called from </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrScreen.html#l19"><span class=cF4>GrUpdateTaskWin</span></a><span class=cF2>() by the winmgr at 60fps.</span><span class=cF0>
-<a name="l215"></a>        </span><span class=cF9>CDoc</span><span class=cF0> *doc;
-<a name="l216"></a>        </span><span class=cF9>CD3I64</span><span class=cF0> saved_scroll;
+<a name="l215"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc;
+<a name="l216"></a>    </span><span class=cF9>CD3I64</span><span class=cF0> saved_scroll;
 <a name="l217"></a>
-<a name="l218"></a>        </span><span class=cF1>if</span><span class=cF0> (task-&gt;border_src == </span><span class=cF3>BDS_CUR_DRIVE</span><span class=cF0> &amp;&amp; task-&gt;cur_dv)
-<a name="l219"></a>                task-&gt;border_attr = </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF5>Drive2Letter</span><span class=cF7>(</span><span class=cF0>task-&gt;cur_dv</span><span class=cF7>)</span><span class=cF0>);
-<a name="l220"></a>        </span><span class=cF1>if</span><span class=cF0> (task-&gt;title_src == </span><span class=cF3>TTS_TASK_NAME</span><span class=cF0>)
-<a name="l221"></a>                </span><span class=cF5>StrCopy</span><span class=cF0>(task-&gt;task_title, task-&gt;task_name);
-<a name="l222"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocDisplay</span><span class=cF0>(task)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF7>)</span><span class=cF0>)
-<a name="l223"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l224"></a>                </span><span class=cF1>if</span><span class=cF0> (task-&gt;border_src == </span><span class=cF3>BDS_ED_FILENAME_DRIVE</span><span class=cF0>)
-<a name="l225"></a>                        task-&gt;border_attr = </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(*doc-&gt;filename.name);
-<a name="l226"></a>                </span><span class=cF1>if</span><span class=cF0> (task-&gt;title_src == </span><span class=cF3>TTS_ED_FILENAME</span><span class=cF0>)
-<a name="l227"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(task-&gt;task_title, doc-&gt;filename.name, </span><span class=cF3>STR_LEN</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l228"></a>                </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, </span><span class=cF3>RECALCt_TO_SCREEN</span><span class=cF0> | </span><span class=cF3>RECALCF_HAS_CURSOR</span><span class=cF0>);
-<a name="l229"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l230"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocBorder</span><span class=cF0>(task)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF7>)</span><span class=cF0>)
-<a name="l231"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l232"></a>                </span><span class=cF5>WinScrollNull</span><span class=cF0>(task, &amp;saved_scroll);
-<a name="l233"></a>                </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, </span><span class=cF3>RECALCt_TO_SCREEN</span><span class=cF0>);
-<a name="l234"></a>                </span><span class=cF5>WinScrollRestore</span><span class=cF0>(task, &amp;saved_scroll);
-<a name="l235"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l218"></a>    </span><span class=cF1>if</span><span class=cF0> (task-&gt;border_src == </span><span class=cF3>BDS_CUR_DRIVE</span><span class=cF0> &amp;&amp; task-&gt;cur_dv)
+<a name="l219"></a>        task-&gt;border_attr = </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF5>Drive2Letter</span><span class=cF7>(</span><span class=cF0>task-&gt;cur_dv</span><span class=cF7>)</span><span class=cF0>);
+<a name="l220"></a>    </span><span class=cF1>if</span><span class=cF0> (task-&gt;title_src == </span><span class=cF3>TTS_TASK_NAME</span><span class=cF0>)
+<a name="l221"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(task-&gt;task_title, task-&gt;task_name);
+<a name="l222"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocDisplay</span><span class=cF0>(task)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l223"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l224"></a>        </span><span class=cF1>if</span><span class=cF0> (task-&gt;border_src == </span><span class=cF3>BDS_ED_FILENAME_DRIVE</span><span class=cF0>)
+<a name="l225"></a>            task-&gt;border_attr = </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(*doc-&gt;filename.name);
+<a name="l226"></a>        </span><span class=cF1>if</span><span class=cF0> (task-&gt;title_src == </span><span class=cF3>TTS_ED_FILENAME</span><span class=cF0>)
+<a name="l227"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(task-&gt;task_title, doc-&gt;filename.name, </span><span class=cF3>STR_LEN</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l228"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, </span><span class=cF3>RECALCt_TO_SCREEN</span><span class=cF0> | </span><span class=cF3>RECALCF_HAS_CURSOR</span><span class=cF0>);
+<a name="l229"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l230"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocBorder</span><span class=cF0>(task)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF7>)</span><span class=cF0>)
+<a name="l231"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l232"></a>        </span><span class=cF5>WinScrollNull</span><span class=cF0>(task, &amp;saved_scroll);
+<a name="l233"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, </span><span class=cF3>RECALCt_TO_SCREEN</span><span class=cF0>);
+<a name="l234"></a>        </span><span class=cF5>WinScrollRestore</span><span class=cF0>(task, &amp;saved_scroll);
+<a name="l235"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l236"></a>}
 </span></pre></body>
 </html>

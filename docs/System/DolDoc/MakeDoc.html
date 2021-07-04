@@ -41,20 +41,20 @@ body {background-color:#000000;}
 <a name="l14"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l15"></a>
 <a name="l16"></a></span><span class=cF2>//Hash Types</span><span class=cF0>
-<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DHT_DOC_CMD</span><span class=cF0>             </span><span class=cFE>1</span><span class=cF0>
-<a name="l18"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DHT_DOC_FLAG</span><span class=cF0>            </span><span class=cFE>2</span><span class=cF0>
-<a name="l19"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DHT_COLOR</span><span class=cF0>                       </span><span class=cFE>4</span><span class=cF0>
+<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DHT_DOC_CMD</span><span class=cF0>         </span><span class=cFE>1</span><span class=cF0>
+<a name="l18"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DHT_DOC_FLAG</span><span class=cF0>        </span><span class=cFE>2</span><span class=cF0>
+<a name="l19"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>DHT_COLOR</span><span class=cF0>           </span><span class=cFE>4</span><span class=cF0>
 <a name="l20"></a>
 <a name="l21"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDolDocGlobals</span><span class=cF0>
 <a name="l22"></a>{
-<a name="l23"></a>        </span><span class=cF9>CHashTable</span><span class=cF0>      *hash;
-<a name="l24"></a>        </span><span class=cF9>I64</span><span class=cF0>                      default_de_flags                       [</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0>],
-<a name="l25"></a>                                 type_flags_nontag_invis        [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
-<a name="l26"></a>                                 type_flags_form                        [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
-<a name="l27"></a>                                 type_flags_data                        [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
-<a name="l28"></a>                                 type_flags_chk_dup                     [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
-<a name="l29"></a>                                 clean_scan_codes                       [</span><span class=cFE>4</span><span class=cF0>];
-<a name="l30"></a>        </span><span class=cF9>I32</span><span class=cF0>                      default_type_flags                     [</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0>];
+<a name="l23"></a>    </span><span class=cF9>CHashTable</span><span class=cF0>  *hash;
+<a name="l24"></a>    </span><span class=cF9>I64</span><span class=cF0>          default_de_flags           [</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0>],
+<a name="l25"></a>                 type_flags_nontag_invis    [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
+<a name="l26"></a>                 type_flags_form            [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
+<a name="l27"></a>                 type_flags_data            [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
+<a name="l28"></a>                 type_flags_chk_dup         [(</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> + </span><span class=cFE>63</span><span class=cF0>) / </span><span class=cFE>64</span><span class=cF0>],
+<a name="l29"></a>                 clean_scan_codes           [</span><span class=cFE>4</span><span class=cF0>];
+<a name="l30"></a>    </span><span class=cF9>I32</span><span class=cF0>          default_type_flags         [</span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0>];
 <a name="l31"></a>} </span><span class=cFB>doldoc</span><span class=cF0>;
 <a name="l32"></a></span><span class=cF5>MemSet</span><span class=cF0>(&amp;</span><span class=cFB>doldoc</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDolDocGlobals</span><span class=cF7>)</span><span class=cF0>);
 <a name="l33"></a>
