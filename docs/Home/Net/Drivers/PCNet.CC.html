@@ -40,10 +40,10 @@ body {background-color:#000000;}
 <a name="l13"></a>    </span><span class=cF2>-</span><span class=cF0>   </span><span class=cF2>Clear documentation.</span><span class=cF0>
 <a name="l14"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l15"></a>
-<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> PCNET_DEVICE_ID </span><span class=cFE>0x2000</span><span class=cF0>
-<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> PCNET_VENDOR_ID </span><span class=cFE>0x1022</span><span class=cF0>
+<a name="l16"></a></span><span class=cF2>//#define</span><span class=cF0>   </span><span class=cF2>PCNET_DEVICE_ID</span><span class=cF0> </span><span class=cF2>0x2000</span><span class=cF0>
+<a name="l17"></a></span><span class=cF2>//#define</span><span class=cF0>   </span><span class=cF2>PCNET_VENDOR_ID</span><span class=cF0> </span><span class=cF2>0x1022</span><span class=cF0>
 <a name="l18"></a>
-<a name="l19"></a>#</span><span class=cF1>define</span><span class=cF0> PCI_REG_COMMAND </span><span class=cFE>0x04</span><span class=cF0>
+<a name="l19"></a></span><span class=cF2>//#define</span><span class=cF0>   </span><span class=cF2>PCI_REG_COMMAND</span><span class=cF0> </span><span class=cF2>0x04</span><span class=cF0>
 <a name="l20"></a>
 <a name="l21"></a>#</span><span class=cF1>define</span><span class=cF0> PCNET_CMDf_IOEN </span><span class=cFE>0</span><span class=cF0>
 <a name="l22"></a>#</span><span class=cF1>define</span><span class=cF0> PCNET_CMDf_BMEN </span><span class=cFE>2</span><span class=cF0>
@@ -150,7 +150,7 @@ body {background-color:#000000;}
 <a name="l123"></a></span><span class=cF9>CPCIDev</span><span class=cF0> *PCNetPCIDevFind()
 <a name="l124"></a>{</span><span class=cF2>// Find and return PCNetII card as a CPCIDev pointer.</span><span class=cF0>
 <a name="l125"></a>
-<a name="l126"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PCIDevFind</span><span class=cF0>(,, PCNET_VENDOR_ID, PCNET_DEVICE_ID);
+<a name="l126"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PCIDevFind</span><span class=cF0>(,, PCIV_PCNET, PCID_PCNET);
 <a name="l127"></a>}
 <a name="l128"></a>
 <a name="l129"></a></span><span class=cF9>U32</span><span class=cF0> PCNetIOBaseGet()
@@ -667,7 +667,7 @@ body {background-color:#000000;}
 <a name="l640"></a>    </span><span class=cF5>PCIWriteU16</span><span class=cF0>(pcnet.pci-&gt;bus,
 <a name="l641"></a>                pcnet.pci-&gt;</span><span class=cFB>dev</span><span class=cF0>,
 <a name="l642"></a>                pcnet.pci-&gt;fun,
-<a name="l643"></a>                PCI_REG_COMMAND,
+<a name="l643"></a>                </span><span class=cF3>PCIR_COMMAND</span><span class=cF0>,
 <a name="l644"></a>                PCNET_CMDF_IOEN | PCNET_CMDF_BMEN);
 <a name="l645"></a>
 <a name="l646"></a>    PCNetReset;

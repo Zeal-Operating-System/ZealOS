@@ -13,10 +13,10 @@
 	-	Clear documentation.
 */
 
-#define	PCNET_DEVICE_ID	0x2000
-#define	PCNET_VENDOR_ID	0x1022
+//#define	PCNET_DEVICE_ID	0x2000
+//#define	PCNET_VENDOR_ID	0x1022
 
-#define	PCI_REG_COMMAND	0x04
+//#define	PCI_REG_COMMAND	0x04
 
 #define	PCNET_CMDf_IOEN	0
 #define	PCNET_CMDf_BMEN	2
@@ -123,7 +123,7 @@ class CPCNetBufferSetup
 CPCIDev *PCNetPCIDevFind()
 {// Find and return PCNetII card as a CPCIDev pointer.
 
-	return PCIDevFind(,, PCNET_VENDOR_ID, PCNET_DEVICE_ID);
+	return PCIDevFind(,, PCIV_PCNET, PCID_PCNET);
 }
 
 U32 PCNetIOBaseGet()
@@ -640,7 +640,7 @@ U0 PCNetInit()
 	PCIWriteU16(pcnet.pci->bus,
 				pcnet.pci->dev,
 				pcnet.pci->fun,
-				PCI_REG_COMMAND,
+				PCIR_COMMAND,
 				PCNET_CMDF_IOEN | PCNET_CMDF_BMEN);
 
 	PCNetReset;
