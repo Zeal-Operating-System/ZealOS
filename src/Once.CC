@@ -22,8 +22,9 @@ U0 Tmp()
 			break;
 		case BOOT_SRC_DVD:
 			"\nIf you answer 'No' you can play with\n"
-						"the live CD without installing.\n\n"
-						"Install onto hard drive ";
+			"the live CD without installing.\n\n"
+			"Install onto hard drive ";
+
 			if (YorN)
 			{
 				DocBottom;
@@ -45,17 +46,6 @@ U0 Tmp()
 			TipOfDay;Sleep(500);
 			TipOfDay;Sleep(500);
 			TipOfDay;
-//			Type("::/Doc/Customize.DD");
-//		if (FileFind("::/Misc/Tour"))
-//		{
-//				"\nTake Tour";
-//				if (YorN)
-//				{
-//					DocBottom;
-//					Cd("::/Misc/Tour");
-//					InFile("Tour");
-//				}
-//			}
 			break;
 	}
 }

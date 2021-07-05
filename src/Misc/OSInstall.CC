@@ -363,7 +363,20 @@ Bool DoInstall(Bool prompt_reboot)
 	DocBottom;
 	if (vm_install)
 	{
-		VMInstallWiz();
+		"\n\nUpgrade an existing install,"
+		"\nor create new Installation? (U/I): ";
+		do
+			ch = ToUpper(CharGet(, FALSE));
+		while (ch != 'U' && ch != 'I');
+
+		if (ch == 'U')
+		{
+			OSUpgrade;
+			prompt_reboot = FALSE;
+		}
+		else
+			VMInstallWiz();
+
 		res = TRUE;
 	}
 	else
@@ -384,7 +397,7 @@ Bool DoInstall(Bool prompt_reboot)
 				RegularInstallWiz();
 				res = TRUE;
 			}
-			else if (ch == 'U')
+			else
 			{
 				OSUpgrade;
 				prompt_reboot = FALSE;

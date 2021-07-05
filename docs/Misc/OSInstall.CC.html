@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.05">
+<meta name="generator" content="ZealOS V0.06">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -390,58 +390,71 @@ body {background-color:#000000;}
 <a name="l363"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
 <a name="l364"></a>    </span><span class=cF1>if</span><span class=cF0> (vm_install)
 <a name="l365"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l366"></a>        VMInstallWiz();
-<a name="l367"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l368"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l369"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l370"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l371"></a>        </span><span class=cF6>&quot;\n\nThis wizard works if you have a partition ready. You can partition the drive or BootHDIns() &quot;</span><span class=cF0>
-<a name="l372"></a>                </span><span class=cF6>&quot;with more options if you do it by hand, not using this wizard.\n\n&quot;</span><span class=cF0>
-<a name="l373"></a>                </span><span class=cF6>&quot;Continue Install Wizard &quot;</span><span class=cF0>;
-<a name="l374"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l375"></a>        {
-<a name="l376"></a>            </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
-<a name="l377"></a>            </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
-<a name="l378"></a>            </span><span class=cF1>do</span><span class=cF0>
-<a name="l379"></a>                ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
-<a name="l380"></a>            </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
-<a name="l381"></a>
-<a name="l382"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'I'</span><span class=cF0>)
-<a name="l383"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l384"></a>                RegularInstallWiz();
-<a name="l385"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l386"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l387"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'U'</span><span class=cF0>)
-<a name="l388"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l389"></a>                OSUpgrade;
-<a name="l390"></a>                prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l391"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l392"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l393"></a>        }
-<a name="l394"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l395"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l396"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l397"></a>    </span><span class=cF1>if</span><span class=cF0> (prompt_reboot)
-<a name="l398"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l399"></a>        </span><span class=cF6>&quot;Reboot Now &quot;</span><span class=cF0>;
-<a name="l400"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l401"></a>        {
-<a name="l402"></a>            </span><span class=cF5>DiscEject</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>);
-<a name="l403"></a>            </span><span class=cF5>Reboot</span><span class=cF0>;
-<a name="l404"></a>        };
-<a name="l405"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l406"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l407"></a>}
-<a name="l408"></a>
-<a name="l409"></a></span><span class=cF1>Bool</span><span class=cF0> OSInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l410"></a>{
-<a name="l411"></a>    DoInstructions;
-<a name="l412"></a>
-<a name="l413"></a>    </span><span class=cF1>return</span><span class=cF0> DoInstall(prompt_reboot);
-<a name="l414"></a>}
-<a name="l415"></a>
-<a name="l416"></a>#</span><span class=cF1>if</span><span class=cF0> </span><span class=cF3>__CMD_LINE__</span><span class=cF0>
-<a name="l417"></a>OSInstall(</span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l418"></a>#</span><span class=cF1>endif</span><span class=cF0>
+<a name="l366"></a>        </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
+<a name="l367"></a>        </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
+<a name="l368"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l369"></a>            ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l370"></a>        </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
+<a name="l371"></a>
+<a name="l372"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'U'</span><span class=cF0>)
+<a name="l373"></a>        {
+<a name="l374"></a>            OSUpgrade;
+<a name="l375"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l376"></a>        }
+<a name="l377"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l378"></a>            VMInstallWiz();
+<a name="l379"></a>
+<a name="l380"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l381"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l382"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l383"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l384"></a>        </span><span class=cF6>&quot;\n\nThis wizard works if you have a partition ready. You can partition the drive or BootHDIns() &quot;</span><span class=cF0>
+<a name="l385"></a>                </span><span class=cF6>&quot;with more options if you do it by hand, not using this wizard.\n\n&quot;</span><span class=cF0>
+<a name="l386"></a>                </span><span class=cF6>&quot;Continue Install Wizard &quot;</span><span class=cF0>;
+<a name="l387"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l388"></a>        {
+<a name="l389"></a>            </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
+<a name="l390"></a>            </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
+<a name="l391"></a>            </span><span class=cF1>do</span><span class=cF0>
+<a name="l392"></a>                ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l393"></a>            </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
+<a name="l394"></a>
+<a name="l395"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'I'</span><span class=cF0>)
+<a name="l396"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l397"></a>                RegularInstallWiz();
+<a name="l398"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l399"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l400"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l401"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l402"></a>                OSUpgrade;
+<a name="l403"></a>                prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l404"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l405"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l406"></a>        }
+<a name="l407"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l408"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l409"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l410"></a>    </span><span class=cF1>if</span><span class=cF0> (prompt_reboot)
+<a name="l411"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l412"></a>        </span><span class=cF6>&quot;Reboot Now &quot;</span><span class=cF0>;
+<a name="l413"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l414"></a>        {
+<a name="l415"></a>            </span><span class=cF5>DiscEject</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>);
+<a name="l416"></a>            </span><span class=cF5>Reboot</span><span class=cF0>;
+<a name="l417"></a>        };
+<a name="l418"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l419"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l420"></a>}
+<a name="l421"></a>
+<a name="l422"></a></span><span class=cF1>Bool</span><span class=cF0> OSInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l423"></a>{
+<a name="l424"></a>    DoInstructions;
+<a name="l425"></a>
+<a name="l426"></a>    </span><span class=cF1>return</span><span class=cF0> DoInstall(prompt_reboot);
+<a name="l427"></a>}
+<a name="l428"></a>
+<a name="l429"></a>#</span><span class=cF1>if</span><span class=cF0> </span><span class=cF3>__CMD_LINE__</span><span class=cF0>
+<a name="l430"></a>OSInstall(</span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l431"></a>#</span><span class=cF1>endif</span><span class=cF0>
 </span></pre></body>
 </html>
