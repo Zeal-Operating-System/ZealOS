@@ -209,7 +209,7 @@ body {background-color:#000000;}
 <a name="l182"></a>
 <a name="l183"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>D</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> show_offset=</span><span class=cF3>TRUE</span><span class=cF0>)
 <a name="l184"></a>{</span><span class=cF2>//Dump mem, showing offsets.</span><span class=cF0>
-<a name="l185"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutS.html#l366"><span class=cF4>DocD</span></a><span class=cF2>() for a live dump.</span><span class=cF0>
+<a name="l185"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l366"><span class=cF4>DocD</span></a><span class=cF2>() for a live dump.</span><span class=cF0>
 <a name="l186"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, ch;
 <a name="l187"></a>    </span><span class=cF1>U8</span><span class=cF0> *ptr = addr;
 <a name="l188"></a>
@@ -257,7 +257,7 @@ body {background-color:#000000;}
 <a name="l230"></a>}
 <a name="l231"></a>
 <a name="l232"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawPrint</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l233"></a>{</span><span class=cF2>//Print using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l257"><span class=cF4>Raw</span></a><span class=cF2> screen output for a length of time.</span><span class=cF0>
+<a name="l233"></a>{</span><span class=cF2>//Print using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF2> screen output for a length of time.</span><span class=cF0>
 <a name="l234"></a></span><span class=cF2>//Your heap must be good.</span><span class=cF0>
 <a name="l235"></a>    </span><span class=cF1>U8</span><span class=cF0>  *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l236"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_raw, old_input_filter;
@@ -276,7 +276,7 @@ body {background-color:#000000;}
 <a name="l249"></a>}
 <a name="l250"></a>
 <a name="l251"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawD</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
-<a name="l252"></a>{</span><span class=cF2>//Dumps a block of mem using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l257"><span class=cF4>Raw</span></a><span class=cF0>
+<a name="l252"></a>{</span><span class=cF2>//Dumps a block of mem using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF0>
 <a name="l253"></a></span><span class=cF2>//screen output for a fixed length</span><span class=cF0>
 <a name="l254"></a>    </span><span class=cF2>//of time.</span><span class=cF0>
 <a name="l255"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_raw, old_input_filter;
@@ -294,7 +294,7 @@ body {background-color:#000000;}
 <a name="l267"></a>}
 <a name="l268"></a>
 <a name="l269"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>RawDm</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
-<a name="l270"></a>{</span><span class=cF2>//Dumps a block of mem using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l257"><span class=cF4>Raw</span></a><span class=cF0>
+<a name="l270"></a>{</span><span class=cF2>//Dumps a block of mem using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF0>
 <a name="l271"></a></span><span class=cF2>//screen output for a fixed length</span><span class=cF0>
 <a name="l272"></a>    </span><span class=cF2>//of time.</span><span class=cF0>
 <a name="l273"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_raw, old_input_filter;
@@ -700,7 +700,7 @@ body {background-color:#000000;}
 <a name="l673"></a>}
 <a name="l674"></a>
 <a name="l675"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault2</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
-<a name="l676"></a>{</span><span class=cF2>//Called from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l91"><span class=cF4>Fault2</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l676"></a>{</span><span class=cF2>//Called from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l91"><span class=cF4>Fault2</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l677"></a></span><span class=cF2>//Be careful not to swap-out and ruin the saved context</span><span class=cF0>
 <a name="l678"></a>    </span><span class=cF1>Bool</span><span class=cF0> was_raw, was_single_user, was_silent, was_in_debug, was_mouse_enabled;
 <a name="l679"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags;

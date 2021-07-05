@@ -166,7 +166,7 @@ body {background-color:#000000;}
 <a name="l139"></a>
 <a name="l140"></a></span><span class=cF9>CMemBlk</span><span class=cF0> *</span><span class=cFD>MemPagTaskAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> pags, </span><span class=cF9>CHeapCtrl</span><span class=cF0> *hc)
 <a name="l141"></a>{</span><span class=cF2>/*hc must be locked.  Don't preempt this routine.</span><span class=cF0>
-<a name="l142"></a></span><span class=cF2>Currently, this is only called from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l142"></a></span><span class=cF2>Currently, this is only called from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l143"></a></span><span class=cF2>Return: NULL if out of memory.</span><span class=cF0>
 <a name="l144"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l145"></a>    </span><span class=cF9>CMemBlk</span><span class=cF0>     *res;

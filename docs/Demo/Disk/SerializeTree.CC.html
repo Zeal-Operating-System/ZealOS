@@ -37,7 +37,7 @@ body {background-color:#000000;}
 <a name="l10"></a>    </span><span class=cF9>I64</span><span class=cF0>          size;
 <a name="l11"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr;
 <a name="l12"></a>
-<a name="l13"></a>    </span><span class=cF5>LineRep1</span><span class=cF0>(tmpde); </span><span class=cF2>//We have </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2>.fullname</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF5>LineRep1</span><span class=cF0>(tmpde); </span><span class=cF2>//We have </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2>.fullname</span><span class=cF0>
 <a name="l14"></a>    </span><span class=cF5>LineRep2</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, tmpde);
 <a name="l15"></a>    </span><span class=cF6>&quot;$GREEN$***************$FG$\n&quot;</span><span class=cF0>;
 <a name="l16"></a>    ptr = </span><span class=cF5>DirTreeSerialize</span><span class=cF0>(tmpde, &amp;size);
@@ -45,7 +45,7 @@ body {background-color:#000000;}
 <a name="l18"></a>    </span><span class=cF5>D</span><span class=cF0>(ptr, size);
 <a name="l19"></a>    </span><span class=cF6>&quot;$GREEN$***************:%7d$FG$\n&quot;</span><span class=cF0>, size;
 <a name="l20"></a>    tmpde = </span><span class=cF5>DirTreeUnserialize</span><span class=cF0>(ptr);
-<a name="l21"></a>    </span><span class=cF5>LineRep2</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, tmpde); </span><span class=cF2>//We don't have </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2>.fullname</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF5>LineRep2</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, tmpde); </span><span class=cF2>//We don't have </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2>.fullname</span><span class=cF0>
 <a name="l22"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde);
 <a name="l23"></a>}
 <a name="l24"></a>

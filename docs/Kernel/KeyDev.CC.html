@@ -49,7 +49,7 @@ body {background-color:#000000;}
 <a name="l22"></a>
 <a name="l23"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PutChars</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> ch)
 <a name="l24"></a>{</span><span class=cF2>//Output chars. Up to 8 chars in a single U64.</span><span class=cF0>
-<a name="l25"></a></span><span class=cF2>//Don't use this.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
+<a name="l25"></a></span><span class=cF2>//Don't use this.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
 <a name="l26"></a>    </span><span class=cF1>while</span><span class=cF0> (ch)
 <a name="l27"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l28"></a>        </span><span class=cF5>PutKey</span><span class=cF0>(ch &amp; </span><span class=cFE>255</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
@@ -58,8 +58,8 @@ body {background-color:#000000;}
 <a name="l31"></a>}
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PutS</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
-<a name="l34"></a>{</span><span class=cF2>//Use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l1110"><span class=cF4>Print</span></a><span class=cF2>(). See </span><span class=cF4><u>Keyboard Devices</u></span><span class=cF2>.</span><span class=cF0>
-<a name="l35"></a></span><span class=cF2>//Don't use this.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
+<a name="l34"></a>{</span><span class=cF2>//Use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.CC.html#l1110"><span class=cF4>Print</span></a><span class=cF2>(). See </span><span class=cF4><u>Keyboard Devices</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l35"></a></span><span class=cF2>//Don't use this.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
 <a name="l36"></a>    </span><span class=cF9>I64</span><span class=cF0>              ch;
 <a name="l37"></a>    </span><span class=cF1>U8</span><span class=cF0>              *ptr;
 <a name="l38"></a>    </span><span class=cF1>Bool</span><span class=cF0>             cont = </span><span class=cF3>TRUE</span><span class=cF0>;
@@ -91,7 +91,7 @@ body {background-color:#000000;}
 <a name="l64"></a>}
 <a name="l65"></a>
 <a name="l66"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyDescSet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l67"></a>{</span><span class=cF2>//Call this from key handler to report desc in </span><a href="https://tomawezome.github.io/ZealOS/System/Training.html#l159"><span class=cF4>KeyMap</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l67"></a>{</span><span class=cF2>//Call this from key handler to report desc in </span><a href="https://tomawezome.github.io/ZealOS/System/Training.CC.html#l159"><span class=cF4>KeyMap</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l68"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l69"></a>
 <a name="l70"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>keydev</span><span class=cF0>.desc, buf);

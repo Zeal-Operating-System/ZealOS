@@ -55,7 +55,7 @@ body {background-color:#000000;}
 <a name="l28"></a>};
 <a name="l29"></a>
 <a name="l30"></a></span><span class=cF1>U0</span><span class=cF0> DumpStruct(</span><span class=cF1>U8</span><span class=cF0> *_d, </span><span class=cF1>U8</span><span class=cF0> *class_name=</span><span class=cF1>lastclass</span><span class=cF0>)
-<a name="l31"></a>{</span><span class=cF2>//lastclass is keyword.</span><span class=cF0>    </span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l31"></a>{</span><span class=cF2>//lastclass is keyword.</span><span class=cF0>    </span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.CC.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l32"></a>    </span><span class=cF9>CHashClass</span><span class=cF0>  *tmpc = </span><span class=cF5>HashFind</span><span class=cF0>(class_name, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_CLASS</span><span class=cF0>);
 <a name="l33"></a>    </span><span class=cF1>U8</span><span class=cF0>          *print_str;
 <a name="l34"></a>    </span><span class=cF9>I64</span><span class=cF0>         *q, default_val;
@@ -71,7 +71,7 @@ body {background-color:#000000;}
 <a name="l44"></a>        </span><span class=cF6>&quot;%s:&quot;</span><span class=cF0>, ml-&gt;str;
 <a name="l45"></a>
 <a name="l46"></a>        </span><span class=cF2>//All our items are I64's.</span><span class=cF0>  </span><span class=cF2>If you want, you can check</span><span class=cF0>
-<a name="l47"></a>        </span><span class=cF2>//the data type of the member var.  See </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.html#l216"><span class=cF4>ClassRep</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l47"></a>        </span><span class=cF2>//the data type of the member var.  See </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.CC.html#l216"><span class=cF4>ClassRep</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l48"></a>        q = _d + ml-&gt;</span><span class=cF1>offset</span><span class=cF0>;
 <a name="l49"></a>
 <a name="l50"></a>        </span><span class=cF1>if</span><span class=cF0> (print_str = </span><span class=cF5>MemberMetaData</span><span class=cF7>(</span><span class=cF6>&quot;print_str&quot;</span><span class=cF0>, ml</span><span class=cF7>)</span><span class=cF0>)
@@ -84,8 +84,8 @@ body {background-color:#000000;}
 <a name="l57"></a>            </span><span class=cF2>//This corrects for the ambiguity, allowing zero percentile.</span><span class=cF0>
 <a name="l58"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MemberMetaFind</span><span class=cF7>(</span><span class=cF6>&quot;percentile&quot;</span><span class=cF0>, ml</span><span class=cF7>)</span><span class=cF0>)
 <a name="l59"></a>        {</span><span class=cF2>//check if it exists</span><span class=cF0>
-<a name="l60"></a>            </span><span class=cF2>//We could use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l927"><span class=cF4>CMemberListMeta</span></a><span class=cF2> structure returned by</span><span class=cF0>
-<a name="l61"></a>            </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/LexLib.html#l64"><span class=cF4>MemberMetaFind</span></a><span class=cF2>() and save a search.</span><span class=cF0>
+<a name="l60"></a>            </span><span class=cF2>//We could use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l927"><span class=cF4>CMemberListMeta</span></a><span class=cF2> structure returned by</span><span class=cF0>
+<a name="l61"></a>            </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/LexLib.CC.html#l64"><span class=cF4>MemberMetaFind</span></a><span class=cF2>() and save a search.</span><span class=cF0>
 <a name="l62"></a>            percentile = </span><span class=cF5>MemberMetaData</span><span class=cF0>(</span><span class=cF6>&quot;percentile&quot;</span><span class=cF0>, ml)(</span><span class=cF1>F64</span><span class=cF0>);
 <a name="l63"></a>            </span><span class=cF6>&quot; percentile: %5.2f&quot;</span><span class=cF0>, percentile;
 <a name="l64"></a>        }

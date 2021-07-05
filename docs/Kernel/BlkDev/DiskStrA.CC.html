@@ -63,7 +63,7 @@ body {background-color:#000000;}
 <a name="l36"></a>}
 <a name="l37"></a>
 <a name="l38"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FilesFindMatch</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_test_name,</span><span class=cF1>U8</span><span class=cF0> *files_find_mask,</span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l39"></a>{</span><span class=cF2>//Does filename meet </span><a href="https://tomawezome.github.io/ZealOS/Doc/FileUtils.html#l1"><span class=cF4>Files Find</span></a><span class=cF2> mask?</span><span class=cF0>
+<a name="l39"></a>{</span><span class=cF2>//Does filename meet </span><a href="https://tomawezome.github.io/ZealOS/Doc/FileUtils.DD.html#l1"><span class=cF4>Files Find</span></a><span class=cF2> mask?</span><span class=cF0>
 <a name="l40"></a>    </span><span class=cF9>I64</span><span class=cF0>  tn_len = </span><span class=cF5>StrLen</span><span class=cF0>(_test_name), mask_len = </span><span class=cF5>StrLen</span><span class=cF0>(files_find_mask);
 <a name="l41"></a>    </span><span class=cF1>U8</span><span class=cF0>  *mask1  = </span><span class=cF5>MAlloc</span><span class=cF0>(mask_len + </span><span class=cFE>1</span><span class=cF0>), *mask2 = </span><span class=cF5>MAlloc</span><span class=cF0>(mask_len + </span><span class=cFE>1</span><span class=cF0>), *ptr, *test_name1, *test_name2;
 <a name="l42"></a>    </span><span class=cF1>Bool</span><span class=cF0> res    = </span><span class=cF3>FALSE</span><span class=cF0>;
@@ -216,7 +216,7 @@ body {background-color:#000000;}
 <a name="l189"></a>}
 <a name="l190"></a>
 <a name="l191"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>FileNameAbs</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_filename, </span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cF3>NONE</span><span class=cF0>)
-<a name="l192"></a>{</span><span class=cF2>//Absolute filename. Accepts </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3228"><span class=cF4>FUF_SCAN_PARENTS</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l192"></a>{</span><span class=cF2>//Absolute filename. Accepts </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3228"><span class=cF4>FUF_SCAN_PARENTS</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l193"></a>    </span><span class=cF1>U8</span><span class=cF0>          *res, *filename, *buf, *buf_file, *buf_dir, *free_filename, *free_buf;
 <a name="l194"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>    de;
 <a name="l195"></a>

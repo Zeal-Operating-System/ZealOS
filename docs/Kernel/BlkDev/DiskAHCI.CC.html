@@ -143,7 +143,7 @@ body {background-color:#000000;}
 <a name="l116"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;port-&gt;cmd_issue, cmd_slot</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//When command has been processed</span><span class=cF0>
 <a name="l117"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l118"></a>
-<a name="l119"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;port-&gt;interrupt_status, </span><span class=cF3>AHCI_PxIf_TFE</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//Task File Error (</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2929"><span class=cF4>ATAS_ERR</span></a><span class=cF2>)</span><span class=cF0>
+<a name="l119"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;port-&gt;interrupt_status, </span><span class=cF3>AHCI_PxIf_TFE</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//Task File Error (</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l2929"><span class=cF4>ATAS_ERR</span></a><span class=cF2>)</span><span class=cF0>
 <a name="l120"></a>        {
 <a name="l121"></a>error:
 <a name="l122"></a>            </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Port %d: Command failed!\n&quot;</span><span class=cF0>, port_num);

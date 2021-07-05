@@ -87,14 +87,22 @@ U0 HtmlPutS(CDoc *doc, I64 u32_attr, I64 *_old_u32_attr, Bool underline_update, 
 U8 *TOSLinkConvert2(U8 *filename, I64 line_num)
 {// ::/  --> http://www.templeos.org/Wb/
 //Make your own LinkConvert routine
-	U8 *res = NULL, *st;
+	U8 *res = NULL, *st1, *st2, extension[STR_LEN];
 
 	if (filename)
 	{
-		st = ExtChange(filename, "html");
-		if (st && StrLen(st) > 3 && !StrNCompare(st + 1, ":/", 2))
-			res = MStrPrint("https://tomawezome.github.io/ZealOS/%s#l%d", st + 3, line_num);
-		Free(st);
+		st1 = StrNew(filename);
+		FileExtRemove(st1, extension);
+		if (StrCompare(extension, "html"))
+			st2 = MStrPrint("%s.%s.html", st1, extension);
+		else
+			st2 = MStrPrint("%s.html", st1);
+		
+//		st = ExtChange(filename, "html");
+		if (st2 && StrLen(st2) > 3 && !StrNCompare(st2 + 1, ":/", 2))
+			res = MStrPrint("https://tomawezome.github.io/ZealOS/%s#l%d", st2 + 3, line_num);
+		Free(st1);
+		Free(st2);
 	}
 
 	return res;

@@ -37,7 +37,7 @@ body {background-color:#000000;}
 <a name="l10"></a>    doc-&gt;find_replace-&gt;filter_lines = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l11"></a>    </span><span class=cF1>if</span><span class=cF0> (src2)
 <a name="l12"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l13"></a>        </span><span class=cF5>DocPutS</span><span class=cF0>(doc, src2); </span><span class=cF2>//Too big </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutS.html#l164"><span class=cF4>DocPrint</span></a><span class=cF2>() is wasteful.</span><span class=cF0>
+<a name="l13"></a>        </span><span class=cF5>DocPutS</span><span class=cF0>(doc, src2); </span><span class=cF2>//Too big </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l164"><span class=cF4>DocPrint</span></a><span class=cF2>() is wasteful.</span><span class=cF0>
 <a name="l14"></a>        src = src2 + </span><span class=cF5>StrLen</span><span class=cF0>(src2) + </span><span class=cFE>1</span><span class=cF0>;
 <a name="l15"></a>        i = size - (</span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CDocBin</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CDocBin</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0>);
 <a name="l16"></a>        </span><span class=cF1>while</span><span class=cF0> (src &lt;= src2 + i)
@@ -58,13 +58,13 @@ body {background-color:#000000;}
 <a name="l31"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l32"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; (</span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_PLAIN_TEXT_TABS</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l33"></a>        </span><span class=cF5>DocBinsValidate</span><span class=cF0>(doc);
-<a name="l34"></a>    </span><span class=cF5>DocTop</span><span class=cF0>(doc); </span><span class=cF2>//Calls </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalc.html#l305"><span class=cF4>DocRecalc</span></a><span class=cF2>().  DOCT_CURSOR will be set.</span><span class=cF0>
+<a name="l34"></a>    </span><span class=cF5>DocTop</span><span class=cF0>(doc); </span><span class=cF2>//Calls </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalc.CC.html#l305"><span class=cF4>DocRecalc</span></a><span class=cF2>().  DOCT_CURSOR will be set.</span><span class=cF0>
 <a name="l35"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
 <a name="l36"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
 <a name="l37"></a>}
 <a name="l38"></a>
 <a name="l39"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l40"></a>{</span><span class=cF2>//Fetch doc from disk. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1403"><span class=cF4>flags</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l40"></a>{</span><span class=cF2>//Fetch doc from disk. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1403"><span class=cF4>flags</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l41"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
 <a name="l42"></a>    </span><span class=cF1>U8</span><span class=cF0>          *src, *name2;
 <a name="l43"></a>    </span><span class=cF9>I64</span><span class=cF0>          size = </span><span class=cFE>0</span><span class=cF0>;
@@ -105,7 +105,7 @@ body {background-color:#000000;}
 <a name="l78"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l79"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc, </span><span class=cF3>RECALCF_ADD_CURSOR</span><span class=cF0>);
 <a name="l80"></a>        </span><span class=cF1>if</span><span class=cF0> (doc-&gt;head.next-&gt;type_u8 == </span><span class=cF3>DOCT_CURSOR</span><span class=cF0>)
-<a name="l81"></a>            </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc-&gt;head.next); </span><span class=cF2>//If no cursor, </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocFile.html#l3"><span class=cF4>DocLoad</span></a><span class=cF2>() puts at top.</span><span class=cF0>
+<a name="l81"></a>            </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc-&gt;head.next); </span><span class=cF2>//If no cursor, </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocFile.CC.html#l3"><span class=cF4>DocLoad</span></a><span class=cF2>() puts at top.</span><span class=cF0>
 <a name="l82"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l83"></a>    </span><span class=cF1>for</span><span class=cF0> (doc_e = doc-&gt;head.next; doc_e != doc; doc_e = doc_e-&gt;next)
 <a name="l84"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -248,7 +248,7 @@ body {background-color:#000000;}
 <a name="l221"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
 <a name="l222"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocInsDoc</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CDoc</span><span class=cF0> *doc2)
 <a name="l223"></a>{</span><span class=cF2>//Insert copy of doc2 into doc at insert pt, cur_entry.</span><span class=cF0>
-<a name="l224"></a></span><span class=cF2>//TODO: </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocNew.html#l261"><span class=cF4>DocReset</span></a><span class=cF0>
+<a name="l224"></a></span><span class=cF2>//TODO: </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocNew.CC.html#l261"><span class=cF4>DocReset</span></a><span class=cF0>
 <a name="l225"></a>    </span><span class=cF1>U8</span><span class=cF0>          *dst;
 <a name="l226"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock_doc, unlock_doc2 = </span><span class=cF5>DocLock</span><span class=cF0>(doc2);
 <a name="l227"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_ne, *doc_e = doc2-&gt;head.next, *doc_ce;
@@ -293,7 +293,7 @@ body {background-color:#000000;}
 <a name="l266"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Compiler;Compiler/Directive&quot;</span><span class=cF0>
 <a name="l267"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>StreamDoc</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
 <a name="l268"></a>{</span><span class=cF2>//Inject doc into compile stream. Use inside #exe{}.</span><span class=cF0>
-<a name="l269"></a></span><span class=cF2>//TODO: </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocNew.html#l261"><span class=cF4>DocReset</span></a><span class=cF0>
+<a name="l269"></a></span><span class=cF2>//TODO: </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocNew.CC.html#l261"><span class=cF4>DocReset</span></a><span class=cF0>
 <a name="l270"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock_doc = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
 <a name="l271"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e = doc-&gt;head.next;
 <a name="l272"></a>

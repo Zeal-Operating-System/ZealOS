@@ -26,9 +26,9 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF2>/*</span><span class=cF4>
-<a name="l2"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l3"><span class=cF4>gr.dc</span></a><span class=cF2> is the persistent layer.  You can access</span><span class=cF0>
+<a name="l2"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.CC.html#l3"><span class=cF4>gr.dc</span></a><span class=cF2> is the persistent layer.  You can access</span><span class=cF0>
 <a name="l3"></a></span><span class=cF2>it directly but two tasks accessing it simultaneously</span><span class=cF0>
-<a name="l4"></a></span><span class=cF2>with no </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l182"><span class=cF4>DCAlias</span></a><span class=cF2>() will screw-up color and stuff.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>with no </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.CC.html#l182"><span class=cF4>DCAlias</span></a><span class=cF2>() will screw-up color and stuff.</span><span class=cF0>
 <a name="l5"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l6"></a>
 <a name="l7"></a></span><span class=cF1>U0</span><span class=cF0> SunMoon()
@@ -39,7 +39,7 @@ body {background-color:#000000;}
 <a name="l12"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;      </span><span class=cF2>//No Border</span><span class=cF0>
 <a name="l13"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;         </span><span class=cF2>//Maximize window</span><span class=cF0>
 <a name="l14"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;       </span><span class=cF2>//Clear command-line text</span><span class=cF0>
-<a name="l15"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>; </span><span class=cF2>//Current </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> is Fs segment register.</span><span class=cF0>
+<a name="l15"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>; </span><span class=cF2>//Current </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> is Fs segment register.</span><span class=cF0>
 <a name="l16"></a>
 <a name="l17"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>0x8000</span><span class=cF0>; i += </span><span class=cFE>0x200</span><span class=cF0>)
 <a name="l18"></a>    </span><span class=cF7>{</span><span class=cF0>

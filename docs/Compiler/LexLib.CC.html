@@ -75,7 +75,7 @@ body {background-color:#000000;}
 <a name="l48"></a>}
 <a name="l49"></a>
 <a name="l50"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>MemberMetaData</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF9>CMemberList</span><span class=cF0> *haystack_member_list)
-<a name="l51"></a>{</span><span class=cF2>//Find meta data name, return meta data val. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l51"></a>{</span><span class=cF2>//Find meta data name, return meta data val. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l52"></a>    </span><span class=cF9>CMemberListMeta</span><span class=cF0> *meta = haystack_member_list-&gt;meta;
 <a name="l53"></a>
 <a name="l54"></a>    </span><span class=cF1>while</span><span class=cF0> (meta)
@@ -89,7 +89,7 @@ body {background-color:#000000;}
 <a name="l62"></a>}
 <a name="l63"></a>
 <a name="l64"></a></span><span class=cF9>CMemberListMeta</span><span class=cF0> *</span><span class=cF5>MemberMetaFind</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF9>CMemberList</span><span class=cF0> *haystack_member_list)
-<a name="l65"></a>{</span><span class=cF2>//Find meta data name, return meta data struct. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l65"></a>{</span><span class=cF2>//Find meta data name, return meta data struct. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l66"></a>    </span><span class=cF9>CMemberListMeta</span><span class=cF0> *meta = haystack_member_list-&gt;meta;
 <a name="l67"></a>
 <a name="l68"></a>    </span><span class=cF1>while</span><span class=cF0> (meta)
@@ -103,7 +103,7 @@ body {background-color:#000000;}
 <a name="l76"></a>}
 <a name="l77"></a>
 <a name="l78"></a></span><span class=cF9>CMemberList</span><span class=cF0> *</span><span class=cF5>MemberFind</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF9>CHashClass</span><span class=cF0> *haystack_class)
-<a name="l79"></a>{</span><span class=cF2>//Find class member. See </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.html#l216"><span class=cF4>ClassRep</span></a><span class=cF2>() and </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l79"></a>{</span><span class=cF2>//Find class member. See </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.CC.html#l216"><span class=cF4>ClassRep</span></a><span class=cF2>() and </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l80"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
 <a name="l81"></a>    </span><span class=cF9>CMemberList</span><span class=cF0> *tmpm;
 <a name="l82"></a>
@@ -307,7 +307,7 @@ body {background-color:#000000;}
 <a name="l280"></a>}
 <a name="l281"></a>
 <a name="l282"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>LexExtStr</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> *_size=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> lex_next=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l283"></a>{</span><span class=cF2>//Lex </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l2215"><span class=cF4>TK_STR</span></a><span class=cF2>'s to one combined str. _size includes terminator.</span><span class=cF0>
+<a name="l283"></a>{</span><span class=cF2>//Lex </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l2215"><span class=cF4>TK_STR</span></a><span class=cF2>'s to one combined str. _size includes terminator.</span><span class=cF0>
 <a name="l284"></a>    </span><span class=cF9>I64</span><span class=cF0> len = cc-&gt;cur_str_len, len1, len2;
 <a name="l285"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = cc-&gt;cur_str, *st1, *st2;
 <a name="l286"></a>

@@ -358,7 +358,7 @@ body {background-color:#000000;}
 <a name="l331"></a>        }
 <a name="l332"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>screencast</span><span class=cF0>.dc)
 <a name="l333"></a>        {
-<a name="l334"></a>            </span><span class=cF5>DCDel</span><span class=cF0>(</span><span class=cFB>screencast</span><span class=cF0>.dc); </span><span class=cF2>//TODO: </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/MemRep.html#l219"><span class=cF4>MemRep</span></a><span class=cF2> can crash.</span><span class=cF0>
+<a name="l334"></a>            </span><span class=cF5>DCDel</span><span class=cF0>(</span><span class=cFB>screencast</span><span class=cF0>.dc); </span><span class=cF2>//TODO: </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF2> can crash.</span><span class=cF0>
 <a name="l335"></a>            </span><span class=cFB>screencast</span><span class=cF0>.dc = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l336"></a>        }
 <a name="l337"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>sys_focus_task</span><span class=cF0> &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_focus_task</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_HAS_SONG</span><span class=cF7>)</span><span class=cF0>)

@@ -45,7 +45,7 @@ body {background-color:#000000;}
 <a name="l18"></a>
 <a name="l19"></a></span><span class=cF2>/*This is a sprite created and edited by pressing</span><span class=cF0>
 <a name="l20"></a></span><span class=cF2>&lt;CTRL-r&gt;.  When created, they are assigned</span><span class=cF0>
-<a name="l21"></a></span><span class=cF2>a num.</span><span class=cF0>  </span><span class=cF2>Press &lt;CTRL-t&gt;, to see the hidden </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0>
+<a name="l21"></a></span><span class=cF2>a num.</span><span class=cF0>  </span><span class=cF2>Press &lt;CTRL-t&gt;, to see the hidden </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0>
 <a name="l22"></a></span><span class=cF2>place holder for the sprite.</span><span class=cF0>    </span><span class=cF2>The text in quotes</span><span class=cF0>
 <a name="l23"></a></span><span class=cF2>can be set to whatever you want or nothing,</span><span class=cF0>
 <a name="l24"></a></span><span class=cF2>but the ending num can't be changed.</span><span class=cF0>    </span><span class=cF2>It</span><span class=cF0>
@@ -71,7 +71,7 @@ body {background-color:#000000;}
 <a name="l44"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
 <a name="l45"></a>{
 <a name="l46"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
-<a name="l47"></a>    </span><span class=cF2>//&lt;CTRL-t&gt; now to see the </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> place holder</span><span class=cF0>
+<a name="l47"></a>    </span><span class=cF2>//&lt;CTRL-t&gt; now to see the </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> place holder</span><span class=cF0>
 <a name="l48"></a>    </span><span class=cF2>//where the sprite num is encoded. $IB...$ stands</span><span class=cF0>
 <a name="l49"></a>    </span><span class=cF2>//for &quot;insert ptr to binary object&quot;.</span><span class=cF0>
 <a name="l50"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
@@ -124,7 +124,7 @@ body {background-color:#000000;}
 <a name="l97"></a>                </span><span class=cF6>&quot;  Down(,,SC_CURSOR_DOWN);&quot;</span><span class=cF0>
 <a name="l98"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
 <a name="l99"></a>                );
-<a name="l100"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l100"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l101"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
 <a name="l102"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
 <a name="l103"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
@@ -139,7 +139,7 @@ body {background-color:#000000;}
 <a name="l112"></a>        {
 <a name="l113"></a>            </span><span class=cF1>if</span><span class=cF0> (message_code = </span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF7>)</span><span class=cF0>)
 <a name="l114"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l115"></a>                </span><span class=cF2>//With </span><a href="https://tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>keyboard</span></a><span class=cF2> messages, the two message args</span><span class=cF0>
+<a name="l115"></a>                </span><span class=cF2>//With </span><a href="https://tomawezome.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>keyboard</span></a><span class=cF2> messages, the two message args</span><span class=cF0>
 <a name="l116"></a>                </span><span class=cF2>//are the scan code and ascii val for the key.</span><span class=cF0>
 <a name="l117"></a>                sc = arg2;
 <a name="l118"></a>                ch = arg1;

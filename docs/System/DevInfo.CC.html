@@ -78,7 +78,7 @@ body {background-color:#000000;}
 <a name="l51"></a></span><span class=cF2>}</span><span class=cF0>
 <a name="l52"></a></span><span class=cF2>****/</span><span class=cF0>
 <a name="l53"></a>
-<a name="l54"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Misc/PCIDevices.html#l1"><span class=cF4>::/Misc/PCIDevices.DD</span></a><span class=cF0>
+<a name="l54"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Misc/PCIDevices.DD.html#l1"><span class=cF4>::/Misc/PCIDevices.DD</span></a><span class=cF0>
 <a name="l55"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PCILookUpSingle</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> m, </span><span class=cF9>I64</span><span class=cF0> d, </span><span class=cF1>U8</span><span class=cF0> **_vendor, </span><span class=cF1>U8</span><span class=cF0> **_dev)
 <a name="l56"></a>{
 <a name="l57"></a>    </span><span class=cF1>Bool</span><span class=cF0>         first = </span><span class=cF3>TRUE</span><span class=cF0>;
@@ -259,10 +259,10 @@ body {background-color:#000000;}
 <a name="l232"></a>    </span><span class=cF9>CMemRange</span><span class=cF0>   *tmpmr;
 <a name="l233"></a>
 <a name="l234"></a>    </span><span class=cF6>&quot;$PURPLE$Standard Addresses$FG$\n&quot;</span><span class=cF0>
-<a name="l235"></a>            </span><span class=cF6>&quot;FEE00000-FEE00FFF See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l637"><span class=cF4>APIC</span></a><span class=cF6>\n\n&quot;</span><span class=cF0>
+<a name="l235"></a>            </span><span class=cF6>&quot;FEE00000-FEE00FFF See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l637"><span class=cF4>APIC</span></a><span class=cF6>\n\n&quot;</span><span class=cF0>
 <a name="l236"></a>
 <a name="l237"></a>    </span><span class=cF6>&quot;$PURPLE$VBE Linear Framebuffer$FG$\n&quot;</span><span class=cF0>
-<a name="l238"></a>            </span><span class=cF6>&quot;%08X-%08X  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l531"><span class=cF4>VBE Mode</span></a><span class=cF6>\n&quot;</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.fb_alias,
+<a name="l238"></a>            </span><span class=cF6>&quot;%08X-%08X  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l531"><span class=cF4>VBE Mode</span></a><span class=cF6>\n&quot;</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.fb_alias,
 <a name="l239"></a>                                                                                                                                                                </span><span class=cFB>text</span><span class=cF0>.fb_alias(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cFB>text</span><span class=cF0>.buffer_size - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l240"></a>    </span><span class=cF6>&quot;\n$PURPLE$32 Bit Device Mem$FG$\n&quot;</span><span class=cF0>;
 <a name="l241"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_DEV_MEM</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)

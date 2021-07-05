@@ -149,7 +149,7 @@ body {background-color:#000000;}
 <a name="l122"></a>}
 <a name="l123"></a>
 <a name="l124"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>TimerInit</span><span class=cF0>()
-<a name="l125"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/PIT.html#l1"><span class=cF4>::/Doc/PIT.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l125"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/PIT.DD.html#l1"><span class=cF4>::/Doc/PIT.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l126"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIT_CMD</span><span class=cF0>, </span><span class=cF3>PIT_CMDF_CHANNEL0</span><span class=cF0> | </span><span class=cF3>PIT_CMDF_OPMODE_RATE_GEN</span><span class=cF0> | </span><span class=cF3>PIT_CMDF_ACCESS_WORD</span><span class=cF0>);
 <a name="l127"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIT_0</span><span class=cF0>, </span><span class=cF3>SYS_TIMER0_PERIOD</span><span class=cF0>);
 <a name="l128"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIT_0</span><span class=cF0>, </span><span class=cF3>SYS_TIMER0_PERIOD</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>);
@@ -176,7 +176,7 @@ body {background-color:#000000;}
 <a name="l149"></a>}
 <a name="l150"></a>
 <a name="l151"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>KMain</span><span class=cF0>()
-<a name="l152"></a>{</span><span class=cF2>//Continued from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart64.html#l50"><span class=cF4>KStart64.CC</span></a><span class=cF0>
+<a name="l152"></a>{</span><span class=cF2>//Continued from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart64.CC.html#l50"><span class=cF4>KStart64.CC</span></a><span class=cF0>
 <a name="l153"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd;
 <a name="l154"></a>
 <a name="l155"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PCSPKR</span><span class=cF0>, </span><span class=cF5>InU8</span><span class=cF7>(</span><span class=cF3>PCSPKR</span><span class=cF7>)</span><span class=cF0> &amp; ~</span><span class=cFE>3</span><span class=cF0>); </span><span class=cF2>//Sound;</span><span class=cF0>
@@ -198,8 +198,8 @@ body {background-color:#000000;}
 <a name="l171"></a>    </span><span class=cFD>Core0Init</span><span class=cF0>;
 <a name="l172"></a>    </span><span class=cFD>IntInit1</span><span class=cF0>;
 <a name="l173"></a>
-<a name="l174"></a>    </span><span class=cF2>//Before this point use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l129"><span class=cF4>Sound</span></a><span class=cF2>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l88"><span class=cF4>Busy</span></a><span class=cF2>()</span><span class=cF0>
-<a name="l175"></a>    </span><span class=cF2>//to debug.  After this point, use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.html#l232"><span class=cF4>RawPrint</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l174"></a>    </span><span class=cF2>//Before this point use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l129"><span class=cF4>Sound</span></a><span class=cF2>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l88"><span class=cF4>Busy</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l175"></a>    </span><span class=cF2>//to debug.  After this point, use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l232"><span class=cF4>RawPrint</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l176"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_RAW</span><span class=cF0>);
 <a name="l177"></a>    </span><span class=cF6>&quot;ZealOS V%0.2f\t%D %T\n\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_os_version</span><span class=cF0>, </span><span class=cFB>sys_compile_time</span><span class=cF0>, </span><span class=cFB>sys_compile_time</span><span class=cF0>;
 <a name="l178"></a>
@@ -265,7 +265,7 @@ body {background-color:#000000;}
 <a name="l238"></a>    </span><span class=cFB>counts</span><span class=cF0>.time_stamp_freq_initial = </span><span class=cF5>TimeCal</span><span class=cF0>;
 <a name="l239"></a>    </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
 <a name="l240"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l241"></a>        </span><span class=cF5>ExeFile</span><span class=cF0>(</span><span class=cF6>&quot;StartOS&quot;</span><span class=cF0>); </span><span class=cF2>//Continues </span><a href="https://tomawezome.github.io/ZealOS/StartOS.html#l1"><span class=cF4>/StartOS.CC</span></a><span class=cF0>
+<a name="l241"></a>        </span><span class=cF5>ExeFile</span><span class=cF0>(</span><span class=cF6>&quot;StartOS&quot;</span><span class=cF0>); </span><span class=cF2>//Continues </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>/StartOS.CC</span></a><span class=cF0>
 <a name="l242"></a>    </span><span class=cF1>catch</span><span class=cF0>
 <a name="l243"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l244"></a>        </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);

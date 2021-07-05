@@ -27,9 +27,9 @@ body {background-color:#000000;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF5>                                                             CosmiC</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/CompilerOverview.html#l1"><span class=cF4>::/Doc/CompilerOverview.DD</span></a><span class=cF0>.
+<a name="l3"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/CompilerOverview.DD.html#l1"><span class=cF4>::/Doc/CompilerOverview.DD</span></a><span class=cF0>.
 <a name="l4"></a>
-<a name="l5"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/ScopingLinkage.html#l1"><span class=cF4>Scoping and Linkage</span></a><span class=cF0> for details on </span><span class=cF2>extern</span><span class=cF0>, </span><span class=cF2>import</span><span class=cF0>, </span><span class=cF2>_extern</span><span class=cF0>, </span><span class=cF2>_import</span><span class=cF0>, etc.
+<a name="l5"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/ScopingLinkage.DD.html#l1"><span class=cF4>Scoping and Linkage</span></a><span class=cF0> for details on </span><span class=cF2>extern</span><span class=cF0>, </span><span class=cF2>import</span><span class=cF0>, </span><span class=cF2>_extern</span><span class=cF0>, </span><span class=cF2>_import</span><span class=cF0>, etc.
 <a name="l6"></a>
 <a name="l7"></a>* Built-in types include </span><span class=cF2>I0, I8, I16, I32, I64</span><span class=cF0> for signed 0-8 byte ints and </span><span class=cF2>U0, U8, U16, U32, U64</span><span class=cF0> for unsigned 0-8 byte ints and </span><span class=cF2>
 <a name="l8"></a>F64</span><span class=cF0> for 8 byte floats.
@@ -60,7 +60,7 @@ body {background-color:#000000;}
 <a name="l33"></a>  
 <a name="l34"></a>  Test(, 3);</span><span class=cF0>
 <a name="l35"></a>
-<a name="l36"></a>* A char const all alone is sent to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KeyDev.html#l23"><span class=cF4>PutChars</span></a><span class=cF0>(). A string with or without args is sent to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l1110"><span class=cF4>Print</span></a><span class=cF0>().  An empty string literal 
+<a name="l36"></a>* A char const all alone is sent to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KeyDev.CC.html#l23"><span class=cF4>PutChars</span></a><span class=cF0>(). A string with or without args is sent to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.CC.html#l1110"><span class=cF4>Print</span></a><span class=cF0>().  An empty string literal 
 <a name="l37"></a>signals a variable format_str follows.
 <a name="l38"></a>
 <a name="l39"></a>  </span><span class=cF2>void DemoC(char drv, char *format, char *name, int age)
@@ -83,13 +83,13 @@ body {background-color:#000000;}
 <a name="l56"></a></span><span class=cF0>
 <a name="l57"></a>* When dealing with function addresses such as for callbacks, precede the name with &quot;</span><span class=cF2>&amp;</span><span class=cF0>&quot;.
 <a name="l58"></a>
-<a name="l59"></a>* Type casting is postfix.  To typecast int or F64, use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l92"><span class=cF4>ToI64</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l90"><span class=cF4>ToBool</span></a><span class=cF0>() or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l91"><span class=cF4>ToF64</span></a><span class=cF0>(). (ZealOS follows normal C float&lt;--&gt;int 
+<a name="l59"></a>* Type casting is postfix.  To typecast int or F64, use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l92"><span class=cF4>ToI64</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l90"><span class=cF4>ToBool</span></a><span class=cF0>() or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l91"><span class=cF4>ToF64</span></a><span class=cF0>(). (ZealOS follows normal C float&lt;--&gt;int 
 <a name="l60"></a>conversion, but sometimes you want to override. These functions are better than multiplying by &quot;1.0&quot; to convert to float.)
 <a name="l61"></a>
 <a name="l62"></a>* There is no </span><span class=cF2>main()</span><span class=cF0> function.  Any code outside of functions gets executed upon start-up, in order.
 <a name="l63"></a>
 <a name="l64"></a>* There are no bit fields, but there are </span><span class=cF4><u>bit access</u></span><span class=cF0> routines and you can access bytes or words within any int.  See </span><span class=cF4>
-<a name="l65"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l103"><span class=cF4>I64 declaration</span></a><span class=cF0>.    A class can be accessed as a whole are subints, if you put a type in front of the </span><span class=cF2>class</span><span class=cF0> declaration.
+<a name="l65"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l103"><span class=cF4>I64 declaration</span></a><span class=cF0>.    A class can be accessed as a whole are subints, if you put a type in front of the </span><span class=cF2>class</span><span class=cF0> declaration.
 <a name="l66"></a>  
 <a name="l67"></a>  </span><span class=cF2>public I64i union I64     //&quot;I64i&quot; is intrinsic.  We are defining &quot;I64&quot;.
 <a name="l68"></a>  {
@@ -123,9 +123,9 @@ body {background-color:#000000;}
 <a name="l96"></a>  
 <a name="l97"></a>  public U0 GrPrint(CDC *dc, I64 x, I64 y, U8 *format, ...)
 <a name="l98"></a>  {
-<a name="l99"></a>    U8 *buf = </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>(NULL, format, argc, argv); //SPrintF() with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>()ed string.
+<a name="l99"></a>    U8 *buf = </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.CC.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>(NULL, format, argc, argv); //SPrintF() with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>()ed string.
 <a name="l100"></a>  
-<a name="l101"></a>    </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrBitMap.html#l1084"><span class=cF4>GrPutS</span></a><span class=cF2>(dc, x, y, buf); //Plot string at x,y pixels. GrPutS is not public.
+<a name="l101"></a>    </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1084"><span class=cF4>GrPutS</span></a><span class=cF2>(dc, x, y, buf); //Plot string at x,y pixels. GrPutS is not public.
 <a name="l102"></a>    Free(buf);
 <a name="l103"></a>  }
 <a name="l104"></a>  
@@ -148,7 +148,7 @@ body {background-color:#000000;}
 <a name="l121"></a>
 <a name="l122"></a>* Allows ranges like &quot;</span><span class=cF2>case 4...7:</span><span class=cF0>&quot; in </span><span class=cF2>switch</span><span class=cF0> statements.
 <a name="l123"></a>
-<a name="l124"></a>* A no case number causes next higher int case in </span><span class=cF2>switch</span><span class=cF0> statements.    See </span><a href="https://tomawezome.github.io/ZealOS/Demo/NullCase.html#l1"><span class=cF4>::/Demo/NullCase.CC</span></a><span class=cF0>.
+<a name="l124"></a>* A no case number causes next higher int case in </span><span class=cF2>switch</span><span class=cF0> statements.    See </span><a href="https://tomawezome.github.io/ZealOS/Demo/NullCase.CC.html#l1"><span class=cF4>::/Demo/NullCase.CC</span></a><span class=cF0>.
 <a name="l125"></a>
 <a name="l126"></a>  </span><span class=cF2>I64 i;
 <a name="l127"></a>  
@@ -165,7 +165,7 @@ body {background-color:#000000;}
 <a name="l138"></a>
 <a name="l139"></a>* Switch statements can be nestled with a single switch expression!  This is known as a &quot;sub_switch&quot; statement.  </span><span class=cF2>start</span><span class=cF0>/</span><span class=cF2>end</span><span class=cF0> are 
 <a name="l140"></a>used to group cases.  Don't goto out of, throw an exception out of, or return out of the </span><span class=cF2>start</span><span class=cF0> front porch area.  See </span><span class=cF4>
-<a name="l141"></a></span><a href="https://tomawezome.github.io/ZealOS/Demo/SubSwitch.html#l1"><span class=cF4>::/Demo/SubSwitch.CC</span></a><span class=cF0>.
+<a name="l141"></a></span><a href="https://tomawezome.github.io/ZealOS/Demo/SubSwitch.CC.html#l1"><span class=cF4>::/Demo/SubSwitch.CC</span></a><span class=cF0>.
 <a name="l142"></a>
 <a name="l143"></a>  </span><span class=cF2>I64 i;
 <a name="l144"></a>  
@@ -195,7 +195,7 @@ body {background-color:#000000;}
 <a name="l168"></a>
 <a name="l169"></a>  </span><span class=cF2>U0 Main()
 <a name="l170"></a>  {
-<a name="l171"></a>    //Only use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF2> for reg vars or else clobbered.
+<a name="l171"></a>    //Only use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF2> for reg vars or else clobbered.
 <a name="l172"></a>    I64 reg R15 i = 5, noreg j = 4;
 <a name="l173"></a>    no_warn i;
 <a name="l174"></a>    asm {
@@ -210,9 +210,9 @@ body {background-color:#000000;}
 <a name="l183"></a>    }
 <a name="l184"></a>  }
 <a name="l185"></a></span><span class=cF0>
-<a name="l186"></a>* </span><span class=cF2>interrupt</span><span class=cF0>, </span><span class=cF2>haserrcode</span><span class=cF0>, </span><span class=cF2>public</span><span class=cF0>, </span><span class=cF2>argpop</span><span class=cF0> or </span><span class=cF2>noargpop</span><span class=cF0> are function flags. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.html#l477"><span class=cF4>IRQKbd</span></a><span class=cF0>().
+<a name="l186"></a>* </span><span class=cF2>interrupt</span><span class=cF0>, </span><span class=cF2>haserrcode</span><span class=cF0>, </span><span class=cF2>public</span><span class=cF0>, </span><span class=cF2>argpop</span><span class=cF0> or </span><span class=cF2>noargpop</span><span class=cF0> are function flags. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/SerialDev/Keyboard.CC.html#l477"><span class=cF4>IRQKbd</span></a><span class=cF0>().
 <a name="l187"></a>
-<a name="l188"></a>* A single quote can encompass multiple characters.  </span><span class=cF2>'ABC'</span><span class=cF0> is equ to </span><span class=cF2>0x434241</span><span class=cF0>.  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KeyDev.html#l23"><span class=cF4>PutChars</span></a><span class=cF0>() takes multiple characters.
+<a name="l188"></a>* A single quote can encompass multiple characters.  </span><span class=cF2>'ABC'</span><span class=cF0> is equ to </span><span class=cF2>0x434241</span><span class=cF0>.  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KeyDev.CC.html#l23"><span class=cF4>PutChars</span></a><span class=cF0>() takes multiple characters.
 <a name="l189"></a>
 <a name="l190"></a>  </span><span class=cF2>asm {
 <a name="l191"></a>  HELLO_WORLD::
@@ -233,7 +233,7 @@ body {background-color:#000000;}
 <a name="l206"></a>
 <a name="l207"></a>* There is no question-colon operator.
 <a name="l208"></a>
-<a name="l209"></a>* ZealOS </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CInit.html#l508"><span class=cF4>operator precedence</span></a><span class=cF0>
+<a name="l209"></a>* ZealOS </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CInit.CC.html#l508"><span class=cF4>operator precedence</span></a><span class=cF0>
 <a name="l210"></a>    </span><span class=cF2>`</span><span class=cF0>, </span><span class=cF2>&gt;&gt;</span><span class=cF0>, </span><span class=cF2>&lt;&lt;</span><span class=cF0>
 <a name="l211"></a>    </span><span class=cF2>*</span><span class=cF0>, </span><span class=cF2>/</span><span class=cF0>, </span><span class=cF2>%</span><span class=cF0>
 <a name="l212"></a>    </span><span class=cF2>&amp;</span><span class=cF0>
@@ -247,13 +247,13 @@ body {background-color:#000000;}
 <a name="l220"></a>    </span><span class=cF2>||</span><span class=cF0>
 <a name="l221"></a>    </span><span class=cF2>=</span><span class=cF0>, </span><span class=cF2>&lt;&lt;=</span><span class=cF0>, </span><span class=cF2>&gt;&gt;=</span><span class=cF0>, </span><span class=cF2>*=</span><span class=cF0>, </span><span class=cF2>/=</span><span class=cF0>, </span><span class=cF2>&amp;=</span><span class=cF0>, </span><span class=cF2>|=</span><span class=cF0>, </span><span class=cF2>^=</span><span class=cF0>, </span><span class=cF2>+=</span><span class=cF0>, </span><span class=cF2>-=</span><span class=cF0>
 <a name="l222"></a>
-<a name="l223"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1678"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
+<a name="l223"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1678"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
 <a name="l224"></a>
-<a name="l225"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1679"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find dup local var type statements.
+<a name="l225"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find dup local var type statements.
 <a name="l226"></a>
 <a name="l227"></a>* With the </span><span class=cF2>#exe{}</span><span class=cF0> feature in your src code, you can place programs that insert text into the stream of code being compiled.  See </span><span class=cF4>
-<a name="l228"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l260"><span class=cF4>#exe {}</span></a><span class=cF0> for an example where the date/time and compile-time prompting for configuration data is placed into a program.  </span><span class=cF4>
-<a name="l229"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l71"><span class=cF4>StreamPrint</span></a><span class=cF0>() places text into a src program stream following the conclusion of the </span><span class=cF2>#exe{}</span><span class=cF0> blk.
+<a name="l228"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l260"><span class=cF4>#exe {}</span></a><span class=cF0> for an example where the date/time and compile-time prompting for configuration data is placed into a program.  </span><span class=cF4>
+<a name="l229"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l71"><span class=cF4>StreamPrint</span></a><span class=cF0>() places text into a src program stream following the conclusion of the </span><span class=cF2>#exe{}</span><span class=cF0> blk.
 <a name="l230"></a>
 <a name="l231"></a>* No </span><span class=cF2>#define</span><span class=cF0> functions exist (I'm not a fan)
 <a name="l232"></a>
@@ -263,22 +263,22 @@ body {background-color:#000000;}
 <a name="l236"></a>
 <a name="l237"></a>* Can't use </span><span class=cF2>&lt;&gt;</span><span class=cF0> with </span><span class=cF2>#include</span><span class=cF0>, use </span><span class=cF2>&quot;&quot;</span><span class=cF0>.
 <a name="l238"></a>
-<a name="l239"></a>* &quot;</span><span class=cF2>$</span><span class=cF0>&quot; is an escape character.   Two dollar signs signify an ordinary $. See </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0>. In </span><span class=cF2>asm</span><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> code, it also refers to the 
+<a name="l239"></a>* &quot;</span><span class=cF2>$</span><span class=cF0>&quot; is an escape character.   Two dollar signs signify an ordinary $. See </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0>. In </span><span class=cF2>asm</span><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> code, it also refers to the 
 <a name="l240"></a>inst's address or the offset in a </span><span class=cF2>class</span><span class=cF0> definition.
 <a name="l241"></a>
 <a name="l242"></a>* </span><span class=cF2>union</span><span class=cF0> is more like a class, so you don't reference it with a </span><span class=cF2>union</span><span class=cF0> label after you define it.  Some common unions are declared 
-<a name="l243"></a>in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l65"><span class=cF4>KernelA.HH</span></a><span class=cF0> for 1,2,4 and 8 byte objects. If you place a type in front of a union declaration, that is the type when used by 
-<a name="l244"></a>itself. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/SubIntAccess.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF0>.
+<a name="l243"></a>in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l65"><span class=cF4>KernelA.HH</span></a><span class=cF0> for 1,2,4 and 8 byte objects. If you place a type in front of a union declaration, that is the type when used by 
+<a name="l244"></a>itself. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/SubIntAccess.CC.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF0>.
 <a name="l245"></a>
 <a name="l246"></a>* </span><span class=cF2>class</span><span class=cF0> member vars can have meta data. </span><span class=cF2>format</span><span class=cF0> and </span><span class=cF2>data</span><span class=cF0> are two meta data types now used.  All compiler structures are saved and 
-<a name="l247"></a>you can access the compiler's info about classes and vars.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF0> and    </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>().
+<a name="l247"></a>you can access the compiler's info about classes and vars.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF0> and    </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>().
 <a name="l248"></a>
 <a name="l249"></a>* There is a keyword </span><span class=cF2>lastclass</span><span class=cF0> you use as a default arg.    It is set to the class name of the prev arg.    See </span><span class=cF4>
-<a name="l250"></a></span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.html#l216"><span class=cF4>ClassRep</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>()  and </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/BlkDevRep.html#l1"><span class=cF4>::/Demo/Disk/BlkDevRep.CC</span></a><span class=cF0>.
+<a name="l250"></a></span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.CC.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.CC.html#l216"><span class=cF4>ClassRep</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>()  and </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/BlkDevRep.CC.html#l1"><span class=cF4>::/Demo/Disk/BlkDevRep.CC</span></a><span class=cF0>.
 <a name="l251"></a>
-<a name="l252"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Exceptions.html#l1"><span class=cF4>::/Demo/Exceptions.CC</span></a><span class=cF0>.  </span><span class=cF2>try{} catch{}</span><span class=cF0> and </span><span class=cF2>throw</span><span class=cF0> are different from C++. </span><span class=cF2>throw</span><span class=cF0> is a function with an 8-byte or less char 
+<a name="l252"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Exceptions.CC.html#l1"><span class=cF4>::/Demo/Exceptions.CC</span></a><span class=cF0>.  </span><span class=cF2>try{} catch{}</span><span class=cF0> and </span><span class=cF2>throw</span><span class=cF0> are different from C++. </span><span class=cF2>throw</span><span class=cF0> is a function with an 8-byte or less char 
 <a name="l253"></a>arg.  The char string passed in </span><span class=cF2>throw()</span><span class=cF0> can be accessed from within a </span><span class=cF2>catch{}</span><span class=cF0> using the </span><span class=cF2>Fs-&gt;except_ch</span><span class=cF0>.  Within a </span><span class=cF2>catch {}</span><span class=cF0> blk, 
-<a name="l254"></a>set the var </span><span class=cF2>Fs-&gt;catch_except</span><span class=cF0> to </span><span class=cF2>TRUE</span><span class=cF0> if you want to terminate the search for a handler.  Use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KExcept.html#l46"><span class=cF4>PutExcept</span></a><span class=cF0>() as a handler, if you 
+<a name="l254"></a>set the var </span><span class=cF2>Fs-&gt;catch_except</span><span class=cF0> to </span><span class=cF2>TRUE</span><span class=cF0> if you want to terminate the search for a handler.  Use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KExcept.CC.html#l46"><span class=cF4>PutExcept</span></a><span class=cF0>() as a handler, if you 
 <a name="l255"></a>like.
 <a name="l256"></a>
 <a name="l257"></a>* A function is available similar to </span><span class=cF2>sizeof</span><span class=cF0> which provides the offset of a member of a class.  It's called </span><span class=cF2>offset</span><span class=cF0>.  You place 
@@ -288,21 +288,21 @@ body {background-color:#000000;}
 <a name="l261"></a>* There is no </span><span class=cF2>continue</span><span class=cF0> stmt.    Use </span><span class=cF2>goto</span><span class=cF0>.
 <a name="l262"></a>
 <a name="l263"></a>* </span><span class=cF2>lock{}</span><span class=cF0> can be used to apply asm </span><span class=cF2>LOCK</span><span class=cF0> prefixes to code for safe multicore read-modify-write accesses.  The code bracked with 
-<a name="l264"></a>have </span><span class=cF2>LOCK</span><span class=cF0> asm prefix's applied to relevant insts within.    It's a little shoddy.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>.
+<a name="l264"></a>have </span><span class=cF2>LOCK</span><span class=cF0> asm prefix's applied to relevant insts within.    It's a little shoddy.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.CC.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>.
 <a name="l265"></a>
-<a name="l266"></a>* There is a function called </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l388"><span class=cF4>MSize</span></a><span class=cF0>() which gives the size of an object alloced off the heap.    For larger size allocations, the 
+<a name="l266"></a>* There is a function called </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l388"><span class=cF4>MSize</span></a><span class=cF0>() which gives the size of an object alloced off the heap.    For larger size allocations, the 
 <a name="l267"></a>system rounds-up to a power of two, so </span><span class=cF2>MSize()</span><span class=cF0> lets you know the real size and you can take full advantage of it.
 <a name="l268"></a>
-<a name="l269"></a>* You CAN </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l387"><span class=cF4>Free</span></a><span class=cF0>() a </span><span class=cF2>NULL</span><span class=cF0> ptr.  Useful variants of </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() can be found </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.html#l399"><span class=cF4>Here</span></a><span class=cF0>.  Each task has a heap and you can </span><span class=cF2>MAlloc</span><span class=cF0> and </span><span class=cF2>Free</span><span class=cF0> 
-<a name="l270"></a>off-of other task's heaps, or make an independent heap with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/HeapCtrl.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() for an example.
+<a name="l269"></a>* You CAN </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l387"><span class=cF4>Free</span></a><span class=cF0>() a </span><span class=cF2>NULL</span><span class=cF0> ptr.  Useful variants of </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() can be found </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l399"><span class=cF4>Here</span></a><span class=cF0>.  Each task has a heap and you can </span><span class=cF2>MAlloc</span><span class=cF0> and </span><span class=cF2>Free</span><span class=cF0> 
+<a name="l270"></a>off-of other task's heaps, or make an independent heap with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() for an example.
 <a name="l271"></a>
 <a name="l272"></a>* The stack does not grow because virtual mem is not used.  It's recommended to allocate large local vars from the heap.    You 
-<a name="l273"></a>can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().  You can use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l129"><span class=cF4>CallStackGrow</span></a><span class=cF0>(), but it's 
-<a name="l274"></a>odd.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/StackGrow.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF0>.
+<a name="l273"></a>can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().  You can use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l129"><span class=cF4>CallStackGrow</span></a><span class=cF0>(), but it's 
+<a name="l274"></a>odd.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/StackGrow.CC.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF0>.
 <a name="l275"></a>
 <a name="l276"></a>* Only one base class is allowed.
 <a name="l277"></a>
-<a name="l278"></a>* </span><span class=cF2>printf()</span><span class=cF0> has new codes.  See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF0>.
+<a name="l278"></a>* </span><span class=cF2>printf()</span><span class=cF0> has new codes.  See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.DD.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF0>.
 <a name="l279"></a>
 <a name="l280"></a>* All values are extended to 64-bit when accessed.  Intermediate calculations are done with 64-bit values.
 <a name="l281"></a>

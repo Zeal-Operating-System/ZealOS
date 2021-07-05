@@ -25,9 +25,9 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF2>/*Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2> arithmetic</span><span class=cF0>
+<a name="l1"></a><span class=cF2>/*Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2> arithmetic</span><span class=cF0>
 <a name="l2"></a></span><span class=cF2>because it used to be faster than floating</span><span class=cF0>
-<a name="l3"></a></span><span class=cF2>point.</span><span class=cF0>  </span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>point.</span><span class=cF0>  </span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l4"></a>
 <a name="l5"></a></span><span class=cF2>The decimal place is between</span><span class=cF0>
 <a name="l6"></a></span><span class=cF2>bits 31 and 32.</span><span class=cF0>
@@ -179,7 +179,7 @@ body {background-color:#000000;}
 <a name="l152"></a>
 <a name="l153"></a></span><span class=cF1>U0</span><span class=cF0> Collision()
 <a name="l154"></a>{
-<a name="l155"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l155"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l156"></a>    Init;
 <a name="l157"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
 <a name="l158"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;

@@ -32,7 +32,7 @@ body {background-color:#000000;}
 <a name="l5"></a></span><span class=cF9>U32</span><span class=cF0> </span><span class=cFB>text</span><span class=cF0>[</span><span class=cF3>TEXT_ROWS</span><span class=cF0>][</span><span class=cF3>TEXT_COLS</span><span class=cF0>];
 <a name="l6"></a>
 <a name="l7"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *)
-<a name="l8"></a>{ </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.html#l3"><span class=cF4>gr.text_base</span></a><span class=cF2> gets clear 60fps, so we must use our own permanent text array.</span><span class=cF0>
+<a name="l8"></a>{ </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrGlobals.CC.html#l3"><span class=cF4>gr.text_base</span></a><span class=cF2> gets clear 60fps, so we must use our own permanent text array.</span><span class=cF0>
 <a name="l9"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.text_base + </span><span class=cF3>TEXT_COLS</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>TEXT_COLS</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>U32</span><span class=cF7>)</span><span class=cF0>);
 <a name="l10"></a>
 <a name="l11"></a>    </span><span class=cF2>// You can copy it this way, if you like:</span><span class=cF0>
@@ -57,7 +57,7 @@ body {background-color:#000000;}
 <a name="l30"></a>
 <a name="l31"></a></span><span class=cF2>//Four directions:</span><span class=cF0>
 <a name="l32"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>0=Up, 1=right,2=down,3=left</span><span class=cF0>
-<a name="l33"></a></span><span class=cF9>I64</span><span class=cF0> dir_x[</span><span class=cFE>4</span><span class=cF0>] = { </span><span class=cFE>0</span><span class=cF0>, +</span><span class=cFE>1</span><span class=cF0>,  </span><span class=cFE>0</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>},   </span><span class=cF2>// Could use </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l5"><span class=cF4>gr_x_offsets2</span></a><span class=cF2>,</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l6"><span class=cF4>gr_y_offsets2</span></a><span class=cF0>
+<a name="l33"></a></span><span class=cF9>I64</span><span class=cF0> dir_x[</span><span class=cFE>4</span><span class=cF0>] = { </span><span class=cFE>0</span><span class=cF0>, +</span><span class=cFE>1</span><span class=cF0>,  </span><span class=cFE>0</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>},   </span><span class=cF2>// Could use </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.CC.html#l5"><span class=cF4>gr_x_offsets2</span></a><span class=cF2>,</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.CC.html#l6"><span class=cF4>gr_y_offsets2</span></a><span class=cF0>
 <a name="l34"></a>    dir_y[</span><span class=cFE>4</span><span class=cF0>] = {+</span><span class=cFE>1</span><span class=cF0>,  </span><span class=cFE>0</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>,  </span><span class=cFE>0</span><span class=cF0>};
 <a name="l35"></a>
 <a name="l36"></a></span><span class=cF1>U0</span><span class=cF0> SolveMaze(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y)
@@ -114,7 +114,7 @@ body {background-color:#000000;}
 <a name="l87"></a>{
 <a name="l88"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, x, y;
 <a name="l89"></a>
-<a name="l90"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l90"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l91"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
 <a name="l92"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
 <a name="l93"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;

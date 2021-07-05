@@ -36,7 +36,7 @@ body {background-color:#000000;}
 <a name="l9"></a></span><span class=cF9>I64</span><span class=cF0>  </span><span class=cFB>pf_prof_active</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ProfTimerInt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
-<a name="l12"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l37"><span class=cF4>profiler_timer_irq</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l12"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l37"><span class=cF4>profiler_timer_irq</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l13"></a>    </span><span class=cF9>I64</span><span class=cF0> i, k;
 <a name="l14"></a>
 <a name="l15"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>pf_prof_active</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
@@ -60,7 +60,7 @@ body {background-color:#000000;}
 <a name="l33"></a></span><span class=cF2>by sampling RIP during the 1000Hz</span><span class=cF0>
 <a name="l34"></a></span><span class=cF2>timer interrupt.</span><span class=cF0>
 <a name="l35"></a>
-<a name="l36"></a></span><span class=cF2>Do a </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Profiler.html#l61"><span class=cF4>ProfRep</span></a><span class=cF2>(), (profiler report)</span><span class=cF0>
+<a name="l36"></a></span><span class=cF2>Do a </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Profiler.CC.html#l61"><span class=cF4>ProfRep</span></a><span class=cF2>(), (profiler report)</span><span class=cF0>
 <a name="l37"></a></span><span class=cF2>after you have collected data.</span><span class=cF0>
 <a name="l38"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l39"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= cpu_num &lt; </span><span class=cFB>mp_count</span><span class=cF7>)</span><span class=cF0>)
@@ -86,7 +86,7 @@ body {background-color:#000000;}
 <a name="l59"></a>}
 <a name="l60"></a>
 <a name="l61"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ProfRep</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> filter_count=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> leave_it=</span><span class=cF3>OFF</span><span class=cF0>)
-<a name="l62"></a>{</span><span class=cF2>//Profiler report. Call </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Profiler.html#l30"><span class=cF4>Prof</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
+<a name="l62"></a>{</span><span class=cF2>//Profiler report. Call </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Profiler.CC.html#l30"><span class=cF4>Prof</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
 <a name="l63"></a>    </span><span class=cF9>I64</span><span class=cF0> i, hits, rip, last_rip = </span><span class=cFE>0</span><span class=cF0>, routine_total = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l64"></a>    </span><span class=cF1>F64</span><span class=cF0> total_time;
 <a name="l65"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>256</span><span class=cF0>], buf2[</span><span class=cFE>256</span><span class=cF0>], last_buf[</span><span class=cFE>256</span><span class=cF0>];

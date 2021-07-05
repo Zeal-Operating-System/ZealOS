@@ -26,7 +26,7 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GridInit</span><span class=cF0>()
-<a name="l2"></a>{</span><span class=cF2>//Init mouse grid struct. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Grid.html#l1"><span class=cF4>::/Demo/Graphics/Grid.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Init mouse grid struct. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Grid.CC.html#l1"><span class=cF4>::/Demo/Graphics/Grid.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l3"></a>    </span><span class=cFB>mouse_grid</span><span class=cF0>.x        = </span><span class=cFB>mouse_grid</span><span class=cF0>.y          = </span><span class=cFB>mouse_grid</span><span class=cF0>.z          = </span><span class=cFE>8</span><span class=cF0>;
 <a name="l4"></a>    </span><span class=cFB>mouse_grid</span><span class=cF0>.x_offset = </span><span class=cFB>mouse_grid</span><span class=cF0>.y_offset   = </span><span class=cFB>mouse_grid</span><span class=cF0>.z_offset   = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l5"></a>    </span><span class=cFB>mouse_grid</span><span class=cF0>.x_speed  = </span><span class=cFB>mouse_grid</span><span class=cF0>.y_speed    = </span><span class=cFB>mouse_grid</span><span class=cF0>.z_speed    = </span><span class=cFE>1</span><span class=cF0>;
@@ -72,7 +72,7 @@ body {background-color:#000000;}
 <a name="l45"></a>}
 <a name="l46"></a>
 <a name="l47"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MouseSet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> x=</span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> y=</span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> z=</span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> l=</span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> r=</span><span class=cF3>I64_MAX</span><span class=cF0>)
-<a name="l48"></a>{</span><span class=cF2>//Note: Generates a message. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Games/Zing.html#l94"><span class=cF4>MouseSet</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l48"></a>{</span><span class=cF2>//Note: Generates a message. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Games/Zing.CC.html#l94"><span class=cF4>MouseSet</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l49"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= x &lt; </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width</span><span class=cF7>)</span><span class=cF0>)
 <a name="l50"></a>        x = </span><span class=cFB>mouse</span><span class=cF0>.pos.x;
 <a name="l51"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= y &lt; </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.height</span><span class=cF7>)</span><span class=cF0>)

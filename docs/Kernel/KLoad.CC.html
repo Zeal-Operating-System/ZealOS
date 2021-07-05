@@ -246,7 +246,7 @@ body {background-color:#000000;}
 <a name="l219"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l220"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l221"></a>
-<a name="l222"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
+<a name="l222"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.CC.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
 <a name="l223"></a>    module_align = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; bfh-&gt;module_align_bits;
 <a name="l224"></a>    </span><span class=cF1>if</span><span class=cF0> (!module_align || bfh-&gt;bin_signature != </span><span class=cF3>BIN_SIGNATURE_VAL</span><span class=cF0>)
 <a name="l225"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -307,7 +307,7 @@ body {background-color:#000000;}
 <a name="l280"></a>{
 <a name="l281"></a>    </span><span class=cF5>HashGenericAdd</span><span class=cF0>(</span><span class=cF3>KERNEL_MODULE_NAME</span><span class=cF0>, </span><span class=cF3>HTT_MODULE</span><span class=cF0> | </span><span class=cF3>HTF_PUBLIC</span><span class=cF0>, </span><span class=cFB>mem_boot_base</span><span class=cF0> - </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBinFile</span><span class=cF7>)</span><span class=cF0>);
 <a name="l282"></a>
-<a name="l283"></a>    </span><span class=cF2>//Abs patches done here </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart32.html#l101"><span class=cF4>CPatchTableAbsAddr</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l283"></a>    </span><span class=cF2>//Abs patches done here </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart32.CC.html#l101"><span class=cF4>CPatchTableAbsAddr</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l284"></a>    </span><span class=cFD>LoadPass1</span><span class=cF0>(</span><span class=cFB>sys_boot_patch_table_base</span><span class=cF0>, </span><span class=cFB>mem_boot_base</span><span class=cF0>, </span><span class=cF3>LDF_NO_ABSS</span><span class=cF0> | </span><span class=cF3>LDF_SILENT</span><span class=cF0>);
 <a name="l285"></a>
 <a name="l286"></a>    </span><span class=cF2>//No main routines</span><span class=cF0>
