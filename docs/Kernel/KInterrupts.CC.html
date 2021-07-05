@@ -240,10 +240,10 @@ body {background-color:#000000;}
 <a name="l213"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; </span><span class=cFE>32</span><span class=cF0>; i++)
 <a name="l214"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * i]);
 <a name="l215"></a></span><span class=cF2>/*In theory, we use the PIC mask reg to insure we don't get</span><span class=cF0>
-<a name="l216"></a></span><span class=cF2>anything but keyboard, mouse and timer IRQs.</span><span class=cF0>    </span><span class=cF2>In practice, I've</span><span class=cF0>
-<a name="l217"></a></span><span class=cF2>gotten IRQ 0x27, perhaps because I didn't initialize the APIC.</span><span class=cF0>
-<a name="l218"></a></span><span class=cF2>I go ahead and ACK PIC in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l148"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
-<a name="l219"></a></span><span class=cF2>I have no idea why I got a IRQ 0x27.</span><span class=cF0>
+<a name="l216"></a></span><span class=cF2>anything but keyboard, mouse and timer IRQs.</span><span class=cF0>    </span><span class=cF2>In practice, Terry had</span><span class=cF0>
+<a name="l217"></a></span><span class=cF2>gotten IRQ 0x27, he thought perhaps because he didn't initialize the APIC?</span><span class=cF0>
+<a name="l218"></a></span><span class=cF2>We go ahead and ACK PIC in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l148"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l219"></a></span><span class=cF2>He had no idea why he got a IRQ 0x27.</span><span class=cF0>
 <a name="l220"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l221"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_NMI</span><span class=cF0>,       </span><span class=cFD>_SYS_HLT</span><span class=cF0>);
 <a name="l222"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_TIMER</span><span class=cF0>,     </span><span class=cFD>IRQ_TIMER</span><span class=cF0>);

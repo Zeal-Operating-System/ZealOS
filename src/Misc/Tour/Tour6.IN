@@ -35,7 +35,7 @@ TourPut(	"Tip: You can restart the AutoComplete window if you have closed it by 
 			"pressing $$GREEN$$<CTRL-F1>$$FG$$.\n", TRUE);
 
 TourPut(	"You can also use the $$GREEN$$Man()$$FG$$ function to jump to source code.  "
-			"(I use AutoComplete.)  The $$GREEN$$Man()$$FG$$ is good for short symbol "
+			"(Terry used AutoComplete.)  The $$GREEN$$Man()$$FG$$ is good for short symbol "
 			"names or when inside the debugger.\n", TRUE);
 InPrint(, "Man(\"U\");");
 Sleep(1500);

@@ -18,7 +18,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	Del(out_iso_filename);
 
 	// Generate all HTML docs before ISO creation.
-	PopUpRunFile("::/Demo/ToHtmlToTXTDemo/HtmlGen.CC");
+	PopUpRunFile("::/Home/HtmlGen.CC");
 
 	DirMake("/Distro");
 	In(STD_DISTRO_DVD_CONFIG);

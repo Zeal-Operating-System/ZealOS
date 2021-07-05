@@ -5,7 +5,8 @@ U0 LoadDocDefines()
 	CBinFile *bfh = mem_boot_base - sizeof(CBinFile);
 
 	DefinePrint("DD_OS_NAME_VERSION", "ZealOS V%0.2f", sys_os_version);
-	DefinePrint("DD_TEMPLEOS_AGE", "%0.1f", (Now - Str2Date("8/1/2003")) / ToF64(1 << 32) / CDATE_YEAR_DAYS);
+	DefinePrint("DD_ZEALOS_AGE", "%0.1f", (Now - Str2Date("9/1/2019")) / ToF64(1 << 32) / CDATE_YEAR_DAYS);
+	DefinePrint("DD_TEMPLEOS_AGE", "%0.1f", (Str2Date("8/11/2018") - Str2Date("8/1/2003")) / ToF64(1 << 32) / CDATE_YEAR_DAYS);
 
 	DefinePrint("DD_KERNEL", "%08X", bfh);
 	bfh(I64) += bfh->file_size - 1;

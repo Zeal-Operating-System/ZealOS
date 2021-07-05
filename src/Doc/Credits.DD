@@ -1,6 +1,6 @@
 $WW,1$$FG,5$$TX+CX,"Credits"$$FG$
 
-$FG,2$Terry A. Davis$FG$ wrote all of TempleOS over the past 15.4 years (full-time).	ZealOS is a fork of ZenithOS, which itself is a fork of TempleOS.	It can run on some bare metal 64-bit PC's from about 2007-2019 with no layering, libraries, tools, modules or anything from other sources.	Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.	It is independent and stands alone.  100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!	It is public domain, not GPL.
+$FG,2$Terry A. Davis$FG$ wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D="DD_TEMPLEOS_AGE"$$FG$ years (full-time).	ZealOS, written over a span of $FG,2$$TX,"1.8",D="DD_ZEALOS_AGE"$$FG$ years, is a fork of ZenithOS, which itself is a fork of TempleOS.	It can run on some bare metal 64-bit PC's from about 2007-2019 with no layering, libraries, tools, modules or anything from other sources.	Otherwise, you run it in a virtual machine, like $FG,2$VMware$FG$, $FG,2$QEMU$FG$ or $FG,2$VirtualBox$FG$.	It is independent and stands alone.  100% of the src code is including on all distro's, from the kernel to the compiler to the boot loaders!	It is public domain, not GPL.
 
 *) $LK,"ATA Reg and Cmd Definitions",A="MN:ATA_NOP"$ are originally from Linux.  Later, Terry got the spec.
 
@@ -16,7 +16,7 @@ $FG,2$Terry A. Davis$FG$ wrote all of TempleOS over the past 15.4 years (full-ti
 
 *) Terry included $LK,"PCIDevice List File",A="FI:::/Misc/PCIDevices.DD",HTML="http://www.pcidatabase.com/reports.php?type=tab-delimeted"$.
 
-*) Thanks to whoever wrote this $FG,4$$TX,"CppHtml.CC",HTML="http://web.archive.org/web/20100325153025/http://home.scarlet.be/zoetrope/cpphtml.htm"$$FG$.  I'm a novice on web stuff and you helped me with html.  See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
+*) Thanks to whoever wrote this $FG,4$$TX,"CppHtml.CC",HTML="http://web.archive.org/web/20100325153025/http://home.scarlet.be/zoetrope/cpphtml.htm"$$FG$.  Terry was a novice on web stuff and you helped him with html.  See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
 
 *) Terry looked at bootable CD boot sects, but didn't learn anything, finding it easier to make his own.
 
@@ -26,7 +26,7 @@ $FG,2$Terry A. Davis$FG$ wrote all of TempleOS over the past 15.4 years (full-ti
 
 *) Thanks to $FG,4$$TX,"http://www.osdev.org",HTML="http://www.osdev.org"$$FG$ for a couple tips.
 
-*) I got $FG,4$$TX,"Webster's Dictionary",HTML="http://www.templeos.org/files/DICTIONARY.DD"$$FG$ and $LK,"The King James Bible",A="FI:::/Misc/Bible.TXT"$ from $FG,4$$TX,"Project Gutenberg",HTML="http://web.archive.org/web/20110730111436/http://promo.net/pg/"$$FG$.
+*) Terry got $FG,4$$TX,"Webster's Dictionary",HTML="http://www.templeos.org/files/DICTIONARY.DD"$$FG$ and $LK,"The King James Bible",A="FI:::/Misc/Bible.TXT"$ from $FG,4$$TX,"Project Gutenberg",HTML="http://web.archive.org/web/20110730111436/http://promo.net/pg/"$$FG$.
 
 *) John Carmack inspired Terry to use "$LK,"Clamp",A="MN:Clamp"$" as a name instead of "Limit".	He inspired Terry to use "needle" and "haystack" as names.  He inspired Terry to simplify his Frames-Per-Second code.
 

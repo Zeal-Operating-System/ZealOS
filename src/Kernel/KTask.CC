@@ -249,7 +249,7 @@ I64 TaskInit(CTask *task, I64 stack_size)
 	task->win_bottom			= text.rows - 2;
 
 	if (blkdev.home_dir)
-	{//Beware System $LK,"TaskInit",A="FF:::/Kernel/KStart64.CC,TaskInit"$. I guess ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.CC,DiskChange"$().
+	{//Beware System $LK,"TaskInit",A="FF:::/Kernel/KStart64.CC,TaskInit"$. Maybe ok until $LK,"DiskChange",A="FF:::/Kernel/KMain.CC,DiskChange"$().
 		task->cur_dv	= blkdev.let_to_drive[*blkdev.home_dir - 'A'];
 		task->cur_dir	= StrNew(blkdev.home_dir + 2, task);
 	}

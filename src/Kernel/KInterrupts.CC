@@ -213,10 +213,10 @@ U0 IntInit2()
 	for (i = 1; i < 32; i++)
 		IntEntrySet(i, &debug.int_fault_code[7 * i]);
 /*In theory, we use the PIC mask reg to insure we don't get
-anything but keyboard, mouse and timer IRQs.	In practice, I've
-gotten IRQ 0x27, perhaps because I didn't initialize the APIC.
-I go ahead and ACK PIC in $LK,"IntNop",A="MN:IntNop"$().
-I have no idea why I got a IRQ 0x27.
+anything but keyboard, mouse and timer IRQs.	In practice, Terry had
+gotten IRQ 0x27, he thought perhaps because he didn't initialize the APIC?
+We go ahead and ACK PIC in $LK,"IntNop",A="MN:IntNop"$().
+He had no idea why he got a IRQ 0x27.
 */
 	IntEntrySet(I_NMI,		 _SYS_HLT);
 	IntEntrySet(I_TIMER,	 IRQ_TIMER);

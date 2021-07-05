@@ -31,10 +31,13 @@ U0 EthernetGlobalsInit()
 U0 EthernetFrameParse(CEthernetFrame *frame_out, U8 *frame, U16 length)
 {
 	//TODO: Check length ! We need to figure out what
-	//lengths are appropriate ...... Shrine also says MemCopy has a
-	//high overhead. I'm almost tempted to say that means that a lot
+	//lengths are appropriate
+
+	//Shrine also says MemCopy has a
+	//high overhead. Almost tempted to say that means that a lot
 	//of the current system should be done with less extra allocation
 	//altogether, more passing.
+	//In practice, MemCopy causes the most slowdown on bare-metal.
 
 	NetLog("ETHERNET FRAME PARSE: Parsing frame, copying out to frame_out param.");
 

@@ -1,4 +1,4 @@
-$WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$WW,1$$PURPLE$$TX+CX,"ChangeLog"$$FG$
 $IV,1$----07/03/21 00:01:32----$IV,0$
 
 * Raised version number to 0.05.
@@ -29,10 +29,10 @@ $BK,1$* Forked ZealOS from ZenithOS. Version number 2.01 --> 0.01.$BK,0$
 	- ZenithOS		--> ZealOS
 	- Zenith Task	--> System Task
 
-	- $FG,5$Zenith$FG$		--> $FG,5$Sys$FG$
-	- $FG,5$ZenithErr$FG$		--> $FG,5$SysErr$FG$
-	- $FG,5$ZenithWarn$FG$	--> $FG,5$SysWarn$FG$
-	- $FG,5$ZenithLog$FG$		--> $FG,5$SysLog$FG$
+	- $PURPLE$Zenith$FG$		--> $PURPLE$Sys$FG$
+	- $PURPLE$ZenithErr$FG$		--> $PURPLE$SysErr$FG$
+	- $PURPLE$ZenithWarn$FG$	--> $PURPLE$SysWarn$FG$
+	- $PURPLE$ZenithLog$FG$		--> $PURPLE$SysLog$FG$
 
 	- Zenith/		--> System/
 
@@ -190,21 +190,21 @@ $IV,1$----02/23/20 02:36:28----$IV,0$
 * $LK,"R",A="MN:R"$("err", "error");
 * Removed compression from kernel. Compress.CC, CArcCtrl, CArcCompress, ExpandBuf(), CompressBuf(), DCSF_COMPRESSED, etc. Updated $LK,"::/Demo/Disk/SerializeTree.CC",A="FI:::/Demo/Disk/SerializeTree.CC"$ to not use compression.
 * Removed RS_ATTR_COMPRESSED from $LK,"RedSea attributes",A="MN:RS_ATTR_READ_ONLY"$.
-* Refactored $LK,"FU flags",A="MN:FUf_RECURSE"$. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. $LK,"DocOptEntry",A="MN:DocOptEntry"$(), $LK,"Size",A="MN:Size"$(), $LK,"Size1",A="MN:"$(), $LK,"SizeRep",A="MN:SizeRep"$(), and $LK,"SizeRep1",A="MN:SizeRep1"$() have been updated accordingly.
+* Refactored $LK,"FU flags",A="MN:FUf_RECURSE"$. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. $LK,"DocOptEntry",A="MN:DocOptEntry"$(), $LK,"Size",A="MN:Size"$(), $LK,"Size1",A="MN:Size1"$(), $LK,"SizeRep",A="MN:SizeRep"$(), and $LK,"SizeRep1",A="MN:SizeRep1"$() have been updated accordingly.
 * Removed IsDotZ(), ToggleZOrNotZ(). Cleaned up $LK,"FileRead",A="MN:FileRead"$(), $LK,"FileWrite",A="MN:FileWrite"$(), and $LK,"FileFind",A="MN:FileFind"$() accordingly.
 * Added XMM8-XMM15 to $LK,"OpCodes.DD",A="FF:::/Compiler/OpCodes.DD,XMM8"$.
 * Added $LK,"::/Demo/Graphics/32BitColor.CC",A="FI:::/Demo/Graphics/32BitColor.CC"$.
 
 $IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
-* Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
+* Added $GREEN$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
 * Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/System/Divination.CC",A="FI:::/System/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:GodWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 
 $IV,1$----02/21/20 17:30:17----$IV,0$
 * $LK,"R",A="MN:R"$("IRQ's", "IRQs");
 * Updated $LK,"MemBIOSRep",A="MN:MemBIOSRep"$() to report on VBE Linear Framebuffer size. E820 memory ranges are color-coded. It now shows the total memory reported by $LK,"MemBIOSTotal",A="MN:MemBIOSTotal"$().
-* Updated AutoComplete shortcuts from old WordStat <ALT(-SHIFT-)-W> to $FG,2$<ALT(-SHIFT-)-A>$FG$ in $LK,"::/Doc/Tips.DD",A="FI:::/Doc/Tips.DD"$.
+* Updated AutoComplete shortcuts from old WordStat <ALT(-SHIFT-)-W> to $GREEN$<ALT(-SHIFT-)-A>$FG$ in $LK,"::/Doc/Tips.DD",A="FI:::/Doc/Tips.DD"$.
 * Added $LK,"check",A="FF:::/Kernel/KStart16.CC,E801:3"$ for invalid results of BIOS function 15:E801. BIOSes either return results in AX/BX or CX/DX. You have to make sure which pair of registers it is.
 * Renamed BIOSTotalMem() -> $LK,"MemBIOSTotal",A="MN:MemBIOSTotal"$(), rewritten and commented for clarity, exported from kernel. Neat function.
 
@@ -218,7 +218,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Updated $LK,"MemRep",A="MN:MemRep"$() to report on VBE variables.
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
-* Shortened $LK,"CheckPtr",A="MN:"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
+* Shortened $LK,"CheckPtr",A="MN:CheckPtr"$() and $LK,"CheckCodePtr",A="MN:CheckCodePtr"$(). Even though boolean expressions outside of $HL$if$HL,0$ statements are compiled inefficiently, clarity and low line count is more important.
 * $LK,"RawDr",A="MN:RawDr"$() is 40 columns off the right of the screen, instead of fixed at column 40.
 * Windows start at $LK,"4/5th the screen height",A="FF:::/Kernel/KTask.CC,text.rows"$ instead of row 13. System task window is $LK,"1/5th the screen height",A="FF:::/StartOS.CC,text.rows"$.
 * $LK,"R",A="MN:R"$("RLf_VGA", "$LK,"RLf_VESA",A="MN:RLf_VESA"$");
@@ -229,11 +229,11 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 	Rundown:
 	- Added classes $LK,"CVBEInfo",A="MN:CVBEInfo"$, $LK,"CVBEMode",A="MN:CVBEMode"$, $LK,"CVBEModeShort",A="MN:CVBEModeShort"$
 	- $LK,"real-mode assembly",A="FF:::/Kernel/KStart16.CC,CVBEInfo:2"$ -- $MA-X+PU,"added kernel symbols",LM="F(\"SYS_VBE\", \"+lb\");View;"$.
-	- Added $FG,2$screen_size$FG$, $FG,2$buffer_size$FG$, $FG,2$fb_alias$FG$ members to $LK,"CTextGlobals",A="MN:CTextGlobals"$.
+	- Added $GREEN$screen_size$FG$, $GREEN$buffer_size$FG$, $GREEN$fb_alias$FG$ members to $LK,"CTextGlobals",A="MN:CTextGlobals"$.
 	- $LK,"SysGrInit",A="FF:::/Kernel/KMain.CC,text.screen_size"$() -- using $LK,"Seg2Linear",A="FF:::/Kernel/KMain.CC,Seg2Linear"$() to convert pointers.
 	- $LK,"raw text drawing routine",A="FF:::/Kernel/Display.CC,text.fb_alias"$ updated. $LK,"BLACK32, WHITE32",A="MN:BLACK32"$.
 	- Dynamic definition of $LK,"GR_WIDTH and GR_HEIGHT",A="FF:::/System/Gr/GrGlobals.CC,GR_WIDTH:2"$.
-	- $LK,"GrUpdateScreen32",A="MN:GrUpdateScreen32"$() -- $LK,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$() is used to reduce CPU usage. Added $FG,2$screen_cache$FG$ member to $LK,"CGrGlobals",A="MN:CGrGlobals"$.
+	- $LK,"GrUpdateScreen32",A="MN:GrUpdateScreen32"$() -- $LK,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$() is used to reduce CPU usage. Added $GREEN$screen_cache$FG$ member to $LK,"CGrGlobals",A="MN:CGrGlobals"$.
 	- $LK,"gr_palette",A="MN:gr_palette"$ global variable. We use $LK,"CBGR24",A="MN:CBGR24"$ in $LK,"GrPalette.CC",A="FI:::/System/Gr/GrPalette.CC"$.
 
 * Added $LK,"BinRep",A="MN:BinRep"$() from Sup1 ISO.
@@ -244,7 +244,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Added syntax highlighting for numbers. $LK,"DocHighlight",A="FF:::/System/DolDoc/DocHighlight.CC,DOC_COLOR_NUMBER"$(), $LK,"DOC_COLOR_NUMBER",A="MN:DOC_COLOR_NUMBER"$.
 * Removed unnecessary checks for the presence of the $LK,"APIC",A="MN:LAPIC_BASE"$ in $LK,"MultiProc.CC",A="FI:::/Kernel/MultiProc.CC"$, as it is present on all x86 CPUs after the P5 microarchitecture.
 * Added untested $LK,"ReAlloc",A="MN:ReAlloc"$(), as it could be useful for certain programs.
-* Added definitions for the $LK,"PCI registers",A="MN:PCIR_VENDOR_ID"$. Expanded the $LK,"CPCIDev",A="MN:CPCIDev"$ class to contain the values of the read-only registers. Added $LK,"PCIDevFind",A="MN:"$() as a simpler/abstracted alternative to $LK,"PCIClassFind",A="MN:PCIClassFind"$().
+* Added definitions for the $LK,"PCI registers",A="MN:PCIR_VENDOR_ID"$. Expanded the $LK,"CPCIDev",A="MN:CPCIDev"$ class to contain the values of the read-only registers. Added $LK,"PCIDevFind",A="MN:PCIDevFind"$() as a simpler/abstracted alternative to $LK,"PCIClassFind",A="MN:PCIClassFind"$().
 * Removed the unpolished HPET implementation from the kernel.
 * $LK,"Enabled the execution of SSE instructions",A="FF:::/Kernel/KStart64.CC,CR4f_OSFXSR"$. No actual SSE implementation in assembler yet, however.
 * Added definitions for the $MA-X+PU,"various flags",LM="F(\"CR0F_\", \"+lb\");F(\"CR4F_\", \"+lb\");View;"$ in the Control Registers.
@@ -335,7 +335,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * $UL,1$Start of Zenith Development. Changes up until version 1.0 are not timestamped.$UL,0$
 
 At this point, Terry removed his changelog. Changes made by him after 4/30/17 are not documented.
-$BK$$FG,4$!!!!!!!!!!!!!!!!!!!!!!!!!!
+$BK$$RED$!!!!!!!!!!!!!!!!!!!!!!!!!!
 ==========================
 !!!!!!!!!!!!!!!!!!!!!!!!!!$FG$$BK,0$
 
@@ -353,7 +353,7 @@ $IV,1$----04/21/17 14:17:49----$IV,0$
 * $LK,"R",A="MN:R"$("MODULE_ORG","ORG");
 
 $IV,1$----03/17/17 00:35:11----$IV,0$
-* Added toggle AutoSave $FG,2$<CTRL-SHIFT-s>$FG$.
+* Added toggle AutoSave $GREEN$<CTRL-SHIFT-s>$FG$.
 
 $IV,1$----03/14/17 00:14:39----$IV,0$
 * $BK,1$TempleOS version 5.03 Released$BK,0$
@@ -403,7 +403,7 @@ $IV,1$----01/22/17 06:08:00----$IV,0$
 * Changed polling of $LK,"KbdMsHndlr",A="MN:KbdMsHndlr"$() in $LK,"WinMgrSleep",A="MN:WinMgrSleep"$(), increased fifos.
 
 $IV,1$----01/17/17 18:11:53----$IV,0$
-* Fixed $FG,2$$$$FG$ class offset so $FG,2$#assert$FG$'s don't lag a token.
+* Fixed $GREEN$$$$FG$ class offset so $GREEN$#assert$FG$'s don't lag a token.
 
 $IV,1$----01/17/17 14:39:41----$IV,0$
 * Added $LK,"blkdev.ins_base0",A="MN:CBlkDevGlbls"$ and $LK,"blkdev.ins_unit",A="MN:CBlkDevGlbls"$.
@@ -416,7 +416,7 @@ $IV,1$----01/17/17 06:12:21----$IV,0$
 * $LK,"R",A="MN:R"$("NUM_...","..._NUM");
 
 $IV,1$----01/14/17 19:16:51----$IV,0$
-* Created $FG,2$/Demo/AcctExample/TOS$FG$.
+* Created $GREEN$/Demo/AcctExample/TOS$FG$.
 * $LK,"R",A="MN:R"$("MAX_...","_NUM...");
 
 $IV,1$----01/14/17 09:43:12----$IV,0$
@@ -427,7 +427,7 @@ $IV,1$----01/14/17 09:43:12----$IV,0$
 $IV,1$----01/11/17 03:33:33----$IV,0$
 * $BK,1$TempleOS version 5.01 Released$BK,0$
 * $LK,"R",A="MN:R"$("ChangeLog","ChgLog");
-* Added show mouse pos to $FG,2$<CTRL-ALT-G>$FG$.
+* Added show mouse pos to $GREEN$<CTRL-ALT-G>$FG$.
 * Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.HC,TOSRegen("$().
 * Added $LK,"Let2Let",A="MN:Let2Let"$().
 
@@ -471,7 +471,7 @@ $IV,1$----01/05/17 04:53:21----$IV,0$
 $IV,1$----01/04/17 18:06:14----$IV,0$
 * Added $LK,"::/Demo/AcctExample/TOS/TOSPolicies.DD"$.
 * $LK,"R",A="MN:R"$("U0 pad;",";"); for align #asserts.
-* Got rid of $FG,4$mouse.throttle$FG$. 
+* Got rid of $RED$mouse.throttle$FG$. 
 * $LK,"R",A="MN:R"$("Button","Bttn");
 * $LK,"R",A="MN:R"$("Handler","Hndlr");
 * $LK,"R",A="MN:R"$("InputPointer","Mouse");
@@ -501,7 +501,7 @@ $IV,1$----12/30/16 23:42:20----$IV,0$
 * $LK,"R",A="MN:R"$("BusyWait()","$LK,"Busy",A="MN:Busy"$()");
 
 $IV,1$----12/29/16 10:21:44----$IV,0$
-* Changed $LK,"Snd",A="MN:Snd"$() from $FG,2$freq$FG$ to a $FG,2$I8$FG$ val called an $FG,2$ona$FG$.
+* Changed $LK,"Snd",A="MN:Snd"$() from $GREEN$freq$FG$ to a $GREEN$I8$FG$ val called an $GREEN$ona$FG$.
 * Fixed error in music octaves.
 * To convert songs, download Supplemental#1 ISO from the AppStore on http://www.templeos.org and run Sup1/Sup1Utils/CvtSong500.HC.
 
@@ -584,7 +584,7 @@ $IV,1$----09/27/16 11:09:25----$IV,0$
 
 $IV,1$----09/27/16 01:05:52----$IV,0$
 * Improved $LK,"::/Doc/MemOverview.DD"$.
-* Got rid of $FG,4$::/Demo/Lectures/Mem$FG$.
+* Got rid of $RED$::/Demo/Lectures/Mem$FG$.
 * Made filename paths relative to document location in DolDoc links.
 * $LK,"R",A="MN:R"$("Temp","Tmp");
 
@@ -625,7 +625,7 @@ $IV,1$----09/18/16 12:52:03----$IV,0$
 $IV,1$----09/06/16 13:01:42----$IV,0$
 * Added $LK,"OPTf_WARN_HEADER_MISMATCH",A="MN:OPTf_WARN_HEADER_MISMATCH"$.
 * Changed $LK,"WinInside",A="MN:WinInside"$().
-* Got rid of $FG,4$MSG_FOCUS$FG$, $FG,4$MSG_MOVE$FG$, and $FG,4$MSG_SIZE$FG$.  There are no longer messages for moving and sizing windows.
+* Got rid of $RED$MSG_FOCUS$FG$, $RED$MSG_MOVE$FG$, and $RED$MSG_SIZE$FG$.  There are no longer messages for moving and sizing windows.
 
 $IV,1$----09/06/16 02:40:43----$IV,0$
 * Improved $LK,"::/Demo/MagicPairs.HC"$.
@@ -657,13 +657,13 @@ $IV,1$----07/13/16 17:21:19----$IV,0$
 
 $IV,1$----07/09/16 08:46:36----$IV,0$
 * Changed scoring in $LK,"::/Demo/Games/Talons.HC"$.
-* Replaced many $FG,2$"%Q"$FG$ with $FG,2$"%$$Q"$FG$.
-* Fixed $FG,2$'\x24'$FG$.
-* Added $FG,2$'\d'$FG$ for $FG,2$'$$'$FG$.
+* Replaced many $GREEN$"%Q"$FG$ with $GREEN$"%$$Q"$FG$.
+* Fixed $GREEN$'\x24'$FG$.
+* Added $GREEN$'\d'$FG$ for $GREEN$'$$'$FG$.
 
 $IV,1$----07/08/16 14:30:19----$IV,0$
 * $LK,"R",A="MN:R"$("root","head");
-* Fixed $FG,2$REP_STOSB$FG$ and $LK,"MemSet",A="MN:MemSet"$() for 64-bit.
+* Fixed $GREEN$REP_STOSB$FG$ and $LK,"MemSet",A="MN:MemSet"$() for 64-bit.
 
 $IV,1$----07/07/16 07:21:03----$IV,0$
 * $LK,"DocRead",A="MN:DocRead"$() changes to file's dir so relative filenames work.
@@ -699,7 +699,7 @@ $IV,1$----06/24/16 14:15:13----$IV,0$
 
 $IV,1$----06/24/16 02:55:42----$IV,0$
 * $BK,1$TempleOS version 4.08 Released$BK,0$
-* Added $FG,2$Polygon$FG$, $FG,2$Fence$FG$, $FG,2$Prism$FG$ and $FG,2$ResetColor$FG$ commands to $LK,"SpriteMeshEd",A="MN:SpriteMeshEd"$().
+* Added $GREEN$Polygon$FG$, $GREEN$Fence$FG$, $GREEN$Prism$FG$ and $GREEN$ResetColor$FG$ commands to $LK,"SpriteMeshEd",A="MN:SpriteMeshEd"$().
 * $LK,"R",A="MN:R"$("Reverse","Rev");
 * $LK,"R",A="MN:R"$("Select","Sel");
 
@@ -713,18 +713,18 @@ $IV,1$----06/18/16 16:16:22----$IV,0$
 * $LK,"R",A="MN:R"$("sub_switch_start","start");
 * $LK,"R",A="MN:R"$("sub_switch_end","end");
 * Changed args to $LK,"PutDirLink",A="MN:PutDirLink"$() and $LK,"PutFileLink",A="MN:PutFileLink"$().
-* Added $LK,"HomeSet",A="MN:HomeSet"$().  Added $FG,2$"~"$FG$ as special directory designator.
-* Changed filename exclude mask char from $FG,2$'~'$FG$ to $FG,2$'!'$FG$.  See $LK,"File Utils",A="FI:::/Doc/FileUtils.DD"$.
-* Got rid of $FG,4$/Home/HomePkgs.HC$FG$.
+* Added $LK,"HomeSet",A="MN:HomeSet"$().  Added $GREEN$"~"$FG$ as special directory designator.
+* Changed filename exclude mask char from $GREEN$'~'$FG$ to $GREEN$'!'$FG$.  See $LK,"File Utils",A="FI:::/Doc/FileUtils.DD"$.
+* Got rid of $RED$/Home/HomePkgs.HC$FG$.
 
 $IV,1$----06/16/16 20:59:41----$IV,0$
-* $FG,2$<CTRL-ALT-t>$FG$ is terminal window.
-* $FG,2$<CTRL-ALT-n>$FG$ is next task.
+* $GREEN$<CTRL-ALT-t>$FG$ is terminal window.
+* $GREEN$<CTRL-ALT-n>$FG$ is next task.
 
 $IV,1$----06/16/16 19:49:39----$IV,0$
 * Added $LK,"::/Doc/Comm.HC"$.
 * Added $LK,"::/Doc/StdTempleOSPC.DD"$.
-* Added $LK,"::/Kernel/FontCyrillic.HC"$. $FG,2$<CTRL-ALT-f>$FG$
+* Added $LK,"::/Kernel/FontCyrillic.HC"$. $GREEN$<CTRL-ALT-f>$FG$
 
 $IV,1$----06/02/16 03:20:56----$IV,0$
 * $BK,1$TempleOS version 4.07 Released$BK,0$

@@ -218,7 +218,7 @@ $FG$$ID,-2$
 
 * With the $FG,2$#exe{}$FG$ feature in your src code, you can place programs that insert text into the stream of code being compiled.  See $LK,"#exe {}",A="FF:::/Kernel/KMain.CC,#exe {"$ for an example where the date/time and compile-time prompting for configuration data is placed into a program.  $LK,"StreamPrint",A="MN:StreamPrint"$() places text into a src program stream following the conclusion of the $FG,2$#exe{}$FG$ blk.
 
-* No $FG,2$#define$FG$ functions exist (I'm not a fan)
+* No $FG,2$#define$FG$ functions exist (Terry was not a fan)
 
 * No $FG,2$typedef$FG$, use $FG,2$class$FG$.
 

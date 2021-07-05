@@ -14,7 +14,7 @@
 	the modified/unmodified states to
 	determine next procedure. 
 
-	I included some code for IPV6, currently
+	Some code is inclded for IPV6, currently
 	unused. */
 
 #define SOCKET_STATE_READY			0
