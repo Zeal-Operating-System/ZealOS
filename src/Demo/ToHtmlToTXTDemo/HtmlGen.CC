@@ -88,9 +88,9 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 					StrCompare(dest_ext, "DATA")	&&
 					StrCompare(dest_ext, "MAP"))
 				{
-					dest_path = MStrPrint("%s/%s.%s", dest_abs, dest_file, dest_ext);
+					dest_path = MStrPrint("%s/%s.%s.html", dest_abs, dest_file, dest_ext);
 
-					"%s.html\n\n", dest_path;
+					"%s\n\n", dest_path;
 					ToHtml(tmpde1->full_name, dest_path);
 
 					Free(dest_path);

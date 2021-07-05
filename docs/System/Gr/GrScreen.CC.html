@@ -1,0 +1,464 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Screen&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateTaskODEs</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cFB>sys_task_being_screen_updated</span><span class=cF0> = task;
+<a name="l6"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l7"></a>        </span><span class=cF5>ODEsUpdate</span><span class=cF0>(task);
+<a name="l8"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l10"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_ODE</span><span class=cF0>);
+<a name="l11"></a>        </span><span class=cF6>&quot;Exception in WinMgr: Update Task ODEs\n&quot;</span><span class=cF0>;
+<a name="l12"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l13"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>3000</span><span class=cF0>);
+<a name="l14"></a>        </span><span class=cF5>LFBFlush</span><span class=cF0>;
+<a name="l15"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l16"></a>    </span><span class=cFB>sys_task_being_screen_updated</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l17"></a>}
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateTaskWin</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
+<a name="l20"></a>{ </span><span class=cF2>//Draw a win. Only Core0 tasks have a win.</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF9>CDC</span><span class=cF0>     *dc;
+<a name="l22"></a>    </span><span class=cF9>CD3I64</span><span class=cF0>   saved_scroll;
+<a name="l23"></a>
+<a name="l24"></a>    </span><span class=cFB>sys_task_being_screen_updated</span><span class=cF0> = task;
+<a name="l25"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l26"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l27"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_NO_BORDER</span><span class=cF7>)</span><span class=cF0>)
+<a name="l28"></a>            </span><span class=cF5>TextBorder</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>,  task-&gt;win_left, task-&gt;win_right, task-&gt;win_top, task-&gt;win_bottom,
+<a name="l29"></a>                            task-&gt;border_attr, task == </span><span class=cFB>sys_focus_task</span><span class=cF0>);
+<a name="l30"></a>
+<a name="l31"></a>        </span><span class=cF5>TextRect</span><span class=cF0>(task-&gt;win_left, task-&gt;win_right, task-&gt;win_top, task-&gt;win_bottom, task-&gt;text_attr &lt;&lt; </span><span class=cFE>8</span><span class=cF0>);
+<a name="l32"></a>        </span><span class=cF1>if</span><span class=cF0> (task == </span><span class=cFB>sys_winmgr_task</span><span class=cF0>)
+<a name="l33"></a>        {
+<a name="l34"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.fp_wall_paper)
+<a name="l35"></a>                (*</span><span class=cFB>gr</span><span class=cF0>.fp_wall_paper)(task);
+<a name="l36"></a>        }
+<a name="l37"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>task-&gt;win_inhibit &amp; </span><span class=cF3>WIF_SELF_DOC</span><span class=cF7>)</span><span class=cF0>)
+<a name="l38"></a>            </span><span class=cF5>DocUpdateTaskDocs</span><span class=cF0>(task);
+<a name="l39"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l40"></a>        {
+<a name="l41"></a>            </span><span class=cF1>if</span><span class=cF0> (task-&gt;draw_it)
+<a name="l42"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l43"></a>                dc = </span><span class=cF5>DCAlias</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc2, task);
+<a name="l44"></a>                (*task-&gt;draw_it)(task, dc);
+<a name="l45"></a>                </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l46"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l48"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l49"></a>                </span><span class=cF5>WinScrollNull</span><span class=cF0>(task, &amp;saved_scroll);
+<a name="l50"></a>                </span><span class=cF5>DrawCtrls</span><span class=cF0>(task);
+<a name="l51"></a>                </span><span class=cF5>WinScrollRestore</span><span class=cF0>(task, &amp;saved_scroll);
+<a name="l52"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l53"></a>        }
+<a name="l54"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l55"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l56"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l57"></a>        </span><span class=cF1>if</span><span class=cF0> (task != </span><span class=cF5>Fs</span><span class=cF0> &amp;&amp; </span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l58"></a>        {
+<a name="l59"></a>            </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF0>);
+<a name="l60"></a>            </span><span class=cF6>&quot;Exception in WinMgr: Update Task Win\n&quot;</span><span class=cF0>;
+<a name="l61"></a>            </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l62"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>3000</span><span class=cF0>);
+<a name="l63"></a>            </span><span class=cF5>LFBFlush</span><span class=cF0>;
+<a name="l64"></a>        }
+<a name="l65"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l66"></a>    </span><span class=cFB>sys_task_being_screen_updated</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l67"></a>}
+<a name="l68"></a>
+<a name="l69"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateTasks</span><span class=cF0>()
+<a name="l70"></a>{</span><span class=cF2>//Only called by WinMgr</span><span class=cF0>
+<a name="l71"></a>    </span><span class=cF9>I64</span><span class=cF0>      i;
+<a name="l72"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task, *task1;
+<a name="l73"></a>
+<a name="l74"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l75"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l76"></a>        </span><span class=cFB>winmgr</span><span class=cF0>.ode_time = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l77"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_UPDATE_WIN_Z_BUF</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l78"></a>            </span><span class=cF5>WinZBufUpdate</span><span class=cF0>;
+<a name="l79"></a>        task1 = task = </span><span class=cFB>sys_winmgr_task</span><span class=cF0>;
+<a name="l80"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l81"></a>        { </span><span class=cF2>//Loop through Core0 tasks.</span><span class=cF0>
+<a name="l82"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l83"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l84"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>gr</span><span class=cF0>.win_uncovered_bitmap, task-&gt;win_z_num</span><span class=cF7>)</span><span class=cF0>)
+<a name="l85"></a>                </span><span class=cF5>GrUpdateTaskWin</span><span class=cF0>(task);
+<a name="l86"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l87"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l88"></a>            task = task-&gt;next_task;
+<a name="l89"></a>        }
+<a name="l90"></a>        </span><span class=cF1>while</span><span class=cF0> (task != task1);
+<a name="l91"></a>
+<a name="l92"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>mp_count</span><span class=cF0>; i++)
+<a name="l93"></a>        { </span><span class=cF2>//Loop through all cores.</span><span class=cF0>
+<a name="l94"></a>            task1 = task = </span><span class=cFB>cpu_structs</span><span class=cF0>[i].executive_task;
+<a name="l95"></a>            </span><span class=cF1>do</span><span class=cF0>
+<a name="l96"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l97"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l98"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l99"></a>                </span><span class=cF5>GrUpdateTaskODEs</span><span class=cF0>(task);
+<a name="l100"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l101"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l102"></a>                task = task-&gt;next_task;
+<a name="l103"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l104"></a>            </span><span class=cF1>while</span><span class=cF0> (task != task1);
+<a name="l105"></a>        }
+<a name="l106"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l107"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l108"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l109"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l110"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;Exception in WinMgr&quot;</span><span class=cF0>);
+<a name="l111"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l112"></a>    </span><span class=cFB>winmgr</span><span class=cF0>.last_ode_time = </span><span class=cFB>winmgr</span><span class=cF0>.ode_time;
+<a name="l113"></a>    </span><span class=cFB>ode_alloced_factor</span><span class=cF0> = </span><span class=cF5>LowPass1</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>, </span><span class=cFB>ode_alloced_factor</span><span class=cF0>, </span><span class=cF5>Clamp</span><span class=cF7>(</span><span class=cF5>Gs</span><span class=cF0>-&gt;idle_factor - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>8</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> / </span><span class=cFB>winmgr</span><span class=cF0>.fps);
+<a name="l114"></a>    </span><span class=cFB>sys_task_being_screen_updated</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l115"></a>}
+<a name="l116"></a>
+<a name="l117"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrFixZoomScale</span><span class=cF0>()
+<a name="l118"></a>{
+<a name="l119"></a>    </span><span class=cFB>gr</span><span class=cF0>.screen_zoom = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.screen_zoom, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>GR_SCREEN_ZOOM_MAX</span><span class=cF0>);
+<a name="l120"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.screen_zoom == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l121"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l122"></a>        </span><span class=cFB>gr</span><span class=cF0>.sx = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l123"></a>        </span><span class=cFB>gr</span><span class=cF0>.sy = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l124"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l125"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l126"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l127"></a>        </span><span class=cFB>gr</span><span class=cF0>.sx = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.sx, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>GR_WIDTH</span><span class=cF0>  - </span><span class=cF3>GR_WIDTH</span><span class=cF0>  / </span><span class=cFB>gr</span><span class=cF0>.screen_zoom) &amp; ~</span><span class=cFE>7</span><span class=cF0>;
+<a name="l128"></a>        </span><span class=cFB>gr</span><span class=cF0>.sy = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.sy, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>GR_HEIGHT</span><span class=cF0> - </span><span class=cF3>GR_HEIGHT</span><span class=cF0> / </span><span class=cFB>gr</span><span class=cF0>.screen_zoom);
+<a name="l129"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l130"></a>}
+<a name="l131"></a>
+<a name="l132"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrScaleZoom</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> scale)
+<a name="l133"></a>{</span><span class=cF2>//Multiply zoom factor larger or smaller.</span><span class=cF0>
+<a name="l134"></a>    </span><span class=cF1>F64</span><span class=cF0> s = </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l135"></a>
+<a name="l136"></a>    </span><span class=cFB>gr</span><span class=cF0>.screen_zoom = </span><span class=cFB>gr</span><span class=cF0>.screen_zoom*scale;
+<a name="l137"></a>    </span><span class=cF5>GrFixZoomScale</span><span class=cF0>;
+<a name="l138"></a>    s /= </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l139"></a>    </span><span class=cFB>mouse</span><span class=cF0>.scale.x *= s;
+<a name="l140"></a>    </span><span class=cFB>mouse</span><span class=cF0>.scale.y *= s;
+<a name="l141"></a>    </span><span class=cFB>mouse</span><span class=cF0>.scale.z *= s;
+<a name="l142"></a>    </span><span class=cFB>mouse</span><span class=cF0>.</span><span class=cF1>offset</span><span class=cF0>.x = </span><span class=cFB>mouse</span><span class=cF0>.pos.x - (</span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cFB>mouse</span><span class=cF0>.</span><span class=cF1>offset</span><span class=cF0>.x) * s;
+<a name="l143"></a>    </span><span class=cFB>mouse</span><span class=cF0>.</span><span class=cF1>offset</span><span class=cF0>.y = </span><span class=cFB>mouse</span><span class=cF0>.pos.y - (</span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cFB>mouse</span><span class=cF0>.</span><span class=cF1>offset</span><span class=cF0>.y) * s;
+<a name="l144"></a>    </span><span class=cFB>mouse</span><span class=cF0>.</span><span class=cF1>offset</span><span class=cF0>.z = </span><span class=cFB>mouse</span><span class=cF0>.pos.z - (</span><span class=cFB>mouse</span><span class=cF0>.pos.z - </span><span class=cFB>mouse</span><span class=cF0>.</span><span class=cF1>offset</span><span class=cF0>.z) * s;
+<a name="l145"></a>    </span><span class=cFB>gr</span><span class=cF0>.sx = </span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;width  &gt;&gt; </span><span class=cFE>1</span><span class=cF0> / </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l146"></a>    </span><span class=cFB>gr</span><span class=cF0>.sy = </span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;height &gt;&gt; </span><span class=cFE>1</span><span class=cF0> / </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l147"></a>    </span><span class=cF5>GrFixZoomScale</span><span class=cF0>;
+<a name="l148"></a>}
+<a name="l149"></a>
+<a name="l150"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrZoomInScreen</span><span class=cF0>()
+<a name="l151"></a>{
+<a name="l152"></a>    </span><span class=cF5>GrFixZoomScale</span><span class=cF0>;
+<a name="l153"></a>    </span><span class=cF9>I64</span><span class=cF0> plane, row, col, k, l, 
+<a name="l154"></a>        d2 = </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;width &gt;&gt; </span><span class=cFE>3</span><span class=cF0> / </span><span class=cFB>gr</span><span class=cF0>.screen_zoom, 
+<a name="l155"></a>        d4 = </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;width_internal &gt;&gt; </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l156"></a>        d5 = d4 - d2 * </span><span class=cFB>gr</span><span class=cF0>.screen_zoom, 
+<a name="l157"></a>        d3 = </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;height / </span><span class=cFB>gr</span><span class=cF0>.screen_zoom, 
+<a name="l158"></a>        d6 = (</span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;height - d3) * </span><span class=cFB>gr</span><span class=cF0>.dc1-&gt;width_internal &gt;&gt; </span><span class=cFE>3</span><span class=cF0>, 
+<a name="l159"></a>        d7 = </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;height % </span><span class=cFB>gr</span><span class=cF0>.screen_zoom * d4;
+<a name="l160"></a>    </span><span class=cF1>U8</span><span class=cF0> *src, *src2, *dst, *src3, *map = </span><span class=cFB>gr</span><span class=cF0>.screen_zoom_tables[</span><span class=cFB>gr</span><span class=cF0>.screen_zoom];
+<a name="l161"></a>
+<a name="l162"></a>    src = </span><span class=cFB>gr</span><span class=cF0>.dc1-&gt;body + </span><span class=cFB>gr</span><span class=cF0>.sx &gt;&gt; </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFB>gr</span><span class=cF0>.sy * </span><span class=cFB>gr</span><span class=cF0>.dc1-&gt;width_internal &gt;&gt; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l163"></a>    dst = </span><span class=cFB>gr</span><span class=cF0>.zoomed_dc-&gt;body;
+<a name="l164"></a>    </span><span class=cF1>for</span><span class=cF0> (plane = </span><span class=cFE>1</span><span class=cF0>; plane &lt; </span><span class=cFE>0x10</span><span class=cF0>; plane &lt;&lt;= </span><span class=cFE>1</span><span class=cF0>)
+<a name="l165"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l166"></a>        row = d3;
+<a name="l167"></a>        </span><span class=cF1>while</span><span class=cF0> (row--)
+<a name="l168"></a>        {
+<a name="l169"></a>            k = </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l170"></a>            </span><span class=cF1>while</span><span class=cF0> (k--)
+<a name="l171"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l172"></a>                src2 = src;
+<a name="l173"></a>                col = d2;
+<a name="l174"></a>                </span><span class=cF1>while</span><span class=cF0> (col--)
+<a name="l175"></a>                {
+<a name="l176"></a>                    src3 = &amp;map[*src2++];
+<a name="l177"></a>                    l = </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l178"></a>                    </span><span class=cF1>while</span><span class=cF0> (l--)
+<a name="l179"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l180"></a>                        *dst++ = *src3;
+<a name="l181"></a>                        src3 += </span><span class=cFE>256</span><span class=cF0>;
+<a name="l182"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l183"></a>                }
+<a name="l184"></a>                l = d5;
+<a name="l185"></a>                </span><span class=cF1>while</span><span class=cF0> (l--)
+<a name="l186"></a>                    *dst++ = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l187"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l188"></a>            src += d4;
+<a name="l189"></a>        }
+<a name="l190"></a>        l = d7;
+<a name="l191"></a>        </span><span class=cF1>while</span><span class=cF0> (l--)
+<a name="l192"></a>            *dst++ = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l193"></a>        src += d6;
+<a name="l194"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l195"></a>}
+<a name="l196"></a>
+<a name="l197"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateTextBG</span><span class=cF0>()
+<a name="l198"></a>{
+<a name="l199"></a>    </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>reg</span><span class=cF0> </span><span class=cFC>RSI</span><span class=cF0> *dst = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body, </span><span class=cF1>reg</span><span class=cF0> </span><span class=cFC>R13</span><span class=cF0> c, row, col, 
+<a name="l200"></a>                 num_rows = </span><span class=cF3>TEXT_ROWS</span><span class=cF0>, num_cols = </span><span class=cF3>TEXT_COLS</span><span class=cF0>, i, j, cur_ch, 
+<a name="l201"></a>        </span><span class=cF1>reg</span><span class=cF0> </span><span class=cFC>R12</span><span class=cF0>  w1 = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;width_internal, w2 = -</span><span class=cFE>7</span><span class=cF0> * w1 + </span><span class=cFE>8</span><span class=cF0>, w3 = </span><span class=cFE>7</span><span class=cF0> * w1, w4 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l202"></a>    </span><span class=cF9>U32</span><span class=cF0>         *src = </span><span class=cFB>gr</span><span class=cF0>.text_base;
+<a name="l203"></a>    </span><span class=cF1>Bool</span><span class=cF0>         blink_flag = </span><span class=cF5>Blink</span><span class=cF0>;
+<a name="l204"></a>    </span><span class=cF1>U8</span><span class=cF0>          *dst2 = dst;
+<a name="l205"></a>
+<a name="l206"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_x || </span><span class=cFB>gr</span><span class=cF0>.hide_col)
+<a name="l207"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l208"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_x = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_x, -</span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>);
+<a name="l209"></a>        j = </span><span class=cF5>AbsI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_x) / </span><span class=cF3>FONT_WIDTH</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l210"></a>        num_cols -= j;
+<a name="l211"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_x &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l212"></a>        {
+<a name="l213"></a>            src += j;
+<a name="l214"></a>            i = </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * j + </span><span class=cFB>gr</span><span class=cF0>.pan_text_x;
+<a name="l215"></a>        }
+<a name="l216"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l217"></a>            i = </span><span class=cFB>gr</span><span class=cF0>.pan_text_x;
+<a name="l218"></a>        dst2 = dst(</span><span class=cF1>U8</span><span class=cF0> *) + i;
+<a name="l219"></a>        w4 = j;
+<a name="l220"></a>        w3 += j * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l221"></a>
+<a name="l222"></a>        j *= </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l223"></a>        dst(</span><span class=cF1>U8</span><span class=cF0> *) = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body;
+<a name="l224"></a>        </span><span class=cF1>for</span><span class=cF0> (row = num_rows * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>; row--;)
+<a name="l225"></a>        {
+<a name="l226"></a>            </span><span class=cF1>for</span><span class=cF0> (col = i; col--;)
+<a name="l227"></a>                *dst(</span><span class=cF1>U8</span><span class=cF0> *)++ = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l228"></a>            dst(</span><span class=cF1>U8</span><span class=cF0> *) += w1 - i - j;
+<a name="l229"></a>            </span><span class=cF1>for</span><span class=cF0> (col = j; col--;)
+<a name="l230"></a>                *dst(</span><span class=cF1>U8</span><span class=cF0> *)++ = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l231"></a>        }
+<a name="l232"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l233"></a>    dst = dst2;
+<a name="l234"></a>
+<a name="l235"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_y || </span><span class=cFB>gr</span><span class=cF0>.hide_row)
+<a name="l236"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l237"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_y = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_y, -</span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>);
+<a name="l238"></a>        j = </span><span class=cF5>AbsI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_y) / </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l239"></a>        num_rows -= j;
+<a name="l240"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_y &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l241"></a>        {
+<a name="l242"></a>            src += w1 / </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * j;
+<a name="l243"></a>            i = w1 * (</span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * j + </span><span class=cFB>gr</span><span class=cF0>.pan_text_y);
+<a name="l244"></a>        }
+<a name="l245"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l246"></a>            i = w1 * </span><span class=cFB>gr</span><span class=cF0>.pan_text_y;
+<a name="l247"></a>        dst2 = dst(</span><span class=cF1>U8</span><span class=cF0> *) + i;
+<a name="l248"></a>
+<a name="l249"></a>        j *= w1 * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;
+<a name="l250"></a>        dst(</span><span class=cF1>U8</span><span class=cF0> *) = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body;
+<a name="l251"></a>        </span><span class=cF1>for</span><span class=cF0> (row = i; row--;)
+<a name="l252"></a>            *dst(</span><span class=cF1>U8</span><span class=cF0> *)++ = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l253"></a>        dst(</span><span class=cF1>U8</span><span class=cF0> *) = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body + </span><span class=cF3>TEXT_ROWS</span><span class=cF0> * </span><span class=cF3>TEXT_COLS</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0> - j;
+<a name="l254"></a>        </span><span class=cF1>for</span><span class=cF0> (row=j;row--;)
+<a name="l255"></a>            *dst(</span><span class=cF1>U8</span><span class=cF0> *)++ = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l256"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l257"></a>    dst = dst2;
+<a name="l258"></a>
+<a name="l259"></a>    </span><span class=cF1>for</span><span class=cF0> (row = num_rows; row--;)
+<a name="l260"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l261"></a>        </span><span class=cF1>for</span><span class=cF0> (col = num_cols; col--;)
+<a name="l262"></a>        {
+<a name="l263"></a>            cur_ch = *src++;
+<a name="l264"></a>            </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF7>(</span><span class=cF3>ATTRF_SEL</span><span class=cF0> | </span><span class=cF3>ATTRF_INVERT</span><span class=cF0> | </span><span class=cF3>ATTRF_BLINK</span><span class=cF7>)</span><span class=cF0>)
+<a name="l265"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l266"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF3>ATTRF_SEL</span><span class=cF0>)
+<a name="l267"></a>                    cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] = cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] ^ </span><span class=cFE>0xFF</span><span class=cF0>;
+<a name="l268"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF3>ATTRF_INVERT</span><span class=cF0>)
+<a name="l269"></a>                    cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] = cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &gt;&gt; </span><span class=cFE>4</span><span class=cF0>;
+<a name="l270"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF3>ATTRF_BLINK</span><span class=cF0> &amp;&amp; blink_flag)
+<a name="l271"></a>                    cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] = cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &gt;&gt; </span><span class=cFE>4</span><span class=cF0>;
+<a name="l272"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l273"></a>            c = </span><span class=cFB>gr</span><span class=cF0>.to_8_colors[cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &gt;&gt; </span><span class=cFE>4</span><span class=cF0>];
+<a name="l274"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l275"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l276"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l277"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l278"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l279"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l280"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l281"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l282"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l283"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l284"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l285"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l286"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l287"></a>            </span><span class=cF1>ADD</span><span class=cF0>             </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cFC>R12</span><span class=cF0>
+<a name="l288"></a>            </span><span class=cF1>MOV</span><span class=cF0>             </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>R13</span><span class=cF0>
+<a name="l289"></a>            dst(</span><span class=cF1>U8</span><span class=cF0> *) += w2;
+<a name="l290"></a>        }
+<a name="l291"></a>        src += w4;
+<a name="l292"></a>        dst(</span><span class=cF1>U8</span><span class=cF0> *) += w3;
+<a name="l293"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l294"></a>}
+<a name="l295"></a>
+<a name="l296"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateTextFG</span><span class=cF0>()
+<a name="l297"></a>{</span><span class=cF2>//See </span><span class=cF4><u>TextBase Layer</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l298"></a>    </span><span class=cF9>U32</span><span class=cF0> *src = </span><span class=cFB>gr</span><span class=cF0>.text_base;
+<a name="l299"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, j, cur_ch, *dst = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body, w1 = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;width_internal, w2 = </span><span class=cFE>7</span><span class=cF0> * w1, w4 = </span><span class=cFE>0</span><span class=cF0>, 
+<a name="l300"></a>         num_rows = </span><span class=cF3>TEXT_ROWS</span><span class=cF0>, num_cols = </span><span class=cF3>TEXT_COLS</span><span class=cF0>, row, col;
+<a name="l301"></a>    </span><span class=cF1>U8</span><span class=cF0>  *dst_start = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body, *dst_end = dst_start + w1 * </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;height - </span><span class=cFE>7</span><span class=cF0> * w1 - </span><span class=cFE>8</span><span class=cF0>;
+<a name="l302"></a>    </span><span class=cF1>Bool</span><span class=cF0> blink_flag = </span><span class=cF5>Blink</span><span class=cF0>;
+<a name="l303"></a>
+<a name="l304"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_x || </span><span class=cFB>gr</span><span class=cF0>.hide_col)
+<a name="l305"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l306"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_x = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_x, -</span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>);
+<a name="l307"></a>        j = </span><span class=cF5>AbsI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_x) / </span><span class=cF3>FONT_WIDTH</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l308"></a>        num_cols -= j;
+<a name="l309"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_x &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l310"></a>        {
+<a name="l311"></a>            src += j;
+<a name="l312"></a>            dst(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * j;
+<a name="l313"></a>        }
+<a name="l314"></a>        w4 = j;
+<a name="l315"></a>        w2 += j * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l316"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l317"></a>
+<a name="l318"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_y || </span><span class=cFB>gr</span><span class=cF0>.hide_row)
+<a name="l319"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l320"></a>        </span><span class=cFB>gr</span><span class=cF0>.pan_text_y = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_y, -</span><span class=cFE>7</span><span class=cF0>, </span><span class=cFE>7</span><span class=cF0>);
+<a name="l321"></a>        j = </span><span class=cF5>AbsI64</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.pan_text_y) / </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l322"></a>        num_rows -= j;
+<a name="l323"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.pan_text_y &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l324"></a>        {
+<a name="l325"></a>            src += w1 / </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * j;
+<a name="l326"></a>            dst(</span><span class=cF1>U8</span><span class=cF0> *) += w1 * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * j;
+<a name="l327"></a>        }
+<a name="l328"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l329"></a>
+<a name="l330"></a>    </span><span class=cF1>for</span><span class=cF0> (row = num_rows; row--;)
+<a name="l331"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l332"></a>        </span><span class=cF1>for</span><span class=cF0> (col = num_cols; col--;)
+<a name="l333"></a>        {
+<a name="l334"></a>            cur_ch = *src++;
+<a name="l335"></a>            </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF7>(</span><span class=cF3>ATTRF_UNDERLINE</span><span class=cF0> | </span><span class=cF3>ATTRF_SEL</span><span class=cF0> | </span><span class=cF3>ATTRF_INVERT</span><span class=cF0> | </span><span class=cF3>ATTRF_BLINK</span><span class=cF7>)</span><span class=cF0>)
+<a name="l336"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l337"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF3>ATTRF_SEL</span><span class=cF0>)
+<a name="l338"></a>                    cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] = cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] ^ </span><span class=cFE>0xFF</span><span class=cF0>;
+<a name="l339"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF3>ATTRF_INVERT</span><span class=cF0>)
+<a name="l340"></a>                    cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] = cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &gt;&gt; </span><span class=cFE>4</span><span class=cF0>;
+<a name="l341"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_ch &amp; </span><span class=cF3>ATTRF_BLINK</span><span class=cF0> &amp;&amp; blink_flag)
+<a name="l342"></a>                    cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] = cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + cur_ch.u8[</span><span class=cFE>1</span><span class=cF0>] &gt;&gt; </span><span class=cFE>4</span><span class=cF0>;
+<a name="l343"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l344"></a>            </span><span class=cF1>if</span><span class=cF0> (i = cur_ch.u16[</span><span class=cFE>1</span><span class=cF0>]&amp;</span><span class=cFE>0x3FF</span><span class=cF0>+</span><span class=cFB>gr</span><span class=cF0>.pan_text_x+</span><span class=cFB>gr</span><span class=cF0>.pan_text_y&lt;&lt;</span><span class=cFE>5</span><span class=cF0>) </span><span class=cF7>{</span><span class=cF0>
+<a name="l345"></a>                j = i &amp;</span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l346"></a>                </span><span class=cF1>if</span><span class=cF0> (j &amp; </span><span class=cFE>0x10</span><span class=cF0>)
+<a name="l347"></a>                    j |= ~</span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l348"></a>                i &gt;&gt;= </span><span class=cFE>5</span><span class=cF0>;
+<a name="l349"></a>                </span><span class=cF1>if</span><span class=cF0> (i &amp; </span><span class=cFE>0x10</span><span class=cF0>)
+<a name="l350"></a>                    i |= ~</span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l351"></a>                i = w1 * i + j;
+<a name="l352"></a>                </span><span class=cF1>if</span><span class=cF0> (dst_start &lt;= dst</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + i &lt; dst_end)
+<a name="l353"></a>                    </span><span class=cF5>GrRopEquU8NoClipping</span><span class=cF0>(cur_ch &amp; </span><span class=cF7>(</span><span class=cF3>ATTRF_UNDERLINE</span><span class=cF0> + </span><span class=cFE>0xFFF</span><span class=cF7>)</span><span class=cF0>, dst</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + i, w1);
+<a name="l354"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l355"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l356"></a>                </span><span class=cF5>GrRopEquU8NoClipping</span><span class=cF0>(cur_ch &amp; </span><span class=cF7>(</span><span class=cF3>ATTRF_UNDERLINE</span><span class=cF0> + </span><span class=cFE>0xFFF</span><span class=cF7>)</span><span class=cF0>, dst, w1);
+<a name="l357"></a>            dst(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cFE>8</span><span class=cF0>;
+<a name="l358"></a>        }
+<a name="l359"></a>        src += w4;
+<a name="l360"></a>        dst(</span><span class=cF1>U8</span><span class=cF0> *) += w2;
+<a name="l361"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l362"></a>}
+<a name="l363"></a>
+<a name="l364"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCBlotColor8</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>CDC</span><span class=cF0> *img)
+<a name="l365"></a>{
+<a name="l366"></a>    </span><span class=cF1>U8</span><span class=cF0>  *src = img-&gt;body, *b0 = dc-&gt;body;
+<a name="l367"></a>    </span><span class=cF9>I64</span><span class=cF0>  j, k, d0 = img-&gt;width_internal * img-&gt;height;
+<a name="l368"></a>
+<a name="l369"></a>    </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; d0; k++)
+<a name="l370"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l371"></a>        j = *src++;
+<a name="l372"></a>        </span><span class=cF1>if</span><span class=cF0> (j != </span><span class=cF3>TRANSPARENT</span><span class=cF0>)
+<a name="l373"></a>            *b0++ = j;
+<a name="l374"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l375"></a>            b0++;
+<a name="l376"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l377"></a>}
+<a name="l378"></a>
+<a name="l379"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrCalcScreenUpdates</span><span class=cF0>()
+<a name="l380"></a>{
+<a name="l381"></a>    </span><span class=cF9>U16</span><span class=cF0> *screen = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body, *last_screen = </span><span class=cFB>gr</span><span class=cF0>.screen_cache;
+<a name="l382"></a>    </span><span class=cF9>U64</span><span class=cF0> i, *src = </span><span class=cFB>text</span><span class=cF0>.raw_screen, *dst = </span><span class=cFB>text</span><span class=cF0>.fb_alias, diffs_size = </span><span class=cF3>GR_WIDTH</span><span class=cF0> * </span><span class=cF3>GR_HEIGHT</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l383"></a>
+<a name="l384"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; diffs_size; i++)
+<a name="l385"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l386"></a>        </span><span class=cF1>if</span><span class=cF0> (screen[i] != last_screen[i])
+<a name="l387"></a>            dst[i] = src[i];
+<a name="l388"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l389"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.screen_cache, </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body, diffs_size * </span><span class=cFE>2</span><span class=cF0>);
+<a name="l390"></a>}
+<a name="l391"></a>
+<a name="l392"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateScreen32</span><span class=cF0>()
+<a name="l393"></a>{
+<a name="l394"></a>    </span><span class=cF9>U64</span><span class=cF0> size, *dst;
+<a name="l395"></a>    </span><span class=cF1>U8</span><span class=cF0> *src;
+<a name="l396"></a></span><span class=cF2>//if (gr.screen_zoom == 1) {</span><span class=cF0>
+<a name="l397"></a>        src = </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body;
+<a name="l398"></a>        size = src + </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;height * </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;width_internal;
+<a name="l399"></a></span><span class=cF2>//}</span><span class=cF0>
+<a name="l400"></a></span><span class=cF2>//else {</span><span class=cF0>
+<a name="l401"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>GrZoomInScreen;</span><span class=cF0>
+<a name="l402"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>src = gr.zoomed_dc-&gt;body;</span><span class=cF0>
+<a name="l403"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>size = src + gr.zoomed_dc-&gt;height * gr.zoomed_dc-&gt;width_internal;</span><span class=cF0>
+<a name="l404"></a></span><span class=cF2>//}</span><span class=cF0>
+<a name="l405"></a>    dst = </span><span class=cFB>text</span><span class=cF0>.raw_screen;
+<a name="l406"></a>    </span><span class=cF1>while</span><span class=cF0> (src &lt; size) </span><span class=cF2>//draw 2 pixels at a time</span><span class=cF0>
+<a name="l407"></a>        *dst++ = </span><span class=cFB>gr_palette</span><span class=cF0>[*src++ &amp; </span><span class=cFE>0xFF</span><span class=cF0>] | </span><span class=cFB>gr_palette</span><span class=cF0>[*src++ &amp; </span><span class=cFE>0xFF</span><span class=cF0>] &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l408"></a>
+<a name="l409"></a>    </span><span class=cF5>GrCalcScreenUpdates</span><span class=cF0>;
+<a name="l410"></a>
+<a name="l411"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_FLUSH_VBE_IMAGE</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l412"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias, </span><span class=cFB>text</span><span class=cF0>.raw_screen, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l413"></a>}
+<a name="l414"></a>
+<a name="l415"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GrUpdateScreen</span><span class=cF0>()
+<a name="l416"></a>{</span><span class=cF2>//Called by the Window Manager </span><a href="https://tomawezome.github.io/ZealOS/System/WinMgr.html#l306"><span class=cF4>HERE</span></a><span class=cF2>, 30 times a second.</span><span class=cF0>
+<a name="l417"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc;
+<a name="l418"></a>
+<a name="l419"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>text</span><span class=cF0>.is_fb_busy)
+<a name="l420"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l421"></a>
+<a name="l422"></a>    </span><span class=cF5>GrUpdateTextBG</span><span class=cF0>;
+<a name="l423"></a>    </span><span class=cF5>GrUpdateTextFG</span><span class=cF0>;
+<a name="l424"></a>    </span><span class=cF5>GrUpdateTasks</span><span class=cF0>;
+<a name="l425"></a>    </span><span class=cF5>DCBlotColor8</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc2, </span><span class=cFB>gr</span><span class=cF0>.dc);
+<a name="l426"></a>
+<a name="l427"></a>    dc=</span><span class=cF5>DCAlias</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc2, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l428"></a>    dc-&gt;flags |= </span><span class=cF3>DCF_ON_TOP</span><span class=cF0>;
+<a name="l429"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr</span><span class=cF0>.fp_final_screen_update)
+<a name="l430"></a>        (*</span><span class=cFB>gr</span><span class=cF0>.fp_final_screen_update)(dc);
+<a name="l431"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l432"></a>
+<a name="l433"></a>    </span><span class=cF5>DCBlotColor4</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc1-&gt;body, </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;body, </span><span class=cFB>gr</span><span class=cF0>.dc_cache-&gt;body, </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;height * </span><span class=cFB>gr</span><span class=cF0>.dc2-&gt;width_internal &gt;&gt; </span><span class=cFE>3</span><span class=cF0>);
+<a name="l434"></a>    </span><span class=cF5>GrUpdateScreen32</span><span class=cF0>;
+<a name="l435"></a>}
+</span></pre></body>
+</html>

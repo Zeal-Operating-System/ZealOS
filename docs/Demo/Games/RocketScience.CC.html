@@ -1,0 +1,335 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cB0{color:#ffffff;background-color:#34e2e2;}
+.cBA{color:#82bc49;background-color:#34e2e2;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> THRUST  </span><span class=cFE>1000</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>Bool</span><span class=cF0> blast_off, plane_hit;
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF9>CMass</span><span class=cF0>   m1, </span><span class=cF2>//Bottom of rocket</span><span class=cF0>
+<a name="l6"></a>        m2, </span><span class=cF2>//Top of rocket</span><span class=cF0>
+<a name="l7"></a>        m3; </span><span class=cF2>//Plane</span><span class=cF0>
+<a name="l8"></a></span><span class=cF9>CSpring</span><span class=cF0> s;
+<a name="l9"></a>
+<a name="l10"></a>#</span><span class=cF1>define</span><span class=cF0> ROCKET_HEIGHT   </span><span class=cFE>40</span><span class=cF0>
+<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> GROUND_Y        (</span><span class=cF3>GR_HEIGHT</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>)
+<a name="l12"></a></span><span class=cB0>
+<a name="l13"></a>
+<a name="l14"></a>     </span><span class=cBA>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cB0>
+<a name="l15"></a>
+<a name="l16"></a>
+<a name="l17"></a>
+<a name="l18"></a>     </span><span class=cBA>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=cB0>
+<a name="l19"></a>
+<a name="l20"></a>
+<a name="l21"></a>
+<a name="l22"></a>    </span><span class=cBA>&lt;3&gt;/* Graphics Not Rendered in HTML */</span><span class=cB0>
+<a name="l23"></a> 
+<a name="l24"></a></span><span class=cF0>
+<a name="l25"></a>
+<a name="l26"></a>
+<a name="l27"></a>
+<a name="l28"></a>
+<a name="l29"></a>
+<a name="l30"></a>
+<a name="l31"></a>
+<a name="l32"></a>
+<a name="l33"></a>
+<a name="l34"></a>
+<a name="l35"></a>
+<a name="l36"></a>
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cFA>
+<a name="l39"></a>/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l40"></a>
+<a name="l41"></a></span><span class=cF9>CDC</span><span class=cF0>      *dc2;
+<a name="l42"></a></span><span class=cF9>CMathODE</span><span class=cF0> *ode;
+<a name="l43"></a>
+<a name="l44"></a>#</span><span class=cF1>define</span><span class=cF0> STATE_NOZZLE_ANGLE              </span><span class=cFE>0</span><span class=cF0>
+<a name="l45"></a>#</span><span class=cF1>define</span><span class=cF0> STATE_NOZZLE_ANGLE_VELOCITY     </span><span class=cFE>1</span><span class=cF0>
+<a name="l46"></a>#</span><span class=cF1>define</span><span class=cF0> STATE_NUM                       </span><span class=cFE>2</span><span class=cF0>
+<a name="l47"></a>
+<a name="l48"></a></span><span class=cF9>CD3</span><span class=cF0> target;
+<a name="l49"></a></span><span class=cF1>F64</span><span class=cF0> my_debug, antispin_coefficient;
+<a name="l50"></a>
+<a name="l51"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l52"></a>{
+<a name="l53"></a>    </span><span class=cF9>I64</span><span class=cF0> i, x, y, cx = </span><span class=cF3>GR_WIDTH</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, cy = GROUND_Y;
+<a name="l54"></a>    </span><span class=cF1>F64</span><span class=cF0> theta = </span><span class=cF5>Arg</span><span class=cF0>(m2.x - m1.x, m2.y - m1.y), nozzle_angle = ode-&gt;state[STATE_NOZZLE_ANGLE];
+<a name="l55"></a>
+<a name="l56"></a>    </span><span class=cF1>if</span><span class=cF0> (blast_off)
+<a name="l57"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l58"></a>        x = m1.x - </span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(theta + nozzle_angle);
+<a name="l59"></a>        y = m1.y - </span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(theta + nozzle_angle);
+<a name="l60"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>6</span><span class=cF0>; i++)
+<a name="l61"></a>        {
+<a name="l62"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>i ^ </span><span class=cFB>winmgr</span><span class=cF0>.updates</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l63"></a>                dc-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l64"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l65"></a>                dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l66"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(dc, cx + </span><span class=cF7>(</span><span class=cF0>m1.x + i * </span><span class=cF5>Cos</span><span class=cF0>(theta - </span><span class=cF3>pi</span><span class=cF0>  /</span><span class=cFE>2</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, cy - </span><span class=cF7>(</span><span class=cF0>m1.y + i * </span><span class=cF5>Sin</span><span class=cF0>(theta - </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, cx + x, cy - y);
+<a name="l67"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(dc, cx + </span><span class=cF7>(</span><span class=cF0>m1.x + i * </span><span class=cF5>Cos</span><span class=cF0>(theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, cy - </span><span class=cF7>(</span><span class=cF0>m1.y + i * </span><span class=cF5>Sin</span><span class=cF0>(theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, cx + x, cy - y);
+<a name="l68"></a>        }
+<a name="l69"></a>
+<a name="l70"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>10</span><span class=cF0>; i++)
+<a name="l71"></a>        {
+<a name="l72"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>RandU16</span><span class=cF0> &amp; </span><span class=cFE>3</span><span class=cF0>)
+<a name="l73"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l74"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>: dc2-&gt;color = </span><span class=cF3>WHITE</span><span class=cF0>;     </span><span class=cF1>break</span><span class=cF0>;
+<a name="l75"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>: dc2-&gt;color = </span><span class=cF3>LTGRAY</span><span class=cF0>;    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l76"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>: dc2-&gt;color = </span><span class=cF3>DKGRAY</span><span class=cF0>;    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l77"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>: dc2-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;     </span><span class=cF1>break</span><span class=cF0>;
+<a name="l78"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l79"></a>            </span><span class=cF5>GrPlot</span><span class=cF0>(dc2, cx + </span><span class=cF7>(</span><span class=cF0>x + </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>12</span><span class=cF0> - </span><span class=cFE>6</span><span class=cF7>)</span><span class=cF0>, cy - </span><span class=cF7>(</span><span class=cF0>y + </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>12</span><span class=cF0> - </span><span class=cFE>6</span><span class=cF7>)</span><span class=cF0>);
+<a name="l80"></a>        }
+<a name="l81"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l82"></a>
+<a name="l83"></a>    </span><span class=cF1>if</span><span class=cF0> (plane_hit)
+<a name="l84"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(dc, cx + m3.x, cy - m3.y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>);
+<a name="l85"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l86"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(dc, cx + m3.x, cy - m3.y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
+<a name="l87"></a>
+<a name="l88"></a>    </span><span class=cF1>if</span><span class=cF0> (blast_off &amp;&amp; !plane_hit)
+<a name="l89"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l90"></a>        dc-&gt;color           = </span><span class=cF3>ROP_COLLISION</span><span class=cF0>;
+<a name="l91"></a>        dc-&gt;bkcolor         = </span><span class=cF3>LTCYAN</span><span class=cF0>;
+<a name="l92"></a>        dc-&gt;collision_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l93"></a>        </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, cx + </span><span class=cF7>(</span><span class=cF0>m1.x + m2.x</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, cy - </span><span class=cF7>(</span><span class=cF0>m1.y + m2.y</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;3&gt;</span><span class=cF0>, -theta);
+<a name="l94"></a>        </span><span class=cF1>if</span><span class=cF0> (dc-&gt;collision_count &gt; </span><span class=cFE>100</span><span class=cF0>)
+<a name="l95"></a>        {
+<a name="l96"></a>            </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0>, </span><span class=cFE>62</span><span class=cF0>, </span><span class=cFE>81</span><span class=cF0>);
+<a name="l97"></a>            plane_hit = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l98"></a>        }
+<a name="l99"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l100"></a>            </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>22</span><span class=cF0>);
+<a name="l101"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l102"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!plane_hit)
+<a name="l103"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l104"></a>
+<a name="l105"></a>    dc-&gt;color = </span><span class=cF3>ROP_EQU</span><span class=cF0>;
+<a name="l106"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, GROUND_Y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;4&gt;</span><span class=cF0>);
+<a name="l107"></a>    </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, cx + </span><span class=cF7>(</span><span class=cF0>m1.x + m2.x</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, cy - </span><span class=cF7>(</span><span class=cF0>m1.y + m2.y</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;3&gt;</span><span class=cF0>, -theta);
+<a name="l108"></a>
+<a name="l109"></a>    dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l110"></a>    </span><span class=cF5>GrCircle</span><span class=cF0>(dc, cx + target.x, cy - target.y, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l111"></a>
+<a name="l112"></a>    dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l113"></a>    </span><span class=cF5>GrCircle</span><span class=cF0>(dc, cx + m3.x, cy - m3.y, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l114"></a>
+<a name="l115"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l116"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, </span><span class=cF6>&quot;%12.6f&quot;</span><span class=cF0>, my_debug);
+<a name="l117"></a>}
+<a name="l118"></a>
+<a name="l119"></a></span><span class=cF1>U0</span><span class=cF0> MyDerivative(</span><span class=cF9>CMathODE</span><span class=cF0> *, </span><span class=cF1>F64</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> *state, </span><span class=cF1>F64</span><span class=cF0> *DstateDt)
+<a name="l120"></a>{
+<a name="l121"></a>    </span><span class=cF1>F64</span><span class=cF0> d, discriminant, v, a,
+<a name="l122"></a>        theta = </span><span class=cF5>Arg</span><span class=cF0>(m2.state-&gt;x - m1.state-&gt;x, m2.state-&gt;y - m1.state-&gt;y), 
+<a name="l123"></a>        DthetaDt, collision_estimate_t, target_heading, target_angle_error, 
+<a name="l124"></a>        desired_nozzle_angle;
+<a name="l125"></a>    </span><span class=cF9>CD3</span><span class=cF0> p, p_target, p_body;
+<a name="l126"></a>
+<a name="l127"></a>    </span><span class=cF2>//Unit vect pointing to top of rocket from bottom.</span><span class=cF0>
+<a name="l128"></a>    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p_body, &amp;m2.state-&gt;x, &amp;m1.state-&gt;x);
+<a name="l129"></a>    </span><span class=cF5>D3Unit</span><span class=cF0>(&amp;p_body);
+<a name="l130"></a>
+<a name="l131"></a>    </span><span class=cF2>//DthetaDt lets us prevent too much spin.</span><span class=cF0>
+<a name="l132"></a>    DthetaDt = antispin_coefficient * (m2.state-&gt;DyDt * p_body.x - m2.state-&gt;DxDt * p_body.y -
+<a name="l133"></a>                                   m1.state-&gt;DyDt * p_body.x + m1.state-&gt;DxDt * p_body.y) / ROCKET_HEIGHT;
+<a name="l134"></a>
+<a name="l135"></a>    </span><span class=cF2>//p_target is vect from top of rocket to plane.</span><span class=cF0>
+<a name="l136"></a>    </span><span class=cF5>D3Sub</span><span class=cF0>(&amp;p_target, &amp;m3.state-&gt;x, &amp;m2.state-&gt;x);
+<a name="l137"></a>
+<a name="l138"></a>    </span><span class=cF2>//d=0.5at^2+vt</span><span class=cF0>
+<a name="l139"></a>    d = </span><span class=cF5>D3Norm</span><span class=cF0>(&amp;p_target);
+<a name="l140"></a>
+<a name="l141"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;p, &amp;p_target);
+<a name="l142"></a>    </span><span class=cF5>D3Unit</span><span class=cF0>(&amp;p);
+<a name="l143"></a>    v = (m2.state-&gt;DxDt * p.x + m2.state-&gt;DyDt * p.y) - (m3.state-&gt;DxDt * p.x + m3.state-&gt;DyDt * p.y);
+<a name="l144"></a>
+<a name="l145"></a>    a = THRUST / (m1.mass + m2.mass);
+<a name="l146"></a>
+<a name="l147"></a>    discriminant = v * v + </span><span class=cFE>4</span><span class=cF0> * </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * a * d;
+<a name="l148"></a>    </span><span class=cF1>if</span><span class=cF0> (discriminant &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l149"></a>        collision_estimate_t = (-v + </span><span class=cF5>Sqrt</span><span class=cF7>(</span><span class=cF0>discriminant</span><span class=cF7>)</span><span class=cF0>) / a;
+<a name="l150"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l151"></a>        collision_estimate_t = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l152"></a>    my_debug = collision_estimate_t;
+<a name="l153"></a>
+<a name="l154"></a>    </span><span class=cF2>//Aim for projected pos of plane at time of impact.</span><span class=cF0>
+<a name="l155"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;p, &amp;m3.state-&gt;DxDt);
+<a name="l156"></a>    </span><span class=cF5>D3MulEqu</span><span class=cF0>(&amp;p, collision_estimate_t);
+<a name="l157"></a>    </span><span class=cF5>D3AddEqu</span><span class=cF0>(&amp;p_target, &amp;p);
+<a name="l158"></a>
+<a name="l159"></a>    </span><span class=cF5>D3Copy</span><span class=cF0>(&amp;target, &amp;p_target);
+<a name="l160"></a>    </span><span class=cF5>D3AddEqu</span><span class=cF0>(&amp;target, &amp;m2.state-&gt;x);
+<a name="l161"></a>
+<a name="l162"></a>    target_heading = </span><span class=cF5>Arg</span><span class=cF0>(p_target.x, p_target.y);
+<a name="l163"></a>    target_angle_error = </span><span class=cF5>Wrap</span><span class=cF0>(theta - target_heading); </span><span class=cF2>//Force to range [-pi, pi)</span><span class=cF0>
+<a name="l164"></a>    desired_nozzle_angle = </span><span class=cF5>Clamp</span><span class=cF0>(</span><span class=cFE>50</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * DthetaDt + </span><span class=cFE>750</span><span class=cF0> * target_angle_error, -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>, </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l165"></a>
+<a name="l166"></a>    </span><span class=cF2>//For realism we limit the speed the nozzle angle can change.</span><span class=cF0>
+<a name="l167"></a>    DstateDt[STATE_NOZZLE_ANGLE]          = state[STATE_NOZZLE_ANGLE_VELOCITY];
+<a name="l168"></a>    DstateDt[STATE_NOZZLE_ANGLE_VELOCITY] = </span><span class=cF5>Clamp</span><span class=cF0>(</span><span class=cFE>10000</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>desired_nozzle_angle - state[STATE_NOZZLE_ANGLE]</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cFE>1000</span><span class=cF0>, </span><span class=cFE>1000</span><span class=cF0>) -
+<a name="l169"></a>                                            </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * state[STATE_NOZZLE_ANGLE_VELOCITY]; </span><span class=cF2>//Damping</span><span class=cF0>
+<a name="l170"></a>
+<a name="l171"></a>    </span><span class=cF1>if</span><span class=cF0> (blast_off)
+<a name="l172"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l173"></a>        m1.DstateDt-&gt;DxDt += THRUST * </span><span class=cF5>Cos</span><span class=cF0>(theta + state[STATE_NOZZLE_ANGLE]);
+<a name="l174"></a>        m1.DstateDt-&gt;DyDt += THRUST * </span><span class=cF5>Sin</span><span class=cF0>(theta + state[STATE_NOZZLE_ANGLE]);
+<a name="l175"></a>
+<a name="l176"></a>        m1.DstateDt-&gt;DyDt -= </span><span class=cFE>25</span><span class=cF0>; </span><span class=cF2>//Gravity</span><span class=cF0>
+<a name="l177"></a>        m2.DstateDt-&gt;DyDt -= </span><span class=cFE>25</span><span class=cF0>;
+<a name="l178"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l179"></a>
+<a name="l180"></a>    </span><span class=cF2>//For more realism reduce the mass of the rocket because of fuel.</span><span class=cF0>
+<a name="l181"></a>    </span><span class=cF2>//You might also factor-in fuel slosh in the tank.</span><span class=cF0>
+<a name="l182"></a>
+<a name="l183"></a>    </span><span class=cF2>//To do this,  you would have to set-up state vars for mass and</span><span class=cF0>
+<a name="l184"></a>    </span><span class=cF2>//do A=F/m manually instead of relyin on </span><a href="https://tomawezome.github.io/ZealOS/System/MathODE.html#l431"><span class=cF4>ODECallDerivative</span></a><span class=cF2>() to divide</span><span class=cF0>
+<a name="l185"></a>    </span><span class=cF2>//by mass.</span><span class=cF0>
+<a name="l186"></a>}
+<a name="l187"></a>
+<a name="l188"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l189"></a>{
+<a name="l190"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l191"></a>    </span><span class=cF6>&quot;$BG,LTCYAN$%h*c&quot;</span><span class=cF0>, </span><span class=cF5>ToI64</span><span class=cF0>(GROUND_Y / </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>), </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l192"></a>
+<a name="l193"></a>    blast_off = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l194"></a>    plane_hit = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l195"></a>
+<a name="l196"></a>    </span><span class=cF1>do</span><span class=cF0> antispin_coefficient = </span><span class=cF5>PopUpRangeF64Exp</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>001</span><span class=cF0>, </span><span class=cF5>Sqrt</span><span class=cF7>(</span><span class=cFE>10</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;%9.4f&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Anti-spin Coefficient\n\n&quot;</span><span class=cF0>);
+<a name="l197"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0> &lt;= antispin_coefficient &lt; </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>001</span><span class=cF7>)</span><span class=cF0>);
+<a name="l198"></a>
+<a name="l199"></a>    </span><span class=cF2>//We don't clear que links.</span><span class=cF0>
+<a name="l200"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;m1.</span><span class=cF1>start</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CMass</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CMass</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0>);
+<a name="l201"></a>    m1.y    = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l202"></a>    m1.mass = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l203"></a>
+<a name="l204"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;m2.</span><span class=cF1>start</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CMass</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CMass</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0>);
+<a name="l205"></a>    m2.y    = ROCKET_HEIGHT;
+<a name="l206"></a>    m2.mass = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l207"></a>
+<a name="l208"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;m3.</span><span class=cF1>start</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CMass</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CMass</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0>);
+<a name="l209"></a>    m3.y    = </span><span class=cFE>400</span><span class=cF0>;
+<a name="l210"></a>    m3.x    = -</span><span class=cFE>300</span><span class=cF0>;
+<a name="l211"></a>    m3.DxDt = </span><span class=cFE>50</span><span class=cF0>;
+<a name="l212"></a>    m3.mass = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l213"></a>
+<a name="l214"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;s.</span><span class=cF1>start</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CSpring</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CSpring</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0>);
+<a name="l215"></a>    s.end1      = &amp;m1;
+<a name="l216"></a>    s.end2      = &amp;m2;
+<a name="l217"></a>    s.rest_len  = ROCKET_HEIGHT;
+<a name="l218"></a>    s.const     = </span><span class=cFE>10000</span><span class=cF0>;
+<a name="l219"></a>
+<a name="l220"></a>    ode-&gt;state[STATE_NOZZLE_ANGLE]          = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l221"></a>    ode-&gt;state[STATE_NOZZLE_ANGLE_VELOCITY] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l222"></a>
+<a name="l223"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l224"></a>}
+<a name="l225"></a>
+<a name="l226"></a></span><span class=cF1>U0</span><span class=cF0> TaskEndCB()
+<a name="l227"></a>{
+<a name="l228"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l229"></a>    </span><span class=cF5>SoundTaskEndCB</span><span class=cF0>;
+<a name="l230"></a>}
+<a name="l231"></a>
+<a name="l232"></a></span><span class=cF1>U0</span><span class=cF0> RocketScience()
+<a name="l233"></a>{
+<a name="l234"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l235"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>YELLOW</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l236"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l237"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l238"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l239"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l240"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l241"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l242"></a>                </span><span class=cF6>&quot;  Launch(,CH_SPACE);&quot;</span><span class=cF0>
+<a name="l243"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l244"></a>                );
+<a name="l245"></a>
+<a name="l246"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l247"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l248"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l249"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l250"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l251"></a>    dc2 = </span><span class=cF5>DCAlias</span><span class=cF0>;
+<a name="l252"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;TaskEndCB;
+<a name="l253"></a>
+<a name="l254"></a>    ode = </span><span class=cF5>ODENew</span><span class=cF0>(STATE_NUM, </span><span class=cFE>1</span><span class=cF0>e - </span><span class=cFE>6</span><span class=cF0>, </span><span class=cF3>ODEF_HAS_MASSES</span><span class=cF0>);
+<a name="l255"></a>    ode-&gt;derive             = &amp;MyDerivative;
+<a name="l256"></a>    ode-&gt;drag_v2            = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>002</span><span class=cF0>;
+<a name="l257"></a>    ode-&gt;drag_v3            = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>00001</span><span class=cF0>;
+<a name="l258"></a>    ode-&gt;acceleration_limit = </span><span class=cFE>5</span><span class=cF0>e3;
+<a name="l259"></a>
+<a name="l260"></a>    </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>ode-&gt;t_scale=0.1; //Uncomment this to go in slow motion.</span><span class=cF0>
+<a name="l261"></a>
+<a name="l262"></a>    Init;
+<a name="l263"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(&amp;m1, ode-&gt;last_mass);
+<a name="l264"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(&amp;m2, ode-&gt;last_mass);
+<a name="l265"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(&amp;m3, ode-&gt;last_mass);
+<a name="l266"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(&amp;s, ode-&gt;last_spring);
+<a name="l267"></a>
+<a name="l268"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(ode, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ode);
+<a name="l269"></a>
+<a name="l270"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l271"></a>
+<a name="l272"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l273"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l274"></a>        </span><span class=cF5>KeyGet</span><span class=cF0>;
+<a name="l275"></a>        blast_off = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l276"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l277"></a>        {
+<a name="l278"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l279"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l280"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l281"></a>                    Init;
+<a name="l282"></a>                    </span><span class=cF5>KeyGet</span><span class=cF0>;
+<a name="l283"></a>                    blast_off = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l284"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l285"></a>
+<a name="l286"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l287"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l288"></a>                    </span><span class=cF1>goto</span><span class=cF0> rs_done;
+<a name="l289"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l290"></a>        }
+<a name="l291"></a>rs_done:
+<a name="l292"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l293"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l294"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l295"></a>    </span><span class=cF5>QueueRemove</span><span class=cF0>(ode);
+<a name="l296"></a>    </span><span class=cF5>ODEDel</span><span class=cF0>(ode);
+<a name="l297"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l298"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l299"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l300"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc2);
+<a name="l301"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l302"></a>}
+<a name="l303"></a>
+<a name="l304"></a>RocketScience;
+</span></pre></body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> T_MAN   </span><span class=cFE>0</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> T_BALL  </span><span class=cFE>1</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF1>U0</span><span class=cF0> Models()
+<a name="l5"></a>{
+<a name="l6"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l7"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_form = </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF7>(</span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>-&gt;flags, </span><span class=cF3>DOCf_FORM</span><span class=cF0>);
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l10"></a>    </span><span class=cF6>&quot;Make a CSprite model.  Then, cut-and-Paste it.\n\n&quot;</span><span class=cF0>;
+<a name="l11"></a>    </span><span class=cF6>&quot;$LM,4$&quot;</span><span class=cF0>;
+<a name="l12"></a>    </span><span class=cF6>&quot;\n\n$BT,\&quot;Man\&quot;,LE=T_MAN$\n\n&quot;</span><span class=cF0>;
+<a name="l13"></a>    </span><span class=cF6>&quot;\n\n$BT,\&quot;Ball\&quot;,LE=T_BALL$\n\n&quot;</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF6>&quot;$LM,0$&quot;</span><span class=cF0>;
+<a name="l15"></a>    i = </span><span class=cF5>DocMenu</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF7>(</span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>-&gt;flags, </span><span class=cF3>DOCf_FORM</span><span class=cF0>, old_form);
+<a name="l17"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l18"></a>    </span><span class=cF1>switch</span><span class=cF0> (i)
+<a name="l19"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l20"></a>        </span><span class=cF1>case</span><span class=cF0> T_MAN:
+<a name="l21"></a>            ManGen;
+<a name="l22"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l23"></a>
+<a name="l24"></a>        </span><span class=cF1>case</span><span class=cF0> T_BALL:
+<a name="l25"></a>            BallGen;
+<a name="l26"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l27"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l28"></a>}
+</span></pre></body>
+</html>

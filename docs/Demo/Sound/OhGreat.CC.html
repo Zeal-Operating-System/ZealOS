@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> Song()
+<a name="l2"></a>{</span><span class=cF2>//Song by Terry A. Davis</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_end_cb = &amp;</span><span class=cF5>SoundTaskEndCB</span><span class=cF0>;
+<a name="l4"></a>    </span><span class=cF5>MusicSettingsReset</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF1>try</span><span class=cF0> </span><span class=cF2>//Catch &lt;CTRL-ALT-c&gt; exit</span><span class=cF0>
+<a name="l6"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>CharScan</span><span class=cF0>)
+<a name="l7"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l8"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6hEqDC5B6CDhE&quot;</span><span class=cF0>,
+<a name="l9"></a>                </span><span class=cF6>&quot;God \0is \0a \0g\0od \0of \0love.\n\0&quot;</span><span class=cF0>);
+<a name="l10"></a>
+<a name="l11"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5GqFEFhG6E&quot;</span><span class=cF0>,
+<a name="l12"></a>                </span><span class=cF6>&quot; \0 \0 \0 \0 \0He \0&quot;</span><span class=cF0>);
+<a name="l13"></a>
+<a name="l14"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6qDC5B6CDhE5G&quot;</span><span class=cF0>,
+<a name="l15"></a>                </span><span class=cF6>&quot;wat\0ches \0us \0from \0a\0bove.\n\0 \0&quot;</span><span class=cF0>);
+<a name="l16"></a>
+<a name="l17"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5qFEFhGB6qC&quot;</span><span class=cF0>,
+<a name="l18"></a>                </span><span class=cF6>&quot; \0 \0 \0 \0Our \0world \0&quot;</span><span class=cF0>);
+<a name="l19"></a>
+<a name="l20"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6DhCeDC5hBG&quot;</span><span class=cF0>,
+<a name="l21"></a>                </span><span class=cF6>&quot;is\0n't \0al\0ways \0nice.\n\0 \0&quot;</span><span class=cF0>);
+<a name="l22"></a>
+<a name="l23"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5qFEFhG6EqD&quot;</span><span class=cF0>,
+<a name="l24"></a>                </span><span class=cF6>&quot; \0 \0 \0 \0Be\0fore \0&quot;</span><span class=cF0>);
+<a name="l25"></a>
+<a name="l26"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6C5B6CDhE5G&quot;</span><span class=cF0>,
+<a name="l27"></a>                </span><span class=cF6>&quot;you \0gr\0ipe \0think \0twice.\n\0 \0&quot;</span><span class=cF0>);
+<a name="l28"></a>
+<a name="l29"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5qFEFhG6EqD&quot;</span><span class=cF0>,
+<a name="l30"></a>                </span><span class=cF6>&quot; \0 \0 \0 \0He \0wat\0&quot;</span><span class=cF0>);
+<a name="l31"></a>
+<a name="l32"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6C5B6CDhE5G&quot;</span><span class=cF0>,
+<a name="l33"></a>                </span><span class=cF6>&quot;ches \0us \0from \0a\0bove.\n\0 \0&quot;</span><span class=cF0>);
+<a name="l34"></a>
+<a name="l35"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5qFEFhG6EqD&quot;</span><span class=cF0>,
+<a name="l36"></a>                </span><span class=cF6>&quot; \0 \0 \0 \0He'll \0smack \0&quot;</span><span class=cF0>);
+<a name="l37"></a>
+<a name="l38"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6C5B6CDhE5G&quot;</span><span class=cF0>,
+<a name="l39"></a>                </span><span class=cF6>&quot;you \0with \0out \0a \0glove.\n\0 \0&quot;</span><span class=cF0>);
+<a name="l40"></a>
+<a name="l41"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5qFEFhGB6qC&quot;</span><span class=cF0>,
+<a name="l42"></a>                </span><span class=cF6>&quot; \0 \0 \0 \0Our \0world \0&quot;</span><span class=cF0>);
+<a name="l43"></a>
+<a name="l44"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;6DhCeDC5hBG&quot;</span><span class=cF0>,
+<a name="l45"></a>                </span><span class=cF6>&quot;is\0n't \0al\0ways \0nice.\n\0 \0&quot;</span><span class=cF0>);
+<a name="l46"></a>
+<a name="l47"></a>            </span><span class=cF5>Play</span><span class=cF0>(</span><span class=cF6>&quot;5qFEFhG&quot;</span><span class=cF0>);
+<a name="l48"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l49"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l50"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l51"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l52"></a>    </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l53"></a>}
+<a name="l54"></a>
+<a name="l55"></a>Song;
+</span></pre></body>
+</html>

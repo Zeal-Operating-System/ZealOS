@@ -1,0 +1,574 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Sprite;Sprites&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>/*</span><span class=cF4>
+<a name="l3"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF2>s are stored as a sequence of var</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>length operations with a 1-byte </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l128"><span class=cF4>type</span></a><span class=cF2> leading</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>each operation.  They are stored, one after another,</span><span class=cF0>
+<a name="l6"></a></span><span class=cF2>in a chunk of memory terminated by a </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l120"><span class=cF4>zero</span></a><span class=cF2>.</span><span class=cF4>
+<a name="l7"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrSpritePlot.html#l18"><span class=cF4>Sprite3</span></a><span class=cF2>() shows how the </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF2> unions are used.</span><span class=cF0>
+<a name="l8"></a></span><span class=cF4>
+<a name="l9"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteNew.html#l44"><span class=cF4>SpriteElemSize</span></a><span class=cF2>() will return the size of a single</span><span class=cF0>
+<a name="l10"></a></span><span class=cF2>element, while </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteNew.html#l87"><span class=cF4>SpriteSize</span></a><span class=cF2>() will return the size</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>of an entire list.  Look at </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteNew.html#l6"><span class=cF4>sprite_elem_base_sizes</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF2>See </span><span class=cF9><u>::/Apps/GrModels</u></span><span class=cF2> for an example of</span><span class=cF0>
+<a name="l14"></a></span><span class=cF2>making CSprite by hand.  It uses </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l144"><span class=cF4>SPT_MESH</span></a><span class=cF2>,</span><span class=cF0>
+<a name="l15"></a></span><span class=cF2>one of the most complicated.</span><span class=cF0>
+<a name="l16"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sprite3</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z, </span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF1>Bool</span><span class=cF0> just_one_elem=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l19"></a>{</span><span class=cF2>//Plot a sprite into a CDC.</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF9>CSprite</span><span class=cF0>         *tmpg = elems - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF0>);
+<a name="l21"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, k, x1, y1, z1, x2, y2, *old_r, *r2, old_flags = dc-&gt;flags, old_pen_width = dc-&gt;thick;
+<a name="l22"></a>    </span><span class=cF9>I32</span><span class=cF0>             *ptr;
+<a name="l23"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>     old_color = dc-&gt;color;
+<a name="l24"></a>    </span><span class=cF9>CDC</span><span class=cF0>             *img;
+<a name="l25"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>          *p, *p2;
+<a name="l26"></a>    </span><span class=cF9>CGrSym</span><span class=cF0>           old_sym;
+<a name="l27"></a>
+<a name="l28"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;old_sym, &amp;dc-&gt;sym, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CGrSym</span><span class=cF7>)</span><span class=cF0>);
+<a name="l29"></a>    </span><span class=cF1>if</span><span class=cF0> (dc-&gt;flags &amp; </span><span class=cF3>DCF_LOCATE_NEAREST</span><span class=cF0>)
+<a name="l30"></a>        dc-&gt;nearest_dist = </span><span class=cF3>I64_MAX</span><span class=cF0>;
+<a name="l31"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpg-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
+<a name="l32"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l33"></a>        </span><span class=cF1>switch</span><span class=cF0> (tmpg-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
+<a name="l34"></a>        {
+<a name="l35"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_COLOR</span><span class=cF0>:
+<a name="l36"></a>                dc-&gt;color = dc-&gt;color &amp; ~(</span><span class=cF3>COLORROP_COLORS_MASK</span><span class=cF0> | </span><span class=cF3>ROPF_DITHER</span><span class=cF0>) | tmpg-&gt;c.color;
+<a name="l37"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l38"></a>
+<a name="l39"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_DITHER_COLOR</span><span class=cF0>:
+<a name="l40"></a>                dc-&gt;color = dc-&gt;color &amp; ~</span><span class=cF3>COLORROP_COLORS_MASK</span><span class=cF0> |
+<a name="l41"></a>                            tmpg-&gt;d.dither_color.u8[</span><span class=cFE>0</span><span class=cF0>] | tmpg-&gt;d.dither_color.u8[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cF3>COLORROP_BITS</span><span class=cF0> | </span><span class=cF3>ROPF_DITHER</span><span class=cF0>;
+<a name="l42"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l43"></a>
+<a name="l44"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_THICK</span><span class=cF0>:
+<a name="l45"></a>                dc-&gt;thick = tmpg-&gt;t.thick;
+<a name="l46"></a>                </span><span class=cF5>DCThickScale</span><span class=cF0>(dc);
+<a name="l47"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l48"></a>
+<a name="l49"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TRANSFORM_ON</span><span class=cF0>:
+<a name="l50"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>dc-&gt;flags &amp; </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF7>)</span><span class=cF0>)
+<a name="l51"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>                    x -= dc-&gt;x;
+<a name="l53"></a>                    y -= dc-&gt;y;
+<a name="l54"></a>                    z -= dc-&gt;z;
+<a name="l55"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l56"></a>                dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l57"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l58"></a>
+<a name="l59"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TRANSFORM_OFF</span><span class=cF0>:
+<a name="l60"></a>                </span><span class=cF1>if</span><span class=cF0> (dc-&gt;flags &amp; </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>)
+<a name="l61"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l62"></a>                    x += dc-&gt;x;
+<a name="l63"></a>                    y += dc-&gt;y;
+<a name="l64"></a>                    z += dc-&gt;z;
+<a name="l65"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l66"></a>                dc-&gt;flags &amp;= ~</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l67"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l68"></a>
+<a name="l69"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PT</span><span class=cF0>:
+<a name="l70"></a>                </span><span class=cF5>GrPlot3</span><span class=cF0>(dc, tmpg-&gt;p.x1 + x, tmpg-&gt;p.y1 + y, z);
+<a name="l71"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l72"></a>
+<a name="l73"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT</span><span class=cF0>:
+<a name="l74"></a>                </span><span class=cF5>GrPrint3</span><span class=cF0>(dc, tmpg-&gt;ps.x1 + x, tmpg-&gt;ps.y1 + y, z, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, tmpg-&gt;ps.st);
+<a name="l75"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l76"></a>
+<a name="l77"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_BOX</span><span class=cF0>:
+<a name="l78"></a>                </span><span class=cF5>GrTextBox3</span><span class=cF0>(dc, tmpg-&gt;ps.x1 + x, tmpg-&gt;ps.y1 + y, z, tmpg-&gt;ps.st);
+<a name="l79"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l80"></a>
+<a name="l81"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_DIAMOND</span><span class=cF0>:
+<a name="l82"></a>                </span><span class=cF5>GrTextDiamond3</span><span class=cF0>(dc, tmpg-&gt;ps.x1 + x, tmpg-&gt;ps.y1 + y, z, tmpg-&gt;ps.st);
+<a name="l83"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l84"></a>
+<a name="l85"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL</span><span class=cF0>:
+<a name="l86"></a>                </span><span class=cF5>GrFloodFill3</span><span class=cF0>(dc, tmpg-&gt;p.x1 + x, tmpg-&gt;p.y1 + y, z, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l87"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l88"></a>
+<a name="l89"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL_NOT</span><span class=cF0>:
+<a name="l90"></a>                i = dc-&gt;color;
+<a name="l91"></a>                dc-&gt;color = dc-&gt;color.c0;
+<a name="l92"></a>                </span><span class=cF5>GrFloodFill3</span><span class=cF0>(dc, tmpg-&gt;p.x1 + x, tmpg-&gt;p.y1 + y, z, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l93"></a>                dc-&gt;color = i;
+<a name="l94"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l95"></a>
+<a name="l96"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_SHIFT</span><span class=cF0>:
+<a name="l97"></a>                x += tmpg-&gt;p.x1;
+<a name="l98"></a>                y += tmpg-&gt;p.y1;
+<a name="l99"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l100"></a>
+<a name="l101"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_LINE</span><span class=cF0>:
+<a name="l102"></a>                </span><span class=cF5>GrLine3</span><span class=cF0>(dc, tmpg-&gt;pp.x1 + x, tmpg-&gt;pp.y1 + y, z, tmpg-&gt;pp.x2 + x, tmpg-&gt;pp.y2 + y, z);
+<a name="l103"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l104"></a>
+<a name="l105"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ARROW</span><span class=cF0>:
+<a name="l106"></a>                </span><span class=cF5>GrArrow3</span><span class=cF0>(dc, tmpg-&gt;pp.x1 + x, tmpg-&gt;pp.y1 + y, z, tmpg-&gt;pp.x2 + x, tmpg-&gt;pp.y2 + y, z);
+<a name="l107"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l108"></a>
+<a name="l109"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>:
+<a name="l110"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>DCSymmetry3Set</span><span class=cF7>(</span><span class=cF0>dc,  tmpg-&gt;pp.x1 + x, tmpg-&gt;pp.y1 + y, z,
+<a name="l111"></a>                                        tmpg-&gt;pp.x2 + x, tmpg-&gt;pp.y2 + y, z,
+<a name="l112"></a>                                        tmpg-&gt;pp.x2 + x, tmpg-&gt;pp.y2 + y, z + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>)
+<a name="l113"></a>                    dc-&gt;flags |= </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l114"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l115"></a>                    dc-&gt;flags &amp;= ~</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l116"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l117"></a>
+<a name="l118"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BITMAP</span><span class=cF0>:
+<a name="l119"></a>                img = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDC</span><span class=cF7>)</span><span class=cF0>);
+<a name="l120"></a>                img-&gt;width          = tmpg-&gt;pwhu.width;
+<a name="l121"></a>                img-&gt;width_internal = (tmpg-&gt;pwhu.width + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF0>;
+<a name="l122"></a>                img-&gt;height         = tmpg-&gt;pwhu.height;
+<a name="l123"></a>                img-&gt;body           = &amp;tmpg-&gt;pwhu.u;
+<a name="l124"></a>                img-&gt;dc_signature   = </span><span class=cF3>DCS_SIGNATURE_VAL</span><span class=cF0>;
+<a name="l125"></a>                </span><span class=cF5>GrBlot3</span><span class=cF0>(dc, tmpg-&gt;pwhu.x1 + x, tmpg-&gt;pwhu.y1 + y, z, img);
+<a name="l126"></a>                </span><span class=cF5>Free</span><span class=cF0>(img);
+<a name="l127"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l128"></a>
+<a name="l129"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_RECT</span><span class=cF0>:
+<a name="l130"></a>                </span><span class=cF5>GrRect3</span><span class=cF0>(dc, tmpg-&gt;pp.x1 + x, tmpg-&gt;pp.y1 + y, z, tmpg-&gt;pp.x2 - tmpg-&gt;pp.x1, tmpg-&gt;pp.y2 - tmpg-&gt;pp.y1);
+<a name="l131"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l132"></a>
+<a name="l133"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ROTATED_RECT</span><span class=cF0>:
+<a name="l134"></a>                x1 = tmpg-&gt;ppa.x1 + x;
+<a name="l135"></a>                y1 = tmpg-&gt;ppa.y1 + y;
+<a name="l136"></a>                z1 = z;
+<a name="l137"></a>                </span><span class=cF5>Mat4x4MulXYZ</span><span class=cF0>(dc-&gt;r, &amp;x1, &amp;y1, &amp;z1);
+<a name="l138"></a>                old_r = dc-&gt;r;
+<a name="l139"></a>                dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l140"></a>                r2 = </span><span class=cF5>Mat4x4IdentNew</span><span class=cF0>;
+<a name="l141"></a>                </span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(r2, -tmpg-&gt;ppa.angle);
+<a name="l142"></a>                </span><span class=cF5>Mat4x4TranslationEqu</span><span class=cF0>(r2, x1, y1, z1);
+<a name="l143"></a>                </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(dc, </span><span class=cF5>Mat4x4MulMat4x4New</span><span class=cF7>(</span><span class=cF0>old_r, r2</span><span class=cF7>)</span><span class=cF0>);
+<a name="l144"></a>                </span><span class=cF5>GrRect3</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpg-&gt;ppa.x2 - tmpg-&gt;ppa.x1, tmpg-&gt;ppa.y2 - tmpg-&gt;ppa.y1);
+<a name="l145"></a>                </span><span class=cF5>Free</span><span class=cF0>(dc-&gt;r);
+<a name="l146"></a>                </span><span class=cF5>Free</span><span class=cF0>(r2);
+<a name="l147"></a>                </span><span class=cF5>DCMat4x4Set</span><span class=cF0>(dc, old_r);
+<a name="l148"></a>                dc-&gt;flags = dc-&gt;flags &amp; ~</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | old_flags;
+<a name="l149"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l150"></a>
+<a name="l151"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_CIRCLE</span><span class=cF0>:
+<a name="l152"></a>                </span><span class=cF5>GrCircle3</span><span class=cF0>(dc, tmpg-&gt;pr.x1 + x, tmpg-&gt;pr.y1 + y, z, tmpg-&gt;pr.radius);
+<a name="l153"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l154"></a>
+<a name="l155"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ELLIPSE</span><span class=cF0>:
+<a name="l156"></a>                </span><span class=cF5>GrEllipse3</span><span class=cF0>(dc,
+<a name="l157"></a>                           tmpg-&gt;pwha.x1 + x, tmpg-&gt;pwha.y1 + y, z, tmpg-&gt;pwha.width, tmpg-&gt;pwha.height, tmpg-&gt;pwha.angle);
+<a name="l158"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l159"></a>
+<a name="l160"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYGON</span><span class=cF0>:
+<a name="l161"></a>                </span><span class=cF5>GrRegPoly3</span><span class=cF0>(dc,  tmpg-&gt;pwhas.x1 + x, tmpg-&gt;pwhas.y1 + y, z,
+<a name="l162"></a>                                tmpg-&gt;pwhas.width, tmpg-&gt;pwhas.height, tmpg-&gt;pwhas.sides, tmpg-&gt;pwhas.angle);
+<a name="l163"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l164"></a>
+<a name="l165"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYLINE</span><span class=cF0>:
+<a name="l166"></a>                ptr = &amp;tmpg-&gt;nu.u;
+<a name="l167"></a>                x1 = ptr[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l168"></a>                y1 = ptr[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l169"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; tmpg-&gt;nu.num; i++)
+<a name="l170"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l171"></a>                    x2 = ptr[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>];
+<a name="l172"></a>                    y2 = ptr[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>];
+<a name="l173"></a>                    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1 + x, y1 + y, z, x2 + x, y2 + y, z);
+<a name="l174"></a>                    x1 = x2;
+<a name="l175"></a>                    y1 = y2;
+<a name="l176"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l177"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l178"></a>
+<a name="l179"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYPT</span><span class=cF0>:
+<a name="l180"></a>                x1 = tmpg-&gt;npu.x;
+<a name="l181"></a>                y1 = tmpg-&gt;npu.y;
+<a name="l182"></a>                ptr = &amp;tmpg-&gt;npu.u;
+<a name="l183"></a>                k = tmpg-&gt;npu.num * </span><span class=cFE>3</span><span class=cF0>;
+<a name="l184"></a>                </span><span class=cF5>GrPlot3</span><span class=cF0>(dc, x1 + x, y1 + y, z);
+<a name="l185"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; k; i += </span><span class=cFE>3</span><span class=cF0>) </span><span class=cF7>{</span><span class=cF0>
+<a name="l186"></a>                    j = </span><span class=cF5>BFieldExtU32</span><span class=cF0>(ptr, i, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l187"></a>                    x1 += </span><span class=cFB>gr_x_offsets</span><span class=cF0>[j];
+<a name="l188"></a>                    y1 += </span><span class=cFB>gr_y_offsets</span><span class=cF0>[j];
+<a name="l189"></a>                    </span><span class=cF5>GrPlot3</span><span class=cF0>(dc, x1 + x, y1 + y, z);
+<a name="l190"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l191"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l192"></a>            </span><span class=cF1>start</span><span class=cF0>:
+<a name="l193"></a>                p2 = p = </span><span class=cF5>MAlloc</span><span class=cF0>(tmpg-&gt;nu.num * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l194"></a>                </span><span class=cF5>MemCopy</span><span class=cF0>(p, &amp;tmpg-&gt;nu.u, tmpg-&gt;nu.num * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l195"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg-&gt;nu.num; i++, p2++)
+<a name="l196"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l197"></a>                    p2-&gt;x += x;
+<a name="l198"></a>                    p2-&gt;y += y;
+<a name="l199"></a>                    p2-&gt;z += z;
+<a name="l200"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l201"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2</span><span class=cF0>:
+<a name="l202"></a>                    </span><span class=cF5>Gr2BSpline3</span><span class=cF0>(dc, p, tmpg-&gt;nu.num, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l203"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l204"></a>
+<a name="l205"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3</span><span class=cF0>:
+<a name="l206"></a>                    </span><span class=cF5>Gr3BSpline3</span><span class=cF0>(dc, p, tmpg-&gt;nu.num, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l207"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l208"></a>
+<a name="l209"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2_CLOSED</span><span class=cF0>:
+<a name="l210"></a>                    </span><span class=cF5>Gr2BSpline3</span><span class=cF0>(dc, p, tmpg-&gt;nu.num, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l211"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l212"></a>
+<a name="l213"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3_CLOSED</span><span class=cF0>:
+<a name="l214"></a>                    </span><span class=cF5>Gr3BSpline3</span><span class=cF0>(dc, p, tmpg-&gt;nu.num, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l215"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l216"></a>            </span><span class=cF1>end</span><span class=cF0>:
+<a name="l217"></a>                </span><span class=cF5>Free</span><span class=cF0>(p);
+<a name="l218"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l219"></a>
+<a name="l220"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_MESH</span><span class=cF0>:
+<a name="l221"></a>                p2 = p = </span><span class=cF5>MAlloc</span><span class=cF0>(tmpg-&gt;mu.vertex_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l222"></a>                </span><span class=cF5>MemCopy</span><span class=cF0>(p, &amp;tmpg-&gt;mu.u, tmpg-&gt;mu.vertex_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l223"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg-&gt;mu.vertex_count; i++, p2++)
+<a name="l224"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l225"></a>                    p2-&gt;x += x;
+<a name="l226"></a>                    p2-&gt;y += y;
+<a name="l227"></a>                    p2-&gt;z += z;
+<a name="l228"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l229"></a>                </span><span class=cF5>Gr3Mesh</span><span class=cF0>(dc, tmpg-&gt;mu.vertex_count, p, tmpg-&gt;mu.tri_count,
+<a name="l230"></a>                            </span><span class=cF7>(</span><span class=cF0>&amp;tmpg-&gt;mu.u</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0> * tmpg-&gt;mu.vertex_count);
+<a name="l231"></a>                </span><span class=cF5>Free</span><span class=cF0>(p);
+<a name="l232"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l233"></a>
+<a name="l234"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>:
+<a name="l235"></a>                </span><span class=cF1>if</span><span class=cF0> (dc-&gt;flags &amp; </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>)
+<a name="l236"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l237"></a>                    dc-&gt;x += tmpg-&gt;pmu.x;
+<a name="l238"></a>                    dc-&gt;y += tmpg-&gt;pmu.y;
+<a name="l239"></a>                    dc-&gt;z += tmpg-&gt;pmu.z;
+<a name="l240"></a>                    x1 = x;
+<a name="l241"></a>                    y1 = y;
+<a name="l242"></a>                    z1 = z;
+<a name="l243"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l244"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l245"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l246"></a>                    x1 = tmpg-&gt;pmu.x + x;
+<a name="l247"></a>                    y1 = tmpg-&gt;pmu.y + y;
+<a name="l248"></a>                    z1 = tmpg-&gt;pmu.z + z;
+<a name="l249"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l250"></a>                p2 = p = </span><span class=cF5>MAlloc</span><span class=cF0>(tmpg-&gt;pmu.vertex_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l251"></a>                </span><span class=cF5>MemCopy</span><span class=cF0>(p, &amp;tmpg-&gt;pmu.u, tmpg-&gt;pmu.vertex_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l252"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg-&gt;pmu.vertex_count; i++, p2++)
+<a name="l253"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l254"></a>                    p2-&gt;x += x1;
+<a name="l255"></a>                    p2-&gt;y += y1;
+<a name="l256"></a>                    p2-&gt;z += z1;
+<a name="l257"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l258"></a>                </span><span class=cF5>Gr3Mesh</span><span class=cF0>(dc, tmpg-&gt;pmu.vertex_count, p, tmpg-&gt;pmu.tri_count, 
+<a name="l259"></a>                            </span><span class=cF7>(</span><span class=cF0>&amp;tmpg-&gt;pmu.u</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0> * tmpg-&gt;pmu.vertex_count);
+<a name="l260"></a>                </span><span class=cF5>Free</span><span class=cF0>(p);
+<a name="l261"></a>                </span><span class=cF1>if</span><span class=cF0> (dc-&gt;flags &amp; </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>)
+<a name="l262"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l263"></a>                    dc-&gt;x -= tmpg-&gt;pmu.x;
+<a name="l264"></a>                    dc-&gt;y -= tmpg-&gt;pmu.y;
+<a name="l265"></a>                    dc-&gt;z -= tmpg-&gt;pmu.z;
+<a name="l266"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l267"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l268"></a>        }
+<a name="l269"></a>        </span><span class=cF1>if</span><span class=cF0> (just_one_elem)
+<a name="l270"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l271"></a>        tmpg(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF5>SpriteElemSize</span><span class=cF0>(tmpg);
+<a name="l272"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l273"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;dc-&gt;sym, &amp;old_sym, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CGrSym</span><span class=cF7>)</span><span class=cF0>);
+<a name="l274"></a>    dc-&gt;color = old_color;
+<a name="l275"></a>    dc-&gt;thick = old_pen_width;
+<a name="l276"></a>    dc-&gt;flags = dc-&gt;flags &amp; ~(</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>) | old_flags &amp; (</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>);
+<a name="l277"></a>}
+<a name="l278"></a>
+<a name="l279"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sprite3B</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z, </span><span class=cF1>U8</span><span class=cF0> *elems)
+<a name="l280"></a>{</span><span class=cF2>//Plot a sprite into a CDC, post transform xyz translation.</span><span class=cF0>
+<a name="l281"></a>    </span><span class=cF9>I64</span><span class=cF0> old_x = dc-&gt;x, old_y = dc-&gt;y, old_z = dc-&gt;z, old_flags = dc-&gt;flags &amp; </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l282"></a>
+<a name="l283"></a>    dc-&gt;x = x;
+<a name="l284"></a>    dc-&gt;y = y;
+<a name="l285"></a>    dc-&gt;z = z;
+<a name="l286"></a>    dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l287"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, elems);
+<a name="l288"></a>    dc-&gt;x       = old_x;
+<a name="l289"></a>    dc-&gt;y       = old_y;
+<a name="l290"></a>    dc-&gt;z       = old_z;
+<a name="l291"></a>    dc-&gt;flags   = dc-&gt;flags &amp; ~</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | old_flags;
+<a name="l292"></a>}
+<a name="l293"></a>
+<a name="l294"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sprite3Mat4x4B</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z, </span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF9>I64</span><span class=cF0> *m)
+<a name="l295"></a>{</span><span class=cF2>//Plot rotated by matrix.</span><span class=cF0>
+<a name="l296"></a>    </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>], *old_r = dc-&gt;r, new_m[</span><span class=cFE>16</span><span class=cF0>], old_flags = dc-&gt;flags &amp; </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l297"></a>
+<a name="l298"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(new_m, m, </span><span class=cFE>16</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>);
+<a name="l299"></a>    dc-&gt;flags |= </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0>;
+<a name="l300"></a>    </span><span class=cF5>Mat4x4TranslationAdd</span><span class=cF0>(new_m, x, y, z);
+<a name="l301"></a>    dc-&gt;r=</span><span class=cF5>Mat4x4MulMat4x4Equ</span><span class=cF0>(r, old_r, new_m);
+<a name="l302"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, elems);
+<a name="l303"></a>    dc-&gt;r       = old_r;
+<a name="l304"></a>    dc-&gt;flags   = dc-&gt;flags &amp; ~</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | old_flags;
+<a name="l305"></a>}
+<a name="l306"></a>
+<a name="l307"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sprite3XB</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z, </span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF1>F64</span><span class=cF0> phi=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l308"></a>{</span><span class=cF2>//Plot rotated around X axis.</span><span class=cF0>
+<a name="l309"></a>    </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>];
+<a name="l310"></a>
+<a name="l311"></a>    </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(r);
+<a name="l312"></a>    </span><span class=cF5>Mat4x4RotX</span><span class=cF0>(r, phi);
+<a name="l313"></a>    </span><span class=cF5>Sprite3Mat4x4B</span><span class=cF0>(dc, x, y, z, elems, r);
+<a name="l314"></a>}
+<a name="l315"></a>
+<a name="l316"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sprite3YB</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z, </span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF1>F64</span><span class=cF0> omega=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l317"></a>{</span><span class=cF2>//Plot rotated around Y axis.</span><span class=cF0>
+<a name="l318"></a>    </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>];
+<a name="l319"></a>
+<a name="l320"></a>    </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(r);
+<a name="l321"></a>    </span><span class=cF5>Mat4x4RotY</span><span class=cF0>(r, omega);
+<a name="l322"></a>    </span><span class=cF5>Sprite3Mat4x4B</span><span class=cF0>(dc, x, y, z, elems, r);
+<a name="l323"></a>}
+<a name="l324"></a>
+<a name="l325"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sprite3ZB</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z, </span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF1>F64</span><span class=cF0> theta=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l326"></a>{</span><span class=cF2>//Plot rotated around Z axis.</span><span class=cF0>
+<a name="l327"></a>    </span><span class=cF9>I64</span><span class=cF0> r[</span><span class=cFE>16</span><span class=cF0>];
+<a name="l328"></a>
+<a name="l329"></a>    </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(r);
+<a name="l330"></a>    </span><span class=cF5>Mat4x4RotZ</span><span class=cF0>(r, theta);
+<a name="l331"></a>    </span><span class=cF5>Sprite3Mat4x4B</span><span class=cF0>(dc, x, y, z, elems, r);
+<a name="l332"></a>}
+<a name="l333"></a>
+<a name="l334"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SpriteExtents</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF9>I64</span><span class=cF0> *min_x=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> *max_x=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> *min_y=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> *max_y=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l335"></a>{</span><span class=cF2>//Ignores flood fills.</span><span class=cF0>
+<a name="l336"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCNew</span><span class=cF0>(</span><span class=cF3>I32_MAX</span><span class=cF0>, </span><span class=cF3>I32_MAX</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l337"></a>
+<a name="l338"></a>    </span><span class=cF5>DCExtentsInit</span><span class=cF0>(dc);
+<a name="l339"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>, elems);
+<a name="l340"></a>    </span><span class=cF1>if</span><span class=cF0> (dc-&gt;min_x &lt;= dc-&gt;max_x)
+<a name="l341"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l342"></a>        dc-&gt;min_x -= </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l343"></a>        dc-&gt;max_x -= </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l344"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l345"></a>    </span><span class=cF1>if</span><span class=cF0> (dc-&gt;min_y &lt;= dc-&gt;max_y)
+<a name="l346"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l347"></a>        dc-&gt;min_y -= </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l348"></a>        dc-&gt;max_y -= </span><span class=cF3>I32_MAX</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l349"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l350"></a>    </span><span class=cF1>if</span><span class=cF0> (min_x)
+<a name="l351"></a>        *min_x = dc-&gt;min_x;
+<a name="l352"></a>    </span><span class=cF1>if</span><span class=cF0> (max_x)
+<a name="l353"></a>        *max_x = dc-&gt;max_x;
+<a name="l354"></a>    </span><span class=cF1>if</span><span class=cF0> (min_y)
+<a name="l355"></a>        *min_y = dc-&gt;min_y;
+<a name="l356"></a>    </span><span class=cF1>if</span><span class=cF0> (max_y)
+<a name="l357"></a>        *max_y = dc-&gt;max_y;
+<a name="l358"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l359"></a>}
+<a name="l360"></a>
+<a name="l361"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDC</span><span class=cF0> *</span><span class=cF5>Sprite2DC</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *elems)
+<a name="l362"></a>{</span><span class=cF2>//Convert sprite to device context.</span><span class=cF0>
+<a name="l363"></a>    </span><span class=cF9>CDC</span><span class=cF0> *res;
+<a name="l364"></a>    </span><span class=cF9>I64</span><span class=cF0>  min_x, max_x, min_y, max_y;
+<a name="l365"></a>
+<a name="l366"></a>    </span><span class=cF5>SpriteExtents</span><span class=cF0>(elems, &amp;min_x, &amp;max_x, &amp;min_y, &amp;max_y);
+<a name="l367"></a>    res = </span><span class=cF5>DCNew</span><span class=cF0>(max_x - min_x + </span><span class=cFE>1</span><span class=cF0>, max_y - min_y + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l368"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(res, -min_x, -min_y, </span><span class=cFE>0</span><span class=cF0>, elems);
+<a name="l369"></a>
+<a name="l370"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l371"></a>}
+<a name="l372"></a>
+<a name="l373"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SpriteInterpolate</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> t, </span><span class=cF1>U8</span><span class=cF0> *elems0, </span><span class=cF1>U8</span><span class=cF0> *elems1)
+<a name="l374"></a>{</span><span class=cF2>//The two CSprite should be ident except for points shifted around.</span><span class=cF0>
+<a name="l375"></a></span><span class=cF2>//t ranges from 0.0 to 1.0.</span><span class=cF0>
+<a name="l376"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, t1 = </span><span class=cF3>GR_SCALE</span><span class=cF0> * t, t0 = </span><span class=cF3>GR_SCALE</span><span class=cF0> - t1;
+<a name="l377"></a>    </span><span class=cF9>I32</span><span class=cF0>     *ptr0, *ptr1, *ptrr;
+<a name="l378"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>  *p0, *p1, *pr;
+<a name="l379"></a>    </span><span class=cF1>U8</span><span class=cF0>      *res;
+<a name="l380"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *tmpg0 = elems0 - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF0>), *tmpg1 = elems1 - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF0>), *tmpgr;
+<a name="l381"></a>
+<a name="l382"></a>    </span><span class=cF1>if</span><span class=cF0> (t &lt; </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0>)
+<a name="l383"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l384"></a>        i = </span><span class=cF5>SpriteSize</span><span class=cF0>(elems0), res = </span><span class=cF5>MAlloc</span><span class=cF0>(i);
+<a name="l385"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(res, elems0, i);
+<a name="l386"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l387"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l388"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l389"></a>        i = </span><span class=cF5>SpriteSize</span><span class=cF0>(elems1), res = </span><span class=cF5>MAlloc</span><span class=cF0>(i);
+<a name="l390"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(res, elems1, i);
+<a name="l391"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l392"></a>    tmpgr = res - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF0>);
+<a name="l393"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpg0-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
+<a name="l394"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l395"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpg0-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> != tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
+<a name="l396"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Graphics'</span><span class=cF0>);
+<a name="l397"></a>        </span><span class=cF1>switch</span><span class=cF0> (tmpg0-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0>)
+<a name="l398"></a>        {
+<a name="l399"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ROTATED_RECT</span><span class=cF0>:
+<a name="l400"></a>                tmpgr-&gt;ppa.angle = (tmpg0-&gt;ppa.angle * t0 + tmpg1-&gt;ppa.angle * t1) / </span><span class=cF3>GR_SCALE</span><span class=cF0>;
+<a name="l401"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_RECT</span><span class=cF0>:
+<a name="l402"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_LINE</span><span class=cF0>:
+<a name="l403"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ARROW</span><span class=cF0>:
+<a name="l404"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>:
+<a name="l405"></a>                tmpgr-&gt;pp.x2 = (tmpg0-&gt;pp.x2 * t0 + tmpg1-&gt;pp.x2 * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l406"></a>                tmpgr-&gt;pp.y2 = (tmpg0-&gt;pp.y2 * t0 + tmpg1-&gt;pp.y2 * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l407"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT</span><span class=cF0>:
+<a name="l408"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_BOX</span><span class=cF0>:
+<a name="l409"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_DIAMOND</span><span class=cF0>:
+<a name="l410"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PT</span><span class=cF0>:
+<a name="l411"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL</span><span class=cF0>:
+<a name="l412"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL_NOT</span><span class=cF0>:
+<a name="l413"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_SHIFT</span><span class=cF0>:
+<a name="l414"></a>                tmpgr-&gt;p.x1 = (tmpg0-&gt;p.x1 * t0 + tmpg1-&gt;p.x1 * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l415"></a>                tmpgr-&gt;p.y1 = (tmpg0-&gt;p.y1 * t0 + tmpg1-&gt;p.y1 * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l416"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l417"></a>
+<a name="l418"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_CIRCLE</span><span class=cF0>:
+<a name="l419"></a>                tmpgr-&gt;pr.radius = (tmpg0-&gt;pr.radius * t0 + tmpg1-&gt;pr.radius * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l420"></a>                tmpgr-&gt;pr.x1     = (tmpg0-&gt;pr.x1     * t0 + tmpg1-&gt;pr.x1     * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l421"></a>                tmpgr-&gt;pr.y1     = (tmpg0-&gt;pr.y1     * t0 + tmpg1-&gt;pr.y1     * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l422"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l423"></a>
+<a name="l424"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ELLIPSE</span><span class=cF0>:
+<a name="l425"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYGON</span><span class=cF0>:
+<a name="l426"></a>                tmpgr-&gt;pwha.x1      = (tmpg0-&gt;pwha.x1     * t0 + tmpg1-&gt;pwha.x1     * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l427"></a>                tmpgr-&gt;pwha.y1      = (tmpg0-&gt;pwha.y1     * t0 + tmpg1-&gt;pwha.y1     * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l428"></a>                tmpgr-&gt;pwha.width   = (tmpg0-&gt;pwha.width  * t0 + tmpg1-&gt;pwha.width  * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l429"></a>                tmpgr-&gt;pwha.height  = (tmpg0-&gt;pwha.height * t0 + tmpg1-&gt;pwha.height * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l430"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l431"></a>
+<a name="l432"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BITMAP</span><span class=cF0>:
+<a name="l433"></a>                tmpgr-&gt;pwhu.x1 = (tmpg0-&gt;pwhu.x1 * t0 + tmpg1-&gt;pwhu.x1 * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l434"></a>                tmpgr-&gt;pwhu.y1 = (tmpg0-&gt;pwhu.y1 * t0 + tmpg1-&gt;pwhu.y1 * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l435"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l436"></a>
+<a name="l437"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYLINE</span><span class=cF0>:
+<a name="l438"></a>                ptr0 = &amp;tmpg0-&gt;nu.u;
+<a name="l439"></a>                ptr1 = &amp;tmpg1-&gt;nu.u;
+<a name="l440"></a>                ptrr = &amp;tmpgr-&gt;nu.u;
+<a name="l441"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg0-&gt;nu.num; i++)
+<a name="l442"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l443"></a>                    ptrr[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     = (ptr0[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     * t0 + ptr1[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l444"></a>                    ptrr[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] = (ptr0[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] * t0 + ptr1[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l445"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l446"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l447"></a>
+<a name="l448"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYPT</span><span class=cF0>:
+<a name="l449"></a>                tmpgr-&gt;npu.x = (tmpg0-&gt;npu.x * t0 + tmpg1-&gt;npu.x * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l450"></a>                tmpgr-&gt;npu.y = (tmpg0-&gt;npu.y * t0 + tmpg1-&gt;npu.y * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l451"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l452"></a>
+<a name="l453"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2</span><span class=cF0>:
+<a name="l454"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3</span><span class=cF0>:
+<a name="l455"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2_CLOSED</span><span class=cF0>:
+<a name="l456"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3_CLOSED</span><span class=cF0>:
+<a name="l457"></a>                p0 = &amp;tmpg0-&gt;nu.u;
+<a name="l458"></a>                p1 = &amp;tmpg1-&gt;nu.u;
+<a name="l459"></a>                pr = &amp;tmpgr-&gt;nu.u;
+<a name="l460"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg0-&gt;nu.num; i++)
+<a name="l461"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l462"></a>                    pr[i].x = (p0[i].x * t0 + p1[i].x * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l463"></a>                    pr[i].y = (p0[i].y * t0 + p1[i].y * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l464"></a>                    pr[i].z = (p0[i].z * t0 + p1[i].z * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l465"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l466"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l467"></a>
+<a name="l468"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_MESH</span><span class=cF0>:
+<a name="l469"></a>                p0 = &amp;tmpg0-&gt;mu.u;
+<a name="l470"></a>                p1 = &amp;tmpg1-&gt;mu.u;
+<a name="l471"></a>                pr = &amp;tmpgr-&gt;mu.u;
+<a name="l472"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg0-&gt;mu.vertex_count; i++)
+<a name="l473"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l474"></a>                    pr[i].x = (p0[i].x * t0 + p1[i].x * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l475"></a>                    pr[i].y = (p0[i].y * t0 + p1[i].y * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l476"></a>                    pr[i].z = (p0[i].z * t0 + p1[i].z * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l477"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l478"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l479"></a>
+<a name="l480"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>:
+<a name="l481"></a>                p0 = &amp;tmpg0-&gt;pmu.u;
+<a name="l482"></a>                p1 = &amp;tmpg1-&gt;pmu.u;
+<a name="l483"></a>                pr = &amp;tmpgr-&gt;pmu.u;
+<a name="l484"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg0-&gt;pmu.vertex_count; i++)
+<a name="l485"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l486"></a>                    pr[i].x = (p0[i].x * t0 + p1[i].x * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l487"></a>                    pr[i].y = (p0[i].y * t0 + p1[i].y * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l488"></a>                    pr[i].z = (p0[i].z * t0 + p1[i].z * t1) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l489"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l490"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l491"></a>        }
+<a name="l492"></a>        tmpg0(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF5>SpriteElemSize</span><span class=cF0>(tmpg0);
+<a name="l493"></a>        tmpg1(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF5>SpriteElemSize</span><span class=cF0>(tmpg1);
+<a name="l494"></a>        tmpgr(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cF5>SpriteElemSize</span><span class=cF0>(tmpgr);
+<a name="l495"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l496"></a>
+<a name="l497"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l498"></a>}
+<a name="l499"></a>
+<a name="l500"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Sprite;DolDoc/Output;StdOut/DolDoc&quot;</span><span class=cF0>
+<a name="l501"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDocEntry</span><span class=cF0> *</span><span class=cF5>DocSprite</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF1>U8</span><span class=cF0> *format=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l502"></a>{</span><span class=cF2>//Put a sprite into a document.</span><span class=cF0>    </span><span class=cF2>You can, optionally, supply a format string</span><span class=cF0>
+<a name="l503"></a></span><span class=cF2>//for </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> cmd with a %d for the bin_num.</span><span class=cF0>
+<a name="l504"></a>    </span><span class=cF9>I64</span><span class=cF0>          size;
+<a name="l505"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
+<a name="l506"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock;
+<a name="l507"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e;
+<a name="l508"></a>    </span><span class=cF9>CDocBin</span><span class=cF0>     *tmpb;
+<a name="l509"></a>
+<a name="l510"></a>    </span><span class=cF1>if</span><span class=cF0> (!doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc = </span><span class=cF5>DocPut</span><span class=cF7>)</span><span class=cF0>)
+<a name="l511"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l512"></a>    unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l513"></a>    size = </span><span class=cF5>SpriteSize</span><span class=cF0>(elems);
+<a name="l514"></a>    tmpb = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDocBin</span><span class=cF7>)</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l515"></a>    tmpb-&gt;size      = size;
+<a name="l516"></a>    tmpb-&gt;data      = </span><span class=cF5>MAlloc</span><span class=cF0>(size, doc-&gt;mem_task);
+<a name="l517"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(tmpb-&gt;data, elems, size);
+<a name="l518"></a>    tmpb-&gt;num       = doc-&gt;cur_bin_num;
+<a name="l519"></a>    tmpb-&gt;use_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l520"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpb, doc-&gt;bin_head.last);
+<a name="l521"></a>    </span><span class=cF1>if</span><span class=cF0> (format)
+<a name="l522"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(format, doc-&gt;cur_bin_num++);
+<a name="l523"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l524"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;$SP,\&quot;\&quot;,BI=%d$&quot;</span><span class=cF0>, doc-&gt;cur_bin_num++);
+<a name="l525"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, st);
+<a name="l526"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l527"></a>    doc_e-&gt;bin_data = tmpb;
+<a name="l528"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_e &amp;&amp; doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TAG</span><span class=cF0> &amp;&amp; doc_e-&gt;tag &amp;&amp; *doc_e-&gt;tag)
+<a name="l529"></a>        tmpb-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(doc_e-&gt;tag, doc-&gt;mem_task);
+<a name="l530"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l531"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l532"></a>
+<a name="l533"></a>    </span><span class=cF1>return</span><span class=cF0> doc_e;
+<a name="l534"></a>}
+<a name="l535"></a>
+<a name="l536"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDocEntry</span><span class=cF0> *</span><span class=cF5>Sprite</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *elems, </span><span class=cF1>U8</span><span class=cF0> *format=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l537"></a>{</span><span class=cF2>//Put sprite to the command-line, </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocDblBuf.html#l2"><span class=cF4>DocPut</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l538"></a></span><span class=cF2>//If you set format, then include dollars (&quot;$SP ...$&quot;) and leave %d for num.</span><span class=cF0>
+<a name="l539"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc;
+<a name="l540"></a>
+<a name="l541"></a>    </span><span class=cF1>if</span><span class=cF0> (doc = </span><span class=cF5>DocPut</span><span class=cF0>)
+<a name="l542"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>DocSprite</span><span class=cF0>(doc, elems, format);
+<a name="l543"></a>
+<a name="l544"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l545"></a>}
+</span></pre></body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF0>'s have a 4x4 matrix for rotating, scaling, skewing and shifting in 3 dimensions.    To make the graphics routines use the 
+<a name="l2"></a>transform, you must set the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4232"><span class=cF4>DCF_TRANSFORMATION</span></a><span class=cF0> flag.
+<a name="l3"></a>
+<a name="l4"></a>The matrix consists of ints that have been scaled 32 bits (</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l4"><span class=cF4>GR_SCALE</span></a><span class=cF0>).   See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF0> to learn why.
+<a name="l5"></a>
+<a name="l6"></a>See </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l27"><span class=cF4>Mat4x4IdentEqu</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l38"><span class=cF4>Mat4x4IdentNew</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l130"><span class=cF4>Mat4x4Equ</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l137"><span class=cF4>Mat4x4New</span></a><span class=cF0>().    See </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l142"><span class=cF4>Mat4x4RotX</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l158"><span class=cF4>Mat4x4RotY</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l174"><span class=cF4>Mat4x4RotZ</span></a><span class=cF0>() and </span><span class=cF4>
+<a name="l7"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l190"><span class=cF4>Mat4x4Scale</span></a><span class=cF0>() to rotate about axes and scale.  Combine them with </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l104"><span class=cF4>Mat4x4MulMat4x4Equ</span></a><span class=cF0>()/</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l124"><span class=cF4>Mat4x4MulMat4x4New</span></a><span class=cF0>() and assign them to 
+<a name="l8"></a>the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF0>.</span><span class=cF2>dc</span><span class=cF0> with </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l51"><span class=cF4>DCMat4x4Set</span></a><span class=cF0>().  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Box.html#l1"><span class=cF4>::/Demo/Graphics/Box.CC</span></a><span class=cF0>.
+<a name="l9"></a>
+<a name="l10"></a>You can rotate single points using </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l6"><span class=cF4>Mat4x4MulXYZ</span></a><span class=cF0>().
+<a name="l11"></a>
+<a name="l12"></a>The 4th dimension allows a neat trick where you can place pos shifts (translations), into the matrix and </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l104"><span class=cF4>Mat4x4MulMat4x4Equ</span></a><span class=cF0>/</span><span class=cF4>
+<a name="l13"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l124"><span class=cF4>Mat4x4MulMat4x4New</span></a><span class=cF0> them to combine rotation/shift operations.  Normally, you can't combine pos shift operations.    See </span><span class=cF4>
+<a name="l14"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrMath.html#l216"><span class=cF4>Mat4x4TranslationEqu</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Transform.html#l1"><span class=cF4>::/Demo/Graphics/Transform.CC</span></a><span class=cF0>.
+<a name="l15"></a>
+<a name="l16"></a>Finally, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF0>'s have an </span><span class=cF2>x</span><span class=cF0>, </span><span class=cF2>y</span><span class=cF0> and </span><span class=cF2>z</span><span class=cF0> which is an additional shift (translation).
+<a name="l17"></a>
+<a name="l18"></a>The transformation is implemented as a callback on the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4261"><span class=cF4>CDC</span></a><span class=cF0>'s </span><span class=cF2>transform()</span><span class=cF0> member.    The default </span><span class=cF2>transform()</span><span class=cF0> callback is </span><span class=cF4>
+<a name="l19"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.html#l18"><span class=cF4>DCTransform</span></a><span class=cF0>().  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Games/Talons.html#l1"><span class=cF4>::/Demo/Games/Talons.CC</span></a><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Demo/Games/CastleFrankenstein.html#l1"><span class=cF4>::/Demo/Games/CastleFrankenstein.CC</span></a><span class=cF0> to see how to change the </span><span class=cF2>transform()</span><span class=cF0> callback 
+<a name="l20"></a>for foreshortening.
+</span></pre></body>
+</html>

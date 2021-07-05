@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>ISOInit</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> blk)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>         *bd  = drive-&gt;bd;
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>              spc = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, i = blk / spc, drv_offset = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF9>CISOPriDesc</span><span class=cF0>     *iso = </span><span class=cF5>MAlloc</span><span class=cF0>(bd-&gt;blk_size);
+<a name="l6"></a>    </span><span class=cF9>CISODirEntry</span><span class=cF0>    *de;
+<a name="l7"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock, res = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l8"></a>    </span><span class=cF1>U8</span><span class=cF0>               buf[</span><span class=cFE>8</span><span class=cF0>];
+<a name="l9"></a>
+<a name="l10"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l11"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l12"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l13"></a>        drive-&gt;fs_type = </span><span class=cF3>FSt_ISO9660</span><span class=cF0>;
+<a name="l14"></a>        drive-&gt;spc = spc;
+<a name="l15"></a>        drive-&gt;data_area = drive-&gt;root_clus = drive-&gt;drv_offset = bd-&gt;drv_offset = drive-&gt;size = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l16"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l17"></a>        {
+<a name="l18"></a>            drive-&gt;size = </span><span class=cF5>MaxI64</span><span class=cF0>(drive-&gt;size, </span><span class=cF7>(</span><span class=cF0>i + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> * spc);
+<a name="l19"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;BlkRead(drive, iso, %d, %d);&quot;, i * spc, spc;</span><span class=cF0>
+<a name="l20"></a>            </span><span class=cF5>BlkRead</span><span class=cF0>(drive, iso, i * spc, spc);
+<a name="l21"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>D(iso);</span><span class=cF0>
+<a name="l22"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>Sleep(3000);</span><span class=cF0>
+<a name="l23"></a>            buf[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>U32</span><span class=cF0>) = iso-&gt;id[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>U32</span><span class=cF0>);
+<a name="l24"></a>            buf[</span><span class=cFE>4</span><span class=cF0>](</span><span class=cF9>U16</span><span class=cF0>) = iso-&gt;id[</span><span class=cFE>4</span><span class=cF0>](</span><span class=cF1>U8</span><span class=cF0>);
+<a name="l25"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>ListMatch</span><span class=cF7>(</span><span class=cF0>buf, </span><span class=cF6>&quot;CD001\0CDW02\0BEA01\0BOOT2\0NSR02\0NSR03\0TEA01\0&quot;</span><span class=cF0>, </span><span class=cF3>LMF_EXACT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l26"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l27"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l28"></a>                    </span><span class=cF1>switch</span><span class=cF0> (iso-&gt;type)
+<a name="l29"></a>                    {
+<a name="l30"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ISOT_BOOT_RECORD</span><span class=cF0>:
+<a name="l31"></a>                            drv_offset += (</span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0> + </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>) / </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l32"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l33"></a>
+<a name="l34"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ISOT_SUPPLEMENTARY_DESC</span><span class=cF0>:
+<a name="l35"></a>                            de = &amp;iso-&gt;root_dir_record;
+<a name="l36"></a>                            drive-&gt;size = iso-&gt;vol_space_size.little * bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l37"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>iso-&gt;publisher_id, </span><span class=cF6>&quot;ZealOS RedSea&quot;</span><span class=cF7>)</span><span class=cF0>     ||
+<a name="l38"></a>                                !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>iso-&gt;publisher_id, </span><span class=cF6>&quot;ZenithOS RedSea&quot;</span><span class=cF7>)</span><span class=cF0>   ||
+<a name="l39"></a>                                !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>iso-&gt;publisher_id, </span><span class=cF6>&quot;TempleOS RedSea&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l40"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l41"></a>                                drive-&gt;fs_type = </span><span class=cF3>FSt_REDSEA</span><span class=cF0>;
+<a name="l42"></a>                                bd-&gt;drv_offset = drive-&gt;drv_offset = </span><span class=cFE>19</span><span class=cF0> &lt;&lt; </span><span class=cFE>2</span><span class=cF0> + drv_offset;
+<a name="l43"></a>                                bd-&gt;max_blk = drive-&gt;size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l44"></a>                                drive-&gt;size -= bd-&gt;drv_offset;
+<a name="l45"></a>                                </span><span class=cFD>RedSeaInit</span><span class=cF0>(drive);
+<a name="l46"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l48"></a>                                drive-&gt;root_clus = de-&gt;loc.little;
+<a name="l49"></a>                            res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l50"></a>                            </span><span class=cF1>goto</span><span class=cF0> di_done;
+<a name="l51"></a>
+<a name="l52"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>ISOT_TERMINATOR</span><span class=cF0>:
+<a name="l53"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Drive'</span><span class=cF0>);
+<a name="l54"></a>                    }
+<a name="l55"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l56"></a>
+<a name="l57"></a>                </span><span class=cF1>default</span><span class=cF0>: </span><span class=cF2>//Its normal for ISO3346 to read NULL blk as terminator</span><span class=cF0>
+<a name="l58"></a>                    </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;File System Not Supported\n&quot;</span><span class=cF0>);
+<a name="l59"></a>                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Drive'</span><span class=cF0>);
+<a name="l60"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l61"></a>            i++;
+<a name="l62"></a>        }
+<a name="l63"></a>di_done:
+<a name="l64"></a>        </span><span class=cF5>Free</span><span class=cF0>(iso);
+<a name="l65"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l66"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l67"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l68"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l69"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l70"></a>        drive-&gt;fs_type = </span><span class=cF3>FSt_ISO9660</span><span class=cF0>;
+<a name="l71"></a>        drive-&gt;spc = spc;
+<a name="l72"></a>        drive-&gt;drv_offset = bd-&gt;drv_offset = drive-&gt;data_area = drive-&gt;root_clus = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l73"></a>        </span><span class=cF5>Free</span><span class=cF0>(iso);
+<a name="l74"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l75"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l76"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l77"></a>
+<a name="l78"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l79"></a>}
+<a name="l80"></a>
+<a name="l81"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DVDImageRead</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> dvd_drive_let, </span><span class=cF1>U8</span><span class=cF0> *out_name)
+<a name="l82"></a>{</span><span class=cF2>//Read entire CD/DVD image into ISO file.</span><span class=cF0>
+<a name="l83"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *drive  = </span><span class=cF5>Letter2Drive</span><span class=cF0>(dvd_drive_let);
+<a name="l84"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd     = drive-&gt;bd;
+<a name="l85"></a>    </span><span class=cF1>U8</span><span class=cF0>      *buf    = </span><span class=cF5>MAlloc</span><span class=cF0>(COPY_BUF_BLKS &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>), *out_name2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(out_name, </span><span class=cF6>&quot;ISO&quot;</span><span class=cF0>);
+<a name="l86"></a>    </span><span class=cF9>CFile</span><span class=cF0>   *f      = </span><span class=cF5>FOpen</span><span class=cF0>(out_name2, </span><span class=cF6>&quot;w&quot;</span><span class=cF0>);
+<a name="l87"></a>    </span><span class=cF9>I64</span><span class=cF0>      n, spc = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, blk = </span><span class=cFE>0</span><span class=cF0>, count, retry;
+<a name="l88"></a>
+<a name="l89"></a>    </span><span class=cFD>BlkDevInit</span><span class=cF0>(bd);
+<a name="l90"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type != </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
+<a name="l91"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'BlkDev'</span><span class=cF0>);
+<a name="l92"></a>    </span><span class=cF1>if</span><span class=cF0> (!out_name)
+<a name="l93"></a>        out_name = </span><span class=cFB>blkdev</span><span class=cF0>.default_iso_filename;
+<a name="l94"></a>    count = </span><span class=cF5>CeilU64</span><span class=cF0>(drive-&gt;size, spc);
+<a name="l95"></a>    </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l96"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l97"></a>        </span><span class=cF1>if</span><span class=cF0> (count &gt; COPY_BUF_BLKS)
+<a name="l98"></a>            n = COPY_BUF_BLKS;
+<a name="l99"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l100"></a>            n = count;
+<a name="l101"></a>        </span><span class=cF1>if</span><span class=cF0> (n &gt; bd-&gt;max_reads)
+<a name="l102"></a>            n = bd-&gt;max_reads;
+<a name="l103"></a>
+<a name="l104"></a>        retry = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l105"></a>        </span><span class=cF1>while</span><span class=cF0> (--retry)
+<a name="l106"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF7>(</span><span class=cF0>bd, buf, blk / spc, n / spc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l107"></a></span><span class=cF2>//n is 0x800 if max_reads.</span><span class=cF0>  </span><span class=cF2>Up to 8 additional seconds</span><span class=cF0>
+<a name="l108"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l109"></a>
+<a name="l110"></a>        </span><span class=cF1>if</span><span class=cF0> (!retry)
+<a name="l111"></a>            </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, buf, blk / spc, n / spc);
+<a name="l112"></a>
+<a name="l113"></a>        </span><span class=cF5>FBlkWrite</span><span class=cF0>(f, buf, blk, n);
+<a name="l114"></a>        count -= n;
+<a name="l115"></a>        blk += n;
+<a name="l116"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l117"></a>    </span><span class=cF5>FClose</span><span class=cF0>(f);
+<a name="l118"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l119"></a>    </span><span class=cF5>Free</span><span class=cF0>(out_name2);
+<a name="l120"></a>}
+<a name="l121"></a>
+<a name="l122"></a></span><span class=cF1>class</span><span class=cF0> CDualBuf
+<a name="l123"></a>{
+<a name="l124"></a>    </span><span class=cF1>U8</span><span class=cF0>      *buf0, *buf1;
+<a name="l125"></a>    </span><span class=cF9>I64</span><span class=cF0>      in_buf, out_buf, count;
+<a name="l126"></a>    </span><span class=cF1>U8</span><span class=cF0>      *filename;
+<a name="l127"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *dvd_bd;
+<a name="l128"></a>};
+<a name="l129"></a>
+<a name="l130"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>DVDImageWriteTask</span><span class=cF0>(CDualBuf *d)
+<a name="l131"></a>{
+<a name="l132"></a>    </span><span class=cF1>U8</span><span class=cF0>      *buf;
+<a name="l133"></a>    </span><span class=cF9>I64</span><span class=cF0>      n, blk = </span><span class=cFE>0</span><span class=cF0>, count = d-&gt;count;
+<a name="l134"></a>    </span><span class=cF9>CFile</span><span class=cF0>   *f;
+<a name="l135"></a>
+<a name="l136"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileAttr</span><span class=cF7>(</span><span class=cF0>d-&gt;filename</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cF3>RS_ATTR_CONTIGUOUS</span><span class=cF0>)
+<a name="l137"></a>        f = </span><span class=cF5>FOpen</span><span class=cF0>(d-&gt;filename, </span><span class=cF6>&quot;rc&quot;</span><span class=cF0>);
+<a name="l138"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l139"></a>        f = </span><span class=cF5>FOpen</span><span class=cF0>(d-&gt;filename, </span><span class=cF6>&quot;r&quot;</span><span class=cF0>);
+<a name="l140"></a>    </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l141"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l142"></a>        </span><span class=cF1>if</span><span class=cF0> (count &gt; COPY_BUF_BLKS)
+<a name="l143"></a>            n = COPY_BUF_BLKS;
+<a name="l144"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l145"></a>            n = count;
+<a name="l146"></a>        </span><span class=cF1>if</span><span class=cF0> (n &gt; d-&gt;dvd_bd-&gt;max_writes)
+<a name="l147"></a>            n = d-&gt;dvd_bd-&gt;max_writes;
+<a name="l148"></a>        </span><span class=cF1>if</span><span class=cF0> (d-&gt;in_buf &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l149"></a>            buf = d-&gt;buf1;
+<a name="l150"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l151"></a>            buf = d-&gt;buf0;
+<a name="l152"></a>        </span><span class=cF1>while</span><span class=cF0> (d-&gt;in_buf&gt;d-&gt;out_buf + </span><span class=cFE>1</span><span class=cF0>)
+<a name="l153"></a>            </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l154"></a>        </span><span class=cF5>FBlkRead</span><span class=cF0>(f, buf, blk, n);
+<a name="l155"></a>        d-&gt;in_buf++;
+<a name="l156"></a>        count -= n;
+<a name="l157"></a>        blk += n;
+<a name="l158"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l159"></a>    </span><span class=cF5>FClose</span><span class=cF0>(f);
+<a name="l160"></a>}
+<a name="l161"></a>
+<a name="l162"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DVDImageWrite</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> dvd_drive_let, </span><span class=cF1>U8</span><span class=cF0> *in_name=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> media_type=</span><span class=cF3>MT_DVD</span><span class=cF0>)
+<a name="l163"></a>{</span><span class=cF2>//Write CD/DVD ISO file to disk.</span><span class=cF0>
+<a name="l164"></a>    CDualBuf    *d = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CDualBuf</span><span class=cF7>)</span><span class=cF0>);
+<a name="l165"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf, *in_name2, *in_name3;
+<a name="l166"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, n, spc, blk = </span><span class=cFE>0</span><span class=cF0>, count;
+<a name="l167"></a>    </span><span class=cF9>CDrive</span><span class=cF0>      *drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(dvd_drive_let);
+<a name="l168"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>     *bd = drive-&gt;bd, *bd2;
+<a name="l169"></a>    </span><span class=cF9>CTask</span><span class=cF0>       *task;
+<a name="l170"></a>    </span><span class=cF9>CFile</span><span class=cF0>       *f;
+<a name="l171"></a>
+<a name="l172"></a>    </span><span class=cF1>if</span><span class=cF0> (!in_name)
+<a name="l173"></a>        in_name = </span><span class=cFB>blkdev</span><span class=cF0>.default_iso_filename;
+<a name="l174"></a>    in_name3 = </span><span class=cF5>ExtDefault</span><span class=cF0>(in_name, </span><span class=cF6>&quot;ISO&quot;</span><span class=cF0>);
+<a name="l175"></a>    in_name2 = </span><span class=cF5>FileNameAbs</span><span class=cF0>(in_name3);
+<a name="l176"></a>    f=</span><span class=cF5>FOpen</span><span class=cF0>(in_name2, </span><span class=cF6>&quot;r&quot;</span><span class=cF0>);
+<a name="l177"></a>    </span><span class=cF1>if</span><span class=cF0> (!f)
+<a name="l178"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l179"></a>        </span><span class=cF5>Free</span><span class=cF0>(d);
+<a name="l180"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l181"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l182"></a>    count = (</span><span class=cF5>FSize</span><span class=cF7>(</span><span class=cF0>f</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>BLK_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l183"></a>    </span><span class=cF5>FClose</span><span class=cF0>(f);
+<a name="l184"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type != </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
+<a name="l185"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'BlkDev'</span><span class=cF0>);
+<a name="l186"></a>    bd2 = </span><span class=cF5>Letter2BlkDev</span><span class=cF0>(*in_name2);
+<a name="l187"></a>    </span><span class=cF1>while</span><span class=cF0> (bd2-&gt;lock_fwding)
+<a name="l188"></a>        bd2 = bd2-&gt;lock_fwding;  </span><span class=cF2>//If two blkdevs on same controller, use one lock</span><span class=cF0>
+<a name="l189"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>bd2-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0> || bd2-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF7>)</span><span class=cF0> &amp;&amp; bd2-&gt;base0 == bd-&gt;base0)
+<a name="l190"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l191"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Can't burn CD/DVD on same ATA controller as file.\n\n&quot;</span><span class=cF0>);
+<a name="l192"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'BlkDev'</span><span class=cF0>);
+<a name="l193"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l194"></a>
+<a name="l195"></a>    bd-&gt;flags |= </span><span class=cF3>BDF_READ_ONLY_OVERRIDE</span><span class=cF0>;
+<a name="l196"></a>    </span><span class=cFD>BlkDevInit</span><span class=cF0>(bd);
+<a name="l197"></a>    spc = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l198"></a>    </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt; count)
+<a name="l199"></a>        drive-&gt;size = count;
+<a name="l200"></a>
+<a name="l201"></a>    d-&gt;filename = in_name2;
+<a name="l202"></a>    d-&gt;dvd_bd = bd;
+<a name="l203"></a>    d-&gt;buf0 = </span><span class=cF5>MAlloc</span><span class=cF0>(COPY_BUF_BLKS &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l204"></a>    d-&gt;buf1 = </span><span class=cF5>MAlloc</span><span class=cF0>(COPY_BUF_BLKS &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l205"></a>    d-&gt;count = count;
+<a name="l206"></a>
+<a name="l207"></a>    task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cFD>DVDImageWriteTask</span><span class=cF0>, d, </span><span class=cF6>&quot;Write CD/DVD&quot;</span><span class=cF0>);
+<a name="l208"></a>    </span><span class=cF1>while</span><span class=cF0> (d-&gt;in_buf &lt;= d-&gt;out_buf)
+<a name="l209"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l210"></a>
+<a name="l211"></a>    </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
+<a name="l212"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>IDEATAPIWaitReady(bd, 0);</span><span class=cF0>
+<a name="l213"></a>
+<a name="l214"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l215"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = count;
+<a name="l216"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Writing&quot;</span><span class=cF0>);
+<a name="l217"></a>    </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l218"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l219"></a>        </span><span class=cF1>if</span><span class=cF0> (count &gt; COPY_BUF_BLKS)
+<a name="l220"></a>            n = COPY_BUF_BLKS;
+<a name="l221"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l222"></a>            n = count;
+<a name="l223"></a>        </span><span class=cF1>if</span><span class=cF0> (n &gt; bd-&gt;max_writes)
+<a name="l224"></a>            n = bd-&gt;max_writes;
+<a name="l225"></a>        </span><span class=cF1>if</span><span class=cF0> (d-&gt;out_buf &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l226"></a>            buf = d-&gt;buf1;
+<a name="l227"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l228"></a>            buf = d-&gt;buf0;
+<a name="l229"></a>        </span><span class=cF1>while</span><span class=cF0> (d-&gt;in_buf &lt;= d-&gt;out_buf)
+<a name="l230"></a>            </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l231"></a>        </span><span class=cFD>IDEATAPIWriteBlks</span><span class=cF0>(bd, buf, blk / spc, </span><span class=cF7>(</span><span class=cF0>n + spc - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / spc);
+<a name="l232"></a>        d-&gt;out_buf++;
+<a name="l233"></a>        count -= n;
+<a name="l234"></a>        blk += n;
+<a name="l235"></a>        </span><span class=cFB>progress1</span><span class=cF0> += n;
+<a name="l236"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l237"></a>    </span><span class=cFD>IDEATAPISync</span><span class=cF0>(bd);
+<a name="l238"></a>
+<a name="l239"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l240"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l241"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Closing&quot;</span><span class=cF0>);
+<a name="l242"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>2</span><span class=cF0>; i++)
+<a name="l243"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l244"></a>        </span><span class=cFD>IDEATAPIClose</span><span class=cF0>(bd, </span><span class=cFE>0x100</span><span class=cF0>, i); </span><span class=cF2>//Close tracks</span><span class=cF0>
+<a name="l245"></a>        </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l246"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l247"></a>
+<a name="l248"></a>    </span><span class=cFD>IDEATAPISync</span><span class=cF0>(bd);
+<a name="l249"></a>
+<a name="l250"></a>    </span><span class=cFD>IDEATAPIClose</span><span class=cF0>(bd, </span><span class=cFE>0x200</span><span class=cF0>); </span><span class=cF2>//close disk</span><span class=cF0>
+<a name="l251"></a>    </span><span class=cFD>IDEATAPISync</span><span class=cF0>(bd);
+<a name="l252"></a>    </span><span class=cF1>if</span><span class=cF0> (media_type == </span><span class=cF3>MT_DVD</span><span class=cF0>)
+<a name="l253"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l254"></a>        </span><span class=cFD>IDEATAPIClose</span><span class=cF0>(bd, </span><span class=cFE>0x300</span><span class=cF0>);
+<a name="l255"></a>        </span><span class=cFD>IDEATAPISync</span><span class=cF0>(bd);
+<a name="l256"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l257"></a>
+<a name="l258"></a>    *</span><span class=cFB>progress1_desc</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l259"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l260"></a>
+<a name="l261"></a>    bd-&gt;flags &amp;= ~</span><span class=cF3>BDF_READ_ONLY_OVERRIDE</span><span class=cF0>;
+<a name="l262"></a>    </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
+<a name="l263"></a>    </span><span class=cF5>Free</span><span class=cF0>(d-&gt;buf0);
+<a name="l264"></a>    </span><span class=cF5>Free</span><span class=cF0>(d-&gt;buf1);
+<a name="l265"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_name2);
+<a name="l266"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_name3);
+<a name="l267"></a>    </span><span class=cF5>Free</span><span class=cF0>(d);
+<a name="l268"></a>}
+</span></pre></body>
+</html>

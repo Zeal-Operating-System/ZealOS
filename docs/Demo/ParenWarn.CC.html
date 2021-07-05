@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>, </span><span class=cF3>ON</span><span class=cF0>);
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>F64</span><span class=cF0> d, d1 = </span><span class=cFE>1</span><span class=cF0>, d2 = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l4"></a>
+<a name="l5"></a>d1 = (d2 = </span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
+<a name="l6"></a>
+<a name="l7"></a>d1 = (d2 + </span><span class=cFE>3</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
+<a name="l8"></a>
+<a name="l9"></a>d = (d1 + d2) + (d1 + d2);
+<a name="l10"></a>
+<a name="l11"></a>d = (</span><span class=cFE>2</span><span class=cF0> ` </span><span class=cFE>3</span><span class=cF0>) ` </span><span class=cFE>2</span><span class=cF0>;
+<a name="l12"></a>
+<a name="l13"></a>d = </span><span class=cFE>2</span><span class=cF0> ` (</span><span class=cFE>3</span><span class=cF0> ` </span><span class=cFE>2</span><span class=cF0>);
+<a name="l14"></a>
+<a name="l15"></a>d = -d1 ` (d + d2);
+<a name="l16"></a>
+<a name="l17"></a></span><span class=cF5>Option</span><span class=cF0>(</span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>, </span><span class=cF3>OFF</span><span class=cF0>);
+</span></pre></body>
+</html>

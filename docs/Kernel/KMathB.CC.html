@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Clamp</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> d, </span><span class=cF1>F64</span><span class=cF0> lo, </span><span class=cF1>F64</span><span class=cF0> hi)
+<a name="l2"></a>{</span><span class=cF2>//Clamp to F64 [] range.</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF1>if</span><span class=cF0> (d &lt; lo)
+<a name="l4"></a>        </span><span class=cF1>return</span><span class=cF0> lo;
+<a name="l5"></a>    </span><span class=cF1>if</span><span class=cF0> (d &gt; hi)
+<a name="l6"></a>        </span><span class=cF1>return</span><span class=cF0> hi;
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF1>return</span><span class=cF0> d;
+<a name="l9"></a>}
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Min</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> n1, </span><span class=cF1>F64</span><span class=cF0> n2)
+<a name="l12"></a>{</span><span class=cF2>//Min of two F64s.</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF1>if</span><span class=cF0> (n1 &lt;= n2)
+<a name="l14"></a>        </span><span class=cF1>return</span><span class=cF0> n1;
+<a name="l15"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l16"></a>        </span><span class=cF1>return</span><span class=cF0> n2;
+<a name="l17"></a>}
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Max</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> n1, </span><span class=cF1>F64</span><span class=cF0> n2)
+<a name="l20"></a>{</span><span class=cF2>//Max of two F64s.</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF1>if</span><span class=cF0> (n1 &gt;= n2)
+<a name="l22"></a>        </span><span class=cF1>return</span><span class=cF0> n1;
+<a name="l23"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l24"></a>        </span><span class=cF1>return</span><span class=cF0> n2;
+<a name="l25"></a>}
+<a name="l26"></a>
+<a name="l27"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Pow10I64</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> i)
+<a name="l28"></a>{</span><span class=cF2>//F64 int powers of ten.</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>308</span><span class=cF0>)
+<a name="l30"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>inf</span><span class=cF0>;
+<a name="l31"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (i &lt; -</span><span class=cFE>308</span><span class=cF0>)
+<a name="l32"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l34"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>pow10_I64</span><span class=cF0>[i + </span><span class=cFE>309</span><span class=cF0>];
+<a name="l35"></a>}
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF9>U64</span><span class=cF0> </span><span class=cF5>FloorU64</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> num, </span><span class=cF9>U64</span><span class=cF0> to)
+<a name="l38"></a>{</span><span class=cF2>//Int multiples of num.</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF1>return</span><span class=cF0> num - num % to;
+<a name="l40"></a>}
+<a name="l41"></a>
+<a name="l42"></a></span><span class=cF9>U64</span><span class=cF0> </span><span class=cF5>CeilU64</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> num, </span><span class=cF9>U64</span><span class=cF0> to)
+<a name="l43"></a>{</span><span class=cF2>//Int multiples of num.</span><span class=cF0>
+<a name="l44"></a>    num += to - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l45"></a>
+<a name="l46"></a>    </span><span class=cF1>return</span><span class=cF0> num - num % to;
+<a name="l47"></a>}
+<a name="l48"></a>
+<a name="l49"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>RoundI64</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num, </span><span class=cF9>I64</span><span class=cF0> to)
+<a name="l50"></a>{</span><span class=cF2>//Int multiples of num.</span><span class=cF0>
+<a name="l51"></a>    </span><span class=cF1>return</span><span class=cF0> num - num % to;
+<a name="l52"></a>}
+<a name="l53"></a>
+<a name="l54"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FloorI64</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num, </span><span class=cF9>I64</span><span class=cF0> to)
+<a name="l55"></a>{</span><span class=cF2>//Int multiples of num.</span><span class=cF0>
+<a name="l56"></a>    </span><span class=cF1>if</span><span class=cF0> (num &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l57"></a>        </span><span class=cF1>return</span><span class=cF0> num - num % to;
+<a name="l58"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l59"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>        num++;
+<a name="l61"></a>        </span><span class=cF1>return</span><span class=cF0> num - num % to - to;
+<a name="l62"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l63"></a>}
+<a name="l64"></a>
+<a name="l65"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>CeilI64</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num, </span><span class=cF9>I64</span><span class=cF0> to)
+<a name="l66"></a>{</span><span class=cF2>//Int multiples of num.</span><span class=cF0>
+<a name="l67"></a>    </span><span class=cF1>if</span><span class=cF0> (num &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l68"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l69"></a>        num += to - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l70"></a>        </span><span class=cF1>return</span><span class=cF0> num - num % to;
+<a name="l71"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l72"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l73"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l74"></a>        num += to - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l75"></a>        </span><span class=cF1>return</span><span class=cF0> num - num % to - to;
+<a name="l76"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l77"></a>}
+<a name="l78"></a>
+<a name="l79"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Credits.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l80"></a>#</span><span class=cF1>define</span><span class=cF0> LIN_CONGRUE_A   </span><span class=cFE>6364136223846793005</span><span class=cF0>
+<a name="l81"></a>#</span><span class=cF1>define</span><span class=cF0> LIN_CONGRUE_C   </span><span class=cFE>1442695040888963407</span><span class=cF0>
+<a name="l82"></a>
+<a name="l83"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>RandInt</span><span class=cF0>()
+<a name="l84"></a>{</span><span class=cF2>//Don't use this. Use the functions below.</span><span class=cF0>
+<a name="l85"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rand_seed;
+<a name="l86"></a>
+<a name="l87"></a>    res = LIN_CONGRUE_A * res ^ (res &amp; </span><span class=cFE>0xFFFFFFFF0000</span><span class=cF0>) &gt;&gt; </span><span class=cFE>16</span><span class=cF0> + LIN_CONGRUE_C;
+<a name="l88"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_NONTIMER_RAND</span><span class=cF7>)</span><span class=cF0>)
+<a name="l89"></a>        res ^= </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l90"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;rand_seed = res;
+<a name="l91"></a>
+<a name="l92"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l93"></a>}
+<a name="l94"></a>
+<a name="l95"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>RandU8</span><span class=cF0>()
+<a name="l96"></a>{</span><span class=cF2>//Random U8.</span><span class=cF0>
+<a name="l97"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>RandInt</span><span class=cF0> &amp; </span><span class=cF3>U8_MAX</span><span class=cF0>;
+<a name="l98"></a>}
+<a name="l99"></a>
+<a name="l100"></a></span><span class=cF9>I16</span><span class=cF0> </span><span class=cF5>RandI16</span><span class=cF0>()
+<a name="l101"></a>{</span><span class=cF2>//Random I16.</span><span class=cF0>
+<a name="l102"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFD>RandInt</span><span class=cF0>;
+<a name="l103"></a>
+<a name="l104"></a>    </span><span class=cF1>return</span><span class=cF0> res.i16[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l105"></a>}
+<a name="l106"></a>
+<a name="l107"></a></span><span class=cF9>U16</span><span class=cF0> </span><span class=cF5>RandU16</span><span class=cF0>()
+<a name="l108"></a>{</span><span class=cF2>//Random U16.</span><span class=cF0>
+<a name="l109"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>RandInt</span><span class=cF0> &amp; </span><span class=cF3>U16_MAX</span><span class=cF0>;
+<a name="l110"></a>}
+<a name="l111"></a>
+<a name="l112"></a></span><span class=cF9>I32</span><span class=cF0> </span><span class=cF5>RandI32</span><span class=cF0>()
+<a name="l113"></a>{</span><span class=cF2>//Random I32.</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFD>RandInt</span><span class=cF0>;
+<a name="l115"></a>
+<a name="l116"></a>    </span><span class=cF1>return</span><span class=cF0> res.i32[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l117"></a>}
+<a name="l118"></a>
+<a name="l119"></a></span><span class=cF9>U32</span><span class=cF0> </span><span class=cF5>RandU32</span><span class=cF0>()
+<a name="l120"></a>{</span><span class=cF2>//Random U32.</span><span class=cF0>
+<a name="l121"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>RandInt</span><span class=cF0> &amp; </span><span class=cF3>U32_MAX</span><span class=cF0>;
+<a name="l122"></a>}
+<a name="l123"></a>
+<a name="l124"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>RandI64</span><span class=cF0>()
+<a name="l125"></a>{</span><span class=cF2>//Random I64.</span><span class=cF0>
+<a name="l126"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>RandInt</span><span class=cF0>;
+<a name="l127"></a>}
+<a name="l128"></a>
+<a name="l129"></a></span><span class=cF9>U64</span><span class=cF0> </span><span class=cF5>RandU64</span><span class=cF0>()
+<a name="l130"></a>{</span><span class=cF2>//Random U64.</span><span class=cF0>
+<a name="l131"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>RandInt</span><span class=cF0>;
+<a name="l132"></a>}
+<a name="l133"></a>
+<a name="l134"></a></span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Rand</span><span class=cF0>()
+<a name="l135"></a>{</span><span class=cF2>//Random F64.</span><span class=cF0>
+<a name="l136"></a>    </span><span class=cF1>return</span><span class=cF0> (</span><span class=cFD>RandInt</span><span class=cF0> &amp; </span><span class=cFE>0x3FFFFFFFFFFFFFFF</span><span class=cF0>) / </span><span class=cF5>ToF64</span><span class=cF0>(</span><span class=cFE>0x4000000000000000</span><span class=cF0>);
+<a name="l137"></a>}
+<a name="l138"></a>
+<a name="l139"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Seed</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> seed=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l140"></a>{</span><span class=cF2>//Set </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMathB.html#l134"><span class=cF4>Rand</span></a><span class=cF2>() seed. Zero for timer-based.</span><span class=cF0>
+<a name="l141"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l142"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l143"></a>    </span><span class=cF1>if</span><span class=cF0> (seed)
+<a name="l144"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l145"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_NONTIMER_RAND</span><span class=cF0>);
+<a name="l146"></a>        </span><span class=cF1>return</span><span class=cF0> task-&gt;rand_seed = seed;
+<a name="l147"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l148"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l149"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l150"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_NONTIMER_RAND</span><span class=cF0>);
+<a name="l151"></a>        </span><span class=cF1>return</span><span class=cF0> task-&gt;rand_seed ^= </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l152"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l153"></a>}
+</span></pre></body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ParseDocFlagSingle</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> *_de_flags, </span><span class=cF9>U32</span><span class=cF0> *_type, </span><span class=cF1>Bool</span><span class=cF0> turn_on)
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF9>I64</span><span class=cF0>              res = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF9>CHashGeneric</span><span class=cF0>    *tmph;
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>tmph = </span><span class=cF5>HashFind</span><span class=cF0>(cc-&gt;cur_str, </span><span class=cFB>doldoc</span><span class=cF0>.hash, </span><span class=cF3>DHT_DOC_FLAG</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l10"></a>        res = tmph-&gt;user_data0;
+<a name="l11"></a>        </span><span class=cF1>if</span><span class=cF0> (res &lt; </span><span class=cFE>64</span><span class=cF0>)
+<a name="l12"></a>        {
+<a name="l13"></a>            </span><span class=cF5>BEqual</span><span class=cF0>(_de_flags, res, turn_on);
+<a name="l14"></a>            </span><span class=cF1>switch</span><span class=cF0> (res)
+<a name="l15"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_BLINK</span><span class=cF0>:
+<a name="l17"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_INVERT</span><span class=cF0>:
+<a name="l18"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_UNDERLINE</span><span class=cF0>:
+<a name="l19"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SEL</span><span class=cF0>:
+<a name="l20"></a>                    </span><span class=cF5>BEqual</span><span class=cF0>(_type, res, turn_on);
+<a name="l21"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l22"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l23"></a>        }
+<a name="l24"></a>        </span><span class=cF5>Lex</span><span class=cF0>(cc);        </span><span class=cF2>//skip flag</span><span class=cF0>
+<a name="l25"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l26"></a>
+<a name="l27"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l28"></a>}
+<a name="l29"></a>
+<a name="l30"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ParseDocFlags</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> *_de_flags, </span><span class=cF9>U32</span><span class=cF0> *_type)
+<a name="l31"></a>{
+<a name="l32"></a>    </span><span class=cF9>I64</span><span class=cF0>  res = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF1>Bool</span><span class=cF0> turn_on;
+<a name="l34"></a>
+<a name="l35"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l36"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'+'</span><span class=cF0>)
+<a name="l38"></a>            turn_on = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l39"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'-'</span><span class=cF0>)
+<a name="l40"></a>            turn_on = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l41"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l42"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l43"></a>        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l44"></a>        res = </span><span class=cF5>ParseDocFlagSingle</span><span class=cF0>(cc, _de_flags, _type, turn_on);
+<a name="l45"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l46"></a>
+<a name="l47"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l48"></a>}
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Doc2PlainText</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e)
+<a name="l51"></a>{</span><span class=cF2>//TODO: break strs</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, attr = doc_e-&gt;attr, t1, f1, de_flags, type;
+<a name="l53"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf, *buf2;
+<a name="l54"></a>
+<a name="l55"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_FOREGROUND</span><span class=cF0> &amp;&amp; doc-&gt;flags &amp; </span><span class=cF3>DOCF_COLOR_NAMES</span><span class=cF0> &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= attr &lt; </span><span class=cF3>COLORS_NUM</span><span class=cF0>)
+<a name="l56"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l57"></a>        buf = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF5>DefineSub</span><span class=cF7>(</span><span class=cF0>attr, </span><span class=cF6>&quot;ST_COLORS&quot;</span><span class=cF7>)</span><span class=cF0>);
+<a name="l58"></a>        attr = </span><span class=cF3>DOC_DEFAULT</span><span class=cF0>;
+<a name="l59"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l60"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l61"></a>        buf = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF5>DefineSub</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;type_u8, </span><span class=cF6>&quot;ST_DOC_CMDS&quot;</span><span class=cF7>)</span><span class=cF0>);
+<a name="l62"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_ERROR</span><span class=cF0>)
+<a name="l63"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l64"></a>        f1 = </span><span class=cFB>doldoc</span><span class=cF0>.default_de_flags[doc_e-&gt;type_u8];
+<a name="l65"></a>        t1 = doc_e-&gt;type_u8 | </span><span class=cFB>doldoc</span><span class=cF0>.default_type_flags[doc_e-&gt;type_u8];
+<a name="l66"></a>
+<a name="l67"></a>        de_flags = doc_e-&gt;de_flags &amp; ~(</span><span class=cF3>DOCG_BL_IV_UL</span><span class=cF0> | </span><span class=cF3>DOCEF_SEL</span><span class=cF0> | </span><span class=cF3>DOCEF_HIGHLIGHT</span><span class=cF0> |
+<a name="l68"></a>                                       </span><span class=cF3>DOCEF_WORD_WRAP</span><span class=cF0> | </span><span class=cF3>DOCEF_SKIP</span><span class=cF0> | </span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>);
+<a name="l69"></a>
+<a name="l70"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>DOCEf_FLAGS_NUM</span><span class=cF0>;i++)
+<a name="l71"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;f1, i</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;de_flags, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l72"></a>        {
+<a name="l73"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;de_flags, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l74"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l75"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>1</span><span class=cF0> &lt;&lt; i &amp; </span><span class=cF3>DOCEG_HAS_ARG</span><span class=cF7>)</span><span class=cF0>)
+<a name="l76"></a>                    {
+<a name="l77"></a>                        buf2 =</span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s+%Z&quot;</span><span class=cF0>, buf, i, </span><span class=cF6>&quot;ST_DOC_FLAGS&quot;</span><span class=cF0>);
+<a name="l78"></a>                        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l79"></a>                        buf = buf2;
+<a name="l80"></a>                    }
+<a name="l81"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l82"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l83"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l84"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s-%Z&quot;</span><span class=cF0>, buf, i, </span><span class=cF6>&quot;ST_DOC_FLAGS&quot;</span><span class=cF0>);
+<a name="l85"></a>                    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l86"></a>                    buf = buf2;
+<a name="l87"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l88"></a>            }
+<a name="l89"></a>        type = doc_e-&gt;type &amp; ~</span><span class=cF3>DOCET_SEL</span><span class=cF0>;
+<a name="l90"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cF3>DOCEt_BLINK</span><span class=cF0>; i &lt;= </span><span class=cF3>DOCEt_UNDERLINE</span><span class=cF0>; i++)
+<a name="l91"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;t1, i</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;type, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l92"></a>            {
+<a name="l93"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;type, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l94"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s+%Z&quot;</span><span class=cF0>, buf, i, </span><span class=cF6>&quot;ST_DOC_FLAGS&quot;</span><span class=cF0>);
+<a name="l95"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l96"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s-%Z&quot;</span><span class=cF0>, buf, i, </span><span class=cF6>&quot;ST_DOC_FLAGS&quot;</span><span class=cF0>);
+<a name="l97"></a>                </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l98"></a>                buf = buf2;
+<a name="l99"></a>            }
+<a name="l100"></a>        buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s,&quot;</span><span class=cF0>, buf);
+<a name="l101"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l102"></a>        buf = buf2;
+<a name="l103"></a>        </span><span class=cF1>switch</span><span class=cF0> [doc_e-&gt;type_u8]
+<a name="l104"></a>        {
+<a name="l105"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_HEX_ED</span><span class=cF0>:
+<a name="l106"></a>                buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;len);
+<a name="l107"></a>                </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l108"></a>                buf  =buf2;
+<a name="l109"></a>                buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;hex_ed_width);
+<a name="l110"></a>                </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l111"></a>                buf = buf2;
+<a name="l112"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l113"></a>
+<a name="l114"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_FOREGROUND</span><span class=cF0>:
+<a name="l115"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_BACKGROUND</span><span class=cF0>:
+<a name="l116"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_DEFAULT_FOREGROUND</span><span class=cF0>:
+<a name="l117"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_DEFAULT_BACKGROUND</span><span class=cF0>:
+<a name="l118"></a>                </span><span class=cF1>if</span><span class=cF0> (doc-&gt;flags &amp; </span><span class=cF3>DOCF_COLOR_NAMES</span><span class=cF0> &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= attr &lt; </span><span class=cF3>COLORS_NUM</span><span class=cF0>)
+<a name="l119"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l120"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s%Z,&quot;</span><span class=cF0>, buf, doc_e-&gt;attr, </span><span class=cF6>&quot;ST_COLORS&quot;</span><span class=cF0>);
+<a name="l121"></a>                    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l122"></a>                    buf = buf2;
+<a name="l123"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l124"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l125"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_PAGE_LEN</span><span class=cF0>:
+<a name="l126"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_LEFT_MARGIN</span><span class=cF0>:
+<a name="l127"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_RIGHT_MARGIN</span><span class=cF0>:
+<a name="l128"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_HEADER</span><span class=cF0>:
+<a name="l129"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_FOOTER</span><span class=cF0>:
+<a name="l130"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_INDENT</span><span class=cF0>:
+<a name="l131"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_WORD_WRAP</span><span class=cF0>:
+<a name="l132"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_HIGHLIGHT</span><span class=cF0>:
+<a name="l133"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_BLINK</span><span class=cF0>:
+<a name="l134"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_INVERT</span><span class=cF0>:
+<a name="l135"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_UNDERLINE</span><span class=cF0>:
+<a name="l136"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_SHIFTED_X</span><span class=cF0>:
+<a name="l137"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_SHIFTED_Y</span><span class=cF0>:
+<a name="l138"></a>                </span><span class=cF1>if</span><span class=cF0> (attr != </span><span class=cF3>DOC_DEFAULT</span><span class=cF0>)
+<a name="l139"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l140"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;attr);
+<a name="l141"></a>                    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l142"></a>                    buf = buf2;
+<a name="l143"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l144"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>: </span><span class=cF2>//nobound switch</span><span class=cF0>
+<a name="l145"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l146"></a>        }
+<a name="l147"></a>        de_flags = doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEG_HAS_ARG</span><span class=cF0>;
+<a name="l148"></a>        </span><span class=cF1>while</span><span class=cF0> (de_flags)
+<a name="l149"></a>        {
+<a name="l150"></a>            j = </span><span class=cF5>Bsf</span><span class=cF0>(de_flags);
+<a name="l151"></a>            </span><span class=cF5>Btr</span><span class=cF0>(&amp;de_flags, j);
+<a name="l152"></a>            </span><span class=cF1>switch</span><span class=cF0> [j]
+<a name="l153"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l154"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_TAG</span><span class=cF0>:
+<a name="l155"></a>                    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_DATA</span><span class=cF0> || doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_MACRO</span><span class=cF0> &amp;&amp;
+<a name="l156"></a>                        </span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_LEFT_MACRO</span><span class=cF0> &amp;&amp;
+<a name="l157"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF0>(doc_e-&gt;tag, doc_e-&gt;left_macro) ||
+<a name="l158"></a>                         doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_RIGHT_MACRO</span><span class=cF0> &amp;&amp;
+<a name="l159"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF0>(doc_e-&gt;tag, doc_e-&gt;right_macro)</span><span class=cF7>)</span><span class=cF0> ||
+<a name="l160"></a>                        doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_LIST</span><span class=cF0> &amp;&amp; !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;tag, </span><span class=cF6>&quot;[]&quot;</span><span class=cF7>)</span><span class=cF0> &amp;&amp; doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_DEFINE</span><span class=cF0>)
+<a name="l161"></a>                    {
+<a name="l162"></a>                        buf2 = buf;
+<a name="l163"></a>                        buf = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l164"></a>                    }
+<a name="l165"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l166"></a>                    {
+<a name="l167"></a>                        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_CHECK_BOX</span><span class=cF0>)
+<a name="l168"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l169"></a>                            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cFE>4</span><span class=cF0>)
+<a name="l170"></a>                                buf2 = doc_e-&gt;tag + </span><span class=cFE>4</span><span class=cF0>;
+<a name="l171"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l172"></a>                                buf2 = </span><span class=cF6>&quot;&quot;</span><span class=cF0>;
+<a name="l173"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l174"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TREE</span><span class=cF0>)
+<a name="l175"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l176"></a>                            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cFE>3</span><span class=cF0>)
+<a name="l177"></a>                                buf2 = doc_e-&gt;tag + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l178"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l179"></a>                                buf2 = </span><span class=cF6>&quot;&quot;</span><span class=cF0>;
+<a name="l180"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l181"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l182"></a>                            buf2 = doc_e-&gt;tag;
+<a name="l183"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>doldoc</span><span class=cF0>.default_de_flags[doc_e-&gt;type_u8], </span><span class=cF3>DOCEf_TAG</span><span class=cF7>)</span><span class=cF0>)
+<a name="l184"></a>                            buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, buf2);
+<a name="l185"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l186"></a>                            buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sT=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, buf2);
+<a name="l187"></a>                    }
+<a name="l188"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l189"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_LEN</span><span class=cF0>:
+<a name="l190"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sLEN=%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;len);
+<a name="l191"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l192"></a>
+<a name="l193"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_AUX_STR</span><span class=cF0>:
+<a name="l194"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sA=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, doc_e-&gt;aux_str);
+<a name="l195"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l196"></a>
+<a name="l197"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_DEFINE</span><span class=cF0>:
+<a name="l198"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sD=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, doc_e-&gt;define_str);
+<a name="l199"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l200"></a>
+<a name="l201"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_HTML_LINK</span><span class=cF0>:
+<a name="l202"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sHTML=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, doc_e-&gt;html_link);
+<a name="l203"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l204"></a>
+<a name="l205"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_LEFT_EXP</span><span class=cF0>:
+<a name="l206"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sLE=%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;left_exp);
+<a name="l207"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l208"></a>
+<a name="l209"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_LEFT_MACRO</span><span class=cF0>:
+<a name="l210"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sLM=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, doc_e-&gt;left_macro);
+<a name="l211"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l212"></a>
+<a name="l213"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_RIGHT_EXP</span><span class=cF0>:
+<a name="l214"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sRE=%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;right_exp);
+<a name="l215"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l216"></a>
+<a name="l217"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_RIGHT_MACRO</span><span class=cF0>:
+<a name="l218"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sRM=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, doc_e-&gt;right_macro);
+<a name="l219"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l220"></a>
+<a name="l221"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_HAS_BIN</span><span class=cF0>:
+<a name="l222"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sBI=%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;bin_num);
+<a name="l223"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l224"></a>
+<a name="l225"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_BIN_PTR_LINK</span><span class=cF0>:
+<a name="l226"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sBP=\&quot;%$Q\&quot;,&quot;</span><span class=cF0>, buf, doc_e-&gt;bin_ptr_link);
+<a name="l227"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l228"></a>
+<a name="l229"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_RAW_TYPE</span><span class=cF0>:
+<a name="l230"></a>                    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_CHECK_BOX</span><span class=cF0> &amp;&amp; doc_e-&gt;raw_type != </span><span class=cF3>RT_I8</span><span class=cF0> ||
+<a name="l231"></a>                            doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_CHECK_BOX</span><span class=cF0> &amp;&amp; doc_e-&gt;raw_type != </span><span class=cF3>RT_I64</span><span class=cF0>)
+<a name="l232"></a>
+<a name="l233"></a>                        buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sRT=%Z,&quot;</span><span class=cF0>, buf, doc_e-&gt;raw_type, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>);
+<a name="l234"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l235"></a>
+<a name="l236"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SHIFTED_X</span><span class=cF0>:
+<a name="l237"></a>                    j = doc_e-&gt;type.u16[</span><span class=cFE>1</span><span class=cF0>] &amp; </span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l238"></a>                    </span><span class=cF1>if</span><span class=cF0> (j &amp; </span><span class=cFE>0x10</span><span class=cF0>)
+<a name="l239"></a>                        j |= </span><span class=cFE>0xFFFFFFF0</span><span class=cF0>;
+<a name="l240"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sSX=%d,&quot;</span><span class=cF0>, buf, j);
+<a name="l241"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l242"></a>
+<a name="l243"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SHIFTED_Y</span><span class=cF0>:
+<a name="l244"></a>                    j = doc_e-&gt;type &gt;&gt; </span><span class=cFE>21</span><span class=cF0> &amp; </span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l245"></a>                    </span><span class=cF1>if</span><span class=cF0> (j &amp; </span><span class=cFE>0x10</span><span class=cF0>)
+<a name="l246"></a>                        j |= </span><span class=cFE>0xFFFFFFF0</span><span class=cF0>;
+<a name="l247"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sSY=%d,&quot;</span><span class=cF0>, buf, j);
+<a name="l248"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l249"></a>
+<a name="l250"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SCROLLING_X</span><span class=cF0>:
+<a name="l251"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sSCX=%d,&quot;</span><span class=cF0>, buf, doc_e-&gt;scroll_len);
+<a name="l252"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l253"></a>
+<a name="l254"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_USER_DATA</span><span class=cF0>:
+<a name="l255"></a>                    buf2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%sU=0x%X,&quot;</span><span class=cF0>, buf, doc_e-&gt;user_data);
+<a name="l256"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l257"></a>
+<a name="l258"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_FLAGS_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>: </span><span class=cF2>//nobound switch</span><span class=cF0>
+<a name="l259"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l260"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l261"></a>            </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l262"></a>            buf = buf2;
+<a name="l263"></a>        }
+<a name="l264"></a>        buf[</span><span class=cF5>StrLen</span><span class=cF0>(buf) - </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>;  </span><span class=cF2>//Kill last comma</span><span class=cF0>
+<a name="l265"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l266"></a>    buf2 = </span><span class=cF5>StrNew</span><span class=cF0>(buf, doc-&gt;mem_task); </span><span class=cF2>//exact allocation</span><span class=cF0>
+<a name="l267"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l268"></a>
+<a name="l269"></a>    </span><span class=cF1>return</span><span class=cF0> buf2;
+<a name="l270"></a>}
+<a name="l271"></a>
+<a name="l272"></a></span><span class=cF9>CDocEntry</span><span class=cF0> *</span><span class=cF5>ParseDollarCmd</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l273"></a>{</span><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>() to parse a string and make Doc entries.</span><span class=cF0>
+<a name="l274"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, de_flags, processed_flags, attr = </span><span class=cF3>DOC_DEFAULT</span><span class=cF0>;
+<a name="l275"></a>    </span><span class=cF1>U8</span><span class=cF0>              *ptr, *st2;
+<a name="l276"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l277"></a>    </span><span class=cF9>CHashGeneric</span><span class=cF0>    *tmph;
+<a name="l278"></a>    </span><span class=cF9>CCompCtrl</span><span class=cF0>       *cc = </span><span class=cF5>CompCtrlNew</span><span class=cF0>(st, </span><span class=cF3>CCF_DONT_FREE_BUF</span><span class=cF0>);
+<a name="l279"></a>    </span><span class=cF9>CHashTable</span><span class=cF0>      *old_hash_table_list = cc-&gt;htc.hash_table_list;
+<a name="l280"></a>
+<a name="l281"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l282"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l283"></a>        cc-&gt;htc.hash_table_list = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l284"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l285"></a>        {
+<a name="l286"></a>            </span><span class=cF1>if</span><span class=cF0> (tmph = </span><span class=cF5>HashFind</span><span class=cF7>(</span><span class=cF0>cc-&gt;cur_str, </span><span class=cFB>doldoc</span><span class=cF0>.hash, </span><span class=cF3>DHT_DOC_CMD</span><span class=cF0> | </span><span class=cF3>DHT_COLOR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l287"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l288"></a>                </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>DHT_DOC_CMD</span><span class=cF0>)
+<a name="l289"></a>                    i = tmph-&gt;user_data0;
+<a name="l290"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l291"></a>                {</span><span class=cF2>//DHT_COLOR</span><span class=cF0>
+<a name="l292"></a>                    i = </span><span class=cF3>DOCT_FOREGROUND</span><span class=cF0>;
+<a name="l293"></a>                    attr = tmph-&gt;user_data0;
+<a name="l294"></a>                }
+<a name="l295"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l296"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l297"></a>                </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l298"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip cmd code</span><span class=cF0>
+<a name="l299"></a>            doc_e = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDocEntry</span><span class=cF7>)</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l300"></a>            doc_e-&gt;type     =  i;
+<a name="l301"></a>            doc_e-&gt;de_flags =  </span><span class=cFB>doldoc</span><span class=cF0>.default_de_flags[i];
+<a name="l302"></a>            doc_e-&gt;type     |= </span><span class=cFB>doldoc</span><span class=cF0>.default_type_flags[i];
+<a name="l303"></a>            doc_e-&gt;raw_type =  </span><span class=cF3>RT_I64</span><span class=cF0>;
+<a name="l304"></a>            doc_e-&gt;len      =  </span><span class=cF3>DOCE_LEN_DEFAULT</span><span class=cF0>;
+<a name="l305"></a>            j=</span><span class=cF5>ParseDocFlags</span><span class=cF0>(cc, &amp;doc_e-&gt;de_flags, &amp;doc_e-&gt;type);
+<a name="l306"></a>            cc-&gt;htc.hash_table_list = old_hash_table_list;
+<a name="l307"></a>            </span><span class=cF1>switch</span><span class=cF0> [i]
+<a name="l308"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l309"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_CHECK_BOX</span><span class=cF0>:
+<a name="l310"></a>                    doc_e-&gt;raw_type = </span><span class=cF3>RT_I8</span><span class=cF0>;
+<a name="l311"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l312"></a>
+<a name="l313"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_HEX_ED</span><span class=cF0>:
+<a name="l314"></a>                    </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>','</span><span class=cF0>)
+<a name="l315"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l316"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l317"></a>                        doc_e-&gt;len = </span><span class=cF5>LexExpressionI64</span><span class=cF0>(cc);
+<a name="l318"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l319"></a>                        </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l320"></a>                    </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>','</span><span class=cF0>)
+<a name="l321"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l322"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l323"></a>                        doc_e-&gt;hex_ed_width = </span><span class=cF5>LexExpressionI64</span><span class=cF0>(cc);
+<a name="l324"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l325"></a>                        </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l326"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l327"></a>
+<a name="l328"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_PAGE_LEN</span><span class=cF0>:
+<a name="l329"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_LEFT_MARGIN</span><span class=cF0>:
+<a name="l330"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_RIGHT_MARGIN</span><span class=cF0>:
+<a name="l331"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_HEADER</span><span class=cF0>:
+<a name="l332"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_FOOTER</span><span class=cF0>:
+<a name="l333"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_INDENT</span><span class=cF0>:
+<a name="l334"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_FOREGROUND</span><span class=cF0>:
+<a name="l335"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_BACKGROUND</span><span class=cF0>:
+<a name="l336"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_DEFAULT_FOREGROUND</span><span class=cF0>:
+<a name="l337"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_DEFAULT_BACKGROUND</span><span class=cF0>:
+<a name="l338"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_WORD_WRAP</span><span class=cF0>:
+<a name="l339"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_HIGHLIGHT</span><span class=cF0>:
+<a name="l340"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_BLINK</span><span class=cF0>:
+<a name="l341"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_INVERT</span><span class=cF0>:
+<a name="l342"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_UNDERLINE</span><span class=cF0>:
+<a name="l343"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_SHIFTED_X</span><span class=cF0>:
+<a name="l344"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_SHIFTED_Y</span><span class=cF0>:
+<a name="l345"></a>                    </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>','</span><span class=cF0>)
+<a name="l346"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l347"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l348"></a>                        doc_e-&gt;attr = </span><span class=cF5>LexExpressionI64</span><span class=cF0>(cc);
+<a name="l349"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l350"></a>                        doc_e-&gt;attr = attr;
+<a name="l351"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l352"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cF3>DOCT_ERROR</span><span class=cF0> == </span><span class=cF3>DOCT_TYPES_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>
+<a name="l353"></a>
+<a name="l354"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCT_ERROR</span><span class=cF0>:
+<a name="l355"></a>                    </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l356"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l357"></a>
+<a name="l358"></a>            processed_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l359"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l360"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l361"></a>                cc-&gt;htc.hash_table_list = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l362"></a>                </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>','</span><span class=cF0>)
+<a name="l363"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l364"></a>                cc-&gt;htc.hash_table_list = old_hash_table_list;
+<a name="l365"></a>                j=</span><span class=cF5>ParseDocFlagSingle</span><span class=cF0>(cc, &amp;doc_e-&gt;de_flags, &amp;doc_e-&gt;type, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l366"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>de_flags = ~processed_flags &amp; doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEG_HAS_ARG</span><span class=cF7>)</span><span class=cF0>)
+<a name="l367"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l368"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'='</span><span class=cF0>)
+<a name="l369"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l370"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l371"></a>                    j = </span><span class=cF5>Bsf</span><span class=cF0>(de_flags);
+<a name="l372"></a>                </span><span class=cF1>if</span><span class=cF0> (j &lt; </span><span class=cFE>0</span><span class=cF0> || </span><span class=cF5>Bts</span><span class=cF7>(</span><span class=cF0>&amp;processed_flags, j</span><span class=cF7>)</span><span class=cF0>)
+<a name="l373"></a>                    </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l374"></a>                </span><span class=cF1>switch</span><span class=cF0> [j]
+<a name="l375"></a>                {</span><span class=cF2>//TODO: Might check for expression errors</span><span class=cF0>
+<a name="l376"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_TAG</span><span class=cF0>:
+<a name="l377"></a>                        </span><span class=cF1>if</span><span class=cF0> (!doc_e-&gt;tag)
+<a name="l378"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l379"></a></span><span class=cF2>//If a $MA,LM=&quot;&quot;$, Tag is filled when the LM is processed.</span><span class=cF0>
+<a name="l380"></a>                            </span><span class=cF2>//if doc_e-&gt;df_flags&amp;DOCEF_LIST,</span><span class=cF0>
+<a name="l381"></a>                            </span><span class=cF2>// Tag is filled when the Define is processed.</span><span class=cF0>
+<a name="l382"></a>                            </span><span class=cF2>//(The default_flag1.tag calls this after.)</span><span class=cF0>
+<a name="l383"></a>                            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l384"></a>                            {
+<a name="l385"></a>                                st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l386"></a>                                </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cF3>DOCT_CHECK_BOX</span><span class=cF0>)
+<a name="l387"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l388"></a>                                    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;[X] %s&quot;</span><span class=cF0>, st2);
+<a name="l389"></a>                                    </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l390"></a>                                    doc_e-&gt;min_col = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l391"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l392"></a>                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_LIST</span><span class=cF0>)
+<a name="l393"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l394"></a>                                    </span><span class=cF1>if</span><span class=cF0> (*st2 != </span><span class=cF6>'['</span><span class=cF0>)
+<a name="l395"></a>                                    {
+<a name="l396"></a>                                        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;[%s]&quot;</span><span class=cF0>, st2);
+<a name="l397"></a>                                        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l398"></a>                                    }
+<a name="l399"></a>                                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l400"></a>                                        st = st2;
+<a name="l401"></a>                                    doc_e-&gt;min_col = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l402"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l403"></a>                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TREE</span><span class=cF0>)
+<a name="l404"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l405"></a>                                    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;+] %s&quot;</span><span class=cF0>, st2);
+<a name="l406"></a>                                    </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l407"></a>                                    doc_e-&gt;min_col = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l408"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l409"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l410"></a>                                    st = st2;
+<a name="l411"></a>                                doc_e-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(st, doc-&gt;mem_task);
+<a name="l412"></a>                                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l413"></a>                            }
+<a name="l414"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l415"></a>                                </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l416"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l417"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l418"></a>
+<a name="l419"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_LEN</span><span class=cF0>:
+<a name="l420"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l421"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l422"></a>                            doc_e-&gt;len      =  </span><span class=cF5>LexExpression</span><span class=cF0>(cc);
+<a name="l423"></a>                            doc_e-&gt;de_flags &amp;= ~</span><span class=cF3>DOCEF_DEFAULT_LEN</span><span class=cF0>;
+<a name="l424"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l425"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l426"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l427"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l428"></a>
+<a name="l429"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_AUX_STR</span><span class=cF0>:
+<a name="l430"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l431"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l432"></a>                            st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l433"></a>                            doc_e-&gt;aux_str = </span><span class=cF5>StrNew</span><span class=cF0>(st2, doc-&gt;mem_task);
+<a name="l434"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l435"></a></span><span class=cF2>//</span><span class=cF8>Anchor</span><span class=cF0>
+<a name="l436"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cF3>DOCT_DATA</span><span class=cF0>)
+<a name="l437"></a>                            { </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l438"></a>                                </span><span class=cF1>if</span><span class=cF0> (ptr = </span><span class=cF5>StrMatch</span><span class=cF7>(</span><span class=cF6>&quot;:&quot;</span><span class=cF0>, doc_e-&gt;aux_str</span><span class=cF7>)</span><span class=cF0>)
+<a name="l439"></a>                                    doc_e-&gt;min_col = ptr - doc_e-&gt;aux_str + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l440"></a>
+<a name="l441"></a>                                doc_e-&gt;tag = </span><span class=cF5>MAlloc</span><span class=cF0>(doc_e-&gt;len + doc_e-&gt;min_col + </span><span class=cFE>2</span><span class=cF0>, doc-&gt;mem_task); </span><span class=cF2>//+2 because &quot;_\0&quot;</span><span class=cF0>
+<a name="l442"></a>                            }
+<a name="l443"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l444"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l445"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l446"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l447"></a>
+<a name="l448"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_DEFINE</span><span class=cF0>:
+<a name="l449"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l450"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l451"></a>                            st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l452"></a>                            doc_e-&gt;define_str = </span><span class=cF5>StrNew</span><span class=cF0>(st2, doc-&gt;mem_task);
+<a name="l453"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l454"></a>                            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_LIST</span><span class=cF0> &amp;&amp; !doc_e-&gt;tag)
+<a name="l455"></a>                                doc_e-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;[]&quot;</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l456"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l457"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l458"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l459"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l460"></a>
+<a name="l461"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_HTML_LINK</span><span class=cF0>:
+<a name="l462"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l463"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l464"></a>                            st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l465"></a>                            doc_e-&gt;html_link = </span><span class=cF5>StrNew</span><span class=cF0>(st2, doc-&gt;mem_task);
+<a name="l466"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l467"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l468"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l469"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l470"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l471"></a>
+<a name="l472"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_LEFT_EXP</span><span class=cF0>:
+<a name="l473"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l474"></a>                            doc_e-&gt;left_exp = </span><span class=cF5>LexExpression</span><span class=cF0>(cc);
+<a name="l475"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l476"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l477"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l478"></a>
+<a name="l479"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_LEFT_MACRO</span><span class=cF0>:
+<a name="l480"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l481"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l482"></a>                            st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l483"></a>                            doc_e-&gt;left_macro = </span><span class=cF5>StrNew</span><span class=cF0>(st2, doc-&gt;mem_task);
+<a name="l484"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l485"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cF3>DOCT_MACRO</span><span class=cF0> &amp;&amp; !doc_e-&gt;tag)
+<a name="l486"></a>                                doc_e-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(doc_e-&gt;left_macro, doc-&gt;mem_task);
+<a name="l487"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l488"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l489"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l490"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l491"></a>
+<a name="l492"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_RIGHT_EXP</span><span class=cF0>:
+<a name="l493"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l494"></a>                            doc_e-&gt;right_exp = </span><span class=cF5>LexExpression</span><span class=cF0>(cc);
+<a name="l495"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l496"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l497"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l498"></a>
+<a name="l499"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_RIGHT_MACRO</span><span class=cF0>:
+<a name="l500"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l501"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l502"></a>                            st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l503"></a>                            doc_e-&gt;right_macro = </span><span class=cF5>StrNew</span><span class=cF0>(st2, doc-&gt;mem_task);
+<a name="l504"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l505"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cF3>DOCT_MACRO</span><span class=cF0> &amp;&amp; !doc_e-&gt;tag)
+<a name="l506"></a>                                doc_e-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(doc_e-&gt;right_macro, doc-&gt;mem_task);
+<a name="l507"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l508"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l509"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l510"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l511"></a>
+<a name="l512"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_HAS_BIN</span><span class=cF0>:
+<a name="l513"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l514"></a>                            doc_e-&gt;bin_num = </span><span class=cF5>LexExpressionI64</span><span class=cF0>(cc);
+<a name="l515"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l516"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l517"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l518"></a>
+<a name="l519"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_BIN_PTR_LINK</span><span class=cF0>:
+<a name="l520"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l521"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l522"></a>                            st2 = </span><span class=cF5>LexExtStr</span><span class=cF0>(cc);
+<a name="l523"></a>                            doc_e-&gt;bin_ptr_link = </span><span class=cF5>StrNew</span><span class=cF0>(st2, doc-&gt;mem_task);
+<a name="l524"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l525"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>DocBinPtrReset</span><span class=cF7>(</span><span class=cF0>doc, doc_e</span><span class=cF7>)</span><span class=cF0>)
+<a name="l526"></a>                                doc_e-&gt;type = </span><span class=cF3>DOCT_ERROR</span><span class=cF0>;
+<a name="l527"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l528"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l529"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l530"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l531"></a>
+<a name="l532"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_RAW_TYPE</span><span class=cF0>:
+<a name="l533"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l534"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l535"></a>                            j = </span><span class=cF5>DefineMatch</span><span class=cF0>(cc-&gt;cur_str, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>);
+<a name="l536"></a>                            </span><span class=cF1>if</span><span class=cF0> (j &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l537"></a>                                </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l538"></a>                            doc_e-&gt;raw_type =  j;
+<a name="l539"></a>                            doc_e-&gt;de_flags &amp;= ~</span><span class=cF3>DOCEF_DEFAULT_RAW_TYPE</span><span class=cF0>;
+<a name="l540"></a>                            </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l541"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l542"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l543"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l544"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l545"></a>
+<a name="l546"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SHIFTED_X</span><span class=cF0>:
+<a name="l547"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l548"></a>                            doc_e-&gt;type |= (</span><span class=cF5>LexExpressionI64</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cFE>0x1F</span><span class=cF0>) &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
+<a name="l549"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l550"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l551"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l552"></a>
+<a name="l553"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SHIFTED_Y</span><span class=cF0>:
+<a name="l554"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l555"></a>                            doc_e-&gt;type |= (</span><span class=cF5>LexExpressionI64</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cFE>0x1F</span><span class=cF0>) &lt;&lt; </span><span class=cFE>21</span><span class=cF0>;
+<a name="l556"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l557"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l558"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l559"></a>
+<a name="l560"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_SCROLLING_X</span><span class=cF0>:
+<a name="l561"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l562"></a>                            doc_e-&gt;scroll_len = </span><span class=cF5>LexExpressionI64</span><span class=cF0>(cc);
+<a name="l563"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l564"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l565"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l566"></a>
+<a name="l567"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_USER_DATA</span><span class=cF0>:
+<a name="l568"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token)
+<a name="l569"></a>                            doc_e-&gt;user_data = </span><span class=cF5>LexExpression</span><span class=cF0>(cc);
+<a name="l570"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l571"></a>                            </span><span class=cF1>goto</span><span class=cF0> pd_err;
+<a name="l572"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l573"></a>
+<a name="l574"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>DOCEf_FLAGS_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>: </span><span class=cF2>//nobound switch</span><span class=cF0>
+<a name="l575"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l576"></a>                }
+<a name="l577"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l578"></a>        }
+<a name="l579"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l580"></a>        {
+<a name="l581"></a>pd_err:
+<a name="l582"></a>            </span><span class=cF1>if</span><span class=cF0> (!doc_e)
+<a name="l583"></a>                doc_e = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDocEntry</span><span class=cF7>)</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l584"></a>            doc_e-&gt;type     = </span><span class=cF3>DOCT_ERROR</span><span class=cF0>;
+<a name="l585"></a>            doc_e-&gt;de_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l586"></a>        }
+<a name="l587"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_LIST</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_REMALLOC_DATA</span><span class=cF0> || !(doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_DEREF_DATA</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l588"></a>        {
+<a name="l589"></a>            </span><span class=cF5>DocDataScan</span><span class=cF0>(doc, doc_e);
+<a name="l590"></a>            </span><span class=cF5>DocDataFormat</span><span class=cF0>(doc, doc_e);
+<a name="l591"></a>        }
+<a name="l592"></a>        </span><span class=cF5>CompCtrlDel</span><span class=cF0>(cc);
+<a name="l593"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l594"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l595"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l596"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l597"></a>        </span><span class=cF1>if</span><span class=cF0> (!doc_e)
+<a name="l598"></a>            doc_e = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDocEntry</span><span class=cF7>)</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l599"></a>        doc_e-&gt;type     = </span><span class=cF3>DOCT_ERROR</span><span class=cF0>;
+<a name="l600"></a>        doc_e-&gt;de_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l601"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l602"></a>
+<a name="l603"></a>    </span><span class=cF1>return</span><span class=cF0> doc_e;
+<a name="l604"></a>}
+<a name="l605"></a>
+<a name="l606"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocEntryToggle</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
+<a name="l607"></a>{
+<a name="l608"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc), old_color_names;
+<a name="l609"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_ce = doc-&gt;cur_entry, *cl1, *doc_ce2;
+<a name="l610"></a>    </span><span class=cF1>U8</span><span class=cF0>           ch, *st, *st2;
+<a name="l611"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, j, k;
+<a name="l612"></a>
+<a name="l613"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_ce != doc &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; (</span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_PLAIN_TEXT_TABS</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l614"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l615"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_ce-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp;
+<a name="l616"></a>            !</span><span class=cF7>(</span><span class=cF0>doc_ce-&gt;de_flags &amp;
+<a name="l617"></a>             ~(</span><span class=cF3>DOCEF_TAG</span><span class=cF0> | </span><span class=cF3>DOCG_BL_IV_UL</span><span class=cF0> | </span><span class=cF3>DOCEF_WORD_WRAP</span><span class=cF0> | </span><span class=cF3>DOCEF_HIGHLIGHT</span><span class=cF0> | </span><span class=cF3>DOCEF_SKIP</span><span class=cF0> | </span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l618"></a>            !</span><span class=cF7>(</span><span class=cF0>doc_ce-&gt;type&amp;</span><span class=cF3>DOCG_BL_IV_UL</span><span class=cF7>)</span><span class=cF0>)
+<a name="l619"></a>        {
+<a name="l620"></a>            doc_ce2 = doc_ce-&gt;last;
+<a name="l621"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; </span><span class=cFE>20</span><span class=cF0>; k++)
+<a name="l622"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l623"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_ce2 != doc)
+<a name="l624"></a>                {
+<a name="l625"></a>                    cl1 = doc_ce2-&gt;last;
+<a name="l626"></a>                    </span><span class=cF1>if</span><span class=cF0> (doc_ce2-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp;
+<a name="l627"></a>                        doc_ce-&gt;de_flags == doc_ce2-&gt;de_flags &amp;&amp;
+<a name="l628"></a>                        doc_ce-&gt;type == doc_ce2-&gt;type)
+<a name="l629"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l630"></a>                        i = </span><span class=cF5>StrLen</span><span class=cF0>(doc_ce2-&gt;tag);
+<a name="l631"></a>                        j = </span><span class=cF5>StrLen</span><span class=cF0>(doc_ce-&gt;tag);
+<a name="l632"></a>                        st = </span><span class=cF5>MAlloc</span><span class=cF0>(i + j + </span><span class=cFE>1</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l633"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(st, doc_ce2-&gt;tag, i);
+<a name="l634"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(st + i, doc_ce-&gt;tag, j + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l635"></a>                        </span><span class=cF5>Free</span><span class=cF0>(doc_ce-&gt;tag);
+<a name="l636"></a>                        doc_ce-&gt;tag     =  st;
+<a name="l637"></a>                        doc_ce-&gt;max_col =  i + j;
+<a name="l638"></a>                        doc-&gt;cur_col    += i;
+<a name="l639"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_ce2);
+<a name="l640"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l641"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_ce2-&gt;type_u8 == </span><span class=cF3>DOCT_SOFT_NEW_LINE</span><span class=cF0>)
+<a name="l642"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_ce2);
+<a name="l643"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l644"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l645"></a>                    doc_ce2 = cl1;
+<a name="l646"></a>                }
+<a name="l647"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l648"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l649"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l650"></a>            doc_ce2 = doc_ce-&gt;next;
+<a name="l651"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; </span><span class=cFE>20</span><span class=cF0>; k++)
+<a name="l652"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l653"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_ce2 != doc)
+<a name="l654"></a>                {
+<a name="l655"></a>                    cl1 = doc_ce2-&gt;next;
+<a name="l656"></a>                    </span><span class=cF1>if</span><span class=cF0> (doc_ce2-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp;
+<a name="l657"></a>                        doc_ce-&gt;de_flags == doc_ce2-&gt;de_flags &amp;&amp;
+<a name="l658"></a>                        doc_ce-&gt;type == doc_ce2-&gt;type)
+<a name="l659"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l660"></a>                        i = </span><span class=cF5>StrLen</span><span class=cF0>(doc_ce-&gt;tag);
+<a name="l661"></a>                        j = </span><span class=cF5>StrLen</span><span class=cF0>(doc_ce2-&gt;tag);
+<a name="l662"></a>                        st = </span><span class=cF5>MAlloc</span><span class=cF0>(i + j + </span><span class=cFE>1</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l663"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(st, doc_ce-&gt;tag, i);
+<a name="l664"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(st + i, doc_ce2-&gt;tag, j + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l665"></a>                        </span><span class=cF5>Free</span><span class=cF0>(doc_ce-&gt;tag);
+<a name="l666"></a>                        doc_ce-&gt;tag     = st;
+<a name="l667"></a>                        doc_ce-&gt;max_col = i + j;
+<a name="l668"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_ce2);
+<a name="l669"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l670"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_ce2-&gt;type_u8 == </span><span class=cF3>DOCT_SOFT_NEW_LINE</span><span class=cF0>)
+<a name="l671"></a>                        </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_ce2);
+<a name="l672"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l673"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l674"></a>                    doc_ce2 = cl1;
+<a name="l675"></a>                }
+<a name="l676"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l677"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l678"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l679"></a>            i = doc-&gt;cur_col;
+<a name="l680"></a>            </span><span class=cF1>while</span><span class=cF0> (i &gt; doc_ce-&gt;min_col &amp;&amp; doc_ce-&gt;tag[i] != </span><span class=cF6>'$'</span><span class=cF0>)
+<a name="l681"></a>                i--;
+<a name="l682"></a>            j = doc-&gt;cur_col + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l683"></a>            </span><span class=cF1>while</span><span class=cF0> (j &lt; doc_ce-&gt;max_col &amp;&amp; doc_ce-&gt;tag[j] != </span><span class=cF6>'$'</span><span class=cF0>)
+<a name="l684"></a>                j++;
+<a name="l685"></a>            </span><span class=cF1>if</span><span class=cF0> (i &lt; j - </span><span class=cFE>1</span><span class=cF0> &amp;&amp; doc_ce-&gt;min_col &lt;= i &lt; j &lt; doc_ce-&gt;max_col &amp;&amp; doc_ce-&gt;tag[i] == </span><span class=cF6>'$'</span><span class=cF0> &amp;&amp; doc_ce-&gt;tag[j] == </span><span class=cF6>'$'</span><span class=cF0>)
+<a name="l686"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l687"></a>                ch = doc_ce-&gt;tag[j + </span><span class=cFE>1</span><span class=cF0>];
+<a name="l688"></a>                doc_ce-&gt;tag[j + </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l689"></a>                st = </span><span class=cF5>StrNew</span><span class=cF0>(doc_ce-&gt;tag + i);
+<a name="l690"></a>                doc_ce-&gt;tag[j + </span><span class=cFE>1</span><span class=cF0>] = ch;
+<a name="l691"></a>                </span><span class=cF5>StrCopy</span><span class=cF0>(doc_ce-&gt;tag + i, doc_ce-&gt;tag + j + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l692"></a>                doc-&gt;cur_col = i;
+<a name="l693"></a>                st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%q&quot;</span><span class=cF0>, st);
+<a name="l694"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_ce = </span><span class=cF5>DocPrint</span><span class=cF7>(</span><span class=cF0>doc, st2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l695"></a>                {
+<a name="l696"></a>                    doc-&gt;cur_entry  = doc_ce;
+<a name="l697"></a>                    doc-&gt;cur_col    = doc_ce-&gt;min_col;
+<a name="l698"></a>                }
+<a name="l699"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l700"></a>                </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l701"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l702"></a>        }
+<a name="l703"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l704"></a>        {
+<a name="l705"></a>            old_color_names = </span><span class=cF5>LBts</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_COLOR_NAMES</span><span class=cF0>);
+<a name="l706"></a>            st = </span><span class=cF5>Doc2PlainText</span><span class=cF0>(doc, doc_ce);
+<a name="l707"></a>            </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;doc-&gt;flags, </span><span class=cF3>DOCf_COLOR_NAMES</span><span class=cF0>, old_color_names);
+<a name="l708"></a>            </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_ce);
+<a name="l709"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$$%$Q$$&quot;</span><span class=cF0>, st);
+<a name="l710"></a>        }
+<a name="l711"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l712"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l713"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l714"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l715"></a>}
+<a name="l716"></a>
+<a name="l717"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DocFlagsToggle</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> tog_flags)
+<a name="l718"></a>{
+<a name="l719"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l720"></a>    </span><span class=cF9>I64</span><span class=cF0>          size, flags = doc-&gt;flags ^ tog_flags;
+<a name="l721"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
+<a name="l722"></a>    </span><span class=cF9>CDocUndo</span><span class=cF0>    *u_next, *u_last;
+<a name="l723"></a>
+<a name="l724"></a>    doc-&gt;flags = doc-&gt;flags &amp; ~</span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0> | </span><span class=cF3>DOCF_COLOR_NAMES</span><span class=cF0>;
+<a name="l725"></a>    st = </span><span class=cF5>DocSave</span><span class=cF0>(doc, &amp;size);
+<a name="l726"></a>
+<a name="l727"></a>    u_next = doc-&gt;undo_head.next;
+<a name="l728"></a>    u_last = doc-&gt;undo_head.last;
+<a name="l729"></a>    doc-&gt;undo_head.next = doc-&gt;undo_head.last = &amp;doc-&gt;undo_head;
+<a name="l730"></a>
+<a name="l731"></a>    </span><span class=cF5>DocReset</span><span class=cF0>(doc, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l732"></a>    doc-&gt;undo_head.next = u_next;
+<a name="l733"></a>    doc-&gt;undo_head.last = u_last;
+<a name="l734"></a>    </span><span class=cF5>DocUndoCountSet</span><span class=cF0>(doc);
+<a name="l735"></a>    doc-&gt;flags = flags &amp; ~(</span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0> | </span><span class=cF3>DOCG_BL_IV_UL</span><span class=cF0> | </span><span class=cF3>DOCF_WORD_WRAP</span><span class=cF0>);
+<a name="l736"></a>    </span><span class=cF5>DocLoad</span><span class=cF0>(doc, st, size);
+<a name="l737"></a>    doc-&gt;flags |= flags &amp; </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>;
+<a name="l738"></a>    </span><span class=cF5>DocCenter</span><span class=cF0>(doc);
+<a name="l739"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l740"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l741"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l742"></a>}
+</span></pre></body>
+</html>

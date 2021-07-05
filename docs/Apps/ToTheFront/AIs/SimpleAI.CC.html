@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>Unit *UnitNearestFind(</span><span class=cF9>I64</span><span class=cF0> row, </span><span class=cF9>I64</span><span class=cF0> col, </span><span class=cF9>I64</span><span class=cF0> player, </span><span class=cF1>Bool</span><span class=cF0> in_LOS, </span><span class=cF1>F64</span><span class=cF0> range=-</span><span class=cFE>1</span><span class=cF0>)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l4"></a>    </span><span class=cF1>F64</span><span class=cF0>   dd, best_dd = </span><span class=cF3>F64_MAX</span><span class=cF0>, x1, y1, x2, y2;
+<a name="l5"></a>    Unit *best = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l6"></a>
+<a name="l7"></a>    </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l84"><span class=cF4>Sqrt</span></a><span class=cF2>() is slow, so work with squared distances.</span><span class=cF0>
+<a name="l8"></a>    </span><span class=cF1>if</span><span class=cF0> (range &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l9"></a>        range = </span><span class=cF3>F64_MAX</span><span class=cF0>;
+<a name="l10"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l11"></a>        range *= range;
+<a name="l12"></a>    RowCol2XY(&amp;x1, &amp;y1, row, col);
+<a name="l13"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; UNITS_NUM; i++)
+<a name="l14"></a>        </span><span class=cF1>if</span><span class=cF0> (units[player][i].life &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l15"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>            </span><span class=cF1>if</span><span class=cF0> (!in_LOS || LOS</span><span class=cF7>(</span><span class=cF0>row, col, units[player][i].row, units[player][i].col</span><span class=cF7>)</span><span class=cF0>)
+<a name="l17"></a>            {
+<a name="l18"></a>                RowCol2XY(&amp;x2, &amp;y2, units[player][i].row, units[player][i].col);
+<a name="l19"></a>                dd = </span><span class=cF5>Sqr</span><span class=cF0>(x2 - x1) + </span><span class=cF5>Sqr</span><span class=cF0>(y2 - y1);
+<a name="l20"></a>                </span><span class=cF1>if</span><span class=cF0> (dd &lt;= range &amp;&amp; dd &lt; best_dd)
+<a name="l21"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l22"></a>                    best = &amp;units[player][i];
+<a name="l23"></a>                    best_dd = dd;
+<a name="l24"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l25"></a>            }
+<a name="l26"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l27"></a>
+<a name="l28"></a>    </span><span class=cF1>return</span><span class=cF0> best;
+<a name="l29"></a>}
+<a name="l30"></a>
+<a name="l31"></a></span><span class=cF1>U0</span><span class=cF0> PlayerIndirect()
+<a name="l32"></a>{
+<a name="l33"></a>    Unit *target, *tmpu;
+<a name="l34"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l35"></a>
+<a name="l36"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; UNITS_NUM; i++)
+<a name="l37"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l38"></a>        UserCheck;
+<a name="l39"></a>        tmpu = &amp;units[cur_player][i];
+<a name="l40"></a>        </span><span class=cF1>if</span><span class=cF0> (    tmpu-&gt;life &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; tmpu-&gt;indirect_fire &amp;&amp;
+<a name="l41"></a>                </span><span class=cF7>(</span><span class=cF0>target = UnitNearestFind(tmpu-&gt;row, tmpu-&gt;col, enemy_player, </span><span class=cF3>TRUE</span><span class=cF0>, tmpu-&gt;range * </span><span class=cFE>2</span><span class=cF0> * HEX_RADIUS)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l42"></a>            IndirectAdd(tmpu, target-&gt;row, target-&gt;col);
+<a name="l43"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l44"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a></span><span class=cF1>U0</span><span class=cF0> PlayerMove()
+<a name="l48"></a>{
+<a name="l49"></a>    Unit *target, *tmpu;
+<a name="l50"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l51"></a>    </span><span class=cF1>F64</span><span class=cF0>   x, y;
+<a name="l52"></a>
+<a name="l53"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; UNITS_NUM; i++)
+<a name="l54"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l55"></a>        UserCheck;
+<a name="l56"></a>        tmpu = &amp;units[cur_player][i];
+<a name="l57"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;life&gt;</span><span class=cFE>0</span><span class=cF0>)
+<a name="l58"></a>        {
+<a name="l59"></a>            </span><span class=cF2>//Cheats because it violates Line-of-Sight</span><span class=cF0>
+<a name="l60"></a>            </span><span class=cF1>if</span><span class=cF0> (target = UnitNearestFind</span><span class=cF7>(</span><span class=cF0>tmpu-&gt;row, tmpu-&gt;col, enemy_player, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l61"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l62"></a>                RowCol2XY(&amp;x, &amp;y, target-&gt;row, target-&gt;col);
+<a name="l63"></a>                </span><span class=cF1>if</span><span class=cF0> (!UnitMove</span><span class=cF7>(</span><span class=cF0>tmpu, x, y</span><span class=cF7>)</span><span class=cF0>)
+<a name="l64"></a>                {
+<a name="l65"></a>                    RowCol2XY(&amp;x, &amp;y, tmpu-&gt;row, tmpu-&gt;col);
+<a name="l66"></a>                    UnitMove(tmpu, x + </span><span class=cF5>RandI16</span><span class=cF0>, y + </span><span class=cF5>RandI16</span><span class=cF0>);
+<a name="l67"></a>                }
+<a name="l68"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l69"></a>        }
+<a name="l70"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l71"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l72"></a>}
+<a name="l73"></a>
+<a name="l74"></a></span><span class=cF1>U0</span><span class=cF0> PlayerDirect()
+<a name="l75"></a>{
+<a name="l76"></a>    Unit *target, *tmpu;
+<a name="l77"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l78"></a>
+<a name="l79"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; UNITS_NUM; i++)
+<a name="l80"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l81"></a>        UserCheck;
+<a name="l82"></a>        tmpu = &amp;units[cur_player][i];
+<a name="l83"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpu-&gt;life &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; !tmpu-&gt;indirect_fire &amp;&amp;
+<a name="l84"></a>            </span><span class=cF7>(</span><span class=cF0>target = UnitNearestFind(tmpu-&gt;row, tmpu-&gt;col, enemy_player, </span><span class=cF3>TRUE</span><span class=cF0>, tmpu-&gt;range * </span><span class=cFE>2</span><span class=cF0> * HEX_RADIUS)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l85"></a>        {
+<a name="l86"></a>            UnitDirectFire(tmpu, target);
+<a name="l87"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0> * animation_delay);
+<a name="l88"></a>        }
+<a name="l89"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l90"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'PhaseOvr'</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l91"></a>}
+<a name="l92"></a>
+</span></pre></body>
+</html>

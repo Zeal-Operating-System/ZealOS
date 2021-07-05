@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cFA>/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>
+<a name="l4"></a>
+<a name="l5"></a>
+<a name="l6"></a>
+<a name="l7"></a>
+<a name="l8"></a>
+<a name="l9"></a>
+<a name="l10"></a>
+<a name="l11"></a>
+<a name="l12"></a>
+<a name="l13"></a>
+<a name="l14"></a>
+<a name="l15"></a>
+<a name="l16"></a>
+<a name="l17"></a>
+<a name="l18"></a>
+<a name="l19"></a>
+<a name="l20"></a>
+<a name="l21"></a>
+<a name="l22"></a>
+<a name="l23"></a>
+<a name="l24"></a>
+<a name="l25"></a>
+<a name="l26"></a>
+<a name="l27"></a>
+<a name="l28"></a>There is a symbol (hash) table for each task.  When a sym is not found, the parent task's sym table is checked.  All tasks chain 
+<a name="l29"></a>back to the </span><span class=cF2>System</span><span class=cF0> task.
+<a name="l30"></a>
+<a name="l31"></a>ZealOS sym tables are implemented with an array of linked-lists.    A num is generated from a string by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KHashA.html#l258"><span class=cF4>HashStr</span></a><span class=cF0>() to index into 
+<a name="l32"></a>the array of linked-lists.  Multiple strings can generate the same num, so linked-lists are built.  Newer entries overshadow 
+<a name="l33"></a>older ones.
+<a name="l34"></a>
+<a name="l35"></a>There are various types of entries.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l821"><span class=cF4>Hash Entry Types</span></a><span class=cF0>.
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF5>Symbol Look-up</span><span class=cF0> (Used many places including the </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l596"><span class=cF4>JIT Compiler</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.html#l24"><span class=cF4>Loader</span></a><span class=cF0>.)
+<a name="l38"></a>1) Symbol name is </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KHashA.html#l4"><span class=cF4>hashed</span></a><span class=cF0> by adding and shifting the ASCII of all chars.
+<a name="l39"></a>2) </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;body[] array is indexed.
+<a name="l40"></a>3) Linked-list is traversed until match of text and type of entry.
+<a name="l41"></a>4) If not found, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;next table is searched.
+<a name="l42"></a>
+<a name="l43"></a>Duplicate entries are allowed -- they overshadow old entries.
+<a name="l44"></a>
+<a name="l45"></a></span><span class=cF5>Address-to-Symbol Look-up</span><span class=cF0> (Slow because not important. We could use trees.)
+<a name="l46"></a>1) FunSeg Cache is </span><a href="https://tomawezome.github.io/ZealOS/Kernel/FunSeg.html#l137"><span class=cF4>scanned</span></a><span class=cF0>.
+<a name="l47"></a>2) Hash Tables are </span><a href="https://tomawezome.github.io/ZealOS/Kernel/FunSeg.html#l64"><span class=cF4>scanned</span></a><span class=cF0>.
+</span></pre></body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Math&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>R2P</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> *_mag=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> *_arg=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> x, </span><span class=cF1>F64</span><span class=cF0> y)
+<a name="l3"></a>{</span><span class=cF2>//Rect to polar</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//Returns angle in range (-pi,pi]</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF1>if</span><span class=cF0> (_arg)
+<a name="l6"></a>        *_arg = </span><span class=cF5>Arg</span><span class=cF0>(x, y);
+<a name="l7"></a>    </span><span class=cF1>if</span><span class=cF0> (_mag)
+<a name="l8"></a>        *_mag = </span><span class=cF5>Sqrt</span><span class=cF0>(x * x + y * y);
+<a name="l9"></a>}
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>P2R</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> *_x=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> *_y=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> mag, </span><span class=cF1>F64</span><span class=cF0> arg)
+<a name="l12"></a>{</span><span class=cF2>//Polar to Rect</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF1>if</span><span class=cF0> (_x)
+<a name="l14"></a>        *_x = mag * </span><span class=cF5>Cos</span><span class=cF0>(arg);
+<a name="l15"></a>    </span><span class=cF1>if</span><span class=cF0> (_y)
+<a name="l16"></a>        *_y = mag * </span><span class=cF5>Sin</span><span class=cF0>(arg);
+<a name="l17"></a>}
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Wrap</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> theta, </span><span class=cF1>F64</span><span class=cF0> base=-</span><span class=cF3>pi</span><span class=cF0>)
+<a name="l20"></a>{</span><span class=cF2>//Returns angle in range [base,base+2*pi)</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF1>F64</span><span class=cF0> res = theta % (</span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>);
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>if</span><span class=cF0> (res &gt;= base + </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>)
+<a name="l24"></a>        res -= </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (res &lt; base)
+<a name="l26"></a>        res += </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0>;
+<a name="l27"></a>
+<a name="l28"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l29"></a>}
+<a name="l30"></a>
+<a name="l31"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DistSqrI64</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> x1, </span><span class=cF9>I64</span><span class=cF0> y1, </span><span class=cF9>I64</span><span class=cF0> x2, </span><span class=cF9>I64</span><span class=cF0> y2)
+<a name="l32"></a>{</span><span class=cF2>//Distance-squared between 2 points.</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF9>I64</span><span class=cF0> dx = x1 - x2, dy = y1 - y2;
+<a name="l34"></a>
+<a name="l35"></a>    </span><span class=cF1>return</span><span class=cF0> dx * dx + dy * dy;
+<a name="l36"></a>}
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>ASin</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> s)
+<a name="l39"></a>{</span><span class=cF2>//Arc Sin (Inverse Sin).</span><span class=cF0>
+<a name="l40"></a>    </span><span class=cF1>F64</span><span class=cF0> c;
+<a name="l41"></a>
+<a name="l42"></a>    c = s * s;
+<a name="l43"></a>    </span><span class=cF1>if</span><span class=cF0> (c &gt;= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l44"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l45"></a>    c = </span><span class=cF5>Sqrt</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> - c);
+<a name="l46"></a>
+<a name="l47"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ATan</span><span class=cF0>(s / c);
+<a name="l48"></a>}
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>ACos</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> c)
+<a name="l51"></a>{</span><span class=cF2>//Arc Cos (Inverse Cos).</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF1>F64</span><span class=cF0> s;
+<a name="l53"></a>
+<a name="l54"></a>    </span><span class=cF1>if</span><span class=cF0> (!c)
+<a name="l55"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l56"></a>    s = c * c;
+<a name="l57"></a>    </span><span class=cF1>if</span><span class=cF0> (s &gt;= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l58"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l59"></a>    s = </span><span class=cF5>Sqrt</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> - s);
+<a name="l60"></a>
+<a name="l61"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ATan</span><span class=cF0>(s / c);
+<a name="l62"></a>}
+<a name="l63"></a>
+<a name="l64"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Sinh</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> x)
+<a name="l65"></a>{</span><span class=cF2>//Hyperbolic Sine.</span><span class=cF0>
+<a name="l66"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * (</span><span class=cF5>Exp</span><span class=cF7>(</span><span class=cF0>x</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF5>Exp</span><span class=cF7>(</span><span class=cF0>-x</span><span class=cF7>)</span><span class=cF0>);
+<a name="l67"></a>}
+<a name="l68"></a>
+<a name="l69"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>Cosh</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> x)
+<a name="l70"></a>{</span><span class=cF2>//Hyperbolic Cosine.</span><span class=cF0>
+<a name="l71"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * (</span><span class=cF5>Exp</span><span class=cF7>(</span><span class=cF0>x</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>Exp</span><span class=cF7>(</span><span class=cF0>-x</span><span class=cF7>)</span><span class=cF0>);
+<a name="l72"></a>}
+<a name="l73"></a>
+<a name="l74"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Math/Complex;Data Types/Complex&quot;</span><span class=cF0>
+<a name="l75"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CAdd</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *sum, </span><span class=cF9>Complex</span><span class=cF0> *n1, </span><span class=cF9>Complex</span><span class=cF0> *n2)
+<a name="l76"></a>{</span><span class=cF2>//sum=n1+n2</span><span class=cF0>
+<a name="l77"></a>    sum-&gt;x = n1-&gt;x + n2-&gt;x;
+<a name="l78"></a>    sum-&gt;y = n1-&gt;y + n2-&gt;y;
+<a name="l79"></a>
+<a name="l80"></a>    </span><span class=cF1>return</span><span class=cF0> sum;
+<a name="l81"></a>}
+<a name="l82"></a>
+<a name="l83"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CSub</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *diff, </span><span class=cF9>Complex</span><span class=cF0> *n1, </span><span class=cF9>Complex</span><span class=cF0> *n2)
+<a name="l84"></a>{</span><span class=cF2>//diff=n1-n2</span><span class=cF0>
+<a name="l85"></a>    diff-&gt;x = n1-&gt;x - n2-&gt;x;
+<a name="l86"></a>    diff-&gt;y = n1-&gt;y - n2-&gt;y;
+<a name="l87"></a>
+<a name="l88"></a>    </span><span class=cF1>return</span><span class=cF0> diff;
+<a name="l89"></a>}
+<a name="l90"></a>
+<a name="l91"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CMul</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *prod, </span><span class=cF9>Complex</span><span class=cF0> *n1, </span><span class=cF9>Complex</span><span class=cF0> *n2)
+<a name="l92"></a>{</span><span class=cF2>//prod=n1*n2</span><span class=cF0>
+<a name="l93"></a>    prod-&gt;x = n1-&gt;x * n2-&gt;x - n1-&gt;y * n2-&gt;y;
+<a name="l94"></a>    prod-&gt;y = n1-&gt;x * n2-&gt;y + n1-&gt;y * n2-&gt;x;
+<a name="l95"></a>
+<a name="l96"></a>    </span><span class=cF1>return</span><span class=cF0> prod;
+<a name="l97"></a>}
+<a name="l98"></a>
+<a name="l99"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CDiv</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *quot, </span><span class=cF9>Complex</span><span class=cF0> *n1, </span><span class=cF9>Complex</span><span class=cF0> *n2)
+<a name="l100"></a>{</span><span class=cF2>//quot=n1/n2</span><span class=cF0>
+<a name="l101"></a>    </span><span class=cF1>F64</span><span class=cF0> m1, arg1, m2, arg2;
+<a name="l102"></a>
+<a name="l103"></a>    </span><span class=cF5>R2P</span><span class=cF0>(&amp;m1, &amp;arg1, n1-&gt;x, n1-&gt;y);
+<a name="l104"></a>    </span><span class=cF5>R2P</span><span class=cF0>(&amp;m2, &amp;arg2, n2-&gt;x, n2-&gt;y);
+<a name="l105"></a>    m1 /= m2;
+<a name="l106"></a>    arg1 -= arg2;
+<a name="l107"></a>    quot-&gt;x = m1 * </span><span class=cF5>Cos</span><span class=cF0>(arg1);
+<a name="l108"></a>    quot-&gt;y = m1 * </span><span class=cF5>Sin</span><span class=cF0>(arg1);
+<a name="l109"></a>
+<a name="l110"></a>    </span><span class=cF1>return</span><span class=cF0> quot;
+<a name="l111"></a>}
+<a name="l112"></a>
+<a name="l113"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CScale</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *dst, </span><span class=cF1>F64</span><span class=cF0> s)
+<a name="l114"></a>{</span><span class=cF2>//dst*=s</span><span class=cF0>
+<a name="l115"></a>    dst-&gt;x *= s;
+<a name="l116"></a>    dst-&gt;y *= s;
+<a name="l117"></a>
+<a name="l118"></a>    </span><span class=cF1>return</span><span class=cF0> dst;
+<a name="l119"></a>}
+<a name="l120"></a>
+<a name="l121"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CCopy</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *dst, </span><span class=cF9>Complex</span><span class=cF0> *src)
+<a name="l122"></a>{</span><span class=cF2>//dst=src</span><span class=cF0>
+<a name="l123"></a>    dst-&gt;x = src-&gt;x;
+<a name="l124"></a>    dst-&gt;y = src-&gt;y;
+<a name="l125"></a>
+<a name="l126"></a>    </span><span class=cF1>return</span><span class=cF0> dst;
+<a name="l127"></a>}
+<a name="l128"></a>
+<a name="l129"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CEqu</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *dst, </span><span class=cF1>F64</span><span class=cF0> x, </span><span class=cF1>F64</span><span class=cF0> y)
+<a name="l130"></a>{</span><span class=cF2>//dst=(x,y)</span><span class=cF0>
+<a name="l131"></a>    dst-&gt;x = x;
+<a name="l132"></a>    dst-&gt;y = y;
+<a name="l133"></a>
+<a name="l134"></a>    </span><span class=cF1>return</span><span class=cF0> dst;
+<a name="l135"></a>}
+<a name="l136"></a>
+<a name="l137"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>Complex</span><span class=cF0> *</span><span class=cF5>CPoly</span><span class=cF0>(</span><span class=cF9>Complex</span><span class=cF0> *dst, </span><span class=cF9>I64</span><span class=cF0> n, </span><span class=cF9>Complex</span><span class=cF0> *zeros, </span><span class=cF9>Complex</span><span class=cF0> *x)
+<a name="l138"></a>{</span><span class=cF2>//Eval complex polynomial</span><span class=cF0>
+<a name="l139"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
+<a name="l140"></a>    </span><span class=cF9>Complex</span><span class=cF0> n1, n2;
+<a name="l141"></a>
+<a name="l142"></a>    </span><span class=cF1>if</span><span class=cF0> (n &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l143"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l144"></a>        </span><span class=cF5>CSub</span><span class=cF0>(dst, x, &amp;zeros[</span><span class=cFE>0</span><span class=cF0>]);
+<a name="l145"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; n; i++)
+<a name="l146"></a>        {
+<a name="l147"></a>            </span><span class=cF5>CCopy</span><span class=cF0>(&amp;n1, dst);
+<a name="l148"></a>            </span><span class=cF5>CMul</span><span class=cF0>(dst, &amp;n1, </span><span class=cF5>CSub</span><span class=cF7>(</span><span class=cF0>&amp;n2, x, &amp;zeros[i]</span><span class=cF7>)</span><span class=cF0>);
+<a name="l149"></a>        }
+<a name="l150"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l151"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l152"></a>        </span><span class=cF5>CEqu</span><span class=cF0>(dst, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>);
+<a name="l153"></a>
+<a name="l154"></a>    </span><span class=cF1>return</span><span class=cF0> dst;
+<a name="l155"></a>}
+</span></pre></body>
+</html>

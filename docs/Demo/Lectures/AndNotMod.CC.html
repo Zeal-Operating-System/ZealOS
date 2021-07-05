@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//You may wonder why &quot;&amp;&quot; is used instead of &quot;%&quot;.</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>#</span><span class=cF1>define</span><span class=cF0> SAMPLE_SIZE         </span><span class=cFE>100000000</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TimeIns</span><span class=cF0>()
+<a name="l6"></a>{
+<a name="l7"></a>    </span><span class=cF9>I64</span><span class=cF0> start1, end1, start2, end2, overhead_time, test_time;
+<a name="l8"></a>    </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>reg</span><span class=cF0> i, </span><span class=cF1>reg</span><span class=cF0> tmp;
+<a name="l9"></a>
+<a name="l10"></a>    </span><span class=cF5>CPURep</span><span class=cF0>;
+<a name="l11"></a>
+<a name="l12"></a>    </span><span class=cF2>//Measure Loop Overhead</span><span class=cF0>
+<a name="l13"></a>    start1 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; SAMPLE_SIZE; i++)
+<a name="l15"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l16"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l17"></a>    end1 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l18"></a>    overhead_time = end1 - start1;
+<a name="l19"></a>
+<a name="l20"></a>    </span><span class=cF2>//Measure remainder...</span><span class=cF0>
+<a name="l21"></a>    start2 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l22"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; SAMPLE_SIZE; i++)
+<a name="l23"></a>        tmp = i % </span><span class=cFE>0x400</span><span class=cF0>;
+<a name="l24"></a>    end2 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l25"></a>    test_time = end2 - start2;
+<a name="l26"></a>    </span><span class=cF6>&quot;Remainder Version #1 Cycles\t: %10.5f\n&quot;</span><span class=cF0>, </span><span class=cF5>ToF64</span><span class=cF0>(test_time - overhead_time) / SAMPLE_SIZE;
+<a name="l27"></a>
+<a name="l28"></a>    </span><span class=cF2>//Measure remainder...</span><span class=cF0>
+<a name="l29"></a>    start2 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l30"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; SAMPLE_SIZE; i++)
+<a name="l31"></a>        tmp = i &amp; </span><span class=cFE>0x3FF</span><span class=cF0>;
+<a name="l32"></a>    end2 = </span><span class=cF5>TSCGet</span><span class=cF0>;
+<a name="l33"></a>    test_time = end2 - start2;
+<a name="l34"></a>    </span><span class=cF6>&quot;Remainder Version #2 Cycles\t: %10.5f\n&quot;</span><span class=cF0>, </span><span class=cF5>ToF64</span><span class=cF0>(test_time - overhead_time) / SAMPLE_SIZE;
+<a name="l35"></a>}
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF5>TimeIns</span><span class=cF0>;
+<a name="l38"></a>
+<a name="l39"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>Program Output</span><span class=cF1>
+<a name="l40"></a>8 Cores 2.660GHz
+<a name="l41"></a>Remainder Version #1 Cycles         :   26.85345
+<a name="l42"></a>Remainder Version #2 Cycles         :   -0.00800
+<a name="l43"></a></span><span class=cF2>*/</span><span class=cF1>
+</span></pre></body>
+</html>

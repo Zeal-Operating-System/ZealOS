@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>LoadOneImport</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> *module_base, </span><span class=cF9>I64</span><span class=cF0> ld_flags)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF1>U8</span><span class=cF0>          *src = *_src, *ptr2, *st_ptr;
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, etype;
+<a name="l5"></a>    </span><span class=cF9>CHashExport</span><span class=cF0> *tmpex = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF9>CHashImport</span><span class=cF0> *tmpiss;
+<a name="l7"></a>    </span><span class=cF1>Bool</span><span class=cF0>         first = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF1>while</span><span class=cF0> (etype = *src++)
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        i = *src(</span><span class=cF9>U32</span><span class=cF0> *)++;
+<a name="l12"></a>        st_ptr = src;
+<a name="l13"></a>        src += </span><span class=cF5>StrLen</span><span class=cF0>(st_ptr) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l14"></a>        </span><span class=cF1>if</span><span class=cF0> (*st_ptr)
+<a name="l15"></a>        {
+<a name="l16"></a>            </span><span class=cF1>if</span><span class=cF0> (!first)
+<a name="l17"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l18"></a>                *_src = st_ptr - </span><span class=cFE>5</span><span class=cF0>;
+<a name="l19"></a>                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l20"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l22"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l23"></a>                first = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l24"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpex = </span><span class=cF5>HashFind</span><span class=cF0>(st_ptr, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTG_ALL</span><span class=cF0> - </span><span class=cF3>HTT_IMPORT_SYS_SYM</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l25"></a>                {
+<a name="l26"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>ld_flags &amp; </span><span class=cF3>LDF_SILENT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l27"></a>                        </span><span class=cF6>&quot;Unresolved Reference:%s\n&quot;</span><span class=cF0>, st_ptr;
+<a name="l28"></a>                    tmpiss = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashImport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l29"></a>                    tmpiss-&gt;str                 = </span><span class=cF5>StrNew</span><span class=cF0>(st_ptr);
+<a name="l30"></a>                    tmpiss-&gt;type                = </span><span class=cF3>HTT_IMPORT_SYS_SYM</span><span class=cF0>;
+<a name="l31"></a>                    tmpiss-&gt;module_header_entry = st_ptr - </span><span class=cFE>5</span><span class=cF0>;
+<a name="l32"></a>                    tmpiss-&gt;module_base         = module_base;
+<a name="l33"></a>                    </span><span class=cF5>HashAdd</span><span class=cF0>(tmpiss, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table);
+<a name="l34"></a>                }
+<a name="l35"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l36"></a>        }
+<a name="l37"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpex)
+<a name="l38"></a>        {
+<a name="l39"></a>            ptr2 = module_base+i;
+<a name="l40"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTT_FUN</span><span class=cF0>)
+<a name="l41"></a>                i = tmpex(</span><span class=cF9>CHashFun</span><span class=cF0> *)-&gt;exe_addr;
+<a name="l42"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTT_GLOBAL_VAR</span><span class=cF0>)
+<a name="l43"></a>                i = tmpex(</span><span class=cF9>CHashGlobalVar</span><span class=cF0> *)-&gt;data_addr;
+<a name="l44"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l45"></a>                i = tmpex-&gt;val;
+<a name="l46"></a>            </span><span class=cF1>switch</span><span class=cF0> (etype)
+<a name="l47"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l48"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL_I8</span><span class=cF0>:  *ptr2(</span><span class=cF1>U8</span><span class=cF0> *)  = i - ptr2 - </span><span class=cFE>1</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l49"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_IMM_U8</span><span class=cF0>:  *ptr2(</span><span class=cF1>U8</span><span class=cF0> *)  = i;             </span><span class=cF1>break</span><span class=cF0>;
+<a name="l50"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL_I16</span><span class=cF0>: *ptr2(</span><span class=cF9>U16</span><span class=cF0> *) = i - ptr2 - </span><span class=cFE>2</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l51"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_IMM_U16</span><span class=cF0>: *ptr2(</span><span class=cF9>U16</span><span class=cF0> *) = i;             </span><span class=cF1>break</span><span class=cF0>;
+<a name="l52"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL_I32</span><span class=cF0>: *ptr2(</span><span class=cF9>U32</span><span class=cF0> *) = i - ptr2 - </span><span class=cFE>4</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l53"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_IMM_U32</span><span class=cF0>: *ptr2(</span><span class=cF9>U32</span><span class=cF0> *) = i;             </span><span class=cF1>break</span><span class=cF0>;
+<a name="l54"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL_I64</span><span class=cF0>: *ptr2(</span><span class=cF9>I64</span><span class=cF0> *) = i - ptr2 - </span><span class=cFE>8</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l55"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_IMM_I64</span><span class=cF0>: *ptr2(</span><span class=cF9>I64</span><span class=cF0> *) = i;             </span><span class=cF1>break</span><span class=cF0>;
+<a name="l56"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l57"></a>        }
+<a name="l58"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l59"></a>    *_src = src - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l60"></a>}
+<a name="l61"></a>
+<a name="l62"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SysSymImportsResolve</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st_ptr, </span><span class=cF9>I64</span><span class=cF0> ld_flags)
+<a name="l63"></a>{
+<a name="l64"></a>    </span><span class=cF9>CHashImport</span><span class=cF0> *tmpiss;
+<a name="l65"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr;
+<a name="l66"></a>
+<a name="l67"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpiss = </span><span class=cF5>HashSingleTableFind</span><span class=cF7>(</span><span class=cF0>st_ptr, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_IMPORT_SYS_SYM</span><span class=cF7>)</span><span class=cF0>)
+<a name="l68"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l69"></a>        ptr = tmpiss-&gt;module_header_entry;
+<a name="l70"></a>        </span><span class=cFD>LoadOneImport</span><span class=cF0>(&amp;ptr, tmpiss-&gt;module_base, ld_flags);
+<a name="l71"></a>        tmpiss-&gt;type = </span><span class=cF3>HTT_INVALID</span><span class=cF0>;
+<a name="l72"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l73"></a>}
+<a name="l74"></a>
+<a name="l75"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>LoadPass1</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF1>U8</span><span class=cF0> *module_base, </span><span class=cF9>I64</span><span class=cF0> ld_flags)
+<a name="l76"></a>{
+<a name="l77"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr2, *ptr3, *st_ptr;
+<a name="l78"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, j, count, etype;
+<a name="l79"></a>    </span><span class=cF9>CHashExport</span><span class=cF0> *tmpex = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l80"></a>
+<a name="l81"></a>    </span><span class=cF1>while</span><span class=cF0> (etype = *src++)
+<a name="l82"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l83"></a>        i = *src(</span><span class=cF9>U32</span><span class=cF0> *)++;
+<a name="l84"></a>        st_ptr = src;
+<a name="l85"></a>        src += </span><span class=cF5>StrLen</span><span class=cF0>(st_ptr) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l86"></a>        </span><span class=cF1>switch</span><span class=cF0> (etype)
+<a name="l87"></a>        {
+<a name="l88"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL32_EXPORT</span><span class=cF0>:
+<a name="l89"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_IMM32_EXPORT</span><span class=cF0>:
+<a name="l90"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL64_EXPORT</span><span class=cF0>:
+<a name="l91"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_IMM64_EXPORT</span><span class=cF0>:
+<a name="l92"></a>                tmpex = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l93"></a>                tmpex-&gt;str  = </span><span class=cF5>StrNew</span><span class=cF0>(st_ptr);
+<a name="l94"></a>                tmpex-&gt;type = </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0> | </span><span class=cF3>HTF_IMM</span><span class=cF0>;
+<a name="l95"></a>                </span><span class=cF1>if</span><span class=cF0> (etype == </span><span class=cF3>IET_IMM32_EXPORT</span><span class=cF0> || etype == </span><span class=cF3>IET_IMM64_EXPORT</span><span class=cF0>)
+<a name="l96"></a>                    tmpex-&gt;val = i;
+<a name="l97"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l98"></a>                    tmpex-&gt;val = i + module_base;
+<a name="l99"></a>                </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table);
+<a name="l100"></a>                </span><span class=cF5>SysSymImportsResolve</span><span class=cF0>(st_ptr, ld_flags);
+<a name="l101"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l102"></a>
+<a name="l103"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_REL_I0</span><span class=cF0> ... </span><span class=cF3>IET_IMM_I64</span><span class=cF0>:
+<a name="l104"></a>                src = st_ptr - </span><span class=cFE>5</span><span class=cF0>;
+<a name="l105"></a>                </span><span class=cFD>LoadOneImport</span><span class=cF0>(&amp;src, module_base, ld_flags);
+<a name="l106"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l107"></a>
+<a name="l108"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_ABS_ADDR</span><span class=cF0>:
+<a name="l109"></a>                </span><span class=cF1>if</span><span class=cF0> (ld_flags &amp; </span><span class=cF3>LDF_NO_ABSS</span><span class=cF0>)
+<a name="l110"></a>                    src += i * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0>);
+<a name="l111"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l112"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l113"></a>                    count = i;
+<a name="l114"></a>                    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; count; j++)
+<a name="l115"></a>                    {
+<a name="l116"></a>                        ptr2 = module_base + *src(</span><span class=cF9>U32</span><span class=cF0> *)++;
+<a name="l117"></a>                        *ptr2(</span><span class=cF9>U32</span><span class=cF0> *) += module_base;
+<a name="l118"></a>                    }
+<a name="l119"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l120"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l121"></a>
+<a name="l122"></a>            </span><span class=cF1>start</span><span class=cF0>:
+<a name="l123"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_CODE_HEAP</span><span class=cF0>:
+<a name="l124"></a>                    ptr3 = </span><span class=cF5>MAlloc</span><span class=cF0>(*src</span><span class=cF7>(</span><span class=cF9>I32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>++, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap);
+<a name="l125"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l126"></a>
+<a name="l127"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_ZEROED_CODE_HEAP</span><span class=cF0>:
+<a name="l128"></a>                    ptr3 = </span><span class=cF5>CAlloc</span><span class=cF0>(*src</span><span class=cF7>(</span><span class=cF9>I32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>++, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap);
+<a name="l129"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l130"></a>            </span><span class=cF1>end</span><span class=cF0>:
+<a name="l131"></a>                </span><span class=cF1>if</span><span class=cF0> (*st_ptr)
+<a name="l132"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l133"></a>                    tmpex = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l134"></a>                    tmpex-&gt;str  = </span><span class=cF5>StrNew</span><span class=cF0>(st_ptr);
+<a name="l135"></a>                    tmpex-&gt;type = </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0> | </span><span class=cF3>HTF_IMM</span><span class=cF0>;
+<a name="l136"></a>                    tmpex-&gt;val  = ptr3;
+<a name="l137"></a>                    </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table);
+<a name="l138"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l139"></a>                count = i;
+<a name="l140"></a>                </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; count; j++)
+<a name="l141"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l142"></a>                    ptr2 = module_base + *src(</span><span class=cF9>U32</span><span class=cF0> *)++;
+<a name="l143"></a>                    *ptr2(</span><span class=cF9>I32</span><span class=cF0> *) += ptr3;
+<a name="l144"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l145"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l146"></a>
+<a name="l147"></a>            </span><span class=cF1>start</span><span class=cF0>:
+<a name="l148"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_DATA_HEAP</span><span class=cF0>:
+<a name="l149"></a>                    ptr3 = </span><span class=cF5>MAlloc</span><span class=cF0>(*src</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>++);
+<a name="l150"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l151"></a>
+<a name="l152"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_ZEROED_DATA_HEAP</span><span class=cF0>:
+<a name="l153"></a>                    ptr3 = </span><span class=cF5>CAlloc</span><span class=cF0>(*src</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>++);
+<a name="l154"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l155"></a>            </span><span class=cF1>end</span><span class=cF0>:
+<a name="l156"></a>                </span><span class=cF1>if</span><span class=cF0> (*st_ptr)
+<a name="l157"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l158"></a>                    tmpex = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l159"></a>                    tmpex-&gt;str  = </span><span class=cF5>StrNew</span><span class=cF0>(st_ptr);
+<a name="l160"></a>                    tmpex-&gt;type = </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0> | </span><span class=cF3>HTF_IMM</span><span class=cF0>;
+<a name="l161"></a>                    tmpex-&gt;val  = ptr3;
+<a name="l162"></a>                    </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table);
+<a name="l163"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l164"></a>                count = i;
+<a name="l165"></a>                </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; count; j++)
+<a name="l166"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l167"></a>                    ptr2 = module_base + *src(</span><span class=cF9>U32</span><span class=cF0> *)++;
+<a name="l168"></a>                    *ptr2(</span><span class=cF9>I64</span><span class=cF0> *) += ptr3;
+<a name="l169"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l170"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l171"></a>        }
+<a name="l172"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l173"></a>}
+<a name="l174"></a>
+<a name="l175"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>LoadPass2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF1>U8</span><span class=cF0> *module_base, </span><span class=cF9>I64</span><span class=cF0>)
+<a name="l176"></a>{
+<a name="l177"></a>    </span><span class=cF1>U8</span><span class=cF0> *st_ptr;
+<a name="l178"></a>    </span><span class=cF9>I64</span><span class=cF0> i, etype;
+<a name="l179"></a>
+<a name="l180"></a>    </span><span class=cF1>while</span><span class=cF0> (etype = *src++)
+<a name="l181"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l182"></a>        i = *src(</span><span class=cF9>U32</span><span class=cF0> *)++;
+<a name="l183"></a>        st_ptr = src;
+<a name="l184"></a>        src += </span><span class=cF5>StrLen</span><span class=cF0>(st_ptr) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l185"></a>        </span><span class=cF1>switch</span><span class=cF0> (etype)
+<a name="l186"></a>        {
+<a name="l187"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_MAIN</span><span class=cF0>:
+<a name="l188"></a>                </span><span class=cF5>Call</span><span class=cF0>(i + module_base);
+<a name="l189"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l190"></a>
+<a name="l191"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_ABS_ADDR</span><span class=cF0>:
+<a name="l192"></a>                src += </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0>) * i;
+<a name="l193"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l194"></a>
+<a name="l195"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_CODE_HEAP</span><span class=cF0>:
+<a name="l196"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_ZEROED_CODE_HEAP</span><span class=cF0>:
+<a name="l197"></a>                src += </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0>) * i;
+<a name="l198"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l199"></a>
+<a name="l200"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_DATA_HEAP</span><span class=cF0>:
+<a name="l201"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IET_ZEROED_DATA_HEAP</span><span class=cF0>:
+<a name="l202"></a>                src += </span><span class=cFE>8</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0>) * i;
+<a name="l203"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l204"></a>        }
+<a name="l205"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l206"></a>}
+<a name="l207"></a>
+<a name="l208"></a></span><span class=cF9>CBinFile</span><span class=cF0> *</span><span class=cF5>Load</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>I64</span><span class=cF0> ld_flags=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>CBinFile</span><span class=cF0> *bfh_addr=</span><span class=cF3>INVALID_PTR</span><span class=cF0>)
+<a name="l209"></a>{</span><span class=cF2>//Load a .BIN file module into memory.</span><span class=cF0>
+<a name="l210"></a></span><span class=cF2>//bfh_addr==INVALID_PTR means don't care what load addr.</span><span class=cF0>
+<a name="l211"></a>    </span><span class=cF1>U8</span><span class=cF0>          *fbuf, *module_base, *absname;
+<a name="l212"></a>    </span><span class=cF9>I64</span><span class=cF0>          size, module_align, misalignment;
+<a name="l213"></a>    </span><span class=cF9>CBinFile</span><span class=cF0>    *bfh;
+<a name="l214"></a>
+<a name="l215"></a>    fbuf = </span><span class=cF5>ExtDefault</span><span class=cF0>(filename, </span><span class=cF6>&quot;BIN&quot;</span><span class=cF0>);
+<a name="l216"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>bfh = </span><span class=cF5>FileRead</span><span class=cF0>(fbuf, &amp;size)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l217"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l218"></a>        </span><span class=cF5>Free</span><span class=cF0>(fbuf);
+<a name="l219"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l220"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l221"></a>
+<a name="l222"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l525"><span class=cF4>Patch Table Generation</span></a><span class=cF0>
+<a name="l223"></a>    module_align = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; bfh-&gt;module_align_bits;
+<a name="l224"></a>    </span><span class=cF1>if</span><span class=cF0> (!module_align || bfh-&gt;bin_signature != </span><span class=cF3>BIN_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l225"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l226"></a>        </span><span class=cF5>Free</span><span class=cF0>(bfh);
+<a name="l227"></a>        </span><span class=cF5>Free</span><span class=cF0>(fbuf);
+<a name="l228"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'BinModul'</span><span class=cF0>);
+<a name="l229"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l230"></a>
+<a name="l231"></a>    </span><span class=cF1>if</span><span class=cF0> (bfh_addr == </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
+<a name="l232"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l233"></a>        </span><span class=cF1>if</span><span class=cF0> (bfh-&gt;org == </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
+<a name="l234"></a>        {
+<a name="l235"></a>            misalignment = module_align - </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBinFile</span><span class=cF0>);
+<a name="l236"></a>            </span><span class=cF1>if</span><span class=cF0> (misalignment &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l237"></a>                misalignment &amp;= module_align - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l238"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap != </span><span class=cF5>Fs</span><span class=cF0>-&gt;data_heap)
+<a name="l239"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l240"></a>                </span><span class=cF1>if</span><span class=cF0> (module_align &lt; </span><span class=cFE>16</span><span class=cF0>)
+<a name="l241"></a>                    module_align = </span><span class=cFE>16</span><span class=cF0>;
+<a name="l242"></a>                bfh_addr = </span><span class=cF5>MAllocAligned</span><span class=cF0>(size, module_align, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap, misalignment);
+<a name="l243"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l244"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (module_align &gt; </span><span class=cFE>8</span><span class=cF0>)
+<a name="l245"></a>                bfh_addr = </span><span class=cF5>MAllocAligned</span><span class=cF0>(size, module_align,, misalignment);
+<a name="l246"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l247"></a>            </span><span class=cF7>{</span><span class=cF2>//Less than 2Gig system memory</span><span class=cF0>
+<a name="l248"></a>                bfh_addr = bfh;
+<a name="l249"></a>                </span><span class=cF1>goto</span><span class=cF0> lo_skip; </span><span class=cF2>//File is already in code heap area, don't copy.</span><span class=cF0>
+<a name="l250"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l251"></a>        }
+<a name="l252"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l253"></a>            bfh_addr = bfh-&gt;org;
+<a name="l254"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l255"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(bfh_addr, bfh, size);
+<a name="l256"></a>    </span><span class=cF5>Free</span><span class=cF0>(bfh);
+<a name="l257"></a>
+<a name="l258"></a>    lo_skip:
+<a name="l259"></a>    module_base = bfh_addr(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBinFile</span><span class=cF0>);
+<a name="l260"></a>
+<a name="l261"></a>    absname = </span><span class=cF5>FileNameAbs</span><span class=cF0>(fbuf);
+<a name="l262"></a>    </span><span class=cF5>Free</span><span class=cF0>(fbuf);
+<a name="l263"></a>    fbuf = </span><span class=cF5>StrNew</span><span class=cF0>(absname);
+<a name="l264"></a>
+<a name="l265"></a>    </span><span class=cF5>FileExtRemove</span><span class=cF0>(fbuf);
+<a name="l266"></a>    </span><span class=cF1>if</span><span class=cF0> (fbuf[</span><span class=cFE>1</span><span class=cF0>] == </span><span class=cF6>':'</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>fbuf</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>2</span><span class=cF0>)
+<a name="l267"></a>        </span><span class=cF5>HashGenericAdd</span><span class=cF0>(fbuf + </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>HTT_MODULE</span><span class=cF0> | </span><span class=cF3>HTF_PUBLIC</span><span class=cF0>, bfh_addr);
+<a name="l268"></a>
+<a name="l269"></a>    </span><span class=cFD>LoadPass1</span><span class=cF0>(bfh_addr</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + bfh_addr-&gt;patch_table_offset, module_base, ld_flags);
+<a name="l270"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>ld_flags &amp; </span><span class=cF3>LDF_JUST_LOAD</span><span class=cF7>)</span><span class=cF0>)
+<a name="l271"></a>        </span><span class=cFD>LoadPass2</span><span class=cF0>(bfh_addr</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + bfh_addr-&gt;patch_table_offset, module_base, ld_flags);
+<a name="l272"></a>
+<a name="l273"></a>    </span><span class=cF5>Free</span><span class=cF0>(absname);
+<a name="l274"></a>    </span><span class=cF5>Free</span><span class=cF0>(fbuf);
+<a name="l275"></a>
+<a name="l276"></a>    </span><span class=cF1>return</span><span class=cF0> bfh_addr;
+<a name="l277"></a>}
+<a name="l278"></a>
+<a name="l279"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>LoadKernel</span><span class=cF0>()
+<a name="l280"></a>{
+<a name="l281"></a>    </span><span class=cF5>HashGenericAdd</span><span class=cF0>(</span><span class=cF3>KERNEL_MODULE_NAME</span><span class=cF0>, </span><span class=cF3>HTT_MODULE</span><span class=cF0> | </span><span class=cF3>HTF_PUBLIC</span><span class=cF0>, </span><span class=cFB>mem_boot_base</span><span class=cF0> - </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBinFile</span><span class=cF7>)</span><span class=cF0>);
+<a name="l282"></a>
+<a name="l283"></a>    </span><span class=cF2>//Abs patches done here </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart32.html#l101"><span class=cF4>CPatchTableAbsAddr</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l284"></a>    </span><span class=cFD>LoadPass1</span><span class=cF0>(</span><span class=cFB>sys_boot_patch_table_base</span><span class=cF0>, </span><span class=cFB>mem_boot_base</span><span class=cF0>, </span><span class=cF3>LDF_NO_ABSS</span><span class=cF0> | </span><span class=cF3>LDF_SILENT</span><span class=cF0>);
+<a name="l285"></a>
+<a name="l286"></a>    </span><span class=cF2>//No main routines</span><span class=cF0>
+<a name="l287"></a>    </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>LoadPass2(sys_boot_patch_table_base,mem_boot_base,0);</span><span class=cF0>
+<a name="l288"></a>}
+</span></pre></body>
+</html>

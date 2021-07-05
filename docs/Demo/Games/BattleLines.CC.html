@@ -1,0 +1,470 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.c20{color:#ffffff;background-color:#4e9a06;}
+.c2A{color:#82bc49;background-color:#4e9a06;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=c20>
+<a name="l4"></a></span><span class=c2A>
+<a name="l5"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=c20>
+<a name="l6"></a>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=c2A>
+<a name="l9"></a>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=c20>
+<a name="l10"></a>
+<a name="l11"></a>
+<a name="l12"></a></span><span class=c2A>
+<a name="l13"></a>&lt;3&gt;/* Graphics Not Rendered in HTML */</span><span class=c20>
+<a name="l14"></a>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=c2A>
+<a name="l17"></a>&lt;4&gt;/* Graphics Not Rendered in HTML */</span><span class=c20>
+<a name="l18"></a>
+<a name="l19"></a>
+<a name="l20"></a></span><span class=c2A>
+<a name="l21"></a>&lt;5&gt;/* Graphics Not Rendered in HTML */</span><span class=c20>
+<a name="l22"></a>
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> FRAMES </span><span class=cFE>6</span><span class=cF0>
+<a name="l25"></a>
+<a name="l26"></a></span><span class=cF1>U8</span><span class=cF0> *imgs[FRAMES] = {</span><span class=cFA>&lt;1&gt;</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>, </span><span class=cFA>&lt;3&gt;</span><span class=cF0>, </span><span class=cFA>&lt;4&gt;</span><span class=cF0>, </span><span class=cFA>&lt;3&gt;</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>};
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF1>F64</span><span class=cF0> fire_end_time;
+<a name="l29"></a>
+<a name="l30"></a></span><span class=cF1>class</span><span class=cF0> Trooper
+<a name="l31"></a>{
+<a name="l32"></a>    </span><span class=cF9>I64</span><span class=cF0>      x, y, dx, dy, att, def, rng, player;
+<a name="l33"></a>    </span><span class=cF1>F64</span><span class=cF0>      animate_time_base, fire_end_time;
+<a name="l34"></a>    Trooper *target;
+<a name="l35"></a>};
+<a name="l36"></a>
+<a name="l37"></a>#</span><span class=cF1>define</span><span class=cF0> TROOPERS_NUM    </span><span class=cFE>100</span><span class=cF0>
+<a name="l38"></a>Trooper tr[</span><span class=cFE>2</span><span class=cF0>][TROOPERS_NUM];
+<a name="l39"></a>
+<a name="l40"></a></span><span class=cF1>Bool</span><span class=cF0> time_lapse = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l41"></a>
+<a name="l42"></a>#</span><span class=cF1>define</span><span class=cF0> TAP_MODE_RADIUS </span><span class=cFE>50</span><span class=cF0>
+<a name="l43"></a></span><span class=cF1>Bool</span><span class=cF0> tap_mode;
+<a name="l44"></a>
+<a name="l45"></a>#</span><span class=cF1>define</span><span class=cF0> AI_NOTHING </span><span class=cFE>0</span><span class=cF0>
+<a name="l46"></a>#</span><span class=cF1>define</span><span class=cF0> AI_TARGET  </span><span class=cFE>1</span><span class=cF0>
+<a name="l47"></a>#</span><span class=cF1>define</span><span class=cF0> AI_RANDOM  </span><span class=cFE>2</span><span class=cF0>
+<a name="l48"></a>#</span><span class=cF1>define</span><span class=cF0> AI_AI_NUM  </span><span class=cFE>3</span><span class=cF0>
+<a name="l49"></a></span><span class=cF9>I64</span><span class=cF0> ai_mode;
+<a name="l50"></a>
+<a name="l51"></a></span><span class=cF9>I64</span><span class=cF0> ai_targets[</span><span class=cFE>10</span><span class=cF0>];
+<a name="l52"></a>
+<a name="l53"></a></span><span class=cF1>U0</span><span class=cF0> DrawTrooper(</span><span class=cF9>CTask</span><span class=cF0> *, </span><span class=cF9>CDC</span><span class=cF0> *dc, Trooper *tmpt)
+<a name="l54"></a>{
+<a name="l55"></a>    </span><span class=cF1>U8</span><span class=cF0> *tmps;
+<a name="l56"></a>    </span><span class=cF9>I64</span><span class=cF0> x, y, gx, gy;
+<a name="l57"></a>    </span><span class=cF1>F64</span><span class=cF0> speed, tt;
+<a name="l58"></a>
+<a name="l59"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;def &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l60"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l61"></a>        x = tmpt-&gt;dx &gt;&gt; </span><span class=cFE>28</span><span class=cF0>;
+<a name="l62"></a>        y = tmpt-&gt;dy &gt;&gt; </span><span class=cFE>28</span><span class=cF0>;
+<a name="l63"></a>        speed = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * </span><span class=cF5>Sqrt</span><span class=cF0>(x * x + y * y);
+<a name="l64"></a>
+<a name="l65"></a>        tt = tmpt-&gt;animate_time_base + </span><span class=cF5>tS</span><span class=cF0> * speed;
+<a name="l66"></a>        </span><span class=cF1>if</span><span class=cF0> (time_lapse)
+<a name="l67"></a>        {
+<a name="l68"></a>            x = (tmpt-&gt;x + </span><span class=cFE>500</span><span class=cF0> * tmpt-&gt;dx) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l69"></a>            y = (tmpt-&gt;y + </span><span class=cFE>500</span><span class=cF0> * tmpt-&gt;dy) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l70"></a>        }
+<a name="l71"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l72"></a>        {
+<a name="l73"></a>            x = tmpt-&gt;x.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l74"></a>            y = tmpt-&gt;y.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l75"></a>        }
+<a name="l76"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;target)
+<a name="l77"></a>        {
+<a name="l78"></a>            gx = x;
+<a name="l79"></a>            gy = y;
+<a name="l80"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;dx &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l81"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l82"></a>                dc-&gt;flags |= </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>;
+<a name="l83"></a>                </span><span class=cF5>DCSymmetrySet</span><span class=cF0>(dc, x, y, x, y + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l84"></a>                gx -= </span><span class=cFE>13</span><span class=cF0>;
+<a name="l85"></a>                gy -= </span><span class=cFE>7</span><span class=cF0>;
+<a name="l86"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l87"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l88"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l89"></a>                dc-&gt;flags &amp;= ~</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>;
+<a name="l90"></a>                gx += </span><span class=cFE>13</span><span class=cF0>;
+<a name="l91"></a>                gy -= </span><span class=cFE>7</span><span class=cF0>;
+<a name="l92"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l93"></a>
+<a name="l94"></a>            dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l95"></a>            </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x + </span><span class=cFE>1</span><span class=cF0>, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;5&gt;</span><span class=cF0>);
+<a name="l96"></a>
+<a name="l97"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpt-&gt;player)
+<a name="l98"></a>                dc-&gt;color = </span><span class=cF3>LTCYAN</span><span class=cF0>;
+<a name="l99"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l100"></a>                dc-&gt;color = </span><span class=cF3>LTPURPLE</span><span class=cF0>;
+<a name="l101"></a>            </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;5&gt;</span><span class=cF0>);
+<a name="l102"></a>
+<a name="l103"></a>            dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>);
+<a name="l104"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpt-&gt;player)
+<a name="l105"></a>                dc-&gt;color = </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l106"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l107"></a>                dc-&gt;color = </span><span class=cF3>LTBLUE</span><span class=cF0>;
+<a name="l108"></a>            </span><span class=cF5>GrLine3</span><span class=cF0>(dc, gx, gy, </span><span class=cFE>0</span><span class=cF0>, tmpt-&gt;target-&gt;x.i32[</span><span class=cFE>1</span><span class=cF0>], tmpt-&gt;target-&gt;y.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l109"></a>        }
+<a name="l110"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l111"></a>        {
+<a name="l112"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;dx &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l113"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l114"></a>                dc-&gt;flags |= </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>;
+<a name="l115"></a>                </span><span class=cF5>DCSymmetrySet</span><span class=cF0>(dc, x, y, x, y + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l116"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l117"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l118"></a>                dc-&gt;flags &amp;= ~</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>;
+<a name="l119"></a>            tmps = </span><span class=cF5>SpriteInterpolate</span><span class=cF0>(tt % </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>, imgs[tt % FRAMES], imgs[</span><span class=cF7>(</span><span class=cF0>tt + </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0> % FRAMES]);
+<a name="l120"></a>
+<a name="l121"></a>            dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l122"></a>            </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x + </span><span class=cFE>1</span><span class=cF0>, y, </span><span class=cFE>0</span><span class=cF0>, tmps);
+<a name="l123"></a>
+<a name="l124"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpt-&gt;player)
+<a name="l125"></a>                dc-&gt;color = </span><span class=cF3>LTCYAN</span><span class=cF0>;
+<a name="l126"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l127"></a>                dc-&gt;color = </span><span class=cF3>LTPURPLE</span><span class=cF0>;
+<a name="l128"></a>            </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, tmps);
+<a name="l129"></a>
+<a name="l130"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmps);
+<a name="l131"></a>            dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>);
+<a name="l132"></a>        }
+<a name="l133"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l134"></a>}
+<a name="l135"></a>
+<a name="l136"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l137"></a>{
+<a name="l138"></a>    Trooper *tmpt=tr;
+<a name="l139"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, count[</span><span class=cFE>2</span><span class=cF0>], 
+<a name="l140"></a>             x = </span><span class=cFB>mouse</span><span class=cF0>.pos.x - task-&gt;pix_left - task-&gt;scroll_x, 
+<a name="l141"></a>             y = </span><span class=cFB>mouse</span><span class=cF0>.pos.y - task-&gt;pix_top  - task-&gt;scroll_y;
+<a name="l142"></a>    </span><span class=cF1>Bool</span><span class=cF0>     repulsive = </span><span class=cFB>mouse</span><span class=cF0>.pos.z &gt; </span><span class=cFE>0</span><span class=cF0> ^^ </span><span class=cFB>mouse</span><span class=cF0>.rb, 
+<a name="l143"></a>             active = !</span><span class=cFB>winmgr</span><span class=cF0>.grab_scroll &amp;&amp; (</span><span class=cFB>mouse</span><span class=cF0>.lb || </span><span class=cFB>mouse</span><span class=cF0>.rb);
+<a name="l144"></a>
+<a name="l145"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>2</span><span class=cF0>; j++)
+<a name="l146"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l147"></a>        count[j] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l148"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TROOPERS_NUM; i++, tmpt++)
+<a name="l149"></a>        {
+<a name="l150"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;def &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l151"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l152"></a>                DrawTrooper(task, dc, tmpt);
+<a name="l153"></a>                count[j]++;
+<a name="l154"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l155"></a>        }
+<a name="l156"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l157"></a>    </span><span class=cF1>if</span><span class=cF0> (tap_mode)
+<a name="l158"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l159"></a>        dc-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l160"></a>        </span><span class=cF5>GrCircle</span><span class=cF0>(dc, x, y, TAP_MODE_RADIUS);
+<a name="l161"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l162"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l163"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l164"></a>        </span><span class=cF1>if</span><span class=cF0> (repulsive)
+<a name="l165"></a>        {
+<a name="l166"></a>            </span><span class=cF1>if</span><span class=cF0> (active)
+<a name="l167"></a>                dc-&gt;color = </span><span class=cF3>LTRED</span><span class=cF0>;
+<a name="l168"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l169"></a>                dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l170"></a>        }
+<a name="l171"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l172"></a>        {
+<a name="l173"></a>            </span><span class=cF1>if</span><span class=cF0> (active)
+<a name="l174"></a>                dc-&gt;color = </span><span class=cF3>LTBLUE</span><span class=cF0>;
+<a name="l175"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l176"></a>                dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l177"></a>        }
+<a name="l178"></a>        </span><span class=cF5>GrCircle</span><span class=cF0>(dc, x, y, </span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cFB>mouse</span><span class=cF0>.pos.z</span><span class=cF7>)</span><span class=cF0>);
+<a name="l179"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l180"></a>    dc-&gt;color = </span><span class=cF3>LTCYAN</span><span class=cF0>;
+<a name="l181"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>task-&gt;win_right - </span><span class=cFE>8</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF6>&quot;%03d&quot;</span><span class=cF0>, count[</span><span class=cFE>0</span><span class=cF0>]);
+<a name="l182"></a>    dc-&gt;color = </span><span class=cF3>LTPURPLE</span><span class=cF0>;
+<a name="l183"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>task-&gt;win_right - </span><span class=cFE>4</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF6>&quot;%03d&quot;</span><span class=cF0>, count[</span><span class=cFE>1</span><span class=cF0>]);
+<a name="l184"></a>}
+<a name="l185"></a>
+<a name="l186"></a></span><span class=cF1>U0</span><span class=cF0> DoAiTarget()
+<a name="l187"></a>{
+<a name="l188"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j;
+<a name="l189"></a>    Trooper *tmpt1, *tmpt0;
+<a name="l190"></a>
+<a name="l191"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>10</span><span class=cF0>; i++)
+<a name="l192"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l193"></a>        tmpt0 = &amp;tr[</span><span class=cFE>0</span><span class=cF0>][ai_targets[i]];
+<a name="l194"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>10</span><span class=cF0>; j++)
+<a name="l195"></a>        {
+<a name="l196"></a>            tmpt1 = &amp;tr[</span><span class=cFE>1</span><span class=cF0>][i * </span><span class=cFE>10</span><span class=cF0> + j];
+<a name="l197"></a>            tmpt1-&gt;dx = (tmpt0-&gt;x - tmpt1-&gt;x) &gt;&gt; </span><span class=cFE>11</span><span class=cF0>;
+<a name="l198"></a>            tmpt1-&gt;dy = (tmpt0-&gt;y - tmpt1-&gt;y) &gt;&gt; </span><span class=cFE>11</span><span class=cF0>;
+<a name="l199"></a>        }
+<a name="l200"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l201"></a>}
+<a name="l202"></a>
+<a name="l203"></a></span><span class=cF1>U0</span><span class=cF0> UpdatePos()
+<a name="l204"></a>{
+<a name="l205"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j;
+<a name="l206"></a>    Trooper *tmpt = tr;
+<a name="l207"></a>
+<a name="l208"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>2</span><span class=cF0>; j++)
+<a name="l209"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TROOPERS_NUM; i++, tmpt++)
+<a name="l210"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l211"></a>            tmpt-&gt;x += tmpt-&gt;dx;
+<a name="l212"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;x &gt;= </span><span class=cF3>GR_WIDTH</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>)
+<a name="l213"></a>                tmpt-&gt;x -= </span><span class=cF3>GR_WIDTH</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l214"></a>
+<a name="l215"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;x &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l216"></a>                tmpt-&gt;x += </span><span class=cF3>GR_WIDTH</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l217"></a>
+<a name="l218"></a>            tmpt-&gt;y += tmpt-&gt;dy;
+<a name="l219"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;y &gt;= </span><span class=cF3>GR_HEIGHT</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>)
+<a name="l220"></a>                tmpt-&gt;y -= </span><span class=cF3>GR_HEIGHT</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l221"></a>
+<a name="l222"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;y &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l223"></a>                tmpt-&gt;y += </span><span class=cF3>GR_HEIGHT</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l224"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l225"></a>}
+<a name="l226"></a>
+<a name="l227"></a></span><span class=cF1>U0</span><span class=cF0> ResolveFiring()
+<a name="l228"></a>{
+<a name="l229"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, dd, dx, dy;
+<a name="l230"></a>    Trooper *tmpt = tr, *tmpt0, *tmpt1;
+<a name="l231"></a>
+<a name="l232"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>2</span><span class=cF0>; j++)
+<a name="l233"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TROOPERS_NUM; i++, tmpt++)
+<a name="l234"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l235"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;target &amp;&amp; tmpt-&gt;fire_end_time &lt; </span><span class=cF5>tS</span><span class=cF0>)
+<a name="l236"></a>            {
+<a name="l237"></a>                tmpt-&gt;target-&gt;def  -= tmpt-&gt;att;
+<a name="l238"></a>                tmpt-&gt;fire_end_time = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l239"></a>                tmpt-&gt;target        = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l240"></a>            }
+<a name="l241"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l242"></a>
+<a name="l243"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TROOPERS_NUM; i++)
+<a name="l244"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l245"></a>        tmpt0 = &amp;tr[</span><span class=cFE>0</span><span class=cF0>][i];
+<a name="l246"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; TROOPERS_NUM; j++)
+<a name="l247"></a>        {
+<a name="l248"></a>            tmpt1 = &amp;tr[</span><span class=cFE>1</span><span class=cF0>][j];
+<a name="l249"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpt0-&gt;def &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; tmpt1-&gt;def &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l250"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l251"></a>                dx = (tmpt0-&gt;x - tmpt1-&gt;x) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l252"></a>                dy = (tmpt0-&gt;y - tmpt1-&gt;y) &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l253"></a>                dd = dx * dx + dy * dy;
+<a name="l254"></a>                </span><span class=cF1>if</span><span class=cF0> (dd &lt; tmpt0-&gt;rng &amp;&amp; !tmpt0-&gt;target)
+<a name="l255"></a>                {
+<a name="l256"></a>                    fire_end_time = tmpt0-&gt;fire_end_time = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>125</span><span class=cF0>;
+<a name="l257"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>86</span><span class=cF0>);
+<a name="l258"></a>                    tmpt0-&gt;target = tmpt1;
+<a name="l259"></a>                }
+<a name="l260"></a>                </span><span class=cF1>if</span><span class=cF0> (dd &lt; tmpt1-&gt;rng &amp;&amp; !tmpt1-&gt;target)
+<a name="l261"></a>                {
+<a name="l262"></a>                    fire_end_time = tmpt1-&gt;fire_end_time = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>125</span><span class=cF0>;
+<a name="l263"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>86</span><span class=cF0>);
+<a name="l264"></a>                    tmpt1-&gt;target = tmpt0;
+<a name="l265"></a>                }
+<a name="l266"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l267"></a>        }
+<a name="l268"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l269"></a>
+<a name="l270"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>tS</span><span class=cF0> &gt;= fire_end_time)
+<a name="l271"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l272"></a>}
+<a name="l273"></a>
+<a name="l274"></a></span><span class=cF1>U0</span><span class=cF0> UpdateHumanVelocities()
+<a name="l275"></a>{
+<a name="l276"></a>    </span><span class=cF1>F64</span><span class=cF0>      intensity;
+<a name="l277"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, dx, dy, d, 
+<a name="l278"></a>             x = </span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x, 
+<a name="l279"></a>             y = </span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  - </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y;
+<a name="l280"></a>    </span><span class=cF1>Bool</span><span class=cF0>     active = !</span><span class=cFB>winmgr</span><span class=cF0>.grab_scroll &amp;&amp; (</span><span class=cFB>mouse</span><span class=cF0>.lb || </span><span class=cFB>mouse</span><span class=cF0>.rb);
+<a name="l281"></a>    Trooper *tmpt = &amp;tr[</span><span class=cFE>0</span><span class=cF0>][</span><span class=cFE>0</span><span class=cF0>];
+<a name="l282"></a>
+<a name="l283"></a>    </span><span class=cF1>if</span><span class=cF0> (tap_mode)
+<a name="l284"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l285"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TROOPERS_NUM; i++, tmpt++)
+<a name="l286"></a>        {
+<a name="l287"></a>            dx = x - tmpt-&gt;x.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l288"></a>            dy = y - tmpt-&gt;y.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l289"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>d = dx * dx + dy * dy</span><span class=cF7>)</span><span class=cF0> &amp;&amp; d &lt; TAP_MODE_RADIUS * TAP_MODE_RADIUS)
+<a name="l290"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l291"></a>                intensity = </span><span class=cF5>SqrI64</span><span class=cF0>(</span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF5>SqrI64</span><span class=cF0>(TAP_MODE_RADIUS) - d</span><span class=cF7>)</span><span class=cF0>);
+<a name="l292"></a>                dx = intensity * dx / d;
+<a name="l293"></a>                dy = intensity * dy / d;
+<a name="l294"></a>                tmpt-&gt;dx = tmpt-&gt;dx - dx;
+<a name="l295"></a>                tmpt-&gt;dy = tmpt-&gt;dy - dy;
+<a name="l296"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l297"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l298"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l299"></a>                tmpt-&gt;dx -= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>2</span><span class=cF0> * tmpt-&gt;dx;
+<a name="l300"></a>                tmpt-&gt;dy -= </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>2</span><span class=cF0> * tmpt-&gt;dy;
+<a name="l301"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l302"></a>        }
+<a name="l303"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l304"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (active)
+<a name="l305"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l306"></a>        j = </span><span class=cFE>400000000</span><span class=cF0> * </span><span class=cFB>mouse</span><span class=cF0>.pos.z;
+<a name="l307"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mouse</span><span class=cF0>.rb)
+<a name="l308"></a>            j =-j;
+<a name="l309"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; TROOPERS_NUM; i++, tmpt++)
+<a name="l310"></a>        {
+<a name="l311"></a>            dx = x - tmpt-&gt;x.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l312"></a>            dy = y - tmpt-&gt;y.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l313"></a>            </span><span class=cF1>if</span><span class=cF0> (d = dx * dx + dy * dy)
+<a name="l314"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l315"></a>                dx = j * dx / d;
+<a name="l316"></a>                dy = j * dy / d;
+<a name="l317"></a>                tmpt-&gt;dx = tmpt-&gt;dx - dx;
+<a name="l318"></a>                tmpt-&gt;dy = tmpt-&gt;dy - dy;
+<a name="l319"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l320"></a>        }
+<a name="l321"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l322"></a>}
+<a name="l323"></a>
+<a name="l324"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l325"></a>{
+<a name="l326"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, dx, dy;
+<a name="l327"></a>    Trooper *tmpt;
+<a name="l328"></a>
+<a name="l329"></a>    </span><span class=cF5>MouseSet</span><span class=cF0>(,, </span><span class=cFE>25</span><span class=cF0>);
+<a name="l330"></a>    tap_mode = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l331"></a>    time_lapse = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l332"></a>    fire_end_time = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l333"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(tr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>tr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l334"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>10</span><span class=cF0>; i++)
+<a name="l335"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l336"></a>        ai_targets[i] = </span><span class=cF5>RandU16</span><span class=cF0> % TROOPERS_NUM;
+<a name="l337"></a>        dx = </span><span class=cF5>RandI32</span><span class=cF0>;
+<a name="l338"></a>        dy = </span><span class=cF5>RandI32</span><span class=cF0>;
+<a name="l339"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>10</span><span class=cF0>; j++)
+<a name="l340"></a>        {
+<a name="l341"></a>            tmpt = &amp;tr[</span><span class=cFE>0</span><span class=cF0>][i * </span><span class=cFE>10</span><span class=cF0> + j];
+<a name="l342"></a>            tmpt-&gt;x                 = (</span><span class=cF3>GR_WIDTH</span><span class=cF0> - </span><span class=cFE>100</span><span class=cF0> - i * </span><span class=cFE>10</span><span class=cF0>) &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l343"></a>            tmpt-&gt;y                 = (</span><span class=cF3>GR_HEIGHT</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>50</span><span class=cF0> + j * </span><span class=cFE>10</span><span class=cF0>) &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l344"></a>            tmpt-&gt;att               = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l345"></a>            tmpt-&gt;def               = </span><span class=cFE>10</span><span class=cF0>;
+<a name="l346"></a>            tmpt-&gt;rng               = </span><span class=cFE>50</span><span class=cF0> * </span><span class=cFE>50</span><span class=cF0>;
+<a name="l347"></a>            tmpt-&gt;animate_time_base = </span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l348"></a>            tmpt-&gt;player            = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l349"></a>
+<a name="l350"></a>            tmpt = &amp;tr[</span><span class=cFE>1</span><span class=cF0>][i * </span><span class=cFE>10</span><span class=cF0> + j];
+<a name="l351"></a>            tmpt-&gt;x                 = (</span><span class=cFE>100</span><span class=cF0> + i * </span><span class=cFE>10</span><span class=cF0>) &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l352"></a>            tmpt-&gt;y                 = (</span><span class=cF3>GR_HEIGHT</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - </span><span class=cFE>50</span><span class=cF0> + j * </span><span class=cFE>10</span><span class=cF0>) &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l353"></a>            </span><span class=cF1>if</span><span class=cF0> (ai_mode == AI_RANDOM)
+<a name="l354"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l355"></a>                tmpt-&gt;dx            = dx;
+<a name="l356"></a>                tmpt-&gt;dy            = dy;
+<a name="l357"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l358"></a>            tmpt-&gt;att               = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l359"></a>            tmpt-&gt;def               = </span><span class=cFE>10</span><span class=cF0>;
+<a name="l360"></a>            tmpt-&gt;rng               = </span><span class=cFE>50</span><span class=cF0> * </span><span class=cFE>50</span><span class=cF0>;
+<a name="l361"></a>            tmpt-&gt;animate_time_base = </span><span class=cFE>10</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0>;
+<a name="l362"></a>            tmpt-&gt;player            = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l363"></a>        }
+<a name="l364"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l365"></a>    ai_mode = </span><span class=cF5>RandU16</span><span class=cF0> % AI_AI_NUM;
+<a name="l366"></a>}
+<a name="l367"></a>
+<a name="l368"></a></span><span class=cF1>U0</span><span class=cF0> BattleLines()
+<a name="l369"></a>{
+<a name="l370"></a>    </span><span class=cF9>CMenuEntry</span><span class=cF0> *tmpse;
+<a name="l371"></a>
+<a name="l372"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l373"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l374"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l375"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l376"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l377"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l378"></a>                </span><span class=cF6>&quot;  TimeLapse(,'1');&quot;</span><span class=cF0>
+<a name="l379"></a>                </span><span class=cF6>&quot;  TapMode(,'2');&quot;</span><span class=cF0>
+<a name="l380"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l381"></a>                );
+<a name="l382"></a>
+<a name="l383"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l384"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>GREEN</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l385"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l386"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l387"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l388"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l389"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l390"></a>    Init;
+<a name="l391"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l392"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;The mouse wheel controls\n&quot;</span><span class=cF0>
+<a name="l393"></a>                </span><span class=cF6>&quot;the command force.\n&quot;</span><span class=cF0>
+<a name="l394"></a>                </span><span class=cF6>&quot;Attract or repel with\n&quot;</span><span class=cF0>
+<a name="l395"></a>                </span><span class=cF6>&quot;left or right bttn.\n\n&quot;</span><span class=cF0>);
+<a name="l396"></a>
+<a name="l397"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_FOCUS_TASK_MENU</span><span class=cF0>;
+<a name="l398"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l399"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l400"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l401"></a>        {
+<a name="l402"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>CharScan</span><span class=cF0>)
+<a name="l403"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l404"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'1'</span><span class=cF0>:
+<a name="l405"></a>                    time_lapse = !time_lapse;
+<a name="l406"></a>                    tmpse = </span><span class=cF5>MenuEntryFind</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_menu, </span><span class=cF6>&quot;Play/TimeLapse&quot;</span><span class=cF0>);
+<a name="l407"></a>                    tmpse-&gt;checked = time_lapse;
+<a name="l408"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l409"></a>
+<a name="l410"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'2'</span><span class=cF0>:
+<a name="l411"></a>                    tap_mode = !tap_mode;
+<a name="l412"></a>                    tmpse = </span><span class=cF5>MenuEntryFind</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_menu, </span><span class=cF6>&quot;Play/TapMode&quot;</span><span class=cF0>);
+<a name="l413"></a>                    tmpse-&gt;checked = tap_mode;
+<a name="l414"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l415"></a>
+<a name="l416"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l417"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l418"></a>                    </span><span class=cF1>goto</span><span class=cF0> wg_done;
+<a name="l419"></a>
+<a name="l420"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l421"></a>                    Init;
+<a name="l422"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l423"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l424"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>40</span><span class=cF0>);
+<a name="l425"></a>            </span><span class=cF1>if</span><span class=cF0> (ai_mode == AI_TARGET)
+<a name="l426"></a>                DoAiTarget;
+<a name="l427"></a>            UpdateHumanVelocities;
+<a name="l428"></a>            UpdatePos;
+<a name="l429"></a>            ResolveFiring;
+<a name="l430"></a>        }
+<a name="l431"></a>wg_done:
+<a name="l432"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l433"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l434"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l435"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l436"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l437"></a>}
+<a name="l438"></a>
+<a name="l439"></a>BattleLines;
+</span></pre></body>
+</html>

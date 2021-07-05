@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Place this file in /Home and change</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//anything you want.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>//This makes your keyboard fast</span><span class=cF0>
+<a name="l5"></a></span><span class=cF5>KbdTypeMatic</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>);
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cF2>//Set Time Zone</span><span class=cF0>
+<a name="l8"></a></span><span class=cFB>local_time_offset</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0> * </span><span class=cFE>60</span><span class=cF0> * </span><span class=cFE>60</span><span class=cF0> * </span><span class=cF3>CDATE_FREQ</span><span class=cF0>; </span><span class=cF2>//Do daylight savings by hand</span><span class=cF0>
+<a name="l9"></a>
+<a name="l10"></a></span><span class=cF2>//</span><span class=cF8></span><span class=cF2>adjust these to set mouse move scale</span><span class=cF0>
+<a name="l11"></a></span><span class=cFB>mouse_hard</span><span class=cF0>.scale.x = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>7</span><span class=cF0>;
+<a name="l12"></a></span><span class=cFB>mouse_hard</span><span class=cF0>.scale.y = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>7</span><span class=cF0>;
+<a name="l13"></a></span><span class=cFB>mouse_hard</span><span class=cF0>.scale.z = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//wheel</span><span class=cF0>
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF2>//don't change these</span><span class=cF0>
+<a name="l16"></a></span><span class=cFB>mouse_hard</span><span class=cF0>.prescale.x = </span><span class=cFB>mouse_hard</span><span class=cF0>.pos.x / </span><span class=cFB>mouse_hard</span><span class=cF0>.scale.x;
+<a name="l17"></a></span><span class=cFB>mouse_hard</span><span class=cF0>.prescale.y = </span><span class=cFB>mouse_hard</span><span class=cF0>.pos.y / </span><span class=cFB>mouse_hard</span><span class=cF0>.scale.y;
+<a name="l18"></a></span><span class=cFB>mouse_hard</span><span class=cF0>.prescale.z = </span><span class=cFB>mouse_hard</span><span class=cF0>.pos.z / </span><span class=cFB>mouse_hard</span><span class=cF0>.scale.z;
+<a name="l19"></a>
+</span></pre></body>
+</html>

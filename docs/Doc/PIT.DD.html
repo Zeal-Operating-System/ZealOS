@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>The </span><span class=cF2>Programmable Interval Timer</span><span class=cF0> has two purposes: Generate interrupts, and control the </span><span class=cF2>PC speaker</span><span class=cF0>.
+<a name="l2"></a>
+<a name="l3"></a>It has 3 channels:
+<a name="l4"></a></span><span class=cF4>
+<a name="l5"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l685"><span class=cF4>Channel 0</span></a><span class=cF0> can generate an interrupt, IRQ 0, at a defined frequency. We set it up in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l124"><span class=cF4>TimerInit</span></a><span class=cF0>(), and use it in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l22"><span class=cF4>SysTimerRead</span></a><span class=cF0>().
+<a name="l6"></a>
+<a name="l7"></a>Channel 1 was used historically to refresh the DRAM, but now it is obsolete as the hardware does this itself.  Channel 1 is 
+<a name="l8"></a>useless and might not even be implemented anymore on modern machines.
+<a name="l9"></a></span><span class=cF4>
+<a name="l10"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l686"><span class=cF4>Channel 2</span></a><span class=cF0>'s output is connected to the PC speaker.
+<a name="l11"></a>
+<a name="l12"></a>The Command port is used to control each of these 3 channels. The relevant </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l689"><span class=cF4>flags</span></a><span class=cF0> are defined.
+<a name="l13"></a>
+<a name="l14"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.html#l129"><span class=cF4>Sound</span></a><span class=cF0>() for how the PC speaker frequency is changed.</span></pre></body>
+</html>

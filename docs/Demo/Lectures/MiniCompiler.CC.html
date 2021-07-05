@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*</span><span class=cF5>
+<a name="l2"></a><u>-] Main Compiler</span><span class=cF0>
+<a name="l3"></a></u>  </span><span class=cF2>The mini compiler is like the main compiler, except the main compiler's lexical analyser removes comments and does </span><span class=cF0>
+<a name="l4"></a>  </span><span class=cF2>preprocessing.  </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>(),</span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l66"><span class=cF4>Echo</span></a><span class=cF2>(ON).</span><span class=cF0>
+<a name="l5"></a>  
+<a name="l6"></a>  </span><span class=cF2>The main compiler generates </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CompilerA.html#l20"><span class=cF4>Intermediate Code</span></a><span class=cF2> at the parser stage.  See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>(), </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseStatement.html#l1020"><span class=cF4>ParseStatement</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l7"></a>  
+<a name="l8"></a>  </span><span class=cF2>The main compiler optimizes   See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CInit.html#l26"><span class=cF4>Intermediate Code Attributes</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OptPass012.html#l374"><span class=cF4>Combining Consts</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OptPass3.html#l627"><span class=cF4>Choosing Reg Vars</span></a><span class=cF2>.  Use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l50"><span class=cF4>PassTrace</span></a><span class=cF2>() to see </span><span class=cF0>
+<a name="l9"></a>  </span><span class=cF2>the optimization stages.</span><span class=cF0>
+<a name="l10"></a>  
+<a name="l11"></a>  </span><span class=cF2>The main compiler makes machine code in the back end.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1797"><span class=cF4>IC Struct</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseLib.html#l289"><span class=cF4>COCCompile</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OptPass789A.html#l596"><span class=cF4>OptPass789A</span></a><span class=cF2>(), </span><a href="https://tomawezome.github.io/ZealOS/Compiler/BackA.html#l273"><span class=cF4>BackEnd</span></a><span class=cF2>.  Set </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l61"><span class=cF4>Trace</span></a><span class=cF2>(ON) to </span><span class=cF0>
+<a name="l12"></a>  </span><span class=cF2>see the output of the backend.</span><span class=cF0>
+<a name="l13"></a></span><span class=cF5>
+<a name="l14"></a><u>-] Mini Compiler</span><span class=cF0>
+<a name="l15"></a></u>  </span><span class=cF2>For this mini compiler, some things you should know about 64-bit asm:</span><span class=cF0>
+<a name="l16"></a>  
+<a name="l17"></a>  </span><span class=cF2>* Putting a 0x48, known as the REX byte, in front of an inst makes it 64-bit size.</span><span class=cF0>
+<a name="l18"></a>  
+<a name="l19"></a>  </span><span class=cF2>* &quot;PUSH EAX&quot;, &quot;POP EAX&quot; and &quot;XOR EAX,EAX&quot; will behave as 64-bit even without REX because the stack is always 64 bit and </span><span class=cF0>
+<a name="l20"></a>  </span><span class=cF2>because the XOR clears the upper 32-bits.</span><span class=cF0>
+<a name="l21"></a>  
+<a name="l22"></a>  </span><span class=cF2>It is okay in ZealOS to change RAX, RBX, RCX, RDX, R8 and R9 without restoring them to their original values.</span><span class=cF0>
+<a name="l23"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l24"></a>
+<a name="l25"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>TK_EOF</span><span class=cF0>                  </span><span class=cFE>0</span><span class=cF0>
+<a name="l26"></a>#</span><span class=cF1>define</span><span class=cF0> TK_NUM                  </span><span class=cFE>1</span><span class=cF0>
+<a name="l27"></a>#</span><span class=cF1>define</span><span class=cF0> TK_OP                   </span><span class=cFE>2</span><span class=cF0>
+<a name="l28"></a>#</span><span class=cF1>define</span><span class=cF0> TK_LEFT                 </span><span class=cFE>3</span><span class=cF0>
+<a name="l29"></a>#</span><span class=cF1>define</span><span class=cF0> TK_RIGHT                </span><span class=cFE>4</span><span class=cF0>
+<a name="l30"></a>
+<a name="l31"></a>#</span><span class=cF1>define</span><span class=cF0> OP_MUL                  </span><span class=cFE>1</span><span class=cF0>
+<a name="l32"></a>#</span><span class=cF1>define</span><span class=cF0> OP_DIV                  </span><span class=cFE>2</span><span class=cF0>
+<a name="l33"></a>#</span><span class=cF1>define</span><span class=cF0> OP_ADD                  </span><span class=cFE>3</span><span class=cF0>
+<a name="l34"></a>#</span><span class=cF1>define</span><span class=cF0> OP_SUB                  </span><span class=cFE>4</span><span class=cF0>
+<a name="l35"></a>
+<a name="l36"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Lex</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF9>I64</span><span class=cF0> *num)
+<a name="l37"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.html#l529"><span class=cF4>Lex</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l38"></a>    </span><span class=cF1>U8</span><span class=cF0> *src = *_src;
+<a name="l39"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l40"></a>
+<a name="l41"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l42"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l43"></a>        </span><span class=cF1>switch</span><span class=cF0> (*src)
+<a name="l44"></a>        {
+<a name="l45"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l46"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>';'</span><span class=cF0>:
+<a name="l47"></a>                *_src = src;
+<a name="l48"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TK_EOF</span><span class=cF0>;
+<a name="l49"></a>
+<a name="l50"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l51"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\r'</span><span class=cF0>:
+<a name="l52"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l53"></a>                src++;
+<a name="l54"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l55"></a>
+<a name="l56"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'0'</span><span class=cF0>...</span><span class=cF6>'9'</span><span class=cF0>:
+<a name="l57"></a>                i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l58"></a>                </span><span class=cF1>do</span><span class=cF0>
+<a name="l59"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>                    i = i * </span><span class=cFE>10</span><span class=cF0> + *src - </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l61"></a>                    src++;
+<a name="l62"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l63"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *src &lt;= </span><span class=cF6>'9'</span><span class=cF0>);
+<a name="l64"></a>
+<a name="l65"></a>                *num = i;
+<a name="l66"></a>                *_src = src;
+<a name="l67"></a>                </span><span class=cF1>return</span><span class=cF0> TK_NUM;
+<a name="l68"></a>
+<a name="l69"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'*'</span><span class=cF0>:
+<a name="l70"></a>                *num = OP_MUL;
+<a name="l71"></a>                *_src = src + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l72"></a>                </span><span class=cF1>return</span><span class=cF0> TK_OP;
+<a name="l73"></a>
+<a name="l74"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'/'</span><span class=cF0>:
+<a name="l75"></a>                *num = OP_DIV;
+<a name="l76"></a>                *_src = src + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l77"></a>                </span><span class=cF1>return</span><span class=cF0> TK_OP;
+<a name="l78"></a>
+<a name="l79"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
+<a name="l80"></a>                *num = OP_ADD;
+<a name="l81"></a>                *_src = src + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l82"></a>                </span><span class=cF1>return</span><span class=cF0> TK_OP;
+<a name="l83"></a>
+<a name="l84"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
+<a name="l85"></a>                *num = OP_SUB;
+<a name="l86"></a>                *_src = src + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l87"></a>                </span><span class=cF1>return</span><span class=cF0> TK_OP;
+<a name="l88"></a>
+<a name="l89"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'('</span><span class=cF0>:
+<a name="l90"></a>                *_src = src + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l91"></a>                </span><span class=cF1>return</span><span class=cF0> TK_LEFT;
+<a name="l92"></a>
+<a name="l93"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>')'</span><span class=cF0>:
+<a name="l94"></a>                *_src = src + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l95"></a>                </span><span class=cF1>return</span><span class=cF0> TK_RIGHT;
+<a name="l96"></a>
+<a name="l97"></a>            </span><span class=cF1>default</span><span class=cF0>:
+<a name="l98"></a>                </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l99"></a>        }
+<a name="l100"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l101"></a>}
+<a name="l102"></a>
+<a name="l103"></a>#</span><span class=cF1>define</span><span class=cF0> PREC_EOF            </span><span class=cFE>0</span><span class=cF0>
+<a name="l104"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PREC_TERM</span><span class=cF0>           </span><span class=cFE>1</span><span class=cF0>
+<a name="l105"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PREC_MUL</span><span class=cF0>            </span><span class=cFE>2</span><span class=cF0>
+<a name="l106"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PREC_ADD</span><span class=cF0>            </span><span class=cFE>3</span><span class=cF0>
+<a name="l107"></a>#</span><span class=cF1>define</span><span class=cF0> PREC_PAREN          </span><span class=cFE>4</span><span class=cF0>
+<a name="l108"></a>
+<a name="l109"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> Parse(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> **_dst);
+<a name="l110"></a>
+<a name="l111"></a></span><span class=cF1>U0</span><span class=cF0> ParseTerm(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> **_dst, </span><span class=cF9>I64</span><span class=cF0> prec)
+<a name="l112"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l113"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l114"></a>    </span><span class=cF1>U8</span><span class=cF0> *src2;
+<a name="l115"></a>    </span><span class=cF1>U8</span><span class=cF0> *dst2;
+<a name="l116"></a>    </span><span class=cF1>if</span><span class=cF0> (Parse</span><span class=cF7>(</span><span class=cF0>_src, _dst</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>PREC_TERM</span><span class=cF0>)
+<a name="l117"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l118"></a>        src2 = *_src;
+<a name="l119"></a>        dst2 = *_dst;
+<a name="l120"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l121"></a>        {
+<a name="l122"></a>            </span><span class=cF2>//This is inefficient.  The main compiler doesn't back-up like this.</span><span class=cF0>
+<a name="l123"></a>            i = Parse(&amp;src2, &amp;dst2);
+<a name="l124"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>PREC_MUL</span><span class=cF0> &lt;= i &lt; prec)
+<a name="l125"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l126"></a>                *_src = src2;
+<a name="l127"></a>                *_dst = dst2;
+<a name="l128"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l129"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l130"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l131"></a>        }
+<a name="l132"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l133"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l134"></a>        </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l135"></a>}
+<a name="l136"></a>
+<a name="l137"></a></span><span class=cF9>I64</span><span class=cF0> Parse(</span><span class=cF1>U8</span><span class=cF0> **_src, </span><span class=cF1>U8</span><span class=cF0> **_dst)
+<a name="l138"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/ParseExp.html#l302"><span class=cF4>ParseExpression</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l139"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l716"><span class=cF4>Opcode Formats</span></a><span class=cF2> for details on asm insts.</span><span class=cF0>
+<a name="l140"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l141"></a>    </span><span class=cF1>U8</span><span class=cF0> *dst = *_dst;
+<a name="l142"></a>
+<a name="l143"></a>    </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>_src, &amp;i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l144"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l145"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>TK_EOF</span><span class=cF0>:
+<a name="l146"></a>            *dst++ = </span><span class=cFE>0x58</span><span class=cF0>; </span><span class=cF2>//POP RAX</span><span class=cF0>
+<a name="l147"></a>            *dst++ = </span><span class=cFE>0xC3</span><span class=cF0>; </span><span class=cF2>//RET</span><span class=cF0>
+<a name="l148"></a>            *_dst = dst;
+<a name="l149"></a>            </span><span class=cF1>return</span><span class=cF0> PREC_EOF;
+<a name="l150"></a>
+<a name="l151"></a>        </span><span class=cF1>case</span><span class=cF0> TK_NUM:
+<a name="l152"></a>            *dst++ = </span><span class=cFE>0x48</span><span class=cF0>; </span><span class=cF2>//REX</span><span class=cF0>
+<a name="l153"></a>            *dst++ = </span><span class=cFE>0xB8</span><span class=cF0>; </span><span class=cF2>//MOV RAX,immediate num</span><span class=cF0>
+<a name="l154"></a>            *dst(</span><span class=cF9>I64</span><span class=cF0> *)++ = i;
+<a name="l155"></a>
+<a name="l156"></a>            *dst++ = </span><span class=cFE>0x50</span><span class=cF0>; </span><span class=cF2>//PUSH RAX</span><span class=cF0>
+<a name="l157"></a>            *_dst = dst;
+<a name="l158"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>PREC_TERM</span><span class=cF0>;
+<a name="l159"></a>
+<a name="l160"></a>        </span><span class=cF1>case</span><span class=cF0> TK_LEFT:
+<a name="l161"></a>            ParseTerm(_src, _dst, PREC_PAREN);
+<a name="l162"></a>            </span><span class=cF1>if</span><span class=cF0> (Parse</span><span class=cF7>(</span><span class=cF0>_src, _dst</span><span class=cF7>)</span><span class=cF0> != PREC_PAREN)
+<a name="l163"></a>                </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l164"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>PREC_TERM</span><span class=cF0>;
+<a name="l165"></a>
+<a name="l166"></a>        </span><span class=cF1>case</span><span class=cF0> TK_RIGHT:
+<a name="l167"></a>            </span><span class=cF1>return</span><span class=cF0> PREC_PAREN;
+<a name="l168"></a>
+<a name="l169"></a>        </span><span class=cF1>case</span><span class=cF0> TK_OP:
+<a name="l170"></a>            </span><span class=cF1>switch</span><span class=cF0> (i)
+<a name="l171"></a>            {
+<a name="l172"></a>                </span><span class=cF1>case</span><span class=cF0> OP_MUL:
+<a name="l173"></a>                    ParseTerm(_src, &amp;dst, </span><span class=cF3>PREC_MUL</span><span class=cF0>);
+<a name="l174"></a>                    *dst++ = </span><span class=cFE>0x5A</span><span class=cF0>; </span><span class=cF2>//POP RDX</span><span class=cF0>
+<a name="l175"></a>                    *dst++ = </span><span class=cFE>0x58</span><span class=cF0>; </span><span class=cF2>//POP RAX</span><span class=cF0>
+<a name="l176"></a>
+<a name="l177"></a>                    *dst++ = </span><span class=cFE>0x48</span><span class=cF0>; </span><span class=cF2>//REX</span><span class=cF0>
+<a name="l178"></a>                    *dst++ = </span><span class=cFE>0x0F</span><span class=cF0>;
+<a name="l179"></a>                    *dst++ = </span><span class=cFE>0xAF</span><span class=cF0>; </span><span class=cF2>//IMUL RAX,RDX</span><span class=cF0>
+<a name="l180"></a>                    *dst++ = </span><span class=cFE>0xC2</span><span class=cF0>;
+<a name="l181"></a>
+<a name="l182"></a>                    *dst++ = </span><span class=cFE>0x50</span><span class=cF0>; </span><span class=cF2>//PUSH RAX</span><span class=cF0>
+<a name="l183"></a>                    *_dst = dst;
+<a name="l184"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>PREC_MUL</span><span class=cF0>;
+<a name="l185"></a>
+<a name="l186"></a>                </span><span class=cF1>case</span><span class=cF0> OP_DIV:
+<a name="l187"></a>                    ParseTerm(_src, &amp;dst, </span><span class=cF3>PREC_MUL</span><span class=cF0>);
+<a name="l188"></a>                    *dst++ = </span><span class=cFE>0x5B</span><span class=cF0>; </span><span class=cF2>//POP RBX</span><span class=cF0>
+<a name="l189"></a>                    *dst++ = </span><span class=cFE>0x58</span><span class=cF0>; </span><span class=cF2>//POP RAX</span><span class=cF0>
+<a name="l190"></a>
+<a name="l191"></a>                    *dst++ = </span><span class=cFE>0x33</span><span class=cF0>; </span><span class=cF2>//XOR RDX,RDX</span><span class=cF0>
+<a name="l192"></a>                    *dst++ = </span><span class=cFE>0xD2</span><span class=cF0>;
+<a name="l193"></a>
+<a name="l194"></a>                    *dst++ = </span><span class=cFE>0x48</span><span class=cF0>; </span><span class=cF2>//REX</span><span class=cF0>
+<a name="l195"></a>                    *dst++ = </span><span class=cFE>0xF7</span><span class=cF0>; </span><span class=cF2>//IDIV RBX</span><span class=cF0>
+<a name="l196"></a>                    *dst++ = </span><span class=cFE>0xFB</span><span class=cF0>;
+<a name="l197"></a>
+<a name="l198"></a>                    *dst++ = </span><span class=cFE>0x50</span><span class=cF0>; </span><span class=cF2>//PUSH RAX</span><span class=cF0>
+<a name="l199"></a>                    *_dst = dst;
+<a name="l200"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>PREC_MUL</span><span class=cF0>;
+<a name="l201"></a>
+<a name="l202"></a>                </span><span class=cF1>case</span><span class=cF0> OP_ADD:
+<a name="l203"></a>                    ParseTerm(_src, &amp;dst, </span><span class=cF3>PREC_ADD</span><span class=cF0>);
+<a name="l204"></a>                    *dst++ = </span><span class=cFE>0x5A</span><span class=cF0>; </span><span class=cF2>//POP RDX</span><span class=cF0>
+<a name="l205"></a>                    *dst++ = </span><span class=cFE>0x58</span><span class=cF0>; </span><span class=cF2>//POP RAX</span><span class=cF0>
+<a name="l206"></a>
+<a name="l207"></a>                    *dst++ = </span><span class=cFE>0x48</span><span class=cF0>; </span><span class=cF2>//REX</span><span class=cF0>
+<a name="l208"></a>                    *dst++ = </span><span class=cFE>0x03</span><span class=cF0>; </span><span class=cF2>//ADD RAX,RDX</span><span class=cF0>
+<a name="l209"></a>                    *dst++ = </span><span class=cFE>0xC2</span><span class=cF0>;
+<a name="l210"></a>
+<a name="l211"></a>                    *dst++ = </span><span class=cFE>0x50</span><span class=cF0>; </span><span class=cF2>//PUSH RAX</span><span class=cF0>
+<a name="l212"></a>                    *_dst = dst;
+<a name="l213"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>PREC_ADD</span><span class=cF0>;
+<a name="l214"></a>
+<a name="l215"></a>                </span><span class=cF1>case</span><span class=cF0> OP_SUB:
+<a name="l216"></a>                    ParseTerm(_src, &amp;dst, </span><span class=cF3>PREC_ADD</span><span class=cF0>);
+<a name="l217"></a>                    *dst++ = </span><span class=cFE>0x5A</span><span class=cF0>; </span><span class=cF2>//POP RDX</span><span class=cF0>
+<a name="l218"></a>                    *dst++ = </span><span class=cFE>0x58</span><span class=cF0>; </span><span class=cF2>//POP RAX</span><span class=cF0>
+<a name="l219"></a>
+<a name="l220"></a>                    *dst++ = </span><span class=cFE>0x48</span><span class=cF0>; </span><span class=cF2>//REX</span><span class=cF0>
+<a name="l221"></a>                    *dst++ = </span><span class=cFE>0x2B</span><span class=cF0>; </span><span class=cF2>//SUB RAX,RDX</span><span class=cF0>
+<a name="l222"></a>                    *dst++ = </span><span class=cFE>0xC2</span><span class=cF0>;
+<a name="l223"></a>
+<a name="l224"></a>                    *dst++ = </span><span class=cFE>0x50</span><span class=cF0>; </span><span class=cF2>//PUSH RAX</span><span class=cF0>
+<a name="l225"></a>                    *_dst = dst;
+<a name="l226"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>PREC_ADD</span><span class=cF0>;
+<a name="l227"></a>            }
+<a name="l228"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l229"></a>}
+<a name="l230"></a>
+<a name="l231"></a></span><span class=cF1>U0</span><span class=cF0> Main()
+<a name="l232"></a>{
+<a name="l233"></a>    </span><span class=cF1>U8</span><span class=cF0> *src, *src2, *code, *dst;
+<a name="l234"></a>
+<a name="l235"></a>    </span><span class=cF2>//Fixed size, no buffer overrun check.</span><span class=cF0>
+<a name="l236"></a>    </span><span class=cF2>//You can make it fancier if you like.</span><span class=cF0>
+<a name="l237"></a>    code = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>512</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap);
+<a name="l238"></a>
+<a name="l239"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l240"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l241"></a>        </span><span class=cF6>&quot;This will compile an expression\n&quot;</span><span class=cF0>
+<a name="l242"></a>        </span><span class=cF6>&quot;consisting of ints, parentheses\n&quot;</span><span class=cF0>
+<a name="l243"></a>        </span><span class=cF6>&quot;and the operators +,-,* and /.\n&quot;</span><span class=cF0>;
+<a name="l244"></a>        src = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l245"></a>        </span><span class=cF1>if</span><span class=cF0> (*src)
+<a name="l246"></a>        {
+<a name="l247"></a>            src2 = src;
+<a name="l248"></a>            dst = code;
+<a name="l249"></a>            </span><span class=cF1>try</span><span class=cF0>
+<a name="l250"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l251"></a>                ParseTerm(&amp;src2, &amp;dst, PREC_PAREN);
+<a name="l252"></a>                </span><span class=cF1>if</span><span class=cF0> (Parse</span><span class=cF7>(</span><span class=cF0>&amp;src2, &amp;dst</span><span class=cF7>)</span><span class=cF0> != PREC_EOF)
+<a name="l253"></a>                    </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l254"></a>                </span><span class=cF6>&quot;$RED$This code is not efficient, but the compiler is simple.$FG$\n&quot;</span><span class=cF0>;
+<a name="l255"></a>                </span><span class=cF5>Un</span><span class=cF0>(code, dst - code); </span><span class=cF2>//Unassemble the code we created.</span><span class=cF0>
+<a name="l256"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l32"><span class=cF4>Call</span></a><span class=cF2>() is a function.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l165"><span class=cF4>_CALL</span></a><span class=cF2>::</span><span class=cF0>
+<a name="l257"></a>                </span><span class=cF2>//See also </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l35"><span class=cF4>CallInd</span></a><span class=cF2>().  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KUtils.html#l415"><span class=cF4>_CALL_IND</span></a><span class=cF2>::</span><span class=cF0>
+<a name="l258"></a>                </span><span class=cF6>&quot;$LTBLUE$Answer:%d$FG$\n&quot;</span><span class=cF0>, </span><span class=cF5>Call</span><span class=cF0>(code);
+<a name="l259"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l260"></a>            </span><span class=cF1>catch</span><span class=cF0>
+<a name="l261"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l262"></a>                </span><span class=cF6>&quot;$RED$Error$FG$\n&quot;</span><span class=cF0>;
+<a name="l263"></a>                </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l264"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l265"></a>            </span><span class=cF5>Free</span><span class=cF0>(src);
+<a name="l266"></a>        }
+<a name="l267"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l268"></a>        {
+<a name="l269"></a>            </span><span class=cF5>Free</span><span class=cF0>(src);
+<a name="l270"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l271"></a>        }
+<a name="l272"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l273"></a>    </span><span class=cF5>Free</span><span class=cF0>(code);
+<a name="l274"></a>}
+<a name="l275"></a>
+<a name="l276"></a>Main;
+<a name="l277"></a>
+</span></pre></body>
+</html>

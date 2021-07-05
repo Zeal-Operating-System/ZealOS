@@ -1,0 +1,709 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> TABLE_SIZE_MAX </span><span class=cFE>0x10000</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF9>I64</span><span class=cF0> output_found, passes, table_size;
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF1>U8</span><span class=cF0>  *gate_type_table  = </span><span class=cF3>NULL</span><span class=cF0>, 
+<a name="l6"></a>    *displayed_design = </span><span class=cF3>NULL</span><span class=cF0>, 
+<a name="l7"></a>    *added_this_pass  = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF9>U16</span><span class=cF0> *input1_table = </span><span class=cF3>NULL</span><span class=cF0>, 
+<a name="l10"></a>    *input2_table = </span><span class=cF3>NULL</span><span class=cF0>, 
+<a name="l11"></a>    *input3_table = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l12"></a>
+<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> CONNECT_WIDTH   </span><span class=cFE>16</span><span class=cF0>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> GATE_WIDTH      </span><span class=cFE>37</span><span class=cF0>
+<a name="l15"></a>
+<a name="l16"></a>      </span><span class=cFA>
+<a name="l17"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l18"></a>      
+<a name="l19"></a>      </span><span class=cFA>
+<a name="l20"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l21"></a>      
+<a name="l22"></a>      </span><span class=cFA>
+<a name="l23"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l24"></a>      
+<a name="l25"></a>      </span><span class=cFA>
+<a name="l26"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l27"></a>      
+<a name="l28"></a>      </span><span class=cFA>
+<a name="l29"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l30"></a>      
+<a name="l31"></a>      </span><span class=cFA>
+<a name="l32"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l33"></a>      
+<a name="l34"></a>      </span><span class=cFA>
+<a name="l35"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l36"></a>      
+<a name="l37"></a>      
+<a name="l38"></a>      </span><span class=cFA>
+<a name="l39"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l40"></a>      
+<a name="l41"></a>      
+<a name="l42"></a>      </span><span class=cFA>
+<a name="l43"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l44"></a>      
+<a name="l45"></a>      
+<a name="l46"></a>      </span><span class=cFA>
+<a name="l47"></a>      /* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l48"></a>      
+<a name="l49"></a>
+<a name="l50"></a></span><span class=cF1>U8</span><span class=cF0> *gate_type_list =    </span><span class=cF6>&quot;NULL\0OUTPUT\0INPUT\0&quot;</span><span class=cF0>
+<a name="l51"></a>                        </span><span class=cF6>&quot;NOT\0AND\0OR\0NAND\0NOR\0XOR\0AND3\0OR3\0NAND3\0NOR3\0&quot;</span><span class=cF0>;
+<a name="l52"></a>
+<a name="l53"></a>#</span><span class=cF1>define</span><span class=cF0> GT_NULL     </span><span class=cFE>0</span><span class=cF0>  </span><span class=cF2>//Specifies that table entry has not been filled-in</span><span class=cF0>
+<a name="l54"></a>#</span><span class=cF1>define</span><span class=cF0> GT_OUTPUT   </span><span class=cFE>1</span><span class=cF0>  </span><span class=cF2>//Specifies the table entry is a desired output</span><span class=cF0>
+<a name="l55"></a>#</span><span class=cF1>define</span><span class=cF0> GT_INPUT    </span><span class=cFE>2</span><span class=cF0>  </span><span class=cF2>//Specifies that table entry comes from an input signal</span><span class=cF0>
+<a name="l56"></a>
+<a name="l57"></a>#</span><span class=cF1>define</span><span class=cF0> GT_FIRST_REAL_GATE      </span><span class=cFE>3</span><span class=cF0>
+<a name="l58"></a>#</span><span class=cF1>define</span><span class=cF0> GT_NOT                  </span><span class=cFE>3</span><span class=cF0>
+<a name="l59"></a>#</span><span class=cF1>define</span><span class=cF0> GT_AND                  </span><span class=cFE>4</span><span class=cF0>
+<a name="l60"></a>#</span><span class=cF1>define</span><span class=cF0> GT_OR                   </span><span class=cFE>5</span><span class=cF0>
+<a name="l61"></a>#</span><span class=cF1>define</span><span class=cF0> GT_NAND                 </span><span class=cFE>6</span><span class=cF0>
+<a name="l62"></a>#</span><span class=cF1>define</span><span class=cF0> GT_NOR                  </span><span class=cFE>7</span><span class=cF0>
+<a name="l63"></a>#</span><span class=cF1>define</span><span class=cF0> GT_XOR                  </span><span class=cFE>8</span><span class=cF0>
+<a name="l64"></a>#</span><span class=cF1>define</span><span class=cF0> GT_AND3                 </span><span class=cFE>9</span><span class=cF0>
+<a name="l65"></a>#</span><span class=cF1>define</span><span class=cF0> GT_OR3                  </span><span class=cFE>10</span><span class=cF0>
+<a name="l66"></a>#</span><span class=cF1>define</span><span class=cF0> GT_NAND3                </span><span class=cFE>11</span><span class=cF0>
+<a name="l67"></a>#</span><span class=cF1>define</span><span class=cF0> GT_NOR3                 </span><span class=cFE>12</span><span class=cF0>
+<a name="l68"></a>#</span><span class=cF1>define</span><span class=cF0> GT_ENTRIES_NUM          </span><span class=cFE>13</span><span class=cF0>
+<a name="l69"></a>
+<a name="l70"></a>#</span><span class=cF1>define</span><span class=cF0> SEL_GATES_NUM   </span><span class=cFE>128</span><span class=cF0>
+<a name="l71"></a>
+<a name="l72"></a></span><span class=cF1>U8</span><span class=cF0> *imgs[GT_ENTRIES_NUM] = {</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, 
+<a name="l73"></a>                            </span><span class=cFA>&lt;NOT&gt;</span><span class=cF0>, </span><span class=cFA>&lt;AND&gt;</span><span class=cF0>, </span><span class=cFA>&lt;OR&gt;</span><span class=cF0>, </span><span class=cFA>&lt;NAND&gt;</span><span class=cF0>, </span><span class=cFA>&lt;NOR&gt;</span><span class=cF0>, </span><span class=cFA>&lt;XOR&gt;</span><span class=cF0>, </span><span class=cFA>&lt;AND3&gt;</span><span class=cF0>, </span><span class=cFA>&lt;OR3&gt;</span><span class=cF0>, </span><span class=cFA>&lt;NAND3&gt;</span><span class=cF0>, </span><span class=cFA>&lt;NOR3&gt;</span><span class=cF0>};
+<a name="l74"></a>
+<a name="l75"></a></span><span class=cF9>I64</span><span class=cF0> num_inputs_entered, num_outputs_entered;
+<a name="l76"></a></span><span class=cF9>I64</span><span class=cF0> num_sel_gates, 
+<a name="l77"></a>    sel_gates[SEL_GATES_NUM];
+<a name="l78"></a>
+<a name="l79"></a></span><span class=cF1>U0</span><span class=cF0> GetGates()
+<a name="l80"></a>{
+<a name="l81"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l82"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l83"></a>
+<a name="l84"></a>    </span><span class=cF6>&quot;\nEnter the available gate types in the order you prefer them to be used.\n&quot;</span><span class=cF0>
+<a name="l85"></a>    </span><span class=cF6>&quot;Your choices are:\n&quot;</span><span class=cF0>;
+<a name="l86"></a>    </span><span class=cF1>for</span><span class=cF0> (i = GT_FIRST_REAL_GATE; i &lt; GT_ENTRIES_NUM; i++)
+<a name="l87"></a>        </span><span class=cF6>&quot;%z &quot;</span><span class=cF0>, i, gate_type_list;
+<a name="l88"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l89"></a>
+<a name="l90"></a>    num_sel_gates = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l91"></a>    </span><span class=cF1>while</span><span class=cF0> (num_sel_gates &lt; GT_ENTRIES_NUM)
+<a name="l92"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l93"></a>        </span><span class=cF6>&quot;%d&quot;</span><span class=cF0>, num_sel_gates;
+<a name="l94"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot; Gate: &quot;</span><span class=cF0>);
+<a name="l95"></a>        </span><span class=cF1>if</span><span class=cF0> (!*st)
+<a name="l96"></a>        {
+<a name="l97"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l98"></a>            </span><span class=cF1>return</span><span class=cF0>;
+<a name="l99"></a>        }
+<a name="l100"></a>        i = </span><span class=cF5>ListMatch</span><span class=cF0>(st, gate_type_list, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
+<a name="l101"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l102"></a>        </span><span class=cF1>if</span><span class=cF0> (i &lt; GT_FIRST_REAL_GATE)
+<a name="l103"></a>            </span><span class=cF6>&quot;Invalid response\n&quot;</span><span class=cF0>;
+<a name="l104"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l105"></a>            sel_gates[num_sel_gates++] = i;
+<a name="l106"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l107"></a>}
+<a name="l108"></a>
+<a name="l109"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l110"></a>{
+<a name="l111"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l112"></a>
+<a name="l113"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l115"></a>        table_size = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;\nTable size in hex (3 input=0x100,4=0x10000): &quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l116"></a>        </span><span class=cF1>if</span><span class=cF0> (table_size &gt; TABLE_SIZE_MAX)
+<a name="l117"></a>            </span><span class=cF6>&quot;Too large\n&quot;</span><span class=cF0>;
+<a name="l118"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (table_size &lt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l119"></a>        {
+<a name="l120"></a>            </span><span class=cF6>&quot;No table specified, aborting.\n&quot;</span><span class=cF0>;
+<a name="l121"></a>            </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l122"></a>        }
+<a name="l123"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l124"></a>    </span><span class=cF1>while</span><span class=cF0> (table_size &gt; TABLE_SIZE_MAX);
+<a name="l125"></a>
+<a name="l126"></a>    gate_type_table  = </span><span class=cF5>CAlloc</span><span class=cF0>(table_size * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF7>)</span><span class=cF0>);
+<a name="l127"></a>    displayed_design = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>table_size + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l128"></a>    added_this_pass  = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>table_size + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l129"></a>    input1_table    = </span><span class=cF5>MAlloc</span><span class=cF0>(table_size * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>U16</span><span class=cF7>)</span><span class=cF0>);
+<a name="l130"></a>    input2_table    = </span><span class=cF5>MAlloc</span><span class=cF0>(table_size * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>U16</span><span class=cF7>)</span><span class=cF0>);
+<a name="l131"></a>    input3_table    = </span><span class=cF5>MAlloc</span><span class=cF0>(table_size * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>U16</span><span class=cF7>)</span><span class=cF0>);
+<a name="l132"></a>
+<a name="l133"></a>    </span><span class=cF6>&quot;\nEnter the hex truth table column values of inputs.\n&quot;</span><span class=cF0>;
+<a name="l134"></a>    </span><span class=cF1>if</span><span class=cF0> (table_size &lt;= </span><span class=cFE>0x100</span><span class=cF0>)
+<a name="l135"></a>        </span><span class=cF6>&quot;For example, enter A=0xF0, B=0xCC and C=0xAA.\n&quot;</span><span class=cF0>;
+<a name="l136"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l137"></a>        </span><span class=cF6>&quot;For example, enter A=0xFF00, B=0xF0F0, C=0xCCCC and D=0xAAAA.\n&quot;</span><span class=cF0>;
+<a name="l138"></a>    num_inputs_entered = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l139"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l140"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l141"></a>        </span><span class=cF6>&quot;Input %C: &quot;</span><span class=cF0>, </span><span class=cF6>'A'</span><span class=cF0> + num_inputs_entered;
+<a name="l142"></a>        i = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>);
+<a name="l143"></a>        </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l144"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l145"></a>        </span><span class=cF1>if</span><span class=cF0> (i &gt; table_size)
+<a name="l146"></a>            </span><span class=cF6>&quot;Too large\n&quot;</span><span class=cF0>;
+<a name="l147"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l148"></a>        {
+<a name="l149"></a>            </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i])
+<a name="l150"></a>                </span><span class=cF6>&quot;Duplicate\n&quot;</span><span class=cF0>;
+<a name="l151"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l152"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l153"></a>                gate_type_table[i] = GT_INPUT;
+<a name="l154"></a>                input1_table[i] = num_inputs_entered++;
+<a name="l155"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l156"></a>        }
+<a name="l157"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l158"></a>    </span><span class=cF1>if</span><span class=cF0> (!num_inputs_entered)
+<a name="l159"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l160"></a>        </span><span class=cF6>&quot;No inputs specified, aborting.\n&quot;</span><span class=cF0>;
+<a name="l161"></a>        </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l162"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l163"></a>
+<a name="l164"></a>    </span><span class=cF6>&quot;\nEnter the hex truth table columns values of the outputs.\n&quot;</span><span class=cF0>;
+<a name="l165"></a>    num_outputs_entered = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l166"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l167"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l168"></a>        </span><span class=cF6>&quot;Output %C: &quot;</span><span class=cF0>, </span><span class=cF6>'A'</span><span class=cF0> + num_outputs_entered;
+<a name="l169"></a>        i = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>, -</span><span class=cFE>1</span><span class=cF0>);
+<a name="l170"></a>        </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l171"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l172"></a>        </span><span class=cF1>if</span><span class=cF0> (i &gt; table_size)
+<a name="l173"></a>            </span><span class=cF6>&quot;Too large\n&quot;</span><span class=cF0>;
+<a name="l174"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l175"></a>        {
+<a name="l176"></a>            </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] == GT_INPUT)
+<a name="l177"></a>                </span><span class=cF6>&quot;To produce this output, connect to input %C\n&quot;</span><span class=cF0>, </span><span class=cF6>'A'</span><span class=cF0> + input1_table[i];
+<a name="l178"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] == GT_OUTPUT)
+<a name="l179"></a>                </span><span class=cF6>&quot;Duplicate\n&quot;</span><span class=cF0>;
+<a name="l180"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l181"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l182"></a>                gate_type_table[i] = GT_OUTPUT;
+<a name="l183"></a>                input1_table[i] = num_outputs_entered++;
+<a name="l184"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l185"></a>        }
+<a name="l186"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l187"></a>
+<a name="l188"></a>    </span><span class=cF1>if</span><span class=cF0> (!num_outputs_entered)
+<a name="l189"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l190"></a>        </span><span class=cF6>&quot;No output specified, aborting.\n&quot;</span><span class=cF0>;
+<a name="l191"></a>        </span><span class=cF5>throw</span><span class=cF0>;
+<a name="l192"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l193"></a>}
+<a name="l194"></a>
+<a name="l195"></a></span><span class=cF1>U0</span><span class=cF0> DrawDesign(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> *_y, </span><span class=cF9>I64</span><span class=cF0> output, </span><span class=cF9>I64</span><span class=cF0> depth, </span><span class=cF9>I64</span><span class=cF0> *_x_out, </span><span class=cF9>I64</span><span class=cF0> *_y_out)
+<a name="l196"></a>{
+<a name="l197"></a>    </span><span class=cF9>I64</span><span class=cF0> y = *_y, type = gate_type_table[output], 
+<a name="l198"></a>        xx = (passes - depth) * (GATE_WIDTH + CONNECT_WIDTH), yy = y, 
+<a name="l199"></a>        x1, y1, x2, y2, x3, y3;
+<a name="l200"></a>
+<a name="l201"></a>    </span><span class=cF1>if</span><span class=cF0> (_x_out)
+<a name="l202"></a>        *_x_out = xx;
+<a name="l203"></a>
+<a name="l204"></a>    </span><span class=cF1>if</span><span class=cF0> (_y_out)
+<a name="l205"></a>        *_y_out = yy;
+<a name="l206"></a>
+<a name="l207"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>displayed_design, output</span><span class=cF7>)</span><span class=cF0> &amp;&amp; type != GT_INPUT)
+<a name="l208"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l209"></a>        dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l210"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, xx - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * </span><span class=cFE>3</span><span class=cF0>, y - </span><span class=cFE>4</span><span class=cF0>, </span><span class=cF6>&quot;Dup&quot;</span><span class=cF0>);
+<a name="l211"></a>        y += </span><span class=cFE>10</span><span class=cF0>;
+<a name="l212"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l213"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l214"></a>        </span><span class=cF1>switch</span><span class=cF0> (type)
+<a name="l215"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l216"></a>            </span><span class=cF1>case</span><span class=cF0> GT_INPUT:
+<a name="l217"></a>                dc-&gt;color = </span><span class=cF3>GREEN</span><span class=cF0>;
+<a name="l218"></a>                </span><span class=cF5>GrPrint</span><span class=cF0>(dc, xx - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> - </span><span class=cFE>4</span><span class=cF0>, y - </span><span class=cFE>4</span><span class=cF0>, </span><span class=cF6>&quot;%C&quot;</span><span class=cF0>, </span><span class=cF6>'A'</span><span class=cF0> + input1_table[output]);
+<a name="l219"></a>                y += </span><span class=cFE>10</span><span class=cF0>;
+<a name="l220"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l221"></a>
+<a name="l222"></a>            </span><span class=cF1>case</span><span class=cF0> GT_NOT:
+<a name="l223"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>displayed_design, output</span><span class=cF7>)</span><span class=cF0>)
+<a name="l224"></a>                {
+<a name="l225"></a>                    y += </span><span class=cFE>16</span><span class=cF0>;
+<a name="l226"></a>                    DrawDesign(dc, &amp;y, input1_table[output], depth + </span><span class=cFE>1</span><span class=cF0>, &amp;x1, &amp;y1);
+<a name="l227"></a>                    yy = y1;
+<a name="l228"></a>
+<a name="l229"></a>                    dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l230"></a>                    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, xx, yy, </span><span class=cFE>0</span><span class=cF0>, imgs[type]);
+<a name="l231"></a>
+<a name="l232"></a>                    dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l233"></a>                    </span><span class=cF5>GrLine</span><span class=cF0>(dc, xx - GATE_WIDTH, yy, x1, y1);
+<a name="l234"></a>                    </span><span class=cF1>if</span><span class=cF0> (_y_out)
+<a name="l235"></a>                        *_y_out = yy;
+<a name="l236"></a>                }
+<a name="l237"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l238"></a>
+<a name="l239"></a>            </span><span class=cF1>case</span><span class=cF0> GT_AND:
+<a name="l240"></a>            </span><span class=cF1>case</span><span class=cF0> GT_OR:
+<a name="l241"></a>            </span><span class=cF1>case</span><span class=cF0> GT_NAND:
+<a name="l242"></a>            </span><span class=cF1>case</span><span class=cF0> GT_NOR:
+<a name="l243"></a>            </span><span class=cF1>case</span><span class=cF0> GT_XOR:
+<a name="l244"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>displayed_design, output</span><span class=cF7>)</span><span class=cF0>)
+<a name="l245"></a>                {
+<a name="l246"></a>                    y += </span><span class=cFE>24</span><span class=cF0>;
+<a name="l247"></a>                    DrawDesign(dc, &amp;y, input1_table[output], depth + </span><span class=cFE>1</span><span class=cF0>, &amp;x1, &amp;y1);
+<a name="l248"></a>                    DrawDesign(dc, &amp;y, input2_table[output], depth + </span><span class=cFE>1</span><span class=cF0>, &amp;x2, &amp;y2);
+<a name="l249"></a>                    yy = (y1 + y2) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l250"></a>
+<a name="l251"></a>                    dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l252"></a>                    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, xx, yy, </span><span class=cFE>0</span><span class=cF0>, imgs[type]);
+<a name="l253"></a>
+<a name="l254"></a>                    dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l255"></a>                    </span><span class=cF5>GrLine</span><span class=cF0>(dc, xx - GATE_WIDTH, yy - </span><span class=cFE>4</span><span class=cF0>, x1, y1);
+<a name="l256"></a>                    </span><span class=cF5>GrLine</span><span class=cF0>(dc, xx - GATE_WIDTH, yy + </span><span class=cFE>4</span><span class=cF0>, x2, y2);
+<a name="l257"></a>                    </span><span class=cF1>if</span><span class=cF0> (_y_out)
+<a name="l258"></a>                        *_y_out = yy;
+<a name="l259"></a>                }
+<a name="l260"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l261"></a>
+<a name="l262"></a>            </span><span class=cF1>case</span><span class=cF0> GT_AND3:
+<a name="l263"></a>            </span><span class=cF1>case</span><span class=cF0> GT_OR3:
+<a name="l264"></a>            </span><span class=cF1>case</span><span class=cF0> GT_NAND3:
+<a name="l265"></a>            </span><span class=cF1>case</span><span class=cF0> GT_NOR3:
+<a name="l266"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>displayed_design, output</span><span class=cF7>)</span><span class=cF0>)
+<a name="l267"></a>                {
+<a name="l268"></a>                    y += </span><span class=cFE>32</span><span class=cF0>;
+<a name="l269"></a>                    DrawDesign(dc, &amp;y, input1_table[output], depth + </span><span class=cFE>1</span><span class=cF0>, &amp;x1, &amp;y1);
+<a name="l270"></a>                    DrawDesign(dc, &amp;y, input2_table[output], depth + </span><span class=cFE>1</span><span class=cF0>, &amp;x2, &amp;y2);
+<a name="l271"></a>                    DrawDesign(dc, &amp;y, input3_table[output], depth + </span><span class=cFE>1</span><span class=cF0>, &amp;x3, &amp;y3);
+<a name="l272"></a>                    yy = (y1 + y2 + y3) / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l273"></a>
+<a name="l274"></a>                    dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l275"></a>                    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, xx, yy, </span><span class=cFE>0</span><span class=cF0>, imgs[type]);
+<a name="l276"></a>
+<a name="l277"></a>                    dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l278"></a>                    </span><span class=cF5>GrLine</span><span class=cF0>(dc, xx - GATE_WIDTH, yy - </span><span class=cFE>8</span><span class=cF0>, x1, y1);
+<a name="l279"></a>                    </span><span class=cF5>GrLine</span><span class=cF0>(dc, xx - GATE_WIDTH, yy,     x2, y2);
+<a name="l280"></a>                    </span><span class=cF5>GrLine</span><span class=cF0>(dc, xx - GATE_WIDTH, yy + </span><span class=cFE>8</span><span class=cF0>, x3, y3);
+<a name="l281"></a>                    </span><span class=cF1>if</span><span class=cF0> (_y_out)
+<a name="l282"></a>                        *_y_out = yy;
+<a name="l283"></a>                }
+<a name="l284"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l285"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l286"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l287"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, xx, yy + </span><span class=cFE>3</span><span class=cF0>, </span><span class=cF6>&quot;%04X&quot;</span><span class=cF0>, output);
+<a name="l288"></a>    </span><span class=cF5>Bts</span><span class=cF0>(displayed_design, output);
+<a name="l289"></a>    </span><span class=cF1>if</span><span class=cF0> (_y)
+<a name="l290"></a>        *_y = y;
+<a name="l291"></a>}
+<a name="l292"></a>
+<a name="l293"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l294"></a>{
+<a name="l295"></a>    </span><span class=cF9>I64</span><span class=cF0> y = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l296"></a>
+<a name="l297"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(displayed_design, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>table_size + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>Bool</span><span class=cF7>)</span><span class=cF0>);
+<a name="l298"></a>    DrawDesign(dc, &amp;y, output_found, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>);
+<a name="l299"></a>}
+<a name="l300"></a>
+<a name="l301"></a></span><span class=cF1>U0</span><span class=cF0> FillNot(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l302"></a>{
+<a name="l303"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, old_type;
+<a name="l304"></a>
+<a name="l305"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l306"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l307"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l308"></a>            </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l309"></a>            j= (~i) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l310"></a>            old_type = gate_type_table[j];
+<a name="l311"></a>            </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l312"></a>            {
+<a name="l313"></a>                gate_type_table[j] = GT_NOT;
+<a name="l314"></a>                input1_table[j] = i;
+<a name="l315"></a>                </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l316"></a>                *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l317"></a>                </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l318"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l319"></a>                    </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l320"></a>                        output_found = j;
+<a name="l321"></a>                    *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l322"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l323"></a>            }
+<a name="l324"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l325"></a>}
+<a name="l326"></a>
+<a name="l327"></a></span><span class=cF1>U0</span><span class=cF0> FillAnd(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l328"></a>{
+<a name="l329"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, old_type;
+<a name="l330"></a>
+<a name="l331"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l332"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l333"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l334"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l335"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l336"></a>                    </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l337"></a>                    j= (i &amp; k) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l338"></a>                    old_type = gate_type_table[j];
+<a name="l339"></a>                    </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l340"></a>                    {
+<a name="l341"></a>                        gate_type_table[j] = GT_AND;
+<a name="l342"></a>                        input1_table[j] = i;
+<a name="l343"></a>                        input2_table[j] = k;
+<a name="l344"></a>                        </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l345"></a>                        *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l346"></a>                        </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l347"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l348"></a>                            </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l349"></a>                                output_found = j;
+<a name="l350"></a>                            *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l351"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l352"></a>                    }
+<a name="l353"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l354"></a>}
+<a name="l355"></a>
+<a name="l356"></a></span><span class=cF1>U0</span><span class=cF0> FillOr(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l357"></a>{
+<a name="l358"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, old_type;
+<a name="l359"></a>
+<a name="l360"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l361"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l362"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l363"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l364"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l365"></a>                    </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l366"></a>                    j= (i | k) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l367"></a>                    old_type = gate_type_table[j];
+<a name="l368"></a>                    </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l369"></a>                    {
+<a name="l370"></a>                        gate_type_table[j] = GT_OR;
+<a name="l371"></a>                        input1_table[j] = i;
+<a name="l372"></a>                        input2_table[j] = k;
+<a name="l373"></a>                        </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l374"></a>                        *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l375"></a>                        </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l376"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l377"></a>                            </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l378"></a>                                output_found = j;
+<a name="l379"></a>                            *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l380"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l381"></a>                    }
+<a name="l382"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l383"></a>}
+<a name="l384"></a>
+<a name="l385"></a></span><span class=cF1>U0</span><span class=cF0> FillNAnd(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l386"></a>{
+<a name="l387"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, old_type;
+<a name="l388"></a>
+<a name="l389"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l390"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l391"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l392"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l393"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l394"></a>                    </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l395"></a>                    j= (~ </span><span class=cF7>(</span><span class=cF0>i &amp; k</span><span class=cF7>)</span><span class=cF0>) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l396"></a>                    old_type = gate_type_table[j];
+<a name="l397"></a>                    </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l398"></a>                    {
+<a name="l399"></a>                        gate_type_table[j] = GT_NAND;
+<a name="l400"></a>                        input1_table[j] = i;
+<a name="l401"></a>                        input2_table[j] = k;
+<a name="l402"></a>                        </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l403"></a>                        *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l404"></a>                        </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l405"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l406"></a>                            </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l407"></a>                                output_found = j;
+<a name="l408"></a>                            *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l409"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l410"></a>                    }
+<a name="l411"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l412"></a>}
+<a name="l413"></a>
+<a name="l414"></a></span><span class=cF1>U0</span><span class=cF0> FillNOr(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l415"></a>{
+<a name="l416"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, old_type;
+<a name="l417"></a>
+<a name="l418"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l419"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l420"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l421"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l422"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l423"></a>                    </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l424"></a>                    j= (~ </span><span class=cF7>(</span><span class=cF0>i | k</span><span class=cF7>)</span><span class=cF0>) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l425"></a>                    old_type = gate_type_table[j];
+<a name="l426"></a>                    </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l427"></a>                    {
+<a name="l428"></a>                        gate_type_table[j] = GT_NOR;
+<a name="l429"></a>                        input1_table[j] = i;
+<a name="l430"></a>                        input2_table[j] = k;
+<a name="l431"></a>                        </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l432"></a>                        *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l433"></a>                        </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l434"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l435"></a>                            </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l436"></a>                                output_found = j;
+<a name="l437"></a>                            *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l438"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l439"></a>                    }
+<a name="l440"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l441"></a>}
+<a name="l442"></a>
+<a name="l443"></a></span><span class=cF1>U0</span><span class=cF0> FillXor(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l444"></a>{
+<a name="l445"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, old_type;
+<a name="l446"></a>
+<a name="l447"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l448"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l449"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l450"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l451"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l452"></a>                    </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l453"></a>                    j= (i ^ k) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l454"></a>                    old_type = gate_type_table[j];
+<a name="l455"></a>                    </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l456"></a>                    {
+<a name="l457"></a>                        gate_type_table[j] = GT_XOR;
+<a name="l458"></a>                        input1_table[j] = i;
+<a name="l459"></a>                        input2_table[j] = k;
+<a name="l460"></a>                        </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l461"></a>                        *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l462"></a>                        </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l463"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l464"></a>                            </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l465"></a>                                output_found = j;
+<a name="l466"></a>                            *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l467"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l468"></a>                    }
+<a name="l469"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l470"></a>}
+<a name="l471"></a>
+<a name="l472"></a></span><span class=cF1>U0</span><span class=cF0> FillAnd3(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l473"></a>{
+<a name="l474"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, l, old_type;
+<a name="l475"></a>
+<a name="l476"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l477"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l478"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l479"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l480"></a>                    </span><span class=cF1>for</span><span class=cF0> (l = </span><span class=cFE>0</span><span class=cF0>; l &lt; table_size; l++)
+<a name="l481"></a>                        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[l] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, l</span><span class=cF7>)</span><span class=cF0>)
+<a name="l482"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l483"></a>                            </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l484"></a>                            j= (i &amp; k &amp; l) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l485"></a>                            old_type = gate_type_table[j];
+<a name="l486"></a>                            </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l487"></a>                            {
+<a name="l488"></a>                                gate_type_table[j] = GT_AND3;
+<a name="l489"></a>                                input1_table[j] = i;
+<a name="l490"></a>                                input2_table[j] = k;
+<a name="l491"></a>                                input3_table[j] = l;
+<a name="l492"></a>                                </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l493"></a>                                *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l494"></a>                                </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l495"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l496"></a>                                    </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l497"></a>                                        output_found = j;
+<a name="l498"></a>                                    *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l499"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l500"></a>                            }
+<a name="l501"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l502"></a>}
+<a name="l503"></a>
+<a name="l504"></a></span><span class=cF1>U0</span><span class=cF0> FillOr3(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l505"></a>{
+<a name="l506"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, l, old_type;
+<a name="l507"></a>
+<a name="l508"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l509"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l510"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l511"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l512"></a>                    </span><span class=cF1>for</span><span class=cF0> (l = </span><span class=cFE>0</span><span class=cF0>; l &lt; table_size; l++)
+<a name="l513"></a>                        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[l] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, l</span><span class=cF7>)</span><span class=cF0>)
+<a name="l514"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l515"></a>                            </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l516"></a>                            j= (i | k | l) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l517"></a>                            old_type = gate_type_table[j];
+<a name="l518"></a>                            </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l519"></a>                            {
+<a name="l520"></a>                                gate_type_table[j] = GT_OR3;
+<a name="l521"></a>                                input1_table[j] = i;
+<a name="l522"></a>                                input2_table[j] = k;
+<a name="l523"></a>                                input3_table[j] = l;
+<a name="l524"></a>                                </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l525"></a>                                *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l526"></a>                                </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l527"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l528"></a>                                    </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l529"></a>                                        output_found = j;
+<a name="l530"></a>                                    *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l531"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l532"></a>                            }
+<a name="l533"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l534"></a>}
+<a name="l535"></a>
+<a name="l536"></a></span><span class=cF1>U0</span><span class=cF0> FillNAnd3(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l537"></a>{
+<a name="l538"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, l, old_type;
+<a name="l539"></a>
+<a name="l540"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l541"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l542"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l543"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l544"></a>                    </span><span class=cF1>for</span><span class=cF0> (l = </span><span class=cFE>0</span><span class=cF0>; l &lt; table_size; l++)
+<a name="l545"></a>                        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[l] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, l</span><span class=cF7>)</span><span class=cF0>)
+<a name="l546"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l547"></a>                            </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l548"></a>                            j= (~</span><span class=cF7>(</span><span class=cF0>i &amp; k &amp; l</span><span class=cF7>)</span><span class=cF0>) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l549"></a>                            old_type = gate_type_table[j];
+<a name="l550"></a>                            </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l551"></a>                            {
+<a name="l552"></a>                                gate_type_table[j] = GT_NAND3;
+<a name="l553"></a>                                input1_table[j] = i;
+<a name="l554"></a>                                input2_table[j] = k;
+<a name="l555"></a>                                input3_table[j] = l;
+<a name="l556"></a>                                </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l557"></a>                                *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l558"></a>                                </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l559"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l560"></a>                                    </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l561"></a>                                        output_found = j;
+<a name="l562"></a>                                    *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l563"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l564"></a>                            }
+<a name="l565"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l566"></a>}
+<a name="l567"></a>
+<a name="l568"></a></span><span class=cF1>U0</span><span class=cF0> FillNOr3(</span><span class=cF1>Bool</span><span class=cF0> *chged, </span><span class=cF9>I64</span><span class=cF0> *num_outputs_found)
+<a name="l569"></a>{
+<a name="l570"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, l, old_type;
+<a name="l571"></a>
+<a name="l572"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; table_size; i++)
+<a name="l573"></a>        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[i] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l574"></a>            </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; table_size; k++)
+<a name="l575"></a>                </span><span class=cF1>if</span><span class=cF0> (gate_type_table[k] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, k</span><span class=cF7>)</span><span class=cF0>)
+<a name="l576"></a>                    </span><span class=cF1>for</span><span class=cF0> (l = </span><span class=cFE>0</span><span class=cF0>; l &lt; table_size; l++)
+<a name="l577"></a>                        </span><span class=cF1>if</span><span class=cF0> (gate_type_table[l] &gt; GT_OUTPUT &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>added_this_pass, l</span><span class=cF7>)</span><span class=cF0>)
+<a name="l578"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l579"></a>                            </span><span class=cFB>progress1</span><span class=cF0> = i;
+<a name="l580"></a>                            j= (~</span><span class=cF7>(</span><span class=cF0>i | k | l</span><span class=cF7>)</span><span class=cF0>) &amp; (table_size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l581"></a>                            old_type = gate_type_table[j];
+<a name="l582"></a>                            </span><span class=cF1>if</span><span class=cF0> (old_type &lt; GT_INPUT)
+<a name="l583"></a>                            {
+<a name="l584"></a>                                gate_type_table[j] = GT_NOR3;
+<a name="l585"></a>                                input1_table[j] = i;
+<a name="l586"></a>                                input2_table[j] = k;
+<a name="l587"></a>                                input3_table[j] = l;
+<a name="l588"></a>                                </span><span class=cF5>Bts</span><span class=cF0>(added_this_pass, j);
+<a name="l589"></a>                                *chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l590"></a>                                </span><span class=cF1>if</span><span class=cF0> (old_type == GT_OUTPUT)
+<a name="l591"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l592"></a>                                    </span><span class=cF1>if</span><span class=cF0> (output_found &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l593"></a>                                        output_found = j;
+<a name="l594"></a>                                    *num_outputs_found = *num_outputs_found + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l595"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l596"></a>                            }
+<a name="l597"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l598"></a>}
+<a name="l599"></a>
+<a name="l600"></a></span><span class=cF9>I64</span><span class=cF0> FillGateTable()
+<a name="l601"></a>{
+<a name="l602"></a>    </span><span class=cF9>I64</span><span class=cF0>  current_gate, num_outputs_found = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l603"></a>    </span><span class=cF1>Bool</span><span class=cF0> chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l604"></a>
+<a name="l605"></a>    passes = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l606"></a>    output_found = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l607"></a>    </span><span class=cF5>ProgressBarsReset</span><span class=cF0>;
+<a name="l608"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = table_size;
+<a name="l609"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l610"></a>    </span><span class=cF1>while</span><span class=cF0> (num_outputs_found&lt;num_outputs_entered &amp;&amp; chged)
+<a name="l611"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l612"></a>        </span><span class=cF6>&quot;Pass : %d\n&quot;</span><span class=cF0>, passes++;
+<a name="l613"></a>        chged = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l614"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(added_this_pass, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>table_size + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l615"></a>        </span><span class=cF1>for</span><span class=cF0> (current_gate = </span><span class=cFE>0</span><span class=cF0>; current_gate &lt; num_sel_gates &amp;&amp; num_outputs_found &lt; num_outputs_entered; current_gate++)
+<a name="l616"></a>        {
+<a name="l617"></a>            </span><span class=cF1>switch</span><span class=cF0> (sel_gates[current_gate])
+<a name="l618"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l619"></a>                </span><span class=cF1>case</span><span class=cF0> GT_NOT:    FillNot  (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l620"></a>                </span><span class=cF1>case</span><span class=cF0> GT_AND:    FillAnd  (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l621"></a>                </span><span class=cF1>case</span><span class=cF0> GT_OR:     FillOr   (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l622"></a>                </span><span class=cF1>case</span><span class=cF0> GT_NAND:   FillNAnd (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l623"></a>                </span><span class=cF1>case</span><span class=cF0> GT_NOR:    FillNOr  (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l624"></a>                </span><span class=cF1>case</span><span class=cF0> GT_XOR:    FillXor  (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l625"></a>                </span><span class=cF1>case</span><span class=cF0> GT_AND3:   FillAnd3 (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l626"></a>                </span><span class=cF1>case</span><span class=cF0> GT_OR3:    FillOr3  (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l627"></a>                </span><span class=cF1>case</span><span class=cF0> GT_NAND3:  FillNAnd3(&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l628"></a>                </span><span class=cF1>case</span><span class=cF0> GT_NOR3:   FillNOr3 (&amp;chged, &amp;num_outputs_found); </span><span class=cF1>break</span><span class=cF0>;
+<a name="l629"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l630"></a>        }
+<a name="l631"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l632"></a>    </span><span class=cF5>ProgressBarsReset</span><span class=cF0>;
+<a name="l633"></a>
+<a name="l634"></a>    </span><span class=cF1>return</span><span class=cF0> num_outputs_found;
+<a name="l635"></a>}
+<a name="l636"></a>
+<a name="l637"></a></span><span class=cF1>U0</span><span class=cF0> CleanUp()
+<a name="l638"></a>{
+<a name="l639"></a>    </span><span class=cF5>Free</span><span class=cF0>(gate_type_table);
+<a name="l640"></a>    </span><span class=cF5>Free</span><span class=cF0>(displayed_design);
+<a name="l641"></a>    </span><span class=cF5>Free</span><span class=cF0>(added_this_pass);
+<a name="l642"></a>    </span><span class=cF5>Free</span><span class=cF0>(input1_table);
+<a name="l643"></a>    </span><span class=cF5>Free</span><span class=cF0>(input2_table);
+<a name="l644"></a>    </span><span class=cF5>Free</span><span class=cF0>(input3_table);
+<a name="l645"></a>}
+<a name="l646"></a>
+<a name="l647"></a></span><span class=cF1>U0</span><span class=cF0> DigitalLogic()
+<a name="l648"></a>{
+<a name="l649"></a>    gate_type_table  = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l650"></a>    displayed_design = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l651"></a>    added_this_pass  = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l652"></a>    input1_table = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l653"></a>    input2_table = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l654"></a>    input3_table = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l655"></a>
+<a name="l656"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l657"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l658"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l659"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l660"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l661"></a>    GetGates;
+<a name="l662"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l663"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l664"></a>        Init;
+<a name="l665"></a>        </span><span class=cF1>if</span><span class=cF0> (FillGateTable)
+<a name="l666"></a>        {
+<a name="l667"></a>            </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l668"></a>            </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l669"></a>            </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l670"></a>            </span><span class=cF5>CharGet</span><span class=cF0>;
+<a name="l671"></a>            </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l672"></a>            </span><span class=cF5>Refresh</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l673"></a>            </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l674"></a>        }
+<a name="l675"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l676"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l677"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l678"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l679"></a>    CleanUp;
+<a name="l680"></a>}
+</span></pre></body>
+</html>

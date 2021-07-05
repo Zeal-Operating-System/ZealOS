@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Output;StdOut/DolDoc&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0> *</span><span class=cF5>PopUpViewDoc</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> dof_flags=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l3"></a>{</span><span class=cF2>//Pass doc to PopUp win task for viewing.</span><span class=cF0>
+<a name="l4"></a>    </span><span class=cF1>U8</span><span class=cF0>      *buf = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;DocEd(0x%X,0x%X);&quot;</span><span class=cF0>, doc, dof_flags);
+<a name="l5"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>ServerCmdLine</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;View&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l6"></a>
+<a name="l7"></a>    </span><span class=cF5>TaskExe</span><span class=cF0>(task, </span><span class=cF3>NULL</span><span class=cF0>, buf, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_EXIT_ON_COMPLETE</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_FREE_ON_COMPLETE</span><span class=cF0>);
+<a name="l8"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l9"></a>
+<a name="l10"></a>    </span><span class=cF1>return</span><span class=cF0> task;
+<a name="l11"></a>}
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0> *</span><span class=cF5>PopUpViewPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l14"></a>{</span><span class=cF2>//View Print stmt in PopUp win task.</span><span class=cF0>
+<a name="l15"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>ServerCmdLine</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;View&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l16"></a>    </span><span class=cF1>U8</span><span class=cF0>      *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
+<a name="l17"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc = </span><span class=cF5>DocNew</span><span class=cF0>(, task);
+<a name="l18"></a>
+<a name="l19"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, buf);
+<a name="l20"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l21"></a>    buf = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;DocEd(0x%X);&quot;</span><span class=cF0>, doc);
+<a name="l22"></a>    </span><span class=cF5>TaskExe</span><span class=cF0>(task, </span><span class=cF3>NULL</span><span class=cF0>, buf, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_EXIT_ON_COMPLETE</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_FREE_ON_COMPLETE</span><span class=cF0>);
+<a name="l23"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l24"></a>
+<a name="l25"></a>    </span><span class=cF1>return</span><span class=cF0> task;
+<a name="l26"></a>}
+<a name="l27"></a>
+<a name="l28"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;File/FileNames;StdIn/DolDoc&quot;</span><span class=cF0>
+<a name="l29"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>PopUpPickFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dir=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l30"></a>{</span><span class=cF2>//Filename chooser.</span><span class=cF0>    </span><span class=cF2>Uses </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/FileMgr.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l31"></a>    </span><span class=cF1>U8</span><span class=cF0> *res, *st, *st2;
+<a name="l32"></a>
+<a name="l33"></a>    </span><span class=cF1>if</span><span class=cF0> (dir)
+<a name="l34"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;Cd(\&quot;%Q\&quot;);FileMgr(FM_PICK_FILE,Fs-&gt;parent_task);&quot;</span><span class=cF0>, dir);
+<a name="l35"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l36"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>        st2 = </span><span class=cF5>DirCur</span><span class=cF0>;
+<a name="l38"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;Cd(\&quot;%Q\&quot;);FileMgr(FM_PICK_FILE,Fs-&gt;parent_task);&quot;</span><span class=cF0>, st2);
+<a name="l39"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l40"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l41"></a>    res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l42"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l43"></a>
+<a name="l44"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>PopUpPickDir</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dir=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l48"></a>{</span><span class=cF2>//File dir name chooser.  Uses </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/FileMgr.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l49"></a>    </span><span class=cF1>U8</span><span class=cF0> *res, *st, *st2;
+<a name="l50"></a>
+<a name="l51"></a>    </span><span class=cF1>if</span><span class=cF0> (dir)
+<a name="l52"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;Cd(\&quot;%Q\&quot;);FileMgr(FM_PICK_DIR,Fs-&gt;parent_task);&quot;</span><span class=cF0>, dir);
+<a name="l53"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l54"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l55"></a>        st2 = </span><span class=cF5>DirCur</span><span class=cF0>;
+<a name="l56"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;Cd(\&quot;%Q\&quot;);FileMgr(FM_PICK_DIR,Fs-&gt;parent_task);&quot;</span><span class=cF0>, st2);
+<a name="l57"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l58"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l59"></a>    res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l60"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l61"></a>
+<a name="l62"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l63"></a>}
+<a name="l64"></a>
+<a name="l65"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>FileNameForm</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF1>default</span><span class=cF0>=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> dof_flags=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l66"></a>{</span><span class=cF2>//Text filename form in cur win, not PopUp.</span><span class=cF0>
+<a name="l67"></a>    </span><span class=cF9>CEdFileName</span><span class=cF0> fn;
+<a name="l68"></a>
+<a name="l69"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>default</span><span class=cF0>)
+<a name="l70"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(fn.name, </span><span class=cF1>default</span><span class=cF0>);
+<a name="l71"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l72"></a>        *fn.name = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l73"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>DocForm</span><span class=cF7>(</span><span class=cF0>&amp;fn,, dof_flags</span><span class=cF7>)</span><span class=cF0>)
+<a name="l74"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrNew</span><span class=cF0>(fn.name, mem_task);
+<a name="l75"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l76"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l77"></a>}
+<a name="l78"></a>
+<a name="l79"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>PopUpFileName</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF1>default</span><span class=cF0>=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> dof_flags=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l80"></a>{</span><span class=cF2>//Filename chooser. Uses form, not </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/FileMgr.html#l678"><span class=cF4>FileMgr</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l81"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;FileNameForm(\&quot;%Q\&quot;,0x%X,Fs-&gt;parent_task);&quot;</span><span class=cF0>, </span><span class=cF1>default</span><span class=cF0>, dof_flags | </span><span class=cF3>DOF_SIZE_MIN</span><span class=cF0>), *res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l82"></a>
+<a name="l83"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l84"></a>
+<a name="l85"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l86"></a>}
+<a name="l87"></a>
+<a name="l88"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
+<a name="l89"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpCd</span><span class=cF0>()
+<a name="l90"></a>{
+<a name="l91"></a>    </span><span class=cF1>Bool</span><span class=cF0> res;
+<a name="l92"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st = </span><span class=cF5>PopUpPickDir</span><span class=cF0>;
+<a name="l93"></a>
+<a name="l94"></a>    </span><span class=cF1>if</span><span class=cF0> (st)
+<a name="l95"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l96"></a>        res = </span><span class=cF5>Cd</span><span class=cF0>(st);
+<a name="l97"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l98"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l99"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l100"></a>        res = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l101"></a>
+<a name="l102"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l103"></a>}
+<a name="l104"></a>
+<a name="l105"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;Char/Lists;StdIn/DolDoc&quot;</span><span class=cF0>
+<a name="l106"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpPickList</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *list)
+<a name="l107"></a>{</span><span class=cF2>//Prompt for list entry in PopUp win task.</span><span class=cF0>
+<a name="l108"></a>    </span><span class=cF9>I64</span><span class=cF0>   res, i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l109"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l110"></a>
+<a name="l111"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$&quot;</span><span class=cF0>);
+<a name="l112"></a>    </span><span class=cF1>while</span><span class=cF0> (*list)
+<a name="l113"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l114"></a>        </span><span class=cF1>if</span><span class=cF0> (*list == </span><span class=cF6>'@'</span><span class=cF0>)
+<a name="l115"></a>        {</span><span class=cF2>//Check for '@' alias list entry</span><span class=cF0>
+<a name="l116"></a>            i--;
+<a name="l117"></a>            list++;
+<a name="l118"></a>        }
+<a name="l119"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$MU,\&quot;%s\&quot;,LE=%d$\n&quot;</span><span class=cF0>, list, i++);
+<a name="l120"></a>        list += </span><span class=cF5>StrLen</span><span class=cF0>(list) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l121"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l122"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\n$MU,\&quot;CANCEL\&quot;,LE=DOCM_CANCEL$\n&quot;</span><span class=cF0>);
+<a name="l123"></a>    res = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l124"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l125"></a>
+<a name="l126"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l127"></a>}
+<a name="l128"></a>
+<a name="l129"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;Char/Lists;Char/Define;StdIn/DolDoc&quot;</span><span class=cF0>
+<a name="l130"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>PopUpPickDefineSub</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dname)
+<a name="l131"></a>{</span><span class=cF2>//Prompt for </span><span class=cF4><u>Define</u></span><span class=cF2> list entry in PopUp win task.</span><span class=cF0>
+<a name="l132"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUpPickList</span><span class=cF0>(</span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF0>dname</span><span class=cF7>)</span><span class=cF0>);
+<a name="l133"></a>}
+<a name="l134"></a>
+<a name="l135"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;StdIn/DolDoc&quot;</span><span class=cF0>
+<a name="l136"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUp1</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *b1, </span><span class=cF9>I64</span><span class=cF0> n1, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l137"></a>{</span><span class=cF2>//Make PopUp win task with one bttn.</span><span class=cF0>
+<a name="l138"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, l1 = </span><span class=cF5>StrLen</span><span class=cF0>(b1);
+<a name="l139"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l140"></a>
+<a name="l141"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l142"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header);
+<a name="l143"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CM+CX,%d,4$$BT,\&quot;%s\&quot;,LE=%d$\n&quot;</span><span class=cF0>, -l1 / </span><span class=cFE>2</span><span class=cF0>, b1, n1);
+<a name="l144"></a>    </span><span class=cF1>if</span><span class=cF0> (footer)
+<a name="l145"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, footer);
+<a name="l146"></a>    i = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l147"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l148"></a>
+<a name="l149"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l150"></a>}
+<a name="l151"></a>
+<a name="l152"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUp2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *b1, </span><span class=cF9>I64</span><span class=cF0> n1, </span><span class=cF1>U8</span><span class=cF0> *b2, </span><span class=cF9>I64</span><span class=cF0> n2, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l153"></a>{</span><span class=cF2>//Make PopUp win task with two bttns.</span><span class=cF0>
+<a name="l154"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, l1 = </span><span class=cF5>StrLen</span><span class=cF0>(b1), l2 = </span><span class=cF5>StrLen</span><span class=cF0>(b2), y;
+<a name="l155"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l156"></a>
+<a name="l157"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l158"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l159"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header);
+<a name="l160"></a>        y = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l161"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l162"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l163"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l164"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%*s\n&quot;</span><span class=cF0>, l1 + l2 + </span><span class=cFE>10</span><span class=cF0>, </span><span class=cF6>&quot;&quot;</span><span class=cF0>);
+<a name="l165"></a>        y = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l166"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l167"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CM+CX,%d,%d$$BT,\&quot;%s\&quot;,LE=%d$&quot;</span><span class=cF0>, -</span><span class=cF7>(</span><span class=cF0>l1 + l2 + </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, y, b1, n1);
+<a name="l168"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CM+CX,%d,0$$BT,\&quot;%s\&quot;,LE=%d$\n&quot;</span><span class=cF0> , -</span><span class=cF7>(</span><span class=cF0>l1 + l2 + </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0> + l1 + </span><span class=cFE>6</span><span class=cF0>, b2, n2);
+<a name="l169"></a>    </span><span class=cF1>if</span><span class=cF0> (footer)
+<a name="l170"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, footer);
+<a name="l171"></a>    i = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l172"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l173"></a>
+<a name="l174"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l175"></a>}
+<a name="l176"></a>
+<a name="l177"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l178"></a>{</span><span class=cF2>//Make PopUp win task with OKAY bttn.</span><span class=cF0>
+<a name="l179"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUp1</span><span class=cF0>(</span><span class=cF6>&quot;OKAY&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, header, footer) &gt; </span><span class=cFE>0</span><span class=cF0>;
+<a name="l180"></a>}
+<a name="l181"></a>
+<a name="l182"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpNoYes</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l183"></a>{</span><span class=cF2>//Make PopUp win task with NO/YES bttns.</span><span class=cF0>
+<a name="l184"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUp2</span><span class=cF0>(</span><span class=cF6>&quot;YES&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;NO&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, header, footer) &gt; </span><span class=cFE>0</span><span class=cF0>;
+<a name="l185"></a>}
+<a name="l186"></a>
+<a name="l187"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpCancelOk</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l188"></a>{</span><span class=cF2>//Make PopUp win task CANCEL/OKAY bttns.</span><span class=cF0>
+<a name="l189"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUp2</span><span class=cF0>(</span><span class=cF6>&quot;OKAY&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;CANCEL&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, header, footer) &gt; </span><span class=cFE>0</span><span class=cF0>;
+<a name="l190"></a>}
+<a name="l191"></a>
+<a name="l192"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>PopUpGetStr2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header, </span><span class=cF9>CTask</span><span class=cF0> *mem_task)
+<a name="l193"></a>{
+<a name="l194"></a>    </span><span class=cF1>U8</span><span class=cF0> *res, *st;
+<a name="l195"></a>
+<a name="l196"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l197"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header;
+<a name="l198"></a>    st = </span><span class=cF5>StrGet</span><span class=cF0>(,, </span><span class=cF3>SGF_WITH_NEW_LINE</span><span class=cF0>);
+<a name="l199"></a>    res = </span><span class=cF5>StrNew</span><span class=cF0>(st, mem_task);
+<a name="l200"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l201"></a>
+<a name="l202"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l203"></a>}
+<a name="l204"></a>
+<a name="l205"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>PopUpGetStr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l206"></a>{</span><span class=cF2>//Prompt for text str in PopUp win task.</span><span class=cF0>
+<a name="l207"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;PopUpGetStr2(0x%X,0x%X);&quot;</span><span class=cF0>, header, </span><span class=cF5>Fs</span><span class=cF0>), *res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l208"></a>
+<a name="l209"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l210"></a>
+<a name="l211"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l212"></a>}
+<a name="l213"></a>
+<a name="l214"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpI64Get</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> lo=</span><span class=cF3>I64_MIN</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> hi=</span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l215"></a>{</span><span class=cF2>//Prompt for I64 text expression in PopUp win task.</span><span class=cF0>
+<a name="l216"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;I64Get(0x%X,0x%X,0x%X,0x%X);&quot;</span><span class=cF0>, message, </span><span class=cF1>default</span><span class=cF0>, lo, hi);
+<a name="l217"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l218"></a>
+<a name="l219"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l220"></a>
+<a name="l221"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l222"></a>}
+<a name="l223"></a>
+<a name="l224"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>PopUpGetF64</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message, </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> lo=</span><span class=cF3>F64_MIN</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> hi=</span><span class=cF3>F64_MAX</span><span class=cF0>)
+<a name="l225"></a>{</span><span class=cF2>//Prompt for F64 text expression in PopUp win task.</span><span class=cF0>
+<a name="l226"></a>    </span><span class=cF1>U8</span><span class=cF0> *st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;F64Get(0x%X,0x%X(F64),0x%X(F64),0x%X(F64));&quot;</span><span class=cF0>, message, </span><span class=cF1>default</span><span class=cF0>, lo, hi);
+<a name="l227"></a>    </span><span class=cF1>F64</span><span class=cF0> res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>)(</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l228"></a>
+<a name="l229"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l230"></a>
+<a name="l231"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l232"></a>}
+<a name="l233"></a>
+<a name="l234"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpRangeI64</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> lo, </span><span class=cF9>I64</span><span class=cF0> hi, </span><span class=cF9>I64</span><span class=cF0> step=</span><span class=cFE>1</span><span class=cF0>, 
+<a name="l235"></a>                </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l236"></a>{</span><span class=cF2>//Evenly-spaced I64 range chooser in PopUp win task.</span><span class=cF0>
+<a name="l237"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l238"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l239"></a>
+<a name="l240"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l241"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header);
+<a name="l242"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$&quot;</span><span class=cF0>);
+<a name="l243"></a>    </span><span class=cF1>for</span><span class=cF0> (i = lo; i &lt;= hi; i += step)
+<a name="l244"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$MU,\&quot;%d\&quot;,LE=%d$\n&quot;</span><span class=cF0>, i, i);
+<a name="l245"></a>    </span><span class=cF1>if</span><span class=cF0> (footer)
+<a name="l246"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, footer);
+<a name="l247"></a>    i = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l248"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l249"></a>
+<a name="l250"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l251"></a>}
+<a name="l252"></a>
+<a name="l253"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>PopUpRangeF64</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> lo, </span><span class=cF1>F64</span><span class=cF0> hi, </span><span class=cF1>F64</span><span class=cF0> step, </span><span class=cF1>U8</span><span class=cF0> *format=</span><span class=cF6>&quot;%9.4f&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l254"></a>{</span><span class=cF2>//Evenly-spaced F64 range chooser in PopUp win task.</span><span class=cF0>
+<a name="l255"></a>    </span><span class=cF1>F64</span><span class=cF0>   d;
+<a name="l256"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l257"></a>    </span><span class=cF1>U8</span><span class=cF0>    buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l258"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l259"></a>
+<a name="l260"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l261"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header);
+<a name="l262"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$&quot;</span><span class=cF0>);
+<a name="l263"></a>    </span><span class=cF1>for</span><span class=cF0> (d = lo; d &lt;= hi; d += step)
+<a name="l264"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l265"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, format, d);
+<a name="l266"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$MU,\&quot;%s\&quot;,LE=0x%X$\n&quot;</span><span class=cF0>, buf, d);
+<a name="l267"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l268"></a>    </span><span class=cF1>if</span><span class=cF0> (footer)
+<a name="l269"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, footer);
+<a name="l270"></a>    i = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l271"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l272"></a>
+<a name="l273"></a>    </span><span class=cF1>return</span><span class=cF0> i(</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l274"></a>}
+<a name="l275"></a>
+<a name="l276"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>PopUpRangeF64Exp</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> lo, </span><span class=cF1>F64</span><span class=cF0> hi, </span><span class=cF1>F64</span><span class=cF0> factor, </span><span class=cF1>U8</span><span class=cF0> *format=</span><span class=cF6>&quot;%9.4f&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l277"></a>{</span><span class=cF2>//Exp-spaced F64 range chooser in PopUp win task.</span><span class=cF0>
+<a name="l278"></a>    </span><span class=cF1>F64</span><span class=cF0>   d;
+<a name="l279"></a>    </span><span class=cF9>I64</span><span class=cF0>   i;
+<a name="l280"></a>    </span><span class=cF1>U8</span><span class=cF0>    buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l281"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l282"></a>
+<a name="l283"></a>    </span><span class=cF1>if</span><span class=cF0> (header)
+<a name="l284"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, header);
+<a name="l285"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$LTBLUE$&quot;</span><span class=cF0>);
+<a name="l286"></a>    </span><span class=cF1>for</span><span class=cF0> (d = lo; d &lt;= hi; d *= factor)
+<a name="l287"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l288"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, format, d);
+<a name="l289"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$MU,\&quot;%s\&quot;,LE=0x%X$\n&quot;</span><span class=cF0>, buf, d);
+<a name="l290"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l291"></a>    </span><span class=cF1>if</span><span class=cF0> (footer)
+<a name="l292"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, footer);
+<a name="l293"></a>    i = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l294"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l295"></a>
+<a name="l296"></a>    </span><span class=cF1>return</span><span class=cF0> i(</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l297"></a>}
+<a name="l298"></a>
+<a name="l299"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>PopUpRangeF64Log</span><span class=cF0>(</span><span class=cF1>F64</span><span class=cF0> lo, </span><span class=cF1>F64</span><span class=cF0> hi, </span><span class=cF9>I64</span><span class=cF0> steps, </span><span class=cF1>U8</span><span class=cF0> *format=</span><span class=cF6>&quot;%9.4f&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l300"></a>{</span><span class=cF2>//Log-spaced F64 range chooser in PopUp win task.</span><span class=cF0>
+<a name="l301"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUpRangeF64Exp</span><span class=cF0>(lo, hi, </span><span class=cF5>Exp</span><span class=cF7>(</span><span class=cF5>Ln</span><span class=cF0>(hi / lo) / (steps - </span><span class=cFE>1</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>, format, header, footer);
+<a name="l302"></a>}
+<a name="l303"></a>
+<a name="l304"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Job/Exe;Task/Job/Exe;Compiler&quot;</span><span class=cF0>
+<a name="l305"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SysFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>Bool</span><span class=cF0> warn_ext=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l306"></a>{</span><span class=cF2>//Make sys_task execute file.</span><span class=cF0>
+<a name="l307"></a>    </span><span class=cF1>Bool</span><span class=cF0> okay = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l308"></a>    </span><span class=cF1>U8</span><span class=cF0>  *name = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename), *name2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(name, </span><span class=cF6>&quot;CC&quot;</span><span class=cF0>);
+<a name="l309"></a>    </span><span class=cF9>I64</span><span class=cF0>  res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l310"></a>
+<a name="l311"></a>    </span><span class=cF1>if</span><span class=cF0> (warn_ext &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>name2, </span><span class=cF3>FILEMASK_JIT</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not .CC File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l312"></a>        okay = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l313"></a>    </span><span class=cF1>if</span><span class=cF0> (okay)
+<a name="l314"></a>        res = </span><span class=cF5>Sys</span><span class=cF0>(</span><span class=cF6>&quot;#include \&quot;%s\&quot;;&quot;</span><span class=cF0>, name2);
+<a name="l315"></a>    </span><span class=cF5>Free</span><span class=cF0>(name2);
+<a name="l316"></a>    </span><span class=cF5>Free</span><span class=cF0>(name);
+<a name="l317"></a>
+<a name="l318"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l319"></a>}
+<a name="l320"></a>
+<a name="l321"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>Bool</span><span class=cF0> warn_ext=</span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> **_pu_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l322"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l760"><span class=cF4>ExeFile2</span></a><span class=cF2>() in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF2> task. Cont as User.</span><span class=cF0>
+<a name="l323"></a>    </span><span class=cF1>Bool</span><span class=cF0> okay = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l324"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st, *name = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename), *name2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(name, </span><span class=cF6>&quot;CC&quot;</span><span class=cF0>);
+<a name="l325"></a>    </span><span class=cF9>I64</span><span class=cF0>  res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l326"></a>
+<a name="l327"></a>    </span><span class=cF1>if</span><span class=cF0> (warn_ext &amp;&amp; !</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>name2, </span><span class=cF3>FILEMASK_JIT</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF5>PopUpCancelOk</span><span class=cF7>(</span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;Not .CC File\n\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l328"></a>        okay = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l329"></a>    </span><span class=cF1>if</span><span class=cF0> (okay)
+<a name="l330"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l331"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;$$WW+H,1$$\&quot;;In(\&quot;ExeFile2(\\\&quot;%s\\\&quot;,CCF_CMD_LINE);\\n\&quot;);UserTaskCont;&quot;</span><span class=cF0>, name2);
+<a name="l332"></a>        res = </span><span class=cF5>PopUp</span><span class=cF0>(st, parent, _pu_task);
+<a name="l333"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l334"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l335"></a>    </span><span class=cF5>Free</span><span class=cF0>(name2);
+<a name="l336"></a>    </span><span class=cF5>Free</span><span class=cF0>(name);
+<a name="l337"></a>
+<a name="l338"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l339"></a>}
+<a name="l340"></a>
+<a name="l341"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpRunFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>I64</span><span class=cF0> ccf_flags=</span><span class=cFE>0</span><span class=cF0>, ...)
+<a name="l342"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.html#l711"><span class=cF4>ExeFile</span></a><span class=cF2>() with args using </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.html#l48"><span class=cF4>LastFun</span></a><span class=cF2>() in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l447"><span class=cF4>PopUp</span></a><span class=cF2> task.</span><span class=cF0>
+<a name="l343"></a>    </span><span class=cF1>U8</span><span class=cF0> *st, *name = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename), *name2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(name, </span><span class=cF6>&quot;CC&quot;</span><span class=cF0>);
+<a name="l344"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l345"></a>
+<a name="l346"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;$$WW+H,1$$\&quot;;ExeFile2(\&quot;%s\&quot;,0x%X);LastFun(0x%X,0x%X);&quot;</span><span class=cF0>, name2, ccf_flags, argc, argv);
+<a name="l347"></a>    res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l348"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l349"></a>    </span><span class=cF5>Free</span><span class=cF0>(name2);
+<a name="l350"></a>    </span><span class=cF5>Free</span><span class=cF0>(name);
+<a name="l351"></a>
+<a name="l352"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l353"></a>}
+</span></pre></body>
+</html>

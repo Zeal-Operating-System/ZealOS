@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Place this file in /Home and change</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//anything you want.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Cmd Line (Typically)&quot;</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF2>//These are customized quick commands.</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>//Feel free to add more or change.</span><span class=cF0>
+<a name="l8"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>F</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF1>U8</span><span class=cF0> *fu_flags = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l9"></a>{</span><span class=cF2>//Find text in all text files.</span><span class=cF0>
+<a name="l10"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Find</span><span class=cF0>(needle_str, </span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, fu_flags);
+<a name="l11"></a>}
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>R</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF1>U8</span><span class=cF0> *replace_text = </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags = </span><span class=cF6>&quot;+l-i&quot;</span><span class=cF0>)
+<a name="l14"></a>{</span><span class=cF2>//Find text and replace in all text files.</span><span class=cF0>
+<a name="l15"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Find</span><span class=cF0>(needle_str, </span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, fu_flags, replace_text);
+<a name="l16"></a>}
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FD</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF1>U8</span><span class=cF0> *fu_flags = </span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l19"></a>{</span><span class=cF2>//Find text in cur dir text files.</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Find</span><span class=cF0>(needle_str, </span><span class=cF6>&quot;*&quot;</span><span class=cF0>, fu_flags);
+<a name="l21"></a>}
+<a name="l22"></a>
+<a name="l23"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>RD</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF1>U8</span><span class=cF0> *replace_text = </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags = </span><span class=cF6>&quot;+l-i&quot;</span><span class=cF0>)
+<a name="l24"></a>{</span><span class=cF2>//Find text and replace in cur dir text files.</span><span class=cF0>
+<a name="l25"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Find</span><span class=cF0>(needle_str, </span><span class=cF6>&quot;*&quot;</span><span class=cF0>, fu_flags, replace_text);
+<a name="l26"></a>}
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Cls</span><span class=cF0>()
+<a name="l29"></a>{</span><span class=cF2>//Clear terminal. Reminiscent of DOS command of same name.</span><span class=cF0>
+<a name="l30"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l31"></a>}
+<a name="l32"></a>
+<a name="l33"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ZCls</span><span class=cF0>()
+<a name="l34"></a>{</span><span class=cF2>//Clear System terminal.</span><span class=cF0>
+<a name="l35"></a>    </span><span class=cF5>Sys</span><span class=cF0>(</span><span class=cF6>&quot;DocClear;\n&quot;</span><span class=cF0>);
+<a name="l36"></a>}</span></pre></body>
+</html>

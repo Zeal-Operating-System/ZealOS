@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>MODULE_SIZE</span><span class=cF0>         </span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>BLK_SIZE</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_HIGH_LOC_MHD</span><span class=cF0>   (</span><span class=cF7>(</span><span class=cF3>BOOT_RAM_LIMIT</span><span class=cF0> - (</span><span class=cF3>BOOT_STACK_SIZE</span><span class=cF0> + </span><span class=cF3>MODULE_SIZE</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>4</span><span class=cF0>)
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF5>DefinePrint</span><span class=cF0>(</span><span class=cF6>&quot;DD_BOOT_HIGH_LOC_MHD&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%08X&quot;</span><span class=cF0>, </span><span class=cF3>BOOT_HIGH_LOC_MHD</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0>);
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF1>asm</span><span class=cF0> {
+<a name="l7"></a></span><span class=cF1>USE16</span><span class=cF0>
+<a name="l8"></a></span><span class=cFD>BMHD_START</span><span class=cF0>::
+<a name="l9"></a></span><span class=cFD>BMHD_CODE</span><span class=cF0>::
+<a name="l10"></a>                </span><span class=cF1>CLD</span><span class=cF0>
+<a name="l11"></a>
+<a name="l12"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF3>BOOT_HIGH_LOC_MHD</span><span class=cF0>
+<a name="l13"></a>
+<a name="l14"></a>                </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l15"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>SS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>SP</span><span class=cF0>, </span><span class=cF3>BOOT_STACK_SIZE</span><span class=cF0> + </span><span class=cF3>MODULE_SIZE</span><span class=cF0>
+<a name="l17"></a>                </span><span class=cF1>STI</span><span class=cF0>
+<a name="l18"></a>
+<a name="l19"></a>                </span><span class=cF1>PUSHF</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>DS</span><span class=cF0>
+<a name="l21"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>ES</span><span class=cF0>
+<a name="l22"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>FS</span><span class=cF0>
+<a name="l23"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>GS</span><span class=cF0>
+<a name="l24"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>ECX</span><span class=cF0>
+<a name="l25"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>EBX</span><span class=cF0>
+<a name="l26"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>EDX</span><span class=cF0>
+<a name="l27"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>EBP</span><span class=cF0>
+<a name="l28"></a>
+<a name="l29"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>ES</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l30"></a>
+<a name="l31"></a>                </span><span class=cF1>CALL</span><span class=cF0>        BMHD_GET_RIP
+<a name="l32"></a>BMHD_GET_RIP:
+<a name="l33"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>BX</span><span class=cF0>
+<a name="l34"></a>                </span><span class=cF1>SUB</span><span class=cF0>         </span><span class=cFC>BX</span><span class=cF0>, BMHD_GET_RIP-</span><span class=cFD>BMHD_START</span><span class=cF0>
+<a name="l35"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>CX</span><span class=cF0>, </span><span class=cFC>BX</span><span class=cF0>
+<a name="l36"></a>                </span><span class=cF1>SHR</span><span class=cF0>         </span><span class=cFC>BX</span><span class=cF0>, </span><span class=cFE>4</span><span class=cF0>
+<a name="l37"></a></span><span class=cF2>//This copies this bootloader's code to 0x00096C00</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cFC>CS</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>AX</span><span class=cF0>
+<a name="l40"></a>                </span><span class=cF1>ADD</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cFC>BX</span><span class=cF0>
+<a name="l41"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l42"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U16</span><span class=cF0> [BMHD_OLD_CS_RIP     - </span><span class=cFD>BMHD_START</span><span class=cF0>], </span><span class=cFC>CX</span><span class=cF0>
+<a name="l43"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cF9>U16</span><span class=cF0> [BMHD_OLD_CS_RIP + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l44"></a>
+<a name="l45"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>CX</span><span class=cF0>, </span><span class=cF3>MODULE_SIZE</span><span class=cF0>
+<a name="l46"></a>                </span><span class=cF1>XOR</span><span class=cF0>         </span><span class=cFC>SI</span><span class=cF0>, </span><span class=cFC>SI</span><span class=cF0>
+<a name="l47"></a>                </span><span class=cF1>XOR</span><span class=cF0>         </span><span class=cFC>DI</span><span class=cF0>, </span><span class=cFC>DI</span><span class=cF0>
+<a name="l48"></a>                </span><span class=cF1>REP_MOVSB</span><span class=cF0>
+<a name="l49"></a>
+<a name="l50"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF3>BOOT_HIGH_LOC_MHD</span><span class=cF0>
+<a name="l51"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l52"></a>
+<a name="l53"></a></span><span class=cF2>//The assembler doesn't support 16-bit very well.</span><span class=cF0>
+<a name="l54"></a>                </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>0xEA</span><span class=cF0>;   </span><span class=cF2>//JMP BOOT_HIGH_LOC_MHD:BMHD_HISTART</span><span class=cF0>
+<a name="l55"></a>                </span><span class=cF1>DU16</span><span class=cF0>        BMHD_HISTART - </span><span class=cFD>BMHD_START</span><span class=cF0>, </span><span class=cF3>BOOT_HIGH_LOC_MHD</span><span class=cF0>;
+<a name="l56"></a>
+<a name="l57"></a>BMHD_BIOS_DRIVE_NUM:    </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>0</span><span class=cF0>;
+<a name="l58"></a>BMHD_OLD_CS_RIP:        </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
+<a name="l59"></a></span><span class=cF2>//Gets patched by </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l60"></a></span><span class=cFD>BMHD_BLK_COUNT</span><span class=cF0>::        </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>;
+<a name="l61"></a>
+<a name="l62"></a>BMHD_DAP:               </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//One blk at a time</span><span class=cF0>
+<a name="l63"></a>BMHD_DAP_BUF:           </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
+<a name="l64"></a></span><span class=cF2>//Gets patched by </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l65"></a></span><span class=cFD>BMHD_DAP_BLK</span><span class=cF0>::  </span><span class=cF2>//64-bit</span><span class=cF0>
+<a name="l66"></a>BMHD_DAP_BLK_LO:        </span><span class=cF1>DU32</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>;
+<a name="l67"></a>BMHD_DAP_BLK_HI:        </span><span class=cF1>DU32</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>;
+<a name="l68"></a>
+<a name="l69"></a>BMHD_HISTART:
+<a name="l70"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF1>U8</span><span class=cF0> [BMHD_BIOS_DRIVE_NUM - </span><span class=cFD>BMHD_START</span><span class=cF0>], </span><span class=cFC>DL</span><span class=cF0> </span><span class=cF2>//Passed in by BIOS</span><span class=cF0>
+<a name="l71"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>,  </span><span class=cF3>BOOT_RAM_BASE</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>
+<a name="l72"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>ES</span><span class=cF0>,  </span><span class=cFC>AX</span><span class=cF0>
+<a name="l73"></a>                </span><span class=cF1>XOR</span><span class=cF0>         </span><span class=cFC>ECX</span><span class=cF0>, </span><span class=cFC>ECX</span><span class=cF0>
+<a name="l74"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>CX</span><span class=cF0>,  </span><span class=cF9>U16</span><span class=cF0> [</span><span class=cFD>BMHD_BLK_COUNT</span><span class=cF0> - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l75"></a>
+<a name="l76"></a>@@05:           </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>CX</span><span class=cF0>          </span><span class=cF2>//Blk count</span><span class=cF0>
+<a name="l77"></a>
+<a name="l78"></a></span><span class=cF2>//READ BLK</span><span class=cF0>
+<a name="l79"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>ES</span><span class=cF0>          </span><span class=cF2>//Buf seg</span><span class=cF0>
+<a name="l80"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cFC>ES</span><span class=cF0>
+<a name="l81"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U16</span><span class=cF0> [BMHD_DAP_BUF + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFD>BMHD_START</span><span class=cF0>], </span><span class=cFC>AX</span><span class=cF0> </span><span class=cF2>//ES:0000</span><span class=cF0>
+<a name="l82"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>SI</span><span class=cF0>, BMHD_DAP - </span><span class=cFD>BMHD_START</span><span class=cF0> </span><span class=cF2>//DS:SI=DAP</span><span class=cF0>
+<a name="l83"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AH</span><span class=cF0>, </span><span class=cFE>0x42</span><span class=cF0>
+<a name="l84"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>DL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> [BMHD_BIOS_DRIVE_NUM - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l85"></a>                </span><span class=cF1>INT</span><span class=cF0>         </span><span class=cFE>0x13</span><span class=cF0>
+<a name="l86"></a>
+<a name="l87"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>          </span><span class=cF2>//ES</span><span class=cF0>
+<a name="l88"></a>                </span><span class=cF1>ADD</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>
+<a name="l89"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>ES</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l90"></a>                </span><span class=cF1>INC</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [BMHD_DAP_BLK_LO - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l91"></a>                </span><span class=cF1>JNZ</span><span class=cF0>         @@10
+<a name="l92"></a>                </span><span class=cF1>INC</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [BMHD_DAP_BLK_HI - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l93"></a>
+<a name="l94"></a>@@10:           </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>CX</span><span class=cF0>
+<a name="l95"></a>                </span><span class=cF1>LOOP</span><span class=cF0>        @@05
+<a name="l96"></a>
+<a name="l97"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>DL</span><span class=cF0>,  </span><span class=cF1>U8</span><span class=cF0>  [BMHD_BIOS_DRIVE_NUM - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l98"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>EBX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> [BMHD_OLD_CS_RIP     - </span><span class=cFD>BMHD_START</span><span class=cF0>]
+<a name="l99"></a></span><span class=cF2>//The assembler doesn't support 16-bit very well.</span><span class=cF0>
+<a name="l100"></a>                </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>0xEA</span><span class=cF0>;   </span><span class=cF2>//JMP BOOT_RAM_BASE:0000</span><span class=cF0>
+<a name="l101"></a>                </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BOOT_RAM_BASE</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>;
+<a name="l102"></a></span><span class=cF2>//Continues here </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHD2.html#l8"><span class=cF4>BMHD2_START</span></a><span class=cF0>
+<a name="l103"></a></span><span class=cFD>BMHD_END</span><span class=cF0>::
+<a name="l104"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cFD>BMHD_END</span><span class=cF0>-</span><span class=cFD>BMHD_START</span><span class=cF0> &lt;= </span><span class=cFE>440</span><span class=cF0>
+<a name="l105"></a>}
+</span></pre></body>
+</html>

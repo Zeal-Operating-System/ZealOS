@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> ROAD_NUM        </span><span class=cFE>512</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> ROAD_WIDTH_BY_2 </span><span class=cFE>200</span><span class=cF0>
+<a name="l3"></a>#</span><span class=cF1>define</span><span class=cF0> CAR_WIDTH_BY_2  </span><span class=cFE>100</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF9>I64</span><span class=cF0>  road_x[ROAD_NUM], road_trend;
+<a name="l6"></a></span><span class=cF1>F64</span><span class=cF0>  speed, distance;
+<a name="l7"></a></span><span class=cF9>I64</span><span class=cF0>  road_ptr = </span><span class=cFE>0</span><span class=cF0>, car_x;
+<a name="l8"></a></span><span class=cF1>F64</span><span class=cF0>  t_last;
+<a name="l9"></a></span><span class=cF1>Bool</span><span class=cF0> crash;
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l12"></a>{
+<a name="l13"></a>    </span><span class=cF9>I64</span><span class=cF0> w = task-&gt;pix_width, h = task-&gt;pix_height;
+<a name="l14"></a>    </span><span class=cF9>I64</span><span class=cF0> i, x, y, xx;
+<a name="l15"></a>
+<a name="l16"></a>    xx = w &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - car_x + road_x[road_ptr &amp; (ROAD_NUM - </span><span class=cFE>1</span><span class=cF0>)];
+<a name="l17"></a>
+<a name="l18"></a>    dc-&gt;color = </span><span class=cF3>LTGRAY</span><span class=cF0>;
+<a name="l19"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; ROAD_NUM; i++)
+<a name="l20"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l21"></a>        x = w &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - car_x + road_x[(i + road_ptr) &amp; (ROAD_NUM - </span><span class=cFE>1</span><span class=cF0>)];
+<a name="l22"></a>        y = h - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>5</span><span class=cF0> * i;
+<a name="l23"></a>        </span><span class=cF1>if</span><span class=cF0> (y &lt; </span><span class=cF7>(</span><span class=cF0>h + </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l24"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l25"></a>        </span><span class=cF5>GrPlot</span><span class=cF0>(dc, x + ROAD_WIDTH_BY_2 - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>4</span><span class=cF0> * i, y);
+<a name="l26"></a>        </span><span class=cF5>GrPlot</span><span class=cF0>(dc, x - ROAD_WIDTH_BY_2 + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>4</span><span class=cF0> * i, y);
+<a name="l27"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l28"></a>    dc-&gt;color = </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l29"></a>
+<a name="l30"></a>    x = w &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - CAR_WIDTH_BY_2;
+<a name="l31"></a>    </span><span class=cF1>if</span><span class=cF0> (x &lt; xx - ROAD_WIDTH_BY_2)
+<a name="l32"></a>        crash = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc, x - </span><span class=cFE>10</span><span class=cF0>, h, x - </span><span class=cFE>40</span><span class=cF0>, h - </span><span class=cFE>100</span><span class=cF0>);
+<a name="l34"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc, x + </span><span class=cFE>10</span><span class=cF0>, h, x + </span><span class=cFE>40</span><span class=cF0>, h - </span><span class=cFE>100</span><span class=cF0>);
+<a name="l35"></a>
+<a name="l36"></a>    x = w &gt;&gt; </span><span class=cFE>1</span><span class=cF0> + CAR_WIDTH_BY_2;
+<a name="l37"></a>    </span><span class=cF1>if</span><span class=cF0> (x &gt; xx + ROAD_WIDTH_BY_2)
+<a name="l38"></a>        crash = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l39"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc, x - </span><span class=cFE>10</span><span class=cF0>, h, x - </span><span class=cFE>40</span><span class=cF0>, h - </span><span class=cFE>100</span><span class=cF0>);
+<a name="l40"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc, x + </span><span class=cFE>10</span><span class=cF0>, h, x + </span><span class=cFE>40</span><span class=cF0>, h - </span><span class=cFE>100</span><span class=cF0>);
+<a name="l41"></a>
+<a name="l42"></a>    dc-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l43"></a>    </span><span class=cF1>if</span><span class=cF0> (crash)
+<a name="l44"></a>        </span><span class=cF5>GrPrint</span><span class=cF0>(dc, w &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - </span><span class=cF3>FONT_WIDTH</span><span class=cF0> * </span><span class=cFE>4</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>h - </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Game Over&quot;</span><span class=cF0>);
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a></span><span class=cF1>U0</span><span class=cF0> UpdateRoad()
+<a name="l48"></a>{
+<a name="l49"></a>    </span><span class=cF1>F64</span><span class=cF0> t0 = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l50"></a>
+<a name="l51"></a>    distance += speed * (t0 - t_last);
+<a name="l52"></a>    t_last = t0;
+<a name="l53"></a>    </span><span class=cF1>while</span><span class=cF0> (distance &gt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l54"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l55"></a>        road_trend = </span><span class=cF5>ClampI64</span><span class=cF0>(road_trend + </span><span class=cF5>SignI64</span><span class=cF7>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l56"></a>        road_x[road_ptr &amp; (ROAD_NUM - </span><span class=cFE>1</span><span class=cF0>)] = road_x[(road_ptr - </span><span class=cFE>1</span><span class=cF0>) &amp; (ROAD_NUM - </span><span class=cFE>1</span><span class=cF0>)] += road_trend / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l57"></a>        road_ptr++;
+<a name="l58"></a>        distance -= </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l59"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l60"></a>}
+<a name="l61"></a>
+<a name="l62"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l63"></a>{
+<a name="l64"></a>    </span><span class=cF9>I64</span><span class=cF0> i, x = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l65"></a>
+<a name="l66"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l67"></a>    </span><span class=cF6>&quot;$BG,DKGRAY$%h*c&quot;</span><span class=cF0>, (</span><span class=cF3>TEXT_ROWS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l68"></a>    speed = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l69"></a>    distance = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l70"></a>    road_trend = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l71"></a>    road_ptr = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l72"></a>    car_x = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l73"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; ROAD_NUM; i++)
+<a name="l74"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l75"></a>        road_x[i] = x;
+<a name="l76"></a>        road_trend = </span><span class=cF5>ClampI64</span><span class=cF0>(road_trend + </span><span class=cF5>SignI64</span><span class=cF7>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l77"></a>        x += road_trend / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l78"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l79"></a>    t_last = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l80"></a>    crash = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l81"></a>}
+<a name="l82"></a>
+<a name="l83"></a></span><span class=cF1>U0</span><span class=cF0> Halogen()
+<a name="l84"></a>{
+<a name="l85"></a>    </span><span class=cF9>I64</span><span class=cF0> arg1, arg2, ch=</span><span class=cFE>0</span><span class=cF0>, sc=</span><span class=cFE>0</span><span class=cF0>;
+<a name="l86"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l87"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;text_attr = </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l88"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l89"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l90"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l91"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l92"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l93"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l94"></a>                </span><span class=cF6>&quot;  Accelerate(,,SC_CURSOR_UP);&quot;</span><span class=cF0>
+<a name="l95"></a>                </span><span class=cF6>&quot;  Deccellerate(,,SC_CURSOR_DOWN);&quot;</span><span class=cF0>
+<a name="l96"></a>                </span><span class=cF6>&quot;  Left(,,SC_CURSOR_LEFT);&quot;</span><span class=cF0>
+<a name="l97"></a>                </span><span class=cF6>&quot;  Right(,,SC_CURSOR_RIGHT);&quot;</span><span class=cF0>
+<a name="l98"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l99"></a>                );
+<a name="l100"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l101"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l102"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l103"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l104"></a>    Init;
+<a name="l105"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l106"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l107"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l108"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l109"></a>        {
+<a name="l110"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF7>)</span><span class=cF0>)
+<a name="l111"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l112"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l113"></a>                    ch = arg1;
+<a name="l114"></a>                    sc = arg2;
+<a name="l115"></a>                    </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l116"></a>                    {
+<a name="l117"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l118"></a>                            Init;
+<a name="l119"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l120"></a>
+<a name="l121"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l122"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l123"></a>                            </span><span class=cF1>goto</span><span class=cF0> ha_done;
+<a name="l124"></a>                    }
+<a name="l125"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l126"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>:
+<a name="l127"></a>                    ch = arg1;
+<a name="l128"></a>                    sc = arg2;
+<a name="l129"></a>                    </span><span class=cF1>if</span><span class=cF0> (!ch)
+<a name="l130"></a>                        </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l131"></a>                        {
+<a name="l132"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l133"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l134"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l135"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l136"></a>                                sc = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l137"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l138"></a>                        }
+<a name="l139"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l140"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l141"></a>            </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l142"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l143"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l144"></a>                    car_x++;
+<a name="l145"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l146"></a>
+<a name="l147"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l148"></a>                    car_x--;
+<a name="l149"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l150"></a>
+<a name="l151"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l152"></a>                    </span><span class=cF1>if</span><span class=cF0> (++speed &gt; </span><span class=cFE>200</span><span class=cF0>)
+<a name="l153"></a>                        speed = </span><span class=cFE>200</span><span class=cF0>;
+<a name="l154"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l155"></a>
+<a name="l156"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l157"></a>                    </span><span class=cF1>if</span><span class=cF0> (--speed &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l158"></a>                        speed = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l159"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l160"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l161"></a>            </span><span class=cF1>if</span><span class=cF0> (crash)
+<a name="l162"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l163"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l164"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l165"></a>                </span><span class=cF1>if</span><span class=cF0> (speed)
+<a name="l166"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cF5>Freq2Ona</span><span class=cF7>(</span><span class=cF0>speed + </span><span class=cFE>10</span><span class=cF7>)</span><span class=cF0>);
+<a name="l167"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l168"></a>                    </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l169"></a>                UpdateRoad;
+<a name="l170"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l171"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>);
+<a name="l172"></a>        }
+<a name="l173"></a>ha_done:
+<a name="l174"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l175"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l176"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l177"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l178"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l179"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l180"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l181"></a>}
+<a name="l182"></a>
+<a name="l183"></a>Halogen;
+</span></pre></body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*ZealOS has a feature that allows access to bytes and words of larger ints.</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l93"><span class=cF4>U64i union</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2> </span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>The versions with &quot;i&quot; are internal data types. Use &quot;I64&quot; instead of &quot;U64i&quot; and you will have access to subbytes and subwords.</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cF2>Unfortunately, byte access causes the compiler to not use a reg for the variable.</span><span class=cF0>
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>::/Demo/Lectures/FixedPoint.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l10"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l11"></a>
+<a name="l12"></a></span><span class=cF9>I64</span><span class=cF0> q = </span><span class=cFE>0xFEDCBA9876543210</span><span class=cF0>, q1;
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF6>&quot;q\t\t\t\t=%016X\n&quot;</span><span class=cF0>, q;
+<a name="l15"></a>q1 = q.i16[</span><span class=cFE>2</span><span class=cF0>];
+<a name="l16"></a></span><span class=cF6>&quot;q.i16[2]\t\t=%016X\n&quot;</span><span class=cF0>, q1;
+<a name="l17"></a>q1 = q.u8[</span><span class=cFE>5</span><span class=cF0>];
+<a name="l18"></a></span><span class=cF6>&quot;q.u8[5]\t\t\t=%016X\n&quot;</span><span class=cF0>, q1;
+<a name="l19"></a>q1 = q.i32[</span><span class=cFE>1</span><span class=cF0>].u8[</span><span class=cFE>2</span><span class=cF0>];
+<a name="l20"></a></span><span class=cF6>&quot;q.i32[1].u8[2]\t=%016X\n&quot;</span><span class=cF0>, q1;
+<a name="l21"></a>q1 = q.i32[</span><span class=cFE>0</span><span class=cF0>].i8[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l22"></a></span><span class=cF6>&quot;q.i32[0].i8[1]\t=%016X\n&quot;</span><span class=cF0>, q1;
+</span></pre></body>
+</html>

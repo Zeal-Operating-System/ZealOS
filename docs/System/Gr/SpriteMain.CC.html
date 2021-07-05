@@ -1,0 +1,1501 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Sprite;Sprites&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SPT_MENU</span><span class=cF0>                            -</span><span class=cFE>2</span><span class=cF0>
+<a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SPT_INS_SCREEN_BITMAP</span><span class=cF0>               -</span><span class=cFE>3</span><span class=cF0>
+<a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SPT_INS_TRANSPARENT_SCREEN_BITMAP</span><span class=cF0>   -</span><span class=cFE>4</span><span class=cF0>
+<a name="l6"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SPT_ED_MENU</span><span class=cF0>                         -</span><span class=cFE>5</span><span class=cF0>
+<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>SPT_EXIT</span><span class=cF0>                            -</span><span class=cFE>6</span><span class=cF0>
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUpSpriteMain</span><span class=cF0>(</span><span class=cF9>CSprite</span><span class=cF0> **_head, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num, </span><span class=cF9>CDoc</span><span class=cF0> *_doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *_doc_e)
+<a name="l10"></a>{
+<a name="l11"></a>    </span><span class=cF9>CTask</span><span class=cF0>       *pu_task;
+<a name="l12"></a>    </span><span class=cF9>I64</span><span class=cF0>          res;
+<a name="l13"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_de;
+<a name="l15"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
+<a name="l16"></a>
+<a name="l17"></a>    doc_de = </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l18"></a>                </span><span class=cF6>&quot;$PURPLE$$TX+CX,\&quot;Sprite Main Menu\&quot;$\n&quot;</span><span class=cF0>
+<a name="l19"></a>                </span><span class=cF6>&quot;$LK+PU+CX,\&quot;Click for Help\&quot;,A=\&quot;FI:::/Doc/SpriteMain.DD\&quot;$\n&quot;</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF6>&quot;\n$LTBLUE$$DA+M,A=\&quot;Tag Text:%%s\&quot;$\n\n&quot;</span><span class=cF0>);
+<a name="l21"></a>    doc_de-&gt;data = </span><span class=cF5>StrNew</span><span class=cF0>(_doc_e-&gt;tag, doc-&gt;mem_task);
+<a name="l22"></a>    </span><span class=cF5>DocDataFormat</span><span class=cF0>(doc,doc_de);
+<a name="l23"></a>
+<a name="l24"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc,
+<a name="l25"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Color (4-bit)\&quot;,LE=SPT_COLOR$\n&quot;</span><span class=cF0>
+<a name="l26"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Dither Color (4-bit)\&quot;,LE=SPT_DITHER_COLOR$\n&quot;</span><span class=cF0>
+<a name="l27"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Thick\&quot;,LE=SPT_THICK$\n&quot;</span><span class=cF0>
+<a name="l28"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Planar Symmetry\&quot;,LE=SPT_PLANAR_SYMMETRY$\n&quot;</span><span class=cF0>
+<a name="l29"></a>                </span><span class=cF6>&quot;\n$MU-UL,\&quot;Point\&quot;,LE=SPT_PT$\n&quot;</span><span class=cF0>
+<a name="l30"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Line\&quot;,LE=SPT_LINE$\n&quot;</span><span class=cF0>
+<a name="l31"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Arrow\&quot;,LE=SPT_ARROW$\n&quot;</span><span class=cF0>
+<a name="l32"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Rect\&quot;,LE=SPT_RECT$\n&quot;</span><span class=cF0>
+<a name="l33"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Circle\&quot;,LE=SPT_CIRCLE$\n&quot;</span><span class=cF0>
+<a name="l34"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Ellipse\&quot;,LE=SPT_ELLIPSE$\n&quot;</span><span class=cF0>
+<a name="l35"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Polygon\&quot;,LE=SPT_POLYGON$\n&quot;</span><span class=cF0>
+<a name="l36"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Text\&quot;,LE=SPT_TEXT$\n&quot;</span><span class=cF0>
+<a name="l37"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Text Box\&quot;,LE=SPT_TEXT_BOX$\n&quot;</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Text Diamond\&quot;,LE=SPT_TEXT_DIAMOND$\n&quot;</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Flood Fill\&quot;,LE=SPT_FLOOD_FILL$\n&quot;</span><span class=cF0>
+<a name="l40"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Flood Fill Not Color\&quot;,LE=SPT_FLOOD_FILL_NOT$\n&quot;</span><span class=cF0>
+<a name="l41"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;PolyLine\&quot;,LE=SPT_POLYLINE$\n&quot;</span><span class=cF0>
+<a name="l42"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;PolyPoint\&quot;,LE=SPT_POLYPT$\n&quot;</span><span class=cF0>
+<a name="l43"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;BSpline2\&quot;,LE=SPT_BSPLINE2$\n&quot;</span><span class=cF0>
+<a name="l44"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;BSpline3\&quot;,LE=SPT_BSPLINE3$\n&quot;</span><span class=cF0>
+<a name="l45"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;BSpline2 Closed\&quot;,LE=SPT_BSPLINE2_CLOSED$\n&quot;</span><span class=cF0>
+<a name="l46"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;BSpline3 Closed\&quot;,LE=SPT_BSPLINE3_CLOSED$\n&quot;</span><span class=cF0>
+<a name="l47"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Insert Screen-Captured BitMap\&quot;,LE=SPT_INS_SCREEN_BITMAP$\n&quot;</span><span class=cF0>
+<a name="l48"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Insert Transparent Screen-Captured BitMap\&quot;,&quot;</span><span class=cF0>
+<a name="l49"></a>                </span><span class=cF6>&quot;LE=SPT_INS_TRANSPARENT_SCREEN_BITMAP$\n&quot;</span><span class=cF0>
+<a name="l50"></a>                </span><span class=cF6>&quot;$PURPLE$$MU-UL,\&quot;+] Create or Edit 3D Mesh\&quot;,LE=SPT_MESH$\n&quot;</span><span class=cF0>
+<a name="l51"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;+] Create or Edit Shiftable 3D Mesh\&quot;,&quot;</span><span class=cF0>
+<a name="l52"></a>                </span><span class=cF6>&quot;LE=SPT_SHIFTABLE_MESH$\n&quot;</span><span class=cF0>
+<a name="l53"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;+] Convert to BitMap or Edit BitMap\&quot;,&quot;</span><span class=cF0>
+<a name="l54"></a>                </span><span class=cF6>&quot;LE=SPT_BITMAP$$LTBLUE$\n&quot;</span><span class=cF0>
+<a name="l55"></a>                </span><span class=cF6>&quot;\n$MU-UL,\&quot;Transform On  (for use with 3D icons)\&quot;,&quot;</span><span class=cF0>
+<a name="l56"></a>                </span><span class=cF6>&quot;LE=SPT_TRANSFORM_ON$\n&quot;</span><span class=cF0>
+<a name="l57"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Transform Off (for use with 3D icons)\&quot;,&quot;</span><span class=cF0>
+<a name="l58"></a>                </span><span class=cF6>&quot;LE=SPT_TRANSFORM_OFF$\n&quot;</span><span class=cF0>
+<a name="l59"></a>                </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l60"></a>                </span><span class=cF6>&quot;$PURPLE$$MU-UL,\&quot;+] Sprite Edit Menu\&quot;,LE=SPT_ED_MENU$$LTBLUE$\n&quot;</span><span class=cF0>
+<a name="l61"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Exit  Sprite\&quot;,LE=SPT_EXIT$\n&quot;</span><span class=cF0>
+<a name="l62"></a>                </span><span class=cF6>&quot;$MU-UL,\&quot;Abort Sprite\&quot;,LE=DOCM_CANCEL$\n&quot;</span><span class=cF0>
+<a name="l63"></a>                </span><span class=cF6>&quot;\nRight-Click to get back to this menu.&quot;</span><span class=cF0>);
+<a name="l64"></a>
+<a name="l65"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;SpriteSideBarTask(0x%X,0x%X,0x%X);&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>, _head, _cur_elem_num);
+<a name="l66"></a>    </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF3>NULL</span><span class=cF0>, &amp;pu_task);
+<a name="l67"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l68"></a>    res = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l69"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>pu_task</span><span class=cF7>)</span><span class=cF0>)
+<a name="l70"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l71"></a>        *_head = </span><span class=cF5>SpriteSideBar2SpriteQueue</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF7>(</span><span class=cF0>pu_task</span><span class=cF7>)</span><span class=cF0>, *_head, _cur_elem_num);
+<a name="l72"></a>        </span><span class=cF5>Kill</span><span class=cF0>(pu_task);
+<a name="l73"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l74"></a>    </span><span class=cF5>Free</span><span class=cF0>(_doc_e-&gt;tag);
+<a name="l75"></a>    _doc_e-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(doc_de-&gt;data, _doc-&gt;mem_task);
+<a name="l76"></a>    _doc-&gt;cur_col = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l77"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l78"></a>
+<a name="l79"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l80"></a>}
+<a name="l81"></a>
+<a name="l82"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpExtents</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *_x1, </span><span class=cF9>I64</span><span class=cF0> *_x2, </span><span class=cF9>I64</span><span class=cF0> *_y1, </span><span class=cF9>I64</span><span class=cF0> *_y2)
+<a name="l83"></a>{
+<a name="l84"></a>    </span><span class=cF9>I64</span><span class=cF0>          res;
+<a name="l85"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l86"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e;
+<a name="l87"></a>
+<a name="l88"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;  $DA,A=\&quot;x1:%%d\&quot;$\n&quot;</span><span class=cF0>);
+<a name="l89"></a>    doc_e-&gt;data = _x1;
+<a name="l90"></a>    </span><span class=cF5>DocDataFormat</span><span class=cF0>(doc, doc_e);
+<a name="l91"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;  $DA,A=\&quot;x2:%%d\&quot;$\n&quot;</span><span class=cF0>);
+<a name="l92"></a>    doc_e-&gt;data = _x2;
+<a name="l93"></a>    </span><span class=cF5>DocDataFormat</span><span class=cF0>(doc, doc_e);
+<a name="l94"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;  $DA,A=\&quot;y1:%%d\&quot;$\n&quot;</span><span class=cF0>);
+<a name="l95"></a>    doc_e-&gt;data = _y1;
+<a name="l96"></a>    </span><span class=cF5>DocDataFormat</span><span class=cF0>(doc, doc_e);
+<a name="l97"></a>    doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;  $DA,A=\&quot;y2:%%d\&quot;$\n\n&quot;</span><span class=cF0>);
+<a name="l98"></a>    doc_e-&gt;data = _y2;
+<a name="l99"></a>    </span><span class=cF5>DocDataFormat</span><span class=cF0>(doc, doc_e);
+<a name="l100"></a>
+<a name="l101"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot; $BT,\&quot;Use These Extents\&quot;,LE=TRUE$&quot;</span><span class=cF0>);
+<a name="l102"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$CM,3,0$$BT,\&quot;Drag-Out New Extents\&quot;,LE=FALSE$\n\n&quot;</span><span class=cF0>);
+<a name="l103"></a>
+<a name="l104"></a>    </span><span class=cF1>do</span><span class=cF0> res = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc);
+<a name="l105"></a>    </span><span class=cF1>while</span><span class=cF0> (res != </span><span class=cF3>FALSE</span><span class=cF0> &amp;&amp; res != </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l106"></a>
+<a name="l107"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l108"></a>
+<a name="l109"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l110"></a>}
+<a name="l111"></a>
+<a name="l112"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0>)
+<a name="l113"></a>{ </span><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF9>I64</span><span class=cF0>             xx, yy, old_pen_width = dc-&gt;thick;
+<a name="l115"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>    old_color = dc-&gt;color;
+<a name="l116"></a>
+<a name="l117"></a>    </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l118"></a>    </span><span class=cF5>DCFill</span><span class=cF0>(dc);
+<a name="l119"></a>    </span><span class=cF1>if</span><span class=cF0> (dc-&gt;flags &amp; </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>)
+<a name="l120"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l121"></a>        dc-&gt;flags &amp;= ~</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l122"></a>        dc-&gt;thick = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l123"></a>        xx = dc-&gt;sym.sny  * </span><span class=cFE>8192</span><span class=cF0>;
+<a name="l124"></a>        yy = -dc-&gt;sym.snx * </span><span class=cFE>8192</span><span class=cF0>;
+<a name="l125"></a>        dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l126"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc,
+<a name="l127"></a>                dc-&gt;sym.sx - xx.i32[</span><span class=cFE>1</span><span class=cF0>], dc-&gt;sym.sy - yy.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, dc-&gt;sym.sx + xx.i32[</span><span class=cFE>1</span><span class=cF0>], dc-&gt;sym.sy + yy.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l128"></a>        dc-&gt;color = </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l129"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc,
+<a name="l130"></a>                dc-&gt;sym.sx - xx.i32[</span><span class=cFE>1</span><span class=cF0>], dc-&gt;sym.sy - yy.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, dc-&gt;sym.sx + xx.i32[</span><span class=cFE>1</span><span class=cF0>], dc-&gt;sym.sy + yy.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l131"></a>        dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l132"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc,
+<a name="l133"></a>                dc-&gt;sym.sx - xx.i32[</span><span class=cFE>1</span><span class=cF0>], dc-&gt;sym.sy - yy.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, dc-&gt;sym.sx + xx.i32[</span><span class=cFE>1</span><span class=cF0>], dc-&gt;sym.sy + yy.i32[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l134"></a>        dc-&gt;flags |= </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l135"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l136"></a>    dc-&gt;color = old_color;
+<a name="l137"></a>    dc-&gt;thick = old_pen_width;
+<a name="l138"></a>}
+<a name="l139"></a>
+<a name="l140"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMLine</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc,</span><span class=cF9>I64</span><span class=cF0> x,</span><span class=cF9>I64</span><span class=cF0> y,</span><span class=cF9>I64</span><span class=cF0> arg1,</span><span class=cF9>I64</span><span class=cF0> arg2,</span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l141"></a>{
+<a name="l142"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2;
+<a name="l143"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l144"></a>
+<a name="l145"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l146"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l147"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l148"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l149"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l150"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l151"></a>        x2 = arg1;
+<a name="l152"></a>        y2 = arg2;
+<a name="l153"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l154"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l155"></a>
+<a name="l156"></a>    dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l157"></a>    </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l158"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_LINE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l159"></a>    res-&gt;type = </span><span class=cF3>SPT_LINE</span><span class=cF0>;
+<a name="l160"></a>    res-&gt;pp.x1 = x1 - x;
+<a name="l161"></a>    res-&gt;pp.y1 = y1 - y;
+<a name="l162"></a>    res-&gt;pp.x2 = x2 - x;
+<a name="l163"></a>    res-&gt;pp.y2 = y2 - y;
+<a name="l164"></a>
+<a name="l165"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l166"></a>}
+<a name="l167"></a>
+<a name="l168"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMArrow</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l169"></a>{
+<a name="l170"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2;
+<a name="l171"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l172"></a>
+<a name="l173"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l174"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l175"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l176"></a>        </span><span class=cF5>GrArrow3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l177"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l178"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l179"></a>        x2 = arg1;
+<a name="l180"></a>        y2 = arg2;
+<a name="l181"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l182"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l183"></a>
+<a name="l184"></a>    dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l185"></a>    </span><span class=cF5>GrArrow3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l186"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_ARROW</span><span class=cF7>)</span><span class=cF0>);
+<a name="l187"></a>    res-&gt;type = </span><span class=cF3>SPT_ARROW</span><span class=cF0>;
+<a name="l188"></a>    res-&gt;pp.x1 = x1 - x;
+<a name="l189"></a>    res-&gt;pp.y1 = y1 - y;
+<a name="l190"></a>    res-&gt;pp.x2 = x2 - x;
+<a name="l191"></a>    res-&gt;pp.y2 = y2 - y;
+<a name="l192"></a>
+<a name="l193"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l194"></a>}
+<a name="l195"></a>
+<a name="l196"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMPlanarSymmetry</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2)
+<a name="l197"></a>{
+<a name="l198"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2, old_width, old_flags;
+<a name="l199"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l200"></a>
+<a name="l201"></a>    old_width = dc-&gt;thick;
+<a name="l202"></a>    old_flags = dc-&gt;flags;
+<a name="l203"></a>    dc-&gt;flags &amp;= ~</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l204"></a>    dc-&gt;thick = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l205"></a>
+<a name="l206"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l207"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l208"></a>        dc-&gt;color = </span><span class=cF3>ROPF_DITHER</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l209"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l210"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l211"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l212"></a>        x2 = arg1;
+<a name="l213"></a>        y2 = arg2;
+<a name="l214"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l215"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l216"></a>
+<a name="l217"></a>    dc-&gt;flags = old_flags &amp; </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | dc-&gt;flags &amp; ~</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>;
+<a name="l218"></a>    dc-&gt;thick = old_width;
+<a name="l219"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF7>)</span><span class=cF0>);
+<a name="l220"></a>    res-&gt;type = </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>;
+<a name="l221"></a>    res-&gt;pp.x1 = x1 - x;
+<a name="l222"></a>    res-&gt;pp.y1 = y1 - y;
+<a name="l223"></a>    res-&gt;pp.x2 = x2 - x;
+<a name="l224"></a>    res-&gt;pp.y2 = y2 - y;
+<a name="l225"></a>
+<a name="l226"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l227"></a>}
+<a name="l228"></a>
+<a name="l229"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMRect</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l230"></a>{
+<a name="l231"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2, xx1 = arg1, yy1 = arg2, xx2 = arg1, yy2 = arg2;
+<a name="l232"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l233"></a>
+<a name="l234"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l235"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l236"></a>        dc-&gt;color = color&amp;</span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l237"></a>        </span><span class=cF5>GrRect3</span><span class=cF0>(dc, xx1, yy1, </span><span class=cFE>0</span><span class=cF0>, xx2 - xx1, yy2 - yy1);
+<a name="l238"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l239"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l240"></a>        x2 = arg1;
+<a name="l241"></a>        y2 = arg2;
+<a name="l242"></a>        </span><span class=cF1>if</span><span class=cF0> (x2 &lt; x1)
+<a name="l243"></a>        {
+<a name="l244"></a>            xx1 = x2;
+<a name="l245"></a>            xx2 = x1;
+<a name="l246"></a>        }
+<a name="l247"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l248"></a>        {
+<a name="l249"></a>            xx1 = x1;
+<a name="l250"></a>            xx2 = x2;
+<a name="l251"></a>        }
+<a name="l252"></a>        </span><span class=cF1>if</span><span class=cF0> (y2 &lt; y1)
+<a name="l253"></a>        {
+<a name="l254"></a>            yy1 = y2;
+<a name="l255"></a>            yy2 = y1;
+<a name="l256"></a>        }
+<a name="l257"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l258"></a>        {
+<a name="l259"></a>            yy1 = y1;
+<a name="l260"></a>            yy2 = y2;
+<a name="l261"></a>        }
+<a name="l262"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l263"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l264"></a>
+<a name="l265"></a>    dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l266"></a>    </span><span class=cF5>GrRect3</span><span class=cF0>(dc, xx1, yy1, </span><span class=cFE>0</span><span class=cF0>, xx2 - xx1, yy2 - yy1);
+<a name="l267"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_RECT</span><span class=cF7>)</span><span class=cF0>);
+<a name="l268"></a>    res-&gt;type = </span><span class=cF3>SPT_RECT</span><span class=cF0>;
+<a name="l269"></a>    res-&gt;pp.x1 = xx1 - x;
+<a name="l270"></a>    res-&gt;pp.y1 = yy1 - y;
+<a name="l271"></a>    res-&gt;pp.x2 = xx2 - x;
+<a name="l272"></a>    res-&gt;pp.y2 = yy2 - y;
+<a name="l273"></a>
+<a name="l274"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l275"></a>}
+<a name="l276"></a>
+<a name="l277"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMScreenBitMap</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> eletype, </span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>CDC</span><span class=cF0> *dc2, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> bm_bkcolor)
+<a name="l278"></a>{
+<a name="l279"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, message_code,
+<a name="l280"></a>             x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2, xx1 = arg1, yy1 = arg2, xx2 = arg1, yy2 = arg2, old_width;
+<a name="l281"></a>    </span><span class=cF9>CDC</span><span class=cF0>     *dc3, *img;
+<a name="l282"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l283"></a>
+<a name="l284"></a>    old_width = dc2-&gt;thick;
+<a name="l285"></a>    dc2-&gt;thick = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l286"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l287"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l288"></a>        dc2-&gt;color = </span><span class=cF3>ROPF_DITHER</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l289"></a>        </span><span class=cF5>GrBorder</span><span class=cF0>(dc2,
+<a name="l290"></a>                 xx1 + </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x,
+<a name="l291"></a>                 yy1 + </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y,
+<a name="l292"></a>                 xx2 + </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x,
+<a name="l293"></a>                 yy2 + </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y);
+<a name="l294"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l295"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l296"></a>        x2 = arg1;
+<a name="l297"></a>        y2 = arg2;
+<a name="l298"></a>        </span><span class=cF1>if</span><span class=cF0> (x2 &lt; x1)
+<a name="l299"></a>        {
+<a name="l300"></a>            xx1 = x2;
+<a name="l301"></a>            xx2 = x1;
+<a name="l302"></a>        }
+<a name="l303"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l304"></a>        {
+<a name="l305"></a>            xx1 = x1;
+<a name="l306"></a>            xx2 = x2;
+<a name="l307"></a>        }
+<a name="l308"></a>        </span><span class=cF1>if</span><span class=cF0> (y2 &lt; y1)
+<a name="l309"></a>        {
+<a name="l310"></a>            yy1 = y2;
+<a name="l311"></a>            yy2 = y1;
+<a name="l312"></a>        }
+<a name="l313"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l314"></a>        {
+<a name="l315"></a>            yy1 = y1;
+<a name="l316"></a>            yy2 = y2;
+<a name="l317"></a>        }
+<a name="l318"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l319"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l320"></a>
+<a name="l321"></a>    xx2++;
+<a name="l322"></a>    yy2++;
+<a name="l323"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_BITMAP</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF7>(</span><span class=cF0>(xx2 - xx1 + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>yy2 - yy1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l324"></a>    res-&gt;type = </span><span class=cF3>SPT_BITMAP</span><span class=cF0>;
+<a name="l325"></a>    res-&gt;pwhu.width  = xx2 - xx1;
+<a name="l326"></a>    res-&gt;pwhu.height = yy2 - yy1;
+<a name="l327"></a>    res-&gt;pwhu.x1     = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l328"></a>    res-&gt;pwhu.y1     = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l329"></a>    </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l330"></a>    i = </span><span class=cFB>gr</span><span class=cF0>.screen_zoom;
+<a name="l331"></a>    </span><span class=cF5>GrScaleZoom</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> / i);
+<a name="l332"></a>    </span><span class=cF5>Refresh</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l333"></a>
+<a name="l334"></a>    dc3 = </span><span class=cF5>DCScreenCapture</span><span class=cF0>;
+<a name="l335"></a>    img = </span><span class=cF5>DCExt</span><span class=cF0>(dc3,
+<a name="l336"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x + xx1,
+<a name="l337"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y + yy1,
+<a name="l338"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x + xx2 - </span><span class=cFE>1</span><span class=cF0>,
+<a name="l339"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top  + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y + yy2 - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l340"></a>    </span><span class=cF1>if</span><span class=cF0> (eletype == </span><span class=cF3>SPT_INS_TRANSPARENT_SCREEN_BITMAP</span><span class=cF0>)
+<a name="l341"></a>        </span><span class=cF5>DCColorChange</span><span class=cF0>(img, bm_bkcolor);
+<a name="l342"></a>    </span><span class=cF5>GrScaleZoom</span><span class=cF0>(i);
+<a name="l343"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;res-&gt;pwhu.u, img-&gt;body, </span><span class=cF7>(</span><span class=cF0>(xx2 - xx1 + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>yy2 - yy1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l344"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(img);
+<a name="l345"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc3);
+<a name="l346"></a>    dc2-&gt;thick = old_width;
+<a name="l347"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0>;
+<a name="l348"></a>
+<a name="l349"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l350"></a>}
+<a name="l351"></a>
+<a name="l352"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMCircle</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l353"></a>{
+<a name="l354"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2;
+<a name="l355"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l356"></a>
+<a name="l357"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l358"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l359"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l360"></a>        </span><span class=cF5>GrCircle3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF5>Sqrt</span><span class=cF7>(</span><span class=cF5>SqrI64</span><span class=cF0>(x1 - x2) + </span><span class=cF5>SqrI64</span><span class=cF0>(y1 - y2)</span><span class=cF7>)</span><span class=cF0>);
+<a name="l361"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l362"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l363"></a>        x2 = arg1;
+<a name="l364"></a>        y2 = arg2;
+<a name="l365"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l366"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l367"></a>
+<a name="l368"></a>    dc-&gt;color = color&amp;</span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l369"></a>    </span><span class=cF5>GrCircle3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF5>Sqrt</span><span class=cF7>(</span><span class=cF5>SqrI64</span><span class=cF0>(x1-x2)+</span><span class=cF5>SqrI64</span><span class=cF0>(y1-y2)</span><span class=cF7>)</span><span class=cF0>);
+<a name="l370"></a>    res=</span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_CIRCLE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l371"></a>    res-&gt;type = </span><span class=cF3>SPT_CIRCLE</span><span class=cF0>;
+<a name="l372"></a>    res-&gt;pr.x1      = x1 - x;
+<a name="l373"></a>    res-&gt;pr.y1      = y1 - y;
+<a name="l374"></a>    res-&gt;pr.radius  = </span><span class=cF5>Sqrt</span><span class=cF0>(</span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF0>x1 - x2</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>SqrI64</span><span class=cF7>(</span><span class=cF0>y1 - y2</span><span class=cF7>)</span><span class=cF0>);
+<a name="l375"></a>
+<a name="l376"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l377"></a>}
+<a name="l378"></a>
+<a name="l379"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMEllipse</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l380"></a>{
+<a name="l381"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2;
+<a name="l382"></a>    </span><span class=cF1>F64</span><span class=cF0>      angle1, angle2;
+<a name="l383"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l384"></a>
+<a name="l385"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l386"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l387"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l388"></a>        </span><span class=cF5>GrEllipse3</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>x1 + x2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>y1 + y2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cF0>x1 - x2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cF0>y1 - y2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>);
+<a name="l389"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l390"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l391"></a>        x2 = arg1;
+<a name="l392"></a>        y2 = arg2;
+<a name="l393"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l394"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l395"></a>
+<a name="l396"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_ELLIPSE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l397"></a>    res-&gt;type = </span><span class=cF3>SPT_ELLIPSE</span><span class=cF0>;
+<a name="l398"></a>    res-&gt;pwha.x1     = (x1 + x2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - x;
+<a name="l399"></a>    res-&gt;pwha.y1     = (y1 + y2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - y;
+<a name="l400"></a>    res-&gt;pwha.width  = </span><span class=cF5>AbsI64</span><span class=cF0>(x1 - x2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l401"></a>    res-&gt;pwha.height = </span><span class=cF5>AbsI64</span><span class=cF0>(y1 - y2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l402"></a>    angle2 = </span><span class=cF5>Arg</span><span class=cF0>(x2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwha.x1 + x</span><span class=cF7>)</span><span class=cF0>, y2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwha.y1 + y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l403"></a>    </span><span class=cF1>if</span><span class=cF0> (res-&gt;pwha.width &lt; res-&gt;pwha.height)
+<a name="l404"></a>        angle2 -= </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l405"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l406"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l407"></a>        angle1 = </span><span class=cF5>Arg</span><span class=cF0>(x2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwha.x1 + x</span><span class=cF7>)</span><span class=cF0>, y2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwha.y1 + y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l408"></a>        </span><span class=cF1>if</span><span class=cF0> (res-&gt;pwha.width &gt;= res-&gt;pwha.height)
+<a name="l409"></a>            res-&gt;pwha.angle = -(angle1 - angle2);
+<a name="l410"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l411"></a>            res-&gt;pwha.angle = -(angle1-angle2) + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l412"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l413"></a>        </span><span class=cF5>GrEllipse3</span><span class=cF0>(dc, res-&gt;pwha.x1 + x, res-&gt;pwha.y1 + y, </span><span class=cFE>0</span><span class=cF0>, res-&gt;pwha.width, res-&gt;pwha.height, res-&gt;pwha.angle);
+<a name="l414"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l415"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l416"></a>        x2 = arg1;
+<a name="l417"></a>        y2 = arg2;
+<a name="l418"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l419"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l420"></a>
+<a name="l421"></a>    angle1 = </span><span class=cF5>Arg</span><span class=cF0>(x2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwha.x1 + x</span><span class=cF7>)</span><span class=cF0>, y2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwha.y1 + y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l422"></a>    </span><span class=cF1>if</span><span class=cF0> (res-&gt;pwha.width &gt;= res-&gt;pwha.height)
+<a name="l423"></a>        res-&gt;pwha.angle = -(angle1 - angle2);
+<a name="l424"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l425"></a>        res-&gt;pwha.angle = -(angle1 - angle2) + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l426"></a>    dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l427"></a>    </span><span class=cF5>GrEllipse3</span><span class=cF0>(dc, res-&gt;pwha.x1 + x, res-&gt;pwha.y1 + y, </span><span class=cFE>0</span><span class=cF0>, res-&gt;pwha.width, res-&gt;pwha.height, res-&gt;pwha.angle);
+<a name="l428"></a>
+<a name="l429"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l430"></a>}
+<a name="l431"></a>
+<a name="l432"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMPolygon</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> sides, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l433"></a>{
+<a name="l434"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2;
+<a name="l435"></a>    </span><span class=cF1>F64</span><span class=cF0>      angle1, angle2;
+<a name="l436"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res;
+<a name="l437"></a>
+<a name="l438"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l439"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l440"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l441"></a>        </span><span class=cF5>GrRegPoly3</span><span class=cF0>(dc, </span><span class=cF7>(</span><span class=cF0>x1 + x2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>y1 + y2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cF0>x1 - x2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cF0>y1 - y2</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, sides);
+<a name="l442"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l443"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l444"></a>        x2 = arg1;
+<a name="l445"></a>        y2 = arg2;
+<a name="l446"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l447"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l448"></a>
+<a name="l449"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_POLYGON</span><span class=cF7>)</span><span class=cF0>);
+<a name="l450"></a>    res-&gt;type = </span><span class=cF3>SPT_POLYGON</span><span class=cF0>;
+<a name="l451"></a>    res-&gt;pwhas.x1       = (x1 + x2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - x;
+<a name="l452"></a>    res-&gt;pwhas.y1       = (y1 + y2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> - y;
+<a name="l453"></a>    res-&gt;pwhas.width    = </span><span class=cF5>AbsI64</span><span class=cF0>(x1 - x2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l454"></a>    res-&gt;pwhas.height   = </span><span class=cF5>AbsI64</span><span class=cF0>(y1 - y2) &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l455"></a>    res-&gt;pwhas.sides    = sides;
+<a name="l456"></a>    angle2 = </span><span class=cF5>Arg</span><span class=cF0>(x2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwhas.x1 + x</span><span class=cF7>)</span><span class=cF0>, y2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwhas.y1 + y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l457"></a>    </span><span class=cF1>if</span><span class=cF0> (res-&gt;pwhas.width &lt; res-&gt;pwhas.height)
+<a name="l458"></a>        angle2 -= </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l459"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l460"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l461"></a>        angle1 = </span><span class=cF5>Arg</span><span class=cF0>(x2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwhas.x1 + x</span><span class=cF7>)</span><span class=cF0>, y2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwhas.y1 + y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l462"></a>        </span><span class=cF1>if</span><span class=cF0> (res-&gt;pwhas.width &gt;= res-&gt;pwhas.height)
+<a name="l463"></a>            res-&gt;pwhas.angle = -(angle1 - angle2);
+<a name="l464"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l465"></a>            res-&gt;pwhas.angle = -(angle1 - angle2) + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l466"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l467"></a>        </span><span class=cF5>GrRegPoly3</span><span class=cF0>(dc,  res-&gt;pwhas.x1 + x, res-&gt;pwhas.y1 + y, </span><span class=cFE>0</span><span class=cF0>, 
+<a name="l468"></a>                        res-&gt;pwhas.width, res-&gt;pwhas.height, res-&gt;pwhas.sides, res-&gt;pwhas.angle);
+<a name="l469"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l470"></a>        </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l471"></a>        x2 = arg1;
+<a name="l472"></a>        y2 = arg2;
+<a name="l473"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l474"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l475"></a>
+<a name="l476"></a>    angle1 = </span><span class=cF5>Arg</span><span class=cF0>(x2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwhas.x1 + x</span><span class=cF7>)</span><span class=cF0>, y2 - </span><span class=cF7>(</span><span class=cF0>res-&gt;pwhas.y1 + y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l477"></a>    </span><span class=cF1>if</span><span class=cF0> (res-&gt;pwhas.width &gt;= res-&gt;pwhas.height)
+<a name="l478"></a>        res-&gt;pwhas.angle = -(angle1-angle2);
+<a name="l479"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l480"></a>        res-&gt;pwhas.angle = -(angle1-angle2) + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l481"></a>    dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l482"></a>    </span><span class=cF5>GrRegPoly3</span><span class=cF0>(dc,  res-&gt;pwhas.x1 + x, res-&gt;pwhas.y1 + y, </span><span class=cFE>0</span><span class=cF0>, 
+<a name="l483"></a>                    res-&gt;pwhas.width, res-&gt;pwhas.height, res-&gt;pwhas.sides, res-&gt;pwhas.angle);
+<a name="l484"></a>
+<a name="l485"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l486"></a>}
+<a name="l487"></a>
+<a name="l488"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMPolyLineFamily</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> eletype, </span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l489"></a>{
+<a name="l490"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, num = </span><span class=cFE>0</span><span class=cF0>, message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2;
+<a name="l491"></a>    </span><span class=cF9>I32</span><span class=cF0>     *ptr;
+<a name="l492"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>  *p;
+<a name="l493"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res, *tmpg, *tmpg1, head2;
+<a name="l494"></a>
+<a name="l495"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;head2);
+<a name="l496"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l497"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l498"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l499"></a>        {
+<a name="l500"></a>            dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l501"></a>            </span><span class=cF1>if</span><span class=cF0> (num)
+<a name="l502"></a>                </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l503"></a>            message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l504"></a>            dc-&gt;color = </span><span class=cF3>TRANSPARENT</span><span class=cF0>;
+<a name="l505"></a>            </span><span class=cF1>if</span><span class=cF0> (num)
+<a name="l506"></a>                </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l507"></a>            x2 = arg1;
+<a name="l508"></a>            y2 = arg2;
+<a name="l509"></a>        }
+<a name="l510"></a>        </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> &amp;&amp; message_code != </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l511"></a>
+<a name="l512"></a>        dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l513"></a>        </span><span class=cF1>if</span><span class=cF0> (message_code == </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>)
+<a name="l514"></a>        {
+<a name="l515"></a>            </span><span class=cF1>if</span><span class=cF0> (num)
+<a name="l516"></a>                </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l517"></a>            res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_PT</span><span class=cF7>)</span><span class=cF0>);
+<a name="l518"></a>            res-&gt;type = </span><span class=cF3>SPT_PT</span><span class=cF0>;
+<a name="l519"></a>            res-&gt;p.x1 = x2 - x;
+<a name="l520"></a>            res-&gt;p.y1 = y2 - y;
+<a name="l521"></a>            </span><span class=cF5>QueueInsert</span><span class=cF0>(res, head2.last);
+<a name="l522"></a>            x1 = x2;
+<a name="l523"></a>            y1 = y2;
+<a name="l524"></a>            num++;
+<a name="l525"></a>        }
+<a name="l526"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l527"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>);
+<a name="l528"></a>
+<a name="l529"></a>    </span><span class=cF1>switch</span><span class=cF0> (eletype)
+<a name="l530"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l531"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYLINE</span><span class=cF0>:
+<a name="l532"></a>            </span><span class=cF1>if</span><span class=cF0> (num &gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l533"></a>            {
+<a name="l534"></a>                res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_POLYLINE</span><span class=cF7>)</span><span class=cF0> + num * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD2I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l535"></a>                ptr = &amp;res-&gt;nu.u;
+<a name="l536"></a>                tmpg1 = head2.next;
+<a name="l537"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; num; i++)
+<a name="l538"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l539"></a>                    tmpg = tmpg1-&gt;next;
+<a name="l540"></a>                    ptr[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     = tmpg1-&gt;p.x1;
+<a name="l541"></a>                    ptr[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] = tmpg1-&gt;p.y1;
+<a name="l542"></a>                    </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l543"></a>                    tmpg1 = tmpg;
+<a name="l544"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l545"></a>                res-&gt;type = </span><span class=cF3>SPT_POLYLINE</span><span class=cF0>;
+<a name="l546"></a>                res-&gt;nu.num = num;
+<a name="l547"></a>            }
+<a name="l548"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l549"></a>            {
+<a name="l550"></a>                tmpg1 = head2.next;
+<a name="l551"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; num; i++)
+<a name="l552"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l553"></a>                    tmpg = tmpg1-&gt;next;
+<a name="l554"></a>                    </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l555"></a>                    tmpg1 = tmpg;
+<a name="l556"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l557"></a>                res = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l558"></a>            }
+<a name="l559"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l560"></a>
+<a name="l561"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2</span><span class=cF0>:
+<a name="l562"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3</span><span class=cF0>:
+<a name="l563"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2_CLOSED</span><span class=cF0>:
+<a name="l564"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3_CLOSED</span><span class=cF0>:
+<a name="l565"></a>            </span><span class=cF1>if</span><span class=cF0> (num &gt; </span><span class=cFE>2</span><span class=cF0>)
+<a name="l566"></a>            {
+<a name="l567"></a>                res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF0>eletype</span><span class=cF7>)</span><span class=cF0> + num * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
+<a name="l568"></a>                p = &amp;res-&gt;nu.u;
+<a name="l569"></a>                tmpg1 = head2.next;
+<a name="l570"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; num; i++)
+<a name="l571"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l572"></a>                    tmpg = tmpg1-&gt;next;
+<a name="l573"></a>                    p[i].x = tmpg1-&gt;p.x1;
+<a name="l574"></a>                    p[i].y = tmpg1-&gt;p.y1;
+<a name="l575"></a>                    </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l576"></a>                    tmpg1 = tmpg;
+<a name="l577"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l578"></a>                res-&gt;type = eletype;
+<a name="l579"></a>                res-&gt;nu.num = num;
+<a name="l580"></a>            }
+<a name="l581"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l582"></a>            {
+<a name="l583"></a>                tmpg1 = head2.next;
+<a name="l584"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; num; i++)
+<a name="l585"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l586"></a>                    tmpg = tmpg1-&gt;next;
+<a name="l587"></a>                    </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l588"></a>                    tmpg1 = tmpg;
+<a name="l589"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l590"></a>                res = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l591"></a>            }
+<a name="l592"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l593"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l594"></a>
+<a name="l595"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l596"></a>}
+<a name="l597"></a>
+<a name="l598"></a></span><span class=cF9>CSprite</span><span class=cF0> *</span><span class=cF5>SMPolyPoint</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color)
+<a name="l599"></a>{
+<a name="l600"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, num = </span><span class=cFE>0</span><span class=cF0>, message_code, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2, x3, y3;
+<a name="l601"></a>    </span><span class=cF9>I32</span><span class=cF0>     *ptr;
+<a name="l602"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *res, *tmpg, *tmpg1, head2;
+<a name="l603"></a>
+<a name="l604"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;head2);
+<a name="l605"></a>    x3 = arg1 - x;
+<a name="l606"></a>    y3 = arg2 - y;
+<a name="l607"></a>    dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l608"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l609"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l610"></a>        message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l611"></a>        x2 = arg1;
+<a name="l612"></a>        y2 = arg2;
+<a name="l613"></a>        </span><span class=cF5>GrLine3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l614"></a>        </span><span class=cF5>Line</span><span class=cF0>(&amp;head2, x1 - x, y1 - y, </span><span class=cFE>0</span><span class=cF0>, x2 - x, y2 - y, </span><span class=cFE>0</span><span class=cF0>, &amp;</span><span class=cF5>SpritePolyPtPlot</span><span class=cF0>);
+<a name="l615"></a>        x1 = x2;
+<a name="l616"></a>        y1 = y2;
+<a name="l617"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l618"></a>    </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l619"></a>
+<a name="l620"></a>    num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l621"></a>    res = head2.next;
+<a name="l622"></a>    x1 = x3;
+<a name="l623"></a>    y1 = y3;
+<a name="l624"></a>    </span><span class=cF1>while</span><span class=cF0> (res != &amp;head2)
+<a name="l625"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l626"></a>        tmpg = res-&gt;next;
+<a name="l627"></a>        </span><span class=cF1>if</span><span class=cF0> (res-&gt;p.x1 == x1 &amp;&amp; res-&gt;p.y1 == y1)
+<a name="l628"></a>        {
+<a name="l629"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(res);
+<a name="l630"></a>            </span><span class=cF5>Free</span><span class=cF0>(res);
+<a name="l631"></a>        }
+<a name="l632"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l633"></a>        {
+<a name="l634"></a>            num++;
+<a name="l635"></a>            x1 = res-&gt;p.x1;
+<a name="l636"></a>            y1 = res-&gt;p.y1;
+<a name="l637"></a>        }
+<a name="l638"></a>        res = tmpg;
+<a name="l639"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l640"></a>
+<a name="l641"></a>    res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_POLYPT</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF7>(</span><span class=cF0>num * </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>3</span><span class=cF0>);
+<a name="l642"></a>    res-&gt;npu.x = x3;
+<a name="l643"></a>    res-&gt;npu.y = y3;
+<a name="l644"></a>    ptr = &amp;res-&gt;npu.u;
+<a name="l645"></a>    x1 = x3;
+<a name="l646"></a>    y1 = y3;
+<a name="l647"></a>    i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l648"></a>    tmpg1 = head2.next;
+<a name="l649"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpg1 != &amp;head2)
+<a name="l650"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l651"></a>        tmpg = tmpg1-&gt;next;
+<a name="l652"></a>        </span><span class=cF5>BFieldOrU32</span><span class=cF0>(ptr, i, </span><span class=cFB>polypt_map</span><span class=cF0>[</span><span class=cF5>SignI64</span><span class=cF7>(</span><span class=cF0>tmpg1-&gt;p.x1 - x1</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF5>SignI64</span><span class=cF0>(tmpg1-&gt;p.y1 - y1) + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>]);
+<a name="l653"></a>        i += </span><span class=cFE>3</span><span class=cF0>;
+<a name="l654"></a>        x1 = tmpg1-&gt;p.x1;
+<a name="l655"></a>        y1 = tmpg1-&gt;p.y1;
+<a name="l656"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpg1);
+<a name="l657"></a>        </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l658"></a>        tmpg1 = tmpg;
+<a name="l659"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l660"></a>    res-&gt;type = </span><span class=cF3>SPT_POLYPT</span><span class=cF0>;
+<a name="l661"></a>    res-&gt;npu.num = num;
+<a name="l662"></a>
+<a name="l663"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l664"></a>}
+<a name="l665"></a>
+<a name="l666"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SMTextFamily</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> eletype, </span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_ce, </span><span class=cF9>CSprite</span><span class=cF0> *head, </span><span class=cF9>CDC</span><span class=cF0> *dc, 
+<a name="l667"></a>                </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> color, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num, </span><span class=cF9>I64</span><span class=cF0> old_de_flags)
+<a name="l668"></a>{
+<a name="l669"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *tmpg, *insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(, head, *_cur_elem_num);
+<a name="l670"></a>    </span><span class=cF9>I64</span><span class=cF0>      message_code, x1, y1;
+<a name="l671"></a>    </span><span class=cF1>U8</span><span class=cF0>      *st;
+<a name="l672"></a>
+<a name="l673"></a>    doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l674"></a>    st = </span><span class=cF5>PopUpGetStr</span><span class=cF0>(</span><span class=cF6>&quot;Enter text and press &lt;ESC&gt;.\n&quot;</span><span class=cF0>);
+<a name="l675"></a>    doc_ce-&gt;de_flags = old_de_flags;
+<a name="l676"></a>    </span><span class=cF1>if</span><span class=cF0> (st &amp;&amp; *st)
+<a name="l677"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l678"></a>        x1 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l679"></a>        y1 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l680"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l681"></a>        {
+<a name="l682"></a>            dc-&gt;color = color &amp; </span><span class=cF3>COLORROP_NO_ROP0_MASK</span><span class=cF0>;
+<a name="l683"></a>            </span><span class=cF1>switch</span><span class=cF0> (eletype)
+<a name="l684"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l685"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT</span><span class=cF0>:          </span><span class=cF5>GrPrint3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, st);  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l686"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_BOX</span><span class=cF0>:      </span><span class=cF5>GrTextBox3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, st);      </span><span class=cF1>break</span><span class=cF0>;
+<a name="l687"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_DIAMOND</span><span class=cF0>:  </span><span class=cF5>GrTextDiamond3</span><span class=cF0>(dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, st);  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l688"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l689"></a>            message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l690"></a>            </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l691"></a>            x1 = arg1;
+<a name="l692"></a>            y1 = arg2;
+<a name="l693"></a>        }
+<a name="l694"></a>        </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l695"></a>
+<a name="l696"></a>        tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF0>eletype</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l697"></a>        tmpg-&gt;type = eletype;
+<a name="l698"></a>        tmpg-&gt;ps.x1 = x1 - x;
+<a name="l699"></a>        tmpg-&gt;ps.y1 = y1 - y;
+<a name="l700"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(tmpg-&gt;ps.st, st);
+<a name="l701"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l702"></a>        </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l703"></a>        *_cur_elem_num += </span><span class=cFE>1</span><span class=cF0>;
+<a name="l704"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l705"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l706"></a>}
+<a name="l707"></a>
+<a name="l708"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SMBitMap</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> eletype, </span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_ce, </span><span class=cF9>CSprite</span><span class=cF0> *head, 
+<a name="l709"></a>             </span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> xx, </span><span class=cF9>I64</span><span class=cF0> yy, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>CColorROPU32</span><span class=cF0> bm_bkcolor, 
+<a name="l710"></a>             </span><span class=cF1>Bool</span><span class=cF0> sel, </span><span class=cF9>I64</span><span class=cF0> xx1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> yy1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> xx2=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> yy2=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num)
+<a name="l711"></a>{
+<a name="l712"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, message_code, x = xx, y = yy, x1 = arg1, y1 = arg2, x2 = arg1, y2 = arg2, old_width;
+<a name="l713"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *tmpg, *tmpg1, *insert_pt;
+<a name="l714"></a>    </span><span class=cF9>CDC</span><span class=cF0>     *img;
+<a name="l715"></a>
+<a name="l716"></a>    insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(, head, *_cur_elem_num, xx, yy,,, &amp;x, &amp;y);
+<a name="l717"></a>    x += xx;
+<a name="l718"></a>    y += yy;
+<a name="l719"></a>
+<a name="l720"></a>    </span><span class=cF1>if</span><span class=cF0> (sel)
+<a name="l721"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l722"></a>        xx1 = arg1;
+<a name="l723"></a>        yy1 = arg2;
+<a name="l724"></a>        xx2 = arg1;
+<a name="l725"></a>        yy2 = arg2;
+<a name="l726"></a>        old_width = dc-&gt;thick;
+<a name="l727"></a>        dc-&gt;thick = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l728"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l729"></a>        {
+<a name="l730"></a>            dc-&gt;color = </span><span class=cF3>ROPF_DITHER</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> + </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l731"></a>            </span><span class=cF5>GrBorder</span><span class=cF0>(dc, xx1, yy1, xx2, yy2);
+<a name="l732"></a>            message_code = </span><span class=cF5>MessageGet</span><span class=cF0>(&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_MOVE</span><span class=cF0>);
+<a name="l733"></a>            </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l734"></a>            x2 = arg1;
+<a name="l735"></a>            y2 = arg2;
+<a name="l736"></a>            </span><span class=cF1>if</span><span class=cF0> (x2 &lt; x1)
+<a name="l737"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l738"></a>                xx1 = x2;
+<a name="l739"></a>                xx2 = x1;
+<a name="l740"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l741"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l742"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l743"></a>                xx1 = x1;
+<a name="l744"></a>                xx2 = x2;
+<a name="l745"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l746"></a>            </span><span class=cF1>if</span><span class=cF0> (y2 &lt; y1)
+<a name="l747"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l748"></a>                yy1 = y2;
+<a name="l749"></a>                yy2 = y1;
+<a name="l750"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l751"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l752"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l753"></a>                yy1 = y1;
+<a name="l754"></a>                yy2 = y2;
+<a name="l755"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l756"></a>        }
+<a name="l757"></a>        </span><span class=cF1>while</span><span class=cF0> (message_code != </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l758"></a>
+<a name="l759"></a>        dc-&gt;thick = old_width;
+<a name="l760"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l761"></a>
+<a name="l762"></a>    xx2++;
+<a name="l763"></a>    yy2++;
+<a name="l764"></a>    tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_BITMAP</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF7>(</span><span class=cF0>(xx2 - xx1 + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>yy2 - yy1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l765"></a>    tmpg-&gt;type = </span><span class=cF3>SPT_BITMAP</span><span class=cF0>;
+<a name="l766"></a>    tmpg-&gt;pwhu.width    = xx2 - xx1;
+<a name="l767"></a>    tmpg-&gt;pwhu.height   = yy2 - yy1;
+<a name="l768"></a>    tmpg-&gt;pwhu.x1       = xx1 - x;
+<a name="l769"></a>    tmpg-&gt;pwhu.y1       = yy1 - y;
+<a name="l770"></a>    img = </span><span class=cF5>DCNew</span><span class=cF0>(tmpg-&gt;pwhu.width, tmpg-&gt;pwhu.height, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l771"></a>    img-&gt;color = bm_bkcolor;
+<a name="l772"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(img, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpg-&gt;pwhu.width, tmpg-&gt;pwhu.height);
+<a name="l773"></a>    tmpg1 = insert_pt;
+<a name="l774"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpg1 == head || tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> != </span><span class=cF3>SPT_BITMAP</span><span class=cF0>)
+<a name="l775"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l776"></a>        </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(img, head, </span><span class=cFE>0</span><span class=cF0>, -</span><span class=cF7>(</span><span class=cF0>xx1 - x</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cF7>(</span><span class=cF0>yy1 - y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l777"></a>        x = xx;
+<a name="l778"></a>        y = yy;
+<a name="l779"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(img, -</span><span class=cF7>(</span><span class=cF0>xx1 - x</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cF7>(</span><span class=cF0>yy1 - y</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, doc_ce-&gt;bin_data-&gt;data);
+<a name="l780"></a>        </span><span class=cF5>QueueDel</span><span class=cF0>(head);
+<a name="l781"></a>        insert_pt = head-&gt;next = head-&gt;last = head;
+<a name="l782"></a>        *_cur_elem_num = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l783"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l784"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l785"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l786"></a>        </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(img, head, *_cur_elem_num, -</span><span class=cF7>(</span><span class=cF0>xx1 - x</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cF7>(</span><span class=cF0>yy1 - y</span><span class=cF7>)</span><span class=cF0>);
+<a name="l787"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(img, -</span><span class=cF7>(</span><span class=cF0>xx1 - x</span><span class=cF7>)</span><span class=cF0>, -</span><span class=cF7>(</span><span class=cF0>yy1 - y</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, &amp;tmpg1-&gt;</span><span class=cF1>start</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l788"></a>        insert_pt = tmpg1-&gt;next;
+<a name="l789"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpg1);
+<a name="l790"></a>        </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l791"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l792"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;tmpg-&gt;pwhu.u, img-&gt;body, </span><span class=cF7>(</span><span class=cF0>(xx2 - xx1 + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>yy2 - yy1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l793"></a>
+<a name="l794"></a>    </span><span class=cF1>switch</span><span class=cF0> (i = </span><span class=cF5>SpriteBitMapEd</span><span class=cF7>(</span><span class=cF0>doc, doc_ce, dc, &amp;xx1, &amp;yy1, &amp;xx2, &amp;yy2, &amp;img, bm_bkcolor</span><span class=cF7>)</span><span class=cF0>)
+<a name="l795"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l796"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPE_EXIT</span><span class=cF0>:
+<a name="l797"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPE_CONT</span><span class=cF0>:
+<a name="l798"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpg);
+<a name="l799"></a>            tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_BITMAP</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF7>(</span><span class=cF0>(xx2 - xx1 + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>yy2 - yy1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l800"></a>            tmpg-&gt;type = eletype;
+<a name="l801"></a>            tmpg-&gt;pwhu.width    = xx2 - xx1;
+<a name="l802"></a>            tmpg-&gt;pwhu.height   = yy2 - yy1;
+<a name="l803"></a>            tmpg-&gt;pwhu.x1       = xx1 - x;
+<a name="l804"></a>            tmpg-&gt;pwhu.y1       = yy1 - y;
+<a name="l805"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;tmpg-&gt;pwhu.u, img-&gt;body, </span><span class=cF7>(</span><span class=cF0>(xx2 - xx1 + </span><span class=cFE>7</span><span class=cF0>) &amp; ~</span><span class=cFE>7</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF0>yy2 - yy1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l806"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l807"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l808"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l809"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(img);
+<a name="l810"></a>    </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l811"></a>
+<a name="l812"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l813"></a>}
+<a name="l814"></a>
+<a name="l815"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SMMesh</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_ce, </span><span class=cF9>CSprite</span><span class=cF0> *head, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num)
+<a name="l816"></a>{
+<a name="l817"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *tmpg, *insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(, head, *_cur_elem_num), *tmpg1 = insert_pt;
+<a name="l818"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>  *p;
+<a name="l819"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, size, x1, y1, z1;
+<a name="l820"></a>    </span><span class=cF9>I32</span><span class=cF0>     *mesh, *old_mesh;
+<a name="l821"></a>
+<a name="l822"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpg1 != head &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_MESH</span><span class=cF0>)
+<a name="l823"></a>        old_mesh = &amp;tmpg1-&gt;mu.vertex_count;
+<a name="l824"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpg1 != head &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>)
+<a name="l825"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l826"></a>        x1 = tmpg1-&gt;pmu.x;
+<a name="l827"></a>        y1 = tmpg1-&gt;pmu.y;
+<a name="l828"></a>        z1 = tmpg1-&gt;pmu.z;
+<a name="l829"></a>        p = &amp;tmpg1-&gt;pmu.u;
+<a name="l830"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg1-&gt;pmu.vertex_count; i++, p++)
+<a name="l831"></a>        {
+<a name="l832"></a>            p-&gt;x += x1;
+<a name="l833"></a>            p-&gt;y += y1;
+<a name="l834"></a>            p-&gt;z += z1;
+<a name="l835"></a>        }
+<a name="l836"></a>        old_mesh = &amp;tmpg1-&gt;pmu.vertex_count;
+<a name="l837"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l838"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l839"></a>        old_mesh = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l840"></a>    </span><span class=cF1>if</span><span class=cF0> (mesh = </span><span class=cF5>SpriteMeshEd</span><span class=cF7>(</span><span class=cF0>old_mesh, &amp;size, </span><span class=cF3>TRUE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l841"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l842"></a>        tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_MESH</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I32</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + size);
+<a name="l843"></a>        tmpg-&gt;type = </span><span class=cF3>SPT_MESH</span><span class=cF0>;
+<a name="l844"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;tmpg-&gt;mu.vertex_count, mesh, size);
+<a name="l845"></a>        </span><span class=cF5>Free</span><span class=cF0>(mesh);
+<a name="l846"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l847"></a>        </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l848"></a>        </span><span class=cF1>if</span><span class=cF0> (old_mesh)
+<a name="l849"></a>        {
+<a name="l850"></a>            insert_pt = tmpg;
+<a name="l851"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpg1);
+<a name="l852"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l853"></a>            </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l854"></a>        }
+<a name="l855"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l856"></a>            *_cur_elem_num += </span><span class=cFE>1</span><span class=cF0>;
+<a name="l857"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l858"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (old_mesh &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>)
+<a name="l859"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l860"></a>        x1 = tmpg1-&gt;pmu.x;
+<a name="l861"></a>        y1 = tmpg1-&gt;pmu.y;
+<a name="l862"></a>        z1 = tmpg1-&gt;pmu.z;
+<a name="l863"></a>        p = &amp;tmpg1-&gt;pmu.u;
+<a name="l864"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg1-&gt;pmu.vertex_count; i++, p++)
+<a name="l865"></a>        {
+<a name="l866"></a>            p-&gt;x -= x1;
+<a name="l867"></a>            p-&gt;y -= y1;
+<a name="l868"></a>            p-&gt;z -= z1;
+<a name="l869"></a>        }
+<a name="l870"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l871"></a>}
+<a name="l872"></a>
+<a name="l873"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SMShiftableMesh</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_ce, </span><span class=cF9>CSprite</span><span class=cF0> *head, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> *_cur_elem_num)
+<a name="l874"></a>{
+<a name="l875"></a>    </span><span class=cF9>CSprite</span><span class=cF0> *tmpg, *insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(, head, *_cur_elem_num), *tmpg1 = insert_pt;
+<a name="l876"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>  *p;
+<a name="l877"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, size, z, x1, y1, z1;
+<a name="l878"></a>    </span><span class=cF9>I32</span><span class=cF0>     *mesh, *old_mesh;
+<a name="l879"></a>
+<a name="l880"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpg1 != head &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_MESH</span><span class=cF0>)
+<a name="l881"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l882"></a>        z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l883"></a>        x1 = -(arg1-x);
+<a name="l884"></a>        y1 = -(arg2-y);
+<a name="l885"></a>        z1 = z;
+<a name="l886"></a>        p = &amp;tmpg1-&gt;mu.u;
+<a name="l887"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg1-&gt;mu.vertex_count; i++, p++)
+<a name="l888"></a>        {
+<a name="l889"></a>            p-&gt;x += x1;
+<a name="l890"></a>            p-&gt;y += y1;
+<a name="l891"></a>            p-&gt;z += z1;
+<a name="l892"></a>        }
+<a name="l893"></a>        old_mesh = &amp;tmpg1-&gt;mu.vertex_count;
+<a name="l894"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l895"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpg1 != head &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>)
+<a name="l896"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l897"></a>        z = -tmpg1-&gt;pmu.z;
+<a name="l898"></a>        x1 = tmpg1-&gt;pmu.x - (arg1 - x);
+<a name="l899"></a>        y1 = tmpg1-&gt;pmu.y - (arg2 - y);
+<a name="l900"></a>        z1 = tmpg1-&gt;pmu.z + z;
+<a name="l901"></a>        p = &amp;tmpg1-&gt;pmu.u;
+<a name="l902"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg1-&gt;pmu.vertex_count; i++, p++)
+<a name="l903"></a>        {
+<a name="l904"></a>            p-&gt;x += x1;
+<a name="l905"></a>            p-&gt;y += y1;
+<a name="l906"></a>            p-&gt;z += z1;
+<a name="l907"></a>        }
+<a name="l908"></a>        old_mesh = &amp;tmpg1-&gt;pmu.vertex_count;
+<a name="l909"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l910"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l911"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l912"></a>        z = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l913"></a>        old_mesh = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l914"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l915"></a>    </span><span class=cF1>if</span><span class=cF0> (mesh = </span><span class=cF5>SpriteMeshEd</span><span class=cF7>(</span><span class=cF0>old_mesh, &amp;size, </span><span class=cF3>TRUE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l916"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l917"></a>        tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I32</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + size);
+<a name="l918"></a>        tmpg-&gt;type = </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>;
+<a name="l919"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;tmpg-&gt;pmu.vertex_count, mesh, size);
+<a name="l920"></a>        </span><span class=cF5>Free</span><span class=cF0>(mesh);
+<a name="l921"></a>        tmpg-&gt;pmu.x = arg1 - x;
+<a name="l922"></a>        tmpg-&gt;pmu.y = arg2 - y;
+<a name="l923"></a>        tmpg-&gt;pmu.z = -z;
+<a name="l924"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l925"></a>        </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l926"></a>        </span><span class=cF1>if</span><span class=cF0> (old_mesh)
+<a name="l927"></a>        {
+<a name="l928"></a>            insert_pt = tmpg;
+<a name="l929"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpg1);
+<a name="l930"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpg1);
+<a name="l931"></a>            </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l932"></a>        }
+<a name="l933"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l934"></a>            *_cur_elem_num += </span><span class=cFE>1</span><span class=cF0>;
+<a name="l935"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l936"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (old_mesh &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>)
+<a name="l937"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l938"></a>        x1 = tmpg1-&gt;pmu.x - (arg1 - x);
+<a name="l939"></a>        y1 = tmpg1-&gt;pmu.y - (arg2 - y);
+<a name="l940"></a>        z1 = tmpg1-&gt;pmu.z + z;
+<a name="l941"></a>        p = &amp;tmpg1-&gt;pmu.u;
+<a name="l942"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg1-&gt;pmu.vertex_count; i++, p++)
+<a name="l943"></a>        {
+<a name="l944"></a>            p-&gt;x -= x1;
+<a name="l945"></a>            p-&gt;y -= y1;
+<a name="l946"></a>            p-&gt;z -= z1;
+<a name="l947"></a>        }
+<a name="l948"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l949"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (old_mesh &amp;&amp; tmpg1-&gt;type &amp; </span><span class=cF3>SPG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>SPT_MESH</span><span class=cF0>)
+<a name="l950"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l951"></a>        x1 = -(arg1 - x);
+<a name="l952"></a>        y1 = -(arg2 - y);
+<a name="l953"></a>        z1 = z;
+<a name="l954"></a>        p = &amp;tmpg1-&gt;mu.u;
+<a name="l955"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpg1-&gt;mu.vertex_count; i++, p++)
+<a name="l956"></a>        {
+<a name="l957"></a>            p-&gt;x -= x1;
+<a name="l958"></a>            p-&gt;y -= y1;
+<a name="l959"></a>            p-&gt;z -= z1;
+<a name="l960"></a>        }
+<a name="l961"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l962"></a>}
+<a name="l963"></a>
+<a name="l964"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SMTaskTitleSet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> eletype)
+<a name="l965"></a>{
+<a name="l966"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;title_src = </span><span class=cF3>TTS_CONST</span><span class=cF0>; </span><span class=cF2>//Violates TTS_LOCKED_CONST</span><span class=cF0>
+<a name="l967"></a>    </span><span class=cF1>switch</span><span class=cF0> (eletype)
+<a name="l968"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l969"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_INS_SCREEN_BITMAP</span><span class=cF0>:
+<a name="l970"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title, </span><span class=cF6>&quot;Insert Screen BitMap&quot;</span><span class=cF0>);
+<a name="l971"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l972"></a>
+<a name="l973"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_INS_TRANSPARENT_SCREEN_BITMAP</span><span class=cF0>:
+<a name="l974"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title, </span><span class=cF6>&quot;Insert Transparent Screen BitMap&quot;</span><span class=cF0>);
+<a name="l975"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l976"></a>
+<a name="l977"></a>        </span><span class=cF1>default</span><span class=cF0>:
+<a name="l978"></a>            </span><span class=cF1>if</span><span class=cF0> (eletype &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l979"></a>                </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title, </span><span class=cF5>DefineSub</span><span class=cF7>(</span><span class=cF0>eletype, </span><span class=cF6>&quot;ST_SPRITE_ELEM_TYPES&quot;</span><span class=cF7>)</span><span class=cF0>);
+<a name="l980"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l981"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_src = </span><span class=cF3>BDS_CONST</span><span class=cF0>;
+<a name="l982"></a>}
+<a name="l983"></a>
+<a name="l984"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SpriteMainEd</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
+<a name="l985"></a>{
+<a name="l986"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_ce = doc-&gt;cur_entry;
+<a name="l987"></a>    </span><span class=cF9>I64</span><span class=cF0>              res, i, x, y, arg1, arg2, xx, yy, xx1, yy1, xx2, yy2, thick, eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>, cur_elem_num,
+<a name="l988"></a>                     old_border_src = </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_src, old_title_src = </span><span class=cF5>Fs</span><span class=cF0>-&gt;title_src, old_de_flags = doc_ce-&gt;de_flags;
+<a name="l989"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>     bm_bkcolor, color;
+<a name="l990"></a>    </span><span class=cF9>CSprite</span><span class=cF0>         *head, *tmpg, *insert_pt;
+<a name="l991"></a>    </span><span class=cF9>CDC</span><span class=cF0>             *dc = </span><span class=cF5>DCAlias</span><span class=cF0>(, </span><span class=cF5>Fs</span><span class=cF0>), *dc2 = </span><span class=cF5>DCAlias</span><span class=cF0>(, </span><span class=cFB>sys_winmgr_task</span><span class=cF0>), *dc3;
+<a name="l992"></a>    </span><span class=cF1>U8</span><span class=cF0>              *old_task_title = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title);
+<a name="l993"></a>
+<a name="l994"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l995"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l996"></a>    </span><span class=cF5>Refresh</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l997"></a>    dc2-&gt;flags |= </span><span class=cF3>DCF_ON_TOP</span><span class=cF0>;
+<a name="l998"></a>    head = </span><span class=cF5>Sprite2SpriteQueue</span><span class=cF0>(doc_ce-&gt;bin_data-&gt;data);
+<a name="l999"></a>    cur_elem_num = </span><span class=cF5>QueueCount</span><span class=cF0>(head);
+<a name="l1000"></a>    xx = (doc_ce-&gt;x + doc_ce-&gt;max_col - doc-&gt;line_start_col) * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l1001"></a>    yy = (doc_ce-&gt;y - doc-&gt;top_line_num) * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;
+<a name="l1002"></a>
+<a name="l1003"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l1004"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1005"></a>        insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(dc, head, cur_elem_num, xx, yy, &amp;color, &amp;thick, &amp;x, &amp;y);
+<a name="l1006"></a>        x += xx;
+<a name="l1007"></a>        y += yy;
+<a name="l1008"></a>        </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l1009"></a>        </span><span class=cF1>if</span><span class=cF0> (eletype == </span><span class=cF3>SPT_MENU</span><span class=cF0>)
+<a name="l1010"></a>        {
+<a name="l1011"></a>            </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0>-</span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0>;
+<a name="l1012"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>winmgr</span><span class=cF0>.fps &lt; </span><span class=cFE>10</span><span class=cF0>)
+<a name="l1013"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1014"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title, old_task_title);
+<a name="l1015"></a>            </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_src = old_border_src;
+<a name="l1016"></a>            </span><span class=cF5>Fs</span><span class=cF0>-&gt;title_src  = old_title_src;
+<a name="l1017"></a>
+<a name="l1018"></a>            xx -= </span><span class=cF5>StrLen</span><span class=cF0>(doc_ce-&gt;tag) * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l1019"></a>            eletype = </span><span class=cF5>PopUpSpriteMain</span><span class=cF0>(&amp;head, &amp;cur_elem_num, doc, doc_ce);
+<a name="l1020"></a>            xx += </span><span class=cF5>StrLen</span><span class=cF0>(doc_ce-&gt;tag) * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
+<a name="l1021"></a>            insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(dc, head, cur_elem_num, x, y, &amp;color, &amp;thick, &amp;x, &amp;y);
+<a name="l1022"></a>            x += xx;
+<a name="l1023"></a>            y += yy;
+<a name="l1024"></a>
+<a name="l1025"></a>            </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1026"></a>            </span><span class=cF1>switch</span><span class=cF0> (eletype)
+<a name="l1027"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1028"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL</span><span class=cF0>:
+<a name="l1029"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL_NOT</span><span class=cF0>:
+<a name="l1030"></a>                    </span><span class=cF5>RegOneTimePopUp</span><span class=cF0>(</span><span class=cF3>ARf_FLOODFILL</span><span class=cF0>, 
+<a name="l1031"></a>                                </span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;This is affected by what's underneath\n&quot;</span><span class=cF0>
+<a name="l1032"></a>                                </span><span class=cF6>&quot;when it is drawn.  You will probably want to\n&quot;</span><span class=cF0>
+<a name="l1033"></a>                                </span><span class=cF6>&quot;convert it to a bitmap.\n\n&quot;</span><span class=cF0>
+<a name="l1034"></a>                                </span><span class=cF6>&quot;A tip on artistry you might consider\n&quot;</span><span class=cF0>
+<a name="l1035"></a>                                </span><span class=cF6>&quot;is using lines to fill regions because\n&quot;</span><span class=cF0>
+<a name="l1036"></a>                                </span><span class=cF6>&quot;brush strokes look cool.\n&quot;</span><span class=cF0>);
+<a name="l1037"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1038"></a>
+<a name="l1039"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>:
+<a name="l1040"></a>                    </span><span class=cF5>RegOneTimePopUp</span><span class=cF0>(</span><span class=cF3>ARf_PLANAR_SYMMETRY</span><span class=cF0>, </span><span class=cF6>&quot;Right-click to turn-off symmetry.\n&quot;</span><span class=cF0>);
+<a name="l1041"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1042"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1043"></a>            doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1044"></a>        }
+<a name="l1045"></a>        </span><span class=cF5>SMTaskTitleSet</span><span class=cF0>(eletype);
+<a name="l1046"></a>        </span><span class=cF1>switch</span><span class=cF0> (eletype)
+<a name="l1047"></a>        {
+<a name="l1048"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_COLOR</span><span class=cF0>:
+<a name="l1049"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1050"></a>                i = </span><span class=cF5>PopUpColor</span><span class=cF0>(,, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1051"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l1052"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1053"></a>                    color = i;
+<a name="l1054"></a>                    tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_COLOR</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1055"></a>                    tmpg-&gt;type = </span><span class=cF3>SPT_COLOR</span><span class=cF0>;
+<a name="l1056"></a>                    tmpg-&gt;c.color = color;
+<a name="l1057"></a>                    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1058"></a>                    </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1059"></a>                    cur_elem_num++;
+<a name="l1060"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1061"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1062"></a>                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1063"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1064"></a>
+<a name="l1065"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_DITHER_COLOR</span><span class=cF0>:
+<a name="l1066"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1067"></a>                i = </span><span class=cF5>PopUpColorDither</span><span class=cF0>;
+<a name="l1068"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l1069"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1070"></a>                    color = i;
+<a name="l1071"></a>                    tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_DITHER_COLOR</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1072"></a>                    tmpg-&gt;type = </span><span class=cF3>SPT_DITHER_COLOR</span><span class=cF0>;
+<a name="l1073"></a>                    tmpg-&gt;d.dither_color = color.c0.color | color.c1.color &lt;&lt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l1074"></a>                    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1075"></a>                    </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1076"></a>                    cur_elem_num++;
+<a name="l1077"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1078"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1079"></a>                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1080"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1081"></a>
+<a name="l1082"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ED_MENU</span><span class=cF0>:
+<a name="l1083"></a>                </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>SpriteEd</span><span class=cF7>(</span><span class=cF0>doc, doc_ce, x, y, &amp;head, &amp;cur_elem_num</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1084"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1085"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPE_ABORT</span><span class=cF0>: eletype = </span><span class=cF3>DOCM_CANCEL</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1086"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPE_EXIT</span><span class=cF0>:  eletype = </span><span class=cF3>SPT_EXIT</span><span class=cF0>;     </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1087"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPE_CONT</span><span class=cF0>:  eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;     </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1088"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1089"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1090"></a>
+<a name="l1091"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_MESH</span><span class=cF0>:
+<a name="l1092"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1093"></a>                </span><span class=cF5>SMMesh</span><span class=cF0>(doc, doc_ce, head, &amp;cur_elem_num);
+<a name="l1094"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1095"></a>                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1096"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1097"></a>
+<a name="l1098"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>:
+<a name="l1099"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1100"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>PopUpNoYes</span><span class=cF7>(</span><span class=cF6>&quot;Study the $LK,\&quot;X-Caliber\&quot;,&quot;</span><span class=cF0>
+<a name="l1101"></a>                            </span><span class=cF6>&quot;A=\&quot;FF:::/PersonalMenu.DD,X-Caliber\&quot;$ icon.\n\n&quot;</span><span class=cF0>
+<a name="l1102"></a>                            </span><span class=cF6>&quot;It has black rectangle background with stars.  The\n&quot;</span><span class=cF0>
+<a name="l1103"></a>                            </span><span class=cF6>&quot;mesh is in front and rotates.  To keep the background\n&quot;</span><span class=cF0>
+<a name="l1104"></a>                            </span><span class=cF6>&quot;rectangle from rotating, &quot;</span><span class=cF0>
+<a name="l1105"></a>                            </span><span class=cF6>&quot;$GREEN$TRANSFORM OFF$FG$ has been used.\n\n&quot;</span><span class=cF0>
+<a name="l1106"></a>                            </span><span class=cF6>&quot;The X-Caliber mesh has a different origin for rotation.\n&quot;</span><span class=cF0>
+<a name="l1107"></a>                            </span><span class=cF6>&quot;To avoid clipping, it also has also been moved in the\n&quot;</span><span class=cF0>
+<a name="l1108"></a>                            </span><span class=cF6>&quot;negative Z direction by editing the sprite as text\n&quot;</span><span class=cF0>
+<a name="l1109"></a>                            </span><span class=cF6>&quot;and changing the first vector.\n\n&quot;</span><span class=cF0>
+<a name="l1110"></a>                            </span><span class=cF6>&quot;For the mesh you are creating, use same origin as\n&quot;</span><span class=cF0>
+<a name="l1111"></a>                            </span><span class=cF6>&quot;the rest of the sprite?  If $GREEN$YES$FG$, you can always\n&quot;</span><span class=cF0>
+<a name="l1112"></a>                            </span><span class=cF6>&quot;shift the mesh origin point in the sprite edit menu.\n&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1113"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1114"></a>                    doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1115"></a>                    arg1 = x;
+<a name="l1116"></a>                    arg2 = y;
+<a name="l1117"></a>                    </span><span class=cF5>SMShiftableMesh</span><span class=cF0>(doc, doc_ce, head, x, y, arg1, arg2, &amp;cur_elem_num);
+<a name="l1118"></a>                    eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1119"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1120"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1121"></a>                    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;Select Origin.\n&quot;</span><span class=cF0>);
+<a name="l1122"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1123"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1124"></a>
+<a name="l1125"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_INS_SCREEN_BITMAP</span><span class=cF0>:
+<a name="l1126"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1127"></a>                </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;Drag-out a rect for the extents of the\nbitmap.\n&quot;</span><span class=cF0>);
+<a name="l1128"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1129"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> | </span><span class=cF3>WIF_FOCUS_TASK_MS_L</span><span class=cF0> | </span><span class=cF3>WIF_FOCUS_TASK_MS_R</span><span class=cF0> |
+<a name="l1130"></a>                                  </span><span class=cF3>WIF_FOCUS_TASK_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0>;
+<a name="l1131"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1132"></a>
+<a name="l1133"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BITMAP</span><span class=cF0>:
+<a name="l1134"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1135"></a>                i = </span><span class=cF5>PopUpColor</span><span class=cF0>(</span><span class=cF6>&quot;Background Color\n\n&quot;</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1136"></a>                </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l1137"></a>                    eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1138"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1139"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1140"></a>                    bm_bkcolor = i;
+<a name="l1141"></a>                    </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1142"></a>                    </span><span class=cF5>SpriteExtents</span><span class=cF0>(doc_ce-&gt;bin_data-&gt;data, &amp;xx1, &amp;xx2, &amp;yy1, &amp;yy2);
+<a name="l1143"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>xx1 &lt;= xx2 &amp;&amp; yy1 &lt;= yy2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1144"></a>                        xx1 = xx2 = yy1 = yy2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1145"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>PopUpExtents</span><span class=cF7>(</span><span class=cF0>&amp;xx1, &amp;xx2, &amp;yy1, &amp;yy2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1146"></a>                    {
+<a name="l1147"></a>                        doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1148"></a>                        xx1 += xx;
+<a name="l1149"></a>                        yy1 += yy;
+<a name="l1150"></a>                        xx2 += xx;
+<a name="l1151"></a>                        yy2 += yy;
+<a name="l1152"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>SMBitMap</span><span class=cF7>(</span><span class=cF0>eletype, doc, doc_ce, head, dc, xx, yy, arg1, arg2,
+<a name="l1153"></a>                                     bm_bkcolor, </span><span class=cF3>FALSE</span><span class=cF0>, xx1, yy1, xx2, yy2, &amp;cur_elem_num</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>SPE_EXIT</span><span class=cF0>)
+<a name="l1154"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1155"></a>                            res = </span><span class=cF3>SPE_EXIT</span><span class=cF0>;
+<a name="l1156"></a>                            </span><span class=cF1>goto</span><span class=cF0> ei_done;
+<a name="l1157"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1158"></a>                        eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1159"></a>                    }
+<a name="l1160"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1161"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1162"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1163"></a>
+<a name="l1164"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_INS_TRANSPARENT_SCREEN_BITMAP</span><span class=cF0>:
+<a name="l1165"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1166"></a>                i = </span><span class=cF5>PopUpColor</span><span class=cF0>(</span><span class=cF6>&quot;Color to Become Transparent\n\n&quot;</span><span class=cF0>,, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1167"></a>                </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l1168"></a>                    eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1169"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1170"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1171"></a>                    bm_bkcolor = i;
+<a name="l1172"></a>                    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;Drag-out a rect for the extents of the\nbitmap.\n&quot;</span><span class=cF0>);
+<a name="l1173"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1174"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1175"></a>                </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> | </span><span class=cF3>WIF_FOCUS_TASK_MS_L</span><span class=cF0> | </span><span class=cF3>WIF_FOCUS_TASK_MS_R</span><span class=cF0> |
+<a name="l1176"></a>                                  </span><span class=cF3>WIF_FOCUS_TASK_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0>;
+<a name="l1177"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1178"></a>
+<a name="l1179"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_THICK</span><span class=cF0>:
+<a name="l1180"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1181"></a>                i = </span><span class=cF5>PopUpRangeI64</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Thick\n&quot;</span><span class=cF0>);
+<a name="l1182"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>1</span><span class=cF0>)
+<a name="l1183"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l1184"></a>                    thick = i;
+<a name="l1185"></a>                    tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_THICK</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1186"></a>                    tmpg-&gt;type = </span><span class=cF3>SPT_THICK</span><span class=cF0>;
+<a name="l1187"></a>                    tmpg-&gt;t.thick = thick;
+<a name="l1188"></a>                    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1189"></a>                    </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1190"></a>                    cur_elem_num++;
+<a name="l1191"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l1192"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1193"></a>                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1194"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1195"></a>
+<a name="l1196"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TRANSFORM_ON</span><span class=cF0>:
+<a name="l1197"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TRANSFORM_OFF</span><span class=cF0>:
+<a name="l1198"></a>                tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_TRANSFORM_ON</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1199"></a>                </span><span class=cF1>if</span><span class=cF0> (eletype == </span><span class=cF3>SPT_TRANSFORM_ON</span><span class=cF0>)
+<a name="l1200"></a>                    tmpg-&gt;type = </span><span class=cF3>SPT_TRANSFORM_ON</span><span class=cF0>;
+<a name="l1201"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1202"></a>                    tmpg-&gt;type = </span><span class=cF3>SPT_TRANSFORM_OFF</span><span class=cF0>;
+<a name="l1203"></a>                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1204"></a>                </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1205"></a>                cur_elem_num++;
+<a name="l1206"></a>                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1207"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1208"></a>
+<a name="l1209"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYGON</span><span class=cF0>:
+<a name="l1210"></a>                doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1211"></a>                i = </span><span class=cF5>PopUpRangeI64</span><span class=cF0>(</span><span class=cFE>3</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Num of Sides\n&quot;</span><span class=cF0>);
+<a name="l1212"></a>                doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1213"></a>                </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>3</span><span class=cF0>)
+<a name="l1214"></a>                    eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1215"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1216"></a>
+<a name="l1217"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT</span><span class=cF0>:
+<a name="l1218"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_BOX</span><span class=cF0>:
+<a name="l1219"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_TEXT_DIAMOND</span><span class=cF0>:
+<a name="l1220"></a>                </span><span class=cF5>SMTextFamily</span><span class=cF0>(eletype, doc, doc_ce, head, dc, xx, yy, arg1, arg2, color, &amp;cur_elem_num, old_de_flags);
+<a name="l1221"></a>                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1222"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1223"></a>        }
+<a name="l1224"></a>
+<a name="l1225"></a>        </span><span class=cF1>if</span><span class=cF0> (eletype != </span><span class=cF3>SPT_MENU</span><span class=cF0>)
+<a name="l1226"></a>        {
+<a name="l1227"></a>            insert_pt = </span><span class=cF5>SpriteSetSettings</span><span class=cF0>(dc, head, cur_elem_num, xx, yy, &amp;color, &amp;thick, &amp;x, &amp;y);
+<a name="l1228"></a>            x += xx;
+<a name="l1229"></a>            y += yy;
+<a name="l1230"></a>            </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(dc, x, y);
+<a name="l1231"></a>            </span><span class=cF1>if</span><span class=cF0> (eletype == </span><span class=cF3>SPT_EXIT</span><span class=cF0>)
+<a name="l1232"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1233"></a>                res = </span><span class=cF3>SPE_EXIT</span><span class=cF0>;
+<a name="l1234"></a>                </span><span class=cF1>goto</span><span class=cF0> ei_done;
+<a name="l1235"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1236"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (eletype == </span><span class=cF3>DOCM_CANCEL</span><span class=cF0>)
+<a name="l1237"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1238"></a>                res = </span><span class=cF3>SPE_ABORT</span><span class=cF0>;
+<a name="l1239"></a>                </span><span class=cF1>goto</span><span class=cF0> ei_done;
+<a name="l1240"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1241"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>MessageGet</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1242"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1243"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l1244"></a>                    </span><span class=cF1>switch</span><span class=cF0> (arg1)
+<a name="l1245"></a>                    {
+<a name="l1246"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l1247"></a>                            res = </span><span class=cF3>SPE_EXIT</span><span class=cF0>;
+<a name="l1248"></a>                            </span><span class=cF1>goto</span><span class=cF0> ei_done;
+<a name="l1249"></a>
+<a name="l1250"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l1251"></a>                            res = </span><span class=cF3>SPE_ABORT</span><span class=cF0>;
+<a name="l1252"></a>                            </span><span class=cF1>goto</span><span class=cF0> ei_done;
+<a name="l1253"></a>
+<a name="l1254"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'c'</span><span class=cF0>: </span><span class=cF2>//eye-dropper</span><span class=cF0>
+<a name="l1255"></a>                            dc3 = </span><span class=cF5>DCScreenCapture</span><span class=cF0>(</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1256"></a>                            color = </span><span class=cF5>GrPeek</span><span class=cF0>(dc3, </span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y) ^ </span><span class=cFE>15</span><span class=cF0>;</span><span class=cF2>//Mouse cursor is XORed.</span><span class=cF0>
+<a name="l1257"></a>                            </span><span class=cF5>DCDel</span><span class=cF0>(dc3);
+<a name="l1258"></a>                            tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_COLOR</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1259"></a>                            tmpg-&gt;type = </span><span class=cF3>SPT_COLOR</span><span class=cF0>;
+<a name="l1260"></a>                            tmpg-&gt;c.color = color;
+<a name="l1261"></a>                            </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1262"></a>                            </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1263"></a>                            cur_elem_num++;
+<a name="l1264"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1265"></a>
+<a name="l1266"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'t'</span><span class=cF0>: </span><span class=cF2>//Set to transparent color</span><span class=cF0>
+<a name="l1267"></a>                            tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_COLOR</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1268"></a>                            tmpg-&gt;type = </span><span class=cF3>SPT_COLOR</span><span class=cF0>;
+<a name="l1269"></a>                            tmpg-&gt;c.color = </span><span class=cF3>TRANSPARENT</span><span class=cF0>;
+<a name="l1270"></a>                            </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1271"></a>                            </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1272"></a>                            cur_elem_num++;
+<a name="l1273"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1274"></a>                    }
+<a name="l1275"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1276"></a>
+<a name="l1277"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_R_UP</span><span class=cF0>:
+<a name="l1278"></a>                    </span><span class=cF1>if</span><span class=cF0> (eletype == </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>)
+<a name="l1279"></a>                    {
+<a name="l1280"></a>                        tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1281"></a>                        tmpg-&gt;type = </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>;
+<a name="l1282"></a>                        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1283"></a>                        </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1284"></a>                        cur_elem_num++;
+<a name="l1285"></a>                        eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1286"></a>                    }
+<a name="l1287"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1288"></a>                        eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1289"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1290"></a>
+<a name="l1291"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:
+<a name="l1292"></a>                    </span><span class=cF1>switch</span><span class=cF0> (eletype)
+<a name="l1293"></a>                    {
+<a name="l1294"></a>                        </span><span class=cF1>start</span><span class=cF0>:
+<a name="l1295"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_LINE</span><span class=cF0>:
+<a name="l1296"></a>                                tmpg = </span><span class=cF5>SMLine</span><span class=cF0>(dc, x, y, arg1, arg2, color);
+<a name="l1297"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1298"></a>
+<a name="l1299"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ARROW</span><span class=cF0>:
+<a name="l1300"></a>                                tmpg = </span><span class=cF5>SMArrow</span><span class=cF0>(dc, x, y, arg1, arg2, color);
+<a name="l1301"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1302"></a>
+<a name="l1303"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PLANAR_SYMMETRY</span><span class=cF0>:
+<a name="l1304"></a>                                tmpg = </span><span class=cF5>SMPlanarSymmetry</span><span class=cF0>(dc, x, y, arg1, arg2);
+<a name="l1305"></a>                                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1306"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1307"></a>
+<a name="l1308"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_RECT</span><span class=cF0>:
+<a name="l1309"></a>                                tmpg = </span><span class=cF5>SMRect</span><span class=cF0>(dc, x, y, arg1, arg2, color);
+<a name="l1310"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1311"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_INS_SCREEN_BITMAP</span><span class=cF0>:
+<a name="l1312"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_INS_TRANSPARENT_SCREEN_BITMAP</span><span class=cF0>:
+<a name="l1313"></a>                                tmpg = </span><span class=cF5>SMScreenBitMap</span><span class=cF0>(eletype, dc, dc2, x, y, arg1, arg2, bm_bkcolor);
+<a name="l1314"></a>                                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1315"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1316"></a>
+<a name="l1317"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_CIRCLE</span><span class=cF0>:
+<a name="l1318"></a>                                tmpg = </span><span class=cF5>SMCircle</span><span class=cF0>(dc, x, y, arg1, arg2, color);
+<a name="l1319"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1320"></a>
+<a name="l1321"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_ELLIPSE</span><span class=cF0>:
+<a name="l1322"></a>                                tmpg = </span><span class=cF5>SMEllipse</span><span class=cF0>(dc, x, y, arg1, arg2, color);
+<a name="l1323"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1324"></a>
+<a name="l1325"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYGON</span><span class=cF0>:
+<a name="l1326"></a>                                tmpg = </span><span class=cF5>SMPolygon</span><span class=cF0>(dc, x, y, arg1, arg2, i, color);
+<a name="l1327"></a>                                eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1328"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1329"></a>
+<a name="l1330"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_PT</span><span class=cF0>:
+<a name="l1331"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL</span><span class=cF0>:
+<a name="l1332"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_FLOOD_FILL_NOT</span><span class=cF0>:
+<a name="l1333"></a>                                tmpg = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF5>SpriteElemQueuedBaseSize</span><span class=cF7>(</span><span class=cF0>eletype</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1334"></a>                                tmpg-&gt;type = eletype;
+<a name="l1335"></a>                                tmpg-&gt;p.x1 = arg1 - x;
+<a name="l1336"></a>                                tmpg-&gt;p.y1 = arg2 - y;
+<a name="l1337"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1338"></a>
+<a name="l1339"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYLINE</span><span class=cF0>:
+<a name="l1340"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2</span><span class=cF0>:
+<a name="l1341"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3</span><span class=cF0>:
+<a name="l1342"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE2_CLOSED</span><span class=cF0>:
+<a name="l1343"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BSPLINE3_CLOSED</span><span class=cF0>:
+<a name="l1344"></a>                                tmpg = </span><span class=cF5>SMPolyLineFamily</span><span class=cF0>(eletype, dc, x, y, arg1, arg2, color);
+<a name="l1345"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1346"></a>
+<a name="l1347"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_POLYPT</span><span class=cF0>:
+<a name="l1348"></a>                                tmpg = </span><span class=cF5>SMPolyPoint</span><span class=cF0>(dc, x, y, arg1, arg2, color);
+<a name="l1349"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1350"></a>                        </span><span class=cF1>end</span><span class=cF0>:
+<a name="l1351"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpg)
+<a name="l1352"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1353"></a>                                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpg, insert_pt-&gt;last);
+<a name="l1354"></a>                                </span><span class=cF5>SpriteEdUpdate</span><span class=cF0>(doc, doc_ce, head);
+<a name="l1355"></a>                                cur_elem_num++;
+<a name="l1356"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1357"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1358"></a>
+<a name="l1359"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_BITMAP</span><span class=cF0>:
+<a name="l1360"></a>                            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>SMBitMap</span><span class=cF7>(</span><span class=cF0>eletype, doc, doc_ce, head, dc, xx, yy, 
+<a name="l1361"></a>                                         arg1, arg2, bm_bkcolor, </span><span class=cF3>TRUE</span><span class=cF0>,,,,, &amp;cur_elem_num</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>SPE_EXIT</span><span class=cF0>)
+<a name="l1362"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1363"></a>                                res = </span><span class=cF3>SPE_EXIT</span><span class=cF0>;
+<a name="l1364"></a>                                </span><span class=cF1>goto</span><span class=cF0> ei_done;
+<a name="l1365"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1366"></a>                            doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1367"></a>                            eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1368"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1369"></a>
+<a name="l1370"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SPT_SHIFTABLE_MESH</span><span class=cF0>:
+<a name="l1371"></a>                            </span><span class=cF5>MessageGet</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>);
+<a name="l1372"></a>                            doc_ce-&gt;de_flags |= </span><span class=cF3>DOCEF_DONT_DRAW</span><span class=cF0>;
+<a name="l1373"></a>                            </span><span class=cF5>SMShiftableMesh</span><span class=cF0>(doc, doc_ce, head, x, y, arg1, arg2, &amp;cur_elem_num);
+<a name="l1374"></a>                            doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1375"></a>                            eletype = </span><span class=cF3>SPT_MENU</span><span class=cF0>;
+<a name="l1376"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1377"></a>                    }
+<a name="l1378"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1379"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1380"></a>        }
+<a name="l1381"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1382"></a>ei_done:
+<a name="l1383"></a>    </span><span class=cF5>DCFill</span><span class=cF0>;
+<a name="l1384"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l1385"></a>    doc_ce-&gt;de_flags = old_de_flags;
+<a name="l1386"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l1387"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc2);
+<a name="l1388"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title, old_task_title);
+<a name="l1389"></a>    </span><span class=cF5>Free</span><span class=cF0>(old_task_title);
+<a name="l1390"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;border_src = old_border_src;
+<a name="l1391"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;title_src  = old_title_src;
+<a name="l1392"></a>    </span><span class=cF5>QueueDel</span><span class=cF0>(head);
+<a name="l1393"></a>    </span><span class=cF5>Free</span><span class=cF0>(head);
+<a name="l1394"></a>
+<a name="l1395"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l1396"></a>}
+<a name="l1397"></a>
+<a name="l1398"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>EdSpriteIns</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
+<a name="l1399"></a>{
+<a name="l1400"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock;
+<a name="l1401"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
+<a name="l1402"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e;
+<a name="l1403"></a>    </span><span class=cF9>CDocBin</span><span class=cF0>     *tmpb;
+<a name="l1404"></a>
+<a name="l1405"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0> != doc-&gt;mem_task)
+<a name="l1406"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Graphics'</span><span class=cF0>);
+<a name="l1407"></a>    </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>EdSprite</span><span class=cF7>(</span><span class=cF0>doc-&gt;cur_bin_num</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1408"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1409"></a>        unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l1410"></a>        tmpb = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDocBin</span><span class=cF7>)</span><span class=cF0>, doc-&gt;mem_task);
+<a name="l1411"></a>        tmpb-&gt;size      = </span><span class=cFB>sprite_elem_base_sizes</span><span class=cF0>[</span><span class=cF3>SPT_END</span><span class=cF0>];
+<a name="l1412"></a>        tmpb-&gt;data      = </span><span class=cF5>CAlloc</span><span class=cF0>(tmpb-&gt;size, doc-&gt;mem_task);
+<a name="l1413"></a>        tmpb-&gt;num       = doc-&gt;cur_bin_num++;
+<a name="l1414"></a>        tmpb-&gt;use_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1415"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpb, doc-&gt;bin_head.last);
+<a name="l1416"></a>        doc_e = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, st);
+<a name="l1417"></a>        doc_e-&gt;bin_data = tmpb;
+<a name="l1418"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l1419"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e)
+<a name="l1420"></a>        {
+<a name="l1421"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TAG</span><span class=cF0> &amp;&amp; doc_e-&gt;tag &amp;&amp; *doc_e-&gt;tag)
+<a name="l1422"></a>                tmpb-&gt;tag = </span><span class=cF5>StrNew</span><span class=cF0>(doc_e-&gt;tag, doc-&gt;mem_task);
+<a name="l1423"></a>            doc-&gt;cur_entry  = doc_e;
+<a name="l1424"></a>            doc-&gt;cur_col    = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1425"></a>            </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l1426"></a>            </span><span class=cF5>DocRecalc</span><span class=cF0>(doc);
+<a name="l1427"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>SpriteMainEd</span><span class=cF7>(</span><span class=cF0>doc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>SPE_ABORT</span><span class=cF0>)
+<a name="l1428"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1429"></a>                </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l1430"></a>                </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_e);
+<a name="l1431"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1432"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1433"></a>                </span><span class=cF5>SpriteSelAll</span><span class=cF0>(tmpb-&gt;data, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1434"></a>        }
+<a name="l1435"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1436"></a>            </span><span class=cF5>DocBinDel</span><span class=cF0>(doc, tmpb);
+<a name="l1437"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l1438"></a>            </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l1439"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1440"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>doc-&gt;flags &amp; (</span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_PLAIN_TEXT_TABS</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1441"></a>        </span><span class=cF5>DocBinsValidate</span><span class=cF0>(doc);
+<a name="l1442"></a>}
+<a name="l1443"></a>
+<a name="l1444"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>EdSpriteEd</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
+<a name="l1445"></a>{
+<a name="l1446"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_ce;
+<a name="l1447"></a>    </span><span class=cF9>CDocBin</span><span class=cF0>     *tmpb;
+<a name="l1448"></a>    </span><span class=cF9>CSprite</span><span class=cF0>     *old_csprite;
+<a name="l1449"></a>    </span><span class=cF9>I64</span><span class=cF0>          old_size;
+<a name="l1450"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l1451"></a>
+<a name="l1452"></a>    doc_ce = doc-&gt;cur_entry;
+<a name="l1453"></a>    tmpb = doc_ce-&gt;bin_data;
+<a name="l1454"></a>    old_size = tmpb-&gt;size;
+<a name="l1455"></a>    old_csprite = tmpb-&gt;data;
+<a name="l1456"></a>    tmpb-&gt;data = </span><span class=cF5>MAllocIdent</span><span class=cF0>(old_csprite, doc-&gt;mem_task);
+<a name="l1457"></a>    </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l1458"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>SpriteMainEd</span><span class=cF7>(</span><span class=cF0>doc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>SPE_ABORT</span><span class=cF0>)
+<a name="l1459"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1460"></a>        </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l1461"></a>        </span><span class=cF5>Free</span><span class=cF0>(tmpb-&gt;data);
+<a name="l1462"></a>        tmpb-&gt;data = old_csprite;
+<a name="l1463"></a>        tmpb-&gt;size = old_size;
+<a name="l1464"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1465"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1466"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1467"></a>        </span><span class=cF5>SpriteSelAll</span><span class=cF0>(tmpb-&gt;data, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1468"></a>        </span><span class=cF5>Free</span><span class=cF0>(old_csprite);
+<a name="l1469"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1470"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l1471"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l1472"></a>}
+</span></pre></body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U8</span><span class=cF0> *RandVocabWord()
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l4"></a>    </span><span class=cF1>U8</span><span class=cF0> *ptr;
+<a name="l5"></a>
+<a name="l6"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFB>acd</span><span class=cF0>.num_words)
+<a name="l7"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l8"></a>    i = </span><span class=cF5>RandU32</span><span class=cF0>%</span><span class=cFB>acd</span><span class=cF0>.num_words;
+<a name="l9"></a>    ptr = </span><span class=cFB>acd</span><span class=cF0>.word_list;
+<a name="l10"></a>    </span><span class=cF1>while</span><span class=cF0> (i-- &amp;&amp; *ptr == </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l11"></a>        ptr += </span><span class=cF5>StrLen</span><span class=cF0>(ptr) + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l12"></a>    </span><span class=cF1>if</span><span class=cF0> (*ptr++ != </span><span class=cF3>ACD_WORD_CHAR</span><span class=cF0>)
+<a name="l13"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l15"></a>        </span><span class=cF1>return</span><span class=cF0> ptr;
+<a name="l16"></a>}
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF1>U0</span><span class=cF0> VocabQuiz()
+<a name="l19"></a>{
+<a name="l20"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, i, num;
+<a name="l21"></a>    </span><span class=cF1>U8</span><span class=cF0> *right_word, *words[</span><span class=cFE>4</span><span class=cF0>];
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF3>ACD_DEF_FILENAME</span><span class=cF7>)</span><span class=cF0>)
+<a name="l24"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l25"></a>        </span><span class=cF6>&quot;Uncompressed dictionary not present.\n&quot;</span><span class=cF0>;
+<a name="l26"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l27"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l30"></a>        right_word = RandVocabWord;
+<a name="l31"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>4</span><span class=cF0>; i++)
+<a name="l32"></a>            words[i] = RandVocabWord;
+<a name="l33"></a>        num = </span><span class=cF5>RandU32</span><span class=cF0> &amp; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l34"></a>        words[num] = right_word;
+<a name="l35"></a>
+<a name="l36"></a>        </span><span class=cF6>&quot;$WW,1$$CM-LE,5$$RED$$BK,1$%s$BK,0$:$FG$$LM,4$\n&quot;</span><span class=cF0>, right_word;
+<a name="l37"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>4</span><span class=cF0>; i++)
+<a name="l38"></a>            </span><span class=cF6>&quot;\n\n$GREEN$$BT-X,\&quot;%d\&quot;,LM=\&quot;%d\&quot;$$FG$&quot;</span><span class=cF0>
+<a name="l39"></a>            </span><span class=cF6>&quot;$LM,7$%s\n$LM,4$&quot;</span><span class=cF0>, i + </span><span class=cFE>1</span><span class=cF0>, i + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF5>ACDDefGet</span><span class=cF0>(words[i]);
+<a name="l40"></a>        </span><span class=cF6>&quot;\n\n$LTBLUE$Answer:$FG$&quot;</span><span class=cF0>;
+<a name="l41"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l42"></a>        {
+<a name="l43"></a>            ch = </span><span class=cF5>KeyGet</span><span class=cF0>(, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l44"></a>            </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l45"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'1'</span><span class=cF0> &lt;= ch &lt;= </span><span class=cF6>'4'</span><span class=cF0>)
+<a name="l46"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l47"></a>                </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l48"></a>                </span><span class=cF1>if</span><span class=cF0> (ch - </span><span class=cF6>'1'</span><span class=cF0> == num)
+<a name="l49"></a>                {
+<a name="l50"></a>                    </span><span class=cF6>&quot;$LTGREEN$Correct\n$FG$&quot;</span><span class=cF0>;
+<a name="l51"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>74</span><span class=cF0>);
+<a name="l52"></a>                }
+<a name="l53"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l54"></a>                {
+<a name="l55"></a>                    </span><span class=cF6>&quot;$LTRED$Incorrect\n$FG$&quot;</span><span class=cF0>;
+<a name="l56"></a>                    </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>46</span><span class=cF0>);
+<a name="l57"></a>                }
+<a name="l58"></a>                </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
+<a name="l59"></a>                </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l60"></a>                </span><span class=cF5>ACDPopUpDef</span><span class=cF0>(right_word);
+<a name="l61"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l62"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l63"></a>        }
+<a name="l64"></a>        </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_ESC</span><span class=cF0>);
+<a name="l65"></a>
+<a name="l66"></a>        </span><span class=cF6>&quot;$LM,0$\n&quot;</span><span class=cF0>;
+<a name="l67"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l68"></a>    </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0> &amp;&amp; ch != </span><span class=cF3>CH_ESC</span><span class=cF0>);
+<a name="l69"></a>}
+</span></pre></body>
+</html>

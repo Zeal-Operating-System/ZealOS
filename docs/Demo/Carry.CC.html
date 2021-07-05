@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Shows the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l203"><span class=cF4>Carry</span></a><span class=cF2> function.  It holds the CPU carry flag.</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.html#l771"><span class=cF4>U</span></a><span class=cF2>() Unassemble to make sure it is right.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF1>U0</span><span class=cF0> BigCount()
+<a name="l5"></a>{
+<a name="l6"></a>    </span><span class=cF9>U64</span><span class=cF0> lo = </span><span class=cFE>0</span><span class=cF0>, hi = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF6>&quot;BigCount\n&quot;</span><span class=cF0>;
+<a name="l9"></a>    </span><span class=cF1>while</span><span class=cF0> (hi &lt; </span><span class=cFE>0x10</span><span class=cF0>)
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        lo += </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>58</span><span class=cF0>;
+<a name="l12"></a>        hi += </span><span class=cF5>Carry</span><span class=cF0>;
+<a name="l13"></a>        </span><span class=cF6>&quot;%016X %016X\n&quot;</span><span class=cF0>, hi, lo;
+<a name="l14"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l15"></a>}
+<a name="l16"></a>
+<a name="l17"></a>BigCount;
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cF1>U0</span><span class=cF0> BigShift()
+<a name="l20"></a>{
+<a name="l21"></a>    </span><span class=cF9>U64</span><span class=cF0> lo = </span><span class=cFE>1</span><span class=cF0>, hi = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF6>&quot;Big Shift\n&quot;</span><span class=cF0>;
+<a name="l24"></a>    </span><span class=cF1>while</span><span class=cF0> (lo || hi)
+<a name="l25"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l26"></a>        hi &lt;&lt;= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l27"></a>        lo &lt;&lt;= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l28"></a>        hi += </span><span class=cF5>Carry</span><span class=cF0>;
+<a name="l29"></a>        </span><span class=cF6>&quot;%016X %016X\n&quot;</span><span class=cF0>, hi, lo;
+<a name="l30"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l31"></a>}
+<a name="l32"></a>
+<a name="l33"></a>BigShift;
+<a name="l34"></a>
+<a name="l35"></a></span><span class=cF1>U0</span><span class=cF0> Branch()
+<a name="l36"></a>{
+<a name="l37"></a>    </span><span class=cF9>U64</span><span class=cF0> i = </span><span class=cFE>0xFFCC3311</span><span class=cF0>, j;
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF6>'Branch\n'</span><span class=cF0>;
+<a name="l40"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>64</span><span class=cF0>; j++)
+<a name="l41"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l42"></a>        i &lt;&lt;= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l43"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Carry</span><span class=cF0>)
+<a name="l44"></a>            </span><span class=cF6>'1'</span><span class=cF0>;
+<a name="l45"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l46"></a>            </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l47"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l48"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l49"></a>}
+<a name="l50"></a>
+<a name="l51"></a>Branch;
+</span></pre></body>
+</html>
