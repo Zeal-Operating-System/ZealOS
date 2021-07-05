@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.c0F{color:#000000;background-color:#ffffff;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF5>                                                        DolDoc Overview</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>DolDoc is a ZealOS document type supported by </span><span class=cF4><u>DolDoc Routines</u></span><span class=cF0>.  In a document, commands are bracketed with '</span><span class=cF2>$</span><span class=cF0>'s.    Use </span><span class=cF2>&lt;CTRL-l&gt;</span><span class=cF0> 
+<a name="l4"></a>to experiment inserting a command.  Then, use </span><span class=cF2>&lt;CTRL-t&gt;</span><span class=cF0> to toggle to plain text to see it.
+<a name="l5"></a>
+<a name="l6"></a>Here is the grammar:
+<a name="l7"></a>
+<a name="l8"></a>&lt;DolDocCmd&gt; := </span><span class=cF2>$</span><span class=cF0>&lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;[&lt;FlagList&gt;][</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]</span><span class=cF2>$</span><span class=cF0> | </span><span class=cF2>$</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.html#l246"><span class=cF4>ColorName</span></a><span class=cF2>$</span><span class=cF0>
+<a name="l9"></a>
+<a name="l10"></a>&lt;FlagList&gt; := </span><span class=cF2>+</span><span class=cF0>|</span><span class=cF2>-</span><span class=cF0> &lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;[&lt;FlagList&gt;]
+<a name="l11"></a>
+<a name="l12"></a>&lt;ArgList&gt; := &lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>&lt;ArgExpression&gt;[</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]
+<a name="l13"></a>
+<a name="l14"></a>
+<a name="l15"></a>The format of DolDoc cmds is a two character code, +/-flags, a comma and args separated by commas.  Some commands have mandatory 
+<a name="l16"></a>args.   Optional args are indicated with &lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>.  A </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.html#l246"><span class=cF4>ColorName</span></a><span class=cF0> bracked by dollars, will change the foreground color.
+<a name="l17"></a>
+<a name="l18"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Widget.html#l1"><span class=cF4>::/Doc/Widget.DD</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Demo/DolDoc/DemoDoc.html#l1"><span class=cF4>::/Demo/DolDoc/DemoDoc.DD</span></a><span class=cF0>, and </span><a href="https://tomawezome.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/ToHtml.CC</span></a><span class=cF0>.
+<a name="l19"></a>
+<a name="l20"></a>&lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1040"><span class=cF4>Type Defines</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPlain.html#l272"><span class=cF4>ParseDollarCmd</span></a><span class=cF0>().</span><span class=cF5>
+<a name="l21"></a><u>+] TX Text
+<a name="l22"></a>+] CR Hard New Line
+<a name="l23"></a>+] SR Soft New Line
+<a name="l24"></a>+] CU Cursor pos
+<a name="l25"></a>+] TB Tab
+<a name="l26"></a>+] CL Clear
+<a name="l27"></a>+] PB Page Break
+<a name="l28"></a>+] PL Page Length
+<a name="l29"></a>+] LM Left Margin
+<a name="l30"></a>+] RM Right Margin
+<a name="l31"></a>+] HD Header
+<a name="l32"></a>+] FO Footer
+<a name="l33"></a>+] ID Indent +/- num
+<a name="l34"></a>+] Text Colors
+<a name="l35"></a>+] PT User Prompt
+<a name="l36"></a>+] WW Word Wrap
+<a name="l37"></a>+] UL Underline
+<a name="l38"></a>+] IV Invert
+<a name="l39"></a>+] BK Blink
+<a name="l40"></a>+] SX Shift X pos
+<a name="l41"></a>+] SY Shift Y pos
+<a name="l42"></a>+] CM Cursor Movement
+<a name="l43"></a>+] AN Anchor
+<a name="l44"></a>+] LK Link
+<a name="l45"></a>+] BT Bttn
+<a name="l46"></a>+] DA Data
+<a name="l47"></a>+] CB Check Box
+<a name="l48"></a>+] LS List Widget
+<a name="l49"></a>+] MA Macro
+<a name="l50"></a>+] MU Menu Value
+<a name="l51"></a>+] HX Hex Edit
+<a name="l52"></a>+] TR Tree Widget
+<a name="l53"></a>+] SP Sprite
+<a name="l54"></a>+] IB Insert Binary
+<a name="l55"></a>+] IS Insert Binary Size
+<a name="l56"></a>+] SO Song
+<a name="l57"></a>+] HL Highlighting
+<a name="l58"></a>+] HC html
+<a name="l59"></a>+] ER Error</span><span class=cF0>
+<a name="l60"></a>
+<a name="l61"></a></u>&lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1208"><span class=cF4>Flag Defines</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Doc/Widget.html#l1"><span class=cF4>Simple Flags</span></a><span class=cF0>.</span><span class=cF5>
+<a name="l62"></a><u>+] +H Hold
+<a name="l63"></a>+] +L Link
+<a name="l64"></a>+] +TR Tree
+<a name="l65"></a>+] +LS List
+<a name="l66"></a>+] +PU PopUp
+<a name="l67"></a>+] +C Collapsed
+<a name="l68"></a>+] +X &lt;ESC&gt; (Exit)
+<a name="l69"></a>+] +Q &lt;SHIFT-ESC&gt; (Abort Quit)
+<a name="l70"></a>+] +Z Zero
+<a name="l71"></a>+] +RD Refresh Data
+<a name="l72"></a>+] +UD Update Data
+<a name="l73"></a>+] +TC Tag CallBack
+<a name="l74"></a>+] +LC Left CallBack
+<a name="l75"></a>+] +RC Right CallBack</span><span class=cF0>
+<a name="l76"></a>
+<a name="l77"></a></u>&lt;</span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocInit.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;   See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l1190"><span class=cF4>Arg Defines</span></a><span class=cF0>.</span><span class=cF5>
+<a name="l78"></a><u>+] T=&quot;&quot; Tag Str
+<a name="l79"></a>+] LEN=&quot;&quot; Field Length
+<a name="l80"></a>+] A=&quot;&quot; Auxilliary Str
+<a name="l81"></a>+] D=&quot;&quot; Define Str
+<a name="l82"></a>+] HTML=&quot;&quot;
+<a name="l83"></a>+] LE=&lt;Exp&gt; Left Expression
+<a name="l84"></a>+] LM=&quot;&quot; Left Macro Str
+<a name="l85"></a>+] RE=&lt;Exp&gt; Right Expression
+<a name="l86"></a>+] RM=&quot;&quot; Right Macro Str
+<a name="l87"></a>+] BI=&lt;Exp&gt; Bin Number
+<a name="l88"></a>+] BP=&quot;&quot; Bin Ptr
+<a name="l89"></a>+] RT=&lt;raw_data_type&gt;
+<a name="l90"></a>+] SX=&lt;Exp&gt; Shift X
+<a name="l91"></a>+] SY=&lt;Exp&gt; Shift Y
+<a name="l92"></a>+] SCX=&lt;Exp&gt; Scroll X
+<a name="l93"></a>+] U=&lt;Exp&gt; User Data</span><span class=cF0>
+<a name="l94"></a>
+<a name="l95"></a></u></span><span class=cF5>EXAMPLES:
+<a name="l96"></a>
+<a name="l97"></a></span><span class=cF0>&lt;CTRL-t&gt; to see how the following were done.
+<a name="l98"></a><u>Underlined</u> </span><span class=c0F>Inverted</span><span class=cF0> <blink>Blinking</blink> super sub
+<a name="l99"></a>This is a big long scrolling message.
+<a name="l100"></a>
+<a name="l101"></a></span><span class=cF5>Cursor Movements:</span><span class=cF0>
+<a name="l102"></a>
+<a name="l103"></a>
+<a name="l104"></a>
+<a name="l105"></a>   Cursor moved 3 rows down and to 3rd column from left.
+<a name="l106"></a>                                                                                                                                
+<a name="l107"></a>
+<a name="l108"></a>
+<a name="l109"></a>                                                                                        Note mandatory comma after flags
+<a name="l110"></a>
+<a name="l111"></a>The following may be changed to modes instead of attr with flags.
+<a name="l112"></a>
+<a name="l113"></a>                                                        This is centered
+<a name="l114"></a>
+<a name="l115"></a>                                                                                                         This is right justified
+</span></pre></body>
+</html>

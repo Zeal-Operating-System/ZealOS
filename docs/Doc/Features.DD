@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.c0F{color:#000000;background-color:#ffffff;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=c0F>    </span><span class=cF0>             </span><span class=cF5>                                       ZealOS Features</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>* Oracle with </span><span class=cF2>&lt;F7&gt;</span><span class=cF0> for words or </span><span class=cF2>&lt;SHIFT-F7&gt;</span><span class=cF0> for passages.
+<a name="l4"></a>
+<a name="l5"></a>* </span><a href="http://en.wikipedia.org/wiki/Amd64#AMD64"><span class=cF4>x86_64</span></a><span class=cF0>, ring-0-only, single-address-map (identity), multitasking kernel with multicore support.
+<a name="l6"></a>
+<a name="l7"></a>* Master/Slave MultiCore
+<a name="l8"></a>
+<a name="l9"></a>* Free, </span><span class=cF2>public domain</span><span class=cF0>, </span><span class=cF2>100% open source</span><span class=cF0>.
+<a name="l10"></a>
+<a name="l11"></a>* 64-bit </span><span class=cF2>compiler/assembler</span><span class=cF0> for </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0>. Truly compiles, doesn't interpret.  </span><span class=cF2>Just-in-Time</span><span class=cF0> and </span><span class=cF2>Ahead-of-Time</span><span class=cF0> compilation.  With </span><span class=cF2>JI
+<a name="l12"></a>T</span><span class=cF0>, no need for object or exe files.
+<a name="l13"></a>
+<a name="l14"></a>* No 32-bit krufty code.
+<a name="l15"></a>
+<a name="l16"></a>* 32-bit color </span><span class=cF2>high-res VBE</span><span class=cF0> graphics.
+<a name="l17"></a>
+<a name="l18"></a>* Keyboard &amp; Mouse support.
+<a name="l19"></a>
+<a name="l20"></a>* AHCI ATA Hard drives, support for </span><span class=cF2>FAT32</span><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file systems with file compression.
+<a name="l21"></a>
+<a name="l22"></a>* AHCI ATAPI </span><span class=cF2>CD/DVD</span><span class=cF0> support with </span><span class=cF2>RedSea</span><span class=cF0> file system.  Can make bootable ISO files so you can roll-your-own distro's.
+<a name="l23"></a>
+<a name="l24"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/DiskPart.html#l13"><span class=cF4>Partitioning</span></a><span class=cF0> tool, installer, </span><span class=cF2>boot loaders</span><span class=cF0> for CD/DVD and hard disk.
+<a name="l25"></a>
+<a name="l26"></a>* </span><span class=cF2>Editor/Browser</span><span class=cF0> for a new </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>Document Format</span></a><span class=cF0>. Source files and the command line window can have graphics, links, icons, trees, 
+<a name="l27"></a>colors, super/sub scripts, margins. Everything is seamless through-out the tool chain.  No need for separate resource files.
+<a name="l28"></a>
+<a name="l29"></a>* 8-bit </span><span class=cF2>ASCII</span><span class=cF0>, not just 7-bit.  Supported in entire tool chain.  </span><span class=cF2>&lt;CTRL-ALT-a&gt;</span><span class=cF0>
+<a name="l30"></a>
+<a name="l31"></a>* </span><span class=cF2>Graphics in source code</span><span class=cF0>, no resource files, </span><span class=cF2>graphic sprite editor</span><span class=cF0>. </span><span class=cF2>&lt;CTRL-r&gt;</span><span class=cF0>
+<a name="l32"></a>
+<a name="l33"></a>* </span><span class=cF2>64-bit pointers</span><span class=cF0>.  All memory, even more than 4Gig, can be directly accessed by all tasks on all cores at all times.
+<a name="l34"></a>
+<a name="l35"></a>* </span><span class=cF2>Ring-0-only</span><span class=cF0>.  Highest CPU privileged mode at all times.  No off-limits insts.  No time lost changing modes or address maps.  
+<a name="l36"></a>Switches tasks in half a microsecond.
+<a name="l37"></a>
+<a name="l38"></a>* </span><span class=cF2>2D/3D</span><span class=cF0> graphics library
+<a name="l39"></a>
+<a name="l40"></a>* Real-time fancy </span><span class=cF2>differential-equation solver</span><span class=cF0> for physics engines, to use in games.    (Adaptive step-size Runge-Kutta, 
+<a name="l41"></a>interpolated for real-time.)
+<a name="l42"></a>
+<a name="l43"></a>* Auto-completion, jump-to-source tool called </span><span class=cF2>AutoComplete</span><span class=cF0> with Dictionary.
+<a name="l44"></a>
+<a name="l45"></a>* Window Manager.  Pan screen with </span><span class=cF2>&lt;CTRL-LeftDrag&gt;</span><span class=cF0>.  Zoom screen on mouse cursor with </span><span class=cF2>&lt;CTRL-ALT-z&gt;</span><span class=cF0>/</span><span class=cF2>&lt;CTRL-ALT-SHIFT-Z&gt;</span><span class=cF0>.
+<a name="l46"></a>
+<a name="l47"></a>* File Manager, </span><span class=cF2>&lt;CTRL-d&gt;</span><span class=cF0>.
+<a name="l48"></a>
+<a name="l49"></a>* Code </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Profiler.html#l30"><span class=cF4>profiler</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Merge.html#l44"><span class=cF4>merge</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Diff.html#l259"><span class=cF4>diff</span></a><span class=cF0> utils.
+<a name="l50"></a>
+<a name="l51"></a>* </span><span class=cF2>PC Speaker</span><span class=cF0> support with many hymns.
+<a name="l52"></a>
+<a name="l53"></a>* Music composing tool.
+<a name="l54"></a>
+<a name="l55"></a>* Many games, </span><a href="https://tomawezome.github.io/ZealOS/Doc/DemoIndex.html#l1"><span class=cF4>demos</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Doc/HelpIndex.html#l1"><span class=cF4>documentation</span></a><span class=cF0>.
+<a name="l56"></a>
+<a name="l57"></a>* </span><span class=cF2>All source code</span><span class=cF0> included.  Only compiles with the included ZealOS compiler and assembler.
+</span></pre></body>
+</html>

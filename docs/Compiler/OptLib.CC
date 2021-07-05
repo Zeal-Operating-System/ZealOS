@@ -1,0 +1,676 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF9>CCodeMisc</span><span class=cF0> *</span><span class=cFD>OptLabelFwd</span><span class=cF0>(</span><span class=cF9>CCodeMisc</span><span class=cF0> *lb)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>CCodeMisc</span><span class=cF0> *lb1;
+<a name="l4"></a>
+<a name="l5"></a>    </span><span class=cF1>while</span><span class=cF0> (lb1 = lb-&gt;forward)
+<a name="l6"></a>        lb = lb1;
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF1>return</span><span class=cF0> lb;
+<a name="l9"></a>}
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF9>CHashClass</span><span class=cF0> *</span><span class=cF5>OptClassFwd</span><span class=cF0>(</span><span class=cF9>CHashClass</span><span class=cF0> *tmpc)
+<a name="l12"></a>{</span><span class=cF2>//Class forwarding for unions and subclasses.</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF9>CHashClass</span><span class=cF0> *tmpc1;
+<a name="l14"></a>
+<a name="l15"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpc1 = tmpc-&gt;fwd_class)
+<a name="l16"></a>        tmpc = tmpc1;
+<a name="l17"></a>
+<a name="l18"></a>    </span><span class=cF1>return</span><span class=cF0> tmpc;
+<a name="l19"></a>}
+<a name="l20"></a>
+<a name="l21"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>OptSetNOP1</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l22"></a>{
+<a name="l23"></a>    tmpi-&gt;ic_code = </span><span class=cF3>IC_NOP1</span><span class=cF0>;
+<a name="l24"></a>    tmpi-&gt;ic_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l25"></a>    tmpi-&gt;arg1.type = </span><span class=cF3>MDF_NULL</span><span class=cF0> + tmpi-&gt;arg1.type.raw_type;
+<a name="l26"></a>    tmpi-&gt;res.type  = </span><span class=cF3>MDF_NULL</span><span class=cF0> + tmpi-&gt;res.type.raw_type;
+<a name="l27"></a>}
+<a name="l28"></a>
+<a name="l29"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>OptSetNOP2</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi, </span><span class=cF9>I64</span><span class=cF0> stack_delta=</span><span class=cFE>1</span><span class=cF0>)
+<a name="l30"></a>{
+<a name="l31"></a>    tmpi-&gt;ic_code = </span><span class=cF3>IC_NOP2</span><span class=cF0>;
+<a name="l32"></a>    tmpi-&gt;ic_data = stack_delta;
+<a name="l33"></a>    tmpi-&gt;arg1.type = </span><span class=cF3>MDF_NULL</span><span class=cF0> + tmpi-&gt;arg1.type.raw_type;
+<a name="l34"></a>    tmpi-&gt;res.type  = </span><span class=cF3>MDF_NULL</span><span class=cF0> + tmpi-&gt;res.type.raw_type;
+<a name="l35"></a>}
+<a name="l36"></a>
+<a name="l37"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptFree</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l38"></a>{</span><span class=cF2>//We might access freed entries in CICTreeLinks</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpi);
+<a name="l40"></a>    </span><span class=cF5>Free</span><span class=cF0>(tmpi);
+<a name="l41"></a>
+<a name="l42"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l43"></a>}
+<a name="l44"></a>
+<a name="l45"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptLag</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l46"></a>{
+<a name="l47"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l48"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l49"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpi-&gt;ic_code)
+<a name="l50"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l51"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l52"></a>            tmpi = tmpi-&gt;last;
+<a name="l53"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l54"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpi-&gt;ic_code &lt;= </span><span class=cF3>IC_END_EXP</span><span class=cF0>);
+<a name="l55"></a>
+<a name="l56"></a>    </span><span class=cF1>return</span><span class=cF0> tmpi;
+<a name="l57"></a>}
+<a name="l58"></a>
+<a name="l59"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptLag1</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l60"></a>{
+<a name="l61"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l62"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l63"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpi-&gt;ic_code)
+<a name="l64"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l65"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l66"></a>            tmpi = tmpi-&gt;last;
+<a name="l67"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l68"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_NOP1</span><span class=cF0> || tmpi-&gt;ic_code == </span><span class=cF3>IC_NOP2</span><span class=cF0>);
+<a name="l69"></a>
+<a name="l70"></a>    </span><span class=cF1>return</span><span class=cF0> tmpi;
+<a name="l71"></a>}
+<a name="l72"></a>
+<a name="l73"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptLag2</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l74"></a>{
+<a name="l75"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l76"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l77"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpi-&gt;ic_code)
+<a name="l78"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l79"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l80"></a>            tmpi = tmpi-&gt;last;
+<a name="l81"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l82"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpi-&gt;ic_code &lt; </span><span class=cF3>IC_END_EXP</span><span class=cF0>);
+<a name="l83"></a>
+<a name="l84"></a>    </span><span class=cF1>return</span><span class=cF0> tmpi;
+<a name="l85"></a>}
+<a name="l86"></a>
+<a name="l87"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptLead1</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l88"></a>{
+<a name="l89"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l90"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l91"></a>        tmpi = tmpi-&gt;next;
+<a name="l92"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpi-&gt;ic_code)
+<a name="l93"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l94"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_NOP1</span><span class=cF0> || tmpi-&gt;ic_code == </span><span class=cF3>IC_NOP2</span><span class=cF0>);
+<a name="l96"></a>
+<a name="l97"></a>    </span><span class=cF1>return</span><span class=cF0> tmpi;
+<a name="l98"></a>}
+<a name="l99"></a>
+<a name="l100"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>CompOffset2Reg</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>offset</span><span class=cF0>, </span><span class=cF9>COptReg</span><span class=cF0> *reg_offsets)
+<a name="l101"></a>{
+<a name="l102"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l103"></a>
+<a name="l104"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>REG_REGS_NUM</span><span class=cF0>; i++)
+<a name="l105"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>offset</span><span class=cF0> == reg_offsets[i].</span><span class=cF1>offset</span><span class=cF0>)
+<a name="l106"></a>            </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l107"></a>
+<a name="l108"></a>    </span><span class=cF1>return</span><span class=cF0> -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l109"></a>}
+<a name="l110"></a>
+<a name="l111"></a>#</span><span class=cF1>define</span><span class=cF0> FBO1_NOT_CONST  </span><span class=cFE>0</span><span class=cF0>
+<a name="l112"></a>#</span><span class=cF1>define</span><span class=cF0> FBO1_INT        </span><span class=cFE>1</span><span class=cF0>
+<a name="l113"></a>#</span><span class=cF1>define</span><span class=cF0> FBO1_F64        </span><span class=cFE>2</span><span class=cF0>
+<a name="l114"></a>
+<a name="l115"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>OptFixupBinaryOp1</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi1, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi2, </span><span class=cF1>Bool</span><span class=cF0> *is_unsigned)
+<a name="l116"></a>{
+<a name="l117"></a>    </span><span class=cF9>CIntermediateCode</span><span class=cF0>   *tmpii;
+<a name="l118"></a>    </span><span class=cF9>CHashClass</span><span class=cF0>          *tmpc = tmpi-&gt;ic_class, *tmpc1, *tmpc2;
+<a name="l119"></a>
+<a name="l120"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_INT</span><span class=cF0>)
+<a name="l121"></a>        tmpc1 = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_I64</span><span class=cF0>];
+<a name="l122"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>)
+<a name="l123"></a>        tmpc1 = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>];
+<a name="l124"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l125"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l126"></a>        tmpc1 = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpi1-&gt;ic_class);
+<a name="l127"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l128"></a>
+<a name="l129"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi2-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_INT</span><span class=cF0>)
+<a name="l130"></a>        tmpc2 = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_I64</span><span class=cF0>];
+<a name="l131"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpi2-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>)
+<a name="l132"></a>        tmpc2 = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>];
+<a name="l133"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l134"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l135"></a>        tmpc2 = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpi2-&gt;ic_class);
+<a name="l136"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l137"></a>
+<a name="l138"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpc1-&gt;raw_type&gt;tmpc2-&gt;raw_type)
+<a name="l139"></a>        tmpc = tmpi-&gt;ic_class = tmpc1;
+<a name="l140"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l141"></a>        tmpc = tmpi-&gt;ic_class = tmpc2;
+<a name="l142"></a>
+<a name="l143"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpc-&gt;raw_type == </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l144"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l145"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0>)
+<a name="l146"></a>        {
+<a name="l147"></a>            tmpi1-&gt;ic_data(</span><span class=cF1>F64</span><span class=cF0>) = tmpi1-&gt;ic_data;
+<a name="l148"></a>            tmpi1-&gt;ic_class = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>];
+<a name="l149"></a>            tmpi1-&gt;ic_code = </span><span class=cF3>IC_IMM_F64</span><span class=cF0>;
+<a name="l150"></a>            tmpi1-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l151"></a>        }
+<a name="l152"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l153"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpc1-&gt;raw_type != </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l154"></a>                tmpi1-&gt;ic_flags |= </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l155"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi2-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0>)
+<a name="l156"></a>        {
+<a name="l157"></a>            tmpi2-&gt;ic_data(</span><span class=cF1>F64</span><span class=cF0>) = tmpi2-&gt;ic_data;
+<a name="l158"></a>            tmpi2-&gt;ic_class = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>];
+<a name="l159"></a>            tmpi2-&gt;ic_code = </span><span class=cF3>IC_IMM_F64</span><span class=cF0>;
+<a name="l160"></a>            tmpi2-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l161"></a>        }
+<a name="l162"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l163"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpc2-&gt;raw_type != </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l164"></a>                tmpi2-&gt;ic_flags |= </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l165"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>IC_LESS</span><span class=cF0> &lt;= tmpi-&gt;ic_code &lt;= </span><span class=cF3>IC_GREATER_EQU</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>tmpii = </span><span class=cFD>OptLead1</span><span class=cF0>(tmpi)</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l166"></a>            tmpii-&gt;ic_code != </span><span class=cF3>IC_PUSH_CMP</span><span class=cF0> &amp;&amp; tmpii-&gt;ic_code != </span><span class=cF3>IC_AND_AND</span><span class=cF0>)
+<a name="l167"></a>        {
+<a name="l168"></a></span><span class=cF2>//We are looking for float comparisons to zero to convert to int.</span><span class=cF0>
+<a name="l169"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_F64</span><span class=cF0> &amp;&amp; !tmpi1-&gt;ic_data &amp;&amp;
+<a name="l170"></a>                tmpi2-&gt;ic_code == </span><span class=cF3>IC_DEREF</span><span class=cF0> &amp;&amp; tmpc2 == </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>])
+<a name="l171"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l172"></a>                tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0>;
+<a name="l173"></a>                </span><span class=cF1>goto</span><span class=cF0> fb_here1;
+<a name="l174"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l175"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpi2-&gt;ic_code == </span><span class=cF3>IC_IMM_F64</span><span class=cF0> &amp;&amp; !tmpi2-&gt;ic_data &amp;&amp;
+<a name="l176"></a>                    tmpi1-&gt;ic_code == </span><span class=cF3>IC_DEREF</span><span class=cF0> &amp;&amp; tmpc1 == </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>])
+<a name="l177"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l178"></a>                tmpi2-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0>;
+<a name="l179"></a>fb_here1:
+<a name="l180"></a>                tmpi1-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l181"></a>                tmpi-&gt;ic_class = tmpi1-&gt;ic_class = tmpi2-&gt;ic_class = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_I64</span><span class=cF0>];
+<a name="l182"></a>                *is_unsigned = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l183"></a>                </span><span class=cF1>return</span><span class=cF0> FBO1_NOT_CONST;
+<a name="l184"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l185"></a>            </span><span class=cF1>goto</span><span class=cF0> fb_here2;
+<a name="l186"></a>        }
+<a name="l187"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l188"></a>        {
+<a name="l189"></a>fb_here2:
+<a name="l190"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_F64</span><span class=cF0> &amp;&amp; tmpi2-&gt;ic_code == </span><span class=cF3>IC_IMM_F64</span><span class=cF0> &amp;&amp;
+<a name="l191"></a>                !</span><span class=cF7>(</span><span class=cF0>tmpi-&gt;ic_flags &amp; (</span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0> | </span><span class=cF3>ICF_POP_CMP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l192"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l193"></a>                tmpi-&gt;ic_flags |= tmpi1-&gt;ic_flags | tmpi2-&gt;ic_flags;
+<a name="l194"></a>                </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi1);
+<a name="l195"></a>                </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi2);
+<a name="l196"></a>                </span><span class=cF1>return</span><span class=cF0> FBO1_F64;
+<a name="l197"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l199"></a>                </span><span class=cF1>return</span><span class=cF0> FBO1_NOT_CONST;
+<a name="l200"></a>        }
+<a name="l201"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l202"></a>    *is_unsigned = tmpc1-&gt;raw_type &amp; </span><span class=cF3>RTF_UNSIGNED</span><span class=cF0> || tmpc2-&gt;raw_type &amp; </span><span class=cF3>RTF_UNSIGNED</span><span class=cF0>;
+<a name="l203"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0> &amp;&amp; tmpi2-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpi-&gt;ic_flags &amp; (</span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0> | </span><span class=cF3>ICF_POP_CMP</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l204"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l205"></a>        tmpi-&gt;ic_flags |= tmpi1-&gt;ic_flags | tmpi2-&gt;ic_flags;
+<a name="l206"></a>        </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi1);
+<a name="l207"></a>        </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi2);
+<a name="l208"></a>        </span><span class=cF1>return</span><span class=cF0> FBO1_INT;
+<a name="l209"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l210"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l211"></a>        </span><span class=cF1>return</span><span class=cF0> FBO1_NOT_CONST;
+<a name="l212"></a>}
+<a name="l213"></a>
+<a name="l214"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>OptFixupBinaryOp2</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> **tmpi1, </span><span class=cF9>CIntermediateCode</span><span class=cF0> **tmpi2)
+<a name="l215"></a>{
+<a name="l216"></a>    </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpii1 = *tmpi1, *tmpii2 = *tmpi2;
+<a name="l217"></a>
+<a name="l218"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpii1-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpii1-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l219"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l220"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpii2-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpii2-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l221"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l222"></a>        *tmpi1 = tmpii2;
+<a name="l223"></a>        *tmpi2 = tmpii1;
+<a name="l224"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l225"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l226"></a>
+<a name="l227"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l228"></a>}
+<a name="l229"></a>
+<a name="l230"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>OptFixupUnaryOp</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi1, </span><span class=cF1>Bool</span><span class=cF0> *is_unsigned)
+<a name="l231"></a>{
+<a name="l232"></a>    </span><span class=cF9>CHashClass</span><span class=cF0> *tmpc, *tmpc1;
+<a name="l233"></a>
+<a name="l234"></a>    tmpc1 = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpi1-&gt;ic_class);
+<a name="l235"></a>    tmpi-&gt;ic_class = tmpc1;
+<a name="l236"></a>    tmpc = tmpi-&gt;ic_class;
+<a name="l237"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpc-&gt;raw_type == </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l238"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l239"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0>)
+<a name="l240"></a>        {
+<a name="l241"></a>            tmpi1-&gt;ic_data(</span><span class=cF1>F64</span><span class=cF0>) = tmpi1-&gt;ic_data;
+<a name="l242"></a>            tmpi1-&gt;ic_class = </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_F64</span><span class=cF0>];
+<a name="l243"></a>            tmpi1-&gt;ic_code = </span><span class=cF3>IC_IMM_F64</span><span class=cF0>;
+<a name="l244"></a>            tmpi1-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l245"></a>        }
+<a name="l246"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l247"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpc1-&gt;raw_type != </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l248"></a>                tmpi1-&gt;ic_flags |= </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>;
+<a name="l249"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_F64</span><span class=cF0>)
+<a name="l250"></a>        {
+<a name="l251"></a>            tmpi-&gt;ic_flags |= tmpi1-&gt;ic_flags;
+<a name="l252"></a>            </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi1);
+<a name="l253"></a>            </span><span class=cF1>return</span><span class=cF0> FBO1_F64;
+<a name="l254"></a>        }
+<a name="l255"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l256"></a>            </span><span class=cF1>return</span><span class=cF0> FBO1_NOT_CONST;
+<a name="l257"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l258"></a>    *is_unsigned = tmpc1-&gt;raw_type &amp; </span><span class=cF3>RTF_UNSIGNED</span><span class=cF0>;
+<a name="l259"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_IMM_I64</span><span class=cF0>)
+<a name="l260"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l261"></a>        tmpi-&gt;ic_flags |= tmpi1-&gt;ic_flags;
+<a name="l262"></a>        </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi1);
+<a name="l263"></a>        </span><span class=cF1>return</span><span class=cF0> FBO1_INT;
+<a name="l264"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l265"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l266"></a>        </span><span class=cF1>return</span><span class=cF0> FBO1_NOT_CONST;
+<a name="l267"></a>}
+<a name="l268"></a>
+<a name="l269"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptBrNotZero</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi);
+<a name="l270"></a>
+<a name="l271"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptBrZero</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l272"></a>{
+<a name="l273"></a>    </span><span class=cF9>CCodeMisc</span><span class=cF0>           *lb_true, *lb_false;
+<a name="l274"></a>    </span><span class=cF9>CIntermediateCode</span><span class=cF0>   *tmpii = </span><span class=cFD>OptLag</span><span class=cF0>(tmpi), *tmpii2;
+<a name="l275"></a>
+<a name="l276"></a>    </span><span class=cF1>switch</span><span class=cF0> (tmpii-&gt;ic_code)
+<a name="l277"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l278"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_NOT</span><span class=cF0>:
+<a name="l279"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_ZERO</span><span class=cF0>;
+<a name="l280"></a>            tmpi-&gt;ic_class = tmpii-&gt;ic_class;
+<a name="l281"></a>            tmpi-&gt;ic_flags |= tmpii-&gt;ic_flags;
+<a name="l282"></a>            tmpi-&gt;t.arg1_class = tmpii-&gt;t.arg1_class;
+<a name="l283"></a>            tmpi-&gt;t.arg1_tree = tmpii-&gt;t.arg1_tree;
+<a name="l284"></a>            </span><span class=cFD>OptFree</span><span class=cF0>(tmpii);
+<a name="l285"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>OptBrNotZero</span><span class=cF0>(cc, tmpi);
+<a name="l286"></a>
+<a name="l287"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_EQU_EQU</span><span class=cF0>...</span><span class=cF3>IC_LESS_EQU</span><span class=cF0>:
+<a name="l288"></a>            tmpi-&gt;ic_code = (tmpii-&gt;ic_code - </span><span class=cF3>IC_EQU_EQU</span><span class=cF0>) ^ </span><span class=cFE>1</span><span class=cF0> + </span><span class=cF3>IC_BR_EQU_EQU</span><span class=cF0>;
+<a name="l289"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l290"></a>
+<a name="l291"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_OR_OR</span><span class=cF0>:
+<a name="l292"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_OR_OR_ZERO</span><span class=cF0>;
+<a name="l293"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l294"></a>
+<a name="l295"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_AND_AND</span><span class=cF0>:
+<a name="l296"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_AND_AND_ZERO</span><span class=cF0>;
+<a name="l297"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l298"></a>
+<a name="l299"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_AND</span><span class=cF0>:
+<a name="l300"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_AND_ZERO</span><span class=cF0>;
+<a name="l301"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l302"></a>
+<a name="l303"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_MM_</span><span class=cF0>:
+<a name="l304"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;pass == </span><span class=cFE>2</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpii-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0> &amp;&amp; tmpii-&gt;ic_class-&gt;raw_type != </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l305"></a>                tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_MM_ZERO</span><span class=cF0>;
+<a name="l306"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l307"></a>
+<a name="l308"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CALL_END</span><span class=cF0>:
+<a name="l309"></a>            tmpii2 = </span><span class=cFD>OptLag</span><span class=cF0>(tmpii);
+<a name="l310"></a>            </span><span class=cF1>switch</span><span class=cF0> (tmpii2-&gt;ic_code)
+<a name="l311"></a>            {
+<a name="l312"></a>                </span><span class=cF1>start</span><span class=cF0>:
+<a name="l313"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CARRY</span><span class=cF0>:
+<a name="l314"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_CARRY</span><span class=cF0>;
+<a name="l315"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l316"></a>
+<a name="l317"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BT</span><span class=cF0>:
+<a name="l318"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_BT</span><span class=cF0>;
+<a name="l319"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l320"></a>
+<a name="l321"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_LBTS</span><span class=cF0>:
+<a name="l322"></a>                        tmpii2-&gt;ic_flags |= </span><span class=cF3>ICF_LOCK</span><span class=cF0>;
+<a name="l323"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BTS</span><span class=cF0>:
+<a name="l324"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_BTS</span><span class=cF0>;
+<a name="l325"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l326"></a>
+<a name="l327"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_LBTR</span><span class=cF0>:
+<a name="l328"></a>                        tmpii2-&gt;ic_flags |= </span><span class=cF3>ICF_LOCK</span><span class=cF0>;
+<a name="l329"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BTR</span><span class=cF0>:
+<a name="l330"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_BTR</span><span class=cF0>;
+<a name="l331"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l332"></a>
+<a name="l333"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_LBTC</span><span class=cF0>:
+<a name="l334"></a>                        tmpii2-&gt;ic_flags |= </span><span class=cF3>ICF_LOCK</span><span class=cF0>;
+<a name="l335"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BTC</span><span class=cF0>:
+<a name="l336"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_BTC</span><span class=cF0>;
+<a name="l337"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l338"></a>                </span><span class=cF1>end</span><span class=cF0>:
+<a name="l339"></a>                    tmpii2-&gt;ic_data = tmpi-&gt;ic_data;
+<a name="l340"></a>                    tmpii-&gt;ic_code = </span><span class=cF3>IC_CALL_END2</span><span class=cF0>;
+<a name="l341"></a>                    </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi);
+<a name="l342"></a>                    </span><span class=cF1>return</span><span class=cF0> tmpii;
+<a name="l343"></a>            }
+<a name="l344"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l345"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l346"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code != </span><span class=cF3>IC_BR_ZERO</span><span class=cF0>)
+<a name="l347"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l348"></a>        tmpi-&gt;ic_class = tmpii-&gt;ic_class;
+<a name="l349"></a>        tmpi-&gt;ic_flags |= tmpii-&gt;ic_flags;
+<a name="l350"></a>        tmpi-&gt;t.arg1_class = tmpii-&gt;t.arg1_class;
+<a name="l351"></a>        tmpi-&gt;t.arg2_class = tmpii-&gt;t.arg2_class;
+<a name="l352"></a>        tmpi-&gt;t.arg1_tree = tmpii-&gt;t.arg1_tree;
+<a name="l353"></a>        tmpi-&gt;t.arg2_tree = tmpii-&gt;t.arg2_tree;
+<a name="l354"></a>        </span><span class=cFD>OptFree</span><span class=cF0>(tmpii);
+<a name="l355"></a>
+<a name="l356"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0> &amp;&amp; </span><span class=cF3>IC_BR_NOT_EQU</span><span class=cF0> &lt;= tmpi-&gt;ic_code &lt;= </span><span class=cF3>IC_BR_LESS_EQU</span><span class=cF0> &amp;&amp;
+<a name="l357"></a>            !</span><span class=cF7>(</span><span class=cF0>tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_F64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l358"></a>        {
+<a name="l359"></a>            tmpi-&gt;ic_code += </span><span class=cF3>IC_BR_EQU_EQU2</span><span class=cF0>-</span><span class=cF3>IC_BR_EQU_EQU</span><span class=cF0>;
+<a name="l360"></a>            tmpi-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0>;
+<a name="l361"></a>            tmpii = tmpi-&gt;next; </span><span class=cF2>//IC_PUSH_CMP inst</span><span class=cF0>
+<a name="l362"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpii-&gt;ic_code != </span><span class=cF3>IC_PUSH_CMP</span><span class=cF0>)
+<a name="l363"></a>                tmpii = tmpii-&gt;next;
+<a name="l364"></a>            tmpii-&gt;t.arg1_tree = tmpi;
+<a name="l365"></a>            </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpii);
+<a name="l366"></a>        }
+<a name="l367"></a>
+<a name="l368"></a>        lb_true = tmpi-&gt;ic_data;
+<a name="l369"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_BR_AND_AND_ZERO</span><span class=cF0>)
+<a name="l370"></a>        {
+<a name="l371"></a>            tmpii = tmpi-&gt;t.arg1_tree-&gt;next;
+<a name="l372"></a>            tmpii-&gt;ic_data = lb_true;
+<a name="l373"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg1_tree;
+<a name="l374"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg1_class;
+<a name="l375"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_ZERO</span><span class=cF0>;
+<a name="l376"></a>            </span><span class=cFD>OptBrZero</span><span class=cF0>(cc, tmpii);
+<a name="l377"></a>            tmpii = tmpi-&gt;t.arg2_tree-&gt;next;
+<a name="l378"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg2_tree;
+<a name="l379"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg2_class;
+<a name="l380"></a>            tmpii-&gt;ic_data = lb_true;
+<a name="l381"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_ZERO</span><span class=cF0>;
+<a name="l382"></a>            tmpii=</span><span class=cFD>OptBrZero</span><span class=cF0>(cc, tmpii);
+<a name="l383"></a>            </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi);
+<a name="l384"></a>        }
+<a name="l385"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_BR_OR_OR_ZERO</span><span class=cF0>)
+<a name="l386"></a>        {
+<a name="l387"></a>            lb_false = </span><span class=cFD>COCMiscNew</span><span class=cF0>(cc, </span><span class=cF3>CMT_LABEL</span><span class=cF0>);
+<a name="l388"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_LABEL</span><span class=cF0>;
+<a name="l389"></a>            tmpi-&gt;ic_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l390"></a>            tmpi-&gt;ic_data = lb_false;
+<a name="l391"></a>            tmpii = tmpi-&gt;t.arg1_tree-&gt;next;
+<a name="l392"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg1_tree;
+<a name="l393"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg1_class;
+<a name="l394"></a>            tmpii-&gt;ic_data = lb_false;
+<a name="l395"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_ZERO</span><span class=cF0>;
+<a name="l396"></a>            </span><span class=cFD>OptBrNotZero</span><span class=cF0>(cc, tmpii);
+<a name="l397"></a>            tmpii = tmpi-&gt;t.arg2_tree-&gt;next;
+<a name="l398"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg2_tree;
+<a name="l399"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg2_class;
+<a name="l400"></a>            tmpii-&gt;ic_data = lb_true;
+<a name="l401"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_ZERO</span><span class=cF0>;
+<a name="l402"></a>            tmpii = </span><span class=cFD>OptBrZero</span><span class=cF0>(cc, tmpii);
+<a name="l403"></a>        }
+<a name="l404"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l405"></a>            tmpii = tmpi;
+<a name="l406"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_POP_CMP</span><span class=cF0> &amp;&amp; tmpi-&gt;t.arg1_tree-&gt;ic_code == </span><span class=cF3>IC_NOP1</span><span class=cF0>)
+<a name="l407"></a>        {
+<a name="l408"></a>            tmpi-&gt;t.arg1_tree = tmpi-&gt;t.arg1_tree-&gt;t.arg1_tree;
+<a name="l409"></a>            tmpi-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_POP_CMP</span><span class=cF0>;
+<a name="l410"></a>        }
+<a name="l411"></a>        </span><span class=cF1>return</span><span class=cF0> tmpii;
+<a name="l412"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l413"></a>    </span><span class=cF1>return</span><span class=cF0> tmpi;
+<a name="l414"></a>}
+<a name="l415"></a>
+<a name="l416"></a></span><span class=cF9>CIntermediateCode</span><span class=cF0> *</span><span class=cFD>OptBrNotZero</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l417"></a>{
+<a name="l418"></a>    </span><span class=cF9>CCodeMisc</span><span class=cF0>           *lb_true, *lb_false;
+<a name="l419"></a>    </span><span class=cF9>CIntermediateCode</span><span class=cF0>   *tmpii = </span><span class=cFD>OptLag</span><span class=cF0>(tmpi), *tmpii2;
+<a name="l420"></a>
+<a name="l421"></a>    </span><span class=cF1>switch</span><span class=cF0> (tmpii-&gt;ic_code)
+<a name="l422"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l423"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_NOT</span><span class=cF0>:
+<a name="l424"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_ZERO</span><span class=cF0>;
+<a name="l425"></a>            tmpi-&gt;ic_class = tmpii-&gt;ic_class;
+<a name="l426"></a>            tmpi-&gt;ic_flags |= tmpii-&gt;ic_flags;
+<a name="l427"></a>            tmpi-&gt;t.arg1_class = tmpii-&gt;t.arg1_class;
+<a name="l428"></a>            tmpi-&gt;t.arg1_tree = tmpii-&gt;t.arg1_tree;
+<a name="l429"></a>            </span><span class=cFD>OptFree</span><span class=cF0>(tmpii);
+<a name="l430"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cFD>OptBrZero</span><span class=cF0>(cc, tmpi);
+<a name="l431"></a>
+<a name="l432"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_EQU_EQU</span><span class=cF0>...</span><span class=cF3>IC_LESS_EQU</span><span class=cF0>:
+<a name="l433"></a>            tmpi-&gt;ic_code = tmpii-&gt;ic_code + </span><span class=cF3>IC_BR_EQU_EQU</span><span class=cF0> - </span><span class=cF3>IC_EQU_EQU</span><span class=cF0>;
+<a name="l434"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l435"></a>
+<a name="l436"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_OR_OR</span><span class=cF0>:
+<a name="l437"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_OR_OR_NOT_ZERO</span><span class=cF0>;
+<a name="l438"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l439"></a>
+<a name="l440"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_AND_AND</span><span class=cF0>:
+<a name="l441"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_AND_AND_NOT_ZERO</span><span class=cF0>;
+<a name="l442"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l443"></a>
+<a name="l444"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_AND</span><span class=cF0>:
+<a name="l445"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_AND_NOT_ZERO</span><span class=cF0>;
+<a name="l446"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l447"></a>
+<a name="l448"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_MM_</span><span class=cF0>:
+<a name="l449"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;pass == </span><span class=cFE>2</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpii-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0> &amp;&amp; tmpii-&gt;ic_class-&gt;raw_type != </span><span class=cF3>RT_F64</span><span class=cF0>)
+<a name="l450"></a>                tmpi-&gt;ic_code = </span><span class=cF3>IC_BR_MM_NOT_ZERO</span><span class=cF0>;
+<a name="l451"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l452"></a>
+<a name="l453"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CALL_END</span><span class=cF0>:
+<a name="l454"></a>            tmpii2 = </span><span class=cFD>OptLag</span><span class=cF0>(tmpii);
+<a name="l455"></a>            </span><span class=cF1>switch</span><span class=cF0> (tmpii2-&gt;ic_code)
+<a name="l456"></a>            {
+<a name="l457"></a>                </span><span class=cF1>start</span><span class=cF0>:
+<a name="l458"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_CARRY</span><span class=cF0>:
+<a name="l459"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_CARRY</span><span class=cF0>;
+<a name="l460"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l461"></a>
+<a name="l462"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BT</span><span class=cF0>:
+<a name="l463"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_BT</span><span class=cF0>;
+<a name="l464"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l465"></a>
+<a name="l466"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_LBTS</span><span class=cF0>:
+<a name="l467"></a>                        tmpii2-&gt;ic_flags |= </span><span class=cF3>ICF_LOCK</span><span class=cF0>;
+<a name="l468"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BTS</span><span class=cF0>:
+<a name="l469"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_BTS</span><span class=cF0>;
+<a name="l470"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l471"></a>
+<a name="l472"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_LBTR</span><span class=cF0>:
+<a name="l473"></a>                        tmpii2-&gt;ic_flags |= </span><span class=cF3>ICF_LOCK</span><span class=cF0>;
+<a name="l474"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BTR</span><span class=cF0>:
+<a name="l475"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_BTR</span><span class=cF0>;
+<a name="l476"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l477"></a>
+<a name="l478"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_LBTC</span><span class=cF0>:
+<a name="l479"></a>                        tmpii2-&gt;ic_flags |= </span><span class=cF3>ICF_LOCK</span><span class=cF0>;
+<a name="l480"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>IC_BTC</span><span class=cF0>:
+<a name="l481"></a>                        tmpii2-&gt;ic_code = </span><span class=cF3>IC_BR_BTC</span><span class=cF0>;
+<a name="l482"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l483"></a>                </span><span class=cF1>end</span><span class=cF0>:
+<a name="l484"></a>                    tmpii2-&gt;ic_data = tmpi-&gt;ic_data;
+<a name="l485"></a>                    tmpii-&gt;ic_code = </span><span class=cF3>IC_CALL_END2</span><span class=cF0>;
+<a name="l486"></a>                    </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi);
+<a name="l487"></a>                    </span><span class=cF1>return</span><span class=cF0> tmpii;
+<a name="l488"></a>            }
+<a name="l489"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l490"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l491"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code != </span><span class=cF3>IC_BR_NOT_ZERO</span><span class=cF0>)
+<a name="l492"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l493"></a>        tmpi-&gt;ic_class = tmpii-&gt;ic_class;
+<a name="l494"></a>        tmpi-&gt;ic_flags |= tmpii-&gt;ic_flags;
+<a name="l495"></a>        tmpi-&gt;t.arg1_class = tmpii-&gt;t.arg1_class;
+<a name="l496"></a>        tmpi-&gt;t.arg2_class = tmpii-&gt;t.arg2_class;
+<a name="l497"></a>        tmpi-&gt;t.arg1_tree = tmpii-&gt;t.arg1_tree;
+<a name="l498"></a>        tmpi-&gt;t.arg2_tree = tmpii-&gt;t.arg2_tree;
+<a name="l499"></a>        </span><span class=cFD>OptFree</span><span class=cF0>(tmpii);
+<a name="l500"></a>
+<a name="l501"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0> &amp;&amp; </span><span class=cF3>IC_BR_NOT_EQU</span><span class=cF0> &lt;= tmpi-&gt;ic_code &lt;= </span><span class=cF3>IC_BR_LESS_EQU</span><span class=cF0> &amp;&amp;
+<a name="l502"></a>            !</span><span class=cF7>(</span><span class=cF0>tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_F64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l503"></a>        {
+<a name="l504"></a>            tmpi-&gt;ic_code += </span><span class=cF3>IC_BR_EQU_EQU2</span><span class=cF0>-</span><span class=cF3>IC_BR_EQU_EQU</span><span class=cF0>;
+<a name="l505"></a>            tmpi-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0>;
+<a name="l506"></a>            tmpii = tmpi-&gt;next; </span><span class=cF2>//IC_PUSH_CMP inst</span><span class=cF0>
+<a name="l507"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpii-&gt;ic_code != </span><span class=cF3>IC_PUSH_CMP</span><span class=cF0>)
+<a name="l508"></a>                tmpii = tmpii-&gt;next;
+<a name="l509"></a>            tmpii-&gt;t.arg1_tree = tmpi;
+<a name="l510"></a>            </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpii);
+<a name="l511"></a>        }
+<a name="l512"></a>
+<a name="l513"></a>        lb_true = tmpi-&gt;ic_data;
+<a name="l514"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_BR_OR_OR_NOT_ZERO</span><span class=cF0>)
+<a name="l515"></a>        {
+<a name="l516"></a>            tmpii = tmpi-&gt;t.arg1_tree-&gt;next;
+<a name="l517"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg1_tree;
+<a name="l518"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg1_class;
+<a name="l519"></a>            tmpii-&gt;ic_data = lb_true;
+<a name="l520"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_ZERO</span><span class=cF0>;
+<a name="l521"></a>            </span><span class=cFD>OptBrNotZero</span><span class=cF0>(cc, tmpii);
+<a name="l522"></a>            tmpii = tmpi-&gt;t.arg2_tree-&gt;next;
+<a name="l523"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg2_tree;
+<a name="l524"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg2_class;
+<a name="l525"></a>            tmpii-&gt;ic_data = lb_true;
+<a name="l526"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_ZERO</span><span class=cF0>;
+<a name="l527"></a>            tmpii=</span><span class=cFD>OptBrNotZero</span><span class=cF0>(cc, tmpii);
+<a name="l528"></a>            </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi);
+<a name="l529"></a>        }
+<a name="l530"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_code == </span><span class=cF3>IC_BR_AND_AND_NOT_ZERO</span><span class=cF0>)
+<a name="l531"></a>        {
+<a name="l532"></a>            lb_false = </span><span class=cFD>COCMiscNew</span><span class=cF0>(cc, </span><span class=cF3>CMT_LABEL</span><span class=cF0>);
+<a name="l533"></a>            tmpi-&gt;ic_code = </span><span class=cF3>IC_LABEL</span><span class=cF0>;
+<a name="l534"></a>            tmpi-&gt;ic_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l535"></a>            tmpi-&gt;ic_data = lb_false;
+<a name="l536"></a>            tmpii = tmpi-&gt;t.arg1_tree-&gt;next;
+<a name="l537"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg1_tree;
+<a name="l538"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg1_class;
+<a name="l539"></a>            tmpii-&gt;ic_data = lb_false;
+<a name="l540"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_ZERO</span><span class=cF0>;
+<a name="l541"></a>            </span><span class=cFD>OptBrZero</span><span class=cF0>(cc, tmpii);
+<a name="l542"></a>            tmpii = tmpi-&gt;t.arg2_tree-&gt;next;
+<a name="l543"></a>            tmpii-&gt;t.arg1_tree = tmpi-&gt;t.arg2_tree;
+<a name="l544"></a>            tmpii-&gt;t.arg1_class = tmpi-&gt;t.arg2_class;
+<a name="l545"></a>            tmpii-&gt;ic_data = lb_true;
+<a name="l546"></a>            tmpii-&gt;ic_code = </span><span class=cF3>IC_BR_NOT_ZERO</span><span class=cF0>;
+<a name="l547"></a>            tmpii=</span><span class=cFD>OptBrNotZero</span><span class=cF0>(cc, tmpii);
+<a name="l548"></a>        }
+<a name="l549"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l550"></a>            tmpii = tmpi;
+<a name="l551"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_POP_CMP</span><span class=cF0> &amp;&amp; tmpi-&gt;t.arg1_tree-&gt;ic_code == </span><span class=cF3>IC_NOP1</span><span class=cF0>)
+<a name="l552"></a>        {
+<a name="l553"></a>            tmpi-&gt;t.arg1_tree = tmpi-&gt;t.arg1_tree-&gt;t.arg1_tree;
+<a name="l554"></a>            tmpi-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_POP_CMP</span><span class=cF0>;
+<a name="l555"></a>        }
+<a name="l556"></a>        </span><span class=cF1>return</span><span class=cF0> tmpii;
+<a name="l557"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l558"></a>
+<a name="l559"></a>    </span><span class=cF1>return</span><span class=cF0> tmpi;
+<a name="l560"></a>}
+<a name="l561"></a>
+<a name="l562"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>OptFixSizeOf</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi1, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi_push, </span><span class=cF9>CHashClass</span><span class=cF0> *tmpcc)
+<a name="l563"></a>{
+<a name="l564"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpi1-&gt;ic_code == </span><span class=cF3>IC_MUL</span><span class=cF0> &amp;&amp; tmpi1-&gt;t.arg2_tree-&gt;ic_code == </span><span class=cF3>IC_SIZEOF</span><span class=cF0>)
+<a name="l565"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l566"></a>        tmpi1-&gt;t.arg2_tree-&gt;ic_code = </span><span class=cF3>IC_IMM_I64</span><span class=cF0>;
+<a name="l567"></a>        tmpi1-&gt;t.arg2_tree-&gt;ic_class = tmpcc;
+<a name="l568"></a>        tmpi_push-&gt;ic_class = tmpcc;
+<a name="l569"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpcc-&gt;ptr_stars_count)
+<a name="l570"></a>        {
+<a name="l571"></a>            tmpcc--;
+<a name="l572"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpcc-&gt;size == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l573"></a>                </span><span class=cF1>goto</span><span class=cF0> here;
+<a name="l574"></a>            tmpi1-&gt;t.arg2_tree-&gt;ic_data = tmpcc-&gt;size;
+<a name="l575"></a>        }
+<a name="l576"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l577"></a>        {
+<a name="l578"></a>here:
+<a name="l579"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi_push == tmpi1)
+<a name="l580"></a>                tmpi1-&gt;t.arg2_tree-&gt;ic_data = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l581"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l582"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l583"></a>                </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi1-&gt;t.arg2_tree);
+<a name="l584"></a>                </span><span class=cFD>OptSetNOP1</span><span class=cF0>(tmpi1);
+<a name="l585"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l586"></a>        }
+<a name="l587"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l588"></a>}
+<a name="l589"></a>
+<a name="l590"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>CompRawType</span><span class=cF0>(</span><span class=cF9>CHashClass</span><span class=cF0> *tmpc)
+<a name="l591"></a>{
+<a name="l592"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpc)
+<a name="l593"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l594"></a>        tmpc = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpc);
+<a name="l595"></a>        </span><span class=cF1>return</span><span class=cF0> tmpc-&gt;raw_type;
+<a name="l596"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l597"></a>
+<a name="l598"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l599"></a>}
+<a name="l600"></a>
+<a name="l601"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>CompRawTypePointed</span><span class=cF0>(</span><span class=cF9>CHashClass</span><span class=cF0> *tmpc)
+<a name="l602"></a>{
+<a name="l603"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpc)
+<a name="l604"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l605"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpc-&gt;ptr_stars_count)
+<a name="l606"></a>            tmpc--;
+<a name="l607"></a>        tmpc = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpc);
+<a name="l608"></a>        </span><span class=cF1>return</span><span class=cF0> tmpc-&gt;raw_type;
+<a name="l609"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l610"></a>
+<a name="l611"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l612"></a>}
+<a name="l613"></a>
+<a name="l614"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>CompMinTypePointed</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi, </span><span class=cF9>I64</span><span class=cF0> pt1)
+<a name="l615"></a>{
+<a name="l616"></a>    </span><span class=cF9>I64</span><span class=cF0> pt;
+<a name="l617"></a>
+<a name="l618"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>pt = tmpi-&gt;arg1_type_pointed_to</span><span class=cF7>)</span><span class=cF0> &amp;&amp; pt != </span><span class=cF3>RT_F64</span><span class=cF0> &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt; pt1 &lt; pt)
+<a name="l619"></a>        tmpi-&gt;arg1_type_pointed_to = pt;
+<a name="l620"></a>}
+<a name="l621"></a>
+<a name="l622"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>CompF1PushPop</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi2)
+<a name="l623"></a>{
+<a name="l624"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi2-&gt;ic_code].fpop || tmpi2-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>)
+<a name="l625"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_PUSH_FLOAT0</span><span class=cF0>);
+<a name="l626"></a>}
+<a name="l627"></a>
+<a name="l628"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>CompF2PushPop</span><span class=cF0>(</span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi1, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi2)
+<a name="l629"></a>{
+<a name="l630"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>tmpi2-&gt;ic_code == </span><span class=cF3>IC_MOV</span><span class=cF0> || tmpi2-&gt;ic_code == </span><span class=cF3>IC_IMM_F64</span><span class=cF7>)</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpi2-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l631"></a>            </span><span class=cF7>(</span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi1-&gt;ic_code].fpop || tmpi1-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l632"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_PUSH_FLOAT0</span><span class=cF0>);
+<a name="l633"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi2-&gt;ic_code].fpop || tmpi2-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l634"></a>            !</span><span class=cF7>(</span><span class=cF0>tmpi1-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l635"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_PUSH_FLOAT0</span><span class=cF0>);
+<a name="l636"></a>}
+<a name="l637"></a>
+<a name="l638"></a></span><span class=cF1>class</span><span class=cF0> COptMemberVar
+<a name="l639"></a>{
+<a name="l640"></a>    </span><span class=cF9>I64</span><span class=cF0>          score, offset_start, offset_end, lea_balance;
+<a name="l641"></a>    </span><span class=cF9>CMemberList</span><span class=cF0> *m;
+<a name="l642"></a>};
+<a name="l643"></a>
+<a name="l644"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>OptMVCompare</span><span class=cF0>(COptMemberVar *mv1, COptMemberVar *mv2)
+<a name="l645"></a>{
+<a name="l646"></a>    </span><span class=cF1>return</span><span class=cF0> mv2-&gt;score-mv1-&gt;score;
+<a name="l647"></a>}
+</span></pre></body>
+</html>

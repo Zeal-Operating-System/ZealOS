@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> MemDemo()
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l4"></a></span><span class=cF6>&quot;$HL,1$$BLACK$</span><span class=cF0>
+<a name="l5"></a></span><span class=cF6>#define MEM_PAG_BITS</span><span class=cF0>            </span><span class=cF6>9</span><span class=cF0>
+<a name="l6"></a></span><span class=cF6>#define MEM_PAG_SIZE</span><span class=cF0>            </span><span class=cF6>(1 &lt;&lt; MEM_PAG_BITS)</span><span class=cF0>
+<a name="l7"></a></span><span class=cF6>#define MEM_HEAP_HASH_SIZE</span><span class=cF0>      </span><span class=cF6>1024</span><span class=cF0>
+<a name="l8"></a></span><span class=cF6>#define MEM_FREE_PAG_HASH_SIZE</span><span class=cF0>  </span><span class=cF6>0x100</span><span class=cF0>
+<a name="l9"></a></span><span class=cF6>#define MEM_EXTRA_HASH2_PAGS</span><span class=cF0>    </span><span class=cF6>2</span><span class=cF0>
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF6>public class CBlkPool</span><span class=cF0>
+<a name="l12"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF6>CMemBlk *free_pag_hash[MEM_FREE_PAG_HASH_SIZE], *free_pag_hash2[64 - MEM_PAG_BITS];</span><span class=cF0>
+<a name="l14"></a></span><span class=cF6>};</span><span class=cF0>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cF6>public class CHeapCtrl</span><span class=cF0>
+<a name="l17"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cF6>CBlkPool   *bp;</span><span class=cF0>
+<a name="l19"></a>    </span><span class=cF6>CMemUnused *heap_hash[MEM_HEAP_HASH_SIZE / sizeof(U8 *)];</span><span class=cF0>
+<a name="l20"></a></span><span class=cF6>};</span><span class=cF0>
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF6>public class CTask //The Fs segment reg points to current CTask.</span><span class=cF0>
+<a name="l23"></a></span><span class=cF6>{</span><span class=cF0>
+<a name="l24"></a>    </span><span class=cF6>CHeapCtrl *code_heap, *data_heap;</span><span class=cF0>
+<a name="l25"></a></span><span class=cF6>};</span><span class=cF0>
+<a name="l26"></a></span><span class=cF6>$HL,0$$FG$</span><span class=cF0>
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF6>&quot;</span><span class=cF0>;
+<a name="l29"></a>
+<a name="l30"></a>
+<a name="l31"></a>    </span><span class=cF6>&quot;$PURPLE$Chunks in increments of 8 bytes, owned by the task.$FG$\n&quot;</span><span class=cF0>;
+<a name="l32"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemUnused</span><span class=cF7>)</span><span class=cF0>; i &lt; </span><span class=cF3>MEM_HEAP_HASH_SIZE</span><span class=cF0>; i += </span><span class=cFE>8</span><span class=cF0>)
+<a name="l33"></a>        </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>0x48</span><span class=cF0>)
+<a name="l34"></a>            </span><span class=cF6>&quot;...\n&quot;</span><span class=cF0>;
+<a name="l35"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0x48</span><span class=cF0> &lt; i &lt; </span><span class=cFE>0x3C8</span><span class=cF7>)</span><span class=cF0>)
+<a name="l36"></a>            </span><span class=cF6>&quot;Fs-&gt;data_heap-&gt;heap_hash[%X/8]&quot;</span><span class=cF0>
+<a name="l37"></a>            </span><span class=cF6>&quot;$BLACK$ --&gt;$FG$[X]$BLACK$ --&gt;$FG$[X]$BLACK$ --&gt;$FG$\n&quot;</span><span class=cF0>,i;
+<a name="l38"></a>    </span><span class=cF6>&quot;\n\n&quot;</span><span class=cF0>;
+<a name="l39"></a>
+<a name="l40"></a>    </span><span class=cF6>&quot;$PURPLE$Pages of 512 bytes, owned by the system.$FG$\n&quot;</span><span class=cF0>;
+<a name="l41"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cF3>MEM_HEAP_HASH_SIZE</span><span class=cF0>; i &lt; </span><span class=cF3>MEM_FREE_PAG_HASH_SIZE</span><span class=cF0> * </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>; i += </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>)
+<a name="l42"></a>        </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>0x1200</span><span class=cF0>)
+<a name="l43"></a>            </span><span class=cF6>&quot;...\n&quot;</span><span class=cF0>;
+<a name="l44"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0x1200</span><span class=cF0> &lt; i &lt; </span><span class=cFE>0x1F200</span><span class=cF7>)</span><span class=cF0>)
+<a name="l45"></a>            </span><span class=cF6>&quot;Fs-&gt;data_heap-&gt;bp-&gt;free_pag_hash[%X/512]&quot;</span><span class=cF0>
+<a name="l46"></a>            </span><span class=cF6>&quot;$BLACK$ --&gt;$FG$[X]$BLACK$ --&gt;$FG$[X]$BLACK$ --&gt;$FG$\n&quot;</span><span class=cF0>,i;
+<a name="l47"></a>    </span><span class=cF6>&quot;\n\n&quot;</span><span class=cF0>;
+<a name="l48"></a>
+<a name="l49"></a>    </span><span class=cF6>&quot;$PURPLE$Powers of two, owned by the system.$FG$\n&quot;</span><span class=cF0>;
+<a name="l50"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cF5>Bsf</span><span class=cF7>(</span><span class=cF3>MEM_FREE_PAG_HASH_SIZE</span><span class=cF0> * </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF7>)</span><span class=cF0>; i &lt; </span><span class=cFE>64</span><span class=cF0>; i++)
+<a name="l51"></a>        </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cFE>0x1A</span><span class=cF0>)
+<a name="l52"></a>            </span><span class=cF6>&quot;...\n&quot;</span><span class=cF0>;
+<a name="l53"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0x1A</span><span class=cF0> &lt;= i &lt;= </span><span class=cFE>0x36</span><span class=cF7>)</span><span class=cF0>)
+<a name="l54"></a>            </span><span class=cF6>&quot;Fs-&gt;data_heap-&gt;bp-&gt;free_pag_hash2[%X] %016X&quot;</span><span class=cF0>
+<a name="l55"></a>            </span><span class=cF6>&quot;$BLACK$ --&gt;$FG$[X]$BLACK$ --&gt;$FG$[X]$BLACK$ --&gt;$FG$\n&quot;</span><span class=cF0>, i, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; i + </span><span class=cF3>MEM_EXTRA_HASH2_PAGS</span><span class=cF0> * </span><span class=cF3>MEM_PAG_SIZE</span><span class=cF0>;
+<a name="l56"></a>    </span><span class=cF6>&quot;\n\n&quot;</span><span class=cF0>;
+<a name="l57"></a>}
+<a name="l58"></a>
+<a name="l59"></a>MemDemo;
+<a name="l60"></a>
+<a name="l61"></a>
+</span></pre></body>
+</html>

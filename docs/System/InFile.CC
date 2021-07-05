@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;InFile;Help System/Training&quot;</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>help_file</span><span class=cF0> </span><span class=cF6>&quot;::/Doc/InFile&quot;</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>InGetStr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l5"></a>{</span><span class=cF2>//Wait for user to type certain str.</span><span class=cF0>
+<a name="l6"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, sc;
+<a name="l7"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>256</span><span class=cF0>], *st2;
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF1>while</span><span class=cF0> (*st)
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        ch=</span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc,</span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l12"></a>        </span><span class=cF1>if</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_SHIFT</span><span class=cF0> &amp;&amp;
+<a name="l13"></a>                    sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_ALT</span><span class=cF0> &amp;&amp;
+<a name="l14"></a>                    sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_CTRL</span><span class=cF0>)
+<a name="l15"></a>        {
+<a name="l16"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == *st)
+<a name="l17"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l18"></a>                </span><span class=cF6>''</span><span class=cF0> ch;
+<a name="l19"></a>                st++;
+<a name="l20"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l22"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l23"></a>                st2 = </span><span class=cF5>Char2KeyName</span><span class=cF0>(*st);
+<a name="l24"></a>                </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Press the $GREEN$&lt;%s&gt;$FG$ key.&quot;</span><span class=cF0>, st2);
+<a name="l25"></a>                </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l26"></a>                </span><span class=cF5>PopUpOk</span><span class=cF0>(buf);
+<a name="l27"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l28"></a>        }
+<a name="l29"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l30"></a>}
+<a name="l31"></a>
+<a name="l32"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>InPrint</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>100</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format,...)
+<a name="l33"></a>{</span><span class=cF2>//Print message with delay after each char.</span><span class=cF0>
+<a name="l34"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st=buf;
+<a name="l35"></a>    </span><span class=cF9>I64</span><span class=cF0> ch;
+<a name="l36"></a>
+<a name="l37"></a>    </span><span class=cF1>while</span><span class=cF0> (ch = *st++)
+<a name="l38"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l39"></a>        </span><span class=cF6>''</span><span class=cF0> ch;
+<a name="l40"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(mS);
+<a name="l41"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l42"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l43"></a>}
+<a name="l44"></a>
+<a name="l45"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>InKeyGet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> scan_code, </span><span class=cF9>I64</span><span class=cF0> sc_mask = </span><span class=cFE>0xFF</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF0> | </span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF0>)
+<a name="l46"></a>{</span><span class=cF2>//Wait for user to press certain key.</span><span class=cF0>
+<a name="l47"></a>    </span><span class=cF9>I64</span><span class=cF0> sc, ch;
+<a name="l48"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], *st;
+<a name="l49"></a>
+<a name="l50"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l51"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l52"></a>        ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc);
+<a name="l53"></a>        </span><span class=cF1>if</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_PRINTSCREEN1</span><span class=cF0> &amp;&amp;
+<a name="l54"></a>                    !</span><span class=cF7>(</span><span class=cF0>sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_SHIFT</span><span class=cF0> &amp;&amp; scan_code &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l55"></a>                    !</span><span class=cF7>(</span><span class=cF0>sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_CTRL</span><span class=cF0> &amp;&amp; scan_code &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l56"></a>                    !</span><span class=cF7>(</span><span class=cF0>sc.u8[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>SC_ALT</span><span class=cF0> &amp;&amp; scan_code &amp; </span><span class=cF3>SCF_ALT</span><span class=cF7>)</span><span class=cF0> )
+<a name="l57"></a>        {
+<a name="l58"></a>            </span><span class=cF1>if</span><span class=cF0> (sc &amp; sc_mask != scan_code &amp; sc_mask)
+<a name="l59"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>                st = </span><span class=cF5>ScanCode2KeyName</span><span class=cF0>(scan_code);
+<a name="l61"></a>                </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Press the $GREEN$&lt;%s&gt;$FG$ key&quot;</span><span class=cF0>, st);
+<a name="l62"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l63"></a>                </span><span class=cF5>PopUpOk</span><span class=cF0>(buf);
+<a name="l64"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l65"></a>        }
+<a name="l66"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l67"></a>    </span><span class=cF1>while</span><span class=cF0> (sc &amp; sc_mask != scan_code &amp; sc_mask);
+<a name="l68"></a>
+<a name="l69"></a>    </span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, ch, sc);
+<a name="l70"></a>}
+<a name="l71"></a>
+<a name="l72"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>InCharGet</span><span class=cF0>(...)
+<a name="l73"></a>{</span><span class=cF2>//Wait for user to press one of set of chars.</span><span class=cF0>
+<a name="l74"></a>    </span><span class=cF9>I64</span><span class=cF0> i, sc, ch;
+<a name="l75"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>512</span><span class=cF0>], *st;
+<a name="l76"></a>
+<a name="l77"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l78"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l79"></a>        ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc);
+<a name="l80"></a>        </span><span class=cF1>if</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_SHIFT</span><span class=cF0> &amp;&amp; sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_ALT</span><span class=cF0> &amp;&amp; sc.u8[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF3>SC_CTRL</span><span class=cF0>)
+<a name="l81"></a>        {
+<a name="l82"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; argc; i++)
+<a name="l83"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == argv[i])
+<a name="l84"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l85"></a>                    </span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, ch, sc);
+<a name="l86"></a>                    </span><span class=cF1>return</span><span class=cF0> ch;
+<a name="l87"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l88"></a>            </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Press &quot;</span><span class=cF0>);
+<a name="l89"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; argc; i++)
+<a name="l90"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l91"></a>                st = </span><span class=cF5>Char2KeyName</span><span class=cF0>(argv[i]);
+<a name="l92"></a>                </span><span class=cF5>CatPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;$GREEN$&lt;%s&gt;$FG$&quot;</span><span class=cF0>, st);
+<a name="l93"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l94"></a>                </span><span class=cF1>if</span><span class=cF0> (argc == i+</span><span class=cFE>1</span><span class=cF0>)
+<a name="l95"></a>                    </span><span class=cF5>CatPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;.&quot;</span><span class=cF0>);
+<a name="l96"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (argc == i + </span><span class=cFE>2</span><span class=cF0>)
+<a name="l97"></a>                    </span><span class=cF5>CatPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot; or &quot;</span><span class=cF0>);
+<a name="l98"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l99"></a>                    </span><span class=cF5>CatPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;, &quot;</span><span class=cF0>);
+<a name="l100"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l101"></a>            </span><span class=cF5>PopUpOk</span><span class=cF0>(buf);
+<a name="l102"></a>        }
+<a name="l103"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l104"></a>}
+<a name="l105"></a>
+<a name="l106"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>InUntilKey</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> scan_code, </span><span class=cF9>I64</span><span class=cF0> sc_mask = </span><span class=cFE>0xFF</span><span class=cF0> | </span><span class=cF3>SCF_SHIFT</span><span class=cF0> | </span><span class=cF3>SCF_CTRL</span><span class=cF0> | </span><span class=cF3>SCF_ALT</span><span class=cF0>)
+<a name="l107"></a>{</span><span class=cF2>//Let user type until he presses certain key.</span><span class=cF0>
+<a name="l108"></a>    </span><span class=cF9>I64</span><span class=cF0> sc, ch;
+<a name="l109"></a>
+<a name="l110"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l111"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l112"></a>        ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc);
+<a name="l113"></a>        </span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, ch, sc);
+<a name="l114"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l115"></a>    </span><span class=cF1>while</span><span class=cF0> (sc &amp; sc_mask != scan_code &amp; sc_mask);
+<a name="l116"></a>}
+<a name="l117"></a>
+<a name="l118"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>InUntilChar</span><span class=cF0>(...)
+<a name="l119"></a>{</span><span class=cF2>//Let user type until he presses one of set of chars.</span><span class=cF0>
+<a name="l120"></a>    </span><span class=cF9>I64</span><span class=cF0> i, sc, ch;
+<a name="l121"></a>
+<a name="l122"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l123"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l124"></a>        ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc);
+<a name="l125"></a>        </span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, ch, sc);
+<a name="l126"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0> ;i &lt; argc; i++)
+<a name="l127"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == argv[i])
+<a name="l128"></a>                </span><span class=cF1>return</span><span class=cF0> ch;
+<a name="l129"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l130"></a>}
+<a name="l131"></a>
+<a name="l132"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>InView</span><span class=cF0>()
+<a name="l133"></a>{</span><span class=cF2>//Let user type until &lt;ESC&gt; or &lt;SHIFT-ESC&gt;.</span><span class=cF0>
+<a name="l134"></a>    </span><span class=cF1>Bool</span><span class=cF0> res = </span><span class=cF5>View</span><span class=cF0>;
+<a name="l135"></a>
+<a name="l136"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l137"></a>
+<a name="l138"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l139"></a>}
+<a name="l140"></a>
+<a name="l141"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;InFile;Help System/Training;Mouse&quot;</span><span class=cF0>
+<a name="l142"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFB>in_plot_l</span><span class=cF0>, </span><span class=cFB>in_plot_r</span><span class=cF0>;
+<a name="l143"></a>
+<a name="l144"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>InSetMousePlot</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z)
+<a name="l145"></a>{
+<a name="l146"></a>    </span><span class=cF5>MouseSet</span><span class=cF0>(x, y, z, </span><span class=cFB>in_plot_l</span><span class=cF0>, </span><span class=cFB>in_plot_r</span><span class=cF0>);
+<a name="l147"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(mS);
+<a name="l148"></a>
+<a name="l149"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l150"></a>}
+<a name="l151"></a>
+<a name="l152"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>InSetMouse</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> mS=</span><span class=cFE>7</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> x = </span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> y = </span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> z = </span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> l = </span><span class=cF3>I64_MAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> r = </span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l153"></a>{</span><span class=cF2>//Move mouse to spot at certain speed.</span><span class=cF0>
+<a name="l154"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= x &lt; </span><span class=cF3>GR_WIDTH</span><span class=cF7>)</span><span class=cF0>)
+<a name="l155"></a>        x = </span><span class=cFB>mouse</span><span class=cF0>.pos.x;
+<a name="l156"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= y &lt; </span><span class=cF3>GR_HEIGHT</span><span class=cF7>)</span><span class=cF0>)
+<a name="l157"></a>        y = </span><span class=cFB>mouse</span><span class=cF0>.pos.y;
+<a name="l158"></a>    </span><span class=cF1>if</span><span class=cF0> (z == </span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l159"></a>        z = </span><span class=cFB>mouse</span><span class=cF0>.pos.z;
+<a name="l160"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF3>FALSE</span><span class=cF0> &lt;= l &lt;= </span><span class=cF3>TRUE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l161"></a>        l = </span><span class=cFB>mouse</span><span class=cF0>.lb;
+<a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF3>FALSE</span><span class=cF0> &lt;= r &lt;= </span><span class=cF3>TRUE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l163"></a>        r = </span><span class=cFB>mouse</span><span class=cF0>.rb;
+<a name="l164"></a>    </span><span class=cFB>in_plot_l</span><span class=cF0> = l; </span><span class=cFB>in_plot_r</span><span class=cF0> = r;
+<a name="l165"></a>    </span><span class=cF5>Line</span><span class=cF0>(mS, </span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, </span><span class=cFB>mouse</span><span class=cF0>.pos.z, x, y, z, &amp;</span><span class=cF5>InSetMousePlot</span><span class=cF0>);
+<a name="l166"></a>}
+</span></pre></body>
+</html>

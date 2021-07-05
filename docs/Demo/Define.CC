@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//See </span><span class=cF4><u>Define</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF2>//These might be in the System task.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>, </span><span class=cF6>&quot;(Yes or No)&quot;</span><span class=cF0>);
+<a name="l5"></a></span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Exit&quot;</span><span class=cF0>);
+<a name="l6"></a></span><span class=cF5>DefineListLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF6>&quot;No\0Yes\0&quot;</span><span class=cF0>);
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF2>//New strings might be loaded for each user</span><span class=cF0>
+<a name="l9"></a></span><span class=cF2>//to override.</span><span class=cF0>
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF6>&quot;Spanish&quot;</span><span class=cF0>;
+<a name="l12"></a></span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>) {
+<a name="l13"></a>    </span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>, </span><span class=cF6>&quot;(Si or No)&quot;</span><span class=cF0>);
+<a name="l14"></a>    </span><span class=cF5>DefineLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;Salida&quot;</span><span class=cF0>);
+<a name="l15"></a>    </span><span class=cF5>DefineListLoad</span><span class=cF0>(</span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF6>&quot;No\0Si\0&quot;</span><span class=cF0>);
+<a name="l16"></a>}
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF1>Bool</span><span class=cF0> Quit()
+<a name="l19"></a>{
+<a name="l20"></a>    </span><span class=cF1>Bool</span><span class=cF0> res;
+<a name="l21"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st;
+<a name="l22"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l23"></a>
+<a name="l24"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l25"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l26"></a>        </span><span class=cF6>&quot;%S %S?&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ST_EXIT&quot;</span><span class=cF0>, </span><span class=cF6>&quot;ST_YES_NO&quot;</span><span class=cF0>;
+<a name="l27"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l28"></a>        i = </span><span class=cF5>DefineMatch</span><span class=cF0>(st, </span><span class=cF6>&quot;ST_NO_YES_LIST&quot;</span><span class=cF0>, </span><span class=cF3>LMF_IGNORE_CASE</span><span class=cF0>);
+<a name="l29"></a>        </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l30"></a>        {
+<a name="l31"></a>            res = i;
+<a name="l32"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l33"></a>        }
+<a name="l34"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l35"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l36"></a>
+<a name="l37"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l38"></a>}
+<a name="l39"></a>
+<a name="l40"></a>Quit;
+</span></pre></body>
+</html>

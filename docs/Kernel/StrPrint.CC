@@ -1,0 +1,1174 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>SPutChar</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_dst, </span><span class=cF1>U8</span><span class=cF0> ch, </span><span class=cF1>U8</span><span class=cF0> **_buf)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l4"></a>    </span><span class=cF1>U8</span><span class=cF0> *dst = *_dst, *buf;
+<a name="l5"></a>
+<a name="l6"></a>    </span><span class=cF1>if</span><span class=cF0> (_buf)
+<a name="l7"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l8"></a>        buf = *_buf;
+<a name="l9"></a>        i = dst - buf;
+<a name="l10"></a>        </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cF5>MSize</span><span class=cF7>(</span><span class=cF0>buf</span><span class=cF7>)</span><span class=cF0>)
+<a name="l11"></a>        {
+<a name="l12"></a>            buf = </span><span class=cF5>MAlloc</span><span class=cF0>(i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l13"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(buf, *_buf, i);
+<a name="l14"></a>            </span><span class=cF5>Free</span><span class=cF0>(*_buf);
+<a name="l15"></a>            dst = buf + i;
+<a name="l16"></a>            *_buf = buf;
+<a name="l17"></a>        }
+<a name="l18"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l19"></a>    *dst++ = ch;
+<a name="l20"></a>    *_dst = dst;
+<a name="l21"></a>}
+<a name="l22"></a>
+<a name="l23"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>OutStr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF1>U8</span><span class=cF0> **_buf, </span><span class=cF1>U8</span><span class=cF0> **_dst, </span><span class=cF9>I64</span><span class=cF0> len, </span><span class=cF9>I64</span><span class=cF0> flags)
+<a name="l24"></a>{
+<a name="l25"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l26"></a>
+<a name="l27"></a>    </span><span class=cF1>if</span><span class=cF0> (!ptr)
+<a name="l28"></a>        i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l29"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l30"></a>        i = </span><span class=cF5>StrLen</span><span class=cF0>(ptr);
+<a name="l31"></a>    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0> &amp;&amp; i &gt; len)
+<a name="l32"></a>        i = len;
+<a name="l33"></a>    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_LEFT_JUSTIFY</span><span class=cF0>)
+<a name="l34"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l35"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; i; j++)
+<a name="l36"></a>            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, *ptr++, _buf);
+<a name="l37"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; len - i; j++)
+<a name="l38"></a>            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF3>CH_SPACE</span><span class=cF0>, _buf);
+<a name="l39"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l40"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l41"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l42"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; len - i; j++)
+<a name="l43"></a>            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF3>CH_SPACE</span><span class=cF0>, _buf);
+<a name="l44"></a>        </span><span class=cF1>for</span><span class=cF0> (j = len - i; j &lt; len; j++)
+<a name="l45"></a>            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, *ptr++, _buf);
+<a name="l46"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>}
+<a name="l48"></a>
+<a name="l49"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>MPrintTime</span><span class=cF0>(</span><span class=cF9>CDate</span><span class=cF0> cdt)
+<a name="l50"></a>{
+<a name="l51"></a>    </span><span class=cF9>CDateStruct</span><span class=cF0> ds;
+<a name="l52"></a>
+<a name="l53"></a>    </span><span class=cF5>Date2Struct</span><span class=cF0>(&amp;ds, cdt + </span><span class=cFB>local_time_offset</span><span class=cF0>);
+<a name="l54"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%02d:%02d:%02d&quot;</span><span class=cF0>, ds.hour, ds.min, ds.sec);
+<a name="l55"></a>}
+<a name="l56"></a>
+<a name="l57"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>MPrintDate</span><span class=cF0>(</span><span class=cF9>CDate</span><span class=cF0> cdt)
+<a name="l58"></a>{
+<a name="l59"></a>    </span><span class=cF9>CDateStruct</span><span class=cF0> ds;
+<a name="l60"></a>
+<a name="l61"></a>    </span><span class=cF5>Date2Struct</span><span class=cF0>(&amp;ds, cdt + </span><span class=cFB>local_time_offset</span><span class=cF0>);
+<a name="l62"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%02d/%02d/%02d&quot;</span><span class=cF0>, ds.mon, ds.day_of_mon, ds.year % </span><span class=cFE>100</span><span class=cF0>);
+<a name="l63"></a>}
+<a name="l64"></a>
+<a name="l65"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>MPrintQ</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF9>I64</span><span class=cF0> flags)
+<a name="l66"></a>{
+<a name="l67"></a>    </span><span class=cF1>U8</span><span class=cF0> **_buf, *buf, **_dst, *dst, buf2[</span><span class=cFE>8</span><span class=cF0>], *ptr2;
+<a name="l68"></a>    </span><span class=cF9>I64</span><span class=cF0>  ch;
+<a name="l69"></a>
+<a name="l70"></a>    buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>STR_LEN</span><span class=cF0>);
+<a name="l71"></a>    _buf = &amp;buf;
+<a name="l72"></a>    dst = buf;
+<a name="l73"></a>    _dst = &amp;dst;
+<a name="l74"></a>    </span><span class=cF1>if</span><span class=cF0> (ptr)
+<a name="l75"></a>        </span><span class=cF1>while</span><span class=cF0> (ch = *ptr++)
+<a name="l76"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l77"></a>            </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l78"></a>            {
+<a name="l79"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'$'</span><span class=cF0>:
+<a name="l80"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_DOLLAR</span><span class=cF0>)
+<a name="l81"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l82"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\\'</span><span class=cF0>, _buf);
+<a name="l83"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'d'</span><span class=cF0>,  _buf);
+<a name="l84"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l85"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l86"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l87"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l88"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l89"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l90"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l91"></a>
+<a name="l92"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'%'</span><span class=cF0>:
+<a name="l93"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l94"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_SLASH</span><span class=cF0>)
+<a name="l95"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l96"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l97"></a>
+<a name="l98"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l99"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\\'</span><span class=cF0>, _buf);
+<a name="l100"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'n'</span><span class=cF0>,  _buf);
+<a name="l101"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l102"></a>
+<a name="l103"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\r'</span><span class=cF0>:
+<a name="l104"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\\'</span><span class=cF0>, _buf);
+<a name="l105"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'r'</span><span class=cF0>,  _buf);
+<a name="l106"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l107"></a>
+<a name="l108"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\t'</span><span class=cF0>:
+<a name="l109"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\\'</span><span class=cF0>, _buf);
+<a name="l110"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'t'</span><span class=cF0>,  _buf);
+<a name="l111"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l112"></a>
+<a name="l113"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'&quot;'</span><span class=cF0>:
+<a name="l114"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\\'</span><span class=cF0>:
+<a name="l115"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\\'</span><span class=cF0>, _buf);
+<a name="l116"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch,   _buf);
+<a name="l117"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l118"></a>
+<a name="l119"></a>                </span><span class=cF1>default</span><span class=cF0>:
+<a name="l120"></a>                    </span><span class=cF1>if</span><span class=cF0> (ch &gt;= </span><span class=cF3>CH_SPACE</span><span class=cF0> &amp;&amp; ch != </span><span class=cFE>0x7F</span><span class=cF0>)
+<a name="l121"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l122"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l123"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l124"></a>                        </span><span class=cF5>StrPrint</span><span class=cF0>(buf2, </span><span class=cF6>&quot;\\x%02X&quot;</span><span class=cF0>, ch);
+<a name="l125"></a>                        ptr2 = buf2;
+<a name="l126"></a>                        </span><span class=cF1>while</span><span class=cF0> (*ptr2)
+<a name="l127"></a>                            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, *ptr2++, _buf);
+<a name="l128"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l129"></a>            }
+<a name="l130"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l131"></a>    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cFE>0</span><span class=cF0>, _buf);
+<a name="l132"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l133"></a>}
+<a name="l134"></a>
+<a name="l135"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>MPrintq</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF9>I64</span><span class=cF0> flags)
+<a name="l136"></a>{
+<a name="l137"></a>    </span><span class=cF1>U8</span><span class=cF0> **_buf, *buf, **_dst, *dst;
+<a name="l138"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, j, ch, ch1;
+<a name="l139"></a>
+<a name="l140"></a>    buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>STR_LEN</span><span class=cF0>);
+<a name="l141"></a>    _buf = &amp;buf;
+<a name="l142"></a>    dst = buf;
+<a name="l143"></a>    _dst = &amp;dst;
+<a name="l144"></a>    </span><span class=cF1>if</span><span class=cF0> (ptr)
+<a name="l145"></a>        </span><span class=cF1>while</span><span class=cF0> (ch =*ptr++)
+<a name="l146"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l147"></a>            ch1 = *ptr;
+<a name="l148"></a>            </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l149"></a>            {
+<a name="l150"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\\'</span><span class=cF0>:
+<a name="l151"></a>                    </span><span class=cF1>switch</span><span class=cF0> (ch1)
+<a name="l152"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l153"></a>                        </span><span class=cF1>start</span><span class=cF0>:
+<a name="l154"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'0'</span><span class=cF0>:
+<a name="l155"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cFE>0</span><span class=cF0>,    _buf);
+<a name="l156"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l157"></a>
+<a name="l158"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\''</span><span class=cF0>:
+<a name="l159"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\''</span><span class=cF0>, _buf);
+<a name="l160"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l161"></a>
+<a name="l162"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\`'</span><span class=cF0>:
+<a name="l163"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\`'</span><span class=cF0>, _buf);
+<a name="l164"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l165"></a>
+<a name="l166"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'&quot;'</span><span class=cF0>:
+<a name="l167"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'&quot;'</span><span class=cF0>,  _buf);
+<a name="l168"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l169"></a>
+<a name="l170"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\\'</span><span class=cF0>:
+<a name="l171"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\\'</span><span class=cF0>, _buf);
+<a name="l172"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l173"></a>
+<a name="l174"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'d'</span><span class=cF0>:
+<a name="l175"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'$'</span><span class=cF0>,  _buf);
+<a name="l176"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l177"></a>
+<a name="l178"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'n'</span><span class=cF0>:
+<a name="l179"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\n'</span><span class=cF0>, _buf);
+<a name="l180"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l181"></a>
+<a name="l182"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'r'</span><span class=cF0>:
+<a name="l183"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\r'</span><span class=cF0>, _buf);
+<a name="l184"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l185"></a>
+<a name="l186"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'t'</span><span class=cF0>:
+<a name="l187"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'\t'</span><span class=cF0>, _buf);
+<a name="l188"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l189"></a>                        </span><span class=cF1>end</span><span class=cF0>:
+<a name="l190"></a>                            ptr++;
+<a name="l191"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l192"></a>
+<a name="l193"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'x'</span><span class=cF0>:
+<a name="l194"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'X'</span><span class=cF0>:
+<a name="l195"></a>                            i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l196"></a>                            ptr++;
+<a name="l197"></a>                            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>2</span><span class=cF0>; j++)
+<a name="l198"></a>                            {
+<a name="l199"></a>                                ch1 = </span><span class=cF5>ToUpper</span><span class=cF0>(*ptr++);
+<a name="l200"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>char_bmp_hex_numeric</span><span class=cF0>, ch1</span><span class=cF7>)</span><span class=cF0>)
+<a name="l201"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l202"></a>                                    </span><span class=cF1>if</span><span class=cF0> (ch1 &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l203"></a>                                        i = i &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + ch1 - </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l204"></a>                                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l205"></a>                                        i = i &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + ch1 - </span><span class=cF6>'A'</span><span class=cF0> + </span><span class=cFE>10</span><span class=cF0>;
+<a name="l206"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l207"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l208"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l209"></a>                                    ptr--;
+<a name="l210"></a>                                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l211"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l212"></a>                            }
+<a name="l213"></a>                            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, i, _buf);
+<a name="l214"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l215"></a>
+<a name="l216"></a>                        </span><span class=cF1>default</span><span class=cF0>:
+<a name="l217"></a>                            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l218"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l219"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l220"></a>
+<a name="l221"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'$'</span><span class=cF0>:
+<a name="l222"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l223"></a>                    </span><span class=cF1>if</span><span class=cF0> (ch1 == </span><span class=cF6>'$'</span><span class=cF0>)
+<a name="l224"></a>                        ptr++;
+<a name="l225"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l226"></a>
+<a name="l227"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'%'</span><span class=cF0>:
+<a name="l228"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l229"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_SLASH</span><span class=cF0> &amp;&amp; ch1 == </span><span class=cF6>'%'</span><span class=cF0>)
+<a name="l230"></a>                        ptr++;
+<a name="l231"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l232"></a>
+<a name="l233"></a>                </span><span class=cF1>default</span><span class=cF0>:
+<a name="l234"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l235"></a>            }
+<a name="l236"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l237"></a>    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cFE>0</span><span class=cF0>, _buf);
+<a name="l238"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l239"></a>}
+<a name="l240"></a>
+<a name="l241"></a></span><span class=cF1>U8</span><span class=cF0>  *</span><span class=cFD>sys_pos_pows_lets</span><span class=cF0> = </span><span class=cF6>&quot; KMGTPEZY&quot;</span><span class=cF0>,
+<a name="l242"></a>    *</span><span class=cFD>sys_neg_pows_lets</span><span class=cF0> = </span><span class=cF6>&quot; munpfazy&quot;</span><span class=cF0>,
+<a name="l243"></a>    *</span><span class=cFD>sys_pos_pows_list</span><span class=cF0> = </span><span class=cF6>&quot;kilo\0mega\0giga\0tera\0peta\0exa\0zetta\0yotta\0&quot;</span><span class=cF0>,
+<a name="l244"></a>    *</span><span class=cFD>sys_neg_pows_list</span><span class=cF0> = </span><span class=cF6>&quot;milli\0micro\0nano\0pico\0femto\0atto\0zepto\0yocto\0&quot;</span><span class=cF0>;
+<a name="l245"></a>
+<a name="l246"></a>#</span><span class=cF1>define</span><span class=cF0> TMP_BUF_LEN     </span><span class=cFE>256</span><span class=cF0>
+<a name="l247"></a>#</span><span class=cF1>define</span><span class=cF0> SLOP            </span><span class=cFE>8</span><span class=cF0>
+<a name="l248"></a>
+<a name="l249"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *format, </span><span class=cF9>I64</span><span class=cF0> argc, </span><span class=cF9>I64</span><span class=cF0> *argv)
+<a name="l250"></a>{</span><span class=cF2>/*</span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF0>
+<a name="l251"></a></span><span class=cF2>In float formatting, do not exceed 18-digits</span><span class=cF0>
+<a name="l252"></a></span><span class=cF2>before or after the decimal point</span><span class=cF0>
+<a name="l253"></a></span><span class=cF2>because the numbers before and after</span><span class=cF0>
+<a name="l254"></a></span><span class=cF2>the decimal point are stored</span><span class=cF0>
+<a name="l255"></a></span><span class=cF2>in 64-bits.  Use exponentiated forms</span><span class=cF0>
+<a name="l256"></a></span><span class=cF2>to avoid this.</span><span class=cF0>
+<a name="l257"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l258"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, j, l, ch, k, k0, n, n0,
+<a name="l259"></a>             len, dec_len, flags, old_flags,
+<a name="l260"></a>             aux_format_num, comma_count, comma_format_count, cur_arg=</span><span class=cFE>0</span><span class=cF0>;
+<a name="l261"></a>    </span><span class=cF9>U64</span><span class=cF0>      m;
+<a name="l262"></a>    </span><span class=cF1>F64</span><span class=cF0>      d, d1;
+<a name="l263"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc;
+<a name="l264"></a>    </span><span class=cF1>U8</span><span class=cF0>      *ptr, **_buf, *buf, **_dst, tmp_buf[TMP_BUF_LEN], tmp_buf2[TMP_BUF_LEN*</span><span class=cFE>2</span><span class=cF0>];
+<a name="l265"></a>
+<a name="l266"></a>    </span><span class=cF1>if</span><span class=cF0> (!format)
+<a name="l267"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l268"></a>    </span><span class=cF1>if</span><span class=cF0> (dst)
+<a name="l269"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l270"></a>        _buf = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l271"></a>        buf  = dst;
+<a name="l272"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l273"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l274"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l275"></a>        buf  = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>STR_LEN</span><span class=cF0>);
+<a name="l276"></a>        _buf = &amp;buf;
+<a name="l277"></a>        dst  = buf;
+<a name="l278"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l279"></a>    _dst = &amp;dst;
+<a name="l280"></a>
+<a name="l281"></a>    </span><span class=cF1>while</span><span class=cF0> (ch = *format++)
+<a name="l282"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l283"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'%'</span><span class=cF0>)
+<a name="l284"></a>        {
+<a name="l285"></a>            flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l286"></a>            </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'-'</span><span class=cF0>)
+<a name="l287"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l288"></a>                flags |= </span><span class=cF3>PRINTF_LEFT_JUSTIFY</span><span class=cF0>;
+<a name="l289"></a>                format++;
+<a name="l290"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l291"></a>            </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'0'</span><span class=cF0>)
+<a name="l292"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l293"></a>                flags |= </span><span class=cF3>PRINTF_PAD_ZERO</span><span class=cF0>;
+<a name="l294"></a>                format++;
+<a name="l295"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l296"></a>            len = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l297"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *format &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l298"></a>                len = len * </span><span class=cFE>10</span><span class=cF0> + *format++ - </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l299"></a>            </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l300"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l301"></a>                format++;
+<a name="l302"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l303"></a>                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l304"></a>                len = argv[cur_arg++];
+<a name="l305"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l306"></a>            dec_len = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l307"></a>            </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'.'</span><span class=cF0>)
+<a name="l308"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l309"></a>                format++;
+<a name="l310"></a>                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *format &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l311"></a>                    dec_len = dec_len * </span><span class=cFE>10</span><span class=cF0> + *format++ - </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l312"></a>                </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l313"></a>                {
+<a name="l314"></a>                    format++;
+<a name="l315"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l316"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l317"></a>                    dec_len = argv[cur_arg++];
+<a name="l318"></a>                }
+<a name="l319"></a>                flags |= </span><span class=cF3>PRINTF_DECIMAL</span><span class=cF0>;
+<a name="l320"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l321"></a>
+<a name="l322"></a>            aux_format_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l323"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l324"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l325"></a>                </span><span class=cF1>switch</span><span class=cF0> (*format)
+<a name="l326"></a>                {
+<a name="l327"></a>                    </span><span class=cF1>start</span><span class=cF0>:
+<a name="l328"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'$'</span><span class=cF0>:
+<a name="l329"></a>                            flags |= </span><span class=cF3>PRINTF_DOLLAR</span><span class=cF0>;
+<a name="l330"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l331"></a>
+<a name="l332"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'/'</span><span class=cF0>:
+<a name="l333"></a>                            flags |= </span><span class=cF3>PRINTF_SLASH</span><span class=cF0>;
+<a name="l334"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l335"></a>
+<a name="l336"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>','</span><span class=cF0>:
+<a name="l337"></a>                            flags |= </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>;
+<a name="l338"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l339"></a>
+<a name="l340"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'t'</span><span class=cF0>:
+<a name="l341"></a>                            flags |= </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0>;
+<a name="l342"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l343"></a>
+<a name="l344"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'l'</span><span class=cF0>: </span><span class=cF2>//harmless</span><span class=cF0>
+<a name="l345"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l346"></a>                    </span><span class=cF1>end</span><span class=cF0>:
+<a name="l347"></a>                        format++;
+<a name="l348"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l349"></a>
+<a name="l350"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'h'</span><span class=cF0>:
+<a name="l351"></a>                        format++;
+<a name="l352"></a>                        flags |= </span><span class=cF3>PRINTF_AUX_FORMAT_NUM</span><span class=cF0>;
+<a name="l353"></a>                        </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'?'</span><span class=cF0>)
+<a name="l354"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l355"></a>                            format++;
+<a name="l356"></a>                            flags |= </span><span class=cF3>PRINTF_QUESTION</span><span class=cF0>;
+<a name="l357"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l358"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l359"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l360"></a>                            </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l361"></a>                            {
+<a name="l362"></a>                                format++;
+<a name="l363"></a>                                </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l364"></a>                                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l365"></a>                                aux_format_num = argv[cur_arg++];
+<a name="l366"></a>                            }
+<a name="l367"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l368"></a>                            {
+<a name="l369"></a>                                </span><span class=cF1>if</span><span class=cF0> (*format == </span><span class=cF6>'-'</span><span class=cF0>)
+<a name="l370"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l371"></a>                                    format++;
+<a name="l372"></a>                                    flags |= </span><span class=cF3>PRINTF_NEG_AUX_FORMAT_NUM</span><span class=cF0>;
+<a name="l373"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l374"></a>                                </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *format &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l375"></a>                                    aux_format_num = aux_format_num * </span><span class=cFE>10</span><span class=cF0> + *format++ - </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l376"></a>                                </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG_AUX_FORMAT_NUM</span><span class=cF0>)
+<a name="l377"></a>                                    aux_format_num = -aux_format_num;
+<a name="l378"></a>                            }
+<a name="l379"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l380"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l381"></a>
+<a name="l382"></a>                    </span><span class=cF1>default</span><span class=cF0>:
+<a name="l383"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_arg;
+<a name="l384"></a>                }
+<a name="l385"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l386"></a>
+<a name="l387"></a>            sp_arg:
+<a name="l388"></a>            k = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l389"></a>            </span><span class=cF1>switch</span><span class=cF0> (*format++)
+<a name="l390"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l391"></a>                </span><span class=cF1>start</span><span class=cF0>:
+<a name="l392"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'F'</span><span class=cF0>:
+<a name="l393"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l394"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l395"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_DOLLAR</span><span class=cF0>)
+<a name="l396"></a>                        {
+<a name="l397"></a>                            doc = argv[cur_arg++];
+<a name="l398"></a>                            old_flags = doc-&gt;flags;
+<a name="l399"></a>                            doc-&gt;flags |= </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>;
+<a name="l400"></a>                            ptr = </span><span class=cF5>DocSave</span><span class=cF0>(doc);
+<a name="l401"></a>                            doc-&gt;flags = old_flags;
+<a name="l402"></a>                        }
+<a name="l403"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l404"></a>                            ptr = </span><span class=cF5>FileRead</span><span class=cF0>(argv[cur_arg++]);
+<a name="l405"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l406"></a>
+<a name="l407"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'Q'</span><span class=cF0>:
+<a name="l408"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l409"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l410"></a>                        ptr = </span><span class=cFD>MPrintQ</span><span class=cF0>(argv[cur_arg++], flags);
+<a name="l411"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l412"></a>
+<a name="l413"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'q'</span><span class=cF0>:
+<a name="l414"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l415"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l416"></a>                        ptr = </span><span class=cFD>MPrintq</span><span class=cF0>(argv[cur_arg++], flags);
+<a name="l417"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l418"></a>
+<a name="l419"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'D'</span><span class=cF0>:
+<a name="l420"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l421"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l422"></a>                        ptr = </span><span class=cF5>MPrintDate</span><span class=cF0>(argv[cur_arg++]);
+<a name="l423"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l424"></a>
+<a name="l425"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'T'</span><span class=cF0>:
+<a name="l426"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l427"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l428"></a>                        ptr = </span><span class=cF5>MPrintTime</span><span class=cF0>(argv[cur_arg++]);
+<a name="l429"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l430"></a>                </span><span class=cF1>end</span><span class=cF0>:
+<a name="l431"></a>                    </span><span class=cFD>OutStr</span><span class=cF0>(ptr, _buf, _dst, len, flags);
+<a name="l432"></a>                    </span><span class=cF5>Free</span><span class=cF0>(ptr);
+<a name="l433"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l434"></a>
+<a name="l435"></a>                </span><span class=cF1>start</span><span class=cF0>:
+<a name="l436"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'s'</span><span class=cF0>:
+<a name="l437"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l438"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l439"></a>                        ptr = argv[cur_arg++];
+<a name="l440"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l441"></a>
+<a name="l442"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'S'</span><span class=cF0>:
+<a name="l443"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l444"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l445"></a>                        ptr = </span><span class=cF5>Define</span><span class=cF0>(argv[cur_arg++]);
+<a name="l446"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l447"></a>
+<a name="l448"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'z'</span><span class=cF0>:
+<a name="l449"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg + </span><span class=cFE>1</span><span class=cF0> &gt;= argc)
+<a name="l450"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l451"></a>                        ptr = </span><span class=cF5>ListSub</span><span class=cF0>(argv[cur_arg], argv[cur_arg + </span><span class=cFE>1</span><span class=cF0>]);
+<a name="l452"></a>                        cur_arg = cur_arg + </span><span class=cFE>2</span><span class=cF0>;
+<a name="l453"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l454"></a>
+<a name="l455"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'Z'</span><span class=cF0>:
+<a name="l456"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg + </span><span class=cFE>1</span><span class=cF0> &gt;= argc)
+<a name="l457"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l458"></a>                        ptr = </span><span class=cF5>DefineSub</span><span class=cF0>(argv[cur_arg], argv[cur_arg + </span><span class=cFE>1</span><span class=cF0>]);
+<a name="l459"></a>                        cur_arg = cur_arg + </span><span class=cFE>2</span><span class=cF0>;
+<a name="l460"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l461"></a>                </span><span class=cF1>end</span><span class=cF0>:
+<a name="l462"></a>                    </span><span class=cFD>OutStr</span><span class=cF0>(ptr, _buf, _dst, len, flags);
+<a name="l463"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l464"></a>
+<a name="l465"></a>                </span><span class=cF1>start</span><span class=cF0>:
+<a name="l466"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'c'</span><span class=cF0>:
+<a name="l467"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l468"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l469"></a>                        tmp_buf[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>I64</span><span class=cF0>) = argv[cur_arg++];
+<a name="l470"></a>                        tmp_buf[</span><span class=cFE>8</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l471"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l472"></a>
+<a name="l473"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'C'</span><span class=cF0>:
+<a name="l474"></a>                        </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l475"></a>                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l476"></a>                        tmp_buf[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>I64</span><span class=cF0>) = argv[cur_arg++];
+<a name="l477"></a>                        tmp_buf[</span><span class=cFE>8</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l478"></a>                        ptr = tmp_buf;
+<a name="l479"></a>                        </span><span class=cF1>while</span><span class=cF0> (*ptr)
+<a name="l480"></a>                        {
+<a name="l481"></a>                            *ptr = </span><span class=cF5>ToUpper</span><span class=cF0>(*ptr);
+<a name="l482"></a>                            ptr++;
+<a name="l483"></a>                        }
+<a name="l484"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l485"></a>                </span><span class=cF1>end</span><span class=cF0>:
+<a name="l486"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>flags &amp; </span><span class=cF3>PRINTF_AUX_FORMAT_NUM</span><span class=cF7>)</span><span class=cF0>)
+<a name="l487"></a>                        aux_format_num = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l488"></a>                    </span><span class=cF1>while</span><span class=cF0> (aux_format_num-- &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l489"></a>                        </span><span class=cFD>OutStr</span><span class=cF0>(tmp_buf, _buf, _dst, len, flags);
+<a name="l490"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l491"></a>
+<a name="l492"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'p'</span><span class=cF0>:
+<a name="l493"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l494"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l495"></a>                    </span><span class=cFD>StrPrintFunSeg</span><span class=cF0>(tmp_buf, argv[cur_arg++], len, flags);
+<a name="l496"></a>                    </span><span class=cFD>OutStr</span><span class=cF0>(tmp_buf, _buf, _dst, len, flags);
+<a name="l497"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l498"></a>
+<a name="l499"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'P'</span><span class=cF0>:
+<a name="l500"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l501"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l502"></a>                    </span><span class=cFD>StrPrintFunSeg</span><span class=cF0>(tmp_buf, argv[cur_arg], len, flags);
+<a name="l503"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0> || !_buf)
+<a name="l504"></a>                    {
+<a name="l505"></a>                        </span><span class=cF5>StrPrint</span><span class=cF0>(tmp_buf2, </span><span class=cF6>&quot;$LK,\&quot;%s\&quot;,A=\&quot;AD:0x%X\&quot;$&quot;</span><span class=cF0>, tmp_buf, argv[cur_arg]);
+<a name="l506"></a>                        </span><span class=cFD>OutStr</span><span class=cF0>(tmp_buf2, _buf, _dst, len, flags);
+<a name="l507"></a>                    }
+<a name="l508"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l509"></a>                        </span><span class=cFD>OutStr</span><span class=cF0>(tmp_buf, _buf, _dst, len, flags);
+<a name="l510"></a>                    cur_arg++;
+<a name="l511"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l512"></a>
+<a name="l513"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'d'</span><span class=cF0>:
+<a name="l514"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l515"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l516"></a>                    m = argv[cur_arg++];
+<a name="l517"></a>                    </span><span class=cF1>if</span><span class=cF0> (m</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l518"></a>                    {
+<a name="l519"></a>                        flags |= </span><span class=cF3>PRINTF_NEG</span><span class=cF0>;
+<a name="l520"></a>                        m = -m;
+<a name="l521"></a>                    }
+<a name="l522"></a>sp_out_dec:
+<a name="l523"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_AUX_FORMAT_NUM</span><span class=cF0>)
+<a name="l524"></a>                    {
+<a name="l525"></a>                        </span><span class=cF1>if</span><span class=cF0> (!len)
+<a name="l526"></a>                            len = </span><span class=cFE>12</span><span class=cF0>;
+<a name="l527"></a>                        d = m;
+<a name="l528"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_eng;
+<a name="l529"></a>                    }
+<a name="l530"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l531"></a>                    {
+<a name="l532"></a>                        comma_format_count = comma_count = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l533"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l534"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l535"></a>                            tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;m, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l536"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l537"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l538"></a>                            </span><span class=cF1>if</span><span class=cF0> (!--comma_count)
+<a name="l539"></a>                            {
+<a name="l540"></a>                                tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l541"></a>                                comma_count = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l542"></a>                            }
+<a name="l543"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l544"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l545"></a>sp_out_comma_num:
+<a name="l546"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l547"></a>                            i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l548"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l549"></a>                            i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l550"></a>                        </span><span class=cF1>if</span><span class=cF0> (len &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l551"></a>                            len = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l552"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0> &amp;&amp; k + i &gt; len)
+<a name="l553"></a>                            k = len - i;
+<a name="l554"></a>                        </span><span class=cF1>if</span><span class=cF0> (k &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l555"></a>                            k = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l556"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_PAD_ZERO</span><span class=cF0>)
+<a name="l557"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l558"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l559"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'-'</span><span class=cF0>, _buf);
+<a name="l560"></a>                            comma_count = (len - k - i + comma_format_count - comma_count + </span><span class=cFE>1</span><span class=cF0>) % (comma_format_count + </span><span class=cFE>1</span><span class=cF0>) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l561"></a>                            </span><span class=cF1>for</span><span class=cF0> (; i &lt; len - k; i++)
+<a name="l562"></a>                            {
+<a name="l563"></a>                                </span><span class=cF1>if</span><span class=cF0> (!--comma_count)
+<a name="l564"></a>                                </span><span class=cF7>{</span><span class=cF0>
+<a name="l565"></a>                                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>','</span><span class=cF0>, _buf);
+<a name="l566"></a>                                    comma_count = comma_format_count;
+<a name="l567"></a>                                    </span><span class=cF1>if</span><span class=cF0> (++i &gt;= len - k)
+<a name="l568"></a>                                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l569"></a>                                </span><span class=cF7>}</span><span class=cF0>
+<a name="l570"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'0'</span><span class=cF0>, _buf);
+<a name="l571"></a>                            }
+<a name="l572"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l573"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l574"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l575"></a>                            </span><span class=cF1>for</span><span class=cF0> (; i &lt; len - k; i++)
+<a name="l576"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF3>CH_SPACE</span><span class=cF0>, _buf);
+<a name="l577"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l578"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'-'</span><span class=cF0>, _buf);
+<a name="l579"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l580"></a>                    }
+<a name="l581"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l582"></a>                    {
+<a name="l583"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l584"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l585"></a>                            tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;m, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l586"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l587"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l588"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l589"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l590"></a>sp_out_num:
+<a name="l591"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l592"></a>                            i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l593"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l594"></a>                            i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l595"></a>                        </span><span class=cF1>if</span><span class=cF0> (len &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l596"></a>                            len = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l597"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0> &amp;&amp; k + i &gt; len)
+<a name="l598"></a>                            k = len - i;
+<a name="l599"></a>                        </span><span class=cF1>if</span><span class=cF0> (k &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l600"></a>                            k = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l601"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_PAD_ZERO</span><span class=cF0>)
+<a name="l602"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l603"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l604"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'-'</span><span class=cF0>, _buf);
+<a name="l605"></a>                            </span><span class=cF1>for</span><span class=cF0> (; i &lt; len - k; i++)
+<a name="l606"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'0'</span><span class=cF0>, _buf);
+<a name="l607"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l608"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l609"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l610"></a>                            </span><span class=cF1>for</span><span class=cF0> (; i &lt; len - k; i++)
+<a name="l611"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF3>CH_SPACE</span><span class=cF0>, _buf);
+<a name="l612"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l613"></a>                                </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'-'</span><span class=cF0>, _buf);
+<a name="l614"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l615"></a>                    }
+<a name="l616"></a>                    </span><span class=cF1>for</span><span class=cF0> (i = k - </span><span class=cFE>1</span><span class=cF0>; i &gt;= </span><span class=cFE>0</span><span class=cF0>; i--)
+<a name="l617"></a>                        </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, tmp_buf[i], _buf);
+<a name="l618"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l619"></a>
+<a name="l620"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'u'</span><span class=cF0>:
+<a name="l621"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l622"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l623"></a>                    m = argv[cur_arg++];
+<a name="l624"></a>                    </span><span class=cF1>goto</span><span class=cF0> sp_out_dec;
+<a name="l625"></a>
+<a name="l626"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'f'</span><span class=cF0>:
+<a name="l627"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l628"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l629"></a>                    d = argv[cur_arg++](</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l630"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l631"></a>                    {
+<a name="l632"></a>                        flags |= </span><span class=cF3>PRINTF_NEG</span><span class=cF0>;
+<a name="l633"></a>                        d = -d;
+<a name="l634"></a>                    }
+<a name="l635"></a>
+<a name="l636"></a>                    </span><span class=cF1>if</span><span class=cF0> (d == </span><span class=cF3>inf</span><span class=cF0>)
+<a name="l637"></a>                    {
+<a name="l638"></a>sp_out_inf:
+<a name="l639"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l640"></a>                            i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l641"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l642"></a>                            i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l643"></a>                        k = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l644"></a>                        </span><span class=cF1>if</span><span class=cF0> (len &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l645"></a>                            len = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l646"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0> &amp;&amp; k + i &gt; len)
+<a name="l647"></a>                            k = len - i;
+<a name="l648"></a>                        </span><span class=cF1>if</span><span class=cF0> (k &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l649"></a>                            k = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l650"></a>                        </span><span class=cF1>for</span><span class=cF0> (; i &lt; len - k; i++)
+<a name="l651"></a>                            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF3>CH_SPACE</span><span class=cF0>, _buf);
+<a name="l652"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l653"></a>                            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'-'</span><span class=cF0>, _buf);
+<a name="l654"></a>                        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; k; i++)
+<a name="l655"></a>                            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'inf'</span><span class=cF0>, _buf);
+<a name="l656"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l657"></a>                    }
+<a name="l658"></a>
+<a name="l659"></a>                    sp_out_f:
+<a name="l660"></a>                    </span><span class=cF1>if</span><span class=cF0> (dec_len &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l661"></a>                        dec_len = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l662"></a>                    n = </span><span class=cF5>Log10</span><span class=cF0>(d);
+<a name="l663"></a>                    </span><span class=cF1>if</span><span class=cF0> (i = dec_len)
+<a name="l664"></a>                    {
+<a name="l665"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l666"></a>                            i = i - i / </span><span class=cFE>4</span><span class=cF0>;
+<a name="l667"></a>                        </span><span class=cF1>if</span><span class=cF0> (n + i &gt; </span><span class=cFE>17</span><span class=cF0>)
+<a name="l668"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l669"></a>                            n += i - </span><span class=cFE>17</span><span class=cF0>;
+<a name="l670"></a>                            d *= </span><span class=cF5>Pow10I64</span><span class=cF0>(i - n);
+<a name="l671"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l672"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l673"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l674"></a>                            n = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l675"></a>                            d *= </span><span class=cF5>Pow10I64</span><span class=cF0>(i);
+<a name="l676"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l677"></a>                        i = dec_len;
+<a name="l678"></a>                    }
+<a name="l679"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (n &gt; </span><span class=cFE>17</span><span class=cF0>)
+<a name="l680"></a>                    {
+<a name="l681"></a>                        n -= </span><span class=cFE>17</span><span class=cF0>;
+<a name="l682"></a>                        d *= </span><span class=cF5>Pow10I64</span><span class=cF0>(-n);
+<a name="l683"></a>                    }
+<a name="l684"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l685"></a>                        n = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l686"></a>
+<a name="l687"></a>                    m = </span><span class=cF5>Round</span><span class=cF0>(d);
+<a name="l688"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l689"></a>                    {
+<a name="l690"></a>                        comma_count = i &amp; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l691"></a>                        </span><span class=cF1>while</span><span class=cF0> (i-- &amp;&amp; k &lt; TMP_BUF_LEN - SLOP)
+<a name="l692"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l693"></a>                            </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>2</span><span class=cF0> &amp;&amp; !comma_count--)
+<a name="l694"></a>                            {
+<a name="l695"></a>                                tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l696"></a>                                comma_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l697"></a>                                </span><span class=cF1>if</span><span class=cF0> (!--i)
+<a name="l698"></a>                                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l699"></a>                            }
+<a name="l700"></a>                            </span><span class=cF1>if</span><span class=cF0> (n)
+<a name="l701"></a>                            {
+<a name="l702"></a>                                n--;
+<a name="l703"></a>                                tmp_buf[k++] = </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l704"></a>                            }
+<a name="l705"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l706"></a>                                tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;m, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l707"></a>                            </span><span class=cF1>if</span><span class=cF0> (!i)
+<a name="l708"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l709"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l710"></a>                    }
+<a name="l711"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l712"></a>                    {
+<a name="l713"></a>                        </span><span class=cF1>while</span><span class=cF0> (i-- &amp;&amp; k &lt; TMP_BUF_LEN - SLOP)
+<a name="l714"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l715"></a>                            </span><span class=cF1>if</span><span class=cF0> (n)
+<a name="l716"></a>                            {
+<a name="l717"></a>                                n--;
+<a name="l718"></a>                                tmp_buf[k++] = </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l719"></a>                            }
+<a name="l720"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l721"></a>                                tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;m, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l722"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l723"></a>                    }
+<a name="l724"></a>                    </span><span class=cF1>if</span><span class=cF0> (dec_len)
+<a name="l725"></a>                        tmp_buf[k++] = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l726"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l727"></a>                    {
+<a name="l728"></a>                        comma_count = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l729"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l730"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l731"></a>                            </span><span class=cF1>if</span><span class=cF0> (n)
+<a name="l732"></a>                            {
+<a name="l733"></a>                                n--;
+<a name="l734"></a>                                tmp_buf[k++] = </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l735"></a>                            }
+<a name="l736"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l737"></a>                                tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;m, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l738"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l739"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l740"></a>                            </span><span class=cF1>if</span><span class=cF0> (!--comma_count)
+<a name="l741"></a>                            {
+<a name="l742"></a>                                tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l743"></a>                                comma_count = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l744"></a>                            }
+<a name="l745"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l746"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l747"></a>
+<a name="l748"></a>                    }
+<a name="l749"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l750"></a>                    {
+<a name="l751"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l752"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l753"></a>                            </span><span class=cF1>if</span><span class=cF0> (n)
+<a name="l754"></a>                            {
+<a name="l755"></a>                                n--;
+<a name="l756"></a>                                tmp_buf[k++] = </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l757"></a>                            }
+<a name="l758"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l759"></a>                                tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;m, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l760"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l761"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l762"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l763"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l764"></a>
+<a name="l765"></a>                    }
+<a name="l766"></a>                    </span><span class=cF1>goto</span><span class=cF0> sp_out_num;
+<a name="l767"></a>
+<a name="l768"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'e'</span><span class=cF0>:
+<a name="l769"></a>                    </span><span class=cF1>if</span><span class=cF0> (!len)
+<a name="l770"></a>                        len = </span><span class=cFE>12</span><span class=cF0>;
+<a name="l771"></a>                    flags |= </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0>;
+<a name="l772"></a>
+<a name="l773"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l774"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l775"></a>                    d = argv[cur_arg++](</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l776"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l777"></a>                    {
+<a name="l778"></a>                        flags |= </span><span class=cF3>PRINTF_NEG</span><span class=cF0>;
+<a name="l779"></a>                        d = -d;
+<a name="l780"></a>                    }
+<a name="l781"></a>                    </span><span class=cF1>if</span><span class=cF0> (d == </span><span class=cF3>inf</span><span class=cF0>)
+<a name="l782"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_inf;
+<a name="l783"></a>
+<a name="l784"></a>                    </span><span class=cF1>if</span><span class=cF0> (d)
+<a name="l785"></a>                        n = </span><span class=cF5>Floor</span><span class=cF0>(</span><span class=cF5>Log10</span><span class=cF7>(</span><span class=cF0>d</span><span class=cF7>)</span><span class=cF0>);
+<a name="l786"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l787"></a>                        n = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l788"></a>sp_out_e:
+<a name="l789"></a>                    d /= </span><span class=cF5>Pow10I64</span><span class=cF0>(n);
+<a name="l790"></a>
+<a name="l791"></a>                    k0 = k;
+<a name="l792"></a>                    </span><span class=cF1>for</span><span class=cF0> (l = </span><span class=cFE>0</span><span class=cF0>; l &lt; </span><span class=cFE>2</span><span class=cF0>; l++)
+<a name="l793"></a>                    {
+<a name="l794"></a>                        n0 = n;
+<a name="l795"></a>                        </span><span class=cF1>if</span><span class=cF0> (n &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l796"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l797"></a>                            n = -n;
+<a name="l798"></a>                            flags |= </span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>;
+<a name="l799"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l800"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l801"></a>                            flags &amp;= ~</span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>;
+<a name="l802"></a>
+<a name="l803"></a>                        i = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l804"></a>
+<a name="l805"></a>                        </span><span class=cF1>do</span><span class=cF0> tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;n, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l806"></a>                        </span><span class=cF1>while</span><span class=cF0> (n &amp;&amp; i--);
+<a name="l807"></a>
+<a name="l808"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>)
+<a name="l809"></a>                            tmp_buf[k++] = </span><span class=cF6>'-'</span><span class=cF0>;
+<a name="l810"></a>                        tmp_buf[k++] = </span><span class=cF6>'e'</span><span class=cF0>;
+<a name="l811"></a>                        dec_len = len - k - </span><span class=cFE>2</span><span class=cF0>;
+<a name="l812"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l813"></a>                            dec_len--;
+<a name="l814"></a>
+<a name="l815"></a>                        </span><span class=cF1>if</span><span class=cF0> (d)
+<a name="l816"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l817"></a>                            d1 = d + </span><span class=cF5>Pow10I64</span><span class=cF0>(-dec_len) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l818"></a>                            </span><span class=cF1>if</span><span class=cF0> (d1 &lt; </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>)
+<a name="l819"></a>                            {
+<a name="l820"></a>                                d *= </span><span class=cFE>10</span><span class=cF0>;
+<a name="l821"></a>                                n = n0 - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l822"></a>                                k = k0;
+<a name="l823"></a>                            }
+<a name="l824"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (d1 &gt;= </span><span class=cFE>10</span><span class=cF0>)
+<a name="l825"></a>                            {
+<a name="l826"></a>                                d /= </span><span class=cFE>10</span><span class=cF0>;
+<a name="l827"></a>                                n = n0 + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l828"></a>                                k = k0;
+<a name="l829"></a>                            }
+<a name="l830"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l831"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l832"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l833"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l834"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l835"></a>                    }
+<a name="l836"></a>
+<a name="l837"></a>                    </span><span class=cF1>goto</span><span class=cF0> sp_out_f;
+<a name="l838"></a>
+<a name="l839"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'g'</span><span class=cF0>:
+<a name="l840"></a>                    </span><span class=cF1>if</span><span class=cF0> (!len)
+<a name="l841"></a>                        len = </span><span class=cFE>12</span><span class=cF0>;
+<a name="l842"></a>                    flags |= </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0>;
+<a name="l843"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l844"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l845"></a>                    d = argv[cur_arg++](</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l846"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l847"></a>                    {
+<a name="l848"></a>                        flags |= </span><span class=cF3>PRINTF_NEG</span><span class=cF0>;
+<a name="l849"></a>                        d = -d;
+<a name="l850"></a>                    }
+<a name="l851"></a>                    </span><span class=cF1>if</span><span class=cF0> (d == </span><span class=cF3>inf</span><span class=cF0>)
+<a name="l852"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_inf;
+<a name="l853"></a>                    </span><span class=cF1>if</span><span class=cF0> (d)
+<a name="l854"></a>                        n = </span><span class=cF5>Floor</span><span class=cF0>(</span><span class=cF5>Log10</span><span class=cF7>(</span><span class=cF0>d</span><span class=cF7>)</span><span class=cF0>);
+<a name="l855"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l856"></a>                        n = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l857"></a>                    </span><span class=cF1>if</span><span class=cF0> (n &gt;= len - </span><span class=cFE>1</span><span class=cF0> - dec_len || n &lt; -</span><span class=cF7>(</span><span class=cF0>dec_len - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>)
+<a name="l858"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_e;
+<a name="l859"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l860"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_f;
+<a name="l861"></a>
+<a name="l862"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'n'</span><span class=cF0>:
+<a name="l863"></a>                    </span><span class=cF1>if</span><span class=cF0> (!len)
+<a name="l864"></a>                        len = </span><span class=cFE>12</span><span class=cF0>;
+<a name="l865"></a>                    flags |= </span><span class=cF3>PRINTF_TRUNCATE</span><span class=cF0>;
+<a name="l866"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l867"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l868"></a>                    d = argv[cur_arg++](</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l869"></a>                    </span><span class=cF1>if</span><span class=cF0> (d &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l870"></a>                    {
+<a name="l871"></a>                        flags |= </span><span class=cF3>PRINTF_NEG</span><span class=cF0>;
+<a name="l872"></a>                        d = -d;
+<a name="l873"></a>                    }
+<a name="l874"></a>sp_out_eng: </span><span class=cF2>//Engineering notation</span><span class=cF0>
+<a name="l875"></a>                    </span><span class=cF1>if</span><span class=cF0> (d == </span><span class=cF3>inf</span><span class=cF0>)
+<a name="l876"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_inf;
+<a name="l877"></a>                    </span><span class=cF1>if</span><span class=cF0> (d)
+<a name="l878"></a>                        n = </span><span class=cF5>FloorI64</span><span class=cF0>(</span><span class=cF5>Floor</span><span class=cF7>(</span><span class=cF5>Log10</span><span class=cF0>(d)</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l879"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l880"></a>                        n = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l881"></a>                    d /= </span><span class=cF5>Pow10I64</span><span class=cF0>(n);
+<a name="l882"></a>
+<a name="l883"></a>                    </span><span class=cF1>if</span><span class=cF0> (n &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l884"></a>                    {
+<a name="l885"></a>                        n = -n;
+<a name="l886"></a>                        flags |= </span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>;
+<a name="l887"></a>                    }
+<a name="l888"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_AUX_FORMAT_NUM</span><span class=cF0> &amp;&amp; -</span><span class=cFE>24</span><span class=cF0> &lt;= n &lt;= </span><span class=cFE>24</span><span class=cF0>)
+<a name="l889"></a>                    {
+<a name="l890"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_QUESTION</span><span class=cF0>)
+<a name="l891"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l892"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>)
+<a name="l893"></a>                                i = -n / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l894"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l895"></a>                                i = n / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l896"></a>                            j = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l897"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l898"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l899"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l900"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>)
+<a name="l901"></a>                                j = -n - aux_format_num;
+<a name="l902"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l903"></a>                                j = n - aux_format_num;
+<a name="l904"></a>                            d *= </span><span class=cF5>Pow10I64</span><span class=cF0>(j);
+<a name="l905"></a>                            i = aux_format_num / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l906"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l907"></a>                        </span><span class=cF1>if</span><span class=cF0> (i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l908"></a>                            tmp_buf[k++] = </span><span class=cFD>sys_neg_pows_lets</span><span class=cF0>[-i];
+<a name="l909"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l910"></a>                            tmp_buf[k++] = </span><span class=cFD>sys_pos_pows_lets</span><span class=cF0>[i];
+<a name="l911"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (len != </span><span class=cFE>0</span><span class=cF0>)
+<a name="l912"></a>                            tmp_buf[k++] = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l913"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>flags &amp; </span><span class=cF3>PRINTF_DECIMAL</span><span class=cF7>)</span><span class=cF0>)
+<a name="l914"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l915"></a>                            dec_len = len - k - </span><span class=cFE>2</span><span class=cF0>;
+<a name="l916"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l917"></a>                                dec_len--;
+<a name="l918"></a>                            </span><span class=cF1>if</span><span class=cF0> (j &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l919"></a>                            {
+<a name="l920"></a>                                </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l921"></a>                                    dec_len -= </span><span class=cFE>4</span><span class=cF0> * j / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l922"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l923"></a>                                    dec_len -= j;
+<a name="l924"></a>                            }
+<a name="l925"></a>                            d1 = d + </span><span class=cF5>Pow10I64</span><span class=cF0>(-dec_len + </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l926"></a>                            </span><span class=cF1>if</span><span class=cF0> (d1 &gt;= </span><span class=cFE>10</span><span class=cF0>)
+<a name="l927"></a>                            {
+<a name="l928"></a>                                dec_len--;
+<a name="l929"></a>                                </span><span class=cF1>if</span><span class=cF0> (d1 &gt;= </span><span class=cFE>100</span><span class=cF0>)
+<a name="l930"></a>                                    dec_len--;
+<a name="l931"></a>                            }
+<a name="l932"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l933"></a>                    }
+<a name="l934"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l935"></a>                    {
+<a name="l936"></a>                        i = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l937"></a>                        </span><span class=cF1>do</span><span class=cF0> tmp_buf[k++] = </span><span class=cF5>ModU64</span><span class=cF0>(&amp;n, </span><span class=cFE>10</span><span class=cF0>) + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l938"></a>                        </span><span class=cF1>while</span><span class=cF0> (n &amp;&amp; i--);
+<a name="l939"></a>                        </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG_E</span><span class=cF0>)
+<a name="l940"></a>                            tmp_buf[k++] = </span><span class=cF6>'-'</span><span class=cF0>;
+<a name="l941"></a>                        tmp_buf[k++] = </span><span class=cF6>'e'</span><span class=cF0>;
+<a name="l942"></a>                        </span><span class=cF1>if</span><span class=cF0> (!dec_len)
+<a name="l943"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l944"></a>                            dec_len = len - k - </span><span class=cFE>2</span><span class=cF0>;
+<a name="l945"></a>                            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_NEG</span><span class=cF0>)
+<a name="l946"></a>                                dec_len--;
+<a name="l947"></a>                            d1 = d + </span><span class=cF5>Pow10I64</span><span class=cF0>(-dec_len + </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l948"></a>                            </span><span class=cF1>if</span><span class=cF0> (d1 &gt;= </span><span class=cFE>10</span><span class=cF0>)
+<a name="l949"></a>                            {
+<a name="l950"></a>                                dec_len--;
+<a name="l951"></a>                                </span><span class=cF1>if</span><span class=cF0> (d1 &gt;= </span><span class=cFE>100</span><span class=cF0>)
+<a name="l952"></a>                                    dec_len--;
+<a name="l953"></a>                            }
+<a name="l954"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l955"></a>                    }
+<a name="l956"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l957"></a>                    {
+<a name="l958"></a>                        </span><span class=cF1>if</span><span class=cF0> (len &amp;&amp; dec_len &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>dec_len &amp; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>)
+<a name="l959"></a>                            tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l960"></a>                        dec_len -= dec_len / </span><span class=cFE>4</span><span class=cF0>;
+<a name="l961"></a>                    }
+<a name="l962"></a>                    </span><span class=cF1>goto</span><span class=cF0> sp_out_f;
+<a name="l963"></a>
+<a name="l964"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'X'</span><span class=cF0>:
+<a name="l965"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l966"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l967"></a>                    m = argv[cur_arg++];
+<a name="l968"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l969"></a>                    {
+<a name="l970"></a>                        comma_format_count = comma_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l971"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l972"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l973"></a>                            tmp_buf[k] = m &amp; </span><span class=cFE>15</span><span class=cF0> + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l974"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmp_buf[k] &gt; </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l975"></a>                                tmp_buf[k] += </span><span class=cF6>'A'</span><span class=cF0> - </span><span class=cFE>0x3A</span><span class=cF0>;
+<a name="l976"></a>                            k++;
+<a name="l977"></a>                            m &gt;&gt;= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l978"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l979"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l980"></a>                            </span><span class=cF1>if</span><span class=cF0> (!--comma_count)
+<a name="l981"></a>                            {
+<a name="l982"></a>                                tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l983"></a>                                comma_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l984"></a>                            }
+<a name="l985"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l986"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l987"></a>
+<a name="l988"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_comma_num;
+<a name="l989"></a>                    }
+<a name="l990"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l991"></a>                    {
+<a name="l992"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l993"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l994"></a>                            tmp_buf[k] = m &amp; </span><span class=cFE>15</span><span class=cF0> + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l995"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmp_buf[k] &gt; </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l996"></a>                                tmp_buf[k] += </span><span class=cF6>'A'</span><span class=cF0> - </span><span class=cFE>0x3A</span><span class=cF0>;
+<a name="l997"></a>                            k++;
+<a name="l998"></a>                            m &gt;&gt;= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l999"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1000"></a>                        </span><span class=cF1>while</span><span class=cF0> (m &amp;&amp; k &lt; TMP_BUF_LEN - SLOP);
+<a name="l1001"></a>
+<a name="l1002"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_num;
+<a name="l1003"></a>                    }
+<a name="l1004"></a>
+<a name="l1005"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'x'</span><span class=cF0>:
+<a name="l1006"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l1007"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l1008"></a>                    m = argv[cur_arg++];
+<a name="l1009"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l1010"></a>                    {
+<a name="l1011"></a>                        comma_format_count = comma_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l1012"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l1013"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1014"></a>                            tmp_buf[k] = m &amp; </span><span class=cFE>15</span><span class=cF0> + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l1015"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmp_buf[k] &gt; </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l1016"></a>                                tmp_buf[k] += </span><span class=cF6>'a'</span><span class=cF0> - </span><span class=cFE>0x3A</span><span class=cF0>;
+<a name="l1017"></a>                            k++;
+<a name="l1018"></a>                            m &gt;&gt;= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l1019"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l1020"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1021"></a>                            </span><span class=cF1>if</span><span class=cF0> (!--comma_count)
+<a name="l1022"></a>                            {
+<a name="l1023"></a>                                tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l1024"></a>                                comma_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l1025"></a>                            }
+<a name="l1026"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1027"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l1028"></a>
+<a name="l1029"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_comma_num;
+<a name="l1030"></a>                    }
+<a name="l1031"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1032"></a>                    {
+<a name="l1033"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l1034"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1035"></a>                            tmp_buf[k] = m &amp; </span><span class=cFE>15</span><span class=cF0> + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l1036"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmp_buf[k] &gt; </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l1037"></a>                                tmp_buf[k] += </span><span class=cF6>'a'</span><span class=cF0> - </span><span class=cFE>0x3A</span><span class=cF0>;
+<a name="l1038"></a>                            k++;
+<a name="l1039"></a>                            m &gt;&gt;= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l1040"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1041"></a>                        </span><span class=cF1>while</span><span class=cF0> (m &amp;&amp; k &lt; TMP_BUF_LEN - SLOP);
+<a name="l1042"></a>
+<a name="l1043"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_num;
+<a name="l1044"></a>                    }
+<a name="l1045"></a>
+<a name="l1046"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'b'</span><span class=cF0>:
+<a name="l1047"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'B'</span><span class=cF0>:
+<a name="l1048"></a>                    </span><span class=cF1>if</span><span class=cF0> (cur_arg &gt;= argc)
+<a name="l1049"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'StrPrint'</span><span class=cF0>);
+<a name="l1050"></a>                    m = argv[cur_arg++];
+<a name="l1051"></a>                    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>PRINTF_COMMA</span><span class=cF0>)
+<a name="l1052"></a>                    {
+<a name="l1053"></a>                        comma_format_count = comma_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l1054"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l1055"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1056"></a>                            tmp_buf[k++] = m &amp; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l1057"></a>                            m &gt;&gt;= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1058"></a>                            </span><span class=cF1>if</span><span class=cF0> (!m)
+<a name="l1059"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1060"></a>                            </span><span class=cF1>if</span><span class=cF0> (!--comma_count)
+<a name="l1061"></a>                            {
+<a name="l1062"></a>                                tmp_buf[k++] = </span><span class=cF6>','</span><span class=cF0>;
+<a name="l1063"></a>                                comma_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l1064"></a>                            }
+<a name="l1065"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1066"></a>                        </span><span class=cF1>while</span><span class=cF0> (k &lt; TMP_BUF_LEN - SLOP);
+<a name="l1067"></a>
+<a name="l1068"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_comma_num;
+<a name="l1069"></a>                    }
+<a name="l1070"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1071"></a>                    {
+<a name="l1072"></a>                        </span><span class=cF1>do</span><span class=cF0>
+<a name="l1073"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1074"></a>                            tmp_buf[k++] = m &amp; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cF6>'0'</span><span class=cF0>;
+<a name="l1075"></a>                            m &gt;&gt;= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1076"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1077"></a>                        </span><span class=cF1>while</span><span class=cF0> (m &amp;&amp; k &lt; TMP_BUF_LEN - SLOP);
+<a name="l1078"></a>
+<a name="l1079"></a>                        </span><span class=cF1>goto</span><span class=cF0> sp_out_num;
+<a name="l1080"></a>                    }
+<a name="l1081"></a>
+<a name="l1082"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'%'</span><span class=cF0>:
+<a name="l1083"></a>                    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cF6>'%'</span><span class=cF0>, _buf);
+<a name="l1084"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1085"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1086"></a>        }
+<a name="l1087"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1088"></a>            </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, ch, _buf);
+<a name="l1089"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1090"></a>    </span><span class=cFD>SPutChar</span><span class=cF0>(_dst, </span><span class=cFE>0</span><span class=cF0>, _buf);
+<a name="l1091"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l1092"></a>}
+<a name="l1093"></a>
+<a name="l1094"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l1095"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1096"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrPrintJoin</span><span class=cF0>(dst, format, argc, argv);
+<a name="l1097"></a>}
+<a name="l1098"></a>
+<a name="l1099"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>CatPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_dst, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l1100"></a>{</span><span class=cF2>//StrCat().  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1101"></a>    </span><span class=cF1>U8</span><span class=cF0> *dst = _dst;
+<a name="l1102"></a>
+<a name="l1103"></a>    </span><span class=cF1>while</span><span class=cF0> (*dst)
+<a name="l1104"></a>        dst++;
+<a name="l1105"></a>    </span><span class=cF5>StrPrintJoin</span><span class=cF0>(dst, format, argc, argv);
+<a name="l1106"></a>
+<a name="l1107"></a>    </span><span class=cF1>return</span><span class=cF0> _dst;
+<a name="l1108"></a>}
+<a name="l1109"></a>
+<a name="l1110"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Print</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l1111"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print(&quot;&quot;) Format Strings</span></a><span class=cF2>.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1112"></a></span><span class=cF2>//Don't use this.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
+<a name="l1113"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
+<a name="l1114"></a>
+<a name="l1115"></a>    </span><span class=cF5>PutS</span><span class=cF0>(buf);</span><span class=cF2>//Don't use PutS().  </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.html#l48"><span class=cF4>See Print() shortcut.</span></a><span class=cF0>
+<a name="l1116"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l1117"></a>}
+<a name="l1118"></a>
+<a name="l1119"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l1120"></a>{</span><span class=cF2>//MAlloc StrPrint.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l1121"></a>    </span><span class=cF1>U8</span><span class=cF0> *res, *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
+<a name="l1122"></a>
+<a name="l1123"></a>    res = </span><span class=cF5>StrNew</span><span class=cF0>(buf);
+<a name="l1124"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l1125"></a>
+<a name="l1126"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l1127"></a>}
+<a name="l1128"></a>
+<a name="l1129"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l1130"></a>{</span><span class=cF2>//Print &quot;Err:&quot; and message in blinking red.</span><span class=cF0>
+<a name="l1131"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
+<a name="l1132"></a>
+<a name="l1133"></a>    </span><span class=cF5>GetOutOfDollar</span><span class=cF0>;
+<a name="l1134"></a>    </span><span class=cF6>&quot;%,p %,p %,p %,p &quot;</span><span class=cF0> </span><span class=cF3>ST_ERR_ST</span><span class=cF0> </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, </span><span class=cF5>Caller</span><span class=cF0>, </span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>), </span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cFE>3</span><span class=cF0>), </span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cFE>4</span><span class=cF0>), buf;
+<a name="l1135"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l1136"></a>}
+<a name="l1137"></a>
+<a name="l1138"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l1139"></a>{</span><span class=cF2>//Print &quot;Warn:&quot; and message in blinking red.</span><span class=cF0>
+<a name="l1140"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
+<a name="l1141"></a>
+<a name="l1142"></a>    </span><span class=cF5>GetOutOfDollar</span><span class=cF0>;
+<a name="l1143"></a>    </span><span class=cF6>&quot;%,p %,p %,p %,p &quot;</span><span class=cF0> </span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, </span><span class=cF5>Caller</span><span class=cF0>, </span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>), </span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cFE>3</span><span class=cF0>), </span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cFE>4</span><span class=cF0>), buf;
+<a name="l1144"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l1145"></a>}
+</span></pre></body>
+</html>

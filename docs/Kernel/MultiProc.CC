@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>asm</span><span class=cF0> {
+<a name="l2"></a>                </span><span class=cF1>ALIGN</span><span class=cF0>   </span><span class=cFE>16</span><span class=cF0>, </span><span class=cF3>OC_NOP</span><span class=cF0>
+<a name="l3"></a></span><span class=cF1>USE16</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/MultiCore.html#l1"><span class=cF4>ZealOS MultiCore</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF2>//This code gets copied to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l324"><span class=cF4>MemCopy(MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l8"></a></span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>::
+<a name="l9"></a>                </span><span class=cF1>JMP</span><span class=cF0>         @@05
+<a name="l10"></a>
+<a name="l11"></a>                </span><span class=cF1>ALIGN</span><span class=cF0>   </span><span class=cFE>4</span><span class=cF0>, </span><span class=cF3>OC_NOP</span><span class=cF0>
+<a name="l12"></a>AP_GDT_PTR:     </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CGDT</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l13"></a>                </span><span class=cF1>DU64</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>;
+<a name="l14"></a>
+<a name="l15"></a>@@05:           </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF1>WBINVD</span><span class=cF0>
+<a name="l17"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF3>MP_VECT_ADDR</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>
+<a name="l18"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l19"></a>                </span><span class=cF1>LGDT</span><span class=cF0>        </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cF9>CAP16BitInit</span><span class=cF0>.ap_gdt_ptr]  </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l325"><span class=cF4>mp-&gt;ap_gdt_ptr</span></a><span class=cF0>
+<a name="l20"></a>
+<a name="l21"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cF3>SYS_START_CR0</span><span class=cF0>
+<a name="l22"></a>                </span><span class=cF1>MOV_CR0_EAX</span><span class=cF0>
+<a name="l23"></a>                </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>0x66</span><span class=cF0>, </span><span class=cFE>0xEA</span><span class=cF0>;     </span><span class=cF2>//JMP CGDT.cs32:AP_32BIT_INIT</span><span class=cF0>
+<a name="l24"></a>                </span><span class=cF1>DU32</span><span class=cF0>        AP_32BIT_INIT;
+<a name="l25"></a>                </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cF9>CGDT</span><span class=cF0>.cs32;
+<a name="l26"></a></span><span class=cFD>COREAP_16BIT_INIT_END</span><span class=cF0>::
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF1>USE32</span><span class=cF0>
+<a name="l29"></a>AP_32BIT_INIT:
+<a name="l30"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF9>CGDT</span><span class=cF0>.ds
+<a name="l31"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l32"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>ES</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l33"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>FS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l34"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>GS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l35"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>SS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l36"></a>
+<a name="l37"></a>@@05:           </span><span class=cF1>LOCK</span><span class=cF0>
+<a name="l38"></a>                </span><span class=cF1>BTS</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_MP_COUNT_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
+<a name="l39"></a>                </span><span class=cF1>JC</span><span class=cF0>          @@05
+<a name="l40"></a>
+<a name="l41"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>ESI</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_MP_COUNT_INITIAL</span><span class=cF0>]
+<a name="l42"></a>                </span><span class=cF1>LOCK</span><span class=cF0>
+<a name="l43"></a>                </span><span class=cF1>INC</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_MP_COUNT_INITIAL</span><span class=cF0>]
+<a name="l44"></a>                </span><span class=cF1>LOCK</span><span class=cF0>
+<a name="l45"></a>                </span><span class=cF1>BTR</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_MP_COUNT_LOCK</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
+<a name="l46"></a>
+<a name="l47"></a>                </span><span class=cF1>CMP</span><span class=cF0>         </span><span class=cFC>ESI</span><span class=cF0>, </span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>
+<a name="l48"></a>                </span><span class=cF1>JAE</span><span class=cF0>         </span><span class=cF9>I32</span><span class=cF0> </span><span class=cFD>_SYS_HLT</span><span class=cF0>
+<a name="l49"></a>
+<a name="l50"></a>                </span><span class=cF1>IMUL2</span><span class=cF0>       </span><span class=cFC>ESI</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CCPU</span><span class=cF0>)
+<a name="l51"></a>                </span><span class=cF1>ADD</span><span class=cF0>         </span><span class=cFC>ESI</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_CPU_STRUCTS</span><span class=cF0>]
+<a name="l52"></a>
+<a name="l53"></a>                </span><span class=cF1>LEA</span><span class=cF0>         </span><span class=cFC>ESP</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0>.start_stack + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CCPU</span><span class=cF0>.start_stack)[</span><span class=cFC>ESI</span><span class=cF0>]
+<a name="l54"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>RFLAGG_START</span><span class=cF0>
+<a name="l55"></a>                </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l56"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>   </span><span class=cF2>//Return from next call will be 64-bit</span><span class=cF0>
+<a name="l57"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>SYS_ENTER_LONG_MODE</span><span class=cF0>
+<a name="l58"></a></span><span class=cF1>USE64</span><span class=cF0>
+<a name="l59"></a>                </span><span class=cF1>FNINIT</span><span class=cF0>
+<a name="l60"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l61"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>SET_GS_BASE</span><span class=cF0>
+<a name="l62"></a>@@10:           </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0>.executive_task[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l63"></a>                </span><span class=cF1>TEST</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l64"></a>                </span><span class=cF1>JZ</span><span class=cF0>          @@10
+<a name="l65"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.gs[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l66"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>SET_FS_BASE</span><span class=cF0>
+<a name="l67"></a>
+<a name="l68"></a>                </span><span class=cF1>JMP</span><span class=cF0>         </span><span class=cF9>I32</span><span class=cF0> </span><span class=cFD>_TASK_CONTEXT_RESTORE</span><span class=cF0>
+<a name="l69"></a>}
+<a name="l70"></a>
+<a name="l71"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TSSBusy</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> tr, </span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>OFF</span><span class=cF0>)
+<a name="l72"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/Ring3.html#l1"><span class=cF4>::/Demo/Lectures/Ring3.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l73"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_gdt</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + tr + </span><span class=cFE>4</span><span class=cF0>, </span><span class=cFE>9</span><span class=cF0>, val);
+<a name="l74"></a>}
+<a name="l75"></a>
+<a name="l76"></a></span><span class=cF9>CTSS</span><span class=cF0> *</span><span class=cFD>TSSNew</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> cpu_num)
+<a name="l77"></a>{
+<a name="l78"></a>    </span><span class=cF9>U32</span><span class=cF0>  *d, *d1;
+<a name="l79"></a>    </span><span class=cF9>CTSS</span><span class=cF0> *tss = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CTSS</span><span class=cF7>)</span><span class=cF0>);
+<a name="l80"></a>
+<a name="l81"></a>    tss-&gt;io_map_offset = </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CTSS</span><span class=cF0>.io_map);
+<a name="l82"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(tss-&gt;io_map, </span><span class=cFE>0xFF</span><span class=cF0>, </span><span class=cFE>0x10000</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>);
+<a name="l83"></a>
+<a name="l84"></a>    tss-&gt;st0    = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>MEM_INTERRUPT_STACK</span><span class=cF0>);
+<a name="l85"></a>    tss-&gt;rsp0   = tss-&gt;st0(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cF5>MSize</span><span class=cF0>(tss-&gt;st0);
+<a name="l86"></a>    tss-&gt;st1    = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>MEM_INTERRUPT_STACK</span><span class=cF0>);
+<a name="l87"></a>    tss-&gt;rsp1   = tss-&gt;st1(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cF5>MSize</span><span class=cF0>(tss-&gt;st1);
+<a name="l88"></a>    tss-&gt;st2    = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>MEM_INTERRUPT_STACK</span><span class=cF0>);
+<a name="l89"></a>    tss-&gt;rsp2   = tss-&gt;st2(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cF5>MSize</span><span class=cF0>(tss-&gt;st2);
+<a name="l90"></a>
+<a name="l91"></a>    tss-&gt;tr      = </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CGDT</span><span class=cF0>.tr) + cpu_num * </span><span class=cFE>16</span><span class=cF0>;
+<a name="l92"></a>    tss-&gt;tr_ring3= </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CGDT</span><span class=cF0>.tr_ring3) + cpu_num * </span><span class=cFE>16</span><span class=cF0>;
+<a name="l93"></a>
+<a name="l94"></a>    d = (&amp;</span><span class=cFB>sys_gdt</span><span class=cF0>)(</span><span class=cF1>U8</span><span class=cF0> *) + tss-&gt;tr;
+<a name="l95"></a>    d1 = d(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cFE>4</span><span class=cF0>;
+<a name="l96"></a>    *d = </span><span class=cFE>0x0000FFFF</span><span class=cF0>;
+<a name="l97"></a>    *d1 = </span><span class=cFE>0x008F8900</span><span class=cF0>;
+<a name="l98"></a>    d(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l99"></a>    *d |= tss &amp; </span><span class=cFE>0x00FFFFFF</span><span class=cF0>;
+<a name="l100"></a>    *d1++ |= tss &amp; </span><span class=cFE>0xFF000000</span><span class=cF0>;
+<a name="l101"></a>    *d1++ = tss &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l102"></a>    *d1 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l103"></a>
+<a name="l104"></a>    d = (&amp;</span><span class=cFB>sys_gdt</span><span class=cF0>)(</span><span class=cF1>U8</span><span class=cF0> *) + tss-&gt;tr_ring3;
+<a name="l105"></a>    d1 = d(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cFE>4</span><span class=cF0>;
+<a name="l106"></a>    *d = </span><span class=cFE>0x0000FFFF</span><span class=cF0>;
+<a name="l107"></a>    *d1 = </span><span class=cFE>0x008FE900</span><span class=cF0>;
+<a name="l108"></a>    d(</span><span class=cF1>U8</span><span class=cF0> *) += </span><span class=cFE>2</span><span class=cF0>;
+<a name="l109"></a>    *d |= tss &amp; </span><span class=cFE>0x00FFFFFF</span><span class=cF0>;
+<a name="l110"></a>    *d1++ |= tss &amp; </span><span class=cFE>0xFF000000</span><span class=cF0>;
+<a name="l111"></a>    *d1++ = tss &gt;&gt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l112"></a>    *d1 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l113"></a>
+<a name="l114"></a>    </span><span class=cF1>return</span><span class=cF0> tss;
+<a name="l115"></a>}
+<a name="l116"></a>
+<a name="l117"></a></span><span class=cF9>CCPU</span><span class=cF0> *</span><span class=cFD>CPUStructInit</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num, </span><span class=cF9>CCPU</span><span class=cF0> *c, </span><span class=cF9>CTask</span><span class=cF0> *executive_task)
+<a name="l118"></a>{</span><span class=cF2>//Executive is null when called by sys_task on CSysFixedArea.boot_cpu0</span><span class=cF0>
+<a name="l119"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(c, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0>);
+<a name="l120"></a>    c-&gt;addr         = c;
+<a name="l121"></a>    c-&gt;num          = num;
+<a name="l122"></a>    c-&gt;idle_factor  = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>01</span><span class=cF0>;
+<a name="l123"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;c-&gt;next_dying);
+<a name="l124"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_16MEG_SYSTEM_HEAP_CTRL</span><span class=cF7>)</span><span class=cF0>)
+<a name="l125"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l126"></a>        c-&gt;idle_task = </span><span class=cF5>Spawn</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Idle Task&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>,, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l127"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;c-&gt;idle_task-&gt;task_flags, </span><span class=cF3>TASKf_IDLE</span><span class=cF0>);
+<a name="l128"></a>        c-&gt;tss = </span><span class=cFD>TSSNew</span><span class=cF0>(num);
+<a name="l129"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l130"></a>    c-&gt;executive_task = executive_task;</span><span class=cF2>// It waits for this to be filled-in: </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l62"><span class=cF4>executive_task</span></a><span class=cF0>
+<a name="l131"></a>
+<a name="l132"></a>    </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l133"></a>}
+<a name="l134"></a>
+<a name="l135"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> num, </span><span class=cF9>I64</span><span class=cF0> cpu_num=</span><span class=cFE>1</span><span class=cF0>)
+<a name="l136"></a>{</span><span class=cF2>//Generate interrupt for specified core.</span><span class=cF0>
+<a name="l137"></a>    </span><span class=cF1>if</span><span class=cF0> (cpu_num &gt;= </span><span class=cFB>mp_count</span><span class=cF0>)
+<a name="l138"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l139"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_MP</span><span class=cF7>)</span><span class=cF0>)
+<a name="l140"></a>            </span><span class=cF1>return</span><span class=cF0>;
+<a name="l141"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l142"></a>            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'MultCore'</span><span class=cF0>);
+<a name="l143"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l144"></a>
+<a name="l145"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l146"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//Multitasking safe because each core has a local apic and IRQs are off</span><span class=cF0>
+<a name="l147"></a>    </span><span class=cF1>while</span><span class=cF0> (*</span><span class=cF7>(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF7>)(</span><span class=cF9>U32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cFE>0x1000</span><span class=cF0>)
+<a name="l148"></a>        </span><span class=cF1>PAUSE</span><span class=cF0>
+<a name="l149"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_HIGH</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFB>dev</span><span class=cF0>.mp_apic_ids[cpu_num] &lt;&lt; </span><span class=cFE>24</span><span class=cF0>;
+<a name="l150"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *)  = </span><span class=cFE>0x4000</span><span class=cF0> + num;
+<a name="l151"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l152"></a>}
+<a name="l153"></a>
+<a name="l154"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MPIntAll</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> num)
+<a name="l155"></a>{</span><span class=cF2>//Generate interrupt for all but own core.</span><span class=cF0>
+<a name="l156"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l157"></a>    </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//Multitasking safe because each core has a local apic and IRQs are off</span><span class=cF0>
+<a name="l158"></a>    </span><span class=cF1>while</span><span class=cF0> (*</span><span class=cF7>(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF7>)(</span><span class=cF9>U32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cFE>0x1000</span><span class=cF0>)
+<a name="l159"></a>        </span><span class=cF1>PAUSE</span><span class=cF0>
+<a name="l160"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xC4800</span><span class=cF0> + num;
+<a name="l161"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l162"></a>}
+<a name="l163"></a>
+<a name="l164"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MPNMInt</span><span class=cF0>()
+<a name="l165"></a>{</span><span class=cF2>//Generate nonmaskable interrupt.</span><span class=cF0>
+<a name="l166"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xC4400</span><span class=cF0>;
+<a name="l167"></a>}
+<a name="l168"></a>
+<a name="l169"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MPHalt</span><span class=cF0>()
+<a name="l170"></a>{</span><span class=cF2>//Halt all other cores.</span><span class=cF0>
+<a name="l171"></a>    </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l172"></a>    </span><span class=cF5>MPNMInt</span><span class=cF0>;
+<a name="l173"></a>    </span><span class=cF5>Busy</span><span class=cF0>(</span><span class=cFE>10000</span><span class=cF0>);
+<a name="l174"></a>}
+<a name="l175"></a>
+<a name="l176"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>MPAPICInit</span><span class=cF0>()
+<a name="l177"></a>{</span><span class=cF2>//Called by sys_task during start-up</span><span class=cF0>
+<a name="l178"></a></span><span class=cF2>//and other cores during initialization</span><span class=cF0>
+<a name="l179"></a>    </span><span class=cF2>//after </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l180"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_SVR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) |= </span><span class=cF3>LAPICF_APIC_ENABLED</span><span class=cF0>;
+<a name="l181"></a>    </span><span class=cFB>dev</span><span class=cF0>.mp_apic_ids[</span><span class=cF5>Gs</span><span class=cF0>-&gt;num] = *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_APIC_ID</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) &gt;&gt; </span><span class=cFE>24</span><span class=cF0>;
+<a name="l182"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_LDR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFB>dev</span><span class=cF0>.mp_apic_ids[</span><span class=cF5>Gs</span><span class=cF0>-&gt;num] &lt;&lt; </span><span class=cFE>24</span><span class=cF0>;
+<a name="l183"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_DFR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xF0000000</span><span class=cF0>;
+<a name="l184"></a>
+<a name="l185"></a>    </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>MemSet(dev.uncached_alias + LAPIC_IRR, 0, 0x20);</span><span class=cF0>
+<a name="l186"></a>    </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>MemSet(dev.uncached_alias + LAPIC_ISR, 0, 0x20);</span><span class=cF0>
+<a name="l187"></a>    </span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>MemSet(dev.uncached_alias + LAPIC_TMR, 0, 0x20);</span><span class=cF0>
+<a name="l188"></a>
+<a name="l189"></a>    </span><span class=cF5>RAXSet</span><span class=cF0>(</span><span class=cF5>Gs</span><span class=cF0>-&gt;tss-&gt;tr);
+<a name="l190"></a>    </span><span class=cF1>LTR</span><span class=cF0>     </span><span class=cFC>AX</span><span class=cF0>
+<a name="l191"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num)
+<a name="l192"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l193"></a>        </span><span class=cFD>IntInit1</span><span class=cF0>;
+<a name="l194"></a>        </span><span class=cF5>RFlagsSet</span><span class=cF0>(</span><span class=cF3>RFLAGG_NORMAL</span><span class=cF0>);
+<a name="l195"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l196"></a>}
+<a name="l197"></a>
+<a name="l198"></a>#</span><span class=cF1>assert</span><span class=cF0> !</span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CJobCtrl</span><span class=cF0>.next_waiting)
+<a name="l199"></a>
+<a name="l200"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>CoreAPExecutiveTask</span><span class=cF0>()
+<a name="l201"></a>{
+<a name="l202"></a>    </span><span class=cF9>CJobCtrl</span><span class=cF0> *ctrl = &amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;server_ctrl;
+<a name="l203"></a>
+<a name="l204"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l205"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l206"></a>        </span><span class=cF1>STI</span><span class=cF0>
+<a name="l207"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l208"></a>        {
+<a name="l209"></a>            </span><span class=cF5>TaskKillDying</span><span class=cF0>;
+<a name="l210"></a>            </span><span class=cF1>do</span><span class=cF0> </span><span class=cF1>PAUSE</span><span class=cF0>
+<a name="l211"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;ctrl-&gt;flags, </span><span class=cF3>JOBCf_LOCKED</span><span class=cF7>)</span><span class=cF0>);
+<a name="l212"></a>        }
+<a name="l213"></a>        </span><span class=cF1>while</span><span class=cF0> (ctrl-&gt;next_waiting != ctrl &amp;&amp; </span><span class=cFD>JobRunOne</span><span class=cF7>(</span><span class=cF5>RFlagsGet</span><span class=cF0>, ctrl</span><span class=cF7>)</span><span class=cF0>);
+<a name="l214"></a>
+<a name="l215"></a>        </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l216"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>);
+<a name="l217"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;ctrl-&gt;flags, </span><span class=cF3>JOBCf_LOCKED</span><span class=cF0>);
+<a name="l218"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_IDLE</span><span class=cF0>);
+<a name="l219"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l220"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_IDLE</span><span class=cF0>);
+<a name="l221"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l222"></a>}
+<a name="l223"></a>
+<a name="l224"></a></span><span class=cF9>CJob</span><span class=cF0> *</span><span class=cF5>JobQueue</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_addr</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *data</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *data=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> target_cpu=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>1</span><span class=cF0>&lt;&lt;</span><span class=cF3>JOBf_FREE_ON_COMPLETE</span><span class=cF0>, 
+<a name="l225"></a>               </span><span class=cF9>I64</span><span class=cF0> job_code=</span><span class=cF3>JOBT_CALL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *aux_str=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> aux1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> aux2=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l226"></a>{</span><span class=cF2>//Queue multicore jobs, handled by Executive tasks.</span><span class=cF0>
+<a name="l227"></a></span><span class=cF2>//Set flags to zero if you wish to get the res.</span><span class=cF0>
+<a name="l228"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>
+<a name="l229"></a>    </span><span class=cF9>CJobCtrl</span><span class=cF0>    *ctrl;
+<a name="l230"></a>    </span><span class=cF9>CJob</span><span class=cF0>        *tmpc;
+<a name="l231"></a>    </span><span class=cF9>CTask</span><span class=cF0>       *executive;
+<a name="l232"></a>
+<a name="l233"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= target_cpu &lt; </span><span class=cFB>mp_count</span><span class=cF7>)</span><span class=cF0>)
+<a name="l234"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'MultCore'</span><span class=cF0>);
+<a name="l235"></a>    tmpc = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
+<a name="l236"></a>    </span><span class=cF1>if</span><span class=cF0> (aux_str)
+<a name="l237"></a>        tmpc-&gt;aux_str = </span><span class=cF5>ZStrNew</span><span class=cF0>(aux_str);
+<a name="l238"></a>    tmpc-&gt;job_code  = job_code;
+<a name="l239"></a>    tmpc-&gt;addr      = fp_addr;
+<a name="l240"></a>    tmpc-&gt;fun_arg   = data;
+<a name="l241"></a>    tmpc-&gt;flags     = flags;
+<a name="l242"></a>    tmpc-&gt;aux1      = aux1;
+<a name="l243"></a>    tmpc-&gt;aux2      = aux2;
+<a name="l244"></a>    executive = </span><span class=cFB>cpu_structs</span><span class=cF0>[target_cpu].executive_task;
+<a name="l245"></a>    tmpc-&gt;ctrl = ctrl = &amp;executive-&gt;server_ctrl;
+<a name="l246"></a>
+<a name="l247"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l248"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l249"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;ctrl-&gt;flags, </span><span class=cF3>JOBCf_LOCKED</span><span class=cF7>)</span><span class=cF0>)
+<a name="l250"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l251"></a>    </span><span class=cF1>if</span><span class=cF0> (ctrl-&gt;next_waiting == ctrl &amp;&amp; </span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;executive-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l252"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_WAKE</span><span class=cF0>, target_cpu);
+<a name="l253"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpc, ctrl-&gt;last_waiting);
+<a name="l254"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;ctrl-&gt;flags, </span><span class=cF3>JOBCf_LOCKED</span><span class=cF0>);
+<a name="l255"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l256"></a>
+<a name="l257"></a>    </span><span class=cF1>return</span><span class=cF0> tmpc;
+<a name="l258"></a>}
+<a name="l259"></a>
+<a name="l260"></a></span><span class=cF9>CTask</span><span class=cF0> *</span><span class=cF5>SpawnQueue</span><span class=cF0>(</span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_addr</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *data</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *data=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *task_name=</span><span class=cF3>NULL</span><span class=cF0>, 
+<a name="l261"></a>                  </span><span class=cF9>I64</span><span class=cF0> target_cpu,  </span><span class=cF9>CTask</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>,  </span><span class=cF2>//NULL means sys_task</span><span class=cF0>
+<a name="l262"></a>                  </span><span class=cF9>I64</span><span class=cF0> stack_size=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_ADD_TO_QUE</span><span class=cF0>)
+<a name="l263"></a>{
+<a name="l264"></a>    </span><span class=cF9>CTask</span><span class=cF0>       *res;
+<a name="l265"></a>    </span><span class=cF9>CJob</span><span class=cF0>        *tmpc = </span><span class=cF5>JobQueue</span><span class=cF0>(fp_addr, data, target_cpu, flags, </span><span class=cF3>JOBT_SPAWN_TASK</span><span class=cF0>, task_name, parent, stack_size);
+<a name="l266"></a>    </span><span class=cF9>CJobCtrl</span><span class=cF0>    *ctrl;
+<a name="l267"></a>
+<a name="l268"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpc-&gt;flags, </span><span class=cF3>JOBf_DONE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l269"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l270"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_IDLE</span><span class=cF0>);
+<a name="l271"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l272"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l273"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_IDLE</span><span class=cF0>);
+<a name="l274"></a>
+<a name="l275"></a>    res  = tmpc-&gt;spawned_task;
+<a name="l276"></a>    ctrl = tmpc-&gt;ctrl;
+<a name="l277"></a>
+<a name="l278"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l279"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l280"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;ctrl-&gt;flags, </span><span class=cF3>JOBCf_LOCKED</span><span class=cF7>)</span><span class=cF0>)
+<a name="l281"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l282"></a>    </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpc);
+<a name="l283"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;ctrl-&gt;flags, </span><span class=cF3>JOBCf_LOCKED</span><span class=cF0>);
+<a name="l284"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l285"></a>
+<a name="l286"></a>    </span><span class=cF5>JobDel</span><span class=cF0>(tmpc);
+<a name="l287"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l288"></a>}
+<a name="l289"></a>
+<a name="l290"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>()
+<a name="l291"></a>{</span><span class=cF2>//Called by multicore's executive task after </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l298"><span class=cF4>Core0StartMP</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l292"></a></span><span class=cF2>//as the first thing a CPU does before waiting for jobs.</span><span class=cF0>
+<a name="l293"></a>    </span><span class=cFD>MPAPICInit</span><span class=cF0>;
+<a name="l294"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip = &amp;</span><span class=cF5>CoreAPExecutiveTask</span><span class=cF0>;
+<a name="l295"></a>    </span><span class=cF5>TaskContextRestore</span><span class=cF0>;
+<a name="l296"></a>}
+<a name="l297"></a>
+<a name="l298"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Core0StartMP</span><span class=cF0>()
+<a name="l299"></a>{</span><span class=cF2>//Called by sys_task during </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.html#l223"><span class=cF4>start-up</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l300"></a>    </span><span class=cF9>CTask</span><span class=cF0>           *task;
+<a name="l301"></a>    </span><span class=cF1>U8</span><span class=cF0>               buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l302"></a>    </span><span class=cF9>CAP16BitInit</span><span class=cF0>    *mp = </span><span class=cF3>MP_VECT_ADDR</span><span class=cF0>;
+<a name="l303"></a>    </span><span class=cF9>CCPU</span><span class=cF0>            *c;
+<a name="l304"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, my_mp_count;
+<a name="l305"></a>
+<a name="l306"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l307"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l308"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mp_count</span><span class=cF0> &gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l309"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l310"></a>        my_mp_count = </span><span class=cFB>mp_count</span><span class=cF0>;
+<a name="l311"></a>        </span><span class=cF5>MPHalt</span><span class=cF0>; </span><span class=cF2>//sets mp_count to 1</span><span class=cF0>
+<a name="l312"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; my_mp_count; i++)
+<a name="l313"></a>        {
+<a name="l314"></a>            c = &amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[i];
+<a name="l315"></a>            </span><span class=cFD>JobQueueDel</span><span class=cF0>(&amp;c-&gt;executive_task-&gt;server_ctrl.next_waiting);
+<a name="l316"></a>            </span><span class=cFD>JobQueueDel</span><span class=cF0>(&amp;c-&gt;executive_task-&gt;server_ctrl.next_done);
+<a name="l317"></a>        }
+<a name="l318"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l319"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>);
+<a name="l320"></a>
+<a name="l321"></a>    </span><span class=cF2>//When you start-up other cores, they jump to an addr</span><span class=cF0>
+<a name="l322"></a>    </span><span class=cF2>//specified by a byte vect number, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l664"><span class=cF4>MPN_VECT</span></a><span class=cF2> which corresponds</span><span class=cF0>
+<a name="l323"></a>    </span><span class=cF2>//to a location 4096*vect number, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l324"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(mp, </span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>, </span><span class=cFD>COREAP_16BIT_INIT_END</span><span class=cF0>-</span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>);
+<a name="l325"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;mp-&gt;ap_gdt_ptr, </span><span class=cFD>SYS_GDT_PTR</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSysLimitBase</span><span class=cF7>)</span><span class=cF0>);
+<a name="l326"></a>    </span><span class=cFB>mp_count_initial</span><span class=cF0> = </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l327"></a>    </span><span class=cFB>mp_count_lock</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l328"></a>
+<a name="l329"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_LVT_ERR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_LVT_ERR</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) &amp; </span><span class=cFE>0xFFFFFF00</span><span class=cF0> + </span><span class=cF3>MPN_VECT</span><span class=cF0>;
+<a name="l330"></a>    </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed. Might just need delay. </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l135"><span class=cF4>MemCopy</span></a><span class=cF2> above?</span><span class=cF0>
+<a name="l331"></a>
+<a name="l332"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xC4500</span><span class=cF0>; </span><span class=cF2>//assert init IPI</span><span class=cF0>
+<a name="l333"></a>    </span><span class=cF5>Busy</span><span class=cF0>(</span><span class=cFE>10000</span><span class=cF0>);
+<a name="l334"></a>
+<a name="l335"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xC4600</span><span class=cF0> + </span><span class=cF3>MPN_VECT</span><span class=cF0>; </span><span class=cF2>//start-up</span><span class=cF0>
+<a name="l336"></a>    </span><span class=cF5>Busy</span><span class=cF0>(</span><span class=cFE>200</span><span class=cF0>);
+<a name="l337"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_ICR_LOW</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0xC4600</span><span class=cF0> + </span><span class=cF3>MPN_VECT</span><span class=cF0>;
+<a name="l338"></a>
+<a name="l339"></a>    </span><span class=cF5>Busy</span><span class=cF0>(</span><span class=cFE>100000</span><span class=cF0>);
+<a name="l340"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>10000</span><span class=cF0>; i++)
+<a name="l341"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>mp_count_lock</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//Don't let more through</span><span class=cF0>
+<a name="l342"></a>    my_mp_count = </span><span class=cFB>mp_count_initial</span><span class=cF0>;
+<a name="l343"></a>
+<a name="l344"></a>    </span><span class=cF1>if</span><span class=cF0> (my_mp_count &gt; </span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>)
+<a name="l345"></a>        my_mp_count = </span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>;
+<a name="l346"></a>
+<a name="l347"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; my_mp_count; i++)
+<a name="l348"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l349"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Executive Task CPU%02X&quot;</span><span class=cF0>, i);
+<a name="l350"></a>        task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, buf,,, </span><span class=cF3>MEM_EXECUTIVE_STACK</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l351"></a>        task-&gt;rflags = </span><span class=cF3>RFLAGG_START</span><span class=cF0>;
+<a name="l352"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
+<a name="l353"></a>        </span><span class=cFD>CPUStructInit</span><span class=cF0>(i, &amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[i], task);
+<a name="l354"></a>        </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed.  Might just need delay.</span><span class=cF0>
+<a name="l355"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l356"></a>
+<a name="l357"></a>    </span><span class=cF2>//Make sure they're all up-and-running</span><span class=cF0>
+<a name="l358"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; my_mp_count; i++)
+<a name="l359"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[i].executive_task-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l360"></a>            </span><span class=cF1>PAUSE</span><span class=cF0>;
+<a name="l361"></a>
+<a name="l362"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l363"></a>    </span><span class=cFB>mp_count</span><span class=cF0> = my_mp_count; </span><span class=cF2>//Finalize count</span><span class=cF0>
+<a name="l364"></a>}
+<a name="l365"></a>
+<a name="l366"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Core0Init</span><span class=cF0>()
+<a name="l367"></a>{</span><span class=cF2>//Called by sys_task during start-up</span><span class=cF0>
+<a name="l368"></a>    </span><span class=cFB>mp_count_initial</span><span class=cF0> = </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l369"></a>    </span><span class=cFB>mp_count_lock</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l370"></a>
+<a name="l371"></a>    </span><span class=cFB>debug</span><span class=cF0>.mp_crash = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMPCrash</span><span class=cF7>)</span><span class=cF0>);
+<a name="l372"></a>
+<a name="l373"></a>    </span><span class=cF2>//Must be in code heap because init code uses 32 bit addr of cpu_struct</span><span class=cF0>
+<a name="l374"></a>    </span><span class=cFB>sys_task</span><span class=cF0>-&gt;gs = </span><span class=cFB>cpu_structs</span><span class=cF0> = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap);
+<a name="l375"></a>    </span><span class=cFD>CPUStructInit</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFB>cpu_structs</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>);
+<a name="l376"></a>    </span><span class=cF2>//RAX has GS</span><span class=cF0>
+<a name="l377"></a>    </span><span class=cF1>IMPORT</span><span class=cF0>  </span><span class=cFD>SET_GS_BASE</span><span class=cF0>;
+<a name="l378"></a>    </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>SET_GS_BASE</span><span class=cF0>
+<a name="l379"></a> 
+<a name="l380"></a>    </span><span class=cFD>MPAPICInit</span><span class=cF0>;
+<a name="l381"></a>}
+<a name="l382"></a>
+<a name="l383"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntMPCrash</span><span class=cF0>()
+<a name="l384"></a>{</span><span class=cF2>//Entering the debugger from another core causes an interrupt on Core0</span><span class=cF0>
+<a name="l385"></a></span><span class=cF2>//Which calls this routine.</span><span class=cF0>
+<a name="l386"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l387"></a>    </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l388"></a>    </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l389"></a>    </span><span class=cFB>text</span><span class=cF0>.raw_flags |= </span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0>;
+<a name="l390"></a>    </span><span class=cF6>&quot;MP Crash CPU%02X Task:%08X\n&quot;</span><span class=cF0>
+<a name="l391"></a>    </span><span class=cF6>&quot;RIP:%P\n&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num, </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task, </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip;
+<a name="l392"></a>    </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message, </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num);
+<a name="l393"></a>}
+</span></pre></body>
+</html>

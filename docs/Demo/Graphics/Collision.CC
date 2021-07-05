@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>
+<a name="l2"></a></span><span class=cFA>
+<a name="l3"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cFA>
+<a name="l6"></a>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l9"></a>{
+<a name="l10"></a>    </span><span class=cF9>I64</span><span class=cF0> x, y;
+<a name="l11"></a>
+<a name="l12"></a>    x = </span><span class=cFB>mouse</span><span class=cF0>.pos.x - task-&gt;pix_left;
+<a name="l13"></a>    y = </span><span class=cFB>mouse</span><span class=cF0>.pos.y - task-&gt;pix_top;
+<a name="l14"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
+<a name="l15"></a>
+<a name="l16"></a>    x = task-&gt;pix_width  &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l17"></a>    y = task-&gt;pix_height &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l18"></a>
+<a name="l19"></a>    dc-&gt;color           = </span><span class=cF3>ROP_COLLISION</span><span class=cF0>;
+<a name="l20"></a>    dc-&gt;bkcolor         = </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l21"></a>    dc-&gt;collision_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l22"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
+<a name="l23"></a>
+<a name="l24"></a>    dc-&gt;color = </span><span class=cF3>ROP_EQU</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF5>GrPrint</span><span class=cF0>(dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>task-&gt;pix_height - </span><span class=cF3>FONT_HEIGHT</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;Collisions:%d&quot;</span><span class=cF0>, dc-&gt;collision_count);
+<a name="l26"></a>
+<a name="l27"></a>    </span><span class=cF1>if</span><span class=cF0> (!dc-&gt;collision_count)
+<a name="l28"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
+<a name="l29"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l30"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>);
+<a name="l31"></a>}
+<a name="l32"></a>
+<a name="l33"></a></span><span class=cF1>U0</span><span class=cF0> Collision()
+<a name="l34"></a>{
+<a name="l35"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l36"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l37"></a>    </span><span class=cF5>PressAKey</span><span class=cF0>;
+<a name="l38"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l39"></a>}
+<a name="l40"></a>
+<a name="l41"></a>Collision;
+</span></pre></body>
+</html>

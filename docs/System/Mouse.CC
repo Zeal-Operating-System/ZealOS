@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Misc;Mouse/Ptr&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cFA>
+<a name="l3"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cFB>gr</span><span class=cF0>.empty_sprite = </span><span class=cFA>&lt;1&gt;</span><span class=cF0>;
+<a name="l6"></a></span><span class=cFA>
+<a name="l7"></a>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l8"></a></span><span class=cFA>
+<a name="l9"></a>&lt;3&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l10"></a></span><span class=cFA>
+<a name="l11"></a>&lt;4&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawGrabMouse</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>Bool</span><span class=cF0> closed)
+<a name="l14"></a>{</span><span class=cF2>//This is a callback. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Grid.html#l1"><span class=cF4>::/Demo/Graphics/Grid.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l15"></a>    dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>);
+<a name="l16"></a>    dc-&gt;color = </span><span class=cF3>ROP_EQU</span><span class=cF0>;
+<a name="l17"></a>    </span><span class=cF1>if</span><span class=cF0> (closed)
+<a name="l18"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>);
+<a name="l19"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l20"></a>        </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;3&gt;</span><span class=cF0>);
+<a name="l21"></a>}
+<a name="l22"></a></span><span class=cFB>gr</span><span class=cF0>.fp_draw_grab_mouse = &amp;</span><span class=cF5>DrawGrabMouse</span><span class=cF0>;
+<a name="l23"></a>
+<a name="l24"></a>
+<a name="l25"></a>
+<a name="l26"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawStdMouse</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y)
+<a name="l27"></a>{</span><span class=cF2>//This is a callback. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Grid.html#l1"><span class=cF4>::/Demo/Graphics/Grid.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l28"></a></span><span class=cF2>//Called by </span><a href="https://tomawezome.github.io/ZealOS/System/Win.html#l182"><span class=cF4>DrawMouse</span></a><span class=cF2>() which is</span><span class=cF0>
+<a name="l29"></a></span><span class=cF2>//called by </span><a href="https://tomawezome.github.io/ZealOS/System/Win.html#l203"><span class=cF4>WinFinalUpdate</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l30"></a>    dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0>);
+<a name="l31"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;4&gt;</span><span class=cF0>);
+<a name="l32"></a>}
+<a name="l33"></a>
+<a name="l34"></a></span><span class=cFB>gr</span><span class=cF0>.fp_draw_mouse = &amp;</span><span class=cF5>DrawStdMouse</span><span class=cF0>;
+</span></pre></body>
+</html>

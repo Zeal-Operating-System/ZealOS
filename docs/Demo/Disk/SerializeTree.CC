@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*You probably don't need this.  It makes a directory</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>tree into a flat contiguous memory chunk, suitable for</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>serial communication and rebuilds it into a tree on the</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>other end.</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cF1>U0</span><span class=cF0> SerializeTree()
+<a name="l8"></a>{
+<a name="l9"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde = </span><span class=cF5>FilesFind</span><span class=cF0>(</span><span class=cF6>&quot;/Demo/*.DD*&quot;</span><span class=cF0>, </span><span class=cF3>FUF_RECURSE</span><span class=cF0>);
+<a name="l10"></a>    </span><span class=cF9>I64</span><span class=cF0>          size;
+<a name="l11"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr;
+<a name="l12"></a>
+<a name="l13"></a>    </span><span class=cF5>LineRep1</span><span class=cF0>(tmpde); </span><span class=cF2>//We have </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2>.fullname</span><span class=cF0>
+<a name="l14"></a>    </span><span class=cF5>LineRep2</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, tmpde);
+<a name="l15"></a>    </span><span class=cF6>&quot;$GREEN$***************$FG$\n&quot;</span><span class=cF0>;
+<a name="l16"></a>    ptr = </span><span class=cF5>DirTreeSerialize</span><span class=cF0>(tmpde, &amp;size);
+<a name="l17"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde);
+<a name="l18"></a>    </span><span class=cF5>D</span><span class=cF0>(ptr, size);
+<a name="l19"></a>    </span><span class=cF6>&quot;$GREEN$***************:%7d$FG$\n&quot;</span><span class=cF0>, size;
+<a name="l20"></a>    tmpde = </span><span class=cF5>DirTreeUnserialize</span><span class=cF0>(ptr);
+<a name="l21"></a>    </span><span class=cF5>LineRep2</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>, tmpde); </span><span class=cF2>//We don't have </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2>.fullname</span><span class=cF0>
+<a name="l22"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde);
+<a name="l23"></a>}
+<a name="l24"></a>
+<a name="l25"></a>SerializeTree;
+</span></pre></body>
+</html>

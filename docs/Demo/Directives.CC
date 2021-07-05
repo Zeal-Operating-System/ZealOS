@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> Directives()
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF6>&quot;Date\t:%s\n&quot;</span><span class=cF0>, </span><span class=cF3>__DATE__</span><span class=cF0>;
+<a name="l4"></a>    </span><span class=cF6>&quot;Time\t:%s\n&quot;</span><span class=cF0>, </span><span class=cF3>__TIME__</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF6>&quot;File\t:%s\n&quot;</span><span class=cF0>, </span><span class=cF3>__FILE__</span><span class=cF0>;
+<a name="l6"></a>    </span><span class=cF6>&quot;Dir\t:%s\n&quot;</span><span class=cF0>, </span><span class=cF3>__DIR__</span><span class=cF0>;
+<a name="l7"></a>    </span><span class=cF6>&quot;Line\t:%d\n&quot;</span><span class=cF0>, </span><span class=cF3>__LINE__</span><span class=cF0>;
+<a name="l8"></a>    </span><span class=cF6>&quot;CmdLine\t:%d\n&quot;</span><span class=cF0>, </span><span class=cF3>__CMD_LINE__</span><span class=cF0>;
+<a name="l9"></a>    </span><span class=cF6>&quot;Inst1\t:%P:%08X\n&quot;</span><span class=cF0>, $, $;
+<a name="l10"></a>    </span><span class=cF6>&quot;Inst2\t:%P:%08X\n&quot;</span><span class=cF0>, $, $;
+<a name="l11"></a>}
+<a name="l12"></a>
+<a name="l13"></a>Directives;
+</span></pre></body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Internal&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DirTreeSerializeSize</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde)
+<a name="l3"></a>{
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l5"></a>
+<a name="l6"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l7"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l8"></a>        res += </span><span class=cF3>CDIR_SIZE</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l9"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l10"></a>            res += </span><span class=cF5>DirTreeSerializeSize</span><span class=cF0>(tmpde-&gt;sub);
+<a name="l11"></a>        tmpde = tmpde-&gt;next;
+<a name="l12"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l13"></a>
+<a name="l14"></a>    </span><span class=cF1>return</span><span class=cF0> res + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l15"></a>}
+<a name="l16"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DirTreeSerializeFill</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF1>U8</span><span class=cF0> *dst)
+<a name="l17"></a>{
+<a name="l18"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>, i;
+<a name="l19"></a>
+<a name="l20"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l21"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l22"></a>        *dst++ = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l23"></a>        res++;
+<a name="l24"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(dst, &amp;tmpde-&gt;</span><span class=cF1>start</span><span class=cF0>, </span><span class=cF3>CDIR_SIZE</span><span class=cF0>);
+<a name="l25"></a>        dst += </span><span class=cF3>CDIR_SIZE</span><span class=cF0>;
+<a name="l26"></a>        res += </span><span class=cF3>CDIR_SIZE</span><span class=cF0>;
+<a name="l27"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l28"></a>        {
+<a name="l29"></a>            i = </span><span class=cF5>DirTreeSerializeFill</span><span class=cF0>(tmpde-&gt;sub, dst);
+<a name="l30"></a>            dst += i;
+<a name="l31"></a>            res += i;
+<a name="l32"></a>        }
+<a name="l33"></a>        tmpde = tmpde-&gt;next;
+<a name="l34"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l35"></a>    *dst = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l36"></a>
+<a name="l37"></a>    </span><span class=cF1>return</span><span class=cF0> res + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l38"></a>}
+<a name="l39"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DirTreeSerialize</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF9>I64</span><span class=cF0> *_size=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l40"></a>{</span><span class=cF2>//Serialize tree returned from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>() into a one contiguous U8 array.</span><span class=cF0>
+<a name="l41"></a>    </span><span class=cF9>I64</span><span class=cF0> size = </span><span class=cF5>DirTreeSerializeSize</span><span class=cF0>(tmpde);
+<a name="l42"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(size);
+<a name="l43"></a>
+<a name="l44"></a>    </span><span class=cF5>DirTreeSerializeFill</span><span class=cF0>(tmpde, buf);
+<a name="l45"></a>    </span><span class=cF1>if</span><span class=cF0> (_size)
+<a name="l46"></a>        *_size = size;
+<a name="l47"></a>
+<a name="l48"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l49"></a>}
+<a name="l50"></a>
+<a name="l51"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DirTreeUnserialize2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF9>CDirEntry</span><span class=cF0> **tmpde)
+<a name="l52"></a>{
+<a name="l53"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde1;
+<a name="l54"></a>
+<a name="l55"></a>    </span><span class=cF1>if</span><span class=cF0> (*src++)
+<a name="l56"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l57"></a>        tmpde1 = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l58"></a>        *tmpde = tmpde1;
+<a name="l59"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;tmpde1-&gt;</span><span class=cF1>start</span><span class=cF0>, src, </span><span class=cF3>CDIR_SIZE</span><span class=cF0>);
+<a name="l60"></a>        src += </span><span class=cF3>CDIR_SIZE</span><span class=cF0>;
+<a name="l61"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l62"></a>            src = </span><span class=cF5>DirTreeUnserialize2</span><span class=cF0>(src, &amp;tmpde1-&gt;sub);
+<a name="l63"></a>        src = </span><span class=cF5>DirTreeUnserialize2</span><span class=cF0>(src, &amp;tmpde1-&gt;next);
+<a name="l64"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l65"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l66"></a>        *tmpde = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l67"></a>
+<a name="l68"></a>    </span><span class=cF1>return</span><span class=cF0> src;
+<a name="l69"></a>}
+<a name="l70"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDirEntry</span><span class=cF0> *</span><span class=cF5>DirTreeUnserialize</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src)
+<a name="l71"></a>{</span><span class=cF2>//Unserialize tree to make it like a tree returned from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l72"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l73"></a>
+<a name="l74"></a>    </span><span class=cF5>DirTreeUnserialize2</span><span class=cF0>(src, &amp;tmpde);
+<a name="l75"></a>
+<a name="l76"></a>    </span><span class=cF1>return</span><span class=cF0> tmpde;
+<a name="l77"></a>}
+<a name="l78"></a>
+<a name="l79"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Program Routines&quot;</span><span class=cF0>
+<a name="l80"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FOFlatten</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF9>CDirEntry</span><span class=cF0> **a, </span><span class=cF9>I64</span><span class=cF0> *i)
+<a name="l81"></a>{
+<a name="l82"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde1;
+<a name="l83"></a>
+<a name="l84"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l85"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l86"></a>        tmpde1 = tmpde-&gt;next;
+<a name="l87"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l88"></a>        {
+<a name="l89"></a>            </span><span class=cF5>FOFlatten</span><span class=cF0>(tmpde-&gt;sub, a, i);
+<a name="l90"></a>            </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde);
+<a name="l91"></a>        }
+<a name="l92"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l93"></a>        {
+<a name="l94"></a>            a[*i] = tmpde;
+<a name="l95"></a>            *i = *i + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l96"></a>        }
+<a name="l97"></a>        tmpde = tmpde1;
+<a name="l98"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l99"></a>}
+<a name="l100"></a>
+<a name="l101"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Size1</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde,</span><span class=cF9>I64</span><span class=cF0> round_to)
+<a name="l102"></a>{
+<a name="l103"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>, i;
+<a name="l104"></a>
+<a name="l105"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l106"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l107"></a>        i = tmpde-&gt;size;
+<a name="l108"></a>
+<a name="l109"></a>        </span><span class=cF1>if</span><span class=cF0> (round_to)
+<a name="l110"></a>            i = </span><span class=cF5>CeilU64</span><span class=cF0>(tmpde-&gt;size, round_to);
+<a name="l111"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l112"></a>            i += </span><span class=cF5>Size1</span><span class=cF0>(tmpde-&gt;sub, round_to);
+<a name="l113"></a>        tmpde-&gt;user_data = i; </span><span class=cF2>//Store size in user_data member</span><span class=cF0>
+<a name="l114"></a>        res += i;
+<a name="l115"></a>        tmpde = tmpde-&gt;next;
+<a name="l116"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l117"></a>
+<a name="l118"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l119"></a>}
+<a name="l120"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Size</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask=</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> round_to=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l121"></a>{</span><span class=cF2>//Total size of files in mask.</span><span class=cF0>
+<a name="l122"></a></span><span class=cF2>//Does not include directory size of base directory, but does include size of sub directories.</span><span class=cF0>
+<a name="l123"></a>    </span><span class=cF9>I64</span><span class=cF0>          fuf_flags = </span><span class=cFE>0</span><span class=cF0>, res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l124"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde1 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l125"></a>
+<a name="l126"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r&quot;</span><span class=cF0>);
+<a name="l127"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l128"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF7>(</span><span class=cF0>files_find_mask, fuf_flags &amp; </span><span class=cF3>FUG_FILES_FIND</span><span class=cF7>)</span><span class=cF0>)
+<a name="l129"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l130"></a>        res = </span><span class=cF5>Size1</span><span class=cF0>(tmpde1, round_to);
+<a name="l131"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l132"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l133"></a>
+<a name="l134"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l135"></a>}
+<a name="l136"></a>
+<a name="l137"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FileCount</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde)
+<a name="l138"></a>{</span><span class=cF2>//Count of files in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF2> tree.</span><span class=cF0>
+<a name="l139"></a>    </span><span class=cF9>I64</span><span class=cF0> count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l140"></a>
+<a name="l141"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l142"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l143"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l144"></a>            count += </span><span class=cF5>FileCount</span><span class=cF0>(tmpde-&gt;sub);
+<a name="l145"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l146"></a>            count++;
+<a name="l147"></a>        tmpde = tmpde-&gt;next;
+<a name="l148"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l149"></a>
+<a name="l150"></a>    </span><span class=cF1>return</span><span class=cF0> count;
+<a name="l151"></a>}
+<a name="l152"></a>
+<a name="l153"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Cmd Line (Typically);Cmd Line (Typically)&quot;</span><span class=cF0>
+<a name="l154"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FF</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l155"></a>{</span><span class=cF2>//Files find. List files matching mask.</span><span class=cF0>
+<a name="l156"></a>    </span><span class=cF9>I64</span><span class=cF0>          count = </span><span class=cFE>0</span><span class=cF0>, fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l157"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde, *tmpde1;
+<a name="l158"></a>
+<a name="l159"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r+f+F&quot;</span><span class=cF0>);
+<a name="l160"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l161"></a>    tmpde = tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(files_find_mask, fuf_flags);
+<a name="l162"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l163"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l164"></a>        </span><span class=cF5>PutFileLink</span><span class=cF0>(tmpde-&gt;full_name);
+<a name="l165"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l166"></a>        count++;
+<a name="l167"></a>        tmpde = tmpde-&gt;next;
+<a name="l168"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l169"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l170"></a>
+<a name="l171"></a>    </span><span class=cF1>return</span><span class=cF0> count;
+<a name="l172"></a>}
+</span></pre></body>
+</html>

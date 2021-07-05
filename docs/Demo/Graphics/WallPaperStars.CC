@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*</span><span class=cF0>
+<a name="l2"></a>    </span><span class=cF2>You &quot;System Include&quot; this because you want the wallpaper</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF2>routine to stay in mem even if this task is killed.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a>#</span><span class=cF1>define</span><span class=cF0> NUM_STARS   </span><span class=cF3>GR_WIDTH</span><span class=cF0> * </span><span class=cF3>GR_HEIGHT</span><span class=cF0> / </span><span class=cFE>2160</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>// Derived from ratio for 600 for 1440x900</span><span class=cF0>
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF1>class</span><span class=cF0> Star
+<a name="l10"></a>{
+<a name="l11"></a>    </span><span class=cF9>U16</span><span class=cF0> x, y;
+<a name="l12"></a>
+<a name="l13"></a>} wall_stars[NUM_STARS];
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF1>U0</span><span class=cF0> (*old_wall_paper)(</span><span class=cF9>CTask</span><span class=cF0> *task);
+<a name="l16"></a>
+<a name="l17"></a></span><span class=cF1>U0</span><span class=cF0> WallPaperStars(</span><span class=cF9>CTask</span><span class=cF0> *task)
+<a name="l18"></a>{
+<a name="l19"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
+<a name="l20"></a>    </span><span class=cF9>CDC</span><span class=cF0> *dc = </span><span class=cF5>DCAlias</span><span class=cF0>(</span><span class=cFB>gr</span><span class=cF0>.dc2, task);
+<a name="l21"></a>
+<a name="l22"></a>    dc-&gt;color = </span><span class=cF3>YELLOW</span><span class=cF0>;
+<a name="l23"></a>
+<a name="l24"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; NUM_STARS; i++)
+<a name="l25"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l26"></a>        </span><span class=cF5>GrPlot</span><span class=cF0>(dc, wall_stars[i].x, wall_stars[i].y);
+<a name="l27"></a>
+<a name="l28"></a>        </span><span class=cF1>if</span><span class=cF0> (++wall_stars[i].y &gt; </span><span class=cF3>GR_HEIGHT</span><span class=cF0>)
+<a name="l29"></a>        {
+<a name="l30"></a>            wall_stars[i].y = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l31"></a>            wall_stars[i].x = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>;
+<a name="l32"></a>        }
+<a name="l33"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l34"></a>
+<a name="l35"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
+<a name="l36"></a>
+<a name="l37"></a>    </span><span class=cF2>//Uncomment the following if you wish. Will draw the old wallpaper over this one.</span><span class=cF0>
+<a name="l38"></a>    </span><span class=cF2>//old_wall_paper(task);</span><span class=cF0>
+<a name="l39"></a>
+<a name="l40"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>gr_palette</span><span class=cF0>[</span><span class=cFE>0</span><span class=cF0>] &gt; </span><span class=cFB>gr_palette</span><span class=cF0>[</span><span class=cFE>15</span><span class=cF0>])
+<a name="l41"></a>        task-&gt;text_attr = </span><span class=cF3>WHITE</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l42"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l43"></a>        task-&gt;text_attr = </span><span class=cF3>BLACK</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l44"></a>
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a></span><span class=cF1>U0</span><span class=cF0> WallInit()
+<a name="l48"></a>{
+<a name="l49"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l50"></a>
+<a name="l51"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0> != </span><span class=cFB>sys_task</span><span class=cF0>)
+<a name="l52"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l53"></a>        </span><span class=cF6>&quot;\nMust be System Included. (SHIFT-F5 / RightClick-&gt;System Include) \n&quot;</span><span class=cF0>;
+<a name="l54"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l55"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l56"></a>    old_wall_paper = </span><span class=cFB>gr</span><span class=cF0>.fp_wall_paper;
+<a name="l57"></a>
+<a name="l58"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; NUM_STARS; i++)
+<a name="l59"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>        wall_stars[i].x = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>;
+<a name="l61"></a>        wall_stars[i].y = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_HEIGHT</span><span class=cF0>;
+<a name="l62"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l63"></a>
+<a name="l64"></a>    </span><span class=cFB>gr</span><span class=cF0>.fp_wall_paper = &amp;WallPaperStars;
+<a name="l65"></a>}
+<a name="l66"></a>
+<a name="l67"></a>WallInit;
+</span></pre></body>
+</html>

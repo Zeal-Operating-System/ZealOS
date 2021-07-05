@@ -1,0 +1,1411 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>ParseAsmImm</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CAsmArg</span><span class=cF0> *arg)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;imm_or_off_present)
+<a name="l4"></a>        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Already one immediate at &quot;</span><span class=cF0>);
+<a name="l5"></a>    arg-&gt;imm_or_off_present = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l6"></a>    arg-&gt;num.local_asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l7"></a>    arg-&gt;num.global_asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l8"></a>    cc-&gt;asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l9"></a>    cc-&gt;abs_counts = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l10"></a>    cc-&gt;flags &amp;= ~(</span><span class=cF3>CCF_UNRESOLVED</span><span class=cF0> + </span><span class=cF3>CCF_LOCAL</span><span class=cF0>);
+<a name="l11"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsLexExpression2Bin</span><span class=cF7>(</span><span class=cF0>cc, &amp;arg-&gt;num.machine_code</span><span class=cF7>)</span><span class=cF0>)
+<a name="l12"></a>        </span><span class=cF5>LexSkipEol</span><span class=cF0>(cc);
+<a name="l13"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l14"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l15"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;abs_counts.externs)
+<a name="l16"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Extern Not Allowed at &quot;</span><span class=cF0>);
+<a name="l17"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_UNRESOLVED</span><span class=cF0>)
+<a name="l18"></a>        {
+<a name="l19"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_LOCAL</span><span class=cF0>)
+<a name="l20"></a>                arg-&gt;num.local_asm_undef_hash = cc-&gt;asm_undef_hash;
+<a name="l21"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l22"></a>                arg-&gt;num.global_asm_undef_hash = cc-&gt;asm_undef_hash;
+<a name="l23"></a>
+<a name="l24"></a>            cc-&gt;asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l25"></a>        } 
+<a name="l26"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l27"></a>        {
+<a name="l28"></a>            arg-&gt;num.i = </span><span class=cF5>Call</span><span class=cF0>(arg-&gt;num.machine_code);
+<a name="l29"></a>            arg-&gt;num.global_asm_undef_hash = cc-&gt;asm_undef_hash;
+<a name="l30"></a>            cc-&gt;asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l31"></a>            </span><span class=cF5>Free</span><span class=cF0>(arg-&gt;num.machine_code);
+<a name="l32"></a>            arg-&gt;num.machine_code = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l33"></a>        }
+<a name="l34"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l35"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l36"></a>}
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ParseAsmArg</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CAsmArg</span><span class=cF0> *arg, </span><span class=cF1>Bool</span><span class=cF0> rel)
+<a name="l39"></a>{
+<a name="l40"></a>    </span><span class=cF9>CHashGeneric</span><span class=cF0> *tmph, *tmph1;
+<a name="l41"></a>    </span><span class=cF9>CHashReg</span><span class=cF0>     *tmpr;
+<a name="l42"></a>
+<a name="l43"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(arg, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmArg</span><span class=cF7>)</span><span class=cF0>);
+<a name="l44"></a>    arg-&gt;seg  = </span><span class=cF3>REG_NONE</span><span class=cF0>;
+<a name="l45"></a>    arg-&gt;reg1 = </span><span class=cF3>REG_NONE</span><span class=cF0>;
+<a name="l46"></a>    arg-&gt;reg2 = </span><span class=cF3>REG_NONE</span><span class=cF0>;
+<a name="l47"></a>    arg-&gt;scale = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l48"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l49"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l50"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l51"></a>        {
+<a name="l52"></a>            </span><span class=cF1>if</span><span class=cF0> (tmph = cc-&gt;hash_entry)
+<a name="l53"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l54"></a>                </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_REG</span><span class=cF0>)
+<a name="l55"></a>                {
+<a name="l56"></a>                    tmpr = tmph;
+<a name="l57"></a>                    arg-&gt;reg1_type = tmpr-&gt;reg_type;
+<a name="l58"></a>                    </span><span class=cF1>switch</span><span class=cF0> (tmpr-&gt;reg_type)
+<a name="l59"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>                        </span><span class=cF1>start</span><span class=cF0>:
+<a name="l61"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_R8</span><span class=cF0>:
+<a name="l62"></a>                                arg-&gt;size = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l63"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l64"></a>
+<a name="l65"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_R16</span><span class=cF0>:
+<a name="l66"></a>                                arg-&gt;size = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l67"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l68"></a>
+<a name="l69"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_R32</span><span class=cF0>:
+<a name="l70"></a>                                arg-&gt;size = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l71"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l72"></a>
+<a name="l73"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_R64</span><span class=cF0>:
+<a name="l74"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_FSTACK</span><span class=cF0>:
+<a name="l75"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_MM</span><span class=cF0>:
+<a name="l76"></a>                                arg-&gt;size = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l77"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l78"></a>
+<a name="l79"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_XMM</span><span class=cF0>:
+<a name="l80"></a>                                arg-&gt;size = </span><span class=cFE>16</span><span class=cF0>;
+<a name="l81"></a>                        </span><span class=cF1>end</span><span class=cF0>:
+<a name="l82"></a>                            arg-&gt;reg1 = tmpr-&gt;reg_num;
+<a name="l83"></a>                            </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l84"></a>                            </span><span class=cF1>return</span><span class=cF0>;
+<a name="l85"></a>
+<a name="l86"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REGT_SEG</span><span class=cF0>:
+<a name="l87"></a>                            arg-&gt;seg = tmpr-&gt;reg_num;
+<a name="l88"></a>                            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF6>':'</span><span class=cF0>)
+<a name="l89"></a>                            {
+<a name="l90"></a>                                arg-&gt;just_seg = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l91"></a>                                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l92"></a>                            }
+<a name="l93"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l94"></a>                                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip &quot;:&quot;</span><span class=cF0>
+<a name="l95"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l96"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l97"></a>                }
+<a name="l98"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l99"></a>                {
+<a name="l100"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>tmph-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_CLASS</span><span class=cF0> || tmph-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_INTERNAL_TYPE</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l101"></a>                            </span><span class=cF7>(</span><span class=cF0>tmph1 = </span><span class=cF5>HashFind</span><span class=cF0>(cc-&gt;cur_str, </span><span class=cFB>cmp</span><span class=cF0>.asm_hash, </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l102"></a>                        tmph = tmph1;
+<a name="l103"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>)
+<a name="l104"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l105"></a>                        </span><span class=cF1>switch</span><span class=cF0> (tmph-&gt;user_data0)
+<a name="l106"></a>                        {
+<a name="l107"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_I8</span><span class=cF0>:
+<a name="l108"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_U8</span><span class=cF0>:
+<a name="l109"></a>                                arg-&gt;size = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l110"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l111"></a>
+<a name="l112"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_I16</span><span class=cF0>:
+<a name="l113"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_U16</span><span class=cF0>:
+<a name="l114"></a>                                arg-&gt;size = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l115"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l116"></a>
+<a name="l117"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_I32</span><span class=cF0>:
+<a name="l118"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_U32</span><span class=cF0>:
+<a name="l119"></a>                                arg-&gt;size = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l120"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l121"></a>
+<a name="l122"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_I64</span><span class=cF0>:
+<a name="l123"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_U64</span><span class=cF0>:
+<a name="l124"></a>                                arg-&gt;size = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l125"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l126"></a>
+<a name="l127"></a>                            </span><span class=cF1>default</span><span class=cF0>:
+<a name="l128"></a>                                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;syntax error at &quot;</span><span class=cF0>);
+<a name="l129"></a>                        }
+<a name="l130"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip keyword</span><span class=cF0>
+<a name="l131"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l132"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l133"></a>                        </span><span class=cF1>goto</span><span class=cF0> pa_asm_direct_imm;
+<a name="l134"></a>                }
+<a name="l135"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l136"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l137"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l138"></a>pa_asm_direct_imm:
+<a name="l139"></a>                </span><span class=cFD>ParseAsmImm</span><span class=cF0>(cc, arg);
+<a name="l140"></a>                arg-&gt;num.abs_counts = cc-&gt;abs_counts;
+<a name="l141"></a>                </span><span class=cF1>if</span><span class=cF0> (arg-&gt;size &lt;= </span><span class=cFE>1</span><span class=cF0> &amp;&amp; !rel &amp;&amp; arg-&gt;num.abs_counts &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l142"></a>                {
+<a name="l143"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l144"></a>                        arg-&gt;size = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l145"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l146"></a>                        arg-&gt;size = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l147"></a>                }
+<a name="l148"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>'['</span><span class=cF0>)
+<a name="l149"></a>                    </span><span class=cF1>return</span><span class=cF0>;
+<a name="l150"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l151"></a>        }
+<a name="l152"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'['</span><span class=cF0>)
+<a name="l153"></a>        {
+<a name="l154"></a>            arg-&gt;indirect = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l155"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>// skip [</span><span class=cF0>
+<a name="l156"></a>            </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token &amp;&amp; cc-&gt;token != </span><span class=cF6>']'</span><span class=cF0>)
+<a name="l157"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l158"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l159"></a>                {
+<a name="l160"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmph = cc-&gt;hash_entry)
+<a name="l161"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l162"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmph-&gt;type &amp; </span><span class=cF3>HTG_TYPE_MASK</span><span class=cF0> == </span><span class=cF3>HTT_REG</span><span class=cF0> &amp;&amp; </span><span class=cF3>REGT_R16</span><span class=cF0> &lt;= tmph</span><span class=cF7>(</span><span class=cF9>CHashReg</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;reg_type &lt;= </span><span class=cF3>REGT_R64</span><span class=cF0>)
+<a name="l163"></a>                        {
+<a name="l164"></a>                            tmpr = tmph;
+<a name="l165"></a>                            arg-&gt;reg2_type = tmpr-&gt;reg_type;
+<a name="l166"></a>                            </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg1 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l167"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l168"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpr-&gt;reg_num &amp; </span><span class=cFE>7</span><span class=cF0> == </span><span class=cF3>REG_RSP</span><span class=cF0>)
+<a name="l169"></a>                                {
+<a name="l170"></a>                                    arg-&gt;reg1 = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l171"></a>                                    arg-&gt;reg2 = tmpr-&gt;reg_num;
+<a name="l172"></a>                                }
+<a name="l173"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l174"></a>                                    arg-&gt;reg1 = tmpr-&gt;reg_num;
+<a name="l175"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l176"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l177"></a>                                arg-&gt;reg2 = tmpr-&gt;reg_num;
+<a name="l178"></a>                            </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l179"></a>                        }
+<a name="l180"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l181"></a>                            </span><span class=cF1>goto</span><span class=cF0> pa_asm_indirect_imm;
+<a name="l182"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l183"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l184"></a>                        </span><span class=cF1>goto</span><span class=cF0> pa_asm_indirect_imm;
+<a name="l185"></a>                }
+<a name="l186"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'*'</span><span class=cF0>)
+<a name="l187"></a>                {
+<a name="l188"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l189"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_I64</span><span class=cF0>)
+<a name="l190"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting scale factor at &quot;</span><span class=cF0>);
+<a name="l191"></a>                    arg-&gt;scale = cc-&gt;cur_i64;
+<a name="l192"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip scale</span><span class=cF0>
+<a name="l193"></a>                    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg2 != </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l194"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l195"></a>                        </span><span class=cF5>SwapI64</span><span class=cF0>(&amp;arg-&gt;reg1, &amp;arg-&gt;reg2);
+<a name="l196"></a>                        </span><span class=cF5>SwapI64</span><span class=cF0>(&amp;arg-&gt;reg1_type, &amp;arg-&gt;reg2_type);
+<a name="l197"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>                }
+<a name="l199"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>'+'</span><span class=cF0>)
+<a name="l200"></a>                {
+<a name="l201"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip '+'</span><span class=cF0>
+<a name="l202"></a>                }
+<a name="l203"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l204"></a>                {
+<a name="l205"></a>pa_asm_indirect_imm:
+<a name="l206"></a>                    </span><span class=cFD>ParseAsmImm</span><span class=cF0>(cc, arg);
+<a name="l207"></a>                    arg-&gt;num.abs_counts = cc-&gt;abs_counts;
+<a name="l208"></a>                }
+<a name="l209"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l210"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>']'</span><span class=cF0>)
+<a name="l211"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing ']' at &quot;</span><span class=cF0>);
+<a name="l212"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip ]</span><span class=cF0>
+<a name="l213"></a>            </span><span class=cF1>return</span><span class=cF0>;
+<a name="l214"></a>        }
+<a name="l215"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l216"></a>            </span><span class=cF1>goto</span><span class=cF0> pa_asm_direct_imm;
+<a name="l217"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l218"></a>}
+<a name="l219"></a>
+<a name="l220"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>AsmMakeArgMask</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CAsmArg</span><span class=cF0> *arg)
+<a name="l221"></a>{
+<a name="l222"></a>    </span><span class=cF9>CAOTCtrl</span><span class=cF0>    *aotc = cc-&gt;aotc;
+<a name="l223"></a>    </span><span class=cF9>I64</span><span class=cF0>          res;
+<a name="l224"></a>
+<a name="l225"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;just_seg)
+<a name="l226"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l227"></a>        </span><span class=cF1>switch</span><span class=cF0> (arg-&gt;seg)
+<a name="l228"></a>        {
+<a name="l229"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l230"></a>                res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_ES</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SREG</span><span class=cF0>;
+<a name="l231"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l232"></a>
+<a name="l233"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l234"></a>                res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_CS</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SREG</span><span class=cF0>;
+<a name="l235"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l236"></a>
+<a name="l237"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l238"></a>                res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SS</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SREG</span><span class=cF0>;
+<a name="l239"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l240"></a>
+<a name="l241"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>:
+<a name="l242"></a>                res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_DS</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SREG</span><span class=cF0>;
+<a name="l243"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l244"></a>
+<a name="l245"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>4</span><span class=cF0>:
+<a name="l246"></a>                res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_FS</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SREG</span><span class=cF0>;
+<a name="l247"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l248"></a>
+<a name="l249"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>5</span><span class=cF0>:
+<a name="l250"></a>                res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_GS</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_SREG</span><span class=cF0>;
+<a name="l251"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l252"></a>        }
+<a name="l253"></a>        </span><span class=cF1>goto</span><span class=cF0> mm_done;
+<a name="l254"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l255"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg1_type == </span><span class=cF3>REGT_FSTACK</span><span class=cF0>)
+<a name="l256"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l257"></a>        </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg1)
+<a name="l258"></a>            res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_STI</span><span class=cF0>;
+<a name="l259"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l260"></a>            res = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_ST0</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>ARGT_STI</span><span class=cF0>;
+<a name="l261"></a>        </span><span class=cF1>goto</span><span class=cF0> mm_done;
+<a name="l262"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l263"></a>    res = </span><span class=cFB>cmp</span><span class=cF0>.size_arg_mask[arg-&gt;size];
+<a name="l264"></a>    </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>64</span><span class=cF0>)
+<a name="l265"></a>        res &amp;= </span><span class=cFE>0xFF0FFFFFFF</span><span class=cF0>;
+<a name="l266"></a>
+<a name="l267"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg1 != </span><span class=cF3>REG_NONE</span><span class=cF0> &amp;&amp; arg-&gt;imm_or_off_present &amp;&amp; !arg-&gt;num.i &amp;&amp;
+<a name="l268"></a>            !arg-&gt;num.global_asm_undef_hash &amp;&amp; !arg-&gt;num.local_asm_undef_hash)
+<a name="l269"></a>        arg-&gt;imm_or_off_present = </span><span class=cF3>FALSE</span><span class=cF0>;    </span><span class=cF2>//Zero displacement</span><span class=cF0>
+<a name="l270"></a>
+<a name="l271"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg2 != </span><span class=cF3>REG_NONE</span><span class=cF0> || arg-&gt;scale != </span><span class=cFE>1</span><span class=cF0>)
+<a name="l272"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l273"></a>        res &amp;= </span><span class=cFE>0x0000FF0000</span><span class=cF0>;
+<a name="l274"></a>        </span><span class=cF1>goto</span><span class=cF0> mm_done;
+<a name="l275"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l276"></a>
+<a name="l277"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;indirect)
+<a name="l278"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l279"></a>        </span><span class=cF1>if</span><span class=cF0> (arg-&gt;imm_or_off_present)
+<a name="l280"></a>            res &amp;= </span><span class=cFE>0x00FFFF0000</span><span class=cF0>;
+<a name="l281"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l282"></a>            res &amp;= </span><span class=cFE>0x000FFF0000</span><span class=cF0>;
+<a name="l283"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l284"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l285"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l286"></a>        </span><span class=cF1>if</span><span class=cF0> (arg-&gt;imm_or_off_present)
+<a name="l287"></a>            res &amp;= </span><span class=cFE>0x000F000FFE</span><span class=cF0>;
+<a name="l288"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l289"></a>            res &amp;= </span><span class=cFE>0x3F0FFFF000</span><span class=cF0>;
+<a name="l290"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l291"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;seg != </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l292"></a>        res &amp;= </span><span class=cFE>0x00FFFF0000</span><span class=cF0>;
+<a name="l293"></a>    </span><span class=cF1>if</span><span class=cF0> (arg-&gt;reg1 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l294"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l295"></a>        </span><span class=cF1>if</span><span class=cF0> (arg-&gt;indirect)
+<a name="l296"></a>            res &amp;= </span><span class=cFE>0x00FFFF0000</span><span class=cF0>;
+<a name="l297"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l298"></a>        {
+<a name="l299"></a>            </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &gt;= </span><span class=cF3>I8_MIN</span><span class=cF0>)
+<a name="l300"></a>                res &amp;= </span><span class=cFE>0x8FE</span><span class=cF0>;
+<a name="l301"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &gt;= </span><span class=cF3>I16_MIN</span><span class=cF0>)
+<a name="l302"></a>                res &amp;= </span><span class=cFE>0x8EE</span><span class=cF0>;
+<a name="l303"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &gt;= </span><span class=cF3>I32_MIN</span><span class=cF0>)
+<a name="l304"></a>                res &amp;= </span><span class=cFE>0x8CE</span><span class=cF0>;
+<a name="l305"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l306"></a>                res &amp;= </span><span class=cFE>0x88E</span><span class=cF0>;
+<a name="l307"></a>        }
+<a name="l308"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l309"></a>        {
+<a name="l310"></a>            </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt;= </span><span class=cF3>I8_MAX</span><span class=cF0>)
+<a name="l311"></a>                res &amp;= </span><span class=cFE>0xFFE</span><span class=cF0>;
+<a name="l312"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt;= </span><span class=cF3>U8_MAX</span><span class=cF0>)
+<a name="l313"></a>                res &amp;= </span><span class=cFE>0xFEE</span><span class=cF0>;
+<a name="l314"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt;= </span><span class=cF3>I16_MAX</span><span class=cF0>)
+<a name="l315"></a>                res &amp;= </span><span class=cFE>0xEEE</span><span class=cF0>;
+<a name="l316"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt;= </span><span class=cF3>U16_MAX</span><span class=cF0>)
+<a name="l317"></a>                res &amp;= </span><span class=cFE>0xECE</span><span class=cF0>;
+<a name="l318"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt;= </span><span class=cF3>I32_MAX</span><span class=cF0>)
+<a name="l319"></a>                res &amp;= </span><span class=cFE>0xCCE</span><span class=cF0>;
+<a name="l320"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg-&gt;num.i &lt;= </span><span class=cF3>U32_MAX</span><span class=cF0>)
+<a name="l321"></a>                res &amp;= </span><span class=cFE>0xC8E</span><span class=cF0>;
+<a name="l322"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l323"></a>                res &amp;= </span><span class=cFE>0x88E</span><span class=cF0>;
+<a name="l324"></a>        }
+<a name="l325"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l326"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l327"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l328"></a>        res &amp;= </span><span class=cFE>0x3F00FFF000</span><span class=cF0>;
+<a name="l329"></a>        </span><span class=cF1>if</span><span class=cF0> (!arg-&gt;indirect) </span><span class=cF2>//M8-M64</span><span class=cF0>
+<a name="l330"></a>            res &amp;= </span><span class=cFE>0xFFFF0FFFFF</span><span class=cF0>;
+<a name="l331"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l332"></a>    </span><span class=cF1>switch</span><span class=cF0> (arg-&gt;reg1)
+<a name="l333"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l334"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REG_RAX</span><span class=cF0>:
+<a name="l335"></a>            res &amp;= ~</span><span class=cFE>0x3000000000</span><span class=cF0>;
+<a name="l336"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l337"></a>
+<a name="l338"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REG_RCX</span><span class=cF0>:
+<a name="l339"></a>            res &amp;= ~</span><span class=cFE>0x2F00000000</span><span class=cF0>;
+<a name="l340"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l341"></a>
+<a name="l342"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>REG_RDX</span><span class=cF0>:
+<a name="l343"></a>            res &amp;= ~</span><span class=cFE>0x1F00000000</span><span class=cF0>;
+<a name="l344"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l345"></a>
+<a name="l346"></a>        </span><span class=cF1>default</span><span class=cF0>:
+<a name="l347"></a>            res &amp;= ~</span><span class=cFE>0x3F00000000</span><span class=cF0>;
+<a name="l348"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l349"></a>mm_done:
+<a name="l350"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l351"></a>}
+<a name="l352"></a>
+<a name="l353"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AsmStoreNum</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CAsmNum2</span><span class=cF0> *num2, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> U8_avail)
+<a name="l354"></a>{
+<a name="l355"></a>    </span><span class=cF9>CAOTCtrl</span><span class=cF0>    *aotc = cc-&gt;aotc;
+<a name="l356"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
+<a name="l357"></a>    </span><span class=cF9>CAOTAbsAddr</span><span class=cF0> *tmpa;
+<a name="l358"></a>
+<a name="l359"></a>    </span><span class=cF1>if</span><span class=cF0> (!num2-&gt;imm_flag)
+<a name="l360"></a>        num2-&gt;num.i -= num2-&gt;rel;
+<a name="l361"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l362"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l363"></a>        </span><span class=cF1>if</span><span class=cF0> (num2-&gt;U8_count == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l364"></a>        {
+<a name="l365"></a>            </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.local_asm_undef_hash || num2-&gt;num.global_asm_undef_hash)
+<a name="l366"></a>                </span><span class=cFD>AsmUnresolvedAdd</span><span class=cF0>(cc, num2-&gt;num.machine_code, </span><span class=cF3>IET_REL_I8</span><span class=cF0> + num2-&gt;imm_flag, aotc-&gt;rip, num2-&gt;rel,
+<a name="l367"></a>                    num2-&gt;num.local_asm_undef_hash, num2-&gt;num.global_asm_undef_hash,
+<a name="l368"></a>                    cc-&gt;lex_include_stack-&gt;line_num, U8_avail);
+<a name="l369"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!num2-&gt;imm_flag &amp;&amp; !</span><span class=cF7>(</span><span class=cF3>I8_MIN</span><span class=cF0> &lt;= num2-&gt;num.i &lt;= </span><span class=cF3>I8_MAX</span><span class=cF7>)</span><span class=cF0>)
+<a name="l370"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc,</span><span class=cF6>&quot;Branch out of range at &quot;</span><span class=cF0>);
+<a name="l371"></a>            </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
+<a name="l372"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l373"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l374"></a>                {
+<a name="l375"></a>                    tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l376"></a>                    tmpa-&gt;next = aotc-&gt;abss;
+<a name="l377"></a>                    aotc-&gt;abss = tmpa;
+<a name="l378"></a>                    tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l379"></a>                    tmpa-&gt;type = </span><span class=cF3>AAT_ADD_U8</span><span class=cF0>;
+<a name="l380"></a>                }
+<a name="l381"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l382"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l383"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l384"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l385"></a>                {
+<a name="l386"></a>                    tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l387"></a>                    tmpa-&gt;next = aotc-&gt;abss;
+<a name="l388"></a>                    aotc-&gt;abss = tmpa;
+<a name="l389"></a>                    tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l390"></a>                    tmpa-&gt;type = </span><span class=cF3>AAT_SUB_U8</span><span class=cF0>;
+<a name="l391"></a>                }
+<a name="l392"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l393"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, num2-&gt;num.i);
+<a name="l394"></a>        }
+<a name="l395"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l396"></a>        {
+<a name="l397"></a>            </span><span class=cF1>if</span><span class=cF0> (num2-&gt;U8_count == </span><span class=cFE>2</span><span class=cF0>)
+<a name="l398"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l399"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.local_asm_undef_hash || num2-&gt;num.global_asm_undef_hash)
+<a name="l400"></a>                    </span><span class=cFD>AsmUnresolvedAdd</span><span class=cF0>(cc, num2-&gt;num.machine_code, </span><span class=cF3>IET_REL_I16</span><span class=cF0> + num2-&gt;imm_flag, aotc-&gt;rip, num2-&gt;rel,
+<a name="l401"></a>                        num2-&gt;num.local_asm_undef_hash, num2-&gt;num.global_asm_undef_hash,
+<a name="l402"></a>                        cc-&gt;lex_include_stack-&gt;line_num, U8_avail);
+<a name="l403"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!num2-&gt;imm_flag &amp;&amp; !</span><span class=cF7>(</span><span class=cF3>I16_MIN</span><span class=cF0> &lt;= num2-&gt;num.i &lt;= </span><span class=cF3>I16_MAX</span><span class=cF7>)</span><span class=cF0>)
+<a name="l404"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc,</span><span class=cF6>&quot;Branch out of range at &quot;</span><span class=cF0>);
+<a name="l405"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
+<a name="l406"></a>                {
+<a name="l407"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l408"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l409"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l410"></a>                        tmpa-&gt;next = aotc-&gt;abss;
+<a name="l411"></a>                        aotc-&gt;abss = tmpa;
+<a name="l412"></a>                        tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l413"></a>                        tmpa-&gt;type = </span><span class=cF3>AAT_ADD_U16</span><span class=cF0>;
+<a name="l414"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l415"></a>                }
+<a name="l416"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l417"></a>                {
+<a name="l418"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l419"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l420"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l421"></a>                        tmpa-&gt;next = aotc-&gt;abss;
+<a name="l422"></a>                        aotc-&gt;abss = tmpa;
+<a name="l423"></a>                        tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l424"></a>                        tmpa-&gt;type = </span><span class=cF3>AAT_SUB_U16</span><span class=cF0>;
+<a name="l425"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l426"></a>                }
+<a name="l427"></a>                </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, num2-&gt;num.i.u8[</span><span class=cFE>0</span><span class=cF0>]);
+<a name="l428"></a>                </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, num2-&gt;num.i.u8[</span><span class=cFE>1</span><span class=cF0>]);
+<a name="l429"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l430"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (num2-&gt;U8_count == </span><span class=cFE>4</span><span class=cF0>)
+<a name="l431"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l432"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.local_asm_undef_hash || num2-&gt;num.global_asm_undef_hash)
+<a name="l433"></a>                    </span><span class=cFD>AsmUnresolvedAdd</span><span class=cF0>(cc, num2-&gt;num.machine_code, </span><span class=cF3>IET_REL_I32</span><span class=cF0> + num2-&gt;imm_flag, aotc-&gt;rip, num2-&gt;rel,
+<a name="l434"></a>                        num2-&gt;num.local_asm_undef_hash, num2-&gt;num.global_asm_undef_hash,
+<a name="l435"></a>                        cc-&gt;lex_include_stack-&gt;line_num, U8_avail);
+<a name="l436"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!num2-&gt;imm_flag &amp;&amp; !</span><span class=cF7>(</span><span class=cF3>I32_MIN</span><span class=cF0> &lt;= num2-&gt;num.i &lt;= </span><span class=cF3>I32_MAX</span><span class=cF7>)</span><span class=cF0>)
+<a name="l437"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc,</span><span class=cF6>&quot;Branch out of range at &quot;</span><span class=cF0>);
+<a name="l438"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
+<a name="l439"></a>                {
+<a name="l440"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l441"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l442"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l443"></a>                        tmpa-&gt;next = aotc-&gt;abss;
+<a name="l444"></a>                        aotc-&gt;abss = tmpa;
+<a name="l445"></a>                        tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l446"></a>                        tmpa-&gt;type = </span><span class=cF3>AAT_ADD_U32</span><span class=cF0>;
+<a name="l447"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l448"></a>                }
+<a name="l449"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l450"></a>                {
+<a name="l451"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l452"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l453"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l454"></a>                        tmpa-&gt;next = aotc-&gt;abss;
+<a name="l455"></a>                        aotc-&gt;abss = tmpa;
+<a name="l456"></a>                        tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l457"></a>                        tmpa-&gt;type = </span><span class=cF3>AAT_SUB_U32</span><span class=cF0>;
+<a name="l458"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l459"></a>                }
+<a name="l460"></a>                </span><span class=cFD>AOTStoreCodeU32</span><span class=cF0>(cc, num2-&gt;num.i);
+<a name="l461"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l462"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (num2-&gt;U8_count == </span><span class=cFE>8</span><span class=cF0>)
+<a name="l463"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l464"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.local_asm_undef_hash || num2-&gt;num.global_asm_undef_hash)
+<a name="l465"></a>                    </span><span class=cFD>AsmUnresolvedAdd</span><span class=cF0>(cc, num2-&gt;num.machine_code, </span><span class=cF3>IET_REL_I64</span><span class=cF0> + num2-&gt;imm_flag, aotc-&gt;rip, num2-&gt;rel,
+<a name="l466"></a>                        num2-&gt;num.local_asm_undef_hash, num2-&gt;num.global_asm_undef_hash,
+<a name="l467"></a>                        cc-&gt;lex_include_stack-&gt;line_num, U8_avail);
+<a name="l468"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
+<a name="l469"></a>                {
+<a name="l470"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l471"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l472"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l473"></a>                        tmpa-&gt;next = aotc-&gt;abss;
+<a name="l474"></a>                        aotc-&gt;abss = tmpa;
+<a name="l475"></a>                        tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l476"></a>                        tmpa-&gt;type = </span><span class=cF3>AAT_ADD_U64</span><span class=cF0>;
+<a name="l477"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l478"></a>                }
+<a name="l479"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l480"></a>                {
+<a name="l481"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l482"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l483"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
+<a name="l484"></a>                        tmpa-&gt;next = aotc-&gt;abss;
+<a name="l485"></a>                        aotc-&gt;abss = tmpa;
+<a name="l486"></a>                        tmpa-&gt;rip = aotc-&gt;rip;
+<a name="l487"></a>                        tmpa-&gt;type = </span><span class=cF3>AAT_SUB_U64</span><span class=cF0>;
+<a name="l488"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l489"></a>                }
+<a name="l490"></a>                </span><span class=cFD>AOTStoreCodeU64</span><span class=cF0>(cc, num2-&gt;num.i);
+<a name="l491"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l492"></a>            </span><span class=cF1>if</span><span class=cF0> (U8_avail &amp;&amp; !num2-&gt;num.local_asm_undef_hash &amp;&amp; !num2-&gt;num.global_asm_undef_hash &amp;&amp;
+<a name="l493"></a>                !num2-&gt;imm_flag &amp;&amp; -</span><span class=cFE>124</span><span class=cF0> &lt;= num2-&gt;num.i &lt;= </span><span class=cFE>123</span><span class=cF0>)
+<a name="l494"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l495"></a>                </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;could use I8 displacement at &quot;</span><span class=cF0>);
+<a name="l496"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l497"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l498"></a>        }
+<a name="l499"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l500"></a>
+<a name="l501"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l502"></a>}
+<a name="l503"></a>
+<a name="l504"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cFD>asm_seg_prefixes</span><span class=cF0>[</span><span class=cFE>6</span><span class=cF0>] = {</span><span class=cFE>0x26</span><span class=cF0>, </span><span class=cFE>0x2E</span><span class=cF0>, </span><span class=cFE>0x36</span><span class=cF0>, </span><span class=cFE>0x3E</span><span class=cF0>, </span><span class=cFE>0x64</span><span class=cF0>, </span><span class=cFE>0x65</span><span class=cF0>};
+<a name="l505"></a>
+<a name="l506"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>ParseAsmInst</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CHashOpcode</span><span class=cF0> *tmpo, </span><span class=cF9>I64</span><span class=cF0> argcount)
+<a name="l507"></a>{
+<a name="l508"></a>    </span><span class=cF9>CAOTCtrl</span><span class=cF0>    *aotc = cc-&gt;aotc;
+<a name="l509"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, j, arg1, arg2, om, seg, arg1mask, arg2mask;
+<a name="l510"></a>    </span><span class=cF9>CAsmArg</span><span class=cF0>     *tmpa1, *tmpa2;
+<a name="l511"></a>    </span><span class=cF1>Bool</span><span class=cF0>         ModrM_complete, U8_avail = </span><span class=cF3>FALSE</span><span class=cF0>, found_second_possible = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l512"></a>    </span><span class=cF9>CInst</span><span class=cF0>       *tmpins;
+<a name="l513"></a>    </span><span class=cF9>CAsmIns</span><span class=cF0>      cur, best;
+<a name="l514"></a>
+<a name="l515"></a>    best.U8_count = </span><span class=cFE>255</span><span class=cF0>;
+<a name="l516"></a>    </span><span class=cF1>if</span><span class=cF0> (argcount &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l517"></a>        arg1mask = </span><span class=cFD>AsmMakeArgMask</span><span class=cF0>(cc, &amp;aotc-&gt;arg1);
+<a name="l518"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l519"></a>        arg1mask = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l520"></a>    </span><span class=cF1>if</span><span class=cF0> (argcount &gt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l521"></a>        arg2mask = </span><span class=cFD>AsmMakeArgMask</span><span class=cF0>(cc, &amp;aotc-&gt;arg2);
+<a name="l522"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l523"></a>        arg2mask = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l524"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; tmpo-&gt;inst_entry_count; i++)
+<a name="l525"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l526"></a>        tmpins = &amp;tmpo-&gt;ins[i];
+<a name="l527"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;arg1 == </span><span class=cF3>ARGT_REL8</span><span class=cF0> || tmpins-&gt;arg2 == </span><span class=cF3>ARGT_REL8</span><span class=cF0>)
+<a name="l528"></a>            U8_avail = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l529"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;arg1mask, tmpins-&gt;arg1</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;arg2mask, tmpins-&gt;arg2</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l530"></a>                    </span><span class=cF7>(</span><span class=cF0>!(tmpins-&gt;flags &amp; </span><span class=cF3>IEF_NOT_IN_64_BIT</span><span class=cF0>) || aotc-&gt;seg_size != </span><span class=cFE>64</span><span class=cF7>)</span><span class=cF0>)
+<a name="l531"></a>        {
+<a name="l532"></a>            </span><span class=cF5>MemSet</span><span class=cF0>(&amp;cur, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmIns</span><span class=cF7>)</span><span class=cF0>);
+<a name="l533"></a>            cur.tmpins = tmpins;
+<a name="l534"></a>            ModrM_complete = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l535"></a>            cur.is_default = </span><span class=cF5>ToBool</span><span class=cF0>(tmpins-&gt;flags &amp; </span><span class=cF3>IEF_DEFAULT</span><span class=cF0>);
+<a name="l536"></a>            </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>64</span><span class=cF0>)
+<a name="l537"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l538"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_48_REX</span><span class=cF0>)
+<a name="l539"></a>                    cur.</span><span class=cF1>REX</span><span class=cF0> = </span><span class=cFE>0x48</span><span class=cF0>;
+<a name="l540"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l541"></a>                    cur.</span><span class=cF1>REX</span><span class=cF0> = </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l542"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l543"></a>            cur.disp.imm_flag = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l544"></a>            cur.imm.imm_flag = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l545"></a>            om = tmpins-&gt;opcode_modifier;
+<a name="l546"></a>            arg1 = tmpins-&gt;arg1;
+<a name="l547"></a>            arg2 = tmpins-&gt;arg2;
+<a name="l548"></a>            tmpa1 = &amp;aotc-&gt;arg1;
+<a name="l549"></a>            tmpa2 = &amp;aotc-&gt;arg2;
+<a name="l550"></a>            cur.last_opcode_U8 = tmpins-&gt;opcode[tmpins-&gt;opcode_count - </span><span class=cFE>1</span><span class=cF0>];
+<a name="l551"></a>
+<a name="l552"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;slash_val &lt; </span><span class=cFE>8</span><span class=cF0>)
+<a name="l553"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l554"></a>                cur.ModrM |= tmpins-&gt;slash_val &lt;&lt; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l555"></a>                cur.has_ModrM = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l556"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l557"></a>
+<a name="l558"></a>            </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0> &amp;&amp; tmpins-&gt;flags &amp; </span><span class=cF3>IEF_OP_SIZE32</span><span class=cF0> || aotc-&gt;seg_size != </span><span class=cFE>16</span><span class=cF0> &amp;&amp; tmpins-&gt;flags &amp; </span><span class=cF3>IEF_OP_SIZE16</span><span class=cF0>)
+<a name="l559"></a>                cur.has_operand_prefix = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l560"></a>
+<a name="l561"></a>            </span><span class=cF1>if</span><span class=cF0> (om == </span><span class=cF3>OM_IB</span><span class=cF0>)
+<a name="l562"></a>                cur.imm.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l563"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (om == </span><span class=cF3>OM_IW</span><span class=cF0>)
+<a name="l564"></a>                cur.imm.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l565"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (om == </span><span class=cF3>OM_ID</span><span class=cF0>)
+<a name="l566"></a>                cur.imm.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l567"></a>
+<a name="l568"></a>            </span><span class=cF1>if</span><span class=cF0> (om == </span><span class=cF3>OM_CB</span><span class=cF0>)
+<a name="l569"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l570"></a>                cur.imm.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l571"></a>                cur.imm.imm_flag = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l572"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l573"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (om == </span><span class=cF3>OM_CW</span><span class=cF0>)
+<a name="l574"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l575"></a>                cur.imm.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l576"></a>                cur.imm.imm_flag = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l577"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l578"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (om==</span><span class=cF3>OM_CD</span><span class=cF0>)
+<a name="l579"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l580"></a>                cur.imm.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l581"></a>                cur.imm.imm_flag = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l582"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l583"></a>
+<a name="l584"></a>            </span><span class=cF1>if</span><span class=cF0> (argcount == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l585"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l586"></a>                </span><span class=cF1>if</span><span class=cF0> (best.U8_count != </span><span class=cFE>255</span><span class=cF0> &amp;&amp; !found_second_possible &amp;&amp; !best.is_default)
+<a name="l587"></a>                {
+<a name="l588"></a>                    found_second_possible = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l589"></a>                    </span><span class=cF1>if</span><span class=cF0> (!aotc-&gt;arg1.size)
+<a name="l590"></a>                        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;no size specified at %s,%04d\n&quot;</span><span class=cF0>,
+<a name="l591"></a>                                    cc-&gt;lex_include_stack-&gt;full_name,
+<a name="l592"></a>                                    cc-&gt;lex_include_stack-&gt;line_num - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l593"></a>                }
+<a name="l594"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_PLUS_OPCODE</span><span class=cF0>)
+<a name="l595"></a>                {
+<a name="l596"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;slash_val == </span><span class=cF3>SV_R_REG</span><span class=cF0>)
+<a name="l597"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l598"></a>                        cur.last_opcode_U8 |= tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l599"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l600"></a>                            cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l601"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l602"></a>                            cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l603"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l604"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l605"></a>                    </span><span class=cF7>{</span><span class=cF2>//SV_I_REG</span><span class=cF0>
+<a name="l606"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1_type == </span><span class=cF3>REGT_FSTACK</span><span class=cF0>)
+<a name="l607"></a>                            cur.last_opcode_U8 += tmpa1-&gt;reg1;
+<a name="l608"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l609"></a>                }
+<a name="l610"></a>                </span><span class=cF1>if</span><span class=cF0> (arg1 == </span><span class=cF3>ARGT_R64</span><span class=cF0> || arg1 == </span><span class=cF3>ARGT_RM64</span><span class=cF0> || arg1 == </span><span class=cF3>ARGT_M64</span><span class=cF0>)
+<a name="l611"></a>                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>8</span><span class=cF0>;
+<a name="l612"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_RM8</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_RM64</span><span class=cF0> || </span><span class=cF3>ARGT_M8</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_M64</span><span class=cF0>)
+<a name="l613"></a>                {
+<a name="l614"></a>                    </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l615"></a>                        cur.has_addr_prefix = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l616"></a>
+<a name="l617"></a>                    cur.has_ModrM = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l618"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;imm_or_off_present &amp;&amp; tmpa1-&gt;indirect &amp;&amp; tmpa1-&gt;reg1 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l619"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l620"></a>                        cur.ModrM = cur.ModrM + </span><span class=cFE>5</span><span class=cF0>;
+<a name="l621"></a>                        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l622"></a>                        cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l623"></a>                        </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>64</span><span class=cF0>)
+<a name="l624"></a>                            cur.disp.imm_flag = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l625"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l626"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l627"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l628"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 == </span><span class=cF3>REG_NONE</span><span class=cF0> &amp;&amp; tmpa1-&gt;scale == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l629"></a>                        {
+<a name="l630"></a>                            cur.ModrM |= tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l631"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l632"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l633"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l634"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l635"></a>                        }
+<a name="l636"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l637"></a>                        {
+<a name="l638"></a>                            cur.ModrM |= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l639"></a>                            cur.has_SIB = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l640"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l641"></a>                                cur.SIB = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l642"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>2</span><span class=cF0>)
+<a name="l643"></a>                                cur.SIB = </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l644"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>4</span><span class=cF0>)
+<a name="l645"></a>                                cur.SIB = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l646"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>8</span><span class=cF0>)
+<a name="l647"></a>                                cur.SIB = </span><span class=cFE>0xC0</span><span class=cF0>;
+<a name="l648"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l649"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l650"></a>                                ModrM_complete = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l651"></a>                                cur.SIB |= (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>) &lt;&lt; </span><span class=cFE>3</span><span class=cF0> + </span><span class=cF3>REG_RBP</span><span class=cF0>;
+<a name="l652"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l653"></a>                                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>2</span><span class=cF0>;
+<a name="l654"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l655"></a>                                    cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l656"></a>                                </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l657"></a>                                cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l658"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l659"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l660"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l661"></a>                                cur.SIB |= (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>) &lt;&lt; </span><span class=cFE>3</span><span class=cF0> + tmpa1-&gt;reg2 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l662"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l663"></a>                                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>2</span><span class=cF0>;
+<a name="l664"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l665"></a>                                    cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l666"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l667"></a>                                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l668"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l669"></a>                                    cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l670"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2&amp;</span><span class=cFE>7</span><span class=cF0> == </span><span class=cF3>REG_RBP</span><span class=cF0> &amp;&amp; !tmpa1-&gt;imm_or_off_present &amp;&amp; tmpa1-&gt;indirect)
+<a name="l671"></a>                                {
+<a name="l672"></a>                                    cur.ModrM |= </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l673"></a>                                    cur.disp.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l674"></a>                                    ModrM_complete = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l675"></a>                                }
+<a name="l676"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l677"></a>                        }
+<a name="l678"></a>                        </span><span class=cF1>if</span><span class=cF0> (!ModrM_complete)
+<a name="l679"></a>                        {
+<a name="l680"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;imm_or_off_present)
+<a name="l681"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l682"></a>                                </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l683"></a>                                </span><span class=cF1>if</span><span class=cF0> (!cur.disp.num.machine_code &amp;&amp; </span><span class=cF3>I8_MIN</span><span class=cF0> &lt;= cur.disp.num.i &lt;= </span><span class=cF3>I8_MAX</span><span class=cF0>)
+<a name="l684"></a>                                {
+<a name="l685"></a>                                    cur.ModrM |= </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l686"></a>                                    cur.disp.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l687"></a>                                }
+<a name="l688"></a>                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l689"></a>                                {
+<a name="l690"></a>                                    cur.ModrM |= </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l691"></a>                                    cur.disp.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l692"></a>                                }
+<a name="l693"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l694"></a>                                {
+<a name="l695"></a>                                    cur.ModrM |= </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l696"></a>                                    cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l697"></a>                                }
+<a name="l698"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l699"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!tmpa1-&gt;indirect)
+<a name="l700"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l701"></a>                                cur.has_addr_prefix = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l702"></a>                                cur.ModrM |= </span><span class=cFE>0xC0</span><span class=cF0>;
+<a name="l703"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l704"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l705"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l706"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0> == </span><span class=cF3>REG_RBP</span><span class=cF0>)
+<a name="l707"></a>                                {
+<a name="l708"></a>                                    cur.ModrM |= </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l709"></a>                                    cur.disp.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l710"></a>                                }
+<a name="l711"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l712"></a>                        }
+<a name="l713"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l714"></a>                }
+<a name="l715"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_REL8</span><span class=cF0>  &lt;= arg1 &lt;= </span><span class=cF3>ARGT_REL32</span><span class=cF0> ||
+<a name="l716"></a>                         </span><span class=cF3>ARGT_IMM8</span><span class=cF0>  &lt;= arg1 &lt;= </span><span class=cF3>ARGT_IMM64</span><span class=cF0> ||
+<a name="l717"></a>                         </span><span class=cF3>ARGT_UIMM8</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_UIMM64</span><span class=cF0>)
+<a name="l718"></a>                {
+<a name="l719"></a>                    </span><span class=cF1>if</span><span class=cF0> (arg1 == </span><span class=cF3>ARGT_IMM64</span><span class=cF0> || arg2 == </span><span class=cF3>ARGT_UIMM64</span><span class=cF0>)
+<a name="l720"></a>                        cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>8</span><span class=cF0>;
+<a name="l721"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.imm.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l722"></a>                }
+<a name="l723"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l724"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (argcount == </span><span class=cFE>2</span><span class=cF0>)
+<a name="l725"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l726"></a>                </span><span class=cF1>if</span><span class=cF0> (best.U8_count != </span><span class=cFE>255</span><span class=cF0> &amp;&amp; !found_second_possible &amp;&amp; !best.is_default)
+<a name="l727"></a>                {
+<a name="l728"></a>                    found_second_possible = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l729"></a>                    </span><span class=cF1>if</span><span class=cF0> (!aotc-&gt;arg1.size &amp;&amp; !aotc-&gt;arg2.size)
+<a name="l730"></a>                        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;no size specified at %s,%04d\n&quot;</span><span class=cF0>,
+<a name="l731"></a>                                    cc-&gt;lex_include_stack-&gt;full_name,
+<a name="l732"></a>                                    cc-&gt;lex_include_stack-&gt;line_num - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l733"></a>                }
+<a name="l734"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_PLUS_OPCODE</span><span class=cF0>)
+<a name="l735"></a>                {
+<a name="l736"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;slash_val == </span><span class=cF3>SV_R_REG</span><span class=cF0>)
+<a name="l737"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l738"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_AL</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_RAX</span><span class=cF0>)
+<a name="l739"></a>                        {
+<a name="l740"></a>                            cur.last_opcode_U8 |= tmpa2-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l741"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l742"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l743"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l744"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l745"></a>                        }
+<a name="l746"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l747"></a>                        {
+<a name="l748"></a>                            cur.last_opcode_U8 |= tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l749"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l750"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l751"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l752"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l753"></a>                        }
+<a name="l754"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l755"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l756"></a>                    </span><span class=cF7>{</span><span class=cF2>//SV_I_REG</span><span class=cF0>
+<a name="l757"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1_type == </span><span class=cF3>REGT_FSTACK</span><span class=cF0>)
+<a name="l758"></a>                            cur.last_opcode_U8 |= tmpa1-&gt;reg1;
+<a name="l759"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;reg1_type == </span><span class=cF3>REGT_FSTACK</span><span class=cF0>)
+<a name="l760"></a>                            cur.last_opcode_U8 |= tmpa2-&gt;reg1;
+<a name="l761"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l762"></a>                }
+<a name="l763"></a>                </span><span class=cF1>if</span><span class=cF0> (arg1 == </span><span class=cF3>ARGT_RM64</span><span class=cF0> || arg2 == </span><span class=cF3>ARGT_RM64</span><span class=cF0> ||
+<a name="l764"></a>                    arg1 == </span><span class=cF3>ARGT_M64</span><span class=cF0>  || arg2 == </span><span class=cF3>ARGT_M64</span><span class=cF0> ||
+<a name="l765"></a>                    arg1 == </span><span class=cF3>ARGT_R64</span><span class=cF0>  || arg2 == </span><span class=cF3>ARGT_R64</span><span class=cF0>)
+<a name="l766"></a>
+<a name="l767"></a>                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>8</span><span class=cF0>;
+<a name="l768"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_RM8</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_RM64</span><span class=cF0> ||
+<a name="l769"></a>                    </span><span class=cF3>ARGT_RM8</span><span class=cF0> &lt;= arg2 &lt;= </span><span class=cF3>ARGT_RM64</span><span class=cF0> ||
+<a name="l770"></a>                    </span><span class=cF3>ARGT_M8</span><span class=cF0>  &lt;= arg1 &lt;= </span><span class=cF3>ARGT_M64</span><span class=cF0>  ||
+<a name="l771"></a>                    </span><span class=cF3>ARGT_M8</span><span class=cF0>  &lt;= arg2 &lt;= </span><span class=cF3>ARGT_M64</span><span class=cF0>)
+<a name="l772"></a>                {
+<a name="l773"></a>                    </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l774"></a>                        cur.has_addr_prefix = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l775"></a>                    cur.has_ModrM = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l776"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_RM8</span><span class=cF0> &lt;= arg2 &lt;= </span><span class=cF3>ARGT_RM64</span><span class=cF0> || </span><span class=cF3>ARGT_M8</span><span class=cF0> &lt;= arg2 &lt;= </span><span class=cF3>ARGT_M64</span><span class=cF0>)
+<a name="l777"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l778"></a>                        tmpa1 = &amp;aotc-&gt;arg2;
+<a name="l779"></a>                        tmpa2 = &amp;aotc-&gt;arg1;
+<a name="l780"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l781"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;slash_val == </span><span class=cF3>SV_R_REG</span><span class=cF0>)
+<a name="l782"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l783"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;just_seg)
+<a name="l784"></a>                            cur.ModrM |= tmpa2-&gt;seg &lt;&lt; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l785"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l786"></a>                        {
+<a name="l787"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;reg1 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l788"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l789"></a>                                cur.ModrM |= (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>) &lt;&lt; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l790"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l791"></a>                                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l792"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l793"></a>                                    cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l794"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l795"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l796"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l797"></a>                                cur.ModrM |= (tmpa2-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>) &lt;&lt; </span><span class=cFE>3</span><span class=cF0>;
+<a name="l798"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt;</span><span class=cFE>7</span><span class=cF0>)
+<a name="l799"></a>                                    cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l800"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa2-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l801"></a>                                    cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l802"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l803"></a>                        }
+<a name="l804"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l805"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 == </span><span class=cF3>REG_NONE</span><span class=cF0> &amp;&amp; tmpa1-&gt;scale == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l806"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l807"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 != </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l808"></a>                        {
+<a name="l809"></a>                            cur.ModrM |= tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l810"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l811"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l812"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l813"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l814"></a>                        }
+<a name="l815"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l816"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l817"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l818"></a>                        cur.ModrM |= </span><span class=cFE>4</span><span class=cF0>;
+<a name="l819"></a>                        cur.has_SIB = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l820"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>1</span><span class=cF0>)
+<a name="l821"></a>                            cur.SIB = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l822"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>2</span><span class=cF0>)
+<a name="l823"></a>                            cur.SIB = </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l824"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>4</span><span class=cF0>)
+<a name="l825"></a>                            cur.SIB = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l826"></a>                        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;scale == </span><span class=cFE>8</span><span class=cF0>)
+<a name="l827"></a>                            cur.SIB = </span><span class=cFE>0xC0</span><span class=cF0>;
+<a name="l828"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l829"></a>                        {
+<a name="l830"></a>                            ModrM_complete = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l831"></a>                            cur.SIB |= (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>) &lt;&lt; </span><span class=cFE>3</span><span class=cF0> + </span><span class=cFE>5</span><span class=cF0>;
+<a name="l832"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l833"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>2</span><span class=cF0>;
+<a name="l834"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l835"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l836"></a>                            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l837"></a>                            cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l838"></a>                        }
+<a name="l839"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l840"></a>                        {
+<a name="l841"></a>                            cur.SIB |= (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0>) &lt;&lt; </span><span class=cFE>3</span><span class=cF0> + tmpa1-&gt;reg2 &amp; </span><span class=cFE>7</span><span class=cF0>;
+<a name="l842"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l843"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>2</span><span class=cF0>;
+<a name="l844"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l845"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l846"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 &amp; </span><span class=cFE>15</span><span class=cF0> &gt; </span><span class=cFE>7</span><span class=cF0>)
+<a name="l847"></a>                                cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>1</span><span class=cF0>;
+<a name="l848"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 &gt;= </span><span class=cFE>20</span><span class=cF0>) </span><span class=cF2>//RBPu8, RSPu8, RSIu8, RDIu8?</span><span class=cF0>
+<a name="l849"></a>                                cur.has_REX = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l850"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg2 &amp; </span><span class=cFE>7</span><span class=cF0> == </span><span class=cF3>REG_RBP</span><span class=cF0> &amp;&amp; !tmpa1-&gt;imm_or_off_present &amp;&amp; tmpa1-&gt;indirect)
+<a name="l851"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l852"></a>                                cur.ModrM |= </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l853"></a>                                cur.disp.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l854"></a>                                ModrM_complete = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l855"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l856"></a>                        }
+<a name="l857"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l858"></a>                    </span><span class=cF1>if</span><span class=cF0> (!ModrM_complete)
+<a name="l859"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l860"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;imm_or_off_present &amp;&amp; tmpa1-&gt;indirect &amp;&amp; tmpa1-&gt;reg1 == </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l861"></a>                        {
+<a name="l862"></a>                            cur.ModrM = cur.ModrM &amp; </span><span class=cFE>0xF8</span><span class=cF0> + </span><span class=cFE>5</span><span class=cF0>;
+<a name="l863"></a>                            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l864"></a>                            cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l865"></a>                            </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>64</span><span class=cF0>)
+<a name="l866"></a>                                cur.disp.imm_flag = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l867"></a>                        }
+<a name="l868"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l869"></a>                        {
+<a name="l870"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;imm_or_off_present)
+<a name="l871"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l872"></a>                                </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l873"></a>                                </span><span class=cF1>if</span><span class=cF0> (!cur.disp.num.machine_code &amp;&amp; </span><span class=cF3>I8_MIN</span><span class=cF0> &lt;= cur.disp.num.i &lt;= </span><span class=cF3>I8_MAX</span><span class=cF0>)
+<a name="l874"></a>                                {
+<a name="l875"></a>                                    cur.ModrM |= </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l876"></a>                                    cur.disp.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l877"></a>                                }
+<a name="l878"></a>                                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l879"></a>                                {
+<a name="l880"></a>                                    cur.ModrM |= </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l881"></a>                                    cur.disp.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l882"></a>                                }
+<a name="l883"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l884"></a>                                {
+<a name="l885"></a>                                    cur.ModrM |= </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l886"></a>                                    cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l887"></a>                                }
+<a name="l888"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l889"></a>                            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!tmpa1-&gt;indirect)
+<a name="l890"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l891"></a>                                cur.has_addr_prefix = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l892"></a>                                cur.ModrM |= </span><span class=cFE>0xC0</span><span class=cF0>;
+<a name="l893"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l894"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l895"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l896"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpa1-&gt;reg1 &amp; </span><span class=cFE>7</span><span class=cF0> == </span><span class=cF3>REG_RBP</span><span class=cF0>)
+<a name="l897"></a>                                {
+<a name="l898"></a>                                    cur.ModrM |= </span><span class=cFE>0x40</span><span class=cF0>;
+<a name="l899"></a>                                    cur.disp.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l900"></a>                                }
+<a name="l901"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l902"></a>                        }
+<a name="l903"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l904"></a>                }
+<a name="l905"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_MOFFS8</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_MOFFS64</span><span class=cF0>)
+<a name="l906"></a>                {
+<a name="l907"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l908"></a>                    </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l909"></a>                        cur.disp.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l910"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l911"></a>                        cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l912"></a>                    cur.has_addr_prefix = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l913"></a>                }
+<a name="l914"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_MOFFS8</span><span class=cF0> &lt;= arg2 &lt;= </span><span class=cF3>ARGT_MOFFS64</span><span class=cF0>)
+<a name="l915"></a>                {
+<a name="l916"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.disp.num, &amp;tmpa2-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l917"></a>                    </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l918"></a>                        cur.disp.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l919"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l920"></a>                        cur.disp.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l921"></a>                    cur.has_addr_prefix = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l922"></a>                }
+<a name="l923"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_IMM8</span><span class=cF0>  &lt;= arg1 &lt;= </span><span class=cF3>ARGT_IMM64</span><span class=cF0> ||
+<a name="l924"></a>                         </span><span class=cF3>ARGT_UIMM8</span><span class=cF0> &lt;= arg1 &lt;= </span><span class=cF3>ARGT_UIMM64</span><span class=cF0>)
+<a name="l925"></a>                {
+<a name="l926"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.imm.num, &amp;tmpa1-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l927"></a>                    </span><span class=cF1>if</span><span class=cF0> (arg1 == </span><span class=cF3>ARGT_IMM8</span><span class=cF0> || arg1 == </span><span class=cF3>ARGT_UIMM8</span><span class=cF0>)
+<a name="l928"></a>                        cur.imm.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l929"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg1 == </span><span class=cF3>ARGT_IMM16</span><span class=cF0> || arg1 == </span><span class=cF3>ARGT_UIMM16</span><span class=cF0>)
+<a name="l930"></a>                        cur.imm.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l931"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg1 == </span><span class=cF3>ARGT_IMM32</span><span class=cF0> || arg1 == </span><span class=cF3>ARGT_UIMM32</span><span class=cF0>)
+<a name="l932"></a>                        cur.imm.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l933"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l934"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l935"></a>                        cur.imm.U8_count = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l936"></a>                        cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>8</span><span class=cF0>;
+<a name="l937"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l938"></a>                }
+<a name="l939"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_IMM8</span><span class=cF0> &lt;= arg2 &lt;= </span><span class=cF3>ARGT_IMM64</span><span class=cF0> || </span><span class=cF3>ARGT_UIMM8</span><span class=cF0> &lt;= arg2 &lt;= </span><span class=cF3>ARGT_UIMM64</span><span class=cF0>)
+<a name="l940"></a>                {
+<a name="l941"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cur.imm.num, &amp;tmpa2-&gt;num, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmNum</span><span class=cF7>)</span><span class=cF0>);
+<a name="l942"></a>                    </span><span class=cF1>if</span><span class=cF0> (arg2 == </span><span class=cF3>ARGT_IMM8</span><span class=cF0> || arg2 == </span><span class=cF3>ARGT_UIMM8</span><span class=cF0>)
+<a name="l943"></a>                        cur.imm.U8_count = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l944"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg2 == </span><span class=cF3>ARGT_IMM16</span><span class=cF0> || arg2 == </span><span class=cF3>ARGT_UIMM16</span><span class=cF0>)
+<a name="l945"></a>                        cur.imm.U8_count = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l946"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (arg2 == </span><span class=cF3>ARGT_IMM32</span><span class=cF0> || arg2 == </span><span class=cF3>ARGT_UIMM32</span><span class=cF0>)
+<a name="l947"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l948"></a>                        cur.imm.U8_count = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l949"></a>                        </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_REX_ONLY_R8_R15</span><span class=cF0> &amp;&amp; arg2 == </span><span class=cF3>ARGT_UIMM32</span><span class=cF0>)
+<a name="l950"></a>                            cur.</span><span class=cF1>REX</span><span class=cF0> &amp;= ~</span><span class=cFE>8</span><span class=cF0>;
+<a name="l951"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l952"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l953"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l954"></a>                        cur.imm.U8_count = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l955"></a>                        cur.</span><span class=cF1>REX</span><span class=cF0> |= </span><span class=cFE>8</span><span class=cF0>;
+<a name="l956"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l957"></a>                }
+<a name="l958"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l959"></a>            cur.U8_count = tmpins-&gt;opcode_count + cur.disp.U8_count + cur.imm.U8_count;
+<a name="l960"></a>            </span><span class=cF1>if</span><span class=cF0> (cur.has_ModrM)
+<a name="l961"></a>                cur.U8_count++;
+<a name="l962"></a>            </span><span class=cF1>if</span><span class=cF0> (cur.has_SIB)
+<a name="l963"></a>                cur.U8_count++;
+<a name="l964"></a>            </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>64</span><span class=cF0> &amp;&amp; cur.</span><span class=cF1>REX</span><span class=cF0> &amp; </span><span class=cFE>0x40</span><span class=cF0> == </span><span class=cFE>0x40</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>cur.</span><span class=cF1>REX</span><span class=cF0> != </span><span class=cFE>0x40</span><span class=cF0> || cur.has_REX</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l965"></a>                    </span><span class=cF7>(</span><span class=cF0>cur.</span><span class=cF1>REX</span><span class=cF0> &amp; </span><span class=cFE>7</span><span class=cF0> || !(tmpins-&gt;flags &amp; </span><span class=cF3>IEF_REX_ONLY_R8_R15</span><span class=cF0> ||
+<a name="l966"></a>                    tmpins-&gt;flags &amp; </span><span class=cF3>IEF_REX_XOR_LIKE</span><span class=cF0> &amp;&amp; tmpa1-&gt;reg1 == tmpa2-&gt;reg1 &amp;&amp; cur.ModrM &amp; </span><span class=cFE>0xC0</span><span class=cF0> == </span><span class=cFE>0xC0</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l967"></a>                cur.U8_count++;
+<a name="l968"></a>            </span><span class=cF1>if</span><span class=cF0> (cur.U8_count &lt; best.U8_count &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>tmpins-&gt;flags &amp; </span><span class=cF3>IEF_DONT_SWITCH_MODES</span><span class=cF0> &amp;&amp;
+<a name="l969"></a>                    (cur.has_addr_prefix || cur.has_operand_prefix)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l970"></a>                </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;best, &amp;cur, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAsmIns</span><span class=cF7>)</span><span class=cF0>);
+<a name="l971"></a>        }
+<a name="l972"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l973"></a>    </span><span class=cF1>if</span><span class=cF0> (best.U8_count &lt; </span><span class=cFE>255</span><span class=cF0>)
+<a name="l974"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l975"></a>        tmpins = best.tmpins;
+<a name="l976"></a>        seg = </span><span class=cF3>REG_NONE</span><span class=cF0>;
+<a name="l977"></a>        </span><span class=cF1>if</span><span class=cF0> (argcount &gt; </span><span class=cFE>1</span><span class=cF0> &amp;&amp; aotc-&gt;arg2.seg != </span><span class=cF3>REG_NONE</span><span class=cF0> &amp;&amp; !aotc-&gt;arg2.just_seg)
+<a name="l978"></a>            seg = aotc-&gt;arg2.seg;
+<a name="l979"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (argcount &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; aotc-&gt;arg1.seg != </span><span class=cF3>REG_NONE</span><span class=cF0> &amp;&amp; !aotc-&gt;arg1.just_seg)
+<a name="l980"></a>            seg = aotc-&gt;arg1.seg;
+<a name="l981"></a>        </span><span class=cF1>if</span><span class=cF0> (seg != </span><span class=cF3>REG_NONE</span><span class=cF0>)
+<a name="l982"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, </span><span class=cFD>asm_seg_prefixes</span><span class=cF0>[seg]);
+<a name="l983"></a>        </span><span class=cF1>if</span><span class=cF0> (best.has_operand_prefix)
+<a name="l984"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, </span><span class=cF3>OC_OP_SIZE_PREFIX</span><span class=cF0>); </span><span class=cF2>//Operand size override</span><span class=cF0>
+<a name="l985"></a>        </span><span class=cF1>if</span><span class=cF0> (best.has_addr_prefix || aotc-&gt;seg_size == </span><span class=cFE>16</span><span class=cF0> &amp;&amp; cur.has_SIB)
+<a name="l986"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, </span><span class=cF3>OC_ADDR_SIZE_PREFIX</span><span class=cF0>); </span><span class=cF2>//Operand size override</span><span class=cF0>
+<a name="l987"></a>        </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;seg_size == </span><span class=cFE>64</span><span class=cF0> &amp;&amp; best.</span><span class=cF1>REX</span><span class=cF0> &amp; </span><span class=cFE>0x40</span><span class=cF0> == </span><span class=cFE>0x40</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>best.</span><span class=cF1>REX</span><span class=cF0> != </span><span class=cFE>0x40</span><span class=cF0> || best.has_REX</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l988"></a>                </span><span class=cF7>(</span><span class=cF0>best.</span><span class=cF1>REX</span><span class=cF0> &amp; </span><span class=cFE>7</span><span class=cF0> || !(tmpins-&gt;flags &amp; </span><span class=cF3>IEF_REX_ONLY_R8_R15</span><span class=cF0> ||
+<a name="l989"></a>                tmpins-&gt;flags &amp; </span><span class=cF3>IEF_REX_XOR_LIKE</span><span class=cF0> &amp;&amp; tmpa1-&gt;reg1 == tmpa2-&gt;reg1 &amp;&amp; best.ModrM &amp; </span><span class=cFE>0xC0</span><span class=cF0> == </span><span class=cFE>0xC0</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l990"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, best.</span><span class=cF1>REX</span><span class=cF0>);
+<a name="l991"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; tmpins-&gt;opcode_count - </span><span class=cFE>1</span><span class=cF0>; j++)
+<a name="l992"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, tmpins-&gt;opcode[j]);
+<a name="l993"></a>        </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, best.last_opcode_U8);
+<a name="l994"></a>
+<a name="l995"></a>        </span><span class=cF1>if</span><span class=cF0> (best.has_ModrM)
+<a name="l996"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, best.ModrM);
+<a name="l997"></a>        </span><span class=cF1>if</span><span class=cF0> (best.has_SIB)
+<a name="l998"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, best.SIB);
+<a name="l999"></a>
+<a name="l1000"></a>        </span><span class=cF1>if</span><span class=cF0> (best.disp.U8_count)
+<a name="l1001"></a>        {
+<a name="l1002"></a>            best.disp.rel = aotc-&gt;rip + best.disp.U8_count + best.imm.U8_count;
+<a name="l1003"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AsmStoreNum</span><span class=cF7>(</span><span class=cF0>cc, &amp;best.disp, </span><span class=cFE>1</span><span class=cF0>, U8_avail</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1004"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1005"></a>        }
+<a name="l1006"></a>
+<a name="l1007"></a>        </span><span class=cF1>if</span><span class=cF0> (best.imm.U8_count)
+<a name="l1008"></a>        {
+<a name="l1009"></a>            best.imm.rel = aotc-&gt;rip + best.imm.U8_count;
+<a name="l1010"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AsmStoreNum</span><span class=cF7>(</span><span class=cF0>cc, &amp;best.imm, </span><span class=cFE>1</span><span class=cF0>, U8_avail</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1011"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1012"></a>        }
+<a name="l1013"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_ENDING_ZERO</span><span class=cF0>) </span><span class=cF2>//ENTER inst</span><span class=cF0>
+<a name="l1014"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1015"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1016"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1017"></a>    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Invalid inst at &quot;</span><span class=cF0>);
+<a name="l1018"></a>}
+<a name="l1019"></a>
+<a name="l1020"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ParseAsmDefine</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> U8_count)
+<a name="l1021"></a>{
+<a name="l1022"></a>    </span><span class=cF1>Bool</span><span class=cF0>         is_dup;
+<a name="l1023"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, dup_val;
+<a name="l1024"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr;
+<a name="l1025"></a>    </span><span class=cF9>CAsmNum2</span><span class=cF0>     num2;
+<a name="l1026"></a>
+<a name="l1027"></a>    num2.U8_count = U8_count;
+<a name="l1028"></a>
+<a name="l1029"></a>    </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token &amp;&amp; cc-&gt;token != </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l1030"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1031"></a>        num2.num.local_asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1032"></a>        num2.num.global_asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1033"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l1034"></a>        {
+<a name="l1035"></a>            ptr = cc-&gt;cur_str;
+<a name="l1036"></a>            i = cc-&gt;cur_str_len - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1037"></a>            </span><span class=cF1>while</span><span class=cF0> (i--)
+<a name="l1038"></a>                </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, *ptr++);
+<a name="l1039"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc);    </span><span class=cF2>//Skip Str</span><span class=cF0>
+<a name="l1040"></a>        }
+<a name="l1041"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1042"></a>        {
+<a name="l1043"></a>            is_dup = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1044"></a>            cc-&gt;abs_counts = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1045"></a>            cc-&gt;asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1046"></a>            cc-&gt;flags &amp;= ~(</span><span class=cF3>CCF_UNRESOLVED</span><span class=cF0> + </span><span class=cF3>CCF_LOCAL</span><span class=cF0>);
+<a name="l1047"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsLexExpression2Bin</span><span class=cF7>(</span><span class=cF0>cc, &amp;num2.num.machine_code</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1048"></a>                </span><span class=cF5>LexSkipEol</span><span class=cF0>(cc);
+<a name="l1049"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1050"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1051"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;abs_counts.externs)
+<a name="l1052"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Extern Not Allowed at &quot;</span><span class=cF0>);
+<a name="l1053"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_UNRESOLVED</span><span class=cF0>)
+<a name="l1054"></a>                {
+<a name="l1055"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_LOCAL</span><span class=cF0>)
+<a name="l1056"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1057"></a>                        num2.num.local_asm_undef_hash = cc-&gt;asm_undef_hash;
+<a name="l1058"></a>                        cc-&gt;asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1059"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1060"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1061"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1062"></a>                        num2.num.global_asm_undef_hash = cc-&gt;asm_undef_hash;
+<a name="l1063"></a>                        cc-&gt;asm_undef_hash = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1064"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1065"></a>                }
+<a name="l1066"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1067"></a>                {
+<a name="l1068"></a>                    i = </span><span class=cF5>Call</span><span class=cF0>(num2.num.machine_code);
+<a name="l1069"></a>                    </span><span class=cF5>Free</span><span class=cF0>(num2.num.machine_code);
+<a name="l1070"></a>                }
+<a name="l1071"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1072"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0> &amp;&amp; cc-&gt;hash_entry)
+<a name="l1073"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1074"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry-&gt;type &amp; </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0> &amp;&amp; cc-&gt;hash_entry-&gt;user_data0 == </span><span class=cF3>AKW_DUP</span><span class=cF0>)
+<a name="l1075"></a>                {
+<a name="l1076"></a>                    is_dup = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1077"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF6>'('</span><span class=cF0>)
+<a name="l1078"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting '(' at &quot;</span><span class=cF0>);
+<a name="l1079"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip (</span><span class=cF0>
+<a name="l1080"></a>                    dup_val = </span><span class=cFD>AsmLexExpression</span><span class=cF0>(cc);
+<a name="l1081"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>')'</span><span class=cF0>)
+<a name="l1082"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ')' at &quot;</span><span class=cF0>);
+<a name="l1083"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//SKIP )</span><span class=cF0>
+<a name="l1084"></a>                }
+<a name="l1085"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1086"></a>            num2.rel = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1087"></a>            num2.imm_flag = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1088"></a>            num2.num.abs_counts = cc-&gt;abs_counts;
+<a name="l1089"></a>            </span><span class=cF1>if</span><span class=cF0> (is_dup)
+<a name="l1090"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1091"></a>                </span><span class=cF1>if</span><span class=cF0> (num2.num.local_asm_undef_hash || num2.num.global_asm_undef_hash)
+<a name="l1092"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Undefined DUP count at &quot;</span><span class=cF0>);
+<a name="l1093"></a>                num2.num.i = dup_val;
+<a name="l1094"></a>                </span><span class=cFD>AsmStoreNum</span><span class=cF0>(cc, &amp;num2, i, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1095"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1096"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1097"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1098"></a>                num2.num.i = i;
+<a name="l1099"></a>                </span><span class=cFD>AsmStoreNum</span><span class=cF0>(cc, &amp;num2, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1100"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1101"></a>        }
+<a name="l1102"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>','</span><span class=cF0>)
+<a name="l1103"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1104"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1105"></a>    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l1106"></a>        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing ';' at&quot;</span><span class=cF0>);
+<a name="l1107"></a>    </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1108"></a>}
+<a name="l1109"></a>
+<a name="l1110"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ParseBinFile</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc)
+<a name="l1111"></a>{
+<a name="l1112"></a>    </span><span class=cF9>I64</span><span class=cF0> i, size;
+<a name="l1113"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf, *st;
+<a name="l1114"></a>
+<a name="l1115"></a>    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_STR</span><span class=cF0>)
+<a name="l1116"></a>        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting string at &quot;</span><span class=cF0>);
+<a name="l1117"></a>    st = </span><span class=cF5>ExtDefault</span><span class=cF0>(cc-&gt;cur_str, </span><span class=cF6>&quot;BIN&quot;</span><span class=cF0>);
+<a name="l1118"></a>    buf = </span><span class=cF5>FileRead</span><span class=cF0>(st, &amp;size);
+<a name="l1119"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l1120"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; size; i++)
+<a name="l1121"></a>        </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, buf[i]);
+<a name="l1122"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l1123"></a>        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing ';' at&quot;</span><span class=cF0>);
+<a name="l1124"></a>    </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1125"></a>}
+<a name="l1126"></a>
+<a name="l1127"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ParseAsmBlk</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc,</span><span class=cF9>I64</span><span class=cF0> comp_flags)
+<a name="l1128"></a>{
+<a name="l1129"></a>    </span><span class=cF9>CAOTCtrl</span><span class=cF0> *aotc = cc-&gt;aotc;
+<a name="l1130"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, argcount, old_flags = cc-&gt;flags &amp; </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0>;
+<a name="l1131"></a>    </span><span class=cF9>CHashOpcode</span><span class=cF0> *tmpo;
+<a name="l1132"></a>    </span><span class=cF9>CHashExport</span><span class=cF0> *tmpex;
+<a name="l1133"></a>    </span><span class=cF1>U8</span><span class=cF0> *next_last_label;
+<a name="l1134"></a>    </span><span class=cF9>CCodeMisc</span><span class=cF0> *g_lb;
+<a name="l1135"></a>
+<a name="l1136"></a>    aotc-&gt;seg_size = </span><span class=cFE>64</span><span class=cF0>;
+<a name="l1137"></a>    cc-&gt;flags |= </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0>;
+<a name="l1138"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>comp_flags &amp; </span><span class=cF3>CMPF_ONE_ASM_INS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1139"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1140"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>'{'</span><span class=cF0>)
+<a name="l1141"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting '{' at &quot;</span><span class=cF0>);
+<a name="l1142"></a>        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1143"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1144"></a>    </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token &amp;&amp; cc-&gt;token != </span><span class=cF6>'}'</span><span class=cF0>)
+<a name="l1145"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1146"></a>        </span><span class=cFD>AsmLineList</span><span class=cF0>(cc);
+<a name="l1147"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0> &amp;&amp; cc-&gt;hash_entry)
+<a name="l1148"></a>        {
+<a name="l1149"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry-&gt;type &amp; </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF0>)
+<a name="l1150"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1151"></a>                i = cc-&gt;hash_entry-&gt;user_data0;
+<a name="l1152"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip keyword</span><span class=cF0>
+<a name="l1153"></a>                </span><span class=cF1>switch</span><span class=cF0> (i)
+<a name="l1154"></a>                {
+<a name="l1155"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_IMPORT</span><span class=cF0>:
+<a name="l1156"></a>                        </span><span class=cF1>while</span><span class=cF0> (cc-&gt;token &amp;&amp; cc-&gt;token != </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l1157"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l1158"></a>                            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l1159"></a>                                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting identifier at &quot;</span><span class=cF0>);
+<a name="l1160"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1161"></a>                            {
+<a name="l1162"></a>                                tmpex = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l1163"></a>                                tmpex = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1164"></a>                                tmpex-&gt;str = cc-&gt;cur_str;
+<a name="l1165"></a>                                cc-&gt;cur_str = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1166"></a>                                tmpex-&gt;type = </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0> | </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>;
+<a name="l1167"></a>                                </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex, cc-&gt;htc.global_hash_table);
+<a name="l1168"></a>                                tmpex-&gt;type |= </span><span class=cF3>HTF_IMPORT</span><span class=cF0>;
+<a name="l1169"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF6>','</span><span class=cF0>)
+<a name="l1170"></a>                                    </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip ','</span><span class=cF0>
+<a name="l1171"></a>                            }
+<a name="l1172"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l1173"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l1174"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing ';' at&quot;</span><span class=cF0>);
+<a name="l1175"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip ';';</span><span class=cF0>
+<a name="l1176"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1177"></a>
+<a name="l1178"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_ORG</span><span class=cF0>:
+<a name="l1179"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
+<a name="l1180"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ORG not allowed in fun asm blk &quot;</span><span class=cF0>);
+<a name="l1181"></a>                        </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;org != </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
+<a name="l1182"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Just one org allowed &quot;</span><span class=cF0>);
+<a name="l1183"></a>                        </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;rip)
+<a name="l1184"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ORG must be at beginning &quot;</span><span class=cF0>);
+<a name="l1185"></a>                        aotc-&gt;org = </span><span class=cFD>AsmLexExpression</span><span class=cF0>(cc);
+<a name="l1186"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1187"></a>
+<a name="l1188"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_ALIGN</span><span class=cF0>:
+<a name="l1189"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
+<a name="l1190"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ALIGN not allowed in fun asm blk &quot;</span><span class=cF0>);
+<a name="l1191"></a>                        i = </span><span class=cFD>AsmLexExpression</span><span class=cF0>(cc);
+<a name="l1192"></a>                        j = </span><span class=cF5>Bsf</span><span class=cF0>(i);
+<a name="l1193"></a>                        </span><span class=cF1>if</span><span class=cF0> (!i || j != </span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1194"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ALIGN must be power of two at &quot;</span><span class=cF0>);
+<a name="l1195"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF7>)</span><span class=cF0> &amp;&amp; i &gt; </span><span class=cFE>8</span><span class=cF0>)
+<a name="l1196"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;In JIT mode, max ALIGN is 8 &quot;</span><span class=cF0>);
+<a name="l1197"></a>                        </span><span class=cF1>if</span><span class=cF0> (j &gt; aotc-&gt;max_align_bits)
+<a name="l1198"></a>                            aotc-&gt;max_align_bits = j;
+<a name="l1199"></a>                        i = </span><span class=cF5>CeilU64</span><span class=cF0>(aotc-&gt;rip, i);
+<a name="l1200"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>','</span><span class=cF0>)
+<a name="l1201"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ',' at &quot;</span><span class=cF0>);
+<a name="l1202"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1203"></a>                        k = </span><span class=cFD>AsmLexExpression</span><span class=cF0>(cc);
+<a name="l1204"></a>                        </span><span class=cF1>for</span><span class=cF0> (j = aotc-&gt;rip; j &lt; i; j++)
+<a name="l1205"></a>                            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, k);
+<a name="l1206"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1207"></a>
+<a name="l1208"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_DU8</span><span class=cF0>:
+<a name="l1209"></a>                        </span><span class=cFD>ParseAsmDefine</span><span class=cF0>(cc, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l1210"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1211"></a>
+<a name="l1212"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_DU16</span><span class=cF0>:
+<a name="l1213"></a>                        </span><span class=cFD>ParseAsmDefine</span><span class=cF0>(cc, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l1214"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1215"></a>
+<a name="l1216"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_DU32</span><span class=cF0>:
+<a name="l1217"></a>                        </span><span class=cFD>ParseAsmDefine</span><span class=cF0>(cc, </span><span class=cFE>4</span><span class=cF0>);
+<a name="l1218"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1219"></a>
+<a name="l1220"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_DU64</span><span class=cF0>:
+<a name="l1221"></a>                        </span><span class=cFD>ParseAsmDefine</span><span class=cF0>(cc, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l1222"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1223"></a>
+<a name="l1224"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_BINFILE</span><span class=cF0>:
+<a name="l1225"></a>                        </span><span class=cFD>ParseBinFile</span><span class=cF0>(cc);
+<a name="l1226"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1227"></a>
+<a name="l1228"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_LIST</span><span class=cF0>:
+<a name="l1229"></a>                        aotc-&gt;list = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1230"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1231"></a>
+<a name="l1232"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_NOLIST</span><span class=cF0>:
+<a name="l1233"></a>                        aotc-&gt;list = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1234"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1235"></a>
+<a name="l1236"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_USE16</span><span class=cF0>:
+<a name="l1237"></a>                        aotc-&gt;seg_size = </span><span class=cFE>16</span><span class=cF0>;
+<a name="l1238"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1239"></a>
+<a name="l1240"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_USE32</span><span class=cF0>:
+<a name="l1241"></a>                        aotc-&gt;seg_size = </span><span class=cFE>32</span><span class=cF0>;
+<a name="l1242"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1243"></a>
+<a name="l1244"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_USE64</span><span class=cF0>:
+<a name="l1245"></a>                        aotc-&gt;seg_size = </span><span class=cFE>64</span><span class=cF0>;
+<a name="l1246"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1247"></a>
+<a name="l1248"></a>                    </span><span class=cF1>default</span><span class=cF0>:
+<a name="l1249"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Syntax error at &quot;</span><span class=cF0>);
+<a name="l1250"></a>                }
+<a name="l1251"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1252"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry-&gt;type &amp; </span><span class=cF3>HTT_OPCODE</span><span class=cF0>)
+<a name="l1253"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1254"></a>                tmpo = cc-&gt;hash_entry;
+<a name="l1255"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip opcode</span><span class=cF0>
+<a name="l1256"></a>                argcount = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1257"></a>                </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;ins[</span><span class=cFE>0</span><span class=cF0>].arg1)
+<a name="l1258"></a>                {
+<a name="l1259"></a>                    argcount++;
+<a name="l1260"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_REL8</span><span class=cF0> &lt;= tmpo-&gt;ins[</span><span class=cFE>0</span><span class=cF0>].arg1 &lt;= </span><span class=cF3>ARGT_REL32</span><span class=cF0>)
+<a name="l1261"></a>                        </span><span class=cFD>ParseAsmArg</span><span class=cF0>(cc, &amp;aotc-&gt;arg1, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l1262"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1263"></a>                        </span><span class=cFD>ParseAsmArg</span><span class=cF0>(cc, &amp;aotc-&gt;arg1, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1264"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpo-&gt;ins[</span><span class=cFE>0</span><span class=cF0>].arg2)
+<a name="l1265"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1266"></a>                        argcount++;
+<a name="l1267"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>','</span><span class=cF0>)
+<a name="l1268"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ',' at &quot;</span><span class=cF0>);
+<a name="l1269"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1270"></a>                        {
+<a name="l1271"></a>                            </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip ','</span><span class=cF0>
+<a name="l1272"></a>                            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>ARGT_REL8</span><span class=cF0> &lt;= tmpo-&gt;ins[</span><span class=cFE>0</span><span class=cF0>].arg2 &lt;= </span><span class=cF3>ARGT_REL32</span><span class=cF0>)
+<a name="l1273"></a>                                </span><span class=cFD>ParseAsmArg</span><span class=cF0>(cc, &amp;aotc-&gt;arg2, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l1274"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1275"></a>                                </span><span class=cFD>ParseAsmArg</span><span class=cF0>(cc, &amp;aotc-&gt;arg2, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1276"></a>                        }
+<a name="l1277"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1278"></a>                }
+<a name="l1279"></a>                </span><span class=cFD>ParseAsmInst</span><span class=cF0>(cc, tmpo,argcount);
+<a name="l1280"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1281"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry-&gt;type &amp; </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0>)
+<a name="l1282"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1283"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Btr</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;hash_entry-&gt;type, </span><span class=cF3>HTf_UNRESOLVED</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1284"></a>                {
+<a name="l1285"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry-&gt;type &amp; </span><span class=cF3>HTF_LOCAL</span><span class=cF0>)
+<a name="l1286"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1287"></a>                        cc-&gt;hash_entry(</span><span class=cF9>CHashExport</span><span class=cF0> *)-&gt;val = aotc-&gt;rip;
+<a name="l1288"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF6>':'</span><span class=cF0>)
+<a name="l1289"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ':' at &quot;</span><span class=cF0>);
+<a name="l1290"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1291"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1292"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1293"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1294"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry-&gt;type &amp; </span><span class=cF3>HTF_IMPORT</span><span class=cF0>)
+<a name="l1295"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;attempt to define import at &quot;</span><span class=cF0>);
+<a name="l1296"></a>                        cc-&gt;hash_entry(</span><span class=cF9>CHashExport</span><span class=cF0> *)-&gt;val = aotc-&gt;rip;
+<a name="l1297"></a>                        next_last_label = cc-&gt;hash_entry-&gt;str;
+<a name="l1298"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//Skip cur_str</span><span class=cF0>
+<a name="l1299"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>':'</span><span class=cF0> &amp;&amp; cc-&gt;token != </span><span class=cF3>TK_DBL_COLON</span><span class=cF0>)
+<a name="l1300"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ':' at &quot;</span><span class=cF0>);
+<a name="l1301"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_DBL_COLON</span><span class=cF0>)
+<a name="l1302"></a>                        {
+<a name="l1303"></a>                            cc-&gt;hash_entry-&gt;type |= </span><span class=cF3>HTF_EXPORT</span><span class=cF0>;
+<a name="l1304"></a>                            </span><span class=cF5>HashSrcFileSet</span><span class=cF0>(cc, cc-&gt;hash_entry);
+<a name="l1305"></a>
+<a name="l1306"></a>                            </span><span class=cFD>AOTLocalsResolve</span><span class=cF0>(cc);
+<a name="l1307"></a>                            aotc-&gt;last_label = next_last_label;
+<a name="l1308"></a>                        }
+<a name="l1309"></a>                        </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1310"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1311"></a>                }
+<a name="l1312"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;hash_entry</span><span class=cF7>(</span><span class=cF9>CHashExport</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>-&gt;val == aotc-&gt;rip)
+<a name="l1313"></a>                {
+<a name="l1314"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//Skip cur_str</span><span class=cF0>
+<a name="l1315"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>':'</span><span class=cF0> &amp;&amp; cc-&gt;token != </span><span class=cF3>TK_DBL_COLON</span><span class=cF0>)
+<a name="l1316"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ':' at &quot;</span><span class=cF0>);
+<a name="l1317"></a>                    </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1318"></a>                }
+<a name="l1319"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1320"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Redefinition at &quot;</span><span class=cF0>);
+<a name="l1321"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1322"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1323"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Syntax error at &quot;</span><span class=cF0>);
+<a name="l1324"></a>        }
+<a name="l1325"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_IDENT</span><span class=cF0>)
+<a name="l1326"></a>        {
+<a name="l1327"></a>            tmpex = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashExport</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1328"></a>            tmpex-&gt;str = cc-&gt;cur_str;
+<a name="l1329"></a>            cc-&gt;cur_str = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1330"></a>            tmpex-&gt;type = </span><span class=cF3>HTT_EXPORT_SYS_SYM</span><span class=cF0>;
+<a name="l1331"></a>            tmpex-&gt;val = aotc-&gt;rip;
+<a name="l1332"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc);    </span><span class=cF2>//Skip cur_str</span><span class=cF0>
+<a name="l1333"></a>            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>':'</span><span class=cF0> &amp;&amp; cc-&gt;token != </span><span class=cF3>TK_DBL_COLON</span><span class=cF0>)
+<a name="l1334"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Expecting ':' at &quot;</span><span class=cF0>);
+<a name="l1335"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1336"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1337"></a>                </span><span class=cF1>if</span><span class=cF0> (*tmpex-&gt;str == </span><span class=cF6>'@'</span><span class=cF0> &amp;&amp; tmpex-&gt;str[</span><span class=cFE>1</span><span class=cF0>] == </span><span class=cF6>'@'</span><span class=cF0>)
+<a name="l1338"></a>                {
+<a name="l1339"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_DBL_COLON</span><span class=cF0>)
+<a name="l1340"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;No local global exports at &quot;</span><span class=cF0>);
+<a name="l1341"></a>                    </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex, cc-&gt;htc.local_hash_table);
+<a name="l1342"></a>                }
+<a name="l1343"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1344"></a>                    </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex,cc-&gt;htc.global_hash_table);
+<a name="l1345"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
+<a name="l1346"></a>                {</span><span class=cF2>//AsmBlk in fun? Also add goto-like label.</span><span class=cF0>
+<a name="l1347"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>g_lb = </span><span class=cFD>COCGoToLabelFind</span><span class=cF0>(cc, tmpex-&gt;str)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1348"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1349"></a>                        g_lb = </span><span class=cFD>COCMiscNew</span><span class=cF0>(cc, </span><span class=cF3>CMT_ASM_LABEL</span><span class=cF0>);
+<a name="l1350"></a>                        g_lb-&gt;str = </span><span class=cF5>StrNew</span><span class=cF0>(tmpex-&gt;str);
+<a name="l1351"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1352"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (g_lb-&gt;flags &amp; </span><span class=cF3>CMF_DEFINED</span><span class=cF0>)
+<a name="l1353"></a>                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Duplicate goto label at &quot;</span><span class=cF0>);
+<a name="l1354"></a>                    g_lb-&gt;type = </span><span class=cF3>CMT_ASM_LABEL</span><span class=cF0>;
+<a name="l1355"></a>                    g_lb-&gt;flags |= </span><span class=cF3>CMF_DEFINED</span><span class=cF0>;
+<a name="l1356"></a>                    g_lb-&gt;rip = aotc-&gt;rip;
+<a name="l1357"></a>                    g_lb-&gt;use_count++; </span><span class=cF2>//Disable warning on unused labels.</span><span class=cF0>
+<a name="l1358"></a>                    </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_LABEL</span><span class=cF0>, g_lb, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1359"></a>                }
+<a name="l1360"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF3>TK_DBL_COLON</span><span class=cF0>)
+<a name="l1361"></a>                {
+<a name="l1362"></a>                    tmpex-&gt;type |= </span><span class=cF3>HTF_EXPORT</span><span class=cF0>;
+<a name="l1363"></a>                    </span><span class=cF5>HashSrcFileSet</span><span class=cF0>(cc, tmpex);
+<a name="l1364"></a>
+<a name="l1365"></a>                    </span><span class=cFD>AOTLocalsResolve</span><span class=cF0>(cc);
+<a name="l1366"></a>                    aotc-&gt;last_label = tmpex-&gt;str;
+<a name="l1367"></a>                }
+<a name="l1368"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1369"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1370"></a>        }
+<a name="l1371"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token == </span><span class=cF6>';'</span><span class=cF0>)
+<a name="l1372"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc);
+<a name="l1373"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1374"></a>            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Syntax error at &quot;</span><span class=cF0>);
+<a name="l1375"></a>        </span><span class=cF1>if</span><span class=cF0> (comp_flags &amp; </span><span class=cF3>CMPF_ONE_ASM_INS</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>cc-&gt;token != </span><span class=cF3>TK_IDENT</span><span class=cF0> || !(tmpo=cc-&gt;hash_entry) ||
+<a name="l1376"></a>                !(tmpo-&gt;type &amp; </span><span class=cF7>(</span><span class=cF3>HTT_OPCODE</span><span class=cF0> | </span><span class=cF3>HTT_ASM_KEYWORD</span><span class=cF7>)</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1377"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1378"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1379"></a>    </span><span class=cFD>AOTLocalsResolve</span><span class=cF0>(cc);
+<a name="l1380"></a>    aotc-&gt;list = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1381"></a>    cc-&gt;flags &amp;= cc-&gt;flags &amp; ~</span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0> | old_flags;
+<a name="l1382"></a>}
+</span></pre></body>
+</html>

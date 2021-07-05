@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>asm</span><span class=cF0> {
+<a name="l2"></a></span><span class=cFD>INT_MP_CRASH_ADDR</span><span class=cF0>:: </span><span class=cF2>//Forward reference to work around compiler</span><span class=cF0>
+<a name="l3"></a>        </span><span class=cF1>DU32</span><span class=cF0>    &amp;</span><span class=cFD>IntMPCrash</span><span class=cF0>;
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cFD>INT_WAKE</span><span class=cF0>::
+<a name="l6"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RDX</span><span class=cF0>
+<a name="l7"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l8"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, &amp;</span><span class=cFB>dev</span><span class=cF0>
+<a name="l9"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EDX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>LAPIC_EOI</span><span class=cF0>
+<a name="l10"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CDevGlobals</span><span class=cF0>.uncached_alias[</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l11"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFC>RAX</span><span class=cF0>+</span><span class=cFC>RDX</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
+<a name="l12"></a>        </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l13"></a>        </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cFC>RDX</span><span class=cF0>
+<a name="l14"></a>        </span><span class=cF1>IRET</span><span class=cF0>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cFD>IRQ_TIMER</span><span class=cF0>::  </span><span class=cF2>//I_TIMER</span><span class=cF0>
+<a name="l17"></a>        </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>TASK_CONTEXT_SAVE</span><span class=cF0>
+<a name="l18"></a>        </span><span class=cF1>CLD</span><span class=cF0>
+<a name="l19"></a>
+<a name="l20"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSP</span><span class=cF0>]
+<a name="l21"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rip[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l22"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]
+<a name="l23"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rflags[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l24"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>24</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]
+<a name="l25"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rsp[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l26"></a>
+<a name="l27"></a>        </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l28"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RDI</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFC>GS</span><span class=cF0>:</span><span class=cF9>CCPU</span><span class=cF0>.addr[</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l29"></a>        </span><span class=cF1>LOCK</span><span class=cF0>
+<a name="l30"></a>        </span><span class=cF1>INC</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0>.total_jiffies[</span><span class=cFC>RDI</span><span class=cF0>]
+<a name="l31"></a>
+<a name="l32"></a>        </span><span class=cF1>BT</span><span class=cF0>      </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.task_flags[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cF3>TASKf_IDLE</span><span class=cF0>
+<a name="l33"></a>        </span><span class=cF1>JNC</span><span class=cF0>     @@05
+<a name="l34"></a>        </span><span class=cF1>LOCK</span><span class=cF0>
+<a name="l35"></a>        </span><span class=cF1>INC</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0>.idle_pt_hits[</span><span class=cFC>RDI</span><span class=cF0>]
+<a name="l36"></a>
+<a name="l37"></a>@@05:   </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0>.profiler_timer_irq[</span><span class=cFC>RDI</span><span class=cF0>]
+<a name="l38"></a>        </span><span class=cF1>TEST</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l39"></a>        </span><span class=cF1>JZ</span><span class=cF0>      @@10
+<a name="l40"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RSI</span><span class=cF0>
+<a name="l41"></a>        </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>         </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Profiler.html#l11"><span class=cF4>ProfTimerInt</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l42"></a>        </span><span class=cF1>JMP</span><span class=cF0>     @@15
+<a name="l43"></a>@@10:   </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>
+<a name="l44"></a>@@15:   </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l45"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0>.num[</span><span class=cFC>RDI</span><span class=cF0>]
+<a name="l46"></a>        </span><span class=cF1>TEST</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l47"></a>        </span><span class=cF1>JZ</span><span class=cF0>      @@20
+<a name="l48"></a>
+<a name="l49"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EAX</span><span class=cF0>, &amp;</span><span class=cFB>dev</span><span class=cF0>
+<a name="l50"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EDX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>LAPIC_EOI</span><span class=cF0>
+<a name="l51"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CDevGlobals</span><span class=cF0>.uncached_alias[</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l52"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFC>RAX</span><span class=cF0> + </span><span class=cFC>RDX</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
+<a name="l53"></a>        </span><span class=cF1>JMP</span><span class=cF0>     @@25
+<a name="l54"></a>
+<a name="l55"></a>@@20:   </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>IntCore0TimerHandler</span><span class=cF0>   </span><span class=cF2>//Only Core 0 calls this.</span><span class=cF0>
+<a name="l56"></a>@@25:   </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l57"></a>        </span><span class=cF1>CMP</span><span class=cF0>     </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFC>GS</span><span class=cF0>:</span><span class=cF9>CCPU</span><span class=cF0>.idle_task[</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l58"></a>        </span><span class=cF1>JE</span><span class=cF0>      </span><span class=cF9>I32</span><span class=cF0> RESTORE_EXECUTIVE_TASK_IF_READY
+<a name="l59"></a>        </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I32</span><span class=cF0> RESTORE_RSI_TASK
+<a name="l60"></a>
+<a name="l61"></a></span><span class=cF2>//************************************</span><span class=cF0>
+<a name="l62"></a></span><span class=cFD>INT_FAULT</span><span class=cF0>::
+<a name="l63"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RBX</span><span class=cF0>
+<a name="l64"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l65"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>BL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]  </span><span class=cF2>//We pushed fault_num </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l172"><span class=cF4>IntFaultHandlersNew</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l66"></a>        </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l67"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>FS</span><span class=cF0>:</span><span class=cF1>U8</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RAX</span><span class=cF0>], </span><span class=cFC>BL</span><span class=cF0>
+<a name="l68"></a>        </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l69"></a>        </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cFC>RBX</span><span class=cF0>
+<a name="l70"></a>        </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>                  </span><span class=cF2>//Pop fault_num</span><span class=cF0>
+<a name="l71"></a>
+<a name="l72"></a>        </span><span class=cF1>CALL</span><span class=cF0>    </span><span class=cFD>TASK_CONTEXT_SAVE</span><span class=cF0>
+<a name="l73"></a>
+<a name="l74"></a>        </span><span class=cF1>XOR</span><span class=cF0>     </span><span class=cFC>RDX</span><span class=cF0>, </span><span class=cFC>RDX</span><span class=cF0>
+<a name="l75"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_err_code[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RDX</span><span class=cF0>
+<a name="l76"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>EDX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l77"></a>        </span><span class=cF1>BT</span><span class=cF0>      </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFD>INT_FAULT_ERR_CODE_BITMAP</span><span class=cF0>], </span><span class=cFC>RDX</span><span class=cF0>
+<a name="l78"></a>        </span><span class=cF1>JNC</span><span class=cF0>     @@1
+<a name="l79"></a>        </span><span class=cF1>POP</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_err_code[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l80"></a>
+<a name="l81"></a>@@1:    </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RSP</span><span class=cF0>]
+<a name="l82"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rip[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l83"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>16</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]
+<a name="l84"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rflags[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l85"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RSP</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>24</span><span class=cF0>[</span><span class=cFC>RSP</span><span class=cF0>]
+<a name="l86"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.rsp[</span><span class=cFC>RSI</span><span class=cF0>], </span><span class=cFC>RSP</span><span class=cF0>
+<a name="l87"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0>.rbp[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l88"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_err_code[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l89"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0>.fault_num[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l90"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>RSI</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0>.rsi[</span><span class=cFC>RSI</span><span class=cF0>]
+<a name="l91"></a>        </span><span class=cF1>CALL</span><span class=cF0>    &amp;</span><span class=cFD>Fault2</span><span class=cF0>                 </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.html#l675"><span class=cF4>Fault2</span></a><span class=cF0>
+<a name="l92"></a>        </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I32</span><span class=cF0> RESTORE_FS_TASK
+<a name="l93"></a>
+<a name="l94"></a></span><span class=cFD>INT_FAULT_ERR_CODE_BITMAP</span><span class=cF0>::
+<a name="l95"></a>        </span><span class=cF1>DU32</span><span class=cF0>    </span><span class=cFE>0x00027D00</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
+<a name="l96"></a>}
+<a name="l97"></a>
+<a name="l98"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>IntEntryGet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> irq)
+<a name="l99"></a>{</span><span class=cF2>//Get interrupt handler.</span><span class=cF0>
+<a name="l100"></a>    </span><span class=cF9>I64</span><span class=cF0>          handler_addr;
+<a name="l101"></a>    </span><span class=cF9>CIDTEntry</span><span class=cF0>   *entry = &amp;</span><span class=cFB>dev</span><span class=cF0>.idt[irq];
+<a name="l102"></a>
+<a name="l103"></a>    handler_addr.u16[</span><span class=cFE>0</span><span class=cF0>] = entry-&gt;offset_low;
+<a name="l104"></a>    handler_addr.u16[</span><span class=cFE>1</span><span class=cF0>] = entry-&gt;offset_mid;
+<a name="l105"></a>    handler_addr.u32[</span><span class=cFE>1</span><span class=cF0>] = entry-&gt;offset_hi;
+<a name="l106"></a>
+<a name="l107"></a>    </span><span class=cF1>return</span><span class=cF0> handler_addr;
+<a name="l108"></a>}
+<a name="l109"></a>
+<a name="l110"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> irq, </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_new_handler</span><span class=cF7>)()</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> type=</span><span class=cF3>IDTET_IRQ</span><span class=cF0>)
+<a name="l111"></a>{</span><span class=cF2>//Set interrupt handler. Returns old handler. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l322"><span class=cF4>IDTET_IRQ</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l112"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/InterruptDemo.html#l1"><span class=cF4>::/Demo/Lectures/InterruptDemo.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l113"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Interrupts.html#l1"><span class=cF4>::/Demo/MultiCore/Interrupts.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF9>I64</span><span class=cF0>          fp = fp_new_handler;
+<a name="l115"></a>    </span><span class=cF1>U8</span><span class=cF0>          *old_handler;
+<a name="l116"></a>    </span><span class=cF9>CIDTEntry</span><span class=cF0>   *entry;
+<a name="l117"></a>
+<a name="l118"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l119"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l120"></a>    old_handler = </span><span class=cF5>IntEntryGet</span><span class=cF0>(irq);
+<a name="l121"></a>    entry = &amp;</span><span class=cFB>dev</span><span class=cF0>.idt[irq];
+<a name="l122"></a>    entry-&gt;seg_select = </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CGDT</span><span class=cF0>.cs64);
+<a name="l123"></a>    entry-&gt;offset_low = fp.u16[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l124"></a>    entry-&gt;offset_mid = fp.u16[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l125"></a>    entry-&gt;offset_hi  = fp.u32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l126"></a>    entry-&gt;type_attr  = </span><span class=cFE>0x80</span><span class=cF0> + type; </span><span class=cF2>//bit 7 is 'segment present'</span><span class=cF0>
+<a name="l127"></a>    entry-&gt;ist = entry-&gt;zero = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//We don't care about the IST mechanism</span><span class=cF0>
+<a name="l128"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l129"></a>
+<a name="l130"></a>    </span><span class=cF1>return</span><span class=cF0> old_handler;
+<a name="l131"></a>}
+<a name="l132"></a>
+<a name="l133"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntPICInit</span><span class=cF0>()
+<a name="l134"></a>{</span><span class=cF2>//Init 8259</span><span class=cF0>
+<a name="l135"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_INIT</span><span class=cF0>); </span><span class=cF2>//IW (Initialization Word) 1</span><span class=cF0>
+<a name="l136"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2</span><span class=cF0>, </span><span class=cF3>PIC_INIT</span><span class=cF0>); </span><span class=cF2>//IW1</span><span class=cF0>
+<a name="l137"></a>
+<a name="l138"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x20</span><span class=cF0>); </span><span class=cF2>//IW2 Moving IRQ base from 0 -&gt; 32 (beyond Intel reserved faults)</span><span class=cF0>
+<a name="l139"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x28</span><span class=cF0>); </span><span class=cF2>//IW2 Moving IRQ base from 8 -&gt; 40</span><span class=cF0>
+<a name="l140"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x04</span><span class=cF0>); </span><span class=cF2>//IW3 Telling PIC_1 PIC_2 exists.</span><span class=cF0>
+<a name="l141"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x02</span><span class=cF0>); </span><span class=cF2>//IW3 Telling PIC_2 its cascade identity.</span><span class=cF0>
+<a name="l142"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0x0D</span><span class=cF0>); </span><span class=cF2>//IW4 8086 Mode, Buffered Mode (Master PIC)</span><span class=cF0>
+<a name="l143"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0x09</span><span class=cF0>); </span><span class=cF2>//IW4 8086 Mode, Buffered Mode (Slave PIC)</span><span class=cF0>
+<a name="l144"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cFE>0xFA</span><span class=cF0>); </span><span class=cF2>//Mask all but IRQ0 (timer) and IRQ2 Cascade.</span><span class=cF0>
+<a name="l145"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2_DATA</span><span class=cF0>, </span><span class=cFE>0xFF</span><span class=cF0>);
+<a name="l146"></a>}
+<a name="l147"></a>
+<a name="l148"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntNop</span><span class=cF0>()
+<a name="l149"></a>{</span><span class=cF2>//Make unplanned IRQs stop by all means!</span><span class=cF0>
+<a name="l150"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_2</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
+<a name="l151"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
+<a name="l152"></a>    *(</span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF3>LAPIC_EOI</span><span class=cF0>)(</span><span class=cF9>U32</span><span class=cF0> *) = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l153"></a>}
+<a name="l154"></a>
+<a name="l155"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntDivZero</span><span class=cF0>()
+<a name="l156"></a>{
+<a name="l157"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num)
+<a name="l158"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l159"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l160"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
+<a name="l161"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l162"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>8</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//Get RIP off of stack.</span><span class=cF0>
+<a name="l163"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip = </span><span class=cF5>RAXGet</span><span class=cF0>;
+<a name="l164"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message = </span><span class=cF6>&quot;Div Zero&quot;</span><span class=cF0>;
+<a name="l165"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l166"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l167"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
+<a name="l168"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l169"></a>    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'DivZero'</span><span class=cF0>);
+<a name="l170"></a>}
+<a name="l171"></a>
+<a name="l172"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>IntFaultHandlersNew</span><span class=cF0>()
+<a name="l173"></a>{
+<a name="l174"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l175"></a>    </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0> * </span><span class=cFE>7</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap), *dst = res;
+<a name="l176"></a>
+<a name="l177"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
+<a name="l178"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l179"></a>        *dst++ = </span><span class=cFE>0x6A</span><span class=cF0>; </span><span class=cF2>//PUSH I8 xx</span><span class=cF0>
+<a name="l180"></a>        *dst(</span><span class=cF1>I8</span><span class=cF0> *)++ = i;
+<a name="l181"></a>        *dst++ = </span><span class=cFE>0xE9</span><span class=cF0>; </span><span class=cF2>//JMP</span><span class=cF0>    </span><span class=cF2>I32 xxxxxxxx</span><span class=cF0>
+<a name="l182"></a>        *dst(</span><span class=cF9>I32</span><span class=cF0> *) = </span><span class=cFD>INT_FAULT</span><span class=cF0> - dst - </span><span class=cFE>4</span><span class=cF0>;
+<a name="l183"></a>        dst += </span><span class=cFE>4</span><span class=cF0>;
+<a name="l184"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l185"></a>
+<a name="l186"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l187"></a>}
+<a name="l188"></a>
+<a name="l189"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntInit1</span><span class=cF0>()
+<a name="l190"></a>{</span><span class=cF2>//Interrupt descriptor table part1.</span><span class=cF0>
+<a name="l191"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
+<a name="l192"></a>    </span><span class=cF9>CSysLimitBase</span><span class=cF0>   tmp_ptr;
+<a name="l193"></a>
+<a name="l194"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4058"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
+<a name="l195"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l196"></a>        </span><span class=cFB>dev</span><span class=cF0>.idt = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CIDTEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
+<a name="l197"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)
+<a name="l198"></a>            </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFD>IntNop</span><span class=cF0>);
+<a name="l199"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l200"></a>    tmp_ptr.limit = </span><span class=cFE>256</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CIDTEntry</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l201"></a>    tmp_ptr.base = </span><span class=cFB>dev</span><span class=cF0>.idt;
+<a name="l202"></a>    </span><span class=cF5>RAXSet</span><span class=cF0>(&amp;tmp_ptr);
+<a name="l203"></a>    </span><span class=cF1>LIDT</span><span class=cF0> </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RAX</span><span class=cF0>]
+<a name="l204"></a>}
+<a name="l205"></a>
+<a name="l206"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>IntInit2</span><span class=cF0>()
+<a name="l207"></a>{</span><span class=cF2>//Interrupt descriptor table part2: Core 0 Only.</span><span class=cF0>
+<a name="l208"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l209"></a>
+<a name="l210"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l211"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l212"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_DIV_ZERO</span><span class=cF0>, &amp;</span><span class=cFD>IntDivZero</span><span class=cF0>);
+<a name="l213"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; </span><span class=cFE>32</span><span class=cF0>; i++)
+<a name="l214"></a>        </span><span class=cF5>IntEntrySet</span><span class=cF0>(i, &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * i]);
+<a name="l215"></a></span><span class=cF2>/*In theory, we use the PIC mask reg to insure we don't get</span><span class=cF0>
+<a name="l216"></a></span><span class=cF2>anything but keyboard, mouse and timer IRQs.</span><span class=cF0>    </span><span class=cF2>In practice, I've</span><span class=cF0>
+<a name="l217"></a></span><span class=cF2>gotten IRQ 0x27, perhaps because I didn't initialize the APIC.</span><span class=cF0>
+<a name="l218"></a></span><span class=cF2>I go ahead and ACK PIC in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.html#l148"><span class=cF4>IntNop</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l219"></a></span><span class=cF2>I have no idea why I got a IRQ 0x27.</span><span class=cF0>
+<a name="l220"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l221"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_NMI</span><span class=cF0>,       </span><span class=cFD>_SYS_HLT</span><span class=cF0>);
+<a name="l222"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_TIMER</span><span class=cF0>,     </span><span class=cFD>IRQ_TIMER</span><span class=cF0>);
+<a name="l223"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, *</span><span class=cFD>INT_MP_CRASH_ADDR</span><span class=cF7>(</span><span class=cF9>U32</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0>);
+<a name="l224"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_WAKE</span><span class=cF0>,      </span><span class=cFD>INT_WAKE</span><span class=cF0>);
+<a name="l225"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cF3>I_DEBUG</span><span class=cF0>,    &amp;</span><span class=cFB>debug</span><span class=cF0>.int_fault_code[</span><span class=cFE>7</span><span class=cF0> * </span><span class=cF3>I_DEBUG</span><span class=cF0>]);
+<a name="l226"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l227"></a>}
+</span></pre></body>
+</html>

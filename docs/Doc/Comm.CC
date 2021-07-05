@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/* RS232 serial ports no longer exist.</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>Be sure to System Include this by placing</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>it in your start-up scripts.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Comm&quot;</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a>#</span><span class=cF1>define</span><span class=cF0> UART_THR    </span><span class=cFE>0</span><span class=cF0>
+<a name="l9"></a>#</span><span class=cF1>define</span><span class=cF0> UART_RDR    </span><span class=cFE>0</span><span class=cF0>
+<a name="l10"></a>#</span><span class=cF1>define</span><span class=cF0> UART_BRDL   </span><span class=cFE>0</span><span class=cF0>
+<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> UART_IER    </span><span class=cFE>1</span><span class=cF0>
+<a name="l12"></a>#</span><span class=cF1>define</span><span class=cF0> UART_BRDH   </span><span class=cFE>1</span><span class=cF0>
+<a name="l13"></a>#</span><span class=cF1>define</span><span class=cF0> UART_IIR    </span><span class=cFE>2</span><span class=cF0>
+<a name="l14"></a>#</span><span class=cF1>define</span><span class=cF0> UART_LCR    </span><span class=cFE>3</span><span class=cF0>
+<a name="l15"></a>#</span><span class=cF1>define</span><span class=cF0> UART_MCR    </span><span class=cFE>4</span><span class=cF0>
+<a name="l16"></a>#</span><span class=cF1>define</span><span class=cF0> UART_LSR    </span><span class=cFE>5</span><span class=cF0>
+<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> UART_MSR    </span><span class=cFE>6</span><span class=cF0>
+<a name="l18"></a>
+<a name="l19"></a>#</span><span class=cF1>define</span><span class=cF0> COMf_ENABLED    </span><span class=cFE>0</span><span class=cF0>
+<a name="l20"></a></span><span class=cF1>class</span><span class=cF0> CComm
+<a name="l21"></a>{
+<a name="l22"></a>    </span><span class=cF9>I64</span><span class=cF0>      base,
+<a name="l23"></a>             flags;
+<a name="l24"></a>    </span><span class=cF9>CFifoU8</span><span class=cF0> *RX_fifo;
+<a name="l25"></a>    </span><span class=cF9>CFifoU8</span><span class=cF0> *TX_fifo;
+<a name="l26"></a>
+<a name="l27"></a>} comm_ports[</span><span class=cFE>5</span><span class=cF0>];
+<a name="l28"></a>
+<a name="l29"></a></span><span class=cF1>U0</span><span class=cF0> CommHandler(</span><span class=cF9>I64</span><span class=cF0> port)
+<a name="l30"></a>{
+<a name="l31"></a>    CComm   *c = &amp;comm_ports[port];
+<a name="l32"></a>    </span><span class=cF9>I64</span><span class=cF0>      b = </span><span class=cFE>0</span><span class=cF0>, stat;
+<a name="l33"></a>
+<a name="l34"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;c-&gt;flags, COMf_ENABLED</span><span class=cF7>)</span><span class=cF0>)
+<a name="l35"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l36"></a>        stat = </span><span class=cF5>InU8</span><span class=cF0>(c-&gt;base+UART_IIR);
+<a name="l37"></a>        </span><span class=cF1>if</span><span class=cF0> (stat &amp; </span><span class=cFE>4</span><span class=cF0>)   </span><span class=cF2>//RX</span><span class=cF0>
+<a name="l38"></a>            </span><span class=cF5>FifoU8Insert</span><span class=cF0>(c-&gt;RX_fifo, </span><span class=cF5>InU8</span><span class=cF7>(</span><span class=cF0>c-&gt;base + UART_RDR</span><span class=cF7>)</span><span class=cF0>);
+<a name="l39"></a>        </span><span class=cF1>if</span><span class=cF0> (stat &amp; </span><span class=cFE>2</span><span class=cF0>)
+<a name="l40"></a>        { </span><span class=cF2>//TX</span><span class=cF0>
+<a name="l41"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FifoU8Remove</span><span class=cF7>(</span><span class=cF0>c-&gt;TX_fifo, &amp;b</span><span class=cF7>)</span><span class=cF0>)
+<a name="l42"></a>                </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_THR, b);
+<a name="l43"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l44"></a>                </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_IER, </span><span class=cFE>1</span><span class=cF0>); </span><span class=cF2>//RX but no THR empty</span><span class=cF0>
+<a name="l45"></a>        }
+<a name="l46"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l47"></a>}
+<a name="l48"></a>
+<a name="l49"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> IRQComm3()
+<a name="l50"></a>{
+<a name="l51"></a>    CommHandler(</span><span class=cFE>2</span><span class=cF0>);
+<a name="l52"></a>    CommHandler(</span><span class=cFE>4</span><span class=cF0>);
+<a name="l53"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
+<a name="l54"></a>}
+<a name="l55"></a>
+<a name="l56"></a></span><span class=cF1>interrupt</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> IRQComm4()
+<a name="l57"></a>{
+<a name="l58"></a>    CommHandler(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l59"></a>    CommHandler(</span><span class=cFE>3</span><span class=cF0>);
+<a name="l60"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1</span><span class=cF0>, </span><span class=cF3>PIC_EOI</span><span class=cF0>);
+<a name="l61"></a>}
+<a name="l62"></a>
+<a name="l63"></a></span><span class=cF1>U0</span><span class=cF0> CommInit()
+<a name="l64"></a>{
+<a name="l65"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;comm_ports, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>comm_ports</span><span class=cF7>)</span><span class=cF0>);
+<a name="l66"></a>    comm_ports[</span><span class=cFE>1</span><span class=cF0>].base = </span><span class=cFE>0x3F8</span><span class=cF0>;
+<a name="l67"></a>    comm_ports[</span><span class=cFE>2</span><span class=cF0>].base = </span><span class=cFE>0x2F8</span><span class=cF0>;
+<a name="l68"></a>    comm_ports[</span><span class=cFE>3</span><span class=cF0>].base = </span><span class=cFE>0x3E8</span><span class=cF0>;
+<a name="l69"></a>    comm_ports[</span><span class=cFE>4</span><span class=cF0>].base = </span><span class=cFE>0x2E8</span><span class=cF0>;
+<a name="l70"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cFE>0x23</span><span class=cF0>, &amp;IRQComm3);
+<a name="l71"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cFE>0x24</span><span class=cF0>, &amp;IRQComm4);
+<a name="l72"></a>}
+<a name="l73"></a>CommInit;
+<a name="l74"></a>
+<a name="l75"></a></span><span class=cF1>public</span><span class=cF0> CComm *CommInit8n1(</span><span class=cF9>I64</span><span class=cF0> port, </span><span class=cF9>I64</span><span class=cF0> baud)
+<a name="l76"></a>{
+<a name="l77"></a>    CComm *c = &amp;comm_ports[port];
+<a name="l78"></a>
+<a name="l79"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l80"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l81"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;c-&gt;flags, COMf_ENABLED</span><span class=cF7>)</span><span class=cF0>)
+<a name="l82"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l83"></a>        </span><span class=cF5>FifoU8Del</span><span class=cF0>(c-&gt;RX_fifo);
+<a name="l84"></a>        </span><span class=cF5>FifoU8Del</span><span class=cF0>(c-&gt;TX_fifo);
+<a name="l85"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l86"></a>    c-&gt;RX_fifo = </span><span class=cF5>FifoU8New</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0>);
+<a name="l87"></a>    c-&gt;TX_fifo = </span><span class=cF5>FifoU8New</span><span class=cF0>(</span><span class=cFE>256</span><span class=cF0>);
+<a name="l88"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_LCR, </span><span class=cFE>0</span><span class=cF0>);                               </span><span class=cF2>//Set for IER</span><span class=cF0>
+<a name="l89"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_IER, </span><span class=cFE>0</span><span class=cF0>);                               </span><span class=cF2>//Disable all IRQ</span><span class=cF0>
+<a name="l90"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_LCR, </span><span class=cFE>0x80</span><span class=cF0>);                            </span><span class=cF2>//Enable baud rate control</span><span class=cF0>
+<a name="l91"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_BRDL, </span><span class=cF7>(</span><span class=cFE>0x180</span><span class=cF0> / (baud / </span><span class=cFE>300</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cFE>0xFF</span><span class=cF0>);  </span><span class=cF2>//LSB</span><span class=cF0>
+<a name="l92"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_BRDH, </span><span class=cF7>(</span><span class=cFE>0x180</span><span class=cF0> / (baud / </span><span class=cFE>300</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> / </span><span class=cFE>256</span><span class=cF0>);   </span><span class=cF2>//MSB</span><span class=cF0>
+<a name="l93"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_LCR, </span><span class=cFE>3</span><span class=cF0>);                               </span><span class=cF2>//8-none-1</span><span class=cF0>
+<a name="l94"></a>
+<a name="l95"></a>    </span><span class=cF5>InU8</span><span class=cF0>(c-&gt;base + UART_RDR);                               </span><span class=cF2>//read garbage</span><span class=cF0>
+<a name="l96"></a>    </span><span class=cF5>InU8</span><span class=cF0>(c-&gt;base + UART_LSR);
+<a name="l97"></a>
+<a name="l98"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_MCR, </span><span class=cFE>4</span><span class=cF0>);
+<a name="l99"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_IER, </span><span class=cFE>0</span><span class=cF0>);                           </span><span class=cF2>//Disable all IRQ</span><span class=cF0>
+<a name="l100"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_MCR, </span><span class=cFE>0xA</span><span class=cF0>);                         </span><span class=cF2>//out2 and rts</span><span class=cF0>
+<a name="l101"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>PIC_1_DATA</span><span class=cF0>, </span><span class=cF5>InU8</span><span class=cF7>(</span><span class=cF3>PIC_1_DATA</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cF7>(</span><span class=cFE>0xFF</span><span class=cF0> - </span><span class=cFE>0x18</span><span class=cF7>)</span><span class=cF0>);    </span><span class=cF2>//Enable 8259 IRQ 3 &amp; 4</span><span class=cF0>
+<a name="l102"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_IER, </span><span class=cFE>1</span><span class=cF0>);                           </span><span class=cF2>//RX but no THR empty</span><span class=cF0>
+<a name="l103"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l104"></a>
+<a name="l105"></a>    </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l106"></a>}
+<a name="l107"></a>
+<a name="l108"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> CommPutChar(</span><span class=cF9>I64</span><span class=cF0> port, </span><span class=cF1>U8</span><span class=cF0> b)
+<a name="l109"></a>{
+<a name="l110"></a>    CComm *c = &amp;comm_ports[port];
+<a name="l111"></a>
+<a name="l112"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l113"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF5>FifoU8Insert</span><span class=cF0>(c-&gt;TX_fifo, b);
+<a name="l115"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(c-&gt;base + UART_IER, </span><span class=cFE>3</span><span class=cF0>);   </span><span class=cF2>//RX and THR empty</span><span class=cF0>
+<a name="l116"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l117"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>10</span><span class=cF0>); </span><span class=cF2>//!!! Remove this line!!!</span><span class=cF0>    </span><span class=cF2>Linux echo_socket is too slow.</span><span class=cF0>
+<a name="l118"></a>}
+<a name="l119"></a>
+<a name="l120"></a></span><span class=cF1>U0</span><span class=cF0> CommPutS(</span><span class=cF9>I64</span><span class=cF0> port, </span><span class=cF1>U8</span><span class=cF0> *st)
+<a name="l121"></a>{
+<a name="l122"></a>    </span><span class=cF9>I64</span><span class=cF0> b;
+<a name="l123"></a>
+<a name="l124"></a>    </span><span class=cF1>while</span><span class=cF0> (b = *st++)
+<a name="l125"></a>        CommPutChar(port, b);
+<a name="l126"></a>}
+<a name="l127"></a>
+<a name="l128"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> CommPutBlk(</span><span class=cF9>I64</span><span class=cF0> port, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l129"></a>{
+<a name="l130"></a>    </span><span class=cF1>while</span><span class=cF0> (count--)
+<a name="l131"></a>        CommPutChar(port, *buf++);
+<a name="l132"></a>}
+<a name="l133"></a>
+<a name="l134"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> CommPrint(</span><span class=cF9>I64</span><span class=cF0> port, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l135"></a>{
+<a name="l136"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
+<a name="l137"></a>
+<a name="l138"></a>    CommPutS(port, buf);
+<a name="l139"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l140"></a>}
+</span></pre></body>
+</html>

@@ -19,48 +19,6 @@ Cd(__DIR__);;
 
 //ToHtml("DemoInPage.DD", "~/DemoOutPage");
 
-/*
-I64 DirIndexList(U8 *files_find_mask)
-{
-	CDirEntry	*tmpde1 = NULL, *tmpde2;
-	I64			 res = 0;
-	U8			*st, *st_full;
-
-	tmpde1 = FilesFind(files_find_mask);
-
-	if (tmpde1)
-	{
-		"%s\n", tmpde1->full_name;
-
-		while (tmpde1)
-		{
-			tmpde2 = tmpde1->next;
-			res++;
-
-			if (tmpde1->attr & RS_ATTR_DIR)
-			{
-				st		= MStrPrint("%s/%s", tmpde1->name, "index.html");
-				st_full	= MStrPrint("%s/%s", tmpde1->full_name, "index.html");
-				PutFileLink(st, st_full);
-				Free(st);
-				Free(st_full);
-//				PutDirLink(tmpde1->name, tmpde1->full_name);
-			}
-			else
-				PutFileLink(tmpde1->name, tmpde1->full_name);
-
-			'\n';
-			DirEntryDel(tmpde1);
-			tmpde1 = tmpde2;
-		}
-	}
-	else
-		"No matching entries\n";
-
-	return res;
-}
-*/
-
 U0 DirIndex(U8 *dest_path, U8 *full_name)
 {
 	U8		*index_path,
@@ -119,8 +77,6 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 			dest_file = StrNew(tmpde1->name);
 			FileExtRemove(dest_file, dest_ext);
 
-			dest_path = MStrPrint("%s/%s", dest_abs, dest_file);
-
 			"%s\n", tmpde1->full_name;
 
 			if (!(tmpde1->attr & RS_ATTR_DIR))
@@ -132,23 +88,31 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 					StrCompare(dest_ext, "DATA")	&&
 					StrCompare(dest_ext, "MAP"))
 				{
+					dest_path = MStrPrint("%s/%s.%s", dest_abs, dest_file, dest_ext);
+
 					"%s.html\n\n", dest_path;
 					ToHtml(tmpde1->full_name, dest_path);
+
+					Free(dest_path);
 				}
 			}
 			else
 			{
+				dest_path = MStrPrint("%s/%s", dest_abs, dest_file);
+
 				DirIndex(dest_path, tmpde1->full_name);
 
 				if (StrCompare(tmpde1->full_name, dest_abs))
 					Dir2Html(tmpde1->full_name, dest_path);
+
+				Free(dest_path);
+
 
 			}
 
 			DirEntryDel(tmpde1);
 			tmpde1 = tmpde2;
 
-			Free(dest_path);
 			Free(dest_file);
 		}
 	}
@@ -169,5 +133,3 @@ I64 HtmlGen()
 
 	return Dir2Html("::/", "::/HTML/");
 }
-
-//HtmlGen;

@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/***************************************************</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF2>TCP Bound/Connected Socket Tree Functions</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF2>***************************************************/</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a>CTCPTreeNode *TCPTreeNodeInit()
+<a name="l8"></a>{ </span><span class=cF2>// init new empty tree/node. Init socket queue head links.</span><span class=cF0>
+<a name="l9"></a>    CTCPTreeNode *tree_node = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CTCPTreeNode</span><span class=cF7>)</span><span class=cF0>);
+<a name="l10"></a>
+<a name="l11"></a>    tree_node-&gt;queue = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CTCPTreeQueue</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>// CQueue vs CTCPTreeQueue ?...</span><span class=cF0>
+<a name="l12"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(tree_node-&gt;queue);
+<a name="l13"></a>
+<a name="l14"></a>    </span><span class=cF1>return</span><span class=cF0> tree_node;
+<a name="l15"></a>}
+<a name="l16"></a>
+<a name="l17"></a></span><span class=cF1>U0</span><span class=cF0> TCPTreeNodeAdd(CTCPTreeNode *node, CTCPTreeNode *tree)
+<a name="l18"></a>{ </span><span class=cF2>// using temp and last allows avoiding recursion and non-growing stack issues.</span><span class=cF0>
+<a name="l19"></a>    BSTAdd(node, tree);
+<a name="l20"></a>}
+<a name="l21"></a>
+<a name="l22"></a>CTCPTreeNode *TCPTreeNodeParamAdd(</span><span class=cF9>I64</span><span class=cF0> port, CTCPTreeNode *tree)
+<a name="l23"></a>{ </span><span class=cF2>// add a node using params, return pointer to the node</span><span class=cF0>
+<a name="l24"></a>    CTCPTreeNode *result = TCPTreeNodeInit;
+<a name="l25"></a>
+<a name="l26"></a>    result-&gt;value = port;
+<a name="l27"></a>
+<a name="l28"></a>    TCPTreeNodeAdd(result, tree);
+<a name="l29"></a>
+<a name="l30"></a>    </span><span class=cF1>return</span><span class=cF0> result;
+<a name="l31"></a>}
+<a name="l32"></a>
+<a name="l33"></a>CTCPTreeNode *TCPTreeNodeParamInit(</span><span class=cF9>I64</span><span class=cF0> port)
+<a name="l34"></a>{
+<a name="l35"></a>    CTCPTreeNode *result = TCPTreeNodeInit;
+<a name="l36"></a>
+<a name="l37"></a>    result-&gt;value = port;
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF1>return</span><span class=cF0> result;
+<a name="l40"></a>}
+<a name="l41"></a>
+<a name="l42"></a>CTCPTreeNode *TCPTreeNodeFind(</span><span class=cF9>I64</span><span class=cF0> port, CTCPTreeNode *tree)
+<a name="l43"></a>{
+<a name="l44"></a>    </span><span class=cF1>return</span><span class=cF0> BSTFind(port, tree);
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a>CTCPTreeNode *TCPTreeNodePop(</span><span class=cF9>I64</span><span class=cF0> port, CTCPTreeNode *tree)
+<a name="l48"></a>{ </span><span class=cF2>// Pops whole sub-tree, original tree loses whole branch.</span><span class=cF0>
+<a name="l49"></a>    </span><span class=cF1>return</span><span class=cF0> BSTPop(port, tree);
+<a name="l50"></a>}
+<a name="l51"></a>
+<a name="l52"></a>CTCPTreeNode *TCPTreeNodeSinglePop(</span><span class=cF9>I64</span><span class=cF0> port, CTCPTreeNode *tree)
+<a name="l53"></a>{   </span><span class=cF2>// Pop a tree off, then add back in its sub-trees to main tree.</span><span class=cF0>
+<a name="l54"></a>    </span><span class=cF2>// Original node sub-tree links are cleared.</span><span class=cF0>
+<a name="l55"></a>
+<a name="l56"></a>    </span><span class=cF1>return</span><span class=cF0> BSTSinglePop(port, tree);
+<a name="l57"></a>}
+<a name="l58"></a>
+<a name="l59"></a></span><span class=cF1>U0</span><span class=cF0> TCPTreeNodeQueueAdd(CTCPSocket *socket, CTCPTreeNode *node)
+<a name="l60"></a>{
+<a name="l61"></a>    CTCPTreeQueue *new_entry = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CTCPTreeQueue</span><span class=cF7>)</span><span class=cF0>);
+<a name="l62"></a>
+<a name="l63"></a>    new_entry-&gt;socket = socket;
+<a name="l64"></a>
+<a name="l65"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(new_entry, node-&gt;queue-&gt;last);
+<a name="l66"></a>}
+<a name="l67"></a>
+<a name="l68"></a>CTCPTreeQueue *TCPTreeNodeQueueSocketFind(CTCPSocket *socket, CTCPTreeNode *node)
+<a name="l69"></a>{
+<a name="l70"></a>    CTCPTreeQueue *temp_queue;
+<a name="l71"></a>
+<a name="l72"></a>    temp_queue = node-&gt;queue-&gt;next;
+<a name="l73"></a>    </span><span class=cF1>while</span><span class=cF0> (temp_queue != node-&gt;queue)
+<a name="l74"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l75"></a>        </span><span class=cF1>if</span><span class=cF0> (temp_queue-&gt;socket == socket)
+<a name="l76"></a>            </span><span class=cF1>return</span><span class=cF0> temp_queue;
+<a name="l77"></a>        temp_queue = temp_queue-&gt;next;
+<a name="l78"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l79"></a>
+<a name="l80"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l81"></a>}
+<a name="l82"></a>
+<a name="l83"></a>CTCPTreeQueue *TCPTreeNodeQueueSocketSinglePop(CTCPSocket *socket, CTCPTreeNode *node)
+<a name="l84"></a>{ </span><span class=cF2>// search by socket, pop a single TCPTreeQueue off the node, return popped queue.</span><span class=cF0>
+<a name="l85"></a>    CTCPTreeQueue *temp_queue = TCPTreeNodeQueueSocketFind(socket, node);
+<a name="l86"></a>
+<a name="l87"></a>    </span><span class=cF1>if</span><span class=cF0> (temp_queue)
+<a name="l88"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l89"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(temp_queue);
+<a name="l90"></a>
+<a name="l91"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l92"></a>
+<a name="l93"></a>    </span><span class=cF1>return</span><span class=cF0> temp_queue; </span><span class=cF2>// if not found, NULL.</span><span class=cF0>
+<a name="l94"></a>}
+<a name="l95"></a>
+<a name="l96"></a>CTCPTreeQueue *TCPTreeNodeQueueIPV4Find(</span><span class=cF9>U32</span><span class=cF0> address, CTCPTreeNode *node, </span><span class=cF1>Bool</span><span class=cF0> specific=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l97"></a>{   </span><span class=cF2>// address should be pulled from an instance of CIPV4Address (TODO... double check what bit order we're in ?)</span><span class=cF0>
+<a name="l98"></a>    </span><span class=cF2>// use TRUE or FALSE in specific arg to dictate how to handle INADDR_ANY.</span><span class=cF0>
+<a name="l99"></a>
+<a name="l100"></a>    CTCPTreeQueue       *temp_queue = node-&gt;queue-&gt;next;
+<a name="l101"></a>    CSocketAddressIPV4  *temp_ip;
+<a name="l102"></a>
+<a name="l103"></a>    </span><span class=cF1>while</span><span class=cF0> (temp_queue != node-&gt;queue)
+<a name="l104"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l105"></a>        </span><span class=cF1>if</span><span class=cF0> (temp_queue-&gt;socket-&gt;destination_address.family == AF_INET)
+<a name="l106"></a>        {
+<a name="l107"></a>            temp_ip = &amp;temp_queue-&gt;socket-&gt;destination_address;
+<a name="l108"></a>            NetLog(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X&quot;</span><span class=cF0>,
+<a name="l109"></a>                    address, temp_ip-&gt;address.address);
+<a name="l110"></a>
+<a name="l111"></a>            </span><span class=cF1>if</span><span class=cF0> (temp_ip-&gt;address.address == address)
+<a name="l112"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l113"></a>                NetLog(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X &quot;</span><span class=cF0>,
+<a name="l114"></a>                        address, temp_ip-&gt;address.address);
+<a name="l115"></a>
+<a name="l116"></a>                </span><span class=cF1>return</span><span class=cF0> temp_queue;
+<a name="l117"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l118"></a>        }
+<a name="l119"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l120"></a>            NetErr(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X&quot;</span><span class=cF0>,
+<a name="l121"></a>                    temp_queue-&gt;socket-&gt;destination_address.family);
+<a name="l122"></a>
+<a name="l123"></a>        temp_queue = temp_queue-&gt;next;
+<a name="l124"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l125"></a>
+<a name="l126"></a>    </span><span class=cF1>if</span><span class=cF0> (!specific)
+<a name="l127"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l128"></a>        temp_queue = node-&gt;queue-&gt;next;
+<a name="l129"></a>        NetDebug(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Exact match not found, looking for an INADDR_ANY address.&quot;</span><span class=cF0>);
+<a name="l130"></a>
+<a name="l131"></a>        </span><span class=cF1>while</span><span class=cF0> (temp_queue != node-&gt;queue)
+<a name="l132"></a>        {
+<a name="l133"></a>            </span><span class=cF1>if</span><span class=cF0> (temp_queue-&gt;socket-&gt;destination_address.family == AF_INET)
+<a name="l134"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l135"></a>                temp_ip = &amp;temp_queue-&gt;socket-&gt;destination_address;
+<a name="l136"></a>                NetLog(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Comparing:     addr, nodequeue addr: %08X, %08X&quot;</span><span class=cF0>,
+<a name="l137"></a>                        address, temp_ip-&gt;address.address);
+<a name="l138"></a>
+<a name="l139"></a>                </span><span class=cF1>if</span><span class=cF0> (temp_ip-&gt;address.address == INADDR_ANY)
+<a name="l140"></a>                {
+<a name="l141"></a>                    NetLog(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Address match: addr, nodequeue addr: %08X, %08X &quot;</span><span class=cF0>,
+<a name="l142"></a>                            address, temp_ip-&gt;address.address);
+<a name="l143"></a>
+<a name="l144"></a>                    </span><span class=cF1>return</span><span class=cF0> temp_queue;
+<a name="l145"></a>                }
+<a name="l146"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l147"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l148"></a>                NetErr(</span><span class=cF6>&quot;TCPTreeNodeQueueIPV4Find: Skipped iteration of a non AF_INET family: %0X&quot;</span><span class=cF0>,
+<a name="l149"></a>                        temp_queue-&gt;socket-&gt;destination_address.family);
+<a name="l150"></a>
+<a name="l151"></a>            temp_queue = temp_queue-&gt;next;
+<a name="l152"></a>        }
+<a name="l153"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l154"></a>
+<a name="l155"></a>
+<a name="l156"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l157"></a>}
+<a name="l158"></a>
+</span></pre></body>
+</html>

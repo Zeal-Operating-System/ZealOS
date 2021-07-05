@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>class</span><span class=cF0> MyMass:</span><span class=cF9>CMass</span><span class=cF0>
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF1>Bool</span><span class=cF0> collision;
+<a name="l6"></a>};
+<a name="l7"></a>
+<a name="l8"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_WIDTH       </span><span class=cFE>2048</span><span class=cF0>
+<a name="l9"></a>#</span><span class=cF1>define</span><span class=cF0> MAP_HEIGHT      (</span><span class=cF3>GR_HEIGHT</span><span class=cF0> - </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>)
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF9>I64</span><span class=cF0>  gun_x, gun_y, active_map = </span><span class=cFE>0</span><span class=cF0>, gun_recoil;
+<a name="l12"></a></span><span class=cF1>F64</span><span class=cF0>  gun_theta;
+<a name="l13"></a></span><span class=cF9>CDC</span><span class=cF0> *map_dcs[</span><span class=cFE>2</span><span class=cF0>] = {</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>};
+<a name="l14"></a></span><span class=cF9>I16</span><span class=cF0>  elevs[MAP_WIDTH];
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cF1>F64</span><span class=cF0> wind_x;
+<a name="l17"></a>#</span><span class=cF1>define</span><span class=cF0> DUST_NUM        </span><span class=cFE>512</span><span class=cF0>
+<a name="l18"></a></span><span class=cF9>I64</span><span class=cF0> dust_x[DUST_NUM], dust_y[DUST_NUM];
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF9>CMathODE</span><span class=cF0> *ode = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l21"></a>
+<a name="l22"></a>        </span><span class=cFA>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l23"></a>
+<a name="l24"></a>
+<a name="l25"></a>        </span><span class=cFA>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l26"></a>
+<a name="l27"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l28"></a>{
+<a name="l29"></a>    </span><span class=cF9>CDC</span><span class=cF0>     *map = map_dcs[active_map&amp;</span><span class=cFE>1</span><span class=cF0>];
+<a name="l30"></a>    MyMass  *tmpm;
+<a name="l31"></a>    </span><span class=cF1>F64</span><span class=cF0>      theta = gun_theta;
+<a name="l32"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, x, y, w, 
+<a name="l33"></a>             h = -task-&gt;horz_scroll.pos, 
+<a name="l34"></a>             v = -task-&gt;vert_scroll.pos;
+<a name="l35"></a>
+<a name="l36"></a>    task-&gt;horz_scroll.min = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l37"></a>    task-&gt;horz_scroll.max = MAP_WIDTH  - task-&gt;pix_width;
+<a name="l38"></a>    task-&gt;vert_scroll.min = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l39"></a>    task-&gt;vert_scroll.max = MAP_HEIGHT - task-&gt;pix_height;
+<a name="l40"></a>    map-&gt;flags |= </span><span class=cF3>DCF_NO_TRANSPARENTS</span><span class=cF0>;
+<a name="l41"></a>    </span><span class=cF5>GrBlot</span><span class=cF0>(dc, h, v, map);
+<a name="l42"></a>
+<a name="l43"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, gun_x + h, gun_y + v, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;2&gt;</span><span class=cF0>);
+<a name="l44"></a>
+<a name="l45"></a>    </span><span class=cF1>if</span><span class=cF0> (theta &lt; -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>)
+<a name="l46"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l47"></a>        dc-&gt;flags |= </span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>;
+<a name="l48"></a>        </span><span class=cF5>DCSymmetrySet</span><span class=cF0>(dc, gun_x + h, </span><span class=cFE>0</span><span class=cF0>, gun_x + h, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l49"></a>        theta = -</span><span class=cF3>pi</span><span class=cF0> - theta;
+<a name="l50"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l51"></a>    </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, gun_x + h - gun_recoil * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>theta</span><span class=cF7>)</span><span class=cF0>, gun_y + v - gun_recoil * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>theta</span><span class=cF7>)</span><span class=cF0> - </span><span class=cFE>10</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>, theta);
+<a name="l52"></a>    dc-&gt;flags &amp;= ~(</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>);
+<a name="l53"></a>
+<a name="l54"></a>    tmpm = ode-&gt;next_mass;
+<a name="l55"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l56"></a>    map-&gt;color = </span><span class=cF3>ROP_COLLISION</span><span class=cF0>;
+<a name="l57"></a>    map-&gt;bkcolor = </span><span class=cF3>LTCYAN</span><span class=cF0>;
+<a name="l58"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l59"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l60"></a>        map-&gt;collision_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l61"></a>        </span><span class=cF5>GrCircle</span><span class=cF0>(map, tmpm-&gt;x, tmpm-&gt;y, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l62"></a>        </span><span class=cF1>if</span><span class=cF0> (map-&gt;collision_count)
+<a name="l63"></a>            tmpm-&gt;collision = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l64"></a>
+<a name="l65"></a>        </span><span class=cF5>GrCircle</span><span class=cF0>(dc, tmpm-&gt;x + h, tmpm-&gt;y + v, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l66"></a>
+<a name="l67"></a>        tmpm = tmpm-&gt;next;
+<a name="l68"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l69"></a>
+<a name="l70"></a>    dc-&gt;color = </span><span class=cF3>LTGRAY</span><span class=cF0>;
+<a name="l71"></a>    w = </span><span class=cF5>tS</span><span class=cF0> * wind_x;
+<a name="l72"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; DUST_NUM; i++)
+<a name="l73"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l74"></a>        x = (dust_x[i] + w) % MAP_WIDTH;
+<a name="l75"></a>        y = dust_y[i];
+<a name="l76"></a>        </span><span class=cF1>if</span><span class=cF0> (y &lt; elevs[x])
+<a name="l77"></a>            </span><span class=cF5>GrPlot</span><span class=cF0>(dc, x + h, y + v);
+<a name="l78"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l79"></a>}
+<a name="l80"></a>
+<a name="l81"></a></span><span class=cF1>U0</span><span class=cF0> MyDerivative(</span><span class=cF9>CMathODE</span><span class=cF0> *ode, </span><span class=cF1>F64</span><span class=cF0>, </span><span class=cF9>COrder2D3</span><span class=cF0> *, </span><span class=cF9>COrder2D3</span><span class=cF0> *)
+<a name="l82"></a>{
+<a name="l83"></a>    MyMass *tmpm = ode-&gt;next_mass;
+<a name="l84"></a>
+<a name="l85"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l86"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l87"></a>        tmpm-&gt;DstateDt-&gt;DyDt += </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * tmpm-&gt;mass;
+<a name="l88"></a>        tmpm-&gt;DstateDt-&gt;DxDt += </span><span class=cFE>25</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * wind_x;
+<a name="l89"></a>        tmpm = tmpm-&gt;next;
+<a name="l90"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l91"></a>}
+<a name="l92"></a>
+<a name="l93"></a></span><span class=cF1>U0</span><span class=cF0> DrawMap()
+<a name="l94"></a>{
+<a name="l95"></a>    </span><span class=cF9>CDC</span><span class=cF0> *map = map_dcs[(active_map + </span><span class=cFE>1</span><span class=cF0>) &amp; </span><span class=cFE>1</span><span class=cF0>];
+<a name="l96"></a>    </span><span class=cF9>I64</span><span class=cF0>  x;
+<a name="l97"></a>
+<a name="l98"></a>    map-&gt;color = </span><span class=cF3>LTCYAN</span><span class=cF0>;
+<a name="l99"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(map, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_WIDTH, MAP_HEIGHT);
+<a name="l100"></a>
+<a name="l101"></a>    map-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l102"></a>    </span><span class=cF1>for</span><span class=cF0> (x = </span><span class=cFE>1</span><span class=cF0>; x &lt; MAP_WIDTH; x++)
+<a name="l103"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map, x - </span><span class=cFE>1</span><span class=cF0>, elevs[x - </span><span class=cFE>1</span><span class=cF0>], x, elevs[x]);
+<a name="l104"></a>
+<a name="l105"></a>    map-&gt;color = </span><span class=cF3>BROWN</span><span class=cF0>;
+<a name="l106"></a>    </span><span class=cF5>GrFloodFill</span><span class=cF0>(map, </span><span class=cFE>0</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l107"></a>
+<a name="l108"></a>    active_map++;
+<a name="l109"></a>}
+<a name="l110"></a>
+<a name="l111"></a></span><span class=cF2>//U0 FireTask(I64)</span><span class=cF0>
+<a name="l112"></a></span><span class=cF1>U0</span><span class=cF0> FireTask()
+<a name="l113"></a>{
+<a name="l114"></a>    MyMass *tmpm;
+<a name="l115"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
+<a name="l116"></a>
+<a name="l117"></a>    </span><span class=cF1>if</span><span class=cF0> (gun_recoil)
+<a name="l118"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l119"></a>
+<a name="l120"></a>    tmpm = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>MyMass</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task);
+<a name="l121"></a>    tmpm-&gt;mass                  = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l122"></a>    tmpm-&gt;drag_profile_factor   = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>;
+<a name="l123"></a>    tmpm-&gt;x                     = gun_x + </span><span class=cFE>27</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(gun_theta);
+<a name="l124"></a>    tmpm-&gt;y                     = gun_y - </span><span class=cFE>15</span><span class=cF0> + </span><span class=cFE>27</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(gun_theta);
+<a name="l125"></a>    tmpm-&gt;DxDt                  = </span><span class=cFE>600</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(gun_theta);
+<a name="l126"></a>    tmpm-&gt;DyDt                  = </span><span class=cFE>600</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(gun_theta);
+<a name="l127"></a>    tmpm-&gt;collision = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l128"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFB>sys_task_being_screen_updated</span><span class=cF0> == </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task)
+<a name="l129"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l130"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpm, ode-&gt;last_mass);
+<a name="l131"></a>
+<a name="l132"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>Fs-&gt;task_end_cb = &amp;SoundTaskEndCB;</span><span class=cF0>
+<a name="l133"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>60</span><span class=cF0>; i++)
+<a name="l134"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l135"></a>        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>50</span><span class=cF0> * </span><span class=cF5>Rand</span><span class=cF0> + </span><span class=cFE>10</span><span class=cF0>);
+<a name="l136"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>);
+<a name="l137"></a>        gun_recoil = i / </span><span class=cFE>12</span><span class=cF0>;
+<a name="l138"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l139"></a>    </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l140"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= </span><span class=cFE>60</span><span class=cF0>; i++)
+<a name="l141"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l142"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l143"></a>        gun_recoil = </span><span class=cFE>5</span><span class=cF0> - i / </span><span class=cFE>12</span><span class=cF0>;
+<a name="l144"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l145"></a>}
+<a name="l146"></a>
+<a name="l147"></a></span><span class=cF1>U0</span><span class=cF0> ManageShots()
+<a name="l148"></a>{
+<a name="l149"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
+<a name="l150"></a>    MyMass *tmpm, *tmpm1;
+<a name="l151"></a>    </span><span class=cF1>Bool</span><span class=cF0>    chged = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l152"></a>
+<a name="l153"></a>    tmpm = ode-&gt;next_mass;
+<a name="l154"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpm != &amp;ode-&gt;next_mass)
+<a name="l155"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l156"></a>        tmpm1 = tmpm-&gt;next;
+<a name="l157"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= tmpm-&gt;x  &lt; MAP_WIDTH</span><span class=cF7>)</span><span class=cF0> || tmpm-&gt;collision)
+<a name="l158"></a>        {
+<a name="l159"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpm);
+<a name="l160"></a>            </span><span class=cF1>for</span><span class=cF0> (i = tmpm-&gt;x - </span><span class=cFE>4</span><span class=cF0>; i &lt;= tmpm-&gt;x + </span><span class=cFE>4</span><span class=cF0>; i++)
+<a name="l161"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= i &lt; MAP_WIDTH)
+<a name="l162"></a>                    elevs[i] = </span><span class=cF5>ClampI64</span><span class=cF0>(elevs[i] + </span><span class=cFE>10</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>AbsI64</span><span class=cF7>(</span><span class=cF0>i - tmpm-&gt;x</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, MAP_HEIGHT - </span><span class=cFE>2</span><span class=cF0>);
+<a name="l163"></a>            </span><span class=cF5>Free</span><span class=cF0>(tmpm);
+<a name="l164"></a>            chged = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l165"></a>        }
+<a name="l166"></a>        tmpm = tmpm1;
+<a name="l167"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l168"></a>    </span><span class=cF1>if</span><span class=cF0> (chged)
+<a name="l169"></a>        DrawMap;
+<a name="l170"></a>}
+<a name="l171"></a>
+<a name="l172"></a></span><span class=cF2>//U0 MoveTask(I64)</span><span class=cF0>
+<a name="l173"></a></span><span class=cF1>U0</span><span class=cF0> MoveTask()
+<a name="l174"></a>{
+<a name="l175"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>static F64 quit_time = 0;</span><span class=cF0>
+<a name="l176"></a>    </span><span class=cF1>F64</span><span class=cF0> quit_time;
+<a name="l177"></a>
+<a name="l178"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>if (quit_time)</span><span class=cF0>
+<a name="l179"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>quit_time = tS + 0.1;</span><span class=cF0>
+<a name="l180"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>else</span><span class=cF0>
+<a name="l181"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>{</span><span class=cF0>
+<a name="l182"></a>        </span><span class=cF5>Sound</span><span class=cF0>(</span><span class=cFE>34</span><span class=cF0>);
+<a name="l183"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>Fs-&gt;task_end_cb = &amp;SoundTaskEndCB;</span><span class=cF0>
+<a name="l184"></a>        quit_time = </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>1</span><span class=cF0>;
+<a name="l185"></a>        </span><span class=cF1>while</span><span class=cF0> (quit_time &gt; </span><span class=cF5>tS</span><span class=cF0>)
+<a name="l186"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l187"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>Yield;</span><span class=cF0>
+<a name="l188"></a>        </span><span class=cF5>Sound</span><span class=cF0>;
+<a name="l189"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>quit_time = 0;</span><span class=cF0>
+<a name="l190"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>}</span><span class=cF0>
+<a name="l191"></a>}
+<a name="l192"></a>
+<a name="l193"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l194"></a>{
+<a name="l195"></a>    </span><span class=cF9>CDC</span><span class=cF0> *map;
+<a name="l196"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, x, y, dy;
+<a name="l197"></a>
+<a name="l198"></a>    </span><span class=cF1>if</span><span class=cF0> (!map_dcs[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l199"></a>        map_dcs[</span><span class=cFE>0</span><span class=cF0>] = </span><span class=cF5>DCNew</span><span class=cF0>(MAP_WIDTH, MAP_HEIGHT);
+<a name="l200"></a>    </span><span class=cF1>if</span><span class=cF0> (!map_dcs[</span><span class=cFE>1</span><span class=cF0>])
+<a name="l201"></a>        map_dcs[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF5>DCNew</span><span class=cF0>(MAP_WIDTH, MAP_HEIGHT);
+<a name="l202"></a>    map = map_dcs[active_map &amp; </span><span class=cFE>1</span><span class=cF0>];
+<a name="l203"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;horz_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l204"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;vert_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l205"></a>
+<a name="l206"></a>    y = </span><span class=cF5>ToI64</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>7</span><span class=cF0> * MAP_HEIGHT) &lt;&lt; </span><span class=cFE>32</span><span class=cF0>;
+<a name="l207"></a>    dy = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l208"></a>    </span><span class=cF1>for</span><span class=cF0> (x = </span><span class=cFE>0</span><span class=cF0>; x &lt; MAP_WIDTH; x++)
+<a name="l209"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l210"></a>        dy = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cF5>SignI64</span><span class=cF7>(</span><span class=cF5>RandI16</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cFE>30</span><span class=cF0> + dy, -</span><span class=cFE>3</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>);
+<a name="l211"></a>        y = </span><span class=cF5>ClampI64</span><span class=cF0>(y + dy, </span><span class=cF5>ToI64</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>3</span><span class=cF0> * MAP_HEIGHT</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>MAP_HEIGHT - </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cFE>32</span><span class=cF0>);
+<a name="l212"></a>        elevs[x] = y.i32[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l213"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l214"></a>    gun_x = </span><span class=cF5>RandU32</span><span class=cF0> % (MAP_WIDTH - </span><span class=cFE>100</span><span class=cF0>) + </span><span class=cFE>50</span><span class=cF0>;
+<a name="l215"></a>    gun_y = elevs[gun_x];
+<a name="l216"></a>    gun_theta = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l217"></a>    gun_recoil = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l218"></a>    </span><span class=cF1>for</span><span class=cF0> (x = gun_x - </span><span class=cFE>20</span><span class=cF0>; x &lt;= gun_x + </span><span class=cFE>20</span><span class=cF0>; x++)
+<a name="l219"></a>        elevs[x] = gun_y;
+<a name="l220"></a>
+<a name="l221"></a>    wind_x = </span><span class=cF5>RandI16</span><span class=cF0> / </span><span class=cFE>250</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
+<a name="l222"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; DUST_NUM; i++)
+<a name="l223"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l224"></a>        dust_x[i] = </span><span class=cF5>RandU16</span><span class=cF0> % MAP_WIDTH;
+<a name="l225"></a>        dust_y[i] = </span><span class=cF5>RandU16</span><span class=cF0> % MAP_HEIGHT;
+<a name="l226"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l227"></a>
+<a name="l228"></a>    ode = </span><span class=cF5>ODENew</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>e-</span><span class=cFE>4</span><span class=cF0>, </span><span class=cF3>ODEF_HAS_MASSES</span><span class=cF0>);
+<a name="l229"></a>    ode-&gt;derive             = &amp;MyDerivative;
+<a name="l230"></a>    ode-&gt;drag_v2            = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>002</span><span class=cF0>;
+<a name="l231"></a>    ode-&gt;drag_v3            = </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>0001</span><span class=cF0>;
+<a name="l232"></a>    ode-&gt;acceleration_limit = </span><span class=cFE>5</span><span class=cF0>e5;
+<a name="l233"></a>    </span><span class=cF5>QueueInsert</span><span class=cF0>(ode, </span><span class=cF5>Fs</span><span class=cF0>-&gt;last_ode);
+<a name="l234"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;horz_scroll.min = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l235"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;horz_scroll.max = MAP_WIDTH - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width;
+<a name="l236"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;horz_scroll.pos = gun_x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l237"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;vert_scroll.min = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l238"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;vert_scroll.max = MAP_HEIGHT - </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height;
+<a name="l239"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;vert_scroll.pos = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l240"></a>    </span><span class=cF5>TaskDerivedValsUpdate</span><span class=cF0>;
+<a name="l241"></a>
+<a name="l242"></a>    DrawMap;
+<a name="l243"></a>}
+<a name="l244"></a>
+<a name="l245"></a></span><span class=cF1>U0</span><span class=cF0> CleanUp(</span><span class=cF9>CMathODE</span><span class=cF0> *ode)
+<a name="l246"></a>{
+<a name="l247"></a>    </span><span class=cF1>if</span><span class=cF0> (ode)
+<a name="l248"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l249"></a>        </span><span class=cF5>QueueRemove</span><span class=cF0>(ode);
+<a name="l250"></a>        </span><span class=cF5>QueueDel</span><span class=cF0>(&amp;ode-&gt;next_mass, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l251"></a>        </span><span class=cF5>ODEDel</span><span class=cF0>(ode);
+<a name="l252"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l253"></a>}
+<a name="l254"></a>
+<a name="l255"></a></span><span class=cF1>U0</span><span class=cF0> BigGuns()
+<a name="l256"></a>{
+<a name="l257"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, sc;
+<a name="l258"></a>
+<a name="l259"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(    </span><span class=cF6>&quot;Terry refused to rip-off the original\n&quot;</span><span class=cF0>
+<a name="l260"></a>                </span><span class=cF6>&quot;so this is intentionally crappy\n&quot;</span><span class=cF0>
+<a name="l261"></a>                </span><span class=cF6>&quot;and included for demonstration\n&quot;</span><span class=cF0>
+<a name="l262"></a>                </span><span class=cF6>&quot;purposes.\n\n&quot;</span><span class=cF0>
+<a name="l263"></a>                </span><span class=cF6>&quot;Write games, don't play them.\n&quot;</span><span class=cF0>);
+<a name="l264"></a>
+<a name="l265"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;The map scrolls.\n&quot;</span><span class=cF0>);
+<a name="l266"></a>
+<a name="l267"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l268"></a>
+<a name="l269"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l270"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l271"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l272"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l273"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l274"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l275"></a>                </span><span class=cF6>&quot;  Fire(,CH_SPACE);&quot;</span><span class=cF0>
+<a name="l276"></a>                </span><span class=cF6>&quot;  Left(,,SC_CURSOR_LEFT);&quot;</span><span class=cF0>
+<a name="l277"></a>                </span><span class=cF6>&quot;  Right(,,SC_CURSOR_RIGHT);&quot;</span><span class=cF0>
+<a name="l278"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l279"></a>                );
+<a name="l280"></a>
+<a name="l281"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l282"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l283"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l284"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l285"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l286"></a>    </span><span class=cF5>DocScroll</span><span class=cF0>;
+<a name="l287"></a>    Init;
+<a name="l288"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l289"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l290"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l291"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l292"></a>        {
+<a name="l293"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>KeyScan</span><span class=cF7>(</span><span class=cF0>&amp;ch, &amp;sc</span><span class=cF7>)</span><span class=cF0>)
+<a name="l294"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l295"></a>                </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l296"></a>                {
+<a name="l297"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l298"></a>                        </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l299"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l300"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l301"></a>                                gun_theta += </span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>;
+<a name="l302"></a>                                </span><span class=cF1>if</span><span class=cF0> (gun_theta &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l303"></a>                                    gun_theta = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l304"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l305"></a>                                    MoveTask;
+<a name="l306"></a></span><span class=cF2>//</span><span class=cF0>                                  </span><span class=cF2>Spawn(&amp;MoveTask, NULL, &quot;Move&quot;,, Fs);</span><span class=cF0>
+<a name="l307"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l308"></a>                            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l309"></a>                                gun_theta -= </span><span class=cFE>5</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>180</span><span class=cF0>;
+<a name="l310"></a>                                </span><span class=cF1>if</span><span class=cF0> (gun_theta &lt; -</span><span class=cF3>pi</span><span class=cF0>)
+<a name="l311"></a>                                    gun_theta = -</span><span class=cF3>pi</span><span class=cF0>;
+<a name="l312"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l313"></a>                                    MoveTask;
+<a name="l314"></a></span><span class=cF2>//</span><span class=cF0>                                  </span><span class=cF2>Spawn(&amp;MoveTask, NULL, &quot;Move&quot;,, Fs);</span><span class=cF0>
+<a name="l315"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l316"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l317"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l318"></a>
+<a name="l319"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l320"></a>                        CleanUp(ode);
+<a name="l321"></a>                        Init;
+<a name="l322"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l323"></a>
+<a name="l324"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>:
+<a name="l325"></a></span><span class=cF2>//</span><span class=cF0>                      </span><span class=cF2>Spawn(&amp;FireTask, NULL, &quot;Fire&quot;,, Fs);</span><span class=cF0>
+<a name="l326"></a>                        FireTask;
+<a name="l327"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l328"></a>
+<a name="l329"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l330"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l331"></a>                        </span><span class=cF1>goto</span><span class=cF0> bg_done;
+<a name="l332"></a>                }
+<a name="l333"></a>                ManageShots;
+<a name="l334"></a>                </span><span class=cF5>FlushMessages</span><span class=cF0>;
+<a name="l335"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l336"></a>            ManageShots;
+<a name="l337"></a>            </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l338"></a>        }
+<a name="l339"></a>bg_done:
+<a name="l340"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l341"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l342"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l343"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l344"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(map_dcs[</span><span class=cFE>0</span><span class=cF0>]);
+<a name="l345"></a>    map_dcs[</span><span class=cFE>0</span><span class=cF0>] = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l346"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(map_dcs[</span><span class=cFE>1</span><span class=cF0>]);
+<a name="l347"></a>    map_dcs[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l348"></a>    CleanUp(ode);
+<a name="l349"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l350"></a>}
+<a name="l351"></a>
+<a name="l352"></a>BigGuns;
+</span></pre></body>
+</html>

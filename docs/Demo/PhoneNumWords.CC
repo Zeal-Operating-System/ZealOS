@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U8</span><span class=cF0> char_map[</span><span class=cFE>26</span><span class=cF0>]=</span><span class=cF6>&quot;22233344455566677778889999&quot;</span><span class=cF0>;
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>Format of word list entry:</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF2>U8 ACD_WORD_CHAR</span><span class=cF0>
+<a name="l6"></a>    </span><span class=cF2>U8 word[] with terminating zero</span><span class=cF0>
+<a name="l7"></a>    </span><span class=cF2>I16 block; //definition offset in ::/System/AutoComplete/ACDefs.DATA</span><span class=cF0>
+<a name="l8"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l9"></a></span><span class=cF1>U0</span><span class=cF0> PhoneNumWords(</span><span class=cF1>U8</span><span class=cF0> *num)
+<a name="l10"></a>{
+<a name="l11"></a>    </span><span class=cF9>I64</span><span class=cF0>  ch;
+<a name="l12"></a>    </span><span class=cF1>U8</span><span class=cF0>  *_num = </span><span class=cF5>StrNew</span><span class=cF0>(num), *dst = _num, 
+<a name="l13"></a>        *dict = </span><span class=cFB>acd</span><span class=cF0>.word_list, *st, *src;
+<a name="l14"></a>
+<a name="l15"></a>    </span><span class=cF1>while</span><span class=cF0> (*num)
+<a name="l16"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l17"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'0'</span><span class=cF0> &lt;= *num &lt;= </span><span class=cF6>'9'</span><span class=cF0>)
+<a name="l18"></a>            *dst++ = *num;
+<a name="l19"></a>        num++;
+<a name="l20"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l21"></a>    *dst = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>while</span><span class=cF0> (*dict++)
+<a name="l24"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l25"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>dict</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>2</span><span class=cF0>)
+<a name="l26"></a>        {
+<a name="l27"></a>            dst = st = </span><span class=cF5>StrNew</span><span class=cF0>(dict);
+<a name="l28"></a>            </span><span class=cF1>while</span><span class=cF0> (ch = </span><span class=cF5>ToUpper</span><span class=cF7>(</span><span class=cF0>*dst</span><span class=cF7>)</span><span class=cF0>)
+<a name="l29"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l30"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF6>'A'</span><span class=cF0> &lt;= ch &lt;= </span><span class=cF6>'Z'</span><span class=cF0>)
+<a name="l31"></a>                    *dst = char_map[ch - </span><span class=cF6>'A'</span><span class=cF0>];
+<a name="l32"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l33"></a>                    *dst = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l34"></a>                dst++;
+<a name="l35"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l36"></a>            *dst = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l37"></a>
+<a name="l38"></a>            src = _num;
+<a name="l39"></a>            </span><span class=cF1>while</span><span class=cF0> (*src)
+<a name="l40"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l41"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrNCompare</span><span class=cF7>(</span><span class=cF0>st, src, </span><span class=cF5>StrLen</span><span class=cF0>(st)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l42"></a>                {
+<a name="l43"></a>                    ch = *src;
+<a name="l44"></a>                    *src = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l45"></a>                    </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, _num;
+<a name="l46"></a>                    *src = ch;
+<a name="l47"></a>                    </span><span class=cF6>&quot;$GREEN$%s$FG$&quot;</span><span class=cF0>, dict;
+<a name="l48"></a>                    </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, src + </span><span class=cF5>StrLen</span><span class=cF0>(st);
+<a name="l49"></a>                }
+<a name="l50"></a>                src++;
+<a name="l51"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l52"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l53"></a>        }
+<a name="l54"></a>        dict += </span><span class=cF5>StrLen</span><span class=cF0>(dict) + </span><span class=cFE>3</span><span class=cF0>;
+<a name="l55"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l56"></a>    </span><span class=cF5>Free</span><span class=cF0>(_num);
+<a name="l57"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l58"></a>}
+<a name="l59"></a>
+<a name="l60"></a></span><span class=cF1>U0</span><span class=cF0> PNWDemo()
+<a name="l61"></a>{
+<a name="l62"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l63"></a>
+<a name="l64"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>st = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;Phone Num:&quot;</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; *st)
+<a name="l65"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l66"></a>        PhoneNumWords(st);
+<a name="l67"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l68"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l69"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l70"></a>}
+<a name="l71"></a>
+<a name="l72"></a>PNWDemo;
+</span></pre></body>
+</html>

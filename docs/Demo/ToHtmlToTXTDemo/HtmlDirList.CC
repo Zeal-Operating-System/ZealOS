@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF9>I64</span><span class=cF0> DirIndexList(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde1 = </span><span class=cF3>NULL</span><span class=cF0>, *tmpde2;
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>          res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st, *st_full;
+<a name="l6"></a>
+<a name="l7"></a>    tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(files_find_mask);
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpde1)
+<a name="l10"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l11"></a>        st = </span><span class=cF5>MAllocIdent</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l12"></a>        </span><span class=cF5>StrLastRemove</span><span class=cF0>(st, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l13"></a>        </span><span class=cF1>if</span><span class=cF0> (!st[</span><span class=cFE>2</span><span class=cF0>])
+<a name="l14"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(st + </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l15"></a>
+<a name="l16"></a>        </span><span class=cF6>&quot;Directory of %s\n&quot;</span><span class=cF0>, st;
+<a name="l17"></a>
+<a name="l18"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l19"></a>
+<a name="l20"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l21"></a>        {
+<a name="l22"></a>            tmpde2 = tmpde1-&gt;next;
+<a name="l23"></a>            res++;
+<a name="l24"></a>
+<a name="l25"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l26"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l27"></a>                st      = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s/&quot;</span><span class=cF0>, tmpde1-&gt;name);
+<a name="l28"></a>                st_full = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s/%s&quot;</span><span class=cF0>, tmpde1-&gt;full_name, </span><span class=cF6>&quot;index.html&quot;</span><span class=cF0>);
+<a name="l29"></a>                </span><span class=cF6>&quot;$BG,BLACK$&quot;</span><span class=cF0>;
+<a name="l30"></a>                </span><span class=cF5>PutFileLink</span><span class=cF0>(st, st_full);
+<a name="l31"></a>                </span><span class=cF6>&quot;$BG$&quot;</span><span class=cF0>;
+<a name="l32"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l33"></a>                </span><span class=cF5>Free</span><span class=cF0>(st_full);
+<a name="l34"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l35"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l36"></a>                </span><span class=cF5>PutFileLink</span><span class=cF0>(tmpde1-&gt;name, tmpde1-&gt;full_name);
+<a name="l37"></a>
+<a name="l38"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l39"></a>            </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde1);
+<a name="l40"></a>            tmpde1 = tmpde2;
+<a name="l41"></a>        }
+<a name="l42"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l43"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l44"></a>        </span><span class=cF6>&quot;No matching entries\n&quot;</span><span class=cF0>;
+<a name="l45"></a>
+<a name="l46"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l47"></a>}
+<a name="l48"></a>
+<a name="l49"></a>
+</span></pre></body>
+</html>

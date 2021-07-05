@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>ZealOS does master-slave multicore instead of SMP.  </span><span class=cF2>Core0</span><span class=cF0> is the master.    The master core's applications explicitly assign 
+<a name="l2"></a>computational jobs to other cores and the ZealOS scheduler does not move tasks between cores.
+<a name="l3"></a>
+<a name="l4"></a>There are multicore safe locks for file access and heap allocations, however, so ZealOS is symmetrical in some sense.  See </span><span class=cF4>
+<a name="l5"></a></span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/LoadTest.html#l1"><span class=cF4>::/Demo/MultiCore/LoadTest.CC</span></a><span class=cF0>.
+<a name="l6"></a>
+<a name="l7"></a>Only tasks on </span><span class=cF2>Core0</span><span class=cF0> can have windows, but other cores can help render them.
+<a name="l8"></a>
+<a name="l9"></a>Each core has an </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l160"><span class=cF4>Executive Task</span></a><span class=cF0> which is the father of all tasks on that core.  </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l154"><span class=cF4>System</span></a><span class=cF0> is the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l160"><span class=cF4>Executive Task</span></a><span class=cF0> on </span><span class=cF2>Core0</span><span class=cF0>.
+<a name="l10"></a>
+<a name="l11"></a>You give a job to an </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.html#l160"><span class=cF4>Executive Task</span></a><span class=cF0> with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l224"><span class=cF4>JobQueue</span></a><span class=cF0>() and get the result with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l242"><span class=cF4>JobResGet</span></a><span class=cF0>().  You spawn a task on any core with </span><span class=cF4>
+<a name="l12"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().
+<a name="l13"></a>
+<a name="l14"></a>Note: You must use the </span><span class=cF2>LOCK</span><span class=cF0> asm prefix when changing shared structures in a multicore environment.  The </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l17"><span class=cF4>LBts</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l16"><span class=cF4>LBtr</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.html#l15"><span class=cF4>LBtc</span></a><span class=cF0>(
+<a name="l15"></a>) insts have </span><span class=cF2>LOCK</span><span class=cF0> prefixes. The compiler has a </span><span class=cF2>lock{}</span><span class=cF0> feature but it doesn't work well.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>.
+<a name="l16"></a>
+<a name="l17"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Transform.html#l1"><span class=cF4>::/Demo/Graphics/Transform.CC</span></a><span class=cF0>.
+<a name="l18"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.html#l1"><span class=cF4>::/Kernel/MultiProc.CC</span></a><span class=cF0>.
+</span></pre></body>
+</html>

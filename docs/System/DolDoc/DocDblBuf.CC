@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Task;StdOut/Task&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocPut</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l3"></a>{</span><span class=cF2>//Current document that StdOut Put() goes to.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//Basically, StdOut unless double buffering.</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *res;
+<a name="l6"></a>
+<a name="l7"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l8"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l9"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_INPUT_FILTER_TASK</span><span class=cF7>)</span><span class=cF0>)
+<a name="l10"></a>        task = task-&gt;parent_task;
+<a name="l11"></a>
+<a name="l12"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>res = task-&gt;put_doc</span><span class=cF7>)</span><span class=cF0> &amp;&amp; res-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l13"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l14"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l15"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l16"></a>}
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocDisplay</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l19"></a>{</span><span class=cF2>//StdOut displayed unless double buffering.</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *res;
+<a name="l21"></a>
+<a name="l22"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l23"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l24"></a>
+<a name="l25"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>res = task-&gt;display_doc</span><span class=cF7>)</span><span class=cF0> &amp;&amp; res-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l26"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l27"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l28"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l29"></a>}
+<a name="l30"></a>
+<a name="l31"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocBorder</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l32"></a>{</span><span class=cF2>//Doc holding border of window text.</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *res;
+<a name="l34"></a>
+<a name="l35"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l36"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l37"></a>
+<a name="l38"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>res = task-&gt;border_doc</span><span class=cF7>)</span><span class=cF0> &amp;&amp; res-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0>)
+<a name="l39"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l40"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l41"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l42"></a>}
+<a name="l43"></a>
+<a name="l44"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocDblBufStart</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l45"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Spy.html#l1"><span class=cF4>::/Demo/Spy.CC</span></a><span class=cF0>
+<a name="l46"></a>    </span><span class=cF1>Bool</span><span class=cF0>  unlock_ddoc;
+<a name="l47"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *pdoc = </span><span class=cF5>DocPut</span><span class=cF0>(task), *ddoc = </span><span class=cF5>DocDisplay</span><span class=cF0>(task), *res;
+<a name="l48"></a>
+<a name="l49"></a>    </span><span class=cF1>if</span><span class=cF0> (!pdoc || !ddoc || pdoc != ddoc)
+<a name="l50"></a>        res = </span><span class=cF3>NULL</span><span class=cF0>; </span><span class=cF2>//Already Double buffering</span><span class=cF0>
+<a name="l51"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l53"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l54"></a>            task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l55"></a>        unlock_ddoc = </span><span class=cF5>DocLock</span><span class=cF0>(ddoc); </span><span class=cF2>//dont change during winupdate, so lock DocPut</span><span class=cF0>
+<a name="l56"></a>        res = </span><span class=cF5>DocNew</span><span class=cF0>(,task);
+<a name="l57"></a>        res-&gt;win_task           = ddoc-&gt;win_task;
+<a name="l58"></a>        res-&gt;max_entries        = ddoc-&gt;max_entries;
+<a name="l59"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(res-&gt;find_replace, ddoc-&gt;find_replace, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CEdFindText</span><span class=cF7>)</span><span class=cF0>);
+<a name="l60"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;res-&gt;filename, &amp;ddoc-&gt;filename, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CEdFileName</span><span class=cF7>)</span><span class=cF0>);
+<a name="l61"></a>        res-&gt;left_click_link    = ddoc-&gt;left_click_link;
+<a name="l62"></a>        res-&gt;right_click_link   = ddoc-&gt;right_click_link;
+<a name="l63"></a>        res-&gt;user_put_data      = ddoc-&gt;user_put_data;
+<a name="l64"></a>        res-&gt;user_put_key       = ddoc-&gt;user_put_key;
+<a name="l65"></a>        res-&gt;user_put_s         = ddoc-&gt;user_put_s;
+<a name="l66"></a>        res-&gt;parent_doc         = ddoc-&gt;parent_doc;
+<a name="l67"></a>        res-&gt;desc               = ddoc-&gt;desc;
+<a name="l68"></a>        res-&gt;user_data          = ddoc-&gt;user_data;
+<a name="l69"></a>        res-&gt;flags |= ddoc-&gt;flags &amp; </span><span class=cF3>DOCG_DBL_BUF_FLAGS</span><span class=cF0> | </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>;
+<a name="l70"></a>        task-&gt;put_doc = res;
+<a name="l71"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_ddoc)
+<a name="l72"></a>            </span><span class=cF5>DocUnlock</span><span class=cF0>(ddoc);
+<a name="l73"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l74"></a>
+<a name="l75"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l76"></a>}
+<a name="l77"></a>
+<a name="l78"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocDblBufEnd</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l79"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Spy.html#l1"><span class=cF4>::/Demo/Spy.CC</span></a><span class=cF0>
+<a name="l80"></a>    </span><span class=cF1>Bool</span><span class=cF0>  res = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l81"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *pdoc = </span><span class=cF5>DocPut</span><span class=cF0>(task), *ddoc = </span><span class=cF5>DocDisplay</span><span class=cF0>(task);
+<a name="l82"></a>
+<a name="l83"></a>    </span><span class=cF1>if</span><span class=cF0> (pdoc &amp;&amp; ddoc &amp;&amp; pdoc != ddoc)
+<a name="l84"></a>    </span><span class=cF7>{</span><span class=cF2>//Double buffering?</span><span class=cF0>
+<a name="l85"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l86"></a>            task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l87"></a>        ddoc-&gt;flags |= </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>;
+<a name="l88"></a>        pdoc-&gt;flags &amp;= ~</span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>;
+<a name="l89"></a>        </span><span class=cF5>DocLock</span><span class=cF0>(ddoc);
+<a name="l90"></a>        task-&gt;display_doc = pdoc;
+<a name="l91"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(ddoc);
+<a name="l92"></a>        </span><span class=cF5>DocDel</span><span class=cF0>(ddoc);
+<a name="l93"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l94"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>
+<a name="l96"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l97"></a>}
+<a name="l98"></a>
+<a name="l99"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DocDblBufSwap</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l100"></a>{</span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Spy.html#l1"><span class=cF4>::/Demo/Spy.CC</span></a><span class=cF0>
+<a name="l101"></a>    </span><span class=cF1>Bool</span><span class=cF0>  res = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l102"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *pdoc = </span><span class=cF5>DocPut</span><span class=cF0>(task), *ddoc = </span><span class=cF5>DocDisplay</span><span class=cF0>(task);
+<a name="l103"></a>
+<a name="l104"></a>    </span><span class=cF1>if</span><span class=cF0> (pdoc &amp;&amp; ddoc &amp;&amp; pdoc != ddoc)
+<a name="l105"></a>    </span><span class=cF7>{</span><span class=cF2>//Double buffering?</span><span class=cF0>
+<a name="l106"></a>        </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l107"></a>            task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l108"></a>        ddoc-&gt;flags |= </span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>;
+<a name="l109"></a>        pdoc-&gt;flags &amp;= ~</span><span class=cF3>DOCF_DONT_SHOW</span><span class=cF0>;
+<a name="l110"></a>        </span><span class=cF5>DocLock</span><span class=cF0>(ddoc);
+<a name="l111"></a>        task-&gt;display_doc = pdoc;
+<a name="l112"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(ddoc);
+<a name="l113"></a>        </span><span class=cF5>DocReset</span><span class=cF0>(ddoc, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l114"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(ddoc-&gt;find_replace, pdoc-&gt;find_replace, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CEdFindText</span><span class=cF7>)</span><span class=cF0>);
+<a name="l115"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;ddoc-&gt;filename, &amp;pdoc-&gt;filename, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CEdFileName</span><span class=cF7>)</span><span class=cF0>);
+<a name="l116"></a>        ddoc-&gt;max_entries       = pdoc-&gt;max_entries;
+<a name="l117"></a>        ddoc-&gt;flags             = pdoc-&gt;flags &amp; </span><span class=cF3>DOCG_DBL_BUF_FLAGS</span><span class=cF0> | ddoc-&gt;flags &amp; ~</span><span class=cF3>DOCG_DBL_BUF_FLAGS</span><span class=cF0>;
+<a name="l118"></a>        ddoc-&gt;left_click_link   = pdoc-&gt;left_click_link;
+<a name="l119"></a>        ddoc-&gt;right_click_link  = pdoc-&gt;right_click_link;
+<a name="l120"></a>        ddoc-&gt;user_put_data     = pdoc-&gt;user_put_data;
+<a name="l121"></a>        ddoc-&gt;user_put_key      = pdoc-&gt;user_put_key;
+<a name="l122"></a>        ddoc-&gt;user_put_s        = pdoc-&gt;user_put_s;
+<a name="l123"></a>        ddoc-&gt;desc              = pdoc-&gt;desc;
+<a name="l124"></a>        ddoc-&gt;user_data         = pdoc-&gt;user_data;
+<a name="l125"></a>        task-&gt;put_doc = ddoc;
+<a name="l126"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l127"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l128"></a>
+<a name="l129"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l130"></a>}
+</span></pre></body>
+</html>

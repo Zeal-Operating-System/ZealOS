@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*ZealOS runs exclusively in ring 0.</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>Ring 0 is part of the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Charter.html#l1"><span class=cF4>Charter</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>This demo is for you to play around</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>with ring 3.</span><span class=cF0>    </span><span class=cF2>ZealOS is for</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>recreational programming, after all.</span><span class=cF0>
+<a name="l6"></a>
+<a name="l7"></a></span><span class=cF2>This redirects the general protection</span><span class=cF0>
+<a name="l8"></a></span><span class=cF2>fault, switches to ring 3, and generates</span><span class=cF0>
+<a name="l9"></a></span><span class=cF2>a fault to switch back.</span><span class=cF0>
+<a name="l10"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l11"></a>
+<a name="l12"></a></span><span class=cF1>U8</span><span class=cF0> *old_stack, *new_rip;
+<a name="l13"></a>
+<a name="l14"></a></span><span class=cF1>asm</span><span class=cF0> {
+<a name="l15"></a>INT_TO_RING0::  </span><span class=cF2>//Set to handle general protection 0xD fault temporarily.</span><span class=cF0>
+<a name="l16"></a>                </span><span class=cF1>INC</span><span class=cF0>         </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFD>SYS_PROGRESS1</span><span class=cF0>]
+<a name="l17"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.ds         </span><span class=cF2>//STACKSEG</span><span class=cF0>
+<a name="l18"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> [&amp;old_stack]
+<a name="l19"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>                   </span><span class=cF2>//FLAGS--interrupts off</span><span class=cF0>
+<a name="l21"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.cs64
+<a name="l22"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> [&amp;new_rip]
+<a name="l23"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l24"></a>                </span><span class=cF1>IRET</span><span class=cF0>
+<a name="l25"></a>}
+<a name="l26"></a>
+<a name="l27"></a></span><span class=cF1>U0</span><span class=cF0> Ring3Demo()
+<a name="l28"></a>{
+<a name="l29"></a>    </span><span class=cF1>U8</span><span class=cF0> *old_vect;
+<a name="l30"></a>
+<a name="l31"></a>    </span><span class=cF6>&quot;Progress1 Before:%X\n&quot;</span><span class=cF0>, </span><span class=cFB>progress1</span><span class=cF0>;
+<a name="l32"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l33"></a>    old_vect = </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cFE>0x0D</span><span class=cF0>, INT_TO_RING0, </span><span class=cF3>IDTET_TRAP</span><span class=cF0>);
+<a name="l34"></a>
+<a name="l35"></a>    </span><span class=cF5>TSSBusy</span><span class=cF0>(</span><span class=cF5>Gs</span><span class=cF0>-&gt;tss-&gt;tr_ring3, </span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l36"></a>    </span><span class=cF5>RAXSet</span><span class=cF0>(</span><span class=cF5>Gs</span><span class=cF0>-&gt;tss-&gt;tr_ring3 + </span><span class=cFE>3</span><span class=cF0>);
+<a name="l37"></a>    </span><span class=cF1>LTR</span><span class=cF0>     </span><span class=cFC>AX</span><span class=cF0>
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF1>asm</span><span class=cF0> </span><span class=cF7>{</span><span class=cF0>
+<a name="l40"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cF9>U64</span><span class=cF0> [&amp;old_stack], </span><span class=cFC>RSP</span><span class=cF0>
+<a name="l41"></a>
+<a name="l42"></a>        </span><span class=cF1>LEA</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, [R3_CALLBACK]
+<a name="l43"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cF9>U64</span><span class=cF0> [&amp;new_rip], </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l44"></a>
+<a name="l45"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF9>CGDT</span><span class=cF0>.ds_ring3 + </span><span class=cFE>3</span><span class=cF0>
+<a name="l46"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l47"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>ES</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l48"></a>
+<a name="l49"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.ds_ring3 + </span><span class=cFE>3</span><span class=cF0>       </span><span class=cF2>//STACKSEG</span><span class=cF0>
+<a name="l50"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U64</span><span class=cF0> [&amp;old_stack]
+<a name="l51"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>                   </span><span class=cF2>//FLAGS--interrupts off</span><span class=cF0>
+<a name="l52"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.cs64_ring3 + </span><span class=cFE>3</span><span class=cF0>
+<a name="l53"></a>        </span><span class=cF1>LEA</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, [R3_START]
+<a name="l54"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cFC>RAX</span><span class=cF0>
+<a name="l55"></a>        </span><span class=cF1>IRET</span><span class=cF0>
+<a name="l56"></a>
+<a name="l57"></a>        R3_START:
+<a name="l58"></a>        </span><span class=cF1>INC</span><span class=cF0> </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFD>SYS_PROGRESS1</span><span class=cF0>]
+<a name="l59"></a>        </span><span class=cF1>CLI</span><span class=cF0> </span><span class=cF2>//This causes general protection fault #13</span><span class=cF0>
+<a name="l60"></a>
+<a name="l61"></a>        R3_CALLBACK:
+<a name="l62"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cF9>CGDT</span><span class=cF0>.ds
+<a name="l63"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cFC>DS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l64"></a>        </span><span class=cF1>MOV</span><span class=cF0> </span><span class=cFC>ES</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
+<a name="l65"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l66"></a>
+<a name="l67"></a>    </span><span class=cF5>TSSBusy</span><span class=cF0>(</span><span class=cF5>Gs</span><span class=cF0>-&gt;tss-&gt;tr, </span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l68"></a>    </span><span class=cF5>RAXSet</span><span class=cF0>(</span><span class=cF5>Gs</span><span class=cF0>-&gt;tss-&gt;tr);
+<a name="l69"></a>    </span><span class=cF1>LTR</span><span class=cF0>     </span><span class=cFC>AX</span><span class=cF0>
+<a name="l70"></a>
+<a name="l71"></a>    </span><span class=cF5>IntEntrySet</span><span class=cF0>(</span><span class=cFE>0x0D</span><span class=cF0>, old_vect, </span><span class=cF3>IDTET_IRQ</span><span class=cF0>);
+<a name="l72"></a>    </span><span class=cF1>STI</span><span class=cF0>
+<a name="l73"></a>    </span><span class=cF6>&quot;Progress1 After :%X\n&quot;</span><span class=cF0>, </span><span class=cFB>progress1</span><span class=cF0>;
+<a name="l74"></a>}
+<a name="l75"></a>
+<a name="l76"></a>Ring3Demo;
+</span></pre></body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;PCI;Processor;Devices;Info&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF2>//The file was downloaded from</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//http://www.pcidatabase.com/reports.php?type=tab-delimeted</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>PCI_DEV_FILE</span><span class=cF0> </span><span class=cF6>&quot;::/Misc/PCIDevices.DD&quot;</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF2>/****</span><span class=cF0>
+<a name="l9"></a></span><span class=cF2>//1) Download http://www.pcidatabase.com/reports.php?type=tab-delimeted</span><span class=cF0>
+<a name="l10"></a></span><span class=cF2>//2) Rename to ::/Misc/PCIDevices.DD</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>//3) ToDolDoc(&quot;::/Misc/PCIDevices.DD&quot;);</span><span class=cF0>
+<a name="l12"></a></span><span class=cF2>//4) Edit and remove file header and tail</span><span class=cF0>
+<a name="l13"></a></span><span class=cF2>//5) Text find-and-replace &quot;=0A=&quot; with &quot;&quot;. (Doesn't seem necessary anmore.)</span><span class=cF0>
+<a name="l14"></a></span><span class=cF2>//6) Run PCIDevFileGen(). (Doesn't seem necessary anmore.)</span><span class=cF0>
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cF2>public U0 PCIDevFileGen()</span><span class=cF0>
+<a name="l17"></a></span><span class=cF2>{</span><span class=cF0>
+<a name="l18"></a>    </span><span class=cF2>Bool first=TRUE,del=FALSE,del2=FALSE,cont=FALSE;</span><span class=cF0>
+<a name="l19"></a>    </span><span class=cF2>CDoc *doc=DocRead(PCI_DEV_FILE,</span><span class=cF0>
+<a name="l20"></a>                </span><span class=cF2>DOCF_PLAIN_TEXT|DOCF_DBL_DOLLARS|DOCF_NO_CURSOR);</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF2>CDocEntry *doc_e=doc-&gt;head.next,*doc_e2;</span><span class=cF0>
+<a name="l22"></a>    </span><span class=cF2>while (doc_e!=doc) {</span><span class=cF0>
+<a name="l23"></a>        </span><span class=cF2>doc_e2=doc_e-&gt;next;</span><span class=cF0>
+<a name="l24"></a>        </span><span class=cF2>if (first) {</span><span class=cF0>
+<a name="l25"></a>            </span><span class=cF2>if (doc_e-&gt;type_u8==DOCT_TEXT) {</span><span class=cF0>
+<a name="l26"></a>                </span><span class=cF2>if (doc_e-&gt;tag[0]==';')</span><span class=cF0>
+<a name="l27"></a>                    </span><span class=cF2>del=TRUE;</span><span class=cF0>
+<a name="l28"></a>            </span><span class=cF2>}</span><span class=cF0>
+<a name="l29"></a>            </span><span class=cF2>first=FALSE;</span><span class=cF0>
+<a name="l30"></a>        </span><span class=cF2>}</span><span class=cF0>
+<a name="l31"></a>        </span><span class=cF2>if (doc_e-&gt;type_u8==DOCT_TEXT &amp;&amp; doc_e-&gt;tag[StrLen(doc_e-&gt;tag)-1]=='=' &amp;&amp;</span><span class=cF0>
+<a name="l32"></a>                    </span><span class=cF2>doc_e2-&gt;type_u8==DOCT_NEW_LINE) {</span><span class=cF0>
+<a name="l33"></a>            </span><span class=cF2>doc_e-&gt;tag[StrLen(doc_e-&gt;tag)-1]=CH_SPACE;</span><span class=cF0>
+<a name="l34"></a>            </span><span class=cF2>cont=TRUE;</span><span class=cF0>
+<a name="l35"></a>        </span><span class=cF2>}</span><span class=cF0>
+<a name="l36"></a>        </span><span class=cF2>del2=del;</span><span class=cF0>
+<a name="l37"></a>        </span><span class=cF2>if (doc_e-&gt;type_u8==DOCT_NEW_LINE) {</span><span class=cF0>
+<a name="l38"></a>            </span><span class=cF2>first=TRUE;</span><span class=cF0>
+<a name="l39"></a>            </span><span class=cF2>del2=FALSE;</span><span class=cF0>
+<a name="l40"></a>            </span><span class=cF2>if (cont) {</span><span class=cF0>
+<a name="l41"></a>                </span><span class=cF2>del=TRUE;</span><span class=cF0>
+<a name="l42"></a>                </span><span class=cF2>cont=FALSE;</span><span class=cF0>
+<a name="l43"></a>            </span><span class=cF2>}</span><span class=cF0>
+<a name="l44"></a>        </span><span class=cF2>}</span><span class=cF0>
+<a name="l45"></a>        </span><span class=cF2>if (del)</span><span class=cF0>
+<a name="l46"></a>            </span><span class=cF2>DocEntryDel(doc,doc_e);</span><span class=cF0>
+<a name="l47"></a>        </span><span class=cF2>del=del2;</span><span class=cF0>
+<a name="l48"></a>        </span><span class=cF2>doc_e=doc_e2;</span><span class=cF0>
+<a name="l49"></a>    </span><span class=cF2>}</span><span class=cF0>
+<a name="l50"></a>    </span><span class=cF2>DocWrite(doc);</span><span class=cF0>
+<a name="l51"></a></span><span class=cF2>}</span><span class=cF0>
+<a name="l52"></a></span><span class=cF2>****/</span><span class=cF0>
+<a name="l53"></a>
+<a name="l54"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Misc/PCIDevices.html#l1"><span class=cF4>::/Misc/PCIDevices.DD</span></a><span class=cF0>
+<a name="l55"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PCILookUpSingle</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> m, </span><span class=cF9>I64</span><span class=cF0> d, </span><span class=cF1>U8</span><span class=cF0> **_vendor, </span><span class=cF1>U8</span><span class=cF0> **_dev)
+<a name="l56"></a>{
+<a name="l57"></a>    </span><span class=cF1>Bool</span><span class=cF0>         first = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l58"></a>    </span><span class=cF1>U8</span><span class=cF0>           buf[</span><span class=cFE>8</span><span class=cF0>], *vendor = </span><span class=cF3>NULL</span><span class=cF0>, *</span><span class=cFB>dev</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l59"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e = doc-&gt;head.next;
+<a name="l60"></a>
+<a name="l61"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l62"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l63"></a>        </span><span class=cF1>if</span><span class=cF0> (first)
+<a name="l64"></a>        {
+<a name="l65"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; doc_e-&gt;tag[</span><span class=cFE>0</span><span class=cF0>] != </span><span class=cF6>';'</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cFE>4</span><span class=cF0>)
+<a name="l66"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l67"></a>                buf[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>U16</span><span class=cF0>) = </span><span class=cF6>'0x'</span><span class=cF0>;
+<a name="l68"></a>                buf[</span><span class=cFE>2</span><span class=cF0>](</span><span class=cF9>U32</span><span class=cF0>) = doc_e-&gt;tag(</span><span class=cF9>U32</span><span class=cF0> *)[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l69"></a>                buf[</span><span class=cFE>6</span><span class=cF0>] = </span><span class=cF6>'\0'</span><span class=cF0>;
+<a name="l70"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>buf</span><span class=cF7>)</span><span class=cF0> == m)
+<a name="l71"></a>                {
+<a name="l72"></a>                    doc_e = doc_e-&gt;next-&gt;next-&gt;next;
+<a name="l73"></a>                    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
+<a name="l74"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l75"></a>                        vendor = </span><span class=cF5>ZStrNew</span><span class=cF0>(doc_e-&gt;tag);
+<a name="l76"></a>                        first = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l77"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l78"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l79"></a>                }
+<a name="l80"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l81"></a>            first=</span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l82"></a>        }
+<a name="l83"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l84"></a>            first = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l85"></a>        doc_e = doc_e-&gt;next;
+<a name="l86"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l87"></a>
+<a name="l88"></a>    </span><span class=cF1>if</span><span class=cF0> (vendor)
+<a name="l89"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l90"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc)
+<a name="l91"></a>        {
+<a name="l92"></a>            </span><span class=cF1>if</span><span class=cF0> (first)
+<a name="l93"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l94"></a>                </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TAB</span><span class=cF0>)
+<a name="l95"></a>                {
+<a name="l96"></a>                    doc_e = doc_e-&gt;next-&gt;next-&gt;next-&gt;next;
+<a name="l97"></a>                    </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>doc_e-&gt;tag</span><span class=cF7>)</span><span class=cF0> &gt;= </span><span class=cFE>4</span><span class=cF0>)
+<a name="l98"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l99"></a>                        buf[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>U16</span><span class=cF0>) = </span><span class=cF6>'0x'</span><span class=cF0>;
+<a name="l100"></a>                        buf[</span><span class=cFE>2</span><span class=cF0>](</span><span class=cF9>U32</span><span class=cF0>) = doc_e-&gt;tag(</span><span class=cF9>U32</span><span class=cF0> *)[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l101"></a>                        buf[</span><span class=cFE>6</span><span class=cF0>] = </span><span class=cF6>'\0'</span><span class=cF0>;
+<a name="l102"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>buf</span><span class=cF7>)</span><span class=cF0> == d)
+<a name="l103"></a>                        {
+<a name="l104"></a>                            doc_e = doc_e-&gt;next-&gt;next-&gt;next;
+<a name="l105"></a>                            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TEXT</span><span class=cF0>)
+<a name="l106"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l107"></a>                                </span><span class=cFB>dev</span><span class=cF0> = </span><span class=cF5>ZStrNew</span><span class=cF0>(doc_e-&gt;tag);
+<a name="l108"></a>                                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l109"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l110"></a>                        }
+<a name="l111"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l112"></a>                }
+<a name="l113"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l114"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l115"></a>                first = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l116"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l117"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l118"></a>                first = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l119"></a>            doc_e = doc_e-&gt;next;
+<a name="l120"></a>        }
+<a name="l121"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l122"></a>
+<a name="l123"></a>    </span><span class=cF1>if</span><span class=cF0> (vendor)
+<a name="l124"></a>        *_vendor = vendor;
+<a name="l125"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l126"></a>        *_vendor = </span><span class=cF5>ZStrNew</span><span class=cF0>(</span><span class=cF6>&quot;Unknown&quot;</span><span class=cF0>);
+<a name="l127"></a>
+<a name="l128"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>dev</span><span class=cF0>)
+<a name="l129"></a>        *_dev = </span><span class=cFB>dev</span><span class=cF0>;
+<a name="l130"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l131"></a>        *_dev = </span><span class=cF5>ZStrNew</span><span class=cF0>(</span><span class=cF6>&quot;Unknown&quot;</span><span class=cF0>);
+<a name="l132"></a>}
+<a name="l133"></a>
+<a name="l134"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PCILookUpDevs</span><span class=cF0>()
+<a name="l135"></a>{
+<a name="l136"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0> *tmppci;
+<a name="l137"></a>    </span><span class=cF9>I64</span><span class=cF0>      w1, w2, b, d, f, timeout = </span><span class=cFE>32</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>;
+<a name="l138"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc;
+<a name="l139"></a>
+<a name="l140"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>dev</span><span class=cF0>.pci_head.next != &amp;</span><span class=cFB>dev</span><span class=cF0>.pci_head)
+<a name="l141"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l142"></a>    doc = </span><span class=cF5>DocRead</span><span class=cF0>(</span><span class=cF3>PCI_DEV_FILE</span><span class=cF0>, </span><span class=cF3>DOCF_PLAIN_TEXT</span><span class=cF0> | </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>);
+<a name="l143"></a>    </span><span class=cF1>for</span><span class=cF0> (b = </span><span class=cFE>0</span><span class=cF0>; b &lt; </span><span class=cFB>sys_pci_buses</span><span class=cF0>; b++)
+<a name="l144"></a>        </span><span class=cF1>for</span><span class=cF0> (d = </span><span class=cFE>0</span><span class=cF0>; d &lt; </span><span class=cFE>32</span><span class=cF0>; d++)
+<a name="l145"></a>            </span><span class=cF1>for</span><span class=cF0> (f = </span><span class=cFE>0</span><span class=cF0>; f &lt; </span><span class=cFE>8</span><span class=cF0>; f++)
+<a name="l146"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l147"></a>                w1 = </span><span class=cF5>PCIReadU16</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_VENDOR_ID</span><span class=cF0>);
+<a name="l148"></a>                </span><span class=cF1>if</span><span class=cF0> (w1 != </span><span class=cFE>0xFFFF</span><span class=cF0>)
+<a name="l149"></a>                {
+<a name="l150"></a>                    tmppci = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPCIDev</span><span class=cF7>)</span><span class=cF0>);
+<a name="l151"></a>                    tmppci-&gt;bus = b;
+<a name="l152"></a>                    tmppci-&gt;</span><span class=cFB>dev</span><span class=cF0> = d;
+<a name="l153"></a>                    tmppci-&gt;fun = f;
+<a name="l154"></a>                    tmppci-&gt;vendor_id = w1;
+<a name="l155"></a>                    tmppci-&gt;device_id = w2 = </span><span class=cF5>PCIReadU16</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_DEVICE_ID</span><span class=cF0>);
+<a name="l156"></a>                    tmppci-&gt;sub_code =      </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_SUB_CODE</span><span class=cF0>);
+<a name="l157"></a>                    tmppci-&gt;class_code =    </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_CLASS_CODE</span><span class=cF0>);
+<a name="l158"></a>                    tmppci-&gt;prog_if =       </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_PROG_IF</span><span class=cF0>);
+<a name="l159"></a>                    tmppci-&gt;revision_id = </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_REVISION_ID</span><span class=cF0>);
+<a name="l160"></a>                    tmppci-&gt;bist =              </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BIST</span><span class=cF0>);
+<a name="l161"></a>                    tmppci-&gt;header_type = </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_HEADER_TYPE</span><span class=cF0>);
+<a name="l162"></a>                    tmppci-&gt;latency_timer=</span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_LATENCY_TIMER</span><span class=cF0>);
+<a name="l163"></a>                    tmppci-&gt;capabilities= </span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_CAPABILITIES</span><span class=cF0>);
+<a name="l164"></a>                    tmppci-&gt;cache_line_size=</span><span class=cF5>PCIReadU8</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_CACHE_LINE_SIZE</span><span class=cF0>);
+<a name="l165"></a>                    tmppci-&gt;subsys_id =     </span><span class=cF5>PCIReadU16</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_SUBSYS_ID</span><span class=cF0>);
+<a name="l166"></a>                    tmppci-&gt;subsys_vendor_id=</span><span class=cF5>PCIReadU16</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_SUBSYS_VENDOR_ID</span><span class=cF0>);
+<a name="l167"></a>                    tmppci-&gt;erom =              </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_EXPANSION_ROM</span><span class=cF0>);
+<a name="l168"></a>                    tmppci-&gt;base[</span><span class=cFE>0</span><span class=cF0>] =       </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BASE0</span><span class=cF0>);
+<a name="l169"></a>                    tmppci-&gt;base[</span><span class=cFE>1</span><span class=cF0>] =       </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BASE1</span><span class=cF0>);
+<a name="l170"></a>                    tmppci-&gt;base[</span><span class=cFE>2</span><span class=cF0>] =       </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BASE2</span><span class=cF0>);
+<a name="l171"></a>                    tmppci-&gt;base[</span><span class=cFE>3</span><span class=cF0>] =       </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BASE3</span><span class=cF0>);
+<a name="l172"></a>                    tmppci-&gt;base[</span><span class=cFE>4</span><span class=cF0>] =       </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BASE4</span><span class=cF0>);
+<a name="l173"></a>                    tmppci-&gt;base[</span><span class=cFE>5</span><span class=cF0>] =       </span><span class=cF5>PCIReadU32</span><span class=cF0>(b, d, f, </span><span class=cF3>PCIR_BASE5</span><span class=cF0>);
+<a name="l174"></a>                    </span><span class=cF5>PCILookUpSingle</span><span class=cF0>(doc, w1, w2, &amp;tmppci-&gt;vendor_str, &amp;tmppci-&gt;dev_id_str);
+<a name="l175"></a>                    </span><span class=cF5>QueueInsert</span><span class=cF0>(tmppci, </span><span class=cFB>dev</span><span class=cF0>.pci_head.last);
+<a name="l176"></a>                    timeout = </span><span class=cFE>32</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>;
+<a name="l177"></a>                }
+<a name="l178"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>sys_pci_buses</span><span class=cF0> == </span><span class=cFE>256</span><span class=cF0> &amp;&amp; --timeout &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l179"></a>                    </span><span class=cF1>goto</span><span class=cF0> lud_done;
+<a name="l180"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l181"></a>lud_done:
+<a name="l182"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l183"></a>}
+<a name="l184"></a>
+<a name="l185"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CPCIDev</span><span class=cF0> *</span><span class=cF5>PCIDevFind</span><span class=cF0>(</span><span class=cF9>U16</span><span class=cF0> class_code=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>U16</span><span class=cF0> sub_code=</span><span class=cF3>NULL</span><span class=cF0>,
+<a name="l186"></a>                                                </span><span class=cF9>U16</span><span class=cF0> vendor_id=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>U16</span><span class=cF0> device_id=</span><span class=cF3>NULL</span><span class=cF0>,
+<a name="l187"></a>                                                </span><span class=cF1>U8</span><span class=cF0> _bus=</span><span class=cFE>0xFF</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> _dev=</span><span class=cFE>0xFF</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> _fun=</span><span class=cFE>0xFF</span><span class=cF0>)
+<a name="l188"></a>{</span><span class=cF2>//return first device with matching class &amp; subcode, vendor &amp; device id, or a specific device.</span><span class=cF0>
+<a name="l189"></a>    </span><span class=cF5>PCILookUpDevs</span><span class=cF0>;
+<a name="l190"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0> *p = </span><span class=cFB>dev</span><span class=cF0>.pci_head.next;
+<a name="l191"></a>
+<a name="l192"></a>    </span><span class=cF1>while</span><span class=cF0> (p != &amp;</span><span class=cFB>dev</span><span class=cF0>.pci_head)
+<a name="l193"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l194"></a>        </span><span class=cF1>if</span><span class=cF0> (p-&gt;vendor_id == vendor_id &amp;&amp; p-&gt;device_id == device_id ||
+<a name="l195"></a>                p-&gt;class_code == class_code &amp;&amp; p-&gt;sub_code == sub_code ||
+<a name="l196"></a>                p-&gt;bus == _bus &amp;&amp; p-&gt;</span><span class=cFB>dev</span><span class=cF0> == _dev &amp;&amp; p-&gt;fun == _fun)
+<a name="l197"></a>
+<a name="l198"></a>            </span><span class=cF1>return</span><span class=cF0> p;
+<a name="l199"></a> 
+<a name="l200"></a>        p = p-&gt;next;
+<a name="l201"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l202"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l203"></a>}
+<a name="l204"></a>
+<a name="l205"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PCIRep</span><span class=cF0>()
+<a name="l206"></a>{</span><span class=cF2>//Report description of PCI devices.</span><span class=cF0>
+<a name="l207"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0> *tmppci;
+<a name="l208"></a>
+<a name="l209"></a>    </span><span class=cF6>&quot;PCI Buses:%d\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_pci_buses</span><span class=cF0>;
+<a name="l210"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF3>PCI_DEV_FILE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l211"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l212"></a>        </span><span class=cF6>&quot;You don't have the PCI device file.\n&quot;</span><span class=cF0>;
+<a name="l213"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l214"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l215"></a>    </span><span class=cF5>PCILookUpDevs</span><span class=cF0>;
+<a name="l216"></a>    tmppci = </span><span class=cFB>dev</span><span class=cF0>.pci_head.next;
+<a name="l217"></a>    </span><span class=cF1>while</span><span class=cF0> (tmppci != &amp;</span><span class=cFB>dev</span><span class=cF0>.pci_head)
+<a name="l218"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l219"></a>        </span><span class=cF6>&quot;%02X:%02X:%01X %02X-%02X-%02X $GREEN$%s $CYAN$%s$FG$\n&quot;</span><span class=cF0>,
+<a name="l220"></a>                    tmppci-&gt;bus, tmppci-&gt;</span><span class=cFB>dev</span><span class=cF0>, tmppci-&gt;fun,
+<a name="l221"></a>                    tmppci-&gt;class_code, tmppci-&gt;sub_code, tmppci-&gt;prog_if,
+<a name="l222"></a>                    tmppci-&gt;vendor_str, tmppci-&gt;dev_id_str;
+<a name="l223"></a>        tmppci=tmppci-&gt;next;
+<a name="l224"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l225"></a>}
+<a name="l226"></a>
+<a name="l227"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Info;Memory/Info&quot;</span><span class=cF0>
+<a name="l228"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MemBIOSRep</span><span class=cF0>()
+<a name="l229"></a>{</span><span class=cF2>//Report the memory ranges reported by the BIOS at boot.</span><span class=cF0>
+<a name="l230"></a>    </span><span class=cF9>U16</span><span class=cF0>         *m01 = </span><span class=cFD>MEM_E801</span><span class=cF0>;
+<a name="l231"></a>    </span><span class=cF9>CMemE820</span><span class=cF0>    *m20 = </span><span class=cFD>MEM_E820</span><span class=cF0>;
+<a name="l232"></a>    </span><span class=cF9>CMemRange</span><span class=cF0>   *tmpmr;
+<a name="l233"></a>
+<a name="l234"></a>    </span><span class=cF6>&quot;$PURPLE$Standard Addresses$FG$\n&quot;</span><span class=cF0>
+<a name="l235"></a>            </span><span class=cF6>&quot;FEE00000-FEE00FFF See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l637"><span class=cF4>APIC</span></a><span class=cF6>\n\n&quot;</span><span class=cF0>
+<a name="l236"></a>
+<a name="l237"></a>    </span><span class=cF6>&quot;$PURPLE$VBE Linear Framebuffer$FG$\n&quot;</span><span class=cF0>
+<a name="l238"></a>            </span><span class=cF6>&quot;%08X-%08X  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l531"><span class=cF4>VBE Mode</span></a><span class=cF6>\n&quot;</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.fb_alias,
+<a name="l239"></a>                                                                                                                                                                </span><span class=cFB>text</span><span class=cF0>.fb_alias(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cFB>text</span><span class=cF0>.buffer_size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l240"></a>    </span><span class=cF6>&quot;\n$PURPLE$32 Bit Device Mem$FG$\n&quot;</span><span class=cF0>;
+<a name="l241"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>LBts</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_DEV_MEM</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0>)
+<a name="l242"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l243"></a>    tmpmr = </span><span class=cFB>dev</span><span class=cF0>.mem32_head.next;
+<a name="l244"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpmr != &amp;</span><span class=cFB>dev</span><span class=cF0>.mem32_head)
+<a name="l245"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l246"></a>        </span><span class=cF6>&quot;%z:%08X-%08X\n&quot;</span><span class=cF0>, tmpmr-&gt;type, </span><span class=cF6>&quot;Unused\0RAM\0Device&quot;</span><span class=cF0>, tmpmr-&gt;base, tmpmr-&gt;base + tmpmr-&gt;size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l247"></a>        tmpmr = tmpmr-&gt;next;
+<a name="l248"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l249"></a>    </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_DEV_MEM</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l250"></a>
+<a name="l251"></a>    </span><span class=cF6>&quot;\n$PURPLE$BIOS Memory Report 15:E801$FG$\n&quot;</span><span class=cF0>
+<a name="l252"></a>                </span><span class=cF6>&quot;0000000000000000-%016X\n&quot;</span><span class=cF0>, </span><span class=cFE>0x100000</span><span class=cF0> + m01[</span><span class=cFE>0</span><span class=cF0>] * </span><span class=cFE>1024</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l253"></a>                </span><span class=cF6>&quot;0000000001000000-%016X\n&quot;</span><span class=cF0>, </span><span class=cF3>SYS_16MEG_AREA_LIMIT</span><span class=cF0> + m01[</span><span class=cFE>1</span><span class=cF0>] * </span><span class=cFE>64</span><span class=cF0> * </span><span class=cFE>1024</span><span class=cF0>  - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l254"></a>
+<a name="l255"></a>    </span><span class=cF1>if</span><span class=cF0> (m20-&gt;type)
+<a name="l256"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l257"></a>        </span><span class=cF6>&quot;\n$PURPLE$BIOS Memory Report 15:E820$FG$\n&quot;</span><span class=cF0>;
+<a name="l258"></a>        </span><span class=cF1>while</span><span class=cF0> (m20-&gt;type)
+<a name="l259"></a>        {
+<a name="l260"></a>            </span><span class=cF6>&quot;$RED$&quot;</span><span class=cF0>;
+<a name="l261"></a>            </span><span class=cF1>switch</span><span class=cF0>(m20-&gt;type)
+<a name="l262"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l263"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MEM_E820t_USABLE</span><span class=cF0>:
+<a name="l264"></a>                    </span><span class=cF6>&quot;$GREEN$Usable     :&quot;</span><span class=cF0>;
+<a name="l265"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l266"></a>
+<a name="l267"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MEM_E820t_ACPI</span><span class=cF0>:
+<a name="l268"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MEM_E820t_ACPI_NVS</span><span class=cF0>:
+<a name="l269"></a>                    </span><span class=cF6>&quot;ACPI       :&quot;</span><span class=cF0>;
+<a name="l270"></a>                     </span><span class=cF1>break</span><span class=cF0>;
+<a name="l271"></a>
+<a name="l272"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MEM_E820t_BAD_MEM</span><span class=cF0>:
+<a name="l273"></a>                    </span><span class=cF6>&quot;Bad memory :&quot;</span><span class=cF0>;
+<a name="l274"></a>                     </span><span class=cF1>break</span><span class=cF0>;
+<a name="l275"></a>
+<a name="l276"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MEM_E820t_PERM_MEM</span><span class=cF0>:
+<a name="l277"></a>                    </span><span class=cF6>&quot;Perm memory:&quot;</span><span class=cF0>;
+<a name="l278"></a>
+<a name="l279"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MEM_E820t_RESERVED</span><span class=cF0>:
+<a name="l280"></a>                </span><span class=cF1>default</span><span class=cF0>:
+<a name="l281"></a>                    </span><span class=cF6>&quot;Reserved   :&quot;</span><span class=cF0>;
+<a name="l282"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l283"></a>             </span><span class=cF7>}</span><span class=cF0>
+<a name="l284"></a>            </span><span class=cF6>&quot;%016X-%016X$FG$\n&quot;</span><span class=cF0>, m20-&gt;base, m20-&gt;base + m20-&gt;len - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l285"></a>            m20++;
+<a name="l286"></a>        }
+<a name="l287"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l288"></a>    </span><span class=cF6>&quot;\n$PURPLE$BIOS Total Memory Report$FG$: &quot;</span><span class=cF0>;
+<a name="l289"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MemBIOSTotal</span><span class=cF0> &lt; </span><span class=cFE>1024</span><span class=cF0> * </span><span class=cFE>1024</span><span class=cF0> * </span><span class=cFE>1024</span><span class=cF0>)
+<a name="l290"></a>        </span><span class=cF6>&quot;%03d MiB\n&quot;</span><span class=cF0>, </span><span class=cF5>MemBIOSTotal</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>;       
+<a name="l291"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l292"></a>        </span><span class=cF6>&quot;%04d GiB\n&quot;</span><span class=cF0>, </span><span class=cF5>CeilU64</span><span class=cF0>(</span><span class=cF5>MemBIOSTotal</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>, </span><span class=cFE>1024</span><span class=cF0>) / </span><span class=cFE>1024</span><span class=cF0>;
+<a name="l293"></a>}
+<a name="l294"></a>
+<a name="l295"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MemPageRep</span><span class=cF0>()
+<a name="l296"></a>{</span><span class=cF2>//Page Table Report.</span><span class=cF0>
+<a name="l297"></a>    </span><span class=cF6>&quot;MAPPED\t  :%010X with &quot;</span><span class=cF0>, </span><span class=cFB>mem_mapped_space</span><span class=cF0>;
+<a name="l298"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>mem_page_size</span><span class=cF0>, </span><span class=cFE>30</span><span class=cF7>)</span><span class=cF0>)
+<a name="l299"></a>        </span><span class=cF6>&quot;$RED$1GIG$FG$ pages\n&quot;</span><span class=cF0>;
+<a name="l300"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l301"></a>        </span><span class=cF6>&quot;$RED$2MEG$FG$ pages\n&quot;</span><span class=cF0>;
+<a name="l302"></a>    </span><span class=cF6>&quot;PML2\t  :%010X 2MEG  :%08X\n&quot;</span><span class=cF0>,
+<a name="l303"></a>                *</span><span class=cFD>MEM_PML2</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *), *</span><span class=cFD>MEM_2MEG_NUM</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *);
+<a name="l304"></a>    </span><span class=cF6>&quot;PML3\t  :%010X 1GIG  :%08X\n&quot;</span><span class=cF0>,
+<a name="l305"></a>                *</span><span class=cFD>MEM_PML3</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *), *</span><span class=cFD>MEM_1GIG_NUM</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *);
+<a name="l306"></a>    </span><span class=cF6>&quot;PML4\t  :%010X 512GIG:%08X\n&quot;</span><span class=cF0>,
+<a name="l307"></a>                *</span><span class=cFD>MEM_PML4</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *), *</span><span class=cFD>MEM_512GIG_NUM</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *);
+<a name="l308"></a>    </span><span class=cF6>&quot;FIXED_AREA:%010X\n&quot;</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0>;
+<a name="l309"></a>    </span><span class=cF6>&quot;HEAP_BASE :%010X\nHEAP_LIMIT:%010X\n&quot;</span><span class=cF0>, </span><span class=cFB>mem_heap_base</span><span class=cF0>, </span><span class=cFB>mem_heap_limit</span><span class=cF0>;
+<a name="l310"></a>}
+</span></pre></body>
+</html>

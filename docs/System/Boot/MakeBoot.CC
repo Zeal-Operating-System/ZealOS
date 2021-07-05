@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF3>__DIR__</span><span class=cF0>);;
+<a name="l2"></a>
+<a name="l3"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;BootDVDIns&quot;</span><span class=cF0>
+<a name="l4"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;BootHDIns&quot;</span><span class=cF0>
+<a name="l5"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;BootMHDIns&quot;</span><span class=cF0>
+<a name="l6"></a>#</span><span class=cF1>include</span><span class=cF0> </span><span class=cF6>&quot;BootRAM&quot;</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF6>&quot;..&quot;</span><span class=cF0>);;
+</span></pre></body>
+</html>

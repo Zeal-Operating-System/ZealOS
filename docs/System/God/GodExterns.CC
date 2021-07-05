@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;God&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GOD_BAD_BITS</span><span class=cF0>    </span><span class=cFE>4</span><span class=cF0>
+<a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GOD_GOOD_BITS</span><span class=cF0>   </span><span class=cFE>24</span><span class=cF0>
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CGodGlobals</span><span class=cF0>
+<a name="l7"></a>{
+<a name="l8"></a>    </span><span class=cF1>U8</span><span class=cF0>  **words,
+<a name="l9"></a>        *word_file_mask;
+<a name="l10"></a>
+<a name="l11"></a>    </span><span class=cF9>I64</span><span class=cF0> word_fuf_flags,
+<a name="l12"></a>        word_count;
+<a name="l13"></a>    </span><span class=cF9>CFifoU8</span><span class=cF0> *fifo;
+<a name="l14"></a>} </span><span class=cFB>god</span><span class=cF0>;
+<a name="l15"></a>
+<a name="l16"></a></span><span class=cF5>MemSet</span><span class=cF0>(&amp;</span><span class=cFB>god</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CGodGlobals</span><span class=cF7>)</span><span class=cF0>);
+<a name="l17"></a></span><span class=cFB>god</span><span class=cF0>.fifo = </span><span class=cF5>FifoU8New</span><span class=cF0>(</span><span class=cFE>2048</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
+<a name="l18"></a>
+<a name="l19"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GodBiblePassage</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num_lines=</span><span class=cFE>20</span><span class=cF0>);
+<a name="l20"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GodBitsInsert</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num_bits, </span><span class=cF9>I64</span><span class=cF0> bitfield);
+<a name="l21"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GodSong</span><span class=cF0>();
+<a name="l22"></a></span><span class=cF1>extern</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>GodWord</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> bits=</span><span class=cFE>17</span><span class=cF0>);
+</span></pre></body>
+</html>

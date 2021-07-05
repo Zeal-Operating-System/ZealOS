@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>A pull-down menu appears when you move the mouse to the top of the screen.  Menus are created with </span><a href="https://tomawezome.github.io/ZealOS/System/Menu.html#l176"><span class=cF4>MenuPush</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Menu.html#l186"><span class=cF4>MenuFilePush</span></a><span class=cF0>(), </span><span class=cF4>
+<a name="l2"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Menu.html#l97"><span class=cF4>MenuNew</span></a><span class=cF0>() or </span><a href="https://tomawezome.github.io/ZealOS/System/Menu.html#l118"><span class=cF4>MenuFile</span></a><span class=cF0>() and assigned to </span><span class=cF4>Fs-&gt;cur_menu</span><span class=cF0>.  The format is:
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>
+<a name="l5"></a>File
+<a name="l6"></a>{
+<a name="l7"></a>    Open(,'O');
+<a name="l8"></a>    Save(,'S');
+<a name="l9"></a>    Exit(,CH_SHIFT_ESC);
+<a name="l10"></a>}
+<a name="l11"></a>Edit {
+<a name="l12"></a>    Cut(,,SC_DELETE|SCF_SHIFT);
+<a name="l13"></a>    Paste(,,SC_INS|SCF_SHIFT);
+<a name="l14"></a>}
+<a name="l15"></a>Misc {
+<a name="l16"></a>    Opt1(MESSAGE_CMD,M_OPTION1);
+<a name="l17"></a>    Opt2(MESSAGE_CMD,M_OPTION2);
+<a name="l18"></a>}
+<a name="l19"></a>Help
+<a name="l20"></a>{
+<a name="l21"></a>    Help(,'?');
+<a name="l22"></a>    About(,'/');
+<a name="l23"></a>}
+<a name="l24"></a></span><span class=cF0>
+<a name="l25"></a>The first arg is the message code and it is optional with the default being </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3857"><span class=cF4>MESSAGE_KEY_DOWN_UP</span></a><span class=cF0>.    The second arg is the 
+<a name="l26"></a>message </span><span class=cF2>arg1</span><span class=cF0> value which is </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4093"><span class=cF4>ASCII</span></a><span class=cF0> of the key in the case of </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3844"><span class=cF4>MESSAGE_KEY_DOWN</span></a><span class=cF0>.  The third arg is the message </span><span class=cF2>arg2</span><span class=cF0> value which is 
+<a name="l27"></a>the </span><a href="https://tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>scan_code</span></a><span class=cF0> of the key in the case of </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3844"><span class=cF4>MESSAGE_KEY_DOWN</span></a><span class=cF0>.
+<a name="l28"></a>
+<a name="l29"></a>Press </span><span class=cF2>&lt;CTRL-SHIFT-l&gt;</span><span class=cF0> and &quot;Insert ASCII/ScanCode&quot;.
+<a name="l30"></a>
+<a name="l31"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/PullDownMenu.html#l1"><span class=cF4>::/Demo/PullDownMenu.CC</span></a><span class=cF0>.
+</span></pre></body>
+</html>

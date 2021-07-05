@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> CursorMovementDemo()
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l4"></a>
+<a name="l5"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>100</span><span class=cF0>; i++)
+<a name="l6"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l7"></a>        </span><span class=cF6>&quot;%03d &quot;</span><span class=cF0>, i;
+<a name="l8"></a>        </span><span class=cF6>&quot;$CM,-4,1$&quot;</span><span class=cF0>;
+<a name="l9"></a>        </span><span class=cF1>if</span><span class=cF0> (i % </span><span class=cFE>10</span><span class=cF0> == </span><span class=cFE>9</span><span class=cF0>)
+<a name="l10"></a>            </span><span class=cF6>&quot;$CM,4,-10$&quot;</span><span class=cF0>;
+<a name="l11"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l12"></a>
+<a name="l13"></a>    </span><span class=cF2>//+LX is relative to left side.</span><span class=cF0>
+<a name="l14"></a>    </span><span class=cF2>//See &lt;CTRL-l&gt; with cursor-movement for all the flags.</span><span class=cF0>
+<a name="l15"></a>    </span><span class=cF2>//Check &quot;Quote&quot; to set-up a cmd for in quotes.</span><span class=cF0>
+<a name="l16"></a>    </span><span class=cF6>&quot;$CM+LX,0,+10$\n&quot;</span><span class=cF0>;
+<a name="l17"></a>}
+<a name="l18"></a>
+<a name="l19"></a>CursorMovementDemo;
+<a name="l20"></a>
+<a name="l21"></a></span><span class=cF2>/*The word-wrap Off and On cmds are</span><span class=cF0>
+<a name="l22"></a></span><span class=cF2>$WW,0$ and $WW,1$.</span><span class=cF0>
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cF2>You might need </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.html#l193"><span class=cF4>DocMax</span></a><span class=cF2>() to adjust</span><span class=cF0>
+<a name="l25"></a></span><span class=cF2>the cmd line window buf size.</span><span class=cF0>
+<a name="l26"></a></span><span class=cF2>It counts cmds, not lines.</span><span class=cF0>
+<a name="l27"></a>
+<a name="l28"></a></span><span class=cF2>The +H flag will hold-onto an entry</span><span class=cF0>
+<a name="l29"></a></span><span class=cF2>so it doesn't get pushed-out of the document.</span><span class=cF0>
+<a name="l30"></a></span><span class=cF2>This is useful for a $WW+H,1$ cmd.</span><span class=cF0>
+<a name="l31"></a>
+<a name="l32"></a></span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>::/Doc/DolDocOverview.DD</span></a><span class=cF2> for documentation on</span><span class=cF0>
+<a name="l33"></a></span><span class=cF2>all flags and cmds.</span><span class=cF0>
+<a name="l34"></a>
+<a name="l35"></a></span><span class=cF2>Note: the default page length is 66 lines</span><span class=cF0>
+<a name="l36"></a></span><span class=cF2>and branching back more than the page length</span><span class=cF0>
+<a name="l37"></a></span><span class=cF2>will reset the column to 1.  So, set page</span><span class=cF0>
+<a name="l38"></a></span><span class=cF2>length to a large number if you want to</span><span class=cF0>
+<a name="l39"></a></span><span class=cF2>branch back a long distance.</span><span class=cF0>
+<a name="l40"></a></span><span class=cF2>*/</span><span class=cF0>
+</span></pre></body>
+</html>

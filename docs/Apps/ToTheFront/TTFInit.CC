@@ -1,0 +1,511 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>/*</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>Terry got tricky by not defining a color</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>right away in these </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/Gr.html#l157"><span class=cF4>CSprite</span></a><span class=cF2>s so they can</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>work for both players by setting dc-&gt;color</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>before drawing them.  He actually made these</span><span class=cF0>
+<a name="l6"></a></span><span class=cF2>graphics by defining a color in the &lt;CTRL-r&gt;</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>menu, drawing the unit and deleting the color.</span><span class=cF0>
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF2>He had to leave a gap between the tank tread</span><span class=cF0>
+<a name="l10"></a></span><span class=cF2>and body because of how it is rendered when rotated.</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l12"></a></span><span class=cFA>
+<a name="l13"></a>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l14"></a></span><span class=cFA>
+<a name="l15"></a>&lt;2&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l16"></a>
+<a name="l17"></a></span><span class=cF2>//This is an infantry.</span><span class=cF0>
+<a name="l18"></a></span><span class=cFA>
+<a name="l19"></a>&lt;3&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l20"></a></span><span class=cFA>
+<a name="l21"></a>&lt;4&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l22"></a>
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cF1>U0</span><span class=cF0> DrawHexes()
+<a name="l25"></a>{
+<a name="l26"></a>    </span><span class=cF1>F64</span><span class=cF0> dx = </span><span class=cFE>2</span><span class=cF0> * HEX_SIDE + </span><span class=cFE>2</span><span class=cF0> * DCOS, dy = </span><span class=cFE>2</span><span class=cF0> * DSIN, x, y, x1, y1, x2, y2;
+<a name="l27"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l28"></a>
+<a name="l29"></a>    map_dc-&gt;color = </span><span class=cF3>WHITE</span><span class=cF0>;
+<a name="l30"></a>    </span><span class=cF5>GrRect</span><span class=cF0>(map_dc, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, map_dc-&gt;width, map_dc-&gt;height);
+<a name="l31"></a>    map_dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l32"></a>    y = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; map_rows; j += </span><span class=cFE>2</span><span class=cF0>)
+<a name="l34"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l35"></a>        x = DCOS;
+<a name="l36"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x, y, x - DCOS, y + DSIN);
+<a name="l37"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x - DCOS, y + DSIN, x, y + </span><span class=cFE>2</span><span class=cF0> * DSIN);
+<a name="l38"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l39"></a>        {
+<a name="l40"></a>            x1 = x;
+<a name="l41"></a>            y1 = y;
+<a name="l42"></a>            x2 = x1 + HEX_SIDE;
+<a name="l43"></a>            y2 = y1;
+<a name="l44"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l45"></a>            x1 = x2;
+<a name="l46"></a>            y1 = y2;
+<a name="l47"></a>            x2 += DCOS;
+<a name="l48"></a>            y2 += DSIN;
+<a name="l49"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l50"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x2, y2, x2 - DCOS, y2 + DSIN);
+<a name="l51"></a>            x1 = x2;
+<a name="l52"></a>            y1 = y2;
+<a name="l53"></a>            x2 += HEX_SIDE;
+<a name="l54"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l55"></a>            </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x2, y2, x2 + DCOS, y2 + DSIN);
+<a name="l56"></a>            x1 = x2;
+<a name="l57"></a>            y1 = y2;
+<a name="l58"></a>            x2 += DCOS;
+<a name="l59"></a>            y2 -= DSIN;
+<a name="l60"></a>            </span><span class=cF1>if</span><span class=cF0> (j || i &lt; map_cols - </span><span class=cFE>1</span><span class=cF0>)
+<a name="l61"></a>                </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l62"></a>            x += dx;
+<a name="l63"></a>        }
+<a name="l64"></a>        y += dy;
+<a name="l65"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l66"></a>    x = DCOS;
+<a name="l67"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l68"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l69"></a>        x1 = x;
+<a name="l70"></a>        y1 = y;
+<a name="l71"></a>        x2 = x1 + HEX_SIDE;
+<a name="l72"></a>        y2 = y1;
+<a name="l73"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l74"></a>        x1 = x2;
+<a name="l75"></a>        y1 = y2;
+<a name="l76"></a>        x2 += DCOS;
+<a name="l77"></a>        y2 += DSIN;
+<a name="l78"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l79"></a>        x1 = x2;
+<a name="l80"></a>        y1 = y2;
+<a name="l81"></a>        x2 += HEX_SIDE;
+<a name="l82"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l83"></a>        x1 = x2;
+<a name="l84"></a>        y1 = y2;
+<a name="l85"></a>        x2 += DCOS;
+<a name="l86"></a>        y2 -= DSIN;
+<a name="l87"></a>        </span><span class=cF5>GrLine</span><span class=cF0>(map_dc, x1, y1, x2, y2);
+<a name="l88"></a>        x += dx;
+<a name="l89"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l90"></a>}
+<a name="l91"></a>
+<a name="l92"></a></span><span class=cF1>U0</span><span class=cF0> MakeTerrain(</span><span class=cF1>U8</span><span class=cF0> color, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF9>I64</span><span class=cF0> clus_lo, </span><span class=cF9>I64</span><span class=cF0> clus_hi)
+<a name="l93"></a>{
+<a name="l94"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, l, row, col;
+<a name="l95"></a>
+<a name="l96"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l97"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l98"></a>        col = </span><span class=cF5>RandU32</span><span class=cF0> % map_cols;
+<a name="l99"></a>        row = </span><span class=cF5>RandU32</span><span class=cF0> % map_rows;
+<a name="l100"></a>        l = clus_lo + </span><span class=cF5>RandU16</span><span class=cF0> % (clus_hi - clus_lo + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l101"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; l; j++)
+<a name="l102"></a>        {
+<a name="l103"></a>            terrain[row][col] = color;
+<a name="l104"></a>            Toward(&amp;row, &amp;col, </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>6</span><span class=cF0>);
+<a name="l105"></a>            col = </span><span class=cF5>ClampI64</span><span class=cF0>(col, </span><span class=cFE>0</span><span class=cF0>, map_cols - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l106"></a>            row = </span><span class=cF5>ClampI64</span><span class=cF0>(row, </span><span class=cFE>0</span><span class=cF0>, map_rows - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l107"></a>        }
+<a name="l108"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l109"></a>}
+<a name="l110"></a>
+<a name="l111"></a></span><span class=cF1>U0</span><span class=cF0> MakeRivers()
+<a name="l112"></a>{
+<a name="l113"></a>    </span><span class=cF9>I64</span><span class=cF0> i, row, col, direction;
+<a name="l114"></a>
+<a name="l115"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>4</span><span class=cF0>; i++)
+<a name="l116"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l117"></a>        row = </span><span class=cF5>RandU32</span><span class=cF0> % map_rows;
+<a name="l118"></a>        col = </span><span class=cF5>RandU32</span><span class=cF0> % map_cols;
+<a name="l119"></a>        direction = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>6</span><span class=cF0>;
+<a name="l120"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l121"></a>        {
+<a name="l122"></a>            rivers[row][col] = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l123"></a>            Toward(&amp;row, &amp;col, direction);
+<a name="l124"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= row &lt; map_rows &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= col &lt; map_cols</span><span class=cF7>)</span><span class=cF0>)
+<a name="l125"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l126"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF5>RandU16</span><span class=cF0> &amp; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>)
+<a name="l127"></a>                direction = (direction + </span><span class=cF7>(</span><span class=cFE>7</span><span class=cF0> - </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>) % </span><span class=cFE>6</span><span class=cF0>;
+<a name="l128"></a>        }
+<a name="l129"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l130"></a>}
+<a name="l131"></a>
+<a name="l132"></a></span><span class=cF1>U0</span><span class=cF0> MakeRoads()
+<a name="l133"></a>{
+<a name="l134"></a>    </span><span class=cF9>I64</span><span class=cF0> i, row, col, direction;
+<a name="l135"></a>
+<a name="l136"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>5</span><span class=cF0>; i++)
+<a name="l137"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l138"></a>        row = </span><span class=cF5>RandU32</span><span class=cF0> % map_rows;
+<a name="l139"></a>        col = </span><span class=cF5>RandU32</span><span class=cF0> % map_cols;
+<a name="l140"></a>        direction = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>6</span><span class=cF0>;
+<a name="l141"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l142"></a>        {
+<a name="l143"></a>            roads[row][col] = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l144"></a>            Toward(&amp;row, &amp;col, direction);
+<a name="l145"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= row &lt; map_rows &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= col &lt; map_cols</span><span class=cF7>)</span><span class=cF0>)
+<a name="l146"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l147"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>)
+<a name="l148"></a>                direction = (direction + </span><span class=cF7>(</span><span class=cFE>7</span><span class=cF0> - </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>) % </span><span class=cFE>6</span><span class=cF0>;
+<a name="l149"></a>        }
+<a name="l150"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l151"></a>}
+<a name="l152"></a>
+<a name="l153"></a></span><span class=cF1>U0</span><span class=cF0> DrawTerrain()
+<a name="l154"></a>{
+<a name="l155"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l156"></a>    </span><span class=cF1>F64</span><span class=cF0> x, y;
+<a name="l157"></a>
+<a name="l158"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; map_rows; j++)
+<a name="l159"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l160"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l161"></a>            map_dc-&gt;color = terrain[j][i];
+<a name="l162"></a>            RowCol2XY(&amp;x, &amp;y, j, i);
+<a name="l163"></a>            </span><span class=cF5>GrFloodFill</span><span class=cF0>(map_dc, x, y);
+<a name="l164"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l165"></a>}
+<a name="l166"></a>
+<a name="l167"></a></span><span class=cF1>U0</span><span class=cF0> DrawRivers()
+<a name="l168"></a>{
+<a name="l169"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, r, c;
+<a name="l170"></a>    </span><span class=cF1>F64</span><span class=cF0> x1, y1, x2, y2;
+<a name="l171"></a>
+<a name="l172"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; map_rows; j++)
+<a name="l173"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l174"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l175"></a>            </span><span class=cF1>if</span><span class=cF0> (rivers[j][i])
+<a name="l176"></a>            {
+<a name="l177"></a>                RowCol2XY(&amp;x1, &amp;y1, j, i);
+<a name="l178"></a>                </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; </span><span class=cFE>6</span><span class=cF0>; k++)
+<a name="l179"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l180"></a>                    r = j;
+<a name="l181"></a>                    c = i;
+<a name="l182"></a>                    Toward(&amp;r, &amp;c, k);
+<a name="l183"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= r &lt; map_rows &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= c &lt; map_cols &amp;&amp; rivers[r][c])
+<a name="l184"></a>                    {
+<a name="l185"></a>                        RowCol2XY(&amp;x2, &amp;y2, r, c);
+<a name="l186"></a>                        map_dc-&gt;color = </span><span class=cF3>LTBLUE</span><span class=cF0>;
+<a name="l187"></a>                        map_dc-&gt;thick = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l188"></a>                        </span><span class=cF5>GrLine3</span><span class=cF0>(map_dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l189"></a>                        map_dc-&gt;color = </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l190"></a>                        map_dc-&gt;thick = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l191"></a>                        </span><span class=cF5>GrLine3</span><span class=cF0>(map_dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l192"></a>                    }
+<a name="l193"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l194"></a>            }
+<a name="l195"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l196"></a>}
+<a name="l197"></a>
+<a name="l198"></a></span><span class=cF1>U0</span><span class=cF0> DrawRoads()
+<a name="l199"></a>{
+<a name="l200"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k, r, c;
+<a name="l201"></a>    </span><span class=cF1>F64</span><span class=cF0> x1, y1, x2, y2;
+<a name="l202"></a>
+<a name="l203"></a>    map_dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l204"></a>    map_dc-&gt;thick = </span><span class=cFE>3</span><span class=cF0>;
+<a name="l205"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; map_rows; j++)
+<a name="l206"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l207"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l208"></a>            </span><span class=cF1>if</span><span class=cF0> (roads[j][i])
+<a name="l209"></a>            {
+<a name="l210"></a>                RowCol2XY(&amp;x1, &amp;y1, j, i);
+<a name="l211"></a>                </span><span class=cF1>for</span><span class=cF0> (k = </span><span class=cFE>0</span><span class=cF0>; k &lt; </span><span class=cFE>6</span><span class=cF0>; k++)
+<a name="l212"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l213"></a>                    r = j;
+<a name="l214"></a>                    c = i;
+<a name="l215"></a>                    Toward(&amp;r, &amp;c, k);
+<a name="l216"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt;= r &lt; map_rows &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt;= c &lt; map_cols &amp;&amp; roads[r][c])
+<a name="l217"></a>                    {
+<a name="l218"></a>                        RowCol2XY(&amp;x2, &amp;y2, r, c);
+<a name="l219"></a>                        </span><span class=cF5>GrLine3</span><span class=cF0>(map_dc, x1, y1, </span><span class=cFE>0</span><span class=cF0>, x2, y2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l220"></a>                    }
+<a name="l221"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l222"></a>            }
+<a name="l223"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l224"></a>}
+<a name="l225"></a>
+<a name="l226"></a></span><span class=cF1>U0</span><span class=cF0> DrawDots()
+<a name="l227"></a>{
+<a name="l228"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l229"></a>    </span><span class=cF1>F64</span><span class=cF0> x, y;
+<a name="l230"></a>
+<a name="l231"></a>    map_dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l232"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; map_rows; j++)
+<a name="l233"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l234"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l235"></a>            RowCol2XY(&amp;x, &amp;y, j, i);
+<a name="l236"></a>            </span><span class=cF5>GrPlot</span><span class=cF0>(map_dc, x, y);
+<a name="l237"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l238"></a>}
+<a name="l239"></a>
+<a name="l240"></a></span><span class=cF1>U0</span><span class=cF0> HexCentersCalc()
+<a name="l241"></a>{
+<a name="l242"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l243"></a>    </span><span class=cF1>F64</span><span class=cF0> x, y;
+<a name="l244"></a>
+<a name="l245"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; map_rows; j++)
+<a name="l246"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; map_cols; i++)
+<a name="l247"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l248"></a>            x = (</span><span class=cFE>2</span><span class=cF0> * HEX_SIDE + </span><span class=cFE>2</span><span class=cF0> * DCOS) * i + HEX_SIDE / </span><span class=cFE>2</span><span class=cF0> + DCOS;
+<a name="l249"></a>            </span><span class=cF1>if</span><span class=cF0> (j &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l250"></a>                x += HEX_SIDE + DCOS;
+<a name="l251"></a>            y = DSIN * (j + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l252"></a>            hex_centers[j][i].x = x;
+<a name="l253"></a>            hex_centers[j][i].y = y;
+<a name="l254"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l255"></a>}
+<a name="l256"></a>
+<a name="l257"></a></span><span class=cF1>U0</span><span class=cF0> InitMap()
+<a name="l258"></a>{
+<a name="l259"></a>    HexCentersCalc;
+<a name="l260"></a>    DrawHexes;
+<a name="l261"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(terrain, PLAINS, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>terrain</span><span class=cF7>)</span><span class=cF0>);
+<a name="l262"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(roads, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>roads</span><span class=cF7>)</span><span class=cF0>);
+<a name="l263"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(rivers, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>rivers</span><span class=cF7>)</span><span class=cF0>);
+<a name="l264"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(vis_map, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>vis_map</span><span class=cF7>)</span><span class=cF0>);
+<a name="l265"></a>    MakeTerrain(MOUNTAINS, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>03</span><span class=cF0> * map_cols * map_cols, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>35</span><span class=cF0>);
+<a name="l266"></a>    MakeTerrain(TREES, </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>03</span><span class=cF0> * map_cols * map_cols, </span><span class=cFE>5</span><span class=cF0>, </span><span class=cFE>35</span><span class=cF0>);
+<a name="l267"></a>    DrawTerrain;
+<a name="l268"></a>    MakeRivers;
+<a name="l269"></a>    DrawRivers;
+<a name="l270"></a>    MakeRoads;
+<a name="l271"></a>    DrawRoads;
+<a name="l272"></a>    DrawDots;
+<a name="l273"></a>}
+<a name="l274"></a>
+<a name="l275"></a></span><span class=cF1>U0</span><span class=cF0> InitUnits()
+<a name="l276"></a>{
+<a name="l277"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, j, row, col, type;
+<a name="l278"></a>    Unit *tmpu;
+<a name="l279"></a>
+<a name="l280"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(units, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>units</span><span class=cF7>)</span><span class=cF0>);
+<a name="l281"></a>    alive_count[</span><span class=cFE>0</span><span class=cF0>] = alive_count[</span><span class=cFE>1</span><span class=cF0>]=UNITS_NUM;
+<a name="l282"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>2</span><span class=cF0>; j++)
+<a name="l283"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; alive_count[j]; i++)
+<a name="l284"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l285"></a>            tmpu = &amp;units[j][i];
+<a name="l286"></a>            tmpu-&gt;player    = j;
+<a name="l287"></a>            tmpu-&gt;num       = i;
+<a name="l288"></a>            tmpu-&gt;life      = </span><span class=cFE>100</span><span class=cF0>;
+<a name="l289"></a>            tmpu-&gt;facing    = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cFE>6</span><span class=cF0>;
+<a name="l290"></a>            </span><span class=cF1>if</span><span class=cF0> (!j)
+<a name="l291"></a>            {
+<a name="l292"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= UNITS_NUM / </span><span class=cFE>2</span><span class=cF0>)
+<a name="l293"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l294"></a>                    </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>15</span><span class=cF0> * UNITS_NUM / </span><span class=cFE>16</span><span class=cF0>)
+<a name="l295"></a>                        type = UT_ARTILLERY;
+<a name="l296"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l297"></a>                        type = UT_INFANTRY;
+<a name="l298"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l299"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l300"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l301"></a>                    </span><span class=cF1>if</span><span class=cF0> (i &gt;= UNITS_NUM / </span><span class=cFE>4</span><span class=cF0>)
+<a name="l302"></a>                        type = UT_MD_TANK;
+<a name="l303"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l304"></a>                        type = UT_LT_TANK;
+<a name="l305"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l306"></a>            }
+<a name="l307"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l308"></a>            {
+<a name="l309"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt;= UNITS_NUM / </span><span class=cFE>2</span><span class=cF0>)
+<a name="l310"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l311"></a>                    </span><span class=cF1>if</span><span class=cF0> (i &gt;= </span><span class=cFE>15</span><span class=cF0> * UNITS_NUM / </span><span class=cFE>16</span><span class=cF0>)
+<a name="l312"></a>                        type = UT_ARTILLERY;
+<a name="l313"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l314"></a>                        type = UT_INFANTRY;
+<a name="l315"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l316"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l317"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l318"></a>                    </span><span class=cF1>if</span><span class=cF0> (i &gt;= UNITS_NUM / </span><span class=cFE>4</span><span class=cF0>)
+<a name="l319"></a>                        type=UT_MD_TANK;
+<a name="l320"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l321"></a>                        type=UT_LT_TANK;
+<a name="l322"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l323"></a>            }
+<a name="l324"></a>            tmpu-&gt;type=type;
+<a name="l325"></a>            </span><span class=cF1>switch</span><span class=cF0> (type)
+<a name="l326"></a>            {
+<a name="l327"></a>                </span><span class=cF1>case</span><span class=cF0> UT_INFANTRY:
+<a name="l328"></a>                    tmpu-&gt;infantry          = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l329"></a>                    tmpu-&gt;indirect_fire     = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l330"></a>                    tmpu-&gt;armor             = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l331"></a>                    tmpu-&gt;armored_attack    = </span><span class=cFE>15</span><span class=cF0>;
+<a name="l332"></a>                    tmpu-&gt;unarmored_attack  = </span><span class=cFE>180</span><span class=cF0>;
+<a name="l333"></a>                    tmpu-&gt;accuracy          = </span><span class=cFE>45</span><span class=cF0>;
+<a name="l334"></a>                    tmpu-&gt;range             = </span><span class=cFE>5</span><span class=cF0>;
+<a name="l335"></a>                    tmpu-&gt;movement          = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l336"></a>                    tmpu-&gt;img               = </span><span class=cFA>&lt;1&gt;</span><span class=cF0>;
+<a name="l337"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l338"></a>
+<a name="l339"></a>                </span><span class=cF1>case</span><span class=cF0> UT_ARTILLERY:
+<a name="l340"></a>                    tmpu-&gt;infantry          = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l341"></a>                    tmpu-&gt;indirect_fire     = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l342"></a>                    tmpu-&gt;armor             = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l343"></a>                    tmpu-&gt;armored_attack    = </span><span class=cFE>60</span><span class=cF0>;
+<a name="l344"></a>                    tmpu-&gt;unarmored_attack  = </span><span class=cFE>180</span><span class=cF0>;
+<a name="l345"></a>                    tmpu-&gt;accuracy          = </span><span class=cFE>25</span><span class=cF0>;
+<a name="l346"></a>                    tmpu-&gt;range             = </span><span class=cFE>20</span><span class=cF0>;
+<a name="l347"></a>                    tmpu-&gt;movement          = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l348"></a>                    tmpu-&gt;img               = </span><span class=cFA>&lt;2&gt;</span><span class=cF0>;
+<a name="l349"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l350"></a>
+<a name="l351"></a>                </span><span class=cF1>case</span><span class=cF0> UT_LT_TANK:
+<a name="l352"></a>                    tmpu-&gt;infantry          = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l353"></a>                    tmpu-&gt;indirect_fire     = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l354"></a>                    tmpu-&gt;armor             = </span><span class=cFE>30</span><span class=cF0>;
+<a name="l355"></a>                    tmpu-&gt;armored_attack    = </span><span class=cFE>40</span><span class=cF0>;
+<a name="l356"></a>                    tmpu-&gt;unarmored_attack  = </span><span class=cFE>60</span><span class=cF0>;
+<a name="l357"></a>                    tmpu-&gt;accuracy          = </span><span class=cFE>25</span><span class=cF0>;
+<a name="l358"></a>                    tmpu-&gt;range             = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l359"></a>                    tmpu-&gt;movement          = </span><span class=cFE>24</span><span class=cF0>;
+<a name="l360"></a>                    tmpu-&gt;img               = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
+<a name="l361"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l362"></a>
+<a name="l363"></a>                </span><span class=cF1>case</span><span class=cF0> UT_MD_TANK:
+<a name="l364"></a>                    tmpu-&gt;infantry          = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l365"></a>                    tmpu-&gt;indirect_fire     = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l366"></a>                    tmpu-&gt;armor             = </span><span class=cFE>60</span><span class=cF0>;
+<a name="l367"></a>                    tmpu-&gt;armored_attack    = </span><span class=cFE>60</span><span class=cF0>;
+<a name="l368"></a>                    tmpu-&gt;unarmored_attack  = </span><span class=cFE>80</span><span class=cF0>;
+<a name="l369"></a>                    tmpu-&gt;accuracy          = </span><span class=cFE>25</span><span class=cF0>;
+<a name="l370"></a>                    tmpu-&gt;range             = </span><span class=cFE>12</span><span class=cF0>;
+<a name="l371"></a>                    tmpu-&gt;movement          = </span><span class=cFE>16</span><span class=cF0>;
+<a name="l372"></a>                    tmpu-&gt;img               = </span><span class=cFA>&lt;4&gt;</span><span class=cF0>;
+<a name="l373"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l374"></a>            }
+<a name="l375"></a>            </span><span class=cF1>do</span><span class=cF0>
+<a name="l376"></a>            {
+<a name="l377"></a>                row = </span><span class=cF5>RandU32</span><span class=cF0> % map_rows;
+<a name="l378"></a>                col = </span><span class=cF5>RandU32</span><span class=cF0> % (map_cols / </span><span class=cFE>3</span><span class=cF0>);
+<a name="l379"></a>                </span><span class=cF1>if</span><span class=cF0> (j)
+<a name="l380"></a>                    col += </span><span class=cFE>2</span><span class=cF0> * map_cols / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l381"></a>            }
+<a name="l382"></a>            </span><span class=cF1>while</span><span class=cF0> (UnitFind</span><span class=cF7>(</span><span class=cF0>row, col</span><span class=cF7>)</span><span class=cF0>);
+<a name="l383"></a>
+<a name="l384"></a>            tmpu-&gt;row = row;
+<a name="l385"></a>            tmpu-&gt;col = col;
+<a name="l386"></a>            </span><span class=cF5>LBts</span><span class=cF0>(&amp;tmpu-&gt;vis[cur_player], </span><span class=cFE>0</span><span class=cF0>);
+<a name="l387"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l388"></a>}
+<a name="l389"></a>
+<a name="l390"></a></span><span class=cF1>U0</span><span class=cF0> ViewPlayerSet(</span><span class=cF1>I8</span><span class=cF0> p)
+<a name="l391"></a>{
+<a name="l392"></a>    </span><span class=cF9>CMenuEntry</span><span class=cF0> *tmpse;
+<a name="l393"></a>
+<a name="l394"></a>    view_player = p;
+<a name="l395"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpse = </span><span class=cF5>MenuEntryFind</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_menu, </span><span class=cF6>&quot;View/Player1&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l396"></a>        tmpse-&gt;checked = view_player == </span><span class=cFE>0</span><span class=cF0>;
+<a name="l397"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpse = </span><span class=cF5>MenuEntryFind</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_menu, </span><span class=cF6>&quot;View/Player2&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l398"></a>        tmpse-&gt;checked = view_player == </span><span class=cFE>1</span><span class=cF0>;
+<a name="l399"></a>}
+<a name="l400"></a>
+<a name="l401"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l402"></a>{
+<a name="l403"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l404"></a>    </span><span class=cF6>&quot;GameSeed(0x%X)\n&quot;</span><span class=cF0>, </span><span class=cF5>Seed</span><span class=cF0>(</span><span class=cF5>PopUpI64Get</span><span class=cF7>(</span><span class=cF6>&quot;GameSeed(0x%X):&quot;</span><span class=cF0>, </span><span class=cF5>Seed</span><span class=cF7>)</span><span class=cF0>);
+<a name="l405"></a>    moving_unit = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l406"></a>    InitMap;
+<a name="l407"></a>    ViewPlayerSet(cur_player = </span><span class=cFE>0</span><span class=cF0>);
+<a name="l408"></a>    enemy_player = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l409"></a>    </span><span class=cF1>if</span><span class=cF0> (map_width &lt; </span><span class=cF3>GR_WIDTH</span><span class=cF0>)
+<a name="l410"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l411"></a>        x0 = (MAP_WIDTH  - map_width)  &gt;&gt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l412"></a>        y0 = (MAP_HEIGHT - map_height) &gt;&gt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;
+<a name="l413"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l414"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l415"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l416"></a>        x0 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l417"></a>        y0 = </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;
+<a name="l418"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l419"></a>    InitUnits;
+<a name="l420"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;indirect_head);
+<a name="l421"></a>    turn = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l422"></a>    fire_radius = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l423"></a>    show_vis_row = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l424"></a>    show_vis_col = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l425"></a>    *message_buf = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l426"></a>    message_off_timeout = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l427"></a>    phase = PHASE_END;
+<a name="l428"></a>}
+<a name="l429"></a>
+<a name="l430"></a></span><span class=cF1>U0</span><span class=cF0> CleanUp()
+<a name="l431"></a>{
+<a name="l432"></a>    </span><span class=cF5>QueueDel</span><span class=cF0>(&amp;indirect_head, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l433"></a>}
+<a name="l434"></a>
+<a name="l435"></a></span><span class=cF1>U0</span><span class=cF0> PlayerPick(</span><span class=cF1>U8</span><span class=cF0> *dirname, </span><span class=cF9>I64</span><span class=cF0> player)
+<a name="l436"></a>{
+<a name="l437"></a>    </span><span class=cF9>I64</span><span class=cF0>          i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l438"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
+<a name="l439"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde, *tmpde1, *tmpde2;
+<a name="l440"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l441"></a>    </span><span class=cF1>Bool</span><span class=cF0>        *old_silent = </span><span class=cF5>Silent</span><span class=cF0>;
+<a name="l442"></a>
+<a name="l443"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s/*.CC*&quot;</span><span class=cF0>, dirname);
+<a name="l444"></a>    tmpde = </span><span class=cF5>FilesFind</span><span class=cF0>(st);
+<a name="l445"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l446"></a>    tmpde2 = </span><span class=cF5>FilesFind</span><span class=cF0>(</span><span class=cF6>&quot;~/ToTheFront/*.CC*&quot;</span><span class=cF0>);
+<a name="l447"></a>    tmpde1 = tmpde;
+<a name="l448"></a>    </span><span class=cF5>Silent</span><span class=cF0>(old_silent);
+<a name="l449"></a>
+<a name="l450"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;Player %d Type\n\n$LTBLUE$&quot;</span><span class=cF0>, player + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l451"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l452"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l453"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>i++ &amp; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>)
+<a name="l454"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l455"></a>        st = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;name);
+<a name="l456"></a>        </span><span class=cF5>FileExtRemove</span><span class=cF0>(st);
+<a name="l457"></a>        tmpde1-&gt;user_data = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$MU-UL,\&quot;%-10ts\&quot;,LE=%d$ &quot;</span><span class=cF0>, st, tmpde1);
+<a name="l458"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l459"></a>        tmpde1 = tmpde1-&gt;next;
+<a name="l460"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l461"></a>    tmpde1 = tmpde2;
+<a name="l462"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l463"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l464"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>i++ &amp; </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0>)
+<a name="l465"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l466"></a>        st = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;name);
+<a name="l467"></a>        </span><span class=cF5>FileExtRemove</span><span class=cF0>(st);
+<a name="l468"></a>        tmpde1-&gt;user_data = </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;$MU-UL,\&quot;%-10ts\&quot;,LE=%d$ &quot;</span><span class=cF0>, st, tmpde1);
+<a name="l469"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l470"></a>        tmpde1 = tmpde1-&gt;next;
+<a name="l471"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l472"></a>    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\n\n\n$FG$Create your own AI in ~/ToTheFront.&quot;</span><span class=cF0>);
+<a name="l473"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>tmpde1 = </span><span class=cF5>PopUpMenu</span><span class=cF0>(doc)</span><span class=cF7>)</span><span class=cF0> &lt;= </span><span class=cFE>0</span><span class=cF0>);
+<a name="l474"></a>    </span><span class=cF5>ExeFile</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l475"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l476"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde);
+<a name="l477"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde2);
+<a name="l478"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;player_indirect[%d]=&amp;PlayerIndirect;&quot;</span><span class=cF0>
+<a name="l479"></a>             </span><span class=cF6>&quot;player_move[%d]=&amp;PlayerMove;&quot;</span><span class=cF0>
+<a name="l480"></a>             </span><span class=cF6>&quot;player_direct[%d]=&amp;PlayerDirect;&quot;</span><span class=cF0>, 
+<a name="l481"></a>             player, player, player);
+<a name="l482"></a>}
+</span></pre></body>
+</html>

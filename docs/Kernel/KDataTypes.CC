@@ -1,0 +1,427 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>LinkedListDel</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_list)
+<a name="l2"></a>{</span><span class=cF2>//Free entire linked-list.</span><span class=cF0>
+<a name="l3"></a>    </span><span class=cF1>U8</span><span class=cF0> **tmpl;
+<a name="l4"></a>
+<a name="l5"></a>    </span><span class=cF1>while</span><span class=cF0> (_list)
+<a name="l6"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l7"></a>        tmpl = *_list;
+<a name="l8"></a>        </span><span class=cF5>Free</span><span class=cF0>(_list);
+<a name="l9"></a>        _list = tmpl;
+<a name="l10"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l11"></a>}
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>LinkedListCopy</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_list, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l14"></a>{</span><span class=cF2>//MAlloc ident copy of entire linked-list.</span><span class=cF0>
+<a name="l15"></a>    </span><span class=cF1>U8</span><span class=cF0> *res = </span><span class=cF3>NULL</span><span class=cF0>, **tmpl = &amp;res;
+<a name="l16"></a>
+<a name="l17"></a>    </span><span class=cF1>while</span><span class=cF0> (_list)
+<a name="l18"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l19"></a>        tmpl = *tmpl = </span><span class=cF5>MAllocIdent</span><span class=cF0>(_list, mem_task);
+<a name="l20"></a>        _list = *_list;
+<a name="l21"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l24"></a>}
+<a name="l25"></a>
+<a name="l26"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>LinkedListCount</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_list)
+<a name="l27"></a>{</span><span class=cF2>//Count of nodes in linked-list.</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l29"></a>
+<a name="l30"></a>    </span><span class=cF1>while</span><span class=cF0> (_list)
+<a name="l31"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l32"></a>        res++;
+<a name="l33"></a>        _list = *_list;
+<a name="l34"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l35"></a>
+<a name="l36"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l37"></a>}
+<a name="l38"></a>
+<a name="l39"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>LinkedListSize</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> **_list)
+<a name="l40"></a>{</span><span class=cF2>//Mem size of all nodes in linked-list.</span><span class=cF0>
+<a name="l41"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l42"></a>
+<a name="l43"></a>    </span><span class=cF1>while</span><span class=cF0> (_list)
+<a name="l44"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l45"></a>        res += </span><span class=cF5>MSize2</span><span class=cF0>(_list);
+<a name="l46"></a>        _list = *_list;
+<a name="l47"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l48"></a>
+<a name="l49"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l50"></a>}
+<a name="l51"></a>
+<a name="l52"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>QueueDel</span><span class=cF0>(</span><span class=cF9>CQueue</span><span class=cF0> *head, </span><span class=cF1>Bool</span><span class=cF0> querem=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l53"></a>{</span><span class=cF2>//Free entries in queue, not head.</span><span class=cF0>
+<a name="l54"></a>    </span><span class=cF9>CQueue</span><span class=cF0> *tmpq = head-&gt;next, *tmpq1;
+<a name="l55"></a>
+<a name="l56"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpq != head)
+<a name="l57"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l58"></a>        tmpq1 = tmpq-&gt;next;
+<a name="l59"></a>        </span><span class=cF1>if</span><span class=cF0> (querem)
+<a name="l60"></a>            </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpq);
+<a name="l61"></a>        </span><span class=cF5>Free</span><span class=cF0>(tmpq);
+<a name="l62"></a>        tmpq = tmpq1;
+<a name="l63"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l64"></a>}
+<a name="l65"></a>
+<a name="l66"></a></span><span class=cF9>CQueue</span><span class=cF0> *</span><span class=cF5>QueueCopy</span><span class=cF0>(</span><span class=cF9>CQueue</span><span class=cF0> *head, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l67"></a>{</span><span class=cF2>//MAlloc ident copy of entire queue and head.</span><span class=cF0>
+<a name="l68"></a>    </span><span class=cF9>CQueue</span><span class=cF0> *res = </span><span class=cF5>MAllocIdent</span><span class=cF0>(head, mem_task), *tmpq = head-&gt;next, *tmpq1;
+<a name="l69"></a>
+<a name="l70"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(res);
+<a name="l71"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpq != head)
+<a name="l72"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l73"></a>        tmpq1 = </span><span class=cF5>MAllocIdent</span><span class=cF0>(tmpq, mem_task);
+<a name="l74"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpq1, res-&gt;last);
+<a name="l75"></a>        tmpq = tmpq-&gt;next;
+<a name="l76"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l77"></a>
+<a name="l78"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l79"></a>}
+<a name="l80"></a>
+<a name="l81"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>QueueCount</span><span class=cF0>(</span><span class=cF9>CQueue</span><span class=cF0> *head)
+<a name="l82"></a>{</span><span class=cF2>//Count of nodes in queue, not head.</span><span class=cF0>
+<a name="l83"></a>    </span><span class=cF9>CQueue</span><span class=cF0>  *tmpq = head-&gt;next;
+<a name="l84"></a>    </span><span class=cF9>I64</span><span class=cF0>      res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l85"></a>
+<a name="l86"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpq != head)
+<a name="l87"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l88"></a>        res++;
+<a name="l89"></a>        tmpq = tmpq-&gt;next;
+<a name="l90"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l91"></a>
+<a name="l92"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l93"></a>}
+<a name="l94"></a>
+<a name="l95"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>QueueSize</span><span class=cF0>(</span><span class=cF9>CQueue</span><span class=cF0> *head)
+<a name="l96"></a>{</span><span class=cF2>//Mem size of all nodes in queue, not head.</span><span class=cF0>
+<a name="l97"></a>    </span><span class=cF9>CQueue</span><span class=cF0>  *tmpq = head-&gt;next;
+<a name="l98"></a>    </span><span class=cF9>I64</span><span class=cF0>      res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l99"></a>
+<a name="l100"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpq != head)
+<a name="l101"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l102"></a>        res += </span><span class=cF5>MSize2</span><span class=cF0>(tmpq);
+<a name="l103"></a>        tmpq = tmpq-&gt;next;
+<a name="l104"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l105"></a>
+<a name="l106"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l107"></a>}
+<a name="l108"></a>
+<a name="l109"></a></span><span class=cF9>CQueueVectU8</span><span class=cF0> *</span><span class=cF5>QueueVectU8New</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> min_idx=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l110"></a>{</span><span class=cF2>//Create new queue vecter.</span><span class=cF0>
+<a name="l111"></a>    </span><span class=cF9>CQueueVectU8</span><span class=cF0> *res = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CQueueVectU8</span><span class=cF7>)</span><span class=cF0>);
+<a name="l112"></a>
+<a name="l113"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(res);
+<a name="l114"></a>    res-&gt;total_count = res-&gt;node_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l115"></a>    res-&gt;min_idx = min_idx;
+<a name="l116"></a>
+<a name="l117"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l118"></a>}
+<a name="l119"></a>
+<a name="l120"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>QueueVectU8Put</span><span class=cF0>(</span><span class=cF9>CQueueVectU8</span><span class=cF0> *v, </span><span class=cF9>I64</span><span class=cF0> idx, </span><span class=cF1>U8</span><span class=cF0> ch)
+<a name="l121"></a>{</span><span class=cF2>//Put U8 at idx i.</span><span class=cF0>
+<a name="l122"></a>    </span><span class=cF9>CQueueVectU8</span><span class=cF0> *tmpv;
+<a name="l123"></a>
+<a name="l124"></a>    idx -= v-&gt;min_idx;
+<a name="l125"></a>    </span><span class=cF1>if</span><span class=cF0> (idx&lt;</span><span class=cFE>0</span><span class=cF0>)
+<a name="l126"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l127"></a>    </span><span class=cF1>if</span><span class=cF0> (idx&lt;v-&gt;total_count)
+<a name="l128"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l129"></a>        tmpv = v;
+<a name="l130"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l131"></a>        {
+<a name="l132"></a>            idx -= tmpv-&gt;node_count;
+<a name="l133"></a>            </span><span class=cF1>if</span><span class=cF0> (idx &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l134"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l135"></a>                tmpv-&gt;body[idx + tmpv-&gt;node_count] = ch;
+<a name="l136"></a>                </span><span class=cF1>return</span><span class=cF0>;
+<a name="l137"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l138"></a>            tmpv = tmpv-&gt;next;
+<a name="l139"></a>        }
+<a name="l140"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpv != v);
+<a name="l141"></a>
+<a name="l142"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l143"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l144"></a>        idx -= v-&gt;total_count;
+<a name="l145"></a>
+<a name="l146"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l147"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l148"></a>        tmpv = v-&gt;last;
+<a name="l149"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpv-&gt;node_count &gt;= </span><span class=cF3>QUE_VECT_U8_COUNT</span><span class=cF0>)
+<a name="l150"></a>        {
+<a name="l151"></a>            tmpv = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CQueueVectU8</span><span class=cF7>)</span><span class=cF0>);
+<a name="l152"></a>            tmpv-&gt;node_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l153"></a>            </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpv, v-&gt;last);
+<a name="l154"></a>        }
+<a name="l155"></a>        </span><span class=cF1>if</span><span class=cF0> (idx--)
+<a name="l156"></a>        {
+<a name="l157"></a>            tmpv-&gt;body[tmpv-&gt;node_count++] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l158"></a>            v-&gt;total_count++;
+<a name="l159"></a>        }
+<a name="l160"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l161"></a>        {
+<a name="l162"></a>            tmpv-&gt;body[tmpv-&gt;node_count++] = ch;
+<a name="l163"></a>            v-&gt;total_count++;
+<a name="l164"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l165"></a>        }
+<a name="l166"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l167"></a>}
+<a name="l168"></a>
+<a name="l169"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>QueueVectU8Del</span><span class=cF0>(</span><span class=cF9>CQueueVectU8</span><span class=cF0> *v)
+<a name="l170"></a>{</span><span class=cF2>//Free entire queue vector.</span><span class=cF0>
+<a name="l171"></a>    </span><span class=cF1>if</span><span class=cF0> (v)
+<a name="l172"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l173"></a>        </span><span class=cF5>QueueDel</span><span class=cF0>(v);
+<a name="l174"></a>        </span><span class=cF5>Free</span><span class=cF0>(v);
+<a name="l175"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l176"></a>}
+<a name="l177"></a>
+<a name="l178"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>QueueVectU8Get</span><span class=cF0>(</span><span class=cF9>CQueueVectU8</span><span class=cF0> *v, </span><span class=cF9>I64</span><span class=cF0> idx)
+<a name="l179"></a>{</span><span class=cF2>//Get U8 at idx i.</span><span class=cF0>
+<a name="l180"></a>    </span><span class=cF9>CQueueVectU8</span><span class=cF0> *tmpv;
+<a name="l181"></a>
+<a name="l182"></a>    idx -= v-&gt;min_idx;
+<a name="l183"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= idx&lt;v-&gt;total_count</span><span class=cF7>)</span><span class=cF0>)
+<a name="l184"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l185"></a>    tmpv = v;
+<a name="l186"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l187"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l188"></a>        idx -= tmpv-&gt;node_count;
+<a name="l189"></a>        </span><span class=cF1>if</span><span class=cF0> (idx &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l190"></a>            </span><span class=cF1>return</span><span class=cF0> tmpv-&gt;body[idx + tmpv-&gt;node_count];
+<a name="l191"></a>        tmpv = tmpv-&gt;next;
+<a name="l192"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l193"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpv != v);
+<a name="l194"></a>
+<a name="l195"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l196"></a>}
+<a name="l197"></a>
+<a name="l198"></a></span><span class=cF9>CFifoU8</span><span class=cF0> *</span><span class=cF5>FifoU8New</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l199"></a>{</span><span class=cF2>//Create new fifo.</span><span class=cF0>
+<a name="l200"></a>    </span><span class=cF9>CFifoU8</span><span class=cF0> *f;
+<a name="l201"></a>
+<a name="l202"></a>    </span><span class=cF1>if</span><span class=cF0> (!mem_task)
+<a name="l203"></a>        mem_task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l204"></a>
+<a name="l205"></a>    f = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFifoU8</span><span class=cF7>)</span><span class=cF0>, mem_task);
+<a name="l206"></a>    f-&gt;buf      = </span><span class=cF5>MAlloc</span><span class=cF0>(size, mem_task);
+<a name="l207"></a>    f-&gt;mask     = size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l208"></a>    f-&gt;in_ptr   = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l209"></a>    f-&gt;out_ptr  = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l210"></a>
+<a name="l211"></a>    </span><span class=cF1>return</span><span class=cF0> f;
+<a name="l212"></a>}
+<a name="l213"></a>
+<a name="l214"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FifoU8Del</span><span class=cF0>(</span><span class=cF9>CFifoU8</span><span class=cF0> *f)
+<a name="l215"></a>{</span><span class=cF2>//Free fifo.</span><span class=cF0>
+<a name="l216"></a>    </span><span class=cF5>Free</span><span class=cF0>(f-&gt;buf);
+<a name="l217"></a>    </span><span class=cF5>Free</span><span class=cF0>(f);
+<a name="l218"></a>}
+<a name="l219"></a>
+<a name="l220"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FifoU8Insert</span><span class=cF0>(</span><span class=cF9>CFifoU8</span><span class=cF0> *f, </span><span class=cF1>U8</span><span class=cF0> b)
+<a name="l221"></a>{</span><span class=cF2>//Insert U8 into fifo.</span><span class=cF0>
+<a name="l222"></a>    </span><span class=cF9>I64</span><span class=cF0> new_in_ptr;
+<a name="l223"></a>
+<a name="l224"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l225"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l226"></a>    new_in_ptr = (f-&gt;in_ptr + </span><span class=cFE>1</span><span class=cF0>) &amp; f-&gt;mask;
+<a name="l227"></a>    </span><span class=cF1>if</span><span class=cF0> (new_in_ptr == f-&gt;out_ptr)
+<a name="l228"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l229"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l230"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l231"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l232"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l233"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l234"></a>        f-&gt;buf[f-&gt;in_ptr] = b;
+<a name="l235"></a>        f-&gt;in_ptr = new_in_ptr;
+<a name="l236"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l237"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l238"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l239"></a>}
+<a name="l240"></a>
+<a name="l241"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FifoU8Remove</span><span class=cF0>(</span><span class=cF9>CFifoU8</span><span class=cF0> *f, </span><span class=cF1>U8</span><span class=cF0> *_b)
+<a name="l242"></a>{</span><span class=cF2>//Remove U8 from fifo.</span><span class=cF0>
+<a name="l243"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l244"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l245"></a>    </span><span class=cF1>if</span><span class=cF0> (f-&gt;in_ptr == f-&gt;out_ptr)
+<a name="l246"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l247"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l248"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l249"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l250"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l251"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l252"></a>        *_b = f-&gt;buf[f-&gt;out_ptr];
+<a name="l253"></a>        f-&gt;out_ptr = (f-&gt;out_ptr + </span><span class=cFE>1</span><span class=cF0>) &amp; f-&gt;mask;
+<a name="l254"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l255"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l256"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l257"></a>}
+<a name="l258"></a>
+<a name="l259"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FifoU8Peek</span><span class=cF0>(</span><span class=cF9>CFifoU8</span><span class=cF0> *f, </span><span class=cF1>U8</span><span class=cF0> *_b)
+<a name="l260"></a>{</span><span class=cF2>//Peek at front of fifo and don't remove.</span><span class=cF0>
+<a name="l261"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l262"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l263"></a>    </span><span class=cF1>if</span><span class=cF0> (f-&gt;in_ptr == f-&gt;out_ptr)
+<a name="l264"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l265"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l266"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l267"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l268"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l269"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l270"></a>        *_b = f-&gt;buf[f-&gt;out_ptr];
+<a name="l271"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l272"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l273"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l274"></a>}
+<a name="l275"></a>
+<a name="l276"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FifoU8Flush</span><span class=cF0>(</span><span class=cF9>CFifoU8</span><span class=cF0> *f)
+<a name="l277"></a>{</span><span class=cF2>//Flush fifo getting rid of all U8's.</span><span class=cF0>
+<a name="l278"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l279"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l280"></a>    f-&gt;out_ptr = f-&gt;in_ptr;
+<a name="l281"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l282"></a>}
+<a name="l283"></a>
+<a name="l284"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FifoU8Count</span><span class=cF0>(</span><span class=cF9>CFifoU8</span><span class=cF0> *f)
+<a name="l285"></a>{</span><span class=cF2>//Count of U8's in fifo.</span><span class=cF0>
+<a name="l286"></a>    </span><span class=cF9>I64</span><span class=cF0> res;
+<a name="l287"></a>
+<a name="l288"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l289"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l290"></a>    </span><span class=cF1>if</span><span class=cF0> (f-&gt;out_ptr &gt; f-&gt;in_ptr)
+<a name="l291"></a>        res = f-&gt;mask + </span><span class=cFE>1</span><span class=cF0> - (f-&gt;out_ptr - f-&gt;in_ptr);
+<a name="l292"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l293"></a>        res = f-&gt;in_ptr - f-&gt;out_ptr;
+<a name="l294"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l295"></a>
+<a name="l296"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l297"></a>}
+<a name="l298"></a>
+<a name="l299"></a></span><span class=cF9>CFifoI64</span><span class=cF0> *</span><span class=cF5>FifoI64New</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l300"></a>{</span><span class=cF2>//Create new fifo.</span><span class=cF0>
+<a name="l301"></a>    </span><span class=cF9>CFifoI64</span><span class=cF0> *f;
+<a name="l302"></a>
+<a name="l303"></a>    </span><span class=cF1>if</span><span class=cF0> (!mem_task)
+<a name="l304"></a>        mem_task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l305"></a>
+<a name="l306"></a>    f = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFifoI64</span><span class=cF7>)</span><span class=cF0>, mem_task);
+<a name="l307"></a>    f-&gt;buf      = </span><span class=cF5>MAlloc</span><span class=cF0>(size * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>, mem_task);
+<a name="l308"></a>    f-&gt;mask     = size - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l309"></a>    f-&gt;in_ptr   = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l310"></a>    f-&gt;out_ptr  = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l311"></a>
+<a name="l312"></a>    </span><span class=cF1>return</span><span class=cF0> f;
+<a name="l313"></a>}
+<a name="l314"></a>
+<a name="l315"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FifoI64Del</span><span class=cF0>(</span><span class=cF9>CFifoI64</span><span class=cF0> *f)
+<a name="l316"></a>{</span><span class=cF2>//Free fifo.</span><span class=cF0>
+<a name="l317"></a>    </span><span class=cF5>Free</span><span class=cF0>(f-&gt;buf);
+<a name="l318"></a>    </span><span class=cF5>Free</span><span class=cF0>(f);
+<a name="l319"></a>}
+<a name="l320"></a>
+<a name="l321"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FifoI64Ins</span><span class=cF0>(</span><span class=cF9>CFifoI64</span><span class=cF0> *f, </span><span class=cF9>I64</span><span class=cF0> q)
+<a name="l322"></a>{</span><span class=cF2>//Insert I64 into fifo.</span><span class=cF0>
+<a name="l323"></a>    </span><span class=cF9>I64</span><span class=cF0> new_in_ptr;
+<a name="l324"></a>
+<a name="l325"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l326"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l327"></a>    new_in_ptr = (f-&gt;in_ptr + </span><span class=cFE>1</span><span class=cF0>) &amp; f-&gt;mask;
+<a name="l328"></a>    </span><span class=cF1>if</span><span class=cF0> (new_in_ptr == f-&gt;out_ptr)
+<a name="l329"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l330"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l331"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l332"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l333"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l334"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l335"></a>        f-&gt;buf[f-&gt;in_ptr] = q;
+<a name="l336"></a>        f-&gt;in_ptr = new_in_ptr;
+<a name="l337"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l338"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l339"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l340"></a>}
+<a name="l341"></a>
+<a name="l342"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FifoI64Remove</span><span class=cF0>(</span><span class=cF9>CFifoI64</span><span class=cF0> *f, </span><span class=cF9>I64</span><span class=cF0> *_q)
+<a name="l343"></a>{</span><span class=cF2>//Remove I64 from fifo.</span><span class=cF0>
+<a name="l344"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l345"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l346"></a>    </span><span class=cF1>if</span><span class=cF0> (f-&gt;in_ptr == f-&gt;out_ptr)
+<a name="l347"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l348"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l349"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l350"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l351"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l352"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l353"></a>        *_q = f-&gt;buf[f-&gt;out_ptr];
+<a name="l354"></a>        f-&gt;out_ptr = (f-&gt;out_ptr + </span><span class=cFE>1</span><span class=cF0>) &amp; f-&gt;mask;
+<a name="l355"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l356"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l357"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l358"></a>}
+<a name="l359"></a>
+<a name="l360"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FifoI64Peek</span><span class=cF0>(</span><span class=cF9>CFifoI64</span><span class=cF0> *f, </span><span class=cF9>I64</span><span class=cF0> *_q)
+<a name="l361"></a>{</span><span class=cF2>//Peek at front of fifo and don't remove.</span><span class=cF0>
+<a name="l362"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l363"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l364"></a>    </span><span class=cF1>if</span><span class=cF0> (f-&gt;in_ptr == f-&gt;out_ptr)
+<a name="l365"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l366"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l367"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l368"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l369"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l370"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l371"></a>        *_q = f-&gt;buf[f-&gt;out_ptr];
+<a name="l372"></a>        </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l373"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l374"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l375"></a>}
+<a name="l376"></a>
+<a name="l377"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FifoI64Flush</span><span class=cF0>(</span><span class=cF9>CFifoI64</span><span class=cF0> *f)
+<a name="l378"></a>{</span><span class=cF2>//Flush fifo getting rid of all I64's.</span><span class=cF0>
+<a name="l379"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l380"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l381"></a>    f-&gt;out_ptr = f-&gt;in_ptr;
+<a name="l382"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l383"></a>}
+<a name="l384"></a>
+<a name="l385"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>FifoI64Count</span><span class=cF0>(</span><span class=cF9>CFifoI64</span><span class=cF0> *f)
+<a name="l386"></a>{</span><span class=cF2>//Count of I64's in fifo.</span><span class=cF0>
+<a name="l387"></a>    </span><span class=cF9>I64</span><span class=cF0> res;
+<a name="l388"></a>
+<a name="l389"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l390"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l391"></a>    </span><span class=cF1>if</span><span class=cF0> (f-&gt;out_ptr &gt; f-&gt;in_ptr)
+<a name="l392"></a>        res = f-&gt;mask + </span><span class=cFE>1</span><span class=cF0> - (f-&gt;out_ptr - f-&gt;in_ptr);
+<a name="l393"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l394"></a>        res = f-&gt;in_ptr - f-&gt;out_ptr;
+<a name="l395"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l396"></a>
+<a name="l397"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l398"></a>}
+</span></pre></body>
+</html>

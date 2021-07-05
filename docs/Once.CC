@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//Place this file in /Home and change</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//anything you want.</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF2>//This file is executed by the</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>//first terminal window upon start-up.</span><span class=cF0>
+<a name="l6"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.html#l32"><span class=cF4>Once</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Doc/GuideLines.html#l30"><span class=cF4>Home Files</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a>
+<a name="l8"></a></span><span class=cF2>//Delete the rest from this file.</span><span class=cF0>
+<a name="l9"></a>
+<a name="l10"></a></span><span class=cF1>U0</span><span class=cF0> Tmp()
+<a name="l11"></a>{
+<a name="l12"></a>    </span><span class=cF5>OnceExe</span><span class=cF0>;
+<a name="l13"></a>    </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l14"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l15"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_ROM</span><span class=cF0>:
+<a name="l16"></a>            </span><span class=cF6>&quot;Continue booting hard drive &quot;</span><span class=cF0>;
+<a name="l17"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l18"></a>            {
+<a name="l19"></a>                </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l20"></a>                </span><span class=cF5>ExeFile</span><span class=cF0>(</span><span class=cF6>&quot;C:/Home/Once&quot;</span><span class=cF0>);
+<a name="l21"></a>            }
+<a name="l22"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l23"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_DVD</span><span class=cF0>:
+<a name="l24"></a>            </span><span class=cF6>&quot;\nIf you answer 'No' you can play with\n&quot;</span><span class=cF0>
+<a name="l25"></a>                        </span><span class=cF6>&quot;the live CD without installing.\n\n&quot;</span><span class=cF0>
+<a name="l26"></a>                        </span><span class=cF6>&quot;Install onto hard drive &quot;</span><span class=cF0>;
+<a name="l27"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l28"></a>            {
+<a name="l29"></a>                </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l30"></a>                </span><span class=cF5>RunFile</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/OSInstall&quot;</span><span class=cF0>,, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l31"></a>            }
+<a name="l32"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF6>&quot;::/Misc/Tour&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l33"></a>            {
+<a name="l34"></a>                </span><span class=cF6>&quot;\nTake Tour&quot;</span><span class=cF0>;
+<a name="l35"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>) </span><span class=cF7>{</span><span class=cF0>
+<a name="l36"></a>                    </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l37"></a>                    </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/Tour&quot;</span><span class=cF0>);
+<a name="l38"></a>                    </span><span class=cF5>InFile</span><span class=cF0>(</span><span class=cF6>&quot;Tour&quot;</span><span class=cF0>);
+<a name="l39"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l40"></a>            }
+<a name="l41"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l42"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_HARDDRIVE</span><span class=cF0>:
+<a name="l43"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BOOT_SRC_RAM</span><span class=cF0>:
+<a name="l44"></a>            </span><span class=cF6>&quot;$PURPLE$$TX+CX,\&quot;Tips of the Day\&quot;$$FG$\n&quot;</span><span class=cF0>;
+<a name="l45"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;</span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
+<a name="l46"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;</span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
+<a name="l47"></a>            </span><span class=cF5>TipOfDay</span><span class=cF0>;
+<a name="l48"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>Type(&quot;::/Doc/Customize.DD&quot;);</span><span class=cF0>
+<a name="l49"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (FileFind(&quot;::/Misc/Tour&quot;))</span><span class=cF0>
+<a name="l50"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>{</span><span class=cF0>
+<a name="l51"></a></span><span class=cF2>//</span><span class=cF0>              </span><span class=cF2>&quot;\nTake Tour&quot;;</span><span class=cF0>
+<a name="l52"></a></span><span class=cF2>//</span><span class=cF0>              </span><span class=cF2>if (YorN)</span><span class=cF0>
+<a name="l53"></a></span><span class=cF2>//</span><span class=cF0>              </span><span class=cF2>{</span><span class=cF0>
+<a name="l54"></a></span><span class=cF2>//</span><span class=cF0>                  </span><span class=cF2>DocBottom;</span><span class=cF0>
+<a name="l55"></a></span><span class=cF2>//</span><span class=cF0>                  </span><span class=cF2>Cd(&quot;::/Misc/Tour&quot;);</span><span class=cF0>
+<a name="l56"></a></span><span class=cF2>//</span><span class=cF0>                  </span><span class=cF2>InFile(&quot;Tour&quot;);</span><span class=cF0>
+<a name="l57"></a></span><span class=cF2>//</span><span class=cF0>              </span><span class=cF2>}</span><span class=cF0>
+<a name="l58"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>}</span><span class=cF0>
+<a name="l59"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l60"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l61"></a>}
+<a name="l62"></a>Tmp;
+</span></pre></body>
+</html>

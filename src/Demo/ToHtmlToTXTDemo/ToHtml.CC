@@ -206,7 +206,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 	if (!body_header)
 		body_header =
 					"<body>\n"
-					"<pre style=\"font-family:courier;font-size:10pt\">\n";
+					"<pre style=\"font-family:monospace;font-size:12pt\">\n";
 	if (!body_footer)
 		body_footer =
 					"</pre></body>\n";

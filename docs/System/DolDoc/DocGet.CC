@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>EdUndoFilter</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc)
+<a name="l4"></a>{
+<a name="l5"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l6"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_ce = doc-&gt;head.next;
+<a name="l7"></a>
+<a name="l8"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_ce != doc)
+<a name="l9"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l10"></a>        doc_ce-&gt;de_flags &amp;= ~</span><span class=cF3>DOCEF_FILTER_SKIP</span><span class=cF0>;
+<a name="l11"></a>        doc_ce = doc_ce-&gt;next;
+<a name="l12"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l13"></a>    doc-&gt;find_replace-&gt;filter_lines = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l14"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l15"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l16"></a>}
+<a name="l17"></a>
+<a name="l18"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DocKeyGet</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *_sc=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l19"></a>{</span><span class=cF2>//Called by </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocEd.html#l3"><span class=cF4>View</span></a><span class=cF2>. You probably don't need this.</span><span class=cF0>
+<a name="l20"></a>    </span><span class=cF9>I64</span><span class=cF0>  ch, sc;
+<a name="l21"></a>    </span><span class=cF1>Bool</span><span class=cF0> cont, old_key_desc;
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l24"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l25"></a>        old_key_desc = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>);
+<a name="l26"></a>        </span><span class=cF1>do</span><span class=cF0> ch = </span><span class=cF5>KeyGet</span><span class=cF0>(&amp;sc, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l27"></a>        </span><span class=cF1>while</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_KEY_DESC</span><span class=cF0>);
+<a name="l28"></a>        </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit, </span><span class=cF3>WIf_SELF_KEY_DESC</span><span class=cF0>, old_key_desc);
+<a name="l29"></a>
+<a name="l30"></a>        </span><span class=cF5>DocRecalc</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>);
+<a name="l31"></a>        cont = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l32"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>ch == </span><span class=cF3>CH_ESC</span><span class=cF0> || ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF2>//Check for exit filter mode</span><span class=cF0>
+<a name="l33"></a>            </span><span class=cF5>DocPut</span><span class=cF0> &amp;&amp; </span><span class=cF5>DocPut</span><span class=cF0>-&gt;find_replace-&gt;filter_lines)
+<a name="l34"></a>        {
+<a name="l35"></a>            </span><span class=cF5>EdUndoFilter</span><span class=cF0>(</span><span class=cF5>DocPut</span><span class=cF0>);
+<a name="l36"></a>            cont = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l37"></a>        }
+<a name="l38"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF1>while</span><span class=cF0> (cont);
+<a name="l40"></a>
+<a name="l41"></a>    </span><span class=cF1>if</span><span class=cF0> (_sc)
+<a name="l42"></a>        *_sc = sc;
+<a name="l43"></a>
+<a name="l44"></a>    </span><span class=cF1>return</span><span class=cF0> ch;
+<a name="l45"></a>}
+<a name="l46"></a>
+<a name="l47"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;StdIn/DolDoc&quot;</span><span class=cF0>
+<a name="l48"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DocScanLine</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>CDocEntry</span><span class=cF0> *doc_e, </span><span class=cF9>I64</span><span class=cF0> *cur_col=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CDocEntry</span><span class=cF0> **_do_e_end=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l49"></a>{</span><span class=cF2>//Start at entry in doc,make and return one line as str.</span><span class=cF0>
+<a name="l50"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e2 = doc_e;
+<a name="l51"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l52"></a>    </span><span class=cF1>U8</span><span class=cF0>          *dst, *src, *</span><span class=cF1>start</span><span class=cF0>,*res;
+<a name="l53"></a>    </span><span class=cF9>I64</span><span class=cF0>          i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l54"></a>
+<a name="l55"></a>    </span><span class=cF1>if</span><span class=cF0> (cur_col)
+<a name="l56"></a>        *cur_col = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l57"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e2 != doc &amp;&amp; doc_e2-&gt;type_u8 != </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l58"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l59"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e2-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TAG</span><span class=cF0> &amp;&amp; doc_e2-&gt;tag)
+<a name="l60"></a>        {
+<a name="l61"></a>            src = doc_e2-&gt;tag;
+<a name="l62"></a>            i += </span><span class=cF5>StrLen</span><span class=cF0>(src);
+<a name="l63"></a>        }
+<a name="l64"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e2-&gt;type_u8 == </span><span class=cF3>DOCT_TAB</span><span class=cF0>)
+<a name="l65"></a>            i++;
+<a name="l66"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e2-&gt;type_u8 == </span><span class=cF3>DOCT_SHIFTED_X</span><span class=cF0> || doc_e2-&gt;type_u8 == </span><span class=cF3>DOCT_SHIFTED_Y</span><span class=cF0>)
+<a name="l67"></a>        {
+<a name="l68"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e2-&gt;attr &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l69"></a>                i++;
+<a name="l70"></a>            i += </span><span class=cFE>6</span><span class=cF0>; </span><span class=cF2>//$SY,3$</span><span class=cF0>
+<a name="l71"></a>        }
+<a name="l72"></a>        doc_e2 = doc_e2-&gt;next;
+<a name="l73"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l74"></a>    res = </span><span class=cF5>MAlloc</span><span class=cF0>(i + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l75"></a>    dst = res;
+<a name="l76"></a>    </span><span class=cF1>while</span><span class=cF0> (doc_e != doc &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l77"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l78"></a>        </span><span class=cF1>start</span><span class=cF0> = dst;
+<a name="l79"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;de_flags &amp; </span><span class=cF3>DOCEF_TAG</span><span class=cF0> &amp;&amp; doc_e-&gt;tag)
+<a name="l80"></a>        {
+<a name="l81"></a>            src = doc_e-&gt;tag;
+<a name="l82"></a>            </span><span class=cF1>while</span><span class=cF0> (*src)
+<a name="l83"></a>                *dst++ = *src++;
+<a name="l84"></a>        }
+<a name="l85"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_TAB</span><span class=cF0>)
+<a name="l86"></a>            *dst++ = </span><span class=cF6>'\t'</span><span class=cF0>;
+<a name="l87"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_SHIFTED_Y</span><span class=cF0>)
+<a name="l88"></a>        {
+<a name="l89"></a>            *dst(</span><span class=cF9>U32</span><span class=cF0> *)++ = </span><span class=cF6>'$SY,'</span><span class=cF0>;
+<a name="l90"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;attr &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l91"></a>                *dst++ = </span><span class=cF6>'-'</span><span class=cF0>;
+<a name="l92"></a>            *dst++ = </span><span class=cF6>'0'</span><span class=cF0> + </span><span class=cF5>AbsI64</span><span class=cF0>(doc_e-&gt;attr); </span><span class=cF2>//Supposedly -7 to 7 (single digit)</span><span class=cF0>
+<a name="l93"></a>            *dst++ = </span><span class=cF6>'$'</span><span class=cF0>;
+<a name="l94"></a>        }
+<a name="l95"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;type_u8 == </span><span class=cF3>DOCT_SHIFTED_X</span><span class=cF0>)
+<a name="l96"></a>        {
+<a name="l97"></a>            *dst(</span><span class=cF9>U32</span><span class=cF0> *)++ = </span><span class=cF6>'$SX,'</span><span class=cF0>;
+<a name="l98"></a>            </span><span class=cF1>if</span><span class=cF0> (doc_e-&gt;attr &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l99"></a>                *dst++ = </span><span class=cF6>'-'</span><span class=cF0>;
+<a name="l100"></a>            *dst++ = </span><span class=cF6>'0'</span><span class=cF0> + </span><span class=cF5>AbsI64</span><span class=cF0>(doc_e-&gt;attr); </span><span class=cF2>//Supposedly -7 to 7 (single digit)</span><span class=cF0>
+<a name="l101"></a>            *dst++ = </span><span class=cF6>'$'</span><span class=cF0>;
+<a name="l102"></a>        }
+<a name="l103"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e == doc-&gt;cur_entry &amp;&amp; cur_col)
+<a name="l104"></a>            *cur_col = </span><span class=cF1>start</span><span class=cF0> - res + doc-&gt;cur_col;
+<a name="l105"></a>        doc_e = doc_e-&gt;next;
+<a name="l106"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l107"></a>    </span><span class=cF1>if</span><span class=cF0> (_do_e_end)
+<a name="l108"></a>        *_do_e_end=doc_e;
+<a name="l109"></a>    *dst = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l110"></a>    </span><span class=cF1>if</span><span class=cF0> (doc_e == doc-&gt;cur_entry &amp;&amp; cur_col &amp;&amp; !doc-&gt;cur_col)
+<a name="l111"></a>        *cur_col = dst - res;
+<a name="l112"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l113"></a>        </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l114"></a>
+<a name="l115"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l116"></a>}
+<a name="l117"></a>
+<a name="l118"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DocGetStr2</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l119"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4328"><span class=cF4>Flags</span></a><span class=cF0>
+<a name="l120"></a>    </span><span class=cF9>CDoc</span><span class=cF0>        *doc;
+<a name="l121"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e, *doc_e_end;
+<a name="l122"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st, *st2, *res;
+<a name="l123"></a>    </span><span class=cF9>I64</span><span class=cF0>          ch, sc;
+<a name="l124"></a>
+<a name="l125"></a>    </span><span class=cF6>&quot;$PT$&quot;</span><span class=cF0>;
+<a name="l126"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l127"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l128"></a>        ch = </span><span class=cF5>DocKeyGet</span><span class=cF0>(&amp;sc);
+<a name="l129"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_ESC</span><span class=cF0>)
+<a name="l130"></a>        {
+<a name="l131"></a>            </span><span class=cF1>if</span><span class=cF0> (doc = </span><span class=cF5>DocPut</span><span class=cF0>)
+<a name="l132"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l133"></a>                </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l134"></a>                </span><span class=cF1>if</span><span class=cF0> (doc-&gt;doc_signature == </span><span class=cF3>DOC_SIGNATURE_VAL</span><span class=cF0> &amp;&amp; doc-&gt;cur_entry != doc)
+<a name="l135"></a>                {
+<a name="l136"></a>                    doc_e = </span><span class=cF5>DocEntryCopy</span><span class=cF0>(doc, doc-&gt;cur_entry);
+<a name="l137"></a>                    </span><span class=cF5>DocBottom</span><span class=cF0>(doc);
+<a name="l138"></a>                    </span><span class=cF5>DocEntryRun</span><span class=cF0>(doc, doc_e, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l139"></a>                    </span><span class=cF5>DocEntryDel</span><span class=cF0>(doc, doc_e);
+<a name="l140"></a>                }
+<a name="l141"></a>                </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l142"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l143"></a>            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>SGF_WITH_NEW_LINE</span><span class=cF0>)
+<a name="l144"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l145"></a>        }
+<a name="l146"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>)
+<a name="l147"></a>        {
+<a name="l148"></a>            </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>SGF_SHIFT_ESC_EXIT</span><span class=cF0>)
+<a name="l149"></a>                </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l150"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l151"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l152"></a>                res = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>);
+<a name="l153"></a>                </span><span class=cF1>goto</span><span class=cF0> gs_done;
+<a name="l154"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l155"></a>        }
+<a name="l156"></a></span><span class=cF2>//&lt;CTRL-SHIFT-ENTER&gt; is a blank line without entry</span><span class=cF0>
+<a name="l157"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l158"></a>    </span><span class=cF1>while</span><span class=cF0> (flags &amp; </span><span class=cF3>SGF_WITH_NEW_LINE</span><span class=cF0> || ch != </span><span class=cF6>'\n'</span><span class=cF0> || sc &amp; </span><span class=cF3>SCF_CTRL</span><span class=cF0> &amp;&amp; sc &amp; </span><span class=cF3>SCF_SHIFT</span><span class=cF0>);
+<a name="l159"></a>
+<a name="l160"></a>    doc = </span><span class=cF5>DocPut</span><span class=cF0>;
+<a name="l161"></a>    </span><span class=cF5>DocLock</span><span class=cF0>(doc);
+<a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>SGF_WITH_NEW_LINE</span><span class=cF0>)
+<a name="l163"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l164"></a>        doc_e = doc-&gt;cur_entry;
+<a name="l165"></a>        </span><span class=cF1>do</span><span class=cF0> doc_e = doc_e-&gt;last;
+<a name="l166"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_PROMPT</span><span class=cF0>);
+<a name="l167"></a>        doc_e = doc_e-&gt;next;
+<a name="l168"></a>        </span><span class=cF1>if</span><span class=cF0> (res = </span><span class=cF5>DocScanLine</span><span class=cF7>(</span><span class=cF0>doc, doc_e, </span><span class=cF3>NULL</span><span class=cF0>, &amp;doc_e_end</span><span class=cF7>)</span><span class=cF0>)
+<a name="l169"></a>        {
+<a name="l170"></a>            </span><span class=cF1>while</span><span class=cF0> (doc_e_end != doc &amp;&amp; doc_e_end-&gt;type_u8 == </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0>)
+<a name="l171"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l172"></a>                st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, res);
+<a name="l173"></a>                </span><span class=cF5>Free</span><span class=cF0>(res);
+<a name="l174"></a>                res = st2;
+<a name="l175"></a>                </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>DocScanLine</span><span class=cF7>(</span><span class=cF0>doc, doc_e_end-&gt;next, </span><span class=cF3>NULL</span><span class=cF0>, &amp;doc_e_end</span><span class=cF7>)</span><span class=cF0>)
+<a name="l176"></a>                {
+<a name="l177"></a>                    st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s%s&quot;</span><span class=cF0>, res, st);
+<a name="l178"></a>                    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l179"></a>                    </span><span class=cF5>Free</span><span class=cF0>(res);
+<a name="l180"></a>                    res=st2;
+<a name="l181"></a>                }
+<a name="l182"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l183"></a>        }
+<a name="l184"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l185"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l186"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l187"></a>        doc_e = doc-&gt;cur_entry;
+<a name="l188"></a>        </span><span class=cF1>do</span><span class=cF0> doc_e = doc_e-&gt;last;
+<a name="l189"></a>        </span><span class=cF1>while</span><span class=cF0> (doc_e != doc &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0> &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_PROMPT</span><span class=cF0>);
+<a name="l190"></a>        </span><span class=cF1>if</span><span class=cF0> (doc_e != doc &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_PROMPT</span><span class=cF0>)
+<a name="l191"></a>        {
+<a name="l192"></a>            </span><span class=cF1>do</span><span class=cF0> doc_e = doc_e-&gt;last;
+<a name="l193"></a>            </span><span class=cF1>while</span><span class=cF0> (doc_e != doc &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_NEW_LINE</span><span class=cF0> &amp;&amp; doc_e-&gt;type_u8 != </span><span class=cF3>DOCT_PROMPT</span><span class=cF0>);
+<a name="l194"></a>        }
+<a name="l195"></a>        doc_e = doc_e-&gt;next;
+<a name="l196"></a>        res = </span><span class=cF5>DocScanLine</span><span class=cF0>(doc, doc_e, </span><span class=cF3>NULL</span><span class=cF0>);
+<a name="l197"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>    </span><span class=cF5>DocUnlock</span><span class=cF0>(doc);
+<a name="l199"></a>gs_done:
+<a name="l200"></a>    </span><span class=cF6>&quot;$PT$$FG$$BG$&quot;</span><span class=cF0>;
+<a name="l201"></a>
+<a name="l202"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l203"></a>}
+<a name="l204"></a>
+<a name="l205"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Keyboard Devices;Char/Input;StdIn&quot;</span><span class=cF0>
+<a name="l206"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> lo=</span><span class=cF3>I64_MIN</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> hi=</span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l207"></a>{</span><span class=cF2>//Prompt user for I64 expression.</span><span class=cF0>
+<a name="l208"></a>    </span><span class=cF1>Bool</span><span class=cF0> okay;
+<a name="l209"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st;
+<a name="l210"></a>    </span><span class=cF9>I64</span><span class=cF0>  res;
+<a name="l211"></a>
+<a name="l212"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l213"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l214"></a>        </span><span class=cF1>if</span><span class=cF0> (message)
+<a name="l215"></a>            </span><span class=cF6>&quot;&quot;</span><span class=cF0> message, </span><span class=cF1>default</span><span class=cF0>;
+<a name="l216"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l217"></a>        </span><span class=cF1>if</span><span class=cF0> (!*st)
+<a name="l218"></a>        {
+<a name="l219"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l220"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>;
+<a name="l221"></a>        }
+<a name="l222"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l223"></a>        {
+<a name="l224"></a>            res = </span><span class=cF5>ExePrint2</span><span class=cF0>(</span><span class=cF6>&quot;ToI64(%s);&quot;</span><span class=cF0>, st);
+<a name="l225"></a>            okay = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l226"></a>        }
+<a name="l227"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l228"></a>        {
+<a name="l229"></a>            </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l230"></a>            okay = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l231"></a>        }
+<a name="l232"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l233"></a>        </span><span class=cF1>if</span><span class=cF0> (okay &amp;&amp; lo &lt;= res &lt;= hi)
+<a name="l234"></a>            </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l235"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l236"></a>}
+<a name="l237"></a>
+<a name="l238"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF5>F64Get</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> lo=</span><span class=cF3>F64_MIN</span><span class=cF0>, </span><span class=cF1>F64</span><span class=cF0> hi=</span><span class=cF3>F64_MAX</span><span class=cF0>)
+<a name="l239"></a>{</span><span class=cF2>//Prompt user for F64 expression.</span><span class=cF0>
+<a name="l240"></a>    </span><span class=cF1>Bool</span><span class=cF0> okay;
+<a name="l241"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st;
+<a name="l242"></a>    </span><span class=cF1>F64</span><span class=cF0>  res;
+<a name="l243"></a>
+<a name="l244"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l245"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l246"></a>        </span><span class=cF1>if</span><span class=cF0> (message)
+<a name="l247"></a>            </span><span class=cF6>&quot;&quot;</span><span class=cF0> message, </span><span class=cF1>default</span><span class=cF0>;
+<a name="l248"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l249"></a>        </span><span class=cF1>if</span><span class=cF0> (!*st)
+<a name="l250"></a>        {
+<a name="l251"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l252"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>;
+<a name="l253"></a>        }
+<a name="l254"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l255"></a>        {
+<a name="l256"></a>            res = </span><span class=cF5>ExePrint2</span><span class=cF0>(</span><span class=cF6>&quot;ToF64(%s);&quot;</span><span class=cF0>, st)(</span><span class=cF1>F64</span><span class=cF0>);
+<a name="l257"></a>            okay = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l258"></a>        }
+<a name="l259"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l260"></a>        {
+<a name="l261"></a>            </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l262"></a>            okay = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l263"></a>        }
+<a name="l264"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l265"></a>        </span><span class=cF1>if</span><span class=cF0> (okay &amp;&amp; lo &lt;= res &lt;= hi)
+<a name="l266"></a>            </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l267"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l268"></a>}
+<a name="l269"></a>
+<a name="l270"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDate</span><span class=cF0> </span><span class=cF5>DateGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CDate</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>=</span><span class=cF3>I64_MIN</span><span class=cF0>, </span><span class=cF9>CDate</span><span class=cF0> lo=</span><span class=cF3>I64_MIN</span><span class=cF0>, </span><span class=cF9>CDate</span><span class=cF0> hi=</span><span class=cF3>I64_MAX</span><span class=cF0>)
+<a name="l271"></a>{</span><span class=cF2>//Prompt user for date expression. (Use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDate.html#l214"><span class=cF4>Now</span></a><span class=cF2>() if you want current time.)</span><span class=cF0>
+<a name="l272"></a>    </span><span class=cF1>U8</span><span class=cF0>   *st;
+<a name="l273"></a>    </span><span class=cF9>CDate</span><span class=cF0> res;
+<a name="l274"></a>
+<a name="l275"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>default</span><span class=cF0> == </span><span class=cF3>I64_MIN</span><span class=cF0>)
+<a name="l276"></a>        </span><span class=cF1>default</span><span class=cF0> = </span><span class=cF5>Now</span><span class=cF0>;
+<a name="l277"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l278"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l279"></a>        </span><span class=cF1>if</span><span class=cF0> (message)
+<a name="l280"></a>            </span><span class=cF6>&quot;&quot;</span><span class=cF0> message, </span><span class=cF1>default</span><span class=cF0>, </span><span class=cF1>default</span><span class=cF0>;
+<a name="l281"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l282"></a>        </span><span class=cF1>if</span><span class=cF0> (!*st)
+<a name="l283"></a>        {
+<a name="l284"></a>            </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l285"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF1>default</span><span class=cF0>;
+<a name="l286"></a>        }
+<a name="l287"></a>        res = </span><span class=cF5>Str2Date</span><span class=cF0>(st);
+<a name="l288"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l289"></a>        </span><span class=cF1>if</span><span class=cF0> (res &gt;= lo &amp;&amp; res &lt;= hi)
+<a name="l290"></a>            </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l291"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l292"></a>}
+</span></pre></body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF9>I64</span><span class=cF0> box_x_min, box_x_max, box_y_min, box_y_max;
+<a name="l2"></a>
+<a name="l3"></a></span><span class=cF1>class</span><span class=cF0> Arrow
+<a name="l4"></a>{
+<a name="l5"></a>    Arrow   *next, *last;
+<a name="l6"></a>    </span><span class=cF1>F64</span><span class=cF0>      x, y, dx, dy;
+<a name="l7"></a>
+<a name="l8"></a>} head;
+<a name="l9"></a>
+<a name="l10"></a>     </span><span class=cFA>&lt;1&gt;/* Graphics Not Rendered in HTML */</span><span class=cF0>
+<a name="l11"></a>
+<a name="l12"></a></span><span class=cF1>Bool</span><span class=cF0> bow_drawn;
+<a name="l13"></a></span><span class=cF1>F64</span><span class=cF0>  bow_x, bow_y, bow_theta;
+<a name="l14"></a>
+<a name="l15"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DrawIt</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>CDC</span><span class=cF0> *dc)
+<a name="l16"></a>{
+<a name="l17"></a>    </span><span class=cF1>F64</span><span class=cF0>      theta, x, y, dx, dy, str_w, str_h, draw_len;
+<a name="l18"></a>    Arrow   *tmpa;
+<a name="l19"></a>    </span><span class=cF9>CD3I32</span><span class=cF0>   ctrl[</span><span class=cFE>5</span><span class=cF0>];
+<a name="l20"></a>
+<a name="l21"></a>    dc-&gt;color = </span><span class=cF3>RED</span><span class=cF0>;
+<a name="l22"></a>    </span><span class=cF5>GrBorder</span><span class=cF0>(dc, box_x_min, box_y_min, box_x_max, box_y_max);
+<a name="l23"></a>
+<a name="l24"></a>    x = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>mouse</span><span class=cF0>.pos.x - task-&gt;pix_left - task-&gt;scroll_x, box_x_min, box_x_max);
+<a name="l25"></a>    y = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>mouse</span><span class=cF0>.pos.y - task-&gt;pix_top  - task-&gt;scroll_y, box_y_min, box_y_max);
+<a name="l26"></a>    dx = bow_x - x;
+<a name="l27"></a>    dy = bow_y - y;
+<a name="l28"></a>
+<a name="l29"></a>    </span><span class=cF1>if</span><span class=cF0> (bow_drawn &amp;&amp; </span><span class=cF7>(</span><span class=cF0>dx | dy</span><span class=cF7>)</span><span class=cF0>)
+<a name="l30"></a>        bow_theta = </span><span class=cF5>Arg</span><span class=cF0>(dx, dy);
+<a name="l31"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l32"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l33"></a>        bow_x = x;
+<a name="l34"></a>        bow_y = y;
+<a name="l35"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l36"></a>
+<a name="l37"></a>    draw_len = </span><span class=cF5>Sqrt</span><span class=cF0>(dx * dx + dy * dy);
+<a name="l38"></a>    str_w = draw_len / </span><span class=cFE>3</span><span class=cF0>;
+<a name="l39"></a>    str_h = </span><span class=cF5>Sqrt</span><span class=cF0>(</span><span class=cFE>60</span><span class=cF0> * </span><span class=cFE>60</span><span class=cF0> - str_w * str_w);
+<a name="l40"></a>
+<a name="l41"></a>    dc-&gt;color = </span><span class=cF3>BLACK</span><span class=cF0>;
+<a name="l42"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc,  x - str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> + str_w * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>bow_theta</span><span class=cF7>)</span><span class=cF0>,
+<a name="l43"></a>                y - str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> + str_w * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>bow_theta</span><span class=cF7>)</span><span class=cF0>, x, y);
+<a name="l44"></a>    </span><span class=cF5>GrLine</span><span class=cF0>(dc,  x + str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> + str_w * </span><span class=cF5>Cos</span><span class=cF7>(</span><span class=cF0>bow_theta</span><span class=cF7>)</span><span class=cF0>, 
+<a name="l45"></a>                y + str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> + str_w * </span><span class=cF5>Sin</span><span class=cF7>(</span><span class=cF0>bow_theta</span><span class=cF7>)</span><span class=cF0>, x, y);
+<a name="l46"></a>
+<a name="l47"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(ctrl, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>ctrl</span><span class=cF7>)</span><span class=cF0>);
+<a name="l48"></a>    ctrl[</span><span class=cFE>0</span><span class=cF0>].x = x - str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + str_w * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta);
+<a name="l49"></a>    ctrl[</span><span class=cFE>0</span><span class=cF0>].y = y - str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + str_w * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta);
+<a name="l50"></a>    ctrl[</span><span class=cFE>1</span><span class=cF0>].x = x - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + draw_len / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta) + str_w * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta);
+<a name="l51"></a>    ctrl[</span><span class=cFE>1</span><span class=cF0>].y = y - </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + draw_len / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta) + str_w * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta);
+<a name="l52"></a>    ctrl[</span><span class=cFE>2</span><span class=cF0>].x = x + draw_len / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta) + str_w * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta);
+<a name="l53"></a>    ctrl[</span><span class=cFE>2</span><span class=cF0>].y = y + draw_len / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta) + str_w * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta);
+<a name="l54"></a>    ctrl[</span><span class=cFE>3</span><span class=cF0>].x = x + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + draw_len / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta) + str_w * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta);
+<a name="l55"></a>    ctrl[</span><span class=cFE>3</span><span class=cF0>].y = y + </span><span class=cFE>0</span><span class=cF0>.</span><span class=cFE>75</span><span class=cF0> * str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + draw_len / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta) + str_w * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta);
+<a name="l56"></a>    ctrl[</span><span class=cFE>4</span><span class=cF0>].x = x + str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + str_w * </span><span class=cF5>Cos</span><span class=cF0>(bow_theta);
+<a name="l57"></a>    ctrl[</span><span class=cFE>4</span><span class=cF0>].y = y + str_h / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta + </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>) + str_w * </span><span class=cF5>Sin</span><span class=cF0>(bow_theta);
+<a name="l58"></a>
+<a name="l59"></a>    dc-&gt;color = </span><span class=cF3>BROWN</span><span class=cF0>;
+<a name="l60"></a>    dc-&gt;thick = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l61"></a>    </span><span class=cF5>Gr2BSpline3</span><span class=cF0>(dc, ctrl, </span><span class=cFE>5</span><span class=cF0>);
+<a name="l62"></a>    dc-&gt;thick = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l63"></a>
+<a name="l64"></a>    </span><span class=cF1>if</span><span class=cF0> (bow_drawn)
+<a name="l65"></a>        </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>, bow_theta);
+<a name="l66"></a>
+<a name="l67"></a>    tmpa = head.next;
+<a name="l68"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpa != &amp;head)
+<a name="l69"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l70"></a>        theta = </span><span class=cF5>Arg</span><span class=cF0>(tmpa-&gt;dx, tmpa-&gt;dy);
+<a name="l71"></a>        </span><span class=cF5>Sprite3ZB</span><span class=cF0>(dc, tmpa-&gt;x, tmpa-&gt;y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>, theta);
+<a name="l72"></a>        tmpa = tmpa-&gt;next;
+<a name="l73"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l74"></a>}
+<a name="l75"></a>
+<a name="l76"></a>#</span><span class=cF1>define</span><span class=cF0> ANIMATE_SLEEP_MS                </span><span class=cFE>10</span><span class=cF0>
+<a name="l77"></a>
+<a name="l78"></a></span><span class=cF1>U0</span><span class=cF0> AnimateTask(</span><span class=cF9>I64</span><span class=cF0>)
+<a name="l79"></a>{
+<a name="l80"></a>    </span><span class=cF9>I64</span><span class=cF0>      x, y;
+<a name="l81"></a>    Arrow   *tmpa, *tmpa1;
+<a name="l82"></a>    </span><span class=cF1>F64</span><span class=cF0>      dt, t0 = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l83"></a>
+<a name="l84"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l85"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l86"></a>        dt = </span><span class=cF5>tS</span><span class=cF0> - t0;
+<a name="l87"></a>        t0 = </span><span class=cF5>tS</span><span class=cF0>;
+<a name="l88"></a>
+<a name="l89"></a>        x = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>mouse</span><span class=cF0>.pos.x - </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;pix_left - </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_x,
+<a name="l90"></a>                     box_x_min, box_x_max) + </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;pix_left + </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_x;
+<a name="l91"></a>        y = </span><span class=cF5>ClampI64</span><span class=cF0>(</span><span class=cFB>mouse</span><span class=cF0>.pos.y - </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;pix_top - </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_y, 
+<a name="l92"></a>                     box_y_min, box_y_max) + </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;pix_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_y;
+<a name="l93"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mouse</span><span class=cF0>.pos.x != x || </span><span class=cFB>mouse</span><span class=cF0>.pos.y != y)
+<a name="l94"></a>            </span><span class=cF5>MouseSet</span><span class=cF0>(x, y);
+<a name="l95"></a>
+<a name="l96"></a>        tmpa = head.next;
+<a name="l97"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpa != &amp;head)
+<a name="l98"></a>        {
+<a name="l99"></a>            tmpa1 = tmpa-&gt;next;
+<a name="l100"></a>            tmpa-&gt;x += tmpa-&gt;dx * dt;
+<a name="l101"></a>            tmpa-&gt;y += tmpa-&gt;dy * dt;
+<a name="l102"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>-</span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_x &lt;= tmpa-&gt;x &lt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;pix_width  - </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_x</span><span class=cF7>)</span><span class=cF0> ||
+<a name="l103"></a>                !</span><span class=cF7>(</span><span class=cF0>-</span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_y &lt;= tmpa-&gt;y &lt; </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;pix_height - </span><span class=cF5>Fs</span><span class=cF0>-&gt;parent_task-&gt;scroll_y</span><span class=cF7>)</span><span class=cF0>)
+<a name="l104"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l105"></a>                </span><span class=cF5>QueueRemove</span><span class=cF0>(tmpa);
+<a name="l106"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpa);
+<a name="l107"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l108"></a>            tmpa = tmpa1;
+<a name="l109"></a>        }
+<a name="l110"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l111"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l112"></a>}
+<a name="l113"></a>
+<a name="l114"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l115"></a>{
+<a name="l116"></a>    </span><span class=cF9>I64</span><span class=cF0> w = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width, h = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height;
+<a name="l117"></a>
+<a name="l118"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;head);
+<a name="l119"></a>    bow_drawn = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l120"></a>    box_x_min = </span><span class=cFE>7</span><span class=cF0> * w / </span><span class=cFE>16</span><span class=cF0>;
+<a name="l121"></a>    box_y_min = </span><span class=cFE>6</span><span class=cF0> * h / </span><span class=cFE>8</span><span class=cF0>;
+<a name="l122"></a>    box_x_max = </span><span class=cFE>9</span><span class=cF0> * w / </span><span class=cFE>16</span><span class=cF0>;
+<a name="l123"></a>    box_y_max = </span><span class=cFE>7</span><span class=cF0> * h / </span><span class=cFE>8</span><span class=cF0>;
+<a name="l124"></a>    bow_theta = -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l125"></a>    bow_x = (box_x_min + box_x_max) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l126"></a>    bow_y = (box_y_min + box_y_max) / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l127"></a>    </span><span class=cF5>MouseSet</span><span class=cF0>(bow_x + </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_left + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_x, bow_y + </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;scroll_y);
+<a name="l128"></a>}
+<a name="l129"></a>
+<a name="l130"></a></span><span class=cF1>U0</span><span class=cF0> CleanUp()
+<a name="l131"></a>{
+<a name="l132"></a>    </span><span class=cF5>QueueDel</span><span class=cF0>(&amp;head, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l133"></a>}
+<a name="l134"></a>
+<a name="l135"></a></span><span class=cF1>U0</span><span class=cF0> Zing()
+<a name="l136"></a>{
+<a name="l137"></a>    </span><span class=cF9>I64</span><span class=cF0>      arg1, arg2;
+<a name="l138"></a>    Arrow   *tmpa;
+<a name="l139"></a>
+<a name="l140"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(   </span><span class=cF6>&quot;File {&quot;</span><span class=cF0>
+<a name="l141"></a>                </span><span class=cF6>&quot;  Abort(,CH_SHIFT_ESC);&quot;</span><span class=cF0>
+<a name="l142"></a>                </span><span class=cF6>&quot;  Exit(,CH_ESC);&quot;</span><span class=cF0>
+<a name="l143"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l144"></a>                </span><span class=cF6>&quot;Play {&quot;</span><span class=cF0>
+<a name="l145"></a>                </span><span class=cF6>&quot;  Restart(,'\n');&quot;</span><span class=cF0>
+<a name="l146"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>
+<a name="l147"></a>                );
+<a name="l148"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l149"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l150"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l151"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l152"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l153"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l154"></a>
+<a name="l155"></a>    Init;
+<a name="l156"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;animate_task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;AnimateTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Animate&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l157"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;draw_it      = &amp;</span><span class=cF5>DrawIt</span><span class=cF0>;
+<a name="l158"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit  = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_FOCUS</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0>;
+<a name="l159"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l160"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l161"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l162"></a>            </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>MessageGet</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF7>)</span><span class=cF0>)
+<a name="l163"></a>            {
+<a name="l164"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>:
+<a name="l165"></a>                    </span><span class=cF1>switch</span><span class=cF0> (arg1)
+<a name="l166"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l167"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l168"></a>                            CleanUp;
+<a name="l169"></a>                            Init;
+<a name="l170"></a>                            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l171"></a>
+<a name="l172"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l173"></a>                        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l174"></a>                            </span><span class=cF1>goto</span><span class=cF0> zi_done;
+<a name="l175"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l176"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l177"></a>
+<a name="l178"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_DOWN</span><span class=cF0>:
+<a name="l179"></a>                    bow_x = arg1;
+<a name="l180"></a>                    bow_y = arg2;
+<a name="l181"></a>                    bow_drawn = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l182"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l183"></a>
+<a name="l184"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MESSAGE_MS_L_UP</span><span class=cF0>:
+<a name="l185"></a>                    </span><span class=cF1>if</span><span class=cF0> (arg1-bow_x || arg2-bow_y)
+<a name="l186"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l187"></a>                        tmpa = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>Arrow</span><span class=cF7>)</span><span class=cF0>);
+<a name="l188"></a>                        tmpa-&gt;dx = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * (bow_x - arg1);
+<a name="l189"></a>                        tmpa-&gt;dy = </span><span class=cFE>10</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * (bow_y - arg2);
+<a name="l190"></a>                        tmpa-&gt;x = arg1;
+<a name="l191"></a>                        tmpa-&gt;y = arg2;
+<a name="l192"></a>                        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpa, head.last);
+<a name="l193"></a>                        </span><span class=cF5>Noise</span><span class=cF0>(</span><span class=cFE>50</span><span class=cF0>, </span><span class=cFE>110</span><span class=cF0>, </span><span class=cFE>114</span><span class=cF0>);
+<a name="l194"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l195"></a>                    bow_drawn = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l196"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l197"></a>            }
+<a name="l198"></a>zi_done:
+<a name="l199"></a>        </span><span class=cF5>MessageGet</span><span class=cF0>(,, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>);
+<a name="l200"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l201"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l202"></a>        </span><span class=cF5>PutExcept</span><span class=cF0>;
+<a name="l203"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l204"></a>    CleanUp;
+<a name="l205"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l206"></a>}
+<a name="l207"></a>
+<a name="l208"></a>Zing;
+</span></pre></body>
+</html>

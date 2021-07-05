@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> RADIX   </span><span class=cFE>256</span><span class=cF0>
+<a name="l2"></a>#</span><span class=cF1>define</span><span class=cF0> N       </span><span class=cFE>16</span><span class=cF0>
+<a name="l3"></a>
+<a name="l4"></a></span><span class=cF1>U8</span><span class=cF0> a[N];
+<a name="l5"></a>
+<a name="l6"></a></span><span class=cF1>class</span><span class=cF0> List
+<a name="l7"></a>{
+<a name="l8"></a>    List *next;
+<a name="l9"></a>    </span><span class=cF1>U8</span><span class=cF0>   *a;
+<a name="l10"></a>
+<a name="l11"></a>} l[N], *r[RADIX];
+<a name="l12"></a>
+<a name="l13"></a></span><span class=cF1>U0</span><span class=cF0> DumpIn()
+<a name="l14"></a>{
+<a name="l15"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l16"></a>
+<a name="l17"></a>    </span><span class=cF6>&quot;$RED$\n\nInput$FG$\n&quot;</span><span class=cF0>;
+<a name="l18"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; N; i++)
+<a name="l19"></a>        </span><span class=cF6>&quot;%d:%d\n&quot;</span><span class=cF0>, i, a[i];
+<a name="l20"></a>}
+<a name="l21"></a>
+<a name="l22"></a></span><span class=cF1>U0</span><span class=cF0> DumpOut()
+<a name="l23"></a>{
+<a name="l24"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, j = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l25"></a>    List *tmpl;
+<a name="l26"></a>
+<a name="l27"></a>    </span><span class=cF6>&quot;$RED$\n\nOutput$FG$\n&quot;</span><span class=cF0>;
+<a name="l28"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; RADIX; i++)
+<a name="l29"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l30"></a>        tmpl = r[i];
+<a name="l31"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpl)
+<a name="l32"></a>        {
+<a name="l33"></a>            </span><span class=cF6>&quot;%d:%d\n&quot;</span><span class=cF0>, j++, *tmpl-&gt;a;
+<a name="l34"></a>            tmpl = tmpl-&gt;next;
+<a name="l35"></a>        }
+<a name="l36"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l37"></a>}
+<a name="l38"></a>
+<a name="l39"></a></span><span class=cF1>U0</span><span class=cF0> Init()
+<a name="l40"></a>{
+<a name="l41"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l42"></a>
+<a name="l43"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(r, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>r</span><span class=cF7>)</span><span class=cF0>);
+<a name="l44"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; N; i++)
+<a name="l45"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l46"></a>        a[i] = </span><span class=cF5>RandU16</span><span class=cF0>&amp;</span><span class=cFE>255</span><span class=cF0>;
+<a name="l47"></a>        l[i].next   = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l48"></a>        l[i].a      = &amp;a[i];
+<a name="l49"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l50"></a>}
+<a name="l51"></a>
+<a name="l52"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Sort</span><span class=cF0>()
+<a name="l53"></a>{
+<a name="l54"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l55"></a>
+<a name="l56"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; N; i++)
+<a name="l57"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l58"></a>        l[i].next = r[*l[i].a];
+<a name="l59"></a>        r[*l[i].a] = &amp;l[i];
+<a name="l60"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l61"></a>}
+<a name="l62"></a>
+<a name="l63"></a></span><span class=cF1>U0</span><span class=cF0> RadixSort()
+<a name="l64"></a>{
+<a name="l65"></a>    Init;
+<a name="l66"></a>    DumpIn;
+<a name="l67"></a>    </span><span class=cF5>Sort</span><span class=cF0>;
+<a name="l68"></a>    DumpOut;
+<a name="l69"></a>}
+<a name="l70"></a>
+<a name="l71"></a>RadixSort;
+</span></pre></body>
+</html>

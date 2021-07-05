@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;File/Cmd Line (Typically);Cmd Line (Typically)&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DBlk</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l3"></a>{</span><span class=cF2>//Dump disk block. Optionally, write.</span><span class=cF0>
+<a name="l4"></a></span><span class=cF2>//If you set write to TRUE, the block will</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
+<a name="l6"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/DiskRaw.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l8"></a>
+<a name="l9"></a>    </span><span class=cF5>BlkRead</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, blk, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l10"></a>    </span><span class=cF5>DocD</span><span class=cF0>(buf, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l11"></a>    </span><span class=cF1>if</span><span class=cF0> (write)
+<a name="l12"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l13"></a>        </span><span class=cF6>&quot;Edit and press &lt;ESC&gt; to write or &lt;SHIFT-ESC&gt;\n&quot;</span><span class=cF0>;
+<a name="l14"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>View</span><span class=cF0>)
+<a name="l15"></a>        {
+<a name="l16"></a>            </span><span class=cF6>&quot;Write\n&quot;</span><span class=cF0>;
+<a name="l17"></a>            </span><span class=cF5>BlkWrite</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, blk, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l18"></a>        }
+<a name="l19"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l20"></a>
+<a name="l21"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l22"></a>}
+<a name="l23"></a>
+<a name="l24"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DClus</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> num=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l25"></a>{</span><span class=cF2>//Dump disk clus. Optionally, write.</span><span class=cF0>
+<a name="l26"></a></span><span class=cF2>//If you set write to TRUE, the clus will</span><span class=cF0>
+<a name="l27"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/DiskRaw.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF2>//Do </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.html#l120"><span class=cF4>Dir</span></a><span class=cF2>(&quot;*&quot;,TRUE); to get clus numbers of files.</span><span class=cF0>
+<a name="l30"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l31"></a>
+<a name="l32"></a>    c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, c, num);
+<a name="l33"></a>    </span><span class=cF5>ClusRead</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, c, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l34"></a>    </span><span class=cF6>&quot;Clus:%X\n&quot;</span><span class=cF0>, c;
+<a name="l35"></a>    </span><span class=cF5>DocD</span><span class=cF0>(buf, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l36"></a>    </span><span class=cF1>if</span><span class=cF0> (write)
+<a name="l37"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l38"></a>        </span><span class=cF6>&quot;Edit and press &lt;ESC&gt; to write or &lt;SHIFT-ESC&gt;\n&quot;</span><span class=cF0>;
+<a name="l39"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>View</span><span class=cF0>)
+<a name="l40"></a>        {
+<a name="l41"></a>            </span><span class=cF6>&quot;Write\n&quot;</span><span class=cF0>;
+<a name="l42"></a>            </span><span class=cF5>ClusWrite</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, c, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l43"></a>        }
+<a name="l44"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l45"></a>
+<a name="l46"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l47"></a>}
+<a name="l48"></a>
+<a name="l49"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Dump</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l50"></a>{</span><span class=cF2>//Dump file. Optionally, write.</span><span class=cF0>
+<a name="l51"></a></span><span class=cF2>//If you set write to TRUE, the file will</span><span class=cF0>
+<a name="l52"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
+<a name="l53"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf;
+<a name="l54"></a>    </span><span class=cF9>I64</span><span class=cF0> size;
+<a name="l55"></a>
+<a name="l56"></a>    </span><span class=cF1>if</span><span class=cF0> (buf = </span><span class=cF5>FileRead</span><span class=cF7>(</span><span class=cF0>filename,&amp;size</span><span class=cF7>)</span><span class=cF0>)
+<a name="l57"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l58"></a>        </span><span class=cF5>DocD</span><span class=cF0>(buf, size);
+<a name="l59"></a>        </span><span class=cF1>if</span><span class=cF0> (write)
+<a name="l60"></a>        {
+<a name="l61"></a>            </span><span class=cF6>&quot;Edit and press &lt;ESC&gt; to write or &lt;SHIFT-ESC&gt;\n&quot;</span><span class=cF0>;
+<a name="l62"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>View</span><span class=cF0>)
+<a name="l63"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l64"></a>                </span><span class=cF6>&quot;Write\n&quot;</span><span class=cF0>;
+<a name="l65"></a>                </span><span class=cF5>FileWrite</span><span class=cF0>(filename, buf, size);
+<a name="l66"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l67"></a>        }
+<a name="l68"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l69"></a>
+<a name="l70"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l71"></a>}
+<a name="l72"></a>
+<a name="l73"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src_files_find_mask, </span><span class=cF1>U8</span><span class=cF0> *dst_files_find_mask=</span><span class=cF6>&quot;.&quot;</span><span class=cF0>)
+<a name="l74"></a>{</span><span class=cF2>//Copy files.</span><span class=cF0>
+<a name="l75"></a></span><span class=cF2>//If the name ends in &quot;.Z&quot;, it will</span><span class=cF0>
+<a name="l76"></a>    </span><span class=cF2>//be stored compressed.  If not &quot;.Z&quot;</span><span class=cF0>
+<a name="l77"></a>    </span><span class=cF2>//it will be stored uncompressed.</span><span class=cF0>
+<a name="l78"></a>    </span><span class=cF1>Bool</span><span class=cF0>         res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l79"></a>    </span><span class=cF9>CDirContext</span><span class=cF0> *dirc;
+<a name="l80"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde, *tmpde1;
+<a name="l81"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st;
+<a name="l82"></a>
+<a name="l83"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(src_files_find_mask, </span><span class=cF3>FUF_CLUS_ORDER</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l84"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l85"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsDir</span><span class=cF7>(</span><span class=cF0>dst_files_find_mask</span><span class=cF7>)</span><span class=cF0>)
+<a name="l86"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l87"></a>        </span><span class=cF1>if</span><span class=cF0> (dirc = </span><span class=cF5>DirContextNew</span><span class=cF7>(</span><span class=cF0>dst_files_find_mask, </span><span class=cF3>TRUE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l88"></a>        {
+<a name="l89"></a>            tmpde = tmpde1;
+<a name="l90"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l91"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l92"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l93"></a>                {
+<a name="l94"></a>                    st = </span><span class=cF5>FileNameAbs</span><span class=cF0>(tmpde-&gt;name);
+<a name="l95"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>CopySingle</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;full_name, st</span><span class=cF7>)</span><span class=cF0>)
+<a name="l96"></a>                        res = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l97"></a>                    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l98"></a>                }
+<a name="l99"></a>                tmpde = tmpde-&gt;next;
+<a name="l100"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l101"></a>            </span><span class=cF5>DirContextDel</span><span class=cF0>(dirc);
+<a name="l102"></a>        }
+<a name="l103"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l104"></a>        </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l105"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l106"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l107"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l108"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l109"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>CopySingle</span><span class=cF0>(src_files_find_mask, dst_files_find_mask);
+<a name="l110"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l111"></a>}
+<a name="l112"></a>
+<a name="l113"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>Move</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *f1, </span><span class=cF1>U8</span><span class=cF0> *f2)
+<a name="l114"></a>{</span><span class=cF2>//Move files from one location to another or rename.</span><span class=cF0>
+<a name="l115"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Copy</span><span class=cF7>(</span><span class=cF0>f1, f2</span><span class=cF7>)</span><span class=cF0>)
+<a name="l116"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l117"></a>        </span><span class=cF5>Del</span><span class=cF0>(f1);
+<a name="l118"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l119"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l120"></a>
+<a name="l121"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l122"></a>}
+<a name="l123"></a>
+<a name="l124"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>CopyTree2</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF9>I64</span><span class=cF0> src_dir_len, </span><span class=cF9>I64</span><span class=cF0> dst_dir_len, </span><span class=cF1>U8</span><span class=cF0> *dst_dir)
+<a name="l125"></a>{
+<a name="l126"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l127"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l128"></a>
+<a name="l129"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l130"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l131"></a>        st = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;full_name</span><span class=cF7>)</span><span class=cF0> + dst_dir_len + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l132"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(st, dst_dir, dst_dir_len);
+<a name="l133"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(st + dst_dir_len, tmpde-&gt;full_name + src_dir_len);
+<a name="l134"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l135"></a>        {
+<a name="l136"></a>            </span><span class=cF5>DirMake</span><span class=cF0>(st, </span><span class=cF5>LinkedListCount</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;sub</span><span class=cF7>)</span><span class=cF0>);
+<a name="l137"></a>            res += </span><span class=cF5>CopyTree2</span><span class=cF0>(tmpde-&gt;sub, src_dir_len, dst_dir_len, dst_dir);
+<a name="l138"></a>        }
+<a name="l139"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l140"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>CopySingle</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;full_name, st</span><span class=cF7>)</span><span class=cF0>)
+<a name="l141"></a>                res++;
+<a name="l142"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l143"></a>        tmpde = tmpde-&gt;next;
+<a name="l144"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l145"></a>
+<a name="l146"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l147"></a>}
+<a name="l148"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>CopyTree</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src_files_find_mask, </span><span class=cF1>U8</span><span class=cF0> *dst_files_find_mask, </span><span class=cF1>Bool</span><span class=cF0> no_mask=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l149"></a>{</span><span class=cF2>//Copy directory tree.</span><span class=cF0>
+<a name="l150"></a></span><span class=cF2>//Returns the count of copied files (not dirs).</span><span class=cF0>
+<a name="l151"></a>    </span><span class=cF9>CDirContext</span><span class=cF0> *dirc;
+<a name="l152"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l153"></a>    </span><span class=cF9>I64</span><span class=cF0>          res = </span><span class=cFE>0</span><span class=cF0>, i1, i2;
+<a name="l154"></a>    </span><span class=cF1>U8</span><span class=cF0>          *st1, *st2;
+<a name="l155"></a>
+<a name="l156"></a>    st1 = </span><span class=cF5>DirNameAbs</span><span class=cF0>(src_files_find_mask);
+<a name="l157"></a>    st2 = </span><span class=cF5>DirNameAbs</span><span class=cF0>(dst_files_find_mask);
+<a name="l158"></a>    i1 = </span><span class=cF5>StrLen</span><span class=cF0>(st1);
+<a name="l159"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrNCompare</span><span class=cF7>(</span><span class=cF0>st1, st2, i1</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>st2[i1] == </span><span class=cF6>'/'</span><span class=cF0> || !st2[i1]</span><span class=cF7>)</span><span class=cF0>)
+<a name="l160"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l161"></a>        </span><span class=cF5>Free</span><span class=cF0>(st1);
+<a name="l162"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l163"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l164"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l165"></a>    </span><span class=cF5>Free</span><span class=cF0>(st1);
+<a name="l166"></a>    </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l167"></a>    </span><span class=cF1>if</span><span class=cF0> (dirc = </span><span class=cF5>DirContextNew</span><span class=cF7>(</span><span class=cF0>src_files_find_mask, </span><span class=cF3>TRUE</span><span class=cF0>,, no_mask</span><span class=cF7>)</span><span class=cF0>)
+<a name="l168"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l169"></a>        tmpde = </span><span class=cF5>FilesFind</span><span class=cF0>(dirc-&gt;mask, </span><span class=cF3>FUF_RECURSE</span><span class=cF0>);
+<a name="l170"></a>        st1 = </span><span class=cF5>DirCur</span><span class=cF0>;
+<a name="l171"></a>        </span><span class=cF5>DirContextDel</span><span class=cF0>(dirc);
+<a name="l172"></a>        i1 = </span><span class=cF5>StrLen</span><span class=cF0>(st1);
+<a name="l173"></a>        </span><span class=cF1>if</span><span class=cF0> (i1 == </span><span class=cFE>3</span><span class=cF0>)
+<a name="l174"></a>            i1--;
+<a name="l175"></a>        </span><span class=cF1>if</span><span class=cF0> (dirc = </span><span class=cF5>DirContextNew</span><span class=cF7>(</span><span class=cF0>dst_files_find_mask, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l176"></a>        {
+<a name="l177"></a>            st2 = </span><span class=cF5>DirCur</span><span class=cF0>;
+<a name="l178"></a>            i2 = </span><span class=cF5>StrLen</span><span class=cF0>(st2);
+<a name="l179"></a>            </span><span class=cF1>if</span><span class=cF0> (i2 == </span><span class=cFE>3</span><span class=cF0>)
+<a name="l180"></a>                i2--;
+<a name="l181"></a>            res = </span><span class=cF5>CopyTree2</span><span class=cF0>(tmpde, i1, i2, st2);
+<a name="l182"></a>            </span><span class=cF5>DirContextDel</span><span class=cF0>(dirc);
+<a name="l183"></a>            </span><span class=cF5>Free</span><span class=cF0>(st2);
+<a name="l184"></a>        }
+<a name="l185"></a>        </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde);
+<a name="l186"></a>        </span><span class=cF5>Free</span><span class=cF0>(st1);
+<a name="l187"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l188"></a>
+<a name="l189"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l190"></a>}
+<a name="l191"></a>
+<a name="l192"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DelTreeDirs</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde1)
+<a name="l193"></a>{
+<a name="l194"></a>    </span><span class=cF9>I64</span><span class=cF0>          res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l195"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde2;
+<a name="l196"></a>
+<a name="l197"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l198"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l199"></a>        tmpde2 = tmpde1-&gt;next;
+<a name="l200"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l201"></a>        {
+<a name="l202"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;sub)
+<a name="l203"></a>                res += </span><span class=cF5>DelTreeDirs</span><span class=cF0>(tmpde1-&gt;sub);
+<a name="l204"></a>            res += </span><span class=cF5>Del</span><span class=cF0>(tmpde1-&gt;full_name, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l205"></a>        }
+<a name="l206"></a>        </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde1);
+<a name="l207"></a>        tmpde1 = tmpde2;
+<a name="l208"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l209"></a>
+<a name="l210"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l211"></a>}
+<a name="l212"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DelTreeFiles</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde1)
+<a name="l213"></a>{
+<a name="l214"></a>    </span><span class=cF9>I64</span><span class=cF0>          res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l215"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde2;
+<a name="l216"></a>
+<a name="l217"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l218"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l219"></a>        tmpde2 = tmpde1-&gt;next;
+<a name="l220"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l221"></a>        {
+<a name="l222"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;sub)
+<a name="l223"></a>                res += </span><span class=cF5>DelTreeFiles</span><span class=cF0>(tmpde1-&gt;sub);
+<a name="l224"></a>        }
+<a name="l225"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l226"></a>            res += </span><span class=cF5>Del</span><span class=cF0>(tmpde1-&gt;full_name, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l227"></a>        </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde1);
+<a name="l228"></a>        tmpde1 = tmpde2;
+<a name="l229"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l230"></a>
+<a name="l231"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l232"></a>}
+<a name="l233"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l234"></a>{</span><span class=cF2>//Delete directory tree.</span><span class=cF0>
+<a name="l235"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>, fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l236"></a>
+<a name="l237"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r&quot;</span><span class=cF0>);
+<a name="l238"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l239"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsDir</span><span class=cF7>(</span><span class=cF0>files_find_mask</span><span class=cF7>)</span><span class=cF0>)
+<a name="l240"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l241"></a>        res = </span><span class=cF5>DelTreeDirs</span><span class=cF0>(</span><span class=cF5>FilesFind</span><span class=cF7>(</span><span class=cF0>files_find_mask, fuf_flags</span><span class=cF7>)</span><span class=cF0>);
+<a name="l242"></a>        res += </span><span class=cF5>Del</span><span class=cF0>(files_find_mask, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l243"></a>        res += </span><span class=cF5>Del</span><span class=cF0>(files_find_mask, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l244"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l245"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l246"></a>        res = </span><span class=cF5>DelTreeFiles</span><span class=cF0>(</span><span class=cF5>FilesFind</span><span class=cF7>(</span><span class=cF0>files_find_mask, fuf_flags</span><span class=cF7>)</span><span class=cF0>);
+<a name="l247"></a>
+<a name="l248"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l249"></a>}
+<a name="l250"></a>
+<a name="l251"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TouchFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>U8</span><span class=cF0> *attr, </span><span class=cF9>CDate</span><span class=cF0> cdt=</span><span class=cF3>I64_MIN</span><span class=cF0>)
+<a name="l252"></a>{
+<a name="l253"></a>    </span><span class=cF9>CDrive</span><span class=cF0>      *drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(*filename);
+<a name="l254"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>    de;
+<a name="l255"></a>    </span><span class=cF1>U8</span><span class=cF0>          *cur_dir = </span><span class=cF5>StrNew</span><span class=cF0>(filename), buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l256"></a>
+<a name="l257"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>filename, &amp;de, </span><span class=cF3>FUF_JUST_FILES</span><span class=cF7>)</span><span class=cF0>)
+<a name="l258"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l259"></a>        </span><span class=cF5>Free</span><span class=cF0>(de.full_name);
+<a name="l260"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>attr, </span><span class=cF6>&quot;+?&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l261"></a>            </span><span class=cF6>&quot;%-48ts %s\n&quot;</span><span class=cF0>, filename, </span><span class=cF5>FlagsStrPrint</span><span class=cF0>(buf, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_ATTRS&quot;</span><span class=cF7>)</span><span class=cF0>, de.attr);
+<a name="l262"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l263"></a>        {
+<a name="l264"></a>            </span><span class=cF5>StrFirstRemove</span><span class=cF0>(cur_dir, </span><span class=cF6>&quot;:&quot;</span><span class=cF0>);
+<a name="l265"></a>            </span><span class=cF5>StrLastRemove</span><span class=cF0>(cur_dir, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l266"></a>            </span><span class=cF1>if</span><span class=cF0> (!*cur_dir)
+<a name="l267"></a>                </span><span class=cF5>StrCopy</span><span class=cF0>(cur_dir, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
+<a name="l268"></a>            </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;de.attr, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_ATTRS&quot;</span><span class=cF7>)</span><span class=cF0>, attr);
+<a name="l269"></a>            </span><span class=cF1>if</span><span class=cF0> (cdt == </span><span class=cF3>I64_MIN</span><span class=cF0>)
+<a name="l270"></a>                de.datetime = </span><span class=cF5>Now</span><span class=cF0>;
+<a name="l271"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l272"></a>                de.datetime = cdt;
+<a name="l273"></a>            </span><span class=cF5>DirNew</span><span class=cF0>(drive, cur_dir, &amp;de, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l274"></a>        }
+<a name="l275"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l276"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l277"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;File not found: \&quot;%s\&quot;.\n&quot;</span><span class=cF0>, filename);
+<a name="l278"></a>    </span><span class=cF5>Free</span><span class=cF0>(cur_dir);
+<a name="l279"></a>}
+<a name="l280"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Touch</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask=</span><span class=cF6>&quot;*&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *attr=</span><span class=cF6>&quot;+?&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CDate</span><span class=cF0> cdt=</span><span class=cF3>I64_MIN</span><span class=cF0>)
+<a name="l281"></a>{</span><span class=cF2>/*Touch file attributes and DateTime.</span><span class=cF0>
+<a name="l282"></a></span><span class=cF2>Default lists attributes.</span><span class=cF0>
+<a name="l283"></a></span><span class=cF2>attr: &quot;+?&quot; =show current</span><span class=cF0>
+<a name="l284"></a></span><span class=cF2>&quot;+T&quot; =resident</span><span class=cF4>
+<a name="l285"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3146"><span class=cF4>RS_ATTR_READ_ONLY</span></a><span class=cF2>  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
+<a name="l286"></a></span><span class=cF2>To Set DateL:</span><span class=cF0>
+<a name="l287"></a></span><span class=cF2>Touch(filename,&quot;&quot;,,datetime);</span><span class=cF0>
+<a name="l288"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l289"></a>    </span><span class=cF9>I64</span><span class=cF0>          fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l290"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   *tmpde, *tmpde1;
+<a name="l291"></a>
+<a name="l292"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+f+F&quot;</span><span class=cF0>);
+<a name="l293"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, fu_flags);
+<a name="l294"></a>    tmpde=tmpde1 = </span><span class=cF5>FilesFind</span><span class=cF0>(files_find_mask, fuf_flags);
+<a name="l295"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpde)
+<a name="l296"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l297"></a>        </span><span class=cF5>TouchFile</span><span class=cF0>(tmpde-&gt;full_name, attr, cdt);
+<a name="l298"></a>        tmpde = tmpde-&gt;next;
+<a name="l299"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l300"></a>    </span><span class=cF5>DirTreeDel</span><span class=cF0>(tmpde1);
+<a name="l301"></a>}
+</span></pre></body>
+</html>

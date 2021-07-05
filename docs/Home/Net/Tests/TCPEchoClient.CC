@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>CTCPSocket  *tcp            = TCPSocket(AF_INET);
+<a name="l2"></a></span><span class=cF2>//U8</span><span class=cF0>            </span><span class=cF2> buffer_size</span><span class=cF0>    </span><span class=cF2>= 16;</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>//U8</span><span class=cF0>            </span><span class=cF2>*buffer</span><span class=cF0>         </span><span class=cF2>= CAlloc(buffer_size);</span><span class=cF0>
+<a name="l4"></a></span><span class=cF1>U8</span><span class=cF0>          *buffer         = </span><span class=cF6>&quot;Hello world&quot;</span><span class=cF0>;
+<a name="l5"></a></span><span class=cF1>U8</span><span class=cF0>           buffer_size    = </span><span class=cF5>StrLen</span><span class=cF0>(buffer);
+<a name="l6"></a>
+<a name="l7"></a>CSocketAddressIPV4 *socket_addr = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSocketAddressIPV4</span><span class=cF7>)</span><span class=cF0>);
+<a name="l8"></a>
+<a name="l9"></a></span><span class=cF2>//*buffer = EndianU64(0xDEADBEEFC0DEFADE);</span><span class=cF0>
+<a name="l10"></a>
+<a name="l11"></a></span><span class=cF1>U0</span><span class=cF0> TCPTest()
+<a name="l12"></a>{
+<a name="l13"></a>    tcp-&gt;timeout = TCP_TIMEOUT * </span><span class=cFE>3</span><span class=cF0>;
+<a name="l14"></a>
+<a name="l15"></a>    CIPV4Address addr;
+<a name="l16"></a>    PresentationToNetwork(AF_INET, </span><span class=cF6>&quot;10.0.2.7&quot;</span><span class=cF0>, &amp;addr);
+<a name="l17"></a>
+<a name="l18"></a>    socket_addr-&gt;port            = </span><span class=cF5>EndianU16</span><span class=cF0>(</span><span class=cFE>0xBEEF</span><span class=cF0>);
+<a name="l19"></a>    socket_addr-&gt;family          = AF_INET;
+<a name="l20"></a>    socket_addr-&gt;address.address = addr.address;
+<a name="l21"></a>
+<a name="l22"></a>    </span><span class=cF5>ClassRep</span><span class=cF0>(tcp);
+<a name="l23"></a>
+<a name="l24"></a>    </span><span class=cF6>&quot;\nTrying to connect the socket\n&quot;</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF1>if</span><span class=cF0> (TCPSocketConnect</span><span class=cF7>(</span><span class=cF0>tcp, socket_addr</span><span class=cF7>)</span><span class=cF0> == </span><span class=cFE>0</span><span class=cF0>)
+<a name="l26"></a>        </span><span class=cF6>&quot;\nSocket connected.\n&quot;</span><span class=cF0>;
+<a name="l27"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l28"></a>        </span><span class=cF6>&quot;\nFailed to connect.\n&quot;</span><span class=cF0>;
+<a name="l29"></a>
+<a name="l30"></a>    </span><span class=cF5>ClassRep</span><span class=cF0>(tcp);
+<a name="l31"></a>
+<a name="l32"></a>    </span><span class=cF6>&quot;\n\nTrying to Send data\n&quot;</span><span class=cF0>;
+<a name="l33"></a>    </span><span class=cF1>if</span><span class=cF0> (TCPSocketSend</span><span class=cF7>(</span><span class=cF0>tcp, buffer, buffer_size</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l34"></a>        </span><span class=cF6>&quot;\nData sent\n&quot;</span><span class=cF0>;
+<a name="l35"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l36"></a>        </span><span class=cF6>&quot;\nData not sent\n&quot;</span><span class=cF0>;
+<a name="l37"></a>
+<a name="l38"></a>
+<a name="l39"></a>    </span><span class=cF6>&quot;\n\nTrying to Receive data\n&quot;</span><span class=cF0>;
+<a name="l40"></a>    </span><span class=cF1>if</span><span class=cF0> (TCPSocketReceive</span><span class=cF7>(</span><span class=cF0>tcp, buffer, buffer_size</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l41"></a>        </span><span class=cF6>&quot;\nData received\n&quot;</span><span class=cF0>;
+<a name="l42"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l43"></a>        </span><span class=cF6>&quot;\nData not received\n&quot;</span><span class=cF0>;
+<a name="l44"></a>
+<a name="l45"></a>    </span><span class=cF6>&quot;\n\n&quot;</span><span class=cF0>;
+<a name="l46"></a>
+<a name="l47"></a>    </span><span class=cF5>Dm</span><span class=cF0>(buffer, buffer_size);
+<a name="l48"></a>
+<a name="l49"></a>    </span><span class=cF5>ClassRep</span><span class=cF0>(tcp_globals.bound_socket_tree);
+<a name="l50"></a>
+<a name="l51"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>5000</span><span class=cF0>);
+<a name="l52"></a>
+<a name="l53"></a>    </span><span class=cF6>&quot;\n\nTrying to close the connected socket\n&quot;</span><span class=cF0>;
+<a name="l54"></a>    </span><span class=cF1>if</span><span class=cF0> (TCPSocketClose</span><span class=cF7>(</span><span class=cF0>tcp</span><span class=cF7>)</span><span class=cF0> == </span><span class=cFE>0</span><span class=cF0>)
+<a name="l55"></a>        </span><span class=cF6>&quot;\nSocket closed.&quot;</span><span class=cF0>;
+<a name="l56"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l57"></a>        </span><span class=cF6>&quot;\nSocket close failed.&quot;</span><span class=cF0>;
+<a name="l58"></a>
+<a name="l59"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>500</span><span class=cF0>);
+<a name="l60"></a>
+<a name="l61"></a>    </span><span class=cF2>//NetStop;</span><span class=cF0>
+<a name="l62"></a>
+<a name="l63"></a>    </span><span class=cF2>//NetStart;</span><span class=cF0>
+<a name="l64"></a>}
+<a name="l65"></a>
+<a name="l66"></a>
+<a name="l67"></a>TCPTest;
+</span></pre></body>
+</html>

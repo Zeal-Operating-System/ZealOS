@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF5>                                                          Cut Corners
+<a name="l2"></a></span><span class=cF0>
+<a name="l3"></a>There are a few places where corners are cut in the interest of not junking-up code.    This is part of the ZealOS mentality.  
+<a name="l4"></a>Try not to let stupid legacy compatibility issues enter and junk-up ZealOS.
+<a name="l5"></a>
+<a name="l6"></a>* The type-casting operator was made post-fix because it makes the compiler way cleaner.
+<a name="l7"></a>
+<a name="l8"></a>* ZealOS does not figure-out </span><span class=cF2>FAT32</span><span class=cF0> short name alias numbers.    </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/FileSysFAT.html#l646"><span class=cF4>FAT32DirNew</span></a><span class=cF0>().  It can cause hard drive corruption, so it might 
+<a name="l9"></a>have to do it eventually.  It would really take a lot of junky code for this hatefully, detestable, legacy issue.  &quot;Please don't 
+<a name="l10"></a>make us ruin the beautiful shiny-new ZealOS with that!&quot;  </span><span class=cF2>FAT32</span><span class=cF0> is also unappealing because it is in patent limbo.   </span><span class=cF2>FAT32</span><span class=cF0> might 
+<a name="l11"></a>get removed from ZealOS.    There is the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> 64-bit file system that works perfectly well.  </span><span class=cF2>FAT32</span><span class=cF0> is useful, however, because 
+<a name="l12"></a>it assists in transferring between dual booted operating systems.
+<a name="l13"></a>
+<a name="l14"></a>* The </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OpCodes.html#l1"><span class=cF4>asm opcodes</span></a><span class=cF0> names were changed to remove the ambiguity between insts with different numbers of arguments, making the </span><span class=cF4>
+<a name="l15"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/Asm.html#l1"><span class=cF4>assembler</span></a><span class=cF0> simpler and minimal 16-bit asm support was done, since 64-bit is what you should be using, unless you're doing a </span><span class=cF4>
+<a name="l16"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVD.html#l1"><span class=cF4>boot loader</span></a><span class=cF0>.
+<a name="l17"></a>
+<a name="l18"></a>* There are no user-controlled file-sharing locks.  However, the drive and file system have locks and concurrent operations 
+<a name="l19"></a>should be fine.
+<a name="l20"></a>
+<a name="l21"></a>* A hidden window is never refreshed.  Certain tasks are never done, therefore.  During refresh, the entry count limit of the 
+<a name="l22"></a>document buffer is, normally, checked and enforced.  If you print to the command-line in a task whose window is covered, no 
+<a name="l23"></a>limit on buffer exists and it will alloc memory for the document buffer until the system runs out of memory and crashes.
+<a name="l24"></a>
+<a name="l25"></a>* Even if a local function variable is declared less than 64 bits, the compiler does calculations with 64-bit.
+<a name="l26"></a>
+<a name="l27"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Doc/Print.html#l1"><span class=cF4>Print</span></a><span class=cF0>() uses </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.html#l249"><span class=cF4>StrPrintJoin</span></a><span class=cF0>().  You cannot use vastly over-sized fields for %f.
+<a name="l28"></a>
+<a name="l29"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrPrimatives.html#l1018"><span class=cF4>GrEllipse3</span></a><span class=cF0>() is broken on transformations.
+<a name="l30"></a> </span></pre></body>
+</html>

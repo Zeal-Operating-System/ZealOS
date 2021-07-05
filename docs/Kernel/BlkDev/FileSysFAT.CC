@@ -1,0 +1,1117 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>CDate2Dos</span><span class=cF0>(</span><span class=cF9>U16</span><span class=cF0> *t, </span><span class=cF9>U16</span><span class=cF0> *d, </span><span class=cF9>CDate</span><span class=cF0> cdt)
+<a name="l2"></a>{
+<a name="l3"></a>    </span><span class=cF9>CDateStruct</span><span class=cF0> ds;
+<a name="l4"></a>
+<a name="l5"></a>    </span><span class=cF5>Date2Struct</span><span class=cF0>(&amp;ds, cdt);
+<a name="l6"></a>    *d = ds.day_of_mon + (ds.mon + </span><span class=cF7>(</span><span class=cF0>ds.year - </span><span class=cFE>1980</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0>) &lt;&lt; </span><span class=cFE>5</span><span class=cF0>;
+<a name="l7"></a>    *t = ds.sec &gt;&gt; </span><span class=cFE>1</span><span class=cF0> + (ds.min + ds.hour &lt;&lt; </span><span class=cFE>6</span><span class=cF0>) &lt;&lt; </span><span class=cFE>5</span><span class=cF0>;
+<a name="l8"></a>}
+<a name="l9"></a>
+<a name="l10"></a></span><span class=cF9>CDate</span><span class=cF0> </span><span class=cFD>Dos2CDate</span><span class=cF0>(</span><span class=cF9>U16</span><span class=cF0> t, </span><span class=cF9>U16</span><span class=cF0> d)
+<a name="l11"></a>{
+<a name="l12"></a>    </span><span class=cF9>CDateStruct</span><span class=cF0> ds;
+<a name="l13"></a>
+<a name="l14"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;ds, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDateStruct</span><span class=cF7>)</span><span class=cF0>);
+<a name="l15"></a>    ds.day_of_mon   = d &amp; </span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l16"></a>    d = d &gt;&gt; </span><span class=cFE>5</span><span class=cF0>;
+<a name="l17"></a>    ds.mon          = d &amp; </span><span class=cFE>0xF</span><span class=cF0>;
+<a name="l18"></a>    ds.year         = d &gt;&gt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cFE>1980</span><span class=cF0>;
+<a name="l19"></a>    ds.sec          = (t &amp; </span><span class=cFE>0x1F</span><span class=cF0>) * </span><span class=cFE>2</span><span class=cF0>;
+<a name="l20"></a>    t = t &gt;&gt; </span><span class=cFE>5</span><span class=cF0>;
+<a name="l21"></a>    ds.min          = t &amp; </span><span class=cFE>0x3F</span><span class=cF0>;
+<a name="l22"></a>    ds.hour         = t &gt;&gt; </span><span class=cFE>6</span><span class=cF0>;
+<a name="l23"></a>
+<a name="l24"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Struct2Date</span><span class=cF0>(&amp;ds);
+<a name="l25"></a>}
+<a name="l26"></a>
+<a name="l27"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>FAT32Init</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive)
+<a name="l28"></a>{
+<a name="l29"></a>    </span><span class=cF9>CFAT32Boot</span><span class=cF0> br32;
+<a name="l30"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
+<a name="l31"></a>
+<a name="l32"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l33"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l34"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l35"></a>        drive-&gt;fs_type = </span><span class=cF3>FSt_FAT32</span><span class=cF0>;
+<a name="l36"></a>        </span><span class=cF5>BlkRead</span><span class=cF0>(drive, &amp;br32, drive-&gt;drv_offset, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l37"></a>        drive-&gt;file_system_info_sect    = drive-&gt;drv_offset + br32.file_system_info_sect;
+<a name="l38"></a>        drive-&gt;fat1                     = drive-&gt;drv_offset + br32.reserved_sects;
+<a name="l39"></a>        drive-&gt;fat2                     = drive-&gt;fat1 + br32.sects_per_fat;
+<a name="l40"></a>        drive-&gt;data_area                = drive-&gt;fat2 + br32.sects_per_fat - </span><span class=cFE>2</span><span class=cF0> * br32.sects_per_clus; </span><span class=cF2>//Starts at Clus 2</span><span class=cF0>
+<a name="l41"></a>        drive-&gt;spc                      = br32.sects_per_clus;
+<a name="l42"></a>        drive-&gt;root_clus                = br32.root_clus;
+<a name="l43"></a>        </span><span class=cFD>DriveFATBlkAlloc</span><span class=cF0>(drive);
+<a name="l44"></a>        </span><span class=cF5>Free</span><span class=cF0>(drive-&gt;fis);
+<a name="l45"></a>        drive-&gt;fis                      = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l46"></a>        </span><span class=cF5>BlkRead</span><span class=cF0>(drive, drive-&gt;fis, drive-&gt;file_system_info_sect, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l47"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l48"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l49"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l50"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l51"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l52"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l53"></a>}
+<a name="l54"></a>
+<a name="l55"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>FAT32Format</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let, </span><span class=cF1>Bool</span><span class=cF0> quick=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l56"></a>{
+<a name="l57"></a>    </span><span class=cF9>CFAT32Boot</span><span class=cF0>          *br    = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l58"></a>    </span><span class=cF9>CFAT32FileInfoSect</span><span class=cF0>  *fis   = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l59"></a>    </span><span class=cF9>CDrive</span><span class=cF0>              *drive = </span><span class=cF5>Letter2Drive</span><span class=cF0>(drv_let);
+<a name="l60"></a>    </span><span class=cF9>I64</span><span class=cF0>                  i, l;
+<a name="l61"></a>
+<a name="l62"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l63"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l64"></a>        </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l65"></a>        </span><span class=cFD>DriveTypeSet</span><span class=cF0>(drv_let, </span><span class=cF3>FSt_FAT32</span><span class=cF0>);
+<a name="l66"></a>        drive-&gt;fs_type = </span><span class=cF3>FSt_FAT32</span><span class=cF0>;
+<a name="l67"></a>        br-&gt;jump_and_nop[</span><span class=cFE>0</span><span class=cF0>]     = </span><span class=cF3>OC_JMP_REL8</span><span class=cF0>;
+<a name="l68"></a>        br-&gt;jump_and_nop[</span><span class=cFE>1</span><span class=cF0>]     = </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32Boot</span><span class=cF0>.code) - </span><span class=cFE>2</span><span class=cF0>;
+<a name="l69"></a>        br-&gt;jump_and_nop[</span><span class=cFE>2</span><span class=cF0>]     = </span><span class=cF3>OC_NOP</span><span class=cF0>;
+<a name="l70"></a>        br-&gt;oem_name[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>I64</span><span class=cF0>)    = </span><span class=cF6>'MSWIN4.1'</span><span class=cF0>;
+<a name="l71"></a>        br-&gt;bytes_per_sect      = </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l72"></a>
+<a name="l73"></a>        </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt;= </span><span class=cFE>500000</span><span class=cF0>)
+<a name="l74"></a>            br-&gt;sects_per_clus = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l75"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt;= </span><span class=cFE>2000000</span><span class=cF0>)
+<a name="l76"></a>            br-&gt;sects_per_clus = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l77"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt;= </span><span class=cFE>6000000</span><span class=cF0>)
+<a name="l78"></a>            br-&gt;sects_per_clus = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l79"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt;= </span><span class=cFE>12000000</span><span class=cF0>)
+<a name="l80"></a>            br-&gt;sects_per_clus = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l81"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt;= </span><span class=cFE>33000000</span><span class=cF0>)
+<a name="l82"></a>            br-&gt;sects_per_clus = </span><span class=cFE>16</span><span class=cF0>;
+<a name="l83"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (drive-&gt;size &lt;= </span><span class=cFE>67000000</span><span class=cF0>)
+<a name="l84"></a>            br-&gt;sects_per_clus = </span><span class=cFE>32</span><span class=cF0>;
+<a name="l85"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l86"></a>            br-&gt;sects_per_clus = </span><span class=cFE>64</span><span class=cF0>;
+<a name="l87"></a>
+<a name="l88"></a>        br-&gt;reserved_sects          = </span><span class=cFE>32</span><span class=cF0>;
+<a name="l89"></a>        br-&gt;copies_of_fat           = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l90"></a>        br-&gt;media_desc              = </span><span class=cFE>0xF8</span><span class=cF0>;
+<a name="l91"></a>        br-&gt;sects                   = drive-&gt;size;
+<a name="l92"></a>        l = (br-&gt;sects / br-&gt;sects_per_clus) &gt;&gt; (</span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0> - </span><span class=cFE>2</span><span class=cF0>) + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l93"></a>        br-&gt;sects_per_fat           = l;
+<a name="l94"></a>        br-&gt;root_clus               = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l95"></a>        br-&gt;file_system_info_sect   = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l96"></a>        br-&gt;log_drive_num           = </span><span class=cFE>0x80</span><span class=cF0>;
+<a name="l97"></a>        br-&gt;ext_signature           = </span><span class=cFE>0x29</span><span class=cF0>;
+<a name="l98"></a>        br-&gt;serial_num              = </span><span class=cF5>RandU32</span><span class=cF0>;
+<a name="l99"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(br-&gt;vol_name, </span><span class=cF6>&quot;NO NAME    &quot;</span><span class=cF0>, </span><span class=cFE>11</span><span class=cF0>);
+<a name="l100"></a>        br-&gt;fat_name[</span><span class=cFE>0</span><span class=cF0>](</span><span class=cF9>I64</span><span class=cF0>)        = </span><span class=cF6>'FAT32   '</span><span class=cF0>;
+<a name="l101"></a>        br-&gt;signature               = </span><span class=cFE>0xAA55</span><span class=cF0>;
+<a name="l102"></a>
+<a name="l103"></a>        fis-&gt;signature1             = </span><span class=cF6>'RRaA'</span><span class=cF0>;
+<a name="l104"></a>        fis-&gt;signature2             = </span><span class=cF6>'rrAa'</span><span class=cF0>;
+<a name="l105"></a>        fis-&gt;free_clus              = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l106"></a>        fis-&gt;most_recently_alloced  = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l107"></a>        fis-&gt;signature3             = </span><span class=cFE>0xAA550000</span><span class=cF0>;
+<a name="l108"></a>
+<a name="l109"></a>        </span><span class=cF1>if</span><span class=cF0> (quick)
+<a name="l110"></a>            i = br-&gt;reserved_sects + </span><span class=cFE>2</span><span class=cF0> * l + </span><span class=cFE>4</span><span class=cF0> * br-&gt;sects_per_clus;
+<a name="l111"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l112"></a>            i = drive-&gt;size;
+<a name="l113"></a>        </span><span class=cF5>BlkWriteZero</span><span class=cF0>(drive, drive-&gt;drv_offset, i);
+<a name="l114"></a>
+<a name="l115"></a>        </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, fis, drive-&gt;drv_offset + br-&gt;file_system_info_sect, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l116"></a>        </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, br, drive-&gt;drv_offset, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l117"></a>        </span><span class=cFD>FAT32Init</span><span class=cF0>(drive);
+<a name="l118"></a>        </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>); </span><span class=cF2>//Alloc #1</span><span class=cF0>
+<a name="l119"></a>        br-&gt;root_clus = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l120"></a>        </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, br, drive-&gt;drv_offset, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l121"></a>        </span><span class=cFD>FAT32Init</span><span class=cF0>(drive);
+<a name="l122"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l123"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l124"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l125"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l126"></a>    </span><span class=cF5>Free</span><span class=cF0>(br);
+<a name="l127"></a>    </span><span class=cF5>Free</span><span class=cF0>(fis);
+<a name="l128"></a>}
+<a name="l129"></a>
+<a name="l130"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FATNameTo</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *src)
+<a name="l131"></a>{
+<a name="l132"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l133"></a>
+<a name="l134"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(dst, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>11</span><span class=cF0>);
+<a name="l135"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileNameCheck</span><span class=cF7>(</span><span class=cF0>src</span><span class=cF7>)</span><span class=cF0>)
+<a name="l136"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l137"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>src, </span><span class=cF6>&quot;..&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l138"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l139"></a>        *dst   = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l140"></a>        dst[</span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l141"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l142"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l143"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>src, </span><span class=cF6>&quot;.&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l144"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l145"></a>        *dst = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l146"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l147"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l148"></a>    i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l149"></a>    </span><span class=cF1>while</span><span class=cF0> (i &lt; </span><span class=cFE>8</span><span class=cF0> &amp;&amp; *src &amp;&amp; *src != </span><span class=cF6>'.'</span><span class=cF0>)
+<a name="l150"></a>        dst[i++] = </span><span class=cF5>ToUpper</span><span class=cF0>(*src++);
+<a name="l151"></a>    i = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l152"></a>    </span><span class=cF1>if</span><span class=cF0> (*src == </span><span class=cF6>'.'</span><span class=cF0>)
+<a name="l153"></a>        src++;
+<a name="l154"></a>    </span><span class=cF1>while</span><span class=cF0> (*src)
+<a name="l155"></a>        </span><span class=cF1>if</span><span class=cF0> (*src != </span><span class=cF6>'.'</span><span class=cF0>)
+<a name="l156"></a>            dst[i++] = </span><span class=cF5>ToUpper</span><span class=cF0>(*src++);
+<a name="l157"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l158"></a>            src++;
+<a name="l159"></a>
+<a name="l160"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l161"></a>}
+<a name="l162"></a>
+<a name="l163"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>FATNameXSum</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src)
+<a name="l164"></a>{
+<a name="l165"></a>    </span><span class=cF9>I64</span><span class=cF0> i, res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l166"></a>
+<a name="l167"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>11</span><span class=cF0>; i++)
+<a name="l168"></a>        </span><span class=cF1>if</span><span class=cF0> (res &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l169"></a>            res.u8[</span><span class=cFE>0</span><span class=cF0>] = </span><span class=cFE>0x80</span><span class=cF0> + res &gt;&gt; </span><span class=cFE>1</span><span class=cF0> + *src++;
+<a name="l170"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l171"></a>            res.u8[</span><span class=cFE>0</span><span class=cF0>] = res &gt;&gt; </span><span class=cFE>1</span><span class=cF0> + *src++;
+<a name="l172"></a>
+<a name="l173"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l174"></a>}
+<a name="l175"></a>
+<a name="l176"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FATFromName</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *src)
+<a name="l177"></a>{
+<a name="l178"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j, k = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l179"></a>
+<a name="l180"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>7</span><span class=cF0>; j &gt;= </span><span class=cFE>0</span><span class=cF0> &amp;&amp; src[j] == </span><span class=cF3>CH_SPACE</span><span class=cF0>; j--);
+<a name="l181"></a>
+<a name="l182"></a>    </span><span class=cF1>for</span><span class=cF0>(i = </span><span class=cFE>0</span><span class=cF0>; i &lt;= j; i++)
+<a name="l183"></a>        dst[k++] = src[i];
+<a name="l184"></a>
+<a name="l185"></a>    </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>10</span><span class=cF0>; j &gt;= </span><span class=cFE>8</span><span class=cF0> &amp;&amp; src[j] == </span><span class=cF3>CH_SPACE</span><span class=cF0>; j--);
+<a name="l186"></a>
+<a name="l187"></a>    </span><span class=cF1>if</span><span class=cF0> (*src != </span><span class=cF6>'.'</span><span class=cF0> &amp;&amp; j != </span><span class=cFE>7</span><span class=cF0>)
+<a name="l188"></a>        dst[k++] = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l189"></a>    </span><span class=cF1>for</span><span class=cF0>(i = </span><span class=cFE>8</span><span class=cF0>; i &lt;= j; i++)
+<a name="l190"></a>        dst[k++] = src[i];
+<a name="l191"></a>    dst[k++] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l192"></a>
+<a name="l193"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>FileNameCheck</span><span class=cF0>(dst);
+<a name="l194"></a>}
+<a name="l195"></a>
+<a name="l196"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cFD>fat_long_name_map</span><span class=cF0>[</span><span class=cFE>13</span><span class=cF0>] =
+<a name="l197"></a>{
+<a name="l198"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name1), 
+<a name="l199"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name1) + </span><span class=cFE>2</span><span class=cF0>, 
+<a name="l200"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name1) + </span><span class=cFE>4</span><span class=cF0>,
+<a name="l201"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name1) + </span><span class=cFE>6</span><span class=cF0>,
+<a name="l202"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name1) + </span><span class=cFE>8</span><span class=cF0>,
+<a name="l203"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name2),
+<a name="l204"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name2) + </span><span class=cFE>2</span><span class=cF0>,
+<a name="l205"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name2) + </span><span class=cFE>4</span><span class=cF0>,
+<a name="l206"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name2) + </span><span class=cFE>6</span><span class=cF0>,
+<a name="l207"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name2) + </span><span class=cFE>8</span><span class=cF0>,
+<a name="l208"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name2) + </span><span class=cFE>10</span><span class=cF0>,
+<a name="l209"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name3),
+<a name="l210"></a>    </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>.name3) + </span><span class=cFE>2</span><span class=cF0>
+<a name="l211"></a>};
+<a name="l212"></a>
+<a name="l213"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>DirLongNameFill</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0> *de, </span><span class=cF9>I64</span><span class=cF0> *xsum)
+<a name="l214"></a>{
+<a name="l215"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l216"></a>    </span><span class=cF1>U8</span><span class=cF0> *ptr = de;
+<a name="l217"></a>
+<a name="l218"></a>    </span><span class=cF1>if</span><span class=cF0> (de-&gt;ord &amp; </span><span class=cFE>0x40</span><span class=cF0>)
+<a name="l219"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l220"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(tmpde, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l221"></a>        *xsum = de-&gt;xsum;
+<a name="l222"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l223"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (de-&gt;type || de-&gt;zero || de-&gt;xsum != *xsum)
+<a name="l224"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l225"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(tmpde, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l226"></a>        *xsum = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l227"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l228"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l229"></a>    </span><span class=cF1>switch</span><span class=cF0> (de-&gt;ord &amp; </span><span class=cFE>0x3F</span><span class=cF0>)
+<a name="l230"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l231"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l232"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>13</span><span class=cF0>; i++)
+<a name="l233"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;name[i] = ptr[</span><span class=cFD>fat_long_name_map</span><span class=cF0>[i]]</span><span class=cF7>)</span><span class=cF0>)
+<a name="l234"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l235"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l236"></a>
+<a name="l237"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l238"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>12</span><span class=cF0>; i++)
+<a name="l239"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;name[i + </span><span class=cFE>13</span><span class=cF0>] = ptr[</span><span class=cFD>fat_long_name_map</span><span class=cF0>[i]]</span><span class=cF7>)</span><span class=cF0>)
+<a name="l240"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l241"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l242"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l243"></a>
+<a name="l244"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l245"></a>}
+<a name="l246"></a>
+<a name="l247"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32CDirFill</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF9>CFAT32DirEntry</span><span class=cF0> *de, </span><span class=cF9>CDate</span><span class=cF0> _local_time_offset)
+<a name="l248"></a>{
+<a name="l249"></a>    </span><span class=cF1>Bool</span><span class=cF0> res;
+<a name="l250"></a>
+<a name="l251"></a>    </span><span class=cF1>if</span><span class=cF0> (*tmpde-&gt;name)
+<a name="l252"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l253"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l254"></a>        res = </span><span class=cFD>FATFromName</span><span class=cF0>(tmpde-&gt;name, de-&gt;name);
+<a name="l255"></a>    tmpde-&gt;clus     = de-&gt;clus_lo + de-&gt;clus_hi &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
+<a name="l256"></a>    tmpde-&gt;size     = de-&gt;size;
+<a name="l257"></a>    tmpde-&gt;attr     = de-&gt;attr;
+<a name="l258"></a>    tmpde-&gt;datetime = </span><span class=cFD>Dos2CDate</span><span class=cF0>(de-&gt;WrtTime, de-&gt;WrtDate) - _local_time_offset;
+<a name="l259"></a>
+<a name="l260"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l261"></a>}
+<a name="l262"></a>
+<a name="l263"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32DirFill</span><span class=cF0>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF0> *de, </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF9>I64</span><span class=cF0> *_de_count, </span><span class=cF9>CDate</span><span class=cF0> _local_time_offset)
+<a name="l264"></a>{</span><span class=cF2>//Fill up to 3 entries and store count of entries.</span><span class=cF0>
+<a name="l265"></a>    </span><span class=cF9>I64</span><span class=cF0>                  de_count = </span><span class=cFE>0</span><span class=cF0>, i, l, xsum, ord;
+<a name="l266"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *ptr, dname[</span><span class=cFE>16</span><span class=cF0>];
+<a name="l267"></a>    </span><span class=cF9>CFAT32DirEntryLong</span><span class=cF0>  *ld = de;
+<a name="l268"></a>    </span><span class=cF1>Bool</span><span class=cF0>                 res;
+<a name="l269"></a>
+<a name="l270"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(de, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l271"></a>    res = </span><span class=cFD>FATNameTo</span><span class=cF0>(de-&gt;name, tmpde-&gt;name);
+<a name="l272"></a>    </span><span class=cFD>FATFromName</span><span class=cF0>(dname, de-&gt;name);
+<a name="l273"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dname, tmpde-&gt;name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l274"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l275"></a>        ord = </span><span class=cFE>0x41</span><span class=cF0>;
+<a name="l276"></a>        xsum = </span><span class=cFD>FATNameXSum</span><span class=cF0>(de-&gt;name);
+<a name="l277"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>l = </span><span class=cF5>StrLen</span><span class=cF0>(tmpde-&gt;name)</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>13</span><span class=cF0>)
+<a name="l278"></a>        {
+<a name="l279"></a>            ptr = &amp;ld[de_count];
+<a name="l280"></a>            </span><span class=cF5>MemSet</span><span class=cF0>(ptr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF7>)</span><span class=cF0>);
+<a name="l281"></a>            ld[de_count].attr = </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>;
+<a name="l282"></a>            ld[de_count].xsum = xsum;
+<a name="l283"></a>            ld[de_count].ord  = </span><span class=cFE>0x42</span><span class=cF0>;
+<a name="l284"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>13</span><span class=cF0>; i &lt; l; i++)
+<a name="l285"></a>                ptr[</span><span class=cFD>fat_long_name_map</span><span class=cF0>[i - </span><span class=cFE>13</span><span class=cF0>]] = tmpde-&gt;name[i];
+<a name="l286"></a>            i++;
+<a name="l287"></a>            </span><span class=cF1>for</span><span class=cF0> (; i &lt; </span><span class=cFE>26</span><span class=cF0>; i++)
+<a name="l288"></a>                ptr[</span><span class=cFD>fat_long_name_map</span><span class=cF0>[i - </span><span class=cFE>13</span><span class=cF0>]](</span><span class=cF9>U16</span><span class=cF0>) = </span><span class=cFE>0xFFFF</span><span class=cF0>;
+<a name="l289"></a>            ord = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l290"></a>            l = </span><span class=cFE>13</span><span class=cF0>;
+<a name="l291"></a>            de_count++;
+<a name="l292"></a>        }
+<a name="l293"></a>        ptr = &amp;de[de_count];
+<a name="l294"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(ptr, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntryLong</span><span class=cF7>)</span><span class=cF0>);
+<a name="l295"></a>        ld[de_count].attr = </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>;
+<a name="l296"></a>        ld[de_count].xsum = xsum;
+<a name="l297"></a>        ld[de_count].ord  = ord;
+<a name="l298"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; l; i++)
+<a name="l299"></a>            ptr[</span><span class=cFD>fat_long_name_map</span><span class=cF0>[i]] = tmpde-&gt;name[i];
+<a name="l300"></a>        i++;
+<a name="l301"></a>        </span><span class=cF1>for</span><span class=cF0> (; i &lt; </span><span class=cFE>13</span><span class=cF0>; i++)
+<a name="l302"></a>            ptr[</span><span class=cFD>fat_long_name_map</span><span class=cF0>[i]](</span><span class=cF9>U16</span><span class=cF0>) = </span><span class=cFE>0xFFFF</span><span class=cF0>;
+<a name="l303"></a>        de_count++;
+<a name="l304"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;de[de_count], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l305"></a>        res = </span><span class=cFD>FATNameTo</span><span class=cF0>(de[de_count].name, tmpde-&gt;name);
+<a name="l306"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l307"></a>    de[de_count].clus_lo = tmpde-&gt;clus.u16[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l308"></a>    de[de_count].clus_hi = tmpde-&gt;clus.u16[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l309"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l310"></a>        de[de_count].size = tmpde-&gt;size;
+<a name="l311"></a>    de[de_count].attr = tmpde-&gt;attr;
+<a name="l312"></a>    </span><span class=cF1>if</span><span class=cF0> (!tmpde-&gt;datetime)
+<a name="l313"></a>        tmpde-&gt;datetime = </span><span class=cF5>Now</span><span class=cF0>;
+<a name="l314"></a>    </span><span class=cFD>CDate2Dos</span><span class=cF0>(&amp;de[de_count].WrtTime, &amp;de[de_count].WrtDate, tmpde-&gt;datetime + _local_time_offset);
+<a name="l315"></a>    </span><span class=cF1>if</span><span class=cF0> (_de_count)
+<a name="l316"></a>        *_de_count = de_count + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l317"></a>
+<a name="l318"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l319"></a>}
+<a name="l320"></a>
+<a name="l321"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32FileFind</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> cur_dir_clus, </span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>CDirEntry</span><span class=cF0> *_res, </span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l322"></a>{</span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3219"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l3220"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF0>
+<a name="l323"></a>    </span><span class=cF1>Bool</span><span class=cF0>             res = </span><span class=cF3>FALSE</span><span class=cF0>, unlock;
+<a name="l324"></a>    </span><span class=cF9>CFAT32DirEntry</span><span class=cF0>  *buf;
+<a name="l325"></a>    </span><span class=cF9>I64</span><span class=cF0>              xsum = </span><span class=cFE>0</span><span class=cF0>, attr, cur_dir_entry, entries_per_clus;
+<a name="l326"></a>    </span><span class=cF1>U8</span><span class=cF0>               dname[</span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0>], ch;
+<a name="l327"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>        long_name;
+<a name="l328"></a>
+<a name="l329"></a>    </span><span class=cF1>if</span><span class=cF0> (fuf_flags &amp; ~</span><span class=cF3>FUG_FILE_FIND</span><span class=cF0>)
+<a name="l330"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'FUF'</span><span class=cF0>);
+<a name="l331"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(_res, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l332"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l333"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
+<a name="l334"></a>    </span><span class=cF1>if</span><span class=cF0> (drive-&gt;fs_type != </span><span class=cF3>FSt_FAT32</span><span class=cF0>)
+<a name="l335"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Not FAT32 Drive\n&quot;</span><span class=cF0>);
+<a name="l336"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>CFileNameTo</span><span class=cF7>(</span><span class=cF0>dname, name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l337"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Invalid FileName: \&quot;%s\&quot;.\n&quot;</span><span class=cF0>, name);
+<a name="l338"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l339"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l340"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l341"></a>            unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l342"></a>            buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l343"></a>            entries_per_clus = drive-&gt;spc &lt;&lt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>;
+<a name="l344"></a>            </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l345"></a>            cur_dir_entry=</span><span class=cFE>0</span><span class=cF0>;
+<a name="l346"></a>            </span><span class=cF1>while</span><span class=cF0> (ch = *buf[cur_dir_entry].name)
+<a name="l347"></a>            {
+<a name="l348"></a>                attr = buf[cur_dir_entry].attr;
+<a name="l349"></a>                </span><span class=cF1>if</span><span class=cF0> (ch != </span><span class=cFE>0xE5</span><span class=cF0>)
+<a name="l350"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l351"></a>                    </span><span class=cF1>if</span><span class=cF0> (attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l352"></a>                        </span><span class=cFD>DirLongNameFill</span><span class=cF0>(&amp;long_name, &amp;buf[cur_dir_entry], &amp;xsum);
+<a name="l353"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l354"></a>                    {
+<a name="l355"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>attr &amp; </span><span class=cF3>RS_ATTR_VOL_ID</span><span class=cF7>)</span><span class=cF0>)
+<a name="l356"></a>                        </span><span class=cF7>{</span><span class=cF0>
+<a name="l357"></a>                            </span><span class=cF1>if</span><span class=cF0> (xsum == </span><span class=cFD>FATNameXSum</span><span class=cF7>(</span><span class=cF0>buf[cur_dir_entry].name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l358"></a>                                </span><span class=cF5>MemCopy</span><span class=cF0>(_res, &amp;long_name, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l359"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l360"></a>                                </span><span class=cF5>MemSet</span><span class=cF0>(_res, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l361"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>fuf_flags &amp; </span><span class=cF3>FUF_JUST_DIRS</span><span class=cF0> &amp;&amp;
+<a name="l362"></a>                                !(attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l363"></a>                                !</span><span class=cF7>(</span><span class=cF0>fuf_flags &amp; </span><span class=cF3>FUF_JUST_FILES</span><span class=cF0> &amp;&amp; attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l364"></a>                                </span><span class=cFD>FAT32CDirFill</span><span class=cF7>(</span><span class=cF0>_res, &amp;buf[cur_dir_entry], drive-&gt;fat32_local_time_offset</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l365"></a>                                !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>dname, _res-&gt;name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l366"></a>                            {
+<a name="l367"></a>                                res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l368"></a>                                </span><span class=cF1>goto</span><span class=cF0> fff_done;
+<a name="l369"></a>                            }
+<a name="l370"></a>                        </span><span class=cF7>}</span><span class=cF0>
+<a name="l371"></a>                        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l372"></a>                    }
+<a name="l373"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l374"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l375"></a>                    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l376"></a>                </span><span class=cF1>if</span><span class=cF0> (++cur_dir_entry == entries_per_clus)
+<a name="l377"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l378"></a>                    cur_dir_clus = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, cur_dir_clus);
+<a name="l379"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt; cur_dir_clus &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF7>)</span><span class=cF0>)
+<a name="l380"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l381"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l382"></a>                    {
+<a name="l383"></a>                        </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l384"></a>                        cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l385"></a>                    }
+<a name="l386"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l387"></a>            }
+<a name="l388"></a>            </span><span class=cF5>MemSet</span><span class=cF0>(_res, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l389"></a>fff_done:
+<a name="l390"></a>            </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l391"></a>            </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l392"></a>                </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l393"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l394"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l395"></a>            </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l396"></a>                </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l397"></a>
+<a name="l398"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l399"></a>}
+<a name="l400"></a>
+<a name="l401"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>FAT32FileRead</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>I64</span><span class=cF0> *_size, </span><span class=cF9>I64</span><span class=cF0> *_attr)
+<a name="l402"></a>{
+<a name="l403"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l404"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>    de;
+<a name="l405"></a>    </span><span class=cF9>I64</span><span class=cF0>          c, blk_count, cur_dir_clus;
+<a name="l406"></a>
+<a name="l407"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
+<a name="l408"></a>    *_size = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l409"></a>    *_attr = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l410"></a>    </span><span class=cF1>if</span><span class=cF0> (drive-&gt;fs_type != </span><span class=cF3>FSt_FAT32</span><span class=cF0>)
+<a name="l411"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Not FAT32 Drive\n&quot;</span><span class=cF0>);
+<a name="l412"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l413"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l414"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l415"></a>            </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l416"></a>            cur_dir_clus = </span><span class=cF5>Name2DirClus</span><span class=cF0>(drive, cur_dir);
+<a name="l417"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>FAT32FileFind</span><span class=cF7>(</span><span class=cF0>drive, cur_dir_clus, filename, &amp;de, </span><span class=cF3>FUF_JUST_FILES</span><span class=cF7>)</span><span class=cF0>)
+<a name="l418"></a>            {
+<a name="l419"></a>                blk_count = (de.size + </span><span class=cF3>BLK_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l420"></a>                buf = </span><span class=cF5>MAlloc</span><span class=cF0>(blk_count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l421"></a>                c = de.clus;
+<a name="l422"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF7>)</span><span class=cF0>)
+<a name="l423"></a>                    c = </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l424"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l425"></a>                    c = </span><span class=cF5>ClusBlkRead</span><span class=cF0>(drive, buf, c, blk_count);
+<a name="l426"></a>                buf[de.size] = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//Terminate</span><span class=cF0>
+<a name="l427"></a>                *_size = de.size;
+<a name="l428"></a>                *_attr = </span><span class=cF5>FileAttr</span><span class=cF0>(de.name, de.attr);
+<a name="l429"></a>            }
+<a name="l430"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l431"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l432"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l433"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l434"></a>    </span><span class=cF1>return</span><span class=cF0> buf;
+<a name="l435"></a>}
+<a name="l436"></a>
+<a name="l437"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32Cd</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> cur_dir_clus)
+<a name="l438"></a>{
+<a name="l439"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0> de;
+<a name="l440"></a>
+<a name="l441"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;fs_type != </span><span class=cF3>FSt_FAT32</span><span class=cF0>)
+<a name="l442"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Not FAT32 Drive\n&quot;</span><span class=cF0>);
+<a name="l443"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>FAT32FileFind</span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, cur_dir_clus, name, &amp;de, </span><span class=cF3>FUF_JUST_DIRS</span><span class=cF7>)</span><span class=cF0>)
+<a name="l444"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l445"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l446"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;File not found: \&quot;%s\&quot;.\n&quot;</span><span class=cF0>, name);
+<a name="l447"></a>
+<a name="l448"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l449"></a>}
+<a name="l450"></a>
+<a name="l451"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FAT32FreeClus</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> c)
+<a name="l452"></a>{
+<a name="l453"></a>    </span><span class=cF9>I64</span><span class=cF0>  next, saved_c = c;
+<a name="l454"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock, unlock_break;
+<a name="l455"></a>
+<a name="l456"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
+<a name="l457"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF7>)</span><span class=cF0>)
+<a name="l458"></a>        </span><span class=cF1>return</span><span class=cF0>;
+<a name="l459"></a>    </span><span class=cF1>if</span><span class=cF0> (drive-&gt;fs_type != </span><span class=cF3>FSt_FAT32</span><span class=cF0>)
+<a name="l460"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Not FAT32 Drive\n&quot;</span><span class=cF0>);
+<a name="l461"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l462"></a>        </span><span class=cF1>try</span><span class=cF0>
+<a name="l463"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l464"></a>            unlock_break = </span><span class=cF5>BreakLock</span><span class=cF0>;
+<a name="l465"></a>            unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l466"></a>            </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive);
+<a name="l467"></a>            </span><span class=cF1>do</span><span class=cF0>
+<a name="l468"></a>            {
+<a name="l469"></a>                </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, c, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l470"></a>                next = drive-&gt;cur_fat_blk[c &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)];
+<a name="l471"></a>                drive-&gt;cur_fat_blk[c &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l472"></a>                </span><span class=cF5>LBts</span><span class=cF0>(&amp;drive-&gt;fat_blk_dirty, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l473"></a>                c = next;
+<a name="l474"></a>            }
+<a name="l475"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF0>);
+<a name="l476"></a>
+<a name="l477"></a>            </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l478"></a>
+<a name="l479"></a>            c = saved_c;
+<a name="l480"></a>            </span><span class=cF1>do</span><span class=cF0>
+<a name="l481"></a>            {
+<a name="l482"></a>                </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, c, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l483"></a>                next = drive-&gt;cur_fat_blk[c &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)];
+<a name="l484"></a>                drive-&gt;cur_fat_blk[c &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l485"></a>                </span><span class=cF5>LBts</span><span class=cF0>(&amp;drive-&gt;fat_blk_dirty, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l486"></a>                c = next;
+<a name="l487"></a>            }
+<a name="l488"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF0>);
+<a name="l489"></a>
+<a name="l490"></a>            </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l491"></a>            </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l492"></a>                </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l493"></a>            </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l494"></a>                </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l495"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l496"></a>        </span><span class=cF1>catch</span><span class=cF0>
+<a name="l497"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l498"></a>            </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l499"></a>                </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l500"></a>            </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l501"></a>                </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l502"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l503"></a>}
+<a name="l504"></a>
+<a name="l505"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>FAT32AllocClus</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l506"></a>{
+<a name="l507"></a>    </span><span class=cF1>Bool</span><span class=cF0> wrap_around = </span><span class=cF3>FALSE</span><span class=cF0>, unlock, unlock_break;
+<a name="l508"></a>    </span><span class=cF9>I64</span><span class=cF0>  first = </span><span class=cF3>INVALID_CLUS</span><span class=cF0>, j, l;
+<a name="l509"></a>
+<a name="l510"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l511"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l512"></a>
+<a name="l513"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l514"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l515"></a>        unlock_break = </span><span class=cF5>BreakLock</span><span class=cF0>;
+<a name="l516"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l517"></a>        l = (drive-&gt;size + drive-&gt;drv_offset - drive-&gt;data_area) / drive-&gt;spc - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l518"></a>        j = drive-&gt;fis-&gt;most_recently_alloced;
+<a name="l519"></a>        </span><span class=cF1>while</span><span class=cF0> (count-- &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l520"></a>        {
+<a name="l521"></a>            </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l522"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l523"></a>                j++;
+<a name="l524"></a>                </span><span class=cF1>if</span><span class=cF0> (j &lt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l525"></a>                    j = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l526"></a>                </span><span class=cF1>if</span><span class=cF0> (j &gt;= l)
+<a name="l527"></a>                {
+<a name="l528"></a>                    </span><span class=cF1>if</span><span class=cF0> (wrap_around)
+<a name="l529"></a>                        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Drive'</span><span class=cF0>);
+<a name="l530"></a>                    j = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l531"></a>                    wrap_around = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l532"></a>                }
+<a name="l533"></a>                </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, j);
+<a name="l534"></a>                </span><span class=cF1>if</span><span class=cF0> (!drive-&gt;cur_fat_blk[j &amp; </span><span class=cF7>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>])
+<a name="l535"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l536"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l537"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt; first &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF7>)</span><span class=cF0>)
+<a name="l538"></a>                first = j;
+<a name="l539"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; l)
+<a name="l540"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l541"></a>                </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, c);
+<a name="l542"></a>                drive-&gt;cur_fat_blk[c &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = j;
+<a name="l543"></a>                </span><span class=cF5>LBts</span><span class=cF0>(&amp;drive-&gt;fat_blk_dirty, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l544"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l545"></a>            c = j;
+<a name="l546"></a>        }
+<a name="l547"></a>
+<a name="l548"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; l)
+<a name="l549"></a>        {
+<a name="l550"></a>            </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, c);
+<a name="l551"></a>            drive-&gt;cur_fat_blk[c &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l552"></a>            </span><span class=cF5>LBts</span><span class=cF0>(&amp;drive-&gt;fat_blk_dirty, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l553"></a>        }
+<a name="l554"></a>        </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive);
+<a name="l555"></a>
+<a name="l556"></a>        drive-&gt;fis-&gt;most_recently_alloced = j;
+<a name="l557"></a>        drive-&gt;fis-&gt;free_clus = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l558"></a>        </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, drive-&gt;fis, drive-&gt;file_system_info_sect, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l559"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l560"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l561"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l562"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l563"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l564"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l565"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l566"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l567"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l568"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l569"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l570"></a>        </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l571"></a>    </span><span class=cF1>return</span><span class=cF0> first;
+<a name="l572"></a>}
+<a name="l573"></a>
+<a name="l574"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>FAT32AllocContiguousClus</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l575"></a>{
+<a name="l576"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, first = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l577"></a>    </span><span class=cF1>Bool</span><span class=cF0> cont, unlock, unlock_break;
+<a name="l578"></a>
+<a name="l579"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>)
+<a name="l580"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l581"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l582"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l583"></a>        unlock_break = </span><span class=cF5>BreakLock</span><span class=cF0>;
+<a name="l584"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l585"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l586"></a>        {
+<a name="l587"></a>            first++;
+<a name="l588"></a>            i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l589"></a>            cont = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l590"></a>            </span><span class=cF1>while</span><span class=cF0> (cont &amp;&amp; i &lt; count)
+<a name="l591"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l592"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>first + i + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> * drive-&gt;spc + drive-&gt;data_area &gt; drive-&gt;size + drive-&gt;drv_offset)
+<a name="l593"></a>                    </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Drive'</span><span class=cF0>);
+<a name="l594"></a>                </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, first + i);
+<a name="l595"></a>                </span><span class=cF1>if</span><span class=cF0> (drive-&gt;cur_fat_blk[</span><span class=cF7>(</span><span class=cF0>first + i</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cF7>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>])
+<a name="l596"></a>                    cont = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l597"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l598"></a>                    i++;
+<a name="l599"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l600"></a>            </span><span class=cF1>if</span><span class=cF0> (!cont)
+<a name="l601"></a>                first = first + i;
+<a name="l602"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l603"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l604"></a>                </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive);
+<a name="l605"></a>
+<a name="l606"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l607"></a>                {
+<a name="l608"></a>                    </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, first + i, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l609"></a>                    </span><span class=cF1>if</span><span class=cF0> (i + </span><span class=cFE>1</span><span class=cF0> == count)
+<a name="l610"></a>                        drive-&gt;cur_fat_blk[(first + i) &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l611"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l612"></a>                        drive-&gt;cur_fat_blk[(first + i) &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = first + i + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l613"></a>                    </span><span class=cF5>LBts</span><span class=cF0>(&amp;drive-&gt;fat_blk_dirty, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l614"></a>                }
+<a name="l615"></a>                </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l616"></a>
+<a name="l617"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l618"></a>                {
+<a name="l619"></a>                    </span><span class=cFD>DriveFATBlkSet</span><span class=cF0>(drive, first + i, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l620"></a>                    </span><span class=cF1>if</span><span class=cF0> (i + </span><span class=cFE>1</span><span class=cF0> == count)
+<a name="l621"></a>                        drive-&gt;cur_fat_blk[(first + i) &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l622"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l623"></a>                        drive-&gt;cur_fat_blk[(first + i) &amp; (</span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>4</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>)] = first + i + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l624"></a>                    </span><span class=cF5>LBts</span><span class=cF0>(&amp;drive-&gt;fat_blk_dirty, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l625"></a>                }
+<a name="l626"></a>                </span><span class=cFD>DriveFATBlkClean</span><span class=cF0>(drive, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l627"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l628"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l629"></a>        }
+<a name="l630"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l631"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l632"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l633"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l634"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l635"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l636"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l637"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l638"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l639"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l640"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l641"></a>        </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l642"></a>
+<a name="l643"></a>    </span><span class=cF1>return</span><span class=cF0> first;
+<a name="l644"></a>}
+<a name="l645"></a>
+<a name="l646"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32DirNew</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF1>Bool</span><span class=cF0> free_old_chain)
+<a name="l647"></a>{
+<a name="l648"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/CutCorners.html#l1"><span class=cF4>::/Doc/CutCorners.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l649"></a>    </span><span class=cF9>CFAT32DirEntry</span><span class=cF0>  *buf, *last_buf, *tmp_buf, de[</span><span class=cFE>3</span><span class=cF0>];
+<a name="l650"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, attr, avail_count, de_count, c, cur_dir_entry,
+<a name="l651"></a>                     entries_per_clus, cur_dir_clus, xsum = </span><span class=cFE>0</span><span class=cF0>, last_dir_clus = </span><span class=cF3>INVALID_CLUS</span><span class=cF0>;
+<a name="l652"></a>    </span><span class=cF1>U8</span><span class=cF0>               ch;
+<a name="l653"></a>    </span><span class=cF1>Bool</span><span class=cF0>             written = </span><span class=cF3>FALSE</span><span class=cF0>, unlock, unlock_break;
+<a name="l654"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>        long_name;
+<a name="l655"></a>
+<a name="l656"></a>    </span><span class=cFD>FAT32DirFill</span><span class=cF0>(&amp;de, tmpde, &amp;de_count, drive-&gt;fat32_local_time_offset);
+<a name="l657"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l658"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l659"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l660"></a>        unlock_break = </span><span class=cF5>BreakLock</span><span class=cF0>;
+<a name="l661"></a>        unlock = </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l662"></a>        cur_dir_clus = </span><span class=cF5>Name2DirClus</span><span class=cF0>(drive, cur_dir);
+<a name="l663"></a>        buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l664"></a>        last_buf = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l665"></a>        entries_per_clus = drive-&gt;spc &lt;&lt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>;
+<a name="l666"></a>        </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l667"></a>        cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l668"></a>        </span><span class=cF1>while</span><span class=cF0> (ch = *buf[cur_dir_entry].name)
+<a name="l669"></a>        {
+<a name="l670"></a>            attr = buf[cur_dir_entry].attr;
+<a name="l671"></a>            </span><span class=cF1>if</span><span class=cF0> (ch != </span><span class=cFE>0xE5</span><span class=cF0> &amp;&amp; attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l672"></a>                </span><span class=cFD>DirLongNameFill</span><span class=cF0>(&amp;long_name, &amp;buf[cur_dir_entry], &amp;xsum);
+<a name="l673"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l674"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l675"></a>                avail_count = </span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0> - cur_dir_entry &amp; (</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l676"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; avail_count; i++)
+<a name="l677"></a>                    </span><span class=cF1>if</span><span class=cF0> (*buf[cur_dir_entry + i].name != </span><span class=cFE>0xE5</span><span class=cF0>)
+<a name="l678"></a>                    {
+<a name="l679"></a>                        </span><span class=cF1>if</span><span class=cF0> (*buf[cur_dir_entry + i].name)
+<a name="l680"></a>                            avail_count = i;
+<a name="l681"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l682"></a>                    }
+<a name="l683"></a>                </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cFE>0xE5</span><span class=cF0> &amp;&amp; !written &amp;&amp; avail_count &gt;= de_count)
+<a name="l684"></a>                {
+<a name="l685"></a>                    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;buf[cur_dir_entry], &amp;de, de_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l686"></a>                    </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[cur_dir_entry &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>],
+<a name="l687"></a>                             drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + cur_dir_entry &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l688"></a>                    cur_dir_entry += de_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//gets inc'ed</span><span class=cF0>
+<a name="l689"></a>                    written = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l690"></a>                }
+<a name="l691"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch != </span><span class=cFE>0xE5</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>attr &amp; </span><span class=cF3>RS_ATTR_VOL_ID</span><span class=cF7>)</span><span class=cF0>)
+<a name="l692"></a>                {
+<a name="l693"></a>                    </span><span class=cF1>if</span><span class=cF0> (xsum != </span><span class=cFD>FATNameXSum</span><span class=cF7>(</span><span class=cF0>buf[cur_dir_entry].name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l694"></a>                        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l695"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*long_name.name)
+<a name="l696"></a>                        </span><span class=cFD>FATFromName</span><span class=cF0>(long_name.name, buf[cur_dir_entry].name);
+<a name="l697"></a></span><span class=cF2>//Del old entry with same name</span><span class=cF0>
+<a name="l698"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>long_name.name, tmpde-&gt;name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l699"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l700"></a>                        </span><span class=cF1>if</span><span class=cF0> (free_old_chain)
+<a name="l701"></a>                            </span><span class=cF5>FAT32FreeClus</span><span class=cF0>(drive, buf[cur_dir_entry].clus_lo + buf[cur_dir_entry].clus_hi &lt;&lt; </span><span class=cFE>16</span><span class=cF0>);
+<a name="l702"></a>                        </span><span class=cF1>if</span><span class=cF0> (!written)
+<a name="l703"></a>                        {
+<a name="l704"></a>                            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;buf[cur_dir_entry], &amp;de[de_count - </span><span class=cFE>1</span><span class=cF0>], </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l705"></a>                            </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[cur_dir_entry &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l706"></a>                                     drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + cur_dir_entry &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l707"></a>                            written = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l708"></a>                        }
+<a name="l709"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l710"></a>                        {
+<a name="l711"></a>                            *buf[cur_dir_entry].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l712"></a>                            i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l713"></a>                            </span><span class=cF1>while</span><span class=cF0> (i &lt;= cur_dir_entry &amp;&amp;
+<a name="l714"></a>                                    buf[cur_dir_entry - i].attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l715"></a>                                *buf[cur_dir_entry-i++].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l716"></a>                            i--;
+<a name="l717"></a>                            </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[</span><span class=cF7>(</span><span class=cF0>cur_dir_entry - i</span><span class=cF7>)</span><span class=cF0> &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l718"></a>                                     drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + </span><span class=cF7>(</span><span class=cF0>cur_dir_entry - i</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>,
+<a name="l719"></a>                                     </span><span class=cF7>(</span><span class=cF0>i + </span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>);
+<a name="l720"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == cur_dir_entry &amp;&amp; </span><span class=cFE>0</span><span class=cF0> &lt; last_dir_clus &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF0>)
+<a name="l721"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l722"></a>                                i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l723"></a>                                </span><span class=cF1>while</span><span class=cF0> (i &lt;= entries_per_clus &amp;&amp;
+<a name="l724"></a>                                       last_buf[entries_per_clus - i].attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l725"></a>                                    *last_buf[entries_per_clus - i++].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l726"></a>                                </span><span class=cF1>if</span><span class=cF0> (--i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l727"></a>                                    </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[</span><span class=cF7>(</span><span class=cF0>entries_per_clus - i</span><span class=cF7>)</span><span class=cF0> &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l728"></a>                                             drive-&gt;data_area +
+<a name="l729"></a>                                             last_dir_clus * drive-&gt;spc + </span><span class=cF7>(</span><span class=cF0>entries_per_clus - i</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>,
+<a name="l730"></a>                                             </span><span class=cF7>(</span><span class=cF0>i + </span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>);
+<a name="l731"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l732"></a>                        }
+<a name="l733"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l734"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l735"></a>                }
+<a name="l736"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l737"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l738"></a>            </span><span class=cF1>if</span><span class=cF0> (++cur_dir_entry == entries_per_clus)
+<a name="l739"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l740"></a>                last_dir_clus = cur_dir_clus;
+<a name="l741"></a>                tmp_buf     = buf;
+<a name="l742"></a>                buf         = last_buf;
+<a name="l743"></a>                last_buf    = tmp_buf;
+<a name="l744"></a>                c=</span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, cur_dir_clus);
+<a name="l745"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt; c &lt; </span><span class=cFE>0x0FFFFFF8</span><span class=cF7>)</span><span class=cF0>)
+<a name="l746"></a>                {
+<a name="l747"></a>                    c = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l748"></a>                    </span><span class=cF5>MemSet</span><span class=cF0>(buf, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l749"></a>                    </span><span class=cF5>ClusWrite</span><span class=cF0>(drive, buf, c, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l750"></a>                }
+<a name="l751"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l752"></a>                    </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, c, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l753"></a>                cur_dir_clus  = c;
+<a name="l754"></a>                cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l755"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l756"></a>        }
+<a name="l757"></a>        </span><span class=cF1>if</span><span class=cF0> (!written)
+<a name="l758"></a>        {
+<a name="l759"></a>            avail_count = </span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0> - cur_dir_entry &amp; (</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l760"></a>            </span><span class=cF1>if</span><span class=cF0> (avail_count &lt; de_count)
+<a name="l761"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l762"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; avail_count; i++)
+<a name="l763"></a>                    *buf[cur_dir_entry + i].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l764"></a>                </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[cur_dir_entry &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l765"></a>                         drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + cur_dir_entry &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l766"></a>                cur_dir_entry += avail_count;
+<a name="l767"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_dir_entry == entries_per_clus)
+<a name="l768"></a>                {
+<a name="l769"></a>                    last_dir_clus   = cur_dir_clus;
+<a name="l770"></a>                    tmp_buf         = buf;
+<a name="l771"></a>                    buf             = last_buf;
+<a name="l772"></a>                    last_buf        = tmp_buf;
+<a name="l773"></a>                    cur_dir_clus    = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l774"></a>                    cur_dir_entry   = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l775"></a>                    </span><span class=cF5>MemSet</span><span class=cF0>(buf, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l776"></a>                    </span><span class=cF5>ClusWrite</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l777"></a>                }
+<a name="l778"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l779"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;buf[cur_dir_entry], &amp;de, de_count * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l780"></a>            </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[cur_dir_entry &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l781"></a>                     drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + cur_dir_entry &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l782"></a>            cur_dir_entry += de_count;
+<a name="l783"></a>            </span><span class=cF1>if</span><span class=cF0> (cur_dir_entry == entries_per_clus)
+<a name="l784"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l785"></a>                cur_dir_clus = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l786"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(buf, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l787"></a>                </span><span class=cF5>ClusWrite</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l788"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l789"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l790"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l791"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(&amp;buf[cur_dir_entry], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFAT32DirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l792"></a>                </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[cur_dir_entry &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l793"></a>                         drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + cur_dir_entry &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l794"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l795"></a>        }
+<a name="l796"></a>        </span><span class=cF5>Free</span><span class=cF0>(last_buf);
+<a name="l797"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l798"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l799"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l800"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l801"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l802"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l803"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l804"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l805"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l806"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l807"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l808"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l809"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l810"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l811"></a>}
+<a name="l812"></a>
+<a name="l813"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>FAT32FilesDel</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF1>U8</span><span class=cF0> *files_find_mask, </span><span class=cF9>I64</span><span class=cF0> fuf_flags, </span><span class=cF1>Bool</span><span class=cF0> del_dir, </span><span class=cF1>Bool</span><span class=cF0> print_message)
+<a name="l814"></a>{
+<a name="l815"></a>    </span><span class=cF9>CFAT32DirEntry</span><span class=cF0>  *buf, *last_buf, *tmp_buf;
+<a name="l816"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, res = </span><span class=cFE>0</span><span class=cF0>, attr, xsum = </span><span class=cFE>0</span><span class=cF0>, last_dir_clus = </span><span class=cF3>INVALID_CLUS</span><span class=cF0>, cur_dir_entry, entries_per_clus, cur_dir_clus;
+<a name="l817"></a>    </span><span class=cF1>U8</span><span class=cF0>               ch;
+<a name="l818"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock_break;
+<a name="l819"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>        long_name;
+<a name="l820"></a>
+<a name="l821"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l822"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l823"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l824"></a>        unlock_break = </span><span class=cF5>BreakLock</span><span class=cF0>;
+<a name="l825"></a>        </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l826"></a>        cur_dir_clus = </span><span class=cF5>Name2DirClus</span><span class=cF0>(drive, cur_dir);
+<a name="l827"></a>        buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l828"></a>        last_buf = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l829"></a>        entries_per_clus = drive-&gt;spc &lt;&lt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>;
+<a name="l830"></a>        </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l831"></a>        cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l832"></a>        </span><span class=cF1>while</span><span class=cF0> (ch = *buf[cur_dir_entry].name)
+<a name="l833"></a>        {
+<a name="l834"></a>            attr = buf[cur_dir_entry].attr;
+<a name="l835"></a>            </span><span class=cF1>if</span><span class=cF0> (ch != </span><span class=cFE>0xE5</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'.'</span><span class=cF0>)
+<a name="l836"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l837"></a>                </span><span class=cF1>if</span><span class=cF0> (attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l838"></a>                    </span><span class=cFD>DirLongNameFill</span><span class=cF0>(&amp;long_name, &amp;buf[cur_dir_entry], &amp;xsum);
+<a name="l839"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l840"></a>                {
+<a name="l841"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>attr &amp; </span><span class=cF3>RS_ATTR_VOL_ID</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF0>del_dir || !(attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l842"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l843"></a>                        </span><span class=cF1>if</span><span class=cF0> (xsum != </span><span class=cFD>FATNameXSum</span><span class=cF7>(</span><span class=cF0>buf[cur_dir_entry].name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l844"></a>                            </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l845"></a>                        </span><span class=cF1>if</span><span class=cF0> (!*long_name.name)
+<a name="l846"></a>                            </span><span class=cFD>FATFromName</span><span class=cF0>(long_name.name, buf[cur_dir_entry].name);
+<a name="l847"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>long_name.name, files_find_mask, fuf_flags</span><span class=cF7>)</span><span class=cF0>)
+<a name="l848"></a>                        {
+<a name="l849"></a>                            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF7>)</span><span class=cF0>)
+<a name="l850"></a>                                res++;
+<a name="l851"></a>                            </span><span class=cF1>if</span><span class=cF0> (print_message)
+<a name="l852"></a>                                </span><span class=cF6>&quot;Del %s\n&quot;</span><span class=cF0>, long_name.name;
+<a name="l853"></a>                            *buf[cur_dir_entry].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l854"></a>                            i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l855"></a>                            </span><span class=cF1>while</span><span class=cF0> (i &lt;= cur_dir_entry &amp;&amp;
+<a name="l856"></a>                                   buf[cur_dir_entry - i].attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l857"></a>                                *buf[cur_dir_entry - i++].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l858"></a>                            i--;
+<a name="l859"></a>                            </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[</span><span class=cF7>(</span><span class=cF0>cur_dir_entry - i</span><span class=cF7>)</span><span class=cF0> &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l860"></a>                                     drive-&gt;data_area + cur_dir_clus * drive-&gt;spc + </span><span class=cF7>(</span><span class=cF0>cur_dir_entry - i</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, 
+<a name="l861"></a>                                     </span><span class=cF7>(</span><span class=cF0>i + </span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>);
+<a name="l862"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == cur_dir_entry &amp;&amp; last_dir_clus != </span><span class=cF3>INVALID_CLUS</span><span class=cF0>)
+<a name="l863"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l864"></a>                                i = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l865"></a>                                </span><span class=cF1>while</span><span class=cF0> (i &lt;= entries_per_clus &amp;&amp;
+<a name="l866"></a>                                       last_buf[entries_per_clus - i].attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l867"></a>                                    *last_buf[entries_per_clus - i++].name = </span><span class=cFE>0xE5</span><span class=cF0>;
+<a name="l868"></a>                                </span><span class=cF1>if</span><span class=cF0> (--i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l869"></a>                                    </span><span class=cF5>BlkWrite</span><span class=cF0>(drive, &amp;buf[</span><span class=cF7>(</span><span class=cF0>entries_per_clus - i</span><span class=cF7>)</span><span class=cF0> &amp; -</span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0>], 
+<a name="l870"></a>                                             drive-&gt;data_area +
+<a name="l871"></a>                                             last_dir_clus * drive-&gt;spc + </span><span class=cF7>(</span><span class=cF0>entries_per_clus - i</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>, 
+<a name="l872"></a>                                             </span><span class=cF7>(</span><span class=cF0>i + </span><span class=cF3>FAT32_ENTRIES_PER_BLK</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>);
+<a name="l873"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l874"></a>                            </span><span class=cF5>FAT32FreeClus</span><span class=cF0>(drive, buf[cur_dir_entry].clus_lo + buf[cur_dir_entry].clus_hi &lt;&lt; </span><span class=cFE>16</span><span class=cF0>);
+<a name="l875"></a>                        }
+<a name="l876"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l877"></a>                    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l878"></a>                }
+<a name="l879"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l880"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l881"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l882"></a>            </span><span class=cF1>if</span><span class=cF0> (++cur_dir_entry == entries_per_clus)
+<a name="l883"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l884"></a>                last_dir_clus = cur_dir_clus;
+<a name="l885"></a>                cur_dir_clus = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l886"></a>                tmp_buf  = buf;
+<a name="l887"></a>                buf      = last_buf;
+<a name="l888"></a>                last_buf = tmp_buf;
+<a name="l889"></a>                </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l890"></a>                cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l891"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l892"></a>        }
+<a name="l893"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l894"></a>        </span><span class=cF5>Free</span><span class=cF0>(last_buf);
+<a name="l895"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l896"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l897"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l898"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l899"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l900"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l901"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l902"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l903"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l904"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l905"></a>
+<a name="l906"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l907"></a>}
+<a name="l908"></a>
+<a name="l909"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>FAT32FileWrite</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF9>CDate</span><span class=cF0> cdt, </span><span class=cF9>I64</span><span class=cF0> attr)
+<a name="l910"></a>{
+<a name="l911"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>   de;
+<a name="l912"></a>    </span><span class=cF9>I64</span><span class=cF0>         c = </span><span class=cFE>0</span><span class=cF0>, blk_count;
+<a name="l913"></a>    </span><span class=cF1>Bool</span><span class=cF0>        contiguous;
+<a name="l914"></a>
+<a name="l915"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;de, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l916"></a>    </span><span class=cF1>if</span><span class=cF0> (size &lt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l917"></a>        size = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l918"></a>    </span><span class=cF1>if</span><span class=cF0> (drive-&gt;fs_type != </span><span class=cF3>FSt_FAT32</span><span class=cF0>)
+<a name="l919"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Not FAT32 Drive\n&quot;</span><span class=cF0>);
+<a name="l920"></a>    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>CFileNameTo</span><span class=cF7>(</span><span class=cF0>de.name, name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l921"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;Invalid FileName: \&quot;%s\&quot;.\n&quot;</span><span class=cF0>, name);
+<a name="l922"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l923"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l924"></a>        </span><span class=cFD>FAT32FilesDel</span><span class=cF0>(drive, cur_dir, de.name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l925"></a>        </span><span class=cF1>if</span><span class=cF0> (attr &amp; </span><span class=cF3>RS_ATTR_CONTIGUOUS</span><span class=cF0>)
+<a name="l926"></a>            contiguous = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l927"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l928"></a>            contiguous = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l929"></a>        de.size = size;
+<a name="l930"></a>        </span><span class=cF1>if</span><span class=cF0> (blk_count = </span><span class=cF7>(</span><span class=cF0>size + </span><span class=cF3>BLK_SIZE</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>)
+<a name="l931"></a>            c = </span><span class=cF5>ClusAlloc</span><span class=cF0>(drive, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF7>(</span><span class=cF0>blk_count + drive-&gt;spc - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / drive-&gt;spc, contiguous);
+<a name="l932"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l933"></a>            c = </span><span class=cFE>0x0FFFFFFF</span><span class=cF0>;
+<a name="l934"></a>        de.clus     = c;
+<a name="l935"></a>        de.attr     = attr;
+<a name="l936"></a>        de.datetime = cdt;
+<a name="l937"></a>        </span><span class=cF1>if</span><span class=cF0> (blk_count)
+<a name="l938"></a>            </span><span class=cF5>ClusBlkWrite</span><span class=cF0>(drive, buf, c, blk_count);
+<a name="l939"></a>        </span><span class=cFD>FAT32DirNew</span><span class=cF0>(drive, cur_dir, &amp;de, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l940"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l941"></a>    </span><span class=cF1>return</span><span class=cF0> c;
+<a name="l942"></a>}
+<a name="l943"></a>
+<a name="l944"></a></span><span class=cF9>CDirEntry</span><span class=cF0> *</span><span class=cFD>FAT32FilesFind</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask, </span><span class=cF9>I64</span><span class=cF0> fuf_flags, </span><span class=cF9>CDirEntry</span><span class=cF0> *parent=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> *_dir_size=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l945"></a>{
+<a name="l946"></a>    </span><span class=cF9>CDrive</span><span class=cF0>          *drive = </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv;
+<a name="l947"></a>    </span><span class=cF9>CFAT32DirEntry</span><span class=cF0>  *buf;
+<a name="l948"></a>    </span><span class=cF9>I64</span><span class=cF0>              attr, xsum = </span><span class=cFE>0</span><span class=cF0>, dir_size = </span><span class=cFE>0</span><span class=cF0>, sub_dir_size, cur_dir_clus, cur_dir_entry, entries_per_clus;
+<a name="l949"></a>    </span><span class=cF1>U8</span><span class=cF0>               ch;
+<a name="l950"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>       *res = </span><span class=cF3>NULL</span><span class=cF0>, *tmpde, long_name;
+<a name="l951"></a>
+<a name="l952"></a>    </span><span class=cF1>if</span><span class=cF0> (fuf_flags &amp; ~</span><span class=cF3>FUG_FILES_FIND</span><span class=cF0>)
+<a name="l953"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'FUF'</span><span class=cF0>);
+<a name="l954"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l955"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l956"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l957"></a>        </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l958"></a>        cur_dir_clus = </span><span class=cF5>Name2DirClus</span><span class=cF0>(drive, </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dir);
+<a name="l959"></a>        buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0> * drive-&gt;spc);
+<a name="l960"></a>        entries_per_clus = drive-&gt;spc &lt;&lt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>;
+<a name="l961"></a>        </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l962"></a>        dir_size += drive-&gt;spc * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l963"></a>        cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l964"></a>        </span><span class=cF1>while</span><span class=cF0> (ch = *buf[cur_dir_entry].name)
+<a name="l965"></a>        {
+<a name="l966"></a>            attr = buf[cur_dir_entry].attr;
+<a name="l967"></a>            </span><span class=cF1>if</span><span class=cF0> (ch != </span><span class=cFE>0xE5</span><span class=cF0>)
+<a name="l968"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l969"></a>                </span><span class=cF1>if</span><span class=cF0> (attr &amp; </span><span class=cF3>RS_ATTR_LONG_NAME_MASK</span><span class=cF0> == </span><span class=cF3>RS_ATTR_LONG_NAME</span><span class=cF0>)
+<a name="l970"></a>                    </span><span class=cFD>DirLongNameFill</span><span class=cF0>(&amp;long_name, &amp;buf[cur_dir_entry], &amp;xsum);
+<a name="l971"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l972"></a>                {
+<a name="l973"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>attr &amp; </span><span class=cF3>RS_ATTR_VOL_ID</span><span class=cF7>)</span><span class=cF0>)
+<a name="l974"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l975"></a>                        tmpde = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l976"></a>                        </span><span class=cF1>if</span><span class=cF0> (xsum == </span><span class=cFD>FATNameXSum</span><span class=cF7>(</span><span class=cF0>buf[cur_dir_entry].name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l977"></a>                            </span><span class=cF5>MemCopy</span><span class=cF0>(tmpde, &amp;long_name, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l978"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l979"></a>                            </span><span class=cF5>MemSet</span><span class=cF0>(tmpde, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l980"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>FAT32CDirFill</span><span class=cF7>(</span><span class=cF0>tmpde, &amp;buf[cur_dir_entry], drive-&gt;fat32_local_time_offset</span><span class=cF7>)</span><span class=cF0>)
+<a name="l981"></a>                        {
+<a name="l982"></a>                            tmpde-&gt;parent = parent;
+<a name="l983"></a>                            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;fuf_flags, </span><span class=cF3>FUf_RECURSE</span><span class=cF7>)</span><span class=cF0> &amp;&amp; attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0> &amp;&amp; *tmpde-&gt;name != </span><span class=cF6>'.'</span><span class=cF0>)
+<a name="l984"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l985"></a>                                tmpde-&gt;next = res;
+<a name="l986"></a>                                res = tmpde;
+<a name="l987"></a>                                tmpde-&gt;full_name = </span><span class=cF5>DirNameAbs</span><span class=cF0>(tmpde-&gt;name);
+<a name="l988"></a>                                </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l989"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Cd</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;name</span><span class=cF7>)</span><span class=cF0>)
+<a name="l990"></a>                                {
+<a name="l991"></a>                                    tmpde-&gt;sub=</span><span class=cFD>FAT32FilesFind</span><span class=cF0>(files_find_mask, fuf_flags, tmpde, &amp;sub_dir_size);
+<a name="l992"></a>                                    tmpde-&gt;size = sub_dir_size;
+<a name="l993"></a>                                    </span><span class=cF5>Cd</span><span class=cF0>(</span><span class=cF6>&quot;..&quot;</span><span class=cF0>);
+<a name="l994"></a>                                }
+<a name="l995"></a>                                </span><span class=cF5>DriveLock</span><span class=cF0>(drive);
+<a name="l996"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l997"></a>                            </span><span class=cF1>else</span><span class=cF0>
+<a name="l998"></a>                            </span><span class=cF7>{</span><span class=cF0>
+<a name="l999"></a>                                tmpde-&gt;full_name = </span><span class=cF5>FileNameAbs</span><span class=cF0>(tmpde-&gt;name);
+<a name="l1000"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0> ||
+<a name="l1001"></a>                                    !</span><span class=cF5>Bt</span><span class=cF0>(&amp;fuf_flags,  </span><span class=cF3>FUf_JUST_DIRS</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l1002"></a>                                    !</span><span class=cF7>(</span><span class=cF5>Bt</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF3>FUf_RECURSE</span><span class=cF0>) &amp;&amp; *tmpde-&gt;name == </span><span class=cF6>'.'</span><span class=cF0> &amp;&amp; attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l1003"></a>                                    </span><span class=cF5>FilesFindMatch</span><span class=cF7>(</span><span class=cF0>tmpde-&gt;full_name, files_find_mask, fuf_flags</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1004"></a>                                {
+<a name="l1005"></a>                                    tmpde-&gt;next = res;
+<a name="l1006"></a>                                    res = tmpde;
+<a name="l1007"></a>                                }
+<a name="l1008"></a>                                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1009"></a>                                    </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde);
+<a name="l1010"></a>                            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1011"></a>                        }
+<a name="l1012"></a>                        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1013"></a>                            </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde);
+<a name="l1014"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1015"></a>                    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1016"></a>                }
+<a name="l1017"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1018"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1019"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(&amp;long_name, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1020"></a>            </span><span class=cF1>if</span><span class=cF0> (++cur_dir_entry == entries_per_clus)
+<a name="l1021"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1022"></a>                cur_dir_clus = </span><span class=cF5>ClusNumNext</span><span class=cF0>(drive, cur_dir_clus);
+<a name="l1023"></a>                </span><span class=cF1>if</span><span class=cF0> (cur_dir_clus == </span><span class=cF3>INVALID_CLUS</span><span class=cF0>)
+<a name="l1024"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l1025"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1026"></a>                {
+<a name="l1027"></a>                    </span><span class=cF5>ClusRead</span><span class=cF0>(drive, buf, cur_dir_clus, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l1028"></a>                    dir_size += drive-&gt;spc * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l1029"></a>                    cur_dir_entry = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1030"></a>                }
+<a name="l1031"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1032"></a>        }
+<a name="l1033"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l1034"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l1035"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1036"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l1037"></a>        </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);
+<a name="l1038"></a>    </span><span class=cF1>if</span><span class=cF0> (_dir_size)
+<a name="l1039"></a>        *_dir_size = dir_size;
+<a name="l1040"></a>
+<a name="l1041"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l1042"></a>}
+<a name="l1043"></a>
+<a name="l1044"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32MkDir</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> entry_count)
+<a name="l1045"></a>{
+<a name="l1046"></a>    </span><span class=cF9>I64</span><span class=cF0>              c, cur_dir_clus = </span><span class=cF5>Name2DirClus</span><span class=cF0>(drive, cur_dir), 
+<a name="l1047"></a>                     </span><span class=cF2>//Rough estimate of size</span><span class=cF0>
+<a name="l1048"></a>                     size = </span><span class=cF5>CeilU64</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>entry_count + </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>FAT32_ENTRIES_BITS</span><span class=cF0>,
+<a name="l1049"></a>                     drive-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l1050"></a>    </span><span class=cF1>U8</span><span class=cF0>              *buf = </span><span class=cF5>CAlloc</span><span class=cF0>(size);
+<a name="l1051"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0>        d_native;
+<a name="l1052"></a>    </span><span class=cF9>CFAT32DirEntry</span><span class=cF0>  *dFAT = buf;
+<a name="l1053"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock_break;
+<a name="l1054"></a>
+<a name="l1055"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l1056"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1057"></a>        unlock_break = </span><span class=cF5>BreakLock</span><span class=cF0>;
+<a name="l1058"></a>        c = </span><span class=cF5>FileWrite</span><span class=cF0>(name, buf, size, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>);
+<a name="l1059"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;d_native, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1060"></a>        d_native.attr       = </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>;
+<a name="l1061"></a>        *d_native.name      = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l1062"></a>        d_native.name[</span><span class=cFE>1</span><span class=cF0>]    = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1063"></a>        d_native.clus       = c;
+<a name="l1064"></a>        d_native.size       = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1065"></a>        d_native.datetime   = </span><span class=cF5>Now</span><span class=cF0>;
+<a name="l1066"></a>        </span><span class=cFD>FAT32DirFill</span><span class=cF0>(dFAT, &amp;d_native, </span><span class=cF3>NULL</span><span class=cF0>, drive-&gt;fat32_local_time_offset);
+<a name="l1067"></a>        dFAT++;
+<a name="l1068"></a>
+<a name="l1069"></a>        </span><span class=cF5>MemSet</span><span class=cF0>(&amp;d_native, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDirEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1070"></a>        d_native.attr       = </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>;
+<a name="l1071"></a>        *d_native.name      = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l1072"></a>        d_native.name[</span><span class=cFE>1</span><span class=cF0>]    = </span><span class=cF6>'.'</span><span class=cF0>;
+<a name="l1073"></a>        d_native.name[</span><span class=cFE>2</span><span class=cF0>]    = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1074"></a>        d_native.clus       = cur_dir_clus;
+<a name="l1075"></a>        d_native.size       = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1076"></a>        d_native.datetime   = </span><span class=cF5>Now</span><span class=cF0>;
+<a name="l1077"></a>        </span><span class=cFD>FAT32DirFill</span><span class=cF0>(dFAT, &amp;d_native, </span><span class=cF3>NULL</span><span class=cF0>, drive-&gt;fat32_local_time_offset);
+<a name="l1078"></a>        </span><span class=cF5>ClusWrite</span><span class=cF0>(drive, buf, c, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l1079"></a>        </span><span class=cF5>Free</span><span class=cF0>(buf);
+<a name="l1080"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l1081"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l1082"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1083"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l1084"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock_break)
+<a name="l1085"></a>            </span><span class=cF5>BreakUnlock</span><span class=cF0>;
+<a name="l1086"></a>
+<a name="l1087"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1088"></a>}
+</span></pre></body>
+</html>

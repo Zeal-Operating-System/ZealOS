@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.05">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF0>There are no streams in the traditional sense.  The cmd line output gets sent to the cursor location of a document being edited 
+<a name="l2"></a>and by using cursor keys, text can be injected all over the document.  </span><span class=cF4><u>Sprites</u></span><span class=cF0> can be injected and are not serialized!  Furtherm
+<a name="l3"></a>ore, the input can come from triggering macro widgets.  See </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.html#l1"><span class=cF4>Doc Overview</span></a><span class=cF0> and </span><span class=cF4><u>Doc Routines</u></span><span class=cF0>.
+<a name="l4"></a>
+<a name="l5"></a>If you had a remote term and sent key </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.html#l4181"><span class=cF4>Scan Codes</span></a><span class=cF0>, the user would press </span><span class=cF2>&lt;CTRL-m&gt;</span><span class=cF0> to access his </span><span class=cF2>Personal Menu</span><span class=cF0> to trigger his 
+<a name="l6"></a>macros.  However, the local </span><a href="https://tomawezome.github.io/ZealOS/Home/PersonalMenu.html#l1"><span class=cF4>~/PersonalMenu.DD</span></a><span class=cF0> might differ from the remote, causing loss of sync between local and remote 
+<a name="l7"></a>sessions.   Also, the window size of local and remote might differ, so word-wrapped text would be different.    Injecting output 
+<a name="l8"></a>text with different windows sizes would cause remote and local documents to not be in sync.
+<a name="l9"></a>
+<a name="l10"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Doc/CharOverview.html#l1"><span class=cF4>Char Overview</span></a><span class=cF0> and </span><span class=cF4><u>Char Routines</u></span><span class=cF0>.
+<a name="l11"></a>
+<a name="l12"></a>You can send characters into </span><span class=cF2>StdIn</span><span class=cF0>.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l580"><span class=cF4>In</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.html#l542"><span class=cF4>XTalk</span></a><span class=cF0>() and </span><span class=cF4><u>InFile</u></span><span class=cF0>.
+</span></pre></body>
+</html>
