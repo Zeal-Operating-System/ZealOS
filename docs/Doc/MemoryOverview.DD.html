@@ -54,7 +54,7 @@ body {background-color:#000000;}
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF5>                                                 Single System-wide Memory Map
 <a name="l29"></a>
-<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x000003707F</span><span class=cF0>
+<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x0000036F7F</span><span class=cF0>
 <a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4439"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF2> 0x0000096600- 0x0000096FFF</span><span class=cF0>
@@ -108,7 +108,7 @@ body {background-color:#000000;}
 <a name="l81"></a>the lowest 2Meg area directly was cached but the alias he created up at the top of address space was uncached.  See </span><span class=cF4>
 <a name="l82"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many of 
 <a name="l83"></a>the users are familiar with A0000-BFFFF, it is actually pretty seriously unfortunate that they cannot use the easy-to-understand 
-<a name="l84"></a>numbers of A0000-BFFFF, but must access the relocated alias location.   See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l121"><span class=cF4>text.vga_alias</span></a><span class=cF0>.  We also no longer cause a fault 
+<a name="l84"></a>numbers of A0000-BFFFF, but must access the relocated alias location.   See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l113"><span class=cF4>text.vga_alias</span></a><span class=cF0>.  We also no longer cause a fault 
 <a name="l85"></a>when dereferencing NULL.
 <a name="l86"></a>
 <a name="l87"></a>Then, Terry switched to 1Gig page sizes.    For the lowest 4Gig, he set-up an alias up at the top of address space. See </span><span class=cF4>

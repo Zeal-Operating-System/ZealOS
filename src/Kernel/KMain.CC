@@ -94,18 +94,10 @@ U0 SysGrInit()
 	//patch some chars
 	text.aux_font[10]	= text.font[10]; //"Return" symbol 
 	text.aux_font[255]	= text.font[255]; //Block symbol ÿ
-	text.aux_font['º']		= text.font['º'];
-	text.aux_font['»']		= text.font['»'];
-	text.aux_font['¼']		= text.font['¼'];
-	text.aux_font['È']		= text.font['È'];
-	text.aux_font['É']		= text.font['É'];
-	text.aux_font['Í']		= text.font['Í'];
 
-	text.aux_font['¿']		= text.font['¿'];
-	text.aux_font['Ù']		= text.font['Ù'];
-	text.aux_font['À']		= text.font['À'];
-	text.aux_font['Ú']		= text.font['Ú'];
-
+	for (i = '³'; i < 'Û'; i++)
+		text.aux_font[i] = text.font[i];
+	
 	text.border_chars[2] (I64) = 'ÄÍ³ºÚÉ¿»';
 	text.border_chars[10](U32) = 'ÀÈÙ¼';
 
