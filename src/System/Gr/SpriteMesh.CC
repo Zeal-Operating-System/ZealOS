@@ -715,7 +715,7 @@ U0 MeshClipCopy(CMeshFrame *e)
 	{
 		if (tmpv->flags & VF_SEL)
 		{
-			tmpv->copy = tmpv2 = ZCAlloc(sizeof(CMeshEdVertex));
+			tmpv->copy = tmpv2 = SysCAlloc(sizeof(CMeshEdVertex));
 			MemCopy(&tmpv2->p, &tmpv->p, sizeof(CD3I32));
 			QueueInsert(tmpv2, sys_clip_vertex_head.last);
 			tmpv->flags |= VF_COPIED;
@@ -732,7 +732,7 @@ U0 MeshClipCopy(CMeshFrame *e)
 	{
 		if (tmpt->flags & TF_SEL && tmpt->t[0]->copy && tmpt->t[1]->copy && tmpt->t[2]->copy)
 		{
-			tmpt2 = ZCAlloc(sizeof(CMeshEdTri));
+			tmpt2 = SysCAlloc(sizeof(CMeshEdTri));
 			tmpt2->t[0] = tmpt->t[0]->copy;
 			tmpt2->t[1] = tmpt->t[1]->copy;
 			tmpt2->t[2] = tmpt->t[2]->copy;

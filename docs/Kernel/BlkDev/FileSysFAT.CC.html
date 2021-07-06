@@ -69,7 +69,7 @@ body {background-color:#000000;}
 <a name="l42"></a>        drive-&gt;root_clus                = br32.root_clus;
 <a name="l43"></a>        </span><span class=cFD>DriveFATBlkAlloc</span><span class=cF0>(drive);
 <a name="l44"></a>        </span><span class=cF5>Free</span><span class=cF0>(drive-&gt;fis);
-<a name="l45"></a>        drive-&gt;fis                      = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l45"></a>        drive-&gt;fis                      = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l46"></a>        </span><span class=cF5>BlkRead</span><span class=cF0>(drive, drive-&gt;fis, drive-&gt;file_system_info_sect, </span><span class=cFE>1</span><span class=cF0>);
 <a name="l47"></a>        </span><span class=cF1>if</span><span class=cF0> (unlock)
 <a name="l48"></a>            </span><span class=cF5>DriveUnlock</span><span class=cF0>(drive);

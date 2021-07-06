@@ -92,11 +92,11 @@ CCtrl *SliderNew()
 		"(Would crash when code mem was freed.)\n";
 		return NULL;
 	}
-	c = ZCAlloc(sizeof(CCtrl));
+	c = SysCAlloc(sizeof(CCtrl));
 	c->win_task				= sys_winmgr_task;
 	c->flags				= CTRLF_SHOW | CTRLF_CAPTURE_LEFT_MS;
 	c->type					= CTRLT_GENERIC;
-	c->state				= ZCAlloc(sizeof(CSliderState));
+	c->state				= SysCAlloc(sizeof(CSliderState));
 	c->draw_it				= &DrawCtrlSlider;
 	c->left_click			= &LeftClickSlider;
 	c->update_derived_vals	= &UpdateDerivedCtrlSlider;

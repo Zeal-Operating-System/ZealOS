@@ -99,7 +99,7 @@ U0 DriveFATBlkAlloc(CDrive *drive)
 {
 	DriveCheck(drive);
 	Free(drive->cur_fat_blk);
-	drive->cur_fat_blk		= ZMAlloc(BLK_SIZE);
+	drive->cur_fat_blk		= SysMAlloc(BLK_SIZE);
 	drive->cur_fat_blk_num	= 0;
 	drive->fat_blk_dirty	= 0;
 	BlkRead(drive, drive->cur_fat_blk, drive->fat1, 1);

@@ -87,7 +87,7 @@ public extern					Bool	 WildMatch(U8 *test_str, U8 *wild_str);
 public extern U8 *CatPrint(U8 *dst, U8 *format, ...);
 
 #help_index "Char/Operations;Memory/System Heap"
-public extern U8 *ZStrNew(U8 *buf);
+public extern U8 *SysStrNew(U8 *buf);
 
 #help_index "Char/Operations;Memory/Heap"
 public extern U8 *StrNew(U8 *buf, CTask *mem_task=NULL);
@@ -533,10 +533,10 @@ public extern I64 Seed(I64 seed=0, CTask *task=NULL);
 public extern I64 MemBIOSTotal();
 
 #help_index "Memory/System Heap"
-public extern U8 *ZCAlloc(I64 size);
-public extern U8 *ZMAlloc(I64 size);
-public extern U8 *ZMAllocIdent(U8 *src);
-public extern U8 *ZReAlloc(    U8 *src, U64 size);
+public extern U8 *SysCAlloc(I64 size);
+public extern U8 *SysMAlloc(I64 size);
+public extern U8 *SysMAllocIdent(U8 *src);
+public extern U8 *SysReAlloc(    U8 *src, U64 size);
 
 #help_index "Memory/BlkPool"
 public extern U0  BlkPoolAdd( CBlkPool *bp, CMemBlk *m, I64 pags);

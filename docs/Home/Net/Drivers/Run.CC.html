@@ -31,7 +31,7 @@ body {background-color:#000000;}
 <a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> PCIV_PCNET      </span><span class=cFE>0x1022</span><span class=cF0>
 <a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> PCID_PCNET      </span><span class=cFE>0x2000</span><span class=cF0>
 <a name="l6"></a>
-<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> PCIV_82545EM    </span><span class=cFE>0x8086</span><span class=cF0>
+<a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> PCIV_E1000      </span><span class=cFE>0x8086</span><span class=cF0>
 <a name="l8"></a>#</span><span class=cF1>define</span><span class=cF0> PCID_82545EM    </span><span class=cFE>0x100F</span><span class=cF0>
 <a name="l9"></a>
 <a name="l10"></a></span><span class=cF1>U0</span><span class=cF0> NetDriverInclude(</span><span class=cF1>U8</span><span class=cF0> *driver)
@@ -59,11 +59,11 @@ body {background-color:#000000;}
 <a name="l32"></a>            }
 <a name="l33"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l34"></a>
-<a name="l35"></a>        </span><span class=cF1>case</span><span class=cF0> PCIV_82545EM:
+<a name="l35"></a>        </span><span class=cF1>case</span><span class=cF0> PCIV_E1000:
 <a name="l36"></a>            </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;device_id)
 <a name="l37"></a>            {
 <a name="l38"></a>                </span><span class=cF1>case</span><span class=cF0> PCID_82545EM:
-<a name="l39"></a>                    NetDriverInclude(</span><span class=cF6>&quot;82545EM&quot;</span><span class=cF0>);
+<a name="l39"></a>                    NetDriverInclude(</span><span class=cF6>&quot;E1000&quot;</span><span class=cF0>);
 <a name="l40"></a>                    found = </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l41"></a>                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l42"></a>            }

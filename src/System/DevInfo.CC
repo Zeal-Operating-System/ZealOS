@@ -72,7 +72,7 @@ U0 PCILookUpSingle(CDoc *doc, I64 m, I64 d, U8 **_vendor, U8 **_dev)
 					doc_e = doc_e->next->next->next;
 					if (doc_e->type_u8 == DOCT_TEXT)
 					{
-						vendor = ZStrNew(doc_e->tag);
+						vendor = SysStrNew(doc_e->tag);
 						first = FALSE;
 						break;
 					}
@@ -104,7 +104,7 @@ U0 PCILookUpSingle(CDoc *doc, I64 m, I64 d, U8 **_vendor, U8 **_dev)
 							doc_e = doc_e->next->next->next;
 							if (doc_e->type_u8 == DOCT_TEXT)
 							{
-								dev = ZStrNew(doc_e->tag);
+								dev = SysStrNew(doc_e->tag);
 								break;
 							}
 						}
@@ -123,12 +123,12 @@ U0 PCILookUpSingle(CDoc *doc, I64 m, I64 d, U8 **_vendor, U8 **_dev)
 	if (vendor)
 		*_vendor = vendor;
 	else
-		*_vendor = ZStrNew("Unknown");
+		*_vendor = SysStrNew("Unknown");
 
 	if (dev)
 		*_dev = dev;
 	else
-		*_dev = ZStrNew("Unknown");
+		*_dev = SysStrNew("Unknown");
 }
 
 U0 PCILookUpDevs()
@@ -147,7 +147,7 @@ U0 PCILookUpDevs()
 				w1 = PCIReadU16(b, d, f, PCIR_VENDOR_ID);
 				if (w1 != 0xFFFF)
 				{
-					tmppci = ZCAlloc(sizeof(CPCIDev));
+					tmppci = SysCAlloc(sizeof(CPCIDev));
 					tmppci->bus = b;
 					tmppci->dev = d;
 					tmppci->fun = f;

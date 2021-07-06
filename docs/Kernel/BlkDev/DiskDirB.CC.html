@@ -29,7 +29,7 @@ body {background-color:#000000;}
 <a name="l2"></a>{</span><span class=cF2>//Change home directory.</span><span class=cF0>
 <a name="l3"></a>    dirname = </span><span class=cF5>DirNameAbs</span><span class=cF0>(dirname);
 <a name="l4"></a>    </span><span class=cF5>Free</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.home_dir);
-<a name="l5"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.home_dir = </span><span class=cF5>ZStrNew</span><span class=cF0>(dirname);
+<a name="l5"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.home_dir = </span><span class=cF5>SysStrNew</span><span class=cF0>(dirname);
 <a name="l6"></a>    </span><span class=cF5>Free</span><span class=cF0>(dirname);
 <a name="l7"></a>}
 <a name="l8"></a>

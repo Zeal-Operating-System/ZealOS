@@ -81,7 +81,7 @@ $LK,"ExePrint",A="MN:ExePrint"$(U8 *format, ...) compiles and execute a string.	
 
 $LK,"Once",A="MN:Once"$(U8 *format, ...) Writes User code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
 
-$LK,"ZOnce",A="MN:ZOnce"$(U8 *format, ...) Writes System code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
+$LK,"SysOnce",A="MN:SysOnce"$(U8 *format, ...) Writes System code to $LK,"Registry",A="FI:~/Registry.CC"$ to be executed next boot.
 
 $LK,"InPrint",A="MN:InPrint"$(I64 mS, U8 *format, ...) $LK,"PutChars",A="MN:PutChars"$()s one at a time with a delay.
 

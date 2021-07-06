@@ -42,7 +42,7 @@ U0 FAT32Init(CDrive *drive)
 		drive->root_clus				= br32.root_clus;
 		DriveFATBlkAlloc(drive);
 		Free(drive->fis);
-		drive->fis						= ZMAlloc(BLK_SIZE);
+		drive->fis						= SysMAlloc(BLK_SIZE);
 		BlkRead(drive, drive->fis, drive->file_system_info_sect, 1);
 		if (unlock)
 			DriveUnlock(drive);

@@ -382,7 +382,7 @@ U0 FixSet(U8 *filename, I64 line)
 	while (LBts(&sys_semas[SEMA_FIX], 0))
 		Yield;
 	Free(debug.fix_file_line);
-	debug.fix_file_line = ZStrNew(st);
+	debug.fix_file_line = SysStrNew(st);
 	LBtr(&sys_semas[SEMA_FIX], 0);
 }
 

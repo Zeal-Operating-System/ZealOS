@@ -80,7 +80,7 @@ U0 KeyDevRemove(CKeyDevEntry *tmpk)
 
 CKeyDevEntry *KeyDevAdd(Bool (*fp_put_key)(I64 ch, I64 sc), Bool (*fp_puts)(U8 *st), I64 priority, Bool key_descs=FALSE)
 {//Places hook in StdOut chain. See $LK,"Keyboard Devices",A="HI:Keyboard Devices/System"$.
-	CKeyDevEntry *tmpk = keydev.put_key_head.last, *tmpk1 = ZCAlloc(sizeof(CKeyDevEntry));
+	CKeyDevEntry *tmpk = keydev.put_key_head.last, *tmpk1 = SysCAlloc(sizeof(CKeyDevEntry));
 
 	tmpk1->put_key	= fp_put_key;
 	tmpk1->put_s	= fp_puts;
@@ -207,13 +207,13 @@ U0 CtrlAltCBSet(U8 ch, U0 (*fp_handler)(I64 sc), U8 *no_shift_desc=NULL, U8 *shi
 
 		Free(keydev.ctrl_alt_no_shift_descs[ch]);
 		if (no_shift_desc)
-			keydev.ctrl_alt_no_shift_descs[ch] = ZStrNew(no_shift_desc);
+			keydev.ctrl_alt_no_shift_descs[ch] = SysStrNew(no_shift_desc);
 		else
 			keydev.ctrl_alt_no_shift_descs[ch] = NULL;
 
 		Free(keydev.ctrl_alt_shift_descs[ch]);
 		if (shift_desc)
-			keydev.ctrl_alt_shift_descs[ch] = ZStrNew(shift_desc);
+			keydev.ctrl_alt_shift_descs[ch] = SysStrNew(shift_desc);
 		else
 			keydev.ctrl_alt_shift_descs[ch] = NULL;
 

@@ -62,7 +62,7 @@ U8 *FileRead(U8 *filename, I64 *_size=NULL, I64 *_attr=NULL)
 	if (!res)
 		PrintErr("File not found: \"%s\".\n", filename);
 	if (res && attr & RS_ATTR_RESIDENT)
-		HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(res), size, 0, sys_task);
+		HashGenericAdd(absname, HTT_FILE, SysMAllocIdent(res), size, 0, sys_task);
 
 	if (_attr)
 		*_attr = attr;
@@ -103,14 +103,14 @@ I64 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 attr=0)
 			if (attr & RS_ATTR_RESIDENT)
 			{
 				Free(tmph->user_data0);
-				tmph->user_data0 = ZMAllocIdent(fbuf);
+				tmph->user_data0 = SysMAllocIdent(fbuf);
 				tmph->user_data1 = size;
 			}
 			else
 				HashRemDel(tmph, sys_task->hash_table);
 		}
 		else if (attr & RS_ATTR_RESIDENT)
-			HashGenericAdd(absname, HTT_FILE, ZMAllocIdent(fbuf), size, 0, sys_task);
+			HashGenericAdd(absname, HTT_FILE, SysMAllocIdent(fbuf), size, 0, sys_task);
 		DirContextDel(dirc);
 	}
 	Free(absname);

@@ -237,7 +237,7 @@ body {background-color:#000000;}
 <a name="l210"></a>            res = </span><span class=cF3>BDT_ATAPI</span><span class=cF0>;
 <a name="l211"></a>        </span><span class=cF1>else</span><span class=cF0>
 <a name="l212"></a>        {
-<a name="l213"></a>            id_record = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cFE>512</span><span class=cF0>);
+<a name="l213"></a>            id_record = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cFE>512</span><span class=cF0>);
 <a name="l214"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>IDEATAGetRes</span><span class=cF7>(</span><span class=cF0>bd, timeout, id_record, </span><span class=cFE>512</span><span class=cF0>, </span><span class=cFE>512</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
 <a name="l215"></a>                res = </span><span class=cF3>BDT_ATA</span><span class=cF0>;
 <a name="l216"></a>            </span><span class=cF1>else</span><span class=cF0>

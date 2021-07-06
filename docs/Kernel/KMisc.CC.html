@@ -177,7 +177,7 @@ body {background-color:#000000;}
 <a name="l150"></a>        }
 <a name="l151"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsDebugMode</span><span class=cF0> &amp;&amp; </span><span class=cFB>screencast</span><span class=cF0>.record)
 <a name="l152"></a>        {
-<a name="l153"></a>            d = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSoundData</span><span class=cF7>)</span><span class=cF0>);
+<a name="l153"></a>            d = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSoundData</span><span class=cF7>)</span><span class=cF0>);
 <a name="l154"></a>            d-&gt;ona = ona;
 <a name="l155"></a>            d-&gt;</span><span class=cF5>tS</span><span class=cF0> = </span><span class=cF5>tS</span><span class=cF0>;
 <a name="l156"></a>            </span><span class=cF5>QueueInsert</span><span class=cF0>(d, </span><span class=cFB>screencast</span><span class=cF0>.sound_head.last);
@@ -196,7 +196,7 @@ body {background-color:#000000;}
 <a name="l169"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>old_val = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cFB>screencast</span><span class=cF0>.record, </span><span class=cFE>0</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l170"></a>        {
 <a name="l171"></a>            </span><span class=cF5>Free</span><span class=cF0>(</span><span class=cFB>screencast</span><span class=cF0>.print_format);
-<a name="l172"></a>            </span><span class=cFB>screencast</span><span class=cF0>.print_format     = </span><span class=cF5>ZStrNew</span><span class=cF0>(print_format);
+<a name="l172"></a>            </span><span class=cFB>screencast</span><span class=cF0>.print_format     = </span><span class=cF5>SysStrNew</span><span class=cF0>(print_format);
 <a name="l173"></a>            </span><span class=cFB>screencast</span><span class=cF0>.t0_now           = </span><span class=cF5>Now</span><span class=cF0>;
 <a name="l174"></a>            </span><span class=cFB>screencast</span><span class=cF0>.sound_head.</span><span class=cF5>tS</span><span class=cF0>    = </span><span class=cFB>screencast</span><span class=cF0>.t0_tS = </span><span class=cF5>tS</span><span class=cF0>;
 <a name="l175"></a>            </span><span class=cFB>screencast</span><span class=cF0>.sound_head.ona   = </span><span class=cFB>screencast</span><span class=cF0>.ona;

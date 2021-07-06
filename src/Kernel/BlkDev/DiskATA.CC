@@ -210,7 +210,7 @@ I64 IDEATAGetDevId(CBlkDev *bd, F64 timeout, Bool keep_id_record)
 			res = BDT_ATAPI;
 		else
 		{
-			id_record = ZCAlloc(512);
+			id_record = SysCAlloc(512);
 			if (IDEATAGetRes(bd, timeout, id_record, 512, 512, FALSE))
 				res = BDT_ATA;
 			else

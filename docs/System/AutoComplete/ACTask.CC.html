@@ -152,7 +152,7 @@ body {background-color:#000000;}
 <a name="l125"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFB>ac</span><span class=cF0>.cur_word || </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cFB>ac</span><span class=cF0>.cur_word, buf</span><span class=cF7>)</span><span class=cF0> || force_refresh)
 <a name="l126"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l127"></a>        st = </span><span class=cFB>ac</span><span class=cF0>.cur_word;
-<a name="l128"></a>        </span><span class=cFB>ac</span><span class=cF0>.cur_word = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf);
+<a name="l128"></a>        </span><span class=cFB>ac</span><span class=cF0>.cur_word = </span><span class=cF5>SysStrNew</span><span class=cF0>(buf);
 <a name="l129"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l130"></a>        </span><span class=cFB>ac</span><span class=cF0>.num_fillins = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l131"></a>        </span><span class=cF1>if</span><span class=cF0> (*</span><span class=cFB>ac</span><span class=cF0>.cur_word)

@@ -742,7 +742,7 @@ body {background-color:#000000;}
 <a name="l715"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l716"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpv-&gt;flags &amp; </span><span class=cF3>VF_SEL</span><span class=cF0>)
 <a name="l717"></a>        {
-<a name="l718"></a>            tmpv-&gt;copy = tmpv2 = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMeshEdVertex</span><span class=cF7>)</span><span class=cF0>);
+<a name="l718"></a>            tmpv-&gt;copy = tmpv2 = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMeshEdVertex</span><span class=cF7>)</span><span class=cF0>);
 <a name="l719"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;tmpv2-&gt;p, &amp;tmpv-&gt;p, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CD3I32</span><span class=cF7>)</span><span class=cF0>);
 <a name="l720"></a>            </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpv2, </span><span class=cFB>sys_clip_vertex_head</span><span class=cF0>.last);
 <a name="l721"></a>            tmpv-&gt;flags |= </span><span class=cF3>VF_COPIED</span><span class=cF0>;
@@ -759,7 +759,7 @@ body {background-color:#000000;}
 <a name="l732"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l733"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpt-&gt;flags &amp; </span><span class=cF3>TF_SEL</span><span class=cF0> &amp;&amp; tmpt-&gt;t[</span><span class=cFE>0</span><span class=cF0>]-&gt;copy &amp;&amp; tmpt-&gt;t[</span><span class=cFE>1</span><span class=cF0>]-&gt;copy &amp;&amp; tmpt-&gt;t[</span><span class=cFE>2</span><span class=cF0>]-&gt;copy)
 <a name="l734"></a>        {
-<a name="l735"></a>            tmpt2 = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMeshEdTri</span><span class=cF7>)</span><span class=cF0>);
+<a name="l735"></a>            tmpt2 = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMeshEdTri</span><span class=cF7>)</span><span class=cF0>);
 <a name="l736"></a>            tmpt2-&gt;t[</span><span class=cFE>0</span><span class=cF0>] = tmpt-&gt;t[</span><span class=cFE>0</span><span class=cF0>]-&gt;copy;
 <a name="l737"></a>            tmpt2-&gt;t[</span><span class=cFE>1</span><span class=cF0>] = tmpt-&gt;t[</span><span class=cFE>1</span><span class=cF0>]-&gt;copy;
 <a name="l738"></a>            tmpt2-&gt;t[</span><span class=cFE>2</span><span class=cF0>] = tmpt-&gt;t[</span><span class=cFE>2</span><span class=cF0>]-&gt;copy;

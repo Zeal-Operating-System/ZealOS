@@ -172,8 +172,8 @@ body {background-color:#000000;}
 <a name="l145"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Boot/Once;Registry/Once&quot;</span><span class=cF0>
 <a name="l146"></a>#</span><span class=cF1>help_file</span><span class=cF0> </span><span class=cF6>&quot;::/Doc/Once&quot;</span><span class=cF0>
 <a name="l147"></a>
-<a name="l148"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ZOnceFlush</span><span class=cF0>()
-<a name="l149"></a>{</span><span class=cF2>//Flush ZOnce() buf.</span><span class=cF0>
+<a name="l148"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SysOnceFlush</span><span class=cF0>()
+<a name="l149"></a>{</span><span class=cF2>//Flush SysOnce() buf.</span><span class=cF0>
 <a name="l150"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;Once/System&quot;</span><span class=cF0>, </span><span class=cF6>&quot;&quot;</span><span class=cF0>);
 <a name="l151"></a>}
 <a name="l152"></a>
@@ -182,12 +182,12 @@ body {background-color:#000000;}
 <a name="l155"></a>    </span><span class=cF5>RegWrite</span><span class=cF0>(</span><span class=cF6>&quot;Once/User&quot;</span><span class=cF0>, </span><span class=cF6>&quot;&quot;</span><span class=cF0>);
 <a name="l156"></a>}
 <a name="l157"></a>
-<a name="l158"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ZOnce</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l158"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SysOnce</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
 <a name="l159"></a>{</span><span class=cF2>//Add System code to </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l160"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l161"></a>
 <a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_SYSTEM</span><span class=cF7>)</span><span class=cF0>)
-<a name="l163"></a>        </span><span class=cF5>ZOnceFlush</span><span class=cF0>;
+<a name="l163"></a>        </span><span class=cF5>SysOnceFlush</span><span class=cF0>;
 <a name="l164"></a>    </span><span class=cF5>RegAppend</span><span class=cF0>(</span><span class=cF6>&quot;Once/System&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, buf);
 <a name="l165"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
 <a name="l166"></a>}
@@ -202,7 +202,7 @@ body {background-color:#000000;}
 <a name="l175"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
 <a name="l176"></a>}
 <a name="l177"></a>
-<a name="l178"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>ZOnceDrive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
+<a name="l178"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SysOnceDrive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
 <a name="l179"></a>{</span><span class=cF2>//Add System code to drv </span><a href="https://tomawezome.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l180"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l181"></a>    </span><span class=cF9>I64</span><span class=cF0> old_drive_let = *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name;
@@ -210,7 +210,7 @@ body {background-color:#000000;}
 <a name="l183"></a>    </span><span class=cF1>if</span><span class=cF0> (drv_let)
 <a name="l184"></a>        *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name = drv_let;
 <a name="l185"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_SYSTEM</span><span class=cF7>)</span><span class=cF0>)
-<a name="l186"></a>        </span><span class=cF5>ZOnceFlush</span><span class=cF0>;
+<a name="l186"></a>        </span><span class=cF5>SysOnceFlush</span><span class=cF0>;
 <a name="l187"></a>    </span><span class=cF5>RegAppend</span><span class=cF0>(</span><span class=cF6>&quot;Once/System&quot;</span><span class=cF0>, </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, buf);
 <a name="l188"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);
 <a name="l189"></a>    *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name = old_drive_let;
@@ -239,7 +239,7 @@ body {background-color:#000000;}
 <a name="l212"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>RegCount</span><span class=cF7>(</span><span class=cF6>&quot;Once/System&quot;</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>2</span><span class=cF0>)
 <a name="l213"></a>        {
 <a name="l214"></a>            </span><span class=cF5>Sys</span><span class=cF0>(</span><span class=cF6>&quot;RegExe(\&quot;Once/System\&quot;);&quot;</span><span class=cF0>);
-<a name="l215"></a>            </span><span class=cF5>ZOnceFlush</span><span class=cF0>;
+<a name="l215"></a>            </span><span class=cF5>SysOnceFlush</span><span class=cF0>;
 <a name="l216"></a>        }
 <a name="l217"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_SYSTEM</span><span class=cF0>);
 <a name="l218"></a>
@@ -254,7 +254,7 @@ body {background-color:#000000;}
 <a name="l227"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l228"></a>    </span><span class=cF1>catch</span><span class=cF0>
 <a name="l229"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l230"></a>        </span><span class=cF5>ZOnceFlush</span><span class=cF0>;
+<a name="l230"></a>        </span><span class=cF5>SysOnceFlush</span><span class=cF0>;
 <a name="l231"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_SYSTEM</span><span class=cF0>);
 <a name="l232"></a>        </span><span class=cF5>OnceFlush</span><span class=cF0>;
 <a name="l233"></a>        </span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cFB>sys_run_level</span><span class=cF0>, </span><span class=cF3>RLf_ONCE_USER</span><span class=cF0>);

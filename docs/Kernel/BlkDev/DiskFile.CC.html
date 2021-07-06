@@ -89,7 +89,7 @@ body {background-color:#000000;}
 <a name="l62"></a>    </span><span class=cF1>if</span><span class=cF0> (!res)
 <a name="l63"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;File not found: \&quot;%s\&quot;.\n&quot;</span><span class=cF0>, filename);
 <a name="l64"></a>    </span><span class=cF1>if</span><span class=cF0> (res &amp;&amp; attr &amp; </span><span class=cF3>RS_ATTR_RESIDENT</span><span class=cF0>)
-<a name="l65"></a>        </span><span class=cF5>HashGenericAdd</span><span class=cF0>(absname, </span><span class=cF3>HTT_FILE</span><span class=cF0>, </span><span class=cF5>ZMAllocIdent</span><span class=cF7>(</span><span class=cF0>res</span><span class=cF7>)</span><span class=cF0>, size, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>);
+<a name="l65"></a>        </span><span class=cF5>HashGenericAdd</span><span class=cF0>(absname, </span><span class=cF3>HTT_FILE</span><span class=cF0>, </span><span class=cF5>SysMAllocIdent</span><span class=cF7>(</span><span class=cF0>res</span><span class=cF7>)</span><span class=cF0>, size, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l66"></a>
 <a name="l67"></a>    </span><span class=cF1>if</span><span class=cF0> (_attr)
 <a name="l68"></a>        *_attr = attr;
@@ -130,14 +130,14 @@ body {background-color:#000000;}
 <a name="l103"></a>            </span><span class=cF1>if</span><span class=cF0> (attr &amp; </span><span class=cF3>RS_ATTR_RESIDENT</span><span class=cF0>)
 <a name="l104"></a>            </span><span class=cF7>{</span><span class=cF0>
 <a name="l105"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmph-&gt;user_data0);
-<a name="l106"></a>                tmph-&gt;user_data0 = </span><span class=cF5>ZMAllocIdent</span><span class=cF0>(fbuf);
+<a name="l106"></a>                tmph-&gt;user_data0 = </span><span class=cF5>SysMAllocIdent</span><span class=cF0>(fbuf);
 <a name="l107"></a>                tmph-&gt;user_data1 = size;
 <a name="l108"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l109"></a>            </span><span class=cF1>else</span><span class=cF0>
 <a name="l110"></a>                </span><span class=cF5>HashRemDel</span><span class=cF0>(tmph, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;hash_table);
 <a name="l111"></a>        }
 <a name="l112"></a>        </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (attr &amp; </span><span class=cF3>RS_ATTR_RESIDENT</span><span class=cF0>)
-<a name="l113"></a>            </span><span class=cF5>HashGenericAdd</span><span class=cF0>(absname, </span><span class=cF3>HTT_FILE</span><span class=cF0>, </span><span class=cF5>ZMAllocIdent</span><span class=cF7>(</span><span class=cF0>fbuf</span><span class=cF7>)</span><span class=cF0>, size, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>);
+<a name="l113"></a>            </span><span class=cF5>HashGenericAdd</span><span class=cF0>(absname, </span><span class=cF3>HTT_FILE</span><span class=cF0>, </span><span class=cF5>SysMAllocIdent</span><span class=cF7>(</span><span class=cF0>fbuf</span><span class=cF7>)</span><span class=cF0>, size, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l114"></a>        </span><span class=cF5>DirContextDel</span><span class=cF0>(dirc);
 <a name="l115"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l116"></a>    </span><span class=cF5>Free</span><span class=cF0>(absname);

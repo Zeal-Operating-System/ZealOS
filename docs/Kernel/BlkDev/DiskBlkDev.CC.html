@@ -79,7 +79,7 @@ body {background-color:#000000;}
 <a name="l52"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
 <a name="l53"></a>                </span><span class=cF1>if</span><span class=cF0> (!bd-&gt;RAM_disk)
 <a name="l54"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l55"></a>                    bd-&gt;RAM_disk = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l55"></a>                    bd-&gt;RAM_disk = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>bd-&gt;max_blk + </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l56"></a>                    bd-&gt;max_blk = </span><span class=cF5>MSize</span><span class=cF0>(bd-&gt;RAM_disk) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l57"></a>                </span><span class=cF7>}</span><span class=cF0>
 <a name="l58"></a>                drive-&gt;fs_type = </span><span class=cF3>FSt_REDSEA</span><span class=cF0>;
@@ -122,7 +122,7 @@ body {background-color:#000000;}
 <a name="l95"></a>                </span><span class=cF1>if</span><span class=cF0> (!bd-&gt;file_disk_name)
 <a name="l96"></a>                </span><span class=cF7>{</span><span class=cF0>
 <a name="l97"></a>                    </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;%C:/Drive%C.ISO.C&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.boot_drive_let, bd-&gt;first_drive_let);
-<a name="l98"></a>                    bd-&gt;file_disk_name = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf);
+<a name="l98"></a>                    bd-&gt;file_disk_name = </span><span class=cF5>SysStrNew</span><span class=cF0>(buf);
 <a name="l99"></a>                </span><span class=cF7>}</span><span class=cF0>
 <a name="l100"></a>                </span><span class=cF1>if</span><span class=cF0> (bd-&gt;max_blk &lt; </span><span class=cFE>7</span><span class=cF0>)
 <a name="l101"></a>                    bd-&gt;max_blk = </span><span class=cFE>7</span><span class=cF0>;

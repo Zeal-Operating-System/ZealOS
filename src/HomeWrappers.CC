@@ -30,7 +30,7 @@ public U0 Cls()
 	DocClear;
 }
 
-public U0 ZCls()
+public U0 SysCls()
 {//Clear System terminal.
 	Sys("DocClear;\n");
 }

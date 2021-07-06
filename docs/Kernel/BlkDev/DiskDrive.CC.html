@@ -126,7 +126,7 @@ body {background-color:#000000;}
 <a name="l99"></a>{
 <a name="l100"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
 <a name="l101"></a>    </span><span class=cF5>Free</span><span class=cF0>(drive-&gt;cur_fat_blk);
-<a name="l102"></a>    drive-&gt;cur_fat_blk      = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
+<a name="l102"></a>    drive-&gt;cur_fat_blk      = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l103"></a>    drive-&gt;cur_fat_blk_num  = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l104"></a>    drive-&gt;fat_blk_dirty    = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l105"></a>    </span><span class=cF5>BlkRead</span><span class=cF0>(drive, drive-&gt;cur_fat_blk, drive-&gt;fat1, </span><span class=cFE>1</span><span class=cF0>);

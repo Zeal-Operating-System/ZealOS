@@ -77,11 +77,11 @@ body {background-color:#000000;}
 <a name="l50"></a>            server-&gt;popup_task &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;server-&gt;task_flags, </span><span class=cF3>TASKf_FILTER_INPUT</span><span class=cF7>)</span><span class=cF0>)
 <a name="l51"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l52"></a>
-<a name="l53"></a>    res = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
+<a name="l53"></a>    res = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
 <a name="l54"></a>    res-&gt;master_task    = master;
 <a name="l55"></a>    res-&gt;job_code       = </span><span class=cF3>JOBT_EXE_STR</span><span class=cF0>;
 <a name="l56"></a>    res-&gt;flags          = flags;
-<a name="l57"></a>    res-&gt;aux_str        = </span><span class=cF5>ZStrNew</span><span class=cF0>(data);
+<a name="l57"></a>    res-&gt;aux_str        = </span><span class=cF5>SysStrNew</span><span class=cF0>(data);
 <a name="l58"></a>    res-&gt;ctrl           = &amp;server-&gt;server_ctrl;
 <a name="l59"></a>
 <a name="l60"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
@@ -121,11 +121,11 @@ body {background-color:#000000;}
 <a name="l94"></a>            server-&gt;popup_task &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;server-&gt;task_flags, </span><span class=cF3>TASKf_FILTER_INPUT</span><span class=cF7>)</span><span class=cF0>)
 <a name="l95"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l96"></a>
-<a name="l97"></a>    res = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
+<a name="l97"></a>    res = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
 <a name="l98"></a>    res-&gt;master_task    = master; </span><span class=cF2>//in case somebody cares</span><span class=cF0>
 <a name="l99"></a>    res-&gt;job_code       = </span><span class=cF3>JOBT_TEXT_INPUT</span><span class=cF0>;
 <a name="l100"></a>    res-&gt;flags          = flags;
-<a name="l101"></a>    res-&gt;aux_str        = </span><span class=cF5>ZStrNew</span><span class=cF0>(data);
+<a name="l101"></a>    res-&gt;aux_str        = </span><span class=cF5>SysStrNew</span><span class=cF0>(data);
 <a name="l102"></a>
 <a name="l103"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
 <a name="l104"></a>    task = server-&gt;last_input_filter_task;
@@ -177,7 +177,7 @@ body {background-color:#000000;}
 <a name="l150"></a>            server-&gt;popup_task &amp;&amp; !</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;server-&gt;task_flags, </span><span class=cF3>TASKf_FILTER_INPUT</span><span class=cF7>)</span><span class=cF0>)
 <a name="l151"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l152"></a>
-<a name="l153"></a>    tmpc = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
+<a name="l153"></a>    tmpc = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CJob</span><span class=cF7>)</span><span class=cF0>);
 <a name="l154"></a>    tmpc-&gt;master_task   = master;
 <a name="l155"></a>    tmpc-&gt;job_code      = </span><span class=cF3>JOBT_MESSAGE</span><span class=cF0>;
 <a name="l156"></a>    tmpc-&gt;message_code  = </span><span class=cF5>AbsI64</span><span class=cF0>(message_code); </span><span class=cF2>//negative means do a down and up</span><span class=cF0>
@@ -188,7 +188,7 @@ body {background-color:#000000;}
 <a name="l161"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
 <a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>sys_semas</span><span class=cF0>[</span><span class=cF3>SEMA_RECORD_MACRO</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF7>)</span><span class=cF0> &amp;&amp; server != </span><span class=cFB>sys_macro_task</span><span class=cF0> &amp;&amp; message_code == </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>)
 <a name="l163"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l164"></a>        tmpc1 = </span><span class=cF5>ZMAllocIdent</span><span class=cF0>(tmpc);
+<a name="l164"></a>        tmpc1 = </span><span class=cF5>SysMAllocIdent</span><span class=cF0>(tmpc);
 <a name="l165"></a>        </span><span class=cF1>CLI</span><span class=cF0>
 <a name="l166"></a>        </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpc1, </span><span class=cFB>sys_macro_head</span><span class=cF0>.last);
 <a name="l167"></a>    </span><span class=cF7>}</span><span class=cF0>
@@ -568,7 +568,7 @@ body {background-color:#000000;}
 <a name="l541"></a>
 <a name="l542"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>XTalk</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
 <a name="l543"></a>{</span><span class=cF2>//Sends text to other task. See </span><a href="https://tomawezome.github.io/ZealOS/Misc/OSTestSuite.CC.html#l1"><span class=cF4>::/Misc/OSTestSuite.CC</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l544"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf), *st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);
+<a name="l544"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>SysStrNew</span><span class=cF0>(buf), *st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);
 <a name="l545"></a>
 <a name="l546"></a>    </span><span class=cF5>TaskText</span><span class=cF0>(task, </span><span class=cF3>NULL</span><span class=cF0>, st2, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l547"></a>    </span><span class=cF5>Free</span><span class=cF0>(st2);
@@ -577,7 +577,7 @@ body {background-color:#000000;}
 <a name="l550"></a>
 <a name="l551"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>XTalkWait</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
 <a name="l552"></a>{</span><span class=cF2>//Send text to other task and wait for it to idle.</span><span class=cF0>
-<a name="l553"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf), *st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);
+<a name="l553"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>SysStrNew</span><span class=cF0>(buf), *st2 = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);
 <a name="l554"></a>
 <a name="l555"></a>    </span><span class=cF5>TaskText</span><span class=cF0>(task, </span><span class=cF3>NULL</span><span class=cF0>, st2, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l556"></a>    </span><span class=cF5>Free</span><span class=cF0>(st2);
@@ -606,7 +606,7 @@ body {background-color:#000000;}
 <a name="l579"></a>
 <a name="l580"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>In</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
 <a name="l581"></a>{</span><span class=cF2>//Send text to own input buffer. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSDistro.CC.html#l1"><span class=cF4>::/Demo/AcctExample/TOS/TOSDistro.CC</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l582"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>ZStrNew</span><span class=cF0>(buf);
+<a name="l582"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv), *st = </span><span class=cF5>SysStrNew</span><span class=cF0>(buf);
 <a name="l583"></a>
 <a name="l584"></a>    </span><span class=cF5>InStr</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;%%s\&quot;,%d;Free(%d);&quot;</span><span class=cF0>, st, st);
 <a name="l585"></a>    </span><span class=cF5>Free</span><span class=cF0>(buf);

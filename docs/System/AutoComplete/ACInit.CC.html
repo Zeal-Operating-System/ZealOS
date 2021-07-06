@@ -43,7 +43,7 @@ body {background-color:#000000;}
 <a name="l16"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l17"></a>        in_start = in_ptr;
 <a name="l18"></a>        </span><span class=cF5>Free</span><span class=cF0>(</span><span class=cFB>acd</span><span class=cF0>.word_list);
-<a name="l19"></a>        </span><span class=cFB>acd</span><span class=cF0>.word_list = </span><span class=cF5>ZMAlloc</span><span class=cF0>(size);
+<a name="l19"></a>        </span><span class=cFB>acd</span><span class=cF0>.word_list = </span><span class=cF5>SysMAlloc</span><span class=cF0>(size);
 <a name="l20"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(</span><span class=cFB>acd</span><span class=cF0>.word_list, in_start, size);
 <a name="l21"></a>        </span><span class=cFB>acd</span><span class=cF0>.word_list_size = size;
 <a name="l22"></a>
@@ -54,7 +54,7 @@ body {background-color:#000000;}
 <a name="l27"></a>            </span><span class=cF1>if</span><span class=cF0> (*in_ptr)
 <a name="l28"></a>            </span><span class=cF7>{</span><span class=cF0>
 <a name="l29"></a>                st2 = </span><span class=cF5>MStrUtil</span><span class=cF0>(in_ptr, </span><span class=cF3>SUF_TO_UPPER</span><span class=cF0>);
-<a name="l30"></a>                tmph = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>st2</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l30"></a>                tmph = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashGeneric</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>st2</span><span class=cF7>)</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
 <a name="l31"></a>                </span><span class=cF5>StrCopy</span><span class=cF0>(tmph + </span><span class=cFE>1</span><span class=cF0>, st2);
 <a name="l32"></a>                </span><span class=cF5>Free</span><span class=cF0>(st2);
 <a name="l33"></a>                in_ptr += </span><span class=cF5>StrLen</span><span class=cF0>(in_ptr) + </span><span class=cFE>1</span><span class=cF0>;
@@ -84,8 +84,8 @@ body {background-color:#000000;}
 <a name="l57"></a>        tmpw-&gt;hits++;
 <a name="l58"></a>        </span><span class=cF1>return</span><span class=cF0> tmpw;
 <a name="l59"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l60"></a>    tmpw = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashAC</span><span class=cF7>)</span><span class=cF0>);
-<a name="l61"></a>    tmpw-&gt;str       = </span><span class=cF5>ZStrNew</span><span class=cF0>(w);
+<a name="l60"></a>    tmpw = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CHashAC</span><span class=cF7>)</span><span class=cF0>);
+<a name="l61"></a>    tmpw-&gt;str       = </span><span class=cF5>SysStrNew</span><span class=cF0>(w);
 <a name="l62"></a>    tmpw-&gt;type      = </span><span class=cF3>HTT_WORD</span><span class=cF0>;
 <a name="l63"></a>    tmpw-&gt;use_count = </span><span class=cFE>1</span><span class=cF0>;
 <a name="l64"></a>    tmpw-&gt;hits      = </span><span class=cFE>1</span><span class=cF0>;

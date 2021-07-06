@@ -35,7 +35,7 @@ body {background-color:#000000;}
 <a name="l8"></a>        {
 <a name="l9"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpmr-&gt;base &gt; tmpmr1-&gt;base)
 <a name="l10"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l11"></a>                tmpmr2 = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
+<a name="l11"></a>                tmpmr2 = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
 <a name="l12"></a>                tmpmr2-&gt;type  = </span><span class=cF3>MRT_UNUSED</span><span class=cF0>;
 <a name="l13"></a>                tmpmr2-&gt;flags = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l14"></a>                tmpmr2-&gt;base  = tmpmr1-&gt;base;
@@ -64,7 +64,7 @@ body {background-color:#000000;}
 <a name="l37"></a>    </span><span class=cF9>CMemE820</span><span class=cF0>  *m20 = </span><span class=cFD>MEM_E820</span><span class=cF0>;
 <a name="l38"></a>
 <a name="l39"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;</span><span class=cFB>dev</span><span class=cF0>.mem32_head);
-<a name="l40"></a>    tmpmr = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
+<a name="l40"></a>    tmpmr = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
 <a name="l41"></a>    tmpmr-&gt;type  = </span><span class=cF3>MRT_UNUSED</span><span class=cF0>;
 <a name="l42"></a>    tmpmr-&gt;flags = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l43"></a></span><span class=cF2>//Maybe !!! Change this to 0xF0000000 !!!</span><span class=cF0>
@@ -76,7 +76,7 @@ body {background-color:#000000;}
 <a name="l49"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l50"></a>        </span><span class=cF1>while</span><span class=cF0> (m20-&gt;type)
 <a name="l51"></a>        {
-<a name="l52"></a>            tmpmr = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
+<a name="l52"></a>            tmpmr = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
 <a name="l53"></a>            tmpmr-&gt;type  = m20-&gt;type;
 <a name="l54"></a>            tmpmr-&gt;flags = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l55"></a>            tmpmr-&gt;base  = m20-&gt;base;
@@ -104,7 +104,7 @@ body {background-color:#000000;}
 <a name="l77"></a>        limit = base + size - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l78"></a>        </span><span class=cF1>if</span><span class=cF0> (!tmpmr1-&gt;type &amp;&amp; limit &lt; tmpmr1-&gt;base + tmpmr1-&gt;size)
 <a name="l79"></a>        {
-<a name="l80"></a>            tmpmr = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
+<a name="l80"></a>            tmpmr = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMemRange</span><span class=cF7>)</span><span class=cF0>);
 <a name="l81"></a>            tmpmr-&gt;type  = </span><span class=cF3>MRT_DEV</span><span class=cF0>;
 <a name="l82"></a>            tmpmr-&gt;flags = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l83"></a>            tmpmr-&gt;base  = base;

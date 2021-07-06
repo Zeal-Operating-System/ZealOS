@@ -27,6 +27,8 @@ U0 NetLogInit()
 	WinHorz(TEXT_COLS / 3, 2 * TEXT_COLS / 3, net_log_task);
 	WinVert(2 * TEXT_ROWS / 3, 5 * TEXT_ROWS / 6, net_log_task);
 	WinFocus(net_log_task);
+
+	DocPrint(net_log_task->put_doc, "$$WW+H,1$$");
 }
 
 U0 NetLog(U8 *format, ...)

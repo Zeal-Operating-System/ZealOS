@@ -221,7 +221,7 @@ U0 AsmHashLoad()
 		tmpc->raw_type = tmpit->type;
 		Bts(&tmpc->flags, Cf_INTERNAL_TYPE);
 		tmpc->size = tmpit->size;
-		tmpc->str = ZStrNew(tmpit->name);
+		tmpc->str = SysStrNew(tmpit->name);
 		HashAdd(tmpc, cmp.asm_hash);
 		cmp.internal_types[tmpc->raw_type] = tmpc;
 	}

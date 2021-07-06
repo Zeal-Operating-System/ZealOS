@@ -46,7 +46,7 @@ after you have collected data.
 		pf_depth = depth;
 		pf_buf_in_ptr = 0;
 		if (!pf_array)
-			pf_array = ZMAlloc(sizeof(I64) * PF_ARRAY_COUNT);
+			pf_array = SysMAlloc(sizeof(I64) * PF_ARRAY_COUNT);
 		pf_jiffy_end = pf_jiffy_start = counts.jiffies;
 		LBts(&pf_prof_active, 0);
 		cpu_structs[pf_cpu].profiler_timer_irq = &ProfTimerInt;

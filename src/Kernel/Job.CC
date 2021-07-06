@@ -50,11 +50,11 @@ CJob *TaskExe(CTask *server, CTask *master, U8 *data, I64 flags)
 			server->popup_task && !Bt(&server->task_flags, TASKf_FILTER_INPUT))
 		return NULL;
 
-	res = ZCAlloc(sizeof(CJob));
+	res = SysCAlloc(sizeof(CJob));
 	res->master_task	= master;
 	res->job_code		= JOBT_EXE_STR;
 	res->flags			= flags;
-	res->aux_str		= ZStrNew(data);
+	res->aux_str		= SysStrNew(data);
 	res->ctrl			= &server->server_ctrl;
 
 	PUSHFD
@@ -94,11 +94,11 @@ CJob *TaskText(CTask *server, CTask *master, U8 *data, I64 flags)
 			server->popup_task && !Bt(&server->task_flags, TASKf_FILTER_INPUT))
 		return NULL;
 
-	res = ZCAlloc(sizeof(CJob));
+	res = SysCAlloc(sizeof(CJob));
 	res->master_task	= master; //in case somebody cares
 	res->job_code		= JOBT_TEXT_INPUT;
 	res->flags			= flags;
-	res->aux_str		= ZStrNew(data);
+	res->aux_str		= SysStrNew(data);
 
 	PUSHFD
 	task = server->last_input_filter_task;
@@ -150,7 +150,7 @@ CJob *TaskMessage(CTask *_server, CTask *master, I64 message_code, I64 arg1, I64
 			server->popup_task && !Bt(&server->task_flags, TASKf_FILTER_INPUT))
 		return NULL;
 
-	tmpc = ZCAlloc(sizeof(CJob));
+	tmpc = SysCAlloc(sizeof(CJob));
 	tmpc->master_task	= master;
 	tmpc->job_code		= JOBT_MESSAGE;
 	tmpc->message_code	= AbsI64(message_code); //negative means do a down and up
@@ -161,7 +161,7 @@ CJob *TaskMessage(CTask *_server, CTask *master, I64 message_code, I64 arg1, I64
 	PUSHFD
 	if (Bt(&sys_semas[SEMA_RECORD_MACRO], 0) && server != sys_macro_task && message_code == MESSAGE_KEY_DOWN)
 	{
-		tmpc1 = ZMAllocIdent(tmpc);
+		tmpc1 = SysMAllocIdent(tmpc);
 		CLI
 		QueueInsert(tmpc1, sys_macro_head.last);
 	}
@@ -541,7 +541,7 @@ U0 SysErr(U8 *format, ...)
 
 U0 XTalk(CTask *task, U8 *format, ...)
 {//Sends text to other task. See $LK,"::/Misc/OSTestSuite.CC"$.
-	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = ZStrNew(buf), *st2 = MStrPrint("\"%%s\",%d;Free(%d);", st, st);
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = SysStrNew(buf), *st2 = MStrPrint("\"%%s\",%d;Free(%d);", st, st);
 
 	TaskText(task, NULL, st2, 0);
 	Free(st2);
@@ -550,7 +550,7 @@ U0 XTalk(CTask *task, U8 *format, ...)
 
 U0 XTalkWait(CTask *task, U8 *format, ...)
 {//Send text to other task and wait for it to idle.
-	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = ZStrNew(buf), *st2 = MStrPrint("\"%%s\",%d;Free(%d);", st, st);
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = SysStrNew(buf), *st2 = MStrPrint("\"%%s\",%d;Free(%d);", st, st);
 
 	TaskText(task, NULL, st2, 0);
 	Free(st2);
@@ -579,7 +579,7 @@ U0 InFile(U8 *filename)
 
 U0 In(U8 *format, ...)
 {//Send text to own input buffer. See $LK,"::/Demo/AcctExample/TOS/TOSDistro.CC"$.
-	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = ZStrNew(buf);
+	U8 *buf = StrPrintJoin(NULL, format, argc, argv), *st = SysStrNew(buf);
 
 	InStr("\"%%s\",%d;Free(%d);", st, st);
 	Free(buf);

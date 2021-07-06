@@ -2,7 +2,7 @@ CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL, CTask *task=NULL, CBlkPool *bp)
 {//See $LK,"HeapLog",A="MN:HeapLog"$() for an example.
 //Duplicated for $LK,"System Task",A="FF:::/Kernel/KStart64.CC,CHeapCtrl.bp"$.
 	if (!hc)
-		hc = ZCAlloc(sizeof(CHeapCtrl));
+		hc = SysCAlloc(sizeof(CHeapCtrl));
 	hc->hc_signature	= HEAP_CTRL_SIGNATURE_VAL;
 	hc->mem_task		= task;
 	hc->bp				= bp;

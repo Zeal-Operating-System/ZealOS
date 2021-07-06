@@ -418,7 +418,7 @@ body {background-color:#000000;}
 <a name="l391"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>_MALLOC</span><span class=cF0>     </span><span class=cF1>U8</span><span class=cF0>          *</span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>); </span><span class=cF2>//Alloc memory chunk.</span><span class=cF0>
 <a name="l392"></a></span><span class=cF2>//Accepts a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3527"><span class=cF4>CHeapCtrl</span></a><span class=cF2>. NULL allocs off current task's heap.</span><span class=cF0>
 <a name="l393"></a>
-<a name="l394"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size)
+<a name="l394"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size)
 <a name="l395"></a>{</span><span class=cF2>//Alloc memory in System task's heap.</span><span class=cF0>
 <a name="l396"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>MAlloc</span><span class=cF0>(size, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l397"></a>}
@@ -432,7 +432,7 @@ body {background-color:#000000;}
 <a name="l405"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l406"></a>}
 <a name="l407"></a>
-<a name="l408"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size)
+<a name="l408"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size)
 <a name="l409"></a>{</span><span class=cF2>//Alloc and set to zero memory in System task's heap.</span><span class=cF0>
 <a name="l410"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>CAlloc</span><span class=cF0>(size, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l411"></a>}
@@ -451,7 +451,7 @@ body {background-color:#000000;}
 <a name="l424"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l425"></a>}
 <a name="l426"></a>
-<a name="l427"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ZMAllocIdent</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src)
+<a name="l427"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SysMAllocIdent</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src)
 <a name="l428"></a>{</span><span class=cF2>//Alloc in System task's heap, ident copy of heap node.</span><span class=cF0>
 <a name="l429"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>MAllocIdent</span><span class=cF0>(src, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l430"></a>}
@@ -503,7 +503,7 @@ body {background-color:#000000;}
 <a name="l476"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l477"></a>}
 <a name="l478"></a>
-<a name="l479"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ZReAlloc</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF9>I64</span><span class=cF0> new_size)
+<a name="l479"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SysReAlloc</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF9>I64</span><span class=cF0> new_size)
 <a name="l480"></a>{</span><span class=cF2>//Realloc in System task's heap.</span><span class=cF0>
 <a name="l481"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ReAlloc</span><span class=cF0>(ptr, new_size, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l482"></a>}
@@ -527,7 +527,7 @@ body {background-color:#000000;}
 <a name="l500"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l501"></a>}
 <a name="l502"></a>
-<a name="l503"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ZStrNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf)
+<a name="l503"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SysStrNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf)
 <a name="l504"></a>{</span><span class=cF2>//Alloc copy of string in System task's heap.</span><span class=cF0>
 <a name="l505"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrNew</span><span class=cF0>(buf, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l506"></a>}

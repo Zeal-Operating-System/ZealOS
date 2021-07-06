@@ -119,11 +119,11 @@ body {background-color:#000000;}
 <a name="l92"></a>        </span><span class=cF6>&quot;(Would crash when code mem was freed.)\n&quot;</span><span class=cF0>;
 <a name="l93"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l94"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l95"></a>    c = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCtrl</span><span class=cF7>)</span><span class=cF0>);
+<a name="l95"></a>    c = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCtrl</span><span class=cF7>)</span><span class=cF0>);
 <a name="l96"></a>    c-&gt;win_task             = </span><span class=cFB>sys_winmgr_task</span><span class=cF0>;
 <a name="l97"></a>    c-&gt;flags                = </span><span class=cF3>CTRLF_SHOW</span><span class=cF0> | </span><span class=cF3>CTRLF_CAPTURE_LEFT_MS</span><span class=cF0>;
 <a name="l98"></a>    c-&gt;type                 = </span><span class=cF3>CTRLT_GENERIC</span><span class=cF0>;
-<a name="l99"></a>    c-&gt;state                = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSliderState</span><span class=cF7>)</span><span class=cF0>);
+<a name="l99"></a>    c-&gt;state                = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF0>CSliderState</span><span class=cF7>)</span><span class=cF0>);
 <a name="l100"></a>    c-&gt;draw_it              = &amp;DrawCtrlSlider;
 <a name="l101"></a>    c-&gt;left_click           = &amp;LeftClickSlider;
 <a name="l102"></a>    c-&gt;update_derived_vals  = &amp;UpdateDerivedCtrlSlider;

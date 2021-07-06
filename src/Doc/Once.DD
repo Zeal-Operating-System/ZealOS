@@ -6,9 +6,9 @@ $WW,1$$LK,"KMain",A="MN:KMain"$()
 					includes $LK,"~/Once.CC"$
 						calls $LK,"OnceExe",A="MN:OnceExe"$().
 
-$LK,"ZOnce",A="MN:ZOnce"$() appends src code to $LK,"~/Registry.CC"$ $FG,2$Once/System$FG$ tree, executed at next boot by $FG,2$System$FG$.
+$LK,"SysOnce",A="MN:SysOnce"$() appends src code to $LK,"~/Registry.CC"$ $FG,2$Once/System$FG$ tree, executed at next boot by $FG,2$System$FG$.
 
 $LK,"Once",A="MN:Once"$() 	appends src code to $LK,"~/Registry.CC"$ $FG,2$Once/User$FG$ tree, executed at next boot by first $FG,2$User$FG$ term.
 
-At boot, $LK,"OnceExe",A="MN:OnceExe"$(), executes $FG,2$Once/System$FG$ tree, $LK,"ZOnceFlush",A="MN:ZOnceFlush"$()s it,
+At boot, $LK,"OnceExe",A="MN:OnceExe"$(), executes $FG,2$Once/System$FG$ tree, $LK,"SysOnceFlush",A="MN:SysOnceFlush"$()s it,
 executes $FG,2$Once/User$FG$ tree and $LK,"OnceFlush",A="MN:OnceFlush"$()s.

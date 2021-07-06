@@ -223,7 +223,7 @@ body {background-color:#000000;}
 <a name="l196"></a>
 <a name="l197"></a>            bd-&gt;max_blk             = </span><span class=cF5>CeilI64</span><span class=cF0>(bd-&gt;drv_offset + </span><span class=cFE>1</span><span class=cF0> + bitmap_blks + res, </span><span class=cFE>4</span><span class=cF0>);
 <a name="l198"></a>            bd-&gt;max_blk--; </span><span class=cF2>//Inclusive.</span><span class=cF0>
-<a name="l199"></a>            bd-&gt;file_disk_name      = </span><span class=cF5>ZStrNew</span><span class=cF0>(iso_filename);
+<a name="l199"></a>            bd-&gt;file_disk_name      = </span><span class=cF5>SysStrNew</span><span class=cF0>(iso_filename);
 <a name="l200"></a>            bd-&gt;init_root_dir_blks  = root_dir_blks;
 <a name="l201"></a>            </span><span class=cF5>BlkDevAdd</span><span class=cF0>(bd,, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l202"></a>            </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;%C:/&quot;</span><span class=cF0>, drive-&gt;drv_let);

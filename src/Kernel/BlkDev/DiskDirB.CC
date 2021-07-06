@@ -2,7 +2,7 @@ U0 HomeSet(U8 *dirname)
 {//Change home directory.
 	dirname = DirNameAbs(dirname);
 	Free(blkdev.home_dir);
-	blkdev.home_dir = ZStrNew(dirname);
+	blkdev.home_dir = SysStrNew(dirname);
 	Free(dirname);
 }
 

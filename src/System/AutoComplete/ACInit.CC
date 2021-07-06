@@ -16,7 +16,7 @@ public U0 ACDWordsLoad()
 	{
 		in_start = in_ptr;
 		Free(acd.word_list);
-		acd.word_list = ZMAlloc(size);
+		acd.word_list = SysMAlloc(size);
 		MemCopy(acd.word_list, in_start, size);
 		acd.word_list_size = size;
 
@@ -27,7 +27,7 @@ public U0 ACDWordsLoad()
 			if (*in_ptr)
 			{
 				st2 = MStrUtil(in_ptr, SUF_TO_UPPER);
-				tmph = ZCAlloc(sizeof(CHashGeneric) + StrLen(st2) + 1);
+				tmph = SysCAlloc(sizeof(CHashGeneric) + StrLen(st2) + 1);
 				StrCopy(tmph + 1, st2);
 				Free(st2);
 				in_ptr += StrLen(in_ptr) + 1;
@@ -57,8 +57,8 @@ CHashAC *ACHashAdd(U8 *w)
 		tmpw->hits++;
 		return tmpw;
 	}
-	tmpw = ZCAlloc(sizeof(CHashAC));
-	tmpw->str		= ZStrNew(w);
+	tmpw = SysCAlloc(sizeof(CHashAC));
+	tmpw->str		= SysStrNew(w);
 	tmpw->type		= HTT_WORD;
 	tmpw->use_count	= 1;
 	tmpw->hits		= 1;

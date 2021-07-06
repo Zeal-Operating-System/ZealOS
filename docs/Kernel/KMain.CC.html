@@ -36,9 +36,9 @@ body {background-color:#000000;}
 <a name="l9"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF5>Fs</span><span class=cF0>;
 <a name="l10"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;</span><span class=cFB>sys_macro_head</span><span class=cF0>);
 <a name="l11"></a>
-<a name="l12"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.default_iso_filename     = </span><span class=cF5>ZStrNew</span><span class=cF0>(</span><span class=cF3>DEFAULT_ISO_FILENAME</span><span class=cF0>);
-<a name="l13"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.default_iso_c_filename   = </span><span class=cF5>ZStrNew</span><span class=cF0>(</span><span class=cF3>DEFAULT_ISO_C_FILENAME</span><span class=cF0>);
-<a name="l14"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.tmp_filename             = </span><span class=cF5>ZStrNew</span><span class=cF0>(</span><span class=cF6>&quot;~/Tmp.DD&quot;</span><span class=cF0>);
+<a name="l12"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.default_iso_filename     = </span><span class=cF5>SysStrNew</span><span class=cF0>(</span><span class=cF3>DEFAULT_ISO_FILENAME</span><span class=cF0>);
+<a name="l13"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.default_iso_c_filename   = </span><span class=cF5>SysStrNew</span><span class=cF0>(</span><span class=cF3>DEFAULT_ISO_C_FILENAME</span><span class=cF0>);
+<a name="l14"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.tmp_filename             = </span><span class=cF5>SysStrNew</span><span class=cF0>(</span><span class=cF6>&quot;~/Tmp.DD&quot;</span><span class=cF0>);
 <a name="l15"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.dvd_boot_is_good         = </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l16"></a>
 <a name="l17"></a>    #</span><span class=cF1>exe</span><span class=cF0>

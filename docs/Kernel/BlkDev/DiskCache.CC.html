@@ -43,8 +43,8 @@ body {background-color:#000000;}
 <a name="l16"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l17"></a>    </span><span class=cF1>else</span><span class=cF0>
 <a name="l18"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l19"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.cache_ctrl = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CCacheBlk</span><span class=cF0>.body</span><span class=cF7>)</span><span class=cF0>);
-<a name="l20"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.cache_base = </span><span class=cF5>ZMAlloc</span><span class=cF0>(size_in_U8s);
+<a name="l19"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.cache_ctrl = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CCacheBlk</span><span class=cF0>.body</span><span class=cF7>)</span><span class=cF0>);
+<a name="l20"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.cache_base = </span><span class=cF5>SysMAlloc</span><span class=cF0>(size_in_U8s);
 <a name="l21"></a>        </span><span class=cF5>QueueInit</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.cache_ctrl);
 <a name="l22"></a>
 <a name="l23"></a>        count = </span><span class=cF5>MSize</span><span class=cF0>(</span><span class=cFB>blkdev</span><span class=cF0>.cache_base) / </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CCacheBlk</span><span class=cF0>);
@@ -58,7 +58,7 @@ body {background-color:#000000;}
 <a name="l31"></a>            tmpc-&gt;blk       = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l32"></a>        }
 <a name="l33"></a>
-<a name="l34"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.cache_hash_table = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF3>DISK_CACHE_HASH_SIZE</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>);
+<a name="l34"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.cache_hash_table = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF3>DISK_CACHE_HASH_SIZE</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0>);
 <a name="l35"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>DISK_CACHE_HASH_SIZE</span><span class=cF0>; i++)
 <a name="l36"></a>        {
 <a name="l37"></a>            tmpc = </span><span class=cFB>blkdev</span><span class=cF0>.cache_hash_table(</span><span class=cF1>U8</span><span class=cF0> *) + i * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *) * </span><span class=cFE>2</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CCacheBlk</span><span class=cF0>.next_hash);

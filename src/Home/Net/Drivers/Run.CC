@@ -4,7 +4,7 @@
 #define PCIV_PCNET		0x1022
 #define PCID_PCNET		0x2000
 
-#define	PCIV_82545EM	0x8086
+#define	PCIV_E1000		0x8086
 #define	PCID_82545EM	0x100F
 
 U0 NetDriverInclude(U8 *driver)
@@ -32,11 +32,11 @@ U0 NetDriverInit()
 			}
 			break;
 
-		case PCIV_82545EM:
+		case PCIV_E1000:
 			switch (net_driver_pci->device_id)
 			{
 				case PCID_82545EM:
-					NetDriverInclude("82545EM");
+					NetDriverInclude("E1000");
 					found = TRUE;
 					break;
 			}

@@ -77,7 +77,7 @@ body {background-color:#000000;}
 <a name="l50"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l51"></a>            </span><span class=cF1>if</span><span class=cF0> (i)
 <a name="l52"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l53"></a>                tmpf = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFreeList</span><span class=cF7>)</span><span class=cF0>);
+<a name="l53"></a>                tmpf = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFreeList</span><span class=cF7>)</span><span class=cF0>);
 <a name="l54"></a>                tmpf-&gt;size  = i;
 <a name="l55"></a>                tmpf-&gt;</span><span class=cF1>start</span><span class=cF0> = first;
 <a name="l56"></a>                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpf, drive-&gt;last_free);
@@ -335,7 +335,7 @@ body {background-color:#000000;}
 <a name="l308"></a>            }
 <a name="l309"></a>            </span><span class=cF1>if</span><span class=cF0> (!found)
 <a name="l310"></a>            {
-<a name="l311"></a>                tmpf = </span><span class=cF5>ZMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFreeList</span><span class=cF7>)</span><span class=cF0>);
+<a name="l311"></a>                tmpf = </span><span class=cF5>SysMAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFreeList</span><span class=cF7>)</span><span class=cF0>);
 <a name="l312"></a>                tmpf-&gt;size  = count;
 <a name="l313"></a>                tmpf-&gt;</span><span class=cF1>start</span><span class=cF0> = c;
 <a name="l314"></a>                </span><span class=cF5>QueueInsert</span><span class=cF0>(tmpf, drive-&gt;last_free);

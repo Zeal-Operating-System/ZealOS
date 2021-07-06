@@ -1,4 +1,12 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/06/21 15:04:12----$IV,0$
+* $LK,"R",A="MN:R"$("ZCAlloc",		"$LK+PU,"SysCAlloc",A="MN:SysCAlloc"$");
+* $LK,"R",A="MN:R"$("ZMAlloc",		"$LK+PU,"SysMAlloc",A="MN:SysMAlloc"$", "-l");
+* $LK,"R",A="MN:R"$("ZCls",			"$LK+PU,"SysCls",A="MN:SysCls"$");
+* $LK,"R",A="MN:R"$("ZStrNew",		"$LK+PU,"SysStrNew",A="MN:SysStrNew"$");
+* $LK,"R",A="MN:R"$("ZReAlloc",		"$LK+PU,"SysReAlloc",A="MN:SysReAlloc"$");
+* $LK,"R",A="MN:R"$("ZOnce",		"$LK+PU,"SysOnce",A="MN:SysOnce"$", "-l");
+
 $IV,1$----07/05/21 22:24:03----$IV,0$
 * $LK,"R",A="MN:R"$("inst", "instruction");
 * Updated $LK+PU,"line counts",A="FF:::/System/Define.CC,DD_ZEALOS_LOC"$.
@@ -292,7 +300,7 @@ $BK,1$* Zenith 1.0 released.$BK,0$
 * Changed WinMgr $LK,"refresh rate",A="MN:WINMGR_FPS"$ to 60 Hz.
 * New User tasks are named "Terminal" on startup.
 * Added $LK,"FR",A="MN:FR"$(), for renaming files matching a mask. I used it to do the .HC -> .CC conversion.
-* Added $LK,"Cls",A="MN:Cls"$() and $LK,"ZCls",A="MN:ZCls"$().
+* Added $LK,"Cls",A="MN:Cls"$() and $LK,"SysCls",A="MN:SysCls"$().
 * Functions starting with 'A' for Adam now start with 'Z' for Zenith.
 * $UL$Decompressed all files.$UL,0$ Removed Zip(), Unzip(), and ZipRep(). Slightly modified $LK,"FileRead",A="MN:FileRead"$() to disable reading compressed files. Removal of compression planned for the future.
 * $UL$Renamed all files from .HC -> .CC to reflect language name change.$UL,0$

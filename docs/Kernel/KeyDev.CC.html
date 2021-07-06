@@ -107,7 +107,7 @@ body {background-color:#000000;}
 <a name="l80"></a>
 <a name="l81"></a></span><span class=cF9>CKeyDevEntry</span><span class=cF0> *</span><span class=cF5>KeyDevAdd</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_put_key</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF0> ch, </span><span class=cF9>I64</span><span class=cF0> sc</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*fp_puts</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *st</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> priority, </span><span class=cF1>Bool</span><span class=cF0> key_descs=</span><span class=cF3>FALSE</span><span class=cF0>)
 <a name="l82"></a>{</span><span class=cF2>//Places hook in StdOut chain. See </span><span class=cF4><u>Keyboard Devices</u></span><span class=cF2>.</span><span class=cF0>
-<a name="l83"></a>    </span><span class=cF9>CKeyDevEntry</span><span class=cF0> *tmpk = </span><span class=cFB>keydev</span><span class=cF0>.put_key_head.last, *tmpk1 = </span><span class=cF5>ZCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CKeyDevEntry</span><span class=cF7>)</span><span class=cF0>);
+<a name="l83"></a>    </span><span class=cF9>CKeyDevEntry</span><span class=cF0> *tmpk = </span><span class=cFB>keydev</span><span class=cF0>.put_key_head.last, *tmpk1 = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CKeyDevEntry</span><span class=cF7>)</span><span class=cF0>);
 <a name="l84"></a>
 <a name="l85"></a>    tmpk1-&gt;put_key  = fp_put_key;
 <a name="l86"></a>    tmpk1-&gt;put_s    = fp_puts;
@@ -234,13 +234,13 @@ body {background-color:#000000;}
 <a name="l207"></a>
 <a name="l208"></a>        </span><span class=cF5>Free</span><span class=cF0>(</span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_no_shift_descs[ch]);
 <a name="l209"></a>        </span><span class=cF1>if</span><span class=cF0> (no_shift_desc)
-<a name="l210"></a>            </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_no_shift_descs[ch] = </span><span class=cF5>ZStrNew</span><span class=cF0>(no_shift_desc);
+<a name="l210"></a>            </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_no_shift_descs[ch] = </span><span class=cF5>SysStrNew</span><span class=cF0>(no_shift_desc);
 <a name="l211"></a>        </span><span class=cF1>else</span><span class=cF0>
 <a name="l212"></a>            </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_no_shift_descs[ch] = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l213"></a>
 <a name="l214"></a>        </span><span class=cF5>Free</span><span class=cF0>(</span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_shift_descs[ch]);
 <a name="l215"></a>        </span><span class=cF1>if</span><span class=cF0> (shift_desc)
-<a name="l216"></a>            </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_shift_descs[ch] = </span><span class=cF5>ZStrNew</span><span class=cF0>(shift_desc);
+<a name="l216"></a>            </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_shift_descs[ch] = </span><span class=cF5>SysStrNew</span><span class=cF0>(shift_desc);
 <a name="l217"></a>        </span><span class=cF1>else</span><span class=cF0>
 <a name="l218"></a>            </span><span class=cFB>keydev</span><span class=cF0>.ctrl_alt_shift_descs[ch] = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l219"></a>

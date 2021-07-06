@@ -391,7 +391,7 @@ _extern _MHEAP_CTRL	CHeapCtrl	*MHeapCtrl(U8 *src); //$LK,"CHeapCtrl",A="MN:CHeap
 _extern _MALLOC		U8			*MAlloc(I64 size, CTask *mem_task=NULL); //Alloc memory chunk.
 //Accepts a $LK,"CTask",A="MN:CTask"$ or $LK,"CHeapCtrl",A="MN:CHeapCtrl"$. NULL allocs off current task's heap.
 
-U8 *ZMAlloc(I64 size)
+U8 *SysMAlloc(I64 size)
 {//Alloc memory in System task's heap.
 	return MAlloc(size, sys_task);
 }
@@ -405,7 +405,7 @@ U8 *CAlloc(I64 size, CTask *mem_task=NULL)
 	return res;
 }
 
-U8 *ZCAlloc(I64 size)
+U8 *SysCAlloc(I64 size)
 {//Alloc and set to zero memory in System task's heap.
 	return CAlloc(size, sys_task);
 }
@@ -424,7 +424,7 @@ U8 *MAllocIdent(U8 *src, CTask *mem_task=NULL)
 	return res;
 }
 
-U8 *ZMAllocIdent(U8 *src)
+U8 *SysMAllocIdent(U8 *src)
 {//Alloc in System task's heap, ident copy of heap node.
 	return MAllocIdent(src, sys_task);
 }
@@ -476,7 +476,7 @@ U8 *ReAlloc(U8 *ptr, U64 new_size, CTask *mem_task=NULL)
 	return res;
 }
 
-U8 *ZReAlloc(U8 *ptr, I64 new_size)
+U8 *SysReAlloc(U8 *ptr, I64 new_size)
 {//Realloc in System task's heap.
 	return ReAlloc(ptr, new_size, sys_task);
 }
@@ -500,7 +500,7 @@ U8 *StrNew(U8 *buf, CTask *mem_task=NULL)
 	return res;
 }
 
-U8 *ZStrNew(U8 *buf)
+U8 *SysStrNew(U8 *buf)
 {//Alloc copy of string in System task's heap.
 	return StrNew(buf, sys_task);
 }

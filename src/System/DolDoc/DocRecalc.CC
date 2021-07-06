@@ -1206,7 +1206,7 @@ rc_adjust_xy:
 					{
 						Free(music.cur_song);
 						MusicSettingsReset;
-						music.cur_song = ZStrNew(doc_e->aux_str);
+						music.cur_song = SysStrNew(doc_e->aux_str);
 					}
 				}
 				doc->flags |= DOCF_HAS_SONG;
