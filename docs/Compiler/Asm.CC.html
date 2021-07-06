@@ -1037,11 +1037,11 @@ body {background-color:#000000;}
 <a name="l1010"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AsmStoreNum</span><span class=cF7>(</span><span class=cF0>cc, &amp;best.imm, </span><span class=cFE>1</span><span class=cF0>, U8_avail</span><span class=cF7>)</span><span class=cF0>)
 <a name="l1011"></a>                </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l1012"></a>        }
-<a name="l1013"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_ENDING_ZERO</span><span class=cF0>) </span><span class=cF2>//ENTER inst</span><span class=cF0>
+<a name="l1013"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpins-&gt;flags &amp; </span><span class=cF3>IEF_ENDING_ZERO</span><span class=cF0>) </span><span class=cF2>//ENTER instruction</span><span class=cF0>
 <a name="l1014"></a>            </span><span class=cFD>AOTStoreCodeU8</span><span class=cF0>(cc, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1015"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l1016"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1017"></a>    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Invalid inst at &quot;</span><span class=cF0>);
+<a name="l1017"></a>    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Invalid instruction at &quot;</span><span class=cF0>);
 <a name="l1018"></a>}
 <a name="l1019"></a>
 <a name="l1020"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ParseAsmDefine</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>I64</span><span class=cF0> U8_count)

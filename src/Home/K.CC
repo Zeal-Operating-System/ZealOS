@@ -1,4 +1,4 @@
-//Ed("/Doc/ChangeLog.DD");
+Ed("/Doc/ChangeLog.DD");
 
 CAHCIPort	*port;
 I64			 i, ata_drive = -1;

@@ -84,7 +84,7 @@ U0 OSUpgrade()
 {
 	I64		 drv_let;
 	U8		*st, *port_st;
-	I64		 ch, res_num;
+	I64		 res_num;
 	CTask	*task;
 
 	task = User;
@@ -130,13 +130,16 @@ U0 OSUpgrade()
 
 	'\n';
 
-//	InstallDrive(drv_let);
+	PopUpOk("\nFILE1 is new changes.\n"
+			"$$CYAN$$FILE2$$FG$$ is from existing install.\n\n"
+			"You can hold $$GREEN$$SPACE$$FG$$ down to just merge everything.");
 	OSMerge(drv_let); // src_drv needed?
 
 	XTalkWait(task, "BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n", drv_let, drv_let, port_st);
 	VideoRep;
 	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
 	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
+
 //	"$$RED$$Install Master Boot loader?$$FG$$";
 //	if (YorN)
 //	{

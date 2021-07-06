@@ -19,7 +19,7 @@ Cd(__DIR__);;
 
 //ToHtml("DemoInPage.DD", "~/DemoOutPage");
 
-U0 DirIndex(U8 *dest_path, U8 *full_name)
+U0 DirIndex(U8 *dest_path, U8 *full_name, U8 *opt_func="")
 {
 	U8		*index_path,
 			*index_path_out,
@@ -31,8 +31,8 @@ U0 DirIndex(U8 *dest_path, U8 *full_name)
 	index_path_out	= MStrPrint("%s/index.html", dest_path);
 	"%s\n", index_path;
 
-	index_exe = MStrPrint("#include \"::/Demo/ToHtmlToTXTDemo/HtmlDirList\";;;"
-						  "Cls;DirIndexList(\"%s\");View;\n", full_name);
+	index_exe = MStrPrint("#include \"::/Demo/ToHtmlToTXTDemo/HtmlDirList\";;DocMax;DocMax;"
+						  "Cls;DirIndexList(\"%s\");%s;View;\n", full_name, opt_func);
 	PopUp(index_exe,, &index_task);
 	TaskWait(index_task);
 
@@ -129,7 +129,7 @@ I64 HtmlGen()
 	DocMax;
 	DelTree("::/HTML/");
 
-	DirIndex("::/HTML/", "::/");
+	DirIndex("::/HTML/", "::/", "DocPrint(,\"\n\n\");Who;");
 
 	return Dir2Html("::/", "::/HTML/");
 }

@@ -211,7 +211,7 @@ public _intern IC_RAX_SET		U0		RAXSet(I64 d); //Set RAX register value.
 public _intern IC_RBP_SET		U0		RBPSet(U8 *d); //Set RBP register value.
 public _intern IC_RFLAGS_SET	U0		RFlagsSet(I64 d); //Set RFlags register value.
 public _intern IC_RSP_SET		U0		RSPSet(U8 *d); //Set RSP register value.
-public _extern _CPUID			U0		CPUId(U32 rax, CRAXRBXRCXRDX *res); //Do CPUID inst.
+public _extern _CPUID			U0		CPUId(U32 rax, CRAXRBXRCXRDX *res); //Do CPUID instruction.
 public _extern _ENDIAN_U16		U16		EndianU16(U16 val); //Swap big<-->little endian U16.
 public _extern _ENDIAN_U32		U32		EndianU32(U32 val); //Swap big<-->little endian U32.
 public _extern _ENDIAN_U64		U64		EndianU64(U64 val); //Swap big<-->little endian U64.
@@ -221,7 +221,7 @@ public _extern _LXCHG_U32		U32		LXchgU32(U32 *dst, U32 d); //Locked eXchange U32
 public _extern _LXCHG_U8		U8		LXchgU8(  U8 *dst,  U8 d); //Locked eXchange U8s.
 public _extern _MSR_READ		I64		MSRRead(I64 model_specific_reg); //Model Specific Reg See $LK,"MSRs",A="MN:IA32_EFER"$.
 public _extern _MSR_WRITE		U0		MSRWrite(I64 model_specific_reg, I64 val); //Model Specific Reg See $LK,"MSRs",A="MN:IA32_EFER"$.
-public _extern _SYS_HLT			U0		SysHlt(); //Loops doing HLT inst.
+public _extern _SYS_HLT			U0		SysHlt(); //Loops doing HLT instruction.
 public _extern _XCHG_I64		I64		XchgI64(I64 *dst, I64 d); //eXchange I64s.
 public _extern _XCHG_U16		U16		XchgU16(U16 *dst, U16 d); //eXchange U16s.
 public _extern _XCHG_U32		U32		XchgU32(U32 *dst, U32 d); //eXchange U32s.
@@ -229,11 +229,11 @@ public _extern _XCHG_U8			U8		XchgU8(  U8 *dst,  U8 d); //eXchange U8s.
 _extern SYS_GDT					CGDT	sys_gdt;
 
 #help_index "Processor/Cache;Memory/Cache"
-public _intern IC_CLFLUSH			U0  CLFlush(U8 *a); //Flush cache line inst.
+public _intern IC_CLFLUSH			U0  CLFlush(U8 *a); //Flush cache line instruction.
 public _extern SYS_CACHE_LINE_WIDTH	I64 sys_cache_line_width; //CPU's Cache line width.
 
 #help_index "Processor/Page Tables;Memory/Page Tables"
-public _intern IC_INVLPG		U0  InvalidatePage(U8 *a); //Invalidate page at addr inst.
+public _intern IC_INVLPG		U0  InvalidatePage(U8 *a); //Invalidate page at addr instruction.
 public _extern MEM_PAGE_SIZE	U64 mem_page_size;
 
 #help_index "Task;Processor"

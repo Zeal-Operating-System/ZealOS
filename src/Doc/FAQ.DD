@@ -15,7 +15,7 @@ $ID,2$3D $LK,"Sprites",A="FI:::/Doc/Sprite.DD"$ are stored as a mesh of triangle
 $ID,-2$$TR,"If the compiler is JIT, isn't it an interpretor?"$
 $ID,2$ZealOS compiles, doesn't $FG,2$interpret$FG$, and uses no $FG,2$byte code$FG$ anywhere.  Terry Davis loosely used the word $FG,2$script$FG$ sometimes, but it's actually compiled.  The compiler's $LK,"optimization",A="MN:OptPass012"$ code is actually where the compiler evaluates constants to simplify them, like every optimizing compiler.
 $ID,-2$$TR,"Is 'Bt()' in the code Bit Torrent?"$
-$ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ inst, not $FG,2$bit torrent$FG$.
+$ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ instruction, not $FG,2$bit torrent$FG$.
 $ID,-2$$TR,"Is 'Fs->' in the code file system?"$
 $ID,2$$LK,"Fs",A="MN:Fs"$ is a segment reg, not $FG,2$file system$FG$.	($LK,"Fs",A="MN:Fs"$ is kept pointing to the current task's record.)	There is no memory segmentation.	It is 64-bit and flat. FS and GS are used as general purpose regs, more or less.
 $ID,-2$$TR,"Is it Pascal?"$

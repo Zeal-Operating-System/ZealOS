@@ -1,5 +1,5 @@
-// Must be in same directory as driver files.
-// (Uses __DIR__)
+// Must be in same directory as driver files. (Uses __DIR__)
+// Throws if stack has no driver for the PC's hardware.
 
 #define PCIV_PCNET		0x1022
 #define PCID_PCNET		0x2000
@@ -18,6 +18,7 @@ U0 NetDriverInclude(U8 *driver)
 U0 NetDriverInit()
 {
 	CPCIDev *net_driver_pci = PCIDevFind(PCIC_NETWORK);
+	Bool	 found = FALSE;
 
 	switch (net_driver_pci->vendor_id)
 	{
@@ -26,6 +27,7 @@ U0 NetDriverInit()
 			{
 				case PCID_PCNET:
 					NetDriverInclude("PCNet");
+					found = TRUE;
 					break;
 			}
 			break;
@@ -35,11 +37,14 @@ U0 NetDriverInit()
 			{
 				case PCID_82545EM:
 					NetDriverInclude("82545EM");
+					found = TRUE;
 					break;
 			}
 			break;
+	}
 
-	} 
+	if (!found)
+		throw('NET');
 }
 
 NetDriverInit;

@@ -385,7 +385,7 @@ body {background-color:#000000;}
 <a name="l358"></a>        {
 <a name="l359"></a>            tmpi-&gt;ic_code += </span><span class=cF3>IC_BR_EQU_EQU2</span><span class=cF0>-</span><span class=cF3>IC_BR_EQU_EQU</span><span class=cF0>;
 <a name="l360"></a>            tmpi-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0>;
-<a name="l361"></a>            tmpii = tmpi-&gt;next; </span><span class=cF2>//IC_PUSH_CMP inst</span><span class=cF0>
+<a name="l361"></a>            tmpii = tmpi-&gt;next; </span><span class=cF2>//IC_PUSH_CMP instruction</span><span class=cF0>
 <a name="l362"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpii-&gt;ic_code != </span><span class=cF3>IC_PUSH_CMP</span><span class=cF0>)
 <a name="l363"></a>                tmpii = tmpii-&gt;next;
 <a name="l364"></a>            tmpii-&gt;t.arg1_tree = tmpi;
@@ -530,7 +530,7 @@ body {background-color:#000000;}
 <a name="l503"></a>        {
 <a name="l504"></a>            tmpi-&gt;ic_code += </span><span class=cF3>IC_BR_EQU_EQU2</span><span class=cF0>-</span><span class=cF3>IC_BR_EQU_EQU</span><span class=cF0>;
 <a name="l505"></a>            tmpi-&gt;ic_flags &amp;= ~</span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0>;
-<a name="l506"></a>            tmpii = tmpi-&gt;next; </span><span class=cF2>//IC_PUSH_CMP inst</span><span class=cF0>
+<a name="l506"></a>            tmpii = tmpi-&gt;next; </span><span class=cF2>//IC_PUSH_CMP instruction</span><span class=cF0>
 <a name="l507"></a>            </span><span class=cF1>while</span><span class=cF0> (tmpii-&gt;ic_code != </span><span class=cF3>IC_PUSH_CMP</span><span class=cF0>)
 <a name="l508"></a>                tmpii = tmpii-&gt;next;
 <a name="l509"></a>            tmpii-&gt;t.arg1_tree = tmpi;

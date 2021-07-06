@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/05/21 22:24:03----$IV,0$
+* $LK,"R",A="MN:R"$("inst", "instruction");
+* Updated $LK+PU,"line counts",A="FF:::/System/Define.CC,DD_ZEALOS_LOC"$.
 
 $IV,1$----07/05/21 14:58:59----$IV,0$
 * Raised version number to 0.06.

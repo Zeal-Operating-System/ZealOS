@@ -1,6 +1,6 @@
 /*
 The moral of this story is simple
-inst level optimizations
+instruction level optimizations
 don't matter much on a modern Intel CPU
 because they convert complex insts
 to a stream of RISC insts.

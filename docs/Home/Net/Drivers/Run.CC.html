@@ -25,8 +25,8 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF2>// Must be in same directory as driver files.</span><span class=cF0>
-<a name="l2"></a></span><span class=cF2>// (Uses __DIR__)</span><span class=cF0>
+<a name="l1"></a><span class=cF2>// Must be in same directory as driver files. (Uses __DIR__)</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>// Throws if stack has no driver for the PC's hardware.</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a>#</span><span class=cF1>define</span><span class=cF0> PCIV_PCNET      </span><span class=cFE>0x1022</span><span class=cF0>
 <a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> PCID_PCNET      </span><span class=cFE>0x2000</span><span class=cF0>
@@ -45,30 +45,35 @@ body {background-color:#000000;}
 <a name="l18"></a></span><span class=cF1>U0</span><span class=cF0> NetDriverInit()
 <a name="l19"></a>{
 <a name="l20"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0> *net_driver_pci = </span><span class=cF5>PCIDevFind</span><span class=cF0>(</span><span class=cF3>PCIC_NETWORK</span><span class=cF0>);
-<a name="l21"></a>
-<a name="l22"></a>    </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;vendor_id)
-<a name="l23"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l24"></a>        </span><span class=cF1>case</span><span class=cF0> PCIV_PCNET:
-<a name="l25"></a>            </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;device_id)
-<a name="l26"></a>            {
-<a name="l27"></a>                </span><span class=cF1>case</span><span class=cF0> PCID_PCNET:
-<a name="l28"></a>                    NetDriverInclude(</span><span class=cF6>&quot;PCNet&quot;</span><span class=cF0>);
-<a name="l29"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l30"></a>            }
-<a name="l31"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l32"></a>
-<a name="l33"></a>        </span><span class=cF1>case</span><span class=cF0> PCIV_82545EM:
-<a name="l34"></a>            </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;device_id)
-<a name="l35"></a>            {
-<a name="l36"></a>                </span><span class=cF1>case</span><span class=cF0> PCID_82545EM:
-<a name="l37"></a>                    NetDriverInclude(</span><span class=cF6>&quot;82545EM&quot;</span><span class=cF0>);
-<a name="l38"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l39"></a>            }
-<a name="l40"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l41"></a>
-<a name="l42"></a>    </span><span class=cF7>}</span><span class=cF0> 
-<a name="l43"></a>}
-<a name="l44"></a>
-<a name="l45"></a>NetDriverInit;
+<a name="l21"></a>    </span><span class=cF1>Bool</span><span class=cF0>     found = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l22"></a>
+<a name="l23"></a>    </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;vendor_id)
+<a name="l24"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l25"></a>        </span><span class=cF1>case</span><span class=cF0> PCIV_PCNET:
+<a name="l26"></a>            </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;device_id)
+<a name="l27"></a>            {
+<a name="l28"></a>                </span><span class=cF1>case</span><span class=cF0> PCID_PCNET:
+<a name="l29"></a>                    NetDriverInclude(</span><span class=cF6>&quot;PCNet&quot;</span><span class=cF0>);
+<a name="l30"></a>                    found = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l31"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l32"></a>            }
+<a name="l33"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l34"></a>
+<a name="l35"></a>        </span><span class=cF1>case</span><span class=cF0> PCIV_82545EM:
+<a name="l36"></a>            </span><span class=cF1>switch</span><span class=cF0> (net_driver_pci-&gt;device_id)
+<a name="l37"></a>            {
+<a name="l38"></a>                </span><span class=cF1>case</span><span class=cF0> PCID_82545EM:
+<a name="l39"></a>                    NetDriverInclude(</span><span class=cF6>&quot;82545EM&quot;</span><span class=cF0>);
+<a name="l40"></a>                    found = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l41"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l42"></a>            }
+<a name="l43"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l44"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l45"></a>
+<a name="l46"></a>    </span><span class=cF1>if</span><span class=cF0> (!found)
+<a name="l47"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'NET'</span><span class=cF0>);
+<a name="l48"></a>}
+<a name="l49"></a>
+<a name="l50"></a>NetDriverInit;
 </span></pre></body>
 </html>

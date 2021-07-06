@@ -1,5 +1,5 @@
 /*lock{} is a compiler stmt
-which places asm LOCK inst
+which places asm LOCK instruction
 prefixes on code.  Only use it on
 read-modify-write statements.
 It will generate invalid insts

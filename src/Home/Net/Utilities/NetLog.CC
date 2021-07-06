@@ -18,12 +18,15 @@ U0 NetLogInit()
 	net_log_task->border_attr	= DKGRAY << 4 + LTGRAY;
 	net_log_task->text_attr		= WHITE  << 4 + LTGRAY;
 
+/*
 	if (Fs == sys_task)
 		WinFocus(sys_task->next_task);
 	else
-		WinFocus;
+		WinFocus;*/
 
-	WinTileHorz;
+	WinHorz(TEXT_COLS / 3, 2 * TEXT_COLS / 3, net_log_task);
+	WinVert(2 * TEXT_ROWS / 3, 5 * TEXT_ROWS / 6, net_log_task);
+	WinFocus(net_log_task);
 }
 
 U0 NetLog(U8 *format, ...)

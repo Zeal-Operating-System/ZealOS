@@ -11,7 +11,7 @@ $ID,-2$
 $TR-C,"Mini Compiler"$
 $ID,2$For this mini compiler, some things you should know about 64-bit asm:
 
-* Putting a 0x48, known as the REX byte, in front of an inst makes it 64-bit size.
+* Putting a 0x48, known as the REX byte, in front of an instruction makes it 64-bit size.
 
 * "PUSH EAX", "POP EAX" and "XOR EAX,EAX" will behave as 64-bit even without REX because the stack is always 64 bit and because the XOR clears the upper 32-bits.
 

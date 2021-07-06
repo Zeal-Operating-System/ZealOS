@@ -284,7 +284,7 @@ U0 UAsmHashLoad()
 }
 
 U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FALSE)
-{//Unassembles one inst
+{//Unassembles one instruction
 	I64			 i, disp, imm, opsize, opadd, arg1, arg2, reloced_arg1, reloced_arg2,
 				 arg1_size = 0, arg2_size = 0, reloced_arg1_size, reloced_arg2_size,
 				 ModrM = -1, SIB = -1, scale, r1, r2, Mod = -1, RM1 = -1, RM2 = -1, REX = -1, REX_r = 0, REX_x = 0, REX_b = 0;

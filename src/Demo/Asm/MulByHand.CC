@@ -1,5 +1,5 @@
 /*When Terry Davis was a kid with a Commodore 64,
-the 6502 chip had no multiply inst
+the 6502 chip had no multiply instruction
 and this is how he had to do it, except,
 he used more regs in this example.
 */

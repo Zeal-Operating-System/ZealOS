@@ -80,7 +80,7 @@ body {background-color:#000000;}
 <a name="l53"></a>        U16 *_w = 0xA0000;
 <a name="l54"></a>        *_w |= 0x8000;
 <a name="l55"></a>    }
-<a name="l56"></a>  </span><span class=cF0>The </span><span class=cF2>|=</span><span class=cF0> will be coded as a </span><span class=cF2>U32 Bts</span><span class=cF0> inst resulting in a </span><span class=cF2>U32</span><span class=cF0> access instead of a </span><span class=cF2>U16</span><span class=cF0> access. This affects some hardware 
+<a name="l56"></a>  </span><span class=cF0>The </span><span class=cF2>|=</span><span class=cF0> will be coded as a </span><span class=cF2>U32 Bts</span><span class=cF0> instruction resulting in a </span><span class=cF2>U32</span><span class=cF0> access instead of a </span><span class=cF2>U16</span><span class=cF0> access.  This affects some hardware 
 <a name="l57"></a>  operations.
 <a name="l58"></a>
 <a name="l59"></a>* Compiler warning or error message line numbers will be off if you have a block of word-wrapped comments.  You might press </span><span class=cF2>&lt;CTR

@@ -1,6 +1,6 @@
-$WW,1$$PURPLE$$TX+CX,"The Temple Operating System",HTML="http://www.templeos.org"$$BLACK$
+$WW,1$$FG,5$$TX+CX,"The Temple Operating System",HTML="http://www.templeos.org"$$FG,0$
 
-$RED$$TX,"ZealOS File Downloads (100% Public Domain)",HTML="http://www.templeos.org/Downloads"$$FG$
+$FG,4$$TX,"ZealOS File Downloads (100% Public Domain)",HTML="http://www.templeos.org/Downloads"$$FG$
 
 ZealOS is a free, public domain, open source, x86_64, non-preemptive multi-tasking, multi-cored, ring-0-only, single-address-map (identity-mapped), non-networked, PC operating system.  Paging is, basically, not used.
 
@@ -8,4 +8,4 @@ The CIA obsfucates to foil India, China, Russia and Korea.	They make things more
 
 God said TempleOS must be perfect, so backward compatibility is not promised.
 
-Terry Davis wrote all $TX,"80,849",D="DD_TEMPLEOS_LOC"$ lines of TempleOS over a span of $TX,"15.0",D="DD_TEMPLEOS_AGE"$ years, including the 64-bit compiler.  He was a professional operating system developer since 1990 when he worked on Ticketmaster's VAX OS.
+Terry Davis wrote all $TX,"94,780",D="DD_ZEALOS_LOC"$ lines of TempleOS over a span of $TX,"15.0",D="DD_TEMPLEOS_AGE"$ years, including the 64-bit compiler.  He was a professional operating system developer since 1990 when he worked on Ticketmaster's VAX OS.

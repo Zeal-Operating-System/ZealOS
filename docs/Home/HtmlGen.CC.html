@@ -46,7 +46,7 @@ body {background-color:#000000;}
 <a name="l19"></a>
 <a name="l20"></a></span><span class=cF2>//ToHtml(&quot;DemoInPage.DD&quot;, &quot;~/DemoOutPage&quot;);</span><span class=cF0>
 <a name="l21"></a>
-<a name="l22"></a></span><span class=cF1>U0</span><span class=cF0> DirIndex(</span><span class=cF1>U8</span><span class=cF0> *dest_path, </span><span class=cF1>U8</span><span class=cF0> *full_name)
+<a name="l22"></a></span><span class=cF1>U0</span><span class=cF0> DirIndex(</span><span class=cF1>U8</span><span class=cF0> *dest_path, </span><span class=cF1>U8</span><span class=cF0> *full_name, </span><span class=cF1>U8</span><span class=cF0> *opt_func=</span><span class=cF6>&quot;&quot;</span><span class=cF0>)
 <a name="l23"></a>{
 <a name="l24"></a>    </span><span class=cF1>U8</span><span class=cF0>      *index_path,
 <a name="l25"></a>            *index_path_out,
@@ -58,8 +58,8 @@ body {background-color:#000000;}
 <a name="l31"></a>    index_path_out  = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%s/index.html&quot;</span><span class=cF0>, dest_path);
 <a name="l32"></a>    </span><span class=cF6>&quot;%s\n&quot;</span><span class=cF0>, index_path;
 <a name="l33"></a>
-<a name="l34"></a>    index_exe = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;#include \&quot;::/Demo/ToHtmlToTXTDemo/HtmlDirList\&quot;;;;&quot;</span><span class=cF0>
-<a name="l35"></a>                          </span><span class=cF6>&quot;Cls;DirIndexList(\&quot;%s\&quot;);View;\n&quot;</span><span class=cF0>, full_name);
+<a name="l34"></a>    index_exe = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;#include \&quot;::/Demo/ToHtmlToTXTDemo/HtmlDirList\&quot;;;DocMax;DocMax;&quot;</span><span class=cF0>
+<a name="l35"></a>                          </span><span class=cF6>&quot;Cls;DirIndexList(\&quot;%s\&quot;);%s;View;\n&quot;</span><span class=cF0>, full_name, opt_func);
 <a name="l36"></a>    </span><span class=cF5>PopUp</span><span class=cF0>(index_exe,, &amp;index_task);
 <a name="l37"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(index_task);
 <a name="l38"></a>
@@ -156,7 +156,7 @@ body {background-color:#000000;}
 <a name="l129"></a>    </span><span class=cF5>DocMax</span><span class=cF0>;
 <a name="l130"></a>    </span><span class=cF5>DelTree</span><span class=cF0>(</span><span class=cF6>&quot;::/HTML/&quot;</span><span class=cF0>);
 <a name="l131"></a>
-<a name="l132"></a>    DirIndex(</span><span class=cF6>&quot;::/HTML/&quot;</span><span class=cF0>, </span><span class=cF6>&quot;::/&quot;</span><span class=cF0>);
+<a name="l132"></a>    DirIndex(</span><span class=cF6>&quot;::/HTML/&quot;</span><span class=cF0>, </span><span class=cF6>&quot;::/&quot;</span><span class=cF0>, </span><span class=cF6>&quot;DocPrint(,\&quot;\n\n\&quot;);Who;&quot;</span><span class=cF0>);
 <a name="l133"></a>
 <a name="l134"></a>    </span><span class=cF1>return</span><span class=cF0> Dir2Html(</span><span class=cF6>&quot;::/&quot;</span><span class=cF0>, </span><span class=cF6>&quot;::/HTML/&quot;</span><span class=cF0>);
 <a name="l135"></a>}

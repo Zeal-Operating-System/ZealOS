@@ -358,7 +358,7 @@ CIntermediateCode *OptBrZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 		{
 			tmpi->ic_code += IC_BR_EQU_EQU2-IC_BR_EQU_EQU;
 			tmpi->ic_flags &= ~ICF_PUSH_CMP;
-			tmpii = tmpi->next; //IC_PUSH_CMP inst
+			tmpii = tmpi->next; //IC_PUSH_CMP instruction
 			while (tmpii->ic_code != IC_PUSH_CMP)
 				tmpii = tmpii->next;
 			tmpii->t.arg1_tree = tmpi;
@@ -503,7 +503,7 @@ CIntermediateCode *OptBrNotZero(CCompCtrl *cc, CIntermediateCode *tmpi)
 		{
 			tmpi->ic_code += IC_BR_EQU_EQU2-IC_BR_EQU_EQU;
 			tmpi->ic_flags &= ~ICF_PUSH_CMP;
-			tmpii = tmpi->next; //IC_PUSH_CMP inst
+			tmpii = tmpi->next; //IC_PUSH_CMP instruction
 			while (tmpii->ic_code != IC_PUSH_CMP)
 				tmpii = tmpii->next;
 			tmpii->t.arg1_tree = tmpi;

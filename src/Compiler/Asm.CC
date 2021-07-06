@@ -1010,11 +1010,11 @@ Bool ParseAsmInst(CCompCtrl *cc, CHashOpcode *tmpo, I64 argcount)
 			if (!AsmStoreNum(cc, &best.imm, 1, U8_avail))
 				return FALSE;
 		}
-		if (tmpins->flags & IEF_ENDING_ZERO) //ENTER inst
+		if (tmpins->flags & IEF_ENDING_ZERO) //ENTER instruction
 			AOTStoreCodeU8(cc, 0);
 		return TRUE;
 	}
-	LexExcept(cc, "Invalid inst at ");
+	LexExcept(cc, "Invalid instruction at ");
 }
 
 U0 ParseAsmDefine(CCompCtrl *cc, I64 U8_count)

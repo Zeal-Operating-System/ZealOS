@@ -111,7 +111,7 @@ body {background-color:#000000;}
 <a name="l84"></a>{
 <a name="l85"></a>    </span><span class=cF9>I64</span><span class=cF0>      drv_let;
 <a name="l86"></a>    </span><span class=cF1>U8</span><span class=cF0>      *st, *port_st;
-<a name="l87"></a>    </span><span class=cF9>I64</span><span class=cF0>      ch, res_num;
+<a name="l87"></a>    </span><span class=cF9>I64</span><span class=cF0>      res_num;
 <a name="l88"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task;
 <a name="l89"></a>
 <a name="l90"></a>    task = </span><span class=cF5>User</span><span class=cF0>;
@@ -157,304 +157,307 @@ body {background-color:#000000;}
 <a name="l130"></a>
 <a name="l131"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
 <a name="l132"></a>
-<a name="l133"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>InstallDrive(drv_let);</span><span class=cF0>
-<a name="l134"></a>    OSMerge(drv_let); </span><span class=cF2>// src_drv needed?</span><span class=cF0>
-<a name="l135"></a>
-<a name="l136"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n&quot;</span><span class=cF0>, drv_let, drv_let, port_st);
-<a name="l137"></a>    </span><span class=cF5>VideoRep</span><span class=cF0>;
-<a name="l138"></a>    res_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter desired list num ($PURPLE$&lt;ENTER&gt;$FG$ for max res): &quot;</span><span class=cF0>,, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l139"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;%d\n\n\n&quot;</span><span class=cF0>, res_num); </span><span class=cF2>//skip through Disk Cache, Options</span><span class=cF0>
-<a name="l140"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;$RED$Install Master Boot loader?$FG$&quot;;</span><span class=cF0>
-<a name="l141"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>if (YorN)</span><span class=cF0>
-<a name="l142"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>{</span><span class=cF0>
-<a name="l143"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>'\n';</span><span class=cF0>
-<a name="l144"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>BootMHDIns(drv_let);</span><span class=cF0>
-<a name="l145"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>}</span><span class=cF0>
-<a name="l146"></a>
-<a name="l147"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
-<a name="l148"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
-<a name="l149"></a>}
-<a name="l150"></a>
-<a name="l151"></a></span><span class=cF1>U0</span><span class=cF0> InstallDrive(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l152"></a>{
-<a name="l153"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
-<a name="l154"></a>
-<a name="l155"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>DriveCheck</span><span class=cF7>(</span><span class=cFB>blkdev</span><span class=cF0>.let_to_drive[drv_let - </span><span class=cF6>'A'</span><span class=cF0>], </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
-<a name="l156"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
-<a name="l157"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0>);
-<a name="l158"></a>
-<a name="l159"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;CopyTree(\&quot;::/\&quot;,\&quot;%C:/\&quot;);&quot;</span><span class=cF0>,         drv_let);
-<a name="l160"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;DirMake(\&quot;%C:/Tmp\&quot;);&quot;</span><span class=cF0>,               drv_let);
-<a name="l161"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;DirMake(\&quot;%C:/Tmp/ScreenShots\&quot;);&quot;</span><span class=cF0>,   drv_let);
-<a name="l162"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;DirMake(\&quot;%C:/Home\&quot;);&quot;</span><span class=cF0>,              drv_let);
-<a name="l163"></a>
-<a name="l164"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%C:/Home/DoDistro.CC&quot;</span><span class=cF0>, drv_let);
-<a name="l165"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0>)
-<a name="l166"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/DoDistro.CC&quot;</span><span class=cF0>, st);
-<a name="l167"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l168"></a>
-<a name="l169"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%C:/Home/MakeHome.CC&quot;</span><span class=cF0>, drv_let);
-<a name="l170"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0>)
-<a name="l171"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;::/MakeHome.CC&quot;</span><span class=cF0>, st);
-<a name="l172"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l173"></a>}
-<a name="l174"></a>
-<a name="l175"></a></span><span class=cF1>Bool</span><span class=cF0> VMPartDisk(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> ata_port)
-<a name="l176"></a>{
-<a name="l177"></a>    </span><span class=cF1>if</span><span class=cF0> (ata_port &gt; -</span><span class=cFE>1</span><span class=cF0>)
-<a name="l178"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l179"></a>        </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;DiskPart(,0.5,0.5);\nC\n%d\nY&quot;</span><span class=cF0>, ata_port); </span><span class=cF2>// DOUBLE CHECK INFILE</span><span class=cF0>
-<a name="l180"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l181"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l182"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l183"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l184"></a>}
-<a name="l185"></a>
-<a name="l186"></a></span><span class=cF1>U0</span><span class=cF0> VMInstallDrive(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF1>U8</span><span class=cF0> drv_let, </span><span class=cF9>I64</span><span class=cF0> ata_port, </span><span class=cF9>I64</span><span class=cF0> atapi_port)
-<a name="l187"></a>{</span><span class=cF2>// DOUBLE CHECK INFILE</span><span class=cF0>
-<a name="l188"></a>    InstallDrive(drv_let);
-<a name="l189"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;BootHDIns('%C');\n\nB\n0x20000\n&quot;</span><span class=cF0>, drv_let);
-<a name="l190"></a>    </span><span class=cF1>if</span><span class=cF0> (ata_port &gt; -</span><span class=cFE>1</span><span class=cF0>)
-<a name="l191"></a>        </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;C\n%d\n&quot;</span><span class=cF0>, ata_port);
-<a name="l192"></a>    </span><span class=cF1>if</span><span class=cF0> (atapi_port &gt; -</span><span class=cFE>1</span><span class=cF0>)
-<a name="l193"></a>        </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;T%d\n&quot;</span><span class=cF0>, atapi_port);
-<a name="l194"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;\n1024\n768\n\n\n&quot;</span><span class=cF0>); </span><span class=cF2>//Exit Drives,  set Screen Resolution, skip Disk Cache and Options</span><span class=cF0>
-<a name="l195"></a>}
-<a name="l196"></a>
-<a name="l197"></a></span><span class=cF1>U0</span><span class=cF0> VMInstallWiz()
-<a name="l198"></a>{
-<a name="l199"></a>    </span><span class=cF9>CTask</span><span class=cF0>       *task;
-<a name="l200"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, atapi_port = -</span><span class=cFE>1</span><span class=cF0>, ata_port = -</span><span class=cFE>1</span><span class=cF0>;
-<a name="l201"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l202"></a>
-<a name="l203"></a>    task = </span><span class=cF5>User</span><span class=cF0>;
-<a name="l204"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task);
-<a name="l205"></a>    task-&gt;border_src    = </span><span class=cF3>BDS_CONST</span><span class=cF0>;
-<a name="l206"></a>    task-&gt;border_attr   = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>) &amp; </span><span class=cFE>15</span><span class=cF0>;
-<a name="l207"></a>    task-&gt;text_attr     = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
-<a name="l208"></a>    task-&gt;win_inhibit   = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0>;
-<a name="l209"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_left, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_right, task);
-<a name="l210"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top,  </span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, task);
-<a name="l211"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_bottom + </span><span class=cFE>3</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
-<a name="l212"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l213"></a>
-<a name="l214"></a>
-<a name="l215"></a>    </span><span class=cF2>////////////////////////////////////</span><span class=cF0>
-<a name="l216"></a>    </span><span class=cF5>SATARep</span><span class=cF0>;
-<a name="l217"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l218"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l219"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l220"></a>        {
-<a name="l221"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l222"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l223"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l224"></a>                ata_port = i;
-<a name="l225"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l226"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l227"></a>        }
-<a name="l228"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l229"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l230"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l231"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l232"></a>        {
-<a name="l233"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l234"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l235"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l236"></a>                atapi_port = i;
-<a name="l237"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l238"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l239"></a>        }
-<a name="l240"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l241"></a>
-<a name="l242"></a>    </span><span class=cF1>if</span><span class=cF0> (VMPartDisk</span><span class=cF7>(</span><span class=cF0>task, ata_port</span><span class=cF7>)</span><span class=cF0>)
-<a name="l243"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l244"></a>        VMInstallDrive(task, </span><span class=cF6>'C'</span><span class=cF0>, ata_port, atapi_port);
-<a name="l245"></a>        VMInstallDrive(task, </span><span class=cF6>'D'</span><span class=cF0>, ata_port, atapi_port);
-<a name="l246"></a>        </span><span class=cF5>BootMHDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
-<a name="l247"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l248"></a>
-<a name="l249"></a>    </span><span class=cF2>////////////////////////////////////</span><span class=cF0>
-<a name="l250"></a>
-<a name="l251"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
-<a name="l252"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
-<a name="l253"></a>}
-<a name="l254"></a>
-<a name="l255"></a></span><span class=cF1>U0</span><span class=cF0> RegularInstallWiz()
-<a name="l256"></a>{
-<a name="l257"></a>    </span><span class=cF9>I64</span><span class=cF0>      drv_let;
-<a name="l258"></a>    </span><span class=cF1>U8</span><span class=cF0>      *st, *port_st;
-<a name="l259"></a>    </span><span class=cF9>I64</span><span class=cF0>      ch, res_num;
-<a name="l260"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task;
-<a name="l261"></a>
-<a name="l262"></a>    task = </span><span class=cF5>User</span><span class=cF0>;
-<a name="l263"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task);
-<a name="l264"></a>    task-&gt;border_src    = </span><span class=cF3>BDS_CONST</span><span class=cF0>;
-<a name="l265"></a>    task-&gt;border_attr   = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>) &amp; </span><span class=cFE>15</span><span class=cF0>;
-<a name="l266"></a>    task-&gt;text_attr     = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
-<a name="l267"></a>    task-&gt;win_inhibit   = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0>;
-<a name="l268"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_left, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_right, task);
-<a name="l269"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top,  </span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, task);
-<a name="l270"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_bottom + </span><span class=cFE>3</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
-<a name="l271"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l272"></a>
-<a name="l273"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;Mount;\nC\n&quot;</span><span class=cF0>);
-<a name="l274"></a>
-<a name="l275"></a>    </span><span class=cF6>&quot;\nSelect the port of the ATA drive to install on.\n&quot;</span><span class=cF0>;
-<a name="l276"></a>
-<a name="l277"></a>    </span><span class=cF6>&quot;Hard Drive Port: &quot;</span><span class=cF0>;
-<a name="l278"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l279"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l280"></a>        port_st = </span><span class=cF5>StrGet</span><span class=cF0>;
-<a name="l281"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= </span><span class=cF5>Str2I64</span><span class=cF0>(port_st) &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
-<a name="l282"></a>            </span><span class=cF7>(</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>port_st</span><span class=cF7>)</span><span class=cF0>])-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF7>)</span><span class=cF0>)
-<a name="l283"></a>        {
-<a name="l284"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l285"></a>        }
-<a name="l286"></a>        </span><span class=cF5>Free</span><span class=cF0>(port_st);
-<a name="l287"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l288"></a>
-<a name="l289"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;%s\n\n&quot;</span><span class=cF0>, port_st);
-<a name="l290"></a>
-<a name="l291"></a>    </span><span class=cF5>DriveRep</span><span class=cF0>;
-<a name="l292"></a>    </span><span class=cF1>do</span><span class=cF0>
-<a name="l293"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l294"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;\nDestination Partition Letter: &quot;</span><span class=cF0>);
-<a name="l295"></a>        </span><span class=cF1>if</span><span class=cF0> (*st)
-<a name="l296"></a>            drv_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(*st);
-<a name="l297"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l298"></a>            drv_let = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l299"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l300"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l301"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0> &lt;= drv_let &lt;= </span><span class=cF6>'Z'</span><span class=cF7>)</span><span class=cF0>);
-<a name="l302"></a>
-<a name="l303"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l304"></a>
-<a name="l305"></a>    </span><span class=cF6>&quot;$RED$Format %C Partition?$FG$\n&quot;</span><span class=cF0>, drv_let;
-<a name="l306"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l307"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l308"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l309"></a>        </span><span class=cF1>do</span><span class=cF0>
-<a name="l310"></a>        {
-<a name="l311"></a>            </span><span class=cF6>&quot;$PURPLE$1$FG$) Use FAT32\n&quot;</span><span class=cF0>
-<a name="l312"></a>            </span><span class=cF6>&quot;$PURPLE$2$FG$) Use RedSea\n&quot;</span><span class=cF0>
-<a name="l313"></a>            </span><span class=cF6>&quot;\nFile System Type: &quot;</span><span class=cF0>;
-<a name="l314"></a>            ch = </span><span class=cF5>CharGet</span><span class=cF0>;
-<a name="l315"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l316"></a>        }
-<a name="l317"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'1'</span><span class=cF0> &lt;= ch &lt;= </span><span class=cF6>'2'</span><span class=cF7>)</span><span class=cF0>);
-<a name="l318"></a>
-<a name="l319"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'1'</span><span class=cF0>)
-<a name="l320"></a>            </span><span class=cF5>Format</span><span class=cF0>(drv_let,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_FAT32</span><span class=cF0>);
-<a name="l321"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l322"></a>            </span><span class=cF5>Format</span><span class=cF0>(drv_let,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
-<a name="l323"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l324"></a>    InstallDrive(drv_let);
-<a name="l325"></a>
-<a name="l326"></a>
-<a name="l327"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n&quot;</span><span class=cF0>, drv_let, port_st);
-<a name="l328"></a>    </span><span class=cF5>VideoRep</span><span class=cF0>;
-<a name="l329"></a>    res_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter desired list num ($PURPLE$&lt;ENTER&gt;$FG$ for max res): &quot;</span><span class=cF0>,, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l330"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;%d\n\n\n&quot;</span><span class=cF0>, res_num); </span><span class=cF2>//skip through Disk Cache, Options</span><span class=cF0>
-<a name="l331"></a>    </span><span class=cF6>&quot;$RED$Install Master Boot loader?$FG$&quot;</span><span class=cF0>;
-<a name="l332"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l333"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l334"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l335"></a>        </span><span class=cF5>BootMHDIns</span><span class=cF0>(drv_let);
-<a name="l336"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l337"></a>
-<a name="l338"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
-<a name="l339"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
-<a name="l340"></a>}
-<a name="l341"></a>
-<a name="l342"></a></span><span class=cF1>U0</span><span class=cF0> DoInstructions()
-<a name="l343"></a>{
-<a name="l344"></a>    </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF5>User</span><span class=cF0>;
-<a name="l345"></a>
-<a name="l346"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
-<a name="l347"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
-<a name="l348"></a>    </span><span class=cF5>WinTileVert</span><span class=cF0>;
-<a name="l349"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;Ed(\&quot;::/Doc/Install.DD\&quot;);\n&quot;</span><span class=cF0>);
-<a name="l350"></a>}
-<a name="l351"></a>
-<a name="l352"></a></span><span class=cF1>Bool</span><span class=cF0> DoInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot)
-<a name="l353"></a>{
-<a name="l354"></a>    </span><span class=cF9>I64</span><span class=cF0>                  res = </span><span class=cF3>FALSE</span><span class=cF0>, vm_install = </span><span class=cF3>TRUE</span><span class=cF0>, ch;
-<a name="l355"></a>    </span><span class=cF9>CSMBIOSSystemInfo</span><span class=cF0>   *sys_info = </span><span class=cF5>SMBIOSStructGet</span><span class=cF0>(</span><span class=cF3>SMBIOSt_SYSTEM</span><span class=cF0>);
-<a name="l356"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *company = </span><span class=cF5>SMBIOSStr</span><span class=cF0>(sys_info, sys_info-&gt;manufacturer);
-<a name="l357"></a>
-<a name="l358"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>company, </span><span class=cF6>&quot;VMware, Inc.&quot;</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>company, </span><span class=cF6>&quot;innotek GmbH&quot;</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>company, </span><span class=cF6>&quot;QEMU&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l359"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l360"></a>        </span><span class=cF6>&quot;\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox or a similar virtual machine? &quot;</span><span class=cF0>;
-<a name="l361"></a>        vm_install = </span><span class=cF5>YorN</span><span class=cF0>;
-<a name="l362"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l363"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
-<a name="l364"></a>    </span><span class=cF1>if</span><span class=cF0> (vm_install)
-<a name="l365"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l366"></a>        </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
-<a name="l367"></a>        </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
-<a name="l368"></a>        </span><span class=cF1>do</span><span class=cF0>
-<a name="l369"></a>            ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
-<a name="l370"></a>        </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
-<a name="l371"></a>
-<a name="l372"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'U'</span><span class=cF0>)
-<a name="l373"></a>        {
-<a name="l374"></a>            OSUpgrade;
-<a name="l375"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l376"></a>        }
-<a name="l377"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l378"></a>            VMInstallWiz();
-<a name="l379"></a>
-<a name="l380"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l381"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l382"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l383"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l384"></a>        </span><span class=cF6>&quot;\n\nThis wizard works if you have a partition ready. You can partition the drive or BootHDIns() &quot;</span><span class=cF0>
-<a name="l385"></a>                </span><span class=cF6>&quot;with more options if you do it by hand, not using this wizard.\n\n&quot;</span><span class=cF0>
-<a name="l386"></a>                </span><span class=cF6>&quot;Continue Install Wizard &quot;</span><span class=cF0>;
-<a name="l387"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l388"></a>        {
-<a name="l389"></a>            </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
-<a name="l390"></a>            </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
-<a name="l391"></a>            </span><span class=cF1>do</span><span class=cF0>
-<a name="l392"></a>                ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
-<a name="l393"></a>            </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
-<a name="l394"></a>
-<a name="l395"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'I'</span><span class=cF0>)
-<a name="l396"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l397"></a>                RegularInstallWiz();
-<a name="l398"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l399"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l400"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l401"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l402"></a>                OSUpgrade;
-<a name="l403"></a>                prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l404"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l405"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l406"></a>        }
-<a name="l407"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l408"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l409"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l410"></a>    </span><span class=cF1>if</span><span class=cF0> (prompt_reboot)
-<a name="l411"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l412"></a>        </span><span class=cF6>&quot;Reboot Now &quot;</span><span class=cF0>;
-<a name="l413"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
-<a name="l414"></a>        {
-<a name="l415"></a>            </span><span class=cF5>DiscEject</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>);
-<a name="l416"></a>            </span><span class=cF5>Reboot</span><span class=cF0>;
-<a name="l417"></a>        };
-<a name="l418"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l419"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l420"></a>}
-<a name="l421"></a>
-<a name="l422"></a></span><span class=cF1>Bool</span><span class=cF0> OSInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l423"></a>{
-<a name="l424"></a>    DoInstructions;
-<a name="l425"></a>
-<a name="l426"></a>    </span><span class=cF1>return</span><span class=cF0> DoInstall(prompt_reboot);
-<a name="l427"></a>}
+<a name="l133"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;\nFILE1 is new changes.\n&quot;</span><span class=cF0>
+<a name="l134"></a>            </span><span class=cF6>&quot;$CYAN$FILE2$FG$ is from existing install.\n\n&quot;</span><span class=cF0>
+<a name="l135"></a>            </span><span class=cF6>&quot;You can hold $GREEN$SPACE$FG$ down to just merge everything.&quot;</span><span class=cF0>);
+<a name="l136"></a>    OSMerge(drv_let); </span><span class=cF2>// src_drv needed?</span><span class=cF0>
+<a name="l137"></a>
+<a name="l138"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;BootHDIns('%C');\n\nB\n0x20000\n%C\n%s\n\n&quot;</span><span class=cF0>, drv_let, drv_let, port_st);
+<a name="l139"></a>    </span><span class=cF5>VideoRep</span><span class=cF0>;
+<a name="l140"></a>    res_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter desired list num ($PURPLE$&lt;ENTER&gt;$FG$ for max res): &quot;</span><span class=cF0>,, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l141"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;%d\n\n\n&quot;</span><span class=cF0>, res_num); </span><span class=cF2>//skip through Disk Cache, Options</span><span class=cF0>
+<a name="l142"></a>
+<a name="l143"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;$RED$Install Master Boot loader?$FG$&quot;;</span><span class=cF0>
+<a name="l144"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>if (YorN)</span><span class=cF0>
+<a name="l145"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>{</span><span class=cF0>
+<a name="l146"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>'\n';</span><span class=cF0>
+<a name="l147"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>BootMHDIns(drv_let);</span><span class=cF0>
+<a name="l148"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>}</span><span class=cF0>
+<a name="l149"></a>
+<a name="l150"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l151"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
+<a name="l152"></a>}
+<a name="l153"></a>
+<a name="l154"></a></span><span class=cF1>U0</span><span class=cF0> InstallDrive(</span><span class=cF1>U8</span><span class=cF0> drv_let)
+<a name="l155"></a>{
+<a name="l156"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l157"></a>
+<a name="l158"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>DriveCheck</span><span class=cF7>(</span><span class=cFB>blkdev</span><span class=cF0>.let_to_drive[drv_let - </span><span class=cF6>'A'</span><span class=cF0>], </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
+<a name="l159"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>);
+<a name="l160"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0>);
+<a name="l161"></a>
+<a name="l162"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;CopyTree(\&quot;::/\&quot;,\&quot;%C:/\&quot;);&quot;</span><span class=cF0>,         drv_let);
+<a name="l163"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;DirMake(\&quot;%C:/Tmp\&quot;);&quot;</span><span class=cF0>,               drv_let);
+<a name="l164"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;DirMake(\&quot;%C:/Tmp/ScreenShots\&quot;);&quot;</span><span class=cF0>,   drv_let);
+<a name="l165"></a>    </span><span class=cF5>ExePrint</span><span class=cF0>(</span><span class=cF6>&quot;DirMake(\&quot;%C:/Home\&quot;);&quot;</span><span class=cF0>,              drv_let);
+<a name="l166"></a>
+<a name="l167"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%C:/Home/DoDistro.CC&quot;</span><span class=cF0>, drv_let);
+<a name="l168"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0>)
+<a name="l169"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;::/Misc/DoDistro.CC&quot;</span><span class=cF0>, st);
+<a name="l170"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l171"></a>
+<a name="l172"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;%C:/Home/MakeHome.CC&quot;</span><span class=cF0>, drv_let);
+<a name="l173"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>FileFind</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0>)
+<a name="l174"></a>        </span><span class=cF5>Copy</span><span class=cF0>(</span><span class=cF6>&quot;::/MakeHome.CC&quot;</span><span class=cF0>, st);
+<a name="l175"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l176"></a>}
+<a name="l177"></a>
+<a name="l178"></a></span><span class=cF1>Bool</span><span class=cF0> VMPartDisk(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> ata_port)
+<a name="l179"></a>{
+<a name="l180"></a>    </span><span class=cF1>if</span><span class=cF0> (ata_port &gt; -</span><span class=cFE>1</span><span class=cF0>)
+<a name="l181"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l182"></a>        </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;DiskPart(,0.5,0.5);\nC\n%d\nY&quot;</span><span class=cF0>, ata_port); </span><span class=cF2>// DOUBLE CHECK INFILE</span><span class=cF0>
+<a name="l183"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l184"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l185"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l186"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l187"></a>}
+<a name="l188"></a>
+<a name="l189"></a></span><span class=cF1>U0</span><span class=cF0> VMInstallDrive(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF1>U8</span><span class=cF0> drv_let, </span><span class=cF9>I64</span><span class=cF0> ata_port, </span><span class=cF9>I64</span><span class=cF0> atapi_port)
+<a name="l190"></a>{</span><span class=cF2>// DOUBLE CHECK INFILE</span><span class=cF0>
+<a name="l191"></a>    InstallDrive(drv_let);
+<a name="l192"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;BootHDIns('%C');\n\nB\n0x20000\n&quot;</span><span class=cF0>, drv_let);
+<a name="l193"></a>    </span><span class=cF1>if</span><span class=cF0> (ata_port &gt; -</span><span class=cFE>1</span><span class=cF0>)
+<a name="l194"></a>        </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;C\n%d\n&quot;</span><span class=cF0>, ata_port);
+<a name="l195"></a>    </span><span class=cF1>if</span><span class=cF0> (atapi_port &gt; -</span><span class=cFE>1</span><span class=cF0>)
+<a name="l196"></a>        </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;T%d\n&quot;</span><span class=cF0>, atapi_port);
+<a name="l197"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;\n1024\n768\n\n\n&quot;</span><span class=cF0>); </span><span class=cF2>//Exit Drives,  set Screen Resolution, skip Disk Cache and Options</span><span class=cF0>
+<a name="l198"></a>}
+<a name="l199"></a>
+<a name="l200"></a></span><span class=cF1>U0</span><span class=cF0> VMInstallWiz()
+<a name="l201"></a>{
+<a name="l202"></a>    </span><span class=cF9>CTask</span><span class=cF0>       *task;
+<a name="l203"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, atapi_port = -</span><span class=cFE>1</span><span class=cF0>, ata_port = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l204"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
+<a name="l205"></a>
+<a name="l206"></a>    task = </span><span class=cF5>User</span><span class=cF0>;
+<a name="l207"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task);
+<a name="l208"></a>    task-&gt;border_src    = </span><span class=cF3>BDS_CONST</span><span class=cF0>;
+<a name="l209"></a>    task-&gt;border_attr   = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>) &amp; </span><span class=cFE>15</span><span class=cF0>;
+<a name="l210"></a>    task-&gt;text_attr     = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l211"></a>    task-&gt;win_inhibit   = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0>;
+<a name="l212"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_left, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_right, task);
+<a name="l213"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top,  </span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, task);
+<a name="l214"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_bottom + </span><span class=cFE>3</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l215"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l216"></a>
+<a name="l217"></a>
+<a name="l218"></a>    </span><span class=cF2>////////////////////////////////////</span><span class=cF0>
+<a name="l219"></a>    </span><span class=cF5>SATARep</span><span class=cF0>;
+<a name="l220"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l221"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l222"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l223"></a>        {
+<a name="l224"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
+<a name="l225"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l226"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l227"></a>                ata_port = i;
+<a name="l228"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l229"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l230"></a>        }
+<a name="l231"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l232"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l233"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l234"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l235"></a>        {
+<a name="l236"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
+<a name="l237"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l238"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l239"></a>                atapi_port = i;
+<a name="l240"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l241"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l242"></a>        }
+<a name="l243"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l244"></a>
+<a name="l245"></a>    </span><span class=cF1>if</span><span class=cF0> (VMPartDisk</span><span class=cF7>(</span><span class=cF0>task, ata_port</span><span class=cF7>)</span><span class=cF0>)
+<a name="l246"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l247"></a>        VMInstallDrive(task, </span><span class=cF6>'C'</span><span class=cF0>, ata_port, atapi_port);
+<a name="l248"></a>        VMInstallDrive(task, </span><span class=cF6>'D'</span><span class=cF0>, ata_port, atapi_port);
+<a name="l249"></a>        </span><span class=cF5>BootMHDIns</span><span class=cF0>(</span><span class=cF6>'C'</span><span class=cF0>);
+<a name="l250"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l251"></a>
+<a name="l252"></a>    </span><span class=cF2>////////////////////////////////////</span><span class=cF0>
+<a name="l253"></a>
+<a name="l254"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l255"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
+<a name="l256"></a>}
+<a name="l257"></a>
+<a name="l258"></a></span><span class=cF1>U0</span><span class=cF0> RegularInstallWiz()
+<a name="l259"></a>{
+<a name="l260"></a>    </span><span class=cF9>I64</span><span class=cF0>      drv_let;
+<a name="l261"></a>    </span><span class=cF1>U8</span><span class=cF0>      *st, *port_st;
+<a name="l262"></a>    </span><span class=cF9>I64</span><span class=cF0>      ch, res_num;
+<a name="l263"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task;
+<a name="l264"></a>
+<a name="l265"></a>    task = </span><span class=cF5>User</span><span class=cF0>;
+<a name="l266"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task);
+<a name="l267"></a>    task-&gt;border_src    = </span><span class=cF3>BDS_CONST</span><span class=cF0>;
+<a name="l268"></a>    task-&gt;border_attr   = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF5>DriveTextAttrGet</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>) &amp; </span><span class=cFE>15</span><span class=cF0>;
+<a name="l269"></a>    task-&gt;text_attr     = </span><span class=cF3>LTGRAY</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + </span><span class=cF3>BLUE</span><span class=cF0>;
+<a name="l270"></a>    task-&gt;win_inhibit   = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0>;
+<a name="l271"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_left, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_right, task);
+<a name="l272"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top,  </span><span class=cF7>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;win_top + </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom</span><span class=cF7>)</span><span class=cF0> &gt;&gt; </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>, task);
+<a name="l273"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_bottom + </span><span class=cFE>3</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l274"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l275"></a>
+<a name="l276"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;Mount;\nC\n&quot;</span><span class=cF0>);
+<a name="l277"></a>
+<a name="l278"></a>    </span><span class=cF6>&quot;\nSelect the port of the ATA drive to install on.\n&quot;</span><span class=cF0>;
+<a name="l279"></a>
+<a name="l280"></a>    </span><span class=cF6>&quot;Hard Drive Port: &quot;</span><span class=cF0>;
+<a name="l281"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l282"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l283"></a>        port_st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l284"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= </span><span class=cF5>Str2I64</span><span class=cF0>(port_st) &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l285"></a>            </span><span class=cF7>(</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>port_st</span><span class=cF7>)</span><span class=cF0>])-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF7>)</span><span class=cF0>)
+<a name="l286"></a>        {
+<a name="l287"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l288"></a>        }
+<a name="l289"></a>        </span><span class=cF5>Free</span><span class=cF0>(port_st);
+<a name="l290"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l291"></a>
+<a name="l292"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;%s\n\n&quot;</span><span class=cF0>, port_st);
+<a name="l293"></a>
+<a name="l294"></a>    </span><span class=cF5>DriveRep</span><span class=cF0>;
+<a name="l295"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l296"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l297"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;\nDestination Partition Letter: &quot;</span><span class=cF0>);
+<a name="l298"></a>        </span><span class=cF1>if</span><span class=cF0> (*st)
+<a name="l299"></a>            drv_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(*st);
+<a name="l300"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l301"></a>            drv_let = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l302"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l303"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l304"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'A'</span><span class=cF0> &lt;= drv_let &lt;= </span><span class=cF6>'Z'</span><span class=cF7>)</span><span class=cF0>);
+<a name="l305"></a>
+<a name="l306"></a>    </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l307"></a>
+<a name="l308"></a>    </span><span class=cF6>&quot;$RED$Format %C Partition?$FG$\n&quot;</span><span class=cF0>, drv_let;
+<a name="l309"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l310"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l311"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l312"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l313"></a>        {
+<a name="l314"></a>            </span><span class=cF6>&quot;$PURPLE$1$FG$) Use FAT32\n&quot;</span><span class=cF0>
+<a name="l315"></a>            </span><span class=cF6>&quot;$PURPLE$2$FG$) Use RedSea\n&quot;</span><span class=cF0>
+<a name="l316"></a>            </span><span class=cF6>&quot;\nFile System Type: &quot;</span><span class=cF0>;
+<a name="l317"></a>            ch = </span><span class=cF5>CharGet</span><span class=cF0>;
+<a name="l318"></a>            </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l319"></a>        }
+<a name="l320"></a>        </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF6>'1'</span><span class=cF0> &lt;= ch &lt;= </span><span class=cF6>'2'</span><span class=cF7>)</span><span class=cF0>);
+<a name="l321"></a>
+<a name="l322"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'1'</span><span class=cF0>)
+<a name="l323"></a>            </span><span class=cF5>Format</span><span class=cF0>(drv_let,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_FAT32</span><span class=cF0>);
+<a name="l324"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l325"></a>            </span><span class=cF5>Format</span><span class=cF0>(drv_let,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FSt_REDSEA</span><span class=cF0>);
+<a name="l326"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l327"></a>    InstallDrive(drv_let);
+<a name="l328"></a>
+<a name="l329"></a>
+<a name="l330"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;BootHDIns('%C');\n\nB\n0x20000\nC\n%s\n\n&quot;</span><span class=cF0>, drv_let, port_st);
+<a name="l331"></a>    </span><span class=cF5>VideoRep</span><span class=cF0>;
+<a name="l332"></a>    res_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Enter desired list num ($PURPLE$&lt;ENTER&gt;$FG$ for max res): &quot;</span><span class=cF0>,, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l333"></a>    </span><span class=cF5>XTalkWait</span><span class=cF0>(task, </span><span class=cF6>&quot;%d\n\n\n&quot;</span><span class=cF0>, res_num); </span><span class=cF2>//skip through Disk Cache, Options</span><span class=cF0>
+<a name="l334"></a>    </span><span class=cF6>&quot;$RED$Install Master Boot loader?$FG$&quot;</span><span class=cF0>;
+<a name="l335"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l336"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l337"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l338"></a>        </span><span class=cF5>BootMHDIns</span><span class=cF0>(drv_let);
+<a name="l339"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l340"></a>
+<a name="l341"></a>    </span><span class=cF5>WinVert</span><span class=cF0>(task-&gt;win_top, </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_bottom);
+<a name="l342"></a>    </span><span class=cF5>Kill</span><span class=cF0>(task);
+<a name="l343"></a>}
+<a name="l344"></a>
+<a name="l345"></a></span><span class=cF1>U0</span><span class=cF0> DoInstructions()
+<a name="l346"></a>{
+<a name="l347"></a>    </span><span class=cF9>CTask</span><span class=cF0> *task = </span><span class=cF5>User</span><span class=cF0>;
+<a name="l348"></a>
+<a name="l349"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l350"></a>    </span><span class=cF5>WinToTop</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>);
+<a name="l351"></a>    </span><span class=cF5>WinTileVert</span><span class=cF0>;
+<a name="l352"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;Ed(\&quot;::/Doc/Install.DD\&quot;);\n&quot;</span><span class=cF0>);
+<a name="l353"></a>}
+<a name="l354"></a>
+<a name="l355"></a></span><span class=cF1>Bool</span><span class=cF0> DoInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot)
+<a name="l356"></a>{
+<a name="l357"></a>    </span><span class=cF9>I64</span><span class=cF0>                  res = </span><span class=cF3>FALSE</span><span class=cF0>, vm_install = </span><span class=cF3>TRUE</span><span class=cF0>, ch;
+<a name="l358"></a>    </span><span class=cF9>CSMBIOSSystemInfo</span><span class=cF0>   *sys_info = </span><span class=cF5>SMBIOSStructGet</span><span class=cF0>(</span><span class=cF3>SMBIOSt_SYSTEM</span><span class=cF0>);
+<a name="l359"></a>    </span><span class=cF1>U8</span><span class=cF0>                  *company = </span><span class=cF5>SMBIOSStr</span><span class=cF0>(sys_info, sys_info-&gt;manufacturer);
+<a name="l360"></a>
+<a name="l361"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>company, </span><span class=cF6>&quot;VMware, Inc.&quot;</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>company, </span><span class=cF6>&quot;innotek GmbH&quot;</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>company, </span><span class=cF6>&quot;QEMU&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l362"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l363"></a>        </span><span class=cF6>&quot;\n\n\n\n\nAre you installing inside VMware, QEMU, VirtualBox or a similar virtual machine? &quot;</span><span class=cF0>;
+<a name="l364"></a>        vm_install = </span><span class=cF5>YorN</span><span class=cF0>;
+<a name="l365"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l366"></a>    </span><span class=cF5>DocBottom</span><span class=cF0>;
+<a name="l367"></a>    </span><span class=cF1>if</span><span class=cF0> (vm_install)
+<a name="l368"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l369"></a>        </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
+<a name="l370"></a>        </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
+<a name="l371"></a>        </span><span class=cF1>do</span><span class=cF0>
+<a name="l372"></a>            ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l373"></a>        </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
+<a name="l374"></a>
+<a name="l375"></a>        </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'U'</span><span class=cF0>)
+<a name="l376"></a>        {
+<a name="l377"></a>            OSUpgrade;
+<a name="l378"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l379"></a>        }
+<a name="l380"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l381"></a>            VMInstallWiz();
+<a name="l382"></a>
+<a name="l383"></a>        res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l384"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l385"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l386"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l387"></a>        </span><span class=cF6>&quot;\n\nThis wizard works if you have a partition ready. You can partition the drive or BootHDIns() &quot;</span><span class=cF0>
+<a name="l388"></a>                </span><span class=cF6>&quot;with more options if you do it by hand, not using this wizard.\n\n&quot;</span><span class=cF0>
+<a name="l389"></a>                </span><span class=cF6>&quot;Continue Install Wizard &quot;</span><span class=cF0>;
+<a name="l390"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l391"></a>        {
+<a name="l392"></a>            </span><span class=cF6>&quot;\n\nUpgrade an existing install,&quot;</span><span class=cF0>
+<a name="l393"></a>            </span><span class=cF6>&quot;\nor create new Installation? (U/I): &quot;</span><span class=cF0>;
+<a name="l394"></a>            </span><span class=cF1>do</span><span class=cF0>
+<a name="l395"></a>                ch = </span><span class=cF5>ToUpper</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF7>(</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>);
+<a name="l396"></a>            </span><span class=cF1>while</span><span class=cF0> (ch != </span><span class=cF6>'U'</span><span class=cF0> &amp;&amp; ch != </span><span class=cF6>'I'</span><span class=cF0>);
+<a name="l397"></a>
+<a name="l398"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'I'</span><span class=cF0>)
+<a name="l399"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l400"></a>                RegularInstallWiz();
+<a name="l401"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l402"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l403"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l404"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l405"></a>                OSUpgrade;
+<a name="l406"></a>                prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l407"></a>                res = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l408"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l409"></a>        }
+<a name="l410"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l411"></a>            prompt_reboot = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l412"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l413"></a>    </span><span class=cF1>if</span><span class=cF0> (prompt_reboot)
+<a name="l414"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l415"></a>        </span><span class=cF6>&quot;Reboot Now &quot;</span><span class=cF0>;
+<a name="l416"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>YorN</span><span class=cF0>)
+<a name="l417"></a>        {
+<a name="l418"></a>            </span><span class=cF5>DiscEject</span><span class=cF0>(</span><span class=cF6>':'</span><span class=cF0>);
+<a name="l419"></a>            </span><span class=cF5>Reboot</span><span class=cF0>;
+<a name="l420"></a>        };
+<a name="l421"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l422"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l423"></a>}
+<a name="l424"></a>
+<a name="l425"></a></span><span class=cF1>Bool</span><span class=cF0> OSInstall(</span><span class=cF1>Bool</span><span class=cF0> prompt_reboot=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l426"></a>{
+<a name="l427"></a>    DoInstructions;
 <a name="l428"></a>
-<a name="l429"></a>#</span><span class=cF1>if</span><span class=cF0> </span><span class=cF3>__CMD_LINE__</span><span class=cF0>
-<a name="l430"></a>OSInstall(</span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l431"></a>#</span><span class=cF1>endif</span><span class=cF0>
+<a name="l429"></a>    </span><span class=cF1>return</span><span class=cF0> DoInstall(prompt_reboot);
+<a name="l430"></a>}
+<a name="l431"></a>
+<a name="l432"></a>#</span><span class=cF1>if</span><span class=cF0> </span><span class=cF3>__CMD_LINE__</span><span class=cF0>
+<a name="l433"></a>OSInstall(</span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l434"></a>#</span><span class=cF1>endif</span><span class=cF0>
 </span></pre></body>
 </html>

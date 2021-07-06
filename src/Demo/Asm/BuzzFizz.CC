@@ -35,7 +35,7 @@ _BUZZ_FIZZ::
 				CALL		PUT_CHARS
 				POP 		RAX
 				INC 		RAX
-				CMP 		RAX, RANGE_END 	//Actually only a 32-bit inst.
+				CMP 		RAX, RANGE_END 	//Actually only a 32-bit instruction.
 				JBE 		@@05
 
 				POP 		RDI
