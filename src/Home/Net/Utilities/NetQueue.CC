@@ -22,19 +22,6 @@ class CNetQueueEntry:CQueue
 
 CQueue *net_queue; // no QueueRemove the Head! only Entries!
 
-
-/*	PCNet reroutes PCI interrupts to software. See $LK,"PCNet",A="FF:C:/Home/Net/PCNet.CC,I_PCNET0"$.
-	Net Handler interrupt is generated whenever an entry is
-	pushed to the NetQueue. See $LK,"NetHandler",A="FF:C:/Home/Net/NetHandler.CC,I_NETHANDLER"$ */
-
-#define I_PCNET0		I_USER + 0
-#define I_PCNET1		I_USER + 1
-#define I_PCNET2		I_USER + 2
-#define I_PCNET3		I_USER + 3
-#define I_NETHANDLER	I_USER + 4
-
-#define INT_DEST_CPU	0
-
 U0 NetQueueInit()
 {
 	net_queue = CAlloc(sizeof(CQueue));

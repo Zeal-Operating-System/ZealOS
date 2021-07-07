@@ -16,17 +16,8 @@ Cd(__DIR__);
 #include "Protocols/Sockets"
 
 #include "Utilities/BST"
-
-// todo create MakeUDP and MakeTCP to clean this up
-#include "Protocols/UDP/UDP.HH"
-#include "Protocols/UDP/UDPTree"
-#include "Protocols/UDP/UDP.CC"
-
-#include "Protocols/TCP/TCP.HH"
-#include "Protocols/TCP/TCPTree"
-#include "Protocols/TCP/TCP.CC"
-#include "Protocols/TCP/TCPHandler"
-
+#include "Protocols/UDP/MakeUDP"
+#include "Protocols/TCP/MakeTCP"
 
 #include "Protocols/DNS"
 #include "Protocols/DHCP"

@@ -100,7 +100,7 @@ U0 OSUpgrade()
 
 	XTalk(task, "Mount;\nC\n");
 
-	"\nSelect the port of the ATA drive with an existing installation.\n";
+	"\n\nSelect the port of the ATA drive with an existing installation.\n\n";
 
 	"Hard Drive Port: ";
 	while (TRUE)

@@ -20,3 +20,17 @@
 
 #define IP_ADDRESS_LENGTH	4
 
+/*	PCNet reroutes PCI interrupts to software. See $LK,"PCNet",A="FF:C:/Home/Net/PCNet.CC,I_PCNET0"$.
+	Net Handler interrupt is generated whenever an entry is
+	pushed to the NetQueue. See $LK,"NetHandler",A="FF:C:/Home/Net/NetHandler.CC,I_NETHANDLER"$.
+
+	TODO: Make a function to auto-allocate these;
+		  See note above $LK+PU,"I_USER",A="MN:I_USER"$. */
+
+#define I_PCNET0		I_USER + 0
+#define I_PCNET1		I_USER + 1
+#define I_PCNET2		I_USER + 2
+#define I_PCNET3		I_USER + 3
+#define I_NETHANDLER	I_USER + 4
+
+#define INT_DEST_CPU	0

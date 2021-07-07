@@ -2,10 +2,10 @@
 	Author: TomAwezome
 
 	Driver is based on:
-	-	Linux E1000 implementation
-	-	01000101's example E1000 driver
-	-	OSDev Intel(R) E1000 documentation
-	-	Intel(R) 8254x family datasheet
+	-	Linux E1000 driver
+	-	01000101's example i825xx driver
+	-	OSDev Intel(R) 8254x documentation
+	-	Intel(R) PCI/PCI-X Family of Gigabit Ethernet Controllers Software Developer's Manual
 	-	any other useful sources.
 
 	Guidelines:
@@ -14,20 +14,35 @@
 	-	Clear documentation.
 */
 
-// TODO: WIP
-
 class CE1000
 {
 	CPCIDev *pci;
 
 	U8	mac_address[6];
+	U64	mmio_address;
 
 } e1000; // e1000 is the global variable we store all of this into.
 
 CPCIDev *E1000PCIDevFind()
 {// Find and return E1000 card as a CPCIDev pointer.
 
-	return PCIDevFind(,, PCIV_E1000, PCID_82545EM);
+	CPCIDev *pci = PCIDevFind(PCIC_NETWORK,, PCIV_E1000);
+
+	if (!pci)
+		return NULL;
+
+	ClassRep(pci);
+
+	switch (pci->device_id)
+	{
+		case PCID_82545EM:
+			break;
+
+		default:
+			pci = NULL;
+	}
+
+	return pci;
 }
 
 U0 EthernetFrameFinish(I64 de_index)
@@ -56,7 +71,7 @@ U0 PCIInterruptsReroute(I64 base)
 
 U0 E1000InterruptsSetup()
 {
-//	PCIInterruptsReroute(I_E10000);
+//	PCIInterruptsReroute(I_E1000);
 	NetErr("TODO E1000");
 }
 */
@@ -64,12 +79,35 @@ U0 E1000InterruptsSetup()
 U0 E1000Init()
 {
 	MemSet(&e1000, 0, sizeof(CE1000)); // e1000 global var will hold member data the driver uses often.
+	"\nE1000 driver WIP\n\n";
 
 	e1000.pci = E1000PCIDevFind;
 	if (!e1000.pci)
 		return; // if we don't find the card, quit.
 
-	"\nE1000 driver WIP\n\n";
+
+	e1000.mmio_address = dev.uncached_alias + e1000.pci->base[0] & ~0xF;
+	// Assuming card supports MMIO... lower 4 bits are hardwired zero (?)
+
+	"\nMMIO address: 0x%0X\n", e1000.mmio_address;
+
+	// init rx/tx addrs?
+
+	// eeprom? MAC ?
+
+	// setup link? (01000101's driver)
+
+	// zero out multicast hash? (linux)
+	// zero out multicast table array (01000101's driver)
+
+	// setup link? (linux)
+
+	// clear all statistics regs after link establish attempt (linux)
+
+	// enable interupts (01000101's driver)
+
+	// start rx tx?
+
 	NetErr("TODO E1000");
 }
 
