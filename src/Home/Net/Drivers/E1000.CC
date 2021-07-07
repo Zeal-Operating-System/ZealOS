@@ -14,6 +14,10 @@
 	-	Clear documentation.
 */
 
+// TODO: clean up entire driver
+
+#define E1000_REG_EERD	0x0014	// EEPROM Read
+
 class CE1000
 {
 	CPCIDev *pci;
@@ -43,6 +47,51 @@ CPCIDev *E1000PCIDevFind()
 	}
 
 	return pci;
+}
+
+U32	E1000MMIORead(U32 offset)
+{
+	U32 *val = e1000.mmio_address + offset;
+
+	return *val;
+}
+
+U0 E1000MMIOWrite(U32 offset, U32 val)
+{
+	U32 *addr = e1000.mmio_address + offset;
+
+	*addr = val;
+}
+
+U16	E1000EEPROMRead(U8 word)
+{ // word arg is which U16 to read
+	U16 data;
+	U32 temp;
+
+	E1000MMIOWrite(E1000_REG_EERD, 1 | word << 8);
+
+	while (!((temp = E1000MMIORead(E1000_REG_EERD)) & (1 << 4)))
+		Sleep(1);
+
+	data = (temp >> 16) & 0xFFFF;
+	return data;
+}
+
+U0 E1000MACGet()
+{
+	I64 i;
+	U16 mac;
+
+	NetLog("E1000 GET MAC: Getting VM MAC.");
+
+	for (i = 0; i < 3; i++)
+	{
+		mac = E1000EEPROMRead(i);
+		e1000.mac_address[2*i]	 = mac & 0xFF;
+		e1000.mac_address[2*i+1] = (mac >> 8) & 0xFF;
+		NetLog(" %02X %02X", mac.u8[0], mac.u8[1]);
+	}
+	
 }
 
 U0 EthernetFrameFinish(I64 de_index)
@@ -94,6 +143,7 @@ U0 E1000Init()
 	// init rx/tx addrs?
 
 	// eeprom? MAC ?
+	E1000MACGet;
 
 	// setup link? (01000101's driver)
 
