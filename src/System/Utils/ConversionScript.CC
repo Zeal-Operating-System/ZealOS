@@ -24,11 +24,11 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("word_lst", 		ff_mask, fu_flags, "word_list");
 	Find("FileExtRem",		ff_mask, fu_flags, "FileExtRemove");
 	Find("cnts", 			ff_mask, fu_flags, "counts");
-	Find("PostMsg", 		ff_mask, fu_flags, "PostMessage");
-	Find("PostMsgWait", 	ff_mask, fu_flags, "PostMessageWait");
+	Find("PostMsg", 		ff_mask, fu_flags, "MessagePost");
+	Find("PostMsgWait", 	ff_mask, fu_flags, "MessagePostWait");
 	Find("QSort", 			ff_mask, fu_flags, "QuickSort");
 	Find("QSortI64", 		ff_mask, fu_flags, "QuickSortI64");
-	Find("ScanMsg", 		ff_mask, fu_flags, "ScanMessage");
+	Find("ScanMsg", 		ff_mask, fu_flags, "MessageScan");
 	Find("cnts", 			ff_mask, fu_flags, "counts");
 	Find("Dsk",				ff_mask, fu_flags, "Disk");
 	Find("collision_cnt",	ff_mask, fu_flags, "collision_count");
@@ -40,7 +40,7 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("DefineLstLoad",	ff_mask, fu_flags, "DefineListLoad");
 	Find("ExtDft",			ff_mask, fu_flags, "ExtDefault");
 	Find("RegDft",			ff_mask, fu_flags, "RegDefault");
-	Find("\"HC\"",			ff_mask, fu_flags, "FEXT_DEFAULT_C");
+	Find("\"HC\"",			ff_mask, fu_flags, "\"CC\"");
 	Find("CDrv",			ff_mask, fu_flags, "CDrive");
 	Find("CDbgInfo",		ff_mask, fu_flags, "CDebugInfo");
 	Find("dbg_info",		ff_mask, fu_flags, "debug_info");
@@ -55,6 +55,11 @@ U0 Cvt(U8 *ff_mask="*", U8 *fu_flags="+r+l-i+S")
 	Find("Msg",				ff_mask, fu_flags, "Message");
 	Find("MusicSettingsRst",ff_mask, fu_flags, "MusicSettingsReset");
 	Find("hndlr",			ff_mask, fu_flags, "handler");
+	Find("FifoU8Rem",		ff_mask, fu_flags, "FifoU8Remove");
+	Find("GodBitsIns",		ff_mask, fu_flags, "GodBitsInsert");
+	Find("fp_draw_ms",		ff_mask, fu_flags, "fp_draw_mouse");
+	Find("DrawStdMs",		ff_mask, fu_flags, "DrawStdMouse");
+	Find("WIG_TASK_DFT",	ff_mask, fu_flags, "WIG_TASK_DEFAULT");
 
 
 	"\n$$BK,1$$$$LTRED$$Might want to go over these$$FG$$$$BK,0$$\n";
