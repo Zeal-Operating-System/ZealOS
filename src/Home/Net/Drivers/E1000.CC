@@ -2,10 +2,10 @@
 	Author: TomAwezome
 
 	Driver is based on:
-	-	Linux E1000 driver
 	-	01000101's example i825xx driver
 	-	OSDev Intel(R) 8254x documentation
 	-	Intel(R) PCI/PCI-X Family of Gigabit Ethernet Controllers Software Developer's Manual
+	-	Linux E1000 driver
 	-	any other useful sources.
 
 	Guidelines:
@@ -16,7 +16,14 @@
 
 // TODO: clean up entire driver
 
+#define E1000_REG_CTRL	0x0000
 #define E1000_REG_EERD	0x0014	// EEPROM Read
+#define E1000_REG_IMS	0x00D0
+#define E1000_REG_MTA	0x5200	// Multicast Table Array
+
+#define E1000_CTRLf_SLU	6 // Set Link Up ?
+
+#define E1000_CTRLF_SLU	(1 << E1000_CTRLf_SLU) // Set Link Up ?
 
 class CE1000
 {
@@ -127,6 +134,8 @@ U0 E1000InterruptsSetup()
 
 U0 E1000Init()
 {
+	I64 i;
+
 	MemSet(&e1000, 0, sizeof(CE1000)); // e1000 global var will hold member data the driver uses often.
 	"\nE1000 driver WIP\n\n";
 
@@ -140,23 +149,29 @@ U0 E1000Init()
 
 	"\nMMIO address: 0x%0X\n", e1000.mmio_address;
 
-	// init rx/tx addrs?
+	// init rx/tx addrs? (linux)
 
 	// eeprom? MAC ?
 	E1000MACGet;
 
 	// setup link? (01000101's driver)
+	E1000MMIOWrite(E1000_REG_CTRL, E1000MMIORead(E1000_REG_CTRL) | E1000_CTRLF_SLU);
 
 	// zero out multicast hash? (linux)
 	// zero out multicast table array (01000101's driver)
+	for (i = 0; i < 128; i++)
+		E1000MMIOWrite(E1000_REG_MTA + i*4, 0);
 
 	// setup link? (linux)
 
 	// clear all statistics regs after link establish attempt (linux)
 
-	// enable interupts (01000101's driver)
+	// enable & clear existing interupts (01000101's driver)
+	E1000MMIOWrite(E1000_REG_IMS, 0x1F6DC); // TODO: WHAT IS THIS
+	E1000MMIORead(0xC0); // TODO : WHAT IS THIS ???
 
 	// start rx tx?
+
 
 	NetErr("TODO E1000");
 }
@@ -174,7 +189,6 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 
 U8 *EthernetMACGet()
 {
-	NetErr("TODO E1000");
 	return e1000.mac_address;
 }
 
