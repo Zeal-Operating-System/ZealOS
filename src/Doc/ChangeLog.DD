@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/09/21 04:13:50----$IV,0$
+* Added drive changing macros from AcctExample to PersonalMenu.
+
 $IV,1$----07/06/21 15:04:12----$IV,0$
 * $LK,"R",A="MN:R"$("ZCAlloc",		"$LK+PU,"SysCAlloc",A="MN:SysCAlloc"$");
 * $LK,"R",A="MN:R"$("ZMAlloc",		"$LK+PU,"SysMAlloc",A="MN:SysMAlloc"$", "-l");
