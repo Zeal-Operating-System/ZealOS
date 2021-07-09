@@ -19,11 +19,89 @@
 #define E1000_REG_CTRL	0x0000
 #define E1000_REG_EERD	0x0014	// EEPROM Read
 #define E1000_REG_IMS	0x00D0
+#define E1000_REG_RCTL	0x0100
+#define E1000_REG_TCTL	0x0400
+#define E1000_REG_RDBAL	0x2800
+#define E1000_REG_RDBAH	0x2804
+#define E1000_REG_RDLEN	0x2808
+#define E1000_REG_RDH	0x2810
+#define E1000_REG_RDT	0x2818
+#define E1000_REG_TDBAL	0x3800
+#define E1000_REG_TDBAH	0x3804
+#define E1000_REG_TDLEN	0x3808
+#define E1000_REG_TDH	0x3810
+#define E1000_REG_TDT	0x3818
 #define E1000_REG_MTA	0x5200	// Multicast Table Array
 
 #define E1000_CTRLf_SLU	6 // Set Link Up ?
 
 #define E1000_CTRLF_SLU	(1 << E1000_CTRLf_SLU) // Set Link Up ?
+
+#define E1000_RCTLf_EN				1
+#define E1000_RCTLf_SBP				2
+#define E1000_RCTLf_UPE				3
+#define E1000_RCTLf_MPE				4
+#define E1000_RCTLf_LPE				5
+//#define E1000_RCTLf_RDMTS_HALF		
+#define E1000_RCTLf_RDMTS_QUARTER	8
+#define E1000_RCTLf_RDMTS_EIGHTH	9
+#define E1000_RCTLf_BAM				15
+#define E1000_RCTLf_BSIZE_1024		16
+#define E1000_RCTLf_BSIZE_512		17
+#define E1000_RCTLf_BSIZE_256		18
+//#define E1000_RCTLf_BSIZE_2048		
+//#define E1000_RCTLf_BSIZE_4096		
+//#define E1000_RCTLf_BSIZE_8192		
+//#define E1000_RCTLf_BSIZE_16384		
+#define E1000_RCTLf_SECRC			26
+
+#define E1000_RCTLF_EN				(1 << E1000_RCTLf_EN)
+#define E1000_RCTLF_SBP				(1 << E1000_RCTLf_SBP)
+#define E1000_RCTLF_UPE				(1 << E1000_RCTLf_UPE)
+#define E1000_RCTLF_MPE				(1 << E1000_RCTLf_MPE)
+#define E1000_RCTLF_LPE				(1 << E1000_RCTLf_LPE)
+//#define E1000_RCTLF_RDMTS_HALF		
+#define E1000_RCTLF_RDMTS_QUARTER	(1 << E1000_RCTLf_RDMTS_QUARTER)
+#define E1000_RCTLF_RDMTS_EIGHTH	(2 << E1000_RCTLf_RDMTS_QUARTER)
+#define E1000_RCTLF_BAM				(1 << E1000_RCTLf_BAM)
+#define E1000_RCTLF_BSIZE_1024		(1 << E1000_RCTLf_BSIZE_1024)
+#define E1000_RCTLF_BSIZE_512		(2 << E1000_RCTLf_BSIZE_1024)
+#define E1000_RCTLF_BSIZE_256		(3 << E1000_RCTLf_BSIZE_1024)
+//#define E1000_RCTLF_BSIZE_2048		
+//#define E1000_RCTLF_BSIZE_4096		
+//#define E1000_RCTLF_BSIZE_8192		
+//#define E1000_RCTLF_BSIZE_16384		
+#define E1000_RCTLF_SECRC			(1 << E1000_RCTLf_SECRC)
+
+#define E1000_TCTLf_EN	1
+#define E1000_TCTLf_PSP	3
+
+#define E1000_TCTLF_EN	(1 << E1000_TCTLf_EN)
+#define E1000_TCTLF_PSP	(1 << E1000_TCTLf_PSP)
+
+#define E1000_RX_BUFF_COUNT	32	// 01000101's driver uses 768 for each of these...
+#define E1000_TX_BUFF_COUNT	8
+
+class CE1000DescriptorEntryRX
+{
+	U64	address;
+	U16 length;
+	U16 checksum;
+	U8	status;
+	U8	errors;
+	U16	special;
+};
+
+class CE1000DescriptorEntryTX
+{
+	U64 address;
+	U16 length;
+	U8	cso;
+	U8	cmd;
+	U8	sta;
+	U8	css;
+	U16 special;
+};
 
 class CE1000
 {
@@ -31,6 +109,14 @@ class CE1000
 
 	U8	mac_address[6];
 	U64	mmio_address;
+	U8 *rx_de_buffer;			// Uncached-alias of pointer to the buffer of RX Descriptor Entries.
+	U8 *tx_de_buffer;			// Uncached-alias of pointer to the buffer of TX Descriptor Entries.
+	U8 *rx_de_buffer_phys;		// Pointer to the buffer of RX Descriptor Entries. (Code Heap, lower 2Gb)
+	U8 *tx_de_buffer_phys;		// Pointer to the buffer of TX Descriptor Entries. (Code Heap, lower 2Gb)
+	U64 rx_buffer_addr;			// Uncached-alias of address of receive buffers.
+	U64 tx_buffer_addr;			// Uncached-alias of address of transmit buffers.
+	U64 rx_buffer_addr_phys;	// Physical address of actual receive buffers  (< 4 Gb)
+	U64 tx_buffer_addr_phys;	// Physical address of actual transmit buffers (< 4 Gb)
 
 } e1000; // e1000 is the global variable we store all of this into.
 
@@ -132,6 +218,82 @@ U0 E1000InterruptsSetup()
 }
 */
 
+U0 E1000RXInit()
+{
+	I64 de_index;
+
+	e1000.rx_de_buffer_phys = CAllocAligned(sizeof(CE1000DescriptorEntryRX) * E1000_RX_BUFF_COUNT,
+											16, 
+											Fs->code_heap);
+
+	e1000.rx_de_buffer = dev.uncached_alias + e1000.rx_de_buffer_phys;
+
+	e1000.rx_buffer_addr_phys = CAlloc(ETHERNET_FRAME_SIZE * E1000_RX_BUFF_COUNT, Fs->code_heap);
+
+	e1000.rx_buffer_addr = dev.uncached_alias + e1000.rx_buffer_addr_phys;
+
+	// iterate de's and make packet buffers for each
+	CE1000DescriptorEntryRX *entry = e1000.rx_de_buffer;
+	for (de_index = 0; de_index < E1000_RX_BUFF_COUNT; de_index++)
+	{
+		entry->address = e1000.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE; // is this right? might need to change ?..
+																				// 01000101 MAlloc's 8208 for each DE
+//		PCNetDescriptorEntryInit(&entry[de_index],
+//								 pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
+//								 TRUE); // TRUE for is_rx.
+	}
+
+	// setup rx de ring buffer
+	E1000MMIOWrite(E1000_REG_RDBAH, e1000.rx_de_buffer >> 32);			// should we be using uncached addr here ?
+	E1000MMIOWrite(E1000_REG_RDBAL, e1000.rx_de_buffer & 0xFFFFFFFF);
+
+	// set receive buffer length
+	E1000MMIOWrite(E1000_REG_RDLEN, E1000_RX_BUFF_COUNT * 16);
+
+	// set head tail pointers
+	E1000MMIOWrite(E1000_REG_RDH, 0);
+	E1000MMIOWrite(E1000_REG_RDT, E1000_RX_BUFF_COUNT);
+
+	// set receive control reg
+	E1000MMIOWrite(E1000_REG_RCTL,	E1000_RCTLF_SBP			|
+//									E1000_RCTLF_UPE			|
+//									E1000_RCTLF_RDMTS_HALF	|
+//									E1000_RCTLF_BSIZE_2048	|
+//									E1000_RCTLF_MPE			|
+									E1000_RCTLF_SECRC		|
+									E1000_RCTLF_LPE			|
+									E1000_RCTLF_BAM);
+}
+
+U0 E1000TXInit()
+{
+	e1000.tx_de_buffer_phys = CAllocAligned(sizeof(CE1000DescriptorEntryTX) * E1000_TX_BUFF_COUNT,
+											16, 
+											Fs->code_heap);
+
+	e1000.tx_de_buffer = dev.uncached_alias + e1000.tx_de_buffer_phys;
+
+	e1000.tx_buffer_addr_phys = CAlloc(ETHERNET_FRAME_SIZE * E1000_TX_BUFF_COUNT, Fs->code_heap);
+
+	e1000.tx_buffer_addr = dev.uncached_alias + e1000.tx_buffer_addr_phys;
+
+	// setup tx de ring buffer
+	E1000MMIOWrite(E1000_REG_TDBAH, e1000.tx_de_buffer >> 32);			// should we be using uncached addr here ?
+	E1000MMIOWrite(E1000_REG_TDBAL, e1000.tx_de_buffer & 0xFFFFFFFF);
+
+	// set tx buffer length
+	E1000MMIOWrite(E1000_REG_TDLEN, E1000_TX_BUFF_COUNT * 16);
+
+	// set head tail pointers
+	E1000MMIOWrite(E1000_REG_TDH, 0);
+	E1000MMIOWrite(E1000_REG_TDT, E1000_RX_BUFF_COUNT);
+
+	// set transmit control reg
+	E1000MMIOWrite(E1000_REG_TCTL, E1000_TCTLF_EN | E1000_TCTLF_PSP);
+
+}
+
+
 U0 E1000Init()
 {
 	I64 i;
@@ -171,9 +333,13 @@ U0 E1000Init()
 	E1000MMIORead(0xC0); // TODO : WHAT IS THIS ???
 
 	// start rx tx?
+	E1000RXInit;
+	E1000TXInit;
 
 
 	NetErr("TODO E1000");
+	"\n";
+	ClassRep(&e1000);
 }
 
 I64 EthernetFrameAllocate(U8 **packet_buffer_out,
