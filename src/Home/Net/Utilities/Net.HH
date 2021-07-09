@@ -31,6 +31,12 @@
 #define I_PCNET1		I_USER + 1
 #define I_PCNET2		I_USER + 2
 #define I_PCNET3		I_USER + 3
+
+#define I_E1000_0		I_USER + 0
+#define I_E1000_1		I_USER + 1
+#define I_E1000_2		I_USER + 2
+#define I_E1000_3		I_USER + 3
+
 #define I_NETHANDLER	I_USER + 4
 
 #define INT_DEST_CPU	0

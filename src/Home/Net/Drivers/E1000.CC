@@ -109,14 +109,20 @@ class CE1000
 
 	U8	mac_address[6];
 	U64	mmio_address;
+
+	I64 current_rx_de_index;	// Current Receive DE being processed.  Gets incremented, wrapped to 0 at max of E1000_RX_BUFF_COUNT.
+	I64 current_tx_de_index;	// Current Transmit DE being processed. Gets incremented, wrapped to 0 at max of E1000_TX_BUFF_COUNT.
+
 	U8 *rx_de_buffer;			// Uncached-alias of pointer to the buffer of RX Descriptor Entries.
 	U8 *tx_de_buffer;			// Uncached-alias of pointer to the buffer of TX Descriptor Entries.
 	U8 *rx_de_buffer_phys;		// Pointer to the buffer of RX Descriptor Entries. (Code Heap, lower 2Gb)
 	U8 *tx_de_buffer_phys;		// Pointer to the buffer of TX Descriptor Entries. (Code Heap, lower 2Gb)
+
 	U64 rx_buffer_addr;			// Uncached-alias of address of receive buffers.
 	U64 tx_buffer_addr;			// Uncached-alias of address of transmit buffers.
 	U64 rx_buffer_addr_phys;	// Physical address of actual receive buffers  (< 4 Gb)
 	U64 tx_buffer_addr_phys;	// Physical address of actual transmit buffers (< 4 Gb)
+
 
 } e1000; // e1000 is the global variable we store all of this into.
 
@@ -175,7 +181,7 @@ U0 E1000MACGet()
 	I64 i;
 	U16 mac;
 
-	NetLog("E1000 GET MAC: Getting VM MAC.");
+	NetLog("E1000 MAC GET: Getting MAC Address.");
 
 	for (i = 0; i < 3; i++)
 	{
@@ -187,14 +193,163 @@ U0 E1000MACGet()
 	
 }
 
-U0 EthernetFrameFinish(I64 de_index)
-{//Alias for driver Finish TX function.
-	//E1000TransmitPacketFinish(de_index);
-	no_warn de_index;
-	NetErr("TODO E1000");
+I64 E1000PacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
+{
+	I64 de_index = e1000.current_rx_de_index;
+	CE1000DescriptorEntryRX *entry = &e1000.rx_de_buffer[de_index * sizeof(CE1000DescriptorEntryRX)];
+	Bool drop = FALSE;
+
+	if (entry->length < 60)
+	{
+		NetErr("E1000 PACKET RECEIVE: Short Packet");
+		drop = TRUE;
+	}
+
+	if (entry->status & (1 << 1)) // EOP ?? TODO #define
+	{
+		NetErr("E1000 PACKET RECEIVE: No EOP Set");
+		drop = TRUE;
+	}
+
+	if (entry->errors)
+	{
+		NetErr("E1000 PACKET RECEIVE: RX DE Error Bits Set");
+		drop = TRUE;
+	}
+
+	e1000.current_rx_de_index = (e1000.current_rx_de_index + 1) & (E1000_RX_BUFF_COUNT - 1);
+
+	if (!drop)
+	{
+		*packet_buffer_out = entry->address;
+		*packet_length_out = entry->length;
+	}
+	else
+	{
+		NetErr("E1000 PACKET RECEIVE: Dropping packet.");
+		de_index = -1;
+	}
+
+	return de_index;
 }
 
-/*
+U0 E1000ReceivePacketRelease(I64 de_index)
+{
+	CE1000DescriptorEntryRX *entry = &e1000.rx_de_buffer[de_index * sizeof(CE1000DescriptorEntryRX)];
+	entry->status = 0;
+
+	E1000MMIOWrite(E1000_REG_RDT, e1000.current_rx_de_index);
+}
+
+Bool E1000DriverOwnsRX(CE1000DescriptorEntryRX *entry)
+{
+	return Bt(&entry->status, 0); // ?? TODO #define
+}
+
+I64 E1000TransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
+{	I64 de_index = e1000.current_tx_de_index;
+
+	CE1000DescriptorEntryTX *entry = &e1000.tx_de_buffer[de_index * sizeof(CE1000DescriptorEntryTX)];
+
+	*packet_buffer_out = e1000.tx_buffer_addr + de_index * ETHERNET_FRAME_SIZE;
+
+	MemSet(*packet_buffer_out, 0, ETHERNET_FRAME_SIZE); // Clear buffer contents in advance.
+
+	entry->address	= *packet_buffer_out;
+	entry->length	= length;
+	entry->cmd		= (1 << 3) | 3; // ??? TODO #define
+
+	NetLog("E1000 ALLOCATE TX PACKET: de_index: %X.", de_index);
+	return de_index;
+}
+
+U0 E1000TransmitPacketFinish(I64 de_index)
+{
+	CE1000DescriptorEntryTX *entry = &e1000.tx_de_buffer[de_index * sizeof(CE1000DescriptorEntryTX)];
+
+	e1000.current_tx_de_index = (e1000.current_tx_de_index + 1) & (E1000_TX_BUFF_COUNT - 1);
+	E1000MMIOWrite(E1000_REG_TDT, e1000.current_tx_de_index);
+
+	ClassRep(entry);
+
+	while (!(entry->sta & 0xF)) // ???
+		Yield;
+
+	NetLog("E1000 FINISH TX PACKET: TX DE index: %X.", de_index);
+}
+
+U0 EthernetFrameFinish(I64 de_index)
+{//Alias for driver Finish TX function.
+	E1000TransmitPacketFinish(de_index);
+}
+
+interrupt U0 E1000IRQ()
+{ // TODO need #defines
+	U32 icr = E1000MMIORead(0xC0); // ???
+	Bool poll = FALSE;
+	CE1000DescriptorEntryRX *entry = e1000.rx_de_buffer;
+	U8 *packet_buffer;
+	U16 packet_length;
+	I64 de_index;
+
+	icr &= ~3; // ??
+
+	if (icr & (1 << 2)) // ?? 'link status change' ??
+	{
+		icr &= ~(1 << 2);
+		E1000MMIOWrite(E1000_REG_CTRL, E1000MMIORead(E1000_REG_CTRL) | E1000_CTRLF_SLU);
+	}
+
+	if (icr & (1 << 6) || icr & (1 << 4)) // ?? 'rx underrun / min threshold' ??
+	{
+		icr = ~((1 << 6) | (1 << 4)); // ??
+
+		poll = TRUE;
+	}
+
+	if (icr & (1 << 7)) // ?? 'packet pending?
+	{
+		icr &= ~(1 << 7);
+
+		poll = TRUE;
+	}
+
+	if (poll)
+	{
+		while (E1000DriverOwnsRX(&entry[e1000.current_rx_de_index]))
+		{
+			NetLog("$$BG,LTCYAN$$$$FG,WHITE$$"
+				   "==== E1000 IRQ ===="
+				   "$$BG$$$$FG$$");
+
+			NetLog("$$BD,CYAN$$$$FD,WHITE$$"
+				   "E1000 IRQ: Saw owned RX DE index %d.", e1000.current_rx_de_index);
+
+			de_index = E1000PacketReceive(&packet_buffer, &packet_length);
+
+			if (de_index >= 0)
+			{
+				NetLog("E1000 IRQ: Pushing copy into Net Queue, releasing receive packet.");
+				NetQueuePush(packet_buffer, packet_length);
+				E1000ReceivePacketRelease(de_index);
+			}
+
+		NetLog("E1000 IRQ: Exiting.\n"
+			   "$$BD,WHITE$$$$FD,LTGRAY$$"
+			   "$$BG,LTCYAN$$$$FG,WHITE$$"
+			   "==================="
+			   "$$BG$$$$FG$$");
+		}
+	}
+
+
+
+	E1000MMIORead(0xC0); // ?? 'clear pending interrupts' ??
+
+	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
+
+}
+
 U0 PCIInterruptsReroute(I64 base)
 { // todo: comments explaining process, maybe better var names
 	I64	 i;
@@ -212,13 +367,15 @@ U0 PCIInterruptsReroute(I64 base)
 
 
 U0 E1000InterruptsSetup()
-{
-//	PCIInterruptsReroute(I_E1000);
-	NetErr("TODO E1000");
+{ // .. ?
+	IntEntrySet(I_E1000_0, &E1000IRQ);
+	IntEntrySet(I_E1000_1, &E1000IRQ);
+	IntEntrySet(I_E1000_2, &E1000IRQ);
+	IntEntrySet(I_E1000_3, &E1000IRQ);
+	PCIInterruptsReroute(I_E1000_0);
 }
-*/
 
-U0 E1000RXInit()
+U0 E1000InitRX()
 {
 	I64 de_index;
 
@@ -265,7 +422,7 @@ U0 E1000RXInit()
 									E1000_RCTLF_BAM);
 }
 
-U0 E1000TXInit()
+U0 E1000InitTX()
 {
 	e1000.tx_de_buffer_phys = CAllocAligned(sizeof(CE1000DescriptorEntryTX) * E1000_TX_BUFF_COUNT,
 											16, 
@@ -333,8 +490,10 @@ U0 E1000Init()
 	E1000MMIORead(0xC0); // TODO : WHAT IS THIS ???
 
 	// start rx tx?
-	E1000RXInit;
-	E1000TXInit;
+	E1000InitRX;
+	E1000InitTX;
+
+	E1000InterruptsSetup;
 
 
 	NetErr("TODO E1000");
@@ -348,9 +507,34 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 						  U16 ethertype,
 						  I64 packet_length)
 {
-	no_warn packet_buffer_out, source_address, destination_address, ethertype, packet_length;
-	NetErr("TODO E1000");
-	return -1;
+	U8 *ethernet_frame;
+	I64 de_index;
+
+	//need to see if 3 years later VirtualBox supports APAD_XMT!
+	if (packet_length < ETHERNET_MIN_FRAME_SIZE)
+	{
+		NetWarn("ETHERNET FRAME ALLOCATE: Truncating length");
+		packet_length = ETHERNET_MIN_FRAME_SIZE;
+	}
+
+	de_index = E1000TransmitPacketAllocate(&ethernet_frame, ETHERNET_MAC_HEADER_LENGTH + packet_length);
+
+	if (de_index < 0)
+	{
+		NetErr("ETHERNET FRAME ALLOCATE: Failure");
+		return -1; // Positive value expected. Functions calling this must factor this in.
+	}
+
+	MemCopy(ethernet_frame,						 destination_address, MAC_ADDRESS_LENGTH);
+	MemCopy(ethernet_frame + MAC_ADDRESS_LENGTH, source_address,	  MAC_ADDRESS_LENGTH);
+
+	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET]		= ethertype >> 8;
+	ethernet_frame[ETHERNET_ETHERTYPE_OFFSET + 1]	= ethertype & 0xFF;
+
+	*packet_buffer_out = ethernet_frame + ETHERNET_MAC_HEADER_LENGTH;
+
+	return de_index;
+
 }
 
 U8 *EthernetMACGet()
