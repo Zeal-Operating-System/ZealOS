@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/11/21 17:26:32----$IV,0$
+* Raised version number to 0.07.
+* Added $LK+PU,"IntEntryAlloc",A="MN:IntEntryAlloc"$, $LK+PU,"IntEntryFree",A="MN:IntEntryFree"$, $LK+PU,"dev.user_int_bitmap",A="FF:::/Kernel/KernelA.HH,user_int_bitmap"$ to allow acquiring dynamic user APIC IRQ.
+
 $IV,1$----07/09/21 04:13:50----$IV,0$
 * Added drive changing macros from AcctExample to PersonalMenu.
 

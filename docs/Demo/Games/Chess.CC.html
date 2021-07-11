@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -1227,7 +1227,7 @@ body {background-color:#000000;}
 <a name="l1200"></a>    </span><span class=cF9>I64</span><span class=cF0>     i;
 <a name="l1201"></a>    </span><span class=cF9>CTask</span><span class=cF0>  *task = </span><span class=cF5>User</span><span class=cF0>;
 <a name="l1202"></a>
-<a name="l1203"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;#include \&quot;::/TempleOS/Demo/Games/Chess\&quot;;\n&quot;</span><span class=cF0>);
+<a name="l1203"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;#include \&quot;::/Demo/Games/Chess\&quot;;\n&quot;</span><span class=cF0>);
 <a name="l1204"></a>    </span><span class=cF5>BirthWait</span><span class=cF0>(&amp;task-&gt;popup_task);
 <a name="l1205"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task-&gt;popup_task);
 <a name="l1206"></a>    PostMsgWait(task-&gt;popup_task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);

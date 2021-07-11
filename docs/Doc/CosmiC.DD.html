@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -195,7 +195,7 @@ body {background-color:#000000;}
 <a name="l168"></a>
 <a name="l169"></a>  </span><span class=cF2>U0 Main()
 <a name="l170"></a>  {
-<a name="l171"></a>    //Only use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF2> for reg vars or else clobbered.
+<a name="l171"></a>    //Only use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1940"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF2> for reg vars or else clobbered.
 <a name="l172"></a>    I64 reg R15 i = 5, noreg j = 4;
 <a name="l173"></a>    no_warn i;
 <a name="l174"></a>    asm {
@@ -247,9 +247,9 @@ body {background-color:#000000;}
 <a name="l220"></a>    </span><span class=cF2>||</span><span class=cF0>
 <a name="l221"></a>    </span><span class=cF2>=</span><span class=cF0>, </span><span class=cF2>&lt;&lt;=</span><span class=cF0>, </span><span class=cF2>&gt;&gt;=</span><span class=cF0>, </span><span class=cF2>*=</span><span class=cF0>, </span><span class=cF2>/=</span><span class=cF0>, </span><span class=cF2>&amp;=</span><span class=cF0>, </span><span class=cF2>|=</span><span class=cF0>, </span><span class=cF2>^=</span><span class=cF0>, </span><span class=cF2>+=</span><span class=cF0>, </span><span class=cF2>-=</span><span class=cF0>
 <a name="l222"></a>
-<a name="l223"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1678"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
+<a name="l223"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
 <a name="l224"></a>
-<a name="l225"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find dup local var type statements.
+<a name="l225"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find dup local var type statements.
 <a name="l226"></a>
 <a name="l227"></a>* With the </span><span class=cF2>#exe{}</span><span class=cF0> feature in your src code, you can place programs that insert text into the stream of code being compiled.  See </span><span class=cF4>
 <a name="l228"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l252"><span class=cF4>#exe {}</span></a><span class=cF0> for an example where the date/time and compile-time prompting for configuration data is placed into a program.  </span><span class=cF4>
@@ -297,7 +297,7 @@ body {background-color:#000000;}
 <a name="l270"></a>off-of other task's heaps, or make an independent heap with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() for an example.
 <a name="l271"></a>
 <a name="l272"></a>* The stack does not grow because virtual mem is not used.  It's recommended to allocate large local vars from the heap.    You 
-<a name="l273"></a>can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().  You can use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l129"><span class=cF4>CallStackGrow</span></a><span class=cF0>(), but it's 
+<a name="l273"></a>can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3508"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().  You can use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l129"><span class=cF4>CallStackGrow</span></a><span class=cF0>(), but it's 
 <a name="l274"></a>odd.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/StackGrow.CC.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF0>.
 <a name="l275"></a>
 <a name="l276"></a>* Only one base class is allowed.

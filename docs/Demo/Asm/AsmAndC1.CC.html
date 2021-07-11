@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -40,10 +40,10 @@ body {background-color:#000000;}
 <a name="l13"></a>
 <a name="l14"></a>_BEEPS::
 <a name="l15"></a></span><span class=cF2>//You can always clobber RAX,RBX,RCX,RDX,R8,R9.  The compiler expects that.</span><span class=cF0>
-<a name="l16"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1935"><span class=cF4>REGG_CLOBBERED</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1937"><span class=cF4>REGG_STACK_TMP</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l16"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1936"><span class=cF4>REGG_CLOBBERED</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_STACK_TMP</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l17"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l18"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
-<a name="l19"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]   </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l714"><span class=cF4>SF_ARG1</span></a><span class=cF0>
+<a name="l19"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]   </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l715"><span class=cF4>SF_ARG1</span></a><span class=cF0>
 <a name="l20"></a>
 <a name="l21"></a>@@05:           </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RCX</span><span class=cF0>
 <a name="l22"></a></span><span class=cF2>//U0 </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l200"><span class=cF4>Beep</span></a><span class=cF2>(I8 ona=62,Bool busy=FALSE)</span><span class=cF0>

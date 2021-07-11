@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -30,7 +30,7 @@ body {background-color:#000000;}
 <a name="l3"></a></span><span class=cF1>USE16</span><span class=cF0>
 <a name="l4"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/MultiCore.DD.html#l1"><span class=cF4>ZealOS MultiCore</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l5"></a>
-<a name="l6"></a></span><span class=cF2>//This code gets copied to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l6"></a></span><span class=cF2>//This code gets copied to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l666"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l7"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/MultiProc.CC.html#l324"><span class=cF4>MemCopy(MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l8"></a></span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>::
 <a name="l9"></a>                </span><span class=cF1>JMP</span><span class=cF0>         @@05
@@ -346,8 +346,8 @@ body {background-color:#000000;}
 <a name="l319"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>);
 <a name="l320"></a>
 <a name="l321"></a>    </span><span class=cF2>//When you start-up other cores, they jump to an addr</span><span class=cF0>
-<a name="l322"></a>    </span><span class=cF2>//specified by a byte vect number, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l664"><span class=cF4>MPN_VECT</span></a><span class=cF2> which corresponds</span><span class=cF0>
-<a name="l323"></a>    </span><span class=cF2>//to a location 4096*vect number, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l322"></a>    </span><span class=cF2>//specified by a byte vect number, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MPN_VECT</span></a><span class=cF2> which corresponds</span><span class=cF0>
+<a name="l323"></a>    </span><span class=cF2>//to a location 4096*vect number, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l666"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l324"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(mp, </span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>, </span><span class=cFD>COREAP_16BIT_INIT_END</span><span class=cF0>-</span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>);
 <a name="l325"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;mp-&gt;ap_gdt_ptr, </span><span class=cFD>SYS_GDT_PTR</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CSysLimitBase</span><span class=cF7>)</span><span class=cF0>);
 <a name="l326"></a>    </span><span class=cFB>mp_count_initial</span><span class=cF0> = </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
@@ -376,7 +376,7 @@ body {background-color:#000000;}
 <a name="l349"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Executive Task CPU%02X&quot;</span><span class=cF0>, i);
 <a name="l350"></a>        task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, buf,,, </span><span class=cF3>MEM_EXECUTIVE_STACK</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l351"></a>        task-&gt;rflags = </span><span class=cF3>RFLAGG_START</span><span class=cF0>;
-<a name="l352"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3939"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
+<a name="l352"></a></span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3941"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
 <a name="l353"></a>        </span><span class=cFD>CPUStructInit</span><span class=cF0>(i, &amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[i], task);
 <a name="l354"></a>        </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed.  Might just need delay.</span><span class=cF0>
 <a name="l355"></a>    </span><span class=cF7>}</span><span class=cF0>

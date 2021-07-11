@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -58,7 +58,7 @@ body {background-color:#000000;}
 <a name="l31"></a></span><span class=cF2>//The convention is to put an underscore</span><span class=cF0>
 <a name="l32"></a></span><span class=cF2>//on C callable asm routines.</span><span class=cF0>
 <a name="l33"></a>_HELLO_WORLD::
-<a name="l34"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>             </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l34"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>             </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1940"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
 <a name="l35"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>
 <a name="l36"></a>@@05:           </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>RCX</span><span class=cF0>
 <a name="l37"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_HEX_U8</span><span class=cF0>

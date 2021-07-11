@@ -17,6 +17,7 @@ U0 NetLogInit()
 	net_log_task->border_src	= BDS_CONST;
 	net_log_task->border_attr	= DKGRAY << 4 + LTGRAY;
 	net_log_task->text_attr		= WHITE  << 4 + LTGRAY;
+	DocClear(net_log_task->border_doc, TRUE);
 
 /*
 	if (Fs == sys_task)

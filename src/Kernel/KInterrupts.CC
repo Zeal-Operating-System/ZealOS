@@ -130,6 +130,30 @@ U8 *IntEntrySet(I64 irq, U0 (*fp_new_handler)(), I64 type=IDTET_IRQ)
 	return old_handler;
 }
 
+I64 IntEntryAlloc()
+{ // 'Allocate' a user irq num.
+  // 64 user irqs available, 0xFF <--> 0xBF.
+  // $LK+PU,"Goes backwards from 0xFF.",A="MN:I_USER"$
+	I64 i, res = 0;
+
+	for (i = 0xFF; i > 0xFF - 64; i--)
+		if (!Bts(&dev.user_int_bitmap, i - 192))
+		{
+			res = i;
+			break;
+		}
+
+	return res;
+}
+
+I64 IntEntryFree(I64 irq)
+{ // 'Free' a user irq num. Unsets bit in user irq bitmap.
+	if (0xFF >= irq >= 0xFF - 64)
+		return Btr(&dev.user_int_bitmap, irq - 192);
+	else
+		return 0;
+}
+
 U0 IntPICInit()
 {//Init 8259
 	OutU8(PIC_1, PIC_INIT); //IW (Initialization Word) 1

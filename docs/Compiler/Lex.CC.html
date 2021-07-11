@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -59,7 +59,7 @@ body {background-color:#000000;}
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF9>CCompCtrl</span><span class=cF0> *</span><span class=cF5>CompCtrlNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *filename=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l34"></a>{</span><span class=cF2>//MAlloc and Init CCompCtrl.</span><span class=cF0>
-<a name="l35"></a>    </span><span class=cF2>//Frees buf in </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.CC.html#l64"><span class=cF4>CompCtrlDel</span></a><span class=cF2> unless </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l2272"><span class=cF4>CCF_DONT_FREE_BUF</span></a><span class=cF2> flag is set.</span><span class=cF0>
+<a name="l35"></a>    </span><span class=cF2>//Frees buf in </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.CC.html#l64"><span class=cF4>CompCtrlDel</span></a><span class=cF2> unless </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l2273"><span class=cF4>CCF_DONT_FREE_BUF</span></a><span class=cF2> flag is set.</span><span class=cF0>
 <a name="l36"></a>    </span><span class=cF2>//FileName is for error reporting.</span><span class=cF0>  </span><span class=cF2>If files are #included,</span><span class=cF0>
 <a name="l37"></a>    </span><span class=cF2>//new names are used.  See </span><a href="https://tomawezome.github.io/ZealOS/Apps/Psalmody/PsalmodyFile.CC.html#l235"><span class=cF4>Psalmody CompCtrlNew</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l38"></a>    </span><span class=cF9>CCompCtrl</span><span class=cF0> *cc = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCompCtrl</span><span class=cF7>)</span><span class=cF0>);

@@ -339,6 +339,7 @@ public class CMathODE
 
 //You might want to start backward from
 //0xFF for your own interrupts.
+//See $LK+PU,"IntEntryAlloc",A="MN:IntEntryAlloc"$.
 #define I_USER			0x40
 
 #define MP_PROCESSORS_NUM 	128
@@ -3546,6 +3547,7 @@ public class CDevGlobals
 	U8			 mp_apic_ids[MP_PROCESSORS_NUM];
 	CMemRange	 mem32_head;
 	CPCIDev		 pci_head;
+	U64			 user_int_bitmap;
 };
 
 #help_index "Graphics/Color;Graphics/Device Contexts"

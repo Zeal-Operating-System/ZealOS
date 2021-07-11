@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -58,7 +58,7 @@ body {background-color:#000000;}
 <a name="l31"></a>
 <a name="l32"></a>* You can adjust the mouse movement rate by setting global vars in your start-up file. See </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeLocalize.CC.html#l11"><span class=cF4>mouse scale</span></a><span class=cF0>.
 <a name="l33"></a>
-<a name="l34"></a>* You can set your local time zone by setting the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KGlobals.CC.html#l14"><span class=cF4>local_time_offset</span></a><span class=cF0> global var in a start-up file. It's units are </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l706"><span class=cF4>CDATE_FREQ</span></a><span class=cF0>. 
+<a name="l34"></a>* You can set your local time zone by setting the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KGlobals.CC.html#l14"><span class=cF4>local_time_offset</span></a><span class=cF0> global var in a start-up file. It's units are </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l707"><span class=cF4>CDATE_FREQ</span></a><span class=cF0>. 
 <a name="l35"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeLocalize.CC.html#l8"><span class=cF4>local time</span></a><span class=cF0>.
 <a name="l36"></a>
 <a name="l37"></a>* </span><span class=cF2>&lt;CTRL-SHIFT-L&gt;</span><span class=cF0> in the editor to reindent a </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> function or renumber an asm routine's local labels.
@@ -81,13 +81,13 @@ body {background-color:#000000;}
 <a name="l54"></a>wallpaper. The original intent was to indicate how far along operations were. There's no coordination, so different apps might 
 <a name="l55"></a>interfere. They're most often used for debugging--just values easily viewed. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Progress.CC.html#l1"><span class=cF4>::/Demo/Progress.CC</span></a><span class=cF0>.
 <a name="l56"></a>
-<a name="l57"></a>* Use </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l193"><span class=cF4>DocMax</span></a><span class=cF0>() to adjust the size of the cmd line buf. It counts </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> entries, not lines.
+<a name="l57"></a>* Use </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l193"><span class=cF4>DocMax</span></a><span class=cF0>() to adjust the size of the cmd line buf. It counts </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> entries, not lines.
 <a name="l58"></a>
-<a name="l59"></a>* Many data structures have a </span><span class=cF2>user_data</span><span class=cF0> member. Those are available for you to store a data item, for convenience. </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3939"><span class=cF4>CTask</span></a><span class=cF0>, </span><span class=cF4>
-<a name="l60"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1325"><span class=cF4>CDocEntry</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3167"><span class=cF4>CDirEntry</span></a><span class=cF0> have them. You shouldn't encounter conflicts with ZealOS using them.
+<a name="l59"></a>* Many data structures have a </span><span class=cF2>user_data</span><span class=cF0> member. Those are available for you to store a data item, for convenience. </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3941"><span class=cF4>CTask</span></a><span class=cF0>, </span><span class=cF4>
+<a name="l60"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1326"><span class=cF4>CDocEntry</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3168"><span class=cF4>CDirEntry</span></a><span class=cF0> have them. You shouldn't encounter conflicts with ZealOS using them.
 <a name="l61"></a>
 <a name="l62"></a>* If, for some strange reason, you wanted to reduce mem usage, make a smaller disk cache when you recompile the kernel; 
-<a name="l63"></a>disabling </span><span class=cF2>AutoComplete</span><span class=cF0>; Specify smaller stack sizes when doing </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>(), change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3507"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0>, and using </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l193"><span class=cF4>DocMax</span></a><span class=cF0>() to reduce 
+<a name="l63"></a>disabling </span><span class=cF2>AutoComplete</span><span class=cF0>; Specify smaller stack sizes when doing </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>(), change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3508"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0>, and using </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l193"><span class=cF4>DocMax</span></a><span class=cF0>() to reduce 
 <a name="l64"></a>the cmd line buffer size.
 <a name="l65"></a>
 <a name="l66"></a>* </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/Merge.CC.html#l44"><span class=cF4>Merge</span></a><span class=cF0>() can be used to see what's changed. The </span><span class=cF2>+d</span><span class=cF0> flag will show differences of files which have changed and allow you to 
@@ -95,11 +95,11 @@ body {background-color:#000000;}
 <a name="l68"></a>
 <a name="l69"></a>* There is a utility </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/LinkCheck.CC.html#l58"><span class=cF4>LinkCheck</span></a><span class=cF0>() which will check for broken links in documentation.
 <a name="l70"></a>
-<a name="l71"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1678"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
+<a name="l71"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
 <a name="l72"></a>
-<a name="l73"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find unnecessary local var type statements.
+<a name="l73"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find unnecessary local var type statements.
 <a name="l74"></a>
-<a name="l75"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1675"><span class=cF4>OPTf_ECHO</span></a><span class=cF0>, ON) can be placed in </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>StartOS.CC</span></a><span class=cF0> to echo start-up scripts.
+<a name="l75"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1676"><span class=cF4>OPTf_ECHO</span></a><span class=cF0>, ON) can be placed in </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>StartOS.CC</span></a><span class=cF0> to echo start-up scripts.
 <a name="l76"></a>
 <a name="l77"></a>* Use </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocEd.CC.html#l283"><span class=cF4>Plain</span></a><span class=cF0>() to edit a plain text file. You'll need this if your file has </span><span class=cF2>$</span><span class=cF0>'s. Use the </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/ToDolDoc.CC.html#l3"><span class=cF4>ToDolDoc</span></a><span class=cF0>() utility to convert plain text 
 <a name="l78"></a>to DolDoc's by doubling </span><span class=cF2>$</span><span class=cF0>'s.
@@ -145,11 +145,11 @@ body {background-color:#000000;}
 <a name="l118"></a>
 <a name="l119"></a>* Use </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocEd.CC.html#l3"><span class=cF4>View</span></a><span class=cF0>() in Pop-up macros to linger until the user presses </span><span class=cF2>&lt;ESC&gt;</span><span class=cF0> or </span><span class=cF2>&lt;SHIFT-ESC&gt;</span><span class=cF0>.
 <a name="l120"></a>
-<a name="l121"></a>* You can access the word under the cursor at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1626"><span class=cF4>ac.cur_word</span></a><span class=cF0>.
+<a name="l121"></a>* You can access the word under the cursor at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1627"><span class=cF4>ac.cur_word</span></a><span class=cF0>.
 <a name="l122"></a>
 <a name="l123"></a>* You can reactivate </span><span class=cF2>AutoComplete</span><span class=cF0> after closing it by pressing </span><span class=cF2>&lt;CTRL-Fun Key&gt;</span><span class=cF0> or </span><span class=cF2>&lt;ALT-a&gt;</span><span class=cF0>.
 <a name="l124"></a>
-<a name="l125"></a>* </span><span class=cF2>&lt;CTRL-SHIFT-T&gt;</span><span class=cF0> to toggle to/from plain text just the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> cmd under the cursor. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/DolDoc/TextDemo.CC.html#l1"><span class=cF4>::/Demo/DolDoc/TextDemo.CC</span></a><span class=cF0>.
+<a name="l125"></a>* </span><span class=cF2>&lt;CTRL-SHIFT-T&gt;</span><span class=cF0> to toggle to/from plain text just the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> cmd under the cursor. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/DolDoc/TextDemo.CC.html#l1"><span class=cF4>::/Demo/DolDoc/TextDemo.CC</span></a><span class=cF0>.
 <a name="l126"></a> 
 <a name="l127"></a>* If you toggle to plain text when you are working with graphics in a document, you can add duplicate entries for sprites by 
 <a name="l128"></a>entering a </span><span class=cF2>$SP...$</span><span class=cF0> cmd with the same num.
@@ -182,14 +182,14 @@ body {background-color:#000000;}
 <a name="l155"></a>* The editor's sel-text mechanism allows for disjoint portions of sel text. This is a feature, not a bug -- you can 
 <a name="l156"></a>cut-and-paste disjoint text.
 <a name="l157"></a>
-<a name="l158"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l695"><span class=cF4>counts.time_stamp_freq</span></a><span class=cF0> is continuously calibrated. Be careful because expressions might decrease. Take a snap-shot, like this: </span><span class=cF2>
-<a name="l159"></a>timeout = </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l244"><span class=cF4>TSCGet</span></a><span class=cF2> + </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l695"><span class=cF4>counts.time_stamp_freq</span></a><span class=cF2> x seconds;</span><span class=cF0> and compare against </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l244"><span class=cF4>TSCGet</span></a><span class=cF0>(). It's recommended to just use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l75"><span class=cF4>tS</span></a><span class=cF0> or </span><span class=cF4>
-<a name="l160"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l695"><span class=cF4>counts.jiffies</span></a><span class=cF0>.
+<a name="l158"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l696"><span class=cF4>counts.time_stamp_freq</span></a><span class=cF0> is continuously calibrated. Be careful because expressions might decrease. Take a snap-shot, like this: </span><span class=cF2>
+<a name="l159"></a>timeout = </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l244"><span class=cF4>TSCGet</span></a><span class=cF2> + </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l696"><span class=cF4>counts.time_stamp_freq</span></a><span class=cF2> x seconds;</span><span class=cF0> and compare against </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l244"><span class=cF4>TSCGet</span></a><span class=cF0>(). It's recommended to just use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l75"><span class=cF4>tS</span></a><span class=cF0> or </span><span class=cF4>
+<a name="l160"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l696"><span class=cF4>counts.jiffies</span></a><span class=cF0>.
 <a name="l161"></a>
-<a name="l162"></a>* Use </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l139"><span class=cF4>HeapLogAddrRep</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l174"><span class=cF4>HeapLogSizeRep</span></a><span class=cF0>() to find leaks. Don't be confused by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1501"><span class=cF4>CDoc</span></a><span class=cF0> allocations. Those are generated 
+<a name="l162"></a>* Use </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l139"><span class=cF4>HeapLogAddrRep</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l174"><span class=cF4>HeapLogSizeRep</span></a><span class=cF0>() to find leaks. Don't be confused by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> allocations. Those are generated 
 <a name="l163"></a>when text is written to the cmd line buffer.
 <a name="l164"></a>
-<a name="l165"></a>* For advanced heap debugging, play with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3437"><span class=cF4>_CONFIG_HEAP_DEBUG</span></a><span class=cF0>. You're on your own.
+<a name="l165"></a>* For advanced heap debugging, play with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3438"><span class=cF4>_CONFIG_HEAP_DEBUG</span></a><span class=cF0>. You're on your own.
 <a name="l166"></a>
 <a name="l167"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocFile.CC.html#l378"><span class=cF4>Type</span></a><span class=cF0>() to display </span><span class=cF2>.GR</span><span class=cF0> files.
 <a name="l168"></a>

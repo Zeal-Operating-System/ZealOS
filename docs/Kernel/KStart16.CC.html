@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -29,13 +29,13 @@ body {background-color:#000000;}
 <a name="l2"></a></span><span class=cF2>ZealOS starts in real, calls some BIOS routines, switches to 32 bit, and 64 bit mode and continues in </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF2> at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l143"><span class=cF4>KMain</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l3"></a>
 <a name="l4"></a></span><span class=cF2>The boot loader jumps here in real-mode (16-bit).</span><span class=cF0>
-<a name="l5"></a></span><span class=cF2>It actually jumps to the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l451"><span class=cF4>CBinFile</span></a><span class=cF2> header which is placed just before this by </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.CC.html#l628"><span class=cF4>the compiler</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l5"></a></span><span class=cF2>It actually jumps to the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l452"><span class=cF4>CBinFile</span></a><span class=cF2> header which is placed just before this by </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMain.CC.html#l628"><span class=cF4>the compiler</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l6"></a></span><span class=cF2>The header begins with a short jmp to the start of this file's code which begins with the following small jump past some data.</span><span class=cF0>
 <a name="l7"></a>
 <a name="l8"></a></span><span class=cF2>This file is first in the Kernel image because it is #included first.  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l14"><span class=cF4>Kernel.PRJ</span></a><span class=cF0>
 <a name="l9"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l10"></a></span><span class=cF1>USE16</span><span class=cF0>
-<a name="l11"></a></span><span class=cFD>SYS_KERNEL</span><span class=cF0>:: </span><span class=cF2>//This must match </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l547"><span class=cF4>CKernel</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l11"></a></span><span class=cFD>SYS_KERNEL</span><span class=cF0>:: </span><span class=cF2>//This must match </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l548"><span class=cF4>CKernel</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l12"></a>        </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I16</span><span class=cF0> </span><span class=cFD>CORE0_16BIT_INIT</span><span class=cF0>
 <a name="l13"></a>
 <a name="l14"></a></span><span class=cF2>//************************************</span><span class=cF0>
@@ -64,7 +64,7 @@ body {background-color:#000000;}
 <a name="l37"></a>
 <a name="l38"></a>        </span><span class=cF1>ALIGN</span><span class=cF0>   </span><span class=cFE>16</span><span class=cF0>, </span><span class=cF3>OC_NOP</span><span class=cF0>
 <a name="l39"></a>
-<a name="l40"></a></span><span class=cFD>SYS_GDT</span><span class=cF0>:: </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l395"><span class=cF4>CGDT</span></a><span class=cF0>
+<a name="l40"></a></span><span class=cFD>SYS_GDT</span><span class=cF0>:: </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l396"><span class=cF4>CGDT</span></a><span class=cF0>
 <a name="l41"></a>GDT_NULL:       </span><span class=cF1>DU64</span><span class=cF0>    </span><span class=cFE>0</span><span class=cF0>,</span><span class=cFE>0</span><span class=cF0>;
 <a name="l42"></a>GDT_BOOT_DS:    </span><span class=cF1>DU64</span><span class=cF0>    </span><span class=cFE>0x00CF92000000FFFF</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//Gets patched.</span><span class=cF0>
 <a name="l43"></a>GDT_BOOT_CS:    </span><span class=cF1>DU64</span><span class=cF0>    </span><span class=cFE>0x00CF9A000000FFFF</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//Gets patched.</span><span class=cF0>

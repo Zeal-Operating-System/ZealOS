@@ -629,6 +629,8 @@ public extern I64 ATARep(Bool prompt=TRUE, Bool just_ide=FALSE, CATARep **_head=
 #help_index "Processor"
 public extern U8 *IntEntryGet(I64 irq);
 public extern U8 *IntEntrySet(I64 irq, U0 (*fp_new_handler)(), I64 type=IDTET_IRQ);
+public extern I64 IntEntryAlloc();
+public extern I64 IntEntryFree(I64 irq);
 
 #help_index "ScreenCast;Cmd Line (Typically)"
 public extern Bool					ScreenCast(Bool val=ON, Bool just_audio=FALSE, U8 *print_format="B:/Tmp/%X.GR")

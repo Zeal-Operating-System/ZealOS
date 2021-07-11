@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -59,13 +59,13 @@ body {background-color:#000000;}
 <a name="l32"></a>the array of linked-lists.  Multiple strings can generate the same num, so linked-lists are built.  Newer entries overshadow 
 <a name="l33"></a>older ones.
 <a name="l34"></a>
-<a name="l35"></a>There are various types of entries.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l821"><span class=cF4>Hash Entry Types</span></a><span class=cF0>.
+<a name="l35"></a>There are various types of entries.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l822"><span class=cF4>Hash Entry Types</span></a><span class=cF0>.
 <a name="l36"></a>
 <a name="l37"></a></span><span class=cF5>Symbol Look-up</span><span class=cF0> (Used many places including the </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.CC.html#l596"><span class=cF4>JIT Compiler</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KLoad.CC.html#l24"><span class=cF4>Loader</span></a><span class=cF0>.)
 <a name="l38"></a>1) Symbol name is </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KHashA.CC.html#l4"><span class=cF4>hashed</span></a><span class=cF0> by adding and shifting the ASCII of all chars.
-<a name="l39"></a>2) </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;body[] array is indexed.
+<a name="l39"></a>2) </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l783"><span class=cF4>hash table</span></a><span class=cF0>-&gt;body[] array is indexed.
 <a name="l40"></a>3) Linked-list is traversed until match of text and type of entry.
-<a name="l41"></a>4) If not found, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l782"><span class=cF4>hash table</span></a><span class=cF0>-&gt;next table is searched.
+<a name="l41"></a>4) If not found, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l783"><span class=cF4>hash table</span></a><span class=cF0>-&gt;next table is searched.
 <a name="l42"></a>
 <a name="l43"></a>Duplicate entries are allowed -- they overshadow old entries.
 <a name="l44"></a>

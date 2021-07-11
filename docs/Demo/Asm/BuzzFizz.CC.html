@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -35,7 +35,7 @@ body {background-color:#000000;}
 <a name="l8"></a>_BUZZ_FIZZ::
 <a name="l9"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l10"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0> </span><span class=cF2>//Always set-up stack frame.</span><span class=cF0>   </span><span class=cF2>(Stack Gets Traced)</span><span class=cF0>
-<a name="l11"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>         </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l11"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>         </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1940"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
 <a name="l12"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RDI</span><span class=cF0>
 <a name="l13"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>, FIZZ_SPAN - RANGE_START % FIZZ_SPAN + </span><span class=cFE>1</span><span class=cF0>
 <a name="l14"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RDI</span><span class=cF0>, BUZZ_SPAN - RANGE_START % BUZZ_SPAN + </span><span class=cFE>1</span><span class=cF0>

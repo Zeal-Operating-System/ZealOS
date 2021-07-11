@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -51,7 +51,7 @@ body {background-color:#000000;}
 <a name="l24"></a>_MUL_BY_HAND_U8_U8_TO_U16::         </span><span class=cF2>//C callable</span><span class=cF0>
 <a name="l25"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l26"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
-<a name="l27"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AL</span><span class=cF0>,  </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l714"><span class=cF4>SF_ARG1</span></a><span class=cF0>
+<a name="l27"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AL</span><span class=cF0>,  </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l715"><span class=cF4>SF_ARG1</span></a><span class=cF0>
 <a name="l28"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>BL</span><span class=cF0>,  </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF3>SF_ARG2</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]
 <a name="l29"></a>                </span><span class=cF1>CALL</span><span class=cF0>        MUL_BY_HAND_U8_U8_TO_U16
 <a name="l30"></a>                </span><span class=cF1>MOVZX</span><span class=cF0>       </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>
@@ -63,7 +63,7 @@ body {background-color:#000000;}
 <a name="l36"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l37"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
 <a name="l38"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG3</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]
-<a name="l39"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l714"><span class=cF4>SF_ARG1</span></a><span class=cF0>
+<a name="l39"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l715"><span class=cF4>SF_ARG1</span></a><span class=cF0>
 <a name="l40"></a>                </span><span class=cF1>MUL</span><span class=cF0>         </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG2</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>]    </span><span class=cF2>//Res RDX:RAX 128bit</span><span class=cF0>
 <a name="l41"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U64</span><span class=cF0> [</span><span class=cFC>RBX</span><span class=cF0>], </span><span class=cFC>RAX</span><span class=cF0>
 <a name="l42"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U64</span><span class=cF0> </span><span class=cFE>8</span><span class=cF0>[</span><span class=cFC>RBX</span><span class=cF0>], </span><span class=cFC>RDX</span><span class=cF0>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -71,7 +71,7 @@ body {background-color:#000000;}
 <a name="l44"></a>BDVD_DAP_BUF:               </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
 <a name="l45"></a>BDVD_DAP_BLK:               </span><span class=cF1>DU64</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>;
 <a name="l46"></a> 
-<a name="l47"></a>BDVD_TEMPLEOS_MESSAGE:      </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cF6>&quot;Loading ZealOS&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
+<a name="l47"></a>BDVD_ZEALOS_MESSAGE:        </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cF6>&quot;Loading ZealOS&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
 <a name="l48"></a>
 <a name="l49"></a>BDVD_NOT64_MESSAGE:         </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cF6>&quot;ZealOS requires a 64-bit capable processor.\n\r&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
 <a name="l50"></a>
@@ -117,7 +117,7 @@ body {background-color:#000000;}
 <a name="l90"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>BDVD_PUTS</span><span class=cF0>
 <a name="l91"></a>@@10:           </span><span class=cF1>JMP</span><span class=cF0>         @@10
 <a name="l92"></a>
-<a name="l93"></a>@@15:           </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>SI</span><span class=cF0>, BDVD_TEMPLEOS_MESSAGE - </span><span class=cFD>BDVD_START</span><span class=cF0>
+<a name="l93"></a>@@15:           </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>SI</span><span class=cF0>, BDVD_ZEALOS_MESSAGE - </span><span class=cFD>BDVD_START</span><span class=cF0>
 <a name="l94"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>BDVD_PUTS</span><span class=cF0>
 <a name="l95"></a>
 <a name="l96"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>,  </span><span class=cF3>BOOT_RAM_BASE</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>

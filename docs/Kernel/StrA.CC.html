@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -346,7 +346,7 @@ body {background-color:#000000;}
 <a name="l319"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>_STRIMATCH</span><span class=cF0>      </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrIMatch</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle, </span><span class=cF1>U8</span><span class=cF0> *haystack_str);</span><span class=cF2>//Scan for string in string, ignoring case.</span><span class=cF0>
 <a name="l320"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>_STRCOPY</span><span class=cF0>        </span><span class=cF1>U0</span><span class=cF0>  </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *src); </span><span class=cF2>//Copy string.</span><span class=cF0>
 <a name="l321"></a>
-<a name="l322"></a></span><span class=cF2>//These bitmaps go to 0-511 so that </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.CC.html#l529"><span class=cF4>Lex</span></a><span class=cF2>() can use them with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l2210"><span class=cF4>Token Codes</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l322"></a></span><span class=cF2>//These bitmaps go to 0-511 so that </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.CC.html#l529"><span class=cF4>Lex</span></a><span class=cF2>() can use them with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l2211"><span class=cF4>Token Codes</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l323"></a></span><span class=cF9>U32</span><span class=cF0>
 <a name="l324"></a>    </span><span class=cFB>char_bmp_alpha</span><span class=cF0>[</span><span class=cFE>16</span><span class=cF0>] =
 <a name="l325"></a>    {</span><span class=cFE>0x0000000</span><span class=cF0>, </span><span class=cFE>0x00000000</span><span class=cF0>, </span><span class=cFE>0x87FFFFFF</span><span class=cF0>, </span><span class=cFE>0x07FFFFFE</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0xFFFFFFFF</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>}, 
@@ -553,7 +553,7 @@ body {background-color:#000000;}
 <a name="l526"></a>}
 <a name="l527"></a>
 <a name="l528"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrUtil</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_src, </span><span class=cF9>I64</span><span class=cF0> flags)
-<a name="l529"></a>{</span><span class=cF2>//Modifies in place. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4336"><span class=cF4>flags</span></a><span class=cF2> for all the options.</span><span class=cF0>
+<a name="l529"></a>{</span><span class=cF2>//Modifies in place. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4338"><span class=cF4>flags</span></a><span class=cF2> for all the options.</span><span class=cF0>
 <a name="l530"></a>    </span><span class=cF1>U8</span><span class=cF0> *src = _src, *dst = _src;
 <a name="l531"></a>    </span><span class=cF9>I64</span><span class=cF0> ch;
 <a name="l532"></a>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -46,10 +46,10 @@ body {background-color:#000000;}
 <a name="l19"></a>
 <a name="l20"></a>_BEEPS2::
 <a name="l21"></a></span><span class=cF2>//You can clobber RAX,RBX,RCX,RDX,R8,R9.</span><span class=cF0>    </span><span class=cF2>The compiler expects that.</span><span class=cF0>
-<a name="l22"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1935"><span class=cF4>REGG_CLOBBERED</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1937"><span class=cF4>REGG_STACK_TMP</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l22"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1936"><span class=cF4>REGG_CLOBBERED</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_STACK_TMP</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l23"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l24"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>, </span><span class=cFC>RSP</span><span class=cF0>
-<a name="l25"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l714"><span class=cF4>SF_ARG1</span></a><span class=cF0>
+<a name="l25"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>, </span><span class=cF9>U64</span><span class=cF0> </span><span class=cF3>SF_ARG1</span><span class=cF0>[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l715"><span class=cF4>SF_ARG1</span></a><span class=cF0>
 <a name="l26"></a>
 <a name="l27"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cF9>U64</span><span class=cF0> [&amp;</span><span class=cFB>counts</span><span class=cF0>.jiffies]
 <a name="l28"></a>
@@ -61,7 +61,7 @@ body {background-color:#000000;}
 <a name="l34"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>
 <a name="l35"></a>                </span><span class=cF1>LOOP</span><span class=cF0>        @@05
 <a name="l36"></a>
-<a name="l37"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>         </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1938"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
+<a name="l37"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>RSI</span><span class=cF0>         </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1939"><span class=cF4>REGG_LOCAL_VARS</span></a><span class=cF2> &amp; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1940"><span class=cF4>REGG_LOCAL_NON_PTR_VARS</span></a><span class=cF0>
 <a name="l38"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>, JIFFIES_MESSAGE
 <a name="l39"></a>                </span><span class=cF1>CALL</span><span class=cF0>        </span><span class=cFD>PUT_STR</span><span class=cF0>
 <a name="l40"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RSI</span><span class=cF0>

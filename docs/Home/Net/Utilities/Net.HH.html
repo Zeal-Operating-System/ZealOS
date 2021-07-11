@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -47,25 +47,28 @@ body {background-color:#000000;}
 <a name="l20"></a>
 <a name="l21"></a>#</span><span class=cF1>define</span><span class=cF0> IP_ADDRESS_LENGTH   </span><span class=cFE>4</span><span class=cF0>
 <a name="l22"></a>
-<a name="l23"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>PCNet reroutes PCI interrupts to software. See </span><span class=cF4><u>PCNet</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l23"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>PCNet reroutes PCI interrupts to software. See </span><a href="https://tomawezome.github.io/ZealOS/Home/Net/Drivers/PCNet.CC.html#l628"><span class=cF4>PCNet</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l24"></a>    </span><span class=cF2>Net Handler interrupt is generated whenever an entry is</span><span class=cF0>
-<a name="l25"></a>    </span><span class=cF2>pushed to the NetQueue. See </span><span class=cF4><u>NetHandler</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l25"></a>    </span><span class=cF2>pushed to the NetQueue. See </span><a href="https://tomawezome.github.io/ZealOS/Home/Net/Utilities/NetHandler.CC.html#l95"><span class=cF4>NetHandler</span></a><span class=cF2>. */</span><span class=cF0>
 <a name="l26"></a>
-<a name="l27"></a>    </span><span class=cF2>TODO: Make a function to auto-allocate these;</span><span class=cF0>
-<a name="l28"></a>        </span><span class=cF2>  See note above </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l342"><span class=cF4>I_USER</span></a><span class=cF2>. */</span><span class=cF0>
-<a name="l29"></a>
-<a name="l30"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET0        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>
-<a name="l31"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET1        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>
-<a name="l32"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET2        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>
-<a name="l33"></a>#</span><span class=cF1>define</span><span class=cF0> I_PCNET3        </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>
-<a name="l34"></a>
-<a name="l35"></a>#</span><span class=cF1>define</span><span class=cF0> I_E1000_0       </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>0</span><span class=cF0>
-<a name="l36"></a>#</span><span class=cF1>define</span><span class=cF0> I_E1000_1       </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>
-<a name="l37"></a>#</span><span class=cF1>define</span><span class=cF0> I_E1000_2       </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>
-<a name="l38"></a>#</span><span class=cF1>define</span><span class=cF0> I_E1000_3       </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>3</span><span class=cF0>
-<a name="l39"></a>
-<a name="l40"></a>#</span><span class=cF1>define</span><span class=cF0> I_NETHANDLER    </span><span class=cF3>I_USER</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>
-<a name="l41"></a>
-<a name="l42"></a>#</span><span class=cF1>define</span><span class=cF0> INT_DEST_CPU    </span><span class=cFE>0</span><span class=cF0>
+<a name="l27"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l28"></a></span><span class=cF2>#define I_PCNET0</span><span class=cF0>        </span><span class=cF2>I_USER + 0</span><span class=cF0>
+<a name="l29"></a></span><span class=cF2>#define I_PCNET1</span><span class=cF0>        </span><span class=cF2>I_USER + 1</span><span class=cF0>
+<a name="l30"></a></span><span class=cF2>#define I_PCNET2</span><span class=cF0>        </span><span class=cF2>I_USER + 2</span><span class=cF0>
+<a name="l31"></a></span><span class=cF2>#define I_PCNET3</span><span class=cF0>        </span><span class=cF2>I_USER + 3</span><span class=cF0>
+<a name="l32"></a>
+<a name="l33"></a></span><span class=cF2>#define I_E1000_0</span><span class=cF0>       </span><span class=cF2>I_USER + 0</span><span class=cF0>
+<a name="l34"></a></span><span class=cF2>#define I_E1000_1</span><span class=cF0>       </span><span class=cF2>I_USER + 1</span><span class=cF0>
+<a name="l35"></a></span><span class=cF2>#define I_E1000_2</span><span class=cF0>       </span><span class=cF2>I_USER + 2</span><span class=cF0>
+<a name="l36"></a></span><span class=cF2>#define I_E1000_3</span><span class=cF0>       </span><span class=cF2>I_USER + 3</span><span class=cF0>
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cF2>#define I_NETHANDLER</span><span class=cF0>    </span><span class=cF2>I_USER + 4</span><span class=cF0>
+<a name="l39"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l40"></a>
+<a name="l41"></a></span><span class=cF9>I64</span><span class=cF0> I_NETHANDLER = </span><span class=cF5>IntEntryAlloc</span><span class=cF0>;
+<a name="l42"></a></span><span class=cF2>// TODO: needed across NetHandler &amp; NetQueue,</span><span class=cF0>
+<a name="l43"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2> need a dynamic #define.. (I64 allows trashing)</span><span class=cF0>
+<a name="l44"></a>
+<a name="l45"></a>#</span><span class=cF1>define</span><span class=cF0> INT_DEST_CPU    </span><span class=cFE>0</span><span class=cF0>
 </span></pre></body>
 </html>

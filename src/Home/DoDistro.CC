@@ -7,6 +7,7 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 //If you have not recompiled $FG,2$Kernel$FG$ and defined your CD/DVD drive, use $LK,"Mount",A="MN:Mount"$.
 
 	U8 *out_iso_filename = FileNameAbs(_out_iso_filename);
+	I64 line_count = LineRep("/*", "-r") + LineRep("/System/*") + LineRep("/Compiler/*", "-S+$$") + LineRep("/Kernel/*");
 
 	if (!DriveIsWritable)
 	{
@@ -14,41 +15,66 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 		return;
 	}
 
+	DocTreeFWrite("/System/Define.CC", "LineRep", "DefinePrint(\"DD_ZEALOS_LOC\",\"%,d\");\n", line_count);
+	DefinePrint("DD_ZEALOS_LOC", "%,d", line_count);
+
+	"Total LOC:%12,d\n\n", line_count;
+
 	DelTree("/Distro");
 	Del(out_iso_filename);
 
 	// Generate all HTML docs before ISO creation.
 	PopUpRunFile("::/Home/HtmlGen.CC");
+	ProgressBarsReset;
+
+	progress1_max = 14;
+	StrCopy(progress1_desc, "Copying files to /Distro");
 
 	DirMake("/Distro");
 	In(STD_DISTRO_DVD_CONFIG);
 	BootDVDIns;
+	progress1++;
 
 	Copy("/*", "/Distro");
 	Del("/Distro/" KERNEL_BIN_C);
+	progress1++;
 
 	CopyTree(BOOT_DIR,		"/Distro" BOOT_DIR);
+	progress1++;
 	CopyTree("/Home", 		"/Distro/Home");
+	progress1++;
 	Del("/Distro/Home/Registry.CC");
 	CopyTree("/System", 	"/Distro/System");
+	progress1++;
 	CopyTree("/Apps", 		"/Distro/Apps");
+	progress1++;
 	CopyTree("/Compiler",	"/Distro/Compiler");
+	progress1++;
 	CopyTree("/Demo", 		"/Distro/Demo");
+	progress1++;
 	CopyTree("/Doc",		"/Distro/Doc");
+	progress1++;
 	CopyTree("/Kernel", 	"/Distro/Kernel");
+	progress1++;
 	CopyTree("/Misc", 		"/Distro/Misc");
+	progress1++;
 
 	//To save space, optionally delete dictionary.
 	//Del("/Distro/System/AutoComplete/ACDefs.DATA");
 	CopyTree("/Downloads", "/Distro/Downloads"); 		//You can leave this out.
+	progress1++;
 	DirMake("/Distro/Tmp");
 	DirMake("/Distro/Tmp/ScreenShots");
+	progress1++;
+	StrCopy(progress1_desc, "Building ISO");
 	RedSeaISO(out_iso_filename, "/Distro", "/Distro" BOOT_DIR_KERNEL_BIN_C);
+	progress1++;
 
 	//If CD-ROM use MT_CD instead of MT_DVD.
 	//DVDImageWrite('T',out_iso_filename,MT_DVD); //Uncomment to burn.
 
 	DelTree("/Distro");
+	ProgressBarsReset;
 	Free(out_iso_filename);
 }
 

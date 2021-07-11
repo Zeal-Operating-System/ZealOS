@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -29,23 +29,23 @@ body {background-color:#000000;}
 <a name="l2"></a>
 <a name="l3"></a>Use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>().   You might need to do </span><span class=cF2>#exe {Option();}</span><span class=cF0>.
 <a name="l4"></a></span><span class=cF4>
-<a name="l5"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1684"><span class=cF4>OPTf_GLOBALS_ON_DATA_HEAP</span></a><span class=cF0> without this option, global vars are placed in the code heap which is limited to 2Gig.    In </span><span class=cF2>AOT</span><span class=cF0> 
+<a name="l5"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1685"><span class=cF4>OPTf_GLOBALS_ON_DATA_HEAP</span></a><span class=cF0> without this option, global vars are placed in the code heap which is limited to 2Gig.    In </span><span class=cF2>AOT</span><span class=cF0> 
 <a name="l6"></a>modules, global vars take-up room in the </span><span class=cF2>.BIN</span><span class=cF0> file, so you might want to use this option, instead.  You might wish to turn it on 
 <a name="l7"></a>and off around specific vars.  A disadvantage of data heap global vars in </span><span class=cF2>AOT</span><span class=cF0> modules is they can't be initialized.
 <a name="l8"></a></span><span class=cF4>
-<a name="l9"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1681"><span class=cF4>OPTf_EXTERNS_TO_IMPORTS</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1682"><span class=cF4>OPTf_KEEP_PRIVATE</span></a><span class=cF0> are strange options, you'll never need.  They're to allow the same header file for </span><span class=cF2>
+<a name="l9"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1682"><span class=cF4>OPTf_EXTERNS_TO_IMPORTS</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1683"><span class=cF4>OPTf_KEEP_PRIVATE</span></a><span class=cF0> are strange options, you'll never need.  They're to allow the same header file for </span><span class=cF2>
 <a name="l10"></a>Kernel</span><span class=cF0> to act as </span><span class=cF2>extern</span><span class=cF0>s when compiling itself and </span><span class=cF2>import</span><span class=cF0>s when compiled by </span><span class=cF2>AOT</span><span class=cF0> modules.
 <a name="l11"></a></span><span class=cF4>
-<a name="l12"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1677"><span class=cF4>OPTf_WARN_UNUSED_VAR</span></a><span class=cF0>        warning if unused var.  It is applied to functions.
+<a name="l12"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1678"><span class=cF4>OPTf_WARN_UNUSED_VAR</span></a><span class=cF0>        warning if unused var.  It is applied to functions.
 <a name="l13"></a></span><span class=cF4>
-<a name="l14"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1678"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>             warning if parenthesis are not needed.
+<a name="l14"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>             warning if parenthesis are not needed.
 <a name="l15"></a></span><span class=cF4>
-<a name="l16"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>         warning if dup local var type statements.
+<a name="l16"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>         warning if dup local var type statements.
 <a name="l17"></a></span><span class=cF4>
-<a name="l18"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_HEADER_MISMATCH</span></a><span class=cF0>   warning if fun header does not match.
+<a name="l18"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1681"><span class=cF4>OPTf_WARN_HEADER_MISMATCH</span></a><span class=cF0>   warning if fun header does not match.
 <a name="l19"></a></span><span class=cF4>
-<a name="l20"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1683"><span class=cF4>OPTf_NO_REG_VAR</span></a><span class=cF0>             forces all function local vars to the stack not regs.  Applied to functions.
+<a name="l20"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1684"><span class=cF4>OPTf_NO_REG_VAR</span></a><span class=cF0>             forces all function local vars to the stack not regs.  Applied to functions.
 <a name="l21"></a></span><span class=cF4>
-<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1686"><span class=cF4>OPTf_NO_BUILTIN_CONST</span></a><span class=cF0>       Disable 10-byte float consts for pi, log2_10, log10_2, loge_2.  Applied to functions.
+<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1687"><span class=cF4>OPTf_NO_BUILTIN_CONST</span></a><span class=cF0>       Disable 10-byte float consts for pi, log2_10, log10_2, loge_2.  Applied to functions.
 </span></pre></body>
 </html>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -84,7 +84,7 @@ body {background-color:#000000;}
 <a name="l57"></a>            </span><span class=cF2>//This corrects for the ambiguity, allowing zero percentile.</span><span class=cF0>
 <a name="l58"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MemberMetaFind</span><span class=cF7>(</span><span class=cF6>&quot;percentile&quot;</span><span class=cF0>, ml</span><span class=cF7>)</span><span class=cF0>)
 <a name="l59"></a>        {</span><span class=cF2>//check if it exists</span><span class=cF0>
-<a name="l60"></a>            </span><span class=cF2>//We could use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l927"><span class=cF4>CMemberListMeta</span></a><span class=cF2> structure returned by</span><span class=cF0>
+<a name="l60"></a>            </span><span class=cF2>//We could use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l928"><span class=cF4>CMemberListMeta</span></a><span class=cF2> structure returned by</span><span class=cF0>
 <a name="l61"></a>            </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Compiler/LexLib.CC.html#l64"><span class=cF4>MemberMetaFind</span></a><span class=cF2>() and save a search.</span><span class=cF0>
 <a name="l62"></a>            percentile = </span><span class=cF5>MemberMetaData</span><span class=cF0>(</span><span class=cF6>&quot;percentile&quot;</span><span class=cF0>, ml)(</span><span class=cF1>F64</span><span class=cF0>);
 <a name="l63"></a>            </span><span class=cF6>&quot; percentile: %5.2f&quot;</span><span class=cF0>, percentile;

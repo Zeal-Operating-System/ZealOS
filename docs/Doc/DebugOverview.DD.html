@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.06">
+<meta name="generator" content="ZealOS V0.07">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -29,9 +29,9 @@ body {background-color:#000000;}
 <a name="l2"></a>
 <a name="l3"></a>* You can enter the debugger with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l732"><span class=cF4>Debug</span></a><span class=cF0>() or </span><span class=cF2>&lt;CTRL-ALT-d&gt;</span><span class=cF0>.  You might enter the debugger through a fault.  Enter </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l499"><span class=cF4>G</span></a><span class=cF0>() or </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l530"><span class=cF4>G2</span></a><span class=cF0>() to 
 <a name="l4"></a>continue execution. Place a call to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l732"><span class=cF4>Debug</span></a><span class=cF0>() in your code at fatal error points to enter the debugger.  If you see a stack dump, 
-<a name="l5"></a>record the label+offset and unassemble, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(). </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4044"><span class=cF4>_RIP</span></a><span class=cF0>);
+<a name="l5"></a>record the label+offset and unassemble, </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(). </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4046"><span class=cF4>_RIP</span></a><span class=cF0>);
 <a name="l6"></a>
-<a name="l7"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(&amp;FunName+offset) to unassemble mem or </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.CC.html#l330"><span class=cF4>Uf</span></a><span class=cF0>(&quot;FunName&quot;) to unassemble a function. </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4044"><span class=cF4>_RIP</span></a><span class=cF0>-16);
+<a name="l7"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(&amp;FunName+offset) to unassemble mem or </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.CC.html#l330"><span class=cF4>Uf</span></a><span class=cF0>(&quot;FunName&quot;) to unassemble a function. </span><a href="https://tomawezome.github.io/ZealOS/Compiler/UAsm.CC.html#l771"><span class=cF4>U</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4046"><span class=cF4>_RIP</span></a><span class=cF0>-16);
 <a name="l8"></a>
 <a name="l9"></a>* While debugging, you specify addresses of assembly routines with just the label, as in </span><span class=cF2>_MALLOC+0x20</span><span class=cF0>.  You specify </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> 
 <a name="l10"></a>function names with </span><span class=cF2>&amp;</span><span class=cF0> before functions as in </span><span class=cF2>&amp;Print+0x10</span><span class=cF0>.

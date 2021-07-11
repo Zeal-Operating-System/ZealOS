@@ -92,6 +92,7 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 
 					"%s\n\n", dest_path;
 					ToHtml(tmpde1->full_name, dest_path);
+					progress1++;
 
 					Free(dest_path);
 				}
@@ -128,6 +129,9 @@ I64 HtmlGen()
 	DocMax;
 	DocMax;
 	DelTree("::/HTML/");
+
+	progress1		= 0;
+	progress1_max	= FileCount(FilesFind("::/", FUF_RECURSE));
 
 	DirIndex("::/HTML/", "::/", "DocPrint(,\"\n\n\");Who;");
 
