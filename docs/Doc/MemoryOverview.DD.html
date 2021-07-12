@@ -25,16 +25,16 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                        Memory Overview</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                       Memory Overview</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a>Paging is practically not used.  64-bit mode requires paging, however, so it is identity-mapped -- virtual identical to 
 <a name="l4"></a>physical.  All tasks on all cores use the same page table map, just as though all addresses are physical addresses.  2Meg or 
 <a name="l5"></a>1Gig page table entries are used.   Nothing swaps to disk.
 <a name="l6"></a>
 <a name="l7"></a>In ZealOS, the lowest 2Gig of memory is called the </span><span class=cF2>code heap</span><span class=cF0>.  ZealOS's compiler always uses 32-bit signed relative JMP &amp; CALL 
-<a name="l8"></a>insts because 64-bit CALLs take two insts.  With signed +/- 32-bit values, code can only call a function within 2Gig distance.  
-<a name="l9"></a>Therefore, ZealOS keeps all code in the lowest 2Gig memory addresses including what would normally be called &quot;the kernel&quot;.  Two 
-<a name="l10"></a>Gig is plenty for code, don't worry.
+<a name="l8"></a>insts because 64-bit CALLs take two insts.  With signed +/- 32-bit values, code can only call a function within 2Gig distance. 
+<a name="l9"></a> Therefore, ZealOS keeps all code in the lowest 2Gig memory addresses including what would normally be called &quot;the kernel&quot;.  
+<a name="l10"></a>Two Gig is plenty for code, don't worry.
 <a name="l11"></a>
 <a name="l12"></a>You can create new, independent heaps using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). Then, use the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3528"><span class=cF4>CHeapCtrl</span></a><span class=cF0> as the 2nd arg to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>(). See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() 
 <a name="l13"></a>for an example.
@@ -52,7 +52,7 @@ body {background-color:#000000;}
 <a name="l25"></a>See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Demo/MemDemo.CC.html#l1"><span class=cF4>::/Demo/MemDemo.CC</span></a><span class=cF0>.
 <a name="l26"></a>
 <a name="l27"></a>
-<a name="l28"></a></span><span class=cF5>                                                 Single System-wide Memory Map
+<a name="l28"></a></span><span class=cF5>                                                Single System-wide Memory Map
 <a name="l29"></a>
 <a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x000003702F</span><span class=cF0>
 <a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4441"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
@@ -89,27 +89,27 @@ body {background-color:#000000;}
 <a name="l62"></a>the code heap is 1/4 of the total.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/BlkPool.CC.html#l31"><span class=cF4>BlkPoolsInit</span></a><span class=cF0>().
 <a name="l63"></a>
 <a name="l64"></a>
-<a name="l65"></a></span><span class=cF5>                                                            History</span><span class=cF0>
+<a name="l65"></a></span><span class=cF5>                                                           History</span><span class=cF0>
 <a name="l66"></a>
 <a name="l67"></a>In 2003, Terry Davis wanted to make a no-paging ring-0-only 64-bit operating system for super speed with simplicity and full 
 <a name="l68"></a>access. With paging, every memory request requires 5 accesses -- it must access the address itself, 4K, 2Meg, 1Gig, and 512Gig 
 <a name="l69"></a>page tables, but the CPU's translation look-aside buffer mostly removes the penalty for using paging.   So, he did not want to 
-<a name="l70"></a>use paging, but long mode requires it.  He did the next best thing -- he identity-mapped everything and achieved the simplicity 
-<a name="l71"></a>he was after with subtle performance boosts, not wasting time changing address maps.  We look forward to the day Intel makes an 
-<a name="l72"></a>optimized no-paging long mode.
+<a name="l70"></a>use paging, but long mode requires it.  He did the next best thing -- he identity-mapped everything and achieved the 
+<a name="l71"></a>simplicity he was after with subtle performance boosts, not wasting time changing address maps.  We look forward to the day 
+<a name="l72"></a>Intel makes an optimized no-paging long mode.
 <a name="l73"></a>
 <a name="l74"></a>Terry needed VGA A0000-BFFFF memory to be write-through and 0xE0000000-0xFFFFFFFF to be uncached for various devices.  All 
 <a name="l75"></a>64-bit computers allow stopping address translation at 2Meg page size, not using 4K.  He wanted to use 2Meg for everything 
-<a name="l76"></a>because it's faster, with one less level of page tables.  He had to make A0000-BFFFF write-through, though, so he could not use 
-<a name="l77"></a>2Meg size on the lowest page.   He did the lowest 2Meg area as 4K pages.  He also unmapped the first 4K to cause a fault when 
-<a name="l78"></a>dereferencing NULL.
+<a name="l76"></a>because it's faster, with one less level of page tables.  He had to make A0000-BFFFF write-through, though, so he could not 
+<a name="l77"></a>use 2Meg size on the lowest page.   He did the lowest 2Meg area as 4K pages.  He also unmapped the first 4K to cause a fault 
+<a name="l78"></a>when dereferencing NULL.
 <a name="l79"></a>
 <a name="l80"></a>In 2016, Terry came-up with an alternate idea.  He double mapped the lowest memory with an alias that was uncached. Accessing 
 <a name="l81"></a>the lowest 2Meg area directly was cached but the alias he created up at the top of address space was uncached.  See </span><span class=cF4>
-<a name="l82"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many of 
-<a name="l83"></a>the users are familiar with A0000-BFFFF, it is actually pretty seriously unfortunate that they cannot use the easy-to-understand 
-<a name="l84"></a>numbers of A0000-BFFFF, but must access the relocated alias location.   See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l113"><span class=cF4>text.vga_alias</span></a><span class=cF0>.  We also no longer cause a fault 
-<a name="l85"></a>when dereferencing NULL.
+<a name="l82"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().  Unfortunately, he could no longer boast of the simplicity of identity mapping everything.  Since many 
+<a name="l83"></a>of the users are familiar with A0000-BFFFF, it is actually pretty seriously unfortunate that they cannot use the 
+<a name="l84"></a>easy-to-understand numbers of A0000-BFFFF, but must access the relocated alias location.    See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l113"><span class=cF4>text.vga_alias</span></a><span class=cF0>.  We also no 
+<a name="l85"></a>longer cause a fault when dereferencing NULL.
 <a name="l86"></a>
 <a name="l87"></a>Then, Terry switched to 1Gig page sizes.    For the lowest 4Gig, he set-up an alias up at the top of address space. See </span><span class=cF4>
 <a name="l88"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l157"><span class=cF4>UncachedAliasAlloc</span></a><span class=cF0>().   Not all computers support 1Gig page tables, however, so he also supported 2Meg.

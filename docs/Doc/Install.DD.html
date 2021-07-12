@@ -25,15 +25,15 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                       Installing ZealOS</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                      Installing ZealOS</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a>Burn a CD with software that supports ISO files.    Then, boot it.  It's a live CD, so you can look around with or without 
 <a name="l4"></a>installing.
 <a name="l5"></a>
 <a name="l6"></a>Dual booting with another operating system is the best way to use ZealOS.  It is often used in a virtual machine because it 
-<a name="l7"></a>won't boot natively on some machines, though.  For native dual booting, you need a partition for ZealOS.    Windows often comes 
-<a name="l8"></a>with a restore disk that does not allow repartitioning.  It's recommended to connect a spare additional hard drive and use the </span><span class=cF2>B
-<a name="l9"></a>IOS</span><span class=cF0> to select which drive to boot.
+<a name="l7"></a>won't boot natively on some machines, though.  For native dual booting, you need a partition for ZealOS.    Windows often 
+<a name="l8"></a>comes with a restore disk that does not allow repartitioning.  It's recommended to connect a spare additional hard drive and 
+<a name="l9"></a>use the </span><span class=cF2>BIOS</span><span class=cF0> to select which drive to boot.
 <a name="l10"></a>
 <a name="l11"></a>The </span><a href="https://tomawezome.github.io/ZealOS/Misc/OSInstall.CC.html#l1"><span class=cF4>::/Misc/OSInstall.CC</span></a><span class=cF0> script will automate much of this. It runs if you boot the CD/DVD-ROM.
 <a name="l12"></a>
@@ -51,16 +51,16 @@ body {background-color:#000000;}
 <a name="l24"></a>  
 <a name="l25"></a>    This will perform a special </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF0>() automatically.
 <a name="l26"></a>    
-<a name="l27"></a>    <blink>WARNING:</blink>    This command erases everything on a hard drive.  It repartitions a whole drive and formats the partitions.  This 
-<a name="l28"></a>    command should be skipped if you already have your hard drive partitioned.
+<a name="l27"></a>    <blink>WARNING:</blink>    This command erases everything on a hard drive.  It repartitions a whole drive and formats the partitions.  Th
+<a name="l28"></a>    is command should be skipped if you already have your hard drive partitioned.
 <a name="l29"></a>    
 <a name="l30"></a>    
 <a name="l31"></a>    <blink>WARNING:</blink>    This command doesn't play well with other operating systems.    You'll need to do a </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l58"><span class=cF4>BootMHDZero</span></a><span class=cF0>() to restore 
 <a name="l32"></a>    your drive to a state where other operating systems can partition it.
 <a name="l33"></a>  
 <a name="l34"></a>2) </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFormat.CC.html#l67"><span class=cF4>Format</span></a><span class=cF0>(</span><span class=cF2>'D'</span><span class=cF0>,</span><span class=cF2> TRUE</span><span class=cF0>,</span><span class=cF2> FALSE</span><span class=cF0>,</span><span class=cF2> FSt_FAT32</span><span class=cF0>)
-<a name="l35"></a>  This command formats a drive with </span><span class=cF2>FAT32</span><span class=cF0> or the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system type.   Use the drive letter of the partition in place of </span><span class=cF2>'D
-<a name="l36"></a>  '</span><span class=cF0>.
+<a name="l35"></a>  This command formats a drive with </span><span class=cF2>FAT32</span><span class=cF0> or the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system type.   Use the drive letter of the partition in place of </span><span class=cF2>
+<a name="l36"></a>  'D'</span><span class=cF0>.
 <a name="l37"></a>  
 <a name="l38"></a>  <blink>WARNING:</blink>  If you are upgrading, be sure not to lose the file, </span><span class=cF2>/0000Boot/OldMBR.BIN.C</span><span class=cF0>.
 <a name="l39"></a>  
@@ -78,8 +78,8 @@ body {background-color:#000000;}
 <a name="l51"></a>  replaces it.  When you boot, you will have the option of booting the old master boot record.  This command can be skipped if 
 <a name="l52"></a>  you already have a boot loader.   Be sure not to lose the copy of the old boot record, like if you reformat the drive.
 <a name="l53"></a>  
-<a name="l54"></a>  Delete </span><span class=cF2>/0000Boot/OldMBR.BIN.C</span><span class=cF0> if you want to get a fresh copy of a mbr, like if installing from your own custom CD containing 
-<a name="l55"></a>  it's own </span><span class=cF2>/0000Boot/OldMBR.BIN.C</span><span class=cF0> onto a system with a non-ZealOS boot loader.
+<a name="l54"></a>  Delete </span><span class=cF2>/0000Boot/OldMBR.BIN.C</span><span class=cF0> if you want to get a fresh copy of a mbr, like if installing from your own custom CD 
+<a name="l55"></a>  containing it's own </span><span class=cF2>/0000Boot/OldMBR.BIN.C</span><span class=cF0> onto a system with a non-ZealOS boot loader.
 <a name="l56"></a>  
 <a name="l57"></a>  If you have anti-virus software, it might object to having a different master boot record.
 <a name="l58"></a>

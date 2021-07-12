@@ -25,14 +25,14 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                             CosmiC</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                            CosmiC</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/CompilerOverview.DD.html#l1"><span class=cF4>::/Doc/CompilerOverview.DD</span></a><span class=cF0>.
 <a name="l4"></a>
 <a name="l5"></a>* See </span><a href="https://tomawezome.github.io/ZealOS/Doc/ScopingLinkage.DD.html#l1"><span class=cF4>Scoping and Linkage</span></a><span class=cF0> for details on </span><span class=cF2>extern</span><span class=cF0>, </span><span class=cF2>import</span><span class=cF0>, </span><span class=cF2>_extern</span><span class=cF0>, </span><span class=cF2>_import</span><span class=cF0>, etc.
 <a name="l6"></a>
-<a name="l7"></a>* Built-in types include </span><span class=cF2>I0, I8, I16, I32, I64</span><span class=cF0> for signed 0-8 byte ints and </span><span class=cF2>U0, U8, U16, U32, U64</span><span class=cF0> for unsigned 0-8 byte ints and </span><span class=cF2>
-<a name="l8"></a>F64</span><span class=cF0> for 8 byte floats.
+<a name="l7"></a>* Built-in types include </span><span class=cF2>I0, I8, I16, I32, I64</span><span class=cF0> for signed 0-8 byte ints and </span><span class=cF2>U0, U8, U16, U32, U64</span><span class=cF0> for unsigned 0-8 byte ints 
+<a name="l8"></a>and </span><span class=cF2>F64</span><span class=cF0> for 8 byte floats.
 <a name="l9"></a>
 <a name="l10"></a></span><span class=cF2>    U0          void, but ZERO size!
 <a name="l11"></a>    I8          char
@@ -141,8 +141,8 @@ body {background-color:#000000;}
 <a name="l114"></a>  </span><span class=cF2>if (13 &lt;= age &lt; 20)
 <a name="l115"></a>    &quot;Teen-ager&quot;;
 <a name="l116"></a></span><span class=cF0>
-<a name="l117"></a>* if you know a switch stmt will not exceed the lowest or highest case values.  </span><span class=cF2>switch []</span><span class=cF0> is a little faster because it doesn't 
-<a name="l118"></a>check.
+<a name="l117"></a>* if you know a switch stmt will not exceed the lowest or highest case values.  </span><span class=cF2>switch []</span><span class=cF0> is a little faster because it 
+<a name="l118"></a>doesn't check.
 <a name="l119"></a>
 <a name="l120"></a>* </span><span class=cF2>switch</span><span class=cF0> statements always use a jump table.    Don't use them with cases with really big, sparse ranges.
 <a name="l121"></a>
@@ -251,8 +251,8 @@ body {background-color:#000000;}
 <a name="l224"></a>
 <a name="l225"></a>* You can use </span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find dup local var type statements.
 <a name="l226"></a>
-<a name="l227"></a>* With the </span><span class=cF2>#exe{}</span><span class=cF0> feature in your src code, you can place programs that insert text into the stream of code being compiled.  See </span><span class=cF4>
-<a name="l228"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l252"><span class=cF4>#exe {}</span></a><span class=cF0> for an example where the date/time and compile-time prompting for configuration data is placed into a program.  </span><span class=cF4>
+<a name="l227"></a>* With the </span><span class=cF2>#exe{}</span><span class=cF0> feature in your src code, you can place programs that insert text into the stream of code being compiled.  
+<a name="l228"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMain.CC.html#l252"><span class=cF4>#exe {}</span></a><span class=cF0> for an example where the date/time and compile-time prompting for configuration data is placed into a program.  </span><span class=cF4>
 <a name="l229"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/CMisc.CC.html#l71"><span class=cF4>StreamPrint</span></a><span class=cF0>() places text into a src program stream following the conclusion of the </span><span class=cF2>#exe{}</span><span class=cF0> blk.
 <a name="l230"></a>
 <a name="l231"></a>* No </span><span class=cF2>#define</span><span class=cF0> functions exist (Terry was not a fan)
@@ -263,15 +263,15 @@ body {background-color:#000000;}
 <a name="l236"></a>
 <a name="l237"></a>* Can't use </span><span class=cF2>&lt;&gt;</span><span class=cF0> with </span><span class=cF2>#include</span><span class=cF0>, use </span><span class=cF2>&quot;&quot;</span><span class=cF0>.
 <a name="l238"></a>
-<a name="l239"></a>* &quot;</span><span class=cF2>$</span><span class=cF0>&quot; is an escape character.   Two dollar signs signify an ordinary $. See </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0>. In </span><span class=cF2>asm</span><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> code, it also refers to the 
-<a name="l240"></a>instruction's address or the offset in a </span><span class=cF2>class</span><span class=cF0> definition.
+<a name="l239"></a>* &quot;</span><span class=cF2>$</span><span class=cF0>&quot; is an escape character.   Two dollar signs signify an ordinary $. See </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0>. In </span><span class=cF2>asm</span><span class=cF0> or </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> code, it also refers to 
+<a name="l240"></a>the instruction's address or the offset in a </span><span class=cF2>class</span><span class=cF0> definition.
 <a name="l241"></a>
-<a name="l242"></a>* </span><span class=cF2>union</span><span class=cF0> is more like a class, so you don't reference it with a </span><span class=cF2>union</span><span class=cF0> label after you define it.  Some common unions are declared 
-<a name="l243"></a>in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l65"><span class=cF4>KernelA.HH</span></a><span class=cF0> for 1,2,4 and 8 byte objects. If you place a type in front of a union declaration, that is the type when used by 
-<a name="l244"></a>itself. See </span><a href="https://tomawezome.github.io/ZealOS/Demo/SubIntAccess.CC.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF0>.
+<a name="l242"></a>* </span><span class=cF2>union</span><span class=cF0> is more like a class, so you don't reference it with a </span><span class=cF2>union</span><span class=cF0> label after you define it.  Some common unions are 
+<a name="l243"></a>declared in </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l65"><span class=cF4>KernelA.HH</span></a><span class=cF0> for 1,2,4 and 8 byte objects.    If you place a type in front of a union declaration, that is the type 
+<a name="l244"></a>when used by itself.    See </span><a href="https://tomawezome.github.io/ZealOS/Demo/SubIntAccess.CC.html#l1"><span class=cF4>::/Demo/SubIntAccess.CC</span></a><span class=cF0>.
 <a name="l245"></a>
-<a name="l246"></a>* </span><span class=cF2>class</span><span class=cF0> member vars can have meta data. </span><span class=cF2>format</span><span class=cF0> and </span><span class=cF2>data</span><span class=cF0> are two meta data types now used.  All compiler structures are saved and 
-<a name="l247"></a>you can access the compiler's info about classes and vars.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF0> and    </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>().
+<a name="l246"></a>* </span><span class=cF2>class</span><span class=cF0> member vars can have meta data. </span><span class=cF2>format</span><span class=cF0> and </span><span class=cF2>data</span><span class=cF0> are two meta data types now used.  All compiler structures are saved 
+<a name="l247"></a>and you can access the compiler's info about classes and vars.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF0> and    </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>().
 <a name="l248"></a>
 <a name="l249"></a>* There is a keyword </span><span class=cF2>lastclass</span><span class=cF0> you use as a default arg.    It is set to the class name of the prev arg.    See </span><span class=cF4>
 <a name="l250"></a></span><a href="https://tomawezome.github.io/ZealOS/Demo/LastClass.CC.html#l1"><span class=cF4>::/Demo/LastClass.CC</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/System/Debug.CC.html#l216"><span class=cF4>ClassRep</span></a><span class=cF0>(), </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF0>()  and </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/BlkDevRep.CC.html#l1"><span class=cF4>::/Demo/Disk/BlkDevRep.CC</span></a><span class=cF0>.
@@ -282,23 +282,23 @@ body {background-color:#000000;}
 <a name="l255"></a>like.
 <a name="l256"></a>
 <a name="l257"></a>* A function is available similar to </span><span class=cF2>sizeof</span><span class=cF0> which provides the offset of a member of a class.  It's called </span><span class=cF2>offset</span><span class=cF0>.  You place 
-<a name="l258"></a>the class name and member inside as in </span><span class=cF2>offset(classname.membername)</span><span class=cF0>.    It has nothing to do with 16-bit code.  Both </span><span class=cF2>sizeof</span><span class=cF0> and </span><span class=cF2>
-<a name="l259"></a>offset</span><span class=cF0> only accept one level of member vars.    That is, you can't do </span><span class=cF2>sizeof(classname.membername.submembername)</span><span class=cF0>.
+<a name="l258"></a>the class name and member inside as in </span><span class=cF2>offset(classname.membername)</span><span class=cF0>.    It has nothing to do with 16-bit code.  Both </span><span class=cF2>sizeof</span><span class=cF0> 
+<a name="l259"></a>and </span><span class=cF2>offset</span><span class=cF0> only accept one level of member vars.    That is, you can't do </span><span class=cF2>sizeof(classname.membername.submembername)</span><span class=cF0>.
 <a name="l260"></a>
 <a name="l261"></a>* There is no </span><span class=cF2>continue</span><span class=cF0> stmt.    Use </span><span class=cF2>goto</span><span class=cF0>.
 <a name="l262"></a>
 <a name="l263"></a>* </span><span class=cF2>lock{}</span><span class=cF0> can be used to apply asm </span><span class=cF2>LOCK</span><span class=cF0> prefixes to code for safe multicore read-modify-write accesses.  The code bracked with 
 <a name="l264"></a>have </span><span class=cF2>LOCK</span><span class=cF0> asm prefix's applied to relevant insts within.    It's a little shoddy.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/MultiCore/Lock.CC.html#l1"><span class=cF4>::/Demo/MultiCore/Lock.CC</span></a><span class=cF0>.
 <a name="l265"></a>
-<a name="l266"></a>* There is a function called </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l388"><span class=cF4>MSize</span></a><span class=cF0>() which gives the size of an object alloced off the heap.    For larger size allocations, the 
-<a name="l267"></a>system rounds-up to a power of two, so </span><span class=cF2>MSize()</span><span class=cF0> lets you know the real size and you can take full advantage of it.
+<a name="l266"></a>* There is a function called </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l388"><span class=cF4>MSize</span></a><span class=cF0>() which gives the size of an object alloced off the heap.    For larger size allocations, 
+<a name="l267"></a>the system rounds-up to a power of two, so </span><span class=cF2>MSize()</span><span class=cF0> lets you know the real size and you can take full advantage of it.
 <a name="l268"></a>
 <a name="l269"></a>* You CAN </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l387"><span class=cF4>Free</span></a><span class=cF0>() a </span><span class=cF2>NULL</span><span class=cF0> ptr.  Useful variants of </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>() can be found </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l399"><span class=cF4>Here</span></a><span class=cF0>.  Each task has a heap and you can </span><span class=cF2>MAlloc</span><span class=cF0> and </span><span class=cF2>Free</span><span class=cF0> 
 <a name="l270"></a>off-of other task's heaps, or make an independent heap with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). See </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() for an example.
 <a name="l271"></a>
-<a name="l272"></a>* The stack does not grow because virtual mem is not used.  It's recommended to allocate large local vars from the heap.    You 
-<a name="l273"></a>can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3508"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().  You can use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l129"><span class=cF4>CallStackGrow</span></a><span class=cF0>(), but it's 
-<a name="l274"></a>odd.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/StackGrow.CC.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF0>.
+<a name="l272"></a>* The stack does not grow because virtual mem is not used.  It's recommended to allocate large local vars from the heap.    Yo
+<a name="l273"></a>u can change </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3508"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0> and recompile </span><span class=cF2>Kernel</span><span class=cF0> or request more when doing a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>().  You can use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l129"><span class=cF4>CallStackGrow</span></a><span class=cF0>(), but 
+<a name="l274"></a>it's odd.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/StackGrow.CC.html#l1"><span class=cF4>::/Demo/StackGrow.CC</span></a><span class=cF0>.
 <a name="l275"></a>
 <a name="l276"></a>* Only one base class is allowed.
 <a name="l277"></a>

@@ -25,11 +25,11 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                       RedSea File System</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                      RedSea File System</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a>The RedSea file system is a simple, 64-bit, file system which is similar to FAT32, but with absolute block addresses instead of 
-<a name="l4"></a>clus, fixed-sized 64-byte directory entries and no FAT table, just an allocation bitmap.    A clus is just one 512 byte sector.  
-<a name="l5"></a>Files are stored in contiguous blocks and cannot grow in size.
+<a name="l3"></a>The RedSea file system is a simple, 64-bit, file system which is similar to FAT32, but with absolute block addresses instead 
+<a name="l4"></a>of clus, fixed-sized 64-byte directory entries and no FAT table, just an allocation bitmap. A clus is just one 512 byte 
+<a name="l5"></a>sector.  Files are stored in contiguous blocks and cannot grow in size.
 <a name="l6"></a>
 <a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0> </span><span class=cFE>38</span><span class=cF0> </span><span class=cF2>//Must include terminator zero</span><span class=cF0>
 <a name="l8"></a>
@@ -63,9 +63,9 @@ body {background-color:#000000;}
 <a name="l36"></a>
 <a name="l37"></a>Files with names ending in  are compressed.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Compress.CC.html#l1"><span class=cF4>::/Kernel/Compress.CC</span></a><span class=cF0>.
 <a name="l38"></a>
-<a name="l39"></a>To replace ISO9660, make hard-drive partition image of a measured size and copy onto a CD/DVD starting at about sector 20, with 
-<a name="l40"></a>EL TORITO booting.  512-byte sectors will be placed on top of 2048-byte CD/DCD sectors, so there will be four blocks per CD/DVD 
-<a name="l41"></a>sector.
+<a name="l39"></a>To replace ISO9660, make hard-drive partition image of a measured size and copy onto a CD/DVD starting at about sector 20, 
+<a name="l40"></a>with EL TORITO booting. 512-byte sectors will be placed on top of 2048-byte CD/DCD sectors, so there will be four blocks per 
+<a name="l41"></a>CD/DVD sector.
 <a name="l42"></a>
 <a name="l43"></a>RedSea file system has no bad block table and no redundant allocation table.
 <a name="l44"></a>

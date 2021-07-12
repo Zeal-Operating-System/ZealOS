@@ -25,18 +25,18 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                          Cut Corners
+<a name="l1"></a><span class=cF5>                                                         Cut Corners
 <a name="l2"></a></span><span class=cF0>
 <a name="l3"></a>There are a few places where corners are cut in the interest of not junking-up code.    This is part of the ZealOS mentality.  
 <a name="l4"></a>Try not to let stupid legacy compatibility issues enter and junk-up ZealOS.
 <a name="l5"></a>
 <a name="l6"></a>* The type-casting operator was made post-fix because it makes the compiler way cleaner.
 <a name="l7"></a>
-<a name="l8"></a>* ZealOS does not figure-out </span><span class=cF2>FAT32</span><span class=cF0> short name alias numbers.    </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/FileSysFAT.CC.html#l646"><span class=cF4>FAT32DirNew</span></a><span class=cF0>().  It can cause hard drive corruption, so it might 
-<a name="l9"></a>have to do it eventually.  It would really take a lot of junky code for this hatefully, detestable, legacy issue.  &quot;Please don't 
-<a name="l10"></a>make us ruin the beautiful shiny-new ZealOS with that!&quot;  </span><span class=cF2>FAT32</span><span class=cF0> is also unappealing because it is in patent limbo.   </span><span class=cF2>FAT32</span><span class=cF0> might 
-<a name="l11"></a>get removed from ZealOS.    There is the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> 64-bit file system that works perfectly well.  </span><span class=cF2>FAT32</span><span class=cF0> is useful, however, because 
-<a name="l12"></a>it assists in transferring between dual booted operating systems.
+<a name="l8"></a>* ZealOS does not figure-out </span><span class=cF2>FAT32</span><span class=cF0> short name alias numbers.    </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/FileSysFAT.CC.html#l646"><span class=cF4>FAT32DirNew</span></a><span class=cF0>().  It can cause hard drive corruption, so it 
+<a name="l9"></a>might have to do it eventually.  It would really take a lot of junky code for this hatefully, detestable, legacy issue.  
+<a name="l10"></a>&quot;Please don't make us ruin the beautiful shiny-new ZealOS with that!&quot;  </span><span class=cF2>FAT32</span><span class=cF0> is also unappealing because it is in patent 
+<a name="l11"></a>limbo.  </span><span class=cF2>FAT32</span><span class=cF0> might get removed from ZealOS.    There is the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> 64-bit file system that works perfectly well.  </span><span class=cF2>FAT32</span><span class=cF0> is 
+<a name="l12"></a>useful, however, because it assists in transferring between dual booted operating systems.
 <a name="l13"></a>
 <a name="l14"></a>* The </span><a href="https://tomawezome.github.io/ZealOS/Compiler/OpCodes.DD.html#l1"><span class=cF4>asm opcodes</span></a><span class=cF0> names were changed to remove the ambiguity between insts with different numbers of arguments, making the </span><span class=cF4>
 <a name="l15"></a></span><a href="https://tomawezome.github.io/ZealOS/Compiler/Asm.CC.html#l1"><span class=cF4>assembler</span></a><span class=cF0> simpler and minimal 16-bit asm support was done, since 64-bit is what you should be using, unless you're doing a </span><span class=cF4>

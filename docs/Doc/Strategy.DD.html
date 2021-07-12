@@ -25,22 +25,22 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                 Decisions Making ZealOS Simple
+<a name="l1"></a><span class=cF5>                                                Decisions Making ZealOS Simple
 <a name="l2"></a></span><span class=cF0>
 <a name="l3"></a>Linux is a semi-tractor -- you need professional drivers for 20 gears.  Linux has file permissions.  Common people are hurt by 
 <a name="l4"></a>file permissions.
 <a name="l5"></a>
 <a name="l6"></a>Windows is a car.
 <a name="l7"></a>
-<a name="l8"></a>ZealOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.    Don't do that!  There are no side air bags on a 
-<a name="l9"></a>motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude 
+<a name="l8"></a>ZealOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.    Don't do that!  There are no side air bags on 
+<a name="l9"></a>a motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude 
 <a name="l10"></a>complexity.
 <a name="l11"></a>
-<a name="l12"></a>Linux and Windows are general purpose operating systems.    They attempt to do any task you want.  ZealOS cherry-picks tasks and 
-<a name="l13"></a>is designed to do the same things a C64 did.  This saves and order of magnitude complexity. For example, the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system 
-<a name="l14"></a>allocates just contiguous files -- you load and save whole files at once.   A benefit is this allows compression.  Also, ZealOS 
-<a name="l15"></a>does not do multimedia.  In theory, memory will fragment with lots of big files.    The system would fall to pieces with 
-<a name="l16"></a>multimedia.
+<a name="l12"></a>Linux and Windows are general purpose operating systems.    They attempt to do any task you want.  ZealOS cherry-picks tasks 
+<a name="l13"></a>and is designed to do the same things a C64 did.  This saves and order of magnitude complexity. For example, the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file 
+<a name="l14"></a>system allocates just contiguous files -- you load and save whole files at once.    A benefit is this allows compression.  
+<a name="l15"></a>Also, ZealOS does not do multimedia.  In theory, memory will fragment with lots of big files.   The system would fall to 
+<a name="l16"></a>pieces with multimedia.
 <a name="l17"></a>
 <a name="l18"></a>A three bttn mouse is like a leg you cannot put weight on.  ZealOS just does hardware everybody has, with no divergent code 
 <a name="l19"></a>bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order 
@@ -56,9 +56,9 @@ body {background-color:#000000;}
 <a name="l29"></a>
 <a name="l30"></a>* No security or cryptography.
 <a name="l31"></a>
-<a name="l32"></a>* Least (greatest) common denominator hardware support.  Mostly, one driver for each device class.  We can't be in the business 
-<a name="l33"></a>of different drivers.   Compatibility is the greatest challenge for PC operating systems.  Disk code does not use interrupts, 
-<a name="l34"></a>avoiding compatibility risks.  </span><span class=cF2>PS/2</span><span class=cF0> keyboard/mouse is used instead of </span><span class=cF2>USB</span><span class=cF0>, also more compatible.
+<a name="l32"></a>* Least (greatest) common denominator hardware support.  Mostly, one driver for each device class.  We can't be in the 
+<a name="l33"></a>business of different drivers.  Compatibility is the greatest challenge for PC operating systems.  Disk code does not use 
+<a name="l34"></a>interrupts, avoiding compatibility risks.  </span><span class=cF2>PS/2</span><span class=cF0> keyboard/mouse is used instead of </span><span class=cF2>USB</span><span class=cF0>, also more compatible.
 <a name="l35"></a>
 <a name="l36"></a>* Updates whole screen at </span><span class=cF2>60 fps</span><span class=cF0>, optimized for full screen games where </span><span class=cF2>InvalidRectangle</span><span class=cF0>s are counter-productive.
 <a name="l37"></a>

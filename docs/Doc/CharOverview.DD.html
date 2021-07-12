@@ -25,7 +25,7 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                         Char Overview</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                        Char Overview</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a>A </span><span class=cF2>Char</span><span class=cF0>acter is a single byte holding an ASCII code for a letter, num or sym.    The </span><span class=cF2>ZealOS</span><span class=cF0> term is a </span><span class=cF2>U8</span><span class=cF0>.
 <a name="l4"></a>
@@ -38,8 +38,8 @@ body {background-color:#000000;}
 <a name="l11"></a>ZealOS ASCII is 8-bit instead of 7-bit, so it also uses the range from 128-255.  Press </span><span class=cF2>&lt;CTRL-ALT-a&gt;</span><span class=cF0> to see shapes for 128-255.  
 <a name="l12"></a>Technically, </span><span class=cF2>&lt;CTRL-ALT-a&gt;</span><span class=cF0> are </span><span class=cF4><u>screen codes</u></span><span class=cF0>.
 <a name="l13"></a>
-<a name="l14"></a>A </span><span class=cF2>Key</span><span class=cF0> is typically specified with a scan code.  ZealOS scan codes contain the key value in the lowest </span><span class=cF2>U8</span><span class=cF0>, and flags in the upper 
-<a name="l15"></a>3 bytes.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4149"><span class=cF4>Scan Code Flags</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4183"><span class=cF4>Scan Codes</span></a><span class=cF0>.
+<a name="l14"></a>A </span><span class=cF2>Key</span><span class=cF0> is typically specified with a scan code.  ZealOS scan codes contain the key value in the lowest </span><span class=cF2>U8</span><span class=cF0>, and flags in the 
+<a name="l15"></a>upper 3 bytes.  See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4149"><span class=cF4>Scan Code Flags</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l4183"><span class=cF4>Scan Codes</span></a><span class=cF0>.
 <a name="l16"></a>
 <a name="l17"></a>ZealOS stores scan codes in 8 bytes.
 <a name="l18"></a>    </span><span class=cF2>Byte 0</span><span class=cF0>   is the code.  NumPad keys, SHIFT, ALT, CTRL and GUI keys combined.

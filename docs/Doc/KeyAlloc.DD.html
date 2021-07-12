@@ -25,22 +25,22 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                        Key Allocations</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                       Key Allocations</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a>See </span><span class=cF4><u>Char</u></span><span class=cF0> for definition of scan codes.
 <a name="l4"></a>
 <a name="l5"></a>See </span><span class=cF9><u>Key Map</u></span><span class=cF0> for a detailed list of key commands.
 <a name="l6"></a>
 <a name="l7"></a>When you are at the cmd line, editing documents, browsing documentation and help, entering items in forms or in menu's, the </span><span class=cF4>
-<a name="l8"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>DolDoc</span></a><span class=cF0> editor handles keys. It allows you to define your own key handlers in a </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeKeyPlugIns.CC.html#l11"><span class=cF4>MyPutKey</span></a><span class=cF0>() function. If you choose, you can catch 
-<a name="l9"></a>keys, overriding the default handlers.  See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutKey.CC.html#l3"><span class=cF4>DocPutKey</span></a><span class=cF0>().  The following is an overview of key allocations.
+<a name="l8"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>DolDoc</span></a><span class=cF0> editor handles keys. It allows you to define your own key handlers in a </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeKeyPlugIns.CC.html#l11"><span class=cF4>MyPutKey</span></a><span class=cF0>() function. If you choose, you can 
+<a name="l9"></a>catch keys, overriding the default handlers.  See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutKey.CC.html#l3"><span class=cF4>DocPutKey</span></a><span class=cF0>().  The following is an overview of key allocations.
 <a name="l10"></a>
 <a name="l11"></a></span><span class=cF2>&lt;ALT-keys&gt;</span><span class=cF0> and </span><span class=cF2>&lt;ALT-SHIFT-keys&gt;</span><span class=cF0>  Free for user configurations in your </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeKeyPlugIns.CC.html#l11"><span class=cF4>MyPutKey</span></a><span class=cF0>() handler, except for </span><span class=cF2>ALT-BACKSPACE</span><span class=cF0> (undo).  
 <a name="l12"></a>There are a few examples pre-defined, but you can change them if you wish.
 <a name="l13"></a>
-<a name="l14"></a></span><span class=cF2>&lt;CTRL-ALT-keys&gt;</span><span class=cF0> and </span><span class=cF2>&lt;CTRL-ALT-SHIFT-keys&gt;</span><span class=cF0>  Handled at a system level, NOT by the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> editor.   You can define your own handlers 
-<a name="l15"></a>with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KeyDev.CC.html#l201"><span class=cF4>CtrlAltCBSet</span></a><span class=cF0>().    They operate either in a interrupt environment or in the window mgr when it queues kbd messages.    You 
-<a name="l16"></a>can do </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF0>() output.    </span><span class=cF2>&lt;CTRL-ALT-letter&gt;</span><span class=cF0> handlers take a scan_code as an arg.
+<a name="l14"></a></span><span class=cF2>&lt;CTRL-ALT-keys&gt;</span><span class=cF0> and </span><span class=cF2>&lt;CTRL-ALT-SHIFT-keys&gt;</span><span class=cF0>  Handled at a system level, NOT by the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> editor.   You can define your own 
+<a name="l15"></a>handlers with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KeyDev.CC.html#l201"><span class=cF4>CtrlAltCBSet</span></a><span class=cF0>().   They operate either in a interrupt environment or in the window mgr when it queues kbd 
+<a name="l16"></a>messages.   You can do </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KMisc.CC.html#l257"><span class=cF4>Raw</span></a><span class=cF0>() output.    </span><span class=cF2>&lt;CTRL-ALT-letter&gt;</span><span class=cF0> handlers take a scan_code as an arg.
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cF2>&lt;CTRL-function key&gt;</span><span class=cF0>         Auto-completes local words.
 <a name="l19"></a>

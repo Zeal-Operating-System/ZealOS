@@ -26,7 +26,7 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                           ChangeLog</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                          ChangeLog</span><span class=cF0>
 <a name="l2"></a></span><span class=c0F>----07/11/21 17:26:32----</span><span class=cF0>
 <a name="l3"></a>* Raised version number to 0.07.
 <a name="l4"></a>* Added </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l133"><span class=cF4>IntEntryAlloc</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l149"><span class=cF4>IntEntryFree</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3550"><span class=cF4>dev.user_int_bitmap</span></a><span class=cF0> to allow acquiring dynamic user APIC IRQ.
@@ -282,17 +282,17 @@ body {background-color:#000000;}
 <a name="l254"></a>* Updated </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>() to report on VBE variables.
 <a name="l255"></a>* Renamed VGAFlush() -&gt; </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Display.CC.html#l92"><span class=cF4>LFBFlush</span></a><span class=cF0>().
 <a name="l256"></a>* Updated </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/Palette.CC.html#l1"><span class=cF4>Palette Demo</span></a><span class=cF0> to use current palette environment.
-<a name="l257"></a>* Shortened </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l1"><span class=cF4>CheckPtr</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l9"><span class=cF4>CheckCodePtr</span></a><span class=cF0>(). Even though boolean expressions outside of </span><span class=cF1>if</span><span class=cF0> statements are compiled inefficiently, 
-<a name="l258"></a>clarity and low line count is more important.
+<a name="l257"></a>* Shortened </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l1"><span class=cF4>CheckPtr</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l9"><span class=cF4>CheckCodePtr</span></a><span class=cF0>(). Even though boolean expressions outside of </span><span class=cF1>if</span><span class=cF0> statements are compiled 
+<a name="l258"></a>inefficiently, clarity and low line count is more important.
 <a name="l259"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDebug.CC.html#l313"><span class=cF4>RawDr</span></a><span class=cF0>() is 40 columns off the right of the screen, instead of fixed at column 40.
 <a name="l260"></a>* Windows start at </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KTask.CC.html#l248"><span class=cF4>4/5th the screen height</span></a><span class=cF0> instead of row 13. System task window is </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l22"><span class=cF4>1/5th the screen height</span></a><span class=cF0>.
 <a name="l261"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;RLf_VGA&quot;, &quot;</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l576"><span class=cF4>RLf_VESA</span></a><span class=cF0>&quot;);
 <a name="l262"></a>* Removed VGA text mode support, and all definitions relating to it, including from the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>kernel config</span></a><span class=cF0>.
 <a name="l263"></a>* Added </span><span class=cF9><u>screen resolution selection</u></span><span class=cF0> to kernel configuration procedure.
 <a name="l264"></a>* Added </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/VideoRep.CC.html#l1"><span class=cF4>VideoRep</span></a><span class=cF0>() to report on VBE modes and info, added test case to the </span><a href="https://tomawezome.github.io/ZealOS/Misc/OSTestSuite.CC.html#l1821"><span class=cF4>OSTestSuite</span></a><span class=cF0>.
-<a name="l265"></a>* <u>Added VBE graphics support.</u> Screen zooming is non-functional at the moment. We are setting 32-bit color graphics modes but the 
-<a name="l266"></a>graphics library is still 4-bit (16 color) internally. </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/MiniGrLib.CC.html#l1"><span class=cF4>MiniGrLib</span></a><span class=cF0> broken for obvious reasons. Keeping it because its intention is 
-<a name="l267"></a>to teach a how a graphics library works, generically. Removed 2 smaller VGA hardware programming demos.
+<a name="l265"></a>* <u>Added VBE graphics support.</u> Screen zooming is non-functional at the moment. We are setting 32-bit color graphics modes but 
+<a name="l266"></a>the graphics library is still 4-bit (16 color) internally. </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/MiniGrLib.CC.html#l1"><span class=cF4>MiniGrLib</span></a><span class=cF0> broken for obvious reasons. Keeping it because its 
+<a name="l267"></a>intention is to teach a how a graphics library works, generically. Removed 2 smaller VGA hardware programming demos.
 <a name="l268"></a>    Rundown:
 <a name="l269"></a>    - Added classes </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l503"><span class=cF4>CVBEInfo</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l520"><span class=cF4>CVBEMode</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l539"><span class=cF4>CVBEModeShort</span></a><span class=cF0>
 <a name="l270"></a>    - </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart16.CC.html#l104"><span class=cF4>real-mode assembly</span></a><span class=cF0> -- </span><span class=cF9><u>added kernel symbols</u></span><span class=cF0>.
@@ -325,15 +325,15 @@ body {background-color:#000000;}
 <a name="l297"></a>* Replaced the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l215"><span class=cF4>endian-swapping functions</span></a><span class=cF0> with assembly versions.
 <a name="l298"></a>* Added </span><span class=cF1>POPCNT</span><span class=cF0> instruction and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l18"><span class=cF4>PopCount</span></a><span class=cF0>() compiler intrinsic, to replace BCount() and the set_bits_table.
 <a name="l299"></a>* Renamed opcodes PUSHFW, POPFW, PUSHAW, POPAW -&gt; </span><span class=cF1>PUSHF</span><span class=cF0>, </span><span class=cF1>POPF</span><span class=cF0>, </span><span class=cF1>PUSHA</span><span class=cF0>, </span><span class=cF1>POPA</span><span class=cF0> respectively.
-<a name="l300"></a>* The </span><span class=cF9><u>VGA ROM Font</u></span><span class=cF0> is used as the standard system font, with the old one being used as the auxilliary one. The cyrillic font has 
-<a name="l301"></a>been removed.
+<a name="l300"></a>* The </span><span class=cF9><u>VGA ROM Font</u></span><span class=cF0> is used as the standard system font, with the old one being used as the auxilliary one. The cyrillic font 
+<a name="l301"></a>has been removed.
 <a name="l302"></a>* Added </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l209"><span class=cF4>Seg2Linear</span></a><span class=cF0>() to convert segmented 32-bit far pointers obtained from real mode to linear pointers.
 <a name="l303"></a>* Disabled the mouse in debug mode. No more garbage text on mouse movement. </span><span class=cF9><u>MouseHardEnable</u></span><span class=cF0>. You can use this function in your 
 <a name="l304"></a>own applications to disable the mouse completely.
 <a name="l305"></a>* AutoComplete now stays where you move it instead of snapping back to a fixed location, and that location persists after 
 <a name="l306"></a>rebooting by using the Registry to save the window location. Increased number of symbol links shown to 12, so you can use all 
-<a name="l307"></a>the functions keys F1-F12. It does syntax highlighting on the symbols now, so you know what type they are. Public symbols are </span><span class=c0F>in
-<a name="l308"></a>verted</span><span class=cF0>. Dictionary words are BLACK to differentiate between symbols.
+<a name="l307"></a>the functions keys F1-F12. It does syntax highlighting on the symbols now, so you know what type they are. Public symbols are </span><span class=c0F>
+<a name="l308"></a>inverted</span><span class=cF0>. Dictionary words are BLACK to differentiate between symbols.
 <a name="l309"></a>* Added more keyboard shortcuts to the AutoComplete </span><a href="https://tomawezome.github.io/ZealOS/Doc/StandBy.DD.html#l1"><span class=cF4>standby doc</span></a><span class=cF0>.
 <a name="l310"></a>* Removed &quot;TOS Staff&quot; and &quot;InsReg&quot; related code.
 <a name="l311"></a>* Renamed /Kernel/KInts.CC to </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KInterrupts.CC.html#l1"><span class=cF4>KInterrupts.CC</span></a><span class=cF0>.

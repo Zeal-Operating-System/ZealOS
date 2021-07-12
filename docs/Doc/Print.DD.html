@@ -25,7 +25,7 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF5>                                                       Print Format Strs</span><span class=cF0>
+<a name="l1"></a><span class=cF5>                                                      Print Format Strs</span><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a>&lt;format_arg&gt; := </span><span class=cF2>%</span><span class=cF0>[</span><span class=cF2>-</span><span class=cF0>][</span><span class=cF2>0</span><span class=cF0>][&lt;width&gt;][</span><span class=cF2>.</span><span class=cF0>&lt;decimals&gt;][&lt;flags&gt;][</span><span class=cF2>h</span><span class=cF0>&lt;aux_format_num&gt;]&lt;format_code&gt;
 <a name="l4"></a>
@@ -40,8 +40,8 @@ body {background-color:#000000;}
 <a name="l13"></a>
 <a name="l14"></a>&lt;aux_format_num&gt;:
 <a name="l15"></a>
-<a name="l16"></a>  For </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>, </span><span class=cF2>&quot;%d&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%u&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; causes thousands mode.  </span><span class=cF2>&quot;%h?n&quot;</span><span class=cF0> will pick a var exponent multiples of three unit, 
-<a name="l17"></a>  while </span><span class=cF2>&quot;%h-3n&quot;</span><span class=cF0> will display milli units or </span><span class=cF2>&quot;%h6n&quot;</span><span class=cF0> will display mega units.  The </span><span class=cF2>'k'</span><span class=cF0> flag is always on for </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>.    See </span><span class=cF4>
+<a name="l16"></a>  For </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>, </span><span class=cF2>&quot;%d&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%u&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; causes thousands mode.  </span><span class=cF2>&quot;%h?n&quot;</span><span class=cF0> will pick a var exponent multiples of three 
+<a name="l17"></a>  unit, while </span><span class=cF2>&quot;%h-3n&quot;</span><span class=cF0> will display milli units or </span><span class=cF2>&quot;%h6n&quot;</span><span class=cF0> will display mega units.  The </span><span class=cF2>'k'</span><span class=cF0> flag is always on for </span><span class=cF2>&quot;%n&quot;</span><span class=cF0>.  See </span><span class=cF4>
 <a name="l18"></a>  </span><a href="https://tomawezome.github.io/ZealOS/Demo/Print.CC.html#l1"><span class=cF4>::/Demo/Print.CC</span></a><span class=cF0>.
 <a name="l19"></a>  
 <a name="l20"></a>For </span><span class=cF2>&quot;%c&quot;</span><span class=cF0> or </span><span class=cF2>&quot;%C&quot;</span><span class=cF0>, the &lt;aux_format_num&gt; repeats the char that many times.
@@ -84,7 +84,7 @@ body {background-color:#000000;}
 <a name="l57"></a>  </span><span class=cF2>&quot;%q&quot;</span><span class=cF0> rev a </span><span class=cF2>&quot;%Q&quot;</span><span class=cF0>.
 <a name="l58"></a>
 <a name="l59"></a>
-<a name="l60"></a></span><span class=cF5>                                                          Print Family</span><span class=cF0>
+<a name="l60"></a></span><span class=cF5>                                                         Print Family</span><span class=cF0>
 <a name="l61"></a></span><span class=cF4>
 <a name="l62"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.CC.html#l1119"><span class=cF4>MStrPrint</span></a><span class=cF0>(U8 *format, ...) is like </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.CC.html#l1094"><span class=cF4>StrPrint</span></a><span class=cF0>(U8 *dst,U8 *format,...) but it returns a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>ated str.  It is vary handy because 
 <a name="l63"></a>you don't have to worry about overflow.
@@ -92,14 +92,14 @@ body {background-color:#000000;}
 <a name="l65"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrPrint.CC.html#l1099"><span class=cF4>CatPrint</span></a><span class=cF0>(U8 *_dst, U8 *format, ...) concatenates a formated string.
 <a name="l66"></a></span><span class=cF4>
 <a name="l67"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l580"><span class=cF4>In</span></a><span class=cF0>(U8 *format, ...) sends text to the current task's input buffer.</span><span class=cF4>
-<a name="l68"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l561"><span class=cF4>InStr</span></a><span class=cF0>(U8 *format, ...) sends text of an </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l218"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of the current TASK but can also do mouse cmds.
+<a name="l68"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l561"><span class=cF4>InStr</span></a><span class=cF0>(U8 *format, ...) sends text of an </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l219"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of the current TASK but can also do mouse cmds.
 <a name="l69"></a></span><span class=cF4>
 <a name="l70"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l542"><span class=cF4>XTalk</span></a><span class=cF0>(CTask *task, U8 *format, ...) and text to another task's input buffer.</span><span class=cF4>
-<a name="l71"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l588"><span class=cF4>XTalkStr</span></a><span class=cF0>(CTask *task, U8 *format, ...) sends text of an </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l218"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of another TASK but can also do mouse 
+<a name="l71"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l588"><span class=cF4>XTalkStr</span></a><span class=cF0>(CTask *task, U8 *format, ...) sends text of an </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l219"><span class=cF4>InFile</span></a><span class=cF0> to the keyboard stream of another TASK but can also do mouse 
 <a name="l72"></a>cmds.
 <a name="l73"></a></span><span class=cF4>
-<a name="l74"></a></span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l164"><span class=cF4>DocPrint</span></a><span class=cF0>(CDoc *doc, U8 *format, ...) sends text to a document.  You can buffer to a Doc and save it, providing the functionality 
-<a name="l75"></a>of </span><span class=cF2>fprintf</span><span class=cF0>.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/FPrintF.CC.html#l1"><span class=cF4>::/Demo/Disk/FPrintF.CC</span></a><span class=cF0>.
+<a name="l74"></a></span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocPutS.CC.html#l164"><span class=cF4>DocPrint</span></a><span class=cF0>(CDoc *doc, U8 *format, ...) sends text to a document.  You can buffer to a Doc and save it, providing the 
+<a name="l75"></a>functionality of </span><span class=cF2>fprintf</span><span class=cF0>.  See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/FPrintF.CC.html#l1"><span class=cF4>::/Demo/Disk/FPrintF.CC</span></a><span class=cF0>.
 <a name="l76"></a></span><span class=cF4>
 <a name="l77"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l485"><span class=cF4>Sys</span></a><span class=cF0>(U8 *format, ...) sends text to the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> to be compiled and run.</span><span class=cF4>
 <a name="l78"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l507"><span class=cF4>SysLog</span></a><span class=cF0>(U8 *format, ...) and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l530"><span class=cF4>SysErr</span></a><span class=cF0>(U8 *format,...) send text to the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> to be displayed.

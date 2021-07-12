@@ -39,6 +39,7 @@ I64 DirIndexList(U8 *files_find_mask)
 			DirEntryDel(tmpde1);
 			tmpde1 = tmpde2;
 		}
+		"\n\n";
 	}
 	else
 		"No matching entries\n";

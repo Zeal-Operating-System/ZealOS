@@ -19,21 +19,25 @@ Cd(__DIR__);;
 
 //ToHtml("DemoInPage.DD", "~/DemoOutPage");
 
+CTask *index_task = User("#include \"::/Demo/ToHtmlToTXTDemo/HtmlDirList\";;DocMax;DocMax;\n");
+DocClear(index_task->border_doc, TRUE);
+WinVert(1, TEXT_ROWS - 2, index_task);
+WinToTop;
+
 U0 DirIndex(U8 *dest_path, U8 *full_name, U8 *opt_func="")
 {
 	U8		*index_path,
 			*index_path_out,
 			*index_exe;
-	CTask	*index_task;
 	CDoc	*index_doc;
 
 	index_path		= MStrPrint("%s/index.DD", dest_path);
 	index_path_out	= MStrPrint("%s/index.html", dest_path);
 	"%s\n", index_path;
 
-	index_exe = MStrPrint("#include \"::/Demo/ToHtmlToTXTDemo/HtmlDirList\";;DocMax;DocMax;"
-						  "Cls;DirIndexList(\"%s\");%s;View;\n", full_name, opt_func);
-	PopUp(index_exe,, &index_task);
+	index_exe = MStrPrint("Cls;DirIndexList(\"%s\");%s;View;\n", full_name, opt_func);
+	XTalk(index_task, index_exe);
+
 	TaskWait(index_task);
 
 	index_doc = DocNew(index_path);
@@ -42,7 +46,7 @@ U0 DirIndex(U8 *dest_path, U8 *full_name, U8 *opt_func="")
 	DocDel(index_doc);
 
 	TaskWait(index_task);
-	Kill(index_task);
+	MessagePostWait(index_task, MESSAGE_KEY_DOWN_UP, CH_SHIFT_ESC, 0);
 
 	ToHtml(index_path, index_path_out);
 	Del(index_path);
@@ -126,6 +130,8 @@ I64	Dir2Html(U8 *src_files_find_mask, U8 *dst_files_find_mask)
 
 I64 HtmlGen()
 {
+	I64 res;
+
 	DocMax;
 	DocMax;
 	DelTree("::/HTML/");
@@ -133,7 +139,11 @@ I64 HtmlGen()
 	progress1		= 0;
 	progress1_max	= FileCount(FilesFind("::/", FUF_RECURSE));
 
-	DirIndex("::/HTML/", "::/", "DocPrint(,\"\n\n\");Who;");
+	DirIndex("::/HTML/", "::/", "Who;");
 
-	return Dir2Html("::/", "::/HTML/");
+	res = Dir2Html("::/", "::/HTML/");
+
+	Kill(index_task);
+
+	return res;
 }

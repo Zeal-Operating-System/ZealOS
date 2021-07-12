@@ -210,7 +210,7 @@ public CDoc *Doc2Html(CDoc *doc_in, U8 *html_header=NULL, U8 *body_header=NULL,
 					"<head>\n"
 					"<meta http-equiv=\"Content-Type\" "
 					"content=\"text/html;charset=US-ASCII\">\n"
-					"<meta name=\"generator\" content=\"$TX,"ZealOS V0.05",D="DD_OS_NAME_VERSION"$\">\n";
+					"<meta name=\"generator\" content=\"$TX,"ZealOS V0.07",D="DD_OS_NAME_VERSION"$\">\n";
 	if (!body_header)
 		body_header =
 					"<body>\n"
@@ -406,7 +406,7 @@ public U0 ToHtml(U8 *_in_name, U8 *_out_name=NULL, U8 *html_header=NULL,
 	CDoc *doc_in, *doc_out;
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
-	WinHorz(0, width - 1); //Sets doc width for word wrap.
+	WinHorz(1, width - 2); //Sets doc width for word wrap.
 
 	in_name=ExtDefault(_in_name, "CC");
 	if (_out_name)
