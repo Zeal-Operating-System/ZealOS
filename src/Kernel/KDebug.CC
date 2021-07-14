@@ -173,7 +173,7 @@ U0 CallerRep(U8 **rbp=NULL, CTask *task=NULL)
 	while (CheckOnStack(rbp, task))
 	{
 		ptr = rbp + 1;
-		"%08X:%08tX:%P\n", ptr, *ptr, *ptr;
+		"%08X: %08tX: %P\n", ptr, *ptr, *ptr;
 		if (rbp >= *rbp)
 			break;
 		rbp = *rbp;
@@ -319,14 +319,21 @@ U0 RawDr(CTask *task=NULL)
 	if (!task)
 		task = Fs;
 
+	text.raw_col = RAWDR_COL;
+	'É';
+	for (j = 0; j < text.cols - RAWDR_COL - 1; j++)
+		'Í';
+
 	for (i = 0; i < 16; i++)
 	{
-		text.raw_col = i * text.cols + RAWDR_COL;
-		"º%3Z:%016X\n", i, "ST_U64_REGS", *TaskRegAddr(task, i);
+		text.raw_col = (i + 1) * text.cols + RAWDR_COL;
+		"º%3Z: %016X\n", i, "ST_U64_REGS", *TaskRegAddr(task, i);
 	}
 
+	i++;
+
 	text.raw_col = i++ * text.cols + RAWDR_COL;
-	"ºRIP:%016X\n", task->rip;
+	"ºRIP: %016X\n", task->rip;
 
 	text.raw_col = i++ * text.cols + RAWDR_COL;
 	"º%-*tp\n", text.cols - (RAWDR_COL + 1) - 1, Fs->rip;
@@ -347,6 +354,16 @@ U0 RawDr(CTask *task=NULL)
 	for (j = 0; j < text.cols - RAWDR_COL - 1; j++)
 		'Í';
 
+	text.raw_col = text.cols - 1;
+	'»';
+	for (j = 2; j < i + 1; j++)
+	{
+		text.raw_col = j * text.cols - 1;
+		'º';
+	}
+	text.raw_col = j * text.cols - 1;
+	'¼';
+
 	text.raw_col = old_col;
 	Raw(old_raw);
 }
@@ -358,8 +375,8 @@ U0 Dr(CTask *task=NULL)
 	if (!task)
 		task = Fs;
 	for (i = 0; i < 16; i++)
-		"%3Z:%016X\n", i, "ST_U64_REGS", *TaskRegAddr(task, i);
-	"RIP:%016X\n", task->rip;
+		"%3Z: %016X\n", i, "ST_U64_REGS", *TaskRegAddr(task, i);
+	"RIP: %016X\n", task->rip;
 }
 
 U8 *SysGetStr2(I64)
@@ -568,32 +585,32 @@ U0 DebugHelp()
 	"\n"
 	"The cmd line is basically the same as normal.	Here are some common\n"
 	"debugging commands.\n\n"
-	">EdLite(\"FileName\");\t\t//Edit file.\n"
-	">D(0x100000);\t\t\t//Dump page tables.\n"
-	">Dm(0x100000);\t\t\t//Dump page tables.\n"
-	">Dm(Fs,sizeof(CTask));\t\t//Dump current task record.\n"
-	">ClassRep(Fs,\"CTask\",1);\t//Dump current task record.\n"
-	">ClassRep(Fs,,1);\t\t//(It knows lastclass.)\n"
-	">CallerRep;\t\t\t//Stack trace report.\n"
-	">Da(_RSP);\t\t\t//Dump stack.\n"
-	">Dr;\t\t\t\t//Dump Regs.\n"
-	">1+2*3+&Print;\t\t\t//Show calculation res.\n"
-	">*(0x70000)(I64 *)=0x123456789;\t//Assign value to 0x70000-0x70007.\n"
-	">_RAX=0x1234;\t\t\t//Set RAX to 0x1234.\n"
-	">_RIP=&Break;\t\t//Set RIP.\n"
-	">I64 i;\t\t\t\t//Declare variable.\n"
-	">i=_RCX+_RDX;\t\t\t//Assign to variable.\n"
-	">U(&Print+0x8);\t\t\t//Unassemble Print.\n"
-	">Uf(\"Print\");\t\t\t//Unassembler function \"Print\".\n"
-	">Man(\"Print\");\t\t\t//Edit Src for \"Print\".\n"
-	">E(_RIP);\t\t\t//Edit Src Code.\n"
-	">Fix;\t\t\t\t//Edit Last Err Src Code.\n"
-	">B(&Main+0x20);\t\t\t//Toggle break point.\n"
-	">B2;\t\t\t\t//Clear all break points.\n"
-	">S;\t\t\t\t//Single step.\n"
-	">G;\t\t\t\t//Resume execution.\n"
-	">G2;\t\t\t\t//B2;LFBFlush;WinFocus;G;\n"
-	">Exit;\t\t\t\t//Exit (kill) task.\n\n"
+	">EdLite(\"FileName\");\t\t\t\t// Edit file.\n"
+	">D(0x100000);\t\t\t\t\t\t// Dump page tables.\n"
+	">Dm(0x100000);\t\t\t\t\t\t// Dump page tables.\n"
+	">Dm(Fs, sizeof(CTask));\t\t\t\t// Dump current task record.\n"
+	">ClassRep(Fs, \"CTask\", 1);\t\t\t// Dump current task record.\n"
+	">ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n"
+	">CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n"
+	">Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n"
+	">Dr;\t\t\t\t\t\t\t\t// Dump Regs.\n"
+	">1 + 2 * 3 + &Print;\t\t\t\t// Show calculation res.\n"
+	">*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n"
+	">_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n"
+	">_RIP = &Break;\t\t\t\t\t\t// Set RIP.\n"
+	">I64 i;\t\t\t\t\t\t\t\t// Declare variable.\n"
+	">i = _RCX + _RDX;\t\t\t\t\t// Assign to variable.\n"
+	">U(&Print+0x8);\t\t\t\t\t\t// Unassemble Print.\n"
+	">Uf(\"Print\");\t\t\t\t\t\t// Unassembler function \"Print\".\n"
+	">Man(\"Print\");\t\t\t\t\t\t// Edit Src for \"Print\".\n"
+	">E(_RIP);\t\t\t\t\t\t\t// Edit Src Code.\n"
+	">Fix;\t\t\t\t\t\t\t\t// Edit Last Err Src Code.\n"
+	">B(&Main+0x20);\t\t\t\t\t\t// Toggle break point.\n"
+	">B2;\t\t\t\t\t\t\t\t// Clear all break points.\n"
+	">S;\t\t\t\t\t\t\t\t\t// Single step.\n"
+	">G;\t\t\t\t\t\t\t\t\t// Resume execution.\n"
+	">G2;\t\t\t\t\t\t\t\t// B2;LFBFlush;WinFocus;G;\n"
+	">Exit;\t\t\t\t\t\t\t\t// Exit (kill) task.\n\n"
 	"After resuming, <CTRL-ALT-n> next focus task.\n"
 	"After resuming, <CTRL-ALT-v> flushes screen VGA cache.\n\n";
 }
@@ -653,7 +670,7 @@ U0 Fault3(I64 fault_num, I64 fault_err_code)
 	}
 
 	"\n\tZealOS Debugger\n\n"
-	">Help;\t//For help.\n\n";
+	"  Type Help; for help.\n\n";
 
 	Beep(62, TRUE);
 	if (fault_num == I_DEBUG)
@@ -696,15 +713,16 @@ U0 Fault2(I64 fault_num, I64 fault_err_code)
 		"Task \"";
 		"%s", Fs->task_title;
 		"\"\n";
-		"Fault:0x%02X %Z\t\tErr Code:%08X\n", fault_num, fault_num, "ST_INT_NAMES", fault_err_code;
+		"Fault:    0x%02X %Z\n", fault_num, fault_num, "ST_INT_NAMES";
+		"Err Code: %08X\n", fault_err_code;
 		was_in_debug = DebugMode(ON);
-		"RIP:%08X", Fs->rip; //Sometimes crashes on %p, so do this first
-		":%p  RSP:%08X\n", Fs->rip, Fs->rsp;
+		"RIP:      %08X", Fs->rip; //Sometimes crashes on %p, so do this first
+		":%p\nRSP:      %08X\n", Fs->rip, Fs->rsp;
 		if (fault_num == I_PAGE_FAULT)
 		{
 			MOV_RAX_CR2
 			i = RAXGet;
-			"Fault Addr:%08X:%p\n", i, i;
+			"Fault Addr: %08X:%p\n", i, i;
 		}
 		Fault3(fault_num, fault_err_code);
 		DebugMode(was_in_debug);

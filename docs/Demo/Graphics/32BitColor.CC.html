@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.07">
+<meta name="generator" content="ZealOS V0.08">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -47,8 +47,8 @@ body {background-color:#000000;}
 <a name="l20"></a>
 <a name="l21"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cF5>CharScan</span><span class=cF0>)
 <a name="l22"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l23"></a>        x = </span><span class=cF5>FloorI64</span><span class=cF0>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>, SQUARE_SIZE + SQUARE_GAP);
-<a name="l24"></a>        y = </span><span class=cF5>FloorI64</span><span class=cF0>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>, SQUARE_SIZE + SQUARE_GAP);
+<a name="l23"></a>        x = </span><span class=cF5>FloorI64</span><span class=cF0>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>,  SQUARE_SIZE + SQUARE_GAP);
+<a name="l24"></a>        y = </span><span class=cF5>FloorI64</span><span class=cF0>(</span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_HEIGHT</span><span class=cF0>, SQUARE_SIZE + SQUARE_GAP);
 <a name="l25"></a>        color = </span><span class=cF5>RandU32</span><span class=cF0>;
 <a name="l26"></a>
 <a name="l27"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; SQUARE_SIZE; i++)

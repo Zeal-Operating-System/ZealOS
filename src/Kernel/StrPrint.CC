@@ -1131,7 +1131,7 @@ U0 PrintErr(U8 *format, ...)
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
 	GetOutOfDollar;
-	"%,p %,p %,p %,p " ST_ERR_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
+	"%,p ® %,p ® %,p ® %,p " ST_ERR_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
 	Free(buf);
 }
 
@@ -1140,6 +1140,6 @@ U0 PrintWarn(U8 *format, ...)
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 
 	GetOutOfDollar;
-	"%,p %,p %,p %,p " ST_WARN_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
+	"%,p ® %,p ® %,p ® %,p " ST_WARN_ST "%s", Caller, Caller(2), Caller(3), Caller(4), buf;
 	Free(buf);
 }

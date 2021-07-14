@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.07">
+<meta name="generator" content="ZealOS V0.08">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -72,8 +72,8 @@ body {background-color:#000000;}
 <a name="l45"></a>
 <a name="l46"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PutExcept</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> catch_it=</span><span class=cF3>TRUE</span><span class=cF0>)
 <a name="l47"></a>{</span><span class=cF2>//Print exception message and catch exception.</span><span class=cF0>
-<a name="l48"></a>    </span><span class=cF6>&quot;Except:%c:&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_ch;
-<a name="l49"></a>    </span><span class=cF6>&quot;%P:%P:%P:%P:%P:%P\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>2</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>3</span><span class=cF0>],
+<a name="l48"></a>    </span><span class=cF6>&quot;Except . %c . &quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_ch;
+<a name="l49"></a>    </span><span class=cF6>&quot;%P . %P . %P . %P . %P . %P\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>2</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>3</span><span class=cF0>],
 <a name="l50"></a>                           </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>4</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>5</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>6</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>7</span><span class=cF0>];
 <a name="l51"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = catch_it;
 <a name="l52"></a>}
@@ -123,7 +123,7 @@ body {background-color:#000000;}
 <a name="l96"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_rbp = </span><span class=cF5>RBPGet</span><span class=cF0>;
 <a name="l97"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l98"></a>    </span><span class=cF1>if</span><span class=cF0> (!no_log)
-<a name="l99"></a>        </span><span class=cF5>SysLog</span><span class=cF0>(</span><span class=cF6>&quot;Except:%c:%p:%p:%p:%p:%p:%p\n&quot;</span><span class=cF0>, ch,
+<a name="l99"></a>        </span><span class=cF5>SysLog</span><span class=cF0>(</span><span class=cF6>&quot;Except . %c . %p . %p . %p . %p . %p . %p\n&quot;</span><span class=cF0>, ch,
 <a name="l100"></a>                    </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>2</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>3</span><span class=cF0>],
 <a name="l101"></a>                    </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>4</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>5</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>6</span><span class=cF0>], </span><span class=cF5>Fs</span><span class=cF0>-&gt;except_callers[</span><span class=cFE>7</span><span class=cF0>]);
 <a name="l102"></a>

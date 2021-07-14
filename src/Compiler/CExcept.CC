@@ -102,7 +102,7 @@ U0 LexExcept(CCompCtrl *cc, U8 *str=NULL)
 	if (str)
 		PrintErr(str);
 	if (!IsRaw)
-		SysErr("Task:%08X %s\n", Fs,str);
+		SysErr("Task:%08X %s\n", Fs, str);
 	LexPutPos(cc);
 	cc->error_count++;
 	FlushMessages;

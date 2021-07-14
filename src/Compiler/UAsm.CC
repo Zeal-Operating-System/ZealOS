@@ -318,13 +318,13 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	else
 		*line1 = 0;
 
-	StrPrint(line1 + StrLen(line1), "%24tp ", rip);
+	StrPrint(line1 + StrLen(line1), "%24tp 0x", rip);
 	bin_data_area1 = line1 + StrLen(line1);
 	for (i = 0; i < 6; i++)
 		CatPrint(line1, "%02X", rip[i]);
 	CatPrint(line1, " ");
 
-	StrPrint(line2, "%24tp ", rip + 6);
+	StrPrint(line2, "%24tp 0x", rip + 6);
 	bin_data_area2 = line2 + StrLen(line2);
 	for (i = 6; i < 12; i++)
 		CatPrint(line2, "%02X", rip[i]);
@@ -409,8 +409,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	}
 
 	rip += tmpins->opcode_count;
-	tmpo = tmpins(U8 *) - tmpins->ins_entry_num * sizeof(CInst)
-	-offset(CHashOpcode.ins);
+	tmpo = tmpins(U8 *) - tmpins->ins_entry_num * sizeof(CInst) - offset(CHashOpcode.ins);
 	if (just_ins)
 		*line1 = 0;
 	CatPrint(line1, tmpo->str);
@@ -508,12 +507,12 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 			SIB = *rip++;
 		if (Mod == 1) {
 			disp = *rip(U8 *)++;
-			CatPrint(reloced_arg1_st, "%02X", disp);
+			CatPrint(reloced_arg1_st, "0x%02X", disp);
 		}
 		else if (Mod == 2)
 		{
 			disp = *rip(U32 *)++;
-			CatPrint(reloced_arg1_st, "%08X", disp);
+			CatPrint(reloced_arg1_st, "0x%08X", disp);
 		}
 		if (tmpins->slash_val < 8)
 			RM2 = -1;
@@ -587,7 +586,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 					if (r1 == REG_RBP && !Mod)
 					{
 						disp = *rip(U32 *)++;
-						CatPrint(reloced_arg1_st, "%08X[%Z*%d]", disp, r2, ptr, scale);
+						CatPrint(reloced_arg1_st, "0x%08X[%Z*%d]", disp, r2, ptr, scale);
 					}
 					else if (r2 == 4)
 						CatPrint(reloced_arg1_st, "[%Z]", r1, ptr);
@@ -632,24 +631,24 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 		case ARGT_IMM8:
 		case ARGT_UIMM8:
 			imm = *rip(U8 *)++;
-			CatPrint(arg1_st, "%02X", imm);
+			CatPrint(arg1_st, "0x%02X", imm);
 			if (tmpins->opcode[0] == 0xCD && (ptr = DefineSub(imm, "ST_INT_NAMES")))
 				CatPrint(arg1_st, " %s", ptr);
 			break;
 
 		case ARGT_IMM16:
 		case ARGT_UIMM16:
-			CatPrint(arg1_st, "%04X", *rip(U16 *)++);
+			CatPrint(arg1_st, "0x%04X", *rip(U16 *)++);
 			break;
 
 		case ARGT_IMM32:
 		case ARGT_UIMM32:
-			CatPrint(arg1_st, "%08X", *rip(U32 *)++);
+			CatPrint(arg1_st, "0x%08X", *rip(U32 *)++);
 			break;
 
 		case ARGT_IMM64:
 		case ARGT_UIMM64:
-			CatPrint(arg1_st, "%016X", *rip(I64 *)++);
+			CatPrint(arg1_st, "0x%016X", *rip(I64 *)++);
 			break;
 		start:
 			case ARGT_REL8:
@@ -683,7 +682,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 				disp = *rip(U16 *)++;
 			else
 				disp = *rip(U32 *)++;
-			CatPrint(arg1_st, "[%X]",disp);
+			CatPrint(arg1_st, "[0x%X]",disp);
 			break;
 
 		case ARGT_AL ... ARGT_DX:
@@ -701,22 +700,22 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	{
 		case ARGT_IMM8:
 		case ARGT_UIMM8:
-			CatPrint(arg2_st, "%02X", *rip(U8 *)++);
+			CatPrint(arg2_st, "0x%02X", *rip(U8 *)++);
 			break;
 
 		case ARGT_IMM16:
 		case ARGT_UIMM16:
-			CatPrint(arg2_st, "%04X", *rip(U16 *)++);
+			CatPrint(arg2_st, "0x%04X", *rip(U16 *)++);
 			break;
 
 		case ARGT_IMM32:
 		case ARGT_UIMM32:
-			CatPrint(arg2_st, "%08X", *rip(U32 *)++);
+			CatPrint(arg2_st, "0x%08X", *rip(U32 *)++);
 			break;
 
 		case ARGT_IMM64:
 		case ARGT_UIMM64:
-			CatPrint(arg2_st, "%016X", *rip(I64 *)++);
+			CatPrint(arg2_st, "0x%016X", *rip(I64 *)++);
 			break;
 
 		case ARGT_MOFFS8...ARGT_MOFFS64:
@@ -727,7 +726,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 				disp = *rip(U16 *)++;
 			else
 				disp = *rip(U32 *)++;
-			CatPrint(arg2_st, "[%X]", disp);
+			CatPrint(arg2_st, "[0x%X]", disp);
 			break;
 
 		case ARGT_AL ... ARGT_DX:
@@ -746,7 +745,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	if (*arg1_st)
 		CatPrint(line1, "\t%s", arg1_st);
 	if (*arg2_st)
-		CatPrint(line1, ",%s", arg2_st);
+		CatPrint(line1, ", %s", arg2_st);
 	CatPrint(line1, "\n");
 	CatPrint(line2, "\n");
 	if (!just_ins)
@@ -775,7 +774,7 @@ U8 *U(U8 *rip, I64 count=20, I64 seg_size=64)
 
 	if (seg_size == 16)
 		PrintWarn("16-bit unassembly is not well supported.\n");
-	"$$HL,1$$";
+	"$$HL,1$$\n";
 	for (i = 0; i < count; i++)
 	{
 		Ui(buf, &rip, seg_size);
@@ -793,7 +792,7 @@ I64 Un(U8 *rip, I64 count=0x80, I64 seg_size=64)
 
 	if (seg_size == 16)
 		PrintWarn("16-bit unassembly is not well supported.\n");
-	"$$HL,1$$";
+	"$$HL,1$$\n";
 	while (rip < end_rip)
 	{
 		Ui(buf, &rip, seg_size);

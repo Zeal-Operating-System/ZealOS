@@ -20,8 +20,8 @@ I0 Color32Demo()
 
 	while (!CharScan)
 	{
-		x = FloorI64(RandU16 % GR_WIDTH, SQUARE_SIZE + SQUARE_GAP);
-		y = FloorI64(RandU16 % GR_WIDTH, SQUARE_SIZE + SQUARE_GAP);
+		x = FloorI64(RandU16 % GR_WIDTH,  SQUARE_SIZE + SQUARE_GAP);
+		y = FloorI64(RandU16 % GR_HEIGHT, SQUARE_SIZE + SQUARE_GAP);
 		color = RandU32;
 
 		for (i = 0; i < SQUARE_SIZE; i++)

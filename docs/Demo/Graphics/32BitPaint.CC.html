@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
+<meta name="generator" content="ZealOS V0.08">
+<style type="text/css">
+body {background-color:#000000;}
+.cF0{color:#ffffff;background-color:#000000;}
+.cF1{color:#3465a4;background-color:#000000;}
+.cF2{color:#4e9a06;background-color:#000000;}
+.cF3{color:#06989a;background-color:#000000;}
+.cF4{color:#a24444;background-color:#000000;}
+.cF5{color:#75507b;background-color:#000000;}
+.cF6{color:#ce982f;background-color:#000000;}
+.cF7{color:#bcc0b9;background-color:#000000;}
+.cF8{color:#555753;background-color:#000000;}
+.cF9{color:#729fcf;background-color:#000000;}
+.cFA{color:#82bc49;background-color:#000000;}
+.cFB{color:#34e2e2;background-color:#000000;}
+.cFC{color:#ac3535;background-color:#000000;}
+.cFD{color:#ad7fa8;background-color:#000000;}
+.cFE{color:#fce94f;background-color:#000000;}
+.cFF{color:#000000;background-color:#000000;}
+</style>
+</head>
+<body>
+<pre style="font-family:monospace;font-size:12pt">
+<a name="l1"></a><span class=cF2>//#define SQUARE_SIZE</span><span class=cF0>       </span><span class=cF2>20</span><span class=cF0>
+<a name="l2"></a></span><span class=cF2>//#define SQUARE_GAP</span><span class=cF0>        </span><span class=cF2>5</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>//#define SQUARE_DELAY</span><span class=cF0>  </span><span class=cF2>5 // mS</span><span class=cF0>
+<a name="l4"></a>
+<a name="l5"></a></span><span class=cF2>// paint program globals</span><span class=cF0>
+<a name="l6"></a></span><span class=cF1>class</span><span class=cF0> CPaint
+<a name="l7"></a>{
+<a name="l8"></a>    </span><span class=cF2>// Image Framebuffer</span><span class=cF0>
+<a name="l9"></a>    </span><span class=cF9>U32</span><span class=cF0>     *fb;
+<a name="l10"></a>
+<a name="l11"></a>    </span><span class=cF2>// Brush</span><span class=cF0>
+<a name="l12"></a>    </span><span class=cF9>CBGR24</span><span class=cF0>   color;
+<a name="l13"></a>    </span><span class=cF9>U64</span><span class=cF0>      thick;
+<a name="l14"></a>    </span><span class=cF9>U64</span><span class=cF0>      last_x;
+<a name="l15"></a>    </span><span class=cF9>U64</span><span class=cF0>      last_y;
+<a name="l16"></a>    </span><span class=cF9>U64</span><span class=cF0>      last_thick;
+<a name="l17"></a>
+<a name="l18"></a>} paint;
+<a name="l19"></a>
+<a name="l20"></a></span><span class=cF1>U0</span><span class=cF0> PaintGlobalsInit()
+<a name="l21"></a>{
+<a name="l22"></a>    paint.fb            = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l23"></a>    paint.thick         = </span><span class=cFE>8</span><span class=cF0>;
+<a name="l24"></a>    paint.color         = </span><span class=cF3>BLACK32</span><span class=cF0>;
+<a name="l25"></a>
+<a name="l26"></a>    </span><span class=cF2>// last cursor position and size</span><span class=cF0>
+<a name="l27"></a>    paint.last_x        = </span><span class=cFB>mouse</span><span class=cF0>.pos.x;
+<a name="l28"></a>    paint.last_y        = </span><span class=cFB>mouse</span><span class=cF0>.pos.y;
+<a name="l29"></a>    paint.last_thick    = paint.thick;
+<a name="l30"></a>}
+<a name="l31"></a>
+<a name="l32"></a>
+<a name="l33"></a></span><span class=cF1>I0</span><span class=cF0> DrawImagePixel(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>CBGR24</span><span class=cF0> color)
+<a name="l34"></a>{
+<a name="l35"></a>    paint.fb[x + y * </span><span class=cF3>GR_WIDTH</span><span class=cF0>] = color;
+<a name="l36"></a>}
+<a name="l37"></a>
+<a name="l38"></a></span><span class=cF1>I0</span><span class=cF0> DrawScreenPixel(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>CBGR24</span><span class=cF0> color)
+<a name="l39"></a>{
+<a name="l40"></a>    </span><span class=cFB>text</span><span class=cF0>.fb_alias[x + y * </span><span class=cF3>GR_WIDTH</span><span class=cF0>] = color;
+<a name="l41"></a>}
+<a name="l42"></a>
+<a name="l43"></a></span><span class=cF1>I0</span><span class=cF0> DrawScreenChar(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> char)
+<a name="l44"></a>{
+<a name="l45"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l46"></a>
+<a name="l47"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>; i++)
+<a name="l48"></a>        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cF3>FONT_WIDTH</span><span class=cF0>; j++)
+<a name="l49"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cFB>text</span><span class=cF0>.font[char] &gt;&gt; (i * </span><span class=cFE>8</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cF7>(</span><span class=cFE>1</span><span class=cF0> &lt;&lt; j</span><span class=cF7>)</span><span class=cF0>)
+<a name="l50"></a>                DrawScreenPixel(x + j, y + i, </span><span class=cF3>BLACK32</span><span class=cF0>);
+<a name="l51"></a>}
+<a name="l52"></a>
+<a name="l53"></a></span><span class=cF1>I0</span><span class=cF0> DrawScreenStr(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>U8</span><span class=cF0> *str)
+<a name="l54"></a>{
+<a name="l55"></a>    </span><span class=cF9>I64</span><span class=cF0> c, i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l56"></a>
+<a name="l57"></a>    </span><span class=cF1>while</span><span class=cF0> (c = *str++)
+<a name="l58"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l59"></a>        DrawScreenChar(x + </span><span class=cF7>(</span><span class=cF3>FONT_WIDTH</span><span class=cF0> * i++</span><span class=cF7>)</span><span class=cF0>, y, c);
+<a name="l60"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l61"></a>}
+<a name="l62"></a>
+<a name="l63"></a></span><span class=cF1>I0</span><span class=cF0> DrawImageBrush(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>CBGR24</span><span class=cF0> color, </span><span class=cF9>I64</span><span class=cF0> thick)
+<a name="l64"></a>{
+<a name="l65"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l66"></a>
+<a name="l67"></a>    </span><span class=cF1>for</span><span class=cF0> (i = x; i &lt; x + thick; i++)
+<a name="l68"></a>        </span><span class=cF1>for</span><span class=cF0> (j = y; j &lt; y + thick; j++)
+<a name="l69"></a>            DrawImagePixel(i, j, color);
+<a name="l70"></a>}
+<a name="l71"></a>
+<a name="l72"></a></span><span class=cF1>I0</span><span class=cF0> DrawScreenBrush(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>CBGR24</span><span class=cF0> color, </span><span class=cF9>I64</span><span class=cF0> thick)
+<a name="l73"></a>{
+<a name="l74"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
+<a name="l75"></a>
+<a name="l76"></a>    </span><span class=cF1>for</span><span class=cF0> (i = x; i &lt; x + thick; i++)
+<a name="l77"></a>        </span><span class=cF1>for</span><span class=cF0> (j = y; j &lt; y + thick; j++)
+<a name="l78"></a>            DrawScreenPixel(i, j, color);
+<a name="l79"></a>
+<a name="l80"></a>    paint.last_x        = x;
+<a name="l81"></a>    paint.last_y        = y;
+<a name="l82"></a>    paint.last_thick    = thick;
+<a name="l83"></a>
+<a name="l84"></a>}
+<a name="l85"></a>
+<a name="l86"></a></span><span class=cF1>I0</span><span class=cF0> Paint32()
+<a name="l87"></a>{
+<a name="l88"></a>    </span><span class=cF9>I64</span><span class=cF0>      sc, ch, i, j;
+<a name="l89"></a>    </span><span class=cF1>U8</span><span class=cF0>      *str_r[</span><span class=cF3>STR_LEN</span><span class=cF0>],
+<a name="l90"></a>            *str_g[</span><span class=cF3>STR_LEN</span><span class=cF0>],
+<a name="l91"></a>            *str_b[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l92"></a>
+<a name="l93"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l94"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l95"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l96"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l97"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l98"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l99"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>);
+<a name="l100"></a>
+<a name="l101"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;Press $GREEN$0-9$FG$ to get colors from current palette.\n&quot;</span><span class=cF0>
+<a name="l102"></a>            </span><span class=cF6>&quot;Press $GREEN$R, G, or B$FG$ to increase color values.\n&quot;</span><span class=cF0>
+<a name="l103"></a>            </span><span class=cF6>&quot;Press $GREEN$Ctrl-R, Ctrl-G, or Ctrl-B$FG$ to decrease.\n&quot;</span><span class=cF0>
+<a name="l104"></a>            </span><span class=cF6>&quot;Press $GREEN$+ or -$FG$ to change brush size.\n&quot;</span><span class=cF0>
+<a name="l105"></a>            </span><span class=cF6>&quot;Left-click to draw.&quot;</span><span class=cF0>);
+<a name="l106"></a>
+<a name="l107"></a>    </span><span class=cFB>text</span><span class=cF0>.is_fb_busy = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l108"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias, </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l109"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(paint.fb, </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l110"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l111"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l112"></a>        </span><span class=cF1>for</span><span class=cF0> (i = paint.last_x; i &lt; paint.last_x + paint.last_thick; i++)
+<a name="l113"></a>            </span><span class=cF1>for</span><span class=cF0> (j = paint.last_y; j &lt; paint.last_y + paint.last_thick; j++)
+<a name="l114"></a>                DrawScreenPixel(i, j, paint.fb[i + j * </span><span class=cF3>GR_WIDTH</span><span class=cF0>]);
+<a name="l115"></a>
+<a name="l116"></a>        DrawScreenBrush(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, paint.color, paint.thick);
+<a name="l117"></a>
+<a name="l118"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mouse</span><span class=cF0>.lb)
+<a name="l119"></a>            DrawImageBrush(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, paint.color, paint.thick);
+<a name="l120"></a>
+<a name="l121"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_r, </span><span class=cF6>&quot;Red:   %d&quot;</span><span class=cF0>, paint.color.r);
+<a name="l122"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_g, </span><span class=cF6>&quot;Green: %d&quot;</span><span class=cF0>, paint.color.g);
+<a name="l123"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_b, </span><span class=cF6>&quot;Blue:  %d&quot;</span><span class=cF0>, paint.color.b);
+<a name="l124"></a>
+<a name="l125"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>; i++)
+<a name="l126"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>12</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>; j++)
+<a name="l127"></a>                DrawScreenPixel(j, i, paint.fb[j + i * </span><span class=cF3>GR_WIDTH</span><span class=cF0>]);
+<a name="l128"></a>
+<a name="l129"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_r);
+<a name="l130"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_g);
+<a name="l131"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_b);
+<a name="l132"></a>
+<a name="l133"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l134"></a>
+<a name="l135"></a>        </span><span class=cF2>// Get key, process</span><span class=cF0>
+<a name="l136"></a>        </span><span class=cF5>KeyScan</span><span class=cF0>(&amp;ch, &amp;sc);
+<a name="l137"></a>        </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l138"></a>        {
+<a name="l139"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l140"></a>                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l141"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l142"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l143"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l144"></a>
+<a name="l145"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l146"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l147"></a>
+<a name="l148"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l149"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l150"></a>
+<a name="l151"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l152"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l153"></a>                </span><span class=cF7>}</span><span class=cF0>
+<a name="l154"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l155"></a>
+<a name="l156"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
+<a name="l157"></a>                paint.thick++;
+<a name="l158"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l159"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
+<a name="l160"></a>                paint.thick--;
+<a name="l161"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l162"></a>
+<a name="l163"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'r'</span><span class=cF0>:
+<a name="l164"></a>                paint.color.r++;
+<a name="l165"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l166"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'g'</span><span class=cF0>:
+<a name="l167"></a>                paint.color.g++;
+<a name="l168"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l169"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'b'</span><span class=cF0>:
+<a name="l170"></a>                paint.color.b++;
+<a name="l171"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l172"></a>
+<a name="l173"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLR</span><span class=cF0>:
+<a name="l174"></a>                paint.color.r--;
+<a name="l175"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l176"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLG</span><span class=cF0>:
+<a name="l177"></a>                paint.color.g--;
+<a name="l178"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l179"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLB</span><span class=cF0>:
+<a name="l180"></a>                paint.color.b--;
+<a name="l181"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l182"></a>
+<a name="l183"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'0'</span><span class=cF0>...</span><span class=cF6>'9'</span><span class=cF0>:
+<a name="l184"></a>                paint.color = </span><span class=cFB>gr_palette</span><span class=cF0>[ch - </span><span class=cF6>'0'</span><span class=cF0>];
+<a name="l185"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l186"></a>
+<a name="l187"></a>
+<a name="l188"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l189"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(paint.fb, </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l190"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias, </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l191"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l192"></a>
+<a name="l193"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l194"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_ESC</span><span class=cF0>:
+<a name="l195"></a>                </span><span class=cF1>goto</span><span class=cF0> paint_done;
+<a name="l196"></a>        }
+<a name="l197"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l198"></a>
+<a name="l199"></a>paint_done:
+<a name="l200"></a>    </span><span class=cFB>text</span><span class=cF0>.is_fb_busy = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l201"></a>    </span><span class=cF5>LFBFlush</span><span class=cF0>;
+<a name="l202"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l203"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l204"></a>}
+<a name="l205"></a>
+<a name="l206"></a>PaintGlobalsInit;
+<a name="l207"></a>Paint32;</span></pre></body>
+</html>

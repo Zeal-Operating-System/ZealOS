@@ -413,8 +413,14 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 											}
 											else
 											{
-												DocWrite(doc);
-												st = StrNew(doc->filename.name);
+												if (DriveIsWritable)
+												{
+													DocWrite(doc);
+													st = StrNew(doc->filename.name);
+												}
+												else
+													if (PopUpCancelOk(ST_WARN_ST "Drive not writable.\nCompile file stored on drive?"))
+														st = StrNew(doc->filename.name);
 											}
 											if (st2 = DirFile(st, "Run", "CC"))
 											{
@@ -755,7 +761,15 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 						if (sc & SCF_KEY_DESC)
 							KeyDescSet("Edit/Save");
 						else
-							DocWrite(doc);
+						{
+							if (DriveIsWritable)
+							{
+								DocWrite(doc);
+							}
+							else
+								PopUpOk(ST_ERR_ST "Drive not writable.\nCannot save file.");
+						}
+
 					}
 					break;
 

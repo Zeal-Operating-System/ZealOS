@@ -36,7 +36,7 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 	if (ch == '\t')
 	{
 		RawPutChar(CH_SPACE);
-		while (text.raw_col & 7)
+		while (text.raw_col & 3)
 			RawPutChar(CH_SPACE);
 	}
 	else if (ch == CH_BACKSPACE)

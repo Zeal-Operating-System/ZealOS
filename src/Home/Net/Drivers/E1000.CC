@@ -368,11 +368,17 @@ U0 PCIInterruptsReroute(I64 base)
 
 U0 E1000InterruptsSetup()
 { // .. ?
-	IntEntrySet(I_E1000_0, &E1000IRQ);
+/*	IntEntrySet(I_E1000_0, &E1000IRQ);
 	IntEntrySet(I_E1000_1, &E1000IRQ);
 	IntEntrySet(I_E1000_2, &E1000IRQ);
 	IntEntrySet(I_E1000_3, &E1000IRQ);
-	PCIInterruptsReroute(I_E1000_0);
+	PCIInterruptsReroute(I_E1000_0);*/
+	I64 irq, i;
+
+	for (i = 0; i < 4; i++)
+		IntEntrySet((irq = IntEntryAlloc), &E1000IRQ);
+
+	PCIInterruptsReroute(irq);
 }
 
 U0 E1000InitRX()

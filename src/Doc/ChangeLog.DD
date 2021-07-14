@@ -1,4 +1,12 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/14/21 13:12:34----$IV,0$
+* Raised version number to 0.08.
+* Fixed non-writable drive throw when #include with F5 in $LK+PU,"DocPutKey",A="FF:::/System/DolDoc/DocPutKey.CC,SC_F5"$ and when attempting to $LK+PU,"save",A="FF:::/System/DolDoc/DocPutKey.CC,CH_CTRLS"$.
+* Added top & right borders to $LK+PU,"RawDr",A="FF:::/Kernel/KDebug.CC,RawDr"$.
+* Improved spacing in some debug commands.
+* Fixed $LK+PU,"RawPutChar",A="MN:RawPutChar"$ and $LK+PU,"EdLite",A="MN:EdLite"$ tab width.
+* Fixed $LK+PU,"Ui",A="MN:Ui"$ missing "0x" prefix syntax highlighter bug.
+
 $IV,1$----07/11/21 17:26:32----$IV,0$
 * Raised version number to 0.07.
 * Added $LK+PU,"IntEntryAlloc",A="MN:IntEntryAlloc"$, $LK+PU,"IntEntryFree",A="MN:IntEntryFree"$, $LK+PU,"dev.user_int_bitmap",A="FF:::/Kernel/KernelA.HH,user_int_bitmap"$ to allow acquiring dynamic user APIC IRQ.
