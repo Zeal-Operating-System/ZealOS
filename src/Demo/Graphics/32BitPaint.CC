@@ -83,12 +83,63 @@ I0 DrawScreenBrush(I64 x, I64 y, CBGR24 color, I64 thick)
 
 }
 
+U0 PaintSaveImage()
+{
+	U8			*filename, *tmp;
+
+	text.is_fb_busy = FALSE;
+	LFBFlush;
+
+	tmp = PopUpFileName("~/");
+	filename = ExtChange(tmp, "GR32");// make sure file ends in .GR32
+	Free(tmp);
+	FileWrite(filename, paint.fb, text.buffer_size);
+	Free(filename);
+
+	text.is_fb_busy = TRUE;
+	MemCopy(text.fb_alias, paint.fb, text.buffer_size);
+
+}
+
+U0 PaintLoadImage()
+{
+	U8	 ext[STR_LEN],
+		*file,
+		 filename[STR_LEN],
+		*file_image;
+
+	text.is_fb_busy = FALSE;
+	LFBFlush;
+
+	PopUpOk("Pick a .GR32 file to load.\n\n"
+			"(Double-click / ESC to pick.)");
+
+	do
+	{
+		file = PopUpPickFile("~/");
+		FileExtRemove(file, ext);
+	}
+	while (StrCompare(ext, "GR32"));
+
+	StrCopy(filename, file);
+	Free(file);
+	file = ExtDefault(filename, "GR32");
+
+	file_image = FileRead(file);
+	Free(file);
+
+	text.is_fb_busy = TRUE;
+	MemCopy(paint.fb, file_image, text.buffer_size);
+	Free(file_image);
+	MemCopy(text.fb_alias, paint.fb, text.buffer_size);
+}
+
 I0 Paint32()
 {
-	I64		 sc, ch, i, j;
-	U8		*str_r[STR_LEN],
-			*str_g[STR_LEN],
-			*str_b[STR_LEN];
+	I64		sc, ch, i, j, sc_space = Char2ScanCode(CH_SPACE);
+	U8		str_r[STR_LEN],
+			str_g[STR_LEN],
+			str_b[STR_LEN];
 
 	SettingsPush; //See $LK,"SettingsPush",A="MN:SettingsPush"$
 	AutoComplete;
@@ -98,38 +149,52 @@ I0 Paint32()
 	DocClear;
 	MenuPush("");
 
-	PopUpOk("Press $$GREEN$$0-9$$FG$$ to get colors from current palette.\n"
-			"Press $$GREEN$$R, G, or B$$FG$$ to increase color values.\n"
-			"Press $$GREEN$$Ctrl-R, Ctrl-G, or Ctrl-B$$FG$$ to decrease.\n"
-			"Press $$GREEN$$+ or -$$FG$$ to change brush size.\n"
-			"Left-click to draw.");
+	PopUpOk("\n"
+			"$$GREEN$$0-9$$FG$$ to get colors from current palette.\n"
+			"$$GREEN$$R, G, or B$$FG$$ to increase color values.\n"
+			"$$GREEN$$Shift-R, Shift-G, or Shift-B$$FG$$ to decrease.\n"
+			"$$GREEN$$+ or -$$FG$$ to change brush size.\n\n"
+			"$$BLUE$$Ctrl-S$$FG$$ to save image.\n"
+			"$$BLUE$$Ctrl-L$$FG$$ to load image.\n\n"
+			"$$GREEN$$Left-click or SPACE$$FG$$ to draw.\n\n"
+			"$$RED$$ENTER$$FG$$ to clear image.\n"
+			"$$RED$$Shift-Esc or Double Right-Click$$FG$$ to exit.");
+	Sleep(250); // help ensure SPACE press doesn't draw early
 
 	text.is_fb_busy = TRUE;
-	MemSet(text.fb_alias, WHITE32, text.buffer_size);
-	MemSet(paint.fb, WHITE32, text.buffer_size);
+	MemSet(text.fb_alias,	WHITE32, text.buffer_size);
+	MemSet(paint.fb,		WHITE32, text.buffer_size);
+
 	while (TRUE)
 	{
+		// draw the image where the brush was last covering it
 		for (i = paint.last_x; i < paint.last_x + paint.last_thick; i++)
 			for (j = paint.last_y; j < paint.last_y + paint.last_thick; j++)
 				DrawScreenPixel(i, j, paint.fb[i + j * GR_WIDTH]);
 
+		// draw the brush on the screen
 		DrawScreenBrush(mouse.pos.x, mouse.pos.y, paint.color, paint.thick);
 
-		if (mouse.lb)
+		// if clicked, draw brush on the image
+		if (mouse.lb || Bt(kbd.down_bitmap, sc_space))
 			DrawImageBrush(mouse.pos.x, mouse.pos.y, paint.color, paint.thick);
 
+		// build the color strings (U8[], no MAlloc)
 		StrPrint(str_r, "Red:   %d", paint.color.r);
 		StrPrint(str_g, "Green: %d", paint.color.g);
 		StrPrint(str_b, "Blue:  %d", paint.color.b);
 
+		// draw the image where the color strings where covering it 
 		for (i = 0; i < 3 * FONT_HEIGHT; i++)
 			for (j = 0; j < 12 * FONT_WIDTH; j++)
 				DrawScreenPixel(j, i, paint.fb[j + i * GR_WIDTH]);
 
+		// draw the color strings on screen
 		DrawScreenStr(0, 0 * FONT_HEIGHT, str_r);
 		DrawScreenStr(0, 1 * FONT_HEIGHT, str_g);
 		DrawScreenStr(0, 2 * FONT_HEIGHT, str_b);
 
+		// 60fps wait
 		Refresh;
 
 		// Get key, process
@@ -170,13 +235,13 @@ I0 Paint32()
 				paint.color.b++;
 				break;
 
-			case CH_CTRLR:
+			case 'R':
 				paint.color.r--;
 				break;
-			case CH_CTRLG:
+			case 'G':
 				paint.color.g--;
 				break;
-			case CH_CTRLB:
+			case 'B':
 				paint.color.b--;
 				break;
 
@@ -184,14 +249,20 @@ I0 Paint32()
 				paint.color = gr_palette[ch - '0'];
 				break;
 
-
 			case '\n':
-				MemSet(paint.fb, WHITE32, text.buffer_size);
-				MemSet(text.fb_alias, WHITE32, text.buffer_size);
+				MemSet(paint.fb,		WHITE32, text.buffer_size);
+				MemSet(text.fb_alias,	WHITE32, text.buffer_size);
+				break;
+
+			case CH_CTRLS:
+				PaintSaveImage;
+				break;
+
+			case CH_CTRLL:
+				PaintLoadImage;
 				break;
 
 			case CH_SHIFT_ESC:
-			case CH_ESC:
 				goto paint_done;
 		}
 	}
