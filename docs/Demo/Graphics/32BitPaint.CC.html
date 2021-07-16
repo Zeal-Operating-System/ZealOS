@@ -161,146 +161,157 @@ body {background-color:#000000;}
 <a name="l134"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias, paint.fb, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
 <a name="l135"></a>}
 <a name="l136"></a>
-<a name="l137"></a></span><span class=cF1>I0</span><span class=cF0> Paint32()
+<a name="l137"></a></span><span class=cF9>U32</span><span class=cF0> PaintImagePeek(</span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y)
 <a name="l138"></a>{
-<a name="l139"></a>    </span><span class=cF9>I64</span><span class=cF0>     sc, ch, i, j, sc_space = </span><span class=cF5>Char2ScanCode</span><span class=cF0>(</span><span class=cF3>CH_SPACE</span><span class=cF0>);
-<a name="l140"></a>    </span><span class=cF1>U8</span><span class=cF0>      str_r[</span><span class=cF3>STR_LEN</span><span class=cF0>],
-<a name="l141"></a>            str_g[</span><span class=cF3>STR_LEN</span><span class=cF0>],
-<a name="l142"></a>            str_b[</span><span class=cF3>STR_LEN</span><span class=cF0>];
-<a name="l143"></a>
-<a name="l144"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
-<a name="l145"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
-<a name="l146"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
-<a name="l147"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
-<a name="l148"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
-<a name="l149"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
-<a name="l150"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>);
-<a name="l151"></a>
-<a name="l152"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l153"></a>            </span><span class=cF6>&quot;$GREEN$0-9$FG$ to get colors from current palette.\n&quot;</span><span class=cF0>
-<a name="l154"></a>            </span><span class=cF6>&quot;$GREEN$R, G, or B$FG$ to increase color values.\n&quot;</span><span class=cF0>
-<a name="l155"></a>            </span><span class=cF6>&quot;$GREEN$Shift-R, Shift-G, or Shift-B$FG$ to decrease.\n&quot;</span><span class=cF0>
-<a name="l156"></a>            </span><span class=cF6>&quot;$GREEN$+ or -$FG$ to change brush size.\n\n&quot;</span><span class=cF0>
-<a name="l157"></a>            </span><span class=cF6>&quot;$BLUE$Ctrl-S$FG$ to save image.\n&quot;</span><span class=cF0>
-<a name="l158"></a>            </span><span class=cF6>&quot;$BLUE$Ctrl-L$FG$ to load image.\n\n&quot;</span><span class=cF0>
-<a name="l159"></a>            </span><span class=cF6>&quot;$GREEN$Left-click or SPACE$FG$ to draw.\n\n&quot;</span><span class=cF0>
-<a name="l160"></a>            </span><span class=cF6>&quot;$RED$ENTER$FG$ to clear image.\n&quot;</span><span class=cF0>
-<a name="l161"></a>            </span><span class=cF6>&quot;$RED$Shift-Esc or Double Right-Click$FG$ to exit.&quot;</span><span class=cF0>);
-<a name="l162"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0>); </span><span class=cF2>// help ensure SPACE press doesn't draw early</span><span class=cF0>
-<a name="l163"></a>
-<a name="l164"></a>    </span><span class=cFB>text</span><span class=cF0>.is_fb_busy = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l165"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias,   </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
-<a name="l166"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(paint.fb,        </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
-<a name="l167"></a>
-<a name="l168"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l169"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l170"></a>        </span><span class=cF2>// draw the image where the brush was last covering it</span><span class=cF0>
-<a name="l171"></a>        </span><span class=cF1>for</span><span class=cF0> (i = paint.last_x; i &lt; paint.last_x + paint.last_thick; i++)
-<a name="l172"></a>            </span><span class=cF1>for</span><span class=cF0> (j = paint.last_y; j &lt; paint.last_y + paint.last_thick; j++)
-<a name="l173"></a>                DrawScreenPixel(i, j, paint.fb[i + j * </span><span class=cF3>GR_WIDTH</span><span class=cF0>]);
-<a name="l174"></a>
-<a name="l175"></a>        </span><span class=cF2>// draw the brush on the screen</span><span class=cF0>
-<a name="l176"></a>        DrawScreenBrush(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, paint.color, paint.thick);
-<a name="l177"></a>
-<a name="l178"></a>        </span><span class=cF2>// if clicked, draw brush on the image</span><span class=cF0>
-<a name="l179"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mouse</span><span class=cF0>.lb || </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, sc_space</span><span class=cF7>)</span><span class=cF0>)
-<a name="l180"></a>            DrawImageBrush(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, paint.color, paint.thick);
-<a name="l181"></a>
-<a name="l182"></a>        </span><span class=cF2>// build the color strings (U8[], no MAlloc)</span><span class=cF0>
-<a name="l183"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_r, </span><span class=cF6>&quot;Red:   %d&quot;</span><span class=cF0>, paint.color.r);
-<a name="l184"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_g, </span><span class=cF6>&quot;Green: %d&quot;</span><span class=cF0>, paint.color.g);
-<a name="l185"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_b, </span><span class=cF6>&quot;Blue:  %d&quot;</span><span class=cF0>, paint.color.b);
-<a name="l186"></a>
-<a name="l187"></a>        </span><span class=cF2>// draw the image where the color strings where covering it </span><span class=cF0>
-<a name="l188"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>; i++)
-<a name="l189"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>12</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>; j++)
-<a name="l190"></a>                DrawScreenPixel(j, i, paint.fb[j + i * </span><span class=cF3>GR_WIDTH</span><span class=cF0>]);
-<a name="l191"></a>
-<a name="l192"></a>        </span><span class=cF2>// draw the color strings on screen</span><span class=cF0>
-<a name="l193"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_r);
-<a name="l194"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_g);
-<a name="l195"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_b);
-<a name="l196"></a>
-<a name="l197"></a>        </span><span class=cF2>// 60fps wait</span><span class=cF0>
-<a name="l198"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
-<a name="l199"></a>
-<a name="l200"></a>        </span><span class=cF2>// Get key, process</span><span class=cF0>
-<a name="l201"></a>        </span><span class=cF5>KeyScan</span><span class=cF0>(&amp;ch, &amp;sc);
-<a name="l202"></a>        </span><span class=cF1>switch</span><span class=cF0> (ch)
-<a name="l203"></a>        {
-<a name="l204"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l205"></a>                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l206"></a>                </span><span class=cF7>{</span><span class=cF0>
-<a name="l207"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
-<a name="l208"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l209"></a>
-<a name="l210"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
-<a name="l211"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l212"></a>
-<a name="l213"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
-<a name="l214"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l215"></a>
-<a name="l216"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
-<a name="l217"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l218"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l219"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l220"></a>
-<a name="l221"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
-<a name="l222"></a>                paint.thick++;
-<a name="l223"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l224"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
-<a name="l225"></a>                paint.thick--;
-<a name="l226"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l227"></a>
-<a name="l228"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'r'</span><span class=cF0>:
-<a name="l229"></a>                paint.color.r++;
+<a name="l139"></a>    </span><span class=cF1>return</span><span class=cF0> paint.fb[x + y * </span><span class=cF3>GR_WIDTH</span><span class=cF0>];
+<a name="l140"></a>}
+<a name="l141"></a>
+<a name="l142"></a></span><span class=cF1>I0</span><span class=cF0> Paint32()
+<a name="l143"></a>{
+<a name="l144"></a>    </span><span class=cF9>I64</span><span class=cF0>     sc, ch, i, j, sc_space = </span><span class=cF5>Char2ScanCode</span><span class=cF0>(</span><span class=cF3>CH_SPACE</span><span class=cF0>);
+<a name="l145"></a>    </span><span class=cF1>U8</span><span class=cF0>      str_r[</span><span class=cF3>STR_LEN</span><span class=cF0>],
+<a name="l146"></a>            str_g[</span><span class=cF3>STR_LEN</span><span class=cF0>],
+<a name="l147"></a>            str_b[</span><span class=cF3>STR_LEN</span><span class=cF0>];
+<a name="l148"></a>
+<a name="l149"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l150"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
+<a name="l151"></a>    </span><span class=cF5>WinBorder</span><span class=cF0>;
+<a name="l152"></a>    </span><span class=cF5>WinMax</span><span class=cF0>;
+<a name="l153"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
+<a name="l154"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
+<a name="l155"></a>    </span><span class=cF5>MenuPush</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>);
+<a name="l156"></a>
+<a name="l157"></a>    </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l158"></a>            </span><span class=cF6>&quot;$GREEN$0-9$FG$ to get colors from current palette.\n&quot;</span><span class=cF0>
+<a name="l159"></a>            </span><span class=cF6>&quot;$GREEN$R, G, or B$FG$ to increase color values.\n&quot;</span><span class=cF0>
+<a name="l160"></a>            </span><span class=cF6>&quot;$GREEN$Shift-R, Shift-G, or Shift-B$FG$ to decrease.\n&quot;</span><span class=cF0>
+<a name="l161"></a>            </span><span class=cF6>&quot;$GREEN$+ or -$FG$ to change brush size.\n&quot;</span><span class=cF0>
+<a name="l162"></a>            </span><span class=cF6>&quot;$GREEN$Alt$FG$ to peek (eyedropper) color under brush.\n\n&quot;</span><span class=cF0>
+<a name="l163"></a>            </span><span class=cF6>&quot;$BLUE$Ctrl-S$FG$ to save image.\n&quot;</span><span class=cF0>
+<a name="l164"></a>            </span><span class=cF6>&quot;$BLUE$Ctrl-L$FG$ to load image.\n\n&quot;</span><span class=cF0>
+<a name="l165"></a>            </span><span class=cF6>&quot;$GREEN$Left-click or SPACE$FG$ to draw.\n\n&quot;</span><span class=cF0>
+<a name="l166"></a>            </span><span class=cF6>&quot;$RED$ENTER$FG$ to clear image.\n&quot;</span><span class=cF0>
+<a name="l167"></a>            </span><span class=cF6>&quot;$RED$Shift-Esc or Double Right-Click$FG$ to exit.&quot;</span><span class=cF0>);
+<a name="l168"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0>); </span><span class=cF2>// help ensure SPACE press doesn't draw early</span><span class=cF0>
+<a name="l169"></a>
+<a name="l170"></a>    </span><span class=cFB>text</span><span class=cF0>.is_fb_busy = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l171"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias,   </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l172"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(paint.fb,        </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l173"></a>
+<a name="l174"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l175"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l176"></a>        </span><span class=cF2>// draw the image where the brush was last covering it</span><span class=cF0>
+<a name="l177"></a>        </span><span class=cF1>for</span><span class=cF0> (i = paint.last_x; i &lt; paint.last_x + paint.last_thick; i++)
+<a name="l178"></a>            </span><span class=cF1>for</span><span class=cF0> (j = paint.last_y; j &lt; paint.last_y + paint.last_thick; j++)
+<a name="l179"></a>                DrawScreenPixel(i, j, paint.fb[i + j * </span><span class=cF3>GR_WIDTH</span><span class=cF0>]);
+<a name="l180"></a>
+<a name="l181"></a>        </span><span class=cF2>// draw the brush on the screen</span><span class=cF0>
+<a name="l182"></a>        DrawScreenBrush(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, paint.color, paint.thick);
+<a name="l183"></a>
+<a name="l184"></a>        </span><span class=cF2>// if clicked, draw brush on the image</span><span class=cF0>
+<a name="l185"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mouse</span><span class=cF0>.lb || </span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cFB>kbd</span><span class=cF0>.down_bitmap, sc_space</span><span class=cF7>)</span><span class=cF0>)
+<a name="l186"></a>            DrawImageBrush(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y, paint.color, paint.thick);
+<a name="l187"></a>
+<a name="l188"></a>        </span><span class=cF2>// build the color strings (U8[], no MAlloc)</span><span class=cF0>
+<a name="l189"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_r, </span><span class=cF6>&quot;Red:   %d&quot;</span><span class=cF0>, paint.color.r);
+<a name="l190"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_g, </span><span class=cF6>&quot;Green: %d&quot;</span><span class=cF0>, paint.color.g);
+<a name="l191"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(str_b, </span><span class=cF6>&quot;Blue:  %d&quot;</span><span class=cF0>, paint.color.b);
+<a name="l192"></a>
+<a name="l193"></a>        </span><span class=cF2>// draw the image where the color strings where covering it </span><span class=cF0>
+<a name="l194"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>; i++)
+<a name="l195"></a>            </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>12</span><span class=cF0> * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>; j++)
+<a name="l196"></a>                DrawScreenPixel(j, i, paint.fb[j + i * </span><span class=cF3>GR_WIDTH</span><span class=cF0>]);
+<a name="l197"></a>
+<a name="l198"></a>        </span><span class=cF2>// draw the color strings on screen</span><span class=cF0>
+<a name="l199"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_r);
+<a name="l200"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_g);
+<a name="l201"></a>        DrawScreenStr(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, str_b);
+<a name="l202"></a>
+<a name="l203"></a>        </span><span class=cF2>// 60fps wait</span><span class=cF0>
+<a name="l204"></a>        </span><span class=cF5>Refresh</span><span class=cF0>;
+<a name="l205"></a>
+<a name="l206"></a>        </span><span class=cF2>// Get key, process</span><span class=cF0>
+<a name="l207"></a>        </span><span class=cF5>KeyScan</span><span class=cF0>(&amp;ch, &amp;sc);
+<a name="l208"></a>        </span><span class=cF1>switch</span><span class=cF0> (ch)
+<a name="l209"></a>        {
+<a name="l210"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l211"></a>                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
+<a name="l212"></a>                </span><span class=cF7>{</span><span class=cF0>
+<a name="l213"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_ALT</span><span class=cF0>:
+<a name="l214"></a>                        paint.color = PaintImagePeek(</span><span class=cFB>mouse</span><span class=cF0>.pos.x, </span><span class=cFB>mouse</span><span class=cF0>.pos.y);
+<a name="l215"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l216"></a>
+<a name="l217"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_LEFT</span><span class=cF0>:
+<a name="l218"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l219"></a>
+<a name="l220"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>:
+<a name="l221"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l222"></a>
+<a name="l223"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
+<a name="l224"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l225"></a>
+<a name="l226"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>:
+<a name="l227"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l228"></a>
+<a name="l229"></a>                </span><span class=cF7>}</span><span class=cF0>
 <a name="l230"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l231"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'g'</span><span class=cF0>:
-<a name="l232"></a>                paint.color.g++;
-<a name="l233"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l234"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'b'</span><span class=cF0>:
-<a name="l235"></a>                paint.color.b++;
-<a name="l236"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l237"></a>
-<a name="l238"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'R'</span><span class=cF0>:
-<a name="l239"></a>                paint.color.r--;
-<a name="l240"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l241"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'G'</span><span class=cF0>:
-<a name="l242"></a>                paint.color.g--;
-<a name="l243"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l244"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'B'</span><span class=cF0>:
-<a name="l245"></a>                paint.color.b--;
-<a name="l246"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l247"></a>
-<a name="l248"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'0'</span><span class=cF0>...</span><span class=cF6>'9'</span><span class=cF0>:
-<a name="l249"></a>                paint.color = </span><span class=cFB>gr_palette</span><span class=cF0>[ch - </span><span class=cF6>'0'</span><span class=cF0>];
-<a name="l250"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l251"></a>
-<a name="l252"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
-<a name="l253"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(paint.fb,        </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
-<a name="l254"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias,   </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
-<a name="l255"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l256"></a>
-<a name="l257"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLS</span><span class=cF0>:
-<a name="l258"></a>                PaintSaveImage;
-<a name="l259"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l260"></a>
-<a name="l261"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLL</span><span class=cF0>:
-<a name="l262"></a>                PaintLoadImage;
-<a name="l263"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l264"></a>
-<a name="l265"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
-<a name="l266"></a>                </span><span class=cF1>goto</span><span class=cF0> paint_done;
-<a name="l267"></a>        }
-<a name="l268"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l269"></a>
-<a name="l270"></a>paint_done:
-<a name="l271"></a>    </span><span class=cFB>text</span><span class=cF0>.is_fb_busy = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l272"></a>    </span><span class=cF5>LFBFlush</span><span class=cF0>;
-<a name="l273"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
-<a name="l274"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
-<a name="l275"></a>}
-<a name="l276"></a>
-<a name="l277"></a>PaintGlobalsInit;
-<a name="l278"></a>Paint32;</span></pre></body>
+<a name="l231"></a>
+<a name="l232"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'+'</span><span class=cF0>:
+<a name="l233"></a>                paint.thick++;
+<a name="l234"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l235"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'-'</span><span class=cF0>:
+<a name="l236"></a>                paint.thick--;
+<a name="l237"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l238"></a>
+<a name="l239"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'r'</span><span class=cF0>:
+<a name="l240"></a>                paint.color.r++;
+<a name="l241"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l242"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'g'</span><span class=cF0>:
+<a name="l243"></a>                paint.color.g++;
+<a name="l244"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l245"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'b'</span><span class=cF0>:
+<a name="l246"></a>                paint.color.b++;
+<a name="l247"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l248"></a>
+<a name="l249"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'R'</span><span class=cF0>:
+<a name="l250"></a>                paint.color.r--;
+<a name="l251"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l252"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'G'</span><span class=cF0>:
+<a name="l253"></a>                paint.color.g--;
+<a name="l254"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l255"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'B'</span><span class=cF0>:
+<a name="l256"></a>                paint.color.b--;
+<a name="l257"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l258"></a>
+<a name="l259"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'0'</span><span class=cF0>...</span><span class=cF6>'9'</span><span class=cF0>:
+<a name="l260"></a>                paint.color = </span><span class=cFB>gr_palette</span><span class=cF0>[ch - </span><span class=cF6>'0'</span><span class=cF0>];
+<a name="l261"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l262"></a>
+<a name="l263"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'\n'</span><span class=cF0>:
+<a name="l264"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(paint.fb,        </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l265"></a>                </span><span class=cF5>MemSet</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias,   </span><span class=cF3>WHITE32</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.buffer_size);
+<a name="l266"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l267"></a>
+<a name="l268"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLS</span><span class=cF0>:
+<a name="l269"></a>                PaintSaveImage;
+<a name="l270"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l271"></a>
+<a name="l272"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_CTRLL</span><span class=cF0>:
+<a name="l273"></a>                PaintLoadImage;
+<a name="l274"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l275"></a>
+<a name="l276"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>:
+<a name="l277"></a>                </span><span class=cF1>goto</span><span class=cF0> paint_done;
+<a name="l278"></a>        }
+<a name="l279"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l280"></a>
+<a name="l281"></a>paint_done:
+<a name="l282"></a>    </span><span class=cFB>text</span><span class=cF0>.is_fb_busy = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l283"></a>    </span><span class=cF5>LFBFlush</span><span class=cF0>;
+<a name="l284"></a>    </span><span class=cF5>SettingsPop</span><span class=cF0>;
+<a name="l285"></a>    </span><span class=cF5>MenuPop</span><span class=cF0>;
+<a name="l286"></a>}
+<a name="l287"></a>
+<a name="l288"></a>PaintGlobalsInit;
+<a name="l289"></a>Paint32;</span></pre></body>
 </html>

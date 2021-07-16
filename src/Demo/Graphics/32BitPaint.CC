@@ -134,6 +134,11 @@ U0 PaintLoadImage()
 	MemCopy(text.fb_alias, paint.fb, text.buffer_size);
 }
 
+U32 PaintImagePeek(I64 x, I64 y)
+{
+	return paint.fb[x + y * GR_WIDTH];
+}
+
 I0 Paint32()
 {
 	I64		sc, ch, i, j, sc_space = Char2ScanCode(CH_SPACE);
@@ -153,7 +158,8 @@ I0 Paint32()
 			"$$GREEN$$0-9$$FG$$ to get colors from current palette.\n"
 			"$$GREEN$$R, G, or B$$FG$$ to increase color values.\n"
 			"$$GREEN$$Shift-R, Shift-G, or Shift-B$$FG$$ to decrease.\n"
-			"$$GREEN$$+ or -$$FG$$ to change brush size.\n\n"
+			"$$GREEN$$+ or -$$FG$$ to change brush size.\n"
+			"$$GREEN$$Alt$$FG$$ to peek (eyedropper) color under brush.\n\n"
 			"$$BLUE$$Ctrl-S$$FG$$ to save image.\n"
 			"$$BLUE$$Ctrl-L$$FG$$ to load image.\n\n"
 			"$$GREEN$$Left-click or SPACE$$FG$$ to draw.\n\n"
@@ -204,6 +210,10 @@ I0 Paint32()
 			case 0:
 				switch (sc.u8[0])
 				{
+					case SC_ALT:
+						paint.color = PaintImagePeek(mouse.pos.x, mouse.pos.y);
+						break;
+
 					case SC_CURSOR_LEFT:
 						break;
 
@@ -215,6 +225,7 @@ I0 Paint32()
 
 					case SC_CURSOR_DOWN:
 						break;
+
 				}
 				break;
 
