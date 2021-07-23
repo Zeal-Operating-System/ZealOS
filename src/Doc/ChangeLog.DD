@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/23/21 16:30:23----$IV,0$
+* Improve $LK+PU,"ParenWarning",A="MN:ParenWarning"$ to give exact line number.
+
 $IV,1$----07/14/21 13:12:34----$IV,0$
 * Raised version number to 0.08.
 * Fixed non-writable drive throw when #include with F5 in $LK+PU,"DocPutKey",A="FF:::/System/DolDoc/DocPutKey.CC,SC_F5"$ and when attempting to $LK+PU,"save",A="FF:::/System/DolDoc/DocPutKey.CC,CH_CTRLS"$.

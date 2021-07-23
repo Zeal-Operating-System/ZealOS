@@ -126,7 +126,11 @@ U0 UnusedExternWarning(CCompCtrl *cc, CHashClass *tmpc)
 U0 ParenWarning(CCompCtrl *cc)
 {
 	if (Bt(&cc->opts, OPTf_WARN_PAREN) && !(cc->lex_include_stack->flags & LFSF_DEFINE))
-		LexWarn(cc, "Unnecessary parenthesis ");
+	{
+		PrintWarn("Unnecessary parentheses at ");
+		PutFileLink(cc->lex_include_stack->full_name,, cc->lex_include_stack->line_num);
+		'\n';
+	}
 }
 
 U0 ICClassPut(CHashClass *c)
