@@ -38,7 +38,7 @@ class GRFile
 	I32 	width;
 	I32 	width_internal; //Rounded-up to multiple of 8.
 	I32 	height;
-	I32 	flags;			//DCF_COMPRESSED? See $LK,"::/Kernel/Compress.CC"$.
+	I32 	flags;
 	CBGR48  palette[16]; 	//Included if DCF_PALETTE.
 	U8		body[];
 };$HL,0$

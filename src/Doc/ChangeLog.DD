@@ -117,10 +117,10 @@ $IV,1$----04/27/20 15:34:42----$IV,0$
 * Changed $LK+PU,"GrBitMap",A="FI:::/System/Gr/GrBitMap.CC"$ to use non-timer rand for drawing speed improvement on multicore.
 
 $IV,1$----04/21/20 18:54:47----$IV,0$
-* Altered $LK+PU,"Tom Palettes",A="FF:::/System/Gr/GrPalette.CC,PaletteSetTom"$ for better visibility.
+* Altered $LK+PU,"Tom Palettes",A="FF:::/System/Gr/GrPalette.CC,PaletteSetDark"$ for better visibility.
 
 $IV,1$----04/21/20 16:13:01----$IV,0$
-* Added start-up intro $LK+PU,"Splash",A="FI:::/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/Once.CC,PopUpRunFile"$, after performing a full boot (excludes soft reboots).
+* Added start-up intro $LK+PU,"Splash",A="FI:::/System/ZSplash.CC"$ as a PopUp in $LK+PU,"Once",A="FF:::/HomeSys.CC,PopUp"$, after performing a full boot (excludes soft reboots).
 
 $IV,1$----04/13/20 13:48:15----$IV,0$
 * Added $LK,"PIC_INIT",A="MN:PIC_INIT"$ and comments to $LK,"IntPICInit",A="MN:IntPICInit"$().
@@ -133,7 +133,7 @@ $IV,1$----04/12/20 17:06:38----$IV,0$
 * Changed $LK,"BIN_SIGNATURE_VAL",A="MN:BIN_SIGNATURE_VAL"$ from 'TOSB' to 'ZCCB'.
 
 $IV,1$----04/11/20 18:10:58----$IV,0$
-* Beginning efforts to reformat files some. Currently, keeping a temp log of progress at $LK,"FilesRefactored",A="FI:C:/Home/FilesRefactored.DD"$.
+* Beginning efforts to reformat files some. Currently, keeping a temp log of progress at /Home/FilesRefactored.DD.
 
 $IV,1$----04/10/20 07:44:08----$IV,0$
 * $LK,"R",A="MN:R"$("PIC1", "$LK,"PIC_1",A="MN:PIC_1"$");
@@ -171,7 +171,7 @@ $IV,1$----03/29/20 14:07:00----$IV,0$
 
 $IV,1$----03/27/20 13:06:00----$IV,0$
 * Modified $LK,"Ctrl Slider",A="MN:VIEWANGLES_RANGE"$ for 3D model editor to allow higher precision.
-* Added $LK,"PaletteSetTom",A="MN:PaletteSetTom"$() and $LK,"PaletteSetTomLight",A="MN:PaletteSetTomLight"$().
+* Added $LK,"PaletteSetTom",A="MN:PaletteSetDark"$() and $LK,"PaletteSetTomLight",A="MN:PaletteSetLight"$().
 
 $IV,1$----03/21/20 19:35:00----$IV,0$
 * Added $LK,"StrReplace",A="MN:StrReplace"$(), not fully tested yet.
@@ -210,7 +210,7 @@ $IV,1$----03/19/20 01:51:36----$IV,0$
 $IV,1$----03/16/20 14:44:00----$IV,0$
 * $LK,"R",A="MN:R"$("GetStr", "$LK,"StrGet",A="MN:StrGet"$");
 * Renamed GSF -> $LK,"SGF",A="MN:SGF_SHIFT_ESC_EXIT"$ as a consequence.
-* Added some $LK,"AHCI headers",A="MN:AHCI_SIG_ATA"$.
+* Added some $LK,"AHCI headers",A="MN:AHCI_MAX_PORTS"$.
 
 $IV,1$----03/12/20 22:00:36----$IV,0$
 * Added $LK,"PaletteSetGruvboxDark",A="MN:PaletteSetGruvboxDark"$().
@@ -234,7 +234,7 @@ $IV,1$----02/23/20 02:36:28----$IV,0$
 $IV,1$----02/22/20 20:04:00----$IV,0$
 * Reduced $LK,"MEM_MIN_MEG",A="MN:MEM_MIN_MEG"$ to 256 MiB (VMWare users have to do less work).
 * Added $FG,2$<CTRL-ALT-X>$FG$ to AC $LK,"standby",A="FI:::/Doc/StandBy.DD"$ doc.
-* Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into $LK,"::/System/Divination.CC",A="FI:::/System/Divination.CC"$. Functions renamed from God*() to $LK,"Divine*",A="MN:GodWord"$(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
+* Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into ::/System/Divination.CC. Functions renamed from $LK,"God*",A="MN:GodWord"$() to Divine*(). Psalmody GodSong feature $LK,"disabled",A="FF:::/Apps/Psalmody/PsalmodyMain.CC,GodSongStr"$. DolDoc "BF:" links removed. CtrlAltB() is free to be used for other things. 
 * Updated the $LK,"Charter",A="FI:::/Doc/Charter.DD"$.
 
 $IV,1$----02/21/20 17:30:17----$IV,0$
@@ -250,7 +250,7 @@ $IV,1$----02/20/20 17:40:10----$IV,0$
 
 $IV,1$----02/19/20 21:46:17----$IV,0$
 $BK,1$* Zenith 1.0 released.$BK,0$
-* $LK,"GRScreenCaptureWrite",A="MN:GRScreenCaptureWrite"$() and $LK,"GRScreenCaptureRead",A="MN:GRScreenCaptureRead"$() are broken. $LK,"DCLoad",A="MN:DCLoad"$() and $LK,"DCSave",A="MN:DCSave"$() use $LK,"DCF_COMPRESSED",A="MN:DCF_COMPRESSED"$. It also saves the palette as $LK,"CBGR48",A="MN:CBGR48"$, which is a problem.
+* $LK,"GRScreenCaptureWrite",A="MN:GRScreenCaptureWrite"$() and $LK,"GRScreenCaptureRead",A="MN:GRScreenCaptureRead"$() are broken. $LK,"DCLoad",A="MN:DCLoad"$() and $LK,"DCSave",A="MN:DCSave"$() use DCF_COMPRESSED. It also saves the palette as $LK,"CBGR48",A="MN:CBGR48"$, which is a problem.
 * Updated $LK,"MemRep",A="MN:MemRep"$() to report on VBE variables.
 * Renamed VGAFlush() -> $LK,"LFBFlush",A="MN:LFBFlush"$().
 * Updated $LK,"Palette Demo",A="FI:::/Demo/Graphics/Palette.CC"$ to use current palette environment.
@@ -376,7 +376,7 @@ $BK$$FG,4$!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!$FG$$BK,0$
 
 $IV,1$----04/30/17 22:24:51----$IV,0$
-* $LK,"CmdLinePmt",A="MN:CmdLinePmt"$() doesn't print U0 ans.
+* $LK,"CmdLinePmt",A="MN:CmdLinePrompt"$() doesn't print U0 ans.
 * Added comma flag $LK,"StrPrintJoin",A="MN:StrPrintJoin"$(,"%,p");
 * Enhanced $LK,"PrintErr",A="MN:PrintErr"$() and $LK,"PrintWarn",A="MN:PrintWarn"$().
 
@@ -399,11 +399,11 @@ $IV,1$----02/05/17 16:37:39----$IV,0$
 * Added $LK,"::/Doc/BlkChain.DD"$.
 
 $IV,1$----02/03/17 17:27:36----$IV,0$
-* Added multicore $LK,"::/Adam/AMathODE.HC"$.
+* Added multicore $LK,"::/System/MathODE.CC"$.
 * Improved support for sub and super scripts.
 
 $IV,1$----01/31/17 10:22:10----$IV,0$
-* Added $LK,"::/Demo/Graphics/LightTable.HC"$.
+* Added $LK,"::/Demo/Graphics/LightTable.CC"$.
 * Added $LK,"TOS Linux Setup",A="FF:::/Demo/AcctExample/TOS/TOSPolicies.DD,TOS Linux Setup"$.
 
 $IV,1$----01/27/17 08:13:37----$IV,0$
@@ -430,21 +430,21 @@ $IV,1$----01/25/17 20:44:17----$IV,0$
 
 
 $IV,1$----01/24/17 21:56:06----$IV,0$
-* Improved $LK,"::/Apps/Psalmody/JukeBox.HC"$
+* Improved $LK,"::/Apps/Psalmody/JukeBox.CC"$
 * $LK,"R",A="MN:R"$("TreeBranch","Tree");
 * Added $LK,"DocTreeWrite",A="MN:DocTreeWrite"$() and $LK,"DocTreeAppend",A="MN:DocTreeAppend"$().
 
 $IV,1$----01/22/17 06:08:00----$IV,0$
 * $BK,1$TempleOS version 5.02 Released$BK,0$
-* Changed polling of $LK,"KbdMsHndlr",A="MN:KbdMsHndlr"$() in $LK,"WinMgrSleep",A="MN:WinMgrSleep"$(), increased fifos.
+* Changed polling of $LK,"KbdMsHndlr",A="MN:KbdMouseHandler"$() in $LK,"WinMgrSleep",A="MN:WinMgrSleep"$(), increased fifos.
 
 $IV,1$----01/17/17 18:11:53----$IV,0$
 * Fixed $FG,2$$$$FG$ class offset so $FG,2$#assert$FG$'s don't lag a token.
 
 $IV,1$----01/17/17 14:39:41----$IV,0$
-* Added $LK,"blkdev.ins_base0",A="MN:CBlkDevGlbls"$ and $LK,"blkdev.ins_unit",A="MN:CBlkDevGlbls"$.
+* Added $LK,"blkdev.ins_base0",A="MN:CBlkDevGlobals"$ and $LK,"blkdev.ins_unit",A="MN:CBlkDevGlobals"$.
 * Added make $LK,"RedSeaISO",A="MN:RedSeaISO"$() to $LK,"FileMgr",A="MN:FileMgr"$().
-* Added $LK,"blkdev.dft_iso_c_filename",A="MN:CBlkDevGlbls"$ $TX,"",D="DFT_ISO_C_FILENAME"$.
+* Added $LK,"blkdev.dft_iso_c_filename",A="MN:CBlkDevGlobals"$ $TX,"",D="DFT_ISO_C_FILENAME"$.
 
 $IV,1$----01/17/17 06:12:21----$IV,0$
 * $LK,"R",A="MN:R"$("MIN_...","..._MIN");
@@ -457,22 +457,22 @@ $IV,1$----01/14/17 19:16:51----$IV,0$
 
 $IV,1$----01/14/17 09:43:12----$IV,0$
 * Improved $LK,"::/Demo/AcctExample/TOS/TOSHolySpirit.HC"$.
-* Added cmp $LK,"U0 Expression",A="FF:::/Compiler/PrsExp.HC,U0 Expression"$ warn.
+* Added cmp $LK,"U0 Expression",A="FF:::/Compiler/ParseExp.CC,U0 Expression"$ warn.
 * Improved syntax highlighting.
 
 $IV,1$----01/11/17 03:33:33----$IV,0$
 * $BK,1$TempleOS version 5.01 Released$BK,0$
 * $LK,"R",A="MN:R"$("ChangeLog","ChgLog");
 * Added show mouse pos to $FG,2$<CTRL-ALT-G>$FG$.
-* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.HC,TOSRegen("$().
-* Added $LK,"Let2Let",A="MN:Let2Let"$().
+* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.CC,TOSRegen("$().
+* Added $LK,"Let2Let",A="MN:Letter2Letter"$().
 
 $IV,1$----01/10/17 14:27:58----$IV,0$
 * Made $LK,"DocPut",A="MN:DocPut"$() use parent task's doc if input filter task.
-* Added $LK,"Once",A="MN:Once"$(), $LK,"AOnce",A="MN:AOnce"$(), $LK,"OnceFlush",A="MN:OnceFlush"$(), $LK,"AOnceFlush",A="MN:AOnceFlush"$(), $LK,"OnceDrv",A="MN:OnceDrv"$(), $LK,"AOnceDrv",A="MN:AOnceDrv"$() and $LK,"OnceExe",A="MN:OnceExe"$().
+* Added $LK,"Once",A="MN:Once"$(), $LK,"AOnce",A="MN:SysOnce"$(), $LK,"OnceFlush",A="MN:OnceFlush"$(), $LK,"AOnceFlush",A="MN:SysOnceFlush"$(), $LK,"OnceDrv",A="MN:OnceDrive"$(), $LK,"AOnceDrv",A="MN:SysOnceDrive"$() and $LK,"OnceExe",A="MN:OnceExe"$().
 * $LK,"R",A="MN:R"$("DoOnce","Once");
-* Added $LK,"RegAppend",A="MN:RegAppend"$() and $LK,"RegCnt",A="MN:RegCnt"$();
-* $LK,"R",A="MN:R"$("RegSetDftEntry()","$LK,"RegDft",A="MN:RegDft"$()");
+* Added $LK,"RegAppend",A="MN:RegAppend"$() and $LK,"RegCnt",A="MN:RegCount"$();
+* $LK,"R",A="MN:R"$("RegSetDftEntry()","$LK,"RegDft",A="MN:RegDefault"$()");
 * $LK,"R",A="MN:R"$("RegExeBranch()","$LK,"RegExe",A="MN:RegExe"$()");
 * $LK,"R",A="MN:R"$("RegWriteBranch()","$LK,"RegWrite",A="MN:RegWrite"$()");
 
@@ -480,7 +480,7 @@ $IV,1$----01/10/17 11:45:41----$IV,0$
 * Added $LK,"::/Adam/InsReg.HC"$ with $LK,"InsReg",A="MN:InsReg"$(), $LK,"InsRereg",A="MN:InsRereg"$() and $LK,"InsUnreg",A="MN:InsUnreg"$().
 * Added $LK,"::/Adam/Host.HC"$ with $LK,"HostChgDsk",A="MN:HostChgDsk"$().
 * Added $LK,"::/Adam/Opt/Utils/TOS.HC"$ with $LK,"TOSStdIns",A="MN:TOSStdIns"$().
-* Added cmd line args for partition % to $LK,"DskPrt",A="MN:DskPrt"$().
+* Added cmd line args for partition % to $LK,"DskPrt",A="MN:DiskPart"$().
 
 $IV,1$----01/09/17 21:48:34----$IV,0$
 * $LK,"R",A="MN:R"$("a1","arg1");
@@ -496,13 +496,13 @@ $IV,1$----01/09/17 02:30:59----$IV,0$
 * Moved AfterEgypt to the supplemental disk.
 
 $IV,1$----01/06/17 06:07:19----$IV,0$
-* Fixed $LK,"DskChg",A="MN:DskChg"$().
-* Improved $LK,"::/Misc/OSTestSuite.HC"$.
+* Fixed $LK,"DskChg",A="MN:DiskChange"$().
+* Improved $LK,"::/Misc/OSTestSuite.CC"$.
 
 $IV,1$----01/05/17 04:53:21----$IV,0$
 * No longer support ASCII#12, <CTRL-l> CH_FORM_FEED.
 * Fixed $LK,"sys_var_init_flag",A="MN:sys_var_init_flag"$.
-* $LK,"GRScrnCaptureRead",A="MN:GRScrnCaptureRead"$().
+* $LK,"GRScrnCaptureRead",A="MN:GRScreenCaptureRead"$().
 
 $IV,1$----01/04/17 18:06:14----$IV,0$
 * Added $LK,"::/Demo/AcctExample/TOS/TOSPolicies.DD"$.
@@ -512,18 +512,18 @@ $IV,1$----01/04/17 18:06:14----$IV,0$
 * $LK,"R",A="MN:R"$("Handler","Hndlr");
 * $LK,"R",A="MN:R"$("InputPointer","Mouse");
 * Improved $LK,"MemRep",A="MN:MemRep"$().
-* Changed $LK,"::/Adam/WallPaper.HC"$.
+* Changed $LK,"::/System/WallPaper.CC"$.
 
 $IV,1$----01/03/17 12:23:49----$IV,0$
 * $LK,"R",A="MN:R"$("chars_cmp...","char_bmp...");
-* Added chk for $LK,"Profanity",A="FF:::/Demo/AcctExample/TOS/TOSMisc.HC,Profanity"$.
-* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.HC,TOSRegen"$.
+* Added chk for $LK,"Profanity",A="FF:::/Demo/AcctExample/TOS/TOSMisc.CC,Profanity"$.
+* Improved $LK,"TOSRegen",A="FF:::/Demo/AcctExample/TOS/TOSDistro.CC,TOSRegen"$.
 * Removed $TX,"TempleOSBooks1.ISO",HTML="http://www.templeos.org/files/TempleOSBooks1.ISO"$ and $TX,"TempleOSBooks2.ISO",HTML="http://www.templeos.org/files/TempleOSBooks2.ISO"$ out of $TX,"TempleOSSup1.ISO",HTML="http://www.templeos.org/TempleOSSup1.ISO"$.
 
 $IV,1$----01/01/17 17:16:16----$IV,0$
 * $BK,1$TempleOS version 5.00 Released$BK,0$
 * Added $LK,"Collapse",A="MN:Collapse"$().
-* Added $LK,"CursorRem",A="MN:CursorRem"$().
+* Added $LK,"CursorRem",A="MN:CursorRemove"$().
 
 $IV,1$----12/31/16 07:21:20----$IV,0$
 * $LK,"R",A="MN:R"$("SYS_SEMA_...","SEMA_...");
@@ -533,11 +533,11 @@ $IV,1$----12/31/16 07:21:20----$IV,0$
 
 $IV,1$----12/30/16 23:42:20----$IV,0$
 * $LK,"R",A="MN:R"$("Pages512","Pags");
-* Overhauled $LK,"::/Kernel/Mem/PageTables.HC"$.
+* Overhauled $LK,"::/Kernel/Memory/PageTables.CC"$.
 * $LK,"R",A="MN:R"$("BusyWait()","$LK,"Busy",A="MN:Busy"$()");
 
 $IV,1$----12/29/16 10:21:44----$IV,0$
-* Changed $LK,"Snd",A="MN:Snd"$() from $FG,2$freq$FG$ to a $FG,2$I8$FG$ val called an $FG,2$ona$FG$.
+* Changed $LK,"Snd",A="MN:Sound"$() from $FG,2$freq$FG$ to a $FG,2$I8$FG$ val called an $FG,2$ona$FG$.
 * Fixed error in music octaves.
 * To convert songs, download Supplemental#1 ISO from the AppStore on http://www.templeos.org and run Sup1/Sup1Utils/CvtSong500.HC.
 
@@ -550,7 +550,7 @@ $IV,1$----12/03/16 13:19:58----$IV,0$
 * $LK,"R",A="MN:R"$("SpriteX3B()","$LK,"Sprite3XB",A="MN:Sprite3XB"$()");
 * $LK,"R",A="MN:R"$("SpriteY3B()","$LK,"Sprite3YB",A="MN:Sprite3YB"$()");
 * $LK,"R",A="MN:R"$("SpriteZ3B()","$LK,"Sprite3ZB",A="MN:Sprite3ZB"$()");
-* Improved $LK,"::/Demo/Games/Talons.HC"$.
+* Improved $LK,"::/Demo/Games/Talons.CC"$.
 
 $IV,1$----12/03/16 10:16:26----$IV,0$
 * Changed $LK,"__CMD_LINE__",A="MN:__CMD_LINE__"$.
@@ -562,82 +562,82 @@ $IV,1$----11/30/16 22:44:35----$IV,0$
 * Added $LK,"SpriteTransform",A="MN:SpriteTransform"$().
 
 $IV,1$----11/28/16 07:11:41----$IV,0$
-* Improved $LK,"::/Apps/Titanium/Titanium.HC"$.
+* Improved $LK,"::/Apps/Titanium/Titanium.CC"$.
 
 $IV,1$----11/26/16 22:43:51----$IV,0$
-* Added solar storms to $LK,"::/Apps/X-Caliber/X-Caliber.HC"$.
+* Added solar storms to $LK,"::/Apps/X-Caliber/X-Caliber.CC"$.
 * $LK,"R",A="MN:R"$("TimeOut","Titanium");
 
 $IV,1$----11/20/16 19:46:43----$IV,0$
 * $BK,1$TempleOS version 4.13 Released$BK,0$
-* Improved $LK,"::/Apps/Titanium/Titanium.HC"$.
-* Improved $LK,"::/Apps/X-Caliber/X-Caliber.HC"$.
+* Improved $LK,"::/Apps/Titanium/Titanium.CC"$.
+* Improved $LK,"::/Apps/X-Caliber/X-Caliber.CC"$.
 
 $IV,1$----11/19/16 08:19:51----$IV,0$
 * Improved Budget application.
 
 $IV,1$----11/17/16 18:49:51----$IV,0$
 * $LK,"R",A="MN:R"$("EagleDive","Talons");
-* Improved $LK,"::/Demo/Games/RocketScience.HC"$.
-* Improved $LK,"::/Demo/Games/Rocket.HC"$.
+* Improved $LK,"::/Demo/Games/RocketScience.CC"$.
+* Improved $LK,"::/Demo/Games/Rocket.CC"$.
 
 $IV,1$----10/28/16 05:54:27----$IV,0$
-* Added $LK,"::/Demo/RadixSort.HC"$.
+* Added $LK,"::/Demo/RadixSort.CC"$.
 
 $IV,1$----10/26/16 00:21:06----$IV,0$
 * Added $LK,"CProgress",A="MN:CProgress"$.t0.
 * Improved $LK,"::/Doc/Boot.DD"$.
 
 $IV,1$----10/25/16 18:02:44----$IV,0$
-* Improved $LK,"::/Adam/Gr/SpriteEd.HC"$.
+* Improved $LK,"::/System/Gr/SpriteEd.CC"$.
 * Improved $LK,"::/Demo/AcctExample/TOS/TOSHolySpirit.HC"$.
 
 $IV,1$----10/12/16 10:55:26----$IV,0$
 * Added $LK,"CCF_NO_CHAR_CONST",A="MN:CCF_NO_CHAR_CONST"$.
-* Improved $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.HC"$.
+* Improved $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
 
 $IV,1$----10/03/16 01:09:35----$IV,0$
 * Changed $LK,"GodWord",A="MN:GodWord"$().
 
 $IV,1$----09/30/16 18:29:59----$IV,0$
 * Improved $LK,"Rand",A="MN:Rand"$()'s.
-* Improved $LK,"::/Adam/Opt/Utils/ToTXT.HC"$.
+* Improved $LK,"::/System/Utils/ToTXT.CC"$.
 
 $IV,1$----09/29/16 10:13:14----$IV,0$
 * $BK,1$TempleOS version 4.12 Released$BK,0$
-* Added $LK,"TASKf_CMD_LINE_PMT",A="MN:TASKf_CMD_LINE_PMT"$.
+* Added $LK,"TASKf_CMD_LINE_PMT",A="MN:TASKf_CMD_LINE_PROMPT"$.
 * Improved $LK,"TaskWait",A="MN:TaskWait"$().
 * Improved $LK,"DeathWait",A="MN:DeathWait"$().
 
 $IV,1$----09/27/16 12:40:21----$IV,0$
-* Added $LK,"SndRst",A="MN:SndRst"$().
-* Got rid of crappy reverb in $LK,"::/Apps/Psalmody/PsalmodyMain.HC"$.
+* Added $LK,"SndRst",A="MN:SoundReset"$().
+* Got rid of crappy reverb in $LK,"::/Apps/Psalmody/PsalmodyMain.CC"$.
 
 $IV,1$----09/27/16 11:09:25----$IV,0$
-* Improved $LK,"::/Misc/OSTestSuite.HC"$.
+* Improved $LK,"::/Misc/OSTestSuite.CC"$.
 * Fixed bug in $LK,"EdCharIns",A="MN:EdCharIns"$() printing $$ cmds.
 * Added $LK,"FUF_JUST_DD",A="MN:FUF_JUST_DD"$ and $LK,"FILEMASK_DD",A="MN:FILEMASK_DD"$.
 
 $IV,1$----09/27/16 01:05:52----$IV,0$
-* Improved $LK,"::/Doc/MemOverview.DD"$.
+* Improved $LK,"::/Doc/MemoryOverview.DD"$.
 * Got rid of $FG,4$::/Demo/Lectures/Mem$FG$.
 * Made filename paths relative to document location in DolDoc links.
 * $LK,"R",A="MN:R"$("Temp","Tmp");
 
 $IV,1$----09/26/16 00:44:42----$IV,0$
-* Added CloseAssault and OverRun to $LK,"::/Apps/ToTheFront/ToTheFront.HC"$.
+* Added CloseAssault and OverRun to $LK,"::/Apps/ToTheFront/ToTheFront.CC"$.
 
 $IV,1$----09/22/16 07:53:20----$IV,0$
-* Improved $LK,"::/Demo/Graphics/Box.HC"$.
-* Improved $LK,"::/Demo/Graphics/SpritePlot3D.HC"$.
+* Improved $LK,"::/Demo/Graphics/Box.CC"$.
+* Improved $LK,"::/Demo/Graphics/SpritePlot3D.CC"$.
 
 $IV,1$----09/21/16 17:09:40----$IV,0$
-* Fixed bug in $LK,"::/Demo/Games/BomberGolf.HC"$.
+* Fixed bug in $LK,"::/Demo/Games/BomberGolf.CC"$.
 
 $IV,1$----09/20/16 15:57:30----$IV,0$
 * $LK,"R",A="MN:R"$("Screen","Scrn");
 * $LK,"R",A="MN:R"$("WinMgrSync","$LK,"Refresh",A="MN:Refresh"$");
-* $LK,"R",A="MN:R"$("InDbg","$LK,"DbgMode",A="MN:DbgMode"$");
+* $LK,"R",A="MN:R"$("InDbg","$LK,"DbgMode",A="MN:DebugMode"$");
 * Improved $LK,"::/Doc/Boot.DD"$.
 
 $IV,1$----09/20/16 07:31:52----$IV,0$
@@ -664,11 +664,11 @@ $IV,1$----09/06/16 13:01:42----$IV,0$
 * Got rid of $FG,4$MSG_FOCUS$FG$, $FG,4$MSG_MOVE$FG$, and $FG,4$MSG_SIZE$FG$.  There are no longer messages for moving and sizing windows.
 
 $IV,1$----09/06/16 02:40:43----$IV,0$
-* Improved $LK,"::/Demo/MagicPairs.HC"$.
+* Improved $LK,"::/Demo/MagicPairs.CC"$.
 
 $IV,1$----08/27/16 09:45:39----$IV,0$
 * Improved $LK,"CPURep",A="MN:CPURep"$().
-* Improved $LK,"::/Misc/OSTestSuite.HC"$.
+* Improved $LK,"::/Misc/OSTestSuite.CC"$.
 * Added $LK,"BirthWait",A="MN:BirthWait"$() and $LK,"DeathWait",A="MN:DeathWait"$().
 
 $IV,1$----08/22/16 04:14:47----$IV,0$
@@ -678,21 +678,21 @@ $IV,1$----07/17/16 13:03:12----$IV,0$
 * Improved $LK,"DocOpt",A="MN:DocOpt"$().
 
 $IV,1$----07/17/16 03:23:53----$IV,0$
-* Improved $LK,"::/Demo/Games/RawHide.HC"$.
+* Improved $LK,"::/Demo/Games/RawHide.CC"$.
 
 $IV,1$----07/15/16 10:11:10----$IV,0$
 * $BK,1$TempleOS version 4.10 Released$BK,0$
-* Improved $LK,"::/Demo/Games/Talons.HC"$.
+* Improved $LK,"::/Demo/Games/Talons.CC"$.
 
 $IV,1$----07/15/16 05:17:24----$IV,0$
-* Created $LK,"CDevGlbls",A="MN:CDevGlbls"$.uncached_alias.
+* Created $LK,"CDevGlbls",A="MN:CDevGlobals"$.uncached_alias.
 * Added 1 Gig page table support.
 
 $IV,1$----07/13/16 17:21:19----$IV,0$
 * Added multicore report to $LK,"CPURep",A="MN:CPURep"$().
 
 $IV,1$----07/09/16 08:46:36----$IV,0$
-* Changed scoring in $LK,"::/Demo/Games/Talons.HC"$.
+* Changed scoring in $LK,"::/Demo/Games/Talons.CC"$.
 * Replaced many $FG,2$"%Q"$FG$ with $FG,2$"%$$Q"$FG$.
 * Fixed $FG,2$'\x24'$FG$.
 * Added $FG,2$'\d'$FG$ for $FG,2$'$$'$FG$.
@@ -707,11 +707,11 @@ $IV,1$----07/07/16 07:21:03----$IV,0$
 
 $IV,1$----07/06/16 23:45:30----$IV,0$
 * Fixed multicore bug in $LK,"Sprite3",A="MN:Sprite3"$().
-* Improved $LK,"::/Demo/Games/Talons.HC"$.
+* Improved $LK,"::/Demo/Games/Talons.CC"$.
 
 $IV,1$----07/05/16 06:03:47----$IV,0$
 * $BK,1$TempleOS version 4.09 Released$BK,0$
-* Improved $LK,"::/Demo/Games/Talons.HC"$.
+* Improved $LK,"::/Demo/Games/Talons.CC"$.
 * Improved $LK,"GrFillTri0",A="MN:GrFillTri0"$().
 
 $IV,1$----07/03/16 04:30:05----$IV,0$
@@ -720,18 +720,18 @@ $IV,1$----07/03/16 04:30:05----$IV,0$
 * Added $LK,"BDT_ISO_FILE_READ",A="MN:BDT_ISO_FILE_READ"$.
 
 $IV,1$----07/01/16 05:29:08----$IV,0$
-* Made underscore mandatory on $LK,"HolyC",A="FI:::/Doc/HolyC.DD"$ callable asm functions.
+* Made underscore mandatory on $LK,"HolyC",A="FI:::/Doc/CosmiC.DD"$ callable asm functions.
 
 $IV,1$----06/28/16 13:15:08----$IV,0$
 * Changed $LK,"TaskRep",A="MN:TaskRep"$() and $LK,"MemRep",A="MN:MemRep"$().
-* Changed $LK,"::/Adam/WallPaper.HC"$.
+* Changed $LK,"::/System/WallPaper.CC"$.
 
 $IV,1$----06/26/16 14:01:16----$IV,0$
 * Added $LK,"LastFun",A="MN:LastFun"$(), $LK,"RunFile",A="MN:RunFile"$(), $LK,"RunFile2",A="MN:RunFile2"$() and $LK,"PopUpRunFile",A="MN:PopUpRunFile"$().
 * Made boot code modular.
 
 $IV,1$----06/24/16 14:15:13----$IV,0$
-* Added A.I. to $LK,"::/Apps/KeepAway/KeepAway.HC"$ and changed scoring.
+* Added A.I. to $LK,"::/Apps/KeepAway/KeepAway.CC"$ and changed scoring.
 
 $IV,1$----06/24/16 02:55:42----$IV,0$
 * $BK,1$TempleOS version 4.08 Released$BK,0$
@@ -758,10 +758,10 @@ $IV,1$----06/16/16 20:59:41----$IV,0$
 * $FG,2$<CTRL-ALT-n>$FG$ is next task.
 
 $IV,1$----06/16/16 19:49:39----$IV,0$
-* Added $LK,"::/Doc/Comm.HC"$.
+* Added $LK,"::/Doc/Comm.CC"$.
 * Added $LK,"::/Doc/StdTempleOSPC.DD"$.
 * Added $LK,"::/Kernel/FontCyrillic.HC"$. $FG,2$<CTRL-ALT-f>$FG$
 
 $IV,1$----06/02/16 03:20:56----$IV,0$
 * $BK,1$TempleOS version 4.07 Released$BK,0$
-* Added claws to $LK,"::/Demo/Games/Talons.HC"$.
+* Added claws to $LK,"::/Demo/Games/Talons.CC"$.

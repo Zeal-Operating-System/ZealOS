@@ -92,7 +92,7 @@ $ID,-5$
 
 $FG,5$$TX+CX,"Hash Sym Tables"$$FG$
 
-* See $LK,"::/System/ZHash.CC"$ for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for vars and functions.
+* See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for vars and functions.
 
 * $FG,2$sys_task->hash_table$FG$ holds the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ syms loaded in on start-up.
 

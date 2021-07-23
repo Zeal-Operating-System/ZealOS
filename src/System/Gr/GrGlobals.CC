@@ -22,7 +22,7 @@ public class CGrGlobals
 	U0		   (*fp_wall_paper)(CTask *task);
 	U0		   (*fp_draw_mouse)(CDC *dc, I64 x, I64 y);
 	U0		   (*fp_draw_grab_mouse)(CDC *dc, I64 x, I64 y, Bool closed);
-	U8			*empty_sprite; //Gets assigned $LK,"gr.empty_sprite",A="FF:::/System/ZMouse.CC,empty_sprite"$
+	U8			*empty_sprite; //Gets assigned $LK,"gr.empty_sprite",A="FF:::/System/Mouse.CC,empty_sprite"$
 
 	#define GR_PEN_BRUSHES_NUM	64
 	CDC 		*pen_brushes			[GR_PEN_BRUSHES_NUM],

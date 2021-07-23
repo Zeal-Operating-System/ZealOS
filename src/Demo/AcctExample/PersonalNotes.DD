@@ -145,7 +145,7 @@ $FG,5$$TX+CX,"TODO? Meh"$$FG$
 $FG,5$$TX+CX,"TODO: Too Hard, or Not Worth Doing."$$FG$
 * AutoComplete/$LK,"Man",A="MN:Man"$() Jmp for user code.
 
-* $LK,"Bible sized nodes",A="FF:::/System/DolDoc/DocRecalc.CC,->tag+i"$
+* $LK,"Bible sized nodes",A="FF:::/System/DolDoc/DocRecalc.CC,->tag + i"$
 
 * $LK,"FileMgr",A="MN:FileMgr"$() is bad with lots of files.
 
@@ -259,7 +259,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 
 * Make so just CdRom; command to copy entire disk to ::/CdRom directory?
 
-* $LK,"MP DepthBuf",A="FF:::/System/Gr/SpriteMesh.CC,dc->depth_buf=e->"$ is a kludge because of dc->depth_buf=NULL in various graphics routines.
+* $LK,"MP DepthBuf",A="FF:::/System/Gr/SpriteMesh.CC,//We"$ is a kludge because of dc->depth_buf=NULL in various graphics routines.
 
 * Improve editor undo, add redo.
 
@@ -277,7 +277,7 @@ $FG,5$$TX+CX,"Committee Needed"$$FG$
 * $LK,"GrPutChar3",A="MN:GrPutChar3"$() with depth buf?
 
 * Eliminate?	$LK,"::/System/Ctrls/CtrlsA.CC"$?
-* Eliminate?	$LK,"::/System/ZMathODE.CC"$?
+* Eliminate?	$LK,"::/System/MathODE.CC"$?
 * Eliminate?	$LK,"Complex",A="MN:Complex"$?
 * Eliminate?	$LK,"CDC",A="MN:CDC"$.brush?
 * Eliminate?	$LK,"Mat4x4MulXYZ",A="MN:Mat4x4MulXYZ"$() change to 3x3?
@@ -408,7 +408,7 @@ $FG,5$$TX+CX,"Uncategorized"$$FG$
 	>Might want to do ZOOM in U8 graphics and convert screen capture to U8
 	>Might want to rev bit order
 
-* This $LK,"Fs->catch_except=TRUE",A="FF:::/Kernel/Job.CC,Fs->catch_except=TRUE"$ causes problems because it
+* This $LK,"Fs->catch_except = TRUE",A="FF:::/Kernel/Job.CC,Fs->catch_except = TRUE"$ causes problems because it
 catches divide and out-of-mem.	Not sure what to do, yet.
 
 * Release semaphores or break lock sema,usb_td

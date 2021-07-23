@@ -14,7 +14,7 @@ U0 DHCPTest()
 	if (ipv4_globals.local_ip != 0)
 	{
 		"\nThis test will only work on unconfigured network.\n";
-		"To force for testing, comment out $FG,0$NetConfigure;$FG$ in $LK,"NetStart",A="FF:C:/Home/Net/NetStart.CC,NetConfigure"$.\n\n";
+		"To force for testing, comment out $FG,0$NetConfigure;$FG$ in $LK,"Run.CC",A="FF:C:/Home/Net/Run.CC,NetConfigure"$.\n\n";
 		return;
 	}
 

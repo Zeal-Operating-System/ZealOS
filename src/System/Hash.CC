@@ -293,12 +293,12 @@ public U0 Who(U8 *fu_flags=NULL, CHashTable *h=NULL, U8 *idx=NULL, CDoc *doc=NUL
 		{
 			if (ptr->type & HTG_SRC_SYM && ptr(CHashSrcSym *)->src_link)
 			{
-				DocPrint(doc, "$$LK,\"%-20s\",A=\"%s\"$$", ptr->str, ptr(CHashSrcSym *)->src_link);
+				DocPrint(doc, "$$LK,\"%-40s\",A=\"%s\"$$", ptr->str, ptr(CHashSrcSym *)->src_link);
 				if (idx)
 					comment = HelpComment(task, ptr, ptr(CHashSrcSym *)->src_link);
 			}
 			else
-				DocPrint(doc, "%-20s", ptr->str);
+				DocPrint(doc, "%-40s", ptr->str);
 
 			if (!idx)
 			{

@@ -233,7 +233,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 }
 
 public U8 Mount(Bool caller_is_prtdisk=FALSE)
-{//Mount drives. Called from $LK,"DiskPart(Mount)",A="FF:::/System/ZBlkDev/DiskPart.CC,Mount("$.
+{//Mount drives. Called from $LK,"DiskPart(Mount)",A="FF:::/System/BlkDev/DiskPart.CC,Mount("$.
 	return Mount2(0, NULL, caller_is_prtdisk);
 }
 

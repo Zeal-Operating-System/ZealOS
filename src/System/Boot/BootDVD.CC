@@ -168,7 +168,7 @@ BDVD_MAIN::
 				LOOP		@@35
 				POP 		DS
 
-//See $LK,"IDEBootDVDProbe",A="MN:IDEBootDVDProbe"$().
+//See $LK,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$().
 				MOV 		EBX, U32 [BDVD_BLK_LO     - BDVD_START]
 				MOV 		AX,  U16 [BDVD_SHIFT_BLKS - BDVD_START]
 				SHL 		EAX, 16
