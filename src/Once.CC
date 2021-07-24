@@ -44,7 +44,6 @@ U0 Tmp()
 		case BOOT_SRC_RAM:
 			"$$PURPLE$$$$TX+CX,\"Tips of the Day\"$$$$FG$$\n";
 			TipOfDay;Sleep(60);
-			TipOfDay;Sleep(60);
 			TipOfDay;
 			Type("::/Doc/Customize.DD");
 			break;

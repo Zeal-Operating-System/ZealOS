@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/24/21 00:07:05----$IV,0$
+* Raised version number to 0.09.
+* Rename /0000Boot folder to /Boot, rename 0000Kernel.BIN.C generated in $LK+PU,"BootDVDIns",A="MN:BootDVDIns"$ to Kernel.BIN.C.
+
 $IV,1$----07/23/21 16:30:23----$IV,0$
 * Improve $LK+PU,"ParenWarning",A="MN:ParenWarning"$ to give exact line number.
 

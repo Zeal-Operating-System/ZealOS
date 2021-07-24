@@ -6,7 +6,7 @@
 
 #help_index "Install"
 
-#define BOOT_DIR				"/0000Boot"
+#define BOOT_DIR				"/Boot"
 //Stage 2 of master boot loader
 #define BOOT_DIR_BOOTMHD2_BIN_C BOOT_DIR "/BootMHD2.BIN.C"
 //Old master boot record

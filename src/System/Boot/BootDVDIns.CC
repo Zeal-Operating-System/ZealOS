@@ -7,8 +7,8 @@
 #help_index "Install"
 
 #define KERNEL_BIN_C			"Kernel.BIN.C"
-#define BOOT_DIR				"/0000Boot"
-#define BOOT_DIR_KERNEL_BIN_C	BOOT_DIR "/0000" KERNEL_BIN_C
+#define BOOT_DIR				"/Boot"
+#define BOOT_DIR_KERNEL_BIN_C	BOOT_DIR "/" KERNEL_BIN_C
 
 U0 MakeAll()
 {

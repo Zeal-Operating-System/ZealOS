@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.08">
+<meta name="generator" content="ZealOS V0.09">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -46,13 +46,13 @@ body {background-color:#000000;}
 <a name="l19"></a>All the boot related code for ZealOS is in the </span><span class=cF2>/System/Boot</span><span class=cF0> directory.
 <a name="l20"></a></span><span class=cF4>
 <a name="l21"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVD.CC.html#l1"><span class=cF4>BootDVD.CC</span></a><span class=cF0>          CD/DVD boot sector.</span><span class=cF4>
-<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVDIns.CC.html#l1"><span class=cF4>BootDVDIns.CC</span></a><span class=cF0>       Prep for CD/DVD install by creating </span><span class=cF2>/0000Boot/0000Kernel.BIN.C</span><span class=cF0>.
+<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVDIns.CC.html#l1"><span class=cF4>BootDVDIns.CC</span></a><span class=cF0>       Prep for CD/DVD install by creating </span><span class=cF2>/Boot/Kernel.BIN.C</span><span class=cF0>.
 <a name="l23"></a>If you are curious about CD/DVDs, see </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l1"><span class=cF4>DiskISORedSea.CC</span></a><span class=cF0>.  To make a custom bootable CD/DVD, look here </span><a href="https://tomawezome.github.io/ZealOS/Misc/DoDistro.CC.html#l1"><span class=cF4>Bootable CD</span></a><span class=cF0>.
 <a name="l24"></a></span><span class=cF4>
 <a name="l25"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHD.CC.html#l1"><span class=cF4>BootMHD.CC</span></a><span class=cF0>          Stage 1 Master HD boot loader.</span><span class=cF4>
 <a name="l26"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHD2.CC.html#l1"><span class=cF4>BootMHD2.CC</span></a><span class=cF0>         Stage 2 Master HD boot loader.</span><span class=cF4>
 <a name="l27"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l1"><span class=cF4>BootMHDIns.CC</span></a><span class=cF0>       Installs Master HD boot loader.
-<a name="l28"></a></span><span class=cF2>BootMHD</span><span class=cF0> goes on block zero.  </span><span class=cF2>/0000Boot/BootMHD2.BIN.C</span><span class=cF0> is stored as a file in a partition, risky and unusual, since most master 
+<a name="l28"></a></span><span class=cF2>BootMHD</span><span class=cF0> goes on block zero.  </span><span class=cF2>/Boot/BootMHD2.BIN.C</span><span class=cF0> is stored as a file in a partition, risky and unusual, since most master 
 <a name="l29"></a>boot loaders place stage 2 in a gap that's not in any partition.  </span><span class=cF2>BootMHD2</span><span class=cF0> displays a menu and boots a partition.
 <a name="l30"></a></span><span class=cF4>
 <a name="l31"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHD.CC.html#l1"><span class=cF4>BootHD.CC</span></a><span class=cF0>           HD partition boot record.</span><span class=cF4>
