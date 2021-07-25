@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.09">
+<meta name="generator" content="ZealOS V0.10">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -57,7 +57,7 @@ body {background-color:#000000;}
 <a name="l30"></a></span><span class=cF1>_extern</span><span class=cF0> </span><span class=cFD>_HI_MEMCOPY</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>HiMemCopy</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dst, </span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF9>I64</span><span class=cF0> count);
 <a name="l31"></a>
 <a name="l32"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Boot&quot;</span><span class=cF0>
-<a name="l33"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BootRAM</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename=</span><span class=cF6>&quot;::/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>)
+<a name="l33"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BootRAM</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename=</span><span class=cF6>&quot;::&quot;</span><span class=cF0> </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>)
 <a name="l34"></a>{</span><span class=cF2>//Softboot Kernel.BIN file. No hardware reset.</span><span class=cF0>
 <a name="l35"></a>    </span><span class=cF9>I64</span><span class=cF0>      size;
 <a name="l36"></a>    </span><span class=cF9>CKernel</span><span class=cF0> *hi_image, *lo_image = </span><span class=cFB>mem_boot_base</span><span class=cF0> - </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBinFile</span><span class=cF0>), </span><span class=cF1>reg</span><span class=cF0> *sys_ram_reboot;

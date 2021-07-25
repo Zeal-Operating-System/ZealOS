@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.09">
+<meta name="generator" content="ZealOS V0.10">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -39,14 +39,14 @@ body {background-color:#000000;}
 <a name="l12"></a>Not only do boot sectors have a size limit, 512 bytes or 2048 bytes for CD/DVD, the files they load have to fit within 640K 
 <a name="l13"></a>because they run in 16-bit mode.    This means they usually can't just load the whole operating system and start it running.    
 <a name="l14"></a>Some boot loaders, like Grub, have a capability of switching modes before handing-off control to the operating system.  The 
-<a name="l15"></a>operating system must load the rest of itself.  With ZealOS, the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Kernel.BIN.C</span></a><span class=cF0> file is loaded by the boot sector. We try to 
-<a name="l16"></a>put a minimum in the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>Kernel Module</span></a><span class=cF0>, so that it will always fit in 640K.  When Kernel.BIN runs, it switches to 32-bit mode, 
-<a name="l17"></a>then, to 64-bit mode allowing access to more memory.  Then, it loads in the rest of ZealOS by executing </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0>.
+<a name="l15"></a>operating system must load the rest of itself.  With ZealOS, the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Boot/Kernel.BIN.C</span></a><span class=cF0> file is loaded by the boot sector.    We 
+<a name="l16"></a>try to put a minimum in the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>Kernel Module</span></a><span class=cF0>, so that it will always fit in 640K.  When Kernel.BIN runs, it switches to 32-bit 
+<a name="l17"></a>mode, then, to 64-bit mode allowing access to more memory.  Then, it loads in the rest of ZealOS by executing </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0>.
 <a name="l18"></a>
 <a name="l19"></a>All the boot related code for ZealOS is in the </span><span class=cF2>/System/Boot</span><span class=cF0> directory.
 <a name="l20"></a></span><span class=cF4>
 <a name="l21"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVD.CC.html#l1"><span class=cF4>BootDVD.CC</span></a><span class=cF0>          CD/DVD boot sector.</span><span class=cF4>
-<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVDIns.CC.html#l1"><span class=cF4>BootDVDIns.CC</span></a><span class=cF0>       Prep for CD/DVD install by creating </span><span class=cF2>/Boot/Kernel.BIN.C</span><span class=cF0>.
+<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootDVDIns.CC.html#l1"><span class=cF4>BootDVDIns.CC</span></a><span class=cF0>       Prep for CD/DVD install by creating </span><span class=cF2>/Boot/DVDKernel.BIN.C</span><span class=cF0>.
 <a name="l23"></a>If you are curious about CD/DVDs, see </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l1"><span class=cF4>DiskISORedSea.CC</span></a><span class=cF0>.  To make a custom bootable CD/DVD, look here </span><a href="https://tomawezome.github.io/ZealOS/Misc/DoDistro.CC.html#l1"><span class=cF4>Bootable CD</span></a><span class=cF0>.
 <a name="l24"></a></span><span class=cF4>
 <a name="l25"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHD.CC.html#l1"><span class=cF4>BootMHD.CC</span></a><span class=cF0>          Stage 1 Master HD boot loader.</span><span class=cF4>
@@ -56,22 +56,22 @@ body {background-color:#000000;}
 <a name="l29"></a>boot loaders place stage 2 in a gap that's not in any partition.  </span><span class=cF2>BootMHD2</span><span class=cF0> displays a menu and boots a partition.
 <a name="l30"></a></span><span class=cF4>
 <a name="l31"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHD.CC.html#l1"><span class=cF4>BootHD.CC</span></a><span class=cF0>           HD partition boot record.</span><span class=cF4>
-<a name="l32"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l1"><span class=cF4>BootHDIns.CC</span></a><span class=cF0>        Installs HD partition boot record.
+<a name="l32"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l1"><span class=cF4>BootHDIns.CC</span></a><span class=cF0>        Installs HD partition boot record at </span><span class=cF2>/Boot/Kernel.BIN.C</span><span class=cF0>.
 <a name="l33"></a></span><span class=cF2>BootHD</span><span class=cF0> is the boot record for a ZealOS partition.  Each partition has its own partition boot record, the first block of the 
 <a name="l34"></a>partition.
 <a name="l35"></a>
 <a name="l36"></a>The boot records don't access directories because that would make them too big for one block and would make them depend on a 
 <a name="l37"></a>file system layout.  Instead, they get patched with the LBA, logical block addresses, to load files.    To update with a new 
-<a name="l38"></a>ZealOS kernel, you must create a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Kernel.BIN.C</span></a><span class=cF0> binary file and patch the boot loader so it knows the LBA blocks to load.  Th
-<a name="l39"></a>erefore, you usually recompile the kernel and update the boot sector at the same time with  </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>().    </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l76"><span class=cF4>BootMHDIns</span></a><span class=cF0>() will 
-<a name="l40"></a>install a master boot loader.
+<a name="l38"></a>ZealOS kernel, you must create a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Boot/Kernel.BIN.C</span></a><span class=cF0> binary file and patch the boot loader so it knows the LBA blocks to 
+<a name="l39"></a>load.   Therefore, you usually recompile the kernel and update the boot sector at the same time with    </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>().    </span><span class=cF4>
+<a name="l40"></a></span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootMHDIns.CC.html#l76"><span class=cF4>BootMHDIns</span></a><span class=cF0>() will install a master boot loader.
 <a name="l41"></a>
-<a name="l42"></a>With ZealOS, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Kernel.BIN.C</span></a><span class=cF0> loads </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Compiler.PRJ.html#l1"><span class=cF4>::/Compiler/Compiler.BIN</span></a><span class=cF0> so it can work with source code from then on.  It compiles 
+<a name="l42"></a>With ZealOS, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Boot/Kernel.BIN.C</span></a><span class=cF0> loads </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Compiler.PRJ.html#l1"><span class=cF4>::/Compiler/Compiler.BIN</span></a><span class=cF0> so it can work with source code from then on.  It compiles 
 <a name="l43"></a>start-up scripts beginning with </span><a href="https://tomawezome.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0> into the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0>'s memory including the code in the </span><span class=cF2>/System</span><span class=cF0> and </span><span class=cF2>/Home</span><span class=cF0> 
 <a name="l44"></a>directories.
 <a name="l45"></a>
-<a name="l46"></a>It is possible to do a fast reboot without doing a hardware reset.  You might do this when working on </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Kernel.BIN.C</span></a><span class=cF0> or your 
-<a name="l47"></a>start-up scripts when you want to compile them effect.  See </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootRAM.CC.html#l33"><span class=cF4>BootRAM</span></a><span class=cF0>().
+<a name="l46"></a>It is possible to do a fast reboot without doing a hardware reset.  You might do this when working on </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Kernel.PRJ.html#l1"><span class=cF4>::/Boot/Kernel.BIN.C</span></a><span class=cF0> or 
+<a name="l47"></a>your start-up scripts when you want to compile them effect.  See </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootRAM.CC.html#l33"><span class=cF4>BootRAM</span></a><span class=cF0>().
 <a name="l48"></a>
 <a name="l49"></a></span><span class=cFA>
 <a name="l50"></a>/* Graphics Not Rendered in HTML */</span><span class=cF0>

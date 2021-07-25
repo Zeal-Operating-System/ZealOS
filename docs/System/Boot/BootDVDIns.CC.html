@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.09">
+<meta name="generator" content="ZealOS V0.10">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -33,9 +33,9 @@ body {background-color:#000000;}
 <a name="l6"></a>
 <a name="l7"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Install&quot;</span><span class=cF0>
 <a name="l8"></a>
-<a name="l9"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>            </span><span class=cF6>&quot;Kernel.BIN.C&quot;</span><span class=cF0>
-<a name="l10"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_DIR</span><span class=cF0>                </span><span class=cF6>&quot;/Boot&quot;</span><span class=cF0>
-<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>   </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>
+<a name="l9"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>                </span><span class=cF6>&quot;Kernel.BIN.C&quot;</span><span class=cF0>
+<a name="l10"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_DIR</span><span class=cF0>                    </span><span class=cF6>&quot;/Boot&quot;</span><span class=cF0>
+<a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>BOOT_DIR_DVD_KERNEL_BIN_C</span><span class=cF0>   </span><span class=cF3>BOOT_DIR</span><span class=cF0> </span><span class=cF6>&quot;/DVD&quot;</span><span class=cF0> </span><span class=cF3>KERNEL_BIN_C</span><span class=cF0>
 <a name="l12"></a>
 <a name="l13"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MakeAll</span><span class=cF0>()
 <a name="l14"></a>{
@@ -52,7 +52,7 @@ body {background-color:#000000;}
 <a name="l25"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Drive</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>)
 <a name="l26"></a>            </span><span class=cF5>throw</span><span class=cF0>;
 <a name="l27"></a>        </span><span class=cF5>MakeAll</span><span class=cF0>;
-<a name="l28"></a>        </span><span class=cF5>Move</span><span class=cF0>(</span><span class=cF6>&quot;/Kernel/Kernel.BIN&quot;</span><span class=cF0>, </span><span class=cF3>BOOT_DIR_KERNEL_BIN_C</span><span class=cF0>);
+<a name="l28"></a>        </span><span class=cF5>Move</span><span class=cF0>(</span><span class=cF6>&quot;/Kernel/Kernel.BIN&quot;</span><span class=cF0>, </span><span class=cF3>BOOT_DIR_DVD_KERNEL_BIN_C</span><span class=cF0>);
 <a name="l29"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l30"></a>    </span><span class=cF1>catch</span><span class=cF0>
 <a name="l31"></a>    </span><span class=cF7>{</span><span class=cF0>

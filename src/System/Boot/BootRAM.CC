@@ -30,7 +30,7 @@ _extern _HI_CALL	I64 HiCall(U8 *machine_code);
 _extern _HI_MEMCOPY U8 *HiMemCopy(U8 *dst, U8 *src, I64 count);
 
 #help_index "Boot"
-public U0 BootRAM(U8 *filename="::/" KERNEL_BIN_C)
+public U0 BootRAM(U8 *filename="::" BOOT_DIR_KERNEL_BIN_C)
 {//Softboot Kernel.BIN file. No hardware reset.
 	I64		 size;
 	CKernel	*hi_image, *lo_image = mem_boot_base - sizeof(CBinFile), reg *sys_ram_reboot;

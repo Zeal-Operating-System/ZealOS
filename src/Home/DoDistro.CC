@@ -36,10 +36,9 @@ U0 MakeMyISO(U8 *_out_iso_filename)
 	progress1++;
 
 	Copy("/*", "/Distro");
-	Del("/Distro/" KERNEL_BIN_C);
 	progress1++;
-
-	CopyTree(BOOT_DIR,		"/Distro" BOOT_DIR);
+	DirMake("/Distro" BOOT_DIR);
+	Move(BOOT_DIR_DVD_KERNEL_BIN_C, "/Distro" BOOT_DIR_KERNEL_BIN_C);
 	progress1++;
 	CopyTree("/Home", 		"/Distro/Home");
 	progress1++;

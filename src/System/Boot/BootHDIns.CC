@@ -5,8 +5,9 @@
 
 #help_index "Install"
 
-#define KERNEL_BIN_C	"Kernel.BIN.C"
-
+#define KERNEL_BIN_C			"Kernel.BIN.C"
+#define BOOT_DIR				"/Boot"
+#define BOOT_DIR_KERNEL_BIN_C	BOOT_DIR "/" KERNEL_BIN_C
 
 U0 CompComp()
 {
@@ -40,9 +41,9 @@ public U0 BootHDIns(U8 drv_let=0)
 		{
 			case BDT_RAM:
 			case BDT_ATA:
-				Move("/Kernel/Kernel.BIN", "/" KERNEL_BIN_C);
+				Move("/Kernel/Kernel.BIN", BOOT_DIR_KERNEL_BIN_C);
 
-				if (!FileFind("/" KERNEL_BIN_C, &de, FUF_JUST_FILES))
+				if (!FileFind(BOOT_DIR_KERNEL_BIN_C, &de, FUF_JUST_FILES))
 					"No Kernel.BIN.C\n";
 				else
 				{

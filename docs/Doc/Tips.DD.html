@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.09">
+<meta name="generator" content="ZealOS V0.10">
 <style type="text/css">
 body {background-color:#000000;}
 .cF0{color:#ffffff;background-color:#000000;}
@@ -67,10 +67,10 @@ body {background-color:#000000;}
 <a name="l40"></a>value of </span><span class=cF2>filter lines</span><span class=cF0> set to </span><span class=cF2>5</span><span class=cF0> will display lines within 5 lines of matches. Then, you can do another find to a different 
 <a name="l41"></a>string and achieve a </span><span class=cF2>AND</span><span class=cF0> search. When finished, press </span><span class=cF2>&lt;ESC&gt;</span><span class=cF0>.
 <a name="l42"></a> 
-<a name="l43"></a>* You can recompile and reinstall the kernel with </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>(). You'll probably want to make a function for recompiling that 
+<a name="l43"></a>* You can recompile and reinstall the kernel with </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>(). You'll probably want to make a function for recompiling that 
 <a name="l44"></a>uses the </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Job.CC.html#l580"><span class=cF4>In</span></a><span class=cF0>() function to answer the config questions. See the technique </span><a href="https://tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSConfig.CC.html#l1"><span class=cF4>Config Strs</span></a><span class=cF0>, </span><a href="https://tomawezome.github.io/ZealOS/Demo/AcctExample/TOS/TOSDistro.CC.html#l1"><span class=cF4>Update Funs</span></a><span class=cF0>.
 <a name="l45"></a>
-<a name="l46"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l194"><span class=cF4>Scale2Mem</span></a><span class=cF0>(min,max,limit=2*1024*1024*1024) can be used for config questions when recompiling. The </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l24"><span class=cF4>BootHDIns</span></a><span class=cF0>() config prompts 
+<a name="l46"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l194"><span class=cF4>Scale2Mem</span></a><span class=cF0>(min,max,limit=2*1024*1024*1024) can be used for config questions when recompiling. The </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>() config prompts 
 <a name="l47"></a>accept expressions, not just numbers. The default disk cache is </span><span class=cF2>Scale2Mem(0x80000,0x8000000)</span><span class=cF0>.
 <a name="l48"></a>
 <a name="l49"></a>* You can permanently disable </span><span class=cF2>AutoComplete</span><span class=cF0> commenting-out </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.CC.html#l34"><span class=cF4>ACInit</span></a><span class=cF0>() in </span><a href="https://tomawezome.github.io/ZealOS/Home/HomeSys.CC.html#l34"><span class=cF4>~/HomeSys.CC</span></a><span class=cF0>.

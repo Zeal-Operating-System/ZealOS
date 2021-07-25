@@ -14,7 +14,7 @@ $FG,2$/Compiler$FG$ The compiler module src code is found here.  The compiler is
 
 $FG,2$/System$FG$ The non-kernel part of the operating system is found here.	It is $FG,2$JIT$FG$ compiled during boot.  The $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ is the most important task. It never dies.
 
-$FG,2$/Boot$FG$ Boot files go here.  Stage 2 of the ZealOS hard drive master boot loader, the old hard drive master boot record which is just blk#0, and the CD/DVD $LK,"Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ file go here.
+$FG,2$/Boot$FG$ Boot files go here.  Stage 2 of the ZealOS hard drive master boot loader, the old hard drive master boot record which is just blk#0, and the HDD & CD/DVD $LK,"Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ file go here.
 
 
 
