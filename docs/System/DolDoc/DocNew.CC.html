@@ -68,7 +68,7 @@ body {background-color:#000000;}
 <a name="l41"></a>}
 <a name="l42"></a>
 <a name="l43"></a></span><span class=cF9>CDocEntry</span><span class=cF0> *</span><span class=cF5>DocEntryNewBase</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF9>I64</span><span class=cF0> type, </span><span class=cF9>I64</span><span class=cF0> de_flags=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> x=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> y=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> page_line_num=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l44"></a>{</span><span class=cF2>//See also </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocRecalc.CC.html#l161"><span class=cF4>MAllocIdent</span></a><span class=cF2> and </span><span class=cF9><u>CDocEntry</u></span><span class=cF2>.</span><span class=cF0>
+<a name="l44"></a>{</span><span class=cF2>//See also </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalc.CC.html#l161"><span class=cF4>MAllocIdent</span></a><span class=cF2> and </span><span class=cF9><u>CDocEntry</u></span><span class=cF2>.</span><span class=cF0>
 <a name="l45"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0> *res = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CDocEntryBase</span><span class=cF7>)</span><span class=cF0>, doc-&gt;mem_task);
 <a name="l46"></a>
 <a name="l47"></a>    res-&gt;type           = type;
@@ -322,7 +322,7 @@ body {background-color:#000000;}
 <a name="l295"></a>            b = b1;
 <a name="l296"></a>        }
 <a name="l297"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l298"></a></span><span class=cF2>//Check </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocFile.CC.html#l222"><span class=cF4>DocInsDoc</span></a><span class=cF0>
+<a name="l298"></a></span><span class=cF2>//Check </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocFile.CC.html#l222"><span class=cF4>DocInsDoc</span></a><span class=cF0>
 <a name="l299"></a>    doc-&gt;flags &amp;= </span><span class=cF3>DOCF_BREAK_UNLOCKED</span><span class=cF0>;
 <a name="l300"></a>    doc-&gt;head.next = doc-&gt;head.last = doc;
 <a name="l301"></a>    </span><span class=cF5>QueueInit</span><span class=cF0>(&amp;doc-&gt;bin_head);
@@ -424,7 +424,7 @@ body {background-color:#000000;}
 <a name="l397"></a>
 <a name="l398"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc&quot;</span><span class=cF0>
 <a name="l399"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *</span><span class=cF5>DocNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l400"></a>{</span><span class=cF2>//MAlloc new </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2>. (Begin a new doc.)</span><span class=cF0>
+<a name="l400"></a>{</span><span class=cF2>//MAlloc new </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2>. (Begin a new doc.)</span><span class=cF0>
 <a name="l401"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc;
 <a name="l402"></a>
 <a name="l403"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)

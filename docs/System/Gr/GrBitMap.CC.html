@@ -1109,7 +1109,7 @@ body {background-color:#000000;}
 <a name="l1082"></a>}
 <a name="l1083"></a>
 <a name="l1084"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>GrPutS</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>U8</span><span class=cF0> *_s)
-<a name="l1085"></a>{</span><span class=cF2>//Use </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1194"><span class=cF4>GrPrint</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1085"></a>{</span><span class=cF2>//Use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1194"><span class=cF4>GrPrint</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1086"></a>    </span><span class=cF9>I64</span><span class=cF0> x0, sx = </span><span class=cFE>0</span><span class=cF0>, sy = </span><span class=cFE>0</span><span class=cF0>, res;
 <a name="l1087"></a>
 <a name="l1088"></a>    </span><span class=cF1>if</span><span class=cF0> (!_s)
@@ -1163,7 +1163,7 @@ body {background-color:#000000;}
 <a name="l1136"></a>}
 <a name="l1137"></a>
 <a name="l1138"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>GrVPutS</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF1>U8</span><span class=cF0> *_s)
-<a name="l1139"></a>{</span><span class=cF2>//Vertical Text.  Use </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1205"><span class=cF4>GrVPrint</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l1139"></a>{</span><span class=cF2>//Vertical Text.  Use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrBitMap.CC.html#l1205"><span class=cF4>GrVPrint</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l1140"></a>    </span><span class=cF9>I64</span><span class=cF0> y0, sx = </span><span class=cFE>0</span><span class=cF0>, sy = </span><span class=cFE>0</span><span class=cF0>, res;
 <a name="l1141"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>2</span><span class=cF0>];
 <a name="l1142"></a>
@@ -2128,7 +2128,7 @@ body {background-color:#000000;}
 <a name="l2101"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>GrHLine</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x1, </span><span class=cF9>I64</span><span class=cF0> x2, </span><span class=cF9>I64</span><span class=cF0> y, </span><span class=cF9>I64</span><span class=cF0> z1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> z2=</span><span class=cFE>0</span><span class=cF0>)
 <a name="l2102"></a>{</span><span class=cF2>//3D. No transformation or thick.</span><span class=cF0>
 <a name="l2103"></a></span><span class=cF2>//Returns count of pixs changed</span><span class=cF0>
-<a name="l2104"></a>    </span><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2104"></a>    </span><span class=cF2>//Uses </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l2105"></a>    </span><span class=cF9>I64</span><span class=cF0>              dist, dx, dz, z, res = </span><span class=cFE>0</span><span class=cF0>, i, j, d;
 <a name="l2106"></a>    </span><span class=cF1>U8</span><span class=cF0>              *dst;
 <a name="l2107"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>     c, c2, color = dc-&gt;color, bkcolor = dc-&gt;bkcolor, dither_colors;
@@ -2342,7 +2342,7 @@ body {background-color:#000000;}
 <a name="l2315"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>GrVLine</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cFB>gr</span><span class=cF0>.dc, </span><span class=cF9>I64</span><span class=cF0> x, </span><span class=cF9>I64</span><span class=cF0> y1, </span><span class=cF9>I64</span><span class=cF0> y2, </span><span class=cF9>I64</span><span class=cF0> z1=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> z2=</span><span class=cFE>0</span><span class=cF0>)
 <a name="l2316"></a>{</span><span class=cF2>//3D. No transformation or thick.</span><span class=cF0>
 <a name="l2317"></a></span><span class=cF2>//Returns count of pixs changed</span><span class=cF0>
-<a name="l2318"></a>    </span><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l2318"></a>    </span><span class=cF2>//Uses </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l2319"></a>    </span><span class=cF9>I64</span><span class=cF0>              dist, dy, dz, z, res = </span><span class=cFE>0</span><span class=cF0>, i, j, d;
 <a name="l2320"></a>    </span><span class=cF1>U8</span><span class=cF0>              *dst;
 <a name="l2321"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>     c, c2, color = dc-&gt;color, bkcolor = dc-&gt;bkcolor, dither_colors;

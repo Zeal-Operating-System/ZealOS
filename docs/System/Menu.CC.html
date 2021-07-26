@@ -41,7 +41,7 @@ body {background-color:#000000;}
 <a name="l14"></a></span><span class=cF9>CMenuEntry</span><span class=cF0> *</span><span class=cFB>sys_cur_submenu_entry</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l15"></a>
 <a name="l16"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CMenuEntry</span><span class=cF0> *</span><span class=cF5>MenuSubEntryFind</span><span class=cF0>(</span><span class=cF9>CMenuEntry</span><span class=cF0> *haystack_first, </span><span class=cF1>U8</span><span class=cF0> *needle_entry_name)
-<a name="l17"></a>{</span><span class=cF2>//You probably don't need this. Use dir / and </span><a href="https://tomawezome.github.io/ZealOS/System/Menu.CC.html#l28"><span class=cF4>MenuEntryFind</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l17"></a>{</span><span class=cF2>//You probably don't need this. Use dir / and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Menu.CC.html#l28"><span class=cF4>MenuEntryFind</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l18"></a>    </span><span class=cF1>while</span><span class=cF0> (haystack_first)
 <a name="l19"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l20"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF0>haystack_first-&gt;name, needle_entry_name</span><span class=cF7>)</span><span class=cF0>)

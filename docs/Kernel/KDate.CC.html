@@ -25,7 +25,7 @@ body {background-color:#000000;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/TimeDate.DD.html#l1"><span class=cF4>::/Doc/TimeDate.DD</span></a><span class=cF0>
+<a name="l1"></a><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/TimeDate.DD.html#l1"><span class=cF4>::/Doc/TimeDate.DD</span></a><span class=cF0>
 <a name="l2"></a>
 <a name="l3"></a></span><span class=cF9>U16</span><span class=cF0> </span><span class=cFB>month_start_days</span><span class=cF0>[</span><span class=cFE>12</span><span class=cF0>]        = {</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>31</span><span class=cF0>, </span><span class=cFE>59</span><span class=cF0>, </span><span class=cFE>90</span><span class=cF0>, </span><span class=cFE>120</span><span class=cF0>, </span><span class=cFE>151</span><span class=cF0>, </span><span class=cFE>181</span><span class=cF0>, </span><span class=cFE>212</span><span class=cF0>, </span><span class=cFE>243</span><span class=cF0>, </span><span class=cFE>273</span><span class=cF0>, </span><span class=cFE>304</span><span class=cF0>, </span><span class=cFE>334</span><span class=cF0>};
 <a name="l4"></a></span><span class=cF9>U16</span><span class=cF0> </span><span class=cFB>month_start_days_leap</span><span class=cF0>[</span><span class=cFE>12</span><span class=cF0>]   = {</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>31</span><span class=cF0>, </span><span class=cFE>60</span><span class=cF0>, </span><span class=cFE>91</span><span class=cF0>, </span><span class=cFE>121</span><span class=cF0>, </span><span class=cFE>152</span><span class=cF0>, </span><span class=cFE>182</span><span class=cF0>, </span><span class=cFE>213</span><span class=cF0>, </span><span class=cFE>244</span><span class=cF0>, </span><span class=cFE>274</span><span class=cF0>, </span><span class=cFE>305</span><span class=cF0>, </span><span class=cFE>335</span><span class=cF0>};
@@ -163,21 +163,21 @@ body {background-color:#000000;}
 <a name="l136"></a>}
 <a name="l137"></a>
 <a name="l138"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>CMOSRegRead</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> register)
-<a name="l139"></a>{</span><span class=cF2>//Read val from CMOS register. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l139"></a>{</span><span class=cF2>//Read val from CMOS register. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l140"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>CMOS_SEL</span><span class=cF0>, register);
 <a name="l141"></a>
 <a name="l142"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>InU8</span><span class=cF0>(</span><span class=cF3>CMOS_DATA</span><span class=cF0>);
 <a name="l143"></a>}
 <a name="l144"></a>
 <a name="l145"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>CMOSRegWrite</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> register, </span><span class=cF9>I64</span><span class=cF0> val)
-<a name="l146"></a>{</span><span class=cF2>//Write val to CMOS register. See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l146"></a>{</span><span class=cF2>//Write val to CMOS register. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l147"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>CMOS_SEL</span><span class=cF0>, register);
 <a name="l148"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>CMOS_DATA</span><span class=cF0>, val);
 <a name="l149"></a>}
 <a name="l150"></a>
 <a name="l151"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>CMOSIsBcd</span><span class=cF0>()
 <a name="l152"></a>{</span><span class=cF2>//Check of CMOS is in binary-coded decimal mode.</span><span class=cF0>
-<a name="l153"></a></span><span class=cF2>// Ex: 15:32:44 == 0x15:0x32:0x44 (not good). We use </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDate.CC.html#l157"><span class=cF4>Bcd2Binary</span></a><span class=cF2>() to convert.</span><span class=cF0>
+<a name="l153"></a></span><span class=cF2>// Ex: 15:32:44 == 0x15:0x32:0x44 (not good). We use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDate.CC.html#l157"><span class=cF4>Bcd2Binary</span></a><span class=cF2>() to convert.</span><span class=cF0>
 <a name="l154"></a>    </span><span class=cF1>return</span><span class=cF0> !(</span><span class=cF5>CMOSRegRead</span><span class=cF7>(</span><span class=cF3>CMOSR_STATUS_B</span><span class=cF7>)</span><span class=cF0> &amp; </span><span class=cF3>CMOSF_BINARY</span><span class=cF0>);
 <a name="l155"></a>}
 <a name="l156"></a>
@@ -247,8 +247,8 @@ body {background-color:#000000;}
 <a name="l220"></a>}
 <a name="l221"></a>
 <a name="l222"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>TimeSet</span><span class=cF0>(</span><span class=cF9>CDateStruct</span><span class=cF0> *ds)
-<a name="l223"></a>{</span><span class=cF2>//Set CMOS time from user crafted </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l216"><span class=cF4>CDateStruct</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l224"></a></span><span class=cF2>//Make sure to use hex as decimals if BCD mode. Check using </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDate.CC.html#l151"><span class=cF4>CMOSIsBcd</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l223"></a>{</span><span class=cF2>//Set CMOS time from user crafted </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l216"><span class=cF4>CDateStruct</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l224"></a></span><span class=cF2>//Make sure to use hex as decimals if BCD mode. Check using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDate.CC.html#l151"><span class=cF4>CMOSIsBcd</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l225"></a></span><span class=cF2>//Ex: if bcd mode and we want 12/30, 10:45:15 -- 0x12/0x30, 0x10:0x45:0x15.</span><span class=cF0>
 <a name="l226"></a></span><span class=cF2>//Pass year as double digit number (obviously 20XX is too big for a U8).</span><span class=cF0>
 <a name="l227"></a>    </span><span class=cF1>U8</span><span class=cF0> *b = ds;

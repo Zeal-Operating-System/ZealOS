@@ -564,7 +564,7 @@ body {background-color:#000000;}
 <a name="l537"></a>    </span><span class=cF9>CMeshEdTri</span><span class=cF0>  *tmpt = e-&gt;tri_head.next;
 <a name="l538"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, *old_r = dc-&gt;r;
 <a name="l539"></a>
-<a name="l540"></a>    </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.CC.html#l182"><span class=cF4>DCAlias</span></a><span class=cF2>() allocs a new identity rotation matrix.</span><span class=cF0>
+<a name="l540"></a>    </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l182"><span class=cF4>DCAlias</span></a><span class=cF2>() allocs a new identity rotation matrix.</span><span class=cF0>
 <a name="l541"></a>    </span><span class=cF2>//We want e-&gt;dc's rotation matrix.</span><span class=cF0>
 <a name="l542"></a>    dc-&gt;r           = e-&gt;dc-&gt;r;
 <a name="l543"></a>    dc-&gt;depth_buf   = e-&gt;depth_buf;
@@ -629,7 +629,7 @@ body {background-color:#000000;}
 <a name="l602"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l603"></a>    dc-&gt;r = old_r;
 <a name="l604"></a>
-<a name="l605"></a>    </span><span class=cF2>//e-&gt;dc's depth buf was copied but we don't want it freed during </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.CC.html#l230"><span class=cF4>DCDel</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l605"></a>    </span><span class=cF2>//e-&gt;dc's depth buf was copied but we don't want it freed during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l230"><span class=cF4>DCDel</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l606"></a>    dc-&gt;depth_buf = </span><span class=cF3>NULL</span><span class=cF0>;
 <a name="l607"></a>
 <a name="l608"></a>    </span><span class=cF5>DCDel</span><span class=cF0>(dc);
@@ -676,7 +676,7 @@ body {background-color:#000000;}
 <a name="l649"></a>    e-&gt;w2s = </span><span class=cF5>MeshW2S</span><span class=cF0>(e, task);
 <a name="l650"></a>    </span><span class=cF5>Free</span><span class=cF0>(e-&gt;s2w);
 <a name="l651"></a>    e-&gt;s2w = </span><span class=cF5>MeshS2W</span><span class=cF0>(e, task);
-<a name="l652"></a></span><span class=cF2>//returned matrix is assigned to dc-&gt;r and will be freed by </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/GrDC.CC.html#l230"><span class=cF4>DCDel</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l652"></a></span><span class=cF2>//returned matrix is assigned to dc-&gt;r and will be freed by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l230"><span class=cF4>DCDel</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l653"></a>
 <a name="l654"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Mat4x4New</span><span class=cF0>(e-&gt;w2s, task);
 <a name="l655"></a>}
@@ -1140,7 +1140,7 @@ body {background-color:#000000;}
 <a name="l1113"></a>
 <a name="l1114"></a></span><span class=cF2>Returns a newly malloced mesh or NULL.</span><span class=cF0>
 <a name="l1115"></a>
-<a name="l1116"></a></span><span class=cF2>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Graphics/SpritePlot3D.CC.html#l1"><span class=cF4>::/Demo/Graphics/SpritePlot3D.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l1116"></a></span><span class=cF2>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/SpritePlot3D.CC.html#l1"><span class=cF4>::/Demo/Graphics/SpritePlot3D.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l1117"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l1118"></a>    </span><span class=cF9>CCtrl</span><span class=cF0>           *c = </span><span class=cF5>CtrlFindUnique</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>, </span><span class=cF3>CTRLT_VIEWING_ANGLES</span><span class=cF0>);
 <a name="l1119"></a>    </span><span class=cF9>CViewAngles</span><span class=cF0>     *s, *old_s;
@@ -1223,7 +1223,7 @@ body {background-color:#000000;}
 <a name="l1196"></a>                </span><span class=cF6>&quot;  ReverseTri(,'R');&quot;</span><span class=cF0>
 <a name="l1197"></a>                </span><span class=cF6>&quot;}&quot;</span><span class=cF0>);
 <a name="l1198"></a>
-<a name="l1199"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l1199"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l1200"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
 <a name="l1201"></a>    </span><span class=cF5>RegOneTimePopUp</span><span class=cF0>(</span><span class=cF3>ARf_MESH_ED</span><span class=cF0>,
 <a name="l1202"></a>                </span><span class=cF6>&quot;$GREEN$Right Mouse$FG$: Hold and move to shift cursor z\n&quot;</span><span class=cF0>

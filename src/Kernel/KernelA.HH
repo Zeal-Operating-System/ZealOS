@@ -2718,6 +2718,7 @@ public class CATARep
 #define AHCI_CAPSf_S64A		31	//Supports 64-bit Addressing
 
 #define AHCI_CAPSEXTf_BOH	0	//Supports BIOS/OS Handoff
+#define AHCI_CAPSEXTf_NVMP	1	//NVMHCI Supported & Present
 
 //BIOS/OS Handoff Control
 #define AHCI_BOHCf_BOS		0	//BIOS-Owned Semaphore (BIOS owns controller)
@@ -2751,6 +2752,9 @@ public class CATARep
 #define AHCI_PxCMDF_CR		(1 << AHCI_PxCMDf_CR)
 #define AHCI_PxCMDF_ATAPI	(1 << AHCI_PxCMDf_ATAPI)
 
+//Task File Data register flags
+#define AHCI_PxTFDf_STS_ERR	0 // Error Bit of Status register
+
 //Signature types
 #define AHCI_PxSIG_ATA		0x00000101
 #define AHCI_PxSIG_ATAPI	0xEB140101
@@ -2758,7 +2762,13 @@ public class CATARep
 #define AHCI_PxSIG_PM		0x96690101 //Port multiplier... not relevant to PC-type systems.
 
 //Interrupt flags (same in PxIE and PxIS)
+#define AHCI_PxIf_OFS	24	//Overflow Status
+#define AHCI_PxIf_INFS	26	//SATA Interface Non-Fatal Error
+#define AHCI_PxIf_IFS	27	//SATA Interface Fatal Error
+#define AHCI_PxIf_HBDS	28	//Host Bus Data Error
+#define AHCI_PxIf_HBFS	29	//Host Bus Fatal Error
 #define AHCI_PxIf_TFE	30	//Task File Error, see $LK,"ATAS_ERR",A="MN:ATAS_ERR"$.
+#define AHCI_PxIf_CPDS	31	//Cold Port Detect Status
 
 //COMRESET flags
 //SATA Control register flags
@@ -2766,6 +2776,19 @@ public class CATARep
 #define AHCI_PxSCTLF_DET_INIT		(1 << AHCI_PxSCTLf_DET_INIT)
 //SATA Status register flags
 #define AHCI_PxSSTSF_DET_PRESENT	3
+
+//SATA Error register flags
+#define AHCI_PxSERR_ERR_I	0	// Recovered Data Integrity Error
+#define AHCI_PxSERR_ERR_M	1	// Recovered Communication Error
+#define AHCI_PxSERR_ERR_T	8	// Transient Data Integrity Error
+#define AHCI_PxSERR_ERR_C	9	// Persistent Communication Error
+#define AHCI_PxSERR_ERR_P	10	// SATA Protocol Error
+#define AHCI_PxSERR_ERR_E	11	// Internal Error
+#define AHCI_PxSERR_DIAG_I	17	// Phy Internal Error
+#define AHCI_PxSERR_DIAG_C	21	// Link Layer CRC Error
+#define AHCI_PxSERR_DIAG_H	22	// Handshake Error
+#define AHCI_PxSERR_DIAG_S	23	// Link Sequence Error
+#define AHCI_PxSERR_DIAG_T	24	// Transport State Transition Error
 
 class CAHCIPort
 {//Port register layout

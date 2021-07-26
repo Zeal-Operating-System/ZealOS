@@ -26,7 +26,7 @@ body {background-color:#000000;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DirNew</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde, </span><span class=cF1>Bool</span><span class=cF0> free_old_chain=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l2"></a>{</span><span class=cF2>//Makes a directory entry in the directory from a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3168"><span class=cF4>CDirEntry</span></a><span class=cF2> node.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Makes a directory entry in the directory from a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3191"><span class=cF4>CDirEntry</span></a><span class=cF2> node.</span><span class=cF0>
 <a name="l3"></a>    </span><span class=cF1>switch</span><span class=cF0> (drive-&gt;fs_type)
 <a name="l4"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l5"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>FSt_REDSEA</span><span class=cF0>:
@@ -42,7 +42,7 @@ body {background-color:#000000;}
 <a name="l15"></a>}
 <a name="l16"></a>
 <a name="l17"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DirEntryDel</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde)
-<a name="l18"></a>{</span><span class=cF2>//Free node returned from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Doesn't Free user_data.</span><span class=cF0>
+<a name="l18"></a>{</span><span class=cF2>//Free node returned from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Doesn't Free user_data.</span><span class=cF0>
 <a name="l19"></a></span><span class=cF2>//Does not change the directory on disk.</span><span class=cF0>
 <a name="l20"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpde)
 <a name="l21"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -52,7 +52,7 @@ body {background-color:#000000;}
 <a name="l25"></a>}
 <a name="l26"></a>
 <a name="l27"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DirEntryDel2</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde)
-<a name="l28"></a>{</span><span class=cF2>//Free node returned from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Frees user_data</span><span class=cF0>
+<a name="l28"></a>{</span><span class=cF2>//Free node returned from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Frees user_data</span><span class=cF0>
 <a name="l29"></a></span><span class=cF2>//Does not change the directory on disk.</span><span class=cF0>
 <a name="l30"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpde)
 <a name="l31"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -63,7 +63,7 @@ body {background-color:#000000;}
 <a name="l36"></a>}
 <a name="l37"></a>
 <a name="l38"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DirTreeDel</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde)
-<a name="l39"></a>{</span><span class=cF2>//Free tree returned from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Doesn't Free user_data.</span><span class=cF0>
+<a name="l39"></a>{</span><span class=cF2>//Free tree returned from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Doesn't Free user_data.</span><span class=cF0>
 <a name="l40"></a></span><span class=cF2>//Does not change the directory on disk.</span><span class=cF0>
 <a name="l41"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde2;
 <a name="l42"></a>
@@ -78,7 +78,7 @@ body {background-color:#000000;}
 <a name="l51"></a>}
 <a name="l52"></a>
 <a name="l53"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DirTreeDel2</span><span class=cF0>(</span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde)
-<a name="l54"></a>{</span><span class=cF2>//Free tree returned from </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Frees user_data</span><span class=cF0>
+<a name="l54"></a>{</span><span class=cF2>//Free tree returned from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l32"><span class=cF4>FilesFind</span></a><span class=cF2>().  Frees user_data</span><span class=cF0>
 <a name="l55"></a></span><span class=cF2>//Does not change the directory on disk.</span><span class=cF0>
 <a name="l56"></a>    </span><span class=cF9>CDirEntry</span><span class=cF0> *tmpde2;
 <a name="l57"></a>
@@ -209,7 +209,7 @@ body {background-color:#000000;}
 <a name="l182"></a>}
 <a name="l183"></a>
 <a name="l184"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PutFileLink</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>U8</span><span class=cF0> *full_name=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> line=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> plain_text=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l185"></a>{</span><span class=cF2>//Put </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> file,line link to StdOut, </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocDblBuf.CC.html#l2"><span class=cF4>DocPut</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l185"></a>{</span><span class=cF2>//Put </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> file,line link to StdOut, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocDblBuf.CC.html#l2"><span class=cF4>DocPut</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l186"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
 <a name="l187"></a>
 <a name="l188"></a>    </span><span class=cF1>if</span><span class=cF0> (!filename)
@@ -226,7 +226,7 @@ body {background-color:#000000;}
 <a name="l199"></a></span><span class=cF2>//LK_DOC,LK_DOC_ANCHOR,LK_DOC_FIND,LK_DOC_LINE</span><span class=cF0>
 <a name="l200"></a>        </span><span class=cF1>if</span><span class=cF0> (filename[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF6>'A'</span><span class=cF0>&amp;&amp;filename[</span><span class=cFE>2</span><span class=cF0>] == </span><span class=cF6>':'</span><span class=cF0>)
 <a name="l201"></a>        {
-<a name="l202"></a>            </span><span class=cF1>if</span><span class=cF0> (line) </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/Gr/SpriteEd.CC.html#l701"><span class=cF4>SpriteEdText</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l202"></a>            </span><span class=cF1>if</span><span class=cF0> (line) </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/SpriteEd.CC.html#l701"><span class=cF4>SpriteEdText</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l203"></a>                </span><span class=cF6>&quot;$LK,\&quot;%s,%04d\&quot;,A=\&quot;AL:%s,%d\&quot;$&quot;</span><span class=cF0>, filename + </span><span class=cFE>3</span><span class=cF0>, line, filename + </span><span class=cFE>3</span><span class=cF0>, line;
 <a name="l204"></a>            </span><span class=cF1>else</span><span class=cF0>
 <a name="l205"></a>                </span><span class=cF6>&quot;$LK,\&quot;%s\&quot;,A=\&quot;AI:%s\&quot;$&quot;</span><span class=cF0>, filename + </span><span class=cFE>3</span><span class=cF0>, filename + </span><span class=cFE>3</span><span class=cF0>;
@@ -257,7 +257,7 @@ body {background-color:#000000;}
 <a name="l230"></a>}
 <a name="l231"></a>
 <a name="l232"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>PutDirLink</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *dirname, </span><span class=cF1>U8</span><span class=cF0> *full_name=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l233"></a>{</span><span class=cF2>//Put </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> dir macro to StdOut, </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocDblBuf.CC.html#l2"><span class=cF4>DocPut</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l233"></a>{</span><span class=cF2>//Put </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> dir macro to StdOut, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocDblBuf.CC.html#l2"><span class=cF4>DocPut</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l234"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
 <a name="l235"></a>
 <a name="l236"></a>    </span><span class=cF1>if</span><span class=cF0> (!dirname)

@@ -297,7 +297,7 @@ body {background-color:#000000;}
 <a name="l270"></a>}
 <a name="l271"></a>
 <a name="l272"></a></span><span class=cF9>CDocEntry</span><span class=cF0> *</span><span class=cF5>ParseDollarCmd</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>U8</span><span class=cF0> *st)
-<a name="l273"></a>{</span><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Compiler/Lex.CC.html#l529"><span class=cF4>Lex</span></a><span class=cF2>() to parse a string and make Doc entries.</span><span class=cF0>
+<a name="l273"></a>{</span><span class=cF2>//Uses </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/Lex.CC.html#l529"><span class=cF4>Lex</span></a><span class=cF2>() to parse a string and make Doc entries.</span><span class=cF0>
 <a name="l274"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, de_flags, processed_flags, attr = </span><span class=cF3>DOC_DEFAULT</span><span class=cF0>;
 <a name="l275"></a>    </span><span class=cF1>U8</span><span class=cF0>              *ptr, *st2;
 <a name="l276"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>       *doc_e = </span><span class=cF3>NULL</span><span class=cF0>;
@@ -461,7 +461,7 @@ body {background-color:#000000;}
 <a name="l434"></a>                            </span><span class=cF5>Free</span><span class=cF0>(st2);
 <a name="l435"></a></span><span class=cF2>//</span><span class=cF8>Anchor</span><span class=cF0>
 <a name="l436"></a>                            </span><span class=cF1>if</span><span class=cF0> (i == </span><span class=cF3>DOCT_DATA</span><span class=cF0>)
-<a name="l437"></a>                            { </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l437"></a>                            { </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l263"><span class=cF4>DocForm</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l438"></a>                                </span><span class=cF1>if</span><span class=cF0> (ptr = </span><span class=cF5>StrMatch</span><span class=cF7>(</span><span class=cF6>&quot;:&quot;</span><span class=cF0>, doc_e-&gt;aux_str</span><span class=cF7>)</span><span class=cF0>)
 <a name="l439"></a>                                    doc_e-&gt;min_col = ptr - doc_e-&gt;aux_str + </span><span class=cFE>1</span><span class=cF0>;
 <a name="l440"></a>

@@ -359,6 +359,8 @@ public extern	U0				 DiskCacheInvalidate(CDrive *drive);
 public extern	I64				 MountIDEAuto();
 extern			U0				 AHCIHbaReset();
 extern			U0				 AHCIPortReset(I64 port_num);
+extern			U0				 AHCIDebug(    I64 port_num);
+extern			U0				 AHCIDebugMode(Bool mode=TRUE);
 extern			U0				 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num);
 extern			I64				 AHCIAtaBlksRW(		CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool write);
 extern			I64				 AHCIAtaBlksRead(	CBlkDev *bd, U8 *buf, I64 blk, I64 count);

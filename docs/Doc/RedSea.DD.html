@@ -39,11 +39,11 @@ body {background-color:#000000;}
 <a name="l12"></a>
 <a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CDirEntry</span><span class=cF0> </span><span class=cF2>//64-byte fixed-size</span><span class=cF0>
 <a name="l14"></a>{
-<a name="l15"></a>    </span><span class=cF9>U16</span><span class=cF0>     attr;                       </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3151"><span class=cF4>RS_ATTR_DIR</span></a><span class=cF2>.</span><span class=cF0>  </span><span class=cF2>Terry wanted to change these.</span><span class=cF0>
-<a name="l16"></a>    </span><span class=cF1>U8</span><span class=cF0>      name[</span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0>];    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrA.CC.html#l336"><span class=cF4>char_bmp_filename</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskStrA.CC.html#l278"><span class=cF4>FileNameCheck</span></a><span class=cF0>
+<a name="l15"></a>    </span><span class=cF9>U16</span><span class=cF0>     attr;                       </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3174"><span class=cF4>RS_ATTR_DIR</span></a><span class=cF2>.</span><span class=cF0>  </span><span class=cF2>Terry wanted to change these.</span><span class=cF0>
+<a name="l16"></a>    </span><span class=cF1>U8</span><span class=cF0>      name[</span><span class=cF3>CDIR_FILENAME_LEN</span><span class=cF0>];    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrA.CC.html#l336"><span class=cF4>char_bmp_filename</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskStrA.CC.html#l278"><span class=cF4>FileNameCheck</span></a><span class=cF0>
 <a name="l17"></a>    </span><span class=cF9>I64</span><span class=cF0>     clus; </span><span class=cF7>(blk)</span><span class=cF0>                 </span><span class=cF2>//One sector per clus.</span><span class=cF0>
 <a name="l18"></a>    </span><span class=cF9>I64</span><span class=cF0>     size;                       </span><span class=cF2>//In bytes</span><span class=cF0>
-<a name="l19"></a>    </span><span class=cF9>CDate</span><span class=cF0>   datetime;                   </span><span class=cF2>//See  </span><a href="https://tomawezome.github.io/ZealOS/Doc/TimeDate.DD.html#l1"><span class=cF4>DateTime</span></a><span class=cF2>, </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDate.CC.html#l1"><span class=cF4>Implementation of DateTime</span></a><span class=cF0>
+<a name="l19"></a>    </span><span class=cF9>CDate</span><span class=cF0>   datetime;                   </span><span class=cF2>//See  </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/TimeDate.DD.html#l1"><span class=cF4>DateTime</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDate.CC.html#l1"><span class=cF4>Implementation of DateTime</span></a><span class=cF0>
 <a name="l20"></a>};
 <a name="l21"></a>
 <a name="l22"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CRedSeaBoot</span><span class=cF0> </span><span class=cF2>//RedSea is type FAT32 in partition table to fool BIOS.</span><span class=cF0>
@@ -59,7 +59,7 @@ body {background-color:#000000;}
 <a name="l32"></a>    </span><span class=cF9>U16</span><span class=cF0> signature2;             </span><span class=cF2>//0xAA55</span><span class=cF0>
 <a name="l33"></a>};
 <a name="l34"></a>
-<a name="l35"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/FileSysRedSea.CC.html#l1"><span class=cF4>::/Kernel/BlkDev/FileSysRedSea.CC</span></a><span class=cF0> and </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l1"><span class=cF4>::/System/Boot/DiskISORedSea.CC</span></a><span class=cF0>.
+<a name="l35"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/FileSysRedSea.CC.html#l1"><span class=cF4>::/Kernel/BlkDev/FileSysRedSea.CC</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l1"><span class=cF4>::/System/Boot/DiskISORedSea.CC</span></a><span class=cF0>.
 <a name="l36"></a>
 <a name="l37"></a>To replace ISO9660, make hard-drive partition image of a measured size and copy onto a CD/DVD starting at about sector 20, 
 <a name="l38"></a>with EL TORITO booting. 512-byte sectors will be placed on top of 2048-byte CD/DCD sectors, so there will be four blocks per 
@@ -67,8 +67,8 @@ body {background-color:#000000;}
 <a name="l40"></a>
 <a name="l41"></a>RedSea file system has no bad block table and no redundant allocation table.
 <a name="l42"></a>
-<a name="l43"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Doc/BlkChain.DD.html#l1"><span class=cF4>Block Chain</span></a><span class=cF0> for RedSea allocation bitmap discussion.
+<a name="l43"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/BlkChain.DD.html#l1"><span class=cF4>Block Chain</span></a><span class=cF0> for RedSea allocation bitmap discussion.
 <a name="l44"></a>
-<a name="l45"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Reliability.DD.html#l1"><span class=cF4>Reliability</span></a><span class=cF0> for RedSea reliability discussion.
+<a name="l45"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Reliability.DD.html#l1"><span class=cF4>Reliability</span></a><span class=cF0> for RedSea reliability discussion.
 </span></pre></body>
 </html>

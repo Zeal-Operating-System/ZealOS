@@ -35,7 +35,7 @@ body {background-color:#000000;}
 <a name="l8"></a>
 <a name="l9"></a></span><span class=cF9>CFile</span><span class=cF0> *</span><span class=cF5>FOpen</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>U8</span><span class=cF0> *flags, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0</span><span class=cF0>)
 <a name="l10"></a>{</span><span class=cF2>//Allows flags &quot;r&quot;,&quot;w&quot;,&quot;w+&quot;. &quot;c&quot; for contiguous.</span><span class=cF0>
-<a name="l11"></a></span><span class=cF2>//(It uses </span><a href="https://tomawezome.github.io/ZealOS/Kernel/StrA.CC.html#l457"><span class=cF4>StrOcc</span></a><span class=cF2>() for 'w', 'r', '+', 'c')</span><span class=cF0>
+<a name="l11"></a></span><span class=cF2>//(It uses </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrA.CC.html#l457"><span class=cF4>StrOcc</span></a><span class=cF2>() for 'w', 'r', '+', 'c')</span><span class=cF0>
 <a name="l12"></a>    </span><span class=cF9>CFile</span><span class=cF0>       *f = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFile</span><span class=cF7>)</span><span class=cF0>);
 <a name="l13"></a>    </span><span class=cF9>CDirContext</span><span class=cF0> *dirc;
 <a name="l14"></a>    </span><span class=cF1>U8</span><span class=cF0>          *full_name;

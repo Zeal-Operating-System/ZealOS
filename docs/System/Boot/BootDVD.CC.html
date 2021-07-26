@@ -195,7 +195,7 @@ body {background-color:#000000;}
 <a name="l168"></a>                </span><span class=cF1>LOOP</span><span class=cF0>        @@35
 <a name="l169"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>DS</span><span class=cF0>
 <a name="l170"></a>
-<a name="l171"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l783"><span class=cF4>AHCIBootDVDProbeAll</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l171"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1113"><span class=cF4>AHCIBootDVDProbeAll</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l172"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>EBX</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>BDVD_BLK_LO</span><span class=cF0>     - </span><span class=cFD>BDVD_START</span><span class=cF0>]
 <a name="l173"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>,  </span><span class=cF9>U16</span><span class=cF0> [</span><span class=cFD>BDVD_SHIFT_BLKS</span><span class=cF0> - </span><span class=cFD>BDVD_START</span><span class=cF0>]
 <a name="l174"></a>                </span><span class=cF1>SHL</span><span class=cF0>         </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFE>16</span><span class=cF0>
@@ -204,7 +204,7 @@ body {background-color:#000000;}
 <a name="l177"></a></u></span><span class=cF2>//The assembler doesn't support 16-bit very well.</span><span class=cF0>
 <a name="l178"></a>                </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>0xEA</span><span class=cF0>;   </span><span class=cF2>//JMP BOOT_RAM_BASE:0000</span><span class=cF0>
 <a name="l179"></a>                </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>BOOT_RAM_BASE</span><span class=cF0> / </span><span class=cFE>16</span><span class=cF0>;
-<a name="l180"></a></span><span class=cF2>//Continues here </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KStart16.CC.html#l1"><span class=cF4>::/Kernel/KStart16.CC</span></a><span class=cF0>
+<a name="l180"></a></span><span class=cF2>//Continues here </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.CC.html#l1"><span class=cF4>::/Kernel/KStart16.CC</span></a><span class=cF0>
 <a name="l181"></a></span><span class=cFD>BDVD_END</span><span class=cF0>::
 <a name="l182"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cFD>BDVD_END</span><span class=cF0>-</span><span class=cFD>BDVD_START</span><span class=cF0> &lt; </span><span class=cF3>DVD_BOOT_LOADER_SIZE</span><span class=cF0>
 <a name="l183"></a>}

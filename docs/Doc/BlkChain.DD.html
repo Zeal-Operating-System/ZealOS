@@ -30,7 +30,7 @@ body {background-color:#000000;}
 <a name="l3"></a>There was a technique on the Commodore 64 where disk blocks were chained together with a block pointer at the end of each 
 <a name="l4"></a>block.  This is far inferior to having a file allocation table, as in FAT32.
 <a name="l5"></a>
-<a name="l6"></a>The </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system does not allow files to grow because it only has an allocation bitmap and not a FAT table.   This 
+<a name="l6"></a>The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system does not allow files to grow because it only has an allocation bitmap and not a FAT table.   This 
 <a name="l7"></a>&quot;flaw&quot; is by design.  Terry intentionally crippled the operating system, making it a toy with the wisdom that this will 
 <a name="l8"></a>prevent commercialization and corruption.  The toy spirit of the operating system will be preserved going into the future.  Th
 <a name="l9"></a>e vision for this operating system was a modern Commodore 64, which was a fun toy.
@@ -42,19 +42,19 @@ body {background-color:#000000;}
 <a name="l15"></a>When doing large, whole-file operations, immediately memory fragmentation is a serious problem, but not so for allocations in 
 <a name="l16"></a>the range under a Meg (with occasional larger ones).
 <a name="l17"></a>
-<a name="l18"></a>The file compression scheme in ZealOS only works on whole file operations and the </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDoc.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0> format cannot have text tacked onto 
+<a name="l18"></a>The file compression scheme in ZealOS only works on whole file operations and the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDoc.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF0> format cannot have text tacked onto 
 <a name="l19"></a>the end, since binary data is at the end.
 <a name="l20"></a>
 <a name="l21"></a>Terry didn't want to spoil fun, so of course offered a way to get awesome performance that is, ironically, superior.  </span><span class=cF4>
-<a name="l22"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskCFile.CC.html#l151"><span class=cF4>FBlkRead</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskCFile.CC.html#l214"><span class=cF4>FBlkWrite</span></a><span class=cF0>() allow you to read a block offset from the start of a file.  Since files are all contiguous, this is 
-<a name="l23"></a>incredibly efficient.   You just have to declare the desired file size when you create it with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskCFile.CC.html#l9"><span class=cF4>FOpen</span></a><span class=cF0>() and cannot change it.    
-<a name="l24"></a>See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/DataBase.CC.html#l1"><span class=cF4>::/Demo/Disk/DataBase.CC</span></a><span class=cF0>.
+<a name="l22"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskCFile.CC.html#l151"><span class=cF4>FBlkRead</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskCFile.CC.html#l214"><span class=cF4>FBlkWrite</span></a><span class=cF0>() allow you to read a block offset from the start of a file.  Since files are all contiguous, this is 
+<a name="l23"></a>incredibly efficient.   You just have to declare the desired file size when you create it with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskCFile.CC.html#l9"><span class=cF4>FOpen</span></a><span class=cF0>() and cannot change it.    
+<a name="l24"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/DataBase.CC.html#l1"><span class=cF4>::/Demo/Disk/DataBase.CC</span></a><span class=cF0>.
 <a name="l25"></a>
-<a name="l26"></a>If you like, you are encouraged to to do raw </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskBlk.CC.html#l37"><span class=cF4>BlkRead</span></a><span class=cF0>() and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskBlk.CC.html#l87"><span class=cF4>BlkWrite</span></a><span class=cF0>() directly on a drive.  Just get a pointer to a </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3340"><span class=cF4>CDrive</span></a><span class=cF0> 
-<a name="l27"></a>with </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l211"><span class=cF4>Letter2Drive</span></a><span class=cF0>() and you are on your way!    Your computer is supposed to be a fun toy!  You can make an entire partition 
+<a name="l26"></a>If you like, you are encouraged to to do raw </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlk.CC.html#l37"><span class=cF4>BlkRead</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskBlk.CC.html#l87"><span class=cF4>BlkWrite</span></a><span class=cF0>() directly on a drive.  Just get a pointer to a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3363"><span class=cF4>CDrive</span></a><span class=cF0> 
+<a name="l27"></a>with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l211"><span class=cF4>Letter2Drive</span></a><span class=cF0>() and you are on your way!    Your computer is supposed to be a fun toy!  You can make an entire partition 
 <a name="l28"></a>used for a database, or invent a file system.
 <a name="l29"></a>
-<a name="l30"></a>On the whole, the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system with its whole-file-only limitation bring beautiful harmony.   It beautifully captures 
+<a name="l30"></a>On the whole, the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file system with its whole-file-only limitation bring beautiful harmony.   It beautifully captures 
 <a name="l31"></a>the spirit of ZealOS with simplicity and, ironic speed, since contiguous is fastest.
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF8>

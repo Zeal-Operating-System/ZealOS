@@ -137,7 +137,7 @@ body {background-color:#000000;}
 <a name="l110"></a>}
 <a name="l111"></a>
 <a name="l112"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SpriteScreenInit</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0>)
-<a name="l113"></a>{ </span><span class=cF2>//Uses </span><a href="https://tomawezome.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l113"></a>{ </span><span class=cF2>//Uses </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Lectures/FixedPoint.CC.html#l1"><span class=cF4>fixed-point</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l114"></a>    </span><span class=cF9>I64</span><span class=cF0>             xx, yy, old_pen_width = dc-&gt;thick;
 <a name="l115"></a>    </span><span class=cF9>CColorROPU32</span><span class=cF0>    old_color = dc-&gt;color;
 <a name="l116"></a>
@@ -1018,7 +1018,7 @@ body {background-color:#000000;}
 <a name="l991"></a>    </span><span class=cF9>CDC</span><span class=cF0>             *dc = </span><span class=cF5>DCAlias</span><span class=cF0>(, </span><span class=cF5>Fs</span><span class=cF0>), *dc2 = </span><span class=cF5>DCAlias</span><span class=cF0>(, </span><span class=cFB>sys_winmgr_task</span><span class=cF0>), *dc3;
 <a name="l992"></a>    </span><span class=cF1>U8</span><span class=cF0>              *old_task_title = </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title);
 <a name="l993"></a>
-<a name="l994"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l994"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l995"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
 <a name="l996"></a>    </span><span class=cF5>Refresh</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l997"></a>    dc2-&gt;flags |= </span><span class=cF3>DCF_ON_TOP</span><span class=cF0>;

@@ -108,7 +108,7 @@ body {background-color:#000000;}
 <a name="l81"></a>        </span><span class=cF1>RET</span><span class=cF0>
 <a name="l82"></a>
 <a name="l83"></a></span><span class=cF2>//************************************</span><span class=cF0>
-<a name="l84"></a></span><span class=cFD>SYS_RAM_REBOOT</span><span class=cF0>:: </span><span class=cF2>//This gets copied high.  </span><a href="https://tomawezome.github.io/ZealOS/System/Boot/BootRAM.CC.html#l43"><span class=cF4>SYS_RAM_REBOOT</span></a><span class=cF0>
+<a name="l84"></a></span><span class=cFD>SYS_RAM_REBOOT</span><span class=cF0>:: </span><span class=cF2>//This gets copied high.  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootRAM.CC.html#l43"><span class=cF4>SYS_RAM_REBOOT</span></a><span class=cF0>
 <a name="l85"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF9>CGDT</span><span class=cF0>.ds         </span><span class=cF2>//stack seg</span><span class=cF0>
 <a name="l86"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF3>BOOT_RAM_LIMIT</span><span class=cF0>  </span><span class=cF2>//stack</span><span class=cF0>
 <a name="l87"></a>        </span><span class=cF1>PUSH</span><span class=cF0>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>               </span><span class=cF2>//flags</span><span class=cF0>

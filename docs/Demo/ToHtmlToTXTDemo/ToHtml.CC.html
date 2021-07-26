@@ -27,7 +27,7 @@ body {background-color:#000000;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Conversion&quot;</span><span class=cF0>
 <a name="l2"></a>
-<a name="l3"></a></span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Doc/Credits.DD.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l3"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Credits.DD.html#l1"><span class=cF4>::/Doc/Credits.DD</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l4"></a>
 <a name="l5"></a>#</span><span class=cF1>define</span><span class=cF0> DOCET_UNDEF_COLOR           </span><span class=cFE>0x100000000</span><span class=cF0>
 <a name="l6"></a>#</span><span class=cF1>define</span><span class=cF0> DOCET_LINK_UNDERLINE        </span><span class=cFE>0x200000000</span><span class=cF0>
@@ -127,7 +127,7 @@ body {background-color:#000000;}
 <a name="l100"></a>        
 <a name="l101"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>st = ExtChange(filename, &quot;html&quot;);</span><span class=cF0>
 <a name="l102"></a>        </span><span class=cF1>if</span><span class=cF0> (st2 &amp;&amp; </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>st2</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>3</span><span class=cF0> &amp;&amp; !</span><span class=cF5>StrNCompare</span><span class=cF7>(</span><span class=cF0>st2 + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;:/&quot;</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF7>)</span><span class=cF0>)
-<a name="l103"></a>            res = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;https://tomawezome.github.io/ZealOS/%s#l%d&quot;</span><span class=cF0>, st2 + </span><span class=cFE>3</span><span class=cF0>, line_num);
+<a name="l103"></a>            res = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;https://zeal-operating-system.github.io/ZealOS/%s#l%d&quot;</span><span class=cF0>, st2 + </span><span class=cFE>3</span><span class=cF0>, line_num);
 <a name="l104"></a>        </span><span class=cF5>Free</span><span class=cF0>(st1);
 <a name="l105"></a>        </span><span class=cF5>Free</span><span class=cF0>(st2);
 <a name="l106"></a>    </span><span class=cF7>}</span><span class=cF0>
@@ -206,7 +206,7 @@ body {background-color:#000000;}
 <a name="l179"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CDoc</span><span class=cF0> *Doc2Html(</span><span class=cF9>CDoc</span><span class=cF0> *doc_in, </span><span class=cF1>U8</span><span class=cF0> *html_header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *body_header=</span><span class=cF3>NULL</span><span class=cF0>, 
 <a name="l180"></a>                      </span><span class=cF1>U8</span><span class=cF0> *body_footer=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *html_footer=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> line_anchors=</span><span class=cF3>TRUE</span><span class=cF0>, 
 <a name="l181"></a>                      </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*link_convert</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *link_st</span><span class=cF7>)</span><span class=cF0>=&amp;TOSLinkConvert1, </span><span class=cF1>Bool</span><span class=cF0> line_nums=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l182"></a>{</span><span class=cF2>//Convert </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2>doc to HTML file.</span><span class=cF0>
+<a name="l182"></a>{</span><span class=cF2>//Convert </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2>doc to HTML file.</span><span class=cF0>
 <a name="l183"></a>    </span><span class=cF9>CDocEntry</span><span class=cF0>   *doc_e, *style, *doc_e2;
 <a name="l184"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, y, old_y = </span><span class=cF3>I64_MIN</span><span class=cF0>, col, old_u32_attr = DOCET_UNDEF_COLOR, old_attr, digits;
 <a name="l185"></a>    </span><span class=cF9>U32</span><span class=cF0>         *hl, *src;
@@ -427,12 +427,12 @@ body {background-color:#000000;}
 <a name="l400"></a>                 </span><span class=cF1>U8</span><span class=cF0> *body_header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *body_footer=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *html_footer=</span><span class=cF3>NULL</span><span class=cF0>, 
 <a name="l401"></a>                 </span><span class=cF9>I64</span><span class=cF0> width=</span><span class=cFE>128</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> line_anchors=</span><span class=cF3>TRUE</span><span class=cF0>, 
 <a name="l402"></a>                 </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF7>(</span><span class=cF0>*link_convert</span><span class=cF7>)(</span><span class=cF1>U8</span><span class=cF0> *link_st</span><span class=cF7>)</span><span class=cF0>=&amp;TOSLinkConvert1, </span><span class=cF1>Bool</span><span class=cF0> line_nums=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l403"></a>{</span><span class=cF2>//Convert </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2>file to HTML.</span><span class=cF0>
+<a name="l403"></a>{</span><span class=cF2>//Convert </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2>file to HTML.</span><span class=cF0>
 <a name="l404"></a></span><span class=cF2>//Supply your own link_convert routine.</span><span class=cF0>
 <a name="l405"></a>    </span><span class=cF1>U8</span><span class=cF0>   *in_name, *out_name;
 <a name="l406"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc_in, *doc_out;
 <a name="l407"></a>
-<a name="l408"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l408"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l409"></a>    </span><span class=cF5>WinHorz</span><span class=cF0>(</span><span class=cFE>1</span><span class=cF0>, width - </span><span class=cFE>2</span><span class=cF0>); </span><span class=cF2>//Sets doc width for word wrap.</span><span class=cF0>
 <a name="l410"></a>
 <a name="l411"></a>    in_name=</span><span class=cF5>ExtDefault</span><span class=cF0>(_in_name, </span><span class=cF6>&quot;CC&quot;</span><span class=cF0>);

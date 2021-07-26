@@ -115,7 +115,7 @@ body {background-color:#000000;}
 <a name="l88"></a>
 <a name="l89"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Install;File/Cmd Line (Typically);Cmd Line (Typically);&quot;</span><span class=cF0>
 <a name="l90"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Mount2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> boot_drive_let, </span><span class=cF9>CDoc</span><span class=cF0> *_doc, </span><span class=cF1>Bool</span><span class=cF0> _caller_is_prtdisk)
-<a name="l91"></a>{</span><span class=cF2>//If _doc, called by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF2> else called by </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l91"></a>{</span><span class=cF2>//If _doc, called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF2> else called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l92"></a>    </span><span class=cF9>I64</span><span class=cF0>      count, total = </span><span class=cFE>0</span><span class=cF0>, num_hints, drv_let, type, unit, prt_num, port = -</span><span class=cFE>1</span><span class=cF0>;
 <a name="l93"></a>    </span><span class=cF1>U8</span><span class=cF0>       blks_buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], addr_buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], port_str[</span><span class=cF3>STR_LEN</span><span class=cF0>],
 <a name="l94"></a>            *filename = </span><span class=cF3>NULL</span><span class=cF0>, *filename2 = </span><span class=cF3>NULL</span><span class=cF0>, res = </span><span class=cFE>0</span><span class=cF0>;
@@ -143,12 +143,12 @@ body {background-color:#000000;}
 <a name="l116"></a>        {
 <a name="l117"></a>            whole_drive = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l118"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc)
-<a name="l119"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l119"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
 <a name="l120"></a>                doc = _doc;
 <a name="l121"></a>                make_free = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l122"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l123"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l124"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l124"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l125"></a>                doc = </span><span class=cF5>DocNew</span><span class=cF0>;
 <a name="l126"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;CBlkDev *bd;\n&quot;</span><span class=cF0>);
 <a name="l127"></a>                make_free = </span><span class=cF3>TRUE</span><span class=cF0>;
@@ -174,7 +174,7 @@ body {background-color:#000000;}
 <a name="l147"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
 <a name="l148"></a>                    num_hints = </span><span class=cF5>SATARep</span><span class=cF0>;
 <a name="l149"></a>                    </span><span class=cF1>if</span><span class=cF0> (type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; boot_drive_let)
-<a name="l150"></a>                        </span><span class=cF6>&quot;&lt;ENTER&gt; to use booted CD/DVD\n&quot;</span><span class=cF0>; </span><span class=cF2>//Only </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l150"></a>                        </span><span class=cF6>&quot;&lt;ENTER&gt; to use booted CD/DVD\n&quot;</span><span class=cF0>; </span><span class=cF2>//Only </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
 <a name="l151"></a>                    </span><span class=cF1>do</span><span class=cF0>
 <a name="l152"></a>                    {
 <a name="l153"></a>                        </span><span class=cF1>if</span><span class=cF0> (num_hints)
@@ -218,7 +218,7 @@ body {background-color:#000000;}
 <a name="l191"></a>                    </span><span class=cF1>if</span><span class=cF0> (type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; !*port_str &amp;&amp; _doc)
 <a name="l192"></a>                    {
 <a name="l193"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;AHCIBootDVDProbeAll(bd);\n\&quot;;\n&quot;</span><span class=cF0>);
-<a name="l194"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;AHCIBootDVDProbeAll(bd);\n&quot;</span><span class=cF0>); </span><span class=cF2>//Only </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l194"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;AHCIBootDVDProbeAll(bd);\n&quot;</span><span class=cF0>); </span><span class=cF2>//Only </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
 <a name="l195"></a>
 <a name="l196"></a>                        </span><span class=cF1>if</span><span class=cF0> (drv_let == boot_drive_let)
 <a name="l197"></a>                            make_free = </span><span class=cF3>TRUE</span><span class=cF0>;
@@ -232,10 +232,10 @@ body {background-color:#000000;}
 <a name="l205"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l206"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;BlkDevAdd(bd, 0x%0X, %d, %d);\n\&quot;;\n&quot;</span><span class=cF0>, prt_num, whole_drive, make_free);
 <a name="l207"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;BlkDevAdd(bd, 0x%0X, %d, %d);\n&quot;</span><span class=cF0>, prt_num, whole_drive, make_free);
-<a name="l208"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc) </span><span class=cF2>//Called by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l208"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc) </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
 <a name="l209"></a>                count++;
 <a name="l210"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l211"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l211"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l235"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
 <a name="l212"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>count = </span><span class=cF5>ExeDoc</span><span class=cF0>(doc)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; whole_drive)
 <a name="l213"></a>                {
 <a name="l214"></a>                    </span><span class=cF1>if</span><span class=cF0> (_caller_is_prtdisk)
@@ -251,7 +251,7 @@ body {background-color:#000000;}
 <a name="l224"></a>        }
 <a name="l225"></a>        total += count;
 <a name="l226"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l227"></a>    </span><span class=cF1>while</span><span class=cF0> (count &amp;&amp; !_caller_is_prtdisk || !total &amp;&amp; _doc); </span><span class=cF2>//At least 1 if Called by </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l227"></a>    </span><span class=cF1>while</span><span class=cF0> (count &amp;&amp; !_caller_is_prtdisk || !total &amp;&amp; _doc); </span><span class=cF2>//At least 1 if Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
 <a name="l228"></a>
 <a name="l229"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename);
 <a name="l230"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename2);
@@ -260,7 +260,7 @@ body {background-color:#000000;}
 <a name="l233"></a>}
 <a name="l234"></a>
 <a name="l235"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Mount</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> caller_is_prtdisk=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l236"></a>{</span><span class=cF2>//Mount drives. Called from </span><a href="https://tomawezome.github.io/ZealOS/System/BlkDev/DiskPart.CC.html#l43"><span class=cF4>DiskPart(Mount)</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l236"></a>{</span><span class=cF2>//Mount drives. Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/DiskPart.CC.html#l43"><span class=cF4>DiskPart(Mount)</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l237"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Mount2</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, caller_is_prtdisk);
 <a name="l238"></a>}
 <a name="l239"></a>
@@ -272,7 +272,7 @@ body {background-color:#000000;}
 <a name="l245"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>MountFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename)
 <a name="l246"></a>{</span><span class=cF2>//Mount ISO.C file.</span><span class=cF0>
 <a name="l247"></a>    </span><span class=cF1>U8</span><span class=cF0>      *filename2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(filename, </span><span class=cF6>&quot;ISO.C&quot;</span><span class=cF0>), *filename3 = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename2);
-<a name="l248"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *drive = </span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF5>DriveNextFreeLet</span><span class=cF7>(</span><span class=cF6>'M'</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//First </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3244"><span class=cF4>BDT_ISO_FILE_READ</span></a><span class=cF0>
+<a name="l248"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *drive = </span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF5>DriveNextFreeLet</span><span class=cF7>(</span><span class=cF6>'M'</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//First </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3267"><span class=cF4>BDT_ISO_FILE_READ</span></a><span class=cF0>
 <a name="l249"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = </span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(drive-&gt;drv_let, </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>);
 <a name="l250"></a>
 <a name="l251"></a>    bd-&gt;drv_offset = </span><span class=cFE>19</span><span class=cF0> &lt;&lt; </span><span class=cFE>2</span><span class=cF0> + (</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + </span><span class=cF3>DVD_BOOT_LOADER_SIZE</span><span class=cF0>) / </span><span class=cF3>BLK_SIZE</span><span class=cF0>;

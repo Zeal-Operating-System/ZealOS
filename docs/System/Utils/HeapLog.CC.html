@@ -108,7 +108,7 @@ body {background-color:#000000;}
 <a name="l81"></a>}
 <a name="l82"></a>
 <a name="l83"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>HeapLog</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> val=</span><span class=cF3>ON</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l84"></a>{</span><span class=cF2>//Turn on.  Collect data.</span><span class=cF0>  </span><span class=cF2>Call </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l139"><span class=cF4>HeapLogAddrRep</span></a><span class=cF2>() or  </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l174"><span class=cF4>HeapLogSizeRep</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l84"></a>{</span><span class=cF2>//Turn on.  Collect data.</span><span class=cF0>  </span><span class=cF2>Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l139"><span class=cF4>HeapLogAddrRep</span></a><span class=cF2>() or  </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l174"><span class=cF4>HeapLogSizeRep</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l85"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l86"></a>
 <a name="l87"></a>    </span><span class=cF1>if</span><span class=cF0> (val)
@@ -164,7 +164,7 @@ body {background-color:#000000;}
 <a name="l137"></a>}
 <a name="l138"></a>
 <a name="l139"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HeapLogAddrRep</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> leave_it=</span><span class=cF3>OFF</span><span class=cF0>)
-<a name="l140"></a>{</span><span class=cF2>//Call </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
+<a name="l140"></a>{</span><span class=cF2>//Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
 <a name="l141"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, j, total = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l142"></a>    </span><span class=cF9>CHeapLog</span><span class=cF0>    *tmphl, hl;
 <a name="l143"></a>
@@ -199,7 +199,7 @@ body {background-color:#000000;}
 <a name="l172"></a>}
 <a name="l173"></a>
 <a name="l174"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>HeapLogSizeRep</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> leave_it=</span><span class=cF3>OFF</span><span class=cF0>)
-<a name="l175"></a>{</span><span class=cF2>//Call </span><a href="https://tomawezome.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
+<a name="l175"></a>{</span><span class=cF2>//Call </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF2>() first and collect data.</span><span class=cF0>
 <a name="l176"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, j, k, total = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l177"></a>    </span><span class=cF9>CHeapLog</span><span class=cF0>        *tmphla, hla, *tmphls, *tmphls1;
 <a name="l178"></a>    </span><span class=cF9>CHeapLogHash</span><span class=cF0>    *size_head;

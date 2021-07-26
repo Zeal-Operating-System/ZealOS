@@ -47,7 +47,7 @@ body {background-color:#000000;}
 <a name="l20"></a>        </span><span class=cF1>if</span><span class=cF0> (dc-&gt;nearest_dist &lt;= best_dist)
 <a name="l21"></a>        {
 <a name="l22"></a>            </span><span class=cF2>//Distance to nearest pix, squared</span><span class=cF0>
-<a name="l23"></a>            </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelB.HH.html#l84"><span class=cF4>Sqrt</span></a><span class=cF2>() is expensive so we work with distance squared.</span><span class=cF0>
+<a name="l23"></a>            </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l84"><span class=cF4>Sqrt</span></a><span class=cF2>() is expensive so we work with distance squared.</span><span class=cF0>
 <a name="l24"></a>            best_dist = dc-&gt;nearest_dist;
 <a name="l25"></a>            best_apple = i;
 <a name="l26"></a>        }
@@ -70,7 +70,7 @@ body {background-color:#000000;}
 <a name="l43"></a>        x[i] = </span><span class=cF5>RandU16</span><span class=cF0> % </span><span class=cF3>GR_WIDTH</span><span class=cF0>;
 <a name="l44"></a>        y[i] = </span><span class=cF5>RandU16</span><span class=cF0> % (</span><span class=cF3>GR_HEIGHT</span><span class=cF0> - </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cFE>3</span><span class=cF0>) + </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cFE>3</span><span class=cF0>;
 <a name="l45"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l46"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
+<a name="l46"></a>    </span><span class=cF5>SettingsPush</span><span class=cF0>; </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/TaskSettings.CC.html#l3"><span class=cF4>SettingsPush</span></a><span class=cF0>
 <a name="l47"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
 <a name="l48"></a>    </span><span class=cF5>DocCursor</span><span class=cF0>;
 <a name="l49"></a>    </span><span class=cF5>DocClear</span><span class=cF0>;
@@ -94,7 +94,7 @@ body {background-color:#000000;}
 <a name="l67"></a>            </span><span class=cF1>while</span><span class=cF0> (trigger);
 <a name="l68"></a>
 <a name="l69"></a>            </span><span class=cF2>//Use screen coordinates, not window (arg1,arg2)</span><span class=cF0>
-<a name="l70"></a>            </span><span class=cF2>//</span><a href="https://tomawezome.github.io/ZealOS/Kernel/KGlobals.CC.html#l25"><span class=cF4>mouse.pos.x</span></a><span class=cF2> and </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KGlobals.CC.html#l25"><span class=cF4>mouse.pos.y</span></a><span class=cF2> are global vars updated</span><span class=cF0>
+<a name="l70"></a>            </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l25"><span class=cF4>mouse.pos.x</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l25"><span class=cF4>mouse.pos.y</span></a><span class=cF2> are global vars updated</span><span class=cF0>
 <a name="l71"></a>            </span><span class=cF2>//updated by the window mgr to hold the</span><span class=cF0>
 <a name="l72"></a>            </span><span class=cF2>//screen coordinates of the mouse.</span><span class=cF0>
 <a name="l73"></a>            delta_x = x[cur_apple] - </span><span class=cFB>mouse</span><span class=cF0>.pos.x;

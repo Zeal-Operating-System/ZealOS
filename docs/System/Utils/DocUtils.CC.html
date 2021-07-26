@@ -52,7 +52,7 @@ body {background-color:#000000;}
 <a name="l25"></a>}
 <a name="l26"></a>
 <a name="l27"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>CollapseFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF1>Bool</span><span class=cF0> collapse=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l28"></a>{</span><span class=cF2>//Collapse </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> trees in one file.</span><span class=cF0>
+<a name="l28"></a>{</span><span class=cF2>//Collapse </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> trees in one file.</span><span class=cF0>
 <a name="l29"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocRead</span><span class=cF0>(filename, </span><span class=cF3>DOCF_NO_CURSOR</span><span class=cF0>);
 <a name="l30"></a>
 <a name="l31"></a>    </span><span class=cF5>DocCollapse</span><span class=cF0>(collapse, doc);
@@ -60,7 +60,7 @@ body {background-color:#000000;}
 <a name="l33"></a>    </span><span class=cF5>DocDel</span><span class=cF0>(doc);
 <a name="l34"></a>}
 <a name="l35"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Collapse</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask=</span><span class=cF6>&quot;*&quot;</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> collapse=</span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l36"></a>{</span><span class=cF2>//Collapse </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> trees.</span><span class=cF0>
+<a name="l36"></a>{</span><span class=cF2>//Collapse </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> trees.</span><span class=cF0>
 <a name="l37"></a>    </span><span class=cF9>I64</span><span class=cF0> fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l38"></a>
 <a name="l39"></a>    </span><span class=cF5>FlagsScan</span><span class=cF0>(&amp;fuf_flags, </span><span class=cF5>Define</span><span class=cF7>(</span><span class=cF6>&quot;ST_FILE_UTIL_FLAGS&quot;</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>&quot;+r+f+F+$+O&quot;</span><span class=cF0>);
@@ -170,7 +170,7 @@ body {background-color:#000000;}
 <a name="l143"></a>    </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l144"></a>}
 <a name="l145"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>DocOpt</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *files_find_mask=</span><span class=cF6>&quot;*&quot;</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *fu_flags=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l146"></a>{</span><span class=cF2>//Optimize </span><a href="https://tomawezome.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> files, eliminating aux_str's and .Z's.</span><span class=cF0>
+<a name="l146"></a>{</span><span class=cF2>//Optimize </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> files, eliminating aux_str's and .Z's.</span><span class=cF0>
 <a name="l147"></a></span><span class=cF2>//+R flag for aggressively risky.</span><span class=cF0>
 <a name="l148"></a>    </span><span class=cF9>I64</span><span class=cF0> fuf_flags = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l149"></a>

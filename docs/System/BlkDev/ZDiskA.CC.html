@@ -30,7 +30,7 @@ body {background-color:#000000;}
 <a name="l3"></a>{</span><span class=cF2>//Dump disk block. Optionally, write.</span><span class=cF0>
 <a name="l4"></a></span><span class=cF2>//If you set write to TRUE, the block will</span><span class=cF0>
 <a name="l5"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
-<a name="l6"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/DiskRaw.CC.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l6"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/DiskRaw.CC.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l7"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l8"></a>
 <a name="l9"></a>    </span><span class=cF5>BlkRead</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, buf, blk, </span><span class=cFE>1</span><span class=cF0>);
@@ -52,8 +52,8 @@ body {background-color:#000000;}
 <a name="l25"></a>{</span><span class=cF2>//Dump disk clus. Optionally, write.</span><span class=cF0>
 <a name="l26"></a></span><span class=cF2>//If you set write to TRUE, the clus will</span><span class=cF0>
 <a name="l27"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
-<a name="l28"></a>    </span><span class=cF2>//See </span><a href="https://tomawezome.github.io/ZealOS/Demo/Disk/DiskRaw.CC.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l29"></a>    </span><span class=cF2>//Do </span><a href="https://tomawezome.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l120"><span class=cF4>Dir</span></a><span class=cF2>(&quot;*&quot;,TRUE); to get clus numbers of files.</span><span class=cF0>
+<a name="l28"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/DiskRaw.CC.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF2>//Do </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l120"><span class=cF4>Dir</span></a><span class=cF2>(&quot;*&quot;,TRUE); to get clus numbers of files.</span><span class=cF0>
 <a name="l30"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l31"></a>
 <a name="l32"></a>    c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, c, num);
@@ -309,7 +309,7 @@ body {background-color:#000000;}
 <a name="l282"></a></span><span class=cF2>Default lists attributes.</span><span class=cF0>
 <a name="l283"></a></span><span class=cF2>attr: &quot;+?&quot; =show current</span><span class=cF0>
 <a name="l284"></a></span><span class=cF2>&quot;+T&quot; =resident</span><span class=cF4>
-<a name="l285"></a></span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3147"><span class=cF4>RS_ATTR_READ_ONLY</span></a><span class=cF2>  </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KDefine.CC.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
+<a name="l285"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3170"><span class=cF4>RS_ATTR_READ_ONLY</span></a><span class=cF2>  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l187"><span class=cF4>ST_FILE_ATTRS</span></a><span class=cF0>
 <a name="l286"></a></span><span class=cF2>To Set DateL:</span><span class=cF0>
 <a name="l287"></a></span><span class=cF2>Touch(filename,&quot;&quot;,,datetime);</span><span class=cF0>
 <a name="l288"></a></span><span class=cF2>*/</span><span class=cF0>

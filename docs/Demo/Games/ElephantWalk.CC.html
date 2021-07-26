@@ -61,7 +61,7 @@ body {background-color:#000000;}
 <a name="l34"></a></span><span class=cF1>U0</span><span class=cF0> ElephantWalk()
 <a name="l35"></a>{
 <a name="l36"></a>    </span><span class=cF9>I64</span><span class=cF0> sc,
-<a name="l37"></a>        x = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, y = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF2>//Fs is current </span><a href="https://tomawezome.github.io/ZealOS/Kernel/KernelA.HH.html#l3941"><span class=cF4>CTask</span></a><span class=cF2> struct.</span><span class=cF0>
+<a name="l37"></a>        x = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_width &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, y = </span><span class=cF5>Fs</span><span class=cF0>-&gt;pix_height &gt;&gt; </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF2>//Fs is current </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3964"><span class=cF4>CTask</span></a><span class=cF2> struct.</span><span class=cF0>
 <a name="l38"></a>        x_last = x;
 <a name="l39"></a>
 <a name="l40"></a>    </span><span class=cF5>AutoComplete</span><span class=cF0>;
@@ -84,7 +84,7 @@ body {background-color:#000000;}
 <a name="l57"></a>        {
 <a name="l58"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
 <a name="l59"></a>                </span><span class=cF1>switch</span><span class=cF0> (sc.u8[</span><span class=cFE>0</span><span class=cF0>])
-<a name="l60"></a>                </span><span class=cF7>{</span><span class=cF2>//Scan code </span><a href="https://tomawezome.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>lowest byte</span></a><span class=cF0>
+<a name="l60"></a>                </span><span class=cF7>{</span><span class=cF2>//Scan code </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>lowest byte</span></a><span class=cF0>
 <a name="l61"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>:
 <a name="l62"></a>                        y -= </span><span class=cFE>32</span><span class=cF0>;
 <a name="l63"></a>                        </span><span class=cF1>if</span><span class=cF0> (y &lt; </span><span class=cFE>0</span><span class=cF0>)

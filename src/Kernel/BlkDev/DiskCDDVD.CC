@@ -186,11 +186,11 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 	bd2 = Letter2BlkDev(*in_name2);
 	while (bd2->lock_fwding)
 		bd2 = bd2->lock_fwding;  //If two blkdevs on same controller, use one lock
-	if ((bd2->type == BDT_ATA || bd2->type == BDT_ATAPI) && bd2->base0 == bd->base0)
-	{
-		PrintErr("Can't burn CD/DVD on same ATA controller as file.\n\n");
-		throw('BlkDev');
-	}
+//	if ((bd2->type == BDT_ATA || bd2->type == BDT_ATAPI) && bd2->base0 == bd->base0)
+//	{
+//		PrintErr("Can't burn CD/DVD on same ATA controller as file.\n\n");
+//		throw('BlkDev');
+//	}
 
 	bd->flags |= BDF_READ_ONLY_OVERRIDE;
 	BlkDevInit(bd);
@@ -228,31 +228,39 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 			buf = d->buf0;
 		while (d->in_buf <= d->out_buf)
 			Yield;
-		IDEATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
+//		IDEATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
+		AHCIAtapiBlksWrite(bd, buf, blk / spc, (n + spc - 1) / spc);
 		d->out_buf++;
 		count -= n;
 		blk += n;
 		progress1 += n;
 	}
-	IDEATAPISync(bd);
+//	IDEATAPISync(bd);
+	AHCIAtapiSync(bd);
 
 	progress1 = 0;
 	progress1_max = 2;
 	StrCopy(progress1_desc, "Closing");
 	for (i = 0; i < 2; i++)
 	{
-		IDEATAPIClose(bd, 0x100, i); //Close tracks
+//		IDEATAPIClose(bd, 0x100, i); //Close tracks
+		AHCIAtapiClose(bd, 0x100, i); //Close tracks
 		progress1++;
 	}
 
-	IDEATAPISync(bd);
+//	IDEATAPISync(bd);
+	AHCIAtapiSync(bd);
 
-	IDEATAPIClose(bd, 0x200); //close disk
-	IDEATAPISync(bd);
+//	IDEATAPIClose(bd, 0x200); //close disk
+	AHCIAtapiClose(bd, 0x200); //close disk
+//	IDEATAPISync(bd);
+	AHCIAtapiSync(bd);
 	if (media_type == MT_DVD)
 	{
-		IDEATAPIClose(bd, 0x300);
-		IDEATAPISync(bd);
+//		IDEATAPIClose(bd, 0x300);
+		AHCIAtapiClose(bd, 0x300);
+//		IDEATAPISync(bd);
+		AHCIAtapiSync(bd);
 	}
 
 	*progress1_desc = 0;

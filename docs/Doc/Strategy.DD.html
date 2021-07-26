@@ -37,7 +37,7 @@ body {background-color:#000000;}
 <a name="l10"></a>complexity.
 <a name="l11"></a>
 <a name="l12"></a>Linux and Windows are general purpose operating systems.    They attempt to do any task you want.  ZealOS cherry-picks tasks 
-<a name="l13"></a>and is designed to do the same things a C64 did.  This saves and order of magnitude complexity. For example, the </span><a href="https://tomawezome.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file 
+<a name="l13"></a>and is designed to do the same things a C64 did.  This saves and order of magnitude complexity. For example, the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/RedSea.DD.html#l1"><span class=cF4>RedSea</span></a><span class=cF0> file 
 <a name="l14"></a>system allocates just contiguous files -- you load and save whole files at once.    A benefit is this allows compression.  
 <a name="l15"></a>Also, ZealOS does not do multimedia.  In theory, memory will fragment with lots of big files.   The system would fall to 
 <a name="l16"></a>pieces with multimedia.
@@ -71,7 +71,7 @@ body {background-color:#000000;}
 <a name="l44"></a>
 <a name="l45"></a>* Whole files are processed almost exclusively.
 <a name="l46"></a>
-<a name="l47"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>One language</span></a><span class=cF0> and compiler for command-line, scripts, songs, automations and code.
+<a name="l47"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>One language</span></a><span class=cF0> and compiler for command-line, scripts, songs, automations and code.
 <a name="l48"></a>
 <a name="l49"></a>* One editor/word processor/browser for the command-line window, source code, documentation browser, dialog forms.
 <a name="l50"></a>
@@ -79,10 +79,10 @@ body {background-color:#000000;}
 <a name="l52"></a>
 <a name="l53"></a>* No distinction between </span><span class=cF2>thread</span><span class=cF0>, </span><span class=cF2>process</span><span class=cF0> or </span><span class=cF2>task</span><span class=cF0>.
 <a name="l54"></a>
-<a name="l55"></a>* The </span><a href="https://tomawezome.github.io/ZealOS/Kernel/Sched.CC.html#l1"><span class=cF4>Scheduler</span></a><span class=cF0> is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.   It's 
+<a name="l55"></a>* The </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Sched.CC.html#l1"><span class=cF4>Scheduler</span></a><span class=cF0> is for home systems.  It is not preemptiove.  Disk requests are not broken-up, so sharing is bad.   It's 
 <a name="l56"></a>wonderfully simple.
 <a name="l57"></a>
-<a name="l58"></a>* </span><a href="https://tomawezome.github.io/ZealOS/Doc/MultiCore.DD.html#l1"><span class=cF4>MultiCore</span></a><span class=cF0> is done </span><span class=cF2>master/slave</span><span class=cF0>, instead of </span><span class=cF2>SMP</span><span class=cF0>.  </span><span class=cF2>Core0</span><span class=cF0> applications explicitly assigns jobs.  Locks are present allowing 
+<a name="l58"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/MultiCore.DD.html#l1"><span class=cF4>MultiCore</span></a><span class=cF0> is done </span><span class=cF2>master/slave</span><span class=cF0>, instead of </span><span class=cF2>SMP</span><span class=cF0>.  </span><span class=cF2>Core0</span><span class=cF0> applications explicitly assigns jobs.  Locks are present allowing 
 <a name="l59"></a>multicore file, heap, and hardware access, though.
 <a name="l60"></a>
 <a name="l61"></a>* </span><span class=cF4><u>Sound</u></span><span class=cF0> has single-voice 8-bit signed MIDI-like samples.
@@ -91,9 +91,9 @@ body {background-color:#000000;}
 <a name="l64"></a>the command line or you run programs by </span><span class=cF2>#include</span><span class=cF0>ing them, the syms go in the table. If a sym is not found, the parent task's 
 <a name="l65"></a>table is checked.   The father of all tasks has the API syms you'll need waiting in it's table.  No need to </span><span class=cF2>#include</span><span class=cF0> headers.
 <a name="l66"></a>
-<a name="l67"></a>* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the </span><a href="https://tomawezome.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0>'s symbol 
+<a name="l67"></a>* No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0>'s symbol 
 <a name="l68"></a>system-wide global.
 <a name="l69"></a>
-<a name="l70"></a>* Sometimes, we </span><a href="https://tomawezome.github.io/ZealOS/Doc/CutCorners.DD.html#l1"><span class=cF4>cut corners</span></a><span class=cF0> in the interest of keeping the code beautiful.
+<a name="l70"></a>* Sometimes, we </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CutCorners.DD.html#l1"><span class=cF4>cut corners</span></a><span class=cF0> in the interest of keeping the code beautiful.
 </span></pre></body>
 </html>
