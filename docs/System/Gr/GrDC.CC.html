@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.10">
+<meta name="generator" content="ZealOS V0.11">
 <style type="text/css">
-body {background-color:#000000;}
-.cF0{color:#ffffff;background-color:#000000;}
-.cF1{color:#3465a4;background-color:#000000;}
-.cF2{color:#4e9a06;background-color:#000000;}
-.cF3{color:#06989a;background-color:#000000;}
-.cF4{color:#a24444;background-color:#000000;}
-.cF5{color:#75507b;background-color:#000000;}
-.cF6{color:#ce982f;background-color:#000000;}
-.cF7{color:#bcc0b9;background-color:#000000;}
-.cF8{color:#555753;background-color:#000000;}
-.cF9{color:#729fcf;background-color:#000000;}
-.cFA{color:#82bc49;background-color:#000000;}
-.cFB{color:#34e2e2;background-color:#000000;}
-.cFC{color:#ac3535;background-color:#000000;}
-.cFD{color:#ad7fa8;background-color:#000000;}
-.cFE{color:#fce94f;background-color:#000000;}
-.cFF{color:#000000;background-color:#000000;}
+body {background-color:#fef1f0;}
+.cF0{color:#000000;background-color:#fef1f0;}
+.cF1{color:#0148a4;background-color:#fef1f0;}
+.cF2{color:#3b7901;background-color:#fef1f0;}
+.cF3{color:#057c7e;background-color:#fef1f0;}
+.cF4{color:#bb2020;background-color:#fef1f0;}
+.cF5{color:#9e42ae;background-color:#fef1f0;}
+.cF6{color:#b57901;background-color:#fef1f0;}
+.cF7{color:#b2b6af;background-color:#fef1f0;}
+.cF8{color:#555753;background-color:#fef1f0;}
+.cF9{color:#678fbb;background-color:#fef1f0;}
+.cFA{color:#82bc49;background-color:#fef1f0;}
+.cFB{color:#0097a2;background-color:#fef1f0;}
+.cFC{color:#e26a6a;background-color:#fef1f0;}
+.cFD{color:#c671bc;background-color:#fef1f0;}
+.cFE{color:#c7ab00;background-color:#fef1f0;}
+.cFF{color:#fef1f0;background-color:#fef1f0;}
 </style>
 </head>
 <body>
@@ -189,7 +189,7 @@ body {background-color:#000000;}
 <a name="l162"></a>    </span><span class=cF5>Mat4x4IdentEqu</span><span class=cF0>(dc-&gt;r);
 <a name="l163"></a>    dc-&gt;r_norm          = </span><span class=cF3>GR_SCALE</span><span class=cF0>;
 <a name="l164"></a>    dc-&gt;flags          &amp;= ~(</span><span class=cF3>DCF_SYMMETRY</span><span class=cF0> | </span><span class=cF3>DCF_TRANSFORMATION</span><span class=cF0> | </span><span class=cF3>DCF_JUST_MIRROR</span><span class=cF0>);
-<a name="l165"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(dc-&gt;palette, </span><span class=cFB>gr_palette_std</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR48</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>COLORS_NUM</span><span class=cF0>);
+<a name="l165"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(dc-&gt;palette, </span><span class=cFB>gr32_palette_std</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR24</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>COLORS_NUM</span><span class=cF0>);
 <a name="l166"></a>}
 <a name="l167"></a>
 <a name="l168"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DCExtentsInit</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0> *dc=</span><span class=cF3>NULL</span><span class=cF0>)
@@ -346,7 +346,7 @@ body {background-color:#000000;}
 <a name="l319"></a>{</span><span class=cF2>//Stores device context to mem, perhaps, with compression.</span><span class=cF0>
 <a name="l320"></a>    </span><span class=cF1>U8</span><span class=cF0>      *res, *ptr, *body;
 <a name="l321"></a>    </span><span class=cF9>I64</span><span class=cF0>      body_size = dc-&gt;width_internal * dc-&gt;height, total_size, flags;
-<a name="l322"></a>    </span><span class=cF9>CBGR48</span><span class=cF0>   palette[</span><span class=cF3>COLORS_NUM</span><span class=cF0>];
+<a name="l322"></a>    </span><span class=cF9>CBGR24</span><span class=cF0>   palette[</span><span class=cF3>COLORS_NUM</span><span class=cF0>];
 <a name="l323"></a>
 <a name="l324"></a>    body = dc-&gt;body;
 <a name="l325"></a>
@@ -356,11 +356,11 @@ body {background-color:#000000;}
 <a name="l329"></a>    </span><span class=cF1>if</span><span class=cF0> (dcsf_flags &amp; </span><span class=cF3>DCSF_PALETTE_GET</span><span class=cF0>)
 <a name="l330"></a>        </span><span class=cF5>GrPaletteGet</span><span class=cF0>(palette);
 <a name="l331"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l332"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(palette, &amp;dc-&gt;palette, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR48</span><span class=cF7>)</span><span class=cF0>);
-<a name="l333"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MemCompare</span><span class=cF7>(</span><span class=cF0>palette, </span><span class=cFB>gr_palette_std</span><span class=cF0>, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR48</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
+<a name="l332"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(palette, &amp;dc-&gt;palette, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR24</span><span class=cF7>)</span><span class=cF0>);
+<a name="l333"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>MemCompare</span><span class=cF7>(</span><span class=cF0>palette, </span><span class=cFB>gr32_palette_std</span><span class=cF0>, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR24</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l334"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l335"></a>        flags |= </span><span class=cF3>DCF_PALETTE</span><span class=cF0>;
-<a name="l336"></a>        total_size += </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR48</span><span class=cF0>);
+<a name="l336"></a>        total_size += </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR24</span><span class=cF0>);
 <a name="l337"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l338"></a>
 <a name="l339"></a>    ptr = res = </span><span class=cF5>MAlloc</span><span class=cF0>(total_size);
@@ -373,8 +373,8 @@ body {background-color:#000000;}
 <a name="l346"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF0>) == </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CDC</span><span class=cF0>.palette)
 <a name="l347"></a>    </span><span class=cF1>if</span><span class=cF0> (flags &amp; </span><span class=cF3>DCF_PALETTE</span><span class=cF0>)
 <a name="l348"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l349"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(ptr, palette, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR48</span><span class=cF7>)</span><span class=cF0>);
-<a name="l350"></a>        ptr += </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR48</span><span class=cF0>);
+<a name="l349"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(ptr, palette, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR24</span><span class=cF7>)</span><span class=cF0>);
+<a name="l350"></a>        ptr += </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR24</span><span class=cF0>);
 <a name="l351"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l352"></a>
 <a name="l353"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(ptr, body, body_size);
@@ -402,11 +402,11 @@ body {background-color:#000000;}
 <a name="l375"></a>
 <a name="l376"></a>    </span><span class=cF1>if</span><span class=cF0> (res-&gt;flags &amp; </span><span class=cF3>DCF_PALETTE</span><span class=cF0>)
 <a name="l377"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l378"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;res-&gt;palette, ptr, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR48</span><span class=cF7>)</span><span class=cF0>);
-<a name="l379"></a>        ptr += </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR48</span><span class=cF0>);
+<a name="l378"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;res-&gt;palette, ptr, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR24</span><span class=cF7>)</span><span class=cF0>);
+<a name="l379"></a>        ptr += </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBGR24</span><span class=cF0>);
 <a name="l380"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l381"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l382"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;res-&gt;palette, </span><span class=cFB>gr_palette_std</span><span class=cF0>, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR48</span><span class=cF7>)</span><span class=cF0>);
+<a name="l382"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;res-&gt;palette, </span><span class=cFB>gr32_palette_std</span><span class=cF0>, </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR24</span><span class=cF7>)</span><span class=cF0>);
 <a name="l383"></a>
 <a name="l384"></a>    body_size = res-&gt;width_internal * res-&gt;height;
 <a name="l385"></a>    res-&gt;body           = </span><span class=cF5>MAlloc</span><span class=cF0>(body_size, task);
@@ -426,7 +426,7 @@ body {background-color:#000000;}
 <a name="l399"></a>#</span><span class=cF1>help_file</span><span class=cF0> </span><span class=cF6>&quot;::/Doc/GRFiles&quot;</span><span class=cF0>
 <a name="l400"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics/Device Contexts;Graphics/GR Files&quot;</span><span class=cF0>
 <a name="l401"></a>
-<a name="l402"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GR_FILE_MAX</span><span class=cF0>     (</span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CDC</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CDC</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR48</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>GR_WIDTH</span><span class=cF0> * </span><span class=cF3>GR_HEIGHT</span><span class=cF0>)
+<a name="l402"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GR_FILE_MAX</span><span class=cF0>     (</span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CDC</span><span class=cF0>.</span><span class=cF1>end</span><span class=cF7>)</span><span class=cF0> - </span><span class=cF1>offset</span><span class=cF7>(</span><span class=cF9>CDC</span><span class=cF0>.</span><span class=cF1>start</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>COLORS_NUM</span><span class=cF0> * </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBGR24</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF3>GR_WIDTH</span><span class=cF0> * </span><span class=cF3>GR_HEIGHT</span><span class=cF0>)
 <a name="l403"></a>
 <a name="l404"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>GRWrite</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>CDC</span><span class=cF0> *dc, </span><span class=cF9>I64</span><span class=cF0> dcsf_flags=</span><span class=cF3>NONE</span><span class=cF0>)
 <a name="l405"></a>{</span><span class=cF2>//ZealOS GR File.</span><span class=cF0>

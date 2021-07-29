@@ -18,6 +18,7 @@
 
 #define E1000_REG_CTRL	0x0000
 #define E1000_REG_EERD	0x0014	// EEPROM Read
+#define E1000_REG_ICR	0x00C0  // Interrupt Cause Read
 #define E1000_REG_IMS	0x00D0
 #define E1000_REG_RCTL	0x0100
 #define E1000_REG_TCTL	0x0400
@@ -78,6 +79,74 @@
 
 #define E1000_TCTLF_EN	(1 << E1000_TCTLf_EN)
 #define E1000_TCTLF_PSP	(1 << E1000_TCTLf_PSP)
+
+#define E1000_RDESC_STATUSf_EOP	1 // End of Packet: Last Descriptor for an incoming packet
+
+#define E1000_RDESC_STATUSF_EOP	(1 << E1000_RDESC_STATUSf_EOP)
+
+#define E1000_EERDf_DONE	4
+
+#define E1000_EERDF_DONE	(1 << E1000_EERDf_DONE)
+
+#define E1000_TDESC_CMDf_EOP	0 // End of Packet: Last Descriptor making up the packet
+#define E1000_TDESC_CMDf_IFCS	1 // Insert FCS/CRC field in Ethernet packets
+#define E1000_TDESC_CMDf_RS		3 // Report Status: Ethernet controller needs to report status info
+
+#define E1000_TDESC_CMDF_EOP	(1 << E1000_TDESC_CMDf_EOP)
+#define E1000_TDESC_CMDF_IFCS	(1 << E1000_TDESC_CMDf_IFCS)
+#define E1000_TDESC_CMDF_RS		(1 << E1000_TDESC_CMDf_RS)
+
+#define E1000_TDESC_STATUSf_DD	0 // Descriptor Done: descriptor is finished and written-back
+#define E1000_TDESC_STATUSf_EC	1 // Excess Collisions: packet hit too many collisions; not transmitted.
+#define E1000_TDESC_STATUSf_LC	2 // Late Collision: late collision occurred (only for half-duplex mode)
+#define E1000_TDESC_STATUSf_TU	3 // Transmit Underrun
+
+#define E1000_TDESC_STATUSF_DD	(1 << E1000_TDESC_STATUSf_DD)
+#define E1000_TDESC_STATUSF_EC	(1 << E1000_TDESC_STATUSf_EC)
+#define E1000_TDESC_STATUSF_LC	(1 << E1000_TDESC_STATUSf_LC)
+#define E1000_TDESC_STATUSF_TU	(1 << E1000_TDESC_STATUSf_TU)
+
+#define E1000_ICRf_TXDW		0 // Transmit Descriptor Written Back
+#define E1000_ICRf_TXQE		1 // Transmit Queue Empty
+#define E1000_ICRf_LSC		2 // Link Status Change
+#define E1000_ICRf_RXDMT	4 // Receive Descriptor Minimum Threshold Reached
+#define E1000_ICRf_RXO		6 // Receive Data FIFO Overrun
+#define E1000_ICRf_RXT		7 // Receive Timer Interrupt
+
+#define E1000_ICRF_TXDW		(1 << E1000_ICRf_TXDW)
+#define E1000_ICRF_TXQE		(1 << E1000_ICRf_TXQE)
+#define E1000_ICRF_LSC		(1 << E1000_ICRf_LSC)
+#define E1000_ICRF_RXDMT	(1 << E1000_ICRf_RXDMT)
+#define E1000_ICRF_RXO		(1 << E1000_ICRf_RXO)
+#define E1000_ICRF_RXT		(1 << E1000_ICRf_RXT)
+
+#define E1000_IMSf_TXDW		0
+#define E1000_IMSf_TXQE		1
+#define E1000_IMSf_LSC		2
+#define E1000_IMSf_RXSEQ	3
+#define E1000_IMSf_RXDMT	4
+#define E1000_IMSf_RXO		6
+#define E1000_IMSf_RXT		7
+#define E1000_IMSf_MDAC		9
+#define E1000_IMSf_RXCFG	10
+#define E1000_IMSf_PHYINT	12
+#define E1000_IMSf_GPI		13 // 13-14
+#define E1000_IMSf_TXDLOW	15
+#define E1000_IMSf_SRPD		16
+
+#define E1000_IMSF_TXDW		(1 << E1000_IMSf_TXDW)
+#define E1000_IMSF_TXQE		(1 << E1000_IMSf_TXQE)
+#define E1000_IMSF_LSC		(1 << E1000_IMSf_LSC)
+#define E1000_IMSF_RXSEQ	(1 << E1000_IMSf_RXSEQ)
+#define E1000_IMSF_RXDMT	(1 << E1000_IMSf_RXDMT)
+#define E1000_IMSF_RXO		(1 << E1000_IMSf_RXO)
+#define E1000_IMSF_RXT		(1 << E1000_IMSf_RXT)
+#define E1000_IMSF_MDAC		(1 << E1000_IMSf_MDAC)
+#define E1000_IMSF_RXCFG	(1 << E1000_IMSf_RXCFG)
+#define E1000_IMSF_PHYINT	(1 << E1000_IMSf_PHYINT)
+#define E1000_IMSF_GPI		(2 << E1000_IMSf_GPI) // flag sets both bits
+#define E1000_IMSF_TXDLOW	(1 << E1000_IMSf_TXDLOW)
+#define E1000_IMSF_SRPD		(1 << E1000_IMSf_SRPD)
 
 #define E1000_RX_BUFF_COUNT	32	// 01000101's driver uses 768 for each of these...
 #define E1000_TX_BUFF_COUNT	8
@@ -169,10 +238,14 @@ U16	E1000EEPROMRead(U8 word)
 
 	E1000MMIOWrite(E1000_REG_EERD, 1 | word << 8);
 
-	while (!((temp = E1000MMIORead(E1000_REG_EERD)) & (1 << 4)))
+	temp = E1000MMIORead(E1000_REG_EERD);
+	while (!Bt(&temp, E1000_EERDf_DONE))
+	{
 		Sleep(1);
+		temp = E1000MMIORead(E1000_REG_EERD);
+	}
 
-	data = (temp >> 16) & 0xFFFF;
+	data = temp.u16[1];
 	return data;
 }
 
@@ -186,8 +259,8 @@ U0 E1000MACGet()
 	for (i = 0; i < 3; i++)
 	{
 		mac = E1000EEPROMRead(i);
-		e1000.mac_address[2*i]	 = mac & 0xFF;
-		e1000.mac_address[2*i+1] = (mac >> 8) & 0xFF;
+		e1000.mac_address[2*i]	 = mac.u8[0];
+		e1000.mac_address[2*i+1] = mac.u8[1];
 		NetLog(" %02X %02X", mac.u8[0], mac.u8[1]);
 	}
 	
@@ -205,7 +278,7 @@ I64 E1000PacketReceive(U8 **packet_buffer_out, U16 *packet_length_out)
 		drop = TRUE;
 	}
 
-	if (entry->status & (1 << 1)) // EOP ?? TODO #define
+	if (Bt(&entry->status, E1000_RDESC_STATUSf_EOP))
 	{
 		NetErr("E1000 PACKET RECEIVE: No EOP Set");
 		drop = TRUE;
@@ -257,7 +330,9 @@ I64 E1000TransmitPacketAllocate(U8 **packet_buffer_out, I64 length)
 
 	entry->address	= *packet_buffer_out;
 	entry->length	= length;
-	entry->cmd		= (1 << 3) | 3; // ??? TODO #define
+	Bts(&entry->cmd, E1000_TDESC_CMDf_EOP);
+	Bts(&entry->cmd, E1000_TDESC_CMDf_IFCS);
+	Bts(&entry->cmd, E1000_TDESC_CMDf_RS);
 
 	NetLog("E1000 ALLOCATE TX PACKET: de_index: %X.", de_index);
 	return de_index;
@@ -272,7 +347,8 @@ U0 E1000TransmitPacketFinish(I64 de_index)
 
 	ClassRep(entry);
 
-	while (!(entry->sta & 0xF)) // ???
+	while (!(entry->sta & (E1000_TDESC_STATUSF_DD | E1000_TDESC_STATUSF_EC |
+						   E1000_TDESC_STATUSF_LC | E1000_TDESC_STATUSF_TU)))  
 		Yield;
 
 	NetLog("E1000 FINISH TX PACKET: TX DE index: %X.", de_index);
@@ -285,31 +361,32 @@ U0 EthernetFrameFinish(I64 de_index)
 
 interrupt U0 E1000IRQ()
 { // TODO need #defines
-	U32 icr = E1000MMIORead(0xC0); // ???
-	Bool poll = FALSE;
+	U32						 icr = E1000MMIORead(E1000_REG_ICR);
+	Bool					 poll = FALSE;
 	CE1000DescriptorEntryRX *entry = e1000.rx_de_buffer;
-	U8 *packet_buffer;
-	U16 packet_length;
-	I64 de_index;
+	U8						*packet_buffer;
+	U16						 packet_length;
+	I64						 de_index;
 
-	icr &= ~3; // ??
+	icr &= ~(E1000_ICRF_TXDW | E1000_ICRF_TXQE);
 
-	if (icr & (1 << 2)) // ?? 'link status change' ??
+	if (Bt(&icr, E1000_ICRf_LSC)) // 'link status change' ?
 	{
-		icr &= ~(1 << 2);
+		Btr(&icr, E1000_ICRf_LSC);
 		E1000MMIOWrite(E1000_REG_CTRL, E1000MMIORead(E1000_REG_CTRL) | E1000_CTRLF_SLU);
 	}
 
-	if (icr & (1 << 6) || icr & (1 << 4)) // ?? 'rx underrun / min threshold' ??
+	if (Bt(&icr, E1000_ICRf_RXO) || Bt(&icr, E1000_ICRf_RXDMT)) // 'rx underrun / min threshold' ?
 	{
-		icr = ~((1 << 6) | (1 << 4)); // ??
+		Btr(&icr, E1000_ICRf_RXO);
+		Btr(&icr, E1000_ICRf_RXDMT);
 
 		poll = TRUE;
 	}
 
-	if (icr & (1 << 7)) // ?? 'packet pending?
+	if (Bt(&icr, E1000_ICRf_RXT)) // 'packet pending' ?
 	{
-		icr &= ~(1 << 7);
+		Btr(&icr, E1000_ICRf_RXT);
 
 		poll = TRUE;
 	}
@@ -342,12 +419,9 @@ interrupt U0 E1000IRQ()
 		}
 	}
 
-
-
-	E1000MMIORead(0xC0); // ?? 'clear pending interrupts' ??
+	E1000MMIORead(E1000_REG_ICR); // clear pending interrupts?
 
 	*(dev.uncached_alias + LAPIC_EOI)(U32*) = 0;
-
 }
 
 U0 PCIInterruptsReroute(I64 base)
@@ -401,9 +475,6 @@ U0 E1000InitRX()
 	{
 		entry->address = e1000.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE; // is this right? might need to change ?..
 																				// 01000101 MAlloc's 8208 for each DE
-//		PCNetDescriptorEntryInit(&entry[de_index],
-//								 pcnet.rx_buffer_addr + de_index * ETHERNET_FRAME_SIZE,
-//								 TRUE); // TRUE for is_rx.
 	}
 
 	// setup rx de ring buffer
@@ -492,8 +563,19 @@ U0 E1000Init()
 	// clear all statistics regs after link establish attempt (linux)
 
 	// enable & clear existing interupts (01000101's driver)
-	E1000MMIOWrite(E1000_REG_IMS, 0x1F6DC); // TODO: WHAT IS THIS
-	E1000MMIORead(0xC0); // TODO : WHAT IS THIS ???
+	E1000MMIOWrite(E1000_REG_IMS,	E1000_IMSF_LSC		|
+									E1000_IMSF_RXSEQ	|
+									E1000_IMSF_RXDMT	|
+									E1000_IMSF_RXO		|
+									E1000_IMSF_RXT		|
+									E1000_IMSF_MDAC		|
+									E1000_IMSF_RXCFG	|
+									E1000_IMSF_PHYINT	|
+									E1000_IMSF_GPI		|
+									E1000_IMSF_TXDLOW	|
+									E1000_IMSF_SRPD);
+
+	E1000MMIORead(E1000_REG_ICR); // clear pending interrupts ?
 
 	// start rx tx?
 	E1000InitRX;
@@ -516,7 +598,6 @@ I64 EthernetFrameAllocate(U8 **packet_buffer_out,
 	U8 *ethernet_frame;
 	I64 de_index;
 
-	//need to see if 3 years later VirtualBox supports APAD_XMT!
 	if (packet_length < ETHERNET_MIN_FRAME_SIZE)
 	{
 		NetWarn("ETHERNET FRAME ALLOCATE: Truncating length");

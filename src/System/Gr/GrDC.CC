@@ -162,7 +162,7 @@ public U0 DCReset(CDC *dc)
 	Mat4x4IdentEqu(dc->r);
 	dc->r_norm			= GR_SCALE;
 	dc->flags		   &= ~(DCF_SYMMETRY | DCF_TRANSFORMATION | DCF_JUST_MIRROR);
-	MemCopy(dc->palette, gr_palette_std, sizeof(CBGR48) * COLORS_NUM);
+	MemCopy(dc->palette, gr32_palette_std, sizeof(CBGR24) * COLORS_NUM);
 }
 
 public U0 DCExtentsInit(CDC *dc=NULL)
@@ -319,7 +319,7 @@ public U8 *DCSave(CDC *dc, I64 *_size=NULL, I64 dcsf_flags=NONE)
 {//Stores device context to mem, perhaps, with compression.
 	U8		*res, *ptr, *body;
 	I64		 body_size = dc->width_internal * dc->height, total_size, flags;
-	CBGR48	 palette[COLORS_NUM];
+	CBGR24	 palette[COLORS_NUM];
 
 	body = dc->body;
 
@@ -329,11 +329,11 @@ public U8 *DCSave(CDC *dc, I64 *_size=NULL, I64 dcsf_flags=NONE)
 	if (dcsf_flags & DCSF_PALETTE_GET)
 		GrPaletteGet(palette);
 	else
-		MemCopy(palette, &dc->palette, COLORS_NUM * sizeof(CBGR48));
-	if (MemCompare(palette, gr_palette_std, COLORS_NUM * sizeof(CBGR48)))
+		MemCopy(palette, &dc->palette, COLORS_NUM * sizeof(CBGR24));
+	if (MemCompare(palette, gr32_palette_std, COLORS_NUM * sizeof(CBGR24)))
 	{
 		flags |= DCF_PALETTE;
-		total_size += COLORS_NUM * sizeof(CBGR48);
+		total_size += COLORS_NUM * sizeof(CBGR24);
 	}
 
 	ptr = res = MAlloc(total_size);
@@ -346,8 +346,8 @@ public U8 *DCSave(CDC *dc, I64 *_size=NULL, I64 dcsf_flags=NONE)
 #assert offset(CDC.end) == offset(CDC.palette)
 	if (flags & DCF_PALETTE)
 	{
-		MemCopy(ptr, palette, COLORS_NUM * sizeof(CBGR48));
-		ptr += COLORS_NUM * sizeof(CBGR48);
+		MemCopy(ptr, palette, COLORS_NUM * sizeof(CBGR24));
+		ptr += COLORS_NUM * sizeof(CBGR24);
 	}
 
 	MemCopy(ptr, body, body_size);
@@ -375,11 +375,11 @@ public CDC *DCLoad(U8 *src, I64 *_size=NULL, CTask *task=NULL)
 
 	if (res->flags & DCF_PALETTE)
 	{
-		MemCopy(&res->palette, ptr, COLORS_NUM * sizeof(CBGR48));
-		ptr += COLORS_NUM * sizeof(CBGR48);
+		MemCopy(&res->palette, ptr, COLORS_NUM * sizeof(CBGR24));
+		ptr += COLORS_NUM * sizeof(CBGR24);
 	}
 	else
-		MemCopy(&res->palette, gr_palette_std, COLORS_NUM * sizeof(CBGR48));
+		MemCopy(&res->palette, gr32_palette_std, COLORS_NUM * sizeof(CBGR24));
 
 	body_size = res->width_internal * res->height;
 	res->body			= MAlloc(body_size, task);
@@ -399,7 +399,7 @@ public CDC *DCLoad(U8 *src, I64 *_size=NULL, CTask *task=NULL)
 #help_file "::/Doc/GRFiles"
 #help_index "Graphics/Device Contexts;Graphics/GR Files"
 
-#define GR_FILE_MAX 	(offset(CDC.end) - offset(CDC.start) + COLORS_NUM * sizeof(CBGR48) + GR_WIDTH * GR_HEIGHT)
+#define GR_FILE_MAX 	(offset(CDC.end) - offset(CDC.start) + COLORS_NUM * sizeof(CBGR24) + GR_WIDTH * GR_HEIGHT)
 
 public I64 GRWrite(U8 *filename, CDC *dc, I64 dcsf_flags=NONE)
 {//ZealOS GR File.

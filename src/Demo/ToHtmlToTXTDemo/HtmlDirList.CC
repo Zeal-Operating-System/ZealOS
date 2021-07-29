@@ -26,7 +26,7 @@ I64 DirIndexList(U8 *files_find_mask)
 			{
 				st		= MStrPrint("%s/", tmpde1->name);
 				st_full	= MStrPrint("%s/%s", tmpde1->full_name, "index.html");
-				"$$BG,BLACK$$";
+				"$$BG,YELLOW$$";
 				PutFileLink(st, st_full);
 				"$$BG$$";
 				Free(st);

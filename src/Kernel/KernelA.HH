@@ -4292,7 +4292,7 @@ public class CDC
 					 height,
 					 flags;
 	U0				 end;
-	CBGR48			 palette[COLORS_NUM];
+	CBGR24			 palette[COLORS_NUM];
 
 	//public (Change directly)
 	CColorROPU32	 color,
