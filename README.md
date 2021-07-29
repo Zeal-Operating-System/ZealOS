@@ -13,7 +13,7 @@ Simplify, don't complicate; make accessible, don't obfuscate.
 
 Features in development include:
   - Fully-functional AHCI support
-  - 32-bit color VBE graphics
+  - [32-bit color VBE graphics](https://github.com/TempleProgramming/HolyGL)
   - Network card drivers and a networking stack
 
 
