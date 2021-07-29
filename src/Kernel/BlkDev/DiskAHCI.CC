@@ -411,13 +411,16 @@ Bool AHCIAtapiClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
 	return TRUE;
 }
 
+//TODO #define some bits/constants
 Bool AHCIAtapiFormat(CBlkDev *bd, I64 blk, I64 count)
 { // untested
-	CPortCmdTable	*cmd_table;
-	CFisH2D			*cmd_fis;
-	CAHCIPort		*port		= bd->ahci_port;
-	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
-	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+	CPortCmdTable			*cmd_table;
+	CFisH2D					*cmd_fis;
+	CAHCIPort				*port		= bd->ahci_port;
+	I64						 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
+	CPortCmdHeader			*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+	CAtapiFormatCmd			 format_cmd;
+	CAtapiFormatParamList	*format_list;
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
@@ -425,24 +428,33 @@ Bool AHCIAtapiFormat(CBlkDev *bd, I64 blk, I64 count)
 		throw('AHCI');	
 	}
 
+	format_list = CAlloc(sizeof(CAtapiFormatParamList), sys_task->code_heap);
+	format_list->length		= EndianU16(8);
+	format_list->num_blocks	= EndianU32(count(U32)); // remove this safety-cast if not needed
+	format_list->extra[1]	= 0x80;
+
 	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
+//	Bts(&cmd_header->desc, AHCI_CH_DESCf_W); // do we need to set Write ?
 
 	cmd_table = cmd_header->cmd_table_base;
 	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
 
+	cmd_table->prdt[0].data_base		= format_list;
+	cmd_table->prdt[0].data_byte_count	= 12 - 1; // zero based, size of format parameter list
+	cmd_header->prdt_len = 1;
+
 	cmd_fis	= cmd_table->cmd_fis;
 
 	cmd_fis->type		= FISt_H2D;
-	cmd_fis->feature_low= 0x23; // Formattable?...
+//	cmd_fis->feature_low= 0x23; // Formattable?...
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
 	cmd_fis->command	= ATA_PACKET;
-	cmd_table->acmd[0]	= ATAPI_FORMAT_UNIT >> 8;
-	cmd_table->acmd[1]	= 1;
 
-
-	// ? TODO
-
-
+	MemSet(&format_cmd, 0, sizeof(CAtapiFormatCmd));
+	format_cmd.command	= ATAPI_FORMAT_UNIT >> 8; //$BK,1$FIX$BK,0$
+	format_cmd.code		= 1 | 1 << 4; // TODO !!! FORMAT UNIT CODE FLAGS (1 mandatory, 1<<4 mandatory for MM drives)
+	MemCopy(&cmd_table->acmd, &format_cmd, 6); // ?
+	
 	AHCIPortWait(bd->port_num, tS + 2);
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 

@@ -59,9 +59,12 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 		if (text.raw_flags & RAWF_SCROLL && text.raw_col && !row && !col)
 		{//Scroll screen down
 
-			MemCopy(text.fb_alias,
-					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
-					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+//			MemCopy(text.fb_alias,
+//					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
+//					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
+
+			for (i = 0; i < sys_vbe_mode.width * sys_vbe_mode.height / 2; i++)
+				text.fb_alias(U64 *)[i] = text.fb_alias(U64 *)[i + sys_vbe_mode.width /2 * FONT_HEIGHT];
 
 			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
 			text.raw_col -= text.cols;

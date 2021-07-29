@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----07/29/21 14:35:17----$IV,0$
+* Altered RawPutChar $LK+PU,"RawPutChar",A="FF:::/Kernel/Display.CC,(U64 *)"$ screen scrolling algorithm ($LK+PU,"MemCopy",A="MN:_MEMCOPY"$ is slow on bare-metal).
+
 $IV,1$----07/28/21 21:46:46----$IV,0$
 * Raised version number to 0.11.
 * Removed some palettes; replaced all $FG,11$gr_palette_std$FG$ with $FG,11$gr32_palette_std$FG$, added new $LK+PU,"PaletteSetSlate",A="MN:PaletteSetSlate"$.

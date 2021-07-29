@@ -169,7 +169,7 @@ body {background-color:#fef1f0;}
 <a name="l142"></a>
 <a name="l143"></a></span><span class=cF9>CJob</span><span class=cF0> *</span><span class=cF5>TaskMessage</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *_server, </span><span class=cF9>CTask</span><span class=cF0> *master, </span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags)
 <a name="l144"></a>{</span><span class=cF2>//Post message to servant task.</span><span class=cF0>    </span><span class=cF2>Tell who the master task is.</span><span class=cF0>
-<a name="l145"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3822"><span class=cF4>flags</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3868"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l145"></a></span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3840"><span class=cF4>flags</span></a><span class=cF2> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3886"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l146"></a>    </span><span class=cF9>CJob</span><span class=cF0>  *tmpc1, *tmpc;
 <a name="l147"></a>    </span><span class=cF9>CTask</span><span class=cF0> *server = _server;
 <a name="l148"></a>
@@ -320,7 +320,7 @@ body {background-color:#fef1f0;}
 <a name="l293"></a>}
 <a name="l294"></a>
 <a name="l295"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MessagePost</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l296"></a>{</span><span class=cF2>//Post message to a task and return immediately.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3868"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l296"></a>{</span><span class=cF2>//Post message to a task and return immediately.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3886"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l297"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0>)
 <a name="l298"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l299"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_INPUT_FILTER_TASK</span><span class=cF7>)</span><span class=cF0>)
@@ -331,13 +331,13 @@ body {background-color:#fef1f0;}
 <a name="l304"></a>}
 <a name="l305"></a>
 <a name="l306"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>MessagePostWait</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task, </span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l307"></a>{</span><span class=cF2>//Post message to a task and wait until task is idle.See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3868"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l307"></a>{</span><span class=cF2>//Post message to a task and wait until task is idle.See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3886"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l308"></a>    </span><span class=cF5>MessagePost</span><span class=cF0>(task, message_code, arg1, arg2, flags);
 <a name="l309"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task);
 <a name="l310"></a>}
 <a name="l311"></a>
 <a name="l312"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Message</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> message_code, </span><span class=cF9>I64</span><span class=cF0> arg1, </span><span class=cF9>I64</span><span class=cF0> arg2, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l313"></a>{</span><span class=cF2>//Post message to current task and return immediately. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3868"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l313"></a>{</span><span class=cF2>//Post message to current task and return immediately. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3886"><span class=cF4>message_code</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l314"></a>    </span><span class=cF5>MessagePost</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>, message_code, arg1, arg2, flags);
 <a name="l315"></a>}
 <a name="l316"></a>

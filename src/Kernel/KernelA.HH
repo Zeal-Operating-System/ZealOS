@@ -2917,6 +2917,24 @@ class CAtapiReadCmd
 		zero[4];
 };
 
+class CAtapiFormatCmd
+{
+	U8	command,
+		code, // should be set to 1 according to MMC spec
+		zero[4];
+};
+
+class CAtapiFormatParamList
+{
+	U8	reserved,
+		code;		// if set all zero, drive should use defaults for all but Immed and VS
+	U16	length;		// should be set to 8 according to MMC spec
+	U32	num_blocks;
+	U8	type,		// 0: Full Format, 0x10: CD-RW/DVD-RW Full Format
+		extra[3];	// "Type Dependent Parameter". Calling it 'extra' for simplicity sake
+					// For type 0: set 0x8000, for type 0x10: CD Fixed Packet Size or DVD ECC block size (16)
+};
+
 //ATA_IDENTIFY command array indexes (array of U16s)
 #define ATA_IDENT_SERIAL_NUM		10
 #define ATA_IDENT_MODEL_NUM			27

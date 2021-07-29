@@ -346,7 +346,7 @@ body {background-color:#fef1f0;}
 <a name="l319"></a>}
 <a name="l320"></a>
 <a name="l321"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>FAT32FileFind</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> cur_dir_clus, </span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>CDirEntry</span><span class=cF0> *_res, </span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l322"></a>{</span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3243"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3244"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF0>
+<a name="l322"></a>{</span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3261"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3262"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF0>
 <a name="l323"></a>    </span><span class=cF1>Bool</span><span class=cF0>             res = </span><span class=cF3>FALSE</span><span class=cF0>, unlock;
 <a name="l324"></a>    </span><span class=cF9>CFAT32DirEntry</span><span class=cF0>  *buf;
 <a name="l325"></a>    </span><span class=cF9>I64</span><span class=cF0>              xsum = </span><span class=cFE>0</span><span class=cF0>, attr, cur_dir_entry, entries_per_clus;
