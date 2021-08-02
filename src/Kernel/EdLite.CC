@@ -342,7 +342,7 @@ Bool EdLite(U8 *filename, I64 num=1, I64 edf_dof_flags=0)
 	Raw(old_raw);
 	DebugMode(old_debug);
 	SingleUser(old_single);
-	text.raw_flags = text.raw_flags & ~RAWF_SHOW_DOLLAR | old_raw_flags & RAWF_SHOW_DOLLAR;
+	text.raw_flags = text.raw_flags & ~RAWF_SHOW_DOLLAR | old_raw_flags & (RAWF_SHOW_DOLLAR | RAWF_SCROLL);
 	POPFD
 
 	return res;

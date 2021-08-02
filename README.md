@@ -50,7 +50,7 @@ In July of 2021, ZealOS was forked from ZenithOS.
 
 ## Screenshots
 
-System Report, Z Splash and AutoComplete, with Stars wallpaper
+Network Report, UDP Chat Application and AutoComplete, with Stars wallpaper
 
 ![](/screenshots/screenshot3.png)
 

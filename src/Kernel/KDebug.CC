@@ -520,10 +520,11 @@ U0 G(U8 *ip=INVALID_PTR, CTask *task=NULL)
 	if (ip != INVALID_PTR)
 		task->rip = ip;
 	if (BptFind(task->rip, task))
-		"\nDo one of the following, first:\n"
+		"\nBreakpoints found.\n"
+		"Do one of the following, first:\n"
 		">S;\t\t\t//Single step\n"
-		">B2;\t\t\t//Clear all break points\n"
-		">G2;\t\t\t//Clear all break points and Go\n\n"
+		">B2;\t\t//Clear all break points\n"
+		">G2;\t\t//Clear all break points and Go\n\n"
 		"After resuming, <CTRL-ALT-n> next focus task\n"
 		"After resuming, <CTRL-ALT-v> flushes screen VGA cache\n";
 	else
@@ -605,7 +606,7 @@ U0 DebugHelp()
 	">Man(\"Print\");\t\t\t\t\t\t// Edit Src for \"Print\".\n"
 	">E(_RIP);\t\t\t\t\t\t\t// Edit Src Code.\n"
 	">Fix;\t\t\t\t\t\t\t\t// Edit Last Err Src Code.\n"
-	">B(&Main+0x20);\t\t\t\t\t\t// Toggle break point.\n"
+	">B(&Main+0x20);\t\t\t\t\t\t// Toggle break point.\n\n"
 	">B2;\t\t\t\t\t\t\t\t// Clear all break points.\n"
 	">S;\t\t\t\t\t\t\t\t\t// Single step.\n"
 	">G;\t\t\t\t\t\t\t\t\t// Resume execution.\n"

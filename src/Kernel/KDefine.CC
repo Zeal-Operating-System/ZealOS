@@ -1,4 +1,4 @@
-CHashDefineStr *DefineLoad(U8 *dname, U8 *st)
+CHashDefineStr *DefineLoad(U8 *dname, U8 *st, I64 caller_num=1)
 {//Create DEFINE hash entry with string.
 	CHashDefineStr *tmph = CAlloc(sizeof(CHashDefineStr));
 
@@ -6,7 +6,7 @@ CHashDefineStr *DefineLoad(U8 *dname, U8 *st)
 	tmph->str		= StrNew(dname);
 	tmph->data		= StrNew(st);
 	tmph->count		= -1;
-	tmph->src_link	= MStrPrint("AD:0x%X", Caller);
+	tmph->src_link	= MStrPrint("AD:0x%X", Caller(caller_num));
 
 	HashAdd(tmph, Fs->hash_table);
 
@@ -104,7 +104,7 @@ U0 DefinePrint(U8 *dname, U8 *src, ...)
 {//Create DEFINE entry with $LK,"Print",A="FI:::/Doc/Print.DD"$()ed string.
 	U8 *buf = StrPrintJoin(NULL, src, argc, argv);
 
-	DefineLoad(dname, buf);
+	DefineLoad(dname, buf, 2);
 	Free(buf);
 }
 

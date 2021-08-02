@@ -53,6 +53,7 @@ extern U0	MenuPop();
 extern CMenu *MenuPush(U8 *st);
 extern U8	Mount(Bool caller_is_prtdisk=FALSE);
 extern CTask *Noise(I64 mS, F64 min_ona, F64 max_ona);
+extern CPCIDev	*PCIDevFind(U16 class_code=NULL, U16 sub_code=NULL, U16 vendor_id=NULL, U16 device_id=NULL, U8 _bus=0xFF, U8 _dev=0xFF, U8 _fun=0xFF);
 extern Bool	PopUpCancelOk(U8 *header=NULL, U8 *footer=NULL);
 extern I64	PopUpColor(U8 *header=NULL, Bool allow_transparent=TRUE, Bool allow_default=TRUE);
 extern I64	PopUpColorDither(U8 *header=NULL);

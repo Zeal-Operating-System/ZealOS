@@ -1,29 +1,29 @@
 I64 SATARep()
 {
-	I64			 /*bdf, */i, j, num = 0;
+	I64			 bdf, i, j, num = 0;
 	CAHCIPort	*port;
-//	CPCIDev		*pci;
+	CPCIDev		*pci;
 	CBlkDev		*temp_blkdev;
 	U16			*st, *model, *serial;
 
-	"\nAHCI version %X.%1X%1X\n",
+	"\n$$LTBLUE$$AHCI version %X.%1X%1X$$FG$$\n\n",
 		blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
 
-/*	if (dev.pci_head)
+	if (dev.pci_head)
 	{
 		pci = PCIDevFind(PCIC_STORAGE, PCISC_AHCI);
 //		ClassRep(pci);
-		"$$PURPLE$$$$HL,1$$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$$HL,0$$$$FG$$\n\n", pci->bus, pci->dev, pci->fun;
-		"$$PURPLE$$Vendor$$FG$$: $$BLACK$$%s$$FG$$\n", pci->vendor_str;
-		"$$PURPLE$$Device$$FG$$: $$BLACK$$%s$$FG$$\n", pci->dev_id_str;
+		"$$RED$$$$HL,1$$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$$HL,0$$$$FG$$\n\n", pci->bus, pci->dev, pci->fun;
+		"$$RED$$Vendor$$FG$$: $$LTBLUE$$%s$$FG$$\n", pci->vendor_str;
+		"$$RED$$Device$$FG$$: $$LTBLUE$$%s$$FG$$\n", pci->dev_id_str;
 	}	
 	else
 	{
 		bdf = PCIClassFind(PCIC_STORAGE << 16 | PCISC_AHCI << 8 + 1, 0);
-		"Bus:%02X, Dev:%02X, Fun:%02X", bdf.u8[2], bdf.u8[1], bdf.u8[0];
+		"Bus:%02X, Dev:%02X, Fun:%02X\n", bdf.u8[2], bdf.u8[1], bdf.u8[0];
 		"HBA Base Address: 0x%X", PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F;
 	}
-*/
+
 
 
 	if (blkdev.ahci_hba)

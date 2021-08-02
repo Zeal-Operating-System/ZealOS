@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.11">
+<meta name="generator" content="ZealOS V0.12">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -27,30 +27,30 @@ body {background-color:#fef1f0;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SATARep</span><span class=cF0>()
 <a name="l2"></a>{
-<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0>          </span><span class=cF2>/*bdf, */</span><span class=cF0>i, j, num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0>          bdf, i, j, num = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l4"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l5"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>CPCIDev</span><span class=cF0>     </span><span class=cF2>*pci;</span><span class=cF0>
+<a name="l5"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0>     *pci;
 <a name="l6"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>     *temp_blkdev;
 <a name="l7"></a>    </span><span class=cF9>U16</span><span class=cF0>         *st, *model, *serial;
 <a name="l8"></a>
-<a name="l9"></a>    </span><span class=cF6>&quot;\nAHCI version %X.%1X%1X\n&quot;</span><span class=cF0>,
+<a name="l9"></a>    </span><span class=cF6>&quot;\n$LTBLUE$AHCI version %X.%1X%1X$FG$\n\n&quot;</span><span class=cF0>,
 <a name="l10"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &gt;&gt; </span><span class=cFE>16</span><span class=cF0>, (</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &amp; </span><span class=cFE>0xFF00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &amp; </span><span class=cFE>0xFF</span><span class=cF0>;
 <a name="l11"></a>
-<a name="l12"></a></span><span class=cF2>/*</span><span class=cF0>  </span><span class=cF2>if (dev.pci_head)</span><span class=cF0>
-<a name="l13"></a>    </span><span class=cF2>{</span><span class=cF0>
-<a name="l14"></a>        </span><span class=cF2>pci = PCIDevFind(PCIC_STORAGE, PCISC_AHCI);</span><span class=cF0>
+<a name="l12"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>dev</span><span class=cF0>.pci_head)
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        pci = </span><span class=cF5>PCIDevFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0>, </span><span class=cF3>PCISC_AHCI</span><span class=cF0>);
 <a name="l15"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>ClassRep(pci);</span><span class=cF0>
-<a name="l16"></a>        </span><span class=cF2>&quot;$PURPLE$$HL,1$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$HL,0$$FG$\n\n&quot;, pci-&gt;bus, pci-&gt;dev, pci-&gt;fun;</span><span class=cF0>
-<a name="l17"></a>        </span><span class=cF2>&quot;$PURPLE$Vendor$FG$: $BLACK$%s$FG$\n&quot;, pci-&gt;vendor_str;</span><span class=cF0>
-<a name="l18"></a>        </span><span class=cF2>&quot;$PURPLE$Device$FG$: $BLACK$%s$FG$\n&quot;, pci-&gt;dev_id_str;</span><span class=cF0>
-<a name="l19"></a>    </span><span class=cF2>}</span><span class=cF0>   
-<a name="l20"></a>    </span><span class=cF2>else</span><span class=cF0>
-<a name="l21"></a>    </span><span class=cF2>{</span><span class=cF0>
-<a name="l22"></a>        </span><span class=cF2>bdf = PCIClassFind(PCIC_STORAGE &lt;&lt; 16 | PCISC_AHCI &lt;&lt; 8 + 1, 0);</span><span class=cF0>
-<a name="l23"></a>        </span><span class=cF2>&quot;Bus:%02X, Dev:%02X, Fun:%02X&quot;, bdf.u8[2], bdf.u8[1], bdf.u8[0];</span><span class=cF0>
-<a name="l24"></a>        </span><span class=cF2>&quot;HBA Base Address: 0x%X&quot;, PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) &amp; ~0x1F;</span><span class=cF0>
-<a name="l25"></a>    </span><span class=cF2>}</span><span class=cF0>
-<a name="l26"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l16"></a>        </span><span class=cF6>&quot;$RED$$HL,1$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$HL,0$$FG$\n\n&quot;</span><span class=cF0>, pci-&gt;bus, pci-&gt;</span><span class=cFB>dev</span><span class=cF0>, pci-&gt;fun;
+<a name="l17"></a>        </span><span class=cF6>&quot;$RED$Vendor$FG$: $LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, pci-&gt;vendor_str;
+<a name="l18"></a>        </span><span class=cF6>&quot;$RED$Device$FG$: $LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, pci-&gt;dev_id_str;
+<a name="l19"></a>    </span><span class=cF7>}</span><span class=cF0>   
+<a name="l20"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l21"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l22"></a>        bdf = </span><span class=cF5>PCIClassFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> | </span><span class=cF3>PCISC_AHCI</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l23"></a>        </span><span class=cF6>&quot;Bus:%02X, Dev:%02X, Fun:%02X\n&quot;</span><span class=cF0>, bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l24"></a>        </span><span class=cF6>&quot;HBA Base Address: 0x%X&quot;</span><span class=cF0>, </span><span class=cF5>PCIReadU32</span><span class=cF0>(bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF3>PCIR_BASE5</span><span class=cF0>) &amp; ~</span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l25"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l26"></a>
 <a name="l27"></a>
 <a name="l28"></a>
 <a name="l29"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba)

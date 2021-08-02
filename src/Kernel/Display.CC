@@ -6,9 +6,9 @@ the normal screen text output routine.
 
 See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 */
-	I64  i, row, col, x, y;
+	I64  i, row, col, x, y, framebuffer_u64_size, framebuffer_u64_offset;
 	U32 *framebuffer;
-	U64  ch_bitmap;
+	U64  ch_bitmap, *framebuffer_u64;
 
 	if (!(text.raw_flags & RAWF_SHOW_DOLLAR))
 	{
@@ -63,8 +63,13 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 //					text.fb_alias		+ sys_vbe_mode.width * FONT_HEIGHT,
 //					(text.screen_size	- sys_vbe_mode.width * FONT_HEIGHT) * sizeof(U32));
 
-			for (i = 0; i < sys_vbe_mode.width * sys_vbe_mode.height / 2; i++)
-				text.fb_alias(U64 *)[i] = text.fb_alias(U64 *)[i + sys_vbe_mode.width /2 * FONT_HEIGHT];
+			// MemCopy is slow, computing these and iterating U64's manually is far faster.
+			framebuffer_u64			= text.fb_alias;
+			framebuffer_u64_size	= sys_vbe_mode.width * sys_vbe_mode.height / 2;
+			framebuffer_u64_offset	= sys_vbe_mode.width / 2 * FONT_HEIGHT;
+
+			for (i = 0; i < framebuffer_u64_size; i++)
+				framebuffer_u64[i] = framebuffer_u64[i + framebuffer_u64_offset];
 
 			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
 			text.raw_col -= text.cols;

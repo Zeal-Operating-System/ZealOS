@@ -780,7 +780,7 @@ U8 *U(U8 *rip, I64 count=20, I64 seg_size=64)
 		Ui(buf, &rip, seg_size);
 		"%s", buf;
 	}
-	"$$HL,0$$";
+	"$$HL,0$$\n";
 
 	return rip;
 }
@@ -799,7 +799,7 @@ I64 Un(U8 *rip, I64 count=0x80, I64 seg_size=64)
 		"%s", buf;
 		i++;
 	}
-	"$$HL,0$$";
+	"$$HL,0$$\n";
 
 	return i;
 }

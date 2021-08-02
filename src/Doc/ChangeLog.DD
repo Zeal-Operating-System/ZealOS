@@ -1,4 +1,11 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/02/21 00:54:40----$IV,0$
+* Raised version number to 0.12.
+* Fixed EdLite dropping $LK+PU,"RAWF_SCROLL",A="FF:::/Kernel/EdLite.CC,RAWF_SCROLL:2"$.
+* Fixed incorrect src_link for $LK+PU,"DefineLoad",A="MN:DefineLoad"$ variables: added caller_num arg for when it's run from $LK+PU,"DefinePrint",A="MN:DefinePrint"$.
+* Added $LK+PU,"PCIDevFind",A="FF:::/System/Externs.CC,PCIDevFind"$ to System externs: fixes $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,PCIDevFind"$ compiling crash, now displays AHCI controller information from PCI data.
+* Added $LK+PU,"raw-mode screen clearing",A="FF:::/System/DolDoc/DocRecalcLib.CC,text.raw_col"$: can use either $LK+PU,"DocClear",A="MN:DocClear"$ or $LK+PU,"Cls",A="MN:Cls"$, useful for clearing the screen in debug mode.
+
 $IV,1$----07/29/21 14:35:17----$IV,0$
 * Altered RawPutChar $LK+PU,"RawPutChar",A="FF:::/Kernel/Display.CC,(U64 *)"$ screen scrolling algorithm ($LK+PU,"MemCopy",A="MN:_MEMCOPY"$ is slow on bare-metal).
 

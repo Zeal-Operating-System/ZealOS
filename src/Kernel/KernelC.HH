@@ -217,7 +217,7 @@ public extern U0 Panic(U8 *message=NULL, I64 message_num=0, Bool panic=TRUE);
 #help_index "Define;Char/Define"
 #help_file "::/Doc/Define"
 public extern U8				*Define(     U8 *dname);
-public extern CHashDefineStr	*DefineLoad( U8 *dname, U8 *st);
+public extern CHashDefineStr	*DefineLoad( U8 *dname, U8 *st, I64 caller_num=1);
 public extern U0				 DefinePrint(U8 *dname, U8 *src, ...);
 
 #help_index "Define;Char/Define;Char/Lists"

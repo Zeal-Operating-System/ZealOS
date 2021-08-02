@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.11">
+<meta name="generator" content="ZealOS V0.12">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -369,7 +369,7 @@ body {background-color:#fef1f0;}
 <a name="l342"></a>    </span><span class=cF5>Raw</span><span class=cF0>(old_raw);
 <a name="l343"></a>    </span><span class=cF5>DebugMode</span><span class=cF0>(old_debug);
 <a name="l344"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(old_single);
-<a name="l345"></a>    </span><span class=cFB>text</span><span class=cF0>.raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags &amp; ~</span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0> | old_raw_flags &amp; </span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0>;
+<a name="l345"></a>    </span><span class=cFB>text</span><span class=cF0>.raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags &amp; ~</span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0> | old_raw_flags &amp; (</span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0> | </span><span class=cF3>RAWF_SCROLL</span><span class=cF0>);
 <a name="l346"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
 <a name="l347"></a>
 <a name="l348"></a>    </span><span class=cF1>return</span><span class=cF0> res;

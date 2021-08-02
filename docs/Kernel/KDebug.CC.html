@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.11">
+<meta name="generator" content="ZealOS V0.12">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -547,236 +547,237 @@ body {background-color:#fef1f0;}
 <a name="l520"></a>    </span><span class=cF1>if</span><span class=cF0> (ip != </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
 <a name="l521"></a>        task-&gt;rip = ip;
 <a name="l522"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>BptFind</span><span class=cF7>(</span><span class=cF0>task-&gt;rip, task</span><span class=cF7>)</span><span class=cF0>)
-<a name="l523"></a>        </span><span class=cF6>&quot;\nDo one of the following, first:\n&quot;</span><span class=cF0>
-<a name="l524"></a>        </span><span class=cF6>&quot;&gt;S;\t\t\t//Single step\n&quot;</span><span class=cF0>
-<a name="l525"></a>        </span><span class=cF6>&quot;&gt;B2;\t\t\t//Clear all break points\n&quot;</span><span class=cF0>
-<a name="l526"></a>        </span><span class=cF6>&quot;&gt;G2;\t\t\t//Clear all break points and Go\n\n&quot;</span><span class=cF0>
-<a name="l527"></a>        </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-n&gt; next focus task\n&quot;</span><span class=cF0>
-<a name="l528"></a>        </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-v&gt; flushes screen VGA cache\n&quot;</span><span class=cF0>;
-<a name="l529"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l530"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l531"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_DISABLE_BPTS</span><span class=cF0>);
-<a name="l532"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;rflags, </span><span class=cF3>RFLAGf_TRAP</span><span class=cF0>);</span><span class=cF2>//No single step</span><span class=cF0>
-<a name="l533"></a>        </span><span class=cF5>Suspend</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l534"></a>        </span><span class=cF1>if</span><span class=cF0> (task == </span><span class=cF5>Fs</span><span class=cF0>)
-<a name="l535"></a>        {
-<a name="l536"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsDebugMode</span><span class=cF0> &amp;&amp; task-&gt;next_cc != &amp;task-&gt;next_cc)
-<a name="l537"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l538"></a>                </span><span class=cF6>&quot;Exit Debug\n&quot;</span><span class=cF0>;
-<a name="l539"></a>                </span><span class=cF5>Btr</span><span class=cF0>(&amp;task-&gt;last_cc-&gt;flags, </span><span class=cF3>CCf_PROMPT</span><span class=cF0>);
-<a name="l540"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l541"></a>        }
-<a name="l542"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l543"></a>            </span><span class=cF5>Exit</span><span class=cF0>;
-<a name="l544"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l545"></a>}
-<a name="l546"></a>
-<a name="l547"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>G2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ip=</span><span class=cF3>INVALID_PTR</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l548"></a>{</span><span class=cF2>//Remove all breakpoints and Go.</span><span class=cF0>
-<a name="l549"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
-<a name="l550"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l551"></a>    </span><span class=cF5>B2</span><span class=cF0>(task);
-<a name="l552"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>ext</span><span class=cF0>[</span><span class=cF3>EXT_WIN_FOCUS</span><span class=cF0>])
-<a name="l553"></a>        </span><span class=cF5>CallExtNum</span><span class=cF0>(</span><span class=cF3>EXT_WIN_FOCUS</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.focus_task);
-<a name="l554"></a>    </span><span class=cF5>LFBFlush</span><span class=cF0>;
-<a name="l555"></a>    </span><span class=cF5>G</span><span class=cF0>(ip, task);
-<a name="l556"></a>}
-<a name="l557"></a>
-<a name="l558"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>S</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ip=</span><span class=cF3>INVALID_PTR</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>) </span><span class=cF2>//Single-step.</span><span class=cF0>
-<a name="l559"></a>{</span><span class=cF2>//Single step.</span><span class=cF0>
-<a name="l560"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
-<a name="l561"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l562"></a>
-<a name="l563"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l564"></a>    </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l565"></a>    </span><span class=cF1>if</span><span class=cF0> (ip != </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
-<a name="l566"></a>        task-&gt;rip = ip;
-<a name="l567"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_DISABLE_BPTS</span><span class=cF0>);
-<a name="l568"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;rflags, </span><span class=cF3>RFLAGf_TRAP</span><span class=cF0>);
-<a name="l569"></a>    </span><span class=cF5>Suspend</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l570"></a>    </span><span class=cF1>if</span><span class=cF0> (task == </span><span class=cF5>Fs</span><span class=cF0>)
-<a name="l571"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l572"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsDebugMode</span><span class=cF0>)
-<a name="l573"></a>        {
-<a name="l574"></a>            </span><span class=cF1>if</span><span class=cF0> (task-&gt;next_cc != &amp;task-&gt;next_cc)
-<a name="l575"></a>                </span><span class=cF5>Btr</span><span class=cF0>(&amp;task-&gt;last_cc-&gt;flags, </span><span class=cF3>CCf_PROMPT</span><span class=cF0>);
-<a name="l576"></a>        }
-<a name="l577"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l578"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l579"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
-<a name="l580"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l581"></a>}
-<a name="l582"></a>
-<a name="l583"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>DebugHelp</span><span class=cF0>()
-<a name="l584"></a>{
-<a name="l585"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
-<a name="l586"></a>    </span><span class=cF6>&quot;The cmd line is basically the same as normal.</span><span class=cF0>  </span><span class=cF6>Here are some common\n&quot;</span><span class=cF0>
-<a name="l587"></a>    </span><span class=cF6>&quot;debugging commands.\n\n&quot;</span><span class=cF0>
-<a name="l588"></a>    </span><span class=cF6>&quot;&gt;EdLite(\&quot;FileName\&quot;);\t\t\t\t// Edit file.\n&quot;</span><span class=cF0>
-<a name="l589"></a>    </span><span class=cF6>&quot;&gt;D(0x100000);\t\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
-<a name="l590"></a>    </span><span class=cF6>&quot;&gt;Dm(0x100000);\t\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
-<a name="l591"></a>    </span><span class=cF6>&quot;&gt;Dm(Fs, sizeof(CTask));\t\t\t\t// Dump current task record.\n&quot;</span><span class=cF0>
-<a name="l592"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs, \&quot;CTask\&quot;, 1);\t\t\t// Dump current task record.\n&quot;</span><span class=cF0>
-<a name="l593"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n&quot;</span><span class=cF0>
-<a name="l594"></a>    </span><span class=cF6>&quot;&gt;CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n&quot;</span><span class=cF0>
-<a name="l595"></a>    </span><span class=cF6>&quot;&gt;Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n&quot;</span><span class=cF0>
-<a name="l596"></a>    </span><span class=cF6>&quot;&gt;Dr;\t\t\t\t\t\t\t\t// Dump Regs.\n&quot;</span><span class=cF0>
-<a name="l597"></a>    </span><span class=cF6>&quot;&gt;1 + 2 * 3 + &amp;Print;\t\t\t\t// Show calculation res.\n&quot;</span><span class=cF0>
-<a name="l598"></a>    </span><span class=cF6>&quot;&gt;*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n&quot;</span><span class=cF0>
-<a name="l599"></a>    </span><span class=cF6>&quot;&gt;_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n&quot;</span><span class=cF0>
-<a name="l600"></a>    </span><span class=cF6>&quot;&gt;_RIP = &amp;Break;\t\t\t\t\t\t// Set RIP.\n&quot;</span><span class=cF0>
-<a name="l601"></a>    </span><span class=cF6>&quot;&gt;I64 i;\t\t\t\t\t\t\t\t// Declare variable.\n&quot;</span><span class=cF0>
-<a name="l602"></a>    </span><span class=cF6>&quot;&gt;i = _RCX + _RDX;\t\t\t\t\t// Assign to variable.\n&quot;</span><span class=cF0>
-<a name="l603"></a>    </span><span class=cF6>&quot;&gt;U(&amp;Print+0x8);\t\t\t\t\t\t// Unassemble Print.\n&quot;</span><span class=cF0>
-<a name="l604"></a>    </span><span class=cF6>&quot;&gt;Uf(\&quot;Print\&quot;);\t\t\t\t\t\t// Unassembler function \&quot;Print\&quot;.\n&quot;</span><span class=cF0>
-<a name="l605"></a>    </span><span class=cF6>&quot;&gt;Man(\&quot;Print\&quot;);\t\t\t\t\t\t// Edit Src for \&quot;Print\&quot;.\n&quot;</span><span class=cF0>
-<a name="l606"></a>    </span><span class=cF6>&quot;&gt;E(_RIP);\t\t\t\t\t\t\t// Edit Src Code.\n&quot;</span><span class=cF0>
-<a name="l607"></a>    </span><span class=cF6>&quot;&gt;Fix;\t\t\t\t\t\t\t\t// Edit Last Err Src Code.\n&quot;</span><span class=cF0>
-<a name="l608"></a>    </span><span class=cF6>&quot;&gt;B(&amp;Main+0x20);\t\t\t\t\t\t// Toggle break point.\n&quot;</span><span class=cF0>
-<a name="l609"></a>    </span><span class=cF6>&quot;&gt;B2;\t\t\t\t\t\t\t\t// Clear all break points.\n&quot;</span><span class=cF0>
-<a name="l610"></a>    </span><span class=cF6>&quot;&gt;S;\t\t\t\t\t\t\t\t\t// Single step.\n&quot;</span><span class=cF0>
-<a name="l611"></a>    </span><span class=cF6>&quot;&gt;G;\t\t\t\t\t\t\t\t\t// Resume execution.\n&quot;</span><span class=cF0>
-<a name="l612"></a>    </span><span class=cF6>&quot;&gt;G2;\t\t\t\t\t\t\t\t// B2;LFBFlush;WinFocus;G;\n&quot;</span><span class=cF0>
-<a name="l613"></a>    </span><span class=cF6>&quot;&gt;Exit;\t\t\t\t\t\t\t\t// Exit (kill) task.\n\n&quot;</span><span class=cF0>
-<a name="l614"></a>    </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-n&gt; next focus task.\n&quot;</span><span class=cF0>
-<a name="l615"></a>    </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-v&gt; flushes screen VGA cache.\n\n&quot;</span><span class=cF0>;
-<a name="l616"></a>}
-<a name="l617"></a>
-<a name="l618"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Debug2</span><span class=cF0>()
-<a name="l619"></a>{
-<a name="l620"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_win_inhibit, old_waiting_message, old_single;
-<a name="l621"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_getstr2;
-<a name="l622"></a>    </span><span class=cF1>U8</span><span class=cF0>   buf[</span><span class=cFE>200</span><span class=cF0>];
-<a name="l623"></a>
-<a name="l624"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.panic)
-<a name="l625"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l626"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsRaw</span><span class=cF0>)
-<a name="l627"></a>        {
-<a name="l628"></a>            i = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip;
-<a name="l629"></a>            </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;i);
-<a name="l630"></a>            </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
-<a name="l631"></a>        }
-<a name="l632"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l633"></a>            </span><span class=cF5>U</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;rip, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l634"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l635"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l636"></a>        </span><span class=cFB>debug</span><span class=cF0>.panic = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l637"></a>    old_waiting_message = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>);
-<a name="l638"></a>    old_win_inhibit = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit;
-<a name="l639"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_USER_TASK_DEFAULT</span><span class=cF0>;
-<a name="l640"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l641"></a>    </span><span class=cFB>kbd</span><span class=cF0>.scan_code = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l642"></a>    old_getstr2 = </span><span class=cFB>fp_getstr2</span><span class=cF0>;
-<a name="l643"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = &amp;</span><span class=cFD>SysGetStr2</span><span class=cF0>;
-<a name="l644"></a>    old_single = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l645"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cFB>mouse_hard</span><span class=cF0>.install_attempts)
-<a name="l646"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l647"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(old_single);
-<a name="l648"></a>    </span><span class=cF5>UserTaskCont</span><span class=cF0>;
-<a name="l649"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = old_getstr2;
-<a name="l650"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = old_win_inhibit;
-<a name="l651"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>, old_waiting_message);
-<a name="l652"></a>}
-<a name="l653"></a>
-<a name="l654"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault3</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
-<a name="l655"></a>{
-<a name="l656"></a>    </span><span class=cF1>no_warn</span><span class=cF0> fault_err_code;
-<a name="l657"></a>
-<a name="l658"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l659"></a>    </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l660"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num &amp;&amp; </span><span class=cFB>debug</span><span class=cF0>.mp_crash)
-<a name="l661"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l662"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l663"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num     = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
-<a name="l664"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task        = </span><span class=cF5>Fs</span><span class=cF0>;
-<a name="l665"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip         = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip;
-<a name="l666"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message     = </span><span class=cFB>debug</span><span class=cF0>.message;
-<a name="l667"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFB>debug</span><span class=cF0>.message_num;
-<a name="l668"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l669"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
-<a name="l670"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l671"></a>
-<a name="l672"></a>    </span><span class=cF6>&quot;\n\tZealOS Debugger\n\n&quot;</span><span class=cF0>
-<a name="l673"></a>    </span><span class=cF6>&quot;  Type Help; for help.\n\n&quot;</span><span class=cF0>;
-<a name="l674"></a>
-<a name="l675"></a>    </span><span class=cF5>Beep</span><span class=cF0>(</span><span class=cFE>62</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l676"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_DEBUG</span><span class=cF0>)
-<a name="l677"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l678"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message)
-<a name="l679"></a>        {
-<a name="l680"></a>            </span><span class=cF6>&quot;\n!!! %s&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message;
-<a name="l681"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message_num)
-<a name="l682"></a>                </span><span class=cF6>&quot;%016X&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message_num;
-<a name="l683"></a>            </span><span class=cF6>&quot; !!!\n\n&quot;</span><span class=cF0>;
-<a name="l684"></a>        }
-<a name="l685"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l686"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.panic)
-<a name="l687"></a>        </span><span class=cF5>CallerRep</span><span class=cF0>;
-<a name="l688"></a>    </span><span class=cFD>Debug2</span><span class=cF0>;
-<a name="l689"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l690"></a>}
-<a name="l691"></a>
-<a name="l692"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault2</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
-<a name="l693"></a>{</span><span class=cF2>//Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l91"><span class=cF4>Fault2</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l694"></a></span><span class=cF2>//Be careful not to swap-out and ruin the saved context</span><span class=cF0>
-<a name="l695"></a>    </span><span class=cF1>Bool</span><span class=cF0> was_raw, was_single_user, was_silent, was_in_debug, was_mouse_enabled;
-<a name="l696"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags;
-<a name="l697"></a>
-<a name="l698"></a>    was_single_user = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l699"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsDebugMode</span><span class=cF0>)
-<a name="l700"></a>        </span><span class=cFB>debug</span><span class=cF0>.focus_task = </span><span class=cFB>sys_focus_task</span><span class=cF0>;
-<a name="l701"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l702"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_BPT</span><span class=cF0>)
-<a name="l703"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip--;
-<a name="l704"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;debug_task)
-<a name="l705"></a>        </span><span class=cF5>CallExtNum</span><span class=cF0>(</span><span class=cF3>EXT_DEBUG_RESUME</span><span class=cF0>, fault_num, fault_err_code);
-<a name="l706"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l707"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l708"></a>        was_mouse_enabled = </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l709"></a>        was_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l710"></a>        was_silent = </span><span class=cF5>Silent</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
-<a name="l711"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags |= </span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0>|</span><span class=cF3>RAWF_SCROLL</span><span class=cF0>;
-<a name="l712"></a>
-<a name="l713"></a>        </span><span class=cF6>&quot;Task \&quot;&quot;</span><span class=cF0>;
-<a name="l714"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title;
-<a name="l715"></a>        </span><span class=cF6>&quot;\&quot;\n&quot;</span><span class=cF0>;
-<a name="l716"></a>        </span><span class=cF6>&quot;Fault:    0x%02X %Z\n&quot;</span><span class=cF0>, fault_num, fault_num, </span><span class=cF6>&quot;ST_INT_NAMES&quot;</span><span class=cF0>;
-<a name="l717"></a>        </span><span class=cF6>&quot;Err Code: %08X\n&quot;</span><span class=cF0>, fault_err_code;
-<a name="l718"></a>        was_in_debug = </span><span class=cF5>DebugMode</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
-<a name="l719"></a>        </span><span class=cF6>&quot;RIP:      %08X&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip; </span><span class=cF2>//Sometimes crashes on %p, so do this first</span><span class=cF0>
-<a name="l720"></a>        </span><span class=cF6>&quot;:%p\nRSP:      %08X\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rsp;
-<a name="l721"></a>        </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_PAGE_FAULT</span><span class=cF0>)
-<a name="l722"></a>        {
-<a name="l723"></a>            </span><span class=cF1>MOV_RAX_CR2</span><span class=cF0>
-<a name="l724"></a>            i = </span><span class=cF5>RAXGet</span><span class=cF0>;
-<a name="l725"></a>            </span><span class=cF6>&quot;Fault Addr: %08X:%p\n&quot;</span><span class=cF0>, i, i;
-<a name="l726"></a>        }
-<a name="l727"></a>        </span><span class=cFD>Fault3</span><span class=cF0>(fault_num, fault_err_code);
-<a name="l728"></a>        </span><span class=cF5>DebugMode</span><span class=cF0>(was_in_debug);
-<a name="l729"></a>        </span><span class=cF5>Silent</span><span class=cF0>(was_silent);
-<a name="l730"></a>        </span><span class=cF5>Raw</span><span class=cF0>(was_raw);
-<a name="l731"></a>        </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, was_mouse_enabled);
-<a name="l732"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags = old_raw_flags;
-<a name="l733"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l734"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(was_single_user);
-<a name="l735"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_KILL_AFTER_DEBUG</span><span class=cF7>)</span><span class=cF0>)
-<a name="l736"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
-<a name="l737"></a>}
-<a name="l738"></a>
-<a name="l739"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> panic=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l740"></a>{</span><span class=cF2>//Enter the debugger with panic?</span><span class=cF0>
-<a name="l741"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
-<a name="l742"></a>    </span><span class=cF1>CLI</span><span class=cF0>
-<a name="l743"></a>    </span><span class=cFB>debug</span><span class=cF0>.message       = message;
-<a name="l744"></a>    </span><span class=cFB>debug</span><span class=cF0>.message_num   = message_num;
-<a name="l745"></a>    </span><span class=cFB>debug</span><span class=cF0>.panic         = panic;
-<a name="l746"></a>    </span><span class=cF1>INT</span><span class=cF0> </span><span class=cF3>I_DEBUG</span><span class=cF0>
-<a name="l747"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
-<a name="l748"></a>}
-<a name="l749"></a>
-<a name="l750"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l751"></a>{</span><span class=cF2>//Enter debugger, no panic.</span><span class=cF0>
-<a name="l752"></a>    </span><span class=cF5>Panic</span><span class=cF0>(message, message_num, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l753"></a>}
+<a name="l523"></a>        </span><span class=cF6>&quot;\nBreakpoints found.\n&quot;</span><span class=cF0>
+<a name="l524"></a>        </span><span class=cF6>&quot;Do one of the following, first:\n&quot;</span><span class=cF0>
+<a name="l525"></a>        </span><span class=cF6>&quot;&gt;S;\t\t\t//Single step\n&quot;</span><span class=cF0>
+<a name="l526"></a>        </span><span class=cF6>&quot;&gt;B2;\t\t//Clear all break points\n&quot;</span><span class=cF0>
+<a name="l527"></a>        </span><span class=cF6>&quot;&gt;G2;\t\t//Clear all break points and Go\n\n&quot;</span><span class=cF0>
+<a name="l528"></a>        </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-n&gt; next focus task\n&quot;</span><span class=cF0>
+<a name="l529"></a>        </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-v&gt; flushes screen VGA cache\n&quot;</span><span class=cF0>;
+<a name="l530"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l531"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l532"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_DISABLE_BPTS</span><span class=cF0>);
+<a name="l533"></a>        </span><span class=cF5>LBtr</span><span class=cF0>(&amp;task-&gt;rflags, </span><span class=cF3>RFLAGf_TRAP</span><span class=cF0>);</span><span class=cF2>//No single step</span><span class=cF0>
+<a name="l534"></a>        </span><span class=cF5>Suspend</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l535"></a>        </span><span class=cF1>if</span><span class=cF0> (task == </span><span class=cF5>Fs</span><span class=cF0>)
+<a name="l536"></a>        {
+<a name="l537"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsDebugMode</span><span class=cF0> &amp;&amp; task-&gt;next_cc != &amp;task-&gt;next_cc)
+<a name="l538"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l539"></a>                </span><span class=cF6>&quot;Exit Debug\n&quot;</span><span class=cF0>;
+<a name="l540"></a>                </span><span class=cF5>Btr</span><span class=cF0>(&amp;task-&gt;last_cc-&gt;flags, </span><span class=cF3>CCf_PROMPT</span><span class=cF0>);
+<a name="l541"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l542"></a>        }
+<a name="l543"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l544"></a>            </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l545"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l546"></a>}
+<a name="l547"></a>
+<a name="l548"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>G2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ip=</span><span class=cF3>INVALID_PTR</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
+<a name="l549"></a>{</span><span class=cF2>//Remove all breakpoints and Go.</span><span class=cF0>
+<a name="l550"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l551"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l552"></a>    </span><span class=cF5>B2</span><span class=cF0>(task);
+<a name="l553"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>ext</span><span class=cF0>[</span><span class=cF3>EXT_WIN_FOCUS</span><span class=cF0>])
+<a name="l554"></a>        </span><span class=cF5>CallExtNum</span><span class=cF0>(</span><span class=cF3>EXT_WIN_FOCUS</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.focus_task);
+<a name="l555"></a>    </span><span class=cF5>LFBFlush</span><span class=cF0>;
+<a name="l556"></a>    </span><span class=cF5>G</span><span class=cF0>(ip, task);
+<a name="l557"></a>}
+<a name="l558"></a>
+<a name="l559"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>S</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ip=</span><span class=cF3>INVALID_PTR</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>) </span><span class=cF2>//Single-step.</span><span class=cF0>
+<a name="l560"></a>{</span><span class=cF2>//Single step.</span><span class=cF0>
+<a name="l561"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
+<a name="l562"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l563"></a>
+<a name="l564"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l565"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l566"></a>    </span><span class=cF1>if</span><span class=cF0> (ip != </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
+<a name="l567"></a>        task-&gt;rip = ip;
+<a name="l568"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;task_flags, </span><span class=cF3>TASKf_DISABLE_BPTS</span><span class=cF0>);
+<a name="l569"></a>    </span><span class=cF5>LBts</span><span class=cF0>(&amp;task-&gt;rflags, </span><span class=cF3>RFLAGf_TRAP</span><span class=cF0>);
+<a name="l570"></a>    </span><span class=cF5>Suspend</span><span class=cF0>(task, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l571"></a>    </span><span class=cF1>if</span><span class=cF0> (task == </span><span class=cF5>Fs</span><span class=cF0>)
+<a name="l572"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l573"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsDebugMode</span><span class=cF0>)
+<a name="l574"></a>        {
+<a name="l575"></a>            </span><span class=cF1>if</span><span class=cF0> (task-&gt;next_cc != &amp;task-&gt;next_cc)
+<a name="l576"></a>                </span><span class=cF5>Btr</span><span class=cF0>(&amp;task-&gt;last_cc-&gt;flags, </span><span class=cF3>CCf_PROMPT</span><span class=cF0>);
+<a name="l577"></a>        }
+<a name="l578"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l579"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l580"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l581"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l582"></a>}
+<a name="l583"></a>
+<a name="l584"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>DebugHelp</span><span class=cF0>()
+<a name="l585"></a>{
+<a name="l586"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>
+<a name="l587"></a>    </span><span class=cF6>&quot;The cmd line is basically the same as normal.</span><span class=cF0>  </span><span class=cF6>Here are some common\n&quot;</span><span class=cF0>
+<a name="l588"></a>    </span><span class=cF6>&quot;debugging commands.\n\n&quot;</span><span class=cF0>
+<a name="l589"></a>    </span><span class=cF6>&quot;&gt;EdLite(\&quot;FileName\&quot;);\t\t\t\t// Edit file.\n&quot;</span><span class=cF0>
+<a name="l590"></a>    </span><span class=cF6>&quot;&gt;D(0x100000);\t\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
+<a name="l591"></a>    </span><span class=cF6>&quot;&gt;Dm(0x100000);\t\t\t\t\t\t// Dump page tables.\n&quot;</span><span class=cF0>
+<a name="l592"></a>    </span><span class=cF6>&quot;&gt;Dm(Fs, sizeof(CTask));\t\t\t\t// Dump current task record.\n&quot;</span><span class=cF0>
+<a name="l593"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs, \&quot;CTask\&quot;, 1);\t\t\t// Dump current task record.\n&quot;</span><span class=cF0>
+<a name="l594"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n&quot;</span><span class=cF0>
+<a name="l595"></a>    </span><span class=cF6>&quot;&gt;CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n&quot;</span><span class=cF0>
+<a name="l596"></a>    </span><span class=cF6>&quot;&gt;Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n&quot;</span><span class=cF0>
+<a name="l597"></a>    </span><span class=cF6>&quot;&gt;Dr;\t\t\t\t\t\t\t\t// Dump Regs.\n&quot;</span><span class=cF0>
+<a name="l598"></a>    </span><span class=cF6>&quot;&gt;1 + 2 * 3 + &amp;Print;\t\t\t\t// Show calculation res.\n&quot;</span><span class=cF0>
+<a name="l599"></a>    </span><span class=cF6>&quot;&gt;*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n&quot;</span><span class=cF0>
+<a name="l600"></a>    </span><span class=cF6>&quot;&gt;_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n&quot;</span><span class=cF0>
+<a name="l601"></a>    </span><span class=cF6>&quot;&gt;_RIP = &amp;Break;\t\t\t\t\t\t// Set RIP.\n&quot;</span><span class=cF0>
+<a name="l602"></a>    </span><span class=cF6>&quot;&gt;I64 i;\t\t\t\t\t\t\t\t// Declare variable.\n&quot;</span><span class=cF0>
+<a name="l603"></a>    </span><span class=cF6>&quot;&gt;i = _RCX + _RDX;\t\t\t\t\t// Assign to variable.\n&quot;</span><span class=cF0>
+<a name="l604"></a>    </span><span class=cF6>&quot;&gt;U(&amp;Print+0x8);\t\t\t\t\t\t// Unassemble Print.\n&quot;</span><span class=cF0>
+<a name="l605"></a>    </span><span class=cF6>&quot;&gt;Uf(\&quot;Print\&quot;);\t\t\t\t\t\t// Unassembler function \&quot;Print\&quot;.\n&quot;</span><span class=cF0>
+<a name="l606"></a>    </span><span class=cF6>&quot;&gt;Man(\&quot;Print\&quot;);\t\t\t\t\t\t// Edit Src for \&quot;Print\&quot;.\n&quot;</span><span class=cF0>
+<a name="l607"></a>    </span><span class=cF6>&quot;&gt;E(_RIP);\t\t\t\t\t\t\t// Edit Src Code.\n&quot;</span><span class=cF0>
+<a name="l608"></a>    </span><span class=cF6>&quot;&gt;Fix;\t\t\t\t\t\t\t\t// Edit Last Err Src Code.\n&quot;</span><span class=cF0>
+<a name="l609"></a>    </span><span class=cF6>&quot;&gt;B(&amp;Main+0x20);\t\t\t\t\t\t// Toggle break point.\n\n&quot;</span><span class=cF0>
+<a name="l610"></a>    </span><span class=cF6>&quot;&gt;B2;\t\t\t\t\t\t\t\t// Clear all break points.\n&quot;</span><span class=cF0>
+<a name="l611"></a>    </span><span class=cF6>&quot;&gt;S;\t\t\t\t\t\t\t\t\t// Single step.\n&quot;</span><span class=cF0>
+<a name="l612"></a>    </span><span class=cF6>&quot;&gt;G;\t\t\t\t\t\t\t\t\t// Resume execution.\n&quot;</span><span class=cF0>
+<a name="l613"></a>    </span><span class=cF6>&quot;&gt;G2;\t\t\t\t\t\t\t\t// B2;LFBFlush;WinFocus;G;\n&quot;</span><span class=cF0>
+<a name="l614"></a>    </span><span class=cF6>&quot;&gt;Exit;\t\t\t\t\t\t\t\t// Exit (kill) task.\n\n&quot;</span><span class=cF0>
+<a name="l615"></a>    </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-n&gt; next focus task.\n&quot;</span><span class=cF0>
+<a name="l616"></a>    </span><span class=cF6>&quot;After resuming, &lt;CTRL-ALT-v&gt; flushes screen VGA cache.\n\n&quot;</span><span class=cF0>;
+<a name="l617"></a>}
+<a name="l618"></a>
+<a name="l619"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Debug2</span><span class=cF0>()
+<a name="l620"></a>{
+<a name="l621"></a>    </span><span class=cF1>Bool</span><span class=cF0> old_win_inhibit, old_waiting_message, old_single;
+<a name="l622"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_getstr2;
+<a name="l623"></a>    </span><span class=cF1>U8</span><span class=cF0>   buf[</span><span class=cFE>200</span><span class=cF0>];
+<a name="l624"></a>
+<a name="l625"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.panic)
+<a name="l626"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l627"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l628"></a>        {
+<a name="l629"></a>            i = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip;
+<a name="l630"></a>            </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;i);
+<a name="l631"></a>            </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
+<a name="l632"></a>        }
+<a name="l633"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l634"></a>            </span><span class=cF5>U</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;rip, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l635"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l636"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l637"></a>        </span><span class=cFB>debug</span><span class=cF0>.panic = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l638"></a>    old_waiting_message = </span><span class=cF5>LBtr</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>);
+<a name="l639"></a>    old_win_inhibit = </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit;
+<a name="l640"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_USER_TASK_DEFAULT</span><span class=cF0>;
+<a name="l641"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l642"></a>    </span><span class=cFB>kbd</span><span class=cF0>.scan_code = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l643"></a>    old_getstr2 = </span><span class=cFB>fp_getstr2</span><span class=cF0>;
+<a name="l644"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = &amp;</span><span class=cFD>SysGetStr2</span><span class=cF0>;
+<a name="l645"></a>    old_single = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l646"></a>    </span><span class=cF1>while</span><span class=cF0> (!</span><span class=cFB>mouse_hard</span><span class=cF0>.install_attempts)
+<a name="l647"></a>        </span><span class=cF5>Yield</span><span class=cF0>;
+<a name="l648"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(old_single);
+<a name="l649"></a>    </span><span class=cF5>UserTaskCont</span><span class=cF0>;
+<a name="l650"></a>    </span><span class=cFB>fp_getstr2</span><span class=cF0> = old_getstr2;
+<a name="l651"></a>    </span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = old_win_inhibit;
+<a name="l652"></a>    </span><span class=cF5>LBEqual</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_AWAITING_MESSAGE</span><span class=cF0>, old_waiting_message);
+<a name="l653"></a>}
+<a name="l654"></a>
+<a name="l655"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault3</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
+<a name="l656"></a>{
+<a name="l657"></a>    </span><span class=cF1>no_warn</span><span class=cF0> fault_err_code;
+<a name="l658"></a>
+<a name="l659"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l660"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l661"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Gs</span><span class=cF0>-&gt;num &amp;&amp; </span><span class=cFB>debug</span><span class=cF0>.mp_crash)
+<a name="l662"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l663"></a>        </span><span class=cFB>mp_count</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l664"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;cpu_num     = </span><span class=cF5>Gs</span><span class=cF0>-&gt;num;
+<a name="l665"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;task        = </span><span class=cF5>Fs</span><span class=cF0>;
+<a name="l666"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;rip         = </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip;
+<a name="l667"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message     = </span><span class=cFB>debug</span><span class=cF0>.message;
+<a name="l668"></a>        </span><span class=cFB>debug</span><span class=cF0>.mp_crash-&gt;message_num = </span><span class=cFB>debug</span><span class=cF0>.message_num;
+<a name="l669"></a>        </span><span class=cF5>MPInt</span><span class=cF0>(</span><span class=cF3>I_MP_CRASH</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l670"></a>        </span><span class=cF5>SysHlt</span><span class=cF0>;
+<a name="l671"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l672"></a>
+<a name="l673"></a>    </span><span class=cF6>&quot;\n\tZealOS Debugger\n\n&quot;</span><span class=cF0>
+<a name="l674"></a>    </span><span class=cF6>&quot;  Type Help; for help.\n\n&quot;</span><span class=cF0>;
+<a name="l675"></a>
+<a name="l676"></a>    </span><span class=cF5>Beep</span><span class=cF0>(</span><span class=cFE>62</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l677"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_DEBUG</span><span class=cF0>)
+<a name="l678"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l679"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message)
+<a name="l680"></a>        {
+<a name="l681"></a>            </span><span class=cF6>&quot;\n!!! %s&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message;
+<a name="l682"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.message_num)
+<a name="l683"></a>                </span><span class=cF6>&quot;%016X&quot;</span><span class=cF0>, </span><span class=cFB>debug</span><span class=cF0>.message_num;
+<a name="l684"></a>            </span><span class=cF6>&quot; !!!\n\n&quot;</span><span class=cF0>;
+<a name="l685"></a>        }
+<a name="l686"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l687"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>debug</span><span class=cF0>.panic)
+<a name="l688"></a>        </span><span class=cF5>CallerRep</span><span class=cF0>;
+<a name="l689"></a>    </span><span class=cFD>Debug2</span><span class=cF0>;
+<a name="l690"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l691"></a>}
+<a name="l692"></a>
+<a name="l693"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>Fault2</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> fault_num, </span><span class=cF9>I64</span><span class=cF0> fault_err_code)
+<a name="l694"></a>{</span><span class=cF2>//Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l91"><span class=cF4>Fault2</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l695"></a></span><span class=cF2>//Be careful not to swap-out and ruin the saved context</span><span class=cF0>
+<a name="l696"></a>    </span><span class=cF1>Bool</span><span class=cF0> was_raw, was_single_user, was_silent, was_in_debug, was_mouse_enabled;
+<a name="l697"></a>    </span><span class=cF9>I64</span><span class=cF0>  i, old_raw_flags = </span><span class=cFB>text</span><span class=cF0>.raw_flags;
+<a name="l698"></a>
+<a name="l699"></a>    was_single_user = </span><span class=cF5>SingleUser</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l700"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsDebugMode</span><span class=cF0>)
+<a name="l701"></a>        </span><span class=cFB>debug</span><span class=cF0>.focus_task = </span><span class=cFB>sys_focus_task</span><span class=cF0>;
+<a name="l702"></a>    </span><span class=cFB>sys_focus_task</span><span class=cF0> = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l703"></a>    </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_BPT</span><span class=cF0>)
+<a name="l704"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip--;
+<a name="l705"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Fs</span><span class=cF0>-&gt;debug_task)
+<a name="l706"></a>        </span><span class=cF5>CallExtNum</span><span class=cF0>(</span><span class=cF3>EXT_DEBUG_RESUME</span><span class=cF0>, fault_num, fault_err_code);
+<a name="l707"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l708"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l709"></a>        was_mouse_enabled = </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l710"></a>        was_raw = </span><span class=cF5>Raw</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l711"></a>        was_silent = </span><span class=cF5>Silent</span><span class=cF0>(</span><span class=cF3>OFF</span><span class=cF0>);
+<a name="l712"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags |= </span><span class=cF3>RAWF_SHOW_DOLLAR</span><span class=cF0>|</span><span class=cF3>RAWF_SCROLL</span><span class=cF0>;
+<a name="l713"></a>
+<a name="l714"></a>        </span><span class=cF6>&quot;Task \&quot;&quot;</span><span class=cF0>;
+<a name="l715"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;task_title;
+<a name="l716"></a>        </span><span class=cF6>&quot;\&quot;\n&quot;</span><span class=cF0>;
+<a name="l717"></a>        </span><span class=cF6>&quot;Fault:    0x%02X %Z\n&quot;</span><span class=cF0>, fault_num, fault_num, </span><span class=cF6>&quot;ST_INT_NAMES&quot;</span><span class=cF0>;
+<a name="l718"></a>        </span><span class=cF6>&quot;Err Code: %08X\n&quot;</span><span class=cF0>, fault_err_code;
+<a name="l719"></a>        was_in_debug = </span><span class=cF5>DebugMode</span><span class=cF0>(</span><span class=cF3>ON</span><span class=cF0>);
+<a name="l720"></a>        </span><span class=cF6>&quot;RIP:      %08X&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip; </span><span class=cF2>//Sometimes crashes on %p, so do this first</span><span class=cF0>
+<a name="l721"></a>        </span><span class=cF6>&quot;:%p\nRSP:      %08X\n&quot;</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rip, </span><span class=cF5>Fs</span><span class=cF0>-&gt;rsp;
+<a name="l722"></a>        </span><span class=cF1>if</span><span class=cF0> (fault_num == </span><span class=cF3>I_PAGE_FAULT</span><span class=cF0>)
+<a name="l723"></a>        {
+<a name="l724"></a>            </span><span class=cF1>MOV_RAX_CR2</span><span class=cF0>
+<a name="l725"></a>            i = </span><span class=cF5>RAXGet</span><span class=cF0>;
+<a name="l726"></a>            </span><span class=cF6>&quot;Fault Addr: %08X:%p\n&quot;</span><span class=cF0>, i, i;
+<a name="l727"></a>        }
+<a name="l728"></a>        </span><span class=cFD>Fault3</span><span class=cF0>(fault_num, fault_err_code);
+<a name="l729"></a>        </span><span class=cF5>DebugMode</span><span class=cF0>(was_in_debug);
+<a name="l730"></a>        </span><span class=cF5>Silent</span><span class=cF0>(was_silent);
+<a name="l731"></a>        </span><span class=cF5>Raw</span><span class=cF0>(was_raw);
+<a name="l732"></a>        </span><span class=cF5>CallExtStr</span><span class=cF0>(</span><span class=cF6>&quot;MouseHardEnable&quot;</span><span class=cF0>, was_mouse_enabled);
+<a name="l733"></a>        </span><span class=cFB>text</span><span class=cF0>.raw_flags = old_raw_flags;
+<a name="l734"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l735"></a>    </span><span class=cF5>SingleUser</span><span class=cF0>(was_single_user);
+<a name="l736"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>LBtr</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;task_flags, </span><span class=cF3>TASKf_KILL_AFTER_DEBUG</span><span class=cF7>)</span><span class=cF0>)
+<a name="l737"></a>        </span><span class=cF5>Exit</span><span class=cF0>;
+<a name="l738"></a>}
+<a name="l739"></a>
+<a name="l740"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> panic=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l741"></a>{</span><span class=cF2>//Enter the debugger with panic?</span><span class=cF0>
+<a name="l742"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
+<a name="l743"></a>    </span><span class=cF1>CLI</span><span class=cF0>
+<a name="l744"></a>    </span><span class=cFB>debug</span><span class=cF0>.message       = message;
+<a name="l745"></a>    </span><span class=cFB>debug</span><span class=cF0>.message_num   = message_num;
+<a name="l746"></a>    </span><span class=cFB>debug</span><span class=cF0>.panic         = panic;
+<a name="l747"></a>    </span><span class=cF1>INT</span><span class=cF0> </span><span class=cF3>I_DEBUG</span><span class=cF0>
+<a name="l748"></a>    </span><span class=cF1>POPFD</span><span class=cF0>
+<a name="l749"></a>}
+<a name="l750"></a>
+<a name="l751"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> message_num=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l752"></a>{</span><span class=cF2>//Enter debugger, no panic.</span><span class=cF0>
+<a name="l753"></a>    </span><span class=cF5>Panic</span><span class=cF0>(message, message_num, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l754"></a>}
 </span></pre></body>
 </html>
