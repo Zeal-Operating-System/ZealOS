@@ -124,6 +124,17 @@ I64 AHCIPortCmdSlotGet(I64 port_num)
 	throw('AHCI');
 }
 
+I64 AHCIPortSignatureGet(I64 port_num)
+{
+	CAHCIPort *port;
+
+	if (port_num < 0 || port_num > AHCI_MAX_PORTS)
+		return NULL;
+
+	port = &blkdev.ahci_hba->ports[port_num];
+	return port->signature;
+}
+
 Bool AHCIPortIsIdle(I64 port_num)
 {//Check if the command engine is running on port.
 	return !(blkdev.ahci_hba->ports[port_num].command & (AHCI_PxCMDF_ST | AHCI_PxCMDF_CR | AHCI_PxCMDF_FR | AHCI_PxCMDF_FRE));
@@ -412,7 +423,7 @@ Bool AHCIAtapiClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
 }
 
 //TODO #define some bits/constants
-Bool AHCIAtapiFormat(CBlkDev *bd, I64 blk, I64 count)
+Bool AHCIAtapiFormat(CBlkDev *bd, I64 count)
 { // untested
 	CPortCmdTable			*cmd_table;
 	CFisH2D					*cmd_fis;
@@ -892,7 +903,7 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 	AHCIPortWait(bd->port_num, tS + 2);
 	AHCIAtapiSeek(bd, blk);
 	AHCIPortWait(bd->port_num, tS + 2);
-	AHCIAtapiFormat(bd, blk, count); // ??..
+	AHCIAtapiFormat(bd, count); // ??..
 	bd->flags |= BDF_LAST_WAS_WRITE; // ??..
 	AHCIPortWait(bd->port_num, tS + 2);
 	AHCIAtapiSeek(bd, blk);
@@ -967,6 +978,15 @@ U0 AHCIPortInit(CBlkDev *bd, CAHCIPort *port, I64 port_num)
 {//Initialize base addresses for command list and FIS receive area and start command execution on port.
 	CPortCmdHeader *cmd_header;
 	I64				i;
+
+	if (!(port->signature == AHCI_PxSIG_ATAPI || port->signature == AHCI_PxSIG_ATA))
+		Debug("AHCI Port/BlkDev error: Invalid Port Signature");
+
+	if (Letter2BlkDevType(bd->first_drive_let) == BDT_ATA && port->signature == AHCI_PxSIG_ATAPI)
+		Debug("AHCI Port/BlkDev type mismatch: BlkDev ATA, Port ATAPI");
+
+	if (Letter2BlkDevType(bd->first_drive_let) == BDT_ATAPI && port->signature == AHCI_PxSIG_ATA)
+		Debug("AHCI Port/BlkDev type mismatch: BlkDev ATAPI, Port ATA");
 
 	bd->ahci_port = port;
 	bd->port_num  = port_num;
@@ -1221,40 +1241,3 @@ Bool AHCIAtaWBlks(CDrive *drive, U8 *buf, I64 blk, I64 count)
 
 	return TRUE;
 }
-
-/*
-AHCIInit;
-
-#define BLKS 65537
-
-U0 rw()
-{
-	U8 *buf = MAlloc(BLKS * BLK_SIZE);
-	U8 *buf2 = MAlloc(BLKS * DVD_BLK_SIZE);
-	U8 *buf3 = CAlloc(BLKS * DVD_BLK_SIZE);
-
-	MemSet(buf, 0xFF, BLKS * BLK_SIZE);
-
-	CBlkDev *bd = CAlloc(sizeof(CBlkDev));
-	CBlkDev *bd2 = CAlloc(sizeof(CBlkDev));
-//	AHCIPortInit(bd, &blkdev.ahci_hba->ports[0], 0);
-	AHCIPortInit(bd2, &blkdev.ahci_hba->ports[1], 1);
-	
-//	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtaBlksWrite(bd, buf,  0, BLKS); //write
-//	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtaBlksRead(bd, buf2, 0, BLKS);//read
-
-//	"$$PURPLE$$Byte count: %X$$FG$$\n", AHCIAtapiBlksRead(bd2, buf3, 0, BLKS);//read
-	
-//	D(buf2 + (BLKS - 5) * BLK_SIZE, 5 * BLK_SIZE);
-
-	"Capacity: %d\n", AHCIAtapiCapacityGet(bd2);
-//	D(buf3 + DVD_BLK_SIZE * (BLKS - 5), 5 * DVD_BLK_SIZE);
-	Free(buf);
-	Free(buf2);
-	Free(buf3);
-	Free(bd);
-	Free(bd2);
-}
-
-rw;
-*/

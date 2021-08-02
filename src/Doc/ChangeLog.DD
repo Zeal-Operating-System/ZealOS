@@ -1,4 +1,10 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/02/21 16:23:34----$IV,0$
+* Raised version number to 0.13.
+* Fixed $LK+PU,"Mount",A="FF:::/System/BlkDev/Mount.CC,AHCIPortSig"$ allowing ATAPI<-->ATA BlkDev<-->AHCI Port misconfiguration.
+* Added arg to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,switch (bd_type)"$ to specify drive types to show.
+* Added checks in $LK+PU,"AHCIPortInit",A="MN:AHCIPortInit"$ to throw to Debug if invalid port signatures are detected.
+
 $IV,1$----08/02/21 00:54:40----$IV,0$
 * Raised version number to 0.12.
 * Fixed EdLite dropping $LK+PU,"RAWF_SCROLL",A="FF:::/Kernel/EdLite.CC,RAWF_SCROLL:2"$.
@@ -7,7 +13,7 @@ $IV,1$----08/02/21 00:54:40----$IV,0$
 * Added $LK+PU,"raw-mode screen clearing",A="FF:::/System/DolDoc/DocRecalcLib.CC,text.raw_col"$: can use either $LK+PU,"DocClear",A="MN:DocClear"$ or $LK+PU,"Cls",A="MN:Cls"$, useful for clearing the screen in debug mode.
 
 $IV,1$----07/29/21 14:35:17----$IV,0$
-* Altered RawPutChar $LK+PU,"RawPutChar",A="FF:::/Kernel/Display.CC,(U64 *)"$ screen scrolling algorithm ($LK+PU,"MemCopy",A="MN:_MEMCOPY"$ is slow on bare-metal).
+* Altered $LK+PU,"RawPutChar",A="FF:::/Kernel/Display.CC,framebuffer_u64["$ screen scrolling algorithm ($LK+PU,"MemCopy",A="MN:_MEMCOPY"$ is slow on bare-metal).
 
 $IV,1$----07/28/21 21:46:46----$IV,0$
 * Raised version number to 0.11.
