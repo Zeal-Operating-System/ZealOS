@@ -265,7 +265,7 @@ public extern Bool	Cd(U8 *dirname=NULL, Bool make_dirs=FALSE);
 public extern I64	Del(U8 *files_find_mask, Bool make_mask=FALSE, Bool del_dir=FALSE, Bool print_message=TRUE);
 public extern I64	Dir(U8 *files_find_mask="*", Bool full=FALSE);
 public extern Bool	DirMake(U8 *filename, I64 entry_count=0);
-public extern Bool	Drive(     U8 drv_let);
+public extern Bool	Drive(     U8 drv_let=0);
 public extern U0	DiskChange(U8 drv_let=0);
 public extern U0	HomeSet(U8 *dirname);
 
@@ -350,8 +350,6 @@ public extern CDirEntry *FilesFind(U8 *files_find_mask, I64 fuf_flags=0);
 
 #help_index "File/System"
 extern			CBlkDev			*ATAMount(U8 first_drive_let, I64 type, I64 base0, I64 base1, I64 unit);
-extern			Bool			 IDEATAPIStartStop(CBlkDev *bd, F64 timeout, Bool start);
-extern			I64				 IDEATAProbe(I64 base0, I64 base1, I64 unit);
 extern			I64				 BlkDevAdd(   CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free);
 extern			U0				 DiskCacheInit(I64 size_in_U8s);
 public extern	U0				 DiskCacheInvalidate(CDrive *drive);

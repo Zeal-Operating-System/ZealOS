@@ -22,15 +22,28 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 			break;
 	}
 
-	"\n$$LTBLUE$$AHCI version %X.%1X%1X$$FG$$\n\n",
-		blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
+	if (!IsRaw)
+		"\n$$LTBLUE$$AHCI version %X.%1X%1X$$FG$$\n\n",
+			blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
+	else
+		"\nAHCI version %X.%1X%1X\n\n",
+			blkdev.ahci_hba->version >> 16, (blkdev.ahci_hba->version & 0xFF00) >> 8, blkdev.ahci_hba->version & 0xFF;
 
 	if (dev.pci_head)
 	{
 		pci = PCIDevFind(PCIC_STORAGE, PCISC_AHCI);
-		"$$RED$$$$HL,1$$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$$HL,0$$$$FG$$\n\n", pci->bus, pci->dev, pci->fun;
-		"$$RED$$Vendor$$FG$$: $$LTBLUE$$%s$$FG$$\n", pci->vendor_str;
-		"$$RED$$Device$$FG$$: $$LTBLUE$$%s$$FG$$\n", pci->dev_id_str;
+		if (!IsRaw)
+		{
+			"$$RED$$$$HL,1$$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$$HL,0$$$$FG$$\n\n", pci->bus, pci->dev, pci->fun;
+			"$$RED$$Vendor$$FG$$: $$LTBLUE$$%s$$FG$$\n", pci->vendor_str;
+			"$$RED$$Device$$FG$$: $$LTBLUE$$%s$$FG$$\n", pci->dev_id_str;
+		}
+		else
+		{
+			"Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X\n\n", pci->bus, pci->dev, pci->fun;
+			"Vendor: %s\n", pci->vendor_str;
+			"Device: %s\n", pci->dev_id_str;
+		}
 	}	
 	else
 	{
@@ -38,8 +51,6 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 		"Bus:%02X, Dev:%02X, Fun:%02X\n", bdf.u8[2], bdf.u8[1], bdf.u8[0];
 		"HBA Base Address: 0x%X", PCIReadU32(bdf.u8[2], bdf.u8[1], bdf.u8[0], PCIR_BASE5) & ~0x1F;
 	}
-
-
 
 	if (blkdev.ahci_hba)
 	{
@@ -56,14 +67,29 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 				if (port->signature == AHCI_PxSIG_ATAPI && show_atapi ||
 					port->signature == AHCI_PxSIG_ATA	&& show_ata)
 				{
-					"$$PURPLE$$ $$BT,\"%d\",LM=\"%d\n\"$$$$FG$$", i, i;
+					if (!IsRaw)
+						"$$PURPLE$$ $$BT,\"%d\",LM=\"%d\n\"$$$$FG$$", i, i;
+					else
+						"[%d]", i;
 
 					if (port->signature == AHCI_PxSIG_ATA)
-						"$$LM,4$$$$RED$$Hard Drive   $$LTBLUE$$ATA$$FG$$\n";
+					{
+						if (!IsRaw)
+							"$$LM,4$$$$RED$$Hard Drive   $$LTBLUE$$ATA$$FG$$\n";
+						else
+							"\tHard Drive   ATA\n";
+					}
 					else if (port->signature == AHCI_PxSIG_ATAPI)
-						"$$LM,4$$$$RED$$CD/DVD Drive $$LTBLUE$$ATAPI$$FG$$\n";
+					{
+						if (!IsRaw)
+							"$$LM,4$$$$RED$$CD/DVD Drive $$LTBLUE$$ATAPI$$FG$$\n";
+						else
+							"\tCD/DVD Drive ATAPI\n";
+					}
 
-					"$$LM,0$$\n\t";
+					if (!IsRaw)
+						"$$LM,0$$";
+					'\n\t';
 
 					temp_blkdev = CAlloc(sizeof(CBlkDev));
 					if (port->signature == AHCI_PxSIG_ATAPI)
@@ -103,7 +129,7 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 		}
 	}
 	else
-		"$$HL,1$$blkdev.ahci_hba$$HL,0$$ is NULL !\n\n";
+		"blkdev.ahci_hba is NULL !\n\n";
 
 	return num;
 }
@@ -125,13 +151,23 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 		if (!_doc)
 			DriveRep;
 
-		"\n****** Mount Drives ******\n"
-		"$$GREEN$$A$$FG$$-$$GREEN$$B$$FG$$ are RAM drives.\n"
-		"$$GREEN$$C$$FG$$-$$GREEN$$L$$FG$$ are ATA hard drives.\n"
-		"$$GREEN$$M$$FG$$-$$GREEN$$P$$FG$$ are ISO file read drives.\n"
-		"$$GREEN$$Q$$FG$$-$$GREEN$$S$$FG$$ are ISO file write drives.\n"
-		"$$GREEN$$T$$FG$$-$$GREEN$$Z$$FG$$ are ATAPI CD/DVD drives.\n"
-		"\nDrive Letter ($$PURPLE$$<ENTER>$$FG$$ to exit):";
+		if (!IsRaw)
+			"\n****** Mount Drives ******\n"
+			"$$GREEN$$A$$FG$$-$$GREEN$$B$$FG$$ are RAM drives.\n"
+			"$$GREEN$$C$$FG$$-$$GREEN$$L$$FG$$ are ATA hard drives.\n"
+			"$$GREEN$$M$$FG$$-$$GREEN$$P$$FG$$ are ISO file read drives.\n"
+			"$$GREEN$$Q$$FG$$-$$GREEN$$S$$FG$$ are ISO file write drives.\n"
+			"$$GREEN$$T$$FG$$-$$GREEN$$Z$$FG$$ are ATAPI CD/DVD drives.\n"
+			"\nDrive Letter ($$PURPLE$$<ENTER>$$FG$$ to exit):";
+		else
+			"\n****** Mount Drives ******\n"
+			"A-B are RAM drives.\n"
+			"C-L are ATA hard drives.\n"
+			"M-P are ISO file read drives.\n"
+			"Q-S are ISO file write drives.\n"
+			"T-Z are ATAPI CD/DVD drives.\n"
+			"\nDrive Letter (<ENTER> to exit):";
+
 		drv_let = Letter2Letter(CharGet);
 		'\n';
 		if (type = Letter2BlkDevType(drv_let))

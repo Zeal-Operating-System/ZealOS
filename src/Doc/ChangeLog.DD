@@ -1,4 +1,12 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/04/21 14:29:24----$IV,0$
+* Changed $LK+PU,"DriveRep",A="FF:::/Kernel/BlkDev/DiskDrive.CC,port_num"$ to report AHCI SATA port number where IDE base0, base1, and unit were displayed.
+* Improved $LK+PU,"Lex",A="FF:::/Compiler/Lex.CC,Assert Failed"$ assert failure warning to give exact line number.
+* Removed some deprecated IDE functions.
+* Added default arg to $LK+PU,"Drive",A="MN:Drive"$, so running $FG,2$Drive;$FG,0$ will bring you to the root of the current drive.
+* Fixed printing $$'s in Raw mode in $LK+PU,"StackRep",A="MN:StackRep"$, $LK+PU,"DriveRep",A="MN:DriveRep"$, $LK+PU,"SATARep",A="MN:SATARep"$, $LK+PU,"Mount2",A="MN:Mount2"$, and $LK+PU,"CharGet",A="MN:CharGet"$.
+* Changed $LK+PU,"LongLines",A="MN:LongLines"$ cols default arg from 80 to 128 (128 is TEXT_COLS at default 1024x768).
+
 $IV,1$----08/03/21 21:57:44----$IV,0$
 * Added $LK+PU,"MountAHCIAuto",A="MN:MountAHCIAuto"$ which replaces MountIDEAuto: the kernel option works the same as MountIDEAuto, except now it is iterating over SATA ports to mount all the drives.
 * Removed CATARep, ATARep, ATARepEntry, ATARepFind, ATARepExitAllApplications and ATAIDDrives.

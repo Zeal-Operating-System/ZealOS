@@ -160,7 +160,7 @@ I64 LongLinesFile(U8 *filename, I64 cols)
 
 	return res;
 }
-public I64 LongLines(U8 *files_find_mask="*", I64 cols=80, U8 *fu_flags=NULL)
+public I64 LongLines(U8 *files_find_mask="*", I64 cols=128, U8 *fu_flags=NULL)
 {//Report files with lines of too many cols.
 	I64			 res = 0, fuf_flags = 0;
 	CDirEntry	*tmpde, *tmpde1;

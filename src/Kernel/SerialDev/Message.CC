@@ -225,7 +225,12 @@ I64 CharGet(I64 *_scan_code=NULL, Bool echo=TRUE, Bool raw_cursor=FALSE)
 	do ch1 = KeyGet(_scan_code, FALSE, raw_cursor);
 	while (!ch1);
 	if (echo)
-		"$$PT$$%c$$FG$$", ch1;
+	{
+		if (!IsRaw)
+			"$$PT$$%c$$FG$$", ch1;
+		else
+			"%c", ch1;
+	}
 
 	return ch1;
 }

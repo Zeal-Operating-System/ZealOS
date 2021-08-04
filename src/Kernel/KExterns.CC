@@ -39,7 +39,7 @@ extern I64 Del(U8 *files_find_mask, Bool make_mask=FALSE, Bool del_dir=FALSE, Bo
 
 extern Bool DirMake(U8 *filename, I64 entry_count=0);
 
-extern Bool		 Drive(U8 drv_let);
+extern Bool		 Drive(U8 drv_let=0);
 extern U8		 Drive2Letter(CDrive *drive=NULL);
 extern U0		 DriveBlkDevDel(CBlkDev *bd);
 extern CDrive	*DriveCheck(CDrive *drive, Bool except=TRUE);

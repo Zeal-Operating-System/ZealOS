@@ -148,9 +148,12 @@ U0 StackRep(CTask *task=NULL)
 				break;
 			rbp = my_rsp[j];
 		}
-		if (my_rsp[i] == addr)
-			"$$RED$$";
-		"%P$$FG$$\n", my_rsp[i];
+		if (my_rsp[i] == addr && !IsRaw)
+			"$$BG,YELLOW$$";
+		"%P", my_rsp[i];
+		if (!IsRaw)
+			"$$BG$$";
+		'\n';
 	}
 	'\n';
 	Fs->hash_table = old_hash;

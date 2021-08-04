@@ -283,7 +283,7 @@ U0 DiskChange(U8 drv_let=0)
 	RedSeaFreeFreeList(drive);
 }
 
-Bool Drive(U8 drv_let)
+Bool Drive(U8 drv_let=0)
 {//Change drive.	You can set drive with $LK,"Cd",A="MN:Cd"$() as well.
 	CDrive	*drive = Letter2Drive(drv_let);
 	CBlkDev	*bd;
@@ -379,16 +379,16 @@ U0 DriveRep()
 			else
 				ch = '+';
 			attr = DriveTextAttrGet(drv_let);
-			"$$FG,%d$$$$BG,%d$$%C %-8Z %-10Z %04X %04X %02X\n",	attr & 15,
-															attr >> 4,
-															drv_let,
-															drive->fs_type & FSG_TYPE_MASK,
-															"ST_DRIVE_TYPES",
-															bd->type,
-															"ST_BLKDEV_TYPES",
-															bd->base0,
-															bd->base1,
-															bd->unit;
+
+			if (!IsRaw)
+				"$$FG,%d$$$$BG,%d$$", attr & 15, attr >> 4;
+
+			"%C %-8Z %-10Z SATA Port: %02d\n",	drv_let,
+												drive->fs_type & FSG_TYPE_MASK,
+												"ST_DRIVE_TYPES",
+												bd->type,
+												"ST_BLKDEV_TYPES",
+												bd->port_num;
 			if (st = DriveModelNum(drv_let))
 			{
 				"   Model# :%s\n", st;
@@ -401,7 +401,9 @@ U0 DriveRep()
 			}
 			if (bd->type == BDT_ISO_FILE_READ || bd->type == BDT_ISO_FILE_WRITE)
 				"   File=\"%s\"\n", bd->file_disk_name;
-			"   %016X-%016X\n$$FG$$$$BG$$", drive->drv_offset, drive->drv_offset + drive->size - 1;
+			"   %016X-%016X\n", drive->drv_offset, drive->drv_offset + drive->size - 1;
+			if (!IsRaw)
+				"$$FG$$$$BG$$";
 		}
 	}
 	"Home Dir:\"%s\"\n", blkdev.home_dir;

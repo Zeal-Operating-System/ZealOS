@@ -252,79 +252,84 @@ body {background-color:#fef1f0;}
 <a name="l225"></a>    </span><span class=cF1>do</span><span class=cF0> ch1 = </span><span class=cF5>KeyGet</span><span class=cF0>(_scan_code, </span><span class=cF3>FALSE</span><span class=cF0>, raw_cursor);
 <a name="l226"></a>    </span><span class=cF1>while</span><span class=cF0> (!ch1);
 <a name="l227"></a>    </span><span class=cF1>if</span><span class=cF0> (echo)
-<a name="l228"></a>        </span><span class=cF6>&quot;$PT$%c$FG$&quot;</span><span class=cF0>, ch1;
-<a name="l229"></a>
-<a name="l230"></a>    </span><span class=cF1>return</span><span class=cF0> ch1;
-<a name="l231"></a>}
-<a name="l232"></a>
-<a name="l233"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF1>default</span><span class=cF0>=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cF3>NONE</span><span class=cF0>)
-<a name="l234"></a>{</span><span class=cF2>//Returns a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>()ed prompted string. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4359"><span class=cF4>Flags</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l235"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
-<a name="l236"></a>
-<a name="l237"></a>    </span><span class=cF1>if</span><span class=cF0> (message)
-<a name="l238"></a>        </span><span class=cF6>&quot;&quot;</span><span class=cF0> message, </span><span class=cF1>default</span><span class=cF0>;
-<a name="l239"></a>    st = (*</span><span class=cFB>fp_getstr2</span><span class=cF0>)(flags);
-<a name="l240"></a>    </span><span class=cF1>if</span><span class=cF0> (!*st)
-<a name="l241"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l242"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l243"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>default</span><span class=cF0>)
-<a name="l244"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF1>default</span><span class=cF0>);
-<a name="l245"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l246"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>);
-<a name="l247"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l248"></a>    </span><span class=cF1>return</span><span class=cF0> st;
-<a name="l249"></a>}
-<a name="l250"></a>
-<a name="l251"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>StrNGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF1>Bool</span><span class=cF0> allow_ext=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l252"></a>{</span><span class=cF2>//Prompt into fixed length string. Size must include terminator.</span><span class=cF0>
-<a name="l253"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
-<a name="l254"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l228"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l229"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
+<a name="l230"></a>            </span><span class=cF6>&quot;$PT$%c$FG$&quot;</span><span class=cF0>, ch1;
+<a name="l231"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l232"></a>            </span><span class=cF6>&quot;%c&quot;</span><span class=cF0>, ch1;
+<a name="l233"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l234"></a>
+<a name="l235"></a>    </span><span class=cF1>return</span><span class=cF0> ch1;
+<a name="l236"></a>}
+<a name="l237"></a>
+<a name="l238"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *message=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF1>default</span><span class=cF0>=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cF3>NONE</span><span class=cF0>)
+<a name="l239"></a>{</span><span class=cF2>//Returns a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF2>()ed prompted string. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4359"><span class=cF4>Flags</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l240"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l241"></a>
+<a name="l242"></a>    </span><span class=cF1>if</span><span class=cF0> (message)
+<a name="l243"></a>        </span><span class=cF6>&quot;&quot;</span><span class=cF0> message, </span><span class=cF1>default</span><span class=cF0>;
+<a name="l244"></a>    st = (*</span><span class=cFB>fp_getstr2</span><span class=cF0>)(flags);
+<a name="l245"></a>    </span><span class=cF1>if</span><span class=cF0> (!*st)
+<a name="l246"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l247"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l248"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>default</span><span class=cF0>)
+<a name="l249"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF1>default</span><span class=cF0>);
+<a name="l250"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l251"></a>            </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>StrNew</span><span class=cF0>(</span><span class=cF6>&quot;&quot;</span><span class=cF0>);
+<a name="l252"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l253"></a>    </span><span class=cF1>return</span><span class=cF0> st;
+<a name="l254"></a>}
 <a name="l255"></a>
-<a name="l256"></a>    </span><span class=cF1>if</span><span class=cF0> (!size || !buf)
-<a name="l257"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l258"></a>    </span><span class=cF1>if</span><span class=cF0> (allow_ext)
-<a name="l259"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l260"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
-<a name="l261"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &gt; size - </span><span class=cFE>1</span><span class=cF0>)
-<a name="l262"></a>        {
-<a name="l263"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(buf, st, size - </span><span class=cFE>1</span><span class=cF0>);
-<a name="l264"></a>            buf[size - </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l265"></a>        }
-<a name="l266"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l267"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(buf, st);
-<a name="l268"></a>        i = </span><span class=cF5>StrLen</span><span class=cF0>(buf);
-<a name="l269"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l270"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l271"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l272"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l273"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l274"></a>        {
-<a name="l275"></a>            ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF5>IsDebugMode</span><span class=cF0>);
-<a name="l276"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'\n'</span><span class=cF0>)
-<a name="l277"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l278"></a>                </span><span class=cF6>''</span><span class=cF0> ch;
-<a name="l279"></a>                </span><span class=cF1>break</span><span class=cF0>;
-<a name="l280"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l281"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_BACKSPACE</span><span class=cF0>)
+<a name="l256"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>StrNGet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF1>Bool</span><span class=cF0> allow_ext=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l257"></a>{</span><span class=cF2>//Prompt into fixed length string. Size must include terminator.</span><span class=cF0>
+<a name="l258"></a>    </span><span class=cF1>U8</span><span class=cF0> *st;
+<a name="l259"></a>    </span><span class=cF9>I64</span><span class=cF0> ch, i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l260"></a>
+<a name="l261"></a>    </span><span class=cF1>if</span><span class=cF0> (!size || !buf)
+<a name="l262"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l263"></a>    </span><span class=cF1>if</span><span class=cF0> (allow_ext)
+<a name="l264"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l265"></a>        st = </span><span class=cF5>StrGet</span><span class=cF0>;
+<a name="l266"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>st</span><span class=cF7>)</span><span class=cF0> &gt; size - </span><span class=cFE>1</span><span class=cF0>)
+<a name="l267"></a>        {
+<a name="l268"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(buf, st, size - </span><span class=cFE>1</span><span class=cF0>);
+<a name="l269"></a>            buf[size - </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l270"></a>        }
+<a name="l271"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l272"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(buf, st);
+<a name="l273"></a>        i = </span><span class=cF5>StrLen</span><span class=cF0>(buf);
+<a name="l274"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l275"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l276"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l277"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l278"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l279"></a>        {
+<a name="l280"></a>            ch = </span><span class=cF5>CharGet</span><span class=cF0>(, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF5>IsDebugMode</span><span class=cF0>);
+<a name="l281"></a>            </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF6>'\n'</span><span class=cF0>)
 <a name="l282"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l283"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
-<a name="l284"></a>                {
-<a name="l285"></a>                    i--;
-<a name="l286"></a>                    </span><span class=cF6>''</span><span class=cF0> ch;
-<a name="l287"></a>                }
-<a name="l288"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l289"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l290"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l291"></a>                </span><span class=cF1>if</span><span class=cF0> (i &lt; size - </span><span class=cFE>1</span><span class=cF0>)
-<a name="l292"></a>                {
-<a name="l293"></a>                    buf[i++] = ch;
-<a name="l294"></a>                    </span><span class=cF6>''</span><span class=cF0> ch;
-<a name="l295"></a>                }
-<a name="l296"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l297"></a>        }
-<a name="l298"></a>        buf[i] = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l299"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l300"></a>    </span><span class=cF1>return</span><span class=cF0> i;
-<a name="l301"></a>}
+<a name="l283"></a>                </span><span class=cF6>''</span><span class=cF0> ch;
+<a name="l284"></a>                </span><span class=cF1>break</span><span class=cF0>;
+<a name="l285"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l286"></a>            </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (ch == </span><span class=cF3>CH_BACKSPACE</span><span class=cF0>)
+<a name="l287"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l288"></a>                </span><span class=cF1>if</span><span class=cF0> (i &gt; </span><span class=cFE>0</span><span class=cF0>)
+<a name="l289"></a>                {
+<a name="l290"></a>                    i--;
+<a name="l291"></a>                    </span><span class=cF6>''</span><span class=cF0> ch;
+<a name="l292"></a>                }
+<a name="l293"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l294"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l295"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l296"></a>                </span><span class=cF1>if</span><span class=cF0> (i &lt; size - </span><span class=cFE>1</span><span class=cF0>)
+<a name="l297"></a>                {
+<a name="l298"></a>                    buf[i++] = ch;
+<a name="l299"></a>                    </span><span class=cF6>''</span><span class=cF0> ch;
+<a name="l300"></a>                }
+<a name="l301"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l302"></a>        }
+<a name="l303"></a>        buf[i] = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l304"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l305"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l306"></a>}
 </span></pre></body>
 </html>

@@ -1264,7 +1264,11 @@ lex_ifjit:
 						if (!Lex(cc))
 							goto lex_end;
 						if (!LexExpression(cc))
-							LexWarn(cc, "Assert Failed ");
+						{
+							PrintWarn("Assert Failed at ");
+							PutFileLink(cc->lex_include_stack->full_name,, cc->lex_include_stack->line_num);
+							'\n';
+						}
 						goto lex_end;
 
 					case KW_EXE:
