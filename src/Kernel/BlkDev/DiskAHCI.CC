@@ -1033,13 +1033,16 @@ Bool AHCIAtaInit(CBlkDev *bd)
 	unlock = BlkDevLock(bd);
 
 	// if we re-init a port, keep memory from leaking.
-	for (i = 0; i < blkdev.cmd_slot_count; i++)
+	if (bd->ahci_port->cmd_list_base)
 	{
-		cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
-		Free(cmd_header->cmd_table_base);
+		for (i = 0; i < blkdev.cmd_slot_count; i++)
+		{
+			cmd_header = &bd->ahci_port->cmd_list_base(CPortCmdHeader *)[i];
+			Free(cmd_header->cmd_table_base);
+		}
+		Free(bd->ahci_port->cmd_list_base);
+		Free(bd->ahci_port->fis_base);
 	}
-	Free(bd->ahci_port->cmd_list_base);
-	Free(bd->ahci_port->fis_base);
 
 	// try to init the port, catch if fails.
 	try

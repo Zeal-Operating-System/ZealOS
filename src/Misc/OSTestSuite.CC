@@ -1810,10 +1810,10 @@ U0 OSTestSuite()
 	TS("DiskView"); 		if (DriveIsWritable(':'))
 							{
 								XTalkWait(task, "DiskView;\n");
-								Sleep(250); //Short because ATARep takes time.
+								Sleep(250);
 								MessagePostWait(task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
 							}
-	TS("ATARep"); 			XTalkWait(task, "ATARep;\npSleep(750);\n");
+	TS("SATARep"); 			XTalkWait(task, "SATARep;\nSleep(750);\n");
 	TS("HashDepthRep"); 	XTalkWait(task, "HashDepthRep(sys_task->hash_table);Sleep(750);\n");
 	TS("Who");				XTalkWait(task, "Who;Sleep(750);\n");
 	TS("DriveRep"); 		XTalkWait(task, "DriveRep;Sleep(750);\n");

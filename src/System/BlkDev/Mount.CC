@@ -1,5 +1,6 @@
-I64 SATARep(I64 bd_type=BDT_NULL)
-{
+#help_index "PCI;Info;File/System;Devices"
+public I64 SATARep(I64 bd_type=BDT_NULL)
+{ // Report ATA and ATAPI drives implemented by SATA controller.
 	I64			 bdf, i, j, num = 0;
 	CAHCIPort	*port;
 	CPCIDev		*pci;

@@ -349,14 +349,13 @@ public extern I64	 FileWrite(U8 *filename, U8 *fbuf, I64 size, CDate cdt=0, I64 
 public extern CDirEntry *FilesFind(U8 *files_find_mask, I64 fuf_flags=0);
 
 #help_index "File/System"
-public extern	CATARep			*ATAIDDrives(CATARep *head, CATARep **_ata_drive, CATARep **_atapi_drive);
 extern			CBlkDev			*ATAMount(U8 first_drive_let, I64 type, I64 base0, I64 base1, I64 unit);
 extern			Bool			 IDEATAPIStartStop(CBlkDev *bd, F64 timeout, Bool start);
 extern			I64				 IDEATAProbe(I64 base0, I64 base1, I64 unit);
 extern			I64				 BlkDevAdd(   CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free);
 extern			U0				 DiskCacheInit(I64 size_in_U8s);
 public extern	U0				 DiskCacheInvalidate(CDrive *drive);
-public extern	I64				 MountIDEAuto();
+public extern	I64				 MountAHCIAuto();
 extern			U0				 AHCIHbaReset();
 extern			U0				 AHCIPortReset(I64 port_num);
 extern			U0				 AHCIDebug(    I64 port_num);
@@ -427,7 +426,6 @@ public extern U0 DriveRep();
 
 #help_index "Install"
 #help_file "::/Doc/Install"
-extern			CATARep	*ATARepFind(CATARep *haystack_head, I64 needle_num);
 public extern	Bool	 DriveEnable(U8 drv_let, Bool val);
 
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
@@ -625,9 +623,6 @@ public extern							U0	PCIWriteU32(I64 bus, I64 dev, I64 fun, I64 rg, I64 val);
 public extern							U0	PCIWriteU8( I64 bus, I64 dev, I64 fun, I64 rg, I64 val);
 public _extern SYS_PCIBIOS_SERVICE_DIR	U32	sys_PCIBIOS_service_dir;//Far call routine in the BIOS
 public _extern SYS_PCI_SERVICES			U32	sys_pci_services;//Far call routine in the BIOS
-
-#help_index "PCI;Info;File/System;Devices"
-public extern I64 ATARep(Bool prompt=TRUE, Bool just_ide=FALSE, CATARep **_head=NULL);
 
 #help_index "Processor"
 public extern U8 *IntEntryGet(I64 irq);

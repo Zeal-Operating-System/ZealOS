@@ -15,7 +15,7 @@ Features in development include:
   - Fully-functional AHCI support
   - Network card drivers and a networking stack
 
-Changes include:
+[Changes include](https://zeal-operating-system.github.io/ZealOS/Doc/ChangeLog.DD.html):
   - 60 FPS
   - VBE graphics with variable resolutions
   - Reformatted code for readability

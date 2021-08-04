@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/03/21 21:57:44----$IV,0$
+* Added $LK+PU,"MountAHCIAuto",A="MN:MountAHCIAuto"$ which replaces MountIDEAuto: the kernel option works the same as MountIDEAuto, except now it is iterating over SATA ports to mount all the drives.
+* Removed CATARep, ATARep, ATARepEntry, ATARepFind, ATARepExitAllApplications and ATAIDDrives.
+
 $IV,1$----08/02/21 16:23:34----$IV,0$
 * Raised version number to 0.13.
 * Fixed $LK+PU,"Mount",A="FF:::/System/BlkDev/Mount.CC,AHCIPortSig"$ allowing ATAPI<-->ATA BlkDev<-->AHCI Port misconfiguration.

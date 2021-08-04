@@ -6,7 +6,7 @@ U8 *kernel_config_options = "MemInit\0"
 							"HomeDir\0"
 							"NoMP\0"
 							"DontProbe\0"
-							"MountIDEAuto\0"
+							"MountAHCIAuto\0"
 							"DebugDistro\0"
 							"Help";
 
@@ -79,7 +79,7 @@ U0 KConfigOptions(CKConfig *c)
 			"$$PURPLE$$HomeDir$$FG$$ Set home dir.\n"
 			"$$PURPLE$$NoMP$$FG$$ No multicore.\n"
 			"$$PURPLE$$DontProbe$$FG$$ Just prompt CD/DVD ports, don't probe.\n"
-			"$$PURPLE$$MountIDEAuto$$FG$$ Auto Mount IDE drives to 'C' and 'T'.\n"
+			"$$PURPLE$$MountAHCIAuto$$FG$$ Auto Mount AHCI drives to 'C' and 'T'.\n"
 			"$$PURPLE$$DebugDistro$$FG$$ Include RAM Drive in Kernel.BIN.\n"
 			"\n";
 		else

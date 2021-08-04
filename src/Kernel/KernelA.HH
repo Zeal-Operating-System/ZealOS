@@ -2690,18 +2690,6 @@ class CPCIDev
 			 erom;
 };
 
-#help_index "Devices;File/System;PCI"
-public class CATARep
-{
-	CATARep *next;
-	I64 	 num,
-			 type,
-			 base0,
-			 base1,
-			 unit,
-			 irq;
-};
-
 #help_index "Devices;Disk/AHCI"
 #define AHCI_MAX_PORTS			32
 

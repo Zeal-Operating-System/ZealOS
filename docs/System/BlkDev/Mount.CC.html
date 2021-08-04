@@ -25,288 +25,289 @@ body {background-color:#fef1f0;}
 </head>
 <body>
 <pre style="font-family:monospace;font-size:12pt">
-<a name="l1"></a><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SATARep</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> bd_type=</span><span class=cF3>BDT_NULL</span><span class=cF0>)
-<a name="l2"></a>{
-<a name="l3"></a>    </span><span class=cF9>I64</span><span class=cF0>          bdf, i, j, num = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l4"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l5"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0>     *pci;
-<a name="l6"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>     *temp_blkdev;
-<a name="l7"></a>    </span><span class=cF9>U16</span><span class=cF0>         *st, *model, *serial;
-<a name="l8"></a>    </span><span class=cF1>Bool</span><span class=cF0>         show_atapi = </span><span class=cF3>FALSE</span><span class=cF0>, show_ata = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l9"></a>
+<a name="l1"></a><span class=cF0>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;PCI;Info;File/System;Devices&quot;</span><span class=cF0>
+<a name="l2"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SATARep</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> bd_type=</span><span class=cF3>BDT_NULL</span><span class=cF0>)
+<a name="l3"></a>{ </span><span class=cF2>// Report ATA and ATAPI drives implemented by SATA controller.</span><span class=cF0>
+<a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>          bdf, i, j, num = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l5"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
+<a name="l6"></a>    </span><span class=cF9>CPCIDev</span><span class=cF0>     *pci;
+<a name="l7"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>     *temp_blkdev;
+<a name="l8"></a>    </span><span class=cF9>U16</span><span class=cF0>         *st, *model, *serial;
+<a name="l9"></a>    </span><span class=cF1>Bool</span><span class=cF0>         show_atapi = </span><span class=cF3>FALSE</span><span class=cF0>, show_ata = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l10"></a>
-<a name="l11"></a>    </span><span class=cF1>switch</span><span class=cF0> (bd_type)
-<a name="l12"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l13"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_NULL</span><span class=cF0>:
-<a name="l14"></a>            show_atapi = show_ata = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l15"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l16"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
-<a name="l17"></a>            show_atapi = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l18"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l19"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
-<a name="l20"></a>            show_ata = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l21"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l22"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l23"></a>
-<a name="l24"></a>    </span><span class=cF6>&quot;\n$LTBLUE$AHCI version %X.%1X%1X$FG$\n\n&quot;</span><span class=cF0>,
-<a name="l25"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &gt;&gt; </span><span class=cFE>16</span><span class=cF0>, (</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &amp; </span><span class=cFE>0xFF00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &amp; </span><span class=cFE>0xFF</span><span class=cF0>;
-<a name="l26"></a>
-<a name="l27"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>dev</span><span class=cF0>.pci_head)
-<a name="l28"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l29"></a>        pci = </span><span class=cF5>PCIDevFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0>, </span><span class=cF3>PCISC_AHCI</span><span class=cF0>);
-<a name="l30"></a>        </span><span class=cF6>&quot;$RED$$HL,1$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$HL,0$$FG$\n\n&quot;</span><span class=cF0>, pci-&gt;bus, pci-&gt;</span><span class=cFB>dev</span><span class=cF0>, pci-&gt;fun;
-<a name="l31"></a>        </span><span class=cF6>&quot;$RED$Vendor$FG$: $LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, pci-&gt;vendor_str;
-<a name="l32"></a>        </span><span class=cF6>&quot;$RED$Device$FG$: $LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, pci-&gt;dev_id_str;
-<a name="l33"></a>    </span><span class=cF7>}</span><span class=cF0>   
-<a name="l34"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l35"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l36"></a>        bdf = </span><span class=cF5>PCIClassFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> | </span><span class=cF3>PCISC_AHCI</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l37"></a>        </span><span class=cF6>&quot;Bus:%02X, Dev:%02X, Fun:%02X\n&quot;</span><span class=cF0>, bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>];
-<a name="l38"></a>        </span><span class=cF6>&quot;HBA Base Address: 0x%X&quot;</span><span class=cF0>, </span><span class=cF5>PCIReadU32</span><span class=cF0>(bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF3>PCIR_BASE5</span><span class=cF0>) &amp; ~</span><span class=cFE>0x1F</span><span class=cF0>;
-<a name="l39"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l40"></a>
+<a name="l11"></a>
+<a name="l12"></a>    </span><span class=cF1>switch</span><span class=cF0> (bd_type)
+<a name="l13"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l14"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_NULL</span><span class=cF0>:
+<a name="l15"></a>            show_atapi = show_ata = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l16"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l17"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
+<a name="l18"></a>            show_atapi = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l19"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l20"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
+<a name="l21"></a>            show_ata = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l22"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l23"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l24"></a>
+<a name="l25"></a>    </span><span class=cF6>&quot;\n$LTBLUE$AHCI version %X.%1X%1X$FG$\n\n&quot;</span><span class=cF0>,
+<a name="l26"></a>        </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &gt;&gt; </span><span class=cFE>16</span><span class=cF0>, (</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &amp; </span><span class=cFE>0xFF00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;version &amp; </span><span class=cFE>0xFF</span><span class=cF0>;
+<a name="l27"></a>
+<a name="l28"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>dev</span><span class=cF0>.pci_head)
+<a name="l29"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l30"></a>        pci = </span><span class=cF5>PCIDevFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0>, </span><span class=cF3>PCISC_AHCI</span><span class=cF0>);
+<a name="l31"></a>        </span><span class=cF6>&quot;$RED$$HL,1$Bus: 0x%02X, Dev: 0x%02X, Fun: 0x%02X$HL,0$$FG$\n\n&quot;</span><span class=cF0>, pci-&gt;bus, pci-&gt;</span><span class=cFB>dev</span><span class=cF0>, pci-&gt;fun;
+<a name="l32"></a>        </span><span class=cF6>&quot;$RED$Vendor$FG$: $LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, pci-&gt;vendor_str;
+<a name="l33"></a>        </span><span class=cF6>&quot;$RED$Device$FG$: $LTBLUE$%s$FG$\n&quot;</span><span class=cF0>, pci-&gt;dev_id_str;
+<a name="l34"></a>    </span><span class=cF7>}</span><span class=cF0>   
+<a name="l35"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l36"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l37"></a>        bdf = </span><span class=cF5>PCIClassFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> | </span><span class=cF3>PCISC_AHCI</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l38"></a>        </span><span class=cF6>&quot;Bus:%02X, Dev:%02X, Fun:%02X\n&quot;</span><span class=cF0>, bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l39"></a>        </span><span class=cF6>&quot;HBA Base Address: 0x%X&quot;</span><span class=cF0>, </span><span class=cF5>PCIReadU32</span><span class=cF0>(bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF3>PCIR_BASE5</span><span class=cF0>) &amp; ~</span><span class=cFE>0x1F</span><span class=cF0>;
+<a name="l40"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l41"></a>
 <a name="l42"></a>
-<a name="l43"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba)
-<a name="l44"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l45"></a>        </span><span class=cF6>&quot;\nImplemented Ports:\n&quot;</span><span class=cF0>;
-<a name="l46"></a>        </span><span class=cF6>&quot;(Show ATA:   %Z)\n&quot;</span><span class=cF0>, show_ata, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>;
-<a name="l47"></a>        </span><span class=cF6>&quot;(Show ATAPI: %Z)\n\n&quot;</span><span class=cF0>, show_atapi, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>;
-<a name="l48"></a>
-<a name="l49"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l50"></a>        {
-<a name="l51"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l52"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l53"></a>                port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l54"></a>
-<a name="l55"></a>                </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0> &amp;&amp; show_atapi ||
-<a name="l56"></a>                    port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>   &amp;&amp; show_ata)
-<a name="l57"></a>                {
-<a name="l58"></a>                    </span><span class=cF6>&quot;$PURPLE$ $BT,\&quot;%d\&quot;,LM=\&quot;%d\n\&quot;$$FG$&quot;</span><span class=cF0>, i, i;
-<a name="l59"></a>
-<a name="l60"></a>                    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l61"></a>                        </span><span class=cF6>&quot;$LM,4$$RED$Hard Drive   $LTBLUE$ATA$FG$\n&quot;</span><span class=cF0>;
-<a name="l62"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l63"></a>                        </span><span class=cF6>&quot;$LM,4$$RED$CD/DVD Drive $LTBLUE$ATAPI$FG$\n&quot;</span><span class=cF0>;
-<a name="l64"></a>
-<a name="l65"></a>                    </span><span class=cF6>&quot;$LM,0$\n\t&quot;</span><span class=cF0>;
-<a name="l66"></a>
-<a name="l67"></a>                    temp_blkdev = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBlkDev</span><span class=cF7>)</span><span class=cF0>);
-<a name="l68"></a>                    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l69"></a>                        temp_blkdev-&gt;first_drive_let = </span><span class=cF6>'T'</span><span class=cF0>;
-<a name="l70"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF2>// ATA</span><span class=cF0>
-<a name="l71"></a>                        temp_blkdev-&gt;first_drive_let = </span><span class=cF6>'C'</span><span class=cF0>;
-<a name="l72"></a>
-<a name="l73"></a>                    </span><span class=cF5>AHCIPortInit</span><span class=cF0>(temp_blkdev, port, i);
-<a name="l74"></a>                    </span><span class=cF6>&quot;\n\t&quot;</span><span class=cF0>;
-<a name="l75"></a>
-<a name="l76"></a>                    </span><span class=cF1>if</span><span class=cF0> (temp_blkdev-&gt;dev_id_record)
-<a name="l77"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l78"></a>                        st = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>40</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
-<a name="l79"></a>                        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>20</span><span class=cF0>; j++)
-<a name="l80"></a>                            st[j] = </span><span class=cF5>EndianU16</span><span class=cF0>(temp_blkdev-&gt;dev_id_record[</span><span class=cFE>27</span><span class=cF0> + j]);
-<a name="l81"></a>                        model = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_REM_LEADING</span><span class=cF0> | </span><span class=cF3>SUF_REM_TRAILING</span><span class=cF0>);
-<a name="l82"></a>                        </span><span class=cF6>&quot;Model:  %s\n\t&quot;</span><span class=cF0>, model;
-<a name="l83"></a>                        </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l84"></a>                        </span><span class=cF5>Free</span><span class=cF0>(model);
-<a name="l85"></a>
-<a name="l86"></a>                        st = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>20</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
-<a name="l87"></a>                        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>10</span><span class=cF0>; j++)
-<a name="l88"></a>                            st[j] = </span><span class=cF5>EndianU16</span><span class=cF0>(temp_blkdev-&gt;dev_id_record[</span><span class=cFE>10</span><span class=cF0> + j]);
-<a name="l89"></a>                        serial = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_REM_LEADING</span><span class=cF0> | </span><span class=cF3>SUF_REM_TRAILING</span><span class=cF0>);
-<a name="l90"></a>                        </span><span class=cF6>&quot;Serial: %s\n&quot;</span><span class=cF0>, serial;
-<a name="l91"></a>                        </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l92"></a>                        </span><span class=cF5>Free</span><span class=cF0>(serial);
-<a name="l93"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l94"></a>
-<a name="l95"></a>                    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
-<a name="l96"></a>
-<a name="l97"></a>                    </span><span class=cF5>BlkDevDel</span><span class=cF0>(temp_blkdev);
-<a name="l98"></a>                    </span><span class=cF5>Free</span><span class=cF0>(temp_blkdev);
-<a name="l99"></a>                }
-<a name="l100"></a>                num++;
-<a name="l101"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l102"></a>        }
-<a name="l103"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l104"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l105"></a>        </span><span class=cF6>&quot;$HL,1$blkdev.ahci_hba$HL,0$ is NULL !\n\n&quot;</span><span class=cF0>;
-<a name="l106"></a>
-<a name="l107"></a>    </span><span class=cF1>return</span><span class=cF0> num;
-<a name="l108"></a>}
-<a name="l109"></a>
-<a name="l110"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Install;File/Cmd Line (Typically);Cmd Line (Typically);&quot;</span><span class=cF0>
-<a name="l111"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Mount2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> boot_drive_let, </span><span class=cF9>CDoc</span><span class=cF0> *_doc, </span><span class=cF1>Bool</span><span class=cF0> _caller_is_prtdisk)
-<a name="l112"></a>{</span><span class=cF2>//If _doc, called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF2> else called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l260"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
-<a name="l113"></a>    </span><span class=cF9>I64</span><span class=cF0>      count, total = </span><span class=cFE>0</span><span class=cF0>, num_hints, drv_let, type, prt_num, port = -</span><span class=cFE>1</span><span class=cF0>;
-<a name="l114"></a>    </span><span class=cF1>U8</span><span class=cF0>       blks_buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], addr_buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], port_str[</span><span class=cF3>STR_LEN</span><span class=cF0>],
-<a name="l115"></a>            *filename = </span><span class=cF3>NULL</span><span class=cF0>, *filename2 = </span><span class=cF3>NULL</span><span class=cF0>, res = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l116"></a>    </span><span class=cF1>Bool</span><span class=cF0>     whole_drive, make_free;
-<a name="l117"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc;
-<a name="l118"></a>
-<a name="l119"></a>    </span><span class=cF1>if</span><span class=cF0> (boot_drive_let)
-<a name="l120"></a>        boot_drive_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(boot_drive_let);
-<a name="l121"></a>    </span><span class=cF1>do</span><span class=cF0>
-<a name="l122"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l123"></a>        count = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l124"></a>        </span><span class=cF1>if</span><span class=cF0> (!_doc)
-<a name="l125"></a>            </span><span class=cF5>DriveRep</span><span class=cF0>;
-<a name="l126"></a>
-<a name="l127"></a>        </span><span class=cF6>&quot;\n****** Mount Drives ******\n&quot;</span><span class=cF0>
-<a name="l128"></a>        </span><span class=cF6>&quot;$GREEN$A$FG$-$GREEN$B$FG$ are RAM drives.\n&quot;</span><span class=cF0>
-<a name="l129"></a>        </span><span class=cF6>&quot;$GREEN$C$FG$-$GREEN$L$FG$ are ATA hard drives.\n&quot;</span><span class=cF0>
-<a name="l130"></a>        </span><span class=cF6>&quot;$GREEN$M$FG$-$GREEN$P$FG$ are ISO file read drives.\n&quot;</span><span class=cF0>
-<a name="l131"></a>        </span><span class=cF6>&quot;$GREEN$Q$FG$-$GREEN$S$FG$ are ISO file write drives.\n&quot;</span><span class=cF0>
-<a name="l132"></a>        </span><span class=cF6>&quot;$GREEN$T$FG$-$GREEN$Z$FG$ are ATAPI CD/DVD drives.\n&quot;</span><span class=cF0>
-<a name="l133"></a>        </span><span class=cF6>&quot;\nDrive Letter ($PURPLE$&lt;ENTER&gt;$FG$ to exit):&quot;</span><span class=cF0>;
-<a name="l134"></a>        drv_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
-<a name="l135"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l136"></a>        </span><span class=cF1>if</span><span class=cF0> (type = </span><span class=cF5>Letter2BlkDevType</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>)
-<a name="l137"></a>        {
-<a name="l138"></a>            whole_drive = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l139"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc)
-<a name="l140"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
-<a name="l141"></a>                doc = _doc;
-<a name="l142"></a>                make_free = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l143"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l144"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l145"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l260"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
-<a name="l146"></a>                doc = </span><span class=cF5>DocNew</span><span class=cF0>;
-<a name="l147"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;CBlkDev *bd;\n&quot;</span><span class=cF0>);
-<a name="l148"></a>                make_free = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l149"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l150"></a>            prt_num = </span><span class=cF3>I64_MIN</span><span class=cF0>;
-<a name="l151"></a>            </span><span class=cF1>switch</span><span class=cF0> (type)
-<a name="l152"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l153"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
-<a name="l154"></a>                    </span><span class=cF6>&quot;Addr of RAM disk ($PURPLE$&lt;ENTER&gt;$FG$ to MAlloc):&quot;</span><span class=cF0>;
-<a name="l155"></a>                    </span><span class=cF5>StrNGet</span><span class=cF0>(addr_buf, </span><span class=cF3>STR_LEN</span><span class=cF0>);
-<a name="l156"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>:
-<a name="l157"></a>                    </span><span class=cF6>&quot;Blks of 512 bytes:&quot;</span><span class=cF0>;
-<a name="l158"></a>                    </span><span class=cF5>StrNGet</span><span class=cF0>(blks_buf, </span><span class=cF3>STR_LEN</span><span class=cF0>);
-<a name="l159"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l160"></a>
-<a name="l161"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>:
-<a name="l162"></a>                    filename = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;File Name:&quot;</span><span class=cF0>);
-<a name="l163"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l164"></a>
-<a name="l165"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
-<a name="l166"></a>                    prt_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Partition Num (Default=All):&quot;</span><span class=cF0>, prt_num);
-<a name="l167"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
-<a name="l168"></a>                    num_hints = </span><span class=cF5>SATARep</span><span class=cF0>(type);
-<a name="l169"></a>                    </span><span class=cF1>if</span><span class=cF0> (type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; boot_drive_let)
-<a name="l170"></a>                        </span><span class=cF6>&quot;&lt;ENTER&gt; to use booted CD/DVD\n&quot;</span><span class=cF0>; </span><span class=cF2>//Only </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
-<a name="l171"></a>                    </span><span class=cF1>do</span><span class=cF0>
-<a name="l172"></a>                    {
-<a name="l173"></a>                        </span><span class=cF1>if</span><span class=cF0> (num_hints)
-<a name="l174"></a>                            </span><span class=cF6>&quot;Enter port number: \n&quot;</span><span class=cF0>;
-<a name="l175"></a>                        </span><span class=cF5>StrNGet</span><span class=cF0>(port_str, </span><span class=cF3>STR_LEN</span><span class=cF0>);
-<a name="l176"></a>                    }
-<a name="l177"></a>                    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>    type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; </span><span class=cF5>AHCIPortSignatureGet</span><span class=cF0>(</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>port_str</span><span class=cF7>)</span><span class=cF0>) != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0> || 
-<a name="l178"></a>                                type == </span><span class=cF3>BDT_ATA</span><span class=cF0>   &amp;&amp; </span><span class=cF5>AHCIPortSignatureGet</span><span class=cF0>(</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>port_str</span><span class=cF7>)</span><span class=cF0>) != </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0> || 
-<a name="l179"></a>                                </span><span class=cFE>0</span><span class=cF0> &gt; </span><span class=cF5>Str2I64</span><span class=cF0>(port_str) || </span><span class=cF5>Str2I64</span><span class=cF0>(port_str) &gt; num_hints - </span><span class=cFE>1</span><span class=cF0>
-<a name="l180"></a>                           </span><span class=cF7>)</span><span class=cF0> &amp;&amp;
-<a name="l181"></a>                           </span><span class=cF7>(</span><span class=cF0>type != </span><span class=cF3>BDT_ATAPI</span><span class=cF0> || !boot_drive_let</span><span class=cF7>)</span><span class=cF0>);
-<a name="l182"></a>
-<a name="l183"></a>                    port = </span><span class=cF5>Str2I64</span><span class=cF0>(port_str);
-<a name="l184"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l185"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l186"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;bd = BlkDevNextFreeSlot('%C', %d);\n\&quot;;\n&quot;</span><span class=cF0>, drv_let, type);
-<a name="l187"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd = BlkDevNextFreeSlot(\'%C\', %d);\n&quot;</span><span class=cF0>, drv_let, type);
-<a name="l188"></a>            </span><span class=cF1>if</span><span class=cF0> (port != -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; *port_str)
-<a name="l189"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l190"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;AHCIPortInit(bd, &amp;blkdev.ahci_hba-&gt;ports[%d], %d);\n\&quot;;\n&quot;</span><span class=cF0>, port, port);
-<a name="l191"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;AHCIPortInit(bd, &amp;blkdev.ahci_hba-&gt;ports[%d], %d);\n&quot;</span><span class=cF0>, port, port);
-<a name="l192"></a>
-<a name="l193"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l194"></a>
-<a name="l195"></a>            </span><span class=cF1>switch</span><span class=cF0> (type)
-<a name="l196"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l197"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
-<a name="l198"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*addr_buf) </span><span class=cF5>StrCopy</span><span class=cF0>(addr_buf, </span><span class=cF6>&quot;0&quot;</span><span class=cF0>);
-<a name="l199"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;RAM_disk = %s;\n&quot;</span><span class=cF0>, addr_buf);
-<a name="l200"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>:
-<a name="l201"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*blks_buf) </span><span class=cF5>StrCopy</span><span class=cF0>(blks_buf, </span><span class=cF6>&quot;0&quot;</span><span class=cF0>);
-<a name="l202"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;max_blk = (%s) - 1;\n&quot;</span><span class=cF0>, blks_buf);
-<a name="l203"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;drv_offset = 19 &lt;&lt; 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;\n&quot;</span><span class=cF0>);
-<a name="l204"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l205"></a>
-<a name="l206"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>:
-<a name="l207"></a>                    filename2 = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename);
-<a name="l208"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;file_disk_name = SysStrNew(\&quot;%s\&quot;);\n&quot;</span><span class=cF0>, filename2);
-<a name="l209"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;drv_offset = 19 &lt;&lt; 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;\n&quot;</span><span class=cF0>);
-<a name="l210"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l211"></a>
-<a name="l212"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
-<a name="l213"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*port_str &amp;&amp; _doc)
-<a name="l214"></a>                    {
-<a name="l215"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;AHCIBootDVDProbeAll(bd);\n\&quot;;\n&quot;</span><span class=cF0>);
-<a name="l216"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;AHCIBootDVDProbeAll(bd);\n&quot;</span><span class=cF0>); </span><span class=cF2>//Only </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
-<a name="l217"></a>
-<a name="l218"></a>                        </span><span class=cF1>if</span><span class=cF0> (drv_let == boot_drive_let)
-<a name="l219"></a>                            make_free = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l220"></a>                    }
-<a name="l221"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l222"></a>
-<a name="l223"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
-<a name="l224"></a>                    </span><span class=cF1>if</span><span class=cF0> (_caller_is_prtdisk)
-<a name="l225"></a>                    {
-<a name="l226"></a>                        </span><span class=cF6>&quot;\nReformat WHOLE drive!&quot;</span><span class=cF0>;
-<a name="l227"></a>                        whole_drive = </span><span class=cF5>YorN</span><span class=cF0>;
-<a name="l228"></a>                    }
-<a name="l229"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l230"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l231"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;BlkDevAdd(bd, 0x%0X, %Z, %Z);\n\&quot;;\n&quot;</span><span class=cF0>, prt_num, whole_drive, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>, make_free, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>);
-<a name="l232"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;BlkDevAdd(bd, 0x%0X, %d, %d);\n&quot;</span><span class=cF0>, prt_num, whole_drive, make_free);
-<a name="l233"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc) </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
-<a name="l234"></a>                count++;
-<a name="l235"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l236"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l260"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
-<a name="l237"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>count = </span><span class=cF5>ExeDoc</span><span class=cF0>(doc)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; whole_drive)
-<a name="l238"></a>                {
-<a name="l239"></a>                    </span><span class=cF1>if</span><span class=cF0> (_caller_is_prtdisk)
-<a name="l240"></a>                    </span><span class=cF7>{</span><span class=cF0>
-<a name="l241"></a>                        res = drv_let;
-<a name="l242"></a>                        </span><span class=cF5>DiskPart</span><span class=cF0>(drv_let, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//First mount whole drive.</span><span class=cF0>
-<a name="l243"></a>                    </span><span class=cF7>}</span><span class=cF0>
-<a name="l244"></a>                    </span><span class=cF1>else</span><span class=cF0>
-<a name="l245"></a>                        </span><span class=cF5>DiskPart</span><span class=cF0>(drv_let);
-<a name="l246"></a>                }
-<a name="l247"></a>                </span><span class=cF5>DocDel</span><span class=cF0>(doc);
-<a name="l248"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l249"></a>        }
-<a name="l250"></a>        total += count;
-<a name="l251"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l252"></a>    </span><span class=cF1>while</span><span class=cF0> (count &amp;&amp; !_caller_is_prtdisk || !total &amp;&amp; _doc); </span><span class=cF2>//At least 1 if Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
-<a name="l253"></a>
-<a name="l254"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename);
-<a name="l255"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename2);
-<a name="l256"></a>
-<a name="l257"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l258"></a>}
-<a name="l259"></a>
-<a name="l260"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Mount</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> caller_is_prtdisk=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l261"></a>{</span><span class=cF2>//Mount drives. Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/DiskPart.CC.html#l43"><span class=cF4>DiskPart(Mount)</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l262"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Mount2</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, caller_is_prtdisk);
-<a name="l263"></a>}
-<a name="l264"></a>
-<a name="l265"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Unmount</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l266"></a>{</span><span class=cF2>//Unmount drive(s).</span><span class=cF0>
-<a name="l267"></a>    </span><span class=cF5>BlkDevDel</span><span class=cF0>(</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>);
-<a name="l268"></a>}
-<a name="l269"></a>
-<a name="l270"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>MountFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename)
-<a name="l271"></a>{</span><span class=cF2>//Mount ISO.C file.</span><span class=cF0>
-<a name="l272"></a>    </span><span class=cF1>U8</span><span class=cF0>      *filename2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(filename, </span><span class=cF6>&quot;ISO.C&quot;</span><span class=cF0>), *filename3 = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename2);
-<a name="l273"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *drive = </span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF5>DriveNextFreeLet</span><span class=cF7>(</span><span class=cF6>'M'</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//First </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3285"><span class=cF4>BDT_ISO_FILE_READ</span></a><span class=cF0>
-<a name="l274"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = </span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(drive-&gt;drv_let, </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>);
-<a name="l275"></a>
-<a name="l276"></a>    bd-&gt;drv_offset = </span><span class=cFE>19</span><span class=cF0> &lt;&lt; </span><span class=cFE>2</span><span class=cF0> + (</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + </span><span class=cF3>DVD_BOOT_LOADER_SIZE</span><span class=cF0>) / </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
-<a name="l277"></a>    bd-&gt;file_disk_name = </span><span class=cF5>SysStrNew</span><span class=cF0>(filename3);
-<a name="l278"></a>    </span><span class=cF5>BlkDevAdd</span><span class=cF0>(bd,, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l279"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename3);
-<a name="l280"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename2);
-<a name="l281"></a>
-<a name="l282"></a>    </span><span class=cF1>return</span><span class=cF0> drive-&gt;drv_let;
-<a name="l283"></a>}
+<a name="l43"></a>
+<a name="l44"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba)
+<a name="l45"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l46"></a>        </span><span class=cF6>&quot;\nImplemented Ports:\n&quot;</span><span class=cF0>;
+<a name="l47"></a>        </span><span class=cF6>&quot;(Show ATA:   %Z)\n&quot;</span><span class=cF0>, show_ata, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>;
+<a name="l48"></a>        </span><span class=cF6>&quot;(Show ATAPI: %Z)\n\n&quot;</span><span class=cF0>, show_atapi, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>;
+<a name="l49"></a>
+<a name="l50"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l51"></a>        {
+<a name="l52"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l53"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l54"></a>                port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
+<a name="l55"></a>
+<a name="l56"></a>                </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0> &amp;&amp; show_atapi ||
+<a name="l57"></a>                    port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>   &amp;&amp; show_ata)
+<a name="l58"></a>                {
+<a name="l59"></a>                    </span><span class=cF6>&quot;$PURPLE$ $BT,\&quot;%d\&quot;,LM=\&quot;%d\n\&quot;$$FG$&quot;</span><span class=cF0>, i, i;
+<a name="l60"></a>
+<a name="l61"></a>                    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l62"></a>                        </span><span class=cF6>&quot;$LM,4$$RED$Hard Drive   $LTBLUE$ATA$FG$\n&quot;</span><span class=cF0>;
+<a name="l63"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l64"></a>                        </span><span class=cF6>&quot;$LM,4$$RED$CD/DVD Drive $LTBLUE$ATAPI$FG$\n&quot;</span><span class=cF0>;
+<a name="l65"></a>
+<a name="l66"></a>                    </span><span class=cF6>&quot;$LM,0$\n\t&quot;</span><span class=cF0>;
+<a name="l67"></a>
+<a name="l68"></a>                    temp_blkdev = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CBlkDev</span><span class=cF7>)</span><span class=cF0>);
+<a name="l69"></a>                    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l70"></a>                        temp_blkdev-&gt;first_drive_let = </span><span class=cF6>'T'</span><span class=cF0>;
+<a name="l71"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF2>// ATA</span><span class=cF0>
+<a name="l72"></a>                        temp_blkdev-&gt;first_drive_let = </span><span class=cF6>'C'</span><span class=cF0>;
+<a name="l73"></a>
+<a name="l74"></a>                    </span><span class=cF5>AHCIPortInit</span><span class=cF0>(temp_blkdev, port, i);
+<a name="l75"></a>                    </span><span class=cF6>&quot;\n\t&quot;</span><span class=cF0>;
+<a name="l76"></a>
+<a name="l77"></a>                    </span><span class=cF1>if</span><span class=cF0> (temp_blkdev-&gt;dev_id_record)
+<a name="l78"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l79"></a>                        st = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>40</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l80"></a>                        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>20</span><span class=cF0>; j++)
+<a name="l81"></a>                            st[j] = </span><span class=cF5>EndianU16</span><span class=cF0>(temp_blkdev-&gt;dev_id_record[</span><span class=cFE>27</span><span class=cF0> + j]);
+<a name="l82"></a>                        model = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_REM_LEADING</span><span class=cF0> | </span><span class=cF3>SUF_REM_TRAILING</span><span class=cF0>);
+<a name="l83"></a>                        </span><span class=cF6>&quot;Model:  %s\n\t&quot;</span><span class=cF0>, model;
+<a name="l84"></a>                        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l85"></a>                        </span><span class=cF5>Free</span><span class=cF0>(model);
+<a name="l86"></a>
+<a name="l87"></a>                        st = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>20</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>);
+<a name="l88"></a>                        </span><span class=cF1>for</span><span class=cF0> (j = </span><span class=cFE>0</span><span class=cF0>; j &lt; </span><span class=cFE>10</span><span class=cF0>; j++)
+<a name="l89"></a>                            st[j] = </span><span class=cF5>EndianU16</span><span class=cF0>(temp_blkdev-&gt;dev_id_record[</span><span class=cFE>10</span><span class=cF0> + j]);
+<a name="l90"></a>                        serial = </span><span class=cF5>MStrUtil</span><span class=cF0>(st, </span><span class=cF3>SUF_REM_LEADING</span><span class=cF0> | </span><span class=cF3>SUF_REM_TRAILING</span><span class=cF0>);
+<a name="l91"></a>                        </span><span class=cF6>&quot;Serial: %s\n&quot;</span><span class=cF0>, serial;
+<a name="l92"></a>                        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l93"></a>                        </span><span class=cF5>Free</span><span class=cF0>(serial);
+<a name="l94"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l95"></a>
+<a name="l96"></a>                    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l97"></a>
+<a name="l98"></a>                    </span><span class=cF5>BlkDevDel</span><span class=cF0>(temp_blkdev);
+<a name="l99"></a>                    </span><span class=cF5>Free</span><span class=cF0>(temp_blkdev);
+<a name="l100"></a>                }
+<a name="l101"></a>                num++;
+<a name="l102"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l103"></a>        }
+<a name="l104"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l105"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l106"></a>        </span><span class=cF6>&quot;$HL,1$blkdev.ahci_hba$HL,0$ is NULL !\n\n&quot;</span><span class=cF0>;
+<a name="l107"></a>
+<a name="l108"></a>    </span><span class=cF1>return</span><span class=cF0> num;
+<a name="l109"></a>}
+<a name="l110"></a>
+<a name="l111"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Install;File/Cmd Line (Typically);Cmd Line (Typically);&quot;</span><span class=cF0>
+<a name="l112"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Mount2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> boot_drive_let, </span><span class=cF9>CDoc</span><span class=cF0> *_doc, </span><span class=cF1>Bool</span><span class=cF0> _caller_is_prtdisk)
+<a name="l113"></a>{</span><span class=cF2>//If _doc, called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF2> else called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l261"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l114"></a>    </span><span class=cF9>I64</span><span class=cF0>      count, total = </span><span class=cFE>0</span><span class=cF0>, num_hints, drv_let, type, prt_num, port = -</span><span class=cFE>1</span><span class=cF0>;
+<a name="l115"></a>    </span><span class=cF1>U8</span><span class=cF0>       blks_buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], addr_buf[</span><span class=cF3>STR_LEN</span><span class=cF0>], port_str[</span><span class=cF3>STR_LEN</span><span class=cF0>],
+<a name="l116"></a>            *filename = </span><span class=cF3>NULL</span><span class=cF0>, *filename2 = </span><span class=cF3>NULL</span><span class=cF0>, res = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l117"></a>    </span><span class=cF1>Bool</span><span class=cF0>     whole_drive, make_free;
+<a name="l118"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc;
+<a name="l119"></a>
+<a name="l120"></a>    </span><span class=cF1>if</span><span class=cF0> (boot_drive_let)
+<a name="l121"></a>        boot_drive_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(boot_drive_let);
+<a name="l122"></a>    </span><span class=cF1>do</span><span class=cF0>
+<a name="l123"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l124"></a>        count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l125"></a>        </span><span class=cF1>if</span><span class=cF0> (!_doc)
+<a name="l126"></a>            </span><span class=cF5>DriveRep</span><span class=cF0>;
+<a name="l127"></a>
+<a name="l128"></a>        </span><span class=cF6>&quot;\n****** Mount Drives ******\n&quot;</span><span class=cF0>
+<a name="l129"></a>        </span><span class=cF6>&quot;$GREEN$A$FG$-$GREEN$B$FG$ are RAM drives.\n&quot;</span><span class=cF0>
+<a name="l130"></a>        </span><span class=cF6>&quot;$GREEN$C$FG$-$GREEN$L$FG$ are ATA hard drives.\n&quot;</span><span class=cF0>
+<a name="l131"></a>        </span><span class=cF6>&quot;$GREEN$M$FG$-$GREEN$P$FG$ are ISO file read drives.\n&quot;</span><span class=cF0>
+<a name="l132"></a>        </span><span class=cF6>&quot;$GREEN$Q$FG$-$GREEN$S$FG$ are ISO file write drives.\n&quot;</span><span class=cF0>
+<a name="l133"></a>        </span><span class=cF6>&quot;$GREEN$T$FG$-$GREEN$Z$FG$ are ATAPI CD/DVD drives.\n&quot;</span><span class=cF0>
+<a name="l134"></a>        </span><span class=cF6>&quot;\nDrive Letter ($PURPLE$&lt;ENTER&gt;$FG$ to exit):&quot;</span><span class=cF0>;
+<a name="l135"></a>        drv_let = </span><span class=cF5>Letter2Letter</span><span class=cF0>(</span><span class=cF5>CharGet</span><span class=cF0>);
+<a name="l136"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l137"></a>        </span><span class=cF1>if</span><span class=cF0> (type = </span><span class=cF5>Letter2BlkDevType</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>)
+<a name="l138"></a>        {
+<a name="l139"></a>            whole_drive = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l140"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc)
+<a name="l141"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l142"></a>                doc = _doc;
+<a name="l143"></a>                make_free = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l144"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l145"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l146"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l261"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l147"></a>                doc = </span><span class=cF5>DocNew</span><span class=cF0>;
+<a name="l148"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;CBlkDev *bd;\n&quot;</span><span class=cF0>);
+<a name="l149"></a>                make_free = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l150"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l151"></a>            prt_num = </span><span class=cF3>I64_MIN</span><span class=cF0>;
+<a name="l152"></a>            </span><span class=cF1>switch</span><span class=cF0> (type)
+<a name="l153"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l154"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
+<a name="l155"></a>                    </span><span class=cF6>&quot;Addr of RAM disk ($PURPLE$&lt;ENTER&gt;$FG$ to MAlloc):&quot;</span><span class=cF0>;
+<a name="l156"></a>                    </span><span class=cF5>StrNGet</span><span class=cF0>(addr_buf, </span><span class=cF3>STR_LEN</span><span class=cF0>);
+<a name="l157"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>:
+<a name="l158"></a>                    </span><span class=cF6>&quot;Blks of 512 bytes:&quot;</span><span class=cF0>;
+<a name="l159"></a>                    </span><span class=cF5>StrNGet</span><span class=cF0>(blks_buf, </span><span class=cF3>STR_LEN</span><span class=cF0>);
+<a name="l160"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l161"></a>
+<a name="l162"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>:
+<a name="l163"></a>                    filename = </span><span class=cF5>StrGet</span><span class=cF0>(</span><span class=cF6>&quot;File Name:&quot;</span><span class=cF0>);
+<a name="l164"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l165"></a>
+<a name="l166"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
+<a name="l167"></a>                    prt_num = </span><span class=cF5>I64Get</span><span class=cF0>(</span><span class=cF6>&quot;Partition Num (Default=All):&quot;</span><span class=cF0>, prt_num);
+<a name="l168"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
+<a name="l169"></a>                    num_hints = </span><span class=cF5>SATARep</span><span class=cF0>(type);
+<a name="l170"></a>                    </span><span class=cF1>if</span><span class=cF0> (type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; boot_drive_let)
+<a name="l171"></a>                        </span><span class=cF6>&quot;&lt;ENTER&gt; to use booted CD/DVD\n&quot;</span><span class=cF0>; </span><span class=cF2>//Only </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l172"></a>                    </span><span class=cF1>do</span><span class=cF0>
+<a name="l173"></a>                    {
+<a name="l174"></a>                        </span><span class=cF1>if</span><span class=cF0> (num_hints)
+<a name="l175"></a>                            </span><span class=cF6>&quot;Enter port number: \n&quot;</span><span class=cF0>;
+<a name="l176"></a>                        </span><span class=cF5>StrNGet</span><span class=cF0>(port_str, </span><span class=cF3>STR_LEN</span><span class=cF0>);
+<a name="l177"></a>                    }
+<a name="l178"></a>                    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>    type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; </span><span class=cF5>AHCIPortSignatureGet</span><span class=cF0>(</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>port_str</span><span class=cF7>)</span><span class=cF0>) != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0> || 
+<a name="l179"></a>                                type == </span><span class=cF3>BDT_ATA</span><span class=cF0>   &amp;&amp; </span><span class=cF5>AHCIPortSignatureGet</span><span class=cF0>(</span><span class=cF5>Str2I64</span><span class=cF7>(</span><span class=cF0>port_str</span><span class=cF7>)</span><span class=cF0>) != </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0> || 
+<a name="l180"></a>                                </span><span class=cFE>0</span><span class=cF0> &gt; </span><span class=cF5>Str2I64</span><span class=cF0>(port_str) || </span><span class=cF5>Str2I64</span><span class=cF0>(port_str) &gt; num_hints - </span><span class=cFE>1</span><span class=cF0>
+<a name="l181"></a>                           </span><span class=cF7>)</span><span class=cF0> &amp;&amp;
+<a name="l182"></a>                           </span><span class=cF7>(</span><span class=cF0>type != </span><span class=cF3>BDT_ATAPI</span><span class=cF0> || !boot_drive_let</span><span class=cF7>)</span><span class=cF0>);
+<a name="l183"></a>
+<a name="l184"></a>                    port = </span><span class=cF5>Str2I64</span><span class=cF0>(port_str);
+<a name="l185"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l186"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l187"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;bd = BlkDevNextFreeSlot('%C', %d);\n\&quot;;\n&quot;</span><span class=cF0>, drv_let, type);
+<a name="l188"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd = BlkDevNextFreeSlot(\'%C\', %d);\n&quot;</span><span class=cF0>, drv_let, type);
+<a name="l189"></a>            </span><span class=cF1>if</span><span class=cF0> (port != -</span><span class=cFE>1</span><span class=cF0> &amp;&amp; *port_str)
+<a name="l190"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l191"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;AHCIPortInit(bd, &amp;blkdev.ahci_hba-&gt;ports[%d], %d);\n\&quot;;\n&quot;</span><span class=cF0>, port, port);
+<a name="l192"></a>                </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;AHCIPortInit(bd, &amp;blkdev.ahci_hba-&gt;ports[%d], %d);\n&quot;</span><span class=cF0>, port, port);
+<a name="l193"></a>
+<a name="l194"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l195"></a>
+<a name="l196"></a>            </span><span class=cF1>switch</span><span class=cF0> (type)
+<a name="l197"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l198"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_RAM</span><span class=cF0>:
+<a name="l199"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*addr_buf) </span><span class=cF5>StrCopy</span><span class=cF0>(addr_buf, </span><span class=cF6>&quot;0&quot;</span><span class=cF0>);
+<a name="l200"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;RAM_disk = %s;\n&quot;</span><span class=cF0>, addr_buf);
+<a name="l201"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>:
+<a name="l202"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*blks_buf) </span><span class=cF5>StrCopy</span><span class=cF0>(blks_buf, </span><span class=cF6>&quot;0&quot;</span><span class=cF0>);
+<a name="l203"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;max_blk = (%s) - 1;\n&quot;</span><span class=cF0>, blks_buf);
+<a name="l204"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;drv_offset = 19 &lt;&lt; 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;\n&quot;</span><span class=cF0>);
+<a name="l205"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l206"></a>
+<a name="l207"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>:
+<a name="l208"></a>                    filename2 = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename);
+<a name="l209"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;file_disk_name = SysStrNew(\&quot;%s\&quot;);\n&quot;</span><span class=cF0>, filename2);
+<a name="l210"></a>                    </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;bd-&gt;drv_offset = 19 &lt;&lt; 2 + (DVD_BLK_SIZE * 2 + DVD_BOOT_LOADER_SIZE) / BLK_SIZE;\n&quot;</span><span class=cF0>);
+<a name="l211"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l212"></a>
+<a name="l213"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATAPI</span><span class=cF0>:
+<a name="l214"></a>                    </span><span class=cF1>if</span><span class=cF0> (!*port_str &amp;&amp; _doc)
+<a name="l215"></a>                    {
+<a name="l216"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;AHCIBootDVDProbeAll(bd);\n\&quot;;\n&quot;</span><span class=cF0>);
+<a name="l217"></a>                        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;AHCIBootDVDProbeAll(bd);\n&quot;</span><span class=cF0>); </span><span class=cF2>//Only </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l218"></a>
+<a name="l219"></a>                        </span><span class=cF1>if</span><span class=cF0> (drv_let == boot_drive_let)
+<a name="l220"></a>                            make_free = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l221"></a>                    }
+<a name="l222"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l223"></a>
+<a name="l224"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>BDT_ATA</span><span class=cF0>:
+<a name="l225"></a>                    </span><span class=cF1>if</span><span class=cF0> (_caller_is_prtdisk)
+<a name="l226"></a>                    {
+<a name="l227"></a>                        </span><span class=cF6>&quot;\nReformat WHOLE drive!&quot;</span><span class=cF0>;
+<a name="l228"></a>                        whole_drive = </span><span class=cF5>YorN</span><span class=cF0>;
+<a name="l229"></a>                    }
+<a name="l230"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l231"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l232"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;\&quot;BlkDevAdd(bd, 0x%0X, %Z, %Z);\n\&quot;;\n&quot;</span><span class=cF0>, prt_num, whole_drive, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>, make_free, </span><span class=cF6>&quot;ST_FALSE_TRUE&quot;</span><span class=cF0>);
+<a name="l233"></a>            </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;BlkDevAdd(bd, 0x%0X, %d, %d);\n&quot;</span><span class=cF0>, prt_num, whole_drive, make_free);
+<a name="l234"></a>            </span><span class=cF1>if</span><span class=cF0> (_doc) </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l235"></a>                count++;
+<a name="l236"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l237"></a>            </span><span class=cF7>{</span><span class=cF0> </span><span class=cF2>//Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l261"><span class=cF4>Mount</span></a><span class=cF2>()</span><span class=cF0>
+<a name="l238"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF7>(</span><span class=cF0>count = </span><span class=cF5>ExeDoc</span><span class=cF0>(doc)</span><span class=cF7>)</span><span class=cF0> &amp;&amp; whole_drive)
+<a name="l239"></a>                {
+<a name="l240"></a>                    </span><span class=cF1>if</span><span class=cF0> (_caller_is_prtdisk)
+<a name="l241"></a>                    </span><span class=cF7>{</span><span class=cF0>
+<a name="l242"></a>                        res = drv_let;
+<a name="l243"></a>                        </span><span class=cF5>DiskPart</span><span class=cF0>(drv_let, </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//First mount whole drive.</span><span class=cF0>
+<a name="l244"></a>                    </span><span class=cF7>}</span><span class=cF0>
+<a name="l245"></a>                    </span><span class=cF1>else</span><span class=cF0>
+<a name="l246"></a>                        </span><span class=cF5>DiskPart</span><span class=cF0>(drv_let);
+<a name="l247"></a>                }
+<a name="l248"></a>                </span><span class=cF5>DocDel</span><span class=cF0>(doc);
+<a name="l249"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l250"></a>        }
+<a name="l251"></a>        total += count;
+<a name="l252"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l253"></a>    </span><span class=cF1>while</span><span class=cF0> (count &amp;&amp; !_caller_is_prtdisk || !total &amp;&amp; _doc); </span><span class=cF2>//At least 1 if Called by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KConfig.CC.html#l1"><span class=cF4>::/Kernel/KConfig.CC</span></a><span class=cF0>
+<a name="l254"></a>
+<a name="l255"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename);
+<a name="l256"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename2);
+<a name="l257"></a>
+<a name="l258"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l259"></a>}
+<a name="l260"></a>
+<a name="l261"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Mount</span><span class=cF0>(</span><span class=cF1>Bool</span><span class=cF0> caller_is_prtdisk=</span><span class=cF3>FALSE</span><span class=cF0>)
+<a name="l262"></a>{</span><span class=cF2>//Mount drives. Called from </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/DiskPart.CC.html#l43"><span class=cF4>DiskPart(Mount)</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l263"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>Mount2</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, caller_is_prtdisk);
+<a name="l264"></a>}
+<a name="l265"></a>
+<a name="l266"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Unmount</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>)
+<a name="l267"></a>{</span><span class=cF2>//Unmount drive(s).</span><span class=cF0>
+<a name="l268"></a>    </span><span class=cF5>BlkDevDel</span><span class=cF0>(</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>);
+<a name="l269"></a>}
+<a name="l270"></a>
+<a name="l271"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>MountFile</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename)
+<a name="l272"></a>{</span><span class=cF2>//Mount ISO.C file.</span><span class=cF0>
+<a name="l273"></a>    </span><span class=cF1>U8</span><span class=cF0>      *filename2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(filename, </span><span class=cF6>&quot;ISO.C&quot;</span><span class=cF0>), *filename3 = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename2);
+<a name="l274"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *drive = </span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF5>DriveNextFreeLet</span><span class=cF7>(</span><span class=cF6>'M'</span><span class=cF7>)</span><span class=cF0>); </span><span class=cF2>//First </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3273"><span class=cF4>BDT_ISO_FILE_READ</span></a><span class=cF0>
+<a name="l275"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = </span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(drive-&gt;drv_let, </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0>);
+<a name="l276"></a>
+<a name="l277"></a>    bd-&gt;drv_offset = </span><span class=cFE>19</span><span class=cF0> &lt;&lt; </span><span class=cFE>2</span><span class=cF0> + (</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0> * </span><span class=cFE>2</span><span class=cF0> + </span><span class=cF3>DVD_BOOT_LOADER_SIZE</span><span class=cF0>) / </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l278"></a>    bd-&gt;file_disk_name = </span><span class=cF5>SysStrNew</span><span class=cF0>(filename3);
+<a name="l279"></a>    </span><span class=cF5>BlkDevAdd</span><span class=cF0>(bd,, </span><span class=cF3>TRUE</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l280"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename3);
+<a name="l281"></a>    </span><span class=cF5>Free</span><span class=cF0>(filename2);
+<a name="l282"></a>
+<a name="l283"></a>    </span><span class=cF1>return</span><span class=cF0> drive-&gt;drv_let;
+<a name="l284"></a>}
 </span></pre></body>
 </html>

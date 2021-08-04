@@ -235,7 +235,7 @@ U0 BlkDevsInitAll()
 
 	#exe {
 		if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])
-			StreamPrint("MountIDEAuto;");
+			StreamPrint("MountAHCIAuto;");
 		StreamPrint("#exe {Option(OPTf_WARN_PAREN, OFF);}");
 		StreamDoc(kernel_config->add_dev);
 		StreamPrint("#exe {Option(OPTf_WARN_PAREN, ON);}");
