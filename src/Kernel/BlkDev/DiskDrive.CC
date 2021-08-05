@@ -383,12 +383,15 @@ U0 DriveRep()
 			if (!IsRaw)
 				"$$FG,%d$$$$BG,%d$$", attr & 15, attr >> 4;
 
-			"%C %-8Z %-10Z SATA Port: %02d\n",	drv_let,
-												drive->fs_type & FSG_TYPE_MASK,
-												"ST_DRIVE_TYPES",
-												bd->type,
-												"ST_BLKDEV_TYPES",
-												bd->port_num;
+			"%C %-8Z %-10Z ",	drv_let,
+								drive->fs_type & FSG_TYPE_MASK,
+								"ST_DRIVE_TYPES",
+								bd->type,
+								"ST_BLKDEV_TYPES";
+			if (bd->ahci_port)
+				"SATA Port: %02d", bd->port_num;
+			'\n';
+
 			if (st = DriveModelNum(drv_let))
 			{
 				"   Model# :%s\n", st;

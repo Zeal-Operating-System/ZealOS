@@ -1094,13 +1094,13 @@ body {background-color:#fef1f0;}
 <a name="l1067"></a></span><span class=cF1>U0</span><span class=cF0> AnimateTask(</span><span class=cF9>I64</span><span class=cF0>)
 <a name="l1068"></a>{</span><span class=cF2>//Steadily moves the airplane forward.</span><span class=cF0>
 <a name="l1069"></a>    </span><span class=cF9>I64</span><span class=cF0>      i, *s2w, x1, y1, z1, dx, dy, dz, dd;
-<a name="l1070"></a>    </span><span class=cF1>F64</span><span class=cF0>      t0 = </span><span class=cF5>tS</span><span class=cF0>,</span><span class=cFB>mouse</span><span class=cF0>, theta, d;
+<a name="l1070"></a>    </span><span class=cF1>F64</span><span class=cF0>      t0 = </span><span class=cF5>tS</span><span class=cF0>, ms, theta, d;
 <a name="l1071"></a>    Obj     *tmpo;
 <a name="l1072"></a>    Bird    *tmpb;
 <a name="l1073"></a>
 <a name="l1074"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
 <a name="l1075"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1076"></a>        </span><span class=cFB>mouse</span><span class=cF0> = </span><span class=cFE>1000</span><span class=cF0> * (</span><span class=cF5>tS</span><span class=cF0> - t0);
+<a name="l1076"></a>        ms = </span><span class=cFE>1000</span><span class=cF0> * (</span><span class=cF5>tS</span><span class=cF0> - t0);
 <a name="l1077"></a>        t0 = </span><span class=cF5>tS</span><span class=cF0>;
 <a name="l1078"></a>        </span><span class=cF1>if</span><span class=cF0> (!game_tf)
 <a name="l1079"></a>        {
@@ -1114,9 +1114,9 @@ body {background-color:#fef1f0;}
 <a name="l1087"></a>            dy = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l1088"></a>            dz = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
 <a name="l1089"></a>            </span><span class=cF5>Mat4x4MulXYZ</span><span class=cF0>(s2w, &amp;dx, &amp;dy, &amp;dz);
-<a name="l1090"></a>            x -= speed * </span><span class=cFB>mouse</span><span class=cF0> * COORDINATE_SCALE * dx / </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
-<a name="l1091"></a>            y -= speed * </span><span class=cFB>mouse</span><span class=cF0> * COORDINATE_SCALE * dy / </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
-<a name="l1092"></a>            z -= speed * </span><span class=cFB>mouse</span><span class=cF0> * COORDINATE_SCALE * dz / </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
+<a name="l1090"></a>            x -= speed * ms * COORDINATE_SCALE * dx / </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
+<a name="l1091"></a>            y -= speed * ms * COORDINATE_SCALE * dy / </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
+<a name="l1092"></a>            z -= speed * ms * COORDINATE_SCALE * dz / </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>;
 <a name="l1093"></a>            </span><span class=cF5>Free</span><span class=cF0>(s2w);
 <a name="l1094"></a>            x1 = x / COORDINATE_SCALE;
 <a name="l1095"></a>            y1 = y / COORDINATE_SCALE;
@@ -1129,10 +1129,10 @@ body {background-color:#fef1f0;}
 <a name="l1102"></a>                    </span><span class=cF1>if</span><span class=cF0> (invert_pitch)
 <a name="l1103"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l1104"></a>                        </span><span class=cF1>if</span><span class=cF0> (pitch &lt; -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>)
-<a name="l1105"></a>                            phi += </span><span class=cFB>mouse</span><span class=cF0> / </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF5>Sign</span><span class=cF0>(</span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> - phi);
+<a name="l1105"></a>                            phi += ms / </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF5>Sign</span><span class=cF0>(</span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> - phi);
 <a name="l1106"></a>                    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1107"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (pitch &lt; -</span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0>)
-<a name="l1108"></a>                        phi += </span><span class=cFB>mouse</span><span class=cF0> / </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF5>Sign</span><span class=cF0>(-</span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> - phi);
+<a name="l1108"></a>                        phi += ms / </span><span class=cFE>1000</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0> * </span><span class=cF5>Sign</span><span class=cF0>(-</span><span class=cFE>3</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> / </span><span class=cFE>8</span><span class=cF0> - phi);
 <a name="l1109"></a>                    WrapAngles;
 <a name="l1110"></a>                }
 <a name="l1111"></a>                speed = </span><span class=cFE>1</span><span class=cF0>.</span><span class=cFE>0</span><span class=cF0>;
@@ -1183,10 +1183,10 @@ body {background-color:#fef1f0;}
 <a name="l1156"></a>                tmpb = b_head[i].next;
 <a name="l1157"></a>                </span><span class=cF1>while</span><span class=cF0> (tmpb != &amp;b_head[i])
 <a name="l1158"></a>                {
-<a name="l1159"></a>                    tmpb-&gt;p.x += </span><span class=cFE>10</span><span class=cF0> * </span><span class=cFB>mouse</span><span class=cF0> / </span><span class=cFE>1000</span><span class=cF0> * MAP_SCALE * </span><span class=cF5>Cos</span><span class=cF0>(tmpb-&gt;theta);
-<a name="l1160"></a>                    tmpb-&gt;p.y += </span><span class=cFE>10</span><span class=cF0> * </span><span class=cFB>mouse</span><span class=cF0> / </span><span class=cFE>1000</span><span class=cF0> * MAP_SCALE * </span><span class=cF5>Sin</span><span class=cF0>(tmpb-&gt;theta);
+<a name="l1159"></a>                    tmpb-&gt;p.x += </span><span class=cFE>10</span><span class=cF0> * ms / </span><span class=cFE>1000</span><span class=cF0> * MAP_SCALE * </span><span class=cF5>Cos</span><span class=cF0>(tmpb-&gt;theta);
+<a name="l1160"></a>                    tmpb-&gt;p.y += </span><span class=cFE>10</span><span class=cF0> * ms / </span><span class=cFE>1000</span><span class=cF0> * MAP_SCALE * </span><span class=cF5>Sin</span><span class=cF0>(tmpb-&gt;theta);
 <a name="l1161"></a>                    tmpb-&gt;p.z = BIRD_ELEVATION * MAP_SCALE + elevations[tmpb-&gt;p.y / MAP_SCALE][tmpb-&gt;p.x / MAP_SCALE];
-<a name="l1162"></a>                    tmpb-&gt;theta += </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> * </span><span class=cFB>mouse</span><span class=cF0> / </span><span class=cFE>1000</span><span class=cF0> / </span><span class=cFE>10</span><span class=cF0>;
+<a name="l1162"></a>                    tmpb-&gt;theta += </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>pi</span><span class=cF0> * ms / </span><span class=cFE>1000</span><span class=cF0> / </span><span class=cFE>10</span><span class=cF0>;
 <a name="l1163"></a>                    tmpb = tmpb-&gt;next;
 <a name="l1164"></a>                }
 <a name="l1165"></a>            </span><span class=cF7>}</span><span class=cF0>

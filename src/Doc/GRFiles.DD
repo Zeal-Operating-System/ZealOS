@@ -1,7 +1,6 @@
-$WW,1$GR graphics files are 8-bits-per-pixels but only 4-bits of color, with transparency and no palette.  Compression is the standard ZealOS$FG$ LZW compression.
+$WW,1$GR graphics files are 8-bits-per-pixels but only 4-bits of color, with transparency and no palette.
 $HL,1$
-#define DCF_COMPRESSED	1 //This is the only saved flag.
-#define DCF_PALETTE 	2
+#define DCF_PALETTE 	1
 
 #define TRANSPARENT	0xFF
 #define BLACK		0

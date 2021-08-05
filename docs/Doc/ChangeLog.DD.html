@@ -28,7 +28,7 @@ body {background-color:#fef1f0;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF5>                                                          ChangeLog</span><span class=cF0>
 <a name="l2"></a></span><span class=c0F>----08/04/21 14:29:24----</span><span class=cF0>
-<a name="l3"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l391"><span class=cF4>DriveRep</span></a><span class=cF0> to report AHCI SATA port number where IDE base0, base1, and unit were displayed.
+<a name="l3"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l392"><span class=cF4>DriveRep</span></a><span class=cF0> to report AHCI SATA port number where IDE base0, base1, and unit were displayed.
 <a name="l4"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/Lex.CC.html#l1268"><span class=cF4>Lex</span></a><span class=cF0> assert failure warning to give exact line number.
 <a name="l5"></a>* Removed some deprecated IDE functions.
 <a name="l6"></a>* Added default arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDrive.CC.html#l286"><span class=cF4>Drive</span></a><span class=cF0>, so running </span><span class=cF2>Drive;</span><span class=cF0> will bring you to the root of the current drive.
@@ -317,7 +317,7 @@ body {background-color:#fef1f0;}
 <a name="l289"></a>
 <a name="l290"></a></span><span class=c0F>----02/21/20 17:30:17----</span><span class=cF0>
 <a name="l291"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;IRQ's&quot;, &quot;IRQs&quot;);
-<a name="l292"></a>* Updated </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DevInfo.CC.html#l228"><span class=cF4>MemBIOSRep</span></a><span class=cF0>() to report on VBE Linear Framebuffer size. E820 memory ranges are color-coded. It now shows the total 
+<a name="l292"></a>* Updated </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DevInfo.CC.html#l237"><span class=cF4>MemBIOSRep</span></a><span class=cF0>() to report on VBE Linear Framebuffer size. E820 memory ranges are color-coded. It now shows the total 
 <a name="l293"></a>memory reported by </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l173"><span class=cF4>MemBIOSTotal</span></a><span class=cF0>().
 <a name="l294"></a>* Updated AutoComplete shortcuts from old WordStat &lt;ALT(-SHIFT-)-W&gt; to </span><span class=cF2>&lt;ALT(-SHIFT-)-A&gt;</span><span class=cF0> in </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Tips.DD.html#l1"><span class=cF4>::/Doc/Tips.DD</span></a><span class=cF0>.
 <a name="l295"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.CC.html#l234"><span class=cF4>check</span></a><span class=cF0> for invalid results of BIOS function 15:E801. BIOSes either return results in AX/BX or CX/DX. You have to make 
@@ -623,7 +623,7 @@ body {background-color:#fef1f0;}
 <a name="l595"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;SYS_SEMA_...&quot;,&quot;SEMA_...&quot;);
 <a name="l596"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;SYSf_CTRL_ALT_...&quot;,&quot;CTRL_ALT_...&quot;);
 <a name="l597"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;ThrowBreak()&quot;,&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KExcept.CC.html#l121"><span class=cF4>Break</span></a><span class=cF0>()&quot;);
-<a name="l598"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DevInfo.CC.html#l295"><span class=cF4>MemPageRep</span></a><span class=cF0>().
+<a name="l598"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DevInfo.CC.html#l333"><span class=cF4>MemPageRep</span></a><span class=cF0>().
 <a name="l599"></a>
 <a name="l600"></a></span><span class=c0F>----12/30/16 23:42:20----</span><span class=cF0>
 <a name="l601"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;Pages512&quot;,&quot;Pags&quot;);
@@ -818,7 +818,7 @@ body {background-color:#fef1f0;}
 <a name="l790"></a>* Made underscore mandatory on </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>HolyC</span></a><span class=cF0> callable asm functions.
 <a name="l791"></a>
 <a name="l792"></a></span><span class=c0F>----06/28/16 13:15:08----</span><span class=cF0>
-<a name="l793"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/TaskRep.CC.html#l19"><span class=cF4>TaskRep</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>().
+<a name="l793"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/TaskRep.CC.html#l23"><span class=cF4>TaskRep</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>().
 <a name="l794"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/System/WallPaper.CC.html#l1"><span class=cF4>::/System/WallPaper.CC</span></a><span class=cF0>.
 <a name="l795"></a>
 <a name="l796"></a></span><span class=c0F>----06/26/16 14:01:16----</span><span class=cF0>

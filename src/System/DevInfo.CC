@@ -216,10 +216,19 @@ public U0 PCIRep()
 	tmppci = dev.pci_head.next;
 	while (tmppci != &dev.pci_head)
 	{
-		"%02X:%02X:%01X %02X-%02X-%02X $$GREEN$$%s $$CYAN$$%s$$FG$$\n",
+		"%02X:%02X:%01X %02X-%02X-%02X ",
 					tmppci->bus, tmppci->dev, tmppci->fun,
-					tmppci->class_code, tmppci->sub_code, tmppci->prog_if,
-					tmppci->vendor_str, tmppci->dev_id_str;
+					tmppci->class_code, tmppci->sub_code, tmppci->prog_if;
+		if (!IsRaw)
+			"$$GREEN$$";
+		"%s ", tmppci->vendor_str;
+		if (!IsRaw)
+			"$$CYAN$$";
+		"%s", tmppci->dev_id_str;
+		if (!IsRaw)
+			"$$FG$$";
+		'\n';
+					, 
 		tmppci=tmppci->next;
 	}
 }
@@ -231,13 +240,25 @@ public U0 MemBIOSRep()
 	CMemE820	*m20 = MEM_E820;
 	CMemRange	*tmpmr;
 
-	"$$PURPLE$$Standard Addresses$$FG$$\n"
-			"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n"
+	if (!IsRaw)
+		"$$PURPLE$$Standard Addresses$$FG$$\n";
+	else
+		"Standard Addresses\n";
 
-	"$$PURPLE$$VBE Linear Framebuffer$$FG$$\n"
-			"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias,
-																																								text.fb_alias(U8 *) + text.buffer_size - 1;
-	"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
+	"FEE00000-FEE00FFF See $LK,"APIC",A="MN:LAPIC_BASE"$\n\n";
+
+	if (!IsRaw)
+		"$$PURPLE$$VBE Linear Framebuffer$$FG$$\n";
+	else
+		"VBE Linear Framebuffer\n";
+
+	"%08X-%08X  See $LK,"VBE Mode",A="FF:::/Kernel/KernelA.HH,framebuffer"$\n", text.fb_alias, text.fb_alias(U8 *) + text.buffer_size - 1;
+
+	if (!IsRaw)
+		"\n$$PURPLE$$32 Bit Device Mem$$FG$$\n";
+	else
+		"\n32 Bit Device Mem\n";
+
 	while (LBts(&sys_semas[SEMA_DEV_MEM], 0))
 		Yield;
 	tmpmr = dev.mem32_head.next;
@@ -248,20 +269,30 @@ public U0 MemBIOSRep()
 	}
 	LBtr(&sys_semas[SEMA_DEV_MEM], 0);
 
-	"\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n"
-				"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
-				"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] * 64 * 1024  - 1;
+	if (!IsRaw)
+		"\n$$PURPLE$$BIOS Memory Report 15:E801$$FG$$\n";
+	else
+		"\nBIOS Memory Report 15:E801\n";
+
+	"0000000000000000-%016X\n", 0x100000 + m01[0] * 1024 - 1;
+	"0000000001000000-%016X\n", SYS_16MEG_AREA_LIMIT + m01[1] * 64 * 1024  - 1;
 
 	if (m20->type)
 	{
-		"\n$$PURPLE$$BIOS Memory Report 15:E820$$FG$$\n";
+		if (!IsRaw)
+			"\n$$PURPLE$$BIOS Memory Report 15:E820$$FG$$\n";
+		else
+			"\nBIOS Memory Report 15:E820\n";
 		while (m20->type)
 		{
-			"$$RED$$";
+			if (!IsRaw)
+				"$$RED$$";
 			switch(m20->type)
 			{
 				case MEM_E820t_USABLE:
-					"$$GREEN$$Usable     :";
+					if (!IsRaw)
+						"$$GREEN$$";
+					"Usable     :";
 					break;
 
 				case MEM_E820t_ACPI:
@@ -281,11 +312,18 @@ public U0 MemBIOSRep()
 					"Reserved   :";
 					break;
 			 }
-			"%016X-%016X$$FG$$\n", m20->base, m20->base + m20->len - 1;
+			"%016X-%016X", m20->base, m20->base + m20->len - 1;
+			if (!IsRaw)
+				"$$FG$$";
+			'\n';
 			m20++;
 		}
 	}
-	"\n$$PURPLE$$BIOS Total Memory Report$$FG$$: ";
+	if (!IsRaw)
+		"\n$$PURPLE$$BIOS Total Memory Report$$FG$$: ";
+	else
+		"\nBIOS Total Memory Report: ";
+
 	if (MemBIOSTotal < 1024 * 1024 * 1024)
 		"%03d MiB\n", MemBIOSTotal / 1024 / 1024; 		
 	else
@@ -295,10 +333,17 @@ public U0 MemBIOSRep()
 public U0 MemPageRep()
 {//Page Table Report.
 	"MAPPED\t  :%010X with ", mem_mapped_space;
+	if (!IsRaw)
+		"$$RED$$";
 	if (Bt(&mem_page_size, 30))
-		"$$RED$$1GIG$$FG$$ pages\n";
+		"1GIG";
 	else
-		"$$RED$$2MEG$$FG$$ pages\n";
+		"2MEG";
+	if (!IsRaw)
+		"$$FG$$";
+
+	" pages\n";
+
 	"PML2\t  :%010X 2MEG  :%08X\n",
 				*MEM_PML2(U64 *), *MEM_2MEG_NUM(U64 *);
 	"PML3\t  :%010X 1GIG  :%08X\n",

@@ -6,7 +6,7 @@ Windows is a car.
 
 ZealOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.	Don't do that!	There are no side air bags on a motorcycle.  DOS and C64 had no memory protections and ran in ring-0, with no security.  This saves an order of magnitude complexity.
 
-Linux and Windows are general purpose operating systems.	They attempt to do any task you want.  ZealOS cherry-picks tasks and is designed to do the same things a C64 did.  This saves and order of magnitude complexity.	For example, the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system allocates just contiguous files -- you load and save whole files at once.	A benefit is this allows compression.  Also, ZealOS does not do multimedia.  In theory, memory will fragment with lots of big files.	The system would fall to pieces with multimedia.
+Linux and Windows are general purpose operating systems.	They attempt to do any task you want.  ZealOS cherry-picks tasks and is designed to do the same things a C64 did.  This saves and order of magnitude complexity.	For example, the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system allocates just contiguous files -- you load and save whole files at once.  Also, ZealOS does not do multimedia.  In theory, memory will fragment with lots of big files.	The system would fall to pieces with multimedia.
 
 A three bttn mouse is like a leg you cannot put weight on.	ZealOS just does hardware everybody has, with no divergent code bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
 

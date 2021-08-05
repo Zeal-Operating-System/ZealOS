@@ -5,7 +5,6 @@ U8 *kernel_config_options = "MemInit\0"
 							"VarInit\0"
 							"HomeDir\0"
 							"NoMP\0"
-							"DontProbe\0"
 							"MountAHCIAuto\0"
 							"DebugDistro\0"
 							"Help";
@@ -15,12 +14,11 @@ U8 *kernel_config_options = "MemInit\0"
 #define CONFIG_VAR_INIT 		2
 #define CONFIG_HOME_DIR 		3
 #define CONFIG_NO_MP			4
-#define CONFIG_DONT_PROBE 		5
-#define CONFIG_MOUNT_IDE_AUTO 	6
-#define CONFIG_DEBUG_DISTRO 	7
-#define CONFIG_OPTIONS_NUM		8
+#define CONFIG_MOUNT_IDE_AUTO 	5
+#define CONFIG_DEBUG_DISTRO 	6
+#define CONFIG_OPTIONS_NUM		7
 
-#define CONFIG_HELP				8
+#define CONFIG_HELP				7
 
 class CKConfig
 {
