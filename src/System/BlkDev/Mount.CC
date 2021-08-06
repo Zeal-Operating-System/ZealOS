@@ -137,7 +137,7 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 #help_index "Install;File/Cmd Line (Typically);Cmd Line (Typically);"
 U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 {//If _doc, called by $LK,"::/Kernel/KConfig.CC"$ else called by $LK,"Mount",A="MN:Mount"$().
-	I64		 count, total = 0, num_hints, drv_let, type, prt_num, port = -1;
+	I64		 count, total = 0, num_hints, drv_let, type, prt_num, port;
 	U8		 blks_buf[STR_LEN], addr_buf[STR_LEN], port_str[STR_LEN],
 			*filename = NULL, *filename2 = NULL, res = 0;
 	Bool	 whole_drive, make_free;
@@ -185,10 +185,14 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 				make_free = TRUE;
 			}
 			prt_num = I64_MIN;
+			port = -1;
 			switch (type)
 			{
 				case BDT_RAM:
-					"Addr of RAM disk ($$PURPLE$$<ENTER>$$FG$$ to MAlloc):";
+					if (!IsRaw)
+						"Addr of RAM disk ($$PURPLE$$<ENTER>$$FG$$ to MAlloc):";
+					else
+						"Addr of RAM disk (<ENTER> to MAlloc):";
 					StrNGet(addr_buf, STR_LEN);
 				case BDT_ISO_FILE_WRITE:
 					"Blks of 512 bytes:";

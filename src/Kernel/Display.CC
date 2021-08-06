@@ -65,15 +65,15 @@ See also $LK,"GrUpdateScreen",A="MN:GrUpdateScreen"$().
 
 			// MemCopy is slow, computing these and iterating U64's manually is far faster.
 			framebuffer_u64			= text.fb_alias;
-			framebuffer_u64_size	= sys_vbe_mode.width * sys_vbe_mode.height / 2;
-			framebuffer_u64_offset	= sys_vbe_mode.width / 2 * FONT_HEIGHT;
+			framebuffer_u64_size	= sys_vbe_mode.width * sys_vbe_mode.height / 2 - sys_vbe_mode.width * FONT_HEIGHT * 8 / 2;
+			framebuffer_u64_offset	= sys_vbe_mode.width / 2 * FONT_HEIGHT * 8;
 
 			for (i = 0; i < framebuffer_u64_size; i++)
 				framebuffer_u64[i] = framebuffer_u64[i + framebuffer_u64_offset];
 
-			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT, BLACK32, sys_vbe_mode.width * FONT_HEIGHT);
-			text.raw_col -= text.cols;
-			row = text.rows - 1;
+			MemSetU32(text.fb_alias + text.screen_size - sys_vbe_mode.width * FONT_HEIGHT * 8, BLACK32, sys_vbe_mode.width * FONT_HEIGHT * 8);
+			text.raw_col -= text.cols * 8;
+			row = text.rows - 8;
 		}
 		x = col * FONT_WIDTH;
 		y = row * FONT_HEIGHT;

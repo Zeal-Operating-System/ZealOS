@@ -76,8 +76,6 @@ U0 OSMerge(U8 dst_drv, U8 src_drv=':')
 	"Format %C:/ ? ", dst_drv;
 	Format(dst_drv);
 	CopyTree("B:/", dst);
-
-//	BootHDIns(dst_drv);
 }
 
 U0 OSUpgrade()
@@ -140,12 +138,12 @@ U0 OSUpgrade()
 	res_num = I64Get("Enter desired list num ($$PURPLE$$<ENTER>$$FG$$ for max res): ",, 1);
 	XTalkWait(task, "%d\n\n\n", res_num); //skip through Disk Cache, Options
 
-//	"$$RED$$Install Master Boot loader?$$FG$$";
-//	if (YorN)
-//	{
-//		'\n';
-//		BootMHDIns(drv_let);
-//	}
+	"$$RED$$Install Master Boot Loader?$$FG$$";
+	if (YorN)
+	{
+		'\n';
+		BootMHDIns(drv_let);
+	}
 
 	WinVert(task->win_top, Fs->win_bottom);
 	Kill(task);

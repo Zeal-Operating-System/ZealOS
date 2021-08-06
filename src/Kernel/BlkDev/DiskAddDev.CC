@@ -234,7 +234,7 @@ U0 BlkDevsInitAll()
 	}
 
 	#exe {
-		if (kernel_config->opts[CONFIG_MOUNT_IDE_AUTO])
+		if (kernel_config->opts[CONFIG_MOUNT_AHCI_AUTO])
 			StreamPrint("MountAHCIAuto;");
 		StreamPrint("#exe {Option(OPTf_WARN_PAREN, OFF);}");
 		StreamDoc(kernel_config->add_dev);

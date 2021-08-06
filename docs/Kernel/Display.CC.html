@@ -92,15 +92,15 @@ body {background-color:#fef1f0;}
 <a name="l65"></a>
 <a name="l66"></a>            </span><span class=cF2>// MemCopy is slow, computing these and iterating U64's manually is far faster.</span><span class=cF0>
 <a name="l67"></a>            framebuffer_u64         = </span><span class=cFB>text</span><span class=cF0>.fb_alias;
-<a name="l68"></a>            framebuffer_u64_size    = </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.height / </span><span class=cFE>2</span><span class=cF0>;
-<a name="l69"></a>            framebuffer_u64_offset  = </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;
+<a name="l68"></a>            framebuffer_u64_size    = </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.height / </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0> / </span><span class=cFE>2</span><span class=cF0>;
+<a name="l69"></a>            framebuffer_u64_offset  = </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width / </span><span class=cFE>2</span><span class=cF0> * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>;
 <a name="l70"></a>
 <a name="l71"></a>            </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; framebuffer_u64_size; i++)
 <a name="l72"></a>                framebuffer_u64[i] = framebuffer_u64[i + framebuffer_u64_offset];
 <a name="l73"></a>
-<a name="l74"></a>            </span><span class=cF5>MemSetU32</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias + </span><span class=cFB>text</span><span class=cF0>.screen_size - </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>, </span><span class=cF3>BLACK32</span><span class=cF0>, </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>);
-<a name="l75"></a>            </span><span class=cFB>text</span><span class=cF0>.raw_col -= </span><span class=cFB>text</span><span class=cF0>.cols;
-<a name="l76"></a>            row = </span><span class=cFB>text</span><span class=cF0>.rows - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l74"></a>            </span><span class=cF5>MemSetU32</span><span class=cF0>(</span><span class=cFB>text</span><span class=cF0>.fb_alias + </span><span class=cFB>text</span><span class=cF0>.screen_size - </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>, </span><span class=cF3>BLACK32</span><span class=cF0>, </span><span class=cFB>sys_vbe_mode</span><span class=cF0>.width * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>);
+<a name="l75"></a>            </span><span class=cFB>text</span><span class=cF0>.raw_col -= </span><span class=cFB>text</span><span class=cF0>.cols * </span><span class=cFE>8</span><span class=cF0>;
+<a name="l76"></a>            row = </span><span class=cFB>text</span><span class=cF0>.rows - </span><span class=cFE>8</span><span class=cF0>;
 <a name="l77"></a>        }
 <a name="l78"></a>        x = col * </span><span class=cF3>FONT_WIDTH</span><span class=cF0>;
 <a name="l79"></a>        y = row * </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>;

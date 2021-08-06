@@ -14,7 +14,7 @@ U8 *kernel_config_options = "MemInit\0"
 #define CONFIG_VAR_INIT 		2
 #define CONFIG_HOME_DIR 		3
 #define CONFIG_NO_MP			4
-#define CONFIG_MOUNT_IDE_AUTO 	5
+#define CONFIG_MOUNT_AHCI_AUTO 	5
 #define CONFIG_DEBUG_DISTRO 	6
 #define CONFIG_OPTIONS_NUM		7
 
@@ -76,7 +76,6 @@ U0 KConfigOptions(CKConfig *c)
 			"$$PURPLE$$VarInit$$FG$$ Initializes global var memory to a val.\n"
 			"$$PURPLE$$HomeDir$$FG$$ Set home dir.\n"
 			"$$PURPLE$$NoMP$$FG$$ No multicore.\n"
-			"$$PURPLE$$DontProbe$$FG$$ Just prompt CD/DVD ports, don't probe.\n"
 			"$$PURPLE$$MountAHCIAuto$$FG$$ Auto Mount AHCI drives to 'C' and 'T'.\n"
 			"$$PURPLE$$DebugDistro$$FG$$ Include RAM Drive in Kernel.BIN.\n"
 			"\n";
@@ -119,7 +118,7 @@ U0 KConfigOptions(CKConfig *c)
 							c->opts[i] = FALSE;
 						break;
 
-					case CONFIG_MOUNT_IDE_AUTO:
+					case CONFIG_MOUNT_AHCI_AUTO:
 						if (state)
 						{
 							"First HD Drive Let:";

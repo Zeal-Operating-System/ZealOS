@@ -5,7 +5,7 @@ U0 BlkDevRep()
 	for (i = 0; i < BLKDEVS_NUM; i++)
 		if (blkdev.blkdevs[i].bd_signature == BD_SIGNATURE_VAL)
 			//$LK,"ClassRep",A="MN:ClassRep"$() dumps any structure, automatically.
-			ClassRep(&blkdev.blkdevs[i]);
+			ClassRep(&blkdev.blkdevs[i],,, TRUE);
 			//The lastclass arg tells ClassRep the datatype.
 			//lastclass is a language feature of $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.
 			//See $LK,"::/Demo/LastClass.CC"$.
