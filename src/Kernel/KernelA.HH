@@ -2952,6 +2952,7 @@ class CAtapiFormatParamList
 #define ATAPI_SYNC_CACHE			0x3500
 #define ATAPI_READ_TRACK_INFO		0x5200
 #define ATAPI_CLOSE_TRACK_SESSION	0x5B00
+#define ATAPI_BLANK					0xA100
 #define ATAPI_READ					0xA800
 #define ATAPI_WRITE					0xAA00
 #define ATAPI_SET_CD_SPEED			0xBB00

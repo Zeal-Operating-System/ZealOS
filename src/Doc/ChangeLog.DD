@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/08/21 20:30:08----$IV,0$
+* Implemented $LK+PU,"AHCIAtapiBlank",A="MN:AHCIAtapiBlank"$, default is minimal disc blank.
+
 $IV,1$----08/06/21 00:11:02----$IV,0$
 * Fixed $LK+PU,"Mount2",A="FF:::/System/BlkDev/Mount.CC,port = -1"$ AHCI port value not being cleared on loop.
 * Fixed OSUpgrade not asking to update the master boot record.
