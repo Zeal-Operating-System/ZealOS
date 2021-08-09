@@ -492,7 +492,7 @@ Bool AHCIAtapiFormat(CBlkDev *bd, I64 count)
 	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
 
 	cmd_table->prdt[0].data_base		= format_list;
-	cmd_table->prdt[0].data_byte_count	= 12 - 1; // zero based, size of format parameter list
+	cmd_table->prdt[0].data_byte_count	= sizeof(CAtapiFormatParamList) - 1; // zero based, size of format parameter list
 	cmd_header->prdt_len = 1;
 
 	cmd_fis	= cmd_table->cmd_fis;
@@ -507,6 +507,61 @@ Bool AHCIAtapiFormat(CBlkDev *bd, I64 count)
 	format_cmd.code		= 1 | 1 << 4; // TODO !!! FORMAT UNIT CODE FLAGS (1 mandatory, 1<<4 mandatory for MM drives)
 	MemCopy(&cmd_table->acmd, &format_cmd, 6); // ?
 	
+	AHCIPortWait(bd->port_num, tS + 2);
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+
+	try
+		AHCIPortCmdWait(bd->port_num, cmd_slot);
+	catch
+	{
+		Fs->catch_except = TRUE;
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
+{ // untested
+	CPortCmdTable			*cmd_table;
+	CFisH2D					*cmd_fis;
+	CAHCIPort				*port		= bd->ahci_port;
+	I64						 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
+	CPortCmdHeader			*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+	CAtapiModeWriteList		*mode_list;
+
+	if (port->signature != AHCI_PxSIG_ATAPI)
+	{
+		SysErr("AHCI: Drive is not an ATAPI drive!\n");
+		throw('AHCI');	
+	}
+
+	mode_list = CAlloc(sizeof(CAtapiModeWriteList), sys_task->code_heap);
+	mode_list->page.code				= 0x05;
+	mode_list->page.length				= 0x32;
+	mode_list->page.type				= 0x01; // 0x0 packet, 0x1 TAO, 0x2 SAO, 0x3 RAW, 0x4 LJR
+	mode_list->page.mode				= 4;
+	mode_list->page.block_type			= 8;
+//	mode_list->page.link_size			= 7;
+//	mode_list->page.audio_pause_length	= 150;
+
+	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
+
+	cmd_table = cmd_header->cmd_table_base;
+	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
+
+	cmd_table->prdt[0].data_base		= mode_list;
+	cmd_table->prdt[0].data_byte_count	= sizeof(CAtapiModeWriteList) - 1; // zero based, size of mode write list
+	cmd_header->prdt_len = 1;
+
+	cmd_fis	= cmd_table->cmd_fis;
+
+	cmd_fis->type		= FISt_H2D;
+	cmd_fis->feature_low= 0x01; // Core Feature, 'mandatory'
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
+	cmd_fis->command	= ATA_PACKET;
+	cmd_table->acmd[0]	= 0x55; // TODO set define for MODE SELECT
+
 	AHCIPortWait(bd->port_num, tS + 2);
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 
@@ -941,14 +996,16 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 		unlock = BlkDevLock(bd);
 
 
-	AHCIPortWait(bd->port_num, tS + 2);
-	AHCIAtapiSeek(bd, blk);
-	AHCIPortWait(bd->port_num, tS + 2);
-	AHCIAtapiBlank(bd); // ?? should blank/format be outside this func, in case func is re-run?
+//	AHCIPortWait(bd->port_num, tS + 2);
+//	AHCIAtapiSeek(bd, blk);
+//	AHCIPortWait(bd->port_num, tS + 2);
+//	AHCIAtapiBlank(bd); // ?? should blank/format be outside this func, in case func is re-run?
 //	AHCIAtapiFormat(bd, count); // ??..
-	bd->flags |= BDF_LAST_WAS_WRITE; // ??..
+//	bd->flags |= BDF_LAST_WAS_WRITE; // ??..
+	// maybe check the flag and if not set do a blank/format?
 	AHCIPortWait(bd->port_num, tS + 2);
-	AHCIAtapiSeek(bd, blk);
+//	AHCIAtapiSeek(bd, blk);
+	AHCIAtapiModeWriteSet(bd);
 
 	cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
 	cmd_header = AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);

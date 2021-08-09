@@ -2923,6 +2923,41 @@ class CAtapiFormatParamList
 					// For type 0: set 0x8000, for type 0x10: CD Fixed Packet Size or DVD ECC block size (16)
 };
 
+class CAtapiModeHeader
+{
+	U16	data_length;
+	U8	reserved[4];
+	U16	block_desc_len;
+};
+
+class CAtapiModeWritePage
+{
+	U8	code,	//0
+		length,
+		type,
+		mode,
+		block_type,
+		link_size,
+		reserved,
+		host_app_code,
+		session_format,
+		reserved; // 9
+	U32	packet_size; // 10-13
+	U16	audio_pause_length;// 14-15
+	U8	media_catalog_num[16],//16-31
+		recording_code[16],//32-47
+		sub_0,
+		sub_1,
+		sub_2,
+		sub_3;
+};
+
+class CAtapiModeWriteList
+{
+	CAtapiModeHeader	header;
+	CAtapiModeWritePage	page;
+};
+
 //ATA_IDENTIFY command array indexes (array of U16s)
 #define ATA_IDENT_SERIAL_NUM		10
 #define ATA_IDENT_MODEL_NUM			27

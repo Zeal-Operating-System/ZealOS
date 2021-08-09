@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.13">
+<meta name="generator" content="ZealOS V0.14">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -90,7 +90,7 @@ body {background-color:#fef1f0;}
 <a name="l63"></a>}
 <a name="l64"></a>
 <a name="l65"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>FileFind</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *filename, </span><span class=cF9>CDirEntry</span><span class=cF0> *_de=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> fuf_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l66"></a>{</span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3250"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>,  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3251"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3259"><span class=cF4>FUF_SCAN_PARENTS</span></a><span class=cF0>
+<a name="l66"></a>{</span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3285"><span class=cF4>FUF_JUST_DIRS</span></a><span class=cF2>,  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3286"><span class=cF4>FUF_JUST_FILES</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3294"><span class=cF4>FUF_SCAN_PARENTS</span></a><span class=cF0>
 <a name="l67"></a></span><span class=cF2>//If you pass _de,  you must Free(_de-&gt;full_name);</span><span class=cF0>
 <a name="l68"></a>    </span><span class=cF9>I64</span><span class=cF0>          cur_dir_clus;
 <a name="l69"></a>    </span><span class=cF1>U8</span><span class=cF0>          *full_name = </span><span class=cF3>NULL</span><span class=cF0>;

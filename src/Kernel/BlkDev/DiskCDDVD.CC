@@ -210,6 +210,12 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 
 	BlkDevLock(bd);
 //	IDEATAPIWaitReady(bd, 0);
+	AHCIPortWait(bd->port_num, tS + 2);
+//	AHCIAtapiSeek(bd, blk);
+//	AHCIPortWait(bd->port_num, tS + 2);
+	AHCIAtapiBlank(bd);
+//	AHCIAtapiFormat(bd, count);
+	bd->flags |= BDF_LAST_WAS_WRITE;
 
 	progress1 = 0;
 	progress1_max = count;
@@ -229,7 +235,7 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 		while (d->in_buf <= d->out_buf)
 			Yield;
 //		IDEATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
-		AHCIAtapiBlksWrite(bd, buf, blk / spc, (n + spc - 1) / spc);
+		AHCIAtapiBlksWrite(bd, buf, blk / spc, (n + spc - 1) / spc, FALSE);
 		d->out_buf++;
 		count -= n;
 		blk += n;
@@ -238,15 +244,15 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 //	IDEATAPISync(bd);
 	AHCIAtapiSync(bd);
 
-	progress1 = 0;
-	progress1_max = 2;
-	StrCopy(progress1_desc, "Closing");
-	for (i = 0; i < 2; i++)
-	{
+//	progress1 = 0;
+//	progress1_max = 2;
+//	StrCopy(progress1_desc, "Closing");
+//	for (i = 0; i < 2; i++)
+//	{
 //		IDEATAPIClose(bd, 0x100, i); //Close tracks
-		AHCIAtapiClose(bd, 0x100, i); //Close tracks
-		progress1++;
-	}
+//		AHCIAtapiClose(bd, 0x100); //Close tracks
+//		progress1++;
+//	}
 
 //	IDEATAPISync(bd);
 	AHCIAtapiSync(bd);

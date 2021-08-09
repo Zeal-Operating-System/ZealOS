@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.13">
+<meta name="generator" content="ZealOS V0.14">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -376,7 +376,7 @@ body {background-color:#fef1f0;}
 <a name="l349"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Executive Task CPU%02X&quot;</span><span class=cF0>, i);
 <a name="l350"></a>        task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, buf,,, </span><span class=cF3>MEM_EXECUTIVE_STACK</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l351"></a>        task-&gt;rflags = </span><span class=cF3>RFLAGG_START</span><span class=cF0>;
-<a name="l352"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3971"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
+<a name="l352"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4006"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>
 <a name="l353"></a>        </span><span class=cFD>CPUStructInit</span><span class=cF0>(i, &amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[i], task);
 <a name="l354"></a>        </span><span class=cF1>WBINVD</span><span class=cF0> </span><span class=cF2>//Not sure why this is needed.  Might just need delay.</span><span class=cF0>
 <a name="l355"></a>    </span><span class=cF7>}</span><span class=cF0>
