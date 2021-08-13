@@ -242,7 +242,7 @@ body {background-color:#fef1f0;}
 <a name="l215"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
 <a name="l216"></a>    </span><span class=cF9>CSysLimitBase</span><span class=cF0>   tmp_ptr;
 <a name="l217"></a>
-<a name="l218"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4125"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
+<a name="l218"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Gs</span><span class=cF0>-&gt;num) </span><span class=cF2>//Gs is current </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4148"><span class=cF4>CCPU</span></a><span class=cF2> struct</span><span class=cF0>
 <a name="l219"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l220"></a>        </span><span class=cFB>dev</span><span class=cF0>.idt = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CIDTEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFE>8</span><span class=cF0>);
 <a name="l221"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>256</span><span class=cF0>; i++)

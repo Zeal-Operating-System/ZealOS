@@ -254,7 +254,7 @@ body {background-color:#fef1f0;}
 <a name="l227"></a>        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;port-&gt;cmd_issue, cmd_slot</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//When command has been processed</span><span class=cF0>
 <a name="l228"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l229"></a>
-<a name="l230"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;port-&gt;interrupt_status, </span><span class=cF3>AHCI_PxIf_TFE</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//Task File Error (</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l2995"><span class=cF4>ATAS_ERR</span></a><span class=cF2>)</span><span class=cF0>
+<a name="l230"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;port-&gt;interrupt_status, </span><span class=cF3>AHCI_PxIf_TFE</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//Task File Error (</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3018"><span class=cF4>ATAS_ERR</span></a><span class=cF2>)</span><span class=cF0>
 <a name="l231"></a>        {
 <a name="l232"></a>error:
 <a name="l233"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>AHCI_DEBUG</span><span class=cF0>)
@@ -449,7 +449,7 @@ body {background-color:#fef1f0;}
 <a name="l422"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l423"></a>}
 <a name="l424"></a>
-<a name="l425"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtapiBlank</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>Bool</span><span class=cF0> minimal=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l425"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>AHCIAtapiBlank</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>Bool</span><span class=cF0> minimal=</span><span class=cF3>TRUE</span><span class=cF0>)
 <a name="l426"></a>{ </span><span class=cF2>// Blank a disc. If minimal set FALSE, entire disc is blanked.</span><span class=cF0>
 <a name="l427"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
 <a name="l428"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
@@ -549,7 +549,7 @@ body {background-color:#fef1f0;}
 <a name="l522"></a>}
 <a name="l523"></a>
 <a name="l524"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtapiModeWriteSet</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
-<a name="l525"></a>{ </span><span class=cF2>// untested</span><span class=cF0>
+<a name="l525"></a>{ </span><span class=cF2>// Set ATAPI drive write configuration.</span><span class=cF0>
 <a name="l526"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>           *cmd_table;
 <a name="l527"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>                 *cmd_fis;
 <a name="l528"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>               *port       = bd-&gt;ahci_port;
@@ -566,11 +566,11 @@ body {background-color:#fef1f0;}
 <a name="l539"></a>    mode_list = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAtapiModeWriteList</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
 <a name="l540"></a>    mode_list-&gt;page.code                = </span><span class=cFE>0x05</span><span class=cF0>;
 <a name="l541"></a>    mode_list-&gt;page.length              = </span><span class=cFE>0x32</span><span class=cF0>;
-<a name="l542"></a>    mode_list-&gt;page.type                = </span><span class=cFE>0x01</span><span class=cF0>; </span><span class=cF2>// 0x0 packet, 0x1 TAO, 0x2 SAO, 0x3 RAW, 0x4 LJR</span><span class=cF0>
-<a name="l543"></a>    mode_list-&gt;page.mode                = </span><span class=cFE>4</span><span class=cF0>;
+<a name="l542"></a>    mode_list-&gt;page.type                = </span><span class=cFE>0x00</span><span class=cF0>; </span><span class=cF2>// 0x0 packet, 0x1 TAO, 0x2 SAO, 0x3 RAW, 0x4 LJR</span><span class=cF0>
+<a name="l543"></a>    mode_list-&gt;page.mode                = </span><span class=cFE>4</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>5</span><span class=cF0>;
 <a name="l544"></a>    mode_list-&gt;page.block_type          = </span><span class=cFE>8</span><span class=cF0>;
 <a name="l545"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>mode_list-&gt;page.link_size</span><span class=cF0>           </span><span class=cF2>= 7;</span><span class=cF0>
-<a name="l546"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>mode_list-&gt;page.audio_pause_length</span><span class=cF0>  </span><span class=cF2>= 150;</span><span class=cF0>
+<a name="l546"></a>    mode_list-&gt;page.packet_size         = </span><span class=cF5>EndianU32</span><span class=cF0>(</span><span class=cFE>16</span><span class=cF0>);
 <a name="l547"></a>
 <a name="l548"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>);
 <a name="l549"></a>
@@ -602,773 +602,828 @@ body {background-color:#fef1f0;}
 <a name="l575"></a>
 <a name="l576"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
 <a name="l577"></a>}
-<a name="l578"></a>
-<a name="l579"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>)
-<a name="l580"></a>{
-<a name="l581"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
-<a name="l582"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
-<a name="l583"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port       = bd-&gt;ahci_port;
-<a name="l584"></a>    </span><span class=cF9>I64</span><span class=cF0>              cmd_slot   = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
-<a name="l585"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l586"></a>
-<a name="l587"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l588"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l589"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATAPI drive!\n&quot;</span><span class=cF0>);
-<a name="l590"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);  
-<a name="l591"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l592"></a>
-<a name="l593"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>);
-<a name="l594"></a>
-<a name="l595"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
-<a name="l596"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l578"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l579"></a></span><span class=cF2>CAtapiTrackInfo *AHCIAtapiReadTrackInfo(CBlkDev *bd)</span><span class=cF0>
+<a name="l580"></a></span><span class=cF2>{ // untested</span><span class=cF0>
+<a name="l581"></a>    </span><span class=cF2>CPortCmdTable</span><span class=cF0>           </span><span class=cF2>*cmd_table;</span><span class=cF0>
+<a name="l582"></a>    </span><span class=cF2>CFisH2D</span><span class=cF0>                 </span><span class=cF2>*cmd_fis;</span><span class=cF0>
+<a name="l583"></a>    </span><span class=cF2>CAHCIPort</span><span class=cF0>               </span><span class=cF2>*port</span><span class=cF0>       </span><span class=cF2>= bd-&gt;ahci_port;</span><span class=cF0>
+<a name="l584"></a>    </span><span class=cF2>I64</span><span class=cF0>                     </span><span class=cF2> cmd_slot</span><span class=cF0>   </span><span class=cF2>= AHCIPortCmdSlotGet(bd-&gt;port_num);</span><span class=cF0>
+<a name="l585"></a>    </span><span class=cF2>CPortCmdHeader</span><span class=cF0>          </span><span class=cF2>*cmd_header</span><span class=cF0> </span><span class=cF2>= AHCIPortActiveHeaderGet(bd-&gt;port_num, cmd_slot);</span><span class=cF0>
+<a name="l586"></a>    </span><span class=cF2>CAtapiTrackInfo</span><span class=cF0>         </span><span class=cF2>*track_info;</span><span class=cF0>
+<a name="l587"></a>
+<a name="l588"></a>    </span><span class=cF2>if (port-&gt;signature != AHCI_PxSIG_ATAPI)</span><span class=cF0>
+<a name="l589"></a>    </span><span class=cF2>{</span><span class=cF0>
+<a name="l590"></a>        </span><span class=cF2>SysErr(&quot;AHCI: Drive is not an ATAPI drive!\n&quot;);</span><span class=cF0>
+<a name="l591"></a>        </span><span class=cF2>throw('AHCI');</span><span class=cF0>  
+<a name="l592"></a>    </span><span class=cF2>}</span><span class=cF0>
+<a name="l593"></a>
+<a name="l594"></a>    </span><span class=cF2>track_info = CAlloc(sizeof(CAtapiTrackInfo), sys_task-&gt;code_heap);</span><span class=cF0>
+<a name="l595"></a>
+<a name="l596"></a>    </span><span class=cF2>Bts(&amp;cmd_header-&gt;desc, AHCI_CH_DESCf_A);</span><span class=cF0>
 <a name="l597"></a>
-<a name="l598"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
-<a name="l599"></a>
-<a name="l600"></a>    cmd_fis-&gt;type       = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
-<a name="l601"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS.</span><span class=cF0>
-<a name="l602"></a>    cmd_fis-&gt;command    = </span><span class=cF3>ATA_PACKET</span><span class=cF0>;
-<a name="l603"></a>    cmd_table-&gt;acmd[</span><span class=cFE>0</span><span class=cF0>]  = </span><span class=cF3>ATAPI_START_STOP_UNIT</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
-<a name="l604"></a>    cmd_table-&gt;acmd[</span><span class=cFE>4</span><span class=cF0>]  = </span><span class=cF1>start</span><span class=cF0>;
-<a name="l605"></a>
-<a name="l606"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l607"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot); </span><span class=cF2>//Issue the command.</span><span class=cF0>
-<a name="l608"></a>
-<a name="l609"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l610"></a>        </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l611"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l612"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l613"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l614"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l615"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l616"></a>
-<a name="l617"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l618"></a>}
-<a name="l619"></a>
-<a name="l620"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DiscEject</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l621"></a>{ </span><span class=cF2>// returns whether disc tray was successfully ejected.</span><span class=cF0>
-<a name="l622"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l623"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
-<a name="l624"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l625"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l626"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l627"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l628"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l629"></a>}
-<a name="l630"></a>
-<a name="l631"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DiscLoad</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l632"></a>{ </span><span class=cF2>// returns whether disc tray was successfully closed &amp; disc loaded.</span><span class=cF0>
-<a name="l633"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l634"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
-<a name="l635"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l636"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l637"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l638"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l639"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l640"></a>}
-<a name="l641"></a>
-<a name="l642"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AHCIPortIdentify</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
-<a name="l643"></a>{</span><span class=cF2>//Perform ATA_IDENTIFY command on ATA/ATAPI drive and store capacity and id record.</span><span class=cF0>
-<a name="l644"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
-<a name="l645"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
-<a name="l646"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port       = bd-&gt;ahci_port;
-<a name="l647"></a>    </span><span class=cF9>I64</span><span class=cF0>              cmd_slot   = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
-<a name="l648"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l649"></a>    </span><span class=cF9>U16</span><span class=cF0>             *dev_id_record;
+<a name="l598"></a>    </span><span class=cF2>cmd_table = cmd_header-&gt;cmd_table_base;</span><span class=cF0>
+<a name="l599"></a>    </span><span class=cF2>MemSet(cmd_table, 0, sizeof(CPortCmdTable));</span><span class=cF0>
+<a name="l600"></a>
+<a name="l601"></a>    </span><span class=cF2>cmd_table-&gt;prdt[0].data_base</span><span class=cF0>        </span><span class=cF2>= track_info;</span><span class=cF0>
+<a name="l602"></a>    </span><span class=cF2>cmd_table-&gt;prdt[0].data_byte_count</span><span class=cF0>  </span><span class=cF2>= DVD_BLK_SIZE - 1; // zero based, size of track info block</span><span class=cF0>
+<a name="l603"></a>    </span><span class=cF2>cmd_header-&gt;prdt_len = 1;</span><span class=cF0>
+<a name="l604"></a>
+<a name="l605"></a>    </span><span class=cF2>cmd_fis</span><span class=cF0> </span><span class=cF2>= cmd_table-&gt;cmd_fis;</span><span class=cF0>
+<a name="l606"></a>
+<a name="l607"></a>    </span><span class=cF2>cmd_fis-&gt;type</span><span class=cF0>       </span><span class=cF2>= FISt_H2D;</span><span class=cF0>
+<a name="l608"></a>    </span><span class=cF2>cmd_fis-&gt;feature_low= 0x2D; // CD TAO</span><span class=cF0>
+<a name="l609"></a>    </span><span class=cF2>Bts(&amp;cmd_fis-&gt;desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.</span><span class=cF0>
+<a name="l610"></a>    </span><span class=cF2>cmd_fis-&gt;command</span><span class=cF0>    </span><span class=cF2>= ATA_PACKET;</span><span class=cF0>
+<a name="l611"></a>    </span><span class=cF2>cmd_table-&gt;acmd[0]</span><span class=cF0>  </span><span class=cF2>= ATAPI_READ_TRACK_INFO &gt;&gt; 8;</span><span class=cF0>
+<a name="l612"></a>    </span><span class=cF2>cmd_table-&gt;acmd[1]</span><span class=cF0>  </span><span class=cF2>= 1;</span><span class=cF0>
+<a name="l613"></a>    </span><span class=cF2>cmd_table-&gt;acmd[5]</span><span class=cF0>  </span><span class=cF2>= 0xFF;</span><span class=cF0>
+<a name="l614"></a>    </span><span class=cF2>cmd_table-&gt;acmd[8]</span><span class=cF0>  </span><span class=cF2>= 48;</span><span class=cF0>
+<a name="l615"></a>
+<a name="l616"></a>    </span><span class=cF2>AHCIPortWait(bd-&gt;port_num, tS + 2);</span><span class=cF0>
+<a name="l617"></a>    </span><span class=cF2>Bts(&amp;port-&gt;cmd_issue, cmd_slot); //Issue the command.</span><span class=cF0>
+<a name="l618"></a>
+<a name="l619"></a>    </span><span class=cF2>try</span><span class=cF0>
+<a name="l620"></a>        </span><span class=cF2>AHCIPortCmdWait(bd-&gt;port_num, cmd_slot);</span><span class=cF0>
+<a name="l621"></a>    </span><span class=cF2>catch</span><span class=cF0>
+<a name="l622"></a>    </span><span class=cF2>{</span><span class=cF0>
+<a name="l623"></a>        </span><span class=cF2>Fs-&gt;catch_except = TRUE;</span><span class=cF0>
+<a name="l624"></a>        </span><span class=cF2>return NULL;</span><span class=cF0>
+<a name="l625"></a>    </span><span class=cF2>}</span><span class=cF0>
+<a name="l626"></a>
+<a name="l627"></a>    </span><span class=cF2>return track_info;</span><span class=cF0>
+<a name="l628"></a></span><span class=cF2>}</span><span class=cF0>
+<a name="l629"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l630"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>start</span><span class=cF0>)
+<a name="l631"></a>{
+<a name="l632"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
+<a name="l633"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
+<a name="l634"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port       = bd-&gt;ahci_port;
+<a name="l635"></a>    </span><span class=cF9>I64</span><span class=cF0>              cmd_slot   = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
+<a name="l636"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l637"></a>
+<a name="l638"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l639"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l640"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATAPI drive!\n&quot;</span><span class=cF0>);
+<a name="l641"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);  
+<a name="l642"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l643"></a>
+<a name="l644"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>);
+<a name="l645"></a>
+<a name="l646"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
+<a name="l647"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l648"></a>
+<a name="l649"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
 <a name="l650"></a>
-<a name="l651"></a>    port-&gt;interrupt_status = port-&gt;interrupt_status; </span><span class=cF2>//TODO: Why?</span><span class=cF0>
-<a name="l652"></a>
-<a name="l653"></a>    </span><span class=cF2>//Using the code heap for this alloc to stay under 32-bit address space.</span><span class=cF0>
-<a name="l654"></a>    dev_id_record = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>512</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
-<a name="l655"></a>
-<a name="l656"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
-<a name="l657"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
-<a name="l658"></a>
-<a name="l659"></a>    </span><span class=cF2>//Set up single PRD</span><span class=cF0>
-<a name="l660"></a>    cmd_table-&gt;prdt[</span><span class=cFE>0</span><span class=cF0>].data_base       = dev_id_record;
-<a name="l661"></a>    cmd_table-&gt;prdt[</span><span class=cFE>0</span><span class=cF0>].data_base_upper = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l662"></a>    cmd_table-&gt;prdt[</span><span class=cFE>0</span><span class=cF0>].data_byte_count = </span><span class=cFE>512</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
-<a name="l663"></a>    cmd_header-&gt;prdt_len = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//1 PRD, as described above, which contains the address to put the ID record.</span><span class=cF0>
-<a name="l664"></a>
-<a name="l665"></a>    </span><span class=cF2>//Setup command FIS</span><span class=cF0>
-<a name="l666"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
+<a name="l651"></a>    cmd_fis-&gt;type       = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
+<a name="l652"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS.</span><span class=cF0>
+<a name="l653"></a>    cmd_fis-&gt;command    = </span><span class=cF3>ATA_PACKET</span><span class=cF0>;
+<a name="l654"></a>    cmd_table-&gt;acmd[</span><span class=cFE>0</span><span class=cF0>]  = </span><span class=cF3>ATAPI_START_STOP_UNIT</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l655"></a>    cmd_table-&gt;acmd[</span><span class=cFE>4</span><span class=cF0>]  = </span><span class=cF1>start</span><span class=cF0>;
+<a name="l656"></a>
+<a name="l657"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l658"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot); </span><span class=cF2>//Issue the command.</span><span class=cF0>
+<a name="l659"></a>
+<a name="l660"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l661"></a>        </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l662"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l663"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l664"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l665"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l666"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l667"></a>
-<a name="l668"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
-<a name="l669"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS.</span><span class=cF0>
+<a name="l668"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l669"></a>}
 <a name="l670"></a>
-<a name="l671"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l672"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_IDENTIFY_PACKET</span><span class=cF0>;
-<a name="l673"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l674"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_IDENTIFY</span><span class=cF0>;
-<a name="l675"></a>
-<a name="l676"></a>    cmd_fis-&gt;device  = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//No bits need to be set in the device register.</span><span class=cF0>
-<a name="l677"></a>
-<a name="l678"></a>    </span><span class=cF2>//Wait on previous command to complete.</span><span class=cF0>
-<a name="l679"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l680"></a>
-<a name="l681"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot); </span><span class=cF2>//Issue the command.</span><span class=cF0>
-<a name="l682"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l683"></a>
-<a name="l684"></a>    </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;dev_id_record);
-<a name="l685"></a>    bd-&gt;dev_id_record = dev_id_record;
-<a name="l686"></a>
-<a name="l687"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l688"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l689"></a>        bd-&gt;max_blk = </span><span class=cFD>AHCILBA48CapacityGet</span><span class=cF0>(dev_id_record);
-<a name="l690"></a>        </span><span class=cF6>&quot;MAX BLOCK %d, disk size %d MiB\n&quot;</span><span class=cF0>, bd-&gt;max_blk, bd-&gt;max_blk * </span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>; 
-<a name="l691"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l692"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l693"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l694"></a>        bd-&gt;max_blk = </span><span class=cFD>AHCIAtapiCapacityGet</span><span class=cF0>(bd);
-<a name="l695"></a>        </span><span class=cF6>&quot;MAX BLOCK %d, disk size %d MiB\n&quot;</span><span class=cF0>, bd-&gt;max_blk, bd-&gt;max_blk * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>; 
-<a name="l696"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l697"></a>}
-<a name="l698"></a>
-<a name="l699"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *user_buf, </span><span class=cF9>I64</span><span class=cF0> buf_size, </span><span class=cF1>Bool</span><span class=cF0> write)
-<a name="l700"></a>{</span><span class=cF2>//Make sure buffer is accessible by HBA controller.</span><span class=cF0>
-<a name="l701"></a></span><span class=cF2>//Controller requires a U16 aligned buffer and in 32-bit address space (We are not using 64-bit capabilities).</span><span class=cF0>
-<a name="l702"></a></span><span class=cF2>//MAlloc provides U64-aligned addresses, and can allocate in the code heap ( &lt;4GB ).</span><span class=cF0>
-<a name="l703"></a></span><span class=cF2>//In the case of an inadequate buffer address being passed in, we will use a MAlloced internal buffer.</span><span class=cF0>
-<a name="l704"></a>    </span><span class=cF1>if</span><span class=cF0>(user_buf + buf_size &gt; </span><span class=cF3>U32_MAX</span><span class=cF0> || user_buf &amp; </span><span class=cFE>1</span><span class=cF0>)
-<a name="l705"></a>    </span><span class=cF7>{</span><span class=cF2>//if the buffer is not within 32-bit address space or not U16-aligned</span><span class=cF0>
-<a name="l706"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;Aligning buffer under 32-bit range\n&quot;;</span><span class=cF0>
-<a name="l707"></a>
-<a name="l708"></a>        </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;prd_buf);
-<a name="l709"></a>        bd-&gt;prd_buf = </span><span class=cF5>MAlloc</span><span class=cF0>(buf_size, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
-<a name="l710"></a>
-<a name="l711"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;bd-&gt;flags, </span><span class=cF3>BDf_INTERNAL_BUF</span><span class=cF0>);
-<a name="l712"></a>
-<a name="l713"></a>        </span><span class=cF1>if</span><span class=cF0> (write)
-<a name="l714"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(bd-&gt;prd_buf, user_buf, buf_size);
+<a name="l671"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DiscEject</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
+<a name="l672"></a>{ </span><span class=cF2>// returns whether disc tray was successfully ejected.</span><span class=cF0>
+<a name="l673"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l674"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l675"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l676"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l677"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l678"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l679"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l680"></a>}
+<a name="l681"></a>
+<a name="l682"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DiscLoad</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
+<a name="l683"></a>{ </span><span class=cF2>// returns whether disc tray was successfully closed &amp; disc loaded.</span><span class=cF0>
+<a name="l684"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l685"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(</span><span class=cF5>Letter2BlkDev</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>3</span><span class=cF0>);
+<a name="l686"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l687"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l688"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l689"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l690"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l691"></a>}
+<a name="l692"></a>
+<a name="l693"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AHCIPortIdentify</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
+<a name="l694"></a>{</span><span class=cF2>//Perform ATA_IDENTIFY command on ATA/ATAPI drive and store capacity and id record.</span><span class=cF0>
+<a name="l695"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
+<a name="l696"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
+<a name="l697"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port       = bd-&gt;ahci_port;
+<a name="l698"></a>    </span><span class=cF9>I64</span><span class=cF0>              cmd_slot   = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
+<a name="l699"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l700"></a>    </span><span class=cF9>U16</span><span class=cF0>             *dev_id_record;
+<a name="l701"></a>
+<a name="l702"></a>    port-&gt;interrupt_status = port-&gt;interrupt_status; </span><span class=cF2>//TODO: Why?</span><span class=cF0>
+<a name="l703"></a>
+<a name="l704"></a>    </span><span class=cF2>//Using the code heap for this alloc to stay under 32-bit address space.</span><span class=cF0>
+<a name="l705"></a>    dev_id_record = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cFE>512</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
+<a name="l706"></a>
+<a name="l707"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
+<a name="l708"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l709"></a>
+<a name="l710"></a>    </span><span class=cF2>//Set up single PRD</span><span class=cF0>
+<a name="l711"></a>    cmd_table-&gt;prdt[</span><span class=cFE>0</span><span class=cF0>].data_base       = dev_id_record;
+<a name="l712"></a>    cmd_table-&gt;prdt[</span><span class=cFE>0</span><span class=cF0>].data_base_upper = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l713"></a>    cmd_table-&gt;prdt[</span><span class=cFE>0</span><span class=cF0>].data_byte_count = </span><span class=cFE>512</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
+<a name="l714"></a>    cmd_header-&gt;prdt_len = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//1 PRD, as described above, which contains the address to put the ID record.</span><span class=cF0>
 <a name="l715"></a>
-<a name="l716"></a>        </span><span class=cF1>return</span><span class=cF0> bd-&gt;prd_buf;
-<a name="l717"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l718"></a>    </span><span class=cF5>Btr</span><span class=cF0>(&amp;bd-&gt;flags, </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>);
-<a name="l719"></a>
-<a name="l720"></a>    </span><span class=cF1>return</span><span class=cF0> user_buf;
-<a name="l721"></a>}
-<a name="l722"></a>
-<a name="l723"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> write)
-<a name="l724"></a>{</span><span class=cF2>//Read/Write ATA disk blocks. Returns number of bytes transferred between system and disk.</span><span class=cF0>
-<a name="l725"></a></span><span class=cF2>//Don't use this, use the AHCIAtaBlksRead and AHCIAtaBlksWrite functions.</span><span class=cF0>
-<a name="l726"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>  *cmd_table;
-<a name="l727"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>        *cmd_fis;
-<a name="l728"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>      *port = bd-&gt;ahci_port;
-<a name="l729"></a>    </span><span class=cF9>I64</span><span class=cF0> i, buf_size, buf_size_tmp, byte_count, prdt_len, cmd_slot = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
-<a name="l730"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0> *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l731"></a>    </span><span class=cF1>U8</span><span class=cF0>             *internal_buf_tmp, *internal_buf;
-<a name="l732"></a>    </span><span class=cF1>Bool</span><span class=cF0>            unlock;
-<a name="l733"></a>
-<a name="l734"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l735"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l736"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATA drive!\n&quot;</span><span class=cF0>);
-<a name="l737"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
-<a name="l738"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l739"></a>
-<a name="l740"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt; </span><span class=cFE>1</span><span class=cF0>) </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l741"></a>    </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
-<a name="l742"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l743"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Block count %d max allowed in one command (%d)&quot;</span><span class=cF0>, count, </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>);
-<a name="l744"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
-<a name="l745"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l746"></a>
-<a name="l747"></a>    unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
-<a name="l748"></a>
-<a name="l749"></a>    </span><span class=cF2>//Determine buffer size and PRDT length.</span><span class=cF0>
-<a name="l750"></a>    buf_size = buf_size_tmp = count * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
-<a name="l751"></a>    prdt_len = (buf_size - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l752"></a>
-<a name="l753"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;PRDT Length:\t%d\n&quot;, prdt_len;</span><span class=cF0>
-<a name="l754"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Count:\t\t\t%d\n&quot;, count;</span><span class=cF0>
-<a name="l755"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer size:\t%X\n&quot;, buf_size;</span><span class=cF0>
-<a name="l756"></a>
-<a name="l757"></a>    cmd_header-&gt;prdt_len = prdt_len; </span><span class=cF2>//Set PRD table length in cmd header.</span><span class=cF0>
-<a name="l758"></a>    </span><span class=cF2>//Set 'write' bit depending on 'write' argument.</span><span class=cF0>
-<a name="l759"></a>    </span><span class=cF5>BEqual</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_W</span><span class=cF0>, write);
-<a name="l760"></a>
-<a name="l761"></a>    internal_buf = internal_buf_tmp = </span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(bd, buf, buf_size, write);
-<a name="l762"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer:\t\t\t0x%X\n&quot;, internal_buf;</span><span class=cF0>
+<a name="l716"></a>    </span><span class=cF2>//Setup command FIS</span><span class=cF0>
+<a name="l717"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
+<a name="l718"></a>
+<a name="l719"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
+<a name="l720"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS.</span><span class=cF0>
+<a name="l721"></a>
+<a name="l722"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l723"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_IDENTIFY_PACKET</span><span class=cF0>;
+<a name="l724"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l725"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_IDENTIFY</span><span class=cF0>;
+<a name="l726"></a>
+<a name="l727"></a>    cmd_fis-&gt;device  = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//No bits need to be set in the device register.</span><span class=cF0>
+<a name="l728"></a>
+<a name="l729"></a>    </span><span class=cF2>//Wait on previous command to complete.</span><span class=cF0>
+<a name="l730"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l731"></a>
+<a name="l732"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot); </span><span class=cF2>//Issue the command.</span><span class=cF0>
+<a name="l733"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l734"></a>
+<a name="l735"></a>    </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;dev_id_record);
+<a name="l736"></a>    bd-&gt;dev_id_record = dev_id_record;
+<a name="l737"></a>
+<a name="l738"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l739"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l740"></a>        bd-&gt;max_blk = </span><span class=cFD>AHCILBA48CapacityGet</span><span class=cF0>(dev_id_record);
+<a name="l741"></a>        </span><span class=cF6>&quot;MAX BLOCK %d, disk size %d MiB\n&quot;</span><span class=cF0>, bd-&gt;max_blk, bd-&gt;max_blk * </span><span class=cF3>BLK_SIZE</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>; 
+<a name="l742"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l743"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l744"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l745"></a>        bd-&gt;max_blk = </span><span class=cFD>AHCIAtapiCapacityGet</span><span class=cF0>(bd);
+<a name="l746"></a>        </span><span class=cF6>&quot;MAX BLOCK %d, disk size %d MiB\n&quot;</span><span class=cF0>, bd-&gt;max_blk, bd-&gt;max_blk * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0> / </span><span class=cFE>1024</span><span class=cF0>; 
+<a name="l747"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l748"></a>}
+<a name="l749"></a>
+<a name="l750"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *user_buf, </span><span class=cF9>I64</span><span class=cF0> buf_size, </span><span class=cF1>Bool</span><span class=cF0> write)
+<a name="l751"></a>{</span><span class=cF2>//Make sure buffer is accessible by HBA controller.</span><span class=cF0>
+<a name="l752"></a></span><span class=cF2>//Controller requires a U16 aligned buffer and in 32-bit address space (We are not using 64-bit capabilities).</span><span class=cF0>
+<a name="l753"></a></span><span class=cF2>//MAlloc provides U64-aligned addresses, and can allocate in the code heap ( &lt;4GB ).</span><span class=cF0>
+<a name="l754"></a></span><span class=cF2>//In the case of an inadequate buffer address being passed in, we will use a MAlloced internal buffer.</span><span class=cF0>
+<a name="l755"></a>    </span><span class=cF1>if</span><span class=cF0>(user_buf + buf_size &gt; </span><span class=cF3>U32_MAX</span><span class=cF0> || user_buf &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l756"></a>    </span><span class=cF7>{</span><span class=cF2>//if the buffer is not within 32-bit address space or not U16-aligned</span><span class=cF0>
+<a name="l757"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;Aligning buffer under 32-bit range\n&quot;;</span><span class=cF0>
+<a name="l758"></a>
+<a name="l759"></a>        </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;prd_buf);
+<a name="l760"></a>        bd-&gt;prd_buf = </span><span class=cF5>MAlloc</span><span class=cF0>(buf_size, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
+<a name="l761"></a>
+<a name="l762"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;bd-&gt;flags, </span><span class=cF3>BDf_INTERNAL_BUF</span><span class=cF0>);
 <a name="l763"></a>
-<a name="l764"></a>    </span><span class=cF1>if</span><span class=cF0> (!internal_buf) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>); </span><span class=cF2>//Will probably never happen.</span><span class=cF0>
-<a name="l765"></a>
-<a name="l766"></a>    </span><span class=cF2>//Obtain command table and zero it. This contains the command FIS and the PRDT.</span><span class=cF0>
-<a name="l767"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
-<a name="l768"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
-<a name="l769"></a>    
-<a name="l770"></a>    </span><span class=cF2>//Create 'prdt_len' amount of PRD entries in the command table</span><span class=cF0>
-<a name="l771"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prdt_len; i++)
-<a name="l772"></a>    </span><span class=cF7>{</span><span class=cF2>//Use max PRD size until the remaining buffer is smaller than max size.</span><span class=cF0>
-<a name="l773"></a>        </span><span class=cF1>if</span><span class=cF0> (buf_size_tmp &gt; </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>)
-<a name="l774"></a>            byte_count = </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>;
-<a name="l775"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l776"></a>            byte_count = buf_size_tmp;
-<a name="l777"></a>
-<a name="l778"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_base_addr  = 0x%X\n&quot;  , i, internal_buf_tmp;</span><span class=cF0>
-<a name="l779"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_byte_count = 0x%X\n\n&quot;, i, byte_count;</span><span class=cF0>
-<a name="l780"></a>
-<a name="l781"></a>        cmd_table-&gt;prdt[i].data_base = internal_buf_tmp;
-<a name="l782"></a>        cmd_table-&gt;prdt[i].data_byte_count = byte_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
-<a name="l783"></a>        buf_size_tmp -= byte_count;
-<a name="l784"></a>        internal_buf_tmp += byte_count;
-<a name="l785"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l786"></a>    </span><span class=cF2>//Setup the command FIS.</span><span class=cF0>
-<a name="l787"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
-<a name="l788"></a>
-<a name="l789"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
-<a name="l790"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS</span><span class=cF0>
-<a name="l791"></a>
-<a name="l792"></a>    </span><span class=cF1>if</span><span class=cF0> (write) </span><span class=cF2>//Assumed support for LBA48.</span><span class=cF0>
-<a name="l793"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_WRITE_DMA_EXT</span><span class=cF0>;
-<a name="l794"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l795"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_READ_DMA_EXT</span><span class=cF0>;
-<a name="l796"></a>
-<a name="l797"></a>    </span><span class=cF2>//Fill in the rest of the command FIS.</span><span class=cF0>
-<a name="l798"></a>    cmd_fis-&gt;lba0   = blk.u8[</span><span class=cFE>0</span><span class=cF0>];
-<a name="l799"></a>    cmd_fis-&gt;lba1   = blk.u8[</span><span class=cFE>1</span><span class=cF0>];
-<a name="l800"></a>    cmd_fis-&gt;lba2   = blk.u8[</span><span class=cFE>2</span><span class=cF0>];
-<a name="l801"></a>    cmd_fis-&gt;device = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>6</span><span class=cF0>; </span><span class=cF2>//Required as per ATA8-ACS section 7.25.3</span><span class=cF0>
-<a name="l802"></a>    cmd_fis-&gt;lba3   = blk.u8[</span><span class=cFE>3</span><span class=cF0>];
-<a name="l803"></a>    cmd_fis-&gt;lba4   = blk.u8[</span><span class=cFE>4</span><span class=cF0>];
-<a name="l804"></a>    cmd_fis-&gt;lba5   = blk.u8[</span><span class=cFE>5</span><span class=cF0>];
-<a name="l805"></a>    cmd_fis-&gt;count  = count;
-<a name="l806"></a>
-<a name="l807"></a>    </span><span class=cF2>//Wait on previous command to complete.</span><span class=cF0>
-<a name="l808"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l809"></a>    </span><span class=cF2>//Issue the command.</span><span class=cF0>
-<a name="l810"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot);
-<a name="l811"></a>    </span><span class=cF2>//Wait on command to finish.</span><span class=cF0>
-<a name="l812"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l813"></a>
-<a name="l814"></a>    </span><span class=cF1>if</span><span class=cF0> (!write) </span><span class=cF2>//If internal_buf was created it back to argument buf.</span><span class=cF0>
-<a name="l815"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>)
-<a name="l816"></a>        </span><span class=cF7>{</span><span class=cF0>
-<a name="l817"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;Writing back internal buffer\n&quot;;</span><span class=cF0>
-<a name="l818"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(buf, internal_buf, buf_size);
-<a name="l819"></a>        </span><span class=cF7>}</span><span class=cF0>
-<a name="l820"></a>
-<a name="l821"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l822"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
-<a name="l823"></a>
-<a name="l824"></a>    </span><span class=cF1>return</span><span class=cF0> cmd_header-&gt;prd_byte_count;
-<a name="l825"></a>}
-<a name="l826"></a>
-<a name="l827"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRead</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l828"></a>{</span><span class=cF2>//Read 'blk' amount of blocks from AHCI disk device. Returns num of bytes transferred between disk and memory.</span><span class=cF0>
-<a name="l829"></a>    </span><span class=cF9>I64</span><span class=cF0> byte_count = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l830"></a>    </span><span class=cF1>if</span><span class=cF0> (!count)
-<a name="l831"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l832"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
-<a name="l833"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l834"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$READ less than MAX_BLOCKS$FG$\n&quot;;</span><span class=cF0>
-<a name="l835"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l764"></a>        </span><span class=cF1>if</span><span class=cF0> (write)
+<a name="l765"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(bd-&gt;prd_buf, user_buf, buf_size);
+<a name="l766"></a>
+<a name="l767"></a>        </span><span class=cF1>return</span><span class=cF0> bd-&gt;prd_buf;
+<a name="l768"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l769"></a>    </span><span class=cF5>Btr</span><span class=cF0>(&amp;bd-&gt;flags, </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>);
+<a name="l770"></a>
+<a name="l771"></a>    </span><span class=cF1>return</span><span class=cF0> user_buf;
+<a name="l772"></a>}
+<a name="l773"></a>
+<a name="l774"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> write)
+<a name="l775"></a>{</span><span class=cF2>//Read/Write ATA disk blocks. Returns number of bytes transferred between system and disk.</span><span class=cF0>
+<a name="l776"></a></span><span class=cF2>//Don't use this, use the AHCIAtaBlksRead and AHCIAtaBlksWrite functions.</span><span class=cF0>
+<a name="l777"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>  *cmd_table;
+<a name="l778"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>        *cmd_fis;
+<a name="l779"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>      *port = bd-&gt;ahci_port;
+<a name="l780"></a>    </span><span class=cF9>I64</span><span class=cF0> i, buf_size, buf_size_tmp, byte_count, prdt_len, cmd_slot = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
+<a name="l781"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0> *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l782"></a>    </span><span class=cF1>U8</span><span class=cF0>             *internal_buf_tmp, *internal_buf;
+<a name="l783"></a>    </span><span class=cF1>Bool</span><span class=cF0>            unlock;
+<a name="l784"></a>
+<a name="l785"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l786"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l787"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATA drive!\n&quot;</span><span class=cF0>);
+<a name="l788"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l789"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l790"></a>
+<a name="l791"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt; </span><span class=cFE>1</span><span class=cF0>) </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l792"></a>    </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
+<a name="l793"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l794"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Block count %d max allowed in one command (%d)&quot;</span><span class=cF0>, count, </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>);
+<a name="l795"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l796"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l797"></a>
+<a name="l798"></a>    unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
+<a name="l799"></a>
+<a name="l800"></a>    </span><span class=cF2>//Determine buffer size and PRDT length.</span><span class=cF0>
+<a name="l801"></a>    buf_size = buf_size_tmp = count * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l802"></a>    prdt_len = (buf_size - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l803"></a>
+<a name="l804"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;PRDT Length:\t%d\n&quot;, prdt_len;</span><span class=cF0>
+<a name="l805"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Count:\t\t\t%d\n&quot;, count;</span><span class=cF0>
+<a name="l806"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer size:\t%X\n&quot;, buf_size;</span><span class=cF0>
+<a name="l807"></a>
+<a name="l808"></a>    cmd_header-&gt;prdt_len = prdt_len; </span><span class=cF2>//Set PRD table length in cmd header.</span><span class=cF0>
+<a name="l809"></a>    </span><span class=cF2>//Set 'write' bit depending on 'write' argument.</span><span class=cF0>
+<a name="l810"></a>    </span><span class=cF5>BEqual</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_W</span><span class=cF0>, write);
+<a name="l811"></a>
+<a name="l812"></a>    internal_buf = internal_buf_tmp = </span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(bd, buf, buf_size, write);
+<a name="l813"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer:\t\t\t0x%X\n&quot;, internal_buf;</span><span class=cF0>
+<a name="l814"></a>
+<a name="l815"></a>    </span><span class=cF1>if</span><span class=cF0> (!internal_buf) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>); </span><span class=cF2>//Will probably never happen.</span><span class=cF0>
+<a name="l816"></a>
+<a name="l817"></a>    </span><span class=cF2>//Obtain command table and zero it. This contains the command FIS and the PRDT.</span><span class=cF0>
+<a name="l818"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
+<a name="l819"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l820"></a>    
+<a name="l821"></a>    </span><span class=cF2>//Create 'prdt_len' amount of PRD entries in the command table</span><span class=cF0>
+<a name="l822"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prdt_len; i++)
+<a name="l823"></a>    </span><span class=cF7>{</span><span class=cF2>//Use max PRD size until the remaining buffer is smaller than max size.</span><span class=cF0>
+<a name="l824"></a>        </span><span class=cF1>if</span><span class=cF0> (buf_size_tmp &gt; </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>)
+<a name="l825"></a>            byte_count = </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>;
+<a name="l826"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l827"></a>            byte_count = buf_size_tmp;
+<a name="l828"></a>
+<a name="l829"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_base_addr  = 0x%X\n&quot;  , i, internal_buf_tmp;</span><span class=cF0>
+<a name="l830"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_byte_count = 0x%X\n\n&quot;, i, byte_count;</span><span class=cF0>
+<a name="l831"></a>
+<a name="l832"></a>        cmd_table-&gt;prdt[i].data_base = internal_buf_tmp;
+<a name="l833"></a>        cmd_table-&gt;prdt[i].data_byte_count = byte_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
+<a name="l834"></a>        buf_size_tmp -= byte_count;
+<a name="l835"></a>        internal_buf_tmp += byte_count;
 <a name="l836"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l837"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l838"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l839"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$READ greater than MAX_BLOCKS\n&quot;;</span><span class=cF0>
-<a name="l840"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;read count: %d\n$FG$&quot;, count;</span><span class=cF0>
-<a name="l841"></a>        </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
-<a name="l842"></a>        {
-<a name="l843"></a>            byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l844"></a>            count -= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
-<a name="l845"></a>            blk += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
-<a name="l846"></a>            buf += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0> * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
-<a name="l847"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;$GREEN$read count: %d\n$FG$&quot;, count;</span><span class=cF0>
-<a name="l848"></a>        }
-<a name="l849"></a>        byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l850"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l851"></a>
-<a name="l852"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.read_count += (count * bd-&gt;blk_size) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
-<a name="l853"></a>
-<a name="l854"></a>    </span><span class=cF1>return</span><span class=cF0> byte_count;
-<a name="l855"></a>}
-<a name="l856"></a>
-<a name="l857"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l858"></a>{</span><span class=cF2>//Write 'blk' amount of blocks to AHCI disk device. Returns num of bytes transferred between memory and disk.</span><span class=cF0>
-<a name="l859"></a>    </span><span class=cF9>I64</span><span class=cF0>  byte_count = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l860"></a>
-<a name="l861"></a>    </span><span class=cF1>if</span><span class=cF0> (!count)
-<a name="l862"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l863"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
-<a name="l864"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l865"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$WRITE less than MAX_BLOCKS$FG$\n&quot;;</span><span class=cF0>
-<a name="l866"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l867"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l868"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l869"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l870"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$WRITE greater than MAX_BLOCKS\n&quot;;</span><span class=cF0>
-<a name="l871"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;write count: %d$FG$\n&quot;, count;</span><span class=cF0>
-<a name="l872"></a>        </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
-<a name="l873"></a>        {
-<a name="l874"></a>            byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l875"></a>            count -= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
-<a name="l876"></a>            blk += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
-<a name="l877"></a>            buf += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0> * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
-<a name="l878"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;$GREEN$write count: %d\n$FG$\n&quot;, count;</span><span class=cF0>
-<a name="l879"></a>        }
-<a name="l880"></a>        byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l881"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l882"></a>
-<a name="l883"></a>    </span><span class=cF1>return</span><span class=cF0> byte_count;
-<a name="l884"></a>}
-<a name="l885"></a>
-<a name="l886"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>lock</span><span class=cF0>=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l887"></a>{</span><span class=cF2>//Read 'blk' amount of blocks from from AHCI ATAPI device. Returns num of bytes transferred.</span><span class=cF0>
-<a name="l888"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
-<a name="l889"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
-<a name="l890"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port = bd-&gt;ahci_port;
-<a name="l891"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, byte_count, buf_size, buf_size_tmp, prdt_len, cmd_slot = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
-<a name="l892"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l893"></a>    </span><span class=cF1>U8</span><span class=cF0>              *internal_buf, *internal_buf_tmp;
-<a name="l894"></a>    </span><span class=cF9>CAtapiReadCmd</span><span class=cF0>    read_cmd;
-<a name="l895"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock;
-<a name="l896"></a>
-<a name="l897"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l898"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l899"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATAPI drive!\n&quot;</span><span class=cF0>);
-<a name="l900"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l837"></a>    </span><span class=cF2>//Setup the command FIS.</span><span class=cF0>
+<a name="l838"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
+<a name="l839"></a>
+<a name="l840"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
+<a name="l841"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS</span><span class=cF0>
+<a name="l842"></a>
+<a name="l843"></a>    </span><span class=cF1>if</span><span class=cF0> (write) </span><span class=cF2>//Assumed support for LBA48.</span><span class=cF0>
+<a name="l844"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_WRITE_DMA_EXT</span><span class=cF0>;
+<a name="l845"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l846"></a>        cmd_fis-&gt;command = </span><span class=cF3>ATA_READ_DMA_EXT</span><span class=cF0>;
+<a name="l847"></a>
+<a name="l848"></a>    </span><span class=cF2>//Fill in the rest of the command FIS.</span><span class=cF0>
+<a name="l849"></a>    cmd_fis-&gt;lba0   = blk.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l850"></a>    cmd_fis-&gt;lba1   = blk.u8[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l851"></a>    cmd_fis-&gt;lba2   = blk.u8[</span><span class=cFE>2</span><span class=cF0>];
+<a name="l852"></a>    cmd_fis-&gt;device = </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cFE>6</span><span class=cF0>; </span><span class=cF2>//Required as per ATA8-ACS section 7.25.3</span><span class=cF0>
+<a name="l853"></a>    cmd_fis-&gt;lba3   = blk.u8[</span><span class=cFE>3</span><span class=cF0>];
+<a name="l854"></a>    cmd_fis-&gt;lba4   = blk.u8[</span><span class=cFE>4</span><span class=cF0>];
+<a name="l855"></a>    cmd_fis-&gt;lba5   = blk.u8[</span><span class=cFE>5</span><span class=cF0>];
+<a name="l856"></a>    cmd_fis-&gt;count  = count;
+<a name="l857"></a>
+<a name="l858"></a>    </span><span class=cF2>//Wait on previous command to complete.</span><span class=cF0>
+<a name="l859"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l860"></a>    </span><span class=cF2>//Issue the command.</span><span class=cF0>
+<a name="l861"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot);
+<a name="l862"></a>    </span><span class=cF2>//Wait on command to finish.</span><span class=cF0>
+<a name="l863"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l864"></a>
+<a name="l865"></a>    </span><span class=cF1>if</span><span class=cF0> (!write) </span><span class=cF2>//If internal_buf was created it back to argument buf.</span><span class=cF0>
+<a name="l866"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>)
+<a name="l867"></a>        </span><span class=cF7>{</span><span class=cF0>
+<a name="l868"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;Writing back internal buffer\n&quot;;</span><span class=cF0>
+<a name="l869"></a>            </span><span class=cF5>MemCopy</span><span class=cF0>(buf, internal_buf, buf_size);
+<a name="l870"></a>        </span><span class=cF7>}</span><span class=cF0>
+<a name="l871"></a>
+<a name="l872"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l873"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
+<a name="l874"></a>
+<a name="l875"></a>    </span><span class=cF1>return</span><span class=cF0> cmd_header-&gt;prd_byte_count;
+<a name="l876"></a>}
+<a name="l877"></a>
+<a name="l878"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRead</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l879"></a>{</span><span class=cF2>//Read 'blk' amount of blocks from AHCI disk device. Returns num of bytes transferred between disk and memory.</span><span class=cF0>
+<a name="l880"></a>    </span><span class=cF9>I64</span><span class=cF0> byte_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l881"></a>    </span><span class=cF1>if</span><span class=cF0> (!count)
+<a name="l882"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l883"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
+<a name="l884"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l885"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$READ less than MAX_BLOCKS$FG$\n&quot;;</span><span class=cF0>
+<a name="l886"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l887"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l888"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l889"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l890"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$READ greater than MAX_BLOCKS\n&quot;;</span><span class=cF0>
+<a name="l891"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;read count: %d\n$FG$&quot;, count;</span><span class=cF0>
+<a name="l892"></a>        </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
+<a name="l893"></a>        {
+<a name="l894"></a>            byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l895"></a>            count -= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
+<a name="l896"></a>            blk += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
+<a name="l897"></a>            buf += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0> * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l898"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;$GREEN$read count: %d\n$FG$&quot;, count;</span><span class=cF0>
+<a name="l899"></a>        }
+<a name="l900"></a>        byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l901"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l902"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt; </span><span class=cFE>1</span><span class=cF0>)
-<a name="l903"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l902"></a>
+<a name="l903"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.read_count += (count * bd-&gt;blk_size) &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
 <a name="l904"></a>
-<a name="l905"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0>)
-<a name="l906"></a>        unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
+<a name="l905"></a>    </span><span class=cF1>return</span><span class=cF0> byte_count;
+<a name="l906"></a>}
 <a name="l907"></a>
-<a name="l908"></a>    buf_size = buf_size_tmp = count * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>;
-<a name="l909"></a>    prdt_len = (buf_size - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l910"></a>
-<a name="l911"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;PRDT Length:\t%d\n&quot;, prdt_len;</span><span class=cF0>
-<a name="l912"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Count:\t\t\t%d\n&quot;, count;</span><span class=cF0>
-<a name="l913"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer size:\t%X\n&quot;, buf_size;</span><span class=cF0>
-<a name="l914"></a>
-<a name="l915"></a>    cmd_header-&gt;prdt_len = prdt_len;
-<a name="l916"></a>
-<a name="l917"></a>    internal_buf = internal_buf_tmp = </span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(bd, buf, buf_size, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l918"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer:\t\t\t0x%X\n&quot;, internal_buf;</span><span class=cF0>
-<a name="l919"></a>
-<a name="l920"></a>    </span><span class=cF1>if</span><span class=cF0> (!internal_buf) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
-<a name="l921"></a>
-<a name="l922"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>); </span><span class=cF2>//Set ATAPI flag in command header</span><span class=cF0>
-<a name="l923"></a>
-<a name="l924"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
-<a name="l925"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
-<a name="l926"></a>
-<a name="l927"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prdt_len; i++)
-<a name="l928"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l929"></a>        </span><span class=cF1>if</span><span class=cF0> (buf_size_tmp &gt; </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>) </span><span class=cF2>//SHOULD PROBABLY BE ATAPI MAX BYTES</span><span class=cF0>
-<a name="l930"></a>            byte_count = </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>;
-<a name="l931"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l932"></a>            byte_count = buf_size_tmp;
+<a name="l908"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l909"></a>{</span><span class=cF2>//Write 'blk' amount of blocks to AHCI disk device. Returns num of bytes transferred between memory and disk.</span><span class=cF0>
+<a name="l910"></a>    </span><span class=cF9>I64</span><span class=cF0>  byte_count = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l911"></a>
+<a name="l912"></a>    </span><span class=cF1>if</span><span class=cF0> (!count)
+<a name="l913"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l914"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
+<a name="l915"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l916"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$WRITE less than MAX_BLOCKS$FG$\n&quot;;</span><span class=cF0>
+<a name="l917"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l918"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l919"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l920"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l921"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;$GREEN$WRITE greater than MAX_BLOCKS\n&quot;;</span><span class=cF0>
+<a name="l922"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;write count: %d$FG$\n&quot;, count;</span><span class=cF0>
+<a name="l923"></a>        </span><span class=cF1>while</span><span class=cF0> (count &gt; </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>)
+<a name="l924"></a>        {
+<a name="l925"></a>            byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l926"></a>            count -= </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
+<a name="l927"></a>            blk += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0>;
+<a name="l928"></a>            buf += </span><span class=cF3>AHCI_PRDT_MAX_BLOCKS</span><span class=cF0> * </span><span class=cF3>BLK_SIZE</span><span class=cF0>;
+<a name="l929"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>&quot;$GREEN$write count: %d\n$FG$\n&quot;, count;</span><span class=cF0>
+<a name="l930"></a>        }
+<a name="l931"></a>        byte_count += </span><span class=cF5>AHCIAtaBlksRW</span><span class=cF0>(bd, buf, blk, count, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l932"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l933"></a>
-<a name="l934"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_base_addr  = 0x%X\n&quot;  , i, internal_buf_tmp;</span><span class=cF0>
-<a name="l935"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_byte_count = 0x%X\n\n&quot;, i, byte_count;</span><span class=cF0>
-<a name="l936"></a>        cmd_table-&gt;prdt[i].data_base = internal_buf_tmp;
-<a name="l937"></a>        cmd_table-&gt;prdt[i].data_byte_count = byte_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
-<a name="l938"></a>
-<a name="l939"></a>        buf_size_tmp     -= byte_count;
-<a name="l940"></a>        internal_buf_tmp += byte_count;
-<a name="l941"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l942"></a>
-<a name="l943"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
-<a name="l944"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_fis, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFisH2D</span><span class=cF7>)</span><span class=cF0>);
-<a name="l945"></a>
-<a name="l946"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
-<a name="l947"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS </span><span class=cF0>
-<a name="l948"></a>
-<a name="l949"></a>    cmd_fis-&gt;feature_low = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Necessary?</span><span class=cF0>
-<a name="l950"></a>    cmd_fis-&gt;command     = </span><span class=cF3>ATA_PACKET</span><span class=cF0>;
-<a name="l951"></a>
-<a name="l952"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;read_cmd, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAtapiReadCmd</span><span class=cF7>)</span><span class=cF0>);
-<a name="l953"></a>    read_cmd.command = </span><span class=cF3>ATAPI_READ</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>; </span><span class=cF2>//FIX</span><span class=cF0>
-<a name="l954"></a>    read_cmd.lba     = </span><span class=cF5>EndianU32</span><span class=cF0>(blk);
-<a name="l955"></a>    read_cmd.count   = </span><span class=cF5>EndianU32</span><span class=cF0>(count);
-<a name="l956"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cmd_table-&gt;acmd, &amp;read_cmd, </span><span class=cFE>16</span><span class=cF0>);
-<a name="l957"></a>    
-<a name="l958"></a>    cmd_fis-&gt;count = count; </span><span class=cF2>//Necessary?</span><span class=cF0>
-<a name="l959"></a>
-<a name="l960"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l961"></a>    
-<a name="l962"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot);
-<a name="l963"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l964"></a>    
-<a name="l965"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>)
-<a name="l966"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l967"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;Writing back internal buffer\n&quot;;</span><span class=cF0>
-<a name="l968"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, internal_buf, buf_size);
-<a name="l969"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l934"></a>    </span><span class=cF1>return</span><span class=cF0> byte_count;
+<a name="l935"></a>}
+<a name="l936"></a>
+<a name="l937"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>lock</span><span class=cF0>=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l938"></a>{</span><span class=cF2>//Read 'blk' amount of blocks from from AHCI ATAPI device. Returns num of bytes transferred.</span><span class=cF0>
+<a name="l939"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
+<a name="l940"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
+<a name="l941"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port = bd-&gt;ahci_port;
+<a name="l942"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, byte_count, buf_size, buf_size_tmp, prdt_len, cmd_slot = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
+<a name="l943"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l944"></a>    </span><span class=cF1>U8</span><span class=cF0>              *internal_buf, *internal_buf_tmp;
+<a name="l945"></a>    </span><span class=cF9>CAtapiReadCmd</span><span class=cF0>    read_cmd;
+<a name="l946"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock;
+<a name="l947"></a>
+<a name="l948"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l949"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l950"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATAPI drive!\n&quot;</span><span class=cF0>);
+<a name="l951"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l952"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l953"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l954"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l955"></a>
+<a name="l956"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0>)
+<a name="l957"></a>        unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
+<a name="l958"></a>
+<a name="l959"></a>    buf_size = buf_size_tmp = count * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>;
+<a name="l960"></a>    prdt_len = (buf_size - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l961"></a>
+<a name="l962"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;PRDT Length:\t%d\n&quot;, prdt_len;</span><span class=cF0>
+<a name="l963"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Count:\t\t\t%d\n&quot;, count;</span><span class=cF0>
+<a name="l964"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer size:\t%X\n&quot;, buf_size;</span><span class=cF0>
+<a name="l965"></a>
+<a name="l966"></a>    cmd_header-&gt;prdt_len = prdt_len;
+<a name="l967"></a>
+<a name="l968"></a>    internal_buf = internal_buf_tmp = </span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(bd, buf, buf_size, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l969"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;Buffer:\t\t\t0x%X\n&quot;, internal_buf;</span><span class=cF0>
 <a name="l970"></a>
-<a name="l971"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0> &amp;&amp; unlock)
-<a name="l972"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
-<a name="l973"></a>
-<a name="l974"></a>    </span><span class=cF1>return</span><span class=cF0> cmd_header-&gt;prd_byte_count;
-<a name="l975"></a>}
-<a name="l976"></a>
-<a name="l977"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>AHCIAtapiBlksWrite</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>lock</span><span class=cF0>=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l978"></a>{ </span><span class=cF2>// untested</span><span class=cF0>
-<a name="l979"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
-<a name="l980"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
-<a name="l981"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port = bd-&gt;ahci_port;
-<a name="l982"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, byte_count, buf_size, buf_size_tmp, prdt_len, cmd_slot;
-<a name="l983"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header;
-<a name="l984"></a>    </span><span class=cF1>U8</span><span class=cF0>              *internal_buf, *internal_buf_tmp;
-<a name="l985"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock;
-<a name="l986"></a>
-<a name="l987"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l988"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l989"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATAPI drive!\n&quot;</span><span class=cF0>);
-<a name="l990"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
-<a name="l991"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l992"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt; </span><span class=cFE>1</span><span class=cF0>)
-<a name="l993"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
-<a name="l994"></a>
-<a name="l995"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0>)
-<a name="l996"></a>        unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
-<a name="l997"></a>
-<a name="l998"></a>
-<a name="l999"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIPortWait(bd-&gt;port_num, tS + 2);</span><span class=cF0>
-<a name="l1000"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiSeek(bd, blk);</span><span class=cF0>
-<a name="l1001"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIPortWait(bd-&gt;port_num, tS + 2);</span><span class=cF0>
-<a name="l1002"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiBlank(bd); // ?? should blank/format be outside this func, in case func is re-run?</span><span class=cF0>
-<a name="l1003"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiFormat(bd, count); // ??..</span><span class=cF0>
-<a name="l1004"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>bd-&gt;flags |= BDF_LAST_WAS_WRITE; // ??..</span><span class=cF0>
-<a name="l1005"></a>    </span><span class=cF2>// maybe check the flag and if not set do a blank/format?</span><span class=cF0>
-<a name="l1006"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l1007"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiSeek(bd, blk);</span><span class=cF0>
-<a name="l1008"></a>    </span><span class=cFD>AHCIAtapiModeWriteSet</span><span class=cF0>(bd);
-<a name="l1009"></a>
-<a name="l1010"></a>    cmd_slot = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
-<a name="l1011"></a>    cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l1012"></a>
-<a name="l1013"></a>    buf_size = buf_size_tmp = count * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>;
-<a name="l1014"></a>    prdt_len = (buf_size - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
-<a name="l1015"></a>
-<a name="l1016"></a>    cmd_header-&gt;prdt_len = prdt_len;
-<a name="l1017"></a>
-<a name="l1018"></a>    internal_buf = internal_buf_tmp = </span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(bd, buf, buf_size, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l1019"></a>
-<a name="l1020"></a>    </span><span class=cF1>if</span><span class=cF0> (!internal_buf) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l971"></a>    </span><span class=cF1>if</span><span class=cF0> (!internal_buf) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l972"></a>
+<a name="l973"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>); </span><span class=cF2>//Set ATAPI flag in command header</span><span class=cF0>
+<a name="l974"></a>
+<a name="l975"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
+<a name="l976"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l977"></a>
+<a name="l978"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prdt_len; i++)
+<a name="l979"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l980"></a>        </span><span class=cF1>if</span><span class=cF0> (buf_size_tmp &gt; </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>) </span><span class=cF2>//SHOULD PROBABLY BE ATAPI MAX BYTES</span><span class=cF0>
+<a name="l981"></a>            byte_count = </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>;
+<a name="l982"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l983"></a>            byte_count = buf_size_tmp;
+<a name="l984"></a>
+<a name="l985"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_base_addr  = 0x%X\n&quot;  , i, internal_buf_tmp;</span><span class=cF0>
+<a name="l986"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;prdt[%d].data_byte_count = 0x%X\n\n&quot;, i, byte_count;</span><span class=cF0>
+<a name="l987"></a>        cmd_table-&gt;prdt[i].data_base = internal_buf_tmp;
+<a name="l988"></a>        cmd_table-&gt;prdt[i].data_byte_count = byte_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
+<a name="l989"></a>
+<a name="l990"></a>        buf_size_tmp     -= byte_count;
+<a name="l991"></a>        internal_buf_tmp += byte_count;
+<a name="l992"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l993"></a>
+<a name="l994"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
+<a name="l995"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_fis, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFisH2D</span><span class=cF7>)</span><span class=cF0>);
+<a name="l996"></a>
+<a name="l997"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
+<a name="l998"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS </span><span class=cF0>
+<a name="l999"></a>
+<a name="l1000"></a>    cmd_fis-&gt;feature_low = </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Necessary?</span><span class=cF0>
+<a name="l1001"></a>    cmd_fis-&gt;command     = </span><span class=cF3>ATA_PACKET</span><span class=cF0>;
+<a name="l1002"></a>
+<a name="l1003"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;read_cmd, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAtapiReadCmd</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1004"></a>    read_cmd.command = </span><span class=cF3>ATAPI_READ</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>; </span><span class=cF2>//FIX</span><span class=cF0>
+<a name="l1005"></a>    read_cmd.lba     = </span><span class=cF5>EndianU32</span><span class=cF0>(blk);
+<a name="l1006"></a>    read_cmd.count   = </span><span class=cF5>EndianU32</span><span class=cF0>(count);
+<a name="l1007"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(&amp;cmd_table-&gt;acmd, &amp;read_cmd, </span><span class=cFE>16</span><span class=cF0>);
+<a name="l1008"></a>    
+<a name="l1009"></a>    cmd_fis-&gt;count = count; </span><span class=cF2>//Necessary?</span><span class=cF0>
+<a name="l1010"></a>
+<a name="l1011"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l1012"></a>    
+<a name="l1013"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot);
+<a name="l1014"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l1015"></a>    
+<a name="l1016"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>)
+<a name="l1017"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1018"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;Writing back internal buffer\n&quot;;</span><span class=cF0>
+<a name="l1019"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, internal_buf, buf_size);
+<a name="l1020"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1021"></a>
-<a name="l1022"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>); </span><span class=cF2>//Set ATAPI flag in command header</span><span class=cF0>
-<a name="l1023"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_W</span><span class=cF0>); </span><span class=cF2>//Set WRITE flag in command header</span><span class=cF0>
+<a name="l1022"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0> &amp;&amp; unlock)
+<a name="l1023"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
 <a name="l1024"></a>
-<a name="l1025"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
-<a name="l1026"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1025"></a>    </span><span class=cF1>return</span><span class=cF0> cmd_header-&gt;prd_byte_count;
+<a name="l1026"></a>}
 <a name="l1027"></a>
-<a name="l1028"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prdt_len; i++)
-<a name="l1029"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1030"></a>        </span><span class=cF1>if</span><span class=cF0> (buf_size_tmp &gt; </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>) </span><span class=cF2>//SHOULD PROBABLY BE ATAPI MAX BYTES</span><span class=cF0>
-<a name="l1031"></a>            byte_count = </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>;
-<a name="l1032"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1033"></a>            byte_count = buf_size_tmp;
-<a name="l1034"></a>        cmd_table-&gt;prdt[i].data_base = internal_buf_tmp;
-<a name="l1035"></a>        cmd_table-&gt;prdt[i].data_byte_count = byte_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
-<a name="l1036"></a>
-<a name="l1037"></a>        buf_size_tmp     -= byte_count;
-<a name="l1038"></a>        internal_buf_tmp += byte_count;
-<a name="l1039"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1040"></a>
-<a name="l1041"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
-<a name="l1042"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_fis, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFisH2D</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1043"></a>
-<a name="l1044"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
-<a name="l1045"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS </span><span class=cF0>
-<a name="l1046"></a>    cmd_fis-&gt;command     = </span><span class=cF3>ATA_PACKET</span><span class=cF0>;
-<a name="l1047"></a>    cmd_table-&gt;acmd[</span><span class=cFE>0</span><span class=cF0>]  =</span><span class=cF3>ATAPI_WRITE</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
-<a name="l1048"></a>    cmd_table-&gt;acmd[</span><span class=cFE>2</span><span class=cF0>]  = blk.u8[</span><span class=cFE>3</span><span class=cF0>];
-<a name="l1049"></a>    cmd_table-&gt;acmd[</span><span class=cFE>3</span><span class=cF0>]  = blk.u8[</span><span class=cFE>2</span><span class=cF0>];
-<a name="l1050"></a>    cmd_table-&gt;acmd[</span><span class=cFE>4</span><span class=cF0>]  = blk.u8[</span><span class=cFE>1</span><span class=cF0>];
-<a name="l1051"></a>    cmd_table-&gt;acmd[</span><span class=cFE>5</span><span class=cF0>]  = blk.u8[</span><span class=cFE>0</span><span class=cF0>];
-<a name="l1052"></a>    cmd_table-&gt;acmd[</span><span class=cFE>6</span><span class=cF0>]  = count.u8[</span><span class=cFE>3</span><span class=cF0>];
-<a name="l1053"></a>    cmd_table-&gt;acmd[</span><span class=cFE>7</span><span class=cF0>]  = count.u8[</span><span class=cFE>2</span><span class=cF0>];
-<a name="l1054"></a>    cmd_table-&gt;acmd[</span><span class=cFE>8</span><span class=cF0>]  = count.u8[</span><span class=cFE>1</span><span class=cF0>];
-<a name="l1055"></a>    cmd_table-&gt;acmd[</span><span class=cFE>9</span><span class=cF0>]  = count.u8[</span><span class=cFE>0</span><span class=cF0>];
-<a name="l1056"></a>
-<a name="l1057"></a>    cmd_fis-&gt;count = count; </span><span class=cF2>//Necessary?</span><span class=cF0>
-<a name="l1058"></a>
-<a name="l1059"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l1060"></a>    
-<a name="l1061"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot);
-<a name="l1062"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
-<a name="l1063"></a>    
-<a name="l1064"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>)
-<a name="l1065"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1066"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;Writing back internal buffer\n&quot;;</span><span class=cF0>
-<a name="l1067"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, internal_buf, buf_size);
-<a name="l1068"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1028"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cFD>AHCIAtapiBlksWrite</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>lock</span><span class=cF0>=</span><span class=cF3>TRUE</span><span class=cF0>)
+<a name="l1029"></a>{ </span><span class=cF2>// untested</span><span class=cF0>
+<a name="l1030"></a>    </span><span class=cF9>CPortCmdTable</span><span class=cF0>   *cmd_table;
+<a name="l1031"></a>    </span><span class=cF9>CFisH2D</span><span class=cF0>         *cmd_fis;
+<a name="l1032"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>       *port = bd-&gt;ahci_port;
+<a name="l1033"></a>    </span><span class=cF9>I64</span><span class=cF0>              i, byte_count, buf_size, buf_size_tmp, prdt_len, cmd_slot;
+<a name="l1034"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0>  *cmd_header;
+<a name="l1035"></a>    </span><span class=cF1>U8</span><span class=cF0>              *internal_buf, *internal_buf_tmp;
+<a name="l1036"></a>    </span><span class=cF1>Bool</span><span class=cF0>             unlock;
+<a name="l1037"></a>
+<a name="l1038"></a>    </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature != </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1039"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1040"></a>        </span><span class=cF5>SysErr</span><span class=cF0>(</span><span class=cF6>&quot;AHCI: Drive is not an ATAPI drive!\n&quot;</span><span class=cF0>);
+<a name="l1041"></a>        </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l1042"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1043"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l1044"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1045"></a>
+<a name="l1046"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0>)
+<a name="l1047"></a>        unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
+<a name="l1048"></a>
+<a name="l1049"></a>
+<a name="l1050"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIPortWait(bd-&gt;port_num, tS + 2);</span><span class=cF0>
+<a name="l1051"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiSeek(bd, blk);</span><span class=cF0>
+<a name="l1052"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIPortWait(bd-&gt;port_num, tS + 2);</span><span class=cF0>
+<a name="l1053"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiBlank(bd); // ?? should blank/format be outside this func, in case func is re-run?</span><span class=cF0>
+<a name="l1054"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiFormat(bd, count); // ??..</span><span class=cF0>
+<a name="l1055"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>bd-&gt;flags |= BDF_LAST_WAS_WRITE; // ??..</span><span class=cF0>
+<a name="l1056"></a>    </span><span class=cF2>// maybe check the flag and if not set do a blank/format?</span><span class=cF0>
+<a name="l1057"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIPortWait(bd-&gt;port_num, tS + 2);</span><span class=cF0>
+<a name="l1058"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIAtapiSeek(bd, blk);</span><span class=cF0>
+<a name="l1059"></a>
+<a name="l1060"></a>    cmd_slot = </span><span class=cFD>AHCIPortCmdSlotGet</span><span class=cF0>(bd-&gt;port_num);
+<a name="l1061"></a>    cmd_header = </span><span class=cFD>AHCIPortActiveHeaderGet</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l1062"></a>
+<a name="l1063"></a>    buf_size = buf_size_tmp = count * </span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>;
+<a name="l1064"></a>    prdt_len = (buf_size - </span><span class=cFE>1</span><span class=cF0>) / </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1065"></a>
+<a name="l1066"></a>    cmd_header-&gt;prdt_len = prdt_len;
+<a name="l1067"></a>
+<a name="l1068"></a>    internal_buf = internal_buf_tmp = </span><span class=cFD>AHCIBufferAlign</span><span class=cF0>(bd, buf, buf_size, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l1069"></a>
-<a name="l1070"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0> &amp;&amp; unlock)
-<a name="l1071"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
-<a name="l1072"></a>
-<a name="l1073"></a>    </span><span class=cF1>return</span><span class=cF0> cmd_header-&gt;prd_byte_count;
-<a name="l1074"></a>}
-<a name="l1075"></a>
-<a name="l1076"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>AHCIPortInit</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF9>CAHCIPort</span><span class=cF0> *port, </span><span class=cF9>I64</span><span class=cF0> port_num)
-<a name="l1077"></a>{</span><span class=cF2>//Initialize base addresses for command list and FIS receive area and start command execution on port.</span><span class=cF0>
-<a name="l1078"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0> *cmd_header;
-<a name="l1079"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
-<a name="l1080"></a>
-<a name="l1081"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0> || port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1082"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;AHCI Port/BlkDev error: Invalid Port Signature&quot;</span><span class=cF0>);
-<a name="l1083"></a>
-<a name="l1084"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Letter2BlkDevType</span><span class=cF7>(</span><span class=cF0>bd-&gt;first_drive_let</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>BDT_ATA</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1085"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;AHCI Port/BlkDev type mismatch: BlkDev ATA, Port ATAPI&quot;</span><span class=cF0>);
+<a name="l1070"></a>    </span><span class=cF1>if</span><span class=cF0> (!internal_buf) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l1071"></a>
+<a name="l1072"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_A</span><span class=cF0>); </span><span class=cF2>//Set ATAPI flag in command header</span><span class=cF0>
+<a name="l1073"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_header-&gt;desc, </span><span class=cF3>AHCI_CH_DESCf_W</span><span class=cF0>); </span><span class=cF2>//Set WRITE flag in command header</span><span class=cF0>
+<a name="l1074"></a>
+<a name="l1075"></a>    cmd_table = cmd_header-&gt;cmd_table_base;
+<a name="l1076"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_table, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1077"></a>
+<a name="l1078"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; prdt_len; i++)
+<a name="l1079"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1080"></a>        </span><span class=cF1>if</span><span class=cF0> (buf_size_tmp &gt; </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>)
+<a name="l1081"></a>            byte_count = </span><span class=cF3>AHCI_PRD_MAX_BYTES</span><span class=cF0>;
+<a name="l1082"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1083"></a>            byte_count = buf_size_tmp;
+<a name="l1084"></a>        cmd_table-&gt;prdt[i].data_base = internal_buf_tmp;
+<a name="l1085"></a>        cmd_table-&gt;prdt[i].data_byte_count = byte_count - </span><span class=cFE>1</span><span class=cF0>; </span><span class=cF2>//Zero-based value</span><span class=cF0>
 <a name="l1086"></a>
-<a name="l1087"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Letter2BlkDevType</span><span class=cF7>(</span><span class=cF0>bd-&gt;first_drive_let</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l1088"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;AHCI Port/BlkDev type mismatch: BlkDev ATAPI, Port ATA&quot;</span><span class=cF0>);
-<a name="l1089"></a>
-<a name="l1090"></a>    bd-&gt;ahci_port = port;
-<a name="l1091"></a>    bd-&gt;port_num  = port_num;
-<a name="l1092"></a>
-<a name="l1093"></a>    </span><span class=cF5>AHCIPortReset</span><span class=cF0>(port_num);
-<a name="l1094"></a>    </span><span class=cFD>AHCIPortCmdStart</span><span class=cF0>(port_num);
-<a name="l1095"></a>
-<a name="l1096"></a>    </span><span class=cF2>//Spin up, power on device. If the capability isn't suppport the bits will be read-only and this won't do anything.</span><span class=cF0>
-<a name="l1097"></a>    port-&gt;command |= </span><span class=cF3>AHCI_PxCMDF_POD</span><span class=cF0> | </span><span class=cF3>AHCI_PxCMDF_SUD</span><span class=cF0>;
-<a name="l1098"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>); </span><span class=cF2>//Why?</span><span class=cF0>
-<a name="l1099"></a>    </span><span class=cFD>AHCIPortCmdStop</span><span class=cF0>(port_num);
-<a name="l1100"></a>
-<a name="l1101"></a>    </span><span class=cF2>//'1K-byte' align as per SATA spec.</span><span class=cF0>
-<a name="l1102"></a>    port-&gt;cmd_list_base = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdHeader</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count, </span><span class=cFE>1024</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
-<a name="l1103"></a>    port-&gt;cmd_list_base_upper = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1104"></a>
-<a name="l1105"></a>    </span><span class=cF2>//Alloc where received FISes will be copied to. '256-byte' align as per spec.</span><span class=cF0>
-<a name="l1106"></a>    port-&gt;fis_base = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFisReceived</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
-<a name="l1107"></a>    port-&gt;fis_base_upper = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1108"></a>
-<a name="l1109"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count; i++)
-<a name="l1110"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1111"></a>        cmd_header = &amp;port-&gt;cmd_list_base(</span><span class=cF9>CPortCmdHeader</span><span class=cF0> *)[i];
-<a name="l1112"></a>        </span><span class=cF2>//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.</span><span class=cF0>
-<a name="l1113"></a>        cmd_header-&gt;desc = </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CFisH2D</span><span class=cF0>) / </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0>);
-<a name="l1114"></a>
-<a name="l1115"></a>        </span><span class=cF2>//'128-byte' align as per SATA spec, minus 1 since length is 1-based.</span><span class=cF0>
-<a name="l1116"></a>        cmd_header-&gt;cmd_table_base = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPrdtEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF3>AHCI_PRDT_MAX_LEN</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
-<a name="l1117"></a>        cmd_header-&gt;cmd_table_base_upper = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1118"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1119"></a>    </span><span class=cFD>AHCIPortCmdStart</span><span class=cF0>(port_num);
-<a name="l1120"></a>    </span><span class=cFD>AHCIPortIdentify</span><span class=cF0>(bd);
-<a name="l1121"></a>}
-<a name="l1122"></a>
-<a name="l1123"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaInit</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
-<a name="l1124"></a>{
-<a name="l1125"></a>    </span><span class=cF1>Bool</span><span class=cF0>            unlock, okay = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1126"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0> *cmd_header;
-<a name="l1127"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
-<a name="l1128"></a>
-<a name="l1129"></a>    </span><span class=cF1>if</span><span class=cF0> (!bd-&gt;ahci_port)
-<a name="l1130"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1131"></a>
-<a name="l1132"></a>    unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
-<a name="l1133"></a>
-<a name="l1134"></a>    </span><span class=cF2>// if we re-init a port, keep memory from leaking.</span><span class=cF0>
-<a name="l1135"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;ahci_port-&gt;cmd_list_base)
-<a name="l1136"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1137"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count; i++)
-<a name="l1138"></a>        {
-<a name="l1139"></a>            cmd_header = &amp;bd-&gt;ahci_port-&gt;cmd_list_base(</span><span class=cF9>CPortCmdHeader</span><span class=cF0> *)[i];
-<a name="l1140"></a>            </span><span class=cF5>Free</span><span class=cF0>(cmd_header-&gt;cmd_table_base);
-<a name="l1141"></a>        }
-<a name="l1142"></a>        </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;ahci_port-&gt;cmd_list_base);
-<a name="l1143"></a>        </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;ahci_port-&gt;fis_base);
-<a name="l1144"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1145"></a>
-<a name="l1146"></a>    </span><span class=cF2>// try to init the port, catch if fails.</span><span class=cF0>
-<a name="l1147"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l1148"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1149"></a>        </span><span class=cF5>AHCIPortInit</span><span class=cF0>(bd, bd-&gt;ahci_port, bd-&gt;port_num);
+<a name="l1087"></a>        buf_size_tmp     -= byte_count;
+<a name="l1088"></a>        internal_buf_tmp += byte_count;
+<a name="l1089"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1090"></a>
+<a name="l1091"></a>    cmd_fis = cmd_table-&gt;cmd_fis;
+<a name="l1092"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(cmd_fis, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFisH2D</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1093"></a>
+<a name="l1094"></a>    cmd_fis-&gt;type = </span><span class=cF3>FISt_H2D</span><span class=cF0>;
+<a name="l1095"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;cmd_fis-&gt;desc, </span><span class=cF3>AHCI_CF_DESCf_C</span><span class=cF0>); </span><span class=cF2>//Set Command bit in H2D FIS </span><span class=cF0>
+<a name="l1096"></a>
+<a name="l1097"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>cmd_fis-&gt;feature_low = 0x2D; // CD TAO</span><span class=cF0>
+<a name="l1098"></a>    cmd_fis-&gt;command     = </span><span class=cF3>ATA_PACKET</span><span class=cF0>;
+<a name="l1099"></a>    cmd_table-&gt;acmd[</span><span class=cFE>0</span><span class=cF0>]  = </span><span class=cF3>ATAPI_WRITE</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l1100"></a>    cmd_table-&gt;acmd[</span><span class=cFE>2</span><span class=cF0>]  = blk.u8[</span><span class=cFE>3</span><span class=cF0>];
+<a name="l1101"></a>    cmd_table-&gt;acmd[</span><span class=cFE>3</span><span class=cF0>]  = blk.u8[</span><span class=cFE>2</span><span class=cF0>];
+<a name="l1102"></a>    cmd_table-&gt;acmd[</span><span class=cFE>4</span><span class=cF0>]  = blk.u8[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l1103"></a>    cmd_table-&gt;acmd[</span><span class=cFE>5</span><span class=cF0>]  = blk.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l1104"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>cmd_table-&gt;acmd[6]</span><span class=cF0>  </span><span class=cF2>= count.u8[3];</span><span class=cF0>
+<a name="l1105"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>cmd_table-&gt;acmd[7]</span><span class=cF0>  </span><span class=cF2>= count.u8[2];</span><span class=cF0>
+<a name="l1106"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>cmd_table-&gt;acmd[8]</span><span class=cF0>  </span><span class=cF2>= count.u8[1];</span><span class=cF0>
+<a name="l1107"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>cmd_table-&gt;acmd[9]</span><span class=cF0>  </span><span class=cF2>= count.u8[0];</span><span class=cF0>
+<a name="l1108"></a>    </span><span class=cF1>if</span><span class=cF0> (count &gt; </span><span class=cF3>U16_MAX</span><span class=cF0>) </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'AHCI'</span><span class=cF0>);
+<a name="l1109"></a>    cmd_table-&gt;acmd[</span><span class=cFE>7</span><span class=cF0>]  = count.u8[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l1110"></a>    cmd_table-&gt;acmd[</span><span class=cFE>8</span><span class=cF0>]  = count.u8[</span><span class=cFE>0</span><span class=cF0>];
+<a name="l1111"></a>
+<a name="l1112"></a>    cmd_fis-&gt;count = count; </span><span class=cF2>//Necessary?</span><span class=cF0>
+<a name="l1113"></a>
+<a name="l1114"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l1115"></a>    
+<a name="l1116"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;cmd_issue, cmd_slot);
+<a name="l1117"></a>    </span><span class=cFD>AHCIPortCmdWait</span><span class=cF0>(bd-&gt;port_num, cmd_slot);
+<a name="l1118"></a>    
+<a name="l1119"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_INTERNAL_BUF</span><span class=cF0>)
+<a name="l1120"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1121"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;Writing back internal buffer\n&quot;;</span><span class=cF0>
+<a name="l1122"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, internal_buf, buf_size);
+<a name="l1123"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1124"></a>
+<a name="l1125"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF1>lock</span><span class=cF0> &amp;&amp; unlock)
+<a name="l1126"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
+<a name="l1127"></a>
+<a name="l1128"></a>    </span><span class=cF1>return</span><span class=cF0> cmd_header-&gt;prd_byte_count;
+<a name="l1129"></a>}
+<a name="l1130"></a>
+<a name="l1131"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>AHCIPortInit</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd, </span><span class=cF9>CAHCIPort</span><span class=cF0> *port, </span><span class=cF9>I64</span><span class=cF0> port_num)
+<a name="l1132"></a>{</span><span class=cF2>//Initialize base addresses for command list and FIS receive area and start command execution on port.</span><span class=cF0>
+<a name="l1133"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0> *cmd_header;
+<a name="l1134"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
+<a name="l1135"></a>
+<a name="l1136"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0> || port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1137"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;AHCI Port/BlkDev error: Invalid Port Signature&quot;</span><span class=cF0>);
+<a name="l1138"></a>
+<a name="l1139"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Letter2BlkDevType</span><span class=cF7>(</span><span class=cF0>bd-&gt;first_drive_let</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>BDT_ATA</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1140"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;AHCI Port/BlkDev type mismatch: BlkDev ATA, Port ATAPI&quot;</span><span class=cF0>);
+<a name="l1141"></a>
+<a name="l1142"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Letter2BlkDevType</span><span class=cF7>(</span><span class=cF0>bd-&gt;first_drive_let</span><span class=cF7>)</span><span class=cF0> == </span><span class=cF3>BDT_ATAPI</span><span class=cF0> &amp;&amp; port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l1143"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;AHCI Port/BlkDev type mismatch: BlkDev ATAPI, Port ATA&quot;</span><span class=cF0>);
+<a name="l1144"></a>
+<a name="l1145"></a>    bd-&gt;ahci_port = port;
+<a name="l1146"></a>    bd-&gt;port_num  = port_num;
+<a name="l1147"></a>
+<a name="l1148"></a>    </span><span class=cF5>AHCIPortReset</span><span class=cF0>(port_num);
+<a name="l1149"></a>    </span><span class=cFD>AHCIPortCmdStart</span><span class=cF0>(port_num);
 <a name="l1150"></a>
-<a name="l1151"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
-<a name="l1152"></a>            okay = </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(bd, </span><span class=cF3>TRUE</span><span class=cF0>);
-<a name="l1153"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1154"></a>            okay = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1155"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1156"></a>    </span><span class=cF1>catch</span><span class=cF0>
-<a name="l1157"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1158"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1159"></a>        okay = </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1160"></a>        </span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;AHCIAtaInit&quot;</span><span class=cF0>;
-<a name="l1161"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1162"></a>
-<a name="l1163"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
-<a name="l1164"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
-<a name="l1165"></a>
-<a name="l1166"></a>    </span><span class=cF1>return</span><span class=cF0> okay;
-<a name="l1167"></a>}
-<a name="l1168"></a>
-<a name="l1169"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>AHCIHbaReset</span><span class=cF0>()
-<a name="l1170"></a>{
-<a name="l1171"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_HBA_RESET</span><span class=cF0>);
-<a name="l1172"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_HBA_RESET</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1173"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_AHCI_ENABLE</span><span class=cF0>);
-<a name="l1174"></a>}
-<a name="l1175"></a>
-<a name="l1176"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AHCIInit</span><span class=cF0>()
-<a name="l1177"></a>{
-<a name="l1178"></a>    </span><span class=cF9>CAHCIHba</span><span class=cF0>    *hba;
-<a name="l1179"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l1180"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, bdf = </span><span class=cF5>PCIClassFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> | </span><span class=cF3>PCISC_AHCI</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//0x010601, last byte prog_if, AHCI version 1.0</span><span class=cF0>
-<a name="l1181"></a>
-<a name="l1182"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l1151"></a>    </span><span class=cF2>//Spin up, power on device. If the capability isn't suppport the bits will be read-only and this won't do anything.</span><span class=cF0>
+<a name="l1152"></a>    port-&gt;command |= </span><span class=cF3>AHCI_PxCMDF_POD</span><span class=cF0> | </span><span class=cF3>AHCI_PxCMDF_SUD</span><span class=cF0>;
+<a name="l1153"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>); </span><span class=cF2>//Why?</span><span class=cF0>
+<a name="l1154"></a>    </span><span class=cFD>AHCIPortCmdStop</span><span class=cF0>(port_num);
+<a name="l1155"></a>
+<a name="l1156"></a>    </span><span class=cF2>//'1K-byte' align as per SATA spec.</span><span class=cF0>
+<a name="l1157"></a>    port-&gt;cmd_list_base = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdHeader</span><span class=cF7>)</span><span class=cF0> * </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count, </span><span class=cFE>1024</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
+<a name="l1158"></a>    port-&gt;cmd_list_base_upper = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1159"></a>
+<a name="l1160"></a>    </span><span class=cF2>//Alloc where received FISes will be copied to. '256-byte' align as per spec.</span><span class=cF0>
+<a name="l1161"></a>    port-&gt;fis_base = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CFisReceived</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>256</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
+<a name="l1162"></a>    port-&gt;fis_base_upper = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1163"></a>
+<a name="l1164"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count; i++)
+<a name="l1165"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1166"></a>        cmd_header = &amp;port-&gt;cmd_list_base(</span><span class=cF9>CPortCmdHeader</span><span class=cF0> *)[i];
+<a name="l1167"></a>        </span><span class=cF2>//Write Command FIS Length (CFL, a fixed size) in bits 4:0 of the desc. Takes size in U32s.</span><span class=cF0>
+<a name="l1168"></a>        cmd_header-&gt;desc = </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CFisH2D</span><span class=cF0>) / </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0>);
+<a name="l1169"></a>
+<a name="l1170"></a>        </span><span class=cF2>//'128-byte' align as per SATA spec, minus 1 since length is 1-based.</span><span class=cF0>
+<a name="l1171"></a>        cmd_header-&gt;cmd_table_base = </span><span class=cF5>CAllocAligned</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPortCmdTable</span><span class=cF7>)</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CPrdtEntry</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF3>AHCI_PRDT_MAX_LEN</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>, </span><span class=cFE>128</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>-&gt;code_heap);
+<a name="l1172"></a>        cmd_header-&gt;cmd_table_base_upper = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1173"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1174"></a>    </span><span class=cFD>AHCIPortCmdStart</span><span class=cF0>(port_num);
+<a name="l1175"></a>    </span><span class=cFD>AHCIPortIdentify</span><span class=cF0>(bd);
+<a name="l1176"></a>}
+<a name="l1177"></a>
+<a name="l1178"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaInit</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
+<a name="l1179"></a>{
+<a name="l1180"></a>    </span><span class=cF1>Bool</span><span class=cF0>            unlock, okay = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1181"></a>    </span><span class=cF9>CPortCmdHeader</span><span class=cF0> *cmd_header;
+<a name="l1182"></a>    </span><span class=cF9>I64</span><span class=cF0>             i;
 <a name="l1183"></a>
-<a name="l1184"></a>    </span><span class=cF1>if</span><span class=cF0> (bdf == -</span><span class=cFE>1</span><span class=cF0>)
-<a name="l1185"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1186"></a>        </span><span class=cF6>&quot;AHCI: No AHCI controller found.\n&quot;</span><span class=cF0>;
-<a name="l1187"></a>        </span><span class=cF1>return</span><span class=cF0>;
-<a name="l1188"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1189"></a>
-<a name="l1190"></a>    </span><span class=cF6>&quot;AHCI: Controller found\n&quot;</span><span class=cF0>;
-<a name="l1191"></a>    hba = </span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF5>PCIReadU32</span><span class=cF0>(bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF3>PCIR_BASE5</span><span class=cF0>) &amp; ~</span><span class=cFE>0x1F</span><span class=cF0>; </span><span class=cF2>//Last 4 bits not part of address.</span><span class=cF0>
-<a name="l1192"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba = hba;
-<a name="l1193"></a>
-<a name="l1194"></a>
-<a name="l1195"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_AHCI_ENABLE</span><span class=cF0>);
-<a name="l1196"></a>    </span><span class=cF6>&quot;AHCI: GHC.AE\n&quot;</span><span class=cF0>;
-<a name="l1197"></a>
-<a name="l1198"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIHbaReset;</span><span class=cF0>
-<a name="l1199"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;AHCI: HBA Reset\n&quot;;</span><span class=cF0>
+<a name="l1184"></a>    </span><span class=cF1>if</span><span class=cF0> (!bd-&gt;ahci_port)
+<a name="l1185"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1186"></a>
+<a name="l1187"></a>    unlock = </span><span class=cF5>BlkDevLock</span><span class=cF0>(bd);
+<a name="l1188"></a>
+<a name="l1189"></a>    </span><span class=cF2>// if we re-init a port, keep memory from leaking.</span><span class=cF0>
+<a name="l1190"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;ahci_port-&gt;cmd_list_base)
+<a name="l1191"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1192"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count; i++)
+<a name="l1193"></a>        {
+<a name="l1194"></a>            cmd_header = &amp;bd-&gt;ahci_port-&gt;cmd_list_base(</span><span class=cF9>CPortCmdHeader</span><span class=cF0> *)[i];
+<a name="l1195"></a>            </span><span class=cF5>Free</span><span class=cF0>(cmd_header-&gt;cmd_table_base);
+<a name="l1196"></a>        }
+<a name="l1197"></a>        </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;ahci_port-&gt;cmd_list_base);
+<a name="l1198"></a>        </span><span class=cF5>Free</span><span class=cF0>(bd-&gt;ahci_port-&gt;fis_base);
+<a name="l1199"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1200"></a>
-<a name="l1201"></a>
-<a name="l1202"></a>    </span><span class=cF2>//Transferring ownership from BIOS if supported.</span><span class=cF0>
-<a name="l1203"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;caps_ext, </span><span class=cF3>AHCI_CAPSEXTf_BOH</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1204"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1205"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_OOS</span><span class=cF0>);
-<a name="l1206"></a>        </span><span class=cF6>&quot;AHCI: Transferring ownership from BIOS\n&quot;</span><span class=cF0>;
-<a name="l1207"></a>
-<a name="l1208"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BOS</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1209"></a>
-<a name="l1210"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
-<a name="l1211"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BB</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//if Bios Busy is still set after 25 mS, wait 2 seconds.</span><span class=cF0>
-<a name="l1212"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>);
-<a name="l1213"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1214"></a>
-<a name="l1215"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count = (hba-&gt;caps &amp; </span><span class=cFE>0x1F00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
-<a name="l1216"></a>    </span><span class=cF6>&quot;AHCI: Command slot count: %d\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count;
+<a name="l1201"></a>    </span><span class=cF2>// try to init the port, catch if fails.</span><span class=cF0>
+<a name="l1202"></a>    </span><span class=cF1>try</span><span class=cF0>
+<a name="l1203"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1204"></a>        </span><span class=cF5>AHCIPortInit</span><span class=cF0>(bd, bd-&gt;ahci_port, bd-&gt;port_num);
+<a name="l1205"></a>
+<a name="l1206"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
+<a name="l1207"></a>            okay = </span><span class=cF5>AHCIAtapiStartStop</span><span class=cF0>(bd, </span><span class=cF3>TRUE</span><span class=cF0>);
+<a name="l1208"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1209"></a>            okay = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1210"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1211"></a>    </span><span class=cF1>catch</span><span class=cF0>
+<a name="l1212"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1213"></a>        </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1214"></a>        okay = </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1215"></a>        </span><span class=cF3>ST_WARN_ST</span><span class=cF0> </span><span class=cF6>&quot;AHCIAtaInit&quot;</span><span class=cF0>;
+<a name="l1216"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1217"></a>
-<a name="l1218"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l1219"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1220"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1221"></a>        {</span><span class=cF2>//Make ports idle?</span><span class=cF0>
-<a name="l1222"></a>            port = &amp;hba-&gt;ports[i];
-<a name="l1223"></a>            </span><span class=cF6>&quot;AHCI: Port %2d signature 0x%08X &quot;</span><span class=cF0>, i, port-&gt;signature;
-<a name="l1224"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0> || port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1225"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1226"></a>                </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1227"></a>                {
-<a name="l1228"></a>                    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;command, </span><span class=cF3>AHCI_PxCMDf_ATAPI</span><span class=cF0>);
-<a name="l1229"></a>                    </span><span class=cF6>&quot;ATAPI drive\n&quot;</span><span class=cF0>;
-<a name="l1230"></a>                }
-<a name="l1231"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l1232"></a>                    </span><span class=cF6>&quot;ATA drive\n&quot;</span><span class=cF0>;
-<a name="l1233"></a>
-<a name="l1234"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AHCIPortIsIdle</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1235"></a>                {
-<a name="l1236"></a>                    </span><span class=cF6>&quot;AHCI: Port not idle\n&quot;</span><span class=cF0>;
-<a name="l1237"></a>                    </span><span class=cFD>AHCIPortCmdStop</span><span class=cF0>(i);
-<a name="l1238"></a>                }
-<a name="l1239"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1240"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l1241"></a>                </span><span class=cF6>&quot;Unknown\n&quot;</span><span class=cF0>;
-<a name="l1242"></a>        }
+<a name="l1218"></a>    </span><span class=cF1>if</span><span class=cF0> (unlock)
+<a name="l1219"></a>        </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
+<a name="l1220"></a>
+<a name="l1221"></a>    </span><span class=cF1>return</span><span class=cF0> okay;
+<a name="l1222"></a>}
+<a name="l1223"></a>
+<a name="l1224"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>AHCIHbaReset</span><span class=cF0>()
+<a name="l1225"></a>{
+<a name="l1226"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_HBA_RESET</span><span class=cF0>);
+<a name="l1227"></a>    </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_HBA_RESET</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1228"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_AHCI_ENABLE</span><span class=cF0>);
+<a name="l1229"></a>}
+<a name="l1230"></a>
+<a name="l1231"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>AHCIInit</span><span class=cF0>()
+<a name="l1232"></a>{
+<a name="l1233"></a>    </span><span class=cF9>CAHCIHba</span><span class=cF0>    *hba;
+<a name="l1234"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
+<a name="l1235"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, bdf = </span><span class=cF5>PCIClassFind</span><span class=cF0>(</span><span class=cF3>PCIC_STORAGE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0> | </span><span class=cF3>PCISC_AHCI</span><span class=cF0> &lt;&lt; </span><span class=cFE>8</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//0x010601, last byte prog_if, AHCI version 1.0</span><span class=cF0>
+<a name="l1236"></a>
+<a name="l1237"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l1238"></a>
+<a name="l1239"></a>    </span><span class=cF1>if</span><span class=cF0> (bdf == -</span><span class=cFE>1</span><span class=cF0>)
+<a name="l1240"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1241"></a>        </span><span class=cF6>&quot;AHCI: No AHCI controller found.\n&quot;</span><span class=cF0>;
+<a name="l1242"></a>        </span><span class=cF1>return</span><span class=cF0>;
 <a name="l1243"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1244"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
-<a name="l1245"></a>}
-<a name="l1246"></a>
-<a name="l1247"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIBootDVDProbeAll</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
-<a name="l1248"></a>{
-<a name="l1249"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
-<a name="l1250"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l1251"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>);
-<a name="l1252"></a>    </span><span class=cF9>CKernel</span><span class=cF0>     *kernel;
-<a name="l1253"></a>
-<a name="l1254"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l1255"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1256"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1257"></a>        {
-<a name="l1258"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l1259"></a>            </span><span class=cF6>&quot;AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n&quot;</span><span class=cF0>, i, port-&gt;signature;
-<a name="l1260"></a>
-<a name="l1261"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1262"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1263"></a>                </span><span class=cF6>&quot;AHCI: Probing ATAPI drive at port %d\n&quot;</span><span class=cF0>, i;
+<a name="l1244"></a>
+<a name="l1245"></a>    </span><span class=cF6>&quot;AHCI: Controller found\n&quot;</span><span class=cF0>;
+<a name="l1246"></a>    hba = </span><span class=cFB>dev</span><span class=cF0>.uncached_alias + </span><span class=cF5>PCIReadU32</span><span class=cF0>(bdf.u8[</span><span class=cFE>2</span><span class=cF0>], bdf.u8[</span><span class=cFE>1</span><span class=cF0>], bdf.u8[</span><span class=cFE>0</span><span class=cF0>], </span><span class=cF3>PCIR_BASE5</span><span class=cF0>) &amp; ~</span><span class=cFE>0x1F</span><span class=cF0>; </span><span class=cF2>//Last 4 bits not part of address.</span><span class=cF0>
+<a name="l1247"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba = hba;
+<a name="l1248"></a>
+<a name="l1249"></a>
+<a name="l1250"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_AHCI_ENABLE</span><span class=cF0>);
+<a name="l1251"></a>    </span><span class=cF6>&quot;AHCI: GHC.AE\n&quot;</span><span class=cF0>;
+<a name="l1252"></a>
+<a name="l1253"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIHbaReset;</span><span class=cF0>
+<a name="l1254"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;AHCI: HBA Reset\n&quot;;</span><span class=cF0>
+<a name="l1255"></a>
+<a name="l1256"></a>
+<a name="l1257"></a>    </span><span class=cF2>//Transferring ownership from BIOS if supported.</span><span class=cF0>
+<a name="l1258"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;caps_ext, </span><span class=cF3>AHCI_CAPSEXTf_BOH</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1259"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1260"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_OOS</span><span class=cF0>);
+<a name="l1261"></a>        </span><span class=cF6>&quot;AHCI: Transferring ownership from BIOS\n&quot;</span><span class=cF0>;
+<a name="l1262"></a>
+<a name="l1263"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BOS</span><span class=cF7>)</span><span class=cF0>);
 <a name="l1264"></a>
-<a name="l1265"></a>                </span><span class=cF5>AHCIPortInit</span><span class=cF0>(bd, port, i);
-<a name="l1266"></a>
-<a name="l1267"></a>                </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, buf, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l1268"></a>
-<a name="l1269"></a>                kernel = buf + </span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
-<a name="l1270"></a>
-<a name="l1271"></a>                </span><span class=cF1>if</span><span class=cF0> (kernel-&gt;compile_time == </span><span class=cFB>sys_compile_time</span><span class=cF0>)
-<a name="l1272"></a>                {
-<a name="l1273"></a>                    </span><span class=cF6>&quot;AHCI: Found sys_compile_time at BLK %d on Port %d\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, i;
-<a name="l1274"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1275"></a>                }
-<a name="l1276"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l1277"></a>                    </span><span class=cF6>&quot;AHCI: Did not find matching sys_compile_time on Port %d\n&quot;</span><span class=cF0>, i;
-<a name="l1278"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1279"></a>        }
-<a name="l1280"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1281"></a>
-<a name="l1282"></a>    </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF6>&quot;Could not find ATAPI boot drive&quot;</span><span class=cF0>);
-<a name="l1283"></a>
-<a name="l1284"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1285"></a>}
-<a name="l1286"></a>
-<a name="l1287"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtapiRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l1288"></a>{
-<a name="l1289"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd         = drive-&gt;bd;
-<a name="l1290"></a>    </span><span class=cF9>I64</span><span class=cF0>      spc        = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, n, blk2,
-<a name="l1291"></a>             l2         = bd-&gt;max_reads &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + spc &lt;&lt; </span><span class=cFE>1</span><span class=cF0>;
-<a name="l1292"></a>    </span><span class=cF1>U8</span><span class=cF0>      *dvd_buf;</span><span class=cF2>//</span><span class=cF0> </span><span class=cF2>= MAlloc(l2 &lt;&lt; BLK_SIZE_BITS);</span><span class=cF0>
-<a name="l1293"></a>
-<a name="l1294"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
-<a name="l1295"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1296"></a>        dvd_buf = </span><span class=cF5>MAlloc</span><span class=cF0>(l2 &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
-<a name="l1297"></a>
-<a name="l1298"></a>        </span><span class=cF1>if</span><span class=cF0> (blk &lt;= bd-&gt;max_reads)
-<a name="l1299"></a>            blk2 = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1300"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1301"></a>            blk2 = </span><span class=cF5>FloorU64</span><span class=cF0>(blk - bd-&gt;max_reads, spc);
-<a name="l1302"></a>
-<a name="l1303"></a>        </span><span class=cF1>if</span><span class=cF0> (blk2 + l2 &gt; drive-&gt;size + drive-&gt;drv_offset)
-<a name="l1304"></a>            l2 = drive-&gt;size + drive-&gt;drv_offset - blk2;
-<a name="l1305"></a>
-<a name="l1306"></a>        n = (l2 + spc - </span><span class=cFE>1</span><span class=cF0>) / spc;
-<a name="l1307"></a>
-<a name="l1308"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);&quot;, blk2 / spc, n;</span><span class=cF0>
-<a name="l1309"></a>        </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, dvd_buf, blk2 / spc, n);
-<a name="l1310"></a>
-<a name="l1311"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
-<a name="l1312"></a>            </span><span class=cFD>DiskCacheAdd</span><span class=cF0>(drive, dvd_buf, blk2, n * spc);
-<a name="l1313"></a>
-<a name="l1314"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, dvd_buf + </span><span class=cF7>(</span><span class=cF0>blk - blk2</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
-<a name="l1315"></a>        </span><span class=cF5>Free</span><span class=cF0>(dvd_buf);
-<a name="l1316"></a>
-<a name="l1317"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1318"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l1319"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1320"></a>
-<a name="l1321"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1322"></a>}
+<a name="l1265"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
+<a name="l1266"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BB</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//if Bios Busy is still set after 25 mS, wait 2 seconds.</span><span class=cF0>
+<a name="l1267"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>);
+<a name="l1268"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1269"></a>
+<a name="l1270"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count = (hba-&gt;caps &amp; </span><span class=cFE>0x1F00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l1271"></a>    </span><span class=cF6>&quot;AHCI: Command slot count: %d\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count;
+<a name="l1272"></a>
+<a name="l1273"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l1274"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1275"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1276"></a>        {</span><span class=cF2>//Make ports idle?</span><span class=cF0>
+<a name="l1277"></a>            port = &amp;hba-&gt;ports[i];
+<a name="l1278"></a>            </span><span class=cF6>&quot;AHCI: Port %2d signature 0x%08X &quot;</span><span class=cF0>, i, port-&gt;signature;
+<a name="l1279"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0> || port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1280"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1281"></a>                </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1282"></a>                {
+<a name="l1283"></a>                    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;command, </span><span class=cF3>AHCI_PxCMDf_ATAPI</span><span class=cF0>);
+<a name="l1284"></a>                    </span><span class=cF6>&quot;ATAPI drive\n&quot;</span><span class=cF0>;
+<a name="l1285"></a>                }
+<a name="l1286"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l1287"></a>                    </span><span class=cF6>&quot;ATA drive\n&quot;</span><span class=cF0>;
+<a name="l1288"></a>
+<a name="l1289"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AHCIPortIsIdle</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1290"></a>                {
+<a name="l1291"></a>                    </span><span class=cF6>&quot;AHCI: Port not idle\n&quot;</span><span class=cF0>;
+<a name="l1292"></a>                    </span><span class=cFD>AHCIPortCmdStop</span><span class=cF0>(i);
+<a name="l1293"></a>                }
+<a name="l1294"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1295"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1296"></a>                </span><span class=cF6>&quot;Unknown\n&quot;</span><span class=cF0>;
+<a name="l1297"></a>        }
+<a name="l1298"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1299"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l1300"></a>}
+<a name="l1301"></a>
+<a name="l1302"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIBootDVDProbeAll</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
+<a name="l1303"></a>{
+<a name="l1304"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
+<a name="l1305"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
+<a name="l1306"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>);
+<a name="l1307"></a>    </span><span class=cF9>CKernel</span><span class=cF0>     *kernel;
+<a name="l1308"></a>
+<a name="l1309"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l1310"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1311"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1312"></a>        {
+<a name="l1313"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
+<a name="l1314"></a>            </span><span class=cF6>&quot;AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n&quot;</span><span class=cF0>, i, port-&gt;signature;
+<a name="l1315"></a>
+<a name="l1316"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1317"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1318"></a>                </span><span class=cF6>&quot;AHCI: Probing ATAPI drive at port %d\n&quot;</span><span class=cF0>, i;
+<a name="l1319"></a>
+<a name="l1320"></a>                </span><span class=cF5>AHCIPortInit</span><span class=cF0>(bd, port, i);
+<a name="l1321"></a>
+<a name="l1322"></a>                </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, buf, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l1323"></a>
-<a name="l1324"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l1325"></a>{
-<a name="l1326"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
-<a name="l1327"></a>
-<a name="l1328"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0>)
-<a name="l1329"></a>        </span><span class=cF5>AHCIAtaBlksRead</span><span class=cF0>(bd, buf, blk, count);
-<a name="l1330"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l1331"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1332"></a>
-<a name="l1333"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1334"></a>}
-<a name="l1335"></a>
-<a name="l1336"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaWBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l1337"></a>{
-<a name="l1338"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
-<a name="l1339"></a>
-<a name="l1340"></a>    </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, buf, blk, count);
+<a name="l1324"></a>                kernel = buf + </span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l1325"></a>
+<a name="l1326"></a>                </span><span class=cF1>if</span><span class=cF0> (kernel-&gt;compile_time == </span><span class=cFB>sys_compile_time</span><span class=cF0>)
+<a name="l1327"></a>                {
+<a name="l1328"></a>                    </span><span class=cF6>&quot;AHCI: Found sys_compile_time at BLK %d on Port %d\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, i;
+<a name="l1329"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1330"></a>                }
+<a name="l1331"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1332"></a>                    </span><span class=cF6>&quot;AHCI: Did not find matching sys_compile_time on Port %d\n&quot;</span><span class=cF0>, i;
+<a name="l1333"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1334"></a>        }
+<a name="l1335"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1336"></a>
+<a name="l1337"></a>    </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF6>&quot;Could not find ATAPI boot drive&quot;</span><span class=cF0>);
+<a name="l1338"></a>
+<a name="l1339"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1340"></a>}
 <a name="l1341"></a>
-<a name="l1342"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.write_count += count;
-<a name="l1343"></a>
-<a name="l1344"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1345"></a>}
+<a name="l1342"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtapiRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l1343"></a>{
+<a name="l1344"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd         = drive-&gt;bd;
+<a name="l1345"></a>    </span><span class=cF9>I64</span><span class=cF0>      spc        = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, n, blk2,
+<a name="l1346"></a>             l2         = bd-&gt;max_reads &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + spc &lt;&lt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1347"></a>    </span><span class=cF1>U8</span><span class=cF0>      *dvd_buf;</span><span class=cF2>//</span><span class=cF0> </span><span class=cF2>= MAlloc(l2 &lt;&lt; BLK_SIZE_BITS);</span><span class=cF0>
+<a name="l1348"></a>
+<a name="l1349"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
+<a name="l1350"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1351"></a>        dvd_buf = </span><span class=cF5>MAlloc</span><span class=cF0>(l2 &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l1352"></a>
+<a name="l1353"></a>        </span><span class=cF1>if</span><span class=cF0> (blk &lt;= bd-&gt;max_reads)
+<a name="l1354"></a>            blk2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1355"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1356"></a>            blk2 = </span><span class=cF5>FloorU64</span><span class=cF0>(blk - bd-&gt;max_reads, spc);
+<a name="l1357"></a>
+<a name="l1358"></a>        </span><span class=cF1>if</span><span class=cF0> (blk2 + l2 &gt; drive-&gt;size + drive-&gt;drv_offset)
+<a name="l1359"></a>            l2 = drive-&gt;size + drive-&gt;drv_offset - blk2;
+<a name="l1360"></a>
+<a name="l1361"></a>        n = (l2 + spc - </span><span class=cFE>1</span><span class=cF0>) / spc;
+<a name="l1362"></a>
+<a name="l1363"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);&quot;, blk2 / spc, n;</span><span class=cF0>
+<a name="l1364"></a>        </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, dvd_buf, blk2 / spc, n);
+<a name="l1365"></a>
+<a name="l1366"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
+<a name="l1367"></a>            </span><span class=cFD>DiskCacheAdd</span><span class=cF0>(drive, dvd_buf, blk2, n * spc);
+<a name="l1368"></a>
+<a name="l1369"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, dvd_buf + </span><span class=cF7>(</span><span class=cF0>blk - blk2</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l1370"></a>        </span><span class=cF5>Free</span><span class=cF0>(dvd_buf);
+<a name="l1371"></a>
+<a name="l1372"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1373"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1374"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1375"></a>
+<a name="l1376"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1377"></a>}
+<a name="l1378"></a>
+<a name="l1379"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l1380"></a>{
+<a name="l1381"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
+<a name="l1382"></a>
+<a name="l1383"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0>)
+<a name="l1384"></a>        </span><span class=cF5>AHCIAtaBlksRead</span><span class=cF0>(bd, buf, blk, count);
+<a name="l1385"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1386"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1387"></a>
+<a name="l1388"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1389"></a>}
+<a name="l1390"></a>
+<a name="l1391"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaWBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l1392"></a>{
+<a name="l1393"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
+<a name="l1394"></a>
+<a name="l1395"></a>    </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, buf, blk, count);
+<a name="l1396"></a>
+<a name="l1397"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.write_count += count;
+<a name="l1398"></a>
+<a name="l1399"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1400"></a>}
 </span></pre></body>
 </html>

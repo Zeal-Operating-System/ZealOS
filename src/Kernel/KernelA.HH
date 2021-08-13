@@ -2957,7 +2957,30 @@ class CAtapiModeWriteList
 	CAtapiModeHeader	header;
 	CAtapiModeWritePage	page;
 };
-
+/*
+class CAtapiTrackInfo
+{
+	U16	data_length;
+	U8	track_num,
+		session_num,
+		reserved,
+		track_mode,
+		data_mode,
+		misc; // LRA_V, NWA_V
+	U32	track_start_addr,
+		next_write_addr,
+		free_blocks,
+		packet_size, // or 'blocking factor'
+		track_size,
+		last_record_addr;
+	U8	track_num_high,
+		session_num_high,
+		reserved[2];
+	U32	read_compat_lba,
+		next_lj_addr, // Layer Jump
+		last_lj_addr;
+}
+*/
 //ATA_IDENTIFY command array indexes (array of U16s)
 #define ATA_IDENT_SERIAL_NUM		10
 #define ATA_IDENT_MODEL_NUM			27
@@ -2989,7 +3012,7 @@ class CAtapiModeWriteList
 #define ATAPI_CLOSE_TRACK_SESSION	0x5B00
 #define ATAPI_BLANK					0xA100
 #define ATAPI_READ					0xA800
-#define ATAPI_WRITE					0xAA00
+#define ATAPI_WRITE					0x2A00
 #define ATAPI_SET_CD_SPEED			0xBB00
 
 #define ATAS_ERR	0x01

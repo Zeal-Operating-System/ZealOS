@@ -522,7 +522,7 @@ Bool AHCIAtapiFormat(CBlkDev *bd, I64 count)
 }
 
 Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
-{ // untested
+{ // Set ATAPI drive write configuration.
 	CPortCmdTable			*cmd_table;
 	CFisH2D					*cmd_fis;
 	CAHCIPort				*port		= bd->ahci_port;
@@ -539,11 +539,11 @@ Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
 	mode_list = CAlloc(sizeof(CAtapiModeWriteList), sys_task->code_heap);
 	mode_list->page.code				= 0x05;
 	mode_list->page.length				= 0x32;
-	mode_list->page.type				= 0x01; // 0x0 packet, 0x1 TAO, 0x2 SAO, 0x3 RAW, 0x4 LJR
-	mode_list->page.mode				= 4;
+	mode_list->page.type				= 0x00; // 0x0 packet, 0x1 TAO, 0x2 SAO, 0x3 RAW, 0x4 LJR
+	mode_list->page.mode				= 4 | 1 << 5;
 	mode_list->page.block_type			= 8;
 //	mode_list->page.link_size			= 7;
-//	mode_list->page.audio_pause_length	= 150;
+	mode_list->page.packet_size			= EndianU32(16);
 
 	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
 
@@ -575,7 +575,58 @@ Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
 
 	return TRUE;
 }
+/*
+CAtapiTrackInfo *AHCIAtapiReadTrackInfo(CBlkDev *bd)
+{ // untested
+	CPortCmdTable			*cmd_table;
+	CFisH2D					*cmd_fis;
+	CAHCIPort				*port		= bd->ahci_port;
+	I64						 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
+	CPortCmdHeader			*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+	CAtapiTrackInfo			*track_info;
 
+	if (port->signature != AHCI_PxSIG_ATAPI)
+	{
+		SysErr("AHCI: Drive is not an ATAPI drive!\n");
+		throw('AHCI');	
+	}
+
+	track_info = CAlloc(sizeof(CAtapiTrackInfo), sys_task->code_heap);
+
+	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
+
+	cmd_table = cmd_header->cmd_table_base;
+	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
+
+	cmd_table->prdt[0].data_base		= track_info;
+	cmd_table->prdt[0].data_byte_count	= DVD_BLK_SIZE - 1; // zero based, size of track info block
+	cmd_header->prdt_len = 1;
+
+	cmd_fis	= cmd_table->cmd_fis;
+
+	cmd_fis->type		= FISt_H2D;
+	cmd_fis->feature_low= 0x2D; // CD TAO
+	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
+	cmd_fis->command	= ATA_PACKET;
+	cmd_table->acmd[0]	= ATAPI_READ_TRACK_INFO >> 8;
+	cmd_table->acmd[1]	= 1;
+	cmd_table->acmd[5]	= 0xFF;
+	cmd_table->acmd[8]	= 48;
+
+	AHCIPortWait(bd->port_num, tS + 2);
+	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
+
+	try
+		AHCIPortCmdWait(bd->port_num, cmd_slot);
+	catch
+	{
+		Fs->catch_except = TRUE;
+		return NULL;
+	}
+
+	return track_info;
+}
+*/
 Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 {
 	CPortCmdTable	*cmd_table;
@@ -1003,9 +1054,8 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 //	AHCIAtapiFormat(bd, count); // ??..
 //	bd->flags |= BDF_LAST_WAS_WRITE; // ??..
 	// maybe check the flag and if not set do a blank/format?
-	AHCIPortWait(bd->port_num, tS + 2);
+//	AHCIPortWait(bd->port_num, tS + 2);
 //	AHCIAtapiSeek(bd, blk);
-	AHCIAtapiModeWriteSet(bd);
 
 	cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
 	cmd_header = AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
@@ -1015,7 +1065,7 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	cmd_header->prdt_len = prdt_len;
 
-	internal_buf = internal_buf_tmp = AHCIBufferAlign(bd, buf, buf_size, FALSE);
+	internal_buf = internal_buf_tmp = AHCIBufferAlign(bd, buf, buf_size, TRUE);
 
 	if (!internal_buf) throw('AHCI');
 
@@ -1027,7 +1077,7 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	for (i = 0; i < prdt_len; i++)
 	{
-		if (buf_size_tmp > AHCI_PRD_MAX_BYTES) //$BK,1$SHOULD PROBABLY BE ATAPI MAX BYTES$BK,0$
+		if (buf_size_tmp > AHCI_PRD_MAX_BYTES)
 			byte_count = AHCI_PRD_MAX_BYTES;
 		else
 			byte_count = buf_size_tmp;
@@ -1043,16 +1093,21 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 
 	cmd_fis->type = FISt_H2D;
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS 
+
+//	cmd_fis->feature_low = 0x2D; // CD TAO
 	cmd_fis->command	 = ATA_PACKET;
-	cmd_table->acmd[0]	=ATAPI_WRITE >> 8;
+	cmd_table->acmd[0]	= ATAPI_WRITE >> 8;
 	cmd_table->acmd[2]	= blk.u8[3];
 	cmd_table->acmd[3]	= blk.u8[2];
 	cmd_table->acmd[4]	= blk.u8[1];
 	cmd_table->acmd[5]	= blk.u8[0];
-	cmd_table->acmd[6]	= count.u8[3];
-	cmd_table->acmd[7]	= count.u8[2];
-	cmd_table->acmd[8]	= count.u8[1];
-	cmd_table->acmd[9]	= count.u8[0];
+//	cmd_table->acmd[6]	= count.u8[3];
+//	cmd_table->acmd[7]	= count.u8[2];
+//	cmd_table->acmd[8]	= count.u8[1];
+//	cmd_table->acmd[9]	= count.u8[0];
+	if (count > U16_MAX) throw('AHCI');
+	cmd_table->acmd[7]	= count.u8[1];
+	cmd_table->acmd[8]	= count.u8[0];
 
 	cmd_fis->count = count; //Necessary?
 
