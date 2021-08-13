@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/13/21 15:57:12----$IV,0$
+* Changed $LK+PU,"Merge2",A="MN:Merge2"$, $LK+PU,"DiffSel",A="MN:DiffSel"$, and $LK+PU,"PopUpDiffMenu",A="MN:PopUpDiffMenu"$ colors, added printing source and destination files along with some explanatory text in the popup window.
+
 $IV,1$----08/13/21 13:21:32----$IV,0$
 * Raised version number to 0.15.
 * Fixed $LK+PU,"DVDImageWrite",A="MN:DVDImageWrite"$ bare-metal AHCI disc burning, needs some cleanup.

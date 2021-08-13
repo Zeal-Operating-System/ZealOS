@@ -11,10 +11,11 @@ I64 PopUpDiffMenu()
 	I64   i;
 	CDoc *doc = DocNew;
 
-	DocPrint(doc,	"$$CM+LX,2,4$$$$FG$$$$BT,\"USE FILE1\",LE=DS_USE_FILE1$$"
-					"$$CM+LX,24,0$$$$CYAN$$$$BT,\"USE FILE2\",LE=DS_USE_FILE2$$"
-					"$$CM+LX,2,4$$$$FG$$$$BT,\"REMAINDER ALL FILE1\",LE=DS_REMAINDER_1$$"
-					"$$CM+LX,24,0$$$$CYAN$$$$BT,\"REMAINDER ALL FILE2\",LE=DS_REMAINDER_2$$"
+	DocPrint(doc,	"$$CM+LX,2,2$$$$LTRED$$FILE1$$FG$$ = DST.$$CM+LX,24,0$$$$LTGREEN$$FILE2$$FG$$ = SRC."
+					"$$CM+LX,2,4$$$$RED$$$$BT,\"USE FILE1\",LE=DS_USE_FILE1$$"
+					"$$CM+LX,24,0$$$$GREEN$$$$BT,\"USE FILE2\",LE=DS_USE_FILE2$$"
+					"$$CM+LX,2,4$$$$RED$$$$BT,\"REMAINDER ALL FILE1\",LE=DS_REMAINDER_1$$"
+					"$$CM+LX,24,0$$$$GREEN$$$$BT,\"REMAINDER ALL FILE2\",LE=DS_REMAINDER_2$$"
 					"$$CM+LX,2,4$$$$FG$$$$BT,\"ABORT FILE\",LE=DS_ABORT_FILE$$"
 					"$$CM+LX,24,0$$$$FG$$$$BT,\"ABORT ALL FILES\",LE=DOCM_CANCEL$$\n");
 	i = PopUpMenu(doc);
@@ -46,7 +47,7 @@ U0 DiffSel(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi
 
 	if (!(*_df_flags & (DF_ABORT_FILE | DF_ABORT_ALL_FILES)))
 	{
-		"$$RED$$";
+		"$$PURPLE$$";
 		if (0 <= j1_lo < count1)
 			"%d,", doc_unsorted1[j1_lo]->y + 1;
 		else if (0 <= j1_hi - 1 < count1)
@@ -59,7 +60,7 @@ U0 DiffSel(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi
 			"%d", doc_unsorted2[j2_hi - 1]->y + 1;
 		else
 			"***";
-		"---------------------$$FG$$\n";
+		"---------------------$$RED$$\n";
 		if (j1_lo <= 0)
 			i = 0;
 		else
@@ -76,7 +77,7 @@ U0 DiffSel(CDoc *doc, I64 *_df_flags, I64 j1_lo, I64 j1_hi, I64 j2_lo, I64 j2_hi
 				cur_l->flags = cur_l->flags & ~DOCF_PLAIN_TEXT | old_flags;
 			'\n';
 		}
-		"$$CYAN$$";
+		"$$GREEN$$";
 		if (j2_lo <= 0)
 			i = 0;
 		else

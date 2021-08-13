@@ -28,7 +28,8 @@ U0 Merge2(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 *_df_flags)
 			else
 			{
 				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) {//slop
-					"%s", tmpde1->full_name;
+					"\n$$LTRED$$%s$$FG$$\n", tmpde->full_name;
+					"$$LTGREEN$$%s$$FG$$", tmpde1->full_name;
 					'\n';
 					if (Bt(_fuf_flags, FUf_DIFF))
 					{
@@ -56,7 +57,7 @@ destination files.
 	FlagsScan(&fuf_flags, Define("ST_FILE_UTIL_FLAGS"), fu_flags);
 	if (fuf_flags & ~(FUG_FILES_FIND | FUF_DIFF))
 		throw('FUF');
-	PrintWarn("This is based strictly on file dates.\n");
+	ST_WARN_ST "This is based strictly on file dates.\n";
 	tmpde1 = FilesFind(src_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	tmpde2 = FilesFind(dst_files_find_mask, fuf_flags & FUG_FILES_FIND);
 	fuf_flags &= FUF_DIFF;
