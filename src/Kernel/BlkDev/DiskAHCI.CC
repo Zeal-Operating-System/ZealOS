@@ -575,58 +575,7 @@ Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
 
 	return TRUE;
 }
-/*
-CAtapiTrackInfo *AHCIAtapiReadTrackInfo(CBlkDev *bd)
-{ // untested
-	CPortCmdTable			*cmd_table;
-	CFisH2D					*cmd_fis;
-	CAHCIPort				*port		= bd->ahci_port;
-	I64						 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
-	CPortCmdHeader			*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
-	CAtapiTrackInfo			*track_info;
 
-	if (port->signature != AHCI_PxSIG_ATAPI)
-	{
-		SysErr("AHCI: Drive is not an ATAPI drive!\n");
-		throw('AHCI');	
-	}
-
-	track_info = CAlloc(sizeof(CAtapiTrackInfo), sys_task->code_heap);
-
-	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
-
-	cmd_table = cmd_header->cmd_table_base;
-	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
-
-	cmd_table->prdt[0].data_base		= track_info;
-	cmd_table->prdt[0].data_byte_count	= DVD_BLK_SIZE - 1; // zero based, size of track info block
-	cmd_header->prdt_len = 1;
-
-	cmd_fis	= cmd_table->cmd_fis;
-
-	cmd_fis->type		= FISt_H2D;
-	cmd_fis->feature_low= 0x2D; // CD TAO
-	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
-	cmd_fis->command	= ATA_PACKET;
-	cmd_table->acmd[0]	= ATAPI_READ_TRACK_INFO >> 8;
-	cmd_table->acmd[1]	= 1;
-	cmd_table->acmd[5]	= 0xFF;
-	cmd_table->acmd[8]	= 48;
-
-	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-
-	try
-		AHCIPortCmdWait(bd->port_num, cmd_slot);
-	catch
-	{
-		Fs->catch_except = TRUE;
-		return NULL;
-	}
-
-	return track_info;
-}
-*/
 Bool AHCIAtapiStartStop(CBlkDev *bd, Bool start)
 {
 	CPortCmdTable	*cmd_table;

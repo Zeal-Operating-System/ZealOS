@@ -33,7 +33,8 @@ U0 OSFilesMergeInner(CDirEntry *tmpde1, CDirEntry *tmpde2, I64 *_fuf_flags, I64 
 			else
 			{
 				if (AbsI64(tmpde1->datetime - tmpde->datetime) > CDATE_FREQ * 2) {//slop
-					"%s", tmpde1->full_name;
+					"\n$$LTRED$$%s$$FG$$\n", tmpde->full_name;
+					"$$LTGREEN$$%s$$FG$$", tmpde1->full_name;
 					'\n';
 					if (Bt(_fuf_flags, FUf_DIFF))
 					{
@@ -128,8 +129,8 @@ U0 OSUpgrade()
 
 	'\n';
 
-	PopUpOk("\nFILE1 is new changes.\n"
-			"$$CYAN$$FILE2$$FG$$ is from existing install.\n\n"
+	PopUpOk("\n$$LTRED$$FILE1$$FG$$ is new changes.\n"
+			"$$LTGREEN$$FILE2$$FG$$ is from existing install.\n\n"
 			"You can hold $$GREEN$$SPACE$$FG$$ down to just merge everything.");
 	OSMerge(drv_let); // src_drv needed?
 

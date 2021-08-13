@@ -3221,11 +3221,12 @@ class CISOPriDesc
 	CPalindromeU16	vol_set_size;
 	CPalindromeU16	vol_seq_num;
 	CPalindromeU16	log_block_size;
-	U8				pad[20];
+	U8				pad[24];
 	CISODirEntry	root_dir_record;
 	U8				pad[128],
 					publisher_id[128],
-					pad[435],
+					preparer_id[128],
+					pad[307],
 					file_structure_version,
 					pad[1166];
 };

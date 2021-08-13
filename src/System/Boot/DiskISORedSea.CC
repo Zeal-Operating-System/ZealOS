@@ -57,7 +57,7 @@ U0 RedSeaISO9660(U8 *iso_filename, U8 drv_let)
 	I64			 iso_size = 0, i, j;
 	U32			*d;
 	CElTorito	*et = CAlloc(DVD_BLK_SIZE);
-	U8			*zero_buf = CAlloc(DVD_BLK_SIZE);
+	U8			*zero_buf = CAlloc(DVD_BLK_SIZE), *st;
 	CFile		*out_file = NULL;
 
 	if (out_file = FOpen(iso_filename, "wc+"))
@@ -77,6 +77,10 @@ U0 RedSeaISO9660(U8 *iso_filename, U8 drv_let)
 		FillU32Palindrome(&iso_pri->root_dir_record,	drive->root_clus);
 		iso_pri->file_structure_version = 1;
 		StrCopy(iso_pri->publisher_id, "ZealOS RedSea");
+
+		st = MStrPrint("ZealOS V%0.2f %D %T", sys_os_version, Now, Now);
+		StrCopy(iso_pri->preparer_id, st);
+		Free(st);
 
 		MemCopy(iso_sup, iso_pri, DVD_BLK_SIZE);
 		iso_sup->type = ISOT_SUPPLEMENTARY_DESC;

@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/13/21 18:26:14----$IV,0$
+* Fixed padding byte amount in $LK+PU,"CISOPriDesc",A="MN:CISOPriDesc"$, added preparer_id member and set in $LK+PU,"RedSeaISO9660",A="FF:::/System/Boot/DiskISORedSea.CC,preparer_id"$.
+
 $IV,1$----08/13/21 15:57:12----$IV,0$
 * Changed $LK+PU,"Merge2",A="MN:Merge2"$, $LK+PU,"DiffSel",A="MN:DiffSel"$, and $LK+PU,"PopUpDiffMenu",A="MN:PopUpDiffMenu"$ colors, added printing source and destination files along with some explanatory text in the popup window.
 

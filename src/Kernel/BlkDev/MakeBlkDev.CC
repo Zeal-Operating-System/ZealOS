@@ -2,7 +2,6 @@
 #include "DiskStrA"
 #include "DiskCache"
 #include "DiskAHCI"
-#include "DiskATA"
 #include "DiskATAId"
 #include "DiskBlkDev"
 #include "DiskDrive"
