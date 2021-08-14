@@ -539,10 +539,9 @@ Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
 	mode_list = CAlloc(sizeof(CAtapiModeWriteList), sys_task->code_heap);
 	mode_list->page.code				= 0x05;
 	mode_list->page.length				= 0x32;
-	mode_list->page.type				= 0x00; // 0x0 packet, 0x1 TAO, 0x2 SAO, 0x3 RAW, 0x4 LJR
-	mode_list->page.mode				= 4 | 1 << 5;
-	mode_list->page.block_type			= 8;
-//	mode_list->page.link_size			= 7;
+	mode_list->page.type				= 0x00; // packet mode
+	mode_list->page.mode				= 4 | 1 << 5; // set cd track mode, set Fixed Packet Size bit
+	mode_list->page.block_type			= 8; // mode 1: 2048-size blocks of data
 	mode_list->page.packet_size			= EndianU32(16);
 
 	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
@@ -560,7 +559,7 @@ Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
 	cmd_fis->feature_low= 0x01; // Core Feature, 'mandatory'
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
 	cmd_fis->command	= ATA_PACKET;
-	cmd_table->acmd[0]	= 0x55; // TODO set define for MODE SELECT
+	cmd_table->acmd[0]	= ATAPI_MODE_SELECT >> 8;
 
 	AHCIPortWait(bd->port_num, tS + 2);
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
@@ -995,17 +994,6 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 	if (lock)
 		unlock = BlkDevLock(bd);
 
-
-//	AHCIPortWait(bd->port_num, tS + 2);
-//	AHCIAtapiSeek(bd, blk);
-//	AHCIPortWait(bd->port_num, tS + 2);
-//	AHCIAtapiBlank(bd); // ?? should blank/format be outside this func, in case func is re-run?
-//	AHCIAtapiFormat(bd, count); // ??..
-//	bd->flags |= BDF_LAST_WAS_WRITE; // ??..
-	// maybe check the flag and if not set do a blank/format?
-//	AHCIPortWait(bd->port_num, tS + 2);
-//	AHCIAtapiSeek(bd, blk);
-
 	cmd_slot = AHCIPortCmdSlotGet(bd->port_num);
 	cmd_header = AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
 
@@ -1043,17 +1031,12 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 	cmd_fis->type = FISt_H2D;
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS 
 
-//	cmd_fis->feature_low = 0x2D; // CD TAO
 	cmd_fis->command	 = ATA_PACKET;
 	cmd_table->acmd[0]	= ATAPI_WRITE >> 8;
 	cmd_table->acmd[2]	= blk.u8[3];
 	cmd_table->acmd[3]	= blk.u8[2];
 	cmd_table->acmd[4]	= blk.u8[1];
 	cmd_table->acmd[5]	= blk.u8[0];
-//	cmd_table->acmd[6]	= count.u8[3];
-//	cmd_table->acmd[7]	= count.u8[2];
-//	cmd_table->acmd[8]	= count.u8[1];
-//	cmd_table->acmd[9]	= count.u8[0];
 	if (count > U16_MAX) throw('AHCI');
 	cmd_table->acmd[7]	= count.u8[1];
 	cmd_table->acmd[8]	= count.u8[0];

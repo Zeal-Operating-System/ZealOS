@@ -28,7 +28,7 @@ body {background-color:#fef1f0;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF5>                                                          ChangeLog</span><span class=cF0>
 <a name="l2"></a></span><span class=c0F>----08/13/21 18:26:14----</span><span class=cF0>
-<a name="l3"></a>* Fixed padding byte amount in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3213"><span class=cF4>CISOPriDesc</span></a><span class=cF0>, added preparer_id member and set in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l82"><span class=cF4>RedSeaISO9660</span></a><span class=cF0>.
+<a name="l3"></a>* Fixed padding byte amount in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3161"><span class=cF4>CISOPriDesc</span></a><span class=cF0>, added preparer_id member and set in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l82"><span class=cF4>RedSeaISO9660</span></a><span class=cF0>.
 <a name="l4"></a>
 <a name="l5"></a></span><span class=c0F>----08/13/21 15:57:12----</span><span class=cF0>
 <a name="l6"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/Merge.CC.html#l15"><span class=cF4>Merge2</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/Diff.CC.html#l40"><span class=cF4>DiffSel</span></a><span class=cF0>, and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/Diff.CC.html#l9"><span class=cF4>PopUpDiffMenu</span></a><span class=cF0> colors, added printing source and destination files along with some explanatory 
@@ -69,7 +69,7 @@ body {background-color:#fef1f0;}
 <a name="l41"></a>* Raised version number to 0.13.
 <a name="l42"></a>* Fixed </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l218"><span class=cF4>Mount</span></a><span class=cF0> allowing ATAPI&lt;--&gt;ATA BlkDev&lt;--&gt;AHCI Port misconfiguration.
 <a name="l43"></a>* Added arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l12"><span class=cF4>SATARep</span></a><span class=cF0> to specify drive types to show.
-<a name="l44"></a>* Added checks in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1080"><span class=cF4>AHCIPortInit</span></a><span class=cF0> to throw to Debug if invalid port signatures are detected.
+<a name="l44"></a>* Added checks in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1063"><span class=cF4>AHCIPortInit</span></a><span class=cF0> to throw to Debug if invalid port signatures are detected.
 <a name="l45"></a>
 <a name="l46"></a></span><span class=c0F>----08/02/21 00:54:40----</span><span class=cF0>
 <a name="l47"></a>* Raised version number to 0.12.
@@ -108,7 +108,7 @@ body {background-color:#fef1f0;}
 <a name="l80"></a>
 <a name="l81"></a></span><span class=c0F>----07/11/21 17:26:32----</span><span class=cF0>
 <a name="l82"></a>* Raised version number to 0.07.
-<a name="l83"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l133"><span class=cF4>IntEntryAlloc</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l149"><span class=cF4>IntEntryFree</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3639"><span class=cF4>dev.user_int_bitmap</span></a><span class=cF0> to allow acquiring dynamic user APIC IRQ.
+<a name="l83"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l133"><span class=cF4>IntEntryAlloc</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l149"><span class=cF4>IntEntryFree</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3587"><span class=cF4>dev.user_int_bitmap</span></a><span class=cF0> to allow acquiring dynamic user APIC IRQ.
 <a name="l84"></a>
 <a name="l85"></a></span><span class=c0F>----07/09/21 04:13:50----</span><span class=cF0>
 <a name="l86"></a>* Added drive changing macros from AcctExample to PersonalMenu.
@@ -224,7 +224,7 @@ body {background-color:#fef1f0;}
 <a name="l196"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;LAPIC_ARIBITRATION_PRIORITY&quot;, &quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l642"><span class=cF4>LAPIC_ARBITRATION_PRIORITY</span></a><span class=cF0>&quot;); 
 <a name="l197"></a>
 <a name="l198"></a></span><span class=c0F>----04/12/20 17:06:38----</span><span class=cF0>
-<a name="l199"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l411"><span class=cF4>CIDTEntry</span></a><span class=cF0> and rewrote </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l98"><span class=cF4>IntEntryGet</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l110"><span class=cF4>IntEntrySet</span></a><span class=cF0>(). </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3631"><span class=cF4>dev</span></a><span class=cF0>.idt is now </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l220"><span class=cF4>allocated</span></a><span class=cF0> on an 8-byte boundary as per Intel SDM 
+<a name="l199"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l411"><span class=cF4>CIDTEntry</span></a><span class=cF0> and rewrote </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l98"><span class=cF4>IntEntryGet</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l110"><span class=cF4>IntEntrySet</span></a><span class=cF0>(). </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3579"><span class=cF4>dev</span></a><span class=cF0>.idt is now </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KInterrupts.CC.html#l220"><span class=cF4>allocated</span></a><span class=cF0> on an 8-byte boundary as per Intel SDM 
 <a name="l200"></a>recommendation.
 <a name="l201"></a>* Updated </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l16"><span class=cF4>OS version</span></a><span class=cF0>.
 <a name="l202"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l451"><span class=cF4>BIN_SIGNATURE_VAL</span></a><span class=cF0> from 'TOSB' to 'ZCCB'.
@@ -266,7 +266,7 @@ body {background-color:#fef1f0;}
 <a name="l238"></a>* Modified </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Games/Varoom.CC.html#l768"><span class=cF4>Varoom</span></a><span class=cF0> to use kbd bitmap for instant keypress response.
 <a name="l239"></a>* Modified </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrB.CC.html#l209"><span class=cF4>FlagsStrPrint</span></a><span class=cF0>() to print unset flags as well.
 <a name="l240"></a>* Modified </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrA.CC.html#l685"><span class=cF4>StrReplace</span></a><span class=cF0>() to free given str if free_str is set.
-<a name="l241"></a>* Exported </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelC.HH.html#l565"><span class=cF4>Seg2Linear</span></a><span class=cF0>() from kernel.
+<a name="l241"></a>* Exported </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelC.HH.html#l564"><span class=cF4>Seg2Linear</span></a><span class=cF0>() from kernel.
 <a name="l242"></a>
 <a name="l243"></a></span><span class=c0F>----03/27/20 13:06:00----</span><span class=cF0>
 <a name="l244"></a>* Modified </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Ctrls/CtrlsA.CC.html#l252"><span class=cF4>Ctrl Slider</span></a><span class=cF0> for 3D model editor to allow higher precision.
@@ -308,7 +308,7 @@ body {background-color:#fef1f0;}
 <a name="l280"></a>
 <a name="l281"></a></span><span class=c0F>----03/16/20 14:44:00----</span><span class=cF0>
 <a name="l282"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;GetStr&quot;, &quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/SerialDev/Message.CC.html#l238"><span class=cF4>StrGet</span></a><span class=cF0>&quot;);
-<a name="l283"></a>* Renamed GSF -&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4419"><span class=cF4>SGF</span></a><span class=cF0> as a consequence.
+<a name="l283"></a>* Renamed GSF -&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4367"><span class=cF4>SGF</span></a><span class=cF0> as a consequence.
 <a name="l284"></a>* Added some </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l2694"><span class=cF4>AHCI headers</span></a><span class=cF0>.
 <a name="l285"></a>
 <a name="l286"></a></span><span class=c0F>----03/12/20 22:00:36----</span><span class=cF0>
@@ -325,15 +325,15 @@ body {background-color:#fef1f0;}
 <a name="l297"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;err&quot;, &quot;error&quot;);
 <a name="l298"></a>* Removed compression from kernel. Compress.CC, CArcCtrl, CArcCompress, ExpandBuf(), CompressBuf(), DCSF_COMPRESSED, etc. 
 <a name="l299"></a>Updated </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/SerializeTree.CC.html#l1"><span class=cF4>::/Demo/Disk/SerializeTree.CC</span></a><span class=cF0> to not use compression.
-<a name="l300"></a>* Removed RS_ATTR_COMPRESSED from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3236"><span class=cF4>RedSea attributes</span></a><span class=cF0>.
-<a name="l301"></a>* Refactored </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3274"><span class=cF4>FU flags</span></a><span class=cF0>. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/DocUtils.CC.html#l53"><span class=cF4>DocOptEntry</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskB.CC.html#l120"><span class=cF4>Size</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskB.CC.html#l101"><span class=cF4>Size1</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/LineRep.CC.html#l100"><span class=cF4>SizeRep</span></a><span class=cF0>(), and </span><span class=cF4>
+<a name="l300"></a>* Removed RS_ATTR_COMPRESSED from </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3184"><span class=cF4>RedSea attributes</span></a><span class=cF0>.
+<a name="l301"></a>* Refactored </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3222"><span class=cF4>FU flags</span></a><span class=cF0>. Removed FUF_EXPAND, FUF_RISKY, and FUF_Z_OR_NOT_Z. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/DocUtils.CC.html#l53"><span class=cF4>DocOptEntry</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskB.CC.html#l120"><span class=cF4>Size</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskB.CC.html#l101"><span class=cF4>Size1</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/LineRep.CC.html#l100"><span class=cF4>SizeRep</span></a><span class=cF0>(), and </span><span class=cF4>
 <a name="l302"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/LineRep.CC.html#l65"><span class=cF4>SizeRep1</span></a><span class=cF0>() have been updated accordingly.
 <a name="l303"></a>* Removed IsDotZ(), ToggleZOrNotZ(). Cleaned up </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFile.CC.html#l1"><span class=cF4>FileRead</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFile.CC.html#l76"><span class=cF4>FileWrite</span></a><span class=cF0>(), and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskFind.CC.html#l65"><span class=cF4>FileFind</span></a><span class=cF0>() accordingly.
 <a name="l304"></a>* Added XMM8-XMM15 to </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/OpCodes.DD.html#l138"><span class=cF4>OpCodes.DD</span></a><span class=cF0>.
 <a name="l305"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/32BitColor.CC.html#l1"><span class=cF4>::/Demo/Graphics/32BitColor.CC</span></a><span class=cF0>.
 <a name="l306"></a>
 <a name="l307"></a></span><span class=c0F>----02/22/20 20:04:00----</span><span class=cF0>
-<a name="l308"></a>* Reduced </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4169"><span class=cF4>MEM_MIN_MEG</span></a><span class=cF0> to 256 MiB (VMWare users have to do less work).
+<a name="l308"></a>* Reduced </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4117"><span class=cF4>MEM_MIN_MEG</span></a><span class=cF0> to 256 MiB (VMWare users have to do less work).
 <a name="l309"></a>* Added </span><span class=cF2>&lt;CTRL-ALT-X&gt;</span><span class=cF0> to AC </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/StandBy.DD.html#l1"><span class=cF4>standby</span></a><span class=cF0> doc.
 <a name="l310"></a>* Removed the /System/God directory. Bible.TXT has been removed. The functionality of HolySpirit.CC has been moved into 
 <a name="l311"></a>::/System/Divination.CC. Functions renamed from </span><a href="https://zeal-operating-system.github.io/ZealOS/System/God/HolySpirit.CC.html#l173"><span class=cF4>God*</span></a><span class=cF0>() to Divine*(). Psalmody GodSong feature </span><a href="https://zeal-operating-system.github.io/ZealOS/Apps/Psalmody/PsalmodyMain.CC.html#l675"><span class=cF4>disabled</span></a><span class=cF0>. DolDoc &quot;BF:&quot; links 
@@ -357,7 +357,7 @@ body {background-color:#fef1f0;}
 <a name="l329"></a></span><span class=c0F>----02/19/20 21:46:17----</span><span class=cF0>
 <a name="l330"></a><blink>* Zenith 1.0 released.</blink>
 <a name="l331"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrComposites.CC.html#l412"><span class=cF4>GRScreenCaptureWrite</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrComposites.CC.html#l396"><span class=cF4>GRScreenCaptureRead</span></a><span class=cF0>() are broken. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l362"><span class=cF4>DCLoad</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrDC.CC.html#l318"><span class=cF4>DCSave</span></a><span class=cF0>() use DCF_COMPRESSED. It also saves the 
-<a name="l332"></a>palette as </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3705"><span class=cF4>CBGR48</span></a><span class=cF0>, which is a problem.
+<a name="l332"></a>palette as </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3653"><span class=cF4>CBGR48</span></a><span class=cF0>, which is a problem.
 <a name="l333"></a>* Updated </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/MemRep.CC.html#l219"><span class=cF4>MemRep</span></a><span class=cF0>() to report on VBE variables.
 <a name="l334"></a>* Renamed VGAFlush() -&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Display.CC.html#l100"><span class=cF4>LFBFlush</span></a><span class=cF0>().
 <a name="l335"></a>* Updated </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Graphics/Palette.CC.html#l1"><span class=cF4>Palette Demo</span></a><span class=cF0> to use current palette environment.
@@ -375,16 +375,16 @@ body {background-color:#fef1f0;}
 <a name="l347"></a>    Rundown:
 <a name="l348"></a>    - Added classes </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l503"><span class=cF4>CVBEInfo</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l520"><span class=cF4>CVBEMode</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l539"><span class=cF4>CVBEModeShort</span></a><span class=cF0>
 <a name="l349"></a>    - </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.CC.html#l104"><span class=cF4>real-mode assembly</span></a><span class=cF0> -- </span><span class=cF9><u>added kernel symbols</u></span><span class=cF0>.
-<a name="l350"></a>    - Added </span><span class=cF2>screen_size</span><span class=cF0>, </span><span class=cF2>buffer_size</span><span class=cF0>, </span><span class=cF2>fb_alias</span><span class=cF0> members to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4298"><span class=cF4>CTextGlobals</span></a><span class=cF0>.
+<a name="l350"></a>    - Added </span><span class=cF2>screen_size</span><span class=cF0>, </span><span class=cF2>buffer_size</span><span class=cF0>, </span><span class=cF2>fb_alias</span><span class=cF0> members to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4246"><span class=cF4>CTextGlobals</span></a><span class=cF0>.
 <a name="l351"></a>    - </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.CC.html#l107"><span class=cF4>SysGrInit</span></a><span class=cF0>() -- using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMain.CC.html#l69"><span class=cF4>Seg2Linear</span></a><span class=cF0>() to convert pointers.
 <a name="l352"></a>    - </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Display.CC.html#l62"><span class=cF4>raw text drawing routine</span></a><span class=cF0> updated. </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l499"><span class=cF4>BLACK32, WHITE32</span></a><span class=cF0>.
 <a name="l353"></a>    - Dynamic definition of </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrGlobals.CC.html#l50"><span class=cF4>GR_WIDTH and GR_HEIGHT</span></a><span class=cF0>.
 <a name="l354"></a>    - </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrScreen.CC.html#l392"><span class=cF4>GrUpdateScreen32</span></a><span class=cF0>() -- </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrScreen.CC.html#l379"><span class=cF4>GrCalcScreenUpdates</span></a><span class=cF0>() is used to reduce CPU usage. Added </span><span class=cF2>screen_cache</span><span class=cF0> member to </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrGlobals.CC.html#l3"><span class=cF4>CGrGlobals</span></a><span class=cF0>.
-<a name="l355"></a>    - </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrGlobals.CC.html#l44"><span class=cF4>gr_palette</span></a><span class=cF0> global variable. We use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3701"><span class=cF4>CBGR24</span></a><span class=cF0> in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrPalette.CC.html#l1"><span class=cF4>GrPalette.CC</span></a><span class=cF0>.
+<a name="l355"></a>    - </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrGlobals.CC.html#l44"><span class=cF4>gr_palette</span></a><span class=cF0> global variable. We use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3649"><span class=cF4>CBGR24</span></a><span class=cF0> in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrPalette.CC.html#l1"><span class=cF4>GrPalette.CC</span></a><span class=cF0>.
 <a name="l356"></a>
 <a name="l357"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/BinRep.CC.html#l27"><span class=cF4>BinRep</span></a><span class=cF0>() from Sup1 ISO.
 <a name="l358"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;sys_pci_busses&quot;, &quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l200"><span class=cF4>sys_pci_buses</span></a><span class=cF0>&quot;);
-<a name="l359"></a>* Renamed RWF flags -&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4293"><span class=cF4>RAWF</span></a><span class=cF0>.
+<a name="l359"></a>* Renamed RWF flags -&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4241"><span class=cF4>RAWF</span></a><span class=cF0>.
 <a name="l360"></a>* Renamed mon_start_days1 and mon_start_days2 -&gt; </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDate.CC.html#l3"><span class=cF4>month_start_days</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDate.CC.html#l4"><span class=cF4>month_start_days_leap</span></a><span class=cF0>, respectively.
 <a name="l361"></a>* Moved random number generation algorithm into </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMathB.CC.html#l83"><span class=cF4>seperate function</span></a><span class=cF0> to reduce line count. Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KMathB.CC.html#l95"><span class=cF4>RandU8</span></a><span class=cF0>().
 <a name="l362"></a>* Added syntax highlighting for numbers. </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocHighlight.CC.html#l104"><span class=cF4>DocHighlight</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1290"><span class=cF4>DOC_COLOR_NUMBER</span></a><span class=cF0>.
@@ -428,7 +428,7 @@ body {background-color:#fef1f0;}
 <a name="l400"></a>* Disabled blinking MENU.
 <a name="l401"></a>* Disabled scrolling title in editor.
 <a name="l402"></a>* One User terminal on startup.
-<a name="l403"></a>* Swapped colors in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4216"><span class=cF4>ST_ERR_ST</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4217"><span class=cF4>ST_WARN_ST</span></a><span class=cF0>. RED is for errors, LTRED is for warnings.
+<a name="l403"></a>* Swapped colors in </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4164"><span class=cF4>ST_ERR_ST</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4165"><span class=cF4>ST_WARN_ST</span></a><span class=cF0>. RED is for errors, LTRED is for warnings.
 <a name="l404"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/CPURep.CC.html#l28"><span class=cF4>CPURep</span></a><span class=cF0>() now shows extended processor name or vendor string as fallback.
 <a name="l405"></a>* Added #</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l24"><span class=cF4>NONE</span></a><span class=cF0> define to replace 0 or NULL in default function arguments where applicable (usually flags).
 <a name="l406"></a>* Shift+Alt+Delete runs </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootRAM.CC.html#l33"><span class=cF4>BootRAM</span></a><span class=cF0>().
@@ -561,9 +561,9 @@ body {background-color:#fef1f0;}
 <a name="l533"></a>* Fixed </span><span class=cF2>$</span><span class=cF0> class offset so </span><span class=cF2>#assert</span><span class=cF0>'s don't lag a token.
 <a name="l534"></a>
 <a name="l535"></a></span><span class=c0F>----01/17/17 14:39:41----</span><span class=cF0>
-<a name="l536"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3471"><span class=cF4>blkdev.ins_base0</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3471"><span class=cF4>blkdev.ins_unit</span></a><span class=cF0>.
+<a name="l536"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3419"><span class=cF4>blkdev.ins_base0</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3419"><span class=cF4>blkdev.ins_unit</span></a><span class=cF0>.
 <a name="l537"></a>* Added make </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l154"><span class=cF4>RedSeaISO</span></a><span class=cF0>() to </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/FileMgr.CC.html#l678"><span class=cF4>FileMgr</span></a><span class=cF0>().
-<a name="l538"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3471"><span class=cF4>blkdev.dft_iso_c_filename</span></a><span class=cF0> .
+<a name="l538"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3419"><span class=cF4>blkdev.dft_iso_c_filename</span></a><span class=cF0> .
 <a name="l539"></a>
 <a name="l540"></a></span><span class=c0F>----01/17/17 06:12:21----</span><span class=cF0>
 <a name="l541"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;MIN_...&quot;,&quot;..._MIN&quot;);
@@ -662,8 +662,8 @@ body {background-color:#fef1f0;}
 <a name="l634"></a>Sup1/Sup1Utils/CvtSong500.HC.
 <a name="l635"></a>
 <a name="l636"></a></span><span class=c0F>----12/22/16 16:18:32----</span><span class=cF0>
-<a name="l637"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;CSrvCmd&quot;,&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3906"><span class=cF4>CJob</span></a><span class=cF0>&quot;);
-<a name="l638"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;CSrvCtrl&quot;,&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3924"><span class=cF4>CJobCtrl</span></a><span class=cF0>&quot;);
+<a name="l637"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;CSrvCmd&quot;,&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3854"><span class=cF4>CJob</span></a><span class=cF0>&quot;);
+<a name="l638"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;CSrvCtrl&quot;,&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3872"><span class=cF4>CJobCtrl</span></a><span class=cF0>&quot;);
 <a name="l639"></a>
 <a name="l640"></a></span><span class=c0F>----12/03/16 13:19:58----</span><span class=cF0>
 <a name="l641"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;SpriteMat3B()&quot;,&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/System/Gr/GrSpritePlot.CC.html#l294"><span class=cF4>Sprite3Mat4x4B</span></a><span class=cF0>()&quot;);
@@ -674,7 +674,7 @@ body {background-color:#fef1f0;}
 <a name="l646"></a>
 <a name="l647"></a></span><span class=c0F>----12/03/16 10:16:26----</span><span class=cF0>
 <a name="l648"></a>* Changed </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l2173"><span class=cF4>__CMD_LINE__</span></a><span class=cF0>.
-<a name="l649"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4556"><span class=cF4>CProgress</span></a><span class=cF0>.tf.
+<a name="l649"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4504"><span class=cF4>CProgress</span></a><span class=cF0>.tf.
 <a name="l650"></a>* Added </span><span class=cF4><u>sys_staff_mode_flag</u></span><span class=cF0>.
 <a name="l651"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeWrappers.CC.html#l13"><span class=cF4>R</span></a><span class=cF0>(&quot;except_caller&quot;,&quot;except_callers&quot;);
 <a name="l652"></a>
@@ -705,7 +705,7 @@ body {background-color:#fef1f0;}
 <a name="l677"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/RadixSort.CC.html#l1"><span class=cF4>::/Demo/RadixSort.CC</span></a><span class=cF0>.
 <a name="l678"></a>
 <a name="l679"></a></span><span class=c0F>----10/26/16 00:21:06----</span><span class=cF0>
-<a name="l680"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4556"><span class=cF4>CProgress</span></a><span class=cF0>.t0.
+<a name="l680"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4504"><span class=cF4>CProgress</span></a><span class=cF0>.t0.
 <a name="l681"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Boot.DD.html#l1"><span class=cF4>::/Doc/Boot.DD</span></a><span class=cF0>.
 <a name="l682"></a>
 <a name="l683"></a></span><span class=c0F>----10/25/16 18:02:44----</span><span class=cF0>
@@ -725,7 +725,7 @@ body {background-color:#fef1f0;}
 <a name="l697"></a>
 <a name="l698"></a></span><span class=c0F>----09/29/16 10:13:14----</span><span class=cF0>
 <a name="l699"></a>* <blink>TempleOS version 4.12 Released</blink>
-<a name="l700"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3992"><span class=cF4>TASKf_CMD_LINE_PMT</span></a><span class=cF0>.
+<a name="l700"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3940"><span class=cF4>TASKf_CMD_LINE_PMT</span></a><span class=cF0>.
 <a name="l701"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l270"><span class=cF4>TaskWait</span></a><span class=cF0>().
 <a name="l702"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l39"><span class=cF4>DeathWait</span></a><span class=cF0>().
 <a name="l703"></a>
@@ -736,7 +736,7 @@ body {background-color:#fef1f0;}
 <a name="l708"></a></span><span class=c0F>----09/27/16 11:09:25----</span><span class=cF0>
 <a name="l709"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Misc/OSTestSuite.CC.html#l1"><span class=cF4>::/Misc/OSTestSuite.CC</span></a><span class=cF0>.
 <a name="l710"></a>* Fixed bug in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocChar.CC.html#l512"><span class=cF4>EdCharIns</span></a><span class=cF0>() printing $ cmds.
-<a name="l711"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3312"><span class=cF4>FUF_JUST_DD</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3039"><span class=cF4>FILEMASK_DD</span></a><span class=cF0>.
+<a name="l711"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3260"><span class=cF4>FUF_JUST_DD</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3017"><span class=cF4>FILEMASK_DD</span></a><span class=cF0>.
 <a name="l712"></a>
 <a name="l713"></a></span><span class=c0F>----09/27/16 01:05:52----</span><span class=cF0>
 <a name="l714"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/MemoryOverview.DD.html#l1"><span class=cF4>::/Doc/MemoryOverview.DD</span></a><span class=cF0>.
@@ -805,7 +805,7 @@ body {background-color:#fef1f0;}
 <a name="l777"></a>* Improved </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Games/Talons.CC.html#l1"><span class=cF4>::/Demo/Games/Talons.CC</span></a><span class=cF0>.
 <a name="l778"></a>
 <a name="l779"></a></span><span class=c0F>----07/15/16 05:17:24----</span><span class=cF0>
-<a name="l780"></a>* Created </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3631"><span class=cF4>CDevGlbls</span></a><span class=cF0>.uncached_alias.
+<a name="l780"></a>* Created </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3579"><span class=cF4>CDevGlbls</span></a><span class=cF0>.uncached_alias.
 <a name="l781"></a>* Added 1 Gig page table support.
 <a name="l782"></a>
 <a name="l783"></a></span><span class=c0F>----07/13/16 17:21:19----</span><span class=cF0>
@@ -837,7 +837,7 @@ body {background-color:#fef1f0;}
 <a name="l809"></a></span><span class=c0F>----07/03/16 04:30:05----</span><span class=cF0>
 <a name="l810"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l306"><span class=cF4>Unmount</span></a><span class=cF0>().
 <a name="l811"></a>* Made BootLoader mandatory in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/DiskISORedSea.CC.html#l154"><span class=cF4>RedSeaISO</span></a><span class=cF0>().
-<a name="l812"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3333"><span class=cF4>BDT_ISO_FILE_READ</span></a><span class=cF0>.
+<a name="l812"></a>* Added </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3281"><span class=cF4>BDT_ISO_FILE_READ</span></a><span class=cF0>.
 <a name="l813"></a>
 <a name="l814"></a></span><span class=c0F>----07/01/16 05:29:08----</span><span class=cF0>
 <a name="l815"></a>* Made underscore mandatory on </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>HolyC</span></a><span class=cF0> callable asm functions.

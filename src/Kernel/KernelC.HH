@@ -366,7 +366,6 @@ extern 			I64				 AHCIAtaBlksWrite(	CBlkDev *bd, U8 *buf, I64 blk, I64 count);
 extern			I64				 AHCIAtapiBlksRead(	CBlkDev *bd, U8 *buf, I64 blk, I64 count);
 extern			Bool			 AHCIAtapiSeek(		CBlkDev *bd, I64 blk);
 extern			Bool			 AHCIAtapiStartStop(CBlkDev *bd, Bool start);
-//extern			CAtapiTrackInfo *AHCIAtapiReadTrackInfo(CBlkDev *bd);
 extern			Bool			 AHCIAtapiBlank(CBlkDev *bd, Bool minimal=TRUE);
 extern			Bool			 DiscEject(U8 drv_let);
 extern			Bool			 DiscLoad( U8 drv_let);

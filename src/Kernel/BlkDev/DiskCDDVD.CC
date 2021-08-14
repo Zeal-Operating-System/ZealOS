@@ -165,7 +165,7 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 {//Write CD/DVD ISO file to disk.
 	CDualBuf	*d = CAlloc(sizeof(CDualBuf));
 	U8			*buf, *in_name2, *in_name3;
-	I64			 i, n, spc, blk = 0, count;
+	I64			 n, spc, blk = 0, count;
 	CDrive		*drive = Letter2Drive(dvd_drive_let);
 	CBlkDev		*bd = drive->bd, *bd2;
 	CTask		*task;
@@ -213,7 +213,6 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 //*/
 
 //	BlkDevLock(bd);
-//	IDEATAPIWaitReady(bd, 0);
 	AHCIPortWait(bd->port_num, tS + 2);
 //	AHCIAtapiSeek(bd, blk);
 //	AHCIPortWait(bd->port_num, tS + 2);
@@ -241,7 +240,6 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 			buf = d->buf0;
 		while (d->in_buf <= d->out_buf)
 			Yield;
-//		IDEATAPIWriteBlks(bd, buf, blk / spc, (n + spc - 1) / spc);
 		"AHCIAtapiBlksWrite(bd, 0x%0X, 0x%0X, %d, FALSE);\n", buf, blk / spc, (n + spc - 1) / spc;
 		AHCIAtapiBlksWrite(bd, buf, blk / spc, (n + spc - 1) / spc, FALSE);
 		d->out_buf++;
@@ -250,31 +248,24 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 		progress1 += n;
 	}
 //*/
-//	IDEATAPISync(bd);
 	AHCIAtapiSync(bd);
 
 	progress1 = 0;
 	progress1_max = 2;
 	StrCopy(progress1_desc, "Closing");
-//	for (i = 0; i < 2; i++)
-//	{
-//		IDEATAPIClose(bd, 0x100, i); //Close tracks
-		AHCIAtapiClose(bd, 0x100, 0xFF); //Close tracks
-//		progress1++;
-//	}
+	AHCIAtapiClose(bd, 0x100, 0xFF); //Close tracks
+	progress1++;
 
-//	IDEATAPISync(bd);
 	AHCIAtapiSync(bd);
 
-//	IDEATAPIClose(bd, 0x200); //close disk
 	AHCIAtapiClose(bd, 0x200); //close disk
-//	IDEATAPISync(bd);
+	progress1++;
+
 	AHCIAtapiSync(bd);
 	if (media_type == MT_DVD)
 	{
-//		IDEATAPIClose(bd, 0x300);
 		AHCIAtapiClose(bd, 0x300);
-//		IDEATAPISync(bd);
+		progress1++;
 		AHCIAtapiSync(bd);
 	}
 

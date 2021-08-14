@@ -2957,30 +2957,7 @@ class CAtapiModeWriteList
 	CAtapiModeHeader	header;
 	CAtapiModeWritePage	page;
 };
-/*
-class CAtapiTrackInfo
-{
-	U16	data_length;
-	U8	track_num,
-		session_num,
-		reserved,
-		track_mode,
-		data_mode,
-		misc; // LRA_V, NWA_V
-	U32	track_start_addr,
-		next_write_addr,
-		free_blocks,
-		packet_size, // or 'blocking factor'
-		track_size,
-		last_record_addr;
-	U8	track_num_high,
-		session_num_high,
-		reserved[2];
-	U32	read_compat_lba,
-		next_lj_addr, // Layer Jump
-		last_lj_addr;
-}
-*/
+
 //ATA_IDENTIFY command array indexes (array of U16s)
 #define ATA_IDENT_SERIAL_NUM		10
 #define ATA_IDENT_MODEL_NUM			27
@@ -3009,6 +2986,7 @@ class CAtapiTrackInfo
 #define ATAPI_SEEK					0x2B00
 #define ATAPI_SYNC_CACHE			0x3500
 #define ATAPI_READ_TRACK_INFO		0x5200
+#define ATAPI_MODE_SELECT			0x5500
 #define ATAPI_CLOSE_TRACK_SESSION	0x5B00
 #define ATAPI_BLANK					0xA100
 #define ATAPI_READ					0xA800
@@ -3164,36 +3142,6 @@ class CPalindromeU16
 class CPalindromeU32
 {
 	U32 	little, big;
-};
-
-class CATAPITrack
-{
-	U16 	track_info_len;
-	U8		track_lo,
-			session_lo,
-			reserved;
-	U16 	misc1;
-	U8		misc2;
-	U32 	track_start,
-			next_writable,
-			free_blks;
-	union
-	{
-		U32 fixed_packet_size;
-		U32 blocking_factor;
-	};
-	union
-	{
-		U32 track_size;
-		U32 rzone_end;
-	};
-	U32 	last_recorded;
-	U8		track_hi,
-			session_hi;
-	U16 	reserved;
-	U32 	read_compatibility,
-			next_layer_jmp,
-			last_layer_jmp;
 };
 
 //ISO9660
