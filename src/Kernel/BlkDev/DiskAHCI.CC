@@ -295,52 +295,8 @@ I64 AHCIAtapiCapacityGet(CBlkDev *bd)
 	return EndianU32(buf[0]);
 }
 
-Bool AHCIAtapiSeek(CBlkDev *bd, I64 blk)
-{
-	CPortCmdTable	*cmd_table;
-	CFisH2D			*cmd_fis;
-	CAHCIPort		*port		= bd->ahci_port;
-	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
-	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
-
-	if (port->signature != AHCI_PxSIG_ATAPI)
-	{
-		SysErr("AHCI: Drive is not an ATAPI drive!\n");
-		throw('AHCI');	
-	}
-
-	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
-
-	cmd_table = cmd_header->cmd_table_base;
-	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
-
-	cmd_fis	= cmd_table->cmd_fis;
-
-	cmd_fis->type		= FISt_H2D;
-	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
-	cmd_fis->command	= ATA_PACKET;
-	cmd_table->acmd[0]	= ATAPI_SEEK >> 8;
-	cmd_table->acmd[2]	= blk.u8[3];
-	cmd_table->acmd[3]	= blk.u8[2];
-	cmd_table->acmd[4]	= blk.u8[1];
-	cmd_table->acmd[5]	= blk.u8[0];
-
-	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-
-	try
-		AHCIPortCmdWait(bd->port_num, cmd_slot);
-	catch
-	{
-		Fs->catch_except = TRUE;
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
 Bool AHCIAtapiSync(CBlkDev *bd)
-{//untested
+{ // Sync drive read write buffers.
 	CPortCmdTable	*cmd_table;
 	CFisH2D			*cmd_fis;
 	CAHCIPort		*port		= bd->ahci_port;
@@ -380,7 +336,7 @@ Bool AHCIAtapiSync(CBlkDev *bd)
 }
 
 Bool AHCIAtapiClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
-{//untested
+{ // Close track/session on a disc.
 	CPortCmdTable	*cmd_table;
 	CFisH2D			*cmd_fis;
 	CAHCIPort		*port		= bd->ahci_port;
@@ -449,64 +405,6 @@ Bool AHCIAtapiBlank(CBlkDev *bd, Bool minimal=TRUE)
 	cmd_table->acmd[0]	= ATAPI_BLANK >> 8;
 	cmd_table->acmd[1]	= minimal;
 
-	AHCIPortWait(bd->port_num, tS + 2);
-	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
-
-	try
-		AHCIPortCmdWait(bd->port_num, cmd_slot);
-	catch
-	{
-		Fs->catch_except = TRUE;
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-//TODO #define some bits/constants
-Bool AHCIAtapiFormat(CBlkDev *bd, I64 count)
-{ // untested
-	CPortCmdTable			*cmd_table;
-	CFisH2D					*cmd_fis;
-	CAHCIPort				*port		= bd->ahci_port;
-	I64						 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
-	CPortCmdHeader			*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
-	CAtapiFormatCmd			 format_cmd;
-	CAtapiFormatParamList	*format_list;
-
-	if (port->signature != AHCI_PxSIG_ATAPI)
-	{
-		SysErr("AHCI: Drive is not an ATAPI drive!\n");
-		throw('AHCI');	
-	}
-
-	format_list = CAlloc(sizeof(CAtapiFormatParamList), sys_task->code_heap);
-	format_list->length		= EndianU16(8);
-	format_list->num_blocks	= EndianU32(count(U32)); // remove this safety-cast if not needed
-	format_list->extra[1]	= 0x80;
-
-	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
-//	Bts(&cmd_header->desc, AHCI_CH_DESCf_W); // do we need to set Write ?
-
-	cmd_table = cmd_header->cmd_table_base;
-	MemSet(cmd_table, 0, sizeof(CPortCmdTable));
-
-	cmd_table->prdt[0].data_base		= format_list;
-	cmd_table->prdt[0].data_byte_count	= sizeof(CAtapiFormatParamList) - 1; // zero based, size of format parameter list
-	cmd_header->prdt_len = 1;
-
-	cmd_fis	= cmd_table->cmd_fis;
-
-	cmd_fis->type		= FISt_H2D;
-//	cmd_fis->feature_low= 0x23; // Formattable?...
-	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
-	cmd_fis->command	= ATA_PACKET;
-
-	MemSet(&format_cmd, 0, sizeof(CAtapiFormatCmd));
-	format_cmd.command	= ATAPI_FORMAT_UNIT >> 8; //$BK,1$FIX$BK,0$
-	format_cmd.code		= 1 | 1 << 4; // TODO !!! FORMAT UNIT CODE FLAGS (1 mandatory, 1<<4 mandatory for MM drives)
-	MemCopy(&cmd_table->acmd, &format_cmd, 6); // ?
-	
 	AHCIPortWait(bd->port_num, tS + 2);
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
 
@@ -974,13 +872,14 @@ I64 AHCIAtapiBlksRead(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 }
 
 I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
-{ // untested
+{ // Write blocks to a disc. (AHCIAtapiModeWriteSet must be called first.)
 	CPortCmdTable	*cmd_table;
 	CFisH2D			*cmd_fis;
 	CAHCIPort		*port = bd->ahci_port;
 	I64				 i, byte_count, buf_size, buf_size_tmp, prdt_len, cmd_slot;
 	CPortCmdHeader	*cmd_header;
 	U8				*internal_buf, *internal_buf_tmp;
+	CAtapiWriteCmd	 write_cmd;
 	Bool			 unlock;
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
@@ -1032,16 +931,13 @@ I64 AHCIAtapiBlksWrite(CBlkDev *bd, U8 *buf, I64 blk, I64 count, Bool lock=TRUE)
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS 
 
 	cmd_fis->command	 = ATA_PACKET;
-	cmd_table->acmd[0]	= ATAPI_WRITE >> 8;
-	cmd_table->acmd[2]	= blk.u8[3];
-	cmd_table->acmd[3]	= blk.u8[2];
-	cmd_table->acmd[4]	= blk.u8[1];
-	cmd_table->acmd[5]	= blk.u8[0];
-	if (count > U16_MAX) throw('AHCI');
-	cmd_table->acmd[7]	= count.u8[1];
-	cmd_table->acmd[8]	= count.u8[0];
 
-	cmd_fis->count = count; //Necessary?
+	if (count > U16_MAX) throw('AHCI');
+	MemSet(&write_cmd, 0, sizeof(CAtapiWriteCmd));
+	write_cmd.command = ATAPI_WRITE >> 8;
+	write_cmd.lba	 = EndianU32(blk);
+	write_cmd.count	 = EndianU16(count);
+	MemCopy(&cmd_table->acmd, &write_cmd, sizeof(CAtapiWriteCmd));
 
 	AHCIPortWait(bd->port_num, tS + 2);
 	

@@ -2905,22 +2905,13 @@ class CAtapiReadCmd
 		zero[4];
 };
 
-class CAtapiFormatCmd
+class CAtapiWriteCmd
 {
 	U8	command,
-		code, // should be set to 1 according to MMC spec
-		zero[4];
-};
-
-class CAtapiFormatParamList
-{
-	U8	reserved,
-		code;		// if set all zero, drive should use defaults for all but Immed and VS
-	U16	length;		// should be set to 8 according to MMC spec
-	U32	num_blocks;
-	U8	type,		// 0: Full Format, 0x10: CD-RW/DVD-RW Full Format
-		extra[3];	// "Type Dependent Parameter". Calling it 'extra' for simplicity sake
-					// For type 0: set 0x8000, for type 0x10: CD Fixed Packet Size or DVD ECC block size (16)
+		reserved;
+	U32 lba;
+	U8	reserved;
+	U16	count;
 };
 
 class CAtapiModeHeader
@@ -2985,7 +2976,6 @@ class CAtapiModeWriteList
 #define ATAPI_READ_CAPACITY			0x2500
 #define ATAPI_SEEK					0x2B00
 #define ATAPI_SYNC_CACHE			0x3500
-#define ATAPI_READ_TRACK_INFO		0x5200
 #define ATAPI_MODE_SELECT			0x5500
 #define ATAPI_CLOSE_TRACK_SESSION	0x5B00
 #define ATAPI_BLANK					0xA100

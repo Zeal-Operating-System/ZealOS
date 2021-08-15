@@ -1,4 +1,9 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/15/21 01:51:08----$IV,0$
+* Raised version number to 0.16.
+* Changed $LK+PU,"DVDImageWrite",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,buf = MAlloc"$ to single-buffer single-threaded instead of dual-buffer multi-threaded.
+* Added $LK+PU,"CAtapiWriteCmd",A="MN:CAtapiWriteCmd"$.
+
 $IV,1$----08/13/21 18:26:14----$IV,0$
 * Fixed padding byte amount in $LK+PU,"CISOPriDesc",A="MN:CISOPriDesc"$, added preparer_id member and set in $LK+PU,"RedSeaISO9660",A="FF:::/System/Boot/DiskISORedSea.CC,preparer_id"$.
 

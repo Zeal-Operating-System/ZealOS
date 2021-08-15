@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.15">
+<meta name="generator" content="ZealOS V0.16">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -30,7 +30,7 @@ body {background-color:#fef1f0;}
 <a name="l3"></a>A </span><span class=cF2>Char</span><span class=cF0>acter is a single byte holding an ASCII code for a letter, num or sym.    The </span><span class=cF2>ZealOS</span><span class=cF0> term is a </span><span class=cF2>U8</span><span class=cF0>.
 <a name="l4"></a>
 <a name="l5"></a>Standard ASCII values range from 0 to 127.  Values below 32 are ctrl key's.  So, an ASCII #3 is a </span><span class=cF2>&lt;CTRL-c&gt;</span><span class=cF0>.  ZealOS uses a 
-<a name="l6"></a>couple nonstandard values below 32.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4132"><span class=cF4>Char Definitions</span></a><span class=cF0>.
+<a name="l6"></a>couple nonstandard values below 32.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4122"><span class=cF4>Char Definitions</span></a><span class=cF0>.
 <a name="l7"></a>
 <a name="l8"></a>ASCII #5    is the cursor location in a saved file.
 <a name="l9"></a>ASCII #28 is </span><span class=cF2>&lt;SHIFT-ESC&gt;</span><span class=cF0>.
@@ -39,19 +39,19 @@ body {background-color:#fef1f0;}
 <a name="l12"></a>Technically, </span><span class=cF2>&lt;CTRL-ALT-a&gt;</span><span class=cF0> are </span><span class=cF4><u>screen codes</u></span><span class=cF0>.
 <a name="l13"></a>
 <a name="l14"></a>A </span><span class=cF2>Key</span><span class=cF0> is typically specified with a scan code.  ZealOS scan codes contain the key value in the lowest </span><span class=cF2>U8</span><span class=cF0>, and flags in the 
-<a name="l15"></a>upper 3 bytes.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4186"><span class=cF4>Scan Code Flags</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4220"><span class=cF4>Scan Codes</span></a><span class=cF0>.
+<a name="l15"></a>upper 3 bytes.  See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4176"><span class=cF4>Scan Code Flags</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4210"><span class=cF4>Scan Codes</span></a><span class=cF0>.
 <a name="l16"></a>
 <a name="l17"></a>ZealOS stores scan codes in 8 bytes.
 <a name="l18"></a>    </span><span class=cF2>Byte 0</span><span class=cF0>   is the code.  NumPad keys, SHIFT, ALT, CTRL and GUI keys combined.
-<a name="l19"></a>    </span><span class=cF2>Byte 1-3</span><span class=cF0> are </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4169"><span class=cF4>flags</span></a><span class=cF0>
+<a name="l19"></a>    </span><span class=cF2>Byte 1-3</span><span class=cF0> are </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4159"><span class=cF4>flags</span></a><span class=cF0>
 <a name="l20"></a>
 <a name="l21"></a>The upper 4-bytes are copied from lower 4-bytes.
 <a name="l22"></a>    </span><span class=cF2>Byte 4</span><span class=cF0>   is the code.  Left, Right and NumPad keys distinct.
-<a name="l23"></a>    </span><span class=cF2>Byte 5-7</span><span class=cF0> are </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4169"><span class=cF4>flags</span></a><span class=cF0>
+<a name="l23"></a>    </span><span class=cF2>Byte 5-7</span><span class=cF0> are </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4159"><span class=cF4>flags</span></a><span class=cF0>
 <a name="l24"></a>
 <a name="l25"></a>Run the program </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/MessageLoop.CC.html#l1"><span class=cF4>::/Demo/MessageLoop.CC</span></a><span class=cF0> to examine scan code.  Press </span><span class=cF2>&lt;CTRL-SHIFT-l&gt;</span><span class=cF0> and &quot;Insert ASCII/ScanCode&quot;.
 <a name="l26"></a>
-<a name="l27"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/KeyAlloc.DD.html#l1"><span class=cF4>Key Allocations</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3669"><span class=cF4>CKbdStateGlobals</span></a><span class=cF0>.
+<a name="l27"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/KeyAlloc.DD.html#l1"><span class=cF4>Key Allocations</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3659"><span class=cF4>CKbdStateGlobals</span></a><span class=cF0>.
 <a name="l28"></a>
 <a name="l29"></a>A </span><span class=cF2>String</span><span class=cF0> is a bunch of ASCII characters terminated with a zero.
 </span></pre></body>

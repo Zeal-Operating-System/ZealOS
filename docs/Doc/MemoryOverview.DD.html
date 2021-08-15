@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.15">
+<meta name="generator" content="ZealOS V0.16">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -36,7 +36,7 @@ body {background-color:#fef1f0;}
 <a name="l9"></a> Therefore, ZealOS keeps all code in the lowest 2Gig memory addresses including what would normally be called &quot;the kernel&quot;.  
 <a name="l10"></a>Two Gig is plenty for code, don't worry.
 <a name="l11"></a>
-<a name="l12"></a>You can create new, independent heaps using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). Then, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3565"><span class=cF4>CHeapCtrl</span></a><span class=cF0> as the 2nd arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>(). See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() 
+<a name="l12"></a>You can create new, independent heaps using </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/HeapCtrl.CC.html#l1"><span class=cF4>HeapCtrlInit</span></a><span class=cF0>(). Then, use the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3555"><span class=cF4>CHeapCtrl</span></a><span class=cF0> as the 2nd arg to </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l391"><span class=cF4>MAlloc</span></a><span class=cF0>(). See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/HeapLog.CC.html#l83"><span class=cF4>HeapLog</span></a><span class=cF0>() 
 <a name="l13"></a>for an example.
 <a name="l14"></a>
 <a name="l15"></a>Memory alloced by a task will be freed when the task is killed.  The </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> is a task that never dies. His memory is like 
@@ -54,8 +54,8 @@ body {background-color:#fef1f0;}
 <a name="l27"></a>
 <a name="l28"></a></span><span class=cF5>                                                Single System-wide Memory Map
 <a name="l29"></a>
-<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x000003704F</span><span class=cF0>
-<a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4478"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
+<a name="l30"></a></span><span class=cF2> 0x0000007C00- 0x0000036AEF</span><span class=cF0>
+<a name="l31"></a>  Kernel module, placed here by the boot-loader, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4468"><span class=cF4>BOOT_RAM_BASE</span></a><span class=cF0>.
 <a name="l32"></a>
 <a name="l33"></a></span><span class=cF2> 0x0000096600- 0x0000096FFF</span><span class=cF0>
 <a name="l34"></a>  Boot block relocated here before loading the Kernel module, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootDVD.CC.html#l1"><span class=cF4>BootDVD</span></a><span class=cF0> &amp; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHD.CC.html#l1"><span class=cF4>BootHD</span></a><span class=cF0>.
@@ -63,7 +63,7 @@ body {background-color:#fef1f0;}
 <a name="l36"></a></span><span class=cF2> 0x0000097000- 0x0000097030</span><span class=cF0> Multicore start-up vect code, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MPN_VECT</span></a><span class=cF0>.
 <a name="l37"></a></span><span class=cF2>~0x000009F000- 0x000009FFFF</span><span class=cF0> Extended BIOS data area.
 <a name="l38"></a></span><span class=cF2> 0x00000A0000- 0x00000BFFFF</span><span class=cF0> VGA graphics mem with alias at </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l30"><span class=cF4>text</span></a><span class=cF0>.vga_alias.
-<a name="l39"></a></span><span class=cF2> 0x0000100000- 0x0000101FFF</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4121"><span class=cF4>CSysFixedArea</span></a><span class=cF0> for misc.
+<a name="l39"></a></span><span class=cF2> 0x0000100000- 0x0000101FFF</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4111"><span class=cF4>CSysFixedArea</span></a><span class=cF0> for misc.
 <a name="l40"></a></span><span class=cF2> 0x000010C000- 0x007FFFFFFF</span><span class=cF0> Code Heap mem.
 <a name="l41"></a>
 <a name="l42"></a></span><span class=cF2> 0x00E0000000- 0x00FFFFFFFF</span><span class=cF0>

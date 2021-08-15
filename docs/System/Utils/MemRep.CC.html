@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.15">
+<meta name="generator" content="ZealOS V0.16">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -256,7 +256,7 @@ body {background-color:#fef1f0;}
 <a name="l229"></a>    </span><span class=cF6>&quot;Kernel\t:%08X-%08X\n&quot;</span><span class=cF0>, </span><span class=cFB>mem_boot_base</span><span class=cF0> - </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CBinFile</span><span class=cF0>), bfh;
 <a name="l230"></a>
 <a name="l231"></a>    </span><span class=cF6>&quot;$ID,-2$$BLACK$High Memory\t:00100000-%08X$FG$\n&quot;</span><span class=cF0>, </span><span class=cFB>mem_heap_limit</span><span class=cF0>;
-<a name="l232"></a>    </span><span class=cF6>&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4121"><span class=cF4>SYS_FIXED_AREA</span></a><span class=cF6>\t:%08X-%08X\n&quot;</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CSysFixedArea</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>;
+<a name="l232"></a>    </span><span class=cF6>&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4111"><span class=cF4>SYS_FIXED_AREA</span></a><span class=cF6>\t:%08X-%08X\n&quot;</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0>, </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF1>sizeof</span><span class=cF0>(</span><span class=cF9>CSysFixedArea</span><span class=cF0>) - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l233"></a>
 <a name="l234"></a>    </span><span class=cF6>&quot;</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l532"><span class=cF4>VBE framebuffer</span></a><span class=cF6>\t:%08X-%08X\n&quot;</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.fb_alias, </span><span class=cFB>text</span><span class=cF0>.fb_alias(</span><span class=cF1>U8</span><span class=cF0> *) + </span><span class=cFB>text</span><span class=cF0>.buffer_size - </span><span class=cFE>1</span><span class=cF0>;
 <a name="l235"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>sys_data_bp</span><span class=cF0>)

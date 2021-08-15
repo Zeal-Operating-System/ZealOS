@@ -128,7 +128,7 @@ class CDualBuf
 };
 
 #define DVD_WRITE_BLKS	0xFFFFF
-
+/*
 U0 DVDImageWriteTask(CDualBuf *d)
 {
 	U8		*buf;
@@ -160,22 +160,22 @@ U0 DVDImageWriteTask(CDualBuf *d)
 	}
 	FClose(f);
 }
-
+*/
 U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 {//Write CD/DVD ISO file to disk.
 	CDualBuf	*d = CAlloc(sizeof(CDualBuf));
 	U8			*buf, *in_name2, *in_name3;
-	I64			 n, spc, blk = 0, count;
+	I64			 /*n,*/ spc, blk = 0, count;
 	CDrive		*drive = Letter2Drive(dvd_drive_let);
 	CBlkDev		*bd = drive->bd, *bd2;
-	CTask		*task;
+//	CTask		*task;
 	CFile		*f;
 
 	if (!in_name)
 		in_name = blkdev.default_iso_filename;
 	in_name3 = ExtDefault(in_name, "ISO");
 	in_name2 = FileNameAbs(in_name3);
-	f=FOpen(in_name2, "r");
+	f = FOpen(in_name2, "r");
 	if (!f)
 	{
 		Free(d);
@@ -188,44 +188,45 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 	bd2 = Letter2BlkDev(*in_name2);
 	while (bd2->lock_fwding)
 		bd2 = bd2->lock_fwding;  //If two blkdevs on same controller, use one lock
-//	if ((bd2->type == BDT_ATA || bd2->type == BDT_ATAPI) && bd2->base0 == bd->base0)
-//	{
-//		PrintErr("Can't burn CD/DVD on same ATA controller as file.\n\n");
-//		throw('BlkDev');
-//	}
+	if (bd2->port_num == bd->port_num)
+	{
+		PrintErr("Can't burn CD/DVD on same SATA port as file.\n\n");
+		throw('BlkDev');
+	}
 
 	bd->flags |= BDF_READ_ONLY_OVERRIDE;
 	BlkDevInit(bd);
 	spc = bd->blk_size >> BLK_SIZE_BITS;
 	if (drive->size < count)
 		drive->size = count;
-
+/*
 	d->filename = in_name2;
 	d->dvd_bd = bd;
 	d->buf0 = MAlloc(DVD_WRITE_BLKS << BLK_SIZE_BITS);
 	d->buf1 = MAlloc(DVD_WRITE_BLKS << BLK_SIZE_BITS);
 	d->count = count;
 
-///*
+
 	task = Spawn(&DVDImageWriteTask, d, "Write CD/DVD");
 	while (d->in_buf <= d->out_buf)
 		Yield;
-//*/
+*/
+
+	buf = MAlloc(DVD_WRITE_BLKS << BLK_SIZE_BITS);
+	FBlkRead(f, buf, blk, count);
 
 //	BlkDevLock(bd);
 	AHCIPortWait(bd->port_num, tS + 2);
-//	AHCIAtapiSeek(bd, blk);
-//	AHCIPortWait(bd->port_num, tS + 2);
 	AHCIAtapiBlank(bd);
-//	AHCIAtapiFormat(bd, count);
 	bd->flags |= BDF_LAST_WAS_WRITE;
 	AHCIAtapiModeWriteSet(bd);
 
-//	AHCIAtapiBlksWrite(bd, buf, blk / spc, (count + spc - 1) / spc, FALSE);
-
 	progress1 = 0;
-	progress1_max = count;
+	progress1_max = 1;
 	StrCopy(progress1_desc, "Writing");
+
+	AHCIAtapiBlksWrite(bd, buf, blk / spc, (count + spc - 1) / spc, FALSE);
+/*
 	while (count > 0)
 	{
 //		if (count > DVD_WRITE_BLKS)
@@ -247,17 +248,18 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 		blk += n;
 		progress1 += n;
 	}
-//*/
+*/
 	AHCIAtapiSync(bd);
 
 	progress1 = 0;
 	progress1_max = 2;
-	StrCopy(progress1_desc, "Closing");
+	StrCopy(progress1_desc, "Closing tracks");
 	AHCIAtapiClose(bd, 0x100, 0xFF); //Close tracks
 	progress1++;
 
 	AHCIAtapiSync(bd);
 
+	StrCopy(progress1_desc, "Closing session");
 	AHCIAtapiClose(bd, 0x200); //close disk
 	progress1++;
 
@@ -274,8 +276,8 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 
 	bd->flags &= ~BDF_READ_ONLY_OVERRIDE;
 	BlkDevUnlock(bd);
-	Free(d->buf0);
-	Free(d->buf1);
+//	Free(d->buf0);
+//	Free(d->buf1);
 	Free(in_name2);
 	Free(in_name3);
 	Free(d);
