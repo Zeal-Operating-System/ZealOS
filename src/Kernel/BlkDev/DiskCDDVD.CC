@@ -219,7 +219,7 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 	AHCIPortWait(bd->port_num, tS + 2);
 	AHCIAtapiBlank(bd);
 	bd->flags |= BDF_LAST_WAS_WRITE;
-	AHCIAtapiModeWriteSet(bd);
+	AHCIAtapiModeWriteSelect(bd);
 
 	progress1 = 0;
 	progress1_max = 1;

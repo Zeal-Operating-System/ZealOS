@@ -31,7 +31,7 @@ body {background-color:#fef1f0;}
 <a name="l4"></a>
 <a name="l5"></a></span><span class=cF1>U0</span><span class=cF0> MakeMyISO(</span><span class=cF1>U8</span><span class=cF0> *_out_iso_filename)
 <a name="l6"></a>{</span><span class=cF2>//Does everything with current drive.</span><span class=cF0>
-<a name="l7"></a></span><span class=cF2>//If you have not recompiled Kernel and defined your CD/DVD drive, use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l301"><span class=cF4>Mount</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>//If you have not recompiled Kernel and defined your CD/DVD drive, use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l8"></a>
 <a name="l9"></a>    </span><span class=cF1>U8</span><span class=cF0> *out_iso_filename = </span><span class=cF5>FileNameAbs</span><span class=cF0>(_out_iso_filename);
 <a name="l10"></a>    </span><span class=cF9>I64</span><span class=cF0> line_count = </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-r&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/System/*&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/Compiler/*&quot;</span><span class=cF0>, </span><span class=cF6>&quot;-S+$&quot;</span><span class=cF0>) + </span><span class=cF5>LineRep</span><span class=cF0>(</span><span class=cF6>&quot;/Kernel/*&quot;</span><span class=cF0>);

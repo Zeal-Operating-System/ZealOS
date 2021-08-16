@@ -69,7 +69,7 @@ body {background-color:#fef1f0;}
 <a name="l42"></a>        res = </span><span class=cF5>BlkDevNextFreeSlot</span><span class=cF0>(first_drive_let, type);
 <a name="l43"></a>        res-&gt;port_num = port_num;
 <a name="l44"></a>        res-&gt;ahci_port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[port_num];
-<a name="l45"></a>        res-&gt;ahci_port-&gt;cmd_list_base = </span><span class=cF3>NULL</span><span class=cF0>; </span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1018"><span class=cF4>AHCIAtaInit</span></a><span class=cF2> ...</span><span class=cF0>
+<a name="l45"></a>        res-&gt;ahci_port-&gt;cmd_list_base = </span><span class=cF3>NULL</span><span class=cF0>; </span><span class=cF2>// See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskAHCI.CC.html#l1021"><span class=cF4>AHCIAtaInit</span></a><span class=cF2> ...</span><span class=cF0>
 <a name="l46"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>BlkDevAdd</span><span class=cF7>(</span><span class=cF0>res,, </span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
 <a name="l47"></a>            </span><span class=cF1>return</span><span class=cF0> res;
 <a name="l48"></a>    </span><span class=cF7>}</span><span class=cF0>

@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/16/21 00:17:55----$IV,0$
+* Added $LK+PU,"CAtapiCloseCmd",A="MN:CAtapiCloseCmd"$.
+* Add try-catch blocks to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,try"$ and $LK+PU,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$.
+
 $IV,1$----08/15/21 01:51:08----$IV,0$
 * Raised version number to 0.16.
 * Changed $LK+PU,"DVDImageWrite",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,buf = MAlloc"$ to single-buffer single-threaded instead of dual-buffer multi-threaded.
@@ -16,7 +20,7 @@ $IV,1$----08/13/21 13:21:32----$IV,0$
 
 $IV,1$----08/09/21 01:54:50----$IV,0$
 * Raised version number to 0.14.
-* Implemented $LK+PU,"AHCIAtapiModeWriteSet",A="MN:AHCIAtapiModeWriteSet"$ to set up ATAPI disc burner write configurations.
+* Implemented $LK+PU,"AHCIAtapiModeWriteSelect",A="MN:AHCIAtapiModeWriteSelect"$ to set up ATAPI disc burner write configurations.
 
 $IV,1$----08/08/21 20:30:08----$IV,0$
 * Implemented $LK+PU,"AHCIAtapiBlank",A="MN:AHCIAtapiBlank"$, default is minimal disc blank.

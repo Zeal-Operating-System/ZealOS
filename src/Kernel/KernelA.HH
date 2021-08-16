@@ -2914,6 +2914,15 @@ class CAtapiWriteCmd
 	U16	count;
 };
 
+class CAtapiCloseCmd
+{
+	U8	command,
+		reserved,
+		code,
+		reserved;
+	U16	track_num;
+};
+
 class CAtapiModeHeader
 {
 	U16	data_length;

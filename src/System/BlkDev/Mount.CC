@@ -97,7 +97,13 @@ public I64 SATARep(I64 bd_type=BDT_NULL)
 					else // ATA
 						temp_blkdev->first_drive_let = 'C';
 
-					AHCIPortInit(temp_blkdev, port, i);
+					try
+						AHCIPortInit(temp_blkdev, port, i);
+					catch
+					{
+						Fs->catch_except = TRUE;
+						"Error at SATA Port %d", i;
+					}
 					"\n\t";
 
 					if (temp_blkdev->dev_id_record)

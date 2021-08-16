@@ -342,6 +342,7 @@ Bool AHCIAtapiClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
 	CAHCIPort		*port		= bd->ahci_port;
 	I64				 cmd_slot	= AHCIPortCmdSlotGet(bd->port_num);
 	CPortCmdHeader	*cmd_header	= AHCIPortActiveHeaderGet(bd->port_num, cmd_slot);
+	CAtapiCloseCmd	 close_cmd;
 
 	if (port->signature != AHCI_PxSIG_ATAPI)
 	{
@@ -359,10 +360,12 @@ Bool AHCIAtapiClose(CBlkDev *bd, I64 close_field=0x200, I64 track=0)
 	cmd_fis->type		= FISt_H2D;
 	Bts(&cmd_fis->desc, AHCI_CF_DESCf_C); //Set Command bit in H2D FIS.
 	cmd_fis->command	= ATA_PACKET;
-	cmd_table->acmd[0]	= ATAPI_CLOSE_TRACK_SESSION >> 8;
-	cmd_table->acmd[2]	= close_field.u8[1];
-	cmd_table->acmd[4]	= track.u8[1];
-	cmd_table->acmd[5]	= track.u8[0];
+
+	MemSet(&close_cmd, 0, sizeof(CAtapiCloseCmd));
+	close_cmd.command	= ATAPI_CLOSE_TRACK_SESSION >> 8;
+	close_cmd.code		= close_field.u8[1];
+	close_cmd.track_num	= EndianU16(track);
+	MemCopy(&cmd_table->acmd, &close_cmd, sizeof(CAtapiCloseCmd));
 
 	AHCIPortWait(bd->port_num, tS + 2);
 	Bts(&port->cmd_issue, cmd_slot); //Issue the command.
@@ -419,7 +422,7 @@ Bool AHCIAtapiBlank(CBlkDev *bd, Bool minimal=TRUE)
 	return TRUE;
 }
 
-Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
+Bool AHCIAtapiModeWriteSelect(CBlkDev *bd)
 { // Set ATAPI drive write configuration.
 	CPortCmdTable			*cmd_table;
 	CFisH2D					*cmd_fis;
@@ -435,12 +438,12 @@ Bool AHCIAtapiModeWriteSet(CBlkDev *bd)
 	}
 
 	mode_list = CAlloc(sizeof(CAtapiModeWriteList), sys_task->code_heap);
-	mode_list->page.code				= 0x05;
-	mode_list->page.length				= 0x32;
-	mode_list->page.type				= 0x00; // packet mode
-	mode_list->page.mode				= 4 | 1 << 5; // set cd track mode, set Fixed Packet Size bit
-	mode_list->page.block_type			= 8; // mode 1: 2048-size blocks of data
-	mode_list->page.packet_size			= EndianU32(16);
+	mode_list->page.code				= 0x05;			// Write Parameters mode page code
+	mode_list->page.length				= 0x32;			// 0x32 indicates no support for Vendor Specific field.
+	mode_list->page.type				= 0x00;			// Packet/Incremental mode
+	mode_list->page.mode				= 4 | 1 << 5;	// Set CD Track Mode, set Fixed Packet Size bit
+	mode_list->page.block_type			= 8;			// Mode 1: 2048-size blocks of data
+	mode_list->page.packet_size			= EndianU32(16);// Number of User Data Blocks per Fixed Packet. DVD media default: 16.
 
 	Bts(&cmd_header->desc, AHCI_CH_DESCf_A);
 
@@ -1145,9 +1148,17 @@ Bool AHCIBootDVDProbeAll(CBlkDev *bd)
 			{
 				"AHCI: Probing ATAPI drive at port %d\n", i;
 
-				AHCIPortInit(bd, port, i);
+				try
+				{
+					AHCIPortInit(bd, port, i);
 
-				AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1, FALSE);
+					AHCIAtapiBlksRead(bd, buf, sys_boot_blk, 1, FALSE);
+				}
+				catch
+				{
+					Fs->catch_except = TRUE;
+					"AHCI: Error at Port %d", i;
+				}
 
 				kernel = buf + sys_boot_src.u16[1] << BLK_SIZE_BITS;
 
