@@ -73,7 +73,8 @@ U0 DocBorderListDraw(CDoc *doc)
 		attr = win_task->border_attr << 8;
 		while (i-- && y > 0)
 		{
-			TextChar(win_task, TRUE, -1, --y, attr + ch & 0xFF);
+//			TextChar(win_task, TRUE, -1, --y, attr + ch & 0xFF);
+			TextChar(win_task, TRUE, -1, --y, (attr >> 8 & 0xF) << 12 + (attr >> 12 & 0xF) << 8 + ch & 0xFF);
 			ch >>= 8;
 		}
 		y--;

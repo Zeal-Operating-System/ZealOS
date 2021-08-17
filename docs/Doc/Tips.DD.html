@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.16">
+<meta name="generator" content="ZealOS V0.17">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -43,7 +43,7 @@ body {background-color:#fef1f0;}
 <a name="l16"></a>make the partition unbootable.  Boot to the second partition or boot to a standard ZealOS CD/DVD and use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF0>() to mount your 
 <a name="l17"></a>hard drive.
 <a name="l18"></a>
-<a name="l19"></a>* You can copy your files to a mirrored ident partition, periodically with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l148"><span class=cF4>CopyTree</span></a><span class=cF0>() commands in scripts.  You can do merge 
+<a name="l19"></a>* You can copy your files to a mirrored ident partition, periodically with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l145"><span class=cF4>CopyTree</span></a><span class=cF0>() commands in scripts.  You can do merge 
 <a name="l20"></a>commands with a menu entry like this:
 <a name="l21"></a></span><span class=cF2>Merge(\&quot;C:/*\&quot;,\&quot;D:/*\&quot;,\&quot;+r+d\&quot;);</span><span class=cF0> to check your changes.
 <a name="l22"></a>
@@ -81,13 +81,13 @@ body {background-color:#fef1f0;}
 <a name="l54"></a>wallpaper. The original intent was to indicate how far along operations were. There's no coordination, so different apps might 
 <a name="l55"></a>interfere. They're most often used for debugging--just values easily viewed. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Progress.CC.html#l1"><span class=cF4>::/Demo/Progress.CC</span></a><span class=cF0>.
 <a name="l56"></a>
-<a name="l57"></a>* Use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l202"><span class=cF4>DocMax</span></a><span class=cF0>() to adjust the size of the cmd line buf. It counts </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> entries, not lines.
+<a name="l57"></a>* Use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l203"><span class=cF4>DocMax</span></a><span class=cF0>() to adjust the size of the cmd line buf. It counts </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> entries, not lines.
 <a name="l58"></a>
 <a name="l59"></a>* Many data structures have a </span><span class=cF2>user_data</span><span class=cF0> member. Those are available for you to store a data item, for convenience. </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3977"><span class=cF4>CTask</span></a><span class=cF0>, </span><span class=cF4>
 <a name="l60"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1326"><span class=cF4>CDocEntry</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3204"><span class=cF4>CDirEntry</span></a><span class=cF0> have them. You shouldn't encounter conflicts with ZealOS using them.
 <a name="l61"></a>
 <a name="l62"></a>* If, for some strange reason, you wanted to reduce mem usage, make a smaller disk cache when you recompile the kernel; 
-<a name="l63"></a>disabling </span><span class=cF2>AutoComplete</span><span class=cF0>; Specify smaller stack sizes when doing </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>(), change </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3544"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0>, and using </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l202"><span class=cF4>DocMax</span></a><span class=cF0>() to reduce 
+<a name="l63"></a>disabling </span><span class=cF2>AutoComplete</span><span class=cF0>; Specify smaller stack sizes when doing </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KTask.CC.html#l264"><span class=cF4>Spawn</span></a><span class=cF0>(), change </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3544"><span class=cF4>MEM_DEFAULT_STACK</span></a><span class=cF0>, and using </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l203"><span class=cF4>DocMax</span></a><span class=cF0>() to reduce 
 <a name="l64"></a>the cmd line buffer size.
 <a name="l65"></a>
 <a name="l66"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/Merge.CC.html#l45"><span class=cF4>Merge</span></a><span class=cF0>() can be used to see what's changed. The </span><span class=cF2>+d</span><span class=cF0> flag will show differences of files which have changed and allow you to 

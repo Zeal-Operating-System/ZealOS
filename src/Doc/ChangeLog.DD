@@ -1,7 +1,13 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/16/21 20:35:44----$IV,0$
+* Raised version number to 0.17.
+* Fixed $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,max_blk + 1"$ block count.
+* Changed left window border text to use $LK+PU,"inverted color attribute",A="FF:::/System/DolDoc/DocRecalcLib.CC,attr >> 8"$.
+* Fixed $LK+PU,"ISOInit",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,id - 4"$ to account for non-ZealOS CISOPriDesc.
+
 $IV,1$----08/16/21 00:17:55----$IV,0$
 * Added $LK+PU,"CAtapiCloseCmd",A="MN:CAtapiCloseCmd"$.
-* Add try-catch blocks to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,try"$ and $LK+PU,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$.
+* Added try-catch blocks to $LK+PU,"SATARep",A="FF:::/System/BlkDev/Mount.CC,try"$ and $LK+PU,"AHCIBootDVDProbeAll",A="MN:AHCIBootDVDProbeAll"$.
 
 $IV,1$----08/15/21 01:51:08----$IV,0$
 * Raised version number to 0.16.

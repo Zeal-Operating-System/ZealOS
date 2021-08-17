@@ -72,9 +72,6 @@ public U8 *Dump(U8 *filename, Bool write=FALSE)
 
 public Bool Copy(U8 *src_files_find_mask, U8 *dst_files_find_mask=".")
 {//Copy files.
-//If the name ends in ".Z", it will
-	//be stored compressed.  If not ".Z"
-	//it will be stored uncompressed.
 	Bool		 res = TRUE;
 	CDirContext	*dirc;
 	CDirEntry	*tmpde, *tmpde1;

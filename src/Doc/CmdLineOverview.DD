@@ -16,8 +16,6 @@ Directories are referenced with $FG,2$/$FG$ not $FG,2$\$FG$.	There is a current 
 
 >$FG,2$Ed("NewFile.CC");$FG$		Invokes the editor. See $LK,"Doc Link Type",A="MN:LK_FILE"$.
 
-Most filenames end in $FG,2$$FG$ because they are stored compressed.
-
 Drives are specified with a letter.  The boot drive is specified with a '$FG,2$:$FG$'.	The home dir drive is specified with a $FG,2$'~'$FG$.
 
 >$FG,2$Drive('B');$FG$			B drive

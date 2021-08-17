@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.16">
+<meta name="generator" content="ZealOS V0.17">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -37,7 +37,7 @@ body {background-color:#fef1f0;}
 <a name="l10"></a>
 <a name="l11"></a>Simplicity is a goal to </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Strategy.DD.html#l1"><span class=cF4>keep the line count down</span></a><span class=cF0>, so it's easy to tinker with.  As it turns-out, simplicity makes it faster in 
 <a name="l12"></a>some ways, too.  It never switches privilege levels, never changes address maps, tends to load whole contiguous files and 
-<a name="l13"></a>other, similar things which boost speed.    It's only 94,700 lines of code including the kernel, the 64-bit compiler, the 
+<a name="l13"></a>other, similar things which boost speed.    It's only 94,699 lines of code including the kernel, the 64-bit compiler, the 
 <a name="l14"></a>graphics library and all the tools. More importantly, it's designed to keep the user's line count down -- you can do a </span><span class=cF4>
 <a name="l15"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/HelloWorld.DD.html#l1"><span class=cF4>Hello World</span></a><span class=cF0> application in one line of code and can put graphics on the screen with a three line program!
 <a name="l16"></a>
@@ -154,7 +154,7 @@ body {background-color:#fef1f0;}
 <a name="l127"></a>requests, so you can ask him to </span><span class=cF2>#include</span><span class=cF0> something, placing that code system-wide.  A funny story is that originally Terry 
 <a name="l128"></a>Davis called it the </span><span class=cF2>root</span><span class=cF0> task and even had a </span><span class=cF2>/Root</span><span class=cF0> directory :-)    </span><span class=cF2>System</span><span class=cF0> executes </span><a href="https://zeal-operating-system.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>::/StartOS.CC</span></a><span class=cF0> at boot time.
 <a name="l129"></a>
-<a name="l130"></a>For easy back-ups, place everything you author in your </span><span class=cF2>/Home</span><span class=cF0> directory and subdirectories.  Then, use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l148"><span class=cF4>CopyTree</span></a><span class=cF0>().   That 
+<a name="l130"></a>For easy back-ups, place everything you author in your </span><span class=cF2>/Home</span><span class=cF0> directory and subdirectories.  Then, use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/ZDiskA.CC.html#l145"><span class=cF4>CopyTree</span></a><span class=cF0>().   That 
 <a name="l131"></a>should make upgrading easy, too.  Customizable start-up scripts go in your </span><span class=cF2>/Home</span><span class=cF0> directory. The default start-up scripts are 
 <a name="l132"></a>in the root directory.  Copy the start-up files you wish to customize into </span><span class=cF2>/Home</span><span class=cF0> and modify them.   See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/GuideLines.DD.html#l29"><span class=cF4>Home Files</span></a><span class=cF0>. You can 
 <a name="l133"></a>make your own distro that includes everything and is a bootable live CD with </span><a href="https://zeal-operating-system.github.io/ZealOS/Misc/DoDistro.CC.html#l1"><span class=cF4>::/Misc/DoDistro.CC</span></a><span class=cF0>.

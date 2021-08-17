@@ -34,9 +34,9 @@ Bool ISOInit(CDrive *drive, I64 blk)
 						case ISOT_SUPPLEMENTARY_DESC:
 							de = &iso->root_dir_record;
 							drive->size = iso->vol_space_size.little * bd->blk_size >> BLK_SIZE_BITS;
-							if (!StrCompare(iso->publisher_id, "ZealOS RedSea")		||
-								!StrCompare(iso->publisher_id, "ZenithOS RedSea")	||
-								!StrCompare(iso->publisher_id, "TempleOS RedSea"))
+							if (!StrCompare(iso->publisher_id, "ZealOS RedSea")			||
+								!StrCompare(iso->publisher_id - 4, "ZenithOS RedSea")	||
+								!StrCompare(iso->publisher_id - 4, "TempleOS RedSea"))
 							{
 								drive->fs_type = FSt_REDSEA;
 								bd->drv_offset = drive->drv_offset = 19 << 2 + drv_offset;
@@ -91,7 +91,8 @@ U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 		throw('BlkDev');
 	if (!out_name)
 		out_name = blkdev.default_iso_filename;
-	count = CeilU64(drive->size, spc);
+//	count = CeilU64(drive->size, spc);
+	count = bd->max_blk + 1;
 	while (count > 0)
 	{
 		if (count > COPY_BUF_BLKS)

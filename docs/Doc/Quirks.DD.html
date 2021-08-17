@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=US-ASCII">
-<meta name="generator" content="ZealOS V0.16">
+<meta name="generator" content="ZealOS V0.17">
 <style type="text/css">
 body {background-color:#fef1f0;}
 .cF0{color:#000000;background-color:#fef1f0;}
@@ -49,7 +49,7 @@ body {background-color:#fef1f0;}
 <a name="l22"></a>* A terminal task has a </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> document structure that remains active even when you change </span><span class=cF4>Fs-&gt;draw_it</span><span class=cF0>.   To prevent links in 
 <a name="l23"></a>the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> from being activated when the user clicks in the window, do one of three things:
 <a name="l24"></a>  
-<a name="l25"></a>  A) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l121"><span class=cF4>DocBottom</span></a><span class=cF0>() followed by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l135"><span class=cF4>DocClear</span></a><span class=cF0>() to clear the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> so it has no active widgets.
+<a name="l25"></a>  A) </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l122"><span class=cF4>DocBottom</span></a><span class=cF0>() followed by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l136"><span class=cF4>DocClear</span></a><span class=cF0>() to clear the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> so it has no active widgets.
 <a name="l26"></a>  
 <a name="l27"></a>  B) Disable window mgr bttn click checking with </span><span class=cF4>Fs-&gt;win_inhibit</span><span class=cF0> set to mask </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1552"><span class=cF4>WIF_SELF_MS_L</span></a><span class=cF0>|</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1566"><span class=cF4>WIF_FOCUS_TASK_MS_L_D</span></a><span class=cF0>|</span><span class=cF4>
 <a name="l28"></a>  </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1554"><span class=cF4>WIF_SELF_MS_R</span></a><span class=cF0>|</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1568"><span class=cF4>WIF_FOCUS_TASK_MS_R_D</span></a><span class=cF0>.  This inhibits window mgr operations but still generates messages from bttn clicks.
