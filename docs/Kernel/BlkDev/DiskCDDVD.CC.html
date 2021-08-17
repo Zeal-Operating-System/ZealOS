@@ -243,72 +243,75 @@ body {background-color:#fef1f0;}
 <a name="l216"></a>    buf = </span><span class=cF5>MAlloc</span><span class=cF0>(DVD_WRITE_BLKS &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l217"></a>    </span><span class=cF5>FBlkRead</span><span class=cF0>(f, buf, blk, count);
 <a name="l218"></a>
-<a name="l219"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>BlkDevLock(bd);</span><span class=cF0>
-<a name="l220"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
-<a name="l221"></a>    </span><span class=cF5>AHCIAtapiBlank</span><span class=cF0>(bd);
-<a name="l222"></a>    bd-&gt;flags |= </span><span class=cF3>BDF_LAST_WAS_WRITE</span><span class=cF0>;
-<a name="l223"></a>    </span><span class=cFD>AHCIAtapiModeWriteSelect</span><span class=cF0>(bd);
-<a name="l224"></a>
-<a name="l225"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l226"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
-<a name="l227"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Writing&quot;</span><span class=cF0>);
-<a name="l228"></a>
-<a name="l229"></a>    </span><span class=cFD>AHCIAtapiBlksWrite</span><span class=cF0>(bd, buf, blk / spc, </span><span class=cF7>(</span><span class=cF0>count + spc - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / spc, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l230"></a></span><span class=cF2>/*</span><span class=cF0>
-<a name="l231"></a>    </span><span class=cF2>while (count &gt; 0)</span><span class=cF0>
-<a name="l232"></a>    </span><span class=cF2>{</span><span class=cF0>
-<a name="l233"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (count &gt; DVD_WRITE_BLKS)</span><span class=cF0>
-<a name="l234"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>n = DVD_WRITE_BLKS;</span><span class=cF0>
-<a name="l235"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>else</span><span class=cF0>
-<a name="l236"></a>            </span><span class=cF2>n = count;</span><span class=cF0>
-<a name="l237"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (n &gt; bd-&gt;max_writes)</span><span class=cF0>
-<a name="l238"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>n = bd-&gt;max_writes;</span><span class=cF0>
-<a name="l239"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (d-&gt;out_buf &amp; 1)</span><span class=cF0>
-<a name="l240"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>buf = d-&gt;buf1;</span><span class=cF0>
-<a name="l241"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>else</span><span class=cF0>
-<a name="l242"></a>            </span><span class=cF2>buf = d-&gt;buf0;</span><span class=cF0>
-<a name="l243"></a>        </span><span class=cF2>while (d-&gt;in_buf &lt;= d-&gt;out_buf)</span><span class=cF0>
-<a name="l244"></a>            </span><span class=cF2>Yield;</span><span class=cF0>
-<a name="l245"></a>        </span><span class=cF2>&quot;AHCIAtapiBlksWrite(bd, 0x%0X, 0x%0X, %d, FALSE);\n&quot;, buf, blk / spc, (n + spc - 1) / spc;</span><span class=cF0>
-<a name="l246"></a>        </span><span class=cF2>AHCIAtapiBlksWrite(bd, buf, blk / spc, (n + spc - 1) / spc, FALSE);</span><span class=cF0>
-<a name="l247"></a>        </span><span class=cF2>d-&gt;out_buf++;</span><span class=cF0>
-<a name="l248"></a>        </span><span class=cF2>count -= n;</span><span class=cF0>
-<a name="l249"></a>        </span><span class=cF2>blk += n;</span><span class=cF0>
-<a name="l250"></a>        </span><span class=cF2>progress1 += n;</span><span class=cF0>
-<a name="l251"></a>    </span><span class=cF2>}</span><span class=cF0>
-<a name="l252"></a></span><span class=cF2>*/</span><span class=cF0>
-<a name="l253"></a>    </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
-<a name="l254"></a>
-<a name="l255"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l256"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>2</span><span class=cF0>;
-<a name="l257"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Closing tracks&quot;</span><span class=cF0>);
-<a name="l258"></a>    </span><span class=cFD>AHCIAtapiClose</span><span class=cF0>(bd, </span><span class=cFE>0x100</span><span class=cF0>, </span><span class=cFE>0xFF</span><span class=cF0>); </span><span class=cF2>//Close tracks</span><span class=cF0>
-<a name="l259"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
-<a name="l260"></a>
-<a name="l261"></a>    </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
-<a name="l262"></a>
-<a name="l263"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Closing session&quot;</span><span class=cF0>);
-<a name="l264"></a>    </span><span class=cFD>AHCIAtapiClose</span><span class=cF0>(bd, </span><span class=cFE>0x200</span><span class=cF0>); </span><span class=cF2>//close disk</span><span class=cF0>
-<a name="l265"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l219"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l220"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>1</span><span class=cF0>;
+<a name="l221"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Blanking&quot;</span><span class=cF0>);
+<a name="l222"></a>
+<a name="l223"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>BlkDevLock(bd);</span><span class=cF0>
+<a name="l224"></a>    </span><span class=cFD>AHCIPortWait</span><span class=cF0>(bd-&gt;port_num, </span><span class=cF5>tS</span><span class=cF0> + </span><span class=cFE>2</span><span class=cF0>);
+<a name="l225"></a>    </span><span class=cF5>AHCIAtapiBlank</span><span class=cF0>(bd);
+<a name="l226"></a>    bd-&gt;flags |= </span><span class=cF3>BDF_LAST_WAS_WRITE</span><span class=cF0>;
+<a name="l227"></a>
+<a name="l228"></a>    </span><span class=cFD>AHCIAtapiModeWriteSelect</span><span class=cF0>(bd);
+<a name="l229"></a>
+<a name="l230"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Writing&quot;</span><span class=cF0>);
+<a name="l231"></a>    </span><span class=cFD>AHCIAtapiBlksWrite</span><span class=cF0>(bd, buf, blk / spc, </span><span class=cF7>(</span><span class=cF0>count + spc - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0> / spc, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l232"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l233"></a>
+<a name="l234"></a></span><span class=cF2>/*</span><span class=cF0>
+<a name="l235"></a>    </span><span class=cF2>while (count &gt; 0)</span><span class=cF0>
+<a name="l236"></a>    </span><span class=cF2>{</span><span class=cF0>
+<a name="l237"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (count &gt; DVD_WRITE_BLKS)</span><span class=cF0>
+<a name="l238"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>n = DVD_WRITE_BLKS;</span><span class=cF0>
+<a name="l239"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>else</span><span class=cF0>
+<a name="l240"></a>            </span><span class=cF2>n = count;</span><span class=cF0>
+<a name="l241"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (n &gt; bd-&gt;max_writes)</span><span class=cF0>
+<a name="l242"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>n = bd-&gt;max_writes;</span><span class=cF0>
+<a name="l243"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>if (d-&gt;out_buf &amp; 1)</span><span class=cF0>
+<a name="l244"></a></span><span class=cF2>//</span><span class=cF0>          </span><span class=cF2>buf = d-&gt;buf1;</span><span class=cF0>
+<a name="l245"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>else</span><span class=cF0>
+<a name="l246"></a>            </span><span class=cF2>buf = d-&gt;buf0;</span><span class=cF0>
+<a name="l247"></a>        </span><span class=cF2>while (d-&gt;in_buf &lt;= d-&gt;out_buf)</span><span class=cF0>
+<a name="l248"></a>            </span><span class=cF2>Yield;</span><span class=cF0>
+<a name="l249"></a>        </span><span class=cF2>&quot;AHCIAtapiBlksWrite(bd, 0x%0X, 0x%0X, %d, FALSE);\n&quot;, buf, blk / spc, (n + spc - 1) / spc;</span><span class=cF0>
+<a name="l250"></a>        </span><span class=cF2>AHCIAtapiBlksWrite(bd, buf, blk / spc, (n + spc - 1) / spc, FALSE);</span><span class=cF0>
+<a name="l251"></a>        </span><span class=cF2>d-&gt;out_buf++;</span><span class=cF0>
+<a name="l252"></a>        </span><span class=cF2>count -= n;</span><span class=cF0>
+<a name="l253"></a>        </span><span class=cF2>blk += n;</span><span class=cF0>
+<a name="l254"></a>        </span><span class=cF2>progress1 += n;</span><span class=cF0>
+<a name="l255"></a>    </span><span class=cF2>}</span><span class=cF0>
+<a name="l256"></a></span><span class=cF2>*/</span><span class=cF0>
+<a name="l257"></a>    </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
+<a name="l258"></a>
+<a name="l259"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l260"></a>    </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>2</span><span class=cF0>;
+<a name="l261"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Closing track&quot;</span><span class=cF0>);
+<a name="l262"></a>    </span><span class=cFD>AHCIAtapiClose</span><span class=cF0>(bd, </span><span class=cFE>0x100</span><span class=cF0>, </span><span class=cFE>0xFF</span><span class=cF0>); </span><span class=cF2>//Close track</span><span class=cF0>
+<a name="l263"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l264"></a>
+<a name="l265"></a>    </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
 <a name="l266"></a>
-<a name="l267"></a>    </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
-<a name="l268"></a>    </span><span class=cF1>if</span><span class=cF0> (media_type == </span><span class=cF3>MT_DVD</span><span class=cF0>)
-<a name="l269"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l270"></a>        </span><span class=cFD>AHCIAtapiClose</span><span class=cF0>(bd, </span><span class=cFE>0x300</span><span class=cF0>);
-<a name="l271"></a>        </span><span class=cFB>progress1</span><span class=cF0>++;
-<a name="l272"></a>        </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
-<a name="l273"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l274"></a>
-<a name="l275"></a>    *</span><span class=cFB>progress1_desc</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l276"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l267"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>progress1_desc</span><span class=cF0>, </span><span class=cF6>&quot;Closing session&quot;</span><span class=cF0>);
+<a name="l268"></a>    </span><span class=cFD>AHCIAtapiClose</span><span class=cF0>(bd, </span><span class=cFE>0x200</span><span class=cF0>); </span><span class=cF2>//close disk</span><span class=cF0>
+<a name="l269"></a>    </span><span class=cFB>progress1</span><span class=cF0>++;
+<a name="l270"></a>
+<a name="l271"></a>    </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
+<a name="l272"></a>    </span><span class=cF1>if</span><span class=cF0> (media_type == </span><span class=cF3>MT_DVD</span><span class=cF0>)
+<a name="l273"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l274"></a>        </span><span class=cFD>AHCIAtapiClose</span><span class=cF0>(bd, </span><span class=cFE>0x300</span><span class=cF0>);
+<a name="l275"></a>        </span><span class=cFD>AHCIAtapiSync</span><span class=cF0>(bd);
+<a name="l276"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l277"></a>
-<a name="l278"></a>    bd-&gt;flags &amp;= ~</span><span class=cF3>BDF_READ_ONLY_OVERRIDE</span><span class=cF0>;
-<a name="l279"></a>    </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
-<a name="l280"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>Free(d-&gt;buf0);</span><span class=cF0>
-<a name="l281"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>Free(d-&gt;buf1);</span><span class=cF0>
-<a name="l282"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_name2);
-<a name="l283"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_name3);
-<a name="l284"></a>    </span><span class=cF5>Free</span><span class=cF0>(d);
-<a name="l285"></a>}
+<a name="l278"></a>    *</span><span class=cFB>progress1_desc</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l279"></a>    </span><span class=cFB>progress1</span><span class=cF0> = </span><span class=cFB>progress1_max</span><span class=cF0> = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l280"></a>
+<a name="l281"></a>    bd-&gt;flags &amp;= ~</span><span class=cF3>BDF_READ_ONLY_OVERRIDE</span><span class=cF0>;
+<a name="l282"></a>    </span><span class=cF5>BlkDevUnlock</span><span class=cF0>(bd);
+<a name="l283"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>Free(d-&gt;buf0);</span><span class=cF0>
+<a name="l284"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>Free(d-&gt;buf1);</span><span class=cF0>
+<a name="l285"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_name2);
+<a name="l286"></a>    </span><span class=cF5>Free</span><span class=cF0>(in_name3);
+<a name="l287"></a>    </span><span class=cF5>Free</span><span class=cF0>(d);
+<a name="l288"></a>}
 </span></pre></body>
 </html>

@@ -216,17 +216,21 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 	buf = MAlloc(DVD_WRITE_BLKS << BLK_SIZE_BITS);
 	FBlkRead(f, buf, blk, count);
 
+	progress1 = 0;
+	progress1_max = 1;
+	StrCopy(progress1_desc, "Blanking");
+
 //	BlkDevLock(bd);
 	AHCIPortWait(bd->port_num, tS + 2);
 	AHCIAtapiBlank(bd);
 	bd->flags |= BDF_LAST_WAS_WRITE;
+
 	AHCIAtapiModeWriteSelect(bd);
 
-	progress1 = 0;
-	progress1_max = 1;
 	StrCopy(progress1_desc, "Writing");
-
 	AHCIAtapiBlksWrite(bd, buf, blk / spc, (count + spc - 1) / spc, FALSE);
+	progress1++;
+
 /*
 	while (count > 0)
 	{
@@ -254,8 +258,8 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 
 	progress1 = 0;
 	progress1_max = 2;
-	StrCopy(progress1_desc, "Closing tracks");
-	AHCIAtapiClose(bd, 0x100, 0xFF); //Close tracks
+	StrCopy(progress1_desc, "Closing track");
+	AHCIAtapiClose(bd, 0x100, 0xFF); //Close track
 	progress1++;
 
 	AHCIAtapiSync(bd);
@@ -268,7 +272,6 @@ U0 DVDImageWrite(U8 dvd_drive_let, U8 *in_name=NULL, I64 media_type=MT_DVD)
 	if (media_type == MT_DVD)
 	{
 		AHCIAtapiClose(bd, 0x300);
-		progress1++;
 		AHCIAtapiSync(bd);
 	}
 

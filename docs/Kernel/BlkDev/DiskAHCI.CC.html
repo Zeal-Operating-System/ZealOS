@@ -1108,161 +1108,157 @@ body {background-color:#fef1f0;}
 <a name="l1081"></a>    </span><span class=cF5>Bts</span><span class=cF0>(&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ghc, </span><span class=cF3>AHCI_GHCf_AHCI_ENABLE</span><span class=cF0>);
 <a name="l1082"></a>    </span><span class=cF6>&quot;AHCI: GHC.AE\n&quot;</span><span class=cF0>;
 <a name="l1083"></a>
-<a name="l1084"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>AHCIHbaReset;</span><span class=cF0>
-<a name="l1085"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>&quot;AHCI: HBA Reset\n&quot;;</span><span class=cF0>
-<a name="l1086"></a>
-<a name="l1087"></a>
-<a name="l1088"></a>    </span><span class=cF2>//Transferring ownership from BIOS if supported.</span><span class=cF0>
-<a name="l1089"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;caps_ext, </span><span class=cF3>AHCI_CAPSEXTf_BOH</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1090"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1091"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_OOS</span><span class=cF0>);
-<a name="l1092"></a>        </span><span class=cF6>&quot;AHCI: Transferring ownership from BIOS\n&quot;</span><span class=cF0>;
-<a name="l1093"></a>
-<a name="l1094"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BOS</span><span class=cF7>)</span><span class=cF0>);
-<a name="l1095"></a>
-<a name="l1096"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
-<a name="l1097"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BB</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//if Bios Busy is still set after 25 mS, wait 2 seconds.</span><span class=cF0>
-<a name="l1098"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>);
-<a name="l1099"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1100"></a>
-<a name="l1101"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count = (hba-&gt;caps &amp; </span><span class=cFE>0x1F00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
-<a name="l1102"></a>    </span><span class=cF6>&quot;AHCI: Command slot count: %d\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count;
-<a name="l1103"></a>
-<a name="l1104"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l1105"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1106"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1107"></a>        {</span><span class=cF2>//Make ports idle?</span><span class=cF0>
-<a name="l1108"></a>            port = &amp;hba-&gt;ports[i];
-<a name="l1109"></a>            </span><span class=cF6>&quot;AHCI: Port %2d signature 0x%08X &quot;</span><span class=cF0>, i, port-&gt;signature;
-<a name="l1110"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0> || port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1111"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1112"></a>                </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1113"></a>                {
-<a name="l1114"></a>                    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;command, </span><span class=cF3>AHCI_PxCMDf_ATAPI</span><span class=cF0>);
-<a name="l1115"></a>                    </span><span class=cF6>&quot;ATAPI drive\n&quot;</span><span class=cF0>;
-<a name="l1116"></a>                }
-<a name="l1117"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
-<a name="l1118"></a>                    </span><span class=cF6>&quot;ATA drive\n&quot;</span><span class=cF0>;
-<a name="l1119"></a>
-<a name="l1120"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AHCIPortIsIdle</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1121"></a>                {
-<a name="l1122"></a>                    </span><span class=cF6>&quot;AHCI: Port not idle\n&quot;</span><span class=cF0>;
-<a name="l1123"></a>                    </span><span class=cFD>AHCIPortCmdStop</span><span class=cF0>(i);
-<a name="l1124"></a>                }
-<a name="l1125"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1126"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l1127"></a>                </span><span class=cF6>&quot;Unknown\n&quot;</span><span class=cF0>;
-<a name="l1128"></a>        }
-<a name="l1129"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1130"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
-<a name="l1131"></a>}
-<a name="l1132"></a>
-<a name="l1133"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIBootDVDProbeAll</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
-<a name="l1134"></a>{
-<a name="l1135"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
-<a name="l1136"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
-<a name="l1137"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>);
-<a name="l1138"></a>    </span><span class=cF9>CKernel</span><span class=cF0>     *kernel;
-<a name="l1139"></a>
-<a name="l1140"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
-<a name="l1141"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1142"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l1143"></a>        {
-<a name="l1144"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
-<a name="l1145"></a>            </span><span class=cF6>&quot;AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n&quot;</span><span class=cF0>, i, port-&gt;signature;
+<a name="l1084"></a>    </span><span class=cF2>//Transferring ownership from BIOS if supported.</span><span class=cF0>
+<a name="l1085"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;caps_ext, </span><span class=cF3>AHCI_CAPSEXTf_BOH</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1086"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1087"></a>        </span><span class=cF5>Bts</span><span class=cF0>(&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_OOS</span><span class=cF0>);
+<a name="l1088"></a>        </span><span class=cF6>&quot;AHCI: Transferring ownership from BIOS\n&quot;</span><span class=cF0>;
+<a name="l1089"></a>
+<a name="l1090"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BOS</span><span class=cF7>)</span><span class=cF0>);
+<a name="l1091"></a>
+<a name="l1092"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
+<a name="l1093"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;bohc, </span><span class=cF3>AHCI_BOHCf_BB</span><span class=cF7>)</span><span class=cF0>) </span><span class=cF2>//if Bios Busy is still set after 25 mS, wait 2 seconds.</span><span class=cF0>
+<a name="l1094"></a>            </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>2000</span><span class=cF0>);
+<a name="l1095"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1096"></a>
+<a name="l1097"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count = (hba-&gt;caps &amp; </span><span class=cFE>0x1F00</span><span class=cF0>) &gt;&gt; </span><span class=cFE>8</span><span class=cF0>;
+<a name="l1098"></a>    </span><span class=cF6>&quot;AHCI: Command slot count: %d\n&quot;</span><span class=cF0>, </span><span class=cFB>blkdev</span><span class=cF0>.cmd_slot_count;
+<a name="l1099"></a>
+<a name="l1100"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l1101"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1102"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1103"></a>        {</span><span class=cF2>//Make ports idle?</span><span class=cF0>
+<a name="l1104"></a>            port = &amp;hba-&gt;ports[i];
+<a name="l1105"></a>            </span><span class=cF6>&quot;AHCI: Port %2d signature 0x%08X &quot;</span><span class=cF0>, i, port-&gt;signature;
+<a name="l1106"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0> || port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1107"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1108"></a>                </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1109"></a>                {
+<a name="l1110"></a>                    </span><span class=cF5>Bts</span><span class=cF0>(&amp;port-&gt;command, </span><span class=cF3>AHCI_PxCMDf_ATAPI</span><span class=cF0>);
+<a name="l1111"></a>                    </span><span class=cF6>&quot;ATAPI drive\n&quot;</span><span class=cF0>;
+<a name="l1112"></a>                }
+<a name="l1113"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATA</span><span class=cF0>)
+<a name="l1114"></a>                    </span><span class=cF6>&quot;ATA drive\n&quot;</span><span class=cF0>;
+<a name="l1115"></a>
+<a name="l1116"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>AHCIPortIsIdle</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1117"></a>                {
+<a name="l1118"></a>                    </span><span class=cF6>&quot;AHCI: Port not idle\n&quot;</span><span class=cF0>;
+<a name="l1119"></a>                    </span><span class=cFD>AHCIPortCmdStop</span><span class=cF0>(i);
+<a name="l1120"></a>                }
+<a name="l1121"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1122"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l1123"></a>                </span><span class=cF6>&quot;Unknown\n&quot;</span><span class=cF0>;
+<a name="l1124"></a>        }
+<a name="l1125"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1126"></a>    </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>;
+<a name="l1127"></a>}
+<a name="l1128"></a>
+<a name="l1129"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIBootDVDProbeAll</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
+<a name="l1130"></a>{
+<a name="l1131"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
+<a name="l1132"></a>    </span><span class=cF9>CAHCIPort</span><span class=cF0>   *port;
+<a name="l1133"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF3>DVD_BLK_SIZE</span><span class=cF0>);
+<a name="l1134"></a>    </span><span class=cF9>CKernel</span><span class=cF0>     *kernel;
+<a name="l1135"></a>
+<a name="l1136"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cF3>AHCI_MAX_PORTS</span><span class=cF0>; i++)
+<a name="l1137"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1138"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports_implemented, i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l1139"></a>        {
+<a name="l1140"></a>            port = &amp;</span><span class=cFB>blkdev</span><span class=cF0>.ahci_hba-&gt;ports[i];
+<a name="l1141"></a>            </span><span class=cF6>&quot;AHCI: BootDVDProbeAll: Saw port at %2d with signature 0x%0X\n&quot;</span><span class=cF0>, i, port-&gt;signature;
+<a name="l1142"></a>
+<a name="l1143"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
+<a name="l1144"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l1145"></a>                </span><span class=cF6>&quot;AHCI: Probing ATAPI drive at port %d\n&quot;</span><span class=cF0>, i;
 <a name="l1146"></a>
-<a name="l1147"></a>            </span><span class=cF1>if</span><span class=cF0> (port-&gt;signature == </span><span class=cF3>AHCI_PxSIG_ATAPI</span><span class=cF0>)
-<a name="l1148"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l1149"></a>                </span><span class=cF6>&quot;AHCI: Probing ATAPI drive at port %d\n&quot;</span><span class=cF0>, i;
+<a name="l1147"></a>                </span><span class=cF1>try</span><span class=cF0>
+<a name="l1148"></a>                {
+<a name="l1149"></a>                    </span><span class=cF5>AHCIPortInit</span><span class=cF0>(bd, port, i);
 <a name="l1150"></a>
-<a name="l1151"></a>                </span><span class=cF1>try</span><span class=cF0>
-<a name="l1152"></a>                {
-<a name="l1153"></a>                    </span><span class=cF5>AHCIPortInit</span><span class=cF0>(bd, port, i);
-<a name="l1154"></a>
-<a name="l1155"></a>                    </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, buf, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
-<a name="l1156"></a>                }
-<a name="l1157"></a>                </span><span class=cF1>catch</span><span class=cF0>
-<a name="l1158"></a>                {
-<a name="l1159"></a>                    </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1160"></a>                    </span><span class=cF6>&quot;AHCI: Error at Port %d&quot;</span><span class=cF0>, i;
-<a name="l1161"></a>                }
-<a name="l1162"></a>
-<a name="l1163"></a>                kernel = buf + </span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
-<a name="l1164"></a>
-<a name="l1165"></a>                </span><span class=cF1>if</span><span class=cF0> (kernel-&gt;compile_time == </span><span class=cFB>sys_compile_time</span><span class=cF0>)
-<a name="l1166"></a>                {
-<a name="l1167"></a>                    </span><span class=cF6>&quot;AHCI: Found sys_compile_time at BLK %d on Port %d\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, i;
-<a name="l1168"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1169"></a>                }
-<a name="l1170"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l1171"></a>                    </span><span class=cF6>&quot;AHCI: Did not find matching sys_compile_time on Port %d\n&quot;</span><span class=cF0>, i;
-<a name="l1172"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l1173"></a>        }
-<a name="l1174"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1175"></a>
-<a name="l1176"></a>    </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF6>&quot;Could not find ATAPI boot drive&quot;</span><span class=cF0>);
-<a name="l1177"></a>
-<a name="l1178"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1179"></a>}
-<a name="l1180"></a>
-<a name="l1181"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtapiRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l1182"></a>{
-<a name="l1183"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd         = drive-&gt;bd;
-<a name="l1184"></a>    </span><span class=cF9>I64</span><span class=cF0>      spc        = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, n, blk2,
-<a name="l1185"></a>             l2         = bd-&gt;max_reads &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + spc &lt;&lt; </span><span class=cFE>1</span><span class=cF0>;
-<a name="l1186"></a>    </span><span class=cF1>U8</span><span class=cF0>      *dvd_buf;</span><span class=cF2>//</span><span class=cF0> </span><span class=cF2>= MAlloc(l2 &lt;&lt; BLK_SIZE_BITS);</span><span class=cF0>
+<a name="l1151"></a>                    </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, buf, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF0>);
+<a name="l1152"></a>                }
+<a name="l1153"></a>                </span><span class=cF1>catch</span><span class=cF0>
+<a name="l1154"></a>                {
+<a name="l1155"></a>                    </span><span class=cF5>Fs</span><span class=cF0>-&gt;catch_except = </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1156"></a>                    </span><span class=cF6>&quot;AHCI: Error at Port %d&quot;</span><span class=cF0>, i;
+<a name="l1157"></a>                }
+<a name="l1158"></a>
+<a name="l1159"></a>                kernel = buf + </span><span class=cFB>sys_boot_src</span><span class=cF0>.u16[</span><span class=cFE>1</span><span class=cF0>] &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>;
+<a name="l1160"></a>
+<a name="l1161"></a>                </span><span class=cF1>if</span><span class=cF0> (kernel-&gt;compile_time == </span><span class=cFB>sys_compile_time</span><span class=cF0>)
+<a name="l1162"></a>                {
+<a name="l1163"></a>                    </span><span class=cF6>&quot;AHCI: Found sys_compile_time at BLK %d on Port %d\n&quot;</span><span class=cF0>, </span><span class=cFB>sys_boot_blk</span><span class=cF0>, i;
+<a name="l1164"></a>                    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1165"></a>                }
+<a name="l1166"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l1167"></a>                    </span><span class=cF6>&quot;AHCI: Did not find matching sys_compile_time on Port %d\n&quot;</span><span class=cF0>, i;
+<a name="l1168"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l1169"></a>        }
+<a name="l1170"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1171"></a>
+<a name="l1172"></a>    </span><span class=cF5>Panic</span><span class=cF0>(</span><span class=cF6>&quot;Could not find ATAPI boot drive&quot;</span><span class=cF0>);
+<a name="l1173"></a>
+<a name="l1174"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1175"></a>}
+<a name="l1176"></a>
+<a name="l1177"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtapiRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l1178"></a>{
+<a name="l1179"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd         = drive-&gt;bd;
+<a name="l1180"></a>    </span><span class=cF9>I64</span><span class=cF0>      spc        = bd-&gt;blk_size &gt;&gt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, n, blk2,
+<a name="l1181"></a>             l2         = bd-&gt;max_reads &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + spc &lt;&lt; </span><span class=cFE>1</span><span class=cF0>;
+<a name="l1182"></a>    </span><span class=cF1>U8</span><span class=cF0>      *dvd_buf;</span><span class=cF2>//</span><span class=cF0> </span><span class=cF2>= MAlloc(l2 &lt;&lt; BLK_SIZE_BITS);</span><span class=cF0>
+<a name="l1183"></a>
+<a name="l1184"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
+<a name="l1185"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l1186"></a>        dvd_buf = </span><span class=cF5>MAlloc</span><span class=cF0>(l2 &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l1187"></a>
-<a name="l1188"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATAPI</span><span class=cF0>)
-<a name="l1189"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1190"></a>        dvd_buf = </span><span class=cF5>MAlloc</span><span class=cF0>(l2 &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
-<a name="l1191"></a>
-<a name="l1192"></a>        </span><span class=cF1>if</span><span class=cF0> (blk &lt;= bd-&gt;max_reads)
-<a name="l1193"></a>            blk2 = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l1194"></a>        </span><span class=cF1>else</span><span class=cF0>
-<a name="l1195"></a>            blk2 = </span><span class=cF5>FloorU64</span><span class=cF0>(blk - bd-&gt;max_reads, spc);
-<a name="l1196"></a>
-<a name="l1197"></a>        </span><span class=cF1>if</span><span class=cF0> (blk2 + l2 &gt; drive-&gt;size + drive-&gt;drv_offset)
-<a name="l1198"></a>            l2 = drive-&gt;size + drive-&gt;drv_offset - blk2;
-<a name="l1199"></a>
-<a name="l1200"></a>        n = (l2 + spc - </span><span class=cFE>1</span><span class=cF0>) / spc;
-<a name="l1201"></a>
-<a name="l1202"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);&quot;, blk2 / spc, n;</span><span class=cF0>
-<a name="l1203"></a>        </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, dvd_buf, blk2 / spc, n);
-<a name="l1204"></a>
-<a name="l1205"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
-<a name="l1206"></a>            </span><span class=cFD>DiskCacheAdd</span><span class=cF0>(drive, dvd_buf, blk2, n * spc);
-<a name="l1207"></a>
-<a name="l1208"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, dvd_buf + </span><span class=cF7>(</span><span class=cF0>blk - blk2</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
-<a name="l1209"></a>        </span><span class=cF5>Free</span><span class=cF0>(dvd_buf);
+<a name="l1188"></a>        </span><span class=cF1>if</span><span class=cF0> (blk &lt;= bd-&gt;max_reads)
+<a name="l1189"></a>            blk2 = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l1190"></a>        </span><span class=cF1>else</span><span class=cF0>
+<a name="l1191"></a>            blk2 = </span><span class=cF5>FloorU64</span><span class=cF0>(blk - bd-&gt;max_reads, spc);
+<a name="l1192"></a>
+<a name="l1193"></a>        </span><span class=cF1>if</span><span class=cF0> (blk2 + l2 &gt; drive-&gt;size + drive-&gt;drv_offset)
+<a name="l1194"></a>            l2 = drive-&gt;size + drive-&gt;drv_offset - blk2;
+<a name="l1195"></a>
+<a name="l1196"></a>        n = (l2 + spc - </span><span class=cFE>1</span><span class=cF0>) / spc;
+<a name="l1197"></a>
+<a name="l1198"></a></span><span class=cF2>//</span><span class=cF0>      </span><span class=cF2>&quot;AHCIAtapiBlksRead(bd, dvd_buf, %d, %d);&quot;, blk2 / spc, n;</span><span class=cF0>
+<a name="l1199"></a>        </span><span class=cF5>AHCIAtapiBlksRead</span><span class=cF0>(bd, dvd_buf, blk2 / spc, n);
+<a name="l1200"></a>
+<a name="l1201"></a>        </span><span class=cF1>if</span><span class=cF0> (bd-&gt;flags &amp; </span><span class=cF3>BDF_READ_CACHE</span><span class=cF0>)
+<a name="l1202"></a>            </span><span class=cFD>DiskCacheAdd</span><span class=cF0>(drive, dvd_buf, blk2, n * spc);
+<a name="l1203"></a>
+<a name="l1204"></a>        </span><span class=cF5>MemCopy</span><span class=cF0>(buf, dvd_buf + </span><span class=cF7>(</span><span class=cF0>blk - blk2</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>, count &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
+<a name="l1205"></a>        </span><span class=cF5>Free</span><span class=cF0>(dvd_buf);
+<a name="l1206"></a>
+<a name="l1207"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l1208"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1209"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l1210"></a>
-<a name="l1211"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1212"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l1213"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1214"></a>
-<a name="l1215"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1216"></a>}
+<a name="l1211"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1212"></a>}
+<a name="l1213"></a>
+<a name="l1214"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l1215"></a>{
+<a name="l1216"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
 <a name="l1217"></a>
-<a name="l1218"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaRBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l1219"></a>{
-<a name="l1220"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
-<a name="l1221"></a>
-<a name="l1222"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0>)
-<a name="l1223"></a>        </span><span class=cF5>AHCIAtaBlksRead</span><span class=cF0>(bd, buf, blk, count);
-<a name="l1224"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l1225"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
-<a name="l1226"></a>
-<a name="l1227"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1228"></a>}
+<a name="l1218"></a>    </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ATA</span><span class=cF0>)
+<a name="l1219"></a>        </span><span class=cF5>AHCIAtaBlksRead</span><span class=cF0>(bd, buf, blk, count);
+<a name="l1220"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l1221"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
+<a name="l1222"></a>
+<a name="l1223"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1224"></a>}
+<a name="l1225"></a>
+<a name="l1226"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaWBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
+<a name="l1227"></a>{
+<a name="l1228"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
 <a name="l1229"></a>
-<a name="l1230"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>AHCIAtaWBlks</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l1231"></a>{
-<a name="l1232"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd = drive-&gt;bd;
+<a name="l1230"></a>    </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, buf, blk, count);
+<a name="l1231"></a>
+<a name="l1232"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.write_count += count;
 <a name="l1233"></a>
-<a name="l1234"></a>    </span><span class=cF5>AHCIAtaBlksWrite</span><span class=cF0>(bd, buf, blk, count);
-<a name="l1235"></a>
-<a name="l1236"></a>    </span><span class=cFB>blkdev</span><span class=cF0>.write_count += count;
-<a name="l1237"></a>
-<a name="l1238"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
-<a name="l1239"></a>}
+<a name="l1234"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>TRUE</span><span class=cF0>;
+<a name="l1235"></a>}
 </span></pre></body>
 </html>

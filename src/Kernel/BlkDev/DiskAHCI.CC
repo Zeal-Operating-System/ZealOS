@@ -1081,10 +1081,6 @@ U0 AHCIInit()
 	Bts(&blkdev.ahci_hba->ghc, AHCI_GHCf_AHCI_ENABLE);
 	"AHCI: GHC.AE\n";
 
-//	AHCIHbaReset;
-//	"AHCI: HBA Reset\n";
-
-
 	//Transferring ownership from BIOS if supported.
 	if (Bt(&hba->caps_ext, AHCI_CAPSEXTf_BOH))
 	{
