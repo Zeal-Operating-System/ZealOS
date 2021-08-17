@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----08/17/21 02:42:53----$IV,0$
+* Raised version number to 1.00.
+* Added progress bars to $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,progress1"$.
+
 $IV,1$----08/16/21 20:35:44----$IV,0$
 * Raised version number to 0.17.
 * Fixed $LK+PU,"DVDImageRead",A="FF:::/Kernel/BlkDev/DiskCDDVD.CC,max_blk + 1"$ block count.

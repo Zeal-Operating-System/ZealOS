@@ -93,6 +93,8 @@ U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 		out_name = blkdev.default_iso_filename;
 //	count = CeilU64(drive->size, spc);
 	count = bd->max_blk + 1;
+	progress1 = 0;
+	progress1_max = count;
 	while (count > 0)
 	{
 		if (count > COPY_BUF_BLKS)
@@ -114,7 +116,10 @@ U0 DVDImageRead(U8 dvd_drive_let, U8 *out_name)
 		FBlkWrite(f, buf, blk, n);
 		count -= n;
 		blk += n;
+		progress1 += n;
+
 	}
+	progress1 = progress1_max = 0;
 	FClose(f);
 	Free(buf);
 	Free(out_name2);
