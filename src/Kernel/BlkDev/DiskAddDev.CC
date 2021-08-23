@@ -145,6 +145,20 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 									drive->fs_type = FSt_NTFS;
 									break;
 
+								case MBR_PT_LINUX:
+									drive->drive_signature = DRIVE_SIGNATURE_VAL;
+									drive->prt_num = num;
+									res++;
+									drive->fs_type = FSt_LINUX;
+									break;
+
+								case MBR_PT_SWAP:
+									drive->drive_signature = DRIVE_SIGNATURE_VAL;
+									drive->prt_num = num;
+									res++;
+									drive->fs_type = FSt_SWAP;
+									break;
+
 								case 5:
 								case 15:
 									j = i;

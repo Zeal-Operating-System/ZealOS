@@ -3348,13 +3348,14 @@ public class CBlkDev
 #define FSt_FAT32 		2 //Supported except for short names, to some degree
 #define FSt_ISO9660 	3 //Not Supported
 #define FSt_NTFS		4 //Not Supported
-#define FSt_UNKNOWN 	5
-#define FSt_TYPES_NUM 	6
+#define FSt_LINUX		5 //Not Supported
+#define FSt_SWAP		6 //Not Supported
+#define FSt_UNKNOWN 	7
+#define FSt_TYPES_NUM 	8
 #define FSG_TYPE_MASK 	0x7FFF
 //File system type flags
 #define FStf_DISABLE	15
 
-#define MBR_PT_FAT12	0x01
 #define MBR_PT_FAT32a 	0x0B
 #define MBR_PT_FAT32b 	0x0C
 #define MBR_PT_FAT32c 	0x1B
@@ -3363,6 +3364,8 @@ public class CBlkDev
 #define MBR_PT_FAT32f 	0x8C
 #define MBR_PT_NTFS 	0x07
 #define MBR_PT_REDSEA 	0x88
+#define MBR_PT_LINUX	0x83
+#define MBR_PT_SWAP		0x82
 
 class CFreeList
 {

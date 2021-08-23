@@ -33,7 +33,7 @@ body {background-color:#fef1f0;}
 <a name="l5"></a>
 <a name="l6"></a>Here is the grammar:
 <a name="l7"></a>
-<a name="l8"></a>&lt;DolDocCmd&gt; := </span><span class=cF2>$</span><span class=cF0>&lt;</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocInit.CC.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;[&lt;FlagList&gt;][</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]</span><span class=cF2>$</span><span class=cF0> | </span><span class=cF2>$</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l246"><span class=cF4>ColorName</span></a><span class=cF2>$</span><span class=cF0>
+<a name="l8"></a>&lt;DolDocCmd&gt; := </span><span class=cF2>$</span><span class=cF0>&lt;</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocInit.CC.html#l9"><span class=cF4>TwoLetterCmd</span></a><span class=cF0>&gt;[&lt;FlagList&gt;][</span><span class=cF2>,</span><span class=cF0>&lt;ArgList&gt;]</span><span class=cF2>$</span><span class=cF0> | </span><span class=cF2>$</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l248"><span class=cF4>ColorName</span></a><span class=cF2>$</span><span class=cF0>
 <a name="l9"></a>
 <a name="l10"></a>&lt;FlagList&gt; := </span><span class=cF2>+</span><span class=cF0>|</span><span class=cF2>-</span><span class=cF0> &lt;</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocInit.CC.html#l14"><span class=cF4>FlagCode</span></a><span class=cF0>&gt;[&lt;FlagList&gt;]
 <a name="l11"></a>
@@ -41,7 +41,7 @@ body {background-color:#fef1f0;}
 <a name="l13"></a>
 <a name="l14"></a>
 <a name="l15"></a>The format of DolDoc cmds is a two character code, +/-flags, a comma and args separated by commas.  Some commands have 
-<a name="l16"></a>mandatory args. Optional args are indicated with &lt;</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocInit.CC.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>.  A </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l246"><span class=cF4>ColorName</span></a><span class=cF0> bracked by dollars, will change the foreground 
+<a name="l16"></a>mandatory args. Optional args are indicated with &lt;</span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocInit.CC.html#l14"><span class=cF4>ArgCode</span></a><span class=cF0>&gt;</span><span class=cF2>=</span><span class=cF0>.  A </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDefine.CC.html#l248"><span class=cF4>ColorName</span></a><span class=cF0> bracked by dollars, will change the foreground 
 <a name="l17"></a>color.
 <a name="l18"></a>
 <a name="l19"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Widget.DD.html#l1"><span class=cF4>::/Doc/Widget.DD</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/DolDoc/DemoDoc.DD.html#l1"><span class=cF4>::/Demo/DolDoc/DemoDoc.DD</span></a><span class=cF0>, and </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/ToHtmlToTXTDemo/ToHtml.CC.html#l1"><span class=cF4>::/Demo/ToHtmlToTXTDemo/ToHtml.CC</span></a><span class=cF0>.

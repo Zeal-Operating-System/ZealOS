@@ -223,6 +223,8 @@ U0 SysDefinesLoad()
 						"FAT32\0"
 						"ISO9660\0"
 						"NTFS\0"
+						"LINUX\0"
+						"SWAP\0"
 						"UNKNOWN\0");
 
 	DefineListLoad("ST_COLORS",
