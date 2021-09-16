@@ -1,4 +1,7 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----09/15/21 20:33:11----$IV,0$
+* Added $LK+PU,"WinMax",A="FF:::/Doc/EdPullDown.DD,WinMax"$ to EdPullDown menu.
+
 $IV,1$----08/23/21 02:28:07----$IV,0$
 * Added recognition of Linux swap and ext2/3/4 filesystem type in $LK+PU,"BlkDevAdd",A="FF:::/Kernel/BlkDev/DiskAddDev.CC,LINUX"$, added $LK+PU,"MBR_PT_LINUX",A="MN:MBR_PT_LINUX"$ and $LK+PU,"MBR_PT_SWAP",A="MN:MBR_PT_SWAP"$, removed MBR_PT_FAT12, added "LINUX" and "SWAP" to $LK+PU,"ST_DRIVE_TYPES",A="FF:::/Kernel/KDefine.CC,LINUX"$.
 

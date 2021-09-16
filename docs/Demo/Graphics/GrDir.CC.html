@@ -174,128 +174,133 @@ body {background-color:#fef1f0;}
 <a name="l147"></a>        </span><span class=cF1>if</span><span class=cF0> (!st[</span><span class=cFE>2</span><span class=cF0>])
 <a name="l148"></a>            </span><span class=cF5>StrCopy</span><span class=cF0>(st + </span><span class=cFE>2</span><span class=cF0>, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>);
 <a name="l149"></a>
-<a name="l150"></a>        </span><span class=cF6>&quot;\n$MA,T=\&quot;Directory\&quot;,LM=\&quot;PopUpCd;GrDir;\n\&quot;$ of %s\n\n&quot;</span><span class=cF0>, st;
+<a name="l150"></a>        </span><span class=cF6>&quot;%s&gt;$GREEN$GrDir(\&quot;%s\&quot;);$FG$\n&quot;</span><span class=cF0>, st, st;
 <a name="l151"></a>
-<a name="l152"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpde1)
-<a name="l153"></a>        {
-<a name="l154"></a>            tmpde2 = tmpde1-&gt;next;
+<a name="l152"></a>        </span><span class=cF6>&quot;\n$MA,\&quot;Drive C\&quot;,LM=\&quot;Drive('C');GrDir;\n\&quot;$   $MA,\&quot;Drive D\&quot;,LM=\&quot;Drive('D');GrDir;\n\&quot;$   $MA,\&quot;Disk Change T\&quot;,LM=\&quot;DiskChange('T');GrDir;\n\&quot;$\n&quot;</span><span class=cF0>;
+<a name="l153"></a>
+<a name="l154"></a>        </span><span class=cF6>&quot;\n$MA,T=\&quot;Directory\&quot;,LM=\&quot;PopUpCd;GrDir;\n\&quot;$ of %s\n\n&quot;</span><span class=cF0>, st;
 <a name="l155"></a>
-<a name="l156"></a>            </span><span class=cF1>switch</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0>)
-<a name="l157"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l158"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l159"></a>                    tag = </span><span class=cF6>&quot;LX&quot;</span><span class=cF0>;
-<a name="l160"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l161"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
-<a name="l162"></a>                    tag = </span><span class=cF6>&quot;CX&quot;</span><span class=cF0>;
-<a name="l163"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l164"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
-<a name="l165"></a>                    tag = </span><span class=cF6>&quot;RX&quot;</span><span class=cF0>;
-<a name="l166"></a>                    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l167"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l168"></a>
-<a name="l169"></a>            </span><span class=cF1>if</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0> == </span><span class=cFE>0</span><span class=cF0> &amp;&amp; res != </span><span class=cFE>0</span><span class=cF0>)
-<a name="l170"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l171"></a>                GrDirSprite(, tmpb0, tmpf0, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l172"></a>                GrDirSprite(, tmpb1, tmpf1, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l173"></a>                GrDirSprite(, tmpb2, tmpf2, </span><span class=cFE>2</span><span class=cF0>);
-<a name="l174"></a>
-<a name="l175"></a>                </span><span class=cF6>&quot;\n\n\n\n\n\n\n&quot;</span><span class=cF0>;
-<a name="l176"></a>                tmpb  = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l177"></a>                tmpb0 = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l178"></a>                tmpb1 = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l179"></a>                tmpb2 = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l180"></a>
-<a name="l181"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpf0);
-<a name="l182"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpf1);
-<a name="l183"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpf2);
-<a name="l184"></a>                tmpf0 = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l185"></a>                tmpf1 = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l186"></a>                tmpf2 = </span><span class=cF3>NULL</span><span class=cF0>;
-<a name="l187"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l188"></a>
-<a name="l189"></a>            </span><span class=cF1>if</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0> == </span><span class=cFE>2</span><span class=cF0>)
-<a name="l190"></a>                </span><span class=cF6>&quot;$CM-LE-RE$&quot;</span><span class=cF0>;
-<a name="l191"></a>
-<a name="l192"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
-<a name="l193"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l194"></a>
-<a name="l195"></a>                </span><span class=cF6>&quot;$MA+%s,T=\&quot;%s\&quot;,LM=\&quot;Cd(\\\&quot;%s\\\&quot;);GrDir;\n\&quot;$&quot;</span><span class=cF0>, tag, tmpde1-&gt;name, tmpde1-&gt;full_name;
-<a name="l196"></a>                </span><span class=cF1>switch</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0>)
-<a name="l197"></a>                {
-<a name="l198"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l199"></a>                        tmpb0 = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
-<a name="l200"></a>                        tmpf0 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
-<a name="l201"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l202"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
-<a name="l203"></a>                        tmpb1 = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
-<a name="l204"></a>                        tmpf1 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l156"></a>        </span><span class=cF1>while</span><span class=cF0> (tmpde1)
+<a name="l157"></a>        {
+<a name="l158"></a>            tmpde2 = tmpde1-&gt;next;
+<a name="l159"></a>
+<a name="l160"></a>            </span><span class=cF1>switch</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0>)
+<a name="l161"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l162"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l163"></a>                    tag = </span><span class=cF6>&quot;LX&quot;</span><span class=cF0>;
+<a name="l164"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l165"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l166"></a>                    tag = </span><span class=cF6>&quot;CX&quot;</span><span class=cF0>;
+<a name="l167"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l168"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l169"></a>                    tag = </span><span class=cF6>&quot;RX&quot;</span><span class=cF0>;
+<a name="l170"></a>                    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l171"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l172"></a>
+<a name="l173"></a>            </span><span class=cF1>if</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0> == </span><span class=cFE>0</span><span class=cF0> &amp;&amp; res != </span><span class=cFE>0</span><span class=cF0>)
+<a name="l174"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l175"></a>                GrDirSprite(, tmpb0, tmpf0, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l176"></a>                GrDirSprite(, tmpb1, tmpf1, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l177"></a>                GrDirSprite(, tmpb2, tmpf2, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l178"></a>
+<a name="l179"></a>                </span><span class=cF6>&quot;\n\n\n\n\n\n\n&quot;</span><span class=cF0>;
+<a name="l180"></a>                tmpb  = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l181"></a>                tmpb0 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l182"></a>                tmpb1 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l183"></a>                tmpb2 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l184"></a>
+<a name="l185"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpf0);
+<a name="l186"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpf1);
+<a name="l187"></a>                </span><span class=cF5>Free</span><span class=cF0>(tmpf2);
+<a name="l188"></a>                tmpf0 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l189"></a>                tmpf1 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l190"></a>                tmpf2 = </span><span class=cF3>NULL</span><span class=cF0>;
+<a name="l191"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l192"></a>
+<a name="l193"></a>            </span><span class=cF1>if</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0> == </span><span class=cFE>2</span><span class=cF0>)
+<a name="l194"></a>                </span><span class=cF6>&quot;$CM-LE-RE$&quot;</span><span class=cF0>;
+<a name="l195"></a>
+<a name="l196"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpde1-&gt;attr &amp; </span><span class=cF3>RS_ATTR_DIR</span><span class=cF0>)
+<a name="l197"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l198"></a>
+<a name="l199"></a>                </span><span class=cF6>&quot;$MA+%s,T=\&quot;%s\&quot;,LM=\&quot;Cd(\\\&quot;%s\\\&quot;);GrDir;\n\&quot;$&quot;</span><span class=cF0>, tag, tmpde1-&gt;name, tmpde1-&gt;full_name;
+<a name="l200"></a>                </span><span class=cF1>switch</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0>)
+<a name="l201"></a>                {
+<a name="l202"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l203"></a>                        tmpb0 = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
+<a name="l204"></a>                        tmpf0 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
 <a name="l205"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l206"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
-<a name="l207"></a>                        tmpb2 = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
-<a name="l208"></a>                        tmpf2 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l206"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l207"></a>                        tmpb1 = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
+<a name="l208"></a>                        tmpf1 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
 <a name="l209"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l210"></a>                }
-<a name="l211"></a>
-<a name="l212"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l213"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l214"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l215"></a>                </span><span class=cF6>&quot;$LK+%s+PU,\&quot;%s\&quot;,A=\&quot;FI:%s\&quot;$&quot;</span><span class=cF0>, tag, tmpde1-&gt;name, tmpde1-&gt;full_name;
-<a name="l216"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.CC&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l217"></a>                    tmpb = </span><span class=cFA>&lt;1&gt;</span><span class=cF0>;
-<a name="l218"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.DD&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l219"></a>                    tmpb = </span><span class=cFA>&lt;5&gt;</span><span class=cF0>;
-<a name="l220"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.ISO.C&quot;</span><span class=cF7>)</span><span class=cF0>    ||
-<a name="l221"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.ISO&quot;</span><span class=cF7>)</span><span class=cF0>      ||
-<a name="l222"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.iso&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l223"></a>                    tmpb = </span><span class=cFA>&lt;4&gt;</span><span class=cF0>;
-<a name="l224"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.HH&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l225"></a>                    tmpb = </span><span class=cFA>&lt;2&gt;</span><span class=cF0>;
-<a name="l226"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.BIN.C&quot;</span><span class=cF7>)</span><span class=cF0>    ||
-<a name="l227"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.BIN&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l228"></a>                    tmpb = </span><span class=cFA>&lt;6&gt;</span><span class=cF0>;
-<a name="l229"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.IN&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l230"></a>                    tmpb = </span><span class=cFA>&lt;7&gt;</span><span class=cF0>;
-<a name="l231"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.TXT&quot;</span><span class=cF7>)</span><span class=cF0>)
-<a name="l232"></a>                    tmpb = </span><span class=cFA>&lt;8&gt;</span><span class=cF0>;
-<a name="l233"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l234"></a>                    </span><span class=cF2>// sprite for unknown filetype</span><span class=cF0>
-<a name="l235"></a>                    tmpb = </span><span class=cFA>&lt;9&gt;</span><span class=cF0>;
-<a name="l236"></a>
-<a name="l237"></a>                </span><span class=cF1>switch</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0>)
-<a name="l238"></a>                {
-<a name="l239"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
-<a name="l240"></a>                        tmpb0 = tmpb;
-<a name="l241"></a>                        tmpf0 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
-<a name="l242"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l243"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
-<a name="l244"></a>                        tmpb1 = tmpb;
-<a name="l245"></a>                        tmpf1 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l210"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l211"></a>                        tmpb2 = </span><span class=cFA>&lt;3&gt;</span><span class=cF0>;
+<a name="l212"></a>                        tmpf2 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l213"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l214"></a>                }
+<a name="l215"></a>
+<a name="l216"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l217"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l218"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l219"></a>                </span><span class=cF6>&quot;$LK+%s+PU,\&quot;%s\&quot;,A=\&quot;FI:%s\&quot;$&quot;</span><span class=cF0>, tag, tmpde1-&gt;name, tmpde1-&gt;full_name;
+<a name="l220"></a>                </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.CC&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l221"></a>                    tmpb = </span><span class=cFA>&lt;1&gt;</span><span class=cF0>;
+<a name="l222"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.DD&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l223"></a>                    tmpb = </span><span class=cFA>&lt;5&gt;</span><span class=cF0>;
+<a name="l224"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.ISO.C&quot;</span><span class=cF7>)</span><span class=cF0>    ||
+<a name="l225"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.ISO&quot;</span><span class=cF7>)</span><span class=cF0>      ||
+<a name="l226"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.iso&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l227"></a>                    tmpb = </span><span class=cFA>&lt;4&gt;</span><span class=cF0>;
+<a name="l228"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.HH&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l229"></a>                    tmpb = </span><span class=cFA>&lt;2&gt;</span><span class=cF0>;
+<a name="l230"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.BIN.C&quot;</span><span class=cF7>)</span><span class=cF0>    ||
+<a name="l231"></a>                         !</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.BIN&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l232"></a>                    tmpb = </span><span class=cFA>&lt;6&gt;</span><span class=cF0>;
+<a name="l233"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.IN&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l234"></a>                    tmpb = </span><span class=cFA>&lt;7&gt;</span><span class=cF0>;
+<a name="l235"></a>                </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>StrCompare</span><span class=cF7>(</span><span class=cF5>FileExtDot</span><span class=cF0>(tmpde1-&gt;name), </span><span class=cF6>&quot;.TXT&quot;</span><span class=cF7>)</span><span class=cF0>)
+<a name="l236"></a>                    tmpb = </span><span class=cFA>&lt;8&gt;</span><span class=cF0>;
+<a name="l237"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l238"></a>                    </span><span class=cF2>// sprite for unknown filetype</span><span class=cF0>
+<a name="l239"></a>                    tmpb = </span><span class=cFA>&lt;9&gt;</span><span class=cF0>;
+<a name="l240"></a>
+<a name="l241"></a>                </span><span class=cF1>switch</span><span class=cF0> (res % </span><span class=cFE>3</span><span class=cF0>)
+<a name="l242"></a>                {
+<a name="l243"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>:
+<a name="l244"></a>                        tmpb0 = tmpb;
+<a name="l245"></a>                        tmpf0 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
 <a name="l246"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l247"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
-<a name="l248"></a>                        tmpb2 = tmpb;
-<a name="l249"></a>                        tmpf2 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l247"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>:
+<a name="l248"></a>                        tmpb1 = tmpb;
+<a name="l249"></a>                        tmpf1 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
 <a name="l250"></a>                        </span><span class=cF1>break</span><span class=cF0>;
-<a name="l251"></a>                }
-<a name="l252"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l253"></a>
-<a name="l254"></a>            res++;
-<a name="l255"></a>            </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde1);
-<a name="l256"></a>            tmpde1 = tmpde2;
-<a name="l257"></a>        }
-<a name="l258"></a>
-<a name="l259"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
-<a name="l260"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l261"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l262"></a>        </span><span class=cF6>&quot;\nNo matching entries!!\n&quot;</span><span class=cF0>;
-<a name="l263"></a>
-<a name="l264"></a>    GrDirSprite(, tmpb0, tmpf0, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l265"></a>    GrDirSprite(, tmpb1, tmpf1, </span><span class=cFE>1</span><span class=cF0>);
-<a name="l266"></a>    GrDirSprite(, tmpb2, tmpf2, </span><span class=cFE>2</span><span class=cF0>);
-<a name="l267"></a>    </span><span class=cF6>&quot;\n\n\n\n\n\n\n&quot;</span><span class=cF0>;
-<a name="l268"></a>
-<a name="l269"></a>
-<a name="l270"></a>    </span><span class=cF1>return</span><span class=cF0> res;
-<a name="l271"></a>}
+<a name="l251"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>:
+<a name="l252"></a>                        tmpb2 = tmpb;
+<a name="l253"></a>                        tmpf2 = </span><span class=cF5>StrNew</span><span class=cF0>(tmpde1-&gt;full_name);
+<a name="l254"></a>                        </span><span class=cF1>break</span><span class=cF0>;
+<a name="l255"></a>                }
+<a name="l256"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l257"></a>
+<a name="l258"></a>            res++;
+<a name="l259"></a>            </span><span class=cF5>DirEntryDel</span><span class=cF0>(tmpde1);
+<a name="l260"></a>            tmpde1 = tmpde2;
+<a name="l261"></a>        }
+<a name="l262"></a>
+<a name="l263"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
+<a name="l264"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l265"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l266"></a>        </span><span class=cF6>&quot;\nNo matching entries!!\n&quot;</span><span class=cF0>;
+<a name="l267"></a>
+<a name="l268"></a>    GrDirSprite(, tmpb0, tmpf0, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l269"></a>    GrDirSprite(, tmpb1, tmpf1, </span><span class=cFE>1</span><span class=cF0>);
+<a name="l270"></a>    GrDirSprite(, tmpb2, tmpf2, </span><span class=cFE>2</span><span class=cF0>);
+<a name="l271"></a>    </span><span class=cF6>&quot;\n\n\n\n\n\n\n&quot;</span><span class=cF0>;
 <a name="l272"></a>
-<a name="l273"></a>GrDir;</span></pre></body>
+<a name="l273"></a>
+<a name="l274"></a>    </span><span class=cF1>return</span><span class=cF0> res;
+<a name="l275"></a>}
+<a name="l276"></a>
+<a name="l277"></a></span><span class=cF5>Cd</span><span class=cF0>;
+<a name="l278"></a>GrDir;</span></pre></body>
 </html>

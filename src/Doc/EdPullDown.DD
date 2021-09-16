@@ -67,6 +67,7 @@ View
 	Border(,CH_CTRLB);
 	FileMgr(,CH_CTRLD,0x42000000420);
 	Search(,CH_CTRLF,0x62100000621);
+	WinMax(,'m',0x283200002832);
 }
 
 Help

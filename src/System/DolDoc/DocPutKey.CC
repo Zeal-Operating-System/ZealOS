@@ -421,6 +421,8 @@ public U0 DocPutKey(CDoc *doc, I64 ch=0, I64 sc=0)
 												else
 													if (PopUpCancelOk(ST_WARN_ST "Drive not writable.\nCompile file stored on drive?"))
 														st = StrNew(doc->filename.name);
+													else
+														break;
 											}
 											if (st2 = DirFile(st, "Run", "CC"))
 											{

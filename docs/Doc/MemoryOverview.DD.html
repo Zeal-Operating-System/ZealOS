@@ -43,7 +43,7 @@ body {background-color:#fef1f0;}
 <a name="l16"></a>kernel memory in other operating systems.   See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l408"><span class=cF4>SysCAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l394"><span class=cF4>SysMAlloc</span></a><span class=cF0>(), </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l427"><span class=cF4>SysMAllocIdent</span></a><span class=cF0>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MAllocFree.CC.html#l503"><span class=cF4>SysStrNew</span></a><span class=cF0>().
 <a name="l17"></a>
 <a name="l18"></a>All of the regular page tables are marked, &quot;cached&quot;.    When accessing hardware, however, you need uncached page table.  The 
-<a name="l19"></a>lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, </span><span class=cF2>0x015B600000</span><span class=cF0>.    See </span><span class=cF4>
+<a name="l19"></a>lowest 4Gig addresses have an alias to access hardware located toward the top of mapped space, </span><span class=cF2>0x01C4000000</span><span class=cF0>.    See </span><span class=cF4>
 <a name="l20"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/MultiProc.CC.html#l147"><span class=cF4>dev.uncached_alias</span></a><span class=cF0>.
 <a name="l21"></a>
 <a name="l22"></a>During an extended powered-on session of ZealOS, in theory, memory will become fragmented, requiring a reboot.  It has never 
@@ -64,20 +64,20 @@ body {background-color:#fef1f0;}
 <a name="l37"></a></span><span class=cF2>~0x000009F000- 0x000009FFFF</span><span class=cF0> Extended BIOS data area.
 <a name="l38"></a></span><span class=cF2> 0x00000A0000- 0x00000BFFFF</span><span class=cF0> VGA graphics mem with alias at </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l30"><span class=cF4>text</span></a><span class=cF0>.vga_alias.
 <a name="l39"></a></span><span class=cF2> 0x0000100000- 0x0000101FFF</span><span class=cF0> </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l4123"><span class=cF4>CSysFixedArea</span></a><span class=cF0> for misc.
-<a name="l40"></a></span><span class=cF2> 0x000010E000- 0x007FFFFFFF</span><span class=cF0> Code Heap mem.
+<a name="l40"></a></span><span class=cF2> 0x0000110000- 0x007FFFFFFF</span><span class=cF0> Code Heap mem.
 <a name="l41"></a>
 <a name="l42"></a></span><span class=cF2> 0x00E0000000- 0x00FFFFFFFF</span><span class=cF0>
 <a name="l43"></a>  32-bit devices could alloc memory at 0xF0000000 going up, but this is wrong, since some PCs already have devices at 
 <a name="l44"></a>  0xF0000000.  PCI devices are supported, so </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l64"><span class=cF4>Mem32DevAlloc</span></a><span class=cF0>() flaws could become an issue.
 <a name="l45"></a>
 <a name="l46"></a></span><span class=cF2> 0x0080000000-~0x00DFFFFFFF</span><span class=cF0>
-<a name="l47"></a></span><span class=cF2> 0x0100000000-~0x015B5FFFFF</span><span class=cF0>
+<a name="l47"></a></span><span class=cF2> 0x0100000000-~0x01C3FFFFFF</span><span class=cF0>
 <a name="l48"></a>  Data Heap mem.    (The physical memory that exists in this range is data heap.)
 <a name="l49"></a>
-<a name="l50"></a></span><span class=cF2> 0x015B600000- 0x025B5FFFFF</span><span class=cF0>
+<a name="l50"></a></span><span class=cF2> 0x01C4000000- 0x02C3FFFFFF</span><span class=cF0>
 <a name="l51"></a>  Uncached alias of first 4Gig.  (For 32-bit device access.)
 <a name="l52"></a>
-<a name="l53"></a></span><span class=cF2>                         - 0x025B5FFFFF</span><span class=cF0>
+<a name="l53"></a></span><span class=cF2>                         - 0x02C3FFFFFF</span><span class=cF0>
 <a name="l54"></a>  64-bit devices are alloced with </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/MemPhysical.CC.html#l122"><span class=cF4>Mem64DevAlloc</span></a><span class=cF0>() counting backward.
 <a name="l55"></a>
 <a name="l56"></a>
