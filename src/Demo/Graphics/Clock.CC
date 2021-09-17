@@ -1,4 +1,4 @@
-#define USE_JIFFIES		TRUE // Set FALSE for less smooth but more accurate time.
+#define USE_JIFFIES		FALSE // Set FALSE for less smooth but more accurate time.
 
 #define CLOCK_CENTER	70
 #define CLOCK_RADIUS	(CLOCK_CENTER-2)
