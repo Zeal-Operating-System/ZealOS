@@ -48,7 +48,7 @@ body {background-color:#fef1f0;}
 <a name="l21"></a></span><span class=cF5>DocTermNew</span><span class=cF0>;
 <a name="l22"></a></span><span class=cF5>WinVert</span><span class=cF0>(</span><span class=cFE>2</span><span class=cF0>, </span><span class=cFB>text</span><span class=cF0>.rows / </span><span class=cFE>8</span><span class=cF0>);
 <a name="l23"></a>
-<a name="l24"></a></span><span class=cFB>sys_winmgr_task</span><span class=cF0> = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>WinMgrTask</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Window Mgr&quot;</span><span class=cF0>);
+<a name="l24"></a></span><span class=cFB>sys_winmgr_task</span><span class=cF0> = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>WinMgrTask</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Window Manager&quot;</span><span class=cF0>);
 <a name="l25"></a></span><span class=cF5>Fs</span><span class=cF0>-&gt;win_inhibit = </span><span class=cF3>WIG_TASK_DEFAULT</span><span class=cF0> - </span><span class=cF3>WIF_SELF_BORDER</span><span class=cF0> - </span><span class=cF3>WIF_SELF_GRAB_SCROLL</span><span class=cF0> - </span><span class=cF3>WIF_SELF_CTRLS</span><span class=cF0>;
 <a name="l26"></a></span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_CHILDREN_NOT_ON_TOP</span><span class=cF0>);
 <a name="l27"></a></span><span class=cF5>LBts</span><span class=cF0>(&amp;</span><span class=cF5>Fs</span><span class=cF0>-&gt;display_flags, </span><span class=cF3>DISPLAYf_SHOW</span><span class=cF0>);

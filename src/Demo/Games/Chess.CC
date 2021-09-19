@@ -1203,27 +1203,27 @@ U0 DoChess()
 	XTalk(task, "#include \"::/Demo/Games/Chess\";\n");
 	BirthWait(&task->popup_task);
 	TaskWait(task->popup_task);
-	PostMsgWait(task->popup_task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
+	MessagePostWait(task->popup_task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
 	Sleep(100);
 	BirthWait(&task->popup_task);
 	TaskWait(task->popup_task);
-	PostMsgWait(task->popup_task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
+	MessagePostWait(task->popup_task, MESSAGE_KEY_DOWN_UP, CH_SPACE, 0);
 	Sleep(100);
 	for (i = 0; i < 8; i++)
 	{
-		PostMsgWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_DOWN);
-		PostMsgWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_RIGHT);
+		MessagePostWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_DOWN);
+		MessagePostWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_RIGHT);
 		Sleep(25);
 	}
-	PostMsgWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP);
+	MessagePostWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP);
 	Sleep(250);
-	PostMsgWait(task, MESSAGE_KEY_DOWN, CH_SPACE, 0);
-	PostMsgWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP);
+	MessagePostWait(task, MESSAGE_KEY_DOWN, CH_SPACE, 0);
+	MessagePostWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP);
 	Sleep(250);
-	PostMsgWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP);
-	PostMsgWait(task, MESSAGE_KEY_UP, CH_SPACE, 0);
+	MessagePostWait(task, MESSAGE_KEY_DOWN_UP, 0, SC_CURSOR_UP);
+	MessagePostWait(task, MESSAGE_KEY_UP, CH_SPACE, 0);
 	Sleep(1000);
-	PostMsgWait(task, MESSAGE_KEY_DOWN_UP, CH_SHIFT_ESC, 0);
+	MessagePostWait(task, MESSAGE_KEY_DOWN_UP, CH_SHIFT_ESC, 0);
 	DeathWait(&task, TRUE);
 }
 

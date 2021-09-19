@@ -80,7 +80,7 @@ body {background-color:#fef1f0;}
 <a name="l53"></a>    tmpt = header-&gt;next;
 <a name="l54"></a>    </span><span class=cF1>while</span><span class=cF0> (tmpt != header)
 <a name="l55"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l56"></a>        *ptr+ += tmpt-&gt;type;
+<a name="l56"></a>        *ptr++ = tmpt-&gt;type;
 <a name="l57"></a>        *ptr(</span><span class=cF9>CDate</span><span class=cF0> *)++ = tmpt-&gt;datetime;
 <a name="l58"></a>        </span><span class=cF5>StrCopy</span><span class=cF0>(ptr, tmpt-&gt;desc);
 <a name="l59"></a>        ptr += </span><span class=cF5>StrLen</span><span class=cF0>(tmpt-&gt;desc) + </span><span class=cFE>1</span><span class=cF0>;

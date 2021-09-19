@@ -53,7 +53,7 @@ U0 TimeFileWrite(TimeEntry *header)
 	tmpt = header->next;
 	while (tmpt != header)
 	{
-		*ptr+ += tmpt->type;
+		*ptr++ = tmpt->type;
 		*ptr(CDate *)++ = tmpt->datetime;
 		StrCopy(ptr, tmpt->desc);
 		ptr += StrLen(tmpt->desc) + 1;

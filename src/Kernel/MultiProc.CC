@@ -346,7 +346,7 @@ U0 Core0StartMP()
 
 	for (i = 1; i < my_mp_count; i++)
 	{
-		StrPrint(buf, "Executive Task CPU%02X", i);
+		StrPrint(buf, "Executive CPU%02X", i);
 		task = Spawn(&CoreAPExecutiveInit, NULL, buf,,, MEM_EXECUTIVE_STACK, 0);
 		task->rflags = RFLAGG_START;
 //$LK,"CTask",A="MN:CTask"$ alloced off this core's executive_task's heap (Which is System task)

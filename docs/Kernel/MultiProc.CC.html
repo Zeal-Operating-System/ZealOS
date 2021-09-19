@@ -373,7 +373,7 @@ body {background-color:#fef1f0;}
 <a name="l346"></a>
 <a name="l347"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>1</span><span class=cF0>; i &lt; my_mp_count; i++)
 <a name="l348"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l349"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Executive Task CPU%02X&quot;</span><span class=cF0>, i);
+<a name="l349"></a>        </span><span class=cF5>StrPrint</span><span class=cF0>(buf, </span><span class=cF6>&quot;Executive CPU%02X&quot;</span><span class=cF0>, i);
 <a name="l350"></a>        task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cFD>CoreAPExecutiveInit</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, buf,,, </span><span class=cF3>MEM_EXECUTIVE_STACK</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l351"></a>        task-&gt;rflags = </span><span class=cF3>RFLAGG_START</span><span class=cF0>;
 <a name="l352"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3980"><span class=cF4>CTask</span></a><span class=cF2> alloced off this core's executive_task's heap (Which is System task)</span><span class=cF0>

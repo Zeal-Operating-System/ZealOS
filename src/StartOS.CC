@@ -21,7 +21,7 @@ HashTablePurge(sys_task->hash_table);
 DocTermNew;
 WinVert(2, text.rows / 8);
 
-sys_winmgr_task = Spawn(&WinMgrTask, NULL, "Window Mgr");
+sys_winmgr_task = Spawn(&WinMgrTask, NULL, "Window Manager");
 Fs->win_inhibit = WIG_TASK_DEFAULT - WIF_SELF_BORDER - WIF_SELF_GRAB_SCROLL - WIF_SELF_CTRLS;
 LBts(&Fs->display_flags, DISPLAYf_CHILDREN_NOT_ON_TOP);
 LBts(&Fs->display_flags, DISPLAYf_SHOW);

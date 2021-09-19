@@ -1230,27 +1230,27 @@ body {background-color:#fef1f0;}
 <a name="l1203"></a>    </span><span class=cF5>XTalk</span><span class=cF0>(task, </span><span class=cF6>&quot;#include \&quot;::/Demo/Games/Chess\&quot;;\n&quot;</span><span class=cF0>);
 <a name="l1204"></a>    </span><span class=cF5>BirthWait</span><span class=cF0>(&amp;task-&gt;popup_task);
 <a name="l1205"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task-&gt;popup_task);
-<a name="l1206"></a>    PostMsgWait(task-&gt;popup_task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1206"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task-&gt;popup_task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1207"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>);
 <a name="l1208"></a>    </span><span class=cF5>BirthWait</span><span class=cF0>(&amp;task-&gt;popup_task);
 <a name="l1209"></a>    </span><span class=cF5>TaskWait</span><span class=cF0>(task-&gt;popup_task);
-<a name="l1210"></a>    PostMsgWait(task-&gt;popup_task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1210"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task-&gt;popup_task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1211"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>100</span><span class=cF0>);
 <a name="l1212"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>8</span><span class=cF0>; i++)
 <a name="l1213"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l1214"></a>        PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>);
-<a name="l1215"></a>        PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>);
+<a name="l1214"></a>        </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_DOWN</span><span class=cF0>);
+<a name="l1215"></a>        </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_RIGHT</span><span class=cF0>);
 <a name="l1216"></a>        </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>25</span><span class=cF0>);
 <a name="l1217"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l1218"></a>    PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
+<a name="l1218"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
 <a name="l1219"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0>);
-<a name="l1220"></a>    PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l1221"></a>    PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
+<a name="l1220"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1221"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
 <a name="l1222"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>250</span><span class=cF0>);
-<a name="l1223"></a>    PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
-<a name="l1224"></a>    PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1223"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF3>SC_CURSOR_UP</span><span class=cF0>);
+<a name="l1224"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF0>, </span><span class=cF3>CH_SPACE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1225"></a>    </span><span class=cF5>Sleep</span><span class=cF0>(</span><span class=cFE>1000</span><span class=cF0>);
-<a name="l1226"></a>    PostMsgWait(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l1226"></a>    </span><span class=cF5>MessagePostWait</span><span class=cF0>(task, </span><span class=cF3>MESSAGE_KEY_DOWN_UP</span><span class=cF0>, </span><span class=cF3>CH_SHIFT_ESC</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1227"></a>    </span><span class=cF5>DeathWait</span><span class=cF0>(&amp;task, </span><span class=cF3>TRUE</span><span class=cF0>);
 <a name="l1228"></a>}
 <a name="l1229"></a>
