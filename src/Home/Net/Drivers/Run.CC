@@ -7,6 +7,10 @@
 #define	PCIV_E1000		0x8086
 #define	PCID_82545EM	0x100F
 
+
+#define PCIV_VIRTIO		0x1AF4
+//#define PCID_VIRTIO_NET 0x1000
+
 U0 NetDriverInclude(U8 *driver)
 {
 	U8 *filename = MStrPrint(__DIR__ "/%s", driver);
@@ -41,10 +45,18 @@ U0 NetDriverInit()
 					break;
 			}
 			break;
+
+		case PCIV_VIRTIO:
+			NetDriverInclude("VirtIONet");
+			found = TRUE;
+			break;
 	}
 
 	if (!found)
-		throw('NET');
+	{
+		ClassRep(net_driver_pci);
+		throw('NODRIVER');
+	}
 }
 
 NetDriverInit;
