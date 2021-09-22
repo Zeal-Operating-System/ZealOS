@@ -133,7 +133,7 @@ public U0 GrScaleZoom(F64 scale)
 {//Multiply zoom factor larger or smaller.
 	F64 s = gr.screen_zoom;
 
-	gr.screen_zoom = gr.screen_zoom*scale;
+	gr.screen_zoom = gr.screen_zoom * scale;
 	GrFixZoomScale;
 	s /= gr.screen_zoom;
 	mouse.scale.x *= s;
@@ -149,48 +149,29 @@ public U0 GrScaleZoom(F64 scale)
 
 U0 GrZoomInScreen()
 {
-	GrFixZoomScale;
-	I64 plane, row, col, k, l, 
-		d2 = gr.zoomed_dc->width >> 3 / gr.screen_zoom, 
-		d4 = gr.zoomed_dc->width_internal >> 3, 
-		d5 = d4 - d2 * gr.screen_zoom, 
-		d3 = gr.zoomed_dc->height / gr.screen_zoom, 
-		d6 = (gr.zoomed_dc->height - d3) * gr.dc1->width_internal >> 3, 
-		d7 = gr.zoomed_dc->height % gr.screen_zoom * d4;
-	U8 *src, *src2, *dst, *src3, *map = gr.screen_zoom_tables[gr.screen_zoom];
+	I64 i, j, k, l;
+	U8 *src, *src2, *dst;
 
-	src = gr.dc1->body + gr.sx >> 3 + gr.sy * gr.dc1->width_internal >> 3;
+	GrFixZoomScale;
+
+	src = gr.dc2->body + gr.sx + gr.sy * gr.dc2->width_internal;
 	dst = gr.zoomed_dc->body;
-	for (plane = 1; plane < 0x10; plane <<= 1)
+
+	for (i = 0; i < GR_HEIGHT / gr.screen_zoom; i++)
 	{
-		row = d3;
-		while (row--)
+		k = gr.screen_zoom;
+		while (k--)
 		{
-			k = gr.screen_zoom;
-			while (k--)
+			src2 = src;
+			for (l = 0; l < GR_WIDTH / gr.screen_zoom; l++)
 			{
-				src2 = src;
-				col = d2;
-				while (col--)
-				{
-					src3 = &map[*src2++];
-					l = gr.screen_zoom;
-					while (l--)
-					{
-						*dst++ = *src3;
-						src3 += 256;
-					}
-				}
-				l = d5;
-				while (l--)
-					*dst++ = 0;
+				for (j = 0; j < gr.screen_zoom - 1; j++)
+					*dst++ = *src2;
+
+				*dst++ = *src2++;
 			}
-			src += d4;
 		}
-		l = d7;
-		while (l--)
-			*dst++ = 0;
-		src += d6;
+		src += GR_WIDTH;
 	}
 }
 
@@ -378,30 +359,38 @@ U0 DCBlotColor8(CDC *dc, CDC *img)
 
 U0 GrCalcScreenUpdates()
 {
-	U16 *screen = gr.dc2->body, *last_screen = gr.screen_cache;
+	U16 *screen, *last_screen = gr.screen_cache;
 	U64 i, *src = text.raw_screen, *dst = text.fb_alias, diffs_size = GR_WIDTH * GR_HEIGHT / 2;
+
+	if (gr.screen_zoom == 1)
+		screen = gr.dc2->body;
+	else
+		screen = gr.zoomed_dc->body;
 
 	for (i = 0; i < diffs_size; i++)
 	{
 		if (screen[i] != last_screen[i])
 			dst[i] = src[i];
 	}
-	MemCopy(gr.screen_cache, gr.dc2->body, diffs_size * 2);
+	MemCopy(gr.screen_cache, screen, diffs_size * 2);
 }
 
 U0 GrUpdateScreen32()
 {
 	U64 size, *dst;
 	U8 *src;
-//if (gr.screen_zoom == 1) {
+
+	if (gr.screen_zoom == 1)
+	{
 		src = gr.dc2->body;
 		size = src + gr.dc2->height * gr.dc2->width_internal;
-//}
-//else {
-//	GrZoomInScreen;
-//	src = gr.zoomed_dc->body;
-//	size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
-//}
+	}
+	else
+	{
+		GrZoomInScreen;
+		src = gr.zoomed_dc->body;
+		size = src + gr.zoomed_dc->height * gr.zoomed_dc->width_internal;
+	}
 	dst = text.raw_screen;
 	while (src < size) //draw 2 pixels at a time
 		*dst++ = gr_palette[*src++ & 0xFF] | gr_palette[*src++ & 0xFF] << 32;

@@ -6,6 +6,7 @@ U0 CtrlAltZ(I64 sc)
 		GrScaleZoom(0.5);
 	else
 		GrScaleZoom(2.0);
+	LFBFlush;
 }
 CtrlAltCBSet('Z', &CtrlAltZ, "Cmd /Zoom In", "Cmd /Zoom Out");
 

@@ -1,4 +1,8 @@
 $WW,1$$FG,5$$TX+CX,"ChangeLog"$$FG$
+$IV,1$----09/21/21 23:35:00----$IV,0$
+* Raised version number to 1.01.
+* Fixed $LK+PU,"GrZoomInScreen",A="MN:GrZoomInScreen"$, added to $LK+PU,"GrCalcScreenUpdates",A="MN:GrCalcScreenUpdates"$ to factor in zoom, added call to $LK+PU,"LFBFlush",A="MN:LFBFlush"$ in $LK+PU,"CtrlAltZ",A="FF:::/System/Gr/GrEnd.CC,LFBFlush"$.
+
 $IV,1$----09/15/21 20:33:11----$IV,0$
 * Added $LK+PU,"WinMax",A="FF:::/Doc/EdPullDown.DD,WinMax"$ to EdPullDown menu.
 
