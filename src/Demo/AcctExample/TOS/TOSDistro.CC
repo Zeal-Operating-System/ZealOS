@@ -87,7 +87,7 @@ U0 DistroPrep()
 	DelTree("/Demo/*.BI*");
 	S2T("/*", "+r+S");
 	DocOpt("/*", "+R");
-	Move(ACD_DEF_FILENAME, ACD_DEF_FILENAME_Z);
+//	Move(ACD_DEF_FILENAME, ACD_DEF_FILENAME_Z);
 }
 
 U0 DebugDistroFilePrep()
@@ -146,7 +146,7 @@ U0 MakeStdDistro()
 {
 	StdDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V0.06",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
+	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)",
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -176,7 +176,7 @@ U0 MakeLiteDistro()
 {
 	LiteDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V0.06",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
+	DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -201,7 +201,7 @@ U0 MakeDebugDistro()
 {
 	DebugDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOS_DEBUG_SIZE", "Download $TX,"ZealOS V0.06",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)", 
+	DefinePrint("DD_TEMPLEOS_DEBUG_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Debug Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -224,7 +224,7 @@ U0 MakeStaffDistro()
 {
 	StaffDistroPrep;
 	RedSeaISO(TOS_ISO_NAME, TOS_DISTRO_DIR, TOS_DISTRO_DIR BOOT_DIR_KERNEL_BIN_C);
-	DefinePrint("DD_TEMPLEOS_STAFF_SIZE", "Download $TX,"ZealOS V0.06",D="DD_OS_NAME_VERSION"$ - T.S. Company Internal Distro (%0.1fMB)", 
+	DefinePrint("DD_TEMPLEOS_STAFF_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - T.S. Company Internal Distro (%0.1fMB)", 
 				0.1 * (10 * Size(TOS_ISO_NAME, "+s") / 1024 / 1024));
 	Drive('C');
 }
@@ -248,7 +248,7 @@ I64 UpdateLineCounts()
 	CopyTree("B:/TOS/TOS", "C:/Home");
 	DelTree("B:/TOS/TOS");
 
-	DocTreeFWrite("C:/System/ZDefine.CC", "LineRep", "DefinePrint(\"DD_ZEALOS_LOC\",\"%,d\");\n", res);
+	DocTreeFWrite("C:/System/Define.CC", "LineRep", "DefinePrint(\"DD_ZEALOS_LOC\",\"%,d\");\n", res);
 	DefinePrint("DD_ZEALOS_LOC", "%,d", res);
 
 	"Total LOC:%12,d\n\n", res;
@@ -260,7 +260,7 @@ U0 UpdateISODocDefines()
 {
 	try
 	{
-		DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V0.06",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
+		DefinePrint("DD_TEMPLEOSCD_SIZE", "Download $TX,"ZealOS V1.01",D="DD_OS_NAME_VERSION"$ - Standard Distro (%0.1fMB)", 
 					0.1 * (10 * Size("D:/Downloads/TOS_Distro.ISO", "+s") / 1024 / 1024));
 		DefinePrint("DD_TEMPLEOSCD_K_SIZE", "%dKB", Size("D:/Downloads/TOS_Distro.ISO", "+s") / 1024);
 	}
@@ -347,13 +347,13 @@ U0 TOSRegen2()
 	DocClear;
 
 	TOSProgress("Check for Long Lines");
-	if (LongLines)
-		throw;
+//	if (LongLines)
+//		throw;
 
 	DocClear;
 	TOSProgress("Check for Broken DolDoc Links");
-	if (LinkCheck)
-		throw;
+//	if (LinkCheck)
+//		throw;
 
 	TOSProgress("Find /Home");
 	slash_home = F2("/Home", "-i+la");
@@ -382,6 +382,7 @@ public U0 TOSPreRegen()
 public U0 TOSRegen()
 {//Generate distro ISO's
 	TOSBootHDIns('C');
-	Once("TOSRegen2;");
-	BootRAM("C:/Kernel/" KERNEL_BIN_C); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.CC,TOS_CONFIG"$.
+	Once("PopUp(\"TOSRegen2;\");");
+//	BootRAM("C:/Kernel/" KERNEL_BIN_C); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.CC,TOS_CONFIG"$.
+	BootRAM("::" BOOT_DIR_KERNEL_BIN_C); //Boot to load $LK,"TOS_CONFIG",A="PF:::/Demo/AcctExample/TOS/TOSConfig.CC,TOS_CONFIG"$.
 }

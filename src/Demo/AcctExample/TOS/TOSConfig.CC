@@ -49,13 +49,13 @@ U0 TOSInit()
 
 #define TOS_ISO_NAME		"B:/TOS_Distro.ISO.C"
 #define TOS_DISTRO_DIR		"B:/Distro"
-#define CONFIG_OPTS 		"StaffMode\nMountIDEAuto\nCT\n"
-#define CONFIG_DEBUG_OPTS	"StaffMode\nMountIDEAuto\nCTHeapInit\n130\nMemInit\n131\nVarInit\n132\n\n"
-#define CONFIG_DEBUGZ_OPTS	"StaffMode\nMountIDEAuto\nCTHeapInit\n0\nMemInit\n0\nVarInit\n0\n\n"
-#define TOS_CONFIG			"\n" CONFIG_RAM_DRIVES CONFIG_DVD_DRIVES CONFIG_HARD_DRIVES "\n" CONFIG_DISK_CACHE CONFIG_OPTS
-#define TOS_DVD_CONFIG		"TB\n0x20000\nT \n\n\nStaffMode\nMountIDEAuto\nCT\n"
+#define CONFIG_OPTS 		"MountAHCIAuto\nCT\n"
+#define CONFIG_DEBUG_OPTS	"MountAHCIAuto\nCTHeapInit\n130\nMemInit\n131\nVarInit\n132\n\n"
+#define CONFIG_DEBUGZ_OPTS	"MountAHCIAuto\nCTHeapInit\n0\nMemInit\n0\nVarInit\n0\n\n"
+#define TOS_CONFIG			"\n" CONFIG_RAM_DRIVES CONFIG_DVD_DRIVES CONFIG_HARD_DRIVES "\n1024\n768\n" CONFIG_DISK_CACHE CONFIG_OPTS
+#define TOS_DVD_CONFIG		"TB\n0x20000\nT \n\n1024\n768\n\nMountAHCIAuto\nCT\n"
 
 #define TOS_DVD_DEBUG_CONFIG "A" CONFIG_DEBUG_DISTRO\
 							 "B\nScale2Mem(2048,0x40000)\n\n\n"\
-							 "NoMP\nTextMode\nDontProbe\nDebugDistro\n"\
+							 "NoMP\nDebugDistro\n"\
 							 "C:" CONFIG_DEBUG_DISTRO_FILE "\n" CONFIG_DEBUG_DISTRO_START "\n\n"

@@ -9,8 +9,10 @@ U0 UserStartUp()
 	WinToTop;
 	WinZBufUpdate;
 	Dir;
-	"$TX,"94,780",D="DD_ZEALOS_LOC"$LOC:";
+	"\n$TX,"94,710",D="DD_ZEALOS_LOC"$ LOC, ";
+	"%d MB RAM, ", MemBIOSTotal / 1024 / 1024;
 	CPURep;
+	"\n";
 }
 
 U0 ServerStartUp()

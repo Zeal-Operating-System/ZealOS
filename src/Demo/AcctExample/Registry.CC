@@ -2,20 +2,20 @@ $TR-UL,"System"$
 $ID,2$$TR,"SysMessageFlags"$
 $ID,2$sys_message_flags[0]=0xFF;
 $ID,-2$$TR,"SysRegVer"$
-$ID,2$registry_version=5.030;
+$ID,2$registry_version=1.010;
 $ID,-2$$TR,"InsReg"$
 $ID,2$#help_index "Registry/Install Registration"
-MemSet(&ins_reg,0,sizeof(CInsReg));
-ins_reg.registered=1;
-ins_reg.host_os=2;
-ins_reg.host_vm=2;
+//MemSet(&ins_reg,0,sizeof(CInsReg));
+//ins_reg.registered=1;
+//ins_reg.host_os=2;
+//ins_reg.host_vm=2;
 
 #define INS_REG_PERSONAL_INITIALS "TAD"
-StrCopy(ins_reg.initials,"TAD");
+//StrCopy(ins_reg.initials,"TAD");
 HashPublic("INS_REG_PERSONAL_INITIALS",HTT_DEFINE_STR);
 
 #define INS_REG_MACHINE_NUM 0
-ins_reg.machine_num=0;
+//ins_reg.machine_num=0;
 HashPublic("INS_REG_MACHINE_NUM",HTT_DEFINE_STR);
 
 "InsReg:%s:%d\n",INS_REG_PERSONAL_INITIALS,INS_REG_MACHINE_NUM;
@@ -79,4 +79,5 @@ I64 sound_enable=1;
 I64 use_keyboard=1;
 I64 use_gamepad=0;
 I64 lcd_scale=2;
-$ID,-2$$ID,-2$
+$ID,-2$$ID,-2$$TR,"AutoComplete"$
+$ID,2$ac.col=97;ac.row=10;$ID,-2$

@@ -76,15 +76,15 @@ body {background-color:#fef1f0;}
 <a name="l49"></a>
 <a name="l50"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_ISO_NAME        </span><span class=cF6>&quot;B:/TOS_Distro.ISO.C&quot;</span><span class=cF0>
 <a name="l51"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_DISTRO_DIR      </span><span class=cF6>&quot;B:/Distro&quot;</span><span class=cF0>
-<a name="l52"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_OPTS         </span><span class=cF6>&quot;StaffMode\nMountIDEAuto\nCT\n&quot;</span><span class=cF0>
-<a name="l53"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DEBUG_OPTS   </span><span class=cF6>&quot;StaffMode\nMountIDEAuto\nCTHeapInit\n130\nMemInit\n131\nVarInit\n132\n\n&quot;</span><span class=cF0>
-<a name="l54"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DEBUGZ_OPTS  </span><span class=cF6>&quot;StaffMode\nMountIDEAuto\nCTHeapInit\n0\nMemInit\n0\nVarInit\n0\n\n&quot;</span><span class=cF0>
-<a name="l55"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_CONFIG          </span><span class=cF6>&quot;\n&quot;</span><span class=cF0> CONFIG_RAM_DRIVES CONFIG_DVD_DRIVES CONFIG_HARD_DRIVES </span><span class=cF6>&quot;\n&quot;</span><span class=cF0> CONFIG_DISK_CACHE CONFIG_OPTS
-<a name="l56"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_DVD_CONFIG      </span><span class=cF6>&quot;TB\n0x20000\nT \n\n\nStaffMode\nMountIDEAuto\nCT\n&quot;</span><span class=cF0>
+<a name="l52"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_OPTS         </span><span class=cF6>&quot;MountAHCIAuto\nCT\n&quot;</span><span class=cF0>
+<a name="l53"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DEBUG_OPTS   </span><span class=cF6>&quot;MountAHCIAuto\nCTHeapInit\n130\nMemInit\n131\nVarInit\n132\n\n&quot;</span><span class=cF0>
+<a name="l54"></a>#</span><span class=cF1>define</span><span class=cF0> CONFIG_DEBUGZ_OPTS  </span><span class=cF6>&quot;MountAHCIAuto\nCTHeapInit\n0\nMemInit\n0\nVarInit\n0\n\n&quot;</span><span class=cF0>
+<a name="l55"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_CONFIG          </span><span class=cF6>&quot;\n&quot;</span><span class=cF0> CONFIG_RAM_DRIVES CONFIG_DVD_DRIVES CONFIG_HARD_DRIVES </span><span class=cF6>&quot;\n1024\n768\n&quot;</span><span class=cF0> CONFIG_DISK_CACHE CONFIG_OPTS
+<a name="l56"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_DVD_CONFIG      </span><span class=cF6>&quot;TB\n0x20000\nT \n\n1024\n768\n\nMountAHCIAuto\nCT\n&quot;</span><span class=cF0>
 <a name="l57"></a>
 <a name="l58"></a>#</span><span class=cF1>define</span><span class=cF0> TOS_DVD_DEBUG_CONFIG </span><span class=cF6>&quot;A&quot;</span><span class=cF0> CONFIG_DEBUG_DISTRO\
 <a name="l59"></a>                             </span><span class=cF6>&quot;B\nScale2Mem(2048,0x40000)\n\n\n&quot;</span><span class=cF0>\
-<a name="l60"></a>                             </span><span class=cF6>&quot;NoMP\nTextMode\nDontProbe\nDebugDistro\n&quot;</span><span class=cF0>\
+<a name="l60"></a>                             </span><span class=cF6>&quot;NoMP\nDebugDistro\n&quot;</span><span class=cF0>\
 <a name="l61"></a>                             </span><span class=cF6>&quot;C:&quot;</span><span class=cF0> CONFIG_DEBUG_DISTRO_FILE </span><span class=cF6>&quot;\n&quot;</span><span class=cF0> CONFIG_DEBUG_DISTRO_START </span><span class=cF6>&quot;\n\n&quot;</span><span class=cF0>
 </span></pre></body>
 </html>
