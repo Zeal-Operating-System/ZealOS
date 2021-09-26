@@ -355,7 +355,7 @@ body {background-color:#fef1f0;}
 <a name="l328"></a>        okay = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l329"></a>    </span><span class=cF1>if</span><span class=cF0> (okay)
 <a name="l330"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l331"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;$$WW+H,1$$\&quot;;In(\&quot;ExeFile2(\\\&quot;%s\\\&quot;,CCF_CMD_LINE);\\n\&quot;);UserTaskCont;&quot;</span><span class=cF0>, name2);
+<a name="l331"></a>        st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;$$WW+H,1$$\&quot;; In(\&quot;ExeFile2(\\\&quot;%s\\\&quot;, CCF_CMD_LINE);\\n\&quot;); UserTaskCont;&quot;</span><span class=cF0>, name2);
 <a name="l332"></a>        res = </span><span class=cF5>PopUp</span><span class=cF0>(st, parent, _pu_task);
 <a name="l333"></a>        </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l334"></a>    </span><span class=cF7>}</span><span class=cF0>
@@ -370,7 +370,7 @@ body {background-color:#fef1f0;}
 <a name="l343"></a>    </span><span class=cF1>U8</span><span class=cF0> *st, *name = </span><span class=cF5>FileNameAbs</span><span class=cF0>(filename), *name2 = </span><span class=cF5>ExtDefault</span><span class=cF0>(name, </span><span class=cF6>&quot;CC&quot;</span><span class=cF0>);
 <a name="l344"></a>    </span><span class=cF9>I64</span><span class=cF0> res = </span><span class=cFE>0</span><span class=cF0>;
 <a name="l345"></a>
-<a name="l346"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;$$WW+H,1$$\&quot;;ExeFile2(\&quot;%s\&quot;,0x%X);LastFun(0x%X,0x%X);&quot;</span><span class=cF0>, name2, ccf_flags, argc, argv);
+<a name="l346"></a>    st = </span><span class=cF5>MStrPrint</span><span class=cF0>(</span><span class=cF6>&quot;\&quot;$$WW+H,1$$\&quot;; ExeFile2(\&quot;%s\&quot;, 0x%X); LastFun(0x%X, 0x%X);&quot;</span><span class=cF0>, name2, ccf_flags, argc, argv);
 <a name="l347"></a>    res = </span><span class=cF5>PopUp</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>);
 <a name="l348"></a>    </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l349"></a>    </span><span class=cF5>Free</span><span class=cF0>(name2);

@@ -115,7 +115,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check your changes.
 
 * Using a sub-int array, $FG,2$i.u8[3]$FG$, for example, will force a local var to non-reg.
 
-* You can delete the $FG,4$~/Registry.CC$FG$ file. The policy is that deleting it will restore defaults. It is a text doc, if you want to edit it. Be careful of tree indentations.
+* You can delete the $FG,4$~/Registry.CC$FG$ file. The policy is that deleting it will restore defaults. It is a text doc, if you want to edit it. See $LK,"RegDefault",A="MN:RegDefault"$, $LK,"RegAppend",A="MN:RegAppend"$, $LK,"RegExe",A="MN:RegExe"$. Be careful of tree indentations.
 
 * Study $LK,"::/System/Utils/MemRep.CC"$ and $LK,"WallPaper",A="MN:WallPaper"$() to learn how the system resources are put together.
 

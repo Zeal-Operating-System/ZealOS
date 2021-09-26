@@ -83,7 +83,7 @@ body {background-color:#fef1f0;}
 <a name="l56"></a>
 <a name="l57"></a>* Use </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocRecalcLib.CC.html#l203"><span class=cF4>DocMax</span></a><span class=cF0>() to adjust the size of the cmd line buf. It counts </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> entries, not lines.
 <a name="l58"></a>
-<a name="l59"></a>* Many data structures have a </span><span class=cF2>user_data</span><span class=cF0> member. Those are available for you to store a data item, for convenience. </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3980"><span class=cF4>CTask</span></a><span class=cF0>, </span><span class=cF4>
+<a name="l59"></a>* Many data structures have a </span><span class=cF2>user_data</span><span class=cF0> member. Those are available for you to store a data item, for convenience. </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3984"><span class=cF4>CTask</span></a><span class=cF0>, </span><span class=cF4>
 <a name="l60"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1326"><span class=cF4>CDocEntry</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3204"><span class=cF4>CDirEntry</span></a><span class=cF0> have them. You shouldn't encounter conflicts with ZealOS using them.
 <a name="l61"></a>
 <a name="l62"></a>* If, for some strange reason, you wanted to reduce mem usage, make a smaller disk cache when you recompile the kernel; 
@@ -175,7 +175,7 @@ body {background-color:#fef1f0;}
 <a name="l148"></a>* Using a sub-int array, </span><span class=cF2>i.u8[3]</span><span class=cF0>, for example, will force a local var to non-reg.
 <a name="l149"></a>
 <a name="l150"></a>* You can delete the </span><span class=cF4>~/Registry.CC</span><span class=cF0> file. The policy is that deleting it will restore defaults. It is a text doc, if you want 
-<a name="l151"></a>to edit it. Be careful of tree indentations.
+<a name="l151"></a>to edit it. See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l23"><span class=cF4>RegDefault</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l90"><span class=cF4>RegAppend</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l52"><span class=cF4>RegExe</span></a><span class=cF0>. Be careful of tree indentations.
 <a name="l152"></a>
 <a name="l153"></a>* Study </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Utils/MemRep.CC.html#l1"><span class=cF4>::/System/Utils/MemRep.CC</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/WallPaper.CC.html#l17"><span class=cF4>WallPaper</span></a><span class=cF0>() to learn how the system resources are put together.
 <a name="l154"></a>

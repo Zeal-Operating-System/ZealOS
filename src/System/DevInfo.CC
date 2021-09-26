@@ -145,6 +145,7 @@ U0 PCILookUpDevs()
 			for (f = 0; f < 8; f++)
 			{
 				w1 = PCIReadU16(b, d, f, PCIR_VENDOR_ID);
+				Yield; // keep from hanging graphics on bare-metal
 				if (w1 != 0xFFFF)
 				{
 					tmppci = SysCAlloc(sizeof(CPCIDev));
@@ -264,7 +265,7 @@ public U0 MemBIOSRep()
 	tmpmr = dev.mem32_head.next;
 	while (tmpmr != &dev.mem32_head)
 	{
-		"%z:%08X-%08X\n", tmpmr->type, "Unused\0RAM\0Device", tmpmr->base, tmpmr->base + tmpmr->size - 1;
+		"%z: %08X-%08X\n", tmpmr->type, "Unused\0RAM\0Device", tmpmr->base, tmpmr->base + tmpmr->size - 1;
 		tmpmr = tmpmr->next;
 	}
 	LBtr(&sys_semas[SEMA_DEV_MEM], 0);
@@ -292,24 +293,24 @@ public U0 MemBIOSRep()
 				case MEM_E820t_USABLE:
 					if (!IsRaw)
 						"$$GREEN$$";
-					"Usable     :";
+					"Usable:      ";
 					break;
 
 				case MEM_E820t_ACPI:
 				case MEM_E820t_ACPI_NVS:
-					"ACPI       :";
+					"ACPI:        ";
 					 break;
 
 				case MEM_E820t_BAD_MEM:
-					"Bad memory :";
+					"Bad memory:  ";
 					 break;
 
 				case MEM_E820t_PERM_MEM:
-					"Perm memory:";
+					"Perm memory: ";
 
 				case MEM_E820t_RESERVED:
 				default:
-					"Reserved   :";
+					"Reserved:    ";
 					break;
 			 }
 			"%016X-%016X", m20->base, m20->base + m20->len - 1;

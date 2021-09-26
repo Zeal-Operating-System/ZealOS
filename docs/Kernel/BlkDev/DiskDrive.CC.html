@@ -410,7 +410,7 @@ body {background-color:#fef1f0;}
 <a name="l383"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>IsRaw</span><span class=cF0>)
 <a name="l384"></a>                </span><span class=cF6>&quot;$FG,%d$$BG,%d$&quot;</span><span class=cF0>, attr &amp; </span><span class=cFE>15</span><span class=cF0>, attr &gt;&gt; </span><span class=cFE>4</span><span class=cF0>;
 <a name="l385"></a>
-<a name="l386"></a>            </span><span class=cF6>&quot;%C %-8Z %-10Z &quot;</span><span class=cF0>,   drv_let,
+<a name="l386"></a>            </span><span class=cF6>&quot;%C %-9Z %-10Z &quot;</span><span class=cF0>,   drv_let,
 <a name="l387"></a>                                drive-&gt;fs_type &amp; </span><span class=cF3>FSG_TYPE_MASK</span><span class=cF0>,
 <a name="l388"></a>                                </span><span class=cF6>&quot;ST_DRIVE_TYPES&quot;</span><span class=cF0>,
 <a name="l389"></a>                                bd-&gt;type,
@@ -421,12 +421,12 @@ body {background-color:#fef1f0;}
 <a name="l394"></a>
 <a name="l395"></a>            </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>DriveModelNum</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>)
 <a name="l396"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l397"></a>                </span><span class=cF6>&quot;   Model# :%s\n&quot;</span><span class=cF0>, st;
+<a name="l397"></a>                </span><span class=cF6>&quot;   Model:   %s\n&quot;</span><span class=cF0>, st;
 <a name="l398"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l399"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l400"></a>            </span><span class=cF1>if</span><span class=cF0> (st = </span><span class=cF5>DriveSerialNum</span><span class=cF7>(</span><span class=cF0>drv_let</span><span class=cF7>)</span><span class=cF0>)
 <a name="l401"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l402"></a>                </span><span class=cF6>&quot;   Serial#:%s\n&quot;</span><span class=cF0>, st;
+<a name="l402"></a>                </span><span class=cF6>&quot;   Serial:  %s\n&quot;</span><span class=cF0>, st;
 <a name="l403"></a>                </span><span class=cF5>Free</span><span class=cF0>(st);
 <a name="l404"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l405"></a>            </span><span class=cF1>if</span><span class=cF0> (bd-&gt;type == </span><span class=cF3>BDT_ISO_FILE_READ</span><span class=cF0> || bd-&gt;type == </span><span class=cF3>BDT_ISO_FILE_WRITE</span><span class=cF0>)

@@ -3652,6 +3652,10 @@ public U32 class CBGR24
 {
 	U8		b, g, r, pad;
 };
+public U32 class CBGR32
+{
+	U8		b, g, r, a;
+};
 public I64 class CBGR48
 {
 	U16 	b, g, r, pad;

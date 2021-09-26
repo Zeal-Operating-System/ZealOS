@@ -587,12 +587,12 @@ U0 AHCIPortIdentify(CBlkDev *bd)
 	if (port->signature == AHCI_PxSIG_ATA)
 	{
 		bd->max_blk = AHCILBA48CapacityGet(dev_id_record);
-		"MAX BLOCK %d, disk size %d MiB\n", bd->max_blk, bd->max_blk * BLK_SIZE / 1024 / 1024; 
+		"Max Block: %d, Disk Size: %d MiB\n", bd->max_blk, bd->max_blk * BLK_SIZE / 1024 / 1024; 
 	}
 	else
 	{
 		bd->max_blk = AHCIAtapiCapacityGet(bd);
-		"MAX BLOCK %d, disk size %d MiB\n", bd->max_blk, bd->max_blk * DVD_BLK_SIZE / 1024 / 1024; 
+		"Max Block: %d, Disk Size: %d MiB\n", bd->max_blk, bd->max_blk * DVD_BLK_SIZE / 1024 / 1024; 
 	}
 }
 

@@ -770,65 +770,68 @@ body {background-color:#fef1f0;}
 <a name="l743"></a>        rip++;
 <a name="l744"></a>
 <a name="l745"></a>    </span><span class=cF1>if</span><span class=cF0> (*arg1_st)
-<a name="l746"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;\t%s&quot;</span><span class=cF0>, arg1_st);
-<a name="l747"></a>    </span><span class=cF1>if</span><span class=cF0> (*arg2_st)
-<a name="l748"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;, %s&quot;</span><span class=cF0>, arg2_st);
-<a name="l749"></a>    </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
-<a name="l750"></a>    </span><span class=cF5>CatPrint</span><span class=cF0>(line2, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
-<a name="l751"></a>    </span><span class=cF1>if</span><span class=cF0> (!just_ins)
-<a name="l752"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l753"></a>        </span><span class=cF1>for</span><span class=cF0> (i = rip - </span><span class=cF7>(</span><span class=cF0>*_rip</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>; i &lt; </span><span class=cFE>6</span><span class=cF0>; i++)
-<a name="l754"></a>        {
-<a name="l755"></a>            bin_data_area1[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l756"></a>            bin_data_area1[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l757"></a>        }
-<a name="l758"></a>        </span><span class=cF1>for</span><span class=cF0> (i = rip - </span><span class=cF7>(</span><span class=cF0>*_rip</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>; i &lt; </span><span class=cFE>12</span><span class=cF0>; i++)
-<a name="l759"></a>        {
-<a name="l760"></a>            bin_data_area2[(i - </span><span class=cFE>6</span><span class=cF0>) &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l761"></a>            bin_data_area2[(i - </span><span class=cFE>6</span><span class=cF0>) &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l762"></a>        }
-<a name="l763"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l764"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(buf, line1);
-<a name="l765"></a>    </span><span class=cF1>if</span><span class=cF0> (!just_ins &amp;&amp; rip - </span><span class=cF7>(</span><span class=cF0>*_rip</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>6</span><span class=cF0>)
-<a name="l766"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(buf, line2);
-<a name="l767"></a>    *_rip = rip;
-<a name="l768"></a>}
-<a name="l769"></a>
-<a name="l770"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>U</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *rip, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>20</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> seg_size=</span><span class=cFE>64</span><span class=cF0>)
-<a name="l771"></a>{</span><span class=cF2>//Unassembles a num of insts.</span><span class=cF0>
-<a name="l772"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
-<a name="l773"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>1024</span><span class=cF0>];
-<a name="l774"></a>
-<a name="l775"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
-<a name="l776"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
-<a name="l777"></a>    </span><span class=cF6>&quot;$HL,1$\n&quot;</span><span class=cF0>;
-<a name="l778"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
-<a name="l779"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l780"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
-<a name="l781"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
-<a name="l782"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l783"></a>    </span><span class=cF6>&quot;$HL,0$\n&quot;</span><span class=cF0>;
-<a name="l784"></a>
-<a name="l785"></a>    </span><span class=cF1>return</span><span class=cF0> rip;
-<a name="l786"></a>}
+<a name="l746"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l747"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;%h*c&quot;</span><span class=cF0>, </span><span class=cFE>6</span><span class=cF0> - </span><span class=cF5>StrLen</span><span class=cF7>(</span><span class=cF0>tmpo-&gt;str</span><span class=cF7>)</span><span class=cF0>, </span><span class=cF6>' '</span><span class=cF0>);
+<a name="l748"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, arg1_st);
+<a name="l749"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l750"></a>    </span><span class=cF1>if</span><span class=cF0> (*arg2_st)
+<a name="l751"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;, %s&quot;</span><span class=cF0>, arg2_st);
+<a name="l752"></a>    </span><span class=cF5>CatPrint</span><span class=cF0>(line1, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l753"></a>    </span><span class=cF5>CatPrint</span><span class=cF0>(line2, </span><span class=cF6>&quot;\n&quot;</span><span class=cF0>);
+<a name="l754"></a>    </span><span class=cF1>if</span><span class=cF0> (!just_ins)
+<a name="l755"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l756"></a>        </span><span class=cF1>for</span><span class=cF0> (i = rip - </span><span class=cF7>(</span><span class=cF0>*_rip</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>; i &lt; </span><span class=cFE>6</span><span class=cF0>; i++)
+<a name="l757"></a>        {
+<a name="l758"></a>            bin_data_area1[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l759"></a>            bin_data_area1[i &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l760"></a>        }
+<a name="l761"></a>        </span><span class=cF1>for</span><span class=cF0> (i = rip - </span><span class=cF7>(</span><span class=cF0>*_rip</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0>; i &lt; </span><span class=cFE>12</span><span class=cF0>; i++)
+<a name="l762"></a>        {
+<a name="l763"></a>            bin_data_area2[(i - </span><span class=cFE>6</span><span class=cF0>) &lt;&lt; </span><span class=cFE>1</span><span class=cF0>]     = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l764"></a>            bin_data_area2[(i - </span><span class=cFE>6</span><span class=cF0>) &lt;&lt; </span><span class=cFE>1</span><span class=cF0> + </span><span class=cFE>1</span><span class=cF0>] = </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l765"></a>        }
+<a name="l766"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l767"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(buf, line1);
+<a name="l768"></a>    </span><span class=cF1>if</span><span class=cF0> (!just_ins &amp;&amp; rip - </span><span class=cF7>(</span><span class=cF0>*_rip</span><span class=cF7>)(</span><span class=cF9>I64</span><span class=cF7>)</span><span class=cF0> &gt; </span><span class=cFE>6</span><span class=cF0>)
+<a name="l769"></a>        </span><span class=cF5>CatPrint</span><span class=cF0>(buf, line2);
+<a name="l770"></a>    *_rip = rip;
+<a name="l771"></a>}
+<a name="l772"></a>
+<a name="l773"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>U</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *rip, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>20</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> seg_size=</span><span class=cFE>64</span><span class=cF0>)
+<a name="l774"></a>{</span><span class=cF2>//Unassembles a num of insts.</span><span class=cF0>
+<a name="l775"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
+<a name="l776"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>1024</span><span class=cF0>];
+<a name="l777"></a>
+<a name="l778"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l779"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
+<a name="l780"></a>    </span><span class=cF6>&quot;$HL,1$\n&quot;</span><span class=cF0>;
+<a name="l781"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; count; i++)
+<a name="l782"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l783"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
+<a name="l784"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
+<a name="l785"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l786"></a>    </span><span class=cF6>&quot;$HL,0$\n&quot;</span><span class=cF0>;
 <a name="l787"></a>
-<a name="l788"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Un</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *rip, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> seg_size=</span><span class=cFE>64</span><span class=cF0>)
-<a name="l789"></a>{</span><span class=cF2>//Unassembles a num of bytes</span><span class=cF0>
-<a name="l790"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
-<a name="l791"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>1024</span><span class=cF0>], *end_rip = rip(</span><span class=cF9>I64</span><span class=cF0>) + count;
-<a name="l792"></a>
-<a name="l793"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
-<a name="l794"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
-<a name="l795"></a>    </span><span class=cF6>&quot;$HL,1$\n&quot;</span><span class=cF0>;
-<a name="l796"></a>    </span><span class=cF1>while</span><span class=cF0> (rip &lt; end_rip)
-<a name="l797"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l798"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
-<a name="l799"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
-<a name="l800"></a>        i++;
-<a name="l801"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l802"></a>    </span><span class=cF6>&quot;$HL,0$\n&quot;</span><span class=cF0>;
-<a name="l803"></a>
-<a name="l804"></a>    </span><span class=cF1>return</span><span class=cF0> i;
-<a name="l805"></a>}
+<a name="l788"></a>    </span><span class=cF1>return</span><span class=cF0> rip;
+<a name="l789"></a>}
+<a name="l790"></a>
+<a name="l791"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Un</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *rip, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> seg_size=</span><span class=cFE>64</span><span class=cF0>)
+<a name="l792"></a>{</span><span class=cF2>//Unassembles a num of bytes</span><span class=cF0>
+<a name="l793"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
+<a name="l794"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cFE>1024</span><span class=cF0>], *end_rip = rip(</span><span class=cF9>I64</span><span class=cF0>) + count;
+<a name="l795"></a>
+<a name="l796"></a>    </span><span class=cF1>if</span><span class=cF0> (seg_size == </span><span class=cFE>16</span><span class=cF0>)
+<a name="l797"></a>        </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;16-bit unassembly is not well supported.\n&quot;</span><span class=cF0>);
+<a name="l798"></a>    </span><span class=cF6>&quot;$HL,1$\n&quot;</span><span class=cF0>;
+<a name="l799"></a>    </span><span class=cF1>while</span><span class=cF0> (rip &lt; end_rip)
+<a name="l800"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l801"></a>        </span><span class=cF5>Ui</span><span class=cF0>(buf, &amp;rip, seg_size);
+<a name="l802"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, buf;
+<a name="l803"></a>        i++;
+<a name="l804"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l805"></a>    </span><span class=cF6>&quot;$HL,0$\n&quot;</span><span class=cF0>;
+<a name="l806"></a>
+<a name="l807"></a>    </span><span class=cF1>return</span><span class=cF0> i;
+<a name="l808"></a>}
 </span></pre></body>
 </html>

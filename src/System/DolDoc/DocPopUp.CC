@@ -328,7 +328,7 @@ public I64 PopUpFile(U8 *filename, Bool warn_ext=TRUE, CTask *parent=NULL, CTask
 		okay = FALSE;
 	if (okay)
 	{
-		st = MStrPrint("\"$$$$WW+H,1$$$$\";In(\"ExeFile2(\\\"%s\\\",CCF_CMD_LINE);\\n\");UserTaskCont;", name2);
+		st = MStrPrint("\"$$$$WW+H,1$$$$\"; In(\"ExeFile2(\\\"%s\\\", CCF_CMD_LINE);\\n\"); UserTaskCont;", name2);
 		res = PopUp(st, parent, _pu_task);
 		Free(st);
 	}
@@ -343,7 +343,7 @@ public I64 PopUpRunFile(U8 *filename, I64 ccf_flags=0, ...)
 	U8 *st, *name = FileNameAbs(filename), *name2 = ExtDefault(name, "CC");
 	I64 res = 0;
 
-	st = MStrPrint("\"$$$$WW+H,1$$$$\";ExeFile2(\"%s\",0x%X);LastFun(0x%X,0x%X);", name2, ccf_flags, argc, argv);
+	st = MStrPrint("\"$$$$WW+H,1$$$$\"; ExeFile2(\"%s\", 0x%X); LastFun(0x%X, 0x%X);", name2, ccf_flags, argc, argv);
 	res = PopUp(st, Fs);
 	Free(st);
 	Free(name2);
