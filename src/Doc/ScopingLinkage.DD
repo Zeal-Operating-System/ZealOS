@@ -1,8 +1,8 @@
 $FG,5$$TX+CX,"Scoping and Linkage"$$FG$
 $WW,1$
-$LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ makes use of the current task's hash sym table and its parent tasks' tables.  It fetches syms from parent tasks' tables if not found locally in the current task's table and it places new syms in the current task's table.  Conceptually, syms are at the scope of environment vars in other operating systems.
+$LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ makes use of the current task's hash sym table and its parent tasks' tables.  It fetches syms from parent tasks' tables if not found locally in the current task's table and it places new syms in the current task's table.  Conceptually, syms are at the scope of environment variables in other operating systems.
 
-When a sym is placed into a table, older syms with ident names will be overshadowed if they exist.	Duplicates are not allowed in many cases, especially in asm blks.  Dupicates are allowed, by design in other cases, so that you can repeatedly $FG,2$#include$FG$ the same file from the cmd line while developing it.	Or, so you can repeatedly declare a function with a standard name, like $FG,2$DrawIt()$FG$.  This case might occur when the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$ is starting-up loading-in many little utilities.
+When a sym is placed into a table, older syms with ident names will be overshadowed if they exist.	Duplicates are not allowed in many cases, especially in asm blocks.  Dupicates are allowed, by design in other cases, so that you can repeatedly $FG,2$#include$FG$ the same file from the cmd line while developing it.	Or, so you can repeatedly declare a function with a standard name, like $FG,2$DrawIt()$FG$.  This case might occur when the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$ is starting-up loading-in many little utilities.
 
 $FG,2$extern$FG$ binds a new $LK,"HTT_FUN",A="MN:HTT_FUN"$ or $LK,"HTT_GLOBAL_VAR",A="MN:HTT_GLOBAL_VAR"$ sym to an existing sym of the same name if it exists in the sym table (just in just-in-time code).	It also can be used to generate a forward reference.
 
@@ -36,21 +36,21 @@ C 	goto	$FG,2$label:$FG$ 		F C   FG   N
 
 			$FG,2$#define$FG$		x	  MR   D
 			function	G C S MR   D
-			var			F R   FR   N
-			var			F S   FR   N
-$FG,2$static$FG$		var			F C   FR D N
-			var			G C S MR D D
-			var			G D   MR N D
+			variable	F R   FR   N
+			variable	F S   FR   N
+$FG,2$static$FG$		variable	F C   FR D N
+			variable	G C S MR D D
+			variable	G D   MR N D
 			$FG,2$class$FG$		G	  MR   D
 class 		member		G	  MR   P
 $FG,2$extern		class$FG$		G	  MR   D
 $FG,2$extern$FG$		function	G C   MR   W
 $FG,2$import$FG$		function	G C   MR   D
-$FG,2$import$FG$		var			G C   MR   D
+$FG,2$import$FG$		variable	G C   MR   D
 $FG,2$_extern$FG$ 	function	G C   MR   D
-$FG,2$_extern$FG$ 	var			G C   MR   D
+$FG,2$_extern$FG$ 	variable	G C   MR   D
 $FG,2$_import$FG$ 	function	G C   MR   D
-$FG,2$_import$FG$ 	var			G C   MR   D
+$FG,2$_import$FG$ 	variable	G C   MR   D
 
 
 $FG,5$Just in Time Compilation$FG$
@@ -75,30 +75,30 @@ C 	goto	$FG,2$label:$FG$		F C   FG   N
 
 			$FG,2$#define$FG$		x 	D TR   D
 			function	G C F TR   D
-			var			F R   FR   N
-			var			F S   FR   N
-$FG,2$static$FG$		var			F C   FR D N
-			var			G C G TR D D
-			var			G D G TR S D
+			variable	F R   FR   N
+			variable	F S   FR   N
+$FG,2$static$FG$		variable	F C   FR D N
+			variable	G C G TR D D
+			variable			G D G TR S D
 			$FG,2$class$FG$		G 	C TR   D
 class 		member		G	  TR   P
 $FG,2$extern		class$FG$		G 	C TR   D
 $FG,2$extern$FG$		function	G C F TR   W
-$FG,2$extern$FG$		var			G C G TR   D
-$FG,2$extern$FG$		var			G D G TR   D
+$FG,2$extern$FG$		variable	G C G TR   D
+$FG,2$extern$FG$		variable	G D G TR   D
 $FG,2$_extern$FG$ 	function	G C F TR   D
-$FG,2$_extern$FG$ 	var			G C G TR   D
+$FG,2$_extern$FG$ 	variable	G C G TR   D
 
 $WW,1$
 * Goto labels must not have the same name as global scope objects.	GoTo's are rare and we don't want to slow the compiler and add code to fix this.  You will get errors if a collision happens, so it's not very dangerous, but the error message is baffling.
 
 * The member names $FG,2$pad$FG$ and $FG,2$reserved$FG$ are special because multiple instances with the same name are allowed in a class.
 
-* Use $FG,2$reg$FG$ or $FG,2$noreg$FG$ in front of local var names to override automatic reg var allocation.	You can, optionally, specify a reg after the $FG,2$reg$FG$ keyword.
+* Use $FG,2$reg$FG$ or $FG,2$noreg$FG$ in front of local variable names to override automatic register variable allocation.	You can, optionally, specify a register after the $FG,2$reg$FG$ keyword.
  
-* Local non-reg function vars can be accessed in asm blks with $FG,2$&i[RBP]$FG$ for example.
+* Local non-reg function variables can be accessed in asm blocks with $FG,2$&i[RBP]$FG$ for example.
 
-* Global vars and functions can be accessed in asm with and $FG,2$&$FG$ as in
+* Global variables and functions can be accessed in asm with and $FG,2$&$FG$ as in
 				$FG,2$MOV 			RAX, I64 [&global_var]
 				CALL		I32 &Fun
 				CALL		I32 &SYS_SYM$FG$
@@ -107,14 +107,14 @@ $WW,1$
 
 * All offspring tasks of a task inherit syms.
 
-* The $FG,2$sizeof()$FG$ and CosmiC structure members can be used in asm blks.
+* The $FG,2$sizeof()$FG$ and CosmiC structure members can be used in asm blocks.
 
-* Using $FG,2$&i$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ or $FG,2$i.u8[2]$FG$ on a local var, $FG,2$i$FG$, will force it to $FG,2$noreg$FG$.
+* Using $FG,2$&i$FG$ in $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ or $FG,2$i.u8[2]$FG$ on a local variable, $FG,2$i$FG$, will force it to $FG,2$noreg$FG$.
 
-* Using $FG,2$try$FG$/$FG,2$catch$FG$ in a function will force all local vars to $FG,2$noreg$FG$.
+* Using $FG,2$try$FG$/$FG,2$catch$FG$ in a function will force all local variables to $FG,2$noreg$FG$.
 
-* An unused gap on the stack is left for $FG,2$reg$FG$ vars.
+* An unused gap on the stack is left for $FG,2$reg$FG$ variables.
 
-* Note: $FG,2$static$FG$ function vars do not go on the data heap, no matter the setting of the $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$$FG$.	They may in the future.
+* Note: $FG,2$static$FG$ function variables do not go on the data heap, no matter the setting of the $LK,"OPTf_GLOBALS_ON_DATA_HEAP",A="MN:OPTf_GLOBALS_ON_DATA_HEAP"$$FG$.	They may in the future.
 
 * $LK,"OPTf_EXTERNS_TO_IMPORTS",A="MN:OPTf_EXTERNS_TO_IMPORTS"$ will treat $FG,2$_extern$FG$ as $FG,2$_import$FG$ and $FG,2$extern$FG$ as $FG,2$import$FG$.  This allows a header to be used either as a $FG,2$JIT compiled$FG$ or $FG,2$AOT compiled$FG$ header.

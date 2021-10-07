@@ -44,9 +44,9 @@ $WW,1$$PURPLE$$TX+CX,"64-Bit Assembly Quiz"$$FG$
 
 10) How long does an IN or OUT instruction take on a 1GHz machine and on a 3GHz machine?
 
-11) How do you push all 16 regs?
+11) How do you push all 16 registers?
 
-12) Should you put the regs in a TSS?
+12) Should you put the registers in a TSS?
 
 13) You can have 4K or 4Meg pages in 32-bit mode.  You can have 4K or what size pages in 64-bit mode?
 
@@ -64,15 +64,15 @@ ANSWERS:
 
 2) The upper 32-bits are set to zero.
 
-3) To set FS or GS, you use WRMSR to write a model specific reg.	See $LK,"IA32_FS_BASE",A="MN:IA32_FS_BASE"$ and $LK,"SET_FS_BASE",A="MN:SET_FS_BASE"$.
+3) To set FS or GS, you use WRMSR to write a model specific register.	See $LK,"IA32_FS_BASE",A="MN:IA32_FS_BASE"$ and $LK,"SET_FS_BASE",A="MN:SET_FS_BASE"$.
 
 4) Displacement addressing is now RIP relative, so RIP would be added to TSS_SOME_MEMBER.  (Useless)
 
 5) The R13 instruction takes one more byte because it is like $LK,"REG_RBP",A="MN:REG_RBP"$ in the ModR.
 
-6) The R8 instruction needs a REX byte prefix to specify upper-8 reg.
+6) The R8 instruction needs a REX byte prefix to specify upper-8 register.
 
-7) You can access the lowest byte of any reg.  You can access AH but not the second-to-lowest byte of ESI.
+7) You can access the lowest byte of any register.  You can access AH but not the second-to-lowest byte of ESI.
 
 8) To call a subroutine farther than 2Gig away, you put the address into RAX, then CALL RAX.
 
@@ -82,7 +82,7 @@ ANSWERS:
 
 11) PUSHAD is not available for 64-bit mode, so you do it by hand.
 
-12) The TSS is no longer used to hold the task state because there are 16 regs and they are 64-bits, not 32-bits.
+12) The TSS is no longer used to hold the task state because there are 16 registers and they are 64-bits, not 32-bits.
 
 13) 64-bit mode has 4K or 2Meg page size.
 

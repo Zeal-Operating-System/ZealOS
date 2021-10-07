@@ -214,7 +214,7 @@ CBlkDev *BlkDevCheck(CBlkDev *bd, Bool except=TRUE)
 }
 
 CBlkDev *Letter2BlkDev(U8 drv_let=0, Bool except=TRUE)
-{//Drive letter to BlkDev ptr.
+{//Drive letter to BlkDev pointer.
 	CDrive *drive;
 
 	if (drive = Letter2Drive(drv_let, except))

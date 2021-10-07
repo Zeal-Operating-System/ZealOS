@@ -1,5 +1,5 @@
 Bool DriveLock(CDrive *drive)
-{//Make this task have exclusive access to drv & BlkDev.
+{//Make this task have exclusive access to drive & BlkDev.
 	DriveCheck(drive);
 	BlkDevLock(drive->bd);
 	if (!Bt(&drive->locked_flags, DVlf_LOCKED) || drive->owning_task != Fs)
@@ -14,7 +14,7 @@ Bool DriveLock(CDrive *drive)
 }
 
 Bool DriveUnlock(CDrive *drive, Bool reset=FALSE)
-{//Release exclusive lock on access to drv & BlkDev.
+{//Release exclusive lock on access to drive & BlkDev.
 	DriveCheck(drive);
 	if (Bt(&drive->locked_flags, DVlf_LOCKED) && drive->owning_task == Fs)
 	{
@@ -42,7 +42,7 @@ U0 DrivesRelease()
 }
 
 CDrive *DriveMakeFreeSlot(U8 drv_let)
-{//Make a slot free for a new drv, like during $LK,"Mount",A="MN:Mount"$().
+{//Make a slot free for a new drive, like during $LK,"Mount",A="MN:Mount"$().
 	I64		 i = Letter2Letter(drv_let) - 'A';
 	CDrive	*res;
 
@@ -55,7 +55,7 @@ CDrive *DriveMakeFreeSlot(U8 drv_let)
 }
 
 U8 DriveNextFreeLet(U8 first_drive_let='C')
-{//Locate free slot for new drv, like during $LK,"Mount",A="MN:Mount"$().
+{//Locate free slot for new drive, like during $LK,"Mount",A="MN:Mount"$().
 	I64 i = Letter2Letter(first_drive_let) - 'A', type = Letter2BlkDevType(first_drive_let);
 
 	if (!(0 <= i < DRIVES_NUM))
@@ -74,7 +74,7 @@ U8 DriveNextFreeLet(U8 first_drive_let='C')
 }
 
 U0 DriveDel(CDrive *drive)
-{//Delete drv
+{//Delete drive
 	if (drive->fs_type == FSt_REDSEA && drive->next_free)
 		RedSeaFreeFreeList(drive);
 	Free(drive->cur_fat_blk);
@@ -83,7 +83,7 @@ U0 DriveDel(CDrive *drive)
 }
 
 U0 DriveBlkDevDel(CBlkDev *bd)
-{//Delete drv's of BlkDev
+{//Delete drives of BlkDev
 	I64		 i;
 	CDrive	*drive;
 
@@ -158,7 +158,7 @@ U0 DriveFATBlkSet(CDrive *drive, I64 c, I64 fat_sel=3)
 }
 
 CDrive *DriveCheck(CDrive *drive, Bool except=TRUE)
-{//Check for valid drv. Throw exception.
+{//Check for valid drive. Throw exception.
 	if (!drive || drive->drive_signature != DRIVE_SIGNATURE_VAL)
 	{
 		if (except)
@@ -171,7 +171,7 @@ CDrive *DriveCheck(CDrive *drive, Bool except=TRUE)
 }
 
 U8 Drive2Letter(CDrive *drive=NULL)
-{//Drive ptr to Drive letter.
+{//Drive pointer to Drive letter.
 	if (!drive)
 		drive = Fs->cur_dv;
 	DriveCheck(drive);
@@ -209,7 +209,7 @@ I64 Letter2BlkDevType(U8 drv_let)
 }
 
 CDrive *Letter2Drive(U8 drv_let=0, Bool except=TRUE)
-{//Drive letter to Drive ptr.
+{//Drive letter to Drive pointer.
 	CDrive *drive;
 
 	if (!drv_let)

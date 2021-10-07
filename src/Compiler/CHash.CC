@@ -59,7 +59,7 @@ I64 HashEntrySize2(CHashSrcSym *tmph)
 		{
 			res += MemberListSize(tmph);
 			if (debug_info = tmph->debug_info)
-//This should be $LK,"MSize",A="MN:MSize"$() but it would crash on AOT .BIN file funs.
+//This should be $LK,"MSize",A="MN:MSize"$() but it would crash on AOT .BIN file functions.
 				res += debug_info->body[debug_info->max_line + 1 - debug_info->min_line] - debug_info->body[0];
 		}
 		else if (tmph->type & HTT_DEFINE_STR)

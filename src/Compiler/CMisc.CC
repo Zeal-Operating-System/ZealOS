@@ -1,5 +1,5 @@
 Bool Option(I64 num, Bool val)
-{//Set compiler $LK,"Option",A="FI:::/Doc/Options.DD"$ to val.
+{//Set compiler $LK,"Option",A="FI:::/Doc/Options.DD"$ to value.
 	return BEqual(&Fs->last_cc->opts, num, val);
 }
 
@@ -45,7 +45,7 @@ _LAST_FUN:: 		//See $LK,"_CALL_IND",A="MN:_CALL_IND"$
 				POP 		RBP
 				RET1		16
 }
-_extern _LAST_FUN I64 LastFun(I64 argc, I64 *argv); //Execute last fun with args.
+_extern _LAST_FUN I64 LastFun(I64 argc, I64 *argv); //Execute last function with args.
 
 I64 PassTrace(I64 i=0b10001111101)
 {//Ctrls which optimizer passes are displayed.
@@ -81,7 +81,7 @@ U0 StreamPrint(U8 *format, ...)
 		tmpe->body = st;
 	}
 	else
-		PrintErr("No exe{} blk\n");
+		PrintErr("No exe{} block\n");
 	Free(buf);
 }
 

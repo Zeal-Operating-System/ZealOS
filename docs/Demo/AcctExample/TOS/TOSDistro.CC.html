@@ -34,7 +34,7 @@ body {background-color:#fef1f0;}
 <a name="l7"></a>#</span><span class=cF1>define</span><span class=cF0> MAKE_STAFF          </span><span class=cFE>1</span><span class=cF0>
 <a name="l8"></a>
 <a name="l9"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> TOSGetDrive()
-<a name="l10"></a>{</span><span class=cF2>//Prompt for drv let.</span><span class=cF0>
+<a name="l10"></a>{</span><span class=cF2>//Prompt for drive letter.</span><span class=cF0>
 <a name="l11"></a>    </span><span class=cF9>I64</span><span class=cF0> res;
 <a name="l12"></a>
 <a name="l13"></a>    </span><span class=cF6>&quot;Drive (%s):&quot;</span><span class=cF0>, TOS_HDS;
@@ -54,7 +54,7 @@ body {background-color:#fef1f0;}
 <a name="l27"></a>}
 <a name="l28"></a>
 <a name="l29"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSCopyDrive(</span><span class=cF1>U8</span><span class=cF0> src, </span><span class=cF1>U8</span><span class=cF0> dst)
-<a name="l30"></a>{</span><span class=cF2>//Format dst and copy entire drv.</span><span class=cF0>
+<a name="l30"></a>{</span><span class=cF2>//Format dst and copy entire drive.</span><span class=cF0>
 <a name="l31"></a>    </span><span class=cF1>U8</span><span class=cF0> buf_s[</span><span class=cF3>STR_LEN</span><span class=cF0>], buf_d[</span><span class=cF3>STR_LEN</span><span class=cF0>];
 <a name="l32"></a>
 <a name="l33"></a>    src = </span><span class=cF5>Letter2Letter</span><span class=cF0>(src);
@@ -75,7 +75,7 @@ body {background-color:#fef1f0;}
 <a name="l48"></a>}
 <a name="l49"></a>
 <a name="l50"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> TOSPromptAndCopyDrive()
-<a name="l51"></a>{</span><span class=cF2>//Prompt for drv lets. Then, Format dst and copy entire drv.</span><span class=cF0>
+<a name="l51"></a>{</span><span class=cF2>//Prompt for drive letters. Then, Format dst and copy entire drive.</span><span class=cF0>
 <a name="l52"></a>    </span><span class=cF9>I64</span><span class=cF0> src, dst;
 <a name="l53"></a>
 <a name="l54"></a>    </span><span class=cF6>&quot;$RED$\nCopy Src Drive:\n$FG$&quot;</span><span class=cF0>;

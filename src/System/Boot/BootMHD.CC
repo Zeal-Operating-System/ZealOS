@@ -59,7 +59,7 @@ BMHD_OLD_CS_RIP:		DU16		0, 0;
 //Gets patched by $LK,"BootHDIns",A="MN:BootHDIns"$().
 BMHD_BLK_COUNT::		DU16		0;
 
-BMHD_DAP: 				DU8 		16, 0, 1, 0; //One blk at a time
+BMHD_DAP: 				DU8 		16, 0, 1, 0; //One block at a time
 BMHD_DAP_BUF: 			DU16		0, 0;
 //Gets patched by $LK,"BootHDIns",A="MN:BootHDIns"$().
 BMHD_DAP_BLK::	//64-bit
@@ -73,9 +73,9 @@ BMHD_HISTART:
 				XOR 		ECX, ECX
 				MOV 		CX,  U16 [BMHD_BLK_COUNT - BMHD_START]
 
-@@05:			PUSH		CX			//Blk count
+@@05:			PUSH		CX			//Block count
 
-//READ BLK
+//READ BLOCK
 				PUSH		ES			//Buf seg
 				MOV 		AX, ES
 				MOV 		U16 [BMHD_DAP_BUF + 2 - BMHD_START], AX //ES:0000

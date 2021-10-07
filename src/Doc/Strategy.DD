@@ -8,7 +8,7 @@ ZealOS is a motorcycle -- if you lean-over too far, a motorcycle will crash.	Don
 
 Linux and Windows are general purpose operating systems.	They attempt to do any task you want.  ZealOS cherry-picks tasks and is designed to do the same things a C64 did.  This saves and order of magnitude complexity.	For example, the $LK,"RedSea",A="FI:::/Doc/RedSea.DD"$ file system allocates just contiguous files -- you load and save whole files at once.  Also, ZealOS does not do multimedia.  In theory, memory will fragment with lots of big files.	The system would fall to pieces with multimedia.
 
-A three bttn mouse is like a leg you cannot put weight on.	ZealOS just does hardware everybody has, with no divergent code bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
+A three button mouse is like a leg you cannot put weight on.	ZealOS just does hardware everybody has, with no divergent code bases for each machine's custom hardware.  There is one graphics driver instead of 50 for different GPUs.  This saves an order of magnitude complexity and makes for a delightful API, so developer's code is not like a frayed rope end.
 
 
 
@@ -36,7 +36,7 @@ A three bttn mouse is like a leg you cannot put weight on.	ZealOS just does hard
 
 * One editor/word processor/browser for the command-line window, source code, documentation browser, dialog forms.
 
-* No child windows.  One window per task.  Bttns are widgets, not child windows.	There are child tasks, however.
+* No child windows.  One window per task.  Buttons are widgets, not child windows.	There are child tasks, however.
 
 * No distinction between $FG,2$thread$FG$, $FG,2$process$FG$ or $FG,2$task$FG$.
 
@@ -46,7 +46,7 @@ A three bttn mouse is like a leg you cannot put weight on.	ZealOS just does hard
 
 * $LK,"Sound",A="HI:Sound"$ has single-voice 8-bit signed MIDI-like samples.
 
-* All tasks have a heap and a sym table.	Scope is that of environment vars in other operating systems.  As text is typed at the command line or you run programs by $FG,2$#include$FG$ing them, the syms go in the table.	If a sym is not found, the parent task's table is checked.	The father of all tasks has the API syms you'll need waiting in it's table.  No need to $FG,2$#include$FG$ headers.
+* All tasks have a heap and a sym table.	Scope is that of environment variables in other operating systems.  As text is typed at the command line or you run programs by $FG,2$#include$FG$ing them, the syms go in the table.	If a sym is not found, the parent task's table is checked.	The father of all tasks has the API syms you'll need waiting in it's table.  No need to $FG,2$#include$FG$ headers.
 
 * No need for namespaces -- scoping occurs automatically based on task symbol table hierarchy with the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$$FG$'s symbol system-wide global.
 

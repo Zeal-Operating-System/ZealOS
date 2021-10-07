@@ -45,7 +45,7 @@ public CBGR24 gr_palette[COLORS_NUM];
 
 //See $LK,"RLf_VESA",A="FF:::/Kernel/KStart16.CC,RLf_VESA"$
 //See $LK,"SysGrInit",A="MN:SysGrInit"$()
-//Allows consts to be used instead of vars.
+//Allows consts to be used instead of variables.
 HashPublic("GR_WIDTH", HTT_DEFINE_STR);;
 DefinePrint("GR_WIDTH", "%d", sys_vbe_mode.width);
 HashPublic("GR_HEIGHT", HTT_DEFINE_STR);;

@@ -583,15 +583,15 @@ which variables should be assigned to register variables.
 We counted the times each offset was added to RBP as a plus LEA and we subtract
 the times the offset is dereferenced.  If the address was calculated more times
 than the offset was dereferenced, the variable's address was passed or assigned
-and we cannot use a register because you can't take address of a reg var.
+and we cannot use a register because you can't take address of a register variable.
 
 RAX, RBX, RCX, RDX, R8 are free to be clobbered by each intermediate code.
 RAX and R8 links intermediate codes together. R9 is used for stack machine
 temporaries. RBP is used as stack frame.
 
-RSI, RDI, R10, R11, R12, R13, R14, R15 are used for reg vars. R12 and R13, however,
-have a unusual ModR addressing mode in the x86_64 architecture, so we only use
-R12 and R13 as non-pointer register variables, such as index variables i, j, k.
+RSI, RDI, R10, R11, R12, R13, R14, R15 are used for register variables.
+R12 and R13, however, have a unusual ModR addressing mode in the x86_64 architecture,
+so we only use R12 and R13 as non-pointer register variables, such as index variables i, j, k.
 
 */
 	if (cc->htc.fun)
@@ -643,7 +643,7 @@ R12 and R13 as non-pointer register variables, such as index variables i, j, k.
 								if (Bt(&cc->flags, CCf_PASS_TRACE_PRESENT))
 									"Reg %Z Var \"%-15ts\" %016X[RBP]\n", tmpm->reg, "ST_U64_REGS",
 										tmpm->str, reg_offsets[tmpm->reg].offset;
-								mv[i].offset_start = 0; //flag as reg var
+								mv[i].offset_start = 0; //flag as register variable
 								if (tmpm->size < 8 && !StrIMatch("Bool", tmpm->member_class->str) &&
 										tmpm->member_class->type & HTT_INTERNAL_TYPE)
 									PrintWarn("Using 64-bit reg var.\n "
@@ -658,7 +658,7 @@ R12 and R13 as non-pointer register variables, such as index variables i, j, k.
 				for (i = 0; i < j && l < cmp.num_reg_vars;i++)
 				{
 					tmpm = mv[i].m;
-//if not just flagged as reg var
+//if not just flagged as register variable
 					if (mv[i].offset_start && (!mv[i].m->dim.next || tmpm->offset > 0 && StrCompare(tmpm->str, "argv")))
 					{
 						while (l < cmp.num_reg_vars && Bts(&cc->htc.fun->used_reg_mask, cmp.to_reg_vars_map[l]))

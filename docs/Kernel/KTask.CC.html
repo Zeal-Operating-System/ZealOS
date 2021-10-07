@@ -294,7 +294,7 @@ body {background-color:#fef1f0;}
 <a name="l267"></a>                </span><span class=cF9>I64</span><span class=cF0> stack_size=</span><span class=cFE>0</span><span class=cF0>,   </span><span class=cF2>// 0=default</span><span class=cF0>
 <a name="l268"></a>                </span><span class=cF9>I64</span><span class=cF0> flags=</span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>JOBf_ADD_TO_QUE</span><span class=cF0>)
 <a name="l269"></a>{</span><span class=cF2>//Create task on core running at address.</span><span class=cF0>
-<a name="l270"></a></span><span class=cF2>//Alloc </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3984"><span class=cF4>CTask</span></a><span class=cF2> structure from code heap so addr will be short.</span><span class=cF0>
+<a name="l270"></a></span><span class=cF2>//Alloc </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l3984"><span class=cF4>CTask</span></a><span class=cF2> structure from code heap so address will be short.</span><span class=cF0>
 <a name="l271"></a>    </span><span class=cF2>//Could be alloced off of data heap.</span><span class=cF0>
 <a name="l272"></a>    </span><span class=cF9>CTask</span><span class=cF0> *task;
 <a name="l273"></a>
@@ -516,7 +516,7 @@ body {background-color:#fef1f0;}
 <a name="l489"></a>}
 <a name="l490"></a>
 <a name="l491"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>TaskDel</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task)
-<a name="l492"></a>{</span><span class=cF2>//We delay freeing in case lingering ptr to reincarnated.</span><span class=cF0>
+<a name="l492"></a>{</span><span class=cF2>//We delay freeing in case lingering pointer to reincarnated.</span><span class=cF0>
 <a name="l493"></a>    </span><span class=cF5>HeapCtrlDel</span><span class=cF0>(task-&gt;code_heap);
 <a name="l494"></a>    </span><span class=cF1>if</span><span class=cF0> (task-&gt;data_heap != task-&gt;code_heap)
 <a name="l495"></a>        </span><span class=cF5>HeapCtrlDel</span><span class=cF0>(task-&gt;data_heap);

@@ -683,7 +683,7 @@ CDirEntry *RedSeaFilesFind(U8 *files_find_mask, I64 fuf_flags, CDirEntry *parent
 }
 
 Bool RedSeaMkDir(CDrive *drive, U8 *cur_dir, U8 *name, I64 entry_count)
-{//entry_count is for preallocating dir blks.
+{//entry_count is for preallocating dir blocks.
 	I64			 c, cur_dir_clus = Name2DirClus(drive, cur_dir), size = CeilU64((entry_count + 3) << 6, BLK_SIZE);
 #assert CDIR_SIZE == 64
 	U8			*buf = CAlloc(size);

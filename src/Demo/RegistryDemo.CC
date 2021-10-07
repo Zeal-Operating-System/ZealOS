@@ -1,10 +1,10 @@
 /*The ~/Registry.CC file is CosmiC code.
 You can execute a tree branch of it.  The System
 branch is executed in the System task boot phase.
-Normally, you will place var declarations
+Normally, you will place variable declarations
 in the branch you make, but since an arthmetic expression
 is valid in CosmiC you can place simple expressions
-without vars.
+without variables.
 */
 
 RegDefault("DemoCompany/Game1", "F64 best_score=1.23;\n");

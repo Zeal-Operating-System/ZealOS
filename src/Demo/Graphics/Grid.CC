@@ -10,7 +10,7 @@ U0 DrawMyMouse(CDC *dc, I64 x, I64 y)
 U0 GridDemo()
 {
 	CGridGlobals old_grid;
-	U0 (*old_draw_mouse)(CDC *dc, I64 x, I64 y); //Can't init this type of var.
+	U0 (*old_draw_mouse)(CDC *dc, I64 x, I64 y); //Can't init this type of variable.
 
 	MemCopy(&old_grid, &mouse_grid, sizeof(CGridGlobals));
 	GridInit;
@@ -20,7 +20,7 @@ U0 GridDemo()
 	old_draw_mouse = gr.fp_draw_mouse;
 	gr.fp_draw_mouse = &DrawMyMouse;
 	while (!mouse.lb) 
-	{//Left bttn to exit.
+	{//Left button to exit.
 		GrPlot(, mouse.pos.x, mouse.pos.y);
 		Yield;
 	}

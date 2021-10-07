@@ -281,7 +281,7 @@ U0 ParseArrayDims(CCompCtrl *cc, I64 mode, CArrayDim *dim)
 	if (cc->token == '[')
 	{
 		if (mode.u8[1] == PRS1B_FUN_ARG)
-			LexExcept(cc, "No arrays in fun args at ");
+			LexExcept(cc, "No arrays in function args at ");
 		do
 		{
 			if (Lex(cc) == ']' && !dim->next)

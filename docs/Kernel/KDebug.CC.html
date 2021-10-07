@@ -26,7 +26,7 @@ body {background-color:#fef1f0;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>CheckPtr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr)
-<a name="l2"></a>{</span><span class=cF2>//Check if addr is valid ptr.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Check if address is valid pointer.</span><span class=cF0>
 <a name="l3"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mem_heap_base</span><span class=cF0> &lt;= ptr &lt;= </span><span class=cFB>mem_mapped_space</span><span class=cF0>)
 <a name="l4"></a>        </span><span class=cF1>return</span><span class=cF0> *</span><span class=cF5>MemPageTable</span><span class=cF0>(ptr) &amp; </span><span class=cFE>1</span><span class=cF0>;
 <a name="l5"></a>    </span><span class=cF1>else</span><span class=cF0>
@@ -34,7 +34,7 @@ body {background-color:#fef1f0;}
 <a name="l7"></a>}
 <a name="l8"></a>
 <a name="l9"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>CheckCodePtr</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr)
-<a name="l10"></a>{</span><span class=cF2>//Check if addr is valid code addr.</span><span class=cF0>
+<a name="l10"></a>{</span><span class=cF2>//Check if address is valid code address.</span><span class=cF0>
 <a name="l11"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFB>mem_heap_base</span><span class=cF0> &lt;= ptr &lt;= </span><span class=cFB>mem_heap_limit</span><span class=cF0>)
 <a name="l12"></a>        </span><span class=cF1>return</span><span class=cF0> *</span><span class=cF5>MemPageTable</span><span class=cF0>(ptr) &amp; </span><span class=cFE>1</span><span class=cF0>;
 <a name="l13"></a>    </span><span class=cF1>else</span><span class=cF0>
@@ -42,7 +42,7 @@ body {background-color:#fef1f0;}
 <a name="l15"></a>}
 <a name="l16"></a>
 <a name="l17"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>CheckOnStack</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l18"></a>{</span><span class=cF2>//Check if addr is valid stack addr.</span><span class=cF0>
+<a name="l18"></a>{</span><span class=cF2>//Check if address is valid stack address.</span><span class=cF0>
 <a name="l19"></a>    </span><span class=cF1>Bool</span><span class=cF0> res = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l20"></a>
 <a name="l21"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
@@ -78,7 +78,7 @@ body {background-color:#fef1f0;}
 <a name="l51"></a>}
 <a name="l52"></a>
 <a name="l53"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Caller</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> num=</span><span class=cFE>1</span><span class=cF0>)
-<a name="l54"></a>{</span><span class=cF2>//Returns the addr of the fun which called this one,</span><span class=cF0>
+<a name="l54"></a>{</span><span class=cF2>//Returns the address of the function which called this one,</span><span class=cF0>
 <a name="l55"></a></span><span class=cF2>//or the caller of the caller, etc.</span><span class=cF0>
 <a name="l56"></a>    </span><span class=cF1>U8</span><span class=cF0> **rbp = </span><span class=cF5>RBPGet</span><span class=cF0>, **ptr;
 <a name="l57"></a>
@@ -95,7 +95,7 @@ body {background-color:#fef1f0;}
 <a name="l68"></a>}
 <a name="l69"></a>
 <a name="l70"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>TaskCaller</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> num=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> saved_context=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l71"></a>{</span><span class=cF2>//Fetches addr of Nth caller on task's stack.</span><span class=cF0>
+<a name="l71"></a>{</span><span class=cF2>//Fetches address of Nth caller on task's stack.</span><span class=cF0>
 <a name="l72"></a>    </span><span class=cF1>U8</span><span class=cF0> **ptr, **rbp, **rsp;
 <a name="l73"></a>
 <a name="l74"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
@@ -246,7 +246,7 @@ body {background-color:#fef1f0;}
 <a name="l219"></a>}
 <a name="l220"></a>
 <a name="l221"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Dm</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>0x80</span><span class=cF0>)
-<a name="l222"></a>{</span><span class=cF2>//Show mem addr, not offsets.</span><span class=cF0>
+<a name="l222"></a>{</span><span class=cF2>//Show mem address, not offsets.</span><span class=cF0>
 <a name="l223"></a>    </span><span class=cF5>D</span><span class=cF0>(addr, count, </span><span class=cF3>FALSE</span><span class=cF0>);
 <a name="l224"></a>}
 <a name="l225"></a>
@@ -399,7 +399,7 @@ body {background-color:#fef1f0;}
 <a name="l372"></a>}
 <a name="l373"></a>
 <a name="l374"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Dr</span><span class=cF0>(</span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l375"></a>{</span><span class=cF2>//Dump regs</span><span class=cF0>
+<a name="l375"></a>{</span><span class=cF2>//Dump registers</span><span class=cF0>
 <a name="l376"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l377"></a>
 <a name="l378"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
@@ -624,7 +624,7 @@ body {background-color:#fef1f0;}
 <a name="l597"></a>    </span><span class=cF6>&quot;&gt;ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n&quot;</span><span class=cF0>
 <a name="l598"></a>    </span><span class=cF6>&quot;&gt;CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n&quot;</span><span class=cF0>
 <a name="l599"></a>    </span><span class=cF6>&quot;&gt;Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n&quot;</span><span class=cF0>
-<a name="l600"></a>    </span><span class=cF6>&quot;&gt;Dr;\t\t\t\t\t\t\t\t// Dump Regs.\n&quot;</span><span class=cF0>
+<a name="l600"></a>    </span><span class=cF6>&quot;&gt;Dr;\t\t\t\t\t\t\t\t// Dump Registers.\n&quot;</span><span class=cF0>
 <a name="l601"></a>    </span><span class=cF6>&quot;&gt;1 + 2 * 3 + &amp;Print;\t\t\t\t// Show calculation res.\n&quot;</span><span class=cF0>
 <a name="l602"></a>    </span><span class=cF6>&quot;&gt;*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n&quot;</span><span class=cF0>
 <a name="l603"></a>    </span><span class=cF6>&quot;&gt;_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n&quot;</span><span class=cF0>

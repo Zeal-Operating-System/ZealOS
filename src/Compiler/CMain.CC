@@ -85,7 +85,7 @@ CAOT *CompJoin(CCompCtrl *cc, I64 comp_flags, U8 *map_name=NULL, U8 mapfile_driv
 		cc->htc.global_hash_table->next = Fs->hash_table;
 	cc->htc.hash_table_list = cc->htc.local_hash_table = HashTableNew(16);
 	cc->htc.local_hash_table->next = cc->htc.global_hash_table;
-	cc->htc.local_var_list = cc->htc.fun; //CosmiC local vars
+	cc->htc.local_var_list = cc->htc.fun; //CosmiC local variables
 	cc->htc.fun = NULL;
 	try
 	{

@@ -1,6 +1,6 @@
 /*
-If you are sure a fun won't be called before import is resolved, you can use
-"import".  Otherwise, use a fun pointer var and check it before calling.
+If you are sure a function won't be called before import is resolved, you can use
+"import".  Otherwise, use a function pointer variable and check it before calling.
 */
 import U0 ClassRep(U8 *_d, U8 *class_name=lastclass, I64 max_depth=2, Bool u8_chars=FALSE, Bool fun=FALSE, I64 offset=0);
 

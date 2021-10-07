@@ -24,8 +24,7 @@ CIntermediateCode *OptPass012(CCompCtrl *cc)
 {/*Simplify CONST arithmetic.
 Sets the class throughout Expression trees.
 Returns the type of an Expression for use
-in int<-->F64 conversions of fun
-args.
+in int<-->F64 conversions of function args.
 */
 	I64					 code, i;
 	Bool				 is_unsigned;
@@ -1572,7 +1571,7 @@ args.
 		"Pass: %d Stack: %08X\n", cc->pass,ps->ptr;
 		LexExcept(cc, "Compiler Optimization Error at ");
 	}
-//This is for determining type conversions for passing args to funs.
+//This is for determining type conversions for passing args to functions.
 	return last_with_class;
 }
 

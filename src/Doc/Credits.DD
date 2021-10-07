@@ -18,11 +18,11 @@ $FG,2$Terry A. Davis$FG$ wrote all of TempleOS over a span of $FG,2$$TX,"15.0",D
 
 *) Thanks to whoever wrote this $FG,4$$TX,"CppHtml.CC",HTML="http://web.archive.org/web/20100325153025/http://home.scarlet.be/zoetrope/cpphtml.htm"$$FG$.  Terry was a novice on web stuff and you helped him with html.  See $LK,"::/Demo/ToHtmlToTXTDemo/ToHtml.CC"$.
 
-*) Terry looked at bootable CD boot sects, but didn't learn anything, finding it easier to make his own.
+*) Terry looked at bootable CD boot sectors, but didn't learn anything, finding it easier to make his own.
 
 *) Terry thought he got his original PC speaker code from $FG,2$Borland C$FG$.
 
-*) Terry found PS/2 keyboard and mouse code on the net and documentation.  His code is very different.  He found VGA reg info on the net.
+*) Terry found PS/2 keyboard and mouse code on the net and documentation.  His code is very different.  He found VGA register info on the net.
 
 *) Thanks to $FG,4$$TX,"http://www.osdev.org",HTML="http://www.osdev.org"$$FG$ for a couple tips.
 

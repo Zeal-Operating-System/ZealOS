@@ -35,7 +35,7 @@ BMHD2_BIOS_DRIVE_NUM: 	DU8 		0;
 BMHD2_PAGE: 			DU8 		0;
 BMHD2_BLK_ARRAY:: 		DU64 8 DUP(0);
 
-BMHD2_DAP:				DU8 		16, 0, 1, 0; //One blk at a time
+BMHD2_DAP:				DU8 		16, 0, 1, 0; //One block at a time
 BMHD2_DAP_BUF:			DU16		0, 0;
 BMHD2_DAP_BLK:: //64-bit
 BMHD2_DAP_BLK_LO: 		DU32		0;

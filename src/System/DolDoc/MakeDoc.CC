@@ -5,7 +5,7 @@ Cd(__DIR__);;
 
 /*
 ZealOS DolDoc's can have "cursor movement" cmds which can move the cursor up
-the screen and layer on existing text.  It can also have callback funs which
+the screen and layer on existing text.  It can also have callback functions which
 supply live, changing text.  For these reasons, you can't assume you know
 where the vis portion of the document is and must process much
 of the document each time it is placed on the screen, becoming CPU

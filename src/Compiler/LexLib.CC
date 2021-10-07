@@ -48,7 +48,7 @@ U0 LexPopNoRestore(CCompCtrl *cc)
 }
 
 I64 MemberMetaData(U8 *needle_str, CMemberList *haystack_member_list)
-{//Find meta data name, return meta data val. See $LK,"::/Demo/ClassMeta.CC"$.
+{//Find meta data name, return meta data value. See $LK,"::/Demo/ClassMeta.CC"$.
 	CMemberListMeta *meta = haystack_member_list->meta;
 
 	while (meta)
@@ -102,7 +102,7 @@ CMemberList *MemberFind(U8 *needle_str, CHashClass *haystack_class)
 }
 
 CMemberList *MemberClassBaseFind(CHashClass *needle_class, CHashClass *haystack_class)
-{//Find class member class base. For finding dup class local vars.
+{//Find class member class base. For finding duplicate class local variables.
 	CMemberList *tmpm;
 
 	tmpm = haystack_class->member_class_base_root;

@@ -365,7 +365,7 @@ body {background-color:#fef1f0;}
 <a name="l338"></a>}
 <a name="l339"></a>
 <a name="l340"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>EdGoToFun</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>Bool</span><span class=cF0> forward, </span><span class=cF1>Bool</span><span class=cF0> abort_on_dbl_colon)
-<a name="l341"></a>{</span><span class=cF2>//Move cur_entry to start of cur fun and center.(Shoddy)</span><span class=cF0>
+<a name="l341"></a>{</span><span class=cF2>//Move cur_entry to start of cur function and center. (Shoddy)</span><span class=cF0>
 <a name="l342"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc), res = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l343"></a>    </span><span class=cF9>I64</span><span class=cF0>  ch, levels, colons;
 <a name="l344"></a>
@@ -420,7 +420,7 @@ body {background-color:#fef1f0;}
 <a name="l393"></a>}
 <a name="l394"></a>
 <a name="l395"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>EdSelFun</span><span class=cF0>(</span><span class=cF9>CDoc</span><span class=cF0> *doc, </span><span class=cF1>Bool</span><span class=cF0> abort_on_dbl_colon=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l396"></a>{</span><span class=cF2>//Set </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1090"><span class=cF4>DOCET_SEL</span></a><span class=cF2> on all entries in cur fun.</span><span class=cF0>
+<a name="l396"></a>{</span><span class=cF2>//Set </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1090"><span class=cF4>DOCET_SEL</span></a><span class=cF2> on all entries in cur function.</span><span class=cF0>
 <a name="l397"></a>    </span><span class=cF1>Bool</span><span class=cF0>         unlock = </span><span class=cF5>DocLock</span><span class=cF0>(doc);
 <a name="l398"></a>    </span><span class=cF1>U8</span><span class=cF0>          *ptr;
 <a name="l399"></a>    </span><span class=cF9>I64</span><span class=cF0>          ch, levels = </span><span class=cFE>0</span><span class=cF0>, colons = </span><span class=cFE>0</span><span class=cF0>;

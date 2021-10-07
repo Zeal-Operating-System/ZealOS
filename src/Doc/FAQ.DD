@@ -17,13 +17,13 @@ $ID,2$ZealOS compiles, doesn't $FG,2$interpret$FG$, and uses no $FG,2$byte code$
 $ID,-2$$TR,"Is 'Bt()' in the code Bit Torrent?"$
 $ID,2$$LK,"Bt",A="MN:Bt"$() is $FG,2$bit test$FG$, like the $FG,2$x86$FG$ instruction, not $FG,2$bit torrent$FG$.
 $ID,-2$$TR,"Is 'Fs->' in the code file system?"$
-$ID,2$$LK,"Fs",A="MN:Fs"$ is a segment reg, not $FG,2$file system$FG$.	($LK,"Fs",A="MN:Fs"$ is kept pointing to the current task's record.)	There is no memory segmentation.	It is 64-bit and flat. FS and GS are used as general purpose regs, more or less.
+$ID,2$$LK,"Fs",A="MN:Fs"$ is a segment register, not $FG,2$file system$FG$.	($LK,"Fs",A="MN:Fs"$ is kept pointing to the current task's record.)	There is no memory segmentation.	It is 64-bit and flat. FS and GS are used as general purpose registers, more or less.
 $ID,-2$$TR,"Is it Pascal?"$
 $ID,2$ZealOS uses a dialect of C/C++ called $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$.	It is not $FG,2$Pascal$FG$.  The syntax was altered making parenthesis optional on function calls with no parameters.
 $ID,-2$$TR,"Why doesn't Sleep() make my laptop hibernate?"$
 $ID,2$$LK,"Sleep",A="MN:Sleep"$() makes a program pause.	It is not hibernation for a laptop.
 $ID,-2$$TR,"What is Yield() for in loops?"$
-$ID,2$$LK,"Yield",A="MN:Yield"$() saves the current task's regs (context) and loads in the next task.  In a loop waiting for disk IO, it executes $LK,"Yield",A="MN:Yield"$() which pegs the CPU load, yet the system is responsive.
+$ID,2$$LK,"Yield",A="MN:Yield"$() saves the current task's registers (context) and loads in the next task.  In a loop waiting for disk IO, it executes $LK,"Yield",A="MN:Yield"$() which pegs the CPU load, yet the system is responsive.
 $ID,-2$$TR,"What is JIT Compiled Mode?"$
 $ID,2$The term $LK,"JIT Compile Mode",A="FF:::/Doc/Glossary.DD,JIT Compile Mode"$ means it compiles and executes code placed into mem, not stored on disk.
 $ID,-2$$TR,"Is it open source? How do I build it?"$
@@ -59,7 +59,7 @@ $ID,2$ZealOS is 64-bit.  Like all PC operating systems, the boot-loader starts i
 $ID,-2$$TR,"Why are you pushing 32-bit values on the stack?"$
 $ID,2$$FG,2$PUSH EAX$FG$ : All stack operations in 64-bit mode are 64-bits.
 $ID,-2$$TR,"Why are you using 32-bit insts and not setting high 32-bits?"$
-$ID,2$$FG,2$XOR EAX,EAX$FG$ : Operations on 32-bit regs clear the high 32-bits.
+$ID,2$$FG,2$XOR EAX,EAX$FG$ : Operations on 32-bit registers clear the high 32-bits.
 $ID,-2$$TR,"How do you use the FS and GS segment registers."$
 $ID,2$$FG,2$MOV RAX,FS:[RAX]$FG$ : FS can be set with a $FG,2$WRMSR$FG$, but displacement is RIP relative, so it's tricky to use.  FS is used for the current $LK,"CTask",A="MN:CTask"$, GS for $LK,"CCPU",A="MN:CCPU"$.
 $ID,-2$$TR,"How do I set ORG for position of code?"$

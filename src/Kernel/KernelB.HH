@@ -16,8 +16,8 @@ public _intern IC_LBTC				Bool LBtc(		  U8 *bit_field, I64 bit); //Locked bit te
 public _intern IC_LBTR				Bool LBtr(		  U8 *bit_field, I64 bit); //Locked bit test and reset to zero.
 public _intern IC_LBTS				Bool LBts(		  U8 *bit_field, I64 bit); //Locked bit test and set to one.
 public _intern IC_POPCNT			I64  PopCount(I64 bit_field_val); //Count number of set bits in number.
-public _extern _BEQUAL				Bool BEqual(	  U8 *bit_field, I64 bit, Bool val);//Set bit equ to val.
-public _extern _LBEQUAL				Bool LBEqual(	  U8 *bit_field, I64 bit, Bool val); //Locked Set bit equ to val.
+public _extern _BEQUAL				Bool BEqual(	  U8 *bit_field, I64 bit, Bool val);//Set bit equal to value.
+public _extern _LBEQUAL				Bool LBEqual(	  U8 *bit_field, I64 bit, Bool val); //Locked Set bit equal to value.
 public _extern _BIT_FIELD_EXT_U32	U32  BFieldExtU32(U8 *bit_field, I64 bit, I64 size); //Extract U32 from bit field.
 public _extern _BIT_FIELD_OR_U32	U0   BFieldOrU32( U8 *bit_field, I64 bit, U32 pattern); //Or U32 into bit field.
 
@@ -29,13 +29,13 @@ _extern SYS_BOOT_SRC				U32 sys_boot_src;
 _extern SYS_RUN_LEVEL				U32 sys_run_level;
 
 #help_index "Call"
-public _extern _CALL		I64 Call(U8 *machine_code); //Call addr with no args.
-public _extern _CALLEXTSTR	I64 CallExtStr(/*argpop*/U8 *name, ...);//Search sym table for fun and pass it args.
+public _extern _CALL		I64 Call(U8 *machine_code); //Call address with no args.
+public _extern _CALLEXTSTR	I64 CallExtStr(/*argpop*/U8 *name, ...);//Search sym table for function and pass it args.
 //Can have any fixed number of arguments.
 public _extern _CALL_IND	I64 CallInd(/*argpop*/I64 (*fp_addr)(...), ...); //Call with fixed number of args.
 
 #help_index "Call/System Extern Num"
-public _extern SYS_EXTERN_TABLE /*argpop*/	I64 (**ext)(...); //Array of fun ptrs.	See $LK,"Extern Num Definitions",A="MN:EXT_EXTS_NUM"$
+public _extern SYS_EXTERN_TABLE /*argpop*/	I64 (**ext)(...); //Array of function pointers.	See $LK,"Extern Num Definitions",A="MN:EXT_EXTS_NUM"$
 public _extern _CALLEXTNUM					I64 CallExtNum(I64 num, ...); //Call ext num with fixed number of args.
 
 #help_index "Char/Conversion"
@@ -164,22 +164,22 @@ _extern SYS_CTRL_ALT_FLAGS		I64   sys_ctrl_alt_flags[1]; //Should be semiphores?
 
 #help_index "Misc/Progress Bars"
 public _extern SYS_PROGRESS1		I64 progress1; //Current progress 1.
-public _extern SYS_PROGRESS1_DESC	U8  progress1_desc[PROGRESS_DESC_LEN]; //Progress 1 desc.
+public _extern SYS_PROGRESS1_DESC	U8  progress1_desc[PROGRESS_DESC_LEN]; //Progress 1 description.
 public _extern SYS_PROGRESS1_MAX	I64 progress1_max; //Progress 1 max.
 public _extern SYS_PROGRESS1_T0		F64 progress1_t0; //Progress 1 start time.
 public _extern SYS_PROGRESS1_TF		F64 progress1_tf; //Progress 1 end time.
 public _extern SYS_PROGRESS2		I64 progress2; //Current progress 2.
-public _extern SYS_PROGRESS2_DESC	U8	progress2_desc[PROGRESS_DESC_LEN]; //Progress 2 desc.
+public _extern SYS_PROGRESS2_DESC	U8	progress2_desc[PROGRESS_DESC_LEN]; //Progress 2 description.
 public _extern SYS_PROGRESS2_MAX	I64 progress2_max; //Progress 2 max.
 public _extern SYS_PROGRESS2_T0		F64 progress2_t0; //Progress 2 start time.
 public _extern SYS_PROGRESS2_TF		F64 progress2_tf; //Progress 2 end time.
 public _extern SYS_PROGRESS3 I64		progress3; //Current progress 3.
-public _extern SYS_PROGRESS3_DESC	U8	progress3_desc[PROGRESS_DESC_LEN]; //Progress 3 desc.
+public _extern SYS_PROGRESS3_DESC	U8	progress3_desc[PROGRESS_DESC_LEN]; //Progress 3 description.
 public _extern SYS_PROGRESS3_MAX	I64 progress3_max; //Progress 3 max.
 public _extern SYS_PROGRESS3_T0		F64 progress3_t0; //Progress 3 start time.
 public _extern SYS_PROGRESS3_TF		F64 progress3_tf; //Progress 3 end time.
 public _extern SYS_PROGRESS4		I64 progress4; //Current progress 4.
-public _extern SYS_PROGRESS4_DESC	U8	progress4_desc[PROGRESS_DESC_LEN]; //Progress 4 desc.
+public _extern SYS_PROGRESS4_DESC	U8	progress4_desc[PROGRESS_DESC_LEN]; //Progress 4 description.
 public _extern SYS_PROGRESS4_MAX	I64 progress4_max; //Progress 4 max.
 public _extern SYS_PROGRESS4_T0		F64 progress4_t0; //Progress 4 start time.
 public _extern SYS_PROGRESS4_TF		F64 progress4_tf; //Progress 4 end time.
@@ -237,7 +237,7 @@ public _intern IC_INVLPG		U0  InvalidatePage(U8 *a); //Invalidate page at addr i
 public _extern MEM_PAGE_SIZE	U64 mem_page_size;
 
 #help_index "Task;Processor"
-public _intern IC_FS CTask *Fs(); //FS seg reg points to the current $LK,"CTask",A="MN:CTask"$.
+public _intern IC_FS CTask *Fs(); //FS segment register points to the current $LK,"CTask",A="MN:CTask"$.
 
 #help_index "Time/CPU Cycles"
 #help_file "::/Doc/TimeCycles"

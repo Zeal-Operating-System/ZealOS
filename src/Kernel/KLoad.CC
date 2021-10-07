@@ -207,7 +207,7 @@ U0 LoadPass2(U8 *src, U8 *module_base, I64)
 
 CBinFile *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR)
 {//Load a .BIN file module into memory.
-//bfh_addr==INVALID_PTR means don't care what load addr.
+//bfh_addr==INVALID_PTR means don't care what load address.
 	U8			*fbuf, *module_base, *absname;
 	I64			 size, module_align, misalignment;
 	CBinFile	*bfh;

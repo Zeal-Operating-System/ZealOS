@@ -56,10 +56,10 @@ body {background-color:#fef1f0;}
 <a name="l29"></a>
 <a name="l30"></a>* Use the PullDown menu at the top of the screen to learn commands, or for finding the keyboard controls to games.
 <a name="l31"></a>
-<a name="l32"></a>* You can adjust the mouse movement rate by setting global vars in your start-up file. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeLocalize.CC.html#l11"><span class=cF4>mouse scale</span></a><span class=cF0>.
+<a name="l32"></a>* You can adjust the mouse movement rate by setting global variables in your start-up file. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeLocalize.CC.html#l11"><span class=cF4>mouse scale</span></a><span class=cF0>.
 <a name="l33"></a>
-<a name="l34"></a>* You can set your local time zone by setting the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l14"><span class=cF4>local_time_offset</span></a><span class=cF0> global var in a start-up file. It's units are </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l707"><span class=cF4>CDATE_FREQ</span></a><span class=cF0>. 
-<a name="l35"></a>See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeLocalize.CC.html#l8"><span class=cF4>local time</span></a><span class=cF0>.
+<a name="l34"></a>* You can set your local time zone by setting the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KGlobals.CC.html#l14"><span class=cF4>local_time_offset</span></a><span class=cF0> global variable in a start-up file. It's units are </span><span class=cF4>
+<a name="l35"></a></span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l707"><span class=cF4>CDATE_FREQ</span></a><span class=cF0>. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/HomeLocalize.CC.html#l8"><span class=cF4>local time</span></a><span class=cF0>.
 <a name="l36"></a>
 <a name="l37"></a>* </span><span class=cF2>&lt;CTRL-SHIFT-L&gt;</span><span class=cF0> in the editor to reindent a </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> function or renumber an asm routine's local labels.
 <a name="l38"></a>
@@ -77,7 +77,7 @@ body {background-color:#fef1f0;}
 <a name="l50"></a>
 <a name="l51"></a>* Boolean expressions <blink>not</blink> in </span><span class=cF2>if</span><span class=cF0> statements don't have short circuit logic and are compiled inefficiently.
 <a name="l52"></a>
-<a name="l53"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l166"><span class=cF4>progress1</span></a><span class=cF0>-</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l181"><span class=cF4>progress4</span></a><span class=cF0> in your programs for whatever you like. They're just global vars that are shown on the 
+<a name="l53"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l166"><span class=cF4>progress1</span></a><span class=cF0>-</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l181"><span class=cF4>progress4</span></a><span class=cF0> in your programs for whatever you like. They're just global variables that are shown on the 
 <a name="l54"></a>wallpaper. The original intent was to indicate how far along operations were. There's no coordination, so different apps might 
 <a name="l55"></a>interfere. They're most often used for debugging--just values easily viewed. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Progress.CC.html#l1"><span class=cF4>::/Demo/Progress.CC</span></a><span class=cF0>.
 <a name="l56"></a>
@@ -97,7 +97,7 @@ body {background-color:#fef1f0;}
 <a name="l70"></a>
 <a name="l71"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1679"><span class=cF4>OPTf_WARN_PAREN</span></a><span class=cF0>, ON) to find unnecessary parentheses in code.
 <a name="l72"></a>
-<a name="l73"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find unnecessary local var type statements.
+<a name="l73"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1680"><span class=cF4>OPTf_WARN_DUP_TYPES</span></a><span class=cF0>, ON) to find unnecessary local variable type statements.
 <a name="l74"></a>
 <a name="l75"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF0>(</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1676"><span class=cF4>OPTf_ECHO</span></a><span class=cF0>, ON) can be placed in </span><a href="https://zeal-operating-system.github.io/ZealOS/StartOS.CC.html#l1"><span class=cF4>StartOS.CC</span></a><span class=cF0> to echo start-up scripts.
 <a name="l76"></a>
@@ -147,7 +147,7 @@ body {background-color:#fef1f0;}
 <a name="l120"></a>
 <a name="l121"></a>* You can access the word under the cursor at </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1627"><span class=cF4>ac.cur_word</span></a><span class=cF0>.
 <a name="l122"></a>
-<a name="l123"></a>* You can reactivate </span><span class=cF2>AutoComplete</span><span class=cF0> after closing it by pressing </span><span class=cF2>&lt;CTRL-Fun Key&gt;</span><span class=cF0> or </span><span class=cF2>&lt;ALT-a&gt;</span><span class=cF0>.
+<a name="l123"></a>* You can reactivate </span><span class=cF2>AutoComplete</span><span class=cF0> after closing it by pressing </span><span class=cF2>&lt;CTRL-Function Key&gt;</span><span class=cF0> or </span><span class=cF2>&lt;ALT-a&gt;</span><span class=cF0>.
 <a name="l124"></a>
 <a name="l125"></a>* </span><span class=cF2>&lt;CTRL-SHIFT-T&gt;</span><span class=cF0> to toggle to/from plain text just the </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1502"><span class=cF4>CDoc</span></a><span class=cF0> cmd under the cursor. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/DolDoc/TextDemo.CC.html#l1"><span class=cF4>::/Demo/DolDoc/TextDemo.CC</span></a><span class=cF0>.
 <a name="l126"></a> 
@@ -170,9 +170,9 @@ body {background-color:#fef1f0;}
 <a name="l143"></a>
 <a name="l144"></a>* Your RAM disks will not be reformatted when you reboot if the memory location has not changed and it finds the disk intact.
 <a name="l145"></a>
-<a name="l146"></a>* </span><span class=cF2>try{} catch{}</span><span class=cF0> in a function will cause all vars to be non-reg.
+<a name="l146"></a>* </span><span class=cF2>try{} catch{}</span><span class=cF0> in a function will cause all variables to be non-reg.
 <a name="l147"></a>
-<a name="l148"></a>* Using a sub-int array, </span><span class=cF2>i.u8[3]</span><span class=cF0>, for example, will force a local var to non-reg.
+<a name="l148"></a>* Using a sub-int array, </span><span class=cF2>i.u8[3]</span><span class=cF0>, for example, will force a local variable to non-reg.
 <a name="l149"></a>
 <a name="l150"></a>* You can delete the </span><span class=cF4>~/Registry.CC</span><span class=cF0> file. The policy is that deleting it will restore defaults. It is a text doc, if you want 
 <a name="l151"></a>to edit it. See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l23"><span class=cF4>RegDefault</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l90"><span class=cF4>RegAppend</span></a><span class=cF0>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Registry.CC.html#l52"><span class=cF4>RegExe</span></a><span class=cF0>. Be careful of tree indentations.

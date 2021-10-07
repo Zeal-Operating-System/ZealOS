@@ -39,7 +39,7 @@ body {background-color:#fef1f0;}
 <a name="l12"></a>        </span><span class=cF1>JMP</span><span class=cF0>     </span><span class=cF9>I16</span><span class=cF0> </span><span class=cFD>CORE0_16BIT_INIT</span><span class=cF0>
 <a name="l13"></a>
 <a name="l14"></a></span><span class=cF2>//************************************</span><span class=cF0>
-<a name="l15"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>ASM Global vars required for 16-bit start-up</span><span class=cF0>
+<a name="l15"></a></span><span class=cF2>//</span><span class=cF0>  </span><span class=cF2>ASM Global variables required for 16-bit start-up</span><span class=cF0>
 <a name="l16"></a>        </span><span class=cF1>ALIGN</span><span class=cF0>   </span><span class=cFE>4</span><span class=cF0>, </span><span class=cF3>OC_NOP</span><span class=cF0>
 <a name="l17"></a>
 <a name="l18"></a></span><span class=cFD>SYS_BOOT_SRC</span><span class=cF0>::              </span><span class=cF1>DU32</span><span class=cF0>    </span><span class=cF3>BOOT_SRC_NULL</span><span class=cF0>;
@@ -97,7 +97,7 @@ body {background-color:#fef1f0;}
 <a name="l70"></a>
 <a name="l71"></a></span><span class=cF2>//************************************</span><span class=cF0>
 <a name="l72"></a></span><span class=cFD>CORE0_16BIT_INIT</span><span class=cF0>::
-<a name="l73"></a></span><span class=cF2>//EAX is </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.CC.html#l311"><span class=cF4>SYS_BOOT_SRC</span></a><span class=cF2>. (Val passed from boot blk, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHD.CC.html#l84"><span class=cF4>BootHD</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootDVD.CC.html#l175"><span class=cF4>BootDVD</span></a><span class=cF2>, &amp; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootRAM.CC.html#l46"><span class=cF4>BootRAM</span></a><span class=cF2>.)</span><span class=cF0>
+<a name="l73"></a></span><span class=cF2>//EAX is </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KStart16.CC.html#l311"><span class=cF4>SYS_BOOT_SRC</span></a><span class=cF2>. (Value passed from boot block, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHD.CC.html#l84"><span class=cF4>BootHD</span></a><span class=cF2>, </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootDVD.CC.html#l175"><span class=cF4>BootDVD</span></a><span class=cF2>, &amp; </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootRAM.CC.html#l46"><span class=cF4>BootRAM</span></a><span class=cF2>.)</span><span class=cF0>
 <a name="l74"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>ECX</span><span class=cF0>, </span><span class=cFC>EAX</span><span class=cF0>
 <a name="l75"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>AX</span><span class=cF0>, (</span><span class=cF3>BOOT_RAM_LIMIT</span><span class=cF0> - </span><span class=cF3>BOOT_STACK_SIZE</span><span class=cF0>) / </span><span class=cFE>16</span><span class=cF0>
 <a name="l76"></a>        </span><span class=cF1>MOV</span><span class=cF0>     </span><span class=cFC>SS</span><span class=cF0>, </span><span class=cFC>AX</span><span class=cF0>

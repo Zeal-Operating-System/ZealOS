@@ -510,8 +510,8 @@ mo_start:
 mo_got_message:
 			if (message_code == MESSAGE_KEY_DOWN && arg1 == CH_SPACE && !arg2)
 			{
-				//The Window Mgr sets the Doc cur_entry to a bttn
-				//and generates a <SPACE> when the Doc Bttns are clicked.
+				//The Window Mgr sets the Doc cur_entry to a button
+				//and generates a <SPACE> when the Doc Buttons are clicked.
 				//This is so that kbd and mouse are the same for Doc's.
 				//We must now pass the <SPACE> onto the Doc handler.
 				PutKey(arg1, arg2);

@@ -40,7 +40,7 @@ BDVD_GET_RIP:
 BDVD_BIOS_DRIVE_NUM:		DU8 		0;
 BDVD_PAGE:					DU8 		0;
 
-BDVD_DAP: 					DU8 		16, 0, 1, 0; //One blk at a time
+BDVD_DAP: 					DU8 		16, 0, 1, 0; //One block at a time
 BDVD_DAP_BUF: 				DU16		0, 0;
 BDVD_DAP_BLK: 				DU64		0;
  
@@ -107,11 +107,11 @@ BDVD_MAIN::
 				MOV 		AX, U16 [BDVD_BLK_LO - BDVD_START]
 				MOV 		DX, U16 [BDVD_BLK_HI - BDVD_START]
 
-@@20:			PUSH		CX			//Blk count
+@@20:			PUSH		CX			//Block count
 
-//READ BLK
-				PUSH		AX			//Blk lo
-				PUSH		DX			//Blk hi
+//READ BLOCK
+				PUSH		AX			//Block lo
+				PUSH		DX			//Block hi
 				PUSH		ES			//Buf seg
 				MOV 		U16 [BDVD_DAP_BLK     - BDVD_START], AX
 				MOV 		U16 [BDVD_DAP_BLK + 2 - BDVD_START], DX

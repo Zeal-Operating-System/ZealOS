@@ -139,7 +139,7 @@ U0 RCache(CDrive *drive, U8 **_buf, I64 *_blk, I64 *_count)
 	{
 		while (LBts(&sys_semas[SEMA_DISK_CACHE], 0))
 			Yield;
-//fetch leading blks from cache
+//fetch leading blocks from cache
 		while (*_count > 0)
 		{
 			if (tmpc = DiskCacheFind(drive, *_blk))
@@ -152,7 +152,7 @@ U0 RCache(CDrive *drive, U8 **_buf, I64 *_blk, I64 *_count)
 			else
 				break;
 		}
-//fetch trailing blks from cache
+//fetch trailing blocks from cache
 		while (*_count > 0)
 		{
 			if (tmpc = DiskCacheFind(drive, *_blk + *_count - 1))

@@ -4,7 +4,7 @@ U0 MessageLoop()
 	"Use $LK,"message_code",A="MN:MESSAGE_CMD"$ defines in your programs instead of hardcoded nums.\n"
 	"<ESC> to Exit\n";
 
-	//We don't want the mouse bttns to reposition the cursor,
+	//We don't want the mouse buttons to reposition the cursor,
 	//so we inhibit the window mgr from processing them.
 
 	Fs->win_inhibit = WIF_SELF_MS_L | WIF_SELF_MS_R;

@@ -89,7 +89,7 @@ body {background-color:#fef1f0;}
 <a name="l62"></a>}
 <a name="l63"></a>
 <a name="l64"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Mem32DevAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> size, </span><span class=cF9>I64</span><span class=cF0> alignment)
-<a name="l65"></a>{</span><span class=cF2>//Alloc 32-bit addr space for device. (Doesn't work.) Not used.</span><span class=cF0>
+<a name="l65"></a>{</span><span class=cF2>//Alloc 32-bit address space for device. (Doesn't work.) Not used.</span><span class=cF0>
 <a name="l66"></a></span><span class=cF2>//For this to work the BIOS E820 map must be searched for gaps in</span><span class=cF0>
 <a name="l67"></a>    </span><span class=cF2>//the 32-bit range and the pool initialized to the gaps.</span><span class=cF0>
 <a name="l68"></a>    </span><span class=cF1>U8</span><span class=cF0>          *base, *limit;
@@ -147,7 +147,7 @@ body {background-color:#fef1f0;}
 <a name="l120"></a>}
 <a name="l121"></a>
 <a name="l122"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Mem64DevAlloc</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> *_pages1Gig)
-<a name="l123"></a>{</span><span class=cF2>//Alloc 64-bit addr space for device.</span><span class=cF0>
+<a name="l123"></a>{</span><span class=cF2>//Alloc 64-bit address space for device.</span><span class=cF0>
 <a name="l124"></a>    </span><span class=cF1>U8</span><span class=cF0> *a;
 <a name="l125"></a>    </span><span class=cF9>I64</span><span class=cF0> i = *_pages1Gig, *pte;
 <a name="l126"></a>
@@ -234,7 +234,7 @@ body {background-color:#fef1f0;}
 <a name="l207"></a>}
 <a name="l208"></a>
 <a name="l209"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Seg2Linear</span><span class=cF0>(</span><span class=cF9>U32</span><span class=cF0> *ptr)
-<a name="l210"></a>{</span><span class=cF2>//Convert 32-bit segmented farptr to linear address. Modify in place.</span><span class=cF0>
+<a name="l210"></a>{</span><span class=cF2>//Convert 32-bit segmented far pointer to linear address. Modify in place.</span><span class=cF0>
 <a name="l211"></a>    *ptr = *ptr &gt;&gt; </span><span class=cFE>16</span><span class=cF0> &lt;&lt; </span><span class=cFE>4</span><span class=cF0> + *ptr &amp; </span><span class=cFE>0xFFFF</span><span class=cF0>;
 <a name="l212"></a>    </span><span class=cF1>return</span><span class=cF0> *ptr;
 <a name="l213"></a>}</span></pre></body>

@@ -181,7 +181,7 @@ body {background-color:#fef1f0;}
 <a name="l154"></a>                </span><span class=cF1>RET</span><span class=cF0>
 <a name="l155"></a>
 <a name="l156"></a></span><span class=cFD>SYS_INIT_16MEG_SYS_CODE_BP</span><span class=cF0>::
-<a name="l157"></a></span><span class=cF2>// Init sys_code_bp to BIOS E801 lowest 16Meg val.</span><span class=cF0>
+<a name="l157"></a></span><span class=cF2>// Init sys_code_bp to BIOS E801 lowest 16Meg value.</span><span class=cF0>
 <a name="l158"></a></span><span class=cF2>// </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Memory/BlkPool.CC.html#l31"><span class=cF4>BlkPoolsInit</span></a><span class=cF2>() adds the rest.</span><span class=cF0>
 <a name="l159"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_CODE_BP</span><span class=cF0>],     </span><span class=cF3>SYS_FIXED_AREA</span><span class=cF0> + </span><span class=cF9>CSysFixedArea</span><span class=cF0>.</span><span class=cFB>sys_code_bp</span><span class=cF0>
 <a name="l160"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_CODE_BP</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
@@ -190,7 +190,7 @@ body {background-color:#fef1f0;}
 <a name="l163"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>SYS_DATA_BP</span><span class=cF0> + </span><span class=cFE>4</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>
 <a name="l164"></a>
 <a name="l165"></a>                </span><span class=cF1>XOR</span><span class=cF0>         </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFC>EAX</span><span class=cF0>
-<a name="l166"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>,  </span><span class=cF9>U16</span><span class=cF0> [</span><span class=cFD>MEM_E801</span><span class=cF0>] </span><span class=cF2>//1 Kb blks between 1M and 16M</span><span class=cF0>
+<a name="l166"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>,  </span><span class=cF9>U16</span><span class=cF0> [</span><span class=cFD>MEM_E801</span><span class=cF0>] </span><span class=cF2>//1 Kb blocks between 1M and 16M</span><span class=cF0>
 <a name="l167"></a>                </span><span class=cF1>SHL</span><span class=cF0>         </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFE>10</span><span class=cF0>
 <a name="l168"></a>                </span><span class=cF1>ADD</span><span class=cF0>         </span><span class=cFC>EAX</span><span class=cF0>, </span><span class=cFE>0x100000</span><span class=cF0>
 <a name="l169"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>EDI</span><span class=cF0>, </span><span class=cF9>U32</span><span class=cF0> [</span><span class=cFD>MEM_HEAP_BASE</span><span class=cF0>]
@@ -224,7 +224,7 @@ body {background-color:#fef1f0;}
 <a name="l197"></a>}
 <a name="l198"></a>
 <a name="l199"></a></span><span class=cF9>I64</span><span class=cF0> *</span><span class=cF5>MemPageTable</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *a)
-<a name="l200"></a>{</span><span class=cF2>//Point to page table entry for addr.</span><span class=cF0>
+<a name="l200"></a>{</span><span class=cF2>//Point to page table entry for address.</span><span class=cF0>
 <a name="l201"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;</span><span class=cFB>mem_page_size</span><span class=cF0>, </span><span class=cFE>30</span><span class=cF7>)</span><span class=cF0>)
 <a name="l202"></a>        </span><span class=cF1>return</span><span class=cF0> *</span><span class=cFD>MEM_PML3</span><span class=cF0>(</span><span class=cF9>U64</span><span class=cF0> *) + a &gt;&gt; </span><span class=cFE>30</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>;
 <a name="l203"></a>    </span><span class=cF1>else</span><span class=cF0>

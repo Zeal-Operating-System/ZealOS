@@ -66,7 +66,7 @@ public U64i union I64
 
 It's not quite as great as it seems
 because the compiler decides it cannot
-place i into a reg, so there is a
+place i into a register, so there is a
 penalty.
 
 For a complete list of nonstandard compiler

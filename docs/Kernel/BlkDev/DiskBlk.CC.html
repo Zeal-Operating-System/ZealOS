@@ -27,7 +27,7 @@ body {background-color:#fef1f0;}
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF0>#</span><span class=cF1>define</span><span class=cF0> ZERO_BUF_SIZE   </span><span class=cFE>2048</span><span class=cF0>
 <a name="l2"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>BlkWriteZero</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l3"></a>{</span><span class=cF2>//Fill blk count with zeros in Drive.</span><span class=cF0>
+<a name="l3"></a>{</span><span class=cF2>//Fill block count with zeros in Drive.</span><span class=cF0>
 <a name="l4"></a>    </span><span class=cF9>I64</span><span class=cF0>  n;
 <a name="l5"></a>    </span><span class=cF1>U8</span><span class=cF0>  *z = </span><span class=cF5>CAlloc</span><span class=cF0>(ZERO_BUF_SIZE &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l6"></a>    </span><span class=cF1>Bool</span><span class=cF0> show_progress;
@@ -62,7 +62,7 @@ body {background-color:#fef1f0;}
 <a name="l35"></a>}
 <a name="l36"></a>
 <a name="l37"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>BlkRead</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l38"></a>{</span><span class=cF2>//Read blk count from Drive to buf.</span><span class=cF0>
+<a name="l38"></a>{</span><span class=cF2>//Read block count from Drive to buf.</span><span class=cF0>
 <a name="l39"></a>    </span><span class=cF1>Bool</span><span class=cF0>     res = </span><span class=cF3>TRUE</span><span class=cF0>, unlock;
 <a name="l40"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd  = drive-&gt;bd;
 <a name="l41"></a>
@@ -112,7 +112,7 @@ body {background-color:#fef1f0;}
 <a name="l85"></a>}
 <a name="l86"></a>
 <a name="l87"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>BlkWrite</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> blk, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l88"></a>{</span><span class=cF2>//Write blk count from buf to Drive.</span><span class=cF0>
+<a name="l88"></a>{</span><span class=cF2>//Write block count from buf to Drive.</span><span class=cF0>
 <a name="l89"></a>    </span><span class=cF1>Bool</span><span class=cF0>     res = </span><span class=cF3>TRUE</span><span class=cF0>, unlock;
 <a name="l90"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd  = drive-&gt;bd;
 <a name="l91"></a>

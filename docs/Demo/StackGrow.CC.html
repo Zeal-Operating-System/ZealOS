@@ -63,7 +63,7 @@ body {background-color:#fef1f0;}
 <a name="l36"></a>
 <a name="l37"></a>    </span><span class=cF2>//If you know the max stack ahead of time...</span><span class=cF0>
 <a name="l38"></a>    </span><span class=cF2>//Recurse2's stack is 16 because you have 1 arg,</span><span class=cF0>
-<a name="l39"></a>    </span><span class=cF2>//a return addr and no local variables.</span><span class=cF0>
+<a name="l39"></a>    </span><span class=cF2>//a return address and no local variables.</span><span class=cF0>
 <a name="l40"></a>    t0 = </span><span class=cF5>tS</span><span class=cF0>;
 <a name="l41"></a>    </span><span class=cF6>&quot;%X:%X\n&quot;</span><span class=cF0>, DEPTH, </span><span class=cF5>CallStackGrow</span><span class=cF0>(DEPTH * </span><span class=cFE>16</span><span class=cF0> + </span><span class=cFE>0x800</span><span class=cF0>, DEPTH * </span><span class=cFE>16</span><span class=cF0> + </span><span class=cFE>0x800</span><span class=cF0>, &amp;Recurse2, DEPTH);
 <a name="l42"></a>    </span><span class=cF6>&quot;Time:%7.5fs\n&quot;</span><span class=cF0>, </span><span class=cF5>tS</span><span class=cF0> - t0;

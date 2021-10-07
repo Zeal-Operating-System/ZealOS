@@ -55,7 +55,7 @@ U0 UndefinedDefine(U8 *dname)
 }
 
 U8 *Define(U8 *dname)
-{//Look for DEFINE named in hash table, return ptr string.
+{//Look for DEFINE named in hash table, return pointer string.
 	CHashDefineStr *tmph;
 
 	if (tmph = HashFind(dname, Fs->hash_table, HTT_DEFINE_STR))

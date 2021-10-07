@@ -483,7 +483,7 @@ body {background-color:#fef1f0;}
 <a name="l456"></a>
 <a name="l457"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>ReAlloc</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *ptr, </span><span class=cF9>U64</span><span class=cF0> new_size, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
 <a name="l458"></a>{</span><span class=cF2>//Resize previously MAlloc'ed chunk. If new_size is zero then act as Free.</span><span class=cF0>
-<a name="l459"></a></span><span class=cF2>//If ptr is NULL then act as MAlloc. if both are NULL/0 does nothing (Free(NULL))</span><span class=cF0>
+<a name="l459"></a></span><span class=cF2>//If pointer is NULL then act as MAlloc. if both are NULL/0 does nothing (Free(NULL))</span><span class=cF0>
 <a name="l460"></a></span><span class=cF2>//Useless for changing chunk sizes smaller than 8 bytes because MAlloc allocs 8 bytes at a time.</span><span class=cF0>
 <a name="l461"></a>    </span><span class=cF1>U8</span><span class=cF0> *res;
 <a name="l462"></a>

@@ -1,4 +1,4 @@
-/*lock{} is a compiler stmt
+/*lock{} is a compiler statement
 which places asm LOCK instruction
 prefixes on code.  Only use it on
 read-modify-write statements.

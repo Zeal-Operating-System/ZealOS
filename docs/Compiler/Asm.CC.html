@@ -397,7 +397,7 @@ body {background-color:#fef1f0;}
 <a name="l370"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc,</span><span class=cF6>&quot;Branch out of range at &quot;</span><span class=cF0>);
 <a name="l371"></a>            </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
 <a name="l372"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l373"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l373"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l374"></a>                {
 <a name="l375"></a>                    tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l376"></a>                    tmpa-&gt;next = aotc-&gt;abss;
@@ -408,7 +408,7 @@ body {background-color:#fef1f0;}
 <a name="l381"></a>            </span><span class=cF7>}</span><span class=cF0>
 <a name="l382"></a>            </span><span class=cF1>else</span><span class=cF0>
 <a name="l383"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l384"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l384"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l385"></a>                {
 <a name="l386"></a>                    tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l387"></a>                    tmpa-&gt;next = aotc-&gt;abss;
@@ -431,7 +431,7 @@ body {background-color:#fef1f0;}
 <a name="l404"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc,</span><span class=cF6>&quot;Branch out of range at &quot;</span><span class=cF0>);
 <a name="l405"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
 <a name="l406"></a>                {
-<a name="l407"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l407"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l408"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l409"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l410"></a>                        tmpa-&gt;next = aotc-&gt;abss;
@@ -442,7 +442,7 @@ body {background-color:#fef1f0;}
 <a name="l415"></a>                }
 <a name="l416"></a>                </span><span class=cF1>else</span><span class=cF0>
 <a name="l417"></a>                {
-<a name="l418"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l418"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l419"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l420"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l421"></a>                        tmpa-&gt;next = aotc-&gt;abss;
@@ -464,7 +464,7 @@ body {background-color:#fef1f0;}
 <a name="l437"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc,</span><span class=cF6>&quot;Branch out of range at &quot;</span><span class=cF0>);
 <a name="l438"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
 <a name="l439"></a>                {
-<a name="l440"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l440"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l441"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l442"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l443"></a>                        tmpa-&gt;next = aotc-&gt;abss;
@@ -475,7 +475,7 @@ body {background-color:#fef1f0;}
 <a name="l448"></a>                }
 <a name="l449"></a>                </span><span class=cF1>else</span><span class=cF0>
 <a name="l450"></a>                {
-<a name="l451"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l451"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l452"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l453"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l454"></a>                        tmpa-&gt;next = aotc-&gt;abss;
@@ -494,7 +494,7 @@ body {background-color:#fef1f0;}
 <a name="l467"></a>                        cc-&gt;lex_include_stack-&gt;line_num, U8_avail);
 <a name="l468"></a>                </span><span class=cF1>if</span><span class=cF0> (num2-&gt;imm_flag)
 <a name="l469"></a>                {
-<a name="l470"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l470"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.abs_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l471"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l472"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l473"></a>                        tmpa-&gt;next = aotc-&gt;abss;
@@ -505,7 +505,7 @@ body {background-color:#fef1f0;}
 <a name="l478"></a>                }
 <a name="l479"></a>                </span><span class=cF1>else</span><span class=cF0>
 <a name="l480"></a>                {
-<a name="l481"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_addres &amp; </span><span class=cFE>1</span><span class=cF0>)
+<a name="l481"></a>                    </span><span class=cF1>if</span><span class=cF0> (num2-&gt;num.abs_counts.c_address &amp; </span><span class=cFE>1</span><span class=cF0>)
 <a name="l482"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l483"></a>                        tmpa = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CAOTAbsAddr</span><span class=cF7>)</span><span class=cF0>);
 <a name="l484"></a>                        tmpa-&gt;next = aotc-&gt;abss;
@@ -1204,7 +1204,7 @@ body {background-color:#fef1f0;}
 <a name="l1177"></a>
 <a name="l1178"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_ORG</span><span class=cF0>:
 <a name="l1179"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
-<a name="l1180"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ORG not allowed in fun asm blk &quot;</span><span class=cF0>);
+<a name="l1180"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ORG not allowed in function asm block &quot;</span><span class=cF0>);
 <a name="l1181"></a>                        </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;org != </span><span class=cF3>INVALID_PTR</span><span class=cF0>)
 <a name="l1182"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Just one org allowed &quot;</span><span class=cF0>);
 <a name="l1183"></a>                        </span><span class=cF1>if</span><span class=cF0> (aotc-&gt;rip)
@@ -1214,7 +1214,7 @@ body {background-color:#fef1f0;}
 <a name="l1187"></a>
 <a name="l1188"></a>                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>AKW_ALIGN</span><span class=cF0>:
 <a name="l1189"></a>                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
-<a name="l1190"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ALIGN not allowed in fun asm blk &quot;</span><span class=cF0>);
+<a name="l1190"></a>                            </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;ALIGN not allowed in function asm block &quot;</span><span class=cF0>);
 <a name="l1191"></a>                        i = </span><span class=cFD>AsmLexExpression</span><span class=cF0>(cc);
 <a name="l1192"></a>                        j = </span><span class=cF5>Bsf</span><span class=cF0>(i);
 <a name="l1193"></a>                        </span><span class=cF1>if</span><span class=cF0> (!i || j != </span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>i</span><span class=cF7>)</span><span class=cF0>)
@@ -1370,7 +1370,7 @@ body {background-color:#fef1f0;}
 <a name="l1343"></a>                </span><span class=cF1>else</span><span class=cF0>
 <a name="l1344"></a>                    </span><span class=cF5>HashAdd</span><span class=cF0>(tmpex,cc-&gt;htc.global_hash_table);
 <a name="l1345"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.local_var_list)
-<a name="l1346"></a>                {</span><span class=cF2>//AsmBlk in fun? Also add goto-like label.</span><span class=cF0>
+<a name="l1346"></a>                {</span><span class=cF2>//AsmBlk in function? Also add goto-like label.</span><span class=cF0>
 <a name="l1347"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>g_lb = </span><span class=cFD>COCGoToLabelFind</span><span class=cF0>(cc, tmpex-&gt;str)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l1348"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l1349"></a>                        g_lb = </span><span class=cFD>COCMiscNew</span><span class=cF0>(cc, </span><span class=cF3>CMT_ASM_LABEL</span><span class=cF0>);

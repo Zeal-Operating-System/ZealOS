@@ -1,7 +1,7 @@
 /*When Terry Davis was a kid with a Commodore 64,
 the 6502 chip had no multiply instruction
 and this is how he had to do it, except,
-he used more regs in this example.
+he used more registers in this example.
 */
 asm {
 //Opcodes are slightly different to make writing the x86_64 assembler easier.

@@ -14,7 +14,7 @@
 
 public U0 BootMHDOldRead(U8 src_drive, U8 dst_drive)
 {//Reads MBR from disk drive containing src partition.
-//Writes a single blk file to dst BOOT_DIR.
+//Writes a single block file to dst BOOT_DIR.
 	CBlkDev		*bd = Letter2BlkDev(src_drive);
 	CDrive		*drive;
 	CMasterBoot	 mbr;

@@ -370,7 +370,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 				LexExcept(cc,"Branch out of range at ");
 			if (num2->imm_flag)
 			{
-				if (num2->num.abs_counts.abs_addres & 1)
+				if (num2->num.abs_counts.abs_address & 1)
 				{
 					tmpa = CAlloc(sizeof(CAOTAbsAddr));
 					tmpa->next = aotc->abss;
@@ -381,7 +381,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 			}
 			else
 			{
-				if (num2->num.abs_counts.c_addres & 1)
+				if (num2->num.abs_counts.c_address & 1)
 				{
 					tmpa = CAlloc(sizeof(CAOTAbsAddr));
 					tmpa->next = aotc->abss;
@@ -404,7 +404,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 					LexExcept(cc,"Branch out of range at ");
 				if (num2->imm_flag)
 				{
-					if (num2->num.abs_counts.abs_addres & 1)
+					if (num2->num.abs_counts.abs_address & 1)
 					{
 						tmpa = CAlloc(sizeof(CAOTAbsAddr));
 						tmpa->next = aotc->abss;
@@ -415,7 +415,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 				}
 				else
 				{
-					if (num2->num.abs_counts.c_addres & 1)
+					if (num2->num.abs_counts.c_address & 1)
 					{
 						tmpa = CAlloc(sizeof(CAOTAbsAddr));
 						tmpa->next = aotc->abss;
@@ -437,7 +437,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 					LexExcept(cc,"Branch out of range at ");
 				if (num2->imm_flag)
 				{
-					if (num2->num.abs_counts.abs_addres & 1)
+					if (num2->num.abs_counts.abs_address & 1)
 					{
 						tmpa = CAlloc(sizeof(CAOTAbsAddr));
 						tmpa->next = aotc->abss;
@@ -448,7 +448,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 				}
 				else
 				{
-					if (num2->num.abs_counts.c_addres & 1)
+					if (num2->num.abs_counts.c_address & 1)
 					{
 						tmpa = CAlloc(sizeof(CAOTAbsAddr));
 						tmpa->next = aotc->abss;
@@ -467,7 +467,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 						cc->lex_include_stack->line_num, U8_avail);
 				if (num2->imm_flag)
 				{
-					if (num2->num.abs_counts.abs_addres & 1)
+					if (num2->num.abs_counts.abs_address & 1)
 					{
 						tmpa = CAlloc(sizeof(CAOTAbsAddr));
 						tmpa->next = aotc->abss;
@@ -478,7 +478,7 @@ Bool AsmStoreNum(CCompCtrl *cc, CAsmNum2 *num2, I64 count, Bool U8_avail)
 				}
 				else
 				{
-					if (num2->num.abs_counts.c_addres & 1)
+					if (num2->num.abs_counts.c_address & 1)
 					{
 						tmpa = CAlloc(sizeof(CAOTAbsAddr));
 						tmpa->next = aotc->abss;
@@ -1177,7 +1177,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 
 					case AKW_ORG:
 						if (cc->htc.local_var_list)
-							LexExcept(cc, "ORG not allowed in fun asm blk ");
+							LexExcept(cc, "ORG not allowed in function asm block ");
 						if (aotc->org != INVALID_PTR)
 							LexExcept(cc, "Just one org allowed ");
 						if (aotc->rip)
@@ -1187,7 +1187,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 
 					case AKW_ALIGN:
 						if (cc->htc.local_var_list)
-							LexExcept(cc, "ALIGN not allowed in fun asm blk ");
+							LexExcept(cc, "ALIGN not allowed in function asm block ");
 						i = AsmLexExpression(cc);
 						j = Bsf(i);
 						if (!i || j != Bsr(i))
@@ -1343,7 +1343,7 @@ U0 ParseAsmBlk(CCompCtrl *cc,I64 comp_flags)
 				else
 					HashAdd(tmpex,cc->htc.global_hash_table);
 				if (cc->htc.local_var_list)
-				{//AsmBlk in fun? Also add goto-like label.
+				{//AsmBlk in function? Also add goto-like label.
 					if (!(g_lb = COCGoToLabelFind(cc, tmpex->str)))
 					{
 						g_lb = COCMiscNew(cc, CMT_ASM_LABEL);

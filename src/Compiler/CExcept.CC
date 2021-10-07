@@ -139,12 +139,10 @@ U0 ICClassPut(CHashClass *c)
 
 	if (!c)
 		return;
-	if (c->ptr_stars_count > 4)
+	if (c->ptr_stars_count > PTR_STARS_NUM)
 	{
 		PrintErr("put_class ptrcount=%d\n", c->ptr_stars_count);
-		while (TRUE)
-//TODO:
-			Yield;
+		Debug("put_class ptrcount = 0x", c->ptr_stars_count); // TODO
 	}
 	for (i = 0; i < c->ptr_stars_count; i++)
 		'*';
@@ -154,9 +152,7 @@ U0 ICClassPut(CHashClass *c)
 	else
 	{
 		PrintErr("put_class str=NULL\n");
-		while (TRUE)
-//TODO:
-			Yield;
+		Debug("put_class str=NULL");  // TODO
 	}
 	'' CH_SPACE;
 }

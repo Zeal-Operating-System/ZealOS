@@ -209,7 +209,7 @@ body {background-color:#fef1f0;}
 <a name="l182"></a>        cc-&gt;max_line = cc-&gt;min_line;
 <a name="l183"></a>
 <a name="l184"></a>    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun-&gt;return_class-&gt;size &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_HAS_RETURN</span><span class=cF7>)</span><span class=cF0>)
-<a name="l185"></a>        </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;Function should return val &quot;</span><span class=cF0>);
+<a name="l185"></a>        </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;Function should return value &quot;</span><span class=cF0>);
 <a name="l186"></a>    </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_LABEL</span><span class=cF0>, cc-&gt;lb_leave, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l187"></a>    cc-&gt;lb_leave = saved_leave_label;
 <a name="l188"></a>    </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_LEAVE</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, cc-&gt;htc.fun-&gt;return_class);
@@ -989,7 +989,7 @@ body {background-color:#fef1f0;}
 <a name="l962"></a>    </span><span class=cF1>if</span><span class=cF0> (!tmp_try || !tmp_untry)
 <a name="l963"></a>        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Missing header for SysTry() and SysUntry() at &quot;</span><span class=cF0>);
 <a name="l964"></a>
-<a name="l965"></a>    cc-&gt;flags |= </span><span class=cF3>CCF_NO_REG_OPT</span><span class=cF0>; </span><span class=cF2>//TODO:Currently no reg vars in funs with try/catch</span><span class=cF0>
+<a name="l965"></a>    cc-&gt;flags |= </span><span class=cF3>CCF_NO_REG_OPT</span><span class=cF0>; </span><span class=cF2>//TODO:Currently no register variables in functions with try/catch</span><span class=cF0>
 <a name="l966"></a>
 <a name="l967"></a>    lb_catch = </span><span class=cFD>COCMiscNew</span><span class=cF0>(cc, </span><span class=cF3>CMT_LABEL</span><span class=cF0>);
 <a name="l968"></a>    lb_done  = </span><span class=cFD>COCMiscNew</span><span class=cF0>(cc, </span><span class=cF3>CMT_LABEL</span><span class=cF0>);
@@ -1161,7 +1161,7 @@ body {background-color:#fef1f0;}
 <a name="l1134"></a>                                    </span><span class=cF1>break</span><span class=cF0>;
 <a name="l1135"></a>                                </span><span class=cF1>start</span><span class=cF0>:
 <a name="l1136"></a>                                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun)
-<a name="l1137"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not allowed in fun&quot;</span><span class=cF0>);
+<a name="l1137"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not allowed in function&quot;</span><span class=cF0>);
 <a name="l1138"></a>                                    </span><span class=cF5>Lex</span><span class=cF0>(cc);
 <a name="l1139"></a>                                    </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>KW__EXTERN</span><span class=cF0>:
 <a name="l1140"></a>                                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;opts, </span><span class=cF3>OPTf_EXTERNS_TO_IMPORTS</span><span class=cF7>)</span><span class=cF0>)
@@ -1266,7 +1266,7 @@ body {background-color:#fef1f0;}
 <a name="l1239"></a>
 <a name="l1240"></a>                                </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>KW_RETURN</span><span class=cF0>:
 <a name="l1241"></a>                                    </span><span class=cF1>if</span><span class=cF0> (!cc-&gt;htc.fun)
-<a name="l1242"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not in fun.  Can't return a val &quot;</span><span class=cF0>);
+<a name="l1242"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not in function.  Can't return a value &quot;</span><span class=cF0>);
 <a name="l1243"></a>                                    </span><span class=cF1>if</span><span class=cF0> (try_count)
 <a name="l1244"></a>                                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l1245"></a>                                        tmp_untry = </span><span class=cF5>HashFind</span><span class=cF0>(</span><span class=cF6>&quot;SysUntry&quot;</span><span class=cF0>, cc-&gt;htc.hash_table_list, </span><span class=cF3>HTT_FUN</span><span class=cF0>);
@@ -1288,14 +1288,14 @@ body {background-color:#fef1f0;}
 <a name="l1261"></a>                                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Lex</span><span class=cF7>(</span><span class=cF0>cc</span><span class=cF7>)</span><span class=cF0> != </span><span class=cF6>';'</span><span class=cF0>)
 <a name="l1262"></a>                                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l1263"></a>                                        </span><span class=cF1>if</span><span class=cF0> (!cc-&gt;htc.fun-&gt;return_class-&gt;size)
-<a name="l1264"></a>                                            </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;Function should NOT return val &quot;</span><span class=cF0>);
+<a name="l1264"></a>                                            </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;Function should NOT return value &quot;</span><span class=cF0>);
 <a name="l1265"></a>                                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cFD>ParseExpression</span><span class=cF7>(</span><span class=cF0>cc, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF3>FALSE</span><span class=cF7>)</span><span class=cF0>)
 <a name="l1266"></a>                                            </span><span class=cF5>throw</span><span class=cF0>(</span><span class=cF6>'Compiler'</span><span class=cF0>);
 <a name="l1267"></a>                                        </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_RETURN_VAL</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, cc-&gt;htc.fun-&gt;return_class);
 <a name="l1268"></a>                                        cc-&gt;flags |= </span><span class=cF3>CCF_HAS_RETURN</span><span class=cF0>;
 <a name="l1269"></a>                                    </span><span class=cF7>}</span><span class=cF0>
 <a name="l1270"></a>                                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun-&gt;return_class-&gt;size)
-<a name="l1271"></a>                                        </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;Function should return val &quot;</span><span class=cF0>);
+<a name="l1271"></a>                                        </span><span class=cF5>LexWarn</span><span class=cF0>(cc, </span><span class=cF6>&quot;Function should return value &quot;</span><span class=cF0>);
 <a name="l1272"></a>                                    </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_JMP</span><span class=cF0>, cc-&gt;lb_leave, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1273"></a>                                    </span><span class=cF1>goto</span><span class=cF0> sm_semicolon;
 <a name="l1274"></a>
@@ -1371,7 +1371,7 @@ body {background-color:#fef1f0;}
 <a name="l1344"></a>                                            </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_ASM</span><span class=cF0>, tmpaot, </span><span class=cFE>0</span><span class=cF0>);
 <a name="l1345"></a>                                    }
 <a name="l1346"></a>                                    </span><span class=cF1>else</span><span class=cF0>
-<a name="l1347"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Use Asm Blk at &quot;</span><span class=cF0>);
+<a name="l1347"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Use Asm Block at &quot;</span><span class=cF0>);
 <a name="l1348"></a>                                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;token != </span><span class=cF6>','</span><span class=cF0>)
 <a name="l1349"></a>                                        </span><span class=cF1>goto</span><span class=cF0> sm_done;
 <a name="l1350"></a>                                </span><span class=cF7>}</span><span class=cF0>

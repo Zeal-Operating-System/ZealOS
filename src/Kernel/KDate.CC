@@ -136,14 +136,14 @@ I64 LastDayOfYear(I64 i)
 }
 
 U8 CMOSRegRead(I64 register)
-{//Read val from CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
+{//Read value from CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
 	OutU8(CMOS_SEL, register);
 
 	return InU8(CMOS_DATA);
 }
 
 U0 CMOSRegWrite(I64 register, I64 val)
-{//Write val to CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
+{//Write value to CMOS register. See $LK,"CMOS Registers",A="MN:CMOSR_SEC"$.
 	OutU8(CMOS_SEL, register);
 	OutU8(CMOS_DATA, val);
 }

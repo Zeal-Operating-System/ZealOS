@@ -182,7 +182,7 @@ U0 ParseFun(CCompCtrl *cc, CHashClass *tmp_return, U8 *name, I64 fsp_flags)
 		cc->max_line = cc->min_line;
 
 	if (cc->htc.fun->return_class->size && !(cc->flags & CCF_HAS_RETURN))
-		LexWarn(cc, "Function should return val ");
+		LexWarn(cc, "Function should return value ");
 	ICAdd(cc, IC_LABEL, cc->lb_leave, 0);
 	cc->lb_leave = saved_leave_label;
 	ICAdd(cc, IC_LEAVE, 0, cc->htc.fun->return_class);
@@ -962,7 +962,7 @@ U0 ParseTryBlk(CCompCtrl *cc, I64 try_count)
 	if (!tmp_try || !tmp_untry)
 		LexExcept(cc, "Missing header for SysTry() and SysUntry() at ");
 
-	cc->flags |= CCF_NO_REG_OPT; //TODO:Currently no reg vars in funs with try/catch
+	cc->flags |= CCF_NO_REG_OPT; //TODO:Currently no register variables in functions with try/catch
 
 	lb_catch = COCMiscNew(cc, CMT_LABEL);
 	lb_done  = COCMiscNew(cc, CMT_LABEL);
@@ -1134,7 +1134,7 @@ Bool ParseStatement(CCompCtrl *cc, I64 try_count=0, CCodeMisc *lb_break=NULL, I6
 									break;
 								start:
 									if (cc->htc.fun)
-										LexExcept(cc, "Not allowed in fun");
+										LexExcept(cc, "Not allowed in function");
 									Lex(cc);
 									case KW__EXTERN:
 										if (Bt(&cc->opts, OPTf_EXTERNS_TO_IMPORTS))
@@ -1239,7 +1239,7 @@ sm_import:
 
 								case KW_RETURN:
 									if (!cc->htc.fun)
-										LexExcept(cc, "Not in fun.  Can't return a val ");
+										LexExcept(cc, "Not in function.  Can't return a value ");
 									if (try_count)
 									{
 										tmp_untry = HashFind("SysUntry", cc->htc.hash_table_list, HTT_FUN);
@@ -1261,14 +1261,14 @@ sm_import:
 									if (Lex(cc) != ';')
 									{
 										if (!cc->htc.fun->return_class->size)
-											LexWarn(cc, "Function should NOT return val ");
+											LexWarn(cc, "Function should NOT return value ");
 										if (!ParseExpression(cc, NULL, FALSE))
 											throw('Compiler');
 										ICAdd(cc, IC_RETURN_VAL, 0, cc->htc.fun->return_class);
 										cc->flags |= CCF_HAS_RETURN;
 									}
 									else if (cc->htc.fun->return_class->size)
-										LexWarn(cc, "Function should return val ");
+										LexWarn(cc, "Function should return value ");
 									ICAdd(cc, IC_JMP, cc->lb_leave, 0);
 									goto sm_semicolon;
 
@@ -1344,7 +1344,7 @@ sm_not_keyword_afterall:
 											ICAdd(cc, IC_ASM, tmpaot, 0);
 									}
 									else
-										LexExcept(cc, "Use Asm Blk at ");
+										LexExcept(cc, "Use Asm Block at ");
 									if (cc->token != ',')
 										goto sm_done;
 								}

@@ -56,7 +56,7 @@ I64 BlkDevAdd(CBlkDev *bd, I64 prt_num=I64_MIN, Bool whole_drive, Bool make_free
 			drive->fs_type = FSt_REDSEA;
 //This is to force creation of a RAM
 			//drive during boot, so it is probably
-			//MAlloced to the same addr and can
+			//MAlloced to the same address and can
 			//be assumed to be already formatted.
 			//If this line is removed, RAM Drives
 			//will be alloced on a just-in-time

@@ -62,7 +62,7 @@ _WELL_OPTIMIZED3::
 				XOR 		RAX, RAX
 				MOV 		RCX, SAMPLES - 1
 @@05: 			ADD 		RAX, RCX
-				LOOP		@@05		//Inst has slow speed, but saves code size.
+				LOOP		@@05		//Instruction has slow speed, but saves code size.
 				RET
 }
 

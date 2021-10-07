@@ -219,7 +219,7 @@ U0 DocRemSoftNewLines(CDoc *doc=NULL, CDocEntry *doc_e=NULL)
 }
 
 public U0 DocInsEntry(CDoc *doc, CDocEntry *doc_e)
-{//Insert entry into doc, updating its vals.
+{//Insert entry into doc, updating its values.
 	U8			*dst;
 	Bool		 unlock = DocLock(doc);
 	CDocEntry	*doc_ce = doc->cur_entry, *doc_ne;

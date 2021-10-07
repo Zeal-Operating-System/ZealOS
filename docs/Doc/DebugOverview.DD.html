@@ -36,7 +36,7 @@ body {background-color:#fef1f0;}
 <a name="l9"></a>* While debugging, you specify addresses of assembly routines with just the label, as in </span><span class=cF2>_MALLOC+0x20</span><span class=cF0>.  You specify </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CosmiC.DD.html#l1"><span class=cF4>CosmiC</span></a><span class=cF0> 
 <a name="l10"></a>function names with </span><span class=cF2>&amp;</span><span class=cF0> before functions as in </span><span class=cF2>&amp;Print+0x10</span><span class=cF0>.
 <a name="l11"></a>
-<a name="l12"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l166"><span class=cF4>progress1</span></a><span class=cF0>-</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l181"><span class=cF4>progress4</span></a><span class=cF0> for debugging because they show on the wallpaper.  They're just global int vars.
+<a name="l12"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l166"><span class=cF4>progress1</span></a><span class=cF0>-</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l181"><span class=cF4>progress4</span></a><span class=cF0> for debugging because they show on the wallpaper.  They're just global int variables.
 <a name="l13"></a>
 <a name="l14"></a>* You can use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/Job.CC.html#l507"><span class=cF4>SysLog</span></a><span class=cF0>() to send text to the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/Glossary.DD.html#l154"><span class=cF4>System Task</span></a><span class=cF0> window.  It works like </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/StrPrint.CC.html#l1110"><span class=cF4>Print</span></a><span class=cF0>().  You could also use </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l235"><span class=cF4>RawPrint</span></a><span class=cF0>().
 <a name="l15"></a>
@@ -47,7 +47,7 @@ body {background-color:#fef1f0;}
 <a name="l20"></a>
 <a name="l21"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l226"><span class=cF4>Da</span></a><span class=cF0>() to do one column address dump (for stack, etc.) with symbolic addresses.
 <a name="l22"></a>
-<a name="l23"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l374"><span class=cF4>Dr</span></a><span class=cF0>() dumps regs.  You can display and modify regs in the debugger with var-like labels, </span><span class=cF4>_RAX</span><span class=cF0>, </span><span class=cF4>_RBX</span><span class=cF0>, etc.
+<a name="l23"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KDebug.CC.html#l374"><span class=cF4>Dr</span></a><span class=cF0>() dumps registers.  You can display and modify registers in the debugger with variable-like labels, </span><span class=cF4>_RAX</span><span class=cF0>, </span><span class=cF4>_RBX</span><span class=cF0>, etc.
 <a name="l24"></a>
 <a name="l25"></a>* </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Debug.CC.html#l216"><span class=cF4>ClassRep</span></a><span class=cF0>() and the dynamic version </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Debug.CC.html#l246"><span class=cF4>ClassRepD</span></a><span class=cF0>() can be used to dump structures.
 <a name="l26"></a>
@@ -78,8 +78,8 @@ body {background-color:#fef1f0;}
 <a name="l51"></a>scan_code as an arg.
 <a name="l52"></a>
 <a name="l53"></a>* If you recompile </span><span class=cF2>Kernel</span><span class=cF0> with </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF0>(), you can set the </span><span class=cF4>MemInit</span><span class=cF0>, option to initialize memory to a value at boot, the </span><span class=cF4>HeapI
-<a name="l54"></a>nit</span><span class=cF0> option to cause mem alloced off the heap to be initialized or </span><span class=cF4>VarInit</span><span class=cF0> option so both global and local vars will be 
+<a name="l54"></a>nit</span><span class=cF0> option to cause mem alloced off the heap to be initialized or </span><span class=cF4>VarInit</span><span class=cF0> option so both global and local variables will be 
 <a name="l55"></a>initialized to a value, but global AOT variables are always zero if not initialized.  Pick a non-zero value to discover 
-<a name="l56"></a>uninitialized var bugs. You can set </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l145"><span class=cF4>sys_var_init_flag</span></a><span class=cF0>, and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l141"><span class=cF4>sys_heap_init_flag</span></a><span class=cF0> directly after booting.
+<a name="l56"></a>uninitialized variable bugs.    You can set </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l145"><span class=cF4>sys_var_init_flag</span></a><span class=cF0>, and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelB.HH.html#l141"><span class=cF4>sys_heap_init_flag</span></a><span class=cF0> directly after booting.
 </span></pre></body>
 </html>

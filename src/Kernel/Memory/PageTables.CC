@@ -154,7 +154,7 @@ SYS_INIT_PAGE_TABLES::
 				RET
 
 SYS_INIT_16MEG_SYS_CODE_BP::
-// Init sys_code_bp to BIOS E801 lowest 16Meg val.
+// Init sys_code_bp to BIOS E801 lowest 16Meg value.
 // $LK,"BlkPoolsInit",A="MN:BlkPoolsInit"$() adds the rest.
 				MOV 		U32 [SYS_CODE_BP],     SYS_FIXED_AREA + CSysFixedArea.sys_code_bp
 				MOV 		U32 [SYS_CODE_BP + 4], 0
@@ -163,7 +163,7 @@ SYS_INIT_16MEG_SYS_CODE_BP::
 				MOV 		U32 [SYS_DATA_BP + 4], 0
 
 				XOR 		EAX, EAX
-				MOV 		AX,  U16 [MEM_E801] //1 Kb blks between 1M and 16M
+				MOV 		AX,  U16 [MEM_E801] //1 Kb blocks between 1M and 16M
 				SHL 		EAX, 10
 				ADD 		EAX, 0x100000
 				MOV 		EDI, U32 [MEM_HEAP_BASE]
@@ -197,7 +197,7 @@ SYS_INIT_16MEG_SYS_CODE_BP::
 }
 
 I64 *MemPageTable(U8 *a)
-{//Point to page table entry for addr.
+{//Point to page table entry for address.
 	if (Bt(&mem_page_size, 30))
 		return *MEM_PML3(U64 *) + a >> 30 * 8;
 	else

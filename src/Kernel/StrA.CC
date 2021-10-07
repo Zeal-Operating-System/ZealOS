@@ -376,7 +376,7 @@ U32
 
 U8 *ListSub(I64 sub,  U8 *list)
 {//Point to list entry.
-//Not efficient.  Use an array of U8 ptrs for efficiency.
+//Not efficient.  Use an array of U8 pointers for efficiency.
 	if (!list)
 		return NULL;
 	while (*list && sub > 0)

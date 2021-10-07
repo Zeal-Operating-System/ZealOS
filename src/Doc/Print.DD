@@ -13,7 +13,7 @@ $FG,2$'/'$FG$ makes $FG,2$%Q$FG$ and $FG,2$%q$FG$ convert $FG,2$'%'$FG$ to $FG,2
 $ID,-2$
 <aux_format_num>:
 
-$ID,2$For $FG,2$"%n"$FG$, $FG,2$"%d"$FG$ or $FG,2$"%u"$FG$, the <aux_format_num> causes thousands mode.  $FG,2$"%h?n"$FG$ will pick a var exponent multiples of three unit, while $FG,2$"%h-3n"$FG$ will display milli units or $FG,2$"%h6n"$FG$ will display mega units.  The $FG,2$'k'$FG$ flag is always on for $FG,2$"%n"$FG$.	See $LK,"::/Demo/Print.CC"$.
+$ID,2$For $FG,2$"%n"$FG$, $FG,2$"%d"$FG$ or $FG,2$"%u"$FG$, the <aux_format_num> causes thousands mode.  $FG,2$"%h?n"$FG$ will pick a variable exponent multiples of three unit, while $FG,2$"%h-3n"$FG$ will display milli units or $FG,2$"%h6n"$FG$ will display mega units.  The $FG,2$'k'$FG$ flag is always on for $FG,2$"%n"$FG$.	See $LK,"::/Demo/Print.CC"$.
 
 For $FG,2$"%c"$FG$ or $FG,2$"%C"$FG$, the <aux_format_num> repeats the char that many times.$ID,-2$
 
@@ -33,13 +33,13 @@ $FG,2$"%F"$FG$ text file by filename.
 
 $FG,2$"%$$F"$FG$ $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ file in memory.
 
-$FG,2$"%p"$FG$ ptr.
+$FG,2$"%p"$FG$ pointer.
 
-$FG,2$"%,p"$FG$ ptr with no offset.
+$FG,2$"%,p"$FG$ pointer with no offset.
 
-$FG,2$"%P"$FG$ link to ptr.
+$FG,2$"%P"$FG$ link to pointer.
 
-$FG,2$"%,P"$FG$ link to ptr with no offset.
+$FG,2$"%,P"$FG$ link to pointer with no offset.
 
 $FG,2$"%D"$FG$ date.	Pass a $LK,"CDate",A="MN:CDate"$.
 
@@ -71,7 +71,7 @@ $LK,"DocPrint",A="MN:DocPrint"$(CDoc *doc, U8 *format, ...) sends text to a docu
 $LK,"Sys",A="MN:Sys"$(U8 *format, ...) sends text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ to be compiled and run.
 $LK,"SysLog",A="MN:SysLog"$(U8 *format, ...) and $LK,"SysErr",A="MN:SysErr"$(U8 *format,...) send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ to be displayed.
 
-$LK,"StreamPrint",A="MN:StreamPrint"$(U8 *format, ...) sends text to the stream of code being compiled and must reside in a $FG,2$#exe{}$FG$ blk.
+$LK,"StreamPrint",A="MN:StreamPrint"$(U8 *format, ...) sends text to the stream of code being compiled and must reside in a $FG,2$#exe{}$FG$ block.
 
 $LK,"GrPrint",A="MN:GrPrint"$(CDC *dc, I64 x, I64 y, U8 *format,...) and $LK,"GrVPrint",A="MN:GrVPrint"$() plots text in graphics mode.
 

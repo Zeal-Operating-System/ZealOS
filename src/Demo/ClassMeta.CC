@@ -44,7 +44,7 @@ U0 DumpStruct(U8 *_d, U8 *class_name=lastclass)
 		"%s:", ml->str;
 
 		//All our items are I64's.	If you want, you can check
-		//the data type of the member var.  See $LK,"ClassRep",A="MN:ClassRep"$().
+		//the data type of the member variable.  See $LK,"ClassRep",A="MN:ClassRep"$().
 		q = _d + ml->offset;
 
 		if (print_str = MemberMetaData("print_str", ml))

@@ -1,5 +1,5 @@
 I64 ClusNumNext(CDrive *drive, I64 c, I64 count=1)
-{//Return next count'th clus in chain.
+{//Return next count'th cluster in chain.
 	Bool unlock;
 
 	DriveCheck(drive);
@@ -37,7 +37,7 @@ I64 ClusNumNext(CDrive *drive, I64 c, I64 count=1)
 }
 
 I64 Clus2Blk(CDrive *drive, I64 c)
-{//Drive clus num to blk num.
+{//Drive cluster num to block num.
 	DriveCheck(drive);
 	switch (drive->fs_type)
 	{
@@ -53,7 +53,7 @@ I64 Clus2Blk(CDrive *drive, I64 c)
 }
 
 I64 ClusBlkRead(CDrive *drive, U8 *buf, I64 c, I64 blks)
-{//Accepts blk count, so padding on last clus is not read.
+{//Accepts block count, so padding on last cluster is not read.
 	I64  i;
 	Bool unlock;
 
@@ -98,12 +98,12 @@ I64 ClusBlkRead(CDrive *drive, U8 *buf, I64 c, I64 blks)
 }
 
 I64 ClusRead(CDrive *drive, U8 *buf, I64 c, I64 count)
-{//Read clus count from drv to buf.
+{//Read cluster count from drive to buf.
 	return ClusBlkRead(drive, buf, c, count*drive->spc);
 }
 
 I64 ClusBlkWrite(CDrive *drive, U8 *buf, I64 c, I64 blks)
-{//Accepts blk count, so padding on last clus is not written.
+{//Accepts block count, so padding on last cluster is not written.
 	I64  i;
 	Bool unlock;
 
@@ -148,13 +148,13 @@ I64 ClusBlkWrite(CDrive *drive, U8 *buf, I64 c, I64 blks)
 }
 
 I64 ClusWrite(CDrive *drive, U8 *buf, I64 c, I64 count)
-{//Write clus count from buf to drv.
-	return ClusBlkWrite(drive, buf, c, count*drive->spc);
+{//Write cluster count from buf to drive.
+	return ClusBlkWrite(drive, buf, c, count * drive->spc);
 }
 
 I64 ClusAlloc(CDrive *drive, I64 c=0, I64 count=1, Bool contiguous=FALSE)
-{//Alloc clus count into chain.
-//c=0 means first clus in chain
+{//Alloc cluster count into chain.
+//c=0 means first cluster in chain
 	DriveCheck(drive);
 	if (count <= 0) return c;
 	switch (drive->fs_type)

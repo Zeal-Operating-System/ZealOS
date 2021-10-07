@@ -745,7 +745,7 @@ U0 Ui(U8 *buf, U8 **_rip, I64 seg_size=64, I64 *_jmp_dst=NULL, Bool just_ins=FAL
 	if (*arg1_st)
 	{
 		CatPrint(line1, "%h*c", 6 - StrLen(tmpo->str), ' ');
-		CatPrint(line1, "%s", arg1_st);
+		CatPrint(line1, " %s", arg1_st);
 	}
 	if (*arg2_st)
 		CatPrint(line1, ", %s", arg2_st);

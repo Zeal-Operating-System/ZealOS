@@ -1,5 +1,5 @@
-//Demonstrates dynamic initialization of vars.
-//Static vars are, essentually, global vars.
+//Demonstrates dynamic initialization of variables.
+//Static variables are, essentually, global variables.
 
 class Test
 {
@@ -30,7 +30,7 @@ U0 Main1()
 Main1;
 
 /*Now, we'll use the data heap global option
-to force global vars onto the data heap.
+to force global variables onto the data heap.
 
 You can turn the data heap flag
 on and off within your programs, leaving

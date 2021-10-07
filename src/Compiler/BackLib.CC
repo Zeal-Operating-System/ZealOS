@@ -4,13 +4,13 @@ RAX, RBX, RCX and RDX can be clobbered by
 each intermediate code's output code.
 However, intermediate codes must be
 coupled together based on the arg and
-res type specifications in the
-$LK,"CICArg",A="MN:CICArg"$.  RAX is the most common reg
+res type specifications in the $LK,"CICArg",A="MN:CICArg"$.
+RAX is the most common register
 for coupling intermediate codes.
 
 Internal calculations take place on
 64-bit vals, so anything which has
-found it's way into a reg has been
+found it's way into a register has been
 sign or zero extended to 64-bits.
 */
 

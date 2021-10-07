@@ -116,7 +116,7 @@ Bool FilesFindMatch(U8 *_test_name,U8 *files_find_mask,I64 fuf_flags=0)
 }
 
 U8 *DirNameAbs(U8 *_dirname)
-{//MAlloc absolute dir string with drv letter.
+{//MAlloc absolute dir string with drive letter.
 	I64 maxlen;
 	U8  drv[3], *res, *buf, *buf2, *buf3, *buf4, *dirname, *free_dirname;
 
@@ -305,7 +305,7 @@ U8 *FileNameTmpTxt()
 }
 
 U8 *DirCur(CTask *task=NULL, CTask *mem_task=NULL)
-{//MAlloc copy of cur dir with drv letter.
+{//MAlloc copy of cur dir with drive letter.
 	U8 *st;
 
 	if (!task)

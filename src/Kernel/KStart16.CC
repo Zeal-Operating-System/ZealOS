@@ -12,7 +12,7 @@ SYS_KERNEL:: //This must match $LK,"CKernel",A="MN:CKernel"$.
 		JMP		I16 CORE0_16BIT_INIT
 
 //************************************
-//	ASM Global vars required for 16-bit start-up
+//	ASM Global variables required for 16-bit start-up
 		ALIGN 	4, OC_NOP
 
 SYS_BOOT_SRC::				DU32	BOOT_SRC_NULL;
@@ -70,7 +70,7 @@ MAX_SCREEN_HEIGHT:	DU16	0;
 
 //************************************
 CORE0_16BIT_INIT::
-//EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Val passed from boot blk, $LK,"BootHD",A="FF:::/System/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/System/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/System/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
+//EAX is $LK,"SYS_BOOT_SRC",A="FF:::/Kernel/KStart16.CC,[SYS_BOOT_SRC]"$. (Value passed from boot block, $LK,"BootHD",A="FF:::/System/Boot/BootHD.CC,BOOT_SRC_HARDDRIVE"$, $LK,"BootDVD",A="FF:::/System/Boot/BootDVD.CC,BOOT_SRC_DVD"$, & $LK,"BootRAM",A="FF:::/System/Boot/BootRAM.CC,BOOT_SRC_RAM"$.)
 		MOV		ECX, EAX
 		MOV		AX, (BOOT_RAM_LIMIT - BOOT_STACK_SIZE) / 16
 		MOV		SS, AX

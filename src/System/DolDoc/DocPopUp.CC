@@ -11,7 +11,7 @@ public CTask *PopUpViewDoc(CDoc *doc, I64 dof_flags=0)
 }
 
 public CTask *PopUpViewPrint(U8 *format, ...)
-{//View Print stmt in PopUp win task.
+{//View Print statement in PopUp win task.
 	CTask	*task = Spawn(&ServerCmdLine, NULL, "View",, Fs);
 	U8		*buf = StrPrintJoin(NULL, format, argc, argv);
 	CDoc	*doc = DocNew(, task);
@@ -134,7 +134,7 @@ public U8 *PopUpPickDefineSub(U8 *dname)
 
 #help_index "DolDoc/Input;StdIn/DolDoc"
 public I64 PopUp1(U8 *b1, I64 n1, U8 *header=NULL, U8 *footer=NULL)
-{//Make PopUp win task with one bttn.
+{//Make PopUp win task with one button.
 	I64   i, l1 = StrLen(b1);
 	CDoc *doc = DocNew;
 
@@ -150,7 +150,7 @@ public I64 PopUp1(U8 *b1, I64 n1, U8 *header=NULL, U8 *footer=NULL)
 }
 
 public I64 PopUp2(U8 *b1, I64 n1, U8 *b2, I64 n2, U8 *header=NULL, U8 *footer=NULL)
-{//Make PopUp win task with two bttns.
+{//Make PopUp win task with two buttons.
 	I64   i, l1 = StrLen(b1), l2 = StrLen(b2), y;
 	CDoc *doc = DocNew;
 
@@ -175,17 +175,17 @@ public I64 PopUp2(U8 *b1, I64 n1, U8 *b2, I64 n2, U8 *header=NULL, U8 *footer=NU
 }
 
 public Bool PopUpOk(U8 *header=NULL, U8 *footer=NULL)
-{//Make PopUp win task with OKAY bttn.
+{//Make PopUp win task with OKAY button.
 	return PopUp1("OKAY", 1, header, footer) > 0;
 }
 
 public Bool PopUpNoYes(U8 *header=NULL, U8 *footer=NULL)
-{//Make PopUp win task with NO/YES bttns.
+{//Make PopUp win task with NO/YES buttons.
 	return $WW,0$PopUp2("YES", 1, "NO", 0, header, footer) > 0;
 }
 
 public Bool PopUpCancelOk(U8 *header=NULL, U8 *footer=NULL)
-{//Make PopUp win task CANCEL/OKAY bttns.
+{//Make PopUp win task CANCEL/OKAY buttons.
 	return PopUp2("OKAY", 1, "CANCEL", 0, header, footer) > 0;
 }
 

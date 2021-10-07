@@ -131,7 +131,7 @@ body {background-color:#fef1f0;}
 <a name="l104"></a>
 <a name="l105"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Memory/HeapCtrl;Debugging/Heap;Memory/Debugging&quot;</span><span class=cF0>
 <a name="l106"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>IsInHeapCtrl</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *a, </span><span class=cF9>CHeapCtrl</span><span class=cF0> *hc, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>lock</span><span class=cF0>=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l107"></a>{</span><span class=cF2>//Check addr if in HeapCtrl.</span><span class=cF0>
+<a name="l107"></a>{</span><span class=cF2>//Check address if in HeapCtrl.</span><span class=cF0>
 <a name="l108"></a>    </span><span class=cF9>CMemBlk</span><span class=cF0> *m;
 <a name="l109"></a>
 <a name="l110"></a>    </span><span class=cF1>PUSHFD</span><span class=cF0>
@@ -211,7 +211,7 @@ body {background-color:#fef1f0;}
 <a name="l184"></a>
 <a name="l185"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Memory/Task;Debugging/Heap;Memory/Debugging&quot;</span><span class=cF0>
 <a name="l186"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>IsInHeap</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *a, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF1>lock</span><span class=cF0>=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l187"></a>{</span><span class=cF2>//Check addr if in task's heaps.</span><span class=cF0>
+<a name="l187"></a>{</span><span class=cF2>//Check address if in task's heaps.</span><span class=cF0>
 <a name="l188"></a>    </span><span class=cF1>if</span><span class=cF0> (!task)
 <a name="l189"></a>        task = </span><span class=cF5>Fs</span><span class=cF0>;
 <a name="l190"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>TaskValidate</span><span class=cF7>(</span><span class=cF0>task</span><span class=cF7>)</span><span class=cF0> &amp;&amp; </span><span class=cF7>(</span><span class=cF5>IsInHeapCtrl</span><span class=cF0>(a, task-&gt;code_heap, </span><span class=cF1>lock</span><span class=cF0>) ||

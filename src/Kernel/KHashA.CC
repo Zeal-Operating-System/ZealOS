@@ -1,7 +1,7 @@
 asm {
 //************************************
 SYS_HASH_STR::
-// IN:	RSI = Addr of string
+// IN:	RSI = Address of string
 // OUT: RAX
 				XOR 		RAX, RAX
 				TEST		RSI, RSI
@@ -28,7 +28,7 @@ SYS_HASH_STR::
 
 //************************************
 SYS_HASH_SINGLE_TABLE_FIND1::
-// IN:	RAX = HASHED STRING VAL
+// IN:	RAX = HASHED STRING VALUE
 //		RSI = STR
 //		RBX = TYPE MASK
 //		RDI = TABLE

@@ -36,7 +36,7 @@ U0 StackGrowDemo()
 
 	//If you know the max stack ahead of time...
 	//Recurse2's stack is 16 because you have 1 arg,
-	//a return addr and no local variables.
+	//a return address and no local variables.
 	t0 = tS;
 	"%X:%X\n", DEPTH, CallStackGrow(DEPTH * 16 + 0x800, DEPTH * 16 + 0x800, &Recurse2, DEPTH);
 	"Time:%7.5fs\n", tS - t0;

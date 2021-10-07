@@ -209,7 +209,7 @@ body {background-color:#fef1f0;}
 <a name="l182"></a>                        tmpc--;
 <a name="l183"></a>                    </span><span class=cF1>else</span><span class=cF0> </span><span class=cF1>if</span><span class=cF0> (stack_op.u16[</span><span class=cFE>0</span><span class=cF0>] == </span><span class=cF3>IC_ADDR</span><span class=cF0>)
 <a name="l184"></a>                    {
-<a name="l185"></a>                        cc-&gt;abs_counts.c_addres++;
+<a name="l185"></a>                        cc-&gt;abs_counts.c_address++;
 <a name="l186"></a>                        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi-&gt;ic_code].type == </span><span class=cF3>IST_DEREF</span><span class=cF0>)
 <a name="l187"></a>                            </span><span class=cFD>OptFree</span><span class=cF0>(tmpi);
 <a name="l188"></a>                        tmpc++;
@@ -343,7 +343,7 @@ body {background-color:#fef1f0;}
 <a name="l316"></a>    </span><span class=cFD>ParsePush</span><span class=cF0>(ps, </span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//terminate</span><span class=cF0>
 <a name="l317"></a>    </span><span class=cFD>ParsePush</span><span class=cF0>(ps, </span><span class=cFE>0</span><span class=cF0>); </span><span class=cF2>//terminate</span><span class=cF0>
 <a name="l318"></a>    </span><span class=cF1>try</span><span class=cF0>
-<a name="l319"></a></span><span class=cF2>//try catch causes noreg vars in function</span><span class=cF0>
+<a name="l319"></a></span><span class=cF2>//try catch causes noreg variables in function</span><span class=cF0>
 <a name="l320"></a>        </span><span class=cFD>ParseExpression2</span><span class=cF0>(cc, _max_prec, ps);
 <a name="l321"></a>    </span><span class=cF1>catch</span><span class=cF0>
 <a name="l322"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -766,7 +766,7 @@ body {background-color:#fef1f0;}
 <a name="l739"></a>                                            </span><span class=cF1>else</span><span class=cF0>
 <a name="l740"></a>                                                </span><span class=cF1>goto</span><span class=cF0> pu_new_sys_sym;
 <a name="l741"></a>                                        }
-<a name="l742"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Can't take addr of extern fun&quot;</span><span class=cF0>);
+<a name="l742"></a>                                        </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Can't take address of extern function&quot;</span><span class=cF0>);
 <a name="l743"></a>                                    </span><span class=cF7>}</span><span class=cF0>
 <a name="l744"></a>                                    cc-&gt;abs_counts.externs++;
 <a name="l745"></a>                                    </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_IMM_I64</span><span class=cF0>, &amp;tmpf-&gt;exe_addr, </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_PTR</span><span class=cF0>]);
@@ -778,12 +778,12 @@ body {background-color:#fef1f0;}
 <a name="l751"></a>                                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l752"></a>                                        </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_ABS_ADDR</span><span class=cF0>, tmpf-&gt;exe_addr, </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_PTR</span><span class=cF0>]);
 <a name="l753"></a>                                        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0>)
-<a name="l754"></a>                                            cc-&gt;abs_counts.abs_addres++;
+<a name="l754"></a>                                            cc-&gt;abs_counts.abs_address++;
 <a name="l755"></a>                                    </span><span class=cF7>}</span><span class=cF0>
 <a name="l756"></a>                                    </span><span class=cF1>else</span><span class=cF0>
 <a name="l757"></a>                                        </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_IMM_I64</span><span class=cF0>, tmpf-&gt;exe_addr, </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_PTR</span><span class=cF0>]);
 <a name="l758"></a>                                }
-<a name="l759"></a>                                cc-&gt;abs_counts.c_addres++;
+<a name="l759"></a>                                cc-&gt;abs_counts.c_address++;
 <a name="l760"></a>                                </span><span class=cF5>Lex</span><span class=cF0>(cc);
 <a name="l761"></a>                                </span><span class=cF1>return</span><span class=cF0> PE_MAYBE_MODIFIERS;
 <a name="l762"></a>                            </span><span class=cF7>}</span><span class=cF0>
@@ -793,7 +793,7 @@ body {background-color:#fef1f0;}
 <a name="l766"></a>                            tmpex = tmpc;
 <a name="l767"></a>                            </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0> &amp;&amp; !</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF7>)</span><span class=cF0> &amp;&amp; tmpex-&gt;type &amp; </span><span class=cF3>HTF_IMM</span><span class=cF0>)
 <a name="l768"></a>                            </span><span class=cF7>{</span><span class=cF0>
-<a name="l769"></a>                                cc-&gt;abs_counts.c_addres++;
+<a name="l769"></a>                                cc-&gt;abs_counts.c_address++;
 <a name="l770"></a>                                </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_IMM_I64</span><span class=cF0>, tmpex-&gt;val, </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_PTR</span><span class=cF0>]);
 <a name="l771"></a>                                </span><span class=cF5>Lex</span><span class=cF0>(cc);
 <a name="l772"></a>                                </span><span class=cF1>return</span><span class=cF0> PE_MAYBE_MODIFIERS;
@@ -848,7 +848,7 @@ body {background-color:#fef1f0;}
 <a name="l821"></a>            </span><span class=cF1>case</span><span class=cF0> </span><span class=cF6>'$'</span><span class=cF0>:
 <a name="l822"></a>                </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags &amp; </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF0>)
 <a name="l823"></a>                {
-<a name="l824"></a>                    cc-&gt;abs_counts.abs_addres++;
+<a name="l824"></a>                    cc-&gt;abs_counts.abs_address++;
 <a name="l825"></a>                    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;flags  &amp;</span><span class=cF3>CCF_AOT_COMPILE</span><span class=cF0>)
 <a name="l826"></a>                        </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_ABS_ADDR</span><span class=cF0>, cc-&gt;aotc-&gt;rip, </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_PTR</span><span class=cF0>]);
 <a name="l827"></a>                    </span><span class=cF1>else</span><span class=cF0>
@@ -956,7 +956,7 @@ body {background-color:#fef1f0;}
 <a name="l929"></a>                        </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_ADD</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpc);
 <a name="l930"></a>                    }
 <a name="l931"></a>                </span><span class=cF7>}</span><span class=cF0>
-<a name="l932"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip var name</span><span class=cF0>
+<a name="l932"></a>                </span><span class=cF5>Lex</span><span class=cF0>(cc); </span><span class=cF2>//skip variable name</span><span class=cF0>
 <a name="l933"></a>                *_local_var = tmpm;
 <a name="l934"></a>                </span><span class=cF1>return</span><span class=cF0> PE_UNARY_MODIFIERS;
 <a name="l935"></a>            }
@@ -991,7 +991,7 @@ body {background-color:#fef1f0;}
 <a name="l964"></a>                    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF3>PREC_TERM</span><span class=cF0> &gt; *max_prec)
 <a name="l965"></a>                        *max_prec = </span><span class=cF3>PREC_TERM</span><span class=cF0>;
 <a name="l966"></a>                    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>tmpex-&gt;type &amp; (</span><span class=cF3>HTF_IMM</span><span class=cF0> | </span><span class=cF3>HTF_IMPORT</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
-<a name="l967"></a>                        cc-&gt;abs_counts.abs_addres++;
+<a name="l967"></a>                        cc-&gt;abs_counts.abs_address++;
 <a name="l968"></a>                    </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_UNRESOLVED</span><span class=cF0>)
 <a name="l969"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l970"></a>                        </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; </span><span class=cF3>CCF_ASM_EXPRESSIONS</span><span class=cF7>)</span><span class=cF0>)
@@ -1014,7 +1014,7 @@ body {background-color:#fef1f0;}
 <a name="l987"></a>                        </span><span class=cF1>else</span><span class=cF0>
 <a name="l988"></a>                        {
 <a name="l989"></a>                            </span><span class=cF1>if</span><span class=cF0> (tmpex-&gt;type &amp; </span><span class=cF3>HTF_IMM</span><span class=cF0>)
-<a name="l990"></a>                                cc-&gt;abs_counts.c_addres++;
+<a name="l990"></a>                                cc-&gt;abs_counts.c_address++;
 <a name="l991"></a>                            </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_IMM_I64</span><span class=cF0>, tmpex-&gt;val, </span><span class=cFB>cmp</span><span class=cF0>.internal_types[</span><span class=cF3>RT_PTR</span><span class=cF0>]);
 <a name="l992"></a>                        }
 <a name="l993"></a>                    </span><span class=cF7>}</span><span class=cF0>
@@ -1243,12 +1243,12 @@ body {background-color:#fef1f0;}
 <a name="l1216"></a>            </span><span class=cF5>Lex</span><span class=cF0>(cc);
 <a name="l1217"></a>            tmpc = </span><span class=cF5>OptClassFwd</span><span class=cF0>(cc-&gt;coc.coc_head.last-&gt;ic_class);
 <a name="l1218"></a>            </span><span class=cF1>if</span><span class=cF0> (!tmpc-&gt;ptr_stars_count)
-<a name="l1219"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not array or ptr &quot;</span><span class=cF0>);
+<a name="l1219"></a>                </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not array or pointer &quot;</span><span class=cF0>);
 <a name="l1220"></a>            </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cF0>cc-&gt;flags &amp; (</span><span class=cF3>CCF_ARRAY</span><span class=cF0> | </span><span class=cF3>CCF_RAX</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l1221"></a>            {
 <a name="l1222"></a>                tmpc = </span><span class=cF5>OptClassFwd</span><span class=cF0>(tmpc - </span><span class=cFE>1</span><span class=cF0>);
 <a name="l1223"></a>                </span><span class=cF1>if</span><span class=cF0> (!tmpc-&gt;ptr_stars_count)
-<a name="l1224"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not array or ptr &quot;</span><span class=cF0>);
+<a name="l1224"></a>                    </span><span class=cF5>LexExcept</span><span class=cF0>(cc, </span><span class=cF6>&quot;Not array or pointer &quot;</span><span class=cF0>);
 <a name="l1225"></a>                </span><span class=cFD>ICAdd</span><span class=cF0>(cc, </span><span class=cF3>IC_DEREF</span><span class=cF0> + </span><span class=cF3>PREC_UNARY_PRE</span><span class=cF0> &lt;&lt; </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, tmpc);
 <a name="l1226"></a>            }
 <a name="l1227"></a>            tmpc1 = tmpc - </span><span class=cFE>1</span><span class=cF0>;

@@ -149,7 +149,7 @@ I64 FSetClus(CFile *f, I64 c, I64 blk, Bool read)
 }
 
 Bool FBlkRead(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
-{//Read [nth,n+count) blks of file.
+{//Read [nth,n+count) blocks of file.
 	CDrive	*drive = f->drive;
 	I64		 spc   = drive->spc, i, j, c = f->de.clus;
 
@@ -212,7 +212,7 @@ Bool FBlkRead(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
 }
 
 Bool FBlkWrite(CFile *f, U8 *buf, I64 blk=FFB_NEXT_BLK, I64 count=1)
-{//Write [nth,n+count) blks of file.
+{//Write [nth,n+count) blocks of file.
 	CDrive	*drive = f->drive;
 	I64		 spc   = drive->spc, i, j, c = f->de.clus, c1;
 

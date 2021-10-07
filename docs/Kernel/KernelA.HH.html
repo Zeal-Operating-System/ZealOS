@@ -211,8 +211,8 @@ body {background-color:#fef1f0;}
 <a name="l184"></a>         out_ptr;
 <a name="l185"></a>};
 <a name="l186"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Date/CMOS&quot;</span><span class=cF0>
-<a name="l187"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CMOS_SEL</span><span class=cF0>    </span><span class=cFE>0x70</span><span class=cF0> </span><span class=cF2>//select which reg to access using this port</span><span class=cF0>
-<a name="l188"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CMOS_DATA</span><span class=cF0>   </span><span class=cFE>0x71</span><span class=cF0> </span><span class=cF2>//read from or write to reg using this port</span><span class=cF0>
+<a name="l187"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CMOS_SEL</span><span class=cF0>    </span><span class=cFE>0x70</span><span class=cF0> </span><span class=cF2>//select which register to access using this port</span><span class=cF0>
+<a name="l188"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CMOS_DATA</span><span class=cF0>   </span><span class=cFE>0x71</span><span class=cF0> </span><span class=cF2>//read from or write to register using this port</span><span class=cF0>
 <a name="l189"></a>
 <a name="l190"></a></span><span class=cF2>//CMOS registers</span><span class=cF0>
 <a name="l191"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CMOSR_SEC</span><span class=cF0>           </span><span class=cFE>0x0</span><span class=cF0>
@@ -490,9 +490,9 @@ body {background-color:#fef1f0;}
 <a name="l463"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CPatchTableAbsAddr</span><span class=cF0>
 <a name="l464"></a>{
 <a name="l465"></a>    </span><span class=cF1>U8</span><span class=cF0>  eit_abs_addr;   </span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l490"><span class=cF4>IET_ABS_ADDR</span></a><span class=cF0>
-<a name="l466"></a>    </span><span class=cF9>U32</span><span class=cF0> abs_addres_count;
+<a name="l466"></a>    </span><span class=cF9>U32</span><span class=cF0> abs_address_count;
 <a name="l467"></a>    </span><span class=cF1>U8</span><span class=cF0>  zero;
-<a name="l468"></a>    </span><span class=cF9>U32</span><span class=cF0> abs_addres[</span><span class=cFE>1</span><span class=cF0>];
+<a name="l468"></a>    </span><span class=cF9>U32</span><span class=cF0> abs_address[</span><span class=cFE>1</span><span class=cF0>];
 <a name="l469"></a>};
 <a name="l470"></a>
 <a name="l471"></a></span><span class=cF2>//</span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l2104"><span class=cF4>CAOTImportExport</span></a><span class=cF2> Types. Used in PatchTable.</span><span class=cF0>
@@ -645,7 +645,7 @@ body {background-color:#fef1f0;}
 <a name="l618"></a>
 <a name="l619"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Processor&quot;</span><span class=cF0>
 <a name="l620"></a>
-<a name="l621"></a></span><span class=cF2>//Model specific regs.</span><span class=cF0>
+<a name="l621"></a></span><span class=cF2>//Model specific registers.</span><span class=cF0>
 <a name="l622"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IA32F_SCE</span><span class=cF0>       </span><span class=cFE>0x001</span><span class=cF0>
 <a name="l623"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IA32F_LME</span><span class=cF0>       </span><span class=cFE>0x100</span><span class=cF0>
 <a name="l624"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IA32_LAPIC_BASE</span><span class=cF0> </span><span class=cFE>0x01B</span><span class=cF0>
@@ -695,7 +695,7 @@ body {background-color:#fef1f0;}
 <a name="l668"></a></span><span class=cF2>//I/O APIC Memory mapped window</span><span class=cF0>
 <a name="l669"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IOAPIC_REG</span><span class=cF0>  </span><span class=cFE>0xFEC00000</span><span class=cF0> </span><span class=cF2>//U8</span><span class=cF0>
 <a name="l670"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IOAPIC_DATA</span><span class=cF0> </span><span class=cFE>0xFEC00010</span><span class=cF0> </span><span class=cF2>//U32</span><span class=cF0>
-<a name="l671"></a></span><span class=cF2>//I/O APIC Regs</span><span class=cF0>
+<a name="l671"></a></span><span class=cF2>//I/O APIC Registers</span><span class=cF0>
 <a name="l672"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IOAPICID</span><span class=cF0>    </span><span class=cFE>0x00</span><span class=cF0>
 <a name="l673"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IOAPICVER</span><span class=cF0>   </span><span class=cFE>0x01</span><span class=cF0>
 <a name="l674"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>IOAPICARB</span><span class=cF0>   </span><span class=cFE>0x02</span><span class=cF0>
@@ -963,7 +963,7 @@ body {background-color:#fef1f0;}
 <a name="l936"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CMemberList</span><span class=cF0>
 <a name="l937"></a>{
 <a name="l938"></a>    </span><span class=cF9>CMemberList</span><span class=cF0>     *next, *left, *right,
-<a name="l939"></a>                    *left_class_base, *right_class_base; </span><span class=cF2>//For finding dup class local vars.</span><span class=cF0>
+<a name="l939"></a>                    *left_class_base, *right_class_base; </span><span class=cF2>//For finding duplicate class local variables.</span><span class=cF0>
 <a name="l940"></a>    </span><span class=cF1>U8</span><span class=cF0>              *str;
 <a name="l941"></a>    </span><span class=cF9>CHashClass</span><span class=cF0>      *member_class, *member_class_base;
 <a name="l942"></a>    </span><span class=cF9>CMemberListMeta</span><span class=cF0> *meta;
@@ -1004,7 +1004,7 @@ body {background-color:#fef1f0;}
 <a name="l977"></a>    </span><span class=cF1>U8</span><span class=cF0>           ptr_stars_count, raw_type;
 <a name="l978"></a>    </span><span class=cF9>U16</span><span class=cF0>          flags;
 <a name="l979"></a>    </span><span class=cF9>CMemberList</span><span class=cF0> *member_list_and_root, </span><span class=cF2>//Head of linked list and head of tree.</span><span class=cF0>
-<a name="l980"></a>                *member_class_base_root, </span><span class=cF2>//For finding dup class local vars.</span><span class=cF0>
+<a name="l980"></a>                *member_class_base_root, </span><span class=cF2>//For finding duplicate class local variables.</span><span class=cF0>
 <a name="l981"></a>                *last_in_member_list;
 <a name="l982"></a>    </span><span class=cF9>CHashClass</span><span class=cF0>  *base_class,
 <a name="l983"></a>                *fwd_class;
@@ -1698,20 +1698,20 @@ body {background-color:#fef1f0;}
 <a name="l1671"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Compiler/Directive&quot;</span><span class=cF0>
 <a name="l1672"></a></span><span class=cF2>//Compiler </span><a href="https://zeal-operating-system.github.io/ZealOS/Compiler/CMisc.CC.html#l1"><span class=cF4>Option</span></a><span class=cF2>()s</span><span class=cF0>
 <a name="l1673"></a></span><span class=cF2>//You might need to do #exe {Option();}</span><span class=cF0>
-<a name="l1674"></a></span><span class=cF2>//Note: The #exe stmt is lexed-ahead,</span><span class=cF0>
+<a name="l1674"></a></span><span class=cF2>//Note: The #exe statement is lexed-ahead,</span><span class=cF0>
 <a name="l1675"></a></span><span class=cF2>//so it takes effect earlier than you might expect.</span><span class=cF0>
 <a name="l1676"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_ECHO</span><span class=cF0>                   </span><span class=cFE>0</span><span class=cF0>
 <a name="l1677"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_TRACE</span><span class=cF0>                  </span><span class=cFE>1</span><span class=cF0>
-<a name="l1678"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_WARN_UNUSED_VAR</span><span class=cF0>        </span><span class=cFE>2</span><span class=cF0>   </span><span class=cF2>//Applied to funs, not statements</span><span class=cF0>
+<a name="l1678"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_WARN_UNUSED_VAR</span><span class=cF0>        </span><span class=cFE>2</span><span class=cF0>   </span><span class=cF2>//Applied to functions, not statements</span><span class=cF0>
 <a name="l1679"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_WARN_PAREN</span><span class=cF0>             </span><span class=cFE>3</span><span class=cF0>   </span><span class=cF2>//Warn unnecessary parens</span><span class=cF0>
-<a name="l1680"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_WARN_DUP_TYPES</span><span class=cF0>         </span><span class=cFE>4</span><span class=cF0>   </span><span class=cF2>//Warn dup local var type statements</span><span class=cF0>
+<a name="l1680"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_WARN_DUP_TYPES</span><span class=cF0>         </span><span class=cFE>4</span><span class=cF0>   </span><span class=cF2>//Warn duplicate local variable type statements</span><span class=cF0>
 <a name="l1681"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_WARN_HEADER_MISMATCH</span><span class=cF0>   </span><span class=cFE>5</span><span class=cF0>
 <a name="l1682"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_EXTERNS_TO_IMPORTS</span><span class=cF0>     </span><span class=cFE>6</span><span class=cF0>
 <a name="l1683"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_KEEP_PRIVATE</span><span class=cF0>           </span><span class=cFE>7</span><span class=cF0>
-<a name="l1684"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_NO_REG_VAR</span><span class=cF0>             </span><span class=cFE>8</span><span class=cF0>   </span><span class=cF2>//Applied to funs, not statements</span><span class=cF0>
+<a name="l1684"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_NO_REG_VAR</span><span class=cF0>             </span><span class=cFE>8</span><span class=cF0>   </span><span class=cF2>//Applied to functions, not statements</span><span class=cF0>
 <a name="l1685"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_GLOBALS_ON_DATA_HEAP</span><span class=cF0>   </span><span class=cFE>9</span><span class=cF0>
 <a name="l1686"></a></span><span class=cF2>//Disable 10-byte float consts for pi,log2_10,log10_2,loge_2</span><span class=cF0>
-<a name="l1687"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_NO_BUILTIN_CONST</span><span class=cF0>       </span><span class=cFE>10</span><span class=cF0>  </span><span class=cF2>//Applied to funs, not statements</span><span class=cF0>
+<a name="l1687"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_NO_BUILTIN_CONST</span><span class=cF0>       </span><span class=cFE>10</span><span class=cF0>  </span><span class=cF2>//Applied to functions, not statements</span><span class=cF0>
 <a name="l1688"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_USE_IMM64</span><span class=cF0>              </span><span class=cFE>11</span><span class=cF0>  </span><span class=cF2>//Not completely implemented</span><span class=cF0>
 <a name="l1689"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_DECIMAL_ONLY</span><span class=cF0>           </span><span class=cFE>12</span><span class=cF0>  </span><span class=cF2>//Only allow decimal numbers (no 0x or 0b prefixed numbers)</span><span class=cF0>
 <a name="l1690"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>OPTf_NO_FLOATS</span><span class=cF0>              </span><span class=cFE>13</span><span class=cF0>  </span><span class=cF2>//No floating point numbers allowed</span><span class=cF0>
@@ -1977,8 +1977,8 @@ body {background-color:#fef1f0;}
 <a name="l1950"></a>
 <a name="l1951"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAbsCountsI64</span><span class=cF0>
 <a name="l1952"></a>{
-<a name="l1953"></a>    </span><span class=cF9>U16</span><span class=cF0> abs_addres, </span><span class=cF2>//Only odd/even matters. Count of absolute addres in an exp.</span><span class=cF0>
-<a name="l1954"></a>        c_addres;   </span><span class=cF2>//Only odd/even matters. Count of C addres in an exp.</span><span class=cF0>
+<a name="l1953"></a>    </span><span class=cF9>U16</span><span class=cF0> abs_address,    </span><span class=cF2>//Only odd/even matters. Count of absolute address in an exp.</span><span class=cF0>
+<a name="l1954"></a>        c_address;  </span><span class=cF2>//Only odd/even matters. Count of C address in an exp.</span><span class=cF0>
 <a name="l1955"></a>    </span><span class=cF9>U32</span><span class=cF0> externs;    </span><span class=cF2>//Only nonzero matters. Some regions have externs banned.</span><span class=cF0>
 <a name="l1956"></a>};
 <a name="l1957"></a>
@@ -2219,7 +2219,7 @@ body {background-color:#fef1f0;}
 <a name="l2192"></a>
 <a name="l2193"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CAOTCtrl</span><span class=cF0>
 <a name="l2194"></a>{
-<a name="l2195"></a>    </span><span class=cF9>I64</span><span class=cF0>                  rip; </span><span class=cF2>//Inst ptr</span><span class=cF0>
+<a name="l2195"></a>    </span><span class=cF9>I64</span><span class=cF0>                  rip; </span><span class=cF2>//Instruction pointer</span><span class=cF0>
 <a name="l2196"></a>    </span><span class=cF9>CAsmArg</span><span class=cF0>              arg1, arg2;
 <a name="l2197"></a>    </span><span class=cF9>CAOTBinBlk</span><span class=cF0>          *bin;
 <a name="l2198"></a>    </span><span class=cF9>I64</span><span class=cF0>                  num_bin_U8s,
@@ -3059,8 +3059,8 @@ body {background-color:#fef1f0;}
 <a name="l3032"></a>    </span><span class=cF1>U8</span><span class=cF0>  type,
 <a name="l3033"></a>        end_head;
 <a name="l3034"></a>    </span><span class=cF9>U16</span><span class=cF0> end_cyl;
-<a name="l3035"></a>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF1>offset</span><span class=cF0>, </span><span class=cF2>//Sects between MBR and first sect</span><span class=cF0>
-<a name="l3036"></a>        size;   </span><span class=cF2>//Sects in drv</span><span class=cF0>
+<a name="l3035"></a>    </span><span class=cF9>U32</span><span class=cF0> </span><span class=cF1>offset</span><span class=cF0>, </span><span class=cF2>//Sectors between MBR and first sector</span><span class=cF0>
+<a name="l3036"></a>        size;   </span><span class=cF2>//Sectors in drive</span><span class=cF0>
 <a name="l3037"></a>};
 <a name="l3038"></a>
 <a name="l3039"></a></span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CMasterBoot</span><span class=cF0>
@@ -3418,7 +3418,7 @@ body {background-color:#fef1f0;}
 <a name="l3391"></a>                         fat1, fat2,
 <a name="l3392"></a>                         root_clus,
 <a name="l3393"></a>                         data_area,
-<a name="l3394"></a>                         spc; </span><span class=cF2>//sectors per clus</span><span class=cF0>
+<a name="l3394"></a>                         spc; </span><span class=cF2>//sectors per cluster</span><span class=cF0>
 <a name="l3395"></a>    </span><span class=cF9>CDate</span><span class=cF0>                fat32_local_time_offset;
 <a name="l3396"></a>    </span><span class=cF9>CTask</span><span class=cF0>               *owning_task;
 <a name="l3397"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0>             *bd;
@@ -3747,8 +3747,8 @@ body {background-color:#fef1f0;}
 <a name="l3720"></a>    </span><span class=cF1>F64</span><span class=cF0>     dbl_time,           </span><span class=cF2>//Input: Time threshold for calling it a double click.</span><span class=cF0>
 <a name="l3721"></a>            left_dbl_time,      </span><span class=cF2>//Private</span><span class=cF0>
 <a name="l3722"></a>            right_dbl_time;     </span><span class=cF2>//Private</span><span class=cF0>
-<a name="l3723"></a>    </span><span class=cF1>Bool</span><span class=cF0>    lb,                 </span><span class=cF2>//Left Bttn</span><span class=cF0>
-<a name="l3724"></a>            rb,                 </span><span class=cF2>//Right Bttn</span><span class=cF0>
+<a name="l3723"></a>    </span><span class=cF1>Bool</span><span class=cF0>    lb,                 </span><span class=cF2>//Left Button</span><span class=cF0>
+<a name="l3724"></a>            rb,                 </span><span class=cF2>//Right Button</span><span class=cF0>
 <a name="l3725"></a>            show,
 <a name="l3726"></a>            has_wheel,
 <a name="l3727"></a>            left_dbl,           </span><span class=cF2>//Private</span><span class=cF0>
@@ -4008,9 +4008,9 @@ body {background-color:#fef1f0;}
 <a name="l3981"></a>    </span><span class=cF9>I64</span><span class=cF0>      wake_jiffy;
 <a name="l3982"></a>};
 <a name="l3983"></a>
-<a name="l3984"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0> </span><span class=cF2>//The Fs segment reg points to current CTask.</span><span class=cF0>
+<a name="l3984"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0> </span><span class=cF2>//The Fs segment register points to current CTask.</span><span class=cF0>
 <a name="l3985"></a>{
-<a name="l3986"></a>    </span><span class=cF9>CTask</span><span class=cF0>           *addr; </span><span class=cF2>//Self-addressed ptr</span><span class=cF0>
+<a name="l3986"></a>    </span><span class=cF9>CTask</span><span class=cF0>           *addr; </span><span class=cF2>//Self-addressed pointer</span><span class=cF0>
 <a name="l3987"></a>    </span><span class=cF9>U32</span><span class=cF0>              task_signature, win_inhibit;
 <a name="l3988"></a>#</span><span class=cF1>assert</span><span class=cF0> $ == </span><span class=cF1>offset</span><span class=cF0>(</span><span class=cF9>CTaskDying</span><span class=cF0>.wake_jiffy)
 <a name="l3989"></a>    </span><span class=cF9>I64</span><span class=cF0>              wake_jiffy;
@@ -4127,9 +4127,9 @@ body {background-color:#fef1f0;}
 <a name="l4100"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CPUf_RAN_A_TASK</span><span class=cF0>         </span><span class=cFE>0</span><span class=cF0>
 <a name="l4101"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>CPUf_DYING_TASK_QUE</span><span class=cF0>     </span><span class=cFE>1</span><span class=cF0>
 <a name="l4102"></a>
-<a name="l4103"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0> </span><span class=cF2>//The Gs segment reg points to current CCPU.</span><span class=cF0>
+<a name="l4103"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>class</span><span class=cF0> </span><span class=cF9>CCPU</span><span class=cF0> </span><span class=cF2>//The Gs segment register points to current CCPU.</span><span class=cF0>
 <a name="l4104"></a>{
-<a name="l4105"></a>    </span><span class=cF9>CCPU</span><span class=cF0>        *addr; </span><span class=cF2>//Self-addressed ptr</span><span class=cF0>
+<a name="l4105"></a>    </span><span class=cF9>CCPU</span><span class=cF0>        *addr; </span><span class=cF2>//Self-addressed pointer</span><span class=cF0>
 <a name="l4106"></a>    </span><span class=cF9>I64</span><span class=cF0>          num, cpu_flags,
 <a name="l4107"></a>                 startup_rip,
 <a name="l4108"></a>                 idle_pt_hits;
@@ -4291,8 +4291,8 @@ body {background-color:#fef1f0;}
 <a name="l4264"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>FONT_HEIGHT</span><span class=cF0>     </span><span class=cFE>8</span><span class=cF0>
 <a name="l4265"></a>
 <a name="l4266"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Graphics&quot;</span><span class=cF0>
-<a name="l4267"></a></span><span class=cF2>//z-vals less than zero are in front of screen and not drawn.</span><span class=cF0>
-<a name="l4268"></a></span><span class=cF2>//we want to shift all Z-vals into a drawable range.</span><span class=cF0>
+<a name="l4267"></a></span><span class=cF2>//z-values less than zero are in front of screen and not drawn.</span><span class=cF0>
+<a name="l4268"></a></span><span class=cF2>//we want to shift all Z-values into a drawable range.</span><span class=cF0>
 <a name="l4269"></a></span><span class=cF2>//GR_Z_ALL is set to half of the Z-range which is an I32.</span><span class=cF0>
 <a name="l4270"></a>#</span><span class=cF1>define</span><span class=cF0> </span><span class=cF3>GR_Z_ALL</span><span class=cF0>    (</span><span class=cF3>I32_MAX</span><span class=cF0>/</span><span class=cFE>2</span><span class=cF0>)
 <a name="l4271"></a>
@@ -4439,7 +4439,7 @@ body {background-color:#fef1f0;}
 <a name="l4412"></a>    </span><span class=cF9>CKeyDevEntry</span><span class=cF0>     put_key_head;
 <a name="l4413"></a>    </span><span class=cF1>U0</span><span class=cF0>            (**fp_ctrl_alt_cbs)(</span><span class=cF9>I64</span><span class=cF0> sc);
 <a name="l4414"></a>    </span><span class=cF9>I64</span><span class=cF0>              ctrl_alt_in_irq_flags,
-<a name="l4415"></a>                   **ctrl_alt_ret_addr; </span><span class=cF2>//addr of ret addr on stack in kbd irq</span><span class=cF0>
+<a name="l4415"></a>                   **ctrl_alt_ret_addr; </span><span class=cF2>//address of ret address on stack in kbd irq</span><span class=cF0>
 <a name="l4416"></a>    </span><span class=cF1>U8</span><span class=cF0>             **ctrl_alt_no_shift_descs, **ctrl_alt_shift_descs,
 <a name="l4417"></a>                     desc[</span><span class=cF3>STR_LEN</span><span class=cF0>],
 <a name="l4418"></a>                    *handler;

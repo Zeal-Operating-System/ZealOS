@@ -26,7 +26,7 @@ body {background-color:#fef1f0;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DriveLock</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive)
-<a name="l2"></a>{</span><span class=cF2>//Make this task have exclusive access to drv &amp; BlkDev.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Make this task have exclusive access to drive &amp; BlkDev.</span><span class=cF0>
 <a name="l3"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
 <a name="l4"></a>    </span><span class=cF5>BlkDevLock</span><span class=cF0>(drive-&gt;bd);
 <a name="l5"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;drive-&gt;locked_flags, </span><span class=cF3>DVlf_LOCKED</span><span class=cF7>)</span><span class=cF0> || drive-&gt;owning_task != </span><span class=cF5>Fs</span><span class=cF0>)
@@ -41,7 +41,7 @@ body {background-color:#fef1f0;}
 <a name="l14"></a>}
 <a name="l15"></a>
 <a name="l16"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>DriveUnlock</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>Bool</span><span class=cF0> reset=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l17"></a>{</span><span class=cF2>//Release exclusive lock on access to drv &amp; BlkDev.</span><span class=cF0>
+<a name="l17"></a>{</span><span class=cF2>//Release exclusive lock on access to drive &amp; BlkDev.</span><span class=cF0>
 <a name="l18"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
 <a name="l19"></a>    </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;drive-&gt;locked_flags, </span><span class=cF3>DVlf_LOCKED</span><span class=cF7>)</span><span class=cF0> &amp;&amp; drive-&gt;owning_task == </span><span class=cF5>Fs</span><span class=cF0>)
 <a name="l20"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -69,7 +69,7 @@ body {background-color:#fef1f0;}
 <a name="l42"></a>}
 <a name="l43"></a>
 <a name="l44"></a></span><span class=cF9>CDrive</span><span class=cF0> *</span><span class=cF5>DriveMakeFreeSlot</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let)
-<a name="l45"></a>{</span><span class=cF2>//Make a slot free for a new drv, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l45"></a>{</span><span class=cF2>//Make a slot free for a new drive, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l46"></a>    </span><span class=cF9>I64</span><span class=cF0>      i = </span><span class=cF5>Letter2Letter</span><span class=cF0>(drv_let) - </span><span class=cF6>'A'</span><span class=cF0>;
 <a name="l47"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *res;
 <a name="l48"></a>
@@ -82,7 +82,7 @@ body {background-color:#fef1f0;}
 <a name="l55"></a>}
 <a name="l56"></a>
 <a name="l57"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>DriveNextFreeLet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> first_drive_let=</span><span class=cF6>'C'</span><span class=cF0>)
-<a name="l58"></a>{</span><span class=cF2>//Locate free slot for new drv, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l58"></a>{</span><span class=cF2>//Locate free slot for new drive, like during </span><a href="https://zeal-operating-system.github.io/ZealOS/System/BlkDev/Mount.CC.html#l307"><span class=cF4>Mount</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l59"></a>    </span><span class=cF9>I64</span><span class=cF0> i = </span><span class=cF5>Letter2Letter</span><span class=cF0>(first_drive_let) - </span><span class=cF6>'A'</span><span class=cF0>, type = </span><span class=cF5>Letter2BlkDevType</span><span class=cF0>(first_drive_let);
 <a name="l60"></a>
 <a name="l61"></a>    </span><span class=cF1>if</span><span class=cF0> (!</span><span class=cF7>(</span><span class=cFE>0</span><span class=cF0> &lt;= i &lt; </span><span class=cF3>DRIVES_NUM</span><span class=cF7>)</span><span class=cF0>)
@@ -101,7 +101,7 @@ body {background-color:#fef1f0;}
 <a name="l74"></a>}
 <a name="l75"></a>
 <a name="l76"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DriveDel</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive)
-<a name="l77"></a>{</span><span class=cF2>//Delete drv</span><span class=cF0>
+<a name="l77"></a>{</span><span class=cF2>//Delete drive</span><span class=cF0>
 <a name="l78"></a>    </span><span class=cF1>if</span><span class=cF0> (drive-&gt;fs_type == </span><span class=cF3>FSt_REDSEA</span><span class=cF0> &amp;&amp; drive-&gt;next_free)
 <a name="l79"></a>        </span><span class=cFD>RedSeaFreeFreeList</span><span class=cF0>(drive);
 <a name="l80"></a>    </span><span class=cF5>Free</span><span class=cF0>(drive-&gt;cur_fat_blk);
@@ -110,7 +110,7 @@ body {background-color:#fef1f0;}
 <a name="l83"></a>}
 <a name="l84"></a>
 <a name="l85"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>DriveBlkDevDel</span><span class=cF0>(</span><span class=cF9>CBlkDev</span><span class=cF0> *bd)
-<a name="l86"></a>{</span><span class=cF2>//Delete drv's of BlkDev</span><span class=cF0>
+<a name="l86"></a>{</span><span class=cF2>//Delete drives of BlkDev</span><span class=cF0>
 <a name="l87"></a>    </span><span class=cF9>I64</span><span class=cF0>      i;
 <a name="l88"></a>    </span><span class=cF9>CDrive</span><span class=cF0>  *drive;
 <a name="l89"></a>
@@ -185,7 +185,7 @@ body {background-color:#fef1f0;}
 <a name="l158"></a>}
 <a name="l159"></a>
 <a name="l160"></a></span><span class=cF9>CDrive</span><span class=cF0> *</span><span class=cF5>DriveCheck</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>Bool</span><span class=cF0> except=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l161"></a>{</span><span class=cF2>//Check for valid drv. Throw exception.</span><span class=cF0>
+<a name="l161"></a>{</span><span class=cF2>//Check for valid drive. Throw exception.</span><span class=cF0>
 <a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (!drive || drive-&gt;drive_signature != </span><span class=cF3>DRIVE_SIGNATURE_VAL</span><span class=cF0>)
 <a name="l163"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l164"></a>        </span><span class=cF1>if</span><span class=cF0> (except)
@@ -198,7 +198,7 @@ body {background-color:#fef1f0;}
 <a name="l171"></a>}
 <a name="l172"></a>
 <a name="l173"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>Drive2Letter</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l174"></a>{</span><span class=cF2>//Drive ptr to Drive letter.</span><span class=cF0>
+<a name="l174"></a>{</span><span class=cF2>//Drive pointer to Drive letter.</span><span class=cF0>
 <a name="l175"></a>    </span><span class=cF1>if</span><span class=cF0> (!drive)
 <a name="l176"></a>        drive = </span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv;
 <a name="l177"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
@@ -236,7 +236,7 @@ body {background-color:#fef1f0;}
 <a name="l209"></a>}
 <a name="l210"></a>
 <a name="l211"></a></span><span class=cF9>CDrive</span><span class=cF0> *</span><span class=cF5>Letter2Drive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> except=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l212"></a>{</span><span class=cF2>//Drive letter to Drive ptr.</span><span class=cF0>
+<a name="l212"></a>{</span><span class=cF2>//Drive letter to Drive pointer.</span><span class=cF0>
 <a name="l213"></a>    </span><span class=cF9>CDrive</span><span class=cF0> *drive;
 <a name="l214"></a>
 <a name="l215"></a>    </span><span class=cF1>if</span><span class=cF0> (!drv_let)

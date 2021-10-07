@@ -26,19 +26,19 @@ body {background-color:#fef1f0;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF2>/*$DA</span><span class=cF0>   </span><span class=cF2>is the data widget.</span><span class=cF0>
-<a name="l2"></a>    </span><span class=cF2> -TRM flag is for var</span><span class=cF0>
-<a name="l3"></a>                </span><span class=cF2>width fields with a terminator</span><span class=cF0>
-<a name="l4"></a>                </span><span class=cF2>character.</span><span class=cF0>
+<a name="l2"></a>    </span><span class=cF2> -TRM flag is for variable width</span><span class=cF0>
+<a name="l3"></a>            </span><span class=cF2>fields with a terminator</span><span class=cF0>
+<a name="l4"></a>            </span><span class=cF2>character.</span><span class=cF0>
 <a name="l5"></a>    </span><span class=cF2> +RD</span><span class=cF0>    </span><span class=cF2>refreshes the data.</span><span class=cF0>
-<a name="l6"></a>    </span><span class=cF2> +UD</span><span class=cF0>    </span><span class=cF2>updates the val when you edit it.</span><span class=cF0>
+<a name="l6"></a>    </span><span class=cF2> +UD</span><span class=cF0>    </span><span class=cF2>updates the value when you edit it.</span><span class=cF0>
 <a name="l7"></a>
-<a name="l8"></a>    </span><span class=cF2> -P </span><span class=cF0>    </span><span class=cF2>Means it is a string var, basically.</span><span class=cF0>
+<a name="l8"></a>    </span><span class=cF2> -P </span><span class=cF0>    </span><span class=cF2>Means it is a string variable, basically.</span><span class=cF0>
 <a name="l9"></a>
 <a name="l10"></a>    </span><span class=cF2> ,32</span><span class=cF0>    </span><span class=cF2>sets the tag string width.</span><span class=cF0>
-<a name="l11"></a>                </span><span class=cF2>See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPlain.CC.html#l435"><span class=cF4>Data Tag Width</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l11"></a>            </span><span class=cF2>See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocPlain.CC.html#l435"><span class=cF4>Data Tag Width</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l12"></a>
-<a name="l13"></a>    </span><span class=cF2> ,RT=I16 means the val is 2 bytes.</span><span class=cF0>
-<a name="l14"></a>                </span><span class=cF2>See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l71"><span class=cF4>DocDataFormat</span></a><span class=cF2>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l165"><span class=cF4>DocDataScan</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l13"></a>    </span><span class=cF2> ,RT=I16 means the value is 2 bytes.</span><span class=cF0>
+<a name="l14"></a>            </span><span class=cF2>See </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l71"><span class=cF4>DocDataFormat</span></a><span class=cF2>() and </span><a href="https://zeal-operating-system.github.io/ZealOS/System/DolDoc/DocForm.CC.html#l165"><span class=cF4>DocDataScan</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l15"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l16"></a>
 <a name="l17"></a></span><span class=cF9>I16</span><span class=cF0> i = </span><span class=cFE>0</span><span class=cF0>;
@@ -71,7 +71,7 @@ body {background-color:#fef1f0;}
 <a name="l44"></a>    </span><span class=cF5>Spawn</span><span class=cF0>(&amp;UpdateGlobalTask, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;Update Global&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
 <a name="l45"></a>
 <a name="l46"></a>    </span><span class=cF6>&quot;Enter editor overstrike mode\n&quot;</span><span class=cF0>
-<a name="l47"></a>    </span><span class=cF6>&quot;and you can modify the val.\n&quot;</span><span class=cF0>
+<a name="l47"></a>    </span><span class=cF6>&quot;and you can modify the value.\n&quot;</span><span class=cF0>
 <a name="l48"></a>    </span><span class=cF6>&quot;However, changes happen immediately,\n&quot;</span><span class=cF0>
 <a name="l49"></a>    </span><span class=cF6>&quot;so it's tricky.\n\n&quot;</span><span class=cF0>;
 <a name="l50"></a>

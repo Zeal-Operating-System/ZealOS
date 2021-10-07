@@ -104,7 +104,7 @@ public Bool HeapRep(CTask *task)
 
 #help_index "Memory/HeapCtrl;Debugging/Heap;Memory/Debugging"
 public Bool IsInHeapCtrl(U8 *a, CHeapCtrl *hc, Bool lock=TRUE)
-{//Check addr if in HeapCtrl.
+{//Check address if in HeapCtrl.
 	CMemBlk *m;
 
 	PUSHFD
@@ -184,7 +184,7 @@ public Bool HeapCtrlWalk(CHeapCtrl *hc)
 
 #help_index "Memory/Task;Debugging/Heap;Memory/Debugging"
 public Bool IsInHeap(U8 *a, CTask *task=NULL, Bool lock=TRUE)
-{//Check addr if in task's heaps.
+{//Check address if in task's heaps.
 	if (!task)
 		task = Fs;
 	if (TaskValidate(task) && (IsInHeapCtrl(a, task->code_heap, lock) ||

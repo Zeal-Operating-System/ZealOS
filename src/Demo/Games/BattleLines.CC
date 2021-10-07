@@ -392,7 +392,7 @@ U0 BattleLines()
 	PopUpOk("The mouse wheel controls\n"
 				"the command force.\n"
 				"Attract or repel with\n"
-				"left or right bttn.\n\n");
+				"left or right button.\n\n");
 
 	Fs->win_inhibit = WIG_TASK_DEFAULT - WIF_SELF_FOCUS - WIF_SELF_BORDER - WIF_FOCUS_TASK_MENU;
 	try

@@ -32,7 +32,7 @@ TourPut(	"This is a first-person-shooter.\n\n"
 			"programs.  Any program statements outside "
 			"functions get executed when you $$GREEN$$#include$$FG$$ "
 			"them at the command line.\n\n"
-			"The \"$$GREEN$$CastleFrankenstein;$$FG$$\" stmt at the "
+			"The \"$$GREEN$$CastleFrankenstein;$$FG$$\" statement at the "
 			"bottom will run the program when we "
 			"$$GREEN$$#include$$FG$$ it.\n",TRUE);
 

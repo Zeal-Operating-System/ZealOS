@@ -157,7 +157,7 @@ U0 KeyMapFamily(CTask *task, I64 scf, Bool no_shift, Bool shift)
 }
 
 public U0 KeyMap(CTask *task = NULL)
-{//Report desc of all keys.
+{//Report description of all keys.
 	Bool old_key_desc;
 	if (!task) task = Fs;
 	old_key_desc = LBtr(&task->win_inhibit, WIf_SELF_KEY_DESC);

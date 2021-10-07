@@ -332,7 +332,7 @@ public U0 TextPrint(CTask *task, I64 x, I64 y, I64 attr, U8 *format, ...)
 
 public U0 TextBorder(CTask *task=NULL, I64 l, I64 r, I64 t, I64 b, I64 attr, Bool solid)
 {//Plot border square. 60fps in Fs->draw_it() callback.
-//Draws window borders or DolDoc text bttn borders.
+//Draws window borders or DolDoc text button borders.
 	//Set task=sys_winmgr_task for no clipping.
 	I64 i;
 

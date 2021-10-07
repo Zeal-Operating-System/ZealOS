@@ -49,11 +49,11 @@ body {background-color:#fef1f0;}
 <a name="l22"></a>}
 <a name="l23"></a>
 <a name="l24"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>DClus</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF1>Bool</span><span class=cF0> write=</span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> num=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l25"></a>{</span><span class=cF2>//Dump disk clus. Optionally, write.</span><span class=cF0>
-<a name="l26"></a></span><span class=cF2>//If you set write to TRUE, the clus will</span><span class=cF0>
+<a name="l25"></a>{</span><span class=cF2>//Dump disk cluster. Optionally, write.</span><span class=cF0>
+<a name="l26"></a></span><span class=cF2>//If you set write to TRUE, the cluster will</span><span class=cF0>
 <a name="l27"></a>    </span><span class=cF2>//be written when you press &lt;ESC&gt;.</span><span class=cF0>
 <a name="l28"></a>    </span><span class=cF2>//See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/Disk/DiskRaw.CC.html#l1"><span class=cF4>::/Demo/Disk/DiskRaw.CC</span></a><span class=cF2>.</span><span class=cF0>
-<a name="l29"></a>    </span><span class=cF2>//Do </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l120"><span class=cF4>Dir</span></a><span class=cF2>(&quot;*&quot;,TRUE); to get clus numbers of files.</span><span class=cF0>
+<a name="l29"></a>    </span><span class=cF2>//Do </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/BlkDev/DiskDirB.CC.html#l120"><span class=cF4>Dir</span></a><span class=cF2>(&quot;*&quot;,TRUE); to get cluster numbers of files.</span><span class=cF0>
 <a name="l30"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>MAlloc</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv-&gt;spc &lt;&lt; </span><span class=cF3>BLK_SIZE_BITS</span><span class=cF0>);
 <a name="l31"></a>
 <a name="l32"></a>    c = </span><span class=cF5>ClusNumNext</span><span class=cF0>(</span><span class=cF5>Fs</span><span class=cF0>-&gt;cur_dv, c, num);

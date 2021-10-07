@@ -184,8 +184,8 @@ public class CFifoI64
 		 out_ptr;
 };
 #help_index "Date/CMOS"
-#define CMOS_SEL	0x70 //select which reg to access using this port
-#define CMOS_DATA 	0x71 //read from or write to reg using this port
+#define CMOS_SEL	0x70 //select which register to access using this port
+#define CMOS_DATA 	0x71 //read from or write to register using this port
 
 //CMOS registers
 #define CMOSR_SEC 			0x0
@@ -463,9 +463,9 @@ class CBinFile
 class CPatchTableAbsAddr
 {
 	U8	eit_abs_addr; 	//$LK,"IET_ABS_ADDR",A="MN:IET_ABS_ADDR"$
-	U32 abs_addres_count;
+	U32 abs_address_count;
 	U8	zero;
-	U32 abs_addres[1];
+	U32 abs_address[1];
 };
 
 //$LK,"CAOTImportExport",A="MN:CAOTImportExport"$ Types. Used in PatchTable.
@@ -618,7 +618,7 @@ class CKernel
 
 #help_index "Processor"
 
-//Model specific regs.
+//Model specific registers.
 #define IA32F_SCE 		0x001
 #define IA32F_LME 		0x100
 #define IA32_LAPIC_BASE 0x01B
@@ -668,7 +668,7 @@ class CKernel
 //I/O APIC Memory mapped window
 #define IOAPIC_REG	0xFEC00000 //U8
 #define IOAPIC_DATA 0xFEC00010 //U32
-//I/O APIC Regs
+//I/O APIC Registers
 #define IOAPICID	0x00
 #define IOAPICVER 	0x01
 #define IOAPICARB 	0x02
@@ -936,7 +936,7 @@ public class CMemberListMeta
 public class CMemberList
 {
 	CMemberList		*next, *left, *right,
-					*left_class_base, *right_class_base; //For finding dup class local vars.
+					*left_class_base, *right_class_base; //For finding duplicate class local variables.
 	U8				*str;
 	CHashClass		*member_class, *member_class_base;
 	CMemberListMeta	*meta;
@@ -977,7 +977,7 @@ public class CHashClass:CHashSrcSym
 	U8			 ptr_stars_count, raw_type;
 	U16 		 flags;
 	CMemberList	*member_list_and_root, //Head of linked list and head of tree.
-				*member_class_base_root, //For finding dup class local vars.
+				*member_class_base_root, //For finding duplicate class local variables.
 				*last_in_member_list;
 	CHashClass	*base_class,
 				*fwd_class;
@@ -1671,20 +1671,20 @@ public class CAutoCompleteDictGlobals
 #help_index "Compiler/Directive"
 //Compiler $LK,"Option",A="MN:Option"$()s
 //You might need to do #exe {Option();}
-//Note: The #exe stmt is lexed-ahead,
+//Note: The #exe statement is lexed-ahead,
 //so it takes effect earlier than you might expect.
 #define OPTf_ECHO 					0
 #define OPTf_TRACE					1
-#define OPTf_WARN_UNUSED_VAR		2	//Applied to funs, not statements
+#define OPTf_WARN_UNUSED_VAR		2	//Applied to functions, not statements
 #define OPTf_WARN_PAREN 			3	//Warn unnecessary parens
-#define OPTf_WARN_DUP_TYPES 		4	//Warn dup local var type statements
+#define OPTf_WARN_DUP_TYPES 		4	//Warn duplicate local variable type statements
 #define OPTf_WARN_HEADER_MISMATCH	5
 #define OPTf_EXTERNS_TO_IMPORTS 	6
 #define OPTf_KEEP_PRIVATE 			7
-#define OPTf_NO_REG_VAR 			8	//Applied to funs, not statements
+#define OPTf_NO_REG_VAR 			8	//Applied to functions, not statements
 #define OPTf_GLOBALS_ON_DATA_HEAP 	9
 //Disable 10-byte float consts for ã,log2_10,log10_2,loge_2
-#define OPTf_NO_BUILTIN_CONST 		10	//Applied to funs, not statements
+#define OPTf_NO_BUILTIN_CONST 		10	//Applied to functions, not statements
 #define OPTf_USE_IMM64				11	//Not completely implemented
 #define OPTf_DECIMAL_ONLY			12	//Only allow decimal numbers (no 0x or 0b prefixed numbers)
 #define OPTf_NO_FLOATS				13	//No floating point numbers allowed
@@ -1950,8 +1950,8 @@ class CAOTBinBlk
 
 I64 class CAbsCountsI64
 {
-	U16 abs_addres,	//Only odd/even matters. Count of absolute addres in an exp.
-		c_addres;	//Only odd/even matters. Count of C addres in an exp.
+	U16 abs_address,	//Only odd/even matters. Count of absolute address in an exp.
+		c_address;	//Only odd/even matters. Count of C address in an exp.
 	U32 externs;	//Only nonzero matters. Some regions have externs banned.
 };
 
@@ -2192,7 +2192,7 @@ class CLexFile
 
 class CAOTCtrl
 {
-	I64					 rip; //Inst ptr
+	I64					 rip; //Instruction pointer
 	CAsmArg				 arg1, arg2;
 	CAOTBinBlk			*bin;
 	I64					 num_bin_U8s,
@@ -3032,8 +3032,8 @@ class CMBRPart
 	U8	type,
 		end_head;
 	U16 end_cyl;
-	U32 offset, //Sects between MBR and first sect
-		size; 	//Sects in drv
+	U32 offset, //Sectors between MBR and first sector
+		size; 	//Sectors in drive
 };
 
 class CMasterBoot
@@ -3391,7 +3391,7 @@ public class CDrive
 						 fat1, fat2,
 						 root_clus,
 						 data_area,
-						 spc; //sectors per clus
+						 spc; //sectors per cluster
 	CDate				 fat32_local_time_offset;
 	CTask				*owning_task;
 	CBlkDev				*bd;
@@ -3720,8 +3720,8 @@ public class CMouseStateGlobals
 	F64 	dbl_time, 			//Input: Time threshold for calling it a double click.
 			left_dbl_time,		//Private
 			right_dbl_time;		//Private
-	Bool	lb, 				//Left Bttn
-			rb, 				//Right Bttn
+	Bool	lb, 				//Left Button
+			rb, 				//Right Button
 			show,
 			has_wheel,
 			left_dbl, 			//Private
@@ -3981,9 +3981,9 @@ class CTaskDying
 	I64 	 wake_jiffy;
 };
 
-public class CTask //The Fs segment reg points to current CTask.
+public class CTask //The Fs segment register points to current CTask.
 {
-	CTask			*addr; //Self-addressed ptr
+	CTask			*addr; //Self-addressed pointer
 	U32				 task_signature, win_inhibit;
 #assert $$ == offset(CTaskDying.wake_jiffy)
 	I64				 wake_jiffy;
@@ -4100,9 +4100,9 @@ class CTSS
 #define CPUf_RAN_A_TASK 		0
 #define CPUf_DYING_TASK_QUE 	1
 
-public class CCPU //The Gs segment reg points to current CCPU.
+public class CCPU //The Gs segment register points to current CCPU.
 {
-	CCPU		*addr; //Self-addressed ptr
+	CCPU		*addr; //Self-addressed pointer
 	I64			 num, cpu_flags,
 				 startup_rip,
 				 idle_pt_hits;
@@ -4264,8 +4264,8 @@ public class CTextGlobals
 #define FONT_HEIGHT 	8
 
 #help_index "Graphics"
-//z-vals less than zero are in front of screen and not drawn.
-//we want to shift all Z-vals into a drawable range.
+//z-values less than zero are in front of screen and not drawn.
+//we want to shift all Z-values into a drawable range.
 //GR_Z_ALL is set to half of the Z-range which is an I32.
 #define GR_Z_ALL	(I32_MAX/2)
 
@@ -4412,7 +4412,7 @@ class CKeyDevGlobals
 	CKeyDevEntry	 put_key_head;
 	U0			  (**fp_ctrl_alt_cbs)(I64 sc);
 	I64				 ctrl_alt_in_irq_flags,
-				   **ctrl_alt_ret_addr; //addr of ret addr on stack in kbd irq
+				   **ctrl_alt_ret_addr; //address of ret address on stack in kbd irq
 	U8			   **ctrl_alt_no_shift_descs, **ctrl_alt_shift_descs,
 					 desc[STR_LEN],
 					*handler;

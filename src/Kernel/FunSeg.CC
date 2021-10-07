@@ -252,7 +252,7 @@ U0 StrPrintFunSeg(U8 *buf, I64 addr, I64 field_len, I64 flags)
 }
 
 I64 SrcLineNum(U8 *addr, I64 count=1)
-{//linenum for src of addr.
+{//linenum for src of address.
 	CHashSrcSym	*tmph;
 	I64			 cur_line, first_line, last_line, num_lines, offset;
 	CDebugInfo	*debug_info;
@@ -316,7 +316,7 @@ I64 SrcLineNum(U8 *addr, I64 count=1)
 }
 
 U8 *SrcFileName(U8 *addr, I64 count=1, CTask *mem_task=NULL)
-{//MAlloc filename for src of addr.
+{//MAlloc filename for src of address.
 	CHashSrcSym	*tmph;
 	I64			 i, j, ii, offset, best = NULL, d, best_d;
 	U32			*body;
@@ -364,7 +364,7 @@ U8 *SrcFileName(U8 *addr, I64 count=1, CTask *mem_task=NULL)
 }
 
 U8 *SrcEdLink(U8 *addr, I64 count=1, CTask *mem_task=NULL)
-{//MAlloc file,line link to src of addr.
+{//MAlloc file,line link to src of address.
 	U8 *filename, *st, *st2;
 	I64 linenum;
 
@@ -384,7 +384,7 @@ U8 *SrcEdLink(U8 *addr, I64 count=1, CTask *mem_task=NULL)
 }
 
 Bool PutSrcLink(U8 *addr, I64 count=1, U8 *buf=NULL)
-{//Put to StdOut a $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ file,line link to src of addr.
+{//Put to StdOut a $LK,"DolDoc",A="FI:::/Doc/DolDocOverview.DD"$ file,line link to src of address.
 	U8 *src;
 
 	if (src = SrcEdLink(addr, count))
@@ -403,7 +403,7 @@ Bool PutSrcLink(U8 *addr, I64 count=1, U8 *buf=NULL)
 }
 
 Bool E(U8 *addr, I64 count=512, I64 edf_dof_flags=0)
-{//Edit src at addr.
+{//Edit src at address.
 	U8	*st;
 	Bool res = FALSE;
 

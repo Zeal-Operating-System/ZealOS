@@ -144,7 +144,7 @@ body {background-color:#fef1f0;}
 <a name="l117"></a>}
 <a name="l118"></a>
 <a name="l119"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Char2ScanCode</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> ch, </span><span class=cF9>I64</span><span class=cF0> sc_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l120"></a>{</span><span class=cF2>//ASCII val to scan code (Slow).</span><span class=cF0>
+<a name="l120"></a>{</span><span class=cF2>//ASCII value to scan code (Slow).</span><span class=cF0>
 <a name="l121"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l122"></a>    </span><span class=cF1>U8</span><span class=cF0> *table;
 <a name="l123"></a>
@@ -187,7 +187,7 @@ body {background-color:#fef1f0;}
 <a name="l160"></a>}
 <a name="l161"></a>
 <a name="l162"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>ScanCode2Char</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> sc)
-<a name="l163"></a>{</span><span class=cF2>//Scan code to ASCII val.</span><span class=cF0>
+<a name="l163"></a>{</span><span class=cF2>//Scan code to ASCII value.</span><span class=cF0>
 <a name="l164"></a>    </span><span class=cF1>U8</span><span class=cF0> *table = </span><span class=cFD>NORMAL_KEY_SCAN_DECODE_TABLE</span><span class=cF0>;
 <a name="l165"></a>
 <a name="l166"></a>    </span><span class=cF1>if</span><span class=cF0> (sc &amp; </span><span class=cF3>SCF_E0_PREFIX</span><span class=cF0>)
@@ -254,7 +254,7 @@ body {background-color:#fef1f0;}
 <a name="l227"></a>};
 <a name="l228"></a>
 <a name="l229"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>Char2KeyName</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> ch, </span><span class=cF1>Bool</span><span class=cF0> include_ctrl=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l230"></a>{</span><span class=cF2>//ASCII val to key name.</span><span class=cF0>
+<a name="l230"></a>{</span><span class=cF2>//ASCII value to key name.</span><span class=cF0>
 <a name="l231"></a>    </span><span class=cF9>I64</span><span class=cF0> i;
 <a name="l232"></a>    </span><span class=cF1>U8</span><span class=cF0>  buf[</span><span class=cF3>STR_LEN</span><span class=cF0>];
 <a name="l233"></a>

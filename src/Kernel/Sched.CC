@@ -8,7 +8,7 @@ as the wallpaper.
 The scheduler is round-robin.  It checks
 if a task is ready and runs it or skips it.
 Swapping tasks just involves storing and
-restoring regs (no disk I/O for virtual
+restoring registers (no disk I/O for virtual
 memory and no addr map changes).  It is
 always fully identity-mapped on all cores.
 Tasks can be switched in half a microsecond.

@@ -7,7 +7,7 @@
 asm {
 
 //This changes the sign of the floating
-//point val in RAX
+//point value in RAX
 F_UNARY_MINUS_INT::
 				PUSH		RAX
 				FLD 		U64 [RSP]

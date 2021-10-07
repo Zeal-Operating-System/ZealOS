@@ -45,7 +45,7 @@ BHD_BIOS_DRIVE_NUM:	DU8 0;
 //Gets patched by $LK,"BootHDIns",A="MN:BootHDIns"$().
 BHD_BLK_COUNT::	DU16		0;
 
-BHD_DAP:		DU8 		16, 0, 1, 0; //One blk at a time
+BHD_DAP:		DU8 		16, 0, 1, 0; //One block at a time
 BHD_DAP_BUF:	DU16		0, 0;
 //Gets patched by $LK,"BootHDIns",A="MN:BootHDIns"$().
 BHD_DAP_BLK:: 	//64-bit
@@ -59,9 +59,9 @@ BHD_HISTART:
 				XOR 		ECX, ECX
 				MOV 		CX,  U16 [BHD_BLK_COUNT - BHD_START]
 
-@@05:			PUSH		CX			//Blk count
+@@05:			PUSH		CX			//Block count
 
-//READ BLK
+//READ BLOCK
 				PUSH		ES			//Buf seg
 				MOV 		AX, ES
 				MOV 		U16 [BHD_DAP_BUF + 2 - BHD_START], AX //ES:0000

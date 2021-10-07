@@ -5,8 +5,8 @@ error, like when repeatedly #including
 it from the cmd line.
 */
 
-//This is to demo global var access.
-//Glbs defined elsewhere can accessed too, like counts.jiffies.
+//This is to demo global variable access.
+//Globals defined elsewhere can accessed too, like counts.jiffies.
 I64 global_ona = Freq2Ona(400), global_ona_step = 10, global_ona_base = Freq2Ona(100);
 
 asm {

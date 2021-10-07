@@ -22,11 +22,11 @@ public U8 *DBlk(I64 blk, Bool write=FALSE)
 }
 
 public U8 *DClus(I64 c, Bool write=FALSE, I64 num=0)
-{//Dump disk clus. Optionally, write.
-//If you set write to TRUE, the clus will
+{//Dump disk cluster. Optionally, write.
+//If you set write to TRUE, the cluster will
 	//be written when you press <ESC>.
 	//See $LK,"::/Demo/Disk/DiskRaw.CC"$.
-	//Do $LK,"Dir",A="MN:Dir"$("*",TRUE); to get clus numbers of files.
+	//Do $LK,"Dir",A="MN:Dir"$("*",TRUE); to get cluster numbers of files.
 	U8 *buf = MAlloc(Fs->cur_dv->spc << BLK_SIZE_BITS);
 
 	c = ClusNumNext(Fs->cur_dv, c, num);

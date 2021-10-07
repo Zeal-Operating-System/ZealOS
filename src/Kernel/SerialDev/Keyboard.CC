@@ -117,7 +117,7 @@ U0 KbdTypeMatic(U8 delay)
 }
 
 I64 Char2ScanCode(I64 ch, I64 sc_flags=0)
-{//ASCII val to scan code (Slow).
+{//ASCII value to scan code (Slow).
 	I64 i;
 	U8 *table;
 
@@ -160,7 +160,7 @@ I64 Char2ScanCode(I64 ch, I64 sc_flags=0)
 }
 
 U8 ScanCode2Char(I64 sc)
-{//Scan code to ASCII val.
+{//Scan code to ASCII value.
 	U8 *table = NORMAL_KEY_SCAN_DECODE_TABLE;
 
 	if (sc & SCF_E0_PREFIX)
@@ -227,7 +227,7 @@ U8 num_lock_map[0x100] =
 };
 
 U8 *Char2KeyName(I64 ch, Bool include_ctrl=TRUE)
-{//ASCII val to key name.
+{//ASCII value to key name.
 	I64 i;
 	U8  buf[STR_LEN];
 

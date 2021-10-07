@@ -172,8 +172,8 @@ U8 *ACDSortWords(U8 *start, I64 size, I64 word_count)
 		while (*ptr2)
 			*ptr++ = *ptr2++;
 		*ptr++ = *ptr2++; //zero
-		*ptr++ = *ptr2++; //blk lo
-		*ptr++ = *ptr2++; //blk hi
+		*ptr++ = *ptr2++; //block lo
+		*ptr++ = *ptr2++; //block hi
 	}
 	*ptr++ = 0;
 	return out_start;
@@ -308,8 +308,8 @@ next_word:
 
 	Free(in_start);
 
-	"Blk Size      :%d\n",		ACD_BLK_SIZE;
-	"Blk Count       :%04X\n",	(out_ptr - out_start + ACD_BLK_SIZE - 1) / ACD_BLK_SIZE;
+	"Block Size    :%d\n",		ACD_BLK_SIZE;
+	"Block Count   :%04X\n",	(out_ptr - out_start + ACD_BLK_SIZE - 1) / ACD_BLK_SIZE;
 	"Largest Entry :%d\n",		largest_entry;
 	"Word Count    :%d\n",		word_count;
 

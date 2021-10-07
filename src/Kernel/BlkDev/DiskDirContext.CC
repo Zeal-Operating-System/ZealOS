@@ -1,5 +1,5 @@
 U0 DirContextDel(CDirContext *dirc, Bool restore=TRUE)
-{//Change back to old cur_dir and drv.
+{//Change back to old cur_dir and drive.
 	CBlkDev *bd;
 
 	if (!dirc)
@@ -28,7 +28,7 @@ U0 DirContextDel(CDirContext *dirc, Bool restore=TRUE)
 }
 
 CDirContext *DirContextNew(U8 *_mask, Bool make_mask=FALSE, Bool make_dirs=FALSE, Bool no_mask=FALSE)
-{//Save cur_dir and drv. Change to new dir.
+{//Save cur_dir and drive. Change to new dir.
 	Bool		 valid = TRUE, old_silent;
 	I64			 mask_len = StrLen(_mask);
 	U8			*buf, *mask, *tmp_mask, *semicolon_mask;

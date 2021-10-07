@@ -11,7 +11,7 @@ Departures from Shrine:
 
 	Not defining ntohl and friends. Using Endian functions.
 
-	Many file global vars have been condensed into global classes.
+	Many file global variables have been condensed into global classes.
 
 	Sockets are a non-standard finite state machine.
 	Protocols extend these to create protocol-specific sockets.

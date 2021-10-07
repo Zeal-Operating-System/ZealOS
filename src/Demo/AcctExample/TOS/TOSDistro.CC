@@ -7,7 +7,7 @@
 #define MAKE_STAFF			1
 
 public U8 TOSGetDrive()
-{//Prompt for drv let.
+{//Prompt for drive letter.
 	I64 res;
 
 	"Drive (%s):", TOS_HDS;
@@ -27,7 +27,7 @@ public U0 TOSBootHDIns(U8 drv_let=0)
 }
 
 public U0 TOSCopyDrive(U8 src, U8 dst)
-{//Format dst and copy entire drv.
+{//Format dst and copy entire drive.
 	U8 buf_s[STR_LEN], buf_d[STR_LEN];
 
 	src = Letter2Letter(src);
@@ -48,7 +48,7 @@ public U0 TOSCopyDrive(U8 src, U8 dst)
 }
 
 public U0 TOSPromptAndCopyDrive()
-{//Prompt for drv lets. Then, Format dst and copy entire drv.
+{//Prompt for drive letters. Then, Format dst and copy entire drive.
 	I64 src, dst;
 
 	"$$RED$$\nCopy Src Drive:\n$$FG$$";

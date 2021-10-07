@@ -259,7 +259,7 @@ U0 Init(SpanAnimateStruct *a)
 	ode = SpanNew;
 
 	run_bttn.state = 0;
-	Refresh(2); //Allow stop to reg in animate task.
+	Refresh(2); //Allow stop to be registered in animate task.
 
 	if (a->saved_ode)
 		SpanLoad(ode, a->saved_ode);

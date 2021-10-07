@@ -163,14 +163,14 @@ body {background-color:#fef1f0;}
 <a name="l136"></a>}
 <a name="l137"></a>
 <a name="l138"></a></span><span class=cF1>U8</span><span class=cF0> </span><span class=cF5>CMOSRegRead</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> register)
-<a name="l139"></a>{</span><span class=cF2>//Read val from CMOS register. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l139"></a>{</span><span class=cF2>//Read value from CMOS register. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l140"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>CMOS_SEL</span><span class=cF0>, register);
 <a name="l141"></a>
 <a name="l142"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>InU8</span><span class=cF0>(</span><span class=cF3>CMOS_DATA</span><span class=cF0>);
 <a name="l143"></a>}
 <a name="l144"></a>
 <a name="l145"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>CMOSRegWrite</span><span class=cF0>(</span><span class=cF9>I64</span><span class=cF0> register, </span><span class=cF9>I64</span><span class=cF0> val)
-<a name="l146"></a>{</span><span class=cF2>//Write val to CMOS register. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l146"></a>{</span><span class=cF2>//Write value to CMOS register. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l191"><span class=cF4>CMOS Registers</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l147"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>CMOS_SEL</span><span class=cF0>, register);
 <a name="l148"></a>    </span><span class=cF5>OutU8</span><span class=cF0>(</span><span class=cF3>CMOS_DATA</span><span class=cF0>, val);
 <a name="l149"></a>}

@@ -72,7 +72,7 @@ U0 PullDownMenuDemo()
 			case MESSAGE_CMD:
 			//Feel free to make your menu
 			//drive by key strokes, but you can
-			//use the $LK,"MESSAGE_CMD",A="MN:MESSAGE_CMD"$ val.
+			//use the $LK,"MESSAGE_CMD",A="MN:MESSAGE_CMD"$ value.
 				switch (arg1)
 				{
 					case M_OPTION1:

@@ -17,7 +17,7 @@ Bool ClassRep2(CDoc *doc, U8 *_d, U8 *class_name=lastclass, Bool u8_chars, Bool 
 	}
 	if (!force && (!CheckPtr(_d) || !CheckPtr(_d(U8 *) + tmpc->size)))
 	{
-		DocPrint(doc, "Bad Ptr:%016X\n", _d);
+		DocPrint(doc, "Bad Pointer:%016X\n", _d);
 		return FALSE;
 	}
 	if (tmpc->base_class && !ClassRep2(doc, _d, tmpc->base_class->str, depth, max_depth, dynamic, types, offset))
@@ -286,7 +286,7 @@ U0 UpdateRegVarImg(CHashFun *tmpf, U8 *_b, CTask *task)
 }
 
 public U0 FunRep(U8 *st, U8 *rbp=NULL, I64 max_depth=2, CTask *task=NULL)
-{//Shows names and vals of a fun's local vars using compiler's info.
+{//Shows names and values of a function's local variables using compiler's info.
 	I64			 size;
 	U8			*img;
 	CHashFun	*tmpf = HashFind(st, Fs->hash_table, HTT_FUN);
@@ -298,7 +298,7 @@ public U0 FunRep(U8 *st, U8 *rbp=NULL, I64 max_depth=2, CTask *task=NULL)
 		{
 			if (task)
 			{	//tmpf->size is negative.  It's the bottom
-				//of the fun local var space relative to RBP.
+				//of the function local variable space relative to RBP.
 				size = tmpf->arg_count * 8 - tmpf->size + 16;
 
 				img = MAlloc(size);
@@ -328,7 +328,7 @@ public U0 FunRep(U8 *st, U8 *rbp=NULL, I64 max_depth=2, CTask *task=NULL)
 
 #help_index "Debugging/Unassemble"
 public U0 Uf(U8 *st)
-{//Unassembles a named fun
+{//Unassembles a named function.
 	I64			 i;
 	CHashSrcSym	*tmpf;
 	CDebugInfo	*debug_info;

@@ -39,7 +39,7 @@ U0 DrawBoard(I64 player)
 
 		}
 	//mouse.pos.x, mouse.pos.y are mouse x, y.
-	//mouse.lb	is mouse left bttn
+	//mouse.lb	is mouse left button
 	if (player == 1)
 		DrawX(dc, mouse.pos.x - Fs->pix_left, mouse.pos.y - Fs->pix_top);
 	else

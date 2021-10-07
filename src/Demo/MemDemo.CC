@@ -19,7 +19,7 @@ public class CHeapCtrl
 	CMemUnused *heap_hash[MEM_HEAP_HASH_SIZE / sizeof(U8 *)];
 };
 
-public class CTask //The Fs segment reg points to current CTask.
+public class CTask //The Fs segment register points to current CTask.
 {
 	CHeapCtrl *code_heap, *data_heap;
 };

@@ -1,8 +1,8 @@
 U0 Mouse()
 {
-	"Press left mouse bttn to exit.\n";
+	"Press left mouse button to exit.\n";
 	while (!mouse.lb)
-	{ //Left bttn to exit.
+	{ //Left button to exit.
 		GrPlot(, mouse.pos.x, mouse.pos.y);
 		Refresh;
 	}

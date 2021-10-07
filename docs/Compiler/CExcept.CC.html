@@ -166,153 +166,149 @@ body {background-color:#fef1f0;}
 <a name="l139"></a>
 <a name="l140"></a>    </span><span class=cF1>if</span><span class=cF0> (!c)
 <a name="l141"></a>        </span><span class=cF1>return</span><span class=cF0>;
-<a name="l142"></a>    </span><span class=cF1>if</span><span class=cF0> (c-&gt;ptr_stars_count &gt; </span><span class=cFE>4</span><span class=cF0>)
+<a name="l142"></a>    </span><span class=cF1>if</span><span class=cF0> (c-&gt;ptr_stars_count &gt; </span><span class=cF3>PTR_STARS_NUM</span><span class=cF0>)
 <a name="l143"></a>    </span><span class=cF7>{</span><span class=cF0>
 <a name="l144"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;put_class ptrcount=%d\n&quot;</span><span class=cF0>, c-&gt;ptr_stars_count);
-<a name="l145"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l146"></a></span><span class=cF2>//TODO:</span><span class=cF0>
-<a name="l147"></a>            </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l148"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l149"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; c-&gt;ptr_stars_count; i++)
-<a name="l150"></a>        </span><span class=cF6>'*'</span><span class=cF0>;
-<a name="l151"></a>    c -= c-&gt;ptr_stars_count;
-<a name="l152"></a>    </span><span class=cF1>if</span><span class=cF0> (c-&gt;str)
-<a name="l153"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, c-&gt;str;
-<a name="l154"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l155"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l156"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;put_class str=NULL\n&quot;</span><span class=cF0>);
-<a name="l157"></a>        </span><span class=cF1>while</span><span class=cF0> (</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l158"></a></span><span class=cF2>//TODO:</span><span class=cF0>
-<a name="l159"></a>            </span><span class=cF5>Yield</span><span class=cF0>;
-<a name="l160"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l161"></a>    </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l162"></a>}
-<a name="l163"></a>
-<a name="l164"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ICArgPut</span><span class=cF0>(</span><span class=cF9>CICArg</span><span class=cF0> *a, </span><span class=cF9>I64</span><span class=cF0> type_pointed_to)
-<a name="l165"></a>{
-<a name="l166"></a>    </span><span class=cF1>if</span><span class=cF0> (type_pointed_to)
-<a name="l167"></a>        </span><span class=cF6>&quot;[%Z](%Z) %Z &quot;</span><span class=cF0>,
-<a name="l168"></a>        a-&gt;type.raw_type, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>, type_pointed_to, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>, </span><span class=cF5>Bsr</span><span class=cF0>(a-&gt;type &gt;&gt; </span><span class=cFE>8</span><span class=cF0>) + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;ST_TY_TYPES&quot;</span><span class=cF0>;
-<a name="l169"></a>    </span><span class=cF1>else</span><span class=cF0>
-<a name="l170"></a>        </span><span class=cF6>&quot;%Z %Z &quot;</span><span class=cF0>, a-&gt;type.raw_type, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>, </span><span class=cF5>Bsr</span><span class=cF0>(a-&gt;type &gt;&gt; </span><span class=cFE>8</span><span class=cF0>) + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;ST_TY_TYPES&quot;</span><span class=cF0>;
-<a name="l171"></a>    </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>a-&gt;type</span><span class=cF7>)</span><span class=cF0>)
-<a name="l172"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l173"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_STACK</span><span class=cF0>:
-<a name="l174"></a>            </span><span class=cF6>&quot;STACK&quot;</span><span class=cF0>;
+<a name="l145"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;put_class ptrcount = 0x&quot;</span><span class=cF0>, c-&gt;ptr_stars_count); </span><span class=cF2>// TODO</span><span class=cF0>
+<a name="l146"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l147"></a>    </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; c-&gt;ptr_stars_count; i++)
+<a name="l148"></a>        </span><span class=cF6>'*'</span><span class=cF0>;
+<a name="l149"></a>    c -= c-&gt;ptr_stars_count;
+<a name="l150"></a>    </span><span class=cF1>if</span><span class=cF0> (c-&gt;str)
+<a name="l151"></a>        </span><span class=cF6>&quot;%s&quot;</span><span class=cF0>, c-&gt;str;
+<a name="l152"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l153"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l154"></a>        </span><span class=cF5>PrintErr</span><span class=cF0>(</span><span class=cF6>&quot;put_class str=NULL\n&quot;</span><span class=cF0>);
+<a name="l155"></a>        </span><span class=cF5>Debug</span><span class=cF0>(</span><span class=cF6>&quot;put_class str=NULL&quot;</span><span class=cF0>);  </span><span class=cF2>// TODO</span><span class=cF0>
+<a name="l156"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l157"></a>    </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l158"></a>}
+<a name="l159"></a>
+<a name="l160"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ICArgPut</span><span class=cF0>(</span><span class=cF9>CICArg</span><span class=cF0> *a, </span><span class=cF9>I64</span><span class=cF0> type_pointed_to)
+<a name="l161"></a>{
+<a name="l162"></a>    </span><span class=cF1>if</span><span class=cF0> (type_pointed_to)
+<a name="l163"></a>        </span><span class=cF6>&quot;[%Z](%Z) %Z &quot;</span><span class=cF0>,
+<a name="l164"></a>        a-&gt;type.raw_type, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>, type_pointed_to, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>, </span><span class=cF5>Bsr</span><span class=cF0>(a-&gt;type &gt;&gt; </span><span class=cFE>8</span><span class=cF0>) + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;ST_TY_TYPES&quot;</span><span class=cF0>;
+<a name="l165"></a>    </span><span class=cF1>else</span><span class=cF0>
+<a name="l166"></a>        </span><span class=cF6>&quot;%Z %Z &quot;</span><span class=cF0>, a-&gt;type.raw_type, </span><span class=cF6>&quot;ST_RAW_TYPES&quot;</span><span class=cF0>, </span><span class=cF5>Bsr</span><span class=cF0>(a-&gt;type &gt;&gt; </span><span class=cFE>8</span><span class=cF0>) + </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;ST_TY_TYPES&quot;</span><span class=cF0>;
+<a name="l167"></a>    </span><span class=cF1>switch</span><span class=cF0> (</span><span class=cF5>Bsr</span><span class=cF7>(</span><span class=cF0>a-&gt;type</span><span class=cF7>)</span><span class=cF0>)
+<a name="l168"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l169"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_STACK</span><span class=cF0>:
+<a name="l170"></a>            </span><span class=cF6>&quot;STACK&quot;</span><span class=cF0>;
+<a name="l171"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l172"></a>
+<a name="l173"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_IMM</span><span class=cF0>:
+<a name="l174"></a>            </span><span class=cF6>&quot;#%X&quot;</span><span class=cF0>, a-&gt;disp;
 <a name="l175"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l176"></a>
-<a name="l177"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_IMM</span><span class=cF0>:
-<a name="l178"></a>            </span><span class=cF6>&quot;#%X&quot;</span><span class=cF0>, a-&gt;disp;
+<a name="l177"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_REG</span><span class=cF0>:
+<a name="l178"></a>            </span><span class=cF6>&quot;%Z&quot;</span><span class=cF0>, a-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
 <a name="l179"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l180"></a>
-<a name="l181"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_REG</span><span class=cF0>:
-<a name="l182"></a>            </span><span class=cF6>&quot;%Z&quot;</span><span class=cF0>, a-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
+<a name="l181"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_DISP</span><span class=cF0>:
+<a name="l182"></a>            </span><span class=cF6>&quot;%X[%Z]&quot;</span><span class=cF0>, a-&gt;disp, a-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
 <a name="l183"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l184"></a>
-<a name="l185"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_DISP</span><span class=cF0>:
-<a name="l186"></a>            </span><span class=cF6>&quot;%X[%Z]&quot;</span><span class=cF0>, a-&gt;disp, a-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
+<a name="l185"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_RIP_DISP32</span><span class=cF0>:
+<a name="l186"></a>            </span><span class=cF6>&quot;[%X]&quot;</span><span class=cF0>, a-&gt;disp;
 <a name="l187"></a>            </span><span class=cF1>break</span><span class=cF0>;
 <a name="l188"></a>
-<a name="l189"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_RIP_DISP32</span><span class=cF0>:
-<a name="l190"></a>            </span><span class=cF6>&quot;[%X]&quot;</span><span class=cF0>, a-&gt;disp;
-<a name="l191"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l192"></a>
-<a name="l193"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_SIB</span><span class=cF0>:
-<a name="l194"></a>            </span><span class=cF1>if</span><span class=cF0> (a-&gt;disp)
-<a name="l195"></a>                </span><span class=cF6>&quot;%X&quot;</span><span class=cF0>, a-&gt;disp;
-<a name="l196"></a>            </span><span class=cF1>if</span><span class=cF0> (a-&gt;</span><span class=cF1>reg</span><span class=cF0> == </span><span class=cF3>REG_RIP</span><span class=cF0>)
-<a name="l197"></a>                </span><span class=cF6>'['</span><span class=cF0>;
-<a name="l198"></a>            </span><span class=cF1>else</span><span class=cF0>
-<a name="l199"></a>                </span><span class=cF6>&quot;[%Z+&quot;</span><span class=cF0>, a-&gt;</span><span class=cF1>reg</span><span class=cF0> &amp; </span><span class=cFE>15</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
-<a name="l200"></a>            </span><span class=cF6>&quot;%Z&quot;</span><span class=cF0>, a-&gt;</span><span class=cF1>reg</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0> &amp; </span><span class=cFE>15</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
-<a name="l201"></a>            </span><span class=cF1>switch</span><span class=cF0> (a-&gt;</span><span class=cF1>reg</span><span class=cF0> &gt;&gt; </span><span class=cFE>14</span><span class=cF0>)
-<a name="l202"></a>            {
-<a name="l203"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>: </span><span class=cF6>&quot;]&quot;</span><span class=cF0>;    </span><span class=cF1>break</span><span class=cF0>;
-<a name="l204"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>: </span><span class=cF6>&quot;*2]&quot;</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
-<a name="l205"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>: </span><span class=cF6>&quot;*4]&quot;</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
-<a name="l206"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>: </span><span class=cF6>&quot;*8]&quot;</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
-<a name="l207"></a>            }
-<a name="l208"></a>            </span><span class=cF1>break</span><span class=cF0>;
-<a name="l209"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l210"></a>    </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
-<a name="l211"></a>}
+<a name="l189"></a>        </span><span class=cF1>case</span><span class=cF0> </span><span class=cF3>MDf_SIB</span><span class=cF0>:
+<a name="l190"></a>            </span><span class=cF1>if</span><span class=cF0> (a-&gt;disp)
+<a name="l191"></a>                </span><span class=cF6>&quot;%X&quot;</span><span class=cF0>, a-&gt;disp;
+<a name="l192"></a>            </span><span class=cF1>if</span><span class=cF0> (a-&gt;</span><span class=cF1>reg</span><span class=cF0> == </span><span class=cF3>REG_RIP</span><span class=cF0>)
+<a name="l193"></a>                </span><span class=cF6>'['</span><span class=cF0>;
+<a name="l194"></a>            </span><span class=cF1>else</span><span class=cF0>
+<a name="l195"></a>                </span><span class=cF6>&quot;[%Z+&quot;</span><span class=cF0>, a-&gt;</span><span class=cF1>reg</span><span class=cF0> &amp; </span><span class=cFE>15</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
+<a name="l196"></a>            </span><span class=cF6>&quot;%Z&quot;</span><span class=cF0>, a-&gt;</span><span class=cF1>reg</span><span class=cF0> &gt;&gt; </span><span class=cFE>8</span><span class=cF0> &amp; </span><span class=cFE>15</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>;
+<a name="l197"></a>            </span><span class=cF1>switch</span><span class=cF0> (a-&gt;</span><span class=cF1>reg</span><span class=cF0> &gt;&gt; </span><span class=cFE>14</span><span class=cF0>)
+<a name="l198"></a>            {
+<a name="l199"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>0</span><span class=cF0>: </span><span class=cF6>&quot;]&quot;</span><span class=cF0>;    </span><span class=cF1>break</span><span class=cF0>;
+<a name="l200"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>1</span><span class=cF0>: </span><span class=cF6>&quot;*2]&quot;</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l201"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>2</span><span class=cF0>: </span><span class=cF6>&quot;*4]&quot;</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l202"></a>                </span><span class=cF1>case</span><span class=cF0> </span><span class=cFE>3</span><span class=cF0>: </span><span class=cF6>&quot;*8]&quot;</span><span class=cF0>;  </span><span class=cF1>break</span><span class=cF0>;
+<a name="l203"></a>            }
+<a name="l204"></a>            </span><span class=cF1>break</span><span class=cF0>;
+<a name="l205"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l206"></a>    </span><span class=cF6>''</span><span class=cF0> </span><span class=cF3>CH_SPACE</span><span class=cF0>;
+<a name="l207"></a>}
+<a name="l208"></a>
+<a name="l209"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ICPut</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
+<a name="l210"></a>{
+<a name="l211"></a>    </span><span class=cF9>I64</span><span class=cF0> opcode = tmpi-&gt;ic_code, i;
 <a name="l212"></a>
-<a name="l213"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cFD>ICPut</span><span class=cF0>(</span><span class=cF9>CCompCtrl</span><span class=cF0> *cc, </span><span class=cF9>CIntermediateCode</span><span class=cF0> *tmpi)
-<a name="l214"></a>{
-<a name="l215"></a>    </span><span class=cF9>I64</span><span class=cF0> opcode = tmpi-&gt;ic_code, i;
-<a name="l216"></a>
-<a name="l217"></a>    </span><span class=cF1>if</span><span class=cF0> (opcode &gt;= </span><span class=cF3>IC_END_EXP</span><span class=cF0> &amp;&amp; opcode != </span><span class=cF3>IC_NOP2</span><span class=cF0>)
-<a name="l218"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l219"></a>        </span><span class=cF6>&quot;%15ts %016X &quot;</span><span class=cF0>, </span><span class=cFD>intermediate_code_table</span><span class=cF0>[opcode].name, tmpi-&gt;ic_data;
-<a name="l220"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;pass)
-<a name="l221"></a>        {
-<a name="l222"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;res.type.mode)
-<a name="l223"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l224"></a>                </span><span class=cF6>&quot;$PURPLE$RES:$FG$&quot;</span><span class=cF0>;
-<a name="l225"></a>                </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;res, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l226"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l227"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;arg1.type.mode)
-<a name="l228"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l229"></a>                </span><span class=cF6>&quot;$PURPLE$ARG1:$FG$&quot;</span><span class=cF0>;
-<a name="l230"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi-&gt;ic_code].type     == </span><span class=cF3>IST_DEREF</span><span class=cF0> ||
-<a name="l231"></a>                        </span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi-&gt;ic_code].type == </span><span class=cF3>IST_ASSIGN</span><span class=cF0>)
-<a name="l232"></a>                    </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;arg1, tmpi-&gt;arg1_type_pointed_to);
-<a name="l233"></a>                </span><span class=cF1>else</span><span class=cF0>
-<a name="l234"></a>                    </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;arg1, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l235"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l236"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;arg2.type.mode)
-<a name="l237"></a>            </span><span class=cF7>{</span><span class=cF0>
-<a name="l238"></a>                </span><span class=cF6>&quot;$PURPLE$ARG2:$FG$&quot;</span><span class=cF0>;
-<a name="l239"></a>                </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;arg2, </span><span class=cFE>0</span><span class=cF0>);
-<a name="l240"></a>            </span><span class=cF7>}</span><span class=cF0>
-<a name="l241"></a>            </span><span class=cF6>&quot;$PURPLE$:$FG$&quot;</span><span class=cF0>;
-<a name="l242"></a>        }
-<a name="l243"></a>        </span><span class=cFD>ICClassPut</span><span class=cF0>(tmpi-&gt;ic_class);
-<a name="l244"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_LOCK</span><span class=cF0>)
-<a name="l245"></a>            </span><span class=cF6>&quot;$BROWN$lock$FG$ &quot;</span><span class=cF0>;
-<a name="l246"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG2_TO_F64</span><span class=cF0>)
-<a name="l247"></a>            </span><span class=cF6>&quot;$LTBLUE$a2d$FG$ &quot;</span><span class=cF0>;
-<a name="l248"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG2_TO_INT</span><span class=cF0>)
-<a name="l249"></a>            </span><span class=cF6>&quot;$GREEN$a2i$FG$ &quot;</span><span class=cF0>;
-<a name="l250"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG1_TO_F64</span><span class=cF0>)
-<a name="l251"></a>            </span><span class=cF6>&quot;$LTBLUE$a1d$FG$ &quot;</span><span class=cF0>;
-<a name="l252"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG1_TO_INT</span><span class=cF0>)
-<a name="l253"></a>            </span><span class=cF6>&quot;$GREEN$a1i$FG$ &quot;</span><span class=cF0>;
-<a name="l254"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>)
-<a name="l255"></a>            </span><span class=cF6>&quot;$LTBLUE$rd$FG$ &quot;</span><span class=cF0>;
-<a name="l256"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_INT</span><span class=cF0>)
-<a name="l257"></a>            </span><span class=cF6>&quot;$GREEN$ri$FG$ &quot;</span><span class=cF0>;
-<a name="l258"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_F64</span><span class=cF0>)
-<a name="l259"></a>            </span><span class=cF6>&quot;[F64] &quot;</span><span class=cF0>;
-<a name="l260"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_UNSIGNED</span><span class=cF0>)
-<a name="l261"></a>            </span><span class=cF6>&quot;[unsigned] &quot;</span><span class=cF0>;
-<a name="l262"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_INT</span><span class=cF0>)
-<a name="l263"></a>            </span><span class=cF6>&quot;[int] &quot;</span><span class=cF0>;
-<a name="l264"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_NOT_USED</span><span class=cF0>)
-<a name="l265"></a>            </span><span class=cF6>&quot;NO_RES &quot;</span><span class=cF0>;
-<a name="l266"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_BY_VAL</span><span class=cF0>)
-<a name="l267"></a>            </span><span class=cF6>&quot;BY_VAL &quot;</span><span class=cF0>;
-<a name="l268"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PUSH_RES</span><span class=cF0>)
-<a name="l269"></a>            </span><span class=cF6>&quot;PUSH &quot;</span><span class=cF0>;
-<a name="l270"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0>)
-<a name="l271"></a>            </span><span class=cF6>&quot;PUSH_CMP &quot;</span><span class=cF0>;
-<a name="l272"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_POP_CMP</span><span class=cF0>)
-<a name="l273"></a>            </span><span class=cF6>&quot;POP_CMP &quot;</span><span class=cF0>;
-<a name="l274"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_DEL_PREV_INS</span><span class=cF0>)
-<a name="l275"></a>            </span><span class=cF6>&quot;DEL_PREV &quot;</span><span class=cF0>;
-<a name="l276"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PREV_DELETED</span><span class=cF0>)
-<a name="l277"></a>            </span><span class=cF6>&quot;PREV_DEL &quot;</span><span class=cF0>;
-<a name="l278"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0>; i++)
-<a name="l279"></a>        {
-<a name="l280"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_PUSH_FLOAT0</span><span class=cF0> + i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l281"></a>                </span><span class=cF6>&quot;DONT_PUSH#%d &quot;</span><span class=cF0>, i;
-<a name="l282"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_POP_FLOAT0</span><span class=cF0> + i</span><span class=cF7>)</span><span class=cF0>)
-<a name="l283"></a>                </span><span class=cF6>&quot;DONT_POP#%d &quot;</span><span class=cF0>, i;
-<a name="l284"></a>        }
-<a name="l285"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ALT_TEMPLATE</span><span class=cF0>)
-<a name="l286"></a>            </span><span class=cF6>&quot;ALT_TMP &quot;</span><span class=cF0>;
-<a name="l287"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
-<a name="l288"></a>    </span><span class=cF7>}</span><span class=cF0>
-<a name="l289"></a>}
+<a name="l213"></a>    </span><span class=cF1>if</span><span class=cF0> (opcode &gt;= </span><span class=cF3>IC_END_EXP</span><span class=cF0> &amp;&amp; opcode != </span><span class=cF3>IC_NOP2</span><span class=cF0>)
+<a name="l214"></a>    </span><span class=cF7>{</span><span class=cF0>
+<a name="l215"></a>        </span><span class=cF6>&quot;%15ts %016X &quot;</span><span class=cF0>, </span><span class=cFD>intermediate_code_table</span><span class=cF0>[opcode].name, tmpi-&gt;ic_data;
+<a name="l216"></a>        </span><span class=cF1>if</span><span class=cF0> (cc-&gt;pass)
+<a name="l217"></a>        {
+<a name="l218"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;res.type.mode)
+<a name="l219"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l220"></a>                </span><span class=cF6>&quot;$PURPLE$RES:$FG$&quot;</span><span class=cF0>;
+<a name="l221"></a>                </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;res, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l222"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l223"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;arg1.type.mode)
+<a name="l224"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l225"></a>                </span><span class=cF6>&quot;$PURPLE$ARG1:$FG$&quot;</span><span class=cF0>;
+<a name="l226"></a>                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi-&gt;ic_code].type     == </span><span class=cF3>IST_DEREF</span><span class=cF0> ||
+<a name="l227"></a>                        </span><span class=cFD>intermediate_code_table</span><span class=cF0>[tmpi-&gt;ic_code].type == </span><span class=cF3>IST_ASSIGN</span><span class=cF0>)
+<a name="l228"></a>                    </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;arg1, tmpi-&gt;arg1_type_pointed_to);
+<a name="l229"></a>                </span><span class=cF1>else</span><span class=cF0>
+<a name="l230"></a>                    </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;arg1, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l231"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l232"></a>            </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;arg2.type.mode)
+<a name="l233"></a>            </span><span class=cF7>{</span><span class=cF0>
+<a name="l234"></a>                </span><span class=cF6>&quot;$PURPLE$ARG2:$FG$&quot;</span><span class=cF0>;
+<a name="l235"></a>                </span><span class=cFD>ICArgPut</span><span class=cF0>(&amp;tmpi-&gt;arg2, </span><span class=cFE>0</span><span class=cF0>);
+<a name="l236"></a>            </span><span class=cF7>}</span><span class=cF0>
+<a name="l237"></a>            </span><span class=cF6>&quot;$PURPLE$:$FG$&quot;</span><span class=cF0>;
+<a name="l238"></a>        }
+<a name="l239"></a>        </span><span class=cFD>ICClassPut</span><span class=cF0>(tmpi-&gt;ic_class);
+<a name="l240"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_LOCK</span><span class=cF0>)
+<a name="l241"></a>            </span><span class=cF6>&quot;$BROWN$lock$FG$ &quot;</span><span class=cF0>;
+<a name="l242"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG2_TO_F64</span><span class=cF0>)
+<a name="l243"></a>            </span><span class=cF6>&quot;$LTBLUE$a2d$FG$ &quot;</span><span class=cF0>;
+<a name="l244"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG2_TO_INT</span><span class=cF0>)
+<a name="l245"></a>            </span><span class=cF6>&quot;$GREEN$a2i$FG$ &quot;</span><span class=cF0>;
+<a name="l246"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG1_TO_F64</span><span class=cF0>)
+<a name="l247"></a>            </span><span class=cF6>&quot;$LTBLUE$a1d$FG$ &quot;</span><span class=cF0>;
+<a name="l248"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ARG1_TO_INT</span><span class=cF0>)
+<a name="l249"></a>            </span><span class=cF6>&quot;$GREEN$a1i$FG$ &quot;</span><span class=cF0>;
+<a name="l250"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_F64</span><span class=cF0>)
+<a name="l251"></a>            </span><span class=cF6>&quot;$LTBLUE$rd$FG$ &quot;</span><span class=cF0>;
+<a name="l252"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_TO_INT</span><span class=cF0>)
+<a name="l253"></a>            </span><span class=cF6>&quot;$GREEN$ri$FG$ &quot;</span><span class=cF0>;
+<a name="l254"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_F64</span><span class=cF0>)
+<a name="l255"></a>            </span><span class=cF6>&quot;[F64] &quot;</span><span class=cF0>;
+<a name="l256"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_UNSIGNED</span><span class=cF0>)
+<a name="l257"></a>            </span><span class=cF6>&quot;[unsigned] &quot;</span><span class=cF0>;
+<a name="l258"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_USE_INT</span><span class=cF0>)
+<a name="l259"></a>            </span><span class=cF6>&quot;[int] &quot;</span><span class=cF0>;
+<a name="l260"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_RES_NOT_USED</span><span class=cF0>)
+<a name="l261"></a>            </span><span class=cF6>&quot;NO_RES &quot;</span><span class=cF0>;
+<a name="l262"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_BY_VAL</span><span class=cF0>)
+<a name="l263"></a>            </span><span class=cF6>&quot;BY_VAL &quot;</span><span class=cF0>;
+<a name="l264"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PUSH_RES</span><span class=cF0>)
+<a name="l265"></a>            </span><span class=cF6>&quot;PUSH &quot;</span><span class=cF0>;
+<a name="l266"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PUSH_CMP</span><span class=cF0>)
+<a name="l267"></a>            </span><span class=cF6>&quot;PUSH_CMP &quot;</span><span class=cF0>;
+<a name="l268"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_POP_CMP</span><span class=cF0>)
+<a name="l269"></a>            </span><span class=cF6>&quot;POP_CMP &quot;</span><span class=cF0>;
+<a name="l270"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_DEL_PREV_INS</span><span class=cF0>)
+<a name="l271"></a>            </span><span class=cF6>&quot;DEL_PREV &quot;</span><span class=cF0>;
+<a name="l272"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_PREV_DELETED</span><span class=cF0>)
+<a name="l273"></a>            </span><span class=cF6>&quot;PREV_DEL &quot;</span><span class=cF0>;
+<a name="l274"></a>        </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; </span><span class=cFE>3</span><span class=cF0>; i++)
+<a name="l275"></a>        {
+<a name="l276"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_PUSH_FLOAT0</span><span class=cF0> + i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l277"></a>                </span><span class=cF6>&quot;DONT_PUSH#%d &quot;</span><span class=cF0>, i;
+<a name="l278"></a>            </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;tmpi-&gt;ic_flags, </span><span class=cF3>ICf_DONT_POP_FLOAT0</span><span class=cF0> + i</span><span class=cF7>)</span><span class=cF0>)
+<a name="l279"></a>                </span><span class=cF6>&quot;DONT_POP#%d &quot;</span><span class=cF0>, i;
+<a name="l280"></a>        }
+<a name="l281"></a>        </span><span class=cF1>if</span><span class=cF0> (tmpi-&gt;ic_flags &amp; </span><span class=cF3>ICF_ALT_TEMPLATE</span><span class=cF0>)
+<a name="l282"></a>            </span><span class=cF6>&quot;ALT_TMP &quot;</span><span class=cF0>;
+<a name="l283"></a>        </span><span class=cF6>'\n'</span><span class=cF0>;
+<a name="l284"></a>    </span><span class=cF7>}</span><span class=cF0>
+<a name="l285"></a>}
 </span></pre></body>
 </html>

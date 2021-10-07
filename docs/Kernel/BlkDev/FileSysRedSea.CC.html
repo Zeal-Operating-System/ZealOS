@@ -710,7 +710,7 @@ body {background-color:#fef1f0;}
 <a name="l683"></a>}
 <a name="l684"></a>
 <a name="l685"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cFD>RedSeaMkDir</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *cur_dir, </span><span class=cF1>U8</span><span class=cF0> *name, </span><span class=cF9>I64</span><span class=cF0> entry_count)
-<a name="l686"></a>{</span><span class=cF2>//entry_count is for preallocating dir blks.</span><span class=cF0>
+<a name="l686"></a>{</span><span class=cF2>//entry_count is for preallocating dir blocks.</span><span class=cF0>
 <a name="l687"></a>    </span><span class=cF9>I64</span><span class=cF0>          c, cur_dir_clus = </span><span class=cF5>Name2DirClus</span><span class=cF0>(drive, cur_dir), size = </span><span class=cF5>CeilU64</span><span class=cF0>(</span><span class=cF7>(</span><span class=cF0>entry_count + </span><span class=cFE>3</span><span class=cF7>)</span><span class=cF0> &lt;&lt; </span><span class=cFE>6</span><span class=cF0>, </span><span class=cF3>BLK_SIZE</span><span class=cF0>);
 <a name="l688"></a>#</span><span class=cF1>assert</span><span class=cF0> </span><span class=cF3>CDIR_SIZE</span><span class=cF0> == </span><span class=cFE>64</span><span class=cF0>
 <a name="l689"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf = </span><span class=cF5>CAlloc</span><span class=cF0>(size);

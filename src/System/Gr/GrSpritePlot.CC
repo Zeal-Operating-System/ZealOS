@@ -1,7 +1,7 @@
 #help_index "Graphics/Sprite;Sprites"
 /*
-$LK,"CSprite",A="MN:CSprite"$s are stored as a sequence of var
-length operations with a 1-byte $LK,"type",A="MN:SPT_PT"$ leading
+$LK,"CSprite",A="MN:CSprite"$s are stored as a sequence of variable length
+operations with a 1-byte $LK,"type",A="MN:SPT_PT"$ leading
 each operation.  They are stored, one after another,
 in a chunk of memory terminated by a $LK,"zero",A="MN:SPT_END"$.
 $LK,"Sprite3",A="MN:Sprite3"$() shows how the $LK,"CSprite",A="MN:CSprite"$ unions are used.

@@ -338,7 +338,7 @@ pa_done:
 }
 
 public Bool EdGoToFun(CDoc *doc, Bool forward, Bool abort_on_dbl_colon)
-{//Move cur_entry to start of cur fun and center.(Shoddy)
+{//Move cur_entry to start of cur function and center. (Shoddy)
 	Bool unlock = DocLock(doc), res = FALSE;
 	I64  ch, levels, colons;
 
@@ -393,7 +393,7 @@ public Bool EdGoToFun(CDoc *doc, Bool forward, Bool abort_on_dbl_colon)
 }
 
 public U0 EdSelFun(CDoc *doc, Bool abort_on_dbl_colon=FALSE)
-{//Set $LK,"DOCET_SEL",A="MN:DOCET_SEL"$ on all entries in cur fun.
+{//Set $LK,"DOCET_SEL",A="MN:DOCET_SEL"$ on all entries in cur function.
 	Bool		 unlock = DocLock(doc);
 	U8			*ptr;
 	I64			 ch, levels = 0, colons = 0;

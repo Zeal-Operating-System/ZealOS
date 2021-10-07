@@ -41,7 +41,7 @@ I64 ParseKeyWord(CCompCtrl *cc)
 }
 
 CHashClass *ParseClassNew()
-{/*Ptrs to classes are handled by
+{/*Pointers to classes are handled by
 allocating 5 structures for each
 new class and representing a pointer
 to a class by advancing 1 struct forward

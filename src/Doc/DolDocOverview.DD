@@ -119,12 +119,12 @@ Examples: <CTRL-t> to see
 11) $LK,"Address Link",A="AD:0x11000"$.
 12) For in-memory document address links, see $LK,"SpriteEdText",A="MN:SpriteEdText"$().
 
-$ID,-2$$TR,"BT Bttn"$
+$ID,-2$$TR,"BT Button"$
 $ID,2$See $LK,"::/Demo/DolDoc/MenuBttn.CC"$.
 $ID,-2$$TR,"DA Data"$
 $ID,2$Used for forms that prompt for data or just displaying a value.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$, $LK,"::/Demo/Disk/DataBase.CC"$, and $LK,"::/System/DolDoc/DocWidgetWiz.CC"$.
 
-If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$DA...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
+If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$DA...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ address.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
 
 The default raw data type for the $FG,2$$$DA...$$$FG$ command is $FG,2$RT=I64$FG$.	$LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 
@@ -136,13 +136,13 @@ The space after the first ':' in the format string marks the first valid cursor 
 $ID,-2$$TR,"CB Check Box"$
 $ID,2$Used for forms.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$$FG$ and $LK,"CEdFindText",A="MN:CEdFindText"$.
 
-If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$CB...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ addr.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
+If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$CB...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the $FG,2$->data$FG$ address.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
 
 The default raw data type for the $FG,2$$$CB...$$$FG$ command is $FG,2$RT=I8$FG$ which is $FG,2$Bool$FG$.  $LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.	Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.	See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"LS List Widget"$
 $ID,2$Used for forms that prompt for data.	You must specify a define list, $FG,2$D=""$FG$.  Use $FG,2$<CTRL-l>$FG$ to help you generate the DolDoc command text you need in your $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's $FG,2$format$FG$ meta-data for $LK,"DocForm",A="MN:DocForm"$().	See $LK,"::/Demo/DolDoc/Form.CC"$.
 
-If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$LS...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the data addr.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
+If you are not using $LK,"DocForm",A="MN:DocForm"$(), make a $FG,2$$$LS...$$$FG$ statement with $LK,"DocPrint",A="MN:DocPrint"$() and fill-in the data address.	See $LK,"task_title",A="FF:::/System/DolDoc/DocEd.CC,&Fs->task_title"$.
 
 The default raw data type for the $FG,2$$$LS...$$$FG$ command is $FG,2$RT=I64$FG$.	$LK,"DocForm",A="MN:DocForm"$() will automatically reset the raw type to the value from the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ $FG,2$class$FG$ member's definition if you leave it set to the default.  Or, if not using $LK,"DocForm",A="MN:DocForm"$(), specify a raw data type of $FG,2$I8$FG$, $FG,2$U8$FG$, $FG,2$I16$FG$, $FG,2$U16$FG$, $FG,2$I32$FG$, $FG,2$U32$FG$, $FG,2$I64$FG$, $FG,2$U64$FG$, or $FG,2$F64$FG$.  See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 $ID,-2$$TR,"MA Macro"$
@@ -207,7 +207,7 @@ $ID,2$The exit flag will cause a $FG,2$$$MA...$$$FG$ macro to send an $FG,2$<ESC
 $ID,-2$$TR,"+Q <SHIFT-ESC> (Abort Quit)"$
 $ID,2$A quit flag is similar to a $FG,2$+X$FG$ except a $FG,2$<SHIFT-ESC>$FG$ instead of an $FG,2$<ESC>$FG$ to exit.
 $ID,-2$$TR,"+Z Zero"$
-$ID,2$A zero flag on a $FG,2$HX$FG$ entry will cause the offset from zero.	A $FG,2$-X$FG$ will show the actual memory addr. By default, $FG,2$HX$FG$ has the zero flag set.
+$ID,2$A zero flag on a $FG,2$HX$FG$ entry will cause the offset from zero.	A $FG,2$-X$FG$ will show the actual memory address. By default, $FG,2$HX$FG$ has the zero flag set.
 $ID,-2$$TR,"+RD Refresh Data"$
 $ID,2$The Refresh Data flag on a $FG,2$DA$FG$ or a $FG,2$CB$FG$ makes the value on the screen updated continuously.
 $ID,-2$$TR,"+UD Update Data"$
@@ -250,7 +250,7 @@ $ID,-2$$TR,"RM=\"\" Right Macro Str"$
 $ID,2$Right macro string.
 $ID,-2$$TR,"BI=<Exp> Bin Number"$
 $ID,2$Binary data item number.
-$ID,-2$$TR,"BP=\"\" Bin Ptr"$
+$ID,-2$$TR,"BP=\"\" Bin Pointer"$
 $ID,2$The BinPtrLink flags lets you specify a filename and bin num to import a bin$FG$.
 
 $FG,2$$$SP,"<tag>",BI=1,BP="filename,1"$$$FG$ will import bin num "1" from filename.

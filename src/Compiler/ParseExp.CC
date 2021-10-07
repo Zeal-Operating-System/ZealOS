@@ -182,7 +182,7 @@ pe_check_binary_ops2:
 						tmpc--;
 					else if (stack_op.u16[0] == IC_ADDR)
 					{
-						cc->abs_counts.c_addres++;
+						cc->abs_counts.c_address++;
 						if (intermediate_code_table[tmpi->ic_code].type == IST_DEREF)
 							OptFree(tmpi);
 						tmpc++;
@@ -316,7 +316,7 @@ Bool ParseExpression(CCompCtrl *cc, I64 *_max_prec, Bool end_exp, CParseStack *_
 	ParsePush(ps, 0); //terminate
 	ParsePush(ps, 0); //terminate
 	try
-//try catch causes noreg vars in function
+//try catch causes noreg variables in function
 		ParseExpression2(cc, _max_prec, ps);
 	catch
 	{
@@ -739,7 +739,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CAr
 											else
 												goto pu_new_sys_sym;
 										}
-										LexExcept(cc, "Can't take addr of extern fun");
+										LexExcept(cc, "Can't take address of extern function");
 									}
 									cc->abs_counts.externs++;
 									ICAdd(cc, IC_IMM_I64, &tmpf->exe_addr, cmp.internal_types[RT_PTR]);
@@ -751,12 +751,12 @@ I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CAr
 									{
 										ICAdd(cc, IC_ABS_ADDR, tmpf->exe_addr, cmp.internal_types[RT_PTR]);
 										if (cc->flags & CCF_ASM_EXPRESSIONS)
-											cc->abs_counts.abs_addres++;
+											cc->abs_counts.abs_address++;
 									}
 									else
 										ICAdd(cc, IC_IMM_I64, tmpf->exe_addr, cmp.internal_types[RT_PTR]);
 								}
-								cc->abs_counts.c_addres++;
+								cc->abs_counts.c_address++;
 								Lex(cc);
 								return PE_MAYBE_MODIFIERS;
 							}
@@ -766,7 +766,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CAr
 							tmpex = tmpc;
 							if (cc->flags & CCF_ASM_EXPRESSIONS && !(cc->flags & CCF_AOT_COMPILE) && tmpex->type & HTF_IMM)
 							{
-								cc->abs_counts.c_addres++;
+								cc->abs_counts.c_address++;
 								ICAdd(cc, IC_IMM_I64, tmpex->val, cmp.internal_types[RT_PTR]);
 								Lex(cc);
 								return PE_MAYBE_MODIFIERS;
@@ -821,7 +821,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CAr
 			case '$$':
 				if (cc->flags & CCF_ASM_EXPRESSIONS)
 				{
-					cc->abs_counts.abs_addres++;
+					cc->abs_counts.abs_address++;
 					if (cc->flags  &CCF_AOT_COMPILE)
 						ICAdd(cc, IC_ABS_ADDR, cc->aotc->rip, cmp.internal_types[RT_PTR]);
 					else
@@ -929,7 +929,7 @@ I64 ParseUnaryTerm(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var, CAr
 						ICAdd(cc, IC_ADD, 0, tmpc);
 					}
 				}
-				Lex(cc); //skip var name
+				Lex(cc); //skip variable name
 				*_local_var = tmpm;
 				return PE_UNARY_MODIFIERS;
 			}
@@ -964,7 +964,7 @@ pu_export_sys_sym:
 					if (PREC_TERM > *max_prec)
 						*max_prec = PREC_TERM;
 					if (!(tmpex->type & (HTF_IMM | HTF_IMPORT)))
-						cc->abs_counts.abs_addres++;
+						cc->abs_counts.abs_address++;
 					if (tmpex->type & HTF_UNRESOLVED)
 					{
 						if (!(cc->flags & CCF_ASM_EXPRESSIONS))
@@ -987,7 +987,7 @@ pu_export_sys_sym:
 						else
 						{
 							if (tmpex->type & HTF_IMM)
-								cc->abs_counts.c_addres++;
+								cc->abs_counts.c_address++;
 							ICAdd(cc, IC_IMM_I64, tmpex->val, cmp.internal_types[RT_PTR]);
 						}
 					}
@@ -1216,12 +1216,12 @@ I64 ParseUnaryModifier(CCompCtrl *cc, CParseStack *ps, CMemberList **_local_var,
 			Lex(cc);
 			tmpc = OptClassFwd(cc->coc.coc_head.last->ic_class);
 			if (!tmpc->ptr_stars_count)
-				LexExcept(cc, "Not array or ptr ");
+				LexExcept(cc, "Not array or pointer ");
 			if (!(cc->flags & (CCF_ARRAY | CCF_RAX)))
 			{
 				tmpc = OptClassFwd(tmpc - 1);
 				if (!tmpc->ptr_stars_count)
-					LexExcept(cc, "Not array or ptr ");
+					LexExcept(cc, "Not array or pointer ");
 				ICAdd(cc, IC_DEREF + PREC_UNARY_PRE << 16, 0, tmpc);
 			}
 			tmpc1 = tmpc - 1;

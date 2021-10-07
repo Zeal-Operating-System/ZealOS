@@ -161,7 +161,7 @@ a2f_end:
 
 CDate Str2Date(U8 *_src)
 {/*"*+nnnn", "*-nnnn", "mm/dd", "mm/dd/yy"
-It also supports some funs
+It also supports some functions
 SM() start of mon
 EM() end of mon
 SY() start of year
@@ -211,7 +211,7 @@ today.
 		ds.mon = Str2I64(v);
 		if (StrOcc(ptr, '/'))
 		{
-			StrFirstRemove(ptr, "/", v); //Put day into v leaving year in ptr
+			StrFirstRemove(ptr, "/", v); //Put day into v leaving year in pointer
 			ds.day_of_mon = Str2I64(v);
 			ds.year		  = Str2I64(ptr,, &ptr);
 			if (ds.year < 100) //if not 4 digit year
@@ -246,10 +246,10 @@ today.
 }
 
 U8 *StrScan(U8 *src, U8 *format, ...)
-{/*Opposite of sprintf().  Pass ptrs to data to be scanned-in.
-For "%s", pass ptr to ptr (be careful because addr
-of array is the same as array--create ptr to array
-and take addr.
+{/*Opposite of sprintf().  Pass pointers to data to be scanned-in.
+For "%s", pass pointer to pointer (be careful because address
+of array is the same as array--create pointer to array
+and take address.
 */
 	U8	*buf, *ptr, **pptr;
 	Bool left_justify = FALSE;

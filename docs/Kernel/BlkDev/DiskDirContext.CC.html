@@ -26,7 +26,7 @@ body {background-color:#fef1f0;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>DirContextDel</span><span class=cF0>(</span><span class=cF9>CDirContext</span><span class=cF0> *dirc, </span><span class=cF1>Bool</span><span class=cF0> restore=</span><span class=cF3>TRUE</span><span class=cF0>)
-<a name="l2"></a>{</span><span class=cF2>//Change back to old cur_dir and drv.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Change back to old cur_dir and drive.</span><span class=cF0>
 <a name="l3"></a>    </span><span class=cF9>CBlkDev</span><span class=cF0> *bd;
 <a name="l4"></a>
 <a name="l5"></a>    </span><span class=cF1>if</span><span class=cF0> (!dirc)
@@ -55,7 +55,7 @@ body {background-color:#fef1f0;}
 <a name="l28"></a>}
 <a name="l29"></a>
 <a name="l30"></a></span><span class=cF9>CDirContext</span><span class=cF0> *</span><span class=cF5>DirContextNew</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_mask, </span><span class=cF1>Bool</span><span class=cF0> make_mask=</span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> make_dirs=</span><span class=cF3>FALSE</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> no_mask=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l31"></a>{</span><span class=cF2>//Save cur_dir and drv. Change to new dir.</span><span class=cF0>
+<a name="l31"></a>{</span><span class=cF2>//Save cur_dir and drive. Change to new dir.</span><span class=cF0>
 <a name="l32"></a>    </span><span class=cF1>Bool</span><span class=cF0>         valid = </span><span class=cF3>TRUE</span><span class=cF0>, old_silent;
 <a name="l33"></a>    </span><span class=cF9>I64</span><span class=cF0>          mask_len = </span><span class=cF5>StrLen</span><span class=cF0>(_mask);
 <a name="l34"></a>    </span><span class=cF1>U8</span><span class=cF0>          *buf, *mask, *tmp_mask, *semicolon_mask;

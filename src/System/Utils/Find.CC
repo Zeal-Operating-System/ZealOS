@@ -173,7 +173,7 @@ Let's say it stands for global replace ;-)
 "+i" =ignore case
 "+l" =whole labels only.
 This will check for a nonlabel character before
-and after.	If you have a var, "dd" and don't
+and after.	If you have a variable, "dd" and don't
 want to match words like "Add", you
 set this flag and it will see that the characters
 before or after "dd" are label characters.

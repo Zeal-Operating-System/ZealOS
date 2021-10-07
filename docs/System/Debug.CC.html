@@ -44,7 +44,7 @@ body {background-color:#fef1f0;}
 <a name="l17"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l18"></a>    </span><span class=cF1>if</span><span class=cF0> (!force &amp;&amp; </span><span class=cF7>(</span><span class=cF0>!</span><span class=cF5>CheckPtr</span><span class=cF0>(_d) || !</span><span class=cF5>CheckPtr</span><span class=cF0>(_d</span><span class=cF7>(</span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF7>)</span><span class=cF0> + tmpc-&gt;size)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l19"></a>    </span><span class=cF7>{</span><span class=cF0>
-<a name="l20"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;Bad Ptr:%016X\n&quot;</span><span class=cF0>, _d);
+<a name="l20"></a>        </span><span class=cF5>DocPrint</span><span class=cF0>(doc, </span><span class=cF6>&quot;Bad Pointer:%016X\n&quot;</span><span class=cF0>, _d);
 <a name="l21"></a>        </span><span class=cF1>return</span><span class=cF0> </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l22"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l23"></a>    </span><span class=cF1>if</span><span class=cF0> (tmpc-&gt;base_class &amp;&amp; !</span><span class=cF5>ClassRep2</span><span class=cF7>(</span><span class=cF0>doc, _d, tmpc-&gt;base_class-&gt;str, depth, max_depth, dynamic, types, </span><span class=cF1>offset</span><span class=cF7>)</span><span class=cF0>)
@@ -313,7 +313,7 @@ body {background-color:#fef1f0;}
 <a name="l286"></a>}
 <a name="l287"></a>
 <a name="l288"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>FunRep</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st, </span><span class=cF1>U8</span><span class=cF0> *rbp=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> max_depth=</span><span class=cFE>2</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l289"></a>{</span><span class=cF2>//Shows names and vals of a fun's local vars using compiler's info.</span><span class=cF0>
+<a name="l289"></a>{</span><span class=cF2>//Shows names and values of a function's local variables using compiler's info.</span><span class=cF0>
 <a name="l290"></a>    </span><span class=cF9>I64</span><span class=cF0>          size;
 <a name="l291"></a>    </span><span class=cF1>U8</span><span class=cF0>          *img;
 <a name="l292"></a>    </span><span class=cF9>CHashFun</span><span class=cF0>    *tmpf = </span><span class=cF5>HashFind</span><span class=cF0>(st, </span><span class=cF5>Fs</span><span class=cF0>-&gt;hash_table, </span><span class=cF3>HTT_FUN</span><span class=cF0>);
@@ -325,7 +325,7 @@ body {background-color:#fef1f0;}
 <a name="l298"></a>        {
 <a name="l299"></a>            </span><span class=cF1>if</span><span class=cF0> (task)
 <a name="l300"></a>            </span><span class=cF7>{</span><span class=cF0>   </span><span class=cF2>//tmpf-&gt;size is negative.  It's the bottom</span><span class=cF0>
-<a name="l301"></a>                </span><span class=cF2>//of the fun local var space relative to RBP.</span><span class=cF0>
+<a name="l301"></a>                </span><span class=cF2>//of the function local variable space relative to RBP.</span><span class=cF0>
 <a name="l302"></a>                size = tmpf-&gt;arg_count * </span><span class=cFE>8</span><span class=cF0> - tmpf-&gt;size + </span><span class=cFE>16</span><span class=cF0>;
 <a name="l303"></a>
 <a name="l304"></a>                img = </span><span class=cF5>MAlloc</span><span class=cF0>(size);
@@ -355,7 +355,7 @@ body {background-color:#fef1f0;}
 <a name="l328"></a>
 <a name="l329"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;Debugging/Unassemble&quot;</span><span class=cF0>
 <a name="l330"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>Uf</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *st)
-<a name="l331"></a>{</span><span class=cF2>//Unassembles a named fun</span><span class=cF0>
+<a name="l331"></a>{</span><span class=cF2>//Unassembles a named function.</span><span class=cF0>
 <a name="l332"></a>    </span><span class=cF9>I64</span><span class=cF0>          i;
 <a name="l333"></a>    </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmpf;
 <a name="l334"></a>    </span><span class=cF9>CDebugInfo</span><span class=cF0>  *debug_info;

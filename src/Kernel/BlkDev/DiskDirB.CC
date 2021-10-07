@@ -183,7 +183,7 @@ I64 Dir(U8 *files_find_mask, Bool full)
 
 Bool DirMake(U8 *filename, I64 entry_count=0)
 {//Make directory. $LK,"Cd",A="MN:Cd"$() can also make directories.
-//entry_count is for preallocating dir blks, leave it zero if you like.
+//entry_count is for preallocating dir blocks, leave it zero if you like.
 	U8			*name;
 	CDirContext	*dirc;
 	Bool		 res = FALSE;

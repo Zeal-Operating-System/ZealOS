@@ -201,7 +201,7 @@ U8 Mount2(U8 boot_drive_let, CDoc *_doc, Bool _caller_is_prtdisk)
 						"Addr of RAM disk (<ENTER> to MAlloc):";
 					StrNGet(addr_buf, STR_LEN);
 				case BDT_ISO_FILE_WRITE:
-					"Blks of 512 bytes:";
+					"Blocks of 512 bytes:";
 					StrNGet(blks_buf, STR_LEN);
 					break;
 

@@ -279,7 +279,7 @@ body {background-color:#fef1f0;}
 <a name="l252"></a>}
 <a name="l253"></a>
 <a name="l254"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>SrcLineNum</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>)
-<a name="l255"></a>{</span><span class=cF2>//linenum for src of addr.</span><span class=cF0>
+<a name="l255"></a>{</span><span class=cF2>//linenum for src of address.</span><span class=cF0>
 <a name="l256"></a>    </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmph;
 <a name="l257"></a>    </span><span class=cF9>I64</span><span class=cF0>          cur_line, first_line, last_line, num_lines, </span><span class=cF1>offset</span><span class=cF0>;
 <a name="l258"></a>    </span><span class=cF9>CDebugInfo</span><span class=cF0>  *debug_info;
@@ -343,7 +343,7 @@ body {background-color:#fef1f0;}
 <a name="l316"></a>}
 <a name="l317"></a>
 <a name="l318"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SrcFileName</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l319"></a>{</span><span class=cF2>//MAlloc filename for src of addr.</span><span class=cF0>
+<a name="l319"></a>{</span><span class=cF2>//MAlloc filename for src of address.</span><span class=cF0>
 <a name="l320"></a>    </span><span class=cF9>CHashSrcSym</span><span class=cF0> *tmph;
 <a name="l321"></a>    </span><span class=cF9>I64</span><span class=cF0>          i, j, ii, </span><span class=cF1>offset</span><span class=cF0>, best = </span><span class=cF3>NULL</span><span class=cF0>, d, best_d;
 <a name="l322"></a>    </span><span class=cF9>U32</span><span class=cF0>         *body;
@@ -391,7 +391,7 @@ body {background-color:#fef1f0;}
 <a name="l364"></a>}
 <a name="l365"></a>
 <a name="l366"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>SrcEdLink</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF9>CTask</span><span class=cF0> *mem_task=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l367"></a>{</span><span class=cF2>//MAlloc file,line link to src of addr.</span><span class=cF0>
+<a name="l367"></a>{</span><span class=cF2>//MAlloc file,line link to src of address.</span><span class=cF0>
 <a name="l368"></a>    </span><span class=cF1>U8</span><span class=cF0> *filename, *st, *st2;
 <a name="l369"></a>    </span><span class=cF9>I64</span><span class=cF0> linenum;
 <a name="l370"></a>
@@ -411,7 +411,7 @@ body {background-color:#fef1f0;}
 <a name="l384"></a>}
 <a name="l385"></a>
 <a name="l386"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PutSrcLink</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *buf=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l387"></a>{</span><span class=cF2>//Put to StdOut a </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> file,line link to src of addr.</span><span class=cF0>
+<a name="l387"></a>{</span><span class=cF2>//Put to StdOut a </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> file,line link to src of address.</span><span class=cF0>
 <a name="l388"></a>    </span><span class=cF1>U8</span><span class=cF0> *src;
 <a name="l389"></a>
 <a name="l390"></a>    </span><span class=cF1>if</span><span class=cF0> (src = </span><span class=cF5>SrcEdLink</span><span class=cF7>(</span><span class=cF0>addr, count</span><span class=cF7>)</span><span class=cF0>)
@@ -430,7 +430,7 @@ body {background-color:#fef1f0;}
 <a name="l403"></a>}
 <a name="l404"></a>
 <a name="l405"></a></span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>E</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *addr, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>512</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> edf_dof_flags=</span><span class=cFE>0</span><span class=cF0>)
-<a name="l406"></a>{</span><span class=cF2>//Edit src at addr.</span><span class=cF0>
+<a name="l406"></a>{</span><span class=cF2>//Edit src at address.</span><span class=cF0>
 <a name="l407"></a>    </span><span class=cF1>U8</span><span class=cF0>  *st;
 <a name="l408"></a>    </span><span class=cF1>Bool</span><span class=cF0> res = </span><span class=cF3>FALSE</span><span class=cF0>;
 <a name="l409"></a>

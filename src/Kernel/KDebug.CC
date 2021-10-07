@@ -1,5 +1,5 @@
 Bool CheckPtr(U8 *ptr)
-{//Check if addr is valid ptr.
+{//Check if address is valid pointer.
 	if (mem_heap_base <= ptr <= mem_mapped_space)
 		return *MemPageTable(ptr) & 1;
 	else
@@ -7,7 +7,7 @@ Bool CheckPtr(U8 *ptr)
 }
 
 Bool CheckCodePtr(U8 *ptr)
-{//Check if addr is valid code addr.
+{//Check if address is valid code address.
 	if (mem_heap_base <= ptr <= mem_heap_limit)
 		return *MemPageTable(ptr) & 1;
 	else
@@ -15,7 +15,7 @@ Bool CheckCodePtr(U8 *ptr)
 }
 
 Bool CheckOnStack(U8 *ptr, CTask *task=NULL)
-{//Check if addr is valid stack addr.
+{//Check if address is valid stack address.
 	Bool res = FALSE;
 
 	PUSHFD
@@ -51,7 +51,7 @@ I64 UnusedStack(CTask *task=NULL)
 }
 
 U8 *Caller(I64 num=1)
-{//Returns the addr of the fun which called this one,
+{//Returns the address of the function which called this one,
 //or the caller of the caller, etc.
 	U8 **rbp = RBPGet, **ptr;
 
@@ -68,7 +68,7 @@ U8 *Caller(I64 num=1)
 }
 
 U8 *TaskCaller(CTask *task=NULL, I64 num=0, Bool saved_context=FALSE)
-{//Fetches addr of Nth caller on task's stack.
+{//Fetches address of Nth caller on task's stack.
 	U8 **ptr, **rbp, **rsp;
 
 	if (!task)
@@ -219,7 +219,7 @@ U0 D(U8 *addr, I64 count=0x80, Bool show_offset=TRUE)
 }
 
 U0 Dm(U8 *addr, I64 count=0x80)
-{//Show mem addr, not offsets.
+{//Show mem address, not offsets.
 	D(addr, count, FALSE);
 }
 
@@ -372,7 +372,7 @@ U0 RawDr(CTask *task=NULL)
 }
 
 U0 Dr(CTask *task=NULL)
-{//Dump regs
+{//Dump registers
 	I64 i;
 
 	if (!task)
@@ -597,7 +597,7 @@ U0 DebugHelp()
 	">ClassRep(Fs,, 1);\t\t\t\t\t// (It knows lastclass.)\n"
 	">CallerRep;\t\t\t\t\t\t\t// Stack trace report.\n"
 	">Da(_RSP);\t\t\t\t\t\t\t// Dump stack.\n"
-	">Dr;\t\t\t\t\t\t\t\t// Dump Regs.\n"
+	">Dr;\t\t\t\t\t\t\t\t// Dump Registers.\n"
 	">1 + 2 * 3 + &Print;\t\t\t\t// Show calculation res.\n"
 	">*(0x70000)(I64 *) = 0x123456789;\t// Assign value to 0x70000-0x70007.\n"
 	">_RAX = 0x1234;\t\t\t\t\t\t// Set RAX to 0x1234.\n"

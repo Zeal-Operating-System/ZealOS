@@ -112,7 +112,7 @@ public extern CTextGlobals text;
 public extern U0 HashSrcFileSet(CCompCtrl *cc, CHashSrcSym *h, I64 line_num_offset=0);
 
 #help_index "Compiler;Cmd Line (Typically)"
-extern U8 *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR); //INVALID_PTR=don't care what load addr
+extern U8 *Load(U8 *filename, I64 ld_flags=0, CBinFile *bfh_addr=INVALID_PTR); //INVALID_PTR=don't care what load address
 
 #help_index "Data Types/Circular Queue"
 public extern I64 		 QueueCount(CQueue *head);
@@ -590,7 +590,7 @@ public extern	CMouseHardStateGlobals	mouse_hard;
 extern			CMouseHardStateGlobals	mouse_hard_last;
 extern			CMouseStateGlobals		mouse_last;
 
-#help_index "Mouse/Ptr"
+#help_index "Mouse"
 extern U0 MouseInit();
 extern U0 MouseUpdate(I64 x, I64 y, I64 z, Bool l, Bool r);
 

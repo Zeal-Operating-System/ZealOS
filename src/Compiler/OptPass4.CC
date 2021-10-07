@@ -409,7 +409,7 @@ p4_sib:
 
 				case IC_ASSIGN_PP:
 				case IC_ASSIGN_MM:
-//this val was stashed during pass012 for pointer arithmetic
+//this value was stashed during pass012 for pointer arithmetic
 					tmpi->ic_class2 = tmpi->t.class2; //See $LK,"ic_class2",A="FF:::/Compiler/BackB.CC,ic_class2"$
 				case IC_ASSIGN:
 				case IC_SHL_EQU:

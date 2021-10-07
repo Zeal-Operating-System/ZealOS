@@ -26,7 +26,7 @@ body {background-color:#fef1f0;}
 <body>
 <pre style="font-family:monospace;font-size:12pt">
 <a name="l1"></a><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ClusNumNext</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>)
-<a name="l2"></a>{</span><span class=cF2>//Return next count'th clus in chain.</span><span class=cF0>
+<a name="l2"></a>{</span><span class=cF2>//Return next count'th cluster in chain.</span><span class=cF0>
 <a name="l3"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
 <a name="l4"></a>
 <a name="l5"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
@@ -64,7 +64,7 @@ body {background-color:#fef1f0;}
 <a name="l37"></a>}
 <a name="l38"></a>
 <a name="l39"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>Clus2Blk</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> c)
-<a name="l40"></a>{</span><span class=cF2>//Drive clus num to blk num.</span><span class=cF0>
+<a name="l40"></a>{</span><span class=cF2>//Drive cluster num to block num.</span><span class=cF0>
 <a name="l41"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
 <a name="l42"></a>    </span><span class=cF1>switch</span><span class=cF0> (drive-&gt;fs_type)
 <a name="l43"></a>    </span><span class=cF7>{</span><span class=cF0>
@@ -80,7 +80,7 @@ body {background-color:#fef1f0;}
 <a name="l53"></a>}
 <a name="l54"></a>
 <a name="l55"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ClusBlkRead</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> blks)
-<a name="l56"></a>{</span><span class=cF2>//Accepts blk count, so padding on last clus is not read.</span><span class=cF0>
+<a name="l56"></a>{</span><span class=cF2>//Accepts block count, so padding on last cluster is not read.</span><span class=cF0>
 <a name="l57"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
 <a name="l58"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
 <a name="l59"></a>
@@ -125,12 +125,12 @@ body {background-color:#fef1f0;}
 <a name="l98"></a>}
 <a name="l99"></a>
 <a name="l100"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ClusRead</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l101"></a>{</span><span class=cF2>//Read clus count from drv to buf.</span><span class=cF0>
+<a name="l101"></a>{</span><span class=cF2>//Read cluster count from drive to buf.</span><span class=cF0>
 <a name="l102"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ClusBlkRead</span><span class=cF0>(drive, buf, c, count*drive-&gt;spc);
 <a name="l103"></a>}
 <a name="l104"></a>
 <a name="l105"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ClusBlkWrite</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> blks)
-<a name="l106"></a>{</span><span class=cF2>//Accepts blk count, so padding on last clus is not written.</span><span class=cF0>
+<a name="l106"></a>{</span><span class=cF2>//Accepts block count, so padding on last cluster is not written.</span><span class=cF0>
 <a name="l107"></a>    </span><span class=cF9>I64</span><span class=cF0>  i;
 <a name="l108"></a>    </span><span class=cF1>Bool</span><span class=cF0> unlock;
 <a name="l109"></a>
@@ -175,13 +175,13 @@ body {background-color:#fef1f0;}
 <a name="l148"></a>}
 <a name="l149"></a>
 <a name="l150"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ClusWrite</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF1>U8</span><span class=cF0> *buf, </span><span class=cF9>I64</span><span class=cF0> c, </span><span class=cF9>I64</span><span class=cF0> count)
-<a name="l151"></a>{</span><span class=cF2>//Write clus count from buf to drv.</span><span class=cF0>
-<a name="l152"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ClusBlkWrite</span><span class=cF0>(drive, buf, c, count*drive-&gt;spc);
+<a name="l151"></a>{</span><span class=cF2>//Write cluster count from buf to drive.</span><span class=cF0>
+<a name="l152"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>ClusBlkWrite</span><span class=cF0>(drive, buf, c, count * drive-&gt;spc);
 <a name="l153"></a>}
 <a name="l154"></a>
 <a name="l155"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>ClusAlloc</span><span class=cF0>(</span><span class=cF9>CDrive</span><span class=cF0> *drive, </span><span class=cF9>I64</span><span class=cF0> c=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> count=</span><span class=cFE>1</span><span class=cF0>, </span><span class=cF1>Bool</span><span class=cF0> contiguous=</span><span class=cF3>FALSE</span><span class=cF0>)
-<a name="l156"></a>{</span><span class=cF2>//Alloc clus count into chain.</span><span class=cF0>
-<a name="l157"></a></span><span class=cF2>//c=0 means first clus in chain</span><span class=cF0>
+<a name="l156"></a>{</span><span class=cF2>//Alloc cluster count into chain.</span><span class=cF0>
+<a name="l157"></a></span><span class=cF2>//c=0 means first cluster in chain</span><span class=cF0>
 <a name="l158"></a>    </span><span class=cF5>DriveCheck</span><span class=cF0>(drive);
 <a name="l159"></a>    </span><span class=cF1>if</span><span class=cF0> (count &lt;= </span><span class=cFE>0</span><span class=cF0>) </span><span class=cF1>return</span><span class=cF0> c;
 <a name="l160"></a>    </span><span class=cF1>switch</span><span class=cF0> (drive-&gt;fs_type)

@@ -56,7 +56,7 @@ body {background-color:#fef1f0;}
 <a name="l29"></a>                </span><span class=cF1>POP</span><span class=cF0>         </span><span class=cFC>RBP</span><span class=cF0>
 <a name="l30"></a>                </span><span class=cF1>RET1</span><span class=cF0>        </span><span class=cFE>8</span><span class=cF0>           </span><span class=cF2>//Use special return. Pop one arg off of stack.</span><span class=cF0>
 <a name="l31"></a>
-<a name="l32"></a></span><span class=cF2>//CosmiC return vals are in RAX.</span><span class=cF0>    </span><span class=cF2>This function has no return value.</span><span class=cF0>
+<a name="l32"></a></span><span class=cF2>//CosmiC return values are in RAX.</span><span class=cF0>  </span><span class=cF2>This function has no return value.</span><span class=cF0>
 <a name="l33"></a>}
 <a name="l34"></a>
 <a name="l35"></a></span><span class=cF2>//_extern binds a asm sym to a function.</span><span class=cF0>
@@ -73,7 +73,7 @@ body {background-color:#fef1f0;}
 <a name="l46"></a>    Beeps(i);
 <a name="l47"></a>
 <a name="l48"></a>    </span><span class=cF1>asm</span><span class=cF0> </span><span class=cF7>{</span><span class=cF0>
-<a name="l49"></a></span><span class=cF2>//You can clobber RAX,RBX,RCX,RDX.</span><span class=cF0>  </span><span class=cF2>The compiler expects that.</span><span class=cF0>
+<a name="l49"></a></span><span class=cF2>//You can clobber RAX, RBX, RCX, RDX.</span><span class=cF0>   </span><span class=cF2>The compiler expects that.</span><span class=cF0>
 <a name="l50"></a>
 <a name="l51"></a>        </span><span class=cF1>IMPORT</span><span class=cF0>      </span><span class=cF5>Sound</span><span class=cF0>; </span><span class=cF2>//Import an not use &amp; or don't import and use &amp;Sound.</span><span class=cF0>
 <a name="l52"></a>        </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>RCX</span><span class=cF0>, &amp;i[</span><span class=cFC>RBP</span><span class=cF0>] </span><span class=cF2>//You can clobber RAX,RBX,RCX,RDX.</span><span class=cF0>

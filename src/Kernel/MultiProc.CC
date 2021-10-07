@@ -318,7 +318,7 @@ U0 Core0StartMP()
 	}
 	MemSet(&cpu_structs[1], 0, sizeof(CCPU) * (MP_PROCESSORS_NUM - 1));
 
-	//When you start-up other cores, they jump to an addr
+	//When you start-up other cores, they jump to an address
 	//specified by a byte vect number, $LK,"MPN_VECT",A="MN:MPN_VECT"$ which corresponds
 	//to a location 4096*vect number, $LK,"MP_VECT_ADDR",A="MN:MP_VECT_ADDR"$$WW,0$.
 	MemCopy(mp, COREAP_16BIT_INIT, COREAP_16BIT_INIT_END-COREAP_16BIT_INIT);
@@ -370,7 +370,7 @@ U0 Core0Init()
 
 	debug.mp_crash = SysCAlloc(sizeof(CMPCrash));
 
-	//Must be in code heap because init code uses 32 bit addr of cpu_struct
+	//Must be in code heap because init code uses 32 bit address of cpu_struct
 	sys_task->gs = cpu_structs = CAlloc(sizeof(CCPU) * MP_PROCESSORS_NUM, Fs->code_heap);
 	CPUStructInit(0, cpu_structs, sys_task);
 	//RAX has GS

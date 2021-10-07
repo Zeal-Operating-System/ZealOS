@@ -188,7 +188,7 @@ body {background-color:#fef1f0;}
 <a name="l161"></a>
 <a name="l162"></a></span><span class=cF9>CDate</span><span class=cF0> </span><span class=cF5>Str2Date</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *_src)
 <a name="l163"></a>{</span><span class=cF2>/*&quot;*+nnnn&quot;, &quot;*-nnnn&quot;, &quot;mm/dd&quot;, &quot;mm/dd/yy&quot;</span><span class=cF0>
-<a name="l164"></a></span><span class=cF2>It also supports some funs</span><span class=cF0>
+<a name="l164"></a></span><span class=cF2>It also supports some functions</span><span class=cF0>
 <a name="l165"></a></span><span class=cF2>SM() start of mon</span><span class=cF0>
 <a name="l166"></a></span><span class=cF2>EM() end of mon</span><span class=cF0>
 <a name="l167"></a></span><span class=cF2>SY() start of year</span><span class=cF0>
@@ -238,7 +238,7 @@ body {background-color:#fef1f0;}
 <a name="l211"></a>        ds.mon = </span><span class=cF5>Str2I64</span><span class=cF0>(v);
 <a name="l212"></a>        </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>StrOcc</span><span class=cF7>(</span><span class=cF0>ptr, </span><span class=cF6>'/'</span><span class=cF7>)</span><span class=cF0>)
 <a name="l213"></a>        {
-<a name="l214"></a>            </span><span class=cF5>StrFirstRemove</span><span class=cF0>(ptr, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>, v); </span><span class=cF2>//Put day into v leaving year in ptr</span><span class=cF0>
+<a name="l214"></a>            </span><span class=cF5>StrFirstRemove</span><span class=cF0>(ptr, </span><span class=cF6>&quot;/&quot;</span><span class=cF0>, v); </span><span class=cF2>//Put day into v leaving year in pointer</span><span class=cF0>
 <a name="l215"></a>            ds.day_of_mon = </span><span class=cF5>Str2I64</span><span class=cF0>(v);
 <a name="l216"></a>            ds.year       = </span><span class=cF5>Str2I64</span><span class=cF0>(ptr,, &amp;ptr);
 <a name="l217"></a>            </span><span class=cF1>if</span><span class=cF0> (ds.year &lt; </span><span class=cFE>100</span><span class=cF0>) </span><span class=cF2>//if not 4 digit year</span><span class=cF0>
@@ -273,10 +273,10 @@ body {background-color:#fef1f0;}
 <a name="l246"></a>}
 <a name="l247"></a>
 <a name="l248"></a></span><span class=cF1>U8</span><span class=cF0> *</span><span class=cF5>StrScan</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *src, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l249"></a>{</span><span class=cF2>/*Opposite of sprintf().  Pass ptrs to data to be scanned-in.</span><span class=cF0>
-<a name="l250"></a></span><span class=cF2>For &quot;%s&quot;, pass ptr to ptr (be careful because addr</span><span class=cF0>
-<a name="l251"></a></span><span class=cF2>of array is the same as array--create ptr to array</span><span class=cF0>
-<a name="l252"></a></span><span class=cF2>and take addr.</span><span class=cF0>
+<a name="l249"></a>{</span><span class=cF2>/*Opposite of sprintf().  Pass pointers to data to be scanned-in.</span><span class=cF0>
+<a name="l250"></a></span><span class=cF2>For &quot;%s&quot;, pass pointer to pointer (be careful because address</span><span class=cF0>
+<a name="l251"></a></span><span class=cF2>of array is the same as array--create pointer to array</span><span class=cF0>
+<a name="l252"></a></span><span class=cF2>and take address.</span><span class=cF0>
 <a name="l253"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l254"></a>    </span><span class=cF1>U8</span><span class=cF0>  *buf, *ptr, **pptr;
 <a name="l255"></a>    </span><span class=cF1>Bool</span><span class=cF0> left_justify = </span><span class=cF3>FALSE</span><span class=cF0>;

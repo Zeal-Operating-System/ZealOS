@@ -5,13 +5,13 @@ This uses four types of ctrls
 
 	2) The $LK,"CCtrl",A="MN:CCtrl"$ type for the tempo/stacatto sliders.
 
-	3) The active $LK,"CDoc",A="MN:CDoc"$ sprite bttns with macros for left/record/play/right.
+	3) The active $LK,"CDoc",A="MN:CDoc"$ sprite buttons with macros for left/record/play/right.
 
 	4) Hand-made ctrls for the kbdgraphic, notes and staff.
 
 This uses four types of output
 
-	1) The $LK,"CDoc",A="MN:CDoc"$ for the text and bttns and kbdgraphic.
+	1) The $LK,"CDoc",A="MN:CDoc"$ for the text and buttons and kbdgraphic.
 
 	2) The Fs->draw_it() for the staff region, drawn every refresh.
 

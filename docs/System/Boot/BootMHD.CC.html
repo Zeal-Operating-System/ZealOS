@@ -86,7 +86,7 @@ body {background-color:#fef1f0;}
 <a name="l59"></a></span><span class=cF2>//Gets patched by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l60"></a></span><span class=cFD>BMHD_BLK_COUNT</span><span class=cF0>::        </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>;
 <a name="l61"></a>
-<a name="l62"></a>BMHD_DAP:               </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//One blk at a time</span><span class=cF0>
+<a name="l62"></a>BMHD_DAP:               </span><span class=cF1>DU8</span><span class=cF0>         </span><span class=cFE>16</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//One block at a time</span><span class=cF0>
 <a name="l63"></a>BMHD_DAP_BUF:           </span><span class=cF1>DU16</span><span class=cF0>        </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>;
 <a name="l64"></a></span><span class=cF2>//Gets patched by </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Boot/BootHDIns.CC.html#l25"><span class=cF4>BootHDIns</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l65"></a></span><span class=cFD>BMHD_DAP_BLK</span><span class=cF0>::  </span><span class=cF2>//64-bit</span><span class=cF0>
@@ -100,9 +100,9 @@ body {background-color:#fef1f0;}
 <a name="l73"></a>                </span><span class=cF1>XOR</span><span class=cF0>         </span><span class=cFC>ECX</span><span class=cF0>, </span><span class=cFC>ECX</span><span class=cF0>
 <a name="l74"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>CX</span><span class=cF0>,  </span><span class=cF9>U16</span><span class=cF0> [</span><span class=cFD>BMHD_BLK_COUNT</span><span class=cF0> - </span><span class=cFD>BMHD_START</span><span class=cF0>]
 <a name="l75"></a>
-<a name="l76"></a>@@05:           </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>CX</span><span class=cF0>          </span><span class=cF2>//Blk count</span><span class=cF0>
+<a name="l76"></a>@@05:           </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>CX</span><span class=cF0>          </span><span class=cF2>//Block count</span><span class=cF0>
 <a name="l77"></a>
-<a name="l78"></a></span><span class=cF2>//READ BLK</span><span class=cF0>
+<a name="l78"></a></span><span class=cF2>//READ BLOCK</span><span class=cF0>
 <a name="l79"></a>                </span><span class=cF1>PUSH</span><span class=cF0>        </span><span class=cFC>ES</span><span class=cF0>          </span><span class=cF2>//Buf seg</span><span class=cF0>
 <a name="l80"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cFC>AX</span><span class=cF0>, </span><span class=cFC>ES</span><span class=cF0>
 <a name="l81"></a>                </span><span class=cF1>MOV</span><span class=cF0>         </span><span class=cF9>U16</span><span class=cF0> [BMHD_DAP_BUF + </span><span class=cFE>2</span><span class=cF0> - </span><span class=cFD>BMHD_START</span><span class=cF0>], </span><span class=cFC>AX</span><span class=cF0> </span><span class=cF2>//ES:0000</span><span class=cF0>

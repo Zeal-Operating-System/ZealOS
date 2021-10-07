@@ -91,7 +91,7 @@ body {background-color:#fef1f0;}
 <a name="l64"></a>}
 <a name="l65"></a>
 <a name="l66"></a></span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>KeyDescSet</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l67"></a>{</span><span class=cF2>//Call this from key handler to report desc in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Training.CC.html#l159"><span class=cF4>KeyMap</span></a><span class=cF2>().</span><span class=cF0>
+<a name="l67"></a>{</span><span class=cF2>//Call this from key handler to report description in </span><a href="https://zeal-operating-system.github.io/ZealOS/System/Training.CC.html#l159"><span class=cF4>KeyMap</span></a><span class=cF2>().</span><span class=cF0>
 <a name="l68"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l69"></a>
 <a name="l70"></a>    </span><span class=cF5>StrCopy</span><span class=cF0>(</span><span class=cFB>keydev</span><span class=cF0>.desc, buf);

@@ -267,7 +267,7 @@ CTask *Spawn(U0 (*fp_start_addr)(U8 *data), U8 *data=NULL, U8 *task_name=NULL,
 				I64 stack_size=0,	// 0=default
 				I64 flags=1 << JOBf_ADD_TO_QUE)
 {//Create task on core running at address.
-//Alloc $LK,"CTask",A="MN:CTask"$ structure from code heap so addr will be short.
+//Alloc $LK,"CTask",A="MN:CTask"$ structure from code heap so address will be short.
 	//Could be alloced off of data heap.
 	CTask *task;
 
@@ -489,7 +489,7 @@ CTask *User(U8 *format=NULL, ...)
 }
 
 U0 TaskDel(CTask *task)
-{//We delay freeing in case lingering ptr to reincarnated.
+{//We delay freeing in case lingering pointer to reincarnated.
 	HeapCtrlDel(task->code_heap);
 	if (task->data_heap != task->code_heap)
 		HeapCtrlDel(task->data_heap);

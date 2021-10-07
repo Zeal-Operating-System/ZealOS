@@ -43,7 +43,7 @@ U0 LeftClickCtrlBttn(CCtrl *c, I64, I64, Bool down)
 
 public CCtrl *CtrlBttnNew(I64 x, I64 y, I64 width=-1, I64 height=-1,
 						  I64 num_states=1, U8 *state_texts, I32 *state_colors, CCtrlBttnState *_s=NULL)
-{//Create bttn ctrl. See $LK,"::/Apps/Strut/Strut.CC"$.
+{//Create button ctrl. See $LK,"::/Apps/Strut/Strut.CC"$.
 	CCtrl			*res;
 	CCtrlBttnState	*s;
 	I64				 i,j,l;
@@ -92,7 +92,7 @@ public CCtrl *CtrlBttnNew(I64 x, I64 y, I64 width=-1, I64 height=-1,
 }
 
 public U0 CtrlBttnDel(CCtrl *c)
-{//Free bttn ctrl.
+{//Free button ctrl.
 	QueueRemove(c);
 	if (!(c->flags & BTF_DONT_FREE))
 		Free(c->state);

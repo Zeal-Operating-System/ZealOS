@@ -4,7 +4,7 @@ See $LK,"U64i union",A="FF:::/Kernel/KernelA.HH,U64i union"$.
  
 The versions with "i" are internal data types. Use "I64" instead of "U64i" and you will have access to subbytes and subwords.
 
-Unfortunately, byte access causes the compiler to not use a reg for the variable.
+Unfortunately, byte access causes the compiler to not use a register for the variable.
 
 See $LK,"::/Demo/Lectures/FixedPoint.CC"$.
 */

@@ -31,8 +31,8 @@ body {background-color:#fef1f0;}
 <a name="l4"></a></span><span class=cF2>/*This is a FIFO (first-in first-out) data structure</span><span class=cF0>
 <a name="l5"></a></span><span class=cF2>which keeps track of bullets.  When a new bullet is</span><span class=cF0>
 <a name="l6"></a></span><span class=cF2>fired, the bullets_in val is increased by one.</span><span class=cF0>
-<a name="l7"></a></span><span class=cF2>When a bullet expires, the bullets_out val is increased</span><span class=cF0>
-<a name="l8"></a></span><span class=cF2>by one.  The in and out vals loop-around, back to</span><span class=cF0>
+<a name="l7"></a></span><span class=cF2>When a bullet expires, the bullets_out value is increased</span><span class=cF0>
+<a name="l8"></a></span><span class=cF2>by one.  The in and out values loop-around, back to</span><span class=cF0>
 <a name="l9"></a></span><span class=cF2>the start of the arrays.</span><span class=cF0>    </span><span class=cF2>It is known as a ring-buffer.</span><span class=cF0>
 <a name="l10"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l11"></a>#</span><span class=cF1>define</span><span class=cF0> BULLETS_NUM </span><span class=cFE>32</span><span class=cF0>
@@ -73,7 +73,7 @@ body {background-color:#fef1f0;}
 <a name="l46"></a>    </span><span class=cF9>I64</span><span class=cF0> i, j;
 <a name="l47"></a>    </span><span class=cF2>//&lt;CTRL-t&gt; now to see the </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/DolDocOverview.DD.html#l1"><span class=cF4>DolDoc</span></a><span class=cF2> place holder</span><span class=cF0>
 <a name="l48"></a>    </span><span class=cF2>//where the sprite num is encoded. $IB...$ stands</span><span class=cF0>
-<a name="l49"></a>    </span><span class=cF2>//for &quot;insert ptr to binary object&quot;.</span><span class=cF0>
+<a name="l49"></a>    </span><span class=cF2>//for &quot;insert pointer to binary object&quot;.</span><span class=cF0>
 <a name="l50"></a>    </span><span class=cF5>Sprite3</span><span class=cF0>(dc, x, y, </span><span class=cFE>0</span><span class=cF0>, </span><span class=cFA>&lt;1&gt;</span><span class=cF0>);
 <a name="l51"></a>
 <a name="l52"></a>    i = bullets_out;
@@ -140,7 +140,7 @@ body {background-color:#fef1f0;}
 <a name="l113"></a>            </span><span class=cF1>if</span><span class=cF0> (message_code = </span><span class=cF5>MessageScan</span><span class=cF7>(</span><span class=cF0>&amp;arg1, &amp;arg2, </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_DOWN</span><span class=cF0> | </span><span class=cFE>1</span><span class=cF0> &lt;&lt; </span><span class=cF3>MESSAGE_KEY_UP</span><span class=cF7>)</span><span class=cF0>)
 <a name="l114"></a>            </span><span class=cF7>{</span><span class=cF0>
 <a name="l115"></a>                </span><span class=cF2>//With </span><a href="https://zeal-operating-system.github.io/ZealOS/Doc/CharOverview.DD.html#l1"><span class=cF4>keyboard</span></a><span class=cF2> messages, the two message args</span><span class=cF0>
-<a name="l116"></a>                </span><span class=cF2>//are the scan code and ascii val for the key.</span><span class=cF0>
+<a name="l116"></a>                </span><span class=cF2>//are the scan code and ascii value for the key.</span><span class=cF0>
 <a name="l117"></a>                sc = arg2;
 <a name="l118"></a>                ch = arg1;
 <a name="l119"></a>

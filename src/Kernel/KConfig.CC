@@ -71,9 +71,9 @@ U0 KConfigOptions(CKConfig *c)
 		if (i == CONFIG_HELP)
 			"\n"
 			"$$PURPLE$$MemInit$$FG$$ Initializes memory above 0x100000 "
-			"to a val at boot.\n"
-			"$$PURPLE$$HeapInit$$FG$$ Initializes MAlloc() memory to a val.\n"
-			"$$PURPLE$$VarInit$$FG$$ Initializes global var memory to a val.\n"
+			"to a value at boot.\n"
+			"$$PURPLE$$HeapInit$$FG$$ Initializes MAlloc() memory to a value.\n"
+			"$$PURPLE$$VarInit$$FG$$ Initializes global variable memory to a value.\n"
 			"$$PURPLE$$HomeDir$$FG$$ Set home dir.\n"
 			"$$PURPLE$$NoMP$$FG$$ No multicore.\n"
 			"$$PURPLE$$MountAHCIAuto$$FG$$ Auto Mount AHCI drives to 'C' and 'T'.\n"

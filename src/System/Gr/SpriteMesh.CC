@@ -543,7 +543,7 @@ U0 MPDrawIt(CMeshFrame *e)
 	dc->depth_buf	= e->depth_buf;
 	MemCopy(&dc->ls, &e->dc->ls, sizeof(CD3I32));
 
-	//... and translation (shift) vals.
+	//... and translation (shift) values.
 	dc->x = e->dc->x;
 	dc->y = e->dc->y;
 	dc->z = e->dc->z;
@@ -838,8 +838,8 @@ U0 DrawIt(CTask *task, CDC *dc)
 
 	dc->x = e->cx;
 	dc->y = e->cy;
-//z-vals less than zero are in front of screen and not drawn.
-	//we want to shift all Z-vals into a drawable range.
+//z-values less than zero are in front of screen and not drawn.
+	//we want to shift all Z-values into a drawable range.
 	//GR_Z_ALL is set to half of the Z-range which is an I32.
 	dc->z = GR_Z_ALL;
 

@@ -17,7 +17,7 @@ U0 ClickCallBack()
 	CDocEntry *doc_e;
 
 	DocLock(DocPut);
-	//The $LK,"DocPrint",A="MN:DocPrint"$() routine returns the addr of the last entry.
+	//The $LK,"DocPrint",A="MN:DocPrint"$() routine returns the address of the last entry.
 	doc_e = DocPrint(DocPut, "\n$$MA+LC,\"Click Me\"$$ ");
 	//The LC flag is "has left callback".
 

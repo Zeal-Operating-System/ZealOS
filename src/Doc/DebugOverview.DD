@@ -6,7 +6,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * While debugging, you specify addresses of assembly routines with just the label, as in $FG,2$_MALLOC+0x20$FG$.	You specify $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ function names with $FG,2$&$FG$ before functions as in $FG,2$&Print+0x10$FG$.
 
-* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ for debugging because they show on the wallpaper.  They're just global int vars.
+* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ for debugging because they show on the wallpaper.  They're just global int variables.
 
 * You can use $LK,"SysLog",A="MN:SysLog"$() to send text to the $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ window.	It works like $LK,"Print",A="MN:Print"$().	You could also use $LK,"RawPrint",A="MN:RawPrint"$().
 
@@ -16,7 +16,7 @@ $WW,1$$FG,5$$TX+CX,"Debugging Overview"$$FG$
 
 * $LK,"Da",A="MN:Da"$() to do one column address dump (for stack, etc.) with symbolic addresses.
 
-* $LK,"Dr",A="MN:Dr"$() dumps regs.  You can display and modify regs in the debugger with var-like labels, $FG,4$_RAX$FG$, $FG,4$_RBX$FG$, etc.
+* $LK,"Dr",A="MN:Dr"$() dumps registers.  You can display and modify registers in the debugger with variable-like labels, $FG,4$_RAX$FG$, $FG,4$_RBX$FG$, etc.
 
 * $LK,"ClassRep",A="MN:ClassRep"$() and the dynamic version $LK,"ClassRepD",A="MN:ClassRepD"$() can be used to dump structures.
 
@@ -39,4 +39,4 @@ $ID,-2$
 
 * You can define handler functions for $FG,2$<CTRL-ALT-letter>$FG$ keys with $LK,"CtrlAltCBSet",A="MN:CtrlAltCBSet"$().  They operate either in a interrupt environment or in the window mgr when it queues kbd messages.  You can do $LK,"Raw",A="MN:Raw"$() output.  $FG,2$<CTRL-ALT-letter>$FG$ handlers take a scan_code as an arg.
 
-* If you recompile $FG,2$Kernel$FG,2$$FG$ with $LK,"BootHDIns",A="MN:BootHDIns"$(), you can set the $FG,4$MemInit$FG$, option to initialize memory to a value at boot, the $FG,4$HeapInit$FG$ option to cause mem alloced off the heap to be initialized or $FG,4$VarInit$FG$ option so both global and local vars will be initialized to a value, but global AOT variables are always zero if not initialized.  Pick a non-zero value to discover uninitialized var bugs.	You can set $LK,"sys_var_init_flag",A="MN:sys_var_init_flag"$, and $LK,"sys_heap_init_flag",A="MN:sys_heap_init_flag"$ directly after booting.
+* If you recompile $FG,2$Kernel$FG,2$$FG$ with $LK,"BootHDIns",A="MN:BootHDIns"$(), you can set the $FG,4$MemInit$FG$, option to initialize memory to a value at boot, the $FG,4$HeapInit$FG$ option to cause mem alloced off the heap to be initialized or $FG,4$VarInit$FG$ option so both global and local variables will be initialized to a value, but global AOT variables are always zero if not initialized.  Pick a non-zero value to discover uninitialized variable bugs.	You can set $LK,"sys_var_init_flag",A="MN:sys_var_init_flag"$, and $LK,"sys_heap_init_flag",A="MN:sys_heap_init_flag"$ directly after booting.

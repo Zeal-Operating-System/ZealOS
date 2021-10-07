@@ -345,7 +345,7 @@ body {background-color:#fef1f0;}
 <a name="l318"></a>    </span><span class=cF7>}</span><span class=cF0>
 <a name="l319"></a>    </span><span class=cF5>MemSet</span><span class=cF0>(&amp;</span><span class=cFB>cpu_structs</span><span class=cF0>[</span><span class=cFE>1</span><span class=cF0>], </span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF7>(</span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0> - </span><span class=cFE>1</span><span class=cF7>)</span><span class=cF0>);
 <a name="l320"></a>
-<a name="l321"></a>    </span><span class=cF2>//When you start-up other cores, they jump to an addr</span><span class=cF0>
+<a name="l321"></a>    </span><span class=cF2>//When you start-up other cores, they jump to an address</span><span class=cF0>
 <a name="l322"></a>    </span><span class=cF2>//specified by a byte vect number, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l665"><span class=cF4>MPN_VECT</span></a><span class=cF2> which corresponds</span><span class=cF0>
 <a name="l323"></a>    </span><span class=cF2>//to a location 4096*vect number, </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l666"><span class=cF4>MP_VECT_ADDR</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l324"></a>    </span><span class=cF5>MemCopy</span><span class=cF0>(mp, </span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>, </span><span class=cFD>COREAP_16BIT_INIT_END</span><span class=cF0>-</span><span class=cFD>COREAP_16BIT_INIT</span><span class=cF0>);
@@ -397,7 +397,7 @@ body {background-color:#fef1f0;}
 <a name="l370"></a>
 <a name="l371"></a>    </span><span class=cFB>debug</span><span class=cF0>.mp_crash = </span><span class=cF5>SysCAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CMPCrash</span><span class=cF7>)</span><span class=cF0>);
 <a name="l372"></a>
-<a name="l373"></a>    </span><span class=cF2>//Must be in code heap because init code uses 32 bit addr of cpu_struct</span><span class=cF0>
+<a name="l373"></a>    </span><span class=cF2>//Must be in code heap because init code uses 32 bit address of cpu_struct</span><span class=cF0>
 <a name="l374"></a>    </span><span class=cFB>sys_task</span><span class=cF0>-&gt;gs = </span><span class=cFB>cpu_structs</span><span class=cF0> = </span><span class=cF5>CAlloc</span><span class=cF0>(</span><span class=cF1>sizeof</span><span class=cF7>(</span><span class=cF9>CCPU</span><span class=cF7>)</span><span class=cF0> * </span><span class=cF3>MP_PROCESSORS_NUM</span><span class=cF0>, </span><span class=cF5>Fs</span><span class=cF0>-&gt;code_heap);
 <a name="l375"></a>    </span><span class=cFD>CPUStructInit</span><span class=cF0>(</span><span class=cFE>0</span><span class=cF0>, </span><span class=cFB>cpu_structs</span><span class=cF0>, </span><span class=cFB>sys_task</span><span class=cF0>);
 <a name="l376"></a>    </span><span class=cF2>//RAX has GS</span><span class=cF0>

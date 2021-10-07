@@ -13,7 +13,7 @@ CHeapCtrl *HeapCtrlInit(CHeapCtrl *hc=NULL, CTask *task=NULL, CBlkPool *bp)
 }
 
 U0 HeapCtrlDel(CHeapCtrl *hc)
-{//Free all blks alloced to a HeapCtrl.
+{//Free all blocks alloced to a HeapCtrl.
 	CMemBlk *m, *m1;
 
 	if (hc)

@@ -1,7 +1,7 @@
 //$BK,1$WARNING:$BK,0$ Don't return out of a catch{}.  This
 //might get fixed.
 
-//You can use $LK,"PutExcept",A="MN:PutExcept"$() in a catch stmt
+//You can use $LK,"PutExcept",A="MN:PutExcept"$() in a catch statement
 //and it will report args.
 Bool Prompt(I64 i)
 {

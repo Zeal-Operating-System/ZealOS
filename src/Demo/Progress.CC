@@ -1,4 +1,4 @@
-/*$LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ are just global vars
+/*$LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ are just global variables
 shown on the wallpaper. Terry used them in debugging a lot.
 
 If you set $LK,"progress1_max",A="MN:progress1_max"$-$LK,"progress4_max",A="MN:progress4_max"$,

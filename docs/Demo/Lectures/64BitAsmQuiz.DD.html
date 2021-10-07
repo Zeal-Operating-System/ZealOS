@@ -71,9 +71,9 @@ body {background-color:#fef1f0;}
 <a name="l44"></a>
 <a name="l45"></a>10) How long does an IN or OUT instruction take on a 1GHz machine and on a 3GHz machine?
 <a name="l46"></a>
-<a name="l47"></a>11) How do you push all 16 regs?
+<a name="l47"></a>11) How do you push all 16 registers?
 <a name="l48"></a>
-<a name="l49"></a>12) Should you put the regs in a TSS?
+<a name="l49"></a>12) Should you put the registers in a TSS?
 <a name="l50"></a>
 <a name="l51"></a>13) You can have 4K or 4Meg pages in 32-bit mode.  You can have 4K or what size pages in 64-bit mode?
 <a name="l52"></a>
@@ -93,15 +93,15 @@ body {background-color:#fef1f0;}
 <a name="l66"></a>
 <a name="l67"></a>2) The upper 32-bits are set to zero.
 <a name="l68"></a>
-<a name="l69"></a>3) To set FS or GS, you use WRMSR to write a model specific reg.    See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l626"><span class=cF4>IA32_FS_BASE</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0>.
+<a name="l69"></a>3) To set FS or GS, you use WRMSR to write a model specific register.   See </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l626"><span class=cF4>IA32_FS_BASE</span></a><span class=cF0> and </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KUtils.CC.html#l536"><span class=cF4>SET_FS_BASE</span></a><span class=cF0>.
 <a name="l70"></a>
 <a name="l71"></a>4) Displacement addressing is now RIP relative, so RIP would be added to TSS_SOME_MEMBER.  (Useless)
 <a name="l72"></a>
 <a name="l73"></a>5) The R13 instruction takes one more byte because it is like </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l1924"><span class=cF4>REG_RBP</span></a><span class=cF0> in the ModR.
 <a name="l74"></a>
-<a name="l75"></a>6) The R8 instruction needs a REX byte prefix to specify upper-8 reg.
+<a name="l75"></a>6) The R8 instruction needs a REX byte prefix to specify upper-8 register.
 <a name="l76"></a>
-<a name="l77"></a>7) You can access the lowest byte of any reg.  You can access AH but not the second-to-lowest byte of ESI.
+<a name="l77"></a>7) You can access the lowest byte of any register.  You can access AH but not the second-to-lowest byte of ESI.
 <a name="l78"></a>
 <a name="l79"></a>8) To call a subroutine farther than 2Gig away, you put the address into RAX, then CALL RAX.
 <a name="l80"></a>
@@ -111,7 +111,7 @@ body {background-color:#fef1f0;}
 <a name="l84"></a>
 <a name="l85"></a>11) PUSHAD is not available for 64-bit mode, so you do it by hand.
 <a name="l86"></a>
-<a name="l87"></a>12) The TSS is no longer used to hold the task state because there are 16 regs and they are 64-bits, not 32-bits.
+<a name="l87"></a>12) The TSS is no longer used to hold the task state because there are 16 registers and they are 64-bits, not 32-bits.
 <a name="l88"></a>
 <a name="l89"></a>13) 64-bit mode has 4K or 2Meg page size.
 <a name="l90"></a>

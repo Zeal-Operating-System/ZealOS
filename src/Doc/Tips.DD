@@ -21,9 +21,9 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check your changes.
 
 * Use the PullDown menu at the top of the screen to learn commands, or for finding the keyboard controls to games.
 
-* You can adjust the mouse movement rate by setting global vars in your start-up file. See $LK,"mouse scale",A="FF:~/HomeLocalize.CC,mouse_hard.scale"$.
+* You can adjust the mouse movement rate by setting global variables in your start-up file. See $LK,"mouse scale",A="FF:~/HomeLocalize.CC,mouse_hard.scale"$.
 
-* You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global var in a start-up file. It's units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$. See $LK,"local time",A="FF:~/HomeLocalize.CC,local_time"$.
+* You can set your local time zone by setting the $LK,"local_time_offset",A="MN:local_time_offset"$ global variable in a start-up file. It's units are $LK,"CDATE_FREQ",A="MN:CDATE_FREQ"$. See $LK,"local time",A="FF:~/HomeLocalize.CC,local_time"$.
 
 * $FG,2$<CTRL-SHIFT-L>$FG$ in the editor to reindent a $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ function or renumber an asm routine's local labels.
 
@@ -37,7 +37,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check your changes.
 
 * Boolean expressions $BK,1$not$BK,0$ in $FG,2$if$FG$ statements don't have short circuit logic and are compiled inefficiently.
 
-* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ in your programs for whatever you like. They're just global vars that are shown on the wallpaper. The original intent was to indicate how far along operations were. There's no coordination, so different apps might interfere. They're most often used for debugging--just values easily viewed. See $LK,"::/Demo/Progress.CC"$.
+* You can use $LK,"progress1",A="MN:progress1"$-$LK,"progress4",A="MN:progress4"$ in your programs for whatever you like. They're just global variables that are shown on the wallpaper. The original intent was to indicate how far along operations were. There's no coordination, so different apps might interfere. They're most often used for debugging--just values easily viewed. See $LK,"::/Demo/Progress.CC"$.
 
 * Use $LK,"DocMax",A="MN:DocMax"$() to adjust the size of the cmd line buf. It counts $LK,"CDoc",A="MN:CDoc"$ entries, not lines.
 
@@ -51,7 +51,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check your changes.
 
 * You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_PAREN",A="MN:OPTf_WARN_PAREN"$, ON) to find unnecessary parentheses in code.
 
-* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$, ON) to find unnecessary local var type statements.
+* You can use $LK,"Option",A="MN:Option"$($LK,"OPTf_WARN_DUP_TYPES",A="MN:OPTf_WARN_DUP_TYPES"$, ON) to find unnecessary local variable type statements.
 
 * $LK,"Option",A="MN:Option"$($LK,"OPTf_ECHO",A="MN:OPTf_ECHO"$, ON) can be placed in $LK,"StartOS.CC",A="FI:::/StartOS.CC"$ to echo start-up scripts.
 
@@ -91,7 +91,7 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check your changes.
 
 * You can access the word under the cursor at $LK,"ac.cur_word",A="MN:CAutoCompleteGlobals"$.
 
-* You can reactivate $FG,2$AutoComplete$FG$ after closing it by pressing $FG,2$<CTRL-Fun Key>$FG$ or $FG,2$<ALT-a>$FG$.
+* You can reactivate $FG,2$AutoComplete$FG$ after closing it by pressing $FG,2$<CTRL-Function Key>$FG$ or $FG,2$<ALT-a>$FG$.
 
 * $FG,2$<CTRL-SHIFT-T>$FG$ to toggle to/from plain text just the $LK,"CDoc",A="MN:CDoc"$ cmd under the cursor. See $LK,"::/Demo/DolDoc/TextDemo.CC"$.
  
@@ -111,9 +111,9 @@ $FG,2$Merge(\"C:/*\",\"D:/*\",\"+r+d\");$FG$ to check your changes.
 
 * Your RAM disks will not be reformatted when you reboot if the memory location has not changed and it finds the disk intact.
 
-* $FG,2$try{} catch{}$FG$ in a function will cause all vars to be non-reg.
+* $FG,2$try{} catch{}$FG$ in a function will cause all variables to be non-reg.
 
-* Using a sub-int array, $FG,2$i.u8[3]$FG$, for example, will force a local var to non-reg.
+* Using a sub-int array, $FG,2$i.u8[3]$FG$, for example, will force a local variable to non-reg.
 
 * You can delete the $FG,4$~/Registry.CC$FG$ file. The policy is that deleting it will restore defaults. It is a text doc, if you want to edit it. See $LK,"RegDefault",A="MN:RegDefault"$, $LK,"RegAppend",A="MN:RegAppend"$, $LK,"RegExe",A="MN:RegExe"$. Be careful of tree indentations.
 

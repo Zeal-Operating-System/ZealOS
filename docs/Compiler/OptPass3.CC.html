@@ -610,15 +610,15 @@ body {background-color:#fef1f0;}
 <a name="l583"></a></span><span class=cF2>We counted the times each offset was added to RBP as a plus LEA and we subtract</span><span class=cF0>
 <a name="l584"></a></span><span class=cF2>the times the offset is dereferenced.  If the address was calculated more times</span><span class=cF0>
 <a name="l585"></a></span><span class=cF2>than the offset was dereferenced, the variable's address was passed or assigned</span><span class=cF0>
-<a name="l586"></a></span><span class=cF2>and we cannot use a register because you can't take address of a reg var.</span><span class=cF0>
+<a name="l586"></a></span><span class=cF2>and we cannot use a register because you can't take address of a register variable.</span><span class=cF0>
 <a name="l587"></a>
 <a name="l588"></a></span><span class=cF2>RAX, RBX, RCX, RDX, R8 are free to be clobbered by each intermediate code.</span><span class=cF0>
 <a name="l589"></a></span><span class=cF2>RAX and R8 links intermediate codes together. R9 is used for stack machine</span><span class=cF0>
 <a name="l590"></a></span><span class=cF2>temporaries. RBP is used as stack frame.</span><span class=cF0>
 <a name="l591"></a>
-<a name="l592"></a></span><span class=cF2>RSI, RDI, R10, R11, R12, R13, R14, R15 are used for reg vars. R12 and R13, however,</span><span class=cF0>
-<a name="l593"></a></span><span class=cF2>have a unusual ModR addressing mode in the x86_64 architecture, so we only use</span><span class=cF0>
-<a name="l594"></a></span><span class=cF2>R12 and R13 as non-pointer register variables, such as index variables i, j, k.</span><span class=cF0>
+<a name="l592"></a></span><span class=cF2>RSI, RDI, R10, R11, R12, R13, R14, R15 are used for register variables.</span><span class=cF0>
+<a name="l593"></a></span><span class=cF2>R12 and R13, however, have a unusual ModR addressing mode in the x86_64 architecture,</span><span class=cF0>
+<a name="l594"></a></span><span class=cF2>so we only use R12 and R13 as non-pointer register variables, such as index variables i, j, k.</span><span class=cF0>
 <a name="l595"></a>
 <a name="l596"></a></span><span class=cF2>*/</span><span class=cF0>
 <a name="l597"></a>    </span><span class=cF1>if</span><span class=cF0> (cc-&gt;htc.fun)
@@ -670,7 +670,7 @@ body {background-color:#fef1f0;}
 <a name="l643"></a>                                </span><span class=cF1>if</span><span class=cF0> (</span><span class=cF5>Bt</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;flags, </span><span class=cF3>CCf_PASS_TRACE_PRESENT</span><span class=cF7>)</span><span class=cF0>)
 <a name="l644"></a>                                    </span><span class=cF6>&quot;Reg %Z Var \&quot;%-15ts\&quot; %016X[RBP]\n&quot;</span><span class=cF0>, tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0>, </span><span class=cF6>&quot;ST_U64_REGS&quot;</span><span class=cF0>,
 <a name="l645"></a>                                        tmpm-&gt;str, reg_offsets[tmpm-&gt;</span><span class=cF1>reg</span><span class=cF0>].</span><span class=cF1>offset</span><span class=cF0>;
-<a name="l646"></a>                                mv[i].offset_start = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//flag as reg var</span><span class=cF0>
+<a name="l646"></a>                                mv[i].offset_start = </span><span class=cFE>0</span><span class=cF0>; </span><span class=cF2>//flag as register variable</span><span class=cF0>
 <a name="l647"></a>                                </span><span class=cF1>if</span><span class=cF0> (tmpm-&gt;size &lt; </span><span class=cFE>8</span><span class=cF0> &amp;&amp; !</span><span class=cF5>StrIMatch</span><span class=cF7>(</span><span class=cF6>&quot;Bool&quot;</span><span class=cF0>, tmpm-&gt;member_class-&gt;str</span><span class=cF7>)</span><span class=cF0> &amp;&amp;
 <a name="l648"></a>                                        tmpm-&gt;member_class-&gt;type &amp; </span><span class=cF3>HTT_INTERNAL_TYPE</span><span class=cF0>)
 <a name="l649"></a>                                    </span><span class=cF5>PrintWarn</span><span class=cF0>(</span><span class=cF6>&quot;Using 64-bit reg var.\n &quot;</span><span class=cF0>
@@ -685,7 +685,7 @@ body {background-color:#fef1f0;}
 <a name="l658"></a>                </span><span class=cF1>for</span><span class=cF0> (i = </span><span class=cFE>0</span><span class=cF0>; i &lt; j &amp;&amp; l &lt; </span><span class=cFB>cmp</span><span class=cF0>.num_reg_vars;i++)
 <a name="l659"></a>                {
 <a name="l660"></a>                    tmpm = mv[i].m;
-<a name="l661"></a></span><span class=cF2>//if not just flagged as reg var</span><span class=cF0>
+<a name="l661"></a></span><span class=cF2>//if not just flagged as register variable</span><span class=cF0>
 <a name="l662"></a>                    </span><span class=cF1>if</span><span class=cF0> (mv[i].offset_start &amp;&amp; </span><span class=cF7>(</span><span class=cF0>!mv[i].m-&gt;dim.next || tmpm-&gt;</span><span class=cF1>offset</span><span class=cF0> &gt; </span><span class=cFE>0</span><span class=cF0> &amp;&amp; </span><span class=cF5>StrCompare</span><span class=cF0>(tmpm-&gt;str, </span><span class=cF6>&quot;argv&quot;</span><span class=cF0>)</span><span class=cF7>)</span><span class=cF0>)
 <a name="l663"></a>                    </span><span class=cF7>{</span><span class=cF0>
 <a name="l664"></a>                        </span><span class=cF1>while</span><span class=cF0> (l &lt; </span><span class=cFB>cmp</span><span class=cF0>.num_reg_vars &amp;&amp; </span><span class=cF5>Bts</span><span class=cF7>(</span><span class=cF0>&amp;cc-&gt;htc.fun-&gt;used_reg_mask, </span><span class=cFB>cmp</span><span class=cF0>.to_reg_vars_map[l]</span><span class=cF7>)</span><span class=cF0>)

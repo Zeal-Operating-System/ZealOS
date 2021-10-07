@@ -21,7 +21,7 @@ class CElTorito
 	U8	sys_type;
 	U8	zero;
 	U16	sect_count;
-	U32	load_rba;   // start addr of virtual disk
+	U32	load_rba;   // start address of virtual disk
 	U8	zero2[20];
 };
 

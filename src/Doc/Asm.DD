@@ -6,7 +6,7 @@ Here are example instruction formats:
 $HL,1$		ADD 	RAX, I64 FS:DISP[RSI + RDI * 8]
 $HL,0$$HL,1$		ADD 	RAX, I64 [DISP]
 $HL,0$
-$FG,2$$$$FG$ Current compiler output pos (instruction ptr).	Even works in CosmiC expressions.
+$FG,2$$$$FG$ Current compiler output pos (instruction pointer).	Even works in CosmiC expressions.
 
 $FG,2$$$$FG$ works in $FG,2$class$FG$es.
 	$FG,2$class MyFun
@@ -40,7 +40,7 @@ $FG,2$ALIGN$FG$ $FG,4$num$FG$, $FG,4$fill_byte$FG$
 	Align to $FG,4$num$FG$ boundary and fill with $FG,4$fill_byte$FG$.
 
 $FG,2$ORG$FG$ $FG,4$num$FG$
-	Set code addr for JIT or set module $LK,"Load",A="MN:Load"$() addr -- has 16-byte $LK,"CBinFile",A="MN:CBinFile"$ header and patch table trailing.
+	Set code address for JIT or set module $LK,"Load",A="MN:Load"$() address -- has 16-byte $LK,"CBinFile",A="MN:CBinFile"$ header and patch table trailing.
 
 $FG,2$BINFILE$FG,4$ "FileName.BIN"$FG$;
 

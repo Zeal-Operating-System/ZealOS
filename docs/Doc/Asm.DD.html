@@ -34,7 +34,7 @@ body {background-color:#fef1f0;}
 <a name="l7"></a>        </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> </span><span class=cFC>FS</span><span class=cF0>:DISP[</span><span class=cFC>RSI</span><span class=cF0> + </span><span class=cFC>RDI</span><span class=cF0> * </span><span class=cFE>8</span><span class=cF0>]
 <a name="l8"></a>        </span><span class=cF1>ADD</span><span class=cF0>     </span><span class=cFC>RAX</span><span class=cF0>, </span><span class=cF9>I64</span><span class=cF0> [DISP]
 <a name="l9"></a>
-<a name="l10"></a></span><span class=cF2>$</span><span class=cF0> Current compiler output pos (instruction ptr).    Even works in CosmiC expressions.
+<a name="l10"></a></span><span class=cF2>$</span><span class=cF0> Current compiler output pos (instruction pointer).    Even works in CosmiC expressions.
 <a name="l11"></a>
 <a name="l12"></a></span><span class=cF2>$</span><span class=cF0> works in </span><span class=cF2>class</span><span class=cF0>es.
 <a name="l13"></a>    </span><span class=cF2>class MyFun
@@ -69,7 +69,7 @@ body {background-color:#fef1f0;}
 <a name="l42"></a>    Align to </span><span class=cF4>num</span><span class=cF0> boundary and fill with </span><span class=cF4>fill_byte</span><span class=cF0>.
 <a name="l43"></a>
 <a name="l44"></a></span><span class=cF2>ORG</span><span class=cF0> </span><span class=cF4>num</span><span class=cF0>
-<a name="l45"></a>    Set code addr for JIT or set module </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KLoad.CC.html#l208"><span class=cF4>Load</span></a><span class=cF0>() addr -- has 16-byte </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l452"><span class=cF4>CBinFile</span></a><span class=cF0> header and patch table trailing.
+<a name="l45"></a>    Set code address for JIT or set module </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KLoad.CC.html#l208"><span class=cF4>Load</span></a><span class=cF0>() address -- has 16-byte </span><a href="https://zeal-operating-system.github.io/ZealOS/Kernel/KernelA.HH.html#l452"><span class=cF4>CBinFile</span></a><span class=cF0> header and patch table trailing.
 <a name="l46"></a>
 <a name="l47"></a></span><span class=cF2>BINFILE</span><span class=cF4> &quot;FileName.BIN&quot;</span><span class=cF0>;
 <a name="l48"></a>

@@ -62,7 +62,7 @@ U0 Mem32DevInit()
 }
 
 U8 *Mem32DevAlloc(I64 size, I64 alignment)
-{//Alloc 32-bit addr space for device. (Doesn't work.) Not used.
+{//Alloc 32-bit address space for device. (Doesn't work.) Not used.
 //For this to work the BIOS E820 map must be searched for gaps in
 	//the 32-bit range and the pool initialized to the gaps.
 	U8			*base, *limit;
@@ -120,7 +120,7 @@ U0 Mem32DevFree(U8 *base)
 }
 
 U8 *Mem64DevAlloc(I64 *_pages1Gig)
-{//Alloc 64-bit addr space for device.
+{//Alloc 64-bit address space for device.
 	U8 *a;
 	I64 i = *_pages1Gig, *pte;
 
@@ -207,7 +207,7 @@ I64 Scale2Mem(I64 min, I64 max, I64 limit=2*1024*1024*1024)
 }
 
 I64 Seg2Linear(U32 *ptr)
-{//Convert 32-bit segmented farptr to linear address. Modify in place.
+{//Convert 32-bit segmented far pointer to linear address. Modify in place.
 	*ptr = *ptr >> 16 << 4 + *ptr & 0xFFFF;
 	return *ptr;
 }

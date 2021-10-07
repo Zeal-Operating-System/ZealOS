@@ -29,7 +29,7 @@ _BEEPS::
 				POP 		RBP
 				RET1		8 			//Use special return. Pop one arg off of stack.
 
-//CosmiC return vals are in RAX.	This function has no return value.
+//CosmiC return values are in RAX.	This function has no return value.
 }
 
 //_extern binds a asm sym to a function.
@@ -46,7 +46,7 @@ I64 AsmAndC1()
 	Beeps(i);
 
 	asm {
-//You can clobber RAX,RBX,RCX,RDX.	The compiler expects that.
+//You can clobber RAX, RBX, RCX, RDX.	The compiler expects that.
 
 		IMPORT		Sound; //Import an not use & or don't import and use &Sound.
 		MOV 		RCX, &i[RBP] //You can clobber RAX,RBX,RCX,RDX.

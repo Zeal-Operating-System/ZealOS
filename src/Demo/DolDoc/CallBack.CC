@@ -29,7 +29,7 @@ U0 DoIt()
 	DocLock(bdoc);
 	DocBottom(bdoc);	//Ins at the bottom
 	DocPrint(bdoc, "$$RED$$$$CM+BY+LX,5,-3$$");
-	//The $LK,"DocPrint",A="MN:DocPrint"$() routine returns the addr of the last entry.
+	//The $LK,"DocPrint",A="MN:DocPrint"$() routine returns the address of the last entry.
 	doc_e = DocPrint(bdoc, "$$TX+TC,\" \"$$");
 	//The TC flag is "has tag callback".
 

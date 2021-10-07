@@ -176,7 +176,7 @@ public U0 Once(U8 *format, ...)
 }
 
 public U0 SysOnceDrive(U8 drv_let=0, U8 *format, ...)
-{//Add System code to drv $LK,"~/Registry.CC"$, executed next boot.
+{//Add System code to drive $LK,"~/Registry.CC"$, executed next boot.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 	I64 old_drive_let = *sys_registry_doc->filename.name;
 
@@ -190,7 +190,7 @@ public U0 SysOnceDrive(U8 drv_let=0, U8 *format, ...)
 }
 
 public U0 OnceDrive(U8 drv_let=0, U8 *format, ...)
-{//Add User code to drv $LK,"~/Registry.CC"$, executed next boot.
+{//Add User code to drive $LK,"~/Registry.CC"$, executed next boot.
 	U8 *buf = StrPrintJoin(NULL, format, argc, argv);
 	I64 old_drive_let = *sys_registry_doc->filename.name;
 

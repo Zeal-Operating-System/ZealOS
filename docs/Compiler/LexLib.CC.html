@@ -75,7 +75,7 @@ body {background-color:#fef1f0;}
 <a name="l48"></a>}
 <a name="l49"></a>
 <a name="l50"></a></span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>MemberMetaData</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *needle_str, </span><span class=cF9>CMemberList</span><span class=cF0> *haystack_member_list)
-<a name="l51"></a>{</span><span class=cF2>//Find meta data name, return meta data val. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF2>.</span><span class=cF0>
+<a name="l51"></a>{</span><span class=cF2>//Find meta data name, return meta data value. See </span><a href="https://zeal-operating-system.github.io/ZealOS/Demo/ClassMeta.CC.html#l1"><span class=cF4>::/Demo/ClassMeta.CC</span></a><span class=cF2>.</span><span class=cF0>
 <a name="l52"></a>    </span><span class=cF9>CMemberListMeta</span><span class=cF0> *meta = haystack_member_list-&gt;meta;
 <a name="l53"></a>
 <a name="l54"></a>    </span><span class=cF1>while</span><span class=cF0> (meta)
@@ -129,7 +129,7 @@ body {background-color:#fef1f0;}
 <a name="l102"></a>}
 <a name="l103"></a>
 <a name="l104"></a></span><span class=cF9>CMemberList</span><span class=cF0> *</span><span class=cF5>MemberClassBaseFind</span><span class=cF0>(</span><span class=cF9>CHashClass</span><span class=cF0> *needle_class, </span><span class=cF9>CHashClass</span><span class=cF0> *haystack_class)
-<a name="l105"></a>{</span><span class=cF2>//Find class member class base. For finding dup class local vars.</span><span class=cF0>
+<a name="l105"></a>{</span><span class=cF2>//Find class member class base. For finding duplicate class local variables.</span><span class=cF0>
 <a name="l106"></a>    </span><span class=cF9>CMemberList</span><span class=cF0> *tmpm;
 <a name="l107"></a>
 <a name="l108"></a>    tmpm = haystack_class-&gt;member_class_base_root;

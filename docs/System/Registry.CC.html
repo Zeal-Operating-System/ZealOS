@@ -203,7 +203,7 @@ body {background-color:#fef1f0;}
 <a name="l176"></a>}
 <a name="l177"></a>
 <a name="l178"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>SysOnceDrive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l179"></a>{</span><span class=cF2>//Add System code to drv </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
+<a name="l179"></a>{</span><span class=cF2>//Add System code to drive </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l180"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l181"></a>    </span><span class=cF9>I64</span><span class=cF0> old_drive_let = *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name;
 <a name="l182"></a>
@@ -217,7 +217,7 @@ body {background-color:#fef1f0;}
 <a name="l190"></a>}
 <a name="l191"></a>
 <a name="l192"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>U0</span><span class=cF0> </span><span class=cF5>OnceDrive</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> drv_let=</span><span class=cFE>0</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l193"></a>{</span><span class=cF2>//Add User code to drv </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
+<a name="l193"></a>{</span><span class=cF2>//Add User code to drive </span><a href="https://zeal-operating-system.github.io/ZealOS/Home/Registry.CC.html#l1"><span class=cF4>~/Registry.CC</span></a><span class=cF2>, executed next boot.</span><span class=cF0>
 <a name="l194"></a>    </span><span class=cF1>U8</span><span class=cF0> *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l195"></a>    </span><span class=cF9>I64</span><span class=cF0> old_drive_let = *</span><span class=cFB>sys_registry_doc</span><span class=cF0>-&gt;filename.name;
 <a name="l196"></a>

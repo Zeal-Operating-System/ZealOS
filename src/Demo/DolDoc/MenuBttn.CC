@@ -1,6 +1,6 @@
-//This example shows bttns.  Bttns return a menu val
+//This example shows buttons.  Buttons return a menu value
 //unless you rig them to send macros.  Menu entries are
-//about the same as bttns, but don't have a border.
+//about the same as buttons, but don't have a border.
 
 I64 PopUpFreq()
 {//See also $LK,"PopUpRangeI64",A="MN:PopUpRangeI64"$()
@@ -39,7 +39,7 @@ U0 MenuBttn()
 		//Use <CTRL-l> to generate cursor movement expressions and check "Quote".
 		"$$CM+CX-RE,-4$$Menu Demo\n\n";
 		"$$LM,8$$"; //Set left margin
-		//These are bttns that return a val from a menu selection.
+		//These are buttons that return a value from a menu selection.
 		if (!j)
 			"\n$$BT,\"Sound On\",LE=MU_SOUND_ON$$\n\n\n";
 		else

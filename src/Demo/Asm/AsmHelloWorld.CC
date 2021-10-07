@@ -7,15 +7,15 @@ it from the cmd line.
 These are many useful kernel
 routines $LK,"::/Kernel/StrA.CC",A="FF:::/Kernel/StrA.CC,PUT_CHARS"$
 intended to be called from
-asm.  Generally, they preserve
-regs.
+asm. Generally, they
+preserve registers.
 
 You can call any routine you
 like, C or asm, if you import it.
 Be aware that C routines do not
-preserve RAX,RBX,RCX,RDX,R8,R9.
+preserve RAX, RBX, RCX, RDX, R8, or R9.
 When calling from the shell or
-from C, preserve all other regs.
+from C, preserve all other registers.
 
 */
 

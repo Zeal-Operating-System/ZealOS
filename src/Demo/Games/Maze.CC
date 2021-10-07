@@ -14,12 +14,12 @@ U0 DrawIt(CTask *task, CDC *)
 	//		for (i = 0; i < TEXT_COLS; i++)
 	//		 TextChar(task,, i, j, text[j][i]);
 
-	TextPrint(task, 0, 0, ATTR >> 8, "Draw a maze with left bttn.");
+	TextPrint(task, 0, 0, ATTR >> 8, "Draw a maze with left button.");
 	TextPrint(task, 0, 1, ATTR >> 8, "Solve maze starting at right click.");
 }
 
 #define STACK_SIZE 2048
-//We would put these as local vars
+//We would put these as local variables
 //in SolveMaze() but the system stack size
 //is limited, so it's a bad habit.  The heap
 //is the normal ZealOS technique, but

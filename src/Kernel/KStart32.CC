@@ -2,7 +2,7 @@ asm {
 USE32
 
 //************************************
-//	ASM Global vars not required for 16-bit start-up
+//	ASM Global variables not required for 16-bit start-up
 		ALIGN 	8, OC_NOP
 
 MEM_HEAP_BASE:: 	DU64	0;
@@ -98,8 +98,8 @@ CORE0_32BIT_INIT:: //Entry point for $LK,"BootRAM",A="MN:BootRAM"$.
 		MOV		ESP, BOOT_RAM_LIMIT //Tmp Stack
 
 //Patch abs addresses
-		MOV		ECX, U32 CPatchTableAbsAddr.abs_addres_count[ESI]
-		LEA		ESI, U32 CPatchTableAbsAddr.abs_addres[ESI]
+		MOV		ECX, U32 CPatchTableAbsAddr.abs_address_count[ESI]
+		LEA		ESI, U32 CPatchTableAbsAddr.abs_address[ESI]
 @@05: 	LODSD
 		ADD		EAX, EDI
 		ADD		U32 [EAX], EDI

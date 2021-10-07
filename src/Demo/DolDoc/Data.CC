@@ -1,17 +1,17 @@
 /*$$DA	is the data widget.
-	 -TRM flag is for var
-				width fields with a terminator
-				character.
+	 -TRM flag is for variable width
+			fields with a terminator
+			character.
 	 +RD	refreshes the data.
-	 +UD	updates the val when you edit it.
+	 +UD	updates the value when you edit it.
 
-	 -P 	Means it is a string var, basically.
+	 -P 	Means it is a string variable, basically.
 
 	 ,32	sets the tag string width.
-				See $LK,"Data Tag Width",A="FA:::/System/DolDoc/DocPlain.CC,DataTagWidth"$.
+			See $LK,"Data Tag Width",A="FA:::/System/DolDoc/DocPlain.CC,DataTagWidth"$.
 
-	 ,RT=I16 means the val is 2 bytes.
-				See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
+	 ,RT=I16 means the value is 2 bytes.
+			See $LK,"DocDataFormat",A="MN:DocDataFormat"$() and $LK,"DocDataScan",A="MN:DocDataScan"$().
 */
 
 I16 i = 0;
@@ -44,7 +44,7 @@ U0 DataDemo()
 	Spawn(&UpdateGlobalTask, NULL, "Update Global",, Fs);
 
 	"Enter editor overstrike mode\n"
-	"and you can modify the val.\n"
+	"and you can modify the value.\n"
 	"However, changes happen immediately,\n"
 	"so it's tricky.\n\n";
 

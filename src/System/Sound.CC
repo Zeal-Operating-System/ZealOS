@@ -259,10 +259,10 @@ etc.
 
 Sharp and flat are done with '#' or 'b'.
 
-The var music.stacatto_factor can
+The variable music.stacatto_factor can
 be set to a range from 0.0 to 1.0.
 
-The var music.tempo is quarter-notes
+The variable music.tempo is quarter-notes
 per second.  It defaults to
 2.5 and gets faster when bigger.
 */

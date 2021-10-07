@@ -38,7 +38,7 @@ body {background-color:#fef1f0;}
 <a name="l11"></a>}
 <a name="l12"></a>
 <a name="l13"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>CTask</span><span class=cF0> *</span><span class=cF5>PopUpViewPrint</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *format, ...)
-<a name="l14"></a>{</span><span class=cF2>//View Print stmt in PopUp win task.</span><span class=cF0>
+<a name="l14"></a>{</span><span class=cF2>//View Print statement in PopUp win task.</span><span class=cF0>
 <a name="l15"></a>    </span><span class=cF9>CTask</span><span class=cF0>   *task = </span><span class=cF5>Spawn</span><span class=cF0>(&amp;</span><span class=cF5>ServerCmdLine</span><span class=cF0>, </span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF6>&quot;View&quot;</span><span class=cF0>,, </span><span class=cF5>Fs</span><span class=cF0>);
 <a name="l16"></a>    </span><span class=cF1>U8</span><span class=cF0>      *buf = </span><span class=cF5>StrPrintJoin</span><span class=cF0>(</span><span class=cF3>NULL</span><span class=cF0>, format, argc, argv);
 <a name="l17"></a>    </span><span class=cF9>CDoc</span><span class=cF0>    *doc = </span><span class=cF5>DocNew</span><span class=cF0>(, task);
@@ -161,7 +161,7 @@ body {background-color:#fef1f0;}
 <a name="l134"></a>
 <a name="l135"></a>#</span><span class=cF1>help_index</span><span class=cF0> </span><span class=cF6>&quot;DolDoc/Input;StdIn/DolDoc&quot;</span><span class=cF0>
 <a name="l136"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUp1</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *b1, </span><span class=cF9>I64</span><span class=cF0> n1, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l137"></a>{</span><span class=cF2>//Make PopUp win task with one bttn.</span><span class=cF0>
+<a name="l137"></a>{</span><span class=cF2>//Make PopUp win task with one button.</span><span class=cF0>
 <a name="l138"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, l1 = </span><span class=cF5>StrLen</span><span class=cF0>(b1);
 <a name="l139"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
 <a name="l140"></a>
@@ -177,7 +177,7 @@ body {background-color:#fef1f0;}
 <a name="l150"></a>}
 <a name="l151"></a>
 <a name="l152"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF9>I64</span><span class=cF0> </span><span class=cF5>PopUp2</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *b1, </span><span class=cF9>I64</span><span class=cF0> n1, </span><span class=cF1>U8</span><span class=cF0> *b2, </span><span class=cF9>I64</span><span class=cF0> n2, </span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l153"></a>{</span><span class=cF2>//Make PopUp win task with two bttns.</span><span class=cF0>
+<a name="l153"></a>{</span><span class=cF2>//Make PopUp win task with two buttons.</span><span class=cF0>
 <a name="l154"></a>    </span><span class=cF9>I64</span><span class=cF0>   i, l1 = </span><span class=cF5>StrLen</span><span class=cF0>(b1), l2 = </span><span class=cF5>StrLen</span><span class=cF0>(b2), y;
 <a name="l155"></a>    </span><span class=cF9>CDoc</span><span class=cF0> *doc = </span><span class=cF5>DocNew</span><span class=cF0>;
 <a name="l156"></a>
@@ -202,17 +202,17 @@ body {background-color:#fef1f0;}
 <a name="l175"></a>}
 <a name="l176"></a>
 <a name="l177"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpOk</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l178"></a>{</span><span class=cF2>//Make PopUp win task with OKAY bttn.</span><span class=cF0>
+<a name="l178"></a>{</span><span class=cF2>//Make PopUp win task with OKAY button.</span><span class=cF0>
 <a name="l179"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUp1</span><span class=cF0>(</span><span class=cF6>&quot;OKAY&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, header, footer) &gt; </span><span class=cFE>0</span><span class=cF0>;
 <a name="l180"></a>}
 <a name="l181"></a>
 <a name="l182"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpNoYes</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l183"></a>{</span><span class=cF2>//Make PopUp win task with NO/YES bttns.</span><span class=cF0>
+<a name="l183"></a>{</span><span class=cF2>//Make PopUp win task with NO/YES buttons.</span><span class=cF0>
 <a name="l184"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUp2</span><span class=cF0>(</span><span class=cF6>&quot;YES&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;NO&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, header, footer) &gt; </span><span class=cFE>0</span><span class=cF0>;
 <a name="l185"></a>}
 <a name="l186"></a>
 <a name="l187"></a></span><span class=cF1>public</span><span class=cF0> </span><span class=cF1>Bool</span><span class=cF0> </span><span class=cF5>PopUpCancelOk</span><span class=cF0>(</span><span class=cF1>U8</span><span class=cF0> *header=</span><span class=cF3>NULL</span><span class=cF0>, </span><span class=cF1>U8</span><span class=cF0> *footer=</span><span class=cF3>NULL</span><span class=cF0>)
-<a name="l188"></a>{</span><span class=cF2>//Make PopUp win task CANCEL/OKAY bttns.</span><span class=cF0>
+<a name="l188"></a>{</span><span class=cF2>//Make PopUp win task CANCEL/OKAY buttons.</span><span class=cF0>
 <a name="l189"></a>    </span><span class=cF1>return</span><span class=cF0> </span><span class=cF5>PopUp2</span><span class=cF0>(</span><span class=cF6>&quot;OKAY&quot;</span><span class=cF0>, </span><span class=cFE>1</span><span class=cF0>, </span><span class=cF6>&quot;CANCEL&quot;</span><span class=cF0>, </span><span class=cFE>0</span><span class=cF0>, header, footer) &gt; </span><span class=cFE>0</span><span class=cF0>;
 <a name="l190"></a>}
 <a name="l191"></a>

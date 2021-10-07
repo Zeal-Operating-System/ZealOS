@@ -14,7 +14,7 @@ $FG,2$/Compiler$FG$ The compiler module src code is found here.  The compiler is
 
 $FG,2$/System$FG$ The non-kernel part of the operating system is found here.	It is $FG,2$JIT$FG$ compiled during boot.  The $LK,"System Task",A="FF:::/Doc/Glossary.DD,System Task"$ is the most important task. It never dies.
 
-$FG,2$/Boot$FG$ Boot files go here.  Stage 2 of the ZealOS hard drive master boot loader, the old hard drive master boot record which is just blk#0, and the HDD & CD/DVD $LK,"Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ file go here.
+$FG,2$/Boot$FG$ Boot files go here.  Stage 2 of the ZealOS hard drive master boot loader, the old hard drive master boot record which is just block#0, and the HDD & CD/DVD $LK,"Kernel.BIN.C",A="FI:::/Kernel/Kernel.PRJ"$ file go here.
 
 
 
@@ -78,13 +78,13 @@ $ID,-5$
 
 * Avoid boolean expression assignments.  Boolean assignments don't have short circuit logic and are not compiled efficiently.  The $FG,2$Bool$FG$ type is just an alias for a 1 byte signed int -- nothing forces it to $FG,2$1$FG$ or $FG,2$0$FG$.  There is a $LK,"ToBool",A="MN:ToBool"$() function that will for to $FG,2$1$FG$ ot $FG,2$0$FG$, however.
 
-* Global vars in $FG,2$AOT$FG$ BIN modules are initialized to zero.  They occupy space in BIN files.
+* Global variables in $FG,2$AOT$FG$ BIN modules are initialized to zero.  They occupy space in BIN files.
 
 * Bracketing code with $FG,2$PUSHFD CLI$FG$ and $FG,2$POPFD$FG$ will protect against simultaneous accesses from tasks on $UL,1$one$UL,0$ core.	To protect against multiple cores, you need a locked semaphore.  Semaphores might need to be in their own cache line.  Lock bits are used in a lot of places not aligned.
 
 * $LK,"SysDebug",A="MN:SysDebug"$() and $LK,"IsSysDebug",A="MN:IsSysDebug"$() are really handy when working on the compiler or kernel.	It's just a bit you can set and test.
 
-* $FG,2$U0 *$FG$ is not used because the size is zero for ptr arithmetic.
+* $FG,2$U0 *$FG$ is not used because the size is zero for pointer arithmetic.
 
 * Do not use $FG,2$#if$FG$ or $FG,2$#ifdef$FG$
 
@@ -92,7 +92,7 @@ $ID,-5$
 
 $FG,5$$TX+CX,"Hash Sym Tables"$$FG$
 
-* See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for vars and functions.
+* See $LK,"::/System/Hash.CC"$ for examples of how the hash tables are set-up.  Basically, syms are placed into hash tables and child process hash tables are chained to parents.	This provides scopes for variables and functions.
 
 * $FG,2$sys_task->hash_table$FG$ holds the $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ syms loaded in on start-up.
 
@@ -110,9 +110,9 @@ See $LK,"::/Doc/Asm.DD"$.
 
 * $FG,2$GS$FG$ must always point to the cur $LK,"CCPU",A="MN:CCPU"$.
 
-* Don't change the segment regs unless interrupts are off.	It's hard to do, anyway.	$LK,"SET_FS_BASE",A="MN:SET_FS_BASE"$ and $LK,"SET_GS_BASE",A="MN:SET_GS_BASE"$.
+* Don't change the segment registers unless interrupts are off.	It's hard to do, anyway.	$LK,"SET_FS_BASE",A="MN:SET_FS_BASE"$ and $LK,"SET_GS_BASE",A="MN:SET_GS_BASE"$.
 
-* When interacting with $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for reg vars.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
+* When interacting with $LK,"CosmiC",A="FI:::/Doc/CosmiC.DD"$ compiled code, preserve $FG,2$RBP, RSI, RDI, R10-R15$FG$ because the compiler uses these for register variables.	You are free to clobber $FG,2$RAX, RBX, RCX, RDX$FG$, $FG,2$R8$FG$ and $FG,2$R9$FG$.	See $LK,"Compiler Reg Masks",A="MN:REGG_LOCAL_VARS"$, $LK,"PUSH_C_REGS",A="MN:PUSH_C_REGS"$ and $LK,"POP_C_REGS",A="MN:POP_C_REGS"$
 
 * It is recommended to use the standard stack frame for functions because $LK,"Caller",A="MN:Caller"$() is used to display the call stack, such as for the wallpaper.
 $FG,2$				PUSH		RBP
@@ -126,7 +126,7 @@ $FG$
 
 				$FG,2$RET1		16		//remove two args$FG$
 
-* No args are passed in regs.
+* No args are passed in registers.
 
 * RAX holds function return values, of course.
 $FG,8$
